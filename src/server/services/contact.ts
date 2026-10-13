@@ -5,43 +5,20 @@
 import { z } from "zod";
 import type { PrismaClient } from "@/generated/prisma/client";
 import type { EmailSender } from "../adapters/email";
+import {
+  contactSubjects,
+  MESSAGE_MAX,
+  MESSAGE_MIN,
+  partnerPlans,
+  partnerTypes,
+  type ContactSubject,
+  type FieldError,
+} from "./contact-rules";
 
-export const MESSAGE_MIN = 20;
-export const MESSAGE_MAX = 2000;
-
-/** Subjects of /contact (texts `contact.form.subject.*`). */
-export const contactSubjects = [
-  "account",
-  "talent",
-  "billing",
-  "recruiter",
-  "quote",
-  "partners",
-  "privacy",
-  "report",
-  "press",
-  "other",
-] as const;
-
-export type ContactSubject = (typeof contactSubjects)[number];
+export * from "./contact-rules";
 
 /** Professional subjects go to the professional mailbox, the others to the general one. */
 const professionalSubjects: readonly ContactSubject[] = ["quote", "recruiter", "partners", "press"];
-
-export const partnerTypes = [
-  "bank",
-  "university",
-  "foundation",
-  "company",
-  "international",
-  "public",
-  "other",
-] as const;
-export const partnerPlans = ["starter", "pro", "premium", "unsure"] as const;
-
-/** Error codes, mapped to texts `contact.form.error.*` and `partners.contact.form.error.*`. */
-export type FieldError =
-  "required" | "email" | "messageShort" | "messageLong" | "consent" | "number";
 
 const required = z.string().trim().min(1, "required");
 const email = z
@@ -53,7 +30,7 @@ const email = z
 const optional = z
   .string()
   .trim()
-  .max(200)
+  .max(200, "required")
   .optional()
   .transform((value) => value || undefined);
 const consent = z.literal("on", { error: "consent" });
@@ -105,7 +82,12 @@ export const partnerContactSchema = z.object({
   beneficiaries: optionalCount,
   plan: z.enum(partnerPlans).optional().catch(undefined),
   duration: optional,
-  message: optional.pipe(z.string().max(MESSAGE_MAX, "messageLong").optional()),
+  message: z
+    .string()
+    .trim()
+    .max(MESSAGE_MAX, "messageLong")
+    .optional()
+    .transform((value) => value || undefined),
   consent,
 });
 

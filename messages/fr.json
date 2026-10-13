@@ -9206,5 +9206,14 @@
     "subject": "Message du site · {subject} · {name}",
     "partnersSubject": "Demande Jumanly Partners · {organization}",
     "intro": "Nouveau message reçu depuis le formulaire du site. Répondez directement à cet e-mail pour écrire à l'expéditeur."
+  },
+  "cookiesTable": {
+    "consent": {
+      "name": "jm_consent",
+      "purpose": "Mémoriser vos choix de cookies",
+      "category": "Nécessaire",
+      "duration": "6 mois",
+      "provider": "Jumanly"
+    }
   }
 }

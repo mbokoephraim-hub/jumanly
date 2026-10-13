@@ -14,6 +14,10 @@ import { signupHref } from "@/lib/signup";
 import { getCourse, getPublicPlans, getSitemapEntries } from "@/server/queries/public";
 import { planForCatalogLevel } from "@/server/services/plans";
 
+// Known slugs are prerendered; a new one renders in full before responding, so that search engines
+// get the whole page and a real 404 for an unknown slug.
+export const instant = false;
+
 export async function generateStaticParams() {
   const { courseSlugs } = await getSitemapEntries();
   return courseSlugs.map(({ slug }) => ({ slug }));

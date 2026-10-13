@@ -7893,3 +7893,8 @@ Petits textes techniques des pages publiques qui ne figurent pas dans les partie
 | `contactEmail.subject` | Message du site · {subject} · {name} |
 | `contactEmail.partnersSubject` | Demande Jumanly Partners · {organization} |
 | `contactEmail.intro` | Nouveau message reçu depuis le formulaire du site. Répondez directement à cet e-mail pour écrire à l'expéditeur. |
+| `cookiesTable.consent.name` | jm_consent |
+| `cookiesTable.consent.purpose` | Mémoriser vos choix de cookies |
+| `cookiesTable.consent.category` | Nécessaire |
+| `cookiesTable.consent.duration` | 6 mois |
+| `cookiesTable.consent.provider` | Jumanly |

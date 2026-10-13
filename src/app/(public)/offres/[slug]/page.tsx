@@ -20,6 +20,10 @@ import {
   remoteFilterOf,
 } from "@/server/services/jobs";
 
+// Known slugs are prerendered; a new one renders in full before responding, so that search engines
+// get the whole page and a real 404 for an unknown slug.
+export const instant = false;
+
 export async function generateStaticParams() {
   const { jobSlugs } = await getSitemapEntries();
   return jobSlugs.map(({ slug }) => ({ slug }));
