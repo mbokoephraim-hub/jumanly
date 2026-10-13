@@ -1448,7 +1448,13 @@
     },
     "noAccount": "Pas encore de compte ?",
     "signupLink": "Créer un compte gratuit",
-    "partnerCode": "Vous avez un code de licence ? Activez-le"
+    "partnerCode": "Vous avez un code de licence ? Activez-le",
+    "twoFactor": {
+      "seo": "Vérification en deux étapes · Jumanly",
+      "title": "Confirmez votre connexion",
+      "text": "Votre compte est protégé par la vérification en deux étapes. Nous venons d'envoyer un code à {digits} chiffres à votre adresse e-mail."
+    },
+    "deletionScheduled": "Votre compte sera supprimé dans {days} jours. Reconnectez-vous avant cette date pour annuler la suppression."
   },
   "forgot": {
     "seo": {
@@ -3826,6 +3832,10 @@
     "save": "Enregistrer",
     "saved": "Modifications enregistrées.",
     "cancel": "Annuler",
+    "seo": {
+      "title": "Paramètres · Jumanly"
+    },
+    "error": "Vérifiez les champs indiqués, puis réessayez.",
     "account": {
       "title": "Compte",
       "name": "Nom affiché",
@@ -3873,7 +3883,12 @@
         "text": "Vérification en deux étapes",
         "desc": "Un code envoyé par e-mail à chaque connexion depuis un nouvel appareil.",
         "on": "Activée",
-        "off": "Désactivée"
+        "off": "Désactivée",
+        "enable": "Activer",
+        "disable": "Désactiver",
+        "password": "Votre mot de passe, pour confirmer",
+        "required": "Votre rôle d'administrateur exige la vérification en deux étapes. Activez-la pour accéder à Jumanly Admin.",
+        "changed": "Vérification en deux étapes mise à jour."
       },
       "sessions": {
         "text": "Appareils connectés",
@@ -3881,7 +3896,9 @@
         "item": "{device} · {city} · {time, relative}",
         "logout": "Déconnecter",
         "logoutAll": "Déconnecter tous les autres appareils",
-        "loggedOut": "Appareil déconnecté."
+        "loggedOut": "Appareil déconnecté.",
+        "since": "{device} · connecté le {date}",
+        "unknown": "Appareil inconnu"
       }
     },
     "privacy": {
@@ -3953,7 +3970,9 @@
         "cta": "Demander l'export",
         "requested": "Export demandé. Vous recevrez un lien par e-mail sous 48 heures.",
         "ready": "Votre archive est prête jusqu'au {date, date, long}.",
-        "download": "Télécharger l'archive"
+        "download": "Télécharger l'archive",
+        "now": "Télécharger mes données (fichier JSON)",
+        "nowDesc": "Compte, profil, organisations, abonnements, paiements et appareils connectés. Les autres éléments s'ajouteront à l'export au fur et à mesure de leur ouverture."
       },
       "delete": {
         "text": "Supprimer mon compte",
@@ -3964,7 +3983,8 @@
           "body": "Vous disposez de {days} jours pour changer d'avis en vous reconnectant. Passé ce délai, la suppression est définitive. Un abonnement en cours n'est pas remboursé automatiquement.",
           "type": "Tapez SUPPRIMER pour confirmer",
           "password": "Votre mot de passe",
-          "cta": "Supprimer mon compte"
+          "cta": "Supprimer mon compte",
+          "error": "Tapez SUPPRIMER, en majuscules, pour confirmer."
         },
         "ownerBlock": "Vous êtes propriétaire de {org}. Transférez la propriété ou supprimez l'organisation avant de supprimer votre compte.",
         "scheduled": "Suppression programmée le {date, date, long}. Reconnectez-vous avant cette date pour l'annuler.",
@@ -5838,6 +5858,10 @@
       "text": "Une question sur votre facture ? Écrivez-nous à {email}.",
       "emailPersonal": "infojumanly@gmail.com",
       "emailPro": "assistant@jumanly.io"
+    },
+    "finalize": {
+      "text": "Votre formule {plan} n'est pas encore activée. En attendant, votre compte fonctionne avec {freePlan}.",
+      "cta": "Finaliser mon forfait"
     }
   },
   "orgBilling": {
@@ -5932,6 +5956,12 @@
         "numberInvalid": "Ce numéro ne semble pas valide pour {operator}. Vérifiez l'indicatif et le nombre de chiffres.",
         "operatorRequired": "Choisissez votre opérateur.",
         "numberRequired": "Saisissez votre numéro Mobile Money."
+      },
+      "operators": {
+        "mpesa": "M-Pesa",
+        "orange": "Orange Money",
+        "airtel": "Airtel Money",
+        "mtn": "MTN Mobile Money"
       }
     },
     "card": {
@@ -6004,7 +6034,12 @@
       "cta": "Revenir à mon espace"
     },
     "duplicate": "Un paiement est déjà en cours pour cette formule. Attendez sa confirmation avant d'en lancer un autre.",
-    "debitedNotActivated": "Vous avez été débité mais votre formule n'est pas active ? Écrivez-nous à infojumanly@gmail.com avec la référence {reference}. Nous régularisons au plus vite."
+    "debitedNotActivated": "Vous avez été débité mais votre formule n'est pas active ? Écrivez-nous à infojumanly@gmail.com avec la référence {reference}. Nous régularisons au plus vite.",
+    "fake": "Paiement de démonstration : aucun argent n'est débité. Un numéro se terminant par 0000 simule un refus, 1111 un délai dépassé, 2222 une attente.",
+    "trial": {
+      "text": "Le paiement en ligne arrive bientôt. En attendant, vous pouvez essayer {plan} pendant {days} jours, sans rien payer.",
+      "cta": "Essayer {plan}"
+    }
   },
   "renewal": {
     "banner": {
@@ -7978,6 +8013,10 @@
     "reason": {
       "required": "Indiquez le motif de cette action. Il sera enregistré dans le journal d'audit."
     },
+    "seo": {
+      "title": "Jumanly Admin"
+    },
+    "notAllowed": "Votre rôle ne permet pas cette action.",
     "dashboard": {
       "title": "Indicateurs",
       "period": "Période",
@@ -8023,7 +8062,8 @@
     "users": {
       "title": "Utilisateurs",
       "search": {
-        "placeholder": "Nom, e-mail ou identifiant"
+        "placeholder": "Nom, e-mail ou identifiant",
+        "submit": "Rechercher"
       },
       "filter": {
         "plan": "Forfait",
@@ -8064,7 +8104,8 @@
         "unsuspend": "Réactiver le compte",
         "roles": {
           "text": "Modifier les rôles plateforme",
-          "warning": "Les rôles plateforme donnent accès à l'administration. Attribuez-les avec prudence."
+          "warning": "Les rôles plateforme donnent accès à l'administration. Attribuez-les avec prudence.",
+          "save": "Enregistrer le rôle"
         },
         "resendVerification": "Renvoyer l'e-mail de vérification",
         "resetPassword": "Envoyer un lien de réinitialisation",
@@ -8080,7 +8121,14 @@
       },
       "suspended": "Compte suspendu.",
       "updated": "Utilisateur mis à jour.",
-      "supportReadOnly": "Votre rôle Support permet de consulter les comptes et abonnements, sans les modifier."
+      "supportReadOnly": "Votre rôle Support permet de consulter les comptes et abonnements, sans les modifier.",
+      "empty": "Aucun utilisateur ne correspond à cette recherche.",
+      "role": {
+        "user": "Aucun rôle plateforme"
+      },
+      "selfProtected": "Vous ne pouvez pas modifier votre propre rôle ni suspendre votre propre compte.",
+      "count": "{count, plural, one {# utilisateur} other {# utilisateurs}}",
+      "summary": "Forfait : {plan} · inscrit le {date}"
     },
     "orgs": {
       "title": "Organisations",
@@ -8162,7 +8210,9 @@
         },
         "recommended": "Afficher le badge « Recommandé »",
         "purchasable": "Achetable en ligne",
-        "order": "Ordre d'affichage"
+        "order": "Ordre d'affichage",
+        "priceHelp": "En USD. Laisser vide pour « Sur devis ».",
+        "public": "Visible sur la page Tarifs"
       },
       "entitlements": {
         "title": "Droits",
@@ -8202,7 +8252,12 @@
         "notice": "Un changement de prix s'applique aux nouveaux abonnements et aux renouvellements après information des abonnés."
       },
       "duplicate": "Dupliquer le forfait",
-      "new": "Nouveau forfait"
+      "new": "Nouveau forfait",
+      "back": "Tous les forfaits",
+      "error": {
+        "value": "Valeur non valable pour {key}. Pour un quota : un nombre entier, -1 pour illimité.",
+        "price": "Indiquez un prix valable, par exemple 9.99."
+      }
     },
     "subscriptions": {
       "title": "Abonnements",

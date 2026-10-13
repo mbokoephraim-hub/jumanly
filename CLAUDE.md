@@ -62,12 +62,14 @@ pnpm dev            # serveur local
 pnpm lint           # ESLint
 pnpm format         # Prettier
 pnpm typecheck      # tsc --noEmit
-pnpm test           # Vitest
+pnpm test           # Vitest (règles sans base)
+pnpm test:db        # Vitest, règles en base (droits, abonnements)
 pnpm test:e2e       # Playwright
 pnpm build          # build de production
 pnpm db:migrate     # prisma migrate dev
 pnpm db:deploy      # applique les migrations (CI, production)
 pnpm db:seed        # forfaits + référentiel + démo (local)
+pnpm admin:promote  # donne le rôle administrateur à un compte (e-mail en argument)
 pnpm messages       # textes/textes-application.md → messages/fr.json
 pnpm messages:check # vérifie que messages/fr.json est à jour
 pnpm brand          # ressources/ → icônes et images servies (public/)

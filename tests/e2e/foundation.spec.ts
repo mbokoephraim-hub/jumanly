@@ -1,4 +1,5 @@
 import { expect, test } from "@playwright/test";
+import { demo, logIn } from "./session";
 
 test("la page d'accueil publique s'affiche en français", async ({ page }) => {
   await page.goto("/");
@@ -37,6 +38,7 @@ test("la bibliothèque de composants est complète et non indexée", async ({ pa
 });
 
 test("l'espace connecté propose la navigation adaptée à l'écran", async ({ page, isMobile }) => {
+  await logIn(page, demo.talentFree);
   await page.goto("/app");
   const navigation = page.getByRole("navigation", { name: "Navigation principale" });
   await expect(navigation.filter({ visible: true })).toHaveCount(1);
@@ -50,7 +52,8 @@ test("l'espace connecté propose la navigation adaptée à l'écran", async ({ p
 });
 
 test("aucun numéro de téléphone n'apparaît", async ({ page }) => {
-  for (const chemin of ["/", "/app", "/dev/composants"]) {
+  await logIn(page, demo.talentFree);
+  for (const chemin of ["/", "/app", "/app/abonnement", "/app/parametres", "/dev/composants"]) {
     await page.goto(chemin);
     await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
   }

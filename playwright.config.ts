@@ -1,4 +1,5 @@
 import { defineConfig, devices } from "@playwright/test";
+import { OUTBOX_FILE } from "./tests/e2e/outbox";
 
 const port = 3100;
 
@@ -26,5 +27,13 @@ export default defineConfig({
     url: `http://localhost:${port}`,
     reuseExistingServer: !process.env.CI,
     timeout: 120_000,
+    env: {
+      BETTER_AUTH_URL: `http://localhost:${port}`,
+      BETTER_AUTH_SECRET:
+        process.env.BETTER_AUTH_SECRET || "secret-de-test-e2e-uniquement-0123456789abcdef",
+      EMAIL_OUTBOX_FILE: OUTBOX_FILE,
+      // Les tests créent beaucoup de comptes depuis la même machine.
+      AUTH_RATE_LIMIT: "off",
+    },
   },
 });

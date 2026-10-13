@@ -15,6 +15,9 @@ jobs:
     runs-on: ubuntu-latest
     env:
       DATABASE_URL: postgresql://jumanly:jumanly@localhost:5432/jumanly
+      # Valeurs de test uniquement (le serveur e2e tourne sur le port 3100).
+      BETTER_AUTH_SECRET: secret-de-test-ci-uniquement-0123456789abcdef
+      BETTER_AUTH_URL: http://localhost:3100
     services:
       postgres:
         image: pgvector/pgvector:pg16
@@ -53,6 +56,8 @@ jobs:
         run: pnpm db:deploy
       - name: Données (forfaits, référentiel, démo fictive)
         run: pnpm db:seed
+      - name: Tests des règles en base (droits, abonnements)
+        run: pnpm test:db
       - name: Build
         run: pnpm build
       - name: Navigateur pour les tests e2e
