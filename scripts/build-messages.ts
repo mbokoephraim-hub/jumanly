@@ -1,47 +1,42 @@
 /**
- * Génère `messages/fr.json` à partir des tableaux `| Clé | Texte |` de `textes/*.md`.
+ * Generates `messages/fr.json` from the `| Clé | Texte |` tables in `textes/*.md`.
  *
- *   pnpm messages          régénère le fichier
- *   pnpm messages:check    échoue si le fichier n'est pas à jour (utilisé en CI)
+ *   pnpm messages          regenerate the file
+ *   pnpm messages:check    fail if the file is out of date (CI, build)
  */
-import { readdirSync, readFileSync, writeFileSync, existsSync } from "node:fs";
+import { existsSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join, relative } from "node:path";
-import { construireMessages, extraireEntrees } from "./lib/textes";
+import { buildMessages, extractEntries, isTextFile } from "./lib/texts";
 
-const racine = join(import.meta.dirname, "..");
-const dossierTextes = join(racine, "textes");
-const sortie = join(racine, "messages", "fr.json");
-const verification = process.argv.includes("--check");
+const root = join(import.meta.dirname, "..");
+const textsDir = join(root, "textes");
+const output = join(root, "messages", "fr.json");
+const checkOnly = process.argv.includes("--check");
 
-const fichiers = readdirSync(dossierTextes)
-  .filter((nom) => nom.endsWith(".md") && nom.toLowerCase() !== "lisezmoi.md")
-  .sort();
-
-const entrees = fichiers.flatMap((nom) => {
-  const chemin = join(dossierTextes, nom);
-  return extraireEntrees(readFileSync(chemin, "utf8"), relative(racine, chemin));
+const files = readdirSync(textsDir).filter(isTextFile).sort();
+const entries = files.flatMap((name) => {
+  const path = join(textsDir, name);
+  return extractEntries(readFileSync(path, "utf8"), relative(root, path));
 });
 
-const { messages, erreurs } = construireMessages(entrees);
+const { messages, errors } = buildMessages(entries);
 
-if (erreurs.length > 0) {
-  console.error(`✗ ${erreurs.length} erreur(s) dans textes/ :`);
-  for (const erreur of erreurs) console.error(`  - ${erreur}`);
+if (errors.length > 0) {
+  console.error(`✗ ${errors.length} erreur(s) dans textes/ :`);
+  for (const error of errors) console.error(`  - ${error}`);
   process.exit(1);
 }
 
 const json = `${JSON.stringify(messages, null, 2)}\n`;
 
-if (verification) {
-  const actuel = existsSync(sortie) ? readFileSync(sortie, "utf8") : "";
-  if (actuel !== json) {
+if (checkOnly) {
+  const current = existsSync(output) ? readFileSync(output, "utf8") : "";
+  if (current !== json) {
     console.error("✗ messages/fr.json n'est pas à jour. Lancez « pnpm messages ».");
     process.exit(1);
   }
-  console.log(`✓ messages/fr.json à jour (${entrees.length} textes).`);
+  console.log(`✓ messages/fr.json à jour (${entries.length} textes).`);
 } else {
-  writeFileSync(sortie, json);
-  console.log(
-    `✓ messages/fr.json généré : ${entrees.length} textes depuis ${fichiers.length} fichier(s).`,
-  );
+  writeFileSync(output, json);
+  console.log(`✓ messages/fr.json généré : ${entries.length} textes, ${files.length} fichier(s).`);
 }

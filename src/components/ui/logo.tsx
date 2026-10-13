@@ -1,28 +1,28 @@
 import Image from "next/image";
 import { useTranslations } from "next-intl";
 
-const fichiers = {
-  principal: { src: "/marque/jumanly-logo-principal.svg", largeur: 578, hauteur: 120 },
-  negatif: { src: "/marque/jumanly-logo-negatif.svg", largeur: 578, hauteur: 120 },
-  pictogramme: { src: "/marque/jumanly-pictogramme-sapin.svg", largeur: 120, hauteur: 120 },
+const files = {
+  primary: { src: "/marque/jumanly-logo-principal.svg", width: 578, height: 120 },
+  negative: { src: "/marque/jumanly-logo-negatif.svg", width: 578, height: 120 },
+  symbol: { src: "/marque/jumanly-pictogramme-sapin.svg", width: 120, height: 120 },
 };
 
-/** Logo Jumanly. Hauteur en pixels ; la largeur suit les proportions. */
+/** Jumanly logo. `height` in pixels; the width follows the proportions. */
 export function Logo({
-  version = "principal",
-  hauteur = 32,
+  variant = "primary",
+  height = 32,
 }: {
-  version?: keyof typeof fichiers;
-  hauteur?: number;
+  variant?: keyof typeof files;
+  height?: number;
 }) {
-  const t = useTranslations("commun.marque");
-  const fichier = fichiers[version];
+  const t = useTranslations("common.brand");
+  const file = files[variant];
   return (
     <Image
-      src={fichier.src}
-      alt={t("nom")}
-      width={Math.round((fichier.largeur / fichier.hauteur) * hauteur)}
-      height={hauteur}
+      src={file.src}
+      alt={t("name")}
+      width={Math.round((file.width / file.height) * height)}
+      height={height}
       priority
       unoptimized
     />

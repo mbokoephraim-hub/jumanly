@@ -17,7 +17,9 @@
     "messages:check": "tsx scripts/build-messages.ts --check",
     "db:migrate": "prisma migrate dev",
     "db:deploy": "prisma migrate deploy",
+    "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
+    "email:dev": "email dev --dir src/emails --port 3001",
     "postinstall": "prisma generate",
     "predev": "pnpm messages",
     "prebuild": "pnpm messages:check"
@@ -25,6 +27,7 @@
   "dependencies": {
     "@prisma/adapter-pg": "7.10.0",
     "@prisma/client": "7.10.0",
+    "@react-email/components": "1.0.12",
     "clsx": "^2.1.1",
     "lucide-react": "^1.56.0",
     "next": "16.4.0",
@@ -38,6 +41,7 @@
   "devDependencies": {
     "@fontsource-variable/sora": "^5.3.0",
     "@playwright/test": "^1.64.0",
+    "@react-email/ui": "6.11.1",
     "@tailwindcss/turbopack": "^4",
     "@testing-library/dom": "^10.4.2",
     "@testing-library/jest-dom": "^7.0.1",
@@ -54,6 +58,7 @@
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "prisma": "7.10.0",
+    "react-email": "6.11.1",
     "tailwindcss": "^4",
     "tsx": "^4.23.15",
     "typescript": "^5",

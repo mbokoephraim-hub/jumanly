@@ -1,15 +1,15 @@
-import { EnTetePublic } from "@/components/mise-en-page/en-tete-public";
-import { PiedDePagePublic } from "@/components/mise-en-page/pied-de-page-public";
+import { PublicFooter } from "@/components/layout/public-footer";
+import { PublicHeader } from "@/components/layout/public-header";
 
-/** Gabarit du site public, accessible sans compte. */
-export default function GabaritPublic({ children }: LayoutProps<"/">) {
+/** Public site layout, available without an account. */
+export default function PublicLayout({ children }: LayoutProps<"/">) {
   return (
     <div className="flex min-h-dvh flex-col">
-      <EnTetePublic />
-      <main id="contenu" className="flex-1">
+      <PublicHeader />
+      <main id="content" className="flex-1">
         {children}
       </main>
-      <PiedDePagePublic />
+      <PublicFooter />
     </div>
   );
 }

@@ -4,400 +4,404 @@ import { useTranslations } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import { ArrowRight, Inbox, Sparkles } from "lucide-react";
 import {
-  Alerte,
-  ArcProgression,
+  AiOrb,
+  Alert,
   Avatar,
-  BarreProgression,
-  Bouton,
-  BoutonLien,
-  Carte,
-  CaseACocher,
-  ChampTexte,
-  Chargeur,
-  EtatVide,
-  GroupeRadio,
-  Interrupteur,
-  JaugeQuota,
-  ListeDeroulante,
+  Badge,
+  Button,
+  ButtonLink,
+  Card,
+  CardText,
+  CardTitle,
+  Checkbox,
+  EmptyState,
+  ExplainedScore,
   Logo,
-  Onglets,
-  OrbeIA,
-  Pastille,
-  ScoreExplique,
-  Squelette,
-  TexteCarte,
-  TitreCarte,
-  ZoneTexte,
-  type VarianteBouton,
+  ProgressBar,
+  ProgressRing,
+  QuotaGauge,
+  RadioGroup,
+  Select,
+  Skeleton,
+  Spinner,
+  Switch,
+  Tabs,
+  TextArea,
+  TextField,
+  type ButtonVariant,
 } from "@/components/ui";
-import { DemoModale } from "./demo-modale";
+import { ModalDemo } from "./modal-demo";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("devComposants");
-  // Page interne : jamais indexée par les moteurs de recherche.
-  return { title: t("titre"), robots: { index: false, follow: false } };
+  const t = await getTranslations("devComponents");
+  // Internal page: never indexed by search engines.
+  return { title: t("title"), robots: { index: false, follow: false } };
 }
 
-function Section({ titre, children }: { titre: string; children: ReactNode }) {
+function Section({ title, children }: { title: string; children: ReactNode }) {
   return (
     <section className="flex flex-col gap-4 border-t border-brume pt-8">
-      <h2 className="text-h2 font-medium">{titre}</h2>
+      <h2 className="text-h2">{title}</h2>
       {children}
     </section>
   );
 }
 
-function Etat({ libelle, children }: { libelle: string; children: ReactNode }) {
+function State({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col items-start gap-2">
-      <span className="text-legende text-ardoise">{libelle}</span>
+      <span className="text-ardoise text-caption">{label}</span>
       {children}
     </div>
   );
 }
 
-const variantes: VarianteBouton[] = ["primaire", "secondaire", "contour", "fantome", "danger"];
+const buttonVariants: ButtonVariant[] = ["primary", "secondary", "outline", "ghost", "danger"];
 
-/** Vitrine de la bibliothèque de composants, avec tous leurs états. */
-export default function PageComposants() {
-  const t = useTranslations("devComposants");
-  const e = useTranslations("devComposants.etats");
-  const optionsPays = [
-    { valeur: "cd", libelle: t("champs.paysA") },
-    { valeur: "cm", libelle: t("champs.paysB") },
-    { valeur: "sn", libelle: t("champs.paysC") },
+const colors = [
+  ["sapin", "bg-sapin"],
+  ["lime", "bg-lime"],
+  ["creme", "bg-creme border border-brume"],
+  ["blanc", "bg-blanc border border-brume"],
+  ["feuille", "bg-feuille"],
+  ["menthe", "bg-menthe"],
+  ["nuit", "bg-nuit"],
+  ["neon", "bg-neon"],
+  ["ardoise", "bg-ardoise"],
+  ["brume", "bg-brume"],
+  ["ambre", "bg-ambre"],
+  ["corail", "bg-corail"],
+  ["mentheClaire", "bg-menthe-claire"],
+] as const;
+
+const gradients = [
+  ["signature", "bg-gradient-signature"],
+  ["ai", "bg-gradient-ai"],
+  ["depth", "bg-gradient-depth"],
+] as const;
+
+/** Showcase of the component library, with every state. */
+export default function ComponentsPage() {
+  const t = useTranslations("devComponents");
+  const s = useTranslations("devComponents.states");
+  const countries = [
+    { value: "cd", label: t("fields.countryA") },
+    { value: "cm", label: t("fields.countryB") },
+    { value: "sn", label: t("fields.countryC") },
   ];
 
   return (
     <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-10 sm:px-6">
       <header className="flex flex-col gap-3">
-        <Logo hauteur={36} />
-        <h1 className="text-[32px] leading-10 font-semibold md:text-h1">{t("titre")}</h1>
+        <Logo height={36} />
+        <h1 className="text-[32px] leading-10 font-semibold md:text-h1">{t("title")}</h1>
         <p className="max-w-2xl text-ardoise">{t("intro")}</p>
         <div className="flex flex-wrap gap-2">
-          <BoutonLien href="/" variante="contour" taille="sm">
-            {t("gabaritPublic")}
-          </BoutonLien>
-          <BoutonLien href="/app" variante="contour" taille="sm">
-            {t("gabaritEspace")}
-          </BoutonLien>
+          <ButtonLink href="/" variant="outline" size="sm">
+            {t("publicLayout")}
+          </ButtonLink>
+          <ButtonLink href="/app" variant="outline" size="sm">
+            {t("appLayout")}
+          </ButtonLink>
         </div>
       </header>
 
-      <Section titre={t("sections.couleurs")}>
+      <Section title={t("sections.colors")}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
-          {(
-            [
-              ["sapin", "bg-sapin"],
-              ["lime", "bg-lime"],
-              ["creme", "bg-creme border border-brume"],
-              ["feuille", "bg-feuille"],
-              ["mentheIa", "bg-menthe-ia"],
-              ["nuit", "bg-nuit"],
-              ["neon", "bg-neon"],
-              ["ardoise", "bg-ardoise"],
-              ["brume", "bg-brume"],
-              ["ambre", "bg-ambre"],
-              ["corail", "bg-corail"],
-              ["mentheClaire", "bg-menthe-claire"],
-            ] as const
-          ).map(([cle, classe]) => (
-            <div key={cle} className="flex flex-col gap-2">
-              <div className={`h-16 rounded-petit ${classe}`} />
-              <span className="text-legende">{t(`couleurs.${cle}`)}</span>
+          {colors.map(([key, classes]) => (
+            <div key={key} className="flex flex-col gap-2">
+              <div className={`h-16 rounded-sm ${classes}`} />
+              <span className="text-caption">{t(`colors.${key}`)}</span>
             </div>
           ))}
         </div>
         <div className="grid gap-3 sm:grid-cols-3">
-          <div className="h-20 rounded-composant bg-degrade-signature" />
-          <div className="h-20 rounded-composant bg-degrade-intelligence" />
-          <div className="h-20 rounded-composant bg-degrade-profondeur" />
+          {gradients.map(([key, classes]) => (
+            <div key={key} className="flex flex-col gap-2">
+              <div className={`h-20 rounded-md ${classes}`} />
+              <span className="text-caption">{t(`gradients.${key}`)}</span>
+            </div>
+          ))}
         </div>
       </Section>
 
-      <Section titre={t("sections.typographie")}>
-        <p className="text-display font-semibold">{t("typo.display")}</p>
-        <p className="text-h1 font-semibold">{t("typo.h1")}</p>
-        <p className="text-h2 font-medium">{t("typo.h2")}</p>
-        <p className="text-label font-medium text-feuille">{t("typo.label")}</p>
-        <p className="text-corps">{t("typo.corps")}</p>
-        <p className="text-legende font-light">{t("typo.legende")}</p>
+      <Section title={t("sections.typography")}>
+        <p className="text-display">{t("type.display")}</p>
+        <p className="text-h1">{t("type.h1")}</p>
+        <p className="text-h2">{t("type.h2")}</p>
+        <p className="text-feuille text-label">{t("type.label")}</p>
+        <p className="text-body">{t("type.body")}</p>
+        <p className="text-caption">{t("type.caption")}</p>
       </Section>
 
-      <Section titre={t("sections.boutons")}>
+      <Section title={t("sections.buttons")}>
         <div className="flex flex-col gap-6">
-          {variantes.map((variante) => (
-            <div key={variante} className="flex flex-wrap items-end gap-4">
-              <Etat libelle={t(`variantes.${variante}`)}>
-                <Bouton variante={variante}>{t("boutons.action")}</Bouton>
-              </Etat>
-              <Etat libelle={e("icone")}>
-                <Bouton variante={variante} icone={<ArrowRight aria-hidden className="size-4" />}>
-                  {t("boutons.action")}
-                </Bouton>
-              </Etat>
-              <Etat libelle={e("chargement")}>
-                <Bouton variante={variante} chargement>
-                  {t("boutons.action")}
-                </Bouton>
-              </Etat>
-              <Etat libelle={e("desactive")}>
-                <Bouton variante={variante} disabled>
-                  {t("boutons.action")}
-                </Bouton>
-              </Etat>
+          {buttonVariants.map((variant) => (
+            <div key={variant} className="flex flex-wrap items-end gap-4">
+              <State label={t(`variants.${variant}`)}>
+                <Button variant={variant}>{t("buttons.action")}</Button>
+              </State>
+              <State label={s("icon")}>
+                <Button variant={variant} icon={<ArrowRight aria-hidden className="size-4" />}>
+                  {t("buttons.action")}
+                </Button>
+              </State>
+              <State label={s("loading")}>
+                <Button variant={variant} loading>
+                  {t("buttons.action")}
+                </Button>
+              </State>
+              <State label={s("disabled")}>
+                <Button variant={variant} disabled>
+                  {t("buttons.action")}
+                </Button>
+              </State>
             </div>
           ))}
           <div className="flex flex-wrap items-end gap-4">
-            <Etat libelle={e("petit")}>
-              <Bouton taille="sm">{t("boutons.action")}</Bouton>
-            </Etat>
-            <Etat libelle={e("moyen")}>
-              <Bouton taille="md">{t("boutons.action")}</Bouton>
-            </Etat>
-            <Etat libelle={e("grand")}>
-              <Bouton taille="lg">{t("boutons.action")}</Bouton>
-            </Etat>
-            <Etat libelle={e("lien")}>
-              <BoutonLien href="/app" variante="secondaire">
-                {t("boutons.lien")}
-              </BoutonLien>
-            </Etat>
+            <State label={s("small")}>
+              <Button size="sm">{t("buttons.action")}</Button>
+            </State>
+            <State label={s("medium")}>
+              <Button size="md">{t("buttons.action")}</Button>
+            </State>
+            <State label={s("large")}>
+              <Button size="lg">{t("buttons.action")}</Button>
+            </State>
+            <State label={s("link")}>
+              <ButtonLink href="/app" variant="secondary">
+                {t("buttons.link")}
+              </ButtonLink>
+            </State>
           </div>
         </div>
       </Section>
 
-      <Section titre={t("sections.champs")}>
+      <Section title={t("sections.fields")}>
         <div className="grid gap-6 md:grid-cols-2">
-          <ChampTexte
-            id="demo-nom"
-            label={t("champs.nom")}
-            placeholder={t("champs.nomExemple")}
-            requis
+          <TextField
+            id="demo-name"
+            label={t("fields.name")}
+            placeholder={t("fields.namePlaceholder")}
+            required
           />
-          <ChampTexte
+          <TextField
             id="demo-email"
             type="email"
-            label={t("champs.email")}
-            aide={t("champs.emailAide")}
+            label={t("fields.email")}
+            hint={t("fields.emailHint")}
           />
-          <ChampTexte
-            id="demo-erreur"
-            label={t("champs.email")}
-            defaultValue={t("champs.emailInvalide")}
-            erreur={t("champs.emailErreur")}
-            requis
+          <TextField
+            id="demo-error"
+            label={t("fields.email")}
+            defaultValue={t("fields.emailInvalid")}
+            error={t("fields.emailError")}
+            required
           />
-          <ChampTexte
-            id="demo-desactive"
-            label={t("champs.desactive")}
-            defaultValue={t("champs.valeurFixe")}
+          <TextField
+            id="demo-disabled"
+            label={t("fields.locked")}
+            defaultValue={t("fields.lockedValue")}
             disabled
           />
-          <ListeDeroulante
-            id="demo-pays"
-            label={t("champs.pays")}
-            invite={t("champs.paysInvite")}
-            options={optionsPays}
+          <Select
+            id="demo-country"
+            label={t("fields.country")}
+            placeholder={t("fields.countryPlaceholder")}
+            options={countries}
           />
-          <ListeDeroulante
-            id="demo-pays-erreur"
-            label={t("champs.pays")}
-            invite={t("champs.paysInvite")}
-            options={optionsPays}
-            erreur={t("champs.paysErreur")}
-            requis
+          <Select
+            id="demo-country-error"
+            label={t("fields.country")}
+            placeholder={t("fields.countryPlaceholder")}
+            options={countries}
+            error={t("fields.countryError")}
+            required
           />
           <div className="md:col-span-2">
-            <ZoneTexte id="demo-bio" label={t("champs.bio")} aide={t("champs.bioAide")} />
+            <TextArea id="demo-bio" label={t("fields.bio")} hint={t("fields.bioHint")} />
           </div>
         </div>
       </Section>
 
-      <Section titre={t("sections.choix")}>
+      <Section title={t("sections.choices")}>
         <div className="grid gap-8 md:grid-cols-3">
           <div className="flex flex-col gap-3">
-            <CaseACocher id="demo-case-1" label={t("choix.conditions")} />
-            <CaseACocher
-              id="demo-case-2"
-              label={t("choix.alertes")}
-              aide={t("choix.alertesAide")}
+            <Checkbox id="demo-check-1" label={t("choices.terms")} />
+            <Checkbox
+              id="demo-check-2"
+              label={t("choices.alerts")}
+              hint={t("choices.alertsHint")}
               defaultChecked
             />
-            <CaseACocher id="demo-case-3" label={e("desactive")} disabled />
+            <Checkbox id="demo-check-3" label={s("disabled")} disabled />
           </div>
-          <GroupeRadio
-            legende={t("choix.profil")}
-            nom="demo-profil"
-            valeurParDefaut="talent"
+          <RadioGroup
+            legend={t("choices.profile")}
+            name="demo-profile"
+            defaultValue="talent"
             options={[
-              { valeur: "talent", libelle: t("choix.talent") },
-              { valeur: "recruteur", libelle: t("choix.recruteur") },
-              { valeur: "entreprise", libelle: t("choix.entreprise"), desactive: true },
+              { value: "talent", label: t("choices.talent") },
+              { value: "recruiter", label: t("choices.recruiter") },
+              { value: "company", label: t("choices.company"), disabled: true },
             ]}
           />
           <div className="flex flex-col gap-4">
-            <Interrupteur
+            <Switch
               id="demo-switch-1"
-              label={t("choix.profilVisible")}
-              aide={t("choix.profilVisibleAide")}
-              actif
+              label={t("choices.visible")}
+              hint={t("choices.visibleHint")}
+              checked
             />
-            <Interrupteur id="demo-switch-2" label={t("choix.emails")} />
-            <Interrupteur id="demo-switch-3" label={e("desactive")} desactive />
+            <Switch id="demo-switch-2" label={t("choices.digest")} />
+            <Switch id="demo-switch-3" label={s("disabled")} disabled />
           </div>
         </div>
       </Section>
 
-      <Section titre={t("sections.pastilles")}>
+      <Section title={t("sections.badges")}>
         <div className="flex flex-wrap gap-2">
-          <Pastille>{t("pastilles.neutre")}</Pastille>
-          <Pastille ton="sapin">{t("pastilles.sapin")}</Pastille>
-          <Pastille ton="lime">{t("pastilles.lime")}</Pastille>
-          <Pastille ton="succes">{t("pastilles.succes")}</Pastille>
-          <Pastille ton="alerte">{t("pastilles.alerte")}</Pastille>
-          <Pastille ton="erreur">{t("pastilles.erreur")}</Pastille>
-          <Pastille ton="ia" icone={<OrbeIA className="size-2.5" />}>
-            {t("pastilles.ia")}
-          </Pastille>
+          <Badge>{t("badges.neutral")}</Badge>
+          <Badge tone="sapin">{t("badges.sapin")}</Badge>
+          <Badge tone="lime">{t("badges.lime")}</Badge>
+          <Badge tone="success">{t("badges.success")}</Badge>
+          <Badge tone="warning">{t("badges.warning")}</Badge>
+          <Badge tone="error">{t("badges.error")}</Badge>
+          <Badge tone="ai" icon={<AiOrb className="size-2.5" />}>
+            {t("badges.ai")}
+          </Badge>
         </div>
       </Section>
 
-      <Section titre={t("sections.cartes")}>
+      <Section title={t("sections.cards")}>
         <div className="grid gap-4 md:grid-cols-3">
-          <Carte>
-            <TitreCarte>{t("cartes.standardTitre")}</TitreCarte>
-            <TexteCarte>{t("cartes.standardTexte")}</TexteCarte>
-          </Carte>
-          <Carte apparence="teinte">
-            <TitreCarte>{t("cartes.teinteTitre")}</TitreCarte>
-            <TexteCarte>{t("cartes.teinteTexte")}</TexteCarte>
-          </Carte>
-          <Carte apparence="sombre">
-            <TitreCarte>{t("cartes.sombreTitre")}</TitreCarte>
-            <TexteCarte>{t("cartes.sombreTexte")}</TexteCarte>
-          </Carte>
+          <Card>
+            <CardTitle>{t("cards.defaultTitle")}</CardTitle>
+            <CardText>{t("cards.defaultText")}</CardText>
+          </Card>
+          <Card appearance="tinted">
+            <CardTitle>{t("cards.tintedTitle")}</CardTitle>
+            <CardText>{t("cards.tintedText")}</CardText>
+          </Card>
+          <Card appearance="dark">
+            <CardTitle>{t("cards.darkTitle")}</CardTitle>
+            <CardText>{t("cards.darkText")}</CardText>
+          </Card>
         </div>
       </Section>
 
-      <Section titre={t("sections.alertes")}>
+      <Section title={t("sections.alerts")}>
         <div className="grid gap-3 md:grid-cols-2">
-          <Alerte titre={t("alertes.infoTitre")}>{t("alertes.infoTexte")}</Alerte>
-          <Alerte ton="succes" titre={t("alertes.succesTitre")}>
-            {t("alertes.succesTexte")}
-          </Alerte>
-          <Alerte
-            ton="alerte"
-            titre={t("alertes.alerteTitre")}
+          <Alert title={t("alerts.infoTitle")}>{t("alerts.infoText")}</Alert>
+          <Alert tone="success" title={t("alerts.successTitle")}>
+            {t("alerts.successText")}
+          </Alert>
+          <Alert
+            tone="warning"
+            title={t("alerts.warningTitle")}
             action={
-              <BoutonLien href="/tarifs" variante="secondaire" taille="sm">
-                {t("alertes.alerteAction")}
-              </BoutonLien>
+              <ButtonLink href="/tarifs" variant="secondary" size="sm">
+                {t("alerts.warningAction")}
+              </ButtonLink>
             }
           >
-            {t("alertes.alerteTexte")}
-          </Alerte>
-          <Alerte ton="erreur" titre={t("alertes.erreurTitre")}>
-            {t("alertes.erreurTexte")}
-          </Alerte>
+            {t("alerts.warningText")}
+          </Alert>
+          <Alert tone="error" title={t("alerts.errorTitle")}>
+            {t("alerts.errorText")}
+          </Alert>
         </div>
       </Section>
 
-      <Section titre={t("sections.avatars")}>
+      <Section title={t("sections.avatars")}>
         <div className="flex items-center gap-4">
-          <Avatar nom={t("avatars.nom")} taille="sm" />
-          <Avatar nom={t("avatars.nom")} />
-          <Avatar nom={t("avatars.nom")} taille="lg" />
+          <Avatar name={t("avatars.name")} size="sm" />
+          <Avatar name={t("avatars.name")} />
+          <Avatar name={t("avatars.name")} size="lg" />
         </div>
       </Section>
 
-      <Section titre={t("sections.onglets")}>
-        <Onglets
-          onglets={[
+      <Section title={t("sections.tabs")}>
+        <Tabs
+          tabs={[
+            { id: "talents", label: t("tabs.talents"), content: <p>{t("tabs.talentsText")}</p> },
             {
-              id: "talents",
-              libelle: t("onglets.talents"),
-              contenu: <p>{t("onglets.talentsTexte")}</p>,
+              id: "recruiters",
+              label: t("tabs.recruiters"),
+              content: <p>{t("tabs.recruitersText")}</p>,
             },
             {
-              id: "recruteurs",
-              libelle: t("onglets.recruteurs"),
-              contenu: <p>{t("onglets.recruteursTexte")}</p>,
-            },
-            {
-              id: "entreprises",
-              libelle: t("onglets.entreprises"),
-              contenu: <p>{t("onglets.entreprisesTexte")}</p>,
+              id: "companies",
+              label: t("tabs.companies"),
+              content: <p>{t("tabs.companiesText")}</p>,
             },
           ]}
         />
       </Section>
 
-      <Section titre={t("sections.progression")}>
+      <Section title={t("sections.progress")}>
         <div className="grid gap-8 md:grid-cols-2">
           <div className="flex flex-col gap-4">
-            <BarreProgression valeur={64} label={t("progression.profil")} />
-            <BarreProgression valeur={35} label={t("progression.formation")} ton="lime" />
+            <ProgressBar value={64} label={t("progress.profile")} />
+            <ProgressBar value={35} label={t("progress.course")} tone="lime" />
             <div className="flex gap-6">
-              <ArcProgression valeur={64} label={t("progression.profil")} />
-              <ArcProgression valeur={100} label={t("progression.formation")} />
+              <ProgressRing value={64} label={t("progress.profile")} />
+              <ProgressRing value={100} label={t("progress.course")} />
             </div>
           </div>
           <div className="flex flex-col gap-5">
-            <JaugeQuota libelle={t("progression.quotaNormal")} utilise={3} limite={10} />
-            <JaugeQuota libelle={t("progression.quotaProche")} utilise={17} limite={20} />
-            <JaugeQuota libelle={t("progression.quotaAtteint")} utilise={5} limite={5} />
-            <JaugeQuota libelle={t("progression.quotaIllimite")} utilise={42} limite={null} />
+            <QuotaGauge label={t("progress.quotaNormal")} used={3} limit={10} />
+            <QuotaGauge label={t("progress.quotaNear")} used={17} limit={20} />
+            <QuotaGauge label={t("progress.quotaReached")} used={5} limit={5} />
+            <QuotaGauge label={t("progress.quotaUnlimited")} used={42} limit={null} />
           </div>
         </div>
       </Section>
 
-      <Section titre={t("sections.ia")}>
+      <Section title={t("sections.ai")}>
         <div className="max-w-md">
-          <ScoreExplique
-            titre={t("ia.offre")}
+          <ExplainedScore
+            title={t("ai.job")}
             score={87}
-            explication={
+            explanation={
               <ul className="list-disc pl-5">
-                <li>{t("ia.raison1")}</li>
-                <li>{t("ia.raison2")}</li>
-                <li>{t("ia.raison3")}</li>
+                <li>{t("ai.reason1")}</li>
+                <li>{t("ai.reason2")}</li>
+                <li>{t("ai.reason3")}</li>
               </ul>
             }
           />
         </div>
       </Section>
 
-      <Section titre={t("sections.chargement")}>
+      <Section title={t("sections.loading")}>
         <div className="flex flex-wrap items-center gap-6">
-          <Chargeur taille="sm" />
-          <Chargeur />
-          <Chargeur taille="lg" />
+          <Spinner size="sm" />
+          <Spinner />
+          <Spinner size="lg" />
         </div>
-        <Carte className="flex max-w-md flex-col gap-3">
-          <Squelette className="h-5 w-2/3" />
-          <Squelette className="h-4 w-full" />
-          <Squelette className="h-4 w-5/6" />
-        </Carte>
+        <Card className="flex max-w-md flex-col gap-3">
+          <Skeleton className="h-5 w-2/3" />
+          <Skeleton className="h-4 w-full" />
+          <Skeleton className="h-4 w-5/6" />
+        </Card>
       </Section>
 
-      <Section titre={t("sections.vide")}>
-        <EtatVide
-          icone={<Inbox aria-hidden className="size-6" />}
-          titre={t("vide.titre")}
-          description={t("vide.texte")}
+      <Section title={t("sections.empty")}>
+        <EmptyState
+          icon={<Inbox aria-hidden className="size-6" />}
+          title={t("empty.title")}
+          description={t("empty.text")}
           action={
-            <BoutonLien href="/offres" icone={<Sparkles aria-hidden className="size-4" />}>
-              {t("vide.action")}
-            </BoutonLien>
+            <ButtonLink href="/offres" icon={<Sparkles aria-hidden className="size-4" />}>
+              {t("empty.action")}
+            </ButtonLink>
           }
         />
       </Section>
 
-      <Section titre={t("sections.modale")}>
-        <div>
-          <DemoModale />
-        </div>
+      <Section title={t("sections.modal")}>
+        <ModalDemo />
       </Section>
     </div>
   );

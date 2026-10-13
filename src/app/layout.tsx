@@ -4,7 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import "./globals.css";
 
-// Sora (licence SIL OFL), servie depuis le site : aucune requête vers un service externe.
+// Sora (SIL OFL) is self-hosted: no request to an external font service.
 const sora = localFont({
   src: "../../node_modules/@fontsource-variable/sora/files/sora-latin-wght-normal.woff2",
   weight: "100 800",
@@ -15,9 +15,9 @@ const sora = localFont({
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("meta");
   return {
-    title: { default: t("titre"), template: t("modeleTitre") },
+    title: { default: t("title"), template: t("titleTemplate") },
     description: t("description"),
-    applicationName: t("nomApplication"),
+    applicationName: t("applicationName"),
   };
 }
 

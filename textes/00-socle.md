@@ -1,216 +1,230 @@
-# 00 · Socle (textes provisoires de l'étape E0)
+# 00 · Socle (textes de l'étape E0)
 
-> Fichier créé à l'étape E0 pour les textes du socle technique (gabarits, composants, page `/dev/composants`).
-> Les textes officiels de l'interface viendront des fichiers `textes/01` et suivants du cahier des charges.
-> Format : chaque tableau `| Clé | Texte |` est converti en `messages/fr.json` par `pnpm messages`.
-> Les variables s'écrivent entre accolades : `{limite}`.
+> Textes du socle technique : gabarits, composants de base et page `/dev/composants`.
+> Les textes officiels de l'interface sont dans les fichiers `textes/01` et suivants.
+> Chaque tableau `| Clé | Texte |` est converti en `messages/fr.json` par `pnpm messages`.
+> Les variables s'écrivent entre accolades : `{limit}`.
 
 ## Commun
 
-| Clé                              | Texte                                             |
-| -------------------------------- | ------------------------------------------------- |
-| `commun.marque.nom`              | Jumanly                                           |
-| `commun.marque.slogan`           | Learn. Grow. Connect.                             |
-| `commun.marque.portePar`         | Une plateforme développée par The Growth Lab      |
-| `commun.contact.titre`           | Nous écrire                                       |
-| `commun.contact.emailPrincipal`  | assistant@jumanly.io                              |
-| `commun.contact.emailSecondaire` | infojumanly@gmail.com                             |
-| `commun.piedDePage.droits`       | © Jumanly · The Growth Lab. Tous droits réservés. |
+| Clé | Texte |
+|---|---|
+| `common.brand.name` | Jumanly |
+| `common.brand.slogan` | Learn. Grow. Connect. |
+| `common.brand.byline` | Une plateforme développée par The Growth Lab |
+| `common.contact.title` | Nous écrire |
+| `common.contact.primaryEmail` | assistant@jumanly.io |
+| `common.contact.secondaryEmail` | infojumanly@gmail.com |
+| `common.footer.rights` | © Jumanly · The Growth Lab. Tous droits réservés. |
 
 ## Métadonnées
 
-| Clé                   | Texte                                                                                        |
-| --------------------- | -------------------------------------------------------------------------------------------- |
-| `meta.titre`          | Jumanly · Learn. Grow. Connect.                                                              |
-| `meta.modeleTitre`    | %s · Jumanly                                                                                 |
-| `meta.description`    | Jumanly relie les talents africains aux formations et aux employeurs qui leur correspondent. |
-| `meta.nomApplication` | Jumanly                                                                                      |
+| Clé | Texte |
+|---|---|
+| `meta.title` | Jumanly · Learn. Grow. Connect. |
+| `meta.titleTemplate` | %s · Jumanly |
+| `meta.description` | Jumanly relie les talents africains aux formations et aux employeurs qui leur correspondent. |
+| `meta.applicationName` | Jumanly |
 
 ## Navigation
 
-| Clé                                | Texte                    |
-| ---------------------------------- | ------------------------ |
-| `navigation.public.accueil`        | Accueil Jumanly          |
-| `navigation.public.principale`     | Navigation principale    |
-| `navigation.public.menu`           | Ouvrir le menu           |
-| `navigation.public.formations`     | Formations               |
-| `navigation.public.offres`         | Offres d'emploi          |
-| `navigation.public.tarifs`         | Tarifs                   |
-| `navigation.public.connexion`      | Se connecter             |
-| `navigation.public.inscription`    | Créer un compte          |
-| `navigation.espace.principale`     | Navigation de mon espace |
-| `navigation.espace.allerAuContenu` | Aller au contenu         |
-| `navigation.espace.notifications`  | Notifications            |
-| `navigation.espace.accueil`        | Accueil                  |
-| `navigation.espace.learn`          | Learn                    |
-| `navigation.espace.career`         | Career                   |
-| `navigation.espace.jobs`           | Jobs                     |
-| `navigation.espace.connect`        | Connect                  |
+| Clé | Texte |
+|---|---|
+| `nav.public.home` | Accueil Jumanly |
+| `nav.public.main` | Navigation principale |
+| `nav.public.menu` | Ouvrir le menu |
+| `nav.public.courses` | Formations |
+| `nav.public.jobs` | Offres d'emploi |
+| `nav.public.pricing` | Tarifs |
+| `nav.public.signIn` | Se connecter |
+| `nav.public.signUp` | Créer un compte |
+| `nav.app.main` | Navigation de mon espace |
+| `nav.app.skipToContent` | Aller au contenu |
+| `nav.app.notifications` | Notifications |
+| `nav.app.home` | Accueil |
+| `nav.app.learn` | Learn |
+| `nav.app.career` | Career |
+| `nav.app.jobs` | Jobs |
+| `nav.app.connect` | Connect |
 
 ## Composants
 
-| Clé                              | Texte                          |
-| -------------------------------- | ------------------------------ |
-| `composants.chargement`          | Chargement en cours            |
-| `composants.fermer`              | Fermer                         |
-| `composants.facultatif`          | (facultatif)                   |
-| `composants.pourcentage`         | {valeur} %                     |
-| `composants.jaugeQuota.utilise`  | {utilise} sur {limite}         |
-| `composants.jaugeQuota.illimite` | {utilise} utilisés · illimité  |
-| `composants.jaugeQuota.atteint`  | Limite atteinte pour ce mois.  |
-| `composants.ia.suggere`          | Suggéré par l'IA               |
-| `composants.ia.pourquoi`         | Pourquoi ?                     |
-| `composants.ia.humainDecide`     | L'IA recommande, vous décidez. |
+| Clé | Texte |
+|---|---|
+| `ui.loading` | Chargement en cours |
+| `ui.close` | Fermer |
+| `ui.optional` | (facultatif) |
+| `ui.percent` | {value} % |
+| `ui.quota.used` | {used} sur {limit} |
+| `ui.quota.unlimited` | {used} utilisés · illimité |
+| `ui.quota.reached` | Limite atteinte pour ce mois. |
+| `ui.ai.suggested` | Suggéré par l'IA |
+| `ui.ai.why` | Pourquoi ? |
+| `ui.ai.humanDecides` | L'IA recommande, vous décidez. |
 
-## Accueil provisoire
+## Accueil provisoire (remplacé à l'étape E1)
 
-| Clé                   | Texte                                                                                      |
-| --------------------- | ------------------------------------------------------------------------------------------ |
-| `accueil.pastille`    | Bientôt disponible                                                                         |
-| `accueil.titre`       | Votre carrière commence ici.                                                               |
-| `accueil.sousTitre`   | Formez-vous, enrichissez votre profil et rencontrez les employeurs qui vous correspondent. |
-| `accueil.creerCompte` | Créer un compte                                                                            |
-| `accueil.seConnecter` | Se connecter                                                                               |
+| Clé | Texte |
+|---|---|
+| `home.badge` | Bientôt disponible |
+| `home.title` | Votre carrière commence ici. |
+| `home.subtitle` | Formez-vous, enrichissez votre profil et rencontrez les employeurs qui vous correspondent. |
+| `home.signUp` | Créer un compte |
+| `home.signIn` | Se connecter |
 
-## Espace connecté provisoire
+## Espace connecté provisoire (remplacé à l'étape E3)
 
-| Clé                                   | Texte                                                          |
-| ------------------------------------- | -------------------------------------------------------------- |
-| `espace.utilisateurExemple`           | Aïcha Exemple                                                  |
-| `espace.tableauDeBord.surtitre`       | Mon espace                                                     |
-| `espace.tableauDeBord.titre`          | Bonjour, bienvenue sur Jumanly                                 |
-| `espace.tableauDeBord.profilLabel`    | Profil complété                                                |
-| `espace.tableauDeBord.profilTitre`    | Complétez votre profil                                         |
-| `espace.tableauDeBord.profilTexte`    | Un profil complet vous fait remonter dans les recommandations. |
-| `espace.tableauDeBord.videTitre`      | Votre tableau de bord arrive bientôt                           |
-| `espace.tableauDeBord.videTexte`      | Formations, offres et messages apparaîtront ici.               |
-| `espace.tableauDeBord.voirComposants` | Voir les composants                                            |
+| Clé | Texte |
+|---|---|
+| `app.sampleUser` | Aïcha Exemple |
+| `app.dashboard.eyebrow` | Mon espace |
+| `app.dashboard.title` | Bonjour, bienvenue sur Jumanly |
+| `app.dashboard.profileLabel` | Profil complété |
+| `app.dashboard.profileTitle` | Complétez votre profil |
+| `app.dashboard.profileText` | Un profil complet vous fait remonter dans les recommandations. |
+| `app.dashboard.emptyTitle` | Votre tableau de bord arrive bientôt |
+| `app.dashboard.emptyText` | Formations, offres et messages apparaîtront ici. |
+| `app.dashboard.seeComponents` | Voir les composants |
+
+## E-mails
+
+| Clé | Texte |
+|---|---|
+| `email.layout.footer` | Une plateforme développée par The Growth Lab. Pour nous écrire : {email} |
+| `email.example.preview` | Exemple de gabarit d'e-mail Jumanly |
+| `email.example.title` | Bienvenue sur Jumanly |
+| `email.example.body` | Ceci est le gabarit commun des e-mails. Les vrais modèles arrivent avec les notifications. |
+| `email.example.cta` | Ouvrir mon espace |
 
 ## Page /dev/composants
 
-| Clé                                       | Texte                                                                                                       |
-| ----------------------------------------- | ----------------------------------------------------------------------------------------------------------- |
-| `devComposants.titre`                     | Bibliothèque de composants                                                                                  |
-| `devComposants.intro`                     | Tous les composants de base de Jumanly et leurs états. Page interne, non indexée.                           |
-| `devComposants.gabaritPublic`             | Gabarit du site public                                                                                      |
-| `devComposants.gabaritEspace`             | Gabarit de l'espace connecté                                                                                |
-| `devComposants.sections.couleurs`         | Couleurs et dégradés                                                                                        |
-| `devComposants.sections.typographie`      | Typographie                                                                                                 |
-| `devComposants.sections.boutons`          | Boutons                                                                                                     |
-| `devComposants.sections.champs`           | Champs de saisie                                                                                            |
-| `devComposants.sections.choix`            | Cases, boutons radio et interrupteurs                                                                       |
-| `devComposants.sections.pastilles`        | Pastilles                                                                                                   |
-| `devComposants.sections.cartes`           | Cartes                                                                                                      |
-| `devComposants.sections.alertes`          | Alertes                                                                                                     |
-| `devComposants.sections.avatars`          | Avatars                                                                                                     |
-| `devComposants.sections.onglets`          | Onglets                                                                                                     |
-| `devComposants.sections.progression`      | Progression et quotas                                                                                       |
-| `devComposants.sections.ia`               | Intelligence : score expliqué                                                                               |
-| `devComposants.sections.chargement`       | Chargement                                                                                                  |
-| `devComposants.sections.vide`             | État vide                                                                                                   |
-| `devComposants.sections.modale`           | Fenêtre modale                                                                                              |
-| `devComposants.couleurs.sapin`            | Vert Sapin #0F3F37                                                                                          |
-| `devComposants.couleurs.lime`             | Lime #A6F26B                                                                                                |
-| `devComposants.couleurs.creme`            | Crème #F2EDE5                                                                                               |
-| `devComposants.couleurs.feuille`          | Feuille #3DA14F                                                                                             |
-| `devComposants.couleurs.mentheIa`         | Menthe IA #2FD3A6                                                                                           |
-| `devComposants.couleurs.nuit`             | Nuit #0B1A1F                                                                                                |
-| `devComposants.couleurs.neon`             | Néon #E3F67C                                                                                                |
-| `devComposants.couleurs.ardoise`          | Ardoise #5B6B68                                                                                             |
-| `devComposants.couleurs.brume`            | Brume #DCE5E1                                                                                               |
-| `devComposants.couleurs.ambre`            | Ambre #F2B33D                                                                                               |
-| `devComposants.couleurs.corail`           | Corail #E25C4B                                                                                              |
-| `devComposants.couleurs.mentheClaire`     | Menthe claire #BFEFDF                                                                                       |
-| `devComposants.typo.display`              | Learn. Grow.                                                                                                |
-| `devComposants.typo.h1`                   | Votre carrière commence ici                                                                                 |
-| `devComposants.typo.h2`                   | Formations recommandées pour vous                                                                           |
-| `devComposants.typo.label`                | Date limite                                                                                                 |
-| `devComposants.typo.corps`                | Jumanly relie les talents africains aux formations et aux employeurs qui leur correspondent.                |
-| `devComposants.typo.legende`              | Une plateforme développée par The Growth Lab                                                                |
-| `devComposants.variantes.primaire`        | Primaire                                                                                                    |
-| `devComposants.variantes.secondaire`      | Secondaire                                                                                                  |
-| `devComposants.variantes.contour`         | Contour                                                                                                     |
-| `devComposants.variantes.fantome`         | Fantôme                                                                                                     |
-| `devComposants.variantes.danger`          | Danger                                                                                                      |
-| `devComposants.etats.icone`               | Avec icône                                                                                                  |
-| `devComposants.etats.chargement`          | En cours                                                                                                    |
-| `devComposants.etats.desactive`           | Désactivé                                                                                                   |
-| `devComposants.etats.petit`               | Petit                                                                                                       |
-| `devComposants.etats.moyen`               | Moyen                                                                                                       |
-| `devComposants.etats.grand`               | Grand                                                                                                       |
-| `devComposants.etats.lien`                | Lien                                                                                                        |
-| `devComposants.boutons.action`            | Postuler                                                                                                    |
-| `devComposants.boutons.lien`              | Créer mon profil                                                                                            |
-| `devComposants.champs.nom`                | Nom complet                                                                                                 |
-| `devComposants.champs.nomExemple`         | Ex. : Aïcha Exemple                                                                                         |
-| `devComposants.champs.email`              | Adresse e-mail                                                                                              |
-| `devComposants.champs.emailAide`          | Nous ne la partageons jamais sans votre accord.                                                             |
-| `devComposants.champs.emailInvalide`      | aicha@exemple                                                                                               |
-| `devComposants.champs.emailErreur`        | Saisissez une adresse e-mail valide, par exemple nom@domaine.com.                                           |
-| `devComposants.champs.desactive`          | Champ non modifiable                                                                                        |
-| `devComposants.champs.valeurFixe`         | Valeur verrouillée                                                                                          |
-| `devComposants.champs.pays`               | Pays                                                                                                        |
-| `devComposants.champs.paysInvite`         | Choisissez un pays                                                                                          |
-| `devComposants.champs.paysErreur`         | Choisissez votre pays pour continuer.                                                                       |
-| `devComposants.champs.paysA`              | République démocratique du Congo                                                                            |
-| `devComposants.champs.paysB`              | Cameroun                                                                                                    |
-| `devComposants.champs.paysC`              | Sénégal                                                                                                     |
-| `devComposants.champs.bio`                | Présentation                                                                                                |
-| `devComposants.champs.bioAide`            | Quelques lignes sur votre parcours et vos objectifs.                                                        |
-| `devComposants.choix.conditions`          | J'accepte les conditions d'utilisation                                                                      |
-| `devComposants.choix.alertes`             | Recevoir les alertes d'offres                                                                               |
-| `devComposants.choix.alertesAide`         | Un e-mail par semaine au maximum.                                                                           |
-| `devComposants.choix.profil`              | Je suis                                                                                                     |
-| `devComposants.choix.talent`              | Un talent                                                                                                   |
-| `devComposants.choix.recruteur`           | Un recruteur RH                                                                                             |
-| `devComposants.choix.entreprise`          | Une entreprise                                                                                              |
-| `devComposants.choix.profilVisible`       | Profil visible des recruteurs                                                                               |
-| `devComposants.choix.profilVisibleAide`   | Vous pouvez le masquer à tout moment.                                                                       |
-| `devComposants.choix.emails`              | Résumé hebdomadaire par e-mail                                                                              |
-| `devComposants.pastilles.neutre`          | Brouillon                                                                                                   |
-| `devComposants.pastilles.sapin`           | Learn                                                                                                       |
-| `devComposants.pastilles.lime`            | Nouveau                                                                                                     |
-| `devComposants.pastilles.succes`          | Retenu                                                                                                      |
-| `devComposants.pastilles.alerte`          | En attente                                                                                                  |
-| `devComposants.pastilles.erreur`          | Non retenu                                                                                                  |
-| `devComposants.pastilles.ia`              | Suggéré par l'IA                                                                                            |
-| `devComposants.cartes.standardTitre`      | Gestion de projet agile                                                                                     |
-| `devComposants.cartes.standardTexte`      | Learn · 6 modules · Certificat                                                                              |
-| `devComposants.cartes.teinteTitre`        | 3 offres correspondent à votre profil                                                                       |
-| `devComposants.cartes.teinteTexte`        | Consultez-les avant la date limite.                                                                         |
-| `devComposants.cartes.sombreTitre`        | Module Intelligence                                                                                         |
-| `devComposants.cartes.sombreTexte`        | Des recommandations expliquées, jamais imposées.                                                            |
-| `devComposants.alertes.infoTitre`         | Information                                                                                                 |
-| `devComposants.alertes.infoTexte`         | Votre profil est visible des recruteurs vérifiés uniquement.                                                |
-| `devComposants.alertes.succesTitre`       | Candidature envoyée                                                                                         |
-| `devComposants.alertes.succesTexte`       | Vous suivrez son avancement dans vos candidatures.                                                          |
-| `devComposants.alertes.alerteTitre`       | Quota bientôt atteint                                                                                       |
-| `devComposants.alertes.alerteTexte`       | Il vous reste 2 analyses ce mois-ci.                                                                        |
-| `devComposants.alertes.alerteAction`      | Voir les forfaits                                                                                           |
-| `devComposants.alertes.erreurTitre`       | Envoi impossible                                                                                            |
-| `devComposants.alertes.erreurTexte`       | Vérifiez votre connexion puis réessayez.                                                                    |
-| `devComposants.avatars.nom`               | Aïcha Exemple                                                                                               |
-| `devComposants.onglets.talents`           | Talents                                                                                                     |
-| `devComposants.onglets.recruteurs`        | Recruteurs                                                                                                  |
-| `devComposants.onglets.entreprises`       | Entreprises                                                                                                 |
-| `devComposants.onglets.talentsTexte`      | Formez-vous et postulez gratuitement.                                                                       |
-| `devComposants.onglets.recruteursTexte`   | Publiez vos offres et suivez vos candidats.                                                                 |
-| `devComposants.onglets.entreprisesTexte`  | Pilotez vos recrutements en équipe.                                                                         |
-| `devComposants.progression.profil`        | Profil complété                                                                                             |
-| `devComposants.progression.formation`     | Progression de la formation                                                                                 |
-| `devComposants.progression.quotaNormal`   | Analyses de CV                                                                                              |
-| `devComposants.progression.quotaProche`   | Crédits IA du mois                                                                                          |
-| `devComposants.progression.quotaAtteint`  | Offres actives                                                                                              |
-| `devComposants.progression.quotaIllimite` | Candidatures                                                                                                |
-| `devComposants.ia.offre`                  | Compatibilité avec « Analyste RH junior » (exemple fictif)                                                  |
-| `devComposants.ia.raison1`                | Excel avancé : compétence requise, présente sur votre profil.                                               |
-| `devComposants.ia.raison2`                | Certificat RH obtenu sur Jumanly Learn.                                                                     |
-| `devComposants.ia.raison3`                | 2 ans d'expérience pour 1 an demandé.                                                                       |
-| `devComposants.vide.titre`                | Aucune candidature pour l'instant                                                                           |
-| `devComposants.vide.texte`                | Parcourez les offres : postuler est toujours gratuit.                                                       |
-| `devComposants.vide.action`               | Voir les offres                                                                                             |
-| `devComposants.modale.ouvrir`             | Ouvrir la fenêtre                                                                                           |
-| `devComposants.modale.titre`              | Retirer ma candidature ?                                                                                    |
-| `devComposants.modale.texte`              | Le recruteur ne verra plus votre candidature. Vous pourrez postuler à nouveau tant que l'offre est ouverte. |
-| `devComposants.modale.annuler`            | Annuler                                                                                                     |
-| `devComposants.modale.confirmer`          | Retirer                                                                                                     |
+| Clé | Texte |
+|---|---|
+| `devComponents.title` | Bibliothèque de composants |
+| `devComponents.intro` | Tous les composants de base de Jumanly et leurs états. Page interne, non indexée. |
+| `devComponents.publicLayout` | Gabarit du site public |
+| `devComponents.appLayout` | Gabarit de l'espace connecté |
+| `devComponents.sections.colors` | Couleurs et dégradés |
+| `devComponents.sections.typography` | Typographie |
+| `devComponents.sections.buttons` | Boutons |
+| `devComponents.sections.fields` | Champs de saisie |
+| `devComponents.sections.choices` | Cases, boutons radio et interrupteurs |
+| `devComponents.sections.badges` | Pastilles |
+| `devComponents.sections.cards` | Cartes |
+| `devComponents.sections.alerts` | Alertes |
+| `devComponents.sections.avatars` | Avatars |
+| `devComponents.sections.tabs` | Onglets |
+| `devComponents.sections.progress` | Progression et quotas |
+| `devComponents.sections.ai` | Intelligence : score expliqué |
+| `devComponents.sections.loading` | Chargement |
+| `devComponents.sections.empty` | État vide |
+| `devComponents.sections.modal` | Fenêtre modale |
+| `devComponents.colors.sapin` | Vert Sapin #0F3F37 |
+| `devComponents.colors.lime` | Lime #A6F26B |
+| `devComponents.colors.creme` | Crème #F2EDE5 |
+| `devComponents.colors.blanc` | Blanc #FFFFFF |
+| `devComponents.colors.feuille` | Feuille #3DA14F |
+| `devComponents.colors.menthe` | Menthe IA #2FD3A6 |
+| `devComponents.colors.nuit` | Nuit #0B1A1F |
+| `devComponents.colors.neon` | Néon #E3F67C |
+| `devComponents.colors.ardoise` | Ardoise #5B6B68 |
+| `devComponents.colors.brume` | Brume #DCE5E1 |
+| `devComponents.colors.ambre` | Ambre #F2B33D |
+| `devComponents.colors.corail` | Corail #E25C4B |
+| `devComponents.colors.mentheClaire` | Menthe claire #BFEFDF |
+| `devComponents.gradients.signature` | Dégradé signature |
+| `devComponents.gradients.ai` | Dégradé Intelligence |
+| `devComponents.gradients.depth` | Dégradé profondeur |
+| `devComponents.type.display` | Learn. Grow. |
+| `devComponents.type.h1` | Votre carrière commence ici |
+| `devComponents.type.h2` | Formations recommandées pour vous |
+| `devComponents.type.label` | Date limite |
+| `devComponents.type.body` | Jumanly relie les talents africains aux formations et aux employeurs qui leur correspondent. |
+| `devComponents.type.caption` | Une plateforme développée par The Growth Lab |
+| `devComponents.variants.primary` | Primaire |
+| `devComponents.variants.secondary` | Secondaire |
+| `devComponents.variants.outline` | Contour |
+| `devComponents.variants.ghost` | Fantôme |
+| `devComponents.variants.danger` | Danger |
+| `devComponents.states.icon` | Avec icône |
+| `devComponents.states.loading` | En cours |
+| `devComponents.states.disabled` | Désactivé |
+| `devComponents.states.small` | Petit |
+| `devComponents.states.medium` | Moyen |
+| `devComponents.states.large` | Grand |
+| `devComponents.states.link` | Lien |
+| `devComponents.buttons.action` | Postuler |
+| `devComponents.buttons.link` | Créer mon profil |
+| `devComponents.fields.name` | Nom complet |
+| `devComponents.fields.namePlaceholder` | Ex. : Aïcha Exemple |
+| `devComponents.fields.email` | Adresse e-mail |
+| `devComponents.fields.emailHint` | Nous ne la partageons jamais sans votre accord. |
+| `devComponents.fields.emailInvalid` | aicha@exemple |
+| `devComponents.fields.emailError` | Saisissez une adresse e-mail valide, par exemple nom@domaine.com. |
+| `devComponents.fields.locked` | Champ non modifiable |
+| `devComponents.fields.lockedValue` | Valeur verrouillée |
+| `devComponents.fields.country` | Pays |
+| `devComponents.fields.countryPlaceholder` | Choisissez un pays |
+| `devComponents.fields.countryError` | Choisissez votre pays pour continuer. |
+| `devComponents.fields.countryA` | République démocratique du Congo |
+| `devComponents.fields.countryB` | Cameroun |
+| `devComponents.fields.countryC` | Sénégal |
+| `devComponents.fields.bio` | Présentation |
+| `devComponents.fields.bioHint` | Quelques lignes sur votre parcours et vos objectifs. |
+| `devComponents.choices.terms` | J'accepte les conditions d'utilisation |
+| `devComponents.choices.alerts` | Recevoir les alertes d'offres |
+| `devComponents.choices.alertsHint` | Un e-mail par semaine au maximum. |
+| `devComponents.choices.profile` | Je suis |
+| `devComponents.choices.talent` | Un talent |
+| `devComponents.choices.recruiter` | Un recruteur RH |
+| `devComponents.choices.company` | Une entreprise |
+| `devComponents.choices.visible` | Profil visible des recruteurs |
+| `devComponents.choices.visibleHint` | Vous pouvez le masquer à tout moment. |
+| `devComponents.choices.digest` | Résumé hebdomadaire par e-mail |
+| `devComponents.badges.neutral` | Brouillon |
+| `devComponents.badges.sapin` | Learn |
+| `devComponents.badges.lime` | Nouveau |
+| `devComponents.badges.success` | Retenu |
+| `devComponents.badges.warning` | En attente |
+| `devComponents.badges.error` | Non retenu |
+| `devComponents.badges.ai` | Suggéré par l'IA |
+| `devComponents.cards.defaultTitle` | Gestion de projet agile |
+| `devComponents.cards.defaultText` | Learn · 6 modules · Certificat |
+| `devComponents.cards.tintedTitle` | 3 offres correspondent à votre profil |
+| `devComponents.cards.tintedText` | Consultez-les avant la date limite. |
+| `devComponents.cards.darkTitle` | Module Intelligence |
+| `devComponents.cards.darkText` | Des recommandations expliquées, jamais imposées. |
+| `devComponents.alerts.infoTitle` | Information |
+| `devComponents.alerts.infoText` | Votre profil est visible des recruteurs vérifiés uniquement. |
+| `devComponents.alerts.successTitle` | Candidature envoyée |
+| `devComponents.alerts.successText` | Vous suivrez son avancement dans vos candidatures. |
+| `devComponents.alerts.warningTitle` | Quota bientôt atteint |
+| `devComponents.alerts.warningText` | Il vous reste 2 analyses ce mois-ci. |
+| `devComponents.alerts.warningAction` | Voir les forfaits |
+| `devComponents.alerts.errorTitle` | Envoi impossible |
+| `devComponents.alerts.errorText` | Vérifiez votre connexion puis réessayez. |
+| `devComponents.avatars.name` | Aïcha Exemple |
+| `devComponents.tabs.talents` | Talents |
+| `devComponents.tabs.recruiters` | Recruteurs |
+| `devComponents.tabs.companies` | Entreprises |
+| `devComponents.tabs.talentsText` | Formez-vous et postulez gratuitement. |
+| `devComponents.tabs.recruitersText` | Publiez vos offres et suivez vos candidats. |
+| `devComponents.tabs.companiesText` | Pilotez vos recrutements en équipe. |
+| `devComponents.progress.profile` | Profil complété |
+| `devComponents.progress.course` | Progression de la formation |
+| `devComponents.progress.quotaNormal` | Analyses de CV |
+| `devComponents.progress.quotaNear` | Crédits IA du mois |
+| `devComponents.progress.quotaReached` | Offres actives |
+| `devComponents.progress.quotaUnlimited` | Candidatures |
+| `devComponents.ai.job` | Compatibilité avec « Analyste RH junior » (exemple fictif) |
+| `devComponents.ai.reason1` | Excel avancé : compétence requise, présente sur votre profil. |
+| `devComponents.ai.reason2` | Certificat RH obtenu sur Jumanly Learn. |
+| `devComponents.ai.reason3` | 2 ans d'expérience pour 1 an demandé. |
+| `devComponents.empty.title` | Aucune candidature pour l'instant |
+| `devComponents.empty.text` | Parcourez les offres : postuler est toujours gratuit. |
+| `devComponents.empty.action` | Voir les offres |
+| `devComponents.modal.open` | Ouvrir la fenêtre |
+| `devComponents.modal.title` | Retirer ma candidature ? |
+| `devComponents.modal.text` | Le recruteur ne verra plus votre candidature. Vous pourrez postuler à nouveau tant que l'offre est ouverte. |
+| `devComponents.modal.cancel` | Annuler |
+| `devComponents.modal.confirm` | Retirer |

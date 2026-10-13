@@ -7,3 +7,5 @@ test-results/
 ressources/logos/
 ressources/favicon/
 public/marque/
+*.md
+ressources/jumanly-tokens.css

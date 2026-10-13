@@ -7,24 +7,20 @@ import {
   type LucideIcon,
 } from "lucide-react";
 
-/** Liens du site public. `cle` renvoie à `navigation.public.<cle>` dans les textes. */
-export const navigationPublique = [
-  { cle: "formations", href: "/formations" },
-  { cle: "offres", href: "/offres" },
-  { cle: "tarifs", href: "/tarifs" },
+/** Public site links. `key` points to `nav.public.<key>` in the texts. */
+export const publicNavigation = [
+  { key: "courses", href: "/formations" },
+  { key: "jobs", href: "/offres" },
+  { key: "pricing", href: "/tarifs" },
 ] as const;
 
-export type CleNavigationEspace = "accueil" | "learn" | "career" | "jobs" | "connect";
+export type AppNavigationKey = "home" | "learn" | "career" | "jobs" | "connect";
 
-/** Modules de l'espace talent. `cle` renvoie à `navigation.espace.<cle>`. */
-export const navigationEspaceTalent: {
-  cle: CleNavigationEspace;
-  href: string;
-  icone: LucideIcon;
-}[] = [
-  { cle: "accueil", href: "/app", icone: LayoutDashboard },
-  { cle: "learn", href: "/app/learn", icone: BookOpen },
-  { cle: "career", href: "/app/career", icone: TrendingUp },
-  { cle: "jobs", href: "/app/jobs", icone: BriefcaseBusiness },
-  { cle: "connect", href: "/app/messages", icone: MessagesSquare },
+/** Talent space modules. `key` points to `nav.app.<key>`. */
+export const talentNavigation: { key: AppNavigationKey; href: string; icon: LucideIcon }[] = [
+  { key: "home", href: "/app", icon: LayoutDashboard },
+  { key: "learn", href: "/app/learn", icon: BookOpen },
+  { key: "career", href: "/app/career", icon: TrendingUp },
+  { key: "jobs", href: "/app/jobs", icon: BriefcaseBusiness },
+  { key: "connect", href: "/app/messages", icon: MessagesSquare },
 ];

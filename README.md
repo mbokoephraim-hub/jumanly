@@ -36,6 +36,7 @@ Aucun texte n'est écrit dans le code. Ajoutez une ligne `| clé | texte |` dans
 
 ## Documentation
 
+- `CLAUDE.md` : les règles permanentes du projet
 - `docs/12-feuille-de-route.md` : les étapes E0 à E11
 - `docs/journal.md` : ce qui a été fait à chaque étape
 - `docs/decisions/` : les choix techniques

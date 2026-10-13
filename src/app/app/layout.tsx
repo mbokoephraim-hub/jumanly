@@ -1,8 +1,8 @@
 import { useTranslations } from "next-intl";
-import { CoqueEspace } from "@/components/mise-en-page/coque-espace";
+import { AppShell } from "@/components/layout/app-shell";
 
-/** Gabarit de l'espace connecté. L'authentification arrive à l'étape E2. */
-export default function GabaritEspace({ children }: LayoutProps<"/app">) {
-  const t = useTranslations("espace");
-  return <CoqueEspace nomUtilisateur={t("utilisateurExemple")}>{children}</CoqueEspace>;
+/** Signed-in space layout. Authentication comes with step E2. */
+export default function SignedInLayout({ children }: LayoutProps<"/app">) {
+  const t = useTranslations("app");
+  return <AppShell userName={t("sampleUser")}>{children}</AppShell>;
 }

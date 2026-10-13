@@ -6,61 +6,53 @@ Une entrée par étape : ce qui a été fait, les décisions prises, les dettes 
 
 ### Contexte
 
-Le dépôt était vide. Seuls `PROMPT-DEMARRAGE.md` et `docs/12-feuille-de-route.md` ont été fournis :
-**`CLAUDE.md`, `docs/01` à `docs/11`, `textes/` et `ressources/jumanly-tokens.css` sont absents.**
-L'étape a été réalisée avec la feuille de route, la charte graphique v1.0, le LISEZMOI des maquettes
-et les logos du projet. Tout ce qui dépend des fichiers manquants est marqué « provisoire » ci-dessous.
+Fournis : `CLAUDE.md`, `docs/12-feuille-de-route.md`, `ressources/jumanly-tokens.css`, la charte
+graphique, le LISEZMOI des maquettes et les logos.
+**Encore absents : `docs/01` à `docs/11` et les fichiers `textes/01` et suivants.**
+La liste des composants (doc 11 § 11.5) et la stack détaillée (doc 02) ont donc été déduites de
+CLAUDE.md, de la feuille de route et de la charte.
 
 ### Fait
 
-- Next.js 16 (App Router, Turbopack, Cache Components), TypeScript strict, React 19.
-- Tailwind CSS 4 branché sur `ressources/jumanly-tokens.css` (bloc `@theme` de `src/app/globals.css`) :
-  classes `bg-sapin`, `text-lime`, `rounded-carte`, `text-h1`, `bg-degrade-intelligence`…
-- Police Sora servie par le site (`@fontsource-variable/sora` + `next/font/local`), sans appel externe.
-- ESLint (règles Next + règle `react/jsx-no-literals` : **aucun texte en dur dans le JSX**), Prettier.
-- next-intl, langue unique `fr`, clés de traduction **typées** (une clé inexistante ne compile pas).
-- `scripts/build-messages.ts` : lit les tableaux `| Clé | Texte |` de `textes/*.md` et génère
-  `messages/fr.json` ; signale doublons, clés invalides, textes vides et conflits.
-  `pnpm messages` régénère, `pnpm messages:check` vérifie (CI et `pnpm build`).
-- Prisma 7 (adaptateur `pg`) + PostgreSQL 16 avec pgvector (Docker Compose), migration initiale
-  qui active l'extension `vector`. Aucun modèle de données : ils viennent de `docs/04` à partir de E1.
-- Bibliothèque de 20 composants (`src/components/ui`) : Bouton et BoutonLien, ChampTexte, ZoneTexte,
-  ListeDeroulante, CaseACocher, GroupeRadio, Interrupteur, Pastille, Carte, Alerte, Avatar, Onglets,
-  BarreProgression, ArcProgression, JaugeQuota, Squelette, Chargeur, EtatVide, Modale, OrbeIA,
-  ScoreExplique (score + « Pourquoi ? »), Logo.
-- Page `/dev/composants` : tous les composants et leurs états (normal, icône, chargement, désactivé,
-  erreur, aide, quotas proche / atteint / illimité…). Non indexée.
+- Next.js 16 (App Router, Turbopack), TypeScript strict, React 19.
+- Tailwind CSS 4 branché sur les jetons officiels : `bg-sapin`, `text-lime`, `rounded-card`,
+  `text-h1`, `bg-gradient-ai`, `bg-ai-orb`…
+- Police Sora auto-hébergée (voir la décision du jour).
+- ESLint (règles Next + **aucun texte en dur dans le JSX**), Prettier (les `.md` ne sont pas reformatés).
+- next-intl, langue `fr`, clés typées. `scripts/build-messages.ts` lit les tableaux `| Clé | Texte |` de
+  `textes/*.md` et génère `messages/fr.json` ; il signale doublons, clés invalides, textes vides et
+  conflits. `pnpm messages` régénère, `pnpm messages:check` vérifie (CI et `pnpm build`).
+- Prisma 7 + PostgreSQL 16 avec pgvector (Docker Compose), migration `enable_pgvector`,
+  `pnpm db:seed` prêt (vide jusqu'à E1).
+- Bibliothèque de composants (`src/components/ui`) : Button, ButtonLink, TextField, TextArea, Select,
+  Checkbox, RadioGroup, Switch, Badge, Card, Alert, Avatar, Tabs, ProgressBar, ProgressRing,
+  QuotaGauge, Skeleton, Spinner, EmptyState, Modal, AiOrb, ExplainedScore (score + « Pourquoi ? »), Logo.
+- Page `/dev/composants` : couleurs, dégradés, typographie et tous les composants avec leurs états.
 - Gabarits : site public (en-tête, menu mobile sans JavaScript, pied de page avec les deux adresses
-  e-mail) ; espace connecté (barre latérale desktop, barre de navigation basse sur mobile, lien
-  d'évitement « Aller au contenu »).
-- Tests : Vitest (script des textes, composants), Playwright (desktop + mobile).
+  e-mail) ; espace connecté (barre latérale desktop, barre basse mobile, lien « Aller au contenu »).
+- E-mails : gabarit commun React Email et `pnpm email:dev` (aperçu sur le port 3001).
+- Tests : Vitest (script des textes, composants, e-mail), Playwright desktop + mobile (pages,
+  modale au clavier, navigation adaptée à l'écran, aucun lien `tel:`, moins de 200 Ko de JS sur `/`).
 - GitHub Actions : textes, format, lint, types, tests, migrations sur pgvector, build, e2e.
-- `.env.example` avec toutes les variables prévues par la stack (modèles IA en variables).
+- `.env.example` avec les variables prévues (dont `AI_MODEL_DEFAULT`, `AI_MODEL_FAST`).
 
 ### Définition de fini
 
-| Critère                                                                | État                                       |
-| ---------------------------------------------------------------------- | ------------------------------------------ |
-| `pnpm dev` démarre                                                     | ✓                                          |
-| `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` passent en CI | ✓ en local, CI sur la PR                   |
-| `/dev/composants` montre tous les composants avec leurs états          | ✓ (liste provisoire, doc 11 § 11.5 absent) |
-| Aucun texte en dur                                                     | ✓ garanti par ESLint                       |
-
-### Décisions
-
-Voir `docs/decisions/0001-socle-technique.md`.
+| Critère | État |
+|---|---|
+| `pnpm dev` démarre | ✓ |
+| `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm build` passent en CI | ✓ en local ; CI à l'ouverture de la PR |
+| `/dev/composants` montre tous les composants avec leurs états | ✓ (liste à confronter au doc 11 § 11.5) |
+| Aucun texte en dur | ✓ garanti par ESLint |
 
 ### Dettes et points ouverts
 
-- **Fichiers du cahier des charges à ajouter** : `CLAUDE.md`, `docs/01` à `docs/11`, `textes/01` et
-  suivants, `ressources/jumanly-tokens.css`. À leur arrivée :
-  - remplacer `ressources/jumanly-tokens.css` (provisoire) et ajuster le bloc `@theme` si les noms diffèrent ;
-  - comparer la liste des composants avec le doc 11 § 11.5 et compléter ;
-  - fusionner ou supprimer `textes/00-socle.md` si les textes officiels couvrent les mêmes clés
-    (le script refusera tout doublon).
-- Icônes : `lucide-react` (trait 2 px, extrémités rondes, comme la charte) en attendant les icônes
-  de la marque prévues dans `ressources/`.
-- Fuseau horaire d'affichage : `NEXT_PUBLIC_FUSEAU_HORAIRE`, `UTC` par défaut. À fixer.
+- À l'arrivée de `docs/02`, `docs/03` et `docs/11` : vérifier la stack, l'arborescence et la liste des
+  composants, et compléter.
+- À l'arrivée de `textes/01` et suivants : retirer de `textes/00-socle.md` ce qu'ils couvrent
+  (le script refuse tout doublon de clé).
+- Icônes : `lucide-react` en attendant les icônes de la marque dans `ressources/`.
 - `/dev/composants` reste accessible en production (non indexée) : à protéger ou retirer en E11.
-- Better Auth, Resend, S3, Inngest et l'API Claude ne sont pas encore installés : chacun arrive
-  avec l'étape qui l'utilise (variables déjà prévues dans `.env.example`).
+- Better Auth, Resend, S3, Inngest et l'API Claude ne sont pas installés : chacun arrive avec l'étape
+  qui l'utilise (variables déjà dans `.env.example`).
+- Le dépôt n'avait pas de branche `main` : création soumise à l'accord du propriétaire.

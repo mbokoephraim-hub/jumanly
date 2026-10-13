@@ -1,53 +1,76 @@
 @import "tailwindcss";
 @import "../../ressources/jumanly-tokens.css";
 
-/* Les classes Tailwind reprennent les jetons de la marque : bg-sapin, text-lime, rounded-carte… */
+/*
+ * Compléments d'interface, absents des jetons officiels :
+ * couleurs d'état issues du LISEZMOI des maquettes UI v1.0, ombre des cartes,
+ * et police servie par l'application (variable --font-sora de next/font).
+ */
+:root {
+  --jm-font: var(--font-sora), system-ui, sans-serif;
+  --jm-ambre: #f2b33d; /* alerte douce */
+  --jm-corail: #e25c4b; /* baisse, erreur */
+  --jm-menthe-claire: #bfefdf; /* teinte de carte */
+  --jm-shadow-card: 0 1px 2px rgb(15 63 55 / 0.06), 0 8px 24px rgb(15 63 55 / 0.06);
+}
+
+/* Les classes Tailwind reprennent les jetons : bg-sapin, text-lime, rounded-card… */
 @theme inline {
   --color-sapin: var(--jm-sapin);
   --color-lime: var(--jm-lime);
   --color-creme: var(--jm-creme);
+  --color-blanc: var(--jm-blanc);
   --color-feuille: var(--jm-feuille);
-  --color-menthe-ia: var(--jm-menthe-ia);
+  --color-menthe: var(--jm-menthe);
   --color-nuit: var(--jm-nuit);
   --color-neon: var(--jm-neon);
   --color-ardoise: var(--jm-ardoise);
-  --color-blanc: var(--jm-blanc);
   --color-brume: var(--jm-brume);
   --color-ambre: var(--jm-ambre);
   --color-corail: var(--jm-corail);
   --color-menthe-claire: var(--jm-menthe-claire);
 
-  --radius-carte: var(--jm-rayon-carte);
-  --radius-composant: var(--jm-rayon-composant);
-  --radius-petit: var(--jm-rayon-petit);
-  --radius-pastille: var(--jm-rayon-pastille);
+  --radius-card: var(--jm-radius-card);
+  --radius-md: var(--jm-radius-md);
+  --radius-sm: var(--jm-radius-sm);
+  --radius-pill: var(--jm-radius-pill);
 
-  --font-sans: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
-
-  --text-display: var(--jm-texte-display);
-  --text-display--line-height: var(--jm-interligne-display);
-  --text-display--letter-spacing: -0.025em;
-  --text-h1: var(--jm-texte-h1);
-  --text-h1--line-height: var(--jm-interligne-h1);
-  --text-h2: var(--jm-texte-h2);
-  --text-h2--line-height: var(--jm-interligne-h2);
-  --text-corps: var(--jm-texte-corps);
-  --text-corps--line-height: var(--jm-interligne-corps);
-  --text-label: var(--jm-texte-label);
-  --text-legende: var(--jm-texte-legende);
-  --text-legende--line-height: var(--jm-interligne-legende);
-
-  --shadow-carte: var(--jm-ombre-carte);
+  --font-sans: var(--jm-font);
+  --shadow-card: var(--jm-shadow-card);
 }
 
-@utility bg-degrade-signature {
+/* Styles de texte de la charte (taille, interligne et graisse ensemble). */
+@utility text-display {
+  font: var(--jm-display);
+  letter-spacing: -0.025em;
+}
+@utility text-h1 {
+  font: var(--jm-h1);
+}
+@utility text-h2 {
+  font: var(--jm-h2);
+}
+@utility text-body {
+  font: var(--jm-body);
+}
+@utility text-label {
+  font: var(--jm-label);
+}
+@utility text-caption {
+  font: var(--jm-caption);
+}
+
+@utility bg-gradient-signature {
   background-image: var(--jm-degrade-signature);
 }
-@utility bg-degrade-intelligence {
-  background-image: var(--jm-degrade-intelligence);
+@utility bg-gradient-ai {
+  background-image: var(--jm-degrade-ia);
 }
-@utility bg-degrade-profondeur {
+@utility bg-gradient-depth {
   background-image: var(--jm-degrade-profondeur);
+}
+@utility bg-ai-orb {
+  background-image: var(--jm-orbe-ia);
 }
 
 html {
@@ -56,9 +79,7 @@ html {
 }
 
 body {
-  font-family: var(--font-sans);
-  font-size: var(--jm-texte-corps);
-  line-height: var(--jm-interligne-corps);
+  font: var(--jm-body);
 }
 
 :focus-visible {

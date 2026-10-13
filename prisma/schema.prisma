@@ -1,7 +1,7 @@
-// Schéma de données Jumanly.
-// Les modèles (utilisateurs, forfaits, offres…) arrivent à partir de l'étape E1,
-// d'après docs/04-modele-de-donnees.md. L'étape E0 ne pose que la connexion
-// et active l'extension pgvector (recherche par similarité, utilisée à l'étape E6).
+// Jumanly data model.
+// Models (users, plans, jobs…) come from step E1 onwards, following
+// docs/04-modele-de-donnees.md. Step E0 only sets up the connection
+// and enables the pgvector extension (similarity search, used in step E6).
 
 generator client {
   provider = "prisma-client"
