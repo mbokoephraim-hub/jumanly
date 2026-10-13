@@ -28,13 +28,14 @@ Avant chaque commit, Husky vérifie les fichiers modifiés (ESLint, Prettier, te
 | `pnpm lint` / `pnpm typecheck` | Qualité du code et types                               |
 | `pnpm test`                    | Tests unitaires (Vitest)                               |
 | `pnpm test:e2e`                | Tests de bout en bout (Playwright, après `pnpm build`) |
-| `pnpm messages`                | Convertit `textes/*.md` en `messages/fr.json`          |
+| `pnpm messages`                | Convertit les textes en `messages/fr.json`             |
+| `pnpm brand`                   | Convertit `ressources/` en icônes et images du site    |
 | `pnpm format`                  | Met en forme le code (Prettier)                        |
 
 ## Textes de l'interface
 
-Aucun texte n'est écrit dans le code. Ajoutez une ligne `| clé | texte |` dans un fichier de
-`textes/`, lancez `pnpm messages`, puis utilisez la clé avec `useTranslations`.
+Aucun texte n'est écrit dans le code. Ajoutez une ligne `| clé | texte |` dans la bonne partie de
+`textes/textes-application.md`, lancez `pnpm messages`, puis utilisez la clé avec `useTranslations`.
 
 ## Documentation
 

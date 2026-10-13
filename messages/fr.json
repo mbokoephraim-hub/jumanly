@@ -1,293 +1,4 @@
 {
-  "ui": {
-    "percent": "{value} %",
-    "avatarStack": {
-      "more": "+{count}",
-      "moreAria": "{count, plural, one {et # autre personne} other {et # autres personnes}}"
-    }
-  },
-  "brand": {
-    "characters": {
-      "amani": "Amani, la talent",
-      "kofi": "Kofi, le jeune diplômé",
-      "nadia": "Nadia, la recruteuse",
-      "diallo": "M. Diallo, le dirigeant",
-      "fatou": "Fatou, la formatrice",
-      "orbi": "Orbi, l'assistant IA"
-    }
-  },
-  "foundation": {
-    "sampleUser": "Aïcha Exemple",
-    "sampleFirstName": "Aïcha",
-    "emptyTitle": "Votre tableau de bord arrive bientôt",
-    "emptyText": "Formations, offres et messages apparaîtront ici.",
-    "seeComponents": "Voir les composants",
-    "samplePlan": "Free"
-  },
-  "devComponents": {
-    "title": "Bibliothèque de composants",
-    "intro": "Tous les composants de base de Jumanly et leurs états. Page interne, non indexée.",
-    "publicLayout": "Gabarit du site public",
-    "appLayout": "Gabarit de l'espace connecté",
-    "sections": {
-      "colors": "Couleurs et dégradés",
-      "typography": "Typographie",
-      "buttons": "Boutons",
-      "fields": "Champs de saisie",
-      "choices": "Cases, boutons radio et interrupteurs",
-      "badges": "Pastilles",
-      "cards": "Cartes",
-      "alerts": "Alertes",
-      "avatars": "Avatars",
-      "tabs": "Onglets",
-      "progress": "Progression et quotas",
-      "ai": "Intelligence : score expliqué",
-      "loading": "Chargement",
-      "empty": "État vide",
-      "modal": "Fenêtre modale",
-      "brand": "Marque",
-      "search": "Recherche et filtres",
-      "stats": "Cartes de statistique",
-      "listings": "Cartes de formation et d'offre",
-      "pipeline": "Étapes de recrutement",
-      "table": "Tableau",
-      "plans": "Verrou de forfait et carte de formule",
-      "toast": "Notification",
-      "drawer": "Tiroir mobile"
-    },
-    "colors": {
-      "sapin": "Vert Sapin #0F3F37",
-      "lime": "Lime #A6F26B",
-      "creme": "Crème #F2EDE5",
-      "blanc": "Blanc #FFFFFF",
-      "feuille": "Feuille #3DA14F",
-      "menthe": "Menthe IA #2FD3A6",
-      "nuit": "Nuit #0B1A1F",
-      "neon": "Néon #E3F67C",
-      "ardoise": "Ardoise #5B6B68",
-      "brume": "Brume #DCE5E1",
-      "ambre": "Ambre #F2B33D",
-      "corail": "Corail #E25C4B",
-      "mentheClaire": "Menthe claire #BFEFDF"
-    },
-    "gradients": {
-      "signature": "Dégradé signature",
-      "ai": "Dégradé Intelligence",
-      "depth": "Dégradé profondeur"
-    },
-    "type": {
-      "display": "Learn. Grow.",
-      "h1": "Votre carrière commence ici",
-      "h2": "Formations recommandées pour vous",
-      "label": "Date limite",
-      "body": "Jumanly relie les talents africains aux formations et aux employeurs qui leur correspondent.",
-      "caption": "Une plateforme développée par The Growth Lab"
-    },
-    "variants": {
-      "primary": "Primaire",
-      "secondary": "Secondaire",
-      "tertiary": "Tertiaire",
-      "icon": "Icône ronde",
-      "danger": "Danger"
-    },
-    "states": {
-      "icon": "Avec icône",
-      "loading": "En cours",
-      "disabled": "Désactivé",
-      "small": "Petit",
-      "medium": "Moyen",
-      "large": "Grand",
-      "link": "Lien"
-    },
-    "buttons": {
-      "action": "Postuler",
-      "link": "Créer mon profil"
-    },
-    "fields": {
-      "name": "Nom complet",
-      "namePlaceholder": "Ex. : Aïcha Exemple",
-      "email": "Adresse e-mail",
-      "emailHint": "Nous ne la partageons jamais sans votre accord.",
-      "emailInvalid": "aicha@exemple",
-      "emailError": "Saisissez une adresse e-mail valide, par exemple nom@domaine.com.",
-      "locked": "Champ non modifiable",
-      "lockedValue": "Valeur verrouillée",
-      "country": "Pays",
-      "countryPlaceholder": "Choisissez un pays",
-      "countryError": "Choisissez votre pays pour continuer.",
-      "countryA": "République démocratique du Congo",
-      "countryB": "Cameroun",
-      "countryC": "Sénégal",
-      "bio": "Présentation",
-      "bioHint": "Quelques lignes sur votre parcours et vos objectifs."
-    },
-    "choices": {
-      "terms": "J'accepte les conditions d'utilisation",
-      "alerts": "Recevoir les alertes d'offres",
-      "alertsHint": "Un e-mail par semaine au maximum.",
-      "profile": "Je suis",
-      "talent": "Un talent",
-      "recruiter": "Un recruteur RH",
-      "company": "Une entreprise",
-      "visible": "Profil visible des recruteurs",
-      "visibleHint": "Vous pouvez le masquer à tout moment.",
-      "digest": "Résumé hebdomadaire par e-mail"
-    },
-    "badges": {
-      "neutral": "Brouillon",
-      "sapin": "Learn",
-      "lime": "Nouveau",
-      "success": "Retenu",
-      "warning": "En attente",
-      "error": "Non retenu",
-      "ai": "Suggéré par l'IA",
-      "contract": "CDI",
-      "trendUp": "+12 %",
-      "trendDown": "−3 %"
-    },
-    "cards": {
-      "defaultTitle": "Gestion de projet agile",
-      "defaultText": "Learn · 6 modules · Certificat",
-      "tintedTitle": "3 offres correspondent à votre profil",
-      "tintedText": "Consultez-les avant la date limite.",
-      "darkTitle": "Module Intelligence",
-      "darkText": "Des recommandations expliquées, jamais imposées.",
-      "selected": "Élément sélectionné",
-      "tone": {
-        "learn": "Learn",
-        "career": "Career",
-        "jobs": "Jobs",
-        "hire": "Hire",
-        "connect": "Connect"
-      }
-    },
-    "alerts": {
-      "infoTitle": "Information",
-      "infoText": "Votre profil est visible des recruteurs vérifiés uniquement.",
-      "successTitle": "Candidature envoyée",
-      "successText": "Vous suivrez son avancement dans vos candidatures.",
-      "warningTitle": "Quota bientôt atteint",
-      "warningText": "Il vous reste 2 analyses ce mois-ci.",
-      "warningAction": "Voir les forfaits",
-      "errorTitle": "Envoi impossible",
-      "errorText": "Vérifiez votre connexion puis réessayez."
-    },
-    "avatars": {
-      "name": "Aïcha Exemple",
-      "nameB": "Brice Exemple",
-      "nameC": "Chantal Exemple",
-      "nameD": "David Exemple",
-      "nameE": "Esther Exemple",
-      "nameF": "Fabrice Exemple"
-    },
-    "tabs": {
-      "talents": "Talents",
-      "recruiters": "Recruteurs",
-      "companies": "Entreprises",
-      "talentsText": "Formez-vous et postulez gratuitement.",
-      "recruitersText": "Publiez vos offres et suivez vos candidats.",
-      "companiesText": "Pilotez vos recrutements en équipe."
-    },
-    "progress": {
-      "profile": "Profil complété",
-      "course": "Progression de la formation",
-      "quotaNormal": "Analyses de CV",
-      "quotaNear": "Crédits IA du mois",
-      "quotaReached": "Offres actives",
-      "quotaUnlimited": "Candidatures"
-    },
-    "ai": {
-      "job": "Compatibilité avec « Analyste RH junior » (exemple fictif)",
-      "reason1": "Excel avancé : compétence requise, présente sur votre profil.",
-      "reason2": "Certificat RH obtenu sur Jumanly Learn.",
-      "reason3": "2 ans d'expérience pour 1 an demandé.",
-      "suggestion": "Ajoutez « Gestion de la paie » à vos compétences : 4 offres suivies la demandent.",
-      "suggestionWhy": "Cette compétence apparaît dans 4 des offres que vous avez enregistrées et dans votre attestation RH."
-    },
-    "empty": {
-      "title": "Aucune candidature pour l'instant",
-      "text": "Parcourez les offres : postuler est toujours gratuit.",
-      "action": "Voir les offres"
-    },
-    "modal": {
-      "open": "Ouvrir la fenêtre",
-      "title": "Retirer ma candidature ?",
-      "text": "Le recruteur ne verra plus votre candidature. Vous pourrez postuler à nouveau tant que l'offre est ouverte.",
-      "cancel": "Annuler",
-      "confirm": "Retirer"
-    },
-    "brand": {
-      "primary": "Logo principal",
-      "negative": "Logo négatif",
-      "symbol": "Pictogrammes",
-      "orb": "Orbe IA",
-      "icons": "Icônes : trait, trait blanc et duo",
-      "characters": "Personnages",
-      "patterns": "Motifs"
-    },
-    "search": {
-      "id": "Rechercher une offre",
-      "placeholder": "Métier, compétence, entreprise",
-      "filterRemote": "Télétravail",
-      "filterFullTime": "Temps plein",
-      "filterFree": "Formations gratuites",
-      "filterDisabled": "Indisponible"
-    },
-    "stats": {
-      "applications": "Candidatures envoyées",
-      "applicationsValue": "12",
-      "views": "Vues du profil",
-      "viewsValue": "48",
-      "viewsTrend": "+12 % ce mois-ci",
-      "courses": "Formations terminées",
-      "coursesValue": "3"
-    },
-    "listings": {
-      "courseTitle": "Gestion de projet agile (exemple fictif)",
-      "courseLevel": "débutant",
-      "courseDuration": "6 h",
-      "coursePlan": "Exemple Plus",
-      "jobTitle": "Analyste RH junior (exemple fictif)",
-      "jobCompany": "Entreprise Exemple",
-      "jobCity": "Kinshasa",
-      "jobCountry": "RD Congo",
-      "jobContract": "CDI",
-      "jobDeadline": "30 novembre 2026",
-      "jobBTitle": "Chargée de communication (exemple fictif)",
-      "jobBCity": "Douala",
-      "jobBCountry": "Cameroun",
-      "jobBContract": "Stage"
-    },
-    "table": {
-      "caption": "Candidatures reçues (exemple fictif)",
-      "name": "Candidat",
-      "stage": "Étape",
-      "date": "Reçue le",
-      "date1": "2 octobre 2026",
-      "date2": "5 octobre 2026"
-    },
-    "plans": {
-      "lockPlan": "Exemple Plus",
-      "lockText": "Cette analyse détaillée fait partie d'un forfait supérieur. Postuler reste toujours gratuit.",
-      "freeName": "Exemple Gratuit",
-      "paidName": "Exemple Plus",
-      "audience": "les talents en recherche active",
-      "feature1": "Candidatures illimitées",
-      "feature2": "10 crédits IA par mois",
-      "feature3": "Analyse de CV détaillée",
-      "ctaFree": "Commencer gratuitement",
-      "ctaPaid": "Choisir ce forfait"
-    },
-    "toast": {
-      "show": "Afficher une notification"
-    },
-    "drawer": {
-      "open": "Ouvrir le tiroir",
-      "title": "Filtres",
-      "text": "Sur mobile, les filtres s'ouvrent dans ce tiroir qui remonte du bas de l'écran.",
-      "apply": "Afficher les résultats"
-    }
-  },
   "common": {
     "brand": "Jumanly",
     "slogan": "Learn. Grow. Connect.",
@@ -9187,6 +8898,295 @@
     "contact": {
       "title": "6. Contact",
       "text": "Pour toute question : infojumanly@gmail.com."
+    }
+  },
+  "ui": {
+    "percent": "{value} %",
+    "avatarStack": {
+      "more": "+{count}",
+      "moreAria": "{count, plural, one {et # autre personne} other {et # autres personnes}}"
+    }
+  },
+  "brand": {
+    "characters": {
+      "amani": "Amani, la talent",
+      "kofi": "Kofi, le jeune diplômé",
+      "nadia": "Nadia, la recruteuse",
+      "diallo": "M. Diallo, le dirigeant",
+      "fatou": "Fatou, la formatrice",
+      "orbi": "Orbi, l'assistant IA"
+    }
+  },
+  "foundation": {
+    "sampleUser": "Aïcha Exemple",
+    "sampleFirstName": "Aïcha",
+    "emptyTitle": "Votre tableau de bord arrive bientôt",
+    "emptyText": "Formations, offres et messages apparaîtront ici.",
+    "seeComponents": "Voir les composants",
+    "samplePlan": "Free"
+  },
+  "devComponents": {
+    "title": "Bibliothèque de composants",
+    "intro": "Tous les composants de base de Jumanly et leurs états. Page interne, non indexée.",
+    "publicLayout": "Gabarit du site public",
+    "appLayout": "Gabarit de l'espace connecté",
+    "sections": {
+      "colors": "Couleurs et dégradés",
+      "typography": "Typographie",
+      "buttons": "Boutons",
+      "fields": "Champs de saisie",
+      "choices": "Cases, boutons radio et interrupteurs",
+      "badges": "Pastilles",
+      "cards": "Cartes",
+      "alerts": "Alertes",
+      "avatars": "Avatars",
+      "tabs": "Onglets",
+      "progress": "Progression et quotas",
+      "ai": "Intelligence : score expliqué",
+      "loading": "Chargement",
+      "empty": "État vide",
+      "modal": "Fenêtre modale",
+      "brand": "Marque",
+      "search": "Recherche et filtres",
+      "stats": "Cartes de statistique",
+      "listings": "Cartes de formation et d'offre",
+      "pipeline": "Étapes de recrutement",
+      "table": "Tableau",
+      "plans": "Verrou de forfait et carte de formule",
+      "toast": "Notification",
+      "drawer": "Tiroir mobile"
+    },
+    "colors": {
+      "sapin": "Vert Sapin #0F3F37",
+      "lime": "Lime #A6F26B",
+      "creme": "Crème #F2EDE5",
+      "blanc": "Blanc #FFFFFF",
+      "feuille": "Feuille #3DA14F",
+      "menthe": "Menthe IA #2FD3A6",
+      "nuit": "Nuit #0B1A1F",
+      "neon": "Néon #E3F67C",
+      "ardoise": "Ardoise #5B6B68",
+      "brume": "Brume #DCE5E1",
+      "ambre": "Ambre #F2B33D",
+      "corail": "Corail #E25C4B",
+      "mentheClaire": "Menthe claire #BFEFDF"
+    },
+    "gradients": {
+      "signature": "Dégradé signature",
+      "ai": "Dégradé Intelligence",
+      "depth": "Dégradé profondeur"
+    },
+    "type": {
+      "display": "Learn. Grow.",
+      "h1": "Votre carrière commence ici",
+      "h2": "Formations recommandées pour vous",
+      "label": "Date limite",
+      "body": "Jumanly relie les talents africains aux formations et aux employeurs qui leur correspondent.",
+      "caption": "Une plateforme développée par The Growth Lab"
+    },
+    "variants": {
+      "primary": "Primaire",
+      "secondary": "Secondaire",
+      "tertiary": "Tertiaire",
+      "icon": "Icône ronde",
+      "danger": "Danger"
+    },
+    "states": {
+      "icon": "Avec icône",
+      "loading": "En cours",
+      "disabled": "Désactivé",
+      "small": "Petit",
+      "medium": "Moyen",
+      "large": "Grand",
+      "link": "Lien"
+    },
+    "buttons": {
+      "action": "Postuler",
+      "link": "Créer mon profil"
+    },
+    "fields": {
+      "name": "Nom complet",
+      "namePlaceholder": "Ex. : Aïcha Exemple",
+      "email": "Adresse e-mail",
+      "emailHint": "Nous ne la partageons jamais sans votre accord.",
+      "emailInvalid": "aicha@exemple",
+      "emailError": "Saisissez une adresse e-mail valide, par exemple nom@domaine.com.",
+      "locked": "Champ non modifiable",
+      "lockedValue": "Valeur verrouillée",
+      "country": "Pays",
+      "countryPlaceholder": "Choisissez un pays",
+      "countryError": "Choisissez votre pays pour continuer.",
+      "countryA": "République démocratique du Congo",
+      "countryB": "Cameroun",
+      "countryC": "Sénégal",
+      "bio": "Présentation",
+      "bioHint": "Quelques lignes sur votre parcours et vos objectifs."
+    },
+    "choices": {
+      "terms": "J'accepte les conditions d'utilisation",
+      "alerts": "Recevoir les alertes d'offres",
+      "alertsHint": "Un e-mail par semaine au maximum.",
+      "profile": "Je suis",
+      "talent": "Un talent",
+      "recruiter": "Un recruteur RH",
+      "company": "Une entreprise",
+      "visible": "Profil visible des recruteurs",
+      "visibleHint": "Vous pouvez le masquer à tout moment.",
+      "digest": "Résumé hebdomadaire par e-mail"
+    },
+    "badges": {
+      "neutral": "Brouillon",
+      "sapin": "Learn",
+      "lime": "Nouveau",
+      "success": "Retenu",
+      "warning": "En attente",
+      "error": "Non retenu",
+      "ai": "Suggéré par l'IA",
+      "contract": "CDI",
+      "trendUp": "+12 %",
+      "trendDown": "−3 %"
+    },
+    "cards": {
+      "defaultTitle": "Gestion de projet agile",
+      "defaultText": "Learn · 6 modules · Certificat",
+      "tintedTitle": "3 offres correspondent à votre profil",
+      "tintedText": "Consultez-les avant la date limite.",
+      "darkTitle": "Module Intelligence",
+      "darkText": "Des recommandations expliquées, jamais imposées.",
+      "selected": "Élément sélectionné",
+      "tone": {
+        "learn": "Learn",
+        "career": "Career",
+        "jobs": "Jobs",
+        "hire": "Hire",
+        "connect": "Connect"
+      }
+    },
+    "alerts": {
+      "infoTitle": "Information",
+      "infoText": "Votre profil est visible des recruteurs vérifiés uniquement.",
+      "successTitle": "Candidature envoyée",
+      "successText": "Vous suivrez son avancement dans vos candidatures.",
+      "warningTitle": "Quota bientôt atteint",
+      "warningText": "Il vous reste 2 analyses ce mois-ci.",
+      "warningAction": "Voir les forfaits",
+      "errorTitle": "Envoi impossible",
+      "errorText": "Vérifiez votre connexion puis réessayez."
+    },
+    "avatars": {
+      "name": "Aïcha Exemple",
+      "nameB": "Brice Exemple",
+      "nameC": "Chantal Exemple",
+      "nameD": "David Exemple",
+      "nameE": "Esther Exemple",
+      "nameF": "Fabrice Exemple"
+    },
+    "tabs": {
+      "talents": "Talents",
+      "recruiters": "Recruteurs",
+      "companies": "Entreprises",
+      "talentsText": "Formez-vous et postulez gratuitement.",
+      "recruitersText": "Publiez vos offres et suivez vos candidats.",
+      "companiesText": "Pilotez vos recrutements en équipe."
+    },
+    "progress": {
+      "profile": "Profil complété",
+      "course": "Progression de la formation",
+      "quotaNormal": "Analyses de CV",
+      "quotaNear": "Crédits IA du mois",
+      "quotaReached": "Offres actives",
+      "quotaUnlimited": "Candidatures"
+    },
+    "ai": {
+      "job": "Compatibilité avec « Analyste RH junior » (exemple fictif)",
+      "reason1": "Excel avancé : compétence requise, présente sur votre profil.",
+      "reason2": "Certificat RH obtenu sur Jumanly Learn.",
+      "reason3": "2 ans d'expérience pour 1 an demandé.",
+      "suggestion": "Ajoutez « Gestion de la paie » à vos compétences : 4 offres suivies la demandent.",
+      "suggestionWhy": "Cette compétence apparaît dans 4 des offres que vous avez enregistrées et dans votre attestation RH."
+    },
+    "empty": {
+      "title": "Aucune candidature pour l'instant",
+      "text": "Parcourez les offres : postuler est toujours gratuit.",
+      "action": "Voir les offres"
+    },
+    "modal": {
+      "open": "Ouvrir la fenêtre",
+      "title": "Retirer ma candidature ?",
+      "text": "Le recruteur ne verra plus votre candidature. Vous pourrez postuler à nouveau tant que l'offre est ouverte.",
+      "cancel": "Annuler",
+      "confirm": "Retirer"
+    },
+    "brand": {
+      "primary": "Logo principal",
+      "negative": "Logo négatif",
+      "symbol": "Pictogrammes",
+      "orb": "Orbe IA",
+      "icons": "Icônes : trait, trait blanc et duo",
+      "characters": "Personnages",
+      "patterns": "Motifs"
+    },
+    "search": {
+      "id": "Rechercher une offre",
+      "placeholder": "Métier, compétence, entreprise",
+      "filterRemote": "Télétravail",
+      "filterFullTime": "Temps plein",
+      "filterFree": "Formations gratuites",
+      "filterDisabled": "Indisponible"
+    },
+    "stats": {
+      "applications": "Candidatures envoyées",
+      "applicationsValue": "12",
+      "views": "Vues du profil",
+      "viewsValue": "48",
+      "viewsTrend": "+12 % ce mois-ci",
+      "courses": "Formations terminées",
+      "coursesValue": "3"
+    },
+    "listings": {
+      "courseTitle": "Gestion de projet agile (exemple fictif)",
+      "courseLevel": "débutant",
+      "courseDuration": "6 h",
+      "coursePlan": "Exemple Plus",
+      "jobTitle": "Analyste RH junior (exemple fictif)",
+      "jobCompany": "Entreprise Exemple",
+      "jobCity": "Kinshasa",
+      "jobCountry": "RD Congo",
+      "jobContract": "CDI",
+      "jobDeadline": "30 novembre 2026",
+      "jobBTitle": "Chargée de communication (exemple fictif)",
+      "jobBCity": "Douala",
+      "jobBCountry": "Cameroun",
+      "jobBContract": "Stage"
+    },
+    "table": {
+      "caption": "Candidatures reçues (exemple fictif)",
+      "name": "Candidat",
+      "stage": "Étape",
+      "date": "Reçue le",
+      "date1": "2 octobre 2026",
+      "date2": "5 octobre 2026"
+    },
+    "plans": {
+      "lockPlan": "Exemple Plus",
+      "lockText": "Cette analyse détaillée fait partie d'un forfait supérieur. Postuler reste toujours gratuit.",
+      "freeName": "Exemple Gratuit",
+      "paidName": "Exemple Plus",
+      "audience": "les talents en recherche active",
+      "feature1": "Candidatures illimitées",
+      "feature2": "10 crédits IA par mois",
+      "feature3": "Analyse de CV détaillée",
+      "ctaFree": "Commencer gratuitement",
+      "ctaPaid": "Choisir ce forfait"
+    },
+    "toast": {
+      "show": "Afficher une notification"
+    },
+    "drawer": {
+      "open": "Ouvrir le tiroir",
+      "title": "Filtres",
+      "text": "Sur mobile, les filtres s'ouvrent dans ce tiroir qui remonte du bas de l'écran.",
+      "apply": "Afficher les résultats"
     }
   }
 }

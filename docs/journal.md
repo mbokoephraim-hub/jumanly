@@ -23,7 +23,8 @@ toutes dans `docs/specifications.md`.
 - ESLint (règles Next + **aucun texte en dur dans le JSX**), Prettier (les `.md` ne sont pas reformatés).
 - Textes officiels branchés : gabarits, composants et e-mail utilisent les clés officielles
   (`nav.*`, `appNav.*`, `footer.*`, `common.*`, `a11y.*`, `billing.quotas.*`, `ai.*`, `mail.*`).
-  `textes/00-socle.md` ne garde que la page `/dev/composants` et deux écrans provisoires.
+  Les textes propres au socle (page `/dev/composants`, écrans provisoires, personnages) forment la
+  partie 11 « Socle technique » de `textes/textes-application.md`.
 - next-intl, langue `fr`, clés typées. Aucun texte n'est envoyé au navigateur par défaut : un
   composant client qui en a besoin reçoit seulement ses espaces de noms (`pickMessages`). `scripts/build-messages.ts` lit les tableaux `| Clé | Texte |` de
   `textes/*.md` et génère `messages/fr.json` ; il signale doublons, clés invalides, textes vides et
@@ -79,7 +80,8 @@ toutes dans `docs/specifications.md`.
   `PROMPT-DEMARRAGE.md`, `LISEZMOI.md`, `docs/specifications.md`, `textes/textes-application.md`,
   `ressources/logos/` (favicons inclus) et `ressources/LISEZMOI.md`. Les dessins des logos sont
   identiques aux précédents. `docs/12-feuille-de-route.md` est retiré : c'est la partie 12 du cahier.
-- Écart : les textes propres au socle restent dans `textes/00-socle.md` (voir la décision du jour).
+- Textes du socle fusionnés dans `textes/textes-application.md` (partie 11), à la demande du
+  propriétaire : un seul fichier de textes, comme le veut `CLAUDE.md`.
 
 ### Définition de fini
 
