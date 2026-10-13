@@ -1,5 +1,5 @@
+import { Icon } from "@/components/brand/icon";
 import type { ComponentProps } from "react";
-import { Search } from "lucide-react";
 import { cx } from "@/lib/cx";
 
 /** Pill-shaped search field (§ 11.5). The label is read by screen readers only. */
@@ -14,7 +14,8 @@ export function SearchField({
       <label htmlFor={id} className="sr-only">
         {label}
       </label>
-      <Search
+      <Icon
+        name="recherche"
         aria-hidden
         className="pointer-events-none absolute top-1/2 left-4 size-5 -translate-y-1/2 text-ardoise"
       />

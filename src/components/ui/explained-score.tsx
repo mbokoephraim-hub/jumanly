@@ -1,5 +1,5 @@
+import { Icon } from "@/components/brand/icon";
 import type { ReactNode } from "react";
-import { Eye } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { AiOrb } from "@/components/brand/ai-orb";
 
@@ -27,7 +27,7 @@ export function ExplainedScore({
       <p className="text-h1">{t("ui.percent", { value: Math.round(score) })}</p>
       <details className="group mt-2">
         <summary className="inline-flex cursor-pointer items-center gap-1.5 text-sm font-medium text-lime underline-offset-4 hover:underline">
-          <Eye aria-hidden className="size-4" />
+          <Icon name="transparence" className="size-4" />
           {t("ai.card.why")}
         </summary>
         <div className="mt-2 text-sm leading-6">{explanation}</div>

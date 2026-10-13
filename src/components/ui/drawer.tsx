@@ -1,7 +1,7 @@
 "use client";
 
+import { Icon } from "@/components/brand/icon";
 import { useEffect, useId, useRef, type ReactNode } from "react";
-import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 /**
@@ -51,7 +51,7 @@ export function Drawer({
             aria-label={t("closeDialog")}
             className="flex size-11 items-center justify-center rounded-full text-ardoise hover:bg-sapin/8 hover:text-sapin"
           >
-            <X aria-hidden className="size-5" />
+            <Icon name="fermer" className="size-5" />
           </button>
         </div>
         <div className="flex-1 overflow-y-auto px-6 pb-6">{children}</div>

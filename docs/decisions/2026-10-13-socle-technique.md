@@ -23,8 +23,9 @@ sauf les écarts notés ci-dessous.
    s'il n'est pas à jour.
 8. **Aucun texte en dur** imposé par la règle ESLint `react/jsx-no-literals` sur `src/**/*.tsx`.
 9. **E-mails** : React Email, rendus hors requête Next.js avec `createTranslator` sur `messages/fr.json`.
-10. **Icônes** : `lucide-react` (trait 2 px, extrémités rondes, conforme à la charte) en attendant les
-    icônes de la marque.
+10. **Icônes** : celles de la marque (`ressources/icones`), converties par `pnpm brand` en un
+    composant `Icon` en `currentColor`. `lucide-react` (même trait 2 px, extrémités rondes) seulement
+    pour les pictogrammes que la marque ne fournit pas.
 11. **Tests e2e sur la version de production** (`pnpm build` puis `pnpm start`), en desktop et mobile.
 12. **Modale et tiroir sur l'élément natif `<dialog>`** plutôt qu'une bibliothèque (Radix) : piège
     du focus et touche Échap gérés par le navigateur, zéro Ko de JavaScript en plus.

@@ -39,6 +39,8 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - name: Textes à jour (textes/ → messages/fr.json)
         run: pnpm messages:check
+      - name: Ressources de marque à jour
+        run: pnpm brand:check
       - name: Format
         run: pnpm format:check
       - name: Lint

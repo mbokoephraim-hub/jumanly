@@ -1,6 +1,6 @@
 /* eslint-disable @next/next/no-img-element -- course covers come from S3 storage at a known size */
+import { Icon } from "@/components/brand/icon";
 import Link from "next/link";
-import { Award, BookOpen, Clock } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Badge } from "./badge";
 
@@ -38,7 +38,7 @@ export function CourseCard({
             {plan ? t("badge.plan", { plan }) : t("badge.free")}
           </Badge>
           {certificate && (
-            <Badge tone="neutral" icon={<Award aria-hidden className="size-4" />}>
+            <Badge tone="neutral" icon={<Icon name="certificat" className="size-4" />}>
               {t("certificate")}
             </Badge>
           )}
@@ -52,11 +52,11 @@ export function CourseCard({
         <ul className="mt-auto flex flex-wrap gap-x-4 gap-y-1 text-sm text-ardoise">
           <li>{t("level", { level })}</li>
           <li className="flex items-center gap-1">
-            <BookOpen aria-hidden className="size-4" />
+            <Icon name="cours-video" className="size-4" />
             {t("lessons", { count: lessons })}
           </li>
           <li className="flex items-center gap-1">
-            <Clock aria-hidden className="size-4" />
+            <Icon name="horloge" className="size-4" />
             {t("duration", { duration })}
           </li>
         </ul>

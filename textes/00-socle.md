@@ -13,6 +13,17 @@
 | `ui.avatarStack.more` | +{count} |
 | `ui.avatarStack.moreAria` | {count, plural, one {et # autre personne} other {et # autres personnes}} |
 
+## Personnages de la marque (textes alternatifs)
+
+| Clé | Texte |
+|---|---|
+| `brand.characters.amani` | Amani, la talent |
+| `brand.characters.kofi` | Kofi, le jeune diplômé |
+| `brand.characters.nadia` | Nadia, la recruteuse |
+| `brand.characters.diallo` | M. Diallo, le dirigeant |
+| `brand.characters.fatou` | Fatou, la formatrice |
+| `brand.characters.orbi` | Orbi, l'assistant IA |
+
 ## Écrans provisoires du socle (remplacés aux étapes E1 et E3)
 
 | Clé | Texte |
@@ -185,6 +196,9 @@
 | `devComponents.brand.negative` | Logo négatif |
 | `devComponents.brand.symbol` | Pictogrammes |
 | `devComponents.brand.orb` | Orbe IA |
+| `devComponents.brand.icons` | Icônes : trait, trait blanc et duo |
+| `devComponents.brand.characters` | Personnages |
+| `devComponents.brand.patterns` | Motifs |
 | `devComponents.search.id` | Rechercher une offre |
 | `devComponents.search.placeholder` | Métier, compétence, entreprise |
 | `devComponents.search.filterRemote` | Télétravail |

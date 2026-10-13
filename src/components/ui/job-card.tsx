@@ -1,5 +1,5 @@
+import { Icon } from "@/components/brand/icon";
 import Link from "next/link";
-import { CalendarClock, MapPin } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { Badge, ScoreBadge, VerifiedBadge, type MatchBand } from "./badge";
 
@@ -54,11 +54,11 @@ export function JobCard({
       </div>
       <ul className="flex flex-wrap gap-x-4 gap-y-1 text-sm text-ardoise">
         <li className="flex items-center gap-1">
-          <MapPin aria-hidden className="size-4" />
+          <Icon name="localisation" className="size-4" />
           {t("jobs.card.location", { city, country })}
         </li>
         <li className="flex items-center gap-1">
-          <CalendarClock aria-hidden className="size-4" />
+          <Icon name="calendrier" className="size-4" />
           {t("jobs.card.deadline", { date: deadline })}
         </li>
       </ul>

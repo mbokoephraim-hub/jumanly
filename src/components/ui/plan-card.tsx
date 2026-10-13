@@ -1,4 +1,4 @@
-import { Check } from "lucide-react";
+import { Icon } from "@/components/brand/icon";
 import { useTranslations } from "next-intl";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
@@ -67,7 +67,7 @@ export function PlanCard({
       <ul className="flex flex-col gap-2 text-[15px] leading-6">
         {features.map((feature) => (
           <li key={feature} className="flex gap-2">
-            <Check aria-hidden className="mt-1 size-4 shrink-0 text-feuille" />
+            <Icon name="valider" className="mt-1 size-4 shrink-0 text-feuille" />
             {feature}
           </li>
         ))}

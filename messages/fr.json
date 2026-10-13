@@ -6,6 +6,16 @@
       "moreAria": "{count, plural, one {et # autre personne} other {et # autres personnes}}"
     }
   },
+  "brand": {
+    "characters": {
+      "amani": "Amani, la talent",
+      "kofi": "Kofi, le jeune diplômé",
+      "nadia": "Nadia, la recruteuse",
+      "diallo": "M. Diallo, le dirigeant",
+      "fatou": "Fatou, la formatrice",
+      "orbi": "Orbi, l'assistant IA"
+    }
+  },
   "foundation": {
     "sampleUser": "Aïcha Exemple",
     "sampleFirstName": "Aïcha",
@@ -210,7 +220,10 @@
       "primary": "Logo principal",
       "negative": "Logo négatif",
       "symbol": "Pictogrammes",
-      "orb": "Orbe IA"
+      "orb": "Orbe IA",
+      "icons": "Icônes : trait, trait blanc et duo",
+      "characters": "Personnages",
+      "patterns": "Motifs"
     },
     "search": {
       "id": "Rechercher une offre",

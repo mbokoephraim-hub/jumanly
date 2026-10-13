@@ -3,8 +3,9 @@ import type { ReactNode } from "react";
 import { NextIntlClientProvider, useTranslations } from "next-intl";
 import { notFound } from "next/navigation";
 import { getMessages, getTranslations } from "next-intl/server";
-import { ArrowRight, Bookmark, Sparkles, X } from "lucide-react";
-import { AiOrb, Logo } from "@/components/brand";
+import { AiOrb, Character, Icon, Logo, Orbi, characters, poses } from "@/components/brand";
+import type { IconName } from "@/components/brand/icon";
+import { iconPaths } from "@/components/brand/icon-paths";
 import {
   AiCard,
   Alert,
@@ -88,6 +89,19 @@ async function ClientTexts({ children }: { children: ReactNode }) {
   );
 }
 
+const iconNames = Object.keys(iconPaths) as IconName[];
+
+const patterns = [
+  "fonds/fond-01-creme-trajectoire-16x9.svg",
+  "fonds/fond-06-sapin-orbites-16x9.svg",
+  "fonds/fond-08-intelligence-16x9.svg",
+  "fonds/fond-05-signature-16x9.svg",
+  "motifs/motif-pastilles-clair.svg",
+  "motifs/motif-reseau-sombre.svg",
+  "motifs/motif-trajectoires-lime.svg",
+  "motifs/motif-monogramme-clair.svg",
+];
+
 const buttonVariants: ButtonVariant[] = ["primary", "secondary", "tertiary", "danger"];
 
 const moduleTones = ["learn", "career", "jobs", "hire", "connect"] as const satisfies CardTone[];
@@ -169,6 +183,46 @@ export default function ComponentsPage() {
             </div>
           </State>
         </div>
+        <State label={t("brand.icons")}>
+          <div className="flex flex-col gap-3">
+            {(["text-sapin", "rounded-md bg-sapin p-3 text-blanc"] as const).map((classes) => (
+              <div key={classes} className={`flex flex-wrap gap-3 ${classes}`}>
+                {iconNames.map((name) => (
+                  <Icon key={name} name={name} className="size-6" />
+                ))}
+              </div>
+            ))}
+            <div className="flex flex-wrap gap-3 text-sapin">
+              {iconNames.map((name) => (
+                <Icon key={name} name={name} duo className="size-6" />
+              ))}
+            </div>
+          </div>
+        </State>
+        <State label={t("brand.characters")}>
+          <div className="flex flex-wrap items-end gap-4">
+            {characters.map((name) => (
+              <Character key={name} name={name} pose="salut" height={140} labelled />
+            ))}
+            <Orbi size={80} labelled />
+          </div>
+          <div className="flex flex-wrap items-end gap-4">
+            {poses.map((pose) => (
+              <Character key={pose} name="nadia" pose={pose} height={110} />
+            ))}
+          </div>
+        </State>
+        <State label={t("brand.patterns")}>
+          <div className="grid w-full grid-cols-2 gap-3 sm:grid-cols-4">
+            {patterns.map((file) => (
+              <div
+                key={file}
+                className="h-24 rounded-md bg-cover"
+                style={{ backgroundImage: `url(/marque/${file})` }}
+              />
+            ))}
+          </div>
+        </State>
       </Section>
 
       <Section title={t("sections.colors")}>
@@ -207,7 +261,7 @@ export default function ComponentsPage() {
                 <Button variant={variant}>{t("buttons.action")}</Button>
               </State>
               <State label={s("icon")}>
-                <Button variant={variant} icon={<ArrowRight aria-hidden className="size-4" />}>
+                <Button variant={variant} icon={<Icon name="suivant" className="size-4" />}>
                   {t("buttons.action")}
                 </Button>
               </State>
@@ -243,19 +297,19 @@ export default function ComponentsPage() {
             <State label={t("variants.icon")}>
               <div className="flex gap-2">
                 <IconButton label={g("jobs.card.save")}>
-                  <Bookmark aria-hidden className="size-5" />
+                  <Icon name="favori" className="size-5" />
                 </IconButton>
                 <IconButton label={g("jobs.card.save")} variant="outline">
-                  <Bookmark aria-hidden className="size-5" />
+                  <Icon name="favori" className="size-5" />
                 </IconButton>
                 <IconButton label={g("jobs.card.save")} variant="sapin">
-                  <Bookmark aria-hidden className="size-5" />
+                  <Icon name="favori" className="size-5" />
                 </IconButton>
                 <IconButton label={g("jobs.card.save")} variant="lime">
-                  <Bookmark aria-hidden className="size-5" />
+                  <Icon name="favori" className="size-5" />
                 </IconButton>
                 <IconButton label={g("a11y.close")} disabled>
-                  <X aria-hidden className="size-5" />
+                  <Icon name="fermer" className="size-5" />
                 </IconButton>
               </div>
             </State>
@@ -686,7 +740,7 @@ export default function ComponentsPage() {
           title={t("empty.title")}
           description={t("empty.text")}
           action={
-            <ButtonLink href="/offres" icon={<Sparkles aria-hidden className="size-4" />}>
+            <ButtonLink href="/offres" icon={<Icon name="intelligence" className="size-4" />}>
               {t("empty.action")}
             </ButtonLink>
           }

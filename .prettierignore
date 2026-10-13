@@ -8,4 +8,5 @@ ressources/logos/
 ressources/favicon/
 public/marque/
 *.md
-ressources/jumanly-tokens.css
+ressources/
+src/components/brand/icon-paths.ts

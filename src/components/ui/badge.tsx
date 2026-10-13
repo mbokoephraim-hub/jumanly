@@ -1,5 +1,6 @@
+import { Icon } from "@/components/brand/icon";
 import type { ReactNode } from "react";
-import { BadgeCheck, TrendingDown, TrendingUp } from "lucide-react";
+import { TrendingDown, TrendingUp } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { cx } from "@/lib/cx";
 
@@ -64,7 +65,7 @@ export function Badge({
 export function VerifiedBadge() {
   const t = useTranslations("common");
   return (
-    <Badge tone="sapin" icon={<BadgeCheck aria-hidden className="size-4 text-lime" />}>
+    <Badge tone="sapin" icon={<Icon name="valider" className="size-4 text-lime" />}>
       {t("verifiedCompany")}
     </Badge>
   );

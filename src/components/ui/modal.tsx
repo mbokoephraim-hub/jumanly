@@ -1,7 +1,7 @@
 "use client";
 
+import { Icon } from "@/components/brand/icon";
 import { useEffect, useId, useRef, type ReactNode } from "react";
-import { X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 /** Modal built on the native <dialog> element (focus trap and Escape handled by the browser). */
@@ -46,7 +46,7 @@ export function Modal({
           aria-label={t("closeDialog")}
           className="rounded-full p-2 text-ardoise hover:bg-sapin/8 hover:text-sapin"
         >
-          <X aria-hidden className="size-5" />
+          <Icon name="fermer" className="size-5" />
         </button>
       </div>
       <div className="px-6 pb-6 text-[15px] leading-6 text-ardoise">{children}</div>

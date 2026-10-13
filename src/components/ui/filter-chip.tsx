@@ -1,5 +1,5 @@
+import { Icon } from "@/components/brand/icon";
 import type { ComponentProps } from "react";
-import { Check } from "lucide-react";
 import { cx } from "@/lib/cx";
 
 /**
@@ -24,7 +24,7 @@ export function FilterChip({
           "[&>svg]:hidden peer-checked:[&>svg]:block",
         )}
       >
-        <Check aria-hidden className="size-4 text-lime" />
+        <Icon name="valider" className="size-4 text-lime" />
         {label}
       </span>
     </label>

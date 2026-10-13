@@ -1,4 +1,4 @@
-import { Lock } from "lucide-react";
+import { Icon } from "@/components/brand/icon";
 import { useTranslations } from "next-intl";
 import { ButtonLink } from "./button";
 
@@ -19,7 +19,7 @@ export function PlanLock({
   if (compact) {
     return (
       <span className="inline-flex h-7 items-center gap-1.5 rounded-pill bg-sapin px-3 text-blanc text-label">
-        <Lock aria-hidden className="size-3.5 text-lime" />
+        <Icon name="confidentialite" className="size-3.5 text-lime" />
         {t("requiredPlan", { plan })}
       </span>
     );
@@ -27,7 +27,7 @@ export function PlanLock({
   return (
     <div className="flex flex-col items-start gap-3 rounded-md border-2 border-dashed border-sapin/25 p-5">
       <span className="flex size-10 items-center justify-center rounded-full bg-sapin text-lime">
-        <Lock aria-hidden className="size-5" />
+        <Icon name="confidentialite" className="size-5" />
       </span>
       <p className="font-semibold">{t("requiredPlan", { plan })}</p>
       {description && <p className="text-[15px] leading-6 text-ardoise">{description}</p>}

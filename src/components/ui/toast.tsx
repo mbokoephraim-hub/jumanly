@@ -1,7 +1,7 @@
 "use client";
 
+import { Icon } from "@/components/brand/icon";
 import type { ReactNode } from "react";
-import { CircleCheck, X } from "lucide-react";
 import { useTranslations } from "next-intl";
 
 /**
@@ -35,7 +35,7 @@ export function Toast({
   const t = useTranslations("toast");
   return (
     <div className="pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-md bg-sapin py-2 pr-2 pl-4 text-blanc">
-      <CircleCheck aria-hidden className="size-5 shrink-0 text-lime" />
+      <Icon name="valider" className="size-5 shrink-0 text-lime" />
       <p className="flex-1 py-1.5 text-[15px]">{message}</p>
       {action}
       {onClose && (
@@ -45,7 +45,7 @@ export function Toast({
           aria-label={t("close")}
           className="flex size-11 shrink-0 items-center justify-center rounded-full hover:bg-blanc/10"
         >
-          <X aria-hidden className="size-5" />
+          <Icon name="fermer" className="size-5" />
         </button>
       )}
     </div>

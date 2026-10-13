@@ -22,8 +22,10 @@
     "email:dev": "email dev --dir emails --port 3001",
     "postinstall": "prisma generate",
     "predev": "pnpm messages",
-    "prebuild": "pnpm messages:check",
-    "prepare": "husky"
+    "prebuild": "pnpm messages:check && pnpm brand:check",
+    "prepare": "husky",
+    "brand": "tsx scripts/build-brand-assets.ts",
+    "brand:check": "tsx scripts/build-brand-assets.ts --check"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.0",

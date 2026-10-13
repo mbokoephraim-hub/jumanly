@@ -63,6 +63,18 @@ toutes dans `docs/specifications.md`.
 - Les tests axe ont trouvé des contrastes insuffisants (texte Corail, bouton danger, texte Ardoise
   sur fond teinté) : corrigés avec des teintes foncées (Corail, Feuille, Ambre foncés).
 
+### Ressources de la marque (reçues le 13 octobre)
+
+- `ressources/` complété avec les archives reçues : 41 icônes en 3 styles, 5 personnages et Orbi
+  (SVG et PNG, 6 poses), motifs, formes et fonds. Fichiers gardés tels quels.
+- `pnpm brand` (`scripts/build-brand-assets.ts`) en tire ce que le site sert : composant `Icon`
+  (un seul jeu, dessiné en `currentColor`, style duo en option) et copies SVG dans `public/`.
+  Chaque SVG fourni contient un manifeste de provenance d'environ 7 Ko : il est retiré des copies
+  servies, pas des originaux. `pnpm brand:check` tourne en CI, avant le build et avant chaque commit.
+- Icônes de la marque dans la navigation, les cartes, les champs, les fenêtres et les badges ;
+  `lucide-react` ne sert plus que pour ce que la marque n'a pas (menu, chevron, alertes, tendances).
+- Personnages : composants `Character` et `Orbi` ; l'état vide affiche Amani par défaut.
+
 ### Définition de fini
 
 | Critère | État |
@@ -75,8 +87,8 @@ toutes dans `docs/specifications.md`.
 ### Dettes et points ouverts
 
 - `CLAUDE.md` mis à jour (avec l'accord du propriétaire) pour renvoyer vers `docs/specifications.md`.
-- Illustrations de personnages et icônes de la marque non fournies : état vide illustré avec les
-  formes de la charte, icônes `lucide-react` en attendant.
+- Archives « cahier des charges » et « logos et jetons » pas encore reçues : `docs/specifications.md`
+  est encore l'ancienne version (son § 11.7 cite d'anciens chemins).
 - Budget JavaScript : 179 Ko compressés sur `/` pour 200 Ko autorisés, dont environ 165 Ko pour
   React et Next.js eux-mêmes. Peu de marge : chaque composant client ajouté aux pages publiques doit
   être pesé. Les composants client (`Drawer`, `Modal`, `Switch`, `Tabs`, `Toast`) sont importés depuis leur propre
@@ -84,7 +96,6 @@ toutes dans `docs/specifications.md`.
   icônes SVG de la marque si la marge manque.
 - Textes : les emplacements entre crochets `[...]` ne doivent jamais s'afficher en production (règle
   de la partie 01) ; à contrôler à partir de E1.
-- Icônes : `lucide-react` en attendant les icônes de la marque dans `ressources/`.
 - Better Auth, Resend, S3, Inngest et l'API Claude ne sont pas installés : chacun arrive avec l'étape
   qui l'utilise (variables déjà dans `.env.example`).
 - Le dépôt n'avait pas de branche `main` : création soumise à l'accord du propriétaire.

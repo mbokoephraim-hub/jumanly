@@ -1,9 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { Bell } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { talentNavigation } from "@/config/navigation";
-import { Logo } from "@/components/brand";
+import { Logo, Icon } from "@/components/brand";
 import { Avatar } from "@/components/ui";
 import { NavLink } from "./nav-link";
 
@@ -16,12 +15,12 @@ export function AppShell({ userName, children }: { userName: string; children: R
   const t = useTranslations("appNav");
   const a11y = useTranslations("a11y");
   const links = (placement: "sidebar" | "pill") =>
-    talentNavigation.map(({ key, href, icon: Icon }) => (
+    talentNavigation.map(({ key, href, icon }) => (
       <li key={key} className={placement === "pill" ? "flex flex-1" : undefined}>
         <NavLink
           href={href}
           label={t(key)}
-          icon={<Icon aria-hidden className="size-5" strokeWidth={2} />}
+          icon={<Icon name={icon} className="size-6" />}
           placement={placement}
         />
       </li>
@@ -33,7 +32,7 @@ export function AppShell({ userName, children }: { userName: string; children: R
       aria-label={t("notifications")}
       className="flex size-11 items-center justify-center rounded-full hover:bg-sapin/10"
     >
-      <Bell aria-hidden className="size-5" />
+      <Icon name="notification" className="size-5" />
     </button>
   );
 

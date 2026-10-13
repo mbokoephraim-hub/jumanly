@@ -71,6 +71,7 @@ pnpm db:deploy      # applique les migrations (CI, production)
 pnpm db:seed        # forfaits + référentiel + démo (local)
 pnpm messages       # textes/*.md → messages/fr.json
 pnpm messages:check # vérifie que messages/fr.json est à jour
+pnpm brand          # ressources/ → icônes et images servies (public/)
 pnpm email:dev      # aperçu des e-mails
 ```
 
