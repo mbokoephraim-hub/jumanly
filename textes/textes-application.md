@@ -1132,6 +1132,10 @@ Rappel du paramètre `?suite=` : si le visiteur arrive depuis une action (postul
 | `login.noAccount` | Pas encore de compte ? |
 | `login.signupLink` | Créer un compte gratuit |
 | `login.partnerCode` | Vous avez un code de licence ? Activez-le |
+| `login.twoFactor.seo` | Vérification en deux étapes · Jumanly |
+| `login.twoFactor.title` | Confirmez votre connexion |
+| `login.twoFactor.text` | Votre compte est protégé par la vérification en deux étapes. Nous venons d'envoyer un code à {digits} chiffres à votre adresse e-mail. |
+| `login.deletionScheduled` | Votre compte sera supprimé dans {days} jours. Reconnectez-vous avant cette date pour annuler la suppression. |
 
 ---
 
@@ -3167,6 +3171,8 @@ Conventions :
 | `settings.save` | Enregistrer |
 | `settings.saved` | Modifications enregistrées. |
 | `settings.cancel` | Annuler |
+| `settings.seo.title` | Paramètres · Jumanly |
+| `settings.error` | Vérifiez les champs indiqués, puis réessayez. |
 
 #### Compte
 
@@ -3209,12 +3215,19 @@ Conventions :
 | `settings.security.2fa.desc` | Un code envoyé par e-mail à chaque connexion depuis un nouvel appareil. |
 | `settings.security.2fa.on` | Activée |
 | `settings.security.2fa.off` | Désactivée |
+| `settings.security.2fa.enable` | Activer |
+| `settings.security.2fa.disable` | Désactiver |
+| `settings.security.2fa.password` | Votre mot de passe, pour confirmer |
+| `settings.security.2fa.required` | Votre rôle d'administrateur exige la vérification en deux étapes. Activez-la pour accéder à Jumanly Admin. |
 | `settings.security.sessions.text` | Appareils connectés |
 | `settings.security.sessions.current` | Cet appareil |
 | `settings.security.sessions.item` | {device} · {city} · {time, relative} |
 | `settings.security.sessions.logout` | Déconnecter |
 | `settings.security.sessions.logoutAll` | Déconnecter tous les autres appareils |
 | `settings.security.sessions.loggedOut` | Appareil déconnecté. |
+| `settings.security.sessions.since` | {device} · connecté le {date} |
+| `settings.security.sessions.unknown` | Appareil inconnu |
+| `settings.security.2fa.changed` | Vérification en deux étapes mise à jour. |
 
 #### Confidentialité
 
@@ -3279,6 +3292,8 @@ Conventions :
 | `settings.data.export.requested` | Export demandé. Vous recevrez un lien par e-mail sous 48 heures. |
 | `settings.data.export.ready` | Votre archive est prête jusqu'au {date, date, long}. |
 | `settings.data.export.download` | Télécharger l'archive |
+| `settings.data.export.now` | Télécharger mes données (fichier JSON) |
+| `settings.data.export.nowDesc` | Compte, profil, organisations, abonnements, paiements et appareils connectés. Les autres éléments s'ajouteront à l'export au fur et à mesure de leur ouverture. |
 | `settings.data.delete.text` | Supprimer mon compte |
 | `settings.data.delete.desc` | Votre profil, vos CV, vos messages et vos attestations seront supprimés. Les recruteurs ne verront plus vos candidatures. |
 | `settings.data.delete.cta` | Supprimer mon compte |
@@ -3290,6 +3305,7 @@ Conventions :
 | `settings.data.delete.ownerBlock` | Vous êtes propriétaire de {org}. Transférez la propriété ou supprimez l'organisation avant de supprimer votre compte. |
 | `settings.data.delete.scheduled` | Suppression programmée le {date, date, long}. Reconnectez-vous avant cette date pour l'annuler. |
 | `settings.data.delete.canceled` | Suppression annulée. Bon retour parmi nous. |
+| `settings.data.delete.confirm.error` | Tapez SUPPRIMER, en majuscules, pour confirmer. |
 | `settings.data.contact` | Une question sur vos données ? Écrivez-nous à assistant@jumanly.io. |
 
 
@@ -4908,6 +4924,8 @@ Conventions :
 | `billing.help.text` | Une question sur votre facture ? Écrivez-nous à {email}. |
 | `billing.help.emailPersonal` | infojumanly@gmail.com |
 | `billing.help.emailPro` | assistant@jumanly.io |
+| `billing.finalize.text` | Votre formule {plan} n'est pas encore activée. En attendant, votre compte fonctionne avec {freePlan}. |
+| `billing.finalize.cta` | Finaliser mon forfait |
 
 #### Variante organisation (`/app/organisation/abonnement`)
 
@@ -5051,6 +5069,13 @@ Conventions :
 | `checkout.pending.cta` | Revenir à mon espace |
 | `checkout.duplicate` | Un paiement est déjà en cours pour cette formule. Attendez sa confirmation avant d'en lancer un autre. |
 | `checkout.debitedNotActivated` | Vous avez été débité mais votre formule n'est pas active ? Écrivez-nous à infojumanly@gmail.com avec la référence {reference}. Nous régularisons au plus vite. |
+| `checkout.mm.operators.mpesa` | M-Pesa |
+| `checkout.mm.operators.orange` | Orange Money |
+| `checkout.mm.operators.airtel` | Airtel Money |
+| `checkout.mm.operators.mtn` | MTN Mobile Money |
+| `checkout.fake` | Paiement de démonstration : aucun argent n'est débité. Un numéro se terminant par 0000 simule un refus, 1111 un délai dépassé, 2222 une attente. |
+| `checkout.trial.text` | Le paiement en ligne arrive bientôt. En attendant, vous pouvez essayer {plan} pendant {days} jours, sans rien payer. |
+| `checkout.trial.cta` | Essayer {plan} |
 
 ---
 
@@ -6904,6 +6929,8 @@ Conventions :
 | `admin.role.readOnly` | Accès en lecture seule |
 | `admin.audit.notice` | Toutes les actions d'administration sont enregistrées dans le journal d'audit. |
 | `admin.reason.required` | Indiquez le motif de cette action. Il sera enregistré dans le journal d'audit. |
+| `admin.seo.title` | Jumanly Admin |
+| `admin.notAllowed` | Votre rôle ne permet pas cette action. |
 
 ### `/admin` · Indicateurs
 
@@ -6988,6 +7015,13 @@ Conventions :
 | `admin.users.suspended` | Compte suspendu. |
 | `admin.users.updated` | Utilisateur mis à jour. |
 | `admin.users.supportReadOnly` | Votre rôle Support permet de consulter les comptes et abonnements, sans les modifier. |
+| `admin.users.search.submit` | Rechercher |
+| `admin.users.empty` | Aucun utilisateur ne correspond à cette recherche. |
+| `admin.users.role.user` | Aucun rôle plateforme |
+| `admin.users.action.roles.save` | Enregistrer le rôle |
+| `admin.users.selfProtected` | Vous ne pouvez pas modifier votre propre rôle ni suspendre votre propre compte. |
+| `admin.users.count` | {count, plural, one {# utilisateur} other {# utilisateurs}} |
+| `admin.users.summary` | Forfait : {plan} · inscrit le {date} |
 
 ### `/admin/organisations` · Organisations et vérification
 
@@ -7080,6 +7114,11 @@ Conventions :
 | `admin.plans.priceChange.notice` | Un changement de prix s'applique aux nouveaux abonnements et aux renouvellements après information des abonnés. |
 | `admin.plans.duplicate` | Dupliquer le forfait |
 | `admin.plans.new` | Nouveau forfait |
+| `admin.plans.back` | Tous les forfaits |
+| `admin.plans.field.priceHelp` | En USD. Laisser vide pour « Sur devis ». |
+| `admin.plans.field.public` | Visible sur la page Tarifs |
+| `admin.plans.error.value` | Valeur non valable pour {key}. Pour un quota : un nombre entier, -1 pour illimité. |
+| `admin.plans.error.price` | Indiquez un prix valable, par exemple 9.99. |
 
 ### `/admin/abonnements` · Abonnements et paiements
 

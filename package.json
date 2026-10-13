@@ -10,6 +10,7 @@
     "typecheck": "next typegen && tsc --noEmit",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:db": "vitest run --config vitest.db.config.mts",
     "test:e2e": "playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -25,12 +26,14 @@
     "prebuild": "pnpm messages:check && pnpm brand:check",
     "prepare": "husky",
     "brand": "tsx scripts/build-brand-assets.ts",
-    "brand:check": "tsx scripts/build-brand-assets.ts --check"
+    "brand:check": "tsx scripts/build-brand-assets.ts --check",
+    "admin:promote": "tsx scripts/admin-promote.ts"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.0",
     "@prisma/client": "7.10.0",
     "@react-email/components": "1.0.12",
+    "better-auth": "1.7.5",
     "clsx": "^2.1.1",
     "lucide-react": "^1.56.0",
     "next": "16.4.0",

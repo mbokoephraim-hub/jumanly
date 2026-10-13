@@ -2,6 +2,50 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E2 · Comptes, inscription avec forfaits, moteur de droits (13 octobre 2026)
+
+### Fait
+
+- **Authentification** (Better Auth) : e-mail et mot de passe, code à 6 chiffres pour vérifier
+  l'adresse, lien magique, réinitialisation, Google si configuré, vérification en deux étapes par
+  e-mail (obligatoire pour les administrateurs), sessions de 30 jours, comptes suspendus bloqués.
+- **Inscription en 6 étapes** depuis `/tarifs` : profil, forfait, compte, vérification, paiement,
+  bienvenue. Organisation créée automatiquement pour un recruteur ou une entreprise.
+  « Payer plus tard » laisse le compte en Free ; un bandeau « Finaliser mon forfait » le rappelle.
+- **Moteur de droits** (`src/server/entitlements`) : `resolvePlan`, `can`, `level`, `limit`,
+  `usage`, `consume` (atomique), dérogations, délai de grâce de 3 jours, quotas par mois glissant.
+- **Paiement** : interface `PaymentProvider`, prestataire factice (local et preview) qui simule
+  succès, échec, expiration et attente selon le numéro ; activation idempotente ; renouvellement,
+  montée en gamme immédiate, descente programmée, résiliation en fin de période, essai de 14 jours.
+- **Pages** : `/app/abonnement` (forfait, jauges de quotas, changement, historique),
+  `/app/abonnement/payer`, `/app/parametres` (compte, sécurité, confidentialité, mes données, export
+  JSON, suppression avec 30 jours pour changer d'avis), `/app/bienvenue`.
+- **Admin minimale** (`/admin`) : indicateurs de base, utilisateurs (recherche, suspension, rôles),
+  forfaits et droits modifiables sans redéploiement, journal d'audit. Support en lecture seule.
+- **Comptes de démonstration** (local et preview, domaine réservé `.test`, mot de passe
+  `Demo-Jumanly-2026`) : `talent.free@`, `talent.pro@`, `rh@`, `entreprise@` et `admin@jumanly.test`
+  (l'admin reçoit son code de connexion dans la console ou le fichier `EMAIL_OUTBOX_FILE`).
+- `pnpm admin:promote <e-mail>` donne le rôle d'administrateur au premier compte d'un environnement.
+- Tests : règles pures (`pnpm test`), règles en base pour chaque forfait (`pnpm test:db`), parcours
+  e2e (inscription Pro payée, payer plus tard, connexion, déconnexion, réinitialisation, paramètres,
+  admin qui change un quota pris en compte sans redémarrage, accessibilité des nouvelles pages).
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Tests unitaires du moteur de droits pour chaque forfait | ✓ `tests/db/entitlements.test.ts` (11 forfaits) |
+| E2e : visiteur → Pro sur /tarifs → inscription → paiement factice → tableau de bord avec Pro actif | ✓ |
+| E2e : payer plus tard → compte en Free | ✓ |
+| Changer un quota dans l'admin change le comportement sans redémarrage | ✓ e2e |
+
+### Dettes et points ouverts
+
+- Voir `docs/decisions/2026-10-13-comptes-droits.md` (cache en mémoire, essai sans prestataire,
+  éléments reportés).
+- La suppression définitive des comptes après 30 jours sera faite par une tâche de fond (E10).
+- Les reçus de paiement partent par e-mail ; les factures PDF arrivent avec le vrai prestataire (E8).
+
 ## E1 · Site public (13 octobre 2026)
 
 ### Fait

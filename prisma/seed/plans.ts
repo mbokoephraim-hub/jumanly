@@ -245,9 +245,14 @@ export function entitlementSeeds() {
   return result;
 }
 
+/**
+ * Creates missing plans and entitlements. Existing values are left alone, because the admin edits
+ * them in production; SEED_PLANS_RESET=1 puts every value back to this file's matrix.
+ */
 export async function seedPlans(db: SeedClient) {
+  const reset = process.env.SEED_PLANS_RESET === "1";
   for (const plan of planSeeds) {
-    await db.plan.upsert({ where: { code: plan.code }, update: plan, create: plan });
+    await db.plan.upsert({ where: { code: plan.code }, update: reset ? plan : {}, create: plan });
   }
   const plans = await db.plan.findMany({ select: { id: true, code: true } });
   const idByCode = new Map(plans.map((plan) => [plan.code, plan.id]));
@@ -256,7 +261,7 @@ export async function seedPlans(db: SeedClient) {
     const planId = idByCode.get(planCode)!;
     await db.planEntitlement.upsert({
       where: { planId_key: { planId, key } },
-      update: { type, value },
+      update: reset ? { type, value } : {},
       create: { planId, key, type, value },
     });
   }

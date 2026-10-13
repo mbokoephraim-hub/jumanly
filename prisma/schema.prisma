@@ -1,6 +1,7 @@
 // Jumanly data model (docs/specifications.md, partie 04).
 // Tables are added at the step that first needs them. E1: plans and entitlements,
-// organizations, skills, jobs, courses, contact messages.
+// organizations, skills, jobs, courses, contact messages. E2: accounts (Better Auth), memberships,
+// subscriptions, payments, usage counters, overrides, audit log, first talent profile fields.
 
 generator client {
   provider = "prisma-client"
@@ -46,6 +47,9 @@ model Plan {
   sortOrder     Int
   active        Boolean           @default(true)
   entitlements  PlanEntitlement[]
+  subscriptions Subscription[]    @relation("SubscriptionPlan")
+  pendingFor    Subscription[]    @relation("SubscriptionPendingPlan")
+  payments      Payment[]
   createdAt     DateTime          @default(now())
   updatedAt     DateTime          @updatedAt
 
@@ -90,6 +94,7 @@ model Organization {
   parent      Organization?    @relation("OrganizationEntities", fields: [parentId], references: [id])
   entities    Organization[]   @relation("OrganizationEntities")
   jobs        Job[]
+  memberships Membership[]
   createdAt   DateTime         @default(now())
   updatedAt   DateTime         @updatedAt
 }
@@ -97,13 +102,14 @@ model Organization {
 // ─── Référentiel de compétences ─────────────────────────────────
 
 model Skill {
-  id       String        @id @default(cuid(2))
+  id       String         @id @default(cuid(2))
   name     String
-  slug     String        @unique
+  slug     String         @unique
   aliases  String[]
   category String
   jobs     JobSkill[]
   courses  CourseSkill[]
+  profiles ProfileSkill[]
 }
 
 // ─── Offres (Jobs) ──────────────────────────────────────────────
@@ -137,37 +143,37 @@ enum SkillImportance {
 }
 
 model Job {
-  id                 String       @id @default(cuid(2))
-  organizationId     String
-  organization       Organization @relation(fields: [organizationId], references: [id])
-  title              String
-  slug               String       @unique
-  description        String
+  id                String       @id @default(cuid(2))
+  organizationId    String
+  organization      Organization @relation(fields: [organizationId], references: [id])
+  title             String
+  slug              String       @unique
+  description       String
   /// One item per line.
-  responsibilities   String[]
-  requirements       String[]
-  benefits           String[]
-  process            String[]
-  contractType       ContractType
-  city               String
-  country            String
-  remote             RemoteMode
+  responsibilities  String[]
+  requirements      String[]
+  benefits          String[]
+  process           String[]
+  contractType      ContractType
+  city              String
+  country           String
+  remote            RemoteMode
   /// USD cents per month; optional.
-  salaryMin          Int?
-  salaryMax          Int?
-  currency           String       @default("USD")
-  experienceMin      Int          @default(0)
-  educationLevelMin  String?
+  salaryMin         Int?
+  salaryMax         Int?
+  currency          String       @default("USD")
+  experienceMin     Int          @default(0)
+  educationLevelMin String?
   /// [{ code: "fr", level: "C1" }]
-  languagesRequired  Json         @default("[]")
+  languagesRequired Json         @default("[]")
   /// Explicit criteria set by the recruiter: ["Permis B", …]
-  knockoutCriteria   Json         @default("[]")
-  status             JobStatus    @default(draft)
-  publishedAt        DateTime?
-  closesAt           DateTime?
-  skills             JobSkill[]
-  createdAt          DateTime     @default(now())
-  updatedAt          DateTime     @updatedAt
+  knockoutCriteria  Json         @default("[]")
+  status            JobStatus    @default(draft)
+  publishedAt       DateTime?
+  closesAt          DateTime?
+  skills            JobSkill[]
+  createdAt         DateTime     @default(now())
+  updatedAt         DateTime     @updatedAt
 
   @@index([status, publishedAt])
 }
@@ -297,4 +303,329 @@ model ContactMessage {
   createdAt    DateTime @default(now())
 
   @@index([email, createdAt])
+}
+
+// ─── Comptes (Better Auth) ──────────────────────────────────────
+// Field names of User, Session, Account, Verification, TwoFactor and RateLimit follow Better Auth.
+
+enum PlatformRole {
+  user
+  content_editor
+  support_agent
+  platform_admin
+}
+
+enum UserStatus {
+  active
+  suspended
+}
+
+model User {
+  id                  String         @id @default(cuid(2))
+  name                String
+  email               String         @unique
+  emailVerified       Boolean        @default(false)
+  image               String?
+  firstName           String?
+  lastName            String?
+  country             String?
+  city                String?
+  locale              String         @default("fr")
+  platformRole        PlatformRole   @default(user)
+  status              UserStatus     @default(active)
+  /// Consent to AI suggestions (CLAUDE.md § 12): date of consent, null when withdrawn.
+  aiConsentAt         DateTime?
+  newsletter          Boolean        @default(false)
+  termsAcceptedAt     DateTime?
+  /// Account deletion requested: effective at this date unless the user signs in again.
+  deletionScheduledAt DateTime?
+  twoFactorEnabled    Boolean        @default(false)
+  sessions            Session[]
+  accounts            Account[]
+  twoFactors          TwoFactor[]
+  memberships         Membership[]
+  talentProfile       TalentProfile?
+  createdAt           DateTime       @default(now())
+  updatedAt           DateTime       @updatedAt
+
+  @@map("user")
+}
+
+model Session {
+  id        String   @id @default(cuid(2))
+  expiresAt DateTime
+  token     String   @unique
+  ipAddress String?
+  userAgent String?
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@map("session")
+}
+
+model Account {
+  id                    String    @id @default(cuid(2))
+  accountId             String
+  providerId            String
+  userId                String
+  user                  User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  accessToken           String?
+  refreshToken          String?
+  idToken               String?
+  accessTokenExpiresAt  DateTime?
+  refreshTokenExpiresAt DateTime?
+  scope                 String?
+  password              String?
+  createdAt             DateTime  @default(now())
+  updatedAt             DateTime  @updatedAt
+
+  @@index([userId])
+  @@map("account")
+}
+
+model Verification {
+  id         String   @id @default(cuid(2))
+  identifier String
+  value      String
+  expiresAt  DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@index([identifier])
+  @@map("verification")
+}
+
+model TwoFactor {
+  id                      String    @id @default(cuid(2))
+  secret                  String
+  backupCodes             String
+  userId                  String
+  user                    User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  verified                Boolean?  @default(true)
+  failedVerificationCount Int?      @default(0)
+  lockedUntil             DateTime?
+
+  @@index([secret])
+  @@index([userId])
+  @@map("twoFactor")
+}
+
+model RateLimit {
+  id          String @id @default(cuid(2))
+  key         String @unique
+  count       Int
+  lastRequest BigInt
+
+  @@map("rateLimit")
+}
+
+// ─── Appartenances (partie 05 § 5) ──────────────────────────────
+
+enum MembershipRole {
+  org_owner
+  org_admin
+  recruiter
+  hiring_manager
+  viewer
+  partner_manager
+}
+
+enum MembershipStatus {
+  invited
+  active
+  removed
+}
+
+model Membership {
+  id             String           @id @default(cuid(2))
+  userId         String
+  user           User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String
+  organization   Organization     @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  role           MembershipRole
+  status         MembershipStatus @default(active)
+  /// Job title given at sign-up (« Votre fonction »).
+  jobTitle       String?
+  invitedBy      String?
+  createdAt      DateTime         @default(now())
+  updatedAt      DateTime         @updatedAt
+
+  @@unique([userId, organizationId])
+  @@index([organizationId])
+}
+
+// ─── Abonnements, paiements, quotas (parties 05, 09) ────────────
+
+enum SubjectType {
+  user
+  organization
+}
+
+enum SubscriptionStatus {
+  trialing
+  active
+  past_due
+  canceled
+  expired
+  sponsored
+}
+
+enum SubscriptionSource {
+  self
+  license
+  admin
+}
+
+model Subscription {
+  id                 String             @id @default(cuid(2))
+  subjectType        SubjectType
+  subjectId          String
+  planId             String
+  plan               Plan               @relation("SubscriptionPlan", fields: [planId], references: [id])
+  status             SubscriptionStatus
+  currentPeriodStart DateTime
+  currentPeriodEnd   DateTime
+  cancelAtPeriodEnd  Boolean            @default(false)
+  /// Downgrade taking effect at the end of the paid period.
+  pendingPlanId      String?
+  pendingPlan        Plan?              @relation("SubscriptionPendingPlan", fields: [pendingPlanId], references: [id])
+  source             SubscriptionSource @default(self)
+  payments           Payment[]
+  createdAt          DateTime           @default(now())
+  updatedAt          DateTime           @updatedAt
+
+  @@index([subjectType, subjectId])
+}
+
+enum PaymentMethod {
+  mobile_money
+  card
+}
+
+enum PaymentStatus {
+  pending
+  succeeded
+  failed
+  expired
+  refunded
+}
+
+model Payment {
+  id             String        @id @default(cuid(2))
+  subscriptionId String?
+  subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+  /// Who pays and for which plan, kept even before the subscription exists.
+  subjectType    SubjectType
+  subjectId      String
+  planId         String
+  plan           Plan          @relation(fields: [planId], references: [id])
+  provider       String
+  method         PaymentMethod
+  operator       String?
+  /// Mobile Money number, masked (e.g. ••••••4521); never stored in full.
+  msisdnMasked   String?
+  amountCents    Int
+  currency       String        @default("USD")
+  status         PaymentStatus @default(pending)
+  providerRef    String        @unique
+  idempotencyKey String        @unique
+  failureReason  String?
+  periodStart    DateTime
+  periodEnd      DateTime
+  paidAt         DateTime?
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
+
+  @@index([subjectType, subjectId])
+}
+
+/// Consumption of a quota for one period (rolling month from the subscription start).
+model UsageCounter {
+  id          String      @id @default(cuid(2))
+  subjectType SubjectType
+  subjectId   String
+  key         String
+  periodStart DateTime
+  periodEnd   DateTime
+  used        Int         @default(0)
+
+  @@unique([subjectType, subjectId, key, periodStart])
+}
+
+/// Per-subject entitlement value (commercial gesture, Premium contract).
+model EntitlementOverride {
+  id          String      @id @default(cuid(2))
+  subjectType SubjectType
+  subjectId   String
+  key         String
+  value       String
+  reason      String
+  expiresAt   DateTime?
+  createdAt   DateTime    @default(now())
+
+  @@index([subjectType, subjectId])
+}
+
+// ─── Profil talent (début, complété en E3) ──────────────────────
+
+enum ProfileVisibility {
+  private
+  recruiters
+  anonymous
+}
+
+model TalentProfile {
+  id         String            @id @default(cuid(2))
+  userId     String            @unique
+  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  headline   String?
+  /// Main goal chosen on the welcome screen (firstJob, newJob, reconversion…).
+  goal       String?
+  targetJob  String?
+  visibility ProfileVisibility @default(private)
+  skills     ProfileSkill[]
+  createdAt  DateTime          @default(now())
+  updatedAt  DateTime          @updatedAt
+}
+
+enum SkillSource {
+  declared
+  course
+  assessment
+  cv_extracted
+}
+
+model ProfileSkill {
+  id        String        @id @default(cuid(2))
+  profileId String
+  profile   TalentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  skillId   String
+  skill     Skill         @relation(fields: [skillId], references: [id])
+  /// 1 to 4: notions, intermediate, advanced, expert.
+  level     Int           @default(2)
+  source    SkillSource   @default(declared)
+  verified  Boolean       @default(false)
+  createdAt DateTime      @default(now())
+
+  @@unique([profileId, skillId])
+}
+
+// ─── Audit (partie 03 § 3.6) ────────────────────────────────────
+
+model AuditLog {
+  id             String   @id @default(cuid(2))
+  actorId        String?
+  action         String
+  targetType     String
+  targetId       String
+  organizationId String?
+  metadata       Json     @default("{}")
+  ip             String?
+  createdAt      DateTime @default(now())
+
+  @@index([targetType, targetId])
+  @@index([actorId, createdAt])
 }

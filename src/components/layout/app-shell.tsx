@@ -3,7 +3,7 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { talentNavigation } from "@/config/navigation";
 import { Logo, Icon } from "@/components/brand";
-import { Avatar } from "@/components/ui";
+import { AccountMenu, type AccountSummary } from "./account-menu";
 import { NavLink } from "./nav-link";
 
 /**
@@ -11,7 +11,7 @@ import { NavLink } from "./nav-link";
  * Desktop: 92 px Sapin sidebar, Crème main panel with 32 px corners.
  * Mobile: Sapin header, Crème sheet rising over it, floating pill navigation.
  */
-export function AppShell({ userName, children }: { userName: string; children: ReactNode }) {
+export function AppShell({ account, children }: { account: AccountSummary; children: ReactNode }) {
   const t = useTranslations("appNav");
   const a11y = useTranslations("a11y");
   const links = (placement: "sidebar" | "pill") =>
@@ -60,14 +60,14 @@ export function AppShell({ userName, children }: { userName: string; children: R
         </Link>
         <div className="flex items-center gap-1 [&_button]:hover:bg-blanc/10">
           {notifications}
-          <Avatar name={userName} size="sm" />
+          <AccountMenu account={account} tone="dark" />
         </div>
       </header>
 
       <div className="min-h-[calc(100dvh-4rem)] rounded-t-panel bg-creme lg:my-3 lg:mr-3 lg:min-h-0 lg:flex-1 lg:rounded-panel">
         <div className="hidden h-18 items-center justify-end gap-2 page-x lg:flex">
           {notifications}
-          <Avatar name={userName} size="sm" />
+          <AccountMenu account={account} tone="light" />
         </div>
         <main id="content" className="mx-auto max-w-6xl page-x pt-6 pb-32 lg:pt-0 lg:pb-12">
           {children}

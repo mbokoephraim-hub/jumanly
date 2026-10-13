@@ -57,12 +57,20 @@ const african = [
 ];
 const others = ["BE", "CA", "FR", "DE", "CH", "GB", "US"];
 
-/** Country names in French, sorted, for a select field. */
-export function countryOptions(): { value: string; label: string }[] {
+/**
+ * Country names in French, sorted, for a select field. The value is the name (contact forms,
+ * read by a person) or the ISO code (accounts, used by the app).
+ */
+export function countryOptions(
+  value: "name" | "code" = "name",
+): { value: string; label: string }[] {
   const names = new Intl.DisplayNames(["fr-FR"], { type: "region" });
   const sort = (codes: string[]) =>
     codes
-      .map((code) => ({ value: names.of(code) ?? code, label: names.of(code) ?? code }))
+      .map((code) => ({
+        value: value === "code" ? code : (names.of(code) ?? code),
+        label: names.of(code) ?? code,
+      }))
       .sort((a, b) => a.label.localeCompare(b.label, "fr"));
   return [...sort(african), ...sort(others)];
 }
