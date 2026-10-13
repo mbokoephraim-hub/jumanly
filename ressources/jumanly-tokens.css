@@ -1,0 +1,54 @@
+/*
+ * Jetons de design Jumanly · VERSION PROVISOIRE
+ *
+ * Reconstitués depuis la charte graphique v1.0 (octobre 2026) et LISEZMOI des
+ * maquettes UI, en attendant le fichier officiel `ressources/jumanly-tokens.css`
+ * du cahier des charges. Quand il arrivera, il remplacera ce fichier : garder
+ * les mêmes noms de variables ou adapter `src/app/globals.css` (bloc @theme).
+ */
+
+:root {
+  /* Couleurs de marque (charte § 07) */
+  --jm-sapin: #0f3f37; /* couleur de base : textes, logo, boutons principaux */
+  --jm-lime: #a6f26b; /* couleur signature */
+  --jm-creme: #f2ede5; /* couleur de fond */
+  --jm-feuille: #3da14f; /* secondaire, succès */
+  --jm-menthe-ia: #2fd3a6; /* module IA */
+  --jm-nuit: #0b1a1f; /* fond sombre */
+  --jm-neon: #e3f67c; /* labels */
+  --jm-ardoise: #5b6b68; /* texte secondaire */
+  --jm-blanc: #ffffff; /* surfaces */
+  --jm-brume: #dce5e1; /* bordures et séparateurs */
+
+  /* États d'interface (ajouts du LISEZMOI des maquettes) */
+  --jm-ambre: #f2b33d; /* alerte douce */
+  --jm-corail: #e25c4b; /* baisse, erreur */
+  --jm-menthe-claire: #bfefdf; /* teinte de carte */
+
+  /* Dégradés (charte § 08) */
+  --jm-degrade-signature: linear-gradient(135deg, #d9fa72 0%, #7de36b 50%, #1e9a64 100%);
+  --jm-degrade-intelligence: linear-gradient(45deg, #0f3f37 0%, #14745f 50%, #2fd3a6 100%);
+  --jm-degrade-profondeur: linear-gradient(160deg, #0f3f37 0%, #0b1a1f 100%);
+
+  /* Rayons d'angle (charte § 10) */
+  --jm-rayon-carte: 28px;
+  --jm-rayon-composant: 18px;
+  --jm-rayon-petit: 12px;
+  --jm-rayon-pastille: 9999px;
+
+  /* Typographie (charte § 09) : Sora, taille / interligne */
+  --jm-texte-display: 56px;
+  --jm-interligne-display: 60px;
+  --jm-texte-h1: 36px;
+  --jm-interligne-h1: 42px;
+  --jm-texte-h2: 24px;
+  --jm-interligne-h2: 30px;
+  --jm-texte-corps: 16px;
+  --jm-interligne-corps: 26px;
+  --jm-texte-label: 13px;
+  --jm-texte-legende: 12px;
+  --jm-interligne-legende: 18px;
+
+  /* Ombres douces */
+  --jm-ombre-carte: 0 1px 2px rgb(15 63 55 / 0.06), 0 8px 24px rgb(15 63 55 / 0.06);
+}

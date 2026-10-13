@@ -1,0 +1,76 @@
+@import "tailwindcss";
+@import "../../ressources/jumanly-tokens.css";
+
+/* Les classes Tailwind reprennent les jetons de la marque : bg-sapin, text-lime, rounded-carte… */
+@theme inline {
+  --color-sapin: var(--jm-sapin);
+  --color-lime: var(--jm-lime);
+  --color-creme: var(--jm-creme);
+  --color-feuille: var(--jm-feuille);
+  --color-menthe-ia: var(--jm-menthe-ia);
+  --color-nuit: var(--jm-nuit);
+  --color-neon: var(--jm-neon);
+  --color-ardoise: var(--jm-ardoise);
+  --color-blanc: var(--jm-blanc);
+  --color-brume: var(--jm-brume);
+  --color-ambre: var(--jm-ambre);
+  --color-corail: var(--jm-corail);
+  --color-menthe-claire: var(--jm-menthe-claire);
+
+  --radius-carte: var(--jm-rayon-carte);
+  --radius-composant: var(--jm-rayon-composant);
+  --radius-petit: var(--jm-rayon-petit);
+  --radius-pastille: var(--jm-rayon-pastille);
+
+  --font-sans: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+
+  --text-display: var(--jm-texte-display);
+  --text-display--line-height: var(--jm-interligne-display);
+  --text-display--letter-spacing: -0.025em;
+  --text-h1: var(--jm-texte-h1);
+  --text-h1--line-height: var(--jm-interligne-h1);
+  --text-h2: var(--jm-texte-h2);
+  --text-h2--line-height: var(--jm-interligne-h2);
+  --text-corps: var(--jm-texte-corps);
+  --text-corps--line-height: var(--jm-interligne-corps);
+  --text-label: var(--jm-texte-label);
+  --text-legende: var(--jm-texte-legende);
+  --text-legende--line-height: var(--jm-interligne-legende);
+
+  --shadow-carte: var(--jm-ombre-carte);
+}
+
+@utility bg-degrade-signature {
+  background-image: var(--jm-degrade-signature);
+}
+@utility bg-degrade-intelligence {
+  background-image: var(--jm-degrade-intelligence);
+}
+@utility bg-degrade-profondeur {
+  background-image: var(--jm-degrade-profondeur);
+}
+
+html {
+  background: var(--jm-creme);
+  color: var(--jm-sapin);
+}
+
+body {
+  font-family: var(--font-sans);
+  font-size: var(--jm-texte-corps);
+  line-height: var(--jm-interligne-corps);
+}
+
+:focus-visible {
+  outline: 3px solid var(--jm-feuille);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

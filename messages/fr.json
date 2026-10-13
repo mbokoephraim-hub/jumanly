@@ -1,0 +1,241 @@
+{
+  "commun": {
+    "marque": {
+      "nom": "Jumanly",
+      "slogan": "Learn. Grow. Connect.",
+      "portePar": "Une plateforme développée par The Growth Lab"
+    },
+    "contact": {
+      "titre": "Nous écrire",
+      "emailPrincipal": "assistant@jumanly.io",
+      "emailSecondaire": "infojumanly@gmail.com"
+    },
+    "piedDePage": {
+      "droits": "© Jumanly · The Growth Lab. Tous droits réservés."
+    }
+  },
+  "meta": {
+    "titre": "Jumanly · Learn. Grow. Connect.",
+    "modeleTitre": "%s · Jumanly",
+    "description": "Jumanly relie les talents africains aux formations et aux employeurs qui leur correspondent.",
+    "nomApplication": "Jumanly"
+  },
+  "navigation": {
+    "public": {
+      "accueil": "Accueil Jumanly",
+      "principale": "Navigation principale",
+      "menu": "Ouvrir le menu",
+      "formations": "Formations",
+      "offres": "Offres d'emploi",
+      "tarifs": "Tarifs",
+      "connexion": "Se connecter",
+      "inscription": "Créer un compte"
+    },
+    "espace": {
+      "principale": "Navigation de mon espace",
+      "allerAuContenu": "Aller au contenu",
+      "notifications": "Notifications",
+      "accueil": "Accueil",
+      "learn": "Learn",
+      "career": "Career",
+      "jobs": "Jobs",
+      "connect": "Connect"
+    }
+  },
+  "composants": {
+    "chargement": "Chargement en cours",
+    "fermer": "Fermer",
+    "facultatif": "(facultatif)",
+    "pourcentage": "{valeur} %",
+    "jaugeQuota": {
+      "utilise": "{utilise} sur {limite}",
+      "illimite": "{utilise} utilisés · illimité",
+      "atteint": "Limite atteinte pour ce mois."
+    },
+    "ia": {
+      "suggere": "Suggéré par l'IA",
+      "pourquoi": "Pourquoi ?",
+      "humainDecide": "L'IA recommande, vous décidez."
+    }
+  },
+  "accueil": {
+    "pastille": "Bientôt disponible",
+    "titre": "Votre carrière commence ici.",
+    "sousTitre": "Formez-vous, enrichissez votre profil et rencontrez les employeurs qui vous correspondent.",
+    "creerCompte": "Créer un compte",
+    "seConnecter": "Se connecter"
+  },
+  "espace": {
+    "utilisateurExemple": "Aïcha Exemple",
+    "tableauDeBord": {
+      "surtitre": "Mon espace",
+      "titre": "Bonjour, bienvenue sur Jumanly",
+      "profilLabel": "Profil complété",
+      "profilTitre": "Complétez votre profil",
+      "profilTexte": "Un profil complet vous fait remonter dans les recommandations.",
+      "videTitre": "Votre tableau de bord arrive bientôt",
+      "videTexte": "Formations, offres et messages apparaîtront ici.",
+      "voirComposants": "Voir les composants"
+    }
+  },
+  "devComposants": {
+    "titre": "Bibliothèque de composants",
+    "intro": "Tous les composants de base de Jumanly et leurs états. Page interne, non indexée.",
+    "gabaritPublic": "Gabarit du site public",
+    "gabaritEspace": "Gabarit de l'espace connecté",
+    "sections": {
+      "couleurs": "Couleurs et dégradés",
+      "typographie": "Typographie",
+      "boutons": "Boutons",
+      "champs": "Champs de saisie",
+      "choix": "Cases, boutons radio et interrupteurs",
+      "pastilles": "Pastilles",
+      "cartes": "Cartes",
+      "alertes": "Alertes",
+      "avatars": "Avatars",
+      "onglets": "Onglets",
+      "progression": "Progression et quotas",
+      "ia": "Intelligence : score expliqué",
+      "chargement": "Chargement",
+      "vide": "État vide",
+      "modale": "Fenêtre modale"
+    },
+    "couleurs": {
+      "sapin": "Vert Sapin #0F3F37",
+      "lime": "Lime #A6F26B",
+      "creme": "Crème #F2EDE5",
+      "feuille": "Feuille #3DA14F",
+      "mentheIa": "Menthe IA #2FD3A6",
+      "nuit": "Nuit #0B1A1F",
+      "neon": "Néon #E3F67C",
+      "ardoise": "Ardoise #5B6B68",
+      "brume": "Brume #DCE5E1",
+      "ambre": "Ambre #F2B33D",
+      "corail": "Corail #E25C4B",
+      "mentheClaire": "Menthe claire #BFEFDF"
+    },
+    "typo": {
+      "display": "Learn. Grow.",
+      "h1": "Votre carrière commence ici",
+      "h2": "Formations recommandées pour vous",
+      "label": "Date limite",
+      "corps": "Jumanly relie les talents africains aux formations et aux employeurs qui leur correspondent.",
+      "legende": "Une plateforme développée par The Growth Lab"
+    },
+    "variantes": {
+      "primaire": "Primaire",
+      "secondaire": "Secondaire",
+      "contour": "Contour",
+      "fantome": "Fantôme",
+      "danger": "Danger"
+    },
+    "etats": {
+      "icone": "Avec icône",
+      "chargement": "En cours",
+      "desactive": "Désactivé",
+      "petit": "Petit",
+      "moyen": "Moyen",
+      "grand": "Grand",
+      "lien": "Lien"
+    },
+    "boutons": {
+      "action": "Postuler",
+      "lien": "Créer mon profil"
+    },
+    "champs": {
+      "nom": "Nom complet",
+      "nomExemple": "Ex. : Aïcha Exemple",
+      "email": "Adresse e-mail",
+      "emailAide": "Nous ne la partageons jamais sans votre accord.",
+      "emailInvalide": "aicha@exemple",
+      "emailErreur": "Saisissez une adresse e-mail valide, par exemple nom@domaine.com.",
+      "desactive": "Champ non modifiable",
+      "valeurFixe": "Valeur verrouillée",
+      "pays": "Pays",
+      "paysInvite": "Choisissez un pays",
+      "paysErreur": "Choisissez votre pays pour continuer.",
+      "paysA": "République démocratique du Congo",
+      "paysB": "Cameroun",
+      "paysC": "Sénégal",
+      "bio": "Présentation",
+      "bioAide": "Quelques lignes sur votre parcours et vos objectifs."
+    },
+    "choix": {
+      "conditions": "J'accepte les conditions d'utilisation",
+      "alertes": "Recevoir les alertes d'offres",
+      "alertesAide": "Un e-mail par semaine au maximum.",
+      "profil": "Je suis",
+      "talent": "Un talent",
+      "recruteur": "Un recruteur RH",
+      "entreprise": "Une entreprise",
+      "profilVisible": "Profil visible des recruteurs",
+      "profilVisibleAide": "Vous pouvez le masquer à tout moment.",
+      "emails": "Résumé hebdomadaire par e-mail"
+    },
+    "pastilles": {
+      "neutre": "Brouillon",
+      "sapin": "Learn",
+      "lime": "Nouveau",
+      "succes": "Retenu",
+      "alerte": "En attente",
+      "erreur": "Non retenu",
+      "ia": "Suggéré par l'IA"
+    },
+    "cartes": {
+      "standardTitre": "Gestion de projet agile",
+      "standardTexte": "Learn · 6 modules · Certificat",
+      "teinteTitre": "3 offres correspondent à votre profil",
+      "teinteTexte": "Consultez-les avant la date limite.",
+      "sombreTitre": "Module Intelligence",
+      "sombreTexte": "Des recommandations expliquées, jamais imposées."
+    },
+    "alertes": {
+      "infoTitre": "Information",
+      "infoTexte": "Votre profil est visible des recruteurs vérifiés uniquement.",
+      "succesTitre": "Candidature envoyée",
+      "succesTexte": "Vous suivrez son avancement dans vos candidatures.",
+      "alerteTitre": "Quota bientôt atteint",
+      "alerteTexte": "Il vous reste 2 analyses ce mois-ci.",
+      "alerteAction": "Voir les forfaits",
+      "erreurTitre": "Envoi impossible",
+      "erreurTexte": "Vérifiez votre connexion puis réessayez."
+    },
+    "avatars": {
+      "nom": "Aïcha Exemple"
+    },
+    "onglets": {
+      "talents": "Talents",
+      "recruteurs": "Recruteurs",
+      "entreprises": "Entreprises",
+      "talentsTexte": "Formez-vous et postulez gratuitement.",
+      "recruteursTexte": "Publiez vos offres et suivez vos candidats.",
+      "entreprisesTexte": "Pilotez vos recrutements en équipe."
+    },
+    "progression": {
+      "profil": "Profil complété",
+      "formation": "Progression de la formation",
+      "quotaNormal": "Analyses de CV",
+      "quotaProche": "Crédits IA du mois",
+      "quotaAtteint": "Offres actives",
+      "quotaIllimite": "Candidatures"
+    },
+    "ia": {
+      "offre": "Compatibilité avec « Analyste RH junior » (exemple fictif)",
+      "raison1": "Excel avancé : compétence requise, présente sur votre profil.",
+      "raison2": "Certificat RH obtenu sur Jumanly Learn.",
+      "raison3": "2 ans d'expérience pour 1 an demandé."
+    },
+    "vide": {
+      "titre": "Aucune candidature pour l'instant",
+      "texte": "Parcourez les offres : postuler est toujours gratuit.",
+      "action": "Voir les offres"
+    },
+    "modale": {
+      "ouvrir": "Ouvrir la fenêtre",
+      "titre": "Retirer ma candidature ?",
+      "texte": "Le recruteur ne verra plus votre candidature. Vous pourrez postuler à nouveau tant que l'offre est ouverte.",
+      "annuler": "Annuler",
+      "confirmer": "Retirer"
+    }
+  }
+}

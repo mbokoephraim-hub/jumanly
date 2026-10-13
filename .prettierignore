@@ -1,0 +1,9 @@
+pnpm-lock.yaml
+src/generated/
+messages/fr.json
+.next/
+playwright-report/
+test-results/
+ressources/logos/
+ressources/favicon/
+public/marque/

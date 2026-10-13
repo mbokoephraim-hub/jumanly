@@ -1,0 +1,22 @@
+# Base de données locale : `docker compose up -d`
+services:
+  postgres:
+    image: pgvector/pgvector:pg16
+    container_name: jumanly-postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: jumanly
+      POSTGRES_PASSWORD: jumanly
+      POSTGRES_DB: jumanly
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres-donnees:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U jumanly"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres-donnees:

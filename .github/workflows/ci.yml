@@ -1,0 +1,63 @@
+name: CI
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  qualite:
+    name: Lint, types, tests et build
+    runs-on: ubuntu-latest
+    env:
+      DATABASE_URL: postgresql://jumanly:jumanly@localhost:5432/jumanly
+    services:
+      postgres:
+        image: pgvector/pgvector:pg16
+        env:
+          POSTGRES_USER: jumanly
+          POSTGRES_PASSWORD: jumanly
+          POSTGRES_DB: jumanly
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U jumanly"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
+    steps:
+      - uses: actions/checkout@v4
+      - uses: pnpm/action-setup@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: Textes à jour (textes/ → messages/fr.json)
+        run: pnpm messages:check
+      - name: Format
+        run: pnpm format:check
+      - name: Lint
+        run: pnpm lint
+      - name: Types
+        run: pnpm typecheck
+      - name: Tests unitaires
+        run: pnpm test
+      - name: Migrations de la base (pgvector)
+        run: pnpm db:deploy
+      - name: Build
+        run: pnpm build
+      - name: Navigateur pour les tests e2e
+        run: pnpm exec playwright install --with-deps chromium
+      - name: Tests e2e (desktop et mobile)
+        run: pnpm test:e2e
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: rapport-playwright
+          path: playwright-report/
+          retention-days: 7

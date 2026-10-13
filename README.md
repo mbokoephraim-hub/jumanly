@@ -1,0 +1,41 @@
+# Jumanly
+
+Plateforme web qui réunit formation, carrière, emploi et recrutement pour les talents africains.
+Portée par The Growth Lab · « Learn. Grow. Connect. »
+
+## Démarrer en local
+
+Prérequis : Node.js 22, pnpm 10, Docker.
+
+```bash
+pnpm install
+cp .env.example .env
+docker compose up -d      # base PostgreSQL + pgvector
+pnpm db:migrate           # applique les migrations
+pnpm dev                  # http://localhost:3000
+```
+
+Pages utiles : `/` (site public), `/app` (espace connecté), `/dev/composants` (composants).
+
+## Commandes
+
+| Commande                       | Rôle                                                   |
+| ------------------------------ | ------------------------------------------------------ |
+| `pnpm dev`                     | Lance le site en développement (régénère les textes)   |
+| `pnpm build`                   | Version de production                                  |
+| `pnpm lint` / `pnpm typecheck` | Qualité du code et types                               |
+| `pnpm test`                    | Tests unitaires (Vitest)                               |
+| `pnpm test:e2e`                | Tests de bout en bout (Playwright, après `pnpm build`) |
+| `pnpm messages`                | Convertit `textes/*.md` en `messages/fr.json`          |
+| `pnpm format`                  | Met en forme le code (Prettier)                        |
+
+## Textes de l'interface
+
+Aucun texte n'est écrit dans le code. Ajoutez une ligne `| clé | texte |` dans un fichier de
+`textes/`, lancez `pnpm messages`, puis utilisez la clé avec `useTranslations`.
+
+## Documentation
+
+- `docs/12-feuille-de-route.md` : les étapes E0 à E11
+- `docs/journal.md` : ce qui a été fait à chaque étape
+- `docs/decisions/` : les choix techniques
