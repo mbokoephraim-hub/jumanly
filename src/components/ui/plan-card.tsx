@@ -19,6 +19,8 @@ export function PlanCard({
   current = false,
   ctaLabel,
   ctaHref,
+  badge,
+  note,
 }: {
   name: string;
   /** `0` for a free plan, `null` for a quote. */
@@ -30,6 +32,10 @@ export function PlanCard({
   current?: boolean;
   ctaLabel: string;
   ctaHref: string;
+  /** Extra tag such as "Offre d'entrée" (the "Recommandé" tag comes from `recommended`). */
+  badge?: string;
+  /** Small print under the features. */
+  note?: string;
 }) {
   const t = useTranslations();
   return (
@@ -41,7 +47,11 @@ export function PlanCard({
     >
       <div className="flex flex-wrap items-center justify-between gap-2">
         <h3 className="text-h2">{name}</h3>
-        {recommended && <Badge tone="lime">{t("common.recommended")}</Badge>}
+        {recommended ? (
+          <Badge tone="lime">{t("common.recommended")}</Badge>
+        ) : (
+          badge && <Badge tone="new">{badge}</Badge>
+        )}
       </div>
       <p className="flex items-baseline gap-1">
         {priceCents === null ? (
@@ -72,6 +82,7 @@ export function PlanCard({
           </li>
         ))}
       </ul>
+      {note && <p className="text-ardoise text-caption">{note}</p>}
       <div className="mt-auto pt-2">
         {current ? (
           <Badge tone="neutral">{t("pricing.card.current")}</Badge>

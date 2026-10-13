@@ -622,6 +622,7 @@ Une institution (banque, université, fondation, entreprise, agence de coopérat
 | `career.documents` (lettres, bio, correction) | — | ✓ | ✓ | ✓ |
 | `career.linkedin` | — | ✓ | ✓ | ✓ |
 | `career.progress_plan` | — | ✓ | ✓ + recommandations | ✓ + rapports détaillés |
+| `career.progress_plan.recommendations` (ajoutée en E1 pour le comparatif) | — | — | ✓ | ✓ |
 | `career.portfolio.level` | — | — | `standard` | `enriched` |
 | `career.tools.extended` (outils supplémentaires de gestion de carrière et de candidature) | — | — | ✓ | ✓ |
 | `career.interview.text.monthly` | 0 | 3 P | 10 P | 25 P |
@@ -640,6 +641,7 @@ Le diagnostic simplifié et les conseils généraux du plan Free sont fournis **
 | Clé de droit | RH Free | RH Pro | RH Premium | Company | Company Plus | Company Premium |
 |---|---|---|---|---|---|---|
 | `org.seats` | 1 | 2 | 3 | 5 | 15 | contrat |
+| `org.seats.min` (sièges minimum facturés, ajoutée en E1) | 1 | 2 | 3 | 5 | 15 | 30 |
 | `jobs.active.max` | 1 | 5 | 15 | 20 | 50 | contrat |
 | `hire.pipeline.level` | `simple` | `multi` | `advanced` | `advanced` | `advanced` | `advanced` |
 | `hire.talent_search` | — | `advanced` | `deep` | `advanced` | `deep` | `deep` |

@@ -3,7 +3,7 @@ import type { ComponentProps, ReactNode } from "react";
 import { cx } from "@/lib/cx";
 import { Spinner } from "./spinner";
 
-export type ButtonVariant = "primary" | "secondary" | "tertiary" | "danger";
+export type ButtonVariant = "primary" | "secondary" | "tertiary" | "inverse" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
 // Spec § 11.5: primary Lime, secondary Sapin, tertiary outline.
@@ -12,6 +12,8 @@ const variants: Record<ButtonVariant, string> = {
   primary: "bg-lime text-sapin hover:bg-[#97e85a] active:bg-[#88d94c]",
   secondary: "bg-sapin text-blanc hover:bg-[#145045] active:bg-nuit",
   tertiary: "border border-sapin/30 bg-transparent text-sapin hover:border-sapin hover:bg-sapin/5",
+  // Outline on dark backgrounds (Sapin bands).
+  inverse: "border border-blanc/40 bg-transparent text-blanc hover:border-blanc hover:bg-blanc/10",
   danger: "bg-corail-fonce text-blanc hover:bg-[#8a2718]",
 };
 

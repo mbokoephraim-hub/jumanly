@@ -1,0 +1,88 @@
+/**
+ * Cached reads for the public site. Results are shared between visitors (no personal data) and
+ * refreshed every few minutes; the admin will invalidate the tags when content changes.
+ */
+import { cacheLife, cacheTag } from "next/cache";
+import { db } from "@/server/db";
+import * as courses from "@/server/services/courses";
+import * as jobs from "@/server/services/jobs";
+import * as plans from "@/server/services/plans";
+
+export async function getPublicPlans() {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("plans");
+  return plans.listPublicPlans(db);
+}
+
+export async function getCourseSearch(filters: courses.CourseFilters) {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("courses");
+  const [result, total, themes] = await Promise.all([
+    courses.searchCourses(db, filters),
+    courses.countPublishedCourses(db),
+    courses.listCourseThemes(db),
+  ]);
+  return { ...result, catalogTotal: total, themes };
+}
+
+export async function getFeaturedCourses() {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("courses");
+  return courses.featuredCourses(db);
+}
+
+export async function getCourse(slug: string) {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("courses", `course:${slug}`);
+  const course = await courses.getPublicCourse(db, slug);
+  if (!course) return null;
+  const related = await courses.relatedCourses(db, course);
+  return { course, related };
+}
+
+export async function getJobSearch(filters: jobs.JobFilters) {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("jobs");
+  const now = new Date();
+  const [result, total, countries] = await Promise.all([
+    jobs.searchJobs(db, filters, now),
+    jobs.countOpenJobs(db, now),
+    jobs.listJobCountries(db, now),
+  ]);
+  return { ...result, openTotal: total, countries, now };
+}
+
+export async function getLatestJobs() {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("jobs");
+  const now = new Date();
+  return { jobs: await jobs.latestJobs(db, 3, now), now };
+}
+
+export async function getJob(slug: string) {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("jobs", `job:${slug}`);
+  const now = new Date();
+  const job = await jobs.getPublicJob(db, slug);
+  if (!job) return null;
+  const similar = await jobs.similarJobs(db, job, 3, now);
+  return { job, similar, now, open: jobs.isJobOpen(job, now) };
+}
+
+export async function getSitemapEntries() {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("courses", "jobs");
+  const [courseSlugs, jobSlugs] = await Promise.all([
+    courses.listCourseSlugs(db),
+    jobs.listJobSlugs(db),
+  ]);
+  return { courseSlugs, jobSlugs };
+}

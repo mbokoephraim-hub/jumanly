@@ -51,6 +51,8 @@ jobs:
         run: pnpm test
       - name: Migrations de la base (pgvector)
         run: pnpm db:deploy
+      - name: Données (forfaits, référentiel, démo fictive)
+        run: pnpm db:seed
       - name: Build
         run: pnpm build
       - name: Navigateur pour les tests e2e

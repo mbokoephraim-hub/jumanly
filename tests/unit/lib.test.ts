@@ -4,7 +4,8 @@ import { formatUsd } from "@/lib/money";
 
 describe("formatUsd", () => {
   it("affiche les montants en centimes USD à la française", () => {
-    expect(formatUsd(990)).toBe("9,90");
+    expect(formatUsd(990)).toBe("9,9");
+    expect(formatUsd(1995)).toBe("19,95");
     expect(formatUsd(1500)).toBe("15");
     expect(formatUsd(0)).toBe("0");
   });

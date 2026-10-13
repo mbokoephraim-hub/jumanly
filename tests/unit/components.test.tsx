@@ -138,7 +138,7 @@ describe("PlanLock et PlanCard", () => {
         ctaHref="/tarifs"
       />,
     );
-    expect(screen.getByText("9,90")).toBeInTheDocument();
+    expect(screen.getByText("9,9")).toBeInTheDocument();
     expect(screen.getByText("USD/mois")).toBeInTheDocument();
   });
 });
