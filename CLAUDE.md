@@ -1,6 +1,6 @@
 # CLAUDE.md · Jumanly
 
-Ce fichier est lu par Claude Code à chaque session. Il contient les règles permanentes du projet. Le détail est dans `docs/specifications.md` (cahier des charges complet, parties 01 à 12).
+Ce fichier est lu par Claude Code à chaque session. Il contient les règles permanentes du projet. Le détail est dans `docs/`.
 
 ## Le projet
 
@@ -23,12 +23,11 @@ Langue de l'interface : **français** (anglais prévu plus tard). Prix en **USD*
 | `docs/specifications.md`, partie 09 | Paiements, abonnements prépayés, webhooks |
 | `docs/specifications.md`, partie 10 | Sécurité, données personnelles, modération |
 | `docs/specifications.md`, partie 11 | Couleurs, typo, composants, IA dans l'interface |
-| `docs/12-feuille-de-route.md` (aussi partie 12 du cahier) | Étapes E0 à E11, définition de fini, prompts |
-| `docs/journal.md`, `docs/decisions/` | Ce qui a été fait à chaque étape, décisions techniques |
-| `textes/*.md` | Tous les textes de l'interface (clé → texte) : `textes-application.md` (officiels) et `00-socle.md` |
-| `ressources/` | Jetons CSS, logos SVG, favicon, icônes |
+| `docs/specifications.md`, partie 12 | Étapes E0 à E11, définition de fini, prompts |
+| `textes/textes-application.md` | Tous les textes de l'interface (clé → texte) |
+| `ressources/` | Jetons CSS, logos, icônes, personnages illustrés, motifs, fonds (voir `ressources/LISEZMOI.md`) |
 
-En cas de contradiction : la partie 05 l'emporte pour les forfaits, la partie 08 pour le matching, `textes/` pour la formulation. Les maquettes (écran 09 « formules » en particulier) ne font pas foi pour le contenu des forfaits.
+En cas de contradiction : `docs/specifications.md (partie 05)` l'emporte pour les forfaits, `docs/specifications.md (partie 08)` pour le matching, `textes/` pour la formulation. Les maquettes (écran 09 « formules » en particulier) ne font pas foi pour le contenu des forfaits.
 
 ## Règles d'or
 
@@ -38,7 +37,7 @@ En cas de contradiction : la partie 05 l'emporte pour les forfaits, la partie 08
 4. **Données exclues du matching** : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise.
 5. **Confidentialité** : un recruteur ne voit un profil que si le talent a candidaté ou l'a rendu visible ; les partenaires ne voient que des agrégats (seuil de 10 personnes) ; chaque consultation de profil est journalisée.
 6. **Isolation des organisations** : toute requête Hire est filtrée par `organizationId`.
-7. **Aucun texte en dur.** Tous les textes viennent de `messages/fr.json`, généré depuis `textes/*.md` (`pnpm messages`). Pour un nouveau texte : l'ajouter dans `textes/`, puis régénérer.
+7. **Aucun texte en dur.** Tous les textes viennent de `messages/fr.json`, généré depuis `textes/textes-application.md` (`pnpm messages`). Pour un nouveau texte : l'ajouter dans `textes/textes-application.md`, dans la bonne partie, puis régénérer.
 8. **Contact uniquement par e-mail** : assistant@jumanly.io, infojumanly@gmail.com. **Aucun numéro de téléphone** nulle part (site, e-mails, factures, pages légales).
 9. **Mobile d'abord et réseau lent** : rendu serveur pour le public, 200 Ko de JS max par page publique, images optimisées, vidéo adaptative.
 10. **Accessibilité WCAG 2.2 AA.** Texte Sapin sur Lime, jamais blanc sur Lime.
@@ -69,17 +68,17 @@ pnpm build          # build de production
 pnpm db:migrate     # prisma migrate dev
 pnpm db:deploy      # applique les migrations (CI, production)
 pnpm db:seed        # forfaits + référentiel + démo (local)
-pnpm messages       # textes/*.md → messages/fr.json
+pnpm messages       # textes/textes-application.md → messages/fr.json
 pnpm messages:check # vérifie que messages/fr.json est à jour
 pnpm brand          # ressources/ → icônes et images servies (public/)
 pnpm email:dev      # aperçu des e-mails
 ```
 
-(Créées à l'étape E0 ; garder cette liste à jour. Husky lance ESLint, Prettier et `messages:check` avant chaque commit.)
+(Créées à l'étape E0 ; garder cette liste à jour. Husky lance ESLint, Prettier, `messages:check` et `brand:check` avant chaque commit.)
 
 ## Façon de travailler
 
-- Travailler **étape par étape** selon `docs/12-feuille-de-route.md`. Ne pas anticiper une étape suivante, sauf pour préparer un emplacement.
+- Travailler **étape par étape** selon `docs/specifications.md (partie 12)`. Ne pas anticiper une étape suivante, sauf pour préparer un emplacement.
 - Au début d'une tâche : lire les documents cités, proposer un plan court, puis exécuter.
 - Avant de terminer : lint, types, tests et build doivent passer ; vérifier la « définition de fini » ; mettre à jour `docs/journal.md`.
 - Toute décision technique qui s'écarte des documents : une note courte dans `docs/decisions/AAAA-MM-JJ-sujet.md`.

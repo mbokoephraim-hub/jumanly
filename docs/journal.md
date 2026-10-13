@@ -6,7 +6,7 @@ Une entrée par étape : ce qui a été fait, les décisions prises, les dettes 
 
 ### Contexte
 
-Fournis : `CLAUDE.md`, `docs/12-feuille-de-route.md`, `ressources/jumanly-tokens.css`, les textes
+Fournis : `CLAUDE.md`, la feuille de route (aujourd'hui partie 12 de `docs/specifications.md`), `ressources/jumanly-tokens.css`, les textes
 officiels (`textes/textes-application.md`, parties 01 à 10, environ 5 900 textes), la charte graphique,
 le LISEZMOI des maquettes et les logos.
 Puis le cahier des charges complet `docs/specifications.md` (parties 01 à 12) : le socle a été
@@ -73,7 +73,13 @@ toutes dans `docs/specifications.md`.
   servies, pas des originaux. `pnpm brand:check` tourne en CI, avant le build et avant chaque commit.
 - Icônes de la marque dans la navigation, les cartes, les champs, les fenêtres et les badges ;
   `lucide-react` ne sert plus que pour ce que la marque n'a pas (menu, chevron, alertes, tendances).
-- Personnages : composants `Character` et `Orbi` ; l'état vide affiche Amani par défaut.
+- Personnages : composants `Character` et `Orbi` ; l'état vide affiche Amani au repos (usage des
+  poses du § 11.7).
+- Cahier des charges à jour installé tel quel : `CLAUDE.md` (avec la liste des commandes complétée),
+  `PROMPT-DEMARRAGE.md`, `LISEZMOI.md`, `docs/specifications.md`, `textes/textes-application.md`,
+  `ressources/logos/` (favicons inclus) et `ressources/LISEZMOI.md`. Les dessins des logos sont
+  identiques aux précédents. `docs/12-feuille-de-route.md` est retiré : c'est la partie 12 du cahier.
+- Écart : les textes propres au socle restent dans `textes/00-socle.md` (voir la décision du jour).
 
 ### Définition de fini
 
@@ -87,8 +93,6 @@ toutes dans `docs/specifications.md`.
 ### Dettes et points ouverts
 
 - `CLAUDE.md` mis à jour (avec l'accord du propriétaire) pour renvoyer vers `docs/specifications.md`.
-- Archives « cahier des charges » et « logos et jetons » pas encore reçues : `docs/specifications.md`
-  est encore l'ancienne version (son § 11.7 cite d'anciens chemins).
 - Budget JavaScript : 179 Ko compressés sur `/` pour 200 Ko autorisés, dont environ 165 Ko pour
   React et Next.js eux-mêmes. Peu de marge : chaque composant client ajouté aux pages publiques doit
   être pesé. Les composants client (`Drawer`, `Modal`, `Switch`, `Tabs`, `Toast`) sont importés depuis leur propre

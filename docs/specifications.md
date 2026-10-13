@@ -1399,14 +1399,17 @@ Chaque composant : variantes typées, états (survol, focus visible, désactivé
 - **« Pourquoi ? »** : lien avec icône œil sur chaque score ou suggestion ; ouvre un panneau d'explication (doc 08).
 - **Contrôle humain** : boutons Appliquer / Ignorer ; rien ne change sans accord.
 
-### 11.7 Ressources de marque à copier dans `public/`
+### 11.7 Ressources de marque fournies dans `ressources/`
 
-- Logos SVG : `identite-visuelle/logos/` (horizontal, vertical, logotype, symbole, favicon).
-- Icônes : `identite-visuelle/elements-graphiques/icones/`.
-- Motifs, formes, fonds : `identite-visuelle/elements-graphiques/` (motifs, formes, fonds) pour les sections du site public.
-- Personnages illustrés : `video/identite-motion/images/personnages-*.png` (pour les états vides et le site public).
+Tout est fourni dans le dossier `ressources/` (détail dans `ressources/LISEZMOI.md`) :
 
-Une copie prête à l’emploi des jetons, des logos SVG, du favicon et des icônes est fournie dans `ressources/` de ce cahier des charges.
+- `jumanly-tokens.css` : jetons de design ;
+- `logos/` : logos SVG et favicons ;
+- `icones/` : les 41 icônes de la marque en trois styles (`trait`, `trait-blanc`, `duo`), plus un sprite SVG ;
+- `illustrations/` : les personnages illustrés un par un, fond transparent, en SVG et PNG : Amani, Kofi, Nadia, M. Diallo, Fatou (6 poses chacun) et Orbi, l'assistant IA (réservé aux fonctions d'IA) ;
+- `motifs/`, `formes/`, `fonds/` : éléments graphiques pour les sections du site public.
+
+Usage des personnages : `salut` pour l'accueil et la bienvenue, `joie` pour les succès, `perplexe` pour les erreurs et les pages introuvables, `telephone` et `montre` pour présenter l'application, `repos` pour les états vides.
 
 ### 11.8 Accessibilité
 

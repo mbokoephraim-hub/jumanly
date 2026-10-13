@@ -24,7 +24,7 @@ Textes définitifs des pages publiques (doc 07, § 1). Langue : français, vouvo
 Conventions :
 
 - Variables entre accolades façon ICU : `{firstName}`, `{count, plural, one {# offre} other {# offres}}`.
-- Les prix viennent de la base (`Plan`) : dans les textes, ils sont passés en variable (`{price}`). Les valeurs de référence sont dans `docs/05-forfaits-roles-permissions.md`.
+- Les prix viennent de la base (`Plan`) : dans les textes, ils sont passés en variable (`{price}`). Les valeurs de référence sont dans `docs/specifications.md (partie 05)`.
 - Les quotas chiffrés sont provisoires : toujours passés en variable (`{quota}`), jamais écrits en dur.
 - Les emplacements entre crochets (`[...]`) sont à remplir avant publication et ne doivent jamais être affichés tels quels en production. Si le contenu n'existe pas encore, le bloc correspondant est masqué.
 - Aucun numéro de téléphone, nulle part.
@@ -1599,7 +1599,7 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 
 ## Partie 03 · Espace talent
 
-Textes d'interface de l'espace connecté côté talent, à intégrer tels quels dans `messages/fr.json`. Les droits et forfaits cités suivent `docs/05-forfaits-roles-permissions.md`. Les routes suivent `docs/07-ecrans-et-fonctionnalites.md`.
+Textes d'interface de l'espace connecté côté talent, à intégrer tels quels dans `messages/fr.json`. Les droits et forfaits cités suivent `docs/specifications.md (partie 05)`. Les routes suivent `docs/specifications.md (partie 07)`.
 
 Conventions :
 
@@ -3296,7 +3296,7 @@ Conventions :
 
 ## Partie 04 · Espace recruteur et entreprise
 
-Textes d'interface de l'espace Hire et de la gestion d'organisation. Les droits (`hire.*`, `org.*`, `reports.*`, `connect.appointments`) et les rôles suivent `docs/05-forfaits-roles-permissions.md`.
+Textes d'interface de l'espace Hire et de la gestion d'organisation. Les droits (`hire.*`, `org.*`, `reports.*`, `connect.appointments`) et les rôles suivent `docs/specifications.md (partie 05)`.
 
 Conventions :
 
@@ -4334,7 +4334,7 @@ Conventions :
 
 Textes définitifs de la page `/tarifs`, de l'écran `/app/abonnement` (et de sa variante organisation `/app/organisation/abonnement`), du paiement Mobile Money et carte, du cycle de vie de l'abonnement, des quotas, des licences sponsorisées et de la demande de devis Company Premium.
 
-Source de vérité : `docs/05-forfaits-roles-permissions.md`. En cas d'écart, le doc 05 l'emporte.
+Source de vérité : `docs/specifications.md (partie 05)`. En cas d'écart, le doc 05 l'emporte.
 
 Conventions :
 

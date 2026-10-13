@@ -1,6 +1,6 @@
 // Jumanly data model.
 // Models (users, plans, jobs…) come from step E1 onwards, following
-// docs/04-modele-de-donnees.md. Step E0 only sets up the connection
+// docs/specifications.md (partie 04). Step E0 only sets up the connection
 // and enables the pgvector extension (similarity search, used in step E6).
 
 generator client {
