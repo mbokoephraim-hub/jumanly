@@ -102,7 +102,12 @@ const patterns = [
   "motifs/motif-monogramme-clair.svg",
 ];
 
-const buttonVariants: ButtonVariant[] = ["primary", "secondary", "tertiary", "danger"];
+const buttonVariants = [
+  "primary",
+  "secondary",
+  "tertiary",
+  "danger",
+] as const satisfies ButtonVariant[];
 
 const moduleTones = ["learn", "career", "jobs", "hire", "connect"] as const satisfies CardTone[];
 

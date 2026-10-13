@@ -1,6 +1,6 @@
 "use client";
 
-import { useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
+import { useEffect, useId, useRef, useState, type KeyboardEvent, type ReactNode } from "react";
 import { cx } from "@/lib/cx";
 
 type Tab = { id: string; label: string; content: ReactNode };
@@ -12,11 +12,38 @@ const keyTargets: Record<string, (index: number, last: number) => number> = {
   End: (_, last) => last,
 };
 
-/** Underlined tabs (§ 11.5), keyboard accessible: arrows, Home, End. */
-export function Tabs({ tabs, initial }: { tabs: Tab[]; initial?: string }) {
+/**
+ * Underlined tabs (§ 11.5), keyboard accessible: arrows, Home, End.
+ * With `syncHash`, the active tab follows the URL fragment (/tarifs#rh) so that it can be linked.
+ */
+export function Tabs({
+  tabs,
+  initial,
+  syncHash = false,
+}: {
+  tabs: Tab[];
+  initial?: string;
+  syncHash?: boolean;
+}) {
   const baseId = useId();
-  const [active, setActive] = useState(initial ?? tabs[0]?.id);
+  const [active, setActiveState] = useState(initial ?? tabs[0]?.id);
   const buttons = useRef<(HTMLButtonElement | null)[]>([]);
+
+  useEffect(() => {
+    if (!syncHash) return;
+    const fromHash = () => {
+      const id = window.location.hash.slice(1);
+      if (tabs.some((tab) => tab.id === id)) setActiveState(id);
+    };
+    fromHash();
+    window.addEventListener("hashchange", fromHash);
+    return () => window.removeEventListener("hashchange", fromHash);
+  }, [syncHash, tabs]);
+
+  function setActive(id: string) {
+    setActiveState(id);
+    if (syncHash) window.history.replaceState(null, "", `#${id}`);
+  }
 
   function onKeyDown(event: KeyboardEvent, index: number) {
     const target = keyTargets[event.key]?.(index, tabs.length - 1);

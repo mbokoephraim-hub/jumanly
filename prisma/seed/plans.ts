@@ -189,6 +189,8 @@ const hireMatrix: { plans: string[]; rows: Row[] } = {
   plans: ["rh_free", "rh_pro", "rh_premium", "company", "company_plus", "company_premium"],
   rows: [
     lim("org.seats", 1, 2, 3, 5, 15, "contract"),
+    // Seats guaranteed at least, when the count is set by contract (Company Premium: "30 et plus").
+    lim("org.seats.min", 1, 2, 3, 5, 15, 30),
     lim("jobs.active.max", 1, 5, 15, 20, 50, "contract"),
     lv("hire.pipeline.level", "simple", "multi", "advanced", "advanced", "advanced", "advanced"),
     lv("hire.talent_search", "none", "advanced", "deep", "advanced", "deep", "deep"),

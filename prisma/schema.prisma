@@ -280,11 +280,21 @@ model CourseSkill {
 // ─── Formulaire de contact ──────────────────────────────────────
 
 model ContactMessage {
-  id        String   @id @default(cuid(2))
-  name      String
-  email     String
-  subject   String
-  message   String
-  audience  String
-  createdAt DateTime @default(now())
+  id           String   @id @default(cuid(2))
+  /// "contact" (form /contact) or "partners" (form /partenaires).
+  audience     String
+  /// Subject code from the form (account, quote, partners…).
+  subject      String
+  name         String
+  email        String
+  organization String?
+  country      String?
+  message      String
+  /// Extra answers (quote: users, entities; partners: type, role, beneficiaries, plan, duration).
+  details      Json     @default("{}")
+  /// Mailbox the message was forwarded to.
+  routedTo     String
+  createdAt    DateTime @default(now())
+
+  @@index([email, createdAt])
 }

@@ -8905,7 +8905,20 @@
     "avatarStack": {
       "more": "+{count}",
       "moreAria": "{count, plural, one {et # autre personne} other {et # autres personnes}}"
-    }
+    },
+    "duration": {
+      "minutes": "{minutes} min",
+      "hours": "{hours} h",
+      "hoursMinutes": "{hours} h {minutes} min"
+    },
+    "salary": {
+      "range": "{min} à {max} USD/mois",
+      "from": "À partir de {min} USD/mois"
+    },
+    "languageLevel": "{language} ({level})",
+    "breadcrumb": "Fil d'Ariane",
+    "pagination": "Pagination",
+    "unlimited": "Illimité"
   },
   "brand": {
     "characters": {
@@ -9188,5 +9201,10 @@
       "text": "Sur mobile, les filtres s'ouvrent dans ce tiroir qui remonte du bas de l'écran.",
       "apply": "Afficher les résultats"
     }
+  },
+  "contactEmail": {
+    "subject": "Message du site · {subject} · {name}",
+    "partnersSubject": "Demande Jumanly Partners · {organization}",
+    "intro": "Nouveau message reçu depuis le formulaire du site. Répondez directement à cet e-mail pour écrire à l'expéditeur."
   }
 }

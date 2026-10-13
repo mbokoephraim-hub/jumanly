@@ -18,6 +18,7 @@ export function JobCard({
   remote,
   contract,
   deadline,
+  published,
   verified = false,
   isNew = false,
   match,
@@ -30,7 +31,9 @@ export function JobCard({
   remote: RemoteMode;
   contract: string;
   /** Already formatted in the user's time zone. */
-  deadline: string;
+  deadline?: string;
+  /** Relative publication date, already formatted ("il y a 2 jours"). */
+  published?: string;
   verified?: boolean;
   isNew?: boolean;
   match?: { score: number; band: MatchBand };
@@ -57,10 +60,18 @@ export function JobCard({
           <Icon name="localisation" className="size-4" />
           {t("jobs.card.location", { city, country })}
         </li>
-        <li className="flex items-center gap-1">
-          <Icon name="calendrier" className="size-4" />
-          {t("jobs.card.deadline", { date: deadline })}
-        </li>
+        {published && (
+          <li className="flex items-center gap-1">
+            <Icon name="horloge" className="size-4" />
+            {t("jobs.card.published", { relativeDate: published })}
+          </li>
+        )}
+        {deadline && (
+          <li className="flex items-center gap-1">
+            <Icon name="calendrier" className="size-4" />
+            {t("jobs.card.deadline", { date: deadline })}
+          </li>
+        )}
       </ul>
       {match && (
         <div className="mt-1">

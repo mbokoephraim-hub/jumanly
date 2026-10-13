@@ -200,11 +200,15 @@ CREATE TABLE "CourseSkill" (
 -- CreateTable
 CREATE TABLE "ContactMessage" (
     "id" TEXT NOT NULL,
+    "audience" TEXT NOT NULL,
+    "subject" TEXT NOT NULL,
     "name" TEXT NOT NULL,
     "email" TEXT NOT NULL,
-    "subject" TEXT NOT NULL,
+    "organization" TEXT,
+    "country" TEXT,
     "message" TEXT NOT NULL,
-    "audience" TEXT NOT NULL,
+    "details" JSONB NOT NULL DEFAULT '{}',
+    "routedTo" TEXT NOT NULL,
     "createdAt" TIMESTAMP(3) NOT NULL DEFAULT CURRENT_TIMESTAMP,
 
     CONSTRAINT "ContactMessage_pkey" PRIMARY KEY ("id")
@@ -245,6 +249,9 @@ CREATE UNIQUE INDEX "CourseModule_courseId_order_key" ON "CourseModule"("courseI
 
 -- CreateIndex
 CREATE UNIQUE INDEX "Lesson_moduleId_order_key" ON "Lesson"("moduleId", "order");
+
+-- CreateIndex
+CREATE INDEX "ContactMessage_email_createdAt_idx" ON "ContactMessage"("email", "createdAt");
 
 -- AddForeignKey
 ALTER TABLE "PlanEntitlement" ADD CONSTRAINT "PlanEntitlement_planId_fkey" FOREIGN KEY ("planId") REFERENCES "Plan"("id") ON DELETE CASCADE ON UPDATE CASCADE;

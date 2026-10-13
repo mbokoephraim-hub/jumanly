@@ -7874,3 +7874,22 @@ Textes ajoutés à l'étape E0 : composants de base, textes alternatifs des pers
 | `devComponents.drawer.title` | Filtres |
 | `devComponents.drawer.text` | Sur mobile, les filtres s'ouvrent dans ce tiroir qui remonte du bas de l'écran. |
 | `devComponents.drawer.apply` | Afficher les résultats |
+
+### Site public (étape E1)
+
+Petits textes techniques des pages publiques qui ne figurent pas dans les parties 01, 05 et 10 : durées, salaires, navigation, e-mails internes du formulaire de contact.
+
+| Clé | Texte |
+|---|---|
+| `ui.duration.minutes` | {minutes} min |
+| `ui.duration.hours` | {hours} h |
+| `ui.duration.hoursMinutes` | {hours} h {minutes} min |
+| `ui.salary.range` | {min} à {max} USD/mois |
+| `ui.salary.from` | À partir de {min} USD/mois |
+| `ui.languageLevel` | {language} ({level}) |
+| `ui.breadcrumb` | Fil d'Ariane |
+| `ui.pagination` | Pagination |
+| `ui.unlimited` | Illimité |
+| `contactEmail.subject` | Message du site · {subject} · {name} |
+| `contactEmail.partnersSubject` | Demande Jumanly Partners · {organization} |
+| `contactEmail.intro` | Nouveau message reçu depuis le formulaire du site. Répondez directement à cet e-mail pour écrire à l'expéditeur. |

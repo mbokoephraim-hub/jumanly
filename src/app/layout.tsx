@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { getTranslations } from "next-intl/server";
+import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
 // Sora (SIL OFL) is self-hosted: no request to an external font service.
@@ -14,6 +15,7 @@ const sora = localFont({
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations();
   return {
+    metadataBase: new URL(siteUrl()),
     title: { default: t("home.seo.title"), template: `%s ${t("common.seo.titleSuffix")}` },
     description: t("home.seo.description"),
     applicationName: t("common.brand"),

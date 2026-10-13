@@ -1,11 +1,14 @@
 import Link from "next/link";
-import { Menu } from "lucide-react";
+import { ChevronDown, Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { publicNavigation } from "@/config/navigation";
+import { publicNavigation, solutionsNavigation } from "@/config/navigation";
 import { Logo } from "@/components/brand";
 import { ButtonLink } from "@/components/ui";
 
-/** Light public header (§ 11.4): "Se connecter" tertiary, "Créer un compte" primary. */
+/**
+ * Light public header (§ 11.4): "Se connecter" tertiary, "Créer un compte" primary.
+ * Menus use native <details>: they work without JavaScript.
+ */
 export function PublicHeader() {
   const t = useTranslations("nav");
   return (
@@ -14,8 +17,31 @@ export function PublicHeader() {
         <Link href="/" aria-label={t("logo.label")}>
           <Logo height={30} />
         </Link>
-        <nav aria-label={t("menu.label")} className="hidden md:block">
+        <nav aria-label={t("menu.label")} className="hidden lg:block">
           <ul className="flex items-center gap-7 text-[15px] font-medium">
+            <li>
+              <details className="group relative">
+                <summary className="flex cursor-pointer list-none items-center gap-1 hover:underline">
+                  {t("group.solutions")}
+                  <ChevronDown
+                    aria-hidden
+                    className="size-4 transition-transform group-open:rotate-180"
+                  />
+                </summary>
+                <ul className="absolute left-0 mt-3 flex w-56 flex-col gap-1 rounded-md border border-brume bg-blanc p-2">
+                  {solutionsNavigation.map((link) => (
+                    <li key={link.key}>
+                      <Link
+                        href={link.href}
+                        className="block rounded-sm px-3 py-2.5 hover:bg-creme"
+                      >
+                        {t(link.key)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              </details>
+            </li>
             {publicNavigation.map((link) => (
               <li key={link.key}>
                 <Link href={link.href} className="hover:underline">
@@ -23,9 +49,14 @@ export function PublicHeader() {
                 </Link>
               </li>
             ))}
+            <li>
+              <Link href="/a-propos" className="hover:underline">
+                {t("about")}
+              </Link>
+            </li>
           </ul>
         </nav>
-        <div className="hidden items-center gap-2 md:flex">
+        <div className="hidden items-center gap-2 lg:flex">
           <ButtonLink href="/connexion" variant="tertiary" size="sm">
             {t("login")}
           </ButtonLink>
@@ -33,16 +64,29 @@ export function PublicHeader() {
             {t("signup")}
           </ButtonLink>
         </div>
-        {/* Mobile menu without JavaScript: native <details>. */}
-        <details className="relative md:hidden">
+        <details className="relative lg:hidden">
           <summary
             className="flex size-11 cursor-pointer list-none items-center justify-center rounded-full hover:bg-sapin/8"
             aria-label={t("menu.open")}
           >
             <Menu aria-hidden className="size-6" />
           </summary>
-          <div className="absolute right-0 mt-2 flex w-64 flex-col gap-1 rounded-md border border-brume bg-blanc p-3">
-            {publicNavigation.map((link) => (
+          <nav
+            aria-label={t("menu.label")}
+            className="absolute right-0 mt-2 flex max-h-[calc(100dvh-5rem)] w-72 flex-col gap-1 overflow-y-auto rounded-md border border-brume bg-blanc p-3"
+          >
+            <p className="px-3 pt-1 pb-1 text-eyebrow text-feuille-fonce">{t("group.discover")}</p>
+            {[...publicNavigation, { key: "about", href: "/a-propos" } as const].map((link) => (
+              <Link
+                key={link.key}
+                href={link.href}
+                className="rounded-sm px-3 py-2.5 font-medium hover:bg-creme"
+              >
+                {t(link.key)}
+              </Link>
+            ))}
+            <p className="px-3 pt-3 pb-1 text-eyebrow text-feuille-fonce">{t("group.solutions")}</p>
+            {solutionsNavigation.map((link) => (
               <Link
                 key={link.key}
                 href={link.href}
@@ -59,7 +103,7 @@ export function PublicHeader() {
                 {t("signup")}
               </ButtonLink>
             </div>
-          </div>
+          </nav>
         </details>
       </div>
     </header>
