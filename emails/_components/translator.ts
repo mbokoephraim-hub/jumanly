@@ -1,5 +1,5 @@
 import { createTranslator } from "next-intl";
-import messages from "../../../messages/fr.json";
+import messages from "../../messages/fr.json";
 
 /** E-mails are rendered outside a Next.js request, so they read the messages directly. */
 export const t = createTranslator({ locale: "fr", messages });

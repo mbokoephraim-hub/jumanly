@@ -1,6 +1,18 @@
 import { describe, expect, it } from "vitest";
 import { fireEvent, screen } from "@testing-library/react";
-import { Alert, Button, ExplainedScore, ProgressBar, QuotaGauge, TextField } from "@/components/ui";
+import {
+  Alert,
+  AvatarStack,
+  Button,
+  ExplainedScore,
+  PipelineSteps,
+  PlanCard,
+  PlanLock,
+  ProgressBar,
+  QuotaGauge,
+  ScoreBadge,
+  TextField,
+} from "@/components/ui";
 import { Switch } from "@/components/ui/switch";
 import { Tabs } from "@/components/ui/tabs";
 import { renderWithTexts } from "./render";
@@ -88,5 +100,52 @@ describe("ExplainedScore", () => {
     expect(screen.getByText(/^87\s%$/)).toBeInTheDocument();
     expect(screen.getByText("Pourquoi ?")).toBeInTheDocument();
     expect(screen.getByText("L'IA recommande, l'humain décide.")).toBeInTheDocument();
+  });
+});
+
+describe("ScoreBadge", () => {
+  it("affiche toujours la bande avec le score", () => {
+    renderWithTexts(<ScoreBadge score={58} band="partial" />);
+    expect(screen.getByText("Partiellement compatible")).toBeInTheDocument();
+  });
+});
+
+describe("AvatarStack", () => {
+  it("résume les personnes en trop", () => {
+    renderWithTexts(<AvatarStack names={["A B", "C D", "E F"]} max={1} />);
+    expect(screen.getByRole("img", { name: "et 2 autres personnes" })).toHaveTextContent("+2");
+  });
+});
+
+describe("PlanLock et PlanCard", () => {
+  it("affiche le nom du forfait reçu de la base, sans le tester", () => {
+    renderWithTexts(<PlanLock plan="Exemple" />);
+    expect(screen.getByText("Forfait requis : Exemple")).toBeInTheDocument();
+    expect(screen.getByRole("link", { name: "Voir les forfaits" })).toHaveAttribute(
+      "href",
+      "/tarifs",
+    );
+  });
+
+  it("affiche le prix en USD à partir des centimes", () => {
+    renderWithTexts(
+      <PlanCard
+        name="Exemple"
+        priceCents={990}
+        audience="tous"
+        features={[]}
+        ctaLabel="Choisir"
+        ctaHref="/tarifs"
+      />,
+    );
+    expect(screen.getByText("9,90")).toBeInTheDocument();
+    expect(screen.getByText("USD/mois")).toBeInTheDocument();
+  });
+});
+
+describe("PipelineSteps", () => {
+  it("signale l'étape en cours", () => {
+    renderWithTexts(<PipelineSteps counts={{ interview: 2 }} current="interview" />);
+    expect(screen.getByText("Entretien").closest("li")).toHaveAttribute("aria-current", "step");
   });
 });

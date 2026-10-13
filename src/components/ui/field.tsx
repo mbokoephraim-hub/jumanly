@@ -42,7 +42,7 @@ export function Field({
       <label htmlFor={id} className="text-sapin text-label">
         {label}
         {required ? (
-          <span className="text-corail" aria-hidden>
+          <span className="text-corail-fonce" aria-hidden>
             {" *"}
           </span>
         ) : (
@@ -64,7 +64,7 @@ export function Field({
         </p>
       )}
       {error && (
-        <p id={errorId} className="font-medium text-corail text-caption">
+        <p id={errorId} className="font-medium text-corail-fonce text-caption">
           {error}
         </p>
       )}

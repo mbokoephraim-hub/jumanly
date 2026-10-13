@@ -1,6 +1,10 @@
 {
   "ui": {
-    "percent": "{value} %"
+    "percent": "{value} %",
+    "avatarStack": {
+      "more": "+{count}",
+      "moreAria": "{count, plural, one {et # autre personne} other {et # autres personnes}}"
+    }
   },
   "foundation": {
     "sampleUser": "Aïcha Exemple",
@@ -30,7 +34,16 @@
       "ai": "Intelligence : score expliqué",
       "loading": "Chargement",
       "empty": "État vide",
-      "modal": "Fenêtre modale"
+      "modal": "Fenêtre modale",
+      "brand": "Marque",
+      "search": "Recherche et filtres",
+      "stats": "Cartes de statistique",
+      "listings": "Cartes de formation et d'offre",
+      "pipeline": "Étapes de recrutement",
+      "table": "Tableau",
+      "plans": "Verrou de forfait et carte de formule",
+      "toast": "Notification",
+      "drawer": "Tiroir mobile"
     },
     "colors": {
       "sapin": "Vert Sapin #0F3F37",
@@ -63,8 +76,8 @@
     "variants": {
       "primary": "Primaire",
       "secondary": "Secondaire",
-      "outline": "Contour",
-      "ghost": "Fantôme",
+      "tertiary": "Tertiaire",
+      "icon": "Icône ronde",
       "danger": "Danger"
     },
     "states": {
@@ -117,7 +130,10 @@
       "success": "Retenu",
       "warning": "En attente",
       "error": "Non retenu",
-      "ai": "Suggéré par l'IA"
+      "ai": "Suggéré par l'IA",
+      "contract": "CDI",
+      "trendUp": "+12 %",
+      "trendDown": "−3 %"
     },
     "cards": {
       "defaultTitle": "Gestion de projet agile",
@@ -125,7 +141,15 @@
       "tintedTitle": "3 offres correspondent à votre profil",
       "tintedText": "Consultez-les avant la date limite.",
       "darkTitle": "Module Intelligence",
-      "darkText": "Des recommandations expliquées, jamais imposées."
+      "darkText": "Des recommandations expliquées, jamais imposées.",
+      "selected": "Élément sélectionné",
+      "tone": {
+        "learn": "Learn",
+        "career": "Career",
+        "jobs": "Jobs",
+        "hire": "Hire",
+        "connect": "Connect"
+      }
     },
     "alerts": {
       "infoTitle": "Information",
@@ -139,7 +163,12 @@
       "errorText": "Vérifiez votre connexion puis réessayez."
     },
     "avatars": {
-      "name": "Aïcha Exemple"
+      "name": "Aïcha Exemple",
+      "nameB": "Brice Exemple",
+      "nameC": "Chantal Exemple",
+      "nameD": "David Exemple",
+      "nameE": "Esther Exemple",
+      "nameF": "Fabrice Exemple"
     },
     "tabs": {
       "talents": "Talents",
@@ -161,7 +190,9 @@
       "job": "Compatibilité avec « Analyste RH junior » (exemple fictif)",
       "reason1": "Excel avancé : compétence requise, présente sur votre profil.",
       "reason2": "Certificat RH obtenu sur Jumanly Learn.",
-      "reason3": "2 ans d'expérience pour 1 an demandé."
+      "reason3": "2 ans d'expérience pour 1 an demandé.",
+      "suggestion": "Ajoutez « Gestion de la paie » à vos compétences : 4 offres suivies la demandent.",
+      "suggestionWhy": "Cette compétence apparaît dans 4 des offres que vous avez enregistrées et dans votre attestation RH."
     },
     "empty": {
       "title": "Aucune candidature pour l'instant",
@@ -174,6 +205,74 @@
       "text": "Le recruteur ne verra plus votre candidature. Vous pourrez postuler à nouveau tant que l'offre est ouverte.",
       "cancel": "Annuler",
       "confirm": "Retirer"
+    },
+    "brand": {
+      "primary": "Logo principal",
+      "negative": "Logo négatif",
+      "symbol": "Pictogrammes",
+      "orb": "Orbe IA"
+    },
+    "search": {
+      "id": "Rechercher une offre",
+      "placeholder": "Métier, compétence, entreprise",
+      "filterRemote": "Télétravail",
+      "filterFullTime": "Temps plein",
+      "filterFree": "Formations gratuites",
+      "filterDisabled": "Indisponible"
+    },
+    "stats": {
+      "applications": "Candidatures envoyées",
+      "applicationsValue": "12",
+      "views": "Vues du profil",
+      "viewsValue": "48",
+      "viewsTrend": "+12 % ce mois-ci",
+      "courses": "Formations terminées",
+      "coursesValue": "3"
+    },
+    "listings": {
+      "courseTitle": "Gestion de projet agile (exemple fictif)",
+      "courseLevel": "débutant",
+      "courseDuration": "6 h",
+      "coursePlan": "Exemple Plus",
+      "jobTitle": "Analyste RH junior (exemple fictif)",
+      "jobCompany": "Entreprise Exemple",
+      "jobCity": "Kinshasa",
+      "jobCountry": "RD Congo",
+      "jobContract": "CDI",
+      "jobDeadline": "30 novembre 2026",
+      "jobBTitle": "Chargée de communication (exemple fictif)",
+      "jobBCity": "Douala",
+      "jobBCountry": "Cameroun",
+      "jobBContract": "Stage"
+    },
+    "table": {
+      "caption": "Candidatures reçues (exemple fictif)",
+      "name": "Candidat",
+      "stage": "Étape",
+      "date": "Reçue le",
+      "date1": "2 octobre 2026",
+      "date2": "5 octobre 2026"
+    },
+    "plans": {
+      "lockPlan": "Exemple Plus",
+      "lockText": "Cette analyse détaillée fait partie d'un forfait supérieur. Postuler reste toujours gratuit.",
+      "freeName": "Exemple Gratuit",
+      "paidName": "Exemple Plus",
+      "audience": "les talents en recherche active",
+      "feature1": "Candidatures illimitées",
+      "feature2": "10 crédits IA par mois",
+      "feature3": "Analyse de CV détaillée",
+      "ctaFree": "Commencer gratuitement",
+      "ctaPaid": "Choisir ce forfait"
+    },
+    "toast": {
+      "show": "Afficher une notification"
+    },
+    "drawer": {
+      "open": "Ouvrir le tiroir",
+      "title": "Filtres",
+      "text": "Sur mobile, les filtres s'ouvrent dans ce tiroir qui remonte du bas de l'écran.",
+      "apply": "Afficher les résultats"
     }
   },
   "common": {

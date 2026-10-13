@@ -2,13 +2,15 @@ import Link from "next/link";
 import { Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
 import { publicNavigation } from "@/config/navigation";
-import { ButtonLink, Logo } from "@/components/ui";
+import { Logo } from "@/components/brand";
+import { ButtonLink } from "@/components/ui";
 
+/** Light public header (§ 11.4): "Se connecter" tertiary, "Créer un compte" primary. */
 export function PublicHeader() {
   const t = useTranslations("nav");
   return (
-    <header className="sticky top-0 z-30 border-b border-brume/70 bg-creme/90 backdrop-blur">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 px-4 sm:px-6">
+    <header className="sticky top-0 z-30 border-b border-brume/70 bg-creme/95">
+      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 page-x">
         <Link href="/" aria-label={t("logo.label")}>
           <Logo height={30} />
         </Link>
@@ -16,7 +18,7 @@ export function PublicHeader() {
           <ul className="flex items-center gap-7 text-[15px] font-medium">
             {publicNavigation.map((link) => (
               <li key={link.key}>
-                <Link href={link.href} className="text-sapin/80 hover:text-sapin">
+                <Link href={link.href} className="hover:underline">
                   {t(link.key)}
                 </Link>
               </li>
@@ -24,7 +26,7 @@ export function PublicHeader() {
           </ul>
         </nav>
         <div className="hidden items-center gap-2 md:flex">
-          <ButtonLink href="/connexion" variant="ghost" size="sm">
+          <ButtonLink href="/connexion" variant="tertiary" size="sm">
             {t("login")}
           </ButtonLink>
           <ButtonLink href="/inscription" size="sm">
@@ -39,7 +41,7 @@ export function PublicHeader() {
           >
             <Menu aria-hidden className="size-6" />
           </summary>
-          <div className="absolute right-0 mt-2 flex w-64 flex-col gap-1 rounded-md bg-blanc p-3 shadow-card">
+          <div className="absolute right-0 mt-2 flex w-64 flex-col gap-1 rounded-md border border-brume bg-blanc p-3">
             {publicNavigation.map((link) => (
               <Link
                 key={link.key}
@@ -50,7 +52,7 @@ export function PublicHeader() {
               </Link>
             ))}
             <div className="mt-2 flex flex-col gap-2 border-t border-brume pt-3">
-              <ButtonLink href="/connexion" variant="outline" fullWidth>
+              <ButtonLink href="/connexion" variant="tertiary" fullWidth>
                 {t("login")}
               </ButtonLink>
               <ButtonLink href="/inscription" fullWidth>

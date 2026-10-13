@@ -1,19 +1,43 @@
 import type { ComponentProps } from "react";
 import { cx } from "@/lib/cx";
 
-type Props = ComponentProps<"div"> & {
-  /** `tinted`: light mint background; `dark`: depth gradient. */
-  appearance?: "default" | "tinted" | "dark";
-};
+/**
+ * Hierarchy comes from backgrounds, not shadows (§ 11.3): Crème → Blanc → module tint.
+ * Module tints (§ 11.1): Learn Lime, Career Néon, Jobs Menthe claire, Hire Brume,
+ * Connect Blanc, Intelligence AI gradient.
+ */
+export type CardTone =
+  "default" | "learn" | "career" | "jobs" | "hire" | "connect" | "intelligence" | "dark";
 
-const appearances = {
-  default: "bg-blanc text-sapin shadow-card",
-  tinted: "bg-menthe-claire text-sapin",
+const tones: Record<CardTone, string> = {
+  default: "bg-blanc text-sapin",
+  learn: "bg-lime text-sapin",
+  career: "bg-neon text-sapin",
+  jobs: "bg-menthe-claire text-sapin",
+  hire: "bg-brume text-sapin",
+  connect: "bg-blanc text-sapin",
+  intelligence: "bg-gradient-ai text-blanc",
   dark: "bg-gradient-depth text-blanc",
 };
 
-export function Card({ appearance = "default", className, ...rest }: Props) {
-  return <div className={cx("rounded-card p-6", appearances[appearance], className)} {...rest} />;
+type Props = ComponentProps<"div"> & {
+  tone?: CardTone;
+  /** Selected element: 2 px Sapin border (§ 11.3). */
+  selected?: boolean;
+};
+
+export function Card({ tone = "default", selected = false, className, ...rest }: Props) {
+  return (
+    <div
+      className={cx(
+        "rounded-card border-2 p-6",
+        selected ? "border-sapin" : "border-transparent",
+        tones[tone],
+        className,
+      )}
+      {...rest}
+    />
+  );
 }
 
 export function CardTitle({ className, ...rest }: ComponentProps<"h3">) {
@@ -21,5 +45,5 @@ export function CardTitle({ className, ...rest }: ComponentProps<"h3">) {
 }
 
 export function CardText({ className, ...rest }: ComponentProps<"p">) {
-  return <p className={cx("mt-1 text-[15px] leading-6 opacity-80", className)} {...rest} />;
+  return <p className={cx("mt-1 text-[15px] leading-6", className)} {...rest} />;
 }

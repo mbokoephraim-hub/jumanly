@@ -1,5 +1,4 @@
 import { useTranslations } from "next-intl";
-import { Sparkles } from "lucide-react";
 import { ButtonLink, Card, CardText, EmptyState, ProgressRing } from "@/components/ui";
 
 /** Temporary dashboard, to show the signed-in layout. The real one comes with step E3. */
@@ -9,10 +8,8 @@ export default function DashboardPage() {
   return (
     <div className="flex flex-col gap-6">
       <div>
-        <p className="tracking-wide text-feuille uppercase text-label">
-          {t("talent.dashboard.title")}
-        </p>
-        <h1 className="mt-1 text-[28px] leading-9 font-semibold md:text-h1">
+        <p className="text-eyebrow text-ardoise">{t("talent.dashboard.title")}</p>
+        <h1 className="mt-1 text-h1">
           {t("talent.dashboard.greeting.neutral", { firstName: t("foundation.sampleFirstName") })}
         </h1>
       </div>
@@ -27,11 +24,10 @@ export default function DashboardPage() {
           </div>
         </Card>
         <EmptyState
-          icon={<Sparkles aria-hidden className="size-6" />}
           title={t("foundation.emptyTitle")}
           description={t("foundation.emptyText")}
           action={
-            <ButtonLink href="/dev/composants" variant="outline" size="sm">
+            <ButtonLink href="/dev/composants" variant="tertiary" size="sm">
               {t("foundation.seeComponents")}
             </ButtonLink>
           }

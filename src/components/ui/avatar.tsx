@@ -17,13 +17,15 @@ export function Avatar({
   name,
   image,
   size = "md",
+  className,
 }: {
   name: string;
   image?: string;
   size?: keyof typeof sizes;
+  className?: string;
 }) {
   const t = useTranslations("a11y.avatar");
-  const classes = cx("inline-flex shrink-0 rounded-full", sizes[size]);
+  const classes = cx("inline-flex shrink-0 rounded-full", sizes[size], className);
   if (image)
     return <img src={image} alt={t("text", { name })} className={cx(classes, "object-cover")} />;
   return (
@@ -34,5 +36,39 @@ export function Avatar({
     >
       {initials(name)}
     </span>
+  );
+}
+
+/** Overlapping avatars; extra people are summed up in a "+N" bubble. */
+export function AvatarStack({
+  names,
+  max = 4,
+  size = "sm",
+}: {
+  names: string[];
+  max?: number;
+  size?: keyof typeof sizes;
+}) {
+  const t = useTranslations("ui.avatarStack");
+  const shown = names.slice(0, max);
+  const rest = names.length - shown.length;
+  return (
+    <div className="flex -space-x-2">
+      {shown.map((name) => (
+        <Avatar key={name} name={name} size={size} className="ring-2 ring-creme" />
+      ))}
+      {rest > 0 && (
+        <span
+          role="img"
+          aria-label={t("moreAria", { count: rest })}
+          className={cx(
+            "inline-flex shrink-0 items-center justify-center rounded-full bg-brume font-semibold text-sapin ring-2 ring-creme",
+            sizes[size],
+          )}
+        >
+          {t("more", { count: rest })}
+        </span>
+      )}
+    </div>
   );
 }

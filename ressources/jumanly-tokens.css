@@ -1,6 +1,5 @@
 /* JUMANLY · Design tokens v1.0 (octobre 2026) */
-/* Sora est auto-hébergée par l'application (next/font/local) : voir docs/decisions/2026-10-13-socle-technique.md.
-@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap"); */
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap");
 :root {
   /* Couleurs */
   --jm-sapin:   #0F3F37; /* couleur de base : texte, logo, boutons */

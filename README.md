@@ -15,7 +15,9 @@ pnpm db:migrate           # applique les migrations
 pnpm dev                  # http://localhost:3000
 ```
 
-Pages utiles : `/` (site public), `/app` (espace connecté), `/dev/composants` (composants).
+Pages utiles : `/` (site public), `/app` (espace connecté), `/dev/composants` (composants, en local et en preview seulement : `APP_ENV`).
+
+Avant chaque commit, Husky vérifie les fichiers modifiés (ESLint, Prettier, textes à jour).
 
 ## Commandes
 

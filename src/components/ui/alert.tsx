@@ -32,7 +32,7 @@ export function Alert({
       <Icon aria-hidden className={cx("mt-0.5 size-5 shrink-0", color)} strokeWidth={2} />
       <div className="flex flex-1 flex-col gap-1">
         <p className="font-semibold text-sapin">{title}</p>
-        {children && <div className="text-[15px] leading-6 text-ardoise">{children}</div>}
+        {children && <div className="text-[15px] leading-6 text-sapin">{children}</div>}
         {action && <div className="mt-2">{action}</div>}
       </div>
     </div>

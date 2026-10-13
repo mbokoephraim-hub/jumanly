@@ -1,6 +1,6 @@
 import { render } from "@react-email/components";
 import { describe, expect, it } from "vitest";
-import WelcomeTalentEmail from "@/emails/welcome-talent";
+import WelcomeTalentEmail from "../../emails/welcome-talent";
 
 describe("E-mail de bienvenue", () => {
   it("affiche les adresses de contact et aucun numéro de téléphone", async () => {

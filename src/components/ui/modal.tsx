@@ -34,7 +34,7 @@ export function Modal({
       ref={ref}
       onClose={onClose}
       aria-labelledby={titleId}
-      className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-card bg-blanc p-0 text-sapin shadow-card backdrop:bg-nuit/50"
+      className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-card bg-blanc p-0 text-sapin backdrop:bg-nuit/50"
     >
       <div className="flex items-start justify-between gap-4 p-6 pb-2">
         <h2 id={titleId} className="text-h2">

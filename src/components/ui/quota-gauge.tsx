@@ -28,7 +28,7 @@ export function QuotaGauge({
       </div>
       {!unlimited && <ProgressBar value={ratio} label={label} tone={tone} />}
       {!unlimited && ratio >= 100 && (
-        <p className="font-medium text-corail text-caption">{t("reached")}</p>
+        <p className="font-medium text-corail-fonce text-caption">{t("reached")}</p>
       )}
     </div>
   );

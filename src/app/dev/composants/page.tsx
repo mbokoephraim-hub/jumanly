@@ -1,11 +1,14 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import { NextIntlClientProvider, useTranslations } from "next-intl";
+import { notFound } from "next/navigation";
 import { getMessages, getTranslations } from "next-intl/server";
-import { ArrowRight, Inbox, Sparkles } from "lucide-react";
+import { ArrowRight, Bookmark, Sparkles, X } from "lucide-react";
+import { AiOrb, Logo } from "@/components/brand";
 import {
-  AiOrb,
+  AiCard,
   Alert,
+  AvatarStack,
   Avatar,
   Badge,
   Button,
@@ -14,24 +17,40 @@ import {
   CardText,
   CardTitle,
   Checkbox,
+  CourseCard,
   EmptyState,
   ExplainedScore,
-  Logo,
+  FilterChip,
+  IconButton,
+  JobCard,
+  PipelineSteps,
+  PlanCard,
+  PlanLock,
   ProgressBar,
   ProgressRing,
   QuotaGauge,
   RadioGroup,
+  ScoreBadge,
+  SearchField,
   Select,
   Skeleton,
   Spinner,
+  StatCard,
+  Table,
+  Td,
   TextArea,
+  Th,
+  TrendBadge,
+  VerifiedBadge,
   TextField,
   type ButtonVariant,
+  type CardTone,
 } from "@/components/ui";
 import { Switch } from "@/components/ui/switch";
 import { Tabs } from "@/components/ui/tabs";
 import { pickMessages } from "@/i18n/client-messages";
-import { ModalDemo } from "./modal-demo";
+import { isInternalEnv } from "@/lib/env";
+import { DrawerDemo, ModalDemo, ToastDemo } from "./interactive-demos";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("devComponents");
@@ -57,17 +76,21 @@ function State({ label, children }: { label: string; children: ReactNode }) {
   );
 }
 
-/** The demo modal is a client component: it receives the texts it needs. */
-async function ModalDemoWithTexts() {
+/** The interactive demos are client components: they receive only the texts they need. */
+async function ClientTexts({ children }: { children: ReactNode }) {
   const messages = await getMessages();
   return (
-    <NextIntlClientProvider messages={pickMessages(messages, ["a11y", "common", "devComponents"])}>
-      <ModalDemo />
+    <NextIntlClientProvider
+      messages={pickMessages(messages, ["a11y", "common", "devComponents", "toast"])}
+    >
+      {children}
     </NextIntlClientProvider>
   );
 }
 
-const buttonVariants: ButtonVariant[] = ["primary", "secondary", "outline", "ghost", "danger"];
+const buttonVariants: ButtonVariant[] = ["primary", "secondary", "tertiary", "danger"];
+
+const moduleTones = ["learn", "career", "jobs", "hire", "connect"] as const satisfies CardTone[];
 
 const colors = [
   ["sapin", "bg-sapin"],
@@ -93,8 +116,11 @@ const gradients = [
 
 /** Showcase of the component library, with every state. */
 export default function ComponentsPage() {
+  // Also checked here: layout and page render in parallel (see src/app/dev/layout.tsx).
+  if (!isInternalEnv()) notFound();
   const t = useTranslations("devComponents");
   const s = useTranslations("devComponents.states");
+  const g = useTranslations();
   const countries = [
     { value: "cd", label: t("fields.countryA") },
     { value: "cm", label: t("fields.countryB") },
@@ -102,20 +128,48 @@ export default function ComponentsPage() {
   ];
 
   return (
-    <div className="mx-auto flex max-w-6xl flex-col gap-10 px-4 py-10 sm:px-6">
+    <div className="mx-auto flex max-w-6xl flex-col gap-10 page-x py-10">
       <header className="flex flex-col gap-3">
         <Logo height={36} />
-        <h1 className="text-[32px] leading-10 font-semibold md:text-h1">{t("title")}</h1>
+        <h1 className="text-h1">{t("title")}</h1>
         <p className="max-w-2xl text-ardoise">{t("intro")}</p>
         <div className="flex flex-wrap gap-2">
-          <ButtonLink href="/" variant="outline" size="sm">
+          <ButtonLink href="/" variant="tertiary" size="sm">
             {t("publicLayout")}
           </ButtonLink>
-          <ButtonLink href="/app" variant="outline" size="sm">
+          <ButtonLink href="/app" variant="tertiary" size="sm">
             {t("appLayout")}
           </ButtonLink>
         </div>
       </header>
+
+      <Section title={t("sections.brand")}>
+        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+          <State label={t("brand.primary")}>
+            <div className="flex h-24 w-full items-center justify-center rounded-md bg-blanc">
+              <Logo height={32} />
+            </div>
+          </State>
+          <State label={t("brand.negative")}>
+            <div className="flex h-24 w-full items-center justify-center rounded-md bg-sapin">
+              <Logo variant="negative" height={32} />
+            </div>
+          </State>
+          <State label={t("brand.symbol")}>
+            <div className="flex h-24 w-full items-center justify-center gap-4 rounded-md bg-gradient-depth">
+              <Logo variant="symbolLight" height={44} />
+              <span className="rounded-sm bg-creme p-1">
+                <Logo variant="symbol" height={44} />
+              </span>
+            </div>
+          </State>
+          <State label={t("brand.orb")}>
+            <div className="flex h-24 w-full items-center justify-center rounded-md bg-sapin">
+              <AiOrb className="size-12" labelled />
+            </div>
+          </State>
+        </div>
+      </Section>
 
       <Section title={t("sections.colors")}>
         <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 lg:grid-cols-7">
@@ -140,7 +194,7 @@ export default function ComponentsPage() {
         <p className="text-display">{t("type.display")}</p>
         <p className="text-h1">{t("type.h1")}</p>
         <p className="text-h2">{t("type.h2")}</p>
-        <p className="text-feuille text-label">{t("type.label")}</p>
+        <p className="text-label">{t("type.label")}</p>
         <p className="text-body">{t("type.body")}</p>
         <p className="text-caption">{t("type.caption")}</p>
       </Section>
@@ -183,6 +237,27 @@ export default function ComponentsPage() {
               <ButtonLink href="/app" variant="secondary">
                 {t("buttons.link")}
               </ButtonLink>
+            </State>
+          </div>
+          <div className="flex flex-wrap items-end gap-4">
+            <State label={t("variants.icon")}>
+              <div className="flex gap-2">
+                <IconButton label={g("jobs.card.save")}>
+                  <Bookmark aria-hidden className="size-5" />
+                </IconButton>
+                <IconButton label={g("jobs.card.save")} variant="outline">
+                  <Bookmark aria-hidden className="size-5" />
+                </IconButton>
+                <IconButton label={g("jobs.card.save")} variant="sapin">
+                  <Bookmark aria-hidden className="size-5" />
+                </IconButton>
+                <IconButton label={g("jobs.card.save")} variant="lime">
+                  <Bookmark aria-hidden className="size-5" />
+                </IconButton>
+                <IconButton label={g("a11y.close")} disabled>
+                  <X aria-hidden className="size-5" />
+                </IconButton>
+              </div>
             </State>
           </div>
         </div>
@@ -235,6 +310,29 @@ export default function ComponentsPage() {
         </div>
       </Section>
 
+      <Section title={t("sections.search")}>
+        <form className="flex flex-col gap-4" action="/offres">
+          <SearchField
+            id="demo-search"
+            name="q"
+            label={t("search.id")}
+            placeholder={t("search.placeholder")}
+            className="max-w-xl"
+          />
+          <div className="flex flex-wrap gap-2">
+            <FilterChip id="demo-filter-remote" name="remote" label={t("search.filterRemote")} />
+            <FilterChip
+              id="demo-filter-full-time"
+              name="fullTime"
+              label={t("search.filterFullTime")}
+              defaultChecked
+            />
+            <FilterChip id="demo-filter-free" name="free" label={t("search.filterFree")} />
+            <FilterChip id="demo-filter-off" label={t("search.filterDisabled")} disabled />
+          </div>
+        </form>
+      </Section>
+
       <Section title={t("sections.choices")}>
         <div className="grid gap-8 md:grid-cols-3">
           <div className="flex flex-col gap-3">
@@ -282,6 +380,24 @@ export default function ComponentsPage() {
             {t("badges.ai")}
           </Badge>
         </div>
+        <div className="flex flex-wrap gap-2">
+          <Badge tone="new">{g("common.new")}</Badge>
+          {moduleTones.map((tone) => (
+            <Badge key={tone} tone={tone}>
+              {t(`cards.tone.${tone}`)}
+            </Badge>
+          ))}
+          <Badge tone="jobs">{t("badges.contract")}</Badge>
+          <VerifiedBadge />
+          <TrendBadge value={12} label={t("badges.trendUp")} />
+          <TrendBadge value={-3} label={t("badges.trendDown")} />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <ScoreBadge score={91} band="veryHigh" />
+          <ScoreBadge score={78} band="high" />
+          <ScoreBadge score={58} band="partial" />
+          <ScoreBadge score={32} band="low" />
+        </div>
       </Section>
 
       <Section title={t("sections.cards")}>
@@ -290,13 +406,23 @@ export default function ComponentsPage() {
             <CardTitle>{t("cards.defaultTitle")}</CardTitle>
             <CardText>{t("cards.defaultText")}</CardText>
           </Card>
-          <Card appearance="tinted">
+          <Card tone="intelligence">
             <CardTitle>{t("cards.tintedTitle")}</CardTitle>
             <CardText>{t("cards.tintedText")}</CardText>
           </Card>
-          <Card appearance="dark">
+          <Card tone="dark">
             <CardTitle>{t("cards.darkTitle")}</CardTitle>
             <CardText>{t("cards.darkText")}</CardText>
+          </Card>
+        </div>
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-6">
+          {moduleTones.map((tone) => (
+            <Card key={tone} tone={tone} className="p-5">
+              <CardTitle>{t(`cards.tone.${tone}`)}</CardTitle>
+            </Card>
+          ))}
+          <Card selected className="p-5">
+            <CardTitle>{t("cards.selected")}</CardTitle>
           </Card>
         </div>
       </Section>
@@ -329,6 +455,16 @@ export default function ComponentsPage() {
           <Avatar name={t("avatars.name")} size="sm" />
           <Avatar name={t("avatars.name")} />
           <Avatar name={t("avatars.name")} size="lg" />
+          <AvatarStack
+            names={[
+              t("avatars.name"),
+              t("avatars.nameB"),
+              t("avatars.nameC"),
+              t("avatars.nameD"),
+              t("avatars.nameE"),
+              t("avatars.nameF"),
+            ]}
+          />
         </div>
       </Section>
 
@@ -383,6 +519,153 @@ export default function ComponentsPage() {
             }
           />
         </div>
+        <div className="max-w-md">
+          <AiCard
+            explanation={t("ai.suggestionWhy")}
+            actions={
+              <>
+                <Button size="sm">{g("ai.card.apply")}</Button>
+                <Button size="sm" variant="tertiary" className="border-blanc/40 text-blanc">
+                  {g("ai.card.ignore")}
+                </Button>
+              </>
+            }
+          >
+            {t("ai.suggestion")}
+          </AiCard>
+        </div>
+      </Section>
+
+      <Section title={t("sections.stats")}>
+        <div className="grid gap-4 sm:grid-cols-3">
+          <StatCard label={t("stats.applications")} value={t("stats.applicationsValue")} />
+          <StatCard
+            label={t("stats.views")}
+            value={t("stats.viewsValue")}
+            hint={<TrendBadge value={12} label={t("stats.viewsTrend")} />}
+          />
+          <StatCard tone="learn" label={t("stats.courses")} value={t("stats.coursesValue")} />
+        </div>
+      </Section>
+
+      <Section title={t("sections.listings")}>
+        <div className="grid gap-4 md:grid-cols-3">
+          <CourseCard
+            title={t("listings.courseTitle")}
+            href="/formations"
+            level={t("listings.courseLevel")}
+            lessons={12}
+            duration={t("listings.courseDuration")}
+            certificate
+          />
+          <CourseCard
+            title={t("listings.courseTitle")}
+            href="/formations"
+            level={t("listings.courseLevel")}
+            lessons={1}
+            duration={t("listings.courseDuration")}
+            plan={t("listings.coursePlan")}
+          />
+          <JobCard
+            title={t("listings.jobTitle")}
+            href="/offres"
+            company={t("listings.jobCompany")}
+            city={t("listings.jobCity")}
+            country={t("listings.jobCountry")}
+            remote="hybrid"
+            contract={t("listings.jobContract")}
+            deadline={t("listings.jobDeadline")}
+            verified
+            isNew
+            match={{ score: 87, band: "veryHigh" }}
+          />
+          <JobCard
+            title={t("listings.jobBTitle")}
+            href="/offres"
+            company={t("listings.jobCompany")}
+            city={t("listings.jobBCity")}
+            country={t("listings.jobBCountry")}
+            remote="onsite"
+            contract={t("listings.jobBContract")}
+            deadline={t("listings.jobDeadline")}
+          />
+        </div>
+      </Section>
+
+      <Section title={t("sections.pipeline")}>
+        <PipelineSteps
+          counts={{ new: 14, screening: 6, test: 3, interview: 2, offer: 1, hired: 0 }}
+          current="interview"
+        />
+      </Section>
+
+      <Section title={t("sections.table")}>
+        <Table caption={t("table.caption")}>
+          <thead>
+            <tr>
+              <Th>{t("table.name")}</Th>
+              <Th>{t("table.stage")}</Th>
+              <Th>{g("match.score.label")}</Th>
+              <Th>{t("table.date")}</Th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <Td>{t("avatars.name")}</Td>
+              <Td>{g("hire.pipeline.stage.interview")}</Td>
+              <Td>
+                <ScoreBadge score={87} band="veryHigh" />
+              </Td>
+              <Td>{t("table.date1")}</Td>
+            </tr>
+            <tr>
+              <Td>{t("avatars.nameB")}</Td>
+              <Td>{g("hire.pipeline.stage.screening")}</Td>
+              <Td>
+                <ScoreBadge score={64} band="partial" />
+              </Td>
+              <Td>{t("table.date2")}</Td>
+            </tr>
+          </tbody>
+        </Table>
+      </Section>
+
+      <Section title={t("sections.plans")}>
+        <div className="flex flex-wrap items-center gap-3">
+          <PlanLock plan={t("plans.lockPlan")} compact />
+        </div>
+        <div className="max-w-md">
+          <PlanLock plan={t("plans.lockPlan")} description={t("plans.lockText")} />
+        </div>
+        <div className="grid gap-4 md:grid-cols-3">
+          <PlanCard
+            name={t("plans.freeName")}
+            priceCents={0}
+            audience={t("plans.audience")}
+            features={[t("plans.feature1")]}
+            current
+            ctaLabel={t("plans.ctaFree")}
+            ctaHref="/inscription"
+          />
+          <PlanCard
+            name={t("plans.paidName")}
+            priceCents={990}
+            audience={t("plans.audience")}
+            features={[t("plans.feature1"), t("plans.feature2"), t("plans.feature3")]}
+            includesPlan={t("plans.freeName")}
+            recommended
+            ctaLabel={t("plans.ctaPaid")}
+            ctaHref="/tarifs"
+          />
+          <PlanCard
+            name={t("plans.paidName")}
+            priceCents={null}
+            audience={t("plans.audience")}
+            features={[t("plans.feature2")]}
+            ctaLabel={g("pricing.company.premium.cta")}
+            ctaHref="/contact"
+          />
+        </div>
       </Section>
 
       <Section title={t("sections.loading")}>
@@ -400,7 +683,6 @@ export default function ComponentsPage() {
 
       <Section title={t("sections.empty")}>
         <EmptyState
-          icon={<Inbox aria-hidden className="size-6" />}
           title={t("empty.title")}
           description={t("empty.text")}
           action={
@@ -411,9 +693,17 @@ export default function ComponentsPage() {
         />
       </Section>
 
-      <Section title={t("sections.modal")}>
-        <ModalDemoWithTexts />
-      </Section>
+      <ClientTexts>
+        <Section title={t("sections.toast")}>
+          <ToastDemo />
+        </Section>
+        <Section title={t("sections.modal")}>
+          <ModalDemo />
+        </Section>
+        <Section title={t("sections.drawer")}>
+          <DrawerDemo />
+        </Section>
+      </ClientTexts>
     </div>
   );
 }

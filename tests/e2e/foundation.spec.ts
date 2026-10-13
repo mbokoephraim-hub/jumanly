@@ -15,11 +15,24 @@ test("la bibliothèque de composants est complète et non indexée", async ({ pa
   await page.goto("/dev/composants");
   await expect(page.getByRole("heading", { name: "Bibliothèque de composants" })).toBeVisible();
   await expect(page.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
-  for (const section of ["Boutons", "Champs de saisie", "Alertes", "Fenêtre modale"]) {
+  for (const section of [
+    "Boutons",
+    "Champs de saisie",
+    "Recherche et filtres",
+    "Cartes de formation et d'offre",
+    "Étapes de recrutement",
+    "Verrou de forfait et carte de formule",
+    "Fenêtre modale",
+    "Tiroir mobile",
+  ]) {
     await expect(page.getByRole("heading", { name: section, exact: true })).toBeVisible();
   }
   await page.getByRole("button", { name: "Ouvrir la fenêtre" }).click();
   await expect(page.getByRole("dialog", { name: "Retirer ma candidature ?" })).toBeVisible();
+  await page.keyboard.press("Escape");
+  await expect(page.getByRole("dialog")).toBeHidden();
+  await page.getByRole("button", { name: "Ouvrir le tiroir" }).click();
+  await expect(page.getByRole("dialog", { name: "Filtres" })).toBeVisible();
   await page.keyboard.press("Escape");
   await expect(page.getByRole("dialog")).toBeHidden();
 });
@@ -30,7 +43,7 @@ test("l'espace connecté propose la navigation adaptée à l'écran", async ({ p
   await expect(navigation.filter({ visible: true })).toHaveCount(1);
   const lienAccueil = navigation.filter({ visible: true }).getByRole("link", { name: "Accueil" });
   await expect(lienAccueil).toHaveAttribute("aria-current", "page");
-  // Desktop : barre latérale ; mobile : barre de navigation en bas de l'écran.
+  // Desktop : barre latérale de 92 px ; mobile : navigation flottante en bas de l'écran.
   const boite = await navigation.filter({ visible: true }).boundingBox();
   const viewport = page.viewportSize();
   if (isMobile) expect(boite!.y).toBeGreaterThan(viewport!.height / 2);

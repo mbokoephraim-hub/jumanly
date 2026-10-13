@@ -12,7 +12,7 @@ const keyTargets: Record<string, (index: number, last: number) => number> = {
   End: (_, last) => last,
 };
 
-/** Accessible tabs: left / right arrows, Home, End. */
+/** Underlined tabs (§ 11.5), keyboard accessible: arrows, Home, End. */
 export function Tabs({ tabs, initial }: { tabs: Tab[]; initial?: string }) {
   const baseId = useId();
   const [active, setActive] = useState(initial ?? tabs[0]?.id);
@@ -28,10 +28,7 @@ export function Tabs({ tabs, initial }: { tabs: Tab[]; initial?: string }) {
 
   return (
     <div>
-      <div
-        role="tablist"
-        className="inline-flex max-w-full gap-1 overflow-x-auto rounded-pill bg-blanc p-1 shadow-card"
-      >
+      <div role="tablist" className="flex max-w-full gap-6 overflow-x-auto border-b border-brume">
         {tabs.map((tab, index) => {
           const selected = tab.id === active;
           return (
@@ -49,8 +46,10 @@ export function Tabs({ tabs, initial }: { tabs: Tab[]; initial?: string }) {
               onClick={() => setActive(tab.id)}
               onKeyDown={(event) => onKeyDown(event, index)}
               className={cx(
-                "h-9 rounded-pill px-4 text-sm font-medium whitespace-nowrap transition-colors",
-                selected ? "bg-sapin text-blanc" : "text-ardoise hover:text-sapin",
+                "-mb-px h-11 border-b-2 text-[15px] font-medium whitespace-nowrap transition-colors",
+                selected
+                  ? "border-sapin text-sapin"
+                  : "border-transparent text-ardoise hover:text-sapin",
               )}
             >
               {tab.label}

@@ -19,10 +19,11 @@
     "db:deploy": "prisma migrate deploy",
     "db:seed": "prisma db seed",
     "db:studio": "prisma studio",
-    "email:dev": "email dev --dir src/emails --port 3001",
+    "email:dev": "email dev --dir emails --port 3001",
     "postinstall": "prisma generate",
     "predev": "pnpm messages",
-    "prebuild": "pnpm messages:check"
+    "prebuild": "pnpm messages:check",
+    "prepare": "husky"
   },
   "dependencies": {
     "@prisma/adapter-pg": "7.10.0",
@@ -39,6 +40,7 @@
     "zod": "^4.6.7"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.13.0",
     "@fontsource-variable/sora": "^5.3.0",
     "@playwright/test": "^1.64.0",
     "@react-email/ui": "6.11.1",
@@ -54,7 +56,9 @@
     "dotenv": "^18.0.7",
     "eslint": "^9",
     "eslint-config-next": "16.4.0",
+    "husky": "^9.1.7",
     "jsdom": "^30.1.2",
+    "lint-staged": "^17.6.0",
     "prettier": "^3.9.10",
     "prettier-plugin-tailwindcss": "^0.8.1",
     "prisma": "7.10.0",
