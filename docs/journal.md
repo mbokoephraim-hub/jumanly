@@ -74,8 +74,7 @@ toutes dans `docs/specifications.md`.
 
 ### Dettes et points ouverts
 
-- `CLAUDE.md` renvoie vers `docs/01` à `docs/11` : à mettre à jour vers `docs/specifications.md`
-  (fichier du propriétaire, non modifié).
+- `CLAUDE.md` mis à jour (avec l'accord du propriétaire) pour renvoyer vers `docs/specifications.md`.
 - Illustrations de personnages et icônes de la marque non fournies : état vide illustré avec les
   formes de la charte, icônes `lucide-react` en attendant.
 - Budget JavaScript : 179 Ko compressés sur `/` pour 200 Ko autorisés, dont environ 165 Ko pour

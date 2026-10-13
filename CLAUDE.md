@@ -1,6 +1,6 @@
 # CLAUDE.md · Jumanly
 
-Ce fichier est lu par Claude Code à chaque session. Il contient les règles permanentes du projet. Le détail est dans `docs/`.
+Ce fichier est lu par Claude Code à chaque session. Il contient les règles permanentes du projet. Le détail est dans `docs/specifications.md` (cahier des charges complet, parties 01 à 12).
 
 ## Le projet
 
@@ -12,22 +12,23 @@ Langue de l'interface : **français** (anglais prévu plus tard). Prix en **USD*
 
 | Fichier | Contenu |
 |---|---|
-| `docs/01-vision-et-perimetre.md` | Vision, publics, modules, principes non négociables |
-| `docs/02-stack-technique.md` | Stack, arborescence, variables d'environnement |
-| `docs/03-architecture.md` | Couches, moteur de droits, tâches de fond, audit |
-| `docs/04-modele-de-donnees.md` | Tables et relations |
-| `docs/05-forfaits-roles-permissions.md` | **Source de vérité** des forfaits, droits, quotas et rôles |
-| `docs/06-parcours-utilisateurs.md` | Parcours (inscription avec forfait, candidature, paiement…) |
-| `docs/07-ecrans-et-fonctionnalites.md` | Toutes les routes et écrans, critères transverses |
-| `docs/08-matching-ia-explicable.md` | Calcul du score, explication, garde-fous de l'IA |
-| `docs/09-paiements-mobile-money.md` | Paiements, abonnements prépayés, webhooks |
-| `docs/10-securite-confidentialite.md` | Sécurité, données personnelles, modération |
-| `docs/11-design-system.md` | Couleurs, typo, composants, IA dans l'interface |
-| `docs/12-feuille-de-route.md` | Étapes E0 à E11, définition de fini, prompts |
-| `textes/*.md` | Tous les textes de l'interface (clé → texte) |
+| `docs/specifications.md`, partie 01 | Vision, publics, modules, principes non négociables |
+| `docs/specifications.md`, partie 02 | Stack, arborescence, variables d'environnement |
+| `docs/specifications.md`, partie 03 | Couches, moteur de droits, tâches de fond, audit |
+| `docs/specifications.md`, partie 04 | Tables et relations |
+| `docs/specifications.md`, partie 05 | **Source de vérité** des forfaits, droits, quotas et rôles |
+| `docs/specifications.md`, partie 06 | Parcours (inscription avec forfait, candidature, paiement…) |
+| `docs/specifications.md`, partie 07 | Toutes les routes et écrans, critères transverses |
+| `docs/specifications.md`, partie 08 | Calcul du score, explication, garde-fous de l'IA |
+| `docs/specifications.md`, partie 09 | Paiements, abonnements prépayés, webhooks |
+| `docs/specifications.md`, partie 10 | Sécurité, données personnelles, modération |
+| `docs/specifications.md`, partie 11 | Couleurs, typo, composants, IA dans l'interface |
+| `docs/12-feuille-de-route.md` (aussi partie 12 du cahier) | Étapes E0 à E11, définition de fini, prompts |
+| `docs/journal.md`, `docs/decisions/` | Ce qui a été fait à chaque étape, décisions techniques |
+| `textes/*.md` | Tous les textes de l'interface (clé → texte) : `textes-application.md` (officiels) et `00-socle.md` |
 | `ressources/` | Jetons CSS, logos SVG, favicon, icônes |
 
-En cas de contradiction : `docs/05` l'emporte pour les forfaits, `docs/08` pour le matching, `textes/` pour la formulation. Les maquettes (écran 09 « formules » en particulier) ne font pas foi pour le contenu des forfaits.
+En cas de contradiction : la partie 05 l'emporte pour les forfaits, la partie 08 pour le matching, `textes/` pour la formulation. Les maquettes (écran 09 « formules » en particulier) ne font pas foi pour le contenu des forfaits.
 
 ## Règles d'or
 
@@ -60,17 +61,20 @@ En cas de contradiction : `docs/05` l'emporte pour les forfaits, `docs/08` pour 
 ```bash
 pnpm dev            # serveur local
 pnpm lint           # ESLint
+pnpm format         # Prettier
 pnpm typecheck      # tsc --noEmit
 pnpm test           # Vitest
 pnpm test:e2e       # Playwright
 pnpm build          # build de production
 pnpm db:migrate     # prisma migrate dev
+pnpm db:deploy      # applique les migrations (CI, production)
 pnpm db:seed        # forfaits + référentiel + démo (local)
 pnpm messages       # textes/*.md → messages/fr.json
+pnpm messages:check # vérifie que messages/fr.json est à jour
 pnpm email:dev      # aperçu des e-mails
 ```
 
-(À créer à l'étape E0 ; garder cette liste à jour.)
+(Créées à l'étape E0 ; garder cette liste à jour. Husky lance ESLint, Prettier et `messages:check` avant chaque commit.)
 
 ## Façon de travailler
 
