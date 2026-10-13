@@ -1,0 +1,12 @@
+pnpm-lock.yaml
+src/generated/
+messages/fr.json
+.next/
+playwright-report/
+test-results/
+ressources/logos/
+ressources/favicon/
+public/marque/
+*.md
+ressources/
+src/components/brand/icon-paths.ts

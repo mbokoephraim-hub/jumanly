@@ -1,0 +1,36 @@
+/* JUMANLY · Design tokens v1.0 (octobre 2026) */
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap");
+:root {
+  /* Couleurs */
+  --jm-sapin:   #0F3F37; /* couleur de base : texte, logo, boutons */
+  --jm-lime:    #A6F26B; /* couleur signature : accents, CTA */
+  --jm-creme:   #F2EDE5; /* couleur de fond */
+  --jm-blanc:   #FFFFFF; /* surfaces d'interface */
+  --jm-feuille: #3DA14F; /* secondaire, succès */
+  --jm-menthe:  #2FD3A6; /* module Intelligence (IA) */
+  --jm-nuit:    #0B1A1F; /* fond sombre */
+  --jm-neon:    #E3F67C; /* labels sur fond sombre */
+  --jm-ardoise: #5B6B68; /* texte secondaire */
+  --jm-brume:   #DCE5E1; /* bordures, séparateurs */
+
+  /* Dégradés */
+  --jm-degrade-signature: linear-gradient(135deg, #D9FA72 0%, #7DE36B 50%, #1E9A64 100%);
+  --jm-degrade-ia:        linear-gradient(45deg, #0F3F37 0%, #14745F 55%, #2FD3A6 100%);
+  --jm-degrade-profondeur:linear-gradient(160deg, #0F3F37 0%, #0B1A1F 100%);
+  --jm-orbe-ia:           radial-gradient(circle at 38% 32%, #F4FFB8, #A6F26B 45%, #3DA14F);
+
+  /* Typographie */
+  --jm-font: "Sora", system-ui, sans-serif;
+  --jm-display: 600 56px/60px var(--jm-font);
+  --jm-h1: 600 36px/42px var(--jm-font);
+  --jm-h2: 500 24px/30px var(--jm-font);
+  --jm-body: 400 16px/26px var(--jm-font);
+  --jm-label: 500 13px/18px var(--jm-font);
+  --jm-caption: 300 12px/18px var(--jm-font);
+
+  /* Formes */
+  --jm-radius-card: 28px;
+  --jm-radius-md: 18px;
+  --jm-radius-sm: 12px;
+  --jm-radius-pill: 999px;
+}

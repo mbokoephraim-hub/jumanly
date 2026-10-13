@@ -1,0 +1,38 @@
+/* JUMANLY · Design tokens v1.0 (octobre 2026) */
+/* Copie de ressources/jumanly-tokens.css pour l'application. Seul écart : Sora est servie par le site
+   (next/font/local) au lieu de Google Fonts, voir docs/decisions/2026-10-13-socle-technique.md.
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap"); */
+:root {
+  /* Couleurs */
+  --jm-sapin: #0f3f37; /* couleur de base : texte, logo, boutons */
+  --jm-lime: #a6f26b; /* couleur signature : accents, CTA */
+  --jm-creme: #f2ede5; /* couleur de fond */
+  --jm-blanc: #ffffff; /* surfaces d'interface */
+  --jm-feuille: #3da14f; /* secondaire, succès */
+  --jm-menthe: #2fd3a6; /* module Intelligence (IA) */
+  --jm-nuit: #0b1a1f; /* fond sombre */
+  --jm-neon: #e3f67c; /* labels sur fond sombre */
+  --jm-ardoise: #5b6b68; /* texte secondaire */
+  --jm-brume: #dce5e1; /* bordures, séparateurs */
+
+  /* Dégradés */
+  --jm-degrade-signature: linear-gradient(135deg, #d9fa72 0%, #7de36b 50%, #1e9a64 100%);
+  --jm-degrade-ia: linear-gradient(45deg, #0f3f37 0%, #14745f 55%, #2fd3a6 100%);
+  --jm-degrade-profondeur: linear-gradient(160deg, #0f3f37 0%, #0b1a1f 100%);
+  --jm-orbe-ia: radial-gradient(circle at 38% 32%, #f4ffb8, #a6f26b 45%, #3da14f);
+
+  /* Typographie */
+  --jm-font: "Sora", system-ui, sans-serif;
+  --jm-display: 600 56px/60px var(--jm-font);
+  --jm-h1: 600 36px/42px var(--jm-font);
+  --jm-h2: 500 24px/30px var(--jm-font);
+  --jm-body: 400 16px/26px var(--jm-font);
+  --jm-label: 500 13px/18px var(--jm-font);
+  --jm-caption: 300 12px/18px var(--jm-font);
+
+  /* Formes */
+  --jm-radius-card: 28px;
+  --jm-radius-md: 18px;
+  --jm-radius-sm: 12px;
+  --jm-radius-pill: 999px;
+}

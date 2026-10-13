@@ -1,0 +1,207 @@
+[
+  {
+    "id": "jm-learn",
+    "nom": "Learn",
+    "categorie": "Modules"
+  },
+  {
+    "id": "jm-career",
+    "nom": "Career",
+    "categorie": "Modules"
+  },
+  {
+    "id": "jm-jobs",
+    "nom": "Jobs",
+    "categorie": "Modules"
+  },
+  {
+    "id": "jm-hire",
+    "nom": "Hire",
+    "categorie": "Modules"
+  },
+  {
+    "id": "jm-connect",
+    "nom": "Connect",
+    "categorie": "Modules"
+  },
+  {
+    "id": "jm-intelligence",
+    "nom": "Intelligence",
+    "categorie": "Modules"
+  },
+  {
+    "id": "jm-accueil",
+    "nom": "Accueil",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-recherche",
+    "nom": "Recherche",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-notification",
+    "nom": "Notification",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-message",
+    "nom": "Message",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-profil",
+    "nom": "Profil",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-reglages",
+    "nom": "Réglages",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-filtre",
+    "nom": "Filtre",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-ajouter",
+    "nom": "Ajouter",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-valider",
+    "nom": "Valider",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-fermer",
+    "nom": "Fermer",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-suivant",
+    "nom": "Suivant",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-telecharger",
+    "nom": "Télécharger",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-partager",
+    "nom": "Partager",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-favori",
+    "nom": "Favori",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-lien",
+    "nom": "Lien",
+    "categorie": "Interface"
+  },
+  {
+    "id": "jm-diplome",
+    "nom": "Diplôme",
+    "categorie": "Parcours"
+  },
+  {
+    "id": "jm-certificat",
+    "nom": "Certificat",
+    "categorie": "Parcours"
+  },
+  {
+    "id": "jm-cours-video",
+    "nom": "Cours vidéo",
+    "categorie": "Parcours"
+  },
+  {
+    "id": "jm-quiz",
+    "nom": "Quiz",
+    "categorie": "Parcours"
+  },
+  {
+    "id": "jm-competence",
+    "nom": "Compétence",
+    "categorie": "Parcours"
+  },
+  {
+    "id": "jm-objectif",
+    "nom": "Objectif",
+    "categorie": "Parcours"
+  },
+  {
+    "id": "jm-statistiques",
+    "nom": "Statistiques",
+    "categorie": "Parcours"
+  },
+  {
+    "id": "jm-cv",
+    "nom": "CV",
+    "categorie": "Parcours"
+  },
+  {
+    "id": "jm-entreprise",
+    "nom": "Entreprise",
+    "categorie": "Recrutement"
+  },
+  {
+    "id": "jm-equipe",
+    "nom": "Équipe",
+    "categorie": "Recrutement"
+  },
+  {
+    "id": "jm-calendrier",
+    "nom": "Calendrier",
+    "categorie": "Recrutement"
+  },
+  {
+    "id": "jm-horloge",
+    "nom": "Durée",
+    "categorie": "Recrutement"
+  },
+  {
+    "id": "jm-localisation",
+    "nom": "Localisation",
+    "categorie": "Recrutement"
+  },
+  {
+    "id": "jm-etoile",
+    "nom": "Recommandé",
+    "categorie": "Recrutement"
+  },
+  {
+    "id": "jm-confidentialite",
+    "nom": "Confidentialité",
+    "categorie": "Confiance"
+  },
+  {
+    "id": "jm-securite",
+    "nom": "Sécurité",
+    "categorie": "Confiance"
+  },
+  {
+    "id": "jm-transparence",
+    "nom": "Transparence",
+    "categorie": "Confiance"
+  },
+  {
+    "id": "jm-mobile-money",
+    "nom": "Mobile Money",
+    "categorie": "Confiance"
+  },
+  {
+    "id": "jm-portefeuille",
+    "nom": "Abonnement",
+    "categorie": "Confiance"
+  },
+  {
+    "id": "jm-langue",
+    "nom": "Langue",
+    "categorie": "Confiance"
+  }
+]

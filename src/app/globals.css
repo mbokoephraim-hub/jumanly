@@ -1,0 +1,145 @@
+@import "tailwindcss";
+@import "../styles/tokens.css";
+
+/*
+ * Compléments d'interface absents des jetons officiels (spécifications, partie 11) :
+ * couleurs d'état Ambre, Corail et Menthe claire, et police servie par l'application.
+ */
+:root {
+  --jm-font: var(--font-sora), system-ui, sans-serif;
+  --jm-ambre: #f2b33d; /* alerte douce : quota à 80 %, délai de grâce */
+  --jm-corail: #e25c4b; /* erreur, baisse ; jamais pour un score de candidat */
+  --jm-menthe-claire: #bfefdf; /* teinte de carte Jobs, bande « Compatible » */
+  /* Versions foncées pour le texte et les fonds pleins : contraste AA (4,5:1) vérifié par axe. */
+  --jm-corail-fonce: #a3301f;
+  --jm-feuille-fonce: #22662f;
+  --jm-ambre-fonce: #6e4800;
+}
+
+/* Les classes Tailwind reprennent les jetons : bg-sapin, text-lime, rounded-card… */
+@theme inline {
+  --color-sapin: var(--jm-sapin);
+  --color-lime: var(--jm-lime);
+  --color-creme: var(--jm-creme);
+  --color-blanc: var(--jm-blanc);
+  --color-feuille: var(--jm-feuille);
+  --color-menthe: var(--jm-menthe);
+  --color-nuit: var(--jm-nuit);
+  --color-neon: var(--jm-neon);
+  --color-ardoise: var(--jm-ardoise);
+  --color-brume: var(--jm-brume);
+  --color-ambre: var(--jm-ambre);
+  --color-corail: var(--jm-corail);
+  --color-menthe-claire: var(--jm-menthe-claire);
+  --color-corail-fonce: var(--jm-corail-fonce);
+  --color-feuille-fonce: var(--jm-feuille-fonce);
+  --color-ambre-fonce: var(--jm-ambre-fonce);
+
+  --radius-card: var(--jm-radius-card);
+  --radius-md: var(--jm-radius-md);
+  --radius-sm: var(--jm-radius-sm);
+  --radius-pill: var(--jm-radius-pill);
+  --radius-panel: 32px;
+
+  --font-sans: var(--jm-font);
+}
+
+/* Styles de texte (§ 11.2). Display et H1 ont une taille réduite sur mobile. */
+@utility text-display {
+  font: 600 36px/40px var(--jm-font);
+  letter-spacing: -0.025em;
+  @media (width >= 48rem) {
+    font: var(--jm-display);
+  }
+}
+@utility text-h1 {
+  font: 600 28px/34px var(--jm-font);
+  @media (width >= 48rem) {
+    font: var(--jm-h1);
+  }
+}
+@utility text-h2 {
+  font: var(--jm-h2);
+}
+@utility text-body {
+  font: var(--jm-body);
+}
+@utility text-label {
+  font: var(--jm-label);
+}
+/* Surtitre : label en capitales, lettres espacées. */
+@utility text-eyebrow {
+  font: var(--jm-label);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+@utility text-caption {
+  font: var(--jm-caption);
+}
+
+/* Dégradés, avec une couleur unie de repli dessous (§ 11.1). */
+@utility bg-gradient-signature {
+  background-color: #7de36b;
+  background-image: var(--jm-degrade-signature);
+}
+@utility bg-gradient-ai {
+  background-color: #14745f;
+  background-image: var(--jm-degrade-ia);
+}
+@utility bg-gradient-depth {
+  background-color: var(--jm-sapin);
+  background-image: var(--jm-degrade-profondeur);
+}
+@utility bg-ai-orb {
+  background-color: var(--jm-lime);
+  background-image: var(--jm-orbe-ia);
+}
+
+/* Marges de page : 16 px mobile, 32 px tablette, 48 px desktop (§ 11.3). */
+@utility page-x {
+  padding-inline: 16px;
+  @media (width >= 48rem) {
+    padding-inline: 32px;
+  }
+  @media (width >= 80rem) {
+    padding-inline: 48px;
+  }
+}
+
+/* Zone tactile de 44 px autour des petits éléments, sans changer leur taille visible (§ 11.8). */
+@utility touch-target {
+  position: relative;
+  &::after {
+    content: "";
+    position: absolute;
+    inset: 50% auto auto 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+}
+
+html {
+  background: var(--jm-creme);
+  color: var(--jm-sapin);
+}
+
+body {
+  font: var(--jm-body);
+}
+
+/* Focus visible : Sapin 2 px + halo Lime (§ 11.8). */
+:focus-visible {
+  outline: 2px solid var(--jm-sapin);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 5px var(--jm-lime);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}
