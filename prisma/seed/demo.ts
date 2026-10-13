@@ -103,7 +103,7 @@ const jobs: JobSeed[] = [
     ],
     requirements: ["Étudiant ou jeune diplômé en communication ou marketing"],
     skills: [
-      { slug: "reseaux-sociaux", importance: "required" },
+      { slug: "gestion-des-reseaux-sociaux", importance: "required" },
       { slug: "redaction-web", importance: "preferred" },
       { slug: "creativite", importance: "preferred" },
     ],
@@ -129,7 +129,8 @@ const jobs: JobSeed[] = [
     requirements: ["Deux ans d'expérience en développement web", "Pratique de Git"],
     skills: [
       { slug: "javascript", importance: "required" },
-      { slug: "html-css", importance: "required" },
+      { slug: "html", importance: "required" },
+      { slug: "css", importance: "required" },
       { slug: "git", importance: "preferred" },
     ],
     languages: [
@@ -231,7 +232,7 @@ const jobs: JobSeed[] = [
     ],
     requirements: ["Expérience en vente", "Permis de conduire"],
     skills: [
-      { slug: "prospection", importance: "required" },
+      { slug: "prospection-commerciale", importance: "required" },
       { slug: "negociation", importance: "required" },
     ],
     languages: [{ code: "fr", level: "B2" }],
@@ -255,7 +256,7 @@ const jobs: JobSeed[] = [
     ],
     requirements: ["Goût pour la transmission"],
     skills: [
-      { slug: "pedagogie", importance: "required" },
+      { slug: "formation-d-adultes", importance: "required" },
       { slug: "travail-en-equipe", importance: "preferred" },
     ],
     languages: [{ code: "fr", level: "B2" }],
@@ -426,7 +427,7 @@ const courses: CourseSeed[] = [
         ],
       },
     ],
-    skills: ["communication-orale", "confiance-en-soi"],
+    skills: ["communication-orale", "gestion-du-stress"],
   },
   {
     slug: "demo-gestion-de-projet-essentiels",
