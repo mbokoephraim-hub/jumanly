@@ -2,6 +2,45 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E1 · Site public (13 octobre 2026)
+
+### Fait
+
+- Base : formules et matrice complète des droits (`prisma/seed/plans.ts`, 11 formules), référentiel
+  de 329 compétences, démonstration manifestement fictive (« Horizon Démo (entreprise fictive) »,
+  10 offres, 6 formations) chargée seulement en local et en preview.
+- Pages publiques rendues côté serveur : accueil, à propos, talents, recruteurs, entreprises,
+  partenaires (avec formulaire), formations (recherche, filtres, fiche avec leçon en aperçu), offres
+  (recherche, filtres, fiche avec données structurées `JobPosting`), tarifs (onglets, cartes,
+  comparatifs calculés depuis les droits, FAQ facturation), FAQ (recherche, `FAQPage`), contact,
+  quatre pages légales en gabarit, page 404.
+- Formulaire de contact : validation Zod partagée, routage vers la bonne boîte (pro ou générale),
+  enregistrement (`ContactMessage`), limite de 3 messages par adresse en 10 minutes, envoi par
+  e-mail (adaptateur factice en local, Resend si `RESEND_API_KEY`).
+- SEO : métadonnées et Open Graph par page, image Open Graph générée, `sitemap.xml`, `robots.txt`.
+- Bandeau cookies (nécessaires / mesure d'audience / préférences), réouvrable depuis le pied de page.
+- Tests : unitaires (liens d'inscription, textes des formules et des comparatifs, formulaire,
+  filtres, consentement) et e2e (toutes les pages, boutons vers `/inscription`, formulaire,
+  cookies, accessibilité axe, budget JavaScript). La CI charge maintenant les données (`pnpm db:seed`).
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Pages rendues côté serveur | ✓ (le contenu principal est dans le HTML, vérifié en e2e) |
+| Lighthouse mobile ≥ 90 (perf., accessibilité, SEO) | ✓ `/` 99/100/100, `/formations` 93/98/100, `/offres` 96/98/100, `/tarifs` 98/100/100 (build `APP_ENV=production`) |
+| « Postuler », « Commencer », « Choisir » mènent à `/inscription` avec les bons paramètres | ✓ testé en e2e et en unitaire pour chaque formule |
+| Aucun numéro de téléphone | ✓ aucun lien `tel:` sur les pages publiques (e2e) |
+| Budget de 200 Ko de JavaScript compressé | ✓ testé en e2e sur `/`, `/formations`, `/offres`, `/tarifs` |
+
+### Dettes et points ouverts
+
+- Pages légales : contenu à faire valider par un juriste (elles répondent 404 en production tant
+  qu'elles contiennent des emplacements `[...]`).
+- `/inscription`, `/connexion` et `/activer` sont des liens vers des écrans livrés en E2.
+- Décisions détaillées : `docs/decisions/2026-10-13-site-public.md`.
+- Déploiement Hostinger : en attente d'une base PostgreSQL externe (Neon proposé au propriétaire).
+
 ## E0 · Socle technique (13 octobre 2026)
 
 ### Contexte

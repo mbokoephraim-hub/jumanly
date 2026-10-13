@@ -5,10 +5,9 @@ test("la page d'accueil publique s'affiche en français", async ({ page }) => {
   await expect(page).toHaveTitle(/Jumanly/);
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Créer mon compte gratuit" })).toHaveAttribute(
-    "href",
-    "/inscription",
-  );
+  await expect(
+    page.getByRole("link", { name: "Créer mon compte gratuit" }).first(),
+  ).toHaveAttribute("href", /^\/inscription/);
 });
 
 test("la bibliothèque de composants est complète et non indexée", async ({ page }) => {
