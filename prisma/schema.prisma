@@ -1,7 +1,6 @@
-// Jumanly data model.
-// Models (users, plans, jobs…) come from step E1 onwards, following
-// docs/specifications.md (partie 04). Step E0 only sets up the connection
-// and enables the pgvector extension (similarity search, used in step E6).
+// Jumanly data model (docs/specifications.md, partie 04).
+// Tables are added at the step that first needs them. E1: plans and entitlements,
+// organizations, skills, jobs, courses, contact messages.
 
 generator client {
   provider = "prisma-client"
@@ -10,4 +9,282 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+}
+
+// ─── Forfaits et droits (partie 05) ─────────────────────────────
+// Plans and entitlements live in the database and are edited in the admin.
+// Code never tests a plan code or name, only entitlement keys (CLAUDE.md § 2).
+
+enum PlanFamily {
+  talent
+  rh
+  company
+  partner
+}
+
+enum EntitlementType {
+  boolean
+  level
+  limit
+}
+
+model Plan {
+  id            String            @id @default(cuid(2))
+  code          String            @unique
+  family        PlanFamily
+  name          String
+  tagline       String
+  /// Prefix of this plan's interface texts, e.g. "pricing.talent.pro" (features, CTA, badge).
+  contentKey    String
+  /// USD cents; null = on quote.
+  priceCents    Int?
+  currency      String            @default("USD")
+  interval      String            @default("month")
+  isPublic      Boolean           @default(true)
+  isPurchasable Boolean           @default(true)
+  recommended   Boolean           @default(false)
+  sortOrder     Int
+  active        Boolean           @default(true)
+  entitlements  PlanEntitlement[]
+  createdAt     DateTime          @default(now())
+  updatedAt     DateTime          @updatedAt
+
+  @@index([family, sortOrder])
+}
+
+model PlanEntitlement {
+  id     String          @id @default(cuid(2))
+  planId String
+  plan   Plan            @relation(fields: [planId], references: [id], onDelete: Cascade)
+  key    String
+  type   EntitlementType
+  /// Text value: "true", "fundamentals", "150", "-1" (unlimited), "contract".
+  value  String
+
+  @@unique([planId, key])
+  @@index([key])
+}
+
+// ─── Organisations ──────────────────────────────────────────────
+
+enum OrganizationType {
+  recruiter
+  company
+  partner
+}
+
+model Organization {
+  id          String           @id @default(cuid(2))
+  type        OrganizationType
+  name        String
+  slug        String           @unique
+  logo        String?
+  description String?
+  website     String?
+  country     String?
+  city        String?
+  sector      String?
+  size        String?
+  verifiedAt  DateTime?
+  parentId    String?
+  parent      Organization?    @relation("OrganizationEntities", fields: [parentId], references: [id])
+  entities    Organization[]   @relation("OrganizationEntities")
+  jobs        Job[]
+  createdAt   DateTime         @default(now())
+  updatedAt   DateTime         @updatedAt
+}
+
+// ─── Référentiel de compétences ─────────────────────────────────
+
+model Skill {
+  id       String        @id @default(cuid(2))
+  name     String
+  slug     String        @unique
+  aliases  String[]
+  category String
+  jobs     JobSkill[]
+  courses  CourseSkill[]
+}
+
+// ─── Offres (Jobs) ──────────────────────────────────────────────
+
+enum ContractType {
+  cdi
+  cdd
+  stage
+  mission
+  freelance
+  alternance
+  volontariat
+}
+
+enum RemoteMode {
+  onsite
+  hybrid
+  remote
+}
+
+enum JobStatus {
+  draft
+  published
+  closed
+  archived
+}
+
+enum SkillImportance {
+  required
+  preferred
+}
+
+model Job {
+  id                 String       @id @default(cuid(2))
+  organizationId     String
+  organization       Organization @relation(fields: [organizationId], references: [id])
+  title              String
+  slug               String       @unique
+  description        String
+  /// One item per line.
+  responsibilities   String[]
+  requirements       String[]
+  benefits           String[]
+  process            String[]
+  contractType       ContractType
+  city               String
+  country            String
+  remote             RemoteMode
+  /// USD cents per month; optional.
+  salaryMin          Int?
+  salaryMax          Int?
+  currency           String       @default("USD")
+  experienceMin      Int          @default(0)
+  educationLevelMin  String?
+  /// [{ code: "fr", level: "C1" }]
+  languagesRequired  Json         @default("[]")
+  /// Explicit criteria set by the recruiter: ["Permis B", …]
+  knockoutCriteria   Json         @default("[]")
+  status             JobStatus    @default(draft)
+  publishedAt        DateTime?
+  closesAt           DateTime?
+  skills             JobSkill[]
+  createdAt          DateTime     @default(now())
+  updatedAt          DateTime     @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model JobSkill {
+  jobId      String
+  job        Job             @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  skillId    String
+  skill      Skill           @relation(fields: [skillId], references: [id])
+  importance SkillImportance
+  weight     Int             @default(3)
+  minLevel   Int             @default(2)
+
+  @@id([jobId, skillId])
+}
+
+// ─── Formations (Learn) ─────────────────────────────────────────
+
+enum CourseLevel {
+  beginner
+  intermediate
+  advanced
+}
+
+/// Catalog level a course requires; plans grant one through `learn.catalog.level`.
+enum CatalogLevel {
+  free
+  fundamentals
+  standard
+  advanced
+  specialized
+}
+
+enum CourseStatus {
+  draft
+  published
+}
+
+enum LessonKind {
+  video
+  text
+  exercise
+  quiz
+  resource
+}
+
+model Course {
+  id                 String         @id @default(cuid(2))
+  slug               String         @unique
+  title              String
+  summary            String
+  description        String
+  objectives         String[]
+  audience           String
+  category           String
+  level              CourseLevel
+  language           String         @default("fr")
+  durationMinutes    Int
+  coverUrl           String?
+  requiredLevel      CatalogLevel
+  status             CourseStatus   @default(draft)
+  certificateEnabled Boolean        @default(true)
+  enrollmentCount    Int            @default(0)
+  publishedAt        DateTime?
+  modules            CourseModule[]
+  skills             CourseSkill[]
+  createdAt          DateTime       @default(now())
+  updatedAt          DateTime       @updatedAt
+
+  @@index([status, publishedAt])
+}
+
+model CourseModule {
+  id       String   @id @default(cuid(2))
+  courseId String
+  course   Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  order    Int
+  title    String
+  lessons  Lesson[]
+
+  @@unique([courseId, order])
+}
+
+model Lesson {
+  id          String       @id @default(cuid(2))
+  moduleId    String
+  module      CourseModule @relation(fields: [moduleId], references: [id], onDelete: Cascade)
+  order       Int
+  title       String
+  kind        LessonKind
+  videoId     String?
+  durationSec Int          @default(0)
+  content     Json?
+  /// Visible without an account.
+  isPreview   Boolean      @default(false)
+
+  @@unique([moduleId, order])
+}
+
+model CourseSkill {
+  courseId     String
+  course       Course @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  skillId      String
+  skill        Skill  @relation(fields: [skillId], references: [id])
+  levelGranted Int    @default(2)
+
+  @@id([courseId, skillId])
+}
+
+// ─── Formulaire de contact ──────────────────────────────────────
+
+model ContactMessage {
+  id        String   @id @default(cuid(2))
+  name      String
+  email     String
+  subject   String
+  message   String
+  audience  String
+  createdAt DateTime @default(now())
 }

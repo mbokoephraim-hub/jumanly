@@ -1,10 +1,24 @@
 /**
  * Database seed (`pnpm db:seed`).
- * E1 adds the plans and their entitlement matrix (docs/specifications.md, partie 05), then the reference data and an
- * obviously fictional demo dataset, for local use and previews only (CLAUDE.md § 11).
+ * Plans with their entitlement matrix and the skills reference run everywhere; the obviously fictional
+ * demo dataset only runs in local and preview (CLAUDE.md § 11).
  */
+import { isInternalEnv } from "../../src/lib/env";
+import { createSeedClient } from "./client";
+import { seedDemo } from "./demo";
+import { seedPlans } from "./plans";
+import { seedSkills } from "./skills";
+
 async function main() {
-  console.log("Aucune donnée à insérer pour l'instant (les forfaits arrivent à l'étape E1).");
+  const db = createSeedClient();
+  try {
+    await seedPlans(db);
+    await seedSkills(db);
+    if (isInternalEnv()) await seedDemo(db);
+    else console.log("Démo ignorée : APP_ENV n'est ni local ni preview.");
+  } finally {
+    await db.$disconnect();
+  }
 }
 
 main().catch((error) => {
