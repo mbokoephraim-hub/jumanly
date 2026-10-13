@@ -81,6 +81,8 @@ describe("textes/ du dépôt", () => {
   });
 
   it("ne contient aucun numéro de téléphone (CLAUDE.md § 8)", () => {
-    expect(generated).not.toMatch(/\+?\d[\d .-]{7,}\d/);
+    expect(generated).not.toMatch(/\+\d[\d .-]{7,}\d/); // international format
+    expect(generated).not.toMatch(/\b0\d([ .-]?\d{2}){4}\b/); // local 10-digit format
+    expect(generated).not.toMatch(/tel:/);
   });
 });

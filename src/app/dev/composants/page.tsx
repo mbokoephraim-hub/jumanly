@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import type { ReactNode } from "react";
-import { useTranslations } from "next-intl";
-import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider, useTranslations } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
 import { ArrowRight, Inbox, Sparkles } from "lucide-react";
 import {
   AiOrb,
@@ -24,12 +24,13 @@ import {
   Select,
   Skeleton,
   Spinner,
-  Switch,
-  Tabs,
   TextArea,
   TextField,
   type ButtonVariant,
 } from "@/components/ui";
+import { Switch } from "@/components/ui/switch";
+import { Tabs } from "@/components/ui/tabs";
+import { pickMessages } from "@/i18n/client-messages";
 import { ModalDemo } from "./modal-demo";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -53,6 +54,16 @@ function State({ label, children }: { label: string; children: ReactNode }) {
       <span className="text-ardoise text-caption">{label}</span>
       {children}
     </div>
+  );
+}
+
+/** The demo modal is a client component: it receives the texts it needs. */
+async function ModalDemoWithTexts() {
+  const messages = await getMessages();
+  return (
+    <NextIntlClientProvider messages={pickMessages(messages, ["a11y", "common", "devComponents"])}>
+      <ModalDemo />
+    </NextIntlClientProvider>
   );
 }
 
@@ -401,7 +412,7 @@ export default function ComponentsPage() {
       </Section>
 
       <Section title={t("sections.modal")}>
-        <ModalDemo />
+        <ModalDemoWithTexts />
       </Section>
     </div>
   );

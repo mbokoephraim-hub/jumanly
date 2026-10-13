@@ -18,7 +18,7 @@ export function Modal({
   children: ReactNode;
   actions?: ReactNode;
 }) {
-  const t = useTranslations("ui");
+  const t = useTranslations("a11y");
   const ref = useRef<HTMLDialogElement>(null);
   const titleId = useId();
 
@@ -43,7 +43,7 @@ export function Modal({
         <button
           type="button"
           onClick={onClose}
-          aria-label={t("close")}
+          aria-label={t("closeDialog")}
           className="rounded-full p-2 text-ardoise hover:bg-sapin/8 hover:text-sapin"
         >
           <X aria-hidden className="size-5" />

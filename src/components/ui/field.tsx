@@ -34,7 +34,7 @@ export function Field({
   required,
   children,
 }: FieldProps & { children: (aria: FieldAria) => ReactNode }) {
-  const t = useTranslations("ui");
+  const t = useTranslations("common");
   const hintId = hint ? `${id}-hint` : undefined;
   const errorId = error ? `${id}-error` : undefined;
   return (
@@ -46,7 +46,10 @@ export function Field({
             {" *"}
           </span>
         ) : (
-          <span className="font-normal text-ardoise"> {t("optional")}</span>
+          <span className="font-normal text-ardoise">
+            {" · "}
+            {t("optional")}
+          </span>
         )}
       </label>
       {children({

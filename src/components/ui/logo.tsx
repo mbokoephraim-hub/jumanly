@@ -15,12 +15,12 @@ export function Logo({
   variant?: keyof typeof files;
   height?: number;
 }) {
-  const t = useTranslations("common.brand");
+  const t = useTranslations("common");
   const file = files[variant];
   return (
     <Image
       src={file.src}
-      alt={t("name")}
+      alt={t("brand")}
       width={Math.round((file.width / file.height) * height)}
       height={height}
       priority

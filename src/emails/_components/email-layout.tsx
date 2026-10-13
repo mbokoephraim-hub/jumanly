@@ -1,12 +1,10 @@
 import type { ReactNode } from "react";
 import { Body, Container, Head, Html, Img, Preview, Section, Text } from "@react-email/components";
-import { createTranslator } from "next-intl";
-import messages from "../../../messages/fr.json";
-import { emailTranslator, siteUrl } from "./translator";
+import { siteUrl, t } from "./translator";
 
-const common = createTranslator({ locale: "fr", messages, namespace: "common" });
+const footerText = { color: "#5B6B68", fontSize: 12, lineHeight: "18px", margin: "4px 0" };
 
-/** Shared e-mail frame: logo, content, footer with the contact e-mail (never a phone number). */
+/** Shared e-mail frame: logo, content, footer with the contact e-mails (never a phone number). */
 export function EmailLayout({ preview, children }: { preview: string; children: ReactNode }) {
   return (
     <Html lang="fr">
@@ -18,7 +16,7 @@ export function EmailLayout({ preview, children }: { preview: string; children: 
         <Container style={{ maxWidth: 560, margin: "0 auto", padding: "32px 16px" }}>
           <Img
             src={`${siteUrl}/marque/jumanly-logo-principal.svg`}
-            alt={common("brand.name")}
+            alt={t("common.brand")}
             width={145}
             height={30}
           />
@@ -33,9 +31,13 @@ export function EmailLayout({ preview, children }: { preview: string; children: 
           >
             {children}
           </Section>
-          <Text style={{ color: "#5B6B68", fontSize: 12, lineHeight: "18px", marginTop: 24 }}>
-            {emailTranslator("layout.footer", { email: common("contact.primaryEmail") })}
-          </Text>
+          <Section style={{ marginTop: 24 }}>
+            <Text style={{ ...footerText, color: "#0F3F37", fontWeight: 600 }}>
+              {t("mail.common.footer.tagline")}
+            </Text>
+            <Text style={footerText}>{t("mail.common.footer.developedBy")}</Text>
+            <Text style={footerText}>{t("mail.common.footer.contact")}</Text>
+          </Section>
         </Container>
       </Body>
     </Html>

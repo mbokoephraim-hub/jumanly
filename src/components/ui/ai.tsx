@@ -28,22 +28,22 @@ export function ExplainedScore({
   score: number;
   explanation: ReactNode;
 }) {
-  const t = useTranslations("ui");
+  const t = useTranslations();
   return (
     <div className="rounded-md bg-gradient-ai p-5 text-blanc">
       <div className="flex items-center gap-2 text-neon text-label">
         <AiOrb />
-        {t("ai.suggested")}
+        {t("ai.brand")}
       </div>
       <p className="mt-3 text-[15px] leading-6 opacity-90">{title}</p>
-      <p className="text-h1">{t("percent", { value: Math.round(score) })}</p>
+      <p className="text-h1">{t("ui.percent", { value: Math.round(score) })}</p>
       <details className="mt-2">
         <summary className="cursor-pointer text-sm font-medium text-lime underline-offset-4 hover:underline">
-          {t("ai.why")}
+          {t("ai.card.why")}
         </summary>
         <div className="mt-2 text-sm leading-6 opacity-90">{explanation}</div>
       </details>
-      <p className="mt-3 opacity-80 text-caption">{t("ai.humanDecides")}</p>
+      <p className="mt-3 opacity-80 text-caption">{t("common.aiRecommendsHumanDecides")}</p>
     </div>
   );
 }

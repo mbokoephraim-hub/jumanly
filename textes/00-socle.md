@@ -1,100 +1,26 @@
 # 00 · Socle (textes de l'étape E0)
 
-> Textes du socle technique : gabarits, composants de base et page `/dev/composants`.
-> Les textes officiels de l'interface sont dans les fichiers `textes/01` et suivants.
+> Textes propres au socle technique : page interne `/dev/composants` et écrans provisoires.
+> Tous les autres textes viennent de `textes-jumanly.md` (textes officiels). Une clé ne peut exister
+> qu'une fois : le script refuse les doublons.
 > Chaque tableau `| Clé | Texte |` est converti en `messages/fr.json` par `pnpm messages`.
-> Les variables s'écrivent entre accolades : `{limit}`.
-
-## Commun
-
-| Clé | Texte |
-|---|---|
-| `common.brand.name` | Jumanly |
-| `common.brand.slogan` | Learn. Grow. Connect. |
-| `common.brand.byline` | Une plateforme développée par The Growth Lab |
-| `common.contact.title` | Nous écrire |
-| `common.contact.primaryEmail` | assistant@jumanly.io |
-| `common.contact.secondaryEmail` | infojumanly@gmail.com |
-| `common.footer.rights` | © Jumanly · The Growth Lab. Tous droits réservés. |
-
-## Métadonnées
-
-| Clé | Texte |
-|---|---|
-| `meta.title` | Jumanly · Learn. Grow. Connect. |
-| `meta.titleTemplate` | %s · Jumanly |
-| `meta.description` | Jumanly relie les talents africains aux formations et aux employeurs qui leur correspondent. |
-| `meta.applicationName` | Jumanly |
-
-## Navigation
-
-| Clé | Texte |
-|---|---|
-| `nav.public.home` | Accueil Jumanly |
-| `nav.public.main` | Navigation principale |
-| `nav.public.menu` | Ouvrir le menu |
-| `nav.public.courses` | Formations |
-| `nav.public.jobs` | Offres d'emploi |
-| `nav.public.pricing` | Tarifs |
-| `nav.public.signIn` | Se connecter |
-| `nav.public.signUp` | Créer un compte |
-| `nav.app.main` | Navigation de mon espace |
-| `nav.app.skipToContent` | Aller au contenu |
-| `nav.app.notifications` | Notifications |
-| `nav.app.home` | Accueil |
-| `nav.app.learn` | Learn |
-| `nav.app.career` | Career |
-| `nav.app.jobs` | Jobs |
-| `nav.app.connect` | Connect |
 
 ## Composants
 
 | Clé | Texte |
 |---|---|
-| `ui.loading` | Chargement en cours |
-| `ui.close` | Fermer |
-| `ui.optional` | (facultatif) |
 | `ui.percent` | {value} % |
-| `ui.quota.used` | {used} sur {limit} |
-| `ui.quota.unlimited` | {used} utilisés · illimité |
-| `ui.quota.reached` | Limite atteinte pour ce mois. |
-| `ui.ai.suggested` | Suggéré par l'IA |
-| `ui.ai.why` | Pourquoi ? |
-| `ui.ai.humanDecides` | L'IA recommande, vous décidez. |
 
-## Accueil provisoire (remplacé à l'étape E1)
+## Écrans provisoires du socle (remplacés aux étapes E1 et E3)
 
 | Clé | Texte |
 |---|---|
-| `home.badge` | Bientôt disponible |
-| `home.title` | Votre carrière commence ici. |
-| `home.subtitle` | Formez-vous, enrichissez votre profil et rencontrez les employeurs qui vous correspondent. |
-| `home.signUp` | Créer un compte |
-| `home.signIn` | Se connecter |
-
-## Espace connecté provisoire (remplacé à l'étape E3)
-
-| Clé | Texte |
-|---|---|
-| `app.sampleUser` | Aïcha Exemple |
-| `app.dashboard.eyebrow` | Mon espace |
-| `app.dashboard.title` | Bonjour, bienvenue sur Jumanly |
-| `app.dashboard.profileLabel` | Profil complété |
-| `app.dashboard.profileTitle` | Complétez votre profil |
-| `app.dashboard.profileText` | Un profil complet vous fait remonter dans les recommandations. |
-| `app.dashboard.emptyTitle` | Votre tableau de bord arrive bientôt |
-| `app.dashboard.emptyText` | Formations, offres et messages apparaîtront ici. |
-| `app.dashboard.seeComponents` | Voir les composants |
-
-## E-mails
-
-| Clé | Texte |
-|---|---|
-| `email.layout.footer` | Une plateforme développée par The Growth Lab. Pour nous écrire : {email} |
-| `email.example.preview` | Exemple de gabarit d'e-mail Jumanly |
-| `email.example.title` | Bienvenue sur Jumanly |
-| `email.example.body` | Ceci est le gabarit commun des e-mails. Les vrais modèles arrivent avec les notifications. |
-| `email.example.cta` | Ouvrir mon espace |
+| `foundation.sampleUser` | Aïcha Exemple |
+| `foundation.sampleFirstName` | Aïcha |
+| `foundation.emptyTitle` | Votre tableau de bord arrive bientôt |
+| `foundation.emptyText` | Formations, offres et messages apparaîtront ici. |
+| `foundation.seeComponents` | Voir les composants |
+| `foundation.samplePlan` | Free |
 
 ## Page /dev/composants
 

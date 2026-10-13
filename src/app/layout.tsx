@@ -1,6 +1,5 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { NextIntlClientProvider } from "next-intl";
 import { getTranslations } from "next-intl/server";
 import "./globals.css";
 
@@ -13,11 +12,11 @@ const sora = localFont({
 });
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("meta");
+  const t = await getTranslations();
   return {
-    title: { default: t("title"), template: t("titleTemplate") },
-    description: t("description"),
-    applicationName: t("applicationName"),
+    title: { default: t("home.seo.title"), template: `%s ${t("common.seo.titleSuffix")}` },
+    description: t("home.seo.description"),
+    applicationName: t("common.brand"),
   };
 }
 
@@ -28,9 +27,7 @@ export const viewport: Viewport = {
 export default function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr" className={`${sora.variable} antialiased`}>
-      <body className="min-h-dvh">
-        <NextIntlClientProvider>{children}</NextIntlClientProvider>
-      </body>
+      <body className="min-h-dvh">{children}</body>
     </html>
   );
 }

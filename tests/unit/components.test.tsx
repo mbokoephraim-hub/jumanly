@@ -1,15 +1,8 @@
 import { describe, expect, it } from "vitest";
 import { fireEvent, screen } from "@testing-library/react";
-import {
-  Alert,
-  Button,
-  ExplainedScore,
-  ProgressBar,
-  QuotaGauge,
-  Switch,
-  Tabs,
-  TextField,
-} from "@/components/ui";
+import { Alert, Button, ExplainedScore, ProgressBar, QuotaGauge, TextField } from "@/components/ui";
+import { Switch } from "@/components/ui/switch";
+import { Tabs } from "@/components/ui/tabs";
 import { renderWithTexts } from "./render";
 
 describe("Button", () => {
@@ -18,7 +11,7 @@ describe("Button", () => {
     const button = screen.getByRole("button", { name: /Envoyer/ });
     expect(button).toBeDisabled();
     expect(button).toHaveAttribute("aria-busy", "true");
-    expect(screen.getByRole("status", { name: "Chargement en cours" })).toBeInTheDocument();
+    expect(screen.getByRole("status", { name: "Chargement…" })).toBeInTheDocument();
   });
 });
 
@@ -33,7 +26,7 @@ describe("TextField", () => {
 
   it("indique les champs facultatifs", () => {
     renderWithTexts(<TextField id="bio" label="Bio" />);
-    expect(screen.getByText("(facultatif)")).toBeInTheDocument();
+    expect(screen.getByText(/Facultatif/)).toBeInTheDocument();
   });
 });
 
@@ -72,12 +65,12 @@ describe("Progression et quotas", () => {
   it("affiche la consommation et la limite atteinte", () => {
     renderWithTexts(<QuotaGauge label="Crédits IA" used={5} limit={5} />);
     expect(screen.getByText("5 sur 5")).toBeInTheDocument();
-    expect(screen.getByText("Limite atteinte pour ce mois.")).toBeInTheDocument();
+    expect(screen.getByText("Quota atteint")).toBeInTheDocument();
   });
 
   it("gère un quota illimité", () => {
     renderWithTexts(<QuotaGauge label="Candidatures" used={3} limit={null} />);
-    expect(screen.getByText("3 utilisés · illimité")).toBeInTheDocument();
+    expect(screen.getByText("Illimité")).toBeInTheDocument();
     expect(screen.queryByRole("progressbar")).not.toBeInTheDocument();
   });
 });
@@ -94,6 +87,6 @@ describe("ExplainedScore", () => {
     renderWithTexts(<ExplainedScore title="Offre" score={86.6} explanation="Parce que" />);
     expect(screen.getByText(/^87\s%$/)).toBeInTheDocument();
     expect(screen.getByText("Pourquoi ?")).toBeInTheDocument();
-    expect(screen.getByText("L'IA recommande, vous décidez.")).toBeInTheDocument();
+    expect(screen.getByText("L'IA recommande, l'humain décide.")).toBeInTheDocument();
   });
 });

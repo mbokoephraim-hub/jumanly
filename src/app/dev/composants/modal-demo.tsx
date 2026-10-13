@@ -2,7 +2,8 @@
 
 import { useState } from "react";
 import { useTranslations } from "next-intl";
-import { Button, Modal } from "@/components/ui";
+import { Button } from "@/components/ui";
+import { Modal } from "@/components/ui/modal";
 
 export function ModalDemo() {
   const t = useTranslations("devComponents.modal");

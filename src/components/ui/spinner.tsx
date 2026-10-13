@@ -10,7 +10,7 @@ export function Spinner({
   size?: keyof typeof sizes;
   className?: string;
 }) {
-  const t = useTranslations("ui");
+  const t = useTranslations("common");
   return (
     <span
       role="status"

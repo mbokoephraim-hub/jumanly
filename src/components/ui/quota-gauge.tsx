@@ -14,7 +14,7 @@ export function QuotaGauge({
   used: number;
   limit: number | null;
 }) {
-  const t = useTranslations("ui.quota");
+  const t = useTranslations("billing.quotas");
   const unlimited = limit === null;
   const ratio = unlimited || limit === 0 ? 0 : (used / limit) * 100;
   const tone = ratio >= 100 ? "error" : ratio >= 80 ? "warning" : "sapin";
@@ -23,7 +23,7 @@ export function QuotaGauge({
       <div className="flex items-baseline justify-between gap-3">
         <span className="text-[15px] font-medium text-sapin">{label}</span>
         <span className="text-ardoise text-label">
-          {unlimited ? t("unlimited", { used }) : t("used", { used, limit })}
+          {unlimited ? t("unlimited") : t("usage", { used, limit })}
         </span>
       </div>
       {!unlimited && <ProgressBar value={ratio} label={label} tone={tone} />}

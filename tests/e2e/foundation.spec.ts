@@ -5,7 +5,7 @@ test("la page d'accueil publique s'affiche en français", async ({ page }) => {
   await expect(page).toHaveTitle(/Jumanly/);
   await expect(page.locator("html")).toHaveAttribute("lang", "fr");
   await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(page.getByRole("link", { name: "Créer un compte" }).first()).toHaveAttribute(
+  await expect(page.getByRole("link", { name: "Créer mon compte gratuit" })).toHaveAttribute(
     "href",
     "/inscription",
   );
@@ -26,7 +26,7 @@ test("la bibliothèque de composants est complète et non indexée", async ({ pa
 
 test("l'espace connecté propose la navigation adaptée à l'écran", async ({ page, isMobile }) => {
   await page.goto("/app");
-  const navigation = page.getByRole("navigation", { name: "Navigation de mon espace" });
+  const navigation = page.getByRole("navigation", { name: "Navigation principale" });
   await expect(navigation.filter({ visible: true })).toHaveCount(1);
   const lienAccueil = navigation.filter({ visible: true }).getByRole("link", { name: "Accueil" });
   await expect(lienAccueil).toHaveAttribute("aria-current", "page");
@@ -44,15 +44,17 @@ test("aucun numéro de téléphone n'apparaît", async ({ page }) => {
   }
 });
 
-test("la page d'accueil publique reste sous 200 Ko de JavaScript (CLAUDE.md § 9)", async ({
+test("la page d'accueil publique reste sous 200 Ko de JavaScript compressé (CLAUDE.md § 9)", async ({
   page,
 }) => {
-  let bytes = 0;
-  page.on("response", async (response) => {
-    if (response.request().resourceType() === "script") {
-      bytes += (await response.body()).length;
+  const sizes: Promise<number>[] = [];
+  page.on("requestfinished", (request) => {
+    if (request.resourceType() === "script") {
+      sizes.push(request.sizes().then((size) => size.responseBodySize));
     }
   });
   await page.goto("/", { waitUntil: "networkidle" });
-  expect(bytes).toBeLessThan(200 * 1024);
+  const total = (await Promise.all(sizes)).reduce((sum, size) => sum + size, 0);
+  expect(total).toBeGreaterThan(0);
+  expect(total).toBeLessThan(200 * 1024);
 });

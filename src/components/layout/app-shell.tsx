@@ -11,7 +11,8 @@ import { NavLink } from "./nav-link";
  * Desktop: Sapin sidebar. Mobile: compact header and bottom navigation bar.
  */
 export function AppShell({ userName, children }: { userName: string; children: ReactNode }) {
-  const t = useTranslations("nav.app");
+  const t = useTranslations("appNav");
+  const a11y = useTranslations("a11y");
   const links = (placement: "sidebar" | "bottom-bar") =>
     talentNavigation.map(({ key, href, icon: Icon }) => (
       <li key={key} className={placement === "bottom-bar" ? "flex flex-1" : undefined}>
@@ -34,16 +35,16 @@ export function AppShell({ userName, children }: { userName: string; children: R
       </a>
 
       <aside className="fixed inset-y-0 left-0 hidden w-64 flex-col gap-8 bg-sapin px-4 py-6 lg:flex">
-        <Link href="/app" className="px-3" aria-label={t("home")}>
+        <Link href="/app" className="px-3" aria-label={a11y("logo")}>
           <Logo variant="negative" height={28} />
         </Link>
-        <nav aria-label={t("main")}>
+        <nav aria-label={a11y("mainNav")}>
           <ul className="flex flex-col gap-1">{links("sidebar")}</ul>
         </nav>
       </aside>
 
       <header className="sticky top-0 z-20 flex h-16 items-center justify-between gap-4 border-b border-brume/70 bg-creme/90 px-4 backdrop-blur sm:px-6 lg:justify-end lg:px-10">
-        <Link href="/app" className="lg:hidden" aria-label={t("home")}>
+        <Link href="/app" className="lg:hidden" aria-label={a11y("logo")}>
           <Logo variant="symbol" height={34} />
         </Link>
         <div className="flex items-center gap-2">
@@ -63,7 +64,7 @@ export function AppShell({ userName, children }: { userName: string; children: R
       </main>
 
       <nav
-        aria-label={t("main")}
+        aria-label={a11y("mainNav")}
         className="fixed inset-x-0 bottom-0 z-20 h-18 border-t border-brume bg-blanc pb-[env(safe-area-inset-bottom)] lg:hidden"
       >
         <ul className="flex h-full">{links("bottom-bar")}</ul>

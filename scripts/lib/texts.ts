@@ -12,7 +12,7 @@ export type TextEntry = {
   line: number;
 };
 
-const KEY_FORMAT = /^[a-zA-Z][a-zA-Z0-9_]*(\.[a-zA-Z][a-zA-Z0-9_]*)*$/;
+const KEY_FORMAT = /^[a-zA-Z0-9_]+(\.[a-zA-Z0-9_]+)*$/;
 
 function normalize(value: string): string {
   return value.normalize("NFD").replace(/[̀-ͯ]/g, "").trim().toLowerCase();
