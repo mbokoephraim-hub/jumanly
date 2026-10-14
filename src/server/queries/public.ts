@@ -10,6 +10,7 @@ import * as jobs from "@/server/services/jobs";
 import * as learn from "@/server/services/learn";
 import * as plans from "@/server/services/plans";
 import { publicCompany } from "@/server/services/verification";
+import { activeWeights } from "@/server/matching/service";
 
 export async function getPublicPlans() {
   "use cache";
@@ -158,4 +159,12 @@ export async function getLlmsEntries() {
     }),
   ]);
   return { courses: courseRows, jobs: jobRows };
+}
+
+/** Active matching weights, shown as an example on /comment-fonctionne-le-matching. */
+export async function getMatchingWeights() {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("matching-weights");
+  return activeWeights(db);
 }

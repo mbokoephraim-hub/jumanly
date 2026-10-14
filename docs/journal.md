@@ -2,6 +2,29 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · Lot 5 : Partenaires, FAQ, Contact, Matching (14 octobre 2026)
+
+- `/partenaires` refaite d'après `docs/maquettes/01-site-public/01-06` : héros Crème avec un tableau
+  de bord fictif (« Fondation Horizon », chiffres qui comptent, barres qui montent) sur panneau Sapin
+  et Fatou ; six institutions ; « Comment ça marche » en Profondeur avec le chemin qui se dessine ;
+  exemple chiffré sur bandeau Lime ; confidentialité ; formulaire (formule choisie par pastilles) ;
+  bandeau « code de licence ».
+- `/faq` refaite d'après `01-07` : recherche en grand dans le héros, menu des thèmes collant qui
+  suit le défilement (rangée de pastilles sur mobile), questions en accordéon par thème, bandeau final.
+- `/contact` refaite d'après `01-08` : héros Profondeur avec Kofi, formulaire qui chevauche le héros,
+  adresses e-mail et encart FAQ.
+- `/comment-fonctionne-le-matching` refaite d'après `01-09` : héros sur le dégradé IA avec l'anneau
+  « 87 % », sommaire en pastilles ; échelle, huit critères, poids (lus dans la configuration active du
+  matching) ; quatre niveaux ; exemple de « Pourquoi ? » fictif ; ce qui n'est jamais utilisé ;
+  contrôle humain ; FAQ ; bandeau final.
+- Textes ajoutés : `partners.hero.visual.*`, `partners.{who,how,privacy,contact}.eyebrow`,
+  `partners.example.*.value/unit`, `faq.hero.eyebrow`, `contact.hero.eyebrow`,
+  `matchingPage.{eyebrow,nav.*,hero.imageAlt,s3.example,s5.example,s5.imageAlt,example.*}`,
+  `matchingPage.faq.eyebrow`, `matchingPage.finalCta.title`.
+- Écart assumé : la liste des huit critères suit les textes (« le type de contrat et la disponibilité »,
+  « la proximité entre votre profil et la description du poste ») et non la maquette.
+- Vérifié : axe WCAG 2.2 AA sur les quatre pages (desktop et mobile), aucun débordement horizontal à 390 px.
+
 ## Refonte visuelle · Lot 4 : Recruteurs et Entreprises (14 octobre 2026)
 
 - `/recruteurs` refaite d'après `docs/maquettes/01-site-public/01-04` : héros Profondeur avec la

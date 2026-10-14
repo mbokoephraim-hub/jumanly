@@ -3,6 +3,7 @@
 import { useActionState, useState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { Icon } from "@/components/brand/icon";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { ButtonLink } from "@/components/ui/button";
@@ -42,8 +43,13 @@ export function ContactForm({
 
   if (state.status === "sent") {
     return (
-      <div className="flex flex-col items-start gap-4 rounded-card bg-blanc p-6" role="status">
-        <h2 className="text-h2">{t("success.title")}</h2>
+      <div
+        className="flex flex-col items-start gap-4 rounded-card bg-blanc p-6 shadow-[0_30px_60px_rgba(11,26,31,0.12)] lg:rounded-[32px] lg:p-10"
+        role="status"
+      >
+        <h2 className="text-2xl leading-[30px] font-semibold tracking-[-0.015em]">
+          {t("success.title")}
+        </h2>
         <p className="text-[15px] leading-6">{t("success.text", { email: state.email })}</p>
         <ButtonLink href="/" variant="secondary">
           {t("success.cta")}
@@ -54,8 +60,14 @@ export function ContactForm({
 
   const isQuote = subject === "quote";
   return (
-    <form action={action} noValidate className="flex flex-col gap-5 rounded-card bg-blanc p-6">
-      <h2 className="text-h2">{t("form.title")}</h2>
+    <form
+      action={action}
+      noValidate
+      className="flex flex-col gap-5 rounded-card bg-blanc p-6 shadow-[0_30px_60px_rgba(11,26,31,0.12)] lg:rounded-[32px] lg:p-10"
+    >
+      <h2 className="text-2xl leading-[30px] font-semibold tracking-[-0.015em]">
+        {t("form.title")}
+      </h2>
       {state.status === "rateLimited" && <Alert tone="error" title={t("form.error.rateLimit")} />}
       {state.status === "failed" && <Alert tone="error" title={t("form.error.send")} />}
       <Select
@@ -167,7 +179,13 @@ export function ContactForm({
         )}
       </div>
       <div>
-        <Button type="submit" loading={pending} size="lg">
+        <Button
+          type="submit"
+          variant="secondary"
+          loading={pending}
+          size="lg"
+          iconAfter={<Icon name="send" />}
+        >
           {pending ? t("form.sending") : t("form.submit")}
         </Button>
       </div>

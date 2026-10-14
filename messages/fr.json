@@ -735,7 +735,33 @@
       "title": "Financez l'avenir professionnel d'un groupe de bénéficiaires",
       "text": "Jumanly Partners permet à une institution de financer l'accès aux formules Starter, Pro ou Premium pour des étudiants, des jeunes, des collaborateurs ou des communautés.",
       "cta": "Nous contacter",
-      "imageAlt": "Tableau de bord partenaire avec des indicateurs d'usage agrégés"
+      "imageAlt": "Tableau de bord partenaire avec des indicateurs d'usage agrégés",
+      "visual": {
+        "orgInitials": "FH",
+        "orgName": "Fondation Horizon",
+        "program": "Programme Cohorte 2026 · Starter · 6 mois",
+        "aggregated": "Agrégé",
+        "licenses": {
+          "label": "Licences activées",
+          "value": "412 / 500"
+        },
+        "courses": {
+          "label": "Formations suivies",
+          "value": "1 268"
+        },
+        "certificates": {
+          "label": "Attestations obtenues",
+          "value": "534"
+        },
+        "applications": {
+          "label": "Candidatures envoyées",
+          "value": "2 041"
+        },
+        "chart": {
+          "title": "Licences activées par mois",
+          "months": "Mai, Juin, Juil., Août, Sept., Oct."
+        }
+      }
     },
     "who": {
       "title": "Pour quelles institutions ?",
@@ -762,7 +788,8 @@
       "public": {
         "title": "Programmes publics",
         "text": "Accompagner l'insertion professionnelle à l'échelle d'un programme."
-      }
+      },
+      "eyebrow": "Institutions"
     },
     "how": {
       "title": "Comment ça marche",
@@ -781,14 +808,29 @@
       "step4": {
         "title": "Vous suivez l'impact",
         "text": "Votre tableau de bord présente des rapports agrégés : licences activées, formations suivies, attestations obtenues, candidatures envoyées, embauches déclarées."
-      }
+      },
+      "eyebrow": "Le modèle"
     },
     "example": {
       "title": "Un exemple concret",
       "text": "Une banque finance l'accès Starter de 500 jeunes pendant six mois.",
       "formula": "500 bénéficiaires × 5 USD × 6 mois = 15 000 USD",
       "note": "Ce montant est une base commerciale indicative, calculée au tarif individuel de référence. Il peut faire l'objet de remises institutionnelles et n'inclut pas d'éventuels coûts de déploiement additionnels.",
-      "formulaAlt": "Exemple : cinq cents bénéficiaires multipliés par cinq dollars multipliés par six mois égalent quinze mille dollars."
+      "formulaAlt": "Exemple : cinq cents bénéficiaires multipliés par cinq dollars multipliés par six mois égalent quinze mille dollars.",
+      "beneficiaries": {
+        "value": "500",
+        "unit": "bénéficiaires"
+      },
+      "price": {
+        "value": "5 USD"
+      },
+      "months": {
+        "value": "6",
+        "unit": "mois"
+      },
+      "total": {
+        "value": "15 000 USD"
+      }
     },
     "privacy": {
       "title": "Des rapports utiles, une vie privée protégée",
@@ -796,7 +838,8 @@
       "point1": "Indicateurs agrégés uniquement.",
       "point2": "Aucun accès aux CV ni aux messages.",
       "point3": "Aucune donnée nominative sans consentement.",
-      "point4": "Export des rapports en PDF."
+      "point4": "Export des rapports en PDF.",
+      "eyebrow": "Confidentialité"
     },
     "references": {
       "title": "Ils financent déjà des licences",
@@ -872,7 +915,8 @@
         "title": "Merci, votre demande est envoyée",
         "text": "Nous vous répondons par e-mail à l'adresse {email}. Pensez à vérifier vos courriers indésirables."
       },
-      "error": "Votre demande n'a pas pu être envoyée. Réessayez ou écrivez-nous à assistant@jumanly.io."
+      "error": "Votre demande n'a pas pu être envoyée. Réessayez ou écrivez-nous à assistant@jumanly.io.",
+      "eyebrow": "Contact"
     },
     "beneficiary": {
       "title": "Vous avez reçu un code de licence ?",
@@ -1245,7 +1289,8 @@
     },
     "hero": {
       "title": "Questions fréquentes",
-      "text": "Vous ne trouvez pas votre réponse ? Écrivez-nous, nous vous répondons par e-mail."
+      "text": "Vous ne trouvez pas votre réponse ? Écrivez-nous, nous vous répondons par e-mail.",
+      "eyebrow": "FAQ"
     },
     "search": {
       "label": "Rechercher une question",
@@ -1350,7 +1395,8 @@
     },
     "hero": {
       "title": "Contactez-nous",
-      "text": "Une question, une suggestion ou un projet ? Remplissez le formulaire ou écrivez-nous directement. Nous répondons par e-mail."
+      "text": "Une question, une suggestion ou un projet ? Remplissez le formulaire ou écrivez-nous directement. Nous répondons par e-mail.",
+      "eyebrow": "Contact"
     },
     "emails": {
       "title": "Nos adresses",
@@ -7576,7 +7622,8 @@
     },
     "s3": {
       "title": "3. Des poids choisis par le recruteur",
-      "body": "Chaque critère compte pour une part du score. Le recruteur peut donner plus de poids à ce qui compte vraiment pour le poste. Ces poids sont affichés dans l'explication du score."
+      "body": "Chaque critère compte pour une part du score. Le recruteur peut donner plus de poids à ce qui compte vraiment pour le poste. Ces poids sont affichés dans l'explication du score.",
+      "example": "Exemple fictif · Analyste de données junior, Baobab Fintech"
     },
     "s4": {
       "title": "4. Quatre niveaux faciles à lire",
@@ -7588,7 +7635,9 @@
     },
     "s5": {
       "title": "5. Un « Pourquoi ? » sur chaque score",
-      "body": "Chaque score s'accompagne d'une explication : les critères remplis, ceux qui le sont en partie, les compétences manquantes, et les formations Jumanly qui peuvent combler l'écart."
+      "body": "Chaque score s'accompagne d'une explication : les critères remplis, ceux qui le sont en partie, les compétences manquantes, et les formations Jumanly qui peuvent combler l'écart.",
+      "example": "Exemple fictif : Grâce Mbuyi, talent Pro à Kinshasa.",
+      "imageAlt": "Exemple d'explication d'un score de 87 %, avec les critères remplis, les compétences manquantes et une formation pour combler l'écart"
     },
     "s6": {
       "title": "6. Ce que nous n'utilisons jamais",
@@ -7625,10 +7674,39 @@
       "q3": "Le recruteur voit-il mon score ?",
       "a3": "Oui, avec la même explication que vous. Il lui sert à prioriser, pas à décider à votre place.",
       "q4": "Qui peut me contacter grâce au matching ?",
-      "a4": "Seuls les recruteurs des offres auxquelles vous postulez, ou ceux dont vous acceptez la demande de mise en relation si votre profil est visible dans le vivier."
+      "a4": "Seuls les recruteurs des offres auxquelles vous postulez, ou ceux dont vous acceptez la demande de mise en relation si votre profil est visible dans le vivier.",
+      "eyebrow": "FAQ"
     },
     "contact": "Une question sur le matching ? Écrivez-nous à assistant@jumanly.io ou infojumanly@gmail.com.",
-    "cta": "Créer mon profil gratuitement"
+    "cta": "Créer mon profil gratuitement",
+    "eyebrow": "Jumanly Intelligence",
+    "nav": {
+      "label": "Sommaire",
+      "s1": "1. Un score de 0 à 100",
+      "s2": "2. Huit critères",
+      "s6": "6. Ce que nous n'utilisons jamais",
+      "s8": "8. Vous pouvez contester"
+    },
+    "hero": {
+      "imageAlt": "Exemple de score de compatibilité : 87 %, très compatible"
+    },
+    "example": {
+      "job": "Analyste de données junior",
+      "company": "Baobab Fintech",
+      "skill": "SQL",
+      "language": "Français",
+      "languageLevel": "C2",
+      "city": "Kinshasa",
+      "workMode": "Hybride",
+      "partialLanguage": "Anglais",
+      "partialExpected": "B2",
+      "partialActual": "B1",
+      "missingSkill": "Power BI",
+      "course": "Tableaux de bord avec Power BI"
+    },
+    "finalCta": {
+      "title": "Sur Jumanly, l'IA recommande et l'humain décide."
+    }
   },
   "notifications": {
     "title": "Notifications",
