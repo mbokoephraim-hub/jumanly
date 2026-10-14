@@ -2,6 +2,37 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Espace connecté animé · lot B : les messages (14 octobre 2026)
+
+Brief : `docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md` § 4. Décisions :
+`docs/decisions/2026-10-14-espace-anime-messages.md`. Captures 1440 et 390 px dans
+`captures/experience-animee-lot-b/` (dossier du projet).
+
+- Cloche (`NotificationBell`) : sans JavaScript, c'est un lien vers `/app/notifications` ; avec,
+  elle ouvre un panneau des 6 dernières notifications (liseré Lime sur les non lues, « Tout
+  marquer comme lu » sans quitter la page). Elle interroge `/api/notifications` toutes les minutes
+  quand l'onglet est visible ; à l'arrivée d'une notification, elle oscille, la pastille rebondit
+  et le nombre roule. Une notification importante (message, entretien, demande de contact ou de
+  document, invitation, paiement) s'affiche aussi en toast.
+- Toasts (`Toaster`, `showToast`) : en haut à droite sur ordinateur, en haut sur téléphone, barre
+  de temps qui se vide et s'arrête au survol, `role="status"`.
+- Cartes de réussite (`SuccessBurst`) : coche qui se dessine et formes de la marque qui s'écartent
+  une fois, pour la candidature envoyée, le paiement confirmé, l'attestation obtenue et la licence
+  activée.
+- Message du jour sur le tableau de bord : une phrase tirée de l'état réel du compte (offres
+  compatibles, leçons restantes ou profil), une fois par jour, repliée après 8 s ou d'un clic.
+- Bienvenue : le personnage entre en glissant, le « j » se dessine, les étapes arrivent en cascade.
+- CV (réponse du propriétaire, 14 octobre) : champ « Téléphone (facultatif) » propre à chaque CV,
+  vide par défaut, imprimé seulement s'il est rempli. C'est le numéro du talent, sans lien avec la
+  règle « aucun numéro de Jumanly » ; il n'entre ni dans le profil ni dans le matching.
+- En-tête mobile : le sélecteur d'espace se raccourcit (texte tronqué) pour que logo, cloche et
+  compte tiennent sur 390 px ; avant, la ligne débordait de quelques pixels.
+
+### Écarts restants
+
+- Pas de bannière « adresse e-mail non vérifiée » : la connexion exige déjà une adresse vérifiée.
+- Pas de flux SSE : interrogation toutes les minutes (repli prévu par le brief).
+
 ## Espace connecté animé · lot A : le socle (14 octobre 2026)
 
 Brief : `docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md`. Décisions :
@@ -64,7 +95,7 @@ Spécification : `docs/modeles-cv/SPECIFICATION-MODELES-CV.md`. Décisions :
 - Export Word : étape C. Envoi d'une photo : pas encore de stockage de fichiers.
 - Nouvelles sections (projets, certificats…) : le modèle sait les afficher, l'éditeur ne les
   propose pas encore.
-- Question ouverte au propriétaire : champ téléphone facultatif sur le CV (par défaut : non).
+- Champ téléphone facultatif sur le CV : ajouté au lot B de l'espace animé (accord du propriétaire).
 
 ## Refonte visuelle · Lot 9 : espace talent, Career (14 octobre 2026)
 

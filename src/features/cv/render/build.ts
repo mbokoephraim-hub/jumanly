@@ -142,6 +142,7 @@ export function documentFromCv(
     contact: [
       ...(place ? [{ value: place }] : []),
       ...(content.info.showEmail && content.info.email ? [{ value: content.info.email }] : []),
+      ...(content.info.phone ? [{ value: content.info.phone }] : []),
     ],
     photoUrl: photoUrl ?? undefined,
     blocks,

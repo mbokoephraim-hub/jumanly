@@ -19,6 +19,7 @@ import {
   TRIAL_DAYS,
 } from "@/server/services/subscriptions";
 import { CheckoutForm, PaymentPoller } from "./checkout-form";
+import { SuccessBurst } from "@/components/motion/success-burst";
 
 /**
  * Paying for a plan (partie 09 § 9.3): summary, method, then the provider's answer. Used by
@@ -86,8 +87,7 @@ export async function CheckoutPanel({
         : "";
       if (payment.status === "succeeded") {
         return (
-          <Alert
-            tone="success"
+          <SuccessBurst
             title={t("checkout.success.title")}
             action={<ButtonLink href={continueHref}>{t("checkout.success.cta")}</ButtonLink>}
           >
@@ -109,7 +109,7 @@ export async function CheckoutPanel({
                 {t("checkout.success.invoice")}
               </a>
             )}
-          </Alert>
+          </SuccessBurst>
         );
       }
       if (payment.status === "pending") {

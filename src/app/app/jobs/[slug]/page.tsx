@@ -27,6 +27,7 @@ import { getJob } from "@/server/queries/public";
 import { contractFilterOf, parseCriteria, remoteFilterOf } from "@/server/services/jobs";
 import { catalogLevelOf, opensCourse } from "@/server/services/learn";
 import { listPublicPlans, planForCatalogLevel } from "@/server/services/plans";
+import { SuccessBurst } from "@/components/motion/success-burst";
 
 export async function generateMetadata({
   params,
@@ -114,22 +115,21 @@ export default async function TalentJobPage({
         {t("talent.jobs.detail.backToJobs")}
       </Link>
       {outcome === "envoyee" && (
-        <Alert
-          tone="success"
+        <SuccessBurst
           title={t("talent.jobs.apply.success.title")}
           action={
-            <div className="flex flex-wrap gap-2">
+            <>
               <ButtonLink href="/app/jobs/candidatures" size="sm">
                 {t("talent.jobs.apply.success.track")}
               </ButtonLink>
               <ButtonLink href="/app/jobs" variant="tertiary" size="sm">
                 {t("talent.jobs.apply.success.continue")}
               </ButtonLink>
-            </div>
+            </>
           }
         >
-          {t("talent.jobs.apply.success.body", { company })}
-        </Alert>
+          <p>{t("talent.jobs.apply.success.body", { company })}</p>
+        </SuccessBurst>
       )}
       {outcome === "deja" && <Alert tone="info" title={t("talent.jobs.apply.already")} />}
       {outcome === "close" && <Alert tone="warning" title={t("talent.jobs.detail.closed")} />}

@@ -29,6 +29,7 @@ import {
   requiredLessons,
 } from "@/server/services/learn";
 import { planForCatalogLevel, talentPlanFor } from "@/server/services/plans";
+import { SuccessBurst } from "@/components/motion/success-burst";
 
 export async function generateMetadata({
   params,
@@ -125,8 +126,7 @@ export default async function LearnCoursePage({
       {param("inscrit") === "1" && <Alert tone="success" title={t("learn.course.enrolled")} />}
       {param("note") === "1" && <Alert tone="success" title={t("learn.player.notes.saved")} />}
       {congrats && certificate && (
-        <Alert
-          tone="success"
+        <SuccessBurst
           title={t("learn.certificates.congrats.title", { firstName: user.firstName ?? user.name })}
           action={
             <ButtonLink href="/app/learn/attestations">
@@ -134,8 +134,8 @@ export default async function LearnCoursePage({
             </ButtonLink>
           }
         >
-          {t("learn.certificates.congrats.body", { courseTitle: course.title })}
-        </Alert>
+          <p>{t("learn.certificates.congrats.body", { courseTitle: course.title })}</p>
+        </SuccessBurst>
       )}
       {param("termine") === "1" && enrollment.completedAt && !congrats && (
         <Alert tone="success" title={t("learn.course.finished")} />

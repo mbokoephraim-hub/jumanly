@@ -43,6 +43,27 @@ export const notificationTypes = [
 ] as const;
 export type NotificationType = (typeof notificationTypes)[number];
 
+/** Types worth a toast when they arrive while the person is on the platform (brief § 4.3). */
+export const importantNotificationTypes: readonly NotificationType[] = [
+  "interviewInvite",
+  "newMessage",
+  "contactRequest",
+  "documentRequest",
+  "orgInvite",
+  "paymentSucceeded",
+  "paymentFailed",
+];
+
+/** Values of a notification's text, from its stored payload. */
+export function notificationValues(payload: unknown): Record<string, string> {
+  return Object.fromEntries(
+    Object.entries(payload && typeof payload === "object" ? payload : {}).map(([key, value]) => [
+      key,
+      String(value ?? ""),
+    ]),
+  );
+}
+
 export async function notify(
   db: PrismaClient,
   input: {
@@ -72,6 +93,15 @@ export async function listNotifications(db: PrismaClient, userId: string, unread
     where: { userId, ...(unreadOnly ? { readAt: null } : {}) },
     orderBy: { createdAt: "desc" },
     take: 100,
+  });
+}
+
+/** The latest notifications, for the bell's panel. */
+export async function latestNotifications(db: PrismaClient, userId: string, take = 6) {
+  return db.notification.findMany({
+    where: { userId, type: { in: [...notificationTypes] } },
+    orderBy: { createdAt: "desc" },
+    take,
   });
 }
 

@@ -87,6 +87,11 @@ const detailsSchema = z.object({
   title: z.string().trim().min(1).max(80),
   summary: z.string().trim().max(1000),
   showEmail: z.literal("on").optional(),
+  phone: z
+    .string()
+    .trim()
+    .max(30)
+    .regex(/^[+\d\s().-]*$/),
 });
 
 export async function updateCvDetails(formData: FormData) {
@@ -96,15 +101,23 @@ export async function updateCvDetails(formData: FormData) {
     title: formData.get("title"),
     summary: formData.get("summary") ?? "",
     showEmail: formData.get("showEmail") ?? undefined,
+    phone: formData.get("phone") ?? "",
   });
-  if (!parsed.success) back(cv.id, { erreur: "1" });
+  if (!parsed.success) {
+    const phone = parsed.error.issues.some((issue) => issue.path[0] === "phone");
+    back(cv.id, { erreur: phone ? "telephone" : "1" });
+  }
   const content = parseCv(cv.content);
   await save(
     cv.id,
     {
       ...content,
       summary: parsed.data.summary,
-      info: { ...content.info, showEmail: parsed.data.showEmail === "on" },
+      info: {
+        ...content.info,
+        showEmail: parsed.data.showEmail === "on",
+        phone: parsed.data.phone,
+      },
     },
     { title: parsed.data.title },
   );

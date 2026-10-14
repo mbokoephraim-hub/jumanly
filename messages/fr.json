@@ -2193,6 +2193,12 @@
         "evening": "Bonsoir {firstName}",
         "first": "Bienvenue sur Jumanly, {firstName}"
       },
+      "welcome": {
+        "matches": "{count, plural, one {# offre correspond à votre profil.} other {# offres correspondent à votre profil.}}",
+        "course": "Reprenez « {courseTitle} » : {count, plural, one {il vous reste # leçon.} other {il vous reste # leçons.}}",
+        "profile": "Votre profil est complet à {percent} %. Quelques minutes suffisent pour le compléter.",
+        "close": "Fermer le message du jour"
+      },
       "nextStep": {
         "title": "Votre prochaine étape",
         "completeProfile": "Complétez votre profil pour être mieux vu des recruteurs.",
@@ -3700,13 +3706,18 @@
       "info": {
         "contact": {
           "text": "Coordonnées affichées",
-          "hint": "E-mail, ville et liens. Évitez d'indiquer votre âge, votre situation familiale ou votre photo si ce n'est pas demandé."
+          "hint": "E-mail, téléphone, ville et liens. Évitez d'indiquer votre âge, votre situation familiale ou votre photo si ce n'est pas demandé."
         },
         "photo": {
           "text": "Afficher ma photo sur le CV",
           "hint": "Facultatif. De nombreux recruteurs préfèrent un CV sans photo."
         },
-        "showEmail": "Afficher mon e-mail sur le CV"
+        "showEmail": "Afficher mon e-mail sur le CV",
+        "phone": {
+          "label": "Téléphone (facultatif)",
+          "hint": "Affiché seulement sur ce CV, à côté de votre e-mail. Laissez vide pour ne pas l'afficher.",
+          "invalid": "Numéro de téléphone non valide : chiffres, espaces, +, tirets et parenthèses seulement."
+        }
       },
       "bullet": {
         "add": "Ajouter une réalisation"
@@ -8076,6 +8087,11 @@
     },
     "loading": "Chargement des notifications…",
     "allRead": "Toutes les notifications sont marquées comme lues.",
+    "panel": {
+      "title": "Dernières notifications",
+      "seeAll": "Voir toutes les notifications",
+      "close": "Fermer les notifications"
+    },
     "item": {
       "newApplication": "Nouvelle candidature de {candidateName} pour « {jobTitle} »",
       "statusChange": "Votre candidature à « {jobTitle} » chez {company} est passée à l'étape « {stage} »",

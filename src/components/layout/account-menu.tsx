@@ -39,7 +39,7 @@ export function AccountMenu({
     plan: account.planName,
   });
   return (
-    <details className="relative">
+    <details className="relative shrink-0">
       <summary
         aria-label={t("account.menu.aria")}
         className={cx(

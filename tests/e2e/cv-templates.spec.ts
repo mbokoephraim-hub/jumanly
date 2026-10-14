@@ -179,6 +179,18 @@ test.describe("modèles de CV : parcours", () => {
     await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
     const id = new URL(page.url()).pathname.split("/").pop()!;
 
+    // Optional phone, on this CV only: kept once saved, refused when it is not a number (its place in
+    // the document is checked by the unit tests).
+    const details = page.locator("form").filter({ has: page.locator("#cv-phone") });
+    await details.locator("#cv-phone").fill("abc");
+    await details.getByRole("button").last().click();
+    await expect(page.getByText("Numéro de téléphone non valide")).toBeVisible();
+    await details.locator("#cv-phone").fill("+243 970 000 000");
+    await details.getByRole("button").last().click();
+    await expect(page).toHaveURL(/ok=1/);
+    await page.goto(`/app/career/cv/${id}`);
+    await expect(page.locator("#cv-phone")).toHaveValue("+243 970 000 000");
+
     await page.goto(`/app/career/cv/modeles?cv=${id}&modele=moderne`);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Choisir un modèle");
     await expectAccessible(page);

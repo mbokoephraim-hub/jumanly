@@ -142,7 +142,7 @@ export default async function CvEditorPage({
         ? t("template.locked", {
             plan: talentPlanFor(plans, "career.cv.templates.access", ["pro"]),
           })
-        : query.erreur === "couleur"
+        : query.erreur === "couleur" || query.erreur === "telephone"
           ? null
           : query.export === "overMax"
             ? t("pages.overMax", { max: MAX_PAGES })
@@ -453,6 +453,17 @@ export default async function CvEditorPage({
                       defaultChecked={content.info.showEmail}
                       label={t("info.showEmail")}
                       hint={t("info.contact.hint")}
+                    />
+                    <TextField
+                      id="cv-phone"
+                      name="phone"
+                      type="tel"
+                      autoComplete="tel"
+                      label={t("info.phone.label")}
+                      hint={t("info.phone.hint")}
+                      defaultValue={content.info.phone}
+                      maxLength={30}
+                      error={query.erreur === "telephone" ? t("info.phone.invalid") : undefined}
                     />
                     <button type="submit" className={pillClass("dark", "sm", "self-start")}>
                       {tProfile("save")}

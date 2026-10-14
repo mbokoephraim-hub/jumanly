@@ -1833,6 +1833,10 @@ Conventions :
 | `talent.dashboard.greeting.morning` | Bonjour {firstName} |
 | `talent.dashboard.greeting.evening` | Bonsoir {firstName} |
 | `talent.dashboard.greeting.first` | Bienvenue sur Jumanly, {firstName} |
+| `talent.dashboard.welcome.matches` | {count, plural, one {# offre correspond à votre profil.} other {# offres correspondent à votre profil.}} |
+| `talent.dashboard.welcome.course` | Reprenez « {courseTitle} » : {count, plural, one {il vous reste # leçon.} other {il vous reste # leçons.}} |
+| `talent.dashboard.welcome.profile` | Votre profil est complet à {percent} %. Quelques minutes suffisent pour le compléter. |
+| `talent.dashboard.welcome.close` | Fermer le message du jour |
 | `talent.dashboard.nextStep.title` | Votre prochaine étape |
 | `talent.dashboard.nextStep.completeProfile` | Complétez votre profil pour être mieux vu des recruteurs. |
 | `talent.dashboard.nextStep.importCv` | Importez ou créez votre CV en quelques minutes. |
@@ -2764,7 +2768,7 @@ Conventions :
 | `career.cv.section.moveDown` | Descendre |
 | `career.cv.section.completion` | {percent} % |
 | `career.cv.info.contact.text` | Coordonnées affichées |
-| `career.cv.info.contact.hint` | E-mail, ville et liens. Évitez d'indiquer votre âge, votre situation familiale ou votre photo si ce n'est pas demandé. |
+| `career.cv.info.contact.hint` | E-mail, téléphone, ville et liens. Évitez d'indiquer votre âge, votre situation familiale ou votre photo si ce n'est pas demandé. |
 | `career.cv.info.photo.text` | Afficher ma photo sur le CV |
 | `career.cv.info.photo.hint` | Facultatif. De nombreux recruteurs préfèrent un CV sans photo. |
 | `career.cv.bullet.add` | Ajouter une réalisation |
@@ -2928,6 +2932,9 @@ Conventions :
 | `career.cv.export.docxNote` | La version Word est simplifiée sur une colonne pour rester modifiable facilement. |
 | `career.cv.template.name.compact` | Compact |
 | `career.cv.info.showEmail` | Afficher mon e-mail sur le CV |
+| `career.cv.info.phone.label` | Téléphone (facultatif) |
+| `career.cv.info.phone.hint` | Affiché seulement sur ce CV, à côté de votre e-mail. Laissez vide pour ne pas l'afficher. |
+| `career.cv.info.phone.invalid` | Numéro de téléphone non valide : chiffres, espaces, +, tirets et parenthèses seulement. |
 | `career.cv.fromProfileHint` | Le contenu des sections vient de votre profil. Modifiez-le dans votre profil, puis touchez « Remplir depuis mon profil ». |
 | `career.cv.fromProfileDone` | CV mis à jour à partir de votre profil. |
 | `career.cv.limit` | Vous pouvez avoir jusqu'à {max} CV. |
@@ -6756,6 +6763,9 @@ Conventions :
 | `notifications.empty.unread` | Aucune notification non lue. |
 | `notifications.loading` | Chargement des notifications… |
 | `notifications.allRead` | Toutes les notifications sont marquées comme lues. |
+| `notifications.panel.title` | Dernières notifications |
+| `notifications.panel.seeAll` | Voir toutes les notifications |
+| `notifications.panel.close` | Fermer les notifications |
 | `notifications.item.newApplication` | Nouvelle candidature de {candidateName} pour « {jobTitle} » |
 | `notifications.item.statusChange` | Votre candidature à « {jobTitle} » chez {company} est passée à l'étape « {stage} » |
 | `notifications.item.notSelected` | {company} n'a pas retenu votre candidature à « {jobTitle} » |
