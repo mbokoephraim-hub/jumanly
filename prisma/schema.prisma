@@ -188,6 +188,7 @@ model Job {
   stages            PipelineStage[]
   applications      Application[]
   savedBy           SavedJob[]
+  matchResults      MatchResult[]
   createdAt         DateTime        @default(now())
   updatedAt         DateTime        @updatedAt
 
@@ -484,6 +485,10 @@ model User {
   quizAttempts        QuizAttempt[]
   lessonNotes         LessonNote[]
   savedCourses        SavedCourse[]
+  aiUsages            AiUsage[]
+  aiSuggestions       AiSuggestion[]
+  matchDisputes       MatchDispute[]                @relation("DisputeAuthor")
+  progressPlan        ProgressPlan?
   createdAt           DateTime                  @default(now())
   updatedAt           DateTime                  @updatedAt
 
@@ -744,6 +749,9 @@ model TalentProfile {
   languages         Json              @default("[]")
   /// 0 to 100, recomputed on every profile change.
   completeness      Int               @default(0)
+  /// « Calcul de compatibilité » (Paramètres > Confidentialité). Off: no score anywhere.
+  matchingEnabled   Boolean           @default(true)
+  matchResults      MatchResult[]
   skills            ProfileSkill[]
   experiences       Experience[]
   educations        Education[]
@@ -901,6 +909,9 @@ model Application {
   /// Copy of the CV as sent (title, template, content): later edits do not change it.
   cvSnapshot   Json?
   source       ApplicationSource  @default(direct)
+  /// Score and explanation shown when the talent applied (partie 08 § 8.10), frozen.
+  matchScore       Int?
+  matchExplanation Json?
   viewedAt     DateTime?
   events       ApplicationEvent[]
   conversation Conversation?
@@ -1093,4 +1104,134 @@ model Report {
 
   @@unique([reporterId, targetType, targetId])
   @@index([status, createdAt])
+}
+
+// ─── Jumanly Intelligence (partie 08) ───────────────────────────
+
+/// Versioned weights of the eight criteria, edited in /admin/ia. The newest active one is used.
+model MatchingWeights {
+  id          String   @id @default(cuid(2))
+  version     String   @unique
+  /// { skills_required: 35, skills_preferred: 10, … }
+  weights     Json
+  activeFrom  DateTime @default(now())
+  createdById String?
+  note        String?
+  createdAt   DateTime @default(now())
+}
+
+/// Last computed score of a profile for a job, with its explanation (cache, recomputed when stale).
+model MatchResult {
+  id             String        @id @default(cuid(2))
+  profileId      String
+  profile        TalentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  jobId          String
+  job            Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  score          Int
+  band           String
+  explanation    Json
+  weightsVersion String
+  computedAt     DateTime      @default(now())
+
+  @@unique([profileId, jobId])
+  @@index([jobId, score])
+}
+
+/// Embeddings for the semantic criterion (pgvector). Written and read with SQL.
+model Embedding {
+  id          String                 @id @default(cuid(2))
+  /// profile or job
+  subjectType String
+  subjectId   String
+  model       String
+  contentHash String
+  vector      Unsupported("vector")?
+  updatedAt   DateTime               @updatedAt
+
+  @@unique([subjectType, subjectId])
+}
+
+/// Every call to a language model (partie 03): feature, model, tokens, estimated cost.
+model AiUsage {
+  id             String   @id @default(cuid(2))
+  userId         String?
+  user           User?    @relation(fields: [userId], references: [id], onDelete: SetNull)
+  organizationId String?
+  /// cv_parse, cv_coach, diagnostic, progress_plan, match_explain, hire_cv_analysis…
+  feature        String
+  model          String
+  inputTokens    Int      @default(0)
+  outputTokens   Int      @default(0)
+  costMicroUsd   Int      @default(0)
+  planCode       String?
+  /// ok, invalid (output rejected by validation), error
+  status         String   @default("ok")
+  createdAt      DateTime @default(now())
+
+  @@index([feature, createdAt])
+  @@index([userId, createdAt])
+}
+
+enum SuggestionStatus {
+  pending
+  applied
+  ignored
+}
+
+/// A suggestion of the CV coach (or the CV import): the talent applies or ignores it.
+model AiSuggestion {
+  id         String           @id @default(cuid(2))
+  userId     String
+  user       User             @relation(fields: [userId], references: [id], onDelete: Cascade)
+  feature    String
+  documentId String?
+  /// { section, before, after, why, kind… }
+  payload    Json
+  status     SuggestionStatus @default(pending)
+  createdAt  DateTime         @default(now())
+  updatedAt  DateTime         @updatedAt
+
+  @@index([userId, feature, status])
+}
+
+enum DisputeStatus {
+  open
+  in_review
+  corrected
+  confirmed
+}
+
+/// « Signaler une erreur » on a score: a person from Jumanly checks the calculation.
+model MatchDispute {
+  id              String        @id @default(cuid(2))
+  userId          String
+  user            User          @relation("DisputeAuthor", fields: [userId], references: [id], onDelete: Cascade)
+  jobId           String
+  applicationId   String?
+  /// skill, experience, education, language, location, other
+  reason          String
+  details         String
+  notifyRecruiter Boolean       @default(false)
+  scoreBefore     Int
+  scoreAfter      Int?
+  status          DisputeStatus @default(open)
+  resolution      String?
+  resolvedById    String?
+  createdAt       DateTime      @default(now())
+  resolvedAt      DateTime?
+
+  @@index([status, createdAt])
+  @@index([userId])
+}
+
+/// Individual progress plan (Starter and more): steps the talent can tick, edit or remove.
+model ProgressPlan {
+  id        String   @id @default(cuid(2))
+  userId    String   @unique
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  goal      String
+  /// [{ id, title, detail, kind: course|skill|profile|action, href?, done }]
+  steps     Json     @default("[]")
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 }

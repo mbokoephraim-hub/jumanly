@@ -7,6 +7,7 @@ import { isInternalEnv } from "../../src/lib/env";
 import { createSeedClient } from "./client";
 import { seedAccounts } from "./accounts";
 import { seedDemo } from "./demo";
+import { seedIntelligence } from "./intelligence";
 import { seedPlans } from "./plans";
 import { seedSkills } from "./skills";
 
@@ -15,6 +16,7 @@ async function main() {
   try {
     await seedPlans(db);
     await seedSkills(db);
+    await seedIntelligence(db);
     if (isInternalEnv()) {
       await seedDemo(db);
       await seedAccounts(db);

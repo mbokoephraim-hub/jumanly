@@ -1,5 +1,5 @@
 /** Countries offered in the forms: African countries first, then the main diaspora countries. ISO 3166-1 codes. */
-const african = [
+export const african = [
   "DZ",
   "AO",
   "BJ",
@@ -55,7 +55,7 @@ const african = [
   "ZM",
   "ZW",
 ];
-const others = ["BE", "CA", "FR", "DE", "CH", "GB", "US"];
+export const others = ["BE", "CA", "FR", "DE", "CH", "GB", "US"];
 
 /**
  * Country names in French, sorted, for a select field. The value is the name (contact forms,
