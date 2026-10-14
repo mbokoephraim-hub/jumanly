@@ -66,23 +66,27 @@ test("le profil et une leçon déjà ouverte sont gardés pour la lecture hors l
   await page.goto(lesson!);
   await page.goto("/app/notifications");
 
+  // A late navigation (the worker taking over, a redirect) can destroy the page while it is read:
+  // that read returns null and the poll tries again.
   const kept = () =>
-    page.evaluate(async () => {
-      const pages = await caches.open("jm-v1-pages");
-      const files = await caches.open("jm-v1-static");
-      return {
-        pages: (await pages.keys()).map((request) => new URL(request.url).pathname),
-        offline: Boolean(await files.match("/hors-ligne")),
-      };
-    });
+    page
+      .evaluate(async () => {
+        const pages = await caches.open("jm-v1-pages");
+        const files = await caches.open("jm-v1-static");
+        return {
+          pages: (await pages.keys()).map((request) => new URL(request.url).pathname),
+          offline: Boolean(await files.match("/hors-ligne")),
+        };
+      })
+      .catch(() => null);
   await expect
-    .poll(async () => (await kept()).pages.sort())
+    .poll(async () => (await kept())?.pages.sort())
     .toEqual(["/app/profil", lesson!.split("?")[0]!].sort());
-  expect((await kept()).offline).toBe(true);
+  await expect.poll(async () => (await kept())?.offline).toBe(true);
 
   // Signing out empties the kept pages: the next person on the device sees nothing.
   await page.goto("/connexion?deconnecte=1");
-  await expect.poll(async () => (await kept()).pages).toEqual([]);
+  await expect.poll(async () => (await kept())?.pages).toEqual([]);
   await context.close();
 });
 
