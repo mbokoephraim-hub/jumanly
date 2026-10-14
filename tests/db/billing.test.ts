@@ -180,8 +180,8 @@ describe("rappels, délai de grâce et retour au gratuit (partie 09 § 9.2)", ()
     await refreshPayment(db, provider, await pay(subject, "talent_pro"));
     const current = await liveSubscription(db, subject);
     const sevenDaysBefore = new Date(current!.currentPeriodEnd.getTime() - 6.5 * DAY);
-    await runBillingJobs(db, provider, sevenDaysBefore);
-    await runBillingJobs(db, provider, sevenDaysBefore);
+    await runBillingJobs(db, provider, sevenDaysBefore, [subject.id]);
+    await runBillingJobs(db, provider, sevenDaysBefore, [subject.id]);
     expect(await db.notification.count({ where: { userId: subject.id, type: "renewalDue" } })).toBe(
       1,
     );
@@ -225,7 +225,7 @@ describe("rappels, délai de grâce et retour au gratuit (partie 09 § 9.2)", ()
 
     // Grace: access kept, status past_due.
     const inGrace = new Date(end + DAY);
-    await runBillingJobs(db, provider, inGrace);
+    await runBillingJobs(db, provider, inGrace, [org.id]);
     invalidate();
     expect((await resolvePlan(db, subject, inGrace))?.planCode).toBe("rh_pro");
     expect((await db.subscription.findUniqueOrThrow({ where: { id: current!.id } })).status).toBe(
@@ -235,8 +235,8 @@ describe("rappels, délai de grâce et retour au gratuit (partie 09 § 9.2)", ()
 
     // Grace over: free plan, one offer kept, the others back to draft, one seat.
     const after = new Date(end + (GRACE_DAYS + 1) * DAY);
-    await runBillingJobs(db, provider, after);
-    await runBillingJobs(db, provider, after);
+    await runBillingJobs(db, provider, after, [org.id]);
+    await runBillingJobs(db, provider, after, [org.id]);
     invalidate();
     expect((await resolvePlan(db, subject, after))?.planCode).toBe("rh_free");
     const rows = await db.job.findMany({ where: { organizationId: org.id } });

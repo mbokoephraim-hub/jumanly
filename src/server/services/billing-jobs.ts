@@ -66,7 +66,10 @@ export async function runBillingJobs(
   db: PrismaClient,
   provider: PaymentProvider | null,
   now = new Date(),
+  /** Limits the run to these subjects (tests run with a moved clock on a shared database). */
+  only?: string[],
 ): Promise<BillingJobsReport> {
+  const scope = only ? { subjectId: { in: only } } : {};
   const report: BillingJobsReport = {
     expiredPayments: 0,
     reminders: 0,
@@ -76,7 +79,11 @@ export async function runBillingJobs(
 
   // 1. Mobile Money requests without answer: ask the provider, expire after 15 minutes.
   const stale = await db.payment.findMany({
-    where: { status: "pending", createdAt: { lt: new Date(now.getTime() - PAYMENT_EXPIRY_MS) } },
+    where: {
+      ...scope,
+      status: "pending",
+      createdAt: { lt: new Date(now.getTime() - PAYMENT_EXPIRY_MS) },
+    },
     select: { id: true, provider: true },
   });
   for (const payment of stale) {
@@ -87,7 +94,11 @@ export async function runBillingJobs(
     if (updated?.status === "expired") report.expiredPayments++;
   }
 
-  const paid = { source: { not: "license" as const }, plan: { priceCents: { gt: 0 } } };
+  const paid = {
+    ...scope,
+    source: { not: "license" as const },
+    plan: { priceCents: { gt: 0 } },
+  };
 
   // 2. Reminders before the end of a paid period (not for a cancellation the user asked for).
   const ending = await db.subscription.findMany({
@@ -169,6 +180,7 @@ export async function runBillingJobs(
   // 4. Grace over (or trial, cancellation over): back to the free plan, nothing deleted.
   const over = await db.subscription.findMany({
     where: {
+      ...scope,
       source: { not: "license" },
       OR: [
         {
