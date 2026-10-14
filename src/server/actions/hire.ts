@@ -20,6 +20,7 @@ import {
   saveJob,
 } from "@/server/services/hire";
 import { hireMemberships, partnerMemberships } from "@/server/services/organization";
+import { reportError } from "@/server/observability";
 
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
 
@@ -148,7 +149,7 @@ export async function moveApplicationAction(formData: FormData) {
     () => moveApplication(db, ctx, applicationId, stageId),
     "/app/hire/offres",
   );
-  if (moved) await onStageChanged(applicationId, moved.to).catch((error) => console.error(error));
+  if (moved) await onStageChanged(applicationId, moved.to).catch((error) => reportError(error));
   back(formData, applicationId, moved ? `ok=deplacee` : "");
 }
 
@@ -176,7 +177,7 @@ export async function rejectApplicationAction(formData: FormData) {
         body: message,
       }).catch(() => undefined);
     }
-    await onStageChanged(applicationId, moved.to, message).catch((error) => console.error(error));
+    await onStageChanged(applicationId, moved.to, message).catch((error) => reportError(error));
   }
   redirect(`/app/hire/candidats/${applicationId}?ok=decision`);
 }
@@ -221,6 +222,6 @@ export async function requestDocumentAction(formData: FormData) {
     ...sent,
     senderName: user.name,
     documentRequest: { name: parsed.data.name, due },
-  }).catch((error) => console.error(error));
+  }).catch((error) => reportError(error));
   redirect(`/app/hire/candidats/${applicationId}?ok=document`);
 }

@@ -19,6 +19,7 @@ import {
 import { notify } from "@/server/services/notifications";
 import { DEFAULT_WEIGHTS, scoreMatch, withSkill } from "./score";
 import { criterionKeys, type CriterionKey, type MatchExplanation, type Weights } from "./types";
+import { reportError } from "@/server/observability";
 
 // ─── Weights ─────────────────────────────────────────────────────────────────
 
@@ -92,7 +93,7 @@ export async function embeddingsFor(
       }
     }
   } catch (error) {
-    console.error("Embeddings indisponibles, critère sémantique ignoré :", error);
+    void reportError(error, { message: "Embeddings indisponibles, critère sémantique ignoré" });
   }
   return result;
 }

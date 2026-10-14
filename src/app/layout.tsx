@@ -1,6 +1,7 @@
 import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
-import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
@@ -26,10 +27,18 @@ export const viewport: Viewport = {
   themeColor: "#0F3F37",
 };
 
-export default function RootLayout({ children }: LayoutProps<"/">) {
+export default async function RootLayout({ children }: LayoutProps<"/">) {
+  // Only the error page texts go to the browser: the error page is the one client screen that
+  // cannot receive its texts from the server.
+  const { system } = await getMessages();
+  const errorTexts = {
+    system: { 500: system["500"], error: { reference: system.error.reference } },
+  };
   return (
     <html lang="fr" className={`${sora.variable} antialiased`}>
-      <body className="min-h-dvh">{children}</body>
+      <body className="min-h-dvh">
+        <NextIntlClientProvider messages={errorTexts}>{children}</NextIntlClientProvider>
+      </body>
     </html>
   );
 }
