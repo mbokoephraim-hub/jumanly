@@ -2,6 +2,32 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · Lot 2 : accueil et à propos (14 octobre 2026)
+
+- `/` et `/a-propos` refaites d'après `docs/maquettes/01-site-public/01-01` et `01-02` (desktop
+  1440 px et mobile 390 px) : sections alternées Crème, Blanc, Sapin dans un conteneur de 1200 px,
+  titres centrés sur desktop et alignés à gauche sur mobile, cartes de 28 px, personnages illustrés.
+- Nouveaux blocs réutilisables pour les pages publiques suivantes : `src/components/site/marketing.tsx`
+  (section, tête de section, tuile d'icône, pastille numérotée, accordéon FAQ, bandeau final Lime,
+  motifs et formes de la marque) et `src/components/site/public-cards.tsx` (carte de formation à
+  couverture teintée, carte d'offre publique avec « Postuler gratuitement »).
+- Accueil : 4 formations et 4 offres (2 de chaque sur mobile). La carte de formation affiche le
+  formateur et le nombre de modules ; la carte d'offre affiche la fourchette de salaire quand le
+  recruteur l'a donnée (`latestJobs` lit `salaryMin`/`salaryMax`). Prix des familles lus en base.
+- Héros de l'accueil : aperçus du tableau de bord (desktop et téléphone) repris des maquettes,
+  en WebP dans `public/apercus/` (90 Ko et 29 Ko).
+- Textes ajoutés dans `textes/textes-application.md` (surtitres des sections, étiquettes du visuel
+  du héros, étiquettes « Se former / Échanger / Recruter », étapes du lancement).
+- Accessibilité : les surtitres et liens verts utilisent Feuille foncé (#22662F) au lieu de Feuille
+  (#3DA14F), trop clair pour un texte de petite taille sur fond clair (même choix qu'au lot 1).
+
+### Dettes et points ouverts
+
+- Les aperçus du héros sont les images des maquettes (données fictives « Grâce »). À remplacer par
+  de vraies captures de l'application quand l'espace talent aura été refait (lot correspondant).
+- Les anciens blocs `src/components/site/sections.tsx` restent utilisés par les autres pages
+  publiques jusqu'à leur lot.
+
 ## Refonte visuelle · Lot 1 : socle du design system (14 octobre 2026)
 
 - Les maquettes `docs/maquettes/` font désormais foi pour le visuel ; `CLAUDE.md` le dit dans

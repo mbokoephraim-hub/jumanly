@@ -176,11 +176,18 @@
       "reassurance1": "Inscription gratuite",
       "reassurance2": "Candidatures toujours gratuites",
       "reassurance3": "Mobile Money et carte",
-      "imageAlt": "Aperçu du tableau de bord Jumanly sur ordinateur et sur téléphone : progression des formations, candidatures en cours et offres compatibles."
+      "imageAlt": "Aperçu du tableau de bord Jumanly sur ordinateur et sur téléphone : progression des formations, candidatures en cours et offres compatibles.",
+      "visual": {
+        "badge": "Attestation obtenue",
+        "matchTitle": "Analyste de données junior",
+        "matchText": "87 % compatible · Pourquoi ?",
+        "matchShort": "87 % compatible"
+      }
     },
     "audiences": {
       "title": "Une plateforme, trois façons d'avancer",
       "subtitle": "Que vous cherchiez un emploi, que vous recrutiez seul ou en équipe, Jumanly s'adapte à votre situation.",
+      "eyebrow": "Pour qui ?",
       "talents": {
         "label": "Jumanly for Talents",
         "title": "Vous construisez votre carrière",
@@ -203,6 +210,7 @@
     "journey": {
       "title": "De la formation au recrutement, un parcours continu",
       "subtitle": "Chaque étape nourrit la suivante. Ce que vous apprenez enrichit votre profil, et votre profil vous rapproche des bonnes offres.",
+      "eyebrow": "Le parcours",
       "step1": {
         "number": "1",
         "title": "Se former",
@@ -227,6 +235,7 @@
     "modules": {
       "title": "Cinq services connectés",
       "subtitle": "Jumanly n'est pas une juxtaposition d'outils. Chaque service est relié à votre profil, à vos offres et à vos candidatures.",
+      "eyebrow": "Les modules",
       "learn": {
         "name": "Jumanly Learn",
         "text": "Formations vidéo, supports pédagogiques, exercices, évaluations et attestations.",
@@ -260,12 +269,14 @@
     "trainings": {
       "title": "Des formations pour gagner en employabilité",
       "subtitle": "Commencez par une sélection de formations gratuites, puis accédez à des parcours plus complets selon votre forfait.",
+      "eyebrow": "Jumanly Learn",
       "cta": "Voir toutes les formations",
       "empty": "Les premières formations arrivent bientôt. Créez votre compte pour être prévenu de leur ouverture."
     },
     "jobs": {
       "title": "Les dernières opportunités",
       "subtitle": "Emplois, stages et missions publiés par des recruteurs et des entreprises. Postuler est toujours gratuit.",
+      "eyebrow": "Jumanly Jobs",
       "cta": "Voir toutes les offres",
       "empty": "Les premières offres seront bientôt publiées. Créez votre compte pour préparer votre profil dès maintenant.",
       "recruiterCta": "Vous recrutez ? Publiez une offre gratuitement"
@@ -273,6 +284,7 @@
     "pricing": {
       "title": "Commencez gratuitement, évoluez à votre rythme",
       "subtitle": "Chaque famille de forfaits démarre par une formule gratuite. Les formules payantes ajoutent des outils, jamais une condition pour postuler.",
+      "eyebrow": "Forfaits",
       "talents": {
         "name": "Jumanly for Talents",
         "price": "De 0 à {price} USD/mois",
@@ -299,6 +311,7 @@
     "trust": {
       "title": "Une plateforme qui vous respecte",
       "subtitle": "Nos engagements sont inscrits dans le fonctionnement même de Jumanly.",
+      "eyebrow": "Nos engagements",
       "free": {
         "title": "Candidatures toujours gratuites",
         "text": "Quel que soit votre forfait, postuler ne coûte rien. Les profils Free sont recrutés au même titre que les abonnés."
@@ -326,6 +339,7 @@
     },
     "faq": {
       "title": "Questions fréquentes",
+      "eyebrow": "FAQ",
       "q1": "Jumanly est-il gratuit ?",
       "a1": "Oui, vous pouvez créer votre compte, construire votre profil, consulter les offres et postuler gratuitement. Des formules payantes ajoutent des formations et des outils de préparation.",
       "q2": "Dois-je payer pour postuler à une offre ?",
@@ -352,7 +366,12 @@
       "eyebrow": "À propos",
       "title": "Relier les compétences aux opportunités",
       "text": "Jumanly est une plateforme numérique qui réunit la formation professionnelle, le développement de carrière, la découverte d'opportunités et la gestion du recrutement au sein d'un même écosystème.",
-      "imageAlt": "Talents et recruteurs reliés par la plateforme Jumanly"
+      "imageAlt": "Talents et recruteurs reliés par la plateforme Jumanly",
+      "chips": {
+        "learn": "Se former",
+        "exchange": "Échanger",
+        "recruit": "Recruter"
+      }
     },
     "vision": {
       "title": "Notre vision",
@@ -364,6 +383,7 @@
     },
     "positioning": {
       "title": "À la croisée de trois univers",
+      "eyebrow": "Positionnement",
       "intro": "Notre ambition n'est pas de proposer plusieurs services sur un même site, mais de les connecter pour créer une expérience professionnelle continue.",
       "edtech": {
         "title": "EdTech",
@@ -384,6 +404,7 @@
     },
     "values": {
       "title": "Nos valeurs",
+      "eyebrow": "Ce qui nous guide",
       "access": {
         "title": "Accessibilité",
         "text": "Chacun doit pouvoir construire une présence professionnelle, même sans capacité financière. C'est pourquoi le compte, le profil et les candidatures sont gratuits."
@@ -407,12 +428,17 @@
     },
     "growthlab": {
       "title": "Une initiative de The Growth Lab",
+      "eyebrow": "The Growth Lab",
       "text": "Jumanly est développée et portée par The Growth Lab, qui assure la direction stratégique du produit, l'organisation des contenus, la politique commerciale, la gestion des partenariats et la supervision de la plateforme.",
       "signature": "Une plateforme développée par The Growth Lab"
     },
     "launch": {
       "title": "Une plateforme construite avec ses utilisateurs",
-      "text": "Jumanly s'ouvre par étapes : un test fermé, puis une bêta communautaire avec des talents et des employeurs, avant l'ouverture progressive au public. Les retours des premiers utilisateurs façonnent chaque version."
+      "text": "Jumanly s'ouvre par étapes : un test fermé, puis une bêta communautaire avec des talents et des employeurs, avant l'ouverture progressive au public. Les retours des premiers utilisateurs façonnent chaque version.",
+      "eyebrow": "Lancement",
+      "step1": "Test fermé",
+      "step2": "Bêta communautaire",
+      "step3": "Ouverture progressive au public"
     },
     "cta": {
       "title": "Envie de nous rejoindre ou de collaborer ?",
