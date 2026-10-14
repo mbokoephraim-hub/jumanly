@@ -1,37 +1,7 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test } from "@playwright/test";
 import { expectAccessible } from "./a11y";
-import { lastCode, lastLink } from "./outbox";
-import { demo, logIn, testEmail } from "./session";
-
-const PASSWORD = "kinshasa-2026";
-
-/** Steps 1 to 4 of the sign-up (partie 06 § 6.1), from a plan chosen on /tarifs. */
-async function signUpFromPricing(page: Page, planButton: string, email: string) {
-  await page.goto("/tarifs");
-  // The link is followed by its address: on a phone the cookie banner may cover it.
-  const href = await page
-    .getByRole("link", { name: planButton, exact: true })
-    .first()
-    .getAttribute("href");
-  await page.goto(href!);
-  await expect(page).toHaveURL(/\/inscription/);
-  await page.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/\/inscription\/forfait/);
-  await page.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/\/inscription\/compte/);
-  await page.locator('input[name="firstName"]').fill("Awa");
-  await page.locator('input[name="lastName"]').fill("Fictive");
-  await page.locator('input[name="email"]').fill(email);
-  await page.locator('input[name="password"]').fill(PASSWORD);
-  await page.locator('select[name="country"]').selectOption("CD");
-  await page.locator('input[name="city"]').fill("Kinshasa");
-  for (const name of ["terms", "ai", "age"]) await page.locator(`input[name="${name}"]`).check();
-  const since = Date.now();
-  await page.getByRole("button", { name: "Créer mon compte" }).click();
-  await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-  await page.locator('input[name="code"]').fill(await lastCode(email, since));
-  await page.getByRole("button", { name: "Vérifier" }).click();
-}
+import { lastLink } from "./outbox";
+import { demo, logIn, signUpFromPricing, testEmail } from "./session";
 
 test.describe("inscription avec forfait", () => {
   test("Pro choisi sur /tarifs, payé (factice), arrive dans l'espace avec Pro actif", async ({

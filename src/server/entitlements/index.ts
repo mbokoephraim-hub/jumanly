@@ -48,7 +48,7 @@ export function invalidate(subject?: Subject) {
 }
 
 /** Plan family of the free fallback: a person is a talent; an organization starts with RH Free. */
-async function freeFamily(db: PrismaClient, subject: Subject): Promise<PlanFamily | null> {
+export async function freeFamily(db: PrismaClient, subject: Subject): Promise<PlanFamily | null> {
   if (subject.type === "user") return "talent";
   const org = await db.organization.findUnique({
     where: { id: subject.id },
@@ -56,6 +56,17 @@ async function freeFamily(db: PrismaClient, subject: Subject): Promise<PlanFamil
   });
   if (!org) return null;
   return org.type === "partner" ? "partner" : "rh";
+}
+
+/** The free plan a subject falls back to (Free, RH Free…), with its limits. */
+export async function freePlan(db: PrismaClient, subject: Subject) {
+  const family = await freeFamily(db, subject);
+  if (!family) return null;
+  return db.plan.findFirst({
+    where: { family, priceCents: 0, active: true },
+    orderBy: { sortOrder: "asc" },
+    include: { entitlements: true },
+  });
 }
 
 async function anchorDate(db: PrismaClient, subject: Subject): Promise<Date> {
@@ -85,6 +96,8 @@ export async function resolvePlan(
       subjectId: subject.id,
       status: { in: ["sponsored", "active", "trialing", "past_due", "canceled"] },
       currentPeriodEnd: { gt: new Date(now.getTime() - GRACE_DAYS * 86_400_000) },
+      // A renewal paid in advance into another plan starts later.
+      currentPeriodStart: { lte: now },
     },
     include: { plan: { include: { entitlements: true } } },
   });

@@ -5,6 +5,7 @@ import { Alert, StatCard } from "@/components/ui";
 import { formatUsd } from "@/lib/money";
 import { requireAdmin, requireCourseEditor } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { revenueIndicators } from "@/server/services/billing-admin";
 
 /** Indicators that exist at this step: accounts by plan status and recurring revenue. */
 export default async function AdminDashboard({ searchParams }: PageProps<"/admin">) {
@@ -42,6 +43,9 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
     select: { plan: { select: { priceCents: true } } },
   });
   const mrr = [...paid, ...orgRevenue].reduce((sum, row) => sum + (row.plan.priceCents ?? 0), 0);
+  const revenue = await revenueIndicators(db, now);
+  const percent = (value: number | null) =>
+    value === null ? t("dashboard.kpi.none") : t("dashboard.kpi.value.percent", { value });
   return (
     <>
       <h1 className="text-h1">{t("dashboard.title")}</h1>
@@ -59,7 +63,24 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
         />
         <StatCard label={t("dashboard.kpi.activeCompanies")} value={String(companies)} />
         <StatCard label={t("dashboard.activity.signups")} value={String(signups)} />
+        <StatCard
+          label={t("dashboard.kpi.revenue30")}
+          value={t("dashboard.kpi.value.currency", {
+            amount: formatUsd(revenue.revenueCents),
+            currency: "USD",
+          })}
+        />
+        <StatCard label={t("dashboard.kpi.conversion")} value={percent(revenue.conversion)} />
+        <StatCard label={t("dashboard.kpi.renewal")} value={percent(revenue.renewal)} />
+        <StatCard
+          label={t("dashboard.kpi.aiCost")}
+          value={t("dashboard.kpi.value.currency", {
+            amount: formatUsd(Math.round(revenue.aiCostMicroUsd / 10_000)),
+            currency: "USD",
+          })}
+        />
       </div>
+      <p className="text-sm text-ardoise">{t("dashboard.kpi.period")}</p>
     </>
   );
 }

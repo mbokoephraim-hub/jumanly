@@ -4999,7 +4999,7 @@ Conventions :
 | `billing.upgrade.summary.credit` | Crédit pour le temps restant sur {currentPlan} |
 | `billing.upgrade.summary.total` | À payer aujourd'hui |
 | `billing.upgrade.summary.newEnd` | Nouvelle échéance |
-| `billing.upgrade.prorataNote` | Le crédit est calculé selon nos conditions générales de vente. [Règle de prorata à confirmer] |
+| `billing.upgrade.prorataNote` | Le crédit correspond aux jours non utilisés de votre formule actuelle. Votre nouvelle formule commence aujourd'hui pour un mois. |
 | `billing.upgrade.confirm` | Payer et activer {plan} |
 | `billing.upgrade.success.title` | Bienvenue dans {plan} |
 | `billing.upgrade.success.text` | Votre nouvelle formule est active. Vos nouveaux quotas sont disponibles dès maintenant. |
@@ -5045,6 +5045,22 @@ Conventions :
 | `billing.history.status.expired` | Expiré |
 | `billing.history.download` | Télécharger la facture |
 | `billing.history.downloadAlt` | Télécharger la facture {number} en PDF |
+| `billing.invoice.pdf.title` | Facture |
+| `billing.invoice.pdf.number` | Facture n° {number} |
+| `billing.invoice.pdf.issued` | Date d'émission : {date} |
+| `billing.invoice.pdf.seller` | The Growth Lab · Jumanly |
+| `billing.invoice.pdf.sellerContact` | assistant@jumanly.io · infojumanly@gmail.com |
+| `billing.invoice.pdf.billedTo` | Facturé à |
+| `billing.invoice.pdf.taxId` | Identifiant fiscal : {taxId} |
+| `billing.invoice.pdf.description` | Forfait {plan}, du {startDate} au {endDate} |
+| `billing.invoice.pdf.price` | Prix du forfait |
+| `billing.invoice.pdf.credit` | Crédit du forfait précédent (temps non utilisé) |
+| `billing.invoice.pdf.total` | Total payé |
+| `billing.invoice.pdf.amount` | {amount} USD |
+| `billing.invoice.pdf.method` | Moyen de paiement : {method} |
+| `billing.invoice.pdf.reference` | Référence du paiement : {reference} |
+| `billing.invoice.pdf.refunded` | Remboursée le {date} |
+| `billing.invoice.pdf.footer` | Facture émise par The Growth Lab pour la plateforme Jumanly. Montants en dollars américains (USD). |
 | `billing.history.empty` | Aucun paiement pour le moment. |
 | `billing.invoiceDetails.title` | Informations de facturation |
 | `billing.invoiceDetails.text` | Ces informations apparaissent sur vos factures. |
@@ -5055,6 +5071,7 @@ Conventions :
 | `billing.invoiceDetails.email.label` | E-mail de réception des factures |
 | `billing.invoiceDetails.save` | Enregistrer |
 | `billing.invoiceDetails.saved` | Informations de facturation enregistrées. |
+| `billing.invoiceDetails.error` | Vérifiez le nom et l'adresse e-mail. |
 | `billing.help.text` | Une question sur votre facture ? Écrivez-nous à {email}. |
 | `billing.help.emailPersonal` | infojumanly@gmail.com |
 | `billing.help.emailPro` | assistant@jumanly.io |
@@ -6014,6 +6031,13 @@ Conventions :
 | `notifications.item.jobRejected` | Votre offre « {jobTitle} » a été refusée par la modération |
 | `notifications.item.certificateIssued` | Votre attestation « {courseTitle} » est prête |
 | `notifications.item.matchReviewed` | Votre demande de révision du score pour « {jobTitle} » a été traitée |
+| `notifications.item.paymentSucceeded` | Paiement reçu : {amount} USD pour {plan}. Merci ! |
+| `notifications.item.paymentFailed` | Le paiement de votre forfait {plan} n'a pas abouti. Réessayez pour garder vos avantages. |
+| `notifications.item.renewalDue` | Votre forfait {plan} arrive à échéance le {date}. Renouvelez pour garder vos avantages. |
+| `notifications.item.grace` | Paiement en attente : votre forfait {plan} reste actif jusqu'au {date}. |
+| `notifications.item.downgraded` | Votre compte est revenu au forfait {freePlan}. Toutes vos données sont conservées. |
+| `notifications.item.upgraded` | Bienvenue dans {plan} ! Vos nouveaux avantages sont actifs. |
+| `notifications.item.renewed` | Forfait {plan} renouvelé jusqu'au {date}. Merci ! |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)
@@ -7128,6 +7152,9 @@ Conventions :
 | `admin.dashboard.kpi.institutionalRevenue` | Revenus des contrats institutionnels |
 | `admin.dashboard.kpi.value.currency` | {amount} {currency} |
 | `admin.dashboard.kpi.value.percent` | {value} % |
+| `admin.dashboard.kpi.revenue30` | Encaissé sur 30 jours |
+| `admin.dashboard.kpi.none` | Pas encore de données |
+| `admin.dashboard.kpi.period` | Sur les 30 derniers jours : conversion des comptes créés, renouvellement des périodes arrivées à échéance, dépenses IA estimées. |
 | `admin.dashboard.kpi.delta` | {delta} % par rapport à la période précédente |
 | `admin.dashboard.byFamily` | Par famille : Talents, RH, Companies, Partners |
 | `admin.dashboard.byPlan` | Par forfait |
@@ -7326,6 +7353,16 @@ Conventions :
 | `admin.subscriptions.action.refund.reference` | Référence du remboursement |
 | `admin.subscriptions.refunded` | Remboursement enregistré. |
 | `admin.subscriptions.invoice` | Voir la facture |
+| `admin.subscriptions.filter.all` | Tous |
+| `admin.subscriptions.empty` | Aucun abonnement pour ce filtre. |
+| `admin.subscriptions.payments.empty` | Aucun paiement pour l'instant. |
+| `admin.subscriptions.payments.status.expired` | Expiré |
+| `admin.subscriptions.payments.col.date` | Date |
+| `admin.subscriptions.payments.col.amount` | Montant |
+| `admin.subscriptions.payments.col.status` | Statut |
+| `admin.subscriptions.payments.col.reference` | Référence |
+| `admin.subscriptions.payments.credit` | Crédit déduit : {credit} USD |
+| `admin.subscriptions.refundError` | Remboursement non enregistré : indiquez la référence du remboursement. |
 
 ### `/admin/formations` · Formations (Learn)
 

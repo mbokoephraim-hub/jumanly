@@ -13,6 +13,7 @@ import { hiringTeam, notify } from "@/server/services/notifications";
 import { disputeResolutionSchema, resolveDispute } from "@/server/matching/service";
 import { criterionKeys } from "@/server/matching/types";
 import { saveWeights, weightsInputSchema } from "@/server/services/ai-admin";
+import { recordRefund, refundSchema } from "@/server/services/billing-admin";
 
 /** Every admin write: an administrator with write access (support agents read only), then audit. */
 async function adminWriter() {
@@ -251,4 +252,17 @@ export async function resolveDisputeAction(formData: FormData) {
   await resolveDispute(db, admin.id, input.data);
   refresh();
   redirect(`/admin/ia?onglet=revisions${input.data.outcome === "in_review" ? "" : "&ok=1"}`);
+}
+
+/** A refund already made with the provider, recorded here (partie 09 § 9.2). */
+export async function refundPaymentAction(formData: FormData) {
+  const input = refundSchema.safeParse({
+    payment: formData.get("payment"),
+    reference: formData.get("reference") ?? "",
+  });
+  const admin = await adminWriter();
+  if (!input.success) redirect("/admin/abonnements?erreur=remboursement");
+  await recordRefund(db, admin.id, input.data);
+  refresh();
+  redirect("/admin/abonnements?ok=remboursement");
 }

@@ -5936,7 +5936,7 @@
         "total": "À payer aujourd'hui",
         "newEnd": "Nouvelle échéance"
       },
-      "prorataNote": "Le crédit est calculé selon nos conditions générales de vente. [Règle de prorata à confirmer]",
+      "prorataNote": "Le crédit correspond aux jours non utilisés de votre formule actuelle. Votre nouvelle formule commence aujourd'hui pour un mois.",
       "confirm": "Payer et activer {plan}",
       "success": {
         "title": "Bienvenue dans {plan}",
@@ -5999,6 +5999,26 @@
       "downloadAlt": "Télécharger la facture {number} en PDF",
       "empty": "Aucun paiement pour le moment."
     },
+    "invoice": {
+      "pdf": {
+        "title": "Facture",
+        "number": "Facture n° {number}",
+        "issued": "Date d'émission : {date}",
+        "seller": "The Growth Lab · Jumanly",
+        "sellerContact": "assistant@jumanly.io · infojumanly@gmail.com",
+        "billedTo": "Facturé à",
+        "taxId": "Identifiant fiscal : {taxId}",
+        "description": "Forfait {plan}, du {startDate} au {endDate}",
+        "price": "Prix du forfait",
+        "credit": "Crédit du forfait précédent (temps non utilisé)",
+        "total": "Total payé",
+        "amount": "{amount} USD",
+        "method": "Moyen de paiement : {method}",
+        "reference": "Référence du paiement : {reference}",
+        "refunded": "Remboursée le {date}",
+        "footer": "Facture émise par The Growth Lab pour la plateforme Jumanly. Montants en dollars américains (USD)."
+      }
+    },
     "invoiceDetails": {
       "title": "Informations de facturation",
       "text": "Ces informations apparaissent sur vos factures.",
@@ -6016,7 +6036,8 @@
         "label": "E-mail de réception des factures"
       },
       "save": "Enregistrer",
-      "saved": "Informations de facturation enregistrées."
+      "saved": "Informations de facturation enregistrées.",
+      "error": "Vérifiez le nom et l'adresse e-mail."
     },
     "help": {
       "text": "Une question sur votre facture ? Écrivez-nous à {email}.",
@@ -7126,6 +7147,13 @@
       "jobRejected": "Votre offre « {jobTitle} » a été refusée par la modération",
       "certificateIssued": "Votre attestation « {courseTitle} » est prête",
       "matchReviewed": "Votre demande de révision du score pour « {jobTitle} » a été traitée",
+      "paymentSucceeded": "Paiement reçu : {amount} USD pour {plan}. Merci !",
+      "paymentFailed": "Le paiement de votre forfait {plan} n'a pas abouti. Réessayez pour garder vos avantages.",
+      "renewalDue": "Votre forfait {plan} arrive à échéance le {date}. Renouvelez pour garder vos avantages.",
+      "grace": "Paiement en attente : votre forfait {plan} reste actif jusqu'au {date}.",
+      "downgraded": "Votre compte est revenu au forfait {freePlan}. Toutes vos données sont conservées.",
+      "upgraded": "Bienvenue dans {plan} ! Vos nouveaux avantages sont actifs.",
+      "renewed": "Forfait {plan} renouvelé jusqu'au {date}. Merci !",
       "unread": "Non lue"
     }
   },
@@ -8259,6 +8287,9 @@
           "currency": "{amount} {currency}",
           "percent": "{value} %"
         },
+        "revenue30": "Encaissé sur 30 jours",
+        "none": "Pas encore de données",
+        "period": "Sur les 30 derniers jours : conversion des comptes créés, renouvellement des périodes arrivées à échéance, dépenses IA estimées.",
         "delta": "{delta} % par rapport à la période précédente"
       },
       "byFamily": "Par famille : Talents, RH, Companies, Partners",
@@ -8483,7 +8514,8 @@
     "subscriptions": {
       "title": "Abonnements",
       "filter": {
-        "status": "Statut"
+        "status": "Statut",
+        "all": "Tous"
       },
       "status": {
         "trialing": "Essai",
@@ -8505,13 +8537,22 @@
           "succeeded": "Réussi",
           "pending": "En attente de confirmation",
           "failed": "Échoué",
-          "refunded": "Remboursé"
+          "refunded": "Remboursé",
+          "expired": "Expiré"
         },
         "method": {
           "mobileMoney": "Mobile Money",
           "card": "Carte",
           "manual": "Manuel"
-        }
+        },
+        "empty": "Aucun paiement pour l'instant.",
+        "col": {
+          "date": "Date",
+          "amount": "Montant",
+          "status": "Statut",
+          "reference": "Référence"
+        },
+        "credit": "Crédit déduit : {credit} USD"
       },
       "action": {
         "extend": "Prolonger la période",
@@ -8525,7 +8566,9 @@
         }
       },
       "refunded": "Remboursement enregistré.",
-      "invoice": "Voir la facture"
+      "invoice": "Voir la facture",
+      "empty": "Aucun abonnement pour ce filtre.",
+      "refundError": "Remboursement non enregistré : indiquez la référence du remboursement."
     },
     "courses": {
       "title": "Formations",

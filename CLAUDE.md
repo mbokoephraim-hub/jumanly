@@ -70,6 +70,7 @@ pnpm db:migrate     # prisma migrate dev
 pnpm db:deploy      # applique les migrations (CI, production)
 pnpm db:seed        # forfaits + référentiel + démo (local)
 pnpm admin:promote  # donne le rôle administrateur à un compte (e-mail en argument)
+pnpm jobs:billing   # tâches d'abonnement : rappels, délai de grâce, retour au gratuit
 pnpm messages       # textes/textes-application.md → messages/fr.json
 pnpm messages:check # vérifie que messages/fr.json est à jour
 pnpm brand          # ressources/ → icônes et images servies (public/)
