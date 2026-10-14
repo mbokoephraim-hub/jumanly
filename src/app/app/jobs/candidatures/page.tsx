@@ -30,6 +30,11 @@ const tones: Partial<Record<TalentApplicationStatus, "success" | "warning" | "ne
     jobClosed: "neutral",
   };
 
+const stageName = (payload: unknown) =>
+  payload && typeof payload === "object" && "to" in payload && typeof payload.to === "string"
+    ? payload.to
+    : null;
+
 /** « Mes candidatures » (partie 07 § 5): status, history, withdrawal, the CV that was sent. */
 export default async function ApplicationsPage({
   searchParams,
@@ -135,12 +140,16 @@ export default async function ApplicationsPage({
                         date: event.createdAt,
                         event:
                           event.type === "stage_changed"
-                            ? t("event.stage_changed", { stage: application.stage.name })
-                            : event.type === "withdrawn"
-                              ? t("event.withdrawn")
-                              : event.type === "decision"
-                                ? t("event.decision")
-                                : t("event.submitted"),
+                            ? t("event.stage_changed", {
+                                stage: stageName(event.payload) ?? application.stage.name,
+                              })
+                            : event.type === "viewed"
+                              ? t("status.viewed")
+                              : event.type === "withdrawn"
+                                ? t("event.withdrawn")
+                                : event.type === "decision"
+                                  ? t("event.decision")
+                                  : t("event.submitted"),
                       })}
                     </li>
                   ))}

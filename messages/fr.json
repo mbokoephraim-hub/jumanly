@@ -3763,7 +3763,8 @@
       },
       "archive": "Archiver",
       "unarchive": "Désarchiver",
-      "markUnread": "Marquer comme non lu"
+      "markUnread": "Marquer comme non lu",
+      "readOnly": "Votre rôle permet de lire les conversations, pas d'y répondre."
     },
     "thread": {
       "online": "En ligne",
@@ -3781,7 +3782,13 @@
       "failed": "Non envoyé. Touchez pour réessayer.",
       "privacy": "Vos échanges sont privés : seuls vous et l'équipe de recrutement les voyez.",
       "safety": "Jumanly ne vous demandera jamais de payer pour un entretien ou un emploi. Signalez toute demande de ce type.",
-      "loadEarlier": "Messages précédents"
+      "loadEarlier": "Messages précédents",
+      "blocked": "Le talent a bloqué cette conversation. Vous ne pouvez plus lui écrire.",
+      "youBlocked": "Vous avez bloqué cette conversation : l'organisation ne peut plus vous écrire.",
+      "withJob": "{name} · {jobTitle}",
+      "back": "Toutes les conversations",
+      "you": "Vous",
+      "error": "Le message n'a pas pu être envoyé. Vérifiez son contenu et réessayez."
     },
     "side": {
       "verified": "Recruteur vérifié",
@@ -3849,7 +3856,9 @@
         "overdue": "Échéance dépassée"
       },
       "submitted": "Document envoyé au recruteur.",
-      "privacy": "Ce document n'est visible que par l'équipe qui recrute pour cette offre."
+      "privacy": "Ce document n'est visible que par l'équipe qui recrute pour cette offre.",
+      "noDocument": "Vous n'avez pas encore de CV. Créez-en un dans Career, puis revenez ici.",
+      "send": "Envoyer ce CV"
     },
     "contactRequest": {
       "title": "{company} souhaite échanger avec vous",
@@ -3890,7 +3899,15 @@
       },
       "done": "{name} est bloqué."
     },
-    "unblock": "Débloquer"
+    "unblock": "Débloquer",
+    "document": {
+      "view": "Ouvrir le document"
+    },
+    "switchSpace": {
+      "text": "Cette conversation appartient à l'espace de {org}.",
+      "cta": "Passer dans cet espace",
+      "personal": "Cette conversation appartient à votre espace personnel."
+    }
   },
   "settings": {
     "title": "Paramètres",
@@ -4295,7 +4312,8 @@
         "hint": "Les offres avec une fourchette de salaire reçoivent des candidatures plus ciblées.",
         "error": {
           "range": "Le maximum doit être supérieur au minimum."
-        }
+        },
+        "unit": "Montants mensuels, en USD."
       },
       "startDate": "Date de début souhaitée",
       "deadline": "Date limite de candidature",
@@ -4352,7 +4370,9 @@
         },
         "suggestions": "Compétences souvent demandées pour ce poste",
         "max": "{max} compétences requises au maximum, pour garder des critères lisibles.",
-        "minRequired": "Ajoutez au moins une compétence requise."
+        "minRequired": "Ajoutez au moins une compétence requise.",
+        "separator": "Séparez les compétences par une virgule.",
+        "unknown": "Compétences absentes du référentiel : {skills}. Vérifiez l'orthographe ou choisissez une compétence proche."
       },
       "weights": {
         "title": "Poids des critères",
@@ -4465,7 +4485,18 @@
         "hiringManagerBlocked": "Votre rôle ne permet pas de publier une offre. Enregistrez-la en brouillon et demandez à un recruteur ou un administrateur de la publier."
       },
       "error": {
-        "required": "Ce champ est obligatoire pour publier."
+        "required": "Ce champ est obligatoire pour publier.",
+        "invalid": "Certaines informations ne sont pas valides. Vérifiez le formulaire."
+      },
+      "draft": {
+        "ok": "Brouillon enregistré."
+      },
+      "summary": {
+        "text": "Présentation du poste",
+        "placeholder": "Le contexte, l'équipe et ce que la personne fera au quotidien."
+      },
+      "lines": {
+        "hint": "Un élément par ligne."
       }
     },
     "pipeline": {
@@ -4533,6 +4564,8 @@
       "action": {
         "view": "Voir le profil",
         "moveTo": "Déplacer vers…",
+        "moveAria": "Déplacer {candidateName} vers une autre étape",
+        "moveSubmit": "Déplacer",
         "advance": "Étape suivante",
         "schedule": "Planifier",
         "message": "Envoyer un message",
@@ -4791,7 +4824,8 @@
         "hired": "{memberName} a marqué le candidat comme recruté",
         "scoreDisputed": "Le candidat a demandé une révision humaine du score",
         "scoreReviewed": "Score revu par {memberName}",
-        "withdrawn": "Le candidat a retiré sa candidature"
+        "withdrawn": "Le candidat a retiré sa candidature",
+        "message": "Message de {memberName}"
       },
       "timestamp": "{date, date, medium} à {time}",
       "export": "Exporter l'historique"
@@ -5102,7 +5136,10 @@
         "text": "Page publique",
         "view": "Voir la page publique"
       },
-      "saved": "Profil de l'organisation enregistré."
+      "saved": "Profil de l'organisation enregistré.",
+      "save": "Enregistrer",
+      "invalid": "Certaines informations ne sont pas valides. Vérifiez le formulaire.",
+      "countryHint": "Code pays à deux lettres, par exemple CI ou CM."
     },
     "verification": {
       "title": "Vérification de l'organisation",
@@ -5171,6 +5208,8 @@
         }
       },
       "removed": "{memberName} a été retiré.",
+      "removedDone": "Membre retiré de l'organisation.",
+      "roleDone": "Rôle mis à jour.",
       "transferOwnership": {
         "text": "Transférer la propriété",
         "confirm": "{memberName} deviendra propriétaire de {org}, avec accès à la facturation et à la suppression. Vous deviendrez administrateur."
@@ -5195,7 +5234,9 @@
       "revoked": "Invitation annulée.",
       "error": {
         "alreadyMember": "{email} est déjà membre de l'organisation.",
-        "seats": "Pas assez de sièges disponibles pour {count, plural, one {# invitation} other {# invitations}}."
+        "seats": "Pas assez de sièges disponibles pour {count, plural, one {# invitation} other {# invitations}}.",
+        "role": "Ce rôle n'est pas inclus dans le forfait de votre organisation.",
+        "otherEmail": "Cette invitation a été envoyée à une autre adresse e-mail. Connectez-vous avec le compte invité."
       },
       "accept": {
         "title": "Rejoindre {org} sur Jumanly",
@@ -6951,7 +6992,8 @@
   "notifications": {
     "title": "Notifications",
     "bell": {
-      "aria": "Notifications · {count, plural, =0 {aucune non lue} one {# non lue} other {# non lues}}"
+      "aria": "Notifications · {count, plural, =0 {aucune non lue} one {# non lue} other {# non lues}}",
+      "many": "9+"
     },
     "tab": {
       "all": "Toutes",
@@ -6979,7 +7021,18 @@
       "unread": "Aucune notification non lue."
     },
     "loading": "Chargement des notifications…",
-    "allRead": "Toutes les notifications sont marquées comme lues."
+    "allRead": "Toutes les notifications sont marquées comme lues.",
+    "item": {
+      "newApplication": "Nouvelle candidature de {candidateName} pour « {jobTitle} »",
+      "statusChange": "Votre candidature à « {jobTitle} » chez {company} est passée à l'étape « {stage} »",
+      "notSelected": "{company} n'a pas retenu votre candidature à « {jobTitle} »",
+      "newMessage": "Nouveau message de {senderName} · {jobTitle}",
+      "documentRequest": "{company} vous demande un document : {documentName}",
+      "orgInvite": "{inviterName} vous invite à rejoindre {org}",
+      "jobApproved": "Votre offre « {jobTitle} » a été validée et publiée",
+      "jobRejected": "Votre offre « {jobTitle} » a été refusée par la modération",
+      "unread": "Non lue"
+    }
   },
   "notif": {
     "talent": {
@@ -8645,6 +8698,7 @@
       "type": {
         "job": "Offre",
         "message": "Message",
+        "conversation": "Conversation",
         "question": "Question de formation",
         "profile": "Profil",
         "organization": "Organisation",
@@ -9064,7 +9118,12 @@
     "emptyTitle": "Votre tableau de bord arrive bientôt",
     "emptyText": "Formations, offres et messages apparaîtront ici.",
     "seeComponents": "Voir les composants",
-    "samplePlan": "Free"
+    "samplePlan": "Free",
+    "sampleJobTitle": "Analyste de données junior",
+    "sampleCompany": "Cabinet Exemple",
+    "sampleStage": "Entretien",
+    "sampleDocument": "Copie du diplôme",
+    "sampleRole": "Recruteur"
   },
   "devComponents": {
     "title": "Bibliothèque de composants",

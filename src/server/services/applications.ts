@@ -157,13 +157,23 @@ export function isClosedStatus(status: TalentApplicationStatus) {
   return ["hired", "notSelected", "withdrawn", "jobClosed"].includes(status);
 }
 
+/** Events a talent sees in the history of an application. */
+export const talentEventTypes = [
+  "submitted",
+  "viewed",
+  "stage_changed",
+  "decision",
+  "withdrawn",
+] as const;
+
 export async function listApplications(db: PrismaClient, userId: string) {
   return db.application.findMany({
     where: { profile: { userId } },
     orderBy: { createdAt: "desc" },
     include: {
       stage: { select: { kind: true, name: true } },
-      events: { orderBy: { createdAt: "asc" } },
+      // Notes and internal reasons of the recruiting team are never shown to the talent.
+      events: { where: { type: { in: [...talentEventTypes] } }, orderBy: { createdAt: "asc" } },
       job: {
         select: {
           slug: true,

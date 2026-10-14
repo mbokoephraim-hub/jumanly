@@ -19,6 +19,8 @@ import { parseLimit, resolvePlan, usage } from "@/server/entitlements";
 import { billingSubject } from "@/server/services/accounts";
 import { isClosedStatus, listApplications, talentStatus } from "@/server/services/applications";
 import { completeness, getFullProfile } from "@/server/services/profile";
+import { redirect } from "next/navigation";
+import { getActiveSpace } from "@/server/hire-context";
 import { readSignupFlow } from "@/server/signup-flow";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,6 +39,8 @@ const talentQuotas = [
 export default async function DashboardPage() {
   const t = await getTranslations();
   const user = await requireUser("/app");
+  // A recruiter in their organization space lands on Hire; « Personnel » in the switcher comes back here.
+  if (await getActiveSpace(user.id)) redirect("/app/hire");
   const now = new Date();
   const subject = { type: "user" as const, id: user.id };
   const plan = await resolvePlan(db, subject, now);

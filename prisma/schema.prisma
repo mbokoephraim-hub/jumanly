@@ -78,25 +78,27 @@ enum OrganizationType {
 }
 
 model Organization {
-  id          String           @id @default(cuid(2))
-  type        OrganizationType
-  name        String
-  slug        String           @unique
-  logo        String?
-  description String?
-  website     String?
-  country     String?
-  city        String?
-  sector      String?
-  size        String?
-  verifiedAt  DateTime?
-  parentId    String?
-  parent      Organization?    @relation("OrganizationEntities", fields: [parentId], references: [id])
-  entities    Organization[]   @relation("OrganizationEntities")
-  jobs        Job[]
-  memberships Membership[]
-  createdAt   DateTime         @default(now())
-  updatedAt   DateTime         @updatedAt
+  id            String           @id @default(cuid(2))
+  type          OrganizationType
+  name          String
+  slug          String           @unique
+  logo          String?
+  description   String?
+  website       String?
+  country       String?
+  city          String?
+  sector        String?
+  size          String?
+  verifiedAt    DateTime?
+  parentId      String?
+  parent        Organization?    @relation("OrganizationEntities", fields: [parentId], references: [id])
+  entities      Organization[]   @relation("OrganizationEntities")
+  jobs          Job[]
+  memberships   Membership[]
+  invitations   Invitation[]
+  conversations Conversation[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
 }
 
 // ─── Référentiel de compétences ─────────────────────────────────
@@ -132,9 +134,13 @@ enum RemoteMode {
 
 enum JobStatus {
   draft
+  /// Flagged by the automatic check: waiting for an administrator (partie 10 § 10.7).
+  pending_review
   published
   closed
   archived
+  /// Refused by moderation; the recruiter can correct and submit again.
+  rejected
 }
 
 enum SkillImportance {
@@ -171,6 +177,13 @@ model Job {
   status            JobStatus       @default(draft)
   publishedAt       DateTime?
   closesAt          DateTime?
+  createdById       String?
+  createdBy         User?           @relation("JobCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  /// Message sent by default when a candidate is not selected; editable each time.
+  rejectionTemplate String?
+  /// Automatic check results (`admin.jobs.autoFlag.*`) and the moderator's reason.
+  moderationFlags   String[]
+  moderationReason  String?
   skills            JobSkill[]
   stages            PipelineStage[]
   applications      Application[]
@@ -324,25 +337,25 @@ enum UserStatus {
 }
 
 model User {
-  id                  String             @id @default(cuid(2))
+  id                  String                    @id @default(cuid(2))
   name                String
-  email               String             @unique
-  emailVerified       Boolean            @default(false)
+  email               String                    @unique
+  emailVerified       Boolean                   @default(false)
   image               String?
   firstName           String?
   lastName            String?
   country             String?
   city                String?
-  locale              String             @default("fr")
-  platformRole        PlatformRole       @default(user)
-  status              UserStatus         @default(active)
+  locale              String                    @default("fr")
+  platformRole        PlatformRole              @default(user)
+  status              UserStatus                @default(active)
   /// Consent to AI suggestions (CLAUDE.md § 12): date of consent, null when withdrawn.
   aiConsentAt         DateTime?
-  newsletter          Boolean            @default(false)
+  newsletter          Boolean                   @default(false)
   termsAcceptedAt     DateTime?
   /// Account deletion requested: effective at this date unless the user signs in again.
   deletionScheduledAt DateTime?
-  twoFactorEnabled    Boolean            @default(false)
+  twoFactorEnabled    Boolean                   @default(false)
   sessions            Session[]
   accounts            Account[]
   twoFactors          TwoFactor[]
@@ -350,8 +363,11 @@ model User {
   talentProfile       TalentProfile?
   diagnostics         CareerDiagnostic[]
   savedJobs           SavedJob[]
-  createdAt           DateTime           @default(now())
-  updatedAt           DateTime           @updatedAt
+  jobsCreated         Job[]                     @relation("JobCreator")
+  notifications       Notification[]
+  participations      ConversationParticipant[]
+  createdAt           DateTime                  @default(now())
+  updatedAt           DateTime                  @updatedAt
 
   @@map("user")
 }
@@ -755,22 +771,23 @@ enum ApplicationSource {
 }
 
 model Application {
-  id          String             @id @default(cuid(2))
-  jobId       String
-  job         Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  profileId   String
-  profile     TalentProfile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  stageId     String
-  stage       PipelineStage      @relation(fields: [stageId], references: [id])
-  status      ApplicationStatus  @default(active)
-  coverLetter String?
+  id           String             @id @default(cuid(2))
+  jobId        String
+  job          Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  profileId    String
+  profile      TalentProfile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  stageId      String
+  stage        PipelineStage      @relation(fields: [stageId], references: [id])
+  status       ApplicationStatus  @default(active)
+  coverLetter  String?
   /// Copy of the CV as sent (title, template, content): later edits do not change it.
-  cvSnapshot  Json?
-  source      ApplicationSource  @default(direct)
-  viewedAt    DateTime?
-  events      ApplicationEvent[]
-  createdAt   DateTime           @default(now())
-  updatedAt   DateTime           @updatedAt
+  cvSnapshot   Json?
+  source       ApplicationSource  @default(direct)
+  viewedAt     DateTime?
+  events       ApplicationEvent[]
+  conversation Conversation?
+  createdAt    DateTime           @default(now())
+  updatedAt    DateTime           @updatedAt
 
   @@unique([jobId, profileId])
   @@index([profileId, status])
@@ -839,4 +856,123 @@ model AuditLog {
 
   @@index([targetType, targetId])
   @@index([actorId, createdAt])
+}
+
+// ─── Hire et Connect (E4) ───────────────────────────────────────
+
+model Invitation {
+  id             String         @id @default(cuid(2))
+  organizationId String
+  organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  email          String
+  role           MembershipRole
+  token          String         @unique
+  invitedById    String?
+  message        String?
+  expiresAt      DateTime
+  acceptedAt     DateTime?
+  revokedAt      DateTime?
+  createdAt      DateTime       @default(now())
+
+  @@index([organizationId])
+  @@index([email])
+}
+
+enum ConversationKind {
+  application
+  contact_request
+  support
+}
+
+/// One conversation per application, between the talent and the hiring organization.
+model Conversation {
+  id             String                    @id @default(cuid(2))
+  kind           ConversationKind
+  applicationId  String?                   @unique
+  application    Application?              @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  organizationId String?
+  organization   Organization?             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  /// The talent side of the conversation.
+  talentUserId   String
+  /// Set when the talent blocks the organization: no more messages from it.
+  blockedAt      DateTime?
+  participants   ConversationParticipant[]
+  messages       Message[]
+  lastMessageAt  DateTime                  @default(now())
+  createdAt      DateTime                  @default(now())
+
+  @@index([organizationId, lastMessageAt])
+  @@index([talentUserId, lastMessageAt])
+}
+
+model ConversationParticipant {
+  id             String       @id @default(cuid(2))
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lastReadAt     DateTime?
+
+  @@unique([conversationId, userId])
+}
+
+enum MessageKind {
+  text
+  document_request
+  invitation
+  system
+}
+
+model Message {
+  id             String       @id @default(cuid(2))
+  conversationId String
+  conversation   Conversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  senderId       String?
+  body           String
+  kind           MessageKind  @default(text)
+  /// document_request: { name, due, submittedAt?, document? } ; text with a document: { document }
+  payload        Json         @default("{}")
+  /// Hidden by moderation after a report.
+  hiddenAt       DateTime?
+  createdAt      DateTime     @default(now())
+
+  @@index([conversationId, createdAt])
+}
+
+model Notification {
+  id        String    @id @default(cuid(2))
+  userId    String
+  user      User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// newApplication, statusChange, notSelected, newMessage, documentRequest, orgInvite, jobModerated
+  type      String
+  payload   Json      @default("{}")
+  href      String?
+  readAt    DateTime?
+  createdAt DateTime  @default(now())
+
+  @@index([userId, readAt, createdAt])
+}
+
+enum ReportStatus {
+  open
+  in_progress
+  closed
+}
+
+model Report {
+  id           String       @id @default(cuid(2))
+  reporterId   String
+  /// job, message, conversation, profile, organization
+  targetType   String
+  targetId     String
+  reason       String
+  details      String?
+  status       ReportStatus @default(open)
+  resolution   String?
+  resolvedById String?
+  createdAt    DateTime     @default(now())
+  updatedAt    DateTime     @updatedAt
+
+  @@unique([reporterId, targetType, targetId])
+  @@index([status, createdAt])
 }

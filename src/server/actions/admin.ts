@@ -8,6 +8,8 @@ import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { invalidate } from "@/server/entitlements";
 import type { Prisma } from "@/generated/prisma/client";
+import { approveJob, refuseJob, resolveReport } from "@/server/services/moderation";
+import { hiringTeam, notify } from "@/server/services/notifications";
 
 /** Every admin write: an administrator with write access (support agents read only), then audit. */
 async function adminWriter() {
@@ -181,4 +183,39 @@ export async function updatePlan(formData: FormData) {
   invalidate();
   updateTag("plans");
   redirect(withParam(path, "ok", "1"));
+}
+
+// ─── Moderation (partie 10 § 10.7) ────────────────────────────────────────────────
+
+export async function moderateJob(formData: FormData) {
+  const admin = await adminWriter();
+  const jobId = String(formData.get("job") ?? "");
+  const decision = formData.get("decision");
+  const job =
+    decision === "approve"
+      ? await approveJob(db, admin.id, jobId)
+      : await refuseJob(db, admin.id, jobId, String(formData.get("reason") ?? ""));
+  if (job) {
+    updateTag("jobs");
+    updateTag(`job:${job.slug}`);
+    const team = await hiringTeam(db, job.organizationId);
+    await notify(db, {
+      userIds: team.map((member) => member.id),
+      type: decision === "approve" ? "jobApproved" : "jobRejected",
+      payload: { jobTitle: job.title },
+      href:
+        decision === "approve"
+          ? `/app/hire/offres/${job.id}`
+          : `/app/hire/offres/${job.id}/modifier`,
+    });
+  }
+  redirect(`/admin/offres?ok=${decision === "approve" ? "approuvee" : "refusee"}`);
+}
+
+export async function resolveReportAction(formData: FormData) {
+  const admin = await adminWriter();
+  const action = formData.get("action") === "hide" ? "hide" : "dismiss";
+  await resolveReport(db, admin.id, String(formData.get("report") ?? ""), action);
+  updateTag("jobs");
+  redirect("/admin/signalements?ok=1");
 }

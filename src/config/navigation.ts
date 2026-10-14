@@ -40,7 +40,8 @@ export const legalNavigation = [
   { key: "cookies", href: "/cookies" },
 ] as const;
 
-export type AppNavigationKey = "home" | "learn" | "career" | "jobs" | "messages";
+export type AppNavigationKey =
+  "home" | "learn" | "career" | "jobs" | "messages" | "hire.jobs" | "organization";
 
 /** Talent space modules. `key` points to `appNav.<key>`; icons from ressources/icones. */
 export const talentNavigation: { key: AppNavigationKey; href: string; icon: IconName }[] = [
@@ -49,4 +50,12 @@ export const talentNavigation: { key: AppNavigationKey; href: string; icon: Icon
   { key: "career", href: "/app/career", icon: "career" },
   { key: "jobs", href: "/app/jobs", icon: "jobs" },
   { key: "messages", href: "/app/messages", icon: "message" },
+];
+
+/** Organization space (Hire): shown when an organization is chosen in the space switcher. */
+export const hireNavigation: { key: AppNavigationKey; href: string; icon: IconName }[] = [
+  { key: "home", href: "/app/hire", icon: "accueil" },
+  { key: "hire.jobs", href: "/app/hire/offres", icon: "jobs" },
+  { key: "messages", href: "/app/messages", icon: "message" },
+  { key: "organization", href: "/app/organisation", icon: "entreprise" },
 ];

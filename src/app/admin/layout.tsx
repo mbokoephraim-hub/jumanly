@@ -25,6 +25,8 @@ const links = [
   { key: "dashboard", href: "/admin" },
   { key: "users", href: "/admin/utilisateurs" },
   { key: "plans", href: "/admin/forfaits" },
+  { key: "jobs", href: "/admin/offres" },
+  { key: "reports", href: "/admin/signalements" },
 ] as const;
 
 async function AdminShell({ children }: { children: React.ReactNode }) {
