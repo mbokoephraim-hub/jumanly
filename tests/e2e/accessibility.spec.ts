@@ -20,6 +20,14 @@ test("aucune erreur d'accessibilité WCAG 2.2 AA dans l'espace connecté", async
     "/app/parametres?onglet=securite",
     "/app/parametres?onglet=confidentialite",
     "/app/parametres?onglet=donnees",
+    "/app/profil",
+    "/app/career",
+    "/app/career/diagnostic",
+    "/app/career/cv",
+    "/app/jobs",
+    "/app/jobs/demo-developpeur-web-douala",
+    "/app/jobs/candidatures",
+    "/app/jobs/enregistrees",
   ]) {
     await page.goto(path);
     await expectAccessible(page);

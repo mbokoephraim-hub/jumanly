@@ -107,3 +107,19 @@ export function planForCatalogLevel(plans: PublicPlan[], level: string): PublicP
     .sort((a, b) => (a.priceCents ?? Infinity) - (b.priceCents ?? Infinity));
   return candidates[0] ?? null;
 }
+
+/** Cheapest plan of a family whose limit for `key` reaches `min` (-1 = unlimited counts). */
+export function cheapestPlanWithLimit(
+  plans: PublicPlan[],
+  family: PlanFamily,
+  key: string,
+  min: number,
+): PublicPlan | null {
+  const candidates = plansOf(plans, family)
+    .filter((plan) => {
+      const value = limitOf(plan, key);
+      return value !== null && (value < 0 || value >= min);
+    })
+    .sort((a, b) => (a.priceCents ?? Infinity) - (b.priceCents ?? Infinity));
+  return candidates[0] ?? null;
+}
