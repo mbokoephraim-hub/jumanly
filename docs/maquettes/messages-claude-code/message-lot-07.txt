@@ -1,0 +1,20 @@
+Lot 7 sur 14 · Connexion et inscription
+
+J'ai ajouté ces maquettes dans `docs/maquettes/` :
+- `/connexion` : Connexion → `docs/maquettes/02-connexion-inscription/02-01-connexion.pdf`
+- `/mot-de-passe-oublie` : Mot de passe oublié → `docs/maquettes/02-connexion-inscription/02-02-mot-de-passe-oublie.pdf`
+- `/reinitialiser` : Réinitialiser le mot de passe → `docs/maquettes/02-connexion-inscription/02-03-reinitialiser.pdf`
+- `/inscription` : Inscription · étape 1 · Vous êtes… → `docs/maquettes/02-connexion-inscription/02-04-inscription-profil.pdf`
+- `/inscription/forfait` : Inscription · étape 2 · Forfait → `docs/maquettes/02-connexion-inscription/02-05-inscription-forfait.pdf`
+- `/inscription/compte` : Inscription · étape 3 · Compte → `docs/maquettes/02-connexion-inscription/02-06-inscription-compte.pdf`
+- `/inscription/verification` : Inscription · étape 4 · Vérification → `docs/maquettes/02-connexion-inscription/02-07-inscription-verification.pdf`
+- `/inscription/paiement` : Inscription · étape 5 · Paiement → `docs/maquettes/02-connexion-inscription/02-08-inscription-paiement.pdf`
+- `/app/bienvenue` : Bienvenue · premiers pas → `docs/maquettes/02-connexion-inscription/02-09-bienvenue.pdf`
+- `/activer` : Activer une licence Partners → `docs/maquettes/02-connexion-inscription/02-10-activer-licence.pdf`
+
+Pour chaque page de la liste, dans l'ordre :
+1. Ouvre son PDF (page 1 : la fiche avec composants, états et règles ; page 2 : desktop ; page 3 : mobile) et son HTML (dossier `html/`, fichiers `-desktop.html` et `-mobile.html`) pour lire les valeurs exactes.
+2. Refais la page pour qu'elle ressemble exactement à la maquette, avec les composants et gabarits du lot 1. Garde les textes de `messages/fr.json` ; si un texte manque, ajoute-le dans `textes/textes-application.md` et signale-le.
+3. Prends une capture Playwright de ta page à 1440 px et à 390 px, compare-la à la maquette et corrige les écarts.
+
+Termine par lint, typecheck et build, donne-moi la liste des pages faites et des écarts restants, puis attends le lot 8.

@@ -1,0 +1,16 @@
+Lot 14 sur 14 · Pages d'erreur, hors ligne, maintenance et e-mails
+
+J'ai ajouté ces maquettes dans `docs/maquettes/` :
+- `not-found.tsx` : Page introuvable (404) → `docs/maquettes/08-pages-systeme/08-01-404.pdf`
+- `403 (espace connecté)` : Accès refusé (403) → `docs/maquettes/08-pages-systeme/08-02-403.pdf`
+- `error.tsx · global-error.tsx` : Erreur serveur (500) → `docs/maquettes/08-pages-systeme/08-03-500.pdf`
+- `page de maintenance` : Maintenance → `docs/maquettes/08-pages-systeme/08-04-maintenance.pdf`
+- `état hors ligne (toutes pages)` : Hors ligne et connexion lente → `docs/maquettes/08-pages-systeme/08-05-hors-ligne.pdf`
+- `emails/ (React Email)` : Gabarit des e-mails → `docs/maquettes/08-pages-systeme/08-06-emails.pdf`
+
+Pour chaque page de la liste, dans l'ordre :
+1. Ouvre son PDF (page 1 : la fiche avec composants, états et règles ; page 2 : desktop ; page 3 : mobile) et son HTML (dossier `html/`, fichiers `-desktop.html` et `-mobile.html`) pour lire les valeurs exactes.
+2. Refais la page pour qu'elle ressemble exactement à la maquette, avec les composants et gabarits du lot 1. Garde les textes de `messages/fr.json` ; si un texte manque, ajoute-le dans `textes/textes-application.md` et signale-le.
+3. Prends une capture Playwright de ta page à 1440 px et à 390 px, compare-la à la maquette et corrige les écarts.
+
+Termine par lint, typecheck et build, donne-moi la liste des pages faites et des écarts restants, puis c'était le dernier lot : fais une passe de cohérence sur toutes les pages.

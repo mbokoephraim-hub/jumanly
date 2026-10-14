@@ -1,0 +1,19 @@
+Lot 12 sur 14 · Forfaits, paiement et espace partenaire
+
+J'ai ajouté ces maquettes dans `docs/maquettes/` :
+- `/tarifs` : Tarifs et forfaits → `docs/maquettes/05-forfaits-paiement/05-01-tarifs.pdf`
+- `/app/abonnement` : Mon abonnement → `docs/maquettes/05-forfaits-paiement/05-02-abonnement.pdf`
+- `/app/abonnement/paiement (Mobile Money)` : Paiement Mobile Money → `docs/maquettes/05-forfaits-paiement/05-03-paiement-mobile-money.pdf`
+- `/app/abonnement/paiement (carte)` : Paiement par carte bancaire → `docs/maquettes/05-forfaits-paiement/05-04-paiement-carte.pdf`
+- `/app/abonnement/paiement/resultat` : Résultat du paiement → `docs/maquettes/05-forfaits-paiement/05-05-paiement-resultat.pdf`
+- `Fenêtre « Demander un devis » · /contact?sujet=devis` : Demande de devis Company Premium → `docs/maquettes/05-forfaits-paiement/05-06-devis-company-premium.pdf`
+- `/app/partenaire` : Tableau de bord partenaire → `docs/maquettes/06-espace-partenaire/06-01-partenaire-accueil.pdf`
+- `/app/partenaire/licences` : Lots, codes et invitations → `docs/maquettes/06-espace-partenaire/06-02-licences.pdf`
+- `/app/partenaire/rapports` : Rapports d'impact agrégés → `docs/maquettes/06-espace-partenaire/06-03-rapports.pdf`
+
+Pour chaque page de la liste, dans l'ordre :
+1. Ouvre son PDF (page 1 : la fiche avec composants, états et règles ; page 2 : desktop ; page 3 : mobile) et son HTML (dossier `html/`, fichiers `-desktop.html` et `-mobile.html`) pour lire les valeurs exactes.
+2. Refais la page pour qu'elle ressemble exactement à la maquette, avec les composants et gabarits du lot 1. Garde les textes de `messages/fr.json` ; si un texte manque, ajoute-le dans `textes/textes-application.md` et signale-le.
+3. Prends une capture Playwright de ta page à 1440 px et à 390 px, compare-la à la maquette et corrige les écarts.
+
+Termine par lint, typecheck et build, donne-moi la liste des pages faites et des écarts restants, puis attends le lot 13.

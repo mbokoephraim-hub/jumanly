@@ -1,0 +1,14 @@
+Lot 5 sur 14 · Site public 4 : partenaires, FAQ, contact, matching
+
+J'ai ajouté ces maquettes dans `docs/maquettes/` :
+- `/partenaires` : Jumanly Partners → `docs/maquettes/01-site-public/01-06-partenaires.pdf`
+- `/faq` : Questions fréquentes → `docs/maquettes/01-site-public/01-07-faq.pdf`
+- `/contact` : Contact → `docs/maquettes/01-site-public/01-08-contact.pdf`
+- `/comment-fonctionne-le-matching` : Comment fonctionne le matching → `docs/maquettes/01-site-public/01-09-comment-fonctionne-le-matching.pdf`
+
+Pour chaque page de la liste, dans l'ordre :
+1. Ouvre son PDF (page 1 : la fiche avec composants, états et règles ; page 2 : desktop ; page 3 : mobile) et son HTML (dossier `html/`, fichiers `-desktop.html` et `-mobile.html`) pour lire les valeurs exactes.
+2. Refais la page pour qu'elle ressemble exactement à la maquette, avec les composants et gabarits du lot 1. Garde les textes de `messages/fr.json` ; si un texte manque, ajoute-le dans `textes/textes-application.md` et signale-le.
+3. Prends une capture Playwright de ta page à 1440 px et à 390 px, compare-la à la maquette et corrige les écarts.
+
+Termine par lint, typecheck et build, donne-moi la liste des pages faites et des écarts restants, puis attends le lot 6.

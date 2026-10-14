@@ -1,0 +1,18 @@
+Lot 9 sur 14 · Espace talent 2 : Career
+
+J'ai ajouté ces maquettes dans `docs/maquettes/` :
+- `/app/career` : Accueil Career → `docs/maquettes/03-espace-talent/03-08-career.pdf`
+- `/app/career/diagnostic` : Diagnostic de carrière → `docs/maquettes/03-espace-talent/03-09-career-diagnostic.pdf`
+- `/app/career/cv` : Éditeur de CV et coach IA → `docs/maquettes/03-espace-talent/03-10-career-cv.pdf`
+- `/app/career/documents` : Lettres, biographie et correction → `docs/maquettes/03-espace-talent/03-11-career-documents.pdf`
+- `/app/career/linkedin` : Préparation LinkedIn → `docs/maquettes/03-espace-talent/03-12-career-linkedin.pdf`
+- `/app/career/entretiens` : Simulations d'entretien → `docs/maquettes/03-espace-talent/03-13-career-entretiens.pdf`
+- `/app/career/plan` : Plan de progression → `docs/maquettes/03-espace-talent/03-14-career-plan.pdf`
+- `/app/career/portfolio` : Portfolio → `docs/maquettes/03-espace-talent/03-15-career-portfolio.pdf`
+
+Pour chaque page de la liste, dans l'ordre :
+1. Ouvre son PDF (page 1 : la fiche avec composants, états et règles ; page 2 : desktop ; page 3 : mobile) et son HTML (dossier `html/`, fichiers `-desktop.html` et `-mobile.html`) pour lire les valeurs exactes.
+2. Refais la page pour qu'elle ressemble exactement à la maquette, avec les composants et gabarits du lot 1. Garde les textes de `messages/fr.json` ; si un texte manque, ajoute-le dans `textes/textes-application.md` et signale-le.
+3. Prends une capture Playwright de ta page à 1440 px et à 390 px, compare-la à la maquette et corrige les écarts.
+
+Termine par lint, typecheck et build, donne-moi la liste des pages faites et des écarts restants, puis attends le lot 10.

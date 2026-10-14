@@ -1,0 +1,175 @@
+/* JUMANLY · Feuille de style de référence des maquettes (v1.0, octobre 2026)
+   Extraite du générateur des maquettes : c'est exactement ce qui a servi à dessiner les pages.
+   À traduire en jetons Tailwind et en composants React ; ne pas l'importer telle quelle en production.
+   Police : Sora 300–700 (next/font). Jetons officiels : ressources/jumanly-tokens.css (préfixe --jm-).
+   Correspondance : --sapin = --jm-sapin, --sig = --jm-degrade-signature, --ia = --jm-degrade-ia,
+   --prof = --jm-degrade-profondeur, --orbe = --jm-orbe-ia. Jetons ajoutés ici : --menthe-c (#BFEFDF),
+   --lime-c (#E4FAD0), --ambre (#F2B33D), --corail (#E25C4B). */
+@import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap");
+
+/* ===== Socle et composants ===== */
+
+:root{--sapin:#0F3F37;--lime:#A6F26B;--creme:#F2EDE5;--feuille:#3DA14F;--menthe:#2FD3A6;--nuit:#0B1A1F;
+--neon:#E3F67C;--ardoise:#5B6B68;--brume:#DCE5E1;--menthe-c:#BFEFDF;--lime-c:#E4FAD0;--ambre:#F2B33D;--corail:#E25C4B;
+--sig:linear-gradient(135deg,#D9FA72 0%,#7DE36B 50%,#1E9A64 100%);
+--prof:linear-gradient(160deg,#0F3F37 0%,#0B1A1F 100%);--ia:linear-gradient(45deg,#0F3F37 0%,#14745F 55%,#2FD3A6 100%);
+--orbe:radial-gradient(circle at 38% 32%,#F4FFB8,#A6F26B 45%,#3DA14F)}
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Sora,sans-serif;-webkit-font-smoothing:antialiased;color:var(--sapin);font-size:14px;line-height:1.45;background:var(--creme)}
+.ic{display:block;flex:none}
+.row{display:flex;align-items:center}.col{display:flex;flex-direction:column}
+.sb{justify-content:space-between}.g4{gap:4px}.g6{gap:6px}.g8{gap:8px}.g10{gap:10px}.g12{gap:12px}.g16{gap:16px}.g20{gap:20px}.g24{gap:24px}
+.f1{flex:1;min-width:0}
+.av{display:inline-grid;place-items:center;border-radius:50%;font-weight:600;flex:none;letter-spacing:-.02em}
+.pile{display:inline-flex}.pile .av+.av{margin-left:-8px}
+.ent{display:inline-grid;place-items:center;font-weight:700;flex:none;letter-spacing:-.03em}
+.barre{border-radius:99px;overflow:hidden;width:100%}.barre i{display:block;height:100%;border-radius:99px}
+.card{background:#fff;border-radius:24px;padding:22px}
+.card.sm{border-radius:18px;padding:16px}
+.dark{background:var(--sapin);color:#fff}
+.nuit{background:var(--prof);color:#fff}
+.iabg{background:var(--ia);color:#fff}
+h1{font-size:28px;line-height:34px;font-weight:600;letter-spacing:-.02em}
+h2{font-size:20px;line-height:26px;font-weight:600;letter-spacing:-.015em}
+h3{font-size:16px;line-height:22px;font-weight:600;letter-spacing:-.01em}
+.big{font-size:30px;line-height:34px;font-weight:600;letter-spacing:-.03em}
+.lab{font-size:11px;line-height:14px;font-weight:600;letter-spacing:.09em;text-transform:uppercase}
+.mut{color:var(--ardoise)}.sm{font-size:12px;line-height:17px}.xs{font-size:11px;line-height:15px}
+.w5{font-weight:500}.w6{font-weight:600}
+.dark .mut,.nuit .mut,.iabg .mut{color:rgba(255,255,255,.66)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 18px;border-radius:99px;
+ font:600 13px Sora;white-space:nowrap;flex:none}
+.btn.s{height:32px;padding:0 13px;font-size:12px;gap:6px}
+.btn.l{height:48px;padding:0 24px;font-size:14px}
+.b-lime{background:var(--lime);color:var(--sapin)}
+.b-sapin{background:var(--sapin);color:#fff}
+.b-blanc{background:#fff;color:var(--sapin)}
+.b-ghost{background:transparent;color:var(--sapin);box-shadow:inset 0 0 0 1.5px var(--brume)}
+.b-ghostw{background:rgba(255,255,255,.1);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.btn.f1{flex:1}
+.rond{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none}
+.rond.s{width:32px;height:32px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:99px;font:500 12.5px Sora;
+ background:#fff;color:var(--sapin);box-shadow:inset 0 0 0 1.5px var(--brume);white-space:nowrap;flex:none}
+.chip.on{background:var(--sapin);color:#fff;box-shadow:none}
+.tag{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:99px;font:600 11px Sora;white-space:nowrap;flex:none}
+.t-lime{background:var(--lime);color:var(--sapin)}.t-neon{background:var(--neon);color:var(--sapin)}
+.t-sapin{background:var(--sapin);color:var(--neon)}.t-brume{background:var(--brume);color:var(--sapin)}
+.t-menthe{background:var(--menthe-c);color:#0B5E49}.t-blanc{background:#fff;color:var(--sapin)}
+.t-up{background:var(--lime-c);color:#1F7A35}.t-down{background:#FBE3DF;color:#B23A2B}
+.t-ambre{background:#FCEBC6;color:#8A5A00}.t-line{box-shadow:inset 0 0 0 1.2px currentColor;background:transparent}
+.tile{display:grid;place-items:center;flex:none;border-radius:14px}
+.champ{white-space:nowrap;overflow:hidden;display:flex;align-items:center;gap:10px;height:44px;padding:0 16px;border-radius:99px;background:#fff;color:var(--ardoise);font-size:13px}
+.sep{height:1px;background:var(--brume)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.motif{position:absolute;inset:0;background-size:360px;pointer-events:none}
+
+/* ===== Espace connecté desktop (barre latérale 92 px, panneau Crème) ===== */
+
+.app{display:flex;width:1440px;height:1024px;background:var(--sapin);padding:14px 14px 14px 0}
+.side{width:92px;flex:none;display:flex;flex-direction:column;align-items:center;padding:12px 0 6px}
+.nav{display:flex;flex-direction:column;gap:6px;margin-top:34px}
+.ni{width:64px;display:flex;flex-direction:column;align-items:center;gap:5px;padding:9px 0 7px;border-radius:18px;
+ color:rgba(255,255,255,.62);font-size:10px;font-weight:500}
+.ni.on{background:var(--lime);color:var(--sapin)}
+.ni .pt{position:absolute}
+.main{flex:1;min-width:0;background:var(--creme);border-radius:32px;padding:26px 30px 30px;display:flex;flex-direction:column;gap:20px;overflow:hidden;position:relative}
+.top{display:flex;align-items:center;gap:14px;height:52px;flex:none}
+.top .champ{width:300px}
+.badge{position:absolute;top:8px;right:9px;width:8px;height:8px;border-radius:50%;background:#A6F26B;box-shadow:0 0 0 2px #fff}
+.me{display:flex;align-items:center;gap:10px;background:#fff;border-radius:99px;padding:5px 14px 5px 5px}
+
+.app{height:auto!important;min-height:1024px;align-items:stretch}
+.main{overflow:visible!important}
+.side{position:relative}
+.ni{text-align:center;line-height:12px}
+.espace{display:flex;align-items:center;gap:10px;background:#fff;border-radius:99px;padding:5px 14px 5px 5px;font-size:13px}
+
+/* ===== Espace connecté mobile (en-tête Sapin, feuille Crème, pilule flottante) ===== */
+
+body{font-size:13px}
+h1{font-size:24px;line-height:30px}h2{font-size:17px;line-height:23px}h3{font-size:15px;line-height:20px}
+.ecran{position:relative;width:390px;height:844px;overflow:hidden;background:var(--sapin);display:flex;flex-direction:column}
+.sbar{height:46px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:4px 28px 0 34px;color:#fff;font-weight:600;font-size:15px}
+.head{padding:6px 18px 18px;display:flex;align-items:center;gap:10px;flex:none}
+.recherche{flex:1;height:42px;border-radius:99px;background:rgba(255,255,255,.1);display:flex;align-items:center;gap:8px;padding:0 14px;color:rgba(255,255,255,.7);font-size:12.5px;font-weight:500}
+.sheet{flex:1;background:var(--creme);border-radius:28px 28px 0 0;padding:20px 16px 120px;display:flex;flex-direction:column;gap:14px;overflow:hidden;position:relative}
+.bnav{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);height:62px;border-radius:99px;background:var(--sapin);display:flex;align-items:center;gap:4px;padding:7px;box-shadow:0 14px 34px rgba(11,26,31,.28);z-index:5}
+.bnav .it{width:46px;height:48px;display:grid;place-items:center;border-radius:99px}
+.bnav .on{width:auto;display:flex;gap:7px;padding:0 16px;background:var(--lime);color:var(--sapin);font-weight:600;font-size:12px}
+.home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:9px;background:#0B1A1F;z-index:6}
+.sheet>*{flex-shrink:0}
+.fondu::after{content:"";position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(rgba(242,237,229,0),#F2EDE5 65%);z-index:2}
+.scroll{display:flex;gap:8px;margin-right:-16px;overflow:hidden}
+.card{border-radius:22px;padding:16px}
+.big{font-size:24px;line-height:28px}
+
+.ecran{height:auto!important;min-height:844px}
+.sheet{overflow:visible!important;padding-bottom:118px!important}
+.sheet.fondu::after{display:none}
+
+/* ===== Jumanly Admin ===== */
+
+.adm{display:flex;width:1440px;min-height:1024px;background:var(--nuit);padding:14px 14px 14px 0}
+.aside{width:256px;flex:none;padding:14px 18px;display:flex;flex-direction:column;gap:4px;color:#fff}
+.ai{display:flex;align-items:center;gap:12px;height:42px;padding:0 14px;border-radius:14px;color:rgba(255,255,255,.7);font-size:13.5px;font-weight:500}
+.ai.on{background:var(--lime);color:var(--sapin);font-weight:600}
+.amain{flex:1;min-width:0;background:var(--creme);border-radius:32px;padding:26px 30px 30px;display:flex;flex-direction:column;gap:20px}
+
+/* ===== Authentification ===== */
+
+.auth{display:flex;width:1440px;min-height:1024px;background:var(--creme)}
+.auth-g{width:560px;flex:none;background:var(--sapin);color:#fff;position:relative;overflow:hidden;padding:44px 52px;display:flex;flex-direction:column}
+.auth-d{flex:1;display:flex;flex-direction:column;align-items:center;padding:44px 60px}
+.auth-c{width:520px;display:flex;flex-direction:column;gap:20px;margin:auto 0}
+
+/* ===== Site public desktop ===== */
+
+body{font-size:16px;line-height:26px}
+.wrap{width:1200px;margin:0 auto}
+.sec{padding:96px 0;position:relative;overflow:hidden}
+.s-creme{background:var(--creme)}.s-blanc{background:#fff}.s-sapin{background:var(--sapin);color:#fff}.s-nuit{background:var(--prof);color:#fff}
+.s-sapin .mut,.s-nuit .mut{color:rgba(255,255,255,.7)}
+.display{font-size:56px;line-height:60px;font-weight:600;letter-spacing:-.035em}
+.h1s{font-size:36px;line-height:42px;font-weight:600;letter-spacing:-.025em}
+.h2s{font-size:24px;line-height:30px;font-weight:500;letter-spacing:-.015em}
+.lead{font-size:18px;line-height:28px;color:var(--ardoise)}
+.s-sapin .lead,.s-nuit .lead{color:rgba(255,255,255,.75)}
+.eyebrow{font-size:13px;line-height:18px;font-weight:500;letter-spacing:.12em;text-transform:uppercase;color:#3DA14F}
+.s-sapin .eyebrow,.s-nuit .eyebrow{color:var(--neon)}
+.tete{display:flex;flex-direction:column;gap:14px;max-width:760px}
+.tete.c{align-items:center;text-align:center;margin:0 auto}
+.grille{display:grid;gap:20px}
+.c2{grid-template-columns:repeat(2,minmax(0,1fr))}.c3{grid-template-columns:repeat(3,minmax(0,1fr))}.c4{grid-template-columns:repeat(4,minmax(0,1fr))}
+.carte{background:#fff;border-radius:28px;padding:28px;display:flex;flex-direction:column;gap:12px}
+.s-blanc .carte{background:var(--creme)}
+.s-sapin .carte{background:rgba(255,255,255,.07);box-shadow:inset 0 0 0 1px rgba(255,255,255,.12);color:#fff}
+.lien{font-weight:600;color:#3DA14F;display:inline-flex;align-items:center;gap:6px;font-size:15px}
+.s-sapin .lien{color:var(--lime)}
+.pub-h{height:84px;background:#fff;display:flex;align-items:center;padding:0 120px;gap:28px;position:relative;z-index:3;box-shadow:0 1px 0 #E6E9E7}
+.pub-h nav{display:flex;gap:22px;white-space:nowrap;font-size:14.5px;font-weight:500;flex:1}
+.pub-h nav span{display:inline-flex;align-items:center;gap:4px}
+.pub-h nav .on{color:#0F3F37;box-shadow:0 2px 0 #A6F26B}
+.pub-f{background:var(--sapin);color:#fff;padding:72px 0 32px}
+.pub-f .mut{color:rgba(255,255,255,.66)}
+.pub-f a{display:block;font-size:14px;line-height:30px;color:rgba(255,255,255,.82)}
+.cookie{position:fixed}
+.acc{background:#fff;border-radius:20px;padding:20px 24px;display:flex;flex-direction:column;gap:8px}
+.s-blanc .acc{background:var(--creme)}
+.num{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;font-weight:600;font-size:17px;flex:none}
+
+/* ===== Site public mobile (≤ 600 px) ===== */
+@media (max-width:600px){
+body{font-size:15px;line-height:24px}
+.wrap{width:auto;margin:0 16px}
+.sec{padding:56px 0}
+.display{font-size:36px;line-height:40px}
+.h1s{font-size:28px;line-height:34px}
+.h2s{font-size:20px;line-height:26px}
+.lead{font-size:16px;line-height:25px}
+.grille{gap:14px}.c2,.c3,.c4{grid-template-columns:minmax(0,1fr)}
+.m2{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+.carte{border-radius:24px;padding:20px}
+.pub-h{height:64px;padding:0 16px;gap:12px}
+.pub-f{padding:48px 0 28px}
+}

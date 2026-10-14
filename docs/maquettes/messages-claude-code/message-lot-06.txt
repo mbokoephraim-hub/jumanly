@@ -1,0 +1,18 @@
+Lot 6 sur 14 · Site public 5 : formations, offres, entreprise, attestation, portfolio, pages légales
+
+J'ai ajouté ces maquettes dans `docs/maquettes/` :
+- `/formations` : Catalogue public des formations → `docs/maquettes/01-site-public/01-10-formations.pdf`
+- `/formations/[slug]` : Fiche formation publique → `docs/maquettes/01-site-public/01-11-formation-detail.pdf`
+- `/offres` : Offres publiques → `docs/maquettes/01-site-public/01-12-offres.pdf`
+- `/offres/[slug]` : Détail d'offre public → `docs/maquettes/01-site-public/01-13-offre-detail.pdf`
+- `/entreprises/[slug]` : Page entreprise publique → `docs/maquettes/01-site-public/01-14-entreprise-publique.pdf`
+- `/attestations/[code]` : Vérification publique d'une attestation → `docs/maquettes/01-site-public/01-15-attestation-verification.pdf`
+- `/portfolio/[slug]` : Portfolio public → `docs/maquettes/01-site-public/01-16-portfolio-public.pdf`
+- `/confidentialite` : Gabarit des pages légales (Confidentialité) → `docs/maquettes/01-site-public/01-17-page-legale.pdf`
+
+Pour chaque page de la liste, dans l'ordre :
+1. Ouvre son PDF (page 1 : la fiche avec composants, états et règles ; page 2 : desktop ; page 3 : mobile) et son HTML (dossier `html/`, fichiers `-desktop.html` et `-mobile.html`) pour lire les valeurs exactes.
+2. Refais la page pour qu'elle ressemble exactement à la maquette, avec les composants et gabarits du lot 1. Garde les textes de `messages/fr.json` ; si un texte manque, ajoute-le dans `textes/textes-application.md` et signale-le.
+3. Prends une capture Playwright de ta page à 1440 px et à 390 px, compare-la à la maquette et corrige les écarts.
+
+Termine par lint, typecheck et build, donne-moi la liste des pages faites et des écarts restants, puis attends le lot 7.

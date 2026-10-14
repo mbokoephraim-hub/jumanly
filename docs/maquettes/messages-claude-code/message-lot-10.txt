@@ -1,0 +1,18 @@
+Lot 10 sur 14 · Espace talent 3 : Jobs, candidatures, messages, notifications, paramètres
+
+J'ai ajouté ces maquettes dans `docs/maquettes/` :
+- `/app/jobs` : Jobs · Recherche d'offres → `docs/maquettes/03-espace-talent/03-16-jobs-recherche.pdf`
+- `/app/jobs/[slug]` : Jobs · Détail de l'offre → `docs/maquettes/03-espace-talent/03-17-jobs-offre.pdf`
+- `/app/jobs/[slug]` : Jobs · Postuler (1 ou 2 étapes) → `docs/maquettes/03-espace-talent/03-18-jobs-postuler.pdf`
+- `/app/jobs/candidatures` : Jobs · Mes candidatures → `docs/maquettes/03-espace-talent/03-19-candidatures.pdf`
+- `/app/jobs/enregistrees` : Jobs · Offres enregistrées → `docs/maquettes/03-espace-talent/03-20-enregistrees.pdf`
+- `/app/messages` : Messagerie Connect → `docs/maquettes/03-espace-talent/03-21-messages.pdf`
+- `/app/notifications` : Centre de notifications → `docs/maquettes/03-espace-talent/03-22-notifications.pdf`
+- `/app/parametres` : Paramètres → `docs/maquettes/03-espace-talent/03-23-parametres.pdf`
+
+Pour chaque page de la liste, dans l'ordre :
+1. Ouvre son PDF (page 1 : la fiche avec composants, états et règles ; page 2 : desktop ; page 3 : mobile) et son HTML (dossier `html/`, fichiers `-desktop.html` et `-mobile.html`) pour lire les valeurs exactes.
+2. Refais la page pour qu'elle ressemble exactement à la maquette, avec les composants et gabarits du lot 1. Garde les textes de `messages/fr.json` ; si un texte manque, ajoute-le dans `textes/textes-application.md` et signale-le.
+3. Prends une capture Playwright de ta page à 1440 px et à 390 px, compare-la à la maquette et corrige les écarts.
+
+Termine par lint, typecheck et build, donne-moi la liste des pages faites et des écarts restants, puis attends le lot 11.

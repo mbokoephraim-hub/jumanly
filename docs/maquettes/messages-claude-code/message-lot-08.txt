@@ -1,0 +1,17 @@
+Lot 8 sur 14 · Espace talent 1 : tableau de bord, profil, Learn
+
+J'ai ajouté ces maquettes dans `docs/maquettes/` :
+- `/app` : Tableau de bord talent → `docs/maquettes/03-espace-talent/03-01-tableau-de-bord.pdf`
+- `/app/profil` : Profil professionnel → `docs/maquettes/03-espace-talent/03-02-profil.pdf`
+- `/app/learn` : Catalogue Learn → `docs/maquettes/03-espace-talent/03-03-learn-catalogue.pdf`
+- `/app/learn/[slug]` : Fiche formation (avant de commencer) → `docs/maquettes/03-espace-talent/03-04-learn-fiche.pdf`
+- `/app/learn/[slug]` : Lecteur de formation → `docs/maquettes/03-espace-talent/03-05-learn-lecteur.pdf`
+- `/app/learn/[slug]` : Quiz et résultats → `docs/maquettes/03-espace-talent/03-06-learn-quiz.pdf`
+- `/app/learn/attestations` : Attestations → `docs/maquettes/03-espace-talent/03-07-attestations.pdf`
+
+Pour chaque page de la liste, dans l'ordre :
+1. Ouvre son PDF (page 1 : la fiche avec composants, états et règles ; page 2 : desktop ; page 3 : mobile) et son HTML (dossier `html/`, fichiers `-desktop.html` et `-mobile.html`) pour lire les valeurs exactes.
+2. Refais la page pour qu'elle ressemble exactement à la maquette, avec les composants et gabarits du lot 1. Garde les textes de `messages/fr.json` ; si un texte manque, ajoute-le dans `textes/textes-application.md` et signale-le.
+3. Prends une capture Playwright de ta page à 1440 px et à 390 px, compare-la à la maquette et corrige les écarts.
+
+Termine par lint, typecheck et build, donne-moi la liste des pages faites et des écarts restants, puis attends le lot 9.

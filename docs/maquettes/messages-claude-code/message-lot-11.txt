@@ -1,0 +1,20 @@
+Lot 11 sur 14 · Espace recruteur et entreprise (Hire)
+
+J'ai ajouté ces maquettes dans `docs/maquettes/` :
+- `/app/hire` : Tableau de bord recrutement → `docs/maquettes/04-espace-recruteur-entreprise/04-01-hire-accueil.pdf`
+- `/app/hire/offres` : Mes offres → `docs/maquettes/04-espace-recruteur-entreprise/04-02-offres.pdf`
+- `/app/hire/offres/nouvelle` : Création guidée d'une offre → `docs/maquettes/04-espace-recruteur-entreprise/04-03-offre-nouvelle.pdf`
+- `/app/hire/offres/[id]` : Pipeline → `docs/maquettes/04-espace-recruteur-entreprise/04-04-pipeline.pdf`
+- `/app/hire/candidats/[applicationId]` : Fiche candidature → `docs/maquettes/04-espace-recruteur-entreprise/04-05-fiche-candidature.pdf`
+- `/app/hire/talents` : Recherche dans le vivier → `docs/maquettes/04-espace-recruteur-entreprise/04-06-talents.pdf`
+- `/app/hire/viviers` : Viviers et listes → `docs/maquettes/04-espace-recruteur-entreprise/04-07-viviers.pdf`
+- `/app/hire/entretiens` : Entretiens et agenda → `docs/maquettes/04-espace-recruteur-entreprise/04-08-entretiens.pdf`
+- `/app/hire/rapports` : Statistiques et rapports → `docs/maquettes/04-espace-recruteur-entreprise/04-09-rapports.pdf`
+- `/app/organisation` : Organisation → `docs/maquettes/04-espace-recruteur-entreprise/04-10-organisation.pdf`
+
+Pour chaque page de la liste, dans l'ordre :
+1. Ouvre son PDF (page 1 : la fiche avec composants, états et règles ; page 2 : desktop ; page 3 : mobile) et son HTML (dossier `html/`, fichiers `-desktop.html` et `-mobile.html`) pour lire les valeurs exactes.
+2. Refais la page pour qu'elle ressemble exactement à la maquette, avec les composants et gabarits du lot 1. Garde les textes de `messages/fr.json` ; si un texte manque, ajoute-le dans `textes/textes-application.md` et signale-le.
+3. Prends une capture Playwright de ta page à 1440 px et à 390 px, compare-la à la maquette et corrige les écarts.
+
+Termine par lint, typecheck et build, donne-moi la liste des pages faites et des écarts restants, puis attends le lot 12.

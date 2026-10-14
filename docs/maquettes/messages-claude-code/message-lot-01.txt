@@ -1,0 +1,12 @@
+Lot 1 sur 14 · Le socle : design system, ressources et guide
+
+J'ai ajouté le dossier `docs/maquettes/`. Ce sont les maquettes de référence de Jumanly : elles font foi pour tout le visuel (couleurs, dégradés, icônes, rayons, cartes, gabarits). Les textes restent ceux de `messages/fr.json` et les forfaits ceux de la partie 05 des spécifications.
+
+1. Lis `docs/maquettes/LISEZMOI.md`, puis les 5 planches de `docs/maquettes/00-design-system/` (PDF et HTML).
+2. Ajoute dans `CLAUDE.md`, section « Documents de référence », la ligne : « `docs/maquettes/` : maquettes de référence page par page (PDF + HTML). Avant de coder ou de retoucher un écran, ouvrir le PDF et le HTML de sa route et reproduire fidèlement la mise en forme. »
+3. Mets à jour `src/styles/tokens.css` et la config Tailwind d'après `docs/maquettes/ressources/jumanly-ui.css` (jetons, dégradés, rayons, police Sora).
+4. Refais les composants de `src/components/ui` d'après la planche 00-02 (boutons en pilule, champs, cases, interrupteurs, onglets, filtres, badges, progression, avatars, toasts, modale, verrou, état vide, tableau), puis les cartes et l'IA d'après 00-03 (carte IA avec orbe, « Pourquoi ? », Appliquer / Ignorer, score en dégradé IA).
+5. Remplace toute bibliothèque d'icônes par les icônes de `ressources/icones/` et `docs/maquettes/ressources/icones-complementaires/`.
+6. Refais les gabarits d'après 00-04 : en-tête et pied de page du site public, barre latérale Sapin + panneau Crème de l'espace connecté, navigation mobile en pilule, barre large de l'admin.
+
+Ne touche à aucun texte. Termine par lint, typecheck et build, montre-moi une capture de la page /dev/composants, puis attends le lot 2.

@@ -1,0 +1,21 @@
+Lot 13 sur 14 · Jumanly Admin
+
+J'ai ajouté ces maquettes dans `docs/maquettes/` :
+- `/admin` : Indicateurs → `docs/maquettes/07-jumanly-admin/07-01-admin-indicateurs.pdf`
+- `/admin/utilisateurs` : Utilisateurs → `docs/maquettes/07-jumanly-admin/07-02-admin-utilisateurs.pdf`
+- `/admin/organisations` : Organisations et vérification → `docs/maquettes/07-jumanly-admin/07-03-admin-organisations.pdf`
+- `/admin/forfaits` : Forfaits et droits → `docs/maquettes/07-jumanly-admin/07-04-admin-forfaits.pdf`
+- `/admin/abonnements` : Abonnements et paiements → `docs/maquettes/07-jumanly-admin/07-05-admin-abonnements.pdf`
+- `/admin/formations` : Formations (Learn) → `docs/maquettes/07-jumanly-admin/07-06-admin-formations.pdf`
+- `/admin/offres` : Modération des offres → `docs/maquettes/07-jumanly-admin/07-07-admin-offres.pdf`
+- `/admin/partenaires` : Partenaires et lots de licences → `docs/maquettes/07-jumanly-admin/07-08-admin-partenaires.pdf`
+- `/admin/ia` : IA et poids du matching → `docs/maquettes/07-jumanly-admin/07-09-admin-ia.pdf`
+- `/admin/contenus` : Contenus éditables → `docs/maquettes/07-jumanly-admin/07-10-admin-contenus.pdf`
+- `/admin/signalements` : Signalements → `docs/maquettes/07-jumanly-admin/07-11-admin-signalements.pdf`
+
+Pour chaque page de la liste, dans l'ordre :
+1. Ouvre son PDF (page 1 : la fiche avec composants, états et règles ; page 2 : desktop ; page 3 : mobile) et son HTML (dossier `html/`, fichiers `-desktop.html` et `-mobile.html`) pour lire les valeurs exactes.
+2. Refais la page pour qu'elle ressemble exactement à la maquette, avec les composants et gabarits du lot 1. Garde les textes de `messages/fr.json` ; si un texte manque, ajoute-le dans `textes/textes-application.md` et signale-le.
+3. Prends une capture Playwright de ta page à 1440 px et à 390 px, compare-la à la maquette et corrige les écarts.
+
+Termine par lint, typecheck et build, donne-moi la liste des pages faites et des écarts restants, puis attends le lot 14.
