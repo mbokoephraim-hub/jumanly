@@ -1,7 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Alert, Badge, Button, EmptyState } from "@/components/ui";
+import { Icon } from "@/components/brand/icon";
+import { AppPageHeader } from "@/components/app/page-header";
+import { card, CareerTabs, IconTile, pillClass } from "@/components/career/kit";
+import { Alert, EmptyState } from "@/components/ui";
+import { cx } from "@/lib/cx";
 import { formatDate } from "@/lib/dates";
 import { createCv } from "@/server/actions/cv";
 import { requireUser } from "@/server/auth/session";
@@ -23,22 +27,23 @@ export default async function CvListPage({ searchParams }: PageProps<"/app/caree
     orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
     select: { id: true, title: true, isPrimary: true, updatedAt: true },
   });
+  const tHome = await getTranslations("career.home");
   const create = (
     <form action={createCv}>
-      <Button type="submit" disabled={cvs.length >= MAX_CVS}>
+      <button type="submit" disabled={cvs.length >= MAX_CVS} className={pillClass("dark", "sm")}>
+        <Icon name="plus" className="size-4" />
         {t("new")}
-      </Button>
+      </button>
     </form>
   );
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <p className="text-eyebrow text-ardoise">{t("title")}</p>
-          <h1 className="text-h1">{t("myCvs")}</h1>
-        </div>
-        {cvs.length > 0 && create}
-      </header>
+    <>
+      <AppPageHeader
+        eyebrow={tHome("eyebrow")}
+        title={t("myCvs")}
+        actions={cvs.length > 0 ? create : undefined}
+      />
+      <CareerTabs active="cv" />
       {params.ok === "supprime" && <Alert tone="success" title={t("deleted")} />}
       {(params.erreur === "limite" || cvs.length >= MAX_CVS) && (
         <Alert tone={params.erreur ? "error" : "info"} title={t("limit", { max: MAX_CVS })} />
@@ -46,35 +51,40 @@ export default async function CvListPage({ searchParams }: PageProps<"/app/caree
       {cvs.length === 0 ? (
         <EmptyState title={t("empty")} description={t("fromProfileHint")} action={create} />
       ) : (
-        <ul className="flex flex-col gap-3">
+        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
           {cvs.map((cv) => (
-            <li
-              key={cv.id}
-              className="flex flex-wrap items-center justify-between gap-3 rounded-card bg-blanc p-5"
-            >
-              <span className="flex flex-col gap-1">
-                <span className="flex flex-wrap items-center gap-2">
-                  <Link href={`/app/career/cv/${cv.id}`} className="font-semibold underline">
+            <li key={cv.id} className={cx(card, "flex flex-col gap-4")}>
+              <div className="flex items-start justify-between gap-3">
+                <IconTile icon="doc" />
+                {cv.isPrimary && (
+                  <span className="rounded-pill bg-lime-clair px-2.5 py-1 text-[11px] font-semibold">
+                    {t("default")}
+                  </span>
+                )}
+              </div>
+              <div className="flex flex-col gap-1">
+                <h2 className="text-lg font-semibold">
+                  <Link href={`/app/career/cv/${cv.id}`} className="hover:underline">
                     {cv.title}
                   </Link>
-                  {cv.isPrimary && <Badge tone="career">{t("default")}</Badge>}
-                </span>
-                <span className="text-sm text-ardoise">
+                </h2>
+                <p className="text-[13px] text-ardoise">
                   {t("updated", { date: formatDate(cv.updatedAt) })}
-                </span>
-              </span>
-              <span className="flex flex-wrap gap-3 text-sm">
-                <Link href={`/app/career/cv/${cv.id}`} className="underline">
+                </p>
+              </div>
+              <div className="mt-auto flex flex-wrap gap-2 border-t border-brume pt-3">
+                <Link href={`/app/career/cv/${cv.id}`} className={pillClass("dark", "sm")}>
                   {t("open")}
                 </Link>
-                <a href={`/app/career/cv/${cv.id}/pdf`} className="underline">
+                <a href={`/app/career/cv/${cv.id}/pdf`} className={pillClass("outline", "sm")}>
+                  <Icon name="telecharger" className="size-4" />
                   {t("export.text")}
                 </a>
-              </span>
+              </div>
             </li>
           ))}
         </ul>
       )}
-    </div>
+    </>
   );
 }

@@ -2,7 +2,9 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { AiOrb } from "@/components/brand/ai-orb";
 import { Icon } from "@/components/brand/icon";
-import { Alert, Badge, Button } from "@/components/ui";
+import { pillClass, ScoreRing } from "@/components/career/kit";
+import { Alert } from "@/components/ui";
+import { cx } from "@/lib/cx";
 import { decideSuggestionAction, runCoachAction } from "@/server/actions/cv";
 import type { CoachSuggestion, CvScore } from "@/server/services/cv-coach";
 
@@ -37,60 +39,63 @@ export function CvCoachPanel({
   outcome: { coach?: string; suggestion?: string };
 }) {
   const t = useTranslations();
+  const box = "rounded-[20px] bg-sapin/35 p-4 ring-1 ring-blanc/10";
   return (
     <section
       id="coach"
       aria-labelledby="coach-title"
-      className="flex scroll-mt-24 flex-col gap-4 rounded-card bg-blanc p-6"
+      className="relative flex scroll-mt-24 flex-col gap-4 overflow-hidden rounded-[24px] bg-[linear-gradient(160deg,#2FD3A6_0%,#14745F_35%,#0F3F37_100%)] p-5 text-blanc"
     >
-      <div className="flex items-center gap-2">
-        <AiOrb />
-        <h2 id="coach-title" className="text-h2">
-          {t("ai.cvCoach.title")}
-        </h2>
-      </div>
-
-      <div className="flex flex-col gap-1 rounded-card bg-creme p-4">
-        <p className="text-label">{t("ai.cvCoach.analysis")}</p>
-        <p className="text-h1">{t("ai.cvCoach.score.text", { score: score.total })}</p>
-        <p className="font-medium">
-          {t("ai.cvCoach.score.label", { level: t(`ai.cvCoach.score.level.${score.level}`) })}
-        </p>
-        <p className="text-sm text-ardoise">
-          {t("ai.cvCoach.score.detail.text", {
-            ats: score.ats,
-            impact: score.impact,
-            keywords: score.keywords,
-          })}
-        </p>
-        <details>
-          <summary className="cursor-pointer text-sm font-medium underline">
-            {t("ai.card.why")}
-          </summary>
-          <p className="mt-2 text-sm">{t("ai.cvCoach.score.explain")}</p>
-          <ul className="mt-2 flex flex-col gap-1 text-sm">
-            {(["ats", "impact", "keywords"] as const).map((key) => (
-              <li key={key}>
-                {[t(`ai.cvCoach.score.${key}.text`), t(`ai.cvCoach.score.${key}.desc`)].join(" : ")}
-              </li>
-            ))}
-          </ul>
-        </details>
-      </div>
-
-      {missingKeywords.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-h3">{t("ai.cvCoach.keywords.title")}</h3>
-          <ul className="flex flex-wrap gap-2">
-            {missingKeywords.map((keyword) => (
-              <li key={keyword}>
-                <Badge tone="ai">{keyword}</Badge>
-              </li>
-            ))}
-          </ul>
-          <p className="text-sm text-ardoise">{t("ai.cvCoach.keywords.hint")}</p>
+      <span
+        aria-hidden
+        className="pointer-events-none absolute -top-16 -right-16 size-48 rounded-full ring-1 ring-blanc/20"
+      />
+      <div className="relative flex items-center gap-3">
+        <AiOrb size={40} />
+        <div className="flex flex-col">
+          <h2 id="coach-title" className="text-[17px] font-semibold">
+            {t("ai.cvCoach.title")}
+          </h2>
+          <p className="text-xs text-blanc/75">{t("ai.cvCoach.analysis")}</p>
         </div>
-      )}
+      </div>
+
+      <div className="relative flex items-center gap-4 rounded-[20px] bg-blanc/10 p-4 ring-1 ring-blanc/15">
+        <ScoreRing
+          value={score.total}
+          label={t("ai.cvCoach.score.text", { score: score.total })}
+          size={84}
+          dark
+        />
+        <div className="flex min-w-0 flex-col gap-1">
+          <p className="text-[15px] font-semibold">
+            {t("ai.cvCoach.score.label", { level: t(`ai.cvCoach.score.level.${score.level}`) })}
+          </p>
+          <p className="text-xs leading-[17px] text-blanc/80">
+            {t("ai.cvCoach.score.detail.text", {
+              ats: score.ats,
+              impact: score.impact,
+              keywords: score.keywords,
+            })}
+          </p>
+          <details className="text-xs">
+            <summary className="inline-flex cursor-pointer items-center gap-1 font-semibold text-neon">
+              <Icon name="eye" className="size-3.5" />
+              {t("ai.card.why")}
+            </summary>
+            <p className="mt-2 leading-[17px] text-blanc/85">{t("ai.cvCoach.score.explain")}</p>
+            <ul className="mt-2 flex flex-col gap-1 text-blanc/85">
+              {(["ats", "impact", "keywords"] as const).map((key) => (
+                <li key={key}>
+                  {[t(`ai.cvCoach.score.${key}.text`), t(`ai.cvCoach.score.${key}.desc`)].join(
+                    " : ",
+                  )}
+                </li>
+              ))}
+            </ul>
+          </details>
+        </div>
+      </div>
 
       {outcome.coach === "unavailable" && <Alert tone="error" title={t("ai.card.error")} />}
       {outcome.coach === "empty" && <Alert title={t("ai.cvCoach.empty")} />}
@@ -100,6 +105,96 @@ export function CvCoachPanel({
       {outcome.suggestion === "ignored" && <Alert title={t("ai.card.ignored")} />}
       {outcome.suggestion === "obsolete" && <Alert title={t("ai.cvCoach.obsolete")} />}
 
+      {suggestions.length > 0 && (
+        <div className="relative flex flex-col gap-3">
+          <p className="text-[11px] font-semibold tracking-[0.12em] text-neon uppercase">
+            {t("ai.cvCoach.priority", { count: suggestions.length })}
+          </p>
+          <ul className="flex flex-col gap-3">
+            {suggestions.map(({ id, payload }) => (
+              <li key={id} className={cx(box, "flex flex-col gap-2.5")}>
+                <p className="flex items-start gap-2 text-[15px] leading-5 font-semibold">
+                  <span aria-hidden className="mt-1.5 size-2 shrink-0 rounded-full bg-lime" />
+                  {payload.kind === "headlineSkill"
+                    ? t("ai.cvCoach.suggestion.headlineSkill.title", { skill: payload.skill ?? "" })
+                    : t(`ai.cvCoach.suggestion.${payload.kind}.title`)}
+                </p>
+                {payload.after !== null ? (
+                  <p className="text-sm leading-5 text-blanc/90">
+                    {t("ai.cvCoach.suggestion.quantify.body", {
+                      before: payload.before,
+                      after: payload.after,
+                    })}
+                  </p>
+                ) : (
+                  <>
+                    {payload.before && <p className="text-sm italic">{payload.before}</p>}
+                    <p className="text-xs text-blanc/75">{t("ai.cvCoach.adviceOnly")}</p>
+                  </>
+                )}
+                <p className="flex gap-2 text-xs leading-[17px] text-blanc/85">
+                  <Icon name="eye" className="mt-px size-4 shrink-0 text-neon" />
+                  <span>
+                    <strong className="text-blanc">{t("ai.card.why")}</strong>{" "}
+                    {payload.kind === "headlineSkill"
+                      ? percents[payload.skill ?? ""] && targetTitle
+                        ? t("ai.cvCoach.suggestion.headlineSkill.why", {
+                            percent: percents[payload.skill ?? ""] ?? 0,
+                            jobTitle: targetTitle,
+                          })
+                        : t("ai.disclaimer.noInvention")
+                      : t(`ai.cvCoach.suggestion.${payload.kind}.why`)}
+                  </span>
+                </p>
+                <div className="flex flex-wrap gap-2">
+                  {payload.after !== null && (
+                    <form action={decideSuggestionAction}>
+                      <input type="hidden" name="id" value={documentId} />
+                      <input type="hidden" name="suggestion" value={id} />
+                      <input type="hidden" name="decision" value="applied" />
+                      <button type="submit" className={pillClass("lime", "sm")}>
+                        {t("ai.card.apply")}
+                      </button>
+                    </form>
+                  )}
+                  <form action={decideSuggestionAction}>
+                    <input type="hidden" name="id" value={documentId} />
+                    <input type="hidden" name="suggestion" value={id} />
+                    <input type="hidden" name="decision" value="ignored" />
+                    <button type="submit" className={pillClass("ghost", "sm")}>
+                      {t("ai.card.ignore")}
+                    </button>
+                  </form>
+                </div>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+      {outcome.coach === "done" && suggestions.length === 0 && (
+        <p className="text-sm">{t("ai.cvCoach.allDone")}</p>
+      )}
+
+      {missingKeywords.length > 0 && (
+        <div className="relative flex flex-col gap-2">
+          <h3 className="text-[11px] font-semibold tracking-[0.12em] text-neon uppercase">
+            {t("ai.cvCoach.keywords.title")}
+          </h3>
+          <p className="text-xs leading-[17px] text-blanc/80">{t("ai.cvCoach.keywords.hint")}</p>
+          <ul className="flex flex-wrap gap-2">
+            {missingKeywords.map((keyword) => (
+              <li
+                key={keyword}
+                className="flex items-center gap-1 rounded-pill px-3 py-1 text-xs font-semibold ring-1 ring-blanc/40 ring-inset"
+              >
+                <Icon name="plus" className="size-3 text-neon" />
+                {keyword}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {coach.state === "consent" ? (
         <Alert title={t("ai.consent.declined.state")}>
           <Link href="/app/parametres?onglet=confidentialite" className="font-medium underline">
@@ -107,22 +202,31 @@ export function CvCoachPanel({
           </Link>
         </Alert>
       ) : coach.state === "entitlement" || (coach.state === "quota" && !credits?.limit) ? (
-        <div className="flex flex-col gap-2">
-          {coach.plan && <p>{t("ai.cvCoach.locked.free", { plan: coach.plan })}</p>}
-          <h3 className="font-semibold text-h3">{t("ai.cvCoach.tips.free.title")}</h3>
-          <p className="text-sm">{t("ai.cvCoach.tips.free.body")}</p>
+        <div className={cx(box, "relative flex flex-col gap-2")}>
+          {coach.plan && (
+            <p className="text-sm">{t("ai.cvCoach.locked.free", { plan: coach.plan })}</p>
+          )}
+          <h3 className="font-semibold">{t("ai.cvCoach.tips.free.title")}</h3>
+          <p className="text-sm text-blanc/85">{t("ai.cvCoach.tips.free.body")}</p>
         </div>
       ) : coach.state === "quota" ? (
         <Alert tone="warning" title={t("ai.credits.reached.title")}>
           {coach.resetsAt ? t("ai.credits.reached.body", { date: coach.resetsAt }) : null}
         </Alert>
       ) : (
-        <form action={runCoachAction} className="flex flex-col gap-2">
+        <form
+          action={runCoachAction}
+          className="relative flex flex-wrap items-center justify-between gap-2"
+        >
           <input type="hidden" name="id" value={documentId} />
-          <Button type="submit" variant="secondary" className="self-start">
+          <button
+            type="submit"
+            className="flex items-center gap-1.5 text-[13px] font-semibold text-neon hover:underline"
+          >
+            <Icon name="intelligence" className="size-4" />
             {suggestions.length > 0 ? t("ai.cvCoach.reanalyze") : t("ai.cvCoach.analyze")}
-          </Button>
-          <p className="text-sm text-ardoise">
+          </button>
+          <p className="text-xs text-blanc/75">
             {[
               t("ai.cvCoach.cost", { count: 2 }),
               credits && credits.limit >= 0
@@ -135,76 +239,14 @@ export function CvCoachPanel({
         </form>
       )}
 
-      {suggestions.length > 0 && (
-        <div className="flex flex-col gap-3">
-          <p className="font-semibold">{t("ai.cvCoach.priority", { count: suggestions.length })}</p>
-          <ul className="flex flex-col gap-3">
-            {suggestions.map(({ id, payload }) => (
-              <li key={id} className="flex flex-col gap-2 rounded-card border border-brume p-4">
-                <p className="flex items-center gap-2 font-semibold">
-                  <AiOrb />
-                  {payload.kind === "headlineSkill"
-                    ? t("ai.cvCoach.suggestion.headlineSkill.title", { skill: payload.skill ?? "" })
-                    : t(`ai.cvCoach.suggestion.${payload.kind}.title`)}
-                </p>
-                {payload.after !== null ? (
-                  <p className="text-sm">
-                    {t("ai.cvCoach.suggestion.quantify.body", {
-                      before: payload.before,
-                      after: payload.after,
-                    })}
-                  </p>
-                ) : (
-                  <>
-                    {payload.before && <p className="text-sm italic">{payload.before}</p>}
-                    <p className="text-sm text-ardoise">{t("ai.cvCoach.adviceOnly")}</p>
-                  </>
-                )}
-                <details>
-                  <summary className="inline-flex cursor-pointer items-center gap-1 text-sm font-medium underline">
-                    <Icon name="transparence" className="size-4" />
-                    {t("ai.card.why")}
-                  </summary>
-                  <p className="mt-1 text-sm">
-                    {payload.kind === "headlineSkill"
-                      ? percents[payload.skill ?? ""] && targetTitle
-                        ? t("ai.cvCoach.suggestion.headlineSkill.why", {
-                            percent: percents[payload.skill ?? ""] ?? 0,
-                            jobTitle: targetTitle,
-                          })
-                        : t("ai.disclaimer.noInvention")
-                      : t(`ai.cvCoach.suggestion.${payload.kind}.why`)}
-                  </p>
-                </details>
-                <div className="flex flex-wrap gap-2">
-                  {payload.after !== null && (
-                    <form action={decideSuggestionAction}>
-                      <input type="hidden" name="id" value={documentId} />
-                      <input type="hidden" name="suggestion" value={id} />
-                      <input type="hidden" name="decision" value="applied" />
-                      <Button type="submit" size="sm">
-                        {t("ai.card.apply")}
-                      </Button>
-                    </form>
-                  )}
-                  <form action={decideSuggestionAction}>
-                    <input type="hidden" name="id" value={documentId} />
-                    <input type="hidden" name="suggestion" value={id} />
-                    <input type="hidden" name="decision" value="ignored" />
-                    <Button type="submit" size="sm" variant="tertiary">
-                      {t("ai.card.ignore")}
-                    </Button>
-                  </form>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {outcome.coach === "done" && suggestions.length === 0 && (
-        <p className="text-sm">{t("ai.cvCoach.allDone")}</p>
-      )}
-      <p className="text-sm text-ardoise">
+      <Link
+        href="/app/career/entretiens"
+        className="relative flex h-11 items-center justify-center gap-2 rounded-pill bg-blanc text-[15px] font-semibold text-sapin hover:bg-creme"
+      >
+        <Icon name="mic" className="size-4" />
+        {t("career.cv.simulateInterview")}
+      </Link>
+      <p className="relative text-center text-xs leading-[17px] text-blanc/75">
         {[t("ai.cvCoach.footer"), t("ai.disclaimer.noInvention")].join(" ")}
       </p>
     </section>

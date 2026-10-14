@@ -32,6 +32,8 @@ const eslintConfig = defineConfig([
     "src/generated/**",
     "playwright-report/**",
     "test-results/**",
+    // Reference CV templates delivered as is (standalone HTML, CSS and scripts, not app code).
+    "docs/modeles-cv/**",
   ]),
 ]);
 

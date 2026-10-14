@@ -2,6 +2,48 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · Lot 9 : espace talent, Career (14 octobre 2026)
+
+Maquettes 03-08 à 03-15. Captures 1440 et 390 px dans `captures/refonte-lot-09/` (dossier du projet).
+
+- Pièces communes dans `src/components/career/kit.tsx` : rubriques Career en pastilles (défilent
+  sur téléphone), cartes, panneau dégradé « Jumanly Intelligence », « Pourquoi ? », anneau de score.
+- `/app/career` : bandeau Sapin avec trois chiffres (score du CV, étapes du plan, simulations),
+  cartes des outils avec cadenas de forfait, carte IA avant un entretien confirmé.
+- Diagnostic : questions en cartes à cocher, bilan en deux colonnes avec panneau IA et historique.
+- CV : trois colonnes (mes CV, sections, informations, modèle · aperçu A4 à bandeau · coach IA en
+  dégradé avec anneau de score, suggestions et mots-clés). La liste des CV passe en cartes.
+- Lettres et documents : liste à gauche, document au centre (copier, PDF, corrections cochées),
+  formulaire « Rédiger avec l'IA » à droite, sur la liste comme sur un document.
+- LinkedIn : un bloc par proposition avec « Proposition IA » et « Copier », panneau IA et liste de
+  vérification à droite.
+- Simulations : modes en cartes avec leur quota, choix en pastilles, tableau des séances, dernier
+  retour dans le panneau IA (niveaux, jamais de note chiffrée). Séance restylée.
+- Plan : bandeau objectif avec anneau d'avancement, étapes cochables, formations recommandées,
+  rapport détaillé. Portfolio : projets en cartes à couverture, modification sous la grille, page
+  publique et présentation à droite.
+- `Table` : la zone de défilement est positionnée, pour qu'un texte réservé aux lecteurs d'écran
+  ne fasse plus déborder la page sur téléphone.
+- Textes ajoutés (`textes/textes-application.md`) : `career.nav.*`, `career.home.stats.*`,
+  `career.home.ai.*` et compteurs de l'accueil, `career.diagnostic.eyebrow`,
+  `career.diagnostic.result.questions`, `career.diagnostic.result.exploreJobs`,
+  `career.documents.mine`, `.badge`, `.edit.cta`, `.aiNotice`, `.pick`,
+  `career.linkedin.headline.count`, `career.interviews.history.session|date|mode|feedback|completed`,
+  `career.interviews.feedback.latest|none`, `career.plan.steps`, `career.plan.updated`,
+  `career.portfolio.count`, `.publicBadge`, `.privateBadge`.
+
+### Écarts restants
+
+- Pas de fonction derrière : recherche globale et sélecteur d'espace de la barre du haut, articles
+  « Conseils de préparation » (affiché « Bientôt disponible »), PDF du bilan de diagnostic, boutons
+  « Utile / Signaler une erreur », import de CV, partage du CV par lien, « Proposer une autre
+  version » bloc par bloc sur LinkedIn (un seul bouton pour tout), langue de la simulation,
+  suggestions IA de nouvelles étapes du plan, image de couverture et statistiques de vues du portfolio.
+- Le score des simulations n'est pas chiffré (niveaux Solide · En progrès · À travailler), comme le
+  veut la partie 08 ; la maquette montre des notes sur 100.
+- La liste de vérification LinkedIn se coche mais n'est pas enregistrée.
+- Questionnaire du diagnostic sur une seule page, y compris sur téléphone.
+
 ## Refonte visuelle · Lot 8 : espace talent, tableau de bord, profil et Learn (14 octobre 2026)
 
 Maquettes 03-01 à 03-07. Captures 1440 et 390 px dans `captures/refonte-lot-08/` (dossier du projet).

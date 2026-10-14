@@ -3362,34 +3362,44 @@
           "start": "Commencer le diagnostic",
           "view": "Voir mon diagnostic"
         },
-        "lastDone": "Dernier diagnostic : {date, date, medium}"
+        "lastDone": "Dernier diagnostic : {date, date, medium}",
+        "none": "Pas encore de diagnostic"
       },
       "cv": {
         "title": "Mon CV",
         "desc": "Éditez votre CV par sections et exportez-le en PDF.",
         "cta": "Ouvrir mon CV",
-        "score": "Score du CV : {score}/100"
+        "score": "Score du CV : {score}/100",
+        "none": "Pas encore de CV"
       },
       "documents": {
         "title": "Lettres et documents",
-        "desc": "Lettres de motivation, biographie, correction de textes."
+        "desc": "Lettres de motivation, biographie, correction de textes.",
+        "count": "{count, plural, =0 {Aucun document} one {# document} other {# documents}}"
       },
       "linkedin": {
         "title": "Préparation LinkedIn",
-        "desc": "Un titre, un résumé et des compétences prêts à copier."
+        "desc": "Un titre, un résumé et des compétences prêts à copier.",
+        "last": "Propositions du {date, date, medium}",
+        "none": "Aucune proposition pour l'instant"
       },
       "interviews": {
         "title": "Simulations d'entretien",
-        "desc": "Entraînez-vous à l'écrit puis à l'oral, avec un retour détaillé."
+        "desc": "Entraînez-vous à l'écrit puis à l'oral, avec un retour détaillé.",
+        "cta": "S'entraîner"
       },
       "plan": {
         "title": "Plan de progression",
         "desc": "Vos objectifs, vos étapes et les formations qui vous font avancer.",
-        "cta": "Ouvrir mon plan"
+        "cta": "Ouvrir mon plan",
+        "steps": "{done}/{total} étapes",
+        "none": "Pas encore de plan"
       },
       "portfolio": {
         "title": "Portfolio",
-        "desc": "Montrez vos projets sur une page à partager."
+        "desc": "Montrez vos projets sur une page à partager.",
+        "count": "{count, plural, =0 {Aucun projet} one {# projet} other {# projets}}",
+        "public": "page publique"
       },
       "seo": "Career · Jumanly",
       "later": "Bientôt disponible",
@@ -3398,7 +3408,29 @@
         "desc": "Des fiches pratiques pour préparer chaque étape d'un recrutement."
       },
       "lock": "Disponible avec {plan}",
-      "quota": "{used}/{quota} ce mois"
+      "quota": "{used}/{quota} ce mois",
+      "stats": {
+        "cv": "Score du CV",
+        "cvUnit": "/100",
+        "plan": "Plan",
+        "planUnit": "étapes",
+        "interviews": "Simulations",
+        "interviewsUnit": "ce mois",
+        "ratio": "{value}/{max}",
+        "none": "—"
+      },
+      "open": "Ouvrir",
+      "ai": {
+        "title": "Entraînez-vous à l'oral avant votre entretien avec {organization}",
+        "body": "Une simulation vous fait répondre aux questions les plus fréquentes, puis vous donne un retour détaillé.",
+        "why": "Votre entretien a lieu le {date, date, long}.",
+        "left": "{count, plural, =0 {Vous avez utilisé vos simulations orales ce mois.} one {Il vous reste # simulation orale ce mois.} other {Il vous reste # simulations orales ce mois.}}",
+        "start": "Démarrer la simulation"
+      }
+    },
+    "nav": {
+      "home": "Accueil Career",
+      "label": "Rubriques Career"
     },
     "tips": {
       "title": "Conseils de préparation",
@@ -3412,6 +3444,7 @@
     },
     "diagnostic": {
       "title": "Diagnostic de carrière",
+      "eyebrow": "Career · Diagnostic de carrière",
       "intro": {
         "simple": "12 questions, environ 8 minutes. Vous recevez un bilan et des premières pistes.",
         "personalized": "20 questions, environ 15 minutes. Jumanly Intelligence analyse vos réponses et votre profil pour un bilan personnalisé."
@@ -3553,6 +3586,8 @@
       "result": {
         "title": "Votre bilan de carrière",
         "date": "Établi le {date, date, long}",
+        "questions": "{count} questions",
+        "exploreJobs": "Voir les offres",
         "strengths": "Vos atouts",
         "priorities": "Vos priorités",
         "readiness": {
@@ -3754,6 +3789,16 @@
         "body": "La création et la correction de documents professionnels sont incluses à partir de {plan}."
       },
       "new": "Nouveau document",
+      "mine": "Mes documents",
+      "badge": "Proposition IA",
+      "edit": {
+        "cta": "Modifier",
+        "title": "Titre du document",
+        "text": "Texte",
+        "save": "Enregistrer"
+      },
+      "aiNotice": "Ce contenu a été proposé par l'IA à partir de vos informations. Il peut contenir des erreurs : relisez-le avant de l'utiliser.",
+      "pick": "Choisissez un document à gauche, ou créez-en un avec l'IA.",
       "type": {
         "letter": "Lettre de motivation",
         "bio": "Biographie professionnelle",
@@ -3817,11 +3862,6 @@
       "created": "Votre proposition est prête. Relisez-la et adaptez-la avant de l'utiliser.",
       "deleted": "Document supprimé.",
       "open": "Ouvrir",
-      "edit": {
-        "title": "Titre du document",
-        "text": "Texte",
-        "save": "Enregistrer"
-      },
       "error": {
         "input": "Vérifiez les informations saisies."
       },
@@ -3866,7 +3906,8 @@
       "locked": "Disponible avec {plan}",
       "headline": {
         "text": "Titre",
-        "hint": "220 caractères maximum sur LinkedIn."
+        "hint": "220 caractères maximum sur LinkedIn.",
+        "count": "{count}/{max}"
       },
       "about": "Résumé (section « Infos »)",
       "skills": "Compétences à mettre en avant",
@@ -3986,6 +4027,8 @@
         "betterAnswer": "Piste de réponse",
         "disclaimer": "Retour généré par l'IA. Il vous aide à progresser, il ne prédit pas le résultat d'un vrai entretien.",
         "again": "Refaire une simulation",
+        "latest": "Dernière séance · {type} · {date, date, medium}",
+        "none": "Votre retour apparaîtra ici après votre première séance : impression générale, critères, points forts et pistes de progrès.",
         "level": {
           "solid": "Solide",
           "developing": "En progrès",
@@ -4013,7 +4056,12 @@
         "empty": "Votre première simulation apparaîtra ici.",
         "item": "{type} · {date, date, medium} · {mode}",
         "inProgress": "En cours",
-        "open": "Ouvrir la séance"
+        "open": "Ouvrir la séance",
+        "session": "Séance",
+        "date": "Date",
+        "mode": "Mode",
+        "feedback": "Votre retour",
+        "completed": "Terminée"
       },
       "error": {
         "consent": "Les simulations utilisent l'IA. Activez-la dans vos paramètres de confidentialité pour commencer.",
@@ -4137,7 +4185,9 @@
         }
       },
       "encouragement": "Une étape à la fois. Vous avez déjà fait {done} {done, plural, one {étape} other {étapes}}.",
-      "saved": "Plan mis à jour."
+      "saved": "Plan mis à jour.",
+      "steps": "Étapes",
+      "updated": "Mis à jour le {date, date, long}"
     },
     "portfolio": {
       "title": "Mon portfolio",
@@ -4181,6 +4231,9 @@
       "limit": "Vous avez atteint {max} projets. Supprimez-en un pour en ajouter un autre.",
       "error": "Vérifiez les informations du projet : les liens commencent par https://.",
       "projects": "Projets",
+      "count": "{count, plural, =0 {Aucun projet} one {# projet} other {# projets}}",
+      "publicBadge": "Page publique",
+      "privateBadge": "Page privée",
       "settings": "Présentation",
       "saveSettings": "Enregistrer la présentation",
       "layoutOption": {

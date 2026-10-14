@@ -1,7 +1,22 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Alert, Badge, Button, ButtonLink, ProgressBar, TextField } from "@/components/ui";
+import { AiOrb } from "@/components/brand/ai-orb";
+import { Icon } from "@/components/brand/icon";
+import { AppPageHeader } from "@/components/app/page-header";
+import {
+  card,
+  cardTitle,
+  CareerTabs,
+  eyebrow,
+  IconTile,
+  pillClass,
+  ScoreRing,
+  Why,
+} from "@/components/career/kit";
+import { Pattern } from "@/components/site/marketing";
+import { Alert, PlanLock, TextField } from "@/components/ui";
+import { cx } from "@/lib/cx";
 import {
   addStepAction,
   deleteStepAction,
@@ -44,11 +59,14 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
 
   if (!allowed) {
     return (
-      <div className="flex flex-col gap-4">
-        <h1 className="text-h1">{t("career.plan.title")}</h1>
-        <p className="text-ardoise">{t("career.plan.subtitle")}</p>
-        <Alert title={t("career.plan.locked", { plan: planFor("career.progress_plan") })} />
-      </div>
+      <>
+        <AppPageHeader eyebrow={t("career.plan.subtitle")} title={t("career.plan.title")} />
+        <CareerTabs active="plan" />
+        <PlanLock
+          plan={planFor("career.progress_plan")}
+          description={t("career.plan.locked", { plan: planFor("career.progress_plan") })}
+        />
+      </>
     );
   }
 
@@ -62,191 +80,302 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
     : [];
   const steps = plan?.steps ?? [];
   const doneCount = steps.filter((step) => step.done).length;
+  const progress = t("career.plan.progress", { done: doneCount, total: steps.length });
 
   return (
-    <div className="flex flex-col gap-6">
-      <Link href="/app/career" className="text-sm underline">
-        {t("career.home.eyebrow")}
-      </Link>
-      <header className="flex flex-col gap-2">
-        <h1 className="text-h1">{t("career.plan.title")}</h1>
-        <p className="text-ardoise">{t("career.plan.subtitle")}</p>
-      </header>
+    <>
+      <AppPageHeader eyebrow={t("career.plan.subtitle")} title={t("career.plan.title")} />
+      <CareerTabs active="plan" />
       {query.ok && <Alert tone="success" title={t("career.plan.saved")} />}
       {query.erreur && <Alert tone="error" title={t("talent.profile.error")} />}
 
-      {!plan || steps.length === 0 ? (
-        <section className="flex flex-col items-start gap-3 rounded-card bg-blanc p-6">
-          <p>{t("career.plan.empty")}</p>
-          <form action={planFromDiagnosticAction}>
-            <Button type="submit">{t("career.plan.fromDiagnostic")}</Button>
-          </form>
-        </section>
-      ) : (
-        <section className="flex flex-col gap-3 rounded-card bg-blanc p-6">
-          <p className="font-semibold">
-            {t("career.plan.progress", { done: doneCount, total: steps.length })}
-          </p>
-          <ProgressBar
-            value={Math.round((100 * doneCount) / steps.length)}
-            label={t("career.plan.progress", { done: doneCount, total: steps.length })}
-          />
-          <p className="text-sm text-ardoise">
-            {t("career.plan.encouragement", { done: doneCount })}
-          </p>
-        </section>
-      )}
-
-      <form action={saveGoalAction} className="flex flex-col gap-3 rounded-card bg-blanc p-6">
-        <TextField
-          id="plan-goal"
-          name="goal"
-          label={t("career.plan.goal.text")}
-          placeholder={t("career.plan.goal.placeholder")}
-          defaultValue={plan?.goal ?? ""}
-          maxLength={160}
-        />
-        <div>
-          <Button type="submit" variant="secondary" size="sm">
-            {t("talent.profile.save")}
-          </Button>
-        </div>
-      </form>
-
-      {steps.length > 0 && (
-        <ol className="flex flex-col gap-3">
-          {steps.map((step) => {
-            const state = stepState(step);
-            const title =
-              step.kind === "diagnostic" && step.code
-                ? t(`career.diagnostic.rule.step.${step.code}`)
-                : step.title;
-            return (
-              <li
-                key={step.id}
-                className="flex flex-wrap items-center justify-between gap-3 rounded-card bg-blanc p-4"
+      <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_400px]">
+        <div className="flex min-w-0 flex-col gap-5">
+          <section
+            aria-labelledby="plan-goal-title"
+            className="relative grid gap-5 overflow-hidden rounded-[28px] bg-sapin p-6 text-blanc sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center lg:p-[30px]"
+          >
+            <Pattern
+              name="motif-trajectoires-sombre"
+              size={260}
+              opacity={0.45}
+              className="[mask-image:linear-gradient(90deg,transparent_35%,#000)]"
+            />
+            <div className="relative flex flex-col gap-2">
+              <p className={cx(eyebrow, "text-neon")}>{t("career.plan.goal.text")}</p>
+              <h2
+                id="plan-goal-title"
+                className="text-[24px] leading-[1.15] font-bold tracking-tight lg:text-[30px]"
               >
-                <div className="flex flex-col gap-1">
-                  <span className={state === "done" ? "line-through" : "font-medium"}>
-                    {step.href ? (
-                      <Link href={step.href} className="underline">
-                        {title}
-                      </Link>
-                    ) : (
-                      title
-                    )}
+                {plan?.goal || t("career.plan.goal.add")}
+              </h2>
+              <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-blanc/85">
+                {plan && (
+                  <span className="flex items-center gap-1.5">
+                    <Icon name="calendrier" className="size-4 text-lime" />
+                    {t("career.plan.updated", { date: plan.updatedAt })}
                   </span>
-                  <span className="flex flex-wrap items-center gap-2 text-sm text-ardoise">
-                    <Badge
-                      tone={state === "done" ? "success" : state === "late" ? "warning" : "neutral"}
-                    >
-                      {t(`career.plan.step.${state}`)}
-                    </Badge>
-                    {step.due &&
-                      t("career.plan.step.due", { date: new Date(`${step.due}T12:00:00Z`) })}
-                  </span>
-                </div>
-                <div className="flex gap-2">
-                  <form action={toggleStepAction}>
-                    <input type="hidden" name="step" value={step.id} />
-                    <Button type="submit" size="sm" variant={step.done ? "tertiary" : "secondary"}>
-                      {step.done ? t("career.plan.step.todo") : t("career.plan.step.done")}
-                    </Button>
-                  </form>
-                  <form action={deleteStepAction}>
-                    <input type="hidden" name="step" value={step.id} />
-                    <Button
-                      type="submit"
-                      size="sm"
-                      variant="tertiary"
-                      aria-label={[t("talent.profile.delete"), title].join(" · ")}
-                    >
-                      {t("talent.profile.delete")}
-                    </Button>
-                  </form>
-                </div>
-              </li>
-            );
-          })}
-        </ol>
-      )}
-
-      <form action={addStepAction} className="flex flex-col gap-3 rounded-card bg-blanc p-6">
-        <h2 className="font-semibold text-h3">{t("career.plan.step.add")}</h2>
-        <div className="grid gap-3 sm:grid-cols-[1fr_200px]">
-          <TextField
-            id="plan-step-title"
-            name="title"
-            label={t("career.plan.step.add")}
-            placeholder={t("career.plan.step.title.placeholder")}
-            maxLength={160}
-            required
-          />
-          <TextField id="plan-step-due" name="due" type="date" label={t("career.plan.deadline")} />
-        </div>
-        <div>
-          <Button type="submit" variant="secondary" size="sm">
-            {t("talent.profile.add")}
-          </Button>
-        </div>
-      </form>
-
-      <section className="flex flex-col gap-3 rounded-card bg-blanc p-6">
-        <h2 className="text-h2">{t("career.plan.recommendations.text")}</h2>
-        {!withRecommendations ? (
-          <p className="text-sm text-ardoise">
-            {t("career.plan.recommendations.locked", {
-              plan: planFor("career.progress_plan.recommendations"),
-            })}
-          </p>
-        ) : courses.length === 0 ? (
-          <p className="text-sm text-ardoise">{t("match.why.talent.courses.none")}</p>
-        ) : (
-          <ul className="flex flex-col gap-3">
-            {courses.map((course) => (
-              <li key={course.slug} className="flex flex-col gap-1">
-                <Link href={`/app/learn/${course.slug}`} className="font-medium underline">
-                  {course.title}
+                )}
+                <Link
+                  href="/app/career/diagnostic"
+                  className="flex items-center gap-1.5 hover:underline"
+                >
+                  <Icon name="objectif" className="size-4 text-lime" />
+                  {t("career.diagnostic.title")}
                 </Link>
-                <span className="text-sm text-ardoise">
-                  {[
-                    t("ai.recoCourses.reason.demand", { percent: course.percent }),
-                    course.open ? t("match.why.talent.courses.included") : t("learn.error.locked"),
-                  ].join(" · ")}
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-        <p className="text-sm text-ardoise">{t("ai.recoCourses.why")}</p>
-      </section>
-      <section className="flex flex-col gap-3 rounded-card bg-blanc p-6">
-        <h2 className="text-h2">{t("career.plan.report.text")}</h2>
-        {detailed ? (
-          <>
-            <p className="text-sm">{t("career.plan.report.desc")}</p>
-            <ButtonLink
-              href="/app/career/plan/rapport"
-              prefetch={false}
-              variant="secondary"
-              size="sm"
-              className="self-start"
+              </p>
+            </div>
+            {steps.length > 0 && (
+              <div className="relative flex items-center gap-4">
+                <ScoreRing
+                  value={doneCount}
+                  max={steps.length}
+                  label={t("career.home.stats.ratio", { value: doneCount, max: steps.length })}
+                  size={92}
+                  dark
+                />
+                <div className="flex max-w-[220px] flex-col gap-1">
+                  <p className="text-[15px] font-semibold">{progress}</p>
+                  <p className="text-xs leading-[17px] text-blanc/80">
+                    {t("career.plan.encouragement", { done: doneCount })}
+                  </p>
+                </div>
+              </div>
+            )}
+          </section>
+
+          <section
+            aria-labelledby="plan-steps"
+            className={cx(card, "flex flex-col gap-4 lg:p-[26px]")}
+          >
+            <div className="flex flex-wrap items-center justify-between gap-3">
+              <h2 id="plan-steps" className={cardTitle}>
+                {t("career.plan.steps")}
+              </h2>
+              <a href="#ajouter" className={pillClass("outline", "sm")}>
+                <Icon name="plus" className="size-4" />
+                {t("career.plan.step.add")}
+              </a>
+            </div>
+            {steps.length === 0 ? (
+              <div className="flex flex-col items-start gap-3 rounded-[18px] bg-creme p-5">
+                <p className="text-sm">{t("career.plan.empty")}</p>
+                <form action={planFromDiagnosticAction}>
+                  <button type="submit" className={pillClass("dark", "sm")}>
+                    {t("career.plan.fromDiagnostic")}
+                  </button>
+                </form>
+              </div>
+            ) : (
+              <ol className="flex flex-col divide-y divide-brume">
+                {steps.map((step) => {
+                  const state = stepState(step);
+                  const title =
+                    step.kind === "diagnostic" && step.code
+                      ? t(`career.diagnostic.rule.step.${step.code}`)
+                      : step.title;
+                  return (
+                    <li key={step.id} className="flex items-start gap-3 py-3">
+                      <form action={toggleStepAction}>
+                        <input type="hidden" name="step" value={step.id} />
+                        <button
+                          type="submit"
+                          aria-label={[
+                            step.done ? t("career.plan.step.todo") : t("career.plan.step.done"),
+                            title,
+                          ].join(" · ")}
+                          className={cx(
+                            "flex size-8 shrink-0 items-center justify-center rounded-full",
+                            state === "done"
+                              ? "bg-lime text-sapin"
+                              : state === "late"
+                                ? "bg-down-fond text-down-texte ring-1 ring-corail ring-inset hover:bg-lime-clair"
+                                : "bg-blanc ring-[1.5px] ring-brume ring-inset hover:bg-lime-clair",
+                          )}
+                        >
+                          {state === "done" ? (
+                            <Icon name="check" className="size-4" />
+                          ) : state === "late" ? (
+                            <Icon name="horloge" className="size-4" />
+                          ) : null}
+                        </button>
+                      </form>
+                      <div className="flex min-w-0 flex-1 flex-col gap-0.5 pt-1">
+                        <span
+                          className={cx(
+                            "text-[15px] leading-5",
+                            state === "done" ? "text-ardoise" : "font-semibold",
+                          )}
+                        >
+                          {step.href ? (
+                            <Link href={step.href} className="hover:underline">
+                              {title}
+                            </Link>
+                          ) : (
+                            title
+                          )}
+                        </span>
+                        {step.due && (
+                          <span className="text-xs text-ardoise">
+                            {t("career.plan.step.due", {
+                              date: new Date(`${step.due}T12:00:00Z`),
+                            })}
+                          </span>
+                        )}
+                      </div>
+                      <span
+                        className={cx(
+                          "mt-1 shrink-0 rounded-pill px-2.5 py-1 text-[11px] font-semibold",
+                          stateTone[state],
+                        )}
+                      >
+                        {t(`career.plan.step.${state}`)}
+                      </span>
+                      <form action={deleteStepAction}>
+                        <input type="hidden" name="step" value={step.id} />
+                        <button
+                          type="submit"
+                          aria-label={[t("talent.profile.delete"), title].join(" · ")}
+                          title={t("talent.profile.delete")}
+                          className="flex size-8 items-center justify-center rounded-full text-ardoise hover:bg-creme hover:text-sapin"
+                        >
+                          <Icon name="fermer" className="size-4" />
+                        </button>
+                      </form>
+                    </li>
+                  );
+                })}
+              </ol>
+            )}
+            <form
+              id="ajouter"
+              action={addStepAction}
+              className="grid scroll-mt-24 gap-3 rounded-[18px] bg-creme p-4 sm:grid-cols-[minmax(0,1fr)_180px_auto] sm:items-end"
             >
-              {t("career.plan.report.download")}
-            </ButtonLink>
-          </>
-        ) : (
-          <p className="text-sm text-ardoise">
-            {t("career.plan.report.locked", { plan: planFor(REPORT_KEY) })}
-          </p>
-        )}
-      </section>
-      <p className="text-sm text-ardoise">
-        {plan ? t("career.diagnostic.result.date", { date: plan.updatedAt }) : null}
-      </p>
-      <ButtonLink href="/app/career/diagnostic" variant="tertiary" className="self-start">
-        {t("career.diagnostic.title")}
-      </ButtonLink>
-    </div>
+              <TextField
+                id="plan-step-title"
+                name="title"
+                label={t("career.plan.step.add")}
+                placeholder={t("career.plan.step.title.placeholder")}
+                maxLength={160}
+                required
+              />
+              <TextField
+                id="plan-step-due"
+                name="due"
+                type="date"
+                label={t("career.plan.deadline")}
+              />
+              <button type="submit" className={pillClass("dark", "sm", "h-11")}>
+                {t("talent.profile.add")}
+              </button>
+            </form>
+          </section>
+
+          <form
+            action={saveGoalAction}
+            className={cx(card, "flex flex-wrap items-end gap-4 lg:px-[26px] lg:py-5")}
+          >
+            <span
+              aria-hidden
+              className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-lime"
+            >
+              <Icon name="objectif" className="size-5" />
+            </span>
+            <div className="min-w-[220px] flex-1">
+              <TextField
+                id="plan-goal"
+                name="goal"
+                label={plan?.goal ? t("career.plan.goal.text") : t("career.plan.goal.add")}
+                placeholder={t("career.plan.goal.placeholder")}
+                defaultValue={plan?.goal ?? ""}
+                maxLength={160}
+              />
+            </div>
+            <button type="submit" className={pillClass("dark", "sm", "h-11")}>
+              {plan?.goal ? t("talent.profile.save") : t("career.plan.goal.add")}
+            </button>
+          </form>
+        </div>
+
+        <div className="flex min-w-0 flex-col gap-5">
+          <section aria-labelledby="plan-courses" className={cx(card, "flex flex-col gap-3")}>
+            <div className="flex flex-wrap items-start justify-between gap-2">
+              <h2 id="plan-courses" className={cardTitle}>
+                {t("career.plan.courses")}
+              </h2>
+              <AiOrb size={22} />
+            </div>
+            {!withRecommendations ? (
+              <PlanLock
+                plan={planFor("career.progress_plan.recommendations")}
+                description={t("career.plan.recommendations.locked", {
+                  plan: planFor("career.progress_plan.recommendations"),
+                })}
+              />
+            ) : courses.length === 0 ? (
+              <p className="text-sm text-ardoise">{t("match.why.talent.courses.none")}</p>
+            ) : (
+              <ul className="flex flex-col divide-y divide-brume">
+                {courses.map((course) => (
+                  <li key={course.slug} className="flex items-start gap-3 py-3">
+                    <IconTile icon="learn" size="sm" />
+                    <span className="flex min-w-0 flex-col gap-0.5">
+                      <Link
+                        href={`/app/learn/${course.slug}`}
+                        className="text-sm font-semibold hover:underline"
+                      >
+                        {course.title}
+                      </Link>
+                      <span className="text-xs text-ardoise">
+                        {[
+                          t("ai.recoCourses.reason.demand", { percent: course.percent }),
+                          course.open
+                            ? t("match.why.talent.courses.included")
+                            : t("learn.error.locked"),
+                        ].join(" · ")}
+                      </span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <Why>{t("ai.recoCourses.why")}</Why>
+          </section>
+
+          <section aria-labelledby="plan-report" className={cx(card, "flex flex-col gap-3")}>
+            <div className="flex items-start justify-between gap-2">
+              <h2 id="plan-report" className={cardTitle}>
+                {t("career.plan.report.text")}
+              </h2>
+              <Icon name="statistiques" className="mt-1 size-5 shrink-0" />
+            </div>
+            {detailed ? (
+              <>
+                <p className="text-sm text-ardoise">{t("career.plan.report.desc")}</p>
+                <a
+                  href="/app/career/plan/rapport"
+                  className={pillClass("dark", "sm", "self-start")}
+                >
+                  <Icon name="telecharger" className="size-4" />
+                  {t("career.plan.report.download")}
+                </a>
+              </>
+            ) : (
+              <PlanLock
+                plan={planFor(REPORT_KEY)}
+                description={t("career.plan.report.locked", { plan: planFor(REPORT_KEY) })}
+              />
+            )}
+          </section>
+        </div>
+      </div>
+    </>
   );
 }
+
+const stateTone = {
+  done: "bg-lime-clair text-sapin",
+  late: "bg-down-fond text-down-texte",
+  todo: "bg-gris-clair text-sapin",
+} as const;

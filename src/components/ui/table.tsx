@@ -17,7 +17,7 @@ export function Table({
       role="region"
       aria-label={caption}
       tabIndex={0}
-      className="overflow-x-auto rounded-box bg-blanc py-1.5"
+      className="relative overflow-x-auto rounded-box bg-blanc py-1.5"
     >
       <table className={cx("w-full border-collapse text-left text-[13px]", className)} {...rest}>
         <caption className="sr-only">{caption}</caption>
