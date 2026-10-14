@@ -101,3 +101,51 @@ export function courseJsonLd(course: {
     },
   };
 }
+
+/**
+ * Structured data of the home page: who publishes the site (schema.org `Organization`) and the site
+ * itself (`WebSite`). Search engines and AI assistants use it to name Jumanly and show its logo.
+ * Contact is by e-mail only (règle d'or 8).
+ */
+export function siteJsonLd({
+  name,
+  description,
+  slogan,
+  publisher,
+  emails,
+}: {
+  name: string;
+  description: string;
+  slogan: string;
+  publisher: string;
+  emails: string[];
+}) {
+  const url = siteUrl();
+  const organization = {
+    "@type": "Organization",
+    "@id": `${url}/#organization`,
+    name,
+    url,
+    logo: `${url}/marque/jumanly-favicon-512.png`,
+    slogan,
+    description,
+    email: emails[0],
+    contactPoint: emails.map((email) => ({
+      "@type": "ContactPoint",
+      contactType: "customer support",
+      email,
+      availableLanguage: "fr",
+    })),
+    parentOrganization: { "@type": "Organization", name: publisher },
+  };
+  const website = {
+    "@type": "WebSite",
+    "@id": `${url}/#website`,
+    name,
+    url,
+    description,
+    inLanguage: "fr",
+    publisher: { "@id": `${url}/#organization` },
+  };
+  return { "@context": "https://schema.org", "@graph": [organization, website] };
+}

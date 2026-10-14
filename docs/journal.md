@@ -2,6 +2,18 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Référencement : Google, Bing et assistants IA (14 octobre 2026)
+
+- `robots.txt` ouvre explicitement les pages publiques aux moteurs et aux assistants IA (ChatGPT,
+  Claude, Perplexity, Gemini…) ; l'espace connecté reste fermé.
+- Nouveau `/llms.txt` : résumé du site pour les assistants IA (pages, formations, offres).
+- Données structurées : `Organization` et `WebSite` sur l'accueil ; `JobPosting` enrichi (salaire,
+  télétravail, page entreprise).
+- Guide du propriétaire : `docs/referencement.md` (Search Console, Bing, DNS Hostinger).
+  Décision : `docs/decisions/2026-10-14-referencement.md`.
+- À faire par le propriétaire : vérifier le domaine dans Google Search Console et Bing Webmaster
+  Tools, envoyer le plan du site.
+
 ## Mise en production sur Vercel (14 octobre 2026)
 
 - Hostinger bloquait à l'import du dépôt : production déployée sur Vercel, base Neon (Francfort),

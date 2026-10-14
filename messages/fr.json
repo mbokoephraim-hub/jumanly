@@ -46,7 +46,8 @@
       }
     },
     "seo": {
-      "titleSuffix": "· Jumanly"
+      "titleSuffix": "· Jumanly",
+      "publisher": "The Growth Lab"
     },
     "alt": {
       "logo": "Jumanly, Learn. Grow. Connect.",
@@ -10220,5 +10221,22 @@
       "duration": "6 mois",
       "provider": "Jumanly"
     }
+  },
+  "llms": {
+    "summary": "Jumanly est une plateforme web africaine qui réunit la formation (Learn), le développement de carrière (Career), les offres d'emploi (Jobs) et le recrutement (Hire et Connect), avec une intelligence artificielle explicable. Elle s'adresse aux talents, aux professionnels RH, aux entreprises et aux institutions partenaires.",
+    "facts": {
+      "free": "Candidater à une offre est toujours gratuit, quel que soit le forfait.",
+      "ai": "L'IA recommande, l'humain décide : aucun rejet automatique, et chaque score de compatibilité est expliqué.",
+      "payment": "Prix en dollars américains (USD), paiement par Mobile Money et carte bancaire. Interface en français.",
+      "contact": "Contact uniquement par e-mail : assistant@jumanly.io et infojumanly@gmail.com."
+    },
+    "sections": {
+      "pages": "Pages principales",
+      "courses": "Formations publiées",
+      "jobs": "Offres d'emploi ouvertes",
+      "more": "Pour aller plus loin"
+    },
+    "sitemap": "Plan du site (toutes les pages publiques)",
+    "job": "{title} · {company} · {city}"
   }
 }
