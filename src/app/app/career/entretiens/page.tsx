@@ -63,7 +63,7 @@ export default async function InterviewsPage({
           const reached = quota.limit > 0 && quota.used >= quota.limit;
           return (
             <li key={mode} className="flex flex-col gap-2 rounded-card bg-blanc p-5">
-              <h2 className="text-h3 font-semibold">{modeLabel(mode)}</h2>
+              <h2 className="font-semibold text-h3">{modeLabel(mode)}</h2>
               <p className="text-sm text-ardoise">{t(`career.interviews.mode.${mode}.desc`)}</p>
               {quota.limit === 0 ? (
                 <Badge tone="sapin">

@@ -3,13 +3,15 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { hireNavigation, partnerNavigation, talentNavigation } from "@/config/navigation";
 import { Logo, Icon } from "@/components/brand";
+import { signOut } from "@/server/actions/auth";
 import { AccountMenu, type AccountSummary } from "./account-menu";
 import { NavLink } from "./nav-link";
 import { SpaceSwitcher, type SpaceOption } from "./space-switcher";
 
 /**
- * Signed-in space layout (§ 11.4).
- * Desktop: 92 px Sapin sidebar, Crème main panel with 32 px corners.
+ * Signed-in space layout (mockup 00-04).
+ * Desktop: 92 px Sapin sidebar (settings and logout at the bottom), Crème main panel with
+ * 32 px corners, top bar with the space switcher, notifications and the account pill.
  * Mobile: Sapin header, Crème sheet rising over it, floating pill navigation.
  */
 export function AppShell({
@@ -35,27 +37,26 @@ export function AppShell({
     navigation
       .filter((item) => placement === "sidebar" || item.pill !== false)
       .map(({ key, href, icon }) => (
-        <li key={key} className={placement === "pill" ? "flex flex-1" : undefined}>
-          <NavLink
-            href={href}
-            label={t(key)}
-            icon={<Icon name={icon} className="size-6" />}
-            placement={placement}
-          />
+        <li key={key}>
+          <NavLink href={href} label={t(key)} icon={<Icon name={icon} />} placement={placement} />
         </li>
       ));
 
-  const notifications = (
+  const notifications = (tone: "light" | "dark") => (
     <Link
       href="/app/notifications"
       aria-label={tn("bell.aria", { count: unread })}
-      className="relative flex size-11 items-center justify-center rounded-full hover:bg-sapin/10"
+      className={
+        tone === "light"
+          ? "relative flex size-10 items-center justify-center rounded-full bg-blanc hover:bg-brume"
+          : "relative flex size-10 items-center justify-center rounded-full hover:bg-blanc/10"
+      }
     >
       <Icon name="notification" className="size-5" />
       {unread > 0 && (
         <span
           aria-hidden
-          className="absolute top-1.5 right-1.5 flex min-w-5 items-center justify-center rounded-full bg-lime px-1 text-xs font-semibold text-sapin"
+          className="absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-lime px-1 text-[10px] font-semibold text-sapin ring-2 ring-blanc"
         >
           {unread > 9 ? tn("bell.many") : unread}
         </span>
@@ -64,7 +65,7 @@ export function AppShell({
   );
 
   return (
-    <div className="min-h-dvh bg-sapin lg:flex">
+    <div className="min-h-dvh bg-sapin lg:flex lg:py-3.5 lg:pr-3.5">
       <a
         href="#content"
         className="sr-only z-50 rounded-pill bg-lime px-4 py-2 text-sapin focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
@@ -72,40 +73,60 @@ export function AppShell({
         {t("skipToContent")}
       </a>
 
-      <aside className="sticky top-0 hidden h-dvh w-[92px] shrink-0 flex-col items-center gap-8 py-6 lg:flex">
-        <Link href={home} aria-label={a11y("logo")}>
-          <Logo variant="symbolLight" height={40} />
+      <aside className="sticky top-3.5 hidden h-[calc(100dvh-28px)] w-[92px] shrink-0 flex-col items-center pt-3 pb-1.5 lg:flex">
+        <Link href={home} aria-label={a11y("logo")} className="rounded-sm">
+          <Logo variant="tile" height={44} />
         </Link>
-        <nav aria-label={a11y("mainNav")}>
-          <ul className="flex flex-col gap-2">{links("sidebar")}</ul>
+        <nav aria-label={a11y("mainNav")} className="mt-[34px]">
+          <ul className="flex flex-col gap-1.5">{links("sidebar")}</ul>
         </nav>
+        <div className="mt-auto flex flex-col gap-1.5">
+          <NavLink
+            href="/app/parametres"
+            label={t("settings")}
+            icon={<Icon name="reglages" />}
+            placement="sidebar"
+          />
+          <form action={signOut}>
+            <button
+              type="submit"
+              className="flex w-16 flex-col items-center gap-[5px] rounded-[18px] pt-[9px] pb-[7px] text-center text-[10px] leading-3 font-medium text-blanc/65 hover:bg-blanc/10 hover:text-blanc"
+            >
+              <Icon name="logout" className="size-[22px]" />
+              {t("logout")}
+            </button>
+          </form>
+        </div>
       </aside>
 
-      <header className="flex h-16 items-center justify-between gap-4 px-4 text-blanc lg:hidden">
+      <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc lg:hidden">
         <Link href={home} aria-label={a11y("logo")}>
           <Logo variant="negative" height={26} />
         </Link>
-        <div className="flex items-center gap-1 [&>a]:hover:bg-blanc/10">
+        <div className="flex min-w-0 items-center gap-1">
           <SpaceSwitcher current={space} spaces={spaces} tone="dark" />
-          {notifications}
+          {notifications("dark")}
           <AccountMenu account={account} tone="dark" />
         </div>
       </header>
 
-      <div className="min-h-[calc(100dvh-4rem)] rounded-t-panel bg-creme lg:my-3 lg:mr-3 lg:min-h-0 lg:flex-1 lg:rounded-panel">
-        <div className="hidden h-18 items-center justify-end gap-2 page-x lg:flex">
+      <div className="relative min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme lg:min-h-0 lg:flex-1 lg:rounded-panel">
+        <div className="hidden h-[78px] items-center justify-end gap-3.5 px-[30px] pt-[26px] lg:flex">
           <SpaceSwitcher current={space} spaces={spaces} tone="light" />
-          {notifications}
+          {notifications("light")}
           <AccountMenu account={account} tone="light" />
         </div>
-        <main id="content" className="mx-auto max-w-6xl page-x pt-6 pb-32 lg:pt-0 lg:pb-12">
+        <main
+          id="content"
+          className="mx-auto flex max-w-6xl flex-col gap-5 px-4 pt-5 pb-32 sm:px-6 lg:px-[30px] lg:pt-5 lg:pb-[30px]"
+        >
           {children}
         </main>
       </div>
 
       <nav
         aria-label={t("mobile.aria")}
-        className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-20 rounded-pill bg-sapin p-1.5 lg:hidden"
+        className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin p-[7px] shadow-float lg:hidden"
       >
         <ul className="flex gap-1">{links("pill")}</ul>
       </nav>

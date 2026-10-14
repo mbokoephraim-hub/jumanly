@@ -22,7 +22,7 @@ export function ToastRegion({ children }: { children?: ReactNode }) {
   );
 }
 
-/** Sapin toast (§ 11.5), with an optional action such as "Annuler". */
+/** Sapin toast (mockup 00-02): floating, check in a Lime disc, optional action such as "Annuler". */
 export function Toast({
   message,
   action,
@@ -34,16 +34,21 @@ export function Toast({
 }) {
   const t = useTranslations("toast");
   return (
-    <div className="pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-md bg-sapin py-2 pr-2 pl-4 text-blanc">
-      <Icon name="valider" className="size-5 shrink-0 text-lime" />
-      <p className="flex-1 py-1.5 text-[15px]">{message}</p>
+    <div className="pointer-events-auto flex w-full max-w-md items-center gap-3 rounded-[16px] bg-sapin py-2 pr-2 pl-[18px] text-blanc shadow-float">
+      <span
+        aria-hidden
+        className="flex size-[26px] shrink-0 items-center justify-center rounded-full bg-lime text-sapin"
+      >
+        <Icon name="check" className="size-3.5" />
+      </span>
+      <p className="flex-1 py-1.5 text-sm leading-5">{message}</p>
       {action}
       {onClose && (
         <button
           type="button"
           onClick={onClose}
           aria-label={t("close")}
-          className="flex size-11 shrink-0 items-center justify-center rounded-full hover:bg-blanc/10"
+          className="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-blanc/10"
         >
           <Icon name="fermer" className="size-5" />
         </button>

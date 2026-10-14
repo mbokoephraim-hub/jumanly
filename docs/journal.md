@@ -2,6 +2,36 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · Lot 1 : socle du design system (14 octobre 2026)
+
+- Les maquettes `docs/maquettes/` font désormais foi pour le visuel ; `CLAUDE.md` le dit dans
+  « Documents de référence ».
+- Jetons (`src/styles/tokens.css`, `src/app/globals.css`) alignés sur
+  `docs/maquettes/ressources/jumanly-ui.css` : Lime clair, rayons (carte 24, panneau 32, champ 14),
+  ombre des éléments flottants, styles de titres de l'application (`text-app-h1`, `text-h3`,
+  `text-big`, `text-lab`).
+- Composants `src/components/ui` refaits d'après les planches 00-02 et 00-03 : boutons en pilule
+  (40 px, variantes « sur teinte » et « sur fond sombre », icône après le libellé), champs blancs à
+  bordure Brume, cases et radios dessinées, interrupteur 44 × 26, onglets soulignés, filtres en pilule,
+  pastilles 24 px, score sur le dégradé IA, avatars à initiales colorées, logo d'entreprise, toast,
+  modale, verrou de forfait, état vide (Kofi), tableau, carte de statistique avec icône, cartes de
+  formation (catalogue et « en cours »), carte d'offre en ligne, carte IA, critère de score.
+- Icônes : `lucide-react` retiré. Toutes les icônes viennent de `ressources/icones/trait`, des 23
+  icônes complémentaires des maquettes et de 5 icônes dessinées dans la même grammaire
+  (`ressources/icones/interface` : menu, œil barré, info, alerte, flèche retour).
+- Gabarits (planche 00-04) : en-tête public blanc avec les sept rubriques et soulignement Lime,
+  pied de page Sapin ; espace connecté avec barre Sapin 92 px (Paramètres et déconnexion en bas),
+  panneau Crème, menu du compte et sélecteur d'espace en cartes flottantes, navigation mobile en
+  pilule flottante ; Jumanly Admin sur fond Nuit avec barre large de 256 px.
+- Correctif : la page Tarifs ne déborde plus horizontalement sur mobile (bouton du tableau comparatif).
+- Décision : `docs/decisions/2026-10-14-design-system-maquettes.md`.
+
+### Dettes et points ouverts
+
+- Les écrans eux-mêmes gardent leur ancienne mise en page : ils seront repris lot par lot.
+- Trois libellés internes ajoutés pour `/dev/composants` (partie 11 des textes) ; aucun texte
+  d'interface n'a changé.
+
 ## Référencement : Google, Bing et assistants IA (14 octobre 2026)
 
 - `robots.txt` ouvre explicitement les pages publiques aux moteurs et aux assistants IA (ChatGPT,

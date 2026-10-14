@@ -323,7 +323,7 @@ export default async function TalentJobPage({
               aria-labelledby="signaler-titre"
               className="flex flex-col gap-2 rounded-card bg-blanc p-6"
             >
-              <h2 id="signaler-titre" className="text-h3 font-semibold">
+              <h2 id="signaler-titre" className="font-semibold text-h3">
                 {t("report.title.job")}
               </h2>
               {query.signalement === "ok" && <Alert tone="success" title={t("report.success")} />}

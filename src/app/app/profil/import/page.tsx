@@ -99,7 +99,7 @@ export default async function CvImportPage({ searchParams }: PageProps<"/app/pro
           {found === 0 && <Alert title={t("talent.profile.import.empty")} />}
           {extraction.experiences.length > 0 && (
             <fieldset className="flex flex-col gap-3">
-              <legend className="text-h3 mb-2 font-semibold">
+              <legend className="mb-2 font-semibold text-h3">
                 {t("talent.profile.experience.title")}
               </legend>
               {extraction.experiences.map((item, index) => (
@@ -124,7 +124,7 @@ export default async function CvImportPage({ searchParams }: PageProps<"/app/pro
           )}
           {extraction.educations.length > 0 && (
             <fieldset className="flex flex-col gap-3">
-              <legend className="text-h3 mb-2 font-semibold">
+              <legend className="mb-2 font-semibold text-h3">
                 {t("talent.profile.education.title")}
               </legend>
               {extraction.educations.map((item, index) => (
@@ -143,7 +143,7 @@ export default async function CvImportPage({ searchParams }: PageProps<"/app/pro
           )}
           {extraction.skills.length > 0 && (
             <fieldset className="flex flex-col gap-3">
-              <legend className="text-h3 mb-2 font-semibold">
+              <legend className="mb-2 font-semibold text-h3">
                 {t("talent.profile.skills.title")}
               </legend>
               <div className="grid gap-3 sm:grid-cols-2">

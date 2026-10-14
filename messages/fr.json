@@ -9988,7 +9988,8 @@
       "brume": "Brume #DCE5E1",
       "ambre": "Ambre #F2B33D",
       "corail": "Corail #E25C4B",
-      "mentheClaire": "Menthe claire #BFEFDF"
+      "mentheClaire": "Menthe claire #BFEFDF",
+      "limeClair": "Lime clair #E4FAD0"
     },
     "gradients": {
       "signature": "Dégradé signature",
@@ -10008,7 +10009,9 @@
       "secondary": "Secondaire",
       "tertiary": "Tertiaire",
       "icon": "Icône ronde",
-      "danger": "Danger"
+      "danger": "Danger",
+      "white": "Sur teinte",
+      "inverse": "Sur fond sombre"
     },
     "states": {
       "icon": "Avec icône",

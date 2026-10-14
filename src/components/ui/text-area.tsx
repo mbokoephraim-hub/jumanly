@@ -10,7 +10,7 @@ export function TextArea({ id, label, hint, error, required, className, ...rest 
       {(aria) => (
         <textarea
           rows={4}
-          className={cx(inputClasses, "min-h-24 py-3", className)}
+          className={cx(inputClasses, "min-h-24 py-3.5", className)}
           {...aria}
           {...rest}
         />

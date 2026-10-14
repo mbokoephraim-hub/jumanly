@@ -7,7 +7,7 @@ type Props = FieldProps & Omit<ComponentProps<"input">, "id" | "required">;
 export function TextField({ id, label, hint, error, required, className, ...rest }: Props) {
   return (
     <Field id={id} label={label} hint={hint} error={error} required={required}>
-      {(aria) => <input className={cx(inputClasses, "h-11", className)} {...aria} {...rest} />}
+      {(aria) => <input className={cx(inputClasses, "h-12", className)} {...aria} {...rest} />}
     </Field>
   );
 }

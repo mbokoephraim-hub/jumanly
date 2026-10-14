@@ -96,7 +96,7 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
                 className="flex flex-col gap-4 rounded-card bg-blanc p-6"
               >
                 <div className="flex flex-wrap items-center gap-3">
-                  <h2 className="text-h3 font-semibold">{partner.name}</h2>
+                  <h2 className="font-semibold text-h3">{partner.name}</h2>
                   {partner.partnerKind && (
                     <Badge>
                       {t(

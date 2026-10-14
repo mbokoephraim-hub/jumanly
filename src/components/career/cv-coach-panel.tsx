@@ -80,7 +80,7 @@ export function CvCoachPanel({
 
       {missingKeywords.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h3 className="text-h3 font-semibold">{t("ai.cvCoach.keywords.title")}</h3>
+          <h3 className="font-semibold text-h3">{t("ai.cvCoach.keywords.title")}</h3>
           <ul className="flex flex-wrap gap-2">
             {missingKeywords.map((keyword) => (
               <li key={keyword}>
@@ -109,7 +109,7 @@ export function CvCoachPanel({
       ) : coach.state === "entitlement" || (coach.state === "quota" && !credits?.limit) ? (
         <div className="flex flex-col gap-2">
           {coach.plan && <p>{t("ai.cvCoach.locked.free", { plan: coach.plan })}</p>}
-          <h3 className="text-h3 font-semibold">{t("ai.cvCoach.tips.free.title")}</h3>
+          <h3 className="font-semibold text-h3">{t("ai.cvCoach.tips.free.title")}</h3>
           <p className="text-sm">{t("ai.cvCoach.tips.free.body")}</p>
         </div>
       ) : coach.state === "quota" ? (

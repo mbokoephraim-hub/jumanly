@@ -116,7 +116,7 @@ async function FaqTab({ group, items }: { group: FaqGroup; items: ReturnType<typ
           >
             <div className="flex flex-wrap items-center gap-2">
               <h3
-                className={cx("text-h3 font-semibold", item.hidden && "text-ardoise line-through")}
+                className={cx("font-semibold text-h3", item.hidden && "text-ardoise line-through")}
               >
                 {item.question}
               </h3>
@@ -166,7 +166,7 @@ async function FaqTab({ group, items }: { group: FaqGroup; items: ReturnType<typ
         action={saveFaqItemAction}
         className="flex scroll-mt-24 flex-col gap-3 rounded-card bg-blanc p-5"
       >
-        <h3 className="text-h3 font-semibold">{t("faq.add")}</h3>
+        <h3 className="font-semibold text-h3">{t("faq.add")}</h3>
         <input type="hidden" name="group" value={group} />
         <FaqFields prefix="new" />
         <div>
@@ -268,7 +268,7 @@ async function BannersTab({ banners }: { banners: Banner[] }) {
         action={saveBannerAction}
         className="flex scroll-mt-24 flex-col gap-3 rounded-card bg-blanc p-5"
       >
-        <h3 className="text-h3 font-semibold">{t("banner.add")}</h3>
+        <h3 className="font-semibold text-h3">{t("banner.add")}</h3>
         <BannerFields prefix="new" />
         <div>
           <Button type="submit">{t("banner.save")}</Button>

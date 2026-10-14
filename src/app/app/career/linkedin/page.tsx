@@ -41,7 +41,7 @@ export default async function LinkedinPage({ searchParams }: PageProps<"/app/car
   const copy = { label: t("career.linkedin.copy"), copiedLabel: t("career.linkedin.copied") };
   const block = (title: string, text: string, hint?: string) => (
     <div className="flex flex-col gap-2 rounded-card bg-creme p-4">
-      <h3 className="text-h3 font-semibold">{title}</h3>
+      <h3 className="font-semibold text-h3">{title}</h3>
       {hint && <p className="text-sm text-ardoise">{hint}</p>}
       <p className="whitespace-pre-line">{text}</p>
       <div>
@@ -103,7 +103,7 @@ export default async function LinkedinPage({ searchParams }: PageProps<"/app/car
                 block(t("career.linkedin.skills"), proposal.skills.join("\n"))}
               {proposal.experiences.filter((item) => item.text.trim()).length > 0 && (
                 <div className="flex flex-col gap-3">
-                  <h3 className="text-h3 font-semibold">{t("career.linkedin.experience")}</h3>
+                  <h3 className="font-semibold text-h3">{t("career.linkedin.experience")}</h3>
                   {proposal.experiences
                     .filter((item) => item.text.trim())
                     .map((item, index) => (

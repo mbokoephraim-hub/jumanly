@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Character } from "@/components/brand/character";
 
-/** Illustrated empty state (§ 11.5): a brand character by default, and an action to move forward. */
+/** Illustrated empty state (mockup 00-02): a brand character, a title, a line and one action. */
 export function EmptyState({
   illustration,
   title,
@@ -15,11 +15,11 @@ export function EmptyState({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center gap-3 rounded-card bg-blanc px-6 py-10 text-center">
-      {illustration ?? <Character name="amani" pose="repos" height={140} />}
-      <p className="text-lg font-semibold text-sapin">{title}</p>
-      {description && <p className="max-w-sm text-[15px] leading-6 text-ardoise">{description}</p>}
-      {action && <div className="mt-2">{action}</div>}
+    <div className="flex flex-col items-center gap-3 rounded-box bg-blanc px-7 py-9 text-center">
+      {illustration ?? <Character name="kofi" pose="repos" height={140} />}
+      <p className="text-h3 text-sapin">{title}</p>
+      {description && <p className="max-w-[420px] text-sm leading-5 text-ardoise">{description}</p>}
+      {action && <div className="mt-1">{action}</div>}
     </div>
   );
 }

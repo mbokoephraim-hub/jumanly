@@ -18,7 +18,9 @@ import {
   CardText,
   CardTitle,
   Checkbox,
+  CompanyLogo,
   CourseCard,
+  CourseProgressCard,
   EmptyState,
   ExplainedScore,
   FilterChip,
@@ -32,6 +34,7 @@ import {
   QuotaGauge,
   RadioGroup,
   ScoreBadge,
+  ScoreCriterion,
   SearchField,
   Select,
   Skeleton,
@@ -71,7 +74,7 @@ function Section({ title, children }: { title: string; children: ReactNode }) {
 function State({ label, children }: { label: string; children: ReactNode }) {
   return (
     <div className="flex flex-col items-start gap-2">
-      <span className="text-ardoise text-caption">{label}</span>
+      <span className="opacity-75 text-caption">{label}</span>
       {children}
     </div>
   );
@@ -106,10 +109,26 @@ const buttonVariants = [
   "primary",
   "secondary",
   "tertiary",
+  "white",
+  "inverse",
   "danger",
 ] as const satisfies ButtonVariant[];
 
 const moduleTones = ["learn", "career", "jobs", "hire", "connect"] as const satisfies CardTone[];
+
+/** Background behind each button row, so that tinted and dark variants show in context. */
+const buttonRowBackground: Partial<Record<ButtonVariant, string>> = {
+  white: "rounded-box bg-lime p-4",
+  inverse: "rounded-box bg-sapin p-4 text-blanc",
+};
+
+const moduleIcons = {
+  learn: "learn",
+  career: "career",
+  jobs: "jobs",
+  hire: "hire",
+  connect: "connect",
+} as const satisfies Record<(typeof moduleTones)[number], IconName>;
 
 const colors = [
   ["sapin", "bg-sapin"],
@@ -125,6 +144,7 @@ const colors = [
   ["ambre", "bg-ambre"],
   ["corail", "bg-corail"],
   ["mentheClaire", "bg-menthe-claire"],
+  ["limeClair", "bg-lime-clair"],
 ] as const;
 
 const gradients = [
@@ -184,7 +204,7 @@ export default function ComponentsPage() {
           </State>
           <State label={t("brand.orb")}>
             <div className="flex h-24 w-full items-center justify-center rounded-md bg-sapin">
-              <AiOrb className="size-12" labelled />
+              <AiOrb size={48} labelled />
             </div>
           </State>
         </div>
@@ -253,6 +273,10 @@ export default function ComponentsPage() {
         <p className="text-display">{t("type.display")}</p>
         <p className="text-h1">{t("type.h1")}</p>
         <p className="text-h2">{t("type.h2")}</p>
+        <p className="text-app-h1">{t("type.h1")}</p>
+        <p className="text-app-h2">{t("type.h2")}</p>
+        <p className="text-h3">{t("type.h2")}</p>
+        <p className="text-eyebrow text-feuille-fonce">{t("type.label")}</p>
         <p className="text-label">{t("type.label")}</p>
         <p className="text-body">{t("type.body")}</p>
         <p className="text-caption">{t("type.caption")}</p>
@@ -261,12 +285,15 @@ export default function ComponentsPage() {
       <Section title={t("sections.buttons")}>
         <div className="flex flex-col gap-6">
           {buttonVariants.map((variant) => (
-            <div key={variant} className="flex flex-wrap items-end gap-4">
+            <div
+              key={variant}
+              className={`flex flex-wrap items-end gap-4 ${buttonRowBackground[variant] ?? ""}`}
+            >
               <State label={t(`variants.${variant}`)}>
                 <Button variant={variant}>{t("buttons.action")}</Button>
               </State>
               <State label={s("icon")}>
-                <Button variant={variant} icon={<Icon name="suivant" className="size-4" />}>
+                <Button variant={variant} iconAfter={<Icon name="chev-r" />}>
                   {t("buttons.action")}
                 </Button>
               </State>
@@ -305,6 +332,9 @@ export default function ComponentsPage() {
                   <Icon name="favori" className="size-5" />
                 </IconButton>
                 <IconButton label={g("jobs.card.save")} variant="outline">
+                  <Icon name="favori" className="size-5" />
+                </IconButton>
+                <IconButton label={g("jobs.card.save")} variant="creme">
                   <Icon name="favori" className="size-5" />
                 </IconButton>
                 <IconButton label={g("jobs.card.save")} variant="sapin">
@@ -435,7 +465,7 @@ export default function ComponentsPage() {
           <Badge tone="success">{t("badges.success")}</Badge>
           <Badge tone="warning">{t("badges.warning")}</Badge>
           <Badge tone="error">{t("badges.error")}</Badge>
-          <Badge tone="ai" icon={<AiOrb className="size-2.5" />}>
+          <Badge tone="ai" icon={<AiOrb size={12} />}>
             {t("badges.ai")}
           </Badge>
         </div>
@@ -447,6 +477,7 @@ export default function ComponentsPage() {
             </Badge>
           ))}
           <Badge tone="jobs">{t("badges.contract")}</Badge>
+          <Badge tone="white">{t("badges.contract")}</Badge>
           <VerifiedBadge />
           <TrendBadge value={12} label={t("badges.trendUp")} />
           <TrendBadge value={-3} label={t("badges.trendDown")} />
@@ -456,6 +487,7 @@ export default function ComponentsPage() {
           <ScoreBadge score={78} band="high" />
           <ScoreBadge score={58} band="partial" />
           <ScoreBadge score={32} band="low" />
+          <ScoreBadge score={87} band="veryHigh" compact />
         </div>
       </Section>
 
@@ -474,12 +506,21 @@ export default function ComponentsPage() {
             <CardText>{t("cards.darkText")}</CardText>
           </Card>
         </div>
-        <div className="grid grid-cols-2 gap-4 md:grid-cols-6">
+        <div className="grid grid-cols-2 gap-4 md:grid-cols-4 lg:grid-cols-7">
           {moduleTones.map((tone) => (
-            <Card key={tone} tone={tone} className="p-5">
+            <Card key={tone} tone={tone} className="flex flex-col gap-2.5 p-5">
+              <span className="flex size-[46px] items-center justify-center rounded-sm bg-sapin text-lime">
+                <Icon name={moduleIcons[tone]} className="size-5" />
+              </span>
               <CardTitle>{t(`cards.tone.${tone}`)}</CardTitle>
             </Card>
           ))}
+          <Card tone="intelligence" className="flex flex-col gap-2.5 p-5">
+            <span className="flex size-[46px] items-center justify-center rounded-sm bg-blanc/15 text-lime">
+              <Icon name="intelligence" className="size-5" />
+            </span>
+            <CardTitle>{t("cards.darkTitle")}</CardTitle>
+          </Card>
           <Card selected className="p-5">
             <CardTitle>{t("cards.selected")}</CardTitle>
           </Card>
@@ -510,10 +551,14 @@ export default function ComponentsPage() {
       </Section>
 
       <Section title={t("sections.avatars")}>
-        <div className="flex items-center gap-4">
+        <div className="flex flex-wrap items-center gap-4">
           <Avatar name={t("avatars.name")} size="sm" />
           <Avatar name={t("avatars.name")} />
           <Avatar name={t("avatars.name")} size="lg" />
+          <Avatar name={t("avatars.nameB")} />
+          <Avatar name={t("avatars.nameC")} />
+          <CompanyLogo name={t("listings.jobCompany")} />
+          <CompanyLogo name={t("avatars.nameD")} size="lg" />
           <AvatarStack
             names={[
               t("avatars.name"),
@@ -565,6 +610,42 @@ export default function ComponentsPage() {
       </Section>
 
       <Section title={t("sections.ai")}>
+        <div className="grid gap-4 md:grid-cols-2">
+          <Card className="flex flex-col gap-3">
+            <div className="flex items-center gap-2.5">
+              <AiOrb />
+              <CardTitle>{g("match.score.label")}</CardTitle>
+              <span className="ml-auto">
+                <ScoreBadge score={87} band="veryHigh" compact />
+              </span>
+            </div>
+            <ScoreCriterion
+              label={g("match.criterion.requiredSkills.text")}
+              band={g("match.band.veryHigh.text")}
+              percent={92}
+            />
+            <ScoreCriterion
+              label={g("match.criterion.experience.text")}
+              band={g("match.band.high.text")}
+              percent={80}
+            />
+            <ScoreCriterion
+              label={g("match.criterion.languages.text")}
+              band={g("match.band.veryHigh.text")}
+              percent={95}
+            />
+            <ScoreCriterion
+              label={g("match.criterion.location.text")}
+              band={g("match.band.high.text")}
+              percent={75}
+            />
+            <p className="text-xs text-ardoise">{g("common.aiRecommendsHumanDecides")}</p>
+          </Card>
+          <Card className="flex items-center gap-4">
+            <Orbi size={110} labelled />
+            <p className="text-sm text-ardoise">{t("ai.suggestionWhy")}</p>
+          </Card>
+        </div>
         <div className="max-w-md">
           <ExplainedScore
             title={t("ai.job")}
@@ -583,8 +664,10 @@ export default function ComponentsPage() {
             explanation={t("ai.suggestionWhy")}
             actions={
               <>
-                <Button size="sm">{g("ai.card.apply")}</Button>
-                <Button size="sm" variant="tertiary" className="border-blanc/40 text-blanc">
+                <Button size="sm" icon={<Icon name="check" />}>
+                  {g("ai.card.apply")}
+                </Button>
+                <Button size="sm" variant="inverse">
                   {g("ai.card.ignore")}
                 </Button>
               </>
@@ -597,18 +680,66 @@ export default function ComponentsPage() {
 
       <Section title={t("sections.stats")}>
         <div className="grid gap-4 sm:grid-cols-3">
-          <StatCard label={t("stats.applications")} value={t("stats.applicationsValue")} />
+          <StatCard
+            label={t("stats.applications")}
+            value={t("stats.applicationsValue")}
+            icon="jobs"
+            iconTone="jobs"
+          />
           <StatCard
             label={t("stats.views")}
             value={t("stats.viewsValue")}
+            icon="profil"
             hint={<TrendBadge value={12} label={t("stats.viewsTrend")} />}
           />
-          <StatCard tone="learn" label={t("stats.courses")} value={t("stats.coursesValue")} />
+          <StatCard
+            label={t("stats.courses")}
+            value={t("stats.coursesValue")}
+            icon="learn"
+            iconTone="learn"
+          />
         </div>
       </Section>
 
       <Section title={t("sections.listings")}>
         <div className="grid gap-4 md:grid-cols-3">
+          {(["learn", "career"] as const).map((tone, index) => (
+            <CourseProgressCard
+              key={tone}
+              tone={tone}
+              title={t("listings.courseTitle")}
+              category={t(`cards.tone.${tone}`)}
+              progressLabel={g("talent.dashboard.continue.progress")}
+              progressValue={g("talent.dashboard.continue.lessons", {
+                done: index ? 5 : 14,
+                total: index ? 12 : 20,
+              })}
+              percent={index ? 42 : 70}
+              people={
+                <AvatarStack
+                  size="xs"
+                  ring={tone === "learn" ? "ring-lime" : "ring-neon"}
+                  names={[
+                    t("avatars.nameB"),
+                    t("avatars.nameC"),
+                    t("avatars.nameD"),
+                    t("avatars.nameE"),
+                  ]}
+                  max={3}
+                />
+              }
+              action={
+                <ButtonLink
+                  href="/app/learn"
+                  size="sm"
+                  variant="secondary"
+                  iconAfter={<Icon name="chev-r" />}
+                >
+                  {g("talent.dashboard.continue.resume")}
+                </ButtonLink>
+              }
+            />
+          ))}
           <CourseCard
             title={t("listings.courseTitle")}
             href="/formations"
@@ -625,6 +756,9 @@ export default function ComponentsPage() {
             duration={t("listings.courseDuration")}
             plan={t("listings.coursePlan")}
           />
+        </div>
+
+        <div className="flex flex-col gap-3">
           <JobCard
             title={t("listings.jobTitle")}
             href="/offres"
@@ -636,8 +770,21 @@ export default function ComponentsPage() {
             deadline={t("listings.jobDeadline")}
             verified
             isNew
+            selected
             match={{ score: 87, band: "veryHigh" }}
           />
+          <JobCard
+            title={t("listings.jobBTitle")}
+            href="/offres"
+            company={t("avatars.nameD")}
+            city={t("listings.jobBCity")}
+            country={t("listings.jobBCountry")}
+            remote="onsite"
+            contract={t("listings.jobBContract")}
+            match={{ score: 74, band: "high" }}
+          />
+        </div>
+        <div className="max-w-sm">
           <JobCard
             title={t("listings.jobBTitle")}
             href="/offres"
@@ -647,6 +794,7 @@ export default function ComponentsPage() {
             remote="onsite"
             contract={t("listings.jobBContract")}
             deadline={t("listings.jobDeadline")}
+            match={{ score: 58, band: "partial" }}
           />
         </div>
       </Section>
@@ -670,18 +818,32 @@ export default function ComponentsPage() {
           </thead>
           <tbody>
             <tr>
-              <Td>{t("avatars.name")}</Td>
-              <Td>{g("hire.pipeline.stage.interview")}</Td>
               <Td>
-                <ScoreBadge score={87} band="veryHigh" />
+                <span className="flex items-center gap-2.5 font-semibold">
+                  <Avatar name={t("avatars.name")} size="sm" />
+                  {t("avatars.name")}
+                </span>
+              </Td>
+              <Td>
+                <Badge>{g("hire.pipeline.stage.interview")}</Badge>
+              </Td>
+              <Td>
+                <ScoreBadge score={87} band="veryHigh" compact />
               </Td>
               <Td>{t("table.date1")}</Td>
             </tr>
             <tr>
-              <Td>{t("avatars.nameB")}</Td>
-              <Td>{g("hire.pipeline.stage.screening")}</Td>
               <Td>
-                <ScoreBadge score={64} band="partial" />
+                <span className="flex items-center gap-2.5 font-semibold">
+                  <Avatar name={t("avatars.nameB")} size="sm" />
+                  {t("avatars.nameB")}
+                </span>
+              </Td>
+              <Td>
+                <Badge tone="lime">{g("hire.pipeline.stage.screening")}</Badge>
+              </Td>
+              <Td>
+                <ScoreBadge score={64} band="partial" compact />
               </Td>
               <Td>{t("table.date2")}</Td>
             </tr>

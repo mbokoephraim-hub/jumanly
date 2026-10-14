@@ -176,7 +176,7 @@ export default async function HireJobsPage({ searchParams }: PageProps<"/app/hir
               <li key={job.id} className="flex flex-col gap-3 rounded-card bg-blanc p-6">
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex flex-col gap-1">
-                    <h2 className="text-h3 font-semibold">
+                    <h2 className="font-semibold text-h3">
                       <Link href={`/app/hire/offres/${job.id}`} className="underline">
                         {job.title}
                       </Link>

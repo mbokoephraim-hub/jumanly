@@ -15,6 +15,9 @@ export const solutionsNavigation = [
   { key: "partners", href: "/partenaires" },
 ] as const;
 
+/** Public header (mockup 00-04): the four audiences, then the catalogs and pricing. */
+export const publicHeaderNavigation = [...solutionsNavigation, ...publicNavigation] as const;
+
 /** Footer columns. `key` points to `footer.col.<column>.<key>`. */
 export const footerNavigation = {
   solutions: [

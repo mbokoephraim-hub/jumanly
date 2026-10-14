@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
 import { CheckList } from "@/components/site/sections";
@@ -33,7 +32,7 @@ export async function CourseOverview({
         href="/app/learn"
         className="flex items-center gap-1 self-start font-semibold underline-offset-4 hover:underline"
       >
-        <ArrowLeft aria-hidden className="size-4" />
+        <Icon name="precedent" className="size-4" />
         {t("learn.course.back")}
       </Link>
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_320px]">

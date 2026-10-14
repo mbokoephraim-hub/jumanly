@@ -65,7 +65,7 @@ export default async function InterviewSessionPage({
               <p className="text-label">
                 {t("career.interviews.session.question", { current: current + 1, total })}
               </p>
-              <p className="text-h3 font-semibold">{session.turns[current].question}</p>
+              <p className="font-semibold text-h3">{session.turns[current].question}</p>
               {query.erreur === "vide" && (
                 <Alert tone="error" title={t("career.interviews.session.answer.placeholder")} />
               )}
@@ -133,7 +133,7 @@ export default async function InterviewSessionPage({
           </div>
           {feedback.summary && (
             <div className="flex flex-col gap-1">
-              <h3 className="text-h3 font-semibold">{t("career.interviews.feedback.overall")}</h3>
+              <h3 className="font-semibold text-h3">{t("career.interviews.feedback.overall")}</h3>
               <p>{line(feedback.summary)}</p>
             </div>
           )}
@@ -156,7 +156,7 @@ export default async function InterviewSessionPage({
             {(["strengths", "improvements"] as const).map((key) =>
               feedback[key].length > 0 ? (
                 <div key={key} className="flex flex-col gap-2">
-                  <h3 className="text-h3 font-semibold">
+                  <h3 className="font-semibold text-h3">
                     {t(
                       key === "strengths"
                         ? "career.interviews.feedback.strengths"
@@ -173,7 +173,7 @@ export default async function InterviewSessionPage({
             )}
           </div>
           <div className="flex flex-col gap-3">
-            <h3 className="text-h3 font-semibold">{t("career.interviews.feedback.perQuestion")}</h3>
+            <h3 className="font-semibold text-h3">{t("career.interviews.feedback.perQuestion")}</h3>
             <ol className="flex flex-col gap-3">
               {session.turns.map((turn, index) => {
                 const review = feedback.perQuestion.find((item) => item.index === index);

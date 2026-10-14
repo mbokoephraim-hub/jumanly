@@ -4,7 +4,10 @@ import { Icon } from "@/components/brand/icon";
 import { useEffect, useId, useRef, type ReactNode } from "react";
 import { useTranslations } from "next-intl";
 
-/** Modal built on the native <dialog> element (focus trap and Escape handled by the browser). */
+/**
+ * Modal built on the native <dialog> element (focus trap and Escape handled by the browser).
+ * Mockup 00-02: Nuit veil at 45 %, white card with 28 px corners, round Crème close button.
+ */
 export function Modal({
   open,
   onClose,
@@ -34,24 +37,24 @@ export function Modal({
       ref={ref}
       onClose={onClose}
       aria-labelledby={titleId}
-      className="m-auto w-[calc(100%-2rem)] max-w-lg rounded-card bg-blanc p-0 text-sapin backdrop:bg-nuit/50"
+      className="m-auto w-[calc(100%-2rem)] max-w-[440px] rounded-card bg-blanc p-0 text-sapin shadow-float backdrop:bg-nuit/45"
     >
-      <div className="flex items-start justify-between gap-4 p-6 pb-2">
-        <h2 id={titleId} className="text-h2">
+      <div className="flex items-start justify-between gap-4 px-[26px] pt-[26px] pb-3.5">
+        <h2 id={titleId} className="text-app-h2">
           {title}
         </h2>
         <button
           type="button"
           onClick={onClose}
           aria-label={t("closeDialog")}
-          className="rounded-full p-2 text-ardoise hover:bg-sapin/8 hover:text-sapin"
+          className="touch-target flex size-8 shrink-0 items-center justify-center rounded-full bg-creme text-sapin hover:bg-brume"
         >
-          <Icon name="fermer" className="size-5" />
+          <Icon name="fermer" className="size-4" />
         </button>
       </div>
-      <div className="px-6 pb-6 text-[15px] leading-6 text-ardoise">{children}</div>
+      <div className="px-[26px] pb-[26px] text-sm leading-5 text-ardoise">{children}</div>
       {actions && (
-        <div className="flex flex-col-reverse gap-3 border-t border-brume px-6 py-4 sm:flex-row sm:justify-end">
+        <div className="-mt-3 flex flex-col-reverse gap-2.5 px-[26px] pb-[26px] sm:flex-row sm:justify-end">
           {actions}
         </div>
       )}

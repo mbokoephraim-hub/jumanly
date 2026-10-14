@@ -192,7 +192,7 @@ export default async function CandidatePage({
                 {t("application.cv.download")}
               </a>
             )}
-            <h3 className="text-h3 font-semibold">{t("application.letter.text")}</h3>
+            <h3 className="font-semibold text-h3">{t("application.letter.text")}</h3>
             {application.coverLetter ? (
               <p className="whitespace-pre-line">{application.coverLetter}</p>
             ) : (

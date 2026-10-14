@@ -8509,6 +8509,7 @@ Textes ajoutés à l'étape E0 : composants de base, textes alternatifs des pers
 | `devComponents.colors.ambre` | Ambre #F2B33D |
 | `devComponents.colors.corail` | Corail #E25C4B |
 | `devComponents.colors.mentheClaire` | Menthe claire #BFEFDF |
+| `devComponents.colors.limeClair` | Lime clair #E4FAD0 |
 | `devComponents.gradients.signature` | Dégradé signature |
 | `devComponents.gradients.ai` | Dégradé Intelligence |
 | `devComponents.gradients.depth` | Dégradé profondeur |
@@ -8523,6 +8524,8 @@ Textes ajoutés à l'étape E0 : composants de base, textes alternatifs des pers
 | `devComponents.variants.tertiary` | Tertiaire |
 | `devComponents.variants.icon` | Icône ronde |
 | `devComponents.variants.danger` | Danger |
+| `devComponents.variants.white` | Sur teinte |
+| `devComponents.variants.inverse` | Sur fond sombre |
 | `devComponents.states.icon` | Avec icône |
 | `devComponents.states.loading` | En cours |
 | `devComponents.states.disabled` | Désactivé |

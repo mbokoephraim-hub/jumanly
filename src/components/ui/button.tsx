@@ -3,25 +3,29 @@ import type { ComponentProps, ReactNode } from "react";
 import { cx } from "@/lib/cx";
 import { Spinner } from "./spinner";
 
-export type ButtonVariant = "primary" | "secondary" | "tertiary" | "inverse" | "danger";
+export type ButtonVariant = "primary" | "secondary" | "tertiary" | "white" | "inverse" | "danger";
 export type ButtonSize = "sm" | "md" | "lg";
 
-// Spec § 11.5: primary Lime, secondary Sapin, tertiary outline.
-// Lime always carries Sapin text, never white (§ 11.1).
+// Mockup 00-02: always pills. Primary Lime (one per area), secondary Sapin, tertiary outline.
+// Lime always carries Sapin text, never white (§ 11.1). Hover: Lime −8 %.
 const variants: Record<ButtonVariant, string> = {
-  primary: "bg-lime text-sapin hover:bg-[#97e85a] active:bg-[#88d94c]",
+  primary: "bg-lime text-sapin hover:bg-[#8fd957] active:bg-[#82cc4b]",
   secondary: "bg-sapin text-blanc hover:bg-[#145045] active:bg-nuit",
-  tertiary: "border border-sapin/30 bg-transparent text-sapin hover:border-sapin hover:bg-sapin/5",
-  // Outline on dark backgrounds (Sapin bands).
-  inverse: "border border-blanc/40 bg-transparent text-blanc hover:border-blanc hover:bg-blanc/10",
+  tertiary:
+    "bg-transparent text-sapin ring-[1.5px] ring-brume ring-inset hover:bg-blanc hover:ring-sapin/40",
+  // On a tinted card (module colors): white pill.
+  white: "bg-blanc text-sapin ring-1 ring-brume hover:ring-sapin/40",
+  // On dark backgrounds (Sapin, Nuit, AI gradient).
+  inverse: "bg-blanc/10 text-blanc ring-1 ring-blanc/22 ring-inset hover:bg-blanc/18",
+  // Corail of the mockup, darkened for AA contrast with white text (CLAUDE.md § 10).
   danger: "bg-corail-fonce text-blanc hover:bg-[#8a2718]",
 };
 
-// Small buttons keep a 44 px touch area (§ 11.8).
+// 48 / 40 / 32 px. Small buttons keep a 44 px touch area (§ 11.8).
 const sizes: Record<ButtonSize, string> = {
-  sm: "h-9 px-4 text-sm gap-1.5 touch-target",
-  md: "h-11 px-5 text-[15px] gap-2",
-  lg: "h-13 px-7 text-base gap-2.5",
+  sm: "h-8 px-3.5 text-xs gap-1.5 touch-target [&_svg]:size-4",
+  md: "h-10 px-[18px] text-[13px] gap-2 [&_svg]:size-[18px]",
+  lg: "h-12 px-6 text-sm gap-2 [&_svg]:size-5",
 };
 
 type StyleProps = {
@@ -29,6 +33,8 @@ type StyleProps = {
   size?: ButtonSize;
   fullWidth?: boolean;
   icon?: ReactNode;
+  /** Icon after the label (« Créer mon compte › », « Reprendre › »). */
+  iconAfter?: ReactNode;
 };
 
 export function buttonClasses({
@@ -37,7 +43,7 @@ export function buttonClasses({
   fullWidth = false,
 }: StyleProps = {}) {
   return cx(
-    "inline-flex items-center justify-center rounded-pill font-medium whitespace-nowrap",
+    "inline-flex shrink-0 items-center justify-center rounded-pill font-semibold whitespace-nowrap",
     "transition-colors disabled:pointer-events-none disabled:opacity-45",
     variants[variant],
     sizes[size],
@@ -56,6 +62,7 @@ export function Button({
   size,
   fullWidth,
   icon,
+  iconAfter,
   loading = false,
   disabled,
   className,
@@ -73,6 +80,7 @@ export function Button({
     >
       {loading ? <Spinner size="sm" /> : icon}
       {children}
+      {iconAfter}
     </button>
   );
 }
@@ -85,6 +93,7 @@ export function ButtonLink({
   size,
   fullWidth,
   icon,
+  iconAfter,
   className,
   children,
   ...rest
@@ -93,21 +102,27 @@ export function ButtonLink({
     <Link className={cx(buttonClasses({ variant, size, fullWidth }), className)} {...rest}>
       {icon}
       {children}
+      {iconAfter}
     </Link>
   );
 }
 
 const iconVariants = {
   plain: "text-sapin hover:bg-sapin/8",
-  outline: "border border-sapin/30 text-sapin hover:border-sapin",
+  outline: "bg-blanc text-sapin ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40",
+  creme: "bg-creme text-sapin hover:bg-brume",
   sapin: "bg-sapin text-blanc hover:bg-[#145045]",
-  lime: "bg-lime text-sapin hover:bg-[#97e85a]",
+  lime: "bg-lime text-sapin hover:bg-[#8fd957]",
+  inverse: "bg-blanc/10 text-blanc hover:bg-blanc/18",
 };
+
+const iconSizes = { sm: "size-8 touch-target [&_svg]:size-4", md: "size-10 [&_svg]:size-5" };
 
 /** Round icon button. `label` is mandatory: it is the accessible name. */
 export function IconButton({
   label,
   variant = "plain",
+  size = "md",
   className,
   children,
   type = "button",
@@ -115,6 +130,7 @@ export function IconButton({
 }: Omit<ComponentProps<"button">, "aria-label"> & {
   label: string;
   variant?: keyof typeof iconVariants;
+  size?: keyof typeof iconSizes;
 }) {
   return (
     <button
@@ -122,8 +138,9 @@ export function IconButton({
       aria-label={label}
       title={label}
       className={cx(
-        "inline-flex size-11 shrink-0 items-center justify-center rounded-full transition-colors",
+        "inline-flex shrink-0 items-center justify-center rounded-full transition-colors",
         "disabled:pointer-events-none disabled:opacity-45",
+        iconSizes[size],
         iconVariants[variant],
         className,
       )}

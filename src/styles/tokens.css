@@ -1,6 +1,8 @@
 /* JUMANLY · Design tokens v1.0 (octobre 2026) */
-/* Copie de ressources/jumanly-tokens.css pour l'application. Seul écart : Sora est servie par le site
-   (next/font/local) au lieu de Google Fonts, voir docs/decisions/2026-10-13-socle-technique.md.
+/* Copie de ressources/jumanly-tokens.css pour l'application, complétée d'après
+   docs/maquettes/ressources/jumanly-ui.css (planche 00-01 « Fondations ») : 4 couleurs d'état,
+   rayons et ombre des éléments flottants. Sora est servie par le site (next/font/local) au lieu de
+   Google Fonts, voir docs/decisions/2026-10-13-socle-technique.md.
 @import url("https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap"); */
 :root {
   /* Couleurs */
@@ -14,6 +16,11 @@
   --jm-neon: #e3f67c; /* labels sur fond sombre */
   --jm-ardoise: #5b6b68; /* texte secondaire */
   --jm-brume: #dce5e1; /* bordures, séparateurs */
+  /* Compléments des maquettes (00-01) */
+  --jm-menthe-claire: #bfefdf; /* teinte Jobs, bande « Compatible » */
+  --jm-lime-clair: #e4fad0; /* fond de tendance +, étape validée */
+  --jm-ambre: #f2b33d; /* alerte douce : quota à 80 %, délai de grâce */
+  --jm-corail: #e25c4b; /* erreur, baisse ; jamais pour un score de candidat */
 
   /* Dégradés */
   --jm-degrade-signature: linear-gradient(135deg, #d9fa72 0%, #7de36b 50%, #1e9a64 100%);
@@ -31,8 +38,16 @@
   --jm-caption: 300 12px/18px var(--jm-font);
 
   /* Formes */
-  --jm-radius-card: 28px;
-  --jm-radius-md: 18px;
-  --jm-radius-sm: 12px;
-  --jm-radius-pill: 999px;
+  --jm-radius-card: 28px; /* cartes du site public, modales */
+  --jm-radius-box: 24px; /* cartes de l'application */
+  --jm-radius-md: 18px; /* composants */
+  --jm-radius-sm: 14px; /* champs, tuiles d'icône */
+  --jm-radius-pill: 999px; /* boutons, badges, recherche */
+  --jm-radius-panel: 32px; /* panneau principal de l'espace connecté */
+
+  /* Surfaces : ombres quasi nulles, sauf pour les éléments flottants
+     (navigation mobile, toasts, menus, modales). */
+  --jm-ombre-flottante: 0 14px 34px rgba(11, 26, 31, 0.25);
+  --jm-ombre-menu: 0 14px 34px rgba(11, 26, 31, 0.18);
+  --jm-halo-orbe: 0 0 16px rgba(166, 242, 107, 0.55);
 }

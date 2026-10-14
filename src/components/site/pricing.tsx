@@ -96,15 +96,12 @@ export async function CompareTable({ plans, family }: { plans: PublicPlan[]; fam
 
   return (
     <details className="group rounded-card bg-blanc p-5 md:p-6">
-      <summary className="flex cursor-pointer list-none items-center justify-between gap-4">
+      <summary className="flex cursor-pointer list-none flex-col items-start gap-2 sm:flex-row sm:items-center sm:justify-between sm:gap-4 [&::-webkit-details-marker]:hidden">
         <h3 className="text-h2">{t(`${prefix}.title`)}</h3>
-        <span className="flex items-center gap-1 font-semibold whitespace-nowrap">
+        <span className="flex items-center gap-1 text-sm font-semibold text-feuille-fonce sm:whitespace-nowrap">
           <span className="group-open:hidden">{t("pricing.talent.compare.toggleShow")}</span>
           <span className="hidden group-open:inline">{t("pricing.talent.compare.toggleHide")}</span>
-          <Icon
-            name="suivant"
-            className="size-4 rotate-90 transition-transform group-open:-rotate-90"
-          />
+          <Icon name="chev-d" className="size-4 transition-transform group-open:rotate-180" />
         </span>
       </summary>
       <div

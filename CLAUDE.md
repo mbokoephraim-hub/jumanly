@@ -26,6 +26,7 @@ Langue de l'interface : **français** (anglais prévu plus tard). Prix en **USD*
 | `docs/specifications.md`, partie 12 | Étapes E0 à E11, définition de fini, prompts |
 | `textes/textes-application.md` | Tous les textes de l'interface (clé → texte) |
 | `ressources/` | Jetons CSS, logos, icônes, personnages illustrés, motifs, fonds (voir `ressources/LISEZMOI.md`) |
+| `docs/maquettes/` | Maquettes de référence page par page (PDF + HTML). Avant de coder ou de retoucher un écran, ouvrir le PDF et le HTML de sa route et reproduire fidèlement la mise en forme. |
 
 En cas de contradiction : `docs/specifications.md (partie 05)` l'emporte pour les forfaits, `docs/specifications.md (partie 08)` pour le matching, `textes/` pour la formulation. Les maquettes (écran 09 « formules » en particulier) ne font pas foi pour le contenu des forfaits.
 

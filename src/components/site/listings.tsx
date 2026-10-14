@@ -30,6 +30,7 @@ export function CourseListing({
       lessons={course.lessonCount}
       duration={t(`ui.duration.${duration.key}`, duration.values)}
       certificate={course.certificateEnabled}
+      category={course.category ?? undefined}
       plan={planForCatalogLevel(plans, course.requiredLevel)?.name}
       image={course.coverUrl ?? undefined}
       status={status}
