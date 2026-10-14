@@ -1,6 +1,7 @@
 "use server";
 
 import { APIError } from "better-auth/api";
+import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -178,5 +179,7 @@ export async function updateDisplay(formData: FormData) {
     where: { id: user.id },
     data: { reduceMotion: formData.get("reduceMotion") === "on" },
   });
+  // The shell (layout) reads the preference: it must render again, not only the page.
+  refresh();
   back("compte", { ok: "1" });
 }

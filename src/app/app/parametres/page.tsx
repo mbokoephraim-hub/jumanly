@@ -73,7 +73,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
                   "-mb-px border-b-2 py-3 text-[15px] font-medium whitespace-nowrap",
                   tab.id === active
                     ? "border-feuille text-sapin"
-                    : "border-transparent text-ardoise hover:text-sapin",
+                    : "border-transparent text-sapin hover:border-brume",
                 )}
               >
                 {t(`settings.tab.${tab.key}`)}

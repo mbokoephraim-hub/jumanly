@@ -125,9 +125,20 @@ test.describe("paramètres", () => {
 
     await page.goto("/app/parametres?onglet=compte");
     await page.locator('input[name="city"]').fill("Goma");
-    await page.getByRole("button", { name: "Enregistrer" }).click();
+    await page
+      .getByRole("region", { name: "Compte" })
+      .getByRole("button", { name: "Enregistrer" })
+      .click();
     await expect(page.getByText("Modifications enregistrées.")).toBeVisible();
     await expect(page.locator('input[name="city"]')).toHaveValue("Goma");
+
+    // Less motion: the signed-in space is marked, and the choice is kept.
+    const display = page.getByRole("region", { name: "Affichage" });
+    await display.getByLabel("Réduire les animations").check();
+    await display.getByRole("button", { name: "Enregistrer" }).click();
+    await expect(page.locator("[data-reduce-motion]")).toHaveCount(1);
+    await expect(display.getByLabel("Réduire les animations")).toBeChecked();
+    await expect(page.locator("html")).not.toHaveAttribute("data-app-motion");
 
     await page.goto("/app/parametres?onglet=confidentialite");
     await page.getByLabel("Visible des recruteurs", { exact: true }).check();

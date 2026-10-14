@@ -56,7 +56,7 @@ const universes: Record<UniverseKey, Universe> = {
     key: "learn",
     background: "fond-04-lime-pastilles",
     pattern: "pastilles",
-    shape: "forme-pilule-sapin",
+    shape: "forme-etincelle-sapin",
     tone: "light",
     tint: "linear-gradient(120deg, rgb(217 250 114 / 0.5), rgb(255 255 255 / 0.22), rgb(217 250 114 / 0.5))",
     icon: "learn",

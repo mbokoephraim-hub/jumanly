@@ -175,7 +175,7 @@ export default async function LearnPage({ searchParams }: PageProps<"/app/learn"
                       "-mb-px inline-flex h-11 items-center border-b-2 text-[15px] whitespace-nowrap",
                       list === key
                         ? "border-sapin font-semibold"
-                        : "border-transparent text-ardoise hover:text-sapin",
+                        : "border-transparent text-sapin hover:border-brume",
                     )}
                   >
                     {t(`learn.catalog.tab.${lists[key]}`)}
@@ -185,7 +185,7 @@ export default async function LearnPage({ searchParams }: PageProps<"/app/learn"
               <li>
                 <Link
                   href="/app/learn/attestations"
-                  className="-mb-px inline-flex h-11 items-center gap-1.5 border-b-2 border-transparent text-[15px] whitespace-nowrap text-ardoise hover:text-sapin"
+                  className="-mb-px inline-flex h-11 items-center gap-1.5 border-b-2 border-transparent text-[15px] whitespace-nowrap text-sapin hover:border-brume"
                 >
                   <Icon name="certificat" className="size-4" />
                   {t("learn.catalog.certificatesLink")}

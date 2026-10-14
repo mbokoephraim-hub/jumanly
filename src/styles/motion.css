@@ -396,6 +396,8 @@
 .jm-rail-scroll {
   scrollbar-width: none;
   scroll-snap-type: x proximity;
+  /* Snapping keeps the tabs clear of the faded edges, and never cuts the first one. */
+  scroll-padding-inline: 24px;
   overscroll-behavior-x: contain;
 }
 .jm-rail-scroll::-webkit-scrollbar {
