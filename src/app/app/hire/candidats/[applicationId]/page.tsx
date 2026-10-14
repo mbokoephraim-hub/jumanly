@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
+import { ScorecardPanel } from "@/components/hire/scorecard-panel";
 import { RecruiterWhy } from "@/components/matching/recruiter-why";
 import {
   Alert,
@@ -19,24 +20,24 @@ import {
   rejectApplicationAction,
   requestDocumentAction,
 } from "@/server/actions/hire";
+import { addToPoolAction, deleteNoteAction, editNoteAction } from "@/server/actions/hire-advanced";
 import { db } from "@/server/db";
-import { level } from "@/server/entitlements";
+import { can, level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
 import { applicationMatches } from "@/server/matching/service";
 import { ensureApplicationConversation } from "@/server/services/connect";
+import { scorecardCriteria, scorecardView, visibleNotes } from "@/server/services/evaluation";
 import { HireError, hirePermissions, recordView, rejectReasons } from "@/server/services/hire";
 import { parseCriteria } from "@/server/services/jobs";
-import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
+import { cheapestPlanWhere, levelOf, listPublicPlans, orgPlanFor } from "@/server/services/plans";
+import { listPools } from "@/server/services/talent-search";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.application");
   return { title: { absolute: t("tab.profile") }, robots: { index: false } };
 }
 
-const text = (payload: unknown, key: string) =>
-  payload && typeof payload === "object" && key in payload
-    ? String((payload as Record<string, unknown>)[key] ?? "")
-    : "";
+import { describeEvent, payloadText as text } from "@/server/hire-history";
 
 /**
  * A candidate's application, seen by the recruiting team (partie 07 § 4). Opening it is logged
@@ -74,13 +75,22 @@ export default async function CandidatePage({
     ).map((actor) => [actor.id, actor.name]),
   );
   const memberName = (id: string | null) => (id ? (actors.get(id) ?? "") : "");
-  const notes = application.events.filter((event) => event.type === "note");
+  const subject = { type: "organization" as const, id: ctx.organizationId };
+  const notes = await visibleNotes(db, ctx, application.events);
   const criteria = parseCriteria(job.knockoutCriteria);
-  const matchingLevel = await level(
-    db,
-    { type: "organization", id: ctx.organizationId },
-    "hire.matching.level",
-  );
+  const [matchingLevel, collaboration, scorecards, history, appointments, shortlist] =
+    await Promise.all([
+      level(db, subject, "hire.matching.level"),
+      can(db, subject, "hire.collaboration"),
+      can(db, subject, "hire.scorecards"),
+      can(db, subject, "hire.decision_history"),
+      can(db, subject, "connect.appointments"),
+      can(db, subject, "hire.shortlist"),
+    ]);
+  const [scoreView, pools] = await Promise.all([
+    scorecards ? scorecardView(db, ctx, application) : null,
+    shortlist && permissions.manage ? listPools(db, ctx) : [],
+  ]);
   const [match, plans, dispute] = await Promise.all([
     matchingLevel === "none"
       ? null
@@ -104,46 +114,8 @@ export default async function CandidatePage({
       date,
       time: format.dateTime(date, { hour: "2-digit", minute: "2-digit" }),
     });
-  const reasonLabel = (reason: string) =>
-    (rejectReasons as readonly string[]).includes(reason)
-      ? t(`reject.reason.${reason as (typeof rejectReasons)[number]}`)
-      : reason;
-
-  const describe = (event: (typeof application.events)[number]) => {
-    const name = memberName(event.actorId);
-    switch (event.type) {
-      case "submitted":
-        return t("history.event.applied");
-      case "viewed":
-        return t("history.event.viewed", { memberName: name });
-      case "stage_changed":
-        return t("history.event.moved", {
-          memberName: name,
-          from: text(event.payload, "from"),
-          to: text(event.payload, "to"),
-        });
-      case "decision":
-        return text(event.payload, "toKind") === "hired"
-          ? t("history.event.hired", { memberName: name })
-          : t("history.event.rejected", {
-              memberName: name,
-              reason: reasonLabel(text(event.payload, "reason")),
-            });
-      case "note":
-        return t("history.event.noted", { memberName: name });
-      case "document_requested":
-        return t("history.event.documentRequested", {
-          memberName: name,
-          documentName: text(event.payload, "name"),
-        });
-      case "message":
-        return t("history.event.message", { memberName: name });
-      case "withdrawn":
-        return t("history.event.withdrawn");
-      default:
-        return null;
-    }
-  };
+  const describe = (event: (typeof application.events)[number]) =>
+    describeEvent(t, memberName(event.actorId), event);
 
   const defaultRejection = (
     job.rejectionTemplate ??
@@ -180,6 +152,14 @@ export default async function CandidatePage({
 
       {query.ok === "decision" && <Alert tone="success" title={t("reject.done")} />}
       {query.ok === "deplacee" && <Alert tone="success" title={t("pipeline.moved.notified")} />}
+      {query.ok === "note" && Number(query.mentions) > 0 && (
+        <Alert
+          tone="success"
+          title={t("application.notes.mentioned", { count: Number(query.mentions) })}
+        />
+      )}
+      {query.ok === "vivier" && <Alert tone="success" title={t("pools.addedDone")} />}
+      {query.ok === "entretien" && <Alert tone="success" title={t("interviews.sent")} />}
       {query.ok === "document" && (
         <Alert tone="success" title={t("application.requestDocument.sent")} />
       )}
@@ -370,6 +350,58 @@ export default async function CandidatePage({
               >
                 {t("application.message")}
               </ButtonLink>
+              {application.status === "active" &&
+                (appointments ? (
+                  <ButtonLink
+                    href={`/app/hire/entretiens?candidature=${application.id}#planifier`}
+                    variant="tertiary"
+                    size="sm"
+                    className="self-start"
+                  >
+                    {t("application.schedule.text")}
+                  </ButtonLink>
+                ) : (
+                  <p className="text-sm text-ardoise">
+                    {t("application.schedule.locked", {
+                      plan: orgPlanFor(plans, "connect.appointments"),
+                    })}
+                  </p>
+                ))}
+              {shortlist && (
+                <details className="rounded-md bg-creme p-4">
+                  <summary className="cursor-pointer font-medium">
+                    {t("application.addToPool")}
+                  </summary>
+                  {pools.length === 0 ? (
+                    <p className="mt-3 text-sm">{t("application.pool.none")}</p>
+                  ) : (
+                    <form action={addToPoolAction} className="mt-4 flex flex-col gap-3">
+                      <input type="hidden" name="profile" value={profile.id} />
+                      <input
+                        type="hidden"
+                        name="back"
+                        value={`/app/hire/candidats/${application.id}`}
+                      />
+                      <Select
+                        id="candidate-pool"
+                        name="pool"
+                        required
+                        label={t("pools.choose")}
+                        options={pools.map((pool) => ({ value: pool.id, label: pool.name }))}
+                      />
+                      <TextField
+                        id="candidate-pool-note"
+                        name="note"
+                        maxLength={300}
+                        label={t("pools.note")}
+                      />
+                      <Button type="submit" variant="tertiary" size="sm" className="self-start">
+                        {t("pools.add")}
+                      </Button>
+                    </form>
+                  )}
+                </details>
+              )}
 
               {!decided && (
                 <details
@@ -478,6 +510,16 @@ export default async function CandidatePage({
             </section>
           )}
 
+          <ScorecardPanel
+            applicationId={application.id}
+            criteria={scorecardCriteria(job)}
+            view={scoreView}
+            canEvaluate={permissions.evaluate}
+            lockedPlan={scorecards ? null : orgPlanFor(plans, "hire.scorecards")}
+            ok={query.ok === "evaluation"}
+            error={query.erreur === "invalid" && query.ok === undefined}
+          />
+
           <section
             aria-labelledby="notes-title"
             id="notes"
@@ -487,6 +529,13 @@ export default async function CandidatePage({
               {t("application.notes.title")}
             </h2>
             <p className="text-sm text-ardoise">{t("application.notes.private")}</p>
+            {!collaboration && (
+              <p className="text-sm text-ardoise">
+                {t("application.notes.collab.locked", {
+                  plan: orgPlanFor(plans, "hire.collaboration"),
+                })}
+              </p>
+            )}
             {notes.length === 0 ? (
               <p className="text-ardoise">{t("application.notes.empty")}</p>
             ) : (
@@ -495,8 +544,60 @@ export default async function CandidatePage({
                   <li key={note.id} className="flex flex-col gap-1 rounded-md bg-creme p-3">
                     <p className="whitespace-pre-line">{text(note.payload, "body")}</p>
                     <p className="text-ardoise text-caption">
-                      {[memberName(note.actorId), stamp(note.createdAt)].join(" · ")}
+                      {[
+                        memberName(note.actorId),
+                        stamp(note.createdAt),
+                        text(note.payload, "editedAt") ? t("application.notes.edited") : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
                     </p>
+                    {note.actorId === user.id && (
+                      <div className="flex flex-col gap-2">
+                        <details>
+                          <summary className="cursor-pointer text-sm underline">
+                            {t("application.notes.edit")}
+                          </summary>
+                          <form action={editNoteAction} className="mt-2 flex flex-col gap-2">
+                            <input type="hidden" name="application" value={application.id} />
+                            <input type="hidden" name="note" value={note.id} />
+                            <TextArea
+                              id={`note-edit-${note.id}`}
+                              name="body"
+                              required
+                              rows={3}
+                              maxLength={2000}
+                              label={t("application.notes.edit")}
+                              defaultValue={text(note.payload, "body")}
+                            />
+                            <Button
+                              type="submit"
+                              size="sm"
+                              variant="tertiary"
+                              className="self-start"
+                            >
+                              {t("application.notes.save")}
+                            </Button>
+                          </form>
+                        </details>
+                        <details>
+                          <summary className="cursor-pointer text-sm underline">
+                            {t("application.notes.delete.text")}
+                          </summary>
+                          <form
+                            action={deleteNoteAction}
+                            className="mt-2 flex flex-col items-start gap-2"
+                          >
+                            <input type="hidden" name="application" value={application.id} />
+                            <input type="hidden" name="note" value={note.id} />
+                            <p className="text-sm">{t("application.notes.delete.confirm")}</p>
+                            <Button type="submit" size="sm" variant="danger">
+                              {t("application.notes.delete.text")}
+                            </Button>
+                          </form>
+                        </details>
+                      </div>
+                    )}
                   </li>
                 ))}
               </ul>
@@ -531,6 +632,18 @@ export default async function CandidatePage({
               </h2>
               <p className="text-sm text-ardoise">{t("history.subtitle")}</p>
             </div>
+            {history ? (
+              <a
+                href={`/app/hire/candidats/${application.id}/historique`}
+                className="self-start text-sm font-medium underline"
+              >
+                {t("history.export")}
+              </a>
+            ) : (
+              <p className="text-sm text-ardoise">
+                {t("history.locked", { plan: orgPlanFor(plans, "hire.decision_history") })}
+              </p>
+            )}
             <ol className="flex flex-col gap-2 border-l-2 border-brume pl-4 text-sm">
               {application.events.map((event) => {
                 const line = describe(event);

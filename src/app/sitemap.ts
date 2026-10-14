@@ -24,7 +24,7 @@ const staticRoutes = [
 
 export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   const base = siteUrl();
-  const { courseSlugs, jobSlugs } = await getSitemapEntries();
+  const { courseSlugs, jobSlugs, companySlugs } = await getSitemapEntries();
   return [
     ...staticRoutes.map((path) => ({ url: `${base}${path === "/" ? "" : path}` })),
     ...courseSlugs.map((course) => ({
@@ -32,5 +32,9 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
       lastModified: course.updatedAt,
     })),
     ...jobSlugs.map((job) => ({ url: `${base}/offres/${job.slug}`, lastModified: job.updatedAt })),
+    ...companySlugs.map((company) => ({
+      url: `${base}/entreprises/${company.slug}`,
+      lastModified: company.updatedAt,
+    })),
   ];
 }

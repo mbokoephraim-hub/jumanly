@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { JobSettings } from "@/components/hire/job-settings";
 import { JobStatusBadge } from "@/components/hire/job-status";
 import { Alert, Badge, Button, ButtonLink, EmptyState, ScoreBadge } from "@/components/ui";
 import { moveApplicationAction, publishJobAction } from "@/server/actions/hire";
@@ -239,6 +240,14 @@ export default async function PipelinePage({
             })}
           </ol>
         </div>
+      )}
+      {permissions.manage && (
+        <JobSettings
+          ctx={ctx}
+          job={job}
+          ok={typeof query.ok === "string" ? query.ok : undefined}
+          error={typeof query.erreur === "string" ? query.erreur : undefined}
+        />
       )}
       <p className="text-sm text-ardoise">{t("dashboard.fairness")}</p>
     </div>

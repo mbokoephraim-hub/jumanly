@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getFormatter, getTranslations } from "next-intl/server";
 import {
   Alert,
   Badge,
@@ -18,6 +18,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { parseLimit, resolvePlan, usage } from "@/server/entitlements";
 import { billingSubject } from "@/server/services/accounts";
+import { upcomingTalentInterviews } from "@/server/services/interviews";
 import { isClosedStatus, listApplications, talentStatus } from "@/server/services/applications";
 import { completeness, getFullProfile } from "@/server/services/profile";
 import { redirect } from "next/navigation";
@@ -59,10 +60,12 @@ export default async function DashboardPage() {
 
   const profile = await getFullProfile(db, user.id);
   const { percent, missing } = completeness(profile);
-  const [applications, cvCount, diagnosticCount] = await Promise.all([
+  const format = await getFormatter();
+  const [applications, cvCount, diagnosticCount, upcoming] = await Promise.all([
     listApplications(db, user.id),
     db.document.count({ where: { kind: "cv", profileId: profile.id } }),
     db.careerDiagnostic.count({ where: { userId: user.id } }),
+    upcomingTalentInterviews(db, user.id, now),
   ]);
   const withStatus = applications.map((application) => ({
     ...application,
@@ -210,6 +213,48 @@ export default async function DashboardPage() {
           <RecommendedJobs userId={user.id} />
           <RecommendedCourses userId={user.id} />
         </div>
+      )}
+
+      {upcoming.length > 0 && (
+        <section
+          aria-labelledby="upcoming"
+          className="flex flex-col gap-3 rounded-card bg-blanc p-6"
+        >
+          <h2 id="upcoming" className="text-h2">
+            {t("talent.dashboard.upcoming.title")}
+          </h2>
+          <ul className="flex flex-col divide-y divide-brume">
+            {upcoming.map((interview) => (
+              <li key={interview.id} className="flex flex-col gap-1 py-3">
+                <Link
+                  href={
+                    interview.application.conversation
+                      ? `/app/messages/${interview.application.conversation.id}#entretien-${interview.id}`
+                      : "/app/jobs/candidatures"
+                  }
+                  className="font-semibold underline"
+                >
+                  {t("talent.dashboard.upcoming.interview.text", {
+                    company: interview.organization.name,
+                  })}
+                </Link>
+                <span className="text-sm text-ardoise">
+                  {t("talent.dashboard.upcoming.interview.detail", {
+                    time: format.dateTime(interview.startsAt ?? now, {
+                      dateStyle: "medium",
+                      timeStyle: "short",
+                      timeZone: interview.timezone,
+                    }),
+                    mode: t(
+                      `connect.invite.mode.${interview.mode === "audio" ? "call" : interview.mode}`,
+                    ),
+                    interviewer: interview.organizer?.name ?? interview.organization.name,
+                  })}
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">

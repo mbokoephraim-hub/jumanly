@@ -103,6 +103,7 @@ const privacySchema = z.object({
   ai: z.literal("on").optional(),
   matching: z.literal("on").optional(),
   newsletter: z.literal("on").optional(),
+  contactRequests: z.literal("on").optional(),
 });
 
 export async function updatePrivacy(formData: FormData) {
@@ -120,11 +121,16 @@ export async function updatePrivacy(formData: FormData) {
     }),
     db.talentProfile.upsert({
       where: { userId: user.id },
-      update: { visibility: input.visibility, matchingEnabled: input.matching === "on" },
+      update: {
+        visibility: input.visibility,
+        matchingEnabled: input.matching === "on",
+        acceptsContactRequests: input.contactRequests === "on",
+      },
       create: {
         userId: user.id,
         visibility: input.visibility,
         matchingEnabled: input.matching === "on",
+        acceptsContactRequests: input.contactRequests === "on",
       },
     }),
   ]);

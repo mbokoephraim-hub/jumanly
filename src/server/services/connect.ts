@@ -62,6 +62,12 @@ const listInclude = {
       profile: { select: { user: { select: { name: true } } } },
     },
   },
+  contactRequest: {
+    select: {
+      job: { select: { title: true } },
+      profile: { select: { id: true, user: { select: { name: true } } } },
+    },
+  },
   messages: { where: { hiddenAt: null }, orderBy: { createdAt: "desc" }, take: 1 },
 } satisfies Prisma.ConversationInclude;
 

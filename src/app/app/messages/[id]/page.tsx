@@ -4,6 +4,7 @@ import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Alert, Badge, Button, Select, TextArea } from "@/components/ui";
 import { cx } from "@/lib/cx";
+import { InterviewCard } from "@/components/connect/interview-card";
 import { ReportForm } from "@/components/connect/report-form";
 import { answerDocumentAction, blockAction, sendMessageAction } from "@/server/actions/connect";
 import { switchSpace } from "@/server/actions/hire";
@@ -11,13 +12,20 @@ import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
 import { ConnectError, getConversation, markRead, MESSAGE_MAX } from "@/server/services/connect";
 import { hirePermissions } from "@/server/services/hire";
+import { interviewsForConversation } from "@/server/services/interviews";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("connect");
   return { title: { absolute: t("list.title") }, robots: { index: false } };
 }
 
-type Payload = { name?: string; due?: string; submittedAt?: string; document?: { title?: string } };
+type Payload = {
+  name?: string;
+  due?: string;
+  submittedAt?: string;
+  document?: { title?: string };
+  interviewId?: string;
+};
 
 /**
  * A conversation (partie 07 § 3): messages, document requests and the answer with a CV,
@@ -101,10 +109,25 @@ export default async function ThreadPage({
         orderBy: { updatedAt: "desc" },
         select: { id: true, title: true },
       });
+  const contact = conversation.contactRequest;
   const otherName = fromOrganization
-    ? (conversation.application?.profile.user.name ?? "")
+    ? (conversation.application?.profile.user.name ?? contact?.profile.user.name ?? "")
     : (conversation.organization?.name ?? "");
-  const jobTitle = conversation.application?.job.title ?? "";
+  const jobTitle = conversation.application?.job.title ?? contact?.job?.title ?? "";
+  const interviews = new Map(
+    (
+      await interviewsForConversation(
+        db,
+        conversation.messages.flatMap((message) => {
+          const interviewId = (message.payload as Payload | null)?.interviewId;
+          return message.kind === "invitation" && interviewId ? [interviewId] : [];
+        }),
+      )
+    ).map((interview) => [interview.id, interview]),
+  );
+  const ti = await getTranslations("connect.invite");
+  const tc = await getTranslations("connect.contactRequest");
+  const th = await getTranslations("hire.talents.result");
   const now = new Date();
   const back = `/app/messages/${conversation.id}`;
   const lastId = conversation.messages.at(-1)?.id;
@@ -117,6 +140,9 @@ export default async function ThreadPage({
       <header className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex flex-col gap-1">
           <h1 className="text-h1">{otherName}</h1>
+          {!conversation.application && jobTitle && (
+            <p className="text-ardoise">{tc("job", { jobTitle })}</p>
+          )}
           {conversation.application && (
             <p className="text-ardoise">
               {[jobTitle, t("side.stage", { stage: conversation.application.stage.name })].join(
@@ -140,13 +166,29 @@ export default async function ThreadPage({
           ))}
       </header>
 
+      {fromOrganization && contact && (
+        <Link
+          href={`/app/hire/talents/${contact.profile.id}`}
+          className="text-sm font-medium underline"
+        >
+          {th("view")}
+        </Link>
+      )}
+      {query.ok === "relation" && (
+        <Alert tone="success" title={tc("accepted", { company: otherName })} />
+      )}
+      {query.ok === "entretien" && <Alert tone="success" title={ti("done")} />}
       {query.signalement === "ok" && <Alert tone="success" title={tr("success")} />}
       {query.signalement === "deja" && <Alert title={tr("already")} />}
       {query.ok === "document" && <Alert tone="success" title={t("docRequest.submitted")} />}
       {query.ok === "bloque" && (
         <Alert tone="success" title={t("block.done", { name: otherName })} />
       )}
-      {query.erreur && <Alert tone="error" title={t("thread.error")} />}
+      {query.erreur === "entretien" ? (
+        <Alert tone="error" title={ti("error")} />
+      ) : (
+        query.erreur && <Alert tone="error" title={t("thread.error")} />
+      )}
       {conversation.blockedAt &&
         (fromOrganization ? (
           <Alert tone="warning" title={t("thread.blocked")} />
@@ -184,6 +226,13 @@ export default async function ThreadPage({
                 </p>
                 {message.hiddenAt ? (
                   <p className="italic">{tr("hidden")}</p>
+                ) : message.kind === "invitation" && interviews.get(payload.interviewId ?? "") ? (
+                  <InterviewCard
+                    interview={interviews.get(payload.interviewId ?? "")!}
+                    conversationId={conversation.id}
+                    talent={!fromOrganization}
+                    now={now}
+                  />
                 ) : message.kind === "document_request" ? (
                   <div className="flex flex-col gap-2">
                     <p className="font-semibold">

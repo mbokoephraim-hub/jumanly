@@ -4,18 +4,32 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { Alert, Badge, Button, ButtonLink, Select, TextArea, TextField } from "@/components/ui";
 import type { MembershipRole } from "@/generated/prisma/client";
 import { cx } from "@/lib/cx";
+import { EntitiesTab, TeamsTab, VerificationTab } from "@/components/org/structure-tabs";
 import {
   changeRoleAction,
   inviteAction,
   removeMemberAction,
   revokeInvitationAction,
+  setMemberTeamAction,
+  transferOwnershipAction,
   updateOrganizationAction,
 } from "@/server/actions/organization";
 import { db } from "@/server/db";
-import { level, resolvePlan } from "@/server/entitlements";
+import { can, level, resolvePlan } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
 import { hirePermissions } from "@/server/services/hire";
-import { grantableRoles, listMembers, seatUsage } from "@/server/services/organization";
+import {
+  grantableRoles,
+  listMembers,
+  organizationCategories,
+  seatUsage,
+} from "@/server/services/organization";
+import { orgStructure } from "@/server/services/org-structure";
+import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
+import { VERIFICATION_DAYS } from "@/server/services/verification";
+
+const tabs = ["profil", "verification", "membres", "equipes", "departements", "entites"] as const;
+type Tab = (typeof tabs)[number];
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("org");
@@ -31,20 +45,35 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
   const t = await getTranslations("org");
   const format = await getFormatter();
   const subject = { type: "organization" as const, id: ctx.organizationId };
-  const [organization, { members, invitations }, seats, permissionsLevel, plan] = await Promise.all(
-    [
-      db.organization.findUniqueOrThrow({ where: { id: ctx.organizationId } }),
-      listMembers(db, ctx),
-      seatUsage(db, ctx.organizationId),
-      level(db, subject, "org.permissions.level"),
-      resolvePlan(db, subject),
-    ],
-  );
+  const [
+    organization,
+    { members, invitations },
+    seats,
+    permissionsLevel,
+    plan,
+    teamsOn,
+    entitiesOn,
+    verificationOn,
+    plans,
+  ] = await Promise.all([
+    db.organization.findUniqueOrThrow({ where: { id: ctx.organizationId } }),
+    listMembers(db, ctx),
+    seatUsage(db, ctx.organizationId),
+    level(db, subject, "org.permissions.level"),
+    resolvePlan(db, subject),
+    can(db, subject, "org.teams"),
+    can(db, subject, "org.entities"),
+    can(db, subject, "org.verified_profile"),
+    listPublicPlans(db),
+  ]);
+  const structure = teamsOn || entitiesOn ? await orgStructure(db, ctx.organizationId) : null;
   const admin = hirePermissions(ctx.role).administer;
   const roles = grantableRoles(permissionsLevel);
   const roleName = (role: MembershipRole) =>
     role === "partner_manager" ? role : t(`roles.${role}.text`);
-  const tab = params.onglet === "membres" ? "membres" : "profil";
+  const tab: Tab = (tabs as readonly string[]).includes(one(params.onglet))
+    ? (one(params.onglet) as Tab)
+    : "profil";
   const erreur = one(params.erreur);
   const ok = one(params.ok);
   const okText: Record<string, string> = {
@@ -52,6 +81,10 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
     annulee: t("invite.revoked"),
     role: t("members.roleDone"),
     retire: t("members.removedDone"),
+    equipe: t("members.teamDone"),
+    transfert: t("members.transferDone"),
+    cree: t("structure.created"),
+    supprime: t("structure.deleted"),
   };
   const errorText: Record<string, string> = {
     alreadyMember: t("invite.error.alreadyMember", { email: one(params.email) }),
@@ -59,6 +92,9 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
     role: t("invite.error.role"),
     invalid: t("profile.invalid"),
     forbidden: t("roles.error.selfDemote"),
+    notEmpty: t("structure.notEmpty"),
+    verification: t("verification.invalid"),
+    ...(tab !== "profil" && tab !== "membres" ? { invalid: t("structure.invalid") } : {}),
   };
   const full = seats.max >= 0 && seats.used >= seats.max;
 
@@ -71,7 +107,11 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
       <nav aria-label={t("title")} className="flex flex-wrap gap-2">
         {[
           { id: "profil", label: t("tab.profile") },
+          { id: "verification", label: t("tab.verification") },
           { id: "membres", label: t("tab.members") },
+          { id: "equipes", label: t("tab.teams") },
+          { id: "departements", label: t("tab.departments") },
+          { id: "entites", label: t("tab.entities") },
         ].map((item) => (
           <Link
             key={item.id}
@@ -85,12 +125,44 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
             {item.label}
           </Link>
         ))}
+        {admin && (
+          <Link
+            href="/app/abonnement"
+            className="rounded-pill bg-blanc px-4 py-2 text-[15px] font-medium"
+          >
+            {t("tab.subscription")}
+          </Link>
+        )}
       </nav>
       {ok && tab === "profil" && <Alert tone="success" title={t("profile.saved")} />}
-      {ok && tab === "membres" && okText[ok] && <Alert tone="success" title={okText[ok]} />}
+      {ok && tab !== "profil" && tab !== "verification" && okText[ok] && (
+        <Alert tone="success" title={okText[ok]} />
+      )}
       {erreur && <Alert tone="error" title={errorText[erreur] ?? t("profile.invalid")} />}
 
-      {tab === "profil" ? (
+      {tab === "verification" ? (
+        <VerificationTab
+          organization={organization}
+          admin={admin}
+          lockedPlan={verificationOn ? null : orgPlanFor(plans, "org.verified_profile")}
+          days={VERIFICATION_DAYS}
+        />
+      ) : tab === "equipes" || tab === "departements" ? (
+        <TeamsTab
+          kind={tab === "equipes" ? "team" : "department"}
+          structure={teamsOn ? structure : null}
+          members={members}
+          admin={admin}
+          entities={entitiesOn}
+          lockedPlan={teamsOn ? null : orgPlanFor(plans, "org.teams")}
+        />
+      ) : tab === "entites" ? (
+        <EntitiesTab
+          structure={structure}
+          admin={admin}
+          lockedPlan={entitiesOn ? null : orgPlanFor(plans, "org.entities")}
+        />
+      ) : tab === "profil" ? (
         <form
           action={updateOrganizationAction}
           className="flex max-w-3xl flex-col gap-4 rounded-card bg-blanc p-6"
@@ -108,6 +180,25 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
               maxLength={120}
               label={t("profile.name")}
               defaultValue={organization.name}
+            />
+            <TextField
+              id="org-legal-name"
+              name="legalName"
+              maxLength={160}
+              label={t("profile.legalName")}
+              hint={t("profile.legalNameHint")}
+              defaultValue={organization.legalName ?? ""}
+            />
+            <Select
+              id="org-category"
+              name="category"
+              label={t("profile.category.text")}
+              placeholder={t("profile.category.none")}
+              defaultValue={organization.category ?? ""}
+              options={organizationCategories.map((value) => ({
+                value,
+                label: t(`profile.category.${value}`),
+              }))}
             />
             <TextArea
               id="org-description"
@@ -157,6 +248,14 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
                 placeholder={t("profile.website.placeholder")}
                 defaultValue={organization.website ?? ""}
               />
+              <TextField
+                id="org-contact-email"
+                name="contactEmail"
+                type="email"
+                maxLength={200}
+                label={t("profile.contactEmail")}
+                defaultValue={organization.contactEmail ?? ""}
+              />
             </div>
           </fieldset>
           {admin && (
@@ -201,8 +300,52 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
                         </span>
                         <span className="text-sm text-ardoise">{member.user.email}</span>
                       </div>
-                      <Badge tone="hire">{roleName(member.role)}</Badge>
+                      <div className="flex flex-wrap items-center gap-2">
+                        {member.team && <Badge>{member.team.name}</Badge>}
+                        <Badge tone="hire">{roleName(member.role)}</Badge>
+                      </div>
                     </div>
+                    {admin && teamsOn && structure && structure.teams.length > 0 && (
+                      <form action={setMemberTeamAction} className="flex flex-wrap items-end gap-2">
+                        <input type="hidden" name="id" value={member.id} />
+                        <Select
+                          id={`team-${member.id}`}
+                          name="team"
+                          label={t("tab.teams")}
+                          placeholder={t("members.team.none")}
+                          defaultValue={member.team?.id ?? ""}
+                          options={structure.teams.map((team) => ({
+                            value: team.id,
+                            label: team.name,
+                          }))}
+                        />
+                        <Button type="submit" variant="tertiary" size="sm">
+                          {t("members.team.save")}
+                        </Button>
+                      </form>
+                    )}
+                    {ctx.role === "org_owner" && !self && member.status === "active" && (
+                      <details>
+                        <summary className="cursor-pointer text-sm font-medium underline">
+                          {t("members.transferOwnership.text")}
+                        </summary>
+                        <form
+                          action={transferOwnershipAction}
+                          className="mt-3 flex flex-col items-start gap-3 rounded-md bg-creme p-4"
+                        >
+                          <input type="hidden" name="id" value={member.id} />
+                          <p>
+                            {t("members.transferOwnership.confirm", {
+                              memberName: member.user.name,
+                              org: organization.name,
+                            })}
+                          </p>
+                          <Button type="submit" variant="danger" size="sm">
+                            {t("members.transferOwnership.text")}
+                          </Button>
+                        </form>
+                      </details>
+                    )}
                     {editable && member.role !== "org_owner" && (
                       <div className="flex flex-wrap items-end gap-3">
                         <form action={changeRoleAction} className="flex flex-wrap items-end gap-2">
@@ -325,6 +468,18 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
                     defaultValue="recruiter"
                     options={roles.map((role) => ({ value: role, label: roleName(role) }))}
                   />
+                  {teamsOn && structure && structure.teams.length > 0 && (
+                    <Select
+                      id="org-team"
+                      name="team"
+                      label={t("invite.team")}
+                      placeholder={t("members.team.none")}
+                      options={structure.teams.map((team) => ({
+                        value: team.id,
+                        label: team.name,
+                      }))}
+                    />
+                  )}
                   <TextArea
                     id="org-message"
                     name="message"

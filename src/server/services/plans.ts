@@ -135,3 +135,19 @@ export function cheapestPlanWhere(
     .sort((a, b) => (a.priceCents ?? Infinity) - (b.priceCents ?? Infinity));
   return candidates[0] ?? null;
 }
+
+/**
+ * Name of the cheapest RH or Company plan that opens an entitlement: `true`, one of `levels`, or
+ * a limit above zero (contract values count). Used by « Disponible avec {plan} ».
+ */
+export function orgPlanFor(plans: PublicPlan[], key: string, levels?: string[]): string {
+  return (
+    cheapestPlanWhere(plans, ["rh", "company"], (plan) => {
+      const value = plan.entitlements[key];
+      if (value === undefined) return false;
+      if (levels) return levels.includes(value);
+      if (value === "true") return true;
+      return value !== "false" && value !== "0" && value !== "none";
+    })?.name ?? ""
+  );
+}

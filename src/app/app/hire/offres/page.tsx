@@ -2,14 +2,15 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { JobStatusBadge } from "@/components/hire/job-status";
-import { Alert, Button, ButtonLink, EmptyState } from "@/components/ui";
+import { Alert, Button, ButtonLink, EmptyState, Select } from "@/components/ui";
 import type { JobStatus } from "@/generated/prisma/client";
 import { cx } from "@/lib/cx";
 import { closeJobAction, deleteDraftAction } from "@/server/actions/hire";
 import { db } from "@/server/db";
-import { limit, resolvePlan } from "@/server/entitlements";
+import { can, limit, resolvePlan } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
 import { activeJobCount, hirePermissions, listOrgJobs } from "@/server/services/hire";
+import { orgStructure } from "@/server/services/org-structure";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.jobs");
@@ -29,12 +30,28 @@ export default async function HireJobsPage({ searchParams }: PageProps<"/app/hir
   const { ctx } = await requireHire("/app/hire/offres");
   const t = await getTranslations("hire.jobs");
   const subject = { type: "organization" as const, id: ctx.organizationId };
-  const [jobs, max, active, plan] = await Promise.all([
+  const [allJobs, max, active, plan, teams] = await Promise.all([
     listOrgJobs(db, ctx),
     limit(db, subject, "jobs.active.max"),
     activeJobCount(db, ctx.organizationId),
     resolvePlan(db, subject),
+    can(db, subject, "org.teams"),
   ]);
+  // Filters by owner, team, department and entity (`org.teams`), on the jobs already in scope.
+  const structure = teams ? await orgStructure(db, ctx.organizationId) : null;
+  const filter = (key: string) => (typeof params[key] === "string" ? (params[key] as string) : "");
+  const owners = new Map(
+    allJobs.flatMap((job) =>
+      job.assignedToId && job.assignedTo ? [[job.assignedToId, job.assignedTo.name]] : [],
+    ),
+  );
+  const jobs = allJobs.filter(
+    (job) =>
+      (!filter("responsable") || job.assignedToId === filter("responsable")) &&
+      (!filter("equipe") || job.teamId === filter("equipe")) &&
+      (!filter("departement") || job.departmentId === filter("departement")) &&
+      (!filter("entite") || job.entityId === filter("entite")),
+  );
   const permissions = hirePermissions(ctx.role);
   const tab: Tab =
     params.onglet === "brouillons" || params.onglet === "fermees" || params.onglet === "toutes"
@@ -80,6 +97,52 @@ export default async function HireJobsPage({ searchParams }: PageProps<"/app/hir
             </ButtonLink>
           }
         />
+      )}
+      {structure && (
+        <form method="get" className="flex flex-wrap items-end gap-3">
+          <input type="hidden" name="onglet" value={tab} />
+          <Select
+            id="jobs-owner"
+            name="responsable"
+            label={t("filter.owner")}
+            placeholder={t("filter.all")}
+            defaultValue={filter("responsable")}
+            options={[...owners].map(([value, label]) => ({ value, label }))}
+          />
+          {structure.teams.length > 0 && (
+            <Select
+              id="jobs-team"
+              name="equipe"
+              label={t("filter.team")}
+              placeholder={t("filter.all")}
+              defaultValue={filter("equipe")}
+              options={structure.teams.map((item) => ({ value: item.id, label: item.name }))}
+            />
+          )}
+          {structure.departments.length > 0 && (
+            <Select
+              id="jobs-department"
+              name="departement"
+              label={t("filter.department")}
+              placeholder={t("filter.all")}
+              defaultValue={filter("departement")}
+              options={structure.departments.map((item) => ({ value: item.id, label: item.name }))}
+            />
+          )}
+          {structure.entities.length > 0 && (
+            <Select
+              id="jobs-entity"
+              name="entite"
+              label={t("filter.entity")}
+              placeholder={t("filter.all")}
+              defaultValue={filter("entite")}
+              options={structure.entities.map((item) => ({ value: item.id, label: item.name }))}
+            />
+          )}
+          <Button type="submit" size="sm" variant="tertiary">
+            {t("filter.submit")}
+          </Button>
+        </form>
       )}
       <nav aria-label={t("title")} className="flex flex-wrap gap-2">
         {tabs.map((item) => (
@@ -128,6 +191,16 @@ export default async function HireJobsPage({ searchParams }: PageProps<"/app/hir
                         job.closesAt && job.status === "published"
                           ? t("row.expires", { date: job.closesAt })
                           : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </p>
+                    <p className="text-sm text-ardoise">
+                      {[
+                        job.assignedTo ? t("row.owner", { memberName: job.assignedTo.name }) : null,
+                        job.team?.name,
+                        job.department?.name,
+                        job.entity?.name,
                       ]
                         .filter(Boolean)
                         .join(" · ")}

@@ -8,8 +8,8 @@ import { db } from "@/server/db";
 import { requireHire, setActiveSpace } from "@/server/hire-context";
 import { requireUser } from "@/server/auth/session";
 import { ensureApplicationConversation, sendMessage } from "@/server/services/connect";
+import { addTeamNote } from "@/server/services/evaluation";
 import {
-  addNote,
   closeJob,
   deleteDraft,
   HireError,
@@ -177,11 +177,11 @@ export async function rejectApplicationAction(formData: FormData) {
 export async function addNoteAction(formData: FormData) {
   const { ctx } = await requireHire("/app/hire", "evaluate");
   const applicationId = id(formData.get("application"));
-  await guarded(
-    () => addNote(db, ctx, applicationId, String(formData.get("body") ?? "")),
+  const mentions = await guarded(
+    () => addTeamNote(db, ctx, applicationId, String(formData.get("body") ?? "")),
     "/app/hire/offres",
   );
-  redirect(`/app/hire/candidats/${applicationId}?ok=note#notes`);
+  redirect(`/app/hire/candidats/${applicationId}?ok=note&mentions=${mentions.length}#notes`);
 }
 
 const documentSchema = z.object({

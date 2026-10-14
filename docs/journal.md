@@ -2,6 +2,60 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E8 · Hire avancé et Companies (14 octobre 2026)
+
+### Fait
+
+- Structure : équipes et départements (`Team`), entités et filiales (`OrgEntity`), rattachement des
+  membres et des invitations à une équipe, transfert de propriété. Profil d'organisation complété
+  (raison sociale, type, e-mail de contact recrutement). Onglets Organisation : profil,
+  vérification, membres, équipes, départements, entités, lien vers l'abonnement.
+- Offres : responsable, équipe, département, entité et équipe de recrutement (`JobAssignment`),
+  filtres de la liste, portée par rôle (`jobScope`) appliquée à toutes les lectures Hire.
+- Évaluation : modèle de grille par offre, grille sur la fiche candidat (avis masqués avant le
+  sien), notes d'équipe avec mentions (@Prénom) et notification, modification et suppression par
+  l'auteur, export CSV de l'historique.
+- Talents : recherche dans le vivier (filtres approfondis selon le forfait, quota par requête
+  distincte, profils anonymes), fiche talent journalisée, demandes de mise en relation (accepter,
+  décliner, bloquer), onglet « Demandes de mise en relation » côté talent, réglage de
+  confidentialité « Recevoir des demandes ». Viviers privés, d'équipe ou d'organisation.
+- Entretiens : invitation dans la conversation (1 à 3 créneaux, vidéo, sur place ou audio,
+  participants), réponse du talent (choisir, proposer, décliner), reprogrammation, annulation,
+  « terminé » ou « absent », e-mails d'invitation et de confirmation, rendez-vous à venir sur les
+  deux tableaux de bord.
+- Rapports par niveau (vue d'ensemble, statistiques, avancés, consolidés, par entité), périodes et
+  dates personnalisées, export CSV et PDF.
+- Vérification d'entreprise : demande, file `/admin/organisations` (approuver, refuser, retirer le
+  badge), e-mail aux propriétaires, bandeau sur le tableau de bord Hire.
+- Page publique `/entreprises/[slug]` (présentation, badge, offres ouvertes), liée depuis chaque
+  offre et listée dans le sitemap.
+- Tableau de bord Hire : entretiens de la semaine, évaluations à compléter, mises en relation
+  acceptées, quotas (recherches, mises en relation, crédits IA), raccourcis mobiles vers Viviers,
+  Entretiens et Rapports.
+- Démo : « Groupe Démo (groupe fictif) » sur Company Premium (contrat fictif), comptes
+  `groupe@` (propriétaire) et `manager@` (responsable du recrutement), talents `talent.visible@`
+  (visible) et `talent.anonyme@` (anonyme), équipe, département, deux entités, un vivier partagé et
+  un entretien à confirmer. Mot de passe inchangé.
+- Décisions : `docs/decisions/2026-10-14-hire-avance.md`.
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Chaque fonction gouvernée par une clé de droits de la partie 05 | ✓ aucun nom de forfait dans le code |
+| Isolation des nouvelles tables par organisation | ✓ tests en base (viviers, entretiens, grilles, demandes) |
+| Consentement du talent avant tout échange | ✓ tests en base et parcours e2e |
+| Parcours 6.5 (recherche et mise en relation), entretien, vérification | ✓ e2e desktop et mobile |
+| Lint, types, tests unitaires et en base, build, e2e | ✓ en local ; CI à l'ouverture de la PR |
+
+### Dettes et points ouverts
+
+- Pas de téléversement de pièces ni de code envoyé au domaine pour la vérification ; pas de statut
+  « à renouveler ».
+- Pas d'export agenda (.ics) ni de rappel automatique avant un entretien (tâche de fond à venir).
+- Fuseau horaire : celui de `DEFAULT_TIME_ZONE` pour tous ; un fuseau par utilisateur reste à faire.
+- Tableaux de bord personnalisés : ventilation par entité seulement.
+
 ## E7 · Paiements : webhooks, renouvellement, factures (14 octobre 2026)
 
 ### Fait

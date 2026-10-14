@@ -1,5 +1,6 @@
 "use server";
 
+import { updateTag } from "next/cache";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { requireUser } from "@/server/auth/session";
@@ -8,6 +9,15 @@ import { requireHire, setActiveSpace } from "@/server/hire-context";
 import { mailOrgInvite } from "@/server/hire-emails";
 import { HireError } from "@/server/services/hire";
 import { notify } from "@/server/services/notifications";
+import {
+  createEntity,
+  createTeam,
+  deleteEntity,
+  deleteTeam,
+  setMemberTeam,
+  transferOwnership,
+} from "@/server/services/org-structure";
+import { requestVerification } from "@/server/services/verification";
 import {
   acceptInvitation,
   changeRole,
@@ -35,6 +45,8 @@ async function guarded(work: () => Promise<unknown>, tab: string) {
 export async function updateOrganizationAction(formData: FormData) {
   const { ctx } = await requireHire("/app/organisation", "administer");
   const saved = await updateOrganizationProfile(db, ctx, Object.fromEntries(formData));
+  // The public company page and the job pages show the profile.
+  if (saved) updateTag("jobs");
   back("profil", saved ? { ok: "1" } : { erreur: "invalid" });
 }
 
@@ -104,4 +116,84 @@ export async function acceptInvitationAction(formData: FormData) {
   if (!result.ok) redirect(`/app/invitation/${token}?erreur=${result.error}`);
   await setActiveSpace(result.organizationId);
   redirect("/app/hire?bienvenue=1");
+}
+
+// ─── Structure (E8) ─────────────────────────────────────────────────────────────
+
+const tabOfKind = (kind: string) => (kind === "department" ? "departements" : "equipes");
+
+export async function createTeamAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/organisation", "administer");
+  const kind = formData.get("kind") === "department" ? "department" : "team";
+  await guarded(
+    () =>
+      createTeam(db, ctx, {
+        name: String(formData.get("name") ?? ""),
+        kind,
+        entityId: id(formData.get("entity")) || undefined,
+        leadId: id(formData.get("lead")) || undefined,
+      }),
+    tabOfKind(kind),
+  );
+  back(tabOfKind(kind), { ok: "cree" });
+}
+
+export async function deleteTeamAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/organisation", "administer");
+  const tab = tabOfKind(String(formData.get("kind")));
+  await guarded(() => deleteTeam(db, ctx, id(formData.get("id"))), tab);
+  back(tab, { ok: "supprime" });
+}
+
+export async function createEntityAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/organisation", "administer");
+  await guarded(
+    () =>
+      createEntity(db, ctx, {
+        name: String(formData.get("name") ?? ""),
+        country: String(formData.get("country") ?? ""),
+        parentId: id(formData.get("parent")) || undefined,
+      }),
+    "entites",
+  );
+  back("entites", { ok: "cree" });
+}
+
+export async function deleteEntityAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/organisation", "administer");
+  await guarded(async () => {
+    try {
+      await deleteEntity(db, ctx, id(formData.get("id")));
+    } catch (error) {
+      // An entity that still holds jobs, teams or sub-entities is refused as « invalid ».
+      if (error instanceof HireError && error.code === "invalid")
+        back("entites", { erreur: "notEmpty" });
+      throw error;
+    }
+  }, "entites");
+  back("entites", { ok: "supprime" });
+}
+
+export async function setMemberTeamAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/organisation", "administer");
+  await guarded(
+    () => setMemberTeam(db, ctx, id(formData.get("id")), id(formData.get("team")) || null),
+    "membres",
+  );
+  back("membres", { ok: "equipe" });
+}
+
+export async function transferOwnershipAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/organisation", "administer");
+  await guarded(() => transferOwnership(db, ctx, id(formData.get("id"))), "membres");
+  back("membres", { ok: "transfert" });
+}
+
+export async function requestVerificationAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/organisation", "administer");
+  let saved = false;
+  await guarded(async () => {
+    saved = await requestVerification(db, ctx, Object.fromEntries(formData));
+  }, "verification");
+  back("verification", saved ? { ok: "1" } : { erreur: "verification" });
 }
