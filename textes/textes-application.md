@@ -450,8 +450,12 @@ Conventions :
 | `talents.hero.secondary` | Voir les formules |
 | `talents.hero.badge` | Candidatures toujours gratuites |
 | `talents.hero.imageAlt` | Tableau de bord d'un talent sur téléphone, avec sa progression et ses candidatures |
+| `talents.hero.visual.badge` | Attestation obtenue |
+| `talents.hero.visual.matchTitle` | Analyste de données junior |
+| `talents.hero.visual.matchText` | 87 % compatible · Pourquoi ? |
 | `talents.intro.title` | Un seul compte pour tout votre parcours |
 | `talents.intro.text` | Un seul compte relie vos formations, vos documents de candidature et les offres. Chaque étape nourrit la suivante, et l'IA explique toujours pourquoi elle vous conseille. |
+| `talents.intro.eyebrow` | Un seul compte |
 | `talents.learn.label` | Learn |
 | `talents.learn.title` | Se former |
 | `talents.learn.text` | Formations vidéo, supports, exercices, évaluations et attestations à valoriser sur votre profil. Les premières formations portent sur l'employabilité, les compétences professionnelles, le positionnement et la préparation au recrutement. |
@@ -460,6 +464,7 @@ Conventions :
 | `talents.career.title` | Construire son profil |
 | `talents.career.text` | Diagnostic de carrière, CV, lettres de motivation, biographie, préparation LinkedIn, plan de progression et simulations d'entretien. Le coach IA justifie chaque suggestion, et vous choisissez de l'appliquer ou non. |
 | `talents.career.imageAlt` | Éditeur de CV avec une suggestion du coach IA et son explication |
+| `talents.career.decide` | Appliquer ou ignorer, vous décidez |
 | `talents.jobs.label` | Jobs |
 | `talents.jobs.title` | Postuler gratuitement |
 | `talents.jobs.text` | Emplois, stages et missions. Consultez les critères, enregistrez les offres qui vous intéressent, postulez et suivez chaque candidature étape par étape. |
@@ -473,12 +478,15 @@ Conventions :
 | `talents.guarantees.item2` | Profils Free recrutés au même titre que les abonnés. |
 | `talents.guarantees.item3` | Vos choix de confidentialité sont respectés. |
 | `talents.guarantees.item4` | Licence financée par un partenaire ? Activez-la avec votre code. |
+| `talents.guarantees.eyebrow` | Engagements |
 | `talents.privacy.title` | Vous décidez qui vous voit |
 | `talents.privacy.text` | Votre profil peut rester privé, être visible des recruteurs, ou apparaître de façon anonyme jusqu'à ce que vous acceptiez une mise en relation. Vous pouvez changer ce réglage à tout moment. |
 | `talents.plans.title` | Quatre formules, un même parcours |
 | `talents.plans.text` | Commencez gratuitement, puis passez à la formule qui correspond à votre objectif. Chaque formule comprend tout ce que propose la précédente. |
 | `talents.plans.note` | Les cartes de formules reprennent les textes `pricing.talent.*` du fichier 05. |
 | `talents.plans.cta` | Comparer les formules en détail |
+| `talents.plans.eyebrow` | Formules |
+| `talents.plans.payment` | Paiement par Mobile Money et carte bancaire. Prix en USD. |
 | `talents.partners.title` | Votre licence offerte par un partenaire |
 | `talents.partners.text` | Université, banque, fondation ou employeur : avec Jumanly Partners, une institution peut financer votre formule. Si vous avez reçu un code, activez-le en quelques secondes. |
 | `talents.partners.cta` | Activer un code |
