@@ -2,6 +2,30 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · Lot 4 : Recruteurs et Entreprises (14 octobre 2026)
+
+- `/recruteurs` refaite d'après `docs/maquettes/01-site-public/01-04` : héros Profondeur avec la
+  capture du pipeline Hire, Nadia et la pastille « 3 profils suggérés » ; quatre cartes Hire ;
+  matching expliqué avec une fiche candidature d'exemple (score sur le dégradé IA, critères, « Pourquoi ? »,
+  actions humaines) ; engagements ; formules RH ; bandeau Companies (prix lu en base) ; bandeau final.
+- `/entreprises` refaite d'après `01-05` : héros avec le pipeline sur panneau Sapin, M. Diallo,
+  carte « Entreprise vérifiée » et équipe ; quatre avantages (le premier en Sapin) ; rôles avec une
+  liste de membres fictive dont l'étiquette de formule est le nom de la formule Company recommandée
+  (lu en base) ; engagements ; formules Company ; bandeaux devis (Néon) et Partners ; bandeau final.
+- Style immersif sur les deux pages (apparitions, flottement, dégradés qui glissent, barres qui se
+  remplissent, score qui compte). Le héros de `/recruteurs` passe du Sapin au dégradé Profondeur ;
+  celui d'`/entreprises` garde le Crème, éclairé de lumières de marque.
+- `PublicPlanCards` affiche « Sur devis » pour une formule sur devis (non achetable, sans prix) ;
+  un prix indisponible reste masqué.
+- Aperçus : `public/apercus/recruteurs-pipeline.webp` (partagé par les deux pages) et
+  `recruteurs-pipeline-mobile.webp`.
+- Textes ajoutés : `recruiters.hero.visual.*`, `recruiters.{benefits,matching,guarantees,plans}.eyebrow`,
+  `recruiters.matching.link`, `recruiters.example.*`, `recruiters.plans.payment`,
+  `recruiters.upsell.initials`, `recruiters.upsell.more`, `companies.hero.visual.*`,
+  `companies.{benefits,roles,guarantees,plans}.eyebrow`, `companies.roles.chip.*`,
+  `companies.roles.example.*`, `companies.roles.imageAlt`, `companies.plans.payment`.
+- Vérifié : axe WCAG 2.2 AA sur les deux pages (desktop et mobile, 4 passages chacune).
+
 ## Style immersif sur À propos et Talents (14 octobre 2026)
 
 - Le propriétaire veut le style de l'accueil sur tout le site public (espace connecté : touches

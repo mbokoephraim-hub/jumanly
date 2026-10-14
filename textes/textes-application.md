@@ -543,6 +543,25 @@ Note d'intégration : la ligne `talents.plans.note` n'est pas affichée ; elle i
 | `recruiters.finalCta.title` | Publiez votre première offre gratuitement |
 | `recruiters.finalCta.text` | Un compte recruteur, une offre active, la réception des candidatures et la messagerie : tout cela est inclus dans RH Free. |
 | `recruiters.finalCta.primary` | Créer mon compte recruteur |
+| `recruiters.hero.visual.title` | 3 profils suggérés |
+| `recruiters.hero.visual.text` | Pourquoi ? · Appliquer ou ignorer |
+| `recruiters.benefits.eyebrow` | Jumanly Hire |
+| `recruiters.matching.eyebrow` | Jumanly Intelligence |
+| `recruiters.matching.link` | Comment fonctionne le matching |
+| `recruiters.example.initials` | GM |
+| `recruiters.example.name` | Grâce Mbuyi |
+| `recruiters.example.role` | Analyste de données junior · Kinshasa |
+| `recruiters.example.intro` | Somme pondérée des huit critères de votre offre, selon les poids que vous avez définis. |
+| `recruiters.example.missing` | Compétences manquantes : Power BI (souhaitée) |
+| `recruiters.example.shortlist` | Présélectionner |
+| `recruiters.example.message` | Envoyer un message |
+| `recruiters.guarantees.eyebrow` | Nos engagements |
+| `recruiters.plans.eyebrow` | Formules RH |
+| `recruiters.plans.payment` | Paiement par Mobile Money et carte bancaire. Prix en USD. |
+| `recruiters.upsell.initials` | MK, AD, FS, JB |
+| `recruiters.upsell.more` | +8 |
+
+Note d'intégration : la fiche « Grâce Mbuyi » (`recruiters.example.*`) et les initiales du bandeau (`recruiters.upsell.initials`, `recruiters.upsell.more`) sont des illustrations manifestement fictives, présentées comme un exemple d'écran ; les libellés des critères et du score viennent de la partie 06 (`match.*`).
 
 ---
 
@@ -591,6 +610,34 @@ Note d'intégration : la ligne `talents.plans.note` n'est pas affichée ; elle i
 | `companies.finalCta.text` | Créez le compte de votre entreprise avec RH Free, publiez une première offre, puis passez à une formule Company dès que votre équipe grandit. |
 | `companies.finalCta.primary` | Créer le compte de mon entreprise |
 | `companies.finalCta.secondary` | Demander un devis |
+| `companies.hero.visual.orgInitials` | BF |
+| `companies.hero.visual.orgName` | Baobab Fintech |
+| `companies.hero.visual.team` | 4 recruteurs sur cette offre |
+| `companies.hero.visual.initials` | MK, AD, JB, FS |
+| `companies.benefits.eyebrow` | Pourquoi Company |
+| `companies.roles.eyebrow` | Rôles |
+| `companies.roles.chip.owner` | Propriétaire |
+| `companies.roles.chip.admin` | Administrateur |
+| `companies.roles.chip.recruiter` | Recruteur |
+| `companies.roles.chip.manager` | Manager |
+| `companies.roles.chip.viewer` | Lecteur |
+| `companies.roles.example.members` | Membres de l'organisation |
+| `companies.roles.example.member1.name` | Moussa Kanté |
+| `companies.roles.example.member1.team` | Direction RH |
+| `companies.roles.example.member2.name` | Aminata Diop |
+| `companies.roles.example.member2.team` | Direction RH |
+| `companies.roles.example.member3.name` | Jean Bakala |
+| `companies.roles.example.member3.team` | Finance |
+| `companies.roles.example.member4.name` | Fatoumata Sy |
+| `companies.roles.example.member4.team` | Tech |
+| `companies.roles.example.member5.name` | Paul Nzeza |
+| `companies.roles.example.member5.team` | Direction générale |
+| `companies.roles.imageAlt` | Liste fictive des membres d'une organisation, chacun avec son rôle |
+| `companies.guarantees.eyebrow` | Engagements |
+| `companies.plans.eyebrow` | Formules Company |
+| `companies.plans.payment` | Paiement par Mobile Money et carte bancaire. Prix en USD. |
+
+Note d'intégration : l'organisation « Baobab Fintech » et ses membres (`companies.hero.visual.*`, `companies.roles.example.*`) sont une illustration manifestement fictive. L'étiquette de formule de la liste des membres affiche le nom de la formule Company recommandée, lu en base.
 
 ---
 

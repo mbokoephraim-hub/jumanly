@@ -214,6 +214,10 @@ export async function PublicPlanCards({
               <p className="text-[40px] leading-[44px] font-semibold tracking-[-0.04em]">
                 {t("pricing.card.free")}
               </p>
+            ) : plan.priceCents === null && !plan.isPurchasable ? (
+              <p className="text-[40px] leading-[44px] font-semibold tracking-[-0.04em]">
+                {t("pricing.card.quote")}
+              </p>
             ) : (
               plan.priceCents !== null && (
                 <p className="flex items-baseline gap-1.5">

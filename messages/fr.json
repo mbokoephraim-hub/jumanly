@@ -538,7 +538,11 @@
       "cta": "Créer mon compte recruteur gratuit",
       "secondary": "Voir les formules RH",
       "badge": "Un compte recruteur gratuit pour démarrer",
-      "imageAlt": "Pipeline de recrutement Jumanly Hire avec des candidatures classées par étape"
+      "imageAlt": "Pipeline de recrutement Jumanly Hire avec des candidatures classées par étape",
+      "visual": {
+        "title": "3 profils suggérés",
+        "text": "Pourquoi ? · Appliquer ou ignorer"
+      }
     },
     "intro": {
       "text": "Jumanly Hire réunit vos offres, vos candidatures et vos échanges dans un ATS adapté à votre taille. Le matching rapproche les besoins et les qualifications. Vous gardez la décision."
@@ -560,7 +564,8 @@
       "messaging": {
         "title": "Des échanges suivis",
         "text": "Messagerie liée aux candidatures, rendez-vous et entretiens au même endroit."
-      }
+      },
+      "eyebrow": "Jumanly Hire"
     },
     "matching": {
       "title": "Le matching, expliqué",
@@ -568,29 +573,45 @@
       "point1": "Critères explicites, définis par vous.",
       "point2": "Un « Pourquoi ? » sur chaque score.",
       "point3": "Aucune candidature écartée automatiquement par l'IA.",
-      "imageAlt": "Fiche candidature avec un score de compatibilité et son explication"
+      "imageAlt": "Fiche candidature avec un score de compatibilité et son explication",
+      "eyebrow": "Jumanly Intelligence",
+      "link": "Comment fonctionne le matching"
     },
     "guarantees": {
       "title": "Un recrutement responsable",
       "item1": "Accès aux candidats encadré par leurs choix de confidentialité.",
       "item2": "Quotas de recherche et de contact qui empêchent l'extraction massive de données.",
       "item3": "Statistiques de recrutement à chaque étape.",
-      "item4": "Évolution vers Jumanly for Companies à tout moment."
+      "item4": "Évolution vers Jumanly for Companies à tout moment.",
+      "eyebrow": "Nos engagements"
     },
     "plans": {
       "title": "Trois formules pour recruter mieux",
       "text": "Démarrez avec un compte gratuit et une offre active, puis ajoutez des utilisateurs, des offres et des outils à mesure que vos besoins grandissent.",
-      "cta": "Comparer les formules RH"
+      "cta": "Comparer les formules RH",
+      "eyebrow": "Formules RH",
+      "payment": "Paiement par Mobile Money et carte bancaire. Prix en USD."
     },
     "upsell": {
       "title": "Plus de 3 recruteurs ou plusieurs départements ?",
       "text": "Jumanly for Companies ajoute les équipes, les permissions et les rapports consolidés, dès {price} USD par mois.",
-      "cta": "Découvrir Jumanly for Companies"
+      "cta": "Découvrir Jumanly for Companies",
+      "initials": "MK, AD, FS, JB",
+      "more": "+8"
     },
     "finalCta": {
       "title": "Publiez votre première offre gratuitement",
       "text": "Un compte recruteur, une offre active, la réception des candidatures et la messagerie : tout cela est inclus dans RH Free.",
       "primary": "Créer mon compte recruteur"
+    },
+    "example": {
+      "initials": "GM",
+      "name": "Grâce Mbuyi",
+      "role": "Analyste de données junior · Kinshasa",
+      "intro": "Somme pondérée des huit critères de votre offre, selon les poids que vous avez définis.",
+      "missing": "Compétences manquantes : Power BI (souhaitée)",
+      "shortlist": "Présélectionner",
+      "message": "Envoyer un message"
     }
   },
   "companies": {
@@ -605,7 +626,13 @@
       "cta": "Créer le compte de mon entreprise",
       "secondary": "Demander un devis",
       "badge": "Commencez gratuitement avec RH Free",
-      "imageAlt": "Tableau de bord de recrutement partagé entre plusieurs recruteurs d'une entreprise"
+      "imageAlt": "Tableau de bord de recrutement partagé entre plusieurs recruteurs d'une entreprise",
+      "visual": {
+        "orgInitials": "BF",
+        "orgName": "Baobab Fintech",
+        "team": "4 recruteurs sur cette offre",
+        "initials": "MK, AD, JB, FS"
+      }
     },
     "intro": {
       "text": "La différence avec les formules RH tient au nombre de collaborateurs, à la gestion organisationnelle et aux outils de pilotage. Recruteurs et managers travaillent sur les mêmes candidatures, chacun avec ses droits."
@@ -627,23 +654,59 @@
       "reports": {
         "title": "Des rapports consolidés",
         "text": "Tableaux de bord par équipe et département, rapports exportables autorisés."
-      }
+      },
+      "eyebrow": "Pourquoi Company"
     },
     "roles": {
       "title": "Chacun son rôle",
-      "text": "Propriétaire, administrateur, recruteur, manager ou lecteur : attribuez à chaque collaborateur les droits dont il a besoin, rien de plus. Les rôles disponibles dépendent de votre formule."
+      "text": "Propriétaire, administrateur, recruteur, manager ou lecteur : attribuez à chaque collaborateur les droits dont il a besoin, rien de plus. Les rôles disponibles dépendent de votre formule.",
+      "eyebrow": "Rôles",
+      "chip": {
+        "owner": "Propriétaire",
+        "admin": "Administrateur",
+        "recruiter": "Recruteur",
+        "manager": "Manager",
+        "viewer": "Lecteur"
+      },
+      "example": {
+        "members": "Membres de l'organisation",
+        "member1": {
+          "name": "Moussa Kanté",
+          "team": "Direction RH"
+        },
+        "member2": {
+          "name": "Aminata Diop",
+          "team": "Direction RH"
+        },
+        "member3": {
+          "name": "Jean Bakala",
+          "team": "Finance"
+        },
+        "member4": {
+          "name": "Fatoumata Sy",
+          "team": "Tech"
+        },
+        "member5": {
+          "name": "Paul Nzeza",
+          "team": "Direction générale"
+        }
+      },
+      "imageAlt": "Liste fictive des membres d'une organisation, chacun avec son rôle"
     },
     "guarantees": {
       "title": "Nos engagements",
       "item1": "Démarrage gratuit avec les fonctionnalités RH Free.",
       "item2": "Volumes et services définis par contrat pour Company Premium.",
       "item3": "Accès aux candidats encadré par leurs choix de confidentialité.",
-      "item4": "L'IA recommande, vos équipes décident."
+      "item4": "L'IA recommande, vos équipes décident.",
+      "eyebrow": "Engagements"
     },
     "plans": {
       "title": "Trois formules à l'échelle de votre organisation",
       "text": "Choisissez selon le nombre de recruteurs et de managers, le volume d'offres et le niveau de pilotage. La formule Premium se construit avec vous.",
-      "cta": "Comparer les formules Company"
+      "cta": "Comparer les formules Company",
+      "eyebrow": "Formules Company",
+      "payment": "Paiement par Mobile Money et carte bancaire. Prix en USD."
     },
     "quote": {
       "title": "Un groupe, plusieurs entités ou des besoins particuliers ?",
