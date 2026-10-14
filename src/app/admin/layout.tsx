@@ -27,6 +27,7 @@ export default function AdminLayout({ children }: LayoutProps<"/admin">) {
 const links = [
   { key: "dashboard", href: "/admin" },
   { key: "users", href: "/admin/utilisateurs" },
+  { key: "organizations", href: "/admin/organisations" },
   { key: "plans", href: "/admin/forfaits" },
   { key: "subscriptions", href: "/admin/abonnements" },
   { key: "courses", href: "/admin/formations" },

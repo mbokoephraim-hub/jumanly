@@ -147,3 +147,128 @@ export function orgInviteEmail(input: {
     },
   };
 }
+
+/** Slots in the organizer's time zone, as the talent will read them. */
+export function slotList(slots: Date[], timeZone: string) {
+  const format = new Intl.DateTimeFormat("fr", {
+    timeZone,
+    weekday: "short",
+    day: "numeric",
+    month: "short",
+    hour: "2-digit",
+    minute: "2-digit",
+  });
+  return slots.map((slot) => format.format(slot)).join(" · ");
+}
+
+export function interviewInviteEmail(
+  firstName: string | null | undefined,
+  input: {
+    company: string;
+    jobTitle: string;
+    mode: string;
+    minutes: number;
+    slots: Date[];
+    timezone: string;
+    href: string;
+  },
+): HireEmail {
+  const values = {
+    company: input.company,
+    jobTitle: input.jobTitle,
+    mode: input.mode,
+    minutes: input.minutes,
+  };
+  return {
+    subject: t("mail.interviewInvite.subject", values),
+    props: {
+      preview: t("mail.interviewInvite.preheader", values),
+      greeting: greeting(firstName),
+      paragraphs: [
+        t("mail.interviewInvite.p1", values),
+        t("mail.interviewInvite.details", values),
+        t("mail.interviewInvite.slots", {
+          slots: slotList(input.slots, input.timezone),
+          timezone: input.timezone,
+        }),
+        t("mail.interviewInvite.p2"),
+      ],
+      cta: { label: t("mail.interviewInvite.cta"), href: url(input.href) },
+    },
+  };
+}
+
+export function interviewConfirmedEmail(
+  firstName: string | null | undefined,
+  input: { company: string; jobTitle: string; date: Date; timezone: string; href: string },
+): HireEmail {
+  const time = new Intl.DateTimeFormat("fr", {
+    timeZone: input.timezone,
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(input.date);
+  const values = { ...input, time };
+  return {
+    subject: t("mail.interviewConfirmed.subject", values),
+    props: {
+      preview: t("mail.interviewConfirmed.preheader", values),
+      greeting: greeting(firstName),
+      paragraphs: [t("mail.interviewConfirmed.p1", values), t("mail.interviewConfirmed.p2")],
+      cta: { label: t("mail.interviewConfirmed.cta"), href: url(input.href) },
+    },
+  };
+}
+
+export function contactRequestedEmail(
+  firstName: string | null | undefined,
+  input: { company: string; date: Date },
+): HireEmail {
+  return {
+    subject: t("mail.contactRequested.subject", input),
+    props: {
+      preview: t("mail.contactRequested.preheader"),
+      greeting: greeting(firstName),
+      paragraphs: [
+        t("mail.contactRequested.p1", input),
+        t("mail.contactRequested.p2"),
+        t("mail.contactRequested.p3", input),
+      ],
+      cta: { label: t("mail.contactRequested.cta"), href: url("/app/messages?filtre=demandes") },
+    },
+  };
+}
+
+export function contactAcceptedEmail(
+  firstName: string | null | undefined,
+  input: { candidateName: string; href: string },
+): HireEmail {
+  return {
+    subject: t("mail.contactAccepted.subject", input),
+    props: {
+      preview: t("mail.contactAccepted.preheader"),
+      greeting: greeting(firstName),
+      paragraphs: [t("mail.contactAccepted.p1", input), t("mail.contactAccepted.p2")],
+      cta: { label: t("mail.contactAccepted.cta", input), href: url(input.href) },
+    },
+  };
+}
+
+export function orgVerificationEmail(
+  firstName: string | null | undefined,
+  input: { org: string; verified: boolean; reason: string },
+): HireEmail {
+  const key = input.verified ? "mail.orgVerified" : "mail.orgVerificationRejected";
+  const values = { org: input.org, reason: input.reason };
+  return {
+    subject: t(`${key}.subject`, values),
+    props: {
+      preview: t(`${key}.preheader`, values),
+      greeting: greeting(firstName),
+      paragraphs: [t(`${key}.p1`, values), t(`${key}.p2`, values)],
+      cta: {
+        label: t(`${key}.cta`),
+        href: url("/app/organisation?onglet=verification"),
+      },
+    },
+  };
+}

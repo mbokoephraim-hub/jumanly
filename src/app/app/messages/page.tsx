@@ -5,7 +5,9 @@ import { Badge, ButtonLink, EmptyState } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
+import { ContactRequests } from "@/components/connect/contact-requests";
 import { listConversations } from "@/server/services/connect";
+import { talentContactRequests } from "@/server/services/talent-search";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("connect");
@@ -19,12 +21,26 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
   const t = await getTranslations("connect");
   const conversations = await listConversations(db, viewer);
   const unread = conversations.filter((item) => item.unread);
+  const requestsTab = !viewer.hire && params.filtre === "demandes";
   const onlyUnread = params.filtre === "non-lus";
   const shown = onlyUnread ? unread : conversations;
+  const requests = viewer.hire ? [] : await talentContactRequests(db, viewer.userId);
+  const pending = requests.filter((item) => item.status === "pending").length;
+  const filter = requestsTab ? "demandes" : onlyUnread ? "non-lus" : "tous";
   const filters = [
     { id: "tous", label: t("list.filter.all") },
     { id: "non-lus", label: t("list.filter.unread") },
+    ...(viewer.hire
+      ? []
+      : [
+          {
+            id: "demandes",
+            label:
+              pending > 0 ? `${t("list.filter.requests")} (${pending})` : t("list.filter.requests"),
+          },
+        ]),
   ];
+  const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");
 
   return (
     <div className="flex flex-col gap-6">
@@ -34,7 +50,7 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
       </header>
       <nav aria-label={t("list.title")} className="flex flex-wrap gap-2">
         {filters.map((item) => {
-          const active = (item.id === "non-lus") === onlyUnread;
+          const active = item.id === filter;
           return (
             <Link
               key={item.id}
@@ -50,7 +66,13 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
           );
         })}
       </nav>
-      {shown.length === 0 ? (
+      {requestsTab ? (
+        <ContactRequests
+          requests={requests}
+          answered={one(params.reponse)}
+          answeredId={one(params.demande)}
+        />
+      ) : shown.length === 0 ? (
         <EmptyState
           title={t("list.empty.text")}
           action={
@@ -63,7 +85,9 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
         <ul className="flex flex-col divide-y divide-brume rounded-card bg-blanc">
           {shown.map((conversation) => {
             const other = viewer.hire
-              ? (conversation.application?.profile.user.name ?? "")
+              ? (conversation.application?.profile.user.name ??
+                conversation.contactRequest?.profile.user.name ??
+                "")
               : (conversation.organization?.name ?? "");
             const last = conversation.last;
             const preview = !last
@@ -83,7 +107,10 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
                     <span className={cx("text-sapin", conversation.unread && "font-semibold")}>
                       {t("thread.withJob", {
                         name: other,
-                        jobTitle: conversation.application?.job.title ?? "",
+                        jobTitle:
+                          conversation.application?.job.title ??
+                          conversation.contactRequest?.job?.title ??
+                          t("list.filter.requests"),
                       })}
                     </span>
                     {conversation.unread && <Badge tone="new">{t("list.filter.unread")}</Badge>}

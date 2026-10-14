@@ -5,6 +5,7 @@
 import { hashPassword } from "better-auth/crypto";
 import type { MembershipRole, PlatformRole } from "../../src/generated/prisma/client";
 import type { SeedClient } from "./client";
+import { GROUP_SLUG, seedGroupOrganization } from "./group";
 
 export const DEMO_PASSWORD = "Demo-Jumanly-2026";
 
@@ -52,6 +53,20 @@ const accounts: AccountSeed[] = [
     organization: { slug: "demo-horizon-fictive", role: "org_owner" },
   },
   {
+    email: "groupe@jumanly.test",
+    firstName: "Grâce",
+    lastName: "Fictive",
+    organization: { slug: GROUP_SLUG, role: "org_owner" },
+  },
+  {
+    email: "manager@jumanly.test",
+    firstName: "Moïse",
+    lastName: "Fictif",
+    organization: { slug: GROUP_SLUG, role: "hiring_manager" },
+  },
+  { email: "talent.visible@jumanly.test", firstName: "Vicky", lastName: "Fictive" },
+  { email: "talent.anonyme@jumanly.test", firstName: "Aline", lastName: "Fictive" },
+  {
     email: "admin@jumanly.test",
     firstName: "Esther",
     lastName: "Fictive",
@@ -75,6 +90,7 @@ export async function seedAccounts(db: SeedClient) {
       city: "Lubumbashi",
     },
   });
+  await seedGroupOrganization(db);
   const password = await hashPassword(DEMO_PASSWORD);
   const now = new Date();
 

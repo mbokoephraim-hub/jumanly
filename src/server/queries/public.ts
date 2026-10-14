@@ -8,6 +8,7 @@ import * as courses from "@/server/services/courses";
 import * as jobs from "@/server/services/jobs";
 import * as learn from "@/server/services/learn";
 import * as plans from "@/server/services/plans";
+import { publicCompany } from "@/server/services/verification";
 
 export async function getPublicPlans() {
   "use cache";
@@ -81,11 +82,23 @@ export async function getSitemapEntries() {
   "use cache";
   cacheLife("hours");
   cacheTag("courses", "jobs");
-  const [courseSlugs, jobSlugs] = await Promise.all([
+  const [courseSlugs, jobSlugs, companySlugs] = await Promise.all([
     courses.listCourseSlugs(db),
     jobs.listJobSlugs(db),
+    db.organization.findMany({
+      where: { type: { in: ["recruiter", "company"] }, jobs: { some: { status: "published" } } },
+      select: { slug: true, updatedAt: true },
+    }),
   ]);
-  return { courseSlugs, jobSlugs };
+  return { courseSlugs, jobSlugs, companySlugs };
+}
+
+/** Public page of a recruiting organization (E8): its presentation and its open jobs. */
+export async function getCompany(slug: string) {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag("jobs", `company:${slug}`);
+  return publicCompany(db, slug);
 }
 
 /** Public verification of an attestation: only what the verification page shows. */

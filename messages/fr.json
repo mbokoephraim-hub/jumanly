@@ -1130,7 +1130,8 @@
       "title": "Offres ouvertes",
       "count": "{count, plural, =0 {Aucune offre ouverte} one {# offre ouverte} other {# offres ouvertes}}",
       "empty": "Cette entreprise n'a pas d'offre ouverte pour le moment.",
-      "emptyCta": "Voir toutes les offres"
+      "emptyCta": "Voir toutes les offres",
+      "row": "{city} · {contract}"
     },
     "notFound": {
       "title": "Entreprise introuvable",
@@ -1944,7 +1945,8 @@
       "jobs": "Offres",
       "talents": "Talents",
       "interviews": "Entretiens",
-      "reports": "Rapports"
+      "reports": "Rapports",
+      "pools": "Viviers"
     },
     "organization": "Organisation",
     "partner": "Partenaire",
@@ -3892,7 +3894,14 @@
         "past": "Terminé"
       },
       "addToCalendar": "Ajouter à mon agenda",
-      "reminder": "Rappel : entretien {time, relative}"
+      "reminder": "Rappel : entretien {time, relative}",
+      "chosen": "Votre créneau : {date, date, full} à {time} (heure de {timezone})",
+      "canceled": "Le recruteur a annulé cet entretien.",
+      "declined": "Vous avez décliné cet entretien.",
+      "proposed": "Vous avez proposé : {slots}. Le recruteur va vous répondre.",
+      "done": "Réponse envoyée.",
+      "error": "Choisissez un créneau à venir.",
+      "slot": "Créneau {number}"
     },
     "docRequest": {
       "title": "Document demandé : {documentName}",
@@ -3921,7 +3930,17 @@
       "accepted": "Vous pouvez maintenant échanger avec {company}.",
       "declined": "Demande déclinée. {company} en est informé, sans détail.",
       "expires": "Sans réponse, la demande expire {time, relative}.",
-      "expired": "Demande expirée"
+      "expired": "Demande expirée",
+      "expiresOn": "Sans réponse, la demande expire le {date, date, long}.",
+      "empty": "Aucune demande de mise en relation.",
+      "status": {
+        "accepted": "Acceptée",
+        "declined": "Déclinée"
+      },
+      "blocked": "Vous ne recevrez plus de demandes de {company}.",
+      "unavailable": "Cette demande n'est plus disponible.",
+      "receivedOn": "Reçue le {date, date, long}",
+      "open": "Ouvrir la conversation"
     },
     "report": {
       "cta": "Signaler",
@@ -4048,7 +4067,8 @@
       },
       "contactRequests": {
         "text": "Recevoir des demandes de mise en relation",
-        "hint": "Désactivé, plus aucun recruteur ne peut vous contacter hors de vos candidatures."
+        "hint": "Désactivé, plus aucun recruteur ne peut vous contacter hors de vos candidatures.",
+        "legend": "Mises en relation"
       },
       "ai": {
         "text": "Utilisation de l'IA",
@@ -4219,7 +4239,8 @@
       "newCta": "Nouvelle offre",
       "verifyBanner": {
         "text": "Faites vérifier votre organisation pour afficher le badge « Entreprise vérifiée » sur vos offres.",
-        "cta": "Demander la vérification"
+        "cta": "Demander la vérification",
+        "pending": "Votre demande de vérification est en cours d'examen."
       },
       "fairness": "Rappel : les profils Free sont des candidats comme les autres. Le forfait d'un talent n'influence jamais son score."
     },
@@ -4239,7 +4260,9 @@
         "owner": "Responsable",
         "team": "Équipe",
         "department": "Département",
-        "entity": "Entité"
+        "entity": "Entité",
+        "all": "Tous",
+        "submit": "Filtrer"
       },
       "limit": {
         "text": "{count, plural, one {# offre active} other {# offres actives}} sur {max} incluses dans {plan}",
@@ -4307,6 +4330,21 @@
       "assign": {
         "locked": "Attribution des offres aux responsables · Disponible avec {plan}"
       }
+    },
+    "assign": {
+      "title": "Attribution",
+      "subtitle": "Qui est responsable de cette offre et qui peut voir ses candidats.",
+      "none": "Non attribué",
+      "members": {
+        "hint": "Les responsables du recrutement ne voient que les offres auxquelles ils sont ajoutés.",
+        "text": "Équipe de recrutement"
+      },
+      "entities": {
+        "locked": "Entités et filiales · Disponible avec {plan}"
+      },
+      "save": "Enregistrer l'attribution",
+      "saved": "Attribution enregistrée.",
+      "error": "Ces changements n'ont pas pu être enregistrés. Vérifiez les champs puis réessayez."
     },
     "jobForm": {
       "title": {
@@ -4773,6 +4811,10 @@
       "planLabel": {
         "hidden": "Le forfait du talent n'est jamais affiché ni pris en compte."
       },
+      "addToPool": "Ajouter à un vivier",
+      "pool": {
+        "none": "Créez d'abord un vivier dans l'onglet Viviers."
+      },
       "score": {
         "title": "Compatibilité",
         "value": "{score} % · {band}",
@@ -4796,7 +4838,10 @@
         "reminder": "Restez factuel : notez ce qui concerne le poste, rien sur la vie privée du candidat.",
         "collab": {
           "locked": "Notes partagées entre recruteurs · Disponible avec {plan}"
-        }
+        },
+        "edited": "Modifiée",
+        "save": "Enregistrer",
+        "mentioned": "{count, plural, one {# collègue prévenu.} other {# collègues prévenus.}}"
       },
       "message": "Envoyer un message",
       "schedule": {
@@ -4821,7 +4866,11 @@
       "locked": "Grilles d'évaluation · Disponible avec {plan}",
       "template": {
         "text": "Modèle de grille",
-        "edit": "Modifier le modèle"
+        "edit": "Modifier le modèle",
+        "hint": "Un critère par ligne. Ajoutez une précision après deux-points, par exemple « SQL : requêtes et jointures ».",
+        "saved": "Modèle de grille enregistré.",
+        "invalid": "Indiquez entre 1 et {max} critères, un par ligne.",
+        "save": "Enregistrer le modèle"
       },
       "criterion": {
         "add": "Ajouter un critère",
@@ -4855,7 +4904,11 @@
       },
       "average": "Moyenne de l'équipe : {average}/5 · {count, plural, one {# évaluation} other {# évaluations}}",
       "pending": "En attente : {names}",
-      "empty": "Aucune évaluation pour l'instant."
+      "empty": "Aucune évaluation pour l'instant.",
+      "mine": "Votre évaluation",
+      "update": "Mettre à jour mon évaluation",
+      "reviewer": "{memberName} · {average}/5 · {recommendation}",
+      "invalid": "Notez chaque critère et donnez votre avis."
     },
     "history": {
       "title": "Historique des décisions",
@@ -4878,7 +4931,11 @@
         "message": "Message de {memberName}"
       },
       "timestamp": "{date, date, medium} à {time}",
-      "export": "Exporter l'historique"
+      "export": "Exporter l'historique",
+      "col": {
+        "date": "Date",
+        "event": "Événement"
+      }
     },
     "talents": {
       "title": "Rechercher des talents",
@@ -4912,7 +4969,13 @@
         "availability": "Disponibilité",
         "certificates": "Avec attestation Jumanly",
         "deep": {
-          "locked": "Filtres approfondis · Disponible avec {plan}"
+          "locked": "Filtres approfondis · Disponible avec {plan}",
+          "text": "Filtres approfondis"
+        },
+        "any": "Indifférent",
+        "experienceMin": "Expérience minimale (années)",
+        "job": {
+          "none": "Aucune offre"
         }
       },
       "results": "{count, plural, =0 {Aucun talent trouvé} one {# talent trouvé} other {# talents trouvés}}",
@@ -4928,7 +4991,23 @@
         "connected": "En relation"
       },
       "empty": "Aucun talent ne correspond. Essayez moins de filtres ou un lieu plus large.",
+      "capped": "Seuls les {max} premiers résultats sont proposés. Précisez votre recherche pour trouver plus vite.",
+      "page": {
+        "previous": "Page précédente",
+        "next": "Page suivante",
+        "current": "Page {page} sur {pages}"
+      },
+      "start": "Saisissez une compétence, un métier ou un lieu pour lancer une recherche. Chaque recherche compte dans le quota du mois.",
+      "blocked": "Vous avez consulté beaucoup de profils en peu de temps. L'accès est suspendu pendant une heure et l'équipe Jumanly a été prévenue.",
       "profile": {
+        "back": "Retour à la recherche",
+        "applied": "Ce talent a postulé à l'une de vos offres.",
+        "full": "Profil complet visible : ce talent a accepté votre demande ou postulé à l'une de vos offres.",
+        "experience": "Expériences",
+        "education": "Formation",
+        "skills": "Compétences",
+        "verified": "Vérifiée",
+        "openConversation": "Ouvrir la conversation",
         "anonymousNote": "Ce talent est anonyme. Son nom et sa photo seront visibles s'il accepte votre demande.",
         "limited": "Profil résumé. Le profil complet est visible après acceptation de votre demande ou si le talent postule à l'une de vos offres."
       }
@@ -4958,7 +5037,14 @@
         "note": "Le talent a décliné. Merci de respecter son choix : une nouvelle demande ne sera possible qu'après {days} jours."
       },
       "blocked": "Ce talent ne souhaite plus recevoir de demandes de votre organisation.",
-      "noPayment": "Il est interdit de demander un paiement à un talent. Tout manquement entraîne la suspension du compte."
+      "noPayment": "Il est interdit de demander un paiement à un talent. Tout manquement entraîne la suspension du compte.",
+      "error": {
+        "invalid": "Votre message doit compter au moins {min} caractères.",
+        "pending": "Une demande est déjà en attente de réponse pour ce talent.",
+        "connected": "Vous êtes déjà en relation avec ce talent.",
+        "locked": "Les demandes de mise en relation ne sont pas incluses dans votre forfait.",
+        "notFound": "Ce profil n'est plus visible dans le vivier."
+      }
     },
     "pools": {
       "title": "Viviers de talents",
@@ -4976,7 +5062,8 @@
         "org": "Toute l'organisation",
         "shared": {
           "locked": "Viviers partagés · Disponible avec {plan}"
-        }
+        },
+        "teamRequired": "Rejoignez d'abord une équipe pour partager un vivier avec elle."
       },
       "count": "{count, plural, =0 {Aucun talent} one {# talent} other {# talents}}",
       "updated": "Mis à jour {time, relative}",
@@ -4998,6 +5085,24 @@
       "empty": "Aucun vivier. Créez-en un depuis la recherche ou une fiche candidature.",
       "detail": {
         "empty": "Ce vivier est vide."
+      },
+      "created": "Vivier créé.",
+      "renamed": "Vivier renommé.",
+      "deleted": "Vivier supprimé.",
+      "locked": "Viviers de talents · Disponible avec {plan}",
+      "create": "Créer le vivier",
+      "save": "Enregistrer",
+      "back": "Tous les viviers",
+      "choose": "Vivier",
+      "add": "Ajouter",
+      "note": "Note (facultatif)",
+      "invalid": "Donnez un nom d'au moins 2 caractères.",
+      "addedDone": "Talent ajouté au vivier.",
+      "updatedOn": "Mis à jour le {date, date, medium}",
+      "addedOn": "Ajouté le {date, date, medium}",
+      "error": {
+        "forbidden": "Cette action n'est pas permise pour votre rôle.",
+        "notFound": "Ce vivier ou ce profil n'est plus disponible."
       }
     },
     "interviews": {
@@ -5046,7 +5151,10 @@
           "text": "Message au candidat",
           "default": "Bonjour {firstName}, nous souhaitons vous rencontrer pour échanger sur le poste de {jobTitle}. Merci de choisir le créneau qui vous convient."
         },
-        "send": "Envoyer l'invitation"
+        "send": "Envoyer l'invitation",
+        "noCandidate": "Aucun candidat en cours. Les entretiens se planifient pour une candidature active.",
+        "minutes": "{minutes} min",
+        "slot": "Créneau {number}"
       },
       "sent": "Invitation envoyée. Vous serez prévenu de la réponse.",
       "status": {
@@ -5075,7 +5183,21 @@
       "empty": {
         "text": "Aucun entretien prévu.",
         "cta": "Planifier un entretien"
-      }
+      },
+      "noShow": "Marquer comme absent",
+      "proposed": "Créneaux proposés par le candidat : {slots}",
+      "slotsPending": "Créneaux proposés : {slots}",
+      "organizer": "Organisé par {memberName}",
+      "error": {
+        "invalid": "Vérifiez le candidat, le type, la durée et au moins un créneau.",
+        "past": "Choisissez des créneaux à venir."
+      },
+      "canceled": "Entretien annulé. Le candidat a été prévenu.",
+      "updated": "Entretien mis à jour.",
+      "rescheduled": "Nouveaux créneaux envoyés au candidat.",
+      "upcoming": "À venir",
+      "waiting": "En attente de réponse",
+      "past": "Passés et annulés"
     },
     "reports": {
       "title": "Rapports",
@@ -5084,7 +5206,10 @@
         "30d": "30 derniers jours",
         "90d": "3 derniers mois",
         "12m": "12 derniers mois",
-        "custom": "Personnalisée"
+        "custom": "Personnalisée",
+        "from": "Du",
+        "to": "Au",
+        "apply": "Afficher"
       },
       "basic": {
         "title": "Vue d'ensemble",
@@ -5124,7 +5249,8 @@
         "locked": "Tableaux de bord personnalisés · Disponible avec {plan}",
         "new": "Nouveau tableau de bord",
         "addWidget": "Ajouter un indicateur",
-        "byEntity": "Par entité"
+        "byEntity": "Par entité",
+        "note": "Indicateurs ventilés par entité. Pour un tableau de bord sur mesure, écrivez-nous : nous le configurons avec vous."
       },
       "export": {
         "text": "Exporter",
@@ -5134,7 +5260,34 @@
         "ready": "Export prêt. Le téléchargement commence.",
         "privacy": "Les exports ne contiennent que des données agrégées et les informations nécessaires au suivi de vos recrutements."
       },
-      "empty": "Pas encore assez de données pour cette période."
+      "empty": "Pas encore assez de données pour cette période.",
+      "col": {
+        "name": "Nom",
+        "applications": "Candidatures",
+        "hires": "Recrutements",
+        "value": "Valeur",
+        "count": "Nombre",
+        "moves": "Déplacements",
+        "decisions": "Décisions",
+        "notes": "Notes",
+        "section": "Section",
+        "rate": "Taux"
+      },
+      "rate": "{rate} %",
+      "none": "Non disponible",
+      "source": {
+        "direct": "Candidature directe",
+        "invitation": "Invitation",
+        "talent_search": "Recherche dans le vivier"
+      },
+      "scorecards": {
+        "summary": "{count, plural, =0 {Aucune évaluation} one {# évaluation} other {# évaluations}} · moyenne {average}/5"
+      },
+      "pdf": {
+        "title": "Rapport de recrutement · {org}",
+        "period": "Du {from, date, long} au {to, date, long}",
+        "generated": "Édité le {date, date, long} sur Jumanly"
+      }
     }
   },
   "org": {
@@ -5177,6 +5330,15 @@
         "text": "Site web",
         "placeholder": "https://"
       },
+      "category": {
+        "text": "Type d'organisation",
+        "none": "Non précisé",
+        "company": "Entreprise",
+        "consultant": "Cabinet ou consultant RH",
+        "ngo": "ONG ou association",
+        "public": "Institution publique",
+        "education": "École ou université"
+      },
       "contactEmail": "E-mail de contact recrutement",
       "description": {
         "text": "Présentation",
@@ -5189,7 +5351,8 @@
       "saved": "Profil de l'organisation enregistré.",
       "save": "Enregistrer",
       "invalid": "Certaines informations ne sont pas valides. Vérifiez le formulaire.",
-      "countryHint": "Code pays à deux lettres, par exemple CI ou CM."
+      "countryHint": "Code pays à deux lettres, par exemple CI ou CM.",
+      "legalNameHint": "Nom officiel, tel qu'il figure au registre."
     },
     "verification": {
       "title": "Vérification de l'organisation",
@@ -5221,7 +5384,15 @@
       "verifiedOn": "Vérifiée le {date, date, long}",
       "badge": {
         "tooltip": "Jumanly a vérifié l'existence de cette organisation et le rôle de la personne qui l'administre."
-      }
+      },
+      "form": {
+        "registration": "Numéro d'immatriculation (registre du commerce ou équivalent)",
+        "taxId": "Numéro d'identification fiscale (facultatif)",
+        "domainEmail": "Votre adresse e-mail sur le domaine de l'organisation (facultatif)",
+        "mandate": "Votre fonction et ce qui l'atteste",
+        "mandateHint": "Ex. : Directrice des ressources humaines, mandat signé par la direction générale."
+      },
+      "invalid": "Complétez le numéro d'immatriculation et votre fonction."
     },
     "members": {
       "title": "Membres",
@@ -5264,7 +5435,13 @@
         "text": "Transférer la propriété",
         "confirm": "{memberName} deviendra propriétaire de {org}, avec accès à la facturation et à la suppression. Vous deviendrez administrateur."
       },
-      "lastOwner": "Une organisation doit garder au moins un propriétaire."
+      "lastOwner": "Une organisation doit garder au moins un propriétaire.",
+      "team": {
+        "none": "Aucune équipe",
+        "save": "Changer l'équipe"
+      },
+      "teamDone": "Équipe mise à jour.",
+      "transferDone": "Propriété transférée."
     },
     "invite": {
       "title": "Inviter des membres",
@@ -5346,7 +5523,9 @@
       "delete": {
         "confirm": "Supprimer l'équipe « {team} » ? Ses offres restent dans l'organisation."
       },
-      "empty": "Aucune équipe. Créez des équipes pour répartir les offres et les tableaux de bord."
+      "empty": "Aucune équipe. Créez des équipes pour répartir les offres et les tableaux de bord.",
+      "entity": "Entité (facultatif)",
+      "noLead": "Aucun responsable"
     },
     "departments": {
       "title": "Départements",
@@ -5373,7 +5552,17 @@
         "confirm": "Supprimer l'entité « {entity} » ? Ses offres et ses équipes doivent d'abord être réattribuées."
       },
       "empty": "Aucune entité.",
-      "quote": "Demander un devis"
+      "quote": "Demander un devis",
+      "noParent": "Aucune (entité principale)",
+      "parentOf": "Rattachée à {entity}"
+    },
+    "structure": {
+      "created": "Élément créé.",
+      "deleted": "Élément supprimé.",
+      "notEmpty": "Réattribuez d'abord les offres, équipes et entités rattachées.",
+      "invalid": "Donnez un nom d'au moins 2 caractères.",
+      "create": "Créer",
+      "delete": "Supprimer"
     },
     "delete": {
       "title": "Supprimer l'organisation",
@@ -7154,6 +7343,19 @@
       "downgraded": "Votre compte est revenu au forfait {freePlan}. Toutes vos données sont conservées.",
       "upgraded": "Bienvenue dans {plan} ! Vos nouveaux avantages sont actifs.",
       "renewed": "Forfait {plan} renouvelé jusqu'au {date}. Merci !",
+      "mention": "{memberName} vous a mentionné dans une note sur {candidateName}.",
+      "contactRequest": "{company} souhaite échanger avec vous. Vous décidez de répondre ou non.",
+      "contactAccepted": "Un talent a accepté votre demande de mise en relation.",
+      "contactDeclined": "Un talent a décliné votre demande de mise en relation.",
+      "interviewInvite": "{company} vous invite à un entretien pour {jobTitle}. Choisissez votre créneau.",
+      "interviewTeam": "Vous participez à l'entretien de {candidateName} pour {jobTitle}.",
+      "interviewConfirmed": "{candidateName} a confirmé son entretien pour {jobTitle}.",
+      "interviewReschedule": "{candidateName} propose d'autres créneaux pour {jobTitle}.",
+      "interviewDeclined": "{candidateName} a décliné l'entretien pour {jobTitle}.",
+      "interviewCanceled": "{company} a annulé l'entretien pour {jobTitle}.",
+      "orgVerified": "{org} est maintenant une entreprise vérifiée.",
+      "orgVerificationRejected": "La vérification de {org} n'a pas été acceptée. Consultez le motif.",
+      "abnormalUsage": "Usage inhabituel : {count} profils consultés en une heure par un membre de {org}. Accès suspendu une heure.",
       "unread": "Non lue"
     }
   },
@@ -7457,6 +7659,20 @@
       "p1": "{candidateName} a accepté votre demande de mise en relation. La conversation est ouverte dans Connect.",
       "p2": "Un premier message clair et personnalisé fait bonne impression.",
       "cta": "Écrire à {candidateName}"
+    },
+    "orgVerified": {
+      "subject": "{org} est une entreprise vérifiée",
+      "preheader": "Le badge apparaît désormais sur vos offres.",
+      "p1": "Bonne nouvelle : Jumanly a vérifié {org}.",
+      "p2": "Le badge « Entreprise vérifiée » s'affiche sur vos offres et votre page publique.",
+      "cta": "Voir mon organisation"
+    },
+    "orgVerificationRejected": {
+      "subject": "Vérification de {org} : un complément est nécessaire",
+      "preheader": "Consultez le motif et complétez votre demande.",
+      "p1": "Nous n'avons pas pu vérifier {org}. Motif : {reason}",
+      "p2": "Vous pouvez compléter et renvoyer votre demande à tout moment.",
+      "cta": "Compléter la demande"
     },
     "newApplication": {
       "subject": "Nouvelle candidature : {jobTitle}",
@@ -8388,7 +8604,9 @@
         "all": "Toutes",
         "pending": "Vérifications en attente ({count})",
         "verified": "Vérifiées",
-        "partners": "Partenaires"
+        "partners": "Partenaires",
+        "rejected": "Refusées",
+        "none": "Non vérifiées"
       },
       "col": {
         "name": "Organisation",
@@ -8396,7 +8614,9 @@
         "plan": "Forfait",
         "seats": "Membres",
         "activeJobs": "Offres actives",
-        "verification": "Vérification"
+        "verification": "Vérification",
+        "owner": "Propriétaire",
+        "requestedAt": "Demande du {date, date, medium}"
       },
       "verify": {
         "title": "Vérifier {org}",
@@ -8415,7 +8635,15 @@
         },
         "requestMore": "Demander un complément",
         "approved": "{org} est vérifiée.",
-        "rejected": "Vérification refusée. L'organisation a été prévenue par e-mail."
+        "rejected": "Vérification refusée. L'organisation a été prévenue par e-mail.",
+        "field": {
+          "registration": "Immatriculation : {value}",
+          "taxId": "Identification fiscale : {value}",
+          "domainEmail": "E-mail sur le domaine : {value}",
+          "mandate": "Fonction du demandeur : {value}",
+          "website": "Site web : {value}"
+        },
+        "reasonRequired": "Indiquez le motif communiqué à l'organisation."
       },
       "revoke": {
         "text": "Retirer le badge vérifié",
@@ -8424,7 +8652,8 @@
       "suspend": {
         "text": "Suspendre l'organisation",
         "confirm": "Suspendre {org} ? Ses offres seront retirées et ses membres ne pourront plus accéder à l'espace Hire. Les candidats seront prévenus."
-      }
+      },
+      "empty": "Aucune organisation dans cette liste."
     },
     "plans": {
       "title": "Forfaits et droits",

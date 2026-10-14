@@ -7,6 +7,7 @@ import { isInternalEnv } from "../../src/lib/env";
 import { createSeedClient } from "./client";
 import { seedAccounts } from "./accounts";
 import { seedDemo } from "./demo";
+import { seedGroup } from "./group";
 import { seedIntelligence } from "./intelligence";
 import { seedPlans } from "./plans";
 import { seedSkills } from "./skills";
@@ -20,6 +21,7 @@ async function main() {
     if (isInternalEnv()) {
       await seedDemo(db);
       await seedAccounts(db);
+      await seedGroup(db);
     } else console.log("Démo ignorée : APP_ENV n'est ni local ni preview.");
   } finally {
     await db.$disconnect();

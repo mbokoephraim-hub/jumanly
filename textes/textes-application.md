@@ -910,6 +910,7 @@ Note d'intégration : la ligne `talents.plans.note` n'est pas affichée ; elle i
 | `companyPage.jobs.emptyCta` | Voir toutes les offres |
 | `companyPage.notFound.title` | Entreprise introuvable |
 | `companyPage.notFound.text` | Cette page n'existe pas ou n'est plus publique. |
+| `companyPage.jobs.row` | {city} · {contract} |
 
 ---
 
@@ -1634,6 +1635,7 @@ Conventions :
 | `appNav.hire.talents` | Talents |
 | `appNav.hire.interviews` | Entretiens |
 | `appNav.hire.reports` | Rapports |
+| `appNav.hire.pools` | Viviers |
 | `appNav.organization` | Organisation |
 | `appNav.partner` | Partenaire |
 | `appNav.admin` | Jumanly Admin |
@@ -3198,6 +3200,13 @@ Conventions :
 | `connect.invite.decline.confirm.title` | Décliner cet entretien ? |
 | `connect.invite.decline.confirm.body` | Le recruteur sera prévenu. Vous pouvez ajouter un message. |
 | `connect.invite.reminder` | Rappel : entretien {time, relative} |
+| `connect.invite.chosen` | Votre créneau : {date, date, full} à {time} (heure de {timezone}) |
+| `connect.invite.canceled` | Le recruteur a annulé cet entretien. |
+| `connect.invite.declined` | Vous avez décliné cet entretien. |
+| `connect.invite.proposed` | Vous avez proposé : {slots}. Le recruteur va vous répondre. |
+| `connect.invite.done` | Réponse envoyée. |
+| `connect.invite.error` | Choisissez un créneau à venir. |
+| `connect.invite.slot` | Créneau {number} |
 
 #### Demandes de documents
 
@@ -3229,6 +3238,14 @@ Conventions :
 | `connect.contactRequest.declined` | Demande déclinée. {company} en est informé, sans détail. |
 | `connect.contactRequest.expires` | Sans réponse, la demande expire {time, relative}. |
 | `connect.contactRequest.expired` | Demande expirée |
+| `connect.contactRequest.expiresOn` | Sans réponse, la demande expire le {date, date, long}. |
+| `connect.contactRequest.empty` | Aucune demande de mise en relation. |
+| `connect.contactRequest.status.accepted` | Acceptée |
+| `connect.contactRequest.status.declined` | Déclinée |
+| `connect.contactRequest.blocked` | Vous ne recevrez plus de demandes de {company}. |
+| `connect.contactRequest.unavailable` | Cette demande n'est plus disponible. |
+| `connect.contactRequest.receivedOn` | Reçue le {date, date, long} |
+| `connect.contactRequest.open` | Ouvrir la conversation |
 
 #### Signalement et blocage
 
@@ -3353,6 +3370,7 @@ Conventions :
 | `settings.privacy.visibility.manage` | Modifier dans mon profil |
 | `settings.privacy.contactRequests.text` | Recevoir des demandes de mise en relation |
 | `settings.privacy.contactRequests.hint` | Désactivé, plus aucun recruteur ne peut vous contacter hors de vos candidatures. |
+| `settings.privacy.contactRequests.legend` | Mises en relation |
 | `settings.privacy.ai.text` | Utilisation de l'IA |
 | `settings.privacy.ai.desc` | Autoriser Jumanly Intelligence à analyser mon profil et mes documents pour me faire des suggestions. |
 | `settings.privacy.ai.hint` | Coach CV, diagnostic personnalisé, plan de progression et analyse de vos documents. Sans cette autorisation, vous pouvez toujours postuler. |
@@ -3514,6 +3532,7 @@ Conventions :
 | `hire.dashboard.verifyBanner.text` | Faites vérifier votre organisation pour afficher le badge « Entreprise vérifiée » sur vos offres. |
 | `hire.dashboard.verifyBanner.cta` | Demander la vérification |
 | `hire.dashboard.fairness` | Rappel : les profils Free sont des candidats comme les autres. Le forfait d'un talent n'influence jamais son score. |
+| `hire.dashboard.verifyBanner.pending` | Votre demande de vérification est en cours d'examen. |
 
 ---
 
@@ -3574,6 +3593,17 @@ Conventions :
 | `hire.jobs.empty.closed` | Aucune offre fermée. |
 | `hire.jobs.empty.cta` | Créer une offre |
 | `hire.jobs.assign.locked` | Attribution des offres aux responsables · Disponible avec {plan} |
+| `hire.jobs.filter.all` | Tous |
+| `hire.jobs.filter.submit` | Filtrer |
+| `hire.assign.title` | Attribution |
+| `hire.assign.subtitle` | Qui est responsable de cette offre et qui peut voir ses candidats. |
+| `hire.assign.none` | Non attribué |
+| `hire.assign.members.hint` | Les responsables du recrutement ne voient que les offres auxquelles ils sont ajoutés. |
+| `hire.assign.entities.locked` | Entités et filiales · Disponible avec {plan} |
+| `hire.assign.save` | Enregistrer l'attribution |
+| `hire.assign.saved` | Attribution enregistrée. |
+| `hire.assign.error` | Ces changements n'ont pas pu être enregistrés. Vérifiez les champs puis réessayez. |
+| `hire.assign.members.text` | Équipe de recrutement |
 
 ---
 
@@ -3972,6 +4002,8 @@ Conventions :
 | `hire.application.knockout.note` | Ce signalement n'écarte pas le candidat. Vérifiez l'information avec lui si besoin. |
 | `hire.application.privacy` | Ces informations sont confidentielles. Ne les partagez pas hors de l'équipe de recrutement. |
 | `hire.application.planLabel.hidden` | Le forfait du talent n'est jamais affiché ni pris en compte. |
+| `hire.application.addToPool` | Ajouter à un vivier |
+| `hire.application.pool.none` | Créez d'abord un vivier dans l'onglet Viviers. |
 
 #### Score
 
@@ -3999,6 +4031,9 @@ Conventions :
 | `hire.application.notes.empty` | Aucune note pour l'instant. |
 | `hire.application.notes.reminder` | Restez factuel : notez ce qui concerne le poste, rien sur la vie privée du candidat. |
 | `hire.application.notes.collab.locked` | Notes partagées entre recruteurs · Disponible avec {plan} |
+| `hire.application.notes.edited` | Modifiée |
+| `hire.application.notes.save` | Enregistrer |
+| `hire.application.notes.mentioned` | {count, plural, one {# collègue prévenu.} other {# collègues prévenus.}} |
 
 #### Grille d'évaluation
 
@@ -4031,6 +4066,14 @@ Conventions :
 | `hire.scorecard.average` | Moyenne de l'équipe : {average}/5 · {count, plural, one {# évaluation} other {# évaluations}} |
 | `hire.scorecard.pending` | En attente : {names} |
 | `hire.scorecard.empty` | Aucune évaluation pour l'instant. |
+| `hire.scorecard.template.hint` | Un critère par ligne. Ajoutez une précision après deux-points, par exemple « SQL : requêtes et jointures ». |
+| `hire.scorecard.template.saved` | Modèle de grille enregistré. |
+| `hire.scorecard.template.invalid` | Indiquez entre 1 et {max} critères, un par ligne. |
+| `hire.scorecard.template.save` | Enregistrer le modèle |
+| `hire.scorecard.mine` | Votre évaluation |
+| `hire.scorecard.update` | Mettre à jour mon évaluation |
+| `hire.scorecard.reviewer` | {memberName} · {average}/5 · {recommendation} |
+| `hire.scorecard.invalid` | Notez chaque critère et donnez votre avis. |
 
 #### Historique des décisions
 
@@ -4055,6 +4098,8 @@ Conventions :
 | `hire.history.event.message` | Message de {memberName} |
 | `hire.history.timestamp` | {date, date, medium} à {time} |
 | `hire.history.export` | Exporter l'historique |
+| `hire.history.col.date` | Date |
+| `hire.history.col.event` | Événement |
 
 #### Message, rendez-vous et document depuis la fiche
 
@@ -4102,6 +4147,7 @@ Conventions :
 | `hire.talents.filter.availability` | Disponibilité |
 | `hire.talents.filter.certificates` | Avec attestation Jumanly |
 | `hire.talents.filter.deep.locked` | Filtres approfondis · Disponible avec {plan} |
+| `hire.talents.filter.deep.text` | Filtres approfondis |
 | `hire.talents.results` | {count, plural, =0 {Aucun talent trouvé} one {# talent trouvé} other {# talents trouvés}} |
 | `hire.talents.result.anonymous` | Talent anonyme · {headline} |
 | `hire.talents.result.headline` | {headline} · {city} |
@@ -4113,6 +4159,23 @@ Conventions :
 | `hire.talents.result.contacted` | Demande envoyée |
 | `hire.talents.result.connected` | En relation |
 | `hire.talents.empty` | Aucun talent ne correspond. Essayez moins de filtres ou un lieu plus large. |
+| `hire.talents.filter.any` | Indifférent |
+| `hire.talents.filter.experienceMin` | Expérience minimale (années) |
+| `hire.talents.filter.job.none` | Aucune offre |
+| `hire.talents.capped` | Seuls les {max} premiers résultats sont proposés. Précisez votre recherche pour trouver plus vite. |
+| `hire.talents.page.previous` | Page précédente |
+| `hire.talents.page.next` | Page suivante |
+| `hire.talents.page.current` | Page {page} sur {pages} |
+| `hire.talents.start` | Saisissez une compétence, un métier ou un lieu pour lancer une recherche. Chaque recherche compte dans le quota du mois. |
+| `hire.talents.blocked` | Vous avez consulté beaucoup de profils en peu de temps. L'accès est suspendu pendant une heure et l'équipe Jumanly a été prévenue. |
+| `hire.talents.profile.back` | Retour à la recherche |
+| `hire.talents.profile.applied` | Ce talent a postulé à l'une de vos offres. |
+| `hire.talents.profile.full` | Profil complet visible : ce talent a accepté votre demande ou postulé à l'une de vos offres. |
+| `hire.talents.profile.experience` | Expériences |
+| `hire.talents.profile.education` | Formation |
+| `hire.talents.profile.skills` | Compétences |
+| `hire.talents.profile.verified` | Vérifiée |
+| `hire.talents.profile.openConversation` | Ouvrir la conversation |
 | `hire.talents.profile.anonymousNote` | Ce talent est anonyme. Son nom et sa photo seront visibles s'il accepte votre demande. |
 | `hire.talents.profile.limited` | Profil résumé. Le profil complet est visible après acceptation de votre demande ou si le talent postule à l'une de vos offres. |
 
@@ -4137,6 +4200,11 @@ Conventions :
 | `hire.contact.declined.note` | Le talent a décliné. Merci de respecter son choix : une nouvelle demande ne sera possible qu'après {days} jours. |
 | `hire.contact.blocked` | Ce talent ne souhaite plus recevoir de demandes de votre organisation. |
 | `hire.contact.noPayment` | Il est interdit de demander un paiement à un talent. Tout manquement entraîne la suspension du compte. |
+| `hire.contact.error.invalid` | Votre message doit compter au moins {min} caractères. |
+| `hire.contact.error.pending` | Une demande est déjà en attente de réponse pour ce talent. |
+| `hire.contact.error.connected` | Vous êtes déjà en relation avec ce talent. |
+| `hire.contact.error.locked` | Les demandes de mise en relation ne sont pas incluses dans votre forfait. |
+| `hire.contact.error.notFound` | Ce profil n'est plus visible dans le vivier. |
 
 ---
 
@@ -4172,6 +4240,23 @@ Conventions :
 | `hire.pools.consentNote` | Un talent qui passe son profil en privé disparaît automatiquement de vos viviers, sauf s'il a postulé à l'une de vos offres. |
 | `hire.pools.empty` | Aucun vivier. Créez-en un depuis la recherche ou une fiche candidature. |
 | `hire.pools.detail.empty` | Ce vivier est vide. |
+| `hire.pools.created` | Vivier créé. |
+| `hire.pools.renamed` | Vivier renommé. |
+| `hire.pools.deleted` | Vivier supprimé. |
+| `hire.pools.locked` | Viviers de talents · Disponible avec {plan} |
+| `hire.pools.create` | Créer le vivier |
+| `hire.pools.save` | Enregistrer |
+| `hire.pools.back` | Tous les viviers |
+| `hire.pools.choose` | Vivier |
+| `hire.pools.add` | Ajouter |
+| `hire.pools.note` | Note (facultatif) |
+| `hire.pools.invalid` | Donnez un nom d'au moins 2 caractères. |
+| `hire.pools.visibility.teamRequired` | Rejoignez d'abord une équipe pour partager un vivier avec elle. |
+| `hire.pools.addedDone` | Talent ajouté au vivier. |
+| `hire.pools.updatedOn` | Mis à jour le {date, date, medium} |
+| `hire.pools.addedOn` | Ajouté le {date, date, medium} |
+| `hire.pools.error.forbidden` | Cette action n'est pas permise pour votre rôle. |
+| `hire.pools.error.notFound` | Ce vivier ou ce profil n'est plus disponible. |
 
 ---
 
@@ -4232,6 +4317,21 @@ Conventions :
 | `hire.interviews.prep` | Préparer l'entretien |
 | `hire.interviews.empty.text` | Aucun entretien prévu. |
 | `hire.interviews.empty.cta` | Planifier un entretien |
+| `hire.interviews.noShow` | Marquer comme absent |
+| `hire.interviews.proposed` | Créneaux proposés par le candidat : {slots} |
+| `hire.interviews.slotsPending` | Créneaux proposés : {slots} |
+| `hire.interviews.organizer` | Organisé par {memberName} |
+| `hire.interviews.error.invalid` | Vérifiez le candidat, le type, la durée et au moins un créneau. |
+| `hire.interviews.error.past` | Choisissez des créneaux à venir. |
+| `hire.interviews.canceled` | Entretien annulé. Le candidat a été prévenu. |
+| `hire.interviews.updated` | Entretien mis à jour. |
+| `hire.interviews.rescheduled` | Nouveaux créneaux envoyés au candidat. |
+| `hire.interviews.form.noCandidate` | Aucun candidat en cours. Les entretiens se planifient pour une candidature active. |
+| `hire.interviews.form.minutes` | {minutes} min |
+| `hire.interviews.form.slot` | Créneau {number} |
+| `hire.interviews.upcoming` | À venir |
+| `hire.interviews.waiting` | En attente de réponse |
+| `hire.interviews.past` | Passés et annulés |
 
 ---
 
@@ -4282,6 +4382,29 @@ Conventions :
 | `hire.reports.export.ready` | Export prêt. Le téléchargement commence. |
 | `hire.reports.export.privacy` | Les exports ne contiennent que des données agrégées et les informations nécessaires au suivi de vos recrutements. |
 | `hire.reports.empty` | Pas encore assez de données pour cette période. |
+| `hire.reports.period.from` | Du |
+| `hire.reports.period.to` | Au |
+| `hire.reports.period.apply` | Afficher |
+| `hire.reports.col.name` | Nom |
+| `hire.reports.col.applications` | Candidatures |
+| `hire.reports.col.hires` | Recrutements |
+| `hire.reports.col.value` | Valeur |
+| `hire.reports.col.count` | Nombre |
+| `hire.reports.col.moves` | Déplacements |
+| `hire.reports.col.decisions` | Décisions |
+| `hire.reports.col.notes` | Notes |
+| `hire.reports.col.section` | Section |
+| `hire.reports.col.rate` | Taux |
+| `hire.reports.rate` | {rate} % |
+| `hire.reports.none` | Non disponible |
+| `hire.reports.source.direct` | Candidature directe |
+| `hire.reports.source.invitation` | Invitation |
+| `hire.reports.source.talent_search` | Recherche dans le vivier |
+| `hire.reports.scorecards.summary` | {count, plural, =0 {Aucune évaluation} one {# évaluation} other {# évaluations}} · moyenne {average}/5 |
+| `hire.reports.custom.note` | Indicateurs ventilés par entité. Pour un tableau de bord sur mesure, écrivez-nous : nous le configurons avec vous. |
+| `hire.reports.pdf.title` | Rapport de recrutement · {org} |
+| `hire.reports.pdf.period` | Du {from, date, long} au {to, date, long} |
+| `hire.reports.pdf.generated` | Édité le {date, date, long} sur Jumanly |
 
 ---
 
@@ -4321,6 +4444,13 @@ Conventions :
 | `org.profile.city` | Ville |
 | `org.profile.website.text` | Site web |
 | `org.profile.website.placeholder` | https:// |
+| `org.profile.category.text` | Type d'organisation |
+| `org.profile.category.none` | Non précisé |
+| `org.profile.category.company` | Entreprise |
+| `org.profile.category.consultant` | Cabinet ou consultant RH |
+| `org.profile.category.ngo` | ONG ou association |
+| `org.profile.category.public` | Institution publique |
+| `org.profile.category.education` | École ou université |
 | `org.profile.contactEmail` | E-mail de contact recrutement |
 | `org.profile.description.text` | Présentation |
 | `org.profile.description.placeholder` | Votre activité, vos valeurs, ce qui fait la différence pour vos équipes. |
@@ -4330,6 +4460,7 @@ Conventions :
 | `org.profile.save` | Enregistrer |
 | `org.profile.invalid` | Certaines informations ne sont pas valides. Vérifiez le formulaire. |
 | `org.profile.countryHint` | Code pays à deux lettres, par exemple CI ou CM. |
+| `org.profile.legalNameHint` | Nom officiel, tel qu'il figure au registre. |
 
 #### Vérification
 
@@ -4355,6 +4486,12 @@ Conventions :
 | `org.verification.resubmit` | Compléter la demande |
 | `org.verification.verifiedOn` | Vérifiée le {date, date, long} |
 | `org.verification.badge.tooltip` | Jumanly a vérifié l'existence de cette organisation et le rôle de la personne qui l'administre. |
+| `org.verification.form.registration` | Numéro d'immatriculation (registre du commerce ou équivalent) |
+| `org.verification.form.taxId` | Numéro d'identification fiscale (facultatif) |
+| `org.verification.form.domainEmail` | Votre adresse e-mail sur le domaine de l'organisation (facultatif) |
+| `org.verification.form.mandate` | Votre fonction et ce qui l'atteste |
+| `org.verification.form.mandateHint` | Ex. : Directrice des ressources humaines, mandat signé par la direction générale. |
+| `org.verification.invalid` | Complétez le numéro d'immatriculation et votre fonction. |
 
 #### Membres et invitations
 
@@ -4387,6 +4524,10 @@ Conventions :
 | `org.members.transferOwnership.text` | Transférer la propriété |
 | `org.members.transferOwnership.confirm` | {memberName} deviendra propriétaire de {org}, avec accès à la facturation et à la suppression. Vous deviendrez administrateur. |
 | `org.members.lastOwner` | Une organisation doit garder au moins un propriétaire. |
+| `org.members.team.none` | Aucune équipe |
+| `org.members.team.save` | Changer l'équipe |
+| `org.members.teamDone` | Équipe mise à jour. |
+| `org.members.transferDone` | Propriété transférée. |
 | `org.invite.title` | Inviter des membres |
 | `org.invite.emails.text` | Adresses e-mail |
 | `org.invite.emails.placeholder` | Une ou plusieurs adresses, séparées par une virgule |
@@ -4466,6 +4607,16 @@ Conventions :
 | `org.entities.delete.confirm` | Supprimer l'entité « {entity} » ? Ses offres et ses équipes doivent d'abord être réattribuées. |
 | `org.entities.empty` | Aucune entité. |
 | `org.entities.quote` | Demander un devis |
+| `org.structure.created` | Élément créé. |
+| `org.structure.deleted` | Élément supprimé. |
+| `org.structure.notEmpty` | Réattribuez d'abord les offres, équipes et entités rattachées. |
+| `org.structure.invalid` | Donnez un nom d'au moins 2 caractères. |
+| `org.structure.create` | Créer |
+| `org.structure.delete` | Supprimer |
+| `org.entities.noParent` | Aucune (entité principale) |
+| `org.entities.parentOf` | Rattachée à {entity} |
+| `org.teams.entity` | Entité (facultatif) |
+| `org.teams.noLead` | Aucun responsable |
 
 #### Suppression de l'organisation
 
@@ -6038,6 +6189,19 @@ Conventions :
 | `notifications.item.downgraded` | Votre compte est revenu au forfait {freePlan}. Toutes vos données sont conservées. |
 | `notifications.item.upgraded` | Bienvenue dans {plan} ! Vos nouveaux avantages sont actifs. |
 | `notifications.item.renewed` | Forfait {plan} renouvelé jusqu'au {date}. Merci ! |
+| `notifications.item.mention` | {memberName} vous a mentionné dans une note sur {candidateName}. |
+| `notifications.item.contactRequest` | {company} souhaite échanger avec vous. Vous décidez de répondre ou non. |
+| `notifications.item.contactAccepted` | Un talent a accepté votre demande de mise en relation. |
+| `notifications.item.contactDeclined` | Un talent a décliné votre demande de mise en relation. |
+| `notifications.item.interviewInvite` | {company} vous invite à un entretien pour {jobTitle}. Choisissez votre créneau. |
+| `notifications.item.interviewTeam` | Vous participez à l'entretien de {candidateName} pour {jobTitle}. |
+| `notifications.item.interviewConfirmed` | {candidateName} a confirmé son entretien pour {jobTitle}. |
+| `notifications.item.interviewReschedule` | {candidateName} propose d'autres créneaux pour {jobTitle}. |
+| `notifications.item.interviewDeclined` | {candidateName} a décliné l'entretien pour {jobTitle}. |
+| `notifications.item.interviewCanceled` | {company} a annulé l'entretien pour {jobTitle}. |
+| `notifications.item.orgVerified` | {org} est maintenant une entreprise vérifiée. |
+| `notifications.item.orgVerificationRejected` | La vérification de {org} n'a pas été acceptée. Consultez le motif. |
+| `notifications.item.abnormalUsage` | Usage inhabituel : {count} profils consultés en une heure par un membre de {org}. Accès suspendu une heure. |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)
@@ -6325,6 +6489,16 @@ Conventions :
 | `mail.contactAccepted.p1` | {candidateName} a accepté votre demande de mise en relation. La conversation est ouverte dans Connect. |
 | `mail.contactAccepted.p2` | Un premier message clair et personnalisé fait bonne impression. |
 | `mail.contactAccepted.cta` | Écrire à {candidateName} |
+| `mail.orgVerified.subject` | {org} est une entreprise vérifiée |
+| `mail.orgVerified.preheader` | Le badge apparaît désormais sur vos offres. |
+| `mail.orgVerified.p1` | Bonne nouvelle : Jumanly a vérifié {org}. |
+| `mail.orgVerified.p2` | Le badge « Entreprise vérifiée » s'affiche sur vos offres et votre page publique. |
+| `mail.orgVerified.cta` | Voir mon organisation |
+| `mail.orgVerificationRejected.subject` | Vérification de {org} : un complément est nécessaire |
+| `mail.orgVerificationRejected.preheader` | Consultez le motif et complétez votre demande. |
+| `mail.orgVerificationRejected.p1` | Nous n'avons pas pu vérifier {org}. Motif : {reason} |
+| `mail.orgVerificationRejected.p2` | Vous pouvez compléter et renvoyer votre demande à tout moment. |
+| `mail.orgVerificationRejected.cta` | Compléter la demande |
 
 ### E-mail · Nouvelle candidature (recruteur)
 
@@ -7255,6 +7429,17 @@ Conventions :
 | `admin.orgs.revoke.confirm` | Retirer le badge de {org} ? Ses offres n'afficheront plus « Entreprise vérifiée ». |
 | `admin.orgs.suspend.text` | Suspendre l'organisation |
 | `admin.orgs.suspend.confirm` | Suspendre {org} ? Ses offres seront retirées et ses membres ne pourront plus accéder à l'espace Hire. Les candidats seront prévenus. |
+| `admin.orgs.col.owner` | Propriétaire |
+| `admin.orgs.col.requestedAt` | Demande du {date, date, medium} |
+| `admin.orgs.tab.rejected` | Refusées |
+| `admin.orgs.tab.none` | Non vérifiées |
+| `admin.orgs.verify.field.registration` | Immatriculation : {value} |
+| `admin.orgs.verify.field.taxId` | Identification fiscale : {value} |
+| `admin.orgs.verify.field.domainEmail` | E-mail sur le domaine : {value} |
+| `admin.orgs.verify.field.mandate` | Fonction du demandeur : {value} |
+| `admin.orgs.verify.field.website` | Site web : {value} |
+| `admin.orgs.verify.reasonRequired` | Indiquez le motif communiqué à l'organisation. |
+| `admin.orgs.empty` | Aucune organisation dans cette liste. |
 
 ### `/admin/forfaits` · Forfaits et droits
 

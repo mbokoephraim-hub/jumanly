@@ -198,6 +198,11 @@ describe("rôles", () => {
     const viewer = await member(owner.organizationId, "viewer");
     await expect(saveJob(db, manager, form())).rejects.toMatchObject({ code: "forbidden" });
     await expect(publishJob(db, manager, jobId)).rejects.toBeInstanceOf(HireError);
+    // A hiring manager only sees the jobs they are added to (E8).
+    await expect(addNote(db, manager, applicationId, "Avant ajout.")).rejects.toMatchObject({
+      code: "notFound",
+    });
+    await db.jobAssignment.create({ data: { jobId, userId: manager.userId } });
     await addNote(db, manager, applicationId, "Bonne lettre.");
     await expect(getOrgApplication(db, viewer, applicationId)).rejects.toMatchObject({
       code: "forbidden",

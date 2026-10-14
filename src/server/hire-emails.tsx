@@ -5,6 +5,11 @@
 import "server-only";
 import {
   applicationSentEmail,
+  contactAcceptedEmail,
+  contactRequestedEmail,
+  interviewConfirmedEmail,
+  interviewInviteEmail,
+  orgVerificationEmail,
   documentRequestEmail,
   newApplicationEmail,
   newMessageEmail,
@@ -45,3 +50,28 @@ export const mailNewMessage = (to: Person, input: Parameters<typeof newMessageEm
 
 export const mailOrgInvite = (to: string, input: Parameters<typeof orgInviteEmail>[0]) =>
   deliver(to, orgInviteEmail(input));
+
+export const mailInterviewInvite = (
+  to: Person,
+  input: Parameters<typeof interviewInviteEmail>[1],
+) => deliver(to.email, interviewInviteEmail(to.firstName, input));
+
+export const mailInterviewConfirmed = (
+  to: Person,
+  input: Parameters<typeof interviewConfirmedEmail>[1],
+) => deliver(to.email, interviewConfirmedEmail(to.firstName, input));
+
+export const mailContactRequested = (
+  to: Person,
+  input: Parameters<typeof contactRequestedEmail>[1],
+) => deliver(to.email, contactRequestedEmail(to.firstName, input));
+
+export const mailContactAccepted = (
+  to: Person,
+  input: Parameters<typeof contactAcceptedEmail>[1],
+) => deliver(to.email, contactAcceptedEmail(to.firstName, input));
+
+export const mailOrgVerification = (
+  to: Person,
+  input: Parameters<typeof orgVerificationEmail>[1],
+) => deliver(to.email, orgVerificationEmail(to.firstName, input));

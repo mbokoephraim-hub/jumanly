@@ -41,10 +41,28 @@ export const legalNavigation = [
 ] as const;
 
 export type AppNavigationKey =
-  "home" | "learn" | "career" | "jobs" | "messages" | "hire.jobs" | "organization";
+  | "home"
+  | "learn"
+  | "career"
+  | "jobs"
+  | "messages"
+  | "hire.jobs"
+  | "hire.talents"
+  | "hire.pools"
+  | "hire.interviews"
+  | "hire.reports"
+  | "organization";
+
+type AppNavigationItem = {
+  key: AppNavigationKey;
+  href: string;
+  icon: IconName;
+  /** false: sidebar only; on mobile the item is reached from the Hire dashboard. */
+  pill?: boolean;
+};
 
 /** Talent space modules. `key` points to `appNav.<key>`; icons from ressources/icones. */
-export const talentNavigation: { key: AppNavigationKey; href: string; icon: IconName }[] = [
+export const talentNavigation: AppNavigationItem[] = [
   { key: "home", href: "/app", icon: "accueil" },
   { key: "learn", href: "/app/learn", icon: "learn" },
   { key: "career", href: "/app/career", icon: "career" },
@@ -53,9 +71,16 @@ export const talentNavigation: { key: AppNavigationKey; href: string; icon: Icon
 ];
 
 /** Organization space (Hire): shown when an organization is chosen in the space switcher. */
-export const hireNavigation: { key: AppNavigationKey; href: string; icon: IconName }[] = [
+export const hireNavigation: AppNavigationItem[] = [
   { key: "home", href: "/app/hire", icon: "accueil" },
   { key: "hire.jobs", href: "/app/hire/offres", icon: "jobs" },
+  { key: "hire.talents", href: "/app/hire/talents", icon: "recherche" },
+  { key: "hire.pools", href: "/app/hire/viviers", icon: "equipe", pill: false },
+  { key: "hire.interviews", href: "/app/hire/entretiens", icon: "calendrier", pill: false },
+  { key: "hire.reports", href: "/app/hire/rapports", icon: "statistiques", pill: false },
   { key: "messages", href: "/app/messages", icon: "message" },
   { key: "organization", href: "/app/organisation", icon: "entreprise" },
 ];
+
+/** Hire pages that the mobile navigation leaves out, linked from the Hire dashboard. */
+export const hireShortcuts = hireNavigation.filter((item) => item.pill === false);

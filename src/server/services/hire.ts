@@ -16,7 +16,7 @@ import type {
   RemoteMode,
   StageKind,
 } from "@/generated/prisma/client";
-import { limit } from "@/server/entitlements";
+import { level, limit } from "@/server/entitlements";
 import { ensureStages } from "./applications";
 import { slugify } from "./accounts";
 import { findSkill } from "./profile";
@@ -44,6 +44,37 @@ export function hirePermissions(role: MembershipRole) {
     readApplications: [...managers, "hiring_manager"].includes(role),
     /** Members, invitations, organization profile. */
     administer: role === "org_owner" || role === "org_admin",
+  };
+}
+
+/**
+ * The jobs a member may open (partie 05 § 5). Owners, administrators and viewers see every job of
+ * the organization. A hiring manager only sees the jobs assigned to them. With
+ * `org.permissions.level` « advanced », a recruiter who belongs to a team sees that team's jobs and
+ * the jobs assigned to them; without a team, or below that level, every job.
+ */
+export async function jobScope(db: PrismaClient, ctx: HireContext): Promise<Prisma.JobWhereInput> {
+  const base = { organizationId: ctx.organizationId };
+  const assigned: Prisma.JobWhereInput[] = [
+    { assignedToId: ctx.userId },
+    { assignments: { some: { userId: ctx.userId } } },
+  ];
+  if (ctx.role === "hiring_manager") return { ...base, OR: assigned };
+  if (ctx.role !== "recruiter") return base;
+  const membership = await db.membership.findUnique({
+    where: { userId_organizationId: { userId: ctx.userId, organizationId: ctx.organizationId } },
+    select: { teamId: true },
+  });
+  if (!membership?.teamId) return base;
+  const permissions = await level(
+    db,
+    { type: "organization", id: ctx.organizationId },
+    "org.permissions.level",
+  );
+  if (permissions !== "advanced") return base;
+  return {
+    ...base,
+    OR: [{ teamId: membership.teamId }, { createdById: ctx.userId }, ...assigned],
   };
 }
 
@@ -242,8 +273,11 @@ export async function saveJob(
 /** A job of the active organization, or HireError("notFound"). */
 export async function getOrgJob(db: PrismaClient, ctx: HireContext, jobId: string) {
   const job = await db.job.findFirst({
-    where: { id: jobId, organizationId: ctx.organizationId },
-    include: { skills: { include: { skill: { select: { name: true } } } } },
+    where: { AND: [{ id: jobId }, await jobScope(db, ctx)] },
+    include: {
+      skills: { include: { skill: { select: { name: true } } } },
+      assignments: { select: { userId: true } },
+    },
   });
   if (!job) throw new HireError("notFound");
   return job;
@@ -336,11 +370,15 @@ export async function deleteDraft(db: PrismaClient, ctx: HireContext, jobId: str
 
 export async function listOrgJobs(db: PrismaClient, ctx: HireContext) {
   return db.job.findMany({
-    where: { organizationId: ctx.organizationId, status: { not: "archived" } },
+    where: { AND: [await jobScope(db, ctx), { status: { not: "archived" } }] },
     orderBy: [{ updatedAt: "desc" }],
     include: {
       _count: { select: { applications: true } },
       applications: { where: { viewedAt: null, status: "active" }, select: { id: true } },
+      assignedTo: { select: { name: true } },
+      team: { select: { name: true } },
+      department: { select: { name: true } },
+      entity: { select: { name: true } },
     },
   });
 }
@@ -372,12 +410,13 @@ export async function getPipeline(db: PrismaClient, ctx: HireContext, jobId: str
 export async function getOrgApplication(db: PrismaClient, ctx: HireContext, applicationId: string) {
   assert(hirePermissions(ctx.role).readApplications);
   const application = await db.application.findFirst({
-    where: { id: applicationId, job: { organizationId: ctx.organizationId } },
+    where: { id: applicationId, job: await jobScope(db, ctx) },
     include: {
       job: {
         include: {
           stages: { orderBy: { order: "asc" } },
           organization: { select: { name: true } },
+          skills: { include: { skill: { select: { name: true } } } },
         },
       },
       stage: true,
@@ -535,10 +574,11 @@ export async function addNote(
 
 /** Counts for the dashboard, all scoped to the organization. */
 export async function hireDashboard(db: PrismaClient, ctx: HireContext) {
-  const where = { job: { organizationId: ctx.organizationId } };
+  const scope = await jobScope(db, ctx);
+  const where = { job: scope };
   const [jobs, applications, unseen, waiting] = await Promise.all([
     db.job.findMany({
-      where: { organizationId: ctx.organizationId, status: { in: [...activeStatuses] } },
+      where: { AND: [scope, { status: { in: [...activeStatuses] } }] },
       orderBy: { publishedAt: "desc" },
       select: { id: true, title: true, status: true, _count: { select: { applications: true } } },
     }),

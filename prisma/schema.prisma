@@ -77,28 +77,53 @@ enum OrganizationType {
   partner
 }
 
+enum OrgVerificationStatus {
+  none
+  pending
+  verified
+  rejected
+}
+
 model Organization {
-  id            String           @id @default(cuid(2))
-  type          OrganizationType
-  name          String
-  slug          String           @unique
-  logo          String?
-  description   String?
-  website       String?
-  country       String?
-  city          String?
-  sector        String?
-  size          String?
-  verifiedAt    DateTime?
-  parentId      String?
-  parent        Organization?    @relation("OrganizationEntities", fields: [parentId], references: [id])
-  entities      Organization[]   @relation("OrganizationEntities")
-  jobs          Job[]
-  memberships   Membership[]
-  invitations   Invitation[]
-  conversations Conversation[]
-  createdAt     DateTime         @default(now())
-  updatedAt     DateTime         @updatedAt
+  id                      String                @id @default(cuid(2))
+  type                    OrganizationType
+  name                    String
+  slug                    String                @unique
+  logo                    String?
+  description             String?
+  website                 String?
+  country                 String?
+  city                    String?
+  sector                  String?
+  size                    String?
+  verifiedAt              DateTime?
+  /// Profile fields shown on the public page (partie 07 § 4).
+  legalName               String?
+  /// company, consultant, ngo, public, education (`org.profile.type.*`).
+  category                String?
+  contactEmail            String?
+  /// Verification by Jumanly (admin, E8). `verifiedAt` stays the badge's source.
+  verificationStatus      OrgVerificationStatus @default(none)
+  /// { registration, taxId, domainEmail, mandate } as typed by the organization.
+  verificationRequest     Json?
+  verificationRequestedAt DateTime?
+  verificationReason      String?
+  verifiedById            String?
+  parentId                String?
+  parent                  Organization?         @relation("OrganizationEntities", fields: [parentId], references: [id])
+  entities                Organization[]        @relation("OrganizationEntities")
+  jobs                    Job[]
+  memberships             Membership[]
+  invitations             Invitation[]
+  conversations           Conversation[]
+  teams                   Team[]
+  orgEntities             OrgEntity[]
+  talentPools             TalentPool[]
+  contactRequests         ContactRequest[]
+  contactBlocks           ContactBlock[]
+  interviews              Interview[]
+  createdAt               DateTime              @default(now())
+  updatedAt               DateTime              @updatedAt
 }
 
 // ─── Référentiel de compétences ─────────────────────────────────
@@ -149,11 +174,11 @@ enum SkillImportance {
 }
 
 model Job {
-  id                String          @id @default(cuid(2))
+  id                String           @id @default(cuid(2))
   organizationId    String
-  organization      Organization    @relation(fields: [organizationId], references: [id])
+  organization      Organization     @relation(fields: [organizationId], references: [id])
   title             String
-  slug              String          @unique
+  slug              String           @unique
   description       String
   /// One item per line.
   responsibilities  String[]
@@ -167,21 +192,35 @@ model Job {
   /// USD cents per month; optional.
   salaryMin         Int?
   salaryMax         Int?
-  currency          String          @default("USD")
-  experienceMin     Int             @default(0)
+  currency          String           @default("USD")
+  experienceMin     Int              @default(0)
   educationLevelMin String?
   /// [{ code: "fr", level: "C1" }]
-  languagesRequired Json            @default("[]")
+  languagesRequired Json             @default("[]")
   /// Explicit criteria set by the recruiter: ["Permis B", …]
-  knockoutCriteria  Json            @default("[]")
-  status            JobStatus       @default(draft)
+  knockoutCriteria  Json             @default("[]")
+  status            JobStatus        @default(draft)
   publishedAt       DateTime?
   /// Set when the end of a paid plan put this offer back in draft (partie 09 § 9.2); restored
   /// automatically when the organization pays again, within its limit.
   pausedByBillingAt DateTime?
   closesAt          DateTime?
   createdById       String?
-  createdBy         User?           @relation("JobCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdBy         User?            @relation("JobCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  /// Recruiter in charge (« attribution des offres », partie 05 § 2.3).
+  assignedToId      String?
+  assignedTo        User?            @relation("JobAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  teamId            String?
+  team              Team?            @relation("JobTeam", fields: [teamId], references: [id], onDelete: SetNull)
+  departmentId      String?
+  department        Team?            @relation("JobDepartment", fields: [departmentId], references: [id], onDelete: SetNull)
+  entityId          String?
+  entity            OrgEntity?       @relation(fields: [entityId], references: [id], onDelete: SetNull)
+  /// Scorecard template: [{ name, description }] (`hire.scorecards`).
+  scorecardTemplate Json             @default("[]")
+  /// Members given access to this job only (hiring managers, per-job permissions).
+  assignments       JobAssignment[]
+  contactRequests   ContactRequest[]
   /// Message sent by default when a candidate is not selected; editable each time.
   rejectionTemplate String?
   /// Automatic check results (`admin.jobs.autoFlag.*`) and the moderator's reason.
@@ -192,8 +231,8 @@ model Job {
   applications      Application[]
   savedBy           SavedJob[]
   matchResults      MatchResult[]
-  createdAt         DateTime        @default(now())
-  updatedAt         DateTime        @updatedAt
+  createdAt         DateTime         @default(now())
+  updatedAt         DateTime         @updatedAt
 
   @@index([status, publishedAt])
 }
@@ -482,6 +521,12 @@ model User {
   diagnostics         CareerDiagnostic[]
   savedJobs           SavedJob[]
   jobsCreated         Job[]                     @relation("JobCreator")
+  jobsAssigned        Job[]                     @relation("JobAssignee")
+  jobAssignments      JobAssignment[]
+  scorecards          Scorecard[]
+  talentPools         TalentPool[]
+  contactRequestsSent ContactRequest[]
+  interviewsOrganized Interview[]
   notifications       Notification[]
   participations      ConversationParticipant[]
   enrollments         Enrollment[]
@@ -598,6 +643,9 @@ model Membership {
   status         MembershipStatus @default(active)
   /// Job title given at sign-up (« Votre fonction »).
   jobTitle       String?
+  /// Team scope (`org.permissions.level` advanced): a recruiter then sees their team's jobs.
+  teamId         String?
+  team           Team?            @relation(fields: [teamId], references: [id], onDelete: SetNull)
   invitedBy      String?
   createdAt      DateTime         @default(now())
   updatedAt      DateTime         @updatedAt
@@ -737,43 +785,47 @@ enum ProfileVisibility {
 }
 
 model TalentProfile {
-  id                String            @id @default(cuid(2))
-  userId            String            @unique
-  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  headline          String?
-  summary           String?
+  id                     String            @id @default(cuid(2))
+  userId                 String            @unique
+  user                   User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  headline               String?
+  summary                String?
   /// Main goal chosen on the welcome screen (firstJob, newJob, reconversion…).
-  goal              String?
-  targetJob         String?
-  visibility        ProfileVisibility @default(private)
-  availability      Availability      @default(open)
-  availableFrom     DateTime?
-  notice            String?
-  desiredJobTitles  String[]
+  goal                   String?
+  targetJob              String?
+  visibility             ProfileVisibility @default(private)
+  availability           Availability      @default(open)
+  availableFrom          DateTime?
+  notice                 String?
+  desiredJobTitles       String[]
   /// Values of `talent.profile.preferences.contract.*` (cdi, cdd, internship…).
-  desiredContracts  String[]
-  desiredLocations  String[]
-  remotePreferences RemoteMode[]
-  relocation        Boolean           @default(false)
+  desiredContracts       String[]
+  desiredLocations       String[]
+  remotePreferences      RemoteMode[]
+  relocation             Boolean           @default(false)
   /// Never shown to recruiters. Whole USD (or `salaryCurrency`) per `salaryPeriod`.
-  salaryMin         Int?
-  salaryCurrency    String            @default("USD")
-  salaryPeriod      String            @default("month")
-  sectors           String[]
+  salaryMin              Int?
+  salaryCurrency         String            @default("USD")
+  salaryPeriod           String            @default("month")
+  sectors                String[]
   /// [{ code: "fr", level: "native" | "fluent" | …, cefr?: "B2" }]
-  languages         Json              @default("[]")
+  languages              Json              @default("[]")
   /// 0 to 100, recomputed on every profile change.
-  completeness      Int               @default(0)
+  completeness           Int               @default(0)
   /// « Calcul de compatibilité » (Paramètres > Confidentialité). Off: no score anywhere.
-  matchingEnabled   Boolean           @default(true)
-  matchResults      MatchResult[]
-  skills            ProfileSkill[]
-  experiences       Experience[]
-  educations        Education[]
-  documents         Document[]
-  applications      Application[]
-  createdAt         DateTime          @default(now())
-  updatedAt         DateTime          @updatedAt
+  matchingEnabled        Boolean           @default(true)
+  /// « Recevoir des demandes de mise en relation » (Paramètres > Confidentialité).
+  acceptsContactRequests Boolean           @default(true)
+  matchResults           MatchResult[]
+  poolEntries            TalentPoolEntry[]
+  contactRequests        ContactRequest[]
+  skills                 ProfileSkill[]
+  experiences            Experience[]
+  educations             Education[]
+  documents              Document[]
+  applications           Application[]
+  createdAt              DateTime          @default(now())
+  updatedAt              DateTime          @updatedAt
 }
 
 enum Availability {
@@ -930,6 +982,8 @@ model Application {
   viewedAt         DateTime?
   events           ApplicationEvent[]
   conversation     Conversation?
+  scorecards       Scorecard[]
+  interviews       Interview[]
   createdAt        DateTime           @default(now())
   updatedAt        DateTime           @updatedAt
 
@@ -1010,6 +1064,7 @@ model Invitation {
   organization   Organization   @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   email          String
   role           MembershipRole
+  teamId         String?
   token          String         @unique
   invitedById    String?
   message        String?
@@ -1038,6 +1093,7 @@ model Conversation {
   organization   Organization?             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   /// The talent side of the conversation.
   talentUserId   String
+  contactRequest ContactRequest?
   /// Set when the talent blocks the organization: no more messages from it.
   blockedAt      DateTime?
   participants   ConversationParticipant[]
@@ -1311,4 +1367,208 @@ model BillingDetails {
 model JobRun {
   key   String   @id
   ranAt DateTime @default(now())
+}
+
+// ─── Hire avancé et Companies (E8) ──────────────────────────────
+
+enum TeamKind {
+  team
+  department
+}
+
+/// A recruiting team or a department of an organization (`org.teams`).
+model Team {
+  id             String       @id @default(cuid(2))
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  kind           TeamKind     @default(team)
+  leadId         String?
+  entityId       String?
+  entity         OrgEntity?   @relation(fields: [entityId], references: [id], onDelete: SetNull)
+  memberships    Membership[]
+  jobs           Job[]        @relation("JobTeam")
+  departmentJobs Job[]        @relation("JobDepartment")
+  pools          TalentPool[]
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId, kind])
+}
+
+/// An entity or subsidiary inside an organization (`org.entities`).
+model OrgEntity {
+  id             String       @id @default(cuid(2))
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  country        String?
+  parentId       String?
+  parent         OrgEntity?   @relation("OrgEntityTree", fields: [parentId], references: [id], onDelete: SetNull)
+  children       OrgEntity[]  @relation("OrgEntityTree")
+  verifiedAt     DateTime?
+  teams          Team[]
+  jobs           Job[]
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+}
+
+/// A member given access to one job (per-job permissions, hiring managers).
+model JobAssignment {
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([jobId, userId])
+  @@index([userId])
+}
+
+enum ScorecardRecommendation {
+  strong_yes
+  yes
+  no
+  strong_no
+}
+
+/// One evaluation per reviewer and application (`hire.scorecards`).
+model Scorecard {
+  id             String                  @id @default(cuid(2))
+  applicationId  String
+  application    Application             @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  reviewerId     String
+  reviewer       User                    @relation(fields: [reviewerId], references: [id], onDelete: Cascade)
+  /// [{ name, rating 1-5, comment }]
+  ratings        Json                    @default("[]")
+  recommendation ScorecardRecommendation
+  comment        String?
+  createdAt      DateTime                @default(now())
+  updatedAt      DateTime                @updatedAt
+
+  @@unique([applicationId, reviewerId])
+}
+
+enum PoolVisibility {
+  private
+  team
+  org
+}
+
+model TalentPool {
+  id             String            @id @default(cuid(2))
+  organizationId String
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  name           String
+  description    String?
+  visibility     PoolVisibility    @default(private)
+  ownerId        String?
+  owner          User?             @relation(fields: [ownerId], references: [id], onDelete: SetNull)
+  teamId         String?
+  team           Team?             @relation(fields: [teamId], references: [id], onDelete: SetNull)
+  entries        TalentPoolEntry[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
+
+  @@index([organizationId])
+}
+
+model TalentPoolEntry {
+  poolId    String
+  pool      TalentPool    @relation(fields: [poolId], references: [id], onDelete: Cascade)
+  profileId String
+  profile   TalentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  addedById String?
+  note      String?
+  createdAt DateTime      @default(now())
+
+  @@id([poolId, profileId])
+}
+
+enum ContactRequestStatus {
+  pending
+  accepted
+  declined
+  expired
+}
+
+/// A recruiter asks a visible talent for a conversation; nothing is exchanged before consent.
+model ContactRequest {
+  id             String               @id @default(cuid(2))
+  organizationId String
+  organization   Organization         @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  requesterId    String
+  requester      User                 @relation(fields: [requesterId], references: [id], onDelete: Cascade)
+  profileId      String
+  profile        TalentProfile        @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  jobId          String?
+  job            Job?                 @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  message        String
+  status         ContactRequestStatus @default(pending)
+  expiresAt      DateTime
+  respondedAt    DateTime?
+  conversationId String?              @unique
+  conversation   Conversation?        @relation(fields: [conversationId], references: [id], onDelete: SetNull)
+  createdAt      DateTime             @default(now())
+
+  @@index([profileId, status])
+  @@index([organizationId, createdAt])
+}
+
+/// « Ne plus recevoir de demandes de {company} ».
+model ContactBlock {
+  profileId      String
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime     @default(now())
+
+  @@id([profileId, organizationId])
+}
+
+enum InterviewMode {
+  video
+  onsite
+  audio
+}
+
+enum InterviewStatus {
+  pending
+  confirmed
+  reschedule
+  declined
+  canceled
+  done
+  no_show
+}
+
+/// An interview invitation (`connect.appointments`): the recruiter proposes slots, the talent picks.
+model Interview {
+  id              String          @id @default(cuid(2))
+  organizationId  String
+  organization    Organization    @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  applicationId   String
+  application     Application     @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  organizerId     String
+  organizer       User            @relation(fields: [organizerId], references: [id], onDelete: Cascade)
+  mode            InterviewMode
+  durationMinutes Int
+  /// Proposed by the recruiter (1 to 3).
+  slots           DateTime[]
+  /// Proposed back by the talent when asking for another time.
+  proposedSlots   DateTime[]
+  startsAt        DateTime?
+  /// IANA time zone the slots were written in.
+  timezone        String
+  link            String?
+  address         String?
+  message         String?
+  /// Members of the team who take part (collaborative interviews).
+  participantIds  String[]
+  status          InterviewStatus @default(pending)
+  cancelReason    String?
+  createdAt       DateTime        @default(now())
+  updatedAt       DateTime        @updatedAt
+
+  @@index([organizationId, startsAt])
+  @@index([applicationId])
 }

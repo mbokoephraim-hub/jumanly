@@ -32,16 +32,18 @@ export function AppShell({
   const navigation = space ? hireNavigation : talentNavigation;
   const home = space ? "/app/hire" : "/app";
   const links = (placement: "sidebar" | "pill") =>
-    navigation.map(({ key, href, icon }) => (
-      <li key={key} className={placement === "pill" ? "flex flex-1" : undefined}>
-        <NavLink
-          href={href}
-          label={t(key)}
-          icon={<Icon name={icon} className="size-6" />}
-          placement={placement}
-        />
-      </li>
-    ));
+    navigation
+      .filter((item) => placement === "sidebar" || item.pill !== false)
+      .map(({ key, href, icon }) => (
+        <li key={key} className={placement === "pill" ? "flex flex-1" : undefined}>
+          <NavLink
+            href={href}
+            label={t(key)}
+            icon={<Icon name={icon} className="size-6" />}
+            placement={placement}
+          />
+        </li>
+      ));
 
   const notifications = (
     <Link

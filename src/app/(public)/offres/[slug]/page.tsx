@@ -109,7 +109,12 @@ export default async function JobPage({ params }: PageProps<"/offres/[slug]">) {
             </div>
             <h1 className="text-display">{job.title}</h1>
             <div className="flex flex-wrap items-center gap-2 text-lg">
-              <span className="font-semibold">{t("job.header.company", { company })}</span>
+              <Link
+                href={`/entreprises/${job.organization.slug}`}
+                className="font-semibold underline"
+              >
+                {t("job.header.company", { company })}
+              </Link>
               {job.organization.verifiedAt && (
                 <span title={t("job.header.verifiedHelp")}>
                   <VerifiedBadge />

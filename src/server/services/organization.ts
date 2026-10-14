@@ -65,6 +65,7 @@ const inviteSchema = z.object({
     ])
     .pipe(z.array(emailField).min(1).max(20)),
   role: z.enum(["org_admin", "recruiter", "hiring_manager", "viewer"]),
+  team: z.string().default(""),
   message: z.string().trim().max(500).default(""),
 });
 
@@ -87,6 +88,14 @@ export async function inviteMembers(
   const parsed = inviteSchema.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "invalid" };
   const { emails, role, message } = parsed.data;
+  const teamId = parsed.data.team
+    ? ((
+        await db.team.findFirst({
+          where: { id: parsed.data.team, organizationId: ctx.organizationId, kind: "team" },
+          select: { id: true },
+        })
+      )?.id ?? null)
+    : null;
   const permissions = await level(
     db,
     { type: "organization", id: ctx.organizationId },
@@ -130,6 +139,7 @@ export async function inviteMembers(
         organizationId: ctx.organizationId,
         email,
         role,
+        teamId,
         token,
         invitedById: ctx.userId,
         message: message || null,
@@ -190,11 +200,17 @@ export async function acceptInvitation(
       where: {
         userId_organizationId: { userId: user.id, organizationId: invitation.organizationId },
       },
-      update: { role: invitation.role, status: "active", invitedBy: invitation.invitedById },
+      update: {
+        role: invitation.role,
+        status: "active",
+        invitedBy: invitation.invitedById,
+        teamId: invitation.teamId,
+      },
       create: {
         userId: user.id,
         organizationId: invitation.organizationId,
         role: invitation.role,
+        teamId: invitation.teamId,
         invitedBy: invitation.invitedById,
       },
     }),
@@ -208,7 +224,10 @@ export async function listMembers(db: PrismaClient, ctx: HireContext, now = new 
     db.membership.findMany({
       where: { organizationId: ctx.organizationId, status: "active" },
       orderBy: { createdAt: "asc" },
-      include: { user: { select: { id: true, name: true, email: true } } },
+      include: {
+        user: { select: { id: true, name: true, email: true } },
+        team: { select: { id: true, name: true } },
+      },
     }),
     db.invitation.findMany({
       where: {
@@ -256,8 +275,19 @@ export async function removeMember(db: PrismaClient, ctx: HireContext, membershi
   await db.membership.update({ where: { id: membership.id }, data: { status: "removed" } });
 }
 
+export const organizationCategories = [
+  "company",
+  "consultant",
+  "ngo",
+  "public",
+  "education",
+] as const;
+
 export const organizationProfileSchema = z.object({
   name: z.string().trim().min(2).max(120),
+  legalName: z.string().trim().max(160).default(""),
+  category: z.union([z.literal(""), z.enum(organizationCategories)]).default(""),
+  contactEmail: z.union([z.literal(""), emailField]).default(""),
   description: z.string().trim().max(3000).default(""),
   website: z.union([z.literal(""), z.url().max(200)]).default(""),
   country: z.string().trim().max(2).default(""),
@@ -279,6 +309,9 @@ export async function updateOrganizationProfile(
     where: { id: ctx.organizationId },
     data: {
       name: input.name,
+      legalName: input.legalName || null,
+      category: input.category || null,
+      contactEmail: input.contactEmail || null,
       description: input.description || null,
       website: input.website || null,
       country: input.country || null,

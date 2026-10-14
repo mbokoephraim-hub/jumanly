@@ -14,6 +14,8 @@ import { disputeResolutionSchema, resolveDispute } from "@/server/matching/servi
 import { criterionKeys } from "@/server/matching/types";
 import { saveWeights, weightsInputSchema } from "@/server/services/ai-admin";
 import { recordRefund, refundSchema } from "@/server/services/billing-admin";
+import { mailOrgVerification } from "@/server/hire-emails";
+import { decideVerification, verificationDecisionSchema } from "@/server/services/verification";
 
 /** Every admin write: an administrator with write access (support agents read only), then audit. */
 async function adminWriter() {
@@ -265,4 +267,40 @@ export async function refundPaymentAction(formData: FormData) {
   await recordRefund(db, admin.id, input.data);
   refresh();
   redirect("/admin/abonnements?ok=remboursement");
+}
+
+/** Verification of an organization (E8): approved or refused with a reason, owners told by e-mail. */
+export async function decideVerificationAction(formData: FormData) {
+  const organizationId = String(formData.get("organization") ?? "").slice(0, 60);
+  const raw = {
+    decision: formData.get("decision"),
+    reason: String(formData.get("reason") ?? ""),
+  };
+  const input = verificationDecisionSchema.safeParse(raw);
+  const admin = await adminWriter();
+  if (!input.success) redirect(`/admin/organisations?erreur=motif#org-${organizationId}`);
+  const done = await decideVerification(db, admin.id, organizationId, input.data);
+  if (!done) redirect("/admin/organisations?erreur=motif");
+  const organization = await db.organization.findUniqueOrThrow({
+    where: { id: organizationId },
+    select: {
+      name: true,
+      memberships: {
+        where: { role: "org_owner", status: "active" },
+        select: { user: { select: { email: true, firstName: true } } },
+      },
+    },
+  });
+  for (const membership of organization.memberships) {
+    await mailOrgVerification(membership.user, {
+      org: organization.name,
+      verified: input.data.decision === "verify",
+      reason: input.data.reason,
+    });
+  }
+  updateTag("jobs");
+  refresh();
+  redirect(
+    `/admin/organisations?ok=${input.data.decision === "verify" ? "verifiee" : "refusee"}&org=${encodeURIComponent(organization.name)}`,
+  );
 }

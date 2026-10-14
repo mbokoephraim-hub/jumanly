@@ -22,6 +22,19 @@ export const notificationTypes = [
   "downgraded",
   "upgraded",
   "renewed",
+  "mention",
+  "contactRequest",
+  "contactAccepted",
+  "contactDeclined",
+  "interviewInvite",
+  "interviewTeam",
+  "interviewConfirmed",
+  "interviewReschedule",
+  "interviewDeclined",
+  "interviewCanceled",
+  "orgVerified",
+  "orgVerificationRejected",
+  "abnormalUsage",
 ] as const;
 export type NotificationType = (typeof notificationTypes)[number];
 

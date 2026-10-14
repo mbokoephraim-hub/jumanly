@@ -352,7 +352,7 @@ async function PrivacyTab({ user, params }: { user: CurrentUser; params: Params 
   const t = await getTranslations();
   const profile = await db.talentProfile.findUnique({
     where: { userId: user.id },
-    select: { visibility: true, matchingEnabled: true },
+    select: { visibility: true, matchingEnabled: true, acceptsContactRequests: true },
   });
   return (
     <div className="flex flex-col gap-6">
@@ -391,6 +391,19 @@ async function PrivacyTab({ user, params }: { user: CurrentUser; params: Params 
             <Link href="/comment-fonctionne-le-matching" className="text-sm underline">
               {t("settings.privacy.ai.learnMore")}
             </Link>
+          </fieldset>
+          <fieldset className="flex flex-col gap-3">
+            <legend className="mb-2 text-label">
+              {t("settings.privacy.contactRequests.legend")}
+            </legend>
+            <Checkbox
+              id="contact-requests"
+              name="contactRequests"
+              value="on"
+              defaultChecked={profile?.acceptsContactRequests ?? true}
+              label={t("settings.privacy.contactRequests.text")}
+              hint={t("settings.privacy.contactRequests.hint")}
+            />
           </fieldset>
           <Checkbox
             id="newsletter"
