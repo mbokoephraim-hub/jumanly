@@ -1339,7 +1339,7 @@
       "q3": "Comment suivre mes candidatures ?",
       "a3": "Dans votre espace, la rubrique « Mes candidatures » affiche l'étape de chaque candidature, son historique et les messages du recruteur.",
       "q4": "Que contient le forfait gratuit ?",
-      "a4": "Votre compte et votre profil professionnel, un diagnostic de carrière simplifié, la consultation des offres, les candidatures gratuites et leur suivi, un modèle de CV standard, une sélection de formations gratuites, des conseils généraux de préparation et la messagerie liée aux candidatures."
+      "a4": "Votre compte et votre profil professionnel, un diagnostic de carrière simplifié, la consultation des offres, les candidatures gratuites et leur suivi, 5 modèles de CV, une sélection de formations gratuites, des conseils généraux de préparation et la messagerie liée aux candidatures."
     },
     "learn": {
       "q1": "Les formations donnent-elles une attestation ?",
@@ -3689,7 +3689,9 @@
         "show": "Afficher sur le CV",
         "moveUp": "Monter",
         "moveDown": "Descendre",
-        "completion": "{percent} %"
+        "completion": "{percent} %",
+        "moveColumn": "Changer de colonne",
+        "customTitleHint": "Un titre courant (« Expérience », « Formation ») est mieux reconnu par les logiciels de recrutement."
       },
       "info": {
         "contact": {
@@ -3710,7 +3712,12 @@
         "current": "« {templateName} » · lisible par les logiciels de recrutement",
         "change": "Changer de modèle",
         "title": "Choisir un modèle",
-        "ats": "Lisible par les logiciels de recrutement",
+        "ats": {
+          "text": "Lisible par les logiciels de recrutement",
+          "excellent": "ATS excellente",
+          "veryGood": "ATS très bonne",
+          "good": "ATS bonne"
+        },
         "included": "Inclus",
         "locked": "Disponible avec {plan}",
         "limit": "{count, plural, one {# modèle inclus dans votre forfait} other {# modèles inclus dans votre forfait}}",
@@ -3721,18 +3728,83 @@
         "density": {
           "text": "Densité",
           "airy": "Aérée",
-          "compact": "Compacte"
+          "compact": "Compacte",
+          "standard": "Standard"
         },
         "name": {
-          "classic": "Classique",
-          "modern": "Moderne",
+          "classique": "Classique",
+          "epure": "Épuré",
+          "premierEmploi": "Premier emploi",
+          "moderne": "Moderne",
+          "colonne": "Colonne",
+          "executif": "Exécutif",
+          "bandeau": "Bandeau",
+          "contraste": "Contraste",
+          "parcours": "Parcours",
+          "academique": "Académique",
+          "creatif": "Créatif",
+          "tech": "Tech",
+          "elegant": "Élégant",
+          "visuel": "Visuel",
           "compact": "Compact"
+        },
+        "description": {
+          "classique": "Une colonne, en-tête centré, filets fins. Le plus sûr pour les logiciels de recrutement.",
+          "epure": "Titres de sections dans une marge à gauche, beaucoup de blanc, photo carrée facultative.",
+          "premierEmploi": "La formation et les projets passent avant l'expérience. Compétences en étiquettes.",
+          "moderne": "En-tête teinté avec photo ronde, colonne de droite pour les compétences et les langues.",
+          "colonne": "Barre latérale teintée à gauche avec photo, coordonnées et compétences.",
+          "executif": "Une colonne, bandeau fin en haut, encadré « Réalisations clés ».",
+          "bandeau": "Bandeau plein de couleur en haut, photo ronde cerclée de blanc, colonne de droite.",
+          "contraste": "Barre latérale foncée en texte blanc, compétences et langues en pastilles.",
+          "parcours": "Frise chronologique : dates à gauche, ligne et pastilles.",
+          "compact": "Marges réduites, en-tête sur une ligne, compétences en trois colonnes.",
+          "academique": "Sections numérotées, publications et communications en références, plusieurs pages.",
+          "creatif": "Monogramme ou photo en grand, nom très présent, colonne de cartes teintées à droite.",
+          "tech": "Compétences regroupées par domaine, projets avant l'expérience, outils sous chaque poste.",
+          "elegant": "En-tête centré avec photo ronde, titres centrés entre deux filets.",
+          "visuel": "Grande photo, jauges de compétences et pastilles de langues (niveaux aussi écrits en toutes lettres)."
+        },
+        "audience": {
+          "classique": "Tous profils, candidatures en ligne",
+          "epure": "CV sobre et aéré",
+          "premierEmploi": "Étudiants, jeunes diplômés, stages",
+          "moderne": "Tous profils",
+          "colonne": "Tous profils",
+          "executif": "Cadres, managers",
+          "bandeau": "Commerce, services",
+          "contraste": "Se démarquer à l'impression",
+          "parcours": "Parcours riches, reconversions",
+          "compact": "Longues carrières sur une page",
+          "academique": "Enseignants, chercheurs, bourses",
+          "creatif": "Communication, design",
+          "tech": "Développement, data, numérique",
+          "elegant": "Hôtellerie, juridique, profils seniors",
+          "visuel": "Montrer ses niveaux d'un coup d'œil"
+        },
+        "preview": "Aperçu avec votre contenu",
+        "previewFull": "Aperçu plein écran",
+        "previewBadge": "Aperçu",
+        "seePlans": "Voir les forfaits",
+        "lockedHint": "Inclus dans {plans}. Changer de modèle ne modifie jamais votre contenu.",
+        "neutral": "Vos CV téléchargés ne portent ni logo ni mention Jumanly.",
+        "downgraded": "Votre forfait ne comprend plus le modèle « {templateName} ». Choisissez un modèle inclus pour télécharger ce CV : votre contenu reste identique.",
+        "layout": {
+          "one": "Une colonne",
+          "two": "Deux colonnes",
+          "side": "Barre latérale"
+        },
+        "photo": {
+          "optional": "Photo facultative",
+          "none": "Sans photo"
         }
       },
       "tab": {
         "preview": "Aperçu",
         "letter": "Lettre de motivation",
-        "linkedin": "Biographie LinkedIn"
+        "linkedin": "Biographie LinkedIn",
+        "content": "Contenu",
+        "style": "Mise en forme"
       },
       "share": {
         "text": "Partager",
@@ -3753,7 +3825,9 @@
         "preparing": "Préparation du PDF…",
         "ready": "Votre CV est prêt.",
         "download": "Télécharger",
-        "error": "L'export a échoué. Réessayez dans un instant."
+        "error": "L'export a échoué. Réessayez dans un instant.",
+        "fileName": "{fileName} · {count, plural, one {# page} other {# pages}} · texte sélectionnable",
+        "docxNote": "La version Word est simplifiée sur une colonne pour rester modifiable facilement."
       },
       "tailor": {
         "text": "Adapter à une offre",
@@ -3776,6 +3850,66 @@
       "seo": "Mon CV · Jumanly",
       "updated": "Modifié le {date}",
       "open": "Ouvrir",
+      "templates": {
+        "title": "Choisir un modèle",
+        "subtitle": "Changez de mise en page quand vous voulez : votre contenu ne bouge pas.",
+        "count": "{included} modèles inclus dans votre forfait · {others} autres avec Starter ou Pro",
+        "filter": {
+          "all": "Tous ({count})",
+          "included": "Inclus dans mon forfait ({count})",
+          "photo": "Avec photo",
+          "noPhoto": "Sans photo",
+          "oneColumn": "Une colonne",
+          "twoColumns": "Deux colonnes",
+          "atsBest": "ATS excellente"
+        },
+        "sort": "Trier : {order}",
+        "sortBy": {
+          "recommended": "Recommandés",
+          "free": "Gratuits d'abord",
+          "name": "Nom"
+        }
+      },
+      "style": {
+        "color": {
+          "recommended": "Recommandées pour les logiciels de recrutement",
+          "others": "Autres couleurs",
+          "custom": "Couleur personnalisée",
+          "apply": "Appliquer",
+          "invalid": "Saisissez une couleur au format #1B365D.",
+          "contrast": "Contraste {ratio}:1",
+          "hint": "Le texte reste noir sur fond blanc. La couleur ne sert qu'aux titres, aux filets et aux décors.",
+          "tooLight": "Cette couleur est trop claire pour être lue facilement. Essayez {suggestion}."
+        },
+        "font": {
+          "recommended": "Recommandée",
+          "hint": "Toutes les polices sont intégrées au PDF."
+        },
+        "photo": {
+          "unsupported": "Ce modèle n'a pas d'emplacement photo."
+        },
+        "titlesLanguage": {
+          "text": "Langue des titres",
+          "hint": "Seuls les titres de sections changent. Votre texte n'est pas traduit.",
+          "fr": "Français",
+          "en": "English"
+        }
+      },
+      "pages": {
+        "title": "Pages",
+        "count": "{count} sur {max} au maximum",
+        "add": "Ajouter",
+        "page": "Page {number}",
+        "breakTarget": "Avant quel élément ?",
+        "breakHere": "Commencer une nouvelle page ici",
+        "breakLabel": "Saut de page avant « {sectionName} »",
+        "removeBreak": "Retirer le saut de page",
+        "fitOne": "Faire tenir sur une page",
+        "fitFailed": "Votre CV ne tient pas sur une page sans couper de texte. Masquez une section ou raccourcissez une expérience.",
+        "hint": "Les recruteurs lisent surtout la première page. Au-delà de deux pages, nous vous le signalons.",
+        "overMax": "Votre CV dépasse {max} pages. Passez en densité compacte ou masquez une section pour pouvoir le télécharger.",
+        "itemTooLong": "Cet élément est plus long qu'une page. Raccourcissez-le pour qu'il s'affiche en entier."
+      },
       "fromProfileHint": "Le contenu des sections vient de votre profil. Modifiez-le dans votre profil, puis touchez « Remplir depuis mon profil ».",
       "fromProfileDone": "CV mis à jour à partir de votre profil.",
       "limit": "Vous pouvez avoir jusqu'à {max} CV.",
@@ -4261,6 +4395,94 @@
         "share": "Partager",
         "shareCopied": "Lien copié"
       }
+    }
+  },
+  "cv": {
+    "titles": {
+      "fr": {
+        "summary": "Profil",
+        "highlights": "Réalisations clés",
+        "experience": "Expérience professionnelle",
+        "education": "Formation",
+        "skills": "Compétences",
+        "languages": "Langues",
+        "certificates": "Certifications",
+        "projects": "Projets",
+        "volunteer": "Engagement",
+        "interests": "Centres d'intérêt",
+        "publications": "Publications",
+        "talks": "Communications",
+        "teaching": "Enseignements",
+        "custom": "Autres informations"
+      },
+      "en": {
+        "summary": "Profile",
+        "highlights": "Key achievements",
+        "experience": "Work experience",
+        "education": "Education",
+        "skills": "Skills",
+        "languages": "Languages",
+        "certificates": "Certifications",
+        "projects": "Projects",
+        "volunteer": "Volunteering",
+        "interests": "Interests",
+        "publications": "Publications",
+        "talks": "Talks",
+        "teaching": "Teaching",
+        "custom": "Additional information"
+      }
+    },
+    "levels": {
+      "fr": {
+        "1": "Notions",
+        "2": "Intermédiaire",
+        "3": "Avancé",
+        "4": "Expert"
+      },
+      "en": {
+        "1": "Basic",
+        "2": "Intermediate",
+        "3": "Advanced",
+        "4": "Expert"
+      }
+    },
+    "languageLevels": {
+      "fr": {
+        "native": "Langue maternelle",
+        "fluent": "Courant",
+        "professional": "Professionnel",
+        "intermediate": "Intermédiaire",
+        "basic": "Notions"
+      },
+      "en": {
+        "native": "Native language",
+        "fluent": "Fluent",
+        "professional": "Professional",
+        "intermediate": "Intermediate",
+        "basic": "Basic"
+      }
+    },
+    "present": {
+      "fr": "aujourd'hui",
+      "en": "present"
+    },
+    "colors": {
+      "encre": "Encre",
+      "marine": "Marine",
+      "petrole": "Pétrole",
+      "foret": "Forêt",
+      "bordeaux": "Bordeaux",
+      "prune": "Prune",
+      "brun": "Brun",
+      "graphite": "Graphite",
+      "bleu": "Bleu",
+      "turquoise": "Turquoise",
+      "vert": "Vert",
+      "brique": "Brique",
+      "orange": "Orange brûlé",
+      "violet": "Violet",
+      "framboise": "Framboise",
+      "acier": "Acier"
     }
   },
   "connect": {
@@ -6183,8 +6405,9 @@
         },
         "cv": {
           "text": "Modèles de CV",
-          "one": "1 standard",
-          "several": "Plusieurs",
+          "free": "5 modèles",
+          "starter": "10 modèles",
+          "pro": "15 modèles",
           "tailored": "Tous, adaptés à chaque offre"
         },
         "documents": "Documents professionnels et préparation LinkedIn",
@@ -6577,7 +6800,6 @@
       "ai": "Assistance IA",
       "interviewText": "Simulations d'entretien textuelles",
       "interviewVoice": "Simulations d'entretien vocales",
-      "cvTemplates": "Modèles de CV",
       "talentSearch": "Recherches dans le vivier",
       "contactRequests": "Demandes de mise en relation",
       "activeJobs": "Offres actives",
@@ -7020,9 +7242,6 @@
     },
     "seats": {
       "reached": "Tous les sièges de votre formule sont occupés ({limit}). Retirez un membre ou passez à une formule supérieure pour inviter un nouveau collègue."
-    },
-    "cvTemplates": {
-      "reached": "Votre formule comprend {limit, plural, one {# modèle de CV} other {# modèles de CV}}. Passez à une formule supérieure pour en utiliser davantage."
     }
   },
   "lock": {

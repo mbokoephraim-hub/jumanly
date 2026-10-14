@@ -1,13 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { getCurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { getActiveSpace } from "@/server/hire-context";
-import { snapshotPdf } from "@/server/pdf/snapshot";
+import { exportCvCopy } from "@/features/cv/export/export";
 import { hirePermissions } from "@/server/services/hire";
+
+export const maxDuration = 30;
 
 /** The CV a candidate sent, for the recruiting team of the job's organization only. */
 export async function GET(
-  _: Request,
+  request: NextRequest,
   { params }: RouteContext<"/app/hire/candidats/[applicationId]/cv">,
 ) {
   const user = await getCurrentUser();
@@ -31,5 +33,11 @@ export async function GET(
       metadata: { applicationId },
     },
   });
-  return snapshotPdf(application.cvSnapshot, "cv-candidat.pdf");
+  return exportCvCopy(
+    "application",
+    applicationId,
+    application.cvSnapshot,
+    "cv-candidat.pdf",
+    request.nextUrl.origin,
+  );
 }

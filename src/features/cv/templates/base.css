@@ -1,0 +1,93 @@
+/* Modèles de CV · socle commun (v1). Unités d'impression : mm et pt. Page A4 fixe, une boîte par page. */
+/* Copie de docs/modeles-cv/modeles/css/cv-base.css. Seul écart : les règles du document (@page, *, html, body)
+   sont dans print.css, chargé par la seule page d'impression ; ici, la remise à zéro est limitée au CV. */
+:where(.cv,.cv *){box-sizing:border-box;margin:0;padding:0}
+.cv{
+  --cv-encre:#1A1D21; --cv-gris:#555B63; --cv-filet:#D5D9DE;
+  --cv-doux:color-mix(in srgb,var(--cv-accent) 7%,#fff); --cv-doux2:color-mix(in srgb,var(--cv-accent) 15%,#fff);
+  font-family:var(--cv-police),'Helvetica Neue',Arial,sans-serif; font-size:var(--cv-fs); line-height:1.42; color:var(--cv-encre);
+  -webkit-print-color-adjust:exact; print-color-adjust:exact; font-kerning:normal;
+}
+/* Densité : taille du texte, espace entre sections, marges de page */
+.cv.d-aeree{--cv-fs:10.25pt;--cv-esp:6.5mm;--cv-el:3.6mm;--cv-marge:17mm}
+.cv.d-standard{--cv-fs:9.6pt;--cv-esp:5.4mm;--cv-el:3mm;--cv-marge:14mm}
+.cv.d-compacte{--cv-fs:9pt;--cv-esp:4mm;--cv-el:2.2mm;--cv-marge:11mm}
+.cv-source,.cv-page-modele{display:none}
+.cv-pages{display:flex;flex-direction:column;align-items:center;gap:8mm;padding:8mm 0}
+@media print{.cv-pages{gap:0;padding:0}}
+.cv-page{width:210mm;height:297mm;background:#fff;position:relative;overflow:hidden;break-after:page;
+  display:grid;grid-template-columns:minmax(0,1fr);grid-template-rows:auto minmax(0,1fr) auto;grid-template-areas:"tete" "principal" "pied";
+  box-shadow:0 2mm 8mm rgba(20,30,40,.12)}
+@media print{.cv-page{box-shadow:none}}
+.cv-deco{position:absolute;inset:0;pointer-events:none}
+.cv-tete{grid-area:tete;position:relative}
+.cv-principal{grid-area:principal;min-height:0;overflow:hidden;padding:0 var(--cv-marge) 6mm;position:relative}
+.cv-lateral{grid-area:lateral;min-height:0;overflow:hidden;position:relative;display:none}
+.cv-pied{grid-area:pied;height:9mm;padding:0 var(--cv-marge);display:flex;align-items:center;justify-content:flex-end;font-size:7.5pt;color:var(--cv-gris)}
+.cv-page.suite .cv-principal{padding-top:var(--cv-marge)}
+.cv-tete-suite{display:none}
+/* Blocs d'identité */
+.cv-nom{font-weight:600;letter-spacing:-.02em;line-height:1.08;font-size:2.55em}
+.cv-titre{font-size:1.18em;font-weight:500;color:var(--cv-accent);margin-top:1.4mm}
+.cv-contact{list-style:none;display:flex;flex-wrap:wrap;gap:1mm 0;font-size:.92em;color:var(--cv-gris);margin-top:2.6mm}
+.cv-contact,.cv-ligne{overflow:hidden}
+.cv-contact li,.cv-ligne li{margin-left:-4.6mm;margin-right:4.6mm}
+.cv-contact li:last-child,.cv-ligne li:last-child{margin-right:0}
+.cv-contact li::before,.cv-ligne li::before{content:"·";display:inline-block;width:4.6mm;text-align:center;color:var(--cv-gris)}
+.cv-contact .lib{font-weight:600;color:var(--cv-encre)}
+.cv-photo{width:30mm;height:30mm;border-radius:50%;overflow:hidden;flex:none;background:#CDD2D8}
+.cv-photo img{width:100%;height:100%;object-fit:cover;display:block}
+/* Sections */
+.cv-sec{margin-top:var(--cv-esp)}
+.cv-principal>.cv-sec:first-child,.cv-lateral>.cv-sec:first-child{margin-top:0}
+.cv-st{font-size:.86em;font-weight:700;text-transform:uppercase;letter-spacing:.12em;color:var(--cv-accent);margin-bottom:2.4mm;break-after:avoid}
+.cv-st .num{display:none}
+.cv-el{break-inside:avoid}
+.cv-el+.cv-el{margin-top:var(--cv-el)}
+.cv-it-tete{display:flex;justify-content:space-between;align-items:baseline;gap:4mm}
+.cv-it-titre{font-size:1.06em;font-weight:600;line-height:1.3}
+.cv-it-date{font-size:.9em;color:var(--cv-gris);white-space:nowrap;flex:none}
+.cv-it-sous{color:var(--cv-accent);font-weight:500;font-size:.95em;margin-top:.4mm}
+.cv-it-texte{margin-top:1mm}
+.cv-it-outils{margin-top:.8mm;font-size:.9em;color:var(--cv-gris)}
+.cv-puces{list-style:none;margin-top:1.2mm}
+.cv-puces li{position:relative;padding-left:3.6mm}
+.cv-puces li+li{margin-top:.7mm}
+.cv-puces li::before{content:"";position:absolute;left:.4mm;top:.62em;width:1.3mm;height:1.3mm;border-radius:50%;background:var(--cv-accent)}
+.cv-texte{text-align:left}
+/* Compétences, langues, centres d'intérêt : plusieurs présentations */
+.cv-liste{list-style:none}
+.cv-ligne{list-style:none;display:flex;flex-wrap:wrap}
+.cv-ligne .niv{color:var(--cv-gris)}
+.cv-ligne .niv::before{content:" ("}.cv-ligne .niv::after{content:")"}
+.cv-liste-niveau{list-style:none;display:grid;gap:1.1mm}
+.cv-liste-niveau li{display:flex;justify-content:space-between;gap:3mm}
+.cv-liste-niveau .niv{color:var(--cv-gris);font-size:.92em;white-space:nowrap}
+.cv-chips{list-style:none;display:flex;flex-wrap:wrap;gap:1.6mm}
+.cv-chips li{padding:.8mm 2.6mm;border-radius:1.6mm;background:var(--cv-doux2);font-size:.92em;font-weight:500}
+.cv-chips .niv{display:none}
+.cv-grille{list-style:none;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:1.2mm 6mm}
+.cv-grille .niv{display:block;color:var(--cv-gris);font-size:.85em}
+.cv-barres{list-style:none;display:grid;gap:2.2mm}
+.cv-barres li{display:grid;grid-template-columns:1fr auto;row-gap:1mm}
+.cv-barres .niv{font-size:.85em;color:var(--cv-gris)}
+.cv-barres .jauge{grid-column:1/-1;height:1.5mm;border-radius:1mm;background:var(--cv-doux2);position:relative;overflow:hidden}
+.cv-barres .jauge i{position:absolute;inset:0 auto 0 0;background:var(--cv-accent);border-radius:1mm}
+.cv-points{list-style:none;display:grid;gap:1.6mm}
+.cv-points li{display:grid;grid-template-columns:1fr auto;align-items:center;column-gap:3mm}
+.cv-points .pts{display:flex;gap:1.1mm}
+.cv-points .pts b{width:2.1mm;height:2.1mm;border-radius:50%;background:var(--cv-accent)}
+.cv-points .pts b.off{background:var(--cv-doux2)}
+.cv-points .niv{grid-column:1/-1;font-size:.85em;color:var(--cv-gris)}
+.cv-groupes{display:grid;gap:2mm}
+.cv-groupes .grp{display:grid;grid-template-columns:30mm 1fr;gap:3mm;align-items:baseline}
+.cv-groupes .grp>span{font-weight:600;font-size:.92em}
+.cv-refs{list-style:none;counter-reset:ref}
+.cv-refs li{counter-increment:ref;position:relative;padding-left:8mm}
+.cv-refs li::before{content:"[" counter(ref) "]";position:absolute;left:0;color:var(--cv-accent);font-weight:600;font-size:.92em}
+.cv-encadre{background:var(--cv-doux);border-radius:2mm;padding:3.4mm 4.4mm}
+/* Accessibilité ATS : niveaux toujours écrits en toutes lettres, même quand une jauge est dessinée */
+/* Colonne secondaire étroite : le niveau et la date passent sous le libellé */
+.cv-lateral .cv-liste-niveau li{display:block}.cv-lateral .cv-liste-niveau .niv{display:block;font-size:.85em}
+.cv-lateral .cv-it-tete{display:block}.cv-lateral .cv-it-date{display:block}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}

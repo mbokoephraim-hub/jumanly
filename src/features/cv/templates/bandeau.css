@@ -1,0 +1,13 @@
+/* Modèle « Bandeau » (bandeau) · Bandeau plein de couleur en haut, photo ronde cerclée de blanc, colonne de droite. */
+.tpl-bandeau .cv-page{grid-template-columns:minmax(0,1fr) 62mm;grid-template-areas:"tete tete" "principal lateral" "pied pied"}
+.tpl-bandeau .cv-tete{background:var(--cv-accent);color:#fff;padding:12mm var(--cv-marge);margin-bottom:8mm;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"ph id" "ph co";column-gap:8mm;align-items:center}
+.tpl-bandeau .cv-photo{grid-area:ph;width:32mm;height:32mm;box-shadow:0 0 0 1.4mm #fff}
+.tpl-bandeau .cv-identite{grid-area:id;align-self:end}.tpl-bandeau .cv-contact{grid-area:co;align-self:start;color:rgba(255,255,255,.85)}
+.tpl-bandeau .cv-contact .lib{color:#fff}.tpl-bandeau .cv-contact li::before{color:rgba(255,255,255,.5)}
+.tpl-bandeau .cv-titre{color:#fff;opacity:.9}
+.tpl-bandeau .cv-lateral{display:block;padding:0 var(--cv-marge) 6mm 0}
+.tpl-bandeau .cv-principal{padding-right:8mm}
+.tpl-bandeau .cv-page.suite .cv-lateral{padding-top:var(--cv-marge)}
+.tpl-bandeau .cv-page.suite .cv-tete-suite{display:block;grid-area:tete;height:5mm;background:var(--cv-accent)}
+.tpl-bandeau .cv-lateral .cv-sec{background:var(--cv-doux);border-radius:2mm;padding:4mm}
+.tpl-bandeau .cv-chips li{background:#fff}

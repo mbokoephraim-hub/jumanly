@@ -1,0 +1,11 @@
+/* Modèle « Moderne » (moderne) · En-tête teinté avec photo ronde, colonne de droite pour les compétences et les langues. */
+.tpl-moderne .cv-page{grid-template-columns:minmax(0,1fr) 60mm;grid-template-areas:"tete tete" "principal lateral" "pied pied"}
+.tpl-moderne .cv-lateral{display:block;padding:0 var(--cv-marge) 6mm 0}
+.tpl-moderne .cv-principal{padding-right:7mm}
+.tpl-moderne .cv-page.suite .cv-lateral{padding-top:var(--cv-marge)}
+.tpl-moderne .cv-tete{background:var(--cv-doux);padding:11mm var(--cv-marge);margin-bottom:7mm;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"ph id" "ph co";column-gap:7mm;align-items:center}
+.tpl-moderne .cv-photo{grid-area:ph;width:28mm;height:28mm;box-shadow:0 0 0 1.2mm #fff}
+.tpl-moderne .cv-identite{grid-area:id;align-self:end}.tpl-moderne .cv-contact{grid-area:co;align-self:start}
+.tpl-moderne .cv-nom{color:var(--cv-accent)}
+.tpl-moderne .cv-titre{color:var(--cv-encre)}
+.tpl-moderne .cv-lateral .cv-sec{border-left:.6mm solid var(--cv-doux2);padding-left:4mm}

@@ -1,0 +1,7 @@
+/* Règles du document pour la page d'impression des CV (extraites de cv-base.css). */
+@page{size:A4;margin:0}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{background:#E6E8EB}
+@media print{html,body{background:none}}
+/* Chromium ajoute une page blanche après un saut forcé sur la dernière page. */
+.cv-pages>.cv-page:last-child{break-after:auto}

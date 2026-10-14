@@ -3,7 +3,7 @@ import { appEnv } from "@/lib/env";
 import { siteUrl } from "@/lib/seo";
 
 /** Private areas: the connected space, admin, internal pages and the sign-up and login forms. */
-const disallow = ["/app", "/admin", "/dev", "/api", "/inscription", "/connexion"];
+const disallow = ["/app", "/admin", "/dev", "/api", "/impression", "/inscription", "/connexion"];
 
 /**
  * Search engines and AI assistants that are welcome on the public pages. The "*" group already

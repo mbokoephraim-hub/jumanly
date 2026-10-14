@@ -1,10 +1,15 @@
-import { NextResponse } from "next/server";
+import { NextResponse, type NextRequest } from "next/server";
 import { getCurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { snapshotPdf } from "@/server/pdf/snapshot";
+import { exportCvCopy } from "@/features/cv/export/export";
+
+export const maxDuration = 30;
 
 /** « Voir le CV envoyé » : the copy of the CV kept with the application. */
-export async function GET(_: Request, { params }: RouteContext<"/app/jobs/candidatures/[id]/cv">) {
+export async function GET(
+  request: NextRequest,
+  { params }: RouteContext<"/app/jobs/candidatures/[id]/cv">,
+) {
   const user = await getCurrentUser();
   if (!user) return new NextResponse(null, { status: 401 });
   const { id } = await params;
@@ -12,5 +17,12 @@ export async function GET(_: Request, { params }: RouteContext<"/app/jobs/candid
     where: { id, profile: { userId: user.id } },
     select: { cvSnapshot: true },
   });
-  return snapshotPdf(application?.cvSnapshot, "cv-envoye.pdf");
+  if (!application) return new NextResponse(null, { status: 404 });
+  return exportCvCopy(
+    "application",
+    id,
+    application.cvSnapshot,
+    "cv-envoye.pdf",
+    request.nextUrl.origin,
+  );
 }

@@ -2,6 +2,39 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Modèles de CV · étape A : 5 modèles gratuits et pagination (14 octobre 2026)
+
+Spécification : `docs/modeles-cv/SPECIFICATION-MODELES-CV.md`. Décisions :
+`docs/decisions/2026-10-14-modeles-cv.md`. Captures dans `captures/modeles-cv/` (dossier du projet).
+
+- 15 modèles enregistrés (`src/features/cv/templates/registry.ts`), styles et polices de
+  `docs/modeles-cv/modeles/` repris tels quels. Accès par le droit `career.cv.templates.access`
+  (free / starter / pro), vérifié sur le serveur quand on applique un modèle et à l'export.
+- Un seul rendu (`CvDocument`) pour l'aperçu et le PDF, pagination portée en TypeScript
+  (`paginate.ts`), polices chargées avant la mesure.
+- Export PDF par Chromium, neutre : ni logo, ni couleur, ni mention Jumanly ; nom du fichier
+  `CV-Prenom-Nom.pdf`. Au-delà de 3 pages, l'export est refusé.
+- `/app/career/cv/modeles` : galerie « Choisir un modèle » (filtres, tri, aperçu avec le contenu
+  de la personne, cadenas et forfaits). Éditeur : onglets « Contenu » et « Mise en forme »
+  (16 couleurs, couleur personnalisée refusée sous 4,5:1 avec une proposition plus foncée,
+  6 polices, 3 densités, photo, langue des titres), cartes « Pages » et « Exporter mon CV ».
+- Page interne `/dev/cv/[modele]` (local et preview) pour les tests visuels.
+- Tests : unitaires (catalogue, couleurs, réglages, document neutre), en base (droits, 15 modèles
+  sans changer le contenu, couleur refusée), e2e (comparaison avec les PDF de référence, mêmes
+  pages dans l'aperçu et le PDF pour 3 jeux × 3 densités, texte du PDF complet et dans l'ordre,
+  PDF neutre, compte Free refusé même par l'API). La CI installe `poppler-utils`.
+- Textes : partie 9 de la spécification, `cv.titles|levels|languageLevels|present|colors.*`,
+  noms et descriptions des 15 modèles ; comparatif des forfaits « 5 / 10 / 15 modèles ».
+
+### Écarts restants
+
+- Les 10 modèles Starter et Pro sont déjà rendus, mais leur verrouillage complet (retour après
+  abonnement, forfait rétrogradé dans la galerie, table d'accès dans l'admin) est l'étape B.
+- Export Word : étape C. Envoi d'une photo : pas encore de stockage de fichiers.
+- Nouvelles sections (projets, certificats…) : le modèle sait les afficher, l'éditeur ne les
+  propose pas encore.
+- Question ouverte au propriétaire : champ téléphone facultatif sur le CV (par défaut : non).
+
 ## Refonte visuelle · Lot 9 : espace talent, Career (14 octobre 2026)
 
 Maquettes 03-08 à 03-15. Captures 1440 et 390 px dans `captures/refonte-lot-09/` (dossier du projet).

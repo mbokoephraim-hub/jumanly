@@ -654,6 +654,7 @@ export async function tailorCv(
       kind: "cv",
       title: input.title(job.title).slice(0, 120),
       templateId: source.templateId,
+      style: source.style ?? undefined,
       content: json(tailored),
     },
   });

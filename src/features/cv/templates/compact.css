@@ -1,0 +1,9 @@
+/* Modèle « Compact » (compact) · Marges réduites, en-tête sur une ligne, compétences en trois colonnes. */
+.tpl-compact .cv-tete{padding:var(--cv-marge) var(--cv-marge) 3.5mm;border-bottom:1.4pt solid var(--cv-accent);margin:0 var(--cv-marge) 4.5mm;padding-left:0;padding-right:0}
+.tpl-compact .cv-identite{display:flex;align-items:baseline;gap:4mm;flex-wrap:wrap}
+.tpl-compact .cv-nom{font-size:2.1em}
+.tpl-compact .cv-titre{margin:0;font-size:1.1em}
+.tpl-compact .cv-contact{margin-top:1.6mm}
+.tpl-compact .cv-st{font-size:.82em;margin-bottom:1.6mm;padding-bottom:.8mm;border-bottom:.5pt solid var(--cv-filet)}
+.tpl-compact .cv-it-sous{display:inline}
+.tpl-compact .cv-puces{margin-top:.8mm}

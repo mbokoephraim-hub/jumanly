@@ -1,0 +1,13 @@
+/* Modèle « Colonne » (colonne) · Barre latérale teintée à gauche avec photo, coordonnées et compétences. */
+.tpl-colonne .cv-page{grid-template-columns:66mm minmax(0,1fr);grid-template-areas:"lateral tete" "lateral principal" "lateral pied"}
+.tpl-colonne .cv-lateral{display:block;background:var(--cv-doux);padding:var(--cv-marge) 7mm 8mm}
+.tpl-colonne .cv-tete{padding:var(--cv-marge) var(--cv-marge) 7mm 9mm}
+.tpl-colonne .cv-principal{padding-left:9mm}
+.tpl-colonne .cv-lat-tete{display:flex;flex-direction:column;gap:5mm;margin-bottom:var(--cv-esp)}
+.tpl-colonne .cv-photo{width:34mm;height:34mm}
+.tpl-colonne .cv-contact{flex-direction:column;margin:0;gap:1.6mm;color:var(--cv-encre)}
+.tpl-colonne .cv-contact li::before{display:none}.tpl-colonne .cv-contact li{margin:0}
+.tpl-colonne .cv-contact .lib{display:block;font-size:.85em;color:var(--cv-accent);text-transform:uppercase;letter-spacing:.08em}
+.tpl-colonne .cv-lateral .cv-liste-niveau li{display:block}
+.tpl-colonne .cv-lateral .cv-liste-niveau .niv{display:block}
+.tpl-colonne .cv-liste li+li{margin-top:1mm}

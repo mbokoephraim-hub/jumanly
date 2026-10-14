@@ -621,7 +621,7 @@ Une institution (banque, université, fondation, entreprise, agence de coopérat
 | `jobs.track` | ✓ | ✓ | ✓ | ✓ |
 | `connect.messaging.application` | ✓ | ✓ | ✓ | ✓ |
 | `career.diagnostic.level` | `simple` | `personalized` | `personalized` | `personalized` |
-| `career.cv.templates.max` | 1 | 5 P | -1 | -1 |
+| `career.cv.templates.access` (modèles de CV inclus, voir `docs/modeles-cv/`) | `free` | `starter` | `pro` | `pro` |
 | `career.cv.tailor` (adapter le CV à une offre) | — | — | ✓ | ✓ |
 | `career.documents` (lettres, bio, correction) | — | ✓ | ✓ | ✓ |
 | `career.linkedin` | — | ✓ | ✓ | ✓ |

@@ -1,0 +1,15 @@
+/* Modèle « Épuré » (epure) · Titres de sections dans une marge à gauche, beaucoup de blanc, photo carrée facultative. */
+.tpl-epure .cv-tete{padding:var(--cv-marge) var(--cv-marge) 7mm;display:grid;grid-template-columns:1fr auto;grid-template-areas:"id ph" "co ph";column-gap:8mm}
+.tpl-epure .cv-identite{grid-area:id}.tpl-epure .cv-contact{grid-area:co;align-self:start}
+.tpl-epure .cv-photo{grid-area:ph;border-radius:2mm;width:27mm;height:31mm}
+.tpl-epure .cv-nom{font-weight:300;font-size:2.8em;letter-spacing:-.03em}
+.tpl-epure .cv-nom .nom{font-weight:600}
+.tpl-epure .cv-titre{color:var(--cv-gris);font-weight:400}
+.tpl-epure .cv-sec{display:grid;grid-template-columns:34mm minmax(0,1fr);column-gap:6mm}
+.tpl-epure .cv-st{grid-column:1;grid-row:1/span 30;font-size:.8em;color:var(--cv-accent);padding-top:.5mm;margin:0}
+.tpl-epure .cv-el{grid-column:2}
+.tpl-epure .cv-el+.cv-el{margin-top:var(--cv-el)}
+.tpl-epure .cv-sec{padding-top:var(--cv-esp);margin-top:0;border-top:.5pt solid var(--cv-filet)}
+.tpl-epure .cv-principal>.cv-sec:first-child{padding-top:4mm}
+.tpl-epure .cv-liste-niveau{grid-template-columns:1fr 1fr;column-gap:8mm}
+.tpl-epure .cv-it-sous{color:var(--cv-gris)}
