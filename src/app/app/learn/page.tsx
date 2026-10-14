@@ -28,6 +28,7 @@ import {
   savedCourseIds,
 } from "@/server/services/learn";
 import { planForCatalogLevel } from "@/server/services/plans";
+import { TabRail } from "@/components/motion/tab-rail";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("learn");
@@ -162,37 +163,36 @@ export default async function LearnPage({ searchParams }: PageProps<"/app/learn"
       />
 
       <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
-        <nav
-          aria-label={t("learn.catalog.tabs")}
-          className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0"
-        >
-          <ul className="flex gap-5 border-b border-brume">
-            {(Object.keys(lists) as List[]).map((key) => (
-              <li key={key}>
+        <nav aria-label={t("learn.catalog.tabs")} className="max-w-full min-w-0">
+          <TabRail name="learn-listes">
+            <ul className="flex w-max gap-5 px-3">
+              {(Object.keys(lists) as List[]).map((key) => (
+                <li key={key}>
+                  <Link
+                    href={tabHref(key)}
+                    aria-current={list === key ? "page" : undefined}
+                    className={cx(
+                      "-mb-px inline-flex h-11 items-center border-b-2 text-[15px] whitespace-nowrap",
+                      list === key
+                        ? "border-sapin font-semibold"
+                        : "border-transparent text-ardoise hover:text-sapin",
+                    )}
+                  >
+                    {t(`learn.catalog.tab.${lists[key]}`)}
+                  </Link>
+                </li>
+              ))}
+              <li>
                 <Link
-                  href={tabHref(key)}
-                  aria-current={list === key ? "page" : undefined}
-                  className={cx(
-                    "-mb-px inline-flex h-11 items-center border-b-2 text-[15px] whitespace-nowrap",
-                    list === key
-                      ? "border-sapin font-semibold"
-                      : "border-transparent text-ardoise hover:text-sapin",
-                  )}
+                  href="/app/learn/attestations"
+                  className="-mb-px inline-flex h-11 items-center gap-1.5 border-b-2 border-transparent text-[15px] whitespace-nowrap text-ardoise hover:text-sapin"
                 >
-                  {t(`learn.catalog.tab.${lists[key]}`)}
+                  <Icon name="certificat" className="size-4" />
+                  {t("learn.catalog.certificatesLink")}
                 </Link>
               </li>
-            ))}
-            <li>
-              <Link
-                href="/app/learn/attestations"
-                className="-mb-px inline-flex h-11 items-center gap-1.5 border-b-2 border-transparent text-[15px] whitespace-nowrap text-ardoise hover:text-sapin"
-              >
-                <Icon name="certificat" className="size-4" />
-                {t("learn.catalog.certificatesLink")}
-              </Link>
-            </li>
-          </ul>
+            </ul>
+          </TabRail>
         </nav>
         {list === "toutes" && (
           <form action="/app/learn" method="get" role="search" className="w-full lg:w-[440px]">
@@ -209,31 +209,30 @@ export default async function LearnPage({ searchParams }: PageProps<"/app/learn"
       </div>
 
       {list === "toutes" && themes.length > 0 && (
-        <nav
-          aria-label={t("learn.catalog.filter.theme")}
-          className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0"
-        >
-          <ul className="flex gap-2 sm:flex-wrap">
-            <li>
-              <Link
-                href={withParams("/app/learn", { ...current, theme: undefined })}
-                className={chip(!filters.theme)}
-              >
-                {t("learn.catalog.tab.all")}
-              </Link>
-            </li>
-            {themes.filter(Boolean).map((theme) => (
-              <li key={theme}>
+        <nav aria-label={t("learn.catalog.filter.theme")}>
+          <TabRail name="learn-themes">
+            <ul className="flex w-max gap-2">
+              <li>
                 <Link
-                  href={withParams("/app/learn", { ...current, theme })}
-                  aria-current={filters.theme === theme ? "true" : undefined}
-                  className={chip(filters.theme === theme)}
+                  href={withParams("/app/learn", { ...current, theme: undefined })}
+                  className={chip(!filters.theme)}
                 >
-                  {theme}
+                  {t("learn.catalog.tab.all")}
                 </Link>
               </li>
-            ))}
-          </ul>
+              {themes.filter(Boolean).map((theme) => (
+                <li key={theme}>
+                  <Link
+                    href={withParams("/app/learn", { ...current, theme })}
+                    aria-current={filters.theme === theme ? "true" : undefined}
+                    className={chip(filters.theme === theme)}
+                  >
+                    {theme}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </TabRail>
         </nav>
       )}
 

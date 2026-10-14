@@ -31,6 +31,7 @@ import {
   SLOTS_MAX,
 } from "@/server/services/interviews";
 import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.interviews");
@@ -64,7 +65,7 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
   if (!enabled) {
     return (
       <div className="flex flex-col gap-6">
-        <h1 className="text-h1">{t("hire.interviews.title")}</h1>
+        <AppPageHeader title={t("hire.interviews.title")} />
         <PlanLock
           plan={orgPlanFor(plans, "connect.appointments")}
           description={t("hire.interviews.locked", {
@@ -281,14 +282,17 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-h1">{t("hire.interviews.title")}</h1>
-        {manage && !candidature && (
-          <ButtonLink href="/app/hire/entretiens?candidature=nouveau#planifier" size="sm">
-            {t("hire.interviews.new")}
-          </ButtonLink>
-        )}
-      </header>
+      <AppPageHeader
+        title={t("hire.interviews.title")}
+        actions={
+          manage &&
+          !candidature && (
+            <ButtonLink href="/app/hire/entretiens?candidature=nouveau#planifier" size="sm">
+              {t("hire.interviews.new")}
+            </ButtonLink>
+          )
+        }
+      />
       {ok && <Alert tone="success" title={ok} />}
       {error && <Alert tone="error" title={error} />}
       <nav aria-label={t("hire.interviews.title")} className="flex gap-4">

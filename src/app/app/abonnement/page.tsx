@@ -9,6 +9,7 @@ import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
 import { ownedOrganization } from "@/server/services/accounts";
 import { myLicenses } from "@/server/services/partners";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("billing.seo");
@@ -29,11 +30,15 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/abon
   const activated = licenses.find((license) => license.id === params.licence);
   return (
     <div className="flex flex-col gap-8">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-h1">{t("billing.title")}</h1>
-        <p className="text-ardoise">{t("billing.subtitle")}</p>
-        <p className="text-sm font-medium text-feuille-fonce">{t("billing.applyFree")}</p>
-      </header>
+      <AppPageHeader
+        title={t("billing.title")}
+        subtitle={
+          <>
+            <p>{t("billing.subtitle")}</p>
+            <p className="font-semibold">{t("billing.applyFree")}</p>
+          </>
+        }
+      />
       {activated &&
         (activated.pending ? (
           <Alert tone="info" title={t("activate.pending.title")}>

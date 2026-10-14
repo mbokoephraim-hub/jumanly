@@ -19,6 +19,7 @@ import {
   type ContractFilter,
   type RemoteFilter,
 } from "@/server/services/jobs";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talent.jobs");
@@ -58,10 +59,10 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <p className="text-eyebrow text-ardoise">{t("talent.jobs.search.eyebrow")}</p>
-        <h1 className="text-h1">{t("talent.jobs.search.title", { count: result.total })}</h1>
-      </header>
+      <AppPageHeader
+        eyebrow={t("talent.jobs.search.eyebrow")}
+        title={t("talent.jobs.search.title", { count: result.total })}
+      />
       <div className="grid gap-6 lg:grid-cols-[minmax(0,1fr)_280px]">
         <div className="flex flex-col gap-5">
           <form

@@ -7,6 +7,7 @@ import { JobStatusBadge } from "@/components/hire/job-status";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { getOrgJob, HireError } from "@/server/services/hire";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.jobForm");
@@ -32,10 +33,10 @@ export default async function EditJobPage({
       <Link href="/app/hire/offres" className="text-sm underline">
         {t("jobs.title")}
       </Link>
-      <div className="flex flex-wrap items-center gap-3">
-        <h1 className="text-h1">{t("jobForm.title.edit")}</h1>
-        <JobStatusBadge status={job.status} />
-      </div>
+      <AppPageHeader
+        title={t("jobForm.title.edit")}
+        actions={<JobStatusBadge status={job.status} />}
+      />
       <JobForm
         job={job}
         params={{

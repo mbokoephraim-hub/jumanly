@@ -170,3 +170,13 @@ export async function scheduleDeletion(formData: FormData) {
   await db.session.deleteMany({ where: { userId: user.id } });
   redirect("/connexion?suppression=1");
 }
+
+/** « Réduire les animations » (docs/experience-animee § 0.4): kept on the account. */
+export async function updateDisplay(formData: FormData) {
+  const user = await requireUser("/app/parametres");
+  await db.user.update({
+    where: { id: user.id },
+    data: { reduceMotion: formData.get("reduceMotion") === "on" },
+  });
+  back("compte", { ok: "1" });
+}

@@ -9,6 +9,7 @@ import { requireHire } from "@/server/hire-context";
 import { hirePermissions } from "@/server/services/hire";
 import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
 import { listPools, poolsEnabled, poolVisibilities } from "@/server/services/talent-search";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.pools");
@@ -30,7 +31,7 @@ export default async function PoolsPage({ searchParams }: PageProps<"/app/hire/v
   if (!enabled) {
     return (
       <div className="flex flex-col gap-6">
-        <h1 className="text-h1">{t("hire.pools.title")}</h1>
+        <AppPageHeader title={t("hire.pools.title")} />
         <PlanLock
           plan={orgPlanFor(plans, "hire.shortlist")}
           description={t("hire.pools.subtitle")}
@@ -45,10 +46,7 @@ export default async function PoolsPage({ searchParams }: PageProps<"/app/hire/v
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-h1">{t("hire.pools.title")}</h1>
-        <p className="text-ardoise">{t("hire.pools.subtitle")}</p>
-      </header>
+      <AppPageHeader title={t("hire.pools.title")} subtitle={t("hire.pools.subtitle")} />
       {query.ok === "supprime" && <Alert tone="success" title={t("hire.pools.deleted")} />}
       {erreur === "invalid" && <Alert tone="error" title={t("hire.pools.invalid")} />}
       {erreur === "forbidden" && <Alert tone="error" title={t("hire.pools.error.forbidden")} />}

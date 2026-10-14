@@ -3,14 +3,14 @@ import { cx } from "@/lib/cx";
 const placements = {
   // 92 px Sapin bar (mockup 00-04): icon above its label, active item on Lime.
   sidebar: {
-    base: "flex w-16 flex-col items-center gap-[5px] rounded-[18px] pt-[9px] pb-[7px] text-center text-[10px] leading-3 font-medium [&_svg]:size-[22px]",
-    on: "bg-lime text-sapin",
+    base: "jm-nav-link flex w-16 flex-col items-center gap-[5px] rounded-[18px] pt-[9px] pb-[7px] text-center text-[10px] leading-3 font-medium [&_svg]:size-[22px]",
+    on: "jm-nav-active jm-ring bg-lime text-sapin",
     off: "text-blanc/65 hover:bg-blanc/10 hover:text-blanc",
   },
   // Floating mobile pill: icons only, the active item widens and shows its label.
   pill: {
     base: "flex h-12 items-center justify-center rounded-pill [&_svg]:size-[22px]",
-    on: "gap-[7px] bg-lime px-4 text-xs font-semibold text-sapin",
+    on: "jm-nav-active gap-[7px] bg-lime px-4 text-xs font-semibold text-sapin",
     off: "w-[46px] text-blanc/70 hover:text-blanc",
   },
   // White public header: Lime underline under the current page.

@@ -56,6 +56,8 @@ Conventions :
 | `common.learnMore` | En savoir plus |
 | `common.back` | Retour |
 | `common.close` | Fermer |
+| `common.rail.previous` | Onglets précédents |
+| `common.rail.next` | Onglets suivants |
 | `common.cancel` | Annuler |
 | `common.confirm` | Confirmer |
 | `common.save` | Enregistrer |
@@ -3872,6 +3874,9 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `settings.account.memberships.leave.text` | Quitter l'organisation |
 | `settings.account.memberships.leave.confirm` | Quitter {org} ? Vous perdrez l'accès à son espace Hire. Votre compte personnel n'est pas touché. |
 | `settings.account.memberships.empty` | Vous n'êtes membre d'aucune organisation. |
+| `settings.display.title` | Affichage |
+| `settings.display.reduceMotion.text` | Réduire les animations |
+| `settings.display.reduceMotion.hint` | Les pages s'affichent sans mouvement : mêmes informations, sans apparitions ni effets de lumière. Votre appareil peut aussi le demander pour tous les sites. |
 
 #### Sécurité
 

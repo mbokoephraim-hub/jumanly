@@ -12,6 +12,7 @@ import {
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { CV_TEXT_MAX, parseImport } from "@/server/services/cv-import";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talent.profile");
@@ -43,10 +44,10 @@ export default async function CvImportPage({ searchParams }: PageProps<"/app/pro
       <Link href="/app/profil" className="text-sm underline">
         {t("talent.profile.title")}
       </Link>
-      <header className="flex flex-col gap-2">
-        <h1 className="text-h1">{t("talent.profile.importCv.text")}</h1>
-        <p className="text-ardoise">{t("talent.profile.importCv.hint")}</p>
-      </header>
+      <AppPageHeader
+        title={t("talent.profile.importCv.text")}
+        subtitle={t("talent.profile.importCv.hint")}
+      />
 
       {!pending || !extraction ? (
         <form action={readCvAction} className="flex flex-col gap-4 rounded-card bg-blanc p-6">

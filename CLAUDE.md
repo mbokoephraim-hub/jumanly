@@ -66,6 +66,7 @@ pnpm typecheck      # tsc --noEmit
 pnpm test           # Vitest (règles sans base)
 pnpm test:db        # Vitest, règles en base (droits, abonnements)
 pnpm test:e2e       # Playwright
+pnpm test:e2e:reduced # Playwright, animations réduites (prefers-reduced-motion)
 pnpm build          # build de production
 pnpm db:migrate     # prisma migrate dev
 pnpm db:deploy      # applique les migrations (CI, production)

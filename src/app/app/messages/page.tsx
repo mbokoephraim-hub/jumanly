@@ -8,6 +8,7 @@ import { connectViewer } from "@/server/hire-context";
 import { ContactRequests } from "@/components/connect/contact-requests";
 import { listConversations } from "@/server/services/connect";
 import { talentContactRequests } from "@/server/services/talent-search";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("connect");
@@ -44,10 +45,7 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <p className="text-eyebrow text-ardoise">{t("eyebrow", { count: unread.length })}</p>
-        <h1 className="text-h1">{t("list.title")}</h1>
-      </header>
+      <AppPageHeader eyebrow={t("eyebrow", { count: unread.length })} title={t("list.title")} />
       <nav aria-label={t("list.title")} className="flex flex-wrap gap-2">
         {filters.map((item) => {
           const active = item.id === filter;

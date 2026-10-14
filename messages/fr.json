@@ -17,6 +17,10 @@
     "learnMore": "En savoir plus",
     "back": "Retour",
     "close": "Fermer",
+    "rail": {
+      "previous": "Onglets précédents",
+      "next": "Onglets suivants"
+    },
     "cancel": "Annuler",
     "confirm": "Confirmer",
     "save": "Enregistrer",
@@ -4717,6 +4721,13 @@
           "confirm": "Quitter {org} ? Vous perdrez l'accès à son espace Hire. Votre compte personnel n'est pas touché."
         },
         "empty": "Vous n'êtes membre d'aucune organisation."
+      }
+    },
+    "display": {
+      "title": "Affichage",
+      "reduceMotion": {
+        "text": "Réduire les animations",
+        "hint": "Les pages s'affichent sans mouvement : mêmes informations, sans apparitions ni effets de lumière. Votre appareil peut aussi le demander pour tous les sites."
       }
     },
     "security": {

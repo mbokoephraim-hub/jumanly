@@ -50,6 +50,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       }
       spaces={[...hire, ...partners].map(option)}
       unread={unread}
+      reduceMotion={user.reduceMotion}
       account={{
         name: user.name,
         planName: plan?.planName ?? "",

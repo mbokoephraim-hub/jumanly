@@ -14,6 +14,7 @@ import { connectViewer } from "@/server/hire-context";
 import { ConnectError, getConversation, markRead, MESSAGE_MAX } from "@/server/services/connect";
 import { hirePermissions } from "@/server/services/hire";
 import { interviewsForConversation } from "@/server/services/interviews";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("connect");
@@ -139,21 +140,17 @@ export default async function ThreadPage({
       <Link href="/app/messages" className="text-sm underline">
         {t("thread.back")}
       </Link>
-      <header className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-h1">{otherName}</h1>
-          {!conversation.application && jobTitle && (
-            <p className="text-ardoise">{tc("job", { jobTitle })}</p>
-          )}
-          {conversation.application && (
-            <p className="text-ardoise">
-              {[jobTitle, t("side.stage", { stage: conversation.application.stage.name })].join(
+      <AppPageHeader
+        title={otherName}
+        subtitle={
+          conversation.application
+            ? [jobTitle, t("side.stage", { stage: conversation.application.stage.name })].join(
                 " · ",
-              )}
-            </p>
-          )}
-        </div>
-        {conversation.application &&
+              )
+            : jobTitle && tc("job", { jobTitle })
+        }
+        actions={
+          conversation.application &&
           (fromOrganization ? (
             <Link
               href={`/app/hire/candidats/${conversation.application.id}`}
@@ -165,8 +162,9 @@ export default async function ThreadPage({
             <Link href="/app/jobs/candidatures" className="text-sm font-medium underline">
               {t("side.viewApplication")}
             </Link>
-          ))}
-      </header>
+          ))
+        }
+      />
 
       {fromOrganization && contact && (
         <Link

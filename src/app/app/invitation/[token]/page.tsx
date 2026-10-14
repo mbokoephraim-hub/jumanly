@@ -5,6 +5,7 @@ import { acceptInvitationAction } from "@/server/actions/organization";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { findInvitation } from "@/server/services/organization";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("org.invite");
@@ -49,9 +50,10 @@ export default async function InvitationPage({
         </>
       ) : (
         <>
-          <h1 className="text-h1">
-            {t("invite.accept.title", { org: invitation.organization.name })}
-          </h1>
+          <AppPageHeader
+            module="hire"
+            title={t("invite.accept.title", { org: invitation.organization.name })}
+          />
           <p>
             {t("invite.accept.body", {
               inviterName: inviter?.name ?? "",

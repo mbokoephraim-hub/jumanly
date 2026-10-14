@@ -12,6 +12,7 @@ import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { hirePermissions } from "@/server/services/hire";
 import { getPool, poolsEnabled } from "@/server/services/talent-search";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.pools");
@@ -46,17 +47,21 @@ export default async function PoolPage({
       <Link href="/app/hire/viviers" className="text-sm underline">
         {t("hire.pools.back")}
       </Link>
-      <header className="flex flex-col gap-1">
-        <h1 className="text-h1">{pool.name}</h1>
-        {pool.description && <p>{pool.description}</p>}
-        <p className="text-sm text-ardoise">
-          {[
-            t("hire.pools.count", { count: pool.entries.length }),
-            t(`hire.pools.visibility.${pool.visibility}`),
-            t("hire.pools.owner", { memberName: pool.owner?.name ?? "—" }),
-          ].join(" · ")}
-        </p>
-      </header>
+      <AppPageHeader
+        title={pool.name}
+        subtitle={
+          <>
+            {pool.description && <p>{pool.description}</p>}
+            <p>
+              {[
+                t("hire.pools.count", { count: pool.entries.length }),
+                t(`hire.pools.visibility.${pool.visibility}`),
+                t("hire.pools.owner", { memberName: pool.owner?.name ?? "—" }),
+              ].join(" · ")}
+            </p>
+          </>
+        }
+      />
       {ok && <Alert tone="success" title={ok} />}
       {erreur === "invalid" && <Alert tone="error" title={t("hire.pools.invalid")} />}
       {erreur === "forbidden" && <Alert tone="error" title={t("hire.pools.error.forbidden")} />}
