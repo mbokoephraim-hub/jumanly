@@ -3,17 +3,19 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import { AiOrb } from "@/components/brand/ai-orb";
+import { Icon, type IconName } from "@/components/brand/icon";
+import { AppPageHeader } from "@/components/app/page-header";
 import {
-  Alert,
-  Badge,
-  Button,
-  ButtonLink,
-  Card,
-  Checkbox,
-  RadioGroup,
-  TextArea,
-  TextField,
-} from "@/components/ui";
+  AiBrand,
+  AiPanel,
+  card,
+  cardTitle,
+  CareerTabs,
+  IconTile,
+  pillClass,
+} from "@/components/career/kit";
+import { Alert, Checkbox, TextArea, TextField } from "@/components/ui";
+import { cx } from "@/lib/cx";
 import { dynamic } from "@/i18n/dynamic";
 import { formatDate } from "@/lib/dates";
 import { aiReadiness } from "@/server/ai";
@@ -67,94 +69,202 @@ export default async function DiagnosticPage({
   const tAi = await getTranslations("ai");
 
   if (current && result) {
+    const levels = ["low", "medium", "high"] as const;
+    const reached = levels.indexOf(result.readiness);
+    const roleIcons: IconName[] = ["statistiques", "competence", "portefeuille"];
+    const strengths =
+      personal && personal.strengthTexts.length > 0
+        ? personal.strengthTexts
+        : result.strengths.length === 0
+          ? [t("rule.strength.none")]
+          : result.strengths.map((key) => t(`rule.strength.${key}`));
     return (
-      <div className="flex flex-col gap-6">
-        <header className="flex flex-col gap-2">
-          <Badge tone="career">{personal ? t("badge.personalized") : t("badge.simple")}</Badge>
-          <h1 className="text-h1">{t("result.title")}</h1>
-          <p className="text-ardoise">{t("result.date", { date: current.createdAt })}</p>
-        </header>
+      <>
+        <AppPageHeader eyebrow={t("eyebrow")} title={t("result.title")} />
+        <CareerTabs active="diagnostic" />
+        <p className="flex flex-wrap items-center gap-3 text-[13px] text-ardoise">
+          <span
+            className={cx(
+              "flex items-center gap-1.5 rounded-pill px-3 py-1.5 text-xs font-semibold",
+              personal ? "bg-sapin text-neon" : "bg-gris-clair text-sapin",
+            )}
+          >
+            <Icon name="intelligence" className="size-3.5" />
+            {personal ? t("badge.personalized") : t("badge.simple")}
+          </span>
+          {[
+            t("result.date", { date: current.createdAt }),
+            t("result.questions", {
+              count: personal ? DIAGNOSTIC_QUESTIONS_PERSONALIZED : DIAGNOSTIC_QUESTIONS,
+            }),
+          ].join(" · ")}
+        </p>
         {params.ia === "unavailable" && <Alert tone="error" title={tAi("card.error")} />}
         {params.ia === "quota" && <Alert tone="warning" title={tAi("credits.reached.title")} />}
         {params.ia === "consent" && <Alert title={tAi("consent.declined.state")} />}
-        {personal && personal.summary && (
-          <Card tone="intelligence">
-            <p className="flex items-center gap-2 text-label">
-              <AiOrb />
-              {tAi("brand")}
-            </p>
-            <p className="mt-2 whitespace-pre-line">{personal.summary}</p>
-          </Card>
-        )}
-        <Card tone="career">
-          <p className="text-label">{t("result.readiness.text")}</p>
-          <p className="mt-1 text-h2">{t(`result.readiness.${result.readiness}`)}</p>
-        </Card>
-        <div className="grid gap-4 md:grid-cols-2">
-          <Card>
-            <h2 className="text-h2">{t("result.strengths")}</h2>
-            {result.skills.length > 0 && (
-              <p className="mt-3">
-                {t("result.namedSkills", { skills: result.skills.join(", ") })}
-              </p>
-            )}
-            <ul className="mt-3 flex list-disc flex-col gap-2 pl-5">
-              {personal && personal.strengthTexts.length > 0 ? (
-                personal.strengthTexts.map((text) => <li key={text}>{text}</li>)
-              ) : result.strengths.length === 0 ? (
-                <li>{t("rule.strength.none")}</li>
-              ) : (
-                result.strengths.map((key) => <li key={key}>{t(`rule.strength.${key}`)}</li>)
-              )}
-            </ul>
-          </Card>
-          <Card>
-            <h2 className="text-h2">{t("result.priorities")}</h2>
-            <ol className="mt-3 flex list-decimal flex-col gap-2 pl-5">
-              {result.priorities.map((key) => (
-                <li key={key}>{t(`rule.priority.${key}`)}</li>
-              ))}
-            </ol>
-          </Card>
-        </div>
-        <Card>
-          <h2 className="text-h2">{t("result.roles")}</h2>
-          <p className="mt-3">
-            {result.roles.length > 0 ? result.roles.join(", ") : t("result.rolesEmpty")}
-          </p>
-        </Card>
-        <Card>
-          <h2 className="text-h2">{t("result.nextSteps")}</h2>
-          <ol className="mt-3 flex list-decimal flex-col gap-3 pl-5">
-            {result.steps.map((step) => (
-              <li key={step}>
-                <span className="flex flex-wrap items-center justify-between gap-3">
-                  <span>{t(`rule.step.${step}`)}</span>
-                  <ButtonLink href={stepLinks[step]} variant="secondary" size="sm">
-                    {t("rule.step.cta")}
-                  </ButtonLink>
+
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
+          <div className="flex min-w-0 flex-col gap-5">
+            <section aria-labelledby="readiness" className={cx(card, "flex flex-col gap-4")}>
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <h2 id="readiness" className={cardTitle}>
+                  {t("result.readiness.text")}
+                </h2>
+                <span className="rounded-pill bg-lime-clair px-2.5 py-1 text-xs font-semibold">
+                  {t(`result.readiness.${result.readiness}`)}
                 </span>
-              </li>
-            ))}
-          </ol>
-        </Card>
-        <p className="text-sm text-ardoise">
-          {personal ? t("result.personalized.note") : t("result.simple.note")}
-        </p>
-        <div className="flex flex-wrap gap-3">
-          <ButtonLink href="/app/career/plan">{t("result.createPlan")}</ButtonLink>
-          <ButtonLink href="/app/career/diagnostic#questions" variant="secondary">
-            {t("restart")}
-          </ButtonLink>
+              </div>
+              <ol className="grid grid-cols-3 gap-2">
+                {levels.map((code, index) => (
+                  <li key={code} className="flex flex-col gap-2">
+                    <span
+                      aria-hidden
+                      className={cx(
+                        "h-2 rounded-pill",
+                        index < reached
+                          ? "bg-lime"
+                          : index === reached
+                            ? "bg-feuille"
+                            : "bg-gris-clair",
+                      )}
+                    />
+                    <span
+                      aria-current={index === reached ? "step" : undefined}
+                      className={cx(
+                        "text-xs",
+                        index === reached ? "font-semibold" : "text-ardoise",
+                      )}
+                    >
+                      {t(`result.readiness.${code}`)}
+                    </span>
+                  </li>
+                ))}
+              </ol>
+            </section>
+
+            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+              <section aria-labelledby="strengths" className={cx(card, "flex flex-col gap-4")}>
+                <h2 id="strengths" className={cardTitle}>
+                  {t("result.strengths")}
+                </h2>
+                {result.skills.length > 0 && (
+                  <p className="text-sm">
+                    {t("result.namedSkills", { skills: result.skills.join(", ") })}
+                  </p>
+                )}
+                <ul className="flex flex-col gap-3">
+                  {strengths.map((text) => (
+                    <li key={text} className="flex gap-3 text-[15px] leading-6">
+                      <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-lime-clair text-feuille">
+                        <Icon name="check" className="size-3" />
+                      </span>
+                      {text}
+                    </li>
+                  ))}
+                </ul>
+              </section>
+              <section aria-labelledby="priorities" className={cx(card, "flex flex-col gap-4")}>
+                <h2 id="priorities" className={cardTitle}>
+                  {t("result.priorities")}
+                </h2>
+                <ol className="flex flex-col gap-3">
+                  {result.priorities.map((key) => (
+                    <li key={key} className="flex gap-3 text-[15px] leading-6 font-semibold">
+                      <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-lime text-sapin">
+                        <Icon name="objectif" className="size-3.5" />
+                      </span>
+                      {t(`rule.priority.${key}`)}
+                    </li>
+                  ))}
+                </ol>
+              </section>
+            </div>
+
+            <section aria-labelledby="roles" className={cx(card, "flex flex-col gap-4")}>
+              <h2 id="roles" className={cardTitle}>
+                {t("result.roles")}
+              </h2>
+              {result.roles.length === 0 ? (
+                <p className="text-sm text-ardoise">{t("result.rolesEmpty")}</p>
+              ) : (
+                <ul className="grid grid-cols-1 gap-3 md:grid-cols-3">
+                  {result.roles.map((role, index) => (
+                    <li key={role} className="flex flex-col gap-2 rounded-[18px] bg-creme p-4">
+                      <IconTile
+                        icon={roleIcons[index % roleIcons.length]!}
+                        tone="bg-blanc"
+                        size="sm"
+                      />
+                      <p className="mt-1 text-[15px] font-semibold">{role}</p>
+                      <Link
+                        href={`/app/jobs?q=${encodeURIComponent(role)}`}
+                        className="flex items-center gap-1 text-[13px] font-semibold text-up-texte hover:underline"
+                      >
+                        {t("result.exploreJobs")}
+                        <Icon name="chev-r" className="size-3.5" />
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </section>
+
+            <section aria-labelledby="next-steps" className={cx(card, "flex flex-col gap-4")}>
+              <h2 id="next-steps" className={cardTitle}>
+                {t("result.nextSteps")}
+              </h2>
+              <ol className="flex flex-col gap-3">
+                {result.steps.map((step, index) => (
+                  <li key={step} className="flex flex-wrap items-center gap-3">
+                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-sapin text-sm font-semibold text-lime">
+                      {index + 1}
+                    </span>
+                    <span className="min-w-0 flex-1 text-[15px]">{t(`rule.step.${step}`)}</span>
+                    <Link
+                      href={stepLinks[step]}
+                      className="text-[13px] font-semibold text-up-texte hover:underline"
+                    >
+                      {t("rule.step.cta")}
+                    </Link>
+                  </li>
+                ))}
+              </ol>
+              <Link href="/app/career/plan" className={pillClass("dark", "md", "mt-2 self-start")}>
+                {t("result.createPlan")}
+                <Icon name="chev-r" className="size-4" />
+              </Link>
+            </section>
+          </div>
+
+          <aside className="flex flex-col gap-5">
+            <AiPanel>
+              <AiBrand />
+              {personal && personal.summary && (
+                <p className="text-sm leading-6 whitespace-pre-line">{personal.summary}</p>
+              )}
+              <p className="text-[13px] leading-5 text-blanc/85">
+                {personal ? t("result.personalized.note") : t("result.simple.note")}
+              </p>
+            </AiPanel>
+            <section className={cx(card, "flex flex-col gap-3")}>
+              <Link href="/app/career/diagnostic#questions" className={pillClass("outline")}>
+                {t("restart")}
+              </Link>
+            </section>
+            <History history={history} currentId={current.id} />
+            <p className="flex gap-2 text-xs leading-[17px] text-ardoise">
+              <Icon name="lock" className="mt-px size-4 shrink-0" />
+              {t("privacy")}
+            </p>
+          </aside>
         </div>
-        <History history={history} currentId={current.id} />
-      </div>
+      </>
     );
   }
 
   const tProfile = await getTranslations("talent.profile.education.level");
   const choice = (id: ChoiceQuestion) => (
-    <RadioGroup
+    <Choices
       legend={t(`q.${id}.text`)}
       name={id}
       required
@@ -168,7 +278,7 @@ export default async function DiagnosticPage({
     situation: choice("situation"),
     experience: choice("experience"),
     education: (
-      <RadioGroup
+      <Choices
         legend={t("q.education")}
         name="education"
         required
@@ -197,7 +307,7 @@ export default async function DiagnosticPage({
       />
     ),
     confidence: (
-      <RadioGroup
+      <Choices
         legend={t("q.confidence.text")}
         name="confidence"
         required
@@ -234,8 +344,8 @@ export default async function DiagnosticPage({
       )?.name ?? null);
   const total = withAi ? DIAGNOSTIC_QUESTIONS_PERSONALIZED : DIAGNOSTIC_QUESTIONS;
   const extra = (
-    <section aria-labelledby="part-more" className="flex flex-col gap-5 rounded-card bg-blanc p-6">
-      <h2 id="part-more" className="flex items-center gap-2 text-h2">
+    <section aria-labelledby="part-more" className={cx(card, "flex flex-col gap-5")}>
+      <h2 id="part-more" className={cx(cardTitle, "flex items-center gap-2")}>
         <AiOrb />
         {t("section", {
           current: diagnosticParts.length + 1,
@@ -263,7 +373,7 @@ export default async function DiagnosticPage({
           />
         ))}
       </fieldset>
-      <RadioGroup
+      <Choices
         legend={t("q.workStyle.text")}
         name="workStyle"
         required
@@ -281,13 +391,21 @@ export default async function DiagnosticPage({
   );
 
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-2">
-        <Badge tone="career">{withAi ? t("badge.personalized") : t("badge.simple")}</Badge>
-        <h1 className="text-h1">{t("title")}</h1>
-        <p className="text-ardoise">{withAi ? t("intro.personalized") : t("intro.simple")}</p>
-        <p className="text-sm text-ardoise">{t("privacy")}</p>
-      </header>
+    <>
+      <AppPageHeader eyebrow={t("eyebrow")} title={t("title")} />
+      <CareerTabs active="diagnostic" />
+      <p className="flex flex-wrap items-center gap-3 text-[13px] text-ardoise">
+        <span
+          className={cx(
+            "flex items-center gap-1.5 rounded-pill px-3 py-1.5 text-xs font-semibold",
+            withAi ? "bg-sapin text-neon" : "bg-gris-clair text-sapin",
+          )}
+        >
+          <Icon name="intelligence" className="size-3.5" />
+          {withAi ? t("badge.personalized") : t("badge.simple")}
+        </span>
+        {withAi ? t("intro.personalized") : t("intro.simple")}
+      </p>
       {upsellPlan && <Alert title={t("upsell", { plan: upsellPlan })} />}
       {personalized && readiness === "consent" && (
         <Alert title={tAi("consent.declined.state")}>
@@ -300,38 +418,103 @@ export default async function DiagnosticPage({
         <Alert tone="warning" title={tAi("credits.reached.title")} />
       )}
       {params.erreur && <Alert tone="error" title={t("error")} />}
-      <form id="questions" action={submitDiagnostic} className="flex scroll-mt-24 flex-col gap-6">
-        {diagnosticParts.map((part, index) => (
-          <section
-            key={part.id}
-            aria-labelledby={`part-${part.id}`}
-            className="flex flex-col gap-5 rounded-card bg-blanc p-6"
+      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
+        <form
+          id="questions"
+          action={submitDiagnostic}
+          className="flex min-w-0 scroll-mt-24 flex-col gap-5"
+        >
+          {diagnosticParts.map((part, index) => (
+            <section
+              key={part.id}
+              aria-labelledby={`part-${part.id}`}
+              className={cx(card, "flex flex-col gap-6")}
+            >
+              <h2 id={`part-${part.id}`} className="flex flex-col gap-1">
+                <span className="text-xs font-semibold text-up-texte">
+                  {t("section", {
+                    current: index + 1,
+                    total: diagnosticParts.length,
+                    name: t(`part.${part.id}`),
+                  })}
+                </span>
+              </h2>
+              {part.questions.map((id) => (
+                <div key={id}>{questions[id]}</div>
+              ))}
+            </section>
+          ))}
+          {withAi && (
+            <>
+              <input type="hidden" name="personalized" value="1" />
+              {extra}
+            </>
+          )}
+          <div className="flex flex-wrap items-center gap-4">
+            <button type="submit" className={pillClass("dark")}>
+              {t("finish")}
+              <Icon name="chev-r" className="size-4" />
+            </button>
+            <p className="text-sm text-ardoise">{t("progress", { current: total, total })}</p>
+          </div>
+        </form>
+        <aside className="flex flex-col gap-5 self-start xl:sticky xl:top-6">
+          <AiPanel>
+            <AiBrand />
+            <p className="text-sm leading-6">
+              {withAi ? t("intro.personalized") : t("intro.simple")}
+            </p>
+          </AiPanel>
+          <History history={history} />
+          <p className="flex gap-2 text-xs leading-[17px] text-ardoise">
+            <Icon name="check" className="mt-px size-4 shrink-0 text-feuille" />
+            {t("saved")}
+          </p>
+          <p className="flex gap-2 text-xs leading-[17px] text-ardoise">
+            <Icon name="lock" className="mt-px size-4 shrink-0" />
+            {t("privacy")}
+          </p>
+        </aside>
+      </div>
+    </>
+  );
+}
+
+/** One question with its answers as option cards (a radio button in each). */
+function Choices({
+  legend,
+  name,
+  options,
+  required = false,
+}: {
+  legend: string;
+  name: string;
+  options: { value: string; label: string }[];
+  required?: boolean;
+}) {
+  return (
+    <fieldset className="flex flex-col gap-2.5">
+      <legend className="mb-3 text-[17px] leading-snug font-semibold">{legend}</legend>
+      <div className="grid gap-2.5 sm:grid-cols-2">
+        {options.map((option) => (
+          <label
+            key={option.value}
+            htmlFor={`${name}-${option.value}`}
+            className="flex min-h-12 cursor-pointer items-center gap-3 rounded-[14px] border border-brume bg-blanc px-4 py-2.5 text-sm hover:bg-creme has-checked:border-sapin has-checked:bg-lime-clair"
           >
-            <h2 id={`part-${part.id}`} className="text-h2">
-              {t("section", {
-                current: index + 1,
-                total: diagnosticParts.length,
-                name: t(`part.${part.id}`),
-              })}
-            </h2>
-            {part.questions.map((id) => (
-              <div key={id}>{questions[id]}</div>
-            ))}
-          </section>
+            <input
+              id={`${name}-${option.value}`}
+              type="radio"
+              name={name}
+              value={option.value}
+              required={required}
+              className="size-5 shrink-0 accent-sapin"
+            />
+            {option.label}
+          </label>
         ))}
-        {withAi && (
-          <>
-            <input type="hidden" name="personalized" value="1" />
-            {extra}
-          </>
-        )}
-        <p className="text-sm text-ardoise">{t("progress", { current: total, total })}</p>
-        <div>
-          <Button type="submit">{t("finish")}</Button>
-        </div>
-      </form>
-      <History history={history} />
-    </div>
+      </div>
+    </fieldset>
   );
 }
 
@@ -339,23 +522,34 @@ async function History({
   history,
   currentId,
 }: {
-  history: { id: string; createdAt: Date }[];
+  history: { id: string; createdAt: Date; level: string }[];
   currentId?: string;
 }) {
   const t = await getTranslations("career.diagnostic");
   const others = history.filter((item) => item.id !== currentId);
   if (others.length === 0) return null;
   return (
-    <section aria-labelledby="history" className="flex flex-col gap-3">
-      <h2 id="history" className="text-h2">
+    <section aria-labelledby="history" className={cx(card, "flex flex-col gap-2")}>
+      <h2 id="history" className={cardTitle}>
         {t("result.history")}
       </h2>
-      <ul className="flex flex-col gap-2">
+      <ul className="flex flex-col divide-y divide-brume">
         {others.map((item) => (
-          <li key={item.id}>
-            <Link href={`/app/career/diagnostic?bilan=${item.id}`} className="underline">
+          <li key={item.id} className="flex items-center justify-between gap-3 py-3">
+            <Link
+              href={`/app/career/diagnostic?bilan=${item.id}`}
+              className="text-sm underline-offset-4 hover:underline"
+            >
               {formatDate(item.createdAt)}
             </Link>
+            <span
+              className={cx(
+                "rounded-pill px-2.5 py-1 text-[11px] font-semibold",
+                item.level === "personalized" ? "bg-menthe-claire" : "bg-gris-clair",
+              )}
+            >
+              {item.level === "personalized" ? t("badge.personalized") : t("badge.simple")}
+            </span>
           </li>
         ))}
       </ul>

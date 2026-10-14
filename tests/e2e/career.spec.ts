@@ -30,8 +30,10 @@ test("simulation d'entretien écrite, de la préparation au retour", async ({ pa
   await expectAccessible(page);
   await page.getByRole("button", { name: "Terminer la séance" }).click();
   await expect(page.getByRole("heading", { name: "Votre retour" })).toBeVisible();
-  await expect(page.getByText("Structure des réponses")).toBeVisible();
-  await expect(page.getByText(/il ne prédit pas le résultat d'un vrai entretien/)).toBeVisible();
+  await expect(page.locator("#retour").getByText("Structure des réponses")).toBeVisible();
+  await expect(
+    page.locator("#retour").getByText(/il ne prédit pas le résultat d'un vrai entretien/),
+  ).toBeVisible();
   await expect(page.locator("#retour")).not.toContainText("%");
   await expectAccessible(page);
 });

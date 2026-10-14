@@ -2505,6 +2505,32 @@ Conventions :
 | `career.home.tips.desc` | Des fiches pratiques pour préparer chaque étape d'un recrutement. |
 | `career.home.lock` | Disponible avec {plan} |
 | `career.home.quota` | {used}/{quota} ce mois |
+| `career.nav.home` | Accueil Career |
+| `career.nav.label` | Rubriques Career |
+| `career.home.stats.cv` | Score du CV |
+| `career.home.stats.cvUnit` | /100 |
+| `career.home.stats.plan` | Plan |
+| `career.home.stats.planUnit` | étapes |
+| `career.home.stats.interviews` | Simulations |
+| `career.home.stats.interviewsUnit` | ce mois |
+| `career.home.stats.ratio` | {value}/{max} |
+| `career.home.stats.none` | — |
+| `career.home.open` | Ouvrir |
+| `career.home.diagnostic.none` | Pas encore de diagnostic |
+| `career.home.cv.none` | Pas encore de CV |
+| `career.home.documents.count` | {count, plural, =0 {Aucun document} one {# document} other {# documents}} |
+| `career.home.linkedin.last` | Propositions du {date, date, medium} |
+| `career.home.linkedin.none` | Aucune proposition pour l'instant |
+| `career.home.interviews.cta` | S'entraîner |
+| `career.home.plan.steps` | {done}/{total} étapes |
+| `career.home.plan.none` | Pas encore de plan |
+| `career.home.portfolio.count` | {count, plural, =0 {Aucun projet} one {# projet} other {# projets}} |
+| `career.home.portfolio.public` | page publique |
+| `career.home.ai.title` | Entraînez-vous à l'oral avant votre entretien avec {organization} |
+| `career.home.ai.body` | Une simulation vous fait répondre aux questions les plus fréquentes, puis vous donne un retour détaillé. |
+| `career.home.ai.why` | Votre entretien a lieu le {date, date, long}. |
+| `career.home.ai.left` | {count, plural, =0 {Vous avez utilisé vos simulations orales ce mois.} one {Il vous reste # simulation orale ce mois.} other {Il vous reste # simulations orales ce mois.}} |
+| `career.home.ai.start` | Démarrer la simulation |
 
 #### Conseils généraux (Free, contenu statique)
 
@@ -2528,6 +2554,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `career.diagnostic.title` | Diagnostic de carrière |
+| `career.diagnostic.eyebrow` | Career · Diagnostic de carrière |
 | `career.diagnostic.intro.simple` | 12 questions, environ 8 minutes. Vous recevez un bilan et des premières pistes. |
 | `career.diagnostic.intro.personalized` | 20 questions, environ 15 minutes. Jumanly Intelligence analyse vos réponses et votre profil pour un bilan personnalisé. |
 | `career.diagnostic.badge.simple` | Diagnostic simplifié |
@@ -2649,6 +2676,8 @@ Conventions :
 |---|---|
 | `career.diagnostic.result.title` | Votre bilan de carrière |
 | `career.diagnostic.result.date` | Établi le {date, date, long} |
+| `career.diagnostic.result.questions` | {count} questions |
+| `career.diagnostic.result.exploreJobs` | Voir les offres |
 | `career.diagnostic.result.strengths` | Vos atouts |
 | `career.diagnostic.result.priorities` | Vos priorités |
 | `career.diagnostic.result.readiness.text` | Votre niveau de préparation |
@@ -2807,6 +2836,11 @@ Conventions :
 | `career.documents.locked.title` | Disponible avec {plan} |
 | `career.documents.locked.body` | La création et la correction de documents professionnels sont incluses à partir de {plan}. |
 | `career.documents.new` | Nouveau document |
+| `career.documents.mine` | Mes documents |
+| `career.documents.badge` | Proposition IA |
+| `career.documents.edit.cta` | Modifier |
+| `career.documents.aiNotice` | Ce contenu a été proposé par l'IA à partir de vos informations. Il peut contenir des erreurs : relisez-le avant de l'utiliser. |
+| `career.documents.pick` | Choisissez un document à gauche, ou créez-en un avec l'IA. |
 | `career.documents.type.letter` | Lettre de motivation |
 | `career.documents.type.bio` | Biographie professionnelle |
 | `career.documents.type.email` | E-mail de candidature |
@@ -2888,6 +2922,7 @@ Conventions :
 | `career.linkedin.locked` | Disponible avec {plan} |
 | `career.linkedin.headline.text` | Titre |
 | `career.linkedin.headline.hint` | 220 caractères maximum sur LinkedIn. |
+| `career.linkedin.headline.count` | {count}/{max} |
 | `career.linkedin.about` | Résumé (section « Infos ») |
 | `career.linkedin.skills` | Compétences à mettre en avant |
 | `career.linkedin.experience` | Descriptions d'expériences |
@@ -2971,11 +3006,18 @@ Conventions :
 | `career.interviews.feedback.betterAnswer` | Piste de réponse |
 | `career.interviews.feedback.disclaimer` | Retour généré par l'IA. Il vous aide à progresser, il ne prédit pas le résultat d'un vrai entretien. |
 | `career.interviews.feedback.again` | Refaire une simulation |
+| `career.interviews.feedback.latest` | Dernière séance · {type} · {date, date, medium} |
+| `career.interviews.feedback.none` | Votre retour apparaîtra ici après votre première séance : impression générale, critères, points forts et pistes de progrès. |
 | `career.interviews.history.title` | Séances précédentes |
 | `career.interviews.history.empty` | Votre première simulation apparaîtra ici. |
 | `career.interviews.history.item` | {type} · {date, date, medium} · {mode} |
 | `career.interviews.history.inProgress` | En cours |
 | `career.interviews.history.open` | Ouvrir la séance |
+| `career.interviews.history.session` | Séance |
+| `career.interviews.history.date` | Date |
+| `career.interviews.history.mode` | Mode |
+| `career.interviews.history.feedback` | Votre retour |
+| `career.interviews.history.completed` | Terminée |
 | `career.interviews.setup.job.none` | Aucune offre : je saisis le poste |
 | `career.interviews.setup.job.placeholder` | Ex. : Chargé de clientèle |
 | `career.interviews.setup.questions` | {count} questions environ |
@@ -3098,6 +3140,8 @@ Conventions :
 | `career.plan.report.value.none` | Aucun |
 | `career.plan.encouragement` | Une étape à la fois. Vous avez déjà fait {done} {done, plural, one {étape} other {étapes}}. |
 | `career.plan.saved` | Plan mis à jour. |
+| `career.plan.steps` | Étapes |
+| `career.plan.updated` | Mis à jour le {date, date, long} |
 
 ### `/app/career/portfolio` · Portfolio
 
@@ -3134,6 +3178,9 @@ Conventions :
 | `career.portfolio.limit` | Vous avez atteint {max} projets. Supprimez-en un pour en ajouter un autre. |
 | `career.portfolio.error` | Vérifiez les informations du projet : les liens commencent par https://. |
 | `career.portfolio.projects` | Projets |
+| `career.portfolio.count` | {count, plural, =0 {Aucun projet} one {# projet} other {# projets}} |
+| `career.portfolio.publicBadge` | Page publique |
+| `career.portfolio.privateBadge` | Page privée |
 | `career.portfolio.settings` | Présentation |
 | `career.portfolio.saveSettings` | Enregistrer la présentation |
 | `career.portfolio.layoutOption.classic` | Classique |
