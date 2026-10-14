@@ -1,0 +1,12 @@
+/* Modèle « Exécutif » (executif) · Réalisations clés mises en avant dans un encadré, titres de sections soulignés jusqu'au bord. */
+.tpl-executif .cv-deco{border-top:4mm solid var(--cv-accent)}
+.tpl-executif .cv-tete{padding:calc(var(--cv-marge) + 3mm) var(--cv-marge) 6mm;display:grid;grid-template-columns:1fr auto;column-gap:8mm;align-items:end}
+.tpl-executif .cv-contact{flex-direction:column;align-items:flex-end;margin:0;gap:.8mm}
+.tpl-executif .cv-contact li::before{display:none}.tpl-executif .cv-contact li{margin:0}
+.tpl-executif .cv-nom{font-size:2.7em}
+.tpl-executif .cv-titre{text-transform:uppercase;letter-spacing:.1em;font-size:.95em;font-weight:600}
+.tpl-executif .cv-st{display:flex;align-items:center;gap:3mm}
+.tpl-executif .cv-st::after{content:"";flex:1;height:.6pt;background:var(--cv-filet)}
+.tpl-executif .sec-points_forts .cv-el{background:var(--cv-doux);border-left:1mm solid var(--cv-accent);padding:3.4mm 4.4mm}
+.tpl-executif .sec-points_forts .cv-puces li{font-weight:500}
+.tpl-executif .cv-page.suite .cv-deco{border-top-width:1.5mm}

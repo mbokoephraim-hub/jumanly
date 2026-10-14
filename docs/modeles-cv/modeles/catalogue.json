@@ -1,0 +1,830 @@
+{
+  "version": "1.0",
+  "date": "2026-10-14",
+  "regle": "Les modèles ne portent aucun logo, aucune couleur et aucune mention Jumanly.",
+  "couleurs": [
+    {
+      "code": "encre",
+      "nom": "Encre",
+      "hex": "#1F2933",
+      "recommandeeAts": true,
+      "contrasteSurBlanc": 14.76
+    },
+    {
+      "code": "marine",
+      "nom": "Marine",
+      "hex": "#1B365D",
+      "recommandeeAts": true,
+      "contrasteSurBlanc": 12.12
+    },
+    {
+      "code": "petrole",
+      "nom": "Pétrole",
+      "hex": "#0B4F5C",
+      "recommandeeAts": true,
+      "contrasteSurBlanc": 9.18
+    },
+    {
+      "code": "foret",
+      "nom": "Forêt",
+      "hex": "#24503A",
+      "recommandeeAts": true,
+      "contrasteSurBlanc": 9.2
+    },
+    {
+      "code": "bordeaux",
+      "nom": "Bordeaux",
+      "hex": "#6B1E2E",
+      "recommandeeAts": true,
+      "contrasteSurBlanc": 11.35
+    },
+    {
+      "code": "prune",
+      "nom": "Prune",
+      "hex": "#4A2545",
+      "recommandeeAts": true,
+      "contrasteSurBlanc": 12.79
+    },
+    {
+      "code": "brun",
+      "nom": "Brun",
+      "hex": "#5A3A22",
+      "recommandeeAts": true,
+      "contrasteSurBlanc": 10.18
+    },
+    {
+      "code": "graphite",
+      "nom": "Graphite",
+      "hex": "#3D434A",
+      "recommandeeAts": true,
+      "contrasteSurBlanc": 10.0
+    },
+    {
+      "code": "bleu",
+      "nom": "Bleu",
+      "hex": "#1D5FBF",
+      "recommandeeAts": false,
+      "contrasteSurBlanc": 6.1
+    },
+    {
+      "code": "turquoise",
+      "nom": "Turquoise",
+      "hex": "#0E7C86",
+      "recommandeeAts": false,
+      "contrasteSurBlanc": 4.95
+    },
+    {
+      "code": "vert",
+      "nom": "Vert",
+      "hex": "#2E7D32",
+      "recommandeeAts": false,
+      "contrasteSurBlanc": 5.13
+    },
+    {
+      "code": "brique",
+      "nom": "Brique",
+      "hex": "#B23A2B",
+      "recommandeeAts": false,
+      "contrasteSurBlanc": 5.94
+    },
+    {
+      "code": "orange",
+      "nom": "Orange brûlé",
+      "hex": "#B4530A",
+      "recommandeeAts": false,
+      "contrasteSurBlanc": 5.02
+    },
+    {
+      "code": "violet",
+      "nom": "Violet",
+      "hex": "#6D3FB3",
+      "recommandeeAts": false,
+      "contrasteSurBlanc": 6.97
+    },
+    {
+      "code": "framboise",
+      "nom": "Framboise",
+      "hex": "#B0285F",
+      "recommandeeAts": false,
+      "contrasteSurBlanc": 6.34
+    },
+    {
+      "code": "acier",
+      "nom": "Acier",
+      "hex": "#4F6D8A",
+      "recommandeeAts": false,
+      "contrasteSurBlanc": 5.4
+    }
+  ],
+  "polices": [
+    {
+      "code": "sora",
+      "nom": "Sora",
+      "famille": "Sora",
+      "recommandee": true,
+      "style": "sans"
+    },
+    {
+      "code": "inter",
+      "nom": "Inter",
+      "famille": "Inter",
+      "recommandee": false,
+      "style": "sans"
+    },
+    {
+      "code": "source-sans",
+      "nom": "Source Sans 3",
+      "famille": "Source Sans 3",
+      "recommandee": false,
+      "style": "sans"
+    },
+    {
+      "code": "lato",
+      "nom": "Lato",
+      "famille": "Lato",
+      "recommandee": false,
+      "style": "sans"
+    },
+    {
+      "code": "merriweather",
+      "nom": "Merriweather",
+      "famille": "Merriweather",
+      "recommandee": false,
+      "style": "serif"
+    },
+    {
+      "code": "lora",
+      "nom": "Lora",
+      "famille": "Lora",
+      "recommandee": false,
+      "style": "serif"
+    }
+  ],
+  "densites": {
+    "aeree": {
+      "taillePt": 10.25,
+      "marges": "17 mm"
+    },
+    "standard": {
+      "taillePt": 9.6,
+      "marges": "14 mm"
+    },
+    "compacte": {
+      "taillePt": 9,
+      "marges": "11 mm"
+    }
+  },
+  "pages": {
+    "min": 1,
+    "max": 3,
+    "alerteAuDela": 2
+  },
+  "acces": {
+    "free": "Tous les forfaits (Free inclus)",
+    "starter": "Starter, Pro, Premium",
+    "pro": "Pro, Premium"
+  },
+  "modeles": [
+    {
+      "ordre": 1,
+      "id": "classique",
+      "nom": "Classique",
+      "acces": "free",
+      "gratuit": true,
+      "grille": "une",
+      "photo": "sans",
+      "couleurParDefaut": "encre",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "excellente",
+      "pagesConseillees": "1 à 2",
+      "public": "Tous profils, candidatures en ligne",
+      "description": "Une colonne, en-tête centré, filets fins. Le plus sûr pour les logiciels de recrutement.",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "formation",
+        "competences",
+        "langues",
+        "certificats",
+        "projets",
+        "engagement",
+        "interets"
+      ],
+      "colonneSecondaire": [],
+      "enTete": [
+        "identite",
+        "contact"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "ligne",
+        "langues": "ligne",
+        "interets": "ligne"
+      },
+      "css": "css/modele-classique.css",
+      "apercu": "apercus/01-classique.png"
+    },
+    {
+      "ordre": 2,
+      "id": "epure",
+      "nom": "Épuré",
+      "acces": "free",
+      "gratuit": true,
+      "grille": "une",
+      "photo": "option",
+      "couleurParDefaut": "graphite",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "excellente",
+      "pagesConseillees": "1 à 2",
+      "public": "Profils qui veulent un CV sobre et aéré",
+      "description": "Titres de sections dans une marge à gauche, beaucoup de blanc, photo carrée facultative.",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "formation",
+        "competences",
+        "langues",
+        "projets",
+        "certificats",
+        "engagement",
+        "interets"
+      ],
+      "colonneSecondaire": [],
+      "enTete": [
+        "identite",
+        "contact",
+        "photo"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "liste-niveau",
+        "langues": "ligne",
+        "interets": "ligne"
+      },
+      "css": "css/modele-epure.css",
+      "apercu": "apercus/02-epure.png"
+    },
+    {
+      "ordre": 3,
+      "id": "premier-emploi",
+      "nom": "Premier emploi",
+      "acces": "free",
+      "gratuit": true,
+      "grille": "une",
+      "photo": "option",
+      "couleurParDefaut": "petrole",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "excellente",
+      "pagesConseillees": "1",
+      "public": "Étudiants, jeunes diplômés, stages",
+      "description": "La formation et les projets passent avant l'expérience. Compétences en étiquettes.",
+      "ordreSections": [
+        "profil",
+        "formation",
+        "projets",
+        "experience",
+        "competences",
+        "langues",
+        "certificats",
+        "engagement",
+        "interets"
+      ],
+      "colonneSecondaire": [],
+      "enTete": [
+        "photo",
+        "identite",
+        "contact"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "chips",
+        "langues": "ligne",
+        "interets": "ligne"
+      },
+      "css": "css/modele-premier-emploi.css",
+      "apercu": "apercus/03-premier-emploi.png"
+    },
+    {
+      "ordre": 4,
+      "id": "moderne",
+      "nom": "Moderne",
+      "acces": "free",
+      "gratuit": true,
+      "grille": "deux-d",
+      "photo": "option",
+      "couleurParDefaut": "bleu",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "tres-bonne",
+      "pagesConseillees": "1 à 2",
+      "public": "Tous profils",
+      "description": "En-tête teinté avec photo ronde, colonne de droite pour les compétences et les langues.",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "formation",
+        "projets",
+        "engagement",
+        "competences",
+        "langues",
+        "certificats",
+        "interets"
+      ],
+      "colonneSecondaire": [
+        "competences",
+        "langues",
+        "certificats",
+        "interets"
+      ],
+      "enTete": [
+        "photo",
+        "identite",
+        "contact"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "liste-niveau",
+        "langues": "liste-niveau",
+        "interets": "chips"
+      },
+      "css": "css/modele-moderne.css",
+      "apercu": "apercus/04-moderne.png"
+    },
+    {
+      "ordre": 5,
+      "id": "colonne",
+      "nom": "Colonne",
+      "acces": "free",
+      "gratuit": true,
+      "grille": "lat-g",
+      "photo": "option",
+      "couleurParDefaut": "foret",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "tres-bonne",
+      "pagesConseillees": "1 à 2",
+      "public": "Tous profils",
+      "description": "Barre latérale teintée à gauche avec photo, coordonnées et compétences.",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "formation",
+        "projets",
+        "certificats",
+        "engagement",
+        "competences",
+        "langues",
+        "interets"
+      ],
+      "colonneSecondaire": [
+        "competences",
+        "langues",
+        "interets"
+      ],
+      "enTete": [
+        "identite"
+      ],
+      "enTeteLaterale": [
+        "photo",
+        "contact"
+      ],
+      "presentations": {
+        "competences": "liste-niveau",
+        "langues": "liste-niveau",
+        "interets": "liste"
+      },
+      "css": "css/modele-colonne.css",
+      "apercu": "apercus/05-colonne.png"
+    },
+    {
+      "ordre": 6,
+      "id": "executif",
+      "nom": "Exécutif",
+      "acces": "starter",
+      "gratuit": false,
+      "grille": "une",
+      "photo": "sans",
+      "couleurParDefaut": "bordeaux",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "excellente",
+      "pagesConseillees": "2",
+      "public": "Cadres, managers, profils expérimentés",
+      "description": "Réalisations clés mises en avant dans un encadré, titres de sections soulignés jusqu'au bord.",
+      "ordreSections": [
+        "profil",
+        "points_forts",
+        "experience",
+        "formation",
+        "competences",
+        "langues",
+        "certificats",
+        "engagement",
+        "interets"
+      ],
+      "colonneSecondaire": [],
+      "enTete": [
+        "identite",
+        "contact"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "grille",
+        "langues": "ligne",
+        "interets": "ligne"
+      },
+      "css": "css/modele-executif.css",
+      "apercu": "apercus/06-executif.png"
+    },
+    {
+      "ordre": 7,
+      "id": "bandeau",
+      "nom": "Bandeau",
+      "acces": "starter",
+      "gratuit": false,
+      "grille": "deux-d",
+      "photo": "option",
+      "couleurParDefaut": "marine",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "tres-bonne",
+      "pagesConseillees": "1 à 2",
+      "public": "Tous profils, secteurs commerciaux et services",
+      "description": "Bandeau plein de couleur en haut, photo ronde cerclée de blanc, colonne de droite.",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "formation",
+        "projets",
+        "engagement",
+        "competences",
+        "langues",
+        "certificats",
+        "interets"
+      ],
+      "colonneSecondaire": [
+        "competences",
+        "langues",
+        "certificats",
+        "interets"
+      ],
+      "enTete": [
+        "photo",
+        "identite",
+        "contact"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "liste-niveau",
+        "langues": "liste-niveau",
+        "interets": "chips"
+      },
+      "css": "css/modele-bandeau.css",
+      "apercu": "apercus/07-bandeau.png"
+    },
+    {
+      "ordre": 8,
+      "id": "contraste",
+      "nom": "Contraste",
+      "acces": "starter",
+      "gratuit": false,
+      "grille": "lat-g",
+      "photo": "option",
+      "couleurParDefaut": "petrole",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "bonne",
+      "pagesConseillees": "1 à 2",
+      "public": "Profils qui veulent se démarquer à l'impression",
+      "description": "Barre latérale foncée en texte blanc, compétences et langues en pastilles.",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "formation",
+        "projets",
+        "certificats",
+        "engagement",
+        "competences",
+        "langues",
+        "interets"
+      ],
+      "colonneSecondaire": [
+        "competences",
+        "langues",
+        "interets"
+      ],
+      "enTete": [
+        "identite"
+      ],
+      "enTeteLaterale": [
+        "photo",
+        "contact"
+      ],
+      "presentations": {
+        "competences": "points",
+        "langues": "points",
+        "interets": "liste"
+      },
+      "css": "css/modele-contraste.css",
+      "apercu": "apercus/08-contraste.png"
+    },
+    {
+      "ordre": 9,
+      "id": "parcours",
+      "nom": "Parcours",
+      "acces": "starter",
+      "gratuit": false,
+      "grille": "une",
+      "photo": "option",
+      "couleurParDefaut": "turquoise",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "tres-bonne",
+      "pagesConseillees": "1 à 2",
+      "public": "Parcours riches, reconversions",
+      "description": "Frise chronologique : dates à gauche, ligne verticale et pastilles pour chaque étape.",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "formation",
+        "projets",
+        "engagement",
+        "competences",
+        "langues",
+        "certificats",
+        "interets"
+      ],
+      "colonneSecondaire": [],
+      "enTete": [
+        "identite",
+        "contact",
+        "photo"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "chips",
+        "langues": "ligne",
+        "interets": "ligne"
+      },
+      "css": "css/modele-parcours.css",
+      "apercu": "apercus/09-parcours.png"
+    },
+    {
+      "ordre": 10,
+      "id": "compact",
+      "nom": "Compact",
+      "acces": "starter",
+      "gratuit": false,
+      "grille": "une",
+      "photo": "sans",
+      "couleurParDefaut": "encre",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "compacte",
+      "lisibiliteAts": "excellente",
+      "pagesConseillees": "1",
+      "public": "Longues carrières à faire tenir sur une page",
+      "description": "Marges réduites, en-tête sur une ligne, compétences en trois colonnes.",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "formation",
+        "competences",
+        "langues",
+        "certificats",
+        "projets",
+        "engagement",
+        "interets"
+      ],
+      "colonneSecondaire": [],
+      "enTete": [
+        "identite",
+        "contact"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "grille",
+        "langues": "ligne",
+        "interets": "ligne"
+      },
+      "css": "css/modele-compact.css",
+      "apercu": "apercus/10-compact.png"
+    },
+    {
+      "ordre": 11,
+      "id": "academique",
+      "nom": "Académique",
+      "acces": "pro",
+      "gratuit": false,
+      "grille": "une",
+      "photo": "sans",
+      "couleurParDefaut": "marine",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "excellente",
+      "pagesConseillees": "2 à 3",
+      "public": "Enseignants, chercheurs, candidatures à des bourses",
+      "description": "Sections numérotées, publications et communications en références, plusieurs pages.",
+      "ordreSections": [
+        "profil",
+        "formation",
+        "experience",
+        "publications",
+        "communications",
+        "projets",
+        "enseignement",
+        "competences",
+        "langues",
+        "engagement"
+      ],
+      "colonneSecondaire": [],
+      "enTete": [
+        "identite",
+        "contact"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "ligne",
+        "langues": "ligne",
+        "interets": "ligne"
+      },
+      "css": "css/modele-academique.css",
+      "apercu": "apercus/11-academique.png"
+    },
+    {
+      "ordre": 12,
+      "id": "creatif",
+      "nom": "Créatif",
+      "acces": "pro",
+      "gratuit": false,
+      "grille": "deux-d",
+      "photo": "option",
+      "couleurParDefaut": "brique",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "bonne",
+      "pagesConseillees": "1 à 2",
+      "public": "Communication, design, métiers créatifs",
+      "description": "Monogramme ou photo en grand, nom très présent, colonne de cartes teintées à droite.",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "projets",
+        "formation",
+        "engagement",
+        "competences",
+        "langues",
+        "certificats",
+        "interets"
+      ],
+      "colonneSecondaire": [
+        "competences",
+        "langues",
+        "certificats",
+        "interets"
+      ],
+      "enTete": [
+        "photo",
+        "identite",
+        "contact"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "chips",
+        "langues": "points",
+        "interets": "chips"
+      },
+      "css": "css/modele-creatif.css",
+      "apercu": "apercus/12-creatif.png"
+    },
+    {
+      "ordre": 13,
+      "id": "tech",
+      "nom": "Tech",
+      "acces": "pro",
+      "gratuit": false,
+      "grille": "une",
+      "photo": "sans",
+      "couleurParDefaut": "violet",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "tres-bonne",
+      "pagesConseillees": "1 à 2",
+      "public": "Développeurs, data, métiers du numérique",
+      "description": "Compétences regroupées par domaine, projets avant l'expérience, outils indiqués sous chaque poste.",
+      "ordreSections": [
+        "profil",
+        "competences",
+        "projets",
+        "experience",
+        "formation",
+        "certificats",
+        "langues",
+        "engagement",
+        "interets"
+      ],
+      "colonneSecondaire": [],
+      "enTete": [
+        "identite",
+        "contact"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "groupes",
+        "langues": "ligne",
+        "interets": "ligne"
+      },
+      "css": "css/modele-tech.css",
+      "apercu": "apercus/13-tech.png"
+    },
+    {
+      "ordre": 14,
+      "id": "elegant",
+      "nom": "Élégant",
+      "acces": "pro",
+      "gratuit": false,
+      "grille": "une",
+      "photo": "option",
+      "couleurParDefaut": "prune",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "tres-bonne",
+      "pagesConseillees": "1 à 2",
+      "public": "Hôtellerie, juridique, relation client, profils seniors",
+      "description": "En-tête centré avec photo ronde, titres centrés entre deux filets.",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "formation",
+        "competences",
+        "langues",
+        "certificats",
+        "projets",
+        "engagement",
+        "interets"
+      ],
+      "colonneSecondaire": [],
+      "enTete": [
+        "photo",
+        "identite",
+        "contact"
+      ],
+      "enTeteLaterale": [],
+      "presentations": {
+        "competences": "grille",
+        "langues": "ligne",
+        "interets": "ligne"
+      },
+      "css": "css/modele-elegant.css",
+      "apercu": "apercus/14-elegant.png"
+    },
+    {
+      "ordre": 15,
+      "id": "visuel",
+      "nom": "Visuel",
+      "acces": "pro",
+      "gratuit": false,
+      "grille": "lat-g",
+      "photo": "option",
+      "couleurParDefaut": "framboise",
+      "policeParDefaut": "sora",
+      "densiteParDefaut": "standard",
+      "lisibiliteAts": "bonne",
+      "pagesConseillees": "1 à 2",
+      "public": "Profils qui veulent montrer leurs niveaux d'un coup d'œil",
+      "description": "Grande photo, jauges de compétences et pastilles de langues (niveaux aussi écrits en toutes lettres).",
+      "ordreSections": [
+        "profil",
+        "experience",
+        "formation",
+        "projets",
+        "certificats",
+        "engagement",
+        "competences",
+        "langues",
+        "interets"
+      ],
+      "colonneSecondaire": [
+        "competences",
+        "langues",
+        "interets"
+      ],
+      "enTete": [
+        "identite"
+      ],
+      "enTeteLaterale": [
+        "photo",
+        "contact"
+      ],
+      "presentations": {
+        "competences": "barres",
+        "langues": "points",
+        "interets": "chips"
+      },
+      "css": "css/modele-visuel.css",
+      "apercu": "apercus/15-visuel.png"
+    }
+  ]
+}

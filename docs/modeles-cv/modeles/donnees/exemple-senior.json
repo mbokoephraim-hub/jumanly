@@ -1,0 +1,211 @@
+{
+  "langue": "fr",
+  "info": {
+    "prenom": "Marie-Claire",
+    "nom": "Nzeza",
+    "titre": "Directrice des ressources humaines",
+    "ville": "Abidjan, Côte d'Ivoire",
+    "email": "mc.nzeza@exemple.ci",
+    "liens": [
+      {
+        "libelle": "LinkedIn",
+        "url": "linkedin.com/in/mc-nzeza"
+      }
+    ],
+    "photo": false
+  },
+  "profil": "Dix-huit ans en ressources humaines dans la banque et les télécoms, dont huit à la tête d'équipes de 15 à 40 personnes. Je construis des fonctions RH qui recrutent vite, fidélisent les talents et accompagnent la croissance dans plusieurs pays.",
+  "points_forts": [
+    "Recrutement de 600 personnes en trois ans dans 5 pays, délai moyen ramené de 74 à 41 jours.",
+    "Taux de départ volontaire réduit de 19 % à 9 % grâce à un programme de carrière interne.",
+    "Déploiement d'un SIRH unique pour 3 200 collaborateurs dans 7 filiales."
+  ],
+  "sections": [
+    {
+      "type": "experience",
+      "items": [
+        {
+          "titre": "Directrice des ressources humaines Afrique de l'Ouest",
+          "organisation": "Ouest Télécom",
+          "lieu": "Abidjan",
+          "debut": "2019",
+          "fin": "aujourd'hui",
+          "puces": [
+            "Dirige une équipe de 38 personnes dans 5 pays et un budget RH de 4,2 millions USD.",
+            "Pilote le plan de recrutement régional : 600 embauches en trois ans, dont 45 % de femmes.",
+            "Négocie les accords sociaux avec les représentants du personnel dans 3 pays.",
+            "Lance l'académie interne de management, suivie par 180 encadrants."
+          ]
+        },
+        {
+          "titre": "Responsable du développement des talents",
+          "organisation": "Banque Atlantique du Golfe",
+          "lieu": "Dakar",
+          "debut": "2013",
+          "fin": "2019",
+          "puces": [
+            "Crée le programme « Jeunes diplômés » : 120 recrues, 82 % encore en poste après trois ans.",
+            "Met en place les revues de talents annuelles pour 900 cadres.",
+            "Conduit la refonte de la grille des emplois et des rémunérations."
+          ]
+        },
+        {
+          "titre": "Chargée de recrutement puis responsable RH d'agence",
+          "organisation": "Banque Atlantique du Golfe",
+          "lieu": "Dakar",
+          "debut": "2008",
+          "fin": "2013",
+          "puces": [
+            "Recrute 250 conseillers clientèle pour l'ouverture de 30 agences.",
+            "Gère l'administration du personnel de 400 collaborateurs."
+          ]
+        },
+        {
+          "titre": "Assistante ressources humaines",
+          "organisation": "Cabinet Horizon Conseil",
+          "lieu": "Dakar",
+          "debut": "2006",
+          "fin": "2008",
+          "puces": [
+            "Organise les campagnes de recrutement de 12 entreprises clientes."
+          ]
+        }
+      ]
+    },
+    {
+      "type": "formation",
+      "items": [
+        {
+          "titre": "Master en gestion des ressources humaines",
+          "organisation": "Université Cheikh Anta Diop",
+          "lieu": "Dakar",
+          "debut": "2004",
+          "fin": "2006",
+          "texte": ""
+        },
+        {
+          "titre": "Programme de leadership pour dirigeants",
+          "organisation": "École de management, formation continue",
+          "lieu": "",
+          "debut": "",
+          "fin": "2021",
+          "texte": ""
+        }
+      ]
+    },
+    {
+      "type": "competences",
+      "items": [
+        {
+          "nom": "Stratégie RH",
+          "niveau": 4,
+          "groupe": "Direction"
+        },
+        {
+          "nom": "Recrutement à grande échelle",
+          "niveau": 4,
+          "groupe": "Direction"
+        },
+        {
+          "nom": "Relations sociales",
+          "niveau": 4,
+          "groupe": "Direction"
+        },
+        {
+          "nom": "Gestion des talents",
+          "niveau": 4,
+          "groupe": "Direction"
+        },
+        {
+          "nom": "SIRH",
+          "niveau": 3,
+          "groupe": "Outils"
+        },
+        {
+          "nom": "Rémunération et avantages",
+          "niveau": 3,
+          "groupe": "Direction"
+        },
+        {
+          "nom": "Conduite du changement",
+          "niveau": 4,
+          "groupe": "Direction"
+        },
+        {
+          "nom": "Droit du travail OHADA",
+          "niveau": 3,
+          "groupe": "Direction"
+        }
+      ]
+    },
+    {
+      "type": "langues",
+      "items": [
+        {
+          "nom": "Français",
+          "niveau": "Langue maternelle",
+          "note": 5
+        },
+        {
+          "nom": "Anglais",
+          "niveau": "C1, courant",
+          "note": 4
+        },
+        {
+          "nom": "Wolof",
+          "niveau": "B1, conversation",
+          "note": 2
+        }
+      ]
+    },
+    {
+      "type": "certificats",
+      "items": [
+        {
+          "titre": "Certification en gestion des talents",
+          "organisation": "Association professionnelle RH",
+          "fin": "2018"
+        },
+        {
+          "titre": "Coach professionnelle certifiée",
+          "organisation": "Institut de coaching",
+          "fin": "2016"
+        }
+      ]
+    },
+    {
+      "type": "engagement",
+      "items": [
+        {
+          "titre": "Mentore",
+          "organisation": "Réseau Femmes Dirigeantes",
+          "lieu": "Abidjan",
+          "debut": "2017",
+          "fin": "aujourd'hui",
+          "puces": [
+            "Accompagne chaque année 6 jeunes femmes cadres dans leur prise de poste."
+          ]
+        },
+        {
+          "titre": "Membre du jury",
+          "organisation": "Concours national de l'entrepreneuriat",
+          "lieu": "",
+          "debut": "2020",
+          "fin": "2023",
+          "puces": []
+        }
+      ]
+    },
+    {
+      "type": "interets",
+      "items": [
+        {
+          "nom": "Course à pied"
+        },
+        {
+          "nom": "Littérature africaine"
+        }
+      ]
+    }
+  ]
+}

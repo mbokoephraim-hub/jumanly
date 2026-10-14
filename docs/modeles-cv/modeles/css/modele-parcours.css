@@ -1,0 +1,14 @@
+/* Modèle « Parcours » (parcours) · Frise chronologique : dates à gauche, ligne verticale et pastilles pour chaque étape. */
+.tpl-parcours .cv-tete{padding:var(--cv-marge) var(--cv-marge) 7mm;display:grid;grid-template-columns:1fr auto;grid-template-areas:"id ph" "co ph";column-gap:8mm;align-items:center}
+.tpl-parcours .cv-identite{grid-area:id}.tpl-parcours .cv-contact{grid-area:co;align-self:start}.tpl-parcours .cv-photo{grid-area:ph;width:28mm;height:28mm}
+.tpl-parcours .cv-sec{padding-left:31mm}
+.tpl-parcours .cv-st{margin-left:-31mm}
+.tpl-parcours .sec-experience .cv-el,.tpl-parcours .sec-formation .cv-el,.tpl-parcours .sec-engagement .cv-el,.tpl-parcours .sec-projets .cv-el{position:relative}
+.tpl-parcours .cv-sec .cv-el::before{content:"";position:absolute;left:-6.2mm;top:-.2mm;bottom:calc(-1 * var(--cv-el));border-left:.5mm solid var(--cv-doux2)}
+.tpl-parcours .cv-sec .cv-el:last-child::before{bottom:0}
+.tpl-parcours .cv-sec .cv-el::after{content:"";position:absolute;left:-7.4mm;top:.35em;width:2.9mm;height:2.9mm;border-radius:50%;background:#fff;border:.6mm solid var(--cv-accent)}
+.tpl-parcours .cv-it-tete{display:block}
+.tpl-parcours .cv-it-date{position:absolute;left:-31mm;top:.1em;width:22mm;text-align:right;white-space:normal;font-weight:600;color:var(--cv-accent)}
+.tpl-parcours .sec-profil .cv-el::before,.tpl-parcours .sec-profil .cv-el::after,.tpl-parcours .sec-competences .cv-el::before,.tpl-parcours .sec-competences .cv-el::after,
+.tpl-parcours .sec-langues .cv-el::before,.tpl-parcours .sec-langues .cv-el::after,.tpl-parcours .sec-interets .cv-el::before,.tpl-parcours .sec-interets .cv-el::after,
+.tpl-parcours .sec-certificats .cv-el::before,.tpl-parcours .sec-certificats .cv-el::after{display:none}

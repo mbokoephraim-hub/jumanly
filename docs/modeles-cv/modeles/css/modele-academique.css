@@ -1,0 +1,11 @@
+/* Modèle « Académique » (academique) · Sections numérotées, publications et communications en références, plusieurs pages. */
+.tpl-academique .cv-tete{padding:var(--cv-marge) var(--cv-marge) 6mm;border-bottom:.6pt solid var(--cv-encre);margin:0 var(--cv-marge) 6mm;padding-left:0;padding-right:0}
+.tpl-academique .cv-nom{font-size:2.3em;font-weight:600}
+.tpl-academique .cv-titre{color:var(--cv-encre);font-weight:400;font-style:italic}
+.tpl-academique .cv-st .num{display:inline}
+.tpl-academique .cv-st{text-transform:none;letter-spacing:0;font-size:1.12em;font-weight:600;border-bottom:.5pt solid var(--cv-filet);padding-bottom:1mm}
+.tpl-academique .cv-suite>.cv-st::after{content:" (suite)";font-weight:400;color:var(--cv-gris)}
+.tpl-academique .cv-it-sous{color:var(--cv-encre);font-style:italic;font-weight:400}
+.tpl-academique .cv-page.suite .cv-tete-suite{display:flex;justify-content:space-between;grid-area:tete;padding:8mm var(--cv-marge) 0;font-size:.85em;color:var(--cv-gris)}
+.tpl-academique .cv-page.suite .cv-principal{padding-top:6mm}
+.tpl-academique .cv-refs li+li{margin-top:1.4mm}

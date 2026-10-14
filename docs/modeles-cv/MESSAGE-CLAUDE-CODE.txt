@@ -1,0 +1,14 @@
+Nouveau module : les modèles de CV de Jumanly.
+
+J'ai ajouté le dossier docs/modeles-cv/ dans le dépôt. Lis d'abord docs/modeles-cv/SPECIFICATION-MODELES-CV.md en entier : il fait foi pour tout ce qui touche aux modèles de CV et complète docs/specifications.md (parties 05 et 07).
+
+Ce qu'il faut construire :
+1. 15 modèles de CV (5 gratuits, 5 dès Starter, 5 dès Pro) décrits dans docs/modeles-cv/modeles/catalogue.json. Reprends tels quels les styles de docs/modeles-cv/modeles/css/ (cv-base.css + modele-<id>.css) et le balisage des fichiers docs/modeles-cv/modeles/html/*.html. Les PDF de docs/modeles-cv/modeles/pdf/ sont le résultat attendu.
+2. Les CV téléchargés sont NEUTRES : aucun logo, aucune couleur, aucune mention Jumanly dans le PDF ou le Word.
+3. Les réglages : 16 couleurs d'accent (8 recommandées pour les ATS + 8 autres, couleur personnalisée avec contraste minimum 4,5:1), 6 polices (Sora recommandée et par défaut, fichiers dans docs/modeles-cv/modeles/polices/), 3 densités, photo facultative selon le modèle, langue des titres FR/EN, ordre des sections, sauts de page, 1 à 3 pages.
+4. Un seul rendu HTML pour l'aperçu et l'export, avec la pagination de docs/modeles-cv/modeles/js/pagination.js portée en TypeScript (charger les polices avant de mesurer). Export PDF par Chromium (puppeteer-core + @sparticuz/chromium), Word simplifié sur une colonne.
+5. L'interface aux couleurs de Jumanly : galerie « Choisir un modèle » et panneau « Mise en forme » dans /app/career/cv, d'après docs/modeles-cv/interface/ (desktop et mobile).
+6. Le droit career.cv.templates.access (free / starter / pro) vérifié côté serveur à l'application d'un modèle et à l'export.
+7. Les textes de la partie 9 à ajouter dans les fichiers de traduction.
+
+Commence par me proposer un plan court (fichiers, ordre, étapes E3 / E7 / E10 de la partie 11), puis code les 5 modèles gratuits et la pagination. Respecte la définition de fini de la partie 11, en particulier les tests sur la neutralité du PDF et sur les droits.

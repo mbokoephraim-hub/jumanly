@@ -1,0 +1,15 @@
+/* Modèle « Visuel » (visuel) · Grande photo, jauges de compétences et pastilles de langues (niveaux aussi écrits en toutes lettres). */
+.tpl-visuel .cv-page{grid-template-columns:72mm minmax(0,1fr);grid-template-areas:"lateral tete" "lateral principal" "lateral pied"}
+.tpl-visuel .cv-lateral{display:block;background:var(--cv-doux);padding:0 8mm 8mm}
+.tpl-visuel .cv-page.suite .cv-lateral{padding-top:var(--cv-marge)}
+.tpl-visuel .cv-lat-tete{display:flex;flex-direction:column;gap:6mm;margin:0 -8mm var(--cv-esp)}
+.tpl-visuel .cv-photo{width:72mm;height:78mm;border-radius:0}
+.tpl-visuel .cv-contact{flex-direction:column;margin:0;gap:1.8mm;padding:0 8mm;color:var(--cv-encre)}
+.tpl-visuel .cv-contact li::before{display:none}.tpl-visuel .cv-contact li{margin:0}
+.tpl-visuel .cv-contact .lib{display:block;font-size:.82em;color:var(--cv-accent);text-transform:uppercase;letter-spacing:.08em}
+.tpl-visuel:not(.photo-on) .cv-lat-tete{padding-top:var(--cv-marge)}
+.tpl-visuel .cv-tete{padding:calc(var(--cv-marge) + 6mm) var(--cv-marge) 8mm 10mm;position:relative}
+.tpl-visuel .cv-tete::after{content:"";position:absolute;left:10mm;bottom:3mm;width:16mm;height:1.2mm;border-radius:1mm;background:var(--cv-accent)}
+.tpl-visuel .cv-principal{padding-left:10mm}
+.tpl-visuel .cv-nom{font-size:3em;font-weight:700;letter-spacing:-.035em}
+.tpl-visuel .cv-chips li{background:#fff}

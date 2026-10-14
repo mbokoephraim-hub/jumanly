@@ -1,0 +1,10 @@
+/* Modèle « Classique » (classique) · Une colonne, en-tête centré, filets fins. Le plus sûr pour les logiciels de recrutement. */
+.tpl-classique .cv-tete{padding:var(--cv-marge) var(--cv-marge) 5mm;text-align:center}
+.tpl-classique .cv-nom{text-transform:uppercase;letter-spacing:.06em;font-size:2.2em;font-weight:600}
+.tpl-classique .cv-titre{color:var(--cv-encre);font-weight:400;letter-spacing:.02em}
+.tpl-classique .cv-contact{justify-content:center}
+.tpl-classique .cv-contact li,.tpl-elegant .cv-contact li,.tpl-elegant .cv-ligne li{margin:0}
+.tpl-classique .cv-contact li:first-child::before,.tpl-elegant .cv-contact li:first-child::before,.tpl-elegant .cv-ligne li:first-child::before{display:none}
+.tpl-classique .cv-st{color:var(--cv-accent);border-bottom:.6pt solid var(--cv-encre);padding-bottom:1.2mm}
+.tpl-classique .cv-it-sous{color:var(--cv-encre);font-style:italic;font-weight:400}
+.tpl-classique .cv-puces li::before{background:var(--cv-encre)}

@@ -1,0 +1,16 @@
+/* Modèle « Contraste » (contraste) · Barre latérale foncée en texte blanc, compétences et langues en pastilles. */
+.tpl-contraste .cv-page{grid-template-columns:70mm minmax(0,1fr);grid-template-areas:"lateral tete" "lateral principal" "lateral pied"}
+.tpl-contraste .cv-lateral{display:block;background:var(--cv-accent);color:#fff;padding:var(--cv-marge) 8mm 8mm}
+.tpl-contraste .cv-lateral .cv-st{color:#fff;border-bottom:.6pt solid rgba(255,255,255,.35);padding-bottom:1.4mm}
+.tpl-contraste .cv-lateral .niv{color:rgba(255,255,255,.75)}
+.tpl-contraste .cv-lateral .pts b{background:#fff}.tpl-contraste .cv-lateral .pts b.off{background:rgba(255,255,255,.25)}
+.tpl-contraste .cv-lat-tete{display:flex;flex-direction:column;gap:6mm;margin-bottom:var(--cv-esp)}
+.tpl-contraste .cv-photo{width:40mm;height:40mm;align-self:center;box-shadow:0 0 0 1.2mm rgba(255,255,255,.25)}
+.tpl-contraste .cv-contact{flex-direction:column;margin:0;gap:1.8mm;color:#fff}
+.tpl-contraste .cv-contact li::before{display:none}.tpl-contraste .cv-contact li{margin:0}
+.tpl-contraste .cv-contact .lib{display:block;font-size:.82em;opacity:.7;text-transform:uppercase;letter-spacing:.08em;color:#fff}
+.tpl-contraste .cv-tete{padding:calc(var(--cv-marge) + 4mm) var(--cv-marge) 8mm 10mm}
+.tpl-contraste .cv-principal{padding-left:10mm}
+.tpl-contraste .cv-nom{font-size:2.9em;color:var(--cv-accent)}
+.tpl-contraste .cv-titre{color:var(--cv-encre)}
+.tpl-contraste .cv-liste li+li{margin-top:1mm}

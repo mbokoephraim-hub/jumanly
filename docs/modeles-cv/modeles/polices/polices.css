@@ -1,0 +1,20 @@
+/* Polices proposées pour les modèles de CV (toutes sous licence SIL Open Font License, intégrables dans un PDF). */
+@font-face{font-family:'Inter';font-weight:400;font-style:normal;src:url('Inter-400.ttf') format('truetype')}
+@font-face{font-family:'Inter';font-weight:500;font-style:normal;src:url('Inter-500.ttf') format('truetype')}
+@font-face{font-family:'Inter';font-weight:600;font-style:normal;src:url('Inter-600.ttf') format('truetype')}
+@font-face{font-family:'Inter';font-weight:700;font-style:normal;src:url('Inter-700.ttf') format('truetype')}
+@font-face{font-family:'Source Sans 3';font-weight:400;font-style:normal;src:url('SourceSans3-400.ttf') format('truetype')}
+@font-face{font-family:'Source Sans 3';font-weight:600;font-style:normal;src:url('SourceSans3-600.ttf') format('truetype')}
+@font-face{font-family:'Source Sans 3';font-weight:700;font-style:normal;src:url('SourceSans3-700.ttf') format('truetype')}
+@font-face{font-family:'Lato';font-weight:400;font-style:normal;src:url('Lato-400.ttf') format('truetype')}
+@font-face{font-family:'Lato';font-weight:700;font-style:normal;src:url('Lato-700.ttf') format('truetype')}
+@font-face{font-family:'Lora';font-weight:400;font-style:normal;src:url('Lora-400.ttf') format('truetype')}
+@font-face{font-family:'Lora';font-weight:600;font-style:normal;src:url('Lora-600.ttf') format('truetype')}
+@font-face{font-family:'Lora';font-weight:700;font-style:normal;src:url('Lora-700.ttf') format('truetype')}
+@font-face{font-family:'Sora';font-weight:300;font-style:normal;src:url('Sora-300.ttf') format('truetype')}
+@font-face{font-family:'Sora';font-weight:400;font-style:normal;src:url('Sora-400.ttf') format('truetype')}
+@font-face{font-family:'Sora';font-weight:500;font-style:normal;src:url('Sora-500.ttf') format('truetype')}
+@font-face{font-family:'Sora';font-weight:600;font-style:normal;src:url('Sora-600.ttf') format('truetype')}
+@font-face{font-family:'Sora';font-weight:700;font-style:normal;src:url('Sora-700.ttf') format('truetype')}
+@font-face{font-family:'Merriweather';font-weight:400;font-style:normal;src:url('Merriweather-400.ttf') format('truetype')}
+@font-face{font-family:'Merriweather';font-weight:700;font-style:normal;src:url('Merriweather-700.ttf') format('truetype')}

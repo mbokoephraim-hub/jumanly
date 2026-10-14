@@ -1,0 +1,260 @@
+{
+  "langue": "fr",
+  "info": {
+    "prenom": "Joseph",
+    "nom": "Ilunga",
+    "titre": "Enseignant-chercheur en économie du développement",
+    "ville": "Lubumbashi, RD Congo",
+    "email": "j.ilunga@exemple.cd",
+    "liens": [
+      {
+        "libelle": "ORCID",
+        "url": "orcid.org/0000-0000-0000-0000"
+      },
+      {
+        "libelle": "Site",
+        "url": "jilunga.exemple.cd"
+      }
+    ],
+    "photo": false
+  },
+  "profil": "Mes recherches portent sur l'inclusion financière, le Mobile Money et l'emploi des jeunes en Afrique centrale. J'enseigne la microéconomie et l'économétrie appliquée et j'encadre des mémoires de master et des thèses.",
+  "points_forts": [],
+  "sections": [
+    {
+      "type": "formation",
+      "items": [
+        {
+          "titre": "Doctorat en sciences économiques",
+          "organisation": "Université de Lubumbashi",
+          "lieu": "Lubumbashi",
+          "debut": "2012",
+          "fin": "2016",
+          "texte": "Thèse : « Paiements mobiles et épargne des ménages urbains ». Mention très honorable."
+        },
+        {
+          "titre": "Master en économie appliquée",
+          "organisation": "Université de Lubumbashi",
+          "lieu": "Lubumbashi",
+          "debut": "2010",
+          "fin": "2012",
+          "texte": ""
+        },
+        {
+          "titre": "Licence en économie",
+          "organisation": "Université de Kinshasa",
+          "lieu": "Kinshasa",
+          "debut": "2006",
+          "fin": "2010",
+          "texte": ""
+        }
+      ]
+    },
+    {
+      "type": "experience",
+      "items": [
+        {
+          "titre": "Professeur associé",
+          "organisation": "Université de Lubumbashi, faculté des sciences économiques",
+          "lieu": "Lubumbashi",
+          "debut": "2021",
+          "fin": "aujourd'hui",
+          "puces": [
+            "Enseigne la microéconomie (L2, 240 étudiants) et l'économétrie appliquée (M1).",
+            "Coordonne le master en économie du développement (45 étudiants par promotion).",
+            "Encadre 4 doctorants et 22 mémoires de master depuis 2021."
+          ]
+        },
+        {
+          "titre": "Chargé de cours",
+          "organisation": "Université de Lubumbashi",
+          "lieu": "Lubumbashi",
+          "debut": "2016",
+          "fin": "2021",
+          "puces": [
+            "Enseigne l'introduction à l'économie et les statistiques (L1).",
+            "Crée le séminaire de méthodes quantitatives pour les doctorants."
+          ]
+        },
+        {
+          "titre": "Chercheur invité",
+          "organisation": "Centre de recherche en économie du développement",
+          "lieu": "Dakar",
+          "debut": "2019",
+          "fin": "2019",
+          "puces": [
+            "Séjour de six mois consacré à l'évaluation d'un programme d'épargne par téléphone mobile."
+          ]
+        },
+        {
+          "titre": "Consultant",
+          "organisation": "Programme public d'appui à l'emploi des jeunes",
+          "lieu": "Kinshasa",
+          "debut": "2017",
+          "fin": "2018",
+          "puces": [
+            "Conçoit le dispositif de suivi et d'évaluation d'un programme de 5 000 bénéficiaires."
+          ]
+        }
+      ]
+    },
+    {
+      "type": "publications",
+      "titre_perso": "Publications",
+      "items": [
+        {
+          "titre": "Ilunga J. (2025). « Mobile Money et épargne de précaution : données de panel de Lubumbashi ». Revue d'économie du développement africain, 14(2), 45-71."
+        },
+        {
+          "titre": "Ilunga J., Kasongo P. (2024). « Les jeunes diplômés face au marché du travail urbain ». Cahiers de l'emploi en Afrique, 9, 112-138."
+        },
+        {
+          "titre": "Ilunga J. (2022). « Coût des transferts et inclusion financière des ménages ». Revue congolaise d'économie, 31(1), 7-29."
+        },
+        {
+          "titre": "Mutombo A., Ilunga J. (2021). « Mesurer l'informalité à partir des enquêtes ménages ». Document de travail n° 2021-04."
+        },
+        {
+          "titre": "Ilunga J. (2019). « Épargner par téléphone : une évaluation randomisée ». Document de travail n° 2019-11."
+        },
+        {
+          "titre": "Ilunga J. (2017). « Paiements mobiles et consommation des ménages urbains ». Revue congolaise d'économie, 26(2), 51-77."
+        }
+      ]
+    },
+    {
+      "type": "communications",
+      "titre_perso": "Communications",
+      "items": [
+        {
+          "titre": "« Mobile Money et résilience des ménages », Conférence africaine d'économie, Nairobi, 2025."
+        },
+        {
+          "titre": "« Emploi des jeunes diplômés », Journées scientifiques de l'Université de Kinshasa, 2024."
+        },
+        {
+          "titre": "« Inclusion financière et genre », Atelier régional de recherche, Dakar, 2022."
+        },
+        {
+          "titre": "« Évaluer un programme d'épargne mobile », Séminaire doctoral, Lubumbashi, 2020."
+        }
+      ]
+    },
+    {
+      "type": "projets",
+      "titre_perso": "Projets de recherche financés",
+      "items": [
+        {
+          "titre": "Inclusion financière des jeunes travailleurs",
+          "organisation": "Responsable scientifique, financement d'une fondation",
+          "debut": "2023",
+          "fin": "2026",
+          "texte": "Enquête auprès de 2 400 jeunes dans 3 villes, budget de 180 000 USD.",
+          "outils": ""
+        },
+        {
+          "titre": "Coût des transferts d'argent régionaux",
+          "organisation": "Co-chercheur, consortium de 4 universités",
+          "debut": "2020",
+          "fin": "2022",
+          "texte": "Analyse des frais de transfert entre 6 pays d'Afrique centrale.",
+          "outils": ""
+        }
+      ]
+    },
+    {
+      "type": "enseignement",
+      "titre_perso": "Enseignements",
+      "items": [
+        {
+          "titre": "Microéconomie, licence 2",
+          "organisation": "Cours magistral, 60 h",
+          "debut": "2016",
+          "fin": "aujourd'hui",
+          "puces": []
+        },
+        {
+          "titre": "Économétrie appliquée, master 1",
+          "organisation": "Cours et travaux pratiques, 45 h",
+          "debut": "2018",
+          "fin": "aujourd'hui",
+          "puces": []
+        },
+        {
+          "titre": "Méthodes d'évaluation d'impact, master 2",
+          "organisation": "Séminaire, 24 h",
+          "debut": "2021",
+          "fin": "aujourd'hui",
+          "puces": []
+        }
+      ]
+    },
+    {
+      "type": "competences",
+      "items": [
+        {
+          "nom": "Économétrie (Stata, R)",
+          "niveau": 4,
+          "groupe": "Méthodes"
+        },
+        {
+          "nom": "Évaluation d'impact",
+          "niveau": 4,
+          "groupe": "Méthodes"
+        },
+        {
+          "nom": "Enquêtes de terrain",
+          "niveau": 4,
+          "groupe": "Méthodes"
+        },
+        {
+          "nom": "Python",
+          "niveau": 2,
+          "groupe": "Outils"
+        }
+      ]
+    },
+    {
+      "type": "langues",
+      "items": [
+        {
+          "nom": "Français",
+          "niveau": "Langue maternelle",
+          "note": 5
+        },
+        {
+          "nom": "Swahili",
+          "niveau": "Langue maternelle",
+          "note": 5
+        },
+        {
+          "nom": "Anglais",
+          "niveau": "C1, courant",
+          "note": 4
+        }
+      ]
+    },
+    {
+      "type": "engagement",
+      "titre_perso": "Responsabilités collectives",
+      "items": [
+        {
+          "titre": "Membre du comité de lecture",
+          "organisation": "Revue congolaise d'économie",
+          "lieu": "",
+          "debut": "2020",
+          "fin": "aujourd'hui",
+          "puces": []
+        },
+        {
+          "titre": "Secrétaire scientifique",
+          "organisation": "Association des économistes de RD Congo",
+          "lieu": "",
+          "debut": "2018",
+          "fin": "2022",
+          "puces": []
+        }
+      ]
+    }
+  ]
+}
