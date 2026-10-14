@@ -13,6 +13,11 @@ Une entrée par étape : ce qui a été fait, les décisions prises, les dettes 
   `/`, `/tarifs`, `/formations` en 200 et `/formations/aucun` en 404.
 - Rappel : le build lit la base (forfaits, catalogue). `DATABASE_URL` doit donc être renseignée et
   les migrations appliquées avant le build sur l'hébergeur.
+- Hostinger installe avec npm, qui refusait les dépendances (`@types/node@^20` incompatible avec
+  vitest 5) : passage à `@types/node@^22` (Node 22 requis de toute façon). `prebuild` n'appelle plus
+  `pnpm`, absent chez Hostinger. Nouveau script `build:hostinger` (migrations, seed sans démo, build).
+  Vérifié sur une copie sans `.git` ni pnpm, base vide, deux builds de suite. Guide :
+  `docs/deploiement-hostinger.md`.
 
 ## E10 · Career avancé (14 octobre 2026)
 
