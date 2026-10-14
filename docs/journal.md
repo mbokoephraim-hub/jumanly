@@ -2,6 +2,16 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Mise en production sur Vercel (14 octobre 2026)
+
+- Hostinger bloquait à l'import du dépôt : production déployée sur Vercel, base Neon (Francfort),
+  domaine `jumanly.io` pointé depuis la zone DNS de Hostinger. Voir
+  `docs/deploiement-vercel.md` et `docs/decisions/2026-10-14-hebergement-vercel.md`.
+- `vercel.json` : commande de build, région `fra1`, cron horaire de `/api/jobs/billing`.
+- La route des tâches d'abonnement accepte aussi `GET` et `CRON_SECRET` (format de Vercel Cron).
+- À faire avant l'ouverture au public : remplacer `BETTER_AUTH_SECRET` et `JOBS_SECRET` (transmis
+  dans une conversation), brancher Resend, créer le compte administrateur.
+
 ## Correctif · Build de production sur une base vide (14 octobre 2026)
 
 - Constat : sur une base de production neuve (migrations + forfaits, sans démo), `pnpm build`

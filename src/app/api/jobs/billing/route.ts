@@ -4,20 +4,27 @@ import { db } from "@/server/db";
 import { paymentProvider } from "@/server/payments";
 import { runBillingJobs } from "@/server/services/billing-jobs";
 
-function authorized(request: Request) {
-  const secret = process.env.JOBS_SECRET;
+function matches(given: Buffer, secret: string | undefined) {
   if (!secret) return false;
-  const given = Buffer.from(request.headers.get("authorization") ?? "");
   const expected = Buffer.from(`Bearer ${secret}`);
   return given.length === expected.length && timingSafeEqual(given, expected);
 }
 
+/** JOBS_SECRET for any scheduler; CRON_SECRET is the one Vercel Cron sends (vercel.json). */
+function authorized(request: Request) {
+  const given = Buffer.from(request.headers.get("authorization") ?? "");
+  return matches(given, process.env.JOBS_SECRET) || matches(given, process.env.CRON_SECRET);
+}
+
 /**
- * Billing tasks, called by the host's scheduler every hour (`Authorization: Bearer JOBS_SECRET`).
- * Without JOBS_SECRET the route is closed; `pnpm jobs:billing` runs the same tasks.
+ * Billing tasks, called by the host's scheduler every hour (`Authorization: Bearer JOBS_SECRET`,
+ * or GET from Vercel Cron with `Bearer CRON_SECRET`). Without either secret the route is closed;
+ * `pnpm jobs:billing` runs the same tasks.
  */
 export async function POST(request: Request) {
   if (!authorized(request)) return new NextResponse(null, { status: 401 });
   const report = await runBillingJobs(db, paymentProvider());
   return NextResponse.json(report);
 }
+
+export const GET = POST;
