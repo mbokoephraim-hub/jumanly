@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { Breadcrumb } from "@/components/site/navigation-bits";
 import { ButtonLink, EmptyState, VerifiedBadge } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
-import { getCompany, getSitemapEntries } from "@/server/queries/public";
+import { getCompany, getSitemapEntries, staticSlugParams } from "@/server/queries/public";
 import { contractFilterOf } from "@/server/services/jobs";
 
 // Same rendering as a job page: known slugs are prerendered, a new one renders in full.
@@ -13,7 +13,7 @@ export const instant = false;
 
 export async function generateStaticParams() {
   const { companySlugs } = await getSitemapEntries();
-  return companySlugs.map(({ slug }) => ({ slug }));
+  return staticSlugParams(companySlugs);
 }
 
 export async function generateMetadata({

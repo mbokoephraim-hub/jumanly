@@ -13,7 +13,12 @@ import { durationParts } from "@/lib/format";
 import { courseJsonLd, jsonLdScript, pageMetadata } from "@/lib/seo";
 import { signupHref } from "@/lib/signup";
 import { videoProvider } from "@/server/adapters/video";
-import { getCourse, getPublicPlans, getSitemapEntries } from "@/server/queries/public";
+import {
+  getCourse,
+  getPublicPlans,
+  getSitemapEntries,
+  staticSlugParams,
+} from "@/server/queries/public";
 import { planForCatalogLevel } from "@/server/services/plans";
 
 // Known slugs are prerendered; a new one renders in full before responding, so that search engines
@@ -22,7 +27,7 @@ export const instant = false;
 
 export async function generateStaticParams() {
   const { courseSlugs } = await getSitemapEntries();
-  return courseSlugs.map(({ slug }) => ({ slug }));
+  return staticSlugParams(courseSlugs);
 }
 
 export async function generateMetadata({

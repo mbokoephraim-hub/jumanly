@@ -2,6 +2,23 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Correctif · Build de production sur une base vide (14 octobre 2026)
+
+- Constat : sur une base de production neuve (migrations + forfaits, sans démo), `pnpm build`
+  échouait : avec Cache Components, `generateStaticParams` doit renvoyer au moins une valeur, or il
+  n'y a encore ni formation, ni offre, ni entreprise. Le build ne passait jusqu'ici que grâce au seed
+  de démonstration.
+- Correctif : `staticSlugParams` (`src/server/queries/public.ts`) renvoie un slug factice « aucun »
+  quand la liste est vide ; la page correspondante répond 404. Vérifié : build sur base vide, puis
+  `/`, `/tarifs`, `/formations` en 200 et `/formations/aucun` en 404.
+- Rappel : le build lit la base (forfaits, catalogue). `DATABASE_URL` doit donc être renseignée et
+  les migrations appliquées avant le build sur l'hébergeur.
+- Hostinger installe avec npm, qui refusait les dépendances (`@types/node@^20` incompatible avec
+  vitest 5) : passage à `@types/node@^22` (Node 22 requis de toute façon). `prebuild` n'appelle plus
+  `pnpm`, absent chez Hostinger. Nouveau script `build:hostinger` (migrations, seed sans démo, build).
+  Vérifié sur une copie sans `.git` ni pnpm, base vide, deux builds de suite. Guide :
+  `docs/deploiement-hostinger.md`.
+
 ## E11 · Qualité et lancement (14 octobre 2026)
 
 ### Fait
