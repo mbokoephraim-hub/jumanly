@@ -2,6 +2,64 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E6 · Intelligence v1 : matching explicable et IA (14 octobre 2026)
+
+### Fait
+
+- Tables : poids du matching versionnés, résultats de matching (score, bande, explication,
+  version des poids), vecteurs pgvector, consommation IA (`AiUsage`), suggestions IA en attente,
+  demandes de révision, plan de progression.
+- Calcul déterministe (`src/server/matching`) : normalisation du profil sans nom, genre, âge,
+  photo, nationalité, religion, situation familiale, santé ni adresse ; huit critères et poids du
+  § 8.3 ; bandes 85, 70, 50 ; critère non applicable retiré du calcul ; information absente à
+  0,5 ; critères éliminatoires signalés « à vérifier », jamais appliqués ; proximité sémantique
+  par vecteurs quand un fournisseur est configuré.
+- Talent : score et bande sur les listes d'offres, « Pourquoi ? » complet sur l'offre (critères
+  remplis, partiels, compétences manquantes avec les formations Jumanly et le score obtenu après
+  la formation, verrou de forfait), signalement d'erreur et révision humaine ; désactivation du
+  calcul dans les paramètres ; score figé dans la candidature au moment de l'envoi.
+- Recruteur : score sur les cartes du pipeline et tri par score ; « Pourquoi ? » sur la fiche
+  candidat, réduit (trois raisons) ou complet selon `hire.matching.level` ; verrou sinon.
+- Recommandations : offres compatibles et formations utiles sur le tableau de bord, formations sur
+  `/app/learn`.
+- Couche IA (`src/server/ai`) : consentement, droit, crédits `ai.credits.monthly` (rendus si
+  l'appel échoue), sortie validée par Zod, journal `AiUsage` avec coût estimé ; modèles lus dans
+  `AI_MODEL_DEFAULT` et `AI_MODEL_FAST` ; adaptateur factice sans clé `ANTHROPIC_API_KEY`.
+- Coach CV : score du CV par règles (gratuit), suggestions IA avec « Pourquoi ? », Appliquer et
+  Ignorer ; garde-fou qui refuse toute suggestion ajoutant un chiffre ou une compétence absente.
+- Import de CV par texte collé : extraction par l'IA ou par règles, chaque élément validé par le
+  talent avant d'entrer dans le profil.
+- Diagnostic personnalisé (niveau `personalized` de `career.diagnostic.level`) ; plan de
+  progression (`career.progress_plan`) créé depuis le diagnostic, modifiable par le talent.
+- `/admin/ia` : consommation et coût par fonction et par forfait (modèles sans tarif signalés),
+  répartition des scores, nouvelle version des poids (journalisée), révisions humaines.
+- Page publique `/comment-fonctionne-le-matching`, ajoutée au plan du site.
+- Tests : unitaires (bornes, monotonie, critères non applicables, score recalculé, garde-fou du
+  coach, coût), base (contrefactuel nom et photo, désactivation, score figé, crédits et consentement,
+  révision), e2e (import de CV, score et « Pourquoi ? », révision traitée par l'admin, accessibilité
+  de la page publique et de l'admin IA).
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Tests de matching : contrefactuels, monotonie, bornes, critères non applicables | ✓ `tests/unit/matching.test.ts`, `tests/db/matching.test.ts` |
+| Score affiché identique au score recalculé depuis l'explication | ✓ unitaire et base |
+| Aucun appel IA sans consentement ni quota | ✓ `tests/db/ai.test.ts` |
+| Coût IA visible par fonction et par forfait dans l'admin | ✓ `/admin/ia` |
+| Lint, types, tests, build | ✓ en local ; CI à l'ouverture de la PR |
+
+### Dettes et points ouverts
+
+- Voir `docs/decisions/2026-10-14-intelligence.md`.
+- Délai de réponse aux révisions affiché : 5 jours ouvrés, à confirmer par le propriétaire.
+- Le texte de la page publique dit que le recruteur peut ajuster les poids de son offre : cet
+  ajustement par offre est reporté ; les poids sont aujourd'hui ceux de l'admin.
+- Import de CV en PDF ou Word, analyse de CV côté recruteur (`hire_cv_analysis`) et mesure du
+  taux d'ouverture du « Pourquoi ? » : reportés.
+- Les e-mails de réponse aux révisions passent par la notification dans l'application ; l'e-mail
+  dédié viendra avec les gabarits d'E7 ou d'E10.
+
 ## E5 · Learn : formations, quiz et attestations (14 octobre 2026)
 
 ### Fait

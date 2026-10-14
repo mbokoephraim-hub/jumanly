@@ -2,9 +2,11 @@ import { randomUUID } from "node:crypto";
 import { afterAll, describe, expect, it } from "vitest";
 import {
   activeWeights,
+  createDispute,
   matchForUser,
   parseExplanation,
   recommendedJobs,
+  resolveDispute,
 } from "@/server/matching/service";
 import { scoreFromCriteria } from "@/server/matching/score";
 import { applyToJob } from "@/server/services/applications";
@@ -134,5 +136,37 @@ describe("calcul de compatibilité en base (partie 08)", () => {
     const frozen = parseExplanation(application.matchExplanation);
     expect(frozen).not.toBeNull();
     expect(application.matchScore).toBe(frozen!.score);
+  });
+
+  it("une révision humaine : une seule demande ouverte, réponse notifiée au talent", async () => {
+    const [user, job] = [await talent(), await newJob()];
+    const admin = await newUser();
+    users.push(admin.id);
+    const input = {
+      job: job.slug,
+      reason: "skill" as const,
+      details: "Je maîtrise cette compétence depuis trois ans.",
+      notifyRecruiter: true,
+    };
+    expect(await createDispute(db, user.id, input)).toBe("created");
+    expect(await createDispute(db, user.id, input)).toBe("already");
+    const dispute = await db.matchDispute.findFirstOrThrow({ where: { userId: user.id } });
+    // Without an application, the recruiter is not involved.
+    expect(dispute.notifyRecruiter).toBe(false);
+    await resolveDispute(db, admin.id, {
+      id: dispute.id,
+      outcome: "confirmed",
+      resolution: "Le calcul a été vérifié.",
+    });
+    const closed = await db.matchDispute.findUniqueOrThrow({ where: { id: dispute.id } });
+    expect(closed.status).toBe("confirmed");
+    expect(await db.notification.count({ where: { userId: user.id, type: "matchReviewed" } })).toBe(
+      1,
+    );
+    // A closed review cannot be reopened by a second answer.
+    expect(
+      await resolveDispute(db, admin.id, { id: dispute.id, outcome: "corrected", resolution: "" }),
+    ).toBeNull();
+    await db.matchDispute.deleteMany({ where: { userId: user.id } });
   });
 });

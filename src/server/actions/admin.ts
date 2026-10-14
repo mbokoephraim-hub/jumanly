@@ -2,7 +2,7 @@
 
 import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
-import { updateTag } from "next/cache";
+import { refresh, updateTag } from "next/cache";
 import { z } from "zod";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -10,6 +10,9 @@ import { invalidate } from "@/server/entitlements";
 import type { Prisma } from "@/generated/prisma/client";
 import { approveJob, refuseJob, resolveReport } from "@/server/services/moderation";
 import { hiringTeam, notify } from "@/server/services/notifications";
+import { disputeResolutionSchema, resolveDispute } from "@/server/matching/service";
+import { criterionKeys } from "@/server/matching/types";
+import { saveWeights, weightsInputSchema } from "@/server/services/ai-admin";
 
 /** Every admin write: an administrator with write access (support agents read only), then audit. */
 async function adminWriter() {
@@ -218,4 +221,34 @@ export async function resolveReportAction(formData: FormData) {
   await resolveReport(db, admin.id, String(formData.get("report") ?? ""), action);
   updateTag("jobs");
   redirect("/admin/signalements?ok=1");
+}
+
+/** New version of the matching weights (total 100), audited in the service. */
+export async function saveWeightsAction(formData: FormData) {
+  const input = weightsInputSchema.safeParse({
+    ...Object.fromEntries(criterionKeys.map((key) => [key, Number(formData.get(key))])),
+    note: formData.get("note") ?? "",
+  });
+  const admin = await adminWriter();
+  if (!input.success) redirect("/admin/ia?onglet=poids&erreur=1#poids");
+  await saveWeights(db, admin.id, input.data);
+  refresh();
+  redirect("/admin/ia?onglet=poids&ok=1");
+}
+
+/** Human review of a disputed score; confirming needs an answer for the talent. */
+export async function resolveDisputeAction(formData: FormData) {
+  const input = disputeResolutionSchema.safeParse({
+    id: formData.get("id"),
+    outcome: formData.get("outcome"),
+    resolution: formData.get("resolution") ?? "",
+  });
+  const admin = await adminWriter();
+  if (!input.success) redirect("/admin/ia?onglet=revisions&erreur=1");
+  if (input.data.outcome === "confirmed" && !input.data.resolution) {
+    redirect("/admin/ia?onglet=revisions&erreur=reponse");
+  }
+  await resolveDispute(db, admin.id, input.data);
+  refresh();
+  redirect(`/admin/ia?onglet=revisions${input.data.outcome === "in_review" ? "" : "&ok=1"}`);
 }

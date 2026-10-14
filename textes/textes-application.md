@@ -2346,6 +2346,7 @@ Conventions :
 | `career.home.interviews.desc` | Entraînez-vous à l'écrit puis à l'oral, avec un retour détaillé. |
 | `career.home.plan.title` | Plan de progression |
 | `career.home.plan.desc` | Vos objectifs, vos étapes et les formations qui vous font avancer. |
+| `career.home.plan.cta` | Ouvrir mon plan |
 | `career.home.portfolio.title` | Portfolio |
 | `career.home.portfolio.desc` | Montrez vos projets sur une page à partager. |
 | `career.home.seo` | Career · Jumanly |
@@ -7537,6 +7538,20 @@ Conventions :
 | `admin.ai.usage.feature.interviewVoice` | Simulations orales |
 | `admin.ai.usage.feature.cvAnalysis` | Analyse de CV (recruteurs) |
 | `admin.ai.usage.feature.jobDraft` | Rédaction d'offres |
+| `admin.ai.usage.feature.cvParse` | Lecture de CV à l'import |
+| `admin.ai.usage.period` | 30 derniers jours |
+| `admin.ai.usage.col.feature` | Fonction |
+| `admin.ai.usage.col.plan` | Forfait |
+| `admin.ai.usage.col.calls` | Appels |
+| `admin.ai.usage.col.failures` | Échecs |
+| `admin.ai.usage.col.tokens` | Jetons (entrée / sortie) |
+| `admin.ai.usage.col.cost` | Coût estimé (USD) |
+| `admin.ai.usage.plan.none` | Sans forfait |
+| `admin.ai.usage.empty` | Aucun appel d'IA sur la période. |
+| `admin.ai.usage.noPrice` | Prix inconnu pour {models} : le coût de ces appels n'est pas estimé. Ajoutez le tarif dans src/server/ai/prices.ts. |
+| `admin.ai.scores.title` | Répartition des scores calculés |
+| `admin.ai.scores.count` | {count, plural, one {# score} other {# scores}} |
+| `admin.ai.scores.empty` | Aucun score calculé pour le moment. |
 | `admin.ai.usage.cost.perFeature` | Coût par crédit, à mettre à jour selon le fournisseur |
 | `admin.ai.weights.title` | Poids par défaut du matching |
 | `admin.ai.weights.subtitle` | Répartition proposée aux recruteurs à la création d'une offre. Total : 100. Les recruteurs peuvent l'ajuster pour leurs offres. |
@@ -7550,6 +7565,11 @@ Conventions :
 | `admin.ai.weights.excluded.body` | Genre, âge, photo, origine, religion, situation familiale, état de santé, forfait du talent. Cette liste ne peut pas être modifiée. |
 | `admin.ai.weights.impact` | Les scores existants seront recalculés. Les recruteurs et les talents verront la nouvelle explication. |
 | `admin.ai.weights.save` | Enregistrer les poids |
+| `admin.ai.weights.version` | Version en vigueur : {version} |
+| `admin.ai.weights.default` | Poids par défaut de la spécification |
+| `admin.ai.weights.note` | Motif du changement |
+| `admin.ai.weights.history` | Versions précédentes |
+| `admin.ai.weights.historyItem` | {version}, du {date} |
 | `admin.ai.weights.saved` | Poids enregistrés. Recalcul des scores en cours. |
 | `admin.ai.disputes.title` | Révisions humaines demandées |
 | `admin.ai.disputes.col.talent` | Talent |
@@ -7561,6 +7581,12 @@ Conventions :
 | `admin.ai.disputes.confirm` | Confirmer le score et expliquer |
 | `admin.ai.disputes.response` | Réponse envoyée au talent |
 | `admin.ai.disputes.resolved` | Révision clôturée. Le talent a été prévenu par e-mail. |
+| `admin.ai.disputes.empty` | Aucune révision en attente. |
+| `admin.ai.disputes.take` | Prendre en charge |
+| `admin.ai.disputes.scoreBefore` | Score contesté : {score} % |
+| `admin.ai.disputes.recruiterNotified` | Le talent souhaite que le recruteur soit prévenu. |
+| `admin.ai.disputes.responseHint` | Obligatoire pour confirmer le score : expliquez au talent ce qui a été vérifié. |
+| `admin.ai.disputes.responseMissing` | Écrivez une réponse au talent pour confirmer le score. |
 | `admin.ai.audit.title` | Journal d'audit IA |
 | `admin.ai.audit.desc` | Chaque calcul de score conserve les poids utilisés, les critères évalués et la version du modèle, pour permettre une explication et une révision. |
 | `admin.ai.audit.filter` | Filtrer par utilisateur, offre ou fonction |

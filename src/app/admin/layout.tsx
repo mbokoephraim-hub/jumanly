@@ -30,6 +30,7 @@ const links = [
   { key: "plans", href: "/admin/forfaits" },
   { key: "courses", href: "/admin/formations" },
   { key: "jobs", href: "/admin/offres" },
+  { key: "ai", href: "/admin/ia" },
   { key: "reports", href: "/admin/signalements" },
 ] as const;
 

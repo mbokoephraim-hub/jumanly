@@ -372,17 +372,18 @@ export async function recommendedCourses(
     select: {
       skillId: true,
       skill: { select: { name: true } },
-      course: { select: { id: true, slug: true, requiredLevel: true } },
+      course: { select: { id: true, slug: true, title: true, requiredLevel: true } },
     },
   });
   const byCourse = new Map<
     string,
-    { slug: string; open: boolean; demand: number; skills: string[] }
+    { slug: string; title: string; open: boolean; demand: number; skills: string[] }
   >();
   for (const row of rows) {
     if (enrolled.has(row.course.id)) continue;
     const entry = byCourse.get(row.course.id) ?? {
       slug: row.course.slug,
+      title: row.course.title,
       open: options.opens(row.course.requiredLevel),
       demand: 0,
       skills: [],

@@ -3184,7 +3184,8 @@
       },
       "plan": {
         "title": "Plan de progression",
-        "desc": "Vos objectifs, vos étapes et les formations qui vous font avancer."
+        "desc": "Vos objectifs, vos étapes et les formations qui vous font avancer.",
+        "cta": "Ouvrir mon plan"
       },
       "portfolio": {
         "title": "Portfolio",
@@ -8787,8 +8788,28 @@
           "interviewText": "Simulations écrites",
           "interviewVoice": "Simulations orales",
           "cvAnalysis": "Analyse de CV (recruteurs)",
-          "jobDraft": "Rédaction d'offres"
-        }
+          "jobDraft": "Rédaction d'offres",
+          "cvParse": "Lecture de CV à l'import"
+        },
+        "period": "30 derniers jours",
+        "col": {
+          "feature": "Fonction",
+          "plan": "Forfait",
+          "calls": "Appels",
+          "failures": "Échecs",
+          "tokens": "Jetons (entrée / sortie)",
+          "cost": "Coût estimé (USD)"
+        },
+        "plan": {
+          "none": "Sans forfait"
+        },
+        "empty": "Aucun appel d'IA sur la période.",
+        "noPrice": "Prix inconnu pour {models} : le coût de ces appels n'est pas estimé. Ajoutez le tarif dans src/server/ai/prices.ts."
+      },
+      "scores": {
+        "title": "Répartition des scores calculés",
+        "count": "{count, plural, one {# score} other {# scores}}",
+        "empty": "Aucun score calculé pour le moment."
       },
       "weights": {
         "title": "Poids par défaut du matching",
@@ -8807,6 +8828,11 @@
         },
         "impact": "Les scores existants seront recalculés. Les recruteurs et les talents verront la nouvelle explication.",
         "save": "Enregistrer les poids",
+        "version": "Version en vigueur : {version}",
+        "default": "Poids par défaut de la spécification",
+        "note": "Motif du changement",
+        "history": "Versions précédentes",
+        "historyItem": "{version}, du {date}",
         "saved": "Poids enregistrés. Recalcul des scores en cours."
       },
       "disputes": {
@@ -8821,7 +8847,13 @@
         "correct": "Corriger et notifier",
         "confirm": "Confirmer le score et expliquer",
         "response": "Réponse envoyée au talent",
-        "resolved": "Révision clôturée. Le talent a été prévenu par e-mail."
+        "resolved": "Révision clôturée. Le talent a été prévenu par e-mail.",
+        "empty": "Aucune révision en attente.",
+        "take": "Prendre en charge",
+        "scoreBefore": "Score contesté : {score} %",
+        "recruiterNotified": "Le talent souhaite que le recruteur soit prévenu.",
+        "responseHint": "Obligatoire pour confirmer le score : expliquez au talent ce qui a été vérifié.",
+        "responseMissing": "Écrivez une réponse au talent pour confirmer le score."
       },
       "audit": {
         "title": "Journal d'audit IA",

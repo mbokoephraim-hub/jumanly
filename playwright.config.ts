@@ -34,6 +34,8 @@ export default defineConfig({
       EMAIL_OUTBOX_FILE: OUTBOX_FILE,
       // Les tests créent beaucoup de comptes depuis la même machine.
       AUTH_RATE_LIMIT: "off",
+      // Jumanly Intelligence answers with its templates, without calling a model.
+      AI_PROVIDER: "fake",
     },
   },
 });

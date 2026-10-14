@@ -21,10 +21,14 @@ export async function logIn(page: Page, email: string, password = DEMO_PASSWORD,
   await page.waitForURL(
     (url) => !url.pathname.startsWith("/connexion") || url.pathname.includes("deux-etapes"),
   );
-  if (page.url().includes("/connexion/deux-etapes")) {
+  // Tests running in parallel can sign in to the same demo account: a newer code replaces ours,
+  // so a refused code is retried with the latest one.
+  for (let attempt = 0; attempt < 3 && page.url().includes("/connexion/deux-etapes"); attempt++) {
     await page.locator('input[name="code"]').fill(await lastCode(email, since));
     await page.getByRole("button", { name: /Vérifier|Confirmer/ }).click();
-    await page.waitForURL((url) => !url.pathname.startsWith("/connexion"));
+    await page
+      .waitForURL((url) => !url.pathname.startsWith("/connexion"), { timeout: 10_000 })
+      .catch(() => undefined);
   }
   await expect(page).not.toHaveURL(/\/connexion/);
 }
