@@ -118,11 +118,12 @@ test.describe("modèles de CV : rendu (desktop)", () => {
           },
           [shot.toString("base64"), reference.toString("base64")],
         );
-        // Same blocks at the same places: only font rendering differs from one machine to another.
+        // Same blocks at the same places: only font rendering differs from one machine to another
+        // (about 0.2 % locally, 3 % on the CI runner); another template differs by 15 % or more.
         expect(
           difference,
           `${name}: ${(difference * 100).toFixed(2)} % de pixels différents`,
-        ).toBeLessThan(0.02);
+        ).toBeLessThan(0.06);
       }
     });
   }
