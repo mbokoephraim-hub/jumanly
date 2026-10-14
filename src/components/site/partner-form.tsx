@@ -3,6 +3,7 @@
 import { useActionState } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { Icon } from "@/components/brand/icon";
 import { Alert } from "@/components/ui/alert";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -36,7 +37,10 @@ export function PartnerForm({ countries }: { countries: { value: string; label: 
 
   if (state.status === "sent") {
     return (
-      <div className="flex flex-col gap-3 rounded-card bg-blanc p-6 text-sapin" role="status">
+      <div
+        className="flex flex-col gap-3 rounded-card bg-blanc p-6 text-sapin lg:rounded-[28px] lg:p-9"
+        role="status"
+      >
         <h3 className="text-h2">{t("success.title")}</h3>
         <p className="text-[15px] leading-6">{t("success.text", { email: state.email })}</p>
       </div>
@@ -47,7 +51,7 @@ export function PartnerForm({ countries }: { countries: { value: string; label: 
     <form
       action={action}
       noValidate
-      className="flex flex-col gap-5 rounded-card bg-blanc p-6 text-sapin"
+      className="flex flex-col gap-5 rounded-card bg-blanc p-6 text-sapin shadow-[0_30px_60px_rgba(11,26,31,0.1)] lg:rounded-[28px] lg:p-9"
     >
       {(state.status === "failed" || state.status === "rateLimited") && (
         <Alert tone="error" title={state.status === "failed" ? t("error") : c("error.rateLimit")} />
@@ -120,13 +124,6 @@ export function PartnerForm({ countries }: { countries: { value: string; label: 
           defaultValue={values.beneficiaries}
           error={error("beneficiaries")}
         />
-        <Select
-          id="partner-plan"
-          name="plan"
-          label={t("form.plan.label")}
-          defaultValue={values.plan ?? "unsure"}
-          options={partnerPlans.map((value) => ({ value, label: t(`form.plan.${value}`) }))}
-        />
         <TextField
           id="partner-duration"
           name="duration"
@@ -135,6 +132,25 @@ export function PartnerForm({ countries }: { countries: { value: string; label: 
           defaultValue={values.duration}
         />
       </div>
+      <fieldset className="flex flex-col gap-2">
+        <legend className="mb-2 text-[13px] font-semibold">{t("form.plan.label")}</legend>
+        <div className="flex flex-wrap gap-2">
+          {partnerPlans.map((value) => (
+            <label key={value} className="cursor-pointer">
+              <input
+                type="radio"
+                name="plan"
+                value={value}
+                defaultChecked={(values.plan ?? "unsure") === value}
+                className="peer sr-only"
+              />
+              <span className="inline-flex h-[34px] items-center rounded-pill bg-blanc px-3.5 text-[12.5px] font-medium ring-[1.5px] ring-brume transition-colors ring-inset peer-checked:bg-sapin peer-checked:text-blanc peer-checked:ring-sapin peer-focus-visible:outline-2 peer-focus-visible:outline-offset-2 peer-focus-visible:outline-sapin hover:ring-sapin">
+                {t(`form.plan.${value}`)}
+              </span>
+            </label>
+          ))}
+        </div>
+      </fieldset>
       <TextArea
         id="partner-message"
         name="message"
@@ -161,7 +177,13 @@ export function PartnerForm({ countries }: { countries: { value: string; label: 
         )}
       </div>
       <div>
-        <Button type="submit" loading={pending} size="lg">
+        <Button
+          type="submit"
+          variant="secondary"
+          loading={pending}
+          size="lg"
+          iconAfter={<Icon name="send" />}
+        >
           {pending ? t("form.sending") : t("form.submit")}
         </Button>
       </div>

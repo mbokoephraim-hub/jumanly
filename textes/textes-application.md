@@ -736,6 +736,32 @@ Note d'intégration : l'organisation « Baobab Fintech » et ses membres (`compa
 | `partners.beneficiary.title` | Vous avez reçu un code de licence ? |
 | `partners.beneficiary.text` | Activez votre accès sponsorisé en quelques secondes. |
 | `partners.beneficiary.cta` | Activer mon code |
+| `partners.hero.visual.orgInitials` | FH |
+| `partners.hero.visual.orgName` | Fondation Horizon |
+| `partners.hero.visual.program` | Programme Cohorte 2026 · Starter · 6 mois |
+| `partners.hero.visual.aggregated` | Agrégé |
+| `partners.hero.visual.licenses.label` | Licences activées |
+| `partners.hero.visual.licenses.value` | 412 / 500 |
+| `partners.hero.visual.courses.label` | Formations suivies |
+| `partners.hero.visual.courses.value` | 1 268 |
+| `partners.hero.visual.certificates.label` | Attestations obtenues |
+| `partners.hero.visual.certificates.value` | 534 |
+| `partners.hero.visual.applications.label` | Candidatures envoyées |
+| `partners.hero.visual.applications.value` | 2 041 |
+| `partners.hero.visual.chart.title` | Licences activées par mois |
+| `partners.hero.visual.chart.months` | Mai, Juin, Juil., Août, Sept., Oct. |
+| `partners.who.eyebrow` | Institutions |
+| `partners.how.eyebrow` | Le modèle |
+| `partners.example.beneficiaries.value` | 500 |
+| `partners.example.beneficiaries.unit` | bénéficiaires |
+| `partners.example.price.value` | 5 USD |
+| `partners.example.months.value` | 6 |
+| `partners.example.months.unit` | mois |
+| `partners.example.total.value` | 15 000 USD |
+| `partners.privacy.eyebrow` | Confidentialité |
+| `partners.contact.eyebrow` | Contact |
+
+Note d'intégration : le tableau de bord du héros (`partners.hero.visual.*`, « Fondation Horizon ») est une illustration manifestement fictive. Les éléments de la formule d'exemple (`partners.example.*.value`) reprennent `partners.example.formula`, lue en entier par les lecteurs d'écran via `partners.example.formulaAlt`.
 
 ---
 
@@ -1002,6 +1028,7 @@ Note d'intégration : l'organisation « Baobab Fintech » et ses membres (`compa
 | `faq.seo.description` | Gratuité, forfaits, paiement par Mobile Money et carte, intelligence artificielle, confidentialité, recrutement et licences partenaires : toutes les réponses sur Jumanly. |
 | `faq.hero.title` | Questions fréquentes |
 | `faq.hero.text` | Vous ne trouvez pas votre réponse ? Écrivez-nous, nous vous répondons par e-mail. |
+| `faq.hero.eyebrow` | FAQ |
 | `faq.search.label` | Rechercher une question |
 | `faq.search.placeholder` | Ex. : paiement, visibilité du profil |
 | `faq.search.empty` | Aucune question ne correspond. Essayez un autre mot ou écrivez-nous. |
@@ -1088,6 +1115,7 @@ Nombre de questions : 28, réparties en 8 thèmes.
 | `contact.seo.description` | Une question, un projet de recrutement ou de partenariat ? Écrivez à l'équipe Jumanly via le formulaire ou par e-mail. |
 | `contact.hero.title` | Contactez-nous |
 | `contact.hero.text` | Une question, une suggestion ou un projet ? Remplissez le formulaire ou écrivez-nous directement. Nous répondons par e-mail. |
+| `contact.hero.eyebrow` | Contact |
 | `contact.emails.title` | Nos adresses |
 | `contact.emails.pro.label` | Professionnels, entreprises et partenaires |
 | `contact.emails.pro.value` | assistant@jumanly.io |
@@ -6382,6 +6410,32 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 | `matchingPage.faq.a4` | Seuls les recruteurs des offres auxquelles vous postulez, ou ceux dont vous acceptez la demande de mise en relation si votre profil est visible dans le vivier. |
 | `matchingPage.contact` | Une question sur le matching ? Écrivez-nous à assistant@jumanly.io ou infojumanly@gmail.com. |
 | `matchingPage.cta` | Créer mon profil gratuitement |
+| `matchingPage.eyebrow` | Jumanly Intelligence |
+| `matchingPage.nav.label` | Sommaire |
+| `matchingPage.nav.s1` | 1. Un score de 0 à 100 |
+| `matchingPage.nav.s2` | 2. Huit critères |
+| `matchingPage.nav.s6` | 6. Ce que nous n'utilisons jamais |
+| `matchingPage.nav.s8` | 8. Vous pouvez contester |
+| `matchingPage.hero.imageAlt` | Exemple de score de compatibilité : 87 %, très compatible |
+| `matchingPage.s3.example` | Exemple fictif · Analyste de données junior, Baobab Fintech |
+| `matchingPage.s5.example` | Exemple fictif : Grâce Mbuyi, talent Pro à Kinshasa. |
+| `matchingPage.s5.imageAlt` | Exemple d'explication d'un score de 87 %, avec les critères remplis, les compétences manquantes et une formation pour combler l'écart |
+| `matchingPage.example.job` | Analyste de données junior |
+| `matchingPage.example.company` | Baobab Fintech |
+| `matchingPage.example.skill` | SQL |
+| `matchingPage.example.language` | Français |
+| `matchingPage.example.languageLevel` | C2 |
+| `matchingPage.example.city` | Kinshasa |
+| `matchingPage.example.workMode` | Hybride |
+| `matchingPage.example.partialLanguage` | Anglais |
+| `matchingPage.example.partialExpected` | B2 |
+| `matchingPage.example.partialActual` | B1 |
+| `matchingPage.example.missingSkill` | Power BI |
+| `matchingPage.example.course` | Tableaux de bord avec Power BI |
+| `matchingPage.faq.eyebrow` | FAQ |
+| `matchingPage.finalCta.title` | Sur Jumanly, l'IA recommande et l'humain décide. |
+
+Note d'intégration : la fiche « Pourquoi 87 % ? » (`matchingPage.example.*`) est un exemple manifestement fictif ; ses phrases viennent des modèles `match.why.talent.*`. Les poids affichés en section 3 sont lus en base (MatchingWeights, valeurs par défaut sinon).
 
 
 ---
