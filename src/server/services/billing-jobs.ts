@@ -12,6 +12,7 @@ import { GRACE_DAYS } from "@/server/entitlements/periods";
 import type { PaymentProvider } from "@/server/payments";
 import { billingRecipients, returnedToFree } from "./billing-events";
 import { notify } from "./notifications";
+import { endingLicenses, expireLicenses } from "./partners";
 import { applyPaymentStatus, PAYMENT_EXPIRY_MS, refreshPayment } from "./subscriptions";
 
 const DAY_MS = 86_400_000;
@@ -60,6 +61,8 @@ export type BillingJobsReport = {
   reminders: number;
   graces: number;
   returnedToFree: number;
+  licenseReminders: number;
+  licensesExpired: number;
 };
 
 export async function runBillingJobs(
@@ -75,6 +78,8 @@ export async function runBillingJobs(
     reminders: 0,
     graces: 0,
     returnedToFree: 0,
+    licenseReminders: 0,
+    licensesExpired: 0,
   };
 
   // 1. Mobile Money requests without answer: ask the provider, expire after 15 minutes.
@@ -211,6 +216,36 @@ export async function runBillingJobs(
       returnedToFree(db, subject, row.plan.name, now),
     );
     if (done) report.returnedToFree++;
+  }
+
+  // 5. Sponsored licences (Partners): a notice 7 days before the end, then back to the plan
+  // below (another subscription, or the free plan), nothing deleted.
+  for (const row of await endingLicenses(db, now, only)) {
+    const sent = await once(db, `licenseEnding:${row.subscriptionId}`, () =>
+      notify(db, {
+        userIds: [row.userId],
+        type: "licenseExpiring",
+        payload: {
+          plan: row.planName,
+          sponsorName: row.sponsorName,
+          date: formatDate(row.endDate),
+        },
+        href: "/app/abonnement",
+      }),
+    );
+    if (sent) report.licenseReminders++;
+  }
+  for (const row of await expireLicenses(db, now, only)) {
+    const done = await once(db, `licenseExpired:${row.licenseId}`, async () => {
+      const free = await freePlan(db, { type: "user", id: row.userId });
+      await notify(db, {
+        userIds: [row.userId],
+        type: "licenseExpired",
+        payload: { sponsorName: row.sponsorName, freePlan: free?.name ?? "" },
+        href: "/app/abonnement",
+      });
+    });
+    if (done) report.licensesExpired++;
   }
   return report;
 }

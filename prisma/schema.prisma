@@ -30,28 +30,29 @@ enum EntitlementType {
 }
 
 model Plan {
-  id            String            @id @default(cuid(2))
-  code          String            @unique
-  family        PlanFamily
-  name          String
-  tagline       String
+  id             String            @id @default(cuid(2))
+  code           String            @unique
+  family         PlanFamily
+  name           String
+  tagline        String
   /// Prefix of this plan's interface texts, e.g. "pricing.talent.pro" (features, CTA, badge).
-  contentKey    String
+  contentKey     String
   /// USD cents; null = on quote.
-  priceCents    Int?
-  currency      String            @default("USD")
-  interval      String            @default("month")
-  isPublic      Boolean           @default(true)
-  isPurchasable Boolean           @default(true)
-  recommended   Boolean           @default(false)
-  sortOrder     Int
-  active        Boolean           @default(true)
-  entitlements  PlanEntitlement[]
-  subscriptions Subscription[]    @relation("SubscriptionPlan")
-  pendingFor    Subscription[]    @relation("SubscriptionPendingPlan")
-  payments      Payment[]
-  createdAt     DateTime          @default(now())
-  updatedAt     DateTime          @updatedAt
+  priceCents     Int?
+  currency       String            @default("USD")
+  interval       String            @default("month")
+  isPublic       Boolean           @default(true)
+  isPurchasable  Boolean           @default(true)
+  recommended    Boolean           @default(false)
+  sortOrder      Int
+  active         Boolean           @default(true)
+  entitlements   PlanEntitlement[]
+  subscriptions  Subscription[]    @relation("SubscriptionPlan")
+  pendingFor     Subscription[]    @relation("SubscriptionPendingPlan")
+  payments       Payment[]
+  licenseBatches LicenseBatch[]
+  createdAt      DateTime          @default(now())
+  updatedAt      DateTime          @updatedAt
 
   @@index([family, sortOrder])
 }
@@ -122,6 +123,9 @@ model Organization {
   contactRequests         ContactRequest[]
   contactBlocks           ContactBlock[]
   interviews              Interview[]
+  /// Partner organizations only (E9): bank, university, foundation, company, cooperation, public.
+  partnerKind             String?
+  licenseBatches          LicenseBatch[]
   createdAt               DateTime              @default(now())
   updatedAt               DateTime              @updatedAt
 }
@@ -537,6 +541,7 @@ model User {
   aiSuggestions       AiSuggestion[]
   matchDisputes       MatchDispute[]            @relation("DisputeAuthor")
   progressPlan        ProgressPlan?
+  licenses            License[]
   createdAt           DateTime                  @default(now())
   updatedAt           DateTime                  @updatedAt
 
@@ -1571,4 +1576,81 @@ model Interview {
 
   @@index([organizationId, startsAt])
   @@index([applicationId])
+}
+
+// ─── Jumanly Partners (E9) ──────────────────────────────────────
+
+/// A batch of sponsored licences bought by a partner, created by the admin after the contract.
+model LicenseBatch {
+  id           String        @id @default(cuid(2))
+  partnerOrgId String
+  partnerOrg   Organization  @relation(fields: [partnerOrgId], references: [id], onDelete: Cascade)
+  planId       String
+  plan         Plan          @relation(fields: [planId], references: [id])
+  name         String
+  seats        Int
+  /// Licence length for each beneficiary, capped by the end of the contract.
+  months       Int
+  startsAt     DateTime
+  endsAt       DateTime
+  contractRef  String?
+  priceCents   Int?
+  /// Report cells about fewer people than this are hidden (never below 10).
+  minGroup     Int           @default(10)
+  createdById  String?
+  licenses     License[]
+  links        LicenseLink[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
+
+  @@index([partnerOrgId])
+}
+
+enum LicenseStatus {
+  available
+  active
+  revoked
+  expired
+}
+
+/// One distributed licence: a code, an e-mail invitation or an activation through a link.
+model License {
+  id                       String        @id @default(cuid(2))
+  batchId                  String
+  batch                    LicenseBatch  @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  /// JMLY-XXXX-XXXX, stored without separators.
+  code                     String        @unique
+  label                    String?
+  /// E-mail invitation: only this address can activate the code.
+  invitedEmail             String?
+  invitedAt                DateTime?
+  linkId                   String?
+  link                     LicenseLink?  @relation(fields: [linkId], references: [id], onDelete: SetNull)
+  userId                   String?
+  user                     User?         @relation(fields: [userId], references: [id], onDelete: SetNull)
+  subscriptionId           String?       @unique
+  status                   LicenseStatus @default(available)
+  activatedAt              DateTime?
+  /// The beneficiary agreed that a declared hiring counts in the partner's reports.
+  outcomeConsentAt         DateTime?
+  outcomeConsentAnsweredAt DateTime?
+  createdAt                DateTime      @default(now())
+  updatedAt                DateTime      @updatedAt
+
+  @@index([batchId, status])
+  @@index([userId])
+  @@index([batchId, invitedEmail])
+}
+
+/// An invitation link shared with a group; each use activates one licence of the batch.
+model LicenseLink {
+  id         String       @id @default(cuid(2))
+  batchId    String
+  batch      LicenseBatch @relation(fields: [batchId], references: [id], onDelete: Cascade)
+  token      String       @unique
+  maxUses    Int
+  expiresAt  DateTime?
+  disabledAt DateTime?
+  licenses   License[]
+  createdAt  DateTime     @default(now())
 }

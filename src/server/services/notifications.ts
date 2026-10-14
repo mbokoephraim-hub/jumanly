@@ -35,6 +35,11 @@ export const notificationTypes = [
   "orgVerified",
   "orgVerificationRejected",
   "abnormalUsage",
+  "licenseActivated",
+  "licenseOnHold",
+  "licenseExpiring",
+  "licenseExpired",
+  "licensesLow",
 ] as const;
 export type NotificationType = (typeof notificationTypes)[number];
 

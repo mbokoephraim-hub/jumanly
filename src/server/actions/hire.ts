@@ -19,7 +19,7 @@ import {
   rejectReasons,
   saveJob,
 } from "@/server/services/hire";
-import { hireMemberships } from "@/server/services/organization";
+import { hireMemberships, partnerMemberships } from "@/server/services/organization";
 
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
 
@@ -47,7 +47,14 @@ export async function switchSpace(formData: FormData) {
     await setActiveSpace("personal");
     redirect("/app");
   }
-  const memberships = await hireMemberships(db, user.id);
+  const [memberships, partners] = await Promise.all([
+    hireMemberships(db, user.id),
+    partnerMemberships(db, user.id),
+  ]);
+  if (partners.some((membership) => membership.organizationId === wanted)) {
+    await setActiveSpace(wanted);
+    redirect("/app/partenaire");
+  }
   if (!memberships.some((membership) => membership.organizationId === wanted)) redirect("/app");
   await setActiveSpace(wanted);
   const suite = String(formData.get("suite") ?? "");

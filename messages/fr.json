@@ -1861,7 +1861,8 @@
       "free": "Vous n'avez rien à payer.",
       "privacy": "{sponsorName} recevra uniquement des statistiques agrégées d'usage et d'impact. Votre CV, vos messages et vos données personnelles ne lui sont pas transmis sans votre accord.",
       "confirm": "Activer ma licence",
-      "cancel": "Annuler"
+      "cancel": "Annuler",
+      "months": "Durée : {months, plural, one {# mois} other {# mois}}, au plus tard jusqu'au {endDate}"
     },
     "success": {
       "title": "Votre licence {plan} est active",
@@ -1890,7 +1891,8 @@
       "title": "Vous êtes invité par {sponsorName}",
       "text": "{sponsorName} vous offre la formule {plan} jusqu'au {endDate}. Connectez-vous ou créez votre compte pour l'activer."
     },
-    "help": "Un problème avec votre code ? Écrivez-nous à infojumanly@gmail.com en indiquant le nom de votre institution."
+    "help": "Un problème avec votre code ? Écrivez-nous à infojumanly@gmail.com en indiquant le nom de votre institution.",
+    "change": "Saisir un autre code"
   },
   "email": {
     "signature": "L'équipe Jumanly · Learn. Grow. Connect. · jumanly.io",
@@ -1925,7 +1927,7 @@
     },
     "license": {
       "subject": "{sponsorName} vous offre l'accès Jumanly {plan}",
-      "body": "Bonjour, {sponsorName} finance votre accès à la formule {plan} de Jumanly jusqu'au {endDate}. Activez-le avec le code {code} ou en cliquant sur le bouton ci-dessous.",
+      "body": "{sponsorName} finance votre accès à la formule {plan} de Jumanly jusqu'au {endDate}. Activez-le avec le code {code} ou en cliquant sur le bouton ci-dessous.",
       "cta": "Activer ma licence"
     }
   },
@@ -1950,6 +1952,8 @@
     },
     "organization": "Organisation",
     "partner": "Partenaire",
+    "partnerLicenses": "Licences",
+    "partnerReports": "Rapports",
     "admin": "Jumanly Admin",
     "settings": "Paramètres",
     "logout": "Se déconnecter",
@@ -5496,6 +5500,10 @@
         "text": "Lecteur",
         "desc": "Consulte les tableaux de bord et les rapports, sans accès aux actions sur les candidatures."
       },
+      "partner_manager": {
+        "text": "Responsable partenaire",
+        "desc": "Distribue les licences financées par l'institution et consulte les rapports agrégés."
+      },
       "locked": "Ce rôle est disponible avec {plan}.",
       "scope": {
         "text": "Portée",
@@ -6621,7 +6629,15 @@
       "text": "{sponsorName} demande à recevoir {dataDescription} vous concernant, pour {purpose}. Vous êtes libre d'accepter ou de refuser. Votre licence n'en dépend pas.",
       "accept": "J'accepte",
       "decline": "Je refuse",
-      "withdraw": "Vous pouvez retirer votre accord à tout moment dans vos paramètres de confidentialité."
+      "withdraw": "Vous pouvez changer votre réponse à tout moment sur cette page.",
+      "dataDescription": "le fait que vous ayez été recruté grâce à Jumanly (sans votre nom ni celui de l'employeur)",
+      "purpose": "mesurer l'impact de son programme",
+      "status": {
+        "accepted": "Vous avez accepté que votre recrutement soit comptabilisé, de façon anonyme.",
+        "declined": "Vous avez refusé que votre recrutement soit comptabilisé."
+      },
+      "change": "Changer ma réponse",
+      "saved": "Votre réponse est enregistrée."
     }
   },
   "quote": {
@@ -7356,6 +7372,11 @@
       "orgVerified": "{org} est maintenant une entreprise vérifiée.",
       "orgVerificationRejected": "La vérification de {org} n'a pas été acceptée. Consultez le motif.",
       "abnormalUsage": "Usage inhabituel : {count} profils consultés en une heure par un membre de {org}. Accès suspendu une heure.",
+      "licenseActivated": "Votre licence {plan} offerte par {sponsorName} est active jusqu'au {date}.",
+      "licenseOnHold": "Votre licence {licensePlan} offerte par {sponsorName} est en attente : votre forfait {plan} actuel est supérieur. Elle commencera le {date}.",
+      "licenseExpiring": "Votre licence {plan} offerte par {sponsorName} se termine le {date}.",
+      "licenseExpired": "Votre licence offerte par {sponsorName} est terminée. Vous êtes au forfait {freePlan}, vos données sont conservées.",
+      "licensesLow": "{count, plural, =0 {Plus aucune licence disponible} one {Il reste # licence disponible} other {Il reste # licences disponibles}} dans le lot « {batchName} ».",
       "unread": "Non lue"
     }
   },
@@ -7692,6 +7713,13 @@
       "p2": "Si vous avez déjà un compte Jumanly, l'organisation s'ajoutera à votre sélecteur d'espace. Votre espace personnel reste séparé.",
       "p3": "Cette invitation expire le {date, date, long}.",
       "cta": "Rejoindre {org}"
+    },
+    "partnerInvite": {
+      "subject": "Votre espace Jumanly Partners pour {org}",
+      "preheader": "Distribuez les licences financées et suivez leur impact.",
+      "p1": "Jumanly vous invite à gérer l'espace partenaire de {org} : distribution des licences financées et rapports d'impact agrégés.",
+      "p2": "Vous ne verrez jamais les données personnelles des bénéficiaires : uniquement des chiffres agrégés.",
+      "cta": "Ouvrir l'espace partenaire"
     },
     "certificate": {
       "subject": "Bravo {firstName}, votre attestation est prête",
@@ -8305,8 +8333,13 @@
       },
       "smallGroup": "Données masquées : moins de {minGroup} bénéficiaires concernés.",
       "empty": "Aucun lot de licences pour l'instant. Votre contact Jumanly le créera après signature du contrat.",
-      "contact": "Une question sur votre contrat ? Écrivez à assistant@jumanly.io."
+      "contact": "Une question sur votre contrat ? Écrivez à assistant@jumanly.io.",
+      "months": {
+        "title": "Bénéficiaires actifs par mois",
+        "month": "Mois"
+      }
     },
+    "hidden": "Masqué",
     "licenses": {
       "title": "Licences",
       "subtitle": "Distribuez vos licences par code, par lien d'invitation ou par import d'e-mails.",
@@ -8322,7 +8355,16 @@
           "expired": "Terminé",
           "exhausted": "Toutes les licences sont distribuées"
         },
-        "more": "Besoin de licences supplémentaires ? Écrivez à assistant@jumanly.io."
+        "more": "Besoin de licences supplémentaires ? Écrivez à assistant@jumanly.io.",
+        "none": "Aucun lot de licences pour l'instant. Votre contact Jumanly le créera après signature du contrat.",
+        "available": "{count, plural, =0 {Aucune licence disponible} one {# licence disponible} other {# licences disponibles}}"
+      },
+      "error": {
+        "invalid": "Vérifiez les informations saisies.",
+        "notFound": "Cet élément n'existe plus.",
+        "batchClosed": "Ce lot est terminé : ses licences ne peuvent plus être distribuées.",
+        "noneAvailable": "Toutes les licences de ce lot sont distribuées.",
+        "consent": "Confirmez que ces personnes ont accepté de recevoir une invitation de votre part."
       },
       "codes": {
         "title": "Codes d'activation",
@@ -8354,7 +8396,9 @@
           "text": "Révoquer",
           "confirm": "Révoquer ce code ? Il ne pourra plus être utilisé. La licence redevient disponible."
         },
-        "usedNote": "Un code utilisé n'indique pas qui l'a activé."
+        "usedNote": "Un code utilisé n'indique pas qui l'a activé.",
+        "empty": "Aucun code pour ce lot.",
+        "revoked": "Code révoqué. La licence est de nouveau disponible."
       },
       "link": {
         "title": "Lien d'invitation",
@@ -8367,7 +8411,11 @@
         "uses": "{used} activations sur {max}",
         "disable": "Désactiver le lien",
         "disabled": "Lien désactivé.",
-        "warning": "Toute personne disposant du lien peut activer une licence. Partagez-le uniquement avec votre groupe."
+        "warning": "Toute personne disposant du lien peut activer une licence. Partagez-le uniquement avec votre groupe.",
+        "created": "Lien créé. Copiez-le et partagez-le avec votre groupe.",
+        "empty": "Aucun lien pour l'instant.",
+        "address": "Adresse du lien",
+        "expiresOn": "Expire le {date}"
       },
       "import": {
         "title": "Inviter par e-mail",
@@ -8387,7 +8435,8 @@
         "sending": "Envoi des invitations…",
         "sent": "{count, plural, one {# invitation envoyée.} other {# invitations envoyées.}}",
         "privacy": "Les adresses servent uniquement à envoyer les invitations. Après activation, vous ne voyez plus que des statistiques agrégées.",
-        "consent": "Je confirme que ces personnes ont accepté de recevoir une invitation Jumanly de notre part."
+        "consent": "Je confirme que ces personnes ont accepté de recevoir une invitation Jumanly de notre part.",
+        "file": "Fichier CSV"
       },
       "invites": {
         "status": {
@@ -8399,7 +8448,9 @@
         "resend": {
           "text": "Relancer les invitations non activées",
           "confirm": "Relancer {count, plural, one {# personne} other {# personnes}} ?"
-        }
+        },
+        "title": "Invitations par e-mail",
+        "resent": "{count, plural, =0 {Aucune invitation à relancer.} one {# invitation relancée.} other {# invitations relancées.}}"
       }
     },
     "reports": {
@@ -8413,7 +8464,8 @@
       "period": "Période",
       "batch": {
         "text": "Lot",
-        "all": "Tous les lots"
+        "all": "Tous les lots",
+        "apply": "Afficher"
       },
       "section": {
         "reach": "Portée",
@@ -8440,6 +8492,9 @@
         "pdf": "Exporter en PDF",
         "ready": "Rapport prêt. Le téléchargement commence.",
         "footer": "Rapport agrégé généré par Jumanly le {date, date, long}. Ne contient aucune donnée nominative."
+      },
+      "pdf": {
+        "title": "Rapport d'impact · {org}"
       },
       "monthly": "Recevoir le rapport chaque mois par e-mail",
       "empty": "Pas encore assez de données. Les premiers indicateurs apparaîtront quand au moins {minGroup} bénéficiaires auront activé leur licence.",
@@ -9032,9 +9087,24 @@
         "quantity": "Nombre de licences",
         "months": "Durée par bénéficiaire (mois)",
         "minGroup": "Seuil d'anonymat des rapports",
-        "created": "Lot créé. Le responsable partenaire peut distribuer les licences."
+        "created": "Lot créé. Le responsable partenaire peut distribuer les licences.",
+        "create": "Créer le lot",
+        "contract": "Contrat {reference}",
+        "amountHelp": "En USD, tel que prévu au contrat (facultatif).",
+        "none": "Aucun lot pour ce partenaire."
       },
-      "noOnlinePurchase": "Les licences Partners ne s'achètent pas en ligne : le lot est créé ici après signature du contrat."
+      "noOnlinePurchase": "Les licences Partners ne s'achètent pas en ligne : le lot est créé ici après signature du contrat.",
+      "subtitle": "Organisations partenaires, contrats et lots de licences sponsorisées.",
+      "empty": "Aucun partenaire pour l'instant.",
+      "created": "Partenaire créé. Une invitation a été envoyée au responsable.",
+      "invited": "Invitation envoyée.",
+      "error": "Vérifiez les informations saisies : la fin doit suivre le début, le seuil d'anonymat est d'au moins 10.",
+      "managers": "Responsables : {emails}",
+      "noManager": "Aucun responsable actif.",
+      "pending": "Invitation en attente : {emails}",
+      "inviteManager": "Inviter un responsable",
+      "invite": "Inviter",
+      "create": "Créer le partenaire"
     },
     "ai": {
       "title": "IA et matching",

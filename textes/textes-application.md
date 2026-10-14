@@ -1518,6 +1518,8 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `activate.invite.title` | Vous êtes invité par {sponsorName} |
 | `activate.invite.text` | {sponsorName} vous offre la formule {plan} jusqu'au {endDate}. Connectez-vous ou créez votre compte pour l'activer. |
 | `activate.help` | Un problème avec votre code ? Écrivez-nous à infojumanly@gmail.com en indiquant le nom de votre institution. |
+| `activate.preview.months` | Durée : {months, plural, one {# mois} other {# mois}}, au plus tard jusqu'au {endDate} |
+| `activate.change` | Saisir un autre code |
 
 ---
 
@@ -1597,7 +1599,7 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `email.passwordChanged.subject` | Votre mot de passe Jumanly a été modifié |
 | `email.passwordChanged.body` | Bonjour {firstName}, le mot de passe de votre compte a été modifié le {date}. Si ce n'est pas vous, réinitialisez-le immédiatement et écrivez-nous à assistant@jumanly.io. |
 | `email.license.subject` | {sponsorName} vous offre l'accès Jumanly {plan} |
-| `email.license.body` | Bonjour, {sponsorName} finance votre accès à la formule {plan} de Jumanly jusqu'au {endDate}. Activez-le avec le code {code} ou en cliquant sur le bouton ci-dessous. |
+| `email.license.body` | {sponsorName} finance votre accès à la formule {plan} de Jumanly jusqu'au {endDate}. Activez-le avec le code {code} ou en cliquant sur le bouton ci-dessous. |
 | `email.license.cta` | Activer ma licence |
 
 
@@ -1638,6 +1640,8 @@ Conventions :
 | `appNav.hire.pools` | Viviers |
 | `appNav.organization` | Organisation |
 | `appNav.partner` | Partenaire |
+| `appNav.partnerLicenses` | Licences |
+| `appNav.partnerReports` | Rapports |
 | `appNav.admin` | Jumanly Admin |
 | `appNav.settings` | Paramètres |
 | `appNav.logout` | Se déconnecter |
@@ -4567,6 +4571,8 @@ Conventions :
 | `org.roles.hiring_manager.desc` | Voit les candidats des offres qui lui sont attribuées, les évalue et les commente. Ne publie pas d'offre. |
 | `org.roles.viewer.text` | Lecteur |
 | `org.roles.viewer.desc` | Consulte les tableaux de bord et les rapports, sans accès aux actions sur les candidatures. |
+| `org.roles.partner_manager.text` | Responsable partenaire |
+| `org.roles.partner_manager.desc` | Distribue les licences financées par l'institution et consulte les rapports agrégés. |
 | `org.roles.locked` | Ce rôle est disponible avec {plan}. |
 | `org.roles.scope.text` | Portée |
 | `org.roles.scope.org` | Toute l'organisation |
@@ -5573,7 +5579,13 @@ Note d'intégration : `quota.reached.addon` n'est affiché que si une option de 
 | `sponsored.consent.text` | {sponsorName} demande à recevoir {dataDescription} vous concernant, pour {purpose}. Vous êtes libre d'accepter ou de refuser. Votre licence n'en dépend pas. |
 | `sponsored.consent.accept` | J'accepte |
 | `sponsored.consent.decline` | Je refuse |
-| `sponsored.consent.withdraw` | Vous pouvez retirer votre accord à tout moment dans vos paramètres de confidentialité. |
+| `sponsored.consent.withdraw` | Vous pouvez changer votre réponse à tout moment sur cette page. |
+| `sponsored.consent.dataDescription` | le fait que vous ayez été recruté grâce à Jumanly (sans votre nom ni celui de l'employeur) |
+| `sponsored.consent.purpose` | mesurer l'impact de son programme |
+| `sponsored.consent.status.accepted` | Vous avez accepté que votre recrutement soit comptabilisé, de façon anonyme. |
+| `sponsored.consent.status.declined` | Vous avez refusé que votre recrutement soit comptabilisé. |
+| `sponsored.consent.change` | Changer ma réponse |
+| `sponsored.consent.saved` | Votre réponse est enregistrée. |
 
 ---
 
@@ -6202,6 +6214,11 @@ Conventions :
 | `notifications.item.orgVerified` | {org} est maintenant une entreprise vérifiée. |
 | `notifications.item.orgVerificationRejected` | La vérification de {org} n'a pas été acceptée. Consultez le motif. |
 | `notifications.item.abnormalUsage` | Usage inhabituel : {count} profils consultés en une heure par un membre de {org}. Accès suspendu une heure. |
+| `notifications.item.licenseActivated` | Votre licence {plan} offerte par {sponsorName} est active jusqu'au {date}. |
+| `notifications.item.licenseOnHold` | Votre licence {licensePlan} offerte par {sponsorName} est en attente : votre forfait {plan} actuel est supérieur. Elle commencera le {date}. |
+| `notifications.item.licenseExpiring` | Votre licence {plan} offerte par {sponsorName} se termine le {date}. |
+| `notifications.item.licenseExpired` | Votre licence offerte par {sponsorName} est terminée. Vous êtes au forfait {freePlan}, vos données sont conservées. |
+| `notifications.item.licensesLow` | {count, plural, =0 {Plus aucune licence disponible} one {Il reste # licence disponible} other {Il reste # licences disponibles}} dans le lot « {batchName} ». |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)
@@ -6522,6 +6539,11 @@ Conventions :
 | `mail.orgInvite.p2` | Si vous avez déjà un compte Jumanly, l'organisation s'ajoutera à votre sélecteur d'espace. Votre espace personnel reste séparé. |
 | `mail.orgInvite.p3` | Cette invitation expire le {date, date, long}. |
 | `mail.orgInvite.cta` | Rejoindre {org} |
+| `mail.partnerInvite.subject` | Votre espace Jumanly Partners pour {org} |
+| `mail.partnerInvite.preheader` | Distribuez les licences financées et suivez leur impact. |
+| `mail.partnerInvite.p1` | Jumanly vous invite à gérer l'espace partenaire de {org} : distribution des licences financées et rapports d'impact agrégés. |
+| `mail.partnerInvite.p2` | Vous ne verrez jamais les données personnelles des bénéficiaires : uniquement des chiffres agrégés. |
+| `mail.partnerInvite.cta` | Ouvrir l'espace partenaire |
 
 ### E-mail · Attestation obtenue
 
@@ -7143,6 +7165,9 @@ Conventions :
 | `partner.dashboard.smallGroup` | Données masquées : moins de {minGroup} bénéficiaires concernés. |
 | `partner.dashboard.empty` | Aucun lot de licences pour l'instant. Votre contact Jumanly le créera après signature du contrat. |
 | `partner.dashboard.contact` | Une question sur votre contrat ? Écrivez à assistant@jumanly.io. |
+| `partner.hidden` | Masqué |
+| `partner.dashboard.months.title` | Bénéficiaires actifs par mois |
+| `partner.dashboard.months.month` | Mois |
 
 ### `/app/partenaire/licences` · Lots, codes et invitations
 
@@ -7164,6 +7189,13 @@ Conventions :
 | `partner.licenses.batch.status.expired` | Terminé |
 | `partner.licenses.batch.status.exhausted` | Toutes les licences sont distribuées |
 | `partner.licenses.batch.more` | Besoin de licences supplémentaires ? Écrivez à assistant@jumanly.io. |
+| `partner.licenses.batch.none` | Aucun lot de licences pour l'instant. Votre contact Jumanly le créera après signature du contrat. |
+| `partner.licenses.batch.available` | {count, plural, =0 {Aucune licence disponible} one {# licence disponible} other {# licences disponibles}} |
+| `partner.licenses.error.invalid` | Vérifiez les informations saisies. |
+| `partner.licenses.error.notFound` | Cet élément n'existe plus. |
+| `partner.licenses.error.batchClosed` | Ce lot est terminé : ses licences ne peuvent plus être distribuées. |
+| `partner.licenses.error.noneAvailable` | Toutes les licences de ce lot sont distribuées. |
+| `partner.licenses.error.consent` | Confirmez que ces personnes ont accepté de recevoir une invitation de votre part. |
 
 #### Codes d'activation
 
@@ -7189,6 +7221,8 @@ Conventions :
 | `partner.licenses.codes.revoke.text` | Révoquer |
 | `partner.licenses.codes.revoke.confirm` | Révoquer ce code ? Il ne pourra plus être utilisé. La licence redevient disponible. |
 | `partner.licenses.codes.usedNote` | Un code utilisé n'indique pas qui l'a activé. |
+| `partner.licenses.codes.empty` | Aucun code pour ce lot. |
+| `partner.licenses.codes.revoked` | Code révoqué. La licence est de nouveau disponible. |
 
 #### Lien d'invitation
 
@@ -7205,6 +7239,10 @@ Conventions :
 | `partner.licenses.link.disable` | Désactiver le lien |
 | `partner.licenses.link.disabled` | Lien désactivé. |
 | `partner.licenses.link.warning` | Toute personne disposant du lien peut activer une licence. Partagez-le uniquement avec votre groupe. |
+| `partner.licenses.link.created` | Lien créé. Copiez-le et partagez-le avec votre groupe. |
+| `partner.licenses.link.empty` | Aucun lien pour l'instant. |
+| `partner.licenses.link.address` | Adresse du lien |
+| `partner.licenses.link.expiresOn` | Expire le {date} |
 
 #### Import CSV d'e-mails
 
@@ -7234,6 +7272,9 @@ Conventions :
 | `partner.licenses.invites.status.expired` | Invitation expirée |
 | `partner.licenses.invites.resend.text` | Relancer les invitations non activées |
 | `partner.licenses.invites.resend.confirm` | Relancer {count, plural, one {# personne} other {# personnes}} ? |
+| `partner.licenses.invites.title` | Invitations par e-mail |
+| `partner.licenses.invites.resent` | {count, plural, =0 {Aucune invitation à relancer.} one {# invitation relancée.} other {# invitations relancées.}} |
+| `partner.licenses.import.file` | Fichier CSV |
 
 ### `/app/partenaire/rapports` · Rapports d'impact agrégés
 
@@ -7249,6 +7290,7 @@ Conventions :
 | `partner.reports.period` | Période |
 | `partner.reports.batch.text` | Lot |
 | `partner.reports.batch.all` | Tous les lots |
+| `partner.reports.batch.apply` | Afficher |
 | `partner.reports.section.reach` | Portée |
 | `partner.reports.section.learning` | Formation |
 | `partner.reports.section.career` | Préparation à l'emploi |
@@ -7269,6 +7311,7 @@ Conventions :
 | `partner.reports.export.pdf` | Exporter en PDF |
 | `partner.reports.export.ready` | Rapport prêt. Le téléchargement commence. |
 | `partner.reports.export.footer` | Rapport agrégé généré par Jumanly le {date, date, long}. Ne contient aucune donnée nominative. |
+| `partner.reports.pdf.title` | Rapport d'impact · {org} |
 | `partner.reports.monthly` | Recevoir le rapport chaque mois par e-mail |
 | `partner.reports.empty` | Pas encore assez de données. Les premiers indicateurs apparaîtront quand au moins {minGroup} bénéficiaires auront activé leur licence. |
 | `partner.reports.requestNominative` | Vous avez besoin d'une information individuelle (par exemple pour un suivi de programme) ? Elle ne peut être transmise qu'avec l'accord explicite de chaque bénéficiaire. Écrivez à assistant@jumanly.io pour mettre en place une demande de consentement. |
@@ -7738,6 +7781,21 @@ Conventions :
 | `admin.partners.batch.minGroup` | Seuil d'anonymat des rapports |
 | `admin.partners.batch.created` | Lot créé. Le responsable partenaire peut distribuer les licences. |
 | `admin.partners.noOnlinePurchase` | Les licences Partners ne s'achètent pas en ligne : le lot est créé ici après signature du contrat. |
+| `admin.partners.subtitle` | Organisations partenaires, contrats et lots de licences sponsorisées. |
+| `admin.partners.empty` | Aucun partenaire pour l'instant. |
+| `admin.partners.created` | Partenaire créé. Une invitation a été envoyée au responsable. |
+| `admin.partners.invited` | Invitation envoyée. |
+| `admin.partners.error` | Vérifiez les informations saisies : la fin doit suivre le début, le seuil d'anonymat est d'au moins 10. |
+| `admin.partners.managers` | Responsables : {emails} |
+| `admin.partners.noManager` | Aucun responsable actif. |
+| `admin.partners.pending` | Invitation en attente : {emails} |
+| `admin.partners.inviteManager` | Inviter un responsable |
+| `admin.partners.invite` | Inviter |
+| `admin.partners.create` | Créer le partenaire |
+| `admin.partners.batch.create` | Créer le lot |
+| `admin.partners.batch.contract` | Contrat {reference} |
+| `admin.partners.batch.amountHelp` | En USD, tel que prévu au contrat (facultatif). |
+| `admin.partners.batch.none` | Aucun lot pour ce partenaire. |
 
 ### `/admin/ia` · IA et poids du matching
 

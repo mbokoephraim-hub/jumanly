@@ -2,6 +2,49 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E9 · Jumanly Partners (14 octobre 2026)
+
+### Fait
+
+- Données : lots de licences (`LicenseBatch`), licences (`License`) et liens d'invitation
+  (`LicenseLink`), type d'institution sur l'organisation partenaire.
+- Admin `/admin/partenaires` : création d'un partenaire et invitation de son responsable, lots
+  (forfait Starter, Pro ou Premium, nombre, durée par bénéficiaire, contrat, montant, seuil
+  d'anonymat), suivi des activations.
+- Espace partenaire (sélecteur d'espace, rôle `partner_manager`) : tableau de bord (licences
+  achetées, distribuées, activées, bénéficiaires actifs, usage agrégé, activité par mois),
+  licences (codes, révocation, export CSV, lien d'invitation, import CSV ou saisie d'e-mails,
+  relance), rapports d'impact par période et par lot, export PDF.
+- `/activer` : code ou lien, aperçu de l'offre, connexion ou inscription en conservant le code,
+  activation, licence en attente si le forfait payé est supérieur, erreurs de la partie 02.
+- Talent : carte « Licence offerte par… » sur Mon abonnement (dates, jours restants, fin proche,
+  accord pour compter une embauche), notifications et e-mails d'activation.
+- Tâche de fond (`pnpm jobs:billing`) : avis 7 jours avant la fin, fin de licence, codes des lots
+  terminés expirés.
+- Moteur de droits : le forfait le plus élevé l'emporte, la licence à égalité (voir décisions).
+- Démo : « Fondation Démo (partenaire fictif) », compte `partenaire@jumanly.test`, lot de 40
+  licences Pro, 12 bénéficiaires fictifs, codes `JMLY-DEMO-AAAA`, `-BBBB`, `-CCCC`, lien
+  `/activer?lien=demo-lien-fictif` ; compte `talent.licence@jumanly.test` pour essayer un code.
+- Décisions : `docs/decisions/2026-10-14-partners.md`.
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Aucune donnée nominative dans l'espace partenaire | ✓ test en base dédié |
+| Seuil de 10 personnes par cellule | ✓ tests unitaires et en base |
+| Règles de priorité de l'abonnement `sponsored` | ✓ tests en base (inférieur, supérieur, fin de contrat) |
+| Isolation entre partenaires | ✓ tests en base |
+| Parcours 6.8 (lot, distribution, activation, rapports) | ✓ e2e |
+| Lint, types, tests unitaires et en base, build, e2e | ✓ en local ; CI à l'ouverture de la PR |
+
+### Dettes et points ouverts
+
+- Règle commerciale pour un forfait payé inférieur pendant une licence (remboursement, report).
+- Rapport mensuel par e-mail, page Paramètres du partenaire, suivi des adresses injoignables.
+- Pas de déclaration d'embauche hors plateforme : seules les embauches marquées « recruté » sur
+  Jumanly comptent, avec l'accord du bénéficiaire.
+
 ## E8 · Hire avancé et Companies (14 octobre 2026)
 
 ### Fait

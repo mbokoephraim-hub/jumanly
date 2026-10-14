@@ -16,6 +16,13 @@ import { saveWeights, weightsInputSchema } from "@/server/services/ai-admin";
 import { recordRefund, refundSchema } from "@/server/services/billing-admin";
 import { mailOrgVerification } from "@/server/hire-emails";
 import { decideVerification, verificationDecisionSchema } from "@/server/services/verification";
+import { mailPartnerInvite } from "@/server/partner-emails";
+import {
+  createBatch,
+  createPartner,
+  inviteManager,
+  PartnerError,
+} from "@/server/services/partners";
 
 /** Every admin write: an administrator with write access (support agents read only), then audit. */
 async function adminWriter() {
@@ -303,4 +310,53 @@ export async function decideVerificationAction(formData: FormData) {
   redirect(
     `/admin/organisations?ok=${input.data.decision === "verify" ? "verifiee" : "refusee"}&org=${encodeURIComponent(organization.name)}`,
   );
+}
+
+// ─── Partners (E9) ──────────────────────────────────────────────────────────────
+
+const PARTNERS = "/admin/partenaires";
+
+async function partnerWrite<T>(run: () => Promise<T>): Promise<T> {
+  try {
+    return await run();
+  } catch (error) {
+    if (error instanceof PartnerError) redirect(`${PARTNERS}?erreur=${error.code}`);
+    throw error;
+  }
+}
+
+export async function createPartnerAction(formData: FormData) {
+  const admin = await adminWriter();
+  const { org, invitation } = await partnerWrite(() =>
+    createPartner(db, admin.id, Object.fromEntries(formData)),
+  );
+  await mailPartnerInvite(invitation.email, {
+    org: org.name,
+    date: invitation.expiresAt,
+    token: invitation.token,
+  });
+  redirect(`${PARTNERS}?ok=partenaire#partner-${org.id}`);
+}
+
+export async function invitePartnerManagerAction(formData: FormData) {
+  const admin = await adminWriter();
+  const organizationId = String(formData.get("organization") ?? "").slice(0, 60);
+  const org = await db.organization.findFirst({ where: { id: organizationId, type: "partner" } });
+  if (!org) notFound();
+  const invitation = await partnerWrite(() =>
+    inviteManager(db, admin.id, org.id, String(formData.get("email") ?? "")),
+  );
+  await audit(admin.id, "partner.inviteManager", "organization", org.id, {});
+  await mailPartnerInvite(invitation.email, {
+    org: org.name,
+    date: invitation.expiresAt,
+    token: invitation.token,
+  });
+  redirect(`${PARTNERS}?ok=invitation#partner-${org.id}`);
+}
+
+export async function createBatchAction(formData: FormData) {
+  const admin = await adminWriter();
+  const batch = await partnerWrite(() => createBatch(db, admin.id, Object.fromEntries(formData)));
+  redirect(`${PARTNERS}?ok=lot#partner-${batch.partnerOrgId}`);
 }
