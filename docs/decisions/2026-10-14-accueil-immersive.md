@@ -19,3 +19,11 @@ fonds et le mouvement ; la mise en page et les textes restent ceux de la maquett
 - **Chiffres animés** : uniquement ceux des aperçus fictifs (« 87 % compatible ») et les prix lus
   en base. Aucune statistique de plateforme inventée.
 - **Aperçu Hire** : `public/apercus/accueil-module-hire.webp`, capture de la maquette 04-01.
+
+## Extension aux autres pages (14 octobre 2026)
+
+Le propriétaire a demandé le même style « dans toutes les pages », puis a choisi : **style complet
+sur le site public**, et seulement des touches douces (dégradés, apparitions légères) dans l'espace
+connecté. Les blocs partagés (`Glow`, `ImmersiveBackdrop`, `PoseCycle`, `PathLine`, `stagger`,
+`iaFlow`) vivent dans `src/components/site/marketing.tsx`. À propos et Talents sont passées en
+style immersif ; chaque page publique refaite aux lots suivants le reçoit à son tour.

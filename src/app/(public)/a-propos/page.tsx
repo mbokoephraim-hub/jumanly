@@ -2,20 +2,26 @@
 import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { Character } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
   Eyebrow,
+  Glow,
   IconTile,
+  ImmersiveBackdrop,
   LimeCtaBand,
   MarketingSection,
-  NumberDisc,
+  PathLine,
   Pattern,
+  PoseCycle,
   SectionHead,
   Shape,
+  iaFlow,
   lead,
   outlineOnLime,
+  signatureLight,
+  stagger,
 } from "@/components/site/marketing";
+import { MotionRoot } from "@/components/site/motion";
 import { ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { pageMetadata } from "@/lib/seo";
@@ -67,11 +73,7 @@ const values = [
   { key: "privacy", icon: "lock", span: "lg:col-span-3" },
 ] as const;
 
-const launchSteps = [
-  { key: "step1", disc: "bg-lime text-sapin" },
-  { key: "step2", disc: "bg-neon text-sapin" },
-  { key: "step3", disc: "bg-blanc text-sapin" },
-] as const;
+const launchSteps = ["step1", "step2", "step3"] as const;
 
 const chips: { key: "learn" | "exchange" | "recruit"; icon: IconName; position: string }[] = [
   { key: "learn", icon: "learn", position: "top-9 left-8" },
@@ -85,51 +87,71 @@ export default async function AboutPage() {
     "text-[28px] leading-[34px] font-semibold tracking-[-0.025em] lg:text-[32px] lg:leading-[42px]";
   return (
     <>
-      {/* Hero */}
-      <MarketingSection className="pt-10 pb-14 lg:pt-[72px] lg:pb-24">
+      <MotionRoot />
+
+      {/* Hero, on the depth gradient */}
+      <MarketingSection
+        tone="profondeur"
+        scene
+        spotlight
+        className="pt-12 pb-16 lg:pt-[72px] lg:pb-24"
+        background={<ImmersiveBackdrop />}
+      >
         <div className="flex flex-col gap-6 xl:flex-row xl:items-center xl:gap-14">
           <div className="relative z-10 flex flex-col gap-6 xl:w-[560px] xl:shrink-0">
-            <Eyebrow>{t("hero.eyebrow")}</Eyebrow>
-            <h1 className="text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]">
+            <div className="jm-rise" style={stagger(0)}>
+              <Eyebrow dark>{t("hero.eyebrow")}</Eyebrow>
+            </div>
+            <h1
+              className="jm-word text-[36px] leading-10 font-semibold tracking-[-0.035em] lg:text-[56px] lg:leading-[60px]"
+              style={stagger(1)}
+            >
               {t("hero.title")}
             </h1>
-            <p className={cx(lead, "text-ardoise")}>{t("hero.text")}</p>
+            <p className={cx(lead, "jm-rise text-blanc/80")} style={stagger(3)}>
+              {t("hero.text")}
+            </p>
           </div>
           <div
             role="img"
             aria-label={t("hero.imageAlt")}
-            className="relative h-[360px] overflow-hidden rounded-card bg-sapin xl:h-[600px] xl:min-w-0 xl:flex-1 xl:rounded-[40px]"
+            className="jm-rise relative h-[360px] overflow-hidden rounded-card bg-blanc/6 ring-1 ring-blanc/12 ring-inset xl:h-[600px] xl:min-w-0 xl:flex-1 xl:rounded-[40px]"
+            style={stagger(4)}
           >
-            <Pattern name="motif-trajectoires-sombre" size={420} opacity={0.4} />
             <Shape
               name="forme-orbites-lime"
-              className="-top-[50px] -left-10 w-[220px] opacity-35 xl:w-[380px]"
+              className="jm-drift -top-[50px] -left-10 w-[220px] opacity-35 xl:w-[380px]"
+            />
+            <Shape
+              name="forme-halo-couleur"
+              className="jm-drift -right-40 -bottom-40 w-[520px] opacity-50"
             />
             <div className="absolute inset-x-0 bottom-0 flex items-end justify-center gap-1.5">
               <span className="xl:hidden">
-                <Character name="nadia" pose="salut" height={220} />
+                <PoseCycle name="nadia" poses={["salut", "joie"]} height={220} />
               </span>
               <span className="xl:hidden">
-                <Character name="kofi" pose="joie" height={240} />
+                <PoseCycle name="kofi" poses={["joie", "salut"]} height={240} />
               </span>
               <span className="hidden xl:block">
-                <Character name="nadia" pose="salut" height={360} />
+                <PoseCycle name="nadia" poses={["salut", "joie"]} height={360} />
               </span>
               <span className="hidden xl:block">
-                <Character name="kofi" pose="joie" height={390} />
+                <PoseCycle name="kofi" poses={["joie", "salut"]} height={390} />
               </span>
               <span className="hidden xl:block">
-                <Character name="diallo" pose="montre" height={360} />
+                <PoseCycle name="diallo" poses={["montre", "salut"]} height={360} />
               </span>
             </div>
-            {chips.map((chip) => (
+            {chips.map((chip, index) => (
               <div
                 key={chip.key}
                 aria-hidden
                 className={cx(
-                  "absolute z-10 hidden items-center gap-2.5 rounded-md bg-blanc px-4 py-3 text-sapin shadow-[0_18px_40px_rgba(11,26,31,0.22)] xl:flex",
+                  "jm-pop absolute z-10 hidden items-center gap-2.5 rounded-md bg-blanc px-4 py-3 text-sapin shadow-[0_18px_40px_rgba(11,26,31,0.35)] xl:flex",
                   chip.position,
                 )}
+                style={stagger(index)}
               >
                 <IconTile icon={chip.icon} size={34} className="bg-lime text-sapin" />
                 <span className="text-[13px] font-semibold">{t(`hero.chips.${chip.key}`)}</span>
@@ -139,35 +161,50 @@ export default async function AboutPage() {
         </div>
       </MarketingSection>
 
-      {/* Vision and mission */}
-      <MarketingSection tone="blanc">
+      {/* Vision and mission: two cards whose gradient flows */}
+      <MarketingSection
+        scene
+        background={
+          <>
+            <Glow className="-top-40 -left-32 size-[460px] bg-lime/35" />
+            <Glow className="-right-40 -bottom-40 size-[520px] bg-menthe/25" delay={-8} />
+          </>
+        }
+      >
         <div className="grid gap-3.5 lg:grid-cols-2 lg:gap-5">
           {(
             [
               {
                 key: "vision",
                 icon: "objectif",
-                card: "bg-sapin text-blanc",
+                card: "text-blanc",
+                gradient: iaFlow,
                 tile: "bg-lime text-sapin",
                 arc: "forme-trajectoire-lime",
               },
               {
                 key: "mission",
                 icon: "career",
-                card: "bg-lime text-sapin",
+                card: "text-sapin",
+                gradient: signatureLight,
                 tile: "bg-sapin text-lime",
                 arc: "forme-trajectoire-sapin",
               },
             ] as const
-          ).map((item) => (
+          ).map((item, index) => (
             <div
               key={item.key}
+              data-reveal
               className={cx(
-                "relative flex flex-col gap-[18px] overflow-hidden rounded-box p-7 lg:rounded-card lg:p-11",
+                "jm-flow jm-lift relative flex flex-col gap-[18px] overflow-hidden rounded-box p-7 lg:rounded-card lg:p-11",
                 item.card,
               )}
+              style={{ ...stagger(index), backgroundImage: item.gradient }}
             >
-              <Shape name={item.arc} className="-right-10 -bottom-10 w-[220px] opacity-18" />
+              <Shape
+                name={item.arc}
+                className="jm-drift -right-10 -bottom-10 w-[220px] opacity-18"
+              />
               <IconTile icon={item.icon} size={56} className={item.tile} />
               <h2 className={cardTitle}>{t(`${item.key}.title`)}</h2>
               <p className="relative text-[17px] leading-7 opacity-88 lg:text-[19px] lg:leading-[30px]">
@@ -179,8 +216,12 @@ export default async function AboutPage() {
       </MarketingSection>
 
       {/* Positioning */}
-      <MarketingSection innerClassName="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-20">
-        <div className="flex min-w-0 flex-1 flex-col gap-6">
+      <MarketingSection
+        tone="lime"
+        scene
+        innerClassName="flex flex-col gap-6 lg:flex-row lg:items-center lg:gap-20"
+      >
+        <div data-reveal className="flex min-w-0 flex-1 flex-col gap-6">
           <SectionHead
             eyebrow={t("positioning.eyebrow")}
             title={t("positioning.title")}
@@ -195,16 +236,19 @@ export default async function AboutPage() {
           </div>
         </div>
         {/* Three universes: overlapping discs on desktop, a list of cards on mobile. */}
-        <ul className="flex flex-col gap-3 lg:relative lg:block lg:h-[590px] lg:w-[640px] lg:shrink-0">
-          {universes.map((universe) => (
+        <ul
+          data-reveal="zoom"
+          className="flex flex-col gap-3 lg:relative lg:block lg:h-[590px] lg:w-[640px] lg:shrink-0"
+        >
+          {universes.map((universe, index) => (
             <li key={universe.key} className="contents">
               <span
                 aria-hidden
                 className={cx(
-                  "absolute hidden size-[340px] rounded-full opacity-92 mix-blend-multiply lg:block",
+                  "jm-float-slow absolute hidden size-[340px] rounded-full opacity-92 mix-blend-multiply lg:block",
                   universe.circle,
                 )}
-                style={{ left: universe.x, top: universe.y }}
+                style={{ left: universe.x, top: universe.y, animationDelay: `${index * -3}s` }}
               />
               <div
                 className="flex gap-4 rounded-box bg-blanc p-5 lg:absolute lg:top-[var(--ty)] lg:left-[var(--tx)] lg:w-[220px] lg:flex-col lg:items-center lg:gap-2 lg:bg-transparent lg:p-0 lg:text-center"
@@ -233,28 +277,45 @@ export default async function AboutPage() {
           ))}
           <li
             aria-hidden
-            className="absolute top-[215px] left-[265px] hidden size-[110px] items-center justify-center rounded-full bg-sapin shadow-[0_0_0_8px_rgba(242,237,229,0.9)] lg:flex"
+            className="absolute top-[215px] left-[265px] hidden size-[110px] items-center justify-center rounded-full bg-sapin shadow-[0_0_0_8px_rgba(228,250,208,0.9),0_0_40px_rgba(166,242,107,0.6)] lg:flex"
           >
-            <img src="/marque/jumanly-symbole-lime.svg" alt="" width={56} height={56} />
+            <img
+              src="/marque/jumanly-symbole-lime.svg"
+              alt=""
+              width={56}
+              height={56}
+              className="jm-pulse"
+            />
           </li>
         </ul>
       </MarketingSection>
 
       {/* Values */}
       <MarketingSection
-        tone="sapin"
-        background={<Pattern name="motif-points-sombre" opacity={0.25} />}
+        tone="profondeur"
+        scene
+        background={
+          <>
+            <Pattern name="motif-points-sombre" opacity={0.25} />
+            <Glow className="-top-40 left-1/4 size-[520px] bg-feuille/30" />
+            <Glow className="-right-32 -bottom-48 size-[460px] bg-menthe/20" delay={-9} />
+          </>
+        }
         innerClassName="flex flex-col gap-12"
       >
-        <SectionHead center dark eyebrow={t("values.eyebrow")} title={t("values.title")} />
+        <div data-reveal>
+          <SectionHead center dark eyebrow={t("values.eyebrow")} title={t("values.title")} />
+        </div>
         <ol className="grid gap-3.5 lg:grid-cols-6 lg:gap-5">
           {values.map((value, index) => (
             <li
               key={value.key}
+              data-reveal
               className={cx(
-                "flex flex-col gap-3 rounded-box bg-blanc/7 p-5 ring-1 ring-blanc/12 ring-inset lg:rounded-card lg:p-7",
+                "jm-lift flex flex-col gap-3 rounded-box bg-blanc/7 p-5 ring-1 ring-blanc/12 backdrop-blur-sm ring-inset lg:rounded-card lg:p-7",
                 value.span,
               )}
+              style={stagger(index % 3)}
             >
               <div className="flex items-start justify-between">
                 <IconTile icon={value.icon} className="bg-lime text-sapin" />
@@ -274,9 +335,15 @@ export default async function AboutPage() {
       </MarketingSection>
 
       {/* The Growth Lab and launch */}
-      <MarketingSection tone="blanc">
+      <MarketingSection
+        scene
+        background={<Glow className="-top-32 right-1/4 size-[420px] bg-lime/40" delay={-11} />}
+      >
         <div className="grid gap-3.5 lg:grid-cols-2 lg:gap-6">
-          <div className="flex flex-col gap-[18px] rounded-box bg-creme p-7 lg:rounded-card lg:p-11">
+          <div
+            data-reveal
+            className="jm-lift flex flex-col gap-[18px] rounded-box bg-lime-clair p-7 lg:rounded-card lg:p-11"
+          >
             <div className="flex items-center gap-4">
               <img src="/marque/jumanly-symbole-lime.svg" alt="" width={56} height={56} />
               <span className="text-lab text-ardoise">{t("growthlab.eyebrow")}</span>
@@ -290,18 +357,32 @@ export default async function AboutPage() {
               {t("growthlab.signature")}
             </p>
           </div>
-          <div className="relative flex flex-col gap-[18px] overflow-hidden rounded-box bg-sapin p-7 text-blanc lg:rounded-card lg:p-11">
+          <div
+            data-reveal
+            className="jm-lift relative flex flex-col gap-[18px] overflow-hidden rounded-box bg-gradient-depth p-7 text-blanc lg:rounded-card lg:p-11"
+            style={stagger(1)}
+          >
+            <Glow className="-top-24 -right-24 size-[300px] bg-feuille/40" />
             <Eyebrow dark>{t("launch.eyebrow")}</Eyebrow>
             <h2 className={cardTitle}>{t("launch.title")}</h2>
             <p className="text-[15px] leading-[26px] text-blanc/78 lg:text-base">
               {t("launch.text")}
             </p>
-            <ol className="relative mt-1 flex flex-col gap-4">
-              <li aria-hidden className="absolute top-5 bottom-5 left-[21px] w-0.5 bg-blanc/20" />
+            {/* The launch path draws itself, each step lighting up in turn. */}
+            <ol data-reveal className="relative mt-1 flex flex-col gap-4">
+              <li aria-hidden className="absolute top-[22px] bottom-[22px] left-[21px] w-0.5">
+                <PathLine id="jm-launch" vertical />
+              </li>
               {launchSteps.map((step, index) => (
-                <li key={step.key} className="relative flex items-center gap-3">
-                  <NumberDisc className={step.disc}>{index + 1}</NumberDisc>
-                  <span className="text-[15px] font-semibold">{t(`launch.${step.key}`)}</span>
+                <li key={step} className="relative flex items-center gap-3">
+                  <span
+                    aria-hidden
+                    className="jm-glow flex size-11 shrink-0 items-center justify-center rounded-full bg-gradient-signature text-[17px] font-semibold text-sapin"
+                    style={stagger(index)}
+                  >
+                    {index + 1}
+                  </span>
+                  <span className="text-[15px] font-semibold">{t(`launch.${step}`)}</span>
                 </li>
               ))}
             </ol>
@@ -310,8 +391,8 @@ export default async function AboutPage() {
       </MarketingSection>
 
       <LimeCtaBand
+        animated
         title={t("cta.title")}
-        spacedTop
         character={{ name: "amani", pose: "joie", height: 330, mobileHeight: 240 }}
         actions={
           <>
