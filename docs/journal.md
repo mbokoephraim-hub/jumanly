@@ -2,6 +2,54 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E5 · Learn : formations, quiz et attestations (14 octobre 2026)
+
+### Fait
+
+- Tables : inscriptions (progression, leçons terminées, dernière leçon), quiz, questions,
+  tentatives, attestations (numéro JMN-XXXX-XXXX, révocation), notes de leçon, formations
+  enregistrées ; formateur, prérequis, ressources et transcription des leçons ; statuts « en
+  relecture » et « archivée ».
+- `/app/learn` : catalogue connecté (recherche, listes « Mes formations », « Enregistrées »,
+  « Terminées »), verrou « Disponible avec {forfait} » calculé depuis `learn.catalog.level`.
+- `/app/learn/[slug]` : fiche avant de commencer (programme, prérequis, formateur, verrou ou
+  « Commencer », enregistrer), puis lecteur : vidéo HLS avec qualité « Économie de données » et
+  vitesse (adaptateur vidéo, Bunny Stream si configuré), texte, exercice, ressources,
+  transcription, « Marquer comme terminée », notes privées, sommaire avec progression, quiz avec
+  correction expliquée et nombre de tentatives.
+- Attestation à la fin (toutes les leçons faites, quiz réussis) : notification, e-mail, PDF
+  (`/app/learn/attestations/[id]/pdf`), page publique `/attestations/[code]` (authentique,
+  révoquée, introuvable) avec formulaire de vérification. Les compétences de la formation sont
+  ajoutées au profil comme vérifiées (source « formation », preuve « attestation »).
+- Leçon en aperçu jouée sur la fiche publique `/formations/[slug]` quand c'est une vidéo.
+- Admin : rôle `content_editor` (ne voit que les formations), `/admin/formations` (liste,
+  nouveau brouillon) et l'éditeur (fiche, compétences du référentiel, modules, leçons, quiz et
+  questions, statut avec contrôles avant publication, révocation d'une attestation). Chaque
+  écriture est journalisée et rafraîchit le catalogue public.
+- Démo : comptes `talent.starter@` et `editeur@`, formateur et quiz fictifs sur les formations.
+- Tests : unitaires (accès par niveau, correction des quiz, numéros, éditeur, e-mail), base
+  (Free contre « fondamentaux », parcours jusqu'à l'attestation et compétences vérifiées,
+  tentatives, notes, révocation), e2e (l'éditeur crée et publie, un talent Free suit jusqu'à
+  l'attestation et la vérifie ; verrou Free et ouverture Starter ; accessibilité).
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Un éditeur crée une formation complète dans l'admin | ✓ `tests/e2e/learn.spec.ts` |
+| Un talent Free suit une formation gratuite jusqu'à l'attestation | ✓ e2e et `tests/db/learn.test.ts` |
+| Une formation « fondamentaux » est verrouillée en Free et ouverte en Starter | ✓ e2e et base |
+| Lint, types, tests, build | ✓ en local ; CI à l'ouverture de la PR |
+
+### Dettes et points ouverts
+
+- Voir `docs/decisions/2026-10-14-learn.md` : questions entre apprenants, téléversement des
+  vidéos, sous-titres, notes horodatées et reprise à la seconde près reportés.
+- Les vidéos de démonstration n'existent pas : les leçons vidéo affichent « La vidéo de cette
+  leçon n'est pas encore disponible » tant qu'aucun identifiant Bunny n'est saisi.
+- Licences proposées par un partenaire (« attendez qu'une licence vous soit proposée ») : avec
+  Partners (E9).
+
 ## E4 · Hire, Connect et modération légère (14 octobre 2026)
 
 ### Fait

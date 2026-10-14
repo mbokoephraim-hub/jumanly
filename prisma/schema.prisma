@@ -225,7 +225,9 @@ enum CatalogLevel {
 
 enum CourseStatus {
   draft
+  review
   published
+  archived
 }
 
 enum LessonKind {
@@ -252,10 +254,14 @@ model Course {
   requiredLevel      CatalogLevel
   status             CourseStatus   @default(draft)
   certificateEnabled Boolean        @default(true)
+  instructor         String?
+  prerequisites      String?
   enrollmentCount    Int            @default(0)
   publishedAt        DateTime?
   modules            CourseModule[]
   skills             CourseSkill[]
+  enrollments        Enrollment[]
+  savedBy            SavedCourse[]
   createdAt          DateTime       @default(now())
   updatedAt          DateTime       @updatedAt
 
@@ -285,8 +291,116 @@ model Lesson {
   content     Json?
   /// Visible without an account.
   isPreview   Boolean      @default(false)
+  /// [{ title, url, type, sizeKb }]: files to download (PDF supports…).
+  resources   Json         @default("[]")
+  transcript  String?
+  quiz        Quiz?
+  notes       LessonNote[]
 
   @@unique([moduleId, order])
+}
+
+enum QuestionType {
+  single
+  multiple
+  text
+}
+
+/// The evaluation of a lesson of kind `quiz`.
+model Quiz {
+  id           String        @id @default(cuid(2))
+  lessonId     String        @unique
+  lesson       Lesson        @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  passingScore Int           @default(70)
+  /// 0 = unlimited.
+  maxAttempts  Int           @default(0)
+  questions    Question[]
+  attempts     QuizAttempt[]
+}
+
+model Question {
+  id          String       @id @default(cuid(2))
+  quizId      String
+  quiz        Quiz         @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  order       Int
+  type        QuestionType
+  prompt      String
+  options     String[]
+  /// Indices of the right options (single, multiple) or accepted answers (text).
+  answer      String[]
+  explanation String?
+
+  @@unique([quizId, order])
+}
+
+model Enrollment {
+  id               String       @id @default(cuid(2))
+  userId           String
+  user             User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId         String
+  course           Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  /// 0 to 100.
+  progress         Int          @default(0)
+  completedLessons String[]
+  lastLessonId     String?
+  startedAt        DateTime     @default(now())
+  completedAt      DateTime?
+  certificate      Certificate?
+
+  @@unique([userId, courseId])
+}
+
+model QuizAttempt {
+  id        String   @id @default(cuid(2))
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  quizId    String
+  quiz      Quiz     @relation(fields: [quizId], references: [id], onDelete: Cascade)
+  /// 0 to 100.
+  score     Int
+  /// { [questionId]: string[] }
+  answers   Json
+  passed    Boolean
+  createdAt DateTime @default(now())
+
+  @@index([userId, quizId])
+}
+
+/// Attestation of a finished course. Name, title and hours are copied at delivery.
+model Certificate {
+  id           String     @id @default(cuid(2))
+  enrollmentId String     @unique
+  enrollment   Enrollment @relation(fields: [enrollmentId], references: [id], onDelete: Cascade)
+  /// Public number, also used in the verification address (JMN-XXXX-XXXX).
+  code         String     @unique
+  holderName   String
+  courseTitle  String
+  hours        Int
+  issuedAt     DateTime   @default(now())
+  revokedAt    DateTime?
+}
+
+/// Private notes of a learner on a lesson.
+model LessonNote {
+  id        String   @id @default(cuid(2))
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId  String
+  lesson    Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  body      String
+  createdAt DateTime @default(now())
+
+  @@index([userId, lessonId])
+}
+
+model SavedCourse {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  courseId  String
+  course    Course   @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, courseId])
 }
 
 model CourseSkill {
@@ -366,6 +480,10 @@ model User {
   jobsCreated         Job[]                     @relation("JobCreator")
   notifications       Notification[]
   participations      ConversationParticipant[]
+  enrollments         Enrollment[]
+  quizAttempts        QuizAttempt[]
+  lessonNotes         LessonNote[]
+  savedCourses        SavedCourse[]
   createdAt           DateTime                  @default(now())
   updatedAt           DateTime                  @updatedAt
 

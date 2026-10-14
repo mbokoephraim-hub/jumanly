@@ -3,6 +3,7 @@ import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { Icon } from "@/components/brand/icon";
+import { VideoPlayer, speeds } from "@/components/learn/video-player";
 import { CourseListing } from "@/components/site/listings";
 import { Breadcrumb } from "@/components/site/navigation-bits";
 import { CheckList } from "@/components/site/sections";
@@ -11,6 +12,7 @@ import { languageName } from "@/lib/dates";
 import { durationParts } from "@/lib/format";
 import { pageMetadata } from "@/lib/seo";
 import { signupHref } from "@/lib/signup";
+import { videoProvider } from "@/server/adapters/video";
 import { getCourse, getPublicPlans, getSitemapEntries } from "@/server/queries/public";
 import { planForCatalogLevel } from "@/server/services/plans";
 
@@ -63,6 +65,8 @@ export default async function TrainingPage({ params }: PageProps<"/formations/[s
   });
   const preview = lessons.find((lesson) => lesson.isPreview);
   const previewText = preview ? previewSchema.safeParse(preview.content) : null;
+  // Preview lessons are public (partie 12, E5): their video plays without an account.
+  const previewVideo = preview?.kind === "video" ? videoProvider().playback(preview.videoId) : null;
 
   return (
     <>
@@ -198,6 +202,29 @@ export default async function TrainingPage({ params }: PageProps<"/formations/[s
                 <h2 className="text-h2">{t("training.preview.title")}</h2>
                 <p className="text-[15px]">{t("training.preview.text")}</p>
                 <h3 className="font-semibold">{preview.title}</h3>
+                {previewVideo && (
+                  <VideoPlayer
+                    src={previewVideo.src}
+                    poster={previewVideo.poster}
+                    lowMp4={previewVideo.lowMp4}
+                    title={preview.title}
+                    labels={{
+                      quality: t("learn.player.quality.text"),
+                      auto: t("learn.player.quality.auto"),
+                      low: t("learn.player.quality.low"),
+                      speed: t("learn.player.speed.text"),
+                      speedValues: Object.fromEntries(
+                        speeds.map((speed) => [
+                          speed,
+                          t("learn.player.speed.value", { speed: speed.replace(".", ",") }),
+                        ]),
+                      ),
+                      error: t("learn.player.error.text"),
+                      retry: t("learn.player.error.retry"),
+                      lowBandwidth: t("learn.player.lowBandwidth"),
+                    }}
+                  />
+                )}
                 {previewText?.success &&
                   previewText.data.paragraphs.map((paragraph) => (
                     <p key={paragraph} className="text-[15px] leading-7">

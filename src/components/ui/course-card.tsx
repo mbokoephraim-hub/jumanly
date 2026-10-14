@@ -1,6 +1,7 @@
 /* eslint-disable @next/next/no-img-element -- course covers come from S3 storage at a known size */
 import { Icon } from "@/components/brand/icon";
 import Link from "next/link";
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { Badge } from "./badge";
 
@@ -14,6 +15,7 @@ export function CourseCard({
   certificate = false,
   plan,
   image,
+  status,
 }: {
   title: string;
   href: string;
@@ -23,6 +25,8 @@ export function CourseCard({
   certificate?: boolean;
   plan?: string;
   image?: string;
+  /** Extra line under the badges: progress, lock (signed-in catalog). */
+  status?: ReactNode;
 }) {
   const t = useTranslations("trainings.card");
   return (
@@ -43,6 +47,7 @@ export function CourseCard({
             </Badge>
           )}
         </div>
+        {status}
         <h3 className="text-lg leading-7 font-semibold">
           {/* The whole card is clickable; the link stays the only focusable element. */}
           <Link href={href} className="after:absolute after:inset-0 focus-visible:outline-none">

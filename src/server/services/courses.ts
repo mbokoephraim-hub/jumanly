@@ -114,6 +114,17 @@ export async function searchCourses(db: PrismaClient, filters: CourseFilters) {
   };
 }
 
+/** Cards of published courses, by id (« Mes formations », « Enregistrées »). */
+export async function courseSummariesByIds(db: PrismaClient, ids: string[]) {
+  if (ids.length === 0) return [];
+  const rows = await db.course.findMany({
+    where: { id: { in: ids }, status: "published" },
+    select: { id: true, ...cardSelect },
+  });
+  const byId = new Map(rows.map(({ id, ...row }) => [id, toSummary(row)]));
+  return ids.flatMap((id) => byId.get(id) ?? []);
+}
+
 export async function countPublishedCourses(db: PrismaClient) {
   return db.course.count({ where: { status: "published" } });
 }

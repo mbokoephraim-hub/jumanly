@@ -6,6 +6,8 @@ export const DEMO_PASSWORD = "Demo-Jumanly-2026";
 export const demo = {
   talentFree: "talent.free@jumanly.test",
   talentPro: "talent.pro@jumanly.test",
+  talentStarter: "talent.starter@jumanly.test",
+  editor: "editeur@jumanly.test",
   admin: "admin@jumanly.test",
 } as const;
 

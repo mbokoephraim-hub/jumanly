@@ -31,7 +31,7 @@ export async function requireUser(suite?: string): Promise<CurrentUser> {
   return user;
 }
 
-import { ADMIN_ROLES } from "./roles";
+import { ADMIN_ROLES, ADMIN_SHELL_ROLES, CONTENT_ROLES } from "./roles";
 
 export { ADMIN_ROLES };
 
@@ -46,6 +46,22 @@ export async function requireAdmin() {
     redirect("/app/parametres?onglet=securite&raison=deux-etapes");
   }
   return user;
+}
+
+/** Someone who may open the admin shell (administrators, support, content editors), or null. */
+export async function requireAdminShell() {
+  const user = await requireUser("/admin");
+  if (!(ADMIN_SHELL_ROLES as readonly string[]).includes(user.platformRole)) return null;
+  if (user.platformRole === "platform_admin" && !user.twoFactorEnabled) {
+    redirect("/app/parametres?onglet=securite&raison=deux-etapes");
+  }
+  return user;
+}
+
+/** The course editor: content editors and administrators (two-step verification required). */
+export async function requireCourseEditor() {
+  const user = await requireAdminShell();
+  return user && (CONTENT_ROLES as readonly string[]).includes(user.platformRole) ? user : null;
 }
 
 export function canWriteAdmin(user: CurrentUser) {

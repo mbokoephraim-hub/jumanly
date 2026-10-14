@@ -2024,6 +2024,11 @@ Conventions :
 |---|---|
 | `learn.catalog.eyebrow` | Learn · {count, plural, one {# formation} other {# formations}}, dont {free} gratuites |
 | `learn.catalog.title` | Catalogue de formations |
+| `learn.seo` | Learn · Formations |
+| `learn.catalog.search.label` | Rechercher une formation |
+| `learn.catalog.search.submit` | Rechercher |
+| `learn.catalog.tabs` | Listes de formations |
+| `learn.catalog.certificatesLink` | Mes attestations |
 | `learn.catalog.search.placeholder` | Rechercher une formation, une compétence, un formateur |
 | `learn.catalog.tab.all` | Toutes |
 | `learn.catalog.tab.mine` | Mes formations |
@@ -2115,6 +2120,15 @@ Conventions :
 | `learn.course.resume` | Reprendre |
 | `learn.course.restart` | Recommencer |
 | `learn.course.enrolled` | Formation ajoutée à « Mes formations ». Bon apprentissage ! |
+| `learn.course.seo` | {title} · Learn |
+| `learn.course.finished` | Formation terminée. Bravo pour votre persévérance ! |
+| `learn.course.viewCertificate` | Voir mon attestation |
+| `learn.course.continue` | Continuer : {lessonTitle} |
+| `learn.error.locked` | Cette formation n'est pas incluse dans votre forfait actuel. |
+| `learn.error.notEnrolled` | Commencez la formation pour suivre cette leçon. |
+| `learn.error.attempts` | Vous avez utilisé toutes les tentatives de ce quiz. |
+| `learn.error.invalid` | Cette action n'est pas possible pour cette leçon. |
+| `learn.error.notFound` | Cette leçon est introuvable. |
 
 ### `/app/learn/[slug]` · Lecteur
 
@@ -2150,6 +2164,10 @@ Conventions :
 | `learn.player.resumeAt` | Reprendre à {time} |
 | `learn.player.error.text` | La vidéo ne se charge pas. Vérifiez votre connexion puis réessayez. |
 | `learn.player.error.retry` | Réessayer |
+| `learn.player.noVideo` | La vidéo de cette leçon n'est pas encore disponible. Les autres contenus restent accessibles. |
+| `learn.player.exercise.text` | Exercice |
+| `learn.player.lessonDone` | Terminée |
+| `learn.player.lessonCurrent` | Leçon en cours |
 | `learn.player.tab.overview` | Aperçu |
 | `learn.player.tab.resources` | Ressources |
 | `learn.player.tab.notes` | Notes |
@@ -2164,6 +2182,10 @@ Conventions :
 | `learn.player.notes.add` | Ajouter une note à {time} |
 | `learn.player.notes.saved` | Note enregistrée. |
 | `learn.player.notes.empty` | Vos notes apparaîtront ici. Elles ne sont visibles que par vous. |
+| `learn.player.notes.title` | Mes notes |
+| `learn.player.notes.label` | Nouvelle note |
+| `learn.player.notes.save` | Enregistrer la note |
+| `learn.player.notes.delete.text` | Supprimer |
 | `learn.player.notes.delete.confirm` | Supprimer cette note ? |
 | `learn.player.notes.export` | Exporter mes notes |
 | `learn.player.questions.ask` | Poser une question |
@@ -2230,6 +2252,8 @@ Conventions :
 | `learn.quiz.result.retry` | Réessayer |
 | `learn.quiz.result.continue` | Continuer la formation |
 | `learn.quiz.result.retryAfter` | Nouvelle tentative possible {time, relative} |
+| `learn.quiz.noAttempts` | Vous avez utilisé toutes vos tentatives. Écrivez à assistant@jumanly.io si vous avez besoin d'aide. |
+| `learn.quiz.question` | Question {number} |
 
 ### `/app/learn/attestations` · Attestations
 
@@ -2239,6 +2263,9 @@ Conventions :
 |---|---|
 | `learn.certificates.title` | Mes attestations |
 | `learn.certificates.subtitle` | Chaque attestation est ajoutée à votre profil et peut être vérifiée par un recruteur grâce à son lien public. |
+| `learn.certificates.seo` | Mes attestations |
+| `learn.certificates.verifyLink` | Page de vérification |
+| `learn.certificates.revoked` | Révoquée le {date, date, long} |
 | `learn.certificates.issued` | Obtenue le {date, date, long} |
 | `learn.certificates.number` | N° {code} |
 | `learn.certificates.download` | Télécharger le PDF |
@@ -2264,6 +2291,8 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `certificate.verify.title` | Vérification d'attestation |
+| `certificate.verify.seo.description` | Vérifiez l'authenticité d'une attestation de formation Jumanly à partir de son numéro. |
+| `certificate.verify.intro` | Saisissez le numéro inscrit sur l'attestation pour vérifier qu'elle a bien été délivrée par Jumanly. |
 | `certificate.verify.valid.badge` | Attestation authentique |
 | `certificate.verify.valid.body` | Cette attestation a bien été délivrée par Jumanly. |
 | `certificate.verify.holder` | Titulaire |
@@ -5943,6 +5972,7 @@ Conventions :
 | `notifications.item.orgInvite` | {inviterName} vous invite à rejoindre {org} |
 | `notifications.item.jobApproved` | Votre offre « {jobTitle} » a été validée et publiée |
 | `notifications.item.jobRejected` | Votre offre « {jobTitle} » a été refusée par la modération |
+| `notifications.item.certificateIssued` | Votre attestation « {courseTitle} » est prête |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)
@@ -7262,10 +7292,31 @@ Conventions :
 |---|---|
 | `admin.courses.title` | Formations |
 | `admin.courses.new` | Nouvelle formation |
+| `admin.courses.list.empty` | Aucune formation pour l'instant. Créez la première. |
+| `admin.courses.col.title` | Formation |
+| `admin.courses.col.status` | Statut |
+| `admin.courses.col.access` | Accès |
+| `admin.courses.col.lessons` | Leçons |
+| `admin.courses.col.learners` | Apprenants |
+| `admin.courses.col.updated` | Modifiée le |
+| `admin.courses.create.label` | Titre de la nouvelle formation |
+| `admin.courses.create.submit` | Créer le brouillon |
+| `admin.courses.create.invalid` | Donnez un titre d'au moins 3 caractères. |
+| `admin.courses.created` | Brouillon créé. Complétez la fiche, puis ajoutez les modules et les leçons. |
+| `admin.courses.saved` | Modifications enregistrées. |
+| `admin.courses.invalid` | Certains champs sont incomplets ou invalides. Vérifiez la fiche. |
+| `admin.courses.back` | Toutes les formations |
+| `admin.courses.viewPublic` | Voir la page publique |
+| `admin.courses.details` | Fiche de la formation |
+| `admin.courses.save` | Enregistrer la fiche |
+| `admin.courses.skillsUnknown` | Compétences absentes du référentiel, non retenues : {names} |
 | `admin.courses.status.draft` | Brouillon |
 | `admin.courses.status.review` | En relecture |
 | `admin.courses.status.published` | Publiée |
 | `admin.courses.status.archived` | Archivée |
+| `admin.courses.status.text` | Statut |
+| `admin.courses.status.change` | Changer le statut |
+| `admin.courses.status.saved` | Statut mis à jour. |
 | `admin.courses.field.title` | Titre |
 | `admin.courses.field.slug` | Adresse (slug) |
 | `admin.courses.field.summary` | Résumé |
@@ -7273,6 +7324,15 @@ Conventions :
 | `admin.courses.field.theme` | Thème |
 | `admin.courses.field.level` | Niveau |
 | `admin.courses.field.language` | Langue |
+| `admin.courses.field.languageHint` | Code de langue : fr, en… |
+| `admin.courses.field.description` | Description |
+| `admin.courses.field.audience` | Public visé |
+| `admin.courses.field.duration` | Durée totale (minutes) |
+| `admin.courses.field.prerequisites` | Prérequis |
+| `admin.courses.field.cover` | Image de couverture (adresse https) |
+| `admin.courses.field.outcomesHint` | Un objectif par ligne. |
+| `admin.courses.field.slugHint` | Laissez tel quel pour garder l'adresse actuelle. |
+| `admin.courses.field.skillsFormat` | Séparez les compétences par des virgules. Seules celles du référentiel sont retenues. |
 | `admin.courses.field.instructor` | Formateur |
 | `admin.courses.field.catalogLevel.text` | Niveau de catalogue requis |
 | `admin.courses.field.catalogLevel.free` | Gratuit (tous les forfaits) |
@@ -7286,9 +7346,36 @@ Conventions :
 | `admin.courses.field.skills.hint` | Elles sont ajoutées au profil du talent comme compétences validées et utilisées par le matching. |
 | `admin.courses.modules` | Modules |
 | `admin.courses.module.add` | Ajouter un module |
+| `admin.courses.module.title` | Titre du module |
+| `admin.courses.module.number` | Module {number} |
+| `admin.courses.module.rename` | Renommer |
+| `admin.courses.module.delete` | Supprimer le module |
+| `admin.courses.module.empty` | Aucune leçon dans ce module. |
+| `admin.courses.modulesEmpty` | Ajoutez un premier module pour organiser les leçons. |
 | `admin.courses.lesson.add` | Ajouter une leçon |
+| `admin.courses.lesson.title` | Titre de la leçon |
+| `admin.courses.lesson.kind.text` | Type de leçon |
+| `admin.courses.lesson.kind.video` | Vidéo |
+| `admin.courses.lesson.kind.textLesson` | Texte |
+| `admin.courses.lesson.kind.exercise` | Exercice |
+| `admin.courses.lesson.kind.quiz` | Quiz |
+| `admin.courses.lesson.kind.resource` | Ressources |
+| `admin.courses.lesson.edit` | Modifier |
+| `admin.courses.lesson.editing` | Leçon : {title} |
+| `admin.courses.lesson.save` | Enregistrer la leçon |
+| `admin.courses.lesson.saved` | Leçon enregistrée. |
+| `admin.courses.lesson.delete` | Supprimer la leçon |
+| `admin.courses.lesson.duration` | Durée (minutes) |
+| `admin.courses.lesson.content` | Texte de la leçon |
+| `admin.courses.lesson.contentHint` | Séparez les paragraphes par une ligne vide. |
+| `admin.courses.lesson.resourcesHint` | Une ressource par ligne : Titre | adresse | type (ex. : Modèle de CV | https://… | PDF). |
+| `admin.courses.lesson.resourcesInvalid` | {count, plural, one {# ligne de ressource ignorée} other {# lignes de ressources ignorées}} : vérifiez le format. |
+| `admin.courses.lesson.isPreview` | Leçon en aperçu public (visible sans compte) |
+| `admin.courses.lesson.previewBadge` | Aperçu public |
 | `admin.courses.lesson.video.text` | Vidéo |
 | `admin.courses.lesson.video.upload` | Téléverser la vidéo |
+| `admin.courses.lesson.video.id` | Identifiant de la vidéo |
+| `admin.courses.lesson.video.hint` | Identifiant de la vidéo dans la bibliothèque vidéo. En local, une adresse https directe fonctionne aussi. |
 | `admin.courses.lesson.subtitles` | Sous-titres |
 | `admin.courses.lesson.resources` | Ressources à télécharger |
 | `admin.courses.lesson.transcript` | Transcription |
@@ -7298,6 +7385,21 @@ Conventions :
 | `admin.courses.quiz.question.add` | Ajouter une question |
 | `admin.courses.quiz.question.type` | Type de question |
 | `admin.courses.quiz.question.explanation` | Explication affichée après la réponse |
+| `admin.courses.quiz.title` | Quiz de la leçon |
+| `admin.courses.quiz.save` | Enregistrer les réglages |
+| `admin.courses.quiz.saved` | Quiz enregistré. |
+| `admin.courses.quiz.empty` | Ce quiz n'a pas encore de question. |
+| `admin.courses.quiz.question.prompt` | Question |
+| `admin.courses.quiz.question.number` | Question {number} |
+| `admin.courses.quiz.question.options` | Choix proposés (un par ligne) |
+| `admin.courses.quiz.question.answer` | Bonne réponse |
+| `admin.courses.quiz.question.answerHint` | Choix unique : numéro du bon choix. Choix multiples : numéros séparés par des virgules. Réponse libre : réponses acceptées, une par ligne. |
+| `admin.courses.quiz.question.save` | Enregistrer la question |
+| `admin.courses.quiz.question.delete` | Supprimer la question |
+| `admin.courses.quiz.question.invalid` | Question non enregistrée : vérifiez les choix et la bonne réponse. |
+| `admin.courses.quiz.questionType.single` | Choix unique |
+| `admin.courses.quiz.questionType.multiple` | Choix multiples |
+| `admin.courses.quiz.questionType.text` | Réponse libre |
 | `admin.courses.certificate.title` | Attestation |
 | `admin.courses.certificate.enabled` | Délivrer une attestation |
 | `admin.courses.certificate.rule.text` | Conditions d'obtention |
@@ -7305,9 +7407,17 @@ Conventions :
 | `admin.courses.certificate.rule.quizzes` | Tous les quiz réussis |
 | `admin.courses.certificate.revoke.text` | Révoquer une attestation |
 | `admin.courses.certificate.revoke.confirm` | Révoquer l'attestation {code} ? La page de vérification affichera « Attestation révoquée ». |
+| `admin.courses.certificate.revoke.code` | Numéro de l'attestation |
+| `admin.courses.certificate.revoke.submit` | Révoquer l'attestation |
+| `admin.courses.certificate.revoke.done` | Attestation révoquée. La page de vérification l'indique désormais. |
+| `admin.courses.certificate.revoke.notFound` | Aucune attestation active avec ce numéro. |
 | `admin.courses.publish.text` | Publier |
 | `admin.courses.publish.check` | Avant de publier : au moins une leçon, un niveau de catalogue choisi, un formateur renseigné. |
 | `admin.courses.published` | Formation publiée. |
+| `admin.courses.publish.problem.lessons` | Ajoutez au moins une leçon. |
+| `admin.courses.publish.problem.instructor` | Renseignez le formateur. |
+| `admin.courses.publish.problem.summary` | Renseignez le résumé et la description. |
+| `admin.courses.publish.problem.quiz` | Chaque quiz doit avoir au moins une question. |
 | `admin.courses.editorOnly` | Votre rôle Éditeur de contenus permet de créer et publier des formations. |
 
 ### `/admin/offres` · Modération des offres
@@ -7808,6 +7918,7 @@ Textes ajoutés à l'étape E0 : composants de base, textes alternatifs des pers
 | `foundation.sampleStage` | Entretien |
 | `foundation.sampleDocument` | Copie du diplôme |
 | `foundation.sampleRole` | Recruteur |
+| `foundation.sampleCourse` | Réussir son CV |
 
 ### Page /dev/composants
 

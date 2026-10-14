@@ -6,6 +6,7 @@ import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/server/db";
 import * as courses from "@/server/services/courses";
 import * as jobs from "@/server/services/jobs";
+import * as learn from "@/server/services/learn";
 import * as plans from "@/server/services/plans";
 
 export async function getPublicPlans() {
@@ -85,4 +86,15 @@ export async function getSitemapEntries() {
     jobs.listJobSlugs(db),
   ]);
   return { courseSlugs, jobSlugs };
+}
+
+/** Public verification of an attestation: only what the verification page shows. */
+export async function getCertificate(code: string) {
+  "use cache";
+  cacheLife("minutes");
+  cacheTag(`certificate:${code}`);
+  const certificate = await learn.verifyCertificate(db, code);
+  if (!certificate) return null;
+  const { holderName, courseTitle, hours, issuedAt, revokedAt } = certificate;
+  return { code: certificate.code, holderName, courseTitle, hours, issuedAt, revokedAt };
 }

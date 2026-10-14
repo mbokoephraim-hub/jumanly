@@ -28,6 +28,18 @@ const accounts: AccountSeed[] = [
     plan: "talent_pro",
   },
   {
+    email: "talent.starter@jumanly.test",
+    firstName: "Fatou",
+    lastName: "Fictive",
+    plan: "talent_starter",
+  },
+  {
+    email: "editeur@jumanly.test",
+    firstName: "Gaël",
+    lastName: "Fictif",
+    platformRole: "content_editor",
+  },
+  {
     email: "rh@jumanly.test",
     firstName: "Chanelle",
     lastName: "Fictive",

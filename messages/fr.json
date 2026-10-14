@@ -2769,8 +2769,12 @@
       "eyebrow": "Learn · {count, plural, one {# formation} other {# formations}}, dont {free} gratuites",
       "title": "Catalogue de formations",
       "search": {
+        "label": "Rechercher une formation",
+        "submit": "Rechercher",
         "placeholder": "Rechercher une formation, une compétence, un formateur"
       },
+      "tabs": "Listes de formations",
+      "certificatesLink": "Mes attestations",
       "tab": {
         "all": "Toutes",
         "mine": "Mes formations",
@@ -2829,6 +2833,7 @@
       },
       "loading": "Chargement des formations…"
     },
+    "seo": "Learn · Formations",
     "card": {
       "modules": "{count, plural, one {# module} other {# modules}}",
       "lessons": "{count, plural, one {# leçon} other {# leçons}}",
@@ -2897,7 +2902,18 @@
       "start": "Commencer",
       "resume": "Reprendre",
       "restart": "Recommencer",
-      "enrolled": "Formation ajoutée à « Mes formations ». Bon apprentissage !"
+      "enrolled": "Formation ajoutée à « Mes formations ». Bon apprentissage !",
+      "seo": "{title} · Learn",
+      "finished": "Formation terminée. Bravo pour votre persévérance !",
+      "viewCertificate": "Voir mon attestation",
+      "continue": "Continuer : {lessonTitle}"
+    },
+    "error": {
+      "locked": "Cette formation n'est pas incluse dans votre forfait actuel.",
+      "notEnrolled": "Commencez la formation pour suivre cette leçon.",
+      "attempts": "Vous avez utilisé toutes les tentatives de ce quiz.",
+      "invalid": "Cette action n'est pas possible pour cette leçon.",
+      "notFound": "Cette leçon est introuvable."
     },
     "player": {
       "eyebrow": "Learn · Mes formations",
@@ -2936,6 +2952,16 @@
         "text": "La vidéo ne se charge pas. Vérifiez votre connexion puis réessayez.",
         "retry": "Réessayer"
       },
+      "noVideo": "La vidéo de cette leçon n'est pas encore disponible. Les autres contenus restent accessibles.",
+      "exercise": {
+        "text": "Exercice",
+        "jobSpecific": {
+          "text": "Exercice métier",
+          "locked": "Exercices adaptés à votre métier · Disponible avec {plan}"
+        }
+      },
+      "lessonDone": "Terminée",
+      "lessonCurrent": "Leçon en cours",
       "tab": {
         "overview": "Aperçu",
         "resources": "Ressources",
@@ -2957,7 +2983,11 @@
         "add": "Ajouter une note à {time}",
         "saved": "Note enregistrée.",
         "empty": "Vos notes apparaîtront ici. Elles ne sont visibles que par vous.",
+        "title": "Mes notes",
+        "label": "Nouvelle note",
+        "save": "Enregistrer la note",
         "delete": {
+          "text": "Supprimer",
           "confirm": "Supprimer cette note ?"
         },
         "export": "Exporter mes notes"
@@ -2991,12 +3021,6 @@
         "lockedLesson": "Disponible avec {plan}",
         "certificateIn": "{count, plural, one {Attestation dans # leçon} other {Attestation dans # leçons}}",
         "certificateHint": "Ajoutée automatiquement à votre profil Career."
-      },
-      "exercise": {
-        "jobSpecific": {
-          "text": "Exercice métier",
-          "locked": "Exercices adaptés à votre métier · Disponible avec {plan}"
-        }
       }
     },
     "quiz": {
@@ -3044,11 +3068,16 @@
         "retry": "Réessayer",
         "continue": "Continuer la formation",
         "retryAfter": "Nouvelle tentative possible {time, relative}"
-      }
+      },
+      "noAttempts": "Vous avez utilisé toutes vos tentatives. Écrivez à assistant@jumanly.io si vous avez besoin d'aide.",
+      "question": "Question {number}"
     },
     "certificates": {
       "title": "Mes attestations",
       "subtitle": "Chaque attestation est ajoutée à votre profil et peut être vérifiée par un recruteur grâce à son lien public.",
+      "seo": "Mes attestations",
+      "verifyLink": "Page de vérification",
+      "revoked": "Révoquée le {date, date, long}",
       "issued": "Obtenue le {date, date, long}",
       "number": "N° {code}",
       "download": "Télécharger le PDF",
@@ -3077,6 +3106,10 @@
   "certificate": {
     "verify": {
       "title": "Vérification d'attestation",
+      "seo": {
+        "description": "Vérifiez l'authenticité d'une attestation de formation Jumanly à partir de son numéro."
+      },
+      "intro": "Saisissez le numéro inscrit sur l'attestation pour vérifier qu'elle a bien été délivrée par Jumanly.",
       "valid": {
         "badge": "Attestation authentique",
         "body": "Cette attestation a bien été délivrée par Jumanly."
@@ -7031,6 +7064,7 @@
       "orgInvite": "{inviterName} vous invite à rejoindre {org}",
       "jobApproved": "Votre offre « {jobTitle} » a été validée et publiée",
       "jobRejected": "Votre offre « {jobTitle} » a été refusée par la modération",
+      "certificateIssued": "Votre attestation « {courseTitle} » est prête",
       "unread": "Non lue"
     }
   },
@@ -8435,11 +8469,38 @@
     "courses": {
       "title": "Formations",
       "new": "Nouvelle formation",
+      "list": {
+        "empty": "Aucune formation pour l'instant. Créez la première."
+      },
+      "col": {
+        "title": "Formation",
+        "status": "Statut",
+        "access": "Accès",
+        "lessons": "Leçons",
+        "learners": "Apprenants",
+        "updated": "Modifiée le"
+      },
+      "create": {
+        "label": "Titre de la nouvelle formation",
+        "submit": "Créer le brouillon",
+        "invalid": "Donnez un titre d'au moins 3 caractères."
+      },
+      "created": "Brouillon créé. Complétez la fiche, puis ajoutez les modules et les leçons.",
+      "saved": "Modifications enregistrées.",
+      "invalid": "Certains champs sont incomplets ou invalides. Vérifiez la fiche.",
+      "back": "Toutes les formations",
+      "viewPublic": "Voir la page publique",
+      "details": "Fiche de la formation",
+      "save": "Enregistrer la fiche",
+      "skillsUnknown": "Compétences absentes du référentiel, non retenues : {names}",
       "status": {
         "draft": "Brouillon",
         "review": "En relecture",
         "published": "Publiée",
-        "archived": "Archivée"
+        "archived": "Archivée",
+        "text": "Statut",
+        "change": "Changer le statut",
+        "saved": "Statut mis à jour."
       },
       "field": {
         "title": "Titre",
@@ -8449,6 +8510,15 @@
         "theme": "Thème",
         "level": "Niveau",
         "language": "Langue",
+        "languageHint": "Code de langue : fr, en…",
+        "description": "Description",
+        "audience": "Public visé",
+        "duration": "Durée totale (minutes)",
+        "prerequisites": "Prérequis",
+        "cover": "Image de couverture (adresse https)",
+        "outcomesHint": "Un objectif par ligne.",
+        "slugHint": "Laissez tel quel pour garder l'adresse actuelle.",
+        "skillsFormat": "Séparez les compétences par des virgules. Seules celles du référentiel sont retenues.",
         "instructor": "Formateur",
         "catalogLevel": {
           "text": "Niveau de catalogue requis",
@@ -8467,13 +8537,42 @@
       },
       "modules": "Modules",
       "module": {
-        "add": "Ajouter un module"
+        "add": "Ajouter un module",
+        "title": "Titre du module",
+        "number": "Module {number}",
+        "rename": "Renommer",
+        "delete": "Supprimer le module",
+        "empty": "Aucune leçon dans ce module."
       },
+      "modulesEmpty": "Ajoutez un premier module pour organiser les leçons.",
       "lesson": {
         "add": "Ajouter une leçon",
+        "title": "Titre de la leçon",
+        "kind": {
+          "text": "Type de leçon",
+          "video": "Vidéo",
+          "textLesson": "Texte",
+          "exercise": "Exercice",
+          "quiz": "Quiz",
+          "resource": "Ressources"
+        },
+        "edit": "Modifier",
+        "editing": "Leçon : {title}",
+        "save": "Enregistrer la leçon",
+        "saved": "Leçon enregistrée.",
+        "delete": "Supprimer la leçon",
+        "duration": "Durée (minutes)",
+        "content": "Texte de la leçon",
+        "contentHint": "Séparez les paragraphes par une ligne vide.",
+        "resourcesHint": "Une ressource par ligne : Titre",
+        "resourcesInvalid": "{count, plural, one {# ligne de ressource ignorée} other {# lignes de ressources ignorées}} : vérifiez le format.",
+        "isPreview": "Leçon en aperçu public (visible sans compte)",
+        "previewBadge": "Aperçu public",
         "video": {
           "text": "Vidéo",
-          "upload": "Téléverser la vidéo"
+          "upload": "Téléverser la vidéo",
+          "id": "Identifiant de la vidéo",
+          "hint": "Identifiant de la vidéo dans la bibliothèque vidéo. En local, une adresse https directe fonctionne aussi."
         },
         "subtitles": "Sous-titres",
         "resources": "Ressources à télécharger",
@@ -8486,7 +8585,24 @@
         "question": {
           "add": "Ajouter une question",
           "type": "Type de question",
-          "explanation": "Explication affichée après la réponse"
+          "explanation": "Explication affichée après la réponse",
+          "prompt": "Question",
+          "number": "Question {number}",
+          "options": "Choix proposés (un par ligne)",
+          "answer": "Bonne réponse",
+          "answerHint": "Choix unique : numéro du bon choix. Choix multiples : numéros séparés par des virgules. Réponse libre : réponses acceptées, une par ligne.",
+          "save": "Enregistrer la question",
+          "delete": "Supprimer la question",
+          "invalid": "Question non enregistrée : vérifiez les choix et la bonne réponse."
+        },
+        "title": "Quiz de la leçon",
+        "save": "Enregistrer les réglages",
+        "saved": "Quiz enregistré.",
+        "empty": "Ce quiz n'a pas encore de question.",
+        "questionType": {
+          "single": "Choix unique",
+          "multiple": "Choix multiples",
+          "text": "Réponse libre"
         }
       },
       "certificate": {
@@ -8499,12 +8615,22 @@
         },
         "revoke": {
           "text": "Révoquer une attestation",
-          "confirm": "Révoquer l'attestation {code} ? La page de vérification affichera « Attestation révoquée »."
+          "confirm": "Révoquer l'attestation {code} ? La page de vérification affichera « Attestation révoquée ».",
+          "code": "Numéro de l'attestation",
+          "submit": "Révoquer l'attestation",
+          "done": "Attestation révoquée. La page de vérification l'indique désormais.",
+          "notFound": "Aucune attestation active avec ce numéro."
         }
       },
       "publish": {
         "text": "Publier",
-        "check": "Avant de publier : au moins une leçon, un niveau de catalogue choisi, un formateur renseigné."
+        "check": "Avant de publier : au moins une leçon, un niveau de catalogue choisi, un formateur renseigné.",
+        "problem": {
+          "lessons": "Ajoutez au moins une leçon.",
+          "instructor": "Renseignez le formateur.",
+          "summary": "Renseignez le résumé et la description.",
+          "quiz": "Chaque quiz doit avoir au moins une question."
+        }
       },
       "published": "Formation publiée.",
       "editorOnly": "Votre rôle Éditeur de contenus permet de créer et publier des formations."
@@ -9123,7 +9249,8 @@
     "sampleCompany": "Cabinet Exemple",
     "sampleStage": "Entretien",
     "sampleDocument": "Copie du diplôme",
-    "sampleRole": "Recruteur"
+    "sampleRole": "Recruteur",
+    "sampleCourse": "Réussir son CV"
   },
   "devComponents": {
     "title": "Bibliothèque de composants",

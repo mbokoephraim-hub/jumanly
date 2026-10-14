@@ -16,7 +16,9 @@ export default async function AdminPlan({
   const { code } = await params;
   const query = await searchParams;
   const admin = await requireAdmin();
-  const writable = admin ? canWriteAdmin(admin) : false;
+  // Content editors see the admin shell, but only the courses.
+  if (!admin) notFound();
+  const writable = canWriteAdmin(admin);
   const t = await getTranslations("admin.plans");
   const plan = await db.plan.findUnique({
     where: { code },

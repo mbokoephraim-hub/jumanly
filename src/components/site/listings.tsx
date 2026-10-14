@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { CourseCard, JobCard } from "@/components/ui";
 import { formatDate, formatRelativeDays } from "@/lib/dates";
@@ -7,19 +8,31 @@ import { contractFilterOf, remoteFilterOf, type JobSummary } from "@/server/serv
 import { planForCatalogLevel, type PublicPlan } from "@/server/services/plans";
 
 /** Course card fed by the database: the required plan is computed from entitlements, never named. */
-export function CourseListing({ course, plans }: { course: CourseSummary; plans: PublicPlan[] }) {
+export function CourseListing({
+  course,
+  plans,
+  href,
+  status,
+}: {
+  course: CourseSummary;
+  plans: PublicPlan[];
+  /** The signed-in catalog links to `/app/learn/…` and adds progress or a lock. */
+  href?: string;
+  status?: ReactNode;
+}) {
   const t = useTranslations();
   const duration = durationParts(course.durationMinutes);
   return (
     <CourseCard
       title={course.title}
-      href={`/formations/${course.slug}`}
+      href={href ?? `/formations/${course.slug}`}
       level={t(`trainings.filters.level.${course.level}`)}
       lessons={course.lessonCount}
       duration={t(`ui.duration.${duration.key}`, duration.values)}
       certificate={course.certificateEnabled}
       plan={planForCatalogLevel(plans, course.requiredLevel)?.name}
       image={course.coverUrl ?? undefined}
+      status={status}
     />
   );
 }
