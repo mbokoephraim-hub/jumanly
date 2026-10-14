@@ -75,7 +75,7 @@ export async function Pagination({
           {labels.prev}
         </Link>
       ) : (
-        <span aria-hidden className={`${ghost} opacity-50`}>
+        <span aria-hidden className={`${ghost} text-ardoise`}>
           <Icon name="chev-l" className="size-4" />
           {labels.prev}
         </span>
@@ -116,7 +116,7 @@ export async function Pagination({
           <Icon name="chev-r" className="size-4" />
         </Link>
       ) : (
-        <span aria-hidden className={`${ghost} opacity-50`}>
+        <span aria-hidden className={`${ghost} text-ardoise`}>
           {labels.next}
           <Icon name="chev-r" className="size-4" />
         </span>
