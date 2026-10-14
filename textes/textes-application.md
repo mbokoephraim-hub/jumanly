@@ -1202,6 +1202,9 @@ Rappel du paramètre `?suite=` : si le visiteur arrive depuis une action (postul
 | `auth.layout.signature` | Une plateforme développée par The Growth Lab |
 | `auth.layout.imageAlt` | Aperçu de l'espace Jumanly sur téléphone |
 | `auth.layout.backHome` | Retour au site |
+| `auth.layout.eyebrow` | Jumanly |
+| `auth.layout.languageShort` | FR |
+| `auth.layout.languageLabel` | Langue : français |
 | `auth.or` | ou |
 | `auth.google` | Continuer avec Google |
 | `auth.password.show` | Afficher le mot de passe |
@@ -1536,6 +1539,7 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `welcome.talent.targetJob.label` | Quel métier visez-vous ? |
 | `welcome.talent.targetJob.placeholder` | Ex. : Assistant comptable |
 | `welcome.talent.skills.title` | Quelles sont vos principales compétences ? |
+| `welcome.talent.skills.label` | Compétences |
 | `welcome.talent.skills.placeholder` | Ajoutez une compétence puis appuyez sur Entrée |
 | `welcome.talent.skills.help` | Ajoutez-en au moins trois. Elles servent à vous proposer des offres et des formations adaptées. |
 | `welcome.talent.skills.suggestions` | Suggestions |

@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
+import { Icon } from "@/components/brand/icon";
 import { Alert, Button, ButtonLink } from "@/components/ui";
 import { pickMessages } from "@/i18n/client-messages";
 import { formatDate } from "@/lib/dates";
+import { interpolate, slot } from "@/lib/interpolate";
 import { formatUsd } from "@/lib/money";
 import { startTrialAction } from "@/server/actions/checkout";
 import type { CurrentUser } from "@/server/auth/session";
@@ -196,37 +198,51 @@ export async function CheckoutPanel({
   const current = quote.kind === "upgrade" ? await liveSubscription(db, subject, now) : null;
   const messages = await getMessages();
 
+  const row = "flex items-baseline justify-between gap-4 text-sm";
   return (
     <div className="flex flex-col gap-5">
       <section
-        className="flex flex-col gap-2 rounded-card bg-creme p-5"
+        className="flex flex-col gap-2.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
         aria-labelledby="checkout-summary"
       >
-        <h2 id="checkout-summary" className="font-semibold">
+        <h2
+          id="checkout-summary"
+          className="text-[11px] font-semibold tracking-[0.12em] text-ardoise uppercase"
+        >
           {t("checkout.summary.title")}
         </h2>
-        <p>{t("checkout.summary.plan", { plan: plan.name })}</p>
-        <p className="text-sm text-ardoise">
-          {t("checkout.summary.period", {
-            startDate: formatDate(quote.periodStart, timeZone),
-            endDate: formatDate(quote.periodEnd, timeZone),
-          })}
+        <p className={row}>
+          <span className="text-ardoise">{t("signup.payment.summary.plan")}</span>
+          <span className="text-right font-semibold">{plan.name}</span>
+        </p>
+        <p className={row}>
+          <span className="text-ardoise">{t("signup.payment.summary.period")}</span>
+          <span className="text-right">
+            {t("checkout.summary.period", {
+              startDate: formatDate(quote.periodStart, timeZone),
+              endDate: formatDate(quote.periodEnd, timeZone),
+            })}
+          </span>
         </p>
         {quote.creditCents > 0 && (
           <>
-            <p className="text-sm">
-              {t("checkout.summary.amount", { amount: formatUsd(quote.priceCents) })}
+            <p className={row}>
+              <span className="text-ardoise">
+                {t("billing.upgrade.summary.credit", { currentPlan: current?.plan.name ?? "" })}
+              </span>
+              <span className="text-right">
+                {t("checkout.summary.credit", { credit: formatUsd(quote.creditCents) })}
+              </span>
             </p>
-            <p className="text-sm">
-              {[
-                t("billing.upgrade.summary.credit", { currentPlan: current?.plan.name ?? "" }),
-                t("checkout.summary.credit", { credit: formatUsd(quote.creditCents) }),
-              ].join(" · ")}
-            </p>
-            <p className="text-sm text-ardoise">{t("billing.upgrade.prorataNote")}</p>
+            <p className="text-xs text-ardoise">{t("billing.upgrade.prorataNote")}</p>
           </>
         )}
-        <p className="text-lg font-semibold">{t("checkout.summary.total", { total })}</p>
+        <p className="mt-1 flex items-baseline justify-between gap-4 border-t border-brume pt-3.5">
+          <span className="text-sm font-semibold">{t("signup.payment.summary.total")}</span>
+          <span className="text-xl font-bold">
+            {t("signup.payment.summary.totalValue", { price: total })}
+          </span>
+        </p>
       </section>
       {provider ? (
         <>
@@ -237,21 +253,37 @@ export async function CheckoutPanel({
               context={context}
               total={total}
               operators={provider.operators ?? []}
+              note={t("signup.payment.prepaid")}
             />
           </NextIntlClientProvider>
-          <p className="text-sm text-ardoise">{t("checkout.secure")}</p>
+          <p className="flex items-start gap-2.5 px-1 text-xs leading-[17px] text-ardoise">
+            <Icon name="securite" className="mt-px size-4 shrink-0" />
+            <span>
+              {t("checkout.secure")}{" "}
+              {interpolate(t("checkout.terms.text", { terms: slot("terms") }), {
+                terms: (
+                  <Link href="/conditions" className="underline">
+                    {t("checkout.terms.link")}
+                  </Link>
+                ),
+              })}
+            </span>
+          </p>
         </>
       ) : (
-        <form action={startTrialAction} className="flex flex-col items-start gap-3">
+        <form
+          action={startTrialAction}
+          className="flex flex-col items-start gap-3 rounded-[24px] bg-blanc p-5"
+        >
           <input type="hidden" name="plan" value={plan.code} />
           <input type="hidden" name="context" value={context} />
           <p>{t("checkout.trial.text", { plan: plan.name, days: TRIAL_DAYS })}</p>
-          <Button type="submit" size="lg">
+          <Button type="submit" size="lg" fullWidth>
             {t("checkout.trial.cta", { plan: plan.name })}
           </Button>
         </form>
       )}
-      <p className="text-sm">{t("checkout.applyFree")}</p>
+      {context === "billing" && <p className="text-sm">{t("checkout.applyFree")}</p>}
     </div>
   );
 }

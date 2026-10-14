@@ -2,9 +2,17 @@ import { Suspense } from "react";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AuthCard, AuthHeading, SignupStepper } from "@/components/auth/auth-card";
+import Link from "next/link";
+import {
+  AuthCard,
+  AuthHeading,
+  AuthNote,
+  SignupFooter,
+  SignupStepper,
+} from "@/components/auth/auth-card";
 import { CheckoutPanel } from "@/components/billing/checkout-panel";
-import { ButtonLink, Skeleton } from "@/components/ui";
+import { Icon } from "@/components/brand/icon";
+import { Skeleton } from "@/components/ui";
 import { pageMetadata } from "@/lib/seo";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -40,7 +48,7 @@ async function PaymentStep({
   const t = await getTranslations("signup.payment");
   const paymentId = typeof params.paiement === "string" ? params.paiement : undefined;
   return (
-    <AuthCard>
+    <AuthCard width="xl" className="jm-rise">
       <SignupStepper current="payment" paid />
       <AuthHeading
         title={t("title", { plan: plan.name })}
@@ -56,14 +64,26 @@ async function PaymentStep({
         freeHref="/app/bienvenue"
       />
       {!paymentId && (
-        <div className="flex flex-col items-start gap-2 rounded-card bg-creme p-5">
-          <ButtonLink href="/app/bienvenue" variant="tertiary">
+        <Link
+          href="/app/bienvenue"
+          className="group flex flex-col gap-1 rounded-[20px] bg-blanc px-5 py-4 ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
+        >
+          <span className="flex items-center gap-1.5 text-[15px] font-semibold">
             {t("payLater.text")}
-          </ButtonLink>
-          <p className="text-sm text-ardoise">{t("payLater.help", { plan: plan.name })}</p>
-        </div>
+            <Icon
+              name="chev-r"
+              className="size-4 transition-transform group-hover:translate-x-0.5"
+            />
+          </span>
+          <span className="text-xs leading-[17px] text-ardoise">
+            {t("payLater.help", { plan: plan.name })}
+          </span>
+        </Link>
       )}
-      <p className="text-sm text-ardoise">{t("prepaid")}</p>
+      <AuthNote icon="check" tone="lime">
+        {t("applyFree")}
+      </AuthNote>
+      <SignupFooter />
     </AuthCard>
   );
 }

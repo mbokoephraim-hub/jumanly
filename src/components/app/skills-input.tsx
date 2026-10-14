@@ -13,13 +13,21 @@ import { cx } from "@/lib/cx";
 export function SkillsInput({
   suggestions,
   initial = [],
+  quick = [],
+  label,
 }: {
   suggestions: string[];
   initial?: string[];
+  /** A few skills offered as one-click chips (« Suggestions »). */
+  quick?: string[];
+  label?: string;
 }) {
   const t = useTranslations("welcome.talent.skills");
   const [skills, setSkills] = useState<string[]>(initial);
   const [draft, setDraft] = useState("");
+  const proposed = quick
+    .filter((name) => !skills.some((skill) => skill.toLowerCase() === name.toLowerCase()))
+    .slice(0, 3);
   const add = () => {
     const value = draft.trim();
     if (value && !skills.some((skill) => skill.toLowerCase() === value.toLowerCase())) {
@@ -35,20 +43,26 @@ export function SkillsInput({
   };
   return (
     <div className="flex flex-col gap-2">
-      <label htmlFor="welcome-skills" className="text-sapin text-label">
-        {t("title")}
+      <label htmlFor="welcome-skills" className="text-[13px] font-semibold text-sapin">
+        {label ?? t("title")}
       </label>
-      <input
-        id="welcome-skills"
-        list="welcome-skill-suggestions"
-        value={draft}
-        onChange={(event) => setDraft(event.target.value)}
-        onKeyDown={onKeyDown}
-        onBlur={add}
-        placeholder={t("placeholder")}
-        aria-describedby="welcome-skills-hint"
-        className={cx(inputClasses, "h-12")}
-      />
+      <div className="relative">
+        <Icon
+          name="competence"
+          className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-ardoise"
+        />
+        <input
+          id="welcome-skills"
+          list="welcome-skill-suggestions"
+          value={draft}
+          onChange={(event) => setDraft(event.target.value)}
+          onKeyDown={onKeyDown}
+          onBlur={add}
+          placeholder={t("placeholder")}
+          aria-describedby="welcome-skills-hint"
+          className={cx(inputClasses, "h-12 pl-11")}
+        />
+      </div>
       <datalist id="welcome-skill-suggestions">
         {suggestions.map((name) => (
           <option key={name} value={name} />
@@ -61,13 +75,13 @@ export function SkillsInput({
         {skills.map((skill) => (
           <li key={skill}>
             <input type="hidden" name="skills" value={skill} />
-            <span className="inline-flex h-8 items-center gap-1 rounded-pill bg-neon pr-1 pl-3 text-sm text-sapin">
+            <span className="jm-pop inline-flex h-9 items-center gap-1 rounded-pill bg-sapin pr-1.5 pl-3.5 text-[13px] font-semibold text-blanc">
               {skill}
               <button
                 type="button"
                 onClick={() => setSkills(skills.filter((item) => item !== skill))}
                 aria-label={t("remove", { skill })}
-                className="flex size-6 items-center justify-center rounded-full hover:bg-sapin/10"
+                className="flex size-6 items-center justify-center rounded-full text-lime hover:bg-blanc/15"
               >
                 <Icon name="fermer" className="size-3.5" />
               </button>
@@ -75,6 +89,24 @@ export function SkillsInput({
           </li>
         ))}
       </ul>
+      {proposed.length > 0 && (
+        <div className="flex flex-wrap items-center gap-2">
+          <span className="mr-1 text-[11px] font-semibold tracking-[0.12em] text-ardoise uppercase">
+            {t("suggestions")}
+          </span>
+          {proposed.map((name) => (
+            <button
+              key={name}
+              type="button"
+              onClick={() => setSkills([...skills, name])}
+              className="inline-flex h-9 items-center gap-1.5 rounded-pill bg-blanc px-3.5 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
+            >
+              <Icon name="plus" className="size-3.5" />
+              {name}
+            </button>
+          ))}
+        </div>
+      )}
     </div>
   );
 }

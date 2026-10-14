@@ -153,3 +153,21 @@ export async function billingSubject(
   const org = await ownedOrganization(db, userId);
   return org ? { type: "organization", id: org.id } : null;
 }
+
+/**
+ * E-mail of the account a password-reset link belongs to (shown on /reinitialiser), or null when
+ * the link is unknown or expired. Reads the token Better Auth stored, without consuming it.
+ */
+export async function resetLinkEmail(db: PrismaClient, token: string): Promise<string | null> {
+  if (!token) return null;
+  const verification = await db.verification.findFirst({
+    where: { identifier: `reset-password:${token}`, expiresAt: { gt: new Date() } },
+    select: { value: true },
+  });
+  if (!verification) return null;
+  const user = await db.user.findUnique({
+    where: { id: verification.value },
+    select: { email: true },
+  });
+  return user?.email ?? null;
+}

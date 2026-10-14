@@ -3,9 +3,17 @@ import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AuthCard, AuthHeading, SignupStepper } from "@/components/auth/auth-card";
+import {
+  AuthCard,
+  AuthHeading,
+  GoogleButton,
+  OrSeparator,
+  SignupFooter,
+  SignupStepper,
+} from "@/components/auth/auth-card";
 import { SignupAccountForm } from "@/components/auth/forms";
-import { Button, Skeleton } from "@/components/ui";
+import { Icon } from "@/components/brand/icon";
+import { Skeleton } from "@/components/ui";
 import { countryOptions } from "@/config/countries";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
@@ -51,15 +59,16 @@ async function AccountStep({
   const paid = Boolean(plan?.priceCents);
 
   return (
-    <AuthCard>
+    <AuthCard width="lg" className="jm-rise">
       <SignupStepper current="account" paid={paid} />
       <AuthHeading
         title={t("account.title")}
         subtitle={profile === "talent" ? t("account.subtitle.talent") : t("account.subtitle.org")}
       />
       {plan && (
-        <p className="flex flex-wrap items-center justify-between gap-2 rounded-md bg-creme px-4 py-3 text-sm">
-          <span>
+        <p className="flex items-center gap-3 rounded-[16px] bg-sapin py-2.5 pr-2.5 pl-4 text-[13px] text-blanc">
+          <Icon name="portefeuille" className="size-[18px] shrink-0 text-lime" />
+          <span className="flex-1">
             {t("account.planReminder", {
               plan: paid
                 ? `${plan.name} · ${t("plan.price.monthly", { price: formatUsd(plan.priceCents ?? 0) })}`
@@ -68,23 +77,24 @@ async function AccountStep({
           </span>
           <Link
             href={stepHref("/inscription/forfait", { ...params, forfait: plan.code })}
-            className="font-semibold underline"
+            className="flex h-8 items-center rounded-pill bg-blanc/10 px-3.5 text-xs font-semibold ring-1 ring-blanc/25 ring-inset hover:bg-blanc/20"
           >
             {t("account.planChange")}
           </Link>
         </p>
       )}
       {googleEnabled && profile === "talent" && (
-        <form action={signInWithGoogle}>
-          <input
-            type="hidden"
-            name="next"
-            value={stepHref("/app/bienvenue", { suite: params.suite })}
-          />
-          <Button type="submit" variant="secondary" size="lg" fullWidth>
-            {t("account.google")}
-          </Button>
-        </form>
+        <>
+          <form action={signInWithGoogle}>
+            <input
+              type="hidden"
+              name="next"
+              value={stepHref("/app/bienvenue", { suite: params.suite })}
+            />
+            <GoogleButton label={t("account.google")} />
+          </form>
+          <OrSeparator />
+        </>
       )}
       <SignupAccountForm
         profile={profile}
@@ -92,12 +102,7 @@ async function AccountStep({
         next={params.suite}
         countries={countryOptions("code")}
       />
-      <p className="text-sm">
-        {t("hasAccount")}{" "}
-        <Link href="/connexion" className="font-semibold underline">
-          {t("loginLink")}
-        </Link>
-      </p>
+      <SignupFooter back={stepHref("/inscription/forfait", { ...params, forfait: plan?.code })} />
     </AuthCard>
   );
 }

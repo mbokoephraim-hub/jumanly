@@ -1,11 +1,11 @@
 import { Suspense } from "react";
-import Link from "next/link";
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AuthCard, AuthHeading, SignupStepper } from "@/components/auth/auth-card";
+import { AuthCard, AuthHeading, SignupFooter, SignupStepper } from "@/components/auth/auth-card";
 import { VerifyEmailForm } from "@/components/auth/forms";
 import { Skeleton } from "@/components/ui";
+import { interpolate, slot } from "@/lib/interpolate";
 import { CODE_DIGITS } from "@/lib/password";
 import { pageMetadata } from "@/lib/seo";
 import { db } from "@/server/db";
@@ -23,13 +23,13 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default function VerifyPage() {
   return (
-    <Suspense fallback={<Skeleton className="h-[480px] rounded-card" />}>
+    <Suspense fallback={<Skeleton className="h-[480px] w-full max-w-[520px] rounded-card" />}>
       <VerifyStep />
     </Suspense>
   );
 }
 
-/** Step 4 · the 6-digit code sent by e-mail (valid 15 minutes, 5 attempts). */
+/** Step 4 · the 6-digit code sent by e-mail, valid 15 minutes, 5 attempts (mockup 02-07). */
 async function VerifyStep() {
   const flow = await readSignupFlow();
   if (!flow.email) redirect("/inscription");
@@ -38,16 +38,17 @@ async function VerifyStep() {
     ? await db.plan.findUnique({ where: { code: flow.plan }, select: { priceCents: true } })
     : null;
   return (
-    <AuthCard>
+    <AuthCard className="jm-rise lg:pt-16">
       <SignupStepper current="verify" paid={Boolean(plan?.priceCents)} />
       <AuthHeading
+        icon="message"
         title={t("verify.title")}
-        subtitle={t("verify.subtitle", { digits: CODE_DIGITS, email: flow.email })}
+        subtitle={interpolate(t("verify.subtitle", { digits: CODE_DIGITS, email: slot("email") }), {
+          email: <strong className="font-semibold text-sapin">{flow.email}</strong>,
+        })}
       />
       <VerifyEmailForm email={flow.email} />
-      <Link href="/inscription" className="text-sm underline">
-        {t("verify.changeEmail")}
-      </Link>
+      <SignupFooter back="/inscription" />
     </AuthCard>
   );
 }

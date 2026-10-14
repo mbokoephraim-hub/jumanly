@@ -4,7 +4,7 @@ import { expectAccessible } from "./a11y";
 import { demo, logIn, signUpFromPricing, testEmail } from "./session";
 
 async function payWith(page: import("@playwright/test").Page, number: string) {
-  await page.locator("#checkout-operator").selectOption("mpesa");
+  await page.getByRole("radio", { name: "M-Pesa" }).check();
   await page.locator('input[name="number"]').fill(number);
   await page.getByRole("button", { name: /^Payer/ }).click();
 }
