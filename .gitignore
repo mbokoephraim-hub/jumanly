@@ -54,3 +54,6 @@ next-env.d.ts
 
 # react-email
 /.react-email/
+
+# sauvegardes locales de la base (pnpm db:backup)
+/backups/

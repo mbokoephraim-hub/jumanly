@@ -9446,7 +9446,18 @@
         "add": "Ajouter une question",
         "theme": "Thème",
         "question": "Question",
-        "answer": "Réponse"
+        "answer": "Réponse",
+        "count": "{count, plural, =0 {Aucune question} one {# question} other {# questions}}",
+        "status": {
+          "edited": "Modifiée",
+          "added": "Ajoutée",
+          "hidden": "Masquée"
+        },
+        "edit": "Modifier",
+        "hide": "Masquer cette question",
+        "show": "Afficher à nouveau",
+        "reset": "Rétablir le texte d'origine",
+        "delete": "Supprimer cette question"
       },
       "banner": {
         "add": "Nouvelle bannière",
@@ -9462,8 +9473,15 @@
         "end": "Fin d'affichage",
         "style": {
           "info": "Information",
-          "warning": "Avertissement"
-        }
+          "warning": "Avertissement",
+          "text": "Style"
+        },
+        "empty": "Aucune bannière. Une bannière s'affiche en haut des pages pour le public choisi, entre ses dates de début et de fin (incluses).",
+        "dates": "Du {start} au {end}",
+        "always": "Sans date de fin",
+        "delete": "Supprimer la bannière",
+        "save": "Enregistrer la bannière",
+        "where": "La bannière « Tous » s'affiche aussi sur le site public ; les autres seulement dans l'espace connecté correspondant."
       },
       "texts": {
         "key": "Clé",
@@ -9474,7 +9492,15 @@
       "publish": "Publier",
       "published": "Contenu publié.",
       "history": "Historique des versions",
-      "restore": "Restaurer cette version"
+      "restore": "Restaurer cette version",
+      "subtitle": "Modifiez la FAQ et publiez des bannières sans nouvelle mise en ligne. Les textes d'origine restent dans textes/ et peuvent être rétablis à tout moment.",
+      "group": {
+        "home": "Accueil (FAQ courte)",
+        "pricing": "Tarifs (FAQ facturation)"
+      },
+      "saved": "Modification enregistrée.",
+      "deleted": "Contenu supprimé.",
+      "error": "Vérifiez les champs : la question fait au moins 3 caractères, la réponse au moins 3, et la date de fin suit la date de début."
     },
     "reports": {
       "title": "Signalements",

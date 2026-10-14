@@ -6,6 +6,7 @@ import { onMessageSent } from "@/server/application-events";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
+import { allowAttempt } from "@/server/rate-limit";
 import {
   answerDocumentRequest,
   blockConversation,
@@ -17,17 +18,21 @@ import { markNotificationsRead } from "@/server/services/notifications";
 import { mailContactAccepted, mailInterviewConfirmed } from "@/server/hire-emails";
 import { answerInterview } from "@/server/services/interviews";
 import { respondContactRequest } from "@/server/services/talent-search";
+import { reportError } from "@/server/observability";
 
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
 
 export async function sendMessageAction(formData: FormData) {
   const conversationId = id(formData.get("conversation"));
   const { user, viewer } = await connectViewer(`/app/messages/${conversationId}`);
+  if (!(await allowAttempt("message", user.id))) {
+    redirect(`/app/messages/${conversationId}?erreur=trop`);
+  }
   try {
     const sent = await sendMessage(db, viewer, conversationId, {
       body: String(formData.get("body") ?? ""),
     });
-    await onMessageSent({ ...sent, senderName: user.name }).catch((error) => console.error(error));
+    await onMessageSent({ ...sent, senderName: user.name }).catch((error) => reportError(error));
   } catch (error) {
     if (!(error instanceof ConnectError)) throw error;
     redirect(`/app/messages/${conversationId}?erreur=${error.code}`);
@@ -48,7 +53,7 @@ export async function answerDocumentAction(formData: FormData) {
       id(formData.get("request")),
       id(formData.get("document")),
     );
-    await onMessageSent({ ...sent, senderName: user.name }).catch((error) => console.error(error));
+    await onMessageSent({ ...sent, senderName: user.name }).catch((error) => reportError(error));
   } catch (error) {
     if (!(error instanceof ConnectError)) throw error;
     redirect(`/app/messages/${conversationId}?erreur=${error.code}`);

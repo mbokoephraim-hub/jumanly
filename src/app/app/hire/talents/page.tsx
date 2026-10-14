@@ -6,6 +6,7 @@ import { languageName } from "@/lib/dates";
 import { db } from "@/server/db";
 import { level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
+import { allowAttempt, authLimits } from "@/server/rate-limit";
 import { orgPlanFor, listPublicPlans } from "@/server/services/plans";
 import {
   deepFilters,
@@ -59,8 +60,11 @@ export default async function TalentSearchPage({ searchParams }: PageProps<"/app
 
   const deep = searchLevel === "deep";
   const raw = Object.fromEntries(Object.entries(params).map(([key, value]) => [key, one(value)]));
+  // A query (not the empty form) counts towards the per-account rate limit (partie 10 § 10.1).
+  const asked = Boolean(raw.q || raw.location || raw.job);
+  const allowed = !asked || (await allowAttempt("talentSearch", ctx.userId));
   const [result, quotas] = await Promise.all([
-    searchTalents(db, ctx, raw),
+    allowed ? searchTalents(db, ctx, raw) : ({ status: "rateLimited" } as const),
     searchQuotas(db, ctx.organizationId),
   ]);
   const quotaLine = t("hire.talents.quota.text", {
@@ -209,6 +213,12 @@ export default async function TalentSearchPage({ searchParams }: PageProps<"/app
       </form>
 
       {result.status === "empty" && <p className="text-ardoise">{t("hire.talents.start")}</p>}
+      {result.status === "rateLimited" && (
+        <Alert
+          tone="error"
+          title={t("system.error.rateLimit", { seconds: authLimits.talentSearch.window })}
+        />
+      )}
       {result.status === "quota" && (
         <Alert
           tone="warning"

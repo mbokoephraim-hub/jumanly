@@ -18,6 +18,7 @@ import {
   toggleSavedCourse,
 } from "@/server/services/learn";
 import { notify } from "@/server/services/notifications";
+import { reportError } from "@/server/observability";
 
 const value = (formData: FormData, key: string, max = 80) =>
   String(formData.get(key) ?? "").slice(0, max);
@@ -77,7 +78,7 @@ async function afterProgress(
       code: certificate.code,
       certificateId: certificate.id,
     });
-    await send(user.email, email.subject, email.props).catch((error) => console.error(error));
+    await send(user.email, email.subject, email.props).catch((error) => reportError(error));
     redirect(`${coursePath(slug)}?bravo=${certificate.id}`);
   }
   const found = await getLearnerCourse(db, user.id, slug);

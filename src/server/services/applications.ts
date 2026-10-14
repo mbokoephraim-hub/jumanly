@@ -8,6 +8,7 @@
 import { freezeApplicationMatch } from "@/server/matching/service";
 import type { Prisma, PrismaClient, StageKind } from "@/generated/prisma/client";
 import { isJobOpen } from "./jobs";
+import { reportError } from "@/server/observability";
 
 /** Stages every job starts with; the recruiter edits them in Hire (E4). */
 export const defaultStages: { kind: StageKind; name: string }[] = [
@@ -90,7 +91,7 @@ export async function applyToJob(
       },
     });
     // The score shown at that moment is kept with the application; applying never waits on it.
-    await freezeApplicationMatch(db, application.id, now).catch((error) => console.error(error));
+    await freezeApplicationMatch(db, application.id, now).catch((error) => reportError(error));
     return { status: "applied", applicationId: application.id };
   } catch (error) {
     // Two clicks at once: the unique (job, profile) pair keeps a single application.

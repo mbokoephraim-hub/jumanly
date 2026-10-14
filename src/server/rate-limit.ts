@@ -1,7 +1,8 @@
 /**
- * Rate limits for the sign-in and sign-up forms (partie 10). Better Auth only limits requests that
- * reach its HTTP routes; our forms call it from server actions, so the same limits are applied here,
- * in the same `rateLimit` table (shared by every server instance).
+ * Rate limits (partie 10 § 10.1): sign-in and sign-up forms, licence activation, messages and talent
+ * search. Better Auth only limits requests that reach its HTTP routes; our forms call it from server
+ * actions, so the same limits are applied here, in the same `rateLimit` table (shared by every
+ * server instance).
  */
 import "server-only";
 import { headers } from "next/headers";
@@ -14,6 +15,9 @@ export const authLimits = {
   sendCode: { window: 60, max: 3 },
   magicLink: { window: 15 * 60, max: 5 },
   activate: { window: 15 * 60, max: 10 },
+  // Per account: far above what a person types or searches, low enough to stop a script.
+  message: { window: 5 * 60, max: 30 },
+  talentSearch: { window: 10 * 60, max: 60 },
 } as const;
 
 /** The visitor's address as given by the hosting proxy, or null when unknown. */

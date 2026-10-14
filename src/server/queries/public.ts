@@ -4,6 +4,7 @@
  */
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/server/db";
+import * as contents from "@/server/services/contents";
 import * as courses from "@/server/services/courses";
 import * as jobs from "@/server/services/jobs";
 import * as learn from "@/server/services/learn";
@@ -119,4 +120,20 @@ export async function getCertificate(code: string) {
   if (!certificate) return null;
   const { holderName, courseTitle, hours, issuedAt, revokedAt } = certificate;
   return { code: certificate.code, holderName, courseTitle, hours, issuedAt, revokedAt };
+}
+
+/** Texts and banners edited in /admin/contenus (refreshed at once when the admin publishes). */
+export async function getContentOverrides() {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("contents");
+  return contents.listOverrides(db);
+}
+
+/** Banners shown now to a public (dates are whole days: an hour of cache is precise enough). */
+export async function getActiveBanners(audience: contents.BannerAudience) {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("contents");
+  return contents.activeBanners(await contents.listOverrides(db), audience);
 }

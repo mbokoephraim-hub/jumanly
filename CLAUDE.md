@@ -71,6 +71,8 @@ pnpm db:deploy      # applique les migrations (CI, production)
 pnpm db:seed        # forfaits + référentiel + démo (local)
 pnpm admin:promote  # donne le rôle administrateur à un compte (e-mail en argument)
 pnpm jobs:billing   # tâches d'abonnement : rappels, délai de grâce, retour au gratuit
+pnpm db:backup      # sauvegarde de la base (pg_dump, conservation 30 jours)
+pnpm db:restore-check <fichier>  # restaure une sauvegarde dans une base de test et la vérifie
 pnpm messages       # textes/textes-application.md → messages/fr.json
 pnpm messages:check # vérifie que messages/fr.json est à jour
 pnpm brand          # ressources/ → icônes et images servies (public/)

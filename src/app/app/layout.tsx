@@ -6,6 +6,7 @@ import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
 import { ADMIN_ROLES } from "@/server/auth/session";
 import { getTranslations } from "next-intl/server";
+import { ContentBanners } from "@/components/site/content-banners";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
 import { unreadNotifications } from "@/server/services/notifications";
@@ -55,6 +56,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         isAdmin: (ADMIN_ROLES as readonly string[]).includes(user.platformRole),
       }}
     >
+      <ContentBanners audience={partnerSpace ? "partners" : space ? "recruiters" : "talents"} />
       {children}
     </AppShell>
   );
