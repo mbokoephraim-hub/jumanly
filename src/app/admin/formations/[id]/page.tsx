@@ -178,6 +178,9 @@ export default async function AdminCourse({
                       <span className="font-semibold">{item.title}</span>
                       <Badge>{t(`lesson.kind.${kindLabel(item.kind)}`)}</Badge>
                       {item.isPreview && <Badge tone="learn">{t("lesson.previewBadge")}</Badge>}
+                      {item.jobSpecific && (
+                        <Badge tone="career">{t("lesson.jobSpecific.badge")}</Badge>
+                      )}
                     </span>
                     <span className="flex gap-2">
                       <ButtonLink
@@ -423,6 +426,14 @@ async function CourseFields({
           }))}
         />
         <TextField
+          id="course-job-families"
+          name="jobFamilies"
+          label={t("field.jobFamilies.text")}
+          hint={t("field.jobFamilies.hint")}
+          defaultValue={course.jobFamilies.join(", ")}
+          maxLength={500}
+        />
+        <TextField
           id="course-cover"
           name="coverUrl"
           label={t("field.cover")}
@@ -572,6 +583,15 @@ async function LessonEditor({
             name="isPreview"
             label={t("lesson.isPreview")}
             defaultChecked={lesson.isPreview}
+          />
+        </div>
+        <div className="md:col-span-2">
+          <Checkbox
+            id="lesson-job-specific"
+            name="jobSpecific"
+            label={t("lesson.jobSpecific.text")}
+            hint={t("lesson.jobSpecific.hint")}
+            defaultChecked={lesson.jobSpecific}
           />
         </div>
         <Button type="submit" className="self-start">

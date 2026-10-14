@@ -302,9 +302,16 @@ type CourseSeed = {
   objectives: string[];
   modules: {
     title: string;
-    lessons: { title: string; kind: "video" | "text" | "exercise" | "quiz"; minutes: number }[];
+    lessons: {
+      title: string;
+      kind: "video" | "text" | "exercise" | "quiz";
+      minutes: number;
+      /** Job-specific exercise (`learn.exercises.job_specific`). */
+      jobSpecific?: boolean;
+    }[];
   }[];
   skills: string[];
+  jobFamilies?: string[];
 };
 
 /** Quiz of the demo courses: obviously fictitious, two questions. */
@@ -391,11 +398,18 @@ const courses: CourseSeed[] = [
         title: "Pendant l'entretien",
         lessons: [
           { title: "Les questions classiques", kind: "video", minutes: 12 },
+          {
+            title: "Exercice métier : l'entretien d'un chargé de clientèle",
+            kind: "exercise",
+            minutes: 15,
+            jobSpecific: true,
+          },
           { title: "Quiz final", kind: "quiz", minutes: 5 },
         ],
       },
     ],
     skills: ["communication-orale"],
+    jobFamilies: ["Relation client", "Commerce"],
   },
   {
     slug: "demo-excel-pour-debuter",
@@ -603,6 +617,7 @@ export async function seedDemo(db: SeedClient) {
       enrollmentCount: course.enrollmentCount,
       publishedAt: daysFromNow(-course.enrollmentCount / 10),
       instructor: "Formateur fictif (démo)",
+      jobFamilies: course.jobFamilies ?? [],
     };
     const saved = await db.course.upsert({
       where: { slug: course.slug },
@@ -624,6 +639,7 @@ export async function seedDemo(db: SeedClient) {
               kind: lesson.kind,
               durationSec: lesson.minutes * 60,
               isPreview: moduleIndex === 0 && lessonIndex === 0,
+              jobSpecific: lesson.jobSpecific ?? false,
               content: {
                 paragraphs: [
                   moduleIndex === 0 && lessonIndex === 0

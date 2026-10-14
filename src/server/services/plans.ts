@@ -141,8 +141,22 @@ export function cheapestPlanWhere(
  * a limit above zero (contract values count). Used by « Disponible avec {plan} ».
  */
 export function orgPlanFor(plans: PublicPlan[], key: string, levels?: string[]): string {
+  return familyPlanFor(plans, ["rh", "company"], key, levels);
+}
+
+/** Same as `orgPlanFor`, for the talent plans (Career and Learn locks of E10). */
+export function talentPlanFor(plans: PublicPlan[], key: string, levels?: string[]): string {
+  return familyPlanFor(plans, ["talent"], key, levels);
+}
+
+function familyPlanFor(
+  plans: PublicPlan[],
+  families: PlanFamily[],
+  key: string,
+  levels?: string[],
+): string {
   return (
-    cheapestPlanWhere(plans, ["rh", "company"], (plan) => {
+    cheapestPlanWhere(plans, families, (plan) => {
       const value = plan.entitlements[key];
       if (value === undefined) return false;
       if (levels) return levels.includes(value);

@@ -22,6 +22,14 @@ export const aiFeatures = {
   cv_parse: { credits: 1, tier: "fast" },
   cv_coach: { credits: 2, tier: "default" },
   diagnostic: { credits: 2, tier: "default" },
+  // E10. Interview simulations are paid by their own quota (`career.interview.*.monthly`, one
+  // per session), so their model calls cost no credit.
+  interview_questions: { credits: 0, tier: "fast" },
+  interview_feedback: { credits: 0, tier: "default" },
+  career_document: { credits: 2, tier: "default" },
+  proofread: { credits: 1, tier: "fast" },
+  linkedin: { credits: 2, tier: "default" },
+  cv_tailor: { credits: 2, tier: "default" },
 } as const;
 export type AiFeature = keyof typeof aiFeatures;
 
@@ -65,9 +73,10 @@ export async function aiReadiness(
   if (!user?.aiConsentAt) return "consent";
   const subject: Subject = { type: "user", id: userId };
   if (!(await allowed(db, subject, gate))) return "entitlement";
+  const credits: number = aiFeatures[feature].credits;
+  if (credits === 0) return "ready";
   const current = await usage(db, subject, AI_CREDITS_KEY);
-  if (current.limit >= 0 && current.used + aiFeatures[feature].credits > current.limit)
-    return "quota";
+  if (current.limit >= 0 && current.used + credits > current.limit) return "quota";
   return "ready";
 }
 
@@ -95,8 +104,9 @@ export async function runAi<T>(
   });
   if (!user?.aiConsentAt) throw new AiError("consent");
   if (!(await allowed(db, subject, input.gate))) throw new AiError("entitlement");
+  const credits: number = config.credits;
   try {
-    await consume(db, subject, AI_CREDITS_KEY, config.credits, now);
+    if (credits > 0) await consume(db, subject, AI_CREDITS_KEY, credits, now);
   } catch (error) {
     if (error instanceof QuotaExceededError) throw new AiError("quota", error.resetsAt);
     throw error;
@@ -130,7 +140,7 @@ export async function runAi<T>(
       maxTokens: input.maxTokens,
     });
   } catch (error) {
-    await release(db, subject, AI_CREDITS_KEY, config.credits, now);
+    if (credits > 0) await release(db, subject, AI_CREDITS_KEY, credits, now);
     await log("error", provider.name);
     if (error instanceof AiUnavailableError) {
       console.error("IA indisponible :", error.cause);
@@ -139,7 +149,7 @@ export async function runAi<T>(
     throw error;
   }
   if (result.output === null) {
-    await release(db, subject, AI_CREDITS_KEY, config.credits, now);
+    if (credits > 0) await release(db, subject, AI_CREDITS_KEY, credits, now);
     await log("invalid", result.model, result.inputTokens, result.outputTokens);
     return { output: input.template(), source: "template" };
   }

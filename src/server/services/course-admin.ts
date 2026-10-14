@@ -112,6 +112,7 @@ export const courseFormSchema = z.object({
       .max(500),
   ]),
   skills: text(500),
+  jobFamilies: text(500).default(""),
 });
 
 /** Saves the course fields; returns the skill names not found in the reference list. */
@@ -153,6 +154,14 @@ export async function updateCourse(
         requiredLevel: input.requiredLevel,
         certificateEnabled: input.certificateEnabled === "on",
         coverUrl: input.coverUrl || null,
+        jobFamilies: [
+          ...new Set(
+            input.jobFamilies
+              .split(",")
+              .map((item) => item.trim())
+              .filter(Boolean),
+          ),
+        ].slice(0, 12),
       },
     }),
     db.courseSkill.deleteMany({ where: { courseId: id, skillId: { notIn: skillIds } } }),
@@ -270,6 +279,7 @@ export const lessonFormSchema = z.object({
   resources: text(3000),
   transcript: text(50_000),
   isPreview: z.literal("on").optional(),
+  jobSpecific: z.literal("on").optional(),
 });
 
 /** « Titre | adresse | type » per line → resources; invalid lines are dropped and counted. */
@@ -308,6 +318,7 @@ export async function updateLesson(
       resources,
       transcript: input.transcript || null,
       isPreview: input.isPreview === "on",
+      jobSpecific: input.jobSpecific === "on",
       ...(input.kind === "quiz" ? { quiz: { upsert: { create: {}, update: {} } } } : {}),
     },
   });

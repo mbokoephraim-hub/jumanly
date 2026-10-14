@@ -83,6 +83,7 @@ async function course(requiredLevel: "free" | "fundamentals", maxAttempts = 0) {
     certificateEnabled: "on",
     coverUrl: "",
     skills: skill.name,
+    jobFamilies: "",
   });
   const firstModule = await addModule(db, created!.id, "Module test");
   const text = await addLesson(db, created!.id, firstModule!.id, { title: "Texte", kind: "text" });

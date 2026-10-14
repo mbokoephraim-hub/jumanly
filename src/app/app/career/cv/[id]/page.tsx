@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { AiGateNotice } from "@/components/career/ai-gate";
 import { CvCoachPanel, type CoachState } from "@/components/career/cv-coach-panel";
 import {
   Alert,
@@ -10,6 +11,7 @@ import {
   ButtonLink,
   Checkbox,
   PlanLock,
+  Select,
   TextArea,
   TextField,
 } from "@/components/ui";
@@ -22,6 +24,7 @@ import {
   setPrimaryCv,
   updateCvDetails,
 } from "@/server/actions/cv";
+import { tailorCvAction } from "@/server/actions/career-documents";
 import { aiFeatures, aiReadiness, AI_CREDITS_KEY } from "@/server/ai";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -35,8 +38,10 @@ import {
   parseCv,
   type CvContent,
 } from "@/server/services/cv";
+import { aiState, TAILOR_GATE } from "@/server/services/career-documents";
 import { cvScore, parseSuggestion, targetSkillsFor } from "@/server/services/cv-coach";
-import { cheapestPlanWithLimit, listPublicPlans } from "@/server/services/plans";
+import { interviewJobs } from "@/server/services/interview-sim";
+import { cheapestPlanWithLimit, listPublicPlans, talentPlanFor } from "@/server/services/plans";
 import type { CvLabels } from "@/server/pdf/cv-document";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -68,6 +73,12 @@ export default async function CvEditorPage({
   const plans = await listPublicPlans(db);
   const labels = await cvLabels(cv.title);
   const count = await db.document.count({ where: { kind: "cv", profileId: cv.profileId } });
+  const [tailor, tailorJobs] = await Promise.all([
+    aiState(db, user.id, "cv_tailor", TAILOR_GATE),
+    interviewJobs(db, user.id),
+  ]);
+  const tailorPlan = talentPlanFor(plans, TAILOR_GATE.key);
+  const tAll = await getTranslations();
   const [readiness, credits, targets, pending] = await Promise.all([
     aiReadiness(db, user.id, "cv_coach"),
     usage(db, { type: "user", id: user.id }, AI_CREDITS_KEY),
@@ -95,13 +106,15 @@ export default async function CvEditorPage({
   });
 
   const notice =
-    query.ok === "profil"
-      ? t("fromProfileDone")
-      : query.ok === "modele"
-        ? t("template.applied")
-        : query.ok
-          ? t("saved")
-          : null;
+    typeof query.adapte === "string"
+      ? t("tailor.created", { cvName: cv.title, jobTitle: query.adapte })
+      : query.ok === "profil"
+        ? t("fromProfileDone")
+        : query.ok === "modele"
+          ? t("template.applied")
+          : query.ok
+            ? t("saved")
+            : null;
   const error =
     query.erreur === "limite"
       ? t("limit", { max: MAX_CVS })
@@ -351,6 +364,59 @@ export default async function CvEditorPage({
               suggestion: typeof query.suggestion === "string" ? query.suggestion : undefined,
             }}
           />
+          <section
+            id="adapter"
+            aria-labelledby="cv-tailor"
+            className="flex scroll-mt-24 flex-col gap-3 rounded-card bg-blanc p-6"
+          >
+            <h2 id="cv-tailor" className="text-h2">
+              {t("tailor.text")}
+            </h2>
+            {tailor.state === "entitlement" ? (
+              <p className="text-sm">{t("tailor.locked", { plan: tailorPlan })}</p>
+            ) : (
+              <>
+                <p className="text-sm text-ardoise">{t("tailor.desc")}</p>
+                <AiGateNotice
+                  state={tailor.state}
+                  plan={tailorPlan}
+                  resetsAt={tailor.resetsAt}
+                  outcome={typeof query.adaptation === "string" ? query.adaptation : undefined}
+                />
+                {query.adaptation === "notFound" && (
+                  <Alert tone="error" title={t("tailor.notFound")} />
+                )}
+                {query.adaptation === "limit" && (
+                  <Alert tone="error" title={t("limit", { max: MAX_CVS })} />
+                )}
+                {tailor.state === "ready" &&
+                  (tailorJobs.length === 0 ? (
+                    <p className="text-sm">{t("tailor.noJobs")}</p>
+                  ) : (
+                    <form action={tailorCvAction} className="flex flex-col gap-3">
+                      <input type="hidden" name="cvId" value={cv.id} />
+                      <Select
+                        id={`tailor-job-${cv.id}`}
+                        name="jobId"
+                        label={t("tailor.selectJob")}
+                        required
+                        options={tailorJobs.map((job) => ({ value: job.id, label: job.title }))}
+                      />
+                      <p className="text-sm text-ardoise">
+                        {tAll("career.documents.generate.cost", {
+                          count: aiFeatures.cv_tailor.credits,
+                        })}
+                      </p>
+                      <div>
+                        <Button type="submit" variant="secondary" size="sm">
+                          {t("tailor.cta")}
+                        </Button>
+                      </div>
+                    </form>
+                  ))}
+              </>
+            )}
+          </section>
         </div>
       </div>
     </div>

@@ -3,6 +3,10 @@ import { getTranslations } from "next-intl/server";
 import { Badge, ButtonLink, Card, CardText, CardTitle } from "@/components/ui";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { can } from "@/server/entitlements";
+import { interviewQuota } from "@/server/services/interview-sim";
+import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
+import { PORTFOLIO_KEY, portfolioLevel } from "@/server/services/portfolio";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.home");
@@ -18,7 +22,32 @@ export default async function CareerPage() {
     orderBy: { createdAt: "desc" },
     select: { id: true, createdAt: true },
   });
-  const later = ["documents", "linkedin", "interviews", "portfolio", "tips"] as const;
+  const subject = { type: "user" as const, id: user.id };
+  const [documents, linkedin, interviews, portfolio, plans] = await Promise.all([
+    can(db, subject, "career.documents"),
+    can(db, subject, "career.linkedin"),
+    interviewQuota(db, user.id, "text"),
+    portfolioLevel(db, user.id),
+    listPublicPlans(db),
+  ]);
+  const tools = [
+    { key: "documents", href: "/app/career/documents", open: documents, gate: "career.documents" },
+    { key: "linkedin", href: "/app/career/linkedin", open: linkedin, gate: "career.linkedin" },
+    {
+      key: "interviews",
+      href: "/app/career/entretiens",
+      open: interviews.limit !== 0,
+      gate: "career.interview.text.monthly",
+      quota: interviews.limit > 0 ? interviews : null,
+    },
+    {
+      key: "portfolio",
+      href: "/app/career/portfolio",
+      open: portfolio !== "none",
+      gate: PORTFOLIO_KEY,
+    },
+  ] as const;
+  const later = ["tips"] as const;
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
@@ -61,6 +90,26 @@ export default async function CareerPage() {
           </ButtonLink>
         </Card>
       </div>
+      <ul className="grid gap-4 md:grid-cols-2">
+        {tools.map((tool) => (
+          <li key={tool.key}>
+            <Card tone="career" className="flex h-full flex-col items-start gap-3">
+              <CardTitle>{t(`${tool.key}.title`)}</CardTitle>
+              <CardText>{t(`${tool.key}.desc`)}</CardText>
+              {!tool.open ? (
+                <Badge tone="sapin">{t("lock", { plan: talentPlanFor(plans, tool.gate) })}</Badge>
+              ) : "quota" in tool && tool.quota ? (
+                <p className="text-sm">
+                  {t("quota", { used: tool.quota.used, quota: tool.quota.limit })}
+                </p>
+              ) : null}
+              <ButtonLink href={tool.href} size="sm" variant={tool.open ? "primary" : "secondary"}>
+                {t(`${tool.key}.title`)}
+              </ButtonLink>
+            </Card>
+          </li>
+        ))}
+      </ul>
       <ul className="grid gap-4 md:grid-cols-3">
         {later.map((key) => (
           <li key={key}>

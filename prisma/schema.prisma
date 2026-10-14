@@ -299,6 +299,8 @@ model Course {
   durationMinutes    Int
   coverUrl           String?
   requiredLevel      CatalogLevel
+  /// Job families of the course's job-specific exercises (`learn.exercises.job_specific`).
+  jobFamilies        String[]       @default([])
   status             CourseStatus   @default(draft)
   certificateEnabled Boolean        @default(true)
   instructor         String?
@@ -338,6 +340,8 @@ model Lesson {
   content     Json?
   /// Visible without an account.
   isPreview   Boolean      @default(false)
+  /// Job-specific exercise (`learn.exercises.job_specific`): optional, not counted in progress.
+  jobSpecific Boolean      @default(false)
   /// [{ title, url, type, sizeKb }]: files to download (PDF supports…).
   resources   Json         @default("[]")
   transcript  String?
@@ -542,6 +546,7 @@ model User {
   matchDisputes       MatchDispute[]            @relation("DisputeAuthor")
   progressPlan        ProgressPlan?
   licenses            License[]
+  interviewSessions   InterviewSession[]
   createdAt           DateTime                  @default(now())
   updatedAt           DateTime                  @updatedAt
 
@@ -829,6 +834,13 @@ model TalentProfile {
   educations             Education[]
   documents              Document[]
   applications           Application[]
+  /// Public portfolio (`career.portfolio.level`), at /portfolio/[slug] when published.
+  portfolioSlug          String?           @unique
+  portfolioPublic        Boolean           @default(false)
+  portfolioIntro         String?
+  /// classic | grid (the enriched level unlocks grid and the cover colour)
+  portfolioLayout        String            @default("classic")
+  portfolioAccent        String?
   createdAt              DateTime          @default(now())
   updatedAt              DateTime          @updatedAt
 }
@@ -1310,6 +1322,41 @@ model ProgressPlan {
   steps     Json     @default("[]")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+enum InterviewSimMode {
+  text
+  voice
+}
+
+enum InterviewSimStatus {
+  active
+  completed
+}
+
+/// An interview simulation (E10, partie 08 § 8.9): questions, answers, structured feedback.
+/// Never a hireability score: the feedback names strengths and points to work on.
+model InterviewSession {
+  id              String             @id @default(cuid(2))
+  userId          String
+  user            User               @relation(fields: [userId], references: [id], onDelete: Cascade)
+  mode            InterviewSimMode   @default(text)
+  /// general | technical | behavioral | motivation
+  type            String
+  /// junior | intermediate | senior
+  level           String
+  jobTitle        String
+  jobId           String?
+  durationMinutes Int
+  /// [{ question, answer, durationSec? }]
+  questions       Json               @default("[]")
+  /// { summary, criteria: [{ key, level, comment }], strengths[], improvements[], perQuestion[] }
+  feedback        Json?
+  status          InterviewSimStatus @default(active)
+  createdAt       DateTime           @default(now())
+  completedAt     DateTime?
+
+  @@index([userId, createdAt])
 }
 
 /// A signed webhook received from a payment provider, stored before processing (partie 09 § 9.4).

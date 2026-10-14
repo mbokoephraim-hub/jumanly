@@ -2977,7 +2977,9 @@
         "text": "Exercice",
         "jobSpecific": {
           "text": "Exercice métier",
-          "locked": "Exercices adaptés à votre métier · Disponible avec {plan}"
+          "locked": "Exercices adaptés à votre métier · Disponible avec {plan}",
+          "optional": "Facultatif : cet exercice ne compte pas dans votre progression.",
+          "families": "Métiers concernés : {families}"
         }
       },
       "lessonDone": "Terminée",
@@ -3531,7 +3533,11 @@
         "desc": "Choisissez une offre : nous proposons une version de votre CV qui met en avant ce qu'elle demande, sans rien inventer.",
         "selectJob": "Choisir une offre",
         "locked": "Adaptation du CV à une offre · Disponible avec {plan}",
-        "created": "Version « {cvName} » créée pour {jobTitle}."
+        "created": "Version « {cvName} » créée pour {jobTitle}.",
+        "cta": "Créer la version adaptée",
+        "name": "CV · {jobTitle}",
+        "noJobs": "Enregistrez une offre ou candidatez pour pouvoir y adapter votre CV.",
+        "notFound": "Cette offre n'est plus disponible."
       },
       "saved": "Enregistré",
       "saving": "Enregistrement…",
@@ -3582,14 +3588,26 @@
           "placeholder": "Ex. : mon stage en banque, mon attestation Power BI"
         },
         "cta": "Générer une proposition",
-        "cost": "{count, plural, one {Utilise # crédit IA} other {Utilise # crédits IA}}"
+        "cost": "{count, plural, one {Utilise # crédit IA} other {Utilise # crédits IA}}",
+        "noJob": "Sans offre précise",
+        "type": "Type de document"
       },
       "proofread": {
         "paste": "Collez votre texte",
         "cta": "Corriger",
         "changes": "{count, plural, =0 {Aucune correction proposée} one {# correction proposée} other {# corrections proposées}}",
         "acceptAll": "Tout appliquer",
-        "rejectAll": "Tout ignorer"
+        "rejectAll": "Tout ignorer",
+        "title": "Titre",
+        "apply": "Appliquer les corrections cochées",
+        "before": "Avant",
+        "after": "Après",
+        "why": "Pourquoi",
+        "rule": {
+          "spaces": "Espaces en trop.",
+          "punctuation": "Pas d'espace avant une virgule ou un point.",
+          "capital": "Une phrase commence par une majuscule."
+        }
       },
       "list": {
         "empty": "Aucun document pour l'instant.",
@@ -3599,9 +3617,56 @@
       "copied": "Texte copié.",
       "export": "Télécharger en PDF",
       "delete": {
-        "confirm": "Supprimer ce document ? Cette action est définitive."
+        "confirm": "Supprimer ce document ? Cette action est définitive.",
+        "cta": "Supprimer"
       },
-      "saved": "Document enregistré."
+      "saved": "Document enregistré.",
+      "back": "Tous mes documents",
+      "created": "Votre proposition est prête. Relisez-la et adaptez-la avant de l'utiliser.",
+      "deleted": "Document supprimé.",
+      "open": "Ouvrir",
+      "edit": {
+        "title": "Titre du document",
+        "text": "Texte",
+        "save": "Enregistrer"
+      },
+      "error": {
+        "input": "Vérifiez les informations saisies."
+      },
+      "template": {
+        "title": {
+          "letter": "Lettre · {jobTitle}",
+          "bio": "Biographie professionnelle",
+          "email": "E-mail de candidature · {jobTitle}",
+          "thankYou": "Remerciement · {jobTitle}"
+        },
+        "greeting": {
+          "formal": "Madame, Monsieur,",
+          "simple": "Bonjour,"
+        },
+        "letter": {
+          "intro": "Je vous adresse ma candidature au poste de {jobTitle}.",
+          "introCompany": "Je vous adresse ma candidature au poste de {jobTitle} chez {company}.",
+          "experience": "Mon expérience récente ({lastRole}) m'a permis de développer des compétences utiles pour ce poste.",
+          "skills": "Je mets à votre service mes compétences en {skills}.",
+          "closing": "Je reste à votre disposition pour un entretien et vous remercie de l'attention portée à ma candidature."
+        },
+        "points": "Je souhaite notamment mettre en avant : {points}.",
+        "bio": {
+          "intro": "{name} : {headline}.",
+          "experience": "Expérience récente : {lastRole}.",
+          "skills": "Compétences principales : {skills}."
+        },
+        "email": {
+          "intro": "Veuillez trouver ci-joint ma candidature au poste de {jobTitle}, accompagnée de mon CV.",
+          "skills": "Mon profil met en avant les compétences suivantes : {skills}."
+        },
+        "closing": "Je reste disponible pour un échange. Bien cordialement,",
+        "thankYou": {
+          "body": "Je vous remercie pour notre entretien au sujet du poste de {jobTitle}. Nos échanges ont confirmé mon intérêt pour ce poste."
+        },
+        "notice": "Cette proposition reprend uniquement les informations de votre profil. Relisez-la et complétez-la avant de l'envoyer."
+      }
     },
     "linkedin": {
       "title": "Préparation LinkedIn",
@@ -3625,7 +3690,13 @@
         "open": "L'option « Ouvert aux opportunités » si vous cherchez",
         "certificates": "Vos attestations Jumanly dans « Licences et certifications »"
       },
-      "disclaimer": "Jumanly n'est pas affilié à LinkedIn et ne publie rien sur votre compte."
+      "disclaimer": "Jumanly n'est pas affilié à LinkedIn et ne publie rien sur votre compte.",
+      "empty": "Générez des propositions à partir de votre profil Jumanly. Rien n'est publié sur LinkedIn.",
+      "generatedAt": "Propositions du {date, date, medium}",
+      "template": {
+        "about": "{headline}. Compétences principales : {skills}. Expérience récente : {lastRole}."
+      },
+      "profileHint": "Plus votre profil Jumanly est complet, plus les propositions sont utiles."
     },
     "interviews": {
       "title": "Simulations d'entretien",
@@ -3648,9 +3719,12 @@
       },
       "setup": {
         "title": "Préparer la séance",
+        "mode": "Mode",
         "job": {
           "text": "Poste visé",
-          "fromOffer": "Partir d'une offre enregistrée ou d'une candidature"
+          "fromOffer": "Partir d'une offre enregistrée ou d'une candidature",
+          "none": "Aucune offre : je saisis le poste",
+          "placeholder": "Ex. : Chargé de clientèle"
         },
         "type": {
           "text": "Type d'entretien",
@@ -3670,7 +3744,8 @@
           "value": "{minutes} min"
         },
         "language": "Langue",
-        "start": "Démarrer la simulation"
+        "start": "Démarrer la simulation",
+        "questions": "{count} questions environ"
       },
       "session": {
         "question": "Question {current} sur {total}",
@@ -3682,7 +3757,11 @@
         "end": {
           "text": "Terminer la séance",
           "confirm": "Terminer maintenant ? Vous recevrez un retour sur les questions déjà traitées."
-        }
+        },
+        "answered": "Votre réponse",
+        "progress": "{done} réponses sur {total}",
+        "allAnswered": "Vous avez répondu à toutes les questions. Terminez la séance pour recevoir votre retour.",
+        "back": "Toutes mes simulations"
       },
       "voice": {
         "micPermission": "Jumanly a besoin d'accéder à votre micro pour la simulation orale.",
@@ -3693,7 +3772,11 @@
         "listening": "L'intervieweur vous écoute",
         "speaking": "L'intervieweur parle",
         "retry": "Recommencer ma réponse",
-        "privacy": "Vos enregistrements servent uniquement à votre retour. Ils sont supprimés après {days} jours."
+        "privacy": "Vos enregistrements servent uniquement à votre retour. Ils sont supprimés après {days} jours.",
+        "noRecording": "Aucun enregistrement n'est conservé : votre navigateur transcrit votre réponse, que vous relisez avant de l'envoyer.",
+        "unsupported": "Votre navigateur ne permet pas la dictée. Répondez par écrit : la question est lue à voix haute et le retour reste le même.",
+        "listen": "Réécouter la question",
+        "duration": "Durée de votre réponse : {seconds} s"
       },
       "feedback": {
         "title": "Votre retour",
@@ -3710,12 +3793,81 @@
         "perQuestion": "Retour question par question",
         "betterAnswer": "Piste de réponse",
         "disclaimer": "Retour généré par l'IA. Il vous aide à progresser, il ne prédit pas le résultat d'un vrai entretien.",
-        "again": "Refaire une simulation"
+        "again": "Refaire une simulation",
+        "level": {
+          "solid": "Solide",
+          "developing": "En progrès",
+          "toWork": "À travailler"
+        },
+        "rules": "Retour établi par des règles simples (longueur, exemples, structure). Il vous aide à progresser, il ne prédit pas le résultat d'un vrai entretien.",
+        "notAnswered": "Sans réponse",
+        "rule": {
+          "answered": "Vous avez mené l'exercice jusqu'au bout : c'est la meilleure façon de progresser.",
+          "examples": "Vos réponses s'appuient sur des exemples concrets.",
+          "structure": "Vos réponses suivent une structure claire : situation, action, résultat.",
+          "concise": "Vos réponses ont une longueur adaptée et des phrases faciles à suivre.",
+          "pace": "Votre débit à l'oral est régulier et facile à suivre.",
+          "short": "Réponse courte : développez avec un exemple tiré de votre parcours.",
+          "long": "Réponse longue : allez à l'essentiel en deux ou trois idées.",
+          "noExample": "Appuyez-vous sur un exemple précis : un projet, une mission, un chiffre.",
+          "noResult": "Terminez par le résultat obtenu : ce qui a changé grâce à votre action.",
+          "noAnswer": "Certaines questions sont restées sans réponse : reprenez-les lors d'une prochaine séance.",
+          "slow": "Débit un peu lent : préparez vos idées clés pour gagner en fluidité.",
+          "fast": "Débit rapide : marquez des pauses pour laisser le temps de suivre."
+        }
       },
       "history": {
         "title": "Séances précédentes",
         "empty": "Votre première simulation apparaîtra ici.",
-        "item": "{type} · {date, date, medium} · {mode}"
+        "item": "{type} · {date, date, medium} · {mode}",
+        "inProgress": "En cours",
+        "open": "Ouvrir la séance"
+      },
+      "error": {
+        "consent": "Les simulations utilisent l'IA. Activez-la dans vos paramètres de confidentialité pour commencer.",
+        "invalid": "Vérifiez le poste visé et les options choisies."
+      },
+      "bank": {
+        "hr": {
+          "1": "Présentez-vous en quelques minutes : votre parcours et ce qui vous amène vers le poste de {jobTitle}.",
+          "2": "Pourquoi souhaitez-vous rejoindre notre organisation ?",
+          "3": "Quelles sont vos principales qualités pour réussir comme {jobTitle} ?",
+          "4": "Parlez-nous d'un point que vous cherchez à améliorer et de ce que vous faites pour y arriver.",
+          "5": "Comment vous organisez-vous lorsque plusieurs tâches urgentes arrivent en même temps ?",
+          "6": "Racontez une situation où vous avez dû travailler avec une personne au caractère difficile.",
+          "7": "Où vous voyez-vous dans trois ans ?",
+          "8": "Avez-vous des questions à nous poser sur le poste ?"
+        },
+        "technical": {
+          "1": "Décrivez un projet récent en lien avec le métier de {jobTitle} : votre rôle et les outils utilisés.",
+          "2": "Quelle compétence technique maîtrisez-vous le mieux ? Donnez un exemple d'utilisation.",
+          "3": "Comment vérifiez-vous la qualité de votre travail avant de le livrer ?",
+          "4": "Racontez un problème technique difficile et la façon dont vous l'avez résolu.",
+          "5": "Comment vous tenez-vous à jour dans votre domaine ?",
+          "6": "Si vous deviez expliquer une notion clé de votre métier à un débutant, que diriez-vous ?",
+          "7": "Quelle erreur avez-vous commise dans un projet et qu'en avez-vous appris ?",
+          "8": "Comment organiseriez-vous vos trente premiers jours comme {jobTitle} ?"
+        },
+        "motivation": {
+          "1": "Qu'est-ce qui vous attire dans le métier de {jobTitle} ?",
+          "2": "Racontez les étapes de votre parcours qui vous ont conduit jusqu'ici.",
+          "3": "Quel accomplissement vous rend le plus fier, et pourquoi ?",
+          "4": "Qu'attendez-vous de votre prochain poste ?",
+          "5": "Pourquoi devrions-nous retenir votre candidature plutôt qu'une autre ?",
+          "6": "Quelles formations ou expériences récentes vous préparent à ce poste ?",
+          "7": "Dans quel environnement de travail donnez-vous le meilleur de vous-même ?",
+          "8": "Que savez-vous de notre secteur et de ses enjeux ?"
+        },
+        "behavioral": {
+          "1": "Un client mécontent vous appelle pour une erreur qui n'est pas la vôtre. Que faites-vous ?",
+          "2": "Votre responsable vous confie une tâche que vous n'avez jamais faite, à rendre demain. Comment procédez-vous ?",
+          "3": "Racontez une situation où vous avez pris une initiative sans qu'on vous le demande.",
+          "4": "Un collègue ne fait pas sa part dans un projet commun. Comment réagissez-vous ?",
+          "5": "Racontez un moment où vous avez dû convaincre quelqu'un.",
+          "6": "Vous découvrez une erreur dans un document déjà envoyé. Que faites-vous ?",
+          "7": "Décrivez une situation où vous avez dû vous adapter rapidement à un changement.",
+          "8": "Racontez un échec et ce que vous avez fait ensuite."
+        }
       }
     },
     "plan": {
@@ -3751,7 +3903,46 @@
       "report": {
         "text": "Rapport de progression détaillé",
         "locked": "Rapport détaillé · Disponible avec {plan}",
-        "download": "Télécharger le rapport (PDF)"
+        "download": "Télécharger le rapport (PDF)",
+        "desc": "Un bilan de vos formations, de vos compétences, de vos outils Career et de vos candidatures, à télécharger et à garder.",
+        "pdf": {
+          "title": "Rapport de progression",
+          "subtitle": "{name} · {date, date, long}",
+          "footer": "Rapport établi par Jumanly à partir de vos propres données. Il décrit votre parcours, il ne note pas votre profil."
+        },
+        "section": {
+          "plan": "Plan de progression",
+          "learn": "Formations",
+          "courses": "Progression par formation",
+          "profile": "Profil et documents",
+          "interviews": "Simulations d'entretien",
+          "jobs": "Candidatures"
+        },
+        "row": {
+          "goal": "Objectif",
+          "steps": "Étapes réalisées",
+          "enrolled": "Formations suivies",
+          "completed": "Formations terminées",
+          "certificates": "Attestations obtenues",
+          "completeness": "Profil complété",
+          "skills": "Compétences déclarées",
+          "verified": "Compétences vérifiées",
+          "cvs": "CV",
+          "documents": "Lettres et documents",
+          "interviews": "Simulations terminées",
+          "recentInterviews": "Simulations des 90 derniers jours",
+          "criterion": "Dernière simulation · {criterion}",
+          "applications": "Candidatures envoyées",
+          "recentApplications": "Candidatures des 90 derniers jours",
+          "inProgress": "Candidatures en cours",
+          "interviewStage": "Candidatures au stade de l'entretien ou de l'offre",
+          "hired": "Recrutements"
+        },
+        "value": {
+          "steps": "{done} sur {total}",
+          "percent": "{percent} %",
+          "none": "Aucun"
+        }
       },
       "encouragement": "Une étape à la fois. Vous avez déjà fait {done} {done, plural, one {étape} other {étapes}}.",
       "saved": "Plan mis à jour."
@@ -3772,8 +3963,13 @@
         "link": "Lien externe",
         "date": "Date",
         "delete": {
-          "confirm": "Supprimer ce projet du portfolio ?"
-        }
+          "confirm": "Supprimer ce projet du portfolio ?",
+          "cta": "Supprimer"
+        },
+        "skillsHint": "Séparez les compétences par des virgules.",
+        "mediaHint": "Jusqu'à 3 adresses https (images, vidéos ou documents en ligne), séparées par un espace.",
+        "save": "Enregistrer le projet",
+        "edit": "Modifier ce projet"
       },
       "empty": "Ajoutez votre premier projet : un travail d'études, une mission, un projet associatif.",
       "public": {
@@ -3781,13 +3977,39 @@
         "on": "Votre portfolio est visible à cette adresse : {url}",
         "off": "Votre portfolio n'est visible que par vous.",
         "toggle": "Rendre la page publique",
-        "copy": "Copier le lien"
+        "copy": "Copier le lien",
+        "privacy": "La page publique montre votre nom, votre titre, votre présentation et vos projets. Rien d'autre de votre profil."
       },
       "layout": "Mise en page",
       "cover": "Image de couverture",
       "intro": "Texte de présentation",
       "preview": "Voir la page",
-      "saved": "Portfolio enregistré."
+      "saved": "Portfolio enregistré.",
+      "deleted": "Projet supprimé.",
+      "limit": "Vous avez atteint {max} projets. Supprimez-en un pour en ajouter un autre.",
+      "error": "Vérifiez les informations du projet : les liens commencent par https://.",
+      "projects": "Projets",
+      "settings": "Présentation",
+      "saveSettings": "Enregistrer la présentation",
+      "layoutOption": {
+        "classic": "Classique",
+        "grid": "Grille"
+      },
+      "accent": {
+        "text": "Couleur d'accent",
+        "sapin": "Sapin",
+        "feuille": "Feuille",
+        "ardoise": "Ardoise"
+      },
+      "page": {
+        "title": "Portfolio de {name}",
+        "open": "Voir le projet",
+        "media": "Médias",
+        "footer": "Portfolio publié sur Jumanly",
+        "empty": "Aucun projet publié pour l'instant.",
+        "unavailable": "Ce portfolio n'est pas disponible. Son auteur l'a peut-être retiré.",
+        "seo": "Portfolio · Jumanly"
+      }
     }
   },
   "connect": {
@@ -8904,6 +9126,10 @@
         "duration": "Durée totale (minutes)",
         "prerequisites": "Prérequis",
         "cover": "Image de couverture (adresse https)",
+        "jobFamilies": {
+          "text": "Métiers des exercices",
+          "hint": "Familles de métiers visées par les exercices métier, séparées par des virgules."
+        },
         "outcomesHint": "Un objectif par ligne.",
         "slugHint": "Laissez tel quel pour garder l'adresse actuelle.",
         "skillsFormat": "Séparez les compétences par des virgules. Seules celles du référentiel sont retenues.",
@@ -8955,6 +9181,11 @@
         "resourcesHint": "Une ressource par ligne : Titre",
         "resourcesInvalid": "{count, plural, one {# ligne de ressource ignorée} other {# lignes de ressources ignorées}} : vérifiez le format.",
         "isPreview": "Leçon en aperçu public (visible sans compte)",
+        "jobSpecific": {
+          "text": "Exercice métier (réservé aux forfaits qui l'incluent)",
+          "hint": "Facultatif pour l'apprenant : il ne compte pas dans la progression ni dans l'attestation.",
+          "badge": "Exercice métier"
+        },
         "previewBadge": "Aperçu public",
         "video": {
           "text": "Vidéo",
