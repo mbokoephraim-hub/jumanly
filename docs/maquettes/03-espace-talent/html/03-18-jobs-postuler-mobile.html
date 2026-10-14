@@ -1,0 +1,89 @@
+<!doctype html><html lang='fr'><head><meta charset='utf-8'><link rel='preconnect' href='https://fonts.googleapis.com'><link href='https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap' rel='stylesheet'><style>
+
+
+
+
+
+:root{--sapin:#0F3F37;--lime:#A6F26B;--creme:#F2EDE5;--feuille:#3DA14F;--menthe:#2FD3A6;--nuit:#0B1A1F;
+--neon:#E3F67C;--ardoise:#5B6B68;--brume:#DCE5E1;--menthe-c:#BFEFDF;--lime-c:#E4FAD0;--ambre:#F2B33D;--corail:#E25C4B;
+--sig:linear-gradient(135deg,#D9FA72 0%,#7DE36B 50%,#1E9A64 100%);
+--prof:linear-gradient(160deg,#0F3F37 0%,#0B1A1F 100%);--ia:linear-gradient(45deg,#0F3F37 0%,#14745F 55%,#2FD3A6 100%);
+--orbe:radial-gradient(circle at 38% 32%,#F4FFB8,#A6F26B 45%,#3DA14F)}
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{width:390px;height:1px;overflow:hidden}
+body{font-family:Sora,sans-serif;-webkit-font-smoothing:antialiased;color:var(--sapin);font-size:14px;line-height:1.45;background:#0F3F37}
+.ic{display:block;flex:none}
+.row{display:flex;align-items:center}.col{display:flex;flex-direction:column}
+.sb{justify-content:space-between}.g4{gap:4px}.g6{gap:6px}.g8{gap:8px}.g10{gap:10px}.g12{gap:12px}.g16{gap:16px}.g20{gap:20px}.g24{gap:24px}
+.f1{flex:1;min-width:0}
+.av{display:inline-grid;place-items:center;border-radius:50%;font-weight:600;flex:none;letter-spacing:-.02em}
+.pile{display:inline-flex}.pile .av+.av{margin-left:-8px}
+.ent{display:inline-grid;place-items:center;font-weight:700;flex:none;letter-spacing:-.03em}
+.barre{border-radius:99px;overflow:hidden;width:100%}.barre i{display:block;height:100%;border-radius:99px}
+.card{background:#fff;border-radius:24px;padding:22px}
+.card.sm{border-radius:18px;padding:16px}
+.dark{background:var(--sapin);color:#fff}
+.nuit{background:var(--prof);color:#fff}
+.iabg{background:var(--ia);color:#fff}
+h1{font-size:28px;line-height:34px;font-weight:600;letter-spacing:-.02em}
+h2{font-size:20px;line-height:26px;font-weight:600;letter-spacing:-.015em}
+h3{font-size:16px;line-height:22px;font-weight:600;letter-spacing:-.01em}
+.big{font-size:30px;line-height:34px;font-weight:600;letter-spacing:-.03em}
+.lab{font-size:11px;line-height:14px;font-weight:600;letter-spacing:.09em;text-transform:uppercase}
+.mut{color:var(--ardoise)}.sm{font-size:12px;line-height:17px}.xs{font-size:11px;line-height:15px}
+.w5{font-weight:500}.w6{font-weight:600}
+.dark .mut,.nuit .mut,.iabg .mut{color:rgba(255,255,255,.66)}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:40px;padding:0 18px;border-radius:99px;
+ font:600 13px Sora;white-space:nowrap;flex:none}
+.btn.s{height:32px;padding:0 13px;font-size:12px;gap:6px}
+.btn.l{height:48px;padding:0 24px;font-size:14px}
+.b-lime{background:var(--lime);color:var(--sapin)}
+.b-sapin{background:var(--sapin);color:#fff}
+.b-blanc{background:#fff;color:var(--sapin)}
+.b-ghost{background:transparent;color:var(--sapin);box-shadow:inset 0 0 0 1.5px var(--brume)}
+.b-ghostw{background:rgba(255,255,255,.1);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
+.btn.f1{flex:1}
+.rond{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;flex:none}
+.rond.s{width:32px;height:32px}
+.chip{display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;border-radius:99px;font:500 12.5px Sora;
+ background:#fff;color:var(--sapin);box-shadow:inset 0 0 0 1.5px var(--brume);white-space:nowrap;flex:none}
+.chip.on{background:var(--sapin);color:#fff;box-shadow:none}
+.tag{display:inline-flex;align-items:center;gap:5px;height:24px;padding:0 10px;border-radius:99px;font:600 11px Sora;white-space:nowrap;flex:none}
+.t-lime{background:var(--lime);color:var(--sapin)}.t-neon{background:var(--neon);color:var(--sapin)}
+.t-sapin{background:var(--sapin);color:var(--neon)}.t-brume{background:var(--brume);color:var(--sapin)}
+.t-menthe{background:var(--menthe-c);color:#0B5E49}.t-blanc{background:#fff;color:var(--sapin)}
+.t-up{background:var(--lime-c);color:#1F7A35}.t-down{background:#FBE3DF;color:#B23A2B}
+.t-ambre{background:#FCEBC6;color:#8A5A00}.t-line{box-shadow:inset 0 0 0 1.2px currentColor;background:transparent}
+.tile{display:grid;place-items:center;flex:none;border-radius:14px}
+.champ{white-space:nowrap;overflow:hidden;display:flex;align-items:center;gap:10px;height:44px;padding:0 16px;border-radius:99px;background:#fff;color:var(--ardoise);font-size:13px}
+.sep{height:1px;background:var(--brume)}
+.dot{width:8px;height:8px;border-radius:50%;flex:none}
+.motif{position:absolute;inset:0;background-size:360px;pointer-events:none}
+
+body{font-size:13px}
+h1{font-size:24px;line-height:30px}h2{font-size:17px;line-height:23px}h3{font-size:15px;line-height:20px}
+.ecran{position:relative;width:390px;height:844px;overflow:hidden;background:var(--sapin);display:flex;flex-direction:column}
+.sbar{height:46px;flex:none;display:flex;align-items:center;justify-content:space-between;padding:4px 28px 0 34px;color:#fff;font-weight:600;font-size:15px}
+.head{padding:6px 18px 18px;display:flex;align-items:center;gap:10px;flex:none}
+.recherche{flex:1;height:42px;border-radius:99px;background:rgba(255,255,255,.1);display:flex;align-items:center;gap:8px;padding:0 14px;color:rgba(255,255,255,.7);font-size:12.5px;font-weight:500}
+.sheet{flex:1;background:var(--creme);border-radius:28px 28px 0 0;padding:20px 16px 120px;display:flex;flex-direction:column;gap:14px;overflow:hidden;position:relative}
+.bnav{position:absolute;left:50%;bottom:26px;transform:translateX(-50%);height:62px;border-radius:99px;background:var(--sapin);display:flex;align-items:center;gap:4px;padding:7px;box-shadow:0 14px 34px rgba(11,26,31,.28);z-index:5}
+.bnav .it{width:46px;height:48px;display:grid;place-items:center;border-radius:99px}
+.bnav .on{width:auto;display:flex;gap:7px;padding:0 16px;background:var(--lime);color:var(--sapin);font-weight:600;font-size:12px}
+.home{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:9px;background:#0B1A1F;z-index:6}
+.sheet>*{flex-shrink:0}
+.fondu::after{content:"";position:absolute;left:0;right:0;bottom:0;height:150px;background:linear-gradient(rgba(242,237,229,0),#F2EDE5 65%);z-index:2}
+.scroll{display:flex;gap:8px;margin-right:-16px;overflow:hidden}
+.card{border-radius:22px;padding:16px}
+.big{font-size:24px;line-height:28px}
+
+.ecran{height:auto!important;min-height:844px}
+.sheet{overflow:visible!important;padding-bottom:118px!important}
+.sheet.fondu::after{display:none}
+html,body{height:auto!important;min-height:100%;overflow:visible!important}</style></head><body><div class="ecran" style="background:#0F3F37"><div class="sbar" style="color:#fff"><span>9:41</span><span class="row g6"><svg width="18" height="12"><rect x="0" y="8" width="3" height="4" rx="1" fill="#fff"/><rect x="5" y="5.5" width="3" height="6.5" rx="1" fill="#fff"/><rect x="10" y="3" width="3" height="9" rx="1" fill="#fff"/><rect x="15" y="0" width="3" height="12" rx="1" fill="#fff"/></svg><svg width="16" height="12" viewBox="0 0 16 12"><path d="M8 11.5l2.4-2.9a3.6 3.6 0 00-4.8 0zM3.4 6.1a7 7 0 019.2 0l1.5-1.8a9.4 9.4 0 00-12.2 0zM.4 2.6a11.6 11.6 0 0115.2 0" fill="none" stroke="#fff" stroke-width="1.6" stroke-linecap="round"/></svg><svg width="26" height="12"><rect x=".5" y=".5" width="22" height="11" rx="3.5" fill="none" stroke="#fff" opacity=".45"/><rect x="2.5" y="2.5" width="16" height="7" rx="2" fill="#fff"/><rect x="23.5" y="4" width="1.8" height="4" rx="1" fill="#fff" opacity=".45"/></svg></span></div><div class="head" style="padding-bottom:16px"><span class="rond" style="background:rgba(255,255,255,.1)"><svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" class="ic" viewBox="0 0 24 24"><g fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></g></svg>
+</span><span class="f1 w6" style="color:#fff;font-size:15px;text-align:center">Postuler</span><span class="ent" style="width:40px;height:40px;background:#A6F26B;color:#0F3F37;font-size:14px;border-radius:12px">BF</span></div><div class="sheet"><div class="col g4"><span class="xs mut">Étape 1 sur 2</span><h1 style="font-size:21px;line-height:27px">Postuler à Analyste de données junior</h1><span class="sm mut">chez Baobab Fintech</span></div><span class="tag t-up" style="height:30px;padding:0 12px;font-size:12px"><svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" class="ic" viewBox="0 0 24 24"><g fill="none" stroke="#1F7A35" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></g></svg>
+ Candidature gratuite, quel que soit votre forfait.</span><div class="row g6"><i style="flex:1;height:5px;border-radius:9px;background:#0F3F37"></i><i style="flex:1;height:5px;border-radius:9px;background:#DCE5E1"></i></div><div class="row sb xs"><span class="w6">Vos documents</span><span class="mut">Questions du recruteur</span></div><div class="card col g16"><div class="col g12"><div class="row sb"><h3>CV envoyé</h3><span class="sm w6" style="color:#3DA14F">Choisir un CV</span></div><div class="row g12" style="padding:14px 16px;border-radius:18px;background:#E4FAD0;box-shadow:inset 0 0 0 1.5px #A6F26B;min-height:56px"><span style="width:22px;height:22px;border-radius:50%;background:#0F3F37;display:grid;place-items:center;flex:none"><i style="width:8px;height:8px;border-radius:50%;background:#A6F26B"></i></span><span class="tile" style="width:38px;height:38px;background:#fff;border-radius:11px"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" class="ic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3.5H7.5A1.5 1.5 0 0 0 6 5v14a1.5 1.5 0 0 0 1.5 1.5h9A1.5 1.5 0 0 0 18 19V7.5z"/><path d="M14 3.5v4h4"/><path d="M9 12.5h6M9 16h4"/></g></svg>
+</span><div class="col f1"><span class="sm w6" style="font-size:13px">CV_Grace_Mbuyi_Data.pdf</span><span class="xs mut">Modifié il y a 2 heures · Score du CV 82</span></div><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B6B68" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#5B6B68"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg></div><div class="row g12" style="padding:14px 16px;border-radius:18px;background:#fff;box-shadow:inset 0 0 0 1.5px #DCE5E1;min-height:56px"><span style="width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 1.5px #8A9794;background:#fff;flex:none"></span><span class="tile" style="width:38px;height:38px;background:#fff;border-radius:11px"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" class="ic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3.5H7.5A1.5 1.5 0 0 0 6 5v14a1.5 1.5 0 0 0 1.5 1.5h9A1.5 1.5 0 0 0 18 19V7.5z"/><path d="M14 3.5v4h4"/><path d="M9 12.5h6M9 16h4"/></g></svg>
+</span><div class="col f1"><span class="sm w6" style="font-size:13px">CV_Grace_Mbuyi_EN.pdf</span><span class="xs mut">Modifié le 2 oct. 2026</span></div><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#5B6B68" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#5B6B68"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg></div><span class="row g8 sm w6" style="color:#0F3F37"><svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" class="ic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></g></svg>
+Téléverser un autre CV</span></div><div class="sep"></div><div class="col g12"><div class="row g8" style="flex-wrap:wrap"><h3>Lettre de motivation</h3><span class="tag t-neon">Demandée par le recruteur</span></div><div class="row g8" style="flex-wrap:wrap"><span class="chip on" style="height:40px"><svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#fff"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></svg> Écrire ici</span><span class="chip" style="height:40px"><svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0F3F37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0F3F37"><path d="M19.5 11l-7.8 7.8a5 5 0 01-7-7L13 3.5a3.3 3.3 0 014.7 4.7l-8.3 8.3a1.7 1.7 0 01-2.4-2.4L14.5 6.6"/></svg> Joindre un fichier</span><span class="chip" style="height:40px"><svg class="ic" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="#0F3F37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0F3F37"><path d="M7 3.5h7l4.5 4.5v11a2 2 0 01-2 2H7a2 2 0 01-2-2v-13.5a2 2 0 012-2z"/><path d="M14 3.5V8h4.5M8.5 13h7M8.5 16.5h5"/></svg> Choisir un document enregistré</span></div><span class="xs mut">Quelques lignes pour dire pourquoi ce poste vous intéresse.</span><div style="background:#fff;border-radius:16px;box-shadow:0 0 0 2px #0F3F37,0 0 0 6px rgba(166,242,107,.55);padding:14px 16px;min-height:120px" class="col g8"><span style="font-size:13.5px;line-height:21px">Monsieur Kanté, analyste de formation et utilisatrice quotidienne de SQL et Power BI, je souhaite mettre mes compétences au service des tableaux de bord Mobile Money de Baobab Fintech.</span><span class="xs mut" style="margin-top:auto;align-self:flex-end">214 / 2 000</span></div></div><div class="row g12" style="background:#DDF3EB;border-radius:16px;padding:12px 14px;align-items:flex-start"><svg class="ic" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#0B5E49" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:#0B5E49"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></svg><span class="sm" style="color:#0B5E49">Le recruteur verra votre profil professionnel complet, même si votre profil est privé.</span></div><div class="row g12" style="background:#FCEBC6;border-radius:16px;padding:12px 14px;align-items:flex-start"><svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" class="ic" viewBox="0 0 24 24"><g fill="none" stroke="#8A5A00" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></g></svg>
+<span class="sm" style="color:#8A5A00">Vous ne remplissez pas tous les critères indispensables (anglais professionnel). Vous pouvez quand même postuler : le recruteur examine chaque candidature.</span></div></div></div><div style="position:absolute;left:0;right:0;bottom:0;padding:14px 16px 30px;background:#fff;border-radius:24px 24px 0 0;box-shadow:0 -10px 30px rgba(11,26,31,.08);z-index:5" class="row g10"><span class="btn l b-lime f1" style="height:52px">Continuer <svg class="ic" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="color:currentColor"><path d="M9 6l6 6-6 6"/></svg></span></div><div class="home"></div></div></body></html>
