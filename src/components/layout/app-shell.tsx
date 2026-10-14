@@ -118,7 +118,7 @@ export function AppShell({
         </div>
         <main
           id="content"
-          className="mx-auto flex max-w-6xl flex-col gap-5 px-4 pt-5 pb-32 sm:px-6 lg:px-[30px] lg:pt-5 lg:pb-[30px]"
+          className="flex w-full flex-col gap-5 px-4 pt-5 pb-32 sm:px-6 lg:px-[30px] lg:pt-5 lg:pb-[30px]"
         >
           {children}
         </main>

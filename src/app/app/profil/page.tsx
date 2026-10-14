@@ -1,18 +1,21 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
+import Link from "next/link";
+import { AppPageHeader } from "@/components/app/page-header";
+import { Icon, type IconName } from "@/components/brand/icon";
+import { Pattern } from "@/components/site/marketing";
 import {
   Alert,
-  Badge,
   Button,
-  ButtonLink,
   Checkbox,
-  ProgressBar,
-  RadioGroup,
+  ProgressRing,
   Select,
   TextArea,
   TextField,
 } from "@/components/ui";
+import { cx } from "@/lib/cx";
+import { myCertificates } from "@/server/services/learn";
 import { countryOptions } from "@/config/countries";
 import { dynamic } from "@/i18n/dynamic";
 import { languageName } from "@/lib/dates";
@@ -40,6 +43,7 @@ import {
   getFullProfile,
   languageLevels,
   parseProfileLanguages,
+  PROFILE_SKILLS_MAX,
   PROFILE_SUMMARY_MAX,
   skillLevelKeys,
   skillProofs,
@@ -102,43 +106,103 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
   };
   const notice = { section: one(params.section), ok: one(params.ok), error: one(params.erreur) };
 
+  const visibilityChip = {
+    private: "bg-gris-clair",
+    recruiters: "bg-menthe-claire text-menthe-texte",
+    anonymous: "bg-[#FBF6C9]",
+  }[profile.visibility];
+
   return (
-    <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-3">
-        <h1 className="text-h1">{t("talent.profile.title")}</h1>
-        <p className="text-ardoise">{t("talent.profile.subtitle")}</p>
-        <div className="flex max-w-xl flex-col gap-2 rounded-card bg-blanc p-5">
-          <p className="font-semibold">{t("talent.profile.completion.text", { percent })}</p>
-          <ProgressBar value={percent} label={t("talent.profile.completion.text", { percent })} />
-          <p className="text-sm text-ardoise">
-            {missing.length > 0
-              ? t("talent.profile.completion.missing", {
+    <div className="flex flex-col gap-5">
+      <AppPageHeader eyebrow={t("talent.profile.subtitle")} title={t("talent.profile.title")} />
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <p className="flex flex-wrap gap-2 text-xs font-semibold">
+          <span className="flex items-center gap-1.5 rounded-pill bg-lime-clair px-3 py-1.5 text-up-texte">
+            <Icon name="check" className="size-3.5" />
+            {t("talent.profile.autosaved")}
+          </span>
+          <span
+            className={cx("flex items-center gap-1.5 rounded-pill px-3 py-1.5", visibilityChip)}
+          >
+            <Icon name="eye" className="size-3.5" />
+            {t(`talent.profile.visibility.badge.${profile.visibility}`)}
+          </span>
+        </p>
+        <a
+          href="#apercu"
+          className="flex h-10 items-center gap-2 rounded-pill bg-blanc px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
+        >
+          <Icon name="eye" className="size-4" />
+          {t("talent.profile.preview.text")}
+        </a>
+      </div>
+      {one(params.import) !== undefined && (
+        <Alert
+          tone="success"
+          title={t("ai.cvImport.done", { count: Number(one(params.import)) || 0 })}
+        />
+      )}
+      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+        <div className="flex min-w-0 flex-col gap-5">
+          <Identity profile={profile} notice={notice} />
+          <Summary profile={profile} notice={notice} />
+          <Experiences profile={profile} notice={notice} />
+          <Educations profile={profile} notice={notice} />
+          <Skills profile={profile} notice={notice} />
+          <Languages profile={profile} notice={notice} />
+          <Preferences profile={profile} notice={notice} />
+        </div>
+        <aside className="flex flex-col gap-5 max-xl:-order-1 xl:sticky xl:top-5">
+          <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5">
+            <div className="flex items-center gap-4">
+              <ProgressRing
+                value={percent}
+                size={68}
+                label={t("talent.profile.completion.text", { percent })}
+              />
+              <div className="flex flex-col gap-1">
+                <p className="text-[15px] font-bold">
+                  {t("talent.profile.completion.text", { percent })}
+                </p>
+                <p className="text-xs leading-[17px] text-ardoise">
+                  {t("talent.profile.completion.hint")}
+                </p>
+              </div>
+            </div>
+            {missing.length > 0 && (
+              <p className="flex items-start gap-2 rounded-[14px] bg-[#FBF6C9] px-3 py-2 text-xs">
+                <Icon name="objectif" className="mt-px size-3.5 shrink-0" />
+                {t("talent.profile.completion.missing", {
                   sections: missing.map((key) => sectionNames[key]).join(", "),
-                })
-              : t("talent.profile.completion.hint")}
-          </p>
-        </div>
-        {one(params.import) !== undefined && (
-          <Alert
-            tone="success"
-            title={t("ai.cvImport.done", { count: Number(one(params.import)) || 0 })}
-          />
-        )}
-        <div className="flex max-w-xl flex-col items-start gap-2">
-          <ButtonLink href="/app/profil/import" variant="secondary" size="sm">
-            {t("talent.profile.importCv.text")}
-          </ButtonLink>
-          <p className="text-sm text-ardoise">{t("talent.profile.importCv.hint")}</p>
-        </div>
-      </header>
-      <Identity profile={profile} notice={notice} />
-      <Summary profile={profile} notice={notice} />
-      <Experiences profile={profile} notice={notice} />
-      <Educations profile={profile} notice={notice} />
-      <Skills profile={profile} notice={notice} />
-      <Languages profile={profile} notice={notice} />
-      <Preferences profile={profile} notice={notice} />
-      <Visibility profile={profile} notice={notice} />
+                })}
+              </p>
+            )}
+          </section>
+          <RecruiterPreview profile={profile} />
+          <Visibility profile={profile} notice={notice} />
+          <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5">
+            <p className="flex items-center gap-3 text-[15px] font-bold">
+              <span
+                aria-hidden
+                className="flex size-9 items-center justify-center rounded-[12px] bg-lime-clair"
+              >
+                <Icon name="cv" className="size-[18px]" />
+              </span>
+              {t("talent.profile.importCv.text")}
+            </p>
+            <p className="text-xs leading-[17px] text-ardoise">
+              {t("talent.profile.importCv.hint")}
+            </p>
+            <Link
+              href="/app/profil/import"
+              className="flex h-9 items-center gap-2 self-start rounded-pill px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
+            >
+              <Icon name="telecharger" className="size-4" />
+              {t("talent.profile.importCv.action")}
+            </Link>
+          </section>
+        </aside>
+      </div>
     </div>
   );
 }
@@ -150,12 +214,16 @@ async function Section({
   id,
   title,
   subtitle,
+  icon,
+  badge,
   notice,
   children,
 }: {
   id: string;
   title: string;
   subtitle?: string;
+  icon: IconName;
+  badge?: ReactNode;
   notice: Notice;
   children: ReactNode;
 }) {
@@ -166,19 +234,28 @@ async function Section({
     notice.error === "endBeforeStart"
       ? t("experience.error.endBeforeStart")
       : notice.error && td.has(`skills.${notice.error}`)
-        ? td(`skills.${notice.error}`, { max: 40 })
+        ? td(`skills.${notice.error}`, { max: PROFILE_SKILLS_MAX })
         : t("error");
   return (
     <section
       id={id}
       aria-labelledby={`${id}-title`}
-      className="flex scroll-mt-24 flex-col gap-4 rounded-card bg-blanc p-6"
+      className="flex scroll-mt-24 flex-col gap-4 rounded-[24px] bg-blanc p-5 lg:p-6"
     >
-      <div className="flex flex-col gap-1">
-        <h2 id={`${id}-title`} className="text-h2">
-          {title}
-        </h2>
-        {subtitle && <p className="text-sm text-ardoise">{subtitle}</p>}
+      <div className="flex items-start gap-3">
+        <span
+          aria-hidden
+          className="flex size-10 shrink-0 items-center justify-center rounded-[12px] bg-lime-clair"
+        >
+          <Icon name={icon} className="size-5" />
+        </span>
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5 pt-1.5">
+          <h2 id={`${id}-title`} className="text-lg leading-6 font-bold lg:text-xl">
+            {title}
+          </h2>
+          {subtitle && <p className="text-xs leading-[17px] text-ardoise">{subtitle}</p>}
+        </div>
+        {badge}
       </div>
       {mine && notice.ok && <Alert tone="success" title={t("saved")} />}
       {mine && notice.error && <Alert tone="error" title={errorText} />}
@@ -192,23 +269,86 @@ function Disclosure({
   label,
   children,
   open = false,
+  icon = "plus",
 }: {
   label: string;
   children: ReactNode;
   open?: boolean;
+  icon?: IconName;
 }) {
   return (
-    <details className="rounded-md bg-creme p-4" open={open}>
-      <summary className="cursor-pointer font-medium">{label}</summary>
-      <div className="mt-4">{children}</div>
+    <details className="group" open={open}>
+      <summary className="inline-flex h-9 cursor-pointer list-none items-center gap-1.5 rounded-pill bg-blanc px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40 [&::-webkit-details-marker]:hidden">
+        <Icon name={icon} className="size-3.5" />
+        {label}
+      </summary>
+      <div className="mt-3 rounded-[18px] bg-creme p-4 lg:p-5">{children}</div>
     </details>
   );
 }
 
+/** Choice shown as a pill (contract types, work modes): the box itself is visually hidden. */
+function ChipCheck({
+  id,
+  name,
+  value,
+  label,
+  defaultChecked,
+  type = "checkbox",
+}: {
+  id: string;
+  name: string;
+  value: string;
+  label: string;
+  defaultChecked: boolean;
+  type?: "checkbox" | "radio";
+}) {
+  return (
+    <label
+      htmlFor={id}
+      className="inline-flex h-9 cursor-pointer items-center rounded-pill bg-blanc px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40 has-checked:bg-sapin has-checked:text-blanc has-checked:ring-sapin has-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)]"
+    >
+      <input
+        id={id}
+        type={type}
+        name={name}
+        value={value}
+        defaultChecked={defaultChecked}
+        className="sr-only"
+      />
+      {label}
+    </label>
+  );
+}
+
+function initials(name: string) {
+  return name
+    .split(/[\s-]+/)
+    .filter(Boolean)
+    .slice(0, 2)
+    .map((word) => word[0])
+    .join("")
+    .toUpperCase();
+}
+
+const tileTones = ["bg-gris-clair", "bg-lime-clair", "bg-menthe-claire"];
+
 async function Identity({ profile, notice }: SectionProps) {
   const t = await getTranslations("talent.profile");
   return (
-    <Section id="identite" title={t("identity.title")} notice={notice}>
+    <Section id="identite" title={t("identity.title")} icon="profil" notice={notice}>
+      <div className="flex items-center gap-4 rounded-[18px] bg-creme p-4">
+        <span
+          aria-hidden
+          className="flex size-14 shrink-0 items-center justify-center rounded-full bg-lime text-lg font-bold"
+        >
+          {initials(profile.user.name)}
+        </span>
+        <span className="flex flex-col gap-0.5">
+          <span className="text-sm font-semibold">{t("identity.photo.text")}</span>
+          <span className="text-xs text-ardoise">{t("identity.photo.hint")}</span>
+        </span>
+      </div>
       <form action={saveIdentity} className="grid gap-4 sm:grid-cols-2">
         <TextField
           id="firstName"
@@ -248,6 +388,7 @@ async function Identity({ profile, notice }: SectionProps) {
         <TextField
           id="city"
           name="city"
+          icon="localisation"
           label={t("identity.city.text")}
           placeholder={t("identity.city.placeholder")}
           defaultValue={profile.user.city ?? ""}
@@ -257,13 +398,13 @@ async function Identity({ profile, notice }: SectionProps) {
         <TextField
           id="email"
           name="email"
+          icon="message"
           label={t("identity.email.text")}
           hint={t("identity.email.hint")}
           defaultValue={profile.user.email}
           readOnly
           className="sm:col-span-2"
         />
-        <p className="text-sm text-ardoise sm:col-span-2">{t("identity.photo.hint")}</p>
         <div className="sm:col-span-2">
           <Button type="submit">{t("save")}</Button>
         </div>
@@ -275,7 +416,7 @@ async function Identity({ profile, notice }: SectionProps) {
 async function Summary({ profile, notice }: SectionProps) {
   const t = await getTranslations("talent.profile");
   return (
-    <Section id="resume" title={t("summary.title")} notice={notice}>
+    <Section id="resume" title={t("summary.title")} icon="edit" notice={notice}>
       <form action={saveSummary} className="flex flex-col gap-4">
         <TextArea
           id="summary"
@@ -380,7 +521,7 @@ async function Experiences({ profile, notice }: SectionProps) {
   const t = await getTranslations("talent.profile");
   const period = (start: Date, end: Date | null) => {
     const format = (date: Date) =>
-      new Intl.DateTimeFormat("fr-FR", { month: "long", year: "numeric", timeZone: "UTC" }).format(
+      new Intl.DateTimeFormat("fr-FR", { month: "short", year: "numeric", timeZone: "UTC" }).format(
         date,
       );
     return end
@@ -388,35 +529,64 @@ async function Experiences({ profile, notice }: SectionProps) {
       : t("experience.period.current", { start: format(start) });
   };
   return (
-    <Section id="experiences" title={t("experience.title")} notice={notice}>
+    <Section id="experiences" title={t("experience.title")} icon="career" notice={notice}>
       {profile.experiences.length === 0 ? (
-        <p className="text-sm text-ardoise">{t("experience.empty")}</p>
+        <p className="rounded-[16px] bg-creme px-4 py-3 text-sm text-ardoise">
+          {t("experience.empty")}
+        </p>
       ) : (
-        <ul className="flex flex-col divide-y divide-brume">
-          {profile.experiences.map((experience) => (
-            <li key={experience.id} className="flex flex-col gap-2 py-4">
-              <p className="font-semibold">
-                {experience.title}
-                {" · "}
-                {experience.company}
-              </p>
-              <p className="text-sm text-ardoise">
-                {period(experience.startDate, experience.endDate)}
-                {experience.location && ` · ${experience.location}`}
-              </p>
-              {experience.description && (
-                <p className="text-sm whitespace-pre-line">{experience.description}</p>
-              )}
-              <div className="flex flex-wrap gap-3">
-                <Disclosure label={t("edit")}>
-                  <ExperienceForm experience={experience} />
-                </Disclosure>
-                <form action={deleteExperience}>
-                  <input type="hidden" name="id" value={experience.id} />
-                  <Button type="submit" variant="tertiary" size="sm">
-                    {t("delete")}
-                  </Button>
-                </form>
+        <ul className="flex flex-col divide-y divide-brume border-t border-brume">
+          {profile.experiences.map((experience, index) => (
+            <li key={experience.id} className="flex gap-3 py-4">
+              <span
+                aria-hidden
+                className={cx(
+                  "flex size-10 shrink-0 items-center justify-center rounded-[12px] text-[13px] font-bold",
+                  tileTones[index % tileTones.length],
+                )}
+              >
+                {initials(experience.company)}
+              </span>
+              <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
+                  <div className="flex flex-col">
+                    <p className="text-[15px] font-semibold">{experience.title}</p>
+                    <p className="text-xs text-ardoise">
+                      {experience.company}
+                      {" · "}
+                      {t(`experience.type.${experience.type}`)}
+                      {experience.location && ` · ${experience.location}`}
+                    </p>
+                  </div>
+                  <p className="text-xs text-ardoise">
+                    {period(experience.startDate, experience.endDate)}
+                  </p>
+                </div>
+                {experience.description && (
+                  <ul className="flex flex-col gap-0.5 text-[13px] leading-5">
+                    {experience.description
+                      .split("\n")
+                      .map((line) => line.trim())
+                      .filter(Boolean)
+                      .map((line) => (
+                        <li key={line} className="flex gap-2">
+                          <span aria-hidden>{"•"}</span>
+                          {line}
+                        </li>
+                      ))}
+                  </ul>
+                )}
+                <div className="mt-1 flex flex-wrap items-start gap-2">
+                  <Disclosure label={t("edit")} icon="edit">
+                    <ExperienceForm experience={experience} />
+                  </Disclosure>
+                  <form action={deleteExperience}>
+                    <input type="hidden" name="id" value={experience.id} />
+                    <Button type="submit" variant="tertiary" size="sm">
+                      {t("delete")}
+                    </Button>
+                  </form>
+                </div>
               </div>
             </li>
           ))}
@@ -509,38 +679,93 @@ async function EducationForm({ education }: { education?: FullProfile["education
 
 async function Educations({ profile, notice }: SectionProps) {
   const t = await getTranslations("talent.profile");
+  const certificates = (await myCertificates(db, profile.userId)).filter(
+    (certificate) => !certificate.revokedAt,
+  );
   return (
-    <Section id="formations" title={t("education.title")} notice={notice}>
+    <Section id="formations" title={t("education.title")} icon="diplome" notice={notice}>
       {profile.educations.length === 0 ? (
-        <p className="text-sm text-ardoise">{t("sectionEmpty")}</p>
+        <p className="rounded-[16px] bg-creme px-4 py-3 text-sm text-ardoise">
+          {t("sectionEmpty")}
+        </p>
       ) : (
         <ul className="flex flex-col divide-y divide-brume">
           {profile.educations.map((education) => (
-            <li key={education.id} className="flex flex-col gap-2 py-4">
-              <p className="font-semibold">{education.degree}</p>
-              <p className="text-sm text-ardoise">
-                {[
-                  education.school,
-                  t(`education.level.${education.level}`),
-                  education.endYear === null
-                    ? t("education.inProgress")
-                    : String(education.endYear),
-                ].join(" · ")}
-              </p>
-              <div className="flex flex-wrap gap-3">
-                <Disclosure label={t("edit")}>
-                  <EducationForm education={education} />
-                </Disclosure>
-                <form action={deleteEducation}>
-                  <input type="hidden" name="id" value={education.id} />
-                  <Button type="submit" variant="tertiary" size="sm">
-                    {t("delete")}
-                  </Button>
-                </form>
+            <li key={education.id} className="flex gap-3 py-3">
+              <span
+                aria-hidden
+                className="flex size-10 shrink-0 items-center justify-center rounded-[12px] bg-gris-clair text-[13px] font-bold"
+              >
+                {initials(education.school)}
+              </span>
+              <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+                <div className="flex flex-wrap items-start justify-between gap-x-4 gap-y-1">
+                  <div className="flex flex-col">
+                    <p className="text-[15px] font-semibold">{education.degree}</p>
+                    <p className="text-xs text-ardoise">
+                      {[education.school, t(`education.level.${education.level}`), education.field]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </p>
+                  </div>
+                  <p className="text-xs text-ardoise">
+                    {education.endYear === null
+                      ? t("education.inProgress")
+                      : [education.startYear, education.endYear].filter(Boolean).join(" à ")}
+                  </p>
+                </div>
+                <div className="flex flex-wrap items-start gap-2">
+                  <Disclosure label={t("edit")} icon="edit">
+                    <EducationForm education={education} />
+                  </Disclosure>
+                  <form action={deleteEducation}>
+                    <input type="hidden" name="id" value={education.id} />
+                    <Button type="submit" variant="tertiary" size="sm">
+                      {t("delete")}
+                    </Button>
+                  </form>
+                </div>
               </div>
             </li>
           ))}
         </ul>
+      )}
+      {certificates.length > 0 && (
+        <div className="flex flex-col gap-3 rounded-[18px] bg-lime-clair p-4">
+          <div>
+            <p className="flex items-center gap-2 text-sm font-semibold">
+              <Icon name="certificat" className="size-4" />
+              {t("education.jumanlyCertificates.text")}
+            </p>
+            <p className="mt-0.5 text-xs text-ardoise">{t("education.jumanlyCertificates.hint")}</p>
+          </div>
+          <ul className="flex flex-col gap-2">
+            {certificates.map((certificate) => (
+              <li
+                key={certificate.id}
+                className="flex items-center gap-3 rounded-[14px] bg-blanc px-3 py-2.5"
+              >
+                <span
+                  aria-hidden
+                  className="flex size-8 shrink-0 items-center justify-center rounded-[10px] bg-lime"
+                >
+                  <Icon name="certificat" className="size-4" />
+                </span>
+                <span className="flex min-w-0 flex-col">
+                  <Link
+                    href={`/attestations/${certificate.code}`}
+                    className="truncate text-[13px] font-semibold hover:underline"
+                  >
+                    {certificate.courseTitle}
+                  </Link>
+                  <span className="text-[11px] text-ardoise">
+                    {t("education.jumanlyCertificates.issued", { date: certificate.issuedAt })}
+                  </span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
       <Disclosure label={t("education.add")}>
         <EducationForm />
@@ -551,8 +776,10 @@ async function Educations({ profile, notice }: SectionProps) {
 
 async function Skills({ profile, notice }: SectionProps) {
   const t = await getTranslations("talent.profile");
+  const td = dynamic(t);
   const reference = await db.skill.findMany({ select: { name: true }, orderBy: { name: "asc" } });
-  const levelOptions = ([1, 2, 3, 4] as const).map((level) => ({
+  const levels = [1, 2, 3, 4] as const;
+  const levelOptions = levels.map((level) => ({
     value: String(level),
     label: t(`skills.level.${skillLevelKeys[level]}`),
   }));
@@ -561,39 +788,100 @@ async function Skills({ profile, notice }: SectionProps) {
       id="competences"
       title={t("skills.title")}
       subtitle={t("skills.subtitle")}
+      icon="competence"
+      badge={
+        <span className="shrink-0 rounded-pill bg-neon px-2.5 py-1 text-[11px] font-semibold">
+          {t("skills.count", { count: profile.skills.length, max: PROFILE_SKILLS_MAX })}
+        </span>
+      }
       notice={notice}
     >
-      {profile.skills.length < 3 && <p className="text-sm text-ardoise">{t("skills.empty")}</p>}
+      {profile.skills.length < 3 && (
+        <p className="rounded-[16px] bg-[#FBF6C9] px-4 py-3 text-sm">{t("skills.empty")}</p>
+      )}
       {profile.skills.length > 0 && (
-        <ul className="flex flex-col divide-y divide-brume">
-          {profile.skills.map((entry) => (
-            <li key={entry.id} className="flex flex-wrap items-center justify-between gap-3 py-3">
-              <span className="flex flex-wrap items-center gap-2">
-                <span className="font-semibold">{entry.skill.name}</span>
-                <span className="text-sm text-ardoise">
-                  {t(
-                    `skills.level.${skillLevelKeys[entry.level as 1 | 2 | 3 | 4] ?? "intermediate"}`,
-                  )}
+        <div className="overflow-hidden rounded-[18px] ring-[1.5px] ring-brume ring-inset">
+          <p className="flex justify-between bg-creme/60 px-4 py-2.5 text-[11px] font-semibold tracking-[0.08em] text-ardoise uppercase max-sm:hidden">
+            {t("skills.table.skill")}
+            <span className="w-[300px]">{t("skills.level.text")}</span>
+          </p>
+          <ul className="flex flex-col divide-y divide-brume">
+            {profile.skills.map((entry) => (
+              <li
+                key={entry.id}
+                className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2 px-4 py-3"
+              >
+                <span className="flex min-w-0 flex-col gap-1">
+                  <span className="text-sm font-semibold">{entry.skill.name}</span>
+                  <span className="flex flex-wrap items-center gap-2 text-[11px] text-ardoise">
+                    {entry.proof && td.has(`skills.proof.${entry.proof}`) ? (
+                      <span className="flex items-center gap-1">
+                        <Icon
+                          name={entry.proof === "certificate" ? "certificat" : "lien"}
+                          className="size-3"
+                        />
+                        {td(`skills.proof.${entry.proof}`)}
+                      </span>
+                    ) : (
+                      t("skills.proof.none")
+                    )}
+                    <span
+                      className={cx(
+                        "flex items-center gap-1 rounded-pill px-2 py-0.5 font-semibold",
+                        entry.verified ? "bg-lime-clair text-up-texte" : "bg-gris-clair text-sapin",
+                      )}
+                    >
+                      {entry.verified && <Icon name="check" className="size-3" />}
+                      {entry.verified ? t("skills.badge.verified") : t("skills.badge.declared")}
+                    </span>
+                  </span>
                 </span>
-                <Badge tone={entry.verified ? "success" : "neutral"}>
-                  {entry.verified ? t("skills.badge.verified") : t("skills.badge.declared")}
-                </Badge>
-              </span>
-              <form action={removeSkill}>
-                <input type="hidden" name="id" value={entry.id} />
-                <Button type="submit" variant="tertiary" size="sm">
-                  {t("delete")}
-                </Button>
-              </form>
-            </li>
-          ))}
-        </ul>
+                <span className="flex items-center gap-2">
+                  <span
+                    className="flex rounded-pill bg-creme p-0.5 text-[11px]"
+                    aria-label={t(
+                      `skills.level.${skillLevelKeys[entry.level as 1 | 2 | 3 | 4] ?? "intermediate"}`,
+                    )}
+                  >
+                    {levels.map((level) => (
+                      <span
+                        key={level}
+                        aria-hidden
+                        className={cx(
+                          "rounded-pill px-2.5 py-1",
+                          level === entry.level
+                            ? "bg-sapin font-semibold text-blanc"
+                            : "text-ardoise",
+                        )}
+                      >
+                        {t(`skills.level.${skillLevelKeys[level]}`)}
+                      </span>
+                    ))}
+                  </span>
+                  <form action={removeSkill}>
+                    <input type="hidden" name="id" value={entry.id} />
+                    <button
+                      type="submit"
+                      className="flex size-8 items-center justify-center rounded-full text-ardoise hover:bg-creme hover:text-sapin"
+                    >
+                      <Icon name="fermer" className="size-4" />
+                      <span className="sr-only">
+                        {t("delete")} {entry.skill.name}
+                      </span>
+                    </button>
+                  </form>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </div>
       )}
       <Disclosure label={t("skills.add")} open={profile.skills.length < 3}>
         <form action={addSkill} className="grid gap-4 sm:grid-cols-2">
           <TextField
             id="skill-name"
             name="skill"
+            icon="recherche"
             label={t("skills.title")}
             placeholder={t("skills.search.placeholder")}
             list="skills-reference"
@@ -644,27 +932,41 @@ async function Languages({ profile, notice }: SectionProps) {
   const t = await getTranslations("talent.profile");
   const languages = parseProfileLanguages(profile.languages);
   return (
-    <Section id="langues" title={t("languages.title")} notice={notice}>
+    <Section id="langues" title={t("languages.title")} icon="langue" notice={notice}>
       {languages.length === 0 ? (
         <p className="text-sm text-ardoise">{t("languages.empty")}</p>
       ) : (
         <ul className="flex flex-col divide-y divide-brume">
           {languages.map((language) => (
-            <li
-              key={language.code}
-              className="flex flex-wrap items-center justify-between gap-3 py-3"
-            >
-              <span>
-                <span className="font-semibold">{languageName(language.code)}</span>
-                {" · "}
-                {t(`languages.level.${language.level}`)}
-                {language.cefr && ` · ${language.cefr}`}
+            <li key={language.code} className="flex flex-wrap items-center gap-3 py-2.5">
+              <span className="flex items-center gap-3">
+                <span
+                  aria-hidden
+                  className="flex size-8 items-center justify-center rounded-full bg-gris-clair"
+                >
+                  <Icon name="langue" className="size-4" />
+                </span>
+                <span className="text-sm font-semibold">{languageName(language.code)}</span>
+              </span>
+              <span className="ml-auto flex items-center gap-2 text-[11px] font-semibold">
+                <span className="rounded-pill bg-gris-clair px-2.5 py-1">
+                  {t(`languages.level.${language.level}`)}
+                </span>
+                {language.cefr && (
+                  <span className="rounded-pill bg-neon px-2.5 py-1">{language.cefr}</span>
+                )}
               </span>
               <form action={removeLanguage}>
                 <input type="hidden" name="code" value={language.code} />
-                <Button type="submit" variant="tertiary" size="sm">
-                  {t("delete")}
-                </Button>
+                <button
+                  type="submit"
+                  className="flex size-8 items-center justify-center rounded-full text-ardoise hover:bg-creme hover:text-sapin"
+                >
+                  <Icon name="fermer" className="size-4" />
+                  <span className="sr-only">
+                    {t("delete")} {languageName(language.code)}
+                  </span>
+                </button>
               </form>
             </li>
           ))}
@@ -714,41 +1016,60 @@ async function Languages({ profile, notice }: SectionProps) {
 
 async function Preferences({ profile, notice }: SectionProps) {
   const t = await getTranslations("talent.profile");
+  const label = "text-[13px] font-semibold";
   return (
-    <Section
-      id="preferences"
-      title={t("preferences.title")}
-      subtitle={t("preferences.subtitle")}
-      notice={notice}
-    >
-      <form action={savePreferences} className="grid gap-5 sm:grid-cols-2">
-        <Select
-          id="availability"
-          name="availability"
-          label={t("availability.status.text")}
-          defaultValue={profile.availability}
-          required
-          options={[
-            { value: "open", label: t("availability.status.open") },
-            { value: "listening", label: t("availability.status.listening") },
-            { value: "not_looking", label: t("availability.status.notLooking") },
-          ]}
-        />
-        <TextField
-          id="availableFrom"
-          name="availableFrom"
-          type="date"
-          label={t("availability.from")}
-          hint={t("availability.immediate")}
-          defaultValue={profile.availableFrom?.toISOString().slice(0, 10) ?? ""}
-        />
-        <TextField
-          id="notice"
-          name="notice"
-          label={t("availability.notice.text")}
-          placeholder={t("availability.notice.placeholder")}
-          defaultValue={profile.notice ?? ""}
-        />
+    <Section id="preferences" title={t("availability.title")} icon="horloge" notice={notice}>
+      <form action={savePreferences} className="flex flex-col gap-5">
+        <fieldset className="flex flex-col gap-2">
+          <legend className={cx(label, "mb-2")}>{t("availability.status.text")}</legend>
+          <div className="flex flex-wrap gap-1 rounded-pill bg-creme p-1">
+            {(
+              [
+                ["open", "open"],
+                ["listening", "listening"],
+                ["not_looking", "notLooking"],
+              ] as const
+            ).map(([value, key]) => (
+              <label
+                key={value}
+                htmlFor={`availability-${value}`}
+                className="flex h-9 flex-1 cursor-pointer items-center justify-center rounded-pill px-4 text-[13px] font-semibold whitespace-nowrap has-checked:bg-sapin has-checked:text-blanc has-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)]"
+              >
+                <input
+                  id={`availability-${value}`}
+                  type="radio"
+                  name="availability"
+                  value={value}
+                  defaultChecked={profile.availability === value}
+                  className="sr-only"
+                />
+                {t(`availability.status.${key}`)}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+        <div className="grid gap-4 sm:grid-cols-2">
+          <TextField
+            id="availableFrom"
+            name="availableFrom"
+            type="date"
+            icon="calendrier"
+            label={t("availability.from")}
+            hint={t("availability.immediate")}
+            defaultValue={profile.availableFrom?.toISOString().slice(0, 10) ?? ""}
+          />
+          <TextField
+            id="notice"
+            name="notice"
+            label={t("availability.notice.text")}
+            placeholder={t("availability.notice.placeholder")}
+            defaultValue={profile.notice ?? ""}
+          />
+        </div>
+        <div className="flex flex-col gap-1 border-t border-brume pt-5">
+          <h3 className="text-base font-bold">{t("preferences.title")}</h3>
+          <p className="text-xs leading-[17px] text-ardoise">{t("preferences.subtitle")}</p>
+        </div>
         <TextField
           id="desiredJobTitles"
           name="desiredJobTitles"
@@ -756,11 +1077,11 @@ async function Preferences({ profile, notice }: SectionProps) {
           placeholder={t("preferences.jobTitles.placeholder")}
           defaultValue={profile.desiredJobTitles.join(", ")}
         />
-        <fieldset className="flex flex-col gap-2 sm:col-span-2">
-          <legend className="mb-2 text-label">{t("preferences.contract.text")}</legend>
-          <div className="grid gap-2 sm:grid-cols-3">
+        <fieldset className="flex flex-col">
+          <legend className={cx(label, "mb-2")}>{t("preferences.contract.text")}</legend>
+          <div className="flex flex-wrap gap-2">
             {contractPreferences.map((contract) => (
-              <Checkbox
+              <ChipCheck
                 key={contract}
                 id={`contract-${contract}`}
                 name="contracts"
@@ -771,57 +1092,62 @@ async function Preferences({ profile, notice }: SectionProps) {
             ))}
           </div>
         </fieldset>
-        <fieldset className="flex flex-col gap-2 sm:col-span-2">
-          <legend className="mb-2 text-label">{t("preferences.remote.text")}</legend>
-          <div className="grid gap-2 sm:grid-cols-3">
-            {(["onsite", "hybrid", "remote"] as const).map((mode) => (
-              <Checkbox
-                key={mode}
-                id={`remote-${mode}`}
-                name="remote"
-                value={mode}
-                defaultChecked={profile.remotePreferences.includes(mode)}
-                label={t(`preferences.remote.${mode}`)}
-              />
-            ))}
-          </div>
-        </fieldset>
         <TextField
           id="desiredLocations"
           name="desiredLocations"
+          icon="localisation"
           label={t("preferences.location.text")}
           placeholder={t("preferences.location.placeholder")}
           defaultValue={profile.desiredLocations.join(", ")}
         />
-        <Checkbox
-          id="relocation"
-          name="relocation"
-          value="on"
-          defaultChecked={profile.relocation}
-          label={t("preferences.relocation")}
-          className="self-end"
-        />
-        <TextField
-          id="salaryMin"
-          name="salaryMin"
-          type="number"
-          inputMode="numeric"
-          min={0}
-          label={t("preferences.salary.text")}
-          hint={t("preferences.salary.hint")}
-          defaultValue={profile.salaryMin?.toString() ?? ""}
-        />
-        <Select
-          id="salaryPeriod"
-          name="salaryPeriod"
-          label={t("preferences.salary.period.text")}
-          defaultValue={profile.salaryPeriod}
-          options={[
-            { value: "month", label: t("preferences.salary.period.month") },
-            { value: "year", label: t("preferences.salary.period.year") },
-          ]}
-        />
-        <div className="sm:col-span-2">
+        <div className="flex flex-wrap items-end justify-between gap-4">
+          <fieldset className="flex flex-col">
+            <legend className={cx(label, "mb-2")}>{t("preferences.remote.text")}</legend>
+            <div className="flex flex-wrap gap-2">
+              {(["onsite", "hybrid", "remote"] as const).map((mode) => (
+                <ChipCheck
+                  key={mode}
+                  id={`remote-${mode}`}
+                  name="remote"
+                  value={mode}
+                  defaultChecked={profile.remotePreferences.includes(mode)}
+                  label={t(`preferences.remote.${mode}`)}
+                />
+              ))}
+            </div>
+          </fieldset>
+          <Checkbox
+            id="relocation"
+            name="relocation"
+            value="on"
+            defaultChecked={profile.relocation}
+            label={t("preferences.relocation")}
+          />
+        </div>
+        <div className="grid gap-4 sm:grid-cols-[minmax(0,1fr)_180px]">
+          <TextField
+            id="salaryMin"
+            name="salaryMin"
+            type="number"
+            inputMode="numeric"
+            min={0}
+            icon="portefeuille"
+            label={t("preferences.salary.text")}
+            hint={t("preferences.salary.hint")}
+            defaultValue={profile.salaryMin?.toString() ?? ""}
+          />
+          <Select
+            id="salaryPeriod"
+            name="salaryPeriod"
+            label={t("preferences.salary.period.text")}
+            defaultValue={profile.salaryPeriod}
+            options={[
+              { value: "month", label: t("preferences.salary.period.month") },
+              { value: "year", label: t("preferences.salary.period.year") },
+            ]}
+          />
+        </div>
+        <div>
           <Button type="submit">{t("save")}</Button>
         </div>
       </form>
@@ -831,29 +1157,113 @@ async function Preferences({ profile, notice }: SectionProps) {
 
 async function Visibility({ profile, notice }: SectionProps) {
   const t = await getTranslations("talent.profile");
+  const mine = notice.section === "visibilite";
   return (
-    <Section
+    <section
       id="visibilite"
-      title={t("visibility.title")}
-      subtitle={t("visibility.subtitle")}
-      notice={notice}
+      aria-labelledby="visibilite-title"
+      className="flex scroll-mt-24 flex-col gap-3 rounded-[24px] bg-blanc p-5"
     >
-      <form action={saveVisibility} className="flex flex-col gap-4">
-        <RadioGroup
-          legend={t("visibility.title")}
-          name="visibility"
-          defaultValue={profile.visibility}
-          options={(["private", "recruiters", "anonymous"] as const).map((value) => ({
-            value,
-            label: t(`visibility.${value}.text`),
-            hint: t(`visibility.${value}.desc`),
-          }))}
-        />
-        <p className="text-sm text-ardoise">{t("visibility.always")}</p>
+      <div>
+        <h2 id="visibilite-title" className="text-lg leading-6 font-bold">
+          {t("visibility.title")}
+        </h2>
+        <p className="mt-0.5 text-xs text-ardoise">{t("visibility.subtitle")}</p>
+      </div>
+      {mine && notice.ok && <Alert tone="success" title={t("saved")} />}
+      {mine && notice.error && <Alert tone="error" title={t("error")} />}
+      <form action={saveVisibility} className="flex flex-col gap-3">
+        <fieldset className="flex flex-col gap-2.5">
+          <legend className="sr-only">{t("visibility.title")}</legend>
+          {(["private", "recruiters", "anonymous"] as const).map((value) => (
+            <label
+              key={value}
+              htmlFor={`visibility-${value}`}
+              className="flex cursor-pointer gap-3 rounded-[16px] p-3.5 ring-[1.5px] ring-brume ring-inset has-checked:bg-lime-clair/60 has-checked:ring-2 has-checked:ring-sapin has-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)]"
+            >
+              <span className="relative mt-0.5 flex">
+                <input
+                  id={`visibility-${value}`}
+                  type="radio"
+                  name="visibility"
+                  value={value}
+                  defaultChecked={profile.visibility === value}
+                  className="peer size-[18px] shrink-0 cursor-pointer appearance-none rounded-full bg-blanc ring-[1.5px] ring-[#8a9794] ring-inset checked:bg-sapin checked:ring-sapin"
+                />
+                <span
+                  aria-hidden
+                  className="pointer-events-none absolute top-[6px] left-[6px] hidden size-1.5 rounded-full bg-lime peer-checked:block"
+                />
+              </span>
+              <span className="flex flex-col gap-0.5">
+                <span className="text-[13px] font-semibold">{t(`visibility.${value}.text`)}</span>
+                <span className="text-[11px] leading-4 text-ardoise">
+                  {t(`visibility.${value}.desc`)}
+                </span>
+              </span>
+            </label>
+          ))}
+        </fieldset>
+        <p className="flex items-start gap-2 rounded-[14px] bg-lime-clair px-3 py-2.5 text-[11px] leading-4">
+          <Icon name="lock" className="mt-px size-3.5 shrink-0" />
+          {t("visibility.always")}
+        </p>
         <div>
-          <Button type="submit">{t("save")}</Button>
+          <Button type="submit" size="sm">
+            {t("save")}
+          </Button>
         </div>
       </form>
-    </Section>
+    </section>
+  );
+}
+
+/** What a recruiter sees in the talent pool: name (or not), headline and main skills. */
+async function RecruiterPreview({ profile }: { profile: FullProfile }) {
+  const t = await getTranslations("talent.profile");
+  const anonymous = profile.visibility === "anonymous";
+  return (
+    <section
+      id="apercu"
+      aria-labelledby="apercu-title"
+      className="relative flex scroll-mt-24 flex-col gap-3 overflow-hidden rounded-[24px] bg-sapin p-5 text-blanc"
+    >
+      <Pattern name="motif-trajectoires-sombre" size={220} opacity={0.4} />
+      <p className="relative text-[11px] font-bold tracking-[0.12em] text-neon uppercase">
+        {t("preview.text")}
+      </p>
+      <h2 id="apercu-title" className="relative text-[15px] font-bold">
+        {t("preview.title")}
+      </h2>
+      <div className="relative flex items-center gap-3 rounded-[16px] bg-blanc p-3.5 text-sapin">
+        <span
+          aria-hidden
+          className="flex size-11 shrink-0 items-center justify-center rounded-full bg-lime text-sm font-bold"
+        >
+          {anonymous ? "?" : initials(profile.user.name)}
+        </span>
+        <span className="flex min-w-0 flex-col gap-1.5">
+          <span className="truncate text-sm font-semibold">
+            {anonymous ? t("visibility.badge.anonymous") : profile.user.name}
+          </span>
+          {profile.headline && (
+            <span className="truncate text-[11px] text-ardoise">{profile.headline}</span>
+          )}
+          {profile.skills.length > 0 && (
+            <span className="flex flex-wrap gap-1">
+              {profile.skills.slice(0, 3).map((entry) => (
+                <span
+                  key={entry.id}
+                  className="rounded-pill bg-gris-clair px-2 py-0.5 text-[10px] font-semibold"
+                >
+                  {entry.skill.name}
+                </span>
+              ))}
+            </span>
+          )}
+        </span>
+      </div>
+      {anonymous && <p className="relative text-[11px] text-blanc/75">{t("preview.anonymous")}</p>}
+    </section>
   );
 }

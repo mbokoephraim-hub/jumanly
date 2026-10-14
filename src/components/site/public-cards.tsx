@@ -1,4 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- course covers come from storage at a known size */
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Icon, type IconName } from "@/components/brand/icon";
@@ -50,9 +51,18 @@ export function PublicCourseCard({
   plans,
   index = 0,
   variant = "home",
+  href,
+  locked,
+  footer,
 }: {
   course: CourseSummary;
   plans: PublicPlan[];
+  /** Signed-in catalog: the card opens `/app/learn/…`. */
+  href?: string;
+  /** Name of the plan that opens a course the talent's plan does not (lock on the cover). */
+  locked?: string;
+  /** Extra line under the facts (progress, « Voir la première leçon »…). */
+  footer?: ReactNode;
   /** Position in the list: picks the cover tint. */
   index?: number;
   /** `catalog` (mockup 01-10): instructor, lessons, level line and « Voir la formation ». */
@@ -71,7 +81,12 @@ export function PublicCourseCard({
   ].filter(Boolean);
   return (
     <article className="group relative flex h-full flex-col gap-3 rounded-box bg-blanc px-3 pt-3 pb-[18px]">
-      <div className={cx("relative h-[150px] overflow-hidden rounded-md", cover.tint)}>
+      <div
+        className={cx(
+          "relative h-[150px] overflow-hidden rounded-md",
+          locked ? "bg-[#8aa39c]" : cover.tint,
+        )}
+      >
         {course.coverUrl ? (
           <img
             src={course.coverUrl}
@@ -95,13 +110,29 @@ export function PublicCourseCard({
         >
           <Icon name={categoryIcon(course.category)} className="size-5" />
         </span>
+        {locked && (
+          <span
+            aria-hidden
+            className="absolute top-1/2 left-1/2 flex size-[52px] -translate-1/2 items-center justify-center rounded-full bg-blanc text-sapin"
+          >
+            <Icon name="lock" className="size-5" />
+          </span>
+        )}
       </div>
       <div className="flex flex-1 flex-col gap-1.5 px-2">
         <div className="flex items-center justify-between gap-2">
-          <span className="truncate text-[11px] leading-[15px] font-semibold text-feuille-fonce">
+          <span className="min-w-0 truncate text-[11px] leading-[15px] font-semibold text-feuille-fonce">
             {course.category ?? t(`trainings.filters.level.${course.level}`)}
           </span>
-          {plan ? (
+          {locked ? (
+            <span
+              className="flex shrink-0 items-center gap-1 rounded-pill bg-gris-clair px-2.5 py-1 text-[11px] font-semibold"
+              aria-label={t("learn.lock.aria", { plan: locked })}
+            >
+              <Icon name="lock" className="size-3" />
+              {t("learn.lock.badge", { plan: locked })}
+            </span>
+          ) : plan ? (
             <Badge tone="sapin">{t("trainings.card.badge.plan", { plan: plan.name })}</Badge>
           ) : (
             <Badge tone="lime">{t("trainings.card.badge.free")}</Badge>
@@ -110,7 +141,7 @@ export function PublicCourseCard({
         <h3 className="min-h-11 text-base leading-[22px] font-semibold">
           {/* The whole card is clickable; the link stays the only focusable element. */}
           <Link
-            href={`/formations/${course.slug}`}
+            href={href ?? `/formations/${course.slug}`}
             className="after:absolute after:inset-0 focus-visible:outline-none"
           >
             {course.title}
@@ -133,6 +164,7 @@ export function PublicCourseCard({
             </li>
           )}
         </ul>
+        {footer}
       </div>
       <span
         aria-hidden

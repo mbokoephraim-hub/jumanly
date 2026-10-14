@@ -1839,6 +1839,10 @@ Conventions :
 | `talent.dashboard.nextStep.apply` | {count, plural, one {# offre compatible vous attend.} other {# offres compatibles vous attendent.}} |
 | `talent.dashboard.nextStep.interview` | Préparez votre entretien avec {company} du {date, date, medium}. |
 | `talent.dashboard.nextStep.cta` | Commencer |
+| `talent.dashboard.nextStep.hint.interview` | Simulation d'entretien, fiche entreprise et questions fréquentes, au même endroit. |
+| `talent.dashboard.nextStep.hint.course` | Chaque leçon terminée compte pour votre attestation. |
+| `talent.dashboard.nextStep.hint.apply` | Chaque offre explique pourquoi elle vous correspond. Candidater reste gratuit. |
+| `talent.dashboard.nextStep.hint.profile` | Un profil complet aide les recruteurs à vous comprendre. |
 | `talent.dashboard.kpi.courses.text` | Formations en cours |
 | `talent.dashboard.kpi.courses.hint` | {count, plural, =0 {Aucune nouvelle ce mois} one {# nouvelle ce mois} other {# nouvelles ce mois}} |
 | `talent.dashboard.kpi.hours.text` | Heures d'apprentissage |
@@ -1869,6 +1873,8 @@ Conventions :
 | `talent.dashboard.ai.matches.text` | {count, plural, one {# offre correspond à votre profil à plus de {threshold} %.} other {# offres correspondent à votre profil à plus de {threshold} %.}} |
 | `talent.dashboard.ai.matches.none` | Pas encore d'offre très compatible. Complétez vos compétences pour affiner les suggestions. |
 | `talent.dashboard.ai.why` | Pourquoi ? |
+| `talent.dashboard.ai.reason` | {criteria} correspondent à ce que demande la première offre. |
+| `talent.dashboard.ai.score` | {score} % |
 | `talent.dashboard.ai.cta` | Voir les offres |
 | `talent.dashboard.ai.dismiss` | Ignorer |
 | `talent.dashboard.continue.title` | Continuer à apprendre |
@@ -1923,6 +1929,7 @@ Conventions :
 | `talent.profile.preview.anonymous` | En mode anonyme, votre nom et votre photo sont masqués jusqu'à ce que vous acceptiez une mise en relation. |
 | `talent.profile.importCv.text` | Remplir à partir de mon CV |
 | `talent.profile.importCv.hint` | Nous lisons votre CV et pré-remplissons les sections. Vous validez chaque élément. |
+| `talent.profile.importCv.action` | Importer un CV |
 | `talent.profile.import.paste.label` | Texte de votre CV |
 | `talent.profile.import.paste.hint` | Ouvrez votre CV, copiez tout le texte et collez-le ici. Rien n'est ajouté à votre profil sans votre validation. |
 | `talent.profile.import.submit` | Lire mon CV |
@@ -2032,6 +2039,7 @@ Conventions :
 | `talent.profile.education.jumanlyCertificates.hint` | Ajoutées automatiquement quand vous terminez une formation. Vous pouvez les masquer. |
 | `talent.profile.education.jumanlyCertificates.hide` | Masquer sur le profil |
 | `talent.profile.education.jumanlyCertificates.show` | Afficher sur le profil |
+| `talent.profile.education.jumanlyCertificates.issued` | Obtenue le {date, date, long} |
 
 #### Compétences
 
@@ -2060,6 +2068,8 @@ Conventions :
 | `talent.profile.skills.empty` | Ajoutez au moins trois compétences pour recevoir des suggestions d'offres. |
 | `talent.profile.skills.unknown` | Cette compétence n'est pas dans notre référentiel. Choisissez une des propositions de la liste. |
 | `talent.profile.skills.proofUrl` | Lien vers la preuve (facultatif) |
+| `talent.profile.skills.count` | {count} sur {max} |
+| `talent.profile.skills.table.skill` | Compétence et preuve |
 
 #### Langues
 
@@ -2235,6 +2245,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `learn.course.back` | Retour au catalogue |
+| `learn.course.eyebrow` | Learn · Catalogue de formations |
 | `learn.course.about` | À propos de cette formation |
 | `learn.course.outcomes` | Ce que vous saurez faire |
 | `learn.course.program` | Programme |
@@ -2245,6 +2256,8 @@ Conventions :
 | `learn.course.language` | Langue : {language} |
 | `learn.course.certificate` | Attestation Jumanly à la fin, ajoutée à votre profil |
 | `learn.course.requiredPlan` | Forfait requis : {plan} |
+| `learn.course.includedInPlan` | Inclus dans votre forfait |
+| `learn.course.previewBadge` | Aperçu |
 | `learn.course.instructor.text` | Formateur |
 | `learn.course.instructor.courses` | {count, plural, one {# formation} other {# formations}} |
 | `learn.course.start` | Commencer |
@@ -2353,6 +2366,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `learn.quiz.title` | Quiz · {moduleTitle} |
+| `learn.quiz.eyebrow` | Learn · {courseTitle} |
 | `learn.quiz.intro` | {count, plural, one {# question} other {# questions}}. Il faut {passScore} % de bonnes réponses pour valider. |
 | `learn.quiz.attempts` | {count, plural, =0 {Tentatives illimitées} one {# tentative restante} other {# tentatives restantes}} |
 | `learn.quiz.start` | Commencer le quiz |
@@ -2384,6 +2398,11 @@ Conventions :
 | `learn.quiz.result.revisit` | À revoir : {lessonTitle} |
 | `learn.quiz.result.retry` | Réessayer |
 | `learn.quiz.result.continue` | Continuer la formation |
+| `learn.quiz.result.moduleBadge` | Module {number} validé |
+| `learn.quiz.result.yourAnswer` | Votre réponse |
+| `learn.quiz.result.grid` | Question par question |
+| `learn.quiz.result.nextModule` | Module suivant |
+| `learn.quiz.result.reviewCount` | {count, plural, one {# question} other {# questions}} |
 | `learn.quiz.result.retryAfter` | Nouvelle tentative possible {time, relative} |
 | `learn.quiz.noAttempts` | Vous avez utilisé toutes vos tentatives. Écrivez à assistant@jumanly.io si vous avez besoin d'aide. |
 | `learn.quiz.question` | Question {number} |
@@ -2397,6 +2416,11 @@ Conventions :
 | `learn.certificates.title` | Mes attestations |
 | `learn.certificates.subtitle` | Chaque attestation est ajoutée à votre profil et peut être vérifiée par un recruteur grâce à son lien public. |
 | `learn.certificates.seo` | Mes attestations |
+| `learn.certificates.eyebrow` | Learn · Attestations |
+| `learn.certificates.count` | {count, plural, one {# attestation} other {# attestations}} |
+| `learn.certificates.preview` | Aperçu du PDF |
+| `learn.certificates.publicLink.title` | Lien de vérification public |
+| `learn.certificates.publicLink.body` | Seules les informations nécessaires à la vérification sont affichées : titulaire, formation, durée, date et numéro. |
 | `learn.certificates.verifyLink` | Page de vérification |
 | `learn.certificates.revoked` | Révoquée le {date, date, long} |
 | `learn.certificates.issued` | Obtenue le {date, date, long} |
@@ -2410,6 +2434,7 @@ Conventions :
 | `learn.certificates.empty.text` | Vous n'avez pas encore d'attestation. Terminez une formation pour obtenir la première. |
 | `learn.certificates.empty.cta` | Voir mes formations |
 | `learn.certificates.congrats.title` | Félicitations, {firstName} ! |
+| `learn.certificates.congrats.eyebrow` | Nouvelle attestation |
 | `learn.certificates.congrats.body` | Vous avez terminé « {courseTitle} ». Votre attestation est prête et déjà visible sur votre profil. |
 | `learn.certificates.pdf.title` | Attestation de réussite |
 | `learn.certificates.pdf.body` | Jumanly atteste que {fullName} a suivi et validé la formation « {courseTitle} » ({hours} h). |
