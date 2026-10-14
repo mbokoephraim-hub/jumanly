@@ -10,7 +10,7 @@ import { CheckList } from "@/components/site/sections";
 import { Badge, ButtonLink } from "@/components/ui";
 import { languageName } from "@/lib/dates";
 import { durationParts } from "@/lib/format";
-import { pageMetadata } from "@/lib/seo";
+import { courseJsonLd, jsonLdScript, pageMetadata } from "@/lib/seo";
 import { signupHref } from "@/lib/signup";
 import { videoProvider } from "@/server/adapters/video";
 import { getCourse, getPublicPlans, getSitemapEntries } from "@/server/queries/public";
@@ -68,8 +68,19 @@ export default async function TrainingPage({ params }: PageProps<"/formations/[s
   // Preview lessons are public (partie 12, E5): their video plays without an account.
   const previewVideo = preview?.kind === "video" ? videoProvider().playback(preview.videoId) : null;
 
+  const jsonLd = courseJsonLd({
+    ...course,
+    plan: requiredPlan,
+    free: isFree,
+  });
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        // JSON-LD is built from database values, serialized with "<" escaped.
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(jsonLd) }}
+      />
       <section className="bg-creme">
         <div className="mx-auto grid max-w-7xl gap-8 page-x py-10 md:py-14 lg:grid-cols-[1.6fr_1fr]">
           <div className="flex flex-col items-start gap-5">

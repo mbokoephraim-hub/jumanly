@@ -8078,6 +8078,28 @@ Conventions :
 | `admin.content.published` | Contenu publié. |
 | `admin.content.history` | Historique des versions |
 | `admin.content.restore` | Restaurer cette version |
+| `admin.content.subtitle` | Modifiez la FAQ et publiez des bannières sans nouvelle mise en ligne. Les textes d'origine restent dans textes/ et peuvent être rétablis à tout moment. |
+| `admin.content.group.home` | Accueil (FAQ courte) |
+| `admin.content.group.pricing` | Tarifs (FAQ facturation) |
+| `admin.content.faq.count` | {count, plural, =0 {Aucune question} one {# question} other {# questions}} |
+| `admin.content.faq.status.edited` | Modifiée |
+| `admin.content.faq.status.added` | Ajoutée |
+| `admin.content.faq.status.hidden` | Masquée |
+| `admin.content.faq.edit` | Modifier |
+| `admin.content.faq.hide` | Masquer cette question |
+| `admin.content.faq.show` | Afficher à nouveau |
+| `admin.content.faq.reset` | Rétablir le texte d'origine |
+| `admin.content.faq.delete` | Supprimer cette question |
+| `admin.content.banner.style.text` | Style |
+| `admin.content.banner.empty` | Aucune bannière. Une bannière s'affiche en haut des pages pour le public choisi, entre ses dates de début et de fin (incluses). |
+| `admin.content.banner.dates` | Du {start} au {end} |
+| `admin.content.banner.always` | Sans date de fin |
+| `admin.content.banner.delete` | Supprimer la bannière |
+| `admin.content.banner.save` | Enregistrer la bannière |
+| `admin.content.banner.where` | La bannière « Tous » s'affiche aussi sur le site public ; les autres seulement dans l'espace connecté correspondant. |
+| `admin.content.saved` | Modification enregistrée. |
+| `admin.content.deleted` | Contenu supprimé. |
+| `admin.content.error` | Vérifiez les champs : la question fait au moins 3 caractères, la réponse au moins 3, et la date de fin suit la date de début. |
 
 ### `/admin/signalements` · Signalements
 

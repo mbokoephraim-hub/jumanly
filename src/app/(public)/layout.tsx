@@ -2,6 +2,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { PublicFooter } from "@/components/layout/public-footer";
 import { PublicHeader } from "@/components/layout/public-header";
+import { ContentBanners } from "@/components/site/content-banners";
 import { CookieConsent } from "@/components/site/cookie-consent";
 import { pickMessages } from "@/i18n/client-messages";
 
@@ -17,6 +18,7 @@ export default async function PublicLayout({ children }: LayoutProps<"/">) {
       >
         {t("skipToContent")}
       </a>
+      <ContentBanners audience="all" />
       <PublicHeader />
       <main id="content" className="flex-1">
         {children}

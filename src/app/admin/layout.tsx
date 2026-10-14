@@ -13,7 +13,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Jumanly Admin: administrators, support agents and content editors (courses only); a 404 for
+ * Jumanly Admin: administrators, support agents and content editors (courses and contents); a 404 for
  * everyone else.
  */
 export default function AdminLayout({ children }: LayoutProps<"/admin">) {
@@ -34,6 +34,7 @@ const links = [
   { key: "jobs", href: "/admin/offres" },
   { key: "partners", href: "/admin/partenaires" },
   { key: "ai", href: "/admin/ia" },
+  { key: "content", href: "/admin/contenus" },
   { key: "reports", href: "/admin/signalements" },
 ] as const;
 
@@ -41,7 +42,9 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
   const admin = await requireAdminShell();
   if (!admin) notFound();
   const editorOnly = admin.platformRole === "content_editor";
-  const visible = links.filter((link) => !editorOnly || link.key === "courses");
+  const visible = links.filter(
+    (link) => !editorOnly || link.key === "courses" || link.key === "content",
+  );
   const t = await getTranslations("admin");
   return (
     <div className="min-h-dvh bg-creme">

@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
+import { ServiceWorker } from "@/components/site/service-worker";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
@@ -28,16 +29,22 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  // Only the error page texts go to the browser: the error page is the one client screen that
-  // cannot receive its texts from the server.
+  // Only the texts of the error page and of the offline notice go to every page.
   const { system } = await getMessages();
-  const errorTexts = {
-    system: { 500: system["500"], error: { reference: system.error.reference } },
+  const texts = {
+    system: {
+      500: system["500"],
+      error: { reference: system.error.reference },
+      offline: { banner: system.offline.banner },
+    },
   };
   return (
     <html lang="fr" className={`${sora.variable} antialiased`}>
       <body className="min-h-dvh">
-        <NextIntlClientProvider messages={errorTexts}>{children}</NextIntlClientProvider>
+        <NextIntlClientProvider messages={texts}>
+          {children}
+          <ServiceWorker enabled={process.env.NODE_ENV === "production"} />
+        </NextIntlClientProvider>
       </body>
     </html>
   );

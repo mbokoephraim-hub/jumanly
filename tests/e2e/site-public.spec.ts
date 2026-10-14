@@ -132,21 +132,34 @@ test("sitemap et robots sont publiés", async ({ request }) => {
   expect((await request.get("/robots.txt")).status()).toBe(200);
 });
 
-// Rule 9 (CLAUDE.md): at most 200 KB of JavaScript (compressed) per public page.
-for (const path of ["/", "/formations", "/offres", "/tarifs"]) {
+// Rule 9 (CLAUDE.md): at most 200 KB of JavaScript (compressed) on every public page, details
+// included (E11: performance budget checked in CI).
+async function scriptBytes(page: Page, path: string) {
+  const sizes: Promise<number>[] = [];
+  page.on("requestfinished", (request) => {
+    if (request.resourceType() !== "script") return;
+    // Bytes on the wire (compressed), as a slow mobile network would download them.
+    sizes.push(request.sizes().then((size) => size.responseBodySize));
+  });
+  await page.goto(path, { waitUntil: "networkidle" });
+  return (await Promise.all(sizes)).reduce((sum, size) => sum + size, 0);
+}
+
+for (const path of [...publicPages, "/mentions-legales", "/confidentialite", "/conditions"]) {
   test(`${path} reste sous 200 Ko de JavaScript`, async ({ page }) => {
-    let bytes = 0;
-    const sizes: Promise<number>[] = [];
-    page.on("requestfinished", (request) => {
-      if (request.resourceType() !== "script") return;
-      // Bytes on the wire (compressed), as a slow mobile network would download them.
-      sizes.push(request.sizes().then((size) => size.responseBodySize));
-    });
-    await page.goto(path, { waitUntil: "networkidle" });
-    for (const size of await Promise.all(sizes)) bytes += size;
-    expect(bytes).toBeLessThan(200 * 1024);
+    expect(await scriptBytes(page, path)).toBeLessThan(200 * 1024);
   });
 }
+
+test("les pages d'offre et de formation restent sous 200 Ko de JavaScript", async ({ page }) => {
+  const job = await firstDetailPath(page, "/offres", "/offres/");
+  const course = await firstDetailPath(page, "/formations", "/formations/");
+  for (const path of [job, course]) {
+    const fresh = await page.context().newPage();
+    expect(await scriptBytes(fresh, path), path).toBeLessThan(200 * 1024);
+    await fresh.close();
+  }
+});
 
 for (const path of [...publicPages.slice(1), "/mentions-legales", "/confidentialite"]) {
   test(`aucune erreur d'accessibilité WCAG 2.2 AA sur ${path}`, async ({ page }) => {

@@ -4,8 +4,9 @@ import { Icon } from "@/components/brand/icon";
 import { FaqSearch } from "@/components/site/faq-search";
 import { CtaBand, PageHero } from "@/components/site/sections";
 import { ButtonLink } from "@/components/ui";
-import { childKeys, dynamic } from "@/i18n/dynamic";
-import { pageMetadata } from "@/lib/seo";
+import { jsonLdScript, pageMetadata } from "@/lib/seo";
+import { getContentOverrides } from "@/server/queries/public";
+import { faqItems } from "@/server/services/contents";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("faq.seo");
@@ -25,18 +26,16 @@ const themes = [
 
 export default async function FaqPage() {
   const t = await getTranslations("faq");
-  const tx = dynamic(t);
-  const messages = await getMessages();
-  // Questions are numbered in the texts (q1, a1, q2, a2…): adding one there adds it here.
+  const [messages, overrides] = await Promise.all([getMessages(), getContentOverrides()]);
+  // Questions are numbered in the texts (q1, a1, q2, a2…); /admin/contenus can change, hide or
+  // add some.
   const groups = themes.map((theme) => ({
     theme,
-    items: childKeys(messages, `faq.${theme}`)
-      .filter((key) => key.startsWith("q"))
-      .map((key) => ({
-        id: `${theme}-${key}`,
-        question: tx(`${theme}.${key}`),
-        answer: tx(`${theme}.a${key.slice(1)}`),
-      })),
+    items: faqItems(messages, overrides, `faq.${theme}`).map((item) => ({
+      id: `${theme}-q${item.n}`,
+      question: item.question,
+      answer: item.answer,
+    })),
   }));
 
   const faqJsonLd = {
@@ -55,7 +54,7 @@ export default async function FaqPage() {
     <>
       <script
         type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(faqJsonLd).replace(/</g, "\\u003c") }}
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(faqJsonLd) }}
       />
       <PageHero title={t("hero.title")} text={t("hero.text")} />
       <section className="bg-creme">
