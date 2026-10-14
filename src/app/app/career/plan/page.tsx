@@ -16,6 +16,7 @@ import { recommendedCourses } from "@/server/matching/service";
 import { catalogLevelOf, opensCourse } from "@/server/services/learn";
 import { cheapestPlanWhere, isEnabled, listPublicPlans } from "@/server/services/plans";
 import { getPlan, stepState } from "@/server/services/progress-plan";
+import { REPORT_KEY } from "@/server/services/progress-report";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.plan");
@@ -32,9 +33,10 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
   const user = await requireUser("/app/career/plan");
   const t = await getTranslations();
   const subject = { type: "user" as const, id: user.id };
-  const [allowed, withRecommendations, plans] = await Promise.all([
+  const [allowed, withRecommendations, detailed, plans] = await Promise.all([
     can(db, subject, "career.progress_plan"),
     can(db, subject, "career.progress_plan.recommendations"),
+    can(db, subject, REPORT_KEY),
     listPublicPlans(db),
   ]);
   const planFor = (key: string) =>
@@ -217,6 +219,27 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
           </ul>
         )}
         <p className="text-sm text-ardoise">{t("ai.recoCourses.why")}</p>
+      </section>
+      <section className="flex flex-col gap-3 rounded-card bg-blanc p-6">
+        <h2 className="text-h2">{t("career.plan.report.text")}</h2>
+        {detailed ? (
+          <>
+            <p className="text-sm">{t("career.plan.report.desc")}</p>
+            <ButtonLink
+              href="/app/career/plan/rapport"
+              prefetch={false}
+              variant="secondary"
+              size="sm"
+              className="self-start"
+            >
+              {t("career.plan.report.download")}
+            </ButtonLink>
+          </>
+        ) : (
+          <p className="text-sm text-ardoise">
+            {t("career.plan.report.locked", { plan: planFor(REPORT_KEY) })}
+          </p>
+        )}
       </section>
       <p className="text-sm text-ardoise">
         {plan ? t("career.diagnostic.result.date", { date: plan.updatedAt }) : null}

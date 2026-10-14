@@ -195,6 +195,7 @@ ANTHROPIC_API_KEY=
 AI_MODEL_DEFAULT=claude-sonnet-5-5
 AI_MODEL_FAST=claude-haiku-5-5
 EMBEDDINGS_PROVIDER=
+NEXT_PUBLIC_VOICE_PROVIDER=browser   # voix des simulations : browser (navigateur) ou none
 EMBEDDINGS_API_KEY=
 PAYMENTS_MOBILE_MONEY_PROVIDER=        # à choisir, voir docs/specifications.md (partie 09)
 PAYMENTS_MOBILE_MONEY_API_KEY=

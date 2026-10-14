@@ -2,6 +2,61 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E10 · Career avancé (14 octobre 2026)
+
+### Fait
+
+- Simulations d'entretien (`/app/career/entretiens`) : poste visé (ou offre enregistrée ou
+  candidature), type, exigence, durée ; une question à la fois ; retour structuré par critère
+  (structure, pertinence, exemples, clarté, débit à l'oral), points forts, points à travailler et
+  retour question par question. Jamais de note ni de prédiction. Une séance utilise une unité de
+  `career.interview.text.monthly` ou `career.interview.voice.monthly`, sans crédit IA.
+- Mode oral derrière un adaptateur (`src/lib/voice`, `NEXT_PUBLIC_VOICE_PROVIDER`) : la question
+  est lue à voix haute, la réponse dictée dans un champ modifiable, sa durée sert au critère de
+  débit ; sans dictée dans le navigateur, la réponse se tape.
+- Lettres et documents (`/app/career/documents`, `career.documents`) : lettre de motivation,
+  biographie, e-mail de candidature, remerciement ; ton, longueur, offre visée, points à mettre
+  en avant ; édition, copie, PDF, suppression. Correction d'un texte avec corrections à cocher.
+- Préparation LinkedIn (`/app/career/linkedin`, `career.linkedin`) : titre, résumé,
+  compétences et expériences à copier, liste de vérification. Rien n'est publié.
+- Adaptation du CV à une offre (éditeur de CV, `career.cv.tailor`) : une nouvelle version qui
+  met en avant ce que l'offre demande, sans compétence ni chiffre ajoutés.
+- Garde-fous communs : pas de chiffre absent du profil, pas de compétence de l'offre que le
+  talent n'a pas, pas de question discriminatoire ; sinon le modèle déterministe (textes).
+- Portfolio (`/app/career/portfolio`, `career.portfolio.level`) : projets (contexte, rôle,
+  résultat, compétences, lien, médias en liens https), présentation, page publique
+  `/portfolio/[slug]` (adresse non devinable, non indexée) ; le niveau enrichi ouvre la grille
+  et la couleur d'accent.
+- Rapport de progression détaillé en PDF (`reports.progress.detailed`) sur le plan de
+  progression : plan, formations, profil, simulations, candidatures.
+- Exercices métier (`learn.exercises.job_specific`) : case « Exercice métier » et métiers visés
+  dans l'admin formations, verrou dans le lecteur, hors progression et hors attestation.
+- Accueil Career : les quatre outils ouverts, avec verrou ou quota du mois.
+- Correctif : deux premières consommations simultanées d'un quota ne lèvent plus d'erreur.
+- Démo : portfolio publié de `talent.pro@jumanly.test` (`/portfolio/demo-portfolio-fictif`),
+  exercice métier dans « Préparer un entretien d'embauche (démo) ».
+- Décisions : `docs/decisions/2026-10-14-career-advanced.md`.
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Quotas texte et voix appliqués par droit, jamais par nom de forfait | ✓ tests en base |
+| Retour d'entretien sans note, par critère et par question | ✓ tests unitaires, en base et e2e |
+| Aucune compétence ni chiffre inventés (lettres, LinkedIn, CV adapté) | ✓ tests unitaires et en base |
+| Consentement, droit et crédits vérifiés, appels journalisés dans `AiUsage` | ✓ tests en base |
+| Portfolio : page publique seulement si publiée et droit actif | ✓ tests en base et e2e |
+| Exercices métier verrouillés et hors progression | ✓ test en base |
+| Lint, types, tests unitaires et en base, build, e2e | ✓ en local ; CI à l'ouverture de la PR |
+
+### Dettes et points ouverts
+
+- Voix : pas encore de fournisseur hébergé de transcription et de synthèse ; le navigateur suffit
+  sur Chrome et Edge, la saisie prend le relais ailleurs.
+- Médias du portfolio en liens : l'envoi de fichiers attend le stockage S3 (R2).
+- `career.tools.extended` n'ouvre encore aucun outil précis ; les « Conseils de préparation »
+  restent annoncés.
+
 ## E9 · Jumanly Partners (14 octobre 2026)
 
 ### Fait

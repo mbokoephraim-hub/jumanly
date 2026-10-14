@@ -2226,6 +2226,8 @@ Conventions :
 | `learn.player.toc.certificateHint` | Ajoutée automatiquement à votre profil Career. |
 | `learn.player.exercise.jobSpecific.text` | Exercice métier |
 | `learn.player.exercise.jobSpecific.locked` | Exercices adaptés à votre métier · Disponible avec {plan} |
+| `learn.player.exercise.jobSpecific.optional` | Facultatif : cet exercice ne compte pas dans votre progression. |
+| `learn.player.exercise.jobSpecific.families` | Métiers concernés : {families} |
 
 ### `/app/learn/[slug]` · Quiz et résultats
 
@@ -2631,6 +2633,10 @@ Conventions :
 | `career.cv.tailor.selectJob` | Choisir une offre |
 | `career.cv.tailor.locked` | Adaptation du CV à une offre · Disponible avec {plan} |
 | `career.cv.tailor.created` | Version « {cvName} » créée pour {jobTitle}. |
+| `career.cv.tailor.cta` | Créer la version adaptée |
+| `career.cv.tailor.name` | CV · {jobTitle} |
+| `career.cv.tailor.noJobs` | Enregistrez une offre ou candidatez pour pouvoir y adapter votre CV. |
+| `career.cv.tailor.notFound` | Cette offre n'est plus disponible. |
 | `career.cv.saved` | Enregistré |
 | `career.cv.saving` | Enregistrement… |
 | `career.cv.empty` | Votre CV est vide. Importez un CV existant ou remplissez-le depuis votre profil. |
@@ -2689,6 +2695,45 @@ Conventions :
 | `career.documents.export` | Télécharger en PDF |
 | `career.documents.delete.confirm` | Supprimer ce document ? Cette action est définitive. |
 | `career.documents.saved` | Document enregistré. |
+| `career.documents.back` | Tous mes documents |
+| `career.documents.created` | Votre proposition est prête. Relisez-la et adaptez-la avant de l'utiliser. |
+| `career.documents.deleted` | Document supprimé. |
+| `career.documents.delete.cta` | Supprimer |
+| `career.documents.open` | Ouvrir |
+| `career.documents.edit.title` | Titre du document |
+| `career.documents.edit.text` | Texte |
+| `career.documents.edit.save` | Enregistrer |
+| `career.documents.generate.noJob` | Sans offre précise |
+| `career.documents.generate.type` | Type de document |
+| `career.documents.proofread.title` | Titre |
+| `career.documents.proofread.apply` | Appliquer les corrections cochées |
+| `career.documents.proofread.before` | Avant |
+| `career.documents.proofread.after` | Après |
+| `career.documents.proofread.why` | Pourquoi |
+| `career.documents.proofread.rule.spaces` | Espaces en trop. |
+| `career.documents.proofread.rule.punctuation` | Pas d'espace avant une virgule ou un point. |
+| `career.documents.proofread.rule.capital` | Une phrase commence par une majuscule. |
+| `career.documents.error.input` | Vérifiez les informations saisies. |
+| `career.documents.template.title.letter` | Lettre · {jobTitle} |
+| `career.documents.template.title.bio` | Biographie professionnelle |
+| `career.documents.template.title.email` | E-mail de candidature · {jobTitle} |
+| `career.documents.template.title.thankYou` | Remerciement · {jobTitle} |
+| `career.documents.template.greeting.formal` | Madame, Monsieur, |
+| `career.documents.template.greeting.simple` | Bonjour, |
+| `career.documents.template.letter.intro` | Je vous adresse ma candidature au poste de {jobTitle}. |
+| `career.documents.template.letter.introCompany` | Je vous adresse ma candidature au poste de {jobTitle} chez {company}. |
+| `career.documents.template.letter.experience` | Mon expérience récente ({lastRole}) m'a permis de développer des compétences utiles pour ce poste. |
+| `career.documents.template.letter.skills` | Je mets à votre service mes compétences en {skills}. |
+| `career.documents.template.points` | Je souhaite notamment mettre en avant : {points}. |
+| `career.documents.template.letter.closing` | Je reste à votre disposition pour un entretien et vous remercie de l'attention portée à ma candidature. |
+| `career.documents.template.bio.intro` | {name} : {headline}. |
+| `career.documents.template.bio.experience` | Expérience récente : {lastRole}. |
+| `career.documents.template.bio.skills` | Compétences principales : {skills}. |
+| `career.documents.template.email.intro` | Veuillez trouver ci-joint ma candidature au poste de {jobTitle}, accompagnée de mon CV. |
+| `career.documents.template.email.skills` | Mon profil met en avant les compétences suivantes : {skills}. |
+| `career.documents.template.closing` | Je reste disponible pour un échange. Bien cordialement, |
+| `career.documents.template.thankYou.body` | Je vous remercie pour notre entretien au sujet du poste de {jobTitle}. Nos échanges ont confirmé mon intérêt pour ce poste. |
+| `career.documents.template.notice` | Cette proposition reprend uniquement les informations de votre profil. Relisez-la et complétez-la avant de l'envoyer. |
 
 ### `/app/career/linkedin` · Préparation LinkedIn
 
@@ -2714,6 +2759,10 @@ Conventions :
 | `career.linkedin.checklist.open` | L'option « Ouvert aux opportunités » si vous cherchez |
 | `career.linkedin.checklist.certificates` | Vos attestations Jumanly dans « Licences et certifications » |
 | `career.linkedin.disclaimer` | Jumanly n'est pas affilié à LinkedIn et ne publie rien sur votre compte. |
+| `career.linkedin.empty` | Générez des propositions à partir de votre profil Jumanly. Rien n'est publié sur LinkedIn. |
+| `career.linkedin.generatedAt` | Propositions du {date, date, medium} |
+| `career.linkedin.template.about` | {headline}. Compétences principales : {skills}. Expérience récente : {lastRole}. |
+| `career.linkedin.profileHint` | Plus votre profil Jumanly est complet, plus les propositions sont utiles. |
 
 ### `/app/career/entretiens` · Simulations d'entretien
 
@@ -2732,6 +2781,7 @@ Conventions :
 | `career.interviews.quota.voice` | {used}/{quota} simulations orales ce mois |
 | `career.interviews.quota.reached` | Vous avez utilisé toutes vos simulations de ce mois. Elles se renouvellent le {date, date, long}. |
 | `career.interviews.setup.title` | Préparer la séance |
+| `career.interviews.setup.mode` | Mode |
 | `career.interviews.setup.job.text` | Poste visé |
 | `career.interviews.setup.job.fromOffer` | Partir d'une offre enregistrée ou d'une candidature |
 | `career.interviews.setup.type.text` | Type d'entretien |
@@ -2762,6 +2812,10 @@ Conventions :
 | `career.interviews.voice.speaking` | L'intervieweur parle |
 | `career.interviews.voice.retry` | Recommencer ma réponse |
 | `career.interviews.voice.privacy` | Vos enregistrements servent uniquement à votre retour. Ils sont supprimés après {days} jours. |
+| `career.interviews.voice.noRecording` | Aucun enregistrement n'est conservé : votre navigateur transcrit votre réponse, que vous relisez avant de l'envoyer. |
+| `career.interviews.voice.unsupported` | Votre navigateur ne permet pas la dictée. Répondez par écrit : la question est lue à voix haute et le retour reste le même. |
+| `career.interviews.voice.listen` | Réécouter la question |
+| `career.interviews.voice.duration` | Durée de votre réponse : {seconds} s |
 | `career.interviews.feedback.title` | Votre retour |
 | `career.interviews.feedback.overall` | Impression générale |
 | `career.interviews.feedback.strengths` | Points forts |
@@ -2778,6 +2832,66 @@ Conventions :
 | `career.interviews.history.title` | Séances précédentes |
 | `career.interviews.history.empty` | Votre première simulation apparaîtra ici. |
 | `career.interviews.history.item` | {type} · {date, date, medium} · {mode} |
+| `career.interviews.history.inProgress` | En cours |
+| `career.interviews.history.open` | Ouvrir la séance |
+| `career.interviews.setup.job.none` | Aucune offre : je saisis le poste |
+| `career.interviews.setup.job.placeholder` | Ex. : Chargé de clientèle |
+| `career.interviews.setup.questions` | {count} questions environ |
+| `career.interviews.error.consent` | Les simulations utilisent l'IA. Activez-la dans vos paramètres de confidentialité pour commencer. |
+| `career.interviews.error.invalid` | Vérifiez le poste visé et les options choisies. |
+| `career.interviews.session.answered` | Votre réponse |
+| `career.interviews.session.progress` | {done} réponses sur {total} |
+| `career.interviews.session.allAnswered` | Vous avez répondu à toutes les questions. Terminez la séance pour recevoir votre retour. |
+| `career.interviews.session.back` | Toutes mes simulations |
+| `career.interviews.feedback.level.solid` | Solide |
+| `career.interviews.feedback.level.developing` | En progrès |
+| `career.interviews.feedback.level.toWork` | À travailler |
+| `career.interviews.feedback.rules` | Retour établi par des règles simples (longueur, exemples, structure). Il vous aide à progresser, il ne prédit pas le résultat d'un vrai entretien. |
+| `career.interviews.feedback.notAnswered` | Sans réponse |
+| `career.interviews.feedback.rule.answered` | Vous avez mené l'exercice jusqu'au bout : c'est la meilleure façon de progresser. |
+| `career.interviews.feedback.rule.examples` | Vos réponses s'appuient sur des exemples concrets. |
+| `career.interviews.feedback.rule.structure` | Vos réponses suivent une structure claire : situation, action, résultat. |
+| `career.interviews.feedback.rule.concise` | Vos réponses ont une longueur adaptée et des phrases faciles à suivre. |
+| `career.interviews.feedback.rule.pace` | Votre débit à l'oral est régulier et facile à suivre. |
+| `career.interviews.feedback.rule.short` | Réponse courte : développez avec un exemple tiré de votre parcours. |
+| `career.interviews.feedback.rule.long` | Réponse longue : allez à l'essentiel en deux ou trois idées. |
+| `career.interviews.feedback.rule.noExample` | Appuyez-vous sur un exemple précis : un projet, une mission, un chiffre. |
+| `career.interviews.feedback.rule.noResult` | Terminez par le résultat obtenu : ce qui a changé grâce à votre action. |
+| `career.interviews.feedback.rule.noAnswer` | Certaines questions sont restées sans réponse : reprenez-les lors d'une prochaine séance. |
+| `career.interviews.feedback.rule.slow` | Débit un peu lent : préparez vos idées clés pour gagner en fluidité. |
+| `career.interviews.feedback.rule.fast` | Débit rapide : marquez des pauses pour laisser le temps de suivre. |
+| `career.interviews.bank.hr.1` | Présentez-vous en quelques minutes : votre parcours et ce qui vous amène vers le poste de {jobTitle}. |
+| `career.interviews.bank.hr.2` | Pourquoi souhaitez-vous rejoindre notre organisation ? |
+| `career.interviews.bank.hr.3` | Quelles sont vos principales qualités pour réussir comme {jobTitle} ? |
+| `career.interviews.bank.hr.4` | Parlez-nous d'un point que vous cherchez à améliorer et de ce que vous faites pour y arriver. |
+| `career.interviews.bank.hr.5` | Comment vous organisez-vous lorsque plusieurs tâches urgentes arrivent en même temps ? |
+| `career.interviews.bank.hr.6` | Racontez une situation où vous avez dû travailler avec une personne au caractère difficile. |
+| `career.interviews.bank.hr.7` | Où vous voyez-vous dans trois ans ? |
+| `career.interviews.bank.hr.8` | Avez-vous des questions à nous poser sur le poste ? |
+| `career.interviews.bank.technical.1` | Décrivez un projet récent en lien avec le métier de {jobTitle} : votre rôle et les outils utilisés. |
+| `career.interviews.bank.technical.2` | Quelle compétence technique maîtrisez-vous le mieux ? Donnez un exemple d'utilisation. |
+| `career.interviews.bank.technical.3` | Comment vérifiez-vous la qualité de votre travail avant de le livrer ? |
+| `career.interviews.bank.technical.4` | Racontez un problème technique difficile et la façon dont vous l'avez résolu. |
+| `career.interviews.bank.technical.5` | Comment vous tenez-vous à jour dans votre domaine ? |
+| `career.interviews.bank.technical.6` | Si vous deviez expliquer une notion clé de votre métier à un débutant, que diriez-vous ? |
+| `career.interviews.bank.technical.7` | Quelle erreur avez-vous commise dans un projet et qu'en avez-vous appris ? |
+| `career.interviews.bank.technical.8` | Comment organiseriez-vous vos trente premiers jours comme {jobTitle} ? |
+| `career.interviews.bank.motivation.1` | Qu'est-ce qui vous attire dans le métier de {jobTitle} ? |
+| `career.interviews.bank.motivation.2` | Racontez les étapes de votre parcours qui vous ont conduit jusqu'ici. |
+| `career.interviews.bank.motivation.3` | Quel accomplissement vous rend le plus fier, et pourquoi ? |
+| `career.interviews.bank.motivation.4` | Qu'attendez-vous de votre prochain poste ? |
+| `career.interviews.bank.motivation.5` | Pourquoi devrions-nous retenir votre candidature plutôt qu'une autre ? |
+| `career.interviews.bank.motivation.6` | Quelles formations ou expériences récentes vous préparent à ce poste ? |
+| `career.interviews.bank.motivation.7` | Dans quel environnement de travail donnez-vous le meilleur de vous-même ? |
+| `career.interviews.bank.motivation.8` | Que savez-vous de notre secteur et de ses enjeux ? |
+| `career.interviews.bank.behavioral.1` | Un client mécontent vous appelle pour une erreur qui n'est pas la vôtre. Que faites-vous ? |
+| `career.interviews.bank.behavioral.2` | Votre responsable vous confie une tâche que vous n'avez jamais faite, à rendre demain. Comment procédez-vous ? |
+| `career.interviews.bank.behavioral.3` | Racontez une situation où vous avez pris une initiative sans qu'on vous le demande. |
+| `career.interviews.bank.behavioral.4` | Un collègue ne fait pas sa part dans un projet commun. Comment réagissez-vous ? |
+| `career.interviews.bank.behavioral.5` | Racontez un moment où vous avez dû convaincre quelqu'un. |
+| `career.interviews.bank.behavioral.6` | Vous découvrez une erreur dans un document déjà envoyé. Que faites-vous ? |
+| `career.interviews.bank.behavioral.7` | Décrivez une situation où vous avez dû vous adapter rapidement à un changement. |
+| `career.interviews.bank.behavioral.8` | Racontez un échec et ce que vous avez fait ensuite. |
 
 ### `/app/career/plan` · Plan de progression
 
@@ -2809,6 +2923,37 @@ Conventions :
 | `career.plan.report.text` | Rapport de progression détaillé |
 | `career.plan.report.locked` | Rapport détaillé · Disponible avec {plan} |
 | `career.plan.report.download` | Télécharger le rapport (PDF) |
+| `career.plan.report.desc` | Un bilan de vos formations, de vos compétences, de vos outils Career et de vos candidatures, à télécharger et à garder. |
+| `career.plan.report.pdf.title` | Rapport de progression |
+| `career.plan.report.pdf.subtitle` | {name} · {date, date, long} |
+| `career.plan.report.pdf.footer` | Rapport établi par Jumanly à partir de vos propres données. Il décrit votre parcours, il ne note pas votre profil. |
+| `career.plan.report.section.plan` | Plan de progression |
+| `career.plan.report.section.learn` | Formations |
+| `career.plan.report.section.courses` | Progression par formation |
+| `career.plan.report.section.profile` | Profil et documents |
+| `career.plan.report.section.interviews` | Simulations d'entretien |
+| `career.plan.report.section.jobs` | Candidatures |
+| `career.plan.report.row.goal` | Objectif |
+| `career.plan.report.row.steps` | Étapes réalisées |
+| `career.plan.report.row.enrolled` | Formations suivies |
+| `career.plan.report.row.completed` | Formations terminées |
+| `career.plan.report.row.certificates` | Attestations obtenues |
+| `career.plan.report.row.completeness` | Profil complété |
+| `career.plan.report.row.skills` | Compétences déclarées |
+| `career.plan.report.row.verified` | Compétences vérifiées |
+| `career.plan.report.row.cvs` | CV |
+| `career.plan.report.row.documents` | Lettres et documents |
+| `career.plan.report.row.interviews` | Simulations terminées |
+| `career.plan.report.row.recentInterviews` | Simulations des 90 derniers jours |
+| `career.plan.report.row.criterion` | Dernière simulation · {criterion} |
+| `career.plan.report.row.applications` | Candidatures envoyées |
+| `career.plan.report.row.recentApplications` | Candidatures des 90 derniers jours |
+| `career.plan.report.row.inProgress` | Candidatures en cours |
+| `career.plan.report.row.interviewStage` | Candidatures au stade de l'entretien ou de l'offre |
+| `career.plan.report.row.hired` | Recrutements |
+| `career.plan.report.value.steps` | {done} sur {total} |
+| `career.plan.report.value.percent` | {percent} % |
+| `career.plan.report.value.none` | Aucun |
 | `career.plan.encouragement` | Une étape à la fois. Vous avez déjà fait {done} {done, plural, one {étape} other {étapes}}. |
 | `career.plan.saved` | Plan mis à jour. |
 
@@ -2843,6 +2988,31 @@ Conventions :
 | `career.portfolio.intro` | Texte de présentation |
 | `career.portfolio.preview` | Voir la page |
 | `career.portfolio.saved` | Portfolio enregistré. |
+| `career.portfolio.deleted` | Projet supprimé. |
+| `career.portfolio.limit` | Vous avez atteint {max} projets. Supprimez-en un pour en ajouter un autre. |
+| `career.portfolio.error` | Vérifiez les informations du projet : les liens commencent par https://. |
+| `career.portfolio.projects` | Projets |
+| `career.portfolio.settings` | Présentation |
+| `career.portfolio.saveSettings` | Enregistrer la présentation |
+| `career.portfolio.layoutOption.classic` | Classique |
+| `career.portfolio.layoutOption.grid` | Grille |
+| `career.portfolio.accent.text` | Couleur d'accent |
+| `career.portfolio.accent.sapin` | Sapin |
+| `career.portfolio.accent.feuille` | Feuille |
+| `career.portfolio.accent.ardoise` | Ardoise |
+| `career.portfolio.public.privacy` | La page publique montre votre nom, votre titre, votre présentation et vos projets. Rien d'autre de votre profil. |
+| `career.portfolio.project.skillsHint` | Séparez les compétences par des virgules. |
+| `career.portfolio.project.mediaHint` | Jusqu'à 3 adresses https (images, vidéos ou documents en ligne), séparées par un espace. |
+| `career.portfolio.project.save` | Enregistrer le projet |
+| `career.portfolio.project.edit` | Modifier ce projet |
+| `career.portfolio.project.delete.cta` | Supprimer |
+| `career.portfolio.page.title` | Portfolio de {name} |
+| `career.portfolio.page.open` | Voir le projet |
+| `career.portfolio.page.media` | Médias |
+| `career.portfolio.page.footer` | Portfolio publié sur Jumanly |
+| `career.portfolio.page.empty` | Aucun projet publié pour l'instant. |
+| `career.portfolio.page.unavailable` | Ce portfolio n'est pas disponible. Son auteur l'a peut-être retiré. |
+| `career.portfolio.page.seo` | Portfolio · Jumanly |
 
 ---
 
@@ -7636,6 +7806,8 @@ Conventions :
 | `admin.courses.field.duration` | Durée totale (minutes) |
 | `admin.courses.field.prerequisites` | Prérequis |
 | `admin.courses.field.cover` | Image de couverture (adresse https) |
+| `admin.courses.field.jobFamilies.text` | Métiers des exercices |
+| `admin.courses.field.jobFamilies.hint` | Familles de métiers visées par les exercices métier, séparées par des virgules. |
 | `admin.courses.field.outcomesHint` | Un objectif par ligne. |
 | `admin.courses.field.slugHint` | Laissez tel quel pour garder l'adresse actuelle. |
 | `admin.courses.field.skillsFormat` | Séparez les compétences par des virgules. Seules celles du référentiel sont retenues. |
@@ -7677,6 +7849,9 @@ Conventions :
 | `admin.courses.lesson.resourcesHint` | Une ressource par ligne : Titre | adresse | type (ex. : Modèle de CV | https://… | PDF). |
 | `admin.courses.lesson.resourcesInvalid` | {count, plural, one {# ligne de ressource ignorée} other {# lignes de ressources ignorées}} : vérifiez le format. |
 | `admin.courses.lesson.isPreview` | Leçon en aperçu public (visible sans compte) |
+| `admin.courses.lesson.jobSpecific.text` | Exercice métier (réservé aux forfaits qui l'incluent) |
+| `admin.courses.lesson.jobSpecific.hint` | Facultatif pour l'apprenant : il ne compte pas dans la progression ni dans l'attestation. |
+| `admin.courses.lesson.jobSpecific.badge` | Exercice métier |
 | `admin.courses.lesson.previewBadge` | Aperçu public |
 | `admin.courses.lesson.video.text` | Vidéo |
 | `admin.courses.lesson.video.upload` | Téléverser la vidéo |

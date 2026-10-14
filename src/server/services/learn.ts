@@ -5,7 +5,7 @@
 import { randomInt } from "node:crypto";
 import { z } from "zod";
 import type { Prisma, PrismaClient, QuestionType } from "@/generated/prisma/client";
-import { level, type Subject } from "@/server/entitlements";
+import { can, level, type Subject } from "@/server/entitlements";
 import { catalogRank } from "./plans";
 import { ensureProfile, refreshCompleteness } from "./profile";
 
@@ -39,6 +39,16 @@ export function lessonsOf(course: Pick<LearnerCourse, "modules">) {
     module.lessons.map((lesson) => ({ ...lesson, module })),
   );
 }
+
+/**
+ * Lessons that count in progress and for the attestation: job-specific exercises
+ * (`learn.exercises.job_specific`) are optional extras, so a plan without them can finish.
+ */
+export function requiredLessons(course: Pick<LearnerCourse, "modules">) {
+  return lessonsOf(course).filter((lesson) => !lesson.jobSpecific);
+}
+
+export const JOB_EXERCISES_KEY = "learn.exercises.job_specific";
 
 /** A published course with its program, the learner's enrollment and whether it is open. */
 export async function getLearnerCourse(db: PrismaClient, userId: string, slug: string) {
@@ -106,6 +116,8 @@ async function lessonContext(db: PrismaClient, userId: string, lessonId: string)
   if (!found) throw new LearnError("notFound");
   if (!found.open) throw new LearnError("locked");
   if (!found.enrollment) throw new LearnError("notEnrolled");
+  if (lesson.jobSpecific && !(await can(db, { type: "user", id: userId }, JOB_EXERCISES_KEY)))
+    throw new LearnError("locked");
   return { ...found, enrollment: found.enrollment, lesson };
 }
 
@@ -118,6 +130,7 @@ async function markDone(
   lessonId: string,
 ) {
   const all = lessonsOf(ctx.course).map((lesson) => lesson.id);
+  const required = requiredLessons(ctx.course).map((lesson) => lesson.id);
   const done = [...new Set([...ctx.enrollment.completedLessons, lessonId])].filter((id) =>
     all.includes(id),
   );
@@ -125,7 +138,7 @@ async function markDone(
     where: { id: ctx.enrollment.id },
     data: {
       completedLessons: done,
-      progress: percentOf(done.length, all.length),
+      progress: percentOf(done.filter((id) => required.includes(id)).length, required.length),
       lastLessonId: lessonId,
     },
   });
@@ -252,7 +265,7 @@ export async function maybeCertify(db: PrismaClient, enrollmentId: string, now =
       course: { include: courseInclude },
     },
   });
-  const all = lessonsOf(enrollment.course).map((lesson) => lesson.id);
+  const all = requiredLessons(enrollment.course).map((lesson) => lesson.id);
   const finished = all.length > 0 && all.every((id) => enrollment.completedLessons.includes(id));
   if (!finished) return null;
   if (!enrollment.completedAt) {

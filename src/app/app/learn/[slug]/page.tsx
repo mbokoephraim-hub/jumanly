@@ -8,21 +8,24 @@ import { CourseOverview } from "@/components/learn/course-overview";
 import { LessonNotes } from "@/components/learn/lesson-notes";
 import { QuizPanel } from "@/components/learn/quiz-panel";
 import { VideoPlayer, speeds } from "@/components/learn/video-player";
-import { Alert, Badge, Button, ButtonLink, ProgressBar } from "@/components/ui";
+import { Alert, Badge, Button, ButtonLink, PlanLock, ProgressBar } from "@/components/ui";
 import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { videoProvider } from "@/server/adapters/video";
 import { completeLessonAction } from "@/server/actions/learn";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { can } from "@/server/entitlements";
 import { getPublicPlans } from "@/server/queries/public";
 import {
   getLearnerCourse,
+  JOB_EXERCISES_KEY,
   lessonParagraphs,
   lessonsOf,
   parseResources,
+  requiredLessons,
 } from "@/server/services/learn";
-import { planForCatalogLevel } from "@/server/services/plans";
+import { planForCatalogLevel, talentPlanFor } from "@/server/services/plans";
 
 export async function generateMetadata({
   params,
@@ -89,7 +92,11 @@ export default async function LearnCoursePage({
   const done = new Set(enrollment.completedLessons);
   const lessonHref = (id: string) => `/app/learn/${course.slug}?lecon=${id}`;
   const lessonNumber = current.module.lessons.findIndex((lesson) => lesson.id === current.id) + 1;
-  const remaining = lessons.filter((lesson) => !done.has(lesson.id)).length;
+  const required = requiredLessons(course);
+  const remaining = required.filter((lesson) => !done.has(lesson.id)).length;
+  const jobExercises = await can(db, { type: "user", id: user.id }, JOB_EXERCISES_KEY);
+  const locked = current.jobSpecific && !jobExercises;
+  const jobPlan = talentPlanFor(plans, JOB_EXERCISES_KEY);
   const paragraphs = lessonParagraphs(current.content);
   const resources = parseResources(current.resources);
   const playback = current.kind === "video" ? videoProvider().playback(current.videoId) : null;
@@ -137,7 +144,28 @@ export default async function LearnCoursePage({
             <h1 className="text-h1">{current.title}</h1>
           </header>
 
+          {current.jobSpecific && (
+            <div className="flex flex-col gap-1">
+              <Badge tone="career" className="self-start">
+                {t("learn.player.exercise.jobSpecific.text")}
+              </Badge>
+              <p className="text-sm text-ardoise">
+                {[
+                  t("learn.player.exercise.jobSpecific.optional"),
+                  course.jobFamilies.length > 0
+                    ? t("learn.player.exercise.jobSpecific.families", {
+                        families: course.jobFamilies.join(", "),
+                      })
+                    : null,
+                ]
+                  .filter(Boolean)
+                  .join(" ")}
+              </p>
+            </div>
+          )}
+
           {current.kind === "video" &&
+            !locked &&
             (playback ? (
               <VideoPlayer
                 src={playback.src}
@@ -166,7 +194,12 @@ export default async function LearnCoursePage({
               </p>
             ))}
 
-          {current.kind === "quiz" ? (
+          {locked ? (
+            <PlanLock
+              plan={jobPlan}
+              description={t("learn.player.exercise.jobSpecific.locked", { plan: jobPlan })}
+            />
+          ) : current.kind === "quiz" ? (
             <QuizPanel
               userId={user.id}
               slug={course.slug}
@@ -191,7 +224,7 @@ export default async function LearnCoursePage({
             </section>
           )}
 
-          {resources.length > 0 && (
+          {!locked && resources.length > 0 && (
             <section className="flex flex-col gap-3" aria-labelledby="lesson-resources">
               <h2 id="lesson-resources" className="text-h2">
                 {t("learn.player.tab.resources")}
@@ -226,7 +259,7 @@ export default async function LearnCoursePage({
             </section>
           )}
 
-          {current.transcript && (
+          {!locked && current.transcript && (
             <details className="rounded-card bg-blanc p-5">
               <summary className="cursor-pointer font-semibold">
                 {t("learn.player.transcript")}
@@ -237,6 +270,7 @@ export default async function LearnCoursePage({
 
           <div className="flex flex-wrap items-center gap-3">
             {current.kind !== "quiz" &&
+              !locked &&
               (done.has(current.id) ? (
                 <Badge tone="success" icon={<Icon name="valider" className="size-4" />}>
                   {t("learn.player.completed")}
@@ -273,8 +307,8 @@ export default async function LearnCoursePage({
           <ProgressBar value={enrollment.progress} label={t("learn.player.toc.title")} />
           <p className="text-sm">
             {t("learn.player.toc.progress", {
-              done: done.size,
-              total: lessons.length,
+              done: required.filter((lesson) => done.has(lesson.id)).length,
+              total: required.length,
               percent: enrollment.progress,
             })}
           </p>
@@ -320,7 +354,14 @@ export default async function LearnCoursePage({
                           }
                           className="size-4 shrink-0"
                         />
-                        <span className="flex-1">{lesson.title}</span>
+                        <span className="flex-1">
+                          {lesson.title}
+                          {lesson.jobSpecific && (
+                            <span className="block text-ardoise text-caption">
+                              {t("learn.player.exercise.jobSpecific.text")}
+                            </span>
+                          )}
+                        </span>
                         {done.has(lesson.id) && (
                           <span className="sr-only">{t("learn.player.lessonDone")}</span>
                         )}

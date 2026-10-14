@@ -242,11 +242,16 @@ export async function consume(
     key,
     periodStart: plan.periodStart,
   };
-  await db.usageCounter.upsert({
-    where: { subjectType_subjectId_key_periodStart: where },
-    update: {},
-    create: { ...where, periodEnd: plan.periodEnd, used: 0 },
-  });
+  // Two first uses at the same moment both try to create the counter: the loser finds it made.
+  await db.usageCounter
+    .upsert({
+      where: { subjectType_subjectId_key_periodStart: where },
+      update: {},
+      create: { ...where, periodEnd: plan.periodEnd, used: 0 },
+    })
+    .catch((error: unknown) => {
+      if ((error as { code?: string }).code !== "P2002") throw error;
+    });
   const updated = await db.usageCounter.updateMany({
     where: max < 0 ? where : { ...where, used: { lte: max - amount } },
     data: { used: { increment: amount } },
