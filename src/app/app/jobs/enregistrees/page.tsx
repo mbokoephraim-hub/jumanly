@@ -6,6 +6,7 @@ import { clearClosedSavedJobs, toggleSaveAction } from "@/server/actions/jobs";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { isJobOpen } from "@/server/services/jobs";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talent.jobs.saved");
@@ -47,19 +48,19 @@ export default async function SavedJobsPage() {
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-h1">{t("title")}</h1>
-          <p className="text-ardoise">{t("count", { count: jobs.length })}</p>
-        </div>
-        {hasClosed && (
-          <form action={clearClosedSavedJobs}>
-            <Button type="submit" variant="secondary" size="sm">
-              {t("clearClosed")}
-            </Button>
-          </form>
-        )}
-      </header>
+      <AppPageHeader
+        title={t("title")}
+        subtitle={t("count", { count: jobs.length })}
+        actions={
+          hasClosed && (
+            <form action={clearClosedSavedJobs}>
+              <Button type="submit" variant="secondary" size="sm">
+                {t("clearClosed")}
+              </Button>
+            </form>
+          )
+        }
+      />
       {jobs.length === 0 ? (
         <EmptyState
           title={t("empty.text")}

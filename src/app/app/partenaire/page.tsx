@@ -4,6 +4,7 @@ import { Alert, ButtonLink, EmptyState, StatCard, Table, Td, Th } from "@/compon
 import { db } from "@/server/db";
 import { requirePartner } from "@/server/partner-context";
 import { partnerDashboard, type Cell } from "@/server/services/partners";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("partner.dashboard");
@@ -29,11 +30,11 @@ export default async function PartnerDashboardPage() {
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="flex flex-col gap-2">
-        <p className="text-eyebrow">{t("partner.dashboard.eyebrow", { org: organization.name })}</p>
-        <h1 className="text-h1">{t("partner.dashboard.title")}</h1>
-        <p className="text-ardoise">{t("partner.dashboard.subtitle")}</p>
-      </header>
+      <AppPageHeader
+        eyebrow={t("partner.dashboard.eyebrow", { org: organization.name })}
+        title={t("partner.dashboard.title")}
+        subtitle={t("partner.dashboard.subtitle")}
+      />
       <Alert tone="info" title={t("partner.dashboard.privacy")} />
 
       {data.batches.length === 0 ? (

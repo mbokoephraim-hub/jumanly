@@ -5,6 +5,7 @@ import { AiOrb } from "@/components/brand/ai-orb";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
+import { TabRail } from "@/components/motion/tab-rail";
 
 /** Shared pieces of the Career pages (mockups 03-08 to 03-15). */
 
@@ -26,26 +27,28 @@ export async function CareerTabs({ active }: { active: CareerTab }) {
   const t = await getTranslations("career");
   const d = dynamic(t);
   return (
-    <nav aria-label={t("nav.label")} className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0">
-      <ul className="flex w-max gap-1.5">
-        {careerTabs.map((tab) => (
-          <li key={tab.key}>
-            <Link
-              href={tab.href}
-              aria-current={tab.key === active ? "page" : undefined}
-              className={cx(
-                "flex h-9 items-center gap-[5px] rounded-pill px-[11px] text-xs font-medium whitespace-nowrap",
-                tab.key === active
-                  ? "bg-sapin text-blanc"
-                  : "bg-blanc text-sapin ring-1 ring-brume ring-inset hover:bg-lime-clair",
-              )}
-            >
-              <Icon name={tab.icon} className="size-3.5" />
-              {tab.key === "home" ? t("nav.home") : d(`home.${tab.key}.title`)}
-            </Link>
-          </li>
-        ))}
-      </ul>
+    <nav aria-label={t("nav.label")}>
+      <TabRail name="career">
+        <ul className="flex w-max gap-1.5">
+          {careerTabs.map((tab) => (
+            <li key={tab.key}>
+              <Link
+                href={tab.href}
+                aria-current={tab.key === active ? "page" : undefined}
+                className={cx(
+                  "flex h-9 items-center gap-[5px] rounded-pill px-[11px] text-xs font-medium whitespace-nowrap",
+                  tab.key === active
+                    ? "bg-sapin text-blanc"
+                    : "bg-blanc text-sapin ring-1 ring-brume ring-inset hover:bg-lime-clair",
+                )}
+              >
+                <Icon name={tab.icon} className="size-3.5" />
+                {tab.key === "home" ? t("nav.home") : d(`home.${tab.key}.title`)}
+              </Link>
+            </li>
+          ))}
+        </ul>
+      </TabRail>
     </nav>
   );
 }

@@ -1,6 +1,7 @@
 "use server";
 
 import { APIError } from "better-auth/api";
+import { refresh } from "next/cache";
 import { headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
@@ -169,4 +170,16 @@ export async function scheduleDeletion(formData: FormData) {
   });
   await db.session.deleteMany({ where: { userId: user.id } });
   redirect("/connexion?suppression=1");
+}
+
+/** « Réduire les animations » (docs/experience-animee § 0.4): kept on the account. */
+export async function updateDisplay(formData: FormData) {
+  const user = await requireUser("/app/parametres");
+  await db.user.update({
+    where: { id: user.id },
+    data: { reduceMotion: formData.get("reduceMotion") === "on" },
+  });
+  // The shell (layout) reads the preference: it must render again, not only the page.
+  refresh();
+  back("compte", { ok: "1" });
 }

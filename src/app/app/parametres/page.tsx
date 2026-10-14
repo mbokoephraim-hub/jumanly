@@ -24,6 +24,7 @@ import {
   scheduleDeletion,
   setTwoFactor,
   updateAccount,
+  updateDisplay,
   updatePrivacy,
 } from "@/server/actions/settings";
 import { auth } from "@/server/auth";
@@ -31,6 +32,8 @@ import { getSession, requireUser, type CurrentUser } from "@/server/auth/session
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
 import { ownedOrganization } from "@/server/services/accounts";
+import { AppPageHeader } from "@/components/app/page-header";
+import { TabRail } from "@/components/motion/tab-rail";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("settings.seo");
@@ -57,26 +60,27 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
   const active: TabId = tabs.find((tab) => tab.id === one(params.onglet))?.id ?? "compte";
   return (
     <div className="flex flex-col gap-6">
-      <h1 className="text-h1">{t("settings.title")}</h1>
-      <nav
-        aria-label={t("settings.title")}
-        className="flex max-w-full gap-6 overflow-x-auto border-b border-brume"
-      >
-        {tabs.map((tab) => (
-          <Link
-            key={tab.id}
-            href={`/app/parametres?onglet=${tab.id}`}
-            aria-current={tab.id === active ? "page" : undefined}
-            className={cx(
-              "-mb-px border-b-2 py-3 text-[15px] font-medium whitespace-nowrap",
-              tab.id === active
-                ? "border-feuille text-sapin"
-                : "border-transparent text-ardoise hover:text-sapin",
-            )}
-          >
-            {t(`settings.tab.${tab.key}`)}
-          </Link>
-        ))}
+      <AppPageHeader title={t("settings.title")} />
+      <nav aria-label={t("settings.title")}>
+        <TabRail name="parametres">
+          <div className="flex w-max gap-6 px-3">
+            {tabs.map((tab) => (
+              <Link
+                key={tab.id}
+                href={`/app/parametres?onglet=${tab.id}`}
+                aria-current={tab.id === active ? "page" : undefined}
+                className={cx(
+                  "-mb-px border-b-2 py-3 text-[15px] font-medium whitespace-nowrap",
+                  tab.id === active
+                    ? "border-feuille text-sapin"
+                    : "border-transparent text-sapin hover:border-brume",
+                )}
+              >
+                {t(`settings.tab.${tab.key}`)}
+              </Link>
+            ))}
+          </div>
+        </TabRail>
       </nav>
       {active === "compte" && <AccountTab user={user} params={params} />}
       {active === "securite" && <SecurityTab user={user} params={params} />}
@@ -160,6 +164,19 @@ async function AccountTab({ user, params }: { user: CurrentUser; params: Params 
             {t("settings.account.plan.manage")}
           </ButtonLink>
         </div>
+      </Panel>
+      <Panel title={t("settings.display.title")}>
+        <form action={updateDisplay} className="flex flex-col items-start gap-4">
+          <Checkbox
+            id="reduceMotion"
+            name="reduceMotion"
+            value="on"
+            defaultChecked={user.reduceMotion}
+            label={t("settings.display.reduceMotion.text")}
+            hint={t("settings.display.reduceMotion.hint")}
+          />
+          <Button type="submit">{t("settings.save")}</Button>
+        </form>
       </Panel>
       <Panel title={t("settings.account.memberships.text")}>
         {memberships.length === 0 ? (

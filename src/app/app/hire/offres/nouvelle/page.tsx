@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { JobForm } from "@/components/hire/job-form";
 import { requireHire } from "@/server/hire-context";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.jobForm");
@@ -20,7 +21,7 @@ export default async function NewJobPage({ searchParams }: PageProps<"/app/hire/
       <Link href="/app/hire/offres" className="text-sm underline">
         {t("jobs.title")}
       </Link>
-      <h1 className="text-h1">{t("jobForm.title.new")}</h1>
+      <AppPageHeader title={t("jobForm.title.new")} />
       <JobForm
         params={{
           erreur: one(params.erreur),

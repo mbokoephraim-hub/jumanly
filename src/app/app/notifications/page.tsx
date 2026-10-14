@@ -11,6 +11,7 @@ import {
   notificationTypes,
   type NotificationType,
 } from "@/server/services/notifications";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("notifications");
@@ -43,16 +44,18 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <h1 className="text-h1">{t("title")}</h1>
-        {unread && (
-          <form action={markNotificationsReadAction}>
-            <Button type="submit" variant="tertiary" size="sm">
-              {t("markAllRead")}
-            </Button>
-          </form>
-        )}
-      </header>
+      <AppPageHeader
+        title={t("title")}
+        actions={
+          unread && (
+            <form action={markNotificationsReadAction}>
+              <Button type="submit" variant="tertiary" size="sm">
+                {t("markAllRead")}
+              </Button>
+            </form>
+          )
+        }
+      />
       {params.ok === "lues" && <Alert tone="success" title={t("allRead")} />}
       <nav aria-label={t("title")} className="flex flex-wrap gap-2">
         {tabs.map((item) => {

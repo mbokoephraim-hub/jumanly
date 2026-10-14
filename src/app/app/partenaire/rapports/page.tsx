@@ -17,6 +17,7 @@ import { requirePartner } from "@/server/partner-context";
 import { partnerReportRows } from "@/server/partner-report-export";
 import { periodRange, reportPeriods } from "@/server/services/hire-reports";
 import { impactReport, listBatches } from "@/server/services/partners";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("partner.reports");
@@ -55,22 +56,22 @@ export default async function PartnerReportsPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-start justify-between gap-3">
-        <div className="flex flex-col gap-2">
-          <h1 className="text-h1">{t("partner.reports.title")}</h1>
-          <p className="text-ardoise">{t("partner.reports.subtitle")}</p>
-        </div>
-        {report.enough && (
-          <ButtonLink
-            href={`/app/partenaire/rapports/export?${params}`}
-            prefetch={false}
-            size="sm"
-            variant="secondary"
-          >
-            {t("partner.reports.export.pdf")}
-          </ButtonLink>
-        )}
-      </header>
+      <AppPageHeader
+        title={t("partner.reports.title")}
+        subtitle={t("partner.reports.subtitle")}
+        actions={
+          report.enough && (
+            <ButtonLink
+              href={`/app/partenaire/rapports/export?${params}`}
+              prefetch={false}
+              size="sm"
+              variant="secondary"
+            >
+              {t("partner.reports.export.pdf")}
+            </ButtonLink>
+          )
+        }
+      />
 
       <Alert tone="info" title={t("partner.reports.privacy.title")}>
         <p>{t("partner.reports.privacy.body")}</p>

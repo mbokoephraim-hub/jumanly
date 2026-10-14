@@ -25,6 +25,7 @@ import {
   reportRank,
 } from "@/server/services/hire-reports";
 import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.reports");
@@ -68,31 +69,33 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-center justify-between gap-3">
-        <h1 className="text-h1">{t("hire.reports.title")}</h1>
-        {exportable ? (
-          <div className="flex flex-wrap gap-2">
-            <ButtonLink
-              href={`/app/hire/rapports/export?${periodQuery}&format=csv`}
-              prefetch={false}
-              size="sm"
-              variant="secondary"
-            >
-              {t("hire.reports.export.csv")}
-            </ButtonLink>
-            <ButtonLink
-              href={`/app/hire/rapports/export?${periodQuery}&format=pdf`}
-              prefetch={false}
-              size="sm"
-              variant="secondary"
-            >
-              {t("hire.reports.export.pdf")}
-            </ButtonLink>
-          </div>
-        ) : (
-          <PlanLock compact plan={orgPlanFor(plans, "reports.export")} />
-        )}
-      </header>
+      <AppPageHeader
+        title={t("hire.reports.title")}
+        actions={
+          exportable ? (
+            <>
+              <ButtonLink
+                href={`/app/hire/rapports/export?${periodQuery}&format=csv`}
+                prefetch={false}
+                size="sm"
+                variant="secondary"
+              >
+                {t("hire.reports.export.csv")}
+              </ButtonLink>
+              <ButtonLink
+                href={`/app/hire/rapports/export?${periodQuery}&format=pdf`}
+                prefetch={false}
+                size="sm"
+                variant="secondary"
+              >
+                {t("hire.reports.export.pdf")}
+              </ButtonLink>
+            </>
+          ) : (
+            <PlanLock compact plan={orgPlanFor(plans, "reports.export")} />
+          )
+        }
+      />
 
       <nav aria-label={t("hire.reports.period.text")} className="flex flex-wrap items-center gap-4">
         {reportPeriods

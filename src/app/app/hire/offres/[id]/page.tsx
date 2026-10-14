@@ -12,6 +12,7 @@ import { requireHire } from "@/server/hire-context";
 import { applicationMatches } from "@/server/matching/service";
 import { getPipeline, HireError, hirePermissions } from "@/server/services/hire";
 import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.pipeline");
@@ -61,31 +62,32 @@ export default async function PipelinePage({
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-3">
-        <Link href="/app/hire/offres" className="text-sm underline">
-          {t("jobs.title")}
-        </Link>
-        <p className="text-eyebrow text-ardoise">
-          {t("pipeline.eyebrow", { org: space.organization.name })}
-        </p>
-        <div className="flex flex-wrap items-center gap-3">
-          <h1 className="text-h1">{job.title}</h1>
-          <JobStatusBadge status={job.status} />
-        </div>
-        <p className="text-ardoise">{t("jobs.row.applications", { count: applications.length })}</p>
-        <div className="flex flex-wrap gap-x-4 gap-y-2 text-sm">
-          {permissions.manage && job.status !== "closed" && (
-            <Link href={`/app/hire/offres/${job.id}/modifier`} className="font-medium underline">
-              {t("jobs.action.edit")}
-            </Link>
-          )}
-          {job.status === "published" && (
-            <Link href={`/offres/${job.slug}`} className="font-medium underline">
-              {t("jobForm.preview.title")}
-            </Link>
-          )}
-        </div>
-      </header>
+      <Link href="/app/hire/offres" className="text-sm underline">
+        {t("jobs.title")}
+      </Link>
+      <AppPageHeader
+        eyebrow={t("pipeline.eyebrow", { org: space.organization.name })}
+        title={job.title}
+        subtitle={t("jobs.row.applications", { count: applications.length })}
+        actions={
+          <>
+            <JobStatusBadge status={job.status} />
+            {permissions.manage && job.status !== "closed" && (
+              <Link
+                href={`/app/hire/offres/${job.id}/modifier`}
+                className="px-2 text-sm font-medium underline"
+              >
+                {t("jobs.action.edit")}
+              </Link>
+            )}
+            {job.status === "published" && (
+              <Link href={`/offres/${job.slug}`} className="px-2 text-sm font-medium underline">
+                {t("jobForm.preview.title")}
+              </Link>
+            )}
+          </>
+        }
+      />
 
       {query.publiee === "1" && (
         <Alert tone="success" title={t("jobForm.publish.success.title")}>

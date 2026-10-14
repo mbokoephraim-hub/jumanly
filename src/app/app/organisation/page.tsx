@@ -27,6 +27,7 @@ import {
 import { orgStructure } from "@/server/services/org-structure";
 import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
 import { VERIFICATION_DAYS } from "@/server/services/verification";
+import { AppPageHeader } from "@/components/app/page-header";
 
 const tabs = ["profil", "verification", "membres", "equipes", "departements", "entites"] as const;
 type Tab = (typeof tabs)[number];
@@ -100,10 +101,7 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-h1">{t("title")}</h1>
-        <p className="text-ardoise">{organization.name}</p>
-      </header>
+      <AppPageHeader title={t("title")} subtitle={organization.name} />
       <nav aria-label={t("title")} className="flex flex-wrap gap-2">
         {[
           { id: "profil", label: t("tab.profile") },

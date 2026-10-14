@@ -26,6 +26,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { templatesAccess } from "@/server/services/cv";
 import { levelOf, listPublicPlans, plansOf, talentPlanFor } from "@/server/services/plans";
+import { TabRail } from "@/components/motion/tab-rail";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.cv");
@@ -149,27 +150,26 @@ export default async function CvTemplatesPage({
 
       <div className="grid gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="flex min-w-0 flex-col gap-4">
-          <nav
-            aria-label={t("templates.title")}
-            className="-mx-4 overflow-x-auto px-4 sm:mx-0 sm:px-0"
-          >
-            <ul className="flex w-max gap-2 sm:w-auto sm:flex-wrap">
-              {filters.map((item) => (
-                <li key={item}>
-                  <Link
-                    href={href({ filtre: item === "all" ? "" : item })}
-                    aria-current={item === filter ? "true" : undefined}
-                    className={pillClass(item === filter ? "dark" : "outline", "sm", "h-10 px-4")}
-                  >
-                    {item === "all"
-                      ? t("templates.filter.all", { count: cvTemplateRegistry.length })
-                      : item === "included"
-                        ? t("templates.filter.included", { count: includedCount })
-                        : t(`templates.filter.${item}`)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
+          <nav aria-label={t("templates.title")}>
+            <TabRail name="cv-modeles">
+              <ul className="flex w-max gap-2">
+                {filters.map((item) => (
+                  <li key={item}>
+                    <Link
+                      href={href({ filtre: item === "all" ? "" : item })}
+                      aria-current={item === filter ? "true" : undefined}
+                      className={pillClass(item === filter ? "dark" : "outline", "sm", "h-10 px-4")}
+                    >
+                      {item === "all"
+                        ? t("templates.filter.all", { count: cvTemplateRegistry.length })
+                        : item === "included"
+                          ? t("templates.filter.included", { count: includedCount })
+                          : t(`templates.filter.${item}`)}
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            </TabRail>
           </nav>
           <div className="flex flex-wrap items-center justify-between gap-2">
             <p className="flex items-center gap-2 text-sm">

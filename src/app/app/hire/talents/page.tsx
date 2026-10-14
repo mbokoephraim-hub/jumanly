@@ -18,6 +18,7 @@ import {
   SEARCH_MAX_PAGES,
   SEARCH_PAGE_SIZE,
 } from "@/server/services/talent-search";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.talents");
@@ -49,7 +50,7 @@ export default async function TalentSearchPage({ searchParams }: PageProps<"/app
   if (searchLevel === "none") {
     return (
       <div className="flex flex-col gap-6">
-        <h1 className="text-h1">{t("hire.talents.title")}</h1>
+        <AppPageHeader title={t("hire.talents.title")} />
         <PlanLock
           plan={orgPlanFor(plans, "hire.talent_search", ["advanced", "deep"])}
           description={t("hire.talents.locked.body")}
@@ -84,11 +85,15 @@ export default async function TalentSearchPage({ searchParams }: PageProps<"/app
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-h1">{t("hire.talents.title")}</h1>
-        <p className="text-ardoise">{t("hire.talents.subtitle")}</p>
-        <p className="text-sm">{quotaLine}</p>
-      </header>
+      <AppPageHeader
+        title={t("hire.talents.title")}
+        subtitle={
+          <>
+            <p>{t("hire.talents.subtitle")}</p>
+            <p>{quotaLine}</p>
+          </>
+        }
+      />
 
       <form method="get" className="flex flex-col gap-4 rounded-card bg-blanc p-6">
         <div className="grid gap-4 sm:grid-cols-3">

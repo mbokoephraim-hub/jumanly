@@ -202,7 +202,7 @@ export default async function CareerPage() {
       <CareerTabs active="home" />
 
       <section
-        aria-labelledby="career-hero"
+        aria-label={t("title")}
         className="relative grid gap-6 overflow-hidden rounded-[28px] bg-sapin p-6 text-blanc lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:p-[34px]"
       >
         <Pattern
@@ -212,16 +212,8 @@ export default async function CareerPage() {
           className="[mask-image:linear-gradient(90deg,transparent_30%,#000)]"
         />
         <div className="relative flex flex-col items-start gap-3">
-          <p className="text-[11px] font-semibold tracking-[0.14em] text-neon uppercase">
-            {t("eyebrow")}
-          </p>
-          <h2
-            id="career-hero"
-            className="text-[28px] leading-[1.1] font-bold tracking-tight lg:text-[36px]"
-          >
-            {t("title")}
-          </h2>
-          <p className="max-w-[540px] text-[15px] leading-6 text-blanc/85 lg:text-[17px]">
+          {/* The banner above carries the eyebrow and the title. */}
+          <p className="max-w-[540px] text-[20px] leading-snug font-semibold lg:text-[24px]">
             {t("subtitle")}
           </p>
           <div className="mt-2 flex flex-wrap gap-3">

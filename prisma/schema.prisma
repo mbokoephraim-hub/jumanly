@@ -517,6 +517,8 @@ model User {
   /// Consent to AI suggestions (CLAUDE.md § 12): date of consent, null when withdrawn.
   aiConsentAt         DateTime?
   newsletter          Boolean                   @default(false)
+  /// « Réduire les animations » (docs/experience-animee § 0.4): no motion in the signed-in space.
+  reduceMotion        Boolean                   @default(false)
   termsAcceptedAt     DateTime?
   /// Account deletion requested: effective at this date unless the user signs in again.
   deletionScheduledAt DateTime?

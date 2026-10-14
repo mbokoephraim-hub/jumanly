@@ -12,6 +12,7 @@ import {
   talentStatus,
   type TalentApplicationStatus,
 } from "@/server/services/applications";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talent.jobs.applications");
@@ -64,10 +65,7 @@ export default async function ApplicationsPage({
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-col gap-1">
-        <h1 className="text-h1">{t("title")}</h1>
-        <p className="text-ardoise">{t("subtitle")}</p>
-      </header>
+      <AppPageHeader title={t("title")} subtitle={t("subtitle")} />
       {params.ok === "retiree" && <Alert tone="success" title={t("withdrawn.toast")} />}
       <nav aria-label={t("title")} className="flex flex-wrap gap-2">
         {tabs.map((item) => (

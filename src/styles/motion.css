@@ -310,3 +310,335 @@
     animation-play-state: paused !important;
   }
 }
+
+/* ───────────────────────── Espace connecté ─────────────────────────
+ * docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md, lot A (socle).
+ * Courbes : Élan (entrées), Départ (sorties), Rebond (confirmations), Arrivée (jauges).
+ * `[data-reduce-motion]` (réglage « Réduire les animations ») coupe tout, comme le réglage du
+ * système. Les apparitions passent par `html[data-motion]`, posé par <AppMotionRoot>.
+ */
+@property --jm-pos {
+  syntax: "<percentage>";
+  inherits: false;
+  initial-value: 0%;
+}
+
+:root {
+  --jm-elan: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --jm-depart: cubic-bezier(0.4, 0, 1, 1);
+  --jm-rebond: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --jm-arrivee: cubic-bezier(0, 0, 0.2, 1);
+}
+
+[data-reduce-motion] *,
+[data-reduce-motion] *::before,
+[data-reduce-motion] *::after {
+  animation: none !important;
+  transition: none !important;
+  scroll-behavior: auto !important;
+}
+
+/* Pilule active du menu : dégradé Signature clair (texte Sapin AA sur chaque couleur). */
+.jm-nav-active {
+  background-image: linear-gradient(
+    120deg,
+    #d9fa72 0%,
+    #a6f26b 30%,
+    #7de36b 55%,
+    #e3f67c 80%,
+    #d9fa72 100%
+  );
+  background-size: 200% 100%;
+  background-position: var(--jm-pos) 0;
+}
+.jm-nav-active.jm-ring::before {
+  opacity: 0;
+  transition: opacity 0.2s ease;
+}
+.jm-nav-active.jm-ring:hover::before {
+  opacity: 1;
+}
+
+/* Curseur-torche : le motif caché sous la barre n'apparaît qu'autour du pointeur. */
+.jm-torch {
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+.jm-torch-pattern {
+  background-image: url(/marque/motifs/motif-orbites-sombre.svg);
+  background-size: 300px;
+  -webkit-mask-image: radial-gradient(
+    circle 120px at var(--mx, 50%) var(--my, 50%),
+    #000,
+    transparent
+  );
+  mask-image: radial-gradient(circle 120px at var(--mx, 50%) var(--my, 50%), #000, transparent);
+}
+.jm-torch-halo {
+  background: radial-gradient(
+    circle 80px at var(--mx, 50%) var(--my, 50%),
+    rgb(166 242 107 / 0.22),
+    transparent
+  );
+}
+
+/* Pastille de non-lu : un anneau Lime pulse autour. */
+.jm-badge-pulse::after {
+  content: "";
+  position: absolute;
+  inset: -3px;
+  border-radius: inherit;
+  box-shadow: 0 0 0 2px rgb(166 242 107 / 0.8);
+  opacity: 0;
+}
+
+/* Rail d'onglets : bords en fondu du côté où il reste des onglets. */
+.jm-rail-scroll {
+  scrollbar-width: none;
+  scroll-snap-type: x proximity;
+  /* Snapping keeps the tabs clear of the faded edges, and never cuts the first one. */
+  scroll-padding-inline: 24px;
+  overscroll-behavior-x: contain;
+}
+.jm-rail-scroll::-webkit-scrollbar {
+  display: none;
+}
+.jm-rail-scroll > * > * {
+  scroll-snap-align: start;
+}
+.jm-rail[data-fade~="start"] .jm-rail-scroll {
+  -webkit-mask-image: linear-gradient(90deg, transparent, #000 40px);
+  mask-image: linear-gradient(90deg, transparent, #000 40px);
+}
+.jm-rail[data-fade~="end"] .jm-rail-scroll {
+  -webkit-mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent);
+  mask-image: linear-gradient(90deg, #000 calc(100% - 40px), transparent);
+}
+.jm-rail[data-fade~="start"][data-fade~="end"] .jm-rail-scroll {
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 40px,
+    #000 calc(100% - 40px),
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 40px, #000 calc(100% - 40px), transparent);
+}
+.jm-rail-arrow {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.2s ease;
+}
+.jm-rail:hover .jm-rail-arrow[data-on],
+.jm-rail-arrow[data-on]:focus-visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+/* Onglet actif en pilule : liseré au dégradé Signature. */
+.jm-rail [aria-current="page"].rounded-pill,
+.jm-rail [aria-current="true"].rounded-pill,
+.jm-rail [aria-pressed="true"].rounded-pill {
+  position: relative;
+  isolation: isolate;
+}
+.jm-rail [aria-current="page"].rounded-pill::before,
+.jm-rail [aria-current="true"].rounded-pill::before,
+.jm-rail [aria-pressed="true"].rounded-pill::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--jm-angle),
+    #d9fa72,
+    #7de36b,
+    #1e9a64,
+    #2fd3a6,
+    #e3f67c,
+    #d9fa72
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+@keyframes jm-down-in {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+@keyframes jm-page-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+}
+@keyframes jm-uword {
+  from {
+    opacity: 0;
+    transform: translateY(0.35em);
+    filter: blur(6px);
+  }
+}
+@keyframes jm-bounce {
+  40% {
+    transform: translateY(-4px) scale(1.12);
+  }
+}
+@keyframes jm-ripple {
+  from {
+    opacity: 0.45;
+    transform: translate(-50%, -50%) scale(0);
+  }
+  to {
+    opacity: 0;
+    transform: translate(-50%, -50%) scale(1);
+  }
+}
+@keyframes jm-ring-pulse {
+  0% {
+    opacity: 0.9;
+    transform: scale(1);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(1.7);
+  }
+}
+/* Dégradés qui glissent : on anime une propriété enregistrée, pas la position elle-même. */
+@keyframes jm-shift {
+  to {
+    --jm-pos: 100%;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Bandeau d'univers : descend en fondu, le titre arrive mot à mot, le dégradé glisse. */
+  .jm-universe {
+    animation: jm-down-in 0.4s var(--jm-elan) both;
+  }
+  .jm-uword {
+    animation: jm-uword 0.5s var(--jm-elan) both;
+    animation-delay: calc(150ms + var(--i, 0) * 40ms);
+  }
+  .jm-flow-slow {
+    background-size: 220% 220%;
+    background-position: var(--jm-pos) 50%;
+    animation: jm-shift 24s ease-in-out infinite alternate;
+  }
+  html[data-motion] .jm-parallax {
+    transform: translateY(calc(var(--jm-par, 0) * 1px));
+    will-change: transform;
+  }
+
+  /* Entrée dans une page : les blocs arrivent l'un après l'autre (8 au plus). */
+  .jm-page > * {
+    animation: jm-page-in 0.28s var(--jm-elan) both;
+  }
+  .jm-page > :nth-child(2) {
+    animation-delay: 40ms;
+  }
+  .jm-page > :nth-child(3) {
+    animation-delay: 80ms;
+  }
+  .jm-page > :nth-child(4) {
+    animation-delay: 120ms;
+  }
+  .jm-page > :nth-child(5) {
+    animation-delay: 160ms;
+  }
+  .jm-page > :nth-child(6) {
+    animation-delay: 200ms;
+  }
+  .jm-page > :nth-child(7) {
+    animation-delay: 240ms;
+  }
+  .jm-page > :nth-child(8) {
+    animation-delay: 280ms;
+  }
+
+  /* Apparition au défilement, dans les deux sens (data-dir posé par <AppMotionRoot>). */
+  html[data-app-motion] [data-reveal] {
+    transition:
+      opacity 0.45s var(--jm-elan),
+      transform 0.5s var(--jm-elan);
+  }
+  html[data-app-motion][data-dir="down"] [data-reveal]:not([data-shown]) {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+  html[data-app-motion][data-dir="up"] [data-reveal]:not([data-shown]) {
+    opacity: 0;
+    transform: translateY(-16px);
+  }
+
+  /* Menu : pilule au dégradé qui circule, icône qui monte au survol, torche. */
+  .jm-nav-active {
+    animation: jm-shift 3s ease-in-out infinite alternate;
+  }
+  .jm-nav-active.jm-ring::before {
+    animation: jm-spin 4s linear infinite;
+  }
+  .jm-nav-link svg {
+    transition:
+      transform 0.15s var(--jm-elan),
+      color 0.15s ease;
+  }
+  .jm-nav-link:hover svg {
+    transform: translateY(-2px);
+  }
+  .jm-nav-link:not([aria-current]):hover svg {
+    color: var(--jm-lime);
+  }
+  @media (pointer: fine) {
+    [data-torch][data-lit] .jm-torch {
+      opacity: 1;
+    }
+  }
+  .jm-badge-pulse::after {
+    animation: jm-ring-pulse 2.4s ease-out infinite;
+  }
+
+  /* Navigation mobile : rebond de l'icône active, onde au toucher, barre qui se cache. */
+  [data-nav-slide="pill"] [aria-current="page"] svg {
+    animation: jm-bounce 0.25s var(--jm-rebond);
+  }
+  [data-nav-slide="pill"] a {
+    position: relative;
+    overflow: hidden;
+  }
+  [data-nav-slide="pill"] a[data-ripple]::after {
+    content: "";
+    position: absolute;
+    left: var(--rx, 50%);
+    top: var(--ry, 50%);
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgb(166 242 107 / 0.5);
+    pointer-events: none;
+    animation: jm-ripple 0.4s var(--jm-arrivee) both;
+  }
+  [data-autohide] {
+    transition: transform 0.25s var(--jm-elan);
+  }
+  [data-autohide][data-hidden] {
+    transform: translate(-50%, calc(100% + 40px));
+  }
+
+  /* Rail d'onglets : liseré qui tourne sur l'onglet actif. */
+  .jm-rail [aria-current="page"].rounded-pill::before,
+  .jm-rail [aria-current="true"].rounded-pill::before,
+  .jm-rail [aria-pressed="true"].rounded-pill::before {
+    animation: jm-spin 6s linear infinite;
+  }
+  .jm-rail-scroll {
+    scroll-behavior: smooth;
+  }
+}

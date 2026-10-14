@@ -5,6 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { CheckoutPanel } from "@/components/billing/checkout-panel";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("checkout");
@@ -21,10 +22,10 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
   const t = await getTranslations();
   return (
     <div className="flex max-w-2xl flex-col gap-6">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-h1">{t("billing.upgrade.title", { plan: plan.name })}</h1>
-        <p className="text-ardoise">{t("billing.upgrade.text")}</p>
-      </header>
+      <AppPageHeader
+        title={t("billing.upgrade.title", { plan: plan.name })}
+        subtitle={t("billing.upgrade.text")}
+      />
       <div className="rounded-card bg-blanc p-6">
         <CheckoutPanel
           user={user}

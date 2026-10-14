@@ -3,6 +3,8 @@ import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { hireNavigation, partnerNavigation, talentNavigation } from "@/config/navigation";
 import { Logo, Icon } from "@/components/brand";
+import { AppMotionRoot } from "@/components/motion/app-motion-root";
+import { UniverseBackdrop } from "@/components/motion/universe-header";
 import { signOut } from "@/server/actions/auth";
 import { AccountMenu, type AccountSummary } from "./account-menu";
 import { NavLink } from "./nav-link";
@@ -13,12 +15,15 @@ import { SpaceSwitcher, type SpaceOption } from "./space-switcher";
  * Desktop: 92 px Sapin sidebar (settings and logout at the bottom), Crème main panel with
  * 32 px corners, top bar with the space switcher, notifications and the account pill.
  * Mobile: Sapin header, Crème sheet rising over it, floating pill navigation.
+ * Motion (docs/experience-animee, lot A): torch over the sidebar, active item that slides, pattern
+ * of the module behind the top of the page; all off with « Réduire les animations ».
  */
 export function AppShell({
   account,
   space,
   spaces,
   unread,
+  reduceMotion = false,
   children,
 }: {
   account: AccountSummary;
@@ -26,6 +31,8 @@ export function AppShell({
   space: (SpaceOption & { partner?: boolean }) | null;
   spaces: SpaceOption[];
   unread: number;
+  /** « Réduire les animations » (settings): no motion at all in the signed-in space. */
+  reduceMotion?: boolean;
   children: ReactNode;
 }) {
   const t = useTranslations("appNav");
@@ -56,7 +63,7 @@ export function AppShell({
       {unread > 0 && (
         <span
           aria-hidden
-          className="absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-lime px-1 text-[10px] font-semibold text-sapin ring-2 ring-blanc"
+          className="jm-badge-pulse absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-lime px-1 text-[10px] font-semibold text-sapin ring-2 ring-blanc"
         >
           {unread > 9 ? tn("bell.many") : unread}
         </span>
@@ -65,7 +72,11 @@ export function AppShell({
   );
 
   return (
-    <div className="min-h-dvh bg-sapin lg:flex lg:py-3.5 lg:pr-3.5">
+    <div
+      data-reduce-motion={reduceMotion ? "" : undefined}
+      className="min-h-dvh bg-sapin lg:flex lg:py-3.5 lg:pr-3.5"
+    >
+      <AppMotionRoot reduce={reduceMotion} />
       <a
         href="#content"
         className="sr-only z-50 rounded-pill bg-lime px-4 py-2 text-sapin focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
@@ -73,12 +84,19 @@ export function AppShell({
         {t("skipToContent")}
       </a>
 
-      <aside className="sticky top-3.5 hidden h-[calc(100dvh-28px)] w-[92px] shrink-0 flex-col items-center pt-3 pb-1.5 lg:flex">
+      <aside
+        data-torch
+        className="sticky top-3.5 isolate hidden h-[calc(100dvh-28px)] w-[92px] shrink-0 flex-col items-center pt-3 pb-1.5 lg:flex"
+      >
+        <span aria-hidden className="jm-torch jm-torch-pattern absolute inset-0 -z-10" />
+        <span aria-hidden className="jm-torch jm-torch-halo absolute inset-0 -z-10" />
         <Link href={home} aria-label={a11y("logo")} className="rounded-sm">
           <Logo variant="tile" height={44} />
         </Link>
         <nav aria-label={a11y("mainNav")} className="mt-[34px]">
-          <ul className="flex flex-col gap-1.5">{links("sidebar")}</ul>
+          <ul data-nav-slide="sidebar" className="flex flex-col gap-1.5">
+            {links("sidebar")}
+          </ul>
         </nav>
         <div className="mt-auto flex flex-col gap-1.5">
           <NavLink
@@ -110,15 +128,16 @@ export function AppShell({
         </div>
       </header>
 
-      <div className="relative min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme lg:min-h-0 lg:flex-1 lg:rounded-panel">
-        <div className="hidden h-[78px] items-center justify-end gap-3.5 px-[30px] pt-[26px] lg:flex">
+      <div className="relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme lg:min-h-0 lg:flex-1 lg:rounded-panel">
+        <UniverseBackdrop />
+        <div className="relative hidden h-[78px] items-center justify-end gap-3.5 px-[30px] pt-[26px] lg:flex">
           <SpaceSwitcher current={space} spaces={spaces} tone="light" />
           {notifications("light")}
           <AccountMenu account={account} tone="light" />
         </div>
         <main
           id="content"
-          className="flex w-full flex-col gap-5 px-4 pt-5 pb-32 sm:px-6 lg:px-[30px] lg:pt-5 lg:pb-[30px]"
+          className="relative flex w-full flex-col gap-5 px-4 pt-5 pb-32 sm:px-6 lg:px-[30px] lg:pt-5 lg:pb-[30px]"
         >
           {children}
         </main>
@@ -126,9 +145,12 @@ export function AppShell({
 
       <nav
         aria-label={t("mobile.aria")}
+        data-autohide
         className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin p-[7px] shadow-float lg:hidden"
       >
-        <ul className="flex gap-1">{links("pill")}</ul>
+        <ul data-nav-slide="pill" className="flex gap-1">
+          {links("pill")}
+        </ul>
       </nav>
     </div>
   );

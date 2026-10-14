@@ -38,6 +38,7 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 import { describeEvent, payloadText as text } from "@/server/hire-history";
+import { AppPageHeader } from "@/components/app/page-header";
 
 /**
  * A candidate's application, seen by the recruiting team (partie 07 § 4). Opening it is logged
@@ -133,22 +134,28 @@ export default async function CandidatePage({
       <Link href={`/app/hire/offres/${job.id}`} className="text-sm underline">
         {t("application.back")}
       </Link>
-      <header className="flex flex-wrap items-start justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <h1 className="text-h1">{person.name}</h1>
-          {profile.headline && <p className="text-lg">{profile.headline}</p>}
-          <p className="text-ardoise">
-            {[
-              t("application.appliedFor", { jobTitle: job.title }),
-              t("application.appliedOn", { date: application.createdAt }),
-            ].join(" · ")}
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center gap-2">
-          <Badge tone="hire">{[t("application.stage"), application.stage.name].join(" : ")}</Badge>
-          {application.status === "withdrawn" && <Badge>{t("pipeline.card.withdrawn")}</Badge>}
-        </div>
-      </header>
+      <AppPageHeader
+        title={person.name}
+        subtitle={
+          <>
+            {profile.headline && <p className="text-lg">{profile.headline}</p>}
+            <p>
+              {[
+                t("application.appliedFor", { jobTitle: job.title }),
+                t("application.appliedOn", { date: application.createdAt }),
+              ].join(" · ")}
+            </p>
+          </>
+        }
+        actions={
+          <>
+            <Badge tone="hire">
+              {[t("application.stage"), application.stage.name].join(" : ")}
+            </Badge>
+            {application.status === "withdrawn" && <Badge>{t("pipeline.card.withdrawn")}</Badge>}
+          </>
+        }
+      />
 
       {query.ok === "decision" && <Alert tone="success" title={t("reject.done")} />}
       {query.ok === "deplacee" && <Alert tone="success" title={t("pipeline.moved.notified")} />}

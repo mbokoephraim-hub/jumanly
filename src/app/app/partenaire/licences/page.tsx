@@ -34,6 +34,7 @@ import {
   listLinks,
   MAX_CODES,
 } from "@/server/services/partners";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("partner.licenses");
@@ -62,7 +63,7 @@ export default async function PartnerLicensesPage({
   if (!batch) {
     return (
       <div className="flex flex-col gap-6">
-        <h1 className="text-h1">{t("title")}</h1>
+        <AppPageHeader title={t("title")} />
         <EmptyState title={t("batch.none")} />
       </div>
     );
@@ -105,10 +106,7 @@ export default async function PartnerLicensesPage({
 
   return (
     <div className="flex flex-col gap-8">
-      <header className="flex flex-col gap-2">
-        <h1 className="text-h1">{t("title")}</h1>
-        <p className="text-ardoise">{t("subtitle")}</p>
-      </header>
+      <AppPageHeader title={t("title")} subtitle={t("subtitle")} />
       {errorText && <Alert tone="error" title={errorText} />}
       {okText && (
         <Alert tone="success" title={okText}>

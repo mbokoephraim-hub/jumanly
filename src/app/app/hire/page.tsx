@@ -13,6 +13,7 @@ import { upcomingOrgInterviews } from "@/server/services/interviews";
 import { seatUsage } from "@/server/services/organization";
 import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
 import { acceptedContacts } from "@/server/services/talent-search";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.dashboard");
@@ -68,20 +69,16 @@ export default async function HireDashboardPage({ searchParams }: PageProps<"/ap
 
   return (
     <div className="flex flex-col gap-6">
-      <header className="flex flex-wrap items-end justify-between gap-4">
-        <div className="flex flex-col gap-1">
-          <p className="text-eyebrow text-ardoise">
-            {t("eyebrow", { org: space.organization.name })}
-          </p>
-          <h1 className="text-h1">{t("title")}</h1>
-          <p className="text-ardoise">
-            {t("greeting", { firstName: user.firstName ?? user.name })}
-          </p>
-        </div>
-        {permissions.manage && (
-          <ButtonLink href="/app/hire/offres/nouvelle">{t("newCta")}</ButtonLink>
-        )}
-      </header>
+      <AppPageHeader
+        eyebrow={t("eyebrow", { org: space.organization.name })}
+        title={t("title")}
+        subtitle={t("greeting", { firstName: user.firstName ?? user.name })}
+        actions={
+          permissions.manage && (
+            <ButtonLink href="/app/hire/offres/nouvelle">{t("newCta")}</ButtonLink>
+          )
+        }
+      />
       {params.bienvenue && (
         <Alert tone="success" title={t("eyebrow", { org: space.organization.name })} />
       )}

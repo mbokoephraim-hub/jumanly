@@ -47,6 +47,7 @@ import { aiState, TAILOR_GATE } from "@/server/services/career-documents";
 import { cvScore, parseSuggestion, targetSkillsFor } from "@/server/services/cv-coach";
 import { interviewJobs } from "@/server/services/interview-sim";
 import { cheapestPlanWithLimit, listPublicPlans, talentPlanFor } from "@/server/services/plans";
+import { TabRail } from "@/components/motion/tab-rail";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.cv");
@@ -478,20 +479,28 @@ export default async function CvEditorPage({
           </div>
 
           <div className="order-1 flex min-w-0 flex-col gap-4 lg:order-2">
-            <div className="-mx-4 flex gap-2 overflow-x-auto px-4 sm:mx-0 sm:flex-wrap sm:px-0">
-              <span
-                className={pillClass("dark", "sm", "pointer-events-none shrink-0")}
-                aria-current="page"
-              >
-                {t("tab.preview")}
-              </span>
-              <Link href="/app/career/documents" className={pillClass("outline", "sm", "shrink-0")}>
-                {t("tab.letter")}
-              </Link>
-              <Link href="/app/career/linkedin" className={pillClass("outline", "sm", "shrink-0")}>
-                {t("tab.linkedin")}
-              </Link>
-            </div>
+            <TabRail name="cv-document">
+              <div className="flex w-max gap-2">
+                <span
+                  className={pillClass("dark", "sm", "pointer-events-none shrink-0")}
+                  aria-current="page"
+                >
+                  {t("tab.preview")}
+                </span>
+                <Link
+                  href="/app/career/documents"
+                  className={pillClass("outline", "sm", "shrink-0")}
+                >
+                  {t("tab.letter")}
+                </Link>
+                <Link
+                  href="/app/career/linkedin"
+                  className={pillClass("outline", "sm", "shrink-0")}
+                >
+                  {t("tab.linkedin")}
+                </Link>
+              </div>
+            </TabRail>
             <div className="flex flex-wrap items-center justify-between gap-2">
               <span className="flex items-center gap-1.5 rounded-pill bg-lime-clair px-3 py-1 text-xs font-semibold">
                 <Icon name="check" className="size-3.5" />

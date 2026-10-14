@@ -13,6 +13,7 @@
     "test:watch": "vitest",
     "test:db": "vitest run --config vitest.db.config.mts",
     "test:e2e": "playwright test",
+    "test:e2e:reduced": "E2E_REDUCED_MOTION=1 playwright test",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "messages": "tsx scripts/build-messages.ts",

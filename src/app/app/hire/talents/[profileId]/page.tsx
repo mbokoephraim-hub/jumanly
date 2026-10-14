@@ -15,6 +15,7 @@ import {
   searchQuotas,
   viewTalentProfile,
 } from "@/server/services/talent-search";
+import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.talents");
@@ -89,13 +90,15 @@ export default async function TalentProfilePage({
       <Link href="/app/hire/talents" className="text-sm underline">
         {t("hire.talents.profile.back")}
       </Link>
-      <header className="flex flex-col gap-1">
-        <h1 className="text-h1">{title}</h1>
-        {!view.anonymous && profile.headline && <p className="text-lg">{profile.headline}</p>}
-        <p className="text-ardoise">
-          {[profile.user.city, profile.user.country].filter(Boolean).join(", ")}
-        </p>
-      </header>
+      <AppPageHeader
+        title={title}
+        subtitle={
+          <>
+            {!view.anonymous && profile.headline && <p className="text-lg">{profile.headline}</p>}
+            <p>{[profile.user.city, profile.user.country].filter(Boolean).join(", ")}</p>
+          </>
+        }
+      />
       {query.ok === "contact" && <Alert tone="success" title={t("hire.contact.sent")} />}
       {query.ok === "vivier" && <Alert tone="success" title={t("hire.pools.addedDone")} />}
       {erreur && errorText[erreur] && <Alert tone="error" title={errorText[erreur]} />}

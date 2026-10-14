@@ -12,6 +12,8 @@ export default defineConfig({
   use: {
     baseURL: `http://localhost:${port}`,
     trace: "on-first-retry",
+    // E2E_REDUCED_MOTION=1 replays every journey as a person who asked for less motion.
+    reducedMotion: process.env.E2E_REDUCED_MOTION ? "reduce" : "no-preference",
     // Permet d'utiliser un Chromium déjà installé (ex. PLAYWRIGHT_CHROMIUM=/opt/pw-browsers/chromium).
     launchOptions: process.env.PLAYWRIGHT_CHROMIUM
       ? { executablePath: process.env.PLAYWRIGHT_CHROMIUM }

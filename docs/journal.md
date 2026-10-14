@@ -2,6 +2,37 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Espace connecté animé · lot A : le socle (14 octobre 2026)
+
+Brief : `docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md`. Décisions :
+`docs/decisions/2026-10-14-espace-anime-socle.md`. Captures avant et après, 1440 et 390 px, dans
+`captures/experience-animee-lot-a/` (dossier du projet).
+
+- `AppMotionRoot` : sens du défilement (`html[data-dir]`), apparition des blocs dans les deux sens
+  (un bloc ne se recache qu'à plus d'un écran), dérive des formes, torche du menu, pilule qui
+  glisse, onde au toucher, navigation mobile qui se cache en descendant.
+- Préférence « Réduire les animations » (Paramètres › Compte › Affichage, colonne
+  `User.reduceMotion`) ; `prefers-reduced-motion` du système arrête aussi tout. L'état final est
+  l'état par défaut : sans JavaScript ni animation, la page est complète.
+- `UniverseHeader` : bandeau propre à chaque module (fond, teinte qui coule, forme, icône), sur
+  toutes les pages `/app` via `AppPageHeader` ; motif du module très léger en haut de la page.
+- Menu : dégradé Signature qui circule sur l'onglet actif, anneau au survol, torche qui révèle le
+  motif Orbites, pastille de notification qui pulse.
+- Entrée des pages en cascade (`src/app/app/template.tsx`).
+- `TabRail` : rail d'onglets (bords en fondu, flèches « verre », fil de progression Lime, molette
+  horizontale, glisser à la souris, onglet actif ramené dans l'écran et qui glisse) sur Career,
+  l'éditeur de CV, la galerie de modèles, Learn et Paramètres.
+- `pnpm test:e2e:reduced` rejoue tous les parcours avec `prefers-reduced-motion: reduce`.
+
+### Écarts restants
+
+- La fiche d'une offre (`/app/jobs/[slug]`) garde son en-tête en carte : c'est l'offre elle-même.
+  La page de bienvenue sera reprise au lot qui la traite.
+- Pas d'API View Transitions : seule l'entrée de la nouvelle page est animée (repli prévu par le
+  brief).
+- La CI ne rejoue pas encore les parcours en mode réduit (le double de durée) ; à faire en local
+  avant chaque lot.
+
 ## Modèles de CV · étape A : 5 modèles gratuits et pagination (14 octobre 2026)
 
 Spécification : `docs/modeles-cv/SPECIFICATION-MODELES-CV.md`. Décisions :
