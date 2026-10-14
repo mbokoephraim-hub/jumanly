@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
+import { authLimits } from "@/server/rate-limit";
 import { Alert, Badge, Button, Select, TextArea } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { InterviewCard } from "@/components/connect/interview-card";
@@ -126,6 +127,7 @@ export default async function ThreadPage({
     ).map((interview) => [interview.id, interview]),
   );
   const ti = await getTranslations("connect.invite");
+  const te = await getTranslations("system.error");
   const tc = await getTranslations("connect.contactRequest");
   const th = await getTranslations("hire.talents.result");
   const now = new Date();
@@ -186,6 +188,8 @@ export default async function ThreadPage({
       )}
       {query.erreur === "entretien" ? (
         <Alert tone="error" title={ti("error")} />
+      ) : query.erreur === "trop" ? (
+        <Alert tone="error" title={te("rateLimit", { seconds: authLimits.message.window })} />
       ) : (
         query.erreur && <Alert tone="error" title={t("thread.error")} />
       )}

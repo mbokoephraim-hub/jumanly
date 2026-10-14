@@ -6,6 +6,7 @@ import { onApplicationCreated } from "@/server/application-events";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { applyToJob, toggleSavedJob, withdrawApplication } from "@/server/services/applications";
+import { reportError } from "@/server/observability";
 
 const applySchema = z.object({
   job: z.string().min(1).max(200),
@@ -34,7 +35,7 @@ export async function applyAction(formData: FormData) {
   });
   if (result.status === "notFound") redirect("/app/jobs");
   if (result.status === "applied") {
-    await onApplicationCreated(result.applicationId).catch((error) => console.error(error));
+    await onApplicationCreated(result.applicationId).catch((error) => reportError(error));
   }
   const outcome = { applied: "envoyee", already: "deja", closed: "close" }[result.status];
   redirect(`/app/jobs/${job}?candidature=${outcome}`);

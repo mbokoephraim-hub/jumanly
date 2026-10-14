@@ -3,6 +3,7 @@
  * - Icons: ressources/icones/trait/*.svg → src/components/brand/icon-paths.ts (drawn with
  *   currentColor, so one set covers the Sapin, white and duo styles).
  * - Characters, patterns, shapes, backgrounds → public/ (SVG only).
+ * - App icons (PWA manifest): ressources/logos/jumanly-favicon-{192,512}.png → public/marque/.
  * Each source SVG carries a provenance manifest (<metadata>, about 7 KB); it is removed from the
  * copies served to visitors, not from ressources/.
  *
@@ -16,9 +17,9 @@ const root = process.cwd();
 const check = process.argv.includes("--check");
 const stale: string[] = [];
 
-function write(path: string, content: string) {
-  const current = existsSync(path) ? readFileSync(path, "utf8") : null;
-  if (current === content) return;
+function write(path: string, content: string | Buffer) {
+  const current = existsSync(path) ? readFileSync(path) : null;
+  if (current?.equals(Buffer.from(content))) return;
   if (check) stale.push(path);
   else {
     mkdirSync(join(path, ".."), { recursive: true });
@@ -63,6 +64,12 @@ for (const [from, to] of folders) {
     const svg = stripMetadata(readFileSync(join(root, from, file), "utf8"));
     write(join(root, to, file), svg.endsWith("\n") ? svg : `${svg}\n`);
   }
+}
+
+// App icons, copied as they are.
+for (const size of [192, 512]) {
+  const file = `jumanly-favicon-${size}.png`;
+  write(join(root, "public/marque", file), readFileSync(join(root, "ressources/logos", file)));
 }
 
 if (stale.length) {

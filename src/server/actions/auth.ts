@@ -19,6 +19,7 @@ import {
 } from "@/server/services/accounts";
 import { allowAttempt, clientIp } from "@/server/rate-limit";
 import { readSignupFlow, writeSignupFlow } from "@/server/signup-flow";
+import { reportError } from "@/server/observability";
 
 export type AuthFormState = {
   status: "idle" | "invalid" | "error" | "sent" | "done";
@@ -166,7 +167,9 @@ export async function verifyEmail(_: AuthFormState, formData: FormData): Promise
             firstName: user.firstName ?? user.name,
             plan: plan?.planName ?? "",
           });
-    await welcome.catch((error) => console.error("E-mail de bienvenue non envoyé", error));
+    await welcome.catch((error) =>
+      reportError(error, { message: "E-mail de bienvenue non envoyé" }),
+    );
   }
   const paid = flow.plan
     ? await db.plan.findUnique({ where: { code: flow.plan }, select: { priceCents: true } })

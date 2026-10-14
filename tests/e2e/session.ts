@@ -23,16 +23,28 @@ export async function logIn(page: Page, email: string, password = DEMO_PASSWORD,
   );
   // Tests running in parallel can sign in to the same demo account at once: each sign-in gets
   // its own code, so a refused code is followed by the other codes sent since, newest first.
+  // Codes sent by another sign-in after the list was read are picked up on the next round.
   if (page.url().includes("/connexion/deux-etapes")) {
     await lastCode(email, since);
-    for (const code of codesSince(email, since)) {
-      await page.locator('input[name="code"]').fill(code);
-      await page.getByRole("button", { name: /Vérifier|Confirmer/ }).click();
-      const passed = await page
-        .waitForURL((url) => !url.pathname.startsWith("/connexion"), { timeout: 8_000 })
-        .then(() => true)
-        .catch(() => false);
-      if (passed) break;
+    const tried = new Set<string>();
+    const deadline = Date.now() + 45_000;
+    let passed = false;
+    while (!passed && Date.now() < deadline) {
+      const fresh = codesSince(email, since).filter((code) => !tried.has(code));
+      if (fresh.length === 0) {
+        await page.waitForTimeout(500);
+        continue;
+      }
+      for (const code of fresh) {
+        tried.add(code);
+        await page.locator('input[name="code"]').fill(code);
+        await page.getByRole("button", { name: /Vérifier|Confirmer/ }).click();
+        passed = await page
+          .waitForURL((url) => !url.pathname.startsWith("/connexion"), { timeout: 8_000 })
+          .then(() => true)
+          .catch(() => false);
+        if (passed) break;
+      }
     }
   }
   await expect(page).not.toHaveURL(/\/connexion/);

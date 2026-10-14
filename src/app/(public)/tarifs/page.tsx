@@ -1,6 +1,6 @@
 import Link from "next/link";
 import type { Metadata } from "next";
-import { getTranslations } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
 import { CompareTable, FamilyPlans } from "@/components/site/pricing";
 import { Band, CheckList, CtaBand, FaqList, Section } from "@/components/site/sections";
@@ -10,7 +10,8 @@ import { formatUsd } from "@/lib/money";
 import { withoutPlaceholders } from "@/lib/placeholders";
 import { pageMetadata } from "@/lib/seo";
 import { signupHref } from "@/lib/signup";
-import { getPublicPlans } from "@/server/queries/public";
+import { getContentOverrides, getPublicPlans } from "@/server/queries/public";
+import { faqItems } from "@/server/services/contents";
 import { limitOf, lowestPaidPrice, plansOf } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -20,7 +21,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function PricingPage() {
   const t = await getTranslations();
-  const plans = await getPublicPlans();
+  const [plans, messages, overrides] = await Promise.all([
+    getPublicPlans(),
+    getMessages(),
+    getContentOverrides(),
+  ]);
   const companyFrom = lowestPaidPrice(plans, "company");
   // Largest RH team before Companies: the seats of the last RH plan, read from the database.
   const rhMaxSeats = Math.max(
@@ -28,10 +33,10 @@ export default async function PricingPage() {
     ...plansOf(plans, "rh").map((plan) => limitOf(plan, "org.seats") ?? 0),
   );
 
-  const faq = Array.from({ length: 12 }, (_, i) => i + 1)
-    .map((n) => {
-      const answer = withoutPlaceholders(t(`pricing.faq.a${n}` as "pricing.faq.a1"));
-      return answer ? { question: t(`pricing.faq.q${n}` as "pricing.faq.q1"), answer } : null;
+  const faq = faqItems(messages, overrides, "pricing.faq")
+    .map((item) => {
+      const answer = withoutPlaceholders(item.answer);
+      return answer ? { question: item.question, answer } : null;
     })
     .filter((item) => item !== null);
 

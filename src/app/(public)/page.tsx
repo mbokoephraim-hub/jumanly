@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { Character } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { CourseListing, JobListing } from "@/components/site/listings";
@@ -16,7 +16,13 @@ import { ButtonLink } from "@/components/ui";
 import { formatUsd } from "@/lib/money";
 import { withoutPlaceholders } from "@/lib/placeholders";
 import { signupHref } from "@/lib/signup";
-import { getFeaturedCourses, getLatestJobs, getPublicPlans } from "@/server/queries/public";
+import {
+  getContentOverrides,
+  getFeaturedCourses,
+  getLatestJobs,
+  getPublicPlans,
+} from "@/server/queries/public";
+import { faqItems } from "@/server/services/contents";
 import { highestPrice, lowestPaidPrice } from "@/server/services/plans";
 import { pageMetadata } from "@/lib/seo";
 
@@ -33,10 +39,12 @@ export async function generateMetadata(): Promise<Metadata> {
 
 export default async function HomePage() {
   const t = await getTranslations();
-  const [plans, courses, latest] = await Promise.all([
+  const [plans, courses, latest, messages, overrides] = await Promise.all([
     getPublicPlans(),
     getFeaturedCourses(),
     getLatestJobs(),
+    getMessages(),
+    getContentOverrides(),
   ]);
 
   const audiences = [
@@ -249,12 +257,7 @@ export default async function HomePage() {
       )}
 
       <Section title={t("home.faq.title")}>
-        <FaqList
-          items={(["1", "2", "3", "4"] as const).map((n) => ({
-            question: t(`home.faq.q${n}`),
-            answer: t(`home.faq.a${n}`),
-          }))}
-        />
+        <FaqList items={faqItems(messages, overrides, "home.faq")} />
         <div>
           <ButtonLink href="/faq" variant="tertiary">
             {t("home.faq.cta")}

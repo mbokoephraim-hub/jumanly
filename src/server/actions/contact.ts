@@ -13,6 +13,7 @@ import {
   saveAndForward,
   type FieldError,
 } from "@/server/services/contact";
+import { reportError } from "@/server/observability";
 
 export type ContactFormState =
   | { status: "idle" }
@@ -76,7 +77,7 @@ export async function sendContactMessage(
       ],
     });
   } catch (error) {
-    console.error("Formulaire de contact : envoi impossible", error);
+    void reportError(error, { message: "Formulaire de contact : envoi impossible" });
     return { status: "failed", values };
   }
   return { status: "sent", email: input.email };
@@ -134,7 +135,7 @@ export async function sendPartnerRequest(
       ],
     });
   } catch (error) {
-    console.error("Formulaire partenaires : envoi impossible", error);
+    void reportError(error, { message: "Formulaire partenaires : envoi impossible" });
     return { status: "failed", values };
   }
   return { status: "sent", email: input.email };

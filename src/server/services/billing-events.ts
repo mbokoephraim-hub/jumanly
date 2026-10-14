@@ -12,6 +12,7 @@ import { freePlan, invalidate, limit, parseLimit, type Subject } from "@/server/
 import { activeJobCount } from "./hire";
 import { issueInvoice } from "./invoices";
 import { notify } from "./notifications";
+import { reportError } from "@/server/observability";
 
 export type Recipient = { id: string; email: string; firstName: string | null };
 
@@ -65,7 +66,7 @@ export async function paymentSucceeded(db: PrismaClient, paymentId: string, now 
       startDate: payment.periodStart,
       endDate: payment.periodEnd,
       invoiceId: invoice?.id,
-    }).catch((error) => console.error("Reçu non envoyé", error));
+    }).catch((error) => reportError(error, { message: "Reçu non envoyé" }));
   }
 }
 
@@ -96,7 +97,7 @@ export async function paymentFailed(db: PrismaClient, paymentId: string, now = n
       plan: payment.plan.name,
       amount: formatUsd(payment.amountCents),
       activeUntil: current?.currentPeriodEnd ?? null,
-    }).catch((error) => console.error("E-mail d'échec non envoyé", error));
+    }).catch((error) => reportError(error, { message: "E-mail d'échec non envoyé" }));
   }
 }
 
@@ -131,7 +132,7 @@ export async function returnedToFree(
       plan: planName,
       freePlan: freeName,
       organization: subject.type === "organization",
-    }).catch((error) => console.error("E-mail de retour au gratuit non envoyé", error));
+    }).catch((error) => reportError(error, { message: "E-mail de retour au gratuit non envoyé" }));
   }
 }
 

@@ -14,6 +14,7 @@ import { billingRecipients, returnedToFree } from "./billing-events";
 import { notify } from "./notifications";
 import { endingLicenses, expireLicenses } from "./partners";
 import { applyPaymentStatus, PAYMENT_EXPIRY_MS, refreshPayment } from "./subscriptions";
+import { reportError } from "@/server/observability";
 
 const DAY_MS = 86_400_000;
 
@@ -133,7 +134,7 @@ export async function runBillingJobs(
           plan: row.plan.name,
           date: row.currentPeriodEnd,
           freePlan: free?.name ?? "",
-        }).catch((error) => console.error("Rappel non envoyé", error));
+        }).catch((error) => reportError(error, { message: "Rappel non envoyé" }));
       }
     });
     if (sent) report.reminders++;
@@ -175,7 +176,9 @@ export async function runBillingJobs(
             plan: row.plan.name,
             graceEnd,
             freePlan: free?.name ?? "",
-          }).catch((error) => console.error("E-mail de délai de grâce non envoyé", error));
+          }).catch((error) =>
+            reportError(error, { message: "E-mail de délai de grâce non envoyé" }),
+          );
         }
       },
     );

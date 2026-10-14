@@ -17,6 +17,7 @@ import {
 } from "@/server/entitlements";
 import { aiProvider, AiUnavailableError, type AiProvider, type GenerateInput } from "./provider";
 import { costMicroUsd } from "./prices";
+import { reportError } from "@/server/observability";
 
 export const aiFeatures = {
   cv_parse: { credits: 1, tier: "fast" },
@@ -143,7 +144,7 @@ export async function runAi<T>(
     if (credits > 0) await release(db, subject, AI_CREDITS_KEY, credits, now);
     await log("error", provider.name);
     if (error instanceof AiUnavailableError) {
-      console.error("IA indisponible :", error.cause);
+      void reportError(error.cause ?? error, { message: "IA indisponible" });
       throw new AiError("unavailable");
     }
     throw error;

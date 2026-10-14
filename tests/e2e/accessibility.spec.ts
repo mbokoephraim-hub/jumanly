@@ -33,3 +33,69 @@ test("aucune erreur d'accessibilité WCAG 2.2 AA dans l'espace connecté", async
     await expectAccessible(page);
   }
 });
+
+// E11: complete sweep of the signed-in screens, one account per space.
+const sweeps: { name: string; email: string; paths: string[] }[] = [
+  {
+    name: "talent (Learn, Career, Connect)",
+    email: demo.talentPro,
+    paths: [
+      "/app/learn",
+      "/app/learn/attestations",
+      "/app/career/plan",
+      "/app/career/entretiens",
+      "/app/career/documents",
+      "/app/career/linkedin",
+      "/app/career/portfolio",
+      "/app/profil/import",
+      "/app/messages",
+      "/app/notifications",
+    ],
+  },
+  {
+    name: "recruteur (Hire)",
+    email: "entreprise@jumanly.test",
+    paths: [
+      "/app/hire",
+      "/app/hire/offres",
+      "/app/hire/offres/nouvelle",
+      "/app/hire/talents",
+      "/app/hire/viviers",
+      "/app/hire/entretiens",
+      "/app/hire/rapports",
+      "/app/organisation",
+    ],
+  },
+  {
+    name: "partenaire",
+    email: "partenaire@jumanly.test",
+    paths: ["/app/partenaire", "/app/partenaire/licences", "/app/partenaire/rapports"],
+  },
+  {
+    name: "administration",
+    email: demo.admin,
+    paths: [
+      "/admin",
+      "/admin/utilisateurs",
+      "/admin/organisations",
+      "/admin/forfaits",
+      "/admin/abonnements",
+      "/admin/partenaires",
+      "/admin/contenus",
+      "/admin/contenus?onglet=bannieres",
+    ],
+  },
+];
+
+for (const sweep of sweeps) {
+  test(`aucune erreur d'accessibilité WCAG 2.2 AA · espace ${sweep.name}`, async ({ browser }) => {
+    const context = await browser.newContext();
+    const page = await context.newPage();
+    await logIn(page, sweep.email);
+    for (const path of sweep.paths) {
+      await page.goto(path);
+      await expectAccessible(page);
+    }
+    await context.close();
+  });
+}

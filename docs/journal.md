@@ -2,6 +2,68 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E11 · Qualité et lancement (14 octobre 2026)
+
+### Fait
+
+- Audit avant lancement (performance, accessibilité, référencement, sécurité selon la partie 10),
+  partagé avec le propriétaire comme liste priorisée, puis corrections dans cet ordre.
+- Sécurité : en-têtes sur toutes les réponses (politique de contenu, HSTS en production,
+  `X-Content-Type-Options`, `Referrer-Policy`, `X-Frame-Options`, `Permissions-Policy` avec le
+  micro autorisé seulement sur la simulation d'entretien) ; limites de débit par compte sur
+  l'envoi de messages (30 en 5 minutes) et la recherche de talents (60 en 10 minutes).
+- Dépendances : versions corrigées imposées aux paquets signalés (outils Prisma et aperçu des
+  e-mails) ; nouvelle tâche CI « Dépendances et secrets » (`pnpm audit --prod`, gitleaks sur tout
+  l'historique) ; Dependabot (une PR groupée par semaine).
+- Observabilité : journaux en JSON en production, rapports d'erreurs du serveur vers Sentry par
+  son API HTTP quand `SENTRY_DSN` est renseigné (aucun script dans le navigateur), page 500 avec
+  référence d'incident. Procédure et alertes à créer : `docs/exploitation.md`.
+- Application installable (PWA) : manifeste, icônes, service worker ; le profil et les leçons
+  ouvertes restent lisibles hors ligne, page « Pas de connexion » pour le reste, bandeau hors
+  ligne ; les pages gardées sont effacées à la déconnexion.
+- Référencement : données structurées `Course` sur les pages de formation (`JobPosting` existait).
+- Contenus éditables (`/admin/contenus`, éditeurs de contenus et administrateurs) : FAQ (page
+  FAQ, FAQ courte de l'accueil, FAQ des tarifs) modifiable, masquable, avec ajout de questions et
+  retour au texte d'origine ; bannières par public (tous, talents, recruteurs, partenaires) avec
+  dates et style. Table `ContentBlock`, journal d'audit, cache public rafraîchi aussitôt.
+- Sauvegardes : `pnpm db:backup` (conservation 30 jours, nombre de lignes noté) et
+  `pnpm db:restore-check` (restauration dans une base de test et comparaison), testés en local.
+- Tests : budget de 200 Ko de JavaScript sur toutes les pages publiques, offres et formations
+  comprises ; accessibilité WCAG 2.2 AA étendue aux espaces talent, recruteur, partenaire et
+  administration.
+- Décisions : `docs/decisions/2026-10-14-e11.md`.
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Liste priorisée présentée avant les corrections | ✓ `audit-e11.md` partagé le 14 octobre |
+| Budget de 200 Ko de JS par page publique vérifié en CI | ✓ 15 pages publiques + offre + formation (e2e) |
+| Accessibilité WCAG 2.2 AA sur tous les espaces | ✓ e2e axe (public, talent, recruteur, partenaire, admin) |
+| En-têtes de sécurité, micro limité à la simulation vocale | ✓ tests unitaires et e2e |
+| Limites de débit : messages et recherche de talents | ✓ |
+| PWA : installation, lecture hors ligne du profil et des leçons ouvertes | ✓ e2e (contenu gardé, effacé à la déconnexion) |
+| Données structurées `JobPosting` et `Course` | ✓ e2e |
+| Erreurs journalisées et envoyées à Sentry si configuré | ✓ tests unitaires |
+| Sauvegardes testées (sauvegarde puis restauration vérifiée) | ✓ en local ; à programmer chez l'hébergeur |
+| `/admin/contenus` (FAQ et bannières) | ✓ tests unitaires, en base et e2e |
+| Traduction anglaise | non décidée, non faite |
+| Relecture juridique | à faire par un juriste (pages légales marquées) |
+| Lint, types, tests unitaires et en base, build, e2e | ✓ en local ; CI à l'ouverture de la PR |
+
+### Dettes et points ouverts
+
+- Propriétaire : relecture juridique des pages légales, décision sur l'anglais, fournisseur
+  Mobile Money, compte Sentry (`SENTRY_DSN`) et alertes, sauvegardes chez l'hébergeur de la base.
+- La politique de contenu autorise les scripts en ligne (voir la décision) ; un nonce par requête
+  rendrait toutes les pages dynamiques.
+- Erreurs du navigateur non envoyées à Sentry (seules celles du serveur le sont).
+- `/admin/contenus` : onglets « Textes de l'interface » et « Conseils de préparation » et
+  historique des versions non faits ; l'ancien texte reste dans le journal d'audit.
+- Après une modification de la FAQ, un visiteur peut voir l'ancienne version une fois, le temps
+  que la page soit reconstruite.
+- `braces` (outil de lint, développement seulement) : faille signalée sans version corrigée.
+
 ## E10 · Career avancé (14 octobre 2026)
 
 ### Fait

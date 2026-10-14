@@ -1056,6 +1056,22 @@ model ProfileSkill {
   @@unique([profileId, skillId])
 }
 
+// ─── Contenus éditables (partie 04, /admin/contenus) ─────────────
+
+/// A text edited in the admin that replaces the one from textes/ (FAQ), or a banner. An empty
+/// value hides a FAQ question; no row means the original text.
+model ContentBlock {
+  id          String   @id @default(cuid(2))
+  key         String
+  locale      String   @default("fr")
+  value       String
+  updatedById String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@unique([key, locale])
+}
+
 // ─── Audit (partie 03 § 3.6) ────────────────────────────────────
 
 model AuditLog {

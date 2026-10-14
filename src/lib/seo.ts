@@ -45,3 +45,59 @@ export function pageMetadata({
     robots: noindex ? { index: false, follow: true } : undefined,
   };
 }
+
+/** JSON-LD for a page, serialized with "<" escaped (values come from the database). */
+export function jsonLdScript(data: object): string {
+  return JSON.stringify(data).replace(/</g, "\\u003c");
+}
+
+/** ISO 8601 duration ("PT1H30M") for schema.org. */
+export function isoDuration(minutes: number): string {
+  const hours = Math.floor(minutes / 60);
+  const rest = minutes % 60;
+  return `PT${hours > 0 ? `${hours}H` : ""}${rest > 0 || hours === 0 ? `${rest}M` : ""}`;
+}
+
+/**
+ * Structured data of a course page (schema.org `Course`, partie 12 E11). A free course is offered
+ * at 0 USD; a paid one is part of a subscription, priced at the cheapest plan that includes it.
+ */
+export function courseJsonLd(course: {
+  slug: string;
+  title: string;
+  summary: string;
+  language: string;
+  level: string;
+  durationMinutes: number;
+  instructor?: string | null;
+  plan: { priceCents: number | null } | null;
+  free: boolean;
+}) {
+  const url = `${siteUrl()}/formations/${course.slug}`;
+  const provider = { "@type": "Organization", name: "Jumanly", sameAs: siteUrl() };
+  const price = course.free ? 0 : course.plan?.priceCents;
+  return {
+    "@context": "https://schema.org",
+    "@type": "Course",
+    name: course.title,
+    description: course.summary,
+    url,
+    inLanguage: course.language,
+    educationalLevel: course.level,
+    provider,
+    offers: {
+      "@type": "Offer",
+      category: course.free ? "Free" : "Subscription",
+      ...(price !== null && price !== undefined
+        ? { price: (price / 100).toFixed(2), priceCurrency: "USD" }
+        : {}),
+      url,
+    },
+    hasCourseInstance: {
+      "@type": "CourseInstance",
+      courseMode: "Online",
+      courseWorkload: isoDuration(course.durationMinutes),
+      ...(course.instructor ? { instructor: { "@type": "Person", name: course.instructor } } : {}),
+    },
+  };
+}
