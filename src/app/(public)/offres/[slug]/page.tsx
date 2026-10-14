@@ -79,12 +79,37 @@ export default async function JobPage({ params }: PageProps<"/offres/[slug]">) {
     datePosted: job.publishedAt?.toISOString(),
     validThrough: job.closesAt?.toISOString(),
     employmentType: employmentTypes[job.contractType],
-    hiringOrganization: { "@type": "Organization", name: company },
+    identifier: { "@type": "PropertyValue", name: company, value: job.slug },
+    hiringOrganization: {
+      "@type": "Organization",
+      name: company,
+      ...(job.organization.slug
+        ? { sameAs: `${siteUrl()}/entreprises/${job.organization.slug}` }
+        : {}),
+    },
     jobLocation: {
       "@type": "Place",
       address: { "@type": "PostalAddress", addressLocality: job.city, addressCountry: job.country },
     },
     jobLocationType: job.remote === "remote" ? "TELECOMMUTE" : undefined,
+    applicantLocationRequirements:
+      job.remote === "remote" ? { "@type": "Country", name: job.country } : undefined,
+    // Salaries are stored in USD cents per month.
+    baseSalary:
+      job.salaryMin !== null
+        ? {
+            "@type": "MonetaryAmount",
+            currency: job.currency,
+            value: {
+              "@type": "QuantitativeValue",
+              minValue: job.salaryMin / 100,
+              ...(job.salaryMax !== null ? { maxValue: job.salaryMax / 100 } : {}),
+              unitText: "MONTH",
+            },
+          }
+        : undefined,
+    // Applying goes through a free Jumanly account first.
+    directApply: false,
     url: `${siteUrl()}/offres/${job.slug}`,
   };
 

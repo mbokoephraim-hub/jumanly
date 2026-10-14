@@ -79,6 +79,7 @@ Conventions :
 | `common.error.server.title` | Le service est momentanément indisponible |
 | `common.error.server.text` | Nos équipes sont prévenues. Veuillez réessayer dans quelques minutes. |
 | `common.seo.titleSuffix` | · Jumanly |
+| `common.seo.publisher` | The Growth Lab |
 | `common.alt.logo` | Jumanly, Learn. Grow. Connect. |
 | `common.alt.aiOrb` | Suggestion de l'intelligence artificielle |
 
@@ -8699,3 +8700,21 @@ Petits textes techniques des pages publiques qui ne figurent pas dans les partie
 | `cookiesTable.consent.category` | Nécessaire |
 | `cookiesTable.consent.duration` | 6 mois |
 | `cookiesTable.consent.provider` | Jumanly |
+
+### Référencement (moteurs de recherche et assistants IA)
+
+Textes de `/llms.txt`, le résumé du site public lu par les assistants IA (ChatGPT, Claude, Perplexity…). Seules les pages publiques y figurent ; l'espace connecté, les profils et les portfolios n'y sont jamais.
+
+| Clé | Texte |
+|---|---|
+| `llms.summary` | Jumanly est une plateforme web africaine qui réunit la formation (Learn), le développement de carrière (Career), les offres d'emploi (Jobs) et le recrutement (Hire et Connect), avec une intelligence artificielle explicable. Elle s'adresse aux talents, aux professionnels RH, aux entreprises et aux institutions partenaires. |
+| `llms.facts.free` | Candidater à une offre est toujours gratuit, quel que soit le forfait. |
+| `llms.facts.ai` | L'IA recommande, l'humain décide : aucun rejet automatique, et chaque score de compatibilité est expliqué. |
+| `llms.facts.payment` | Prix en dollars américains (USD), paiement par Mobile Money et carte bancaire. Interface en français. |
+| `llms.facts.contact` | Contact uniquement par e-mail : assistant@jumanly.io et infojumanly@gmail.com. |
+| `llms.sections.pages` | Pages principales |
+| `llms.sections.courses` | Formations publiées |
+| `llms.sections.jobs` | Offres d'emploi ouvertes |
+| `llms.sections.more` | Pour aller plus loin |
+| `llms.sitemap` | Plan du site (toutes les pages publiques) |
+| `llms.job` | {title} · {company} · {city} |

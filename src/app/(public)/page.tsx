@@ -24,7 +24,7 @@ import {
 } from "@/server/queries/public";
 import { faqItems } from "@/server/services/contents";
 import { highestPrice, lowestPaidPrice } from "@/server/services/plans";
-import { pageMetadata } from "@/lib/seo";
+import { jsonLdScript, pageMetadata, siteJsonLd } from "@/lib/seo";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("home.seo");
@@ -83,8 +83,20 @@ export default async function HomePage() {
     .map((key) => withoutPlaceholders(t(`home.testimonials.${key}`)))
     .filter((text): text is string => text !== null);
 
+  const structuredData = siteJsonLd({
+    name: t("common.brand"),
+    description: t("home.seo.description"),
+    slogan: t("common.slogan"),
+    publisher: t("common.seo.publisher"),
+    emails: [t("footer.col.contact.pro"), t("footer.col.contact.general")],
+  });
+
   return (
     <>
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: jsonLdScript(structuredData) }}
+      />
       <PageHero
         eyebrow={t("home.hero.eyebrow")}
         title={t("home.hero.title")}

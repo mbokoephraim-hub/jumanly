@@ -132,6 +132,29 @@ test("sitemap et robots sont publiés", async ({ request }) => {
   expect((await request.get("/robots.txt")).status()).toBe(200);
 });
 
+test("les assistants IA trouvent un résumé du site (llms.txt)", async ({ request }) => {
+  const response = await request.get("/llms.txt");
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toContain("text/plain");
+  const text = await response.text();
+  expect(text).toMatch(/^# Jumanly/);
+  expect(text).toContain("/tarifs");
+  expect(text).toContain("/offres/");
+  expect(text).not.toContain("/app");
+  expect(text).not.toContain("/portfolio/");
+});
+
+test("l'accueil décrit Jumanly pour les moteurs (Organization, WebSite)", async ({ page }) => {
+  await page.goto("/");
+  const data = (await page.locator('script[type="application/ld+json"]').allTextContents()).map(
+    (text) => JSON.parse(text),
+  );
+  const graph = data.flatMap((item) => item["@graph"] ?? [item]);
+  expect(graph.map((item) => item["@type"])).toEqual(
+    expect.arrayContaining(["Organization", "WebSite"]),
+  );
+});
+
 // Rule 9 (CLAUDE.md): at most 200 KB of JavaScript (compressed) on every public page, details
 // included (E11: performance budget checked in CI).
 async function scriptBytes(page: Page, path: string) {

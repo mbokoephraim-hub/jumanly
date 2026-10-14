@@ -137,3 +137,25 @@ export async function getActiveBanners(audience: contents.BannerAudience) {
   cacheTag("contents");
   return contents.activeBanners(await contents.listOverrides(db), audience);
 }
+
+/** Published courses and open jobs listed in `/llms.txt` (titles only, no personal data). */
+export async function getLlmsEntries() {
+  "use cache";
+  cacheLife("hours");
+  cacheTag("courses", "jobs");
+  const [courseRows, jobRows] = await Promise.all([
+    db.course.findMany({
+      where: { status: "published" },
+      select: { slug: true, title: true, summary: true },
+      orderBy: { updatedAt: "desc" },
+      take: 100,
+    }),
+    db.job.findMany({
+      where: jobs.openJobWhere(new Date()),
+      select: { slug: true, title: true, city: true, organization: { select: { name: true } } },
+      orderBy: { publishedAt: "desc" },
+      take: 100,
+    }),
+  ]);
+  return { courses: courseRows, jobs: jobRows };
+}
