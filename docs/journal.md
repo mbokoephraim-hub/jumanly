@@ -2,6 +2,18 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Page d'accueil immersive (14 octobre 2026)
+
+- `/` retravaillée à la demande du propriétaire (décision `docs/decisions/2026-10-14-accueil-immersive.md`) :
+  héros sombre au dégradé Profondeur, titre qui apparaît mot à mot, aperçu d'app qui défile, score
+  qui compte et barre qui se remplit ; cartes « Pour qui » au dégradé qui glisse, personnages qui
+  bougent ; parcours dont la ligne se dessine avec l'orbe IA qui avance ; six cartes de services
+  avec icône et aperçu animé ; formations sur dégradé IA, forfaits en cartes « verre » avec bordure
+  Signature qui tourne ; bandeau final au dégradé animé.
+- `MarketingSection` gagne les tons `lime`, `profondeur`, `ia` et les options `scene`, `spotlight` ;
+  `LimeCtaBand` gagne `animated`. Les autres pages ne changent pas.
+- Vérifié : axe WCAG 2.2 AA et budget de 200 Ko de JavaScript sur `/` (e2e site public).
+
 ## Refonte visuelle · Lot 3 : page Talents (14 octobre 2026)
 
 - `/talents` refaite d'après `docs/maquettes/01-site-public/01-03` (desktop 1440 px et mobile

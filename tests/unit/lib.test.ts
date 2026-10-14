@@ -1,4 +1,5 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
+import { splitLastNumber } from "@/lib/numbers";
 import { appEnv, isInternalEnv } from "@/lib/env";
 import { formatUsd } from "@/lib/money";
 
@@ -27,5 +28,28 @@ describe("environnements", () => {
     expect(isInternalEnv()).toBe(false);
     vi.stubEnv("APP_ENV", "production");
     expect(isInternalEnv()).toBe(false);
+  });
+});
+
+describe("splitLastNumber (compteurs de la page d'accueil)", () => {
+  it("isole le dernier nombre d'un texte", () => {
+    expect(splitLastNumber("87 % compatible · Pourquoi ?")).toMatchObject({
+      before: "",
+      number: "87",
+      after: " % compatible · Pourquoi ?",
+      value: 87,
+      decimals: 0,
+    });
+    expect(splitLastNumber("De 0 à 49,9 USD/mois")).toMatchObject({
+      before: "De 0 à ",
+      number: "49,9",
+      value: 49.9,
+      decimals: 1,
+    });
+    expect(splitLastNumber("À partir de 1 200 USD/mois")?.value).toBe(1200);
+  });
+
+  it("laisse un texte sans nombre tel quel", () => {
+    expect(splitLastNumber("Sur contrat")).toBeNull();
   });
 });

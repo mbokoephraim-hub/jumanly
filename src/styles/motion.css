@@ -1,0 +1,300 @@
+/*
+ * Animations de la page d'accueil immersive (docs/decisions/2026-10-14-accueil-immersive.md).
+ *
+ * - Les mouvements d'ambiance (orbes, flottement, dégradés qui défilent, personnages) sont en CSS
+ *   pur et ne tournent que si le visiteur n'a pas demandé à réduire les animations.
+ * - Les apparitions au défilement passent par `html[data-motion]`, posé par <MotionRoot> quand
+ *   JavaScript tourne et que les animations sont permises : sans JavaScript, tout reste visible.
+ * - L'état final de chaque élément est son état par défaut ; l'animation ne fait qu'y mener.
+ * - Hors écran, les scènes (`[data-scene]`) mettent leurs animations en pause.
+ */
+
+@property --jm-angle {
+  syntax: "<angle>";
+  inherits: false;
+  initial-value: 0deg;
+}
+
+/* Bordure en dégradé Signature qui tourne autour d'une carte (`.jm-ring`). */
+.jm-ring {
+  position: relative;
+  isolation: isolate;
+}
+.jm-ring::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  padding: 2px;
+  border-radius: inherit;
+  background: conic-gradient(
+    from var(--jm-angle),
+    #d9fa72,
+    #7de36b,
+    #1e9a64,
+    #2fd3a6,
+    #e3f67c,
+    #d9fa72
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Fond dégradé deux fois plus large que la carte, qui glisse lentement (`.jm-flow`). */
+.jm-flow {
+  background-size: 220% 220%;
+  background-position: 0% 50%;
+}
+
+/* Lumière qui suit le pointeur dans le héros (variables posées par <MotionRoot>). */
+.jm-spotlight {
+  background: radial-gradient(
+    520px circle at var(--mx, 70%) var(--my, 30%),
+    rgb(166 242 107 / 0.16),
+    transparent 60%
+  );
+}
+
+/* Tracé du parcours : longueur normalisée (pathLength = 1). */
+.jm-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+@keyframes jm-float {
+  50% {
+    transform: translateY(-12px);
+  }
+}
+@keyframes jm-drift {
+  33% {
+    transform: translate(40px, -30px) scale(1.08);
+  }
+  66% {
+    transform: translate(-30px, 25px) scale(0.95);
+  }
+}
+@keyframes jm-breathe {
+  50% {
+    transform: translateY(-4px) rotate(-1.2deg) scale(1.015);
+  }
+}
+@keyframes jm-pose {
+  0%,
+  42% {
+    opacity: 0;
+  }
+  50%,
+  92% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+@keyframes jm-spin {
+  to {
+    --jm-angle: 360deg;
+  }
+}
+@keyframes jm-pan {
+  50% {
+    background-position: 100% 50%;
+  }
+}
+@keyframes jm-word {
+  from {
+    opacity: 0;
+    transform: translateY(0.45em);
+    filter: blur(10px);
+  }
+}
+@keyframes jm-rise {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+}
+@keyframes jm-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.6);
+  }
+  70% {
+    opacity: 1;
+    transform: scale(1.06);
+  }
+}
+@keyframes jm-screen {
+  0%,
+  12% {
+    transform: translateY(0);
+  }
+  45%,
+  60% {
+    transform: translateY(var(--jm-scroll, -18%));
+  }
+  92%,
+  100% {
+    transform: translateY(0);
+  }
+}
+@keyframes jm-pan-shot {
+  0%,
+  100% {
+    transform: scale(1.04) translate(0, 0);
+  }
+  50% {
+    transform: scale(1.12) translate(-4%, -5%);
+  }
+}
+@keyframes jm-fill {
+  from {
+    transform: scaleX(0);
+  }
+}
+@keyframes jm-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+@keyframes jm-travel-x {
+  from {
+    left: 0%;
+  }
+  to {
+    left: 100%;
+  }
+}
+@keyframes jm-travel-y {
+  from {
+    top: 0%;
+  }
+  to {
+    top: 100%;
+  }
+}
+@keyframes jm-glow {
+  0%,
+  100% {
+    box-shadow: 0 0 0 0 rgb(166 242 107 / 0);
+  }
+  40% {
+    box-shadow: 0 0 0 10px rgb(166 242 107 / 0.35);
+  }
+}
+@keyframes jm-pulse {
+  50% {
+    opacity: 0.55;
+    transform: scale(1.18);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Ambiance : toujours en mouvement, très lentement. */
+  .jm-float {
+    animation: jm-float 6s ease-in-out infinite;
+  }
+  .jm-float-slow {
+    animation: jm-float 9s ease-in-out infinite;
+  }
+  .jm-drift {
+    animation: jm-drift 22s ease-in-out infinite;
+  }
+  .jm-breathe {
+    transform-origin: 50% 100%;
+    animation: jm-breathe 4.5s ease-in-out infinite;
+  }
+  .jm-pose {
+    animation: jm-pose 9s ease-in-out infinite;
+  }
+  /* La première pose s'efface quand la seconde apparaît. */
+  .jm-pose-first {
+    animation-delay: -4.5s;
+  }
+  .jm-ring::before {
+    animation: jm-spin 7s linear infinite;
+  }
+  .jm-flow {
+    animation: jm-pan 14s ease-in-out infinite;
+  }
+  .jm-screen {
+    animation: jm-screen 16s ease-in-out infinite;
+  }
+  .jm-pan-shot {
+    animation: jm-pan-shot 18s ease-in-out infinite;
+  }
+  .jm-pulse {
+    animation: jm-pulse 3s ease-in-out infinite;
+  }
+
+  /* Héros : jouées au chargement, sans attendre JavaScript. */
+  .jm-word {
+    animation: jm-word 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(120ms + var(--i, 0) * 140ms);
+  }
+  .jm-rise {
+    animation: jm-rise 0.9s cubic-bezier(0.22, 1, 0.36, 1) both;
+    animation-delay: calc(300ms + var(--i, 0) * 120ms);
+  }
+  .jm-pop {
+    animation: jm-pop 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation-delay: calc(900ms + var(--i, 0) * 250ms);
+  }
+  .jm-fill {
+    transform-origin: left;
+    animation: jm-fill 1.6s cubic-bezier(0.22, 1, 0.36, 1) 1.2s both;
+  }
+
+  /* Survol et toucher : la carte se soulève. */
+  .jm-lift {
+    transition:
+      transform 0.35s cubic-bezier(0.22, 1, 0.36, 1),
+      box-shadow 0.35s ease;
+  }
+  .jm-lift:hover,
+  .jm-lift:focus-within {
+    transform: translateY(-6px);
+    box-shadow: 0 24px 48px rgb(11 26 31 / 0.22);
+  }
+
+  /* Apparition au défilement (JavaScript présent). */
+  html[data-motion] [data-reveal] {
+    transition:
+      opacity 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+      transform 0.8s cubic-bezier(0.22, 1, 0.36, 1);
+    transition-delay: calc(var(--i, 0) * 110ms);
+  }
+  html[data-motion] [data-reveal]:not([data-shown]) {
+    opacity: 0;
+    transform: translateY(32px);
+  }
+  html[data-motion] [data-reveal="zoom"]:not([data-shown]) {
+    transform: scale(0.94) translateY(20px);
+  }
+
+  /* Parcours : la ligne se dessine, l'orbe avance, chaque étape s'allume à son tour. */
+  html[data-motion] [data-shown] .jm-draw {
+    animation: jm-draw 3.2s cubic-bezier(0.45, 0, 0.25, 1) 0.2s both;
+  }
+  html[data-motion] [data-shown] .jm-travel-x {
+    animation: jm-travel-x 3.2s cubic-bezier(0.45, 0, 0.25, 1) 0.2s both;
+  }
+  html[data-motion] [data-shown] .jm-travel-y {
+    animation: jm-travel-y 3.2s cubic-bezier(0.45, 0, 0.25, 1) 0.2s both;
+  }
+  html[data-motion] [data-shown] .jm-glow {
+    animation: jm-glow 1.2s ease-out both;
+    animation-delay: calc(0.3s + var(--i, 0) * 0.95s);
+  }
+
+  /* Hors écran : pause. */
+  html[data-motion] [data-scene]:not([data-inview]) *,
+  html[data-motion] [data-scene]:not([data-inview]) *::before {
+    animation-play-state: paused !important;
+  }
+}
