@@ -1,0 +1,17 @@
+# Mises à jour automatiques des dépendances (partie 10 § 10.5) : une PR groupée par semaine,
+# plus une PR immédiate pour chaque faille de sécurité connue.
+version: 2
+updates:
+  - package-ecosystem: npm
+    directory: /
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 5
+    groups:
+      dependances:
+        patterns: ["*"]
+        update-types: [minor, patch]
+  - package-ecosystem: github-actions
+    directory: /
+    schedule:
+      interval: monthly

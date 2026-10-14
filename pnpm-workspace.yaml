@@ -8,3 +8,10 @@ ignoredBuiltDependencies:
   - "@swc/core"
   - sharp
   - unrs-resolver
+
+# Versions corrigées imposées aux dépendances indirectes signalées par `pnpm audit`
+# (outils de développement : CLI Prisma, aperçu des e-mails). Voir docs/decisions/2026-10-14-e11.md.
+overrides:
+  mysql2: ">=3.23.1"
+  deepmerge-ts: ">=8.0.0"
+  "@react-email/ui>next": "16.4.0"
