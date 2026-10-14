@@ -83,7 +83,7 @@ test("simulation orale : la réponse se tape si la dictée n'est pas disponible"
   await page.getByRole("button", { name: "Démarrer la simulation" }).click();
   await expect(page.getByText("Question 1 sur 4")).toBeVisible();
   await expect(
-    page.getByText("Aucun enregistrement n'est conservé", { exact: false }),
+    page.locator("#reponse").getByText("Aucun enregistrement n'est conservé", { exact: false }),
   ).toBeVisible();
   await page
     .getByLabel("Votre réponse")
