@@ -2,6 +2,25 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · Lot 3 : page Talents (14 octobre 2026)
+
+- `/talents` refaite d'après `docs/maquettes/01-site-public/01-03` (desktop 1440 px et mobile
+  390 px) avec les blocs du lot 2 : héros avec deux écrans de téléphone et Kofi, rangées de modules
+  en zigzag (panneau teinté Lime, Néon, Menthe claire, Brume), garanties et sélecteur de visibilité
+  illustré sur Sapin, quatre cartes de formules, bandeau licence partenaire Néon, bandeau final Lime.
+- Nouvelles cartes de formules `PublicPlanCards` (`src/components/site/pricing.tsx`), réutilisables
+  pour `/tarifs` : nom, accroche et prix lus en base (Plan), formule recommandée en Sapin, encadré
+  « Idéal pour ». Prix indisponible : montant masqué, bouton conservé. `talents.plans.note` n'est
+  pas affichée.
+- Aperçus des modules et du héros repris des maquettes, en WebP dans `public/apercus/` (26 à 56 Ko).
+- Textes ajoutés : `talents.hero.visual.*`, `talents.intro.eyebrow`, `talents.career.decide`,
+  `talents.guarantees.eyebrow`, `talents.plans.eyebrow`, `talents.plans.payment`.
+- « Candidatures toujours gratuites » sous Jobs en Feuille foncé (contraste AA), comme aux lots 1 et 2.
+
+### Dettes et points ouverts
+
+- Aperçus fictifs (« Grâce ») à remplacer par de vraies captures après la refonte de l'espace talent.
+
 ## Refonte visuelle · Lot 2 : accueil et à propos (14 octobre 2026)
 
 - `/` et `/a-propos` refaites d'après `docs/maquettes/01-site-public/01-01` et `01-02` (desktop

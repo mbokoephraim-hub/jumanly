@@ -5,7 +5,7 @@ import { compareRows, type CompareCell } from "@/config/pricing-compare";
 import { dynamic, numbered } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
-import { PlanCard } from "@/components/ui";
+import { ButtonLink, PlanCard } from "@/components/ui";
 import { limitOf, planCtaHref, plansOf, type PublicPlan } from "@/server/services/plans";
 
 /** Values injected in a plan's texts: price, seats and active jobs, all read from the database. */
@@ -150,5 +150,130 @@ export async function CompareTable({ plans, family }: { plans: PublicPlan[]; fam
         </table>
       </div>
     </details>
+  );
+}
+
+/**
+ * Plan cards of the redesigned public pages (mockups 01-03 and 01-09): white cards, the
+ * recommended plan in Sapin, price in large figures, features on light check discs and the
+ * « Idéal pour » box at the bottom. Names, taglines and prices come from the `Plan` table; when a
+ * price is unavailable, the amount is hidden and the button kept.
+ */
+export async function PublicPlanCards({
+  plans,
+  family,
+}: {
+  plans: PublicPlan[];
+  family: PlanFamily;
+}) {
+  const t = dynamic(await getTranslations());
+  const list = plansOf(plans, family);
+  return (
+    <ul
+      className={cx(
+        "grid items-stretch gap-3.5 md:grid-cols-2 lg:gap-5",
+        list.length === 4 ? "xl:grid-cols-4" : "lg:grid-cols-3",
+      )}
+    >
+      {list.map((plan, index) => {
+        const key = plan.contentKey;
+        const values = planValues(plan);
+        const dark = plan.recommended;
+        const previous = index > 0 && t.has(`${key}.includes`) ? list[index - 1] : undefined;
+        const tagline = plan.tagline || (t.has(`${key}.tagline`) ? t(`${key}.tagline`) : "");
+        const badge = dark
+          ? t("common.recommended")
+          : t.has(`${key}.badge`)
+            ? t(`${key}.badge`)
+            : undefined;
+        return (
+          <li
+            key={plan.code}
+            className={cx(
+              "relative flex flex-col gap-4 overflow-hidden rounded-card p-6 lg:p-7",
+              dark ? "bg-sapin text-blanc" : "bg-blanc text-sapin",
+            )}
+          >
+            {badge && (
+              <span
+                className={cx(
+                  "absolute top-6 right-6 inline-flex h-6 items-center rounded-pill px-2.5 text-[11px] font-semibold whitespace-nowrap text-sapin",
+                  dark ? "bg-lime" : "bg-neon",
+                )}
+              >
+                {badge}
+              </span>
+            )}
+            <div className="flex flex-col gap-1">
+              <h3 className="text-[22px] leading-[26px] font-semibold tracking-[-0.015em]">
+                {plan.name}
+              </h3>
+              {tagline && <p className="text-[13.5px] leading-[17px] opacity-75">{tagline}</p>}
+            </div>
+            {plan.priceCents === 0 ? (
+              <p className="text-[40px] leading-[44px] font-semibold tracking-[-0.04em]">
+                {t("pricing.card.free")}
+              </p>
+            ) : (
+              plan.priceCents !== null && (
+                <p className="flex items-baseline gap-1.5">
+                  <span className="text-[40px] leading-[44px] font-semibold tracking-[-0.04em]">
+                    {formatUsd(plan.priceCents)}
+                  </span>
+                  <span className="font-semibold">{t("pricing.card.currency")}</span>
+                  <span className="text-xs opacity-70">{t("pricing.card.perMonth")}</span>
+                </p>
+              )
+            )}
+            <ButtonLink
+              href={planCtaHref(plan)}
+              variant={dark ? "primary" : "tertiary"}
+              size="lg"
+              fullWidth
+            >
+              {t(`${key}.cta`)}
+            </ButtonLink>
+            <div aria-hidden className={cx("h-px", dark ? "bg-blanc/15" : "bg-brume")} />
+            {previous && (
+              <p className="text-[13.5px] font-semibold">
+                {t("pricing.card.includesPrevious", { plan: previous.name })}
+              </p>
+            )}
+            <ul className="flex flex-col gap-2.5">
+              {numbered(t, `${key}.f`, values).map((feature) => (
+                <li key={feature} className="flex items-start gap-2.5 text-[13.5px] leading-5">
+                  <span
+                    aria-hidden
+                    className={cx(
+                      "mt-px flex size-5 shrink-0 items-center justify-center rounded-full text-sapin",
+                      dark ? "bg-lime" : "bg-lime-clair",
+                    )}
+                  >
+                    <Icon name="check" className="size-3" />
+                  </span>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <div className="flex-1" />
+            {t.has(`${key}.note`) && (
+              <p className="text-xs leading-[17px] opacity-72">{t(`${key}.note`)}</p>
+            )}
+            <p
+              className={cx(
+                "flex items-center gap-2.5 rounded-[16px] px-3.5 py-3 text-xs leading-[17px]",
+                dark ? "bg-blanc/8" : "bg-creme",
+              )}
+            >
+              <Icon
+                name="objectif"
+                className={cx("size-[18px] shrink-0", dark ? "text-lime" : "text-feuille-fonce")}
+              />
+              {t("pricing.card.idealFor", { audience: t(`${key}.ideal`) })}
+            </p>
+          </li>
+        );
+      })}
+    </ul>
   );
 }

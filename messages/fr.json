@@ -458,11 +458,17 @@
       "cta": "Créer mon compte gratuit",
       "secondary": "Voir les formules",
       "badge": "Candidatures toujours gratuites",
-      "imageAlt": "Tableau de bord d'un talent sur téléphone, avec sa progression et ses candidatures"
+      "imageAlt": "Tableau de bord d'un talent sur téléphone, avec sa progression et ses candidatures",
+      "visual": {
+        "badge": "Attestation obtenue",
+        "matchTitle": "Analyste de données junior",
+        "matchText": "87 % compatible · Pourquoi ?"
+      }
     },
     "intro": {
       "title": "Un seul compte pour tout votre parcours",
-      "text": "Un seul compte relie vos formations, vos documents de candidature et les offres. Chaque étape nourrit la suivante, et l'IA explique toujours pourquoi elle vous conseille."
+      "text": "Un seul compte relie vos formations, vos documents de candidature et les offres. Chaque étape nourrit la suivante, et l'IA explique toujours pourquoi elle vous conseille.",
+      "eyebrow": "Un seul compte"
     },
     "learn": {
       "label": "Learn",
@@ -474,7 +480,8 @@
       "label": "Career",
       "title": "Construire son profil",
       "text": "Diagnostic de carrière, CV, lettres de motivation, biographie, préparation LinkedIn, plan de progression et simulations d'entretien. Le coach IA justifie chaque suggestion, et vous choisissez de l'appliquer ou non.",
-      "imageAlt": "Éditeur de CV avec une suggestion du coach IA et son explication"
+      "imageAlt": "Éditeur de CV avec une suggestion du coach IA et son explication",
+      "decide": "Appliquer ou ignorer, vous décidez"
     },
     "jobs": {
       "label": "Jobs",
@@ -493,7 +500,8 @@
       "item1": "Candidatures gratuites, quelle que soit la formule.",
       "item2": "Profils Free recrutés au même titre que les abonnés.",
       "item3": "Vos choix de confidentialité sont respectés.",
-      "item4": "Licence financée par un partenaire ? Activez-la avec votre code."
+      "item4": "Licence financée par un partenaire ? Activez-la avec votre code.",
+      "eyebrow": "Engagements"
     },
     "privacy": {
       "title": "Vous décidez qui vous voit",
@@ -503,7 +511,9 @@
       "title": "Quatre formules, un même parcours",
       "text": "Commencez gratuitement, puis passez à la formule qui correspond à votre objectif. Chaque formule comprend tout ce que propose la précédente.",
       "note": "Les cartes de formules reprennent les textes `pricing.talent.*` du fichier 05.",
-      "cta": "Comparer les formules en détail"
+      "cta": "Comparer les formules en détail",
+      "eyebrow": "Formules",
+      "payment": "Paiement par Mobile Money et carte bancaire. Prix en USD."
     },
     "partners": {
       "title": "Votre licence offerte par un partenaire",
