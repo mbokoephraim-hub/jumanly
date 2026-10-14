@@ -112,6 +112,15 @@ const cardSelect = {
 
 export type JobSummary = Prisma.JobGetPayload<{ select: typeof cardSelect }>;
 
+/** Job card of the public site (home page): adds the salary range when the recruiter gave one. */
+const publicCardSelect = {
+  ...cardSelect,
+  salaryMin: true,
+  salaryMax: true,
+} satisfies Prisma.JobSelect;
+
+export type PublicJobSummary = Prisma.JobGetPayload<{ select: typeof publicCardSelect }>;
+
 export async function searchJobs(db: PrismaClient, filters: JobFilters, now = new Date()) {
   const where = jobWhere(filters, now);
   const page = filters.page ?? 1;
@@ -147,7 +156,7 @@ export async function latestJobs(db: PrismaClient, take = 3, now = new Date()) {
     where: openJobWhere(now),
     orderBy: jobOrderBy("recent"),
     take,
-    select: cardSelect,
+    select: publicCardSelect,
   });
 }
 

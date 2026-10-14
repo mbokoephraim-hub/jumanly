@@ -77,18 +77,22 @@ const cardSelect = {
   coverUrl: true,
   requiredLevel: true,
   certificateEnabled: true,
+  instructor: true,
   _count: { select: { modules: true } },
   modules: { select: { _count: { select: { lessons: true } } } },
 } satisfies Prisma.CourseSelect;
 
 type CardRow = Prisma.CourseGetPayload<{ select: typeof cardSelect }>;
 
-export type CourseSummary = Omit<CardRow, "_count" | "modules"> & { lessonCount: number };
+export type CourseSummary = Omit<CardRow, "_count" | "modules"> & {
+  moduleCount: number;
+  lessonCount: number;
+};
 
 function toSummary({ _count, modules, ...course }: CardRow): CourseSummary {
-  void _count;
   return {
     ...course,
+    moduleCount: _count.modules,
     lessonCount: modules.reduce((sum, module) => sum + module._count.lessons, 0),
   };
 }
@@ -140,7 +144,7 @@ export async function listCourseThemes(db: PrismaClient): Promise<string[]> {
 }
 
 /** Courses shown on the home page: free ones first, then the most followed. */
-export async function featuredCourses(db: PrismaClient, take = 3) {
+export async function featuredCourses(db: PrismaClient, take = 4) {
   const rows = await db.course.findMany({
     where: { status: "published" },
     orderBy: [{ requiredLevel: "asc" }, { enrollmentCount: "desc" }],

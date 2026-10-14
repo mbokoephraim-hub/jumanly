@@ -65,7 +65,7 @@ export async function getLatestJobs() {
   cacheLife("minutes");
   cacheTag("jobs");
   const now = new Date();
-  return { jobs: await jobs.latestJobs(db, 3, now), now };
+  return { jobs: await jobs.latestJobs(db, 4, now), now };
 }
 
 export async function getJob(slug: string) {

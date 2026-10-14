@@ -210,6 +210,10 @@ Conventions :
 | `home.hero.reassurance2` | Candidatures toujours gratuites |
 | `home.hero.reassurance3` | Mobile Money et carte |
 | `home.hero.imageAlt` | Aperçu du tableau de bord Jumanly sur ordinateur et sur téléphone : progression des formations, candidatures en cours et offres compatibles. |
+| `home.hero.visual.badge` | Attestation obtenue |
+| `home.hero.visual.matchTitle` | Analyste de données junior |
+| `home.hero.visual.matchText` | 87 % compatible · Pourquoi ? |
+| `home.hero.visual.matchShort` | 87 % compatible |
 
 #### Trois publics
 
@@ -217,6 +221,7 @@ Conventions :
 |---|---|
 | `home.audiences.title` | Une plateforme, trois façons d'avancer |
 | `home.audiences.subtitle` | Que vous cherchiez un emploi, que vous recrutiez seul ou en équipe, Jumanly s'adapte à votre situation. |
+| `home.audiences.eyebrow` | Pour qui ? |
 | `home.audiences.talents.label` | Jumanly for Talents |
 | `home.audiences.talents.title` | Vous construisez votre carrière |
 | `home.audiences.talents.text` | Étudiants, jeunes diplômés, personnes en recherche d'emploi ou professionnels : formez-vous, préparez vos candidatures et postulez gratuitement. |
@@ -236,6 +241,7 @@ Conventions :
 |---|---|
 | `home.journey.title` | De la formation au recrutement, un parcours continu |
 | `home.journey.subtitle` | Chaque étape nourrit la suivante. Ce que vous apprenez enrichit votre profil, et votre profil vous rapproche des bonnes offres. |
+| `home.journey.eyebrow` | Le parcours |
 | `home.journey.step1.number` | 1 |
 | `home.journey.step1.title` | Se former |
 | `home.journey.step1.text` | Suivez des formations vidéo, faites les exercices et obtenez des attestations à valoriser sur votre profil. |
@@ -255,6 +261,7 @@ Conventions :
 |---|---|
 | `home.modules.title` | Cinq services connectés |
 | `home.modules.subtitle` | Jumanly n'est pas une juxtaposition d'outils. Chaque service est relié à votre profil, à vos offres et à vos candidatures. |
+| `home.modules.eyebrow` | Les modules |
 | `home.modules.learn.name` | Jumanly Learn |
 | `home.modules.learn.text` | Formations vidéo, supports pédagogiques, exercices, évaluations et attestations. |
 | `home.modules.learn.imageAlt` | Catalogue de formations Jumanly Learn |
@@ -279,6 +286,7 @@ Conventions :
 |---|---|
 | `home.trainings.title` | Des formations pour gagner en employabilité |
 | `home.trainings.subtitle` | Commencez par une sélection de formations gratuites, puis accédez à des parcours plus complets selon votre forfait. |
+| `home.trainings.eyebrow` | Jumanly Learn |
 | `home.trainings.cta` | Voir toutes les formations |
 | `home.trainings.empty` | Les premières formations arrivent bientôt. Créez votre compte pour être prévenu de leur ouverture. |
 
@@ -288,6 +296,7 @@ Conventions :
 |---|---|
 | `home.jobs.title` | Les dernières opportunités |
 | `home.jobs.subtitle` | Emplois, stages et missions publiés par des recruteurs et des entreprises. Postuler est toujours gratuit. |
+| `home.jobs.eyebrow` | Jumanly Jobs |
 | `home.jobs.cta` | Voir toutes les offres |
 | `home.jobs.empty` | Les premières offres seront bientôt publiées. Créez votre compte pour préparer votre profil dès maintenant. |
 | `home.jobs.recruiterCta` | Vous recrutez ? Publiez une offre gratuitement |
@@ -298,6 +307,7 @@ Conventions :
 |---|---|
 | `home.pricing.title` | Commencez gratuitement, évoluez à votre rythme |
 | `home.pricing.subtitle` | Chaque famille de forfaits démarre par une formule gratuite. Les formules payantes ajoutent des outils, jamais une condition pour postuler. |
+| `home.pricing.eyebrow` | Forfaits |
 | `home.pricing.talents.name` | Jumanly for Talents |
 | `home.pricing.talents.price` | De 0 à {price} USD/mois |
 | `home.pricing.talents.text` | Free, Starter, Pro et Premium : de la découverte à la préparation intensive. |
@@ -319,6 +329,7 @@ Conventions :
 |---|---|
 | `home.trust.title` | Une plateforme qui vous respecte |
 | `home.trust.subtitle` | Nos engagements sont inscrits dans le fonctionnement même de Jumanly. |
+| `home.trust.eyebrow` | Nos engagements |
 | `home.trust.free.title` | Candidatures toujours gratuites |
 | `home.trust.free.text` | Quel que soit votre forfait, postuler ne coûte rien. Les profils Free sont recrutés au même titre que les abonnés. |
 | `home.trust.ai.title` | L'IA recommande, l'humain décide |
@@ -344,6 +355,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `home.faq.title` | Questions fréquentes |
+| `home.faq.eyebrow` | FAQ |
 | `home.faq.q1` | Jumanly est-il gratuit ? |
 | `home.faq.a1` | Oui, vous pouvez créer votre compte, construire votre profil, consulter les offres et postuler gratuitement. Des formules payantes ajoutent des formations et des outils de préparation. |
 | `home.faq.q2` | Dois-je payer pour postuler à une offre ? |
@@ -377,11 +389,15 @@ Conventions :
 | `about.hero.title` | Relier les compétences aux opportunités |
 | `about.hero.text` | Jumanly est une plateforme numérique qui réunit la formation professionnelle, le développement de carrière, la découverte d'opportunités et la gestion du recrutement au sein d'un même écosystème. |
 | `about.hero.imageAlt` | Talents et recruteurs reliés par la plateforme Jumanly |
+| `about.hero.chips.learn` | Se former |
+| `about.hero.chips.exchange` | Échanger |
+| `about.hero.chips.recruit` | Recruter |
 | `about.vision.title` | Notre vision |
 | `about.vision.text` | Construire une plateforme africaine de référence qui facilite le développement des compétences, la progression professionnelle et la rencontre entre talents et employeurs. |
 | `about.mission.title` | Notre mission |
 | `about.mission.text` | Accompagner les individus dans la construction de leur trajectoire professionnelle et permettre aux organisations d'identifier, d'évaluer et de recruter plus efficacement les compétences dont elles ont besoin. |
 | `about.positioning.title` | À la croisée de trois univers |
+| `about.positioning.eyebrow` | Positionnement |
 | `about.positioning.intro` | Notre ambition n'est pas de proposer plusieurs services sur un même site, mais de les connecter pour créer une expérience professionnelle continue. |
 | `about.positioning.edtech.title` | EdTech |
 | `about.positioning.edtech.text` | L'apprentissage numérique et le développement des compétences. |
@@ -392,6 +408,7 @@ Conventions :
 | `about.continuity.title` | Une expérience continue |
 | `about.continuity.text` | Un talent peut se former, enrichir son profil, améliorer sa candidature et postuler. Un employeur peut identifier ce profil, examiner ses qualifications, échanger avec le candidat et organiser son recrutement. Tout se passe au même endroit. |
 | `about.values.title` | Nos valeurs |
+| `about.values.eyebrow` | Ce qui nous guide |
 | `about.values.access.title` | Accessibilité |
 | `about.values.access.text` | Chacun doit pouvoir construire une présence professionnelle, même sans capacité financière. C'est pourquoi le compte, le profil et les candidatures sont gratuits. |
 | `about.values.fairness.title` | Équité |
@@ -403,10 +420,15 @@ Conventions :
 | `about.values.privacy.title` | Respect de la vie privée |
 | `about.values.privacy.text` | Vous choisissez la visibilité de votre profil. Les partenaires institutionnels ne reçoivent que des données agrégées. |
 | `about.growthlab.title` | Une initiative de The Growth Lab |
+| `about.growthlab.eyebrow` | The Growth Lab |
 | `about.growthlab.text` | Jumanly est développée et portée par The Growth Lab, qui assure la direction stratégique du produit, l'organisation des contenus, la politique commerciale, la gestion des partenariats et la supervision de la plateforme. |
 | `about.growthlab.signature` | Une plateforme développée par The Growth Lab |
 | `about.launch.title` | Une plateforme construite avec ses utilisateurs |
 | `about.launch.text` | Jumanly s'ouvre par étapes : un test fermé, puis une bêta communautaire avec des talents et des employeurs, avant l'ouverture progressive au public. Les retours des premiers utilisateurs façonnent chaque version. |
+| `about.launch.eyebrow` | Lancement |
+| `about.launch.step1` | Test fermé |
+| `about.launch.step2` | Bêta communautaire |
+| `about.launch.step3` | Ouverture progressive au public |
 | `about.cta.title` | Envie de nous rejoindre ou de collaborer ? |
 | `about.cta.primary` | Créer mon compte gratuit |
 | `about.cta.secondary` | Nous écrire |
