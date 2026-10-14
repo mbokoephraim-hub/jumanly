@@ -241,14 +241,14 @@ async function UsageTab({ money }: { money: (micro: number) => string }) {
           <p className="rounded-card bg-blanc p-6">{t("admin.ai.usage.empty")}</p>
         ) : (
           <>
-            <h3 className="text-h3 font-semibold">{t("admin.ai.usage.byFeature")}</h3>
+            <h3 className="font-semibold text-h3">{t("admin.ai.usage.byFeature")}</h3>
             {table(
               t("admin.ai.usage.byFeature"),
               t("admin.ai.usage.col.feature"),
               usage.byFeature,
               featureLabel,
             )}
-            <h3 className="text-h3 font-semibold">{t("admin.ai.usage.byPlan")}</h3>
+            <h3 className="font-semibold text-h3">{t("admin.ai.usage.byPlan")}</h3>
             {table(
               t("admin.ai.usage.byPlan"),
               t("admin.ai.usage.col.plan"),
@@ -361,12 +361,12 @@ async function WeightsTab({
         )}
       </form>
       <div className="flex flex-col gap-1 rounded-card bg-blanc p-6">
-        <h3 className="text-h3 font-semibold">{t("admin.ai.weights.excluded.title")}</h3>
+        <h3 className="font-semibold text-h3">{t("admin.ai.weights.excluded.title")}</h3>
         <p className="text-sm">{t("admin.ai.weights.excluded.body")}</p>
       </div>
       {history.length > 0 && (
         <div className="flex flex-col gap-2">
-          <h3 className="text-h3 font-semibold">{t("admin.ai.weights.history")}</h3>
+          <h3 className="font-semibold text-h3">{t("admin.ai.weights.history")}</h3>
           <ul className="flex flex-col gap-1 text-sm">
             {history.map((row) => (
               <li key={row.id}>

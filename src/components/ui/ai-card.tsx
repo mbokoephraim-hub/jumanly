@@ -4,32 +4,42 @@ import { useTranslations } from "next-intl";
 import { AiOrb } from "@/components/brand/ai-orb";
 
 /**
- * AI suggestion card (§ 11.6): content on the AI gradient, a "Why?" panel and the human
- * controls (Apply / Ignore, passed as `actions`). Nothing changes without the user's consent.
+ * AI suggestion card (mockup 00-03): AI gradient, orb and Néon label, the suggestion, a
+ * « Pourquoi ? » with the eye icon, and the human controls (Appliquer / Ignorer, passed as
+ * `actions`). Nothing changes without the user's consent.
  */
 export function AiCard({
   children,
   explanation,
   actions,
+  label,
 }: {
   children: ReactNode;
   explanation: ReactNode;
   actions: ReactNode;
+  /** Replaces the default « Jumanly Intelligence » label (e.g. the coach's name). */
+  label?: string;
 }) {
   const t = useTranslations("ai.card");
   return (
-    <section className="flex flex-col gap-3 rounded-card bg-gradient-ai p-5 text-blanc">
-      <h3 className="flex items-center gap-2 text-neon text-label">
+    <section className="relative isolate flex flex-col gap-3 overflow-hidden rounded-box bg-gradient-ai px-[22px] py-5 text-blanc">
+      <span
+        aria-hidden
+        className="absolute -top-20 -right-20 -z-10 size-60 rounded-full border-[18px] border-blanc/10"
+      />
+      <h3 className="flex items-center gap-2.5 text-lab text-neon">
         <AiOrb />
-        {t("title")}
+        {label ?? t("title")}
       </h3>
-      <div className="text-[15px] leading-6">{children}</div>
-      <details>
-        <summary className="inline-flex cursor-pointer items-center gap-1.5 text-sm font-medium text-lime underline-offset-4 hover:underline">
-          <Icon name="transparence" className="size-4" />
+      <div className="text-sm leading-5 text-blanc/90 [&_strong]:text-blanc">{children}</div>
+      <details className="group">
+        <summary className="inline-flex cursor-pointer list-none items-center gap-1.5 text-xs font-semibold text-neon underline-offset-4 hover:underline [&::-webkit-details-marker]:hidden">
+          <Icon name="eye" className="size-4" />
           {t("why")}
         </summary>
-        <div className="mt-2 text-sm leading-6">{explanation}</div>
+        <div className="mt-2 rounded-[16px] bg-nuit/35 px-3.5 py-3 text-xs leading-[18px] text-blanc/85">
+          {explanation}
+        </div>
       </details>
       <div className="flex flex-wrap gap-2">{actions}</div>
     </section>

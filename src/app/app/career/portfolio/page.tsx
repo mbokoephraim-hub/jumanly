@@ -193,7 +193,7 @@ export default async function PortfolioPage({ searchParams }: PageProps<"/app/ca
                 id={`projet-${project.id}`}
                 className="flex scroll-mt-24 flex-col gap-2 rounded-card bg-blanc p-5"
               >
-                <h3 className="text-h3 font-semibold">{project.title}</h3>
+                <h3 className="font-semibold text-h3">{project.title}</h3>
                 {project.result && <p className="text-sm">{project.result}</p>}
                 <details>
                   <summary className="cursor-pointer text-sm font-medium underline">

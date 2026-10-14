@@ -57,7 +57,7 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
           return (
             <li key={job.id} className="flex flex-col gap-3 rounded-card bg-blanc p-6">
               <div className="flex flex-col gap-1">
-                <h2 className="text-h3 font-semibold">{job.title}</h2>
+                <h2 className="font-semibold text-h3">{job.title}</h2>
                 <p className="text-sm text-ardoise">
                   {[job.organization.name, job.city, formatDate(job.updatedAt)].join(" · ")}
                 </p>

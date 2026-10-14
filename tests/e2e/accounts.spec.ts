@@ -45,7 +45,12 @@ test.describe("connexion", () => {
 
     await page.goto("/app/parametres");
     await page.locator("summary[aria-label]").filter({ visible: true }).first().click();
-    await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
+    // The sidebar has its own logout button too: use the one of the open account menu.
+    await page
+      .locator("details[open]")
+      .getByRole("button", { name: "Se déconnecter" })
+      .filter({ visible: true })
+      .click();
     await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
 
     await page.goto("/app");

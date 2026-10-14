@@ -1,5 +1,5 @@
 import type { ComponentProps } from "react";
-import { ChevronDown } from "lucide-react";
+import { Icon } from "@/components/brand/icon";
 import { cx } from "@/lib/cx";
 import { Field, inputClasses, type FieldProps } from "./field";
 
@@ -28,7 +28,7 @@ export function Select({
       {(aria) => (
         <div className="relative">
           <select
-            className={cx(inputClasses, "h-11 appearance-none pr-10", className)}
+            className={cx(inputClasses, "h-12 appearance-none pr-11", className)}
             {...aria}
             {...rest}
           >
@@ -39,9 +39,9 @@ export function Select({
               </option>
             ))}
           </select>
-          <ChevronDown
-            aria-hidden
-            className="pointer-events-none absolute top-1/2 right-3.5 size-4 -translate-y-1/2 text-ardoise"
+          <Icon
+            name="chev-d"
+            className="pointer-events-none absolute top-1/2 right-4 size-[18px] -translate-y-1/2 text-ardoise"
           />
         </div>
       )}

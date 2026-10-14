@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, type KeyboardEvent } from "react";
-import { X } from "lucide-react";
+import { Icon } from "@/components/brand/icon";
 import { useTranslations } from "next-intl";
 import { inputClasses } from "@/components/ui/field";
 import { cx } from "@/lib/cx";
@@ -47,7 +47,7 @@ export function SkillsInput({
         onBlur={add}
         placeholder={t("placeholder")}
         aria-describedby="welcome-skills-hint"
-        className={cx(inputClasses, "h-11")}
+        className={cx(inputClasses, "h-12")}
       />
       <datalist id="welcome-skill-suggestions">
         {suggestions.map((name) => (
@@ -69,7 +69,7 @@ export function SkillsInput({
                 aria-label={t("remove", { skill })}
                 className="flex size-6 items-center justify-center rounded-full hover:bg-sapin/10"
               >
-                <X aria-hidden className="size-3.5" />
+                <Icon name="fermer" className="size-3.5" />
               </button>
             </span>
           </li>

@@ -1,7 +1,10 @@
 import type { ComponentProps } from "react";
 import { cx } from "@/lib/cx";
 
-/** Data table. Scrolls horizontally on small screens; the caption names it for screen readers. */
+/**
+ * Data table (mockup 00-02): white card with 24 px corners, Ardoise capital headers, rows
+ * separated by Brume. Scrolls horizontally on small screens; the caption names it for screen readers.
+ */
 export function Table({
   caption,
   className,
@@ -14,9 +17,9 @@ export function Table({
       role="region"
       aria-label={caption}
       tabIndex={0}
-      className="overflow-x-auto rounded-md bg-blanc"
+      className="overflow-x-auto rounded-box bg-blanc py-1.5"
     >
-      <table className={cx("w-full border-collapse text-left text-sm", className)} {...rest}>
+      <table className={cx("w-full border-collapse text-left text-[13px]", className)} {...rest}>
         <caption className="sr-only">{caption}</caption>
         {children}
       </table>
@@ -28,10 +31,7 @@ export function Th({ className, ...rest }: ComponentProps<"th">) {
   return (
     <th
       scope="col"
-      className={cx(
-        "border-b border-brume px-4 py-3 whitespace-nowrap text-ardoise text-label",
-        className,
-      )}
+      className={cx("px-[18px] py-2.5 text-lab whitespace-nowrap text-ardoise", className)}
       {...rest}
     />
   );
@@ -39,6 +39,6 @@ export function Th({ className, ...rest }: ComponentProps<"th">) {
 
 export function Td({ className, ...rest }: ComponentProps<"td">) {
   return (
-    <td className={cx("border-b border-brume/60 px-4 py-3 text-sapin", className)} {...rest} />
+    <td className={cx("border-t border-brume px-[18px] py-3.5 text-sapin", className)} {...rest} />
   );
 }

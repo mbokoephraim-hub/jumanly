@@ -1,6 +1,8 @@
 /**
  * Brand assets: ressources/ (files as provided) → what the app serves.
- * - Icons: ressources/icones/trait/*.svg → src/components/brand/icon-paths.ts (drawn with
+ * - Icons: ressources/icones/trait/*.svg (41 brand icons), then the interface icons of the mockups
+ *   (docs/maquettes/ressources/icones-complementaires) and the few drawn for the app in the same
+ *   grammar (ressources/icones/interface) → src/components/brand/icon-paths.ts (drawn with
  *   currentColor, so one set covers the Sapin, white and duo styles).
  * - Characters, patterns, shapes, backgrounds → public/ (SVG only).
  * - App icons (PWA manifest): ressources/logos/jumanly-favicon-{192,512}.png → public/marque/.
@@ -37,18 +39,31 @@ function svgFiles(dir: string) {
     .sort();
 }
 
-// Icons: keep only the drawing inside the stroke group.
+// Icons: keep only the drawing. Brand icons wrap it in a stroke group; interface icons carry the
+// stroke attributes on the <svg> element itself.
 const ICON_GROUP =
   /<g fill="none" stroke="#0F3F37" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">([\s\S]*?)<\/g>/;
-const icons = svgFiles("ressources/icones/trait").map((file) => {
-  const svg = stripMetadata(readFileSync(join(root, "ressources/icones/trait", file), "utf8"));
-  const match = ICON_GROUP.exec(svg);
-  if (!match) throw new Error(`Icône au format inattendu : ${file}`);
-  return [basename(file, ".svg").replace(/^jm-/, ""), match[1]] as const;
-});
+const ICON_ROOT = /<svg[^>]*stroke="#0F3F37"[^>]*>([\s\S]*?)<\/svg>/;
+const iconFolders = [
+  "ressources/icones/trait",
+  "docs/maquettes/ressources/icones-complementaires",
+  "ressources/icones/interface",
+];
+const icons = iconFolders.flatMap((folder) =>
+  svgFiles(folder).map((file) => {
+    const svg = stripMetadata(readFileSync(join(root, folder, file), "utf8"));
+    const match = ICON_GROUP.exec(svg) ?? ICON_ROOT.exec(svg);
+    if (!match) throw new Error(`Icône au format inattendu : ${folder}/${file}`);
+    return [basename(file, ".svg").replace(/^jm-/, ""), match[1].trim()] as const;
+  }),
+);
+const duplicate = icons.find(
+  ([name], index) => icons.findIndex(([other]) => other === name) !== index,
+);
+if (duplicate) throw new Error(`Icône en double : ${duplicate[0]}`);
 write(
   join(root, "src/components/brand/icon-paths.ts"),
-  `// Généré par scripts/build-brand-assets.ts depuis ressources/icones/trait. Ne pas modifier.\n` +
+  `// Généré par scripts/build-brand-assets.ts depuis ${iconFolders.join(", ")}. Ne pas modifier.\n` +
     `export const iconPaths = {\n${icons.map(([name, body]) => `  ${JSON.stringify(name)}: ${JSON.stringify(body)},`).join("\n")}\n} as const;\n`,
 );
 

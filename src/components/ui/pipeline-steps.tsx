@@ -5,8 +5,8 @@ export const pipelineStages = ["new", "screening", "test", "interview", "offer",
 export type PipelineStage = (typeof pipelineStages)[number];
 
 /**
- * Pipeline steps (§ 11.5): each recruitment stage with its candidate count.
- * The current stage is marked for screen readers with aria-current.
+ * Pipeline steps: each recruitment stage with its candidate count, as pills (mockup 00-03).
+ * There is never an « automatically rejected » stage. The current stage is marked with aria-current.
  */
 export function PipelineSteps({
   counts,
@@ -25,15 +25,15 @@ export function PipelineSteps({
             key={stage}
             aria-current={active ? "step" : undefined}
             className={cx(
-              "flex h-11 shrink-0 items-center gap-2 rounded-pill px-4 text-sm font-medium",
-              active ? "bg-sapin text-blanc" : "bg-blanc text-sapin",
+              "flex h-10 shrink-0 items-center gap-2 rounded-pill pr-1.5 pl-4 text-[13px] font-semibold",
+              active ? "bg-sapin text-blanc" : "bg-gris-clair text-sapin",
             )}
           >
             {t(stage)}
             <span
               className={cx(
-                "inline-flex min-w-6 justify-center rounded-pill px-1.5 text-label",
-                active ? "bg-lime text-sapin" : "bg-brume text-sapin",
+                "inline-flex h-6 min-w-6 items-center justify-center rounded-pill px-2 text-[11px] font-semibold",
+                active ? "bg-lime text-sapin" : "bg-blanc text-sapin",
               )}
             >
               {t("count", { count: counts[stage] ?? 0 })}

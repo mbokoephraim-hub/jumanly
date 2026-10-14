@@ -2,12 +2,17 @@ import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
 import { cx } from "@/lib/cx";
 
+/**
+ * Mockup 00-02: white field, radius 14, 1.5 px Brume border drawn inside; focus Sapin + Lime
+ * halo; error Corail with its message; valid state Feuille.
+ */
 export const inputClasses = cx(
-  "w-full rounded-sm border border-brume bg-blanc px-4 text-sapin",
-  "placeholder:text-ardoise/70 transition-colors",
-  "hover:border-sapin/40 focus:border-feuille focus:outline-none focus:ring-3 focus:ring-feuille/20",
+  "w-full rounded-sm bg-blanc px-4 text-sm text-sapin ring-[1.5px] ring-brume ring-inset",
+  "placeholder:text-[#8a9794] transition-shadow",
+  "hover:ring-sapin/35",
+  "focus:shadow-[0_0_0_6px_rgb(166_242_107/0.55)] focus:ring-2 focus:ring-sapin focus:outline-none",
   "disabled:cursor-not-allowed disabled:bg-creme disabled:text-ardoise",
-  "aria-invalid:border-corail aria-invalid:focus:ring-corail/20",
+  "aria-invalid:ring-corail",
 );
 
 export type FieldProps = {
@@ -25,7 +30,7 @@ export type FieldAria = {
   "aria-describedby"?: string;
 };
 
-/** Shared wrapper: label, hint and error message linked to the control for accessibility. */
+/** Shared wrapper: label above, hint and error message linked to the control for accessibility. */
 export function Field({
   id,
   label,
@@ -39,14 +44,14 @@ export function Field({
   const errorId = error ? `${id}-error` : undefined;
   return (
     <div className="flex flex-col gap-1.5">
-      <label htmlFor={id} className="text-sapin text-label">
+      <label htmlFor={id} className="text-[13px] leading-[18px] font-semibold text-sapin">
         {label}
         {required ? (
           <span className="text-corail-fonce" aria-hidden>
             {" *"}
           </span>
         ) : (
-          <span className="font-normal text-ardoise">
+          <span className="font-medium text-ardoise">
             {" · "}
             {t("optional")}
           </span>
@@ -59,12 +64,12 @@ export function Field({
         "aria-describedby": [errorId, hintId].filter(Boolean).join(" ") || undefined,
       })}
       {hint && (
-        <p id={hintId} className="text-ardoise text-caption">
+        <p id={hintId} className="text-xs leading-[17px] text-ardoise">
           {hint}
         </p>
       )}
       {error && (
-        <p id={errorId} className="font-medium text-corail-fonce text-caption">
+        <p id={errorId} className="text-xs leading-[17px] font-medium text-down-texte">
           {error}
         </p>
       )}

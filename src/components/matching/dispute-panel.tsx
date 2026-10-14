@@ -44,7 +44,7 @@ export function DisputePanel({
       aria-labelledby="revision-title"
       className="flex scroll-mt-24 flex-col gap-3 rounded-card bg-blanc p-6"
     >
-      <h2 id="revision-title" className="text-h3 font-semibold">
+      <h2 id="revision-title" className="font-semibold text-h3">
         {t("ai.dispute.title")}
       </h2>
       {outcome === "created" && (

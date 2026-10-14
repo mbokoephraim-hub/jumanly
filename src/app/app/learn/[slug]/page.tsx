@@ -1,6 +1,5 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { ArrowLeft } from "lucide-react";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
@@ -109,7 +108,7 @@ export default async function LearnCoursePage({
         href="/app/learn"
         className="flex items-center gap-1 self-start font-semibold underline-offset-4 hover:underline"
       >
-        <ArrowLeft aria-hidden className="size-4" />
+        <Icon name="precedent" className="size-4" />
         {t("learn.course.back")}
       </Link>
       {errorAlert}
@@ -301,7 +300,7 @@ export default async function LearnCoursePage({
           className="flex flex-col gap-4 self-start rounded-card bg-blanc p-5"
           aria-labelledby="course-toc"
         >
-          <h2 id="course-toc" className="text-h3 font-semibold">
+          <h2 id="course-toc" className="font-semibold text-h3">
             {t("learn.player.toc.title")}
           </h2>
           <ProgressBar value={enrollment.progress} label={t("learn.player.toc.title")} />

@@ -36,7 +36,7 @@ export async function PlanChoice({ plans, selected }: { plans: PublicPlan[]; sel
             />
             <span className="flex flex-1 flex-col gap-2">
               <span className="flex flex-wrap items-center justify-between gap-2">
-                <span className="text-h3 font-semibold">{plan.name}</span>
+                <span className="font-semibold text-h3">{plan.name}</span>
                 <span className="font-semibold">{price}</span>
               </span>
               {plan.recommended && (

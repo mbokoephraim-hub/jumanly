@@ -601,7 +601,7 @@ async function LessonEditor({
 
       {lesson.kind === "quiz" && lesson.quiz && (
         <div id="quiz" className="flex scroll-mt-6 flex-col gap-4 border-t border-brume pt-4">
-          <h3 className="text-h3 font-semibold">{t("quiz.title")}</h3>
+          <h3 className="font-semibold text-h3">{t("quiz.title")}</h3>
           {query("ok") === "quiz" && <Alert tone="success" title={t("quiz.saved")} />}
           {query("erreur") === "question" && (
             <Alert tone="error" title={t("quiz.question.invalid")} />

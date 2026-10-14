@@ -172,7 +172,7 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
       )}
 
       <form action={addStepAction} className="flex flex-col gap-3 rounded-card bg-blanc p-6">
-        <h2 className="text-h3 font-semibold">{t("career.plan.step.add")}</h2>
+        <h2 className="font-semibold text-h3">{t("career.plan.step.add")}</h2>
         <div className="grid gap-3 sm:grid-cols-[1fr_200px]">
           <TextField
             id="plan-step-title"

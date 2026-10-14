@@ -6,6 +6,8 @@ const files = {
   negative: { src: "/marque/jumanly-logo-negatif.svg", width: 578, height: 120 },
   symbol: { src: "/marque/jumanly-pictogramme-sapin.svg", width: 120, height: 120 },
   symbolLight: { src: "/marque/jumanly-pictogramme-blanc.svg", width: 120, height: 120 },
+  /** Lime tile with the Sapin "j": top of the signed-in sidebar (mockup 00-04). */
+  tile: { src: "/marque/jumanly-symbole-lime.svg", width: 120, height: 120 },
 };
 
 /** Jumanly logo. `height` in pixels; the width follows the proportions. */

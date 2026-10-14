@@ -17,12 +17,12 @@ export function QuotaGauge({
   const t = useTranslations("billing.quotas");
   const unlimited = limit === null;
   const ratio = unlimited || limit === 0 ? 0 : (used / limit) * 100;
-  const tone = ratio >= 100 ? "error" : ratio >= 80 ? "warning" : "sapin";
+  const tone = ratio >= 100 ? "error" : ratio >= 80 ? "warning" : "feuille";
   return (
     <div className="flex flex-col gap-2">
       <div className="flex items-baseline justify-between gap-3">
-        <span className="text-[15px] font-medium text-sapin">{label}</span>
-        <span className="text-ardoise text-label">
+        <span className="text-sm text-sapin">{label}</span>
+        <span className="text-sm font-semibold text-sapin">
           {unlimited ? t("unlimited") : t("usage", { used, limit })}
         </span>
       </div>

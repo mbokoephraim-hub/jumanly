@@ -25,7 +25,7 @@ export function ModalDemo() {
             <Button variant="tertiary" onClick={() => setOpen(false)}>
               {t("cancel")}
             </Button>
-            <Button variant="danger" onClick={() => setOpen(false)}>
+            <Button variant="secondary" onClick={() => setOpen(false)}>
               {t("confirm")}
             </Button>
           </>

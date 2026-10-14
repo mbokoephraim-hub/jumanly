@@ -3,7 +3,7 @@ import { useTranslations } from "next-intl";
 import { ButtonLink } from "./button";
 
 /**
- * Plan lock (§ 11.5): shown when an entitlement is missing. The plan name comes from the
+ * Plan lock (mockup 00-02): shown when an entitlement is missing. The plan name comes from the
  * database (never tested in code, CLAUDE.md § 2). Applying is never locked (CLAUDE.md § 1).
  */
 export function PlanLock({
@@ -18,20 +18,22 @@ export function PlanLock({
   const t = useTranslations("common");
   if (compact) {
     return (
-      <span className="inline-flex h-7 items-center gap-1.5 rounded-pill bg-sapin px-3 text-blanc text-label">
-        <Icon name="confidentialite" className="size-3.5 text-lime" />
+      <span className="inline-flex h-6 items-center gap-1.5 rounded-pill bg-sapin px-2.5 text-[11px] font-semibold text-neon">
+        <Icon name="lock" className="size-3.5" />
         {t("requiredPlan", { plan })}
       </span>
     );
   }
   return (
-    <div className="flex flex-col items-start gap-3 rounded-md border-2 border-dashed border-sapin/25 p-5">
-      <span className="flex size-10 items-center justify-center rounded-full bg-sapin text-lime">
-        <Icon name="confidentialite" className="size-5" />
+    <div className="flex flex-wrap items-center gap-4 rounded-[20px] bg-blanc px-5 py-4 ring-[1.5px] ring-brume ring-inset">
+      <span className="flex size-11 shrink-0 items-center justify-center rounded-sm bg-creme text-sapin">
+        <Icon name="lock" className="size-5" />
       </span>
-      <p className="font-semibold">{t("requiredPlan", { plan })}</p>
-      {description && <p className="text-[15px] leading-6 text-ardoise">{description}</p>}
-      <ButtonLink href="/tarifs" size="sm">
+      <div className="flex min-w-0 flex-1 basis-48 flex-col">
+        <p className="text-[13.5px] leading-5 font-semibold">{t("requiredPlan", { plan })}</p>
+        {description && <p className="text-xs leading-[17px] text-ardoise">{description}</p>}
+      </div>
+      <ButtonLink href="/tarifs" size="sm" variant="secondary">
         {t("seePlans")}
       </ButtonLink>
     </div>

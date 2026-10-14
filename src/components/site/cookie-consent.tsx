@@ -150,7 +150,7 @@ export function CookieSettingsButton({ label }: { label: string }) {
     <button
       type="button"
       onClick={() => window.dispatchEvent(new Event(OPEN_COOKIE_SETTINGS))}
-      className="underline hover:text-lime"
+      className="hover:text-lime"
     >
       {label}
     </button>

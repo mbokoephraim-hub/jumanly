@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Eye, EyeOff } from "lucide-react";
+import { Icon } from "@/components/brand/icon";
 import { useTranslations } from "next-intl";
 import { Field, inputClasses } from "@/components/ui/field";
 import { cx } from "@/lib/cx";
@@ -45,7 +45,7 @@ export function PasswordField({
               placeholder={placeholder}
               value={value}
               onChange={(event) => setValue(event.target.value)}
-              className={cx(inputClasses, "h-11 pr-12")}
+              className={cx(inputClasses, "h-12 pr-12")}
             />
             <button
               type="button"
@@ -54,11 +54,7 @@ export function PasswordField({
               aria-pressed={visible}
               className="absolute top-1/2 right-1 flex size-10 -translate-y-1/2 items-center justify-center rounded-full text-ardoise hover:text-sapin"
             >
-              {visible ? (
-                <EyeOff aria-hidden className="size-5" />
-              ) : (
-                <Eye aria-hidden className="size-5" />
-              )}
+              <Icon name={visible ? "eye-off" : "eye"} className="size-5" />
             </button>
           </div>
         )}

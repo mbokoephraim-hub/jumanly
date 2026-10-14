@@ -214,7 +214,7 @@ export function TalentWhy({
           ).map(([group, items]) =>
             items.length === 0 ? null : (
               <section key={group} className="flex flex-col gap-2">
-                <h3 className="text-h3 font-semibold">{t(`match.why.talent.${group}.title`)}</h3>
+                <h3 className="font-semibold text-h3">{t(`match.why.talent.${group}.title`)}</h3>
                 <ul className="flex flex-col gap-1 text-[15px]">
                   {items.map((criterion) => (
                     <li key={criterion.key} className="flex gap-2">
@@ -233,7 +233,7 @@ export function TalentWhy({
       )}
 
       <section className="flex flex-col gap-3">
-        <h3 className="text-h3 font-semibold">{t("match.why.talent.missing.title")}</h3>
+        <h3 className="font-semibold text-h3">{t("match.why.talent.missing.title")}</h3>
         {gaps.length === 0 ? (
           <p>{t("match.why.talent.missing.none")}</p>
         ) : (
@@ -300,7 +300,7 @@ export function TalentWhy({
 
       {explanation.knockouts.length > 0 && (
         <section className="flex flex-col gap-2">
-          <h3 className="text-h3 font-semibold">{t("match.why.talent.knockout.title")}</h3>
+          <h3 className="font-semibold text-h3">{t("match.why.talent.knockout.title")}</h3>
           <ul className="flex flex-col gap-1 text-[15px]">
             {explanation.knockouts.map((knockout) => (
               <li key={knockout.label} className="flex flex-wrap items-center gap-2">
@@ -314,7 +314,7 @@ export function TalentWhy({
       )}
 
       <section className="flex flex-col gap-1">
-        <h3 className="text-h3 font-semibold">{t("match.why.talent.breakdown")}</h3>
+        <h3 className="font-semibold text-h3">{t("match.why.talent.breakdown")}</h3>
         <CriterionList explanation={explanation} />
       </section>
 

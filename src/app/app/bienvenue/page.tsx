@@ -100,7 +100,7 @@ export default async function WelcomePage() {
       {resume}
       <form action={saveTalentWelcome} className="flex flex-col gap-6 rounded-card bg-blanc p-6">
         <fieldset className="flex flex-col gap-3">
-          <legend className="text-h3 mb-2 font-semibold">{t("talent.goal.title")}</legend>
+          <legend className="mb-2 font-semibold text-h3">{t("talent.goal.title")}</legend>
           {welcomeGoals.map((goal) => (
             <Checkbox
               key={goal}
@@ -127,7 +127,7 @@ export default async function WelcomePage() {
           />
         </NextIntlClientProvider>
         <fieldset className="flex flex-col gap-3">
-          <legend className="text-h3 mb-2 font-semibold">{t("talent.visibility.title")}</legend>
+          <legend className="mb-2 font-semibold text-h3">{t("talent.visibility.title")}</legend>
           {(["private", "recruiters", "anonymous"] as const).map((value) => (
             <Checkbox
               key={value}

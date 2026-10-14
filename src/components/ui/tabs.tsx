@@ -73,9 +73,10 @@ export function Tabs({
               onClick={() => setActive(tab.id)}
               onKeyDown={(event) => onKeyDown(event, index)}
               className={cx(
-                "-mb-px h-11 border-b-2 text-[15px] font-medium whitespace-nowrap transition-colors",
+                // Mockup 00-02: underlined tabs, 2.5 px Sapin under the active one.
+                "-mb-px h-11 border-b-[2.5px] px-0.5 text-sm whitespace-nowrap transition-colors",
                 selected
-                  ? "border-sapin text-sapin"
+                  ? "border-sapin font-semibold text-sapin"
                   : "border-transparent text-ardoise hover:text-sapin",
               )}
             >
@@ -91,7 +92,7 @@ export function Tabs({
           role="tabpanel"
           aria-labelledby={`${baseId}-tab-${tab.id}`}
           hidden={tab.id !== active}
-          className="pt-4"
+          className="pt-5"
         >
           {tab.content}
         </div>

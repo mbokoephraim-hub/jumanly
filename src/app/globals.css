@@ -2,15 +2,11 @@
 @import "../styles/tokens.css";
 
 /*
- * Compléments d'interface absents des jetons officiels (spécifications, partie 11) :
- * couleurs d'état Ambre, Corail et Menthe claire, et police servie par l'application.
+ * Police servie par l'application, et teintes de texte foncées pour l'accessibilité :
+ * les couleurs d'état des maquettes sont trop claires pour du texte sur fond clair (AA 4,5:1).
  */
 :root {
   --jm-font: var(--font-sora), system-ui, sans-serif;
-  --jm-ambre: #f2b33d; /* alerte douce : quota à 80 %, délai de grâce */
-  --jm-corail: #e25c4b; /* erreur, baisse ; jamais pour un score de candidat */
-  --jm-menthe-claire: #bfefdf; /* teinte de carte Jobs, bande « Compatible » */
-  /* Versions foncées pour le texte et les fonds pleins : contraste AA (4,5:1) vérifié par axe. */
   --jm-corail-fonce: #a3301f;
   --jm-feuille-fonce: #22662f;
   --jm-ambre-fonce: #6e4800;
@@ -31,15 +27,30 @@
   --color-ambre: var(--jm-ambre);
   --color-corail: var(--jm-corail);
   --color-menthe-claire: var(--jm-menthe-claire);
+  --color-lime-clair: var(--jm-lime-clair);
   --color-corail-fonce: var(--jm-corail-fonce);
   --color-feuille-fonce: var(--jm-feuille-fonce);
   --color-ambre-fonce: var(--jm-ambre-fonce);
+  /* Teintes de badges et de retours (planche 00-02) */
+  --color-ia: #14745f;
+  --color-gris-clair: #e9eeec;
+  --color-up-texte: #1f7a35;
+  --color-down-fond: #fbe3df;
+  --color-down-texte: #b23a2b;
+  --color-ambre-fond: #fcebc6;
+  --color-ambre-texte: #8a5a00;
+  --color-menthe-texte: #0b5e49;
 
   --radius-card: var(--jm-radius-card);
+  --radius-box: var(--jm-radius-box);
   --radius-md: var(--jm-radius-md);
   --radius-sm: var(--jm-radius-sm);
   --radius-pill: var(--jm-radius-pill);
-  --radius-panel: 32px;
+  --radius-panel: var(--jm-radius-panel);
+
+  --shadow-float: var(--jm-ombre-flottante);
+  --shadow-menu: var(--jm-ombre-menu);
+  --shadow-orb: var(--jm-halo-orbe);
 
   --font-sans: var(--jm-font);
 }
@@ -63,6 +74,7 @@
 }
 @utility text-body {
   font: var(--jm-body);
+  -webkit-font-smoothing: antialiased;
 }
 @utility text-label {
   font: var(--jm-label);
@@ -70,11 +82,38 @@
 /* Surtitre : label en capitales, lettres espacées. */
 @utility text-eyebrow {
   font: var(--jm-label);
-  letter-spacing: 0.08em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
 }
 @utility text-caption {
   font: var(--jm-caption);
+}
+/* Styles de l'application (planche 00-01) : titres plus compacts que ceux du site. */
+@utility text-app-h1 {
+  font: 600 24px/30px var(--jm-font);
+  letter-spacing: -0.02em;
+  @media (width >= 64rem) {
+    font: 600 28px/34px var(--jm-font);
+  }
+}
+@utility text-app-h2 {
+  font: 600 20px/26px var(--jm-font);
+  letter-spacing: -0.015em;
+}
+@utility text-h3 {
+  font: 600 16px/22px var(--jm-font);
+  letter-spacing: -0.01em;
+}
+/* Chiffre clé des cartes de statistiques. */
+@utility text-big {
+  font: 600 30px/34px var(--jm-font);
+  letter-spacing: -0.03em;
+}
+/* Petit label en capitales (en-têtes de tableau, surtitres de cartes). */
+@utility text-lab {
+  font: 600 11px/14px var(--jm-font);
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
 }
 
 /* Dégradés, avec une couleur unie de repli dessous (§ 11.1). */
@@ -126,13 +165,14 @@ html {
 
 body {
   font: var(--jm-body);
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Focus visible : Sapin 2 px + halo Lime (§ 11.8). */
+/* Focus visible : Sapin 2 px + halo Lime 4 px (§ 11.8, planche 00-01). */
 :focus-visible {
   outline: 2px solid var(--jm-sapin);
   outline-offset: 2px;
-  box-shadow: 0 0 0 5px var(--jm-lime);
+  box-shadow: 0 0 0 6px rgb(166 242 107 / 0.55);
 }
 
 @media (prefers-reduced-motion: reduce) {

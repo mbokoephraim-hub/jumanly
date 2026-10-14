@@ -210,7 +210,7 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
         <aside className="flex flex-col gap-4 self-start">
           <div className="flex flex-col gap-3 rounded-card bg-blanc p-5">
             <div className="flex items-center justify-between gap-2">
-              <h2 className="text-h3 font-semibold">
+              <h2 className="font-semibold text-h3">
                 {t("talent.jobs.sidebar.applications.text")}
               </h2>
               <Link href="/app/jobs/candidatures" className="text-sm underline">

@@ -84,7 +84,7 @@ export default async function AdminOrganizations({
               >
                 <div className="flex flex-wrap items-start justify-between gap-3">
                   <div className="flex flex-col gap-1">
-                    <h2 className="text-h3 font-semibold">{organization.name}</h2>
+                    <h2 className="font-semibold text-h3">{organization.name}</h2>
                     <p className="text-sm text-ardoise">
                       {[
                         organization.legalName,

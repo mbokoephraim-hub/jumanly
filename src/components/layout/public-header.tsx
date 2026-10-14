@@ -1,96 +1,91 @@
+import { Suspense } from "react";
 import Link from "next/link";
-import { ChevronDown, Menu } from "lucide-react";
 import { useTranslations } from "next-intl";
-import { publicNavigation, solutionsNavigation } from "@/config/navigation";
-import { Logo } from "@/components/brand";
+import { publicHeaderNavigation, solutionsNavigation, publicNavigation } from "@/config/navigation";
+import { Icon, Logo } from "@/components/brand";
 import { ButtonLink } from "@/components/ui";
+import { NavLink } from "./nav-link";
+import { navLinkClasses } from "./nav-link-styles";
 
 /**
- * Light public header (§ 11.4): "Se connecter" tertiary, "Créer un compte" primary.
- * Menus use native <details>: they work without JavaScript.
+ * White public header (mockup 00-04): logo, the seven site sections with a Lime underline under
+ * the current one, « Se connecter » outlined and « Créer un compte » in Lime. On mobile: logo,
+ * « Créer un compte » and a round menu button (native <details>, no JavaScript needed).
  */
 export function PublicHeader() {
   const t = useTranslations("nav");
   return (
-    <header className="sticky top-0 z-30 border-b border-brume/70 bg-creme/95">
-      <div className="mx-auto flex h-16 max-w-7xl items-center justify-between gap-6 page-x">
-        <Link href="/" aria-label={t("logo.label")}>
-          <Logo height={30} />
+    <header className="sticky top-0 z-30 bg-blanc shadow-[0_1px_0_#e6e9e7]">
+      <div className="mx-auto flex h-16 max-w-[1248px] items-center gap-3 px-4 xl:h-[84px] xl:gap-7 xl:px-6">
+        <Link href="/" aria-label={t("logo.label")} className="shrink-0">
+          <span className="xl:hidden">
+            <Logo height={28} />
+          </span>
+          <span className="hidden xl:block">
+            <Logo height={34} />
+          </span>
         </Link>
-        <nav aria-label={t("menu.label")} className="hidden lg:block">
-          <ul className="flex items-center gap-7 text-[15px] font-medium">
-            <li>
-              <details className="group relative">
-                <summary className="flex cursor-pointer list-none items-center gap-1 hover:underline">
-                  {t("group.solutions")}
-                  <ChevronDown
-                    aria-hidden
-                    className="size-4 transition-transform group-open:rotate-180"
-                  />
-                </summary>
-                <ul className="absolute left-0 mt-3 flex w-56 flex-col gap-1 rounded-md border border-brume bg-blanc p-2">
-                  {solutionsNavigation.map((link) => (
-                    <li key={link.key}>
-                      <Link
-                        href={link.href}
-                        className="block rounded-sm px-3 py-2.5 hover:bg-creme"
-                      >
-                        {t(link.key)}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-            </li>
-            {publicNavigation.map((link) => (
-              <li key={link.key}>
-                <Link href={link.href} className="hover:underline">
-                  {t(link.key)}
-                </Link>
-              </li>
-            ))}
-            <li>
-              <Link href="/a-propos" className="hover:underline">
-                {t("about")}
-              </Link>
-            </li>
-          </ul>
+        <nav aria-label={t("menu.label")} className="hidden flex-1 xl:block">
+          {/* The current page is known at request time only: prerendered pages show the plain list. */}
+          <Suspense
+            fallback={
+              <ul className="flex gap-[22px]">
+                {publicHeaderNavigation.map((link) => (
+                  <li key={link.key}>
+                    <Link href={link.href} className={navLinkClasses("public", false)}>
+                      <span>{t(link.key)}</span>
+                    </Link>
+                  </li>
+                ))}
+              </ul>
+            }
+          >
+            <ul className="flex gap-[22px]">
+              {publicHeaderNavigation.map((link) => (
+                <li key={link.key}>
+                  <NavLink href={link.href} label={t(link.key)} placement="public" />
+                </li>
+              ))}
+            </ul>
+          </Suspense>
         </nav>
-        <div className="hidden items-center gap-2 lg:flex">
-          <ButtonLink href="/connexion" variant="tertiary" size="sm">
+        <div className="flex-1 xl:hidden" />
+        <div className="hidden items-center gap-3 xl:flex">
+          <ButtonLink href="/connexion" variant="tertiary">
             {t("login")}
           </ButtonLink>
-          <ButtonLink href="/inscription" size="sm">
-            {t("signup")}
-          </ButtonLink>
+          <ButtonLink href="/inscription">{t("signup")}</ButtonLink>
         </div>
-        <details className="relative lg:hidden">
+        <ButtonLink href="/inscription" size="sm" className="xl:hidden">
+          {t("signup")}
+        </ButtonLink>
+        <details className="relative xl:hidden">
           <summary
-            className="flex size-11 cursor-pointer list-none items-center justify-center rounded-full hover:bg-sapin/8"
+            className="flex size-10 cursor-pointer list-none items-center justify-center rounded-full bg-creme [&::-webkit-details-marker]:hidden"
             aria-label={t("menu.open")}
           >
-            <Menu aria-hidden className="size-6" />
+            <Icon name="menu" className="size-5" />
           </summary>
           <nav
             aria-label={t("menu.label")}
-            className="absolute right-0 mt-2 flex max-h-[calc(100dvh-5rem)] w-72 flex-col gap-1 overflow-y-auto rounded-md border border-brume bg-blanc p-3"
+            className="absolute right-0 mt-2 flex max-h-[calc(100dvh-5rem)] w-72 flex-col gap-1 overflow-y-auto rounded-box bg-blanc p-3 shadow-menu"
           >
-            <p className="px-3 pt-1 pb-1 text-eyebrow text-feuille-fonce">{t("group.discover")}</p>
+            <p className="px-3 pt-1 pb-1 text-lab text-feuille-fonce">{t("group.discover")}</p>
             {[...publicNavigation, { key: "about", href: "/a-propos" } as const].map((link) => (
               <Link
                 key={link.key}
                 href={link.href}
-                className="rounded-sm px-3 py-2.5 font-medium hover:bg-creme"
+                className="rounded-sm px-3 py-2.5 text-[15px] font-medium hover:bg-creme"
               >
                 {t(link.key)}
               </Link>
             ))}
-            <p className="px-3 pt-3 pb-1 text-eyebrow text-feuille-fonce">{t("group.solutions")}</p>
+            <p className="px-3 pt-3 pb-1 text-lab text-feuille-fonce">{t("group.solutions")}</p>
             {solutionsNavigation.map((link) => (
               <Link
                 key={link.key}
                 href={link.href}
-                className="rounded-sm px-3 py-2.5 font-medium hover:bg-creme"
+                className="rounded-sm px-3 py-2.5 text-[15px] font-medium hover:bg-creme"
               >
                 {t(link.key)}
               </Link>

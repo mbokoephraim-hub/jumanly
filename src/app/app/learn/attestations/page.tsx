@@ -36,7 +36,7 @@ export default async function CertificatesPage() {
           {certificates.map((certificate) => (
             <li key={certificate.id} className="flex flex-col gap-3 rounded-card bg-blanc p-5">
               <Icon name="certificat" duo className="size-10" />
-              <h2 className="text-h3 font-semibold">{certificate.courseTitle}</h2>
+              <h2 className="font-semibold text-h3">{certificate.courseTitle}</h2>
               <p className="text-sm text-ardoise">
                 {[
                   t("issued", { date: certificate.issuedAt }),
