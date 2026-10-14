@@ -12,3 +12,4 @@ ressources/
 src/components/brand/icon-paths.ts
 docs/maquettes/
 docs/modeles-cv/
+src/features/cv/templates/*.css

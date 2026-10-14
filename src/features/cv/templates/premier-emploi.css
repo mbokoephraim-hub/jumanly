@@ -1,0 +1,7 @@
+/* Modèle « Premier emploi » (premier-emploi) · La formation et les projets passent avant l'expérience. Compétences en étiquettes. */
+.tpl-premier-emploi .cv-tete{padding:var(--cv-marge) var(--cv-marge) 6mm;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"ph id" "ph co";column-gap:6mm;align-items:end}
+.tpl-premier-emploi .cv-tete::after{content:"";position:absolute;left:var(--cv-marge);right:var(--cv-marge);bottom:2mm;height:.8mm;background:var(--cv-accent);border-radius:1mm}
+.tpl-premier-emploi .cv-photo{grid-area:ph;width:26mm;height:26mm}
+.tpl-premier-emploi .cv-identite{grid-area:id}.tpl-premier-emploi .cv-contact{grid-area:co;align-self:start}
+.tpl-premier-emploi .cv-st{display:flex;align-items:center;gap:2.4mm}
+.tpl-premier-emploi .cv-st::before{content:"";width:2.4mm;height:2.4mm;border-radius:.6mm;background:var(--cv-accent)}

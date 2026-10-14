@@ -43,9 +43,7 @@ const talent: CompareRow[] = [
     cell: (p) =>
       isEnabled(p, "career.cv.tailor")
         ? text("cv.tailored")
-        : limitOf(p, "career.cv.templates.max") === 1
-          ? text("cv.one")
-          : text("cv.several"),
+        : text(`cv.${levelOf(p, "career.cv.templates.access")}`),
   },
   {
     label: "documents",

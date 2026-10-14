@@ -236,6 +236,7 @@ export async function answerDocumentRequest(
           title: document.title,
           templateId: document.templateId,
           content: document.content as Prisma.InputJsonValue,
+          ...(document.style ? { style: document.style as Prisma.InputJsonValue } : {}),
         },
       },
     },

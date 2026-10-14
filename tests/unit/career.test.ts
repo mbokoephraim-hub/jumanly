@@ -1,8 +1,6 @@
 // @vitest-environment node
 import { describe, expect, it } from "vitest";
-import { renderCvPdf, type CvLabels } from "@/server/pdf/cv-document";
 import {
-  allowedTemplates,
   cvFromProfile,
   emptyCv,
   isEmptyCv,
@@ -176,33 +174,4 @@ describe("CV", () => {
   it("un contenu illisible devient un CV vide", () => {
     expect(parseCv({ nimporte: "quoi" })).toEqual(emptyCv);
   });
-
-  it("le nombre de modèles suit le droit career.cv.templates.max", () => {
-    expect(allowedTemplates(0)).toEqual(["classic"]);
-    expect(allowedTemplates(1)).toEqual(["classic"]);
-    expect(allowedTemplates(5)).toHaveLength(3);
-    expect(allowedTemplates(-1)).toHaveLength(3);
-  });
-
-  it("produit un PDF", async () => {
-    const labels: CvLabels = {
-      title: "CV",
-      sections: {
-        summary: "Profil",
-        experience: "Expériences",
-        education: "Formation",
-        skills: "Compétences",
-        languages: "Langues",
-      },
-      skillLevel: () => "Avancé",
-      language: (code) => code,
-      period: (start, end) => `${start} – ${end ?? ""}`,
-      years: (start, end) => `${start ?? ""} – ${end ?? ""}`,
-      location: (city, country) => `${city}, ${country}`,
-    };
-    for (const templateId of ["classic", "modern", "compact"] as const) {
-      const pdf = await renderCvPdf({ content: cvFromProfile(profile), templateId, labels });
-      expect(pdf.subarray(0, 4).toString()).toBe("%PDF");
-    }
-  }, 30_000);
 });

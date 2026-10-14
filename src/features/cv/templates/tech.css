@@ -1,0 +1,9 @@
+/* Modèle « Tech » (tech) · Compétences regroupées par domaine, projets avant l'expérience, outils indiqués sous chaque poste. */
+.tpl-tech .cv-tete{padding:var(--cv-marge) var(--cv-marge) 6mm}
+.tpl-tech .cv-nom{font-size:2.5em;font-weight:700}
+.tpl-tech .cv-titre{display:inline-block;margin-top:2mm;padding:.8mm 2.6mm;border-radius:1.4mm;background:var(--cv-doux2);color:var(--cv-accent);font-weight:600;font-size:1.02em}
+.tpl-tech .cv-st{text-transform:none;letter-spacing:0;font-size:1.15em;color:var(--cv-encre);display:flex;align-items:center;gap:2.4mm}
+.tpl-tech .cv-st::before{content:"";width:1.2mm;height:1.05em;border-radius:.6mm;background:var(--cv-accent)}
+.tpl-tech .cv-groupes .cv-chips li{background:none;box-shadow:inset 0 0 0 .5pt var(--cv-accent);color:var(--cv-accent);padding:.5mm 2.2mm}
+.tpl-tech .cv-it-outils{color:var(--cv-accent);font-weight:500}
+.tpl-tech .cv-it-outils::before{content:"Outils : ";color:var(--cv-gris);font-weight:400}

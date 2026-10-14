@@ -1063,7 +1063,7 @@ Note d'intégration : le tableau de bord du héros (`partners.hero.visual.*`, «
 | `faq.talents.q3` | Comment suivre mes candidatures ? |
 | `faq.talents.a3` | Dans votre espace, la rubrique « Mes candidatures » affiche l'étape de chaque candidature, son historique et les messages du recruteur. |
 | `faq.talents.q4` | Que contient le forfait gratuit ? |
-| `faq.talents.a4` | Votre compte et votre profil professionnel, un diagnostic de carrière simplifié, la consultation des offres, les candidatures gratuites et leur suivi, un modèle de CV standard, une sélection de formations gratuites, des conseils généraux de préparation et la messagerie liée aux candidatures. |
+| `faq.talents.a4` | Votre compte et votre profil professionnel, un diagnostic de carrière simplifié, la consultation des offres, les candidatures gratuites et leur suivi, 5 modèles de CV, une sélection de formations gratuites, des conseils généraux de préparation et la messagerie liée aux candidatures. |
 | `faq.learn.q1` | Les formations donnent-elles une attestation ? |
 | `faq.learn.a1` | Oui. Lorsque vous terminez une formation et ses évaluations, vous obtenez une attestation téléchargeable en PDF, avec un lien de vérification public. Elle peut apparaître sur votre profil. |
 | `faq.learn.q2` | Quelles formations sont gratuites ? |
@@ -2770,7 +2770,7 @@ Conventions :
 | `career.cv.template.current` | « {templateName} » · lisible par les logiciels de recrutement |
 | `career.cv.template.change` | Changer de modèle |
 | `career.cv.template.title` | Choisir un modèle |
-| `career.cv.template.ats` | Lisible par les logiciels de recrutement |
+| `career.cv.template.ats.text` | Lisible par les logiciels de recrutement |
 | `career.cv.template.included` | Inclus |
 | `career.cv.template.locked` | Disponible avec {plan} |
 | `career.cv.template.limit` | {count, plural, one {# modèle inclus dans votre forfait} other {# modèles inclus dans votre forfait}} |
@@ -2816,14 +2816,191 @@ Conventions :
 | `career.cv.seo` | Mon CV · Jumanly |
 | `career.cv.updated` | Modifié le {date} |
 | `career.cv.open` | Ouvrir |
-| `career.cv.template.name.classic` | Classique |
-| `career.cv.template.name.modern` | Moderne |
+| `career.cv.template.name.classique` | Classique |
+| `career.cv.template.name.epure` | Épuré |
+| `career.cv.template.name.premierEmploi` | Premier emploi |
+| `career.cv.template.name.moderne` | Moderne |
+| `career.cv.template.name.colonne` | Colonne |
+| `career.cv.template.name.executif` | Exécutif |
+| `career.cv.template.name.bandeau` | Bandeau |
+| `career.cv.template.name.contraste` | Contraste |
+| `career.cv.template.name.parcours` | Parcours |
+| `career.cv.template.name.academique` | Académique |
+| `career.cv.template.name.creatif` | Créatif |
+| `career.cv.template.name.tech` | Tech |
+| `career.cv.template.name.elegant` | Élégant |
+| `career.cv.template.name.visuel` | Visuel |
+| `career.cv.template.description.classique` | Une colonne, en-tête centré, filets fins. Le plus sûr pour les logiciels de recrutement. |
+| `career.cv.template.description.epure` | Titres de sections dans une marge à gauche, beaucoup de blanc, photo carrée facultative. |
+| `career.cv.template.description.premierEmploi` | La formation et les projets passent avant l'expérience. Compétences en étiquettes. |
+| `career.cv.template.description.moderne` | En-tête teinté avec photo ronde, colonne de droite pour les compétences et les langues. |
+| `career.cv.template.description.colonne` | Barre latérale teintée à gauche avec photo, coordonnées et compétences. |
+| `career.cv.template.description.executif` | Une colonne, bandeau fin en haut, encadré « Réalisations clés ». |
+| `career.cv.template.description.bandeau` | Bandeau plein de couleur en haut, photo ronde cerclée de blanc, colonne de droite. |
+| `career.cv.template.description.contraste` | Barre latérale foncée en texte blanc, compétences et langues en pastilles. |
+| `career.cv.template.description.parcours` | Frise chronologique : dates à gauche, ligne et pastilles. |
+| `career.cv.template.description.compact` | Marges réduites, en-tête sur une ligne, compétences en trois colonnes. |
+| `career.cv.template.description.academique` | Sections numérotées, publications et communications en références, plusieurs pages. |
+| `career.cv.template.description.creatif` | Monogramme ou photo en grand, nom très présent, colonne de cartes teintées à droite. |
+| `career.cv.template.description.tech` | Compétences regroupées par domaine, projets avant l'expérience, outils sous chaque poste. |
+| `career.cv.template.description.elegant` | En-tête centré avec photo ronde, titres centrés entre deux filets. |
+| `career.cv.template.description.visuel` | Grande photo, jauges de compétences et pastilles de langues (niveaux aussi écrits en toutes lettres). |
+| `career.cv.template.audience.classique` | Tous profils, candidatures en ligne |
+| `career.cv.template.audience.epure` | CV sobre et aéré |
+| `career.cv.template.audience.premierEmploi` | Étudiants, jeunes diplômés, stages |
+| `career.cv.template.audience.moderne` | Tous profils |
+| `career.cv.template.audience.colonne` | Tous profils |
+| `career.cv.template.audience.executif` | Cadres, managers |
+| `career.cv.template.audience.bandeau` | Commerce, services |
+| `career.cv.template.audience.contraste` | Se démarquer à l'impression |
+| `career.cv.template.audience.parcours` | Parcours riches, reconversions |
+| `career.cv.template.audience.compact` | Longues carrières sur une page |
+| `career.cv.template.audience.academique` | Enseignants, chercheurs, bourses |
+| `career.cv.template.audience.creatif` | Communication, design |
+| `career.cv.template.audience.tech` | Développement, data, numérique |
+| `career.cv.template.audience.elegant` | Hôtellerie, juridique, profils seniors |
+| `career.cv.template.audience.visuel` | Montrer ses niveaux d'un coup d'œil |
+| `career.cv.templates.title` | Choisir un modèle |
+| `career.cv.templates.subtitle` | Changez de mise en page quand vous voulez : votre contenu ne bouge pas. |
+| `career.cv.templates.count` | {included} modèles inclus dans votre forfait · {others} autres avec Starter ou Pro |
+| `career.cv.templates.filter.all` | Tous ({count}) |
+| `career.cv.templates.filter.included` | Inclus dans mon forfait ({count}) |
+| `career.cv.templates.filter.photo` | Avec photo |
+| `career.cv.templates.filter.noPhoto` | Sans photo |
+| `career.cv.templates.filter.oneColumn` | Une colonne |
+| `career.cv.templates.filter.twoColumns` | Deux colonnes |
+| `career.cv.templates.filter.atsBest` | ATS excellente |
+| `career.cv.templates.sort` | Trier : {order} |
+| `career.cv.templates.sortBy.recommended` | Recommandés |
+| `career.cv.templates.sortBy.free` | Gratuits d'abord |
+| `career.cv.templates.sortBy.name` | Nom |
+| `career.cv.template.preview` | Aperçu avec votre contenu |
+| `career.cv.template.previewFull` | Aperçu plein écran |
+| `career.cv.template.previewBadge` | Aperçu |
+| `career.cv.template.seePlans` | Voir les forfaits |
+| `career.cv.template.lockedHint` | Inclus dans {plans}. Changer de modèle ne modifie jamais votre contenu. |
+| `career.cv.template.neutral` | Vos CV téléchargés ne portent ni logo ni mention Jumanly. |
+| `career.cv.template.downgraded` | Votre forfait ne comprend plus le modèle « {templateName} ». Choisissez un modèle inclus pour télécharger ce CV : votre contenu reste identique. |
+| `career.cv.template.ats.excellent` | ATS excellente |
+| `career.cv.template.ats.veryGood` | ATS très bonne |
+| `career.cv.template.ats.good` | ATS bonne |
+| `career.cv.template.layout.one` | Une colonne |
+| `career.cv.template.layout.two` | Deux colonnes |
+| `career.cv.template.layout.side` | Barre latérale |
+| `career.cv.template.photo.optional` | Photo facultative |
+| `career.cv.template.photo.none` | Sans photo |
+| `career.cv.tab.content` | Contenu |
+| `career.cv.tab.style` | Mise en forme |
+| `career.cv.style.color.recommended` | Recommandées pour les logiciels de recrutement |
+| `career.cv.style.color.others` | Autres couleurs |
+| `career.cv.style.color.custom` | Couleur personnalisée |
+| `career.cv.style.color.apply` | Appliquer |
+| `career.cv.style.color.invalid` | Saisissez une couleur au format #1B365D. |
+| `career.cv.style.color.contrast` | Contraste {ratio}:1 |
+| `career.cv.style.color.hint` | Le texte reste noir sur fond blanc. La couleur ne sert qu'aux titres, aux filets et aux décors. |
+| `career.cv.style.color.tooLight` | Cette couleur est trop claire pour être lue facilement. Essayez {suggestion}. |
+| `career.cv.style.font.recommended` | Recommandée |
+| `career.cv.style.font.hint` | Toutes les polices sont intégrées au PDF. |
+| `career.cv.template.density.standard` | Standard |
+| `career.cv.style.photo.unsupported` | Ce modèle n'a pas d'emplacement photo. |
+| `career.cv.style.titlesLanguage.text` | Langue des titres |
+| `career.cv.style.titlesLanguage.hint` | Seuls les titres de sections changent. Votre texte n'est pas traduit. |
+| `career.cv.style.titlesLanguage.fr` | Français |
+| `career.cv.style.titlesLanguage.en` | English |
+| `career.cv.section.moveColumn` | Changer de colonne |
+| `career.cv.section.customTitleHint` | Un titre courant (« Expérience », « Formation ») est mieux reconnu par les logiciels de recrutement. |
+| `career.cv.pages.title` | Pages |
+| `career.cv.pages.count` | {count} sur {max} au maximum |
+| `career.cv.pages.add` | Ajouter |
+| `career.cv.pages.page` | Page {number} |
+| `career.cv.pages.breakTarget` | Avant quel élément ? |
+| `career.cv.pages.breakHere` | Commencer une nouvelle page ici |
+| `career.cv.pages.breakLabel` | Saut de page avant « {sectionName} » |
+| `career.cv.pages.removeBreak` | Retirer le saut de page |
+| `career.cv.pages.fitOne` | Faire tenir sur une page |
+| `career.cv.pages.fitFailed` | Votre CV ne tient pas sur une page sans couper de texte. Masquez une section ou raccourcissez une expérience. |
+| `career.cv.pages.hint` | Les recruteurs lisent surtout la première page. Au-delà de deux pages, nous vous le signalons. |
+| `career.cv.pages.overMax` | Votre CV dépasse {max} pages. Passez en densité compacte ou masquez une section pour pouvoir le télécharger. |
+| `career.cv.pages.itemTooLong` | Cet élément est plus long qu'une page. Raccourcissez-le pour qu'il s'affiche en entier. |
+| `career.cv.export.fileName` | {fileName} · {count, plural, one {# page} other {# pages}} · texte sélectionnable |
+| `career.cv.export.docxNote` | La version Word est simplifiée sur une colonne pour rester modifiable facilement. |
 | `career.cv.template.name.compact` | Compact |
 | `career.cv.info.showEmail` | Afficher mon e-mail sur le CV |
 | `career.cv.fromProfileHint` | Le contenu des sections vient de votre profil. Modifiez-le dans votre profil, puis touchez « Remplir depuis mon profil ». |
 | `career.cv.fromProfileDone` | CV mis à jour à partir de votre profil. |
 | `career.cv.limit` | Vous pouvez avoir jusqu'à {max} CV. |
 | `career.cv.back` | Mes CV |
+
+### Document CV · Titres et niveaux imprimés sur le CV
+
+Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titres » choisie pour chaque CV (français ou anglais), quelle que soit la langue de l'interface. Le contenu saisi par la personne n'est jamais traduit.
+
+| Clé | Texte |
+|---|---|
+| `cv.titles.fr.summary` | Profil |
+| `cv.titles.fr.highlights` | Réalisations clés |
+| `cv.titles.fr.experience` | Expérience professionnelle |
+| `cv.titles.fr.education` | Formation |
+| `cv.titles.fr.skills` | Compétences |
+| `cv.titles.fr.languages` | Langues |
+| `cv.titles.fr.certificates` | Certifications |
+| `cv.titles.fr.projects` | Projets |
+| `cv.titles.fr.volunteer` | Engagement |
+| `cv.titles.fr.interests` | Centres d'intérêt |
+| `cv.titles.fr.publications` | Publications |
+| `cv.titles.fr.talks` | Communications |
+| `cv.titles.fr.teaching` | Enseignements |
+| `cv.titles.fr.custom` | Autres informations |
+| `cv.titles.en.summary` | Profile |
+| `cv.titles.en.highlights` | Key achievements |
+| `cv.titles.en.experience` | Work experience |
+| `cv.titles.en.education` | Education |
+| `cv.titles.en.skills` | Skills |
+| `cv.titles.en.languages` | Languages |
+| `cv.titles.en.certificates` | Certifications |
+| `cv.titles.en.projects` | Projects |
+| `cv.titles.en.volunteer` | Volunteering |
+| `cv.titles.en.interests` | Interests |
+| `cv.titles.en.publications` | Publications |
+| `cv.titles.en.talks` | Talks |
+| `cv.titles.en.teaching` | Teaching |
+| `cv.titles.en.custom` | Additional information |
+| `cv.levels.fr.1` | Notions |
+| `cv.levels.fr.2` | Intermédiaire |
+| `cv.levels.fr.3` | Avancé |
+| `cv.levels.fr.4` | Expert |
+| `cv.levels.en.1` | Basic |
+| `cv.levels.en.2` | Intermediate |
+| `cv.levels.en.3` | Advanced |
+| `cv.levels.en.4` | Expert |
+| `cv.languageLevels.fr.native` | Langue maternelle |
+| `cv.languageLevels.fr.fluent` | Courant |
+| `cv.languageLevels.fr.professional` | Professionnel |
+| `cv.languageLevels.fr.intermediate` | Intermédiaire |
+| `cv.languageLevels.fr.basic` | Notions |
+| `cv.languageLevels.en.native` | Native language |
+| `cv.languageLevels.en.fluent` | Fluent |
+| `cv.languageLevels.en.professional` | Professional |
+| `cv.languageLevels.en.intermediate` | Intermediate |
+| `cv.languageLevels.en.basic` | Basic |
+| `cv.present.fr` | aujourd'hui |
+| `cv.present.en` | present |
+| `cv.colors.encre` | Encre |
+| `cv.colors.marine` | Marine |
+| `cv.colors.petrole` | Pétrole |
+| `cv.colors.foret` | Forêt |
+| `cv.colors.bordeaux` | Bordeaux |
+| `cv.colors.prune` | Prune |
+| `cv.colors.brun` | Brun |
+| `cv.colors.graphite` | Graphite |
+| `cv.colors.bleu` | Bleu |
+| `cv.colors.turquoise` | Turquoise |
+| `cv.colors.vert` | Vert |
+| `cv.colors.brique` | Brique |
+| `cv.colors.orange` | Orange brûlé |
+| `cv.colors.violet` | Violet |
+| `cv.colors.framboise` | Framboise |
+| `cv.colors.acier` | Acier |
 
 ### `/app/career/documents` · Lettres, biographie et correction
 
@@ -5139,8 +5316,9 @@ Conventions :
 | `pricing.talent.compare.trainings.standard` | Parcours standards |
 | `pricing.talent.compare.trainings.advanced` | Parcours avancés et ressources spécialisées |
 | `pricing.talent.compare.cv.text` | Modèles de CV |
-| `pricing.talent.compare.cv.one` | 1 standard |
-| `pricing.talent.compare.cv.several` | Plusieurs |
+| `pricing.talent.compare.cv.free` | 5 modèles |
+| `pricing.talent.compare.cv.starter` | 10 modèles |
+| `pricing.talent.compare.cv.pro` | 15 modèles |
 | `pricing.talent.compare.cv.tailored` | Tous, adaptés à chaque offre |
 | `pricing.talent.compare.documents` | Documents professionnels et préparation LinkedIn |
 | `pricing.talent.compare.ai.text` | Assistance IA |
@@ -5493,7 +5671,6 @@ Conventions :
 | `billing.quotas.ai` | Assistance IA |
 | `billing.quotas.interviewText` | Simulations d'entretien textuelles |
 | `billing.quotas.interviewVoice` | Simulations d'entretien vocales |
-| `billing.quotas.cvTemplates` | Modèles de CV |
 | `billing.quotas.talentSearch` | Recherches dans le vivier |
 | `billing.quotas.contactRequests` | Demandes de mise en relation |
 | `billing.quotas.activeJobs` | Offres actives |
@@ -5870,7 +6047,6 @@ Note d'intégration : `quota.reached.addon` n'est affiché que si une option de 
 | `quota.activeJobs.reached` | Vous avez {limit, plural, one {# offre active} other {# offres actives}}, le maximum de votre formule. Fermez une offre ou passez à une formule supérieure pour en publier une nouvelle. Vous pouvez enregistrer celle-ci en brouillon. |
 | `quota.activeJobs.saveDraft` | Enregistrer en brouillon |
 | `quota.seats.reached` | Tous les sièges de votre formule sont occupés ({limit}). Retirez un membre ou passez à une formule supérieure pour inviter un nouveau collègue. |
-| `quota.cvTemplates.reached` | Votre formule comprend {limit, plural, one {# modèle de CV} other {# modèles de CV}}. Passez à une formule supérieure pour en utiliser davantage. |
 
 #### Verrou de fonctionnalité
 

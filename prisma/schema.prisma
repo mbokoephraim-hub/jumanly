@@ -917,8 +917,13 @@ model Document {
   profile    TalentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
   kind       DocumentKind
   title      String
-  templateId String        @default("classic")
+  templateId String        @default("classique")
   content    Json          @default("{}")
+  /// CV settings (accent, font, density, photo, titles language, order, page breaks):
+  /// docs/modeles-cv/SPECIFICATION-MODELES-CV.md § 5.3. Null = the template's defaults.
+  style      Json?
+  /// Pages counted at the last export.
+  pageCount  Int?
   isPrimary  Boolean       @default(false)
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt

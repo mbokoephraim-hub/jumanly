@@ -85,6 +85,7 @@ export async function applyToJob(
               title: cv.title,
               templateId: cv.templateId,
               content: cv.content as Prisma.InputJsonValue,
+              ...(cv.style ? { style: cv.style as Prisma.InputJsonValue } : {}),
             }
           : undefined,
         events: { create: { actorId: input.userId, type: "submitted" } },

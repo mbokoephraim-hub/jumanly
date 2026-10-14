@@ -1,0 +1,15 @@
+/* Modèle « Créatif » (creatif) · Monogramme ou photo en grand, nom très présent, colonne de cartes teintées à droite. */
+.tpl-creatif .cv-page{grid-template-columns:minmax(0,1fr) 64mm;grid-template-areas:"tete tete" "principal lateral" "pied pied"}
+.tpl-creatif .cv-tete{padding:var(--cv-marge) var(--cv-marge) 9mm;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"ph id" "ph co";column-gap:8mm;align-items:end}
+.tpl-creatif .cv-photo,.tpl-creatif .cv-mono{grid-area:ph;width:38mm;height:38mm;border-radius:6mm 6mm 6mm 0}
+.tpl-creatif .cv-mono{display:grid;place-items:center;background:var(--cv-accent);color:#fff;font-size:3.4em;font-weight:700;letter-spacing:-.04em}
+.tpl-creatif .cv-identite{grid-area:id}.tpl-creatif .cv-contact{grid-area:co;align-self:start}
+.tpl-creatif .cv-nom{font-size:3.3em;font-weight:700;letter-spacing:-.04em;line-height:.98}
+.tpl-creatif .cv-nom .nom{display:block;color:var(--cv-accent)}
+.tpl-creatif .cv-lateral{display:block;padding:0 var(--cv-marge) 6mm 0}
+.tpl-creatif .cv-principal{padding-right:8mm}
+.tpl-creatif .cv-page.suite .cv-lateral{padding-top:var(--cv-marge)}
+.tpl-creatif .cv-lateral .cv-sec{background:var(--cv-doux);border-radius:4mm 4mm 4mm 0;padding:4.5mm}
+.tpl-creatif .cv-st{display:flex;align-items:center;gap:2.4mm;letter-spacing:.08em}
+.tpl-creatif .cv-st::before{content:"";width:5mm;height:1.6mm;border-radius:1mm;background:var(--cv-accent)}
+.tpl-creatif .cv-chips li{background:#fff}

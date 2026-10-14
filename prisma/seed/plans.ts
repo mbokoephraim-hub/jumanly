@@ -165,7 +165,8 @@ const talentMatrix: { plans: string[]; rows: Row[] } = {
     b("jobs.track", true, true, true, true),
     b("connect.messaging.application", true, true, true, true),
     lv("career.diagnostic.level", "simple", "personalized", "personalized", "personalized"),
-    lim("career.cv.templates.max", 1, 5, -1, -1),
+    // CV templates included (docs/modeles-cv § 5.4): free < starter < pro.
+    lv("career.cv.templates.access", "free", "starter", "pro", "pro"),
     b("career.cv.tailor", false, false, true, true),
     b("career.documents", false, true, true, true),
     b("career.linkedin", false, true, true, true),

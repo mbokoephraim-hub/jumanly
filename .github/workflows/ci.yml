@@ -81,6 +81,17 @@ jobs:
         run: pnpm build
       - name: Navigateur pour les tests e2e
         run: pnpm exec playwright install --with-deps chromium
+      - name: Outils PDF pour vérifier les CV exportés (pdftotext, pdfinfo, pdftoppm)
+        run: sudo apt-get install -y poppler-utils
+      # Ubuntu 24.04 réserve les espaces de noms utilisateur aux programmes qui ont un profil
+      # AppArmor : sans eux, le bac à sable de Chromium (export PDF des CV) ne démarre pas. On donne
+      # ce profil au seul Chromium de Playwright, comme le recommandent Ubuntu et Chromium ; le bac à
+      # sable reste actif.
+      - name: Profil AppArmor du Chromium de Playwright (export PDF)
+        run: |
+          chrome="$(node -e "console.log(require('playwright-core').chromium.executablePath())")"
+          printf 'abi <abi/4.0>,\ninclude <tunables/global>\nprofile playwright-chromium "%s" flags=(unconfined) {\n  userns,\n}\n' "$chrome" | sudo tee /etc/apparmor.d/playwright-chromium
+          sudo apparmor_parser -r /etc/apparmor.d/playwright-chromium
       - name: Tests e2e (desktop et mobile)
         run: pnpm test:e2e
       - uses: actions/upload-artifact@v4

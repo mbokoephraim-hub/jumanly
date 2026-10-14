@@ -1,0 +1,10 @@
+/* Modèle « Élégant » (elegant) · En-tête centré avec photo ronde, titres centrés entre deux filets. */
+.tpl-elegant .cv-tete{padding:var(--cv-marge) var(--cv-marge) 5mm;display:flex;flex-direction:column;align-items:center;text-align:center}
+.tpl-elegant .cv-photo{width:26mm;height:26mm;margin-bottom:4mm;box-shadow:0 0 0 .6mm #fff,0 0 0 1.1mm var(--cv-accent)}
+.tpl-elegant .cv-nom{font-weight:400;font-size:2.5em;letter-spacing:.01em}
+.tpl-elegant .cv-titre{text-transform:uppercase;letter-spacing:.18em;font-size:.88em;font-weight:500}
+.tpl-elegant .cv-contact{justify-content:center}
+.tpl-elegant .cv-st{display:flex;align-items:center;gap:4mm;justify-content:center;letter-spacing:.2em;font-weight:600}
+.tpl-elegant .cv-st::before,.tpl-elegant .cv-st::after{content:"";flex:1;height:.5pt;background:var(--cv-accent);opacity:.45}
+.tpl-elegant .sec-profil .cv-el{text-align:center;font-style:italic;padding:0 8mm}
+.tpl-elegant .sec-langues .cv-ligne,.tpl-elegant .sec-interets .cv-ligne{justify-content:center}
