@@ -2,8 +2,8 @@
  * Entitlement engine (docs/specifications.md, partie 03 § 3.3). Code asks for an entitlement key,
  * never for a plan: `can(subject, "career.linkedin")`, `consume(subject, "ai.credits.monthly")`.
  *
- * Resolution: sponsored licence > active paid subscription (or in grace) > free plan of the family,
- * then per-subject overrides. Resolved values are cached 60 s in memory and invalidated on every
+ * Resolution: the highest running plan (a sponsored licence wins a tie, partie 05 § 6; a payment in
+ * grace comes last) > free plan of the family, then per-subject overrides. Resolved values are cached 60 s in memory and invalidated on every
  * subscription or plan change.
  */
 import type { PlanFamily, PrismaClient, SubjectType } from "@/generated/prisma/client";
@@ -80,7 +80,7 @@ async function anchorDate(db: PrismaClient, subject: Subject): Promise<Date> {
   return row?.createdAt ?? new Date(0);
 }
 
-const statusRank = { sponsored: 0, active: 1, trialing: 1, canceled: 1, past_due: 2 } as const;
+const statusRank = { sponsored: 0, active: 0, trialing: 0, canceled: 0, past_due: 1 } as const;
 
 export async function resolvePlan(
   db: PrismaClient,
@@ -108,7 +108,8 @@ export async function resolvePlan(
       (a, b) =>
         statusRank[a.status as keyof typeof statusRank] -
           statusRank[b.status as keyof typeof statusRank] ||
-        (b.subscription.plan.priceCents ?? 0) - (a.subscription.plan.priceCents ?? 0),
+        (b.subscription.plan.priceCents ?? 0) - (a.subscription.plan.priceCents ?? 0) ||
+        Number(b.status === "sponsored") - Number(a.status === "sponsored"),
     );
 
   let resolved: ResolvedPlan | null = null;

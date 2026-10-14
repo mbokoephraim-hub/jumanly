@@ -115,7 +115,7 @@ export async function acceptInvitationAction(formData: FormData) {
   const result = await acceptInvitation(db, user, token);
   if (!result.ok) redirect(`/app/invitation/${token}?erreur=${result.error}`);
   await setActiveSpace(result.organizationId);
-  redirect("/app/hire?bienvenue=1");
+  redirect(result.partner ? "/app/partenaire" : "/app/hire?bienvenue=1");
 }
 
 // ─── Structure (E8) ─────────────────────────────────────────────────────────────

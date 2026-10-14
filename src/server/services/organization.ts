@@ -20,6 +20,20 @@ export async function hireMemberships(db: PrismaClient, userId: string) {
   });
 }
 
+/** Active memberships of partner managers in partner organizations (Jumanly Partners, E9). */
+export async function partnerMemberships(db: PrismaClient, userId: string) {
+  return db.membership.findMany({
+    where: {
+      userId,
+      status: "active",
+      role: "partner_manager",
+      organization: { type: "partner" },
+    },
+    orderBy: { createdAt: "asc" },
+    include: { organization: { select: { id: true, name: true, type: true, verifiedAt: true } } },
+  });
+}
+
 /**
  * The space chosen in the switcher. `wanted` is the cookie value: "personal", an organization id,
  * or nothing (then a recruiter lands in their organization).
@@ -173,12 +187,13 @@ export async function revokeInvitation(db: PrismaClient, ctx: HireContext, invit
 export async function findInvitation(db: PrismaClient, token: string) {
   return db.invitation.findUnique({
     where: { token },
-    include: { organization: { select: { id: true, name: true } } },
+    include: { organization: { select: { id: true, name: true, type: true } } },
   });
 }
 
 export type AcceptResult =
-  { ok: true; organizationId: string } | { ok: false; error: "expired" | "otherEmail" | "seats" };
+  | { ok: true; organizationId: string; partner: boolean }
+  | { ok: false; error: "expired" | "otherEmail" | "seats" };
 
 /** The invited person joins with the role chosen by the administrator. */
 export async function acceptInvitation(
@@ -192,9 +207,13 @@ export async function acceptInvitation(
     return { ok: false, error: "expired" };
   }
   if (invitation.email !== user.email.toLowerCase()) return { ok: false, error: "otherEmail" };
-  // The invitation already holds a seat; only the members count again here.
-  const seats = await seatUsage(db, invitation.organizationId, now);
-  if (seats.max >= 0 && seats.members + 1 > seats.max) return { ok: false, error: "seats" };
+  // Partner organizations have no seats; elsewhere the invitation already holds one and only the
+  // members count again here.
+  const partner = invitation.organization.type === "partner";
+  if (!partner) {
+    const seats = await seatUsage(db, invitation.organizationId, now);
+    if (seats.max >= 0 && seats.members + 1 > seats.max) return { ok: false, error: "seats" };
+  }
   await db.$transaction([
     db.membership.upsert({
       where: {
@@ -216,7 +235,7 @@ export async function acceptInvitation(
     }),
     db.invitation.update({ where: { id: invitation.id }, data: { acceptedAt: now } }),
   ]);
-  return { ok: true, organizationId: invitation.organizationId };
+  return { ok: true, organizationId: invitation.organizationId, partner };
 }
 
 export async function listMembers(db: PrismaClient, ctx: HireContext, now = new Date()) {

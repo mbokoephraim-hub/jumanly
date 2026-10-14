@@ -51,7 +51,9 @@ export type AppNavigationKey =
   | "hire.pools"
   | "hire.interviews"
   | "hire.reports"
-  | "organization";
+  | "organization"
+  | "partnerLicenses"
+  | "partnerReports";
 
 type AppNavigationItem = {
   key: AppNavigationKey;
@@ -84,3 +86,10 @@ export const hireNavigation: AppNavigationItem[] = [
 
 /** Hire pages that the mobile navigation leaves out, linked from the Hire dashboard. */
 export const hireShortcuts = hireNavigation.filter((item) => item.pill === false);
+
+/** Partner space (Jumanly Partners): licences and aggregated reports only. */
+export const partnerNavigation: AppNavigationItem[] = [
+  { key: "home", href: "/app/partenaire", icon: "accueil" },
+  { key: "partnerLicenses", href: "/app/partenaire/licences", icon: "certificat" },
+  { key: "partnerReports", href: "/app/partenaire/rapports", icon: "statistiques" },
+];

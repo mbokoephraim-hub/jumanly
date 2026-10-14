@@ -9,6 +9,7 @@ import { seedAccounts } from "./accounts";
 import { seedDemo } from "./demo";
 import { seedGroup } from "./group";
 import { seedIntelligence } from "./intelligence";
+import { seedPartner } from "./partners";
 import { seedPlans } from "./plans";
 import { seedSkills } from "./skills";
 
@@ -22,6 +23,7 @@ async function main() {
       await seedDemo(db);
       await seedAccounts(db);
       await seedGroup(db);
+      await seedPartner(db);
     } else console.log("Démo ignorée : APP_ENV n'est ni local ni preview.");
   } finally {
     await db.$disconnect();

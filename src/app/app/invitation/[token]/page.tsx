@@ -28,8 +28,7 @@ export default async function InvitationPage({
     !invitation.revokedAt &&
     !invitation.acceptedAt &&
     invitation.expiresAt > new Date();
-  const role =
-    invitation && invitation.role !== "partner_manager" ? t(`roles.${invitation.role}.text`) : "";
+  const role = invitation ? t(`roles.${invitation.role}.text`) : "";
   const errors: Record<string, string> = {
     otherEmail: t("invite.error.otherEmail"),
     seats: t("members.seats.full"),

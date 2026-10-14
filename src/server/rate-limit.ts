@@ -13,6 +13,7 @@ export const authLimits = {
   passwordReset: { window: 15 * 60, max: 5 },
   sendCode: { window: 60, max: 3 },
   magicLink: { window: 15 * 60, max: 5 },
+  activate: { window: 15 * 60, max: 10 },
 } as const;
 
 /** The visitor's address as given by the hosting proxy, or null when unknown. */

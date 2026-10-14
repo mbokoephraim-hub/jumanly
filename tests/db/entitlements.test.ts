@@ -103,11 +103,18 @@ describe("moteur de droits : règles", () => {
     expect(await limit(db, talent, "inconnu.cle")).toBe(0);
   });
 
-  it("une licence sponsorisée l'emporte sur un abonnement payant", async () => {
-    const talent = await subjectFor("talent");
-    await subscribe(talent, "talent_premium");
-    await subscribe(talent, "talent_pro", "sponsored");
-    expect((await resolvePlan(db, talent))?.status).toBe("sponsored");
+  it("une licence sponsorisée l'emporte sur un forfait payant inférieur, pas sur un supérieur", async () => {
+    const lower = await subjectFor("talent");
+    await subscribe(lower, "talent_starter");
+    await subscribe(lower, "talent_pro", "sponsored");
+    expect((await resolvePlan(db, lower))?.status).toBe("sponsored");
+
+    const higher = await subjectFor("talent");
+    await subscribe(higher, "talent_premium");
+    await subscribe(higher, "talent_pro", "sponsored");
+    const plan = await resolvePlan(db, higher);
+    expect(plan?.status).toBe("active");
+    expect(plan?.planCode).toBe("talent_premium");
   });
 
   it("un abonnement échu passe en grâce puis revient au gratuit", async () => {

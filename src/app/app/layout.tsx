@@ -7,8 +7,9 @@ import { resolvePlan } from "@/server/entitlements";
 import { ADMIN_ROLES } from "@/server/auth/session";
 import { getTranslations } from "next-intl/server";
 import { getActiveSpace } from "@/server/hire-context";
+import { getPartnerSpace } from "@/server/partner-context";
 import { unreadNotifications } from "@/server/services/notifications";
-import { hireMemberships } from "@/server/services/organization";
+import { hireMemberships, partnerMemberships } from "@/server/services/organization";
 
 /** Signed-in space: every page below needs a session (checked on the server). */
 export default function SignedInLayout({ children }: LayoutProps<"/app">) {
@@ -29,20 +30,24 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
   });
   const plan = await resolvePlan(db, { type: "user", id: user.id });
   const t = await getTranslations("org.roles");
-  const [memberships, space, unread] = await Promise.all([
+  const [hire, partners, space, partnerSpace, unread] = await Promise.all([
     hireMemberships(db, user.id),
+    partnerMemberships(db, user.id),
     getActiveSpace(user.id),
+    getPartnerSpace(user.id),
     unreadNotifications(db, user.id),
   ]);
-  const option = (membership: (typeof memberships)[number]) => ({
+  const option = (membership: (typeof hire)[number]) => ({
     id: membership.organizationId,
     name: membership.organization.name,
-    role: t(`${membership.role === "partner_manager" ? "viewer" : membership.role}.text`),
+    role: t(`${membership.role}.text`),
   });
   return (
     <AppShell
-      space={space ? option(space) : null}
-      spaces={memberships.map(option)}
+      space={
+        partnerSpace ? { ...option(partnerSpace), partner: true } : space ? option(space) : null
+      }
+      spaces={[...hire, ...partners].map(option)}
       unread={unread}
       account={{
         name: user.name,

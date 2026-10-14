@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { hireNavigation, talentNavigation } from "@/config/navigation";
+import { hireNavigation, partnerNavigation, talentNavigation } from "@/config/navigation";
 import { Logo, Icon } from "@/components/brand";
 import { AccountMenu, type AccountSummary } from "./account-menu";
 import { NavLink } from "./nav-link";
@@ -21,7 +21,7 @@ export function AppShell({
 }: {
   account: AccountSummary;
   /** Active organization space, or null for the personal space. */
-  space: SpaceOption | null;
+  space: (SpaceOption & { partner?: boolean }) | null;
   spaces: SpaceOption[];
   unread: number;
   children: ReactNode;
@@ -29,8 +29,8 @@ export function AppShell({
   const t = useTranslations("appNav");
   const a11y = useTranslations("a11y");
   const tn = useTranslations("notifications");
-  const navigation = space ? hireNavigation : talentNavigation;
-  const home = space ? "/app/hire" : "/app";
+  const navigation = space?.partner ? partnerNavigation : space ? hireNavigation : talentNavigation;
+  const home = space?.partner ? "/app/partenaire" : space ? "/app/hire" : "/app";
   const links = (placement: "sidebar" | "pill") =>
     navigation
       .filter((item) => placement === "sidebar" || item.pill !== false)
