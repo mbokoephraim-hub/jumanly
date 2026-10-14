@@ -1,4 +1,4 @@
-import AxeBuilder from "@axe-core/playwright";
+import { expectAccessible } from "./a11y";
 import { expect, test, type Page } from "@playwright/test";
 
 // Étape E1 (docs/specifications.md, partie 12): public site, rendered on the server and
@@ -187,13 +187,6 @@ test("les pages d'offre et de formation restent sous 200 Ko de JavaScript", asyn
 for (const path of [...publicPages.slice(1), "/mentions-legales", "/confidentialite"]) {
   test(`aucune erreur d'accessibilité WCAG 2.2 AA sur ${path}`, async ({ page }) => {
     await page.goto(path);
-    const results = await new AxeBuilder({ page })
-      .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
-      .analyze();
-    const summary = results.violations.map(
-      (violation) =>
-        `${violation.id} : ${violation.help}\n  ${violation.nodes.map((node) => node.target.join(" ")).join("\n  ")}`,
-    );
-    expect(summary).toEqual([]);
+    await expectAccessible(page);
   });
 }
