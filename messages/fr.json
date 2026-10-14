@@ -1502,7 +1502,10 @@
       "tagline": "Learn. Grow. Connect.",
       "signature": "Une plateforme développée par The Growth Lab",
       "imageAlt": "Aperçu de l'espace Jumanly sur téléphone",
-      "backHome": "Retour au site"
+      "backHome": "Retour au site",
+      "eyebrow": "Jumanly",
+      "languageShort": "FR",
+      "languageLabel": "Langue : français"
     },
     "or": "ou",
     "google": "Continuer avec Google",
@@ -1919,6 +1922,7 @@
       },
       "skills": {
         "title": "Quelles sont vos principales compétences ?",
+        "label": "Compétences",
         "placeholder": "Ajoutez une compétence puis appuyez sur Entrée",
         "help": "Ajoutez-en au moins trois. Elles servent à vous proposer des offres et des formations adaptées.",
         "suggestions": "Suggestions",

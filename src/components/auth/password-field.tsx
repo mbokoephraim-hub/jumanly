@@ -7,6 +7,8 @@ import { Field, inputClasses } from "@/components/ui/field";
 import { cx } from "@/lib/cx";
 import { passwordStrength, PASSWORD_MAX } from "@/lib/password";
 
+const levels = { weak: 0, medium: 1, strong: 2 } as const;
+
 /** Password input with a show/hide button and, on creation, a strength indicator. */
 export function PasswordField({
   id,
@@ -36,6 +38,10 @@ export function PasswordField({
       <Field id={id} label={label} hint={hint} error={error} required>
         {(aria) => (
           <div className="relative">
+            <Icon
+              name="lock"
+              className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-ardoise"
+            />
             <input
               {...aria}
               name={name}
@@ -45,7 +51,7 @@ export function PasswordField({
               placeholder={placeholder}
               value={value}
               onChange={(event) => setValue(event.target.value)}
-              className={cx(inputClasses, "h-12 pr-12")}
+              className={cx(inputClasses, "h-12 pr-12 pl-11")}
             />
             <button
               type="button"
@@ -60,9 +66,31 @@ export function PasswordField({
         )}
       </Field>
       {showStrength && strength && (
-        <p className="text-ardoise text-caption" aria-live="polite">
-          {t(`signup.account.password.strength.${strength}`)}
-        </p>
+        <div className="flex items-center gap-1.5" aria-live="polite">
+          {[0, 1, 2].map((bar) => (
+            <span
+              key={bar}
+              aria-hidden
+              className={cx(
+                "h-1 flex-1 rounded-pill bg-brume",
+                bar <= levels[strength] &&
+                  (strength === "weak"
+                    ? "bg-corail"
+                    : strength === "medium"
+                      ? "bg-ambre"
+                      : "bg-feuille"),
+              )}
+            />
+          ))}
+          <span
+            className={cx(
+              "ml-1.5 text-xs font-semibold",
+              strength === "strong" ? "text-feuille-fonce" : "text-ardoise",
+            )}
+          >
+            {t(`signup.account.password.strength.${strength}`)}
+          </span>
+        </div>
       )}
     </div>
   );

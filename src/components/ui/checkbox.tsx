@@ -1,10 +1,10 @@
-import type { ComponentProps } from "react";
+import type { ComponentProps, ReactNode } from "react";
 import { Icon } from "@/components/brand/icon";
 import { cx } from "@/lib/cx";
 
 type Props = Omit<ComponentProps<"input">, "type"> & {
   id: string;
-  label: string;
+  label: ReactNode;
   hint?: string;
   /** `radio` for a single choice within a group. */
   type?: "checkbox" | "radio";

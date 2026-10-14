@@ -10,7 +10,7 @@ test.describe("inscription avec forfait", () => {
     const email = testEmail("pro");
     await signUpFromPricing(page, "Choisir Pro", email);
     await expect(page).toHaveURL(/\/inscription\/paiement/, { timeout: 20_000 });
-    await page.locator('select[name="operator"]').selectOption("mpesa");
+    await page.getByRole("radio", { name: "M-Pesa" }).check();
     await page.locator('input[name="number"]').fill("+243 810 000 123");
     await page.getByRole("button", { name: /Payer/ }).click();
     await expect(page.getByText("Paiement confirmé")).toBeVisible({ timeout: 20_000 });

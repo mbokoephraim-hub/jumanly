@@ -1,14 +1,25 @@
 "use client";
 
-import { startTransition, useActionState, useEffect, useRef } from "react";
+import {
+  startTransition,
+  useActionState,
+  useEffect,
+  useRef,
+  useState,
+  type ReactNode,
+} from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { Alert } from "@/components/ui/alert";
-import { Button } from "@/components/ui/button";
+import { Icon } from "@/components/brand/icon";
+import { Button, buttonClasses } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Select } from "@/components/ui/select";
+import { Field } from "@/components/ui/field";
 import { TextField } from "@/components/ui/text-field";
 import { dynamic } from "@/i18n/dynamic";
+import { cx } from "@/lib/cx";
+import { interpolate, slot } from "@/lib/interpolate";
 import { CODE_DIGITS, CODE_MINUTES, MIN_AGE, PASSWORD_MIN } from "@/lib/password";
 import {
   requestPasswordReset,
@@ -71,6 +82,7 @@ export function LoginForm({ next }: { next?: string }) {
         id="login-email"
         name="email"
         type="email"
+        icon="message"
         autoComplete="email"
         label={t("login.email.label")}
         placeholder={t("login.email.placeholder")}
@@ -86,7 +98,10 @@ export function LoginForm({ next }: { next?: string }) {
       />
       <div className="flex flex-wrap items-center justify-between gap-3">
         <Checkbox id="login-remember" name="remember" label={t("login.remember")} defaultChecked />
-        <Link href="/mot-de-passe-oublie" className="text-sm font-medium underline">
+        <Link
+          href="/mot-de-passe-oublie"
+          className="text-[13px] font-semibold text-feuille-fonce hover:underline"
+        >
           {t("login.forgot")}
         </Link>
       </div>
@@ -116,6 +131,7 @@ export function MagicLinkForm({ next }: { next?: string }) {
         id="magic-email"
         name="email"
         type="email"
+        icon="message"
         autoComplete="email"
         label={t("login.email.label")}
         placeholder={t("login.email.placeholder")}
@@ -135,29 +151,99 @@ export function ForgotForm() {
   const t = useTranslations();
   const errorText = useErrorText();
   const [state, action, pending] = useActionState(requestPasswordReset, idle);
+  const wait = useCountdown(state.status === "sent" ? state : undefined);
   if (state.status === "sent") {
     return (
-      <Alert tone="success" title={t("forgot.sent.title")}>
-        {t("forgot.sent.text", { email: state.email ?? "", minutes: 60 })}
-      </Alert>
+      <SentCard title={t("forgot.sent.title")}>
+        <p>{t("forgot.sent.text", { email: state.email ?? "", minutes: 60 })}</p>
+        <form action={action}>
+          <input type="hidden" name="email" value={state.email ?? ""} />
+          <button
+            type="submit"
+            disabled={wait > 0 || pending}
+            className="flex h-9 items-center gap-1.5 rounded-pill px-3.5 text-[13px] font-semibold text-sapin ring-[1.5px] ring-brume ring-inset disabled:text-ardoise"
+          >
+            <Icon name="horloge" className="size-4" />
+            {wait > 0 ? t("forgot.sent.resendIn", { seconds: wait }) : t("forgot.sent.resend")}
+          </button>
+        </form>
+      </SentCard>
     );
   }
   return (
-    <form action={action} noValidate className="flex flex-col gap-4">
+    <form action={action} noValidate className="flex flex-col gap-5">
       <TextField
         id="forgot-email"
         name="email"
         type="email"
+        icon="message"
         autoComplete="email"
         label={t("forgot.email.label")}
         placeholder={t("forgot.email.placeholder")}
         required
         error={errorText(state.errors?.email)}
       />
-      <Button type="submit" size="lg" loading={pending} fullWidth>
+      <Button
+        type="submit"
+        size="lg"
+        loading={pending}
+        fullWidth
+        iconAfter={<Icon name="send" className="size-[18px]" />}
+      >
         {pending ? t("forgot.submitting") : t("forgot.submit")}
       </Button>
     </form>
+  );
+}
+
+/** Seconds left before a new e-mail can be asked for; restarts after each sending. */
+function useCountdown(sent: object | undefined, seconds = 60) {
+  const [previous, setPrevious] = useState(sent);
+  const [left, setLeft] = useState(sent ? seconds : 0);
+  if (sent !== previous) {
+    setPrevious(sent);
+    setLeft(sent ? seconds : 0);
+  }
+  useEffect(() => {
+    if (left <= 0) return;
+    const timer = window.setTimeout(() => setLeft((value) => value - 1), 1000);
+    return () => window.clearTimeout(timer);
+  }, [left]);
+  return left;
+}
+
+/** White card with a Lime outline and a check, shown once an e-mail is sent or a step is done. */
+function SentCard({
+  title,
+  tone = "success",
+  children,
+}: {
+  title: string;
+  tone?: "success" | "error";
+  children: ReactNode;
+}) {
+  return (
+    <div
+      role="status"
+      className={cx(
+        "jm-rise flex flex-col items-start gap-3 rounded-[24px] bg-blanc p-6 text-sm leading-[21px] text-ardoise ring-[1.5px] ring-inset",
+        tone === "success" ? "ring-lime" : "ring-corail/60",
+      )}
+    >
+      <p className="flex items-center gap-3 text-lg font-bold text-sapin">
+        <span
+          aria-hidden
+          className={cx(
+            "flex size-10 shrink-0 items-center justify-center rounded-full",
+            tone === "success" ? "bg-lime" : "bg-down-fond text-down-texte",
+          )}
+        >
+          <Icon name={tone === "success" ? "check" : "horloge"} className="size-5" />
+        </span>
+        {title}
+      </p>
+      {children}
+    </div>
   );
 }
 
@@ -167,36 +253,17 @@ export function ResetForm({ token }: { token: string }) {
   const [state, action, pending] = useActionState(resetPassword, idle);
   if (state.status === "done") {
     return (
-      <Alert
-        tone="success"
-        title={t("reset.success.title")}
-        action={
-          <Link href="/connexion" className="font-medium underline">
-            {t("reset.success.cta")}
-          </Link>
-        }
-      >
-        {t("reset.success.text")}
-      </Alert>
+      <SentCard title={t("reset.success.title")}>
+        <p>{t("reset.success.text")}</p>
+        <Link href="/connexion" className={buttonClasses({ size: "md" })}>
+          {t("reset.success.cta")}
+        </Link>
+      </SentCard>
     );
   }
-  if (state.error === "resetLinkInvalid") {
-    return (
-      <Alert
-        tone="error"
-        title={t("reset.invalid.title")}
-        action={
-          <Link href="/mot-de-passe-oublie" className="font-medium underline">
-            {t("reset.invalid.cta")}
-          </Link>
-        }
-      >
-        {t("reset.invalid.text")}
-      </Alert>
-    );
-  }
+  if (state.error === "resetLinkInvalid") return <ResetLinkInvalid />;
   return (
-    <form action={action} noValidate className="flex flex-col gap-4">
+    <form action={action} noValidate className="flex flex-col gap-5">
       <input type="hidden" name="token" value={token} />
       <PasswordField
         id="reset-password"
@@ -215,10 +282,33 @@ export function ResetForm({ token }: { token: string }) {
         autoComplete="new-password"
         error={errorText(state.errors?.confirm)}
       />
+      {/* Every other session is closed after a reset (Better Auth configuration). */}
+      <p className="flex items-center gap-2.5 text-sm">
+        <span
+          aria-hidden
+          className="flex size-5 items-center justify-center rounded-[6px] bg-sapin text-blanc"
+        >
+          <Icon name="check" className="size-4" />
+        </span>
+        {t("reset.logoutOthers")}
+      </p>
       <Button type="submit" size="lg" loading={pending} fullWidth>
         {pending ? t("reset.submitting") : t("reset.submit")}
       </Button>
     </form>
+  );
+}
+
+/** « Ce lien n'est plus valable », with the way to ask for a new one. */
+export function ResetLinkInvalid() {
+  const t = useTranslations();
+  return (
+    <SentCard title={t("reset.invalid.title")} tone="error">
+      <p>{t("reset.invalid.text")}</p>
+      <Link href="/mot-de-passe-oublie" className={buttonClasses({ size: "md" })}>
+        {t("reset.invalid.cta")}
+      </Link>
+    </SentCard>
   );
 }
 
@@ -243,7 +333,7 @@ export function SignupAccountForm({
   const values = state.values ?? {};
   const errors = state.errors ?? {};
   const isOrg = profile !== "talent";
-  const consent = (name: string, label: string, error?: string) => (
+  const consent = (name: string, label: ReactNode, error?: string) => (
     <div className="flex flex-col gap-1">
       <Checkbox
         id={`signup-${name}`}
@@ -258,7 +348,7 @@ export function SignupAccountForm({
     </div>
   );
   return (
-    <form action={action} noValidate className="flex flex-col gap-4">
+    <form action={action} noValidate className="flex flex-col gap-5">
       {state.error && <Alert tone="error" title={errorText(state.error) ?? ""} />}
       {errors.email === "emailTaken" && (
         <Alert tone="error" title={t("auth.error.emailTaken.text")}>
@@ -299,6 +389,7 @@ export function SignupAccountForm({
         id="signup-email"
         name="email"
         type="email"
+        icon="message"
         autoComplete="email"
         label={t("signup.account.email.label")}
         placeholder={t("signup.account.email.placeholder")}
@@ -365,25 +456,34 @@ export function SignupAccountForm({
       <fieldset className="flex flex-col gap-3">
         {consent(
           "terms",
-          t("signup.account.consent.terms", {
-            terms: t("signup.account.consent.termsLink"),
-            privacy: t("signup.account.consent.privacyLink"),
-          }),
+          interpolate(
+            t("signup.account.consent.terms", { terms: slot("terms"), privacy: slot("privacy") }),
+            {
+              terms: (
+                <Link href="/conditions" className="underline" target="_blank">
+                  {t("signup.account.consent.termsLink")}
+                </Link>
+              ),
+              privacy: (
+                <Link href="/confidentialite" className="underline" target="_blank">
+                  {t("signup.account.consent.privacyLink")}
+                </Link>
+              ),
+            },
+          ),
           errors.terms,
         )}
-        <p className="-mt-2 ml-8 flex gap-3 text-sm">
-          <Link href="/conditions" className="underline" target="_blank">
-            {t("signup.account.consent.termsLink")}
-          </Link>
-          <Link href="/confidentialite" className="underline" target="_blank">
-            {t("signup.account.consent.privacyLink")}
-          </Link>
-        </p>
         {consent("ai", t("signup.account.consent.ai"), errors.ai)}
-        {consent("age", t("signup.account.consent.age", { minAge: MIN_AGE }), errors.age)}
         {consent("newsletter", t("signup.account.consent.newsletter"))}
+        {consent("age", t("signup.account.consent.age", { minAge: MIN_AGE }), errors.age)}
       </fieldset>
-      <Button type="submit" size="lg" loading={pending} fullWidth>
+      <Button
+        type="submit"
+        size="lg"
+        loading={pending}
+        fullWidth
+        iconAfter={<Icon name="chev-r" className="size-5" />}
+      >
         {pending ? t("signup.account.submitting") : t("signup.account.submit")}
       </Button>
     </form>
@@ -392,21 +492,53 @@ export function SignupAccountForm({
 
 // ─── Codes (step 4 and two-step sign-in) ───────────────────────────
 
+/**
+ * The 6-digit code (mockup 02-07): one real input over six drawn boxes, so pasting, the keyboard
+ * and autofill of one-time codes keep working.
+ */
 function CodeField({ error, label, help }: { error?: string; label: string; help: string }) {
+  const [value, setValue] = useState("");
+  const [focused, setFocused] = useState(false);
   return (
-    <TextField
-      id="code"
-      name="code"
-      label={label}
-      hint={help}
-      required
-      inputMode="numeric"
-      autoComplete="one-time-code"
-      pattern="\d*"
-      maxLength={CODE_DIGITS}
-      className="text-center text-2xl tracking-[0.5em]"
-      error={error}
-    />
+    <Field id="code" label={label} hint={help} error={error} required>
+      {(aria) => (
+        <div className="relative">
+          <div aria-hidden className="grid grid-cols-6 gap-2 lg:gap-3">
+            {Array.from({ length: CODE_DIGITS }, (_, index) => {
+              const active = focused && index === Math.min(value.length, CODE_DIGITS - 1);
+              return (
+                <span
+                  key={index}
+                  className={cx(
+                    "flex h-14 items-center justify-center rounded-[14px] bg-blanc text-[26px] font-semibold ring-[1.5px] ring-inset lg:h-[70px] lg:text-[30px]",
+                    error ? "ring-corail" : value[index] ? "ring-sapin/30" : "ring-brume",
+                    active && "shadow-[0_0_0_5px_rgb(166_242_107/0.55)] ring-2 ring-sapin",
+                  )}
+                >
+                  {value[index] ??
+                    (active ? <span className="h-7 w-0.5 animate-pulse bg-sapin" /> : null)}
+                </span>
+              );
+            })}
+          </div>
+          <input
+            {...aria}
+            name="code"
+            inputMode="numeric"
+            autoComplete="one-time-code"
+            pattern="\d*"
+            maxLength={CODE_DIGITS}
+            value={value}
+            onChange={(event) =>
+              setValue(event.target.value.replace(/\D/g, "").slice(0, CODE_DIGITS))
+            }
+            onFocus={() => setFocused(true)}
+            onBlur={() => setFocused(false)}
+            className="absolute inset-0 h-full w-full cursor-text rounded-[14px] bg-transparent text-transparent caret-transparent opacity-[0.01] outline-none"
+          />
+        </div>
+      )}
+    </Field>
   );
 }
 
@@ -415,13 +547,15 @@ export function VerifyEmailForm({ email }: { email: string }) {
   const errorText = useErrorText();
   const [state, action, pending] = useActionState(verifyEmail, idle);
   const [resent, resend, resending] = useActionState(resendCode, idle);
+  const [arrival] = useState(() => ({}));
+  const wait = useCountdown(resent.status === "sent" ? resent : arrival);
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex flex-col gap-5">
       {resent.status === "sent" && (
         <Alert tone="success" title={t("signup.verify.resent", { email })} />
       )}
       {resent.error && <Alert tone="error" title={errorText(resent.error) ?? ""} />}
-      <form action={action} noValidate className="flex flex-col gap-4">
+      <form action={action} noValidate className="flex flex-col gap-5">
         <CodeField
           label={t("signup.verify.code.label")}
           help={t("signup.verify.code.help", { minutes: CODE_MINUTES })}
@@ -431,12 +565,25 @@ export function VerifyEmailForm({ email }: { email: string }) {
           {pending ? t("signup.verify.submitting") : t("signup.verify.submit")}
         </Button>
       </form>
-      <form action={resend}>
-        <Button type="submit" variant="tertiary" loading={resending}>
-          {t("signup.verify.resend")}
-        </Button>
-      </form>
-      <p className="text-sm text-ardoise">{t("signup.verify.spam")}</p>
+      <div className="flex flex-wrap items-center justify-between gap-3 text-[13px]">
+        <form action={resend}>
+          <button
+            type="submit"
+            disabled={wait > 0 || resending}
+            className="flex items-center gap-2 font-semibold text-sapin hover:underline disabled:font-normal disabled:text-ardoise disabled:no-underline"
+          >
+            <Icon name="horloge" className="size-4" />
+            {wait > 0 ? t("signup.verify.resendIn", { seconds: wait }) : t("signup.verify.resend")}
+          </button>
+        </form>
+        <Link href="/inscription" className="font-semibold text-feuille-fonce hover:underline">
+          {t("signup.verify.changeEmail")}
+        </Link>
+      </div>
+      <p className="flex items-start gap-3 rounded-[16px] bg-blanc px-4 py-3.5 text-[13px] leading-[19px]">
+        <Icon name="notification" className="mt-px size-4 shrink-0" />
+        {t("signup.verify.spam")}
+      </p>
     </div>
   );
 }

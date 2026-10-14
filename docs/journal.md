@@ -2,6 +2,34 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · Lot 7 : connexion et inscription (14 octobre 2026)
+
+Maquettes 02-01 à 02-10. Captures 1440 et 390 px dans `captures/refonte-lot-07/` (dossier du projet).
+
+- Gabarit d'authentification refait : panneau Sapin à gauche (motif, personnage propre à chaque
+  écran, accroche, trois engagements), formulaire sur Crème à droite, « Retour au site » et langue
+  en haut, signature en bas. Sur téléphone, le panneau disparaît.
+- `/connexion`, `/mot-de-passe-oublie` (avec l'état « e-mail envoyé » et un renvoi après 60 s),
+  `/reinitialiser` (adresse rappelée, jauge de robustesse, lien expiré), `/inscription` (cartes de
+  profil), `/inscription/forfait` (cartes de formules : la carte choisie passe en Sapin, en CSS
+  seul), `/inscription/compte` (rappel de la formule, consentements avec liens),
+  `/inscription/verification` (six cases pour le code, renvoi minuté), `/inscription/paiement`
+  (méthode en cartes, opérateur en pastilles, récapitulatif), `/app/bienvenue` (étapes numérotées,
+  « Vos premiers pas ») et `/activer` (déplacé dans le gabarit d'authentification, même adresse).
+- Textes ajoutés : `auth.layout.eyebrow`, `auth.layout.languageShort`, `auth.layout.languageLabel`,
+  `welcome.talent.skills.label`.
+- Test e2e de paiement adapté : l'opérateur se choisit par bouton radio.
+- Correctif du lot 6 : le bouton de pagination inactif n'utilise plus l'opacité (contraste AA).
+
+### Écarts restants
+
+- Pas d'import de CV sur `/app/bienvenue` (la fonction n'existe pas) ; seul « Créer mon CV » est proposé.
+- Pas de case « Mémoriser ce numéro » au paiement (non prévu).
+- Les encadrés d'exemple des maquettes (« Autres états », « Erreur de saisie (exemple) ») ne sont pas
+  reproduits : ce sont des états réels, affichés quand ils se produisent.
+- Le bouton Google n'apparaît que si Google est configuré.
+- `/app/bienvenue` garde la barre latérale de l'espace connecté.
+- « Déconnecter mes autres appareils » est une information : la déconnexion est toujours appliquée.
 ## Premier administrateur en production (14 octobre 2026)
 
 - Nouvelle variable `ADMIN_BOOTSTRAP_EMAIL` : l'adresse listée devient administrateur à sa première
