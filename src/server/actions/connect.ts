@@ -95,6 +95,12 @@ export async function markNotificationsReadAction(formData: FormData) {
   redirect(href.startsWith("/app") && !href.startsWith("//") ? href : "/app/notifications");
 }
 
+/** « Tout marquer comme lu » from the bell's panel: no redirect, the panel updates itself. */
+export async function markAllNotificationsReadInPlace() {
+  const user = await requireUser("/app/notifications");
+  await markNotificationsRead(db, user.id);
+}
+
 // ─── Contact requests and interviews, talent side (E8) ───────────────────────────
 
 export async function respondContactAction(formData: FormData) {

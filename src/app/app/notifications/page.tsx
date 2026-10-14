@@ -9,6 +9,7 @@ import { db } from "@/server/db";
 import {
   listNotifications,
   notificationTypes,
+  notificationValues,
   type NotificationType,
 } from "@/server/services/notifications";
 import { AppPageHeader } from "@/components/app/page-header";
@@ -17,14 +18,6 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("notifications");
   return { title: { absolute: t("title") }, robots: { index: false } };
 }
-
-const values = (payload: unknown) =>
-  Object.fromEntries(
-    Object.entries(payload && typeof payload === "object" ? payload : {}).map(([key, value]) => [
-      key,
-      String(value ?? ""),
-    ]),
-  );
 
 /** Notifications (textes `notifications.*`): each line opens its page and is marked read. */
 export default async function NotificationsPage({ searchParams }: PageProps<"/app/notifications">) {
@@ -92,7 +85,7 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
                     <span className={cx("text-sapin", !notification.readAt && "font-semibold")}>
                       {t(
                         `item.${notification.type as NotificationType}`,
-                        values(notification.payload),
+                        notificationValues(notification.payload),
                       )}
                     </span>
                     {!notification.readAt && <Badge tone="new">{t("item.unread")}</Badge>}

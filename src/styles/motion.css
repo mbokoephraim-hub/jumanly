@@ -642,3 +642,220 @@
     scroll-behavior: smooth;
   }
 }
+
+/* ─────────────── Espace connecté · messages (lot B) ───────────────
+ * Bienvenue, confirmations, toasts, cloche et panneau des notifications. Les règles hors média
+ * donnent l'état final ; les animations ne jouent que sans demande de mouvement réduit.
+ */
+.jm-check,
+.jm-letter {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+.jm-spark {
+  transform: translate(var(--sx), var(--sy));
+  opacity: 0.9;
+}
+.jm-orb {
+  background: radial-gradient(circle at 35% 30%, #e3f67c, #7de36b 45%, #1e9a64 80%);
+  box-shadow: 0 0 12px rgb(166 242 107 / 0.6);
+}
+.jm-notif {
+  position: relative;
+}
+.jm-notif::before {
+  content: "";
+  position: absolute;
+  inset: 10px auto 10px 0;
+  width: 3px;
+  border-radius: 3px;
+  background: var(--color-lime);
+  opacity: 0;
+  transition: opacity 0.25s ease;
+  transition-delay: calc(var(--i, 0) * 60ms);
+}
+.jm-notif[data-unread]::before {
+  opacity: 1;
+}
+.jm-toast-time {
+  transform: scaleX(0);
+}
+
+@keyframes jm-check-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+}
+@keyframes jm-disc-in {
+  from {
+    transform: scale(0.4);
+    opacity: 0;
+  }
+}
+@keyframes jm-spark-out {
+  from {
+    transform: translate(0, 0) scale(0.3);
+    opacity: 0;
+  }
+  60% {
+    opacity: 1;
+  }
+}
+@keyframes jm-bell {
+  0%,
+  100% {
+    transform: rotate(0);
+  }
+  15%,
+  48% {
+    transform: rotate(12deg);
+  }
+  31%,
+  65% {
+    transform: rotate(-12deg);
+  }
+  82% {
+    transform: rotate(6deg);
+  }
+}
+@keyframes jm-roll {
+  from {
+    transform: translateY(100%);
+    opacity: 0;
+  }
+}
+@keyframes jm-pop-in {
+  from {
+    transform: scale(0);
+  }
+}
+@keyframes jm-panel-in {
+  from {
+    transform: scale(0.96) translateY(-4px);
+    opacity: 0;
+  }
+}
+@keyframes jm-unread-once {
+  50% {
+    opacity: 0.35;
+  }
+}
+@keyframes jm-toast-in {
+  from {
+    transform: translateY(-16px) scale(0.98);
+    opacity: 0;
+  }
+}
+@keyframes jm-time {
+  from {
+    transform: scaleX(1);
+  }
+}
+@keyframes jm-slide-in {
+  from {
+    transform: translateX(-40px);
+    opacity: 0;
+  }
+}
+@keyframes jm-welcome-in {
+  from {
+    transform: translateY(6px);
+    opacity: 0;
+  }
+}
+@keyframes jm-welcome-out {
+  to {
+    transform: translateY(-4px);
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  /* Réussite : la pastille arrive, la coche se dessine, les formes s'écartent une fois. */
+  .jm-success-disc {
+    animation: jm-disc-in 0.45s var(--jm-rebond) both;
+  }
+  .jm-success .jm-check {
+    animation: jm-check-draw 0.4s var(--jm-arrivee) 0.3s both;
+  }
+  .jm-spark {
+    animation: jm-spark-out 0.7s var(--jm-rebond) 0.35s both;
+  }
+  .jm-success > :not(:first-child) {
+    animation: jm-page-in 0.45s var(--jm-elan) both;
+    animation-delay: 0.45s;
+  }
+
+  /* Bienvenue : le personnage entre en glissant, le j se dessine, les pas arrivent en cascade. */
+  .jm-slide-in {
+    animation: jm-slide-in 0.6s var(--jm-elan) 0.1s both;
+  }
+  .jm-letter {
+    animation: jm-check-draw 0.9s var(--jm-arrivee) 0.25s both;
+  }
+  .jm-letter-dot {
+    animation: jm-pop-in 0.35s var(--jm-rebond) 1s both;
+    transform-box: fill-box;
+    transform-origin: center;
+  }
+  .jm-steps > * {
+    animation: jm-page-in 0.5s var(--jm-elan) both;
+  }
+  .jm-steps > :nth-child(2) {
+    animation-delay: 0.12s;
+  }
+  .jm-steps > :nth-child(3) {
+    animation-delay: 0.24s;
+  }
+  .jm-steps > :nth-child(4) {
+    animation-delay: 0.36s;
+  }
+  .jm-steps > :nth-child(n + 5) {
+    animation-delay: 0.48s;
+  }
+
+  /* Message du jour : entre, l'orbe respire, puis il se replie. */
+  .jm-welcome {
+    animation: jm-welcome-in 0.5s var(--jm-elan) 0.5s both;
+  }
+  .jm-welcome[data-leaving] {
+    animation: jm-welcome-out 0.35s var(--jm-depart) both;
+  }
+  .jm-orb {
+    animation: jm-breathe 4.5s ease-in-out infinite;
+  }
+
+  /* Cloche : elle oscille trois fois, la pastille rebondit, le nombre roule. */
+  .jm-bell-ring {
+    transform-origin: 50% 10%;
+    animation: jm-bell 0.6s ease-in-out both;
+  }
+  .jm-badge-in {
+    animation: jm-pop-in 0.4s var(--jm-rebond) both;
+  }
+  .jm-count-roll {
+    animation: jm-roll 0.35s var(--jm-elan) both;
+  }
+  .jm-panel:not([hidden]) {
+    animation: jm-panel-in 0.2s var(--jm-elan) both;
+  }
+  .jm-panel:not([hidden]) .jm-notif[data-unread]::before {
+    animation: jm-unread-once 0.9s ease-in-out 0.2s;
+  }
+
+  /* Toasts : glissé et léger rebond, l'icône apparaît, la barre de temps se vide. */
+  .jm-toast {
+    animation: jm-toast-in 0.4s var(--jm-rebond) both;
+  }
+  .jm-toast-icon {
+    animation: jm-pop-in 0.35s var(--jm-rebond) 0.15s both;
+  }
+  .jm-toast-time {
+    animation-name: jm-time;
+    animation-timing-function: linear;
+    animation-fill-mode: both;
+  }
+  .jm-toast[data-paused] .jm-toast-time {
+    animation-play-state: paused;
+  }
+}

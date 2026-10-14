@@ -53,10 +53,34 @@ export default async function WelcomePage() {
     return (
       <div className="flex max-w-[960px] flex-col gap-6">
         <header className="flex items-start gap-6">
-          <span className="jm-pop hidden shrink-0 md:block">
+          <span className="jm-slide-in hidden shrink-0 md:block">
             <Character name="nadia" pose="salut" height={160} />
           </span>
           <div className="flex flex-col gap-3">
+            <span
+              aria-hidden
+              className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-sapin text-lime lg:size-12"
+            >
+              <svg viewBox="0 0 24 24" className="size-7" fill="none">
+                <path
+                  d="M15 9.5v6a4.5 4.5 0 0 1-9 0"
+                  pathLength={1}
+                  className="jm-letter"
+                  stroke="currentColor"
+                  strokeWidth={3.2}
+                  strokeLinecap="round"
+                />
+                <circle
+                  cx="15"
+                  cy="4"
+                  r="0.01"
+                  className="jm-letter-dot"
+                  stroke="currentColor"
+                  strokeWidth={3.2}
+                  strokeLinecap="round"
+                />
+              </svg>
+            </span>
             <h1 className="text-[30px] leading-[1.1] font-bold tracking-tight lg:text-[40px]">
               {t("org.title", { firstName })}
             </h1>
@@ -160,7 +184,7 @@ export default async function WelcomePage() {
   return (
     <div className="flex max-w-[1312px] flex-col gap-7">
       <header className="flex items-start gap-6">
-        <span className="jm-pop hidden shrink-0 md:block">
+        <span className="jm-slide-in hidden shrink-0 md:block">
           <Character name="amani" pose="salut" height={170} />
         </span>
         <div className="flex flex-1 flex-col gap-4">
@@ -168,6 +192,30 @@ export default async function WelcomePage() {
             <SignupStepper current="welcome" paid={Boolean(paidPlan?.priceCents)} />
           </div>
           <div className="flex flex-wrap items-center gap-3">
+            <span
+              aria-hidden
+              className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-sapin text-lime lg:size-12"
+            >
+              <svg viewBox="0 0 24 24" className="size-7" fill="none">
+                <path
+                  d="M15 9.5v6a4.5 4.5 0 0 1-9 0"
+                  pathLength={1}
+                  className="jm-letter"
+                  stroke="currentColor"
+                  strokeWidth={3.2}
+                  strokeLinecap="round"
+                />
+                <circle
+                  cx="15"
+                  cy="4"
+                  r="0.01"
+                  className="jm-letter-dot"
+                  stroke="currentColor"
+                  strokeWidth={3.2}
+                  strokeLinecap="round"
+                />
+              </svg>
+            </span>
             <h1 className="text-[30px] leading-[1.1] font-bold tracking-tight lg:text-[40px]">
               {t("talent.title", { firstName })}
             </h1>
@@ -202,7 +250,7 @@ export default async function WelcomePage() {
       </header>
       {resume}
       <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-7">
-        <form action={saveTalentWelcome} className="flex flex-col gap-4">
+        <form action={saveTalentWelcome} className="jm-steps flex flex-col gap-4">
           <div role="group" aria-labelledby="welcome-goal" className={card}>
             {heading("goal", 1, t("talent.goal.title"))}
             <div className="flex flex-wrap gap-2">

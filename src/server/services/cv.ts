@@ -43,6 +43,8 @@ const cvContentSchema = z.object({
     city: z.string(),
     country: z.string(),
     showEmail: z.boolean(),
+    /** The talent's own number, on this CV only; empty means not shown (added 2026-10-14). */
+    phone: z.string().default(""),
   }),
   summary: z.string(),
   experiences: z.array(
@@ -75,7 +77,7 @@ const cvContentSchema = z.object({
 export type CvContent = z.infer<typeof cvContentSchema>;
 
 export const emptyCv: CvContent = {
-  info: { name: "", headline: "", email: "", city: "", country: "", showEmail: true },
+  info: { name: "", headline: "", email: "", city: "", country: "", showEmail: true, phone: "" },
   summary: "",
   experiences: [],
   education: [],
@@ -113,6 +115,7 @@ export function cvFromProfile(profile: FullProfile, previous?: CvContent): CvCon
       city: profile.user.city ?? "",
       country: profile.user.country ?? "",
       showEmail: previous?.info.showEmail ?? true,
+      phone: previous?.info.phone ?? "",
     },
     summary: profile.summary ?? "",
     experiences: profile.experiences.map((experience) => ({

@@ -10,6 +10,7 @@ import { resolvePlan } from "@/server/entitlements";
 import { ownedOrganization } from "@/server/services/accounts";
 import { myLicenses } from "@/server/services/partners";
 import { AppPageHeader } from "@/components/app/page-header";
+import { SuccessBurst } from "@/components/motion/success-burst";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("billing.seo");
@@ -49,13 +50,15 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/abon
             })}
           </Alert>
         ) : (
-          <Alert tone="success" title={t("activate.success.title", { plan: activated.planName })}>
-            {t("activate.success.text", {
-              plan: activated.planName,
-              sponsorName: activated.sponsorName,
-              endDate: formatDate(activated.endDate),
-            })}
-          </Alert>
+          <SuccessBurst title={t("activate.success.title", { plan: activated.planName })}>
+            <p>
+              {t("activate.success.text", {
+                plan: activated.planName,
+                sponsorName: activated.sponsorName,
+                endDate: formatDate(activated.endDate),
+              })}
+            </p>
+          </SuccessBurst>
         ))}
       {params.consentement && <Alert tone="success" title={t("sponsored.consent.saved")} />}
       {params.resiliation && <Alert tone="success" title={t("settings.saved")} />}

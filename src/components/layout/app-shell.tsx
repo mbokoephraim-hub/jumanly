@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
+import { NotificationBell, type BellLabels } from "@/components/app/notification-bell";
+import { Toaster } from "@/components/motion/toaster";
 import { hireNavigation, partnerNavigation, talentNavigation } from "@/config/navigation";
 import { Logo, Icon } from "@/components/brand";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
@@ -38,6 +40,7 @@ export function AppShell({
   const t = useTranslations("appNav");
   const a11y = useTranslations("a11y");
   const tn = useTranslations("notifications");
+  const tt = useTranslations("toast");
   const navigation = space?.partner ? partnerNavigation : space ? hireNavigation : talentNavigation;
   const home = space?.partner ? "/app/partenaire" : space ? "/app/hire" : "/app";
   const links = (placement: "sidebar" | "pill") =>
@@ -49,26 +52,21 @@ export function AppShell({
         </li>
       ));
 
+  const bellLabels: BellLabels = {
+    aria: {
+      zero: tn("bell.aria", { count: 0 }),
+      one: tn("bell.aria", { count: 1 }),
+      other: tn("bell.aria", { count: 2 }).replace("2", "#"),
+    },
+    many: tn("bell.many"),
+    title: tn("panel.title"),
+    seeAll: tn("panel.seeAll"),
+    markAllRead: tn("markAllRead"),
+    close: tn("panel.close"),
+    empty: tn("empty.text"),
+  };
   const notifications = (tone: "light" | "dark") => (
-    <Link
-      href="/app/notifications"
-      aria-label={tn("bell.aria", { count: unread })}
-      className={
-        tone === "light"
-          ? "relative flex size-10 items-center justify-center rounded-full bg-blanc hover:bg-brume"
-          : "relative flex size-10 items-center justify-center rounded-full hover:bg-blanc/10"
-      }
-    >
-      <Icon name="notification" className="size-5" />
-      {unread > 0 && (
-        <span
-          aria-hidden
-          className="jm-badge-pulse absolute top-1 right-1 flex h-4 min-w-4 items-center justify-center rounded-full bg-lime px-1 text-[10px] font-semibold text-sapin ring-2 ring-blanc"
-        >
-          {unread > 9 ? tn("bell.many") : unread}
-        </span>
-      )}
-    </Link>
+    <NotificationBell initialUnread={unread} tone={tone} labels={bellLabels} />
   );
 
   return (
@@ -77,6 +75,7 @@ export function AppShell({
       className="min-h-dvh bg-sapin lg:flex lg:py-3.5 lg:pr-3.5"
     >
       <AppMotionRoot reduce={reduceMotion} />
+      <Toaster label={tt("region.aria")} closeLabel={tt("close")} />
       <a
         href="#content"
         className="sr-only z-50 rounded-pill bg-lime px-4 py-2 text-sapin focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
@@ -118,7 +117,7 @@ export function AppShell({
       </aside>
 
       <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc lg:hidden">
-        <Link href={home} aria-label={a11y("logo")}>
+        <Link href={home} aria-label={a11y("logo")} className="shrink-0">
           <Logo variant="negative" height={26} />
         </Link>
         <div className="flex min-w-0 items-center gap-1">

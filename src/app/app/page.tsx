@@ -4,6 +4,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
+import { DailyWelcome } from "@/components/app/daily-welcome";
 import { Pattern } from "@/components/site/marketing";
 import { Alert, ButtonLink, ProgressBar } from "@/components/ui";
 import { criterionText } from "@/components/matching/talent-why";
@@ -190,6 +191,33 @@ export default async function DashboardPage() {
             icon: "profil" as IconName,
           };
 
+  // Message of the day: one real fact about the account (brief § 4.1).
+  const firstCourse = inProgress[0];
+  const firstCourseLessons = firstCourse
+    ? (courses
+        .find((course) => course.slug === firstCourse.course.slug)
+        ?.modules.flatMap((module) => module.lessons) ?? [])
+    : [];
+  const lessonsLeft = firstCourse
+    ? firstCourseLessons.filter((lesson) => !firstCourse.completedLessons.includes(lesson.id))
+        .length
+    : 0;
+  const welcome =
+    strong.length > 0
+      ? {
+          sentence: t("talent.dashboard.welcome.matches", { count: strong.length }),
+          href: "/app/jobs",
+        }
+      : firstCourse && lessonsLeft > 0
+        ? {
+            sentence: t("talent.dashboard.welcome.course", {
+              courseTitle: firstCourse.course.title,
+              count: lessonsLeft,
+            }),
+            href: `/app/learn/${firstCourse.course.slug}`,
+          }
+        : { sentence: t("talent.dashboard.welcome.profile", { percent }), href: "/app/profil" };
+
   const gauges = plan
     ? await Promise.all(
         talentQuotas
@@ -299,6 +327,14 @@ export default async function DashboardPage() {
           applications.length === 0 && enrollments.length === 0 && percent < 30
             ? t("talent.dashboard.greeting.first", { firstName })
             : t("talent.dashboard.greeting.neutral", { firstName })
+        }
+        subtitle={
+          <DailyWelcome
+            person={user.id}
+            sentence={welcome.sentence}
+            href={welcome.href}
+            closeLabel={t("talent.dashboard.welcome.close")}
+          />
         }
       />
 

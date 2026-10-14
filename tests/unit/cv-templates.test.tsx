@@ -29,7 +29,7 @@ import {
   templateOf,
   type CvBlockType,
 } from "@/features/cv/templates/registry";
-import { emptyCv, type CvContent } from "@/server/services/cv";
+import { emptyCv, parseCv, type CvContent } from "@/server/services/cv";
 
 /** Labels of the printed CV, read from the generated texts (same as `cvTextLabels`). */
 function labels(language: "fr" | "en"): CvTextLabels {
@@ -170,6 +170,20 @@ describe("document du CV (§ 5 et § 7)", () => {
     expect(en.blocks.find((block) => block.type === "experience")?.title).toBe(
       messages.cv.titles.en.experience,
     );
+  });
+
+  it("le téléphone facultatif n'apparaît que s'il est rempli ; un ancien CV sans téléphone reste lisible", () => {
+    expect(documentFromCv(content, labels("fr")).contact.map((item) => item.value)).toEqual([
+      "Goma, RD Congo",
+      "awa@exemple.cd",
+    ]);
+    const withPhone = { ...content, info: { ...content.info, phone: "+243 900 000 000" } };
+    expect(documentFromCv(withPhone, labels("fr")).contact.map((item) => item.value)).toContain(
+      "+243 900 000 000",
+    );
+    const oldInfo: Partial<CvContent["info"]> = { ...content.info };
+    delete oldInfo.phone;
+    expect(parseCv({ ...content, info: oldInfo }).info.phone).toBe("");
   });
 
   it("chaque modèle gratuit imprime tous les champs, niveaux compris, sans marque Jumanly", () => {
