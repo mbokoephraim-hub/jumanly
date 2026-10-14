@@ -12,7 +12,7 @@ import { formatDate } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata, siteUrl } from "@/lib/seo";
 import { loginHref, signupHref } from "@/lib/signup";
-import { getJob, getSitemapEntries } from "@/server/queries/public";
+import { getJob, getSitemapEntries, staticSlugParams } from "@/server/queries/public";
 import { contractFilterOf, remoteFilterOf } from "@/server/services/jobs";
 
 // Known slugs are prerendered; a new one renders in full before responding, so that search engines
@@ -21,7 +21,7 @@ export const instant = false;
 
 export async function generateStaticParams() {
   const { jobSlugs } = await getSitemapEntries();
-  return jobSlugs.map(({ slug }) => ({ slug }));
+  return staticSlugParams(jobSlugs);
 }
 
 export async function generateMetadata({ params }: PageProps<"/offres/[slug]">): Promise<Metadata> {

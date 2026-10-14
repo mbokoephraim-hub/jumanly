@@ -93,6 +93,15 @@ export async function getSitemapEntries() {
   return { courseSlugs, jobSlugs, companySlugs };
 }
 
+/**
+ * Params for `generateStaticParams`. Cache Components refuses an empty list, which happens on a fresh
+ * production database (no course, job or company yet): a placeholder slug then renders a 404.
+ */
+export function staticSlugParams(rows: { slug: string }[]) {
+  const params = rows.map(({ slug }) => ({ slug }));
+  return params.length > 0 ? params : [{ slug: "aucun" }];
+}
+
 /** Public page of a recruiting organization (E8): its presentation and its open jobs. */
 export async function getCompany(slug: string) {
   "use cache";
