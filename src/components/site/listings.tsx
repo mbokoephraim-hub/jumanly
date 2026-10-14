@@ -26,14 +26,14 @@ export function CourseListing({ course, plans }: { course: CourseSummary; plans:
 
 const NEW_DAYS = 3;
 
-export function JobListing({ job, now }: { job: JobSummary; now: Date }) {
+export function JobListing({ job, now, href }: { job: JobSummary; now: Date; href?: string }) {
   const t = useTranslations();
   const isNew =
     job.publishedAt !== null && now.getTime() - job.publishedAt.getTime() < NEW_DAYS * 86_400_000;
   return (
     <JobCard
       title={job.title}
-      href={`/offres/${job.slug}`}
+      href={href ?? `/offres/${job.slug}`}
       company={job.organization.name}
       city={job.city}
       country={job.country}

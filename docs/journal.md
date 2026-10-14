@@ -2,6 +2,43 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E3 · Profil, Career, candidatures (14 octobre 2026)
+
+### Fait
+
+- Tables : profil enrichi (résumé, disponibilité, préférences, langues, complétude), expériences,
+  formations, preuves de compétences, documents (CV), diagnostics, étapes de recrutement,
+  candidatures avec historique, offres enregistrées.
+- `/app/profil` : toutes les sections, enregistrées une par une, sans JavaScript ; jauge de
+  complétude calculée par règles (`completeness`).
+- `/app/career` et `/app/career/diagnostic` : diagnostic simplifié en 12 questions, bilan par
+  règles fixes, historique.
+- `/app/career/cv` : plusieurs CV, rempli depuis le profil, sections ordonnables et masquables,
+  3 modèles (verrou de forfait au-delà du droit), aperçu, export PDF (`@react-pdf/renderer`).
+- `/app/jobs` (recherche, enregistrement, « Candidature envoyée »), `/app/jobs/[slug]` (offre et
+  formulaire de candidature : CV ou profil seul, lettre facultative), `/app/jobs/candidatures`
+  (statut, historique, CV envoyé, retrait), `/app/jobs/enregistrees`.
+- Tableau de bord `/app` : prochaine étape, indicateurs, parcours, candidatures en cours, quotas.
+- « Mon profil » dans le menu du compte ; le corps d'une offre est partagé entre la page publique
+  et l'espace connecté (`JobBody`).
+- Tests : unitaires (complétude, diagnostic, CV, PDF), base (candidature gratuite pour chaque
+  forfait et même sans droit ni quota, doublon, offre close, retrait, copie du CV), e2e (parcours
+  complet d'un talent Free depuis une offre publique, diagnostic, accessibilité des nouvelles pages).
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Un talent Free crée son profil, génère un CV PDF, postule et suit sa candidature | ✓ e2e `talent.spec.ts` |
+| La candidature n'est jamais bloquée par un quota ou un forfait (test dédié) | ✓ `tests/db/applications.test.ts` |
+| Lint, types, tests, build | ✓ en local ; CI à l'ouverture de la PR |
+
+### Dettes et points ouverts
+
+- Voir `docs/decisions/2026-10-14-profil-career-jobs.md` : photo, import de CV, alertes, score et
+  carte IA reportés ; fiches conseils sans contenu (à fournir).
+- Les compteurs « Formations en cours » du tableau de bord restent à 0 jusqu'à Learn (E5).
+
 ## E2 · Comptes, inscription avec forfaits, moteur de droits (13 octobre 2026)
 
 ### Fait

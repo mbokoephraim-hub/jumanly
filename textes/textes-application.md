@@ -1701,6 +1701,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `talent.dashboard.title` | Accueil |
+| `talent.dashboard.seo` | Accueil · Jumanly |
 | `talent.dashboard.date` | {date, date, full} |
 | `talent.dashboard.greeting.text` | Bonjour {firstName}, prêt pour la suite ? |
 | `talent.dashboard.greeting.neutral` | Bonjour {firstName}, on continue ? |
@@ -1808,6 +1809,9 @@ Conventions :
 | `talent.profile.delete` | Supprimer |
 | `talent.profile.reorder` | Réorganiser |
 | `talent.profile.sectionEmpty` | Cette section est vide. |
+| `talent.profile.seo` | Mon profil · Jumanly |
+| `talent.profile.error` | Vérifiez les champs de cette section, puis réessayez. |
+| `talent.profile.cancel` | Annuler |
 
 #### Identité
 
@@ -1923,6 +1927,8 @@ Conventions :
 | `talent.profile.skills.max` | Vous pouvez ajouter jusqu'à {max} compétences. |
 | `talent.profile.skills.duplicate` | Cette compétence est déjà dans votre profil. |
 | `talent.profile.skills.empty` | Ajoutez au moins trois compétences pour recevoir des suggestions d'offres. |
+| `talent.profile.skills.unknown` | Cette compétence n'est pas dans notre référentiel. Choisissez une des propositions de la liste. |
+| `talent.profile.skills.proofUrl` | Lien vers la preuve (facultatif) |
 
 #### Langues
 
@@ -1939,6 +1945,7 @@ Conventions :
 | `talent.profile.languages.level.basic` | Notions |
 | `talent.profile.languages.cefr.text` | Niveau CECR (facultatif) |
 | `talent.profile.languages.cefr.placeholder` | Ex. : B2 |
+| `talent.profile.languages.empty` | Ajoutez les langues dans lesquelles vous pouvez travailler. |
 
 #### Disponibilité et préférences
 
@@ -2304,6 +2311,8 @@ Conventions :
 | `career.home.plan.desc` | Vos objectifs, vos étapes et les formations qui vous font avancer. |
 | `career.home.portfolio.title` | Portfolio |
 | `career.home.portfolio.desc` | Montrez vos projets sur une page à partager. |
+| `career.home.seo` | Career · Jumanly |
+| `career.home.later` | Bientôt disponible |
 | `career.home.tips.title` | Conseils de préparation |
 | `career.home.tips.desc` | Des fiches pratiques pour préparer chaque étape d'un recrutement. |
 | `career.home.lock` | Disponible avec {plan} |
@@ -2349,6 +2358,8 @@ Conventions :
 | `career.diagnostic.required` | Choisissez au moins une réponse pour continuer. |
 | `career.diagnostic.analyzing` | Analyse de vos réponses… |
 | `career.diagnostic.privacy` | Vos réponses restent privées. Elles ne sont jamais montrées aux recruteurs. |
+| `career.diagnostic.seo` | Diagnostic de carrière · Jumanly |
+| `career.diagnostic.error` | Répondez à chaque question (le métier visé et les compétences sont facultatifs). |
 
 #### Questions (communes aux deux versions)
 
@@ -2382,6 +2393,9 @@ Conventions :
 | `career.diagnostic.q.targetRole.text` | Quel métier visez-vous ? |
 | `career.diagnostic.q.targetRole.placeholder` | Ex. : Comptable, développeur web, chargé de communication |
 | `career.diagnostic.q.targetRole.unsure` | Je ne sais pas encore |
+| `career.diagnostic.q.targetRole.hint` | Laissez vide si vous ne savez pas encore. |
+| `career.diagnostic.q.topSkillsPlaceholder` | Ex. : Excel, rédaction, service client |
+| `career.diagnostic.q.topSkillsHint` | Séparez-les par des virgules. Facultatif. |
 | `career.diagnostic.q.sector` | Quels secteurs vous attirent ? (plusieurs choix) |
 | `career.diagnostic.q.topSkills` | Quelles sont vos trois compétences les plus solides ? |
 | `career.diagnostic.q.skillsToBuild` | Quelles compétences aimeriez-vous développer ? |
@@ -2460,6 +2474,29 @@ Conventions :
 | `career.diagnostic.result.simple.note` | Ce bilan est établi à partir de vos réponses, selon des règles fixes. |
 | `career.diagnostic.result.personalized.note` | Bilan généré par l'IA à partir de vos réponses et de votre profil. Vérifiez-le : vous restez le meilleur juge de votre parcours. |
 | `career.diagnostic.result.history` | Diagnostics précédents |
+| `career.diagnostic.result.namedSkills` | Les compétences que vous citez : {skills} |
+| `career.diagnostic.result.rolesEmpty` | Vous n'avez pas encore de métier précis en tête. Les offres et les formations peuvent vous donner des idées. |
+| `career.diagnostic.rule.strength.experience` | Une expérience professionnelle sur laquelle vous appuyer |
+| `career.diagnostic.rule.strength.education` | Un niveau d'études supérieur |
+| `career.diagnostic.rule.strength.availability` | Du temps à consacrer chaque semaine à votre progression |
+| `career.diagnostic.rule.strength.mobility` | Une ouverture à la mobilité |
+| `career.diagnostic.rule.strength.interview` | De l'assurance en entretien |
+| `career.diagnostic.rule.strength.applications` | Une recherche déjà active |
+| `career.diagnostic.rule.strength.none` | Vos atouts se préciseront en complétant votre profil. Chaque expérience compte, même courte. |
+| `career.diagnostic.rule.priority.role` | Choisir un métier cible |
+| `career.diagnostic.rule.priority.skills` | Renforcer les compétences demandées dans vos offres cibles |
+| `career.diagnostic.rule.priority.cv` | Mettre votre CV à jour |
+| `career.diagnostic.rule.priority.interview` | Vous préparer aux entretiens |
+| `career.diagnostic.rule.priority.search` | Trouver des offres adaptées et candidater régulièrement |
+| `career.diagnostic.rule.priority.network` | Développer votre réseau professionnel |
+| `career.diagnostic.rule.step.profile` | Compléter votre profil professionnel |
+| `career.diagnostic.rule.step.cv` | Créer ou mettre à jour votre CV |
+| `career.diagnostic.rule.step.skills` | Suivre une formation sur une compétence demandée |
+| `career.diagnostic.rule.step.interview` | Préparer vos réponses aux questions d'entretien fréquentes |
+| `career.diagnostic.rule.step.jobs` | Enregistrer cinq offres qui vous intéressent et postuler |
+| `career.diagnostic.rule.step.network` | Rendre votre profil visible des recruteurs |
+| `career.diagnostic.rule.step.role` | Lister trois métiers qui vous attirent, puis refaire le diagnostic |
+| `career.diagnostic.rule.step.cta` | Y aller |
 
 ### `/app/career/cv` · Éditeur de CV et coach IA
 
@@ -2554,6 +2591,17 @@ Conventions :
 | `career.cv.empty` | Votre CV est vide. Importez un CV existant ou remplissez-le depuis votre profil. |
 | `career.cv.coach.footer` | L'IA conseille, vous décidez. Rien n'est modifié sans votre accord. |
 | `career.cv.simulateInterview` | Simuler un entretien |
+| `career.cv.seo` | Mon CV · Jumanly |
+| `career.cv.updated` | Modifié le {date} |
+| `career.cv.open` | Ouvrir |
+| `career.cv.template.name.classic` | Classique |
+| `career.cv.template.name.modern` | Moderne |
+| `career.cv.template.name.compact` | Compact |
+| `career.cv.info.showEmail` | Afficher mon e-mail sur le CV |
+| `career.cv.fromProfileHint` | Le contenu des sections vient de votre profil. Modifiez-le dans votre profil, puis touchez « Remplir depuis mon profil ». |
+| `career.cv.fromProfileDone` | CV mis à jour à partir de votre profil. |
+| `career.cv.limit` | Vous pouvez avoir jusqu'à {max} CV. |
+| `career.cv.back` | Mes CV |
 
 ### `/app/career/documents` · Lettres, biographie et correction
 
@@ -2828,6 +2876,9 @@ Conventions :
 | `talent.jobs.search.empty.cta` | Effacer les filtres |
 | `talent.jobs.search.loading` | Recherche des offres… |
 | `talent.jobs.search.loadMore` | Voir plus d'offres |
+| `talent.jobs.seo` | Offres · Jumanly |
+| `talent.jobs.search.previous` | Page précédente |
+| `talent.jobs.search.next` | Page suivante |
 
 ### `/app/jobs` · Carte d'offre
 
@@ -2947,6 +2998,10 @@ Conventions :
 | `talent.jobs.apply.error` | Votre candidature n'a pas pu être envoyée. Vos réponses sont conservées, réessayez. |
 | `talent.jobs.apply.already` | Vous avez déjà postulé à cette offre. |
 | `talent.jobs.apply.cancel.confirm` | Abandonner la candidature ? Vos réponses ne seront pas enregistrées. |
+| `talent.jobs.apply.cv.profileOnly` | Envoyer seulement mon profil |
+| `talent.jobs.detail.seo` | {jobTitle} · Jumanly |
+| `talent.jobs.detail.scoreLater` | Le calcul de compatibilité arrive bientôt. Vous pouvez déjà postuler. |
+| `talent.jobs.detail.backToJobs` | Toutes les offres |
 
 ### `/app/jobs/candidatures` · Mes candidatures
 
@@ -2989,6 +3044,11 @@ Conventions :
 | `talent.jobs.applications.empty.text` | Vous n'avez pas encore postulé. Les candidatures sont gratuites et illimitées. |
 | `talent.jobs.applications.empty.cta` | Trouver une offre |
 | `talent.jobs.applications.reportError` | Signaler une erreur sur mon score |
+| `talent.jobs.applications.seo` | Mes candidatures · Jumanly |
+| `talent.jobs.applications.event.submitted` | Candidature envoyée |
+| `talent.jobs.applications.event.withdrawn` | Candidature retirée |
+| `talent.jobs.applications.event.stage_changed` | Nouvelle étape : {stage} |
+| `talent.jobs.applications.event.decision` | Décision du recruteur |
 
 ### `/app/jobs/enregistrees` · Offres enregistrées
 
@@ -3005,6 +3065,7 @@ Conventions :
 | `talent.jobs.saved.empty.text` | Aucune offre enregistrée. Touchez l'icône d'enregistrement sur une offre pour la retrouver ici. |
 | `talent.jobs.saved.empty.cta` | Rechercher des offres |
 | `talent.jobs.saved.clearClosed` | Retirer les offres clôturées |
+| `talent.jobs.saved.seo` | Offres enregistrées · Jumanly |
 
 ---
 

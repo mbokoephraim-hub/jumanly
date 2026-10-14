@@ -5,6 +5,7 @@ import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { welcomeGoals } from "@/lib/welcome";
+import { refreshCompleteness } from "@/server/services/profile";
 import { readSignupFlow, writeSignupFlow } from "@/server/signup-flow";
 
 const welcomeSchema = z.object({
@@ -37,7 +38,7 @@ export async function saveTalentWelcome(formData: FormData) {
       visibility: parsed.visibility,
     },
   });
-  // Only skills of the shared reference are kept; free text waits for the profile editor (E3).
+  // Only skills of the shared reference are kept (the admin enriches the reference).
   const skills = await db.skill.findMany({
     where: {
       OR: [
@@ -54,6 +55,7 @@ export async function saveTalentWelcome(formData: FormData) {
       create: { profileId: profile.id, skillId: skill.id },
     });
   }
+  await refreshCompleteness(db, profile.id);
   await finishWelcome();
 }
 

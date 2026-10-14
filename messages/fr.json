@@ -2013,6 +2013,7 @@
   "talent": {
     "dashboard": {
       "title": "Accueil",
+      "seo": "Accueil · Jumanly",
       "date": "{date, date, full}",
       "greeting": {
         "text": "Bonjour {firstName}, prêt pour la suite ?",
@@ -2167,6 +2168,9 @@
       "delete": "Supprimer",
       "reorder": "Réorganiser",
       "sectionEmpty": "Cette section est vide.",
+      "seo": "Mon profil · Jumanly",
+      "error": "Vérifiez les champs de cette section, puis réessayez.",
+      "cancel": "Annuler",
       "identity": {
         "title": "Identité",
         "photo": {
@@ -2303,7 +2307,9 @@
         },
         "max": "Vous pouvez ajouter jusqu'à {max} compétences.",
         "duplicate": "Cette compétence est déjà dans votre profil.",
-        "empty": "Ajoutez au moins trois compétences pour recevoir des suggestions d'offres."
+        "empty": "Ajoutez au moins trois compétences pour recevoir des suggestions d'offres.",
+        "unknown": "Cette compétence n'est pas dans notre référentiel. Choisissez une des propositions de la liste.",
+        "proofUrl": "Lien vers la preuve (facultatif)"
       },
       "languages": {
         "title": "Langues",
@@ -2320,7 +2326,8 @@
         "cefr": {
           "text": "Niveau CECR (facultatif)",
           "placeholder": "Ex. : B2"
-        }
+        },
+        "empty": "Ajoutez les langues dans lesquelles vous pouvez travailler."
       },
       "availability": {
         "title": "Disponibilité",
@@ -2441,7 +2448,9 @@
           "cta": "Effacer les filtres"
         },
         "loading": "Recherche des offres…",
-        "loadMore": "Voir plus d'offres"
+        "loadMore": "Voir plus d'offres",
+        "previous": "Page précédente",
+        "next": "Page suivante"
       },
       "filters": {
         "text": "Filtres",
@@ -2524,6 +2533,7 @@
         "follow": "Suivre",
         "following": "Suivie"
       },
+      "seo": "Offres · Jumanly",
       "card": {
         "new": "Nouveau",
         "verified": "Entreprise vérifiée",
@@ -2620,7 +2630,10 @@
           "see": "Voir l'entreprise",
           "otherJobs": "{count, plural, one {# autre offre} other {# autres offres}}"
         },
-        "similar": "Offres similaires"
+        "similar": "Offres similaires",
+        "seo": "{jobTitle} · Jumanly",
+        "scoreLater": "Le calcul de compatibilité arrive bientôt. Vous pouvez déjà postuler.",
+        "backToJobs": "Toutes les offres"
       },
       "apply": {
         "title": "Postuler à {jobTitle}",
@@ -2637,7 +2650,8 @@
           "select": "Choisir un CV",
           "upload": "Téléverser un autre CV",
           "none": "Vous n'avez pas encore de CV. Créez-le en quelques minutes ou téléversez un fichier.",
-          "create": "Créer mon CV"
+          "create": "Créer mon CV",
+          "profileOnly": "Envoyer seulement mon profil"
         },
         "letter": {
           "text": "Lettre de motivation",
@@ -2725,7 +2739,14 @@
           "text": "Vous n'avez pas encore postulé. Les candidatures sont gratuites et illimitées.",
           "cta": "Trouver une offre"
         },
-        "reportError": "Signaler une erreur sur mon score"
+        "reportError": "Signaler une erreur sur mon score",
+        "seo": "Mes candidatures · Jumanly",
+        "event": {
+          "submitted": "Candidature envoyée",
+          "withdrawn": "Candidature retirée",
+          "stage_changed": "Nouvelle étape : {stage}",
+          "decision": "Décision du recruteur"
+        }
       },
       "saved": {
         "title": "Offres enregistrées",
@@ -2738,7 +2759,8 @@
           "text": "Aucune offre enregistrée. Touchez l'icône d'enregistrement sur une offre pour la retrouver ici.",
           "cta": "Rechercher des offres"
         },
-        "clearClosed": "Retirer les offres clôturées"
+        "clearClosed": "Retirer les offres clôturées",
+        "seo": "Offres enregistrées · Jumanly"
       }
     }
   },
@@ -3121,6 +3143,8 @@
         "title": "Portfolio",
         "desc": "Montrez vos projets sur une page à partager."
       },
+      "seo": "Career · Jumanly",
+      "later": "Bientôt disponible",
       "tips": {
         "title": "Conseils de préparation",
         "desc": "Des fiches pratiques pour préparer chaque étape d'un recrutement."
@@ -3162,6 +3186,8 @@
       "required": "Choisissez au moins une réponse pour continuer.",
       "analyzing": "Analyse de vos réponses…",
       "privacy": "Vos réponses restent privées. Elles ne sont jamais montrées aux recruteurs.",
+      "seo": "Diagnostic de carrière · Jumanly",
+      "error": "Répondez à chaque question (le métier visé et les compétences sont facultatifs).",
       "part": {
         "situation": "Votre situation",
         "goals": "Vos objectifs",
@@ -3199,8 +3225,11 @@
         "targetRole": {
           "text": "Quel métier visez-vous ?",
           "placeholder": "Ex. : Comptable, développeur web, chargé de communication",
-          "unsure": "Je ne sais pas encore"
+          "unsure": "Je ne sais pas encore",
+          "hint": "Laissez vide si vous ne savez pas encore."
         },
+        "topSkillsPlaceholder": "Ex. : Excel, rédaction, service client",
+        "topSkillsHint": "Séparez-les par des virgules. Facultatif.",
         "sector": "Quels secteurs vous attirent ? (plusieurs choix)",
         "topSkills": "Quelles sont vos trois compétences les plus solides ?",
         "skillsToBuild": "Quelles compétences aimeriez-vous développer ?",
@@ -3294,7 +3323,38 @@
         "personalized": {
           "note": "Bilan généré par l'IA à partir de vos réponses et de votre profil. Vérifiez-le : vous restez le meilleur juge de votre parcours."
         },
-        "history": "Diagnostics précédents"
+        "history": "Diagnostics précédents",
+        "namedSkills": "Les compétences que vous citez : {skills}",
+        "rolesEmpty": "Vous n'avez pas encore de métier précis en tête. Les offres et les formations peuvent vous donner des idées."
+      },
+      "rule": {
+        "strength": {
+          "experience": "Une expérience professionnelle sur laquelle vous appuyer",
+          "education": "Un niveau d'études supérieur",
+          "availability": "Du temps à consacrer chaque semaine à votre progression",
+          "mobility": "Une ouverture à la mobilité",
+          "interview": "De l'assurance en entretien",
+          "applications": "Une recherche déjà active",
+          "none": "Vos atouts se préciseront en complétant votre profil. Chaque expérience compte, même courte."
+        },
+        "priority": {
+          "role": "Choisir un métier cible",
+          "skills": "Renforcer les compétences demandées dans vos offres cibles",
+          "cv": "Mettre votre CV à jour",
+          "interview": "Vous préparer aux entretiens",
+          "search": "Trouver des offres adaptées et candidater régulièrement",
+          "network": "Développer votre réseau professionnel"
+        },
+        "step": {
+          "profile": "Compléter votre profil professionnel",
+          "cv": "Créer ou mettre à jour votre CV",
+          "skills": "Suivre une formation sur une compétence demandée",
+          "interview": "Préparer vos réponses aux questions d'entretien fréquentes",
+          "jobs": "Enregistrer cinq offres qui vous intéressent et postuler",
+          "network": "Rendre votre profil visible des recruteurs",
+          "role": "Lister trois métiers qui vous attirent, puis refaire le diagnostic",
+          "cta": "Y aller"
+        }
       }
     },
     "cv": {
@@ -3355,7 +3415,8 @@
         "photo": {
           "text": "Afficher ma photo sur le CV",
           "hint": "Facultatif. De nombreux recruteurs préfèrent un CV sans photo."
-        }
+        },
+        "showEmail": "Afficher mon e-mail sur le CV"
       },
       "bullet": {
         "add": "Ajouter une réalisation"
@@ -3377,6 +3438,11 @@
           "text": "Densité",
           "airy": "Aérée",
           "compact": "Compacte"
+        },
+        "name": {
+          "classic": "Classique",
+          "modern": "Moderne",
+          "compact": "Compact"
         }
       },
       "tab": {
@@ -3418,7 +3484,14 @@
       "coach": {
         "footer": "L'IA conseille, vous décidez. Rien n'est modifié sans votre accord."
       },
-      "simulateInterview": "Simuler un entretien"
+      "simulateInterview": "Simuler un entretien",
+      "seo": "Mon CV · Jumanly",
+      "updated": "Modifié le {date}",
+      "open": "Ouvrir",
+      "fromProfileHint": "Le contenu des sections vient de votre profil. Modifiez-le dans votre profil, puis touchez « Remplir depuis mon profil ».",
+      "fromProfileDone": "CV mis à jour à partir de votre profil.",
+      "limit": "Vous pouvez avoir jusqu'à {max} CV.",
+      "back": "Mes CV"
     },
     "documents": {
       "title": "Lettres et documents",

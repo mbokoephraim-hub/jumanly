@@ -40,11 +40,13 @@ export function RadioGroup({
   name,
   options,
   defaultValue,
+  required = false,
 }: {
   legend: string;
   name: string;
   options: { value: string; label: string; hint?: string; disabled?: boolean }[];
   defaultValue?: string;
+  required?: boolean;
 }) {
   return (
     <fieldset className="flex flex-col gap-3">
@@ -60,6 +62,7 @@ export function RadioGroup({
           hint={option.hint}
           disabled={option.disabled}
           defaultChecked={option.value === defaultValue}
+          required={required}
         />
       ))}
     </fieldset>

@@ -39,6 +39,11 @@ export function AccountMenu({
         </p>
         <ul className="flex flex-col border-t border-brume pt-2 text-[15px]">
           <li>
+            <Link href="/app/profil" className={item}>
+              {t("account.menu.profile")}
+            </Link>
+          </li>
+          <li>
             <Link href="/app/abonnement" className={item}>
               {t("account.menu.subscription")}
             </Link>

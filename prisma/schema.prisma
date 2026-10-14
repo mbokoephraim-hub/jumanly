@@ -143,11 +143,11 @@ enum SkillImportance {
 }
 
 model Job {
-  id                String       @id @default(cuid(2))
+  id                String          @id @default(cuid(2))
   organizationId    String
-  organization      Organization @relation(fields: [organizationId], references: [id])
+  organization      Organization    @relation(fields: [organizationId], references: [id])
   title             String
-  slug              String       @unique
+  slug              String          @unique
   description       String
   /// One item per line.
   responsibilities  String[]
@@ -161,19 +161,22 @@ model Job {
   /// USD cents per month; optional.
   salaryMin         Int?
   salaryMax         Int?
-  currency          String       @default("USD")
-  experienceMin     Int          @default(0)
+  currency          String          @default("USD")
+  experienceMin     Int             @default(0)
   educationLevelMin String?
   /// [{ code: "fr", level: "C1" }]
-  languagesRequired Json         @default("[]")
+  languagesRequired Json            @default("[]")
   /// Explicit criteria set by the recruiter: ["Permis B", …]
-  knockoutCriteria  Json         @default("[]")
-  status            JobStatus    @default(draft)
+  knockoutCriteria  Json            @default("[]")
+  status            JobStatus       @default(draft)
   publishedAt       DateTime?
   closesAt          DateTime?
   skills            JobSkill[]
-  createdAt         DateTime     @default(now())
-  updatedAt         DateTime     @updatedAt
+  stages            PipelineStage[]
+  applications      Application[]
+  savedBy           SavedJob[]
+  createdAt         DateTime        @default(now())
+  updatedAt         DateTime        @updatedAt
 
   @@index([status, publishedAt])
 }
@@ -321,32 +324,34 @@ enum UserStatus {
 }
 
 model User {
-  id                  String         @id @default(cuid(2))
+  id                  String             @id @default(cuid(2))
   name                String
-  email               String         @unique
-  emailVerified       Boolean        @default(false)
+  email               String             @unique
+  emailVerified       Boolean            @default(false)
   image               String?
   firstName           String?
   lastName            String?
   country             String?
   city                String?
-  locale              String         @default("fr")
-  platformRole        PlatformRole   @default(user)
-  status              UserStatus     @default(active)
+  locale              String             @default("fr")
+  platformRole        PlatformRole       @default(user)
+  status              UserStatus         @default(active)
   /// Consent to AI suggestions (CLAUDE.md § 12): date of consent, null when withdrawn.
   aiConsentAt         DateTime?
-  newsletter          Boolean        @default(false)
+  newsletter          Boolean            @default(false)
   termsAcceptedAt     DateTime?
   /// Account deletion requested: effective at this date unless the user signs in again.
   deletionScheduledAt DateTime?
-  twoFactorEnabled    Boolean        @default(false)
+  twoFactorEnabled    Boolean            @default(false)
   sessions            Session[]
   accounts            Account[]
   twoFactors          TwoFactor[]
   memberships         Membership[]
   talentProfile       TalentProfile?
-  createdAt           DateTime       @default(now())
-  updatedAt           DateTime       @updatedAt
+  diagnostics         CareerDiagnostic[]
+  savedJobs           SavedJob[]
+  createdAt           DateTime           @default(now())
+  updatedAt           DateTime           @updatedAt
 
   @@map("user")
 }
@@ -578,17 +583,220 @@ enum ProfileVisibility {
 }
 
 model TalentProfile {
-  id         String            @id @default(cuid(2))
-  userId     String            @unique
-  user       User              @relation(fields: [userId], references: [id], onDelete: Cascade)
-  headline   String?
+  id                String            @id @default(cuid(2))
+  userId            String            @unique
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  headline          String?
+  summary           String?
   /// Main goal chosen on the welcome screen (firstJob, newJob, reconversion…).
-  goal       String?
-  targetJob  String?
-  visibility ProfileVisibility @default(private)
-  skills     ProfileSkill[]
-  createdAt  DateTime          @default(now())
-  updatedAt  DateTime          @updatedAt
+  goal              String?
+  targetJob         String?
+  visibility        ProfileVisibility @default(private)
+  availability      Availability      @default(open)
+  availableFrom     DateTime?
+  notice            String?
+  desiredJobTitles  String[]
+  /// Values of `talent.profile.preferences.contract.*` (cdi, cdd, internship…).
+  desiredContracts  String[]
+  desiredLocations  String[]
+  remotePreferences RemoteMode[]
+  relocation        Boolean           @default(false)
+  /// Never shown to recruiters. Whole USD (or `salaryCurrency`) per `salaryPeriod`.
+  salaryMin         Int?
+  salaryCurrency    String            @default("USD")
+  salaryPeriod      String            @default("month")
+  sectors           String[]
+  /// [{ code: "fr", level: "native" | "fluent" | …, cefr?: "B2" }]
+  languages         Json              @default("[]")
+  /// 0 to 100, recomputed on every profile change.
+  completeness      Int               @default(0)
+  skills            ProfileSkill[]
+  experiences       Experience[]
+  educations        Education[]
+  documents         Document[]
+  applications      Application[]
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+}
+
+enum Availability {
+  open
+  listening
+  not_looking
+}
+
+enum ExperienceType {
+  job
+  internship
+  freelance
+  volunteer
+  entrepreneur
+}
+
+model Experience {
+  id          String         @id @default(cuid(2))
+  profileId   String
+  profile     TalentProfile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  title       String
+  company     String
+  type        ExperienceType @default(job)
+  location    String?
+  startDate   DateTime
+  /// null = current position.
+  endDate     DateTime?
+  /// One achievement per line.
+  description String         @default("")
+  createdAt   DateTime       @default(now())
+
+  @@index([profileId])
+}
+
+enum EducationLevel {
+  none
+  secondary
+  vocational
+  bachelor
+  master
+  doctorate
+}
+
+model Education {
+  id        String         @id @default(cuid(2))
+  profileId String
+  profile   TalentProfile  @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  degree    String
+  level     EducationLevel
+  field     String?
+  school    String
+  startYear Int?
+  /// null = in progress.
+  endYear   Int?
+  createdAt DateTime       @default(now())
+
+  @@index([profileId])
+}
+
+enum DocumentKind {
+  cv
+  cover_letter
+  bio
+  portfolio_item
+  other
+}
+
+/// A CV (or later a letter): structured content, rendered by a template.
+model Document {
+  id         String        @id @default(cuid(2))
+  profileId  String
+  profile    TalentProfile @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  kind       DocumentKind
+  title      String
+  templateId String        @default("classic")
+  content    Json          @default("{}")
+  isPrimary  Boolean       @default(false)
+  createdAt  DateTime      @default(now())
+  updatedAt  DateTime      @updatedAt
+
+  @@index([profileId, kind])
+}
+
+enum DiagnosticLevel {
+  simple
+  personalized
+}
+
+model CareerDiagnostic {
+  id        String          @id @default(cuid(2))
+  userId    String
+  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  level     DiagnosticLevel
+  answers   Json
+  result    Json
+  createdAt DateTime        @default(now())
+
+  @@index([userId, createdAt])
+}
+
+// ─── Candidatures (Jobs, partie 04) ─────────────────────────────
+
+enum StageKind {
+  new
+  screening
+  test
+  interview
+  offer
+  hired
+  rejected
+}
+
+model PipelineStage {
+  id           String        @id @default(cuid(2))
+  jobId        String
+  job          Job           @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  name         String
+  order        Int
+  kind         StageKind
+  applications Application[]
+
+  @@unique([jobId, order])
+}
+
+enum ApplicationStatus {
+  active
+  withdrawn
+  rejected
+  hired
+}
+
+enum ApplicationSource {
+  direct
+  invitation
+  talent_search
+}
+
+model Application {
+  id          String             @id @default(cuid(2))
+  jobId       String
+  job         Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  profileId   String
+  profile     TalentProfile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  stageId     String
+  stage       PipelineStage      @relation(fields: [stageId], references: [id])
+  status      ApplicationStatus  @default(active)
+  coverLetter String?
+  /// Copy of the CV as sent (title, template, content): later edits do not change it.
+  cvSnapshot  Json?
+  source      ApplicationSource  @default(direct)
+  viewedAt    DateTime?
+  events      ApplicationEvent[]
+  createdAt   DateTime           @default(now())
+  updatedAt   DateTime           @updatedAt
+
+  @@unique([jobId, profileId])
+  @@index([profileId, status])
+}
+
+model ApplicationEvent {
+  id            String      @id @default(cuid(2))
+  applicationId String
+  application   Application @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  actorId       String?
+  /// submitted, stage_changed, note, message, document_requested, decision, withdrawn
+  type          String
+  payload       Json        @default("{}")
+  createdAt     DateTime    @default(now())
+
+  @@index([applicationId, createdAt])
+}
+
+model SavedJob {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId     String
+  job       Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([userId, jobId])
 }
 
 enum SkillSource {
@@ -608,6 +816,9 @@ model ProfileSkill {
   level     Int           @default(2)
   source    SkillSource   @default(declared)
   verified  Boolean       @default(false)
+  /// certificate, experience, project, link or null.
+  proof     String?
+  proofUrl  String?
   createdAt DateTime      @default(now())
 
   @@unique([profileId, skillId])

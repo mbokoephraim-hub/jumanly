@@ -74,3 +74,9 @@ export function countryOptions(
       .sort((a, b) => a.label.localeCompare(b.label, "fr"));
   return [...sort(african), ...sort(others)];
 }
+
+/** "CD" → "Congo-Kinshasa"; any other value is returned as is. */
+export function countryName(code: string): string {
+  if (!/^[A-Z]{2}$/.test(code)) return code;
+  return new Intl.DisplayNames(["fr-FR"], { type: "region" }).of(code) ?? code;
+}
