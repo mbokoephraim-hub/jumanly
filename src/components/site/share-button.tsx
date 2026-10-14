@@ -5,7 +5,15 @@ import { Icon } from "@/components/brand/icon";
 import { Button } from "@/components/ui/button";
 
 /** Shares the current page (native share sheet on mobile, copy of the link otherwise). */
-export function ShareButton({ label, copiedLabel }: { label: string; copiedLabel: string }) {
+export function ShareButton({
+  label,
+  copiedLabel,
+  className,
+}: {
+  label: string;
+  copiedLabel: string;
+  className?: string;
+}) {
   const [copied, setCopied] = useState(false);
   async function share() {
     const url = window.location.href;
@@ -19,7 +27,12 @@ export function ShareButton({ label, copiedLabel }: { label: string; copiedLabel
   }
   return (
     <>
-      <Button variant="tertiary" icon={<Icon name="partager" className="size-4" />} onClick={share}>
+      <Button
+        variant="tertiary"
+        icon={<Icon name="partager" className="size-4" />}
+        onClick={share}
+        className={className}
+      >
         {label}
       </Button>
       <span role="status" className="sr-only">

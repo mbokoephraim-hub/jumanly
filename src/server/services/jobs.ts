@@ -131,7 +131,7 @@ export async function searchJobs(db: PrismaClient, filters: JobFilters, now = ne
       orderBy: jobOrderBy(filters.tri),
       skip: (page - 1) * JOBS_PER_PAGE,
       take: JOBS_PER_PAGE,
-      select: cardSelect,
+      select: publicCardSelect,
     }),
   ]);
   return { total, page, pageCount: Math.max(1, Math.ceil(total / JOBS_PER_PAGE)), jobs };
@@ -166,7 +166,15 @@ export async function getPublicJob(db: PrismaClient, slug: string) {
     where: { slug, status: { in: ["published", "closed"] } },
     include: {
       organization: {
-        select: { name: true, slug: true, description: true, verifiedAt: true, logo: true },
+        select: {
+          name: true,
+          slug: true,
+          description: true,
+          verifiedAt: true,
+          logo: true,
+          sector: true,
+          size: true,
+        },
       },
       skills: { include: { skill: { select: { name: true } } }, orderBy: { weight: "desc" } },
     },

@@ -2,6 +2,38 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · Lot 6 : formations, offres, entreprise, attestation, portfolio, pages légales (14 octobre 2026)
+
+- `/formations` refaite d'après `01-10` : héros Crème avec recherche en pilule et Amani, panneau de
+  filtres (replié sur mobile), pastilles d'accès, tri en menu, nouvelles cartes de catalogue, pagination
+  par pastilles numérotées, bandeau Sapin « Voir les forfaits ».
+- `/formations/[slug]` d'après `01-11` : fil d'Ariane, écran d'aperçu Sapin, programme en accordéons
+  par module, objectifs en deux colonnes, bandeau Lime avec un modèle d'attestation (sans nom),
+  formateur, formations proches.
+- `/offres` d'après `01-12` : formulaire de recherche en carte, encart IA « compatibilité », cartes
+  d'offres (salaire quand il est publié), colonne recruteur, filtres et conseil de sécurité.
+- `/offres/[slug]` d'après `01-13` : en-tête avec logo et faits en pastilles, « Postuler
+  gratuitement », colonne IA, sécurité et entreprise ; `JobBody` restylé (aussi dans `/app/jobs`).
+- `/entreprises/[slug]` d'après `01-14` : bandeau Profondeur, carte d'identité qui chevauche,
+  offres ouvertes, état vide avec Fatou.
+- `/attestations/[code]` d'après `01-15` : carte de vérification (valide, révoquée, introuvable),
+  recherche d'un autre numéro, Kofi.
+- `/portfolio/[slug]` d'après `01-16` : bandeau Lime, initiales, compétences mobilisées, premier
+  projet en grand (mise en page « classique »), couvertures à motifs, nombre de fichiers.
+- Modèle des pages légales d'après `01-17` (les quatre pages) : bandeau « à faire valider », bouton
+  Imprimer, menu des pages avec icônes, sommaire, encadré « L'essentiel », section IA mise en avant,
+  listes à libellé en gras, emplacements `[…]` surlignés (hors production), « Haut de page ».
+- Textes ajoutés : `trainings.hero.eyebrow`, `training.preview.position`,
+  `training.certificate.sample.{intro,text}`, `training.instructor.role`, `jobs.hero.eyebrow`,
+  `jobs.search.filtersCount`, `career.portfolio.page.{eyebrow,projects,count,files,share,shareCopied}`,
+  `legal.eyebrow`.
+- Écarts assumés : filtre « contrat » à choix unique (le moteur de recherche n'en accepte qu'un) ;
+  pas de cartes de démonstration « Autres états » sur l'attestation ; pas de bio ni de titre du
+  formateur (absents du modèle de données) ; pas de lieu ni de badge « Projet mis en avant » sur le
+  portfolio (la page publique ne montre que nom, titre, présentation et projets).
+- Tests e2e mis à jour : le titre du portfolio est désormais le nom ; l'aperçu de leçon s'ouvre par
+  « Lire l'aperçu ».
+
 ## Refonte visuelle · Lot 5 : Partenaires, FAQ, Contact, Matching (14 octobre 2026)
 
 - `/partenaires` refaite d'après `docs/maquettes/01-site-public/01-06` : héros Crème avec un tableau

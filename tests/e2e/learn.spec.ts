@@ -85,6 +85,7 @@ test("un éditeur crée une formation, un talent Free la suit jusqu'à l'attesta
   const visitor = await newPage(browser, baseURL, isMobile);
   await visitor.goto(`/formations/${slug}`);
   await expect(visitor.getByRole("heading", { level: 1 })).toHaveText(title);
+  await visitor.locator("#apercu summary").click();
   await expect(visitor.getByText("Premier paragraphe fictif.")).toBeVisible();
   await visitor.context().close();
 
