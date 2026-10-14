@@ -2,6 +2,55 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · Lot 8 : espace talent, tableau de bord, profil et Learn (14 octobre 2026)
+
+Maquettes 03-01 à 03-07. Captures 1440 et 390 px dans `captures/refonte-lot-08/` (dossier du projet).
+
+- Gabarit de l'espace connecté : contenu en pleine largeur ; nouveau `AppPageHeader` (surtitre et
+  titre remontés dans la barre du haut sur grand écran).
+- `/app` : bandeau Sapin « prochaine étape » (entretien, formation en cours, offres compatibles ou
+  profil), quatre indicateurs, parcours en étapes, carte des offres recommandées avec « Pourquoi ? »,
+  formations en cours, entretiens à venir, candidatures et quotas.
+- `/app/profil` : colonne latérale (complétude, aperçu côté recruteur, visibilité, import de CV),
+  sections avec pictogramme, expériences et formations en tuiles, attestations Jumanly, compétences en
+  tableau, langues, disponibilité en boutons segmentés.
+- `/app/learn` : onglets, recherche, thèmes, formation mise en avant, « En cours », recommandations,
+  grille « Populaires » (carte verrouillée grisée avec cadenas).
+- `/app/learn/[slug]` : fiche (en-tête Sapin, carte de forfait, programme dépliable), lecteur
+  (scène Sapin, navigation entre leçons, onglets d'ancrage, ressources, notes, sommaire avec
+  progression, attestation, formateur) et quiz (résultat avec anneau de score, revue question par
+  question avec la bonne réponse, grille de résultats, module suivant).
+- `/app/learn/attestations` : bandeau « Nouvelle attestation » (30 jours), cartes, copie du lien de
+  vérification, aperçu du PDF et lien public.
+- Textes ajoutés : `talent.dashboard.nextStep.hint.*`, `talent.dashboard.ai.reason`,
+  `talent.dashboard.ai.score`, `talent.profile.importCv.action`,
+  `talent.profile.education.jumanlyCertificates.issued`, `talent.profile.skills.count`,
+  `talent.profile.skills.table.skill`, `learn.course.eyebrow`, `learn.course.includedInPlan`,
+  `learn.course.previewBadge`, `learn.quiz.eyebrow`, `learn.quiz.result.moduleBadge`,
+  `learn.quiz.result.yourAnswer`, `learn.quiz.result.grid`, `learn.quiz.result.nextModule`,
+  `learn.quiz.result.reviewCount`, `learn.certificates.eyebrow`, `learn.certificates.count`,
+  `learn.certificates.preview`, `learn.certificates.publicLink.title`,
+  `learn.certificates.publicLink.body`, `learn.certificates.congrats.eyebrow`.
+
+### Écarts restants
+
+- Pas de graphique du temps d'apprentissage par semaine ni de comparaison au mois précédent (pas de
+  donnée hebdomadaire) ; pas d'évolution de la force du profil.
+- Pas de recherche globale dans la barre du haut ni de sélecteur « Espace ».
+- Pas de notes ni de nombre d'avis sur les formations, pas de pile d'avatars d'apprenants.
+- Carte IA : pas de « Ignorer » ni « Ne plus me proposer » ; pas de carte « Comble une compétence
+  manquante » sur la fiche formation.
+- Pas de quiz ni de documents dans « À venir » ; pas d'envoi de photo ; pas de réécriture du résumé
+  par l'IA ; niveau de compétence en lecture seule dans le tableau.
+- Pas d'interrupteur « Afficher sur mon profil » ni « Ajouter à mon CV » sur les attestations ; pas de
+  tri ; pas de bouton « Partager » par carte (copie du lien à la place).
+- Lecteur : pas d'onglet « Questions » ni « Poser une question » (fonction absente) ; les notes sont
+  datées, pas liées au moment de la vidéo ; les contrôles de la vidéo restent ceux du navigateur.
+- Quiz : pas de lien « À revoir : leçon » (aucun lien entre question et leçon en base).
+- Pas de barre d'action collante en bas sur téléphone (fiche et lecteur).
+- La formation mise en avant du catalogue est une formation, pas un « parcours ».
+- Pas de panneau de filtres ni de tri dans le catalogue connecté.
+
 ## Refonte visuelle · Lot 7 : connexion et inscription (14 octobre 2026)
 
 Maquettes 02-01 à 02-10. Captures 1440 et 390 px dans `captures/refonte-lot-07/` (dossier du projet).

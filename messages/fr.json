@@ -2197,7 +2197,13 @@
         "resumeCourse": "Reprenez « {courseTitle} » là où vous l'avez laissée.",
         "apply": "{count, plural, one {# offre compatible vous attend.} other {# offres compatibles vous attendent.}}",
         "interview": "Préparez votre entretien avec {company} du {date, date, medium}.",
-        "cta": "Commencer"
+        "cta": "Commencer",
+        "hint": {
+          "interview": "Simulation d'entretien, fiche entreprise et questions fréquentes, au même endroit.",
+          "course": "Chaque leçon terminée compte pour votre attestation.",
+          "apply": "Chaque offre explique pourquoi elle vous correspond. Candidater reste gratuit.",
+          "profile": "Un profil complet aide les recruteurs à vous comprendre."
+        }
       },
       "kpi": {
         "courses": {
@@ -2256,6 +2262,8 @@
           "none": "Pas encore d'offre très compatible. Complétez vos compétences pour affiner les suggestions."
         },
         "why": "Pourquoi ?",
+        "reason": "{criteria} correspondent à ce que demande la première offre.",
+        "score": "{score} %",
         "cta": "Voir les offres",
         "dismiss": "Ignorer"
       },
@@ -2324,7 +2332,8 @@
       },
       "importCv": {
         "text": "Remplir à partir de mon CV",
-        "hint": "Nous lisons votre CV et pré-remplissons les sections. Vous validez chaque élément."
+        "hint": "Nous lisons votre CV et pré-remplissons les sections. Vous validez chaque élément.",
+        "action": "Importer un CV"
       },
       "import": {
         "paste": {
@@ -2454,7 +2463,8 @@
           "text": "Attestations Jumanly",
           "hint": "Ajoutées automatiquement quand vous terminez une formation. Vous pouvez les masquer.",
           "hide": "Masquer sur le profil",
-          "show": "Afficher sur le profil"
+          "show": "Afficher sur le profil",
+          "issued": "Obtenue le {date, date, long}"
         }
       },
       "skills": {
@@ -2488,7 +2498,11 @@
         "duplicate": "Cette compétence est déjà dans votre profil.",
         "empty": "Ajoutez au moins trois compétences pour recevoir des suggestions d'offres.",
         "unknown": "Cette compétence n'est pas dans notre référentiel. Choisissez une des propositions de la liste.",
-        "proofUrl": "Lien vers la preuve (facultatif)"
+        "proofUrl": "Lien vers la preuve (facultatif)",
+        "count": "{count} sur {max}",
+        "table": {
+          "skill": "Compétence et preuve"
+        }
       },
       "languages": {
         "title": "Langues",
@@ -3064,6 +3078,7 @@
     },
     "course": {
       "back": "Retour au catalogue",
+      "eyebrow": "Learn · Catalogue de formations",
       "about": "À propos de cette formation",
       "outcomes": "Ce que vous saurez faire",
       "program": "Programme",
@@ -3076,6 +3091,8 @@
       "language": "Langue : {language}",
       "certificate": "Attestation Jumanly à la fin, ajoutée à votre profil",
       "requiredPlan": "Forfait requis : {plan}",
+      "includedInPlan": "Inclus dans votre forfait",
+      "previewBadge": "Aperçu",
       "instructor": {
         "text": "Formateur",
         "courses": "{count, plural, one {# formation} other {# formations}}"
@@ -3208,6 +3225,7 @@
     },
     "quiz": {
       "title": "Quiz · {moduleTitle}",
+      "eyebrow": "Learn · {courseTitle}",
       "intro": "{count, plural, one {# question} other {# questions}}. Il faut {passScore} % de bonnes réponses pour valider.",
       "attempts": "{count, plural, =0 {Tentatives illimitées} one {# tentative restante} other {# tentatives restantes}}",
       "start": "Commencer le quiz",
@@ -3250,6 +3268,11 @@
         "revisit": "À revoir : {lessonTitle}",
         "retry": "Réessayer",
         "continue": "Continuer la formation",
+        "moduleBadge": "Module {number} validé",
+        "yourAnswer": "Votre réponse",
+        "grid": "Question par question",
+        "nextModule": "Module suivant",
+        "reviewCount": "{count, plural, one {# question} other {# questions}}",
         "retryAfter": "Nouvelle tentative possible {time, relative}"
       },
       "noAttempts": "Vous avez utilisé toutes vos tentatives. Écrivez à assistant@jumanly.io si vous avez besoin d'aide.",
@@ -3259,6 +3282,13 @@
       "title": "Mes attestations",
       "subtitle": "Chaque attestation est ajoutée à votre profil et peut être vérifiée par un recruteur grâce à son lien public.",
       "seo": "Mes attestations",
+      "eyebrow": "Learn · Attestations",
+      "count": "{count, plural, one {# attestation} other {# attestations}}",
+      "preview": "Aperçu du PDF",
+      "publicLink": {
+        "title": "Lien de vérification public",
+        "body": "Seules les informations nécessaires à la vérification sont affichées : titulaire, formation, durée, date et numéro."
+      },
       "verifyLink": "Page de vérification",
       "revoked": "Révoquée le {date, date, long}",
       "issued": "Obtenue le {date, date, long}",
@@ -3275,6 +3305,7 @@
       },
       "congrats": {
         "title": "Félicitations, {firstName} !",
+        "eyebrow": "Nouvelle attestation",
         "body": "Vous avez terminé « {courseTitle} ». Votre attestation est prête et déjà visible sur votre profil."
       },
       "pdf": {

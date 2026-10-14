@@ -1,7 +1,8 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { AiOrb } from "@/components/brand/ai-orb";
-import { Badge, ScoreBadge } from "@/components/ui";
+import { Icon } from "@/components/brand/icon";
+import { ScoreBadge } from "@/components/ui";
 import { db } from "@/server/db";
 import { recommendedCourses, recommendedJobs } from "@/server/matching/service";
 import { catalogLevelOf, opensCourse } from "@/server/services/learn";
@@ -63,8 +64,11 @@ export async function RecommendedJobs({ userId }: { userId: string }) {
   );
 }
 
-/** Courses that close the gaps most frequent in the talent's best jobs (§ 8.7). */
-export async function RecommendedCourses({ userId }: { userId: string }) {
+/**
+ * Courses that close the gaps most frequent in the talent's best jobs (§ 8.7), in the green AI
+ * block of the Learn catalog (mockup 03-03), each with its reason.
+ */
+export async function RecommendedCourses({ userId, goal }: { userId: string; goal?: string }) {
   const t = await getTranslations();
   const catalog = await catalogLevelOf(db, userId);
   const courses = await recommendedCourses(db, userId, {
@@ -75,35 +79,62 @@ export async function RecommendedCourses({ userId }: { userId: string }) {
   return (
     <section
       aria-labelledby="reco-courses"
-      className="flex flex-col gap-3 rounded-card bg-blanc p-6"
+      className="relative flex flex-col gap-4 overflow-hidden rounded-[24px] bg-[linear-gradient(120deg,#14745f_0%,#1f9e78_60%,#2fbf8a_100%)] p-5 text-blanc lg:p-6"
     >
-      <div className="flex flex-wrap items-center justify-between gap-2">
-        <h2 id="reco-courses" className="flex items-center gap-2 text-h2">
-          <AiOrb />
-          {t("career.plan.courses")}
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <h2
+          id="reco-courses"
+          className="flex items-center gap-3 text-lg leading-6 font-bold lg:text-[22px]"
+        >
+          <span
+            aria-hidden
+            className="size-8 shrink-0 rounded-full bg-[radial-gradient(circle_at_35%_35%,#E3F67C,#A6F26B_55%,#4caf50)]"
+          />
+          {goal ? t("ai.recoCourses.title", { goal }) : t("career.plan.courses")}
         </h2>
-        <Link href="/comment-fonctionne-le-matching" className="text-sm underline">
+        <Link
+          href="/comment-fonctionne-le-matching"
+          className="flex items-center gap-1.5 rounded-pill bg-blanc/15 px-3 py-1.5 text-xs font-semibold text-lime hover:bg-blanc/25"
+        >
+          <Icon name="eye" className="size-3.5" />
           {t("ai.recoCourses.link")}
         </Link>
       </div>
-      <ul className="flex flex-col gap-3">
+      <ul className="grid gap-3 md:grid-cols-3">
         {courses.map((course) => (
-          <li key={course.slug} className="flex flex-col gap-1">
-            <span className="flex flex-wrap items-center gap-2">
-              <Link href={`/app/learn/${course.slug}`} className="font-semibold underline">
+          <li key={course.slug} className="flex flex-col gap-2.5 rounded-[18px] bg-sapin/80 p-4">
+            <span className="flex items-start gap-3">
+              <span
+                aria-hidden
+                className="flex size-9 shrink-0 items-center justify-center rounded-[10px] bg-blanc/10"
+              >
+                <Icon name="competence" className="size-4" />
+              </span>
+              <Link
+                href={`/app/learn/${course.slug}`}
+                className="text-[15px] leading-5 font-semibold hover:underline"
+              >
                 {course.title}
               </Link>
-              {course.open && (
-                <Badge tone="success">{t("match.why.talent.courses.included")}</Badge>
-              )}
             </span>
-            <span className="text-sm text-ardoise">
+            <span className="text-xs leading-[17px] text-blanc/80">
               {t("ai.recoCourses.reason.demand", { percent: course.percent })}
             </span>
+            {course.open && (
+              <span className="mt-auto text-xs font-semibold text-lime">
+                {t("match.why.talent.courses.included")}
+              </span>
+            )}
           </li>
         ))}
       </ul>
-      <p className="text-sm text-ardoise">{t("ai.recoCourses.why")}</p>
+      <p className="flex items-start gap-2 text-xs text-blanc/85">
+        <Icon name="eye" className="mt-px size-3.5 shrink-0 text-lime" />
+        <span>
+          <strong className="font-semibold text-blanc">{t("talent.dashboard.ai.why")}</strong>{" "}
+          {t("ai.recoCourses.why")}
+        </span>
+      </p>
     </section>
   );
 }

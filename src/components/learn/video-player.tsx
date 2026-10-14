@@ -88,7 +88,7 @@ export function VideoPlayer({ src, poster, lowMp4, title, labels }: Props) {
 
   return (
     <div className="flex flex-col gap-3">
-      <div className="overflow-hidden rounded-card bg-nuit">
+      <div className="overflow-hidden rounded-[18px] bg-nuit ring-1 ring-blanc/10">
         <video
           ref={video}
           controls
@@ -100,9 +100,13 @@ export function VideoPlayer({ src, poster, lowMp4, title, labels }: Props) {
           onError={() => setFailed(true)}
         />
       </div>
-      {slow && <p className="text-sm text-ardoise">{labels.lowBandwidth}</p>}
+      {slow && (
+        <p className="rounded-xl bg-ambre-fond px-4 py-2.5 text-[13px] text-ambre-texte">
+          {labels.lowBandwidth}
+        </p>
+      )}
       {failed && (
-        <p role="alert" className="flex flex-wrap items-center gap-3 text-sm">
+        <p role="alert" className="flex flex-wrap items-center gap-3 text-sm text-blanc">
           {labels.error}
           <button
             type="button"
@@ -116,7 +120,7 @@ export function VideoPlayer({ src, poster, lowMp4, title, labels }: Props) {
           </button>
         </p>
       )}
-      <div className="flex flex-wrap gap-4 text-sm">
+      <div className="flex flex-wrap gap-3 text-[13px] text-blanc/85">
         <label htmlFor={qualityId} className="flex items-center gap-2">
           {labels.quality}
           <select
@@ -126,7 +130,7 @@ export function VideoPlayer({ src, poster, lowMp4, title, labels }: Props) {
               setFailed(false);
               setChoice(event.target.value === "low" ? "low" : "auto");
             }}
-            className="h-9 rounded-sm border border-brume bg-blanc px-2"
+            className="h-9 rounded-pill border border-blanc/40 bg-sapin px-3 font-semibold text-blanc"
           >
             <option value="auto">{labels.auto}</option>
             <option value="low">{labels.low}</option>
@@ -140,7 +144,7 @@ export function VideoPlayer({ src, poster, lowMp4, title, labels }: Props) {
             onChange={(event) => {
               if (video.current) video.current.playbackRate = Number(event.target.value);
             }}
-            className="h-9 rounded-sm border border-brume bg-blanc px-2"
+            className="h-9 rounded-pill border border-blanc/40 bg-sapin px-3 font-semibold text-blanc"
           >
             {speeds.map((speed) => (
               <option key={speed} value={speed}>
