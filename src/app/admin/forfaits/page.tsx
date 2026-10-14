@@ -1,8 +1,10 @@
+import { notFound } from "next/navigation";
 import Link from "next/link";
 import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { Badge } from "@/components/ui";
 import { formatUsd } from "@/lib/money";
+import { requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
 
 const families = [
@@ -15,6 +17,7 @@ const families = [
 /** Plans by family, with their live subscribers. */
 export default async function AdminPlans() {
   await connection();
+  if (!(await requireAdmin())) notFound();
   const t = await getTranslations("admin.plans");
   const now = new Date();
   const plans = await db.plan.findMany({

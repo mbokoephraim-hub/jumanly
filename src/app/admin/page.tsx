@@ -1,13 +1,20 @@
+import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { Alert, StatCard } from "@/components/ui";
 import { formatUsd } from "@/lib/money";
+import { requireAdmin, requireCourseEditor } from "@/server/auth/session";
 import { db } from "@/server/db";
 
 /** Indicators that exist at this step: accounts by plan status and recurring revenue. */
 export default async function AdminDashboard({ searchParams }: PageProps<"/admin">) {
   const params = await searchParams;
   await connection();
+  if (!(await requireAdmin())) {
+    // Content editors land on the courses, the only part of the admin they use.
+    if (await requireCourseEditor()) redirect("/admin/formations");
+    notFound();
+  }
   const t = await getTranslations("admin");
   const now = new Date();
   const [users, paid, sponsored, companies, signups] = await Promise.all([

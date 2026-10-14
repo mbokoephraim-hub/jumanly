@@ -307,6 +307,32 @@ type CourseSeed = {
   skills: string[];
 };
 
+/** Quiz of the demo courses: obviously fictitious, two questions. */
+const demoQuiz = {
+  passingScore: 50,
+  maxAttempts: 0,
+  questions: {
+    create: [
+      {
+        order: 1,
+        type: "single" as const,
+        prompt: "Question de démonstration : Jumanly est…",
+        options: ["Une plateforme de formation et d'emploi", "Un jeu vidéo"],
+        answer: ["0"],
+        explanation: "Réponse de démonstration.",
+      },
+      {
+        order: 2,
+        type: "multiple" as const,
+        prompt: "Question de démonstration : quels modules existent ?",
+        options: ["Learn", "Jobs", "Météo"],
+        answer: ["0", "1"],
+        explanation: "Réponse de démonstration.",
+      },
+    ],
+  },
+};
+
 const courses: CourseSeed[] = [
   {
     slug: "demo-reussir-son-cv",
@@ -576,6 +602,7 @@ export async function seedDemo(db: SeedClient) {
       status: "published" as const,
       enrollmentCount: course.enrollmentCount,
       publishedAt: daysFromNow(-course.enrollmentCount / 10),
+      instructor: "Formateur fictif (démo)",
     };
     const saved = await db.course.upsert({
       where: { slug: course.slug },
@@ -597,15 +624,15 @@ export async function seedDemo(db: SeedClient) {
               kind: lesson.kind,
               durationSec: lesson.minutes * 60,
               isPreview: moduleIndex === 0 && lessonIndex === 0,
-              content:
-                moduleIndex === 0 && lessonIndex === 0
-                  ? {
-                      paragraphs: [
-                        `${lesson.title} : leçon d'aperçu de démonstration.`,
-                        COURSE_NOTICE,
-                      ],
-                    }
-                  : undefined,
+              content: {
+                paragraphs: [
+                  moduleIndex === 0 && lessonIndex === 0
+                    ? `${lesson.title} : leçon d'aperçu de démonstration.`
+                    : `${lesson.title} : leçon de démonstration.`,
+                  COURSE_NOTICE,
+                ],
+              },
+              ...(lesson.kind === "quiz" ? { quiz: { create: demoQuiz } } : {}),
             })),
           },
         },

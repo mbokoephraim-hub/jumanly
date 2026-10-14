@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { Alert, Badge, Button } from "@/components/ui";
@@ -19,9 +20,11 @@ const types = ["job", "message", "conversation"] as const;
 export default async function AdminReports({ searchParams }: PageProps<"/admin/signalements">) {
   const params = await searchParams;
   const admin = await requireAdmin();
+  // Content editors see the admin shell, but only the courses.
+  if (!admin) notFound();
   const t = await getTranslations("admin.reports");
   const tr = await getTranslations("report.reason");
-  const writable = admin ? canWriteAdmin(admin) : false;
+  const writable = canWriteAdmin(admin);
   const tab = params.onglet === "clotures" ? "closed" : "open";
   const [open, reports] = await Promise.all([listReports(db, "open"), listReports(db, tab)]);
   const sorted = [...reports].sort(

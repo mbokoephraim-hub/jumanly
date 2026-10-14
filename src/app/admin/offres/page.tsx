@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import Link from "next/link";
 import { Alert, Badge, Button, TextField } from "@/components/ui";
@@ -14,8 +15,10 @@ const flagKeys = ["payment", "discrimination", "contactOutside", "newOrg"] as co
 export default async function AdminJobs({ searchParams }: PageProps<"/admin/offres">) {
   const params = await searchParams;
   const admin = await requireAdmin();
+  // Content editors see the admin shell, but only the courses.
+  if (!admin) notFound();
   const t = await getTranslations("admin.jobs");
-  const writable = admin ? canWriteAdmin(admin) : false;
+  const writable = canWriteAdmin(admin);
   const tab = params.onglet === "toutes" ? "toutes" : "a-verifier";
   const [queue, live] = await Promise.all([
     moderationQueue(db),

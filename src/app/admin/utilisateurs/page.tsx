@@ -1,3 +1,4 @@
+import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Alert, Badge, Button, Select, TextField } from "@/components/ui";
 import { formatDate } from "@/lib/dates";
@@ -13,8 +14,10 @@ const roles = ["user", "content_editor", "support_agent", "platform_admin"] as c
 export default async function AdminUsers({ searchParams }: PageProps<"/admin/utilisateurs">) {
   const params = await searchParams;
   const admin = await requireAdmin();
+  // Content editors see the admin shell, but only the courses.
+  if (!admin) notFound();
   const t = await getTranslations("admin");
-  const writable = admin ? canWriteAdmin(admin) : false;
+  const writable = canWriteAdmin(admin);
   const q = typeof params.q === "string" ? params.q.trim().slice(0, 120) : "";
   const back = q ? `/admin/utilisateurs?q=${encodeURIComponent(q)}` : "/admin/utilisateurs";
   const where = q
