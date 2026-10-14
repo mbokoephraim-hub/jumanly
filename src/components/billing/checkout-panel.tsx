@@ -8,10 +8,14 @@ import { formatUsd } from "@/lib/money";
 import { startTrialAction } from "@/server/actions/checkout";
 import type { CurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { addMonths } from "@/server/entitlements/periods";
 import { paymentProvider } from "@/server/payments";
 import { billingSubject } from "@/server/services/accounts";
-import { liveSubscription, purchasablePlan, TRIAL_DAYS } from "@/server/services/subscriptions";
+import {
+  liveSubscription,
+  purchasablePlan,
+  quoteCheckout,
+  TRIAL_DAYS,
+} from "@/server/services/subscriptions";
 import { CheckoutForm, PaymentPoller } from "./checkout-form";
 
 /**
@@ -72,6 +76,7 @@ export async function CheckoutPanel({
   if (paymentId) {
     const payment = await db.payment.findFirst({
       where: { id: paymentId, subjectType: subject.type, subjectId: subject.id },
+      include: { invoice: { select: { id: true } } },
     });
     if (payment) {
       const operator = payment.operator
@@ -94,6 +99,14 @@ export async function CheckoutPanel({
             <p className="text-ardoise text-caption">
               {t("checkout.success.reference", { reference: payment.providerRef })}
             </p>
+            {payment.invoice && (
+              <a
+                href={`/app/abonnement/factures/${payment.invoice.id}/pdf`}
+                className="font-medium underline"
+              >
+                {t("checkout.success.invoice")}
+              </a>
+            )}
           </Alert>
         );
       }
@@ -116,6 +129,9 @@ export async function CheckoutPanel({
             </ol>
             <p className="text-sm text-ardoise">{t("checkout.mm.waiting.keepOpen")}</p>
             <p className="text-sm font-medium">{t("checkout.mm.waiting.never")}</p>
+            <p className="text-ardoise text-caption">
+              {t("checkout.success.reference", { reference: payment.providerRef })}
+            </p>
             <PaymentPoller paymentId={payment.id} />
           </div>
         );
@@ -150,10 +166,34 @@ export async function CheckoutPanel({
   }
 
   const provider = paymentProvider();
-  const total = formatUsd(plan.priceCents ?? 0);
-  const current = await liveSubscription(db, subject, now);
-  const start =
-    current?.planId === plan.id && current.currentPeriodEnd > now ? current.currentPeriodEnd : now;
+  const quote = await quoteCheckout(db, subject, plan.code, now);
+  if (!quote) {
+    return (
+      <Alert
+        tone="warning"
+        title={t("billing.change.unavailable")}
+        action={<ButtonLink href={freeHref}>{t("checkout.failed.keepFree")}</ButtonLink>}
+      />
+    );
+  }
+  if (quote.kind === "downgrade") {
+    // A cheaper plan takes over at the end of the paid period (partie 05 § 6).
+    const current = await liveSubscription(db, subject, now);
+    return (
+      <Alert
+        title={t("billing.downgrade.text", {
+          currentPlan: current?.plan.name ?? "",
+          plan: plan.name,
+          endDate: formatDate(current?.currentPeriodEnd ?? now, timeZone),
+        })}
+        action={
+          <ButtonLink href="/app/abonnement#changer">{t("billing.downgrade.confirm")}</ButtonLink>
+        }
+      />
+    );
+  }
+  const total = formatUsd(quote.totalCents);
+  const current = quote.kind === "upgrade" ? await liveSubscription(db, subject, now) : null;
   const messages = await getMessages();
 
   return (
@@ -168,10 +208,24 @@ export async function CheckoutPanel({
         <p>{t("checkout.summary.plan", { plan: plan.name })}</p>
         <p className="text-sm text-ardoise">
           {t("checkout.summary.period", {
-            startDate: formatDate(start, timeZone),
-            endDate: formatDate(addMonths(start, 1), timeZone),
+            startDate: formatDate(quote.periodStart, timeZone),
+            endDate: formatDate(quote.periodEnd, timeZone),
           })}
         </p>
+        {quote.creditCents > 0 && (
+          <>
+            <p className="text-sm">
+              {t("checkout.summary.amount", { amount: formatUsd(quote.priceCents) })}
+            </p>
+            <p className="text-sm">
+              {[
+                t("billing.upgrade.summary.credit", { currentPlan: current?.plan.name ?? "" }),
+                t("checkout.summary.credit", { credit: formatUsd(quote.creditCents) }),
+              ].join(" · ")}
+            </p>
+            <p className="text-sm text-ardoise">{t("billing.upgrade.prorataNote")}</p>
+          </>
+        )}
         <p className="text-lg font-semibold">{t("checkout.summary.total", { total })}</p>
       </section>
       {provider ? (

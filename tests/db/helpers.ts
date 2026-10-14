@@ -22,6 +22,8 @@ export async function newOrganization(type: "recruiter" | "company" | "partner")
 
 export async function cleanup(userIds: string[], orgIds: string[] = []) {
   const subjects = [...userIds, ...orgIds];
+  await db.invoice.deleteMany({ where: { subjectId: { in: subjects } } });
+  await db.billingDetails.deleteMany({ where: { subjectId: { in: subjects } } });
   await db.payment.deleteMany({ where: { subjectId: { in: subjects } } });
   await db.subscription.deleteMany({ where: { subjectId: { in: subjects } } });
   await db.usageCounter.deleteMany({ where: { subjectId: { in: subjects } } });

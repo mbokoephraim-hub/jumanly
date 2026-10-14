@@ -26,6 +26,12 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/abon
       </header>
       {params.resiliation && <Alert tone="success" title={t("settings.saved")} />}
       {params.reactivation && <Alert tone="success" title={t("settings.saved")} />}
+      {params.facturation === "1" && (
+        <Alert tone="success" title={t("billing.invoiceDetails.saved")} />
+      )}
+      {params.facturation === "erreur" && (
+        <Alert tone="error" title={t("billing.invoiceDetails.error")} />
+      )}
       {org && (
         <SubscriptionSection
           subject={{ type: "organization", id: org.id }}

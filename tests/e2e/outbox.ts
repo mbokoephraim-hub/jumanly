@@ -30,6 +30,17 @@ export async function lastCode(to: string, since: number): Promise<string> {
   throw new Error(`Aucun code reçu pour ${to}`);
 }
 
+/** Every 6-digit code sent to `to` after `since`, the newest first. */
+export function codesSince(to: string, since: number): string[] {
+  return mails()
+    .filter(
+      (item) =>
+        item.to === to && new Date(item.at).getTime() >= since && /\d{6}/.test(item.subject),
+    )
+    .map((item) => item.subject.match(/\d{6}/)![0])
+    .reverse();
+}
+
 /** Last link to `path` sent to `to` after `since`. */
 export async function lastLink(to: string, path: string, since: number): Promise<string> {
   for (let attempt = 0; attempt < 40; attempt++) {

@@ -176,6 +176,9 @@ model Job {
   knockoutCriteria  Json            @default("[]")
   status            JobStatus       @default(draft)
   publishedAt       DateTime?
+  /// Set when the end of a paid plan put this offer back in draft (partie 09 § 9.2); restored
+  /// automatically when the organization pays again, within its limit.
+  pausedByBillingAt DateTime?
   closesAt          DateTime?
   createdById       String?
   createdBy         User?           @relation("JobCreator", fields: [createdById], references: [id], onDelete: SetNull)
@@ -487,7 +490,7 @@ model User {
   savedCourses        SavedCourse[]
   aiUsages            AiUsage[]
   aiSuggestions       AiSuggestion[]
-  matchDisputes       MatchDispute[]                @relation("DisputeAuthor")
+  matchDisputes       MatchDispute[]            @relation("DisputeAuthor")
   progressPlan        ProgressPlan?
   createdAt           DateTime                  @default(now())
   updatedAt           DateTime                  @updatedAt
@@ -581,6 +584,8 @@ enum MembershipStatus {
   invited
   active
   removed
+  /// Beyond the seats of the free plan after a paid plan ended: no access, nothing deleted.
+  suspended
 }
 
 model Membership {
@@ -658,30 +663,40 @@ enum PaymentStatus {
 }
 
 model Payment {
-  id             String        @id @default(cuid(2))
-  subscriptionId String?
-  subscription   Subscription? @relation(fields: [subscriptionId], references: [id])
+  id              String        @id @default(cuid(2))
+  subscriptionId  String?
+  subscription    Subscription? @relation(fields: [subscriptionId], references: [id])
   /// Who pays and for which plan, kept even before the subscription exists.
-  subjectType    SubjectType
-  subjectId      String
-  planId         String
-  plan           Plan          @relation(fields: [planId], references: [id])
-  provider       String
-  method         PaymentMethod
-  operator       String?
+  subjectType     SubjectType
+  subjectId       String
+  planId          String
+  plan            Plan          @relation(fields: [planId], references: [id])
+  provider        String
+  method          PaymentMethod
+  operator        String?
   /// Mobile Money number, masked (e.g. ••••••4521); never stored in full.
-  msisdnMasked   String?
-  amountCents    Int
-  currency       String        @default("USD")
-  status         PaymentStatus @default(pending)
-  providerRef    String        @unique
-  idempotencyKey String        @unique
-  failureReason  String?
-  periodStart    DateTime
-  periodEnd      DateTime
-  paidAt         DateTime?
-  createdAt      DateTime      @default(now())
-  updatedAt      DateTime      @updatedAt
+  msisdnMasked    String?
+  amountCents     Int
+  currency        String        @default("USD")
+  status          PaymentStatus @default(pending)
+  providerRef     String        @unique
+  idempotencyKey  String        @unique
+  failureReason   String?
+  /// new, renewal, upgrade (partie 09 § 9.2), for the revenue indicators.
+  kind            String        @default("new")
+  /// Credit for the unused time of the previous plan, already deducted from amountCents.
+  creditCents     Int           @default(0)
+  /// Who started the payment (receipt and invoice e-mails).
+  payerId         String?
+  refundedAt      DateTime?
+  refundReference String?
+  refundedById    String?
+  invoice         Invoice?
+  periodStart     DateTime
+  periodEnd       DateTime
+  paidAt          DateTime?
+  createdAt       DateTime      @default(now())
+  updatedAt       DateTime      @updatedAt
 
   @@index([subjectType, subjectId])
 }
@@ -897,26 +912,26 @@ enum ApplicationSource {
 }
 
 model Application {
-  id           String             @id @default(cuid(2))
-  jobId        String
-  job          Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
-  profileId    String
-  profile      TalentProfile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
-  stageId      String
-  stage        PipelineStage      @relation(fields: [stageId], references: [id])
-  status       ApplicationStatus  @default(active)
-  coverLetter  String?
+  id               String             @id @default(cuid(2))
+  jobId            String
+  job              Job                @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  profileId        String
+  profile          TalentProfile      @relation(fields: [profileId], references: [id], onDelete: Cascade)
+  stageId          String
+  stage            PipelineStage      @relation(fields: [stageId], references: [id])
+  status           ApplicationStatus  @default(active)
+  coverLetter      String?
   /// Copy of the CV as sent (title, template, content): later edits do not change it.
-  cvSnapshot   Json?
-  source       ApplicationSource  @default(direct)
+  cvSnapshot       Json?
+  source           ApplicationSource  @default(direct)
   /// Score and explanation shown when the talent applied (partie 08 § 8.10), frozen.
   matchScore       Int?
   matchExplanation Json?
-  viewedAt     DateTime?
-  events       ApplicationEvent[]
-  conversation Conversation?
-  createdAt    DateTime           @default(now())
-  updatedAt    DateTime           @updatedAt
+  viewedAt         DateTime?
+  events           ApplicationEvent[]
+  conversation     Conversation?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
 
   @@unique([jobId, profileId])
   @@index([profileId, status])
@@ -1234,4 +1249,66 @@ model ProgressPlan {
   steps     Json     @default("[]")
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
+}
+
+/// A signed webhook received from a payment provider, stored before processing (partie 09 § 9.4).
+/// The unique (provider, eventId) makes a replayed webhook a no-op.
+model PaymentEvent {
+  id          String    @id @default(cuid(2))
+  provider    String
+  eventId     String
+  providerRef String
+  status      String
+  payload     Json
+  receivedAt  DateTime  @default(now())
+  processedAt DateTime?
+  error       String?
+
+  @@unique([provider, eventId])
+  @@index([providerRef])
+}
+
+/// Invoice of a successful payment: sequential number, what was billed, frozen at issue.
+model Invoice {
+  id            String      @id @default(cuid(2))
+  /// JMN-2026-000001
+  number        String      @unique
+  sequence      Int         @unique
+  paymentId     String      @unique
+  payment       Payment     @relation(fields: [paymentId], references: [id])
+  subjectType   SubjectType
+  subjectId     String
+  billedName    String
+  billedEmail   String
+  billedAddress String?
+  billedTaxId   String?
+  planName      String
+  amountCents   Int
+  creditCents   Int         @default(0)
+  currency      String      @default("USD")
+  periodStart   DateTime
+  periodEnd     DateTime
+  issuedAt      DateTime    @default(now())
+
+  @@index([subjectType, subjectId])
+}
+
+/// What appears on the invoices of a user or an organization (« Informations de facturation »).
+model BillingDetails {
+  id          String      @id @default(cuid(2))
+  subjectType SubjectType
+  subjectId   String
+  name        String
+  address     String?
+  taxId       String?
+  email       String?
+  updatedAt   DateTime    @updatedAt
+
+  @@unique([subjectType, subjectId])
+}
+
+/// Idempotency keys of background tasks (reminders, grace, return to free): one row per action done.
+model JobRun {
+  key   String   @id
+  ranAt DateTime @default(now())
 }

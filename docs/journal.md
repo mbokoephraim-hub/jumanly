@@ -2,6 +2,59 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E7 · Paiements : webhooks, renouvellement, factures (14 octobre 2026)
+
+### Fait
+
+- Fournisseur : le propriétaire n'a pas encore choisi de fournisseur Mobile Money ni de passerelle
+  carte (décision du 14 octobre). Tout le parcours est construit sur l'interface `PaymentProvider`
+  avec l'adaptateur factice ; un adaptateur réel s'ajoute dans `src/server/payments` sans
+  toucher au reste.
+- Tables : événements de paiement (`PaymentEvent`, unique par fournisseur et identifiant),
+  factures (`Invoice`, numéro séquentiel JMN-AAAA-000001), informations de facturation
+  (`BillingDetails`), clés d'idempotence des tâches (`JobRun`) ; paiement : type (nouveau,
+  renouvellement, montée), crédit, payeur, remboursement ; offre mise en pause par la facturation ;
+  membre suspendu.
+- Webhooks `POST /api/webhooks/payments/[provider]` : corps brut, signature vérifiée (HMAC pour le
+  fournisseur factice), événement enregistré avant traitement, rejeu sans effet, montant contrôlé.
+  Le webhook et l'interrogation du fournisseur passent par la même fonction : un paiement ne
+  quitte l'attente qu'une fois (activation, facture, e-mail et notification uniques).
+- Devis de paiement : renouvellement prépayé à la fin de la période, renouvellement vers le
+  forfait moins cher programmé (qui commence à la fin de la période), montée en gamme immédiate
+  avec crédit du temps non utilisé, réduction de gamme refusée au paiement et programmée.
+- Tâches `POST /api/jobs/billing` (secret `JOBS_SECRET`) et `pnpm jobs:billing` : paiements sans
+  réponse expirés, rappels J-7, J-3, J-0 (notification et e-mail), délai de grâce de 3 jours,
+  retour au gratuit sans perte de données ; pour une organisation, offres et membres au-delà des
+  limites mis en pause, puis rétablis au paiement suivant.
+- Factures PDF (`/app/abonnement/factures/[id]/pdf`), lien dans l'historique, sur l'écran de
+  succès et dans le reçu ; informations de facturation modifiables dans « Mon abonnement » ;
+  bandeaux d'échéance et de délai de grâce ; référence du paiement affichée pendant l'attente.
+- Admin : `/admin/abonnements` (abonnements par statut, paiements, factures, remboursement manuel
+  journalisé) ; `/admin` : encaissé sur 30 jours, conversion Free vers payant, taux de
+  renouvellement, dépenses IA.
+- Tests : unitaires (rappels, numéros, signature), base (webhook rejoué, signature fausse,
+  montant différent, échec, factures séquentielles, crédit de montée, renouvellement vers un forfait
+  moins cher, rappel unique, délai de grâce puis retour au gratuit et rétablissement), e2e (échec,
+  attente confirmée par webhook rejoué, facture PDF, crédit affiché, remboursement par l'admin).
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Parcours testés : succès, échec, expiration, webhook rejoué | ✓ avec le fournisseur factice ; à rejouer dans le bac à sable du fournisseur retenu |
+| Fin de délai de grâce : retour au gratuit sans perte de données | ✓ `tests/db/billing.test.ts` |
+| Lint, types, tests, build | ✓ en local ; CI à l'ouverture de la PR |
+
+### Dettes et points ouverts
+
+- Voir `docs/decisions/2026-10-14-paiements.md`.
+- Fournisseur Mobile Money et passerelle carte à choisir par le propriétaire, puis adaptateurs à
+  écrire d'après leur documentation officielle et parcours à rejouer dans leur bac à sable.
+- Mentions légales et fiscales des factures à fournir par l'équipe (partie 09).
+- Planificateur à configurer chez l'hébergeur (appel horaire de `/api/jobs/billing`).
+- Choix par le recruteur des offres et membres gardés actifs au retour au gratuit : automatique
+  pour l'instant (offres les plus récentes, propriétaires d'abord).
+
 ## E6 · Intelligence v1 : matching explicable et IA (14 octobre 2026)
 
 ### Fait

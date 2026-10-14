@@ -6,6 +6,7 @@ import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { billingSubject } from "@/server/services/accounts";
+import { billingDetailsSchema, saveBillingDetails } from "@/server/services/invoices";
 import { scheduleDowngrade, setCancelAtPeriodEnd } from "@/server/services/subscriptions";
 
 const subjectSchema = z.object({ family: z.enum(["talent", "rh", "company"]) });
@@ -37,4 +38,19 @@ export async function downgradeSubscription(formData: FormData) {
   await scheduleDowngrade(db, await subjectFrom(formData), plan || null);
   revalidatePath("/app/abonnement");
   redirect("/app/abonnement");
+}
+
+/** « Informations de facturation »: shown on the next invoices (issued ones keep theirs). */
+export async function saveBillingDetailsAction(formData: FormData) {
+  const input = billingDetailsSchema.safeParse({
+    name: formData.get("name") ?? "",
+    address: formData.get("address") ?? "",
+    taxId: formData.get("taxId") ?? "",
+    email: formData.get("email") ?? "",
+  });
+  const subject = await subjectFrom(formData);
+  if (!input.success) redirect("/app/abonnement?facturation=erreur");
+  await saveBillingDetails(db, subject, input.data);
+  revalidatePath("/app/abonnement");
+  redirect("/app/abonnement?facturation=1");
 }

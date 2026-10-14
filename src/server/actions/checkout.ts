@@ -1,10 +1,7 @@
 "use server";
 
 import { redirect } from "next/navigation";
-import { getTranslations } from "next-intl/server";
 import { z } from "zod";
-import { formatUsd } from "@/lib/money";
-import { sendPaymentReceipt } from "@/server/account-emails";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { paymentProvider } from "@/server/payments";
@@ -53,24 +50,6 @@ const checkoutSchema = z.discriminatedUnion("method", [
   }),
 ]);
 
-async function sendReceiptIfPaid(paymentId: string) {
-  const payment = await db.payment.findUnique({
-    where: { id: paymentId },
-    include: { plan: true },
-  });
-  if (!payment || payment.status !== "succeeded") return;
-  const user = await requireUser();
-  const t = await getTranslations("checkout.method");
-  await sendPaymentReceipt(user.email, {
-    firstName: user.firstName,
-    plan: payment.plan.name,
-    amount: formatUsd(payment.amountCents),
-    method: payment.method === "card" ? t("card.text") : t("mobileMoney.text"),
-    startDate: payment.periodStart,
-    endDate: payment.periodEnd,
-  }).catch((error) => console.error("Reçu non envoyé", error));
-}
-
 /** Order (CLAUDE.md): validate → session → who pays → service. */
 export async function startPayment(
   _: CheckoutFormState,
@@ -96,6 +75,7 @@ export async function startPayment(
     subject,
     planCode: plan.code,
     method: input.method,
+    payerId: user.id,
     email: user.email,
     country: user.country ?? "",
     msisdn: input.method === "mobile_money" ? input.number : undefined,
@@ -106,7 +86,6 @@ export async function startPayment(
   if (result.status === "unavailable") return { status: "error", error: "failed.text", values };
   // The provider may answer at once (cards, fake provider): check before showing the wait screen.
   await refreshPayment(db, provider, result.paymentId);
-  await sendReceiptIfPaid(result.paymentId);
   redirect(checkoutPath(input.context, plan.code, result.paymentId));
 }
 
@@ -123,7 +102,6 @@ export async function checkPayment(paymentId: string) {
   );
   if (subject?.id !== payment.subjectId) return null;
   const updated = await refreshPayment(db, provider, paymentId);
-  if (updated?.status === "succeeded") await sendReceiptIfPaid(paymentId);
   return updated?.status ?? null;
 }
 

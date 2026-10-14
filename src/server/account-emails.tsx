@@ -95,14 +95,24 @@ export async function sendPaymentReceipt(
     method: string;
     startDate: Date;
     endDate: Date;
+    invoiceId?: string;
   },
 ) {
-  const { firstName, ...rest } = input;
+  const { firstName, invoiceId, ...rest } = input;
   const values = { ...rest, currency: "USD", date: input.endDate };
   await send(to, t("mail.paymentSuccess.subject", { plan: input.plan }), {
     preview: t("mail.paymentSuccess.preheader", values),
     greeting: greeting(firstName),
-    // Invoices (p3 and the download button) arrive with real payments at step E7.
-    paragraphs: [t("mail.paymentSuccess.p1", values), t("mail.paymentSuccess.p2", values)],
+    paragraphs: [
+      t("mail.paymentSuccess.p1", values),
+      t("mail.paymentSuccess.p2", values),
+      ...(invoiceId ? [t("mail.paymentSuccess.p3")] : []),
+    ],
+    cta: invoiceId
+      ? {
+          label: t("mail.paymentSuccess.cta"),
+          href: absoluteUrl(`/app/abonnement/factures/${invoiceId}/pdf`),
+        }
+      : undefined,
   });
 }

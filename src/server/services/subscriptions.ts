@@ -4,10 +4,11 @@
  * browser. Activation is idempotent: a payment activates a plan once.
  */
 import { randomUUID } from "node:crypto";
-import type { PlanFamily, PrismaClient, SubjectType } from "@/generated/prisma/client";
+import type { Plan, PlanFamily, PrismaClient, SubjectType } from "@/generated/prisma/client";
 import { invalidate, resolvePlan, type Subject } from "@/server/entitlements";
 import { addMonths, effectiveStatus } from "@/server/entitlements/periods";
-import type { PaymentMethodCode, PaymentProvider } from "@/server/payments";
+import type { PaymentMethodCode, PaymentProvider, ProviderPaymentStatus } from "@/server/payments";
+import { paymentFailed, paymentSucceeded } from "./billing-events";
 
 /** Trial length for paid plans while online payment is not available (before step E7). */
 export const TRIAL_DAYS = 14;
@@ -32,14 +33,90 @@ export async function purchasablePlan(db: PrismaClient, subject: Subject, code: 
   return plan;
 }
 
-/** The live paid subscription of a subject (not a licence), if any. */
-export async function liveSubscription(db: PrismaClient, subject: Subject, now = new Date()) {
+/** Subscriptions not over yet (paid or trial, never a licence), the latest first. */
+async function liveRows(db: PrismaClient, subject: Subject, now: Date) {
   const rows = await db.subscription.findMany({
     where: { subjectType: subject.type, subjectId: subject.id, source: { not: "license" } },
     include: { plan: true, pendingPlan: true },
     orderBy: { currentPeriodEnd: "desc" },
   });
-  return rows.find((row) => effectiveStatus(row, now) !== "expired") ?? null;
+  return rows.filter((row) => effectiveStatus(row, now) !== "expired");
+}
+
+/**
+ * The subscription in force now (not a licence), if any. A renewal paid in advance into a cheaper
+ * plan exists as a subscription starting later: it is not « in force » before its start.
+ */
+export async function liveSubscription(db: PrismaClient, subject: Subject, now = new Date()) {
+  return (await liveRows(db, subject, now)).find((row) => row.currentPeriodStart <= now) ?? null;
+}
+
+export type CheckoutKind = "new" | "renewal" | "upgrade";
+
+export type CheckoutQuote = {
+  plan: Plan;
+  kind: CheckoutKind | "downgrade";
+  priceCents: number;
+  /** Unused time of the current paid plan, deducted on an upgrade (partie 09 § 9.2). */
+  creditCents: number;
+  totalCents: number;
+  periodStart: Date;
+  periodEnd: Date;
+};
+
+/** The smallest amount ever asked after a credit: providers refuse a zero payment. */
+export const MIN_CHARGE_CENTS = 100;
+
+/**
+ * What paying `planCode` now means for this subject:
+ * - the same plan: a renewal, from the end of the paid period (prepaid, partie 09 § 9.2);
+ * - the cheaper plan scheduled for the next period: a renewal into that plan, from the same date;
+ * - a plan at least as expensive while a paid period runs: an upgrade, at once, minus the unused
+ *   time of the current plan;
+ * - a cheaper plan while a paid period runs: not sold now (`downgrade`, scheduled instead);
+ * - otherwise (free, trial, period over): a new subscription from now.
+ */
+export async function quoteCheckout(
+  db: PrismaClient,
+  subject: Subject,
+  planCode: string,
+  now = new Date(),
+): Promise<CheckoutQuote | null> {
+  const plan = await purchasablePlan(db, subject, planCode);
+  if (!plan?.priceCents) return null;
+  const priceCents = plan.priceCents;
+  const rows = await liveRows(db, subject, now);
+  const latest = rows[0];
+  const current = rows.find((row) => row.currentPeriodStart <= now);
+  const paid = (row?: (typeof rows)[number]) =>
+    !!row && row.status !== "trialing" && row.status !== "sponsored";
+  const quote = (kind: CheckoutQuote["kind"], start: Date, creditCents = 0): CheckoutQuote => ({
+    plan,
+    kind,
+    priceCents,
+    creditCents,
+    totalCents: priceCents - creditCents,
+    periodStart: start,
+    periodEnd: addMonths(start, 1),
+  });
+
+  if (paid(latest) && latest!.planId === plan.id) {
+    const end = latest!.currentPeriodEnd;
+    return quote("renewal", end > now ? end : now);
+  }
+  if (paid(current) && current!.currentPeriodEnd > now) {
+    if (current!.pendingPlanId === plan.id && latest === current) {
+      return quote("renewal", current!.currentPeriodEnd);
+    }
+    const currentPrice = current!.plan.priceCents ?? 0;
+    if (priceCents < currentPrice) return quote("downgrade", now);
+    const end = current!.currentPeriodEnd;
+    const month = end.getTime() - addMonths(end, -1).getTime();
+    const unused = Math.round((currentPrice * (end.getTime() - now.getTime())) / month);
+    const credit = Math.max(0, Math.min(unused, priceCents - MIN_CHARGE_CENTS));
+    return quote("upgrade", now, credit);
+  }
+  return quote("new", now);
 }
 
 export type CheckoutResult =
@@ -52,6 +129,7 @@ export async function startCheckout(
     subject: Subject;
     planCode: string;
     method: PaymentMethodCode;
+    payerId?: string;
     email: string;
     country: string;
     msisdn?: string;
@@ -60,8 +138,8 @@ export async function startCheckout(
   },
   now = new Date(),
 ): Promise<CheckoutResult> {
-  const plan = await purchasablePlan(db, input.subject, input.planCode);
-  if (!plan || !plan.priceCents) return { status: "unavailable" };
+  const quote = await quoteCheckout(db, input.subject, input.planCode, now);
+  if (!quote || quote.kind === "downgrade") return { status: "unavailable" };
 
   const pending = await db.payment.findFirst({
     where: {
@@ -73,15 +151,9 @@ export async function startCheckout(
   });
   if (pending) return { status: "duplicate" };
 
-  // Renewing the same plan extends the paid period; any other plan starts now (upgrade: immediate).
-  const current = await liveSubscription(db, input.subject, now);
-  const renewing = current?.planId === plan.id && current.currentPeriodEnd > now;
-  const periodStart = renewing ? current.currentPeriodEnd : now;
-  const periodEnd = addMonths(periodStart, 1);
-
   const idempotencyKey = randomUUID();
   const created = await provider.createPayment({
-    amountCents: plan.priceCents,
+    amountCents: quote.totalCents,
     currency: "USD",
     reference: idempotencyKey,
     method: input.method,
@@ -98,16 +170,19 @@ export async function startCheckout(
     data: {
       subjectType: input.subject.type,
       subjectId: input.subject.id,
-      planId: plan.id,
+      planId: quote.plan.id,
       provider: provider.id,
       method: input.method,
       operator: input.operator,
       msisdnMasked: input.msisdn ? maskNumber(input.msisdn) : null,
-      amountCents: plan.priceCents,
+      amountCents: quote.totalCents,
+      creditCents: quote.creditCents,
+      kind: quote.kind,
+      payerId: input.payerId,
       providerRef: created.providerRef,
       idempotencyKey,
-      periodStart,
-      periodEnd,
+      periodStart: quote.periodStart,
+      periodEnd: quote.periodEnd,
     },
   });
   return { status: "started", paymentId: payment.id };
@@ -134,10 +209,31 @@ export async function refreshPayment(
   if (status === "pending" && now.getTime() - payment.createdAt.getTime() > PAYMENT_EXPIRY_MS) {
     status = "expired";
   }
-  if (status === "pending") return payment;
-  if (status === "succeeded") return activatePayment(db, payment.id, now);
-  await db.payment.updateMany({ where: { id: payment.id, status: "pending" }, data: { status } });
-  return db.payment.findUnique({ where: { id: payment.id } });
+  return applyPaymentStatus(db, payment.id, status, now);
+}
+
+/**
+ * The one place where a provider's answer (webhook or `getStatus`) changes a payment. Only a
+ * pending payment moves, so a replayed answer never activates twice nor sends two e-mails.
+ */
+export async function applyPaymentStatus(
+  db: PrismaClient,
+  paymentId: string,
+  status: ProviderPaymentStatus,
+  now = new Date(),
+) {
+  if (status === "pending") return db.payment.findUnique({ where: { id: paymentId } });
+  if (status === "succeeded") {
+    const { payment, claimed } = await activatePayment(db, paymentId, now);
+    if (claimed) await paymentSucceeded(db, payment.id, now);
+    return payment;
+  }
+  const moved = await db.payment.updateMany({
+    where: { id: paymentId, status: "pending" },
+    data: { status },
+  });
+  if (moved.count === 1) await paymentFailed(db, paymentId, now);
+  return db.payment.findUnique({ where: { id: paymentId } });
 }
 
 async function activatePayment(db: PrismaClient, paymentId: string, now: Date) {
@@ -147,13 +243,16 @@ async function activatePayment(db: PrismaClient, paymentId: string, now: Date) {
       data: { status: "succeeded", paidAt: now },
     });
     const payment = await tx.payment.findUniqueOrThrow({ where: { id: paymentId } });
-    if (claimed.count === 0) return payment;
+    if (claimed.count === 0) return { payment, claimed: false };
     const subject = { subjectType: payment.subjectType, subjectId: payment.subjectId };
     const others = await tx.subscription.findMany({
       where: { ...subject, source: { not: "license" }, status: { not: "expired" } },
     });
     const same = others.find(
-      (row) => row.planId === payment.planId && row.currentPeriodEnd >= payment.periodStart,
+      (row) =>
+        row.planId === payment.planId &&
+        row.status !== "trialing" &&
+        row.currentPeriodEnd >= payment.periodStart,
     );
     let subscriptionId: string;
     if (same) {
@@ -168,11 +267,14 @@ async function activatePayment(db: PrismaClient, paymentId: string, now: Date) {
       });
       subscriptionId = updated.id;
     } else {
-      // Upgrade or first purchase: the new plan replaces the previous one right away.
-      await tx.subscription.updateMany({
-        where: { id: { in: others.map((row) => row.id) } },
-        data: { status: "expired", currentPeriodEnd: now },
-      });
+      if (payment.periodStart <= now) {
+        // Upgrade or first purchase: the new plan replaces the previous one right away.
+        await tx.subscription.updateMany({
+          where: { id: { in: others.map((row) => row.id) } },
+          data: { status: "expired", currentPeriodEnd: now },
+        });
+      }
+      // A renewal into the scheduled cheaper plan starts when the current period ends.
       const created = await tx.subscription.create({
         data: {
           ...subject,
@@ -184,9 +286,10 @@ async function activatePayment(db: PrismaClient, paymentId: string, now: Date) {
       });
       subscriptionId = created.id;
     }
-    return tx.payment.update({ where: { id: paymentId }, data: { subscriptionId } });
+    const updated = await tx.payment.update({ where: { id: paymentId }, data: { subscriptionId } });
+    return { payment: updated, claimed: true };
   });
-  invalidate({ type: result.subjectType, id: result.subjectId });
+  invalidate({ type: result.payment.subjectType, id: result.payment.subjectId });
   return result;
 }
 
@@ -258,7 +361,7 @@ export async function scheduleDowngrade(
 export async function paymentHistory(db: PrismaClient, subject: Subject) {
   return db.payment.findMany({
     where: { subjectType: subject.type, subjectId: subject.id },
-    include: { plan: { select: { name: true } } },
+    include: { plan: { select: { name: true } }, invoice: { select: { id: true, number: true } } },
     orderBy: { createdAt: "desc" },
     take: 24,
   });

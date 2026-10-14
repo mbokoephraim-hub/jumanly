@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import type { PlanFamily } from "@/generated/prisma/client";
-import { Badge, Button, ButtonLink, QuotaGauge } from "@/components/ui";
+import { Alert, Badge, Button, ButtonLink, QuotaGauge, TextArea, TextField } from "@/components/ui";
 import { quotaRows } from "@/config/quotas";
 import { formatDate } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
@@ -9,10 +9,11 @@ import {
   cancelSubscription,
   downgradeSubscription,
   resumeSubscription,
+  saveBillingDetailsAction,
 } from "@/server/actions/billing";
 import { db } from "@/server/db";
 import { parseLimit, resolvePlan, usage, type Subject } from "@/server/entitlements";
-import { effectiveStatus } from "@/server/entitlements/periods";
+import { effectiveStatus, GRACE_DAYS } from "@/server/entitlements/periods";
 import { liveSubscription, paymentHistory } from "@/server/services/subscriptions";
 
 const DAY = 86_400_000;
@@ -46,6 +47,7 @@ export async function SubscriptionSection({
 }) {
   const t = await getTranslations("billing");
   const tCheckout = await getTranslations("checkout.summary");
+  const tRenewal = await getTranslations("renewal.banner");
   const now = new Date();
   const plan = await resolvePlan(db, subject, now);
   if (!plan) return null;
@@ -73,6 +75,13 @@ export async function SubscriptionSection({
     orderBy: [{ sortOrder: "asc" }],
   });
   const history = await paymentHistory(db, subject);
+  const details = await db.billingDetails.findUnique({
+    where: { subjectType_subjectId: { subjectType: subject.type, subjectId: subject.id } },
+  });
+  const prefix = `billing-${subject.type}`;
+  const renewHref = current
+    ? `/app/abonnement/payer?forfait=${current.pendingPlan?.code ?? current.plan.code}`
+    : "";
   const currentPrice = plan.priceCents ?? 0;
   const statusKey =
     status === "past_due"
@@ -84,6 +93,32 @@ export async function SubscriptionSection({
   return (
     <section className="flex flex-col gap-6" aria-label={heading ?? t("current.title")}>
       {heading && <h2 className="text-h1">{heading}</h2>}
+      {current && status === "past_due" && (
+        <Alert
+          tone="warning"
+          title={tRenewal("grace.text", {
+            plan: current.plan.name,
+            graceEndDate: formatDate(
+              new Date(current.currentPeriodEnd.getTime() + GRACE_DAYS * DAY),
+            ),
+          })}
+          action={<ButtonLink href={renewHref}>{t("current.renew")}</ButtonLink>}
+        />
+      )}
+      {current && status === "active" && daysLeft <= 7 && !current.pendingPlan && (
+        <Alert
+          title={
+            daysLeft === 0
+              ? tRenewal("today", { plan: current.plan.name })
+              : tRenewal("upcoming", {
+                  plan: current.plan.name,
+                  days: daysLeft,
+                  date: formatDate(current.currentPeriodEnd),
+                })
+          }
+          action={<ButtonLink href={renewHref}>{t("current.renew")}</ButtonLink>}
+        />
+      )}
       <div className="flex flex-col gap-4 rounded-card bg-blanc p-6">
         <p className="text-eyebrow text-ardoise">{t("current.title")}</p>
         <div className="flex flex-wrap items-center gap-3">
@@ -128,10 +163,7 @@ export async function SubscriptionSection({
             )}
             <div className="flex flex-wrap gap-3">
               {status !== "trialing" && (
-                <ButtonLink
-                  href={`/app/abonnement/payer?forfait=${current.pendingPlan?.code ?? current.plan.code}`}
-                  size="sm"
-                >
+                <ButtonLink href={renewHref} size="sm">
                   {t("current.renew")}
                 </ButtonLink>
               )}
@@ -206,7 +238,7 @@ export async function SubscriptionSection({
         <p className="text-ardoise text-caption">{t("quotas.help")}</p>
       </div>
 
-      <div className="flex flex-col gap-4 rounded-card bg-blanc p-6">
+      <div id="changer" className="flex scroll-mt-24 flex-col gap-4 rounded-card bg-blanc p-6">
         <h3 className="text-h2">{t("change.title")}</h3>
         <p className="text-sm text-ardoise">{t("change.subtitle")}</p>
         <ul className="flex flex-col divide-y divide-brume">
@@ -268,7 +300,8 @@ export async function SubscriptionSection({
                   <th className="py-2 pr-4 font-medium">{t("history.col.date")}</th>
                   <th className="py-2 pr-4 font-medium">{t("history.col.description")}</th>
                   <th className="py-2 pr-4 font-medium">{t("history.col.amount")}</th>
-                  <th className="py-2 font-medium">{t("history.col.status")}</th>
+                  <th className="py-2 pr-4 font-medium">{t("history.col.status")}</th>
+                  <th className="py-2 font-medium">{t("history.col.invoice")}</th>
                 </tr>
               </thead>
               <tbody>
@@ -285,9 +318,20 @@ export async function SubscriptionSection({
                     <td className="py-2 pr-4">
                       {tCheckout("amount", { amount: formatUsd(payment.amountCents) })}
                     </td>
-                    <td className="py-2">
+                    <td className="py-2 pr-4">
                       {t(
                         `history.status.${payment.status === "succeeded" ? "paid" : payment.status}`,
+                      )}
+                    </td>
+                    <td className="py-2">
+                      {payment.invoice && (
+                        <a
+                          href={`/app/abonnement/factures/${payment.invoice.id}/pdf`}
+                          className="underline"
+                          aria-label={t("history.downloadAlt", { number: payment.invoice.number })}
+                        >
+                          {t("history.download")}
+                        </a>
                       )}
                     </td>
                   </tr>
@@ -297,6 +341,54 @@ export async function SubscriptionSection({
           </div>
         )}
       </div>
+      <form
+        action={saveBillingDetailsAction}
+        className="flex flex-col gap-4 rounded-card bg-blanc p-6"
+        aria-labelledby={`${prefix}-details`}
+      >
+        <h3 id={`${prefix}-details`} className="text-h2">
+          {t("invoiceDetails.title")}
+        </h3>
+        <p className="text-sm text-ardoise">{t("invoiceDetails.text")}</p>
+        <input type="hidden" name="family" value={family} />
+        <TextField
+          id={`${prefix}-name`}
+          name="name"
+          required
+          maxLength={160}
+          defaultValue={details?.name ?? ""}
+          label={t("invoiceDetails.name.label")}
+        />
+        <TextArea
+          id={`${prefix}-address`}
+          name="address"
+          rows={2}
+          maxLength={400}
+          defaultValue={details?.address ?? ""}
+          label={t("invoiceDetails.address.label")}
+        />
+        {subject.type === "organization" && (
+          <TextField
+            id={`${prefix}-tax`}
+            name="taxId"
+            maxLength={60}
+            defaultValue={details?.taxId ?? ""}
+            label={t("invoiceDetails.taxId.label")}
+            hint={t("invoiceDetails.taxId.help")}
+          />
+        )}
+        <TextField
+          id={`${prefix}-email`}
+          name="email"
+          type="email"
+          maxLength={200}
+          defaultValue={details?.email ?? ""}
+          label={t("invoiceDetails.email.label")}
+        />
+        <Button type="submit" variant="secondary" className="self-start">
+          {t("invoiceDetails.save")}
+        </Button>
+      </form>
     </section>
   );
 }

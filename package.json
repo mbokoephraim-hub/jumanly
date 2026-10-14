@@ -27,7 +27,8 @@
     "prepare": "husky",
     "brand": "tsx scripts/build-brand-assets.ts",
     "brand:check": "tsx scripts/build-brand-assets.ts --check",
-    "admin:promote": "tsx scripts/admin-promote.ts"
+    "admin:promote": "tsx scripts/admin-promote.ts",
+    "jobs:billing": "tsx scripts/run-billing-jobs.ts"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.133.0",

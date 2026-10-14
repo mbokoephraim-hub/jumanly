@@ -1,5 +1,5 @@
 import { expect, type Page } from "@playwright/test";
-import { lastCode } from "./outbox";
+import { codesSince, lastCode } from "./outbox";
 
 /** Demo accounts from prisma/seed/accounts.ts (local and preview only). */
 export const DEMO_PASSWORD = "Demo-Jumanly-2026";
@@ -21,14 +21,19 @@ export async function logIn(page: Page, email: string, password = DEMO_PASSWORD,
   await page.waitForURL(
     (url) => !url.pathname.startsWith("/connexion") || url.pathname.includes("deux-etapes"),
   );
-  // Tests running in parallel can sign in to the same demo account: a newer code replaces ours,
-  // so a refused code is retried with the latest one.
-  for (let attempt = 0; attempt < 3 && page.url().includes("/connexion/deux-etapes"); attempt++) {
-    await page.locator('input[name="code"]').fill(await lastCode(email, since));
-    await page.getByRole("button", { name: /Vérifier|Confirmer/ }).click();
-    await page
-      .waitForURL((url) => !url.pathname.startsWith("/connexion"), { timeout: 10_000 })
-      .catch(() => undefined);
+  // Tests running in parallel can sign in to the same demo account at once: each sign-in gets
+  // its own code, so a refused code is followed by the other codes sent since, newest first.
+  if (page.url().includes("/connexion/deux-etapes")) {
+    await lastCode(email, since);
+    for (const code of codesSince(email, since)) {
+      await page.locator('input[name="code"]').fill(code);
+      await page.getByRole("button", { name: /Vérifier|Confirmer/ }).click();
+      const passed = await page
+        .waitForURL((url) => !url.pathname.startsWith("/connexion"), { timeout: 8_000 })
+        .then(() => true)
+        .catch(() => false);
+      if (passed) break;
+    }
   }
   await expect(page).not.toHaveURL(/\/connexion/);
 }
@@ -36,4 +41,34 @@ export async function logIn(page: Page, email: string, password = DEMO_PASSWORD,
 /** A unique, obviously fictional address on the reserved .test domain. */
 export function testEmail(prefix: string) {
   return `${prefix}-${Date.now()}-${Math.floor(Math.random() * 1e6)}@jumanly.test`;
+}
+
+export const PASSWORD = "kinshasa-2026";
+
+/** Steps 1 to 4 of the sign-up (partie 06 § 6.1), from a plan chosen on /tarifs. */
+export async function signUpFromPricing(page: Page, planButton: string, email: string) {
+  await page.goto("/tarifs");
+  // The link is followed by its address: on a phone the cookie banner may cover it.
+  const href = await page
+    .getByRole("link", { name: planButton, exact: true })
+    .first()
+    .getAttribute("href");
+  await page.goto(href!);
+  await expect(page).toHaveURL(/\/inscription/);
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/\/inscription\/forfait/);
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/\/inscription\/compte/);
+  await page.locator('input[name="firstName"]').fill("Awa");
+  await page.locator('input[name="lastName"]').fill("Fictive");
+  await page.locator('input[name="email"]').fill(email);
+  await page.locator('input[name="password"]').fill(PASSWORD);
+  await page.locator('select[name="country"]').selectOption("CD");
+  await page.locator('input[name="city"]').fill("Kinshasa");
+  for (const name of ["terms", "ai", "age"]) await page.locator(`input[name="${name}"]`).check();
+  const since = Date.now();
+  await page.getByRole("button", { name: "Créer mon compte" }).click();
+  await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
+  await page.locator('input[name="code"]').fill(await lastCode(email, since));
+  await page.getByRole("button", { name: "Vérifier" }).click();
 }
