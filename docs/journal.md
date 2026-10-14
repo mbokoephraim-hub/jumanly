@@ -2,6 +2,15 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Premier administrateur en production (14 octobre 2026)
+
+- Nouvelle variable `ADMIN_BOOTSTRAP_EMAIL` : l'adresse listée devient administrateur à sa première
+  connexion, une fois vérifiée (`src/server/services/admin-bootstrap.ts`, appelée à la création de
+  session). Journalisé dans l'audit. Décision : `docs/decisions/2026-10-14-premier-administrateur.md`.
+- Tests unitaires : `tests/unit/admin-bootstrap.test.ts`.
+- Rappel : tant que Resend n'est pas branché, les codes (inscription, deux étapes) apparaissent dans les
+  journaux Vercel (adaptateur e-mail factice).
+
 ## Refonte visuelle · Lot 6 : formations, offres, entreprise, attestation, portfolio, pages légales (14 octobre 2026)
 
 - `/formations` refaite d'après `01-10` : héros Crème avec recherche en pilule et Amani, panneau de

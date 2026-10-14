@@ -22,6 +22,7 @@ import {
   sendVerificationCode,
 } from "@/server/account-emails";
 import { db } from "@/server/db";
+import { bootstrapAdminIfListed } from "@/server/services/admin-bootstrap";
 
 const DAY = 60 * 60 * 24;
 
@@ -84,12 +85,21 @@ export const auth = betterAuth({
     session: {
       create: {
         // A suspended account cannot sign in; signing in again cancels a scheduled deletion.
+        // The address named in ADMIN_BOOTSTRAP_EMAIL becomes administrator on its first sign-in.
         before: async (session) => {
           const user = await db.user.findUnique({
             where: { id: session.userId },
-            select: { status: true, deletionScheduledAt: true },
+            select: {
+              id: true,
+              email: true,
+              emailVerified: true,
+              platformRole: true,
+              status: true,
+              deletionScheduledAt: true,
+            },
           });
           if (user?.status === "suspended") return false;
+          if (user) await bootstrapAdminIfListed(db, user);
           if (user?.deletionScheduledAt) {
             await db.user.update({
               where: { id: session.userId },
