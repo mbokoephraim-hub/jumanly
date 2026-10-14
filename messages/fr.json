@@ -930,6 +930,7 @@
       "description": "Formations vidéo, exercices et attestations pour gagner en employabilité. Une sélection est gratuite, les autres sont incluses dans les formules Starter, Pro et Premium."
     },
     "hero": {
+      "eyebrow": "Jumanly Learn",
       "title": "Formations",
       "text": "Formations vidéo, supports, exercices, évaluations et attestations. Commencez par les formations gratuites, puis accédez à davantage de parcours selon votre forfait."
     },
@@ -1043,11 +1044,19 @@
       "title": "Première leçon en aperçu",
       "text": "Regardez la première leçon gratuitement, sans créer de compte.",
       "play": "Lire l'aperçu",
+      "position": "Module {module} · Leçon {lesson}",
       "videoAlt": "Vidéo d'aperçu de la formation {title}"
     },
     "certificate": {
       "title": "Une attestation à valoriser",
-      "text": "En terminant la formation et ses évaluations, vous obtenez une attestation téléchargeable, vérifiable par un lien public et visible sur votre profil."
+      "text": "En terminant la formation et ses évaluations, vous obtenez une attestation téléchargeable, vérifiable par un lien public et visible sur votre profil.",
+      "sample": {
+        "intro": "Jumanly atteste que",
+        "text": "a suivi et validé « {title} » ({duration})."
+      }
+    },
+    "instructor": {
+      "role": "Formateur de cette formation"
     },
     "cta": {
       "start": "Commencer",
@@ -1071,6 +1080,7 @@
       "description": "Trouvez des emplois, stages et missions et postulez gratuitement. Suivez chaque candidature étape par étape sur Jumanly."
     },
     "hero": {
+      "eyebrow": "Jumanly Jobs",
       "title": "Offres d'emploi",
       "text": "Emplois, stages et missions publiés par des recruteurs et des entreprises. Postuler est toujours gratuit."
     },
@@ -1106,7 +1116,8 @@
       },
       "submit": "Rechercher",
       "reset": "Effacer les filtres",
-      "openFilters": "Filtres"
+      "openFilters": "Filtres",
+      "filtersCount": "{count, plural, =0 {Filtres} other {Filtres · #}}"
     },
     "results": {
       "count": "{count, plural, =0 {Aucune offre} one {# offre} other {# offres}}"
@@ -4154,7 +4165,13 @@
         "footer": "Portfolio publié sur Jumanly",
         "empty": "Aucun projet publié pour l'instant.",
         "unavailable": "Ce portfolio n'est pas disponible. Son auteur l'a peut-être retiré.",
-        "seo": "Portfolio · Jumanly"
+        "seo": "Portfolio · Jumanly",
+        "eyebrow": "Portfolio",
+        "projects": "Projets",
+        "count": "{count, plural, one {# projet} other {# projets}}",
+        "files": "{count, plural, one {# fichier} other {# fichiers}}",
+        "share": "Partager",
+        "shareCopied": "Lien copié"
       }
     }
   },
@@ -9729,6 +9746,7 @@
     "validationBanner": "À faire valider par un juriste avant publication",
     "lastUpdated": "Dernière mise à jour : {lastUpdated}",
     "toc": "Sommaire",
+    "eyebrow": "Informations légales",
     "print": "Imprimer",
     "backToTop": "Haut de page",
     "contactLine": "Pour toute question : infojumanly@gmail.com. Pour les professionnels et partenaires : assistant@jumanly.io.",

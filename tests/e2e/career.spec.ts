@@ -98,7 +98,7 @@ test("portfolio : verrou en Free, page publique sans compte", async ({ page, bro
   const context = await browser.newContext();
   const visitor = await context.newPage();
   await visitor.goto("/portfolio/demo-portfolio-fictif");
-  await expect(visitor.getByRole("heading", { level: 1 })).toContainText("Portfolio de");
+  await expect(visitor.getByRole("heading", { level: 1 })).toHaveText("Bisimwa Fictif");
   await expect(visitor.getByText("Tableau de suivi des ventes (projet fictif)")).toBeVisible();
   await expect(visitor.locator('meta[name="robots"]')).toHaveAttribute("content", /noindex/);
   await expectAccessible(visitor);

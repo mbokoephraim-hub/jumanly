@@ -109,7 +109,9 @@ export async function getCompany(slug: string) {
   "use cache";
   cacheLife("minutes");
   cacheTag("jobs", `company:${slug}`);
-  return publicCompany(db, slug);
+  const company = await publicCompany(db, slug);
+  // The page shows relative dates (« il y a 2 jours »): the reference time is cached with the data.
+  return company ? { ...company, now: new Date() } : null;
 }
 
 /** Public verification of an attestation: only what the verification page shows. */

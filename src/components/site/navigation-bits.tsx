@@ -38,6 +38,14 @@ export function withParams(path: string, params: Record<string, string | number 
   return text ? `${path}?${text}` : path;
 }
 
+/** Page numbers around the current one (at most five), for the numbered pagination. */
+function pageWindow(page: number, pageCount: number) {
+  const start = Math.max(1, Math.min(page - 2, pageCount - 4));
+  const end = Math.min(pageCount, start + 4);
+  return Array.from({ length: end - start + 1 }, (_, index) => start + index);
+}
+
+/** Mockups 01-10 and 01-12: ghost « Précédent / Suivant », page discs on wide screens. */
 export async function Pagination({
   page,
   pageCount,
@@ -53,35 +61,65 @@ export async function Pagination({
 }) {
   const t = await getTranslations("ui");
   if (pageCount <= 1) return null;
-  const linkClass = "flex h-11 items-center gap-1 rounded-pill px-4 font-medium hover:bg-blanc";
+  const ghost =
+    "flex h-11 items-center gap-1.5 rounded-pill px-[18px] text-sm font-semibold ring-[1.5px] ring-brume ring-inset";
   return (
     <nav aria-label={t("pagination")} className="flex items-center justify-between gap-4">
       {page > 1 ? (
         <Link
           href={withParams(path, { ...params, page: page - 1 })}
-          className={linkClass}
+          className={`${ghost} bg-blanc/0 transition-colors hover:bg-blanc`}
           rel="prev"
         >
-          <Icon name="suivant" className="size-4 rotate-180" />
+          <Icon name="chev-l" className="size-4" />
           {labels.prev}
         </Link>
       ) : (
-        <span />
+        <span aria-hidden className={`${ghost} text-ardoise`}>
+          <Icon name="chev-l" className="size-4" />
+          {labels.prev}
+        </span>
       )}
-      <p className="text-sm text-ardoise" aria-current="page">
-        {labels.page}
-      </p>
+      <div className="flex items-center gap-2">
+        <ol className="hidden items-center gap-2 md:flex">
+          {pageWindow(page, pageCount).map((number) => (
+            <li key={number}>
+              {number === page ? (
+                <span
+                  aria-hidden
+                  className="flex size-10 items-center justify-center rounded-full bg-sapin text-sm font-semibold text-blanc"
+                >
+                  {number}
+                </span>
+              ) : (
+                <Link
+                  href={withParams(path, { ...params, page: number })}
+                  className="flex size-10 items-center justify-center rounded-full bg-blanc text-sm font-semibold transition-colors hover:bg-lime"
+                >
+                  {number}
+                </Link>
+              )}
+            </li>
+          ))}
+        </ol>
+        <p className="text-[13px] text-ardoise md:ml-2" aria-current="page">
+          {labels.page}
+        </p>
+      </div>
       {page < pageCount ? (
         <Link
           href={withParams(path, { ...params, page: page + 1 })}
-          className={linkClass}
+          className={`${ghost} transition-colors hover:bg-blanc`}
           rel="next"
         >
           {labels.next}
-          <Icon name="suivant" className="size-4" />
+          <Icon name="chev-r" className="size-4" />
         </Link>
       ) : (
-        <span />
+        <span aria-hidden className={`${ghost} text-ardoise`}>
+          {labels.next}
+          <Icon name="chev-r" className="size-4" />
+        </span>
       )}
     </nav>
   );

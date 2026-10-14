@@ -773,6 +773,7 @@ Note d'intégration : le tableau de bord du héros (`partners.hero.visual.*`, «
 |---|---|
 | `trainings.seo.title` | Formations Jumanly Learn · Employabilité et compétences professionnelles |
 | `trainings.seo.description` | Formations vidéo, exercices et attestations pour gagner en employabilité. Une sélection est gratuite, les autres sont incluses dans les formules Starter, Pro et Premium. |
+| `trainings.hero.eyebrow` | Jumanly Learn |
 | `trainings.hero.title` | Formations |
 | `trainings.hero.text` | Formations vidéo, supports, exercices, évaluations et attestations. Commencez par les formations gratuites, puis accédez à davantage de parcours selon votre forfait. |
 | `trainings.search.label` | Rechercher une formation |
@@ -849,9 +850,13 @@ Note d'intégration : le tableau de bord du héros (`partners.hero.visual.*`, «
 | `training.preview.title` | Première leçon en aperçu |
 | `training.preview.text` | Regardez la première leçon gratuitement, sans créer de compte. |
 | `training.preview.play` | Lire l'aperçu |
+| `training.preview.position` | Module {module} · Leçon {lesson} |
 | `training.preview.videoAlt` | Vidéo d'aperçu de la formation {title} |
 | `training.certificate.title` | Une attestation à valoriser |
 | `training.certificate.text` | En terminant la formation et ses évaluations, vous obtenez une attestation téléchargeable, vérifiable par un lien public et visible sur votre profil. |
+| `training.certificate.sample.intro` | Jumanly atteste que |
+| `training.certificate.sample.text` | a suivi et validé « {title} » ({duration}). |
+| `training.instructor.role` | Formateur de cette formation |
 | `training.cta.start` | Commencer |
 | `training.cta.startFree` | Commencer gratuitement |
 | `training.cta.requiredPlan` | Cette formation est incluse dans la formule {plan}. Créez votre compte pour y accéder. |
@@ -872,6 +877,7 @@ Note d'intégration : le tableau de bord du héros (`partners.hero.visual.*`, «
 |---|---|
 | `jobs.seo.title` | Offres d'emploi, stages et missions · Jumanly Jobs |
 | `jobs.seo.description` | Trouvez des emplois, stages et missions et postulez gratuitement. Suivez chaque candidature étape par étape sur Jumanly. |
+| `jobs.hero.eyebrow` | Jumanly Jobs |
 | `jobs.hero.title` | Offres d'emploi |
 | `jobs.hero.text` | Emplois, stages et missions publiés par des recruteurs et des entreprises. Postuler est toujours gratuit. |
 | `jobs.search.keyword.label` | Mot-clé |
@@ -896,6 +902,7 @@ Note d'intégration : le tableau de bord du héros (`partners.hero.visual.*`, «
 | `jobs.search.submit` | Rechercher |
 | `jobs.search.reset` | Effacer les filtres |
 | `jobs.search.openFilters` | Filtres |
+| `jobs.search.filtersCount` | {count, plural, =0 {Filtres} other {Filtres · #}} |
 | `jobs.results.count` | {count, plural, =0 {Aucune offre} one {# offre} other {# offres}} |
 | `jobs.sort.label` | Trier par |
 | `jobs.sort.recent` | Plus récentes |
@@ -3119,6 +3126,12 @@ Conventions :
 | `career.portfolio.page.empty` | Aucun projet publié pour l'instant. |
 | `career.portfolio.page.unavailable` | Ce portfolio n'est pas disponible. Son auteur l'a peut-être retiré. |
 | `career.portfolio.page.seo` | Portfolio · Jumanly |
+| `career.portfolio.page.eyebrow` | Portfolio |
+| `career.portfolio.page.projects` | Projets |
+| `career.portfolio.page.count` | {count, plural, one {# projet} other {# projets}} |
+| `career.portfolio.page.files` | {count, plural, one {# fichier} other {# fichiers}} |
+| `career.portfolio.page.share` | Partager |
+| `career.portfolio.page.shareCopied` | Lien copié |
 
 ---
 
@@ -8291,6 +8304,7 @@ Conventions :
 | `legal.validationBanner` | À faire valider par un juriste avant publication |
 | `legal.lastUpdated` | Dernière mise à jour : {lastUpdated} |
 | `legal.toc` | Sommaire |
+| `legal.eyebrow` | Informations légales |
 | `legal.print` | Imprimer |
 | `legal.backToTop` | Haut de page |
 | `legal.contactLine` | Pour toute question : infojumanly@gmail.com. Pour les professionnels et partenaires : assistant@jumanly.io. |
