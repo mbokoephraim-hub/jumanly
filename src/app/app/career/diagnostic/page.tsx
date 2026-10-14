@@ -2,20 +2,39 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
-import { Alert, Badge, Button, ButtonLink, Card, RadioGroup, TextField } from "@/components/ui";
+import { AiOrb } from "@/components/brand/ai-orb";
+import {
+  Alert,
+  Badge,
+  Button,
+  ButtonLink,
+  Card,
+  Checkbox,
+  RadioGroup,
+  TextArea,
+  TextField,
+} from "@/components/ui";
 import { dynamic } from "@/i18n/dynamic";
 import { formatDate } from "@/lib/dates";
+import { aiReadiness } from "@/server/ai";
 import { submitDiagnostic } from "@/server/actions/diagnostic";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { level } from "@/server/entitlements";
 import {
   choiceQuestions,
   DIAGNOSTIC_QUESTIONS,
+  DIAGNOSTIC_QUESTIONS_PERSONALIZED,
   diagnosticParts,
   educationAnswers,
   parseDiagnosticResult,
+  parsePersonalized,
   stepLinks,
+  valueAnswers,
+  workStyleAnswers,
 } from "@/server/services/diagnostic";
+import { DIAGNOSTIC_GATE } from "@/server/services/diagnostic-ai";
+import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.diagnostic");
@@ -25,8 +44,9 @@ export async function generateMetadata(): Promise<Metadata> {
 type ChoiceQuestion = keyof typeof choiceQuestions;
 
 /**
- * Simplified diagnostic (partie 07 § 4, E3): the 12 questions on one page (works without
- * JavaScript and on a slow network), then the result of fixed rules. No AI here.
+ * Career diagnostic (partie 07 § 4): the questions on one page (works without JavaScript and
+ * on a slow network). Simplified: fixed rules, no AI (E3). Personalized (E6, from
+ * `career.diagnostic.level`): eight more questions and a summary by Jumanly Intelligence.
  */
 export default async function DiagnosticPage({
   searchParams,
@@ -38,20 +58,34 @@ export default async function DiagnosticPage({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
     take: 10,
-    select: { id: true, createdAt: true, result: true },
+    select: { id: true, createdAt: true, result: true, level: true },
   });
   const wanted = typeof params.bilan === "string" ? params.bilan : undefined;
   const current = wanted ? history.find((item) => item.id === wanted) : undefined;
   const result = current ? parseDiagnosticResult(current.result) : null;
+  const personal = current?.level === "personalized" ? parsePersonalized(current.result) : null;
+  const tAi = await getTranslations("ai");
 
   if (current && result) {
     return (
       <div className="flex flex-col gap-6">
         <header className="flex flex-col gap-2">
-          <Badge tone="career">{t("badge.simple")}</Badge>
+          <Badge tone="career">{personal ? t("badge.personalized") : t("badge.simple")}</Badge>
           <h1 className="text-h1">{t("result.title")}</h1>
           <p className="text-ardoise">{t("result.date", { date: current.createdAt })}</p>
         </header>
+        {params.ia === "unavailable" && <Alert tone="error" title={tAi("card.error")} />}
+        {params.ia === "quota" && <Alert tone="warning" title={tAi("credits.reached.title")} />}
+        {params.ia === "consent" && <Alert title={tAi("consent.declined.state")} />}
+        {personal && personal.summary && (
+          <Card tone="intelligence">
+            <p className="flex items-center gap-2 text-label">
+              <AiOrb />
+              {tAi("brand")}
+            </p>
+            <p className="mt-2 whitespace-pre-line">{personal.summary}</p>
+          </Card>
+        )}
         <Card tone="career">
           <p className="text-label">{t("result.readiness.text")}</p>
           <p className="mt-1 text-h2">{t(`result.readiness.${result.readiness}`)}</p>
@@ -65,7 +99,9 @@ export default async function DiagnosticPage({
               </p>
             )}
             <ul className="mt-3 flex list-disc flex-col gap-2 pl-5">
-              {result.strengths.length === 0 ? (
+              {personal && personal.strengthTexts.length > 0 ? (
+                personal.strengthTexts.map((text) => <li key={text}>{text}</li>)
+              ) : result.strengths.length === 0 ? (
                 <li>{t("rule.strength.none")}</li>
               ) : (
                 result.strengths.map((key) => <li key={key}>{t(`rule.strength.${key}`)}</li>)
@@ -102,8 +138,11 @@ export default async function DiagnosticPage({
             ))}
           </ol>
         </Card>
-        <p className="text-sm text-ardoise">{t("result.simple.note")}</p>
-        <div>
+        <p className="text-sm text-ardoise">
+          {personal ? t("result.personalized.note") : t("result.simple.note")}
+        </p>
+        <div className="flex flex-wrap gap-3">
+          <ButtonLink href="/app/career/plan">{t("result.createPlan")}</ButtonLink>
           <ButtonLink href="/app/career/diagnostic#questions" variant="secondary">
             {t("restart")}
           </ButtonLink>
@@ -180,14 +219,86 @@ export default async function DiagnosticPage({
     mobility: choice("mobility"),
   };
 
+  const subject = { type: "user" as const, id: user.id };
+  const personalized = DIAGNOSTIC_GATE.levels.includes(
+    await level(db, subject, DIAGNOSTIC_GATE.key),
+  );
+  const readiness = personalized
+    ? await aiReadiness(db, user.id, "diagnostic", DIAGNOSTIC_GATE)
+    : "entitlement";
+  const withAi = personalized && readiness === "ready";
+  const upsellPlan = personalized
+    ? null
+    : (cheapestPlanWhere(await listPublicPlans(db), ["talent"], (plan) =>
+        DIAGNOSTIC_GATE.levels.includes(levelOf(plan, DIAGNOSTIC_GATE.key)),
+      )?.name ?? null);
+  const total = withAi ? DIAGNOSTIC_QUESTIONS_PERSONALIZED : DIAGNOSTIC_QUESTIONS;
+  const extra = (
+    <section aria-labelledby="part-more" className="flex flex-col gap-5 rounded-card bg-blanc p-6">
+      <h2 id="part-more" className="flex items-center gap-2 text-h2">
+        <AiOrb />
+        {t("section", {
+          current: diagnosticParts.length + 1,
+          total: diagnosticParts.length + 1,
+          name: t("part.more"),
+        })}
+      </h2>
+      <TextArea
+        id="achievement"
+        name="achievement"
+        label={t("q.achievement.text")}
+        placeholder={t("q.achievement.placeholder")}
+        rows={4}
+        maxLength={1000}
+      />
+      <fieldset className="flex flex-col gap-3">
+        <legend className="mb-2 text-label">{t("q.values.text")}</legend>
+        {valueAnswers.map((code) => (
+          <Checkbox
+            key={code}
+            id={`values-${code}`}
+            name="values"
+            value={code}
+            label={dynamic(t)(`q.values.${code}`)}
+          />
+        ))}
+      </fieldset>
+      <RadioGroup
+        legend={t("q.workStyle.text")}
+        name="workStyle"
+        required
+        options={workStyleAnswers.map((code) => ({
+          value: code,
+          label: dynamic(t)(`q.workStyle.${code}`),
+        }))}
+      />
+      <TextField id="feedback" name="feedback" label={t("q.feedback")} maxLength={300} />
+      <TextField id="languages" name="languages" label={t("q.languages")} maxLength={200} />
+      <TextField id="digital" name="digital" label={t("q.digital")} maxLength={200} />
+      <TextField id="horizon" name="horizon" label={t("q.horizon")} maxLength={300} />
+      <Checkbox id="useProfile" name="useProfile" value="on" label={t("q.useProfile")} />
+    </section>
+  );
+
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-2">
-        <Badge tone="career">{t("badge.simple")}</Badge>
+        <Badge tone="career">{withAi ? t("badge.personalized") : t("badge.simple")}</Badge>
         <h1 className="text-h1">{t("title")}</h1>
-        <p className="text-ardoise">{t("intro.simple")}</p>
+        <p className="text-ardoise">{withAi ? t("intro.personalized") : t("intro.simple")}</p>
         <p className="text-sm text-ardoise">{t("privacy")}</p>
       </header>
+      {upsellPlan && <Alert title={t("upsell", { plan: upsellPlan })} />}
+      {personalized && readiness === "consent" && (
+        <Alert title={tAi("consent.declined.state")}>
+          <Link href="/app/parametres?onglet=confidentialite" className="font-medium underline">
+            {tAi("consent.declined.cta")}
+          </Link>
+        </Alert>
+      )}
+      {personalized && readiness === "quota" && (
+        <Alert tone="warning" title={tAi("credits.reached.title")} />
+      )}
       {params.erreur && <Alert tone="error" title={t("error")} />}
       <form id="questions" action={submitDiagnostic} className="flex scroll-mt-24 flex-col gap-6">
         {diagnosticParts.map((part, index) => (
@@ -208,9 +319,13 @@ export default async function DiagnosticPage({
             ))}
           </section>
         ))}
-        <p className="text-sm text-ardoise">
-          {t("progress", { current: DIAGNOSTIC_QUESTIONS, total: DIAGNOSTIC_QUESTIONS })}
-        </p>
+        {withAi && (
+          <>
+            <input type="hidden" name="personalized" value="1" />
+            {extra}
+          </>
+        )}
+        <p className="text-sm text-ardoise">{t("progress", { current: total, total })}</p>
         <div>
           <Button type="submit">{t("finish")}</Button>
         </div>

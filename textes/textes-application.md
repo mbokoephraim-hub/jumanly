@@ -1800,6 +1800,14 @@ Conventions :
 | `talent.profile.preview.anonymous` | En mode anonyme, votre nom et votre photo sont masqués jusqu'à ce que vous acceptiez une mise en relation. |
 | `talent.profile.importCv.text` | Remplir à partir de mon CV |
 | `talent.profile.importCv.hint` | Nous lisons votre CV et pré-remplissons les sections. Vous validez chaque élément. |
+| `talent.profile.import.paste.label` | Texte de votre CV |
+| `talent.profile.import.paste.hint` | Ouvrez votre CV, copiez tout le texte et collez-le ici. Rien n'est ajouté à votre profil sans votre validation. |
+| `talent.profile.import.submit` | Lire mon CV |
+| `talent.profile.import.tooShort` | Collez le texte de votre CV (30 caractères au moins). |
+| `talent.profile.import.empty` | Aucun élément trouvé. Vérifiez le texte collé, ou remplissez votre profil à la main. |
+| `talent.profile.import.noStart` | Date de début introuvable : ajoutez cette expérience à la main. |
+| `talent.profile.import.skillsHint` | Seules les compétences de notre référentiel sont ajoutées. Vous pourrez préciser leur niveau dans votre profil. |
+| `talent.profile.import.cancel` | Annuler l'import |
 | `talent.profile.save` | Enregistrer |
 | `talent.profile.saved` | Profil enregistré. |
 | `talent.profile.autosaved` | Enregistré automatiquement |
@@ -2398,6 +2406,7 @@ Conventions :
 | `career.diagnostic.part.goals` | Vos objectifs |
 | `career.diagnostic.part.skills` | Vos compétences |
 | `career.diagnostic.part.search` | Votre recherche |
+| `career.diagnostic.part.more` | Pour aller plus loin |
 | `career.diagnostic.q.situation.text` | Quelle est votre situation actuelle ? |
 | `career.diagnostic.q.situation.a1` | Étudiant |
 | `career.diagnostic.q.situation.a2` | Jeune diplômé |
@@ -5729,6 +5738,9 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 | `ai.cvCoach.keywords.hint` | Ajoutez-les seulement si vous maîtrisez vraiment ces compétences. |
 | `ai.cvCoach.keywords.add` | Ajouter {keyword} |
 | `ai.cvCoach.allDone` | Toutes les suggestions ont été traitées. Votre CV est prêt. |
+| `ai.cvCoach.empty` | Ajoutez un titre, un résumé ou une expérience à votre CV pour lancer l'analyse. |
+| `ai.cvCoach.obsolete` | Ce texte a changé depuis l'analyse. Relancez l'analyse pour une suggestion à jour. |
+| `ai.cvCoach.adviceOnly` | Conseil à appliquer vous-même, dans votre profil ou dans ce CV. |
 | `ai.cvCoach.footer` | L'IA conseille, vous décidez. Rien n'est modifié sans votre accord. |
 | `ai.cvCoach.locked.free` | Le coach IA est disponible avec {plan}. Votre CV reste modifiable et exportable gratuitement. |
 | `ai.cvCoach.tips.free.title` | Conseils pour votre CV |

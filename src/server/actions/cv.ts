@@ -1,5 +1,6 @@
 "use server";
 
+import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
@@ -16,6 +17,7 @@ import {
   toggleSection,
   type CvContent,
 } from "@/server/services/cv";
+import { decideSuggestion, runCvCoach } from "@/server/services/cv-coach";
 import { ensureProfile, getFullProfile } from "@/server/services/profile";
 
 async function owner() {
@@ -177,4 +179,28 @@ export async function deleteCv(formData: FormData) {
     if (next) await db.document.update({ where: { id: next.id }, data: { isPrimary: true } });
   }
   redirect("/app/career/cv?ok=supprime");
+}
+
+/** « Analyser mon CV » : the coach checks consent, credits and logs the call (src/server/ai). */
+export async function runCoachAction(formData: FormData) {
+  const { user, profile } = await owner();
+  const cv = await ownedCv(profile.id, formData.get("id"));
+  const result = await runCvCoach(db, user.id, cv.id);
+  refresh();
+  back(cv.id, { coach: result });
+}
+
+export async function decideSuggestionAction(formData: FormData) {
+  const decision = z.enum(["applied", "ignored"]).safeParse(formData.get("decision"));
+  const { user, profile } = await owner();
+  const cv = await ownedCv(profile.id, formData.get("id"));
+  if (!decision.success) back(cv.id);
+  const done = await decideSuggestion(
+    db,
+    user.id,
+    String(formData.get("suggestion") ?? ""),
+    decision.data,
+  );
+  refresh();
+  back(cv.id, { suggestion: done ? decision.data : "obsolete" });
 }

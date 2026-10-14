@@ -1,0 +1,148 @@
+/**
+ * Every call to the model goes through `runAi` (partie 08 § 8.9, CLAUDE.md § 12), in this order:
+ * consent of the person → entitlement → quota `ai.credits.monthly` → model → Zod validation →
+ * log in AiUsage. A rejected output falls back to the deterministic template and costs no credit;
+ * an unavailable model costs no credit either (« Aucun crédit n'a été utilisé »).
+ */
+import type { PrismaClient } from "@/generated/prisma/client";
+import {
+  can,
+  consume,
+  level,
+  QuotaExceededError,
+  release,
+  resolvePlan,
+  usage,
+  type Subject,
+} from "@/server/entitlements";
+import { aiProvider, AiUnavailableError, type AiProvider, type GenerateInput } from "./provider";
+import { costMicroUsd } from "./prices";
+
+export const aiFeatures = {
+  cv_parse: { credits: 1, tier: "fast" },
+  cv_coach: { credits: 2, tier: "default" },
+  diagnostic: { credits: 2, tier: "default" },
+} as const;
+export type AiFeature = keyof typeof aiFeatures;
+
+export const AI_CREDITS_KEY = "ai.credits.monthly";
+
+export class AiError extends Error {
+  constructor(
+    readonly code: "consent" | "entitlement" | "quota" | "unavailable",
+    readonly resetsAt?: Date,
+  ) {
+    super(`AI ${code}`);
+  }
+}
+
+/** A feature gate: a boolean entitlement, or a level among those allowed. */
+export type AiGate = { key: string; levels?: string[] };
+
+export type AiRun<T> = {
+  output: T;
+  /** "ai" when the model answered, "template" when its output was rejected. */
+  source: "ai" | "template";
+};
+
+async function allowed(db: PrismaClient, subject: Subject, gate?: AiGate) {
+  if (!gate) return true;
+  if (gate.levels) return gate.levels.includes(await level(db, subject, gate.key));
+  return can(db, subject, gate.key);
+}
+
+/**
+ * What stops a person from using an AI feature right now, without spending anything: used by
+ * pages to show the right lock (consent, plan or credits).
+ */
+export async function aiReadiness(
+  db: PrismaClient,
+  userId: string,
+  feature: AiFeature,
+  gate?: AiGate,
+): Promise<"ready" | AiError["code"]> {
+  const user = await db.user.findUnique({ where: { id: userId }, select: { aiConsentAt: true } });
+  if (!user?.aiConsentAt) return "consent";
+  const subject: Subject = { type: "user", id: userId };
+  if (!(await allowed(db, subject, gate))) return "entitlement";
+  const current = await usage(db, subject, AI_CREDITS_KEY);
+  if (current.limit >= 0 && current.used + aiFeatures[feature].credits > current.limit)
+    return "quota";
+  return "ready";
+}
+
+export async function runAi<T>(
+  db: PrismaClient,
+  input: {
+    userId: string;
+    feature: AiFeature;
+    gate?: AiGate;
+    system: string;
+    prompt: string;
+    schema: GenerateInput<T>["schema"];
+    template: () => T;
+    maxTokens?: number;
+  },
+  options: { provider?: AiProvider; now?: Date } = {},
+): Promise<AiRun<T>> {
+  const now = options.now ?? new Date();
+  const config = aiFeatures[input.feature];
+  const subject: Subject = { type: "user", id: input.userId };
+
+  const user = await db.user.findUnique({
+    where: { id: input.userId },
+    select: { aiConsentAt: true },
+  });
+  if (!user?.aiConsentAt) throw new AiError("consent");
+  if (!(await allowed(db, subject, input.gate))) throw new AiError("entitlement");
+  try {
+    await consume(db, subject, AI_CREDITS_KEY, config.credits, now);
+  } catch (error) {
+    if (error instanceof QuotaExceededError) throw new AiError("quota", error.resetsAt);
+    throw error;
+  }
+
+  const provider = options.provider ?? aiProvider();
+  const plan = await resolvePlan(db, subject, now);
+  const log = (status: string, model: string, inputTokens = 0, outputTokens = 0) =>
+    db.aiUsage.create({
+      data: {
+        userId: input.userId,
+        feature: input.feature,
+        model,
+        inputTokens,
+        outputTokens,
+        costMicroUsd: costMicroUsd(model, inputTokens, outputTokens),
+        planCode: plan?.planCode ?? null,
+        status,
+        createdAt: now,
+      },
+    });
+
+  let result;
+  try {
+    result = await provider.generate({
+      tier: config.tier,
+      system: input.system,
+      prompt: input.prompt,
+      schema: input.schema,
+      template: input.template,
+      maxTokens: input.maxTokens,
+    });
+  } catch (error) {
+    await release(db, subject, AI_CREDITS_KEY, config.credits, now);
+    await log("error", provider.name);
+    if (error instanceof AiUnavailableError) {
+      console.error("IA indisponible :", error.cause);
+      throw new AiError("unavailable");
+    }
+    throw error;
+  }
+  if (result.output === null) {
+    await release(db, subject, AI_CREDITS_KEY, config.credits, now);
+    await log("invalid", result.model, result.inputTokens, result.outputTokens);
+    return { output: input.template(), source: "template" };
+  }
+  await log("ok", result.model, result.inputTokens, result.outputTokens);
+  return { output: result.output, source: "ai" };
+}

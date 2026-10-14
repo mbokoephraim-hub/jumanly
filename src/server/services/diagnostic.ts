@@ -166,3 +166,71 @@ export const stepLinks: Record<Step, string> = {
   network: "/app/profil",
   role: "/app/career/diagnostic",
 };
+
+// ─── Personalized diagnostic (E6, `career.diagnostic.level` = personalized) ──
+
+export const valueAnswers = choice(7);
+export const workStyleAnswers = choice(3);
+export const DIAGNOSTIC_QUESTIONS_PERSONALIZED = 20;
+
+const free = (max: number) => z.string().trim().max(max).default("");
+
+export const personalAnswersSchema = z.object({
+  achievement: free(1000),
+  values: z.array(pick(valueAnswers)).max(3).default([]),
+  workStyle: pick(workStyleAnswers),
+  feedback: free(300),
+  languages: free(200),
+  digital: free(200),
+  horizon: free(300),
+  useProfile: z.boolean().default(false),
+});
+export type PersonalAnswers = z.infer<typeof personalAnswersSchema>;
+
+export const priorities = ["role", "skills", "cv", "interview", "search", "network"] as const;
+export const steps = ["profile", "cv", "skills", "interview", "jobs", "network", "role"] as const;
+
+/** What the model writes: free sentences for strengths and the summary, codes for the rest. */
+export const personalizedOutputSchema = z.object({
+  summary: z.string(),
+  readiness: z.enum(["low", "medium", "high"]),
+  strengths: z.array(z.string()),
+  priorities: z.array(z.enum(priorities)),
+  roles: z.array(z.string()),
+  steps: z.array(z.enum(steps)),
+});
+export type PersonalizedOutput = z.infer<typeof personalizedOutputSchema>;
+
+/** The personalized result keeps the shape of the simple one, plus the sentences of the model. */
+export type PersonalizedResult = DiagnosticResult & {
+  summary: string;
+  strengthTexts: string[];
+};
+
+export function mergePersonalized(
+  base: DiagnosticResult,
+  output: PersonalizedOutput,
+): PersonalizedResult {
+  const unique = <T>(values: T[]) =>
+    values.filter((value, index) => values.indexOf(value) === index);
+  return {
+    ...base,
+    readiness: output.readiness,
+    priorities: unique(output.priorities).slice(0, 3),
+    steps: unique(output.steps).slice(0, 3),
+    roles: unique(output.roles.map((role) => role.trim()).filter(Boolean)).slice(0, 4),
+    summary: output.summary.trim().slice(0, 1200),
+    strengthTexts: output.strengths
+      .map((text) => text.trim())
+      .filter(Boolean)
+      .slice(0, 4),
+  };
+}
+
+export function parsePersonalized(value: Prisma.JsonValue): PersonalizedResult | null {
+  const base = parseDiagnosticResult(value);
+  const extra = z
+    .object({ summary: z.string(), strengthTexts: z.array(z.string()) })
+    .safeParse(value);
+  return base && extra.success ? { ...base, ...extra.data } : null;
+}

@@ -2159,6 +2159,18 @@
         "text": "Remplir à partir de mon CV",
         "hint": "Nous lisons votre CV et pré-remplissons les sections. Vous validez chaque élément."
       },
+      "import": {
+        "paste": {
+          "label": "Texte de votre CV",
+          "hint": "Ouvrez votre CV, copiez tout le texte et collez-le ici. Rien n'est ajouté à votre profil sans votre validation."
+        },
+        "submit": "Lire mon CV",
+        "tooShort": "Collez le texte de votre CV (30 caractères au moins).",
+        "empty": "Aucun élément trouvé. Vérifiez le texte collé, ou remplissez votre profil à la main.",
+        "noStart": "Date de début introuvable : ajoutez cette expérience à la main.",
+        "skillsHint": "Seules les compétences de notre référentiel sont ajoutées. Vous pourrez préciser leur niveau dans votre profil.",
+        "cancel": "Annuler l'import"
+      },
       "save": "Enregistrer",
       "saved": "Profil enregistré.",
       "autosaved": "Enregistré automatiquement",
@@ -3227,7 +3239,8 @@
         "situation": "Votre situation",
         "goals": "Vos objectifs",
         "skills": "Vos compétences",
-        "search": "Votre recherche"
+        "search": "Votre recherche",
+        "more": "Pour aller plus loin"
       },
       "q": {
         "situation": {
@@ -6604,6 +6617,9 @@
         "add": "Ajouter {keyword}"
       },
       "allDone": "Toutes les suggestions ont été traitées. Votre CV est prêt.",
+      "empty": "Ajoutez un titre, un résumé ou une expérience à votre CV pour lancer l'analyse.",
+      "obsolete": "Ce texte a changé depuis l'analyse. Relancez l'analyse pour une suggestion à jour.",
+      "adviceOnly": "Conseil à appliquer vous-même, dans votre profil ou dans ce CV.",
       "footer": "L'IA conseille, vous décidez. Rien n'est modifié sans votre accord.",
       "locked": {
         "free": "Le coach IA est disponible avec {plan}. Votre CV reste modifiable et exportable gratuitement."
