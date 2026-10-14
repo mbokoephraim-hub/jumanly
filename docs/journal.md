@@ -2,6 +2,54 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## E4 · Hire, Connect et modération légère (14 octobre 2026)
+
+### Fait
+
+- Tables : offres en vérification ou refusées (signaux et motif de modération, auteur, message de
+  refus), invitations, conversations liées aux candidatures, messages (texte, demande de document),
+  notifications, signalements.
+- Espace organisation : sélecteur d'espace (cookie vérifié contre les adhésions à chaque requête),
+  navigation Hire, cloche de notifications.
+- `/app/hire` (à traiter, offres actives, quotas `org.seats` et `jobs.active.max`),
+  `/app/hire/offres` (onglets, limite d'offres actives, fermer, supprimer un brouillon),
+  formulaire d'offre sur une page (brouillon ou publication), pipeline par étapes avec un
+  formulaire de déplacement par carte, fiche candidat (consultation journalisée, CV envoyé,
+  lettre, critères éliminatoires signalés sans écarter, notes d'équipe, historique des décisions,
+  décision « Ne pas retenir » avec motif interne et message, demande de document).
+- Connect : `/app/messages` et la conversation (demande de document, réponse avec un CV,
+  bloquer, signaler), `/app/notifications`.
+- `/app/organisation` (profil, membres, rôles selon `org.permissions.level`, invitations dans la
+  limite des sièges) et `/app/invitation/[token]`.
+- Modération : vérification automatique à la publication (paiement demandé, critère protégé,
+  contact hors plateforme), « Signaler cette offre » sur l'offre, `/admin/offres` (approuver,
+  refuser, dépublier) et `/admin/signalements` (classer, masquer).
+- E-mails Hire et Connect avec aperçu local (`pnpm email:dev`, fichiers `emails/hire-*`,
+  `connect-*`, `organisation-*`).
+- Tests : base (isolation complète entre deux organisations, rôles, limite d'offres RH Free,
+  vérification, compétences inconnues, historique sans les notes côté talent, sièges, signalements,
+  premier message d'un talent), unitaires (rendu des e-mails), e2e (parcours complet, isolation par
+  l'URL, accès à Hire refusé à un talent, accessibilité des écrans Hire, Connect et admin).
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| E2e « recruteur publie → talent postule → recruteur fait avancer → message → décision → talent voit le statut » | ✓ `tests/e2e/hire.spec.ts` |
+| Test d'isolation entre deux organisations | ✓ `tests/db/hire.test.ts` et e2e par l'URL |
+| E-mails visibles en local (aperçu React Email) | ✓ `pnpm email:dev` |
+| Lint, types, tests, build | ✓ en local ; CI à l'ouverture de la PR |
+
+### Dettes et points ouverts
+
+- Voir `docs/decisions/2026-10-14-hire-connect.md` : entretiens, grilles d'évaluation, viviers et
+  recherche de talents (E8), poids des critères (E6), étapes personnalisées, glisser-déposer et
+  attribution des offres reportés.
+- La réponse à une demande de document se limite aux CV : le dépôt de fichiers arrive avec le
+  stockage (S3).
+- La détection « contact hors plateforme » signale aussi les longues suites de chiffres ; l'offre
+  passe alors en vérification, sans être refusée.
+
 ## E3 · Profil, Career, candidatures (14 octobre 2026)
 
 ### Fait

@@ -6,7 +6,9 @@ import type { ReactNode } from "react";
 import { cx } from "@/lib/cx";
 
 function isActive(pathname: string, href: string) {
-  return href === "/app" ? pathname === href : pathname === href || pathname.startsWith(`${href}/`);
+  return href === "/app" || href === "/app/hire"
+    ? pathname === href
+    : pathname === href || pathname.startsWith(`${href}/`);
 }
 
 /**

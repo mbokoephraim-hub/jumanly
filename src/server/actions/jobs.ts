@@ -2,6 +2,7 @@
 
 import { redirect } from "next/navigation";
 import { z } from "zod";
+import { onApplicationCreated } from "@/server/application-events";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { applyToJob, toggleSavedJob, withdrawApplication } from "@/server/services/applications";
@@ -32,6 +33,9 @@ export async function applyAction(formData: FormData) {
     coverLetter,
   });
   if (result.status === "notFound") redirect("/app/jobs");
+  if (result.status === "applied") {
+    await onApplicationCreated(result.applicationId).catch((error) => console.error(error));
+  }
   const outcome = { applied: "envoyee", already: "deja", closed: "close" }[result.status];
   redirect(`/app/jobs/${job}?candidature=${outcome}`);
 }

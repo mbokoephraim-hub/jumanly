@@ -3211,6 +3211,19 @@ Conventions :
 | `connect.block.confirm.cta` | Bloquer |
 | `connect.block.done` | {name} est bloqué. |
 | `connect.unblock` | Débloquer |
+| `connect.thread.blocked` | Le talent a bloqué cette conversation. Vous ne pouvez plus lui écrire. |
+| `connect.thread.youBlocked` | Vous avez bloqué cette conversation : l'organisation ne peut plus vous écrire. |
+| `connect.thread.withJob` | {name} · {jobTitle} |
+| `connect.thread.back` | Toutes les conversations |
+| `connect.thread.you` | Vous |
+| `connect.thread.error` | Le message n'a pas pu être envoyé. Vérifiez son contenu et réessayez. |
+| `connect.docRequest.noDocument` | Vous n'avez pas encore de CV. Créez-en un dans Career, puis revenez ici. |
+| `connect.docRequest.send` | Envoyer ce CV |
+| `connect.document.view` | Ouvrir le document |
+| `connect.switchSpace.text` | Cette conversation appartient à l'espace de {org}. |
+| `connect.switchSpace.cta` | Passer dans cet espace |
+| `connect.switchSpace.personal` | Cette conversation appartient à votre espace personnel. |
+| `connect.list.readOnly` | Votre rôle permet de lire les conversations, pas d'y répondre. |
 
 ---
 
@@ -3709,6 +3722,14 @@ Conventions :
 | `hire.jobForm.publish.success.pipeline` | Voir le pipeline |
 | `hire.jobForm.publish.hiringManagerBlocked` | Votre rôle ne permet pas de publier une offre. Enregistrez-la en brouillon et demandez à un recruteur ou un administrateur de la publier. |
 | `hire.jobForm.error.required` | Ce champ est obligatoire pour publier. |
+| `hire.jobForm.error.invalid` | Certaines informations ne sont pas valides. Vérifiez le formulaire. |
+| `hire.jobForm.draft.ok` | Brouillon enregistré. |
+| `hire.jobForm.summary.text` | Présentation du poste |
+| `hire.jobForm.summary.placeholder` | Le contexte, l'équipe et ce que la personne fera au quotidien. |
+| `hire.jobForm.lines.hint` | Un élément par ligne. |
+| `hire.jobForm.skills.separator` | Séparez les compétences par une virgule. |
+| `hire.jobForm.skills.unknown` | Compétences absentes du référentiel : {skills}. Vérifiez l'orthographe ou choisissez une compétence proche. |
+| `hire.jobForm.salary.unit` | Montants mensuels, en USD. |
 
 ---
 
@@ -3784,6 +3805,8 @@ Conventions :
 |---|---|
 | `hire.pipeline.action.view` | Voir le profil |
 | `hire.pipeline.action.moveTo` | Déplacer vers… |
+| `hire.pipeline.action.moveAria` | Déplacer {candidateName} vers une autre étape |
+| `hire.pipeline.action.moveSubmit` | Déplacer |
 | `hire.pipeline.action.advance` | Étape suivante |
 | `hire.pipeline.action.schedule` | Planifier |
 | `hire.pipeline.action.message` | Envoyer un message |
@@ -3987,6 +4010,7 @@ Conventions :
 | `hire.history.event.scoreDisputed` | Le candidat a demandé une révision humaine du score |
 | `hire.history.event.scoreReviewed` | Score revu par {memberName} |
 | `hire.history.event.withdrawn` | Le candidat a retiré sa candidature |
+| `hire.history.event.message` | Message de {memberName} |
 | `hire.history.timestamp` | {date, date, medium} à {time} |
 | `hire.history.export` | Exporter l'historique |
 
@@ -4261,6 +4285,9 @@ Conventions :
 | `org.profile.publicPage.text` | Page publique |
 | `org.profile.publicPage.view` | Voir la page publique |
 | `org.profile.saved` | Profil de l'organisation enregistré. |
+| `org.profile.save` | Enregistrer |
+| `org.profile.invalid` | Certaines informations ne sont pas valides. Vérifiez le formulaire. |
+| `org.profile.countryHint` | Code pays à deux lettres, par exemple CI ou CM. |
 
 #### Vérification
 
@@ -4313,6 +4340,8 @@ Conventions :
 | `org.members.remove.confirm.reassign` | Réattribuer ses offres à |
 | `org.members.remove.confirm.cta` | Retirer |
 | `org.members.removed` | {memberName} a été retiré. |
+| `org.members.removedDone` | Membre retiré de l'organisation. |
+| `org.members.roleDone` | Rôle mis à jour. |
 | `org.members.transferOwnership.text` | Transférer la propriété |
 | `org.members.transferOwnership.confirm` | {memberName} deviendra propriétaire de {org}, avec accès à la facturation et à la suppression. Vous deviendrez administrateur. |
 | `org.members.lastOwner` | Une organisation doit garder au moins un propriétaire. |
@@ -4331,6 +4360,8 @@ Conventions :
 | `org.invite.revoked` | Invitation annulée. |
 | `org.invite.error.alreadyMember` | {email} est déjà membre de l'organisation. |
 | `org.invite.error.seats` | Pas assez de sièges disponibles pour {count, plural, one {# invitation} other {# invitations}}. |
+| `org.invite.error.role` | Ce rôle n'est pas inclus dans le forfait de votre organisation. |
+| `org.invite.error.otherEmail` | Cette invitation a été envoyée à une autre adresse e-mail. Connectez-vous avec le compte invité. |
 | `org.invite.accept.title` | Rejoindre {org} sur Jumanly |
 | `org.invite.accept.body` | {inviterName} vous invite à rejoindre {org} en tant que {role}. Votre compte personnel reste séparé de l'espace de l'organisation. |
 | `org.invite.accept.cta` | Accepter l'invitation |
@@ -5882,6 +5913,7 @@ Conventions :
 |---|---|
 | `notifications.title` | Notifications |
 | `notifications.bell.aria` | Notifications · {count, plural, =0 {aucune non lue} one {# non lue} other {# non lues}} |
+| `notifications.bell.many` | 9+ |
 | `notifications.tab.all` | Toutes |
 | `notifications.tab.unread` | Non lues |
 | `notifications.tab.applications` | Candidatures |
@@ -5903,6 +5935,15 @@ Conventions :
 | `notifications.empty.unread` | Aucune notification non lue. |
 | `notifications.loading` | Chargement des notifications… |
 | `notifications.allRead` | Toutes les notifications sont marquées comme lues. |
+| `notifications.item.newApplication` | Nouvelle candidature de {candidateName} pour « {jobTitle} » |
+| `notifications.item.statusChange` | Votre candidature à « {jobTitle} » chez {company} est passée à l'étape « {stage} » |
+| `notifications.item.notSelected` | {company} n'a pas retenu votre candidature à « {jobTitle} » |
+| `notifications.item.newMessage` | Nouveau message de {senderName} · {jobTitle} |
+| `notifications.item.documentRequest` | {company} vous demande un document : {documentName} |
+| `notifications.item.orgInvite` | {inviterName} vous invite à rejoindre {org} |
+| `notifications.item.jobApproved` | Votre offre « {jobTitle} » a été validée et publiée |
+| `notifications.item.jobRejected` | Votre offre « {jobTitle} » a été refusée par la modération |
+| `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)
 
@@ -7418,6 +7459,7 @@ Conventions :
 | `admin.reports.filter.type` | Type de contenu |
 | `admin.reports.type.job` | Offre |
 | `admin.reports.type.message` | Message |
+| `admin.reports.type.conversation` | Conversation |
 | `admin.reports.type.question` | Question de formation |
 | `admin.reports.type.profile` | Profil |
 | `admin.reports.type.organization` | Organisation |
@@ -7761,6 +7803,11 @@ Textes ajoutés à l'étape E0 : composants de base, textes alternatifs des pers
 | `foundation.emptyText` | Formations, offres et messages apparaîtront ici. |
 | `foundation.seeComponents` | Voir les composants |
 | `foundation.samplePlan` | Free |
+| `foundation.sampleJobTitle` | Analyste de données junior |
+| `foundation.sampleCompany` | Cabinet Exemple |
+| `foundation.sampleStage` | Entretien |
+| `foundation.sampleDocument` | Copie du diplôme |
+| `foundation.sampleRole` | Recruteur |
 
 ### Page /dev/composants
 

@@ -13,13 +13,13 @@ export const OTP_MINUTES = CODE_MINUTES;
 export const LINK_MINUTES = CODE_MINUTES;
 export const RESET_MINUTES = 60;
 
-function greeting(firstName?: string | null) {
+export function greeting(firstName?: string | null) {
   return firstName
     ? t("mail.common.greeting.text", { firstName })
     : t("mail.common.greeting.noName");
 }
 
-async function send(to: string, subject: string, props: TransactionalEmailProps) {
+export async function send(to: string, subject: string, props: TransactionalEmailProps) {
   const html = await render(<TransactionalEmail {...props} />);
   await emailSender().send({ to, subject, html, text: toPlainText(html) });
 }

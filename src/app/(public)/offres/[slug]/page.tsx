@@ -194,7 +194,10 @@ export default async function JobPage({ params }: PageProps<"/offres/[slug]">) {
               </div>
             )}
             <Alert title={t("job.safety.text")}>
-              <Link href={loginHref(`/offres/${job.slug}`)} className="font-medium underline">
+              <Link
+                href={loginHref(`/app/jobs/${job.slug}?signaler=1#signaler`)}
+                className="font-medium underline"
+              >
                 {t("job.cta.report")}
               </Link>
             </Alert>

@@ -3,6 +3,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
+import { ReportForm } from "@/components/connect/report-form";
 import { JobBody } from "@/components/site/job-body";
 import { Alert, Badge, Button, ButtonLink, Select, TextArea, VerifiedBadge } from "@/components/ui";
 import { formatDate } from "@/lib/dates";
@@ -221,6 +222,30 @@ export default async function TalentJobPage({
               <h2 className="text-h2">{t("job.company.title", { company })}</h2>
               <p className="text-[15px] leading-6">{job.organization.description}</p>
             </div>
+          )}
+          {jobRow && (
+            <section
+              id="signaler"
+              aria-labelledby="signaler-titre"
+              className="flex flex-col gap-2 rounded-card bg-blanc p-6"
+            >
+              <h2 id="signaler-titre" className="text-h3 font-semibold">
+                {t("report.title.job")}
+              </h2>
+              {query.signalement === "ok" && <Alert tone="success" title={t("report.success")} />}
+              {query.signalement === "deja" && <Alert title={t("report.already")} />}
+              <p className="text-sm text-ardoise">{t("job.safety.text")}</p>
+              <details open={query.signaler === "1"}>
+                <summary className="cursor-pointer text-sm font-medium underline">
+                  {t("job.cta.report")}
+                </summary>
+                <ReportForm
+                  targetType="job"
+                  targetId={jobRow.id}
+                  back={`/app/jobs/${slug}#signaler`}
+                />
+              </details>
+            </section>
           )}
         </aside>
       </div>
