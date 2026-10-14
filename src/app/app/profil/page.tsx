@@ -5,6 +5,7 @@ import {
   Alert,
   Badge,
   Button,
+  ButtonLink,
   Checkbox,
   ProgressBar,
   RadioGroup,
@@ -116,6 +117,18 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
                 })
               : t("talent.profile.completion.hint")}
           </p>
+        </div>
+        {one(params.import) !== undefined && (
+          <Alert
+            tone="success"
+            title={t("ai.cvImport.done", { count: Number(one(params.import)) || 0 })}
+          />
+        )}
+        <div className="flex max-w-xl flex-col items-start gap-2">
+          <ButtonLink href="/app/profil/import" variant="secondary" size="sm">
+            {t("talent.profile.importCv.text")}
+          </ButtonLink>
+          <p className="text-sm text-ardoise">{t("talent.profile.importCv.hint")}</p>
         </div>
       </header>
       <Identity profile={profile} notice={notice} />

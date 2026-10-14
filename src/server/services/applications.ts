@@ -5,6 +5,7 @@
  * quota, and a test checks it stays that way (tests/db/applications.test.ts). Free profiles are
  * treated like every other.
  */
+import { freezeApplicationMatch } from "@/server/matching/service";
 import type { Prisma, PrismaClient, StageKind } from "@/generated/prisma/client";
 import { isJobOpen } from "./jobs";
 
@@ -88,6 +89,8 @@ export async function applyToJob(
         events: { create: { actorId: input.userId, type: "submitted" } },
       },
     });
+    // The score shown at that moment is kept with the application; applying never waits on it.
+    await freezeApplicationMatch(db, application.id, now).catch((error) => console.error(error));
     return { status: "applied", applicationId: application.id };
   } catch (error) {
     // Two clicks at once: the unique (job, profile) pair keeps a single application.

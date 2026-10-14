@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { CvCoachPanel, type CoachState } from "@/components/career/cv-coach-panel";
 import {
   Alert,
   Badge,
@@ -21,9 +22,10 @@ import {
   setPrimaryCv,
   updateCvDetails,
 } from "@/server/actions/cv";
+import { aiFeatures, aiReadiness, AI_CREDITS_KEY } from "@/server/ai";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { limit } from "@/server/entitlements";
+import { limit, usage } from "@/server/entitlements";
 import { cvLabels } from "@/server/pdf/cv-labels";
 import {
   allowedTemplates,
@@ -33,6 +35,7 @@ import {
   parseCv,
   type CvContent,
 } from "@/server/services/cv";
+import { cvScore, parseSuggestion, targetSkillsFor } from "@/server/services/cv-coach";
 import { cheapestPlanWithLimit, listPublicPlans } from "@/server/services/plans";
 import type { CvLabels } from "@/server/pdf/cv-document";
 
@@ -65,6 +68,31 @@ export default async function CvEditorPage({
   const plans = await listPublicPlans(db);
   const labels = await cvLabels(cv.title);
   const count = await db.document.count({ where: { kind: "cv", profileId: cv.profileId } });
+  const [readiness, credits, targets, pending] = await Promise.all([
+    aiReadiness(db, user.id, "cv_coach"),
+    usage(db, { type: "user", id: user.id }, AI_CREDITS_KEY),
+    targetSkillsFor(db, user.id),
+    db.aiSuggestion.findMany({
+      where: { userId: user.id, feature: "cv_coach", documentId: cv.id, status: "pending" },
+      orderBy: { createdAt: "asc" },
+    }),
+  ]);
+  const coachPlan =
+    cheapestPlanWithLimit(plans, "talent", AI_CREDITS_KEY, aiFeatures.cv_coach.credits)?.name ??
+    null;
+  const coach: CoachState =
+    readiness === "ready" || readiness === "consent"
+      ? { state: readiness }
+      : readiness === "unavailable"
+        ? { state: "ready" }
+        : { state: readiness, plan: coachPlan, resetsAt: credits.resetsAt };
+  const score = cvScore(content, targets.skills);
+  const cvWords = JSON.stringify(content).toLowerCase();
+  const missingKeywords = targets.skills.filter((skill) => !cvWords.includes(skill.toLowerCase()));
+  const suggestions = pending.flatMap((row) => {
+    const payload = parseSuggestion(row.payload);
+    return payload ? [{ id: row.id, payload }] : [];
+  });
 
   const notice =
     query.ok === "profil"
@@ -297,17 +325,33 @@ export default async function CvEditorPage({
           </section>
         </div>
 
-        <section aria-labelledby="cv-preview" className="flex flex-col gap-3">
-          <h2 id="cv-preview" className="text-h2">
-            {t("tab.preview")}
-          </h2>
-          {isEmptyCv(content) && <Alert tone="info" title={t("empty")} />}
-          <CvPreview
-            content={content}
-            labels={labels}
-            accent={cvTemplates.find((tpl) => tpl.id === cv.templateId)?.accent ?? "#0E3B33"}
+        <div className="flex flex-col gap-6">
+          <section aria-labelledby="cv-preview" className="flex flex-col gap-3">
+            <h2 id="cv-preview" className="text-h2">
+              {t("tab.preview")}
+            </h2>
+            {isEmptyCv(content) && <Alert tone="info" title={t("empty")} />}
+            <CvPreview
+              content={content}
+              labels={labels}
+              accent={cvTemplates.find((tpl) => tpl.id === cv.templateId)?.accent ?? "#0E3B33"}
+            />
+          </section>
+          <CvCoachPanel
+            documentId={cv.id}
+            score={score}
+            coach={coach}
+            credits={credits}
+            suggestions={suggestions}
+            missingKeywords={missingKeywords}
+            percents={targets.percents}
+            targetTitle={targets.title}
+            outcome={{
+              coach: typeof query.coach === "string" ? query.coach : undefined,
+              suggestion: typeof query.suggestion === "string" ? query.suggestion : undefined,
+            }}
           />
-        </section>
+        </div>
       </div>
     </div>
   );

@@ -101,6 +101,7 @@ export async function setTwoFactor(formData: FormData) {
 const privacySchema = z.object({
   visibility: z.enum(["private", "recruiters", "anonymous"]),
   ai: z.literal("on").optional(),
+  matching: z.literal("on").optional(),
   newsletter: z.literal("on").optional(),
 });
 
@@ -119,8 +120,12 @@ export async function updatePrivacy(formData: FormData) {
     }),
     db.talentProfile.upsert({
       where: { userId: user.id },
-      update: { visibility: input.visibility },
-      create: { userId: user.id, visibility: input.visibility },
+      update: { visibility: input.visibility, matchingEnabled: input.matching === "on" },
+      create: {
+        userId: user.id,
+        visibility: input.visibility,
+        matchingEnabled: input.matching === "on",
+      },
     }),
   ]);
   back("confidentialite", { ok: "1" });

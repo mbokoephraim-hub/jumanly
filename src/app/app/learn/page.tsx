@@ -13,6 +13,7 @@ import {
   SearchField,
 } from "@/components/ui";
 import { cx } from "@/lib/cx";
+import { RecommendedCourses } from "@/components/matching/recommendations";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { getCourseSearch, getPublicPlans } from "@/server/queries/public";
@@ -124,6 +125,8 @@ export default async function LearnPage({ searchParams }: PageProps<"/app/learn"
           {t("learn.catalog.certificatesLink")}
         </ButtonLink>
       </header>
+
+      {list === "toutes" && <RecommendedCourses userId={user.id} />}
 
       {saved === "1" && <Alert tone="success" title={t("learn.save.success")} />}
       {saved === "0" && <Alert tone="info" title={t("learn.save.removed")} />}

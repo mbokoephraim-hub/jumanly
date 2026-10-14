@@ -13,6 +13,7 @@ import {
   QuotaGauge,
   StatCard,
 } from "@/components/ui";
+import { RecommendedCourses, RecommendedJobs } from "@/components/matching/recommendations";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { parseLimit, resolvePlan, usage } from "@/server/entitlements";
@@ -203,6 +204,13 @@ export default async function DashboardPage() {
           ))}
         </ol>
       </section>
+
+      {profile.matchingEnabled && (
+        <div className="grid gap-4 lg:grid-cols-2">
+          <RecommendedJobs userId={user.id} />
+          <RecommendedCourses userId={user.id} />
+        </div>
+      )}
 
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
         <section

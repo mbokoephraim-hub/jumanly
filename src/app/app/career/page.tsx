@@ -18,7 +18,7 @@ export default async function CareerPage() {
     orderBy: { createdAt: "desc" },
     select: { id: true, createdAt: true },
   });
-  const later = ["documents", "linkedin", "interviews", "plan", "portfolio", "tips"] as const;
+  const later = ["documents", "linkedin", "interviews", "portfolio", "tips"] as const;
   return (
     <div className="flex flex-col gap-6">
       <header className="flex flex-col gap-1">
@@ -51,6 +51,13 @@ export default async function CareerPage() {
           <CardText>{t("cv.desc")}</CardText>
           <ButtonLink href="/app/career/cv" size="sm">
             {t("cv.cta")}
+          </ButtonLink>
+        </Card>
+        <Card tone="career" className="flex flex-col items-start gap-3">
+          <CardTitle>{t("plan.title")}</CardTitle>
+          <CardText>{t("plan.desc")}</CardText>
+          <ButtonLink href="/app/career/plan" size="sm">
+            {t("plan.cta")}
           </ButtonLink>
         </Card>
       </div>

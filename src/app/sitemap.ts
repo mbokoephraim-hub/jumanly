@@ -14,6 +14,7 @@ const staticRoutes = [
   "/offres",
   "/tarifs",
   "/faq",
+  "/comment-fonctionne-le-matching",
   "/contact",
   "/mentions-legales",
   "/confidentialite",

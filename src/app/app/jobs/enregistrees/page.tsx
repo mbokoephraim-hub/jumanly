@@ -25,6 +25,7 @@ export default async function SavedJobsPage() {
     select: {
       job: {
         select: {
+          id: true,
           slug: true,
           title: true,
           contractType: true,

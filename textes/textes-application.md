@@ -1800,6 +1800,14 @@ Conventions :
 | `talent.profile.preview.anonymous` | En mode anonyme, votre nom et votre photo sont masqués jusqu'à ce que vous acceptiez une mise en relation. |
 | `talent.profile.importCv.text` | Remplir à partir de mon CV |
 | `talent.profile.importCv.hint` | Nous lisons votre CV et pré-remplissons les sections. Vous validez chaque élément. |
+| `talent.profile.import.paste.label` | Texte de votre CV |
+| `talent.profile.import.paste.hint` | Ouvrez votre CV, copiez tout le texte et collez-le ici. Rien n'est ajouté à votre profil sans votre validation. |
+| `talent.profile.import.submit` | Lire mon CV |
+| `talent.profile.import.tooShort` | Collez le texte de votre CV (30 caractères au moins). |
+| `talent.profile.import.empty` | Aucun élément trouvé. Vérifiez le texte collé, ou remplissez votre profil à la main. |
+| `talent.profile.import.noStart` | Date de début introuvable : ajoutez cette expérience à la main. |
+| `talent.profile.import.skillsHint` | Seules les compétences de notre référentiel sont ajoutées. Vous pourrez préciser leur niveau dans votre profil. |
+| `talent.profile.import.cancel` | Annuler l'import |
 | `talent.profile.save` | Enregistrer |
 | `talent.profile.saved` | Profil enregistré. |
 | `talent.profile.autosaved` | Enregistré automatiquement |
@@ -2338,6 +2346,7 @@ Conventions :
 | `career.home.interviews.desc` | Entraînez-vous à l'écrit puis à l'oral, avec un retour détaillé. |
 | `career.home.plan.title` | Plan de progression |
 | `career.home.plan.desc` | Vos objectifs, vos étapes et les formations qui vous font avancer. |
+| `career.home.plan.cta` | Ouvrir mon plan |
 | `career.home.portfolio.title` | Portfolio |
 | `career.home.portfolio.desc` | Montrez vos projets sur une page à partager. |
 | `career.home.seo` | Career · Jumanly |
@@ -2398,6 +2407,7 @@ Conventions :
 | `career.diagnostic.part.goals` | Vos objectifs |
 | `career.diagnostic.part.skills` | Vos compétences |
 | `career.diagnostic.part.search` | Votre recherche |
+| `career.diagnostic.part.more` | Pour aller plus loin |
 | `career.diagnostic.q.situation.text` | Quelle est votre situation actuelle ? |
 | `career.diagnostic.q.situation.a1` | Étudiant |
 | `career.diagnostic.q.situation.a2` | Jeune diplômé |
@@ -2979,6 +2989,9 @@ Conventions :
 | `talent.jobs.detail.compatibility.course.text` | La formation « {courseTitle} » ({hours} h) ferait passer votre score à {newScore} %. |
 | `talent.jobs.detail.compatibility.course.cta` | Voir la formation |
 | `talent.jobs.detail.compatibility.publicHint` | Connectez-vous pour voir votre compatibilité avec cette offre. |
+| `talent.jobs.detail.compatibility.see` | Voir le détail du calcul |
+| `talent.jobs.detail.compatibility.optedOutCta` | Réactiver dans mes paramètres |
+| `talent.jobs.detail.compatibility.incompleteCta` | Ajouter mes compétences |
 | `talent.jobs.detail.recruiter.text` | Recruteur |
 | `talent.jobs.detail.recruiter.responseTime` | Répond en {days, plural, one {# jour} other {# jours}} en moyenne |
 | `talent.jobs.detail.company.title` | L'entreprise |
@@ -3029,7 +3042,6 @@ Conventions :
 | `talent.jobs.apply.cancel.confirm` | Abandonner la candidature ? Vos réponses ne seront pas enregistrées. |
 | `talent.jobs.apply.cv.profileOnly` | Envoyer seulement mon profil |
 | `talent.jobs.detail.seo` | {jobTitle} · Jumanly |
-| `talent.jobs.detail.scoreLater` | Le calcul de compatibilité arrive bientôt. Vous pouvez déjà postuler. |
 | `talent.jobs.detail.backToJobs` | Toutes les offres |
 
 ### `/app/jobs/candidatures` · Mes candidatures
@@ -3343,6 +3355,7 @@ Conventions :
 | `settings.privacy.contactRequests.hint` | Désactivé, plus aucun recruteur ne peut vous contacter hors de vos candidatures. |
 | `settings.privacy.ai.text` | Utilisation de l'IA |
 | `settings.privacy.ai.desc` | Autoriser Jumanly Intelligence à analyser mon profil et mes documents pour me faire des suggestions. |
+| `settings.privacy.ai.hint` | Coach CV, diagnostic personnalisé, plan de progression et analyse de vos documents. Sans cette autorisation, vous pouvez toujours postuler. |
 | `settings.privacy.ai.matching.text` | Calculer ma compatibilité avec les offres |
 | `settings.privacy.ai.matching.hint` | Désactivé, vous pouvez toujours postuler. Le recruteur verra votre candidature sans score. |
 | `settings.privacy.ai.learnMore` | Comment fonctionne le matching |
@@ -5455,7 +5468,7 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 
 - **L'IA recommande, l'humain décide.** L'IA classe et explique ; elle ne rejette jamais un candidat.
 - Toute suggestion IA porte l'orbe IA, un lien « Pourquoi ? » et, si elle modifie quelque chose, les boutons Appliquer / Ignorer.
-- Le score (0 à 100) est la **somme pondérée** de huit critères : compétences requises, compétences souhaitées, expérience, localisation et télétravail, type de contrat, langues, formation ou diplôme, disponibilité.
+- Le score (0 à 100) est la **somme pondérée** de huit critères : compétences requises, compétences souhaitées, expérience, localisation et télétravail, contrat et disponibilité, langues, formation ou diplôme, proximité avec le poste (doc 08, § 8.3).
 - Données **jamais** utilisées : genre, âge, photo, origine, religion, situation familiale, état de santé. Le forfait du talent n'est pas non plus pris en compte.
 - Bandes : 85 à 100 « Très compatible » ; 70 à 84 « Compatible » ; 50 à 69 « Partiellement compatible » ; moins de 50 « Peu compatible ».
 - Variables : `{score}`, `{band}`, `{weight}`, `{points}`, `{skill}`, `{skills}`, `{courseTitle}`, `{hours}`, `{newScore}`, `{jobTitle}`, `{company}`, `{candidateName}`, `{used}`, `{quota}`, `{plan}`.
@@ -5537,14 +5550,16 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 | `match.criterion.experience.desc` | Vos années d'expérience utiles au poste, stages et engagements compris. |
 | `match.criterion.location.text` | Localisation et télétravail |
 | `match.criterion.location.desc` | La distance au lieu de travail, votre mobilité et le mode de travail accepté. |
-| `match.criterion.contract.text` | Type de contrat |
-| `match.criterion.contract.desc` | Le contrat proposé, comparé à ceux que vous recherchez. |
+| `match.criterion.contract.text` | Contrat et disponibilité |
+| `match.criterion.contract.desc` | Le contrat proposé, comparé à ceux que vous recherchez, et votre date de disponibilité. |
 | `match.criterion.languages.text` | Langues |
 | `match.criterion.languages.desc` | Les langues demandées et le niveau attendu. |
 | `match.criterion.education.text` | Formation et diplôme |
 | `match.criterion.education.desc` | Le niveau et le domaine d'études, ou l'expérience équivalente si l'offre l'accepte. |
 | `match.criterion.availability.text` | Disponibilité |
 | `match.criterion.availability.desc` | Votre date de disponibilité, comparée à la date de début souhaitée. |
+| `match.criterion.semantic.text` | Proximité avec le poste |
+| `match.criterion.semantic.desc` | La ressemblance entre l'ensemble de votre profil et la description du poste, mesurée automatiquement. Ce critère n'est calculé que si le service est actif. |
 | `match.criterion.weight` | Poids : {weight} % |
 | `match.criterion.points` | {points} sur {weight} points |
 | `match.criterion.percent` | {percent} % |
@@ -5553,6 +5568,22 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 | `match.criterion.status.unmet` | Non rempli |
 | `match.criterion.status.unknown` | Information absente |
 | `match.criterion.status.notRequested` | Non demandé par l'offre |
+| `match.criterion.status.notApplicable` | Non pris en compte pour cette offre |
+| `match.detail.unknown` | Information absente de votre profil : ce critère compte pour moitié. |
+| `match.detail.skills` | {met} sur {total} au niveau attendu |
+| `match.detail.experience.none` | Aucune expérience minimale demandée |
+| `match.detail.education.none` | Aucun diplôme exigé par l'offre |
+| `match.detail.education.met` | Votre niveau d'études correspond à celui demandé. |
+| `match.detail.education.below` | Votre niveau d'études est en dessous de celui demandé. |
+| `match.detail.education.certificate` | Une attestation Jumanly sur une compétence du poste compte en plus. |
+| `match.detail.languages` | {met} sur {total, plural, one {# langue demandée} other {# langues demandées}} renseignées dans votre profil |
+| `match.detail.location.relocation` | Poste à {city}, dans votre pays : vous acceptez de déménager. |
+| `match.detail.location.far` | Poste à {city}, loin de votre lieu de vie. |
+| `match.detail.contract.wanted` | Ce contrat fait partie de vos recherches. |
+| `match.detail.contract.notWanted` | Ce contrat ne fait pas partie de vos recherches. |
+| `match.detail.availability.ok` | Vous êtes disponible à temps. |
+| `match.detail.availability.late` | Votre disponibilité arrive après le début souhaité. |
+| `match.detail.semantic` | Ressemblance avec la description du poste : {percent} % |
 
 ---
 
@@ -5596,6 +5627,7 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 | `match.why.talent.knockout.title` | Critères indispensables de l'offre |
 | `match.why.talent.knockout.met` | Vous remplissez tous les critères indispensables. |
 | `match.why.talent.knockout.unmet` | Vous ne remplissez pas : {criteria}. Vous pouvez quand même postuler : le recruteur examine chaque candidature. |
+| `match.why.talent.knockout.toVerify` | À vérifier par le recruteur |
 | `match.why.talent.breakdown` | Détail par critère |
 | `match.why.talent.neverUsed` | Jamais pris en compte : genre, âge, photo, origine, religion, situation familiale, état de santé, ni votre forfait Jumanly. |
 | `match.why.talent.reportError` | Le score vous semble faux ? Signaler une erreur |
@@ -5609,7 +5641,7 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 | Clé | Texte |
 |---|---|
 | `match.why.recruiter.title` | Pourquoi {score} % pour {candidateName} ? |
-| `match.why.recruiter.intro` | Somme pondérée des huit critères de votre offre, selon les poids que vous avez définis. |
+| `match.why.recruiter.intro` | Somme pondérée des huit critères de votre offre, avec les poids affichés pour chacun. |
 | `match.why.recruiter.met.title` | Critères remplis |
 | `match.why.recruiter.partial.title` | Critères partiellement remplis |
 | `match.why.recruiter.missing.title` | Compétences manquantes |
@@ -5621,9 +5653,11 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 | `match.why.recruiter.evidence.declared` | Déclaré par le candidat |
 | `match.why.recruiter.evidence.verified` | Validé par une attestation Jumanly |
 | `match.why.recruiter.evidence.cv` | Extrait du CV |
+| `match.why.recruiter.evidence.absent` | Absente du profil |
 | `match.why.recruiter.knockout.title` | Critères éliminatoires de l'offre |
 | `match.why.recruiter.knockout.unmet` | Non rempli : {criteria}. Le candidat n'est pas écarté : à vous de juger. |
 | `match.why.recruiter.knockout.unknown` | Information absente : {criteria}. Vous pouvez demander une précision au candidat. |
+| `match.why.recruiter.verify.unknown` | Information absente du profil : {criterion} |
 | `match.why.recruiter.weights.text` | Poids utilisés |
 | `match.why.recruiter.weights.edit` | Modifier les poids de l'offre |
 | `match.why.recruiter.weights.recalc` | Les scores de tous les candidats seront recalculés. |
@@ -5705,6 +5739,9 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 | `ai.cvCoach.keywords.hint` | Ajoutez-les seulement si vous maîtrisez vraiment ces compétences. |
 | `ai.cvCoach.keywords.add` | Ajouter {keyword} |
 | `ai.cvCoach.allDone` | Toutes les suggestions ont été traitées. Votre CV est prêt. |
+| `ai.cvCoach.empty` | Ajoutez un titre, un résumé ou une expérience à votre CV pour lancer l'analyse. |
+| `ai.cvCoach.obsolete` | Ce texte a changé depuis l'analyse. Relancez l'analyse pour une suggestion à jour. |
+| `ai.cvCoach.adviceOnly` | Conseil à appliquer vous-même, dans votre profil ou dans ce CV. |
 | `ai.cvCoach.footer` | L'IA conseille, vous décidez. Rien n'est modifié sans votre accord. |
 | `ai.cvCoach.locked.free` | Le coach IA est disponible avec {plan}. Votre CV reste modifiable et exportable gratuitement. |
 | `ai.cvCoach.tips.free.title` | Conseils pour votre CV |
@@ -5817,6 +5854,9 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 | `ai.dispute.result.confirmed` | Après vérification, le score est confirmé. Explication : {reason} |
 | `ai.dispute.applicationUnaffected` | Votre candidature reste examinée pendant la révision. |
 | `ai.dispute.contact` | Une question ? assistant@jumanly.io |
+| `ai.dispute.already` | Une révision est déjà en cours pour ce score. |
+| `ai.dispute.invalid` | Choisissez ce qui vous semble faux et expliquez-le en quelques mots (10 caractères au moins). |
+| `ai.dispute.noScore` | Aucun score à réviser pour cette offre. |
 | `ai.report.suggestion.text` | Signaler cette suggestion |
 | `ai.report.suggestion.reason.wrong` | Information inexacte |
 | `ai.report.suggestion.reason.inappropriate` | Contenu inapproprié |
@@ -5873,10 +5913,10 @@ Règles qui s'appliquent à chaque texte de ce fichier :
 | `matchingPage.s2.list.2` | les compétences souhaitées ; |
 | `matchingPage.s2.list.3` | l'expérience ; |
 | `matchingPage.s2.list.4` | la localisation et le télétravail ; |
-| `matchingPage.s2.list.5` | le type de contrat ; |
+| `matchingPage.s2.list.5` | le type de contrat et la disponibilité ; |
 | `matchingPage.s2.list.6` | les langues ; |
 | `matchingPage.s2.list.7` | la formation ou le diplôme ; |
-| `matchingPage.s2.list.8` | la disponibilité. |
+| `matchingPage.s2.list.8` | la proximité entre votre profil et la description du poste. |
 | `matchingPage.s3.title` | 3. Des poids choisis par le recruteur |
 | `matchingPage.s3.body` | Chaque critère compte pour une part du score. Le recruteur peut donner plus de poids à ce qui compte vraiment pour le poste. Ces poids sont affichés dans l'explication du score. |
 | `matchingPage.s4.title` | 4. Quatre niveaux faciles à lire |
@@ -5973,6 +6013,7 @@ Conventions :
 | `notifications.item.jobApproved` | Votre offre « {jobTitle} » a été validée et publiée |
 | `notifications.item.jobRejected` | Votre offre « {jobTitle} » a été refusée par la modération |
 | `notifications.item.certificateIssued` | Votre attestation « {courseTitle} » est prête |
+| `notifications.item.matchReviewed` | Votre demande de révision du score pour « {jobTitle} » a été traitée |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)
@@ -7497,6 +7538,20 @@ Conventions :
 | `admin.ai.usage.feature.interviewVoice` | Simulations orales |
 | `admin.ai.usage.feature.cvAnalysis` | Analyse de CV (recruteurs) |
 | `admin.ai.usage.feature.jobDraft` | Rédaction d'offres |
+| `admin.ai.usage.feature.cvParse` | Lecture de CV à l'import |
+| `admin.ai.usage.period` | 30 derniers jours |
+| `admin.ai.usage.col.feature` | Fonction |
+| `admin.ai.usage.col.plan` | Forfait |
+| `admin.ai.usage.col.calls` | Appels |
+| `admin.ai.usage.col.failures` | Échecs |
+| `admin.ai.usage.col.tokens` | Jetons (entrée / sortie) |
+| `admin.ai.usage.col.cost` | Coût estimé (USD) |
+| `admin.ai.usage.plan.none` | Sans forfait |
+| `admin.ai.usage.empty` | Aucun appel d'IA sur la période. |
+| `admin.ai.usage.noPrice` | Prix inconnu pour {models} : le coût de ces appels n'est pas estimé. Ajoutez le tarif dans src/server/ai/prices.ts. |
+| `admin.ai.scores.title` | Répartition des scores calculés |
+| `admin.ai.scores.count` | {count, plural, one {# score} other {# scores}} |
+| `admin.ai.scores.empty` | Aucun score calculé pour le moment. |
 | `admin.ai.usage.cost.perFeature` | Coût par crédit, à mettre à jour selon le fournisseur |
 | `admin.ai.weights.title` | Poids par défaut du matching |
 | `admin.ai.weights.subtitle` | Répartition proposée aux recruteurs à la création d'une offre. Total : 100. Les recruteurs peuvent l'ajuster pour leurs offres. |
@@ -7510,6 +7565,11 @@ Conventions :
 | `admin.ai.weights.excluded.body` | Genre, âge, photo, origine, religion, situation familiale, état de santé, forfait du talent. Cette liste ne peut pas être modifiée. |
 | `admin.ai.weights.impact` | Les scores existants seront recalculés. Les recruteurs et les talents verront la nouvelle explication. |
 | `admin.ai.weights.save` | Enregistrer les poids |
+| `admin.ai.weights.version` | Version en vigueur : {version} |
+| `admin.ai.weights.default` | Poids par défaut de la spécification |
+| `admin.ai.weights.note` | Motif du changement |
+| `admin.ai.weights.history` | Versions précédentes |
+| `admin.ai.weights.historyItem` | {version}, du {date} |
 | `admin.ai.weights.saved` | Poids enregistrés. Recalcul des scores en cours. |
 | `admin.ai.disputes.title` | Révisions humaines demandées |
 | `admin.ai.disputes.col.talent` | Talent |
@@ -7521,6 +7581,12 @@ Conventions :
 | `admin.ai.disputes.confirm` | Confirmer le score et expliquer |
 | `admin.ai.disputes.response` | Réponse envoyée au talent |
 | `admin.ai.disputes.resolved` | Révision clôturée. Le talent a été prévenu par e-mail. |
+| `admin.ai.disputes.empty` | Aucune révision en attente. |
+| `admin.ai.disputes.take` | Prendre en charge |
+| `admin.ai.disputes.scoreBefore` | Score contesté : {score} % |
+| `admin.ai.disputes.recruiterNotified` | Le talent souhaite que le recruteur soit prévenu. |
+| `admin.ai.disputes.responseHint` | Obligatoire pour confirmer le score : expliquez au talent ce qui a été vérifié. |
+| `admin.ai.disputes.responseMissing` | Écrivez une réponse au talent pour confirmer le score. |
 | `admin.ai.audit.title` | Journal d'audit IA |
 | `admin.ai.audit.desc` | Chaque calcul de score conserve les poids utilisés, les critères évalués et la version du modèle, pour permettre une explication et une révision. |
 | `admin.ai.audit.filter` | Filtrer par utilisateur, offre ou fonction |

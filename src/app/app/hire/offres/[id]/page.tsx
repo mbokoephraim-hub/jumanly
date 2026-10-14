@@ -3,11 +3,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { JobStatusBadge } from "@/components/hire/job-status";
-import { Alert, Badge, Button, ButtonLink, EmptyState } from "@/components/ui";
+import { Alert, Badge, Button, ButtonLink, EmptyState, ScoreBadge } from "@/components/ui";
 import { moveApplicationAction, publishJobAction } from "@/server/actions/hire";
 import { db } from "@/server/db";
+import { level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
+import { applicationMatches } from "@/server/matching/service";
 import { getPipeline, HireError, hirePermissions } from "@/server/services/hire";
+import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.pipeline");
@@ -16,7 +19,9 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * Pipeline of a job (partie 07 § 4): one column per stage. Each card moves with a small form
- * (works with the keyboard and without JavaScript); rejection opens the decision form.
+ * (works with the keyboard and without JavaScript); rejection opens the decision form. With
+ * `hire.matching.level`, each card shows the score frozen at application and the columns can be
+ * sorted by compatibility; without it, applications are listed by date (§ 8.6).
  */
 export default async function PipelinePage({
   params,
@@ -30,7 +35,28 @@ export default async function PipelinePage({
     throw error;
   });
   const permissions = hirePermissions(ctx.role);
-  const back = `/app/hire/offres/${job.id}`;
+  const matchingLevel = await level(
+    db,
+    { type: "organization", id: ctx.organizationId },
+    "hire.matching.level",
+  );
+  const withMatching = matchingLevel !== "none";
+  const matches = withMatching
+    ? await applicationMatches(db, applications)
+    : new Map<string, never>();
+  const scoreOf = (id: string) => {
+    const match = matches.get(id);
+    return match && match !== "disabled" ? match : null;
+  };
+  const byScore = withMatching && query.tri === "score";
+  if (byScore)
+    applications.sort((a, b) => (scoreOf(b.id)?.score ?? -1) - (scoreOf(a.id)?.score ?? -1));
+  const lockedPlan = withMatching
+    ? null
+    : (cheapestPlanWhere(await listPublicPlans(db), ["rh", "company"], (plan) =>
+        ["suggestions", "explainable"].includes(levelOf(plan, "hire.matching.level")),
+      )?.name ?? null);
+  const back = `/app/hire/offres/${job.id}${byScore ? "?tri=score" : ""}`;
 
   return (
     <div className="flex flex-col gap-6">
@@ -77,6 +103,35 @@ export default async function PipelinePage({
         </form>
       )}
       {!permissions.manage && <Alert title={t("pipeline.permission.readOnly")} />}
+      {withMatching && applications.length > 0 && (
+        <div className="flex flex-col gap-2">
+          <p className="text-sm text-ardoise">{t("pipeline.aiNotice")}</p>
+          <nav
+            className="flex flex-wrap gap-4 text-sm"
+            aria-label={t("pipeline.filter.score.text")}
+          >
+            <Link
+              href={`/app/hire/offres/${job.id}?tri=score`}
+              aria-current={byScore ? "page" : undefined}
+              className="font-medium underline aria-[current=page]:no-underline"
+            >
+              {t("pipeline.stage.sortByScore")}
+            </Link>
+            <Link
+              href={`/app/hire/offres/${job.id}`}
+              aria-current={byScore ? undefined : "page"}
+              className="font-medium underline aria-[current=page]:no-underline"
+            >
+              {t("pipeline.stage.sortByDate")}
+            </Link>
+          </nav>
+        </div>
+      )}
+      {lockedPlan && applications.length > 0 && (
+        <p className="text-sm text-ardoise">
+          {t("pipeline.matching.locked", { plan: lockedPlan })}
+        </p>
+      )}
 
       {applications.length === 0 ? (
         <EmptyState
@@ -129,6 +184,14 @@ export default async function PipelinePage({
                                 .filter(Boolean)
                                 .join(" · ")}
                             </p>
+                            {scoreOf(application.id) && (
+                              <span className="self-start">
+                                <ScoreBadge
+                                  score={scoreOf(application.id)!.score}
+                                  band={scoreOf(application.id)!.band}
+                                />
+                              </span>
+                            )}
                             {!application.viewedAt && application.status === "active" && (
                               <Badge tone="new" className="self-start">
                                 {t("jobs.row.new", { count: 1 })}

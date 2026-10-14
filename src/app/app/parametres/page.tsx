@@ -352,7 +352,7 @@ async function PrivacyTab({ user, params }: { user: CurrentUser; params: Params 
   const t = await getTranslations();
   const profile = await db.talentProfile.findUnique({
     where: { userId: user.id },
-    select: { visibility: true },
+    select: { visibility: true, matchingEnabled: true },
   });
   return (
     <div className="flex flex-col gap-6">
@@ -378,9 +378,17 @@ async function PrivacyTab({ user, params }: { user: CurrentUser; params: Params 
               value="on"
               defaultChecked={Boolean(user.aiConsentAt)}
               label={t("settings.privacy.ai.desc")}
+              hint={t("settings.privacy.ai.hint")}
+            />
+            <Checkbox
+              id="matching"
+              name="matching"
+              value="on"
+              defaultChecked={profile?.matchingEnabled ?? true}
+              label={t("settings.privacy.ai.matching.text")}
               hint={t("settings.privacy.ai.matching.hint")}
             />
-            <Link href="/confidentialite" className="text-sm underline">
+            <Link href="/comment-fonctionne-le-matching" className="text-sm underline">
               {t("settings.privacy.ai.learnMore")}
             </Link>
           </fieldset>

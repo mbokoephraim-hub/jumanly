@@ -241,4 +241,29 @@ export async function consume(
   return usage(db, subject, key, now);
 }
 
+/**
+ * Gives back what `consume` took when the work it paid for did not happen (an AI call that
+ * failed: « Aucun crédit n'a été utilisé »). Never below zero.
+ */
+export async function release(
+  db: PrismaClient,
+  subject: Subject,
+  key: string,
+  amount = 1,
+  now = new Date(),
+) {
+  const plan = await resolvePlan(db, subject, now);
+  if (!plan) return;
+  await db.usageCounter.updateMany({
+    where: {
+      subjectType: subject.type,
+      subjectId: subject.id,
+      key,
+      periodStart: plan.periodStart,
+      used: { gte: amount },
+    },
+    data: { used: { decrement: amount } },
+  });
+}
+
 export { addMonths, GRACE_DAYS };

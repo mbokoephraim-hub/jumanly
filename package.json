@@ -30,6 +30,7 @@
     "admin:promote": "tsx scripts/admin-promote.ts"
   },
   "dependencies": {
+    "@anthropic-ai/sdk": "^0.133.0",
     "@prisma/adapter-pg": "7.10.0",
     "@prisma/client": "7.10.0",
     "@react-email/components": "1.0.12",

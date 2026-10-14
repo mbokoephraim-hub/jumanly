@@ -14,6 +14,7 @@ export const notificationTypes = [
   "jobApproved",
   "jobRejected",
   "certificateIssued",
+  "matchReviewed",
 ] as const;
 export type NotificationType = (typeof notificationTypes)[number];
 

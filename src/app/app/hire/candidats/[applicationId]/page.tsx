@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
+import { RecruiterWhy } from "@/components/matching/recruiter-why";
 import {
   Alert,
   Badge,
@@ -19,10 +20,13 @@ import {
   requestDocumentAction,
 } from "@/server/actions/hire";
 import { db } from "@/server/db";
+import { level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
+import { applicationMatches } from "@/server/matching/service";
 import { ensureApplicationConversation } from "@/server/services/connect";
 import { HireError, hirePermissions, recordView, rejectReasons } from "@/server/services/hire";
 import { parseCriteria } from "@/server/services/jobs";
+import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.application");
@@ -72,6 +76,29 @@ export default async function CandidatePage({
   const memberName = (id: string | null) => (id ? (actors.get(id) ?? "") : "");
   const notes = application.events.filter((event) => event.type === "note");
   const criteria = parseCriteria(job.knockoutCriteria);
+  const matchingLevel = await level(
+    db,
+    { type: "organization", id: ctx.organizationId },
+    "hire.matching.level",
+  );
+  const [match, plans, dispute] = await Promise.all([
+    matchingLevel === "none"
+      ? null
+      : applicationMatches(db, [application]).then((map) => map.get(application.id) ?? null),
+    listPublicPlans(db),
+    db.matchDispute.findFirst({
+      where: {
+        applicationId: application.id,
+        notifyRecruiter: true,
+        status: { in: ["open", "in_review"] },
+      },
+      select: { id: true },
+    }),
+  ]);
+  const planWithMatching = (levels: string[]) =>
+    cheapestPlanWhere(plans, ["rh", "company"], (plan) =>
+      levels.includes(levelOf(plan, "hire.matching.level")),
+    )?.name ?? null;
   const stamp = (date: Date) =>
     t("history.timestamp", {
       date,
@@ -289,6 +316,25 @@ export default async function CandidatePage({
         </div>
 
         <div className="flex flex-col gap-4">
+          {match === "disabled" ? (
+            <p className="rounded-card bg-blanc p-6 text-[15px]">
+              {t("application.score.disabled")}
+            </p>
+          ) : match && (matchingLevel === "suggestions" || matchingLevel === "explainable") ? (
+            <RecruiterWhy
+              explanation={match}
+              candidateName={person.name}
+              matchingLevel={matchingLevel}
+              explainPlan={planWithMatching(["explainable"])}
+              disputed={Boolean(dispute)}
+            />
+          ) : matchingLevel === "none" && planWithMatching(["suggestions", "explainable"]) ? (
+            <p className="rounded-card bg-blanc p-6 text-sm text-ardoise">
+              {t("pipeline.matching.locked", {
+                plan: planWithMatching(["suggestions", "explainable"]) ?? "",
+              })}
+            </p>
+          ) : null}
           {permissions.manage && application.status !== "withdrawn" && (
             <section
               aria-labelledby="actions"

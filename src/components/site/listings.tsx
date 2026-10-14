@@ -1,6 +1,6 @@
 import type { ReactNode } from "react";
 import { useTranslations } from "next-intl";
-import { CourseCard, JobCard } from "@/components/ui";
+import { CourseCard, JobCard, type MatchBand } from "@/components/ui";
 import { formatDate, formatRelativeDays } from "@/lib/dates";
 import { durationParts } from "@/lib/format";
 import type { CourseSummary } from "@/server/services/courses";
@@ -39,7 +39,17 @@ export function CourseListing({
 
 const NEW_DAYS = 3;
 
-export function JobListing({ job, now, href }: { job: JobSummary; now: Date; href?: string }) {
+export function JobListing({
+  job,
+  now,
+  href,
+  match,
+}: {
+  job: JobSummary;
+  now: Date;
+  href?: string;
+  match?: { score: number; band: MatchBand };
+}) {
   const t = useTranslations();
   const isNew =
     job.publishedAt !== null && now.getTime() - job.publishedAt.getTime() < NEW_DAYS * 86_400_000;
@@ -56,6 +66,7 @@ export function JobListing({ job, now, href }: { job: JobSummary; now: Date; hre
       published={job.publishedAt ? formatRelativeDays(job.publishedAt, now) : undefined}
       verified={job.organization.verifiedAt !== null}
       isNew={isNew}
+      match={match}
     />
   );
 }
