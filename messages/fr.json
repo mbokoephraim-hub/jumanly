@@ -2618,7 +2618,10 @@
             "text": "La formation « {courseTitle} » ({hours} h) ferait passer votre score à {newScore} %.",
             "cta": "Voir la formation"
           },
-          "publicHint": "Connectez-vous pour voir votre compatibilité avec cette offre."
+          "publicHint": "Connectez-vous pour voir votre compatibilité avec cette offre.",
+          "see": "Voir le détail du calcul",
+          "optedOutCta": "Réactiver dans mes paramètres",
+          "incompleteCta": "Ajouter mes compétences"
         },
         "recruiter": {
           "text": "Recruteur",
@@ -2632,7 +2635,6 @@
         },
         "similar": "Offres similaires",
         "seo": "{jobTitle} · Jumanly",
-        "scoreLater": "Le calcul de compatibilité arrive bientôt. Vous pouvez déjà postuler.",
         "backToJobs": "Toutes les offres"
       },
       "apply": {
@@ -4037,6 +4039,7 @@
       "ai": {
         "text": "Utilisation de l'IA",
         "desc": "Autoriser Jumanly Intelligence à analyser mon profil et mes documents pour me faire des suggestions.",
+        "hint": "Coach CV, diagnostic personnalisé, plan de progression et analyse de vos documents. Sans cette autorisation, vous pouvez toujours postuler.",
         "matching": {
           "text": "Calculer ma compatibilité avec les offres",
           "hint": "Désactivé, vous pouvez toujours postuler. Le recruteur verra votre candidature sans score."
@@ -6722,7 +6725,10 @@
         "confirmed": "Après vérification, le score est confirmé. Explication : {reason}"
       },
       "applicationUnaffected": "Votre candidature reste examinée pendant la révision.",
-      "contact": "Une question ? assistant@jumanly.io"
+      "contact": "Une question ? assistant@jumanly.io",
+      "already": "Une révision est déjà en cours pour ce score.",
+      "invalid": "Choisissez ce qui vous semble faux et expliquez-le en quelques mots (10 caractères au moins).",
+      "noScore": "Aucun score à réviser pour cette offre."
     },
     "report": {
       "suggestion": {
@@ -6814,8 +6820,8 @@
         "desc": "La distance au lieu de travail, votre mobilité et le mode de travail accepté."
       },
       "contract": {
-        "text": "Type de contrat",
-        "desc": "Le contrat proposé, comparé à ceux que vous recherchez."
+        "text": "Contrat et disponibilité",
+        "desc": "Le contrat proposé, comparé à ceux que vous recherchez, et votre date de disponibilité."
       },
       "languages": {
         "text": "Langues",
@@ -6829,6 +6835,10 @@
         "text": "Disponibilité",
         "desc": "Votre date de disponibilité, comparée à la date de début souhaitée."
       },
+      "semantic": {
+        "text": "Proximité avec le poste",
+        "desc": "La ressemblance entre l'ensemble de votre profil et la description du poste, mesurée automatiquement. Ce critère n'est calculé que si le service est actif."
+      },
       "weight": "Poids : {weight} %",
       "points": "{points} sur {weight} points",
       "percent": "{percent} %",
@@ -6837,8 +6847,36 @@
         "partial": "Partiellement rempli",
         "unmet": "Non rempli",
         "unknown": "Information absente",
-        "notRequested": "Non demandé par l'offre"
+        "notRequested": "Non demandé par l'offre",
+        "notApplicable": "Non pris en compte pour cette offre"
       }
+    },
+    "detail": {
+      "unknown": "Information absente de votre profil : ce critère compte pour moitié.",
+      "skills": "{met} sur {total} au niveau attendu",
+      "experience": {
+        "none": "Aucune expérience minimale demandée"
+      },
+      "education": {
+        "none": "Aucun diplôme exigé par l'offre",
+        "met": "Votre niveau d'études correspond à celui demandé.",
+        "below": "Votre niveau d'études est en dessous de celui demandé.",
+        "certificate": "Une attestation Jumanly sur une compétence du poste compte en plus."
+      },
+      "languages": "{met} sur {total, plural, one {# langue demandée} other {# langues demandées}} renseignées dans votre profil",
+      "location": {
+        "relocation": "Poste à {city}, dans votre pays : vous acceptez de déménager.",
+        "far": "Poste à {city}, loin de votre lieu de vie."
+      },
+      "contract": {
+        "wanted": "Ce contrat fait partie de vos recherches.",
+        "notWanted": "Ce contrat ne fait pas partie de vos recherches."
+      },
+      "availability": {
+        "ok": "Vous êtes disponible à temps.",
+        "late": "Votre disponibilité arrive après le début souhaité."
+      },
+      "semantic": "Ressemblance avec la description du poste : {percent} %"
     },
     "why": {
       "talent": {
@@ -6888,7 +6926,8 @@
         "knockout": {
           "title": "Critères indispensables de l'offre",
           "met": "Vous remplissez tous les critères indispensables.",
-          "unmet": "Vous ne remplissez pas : {criteria}. Vous pouvez quand même postuler : le recruteur examine chaque candidature."
+          "unmet": "Vous ne remplissez pas : {criteria}. Vous pouvez quand même postuler : le recruteur examine chaque candidature.",
+          "toVerify": "À vérifier par le recruteur"
         },
         "breakdown": "Détail par critère",
         "neverUsed": "Jamais pris en compte : genre, âge, photo, origine, religion, situation familiale, état de santé, ni votre forfait Jumanly.",
@@ -6898,7 +6937,7 @@
       },
       "recruiter": {
         "title": "Pourquoi {score} % pour {candidateName} ?",
-        "intro": "Somme pondérée des huit critères de votre offre, selon les poids que vous avez définis.",
+        "intro": "Somme pondérée des huit critères de votre offre, avec les poids affichés pour chacun.",
         "met": {
           "title": "Critères remplis"
         },
@@ -6918,12 +6957,16 @@
           "text": "Éléments du profil utilisés",
           "declared": "Déclaré par le candidat",
           "verified": "Validé par une attestation Jumanly",
-          "cv": "Extrait du CV"
+          "cv": "Extrait du CV",
+          "absent": "Absente du profil"
         },
         "knockout": {
           "title": "Critères éliminatoires de l'offre",
           "unmet": "Non rempli : {criteria}. Le candidat n'est pas écarté : à vous de juger.",
           "unknown": "Information absente : {criteria}. Vous pouvez demander une précision au candidat."
+        },
+        "verify": {
+          "unknown": "Information absente du profil : {criterion}"
         },
         "weights": {
           "text": "Poids utilisés",
@@ -6960,10 +7003,10 @@
         "2": "les compétences souhaitées ;",
         "3": "l'expérience ;",
         "4": "la localisation et le télétravail ;",
-        "5": "le type de contrat ;",
+        "5": "le type de contrat et la disponibilité ;",
         "6": "les langues ;",
         "7": "la formation ou le diplôme ;",
-        "8": "la disponibilité."
+        "8": "la proximité entre votre profil et la description du poste."
       }
     },
     "s3": {
@@ -7065,6 +7108,7 @@
       "jobApproved": "Votre offre « {jobTitle} » a été validée et publiée",
       "jobRejected": "Votre offre « {jobTitle} » a été refusée par la modération",
       "certificateIssued": "Votre attestation « {courseTitle} » est prête",
+      "matchReviewed": "Votre demande de révision du score pour « {jobTitle} » a été traitée",
       "unread": "Non lue"
     }
   },

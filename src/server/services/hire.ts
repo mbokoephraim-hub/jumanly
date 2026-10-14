@@ -350,6 +350,7 @@ export async function listOrgJobs(db: PrismaClient, ctx: HireContext) {
 const candidateSelect = {
   id: true,
   headline: true,
+  matchingEnabled: true,
   user: {
     select: { id: true, name: true, firstName: true, lastName: true, city: true, country: true },
   },

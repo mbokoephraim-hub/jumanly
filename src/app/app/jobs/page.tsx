@@ -8,6 +8,7 @@ import { Badge, Button, ButtonLink, EmptyState, SearchField, Select } from "@/co
 import { toggleSaveAction } from "@/server/actions/jobs";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { matchesForUser } from "@/server/matching/service";
 import { getJobSearch } from "@/server/queries/public";
 import { isClosedStatus, listApplications, talentStatus } from "@/server/services/applications";
 import {
@@ -26,8 +27,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * Jobs (partie 07 § 5): the public search, with what only a signed-in talent has: offers saved,
- * offers already applied to, and the follow-up of applications. The compatibility score arrives
- * with E6; applying is free and never limited.
+ * offers already applied to, the compatibility score of each offer (its « Pourquoi ? » is on the
+ * job page) and the follow-up of applications. Applying is free and never limited.
  */
 export default async function TalentJobsPage({ searchParams }: PageProps<"/app/jobs">) {
   const params = await searchParams;
@@ -38,12 +39,17 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
   const { page: _page, ...current } = filters;
   void _page;
   const hasFilters = Object.keys(current).some((key) => key !== "tri");
-  const [applications, saved] = await Promise.all([
+  const [applications, saved, matches] = await Promise.all([
     listApplications(db, user.id),
     db.savedJob.findMany({
       where: { userId: user.id },
       select: { job: { select: { slug: true } } },
     }),
+    matchesForUser(
+      db,
+      user.id,
+      result.jobs.map((job) => job.id),
+    ),
   ]);
   const applied = new Set(applications.map((application) => application.job.slug));
   const savedSlugs = new Set(saved.map((item) => item.job.slug));
@@ -153,9 +159,15 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
             <ul className="grid gap-4 md:grid-cols-2">
               {result.jobs.map((job) => {
                 const isSaved = savedSlugs.has(job.slug);
+                const match = matches.get(job.id);
                 return (
                   <li key={job.slug} className="flex flex-col gap-2 [&>article]:flex-1">
-                    <JobListing job={job} now={result.now} href={`/app/jobs/${job.slug}`} />
+                    <JobListing
+                      job={job}
+                      now={result.now}
+                      href={`/app/jobs/${job.slug}`}
+                      match={match?.state === "ok" ? match.explanation : undefined}
+                    />
                     <div className="flex flex-wrap items-center justify-between gap-2 px-1">
                       {applied.has(job.slug) ? (
                         <Badge tone="success">{t("talent.jobs.card.applied")}</Badge>

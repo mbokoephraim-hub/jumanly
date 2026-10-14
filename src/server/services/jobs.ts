@@ -98,6 +98,7 @@ export function jobOrderBy(sort: JobFilters["tri"]): Prisma.JobOrderByWithRelati
 }
 
 const cardSelect = {
+  id: true,
   slug: true,
   title: true,
   contractType: true,

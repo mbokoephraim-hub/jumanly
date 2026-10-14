@@ -123,3 +123,15 @@ export function cheapestPlanWithLimit(
     .sort((a, b) => (a.priceCents ?? Infinity) - (b.priceCents ?? Infinity));
   return candidates[0] ?? null;
 }
+
+/** Cheapest plan of the given families that passes a test on its entitlements. */
+export function cheapestPlanWhere(
+  plans: PublicPlan[],
+  families: PlanFamily[],
+  test: (plan: PublicPlan) => boolean,
+): PublicPlan | null {
+  const candidates = plans
+    .filter((plan) => families.includes(plan.family) && test(plan))
+    .sort((a, b) => (a.priceCents ?? Infinity) - (b.priceCents ?? Infinity));
+  return candidates[0] ?? null;
+}

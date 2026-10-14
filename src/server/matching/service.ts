@@ -16,7 +16,8 @@ import {
   type JobRow,
   type ProfileRow,
 } from "./normalize";
-import { DEFAULT_WEIGHTS, scoreMatch } from "./score";
+import { notify } from "@/server/services/notifications";
+import { DEFAULT_WEIGHTS, scoreMatch, withSkill } from "./score";
 import { criterionKeys, type CriterionKey, type MatchExplanation, type Weights } from "./types";
 
 // ─── Weights ─────────────────────────────────────────────────────────────────
@@ -245,6 +246,41 @@ export async function freezeApplicationMatch(
   });
 }
 
+/**
+ * Frozen scores of applications for the recruiting team. An application sent before the
+ * calculation existed is frozen the first time it is seen. A talent who switched the calculation
+ * off has no score anywhere (§ 8.6, « Paramètres > Confidentialité »).
+ */
+export async function applicationMatches(
+  db: PrismaClient,
+  applications: {
+    id: string;
+    matchScore: number | null;
+    matchExplanation: Prisma.JsonValue | null;
+    profile: { matchingEnabled: boolean };
+  }[],
+  now = new Date(),
+) {
+  const result = new Map<string, MatchExplanation | "disabled">();
+  for (const application of applications) {
+    if (!application.profile.matchingEnabled) {
+      result.set(application.id, "disabled");
+      continue;
+    }
+    let explanation = parseExplanation(application.matchExplanation);
+    if (!explanation) {
+      await freezeApplicationMatch(db, application.id, now);
+      const row = await db.application.findUnique({
+        where: { id: application.id },
+        select: { matchExplanation: true },
+      });
+      explanation = parseExplanation(row?.matchExplanation);
+    }
+    if (explanation) result.set(application.id, explanation);
+  }
+  return result;
+}
+
 /** Explanation stored as JSON (frozen on an application), checked before use. */
 export function parseExplanation(
   value: Prisma.JsonValue | null | undefined,
@@ -359,4 +395,173 @@ export async function recommendedCourses(
     .sort((a, b) => Number(b.open) - Number(a.open) || b.demand - a.demand)
     .slice(0, options.take ?? 3)
     .map((entry) => ({ ...entry, percent: Math.round((100 * entry.demand) / top.length) }));
+}
+
+// ─── Closing the gap (« Pourquoi ? » côté talent) ────────────────────────────
+
+/**
+ * Missing skills of one talent for one job, each with the Jumanly courses that teach it and the
+ * score the talent would reach once the skill is validated (§ 8.4: « ferait passer à N % »).
+ */
+export async function gapCourses(
+  db: PrismaClient,
+  userId: string,
+  jobId: string,
+  now = new Date(),
+) {
+  const [profile, job] = await Promise.all([
+    loadProfile(db, userId),
+    db.job.findUnique({ where: { id: jobId }, select: jobSelect }),
+  ]);
+  if (!profile || !job || !profile.matchingEnabled || profile.skills.length === 0) return [];
+  const [weights, profileVectors, jobVectors, courses] = await Promise.all([
+    activeWeights(db, now),
+    embeddingsFor(db, "profile", [{ id: profile.id, text: profileText(profile) }]),
+    embeddingsFor(db, "job", [{ id: job.id, text: jobText(job) }]),
+    coursesBySkill(
+      db,
+      job.skills.map((skill) => skill.skillId),
+    ),
+  ]);
+  const normalizedProfile = normalizeProfile(profile, now, profileVectors.get(profile.id) ?? null);
+  const normalizedJob = normalizeJob(job, jobVectors.get(job.id) ?? null);
+  const base = scoreMatch(normalizedProfile, normalizedJob, weights, {
+    now,
+    coursesBySkill: courses,
+  });
+  const rows = await db.course.findMany({
+    where: { slug: { in: [...new Set(base.missingSkills.flatMap((item) => item.courses))] } },
+    select: { slug: true, title: true, durationMinutes: true, requiredLevel: true },
+  });
+  return base.missingSkills.map((missing) => {
+    const target = normalizedJob.skills.find((skill) => skill.skillId === missing.skillId);
+    const newScore = scoreMatch(
+      withSkill(normalizedProfile, {
+        skillId: missing.skillId,
+        name: missing.skill,
+        level: target?.minLevel ?? 2,
+      }),
+      normalizedJob,
+      weights,
+      { now },
+    ).score;
+    return {
+      ...missing,
+      newScore,
+      courses: missing.courses.flatMap((slug) => rows.filter((row) => row.slug === slug)),
+    };
+  });
+}
+
+// ─── Disputes and human review (§ 8.8) ───────────────────────────────────────
+
+export const disputeReasons = [
+  "skill",
+  "experience",
+  "education",
+  "language",
+  "location",
+  "other",
+] as const;
+
+export const disputeSchema = z.object({
+  job: z.string().min(1).max(200),
+  reason: z.enum(disputeReasons),
+  details: z.string().trim().min(10).max(2000),
+  notifyRecruiter: z.boolean(),
+});
+
+export type DisputeResult = "created" | "already" | "noScore" | "notFound";
+
+/** A talent contests a score: the score of the moment is kept, a person reviews it. */
+export async function createDispute(
+  db: PrismaClient,
+  userId: string,
+  input: z.infer<typeof disputeSchema>,
+  now = new Date(),
+): Promise<DisputeResult> {
+  const job = await db.job.findUnique({ where: { slug: input.job }, select: { id: true } });
+  if (!job) return "notFound";
+  const pending = await db.matchDispute.findFirst({
+    where: { userId, jobId: job.id, status: { in: ["open", "in_review"] } },
+  });
+  if (pending) return "already";
+  const match = await matchForUser(db, userId, job.id, now);
+  if (match.state !== "ok") return "noScore";
+  const application = await db.application.findFirst({
+    where: { jobId: job.id, profile: { userId } },
+    select: { id: true },
+  });
+  await db.matchDispute.create({
+    data: {
+      userId,
+      jobId: job.id,
+      applicationId: application?.id ?? null,
+      reason: input.reason,
+      details: input.details,
+      notifyRecruiter: input.notifyRecruiter && Boolean(application),
+      scoreBefore: match.explanation.score,
+    },
+  });
+  return "created";
+}
+
+export const disputeResolutionSchema = z.object({
+  id: z.string().min(1),
+  outcome: z.enum(["in_review", "corrected", "confirmed"]),
+  resolution: z.string().trim().max(2000),
+});
+
+/**
+ * An administrator handles a dispute. « Corrigé » recomputes the score (after the data or the
+ * weights were fixed) and freezes it again on the application, so the recruiter sees it.
+ */
+export async function resolveDispute(
+  db: PrismaClient,
+  actorId: string,
+  input: z.infer<typeof disputeResolutionSchema>,
+  now = new Date(),
+) {
+  const dispute = await db.matchDispute.findUnique({ where: { id: input.id } });
+  if (!dispute || dispute.status === "corrected" || dispute.status === "confirmed") return null;
+  if (input.outcome === "in_review") {
+    return db.matchDispute.update({ where: { id: dispute.id }, data: { status: "in_review" } });
+  }
+  let scoreAfter: number | null = null;
+  if (input.outcome === "corrected") {
+    const match = await matchForUser(db, dispute.userId, dispute.jobId, now);
+    if (match.state === "ok") scoreAfter = match.explanation.score;
+    if (dispute.applicationId) await freezeApplicationMatch(db, dispute.applicationId, now);
+  }
+  const updated = await db.matchDispute.update({
+    where: { id: dispute.id },
+    data: {
+      status: input.outcome,
+      resolution: input.resolution || null,
+      scoreAfter,
+      resolvedById: actorId,
+      resolvedAt: now,
+    },
+  });
+  const job = await db.job.findUnique({
+    where: { id: dispute.jobId },
+    select: { slug: true, title: true },
+  });
+  if (job) {
+    await notify(db, {
+      userIds: [dispute.userId],
+      type: "matchReviewed",
+      payload: { jobTitle: job.title },
+      href: `/app/jobs/${job.slug}#compatibilite`,
+    });
+  }
+  await db.auditLog.create({
+    data: {
+      actorId,
+      action: `match.dispute.${input.outcome}`,
+      targetType: "matchDispute",
+      targetId: dispute.id,
+    },
+  });
+  return updated;
 }
