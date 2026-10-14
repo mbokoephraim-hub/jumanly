@@ -1,5 +1,6 @@
 @import "tailwindcss";
 @import "../styles/tokens.css";
+@import "../styles/motion.css";
 
 /*
  * Police servie par l'application, et teintes de texte foncées pour l'accessibilité :

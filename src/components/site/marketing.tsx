@@ -11,12 +11,15 @@ import { cx } from "@/lib/cx";
  * on mobile, 28 px cards, numbered steps, an FAQ accordion and the Lime closing band.
  */
 
-export type SectionTone = "creme" | "blanc" | "sapin";
+export type SectionTone = "creme" | "blanc" | "sapin" | "lime" | "profondeur" | "ia";
 
 const sectionTones: Record<SectionTone, string> = {
   creme: "bg-creme text-sapin",
   blanc: "bg-blanc text-sapin",
   sapin: "bg-sapin text-blanc",
+  lime: "bg-lime-clair text-sapin",
+  profondeur: "bg-gradient-depth text-blanc",
+  ia: "bg-gradient-ai text-blanc",
 };
 
 /** 1200 px container with the 16 px mobile margin (`.wrap` of the mockups). */
@@ -73,6 +76,8 @@ export function MarketingSection({
   className,
   innerClassName,
   background,
+  scene = false,
+  spotlight = false,
   children,
 }: {
   tone?: SectionTone;
@@ -82,11 +87,17 @@ export function MarketingSection({
   innerClassName?: string;
   /** Pattern or shape behind the content. */
   background?: ReactNode;
+  /** Animated section: its animations pause off screen (src/styles/motion.css). */
+  scene?: boolean;
+  /** A light follows the pointer (`.jm-spotlight` in the background). */
+  spotlight?: boolean;
   children: ReactNode;
 }) {
   return (
     <section
       id={id}
+      data-scene={scene ? "" : undefined}
+      data-spotlight={spotlight ? "" : undefined}
       className={cx("relative overflow-hidden py-14 lg:py-24", sectionTones[tone], className)}
     >
       {background}
@@ -260,6 +271,7 @@ export function LimeCtaBand({
   actions,
   character,
   spacedTop = false,
+  animated = false,
 }: {
   title: string;
   text?: string;
@@ -267,11 +279,19 @@ export function LimeCtaBand({
   character: { name: CharacterName; pose: Pose; height: number; mobileHeight: number };
   /** Top padding, when the section above is not Crème. */
   spacedTop?: boolean;
+  /** Home page: light signature gradient that flows, character in motion. */
+  animated?: boolean;
 }) {
   return (
     <section className={cx("bg-creme pb-14 lg:pb-24", spacedTop && "pt-14 lg:pt-24")}>
       <div className={wrap}>
-        <div className="relative flex flex-col gap-6 overflow-hidden rounded-[28px] bg-lime px-6 pt-8 text-sapin lg:min-h-[400px] lg:flex-row lg:items-center lg:rounded-[40px] lg:px-[72px] lg:py-16">
+        <div
+          className={cx(
+            "relative flex flex-col gap-6 overflow-hidden rounded-[28px] bg-lime px-6 pt-8 text-sapin lg:min-h-[400px] lg:flex-row lg:items-center lg:rounded-[40px] lg:px-[72px] lg:py-16",
+            animated && "jm-flow",
+          )}
+          style={animated ? { backgroundImage: signatureLight } : undefined}
+        >
           <Pattern name="motif-trajectoires-lime" opacity={0.5} />
           <div className="relative flex max-w-[640px] flex-col gap-5">
             <h2 className="text-[28px] leading-[34px] font-semibold tracking-[-0.025em] lg:text-5xl lg:leading-[54px]">
@@ -280,7 +300,12 @@ export function LimeCtaBand({
             {text && <p className="text-lg leading-7">{text}</p>}
             <div className="flex flex-col gap-3 lg:flex-row">{actions}</div>
           </div>
-          <div className="relative -mr-2.5 self-end lg:absolute lg:right-[60px] lg:bottom-0 lg:mr-0">
+          <div
+            className={cx(
+              "relative -mr-2.5 self-end lg:absolute lg:right-[60px] lg:bottom-0 lg:mr-0",
+              animated && "jm-breathe",
+            )}
+          >
             <span className="lg:hidden">
               <Character
                 name={character.name}
@@ -297,6 +322,13 @@ export function LimeCtaBand({
     </section>
   );
 }
+
+/**
+ * Light variant of the signature gradient, for surfaces carrying Sapin text: every stop keeps
+ * Sapin above the AA contrast ratio (the dark #1E9A64 end of the full gradient would not).
+ */
+export const signatureLight =
+  "linear-gradient(120deg, #D9FA72 0%, #A6F26B 30%, #7DE36B 55%, #E3F67C 80%, #D9FA72 100%)";
 
 /** Outlined Sapin pill used on Lime (`b-ghost` with a Sapin ring). */
 export const outlineOnLime =
