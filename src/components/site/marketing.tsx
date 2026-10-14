@@ -1,5 +1,5 @@
 /* eslint-disable @next/next/no-img-element -- brand patterns and product previews are static files already sized */
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { Character, type CharacterName, type Pose } from "@/components/brand";
 import { Icon, type IconName } from "@/components/brand/icon";
@@ -333,3 +333,104 @@ export const signatureLight =
 /** Outlined Sapin pill used on Lime (`b-ghost` with a Sapin ring). */
 export const outlineOnLime =
   "bg-transparent text-sapin ring-[1.5px] ring-sapin ring-inset hover:bg-sapin/8";
+
+/* Immersive layer (src/styles/motion.css, docs/decisions/2026-10-14-accueil-immersive.md). */
+
+/** Cascade delay of the n-th element (`--i` in src/styles/motion.css). */
+export function stagger(index: number) {
+  return { "--i": index } as CSSProperties;
+}
+
+/** AI gradient, wider than its card so it can flow (`.jm-flow`). */
+export const iaFlow =
+  "linear-gradient(45deg, #0F3F37 0%, #14745F 35%, #1C8A72 55%, #14745F 75%, #0F3F37 100%)";
+
+/** Blurred brand light drifting slowly behind a section. */
+export function Glow({ className, delay = 0 }: { className: string; delay?: number }) {
+  return (
+    <span
+      aria-hidden
+      className={cx("jm-drift pointer-events-none absolute rounded-full blur-3xl", className)}
+      style={{ animationDelay: `${delay}s` }}
+    />
+  );
+}
+
+/** Dark hero background: trajectories, drifting lights and the pointer light. */
+export function ImmersiveBackdrop() {
+  return (
+    <>
+      <Pattern name="motif-trajectoires-sombre" size={420} opacity={0.3} />
+      <Glow className="-top-48 -left-40 size-[560px] bg-feuille/40" />
+      <Glow className="top-1/3 -right-48 size-[620px] bg-menthe/25" delay={-7} />
+      <Glow className="-bottom-56 left-1/3 size-[520px] bg-lime/20" delay={-14} />
+      <div aria-hidden className="jm-spotlight pointer-events-none absolute inset-0" />
+    </>
+  );
+}
+
+/** A character alternating two poses while breathing. */
+export function PoseCycle({
+  name,
+  poses: [first, second],
+  height,
+}: {
+  name: CharacterName;
+  poses: readonly [Pose, Pose];
+  height: number;
+}) {
+  return (
+    <span className="jm-breathe relative inline-block">
+      <span className="jm-pose jm-pose-first block">
+        <Character name={name} pose={first} height={height} />
+      </span>
+      <span className="jm-pose absolute inset-x-0 bottom-0 flex justify-center opacity-0">
+        <Character name={name} pose={second} height={height} />
+      </span>
+    </span>
+  );
+}
+
+/** Gradient stroke of the journey line, drawn when the steps come into view (`.jm-draw`). */
+export function PathLine({
+  id,
+  vertical,
+  delay,
+}: {
+  id: string;
+  vertical: boolean;
+  delay?: number;
+}) {
+  const ends = vertical ? { x1: 1, y1: 0, x2: 1, y2: 100 } : { x1: 0, y1: 1, x2: 100, y2: 1 };
+  return (
+    <svg
+      viewBox={vertical ? "0 0 2 100" : "0 0 100 2"}
+      preserveAspectRatio="none"
+      className="absolute inset-0 size-full overflow-visible"
+    >
+      <defs>
+        <linearGradient id={id} x1="0" y1="0" x2={vertical ? 0 : 1} y2={vertical ? 1 : 0}>
+          <stop offset="0" stopColor="#D9FA72" />
+          <stop offset="0.5" stopColor="#7DE36B" />
+          <stop offset="1" stopColor="#2FD3A6" />
+        </linearGradient>
+      </defs>
+      <line
+        {...ends}
+        stroke="rgb(255 255 255 / 0.14)"
+        strokeWidth={4}
+        vectorEffect="non-scaling-stroke"
+      />
+      <line
+        {...ends}
+        pathLength={1}
+        className="jm-draw"
+        style={delay === undefined ? undefined : { animationDelay: `${delay}s` }}
+        stroke={`url(#${id})`}
+        strokeWidth={4}
+        strokeLinecap="round"
+        vectorEffect="non-scaling-stroke"
+      />
+    </svg>
+  );
+}

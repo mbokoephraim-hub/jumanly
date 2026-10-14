@@ -2,6 +2,15 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Style immersif sur À propos et Talents (14 octobre 2026)
+
+- Le propriétaire veut le style de l'accueil sur tout le site public (espace connecté : touches
+  douces seulement). `/a-propos` et `/talents` passent en style immersif : héros sur le dégradé
+  Profondeur, personnages en mouvement, cartes au dégradé qui glisse, apparitions au défilement,
+  aperçus qui flottent, chemin du lancement qui se dessine, bandeau final animé.
+- Blocs de l'accueil déplacés dans `src/components/site/marketing.tsx` pour être partagés.
+- Les autres pages publiques recevront ce style avec leur lot de refonte.
+
 ## Page d'accueil immersive (14 octobre 2026)
 
 - `/` retravaillée à la demande du propriétaire (décision `docs/decisions/2026-10-14-accueil-immersive.md`) :
