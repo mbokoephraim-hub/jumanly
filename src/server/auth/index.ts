@@ -1,6 +1,7 @@
 /**
  * Authentication (docs/specifications.md, partie 10 § 10.1) with Better Auth:
- * e-mail + password (10 characters minimum, leaked passwords refused outside local and preview),
+ * e-mail + password (10 characters minimum, leaked passwords refused outside local and preview,
+ * without blocking when the check service is down),
  * 6-digit e-mail code valid 15 minutes with 5 attempts, magic link, Google, Apple and LinkedIn
  * when configured, 30-day sliding sessions in httpOnly cookies, e-mail two-step verification,
  * rate limits.
@@ -9,7 +10,7 @@ import "server-only";
 import { betterAuth } from "better-auth";
 import { prismaAdapter } from "better-auth/adapters/prisma";
 import { nextCookies } from "better-auth/next-js";
-import { emailOTP, haveIBeenPwned, magicLink, twoFactor } from "better-auth/plugins";
+import { emailOTP, magicLink, twoFactor } from "better-auth/plugins";
 import { isInternalEnv } from "@/lib/env";
 import { siteUrl } from "@/lib/seo";
 import { PASSWORD_MAX, PASSWORD_MIN } from "@/lib/password";
@@ -23,6 +24,7 @@ import {
   sendVerificationCode,
 } from "@/server/account-emails";
 import { db } from "@/server/db";
+import { leakedPasswordCheck } from "./password-check";
 import { bootstrapAdminIfListed } from "@/server/services/admin-bootstrap";
 
 const DAY = 60 * 60 * 24;
@@ -193,7 +195,7 @@ export const auth = betterAuth({
         },
       },
     }),
-    ...(isInternalEnv() ? [] : [haveIBeenPwned()]),
+    ...(isInternalEnv() ? [] : [leakedPasswordCheck()]),
     nextCookies(),
   ],
 });

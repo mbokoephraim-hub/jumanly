@@ -127,6 +127,8 @@ export async function signUp(_: AuthFormState, formData: FormData): Promise<Auth
     if (reason.includes("TOO_MANY") || reason.includes("RATE")) {
       return { status: "error", error: "tooManyAttempts", values: kept };
     }
+    // Anything else is ours: keep the cause in the logs, the form only says « réessayez ».
+    await reportError(error, { message: "Inscription impossible", route: "/inscription/compte" });
     return { status: "error", error: "server", values: kept };
   }
   await setupAccount(db, userId, {

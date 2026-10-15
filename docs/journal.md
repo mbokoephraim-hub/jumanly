@@ -2,6 +2,17 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Inscription bloquée en production (15 octobre 2026)
+
+- Le propriétaire voyait « Un problème est survenu de notre côté » à la création du compte,
+  pour tous les profils. Seule différence de la production : la vérification des mots de passe
+  divulgués (Have I Been Pwned). Quand ce service ne répond pas, Better Auth lève une erreur
+  interne que l'inscription transformait en ce message, sans rien écrire dans les journaux.
+  Reproduit en local avec un build de production et le service injoignable.
+- La vérification laisse passer le mot de passe si le service ne répond pas en 4 secondes ou
+  échoue (un mot de passe divulgué reste refusé) et journalise l'incident ; toute autre erreur
+  de l'inscription est journalisée. Note : `docs/decisions/2026-10-15-verification-mots-de-passe.md`.
+
 ## Envoi réel des e-mails (15 octobre 2026)
 
 - Le propriétaire ne recevait pas ses codes : `RESEND_API_KEY` n'était pas renseignée en
