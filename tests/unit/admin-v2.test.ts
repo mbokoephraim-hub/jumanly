@@ -6,6 +6,8 @@ import { courseReadiness, publishProblems } from "@/server/services/course-admin
 import { jobSeverity, reportSeverity, sortReports } from "@/server/services/moderation";
 import { coverAt, sniffVideoType } from "@/server/services/course-media";
 import { sniffDocumentType } from "@/server/storage";
+import { planCosts } from "@/server/services/ai-admin";
+import { listTips } from "@/server/services/contents";
 import {
   deletionBlock,
   parseUntil,
@@ -326,5 +328,53 @@ describe("modération : gravité et ordre de la file (étape 7)", () => {
   it("une demande de paiement pèse plus qu'une organisation récente", () => {
     expect(jobSeverity(["payment"])).toBeGreaterThan(jobSeverity(["newOrg"]));
     expect(jobSeverity([])).toBe(0);
+  });
+});
+
+describe("Admin v2 · étape 8 : coût de l'IA et fiches conseils", () => {
+  const row = (key: string, costMicroUsd: number, people: number) => ({
+    key,
+    calls: 1,
+    credits: 1,
+    people,
+    failures: 0,
+    inputTokens: 0,
+    outputTokens: 0,
+    costMicroUsd,
+  });
+  const plans = [
+    { code: "fictif_mois", name: "Mensuel", priceCents: 1000, interval: "month" },
+    { code: "fictif_an", name: "Annuel", priceCents: 12000, interval: "year" },
+    { code: "fictif_gratuit", name: "Gratuit", priceCents: 0, interval: "month" },
+  ];
+
+  it("alerte quand l'IA coûte 30 % du prix mensuel ou plus", () => {
+    // 10 USD a month; 3 USD of AI per person = 30 %.
+    const [monthly, yearly, free] = planCosts(
+      [
+        row("fictif_mois", 6_000_000, 2),
+        row("fictif_an", 1_000_000, 1),
+        row("fictif_gratuit", 5, 1),
+      ],
+      plans,
+    );
+    expect(monthly).toMatchObject({ perPersonMicroUsd: 3_000_000, alert: true });
+    expect(monthly!.share).toBeCloseTo(0.3);
+    // A yearly plan counts per month: 120 USD a year = 10 USD a month.
+    expect(yearly).toMatchObject({ monthlyCents: 1000, alert: false });
+    expect(free).toMatchObject({ share: null, alert: false });
+  });
+
+  it("propose les six sujets prévus, sans texte tant qu'ils ne sont pas écrits", () => {
+    const tips = listTips(messages, {});
+    expect(tips.map((tip) => tip.id)).toEqual([
+      "cv",
+      "letter",
+      "interview",
+      "salary",
+      "firstJob",
+      "network",
+    ]);
+    expect(tips.every((tip) => !tip.published && !tip.saved && tip.body === "")).toBe(true);
   });
 });

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import type { ReactNode } from "react";
-import { getTranslations } from "next-intl/server";
+import { getMessages, getTranslations } from "next-intl/server";
 import { AppPageHeader } from "@/components/app/page-header";
 import { Icon } from "@/components/brand/icon";
 import { CareerArt } from "@/components/career/home/art";
@@ -32,6 +32,8 @@ import { dimensions, stageFor, stages } from "@/server/services/diagnostic-scori
 import { interviewQuota } from "@/server/services/interview-sim";
 import { upcomingTalentInterviews } from "@/server/services/interviews";
 import { listPublicPlans } from "@/server/services/plans";
+import { getContentOverrides } from "@/server/queries/public";
+import { publishedTips } from "@/server/services/contents";
 import { getPlan } from "@/server/services/progress-plan";
 import { listProjects, portfolioLevel } from "@/server/services/portfolio";
 
@@ -96,6 +98,8 @@ export default async function CareerPage() {
     db.application.count({ where: { profile: { userId: user.id } } }),
   ]);
   const projects = profile ? await listProjects(db, profile.id) : [];
+  // Tip sheets written in /admin/contenus: the card opens once one is published.
+  const tipCount = publishedTips(await getMessages(), await getContentOverrides()).length;
   const cvContent = primaryCv ? parseCv(primaryCv.content) : null;
   const scored = cvContent ? cvScore(cvContent, targets.skills) : null;
   const score = scored?.total ?? null;
@@ -451,15 +455,20 @@ export default async function CareerPage() {
         />
         <CareerToolCard
           id="career-tips"
-          href={null}
+          href={tipCount > 0 ? "/app/career/conseils" : null}
           title={t("tips.title")}
           description={t("tips.desc")}
           icon="eye"
-          soon
-          badge={{ kind: "soon", label: t("later") }}
+          soon={tipCount === 0}
+          badge={tipCount > 0 ? included : { kind: "soon", label: t("later") }}
           className="sm:col-span-12 xl:col-span-5"
           art={<CareerArt tool="tips" />}
-          state={<span>{t("tips.soon")}</span>}
+          state={
+            <span>{tipCount > 0 ? t("tips.ready", { count: tipCount }) : t("tips.soon")}</span>
+          }
+          action={
+            tipCount > 0 ? <ToolLink href="/app/career/conseils">{t("open")}</ToolLink> : undefined
+          }
         />
       </CareerGroup>
 

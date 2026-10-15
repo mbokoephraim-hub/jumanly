@@ -146,7 +146,11 @@ test("accueil Career : un talent Free voit ses verrous, les formules et le bande
     );
   }
   await expect(page.locator("#career-cv").getByText("Inclus", { exact: true })).toBeVisible();
-  await expect(page.locator("#career-tips").getByText("Bientôt disponible")).toBeVisible();
+  // « Conseils de préparation » opens once a sheet is published in /admin/contenus (e2e
+  // admin-contents.spec publishes one, then restores the empty version): either state is right here.
+  await expect(
+    page.locator("#career-tips").getByText(/^(Bientôt disponible|Inclus)$/),
+  ).toBeVisible();
 
   const band = page.locator("#career-upgrade");
   await expect(

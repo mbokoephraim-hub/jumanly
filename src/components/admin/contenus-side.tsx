@@ -1,10 +1,11 @@
 import { getTranslations } from "next-intl/server";
-import { Initials, Tag, adminCard, type TagTone } from "@/components/admin/kit";
+import { Initials, ReasonField, Tag, adminCard, type TagTone } from "@/components/admin/kit";
 import { Icon } from "@/components/brand/icon";
-import { ButtonLink } from "@/components/ui";
+import { Button, ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatShortDate } from "@/lib/dates";
-import type { Banner } from "@/server/services/contents";
+import { restoreVersionAction } from "@/server/actions/contents";
+import type { Banner, ContentVersion } from "@/server/services/contents";
 import type { contentHistory } from "@/server/services/contents-admin";
 
 /**
@@ -18,6 +19,8 @@ const actionKey = {
   "content.faq.reset": "faqReset",
   "content.banner.save": "bannerSave",
   "content.banner.delete": "bannerDelete",
+  "content.tip.save": "tipSave",
+  "content.restore": "restore",
 } as const;
 
 /** « Programmée », « En ligne » or « Terminée », from the dates (whole days in UTC). */
@@ -150,6 +153,85 @@ export async function BannersSummaryCard({ banners }: { banners: Banner[] }) {
             );
           })}
         </ul>
+      )}
+    </section>
+  );
+}
+
+/**
+ * « Versions précédentes » (Admin v2, étape 8): each former version of one item, with what it
+ * said, who replaced it and why, and « Restaurer » (with a reason).
+ */
+export async function ContentVersionsCard({
+  item,
+  versions,
+  preview,
+}: {
+  item: string;
+  versions: ContentVersion[];
+  /** What a version said, in one line (null: the original text of textes/ applied). */
+  preview: (version: ContentVersion) => string | null;
+}) {
+  const t = await getTranslations("admin.content");
+  return (
+    <section
+      id="versions"
+      aria-labelledby="admin-content-versions-title"
+      className={cx(adminCard, "flex scroll-mt-6 flex-col gap-2 lg:p-5")}
+    >
+      <h2
+        id="admin-content-versions-title"
+        className="text-[16px] leading-[22px] font-semibold tracking-[-0.01em]"
+      >
+        {t("versions.title")}
+      </h2>
+      <p className="text-[11.5px] leading-4 text-ardoise">{t("versions.text")}</p>
+      {versions.length === 0 ? (
+        <p className="py-1 text-[12.5px] text-ardoise">{t("versions.empty")}</p>
+      ) : (
+        <ol className="flex flex-col">
+          {versions.map((version) => {
+            const said = preview(version);
+            return (
+              <li key={version.id} className="border-brume py-2.5 not-first:border-t">
+                <details className="group/version">
+                  <summary className="flex cursor-pointer list-none flex-col gap-0.5 [&::-webkit-details-marker]:hidden">
+                    <span className="line-clamp-2 text-[12.5px] leading-4 font-semibold">
+                      {said ?? t("versions.original")}
+                    </span>
+                    <span className="text-[11px] leading-[15px] text-ardoise">
+                      {t("versions.item", {
+                        date: formatShortDate(version.createdAt),
+                        name: version.actorName ?? t("changes.unknownActor"),
+                      })}
+                    </span>
+                    {version.reason && (
+                      <span className="text-[11px] leading-[15px] text-ardoise">
+                        {t("versions.reason", { reason: version.reason })}
+                      </span>
+                    )}
+                    <span className="mt-1 inline-flex items-center gap-1 text-[12px] font-semibold underline underline-offset-4">
+                      <Icon name="precedent" className="size-3.5" />
+                      {t("versions.restore")}
+                    </span>
+                  </summary>
+                  <form action={restoreVersionAction} className="mt-2.5 flex flex-col gap-2.5">
+                    <input type="hidden" name="item" value={item} />
+                    <input type="hidden" name="version" value={version.id} />
+                    <ReasonField
+                      id={`content-version-${version.id}-reason`}
+                      rows={2}
+                      maxLength={500}
+                    />
+                    <Button type="submit" size="sm" variant="secondary" className="self-start">
+                      {t("versions.restore")}
+                    </Button>
+                  </form>
+                </details>
+              </li>
+            );
+          })}
+        </ol>
       )}
     </section>
   );

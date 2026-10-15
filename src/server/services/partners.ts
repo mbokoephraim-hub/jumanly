@@ -1067,7 +1067,13 @@ const batchSchema = z
   })
   .refine((value) => value.endsAt > value.startsAt);
 
-export async function createBatch(db: PrismaClient, actorId: string, raw: Record<string, unknown>) {
+export async function createBatch(
+  db: PrismaClient,
+  actorId: string,
+  raw: Record<string, unknown>,
+  /** Why the batch is created (Admin v2, étape 8), kept in the audit log. */
+  reason?: string,
+) {
   const input = batchSchema.safeParse(raw);
   if (!input.success) throw new PartnerError("invalid");
   const { partnerId, amount, ...data } = input.data;
@@ -1094,7 +1100,7 @@ export async function createBatch(db: PrismaClient, actorId: string, raw: Record
       targetType: "licenseBatch",
       targetId: batch.id,
       organizationId: partner.id,
-      metadata: { seats: batch.seats, planId: plan.id },
+      metadata: { seats: batch.seats, planId: plan.id, ...(reason ? { reason } : {}) },
     },
   });
   return batch;

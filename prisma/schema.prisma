@@ -1139,6 +1139,25 @@ model ContentBlock {
   @@unique([key, locale])
 }
 
+/// The previous version of an editable content (Admin v2, étape 8), kept at each change so that
+/// « Restaurer » can put it back. `item` names the content (`faq.talents.q3`, `banner.<id>`,
+/// `tips.<id>`); `previous` maps each of its keys to its former value, null when it had none
+/// (the original text of textes/ applied).
+model ContentVersion {
+  id          String   @id @default(cuid(2))
+  item        String
+  locale      String   @default("fr")
+  previous    Json
+  /// Why it changed (the reason given with the change).
+  reason      String?
+  /// content.faq.save, content.banner.delete, content.restore…
+  action      String
+  createdById String?
+  createdAt   DateTime @default(now())
+
+  @@index([item, locale, createdAt])
+}
+
 /// Kinds of running costs entered by an administrator (Admin v2, étape 2).
 enum PlatformCostCategory {
   acquisition

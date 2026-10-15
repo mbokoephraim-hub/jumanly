@@ -27,11 +27,17 @@ import { db } from "@/server/db";
 import { activeWeights, disputeReasons } from "@/server/matching/service";
 import { criterionKeys } from "@/server/matching/types";
 import {
+  configuredModels,
+  exhaustedCredits,
+  monthBudget,
   openDisputes,
+  PLAN_COST_ALERT,
+  planCosts,
   scoreDistribution,
   usageReport,
   weightsHistory,
 } from "@/server/services/ai-admin";
+import { formatUsd } from "@/lib/money";
 
 const tabs = {
   consommation: "usage",
@@ -78,6 +84,28 @@ const bands = [
 ] as const;
 
 type Disputes = Awaited<ReturnType<typeof openDisputes>>;
+
+/** Rows whose features share a name (cv_coach and cv_tailor…) are added up into one line. */
+function merge<Row extends Usage["byFeature"][number]>(rows: Row[], name: (key: string) => string) {
+  const map = new Map<string, Row>();
+  for (const row of rows) {
+    const label = name(row.key);
+    const seen = map.get(label);
+    if (!seen) {
+      map.set(label, { ...row });
+      continue;
+    }
+    seen.calls += row.calls;
+    seen.credits += row.credits;
+    // People can use two features of one name: the larger count is a floor, not a double count.
+    seen.people = Math.max(seen.people, row.people);
+    seen.failures += row.failures;
+    seen.inputTokens += row.inputTokens;
+    seen.outputTokens += row.outputTokens;
+    seen.costMicroUsd += row.costMicroUsd;
+  }
+  return [...map.values()].sort((a, b) => b.calls - a.calls);
+}
 type Usage = Awaited<ReturnType<typeof usageReport>>;
 
 /** IA et matching (partie 07, partie 08 § 8.10): consumption, weights, human reviews, audit. */
@@ -442,14 +470,20 @@ async function UsageTab({
   label,
 }: {
   usage: Usage;
-  money: (micro: number) => string;
+  money: (micro: number, digits?: number) => string;
   label: (feature: string) => string;
 }) {
   const t = await getTranslations();
-  const [distribution, plans] = await Promise.all([
+  const [distribution, plans, budget, exhausted] = await Promise.all([
     scoreDistribution(db),
-    db.plan.findMany({ select: { code: true, name: true } }),
+    db.plan.findMany({ select: { code: true, name: true, priceCents: true, interval: true } }),
+    monthBudget(db),
+    exhaustedCredits(db),
   ]);
+  const costs = planCosts(usage.byPlan, plans);
+  const alerts = costs.filter((row) => row.alert);
+  const models = configuredModels();
+  const percent = (share: number) => Math.round(share * 100);
   const planLabel = (code: string) =>
     code ? (plans.find((plan) => plan.code === code)?.name ?? code) : t("admin.ai.usage.plan.none");
   const totalScores = distribution.reduce((sum, item) => sum + item.count, 0);
@@ -472,16 +506,20 @@ async function UsageTab({
             <tr>
               <Th>{column}</Th>
               <Th>{t("admin.ai.usage.col.calls")}</Th>
+              <Th>{t("admin.ai.usage.col.credits")}</Th>
+              <Th>{t("admin.ai.usage.col.people")}</Th>
               <Th>{t("admin.ai.usage.col.failures")}</Th>
               <Th>{t("admin.ai.usage.col.tokens")}</Th>
               <Th>{t("admin.ai.usage.col.cost")}</Th>
             </tr>
           </thead>
           <tbody>
-            {rows.map((row) => (
+            {merge(rows, name).map((row) => (
               <tr key={row.key}>
                 <Td>{name(row.key)}</Td>
                 <Td>{row.calls}</Td>
+                <Td>{row.credits}</Td>
+                <Td>{row.people}</Td>
                 <Td>{row.failures}</Td>
                 <Td>{[row.inputTokens, row.outputTokens].join(" / ")}</Td>
                 <Td>{money(row.costMicroUsd)}</Td>
@@ -501,8 +539,86 @@ async function UsageTab({
           {[
             t("admin.ai.usage.period"),
             t("admin.ai.usage.cost.text", { amount: money(usage.total), currency: "" }).trim(),
+            t("admin.ai.usage.creditsTotal", { count: usage.credits }),
           ].join(" · ")}
         </p>
+      </div>
+      {budget.level === "over" && <Alert tone="error" title={t("admin.ai.budget.over")} />}
+      {budget.level === "near" && <Alert tone="warning" title={t("admin.ai.budget.near")} />}
+      {alerts.map((row) => (
+        <Alert
+          key={row.key}
+          tone="warning"
+          title={t("admin.ai.cost.alert", {
+            percent: percent(row.share ?? 0),
+            plan: row.name ?? row.key,
+          })}
+        />
+      ))}
+      <div className="grid gap-4 md:grid-cols-3">
+        <section aria-labelledby="ia-budget" className={cx(adminCard, "flex flex-col gap-2")}>
+          <h2 id="ia-budget" className="text-[16px] leading-[22px] font-semibold">
+            {t("admin.ai.budget.title")}
+          </h2>
+          {budget.budgetMicroUsd === null ? (
+            <>
+              <p className="text-[13px] font-semibold">
+                {t("admin.ai.budget.spent", { spent: money(budget.spentMicroUsd, 2) })}
+              </p>
+              <p className="text-[12px] leading-[17px] text-ardoise">{t("admin.ai.budget.none")}</p>
+            </>
+          ) : (
+            <>
+              <p className="text-[13px] font-semibold">
+                {t("admin.ai.budget.value", {
+                  spent: money(budget.spentMicroUsd, 2),
+                  budget: money(budget.budgetMicroUsd, 2),
+                  percent: percent(budget.share ?? 0),
+                })}
+              </p>
+              <span aria-hidden className="h-2 overflow-hidden rounded-pill bg-creme">
+                <span
+                  className={cx(
+                    "block h-2 rounded-pill",
+                    budget.level === "over"
+                      ? "bg-corail"
+                      : budget.level === "near"
+                        ? "bg-ambre"
+                        : "bg-lime",
+                  )}
+                  style={{ width: `${Math.min(100, percent(budget.share ?? 0))}%` }}
+                />
+              </span>
+            </>
+          )}
+        </section>
+        <section aria-labelledby="ia-exhausted" className={cx(adminCard, "flex flex-col gap-2")}>
+          <h2 id="ia-exhausted" className="text-[16px] leading-[22px] font-semibold">
+            {t("admin.ai.usage.col.credits")}
+          </h2>
+          <p className="text-[13px] leading-5">{t("admin.ai.exhausted", { count: exhausted })}</p>
+        </section>
+        <section aria-labelledby="ia-models" className={cx(adminCard, "flex flex-col gap-2")}>
+          <h2 id="ia-models" className="text-[16px] leading-[22px] font-semibold">
+            {t("admin.ai.models.title")}
+          </h2>
+          <dl className="flex flex-col gap-2 text-[12.5px]">
+            {(
+              [
+                ["default", models.default],
+                ["fast", models.fast],
+              ] as const
+            ).map(([tier, model]) => (
+              <div key={tier} className="flex flex-col gap-0.5">
+                <dt className="text-[11.5px] text-ardoise">{t(`admin.ai.models.${tier}`)}</dt>
+                <dd className="font-semibold [overflow-wrap:anywhere]">
+                  {model ? <code>{model}</code> : t("admin.ai.models.unset")}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <p className="text-[11.5px] leading-4 text-ardoise">{t("admin.ai.models.text")}</p>
+        </section>
       </div>
       {usage.unpriced.length > 0 && (
         <Alert
@@ -528,6 +644,57 @@ async function UsageTab({
             usage.byPlan,
             planLabel,
           )}
+          <section aria-labelledby="ia-cost" className={cx(adminCard, "flex flex-col gap-3")}>
+            <h2 id="ia-cost" className="text-[16px] leading-[22px] font-semibold">
+              {t("admin.ai.cost.title")}
+            </h2>
+            <p className="text-[12.5px] leading-[18px] text-ardoise">
+              {t("admin.ai.cost.text", { percent: percent(PLAN_COST_ALERT) })}
+            </p>
+            <div className="-mx-5 lg:-mx-[22px]">
+              <Table caption={t("admin.ai.cost.title")}>
+                <thead>
+                  <tr>
+                    <Th>{t("admin.ai.usage.col.plan")}</Th>
+                    <Th>{t("admin.ai.usage.col.people")}</Th>
+                    <Th>{t("admin.ai.cost.col.perPerson")}</Th>
+                    <Th>{t("admin.ai.cost.col.price")}</Th>
+                    <Th>{t("admin.ai.cost.col.share")}</Th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {costs.map((row) => (
+                    <tr key={row.key}>
+                      <Td>{planLabel(row.key)}</Td>
+                      <Td>{row.people}</Td>
+                      <Td>{money(row.perPersonMicroUsd)}</Td>
+                      <Td>
+                        {row.monthlyCents === null
+                          ? t("admin.ai.cost.quote")
+                          : row.monthlyCents === 0
+                            ? t("admin.ai.cost.free")
+                            : `${formatUsd(row.monthlyCents)} USD`}
+                      </Td>
+                      <Td>
+                        {row.share === null ? (
+                          "·"
+                        ) : (
+                          <Tag tone={row.alert ? "warning" : "success"}>
+                            {t("admin.ai.usage.share", { percent: percent(row.share) })}
+                          </Tag>
+                        )}
+                      </Td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </div>
+            {alerts.length === 0 && (
+              <p className="text-[12px] text-ardoise">
+                {t("admin.ai.cost.ok", { percent: percent(PLAN_COST_ALERT) })}
+              </p>
+            )}
+          </section>
         </>
       )}
 

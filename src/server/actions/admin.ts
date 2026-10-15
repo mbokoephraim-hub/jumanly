@@ -18,6 +18,12 @@ import { mailOrgVerification } from "@/server/hire-emails";
 import { decideVerification, verificationDecisionSchema } from "@/server/services/verification";
 import { mailPartnerInvite } from "@/server/partner-emails";
 import {
+  extendBatch,
+  readReason,
+  updateBatch,
+  updatePartner,
+} from "@/server/services/admin-partners";
+import {
   createBatch,
   createPartner,
   inviteManager,
@@ -363,6 +369,58 @@ export async function invitePartnerManagerAction(formData: FormData) {
 
 export async function createBatchAction(formData: FormData) {
   const admin = await adminWriter();
-  const batch = await partnerWrite(() => createBatch(db, admin.id, Object.fromEntries(formData)));
-  redirect(`${PARTNERS}?ok=lot#partner-${batch.partnerOrgId}`);
+  const partnerId = String(formData.get("partnerId") ?? "").slice(0, 60);
+  // A licence batch commits a contract: the reason is required (Admin v2, étape 8).
+  const reason = readReason(formData.get("reason"));
+  if (!reason) redirect(`${PARTNERS}?id=${partnerId}&action=lot&erreur=motif`);
+  const batch = await partnerWrite(() =>
+    createBatch(db, admin.id, Object.fromEntries(formData), reason!),
+  );
+  redirect(`${PARTNERS}?id=${batch.partnerOrgId}&lot=${batch.id}&ok=lot`);
+}
+
+/** Name and kind of a partner, with a reason. */
+export async function updatePartnerAction(formData: FormData) {
+  const admin = await adminWriter();
+  const partnerId = String(formData.get("partnerId") ?? "").slice(0, 60);
+  if (!readReason(formData.get("reason")))
+    redirect(`${PARTNERS}?id=${partnerId}&action=modifier&erreur=motif`);
+  await partnerWrite(() => updatePartner(db, admin.id, Object.fromEntries(formData)));
+  refresh();
+  redirect(`${PARTNERS}?id=${partnerId}&ok=modifie`);
+}
+
+/** Name, contract and start of a batch, with a reason. */
+export async function updateBatchAction(formData: FormData) {
+  const admin = await adminWriter();
+  const partnerId = String(formData.get("partnerId") ?? "").slice(0, 60);
+  const batchId = String(formData.get("batchId") ?? "").slice(0, 60);
+  const here = `${PARTNERS}?id=${partnerId}&lot=${batchId}`;
+  if (!readReason(formData.get("reason"))) redirect(`${here}&action=lot-modifier&erreur=motif`);
+  try {
+    await updateBatch(db, admin.id, Object.fromEntries(formData));
+  } catch (error) {
+    if (error instanceof PartnerError) redirect(`${here}&action=lot-modifier&erreur=${error.code}`);
+    throw error;
+  }
+  refresh();
+  redirect(`${here}&ok=lot-modifie`);
+}
+
+/** A later end of contract for a batch, with a reason. */
+export async function extendBatchAction(formData: FormData) {
+  const admin = await adminWriter();
+  const partnerId = String(formData.get("partnerId") ?? "").slice(0, 60);
+  const batchId = String(formData.get("batchId") ?? "").slice(0, 60);
+  const here = `${PARTNERS}?id=${partnerId}&lot=${batchId}`;
+  if (!readReason(formData.get("reason"))) redirect(`${here}&action=prolonger&erreur=motif`);
+  let result: Awaited<ReturnType<typeof extendBatch>>;
+  try {
+    result = await extendBatch(db, admin.id, Object.fromEntries(formData));
+  } catch (error) {
+    if (error instanceof PartnerError) redirect(`${here}&action=prolonger&erreur=fin`);
+    throw error;
+  }
+  refresh();
+  redirect(`${here}&ok=prolonge&licences=${result.extended}`);
 }

@@ -5,9 +5,14 @@
  * question, without a new deployment. Deleting the row brings back the original text.
  * - FAQ: keys `<group>.q<n>` and `<group>.a<n>`. An empty question hides that question.
  * - Banners: key `banner.<id>`, value in JSON (text, audience, dates, style).
+ * - Tip sheets « Conseils de préparation » (Admin v2, étape 8): key `tips.<id>`, value in JSON
+ *   (title, text, reading time, published). Free for everyone, no AI (partie 05).
+ *
+ * Every change first keeps the former values in `ContentVersion`, so « Restaurer » can put them
+ * back (Admin v2, étape 8).
  */
 import { z } from "zod";
-import type { PrismaClient } from "@/generated/prisma/client";
+import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 
 export const LOCALE = "fr";
 
@@ -110,6 +115,99 @@ export const faqSchema = z.object({
   answer: z.string().trim().min(3).max(3000),
 });
 
+// ─── Versions ────────────────────────────────────────────────────────────────
+
+/** The reason given with a change (the actions ask for it), kept with the version. */
+function reasonOf(raw: Record<string, unknown>) {
+  return typeof raw.reason === "string" ? raw.reason.trim().slice(0, 500) || null : null;
+}
+
+/** Keeps the current values of an item's keys (null: no row, the original text applies). */
+async function keepVersion(
+  db: PrismaClient,
+  actorId: string | null,
+  item: string,
+  keys: string[],
+  action: string,
+  reason: string | null,
+) {
+  const rows = await db.contentBlock.findMany({
+    where: { key: { in: keys }, locale: LOCALE },
+    select: { key: true, value: true },
+  });
+  const previous = Object.fromEntries(
+    keys.map((key) => [key, rows.find((row) => row.key === key)?.value ?? null]),
+  );
+  await db.contentVersion.create({
+    data: { item, locale: LOCALE, previous, action, reason, createdById: actorId },
+  });
+}
+
+export type ContentVersion = {
+  id: string;
+  action: string;
+  reason: string | null;
+  createdAt: Date;
+  actorName: string | null;
+  previous: Record<string, string | null>;
+};
+
+/** The former versions of an item, newest first, with who replaced them. */
+export async function contentVersions(
+  db: PrismaClient,
+  item: string,
+  take = 10,
+): Promise<ContentVersion[]> {
+  const rows = await db.contentVersion.findMany({
+    where: { item, locale: LOCALE },
+    orderBy: { createdAt: "desc" },
+    take,
+  });
+  const ids = [...new Set(rows.flatMap((row) => (row.createdById ? [row.createdById] : [])))];
+  const users = await db.user.findMany({
+    where: { id: { in: ids } },
+    select: { id: true, name: true },
+  });
+  return rows.map((row) => ({
+    id: row.id,
+    action: row.action,
+    reason: row.reason,
+    createdAt: row.createdAt,
+    actorName: users.find((user) => user.id === row.createdById)?.name ?? null,
+    previous: row.previous as Record<string, string | null>,
+  }));
+}
+
+/**
+ * Puts a former version back. The current values are kept first, so a restore can itself be
+ * undone. Returns the item, or null when the version does not exist.
+ */
+export async function restoreVersion(
+  db: PrismaClient,
+  actorId: string,
+  versionId: string,
+  reason: string,
+) {
+  const version = await db.contentVersion.findUnique({ where: { id: versionId } });
+  if (!version || version.locale !== LOCALE) return null;
+  const previous = version.previous as Record<string, string | null>;
+  const keys = Object.keys(previous);
+  await keepVersion(db, actorId, version.item, keys, "content.restore", reason);
+  await db.$transaction(
+    keys.map((key): Prisma.PrismaPromise<unknown> => {
+      const value = previous[key];
+      return value === null || value === undefined
+        ? db.contentBlock.deleteMany({ where: { key, locale: LOCALE } })
+        : db.contentBlock.upsert({
+            where: { key_locale: { key, locale: LOCALE } },
+            update: { value, updatedById: actorId },
+            create: { key, locale: LOCALE, value, updatedById: actorId },
+          });
+    }),
+  );
+  return { item: version.item, previous };
+}
+
 async function put(db: PrismaClient, actorId: string, key: string, value: string) {
   await db.contentBlock.upsert({
     where: { key_locale: { key, locale: LOCALE } },
@@ -133,6 +231,8 @@ export async function saveFaqItem(
     const items = faqItems(messages, await listOverrides(db), group, { withHidden: true });
     n = Math.max(0, ...items.map((item) => item.n)) + 1;
   }
+  const keys = [`${group}.q${n}`, `${group}.a${n}`];
+  await keepVersion(db, actorId, keys[0]!, keys, "content.faq.save", reasonOf(raw));
   await put(db, actorId, `${group}.q${n}`, question);
   await put(db, actorId, `${group}.a${n}`, answer);
   return n;
@@ -147,6 +247,14 @@ export async function setFaqItemHidden(
   hidden: boolean,
 ) {
   const keys = [`${group}.q${n}`, `${group}.a${n}`];
+  await keepVersion(
+    db,
+    actorId,
+    keys[0]!,
+    keys,
+    hidden ? "content.faq.hide" : "content.faq.reset",
+    null,
+  );
   if (hidden) await put(db, actorId, keys[0]!, "");
   else await db.contentBlock.deleteMany({ where: { key: { in: keys }, locale: LOCALE } });
 }
@@ -212,12 +320,97 @@ export async function saveBanner(
   const parsed = bannerSchema.safeParse(raw);
   if (!parsed.success) throw new ContentError("invalid");
   const id = typeof raw.id === "string" && /^[a-z0-9]{6,32}$/.test(raw.id) ? raw.id : newBannerId();
+  const key = `banner.${id}`;
+  await keepVersion(db, actorId, key, [key], "content.banner.save", reasonOf(raw));
   await put(db, actorId, `banner.${id}`, JSON.stringify(parsed.data));
   return id;
 }
 
-export async function deleteBanner(db: PrismaClient, id: string) {
+export async function deleteBanner(db: PrismaClient, id: string, actorId: string | null = null) {
+  const key = `banner.${id}`;
+  await keepVersion(db, actorId, key, [key], "content.banner.delete", null);
   await db.contentBlock.deleteMany({ where: { key: `banner.${id}`, locale: LOCALE } });
+}
+
+// ─── Tip sheets « Conseils de préparation » ──────────────────────────────────
+
+/** The six topics planned by textes/ (`career.tips.*`); more sheets can be added in the admin. */
+export const TIP_TOPICS = ["cv", "letter", "interview", "salary", "firstJob", "network"] as const;
+
+export const tipSchema = z.object({
+  title: z.string().trim().min(3).max(120),
+  body: z.string().trim().min(20).max(8000),
+  minutes: z.coerce.number().int().min(1).max(60),
+  published: z
+    .union([z.literal("on"), z.literal("1"), z.literal(""), z.boolean()])
+    .default("")
+    .transform((value) => value === true || value === "on" || value === "1"),
+});
+
+export type Tip = {
+  id: string;
+  title: string;
+  body: string;
+  minutes: number;
+  published: boolean;
+  /** Written in the admin (a topic of textes/ without a sheet yet has no text). */
+  saved: boolean;
+};
+
+function parseTip(id: string, value: string): Tip | null {
+  try {
+    const parsed = tipSchema.safeParse(JSON.parse(value));
+    return parsed.success ? { id, ...parsed.data, saved: true } : null;
+  } catch {
+    return null;
+  }
+}
+
+/** Every sheet: the planned topics first (in their order), then the added ones. */
+export function listTips(messages: unknown, overrides: Overrides): Tip[] {
+  const planned = TIP_TOPICS.map((id): Tip => {
+    const saved = overrides[`tips.${id}`];
+    return (
+      (saved !== undefined ? parseTip(id, saved) : null) ?? {
+        id,
+        title: messageAt(messages, `career.tips.${id}`) ?? id,
+        body: "",
+        minutes: 3,
+        published: false,
+        saved: false,
+      }
+    );
+  });
+  const added = Object.entries(overrides)
+    .filter(([key]) => key.startsWith("tips."))
+    .map(([key, value]) => [key.slice("tips.".length), value] as const)
+    .filter(([id]) => !(TIP_TOPICS as readonly string[]).includes(id))
+    .flatMap(([id, value]) => parseTip(id, value) ?? [])
+    .sort((a, b) => a.id.localeCompare(b.id));
+  return [...planned, ...added];
+}
+
+/** The sheets shown to talents. */
+export function publishedTips(messages: unknown, overrides: Overrides) {
+  return listTips(messages, overrides).filter((tip) => tip.published && tip.body !== "");
+}
+
+/** Saves a sheet (a new one without a known `id`). Returns its id. */
+export async function saveTip(
+  db: PrismaClient,
+  actorId: string,
+  raw: Record<string, unknown>,
+): Promise<string> {
+  const parsed = tipSchema.safeParse(raw);
+  if (!parsed.success) throw new ContentError("invalid");
+  const known =
+    typeof raw.id === "string" &&
+    ((TIP_TOPICS as readonly string[]).includes(raw.id) || /^[a-z0-9]{6,32}$/.test(raw.id));
+  const id = known ? (raw.id as string) : newBannerId();
+  const key = `tips.${id}`;
+  await keepVersion(db, actorId, key, [key], "content.tip.save", reasonOf(raw));
+  await put(db, actorId, key, JSON.stringify(parsed.data));
+  return id;
 }
 
 function newBannerId() {

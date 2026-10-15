@@ -3782,7 +3782,8 @@
       "tips": {
         "title": "Conseils de préparation",
         "desc": "Des fiches pratiques pour préparer chaque étape d'un recrutement.",
-        "soon": "Arrive prochainement"
+        "soon": "Arrive prochainement",
+        "ready": "{count, plural, one {# fiche à lire} other {# fiches à lire}}"
       },
       "lock": "Disponible avec {plan}",
       "quota": "{used}/{quota} ce mois",
@@ -3874,7 +3875,11 @@
       "salary": "Parler de salaire sereinement",
       "firstJob": "Chercher un premier emploi sans expérience",
       "network": "Développer son réseau professionnel",
-      "readTime": "{minutes} min de lecture"
+      "readTime": "{minutes} min de lecture",
+      "eyebrow": "Career · Conseils de préparation",
+      "intro": "Des fiches pratiques et gratuites pour préparer chaque étape d'un recrutement.",
+      "empty": "Aucune fiche n'est publiée pour l'instant.",
+      "back": "Retour à Career"
     },
     "diagnostic": {
       "title": "Diagnostic de carrière",
@@ -10563,6 +10568,9 @@
         "partner_create": "a créé le partenaire",
         "partner_batch": "a créé un lot de licences",
         "partner_inviteManager": "a invité un gestionnaire partenaire",
+        "partner_update": "a modifié le partenaire",
+        "partner_batch_update": "a modifié un lot de licences",
+        "partner_batch_extend": "a prolongé un lot de licences",
         "license_activate": "a activé une licence",
         "license_codes": "a généré des codes",
         "license_invite": "a envoyé des invitations",
@@ -10578,6 +10586,8 @@
         "content_faq_reset": "a rétabli une question de la FAQ",
         "content_banner_save": "a enregistré une bannière",
         "content_banner_delete": "a supprimé une bannière",
+        "content_tip_save": "a enregistré une fiche conseil",
+        "content_restore": "a restauré une version précédente d'un contenu",
         "profile_view": "a consulté un profil",
         "talent_search": "a cherché des talents",
         "security_abnormalUsage": "usage anormal détecté",
@@ -11962,7 +11972,9 @@
         "contract": "Contrat {reference}",
         "amountHelp": "En USD, tel que prévu au contrat (facultatif).",
         "none": "Aucun lot pour ce partenaire.",
-        "minGroupHint": "Tout indicateur portant sur moins de {count} personnes est masqué."
+        "minGroupHint": "Tout indicateur portant sur moins de {count} personnes est masqué.",
+        "reasonHint": "Par exemple : contrat signé le 10 octobre, bon de commande reçu.",
+        "open": "Voir la fiche du lot {name}"
       },
       "noOnlinePurchase": "Les licences Partners ne s'achètent pas en ligne : le lot est créé ici après signature du contrat.",
       "subtitle": "Organisations partenaires, contrats et lots de licences sponsorisées.",
@@ -12002,7 +12014,48 @@
         "monthsValue": "{months} mois"
       },
       "creation": "Création",
-      "cancel": "Annuler"
+      "cancel": "Annuler",
+      "edit": "Modifier le partenaire",
+      "editText": "Le nom et le type s'affichent dans l'espace partenaire et sur les pages d'activation des licences.",
+      "save": "Enregistrer",
+      "updated": "Partenaire modifié.",
+      "errorMotif": "Indiquez le motif (au moins 3 caractères) avant d'enregistrer.",
+      "errorStarted": "La date de début ne change plus : le lot a commencé ou une licence est déjà active.",
+      "errorEnd": "La nouvelle fin doit suivre la fin actuelle et la date du jour.",
+      "lot": {
+        "title": "Fiche du lot",
+        "period": "Du {start, date, long} au {end, date, long}",
+        "plan": "Forfait {plan} · {months} mois par bénéficiaire",
+        "used": "{percent} % des licences utilisées",
+        "codes": {
+          "title": "Licences et codes",
+          "seats": "Licences prévues",
+          "activated": "Utilisées",
+          "active": "En cours",
+          "unused": "Codes distribués, pas encore utilisés",
+          "available": "Restantes à distribuer",
+          "expired": "Expirées",
+          "revoked": "Retirées"
+        },
+        "impact": {
+          "title": "Impact des bénéficiaires",
+          "rule": "Chaque chiffre qui porte sur moins de {count} personnes est masqué, comme dans l'espace partenaire.",
+          "active": "Personnes actives",
+          "completed": "Formations terminées",
+          "certificates": "Attestations obtenues",
+          "applications": "Candidatures envoyées",
+          "hires": "Embauches déclarées",
+          "hidden": "Masqué"
+        },
+        "edit": "Modifier le lot",
+        "editText": "Le nom, la référence et le montant du contrat. La date de début ne change que tant que le lot n'a pas commencé.",
+        "extend": "Prolonger le lot",
+        "extendText": "Choisissez une nouvelle fin de contrat. Les licences en cours qui s'arrêtaient à l'ancienne fin vont jusqu'à leur durée prévue, dans la limite de la nouvelle fin.",
+        "extendEnd": "Nouvelle fin du contrat",
+        "extendConfirm": "Prolonger",
+        "updated": "Lot modifié.",
+        "extended": "Lot prolongé. {count, plural, =0 {Aucune licence en cours n'était limitée par l'ancienne fin.} one {# licence en cours a été prolongée.} other {# licences en cours ont été prolongées.}}"
+      }
     },
     "ai": {
       "title": "IA et matching",
@@ -12039,7 +12092,9 @@
           "calls": "Appels",
           "failures": "Échecs",
           "tokens": "Jetons (entrée / sortie)",
-          "cost": "Coût estimé (USD)"
+          "cost": "Coût estimé (USD)",
+          "credits": "Crédits",
+          "people": "Personnes"
         },
         "plan": {
           "none": "Sans forfait"
@@ -12047,7 +12102,8 @@
         "empty": "Aucun appel d'IA sur la période.",
         "noPrice": "Prix inconnu pour {models} : le coût de ces appels n'est pas estimé. Ajoutez le tarif dans src/server/ai/prices.ts.",
         "calls": "Appels",
-        "share": "{percent} %"
+        "share": "{percent} %",
+        "creditsTotal": "{count, plural, =0 {aucun crédit consommé} one {# crédit consommé} other {# crédits consommés}}"
       },
       "scores": {
         "title": "Répartition des scores calculés",
@@ -12124,6 +12180,35 @@
         },
         "empty": "Aucune action sur le matching pour le moment.",
         "by": "Par {name}"
+      },
+      "cost": {
+        "title": "Coût par forfait",
+        "text": "Coût estimé de l'IA par personne sur 30 jours, comparé au prix mensuel du forfait. À partir de {percent} %, le forfait coûte trop cher en IA.",
+        "col": {
+          "perPerson": "Coût par personne",
+          "price": "Prix mensuel",
+          "share": "Part du prix"
+        },
+        "free": "Gratuit",
+        "quote": "Sur devis",
+        "alert": "Alerte : l'IA coûte {percent} % du prix du forfait {plan}.",
+        "ok": "Aucun forfait ne dépasse {percent} % de son prix en coût d'IA."
+      },
+      "budget": {
+        "title": "Budget du mois",
+        "none": "Aucun budget mensuel n'est fixé. Ajoutez la variable AI_MONTHLY_BUDGET_USD (en USD) pour suivre les dépenses d'IA du mois.",
+        "value": "{spent} sur {budget} ({percent} %)",
+        "spent": "{spent} dépensés ce mois-ci",
+        "near": "Le budget d'IA du mois est presque atteint.",
+        "over": "Le budget d'IA du mois est dépassé."
+      },
+      "exhausted": "{count, plural, =0 {Aucun compte n'a épuisé ses crédits d'IA de la période.} one {# compte a épuisé ses crédits d'IA de la période.} other {# comptes ont épuisé leurs crédits d'IA de la période.}}",
+      "models": {
+        "title": "Modèles utilisés",
+        "text": "Les modèles se règlent dans les variables d'environnement AI_MODEL_DEFAULT et AI_MODEL_FAST, jamais dans l'administration.",
+        "default": "Modèle principal",
+        "fast": "Modèle rapide",
+        "unset": "Non défini"
       }
     },
     "content": {
@@ -12220,9 +12305,43 @@
           "faqHide": "Question masquée",
           "faqReset": "Texte d'origine rétabli",
           "bannerSave": "Bannière enregistrée",
-          "bannerDelete": "Bannière supprimée"
+          "bannerDelete": "Bannière supprimée",
+          "tipSave": "Fiche enregistrée",
+          "restore": "Version restaurée"
         },
         "unknownActor": "Compte supprimé"
+      },
+      "tips": {
+        "title": "Fiches conseils",
+        "where": "Les fiches publiées s'affichent pour tous les talents, gratuitement, dans Career · Conseils de préparation. Elles sont écrites ici, sans IA.",
+        "count": "{count, plural, =0 {Aucune fiche publiée} one {# fiche publiée} other {# fiches publiées}}",
+        "status": {
+          "published": "Publiée",
+          "draft": "Brouillon",
+          "empty": "À écrire"
+        },
+        "field": {
+          "title": "Titre",
+          "body": "Texte de la fiche",
+          "bodyHint": "Au moins 20 caractères. Séparez les paragraphes par une ligne vide.",
+          "minutes": "Temps de lecture (minutes)",
+          "published": "Publier la fiche pour les talents"
+        },
+        "add": "Nouvelle fiche",
+        "pick": "Choisissez une fiche dans la liste pour l'écrire ou la modifier, ou créez-en une nouvelle ci-dessous.",
+        "save": "Enregistrer la fiche",
+        "error": "Vérifiez les champs : un titre d'au moins 3 caractères, un texte d'au moins 20 et un temps de lecture entre 1 et 60 minutes."
+      },
+      "versions": {
+        "title": "Versions précédentes",
+        "text": "Chaque enregistrement garde la version d'avant. « Restaurer » la remet en ligne et garde aussi la version actuelle.",
+        "empty": "Aucune version précédente pour ce contenu.",
+        "item": "Remplacée le {date} par {name}",
+        "original": "Texte d'origine (textes de l'interface)",
+        "none": "Aucun contenu (pas encore créé)",
+        "reason": "Motif du changement : {reason}",
+        "restore": "Restaurer cette version",
+        "restored": "Version restaurée."
       }
     },
     "reports": {

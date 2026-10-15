@@ -2,6 +2,34 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v2 · étape 8 : partenaires, IA et contenus (15 octobre 2026)
+
+- **Partenaires** : « Modifier le partenaire » (nom, type) et motif obligatoire à la création d'un
+  lot, gardés dans le journal. Chaque lot ouvre sa **fiche** : licences prévues, utilisées, en
+  cours, codes distribués non utilisés, restantes, expirées, retirées, puis l'impact des
+  bénéficiaires (personnes actives, formations terminées, attestations, candidatures, embauches),
+  chaque chiffre masqué sous le seuil du lot (10 personnes au moins), comme dans l'espace partenaire.
+  « Modifier le lot » (nom, référence, montant ; début seulement avant qu'il commence) et
+  « Prolonger le lot » : les licences en cours arrêtées à l'ancienne fin vont jusqu'à leur durée,
+  les codes non utilisés expirés avec le contrat redeviennent utilisables. Service
+  `src/server/services/admin-partners.ts`.
+- **IA** : crédits consommés et personnes par fonction et par forfait (à partir de `AiUsage`),
+  lignes de même nom regroupées ; « Coût par forfait » : coût par personne sur 30 jours comparé au
+  prix mensuel, alerte à partir de 30 % ; budget du mois facultatif (`AI_MONTHLY_BUDGET_USD`,
+  alerte à 80 % et au-delà de 100 %) ; nombre de comptes qui ont épuisé leurs crédits ; modèles
+  affichés en lecture seule depuis `AI_MODEL_DEFAULT` et `AI_MODEL_FAST`.
+- **Contenus** : onglet « Conseils de préparation » : les six sujets prévus par `textes/` (et des
+  fiches ajoutées), écrits ici, publiés ou en brouillon, avec motif. Les fiches publiées s'ouvrent
+  pour tous les talents, gratuitement, sur `/app/career/conseils` ; la carte de l'accueil Career
+  reste « Bientôt disponible » tant qu'aucune fiche n'est publiée. **Versions** : chaque
+  enregistrement (FAQ, bannières, fiches) garde la version d'avant dans `ContentVersion`
+  (migration `admin_content_versions`) ; « Restaurer » la remet en ligne avec un motif, journalisé,
+  et garde aussi la version remplacée.
+- Tests : unitaires (coût par forfait, sujets des fiches), en base (modifier un partenaire, début de
+  lot figé, prolongation, fiche de lot, versions et restauration, fiche conseil), e2e (lot prolongé
+  et partenaire renommé, fiche publiée puis restaurée, page IA). Captures dans
+  `captures/admin-v2/etape-8`.
+
 ## Jumanly Admin v2 · étape 7 : modération (15 octobre 2026)
 
 - **Correction demandée** : nouveau statut d'offre `changes_requested` (migration
