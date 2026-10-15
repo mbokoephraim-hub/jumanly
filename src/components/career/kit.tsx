@@ -23,7 +23,14 @@ export const careerTabs = [
 export type CareerTab = (typeof careerTabs)[number]["key"];
 
 /** The Career sections, as pills under the page title (scrolls sideways on a phone). */
-export async function CareerTabs({ active }: { active: CareerTab }) {
+export async function CareerTabs({
+  active,
+  locked = [],
+}: {
+  active: CareerTab;
+  /** Tabs whose tool is locked: a small padlock follows their label. */
+  locked?: CareerTab[];
+}) {
   const t = await getTranslations("career");
   const d = dynamic(t);
   return (
@@ -36,7 +43,7 @@ export async function CareerTabs({ active }: { active: CareerTab }) {
                 href={tab.href}
                 aria-current={tab.key === active ? "page" : undefined}
                 className={cx(
-                  "flex h-9 items-center gap-[5px] rounded-pill px-[11px] text-xs font-medium whitespace-nowrap",
+                  "relative flex h-9 items-center gap-[5px] rounded-pill px-[11px] text-xs font-medium whitespace-nowrap",
                   tab.key === active
                     ? "bg-sapin text-blanc"
                     : "bg-blanc text-sapin ring-1 ring-brume ring-inset hover:bg-lime-clair",
@@ -44,6 +51,12 @@ export async function CareerTabs({ active }: { active: CareerTab }) {
               >
                 <Icon name={tab.icon} className="size-3.5" />
                 {tab.key === "home" ? t("nav.home") : d(`home.${tab.key}.title`)}
+                {locked.includes(tab.key) && (
+                  <>
+                    <Icon name="lock" className="size-[13px] opacity-55" />
+                    <span className="sr-only">{t("nav.locked")}</span>
+                  </>
+                )}
               </Link>
             </li>
           ))}

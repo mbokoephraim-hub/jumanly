@@ -3407,14 +3407,21 @@
           "view": "Voir mon diagnostic"
         },
         "lastDone": "Dernier diagnostic : {date, date, medium}",
-        "none": "Pas encore de diagnostic"
+        "none": "Pas encore de diagnostic",
+        "descV2": "Un bilan en 6 dimensions : clarté du projet, compétences, expérience, outils de candidature, entretiens et réseau. Chaque note est expliquée."
       },
       "cv": {
         "title": "Mon CV",
         "desc": "Éditez votre CV par sections et exportez-le en PDF.",
         "cta": "Ouvrir mon CV",
         "score": "Score du CV : {score}/100",
-        "none": "Pas encore de CV"
+        "none": "Pas encore de CV",
+        "descV2": "Éditez votre CV par sections, choisissez un modèle et exportez-le en PDF. Le score vous dit quoi améliorer en premier.",
+        "chip": {
+          "templates": "Modèles",
+          "pdf": "Export PDF",
+          "score": "Score expliqué"
+        }
       },
       "documents": {
         "title": "Lettres et documents",
@@ -3430,14 +3437,17 @@
       "interviews": {
         "title": "Simulations d'entretien",
         "desc": "Entraînez-vous à l'écrit puis à l'oral, avec un retour détaillé.",
-        "cta": "S'entraîner"
+        "cta": "S'entraîner",
+        "question": "« Présentez-vous en deux minutes. »"
       },
       "plan": {
         "title": "Plan de progression",
         "desc": "Vos objectifs, vos étapes et les formations qui vous font avancer.",
         "cta": "Ouvrir mon plan",
         "steps": "{done}/{total} étapes",
-        "none": "Pas encore de plan"
+        "none": "Pas encore de plan",
+        "fromDiagnostic": "Créé à partir de votre diagnostic",
+        "create": "Créer mon plan"
       },
       "portfolio": {
         "title": "Portfolio",
@@ -3449,7 +3459,8 @@
       "later": "Bientôt disponible",
       "tips": {
         "title": "Conseils de préparation",
-        "desc": "Des fiches pratiques pour préparer chaque étape d'un recrutement."
+        "desc": "Des fiches pratiques pour préparer chaque étape d'un recrutement.",
+        "soon": "Arrive prochainement"
       },
       "lock": "Disponible avec {plan}",
       "quota": "{used}/{quota} ce mois",
@@ -3470,11 +3481,68 @@
         "why": "Votre entretien a lieu le {date, date, long}.",
         "left": "{count, plural, =0 {Vous avez utilisé vos simulations orales ce mois.} one {Il vous reste # simulation orale ce mois.} other {Il vous reste # simulations orales ce mois.}}",
         "start": "Démarrer la simulation"
+      },
+      "heroTitle": "Votre identité professionnelle, étape par étape",
+      "heroTitleAccent": "professionnelle",
+      "heroLead": "Faites le point, construisez un CV solide, préparez vos candidatures et entraînez-vous. Jumanly vous indique toujours la prochaine étape.",
+      "journey": {
+        "title": "Votre parcours Career",
+        "count": "{done, plural, =0 {Aucune étape terminée sur 4} one {# étape terminée sur 4} other {# étapes terminées sur 4}}",
+        "step": {
+          "point": "Faire le point",
+          "cv": "Construire mon CV",
+          "apply": "Préparer mes candidatures",
+          "train": "M'entraîner"
+        },
+        "state": {
+          "done": "Terminée",
+          "current": "En cours",
+          "next": "À venir"
+        },
+        "continue": "Continuer",
+        "finished": "Parcours terminé"
+      },
+      "float": {
+        "cv": "Score du CV",
+        "cvSub": "{score}/100 · {band}",
+        "diagnostic": "Diagnostic fait",
+        "diagnosticSub": "le {date, date, medium}",
+        "next": "Prochaine étape"
+      },
+      "group": {
+        "point": {
+          "title": "Faire le point",
+          "lead": "Savoir où vous en êtes et où vous allez"
+        },
+        "apply": {
+          "title": "Préparer mes candidatures",
+          "lead": "Les documents que les recruteurs liront"
+        },
+        "train": {
+          "title": "M'entraîner",
+          "lead": "Arriver prêt le jour de l'entretien"
+        }
+      },
+      "badge": {
+        "included": "Inclus"
+      },
+      "locked": {
+        "with": "Avec {plan}",
+        "withPrice": "Avec {plan} · {price} USD/mois",
+        "cta": "Débloquer"
+      },
+      "upgrade": {
+        "eyebrow": "Formule {plan}",
+        "title": "{count, plural, one {Débloquez un outil pour candidater mieux} other {Débloquez # outils pour candidater mieux}}",
+        "price": "{price} USD",
+        "period": "par mois · Mobile Money ou carte",
+        "cta": "Voir les formules"
       }
     },
     "nav": {
       "home": "Accueil Career",
-      "label": "Rubriques Career"
+      "label": "Rubriques Career",
+      "locked": "(outil verrouillé)"
     },
     "tips": {
       "title": "Conseils de préparation",

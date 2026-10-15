@@ -2538,6 +2538,50 @@ Conventions :
 | `career.home.ai.why` | Votre entretien a lieu le {date, date, long}. |
 | `career.home.ai.left` | {count, plural, =0 {Vous avez utilisé vos simulations orales ce mois.} one {Il vous reste # simulation orale ce mois.} other {Il vous reste # simulations orales ce mois.}} |
 | `career.home.ai.start` | Démarrer la simulation |
+| `career.home.heroTitle` | Votre identité professionnelle, étape par étape |
+| `career.home.heroTitleAccent` | professionnelle |
+| `career.home.heroLead` | Faites le point, construisez un CV solide, préparez vos candidatures et entraînez-vous. Jumanly vous indique toujours la prochaine étape. |
+| `career.home.journey.title` | Votre parcours Career |
+| `career.home.journey.count` | {done, plural, =0 {Aucune étape terminée sur 4} one {# étape terminée sur 4} other {# étapes terminées sur 4}} |
+| `career.home.journey.step.point` | Faire le point |
+| `career.home.journey.step.cv` | Construire mon CV |
+| `career.home.journey.step.apply` | Préparer mes candidatures |
+| `career.home.journey.step.train` | M'entraîner |
+| `career.home.journey.state.done` | Terminée |
+| `career.home.journey.state.current` | En cours |
+| `career.home.journey.state.next` | À venir |
+| `career.home.journey.continue` | Continuer |
+| `career.home.journey.finished` | Parcours terminé |
+| `career.home.float.cv` | Score du CV |
+| `career.home.float.cvSub` | {score}/100 · {band} |
+| `career.home.float.diagnostic` | Diagnostic fait |
+| `career.home.float.diagnosticSub` | le {date, date, medium} |
+| `career.home.float.next` | Prochaine étape |
+| `career.home.group.point.title` | Faire le point |
+| `career.home.group.point.lead` | Savoir où vous en êtes et où vous allez |
+| `career.home.group.apply.title` | Préparer mes candidatures |
+| `career.home.group.apply.lead` | Les documents que les recruteurs liront |
+| `career.home.group.train.title` | M'entraîner |
+| `career.home.group.train.lead` | Arriver prêt le jour de l'entretien |
+| `career.home.badge.included` | Inclus |
+| `career.home.diagnostic.descV2` | Un bilan en 6 dimensions : clarté du projet, compétences, expérience, outils de candidature, entretiens et réseau. Chaque note est expliquée. |
+| `career.home.cv.descV2` | Éditez votre CV par sections, choisissez un modèle et exportez-le en PDF. Le score vous dit quoi améliorer en premier. |
+| `career.home.cv.chip.templates` | Modèles |
+| `career.home.cv.chip.pdf` | Export PDF |
+| `career.home.cv.chip.score` | Score expliqué |
+| `career.home.plan.fromDiagnostic` | Créé à partir de votre diagnostic |
+| `career.home.plan.create` | Créer mon plan |
+| `career.home.locked.with` | Avec {plan} |
+| `career.home.locked.withPrice` | Avec {plan} · {price} USD/mois |
+| `career.home.locked.cta` | Débloquer |
+| `career.home.tips.soon` | Arrive prochainement |
+| `career.home.interviews.question` | « Présentez-vous en deux minutes. » |
+| `career.home.upgrade.eyebrow` | Formule {plan} |
+| `career.home.upgrade.title` | {count, plural, one {Débloquez un outil pour candidater mieux} other {Débloquez # outils pour candidater mieux}} |
+| `career.home.upgrade.price` | {price} USD |
+| `career.home.upgrade.period` | par mois · Mobile Money ou carte |
+| `career.home.upgrade.cta` | Voir les formules |
+| `career.nav.locked` | (outil verrouillé) |
 
 #### Conseils généraux (Free, contenu statique)
 

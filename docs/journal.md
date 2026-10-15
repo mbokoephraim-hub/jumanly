@@ -2,6 +2,29 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Accueil Career v2 (15 octobre 2026)
+
+Brief `docs/refonte-career/BRIEF-CAREER-V2.md` et maquette `docs/refonte-career/maquette/`
+(remplace la 03-08 pour `/app/career`). Chargement des données de `page.tsx` gardé ; ajout du
+résultat du dernier diagnostic (radar et stade) et du nombre de candidatures (parcours). Captures
+1440 et 390 dans `/mnt/project-files/captures/career-v2/`.
+
+- **Hero « parcours »** (`CareerHero`) : parcours en 4 étapes calculé par `careerJourney()`
+  (testé), boutons « Continuer » et diagnostic, scène décorative (Amani « joie », Orbi, orbites,
+  trois cartes : score du CV, diagnostic, prochaine étape), toutes les valeurs réelles.
+- **Trois groupes** numérotés en grille bento : Faire le point (diagnostic sombre avec radar et
+  stade, plan), Préparer mes candidatures (Mon CV, lettres, LinkedIn, portfolio), M'entraîner
+  (simulations avec Kofi « téléphone », conseils « Bientôt disponible »).
+- **Cartes d'outils** (`CareerToolCard`, `CareerArt`) : illustration CSS/SVG par outil, badges
+  « Inclus », formule (Sapin ou Nuit) ou « Bientôt disponible » ; outil verrouillé : voile, prix
+  « Avec {formule} · {prix} USD/mois » et « Débloquer » vers `/app/abonnement`.
+- **Bandeau d'offre** (`CareerUpgradeBand`, Fatou « montre ») tant qu'un outil est verrouillé ;
+  formule choisie par `upgradeOffer()` (testé), sans nom de forfait dans le code.
+- Rail d'onglets : cadenas après les outils verrouillés. Mouvement : entrées en fondu, flottement,
+  orbite, onde du micro, survols ; tout est immobile en animations réduites.
+- 45 textes ajoutés (§ 8 du brief, plus `career.nav.locked`).
+- Décisions : `docs/decisions/2026-10-15-career-v2.md` (seuil de 60, formule du bandeau).
+
 ## Diagnostic : questions de relance et mini plan gratuit (15 octobre 2026)
 
 Décision du propriétaire après le lot C : ajouter les 2 questions de relance, puis faire proposer

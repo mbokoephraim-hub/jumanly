@@ -1093,3 +1093,111 @@
     transform: translateY(-6px) scale(0.98);
   }
 }
+
+/* ─────────────── Accueil Career v2 ───────────────
+ * docs/refonte-career/BRIEF-CAREER-V2.md § 7. Hors média : l'état final, immobile. Les entrées,
+ * le flottement, l'orbite, l'onde du micro et les survols ne jouent que sans demande de mouvement
+ * réduit (système ou réglage de l'utilisateur, `[data-reduce-motion]`). Transform et opacité
+ * seulement.
+ */
+.jm-ch-dots {
+  background-image: radial-gradient(rgb(15 63 55 / 0.16) 1.2px, transparent 1.3px);
+  background-size: 16px 16px;
+  -webkit-mask-image: linear-gradient(180deg, #000, transparent 85%);
+  mask-image: linear-gradient(180deg, #000, transparent 85%);
+}
+.jm-ch-dots-light {
+  background-image: radial-gradient(rgb(255 255 255 / 0.14) 1.2px, transparent 1.3px);
+}
+.jm-ch-spark {
+  clip-path: polygon(50% 0, 61% 39%, 100% 50%, 61% 61%, 50% 100%, 39% 61%, 0 50%, 39% 39%);
+}
+.jm-ch-accent {
+  background-image: var(--jm-degrade-signature);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+}
+.jm-ch-locked .jm-ch-art::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(180deg, transparent 40%, rgb(255 255 255 / 0.55));
+  pointer-events: none;
+}
+.jm-ch-wave {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 40px;
+}
+.jm-ch-wave > i {
+  width: 5px;
+  height: var(--h);
+  border-radius: 4px;
+  background: var(--color-lime);
+}
+
+@keyframes jm-ch-in {
+  from {
+    opacity: 0.001;
+    transform: translateY(14px);
+  }
+}
+@keyframes jm-ch-wave {
+  0%,
+  100% {
+    transform: scaleY(0.45);
+  }
+  50% {
+    transform: scaleY(1);
+  }
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .jm-ch-in {
+    animation: jm-ch-in 0.7s var(--jm-arrivee) both;
+    animation-delay: calc(var(--i, 0) * 80ms);
+  }
+  .jm-ch-orbit {
+    animation: jm-turn 60s linear infinite;
+  }
+  .jm-ch-wave > i {
+    animation: jm-ch-wave 1.6s ease-in-out infinite;
+    animation-delay: var(--d, 0s);
+  }
+  .jm-ch-card {
+    transition:
+      transform 0.35s var(--jm-arrivee),
+      box-shadow 0.35s ease;
+  }
+  /* `translate` and not `transform`: the objects also float (`jm-float` animates transform). */
+  .jm-ch-obj {
+    transition: translate 0.5s var(--jm-arrivee);
+  }
+  .jm-ch-chev {
+    transition: transform 0.25s var(--jm-arrivee);
+  }
+  .jm-ch-card:hover,
+  .jm-ch-card:focus-within {
+    transform: translateY(-4px);
+    box-shadow:
+      0 2px 0 rgb(15 63 55 / 0.04),
+      0 30px 60px -26px rgb(15 63 55 / 0.45);
+  }
+  .jm-ch-card:hover .jm-ch-obj {
+    translate: 0 -6px;
+  }
+  .jm-ch-card:hover .jm-ch-chev {
+    transform: translateX(3px);
+  }
+}
+/* Réglage « Réduire les animations » : rien ne bouge au survol non plus. */
+[data-reduce-motion] .jm-ch-card:hover,
+[data-reduce-motion] .jm-ch-card:focus-within,
+[data-reduce-motion] .jm-ch-card:hover .jm-ch-chev {
+  transform: none;
+}
+[data-reduce-motion] .jm-ch-card:hover .jm-ch-obj {
+  translate: none;
+}
