@@ -2,6 +2,32 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · lot 14 : pages système et e-mails (15 octobre 2026)
+
+- 404 (maquette 08-01) : code en dégradé Signature, Fatou perplexe, recherche en pilule (envoyée
+  vers `/offres`, ou `/formations` pour une formation retirée) ; variantes « offre retirée » et
+  « formation retirée » (`not-found.tsx` sous `/offres/[slug]` et `/formations/[slug]`) ; dans
+  l'espace connecté, la même page garde le gabarit de l'application (`src/app/app/not-found.tsx`).
+- 403 (08-02) : nouvelle page `/app/acces-refuse`. Une page Hire ou partenaire ouverte depuis
+  l'espace personnel y mène (avant : retour silencieux à l'accueil). « Changer d'espace » ouvre le
+  sélecteur d'espace de l'en-tête. Un rôle insuffisant dans l'organisation reste une 404 (on ne
+  révèle pas la page).
+- 500 (08-03) : gabarit minimal sans dépendance au layout, aussi pour `global-error.tsx`. Ses textes
+  viennent de `messages/fr.systeme.json`, généré par `pnpm messages` avec `fr.json`.
+- Maintenance (08-04) : page `/maintenance` ; `MAINTENANCE_MODE=1` (avec `MAINTENANCE_UNTIL` et
+  `MAINTENANCE_CITY`) au moment du build y renvoie toutes les pages.
+- Hors ligne (08-05) : bandeau Nuit en haut du panneau principal avec « Réessayer », toast
+  « Connexion rétablie. », avis unique « Connexion lente », page `/hors-ligne` en carte avec le mode
+  économie de données (réglage de l'appareil : vidéos en qualité réduite).
+- E-mails (08-06) : gabarit 600 px, en-tête Sapin, carte blanche, bouton Lime, pied « essentiel »
+  ou lien vers les préférences, images en PNG (`public/marque/email/`). Bienvenue avec bandeau
+  illustré, invitation à un entretien avec la carte du poste. Logique d'envoi inchangée.
+- Textes ajoutés : `system.404.searchPlaceholder`, `system.404.pageTitle`,
+  `system.403.pageTitle`, `system.500.footer`, `system.maintenance.badge`,
+  `system.maintenance.timezone`, `system.offline.dataSaverOn`, `system.offline.dataSaverHint`,
+  `foundation.sampleEmail`, `foundation.sampleMode`.
+- Écarts restants : voir `docs/decisions/2026-10-15-refonte-lot-14.md`.
+
 ## Inscription bloquée en production (15 octobre 2026)
 
 - Le propriétaire voyait « Un problème est survenu de notre côté » à la création du compte,

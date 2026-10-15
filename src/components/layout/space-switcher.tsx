@@ -57,7 +57,7 @@ export function SpaceSwitcher({
     );
   };
   return (
-    <details className="relative min-w-0">
+    <details data-space-switcher className="relative min-w-0">
       <summary
         aria-label={t("spaceSwitcher.aria")}
         className={cx(

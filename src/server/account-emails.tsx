@@ -20,7 +20,7 @@ export function greeting(firstName?: string | null) {
 }
 
 export async function send(to: string, subject: string, props: TransactionalEmailProps) {
-  const html = await render(<TransactionalEmail {...props} />);
+  const html = await render(<TransactionalEmail recipient={to} {...props} />);
   await emailSender().send({ to, subject, html, text: toPlainText(html) });
 }
 
@@ -70,6 +70,13 @@ export async function sendPasswordChanged(to: string, firstName: string | null, 
   });
 }
 
+// Where each welcome button leads (« Compléter mon profil », « Créer ma première offre »…).
+const welcomePaths = {
+  talent: "/app/profil",
+  recruiter: "/app/hire/offres/nouvelle",
+  company: "/app/organisation",
+};
+
 export async function sendWelcome(
   to: string,
   input:
@@ -82,7 +89,11 @@ export async function sendWelcome(
     preview: t(`${key}.preheader`),
     greeting: greeting(input.firstName),
     paragraphs: [t(`${key}.p1`, values), t(`${key}.p2`), t(`${key}.p3`)],
-    cta: { label: t(`${key}.cta`), href: absoluteUrl("/app") },
+    cta: {
+      label: t(`${key}.cta`),
+      href: absoluteUrl(welcomePaths[input.kind]),
+    },
+    hero: true,
   });
 }
 

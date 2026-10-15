@@ -41,7 +41,7 @@ export async function requireHire(
 ): Promise<{ user: CurrentUser; space: ActiveSpace; ctx: HireContext }> {
   const user = await requireUser(suite);
   const space = await getActiveSpace(user.id);
-  if (!space) redirect("/app");
+  if (!space) redirect("/app/acces-refuse");
   const ctx = { userId: user.id, organizationId: space.organizationId, role: space.role };
   if (need && !hirePermissions(space.role)[need]) notFound();
   return { user, space, ctx };

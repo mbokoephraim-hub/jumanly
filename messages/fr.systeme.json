@@ -1,0 +1,23 @@
+{
+  "common": {
+    "brand": "Jumanly"
+  },
+  "system": {
+    "500": {
+      "meta": {
+        "title": "Erreur · Jumanly"
+      },
+      "code": "500",
+      "title": "Nous rencontrons un problème technique",
+      "body": "Notre équipe est prévenue. Vos données sont en sécurité. Réessayez dans quelques minutes.",
+      "cta": {
+        "retry": "Réessayer",
+        "home": "Retour à l'accueil"
+      },
+      "footer": "Une plateforme développée par The Growth Lab · assistant@jumanly.io"
+    },
+    "error": {
+      "reference": "Référence de l'incident : {ref}"
+    }
+  }
+}

@@ -14,6 +14,7 @@ import { signOut } from "@/server/actions/auth";
 import { AccountMenu, type AccountSummary } from "./account-menu";
 import { NavLink } from "./nav-link";
 import { SpaceSwitcher, type SpaceOption } from "./space-switcher";
+import { OFFLINE_SLOT_ID } from "@/lib/connection";
 
 /**
  * Signed-in space layout (mockup 00-04).
@@ -149,6 +150,7 @@ export function AppShell({
           id="content"
           className="relative flex w-full flex-col gap-5 px-4 pt-5 pb-32 sm:px-6 lg:px-[30px] lg:pt-5 lg:pb-[30px]"
         >
+          <div id={OFFLINE_SLOT_ID} role="status" className="empty:-mb-5" />
           {children}
         </main>
       </div>

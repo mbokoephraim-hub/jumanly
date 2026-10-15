@@ -32,7 +32,7 @@ export async function requirePartner(suite = "/app/partenaire") {
   const wanted = (await cookies()).get(SPACE_COOKIE)?.value;
   const membership =
     memberships.find((item) => item.organizationId === wanted) ?? memberships[0] ?? null;
-  if (!membership) redirect("/app");
+  if (!membership) redirect("/app/acces-refuse");
   const ctx: PartnerContext = { userId: user.id, organizationId: membership.organizationId };
   return { user, ctx, organization: membership.organization };
 }
