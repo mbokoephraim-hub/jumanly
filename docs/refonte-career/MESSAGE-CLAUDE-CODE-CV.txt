@@ -1,0 +1,14 @@
+Refonte de « Mes CV » (/app/career/cv) et de l'éditeur de CV (/app/career/cv/[id]), maquettes validées.
+
+1. Lis docs/refonte-career/BRIEF-CV-V2.md en entier. Ouvre ensuite dans un navigateur docs/refonte-career/maquette/mes-cv-v2.html et editeur-cv-v2.html (ajoute #mise-en-forme pour le second onglet), en 1440 px puis en 390 px, et regarde les captures .jpg du même dossier.
+2. Relis docs/modeles-cv/SPECIFICATION-MODELES-CV.md (§ 4 à § 8) et docs/refonte-career/BRIEF-CAREER-V2.md. Cette refonte change la mise en page, pas les fonctions : les modèles, les réglages, la pagination et l'export restent comme la spécification des modèles les décrit.
+3. Propose-moi un plan court (composants, données ajoutées, textes, tests), puis exécute-le sur une branche dédiée, avec une pull request.
+
+Règles à tenir :
+- Ne modifie ni docs/modeles-cv/, ni src/features/cv/render/, ni src/features/cv/templates/, ni les routes PDF. StylePanel, PagesPanel et ExportPanel ne changent que d'habillage. Si un lot des modèles de CV touche encore ces fichiers, attends qu'il soit fusionné.
+- Toutes les valeurs affichées sont réelles : score et critères via cvScore, modèle et vignette via le style du CV, nombre de modèles inclus via le catalogue et les droits. N'affiche pas un nombre de pages qui n'est pas connu.
+- Aucun nom de forfait dans le code (can, talentPlanFor). Aucun texte en dur : ajoute les clés du § 4 du brief dans textes/textes-application.md, puis pnpm messages.
+- Réutilise Character (Amani « montre » et « salut »), Orbi, Gauge, src/styles/motion.css et les vignettes de public/cv-templates/. N'ajoute aucune image. Seuls transform et opacity sont animés, et tout est immobile en animations réduites.
+- Le surlignage de la section ouverte se fait en CSS (:has()) dans l'aperçu seulement : le PDF exporté n'en garde aucune trace.
+
+Avant de terminer : lint, typecheck, test, test:e2e et test:e2e:reduced passent. Le rendu est conforme aux captures, sans défilement horizontal ni vide sous l'aperçu. Mets à jour docs/journal.md et ajoute une note dans docs/decisions/.
