@@ -10408,7 +10408,15 @@
       "audit": "Journal d'audit",
       "backToApp": "Retour à l'application",
       "more": "Toutes les rubriques",
-      "mobile": "Rubriques de Jumanly Admin"
+      "mobile": "Rubriques de Jumanly Admin",
+      "home": "Accueil de Jumanly Admin",
+      "group": {
+        "steer": "Pilotage",
+        "accounts": "Comptes et partenaires",
+        "offer": "Forfaits et abonnements",
+        "content": "Formations et contenus",
+        "control": "Modération et contrôle"
+      }
     },
     "env": {
       "badge": "Administration"

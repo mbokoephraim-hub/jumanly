@@ -19,7 +19,13 @@ const placements = {
     on: "text-sapin [&>span]:shadow-[0_2px_0_var(--jm-lime)]",
     off: "text-sapin hover:[&>span]:shadow-[0_2px_0_var(--jm-brume)]",
   },
-  // Wide Nuit bar of Jumanly Admin: icon and label on one line.
+  // Floating gradient column of Jumanly Admin (Admin v3): icon only, label in a tooltip.
+  rail: {
+    base: "jm-admin-link relative grid size-10 shrink-0 place-items-center rounded-full transition-colors [&_svg]:size-[21px]",
+    on: "bg-lime text-sapin shadow-[0_0_18px_rgb(166_242_107/0.55)]",
+    off: "text-blanc/75 hover:bg-blanc/12 hover:text-blanc",
+  },
+  // Wide Nuit menu of Jumanly Admin (« more » sheet on phones): icon and label on one line.
   admin: {
     base: "flex h-[42px] shrink-0 items-center gap-3 rounded-sm px-3.5 text-[13.5px] whitespace-nowrap [&_svg]:size-5",
     on: "bg-lime font-semibold text-sapin",
