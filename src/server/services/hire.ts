@@ -825,12 +825,6 @@ export async function pipelineDetails(
       ? [(first.createdAt.getTime() - application.createdAt.getTime()) / 86_400_000]
       : [];
   });
-  const values = applications
-    .map((application) => application.matchScore)
-    .filter((value): value is number => value !== null)
-    .sort((a, b) => b - a);
-  const mean = (list: number[]) =>
-    list.length ? Math.round(list.reduce((sum, value) => sum + value, 0) / list.length) : null;
   return {
     cards,
     thisWeek: applications.filter((application) => application.createdAt >= weekAgo).length,
@@ -839,6 +833,5 @@ export async function pipelineDetails(
       : null,
     interviews: interviews.length,
     interviewsThisWeek: interviews.filter((row) => row.startsAt! < weekAhead).length,
-    compatibility: { average: mean(values), top: mean(values.slice(0, 10)) },
   };
 }

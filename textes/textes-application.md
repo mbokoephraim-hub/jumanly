@@ -5218,7 +5218,6 @@ Conventions :
 | `hire.interviews.legend` | Légende des statuts |
 | `hire.interviews.slotProposed` | Créneau proposé |
 | `hire.interviews.actions` | Actions de l'entretien |
-| `hire.interviews.close` | Fermer le détail |
 | `hire.interviews.calendar` | Agenda des entretiens |
 
 ---

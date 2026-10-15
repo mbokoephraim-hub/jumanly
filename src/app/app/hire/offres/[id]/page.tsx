@@ -90,6 +90,19 @@ export default async function PipelinePage({
     const match = matches.get(applicationId);
     return match && match !== "disabled" ? match : null;
   };
+  // Average of the scores shown on the cards (computed here, not the stored snapshot).
+  const shownScores = applications
+    .map((application) => scoreOf(application.id)?.score)
+    .filter((value): value is number => value !== undefined)
+    .sort((a, b) => b - a);
+  const meanOf = (values: number[]) =>
+    values.length
+      ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length)
+      : null;
+  const compatibility = {
+    average: meanOf(shownScores),
+    top: meanOf(shownScores.slice(0, 10)),
+  };
   const byScore = withMatching && query.tri === "score";
   const narrowed = withMatching && query.compat === "haut";
   const list = byScore
@@ -448,16 +461,16 @@ export default async function PipelinePage({
         <Kpi
           label={t("dashboard.kpi.avgCompatibility.text")}
           value={
-            withMatching && details.compatibility.average !== null
-              ? all("ui.percent", { value: details.compatibility.average })
+            withMatching && compatibility.average !== null
+              ? all("ui.percent", { value: compatibility.average })
               : t("dashboard.kpi.none")
           }
           icon="intelligence"
           ai
         >
-          {withMatching && details.compatibility.top !== null ? (
+          {withMatching && compatibility.top !== null ? (
             <span className={cx(tag, "bg-gris-clair")}>
-              {t("dashboard.kpi.avgCompatibility.top", { score: details.compatibility.top })}
+              {t("dashboard.kpi.avgCompatibility.top", { score: compatibility.top })}
             </span>
           ) : matchingPlan ? (
             <span className="text-[11px] text-ardoise">

@@ -2,6 +2,51 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · lot 11 : espace recruteur et entreprise (15 octobre 2026)
+
+Maquettes `docs/maquettes/04-espace-recruteur-entreprise/` (04-01 à 04-10). Textes de
+`messages/fr.json`, forfaits de la partie 05 ; mouvements des lots A, B et C gardés (bandeau
+d'univers Hire, menu-torche, rail d'onglets, apparitions, compteurs et jauges, cloche, toasts,
+cartes de réussite). Captures 1440 et 390 dans `/mnt/project-files/captures/refonte-lot-11/`.
+
+- **Tableau de bord, Mes offres** : indicateurs, « À traiter », offres avec barre des étapes,
+  tableau des offres avec onglets par statut, recherche et menu d'actions.
+- **Nouvelle offre** : assistant en 6 étapes (bases, description, compétences, critères,
+  processus, aperçu), brouillon IA, suggestions avec « Pourquoi ? », aperçu en direct, « Partir
+  d'une offre existante ». La certification se coche à la publication.
+- **Pipeline** : glisser-déposer fluide (la carte suit la souris ou le doigt après un appui long,
+  la colonne d'arrivée s'éclaire, retour « Annuler » dans le toast), clavier (Espace, flèches,
+  Échap). Déposer sur « Non retenu » ouvre la décision : aucun rejet automatique. Score sur le
+  dégradé IA avec son « Pourquoi ? » en panneau.
+- **Fiche candidature** : en-tête, onglets ancrés, profil, CV, réponses, critères, notes, grille,
+  historique ; à droite le score (anneau, critères, « Pourquoi ? ») et « Votre décision ».
+- **Talents** : barre de recherche, filtres en puces, résultats avec score et « Pourquoi ? »,
+  demande de mise en relation à côté des résultats, quotas du mois.
+- **Viviers** : cartes des viviers, vivier ouvert en tableau (origine, ajout, « Proposer pour une
+  offre »), panneau « Nouveau vivier » avec visibilité. `/app/hire/viviers/[id]` redirige.
+- **Entretiens** : agenda semaine (et jour, mois, liste), statuts en couleur, détail de
+  l'entretien, « Préparer l'entretien » tiré du score (points à vérifier, compétences manquantes),
+  « À confirmer », carte de réussite à l'envoi de l'invitation.
+- **Rapports** : indicateurs, entonnoir, origine en anneau, tableaux par offre et par recruteur,
+  motifs de décision, candidats informés, évaluations, rapports consolidés, niveaux verrouillés.
+- **Organisation** : carte d'en-tête, rail d'onglets, membres en tableau avec changement de rôle
+  dans un menu, invitations, et à droite vérification, rôles et équipes.
+- 100 textes ajoutés (`hire.*`, `org.*`).
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Lint, types, tests unitaires (182) et base (130), build | ✓ |
+| `pnpm test:e2e` et `pnpm test:e2e:reduced` | ✓ 223 et 223 |
+| Aucun rejet automatique, score avec « Pourquoi ? » | ✓ |
+| Aucun chiffre inventé : seuls les champs existants sont affichés | ✓ |
+
+### Écarts restants
+
+Voir `docs/decisions/2026-10-15-refonte-lot-11.md` : éléments des maquettes sans fonction
+derrière (non construits plutôt qu'inventés).
+
 ## Espace connecté animé · lot C : le diagnostic de carrière (15 octobre 2026)
 
 Brief `docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md` § 5. PR unique, captures 1440 et 390 dans
