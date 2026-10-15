@@ -205,7 +205,9 @@ test("une organisation ne voit jamais les offres ni les candidats d'une autre", 
   for (const path of [`/app/hire/offres/${jobId}`, `/app/hire/offres/${jobId}/modifier`]) {
     // Streamed pages keep a 200 status: what matters is that nothing of the job is shown.
     await other.goto(path);
-    await expect(other.getByRole("heading", { level: 1 }), path).toHaveText("Page introuvable");
+    await expect(other.getByRole("heading", { level: 1 }), path).toHaveText(
+      "Cette page est introuvable",
+    );
   }
   expect((await other.request.get(`/app/hire/candidats/inconnu/cv`)).status()).toBe(404);
   await other.context().close();
@@ -214,7 +216,10 @@ test("une organisation ne voit jamais les offres ni les candidats d'une autre", 
 test("un talent sans organisation n'accède pas à Hire", async ({ page }) => {
   await logIn(page, demo.talentFree);
   await page.goto("/app/hire");
-  await expect(page).toHaveURL(/\/app$/);
+  await expect(page).toHaveURL(/\/app\/acces-refuse$/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(
+    "Vous n'avez pas accès à cette page",
+  );
 });
 
 test("les écrans Hire et Connect sont accessibles", async ({ page }) => {

@@ -13,6 +13,11 @@ const PAGES = `${VERSION}-pages`;
 const STATIC = `${VERSION}-static`;
 const OFFLINE_URL = "/hors-ligne";
 const MAX_PAGES = 40;
+// Pictures of the offline page (mockup 08-05), stored with it.
+const OFFLINE_ASSETS = [
+  "/marque/jumanly-logo-principal.svg",
+  "/illustrations/jumanly-amani-perplexe.svg",
+];
 
 // Pages readable offline: the profile and the lessons (one entry per lesson opened).
 const OFFLINE_READABLE = [/^\/app\/profil\/?$/, /^\/app\/learn\/[^/]+\/?$/];
@@ -21,7 +26,7 @@ self.addEventListener("install", (event) => {
   event.waitUntil(
     caches
       .open(STATIC)
-      .then((cache) => cache.addAll([OFFLINE_URL, "/icon.svg"]))
+      .then((cache) => cache.addAll([OFFLINE_URL, "/icon.svg", ...OFFLINE_ASSETS]))
       .then(() => self.skipWaiting()),
   );
 });
@@ -94,5 +99,6 @@ self.addEventListener("fetch", (event) => {
   // Sign-out ends on /connexion?deconnecte=1, as a page or as an in-app navigation.
   if (url.searchParams.has("deconnecte")) event.waitUntil(caches.delete(PAGES));
   if (request.mode === "navigate") event.respondWith(page(request));
-  else if (url.pathname.startsWith("/_next/static/")) event.respondWith(builtFile(request));
+  else if (url.pathname.startsWith("/_next/static/") || OFFLINE_ASSETS.includes(url.pathname))
+    event.respondWith(builtFile(request));
 });

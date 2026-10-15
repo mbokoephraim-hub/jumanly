@@ -13,6 +13,7 @@ export function certificateEmail(
   return {
     subject: t("mail.certificate.subject", { firstName: firstName ?? "" }).replace(/\s+,/, ","),
     props: {
+      essential: false,
       preview: t("mail.certificate.preheader", input),
       greeting: greeting(firstName),
       paragraphs: [t("mail.certificate.p1", input), t("mail.certificate.p2", { verifyUrl })],
