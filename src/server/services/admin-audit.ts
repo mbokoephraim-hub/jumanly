@@ -28,6 +28,7 @@ export const AUDIT_FAMILIES = [
   "profile",
   "talent",
   "security",
+  "cost",
   "admin",
 ] as const;
 export type AuditFamily = (typeof AUDIT_FAMILIES)[number];

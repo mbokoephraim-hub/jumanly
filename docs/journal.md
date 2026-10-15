@@ -2,6 +2,24 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v2 · étape 2 : indicateurs intelligents (15 octobre 2026)
+
+- **Tableau de bord `/admin`** : quatre chiffres clés en tête (utilisateurs actifs, revenu mensuel
+  récurrent, conversion Free vers payant, dépenses IA), puis « Ce qui demande votre attention » :
+  paiements en attente, signalements, contestations de score, vérifications, offres à modérer, pic
+  de dépenses IA et abonnements qui expirent, classés du plus urgent au moins urgent, chacun avec
+  son « Pourquoi ? » et un lien « Traiter ».
+- **Forfaits utilisés** : nombre de comptes par forfait et par famille (Talents, RH, Companies,
+  Partners), forfaits gratuits compris, part, variation sur la période et part offerte (licences) ;
+  chaque forfait ouvre la liste de ses comptes.
+- **Coûts et rentabilité** : nouvelle page `/admin/indicateurs/couts` où l'administrateur saisit ses
+  coûts du mois (acquisition, hébergement, IA hors Jumanly, autres), journalisés. Le tableau de bord
+  en déduit le coût d'acquisition client, le coût de fonctionnement par utilisateur actif et la
+  marge brute. Table `PlatformCost` (migration `admin_platform_costs`).
+- Export CSV des indicateurs complété (actifs, coûts, comptes par forfait).
+- Tests : unitaires (priorité, pic IA, montants, prorata), en base (forfaits utilisés, ordre des
+  urgences, coûts) et e2e (forfaits et saisie des coûts).
+
 ## Jumanly Admin v2 · étape 1 : socle et recette (15 octobre 2026)
 
 - **Recette** : `tests/e2e/admin.spec.ts` ouvre les 14 écrans avec l'administrateur, le support et

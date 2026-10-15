@@ -8835,11 +8835,11 @@ Conventions :
 | `admin.dashboard.kpi.cac` | Coût d'acquisition client |
 | `admin.dashboard.kpi.costPerUser` | Coût de fonctionnement par utilisateur |
 | `admin.dashboard.kpi.aiCost` | Dépenses IA |
-| `admin.dashboard.kpi.grossMargin` | Marge brute par forfait |
+| `admin.dashboard.kpi.grossMargin` | Marge brute |
 | `admin.dashboard.kpi.activeCompanies` | Comptes entreprises actifs |
 | `admin.dashboard.kpi.institutionalRevenue` | Revenus des contrats institutionnels |
 | `admin.dashboard.kpi.value.currency` | {amount} {currency} |
-| `admin.dashboard.kpi.value.percent` | {value} % |
+| `admin.dashboard.kpi.value.percent` | {value, number} % |
 | `admin.dashboard.kpi.revenue30` | Encaissé sur 30 jours |
 | `admin.dashboard.kpi.none` | Pas encore de données |
 | `admin.dashboard.kpi.period` | Sur les 30 derniers jours : conversion des comptes créés, renouvellement des périodes arrivées à échéance, dépenses IA estimées. |
@@ -8886,6 +8886,74 @@ Conventions :
 | `admin.dashboard.csv.indicator` | Indicateur |
 | `admin.dashboard.csv.value` | Valeur |
 | `admin.dashboard.csv.previous` | Période précédente |
+| `admin.dashboard.csv.plan` | Comptes {family} · {plan} |
+
+### `/admin` · Indicateurs intelligents (v2)
+
+| Clé | Texte |
+|---|---|
+| `admin.dashboard.hero` | Chiffres clés |
+| `admin.dashboard.more` | Autres indicateurs |
+| `admin.dashboard.kpi.activeUsers` | Utilisateurs actifs |
+| `admin.dashboard.attention.title` | Ce qui demande votre attention |
+| `admin.dashboard.attention.hint` | Du plus urgent au moins urgent |
+| `admin.dashboard.attention.open` | Traiter |
+| `admin.dashboard.attention.why` | Pourquoi ? |
+| `admin.dashboard.attention.overdue` | En retard |
+| `admin.dashboard.attention.oldest` | {days, plural, =0 {Le plus ancien date d'aujourd'hui} one {Le plus ancien attend depuis # jour} other {Le plus ancien attend depuis # jours}} |
+| `admin.dashboard.attention.rank` | Priorité calculée : {score} points (type d'élément, plus 2 points par jour d'attente). |
+| `admin.dashboard.attention.kind.payments` | {count, plural, one {# paiement bloqué} other {# paiements bloqués}} |
+| `admin.dashboard.attention.kind.reports` | {count, plural, one {# signalement à traiter} other {# signalements à traiter}} |
+| `admin.dashboard.attention.kind.disputes` | {count, plural, one {# score contesté à revoir} other {# scores contestés à revoir}} |
+| `admin.dashboard.attention.kind.verifications` | {count, plural, one {# organisation à vérifier} other {# organisations à vérifier}} |
+| `admin.dashboard.attention.kind.jobs` | {count, plural, one {# offre à modérer} other {# offres à modérer}} |
+| `admin.dashboard.attention.kind.aiSpike` | Dépenses d'IA inhabituelles |
+| `admin.dashboard.attention.kind.expiring` | {count, plural, one {# abonnement arrive à échéance sous 7 jours} other {# abonnements arrivent à échéance sous 7 jours}} |
+| `admin.dashboard.attention.reason.payments` | Un paiement encore « en attente » après 15 minutes n'a pas reçu la confirmation du fournisseur : la personne a peut-être payé sans avoir accès. |
+| `admin.dashboard.attention.reason.reports` | Une personne a signalé une offre ou un message. Tant qu'il n'est pas traité, le contenu reste visible. |
+| `admin.dashboard.attention.reason.disputes` | Un talent a demandé la révision humaine de son score. La réponse est due en {due} jours au plus ; le plus ancien attend depuis {days} jours. |
+| `admin.dashboard.attention.reason.verifications` | Une organisation attend sa vérification pour afficher le badge « vérifiée » et inspirer confiance aux candidats. |
+| `admin.dashboard.attention.reason.jobs` | Le contrôle automatique a mis ces offres de côté. Elles ne sont pas publiées tant qu'une personne ne les a pas vues. |
+| `admin.dashboard.attention.reason.aiSpike` | L'IA a coûté {lastDayCents, number} centimes USD ces dernières 24 heures, plus de {factor} fois la moyenne quotidienne du mois ({averageCents, number} centimes). |
+| `admin.dashboard.attention.reason.expiring` | Les abonnements prépayés s'arrêtent à échéance sans renouvellement. Le plus proche se termine dans {days} jours. |
+| `admin.dashboard.costs.title` | Coûts et rentabilité |
+| `admin.dashboard.costs.empty` | Saisissez vos coûts mensuels pour calculer le coût d'acquisition, le coût par utilisateur et la marge. |
+| `admin.dashboard.costs.total` | Coûts de la période, IA comprise : {amount}. |
+| `admin.dashboard.costs.enter` | Saisir les coûts |
+| `admin.dashboard.costs.edit` | Modifier les coûts |
+| `admin.dashboard.plansUsed.title` | Forfaits utilisés |
+| `admin.dashboard.plansUsed.hint` | Tous les comptes, forfaits gratuits compris. Un forfait ouvre la liste de ses comptes. |
+| `admin.dashboard.plansUsed.accounts` | {count, plural, =0 {aucun compte} one {# compte} other {# comptes}} |
+| `admin.dashboard.plansUsed.sponsored` | dont {count} offerts |
+
+### `/admin/indicateurs/couts` · Coûts mensuels
+
+| Clé | Texte |
+|---|---|
+| `admin.costs.title` | Coûts mensuels |
+| `admin.costs.subtitle` | Vos coûts réels, mois par mois, en USD. Ils servent à calculer le coût d'acquisition, le coût par utilisateur et la marge brute. |
+| `admin.costs.back` | Retour aux indicateurs |
+| `admin.costs.form.title` | Saisir un mois |
+| `admin.costs.form.month` | Mois |
+| `admin.costs.form.amountHint` | Montant en USD, par exemple 120,50. Laissez vide pour zéro. |
+| `admin.costs.form.note` | Note |
+| `admin.costs.form.save` | Enregistrer les coûts |
+| `admin.costs.category.acquisition` | Acquisition (publicité, campagnes) |
+| `admin.costs.category.hosting` | Hébergement et services techniques |
+| `admin.costs.category.ai_external` | IA hors Jumanly (abonnements, outils) |
+| `admin.costs.category.other` | Autres coûts de fonctionnement |
+| `admin.costs.saved` | Coûts du mois enregistrés. Les indicateurs sont à jour. |
+| `admin.costs.error` | Vérifiez le mois et les montants (nombres positifs, deux décimales au plus). |
+| `admin.costs.history.title` | 12 derniers mois |
+| `admin.costs.history.month` | Mois |
+| `admin.costs.history.total` | Total |
+| `admin.costs.history.none` | Non saisi |
+| `admin.costs.history.line` | {category} : {amount} USD |
+| `admin.costs.history.edit` | Modifier |
+| `admin.costs.aiNote` | Les dépenses d'IA de Jumanly sont déjà mesurées automatiquement : ne les saisissez pas ici. |
+| `admin.costs.formula` | Coût d'acquisition = acquisition ÷ nouveaux comptes payants. Coût par utilisateur = coûts de fonctionnement (IA comprise) ÷ utilisateurs actifs. Marge brute = (revenus − coûts de fonctionnement) ÷ revenus. |
+| `admin.journal.action.cost_save` | a saisi les coûts du mois |
+| `admin.journal.family.cost` | Coûts |
 
 ### `/admin/utilisateurs` · Utilisateurs
 

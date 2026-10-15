@@ -10451,7 +10451,8 @@
         "talent_search": "a cherché des talents",
         "security_abnormalUsage": "usage anormal détecté",
         "admin_indicators_export": "a exporté les indicateurs",
-        "admin_audit_export": "a exporté le journal d'audit"
+        "admin_audit_export": "a exporté le journal d'audit",
+        "cost_save": "a saisi les coûts du mois"
       },
       "target": {
         "message": "Message",
@@ -10490,7 +10491,8 @@
         "profile": "Consultations de profil",
         "talent": "Recherches de talents",
         "security": "Sécurité",
-        "admin": "Exports"
+        "admin": "Exports",
+        "cost": "Coûts"
       }
     },
     "search": {
@@ -10529,12 +10531,12 @@
         "cac": "Coût d'acquisition client",
         "costPerUser": "Coût de fonctionnement par utilisateur",
         "aiCost": "Dépenses IA",
-        "grossMargin": "Marge brute par forfait",
+        "grossMargin": "Marge brute",
         "activeCompanies": "Comptes entreprises actifs",
         "institutionalRevenue": "Revenus des contrats institutionnels",
         "value": {
           "currency": "{amount} {currency}",
-          "percent": "{value} %"
+          "percent": "{value, number} %"
         },
         "revenue30": "Encaissé sur 30 jours",
         "none": "Pas encore de données",
@@ -10543,7 +10545,8 @@
         "vsPrevious": "vs période précédente",
         "deltaPercent": "{value} %",
         "deltaPoints": "{count, plural, one {{value} pt} other {{value} pts}}",
-        "lowerIsBetter": "Pour un coût, une baisse est une bonne nouvelle."
+        "lowerIsBetter": "Pour un coût, une baisse est une bonne nouvelle.",
+        "activeUsers": "Utilisateurs actifs"
       },
       "byFamily": "Par famille : Talents, RH, Companies, Partners",
       "byPlan": "Par forfait",
@@ -10595,8 +10598,81 @@
         "file": "indicateurs-jumanly",
         "indicator": "Indicateur",
         "value": "Valeur",
-        "previous": "Période précédente"
+        "previous": "Période précédente",
+        "plan": "Comptes {family} · {plan}"
+      },
+      "hero": "Chiffres clés",
+      "more": "Autres indicateurs",
+      "attention": {
+        "title": "Ce qui demande votre attention",
+        "hint": "Du plus urgent au moins urgent",
+        "open": "Traiter",
+        "why": "Pourquoi ?",
+        "overdue": "En retard",
+        "oldest": "{days, plural, =0 {Le plus ancien date d'aujourd'hui} one {Le plus ancien attend depuis # jour} other {Le plus ancien attend depuis # jours}}",
+        "rank": "Priorité calculée : {score} points (type d'élément, plus 2 points par jour d'attente).",
+        "kind": {
+          "payments": "{count, plural, one {# paiement bloqué} other {# paiements bloqués}}",
+          "reports": "{count, plural, one {# signalement à traiter} other {# signalements à traiter}}",
+          "disputes": "{count, plural, one {# score contesté à revoir} other {# scores contestés à revoir}}",
+          "verifications": "{count, plural, one {# organisation à vérifier} other {# organisations à vérifier}}",
+          "jobs": "{count, plural, one {# offre à modérer} other {# offres à modérer}}",
+          "aiSpike": "Dépenses d'IA inhabituelles",
+          "expiring": "{count, plural, one {# abonnement arrive à échéance sous 7 jours} other {# abonnements arrivent à échéance sous 7 jours}}"
+        },
+        "reason": {
+          "payments": "Un paiement encore « en attente » après 15 minutes n'a pas reçu la confirmation du fournisseur : la personne a peut-être payé sans avoir accès.",
+          "reports": "Une personne a signalé une offre ou un message. Tant qu'il n'est pas traité, le contenu reste visible.",
+          "disputes": "Un talent a demandé la révision humaine de son score. La réponse est due en {due} jours au plus ; le plus ancien attend depuis {days} jours.",
+          "verifications": "Une organisation attend sa vérification pour afficher le badge « vérifiée » et inspirer confiance aux candidats.",
+          "jobs": "Le contrôle automatique a mis ces offres de côté. Elles ne sont pas publiées tant qu'une personne ne les a pas vues.",
+          "aiSpike": "L'IA a coûté {lastDayCents, number} centimes USD ces dernières 24 heures, plus de {factor} fois la moyenne quotidienne du mois ({averageCents, number} centimes).",
+          "expiring": "Les abonnements prépayés s'arrêtent à échéance sans renouvellement. Le plus proche se termine dans {days} jours."
+        }
+      },
+      "costs": {
+        "title": "Coûts et rentabilité",
+        "empty": "Saisissez vos coûts mensuels pour calculer le coût d'acquisition, le coût par utilisateur et la marge.",
+        "total": "Coûts de la période, IA comprise : {amount}.",
+        "enter": "Saisir les coûts",
+        "edit": "Modifier les coûts"
+      },
+      "plansUsed": {
+        "title": "Forfaits utilisés",
+        "hint": "Tous les comptes, forfaits gratuits compris. Un forfait ouvre la liste de ses comptes.",
+        "accounts": "{count, plural, =0 {aucun compte} one {# compte} other {# comptes}}",
+        "sponsored": "dont {count} offerts"
       }
+    },
+    "costs": {
+      "title": "Coûts mensuels",
+      "subtitle": "Vos coûts réels, mois par mois, en USD. Ils servent à calculer le coût d'acquisition, le coût par utilisateur et la marge brute.",
+      "back": "Retour aux indicateurs",
+      "form": {
+        "title": "Saisir un mois",
+        "month": "Mois",
+        "amountHint": "Montant en USD, par exemple 120,50. Laissez vide pour zéro.",
+        "note": "Note",
+        "save": "Enregistrer les coûts"
+      },
+      "category": {
+        "acquisition": "Acquisition (publicité, campagnes)",
+        "hosting": "Hébergement et services techniques",
+        "ai_external": "IA hors Jumanly (abonnements, outils)",
+        "other": "Autres coûts de fonctionnement"
+      },
+      "saved": "Coûts du mois enregistrés. Les indicateurs sont à jour.",
+      "error": "Vérifiez le mois et les montants (nombres positifs, deux décimales au plus).",
+      "history": {
+        "title": "12 derniers mois",
+        "month": "Mois",
+        "total": "Total",
+        "none": "Non saisi",
+        "line": "{category} : {amount} USD",
+        "edit": "Modifier"
+      },
+      "aiNote": "Les dépenses d'IA de Jumanly sont déjà mesurées automatiquement : ne les saisissez pas ici.",
+      "formula": "Coût d'acquisition = acquisition ÷ nouveaux comptes payants. Coût par utilisateur = coûts de fonctionnement (IA comprise) ÷ utilisateurs actifs. Marge brute = (revenus − coûts de fonctionnement) ÷ revenus."
     },
     "users": {
       "title": "Utilisateurs",

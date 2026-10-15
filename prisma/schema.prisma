@@ -1096,6 +1096,30 @@ model ContentBlock {
   @@unique([key, locale])
 }
 
+/// Kinds of running costs entered by an administrator (Admin v2, étape 2).
+enum PlatformCostCategory {
+  acquisition
+  hosting
+  ai_external
+  other
+}
+
+/// A running cost of one month, entered in /admin/indicateurs/couts: the indicators derive the
+/// acquisition cost, the cost per active user and the gross margin from these rows.
+model PlatformCost {
+  id          String               @id @default(cuid(2))
+  /// First day of the month (UTC).
+  month       DateTime
+  category    PlatformCostCategory
+  amountCents Int
+  note        String?
+  updatedById String?
+  createdAt   DateTime             @default(now())
+  updatedAt   DateTime             @updatedAt
+
+  @@unique([month, category])
+}
+
 // ─── Audit (partie 03 § 3.6) ────────────────────────────────────
 
 model AuditLog {

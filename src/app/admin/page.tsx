@@ -3,16 +3,8 @@ import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { AiOrb, Icon, type IconName } from "@/components/brand";
-import {
-  AdminPageHeader,
-  adminCard,
-  adminLabel,
-  adminTitle,
-  FilterMenu,
-  Tag,
-} from "@/components/admin/kit";
-import { ActionRow } from "@/components/hire/kit";
-import { Alert } from "@/components/ui";
+import { AdminPageHeader, adminCard, adminTitle, FilterMenu, Tag } from "@/components/admin/kit";
+import { Alert, ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
 import { requireAdmin, requireCourseEditor } from "@/server/auth/session";
@@ -23,6 +15,14 @@ import {
   type DashboardPeriod,
   type FamilyKey,
 } from "@/server/services/admin-dashboard";
+import {
+  activeAccounts,
+  attentionItems,
+  type AttentionKind,
+  costIndicators,
+  planListHref,
+  planUsage,
+} from "@/server/services/admin-insights";
 
 /** Text key of each AI feature in `admin.ai.usage.feature.*`; the others are « Autres ». */
 type AiFeatureText =
@@ -54,6 +54,36 @@ const signed = (value: number) =>
 
 type Delta = { value: number; kind: "percent" | "points"; lowerIsBetter?: boolean };
 
+type Kpi = {
+  key:
+    | "activeUsers"
+    | "usersFree"
+    | "usersPaid"
+    | "usersSponsored"
+    | "conversion"
+    | "mrr"
+    | "renewal"
+    | "aiCost"
+    | "activeCompanies"
+    | "institutionalRevenue";
+  value: string;
+  icon: IconName;
+  disc: string;
+  delta?: Delta;
+};
+
+const DAY_MS = 86_400_000;
+
+const attentionIcon: Record<AttentionKind, IconName> = {
+  payments: "mobile-money",
+  reports: "securite",
+  disputes: "intelligence",
+  verifications: "entreprise",
+  jobs: "jobs",
+  aiSpike: "alerte",
+  expiring: "horloge",
+};
+
 /** Change between two values, as a percentage of the previous one (null when there is none). */
 function percentChange(current: number, previous: number): number | null {
   if (previous === 0) return null;
@@ -84,7 +114,8 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
     const text = query.toString();
     return text ? `/admin?${text}` : "/admin";
   };
-  const data = await dashboardData(db, new Date(), days);
+  const today = new Date();
+  const data = await dashboardData(db, today, days);
   const { current: now, previous: before, revenue, revenueBefore } = data;
   const none = t("dashboard.kpi.none");
   const usd = (cents: number) =>
@@ -98,25 +129,50 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
     return value === null ? undefined : { value, kind: "percent", lowerIsBetter };
   };
 
-  const kpis: {
-    key:
-      | "usersFree"
-      | "usersPaid"
-      | "usersSponsored"
-      | "conversion"
-      | "mrr"
-      | "renewal"
-      | "cac"
-      | "costPerUser"
-      | "aiCost"
-      | "grossMargin"
-      | "activeCompanies"
-      | "institutionalRevenue";
-    value: string;
-    icon: IconName;
-    disc: string;
-    delta?: Delta;
-  }[] = [
+  const [usage, attention, activeNow, activeBefore] = await Promise.all([
+    planUsage(db, today, days),
+    attentionItems(db, today),
+    activeAccounts(db, new Date(today.getTime() - days * DAY_MS), today),
+    activeAccounts(
+      db,
+      new Date(today.getTime() - 2 * days * DAY_MS),
+      new Date(today.getTime() - days * DAY_MS),
+    ),
+  ]);
+  const costs = await costIndicators(db, today, days, revenue.revenueCents, revenue.aiCostMicroUsd);
+
+  // The four figures that say how Jumanly is doing, then the others.
+  const hero: Kpi[] = [
+    {
+      key: "activeUsers",
+      value: number.format(activeNow),
+      icon: "profil",
+      disc: "bg-neon",
+      delta: pct(activeNow, activeBefore),
+    },
+    {
+      key: "mrr",
+      value: usd(now.mrrCents),
+      icon: "mobile-money",
+      disc: "bg-lime-clair",
+      delta: pct(now.mrrCents, before.mrrCents),
+    },
+    {
+      key: "conversion",
+      value: percent(revenue.conversion),
+      icon: "up",
+      disc: "bg-[#ddf3eb]",
+      delta: pointsDelta(revenue.conversion, revenueBefore.conversion),
+    },
+    {
+      key: "aiCost",
+      value: usd(Math.round(revenue.aiCostMicroUsd / 10_000)),
+      icon: "intelligence",
+      disc: "bg-[#fbf6c9]",
+      delta: pct(revenue.aiCostMicroUsd, revenueBefore.aiCostMicroUsd, true),
+    },
+  ];
+  const kpis: Kpi[] = [
     {
       key: "usersFree",
       value: number.format(now.usersFree),
@@ -139,46 +195,11 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
       delta: pct(now.usersSponsored, before.usersSponsored),
     },
     {
-      key: "conversion",
-      value: percent(revenue.conversion),
-      icon: "up",
-      disc: "bg-[#ddf3eb]",
-      delta: pointsDelta(revenue.conversion, revenueBefore.conversion),
-    },
-    {
-      key: "mrr",
-      value: usd(now.mrrCents),
-      icon: "mobile-money",
-      disc: "bg-lime-clair",
-      delta: pct(now.mrrCents, before.mrrCents),
-    },
-    {
       key: "renewal",
       value: percent(revenue.renewal),
       icon: "horloge",
       disc: "bg-[#fbf6c9]",
       delta: pointsDelta(revenue.renewal, revenueBefore.renewal),
-    },
-    // Acquisition and running costs are not recorded yet: the cards say so.
-    { key: "cac", value: t("dashboard.kpi.none"), icon: "objectif", disc: "bg-gris-clair" },
-    {
-      key: "costPerUser",
-      value: t("dashboard.kpi.none"),
-      icon: "reglages",
-      disc: "bg-gris-clair",
-    },
-    {
-      key: "aiCost",
-      value: usd(Math.round(revenue.aiCostMicroUsd / 10_000)),
-      icon: "intelligence",
-      disc: "bg-[#ddf3eb]",
-      delta: pct(revenue.aiCostMicroUsd, revenueBefore.aiCostMicroUsd, true),
-    },
-    {
-      key: "grossMargin",
-      value: t("dashboard.kpi.none"),
-      icon: "statistiques",
-      disc: "bg-lime-clair",
     },
     {
       key: "activeCompanies",
@@ -196,40 +217,6 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
     },
   ];
 
-  const alerts = [
-    {
-      key: "verifications",
-      count: data.toHandle.verifications,
-      icon: "entreprise",
-      href: "/admin/organisations?onglet=attente",
-      nav: "organizations",
-    },
-    { key: "jobs", count: data.toHandle.jobs, icon: "jobs", href: "/admin/offres", nav: "jobs" },
-    {
-      key: "reports",
-      count: data.toHandle.reports,
-      icon: "securite",
-      href: "/admin/signalements",
-      nav: "reports",
-    },
-    {
-      key: "disputes",
-      count: data.toHandle.disputes,
-      icon: "intelligence",
-      href: "/admin/ia?onglet=revisions",
-      nav: "ai",
-    },
-    {
-      key: "payments",
-      count: data.toHandle.payments,
-      icon: "mobile-money",
-      href: "/admin/abonnements",
-      nav: "subscriptions",
-    },
-  ] as const;
-  const toHandle = alerts.reduce((sum, alert) => sum + alert.count, 0);
-
-  const familyTotal = Object.values(data.families).reduce((sum, value) => sum + value, 0);
   const aiTotal = data.ai.byFeature.reduce((sum, row) => sum + row.calls, 0);
   const aiGroups = new Map<AiFeatureText | "other", number>();
   for (const row of data.ai.byFeature) {
@@ -242,6 +229,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
     .slice(0, 4);
   const aiOther = aiTotal - aiRows.reduce((sum, [, calls]) => sum + calls, 0);
   const aiShare = (calls: number) => (aiTotal ? Math.round((100 * calls) / aiTotal) : 0);
+  const attentionTotal = attention.reduce((sum, item) => sum + item.count, 0);
 
   return (
     <>
@@ -291,21 +279,25 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
         </a>
       </div>
 
-      <ul className="grid grid-cols-2 gap-2.5 lg:grid-cols-4 lg:gap-3.5">
-        {kpis.map((kpi) => (
+      {/* The four key figures. */}
+      <ul
+        aria-label={t("dashboard.hero")}
+        className="grid grid-cols-2 gap-2.5 lg:grid-cols-4 lg:gap-3.5"
+      >
+        {hero.map((kpi) => (
           <li
             key={kpi.key}
-            className="flex min-w-0 flex-col gap-1.5 rounded-[24px] bg-blanc px-[18px] py-4"
+            className="flex min-w-0 flex-col gap-2 rounded-[24px] bg-blanc px-[18px] py-[18px] lg:px-[22px]"
           >
             <div className="flex items-start justify-between gap-2">
-              <span className="text-[12px] leading-4 font-medium text-ardoise">
+              <span className="text-[12.5px] leading-4 font-semibold">
                 {t(`dashboard.kpi.${kpi.key}`)}
               </span>
               <span
                 aria-hidden
-                className={cx("grid size-8 shrink-0 place-items-center rounded-full", kpi.disc)}
+                className={cx("grid size-9 shrink-0 place-items-center rounded-full", kpi.disc)}
               >
-                <Icon name={kpi.icon} className="size-4" />
+                <Icon name={kpi.icon} className="size-[18px]" />
               </span>
             </div>
             <p
@@ -313,7 +305,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
                 "font-semibold tracking-[-0.03em]",
                 kpi.value === none
                   ? "py-1 text-[14px] leading-5 font-medium tracking-normal text-ardoise"
-                  : "text-[20px] leading-7 lg:text-[24px]",
+                  : "text-[26px] leading-8 lg:text-[32px] lg:leading-10",
               )}
             >
               {kpi.value}
@@ -323,10 +315,251 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
         ))}
       </ul>
 
+      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px]">
+        {/* What needs attention, the most urgent first. */}
+        <section aria-labelledby="admin-alerts" className={cx(adminCard, "flex flex-col gap-1")}>
+          <div className="mb-1.5 flex items-center justify-between gap-3">
+            <div className="flex flex-col">
+              <h2 id="admin-alerts" className={adminTitle}>
+                {t("dashboard.attention.title")}
+              </h2>
+              <p className="text-[11.5px] text-ardoise">{t("dashboard.attention.hint")}</p>
+            </div>
+            <Tag tone={attentionTotal > 0 ? "warning" : "success"}>
+              {number.format(attentionTotal)}
+            </Tag>
+          </div>
+          {attention.length === 0 ? (
+            <p className="flex items-center gap-2.5 py-3 text-[13px] text-ardoise">
+              <Icon name="valider" className="size-4 text-feuille" />
+              {t("dashboard.alerts.empty")}
+            </p>
+          ) : (
+            <ol className="flex flex-col">
+              {attention.map((item, index) => (
+                <li key={item.kind} className="border-gris-clair not-first:border-t">
+                  <div className="flex items-start gap-3 py-3">
+                    <span
+                      aria-hidden
+                      className={cx(
+                        "grid size-10 shrink-0 place-items-center rounded-[14px] text-sapin",
+                        index === 0 || item.overdue ? "bg-ambre-fond" : "bg-creme",
+                      )}
+                    >
+                      <Icon name={attentionIcon[item.kind]} className="size-[18px]" />
+                    </span>
+                    <div className="flex min-w-0 flex-1 flex-col gap-1">
+                      <p className="text-[13.5px] leading-[19px] font-semibold">
+                        {t(`dashboard.attention.kind.${item.kind}`, { count: item.count })}
+                      </p>
+                      <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[11.5px] leading-4 text-ardoise">
+                        {item.overdue && (
+                          <Tag tone="error" className="h-5">
+                            {t("dashboard.attention.overdue")}
+                          </Tag>
+                        )}
+                        {item.kind !== "aiSpike" && item.kind !== "expiring" && (
+                          <span>{t("dashboard.attention.oldest", { days: item.oldestDays })}</span>
+                        )}
+                      </p>
+                      <details className="group/why text-[12px] leading-[17px]">
+                        <summary className="w-fit cursor-pointer list-none font-semibold underline underline-offset-2 [&::-webkit-details-marker]:hidden">
+                          {t("dashboard.attention.why")}
+                        </summary>
+                        <p className="mt-1.5 rounded-[10px] bg-creme px-3 py-2">
+                          {t(`dashboard.attention.reason.${item.kind}`, item.why)}{" "}
+                          {t("dashboard.attention.rank", { score: item.score })}
+                        </p>
+                      </details>
+                    </div>
+                    <Link
+                      href={item.href}
+                      className="inline-flex h-9 shrink-0 items-center gap-1.5 rounded-pill bg-sapin px-3.5 text-[12.5px] font-semibold text-blanc hover:bg-nuit"
+                    >
+                      {t("dashboard.attention.open")}
+                      <Icon name="chev-r" className="size-3.5" />
+                    </Link>
+                  </div>
+                </li>
+              ))}
+            </ol>
+          )}
+        </section>
+
+        {/* Costs and what they say. */}
+        <section aria-labelledby="admin-costs" className={cx(adminCard, "flex flex-col gap-3")}>
+          <div className="flex items-center justify-between gap-3">
+            <h2 id="admin-costs" className={adminTitle}>
+              {t("dashboard.costs.title")}
+            </h2>
+            <span aria-hidden className="grid size-9 place-items-center rounded-full bg-[#fbf6c9]">
+              <Icon name="portefeuille" className="size-4" />
+            </span>
+          </div>
+          <dl className="flex flex-col">
+            {(
+              [
+                ["cac", costs.cacCents === null ? none : usd(costs.cacCents)],
+                [
+                  "costPerUser",
+                  costs.costPerUserCents === null ? none : usd(costs.costPerUserCents),
+                ],
+                [
+                  "grossMargin",
+                  costs.grossMargin === null
+                    ? none
+                    : t("dashboard.kpi.value.percent", { value: costs.grossMargin }),
+                ],
+              ] as const
+            ).map(([key, value]) => (
+              <div
+                key={key}
+                className="flex items-baseline justify-between gap-3 border-gris-clair py-2.5 not-first:border-t"
+              >
+                <dt className="text-[12.5px] text-ardoise">{t(`dashboard.kpi.${key}`)}</dt>
+                <dd
+                  className={cx(
+                    "text-right font-semibold",
+                    value === none ? "text-[12.5px] font-medium text-ardoise" : "text-[17px]",
+                  )}
+                >
+                  {value}
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <p className="text-[11.5px] leading-4 text-ardoise">
+            {costs.entered
+              ? t("dashboard.costs.total", { amount: usd(costs.totalCents) })
+              : t("dashboard.costs.empty")}
+          </p>
+          <ButtonLink href="/admin/indicateurs/couts" variant="secondary" size="sm">
+            {t(costs.entered ? "dashboard.costs.edit" : "dashboard.costs.enter")}
+          </ButtonLink>
+        </section>
+      </div>
+
+      <ul
+        aria-label={t("dashboard.more")}
+        className="grid grid-cols-2 gap-2.5 md:grid-cols-3 lg:grid-cols-6 lg:gap-3"
+      >
+        {kpis.map((kpi) => (
+          <li
+            key={kpi.key}
+            className="flex min-w-0 flex-col gap-1.5 rounded-[20px] bg-blanc px-4 py-3.5"
+          >
+            <span className="flex items-start justify-between gap-2 text-[11.5px] leading-4 font-medium text-ardoise">
+              {t(`dashboard.kpi.${kpi.key}`)}
+              <span
+                aria-hidden
+                className={cx("grid size-7 shrink-0 place-items-center rounded-full", kpi.disc)}
+              >
+                <Icon name={kpi.icon} className="size-3.5" />
+              </span>
+            </span>
+            <p
+              className={cx(
+                "font-semibold tracking-[-0.02em]",
+                kpi.value === none
+                  ? "text-[13px] leading-5 font-medium tracking-normal text-ardoise"
+                  : "text-[19px] leading-6",
+              )}
+            >
+              {kpi.value}
+            </p>
+            {compare && kpi.delta && <DeltaTag delta={kpi.delta} compact />}
+          </li>
+        ))}
+      </ul>
+
+      {/* Plans in use, free plans included. */}
+      <section
+        aria-labelledby="admin-plans-used"
+        className={cx(adminCard, "flex min-w-0 flex-col gap-4")}
+      >
+        <div className="flex flex-wrap items-baseline justify-between gap-2">
+          <h2 id="admin-plans-used" className={adminTitle}>
+            {t("dashboard.plansUsed.title")}
+          </h2>
+          <span className="text-[11.5px] text-ardoise">{t("dashboard.plansUsed.hint")}</span>
+        </div>
+        <div className="grid gap-4 md:grid-cols-2">
+          {usage.map((group) => (
+            <div
+              key={group.family}
+              className="flex flex-col gap-2.5 rounded-[18px] bg-creme/60 p-4"
+            >
+              <div className="flex items-center gap-2.5">
+                <span
+                  aria-hidden
+                  className={cx("size-3 shrink-0 rounded-full", familyTone[group.family])}
+                />
+                <h3 className="flex-1 text-[15px] leading-5 font-semibold">
+                  {t(`dashboard.family.${group.family}`)}
+                </h3>
+                <span className="text-[12px] text-ardoise">
+                  {t("dashboard.plansUsed.accounts", { count: group.total })}
+                </span>
+              </div>
+              <ul className="flex flex-col gap-1">
+                {group.plans.map((plan) => {
+                  const share = group.total ? Math.round((100 * plan.count) / group.total) : 0;
+                  const change = plan.count - plan.previous;
+                  return (
+                    <li key={plan.code}>
+                      <Link
+                        href={planListHref(plan.family, plan.code)}
+                        className="flex flex-col gap-1.5 rounded-[12px] px-2.5 py-2 hover:bg-blanc focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus-visible:outline-none"
+                      >
+                        <span className="flex items-baseline justify-between gap-3 text-[13px]">
+                          <span className="font-semibold">
+                            {plan.name}
+                            {plan.sponsored > 0 && (
+                              <span className="ml-1.5 text-[11px] font-medium text-ardoise">
+                                {t("dashboard.plansUsed.sponsored", { count: plan.sponsored })}
+                              </span>
+                            )}
+                          </span>
+                          <span className="flex items-baseline gap-2">
+                            {compare && change !== 0 && (
+                              <span
+                                className={cx(
+                                  "text-[11px] font-semibold",
+                                  change > 0 ? "text-up-texte" : "text-down-texte",
+                                )}
+                              >
+                                {signed(change)}
+                              </span>
+                            )}
+                            <span className="font-semibold">{number.format(plan.count)}</span>
+                            <span className="w-9 text-right text-[11px] text-ardoise">
+                              {t("dashboard.kpi.value.percent", { value: share })}
+                            </span>
+                          </span>
+                        </span>
+                        <span
+                          aria-hidden
+                          className="block h-1.5 overflow-hidden rounded-pill bg-blanc"
+                        >
+                          <span
+                            className={cx("block h-full rounded-pill", familyTone[group.family])}
+                            style={{ width: `${share}%` }}
+                          />
+                        </span>
+                      </Link>
+                    </li>
+                  );
+                })}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+
       <div className="grid gap-4 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px]">
         <section
           aria-labelledby="admin-activity"
-          className={cx(adminCard, "order-2 flex min-w-0 flex-col gap-3 lg:order-1")}
+          className={cx(adminCard, "flex min-w-0 flex-col gap-3")}
         >
           <div className="flex items-center justify-between gap-3">
             <h2 id="admin-activity" className={adminTitle}>
@@ -355,115 +588,6 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
               to: monthName(data.activity.months.at(-1)!),
             })}
           />
-        </section>
-
-        <section
-          aria-labelledby="admin-alerts"
-          className="order-1 flex flex-col rounded-[24px] bg-blanc px-5 py-[18px] lg:order-2"
-        >
-          <div className="mb-1.5 flex items-center justify-between">
-            <h2 id="admin-alerts" className={adminTitle}>
-              {t("dashboard.alerts.title")}
-            </h2>
-            <Tag tone="warning">{number.format(toHandle)}</Tag>
-          </div>
-          {toHandle === 0 ? (
-            <p className="py-3 text-[13px] text-ardoise">{t("dashboard.alerts.empty")}</p>
-          ) : (
-            <ul>
-              {alerts
-                .filter((alert) => alert.count > 0)
-                .map((alert) => (
-                  <ActionRow
-                    key={alert.key}
-                    href={alert.href}
-                    icon={alert.icon}
-                    tile="bg-creme"
-                    title={t(`dashboard.alerts.${alert.key}`, { count: alert.count })}
-                    hint={t(`nav.${alert.nav}`)}
-                  />
-                ))}
-            </ul>
-          )}
-        </section>
-      </div>
-
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_300px] xl:grid-cols-[minmax(0,1fr)_340px]">
-        <section
-          aria-labelledby="admin-family"
-          className={cx(adminCard, "flex min-w-0 flex-col gap-3.5")}
-        >
-          <div className="flex flex-wrap items-baseline justify-between gap-2">
-            <h2 id="admin-family" className={adminTitle}>
-              {t("dashboard.family.title")}
-            </h2>
-            <span className="text-[11px] text-ardoise">{t("dashboard.family.hint")}</span>
-          </div>
-          <span aria-hidden className="flex h-4 overflow-hidden rounded-pill bg-gris-clair">
-            {familyTotal > 0 &&
-              (Object.keys(data.families) as FamilyKey[]).map((family) =>
-                data.families[family] > 0 ? (
-                  <i
-                    key={family}
-                    className={cx("block h-full", familyTone[family])}
-                    style={{ width: `${(100 * data.families[family]) / familyTotal}%` }}
-                  />
-                ) : null,
-              )}
-          </span>
-          <dl className="grid grid-cols-2 gap-x-[18px] gap-y-2">
-            {(Object.keys(data.families) as FamilyKey[]).map((family) => (
-              <div key={family} className="flex items-center gap-2 text-[11.5px]">
-                <span
-                  aria-hidden
-                  className={cx("size-2.5 shrink-0 rounded-full", familyTone[family])}
-                />
-                <dt className="flex-1">{t(`dashboard.family.${family}`)}</dt>
-                <dd className="font-semibold">{number.format(data.families[family])}</dd>
-              </div>
-            ))}
-          </dl>
-          <div className="mt-1.5 flex flex-wrap items-baseline justify-between gap-2">
-            <h3 className="text-[16px] leading-[22px] font-semibold">{t("dashboard.byPlan")}</h3>
-            <span className="text-[11px] text-ardoise">{t("dashboard.plan.hint")}</span>
-          </div>
-          {data.plans.length === 0 ? (
-            <p className="text-[13px] text-ardoise">{t("dashboard.plan.empty")}</p>
-          ) : (
-            <table className="w-full border-collapse text-left text-[13px]">
-              <thead>
-                <tr className={adminLabel}>
-                  <th scope="col" className="py-2.5 pr-3 font-semibold lg:px-[18px]">
-                    {t("dashboard.plan.col.plan")}
-                  </th>
-                  <th scope="col" className="py-2.5 pr-3 font-semibold">
-                    {t("dashboard.plan.col.subscribers")}
-                  </th>
-                  <th scope="col" className="py-2.5 pr-3 font-semibold">
-                    {t("dashboard.plan.col.revenue")}
-                  </th>
-                  <th scope="col" className="py-2.5 font-semibold">
-                    {t("dashboard.plan.col.margin")}
-                  </th>
-                </tr>
-              </thead>
-              <tbody>
-                {data.plans.map((plan) => (
-                  <tr key={plan.code} className="border-t border-brume">
-                    <th scope="row" className="py-3.5 pr-3 font-semibold lg:px-[18px]">
-                      {plan.name}
-                    </th>
-                    <td className="py-3.5 pr-3">{number.format(plan.count)}</td>
-                    <td className="py-3.5 pr-3">{formatUsd(plan.revenueCents)}</td>
-                    <td className="py-3.5 text-ardoise">
-                      <span aria-hidden>–</span>
-                      <span className="sr-only">{t("dashboard.kpi.none")}</span>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-          )}
         </section>
 
         <section
@@ -542,7 +666,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
 }
 
 /** Change against the previous period: Lime clair when good news, pale Corail otherwise. */
-async function DeltaTag({ delta }: { delta: Delta }) {
+async function DeltaTag({ delta, compact = false }: { delta: Delta; compact?: boolean }) {
   const t = await getTranslations("admin.dashboard.kpi");
   const good = delta.lowerIsBetter ? delta.value <= 0 : delta.value >= 0;
   const text =
@@ -557,7 +681,9 @@ async function DeltaTag({ delta }: { delta: Delta }) {
           <Icon name={delta.value > 0 ? "up" : "down"} className="size-[11px]" />
         )}
       </Tag>
-      <span className="hidden text-[11px] text-ardoise xl:inline">{t("vsPrevious")}</span>
+      {!compact && (
+        <span className="hidden text-[11px] text-ardoise xl:inline">{t("vsPrevious")}</span>
+      )}
       {delta.lowerIsBetter && <span className="sr-only">{t("lowerIsBetter")}</span>}
     </div>
   );
