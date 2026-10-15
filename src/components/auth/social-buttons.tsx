@@ -30,6 +30,8 @@ export function SocialButtons({
             key={provider.id}
             type="submit"
             formAction={action.bind(null, provider.id)}
+            // The e-mail of the surrounding form is not needed to continue with a provider.
+            formNoValidate
             aria-label={aria.replace("{provider}", provider.label)}
             className={cx("jm-ae-social", provider.id === "apple" && "jm-ae-apple")}
           >

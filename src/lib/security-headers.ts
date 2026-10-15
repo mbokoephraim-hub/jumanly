@@ -24,8 +24,13 @@ export function contentSecurityPolicy({ production }: { production: boolean }) {
     "frame-src": ["'none'"],
     "object-src": ["'none'"],
     "base-uri": ["'self'"],
-    // Google sign-in ends on Google's page.
-    "form-action": ["'self'", "https://accounts.google.com"],
+    // Sign-in with a provider continues on its page (Google, Apple, LinkedIn).
+    "form-action": [
+      "'self'",
+      "https://accounts.google.com",
+      "https://appleid.apple.com",
+      "https://www.linkedin.com",
+    ],
     "frame-ancestors": ["'none'"],
   };
   const policy = Object.entries(directives).map(([name, values]) => `${name} ${values.join(" ")}`);
