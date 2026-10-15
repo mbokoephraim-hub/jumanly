@@ -8625,6 +8625,14 @@ Conventions :
 | `admin.reason.required` | Indiquez le motif de cette action. Il sera enregistré dans le journal d'audit. |
 | `admin.seo.title` | Jumanly Admin |
 | `admin.notAllowed` | Votre rôle ne permet pas cette action. |
+| `admin.header.logged` | Actions journalisées |
+| `admin.header.search` | Rechercher |
+| `admin.header.searchLabel` | Rechercher un compte par nom, e-mail ou identifiant |
+| `admin.nav.more` | Toutes les rubriques |
+| `admin.nav.mobile` | Rubriques de Jumanly Admin |
+| `admin.sensitive.label` | Action sensible · motif obligatoire |
+| `admin.sensitive.reason` | Motif |
+| `admin.sensitive.close` | Fermer |
 
 ### `/admin` · Indicateurs
 

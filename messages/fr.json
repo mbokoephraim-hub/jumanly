@@ -10282,7 +10282,9 @@
       "content": "Contenus",
       "reports": "Signalements",
       "audit": "Journal d'audit",
-      "backToApp": "Retour à l'application"
+      "backToApp": "Retour à l'application",
+      "more": "Toutes les rubriques",
+      "mobile": "Rubriques de Jumanly Admin"
     },
     "env": {
       "badge": "Administration"
@@ -10303,6 +10305,16 @@
       "title": "Jumanly Admin"
     },
     "notAllowed": "Votre rôle ne permet pas cette action.",
+    "header": {
+      "logged": "Actions journalisées",
+      "search": "Rechercher",
+      "searchLabel": "Rechercher un compte par nom, e-mail ou identifiant"
+    },
+    "sensitive": {
+      "label": "Action sensible · motif obligatoire",
+      "reason": "Motif",
+      "close": "Fermer"
+    },
     "dashboard": {
       "title": "Indicateurs",
       "period": "Période",
