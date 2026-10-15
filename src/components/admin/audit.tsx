@@ -32,6 +32,7 @@ const familyIcon: Record<AuditFamily, IconName> = {
   profile: "eye",
   talent: "recherche",
   security: "securite",
+  cost: "portefeuille",
   admin: "doc",
 };
 

@@ -7,6 +7,14 @@ import {
   readAuditFilters,
   reasonOf,
 } from "@/server/services/admin-audit";
+import {
+  aiSpike,
+  attentionScore,
+  monthKey,
+  parseMonth,
+  parseUsd,
+  prorateCosts,
+} from "@/server/services/admin-insights";
 import { normalizeQuery, searchKindsFor } from "@/server/services/admin-search";
 
 describe("journal d'audit (Admin v2)", () => {
@@ -72,5 +80,59 @@ describe("recherche globale (Admin v2)", () => {
   it("nettoie la saisie", () => {
     expect(normalizeQuery("  Awa   Fictive ")).toBe("Awa Fictive");
     expect(normalizeQuery("x".repeat(300))).toHaveLength(120);
+  });
+});
+
+describe("indicateurs intelligents (Admin v2, étape 2)", () => {
+  it("classe d'abord l'argent et les personnes, puis l'ancienneté", () => {
+    expect(attentionScore("payments", 0, false)).toBeGreaterThan(attentionScore("jobs", 0, false));
+    expect(attentionScore("jobs", 10, false)).toBeGreaterThan(attentionScore("reports", 0, false));
+    // The age counts for 30 days at most; a dispute past its deadline jumps ahead.
+    expect(attentionScore("jobs", 90, false)).toBe(attentionScore("jobs", 30, false));
+    expect(attentionScore("disputes", 7, true)).toBeGreaterThan(
+      attentionScore("payments", 7, false),
+    );
+  });
+
+  it("ne signale une dépense d'IA que si elle est nettement inhabituelle", () => {
+    // 2 USD today against 0,50 USD a day: alert.
+    expect(aiSpike(2_000_000, 15_000_000)).toEqual({
+      lastDayCents: 200,
+      averageCents: 50,
+      factor: 3,
+    });
+    // Three times the average is not reached.
+    expect(aiSpike(2_000_000, 30_000_000)).toBeNull();
+    // A few cents are never news.
+    expect(aiSpike(500_000, 0)).toBeNull();
+    // First spending ever, above 1 USD.
+    expect(aiSpike(1_500_000, 0)).not.toBeNull();
+  });
+
+  it("lit les montants et les mois saisis", () => {
+    expect(parseUsd("120,50")).toBe(12050);
+    expect(parseUsd(" 1 200.5 ")).toBe(120050);
+    expect(parseUsd("")).toBe(0);
+    expect(parseUsd("-3")).toBeNull();
+    expect(parseUsd("12,345")).toBeNull();
+    expect(parseMonth("2026-10")?.toISOString()).toBe("2026-10-01T00:00:00.000Z");
+    expect(parseMonth("2026-13")).toBeNull();
+    expect(monthKey(new Date("2026-02-01T00:00:00Z"))).toBe("2026-02");
+  });
+
+  it("compte chaque mois au prorata de sa part dans la période", () => {
+    const rows = [
+      { month: new Date("2026-09-01T00:00:00Z"), category: "hosting" as const, amountCents: 3000 },
+      { month: new Date("2026-10-01T00:00:00Z"), category: "hosting" as const, amountCents: 3100 },
+      { month: new Date("2026-08-01T00:00:00Z"), category: "other" as const, amountCents: 999 },
+    ];
+    // 16 September → 16 October: half of September, 15 days of October.
+    const totals = prorateCosts(
+      rows,
+      new Date("2026-09-16T00:00:00Z"),
+      new Date("2026-10-16T00:00:00Z"),
+    );
+    expect(totals.hosting).toBe(1500 + 1500);
+    expect(totals.other).toBe(0);
   });
 });

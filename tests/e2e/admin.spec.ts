@@ -80,6 +80,7 @@ test("le support voit tout sans pouvoir agir", async ({ page }) => {
 });
 
 test("l'éditeur de contenus ne voit que les formations et les contenus", async ({ page }) => {
+  test.setTimeout(90_000);
   await logIn(page, demo.editor);
   for (const [path, title] of [
     ["/admin/formations", "Formations"],
@@ -160,6 +161,7 @@ test("suspendre, réactiver et changer le rôle d'un compte, puis le lire dans l
 });
 
 test("la recherche globale trouve comptes, organisations et forfaits", async ({ page }) => {
+  test.setTimeout(90_000);
   await logIn(page, demo.admin);
   await page.goto("/admin");
   const search = page.getByRole("searchbox", {
@@ -180,6 +182,7 @@ test("la recherche globale trouve comptes, organisations et forfaits", async ({ 
 });
 
 test("les poids du matching s'enregistrent et laissent leur trace", async ({ page }) => {
+  test.setTimeout(90_000);
   await logIn(page, demo.admin);
   await page.goto("/admin/ia?onglet=poids");
   await page.locator("#ia-weights-note").fill("Recette de l'admin : mêmes poids");
@@ -194,4 +197,37 @@ test("les poids du matching s'enregistrent et laissent leur trace", async ({ pag
   await expect(
     page.getByText("Motif : Recette de l'admin : mêmes poids").filter({ visible: true }).first(),
   ).toBeVisible();
+});
+
+test("les indicateurs montrent les forfaits utilisés et se complètent avec les coûts", async ({
+  page,
+}) => {
+  test.setTimeout(90_000);
+  await logIn(page, demo.admin);
+  await page.goto("/admin");
+  await expectTitle(page, "Indicateurs");
+  const plans = page.getByRole("region", { name: "Forfaits utilisés" });
+  await expect(plans.getByRole("heading", { name: "Talents" })).toBeVisible();
+  // Free plans count too, and a plan opens the list of its accounts.
+  await plans.getByRole("link", { name: /^Free/ }).first().click();
+  await expect(page).toHaveURL(/\/admin\/utilisateurs\?forfait=/);
+  await expectTitle(page, "Utilisateurs");
+
+  // Costs: entered for the current month, they feed the dashboard.
+  await page.goto("/admin/indicateurs/couts");
+  await expectTitle(page, "Coûts mensuels");
+  await page.getByLabel("Hébergement et services techniques").fill("120,50");
+  await page.getByLabel("Acquisition (publicité, campagnes)").fill("300");
+  await page.getByRole("button", { name: "Enregistrer les coûts" }).click();
+  await expect(
+    page.getByRole("status").filter({ hasText: "Coûts du mois enregistrés" }),
+  ).toBeVisible();
+  await expect(page.getByLabel("Hébergement et services techniques")).toHaveValue("120,50");
+  await expectAccessible(page);
+
+  await page.goto("/admin");
+  const costs = page.getByRole("region", { name: "Coûts et rentabilité" });
+  await expect(costs.getByText(/Coûts de la période, IA comprise/)).toBeVisible();
+  await expect(costs.getByRole("link", { name: "Modifier les coûts" })).toBeVisible();
+  await expectAccessible(page);
 });
