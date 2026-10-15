@@ -3,7 +3,12 @@ import messages from "../../messages/fr.json";
 import {
   activeBanners,
   ContentError,
+  contentVersions,
   deleteBanner,
+  listTips,
+  publishedTips,
+  restoreVersion,
+  saveTip,
   faqItems,
   listOverrides,
   saveBanner,
@@ -16,6 +21,7 @@ const users: string[] = [];
 
 afterAll(async () => {
   await db.contentBlock.deleteMany({ where: { updatedById: { in: users } } });
+  await db.contentVersion.deleteMany({ where: { createdById: { in: users } } });
   await cleanup(users);
   await db.$disconnect();
 });
@@ -90,5 +96,63 @@ describe("editable contents in the database (/admin/contenus)", () => {
     expect(activeBanners(await listOverrides(db), "partners").map((item) => item.id)).not.toContain(
       id,
     );
+  });
+
+  it("garde la version précédente et la restaure (Admin v2, étape 8)", async () => {
+    const editor = await newUser();
+    users.push(editor.id);
+    const n = await saveFaqItem(db, editor.id, messages, {
+      group: "faq.partners",
+      question: "Question fictive version 1 ?",
+      answer: "Réponse fictive version 1.",
+      reason: "Première version",
+    });
+    await saveFaqItem(db, editor.id, messages, {
+      group: "faq.partners",
+      n: String(n),
+      question: "Question fictive version 2 ?",
+      answer: "Réponse fictive version 2.",
+      reason: "Deuxième version",
+    });
+    const item = `faq.partners.q${n}`;
+    const versions = await contentVersions(db, item);
+    expect(versions[0]?.previous[item]).toBe("Question fictive version 1 ?");
+    expect(versions[0]?.reason).toBe("Deuxième version");
+    expect(versions[1]?.previous[item]).toBeNull();
+
+    await restoreVersion(db, editor.id, versions[0]!.id, "Retour à la première version");
+    expect((await listOverrides(db))[item]).toBe("Question fictive version 1 ?");
+    // The restore kept the version it replaced: it can itself be undone.
+    expect((await contentVersions(db, item))[0]?.previous[item]).toBe(
+      "Question fictive version 2 ?",
+    );
+    // Back to the first version of all: no override, the question disappears.
+    await restoreVersion(db, editor.id, versions[1]!.id, "Retirer la question");
+    expect(await listOverrides(db)).not.toHaveProperty(item);
+  });
+
+  it("écrit et publie une fiche conseil", async () => {
+    const editor = await newUser();
+    users.push(editor.id);
+    const before = listTips(messages, await listOverrides(db));
+    expect(before.find((tip) => tip.id === "salary")?.title).toBe(messages.career.tips.salary);
+    await expect(
+      saveTip(db, editor.id, { id: "salary", title: "Titre", body: "Trop court", minutes: "3" }),
+    ).rejects.toBeInstanceOf(ContentError);
+    const id = await saveTip(db, editor.id, {
+      title: "Fiche de test fictive",
+      body: "Un texte de fiche fictif, assez long pour être publié.",
+      minutes: "4",
+      published: "on",
+    });
+    const tips = publishedTips(messages, await listOverrides(db));
+    expect(tips.find((tip) => tip.id === id)).toMatchObject({ minutes: 4, published: true });
+    await restoreVersion(
+      db,
+      editor.id,
+      (await contentVersions(db, `tips.${id}`))[0]!.id,
+      "Fiche retirée",
+    );
+    expect(publishedTips(messages, await listOverrides(db)).map((tip) => tip.id)).not.toContain(id);
   });
 });

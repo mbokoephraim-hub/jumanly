@@ -17,17 +17,19 @@ import {
 import {
   BannersSummaryCard,
   ContentHistoryCard,
+  ContentVersionsCard,
   bannerState,
   bannerStateTone,
 } from "@/components/admin/contenus-side";
 import { Icon } from "@/components/brand/icon";
-import { Alert, Button, ButtonLink, Select, TextArea, TextField } from "@/components/ui";
+import { Alert, Button, ButtonLink, Checkbox, Select, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatShortDate } from "@/lib/dates";
 import {
   deleteBannerAction,
   saveBannerAction,
   saveFaqItemAction,
+  saveTipAction,
   setFaqItemHiddenAction,
 } from "@/server/actions/contents";
 import { requireCourseEditor } from "@/server/auth/session";
@@ -35,7 +37,10 @@ import { db } from "@/server/db";
 import {
   bannerAudiences,
   bannerStyles,
+  contentVersions,
   FAQ_GROUPS,
+  listTips,
+  type Tip,
   type Banner,
   type FaqGroup,
   type FaqItem,
@@ -45,21 +50,23 @@ import {
 } from "@/server/services/contents";
 import { contentHistory, overrideDates } from "@/server/services/contents-admin";
 
-const tabs = { faq: "faq", bannieres: "banners" } as const;
+const tabs = { faq: "faq", bannieres: "banners", conseils: "tips" } as const;
 type Tab = keyof typeof tabs;
 
 /**
- * Editable contents (partie 07, `/admin/contenus`, mockup 07-10): FAQ questions and banners.
- * Content editors and administrators; every change goes to the audit log and shows on the site at
- * once. The tabs « Textes de l'interface » and « Conseils de préparation » of the mockup are not
- * built: those texts are only changed in textes/.
+ * Editable contents (partie 07, `/admin/contenus`, mockup 07-10): FAQ questions, banners and the
+ * tip sheets « Conseils de préparation » (Admin v2, étape 8). Content editors and administrators;
+ * every change goes to the audit log, keeps the former version (« Restaurer ») and shows on the
+ * site at once. The tab « Textes de l'interface » of the mockup is not built: those texts are
+ * only changed in textes/.
  */
 export default async function AdminContents({ searchParams }: PageProps<"/admin/contenus">) {
   const params = await searchParams;
   if (!(await requireCourseEditor())) notFound();
   const t = await getTranslations("admin.content");
   const one = (key: string) => (typeof params[key] === "string" ? (params[key] as string) : "");
-  const tab: Tab = one("onglet") === "bannieres" ? "bannieres" : "faq";
+  const tab: Tab =
+    one("onglet") === "bannieres" ? "bannieres" : one("onglet") === "conseils" ? "conseils" : "faq";
   const group: FaqGroup = (FAQ_GROUPS as readonly string[]).includes(one("groupe"))
     ? (one("groupe") as FaqGroup)
     : FAQ_GROUPS[0];
@@ -91,16 +98,25 @@ export default async function AdminContents({ searchParams }: PageProps<"/admin/
           banners={banners}
           notice={one("ok") || one("erreur")}
         />
-      ) : (
+      ) : tab === "bannieres" ? (
         <BannersTab banners={banners} notice={one("ok") || one("erreur")} />
+      ) : (
+        <TipsTab
+          tips={listTips(messages, overrides)}
+          selected={one("fiche")}
+          dates={dates}
+          notice={one("ok") || one("erreur")}
+        />
       )}
     </>
   );
 }
 
-async function Notices({ notice }: { notice: string }) {
+async function Notices({ notice, tips = false }: { notice: string; tips?: boolean }) {
   const t = await getTranslations("admin.content");
   if (notice === "enregistre") return <Alert tone="success" title={t("saved")} />;
+  if (notice === "restaure") return <Alert tone="success" title={t("versions.restored")} />;
+  if (notice === "champs" && tips) return <Alert tone="error" title={t("tips.error")} />;
   if (notice === "supprime") return <Alert tone="success" title={t("deleted")} />;
   if (notice === "champs") return <Alert tone="error" title={t("error")} />;
   if (notice === "motif") return <Alert tone="error" title={t("reasonMissing")} />;
@@ -155,7 +171,10 @@ async function FaqTab({
         : entry.edited
           ? t("faq.status.edited")
           : t("faq.status.original");
-  const history = await contentHistory(db, itemKey || undefined);
+  const [history, versions] = await Promise.all([
+    contentHistory(db, itemKey || undefined),
+    itemKey ? contentVersions(db, itemKey) : Promise.resolve([]),
+  ]);
   const base = `/admin/contenus?${new URLSearchParams({ groupe: group, ...(q ? { q } : {}) })}`;
 
   return (
@@ -346,6 +365,16 @@ async function FaqTab({
           </section>
         </div>
         <aside className="flex flex-col gap-4">
+          {item && (
+            <ContentVersionsCard
+              item={itemKey}
+              versions={versions}
+              preview={(version) => {
+                const question = version.previous[itemKey];
+                return question === "" ? t("faq.status.hidden") : (question ?? null);
+              }}
+            />
+          )}
           <ContentHistoryCard history={history} versions={Boolean(item)} />
           <BannersSummaryCard banners={banners} />
           <AuditNotice />
@@ -548,5 +577,174 @@ async function BannerFields({ prefix, banner }: { prefix: string; banner?: Banne
         />
       </div>
     </>
+  );
+}
+
+const tipTone = (tip: Tip): TagTone =>
+  tip.published ? "success" : tip.saved ? "warning" : "outline";
+
+/** « Conseils de préparation » (Admin v2, étape 8): the tip sheets shown to every talent. */
+async function TipsTab({
+  tips,
+  selected,
+  dates,
+  notice,
+}: {
+  tips: Tip[];
+  selected: string;
+  dates: Record<string, Date>;
+  notice: string;
+}) {
+  const t = await getTranslations("admin.content");
+  const learn = await getTranslations("career.tips");
+  const tip = tips.find((entry) => entry.id === selected);
+  const status = (entry: Tip) =>
+    t(
+      entry.published
+        ? "tips.status.published"
+        : entry.saved
+          ? "tips.status.draft"
+          : "tips.status.empty",
+    );
+  const item = tip ? `tips.${tip.id}` : "";
+  const [history, versions] = await Promise.all([
+    contentHistory(db, item || undefined),
+    item ? contentVersions(db, item) : Promise.resolve([]),
+  ]);
+  const published = tips.filter((entry) => entry.published).length;
+  return (
+    <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_360px]">
+      <div className="flex min-w-0 flex-col gap-4">
+        <Notices notice={notice} tips />
+        <section aria-labelledby="tips-title" className={cx(adminCard, "flex flex-col gap-3")}>
+          <div className="flex items-center justify-between gap-3">
+            <h2 id="tips-title" className={adminTitle}>
+              {t("tips.title")}
+            </h2>
+            <span className="text-[12.5px] text-ardoise">
+              {t("tips.count", { count: published })}
+            </span>
+          </div>
+          <p className="text-[12.5px] leading-[18px] text-ardoise">{t("tips.where")}</p>
+          <ul className="flex flex-col">
+            {tips.map((entry) => {
+              const date = dates[`tips.${entry.id}`];
+              return (
+                <li key={entry.id} className="border-brume not-first:border-t">
+                  <Link
+                    href={`/admin/contenus?onglet=conseils&fiche=${entry.id}#editeur`}
+                    aria-current={entry.id === selected ? "true" : undefined}
+                    className={cx(
+                      "-mx-2 flex items-center gap-3 rounded-[12px] px-2 py-3 text-[13px]",
+                      entry.id === selected ? "bg-lime-clair" : "hover:bg-creme/60",
+                    )}
+                  >
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <span className="font-semibold">{entry.title}</span>
+                      {entry.saved && (
+                        <span className="text-[11px] leading-[15px] text-ardoise">
+                          {learn("readTime", { minutes: entry.minutes })}
+                          {date ? ` · ${formatShortDate(date)}` : ""}
+                        </span>
+                      )}
+                    </span>
+                    <Tag tone={tipTone(entry)}>{status(entry)}</Tag>
+                  </Link>
+                </li>
+              );
+            })}
+          </ul>
+        </section>
+
+        <section
+          id="editeur"
+          aria-labelledby="content-tip-editor-title"
+          className={cx(adminCard, "flex scroll-mt-6 flex-col gap-3.5")}
+        >
+          {tip ? (
+            <div className="flex items-start justify-between gap-3">
+              <h2 id="content-tip-editor-title" className={adminTitle}>
+                {tip.title}
+              </h2>
+              <Tag tone={tipTone(tip)}>{status(tip)}</Tag>
+            </div>
+          ) : (
+            <>
+              <h2 id="content-tip-editor-title" className={adminTitle}>
+                {t("tips.add")}
+              </h2>
+              <p className="text-[12.5px] leading-[18px] text-ardoise">{t("tips.pick")}</p>
+            </>
+          )}
+          <form
+            key={tip ? `${tip.id}-${tip.title}-${tip.body.length}-${tip.published}` : "new"}
+            action={saveTipAction}
+            className="flex flex-col gap-3.5"
+          >
+            {tip && <input type="hidden" name="id" value={tip.id} />}
+            <TextField
+              id={`tip-${tip?.id ?? "new"}-title`}
+              name="title"
+              label={t("tips.field.title")}
+              defaultValue={tip?.title}
+              minLength={3}
+              maxLength={120}
+              required
+            />
+            <TextArea
+              id={`tip-${tip?.id ?? "new"}-body`}
+              name="body"
+              label={t("tips.field.body")}
+              hint={t("tips.field.bodyHint")}
+              defaultValue={tip?.body}
+              minLength={20}
+              maxLength={8000}
+              rows={10}
+              required
+            />
+            <TextField
+              id={`tip-${tip?.id ?? "new"}-minutes`}
+              name="minutes"
+              type="number"
+              min={1}
+              max={60}
+              label={t("tips.field.minutes")}
+              defaultValue={String(tip?.minutes ?? 3)}
+              required
+            />
+            <Checkbox
+              id={`tip-${tip?.id ?? "new"}-published`}
+              name="published"
+              defaultChecked={tip?.published ?? false}
+              label={t("tips.field.published")}
+            />
+            <Rules />
+            <ReasonField id={`tip-${tip?.id ?? "new"}-reason`} rows={2} maxLength={500} />
+            <Button type="submit" variant="secondary" className="self-end">
+              {t("tips.save")}
+            </Button>
+          </form>
+        </section>
+      </div>
+      <aside className="flex flex-col gap-4">
+        {tip && (
+          <ContentVersionsCard
+            item={item}
+            versions={versions}
+            preview={(version) => {
+              const value = version.previous[item];
+              if (!value) return t("versions.none");
+              try {
+                return (JSON.parse(value) as { title?: string }).title ?? null;
+              } catch {
+                return null;
+              }
+            }}
+          />
+        )}
+        <ContentHistoryCard history={history} versions={Boolean(tip)} />
+        <AuditNotice />
+      </aside>
+    </div>
   );
 }

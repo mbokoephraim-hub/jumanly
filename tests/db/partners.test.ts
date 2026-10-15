@@ -23,6 +23,12 @@ import {
   revokeCode,
   type PartnerContext,
 } from "@/server/services/partners";
+import {
+  batchDetail,
+  extendBatch,
+  updateBatch,
+  updatePartner,
+} from "@/server/services/admin-partners";
 import { cleanup, db, newOrganization, newUser } from "./helpers";
 
 const users: string[] = [];
@@ -394,5 +400,85 @@ describe("Rapports agrégés", () => {
     expect(everything).not.toMatch(
       /"(userId|email|invitedEmail|firstName|lastName|profileId|subscriptionId)"/,
     );
+  });
+});
+
+describe("Admin v2 · étape 8 : partenaires", () => {
+  it("modifie un partenaire avec un motif, gardé dans le journal", async () => {
+    const { org } = await partner();
+    const admin = await person();
+    await expect(
+      updatePartner(db, admin.id, { partnerId: org.id, name: "Nom", kind: "bank", reason: "" }),
+    ).rejects.toBeInstanceOf(PartnerError);
+    await updatePartner(db, admin.id, {
+      partnerId: org.id,
+      name: "Banque test fictive",
+      kind: "bank",
+      reason: "Nom officiel du contrat",
+    });
+    const updated = await db.organization.findUniqueOrThrow({ where: { id: org.id } });
+    expect(updated).toMatchObject({ name: "Banque test fictive", partnerKind: "bank" });
+    const log = await db.auditLog.findFirstOrThrow({
+      where: { action: "partner.update", targetId: org.id },
+    });
+    expect(log.metadata).toMatchObject({ reason: "Nom officiel du contrat" });
+  });
+
+  it("le début d'un lot ne change plus une fois commencé", async () => {
+    const { batch } = await partner();
+    const admin = await person();
+    await expect(
+      updateBatch(db, admin.id, {
+        batchId: batch.id,
+        name: "Lot renommé",
+        startsAt: new Date(Date.now() + 5 * day).toISOString().slice(0, 10),
+        reason: "Erreur de saisie",
+      }),
+    ).rejects.toMatchObject({ code: "batchClosed" });
+    await updateBatch(db, admin.id, {
+      batchId: batch.id,
+      name: "Lot renommé",
+      contractRef: "CT-TEST",
+      amount: "1 250,50",
+      reason: "Référence du contrat signé",
+    });
+    expect(await db.licenseBatch.findUniqueOrThrow({ where: { id: batch.id } })).toMatchObject({
+      name: "Lot renommé",
+      contractRef: "CT-TEST",
+      priceCents: 125050,
+    });
+  });
+
+  it("prolonge un lot : les licences arrêtées à l'ancienne fin vont plus loin", async () => {
+    const end = new Date(Date.now() + 30 * day);
+    const { ctx, batch } = await partner({ months: 12, endsAt: end });
+    const [first] = await codes(ctx, batch.id, 3);
+    const beneficiary = await person();
+    const activation = await activateLicense(db, beneficiary, { code: first!.code });
+    expect(activation.ok).toBe(true);
+    const admin = await person();
+    await expect(
+      extendBatch(db, admin.id, {
+        batchId: batch.id,
+        endsAt: new Date(Date.now() + 10 * day).toISOString(),
+        reason: "Avenant",
+      }),
+    ).rejects.toBeInstanceOf(PartnerError);
+    const newEnd = new Date(Date.now() + 200 * day);
+    const result = await extendBatch(db, admin.id, {
+      batchId: batch.id,
+      endsAt: newEnd.toISOString(),
+      reason: "Avenant signé",
+    });
+    expect(result.extended).toBe(1);
+    const subscription = await db.subscription.findFirstOrThrow({
+      where: { subjectId: beneficiary.id, source: "license" },
+    });
+    expect(subscription.currentPeriodEnd.getTime()).toBe(newEnd.getTime());
+
+    const detail = await batchDetail(db, admin.id, batch.id);
+    expect(detail?.codes).toMatchObject({ activated: 1, active: 1, unused: 2, available: 17 });
+    // One beneficiary: below the threshold, the impact is hidden.
+    expect(detail?.impact.reach.active.hidden).toBe(true);
   });
 });

@@ -2757,6 +2757,7 @@ Conventions :
 | `career.home.locked.withPrice` | Avec {plan} · {price} USD/mois |
 | `career.home.locked.cta` | Débloquer |
 | `career.home.tips.soon` | Arrive prochainement |
+| `career.home.tips.ready` | {count, plural, one {# fiche à lire} other {# fiches à lire}} |
 | `career.home.interviews.question` | « Présentez-vous en deux minutes. » |
 | `career.home.upgrade.eyebrow` | Formule {plan} |
 | `career.home.upgrade.title` | {count, plural, one {Débloquez un outil pour candidater mieux} other {Débloquez # outils pour candidater mieux}} |
@@ -2777,6 +2778,10 @@ Conventions :
 | `career.tips.firstJob` | Chercher un premier emploi sans expérience |
 | `career.tips.network` | Développer son réseau professionnel |
 | `career.tips.readTime` | {minutes} min de lecture |
+| `career.tips.eyebrow` | Career · Conseils de préparation |
+| `career.tips.intro` | Des fiches pratiques et gratuites pour préparer chaque étape d'un recrutement. |
+| `career.tips.empty` | Aucune fiche n'est publiée pour l'instant. |
+| `career.tips.back` | Retour à Career |
 
 ### `/app/career/diagnostic` · Diagnostic de carrière
 
@@ -8839,6 +8844,9 @@ Conventions :
 | `admin.journal.action.partner_create` | a créé le partenaire |
 | `admin.journal.action.partner_batch` | a créé un lot de licences |
 | `admin.journal.action.partner_inviteManager` | a invité un gestionnaire partenaire |
+| `admin.journal.action.partner_update` | a modifié le partenaire |
+| `admin.journal.action.partner_batch_update` | a modifié un lot de licences |
+| `admin.journal.action.partner_batch_extend` | a prolongé un lot de licences |
 | `admin.journal.action.license_activate` | a activé une licence |
 | `admin.journal.action.license_codes` | a généré des codes |
 | `admin.journal.action.license_invite` | a envoyé des invitations |
@@ -8859,6 +8867,8 @@ Conventions :
 | `admin.journal.action.content_faq_reset` | a rétabli une question de la FAQ |
 | `admin.journal.action.content_banner_save` | a enregistré une bannière |
 | `admin.journal.action.content_banner_delete` | a supprimé une bannière |
+| `admin.journal.action.content_tip_save` | a enregistré une fiche conseil |
+| `admin.journal.action.content_restore` | a restauré une version précédente d'un contenu |
 | `admin.journal.action.profile_view` | a consulté un profil |
 | `admin.journal.action.talent_search` | a cherché des talents |
 | `admin.journal.action.security_abnormalUsage` | usage anormal détecté |
@@ -10003,6 +10013,43 @@ Conventions :
 | `admin.partners.batch.minGroupHint` | Tout indicateur portant sur moins de {count} personnes est masqué. |
 | `admin.partners.creation` | Création |
 | `admin.partners.cancel` | Annuler |
+| `admin.partners.edit` | Modifier le partenaire |
+| `admin.partners.editText` | Le nom et le type s'affichent dans l'espace partenaire et sur les pages d'activation des licences. |
+| `admin.partners.save` | Enregistrer |
+| `admin.partners.updated` | Partenaire modifié. |
+| `admin.partners.errorMotif` | Indiquez le motif (au moins 3 caractères) avant d'enregistrer. |
+| `admin.partners.errorStarted` | La date de début ne change plus : le lot a commencé ou une licence est déjà active. |
+| `admin.partners.errorEnd` | La nouvelle fin doit suivre la fin actuelle et la date du jour. |
+| `admin.partners.batch.reasonHint` | Par exemple : contrat signé le 10 octobre, bon de commande reçu. |
+| `admin.partners.batch.open` | Voir la fiche du lot {name} |
+| `admin.partners.lot.title` | Fiche du lot |
+| `admin.partners.lot.period` | Du {start, date, long} au {end, date, long} |
+| `admin.partners.lot.plan` | Forfait {plan} · {months} mois par bénéficiaire |
+| `admin.partners.lot.used` | {percent} % des licences utilisées |
+| `admin.partners.lot.codes.title` | Licences et codes |
+| `admin.partners.lot.codes.seats` | Licences prévues |
+| `admin.partners.lot.codes.activated` | Utilisées |
+| `admin.partners.lot.codes.active` | En cours |
+| `admin.partners.lot.codes.unused` | Codes distribués, pas encore utilisés |
+| `admin.partners.lot.codes.available` | Restantes à distribuer |
+| `admin.partners.lot.codes.expired` | Expirées |
+| `admin.partners.lot.codes.revoked` | Retirées |
+| `admin.partners.lot.impact.title` | Impact des bénéficiaires |
+| `admin.partners.lot.impact.rule` | Chaque chiffre qui porte sur moins de {count} personnes est masqué, comme dans l'espace partenaire. |
+| `admin.partners.lot.impact.active` | Personnes actives |
+| `admin.partners.lot.impact.completed` | Formations terminées |
+| `admin.partners.lot.impact.certificates` | Attestations obtenues |
+| `admin.partners.lot.impact.applications` | Candidatures envoyées |
+| `admin.partners.lot.impact.hires` | Embauches déclarées |
+| `admin.partners.lot.impact.hidden` | Masqué |
+| `admin.partners.lot.edit` | Modifier le lot |
+| `admin.partners.lot.editText` | Le nom, la référence et le montant du contrat. La date de début ne change que tant que le lot n'a pas commencé. |
+| `admin.partners.lot.extend` | Prolonger le lot |
+| `admin.partners.lot.extendText` | Choisissez une nouvelle fin de contrat. Les licences en cours qui s'arrêtaient à l'ancienne fin vont jusqu'à leur durée prévue, dans la limite de la nouvelle fin. |
+| `admin.partners.lot.extendEnd` | Nouvelle fin du contrat |
+| `admin.partners.lot.extendConfirm` | Prolonger |
+| `admin.partners.lot.updated` | Lot modifié. |
+| `admin.partners.lot.extended` | Lot prolongé. {count, plural, =0 {Aucune licence en cours n'était limitée par l'ancienne fin.} one {# licence en cours a été prolongée.} other {# licences en cours ont été prolongées.}} |
 
 ### `/admin/ia` · IA et poids du matching
 
@@ -10098,6 +10145,30 @@ Conventions :
 | `admin.ai.audit.action.confirmed` | Score confirmé et expliqué |
 | `admin.ai.audit.empty` | Aucune action sur le matching pour le moment. |
 | `admin.ai.audit.by` | Par {name} |
+| `admin.ai.usage.col.credits` | Crédits |
+| `admin.ai.usage.col.people` | Personnes |
+| `admin.ai.usage.creditsTotal` | {count, plural, =0 {aucun crédit consommé} one {# crédit consommé} other {# crédits consommés}} |
+| `admin.ai.cost.title` | Coût par forfait |
+| `admin.ai.cost.text` | Coût estimé de l'IA par personne sur 30 jours, comparé au prix mensuel du forfait. À partir de {percent} %, le forfait coûte trop cher en IA. |
+| `admin.ai.cost.col.perPerson` | Coût par personne |
+| `admin.ai.cost.col.price` | Prix mensuel |
+| `admin.ai.cost.col.share` | Part du prix |
+| `admin.ai.cost.free` | Gratuit |
+| `admin.ai.cost.quote` | Sur devis |
+| `admin.ai.cost.alert` | Alerte : l'IA coûte {percent} % du prix du forfait {plan}. |
+| `admin.ai.cost.ok` | Aucun forfait ne dépasse {percent} % de son prix en coût d'IA. |
+| `admin.ai.budget.title` | Budget du mois |
+| `admin.ai.budget.none` | Aucun budget mensuel n'est fixé. Ajoutez la variable AI_MONTHLY_BUDGET_USD (en USD) pour suivre les dépenses d'IA du mois. |
+| `admin.ai.budget.value` | {spent} sur {budget} ({percent} %) |
+| `admin.ai.budget.spent` | {spent} dépensés ce mois-ci |
+| `admin.ai.budget.near` | Le budget d'IA du mois est presque atteint. |
+| `admin.ai.budget.over` | Le budget d'IA du mois est dépassé. |
+| `admin.ai.exhausted` | {count, plural, =0 {Aucun compte n'a épuisé ses crédits d'IA de la période.} one {# compte a épuisé ses crédits d'IA de la période.} other {# comptes ont épuisé leurs crédits d'IA de la période.}} |
+| `admin.ai.models.title` | Modèles utilisés |
+| `admin.ai.models.text` | Les modèles se règlent dans les variables d'environnement AI_MODEL_DEFAULT et AI_MODEL_FAST, jamais dans l'administration. |
+| `admin.ai.models.default` | Modèle principal |
+| `admin.ai.models.fast` | Modèle rapide |
+| `admin.ai.models.unset` | Non défini |
 
 ### `/admin/contenus` · Contenus éditables
 
@@ -10176,6 +10247,32 @@ Conventions :
 | `admin.content.banner.status.live` | En ligne |
 | `admin.content.banner.status.ended` | Terminée |
 | `admin.content.banner.count` | {count, plural, =0 {Aucune bannière} one {# bannière} other {# bannières}} |
+| `admin.content.tips.title` | Fiches conseils |
+| `admin.content.tips.where` | Les fiches publiées s'affichent pour tous les talents, gratuitement, dans Career · Conseils de préparation. Elles sont écrites ici, sans IA. |
+| `admin.content.tips.count` | {count, plural, =0 {Aucune fiche publiée} one {# fiche publiée} other {# fiches publiées}} |
+| `admin.content.tips.status.published` | Publiée |
+| `admin.content.tips.status.draft` | Brouillon |
+| `admin.content.tips.status.empty` | À écrire |
+| `admin.content.tips.field.title` | Titre |
+| `admin.content.tips.field.body` | Texte de la fiche |
+| `admin.content.tips.field.bodyHint` | Au moins 20 caractères. Séparez les paragraphes par une ligne vide. |
+| `admin.content.tips.field.minutes` | Temps de lecture (minutes) |
+| `admin.content.tips.field.published` | Publier la fiche pour les talents |
+| `admin.content.tips.add` | Nouvelle fiche |
+| `admin.content.tips.pick` | Choisissez une fiche dans la liste pour l'écrire ou la modifier, ou créez-en une nouvelle ci-dessous. |
+| `admin.content.tips.save` | Enregistrer la fiche |
+| `admin.content.tips.error` | Vérifiez les champs : un titre d'au moins 3 caractères, un texte d'au moins 20 et un temps de lecture entre 1 et 60 minutes. |
+| `admin.content.versions.title` | Versions précédentes |
+| `admin.content.versions.text` | Chaque enregistrement garde la version d'avant. « Restaurer » la remet en ligne et garde aussi la version actuelle. |
+| `admin.content.versions.empty` | Aucune version précédente pour ce contenu. |
+| `admin.content.versions.item` | Remplacée le {date} par {name} |
+| `admin.content.versions.original` | Texte d'origine (textes de l'interface) |
+| `admin.content.versions.none` | Aucun contenu (pas encore créé) |
+| `admin.content.versions.reason` | Motif du changement : {reason} |
+| `admin.content.versions.restore` | Restaurer cette version |
+| `admin.content.versions.restored` | Version restaurée. |
+| `admin.content.changes.action.tipSave` | Fiche enregistrée |
+| `admin.content.changes.action.restore` | Version restaurée |
 
 ### `/admin/signalements` · Signalements
 

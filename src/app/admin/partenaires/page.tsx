@@ -9,6 +9,7 @@ import {
   adminLabel,
   AuditNotice,
   FilterMenu,
+  ReasonField,
   SectionRule,
   SensitivePanel,
   Tag,
@@ -22,11 +23,15 @@ import { formatUsd } from "@/lib/money";
 import {
   createBatchAction,
   createPartnerAction,
+  extendBatchAction,
   invitePartnerManagerAction,
+  updateBatchAction,
+  updatePartnerAction,
 } from "@/server/actions/admin";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { adminPartners, MIN_GROUP, partnerKinds } from "@/server/services/partners";
+import { batchDetail } from "@/server/services/admin-partners";
+import { adminPartners, type Cell, MIN_GROUP, partnerKinds } from "@/server/services/partners";
 
 type Partner = Awaited<ReturnType<typeof adminPartners>>[number];
 const contractStates = ["active", "upcoming", "ended", "none"] as const;
@@ -115,7 +120,9 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
   const kind = partnerKinds.find((item) => item === params.type);
   const state = contractStates.find((item) => item === params.contrat);
   const action = writable
-    ? (["nouveau", "lot"] as const).find((item) => item === params.action)
+    ? (["nouveau", "lot", "modifier", "lot-modifier", "prolonger"] as const).find(
+        (item) => item === params.action,
+      )
     : undefined;
 
   const [partners, plans] = await Promise.all([
@@ -141,8 +148,17 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
       (!kind || partner.partnerKind === kind) &&
       (!state || contractState(partner, now) === state),
   );
+  // A batch link (`lot`, from the journal for instance) opens its partner too.
+  const lotId = one(params.lot);
   const selected =
-    partners.find((partner) => partner.id === one(params.id)) ?? shown[0] ?? undefined;
+    partners.find((partner) => partner.id === one(params.id)) ??
+    partners.find((partner) => partner.licenseBatches.some((batch) => batch.id === lotId)) ??
+    shown[0] ??
+    undefined;
+  const lot =
+    lotId && selected?.licenseBatches.some((batch) => batch.id === lotId)
+      ? await batchDetail(db, admin.id, lotId, now)
+      : null;
 
   const kindLabel = (value: string | null) => {
     const known = partnerKinds.find((item) => item === value);
@@ -154,6 +170,7 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
       type: kind,
       contrat: state,
       id: one(params.id),
+      lot: lot?.batch.id,
       ...changes,
     };
     const search = new URLSearchParams(
@@ -162,6 +179,16 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
     return search ? `/admin/partenaires?${search}` : "/admin/partenaires";
   };
   const closeHref = href({ action: undefined, id: selected?.id });
+  const errorText =
+    params.erreur === "motif"
+      ? t("errorMotif")
+      : params.erreur === "batchClosed"
+        ? t("errorStarted")
+        : params.erreur === "fin"
+          ? t("errorEnd")
+          : typeof params.erreur === "string"
+            ? t("error")
+            : null;
   const today = now.toISOString().slice(0, 10);
   const kindOptions = partnerKinds.map((item) => ({ value: item, label: t(`field.type.${item}`) }));
   const okText =
@@ -171,17 +198,26 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
         ? t("invited")
         : params.ok === "lot"
           ? t("batch.created")
-          : null;
+          : params.ok === "modifie"
+            ? t("updated")
+            : params.ok === "lot-modifie"
+              ? t("lot.updated")
+              : params.ok === "prolonge"
+                ? t("lot.extended", { count: Number(one(params.licences) ?? 0) || 0 })
+                : null;
   const contractBatch = selected?.licenseBatches.find(
     (batch) => batch.contractRef || batch.priceCents !== null,
   );
-  const panelOpen = action === "nouveau" || (action === "lot" && selected);
+  const panelOpen =
+    action === "nouveau" ||
+    ((action === "lot" || action === "modifier") && selected) ||
+    ((action === "lot-modifier" || action === "prolonger") && lot);
 
   return (
     <>
       <AdminPageHeader title={t("title")} subtitle={t("subtitle")} />
       {okText && <Alert tone="success" title={okText} />}
-      {typeof params.erreur === "string" && <Alert tone="error" title={t("error")} />}
+      {errorText && <Alert tone="error" title={errorText} />}
 
       <AdminFilterBar
         action="/admin/partenaires"
@@ -335,6 +371,18 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
                 </div>
                 {selected.partnerKind && <Tag tone="sapin">{kindLabel(selected.partnerKind)}</Tag>}
               </div>
+              {writable && (
+                <ButtonLink
+                  href={href({ id: selected.id, action: "modifier" })}
+                  scroll={false}
+                  size="sm"
+                  variant="tertiary"
+                  icon={<Icon name="edit" />}
+                  className="self-start"
+                >
+                  {t("edit")}
+                </ButtonLink>
+              )}
 
               <dl className="flex flex-col gap-3.5">
                 <ValueBox label={t("field.manager")} icon="message">
@@ -441,7 +489,15 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
                         )}
                       >
                         <span role="rowheader" className="w-full font-semibold lg:w-auto">
-                          {batch.name}
+                          <Link
+                            href={`${href({ id: selected.id, lot: batch.id, action: undefined })}#lot`}
+                            scroll={false}
+                            aria-current={batch.id === lot?.batch.id ? "true" : undefined}
+                            aria-label={t("batch.open", { name: batch.name })}
+                            className="underline-offset-4 hover:underline"
+                          >
+                            {batch.name}
+                          </Link>
                           <span className="block text-[11px] leading-[15px] font-normal text-ardoise">
                             {tl("period", { start: batch.startsAt, end: batch.endsAt })}
                           </span>
@@ -501,6 +557,7 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
               )}
             </section>
           )}
+          {selected && lot && <BatchSheet lot={lot} writable={writable} href={href} />}
           {!panelOpen && <AuditNotice />}
         </div>
 
@@ -548,125 +605,398 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
                   </div>
                 </form>
               </SensitivePanel>
-            ) : (
-              selected && (
-                <SensitivePanel
-                  title={t("batch.new")}
-                  text={t("noOnlinePurchase")}
-                  closeHref={closeHref}
-                  tone="neutral"
-                >
-                  <form action={createBatchAction} className="flex flex-col gap-3.5">
-                    <input type="hidden" name="partnerId" value={selected.id} />
-                    <p className="text-[12px] leading-[17px] font-semibold text-ardoise">
-                      {selected.name}
-                    </p>
-                    <TextField
-                      id="partenaires-batch-name"
-                      name="name"
-                      label={t("batch.name")}
-                      required
-                      maxLength={80}
-                    />
-                    <fieldset className="flex flex-col gap-2">
-                      <legend className="mb-2 text-[13px] leading-[18px] font-semibold">
-                        {t("batch.plan")}
-                      </legend>
-                      <div className="flex flex-wrap gap-1 self-start rounded-pill bg-creme p-[5px]">
-                        {plans.map((plan, index) => (
-                          <label key={plan.id} className="relative">
-                            <input
-                              type="radio"
-                              name="planId"
-                              value={plan.id}
-                              defaultChecked={index === 0}
-                              className="peer sr-only"
-                            />
-                            <span className="inline-flex h-9 cursor-pointer items-center rounded-pill px-[18px] text-[12px] font-semibold peer-checked:bg-sapin peer-checked:text-blanc peer-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.55)]">
-                              {plan.name}
-                            </span>
-                          </label>
-                        ))}
-                      </div>
-                    </fieldset>
-                    <div className="grid grid-cols-2 gap-3">
-                      <TextField
-                        id="partenaires-batch-seats"
-                        name="seats"
-                        type="number"
-                        min={1}
-                        label={t("batch.quantity")}
-                        required
-                      />
-                      <TextField
-                        id="partenaires-batch-months"
-                        name="months"
-                        type="number"
-                        min={1}
-                        max={36}
-                        defaultValue={6}
-                        label={t("batch.months")}
-                        required
-                      />
+            ) : action === "lot" && selected ? (
+              <SensitivePanel
+                title={t("batch.new")}
+                text={t("noOnlinePurchase")}
+                closeHref={closeHref}
+                tone="neutral"
+              >
+                <form action={createBatchAction} className="flex flex-col gap-3.5">
+                  <input type="hidden" name="partnerId" value={selected.id} />
+                  <p className="text-[12px] leading-[17px] font-semibold text-ardoise">
+                    {selected.name}
+                  </p>
+                  <TextField
+                    id="partenaires-batch-name"
+                    name="name"
+                    label={t("batch.name")}
+                    required
+                    maxLength={80}
+                  />
+                  <fieldset className="flex flex-col gap-2">
+                    <legend className="mb-2 text-[13px] leading-[18px] font-semibold">
+                      {t("batch.plan")}
+                    </legend>
+                    <div className="flex flex-wrap gap-1 self-start rounded-pill bg-creme p-[5px]">
+                      {plans.map((plan, index) => (
+                        <label key={plan.id} className="relative">
+                          <input
+                            type="radio"
+                            name="planId"
+                            value={plan.id}
+                            defaultChecked={index === 0}
+                            className="peer sr-only"
+                          />
+                          <span className="inline-flex h-9 cursor-pointer items-center rounded-pill px-[18px] text-[12px] font-semibold peer-checked:bg-sapin peer-checked:text-blanc peer-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.55)]">
+                            {plan.name}
+                          </span>
+                        </label>
+                      ))}
                     </div>
+                  </fieldset>
+                  <div className="grid grid-cols-2 gap-3">
                     <TextField
-                      id="partenaires-batch-min"
-                      name="minGroup"
+                      id="partenaires-batch-seats"
+                      name="seats"
                       type="number"
-                      min={MIN_GROUP}
-                      defaultValue={MIN_GROUP}
-                      icon="eye"
-                      label={t("batch.minGroup")}
-                      hint={t("batch.minGroupHint", { count: MIN_GROUP })}
+                      min={1}
+                      label={t("batch.quantity")}
                       required
                     />
-                    <p className={cx(adminLabel, "mt-1")}>{t("contract.title")}</p>
                     <TextField
-                      id="partenaires-batch-ref"
-                      name="contractRef"
-                      label={t("contract.reference")}
-                      maxLength={80}
+                      id="partenaires-batch-months"
+                      name="months"
+                      type="number"
+                      min={1}
+                      max={36}
+                      defaultValue={6}
+                      label={t("batch.months")}
+                      required
+                    />
+                  </div>
+                  <TextField
+                    id="partenaires-batch-min"
+                    name="minGroup"
+                    type="number"
+                    min={MIN_GROUP}
+                    defaultValue={MIN_GROUP}
+                    icon="eye"
+                    label={t("batch.minGroup")}
+                    hint={t("batch.minGroupHint", { count: MIN_GROUP })}
+                    required
+                  />
+                  <p className={cx(adminLabel, "mt-1")}>{t("contract.title")}</p>
+                  <TextField
+                    id="partenaires-batch-ref"
+                    name="contractRef"
+                    label={t("contract.reference")}
+                    maxLength={80}
+                  />
+                  <TextField
+                    id="partenaires-batch-amount"
+                    name="amount"
+                    inputMode="decimal"
+                    label={t("contract.amount")}
+                    hint={t("batch.amountHelp")}
+                  />
+                  <div className="grid grid-cols-2 gap-3">
+                    <TextField
+                      id="partenaires-batch-start"
+                      name="startsAt"
+                      type="date"
+                      defaultValue={today}
+                      label={t("contract.start")}
+                      required
                     />
                     <TextField
-                      id="partenaires-batch-amount"
-                      name="amount"
-                      inputMode="decimal"
-                      label={t("contract.amount")}
-                      hint={t("batch.amountHelp")}
+                      id="partenaires-batch-end"
+                      name="endsAt"
+                      type="date"
+                      label={t("contract.end")}
+                      required
                     />
-                    <div className="grid grid-cols-2 gap-3">
-                      <TextField
-                        id="partenaires-batch-start"
-                        name="startsAt"
-                        type="date"
-                        defaultValue={today}
-                        label={t("contract.start")}
-                        required
-                      />
-                      <TextField
-                        id="partenaires-batch-end"
-                        name="endsAt"
-                        type="date"
-                        label={t("contract.end")}
-                        required
-                      />
-                    </div>
-                    <div className="flex flex-wrap justify-end gap-2">
-                      <ButtonLink href={closeHref} scroll={false} variant="tertiary">
-                        {t("cancel")}
-                      </ButtonLink>
-                      <Button type="submit" variant="secondary">
-                        {t("batch.create")}
-                      </Button>
-                    </div>
-                  </form>
-                </SensitivePanel>
-              )
-            )}
+                  </div>
+                  <ReasonField id="partenaires-batch-reason" rows={2} maxLength={500} />
+                  <p className="-mt-2 text-[11px] leading-[15px] text-ardoise">
+                    {t("batch.reasonHint")}
+                  </p>
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <ButtonLink href={closeHref} scroll={false} variant="tertiary">
+                      {t("cancel")}
+                    </ButtonLink>
+                    <Button type="submit" variant="secondary">
+                      {t("batch.create")}
+                    </Button>
+                  </div>
+                </form>
+              </SensitivePanel>
+            ) : action === "modifier" && selected ? (
+              <SensitivePanel
+                title={t("edit")}
+                text={t("editText")}
+                closeHref={closeHref}
+                icon="edit"
+                tone="neutral"
+              >
+                <form action={updatePartnerAction} className="flex flex-col gap-3.5">
+                  <input type="hidden" name="partnerId" value={selected.id} />
+                  <TextField
+                    id="partenaires-edit-name"
+                    name="name"
+                    label={t("field.org")}
+                    defaultValue={selected.name}
+                    required
+                    maxLength={120}
+                  />
+                  <Select
+                    id="partenaires-edit-kind"
+                    name="kind"
+                    label={t("field.type.text")}
+                    options={kindOptions}
+                    defaultValue={selected.partnerKind ?? undefined}
+                    required
+                  />
+                  <ReasonField id="partenaires-edit-reason" rows={2} maxLength={500} />
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <ButtonLink href={closeHref} scroll={false} variant="tertiary">
+                      {t("cancel")}
+                    </ButtonLink>
+                    <Button type="submit" variant="secondary">
+                      {t("save")}
+                    </Button>
+                  </div>
+                </form>
+              </SensitivePanel>
+            ) : action === "lot-modifier" && selected && lot ? (
+              <SensitivePanel
+                title={t("lot.edit")}
+                text={t("lot.editText")}
+                closeHref={closeHref}
+                icon="edit"
+                tone="neutral"
+              >
+                <form action={updateBatchAction} className="flex flex-col gap-3.5">
+                  <input type="hidden" name="partnerId" value={selected.id} />
+                  <input type="hidden" name="batchId" value={lot.batch.id} />
+                  <TextField
+                    id="partenaires-lot-name"
+                    name="name"
+                    label={t("batch.name")}
+                    defaultValue={lot.batch.name}
+                    required
+                    maxLength={80}
+                  />
+                  <TextField
+                    id="partenaires-lot-ref"
+                    name="contractRef"
+                    label={t("contract.reference")}
+                    defaultValue={lot.batch.contractRef ?? ""}
+                    maxLength={80}
+                  />
+                  <TextField
+                    id="partenaires-lot-amount"
+                    name="amount"
+                    inputMode="decimal"
+                    label={t("contract.amount")}
+                    hint={t("batch.amountHelp")}
+                    defaultValue={
+                      lot.batch.priceCents !== null ? String(lot.batch.priceCents / 100) : ""
+                    }
+                  />
+                  {lot.status === "upcoming" && lot.codes.activated === 0 && (
+                    <TextField
+                      id="partenaires-lot-start"
+                      name="startsAt"
+                      type="date"
+                      label={t("contract.start")}
+                      defaultValue={lot.batch.startsAt.toISOString().slice(0, 10)}
+                    />
+                  )}
+                  <ReasonField id="partenaires-lot-reason" rows={2} maxLength={500} />
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <ButtonLink href={closeHref} scroll={false} variant="tertiary">
+                      {t("cancel")}
+                    </ButtonLink>
+                    <Button type="submit" variant="secondary">
+                      {t("save")}
+                    </Button>
+                  </div>
+                </form>
+              </SensitivePanel>
+            ) : action === "prolonger" && selected && lot ? (
+              <SensitivePanel
+                title={t("lot.extend")}
+                text={t("lot.extendText")}
+                closeHref={closeHref}
+                icon="calendrier"
+                tone="neutral"
+              >
+                <form action={extendBatchAction} className="flex flex-col gap-3.5">
+                  <input type="hidden" name="partnerId" value={selected.id} />
+                  <input type="hidden" name="batchId" value={lot.batch.id} />
+                  <p className="text-[12px] leading-[17px] font-semibold text-ardoise">
+                    {lot.batch.name} · {t("contract.end")}
+                    {colon}
+                    {formatDate(lot.batch.endsAt)}
+                  </p>
+                  <TextField
+                    id="partenaires-lot-end"
+                    name="endsAt"
+                    type="date"
+                    label={t("lot.extendEnd")}
+                    min={nextDay(lot.batch.endsAt > now ? lot.batch.endsAt : now)}
+                    required
+                  />
+                  <ReasonField id="partenaires-extend-reason" rows={2} maxLength={500} />
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <ButtonLink href={closeHref} scroll={false} variant="tertiary">
+                      {t("cancel")}
+                    </ButtonLink>
+                    <Button type="submit" variant="secondary">
+                      {t("lot.extendConfirm")}
+                    </Button>
+                  </div>
+                </form>
+              </SensitivePanel>
+            ) : null}
             <AuditNotice />
           </div>
         )}
       </div>
     </>
+  );
+}
+
+/** The day after `date`, for the smallest new end of a batch (YYYY-MM-DD). */
+function nextDay(date: Date) {
+  return new Date(date.getTime() + 86_400_000).toISOString().slice(0, 10);
+}
+
+type Lot = NonNullable<Awaited<ReturnType<typeof batchDetail>>>;
+
+/** One figure of the batch sheet: a count, or « Masqué » below the anonymity threshold. */
+function Figure({ label, value }: { label: string; value: ReactNode }) {
+  return (
+    <div className="flex min-w-0 flex-col gap-0.5 rounded-[14px] bg-creme px-3.5 py-3">
+      <dt className="text-[11.5px] leading-4 text-ardoise">{label}</dt>
+      <dd className="text-[20px] leading-7 font-semibold tracking-[-0.02em]">{value}</dd>
+    </div>
+  );
+}
+
+/** Sheet of one licence batch (Admin v2, étape 8): codes, seats left, then aggregated impact. */
+async function BatchSheet({
+  lot,
+  writable,
+  href,
+}: {
+  lot: Lot;
+  writable: boolean;
+  href: (changes: Record<string, string | undefined>) => string;
+}) {
+  const t = await getTranslations("admin.partners");
+  const tl = await getTranslations("partner.licenses.batch");
+  const { batch, codes, impact } = lot;
+  const shownCell = (cell: Cell) =>
+    cell.hidden || cell.value === null ? (
+      <span className="text-[14px] font-medium text-ardoise">{t("lot.impact.hidden")}</span>
+    ) : (
+      cell.value
+    );
+  return (
+    <section
+      id="lot"
+      aria-labelledby="partenaires-lot-title"
+      className="flex scroll-mt-6 flex-col gap-3.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
+    >
+      <div className="flex flex-wrap items-start justify-between gap-3">
+        <div className="flex min-w-0 flex-col gap-0.5">
+          <span className={adminLabel}>{t("lot.title")}</span>
+          <h2
+            id="partenaires-lot-title"
+            className="text-[18px] leading-[24px] font-semibold tracking-[-0.015em]"
+          >
+            {batch.name}
+          </h2>
+          <p className="text-[12px] leading-[17px] text-ardoise">
+            {t("lot.period", { start: batch.startsAt, end: batch.endsAt })}
+            {" · "}
+            {t("lot.plan", { plan: batch.plan.name, months: batch.months })}
+          </p>
+        </div>
+        <Tag
+          tone={
+            lot.status === "active"
+              ? "success"
+              : lot.status === "upcoming"
+                ? "neon"
+                : lot.status === "exhausted"
+                  ? "warning"
+                  : "neutral"
+          }
+        >
+          {tl(`status.${lot.status}`)}
+        </Tag>
+      </div>
+      {writable && (
+        <div className="flex flex-wrap gap-2">
+          <ButtonLink
+            href={href({ action: "lot-modifier" })}
+            scroll={false}
+            size="sm"
+            variant="tertiary"
+            icon={<Icon name="edit" />}
+          >
+            {t("lot.edit")}
+          </ButtonLink>
+          <ButtonLink
+            href={href({ action: "prolonger" })}
+            scroll={false}
+            size="sm"
+            variant="tertiary"
+            icon={<Icon name="calendrier" />}
+          >
+            {t("lot.extend")}
+          </ButtonLink>
+        </div>
+      )}
+
+      <h3 className={cx(adminLabel, "mt-1")}>{t("lot.codes.title")}</h3>
+      <div className="flex flex-col gap-1.5">
+        <span className="flex justify-between gap-3 text-[12px] leading-4">
+          <span className="font-semibold">{t("lot.used", { percent: lot.usedPercent })}</span>
+          <span className="text-ardoise">
+            {codes.activated}/{batch.seats}
+          </span>
+        </span>
+        <span aria-hidden className="h-2 overflow-hidden rounded-pill bg-creme">
+          <span
+            className="block h-2 rounded-pill bg-lime"
+            style={{ width: `${Math.min(100, lot.usedPercent)}%` }}
+          />
+        </span>
+      </div>
+      <dl className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 xl:grid-cols-4">
+        <Figure label={t("lot.codes.seats")} value={batch.seats} />
+        <Figure label={t("lot.codes.activated")} value={codes.activated} />
+        <Figure label={t("lot.codes.active")} value={codes.active} />
+        <Figure label={t("lot.codes.unused")} value={codes.unused} />
+        <Figure label={t("lot.codes.available")} value={codes.available} />
+        <Figure label={t("lot.codes.expired")} value={codes.expired} />
+        <Figure label={t("lot.codes.revoked")} value={codes.revoked} />
+      </dl>
+
+      <h3 className={cx(adminLabel, "mt-1")}>{t("lot.impact.title")}</h3>
+      <p className="-mt-1.5 text-[11.5px] leading-4 text-ardoise">
+        {t("lot.impact.rule", { count: impact.minGroup })}
+      </p>
+      <dl className="grid grid-cols-2 gap-2.5 sm:grid-cols-3 xl:grid-cols-5">
+        <Figure label={t("lot.impact.active")} value={shownCell(impact.reach.active)} />
+        <Figure
+          label={t("lot.impact.completed")}
+          value={shownCell(impact.learning.coursesCompleted)}
+        />
+        <Figure
+          label={t("lot.impact.certificates")}
+          value={shownCell(impact.learning.certificates)}
+        />
+        <Figure
+          label={t("lot.impact.applications")}
+          value={shownCell(impact.employment.applications)}
+        />
+        <Figure label={t("lot.impact.hires")} value={shownCell(impact.employment.hiresDeclared)} />
+      </dl>
+    </section>
   );
 }

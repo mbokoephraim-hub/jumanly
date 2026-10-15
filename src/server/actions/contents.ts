@@ -12,8 +12,10 @@ import {
   deleteBanner,
   FAQ_GROUPS,
   type FaqGroup,
+  restoreVersion,
   saveBanner,
   saveFaqItem,
+  saveTip,
   setFaqItemHidden,
 } from "@/server/services/contents";
 
@@ -109,7 +111,65 @@ export async function saveBannerAction(formData: FormData) {
 export async function deleteBannerAction(formData: FormData) {
   const user = await editor();
   const id = String(formData.get("id") ?? "").slice(0, 40);
-  await deleteBanner(db, id);
+  await deleteBanner(db, id, user.id);
   await audit(user.id, "content.banner.delete", id, {});
   back({ onglet: "bannieres", ok: "supprime" });
+}
+
+const reasonOf = (formData: FormData) =>
+  String(formData.get("reason") ?? "")
+    .trim()
+    .slice(0, 500);
+
+/** A tip sheet « Conseils de préparation » (Admin v2, étape 8): published with a reason. */
+export async function saveTipAction(formData: FormData) {
+  const user = await editor();
+  const current = String(formData.get("id") ?? "").slice(0, 40);
+  const tab = { onglet: "conseils", ...(current ? { fiche: current } : {}) };
+  const reason = reasonOf(formData);
+  if (reason.length < 3)
+    redirect(`/admin/contenus?${new URLSearchParams({ ...tab, erreur: "motif" })}`);
+  let id: string;
+  try {
+    id = await saveTip(db, user.id, Object.fromEntries(formData));
+  } catch (error) {
+    if (!(error instanceof ContentError)) throw error;
+    redirect(`/admin/contenus?${new URLSearchParams({ ...tab, erreur: "champs" })}`);
+  }
+  await audit(user.id, "content.tip.save", `tips.${id}`, {
+    title: String(formData.get("title") ?? "").slice(0, 120),
+    published: formData.get("published") === "on",
+    reason,
+  });
+  back({ onglet: "conseils", fiche: id, ok: "enregistre" }, "#editeur");
+}
+
+/** Where the admin finds an item again: its tab, then the item itself. */
+function placeOf(item: string): Record<string, string> {
+  if (item.startsWith("tips.")) return { onglet: "conseils", fiche: item.slice("tips.".length) };
+  if (item.startsWith("banner.")) return { onglet: "bannieres" };
+  const match = item.match(/^(.+)\.q(\d+)$/);
+  return match ? { groupe: match[1]!, question: match[2]! } : {};
+}
+
+/** « Restaurer »: a former version comes back, with a reason kept in the audit log. */
+export async function restoreVersionAction(formData: FormData) {
+  const user = await editor();
+  const item = String(formData.get("item") ?? "").slice(0, 120);
+  const reason = reasonOf(formData);
+  if (reason.length < 3) back({ ...placeOf(item), erreur: "motif" }, "#versions");
+  const restored = await restoreVersion(
+    db,
+    user.id,
+    String(formData.get("version") ?? "").slice(0, 40),
+    reason,
+  );
+  if (!restored) back({ ...placeOf(item), erreur: "champs" }, "#versions");
+  // Banners are logged by their id (as « content.banner.save »), the other items by their key.
+  const target = restored!.item.replace(/^banner\./, "");
+  await audit(user.id, "content.restore", target, {
+    version: String(formData.get("version") ?? "").slice(0, 40),
+    reason,
+  });
+  back({ ...placeOf(restored!.item), ok: "restaure" }, "#versions");
 }

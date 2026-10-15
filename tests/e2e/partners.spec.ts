@@ -97,8 +97,37 @@ test("l'administrateur crée un partenaire et un lot de licences", async ({ page
   await panel.getByLabel("Nombre de licences").fill("25");
   const end = new Date(Date.now() + 180 * 86_400_000).toISOString().slice(0, 10);
   await panel.getByLabel("Fin").fill(end);
+  // Admin v2, étape 8: a batch commits a contract, its reason is required.
+  await panel.getByLabel("Motif").fill("Contrat fictif signé pour la recette");
   await panel.getByRole("button", { name: "Créer le lot" }).click();
   await expect(page.getByText(/Lot créé/)).toBeVisible();
-  await page.getByRole("link", { name, exact: true }).click();
   await expect(page.getByRole("region", { name, exact: true }).getByText("0/25")).toBeVisible();
+
+  // The batch sheet opens at once: seats, codes, and the impact hidden below 10 people.
+  const lot = page.locator("#lot");
+  await expect(lot.getByRole("heading", { name: "Lot test" })).toBeVisible();
+  await expect(lot.getByText("Restantes à distribuer")).toBeVisible();
+  await expect(lot.getByText("Masqué").first()).toBeVisible();
+
+  // Extend the batch: a later end, with a reason.
+  await lot.getByRole("link", { name: "Prolonger le lot" }).click();
+  const extend = page.getByRole("region", { name: "Prolonger le lot" });
+  const later = new Date(Date.now() + 365 * 86_400_000).toISOString().slice(0, 10);
+  await extend.getByLabel("Nouvelle fin du contrat").fill(later);
+  await extend.getByLabel("Motif").fill("Avenant fictif");
+  await extend.getByRole("button", { name: "Prolonger" }).click();
+  await expect(page.getByText(/Lot prolongé/)).toBeVisible();
+
+  // Rename the partner, with a reason.
+  const renamed = `${name} renommée`;
+  await page
+    .getByRole("region", { name, exact: true })
+    .getByRole("link", { name: "Modifier le partenaire" })
+    .click();
+  const edit = page.getByRole("region", { name: "Modifier le partenaire" });
+  await edit.getByLabel("Organisation partenaire").fill(renamed);
+  await edit.getByLabel("Motif").fill("Nom officiel fictif");
+  await edit.getByRole("button", { name: "Enregistrer" }).click();
+  await expect(page.getByText("Partenaire modifié.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: renamed, exact: true })).toBeVisible();
 });

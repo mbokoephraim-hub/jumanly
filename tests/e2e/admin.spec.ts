@@ -206,6 +206,19 @@ test("les poids du matching s'enregistrent et laissent leur trace", async ({ pag
   ).toBeVisible();
 });
 
+test("la consommation d'IA montre le budget, les crédits et les modèles en lecture seule", async ({
+  page,
+}) => {
+  test.setTimeout(60_000);
+  await logIn(page, demo.admin);
+  await page.goto("/admin/ia");
+  await expect(page.getByRole("heading", { name: "Budget du mois" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Modèles utilisés" })).toBeVisible();
+  await expect(page.getByText(/crédits d'IA de la période/)).toBeVisible();
+  // No field changes a model: they come from the environment variables only.
+  await expect(page.getByText(/AI_MODEL_DEFAULT et AI_MODEL_FAST/)).toBeVisible();
+});
+
 test("les indicateurs montrent les forfaits utilisés et se complètent avec les coûts", async ({
   page,
 }) => {

@@ -4,7 +4,9 @@
  */
 import { z } from "zod";
 import type { PrismaClient } from "@/generated/prisma/client";
+import { AI_CREDITS_KEY, aiFeatures } from "@/server/ai";
 import { hasPrice } from "@/server/ai/prices";
+import { limit } from "@/server/entitlements";
 import { criterionKeys } from "@/server/matching/types";
 import { weightsSchema } from "@/server/matching/service";
 
@@ -13,6 +15,10 @@ export const USAGE_PERIOD_DAYS = 30;
 type UsageRow = {
   key: string;
   calls: number;
+  /** Credits spent by the successful calls (`aiFeatures[feature].credits`). */
+  credits: number;
+  /** Distinct people who called the AI. */
+  people: number;
   failures: number;
   inputTokens: number;
   outputTokens: number;
@@ -25,6 +31,7 @@ export async function usageReport(db: PrismaClient, now = new Date(), days = USA
   const rows = await db.aiUsage.findMany({
     where: { createdAt: { gte: since } },
     select: {
+      userId: true,
       feature: true,
       planCode: true,
       model: true,
@@ -34,13 +41,18 @@ export async function usageReport(db: PrismaClient, now = new Date(), days = USA
       costMicroUsd: true,
     },
   });
+  const creditsOf = (feature: string): number =>
+    feature in aiFeatures ? aiFeatures[feature as keyof typeof aiFeatures].credits : 0;
   const group = (keyOf: (row: (typeof rows)[number]) => string) => {
     const map = new Map<string, UsageRow>();
+    const people = new Map<string, Set<string>>();
     for (const row of rows) {
       const key = keyOf(row);
       const entry = map.get(key) ?? {
         key,
         calls: 0,
+        credits: 0,
+        people: 0,
         failures: 0,
         inputTokens: 0,
         outputTokens: 0,
@@ -48,6 +60,11 @@ export async function usageReport(db: PrismaClient, now = new Date(), days = USA
       };
       entry.calls++;
       if (row.status !== "ok") entry.failures++;
+      else entry.credits += creditsOf(row.feature);
+      const set = people.get(key) ?? new Set<string>();
+      if (row.userId) set.add(row.userId);
+      people.set(key, set);
+      entry.people = set.size;
       entry.inputTokens += row.inputTokens;
       entry.outputTokens += row.outputTokens;
       entry.costMicroUsd += row.costMicroUsd;
@@ -62,7 +79,96 @@ export async function usageReport(db: PrismaClient, now = new Date(), days = USA
     byFeature: group((row) => row.feature),
     byPlan: group((row) => row.planCode ?? ""),
     total: rows.reduce((sum, row) => sum + row.costMicroUsd, 0),
+    credits: rows.reduce((sum, row) => sum + (row.status === "ok" ? creditsOf(row.feature) : 0), 0),
     unpriced,
+  };
+}
+
+/** The AI cost of a plan above this share of its monthly price raises an alert (Admin v2, étape 8). */
+export const PLAN_COST_ALERT = 0.3;
+
+/**
+ * Cost of the AI per person and per plan over the period, against the monthly price of the plan:
+ * a share at or above 30 % is an alert. Free plans and plans on quote have no share.
+ */
+export function planCosts(
+  byPlan: UsageRow[],
+  plans: { code: string; name: string; priceCents: number | null; interval: string }[],
+) {
+  return byPlan.map((row) => {
+    const plan = plans.find((item) => item.code === row.key);
+    const monthlyCents =
+      plan?.priceCents == null
+        ? null
+        : plan.interval === "year"
+          ? Math.round(plan.priceCents / 12)
+          : plan.priceCents;
+    const perPerson = row.people ? row.costMicroUsd / row.people : 0;
+    // Micro-USD against cents: 1 cent = 10 000 micro-USD.
+    const share = monthlyCents ? perPerson / (monthlyCents * 10_000) : null;
+    return {
+      key: row.key,
+      name: plan?.name ?? null,
+      people: row.people,
+      perPersonMicroUsd: Math.round(perPerson),
+      monthlyCents,
+      share,
+      alert: share !== null && share >= PLAN_COST_ALERT,
+    };
+  });
+}
+
+/**
+ * The monthly AI budget of `AI_MONTHLY_BUDGET_USD` (optional): the cost of the current month
+ * against it, a warning from 80 %, an error above 100 %.
+ */
+export async function monthBudget(db: PrismaClient, now = new Date()) {
+  const raw = Number(process.env.AI_MONTHLY_BUDGET_USD ?? "");
+  const budgetMicroUsd = Number.isFinite(raw) && raw > 0 ? Math.round(raw * 1_000_000) : null;
+  const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), 1));
+  const spent = await db.aiUsage.aggregate({
+    where: { createdAt: { gte: start } },
+    _sum: { costMicroUsd: true },
+  });
+  const spentMicroUsd = spent._sum.costMicroUsd ?? 0;
+  const share = budgetMicroUsd ? spentMicroUsd / budgetMicroUsd : null;
+  return {
+    budgetMicroUsd,
+    spentMicroUsd,
+    share,
+    level: share === null ? null : share > 1 ? "over" : share >= 0.8 ? "near" : "ok",
+  } as const;
+}
+
+/** People and organizations who used all their AI credits of the current period. */
+export async function exhaustedCredits(db: PrismaClient, now = new Date()) {
+  const counters = await db.usageCounter.findMany({
+    where: {
+      key: AI_CREDITS_KEY,
+      periodStart: { lte: now },
+      periodEnd: { gt: now },
+      used: { gt: 0 },
+    },
+    select: { subjectType: true, subjectId: true, used: true },
+    take: 5000,
+  });
+  let count = 0;
+  for (const counter of counters) {
+    const max = await limit(
+      db,
+      { type: counter.subjectType, id: counter.subjectId },
+      AI_CREDITS_KEY,
+    );
+    if (max >= 0 && counter.used >= max) count++;
+  }
+  return count;
+}
+
+/** Models in use: the variables `AI_MODEL_DEFAULT` and `AI_MODEL_FAST`, read only. */
+export function configuredModels() {
+  return {
+    default: process.env.AI_MODEL_DEFAULT || null,
+    fast: process.env.AI_MODEL_FAST || null,
   };
 }
 

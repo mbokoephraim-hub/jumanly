@@ -176,6 +176,7 @@ function fallbackHref(targetType: string, targetId: string) {
   if (targetType === "content") return "/admin/contenus";
   if (targetType === "report") return `/admin/signalements?id=${targetId}`;
   if (targetType === "license") return "/admin/partenaires";
+  if (targetType === "licenseBatch") return `/admin/partenaires?lot=${targetId}`;
   if (targetType === "matchingWeights") return "/admin/ia?onglet=poids";
   return null;
 }
