@@ -7,27 +7,27 @@ import { formatShortDate } from "@/lib/dates";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
 import { setUserStatus } from "@/server/actions/admin";
+import { resendVerificationAction, sendResetLinkAction } from "@/server/actions/admin-users";
 import { db } from "@/server/db";
 import { parseLimit, resolvePlan, usage } from "@/server/entitlements";
+import { accountCheck, userState, type UserState } from "@/server/services/admin-users";
 
-export const statuses = ["active", "unverified", "suspended", "deletionScheduled"] as const;
-export type UserState = (typeof statuses)[number];
+export { USER_STATES as statuses, userState } from "@/server/services/admin-users";
 
 export const statusTone: Record<UserState, TagTone> = {
   active: "success",
   unverified: "warning",
   suspended: "error",
   deletionScheduled: "warning",
+  deleted: "neutral",
 };
 
-export function userState(user: {
-  status: string;
-  deletionScheduledAt: Date | null;
-  emailVerified: boolean;
-}): UserState {
-  if (user.status === "suspended") return "suspended";
-  if (user.deletionScheduledAt) return "deletionScheduled";
-  return user.emailVerified ? "active" : "unverified";
+/** The name shown for an account: « Compte supprimé » once anonymized. */
+export function displayName(
+  t: (key: "users.deletedName") => string,
+  user: { name: string; status: string },
+) {
+  return user.status === "deleted" ? t("users.deletedName") : user.name;
 }
 
 /** Plan tag colour: free in Brume, partners in Menthe, organization plans in Néon, paid talent in Lime. */
@@ -109,6 +109,7 @@ export async function UserCard({
   now,
   closeHref,
   suspendHref,
+  actionHref,
   back,
   canAct,
   className,
@@ -128,6 +129,8 @@ export async function UserCard({
   now: Date;
   closeHref: string;
   suspendHref: string;
+  /** Link opening a panel of the page (`verifier`, `forfait`, `credits`, `supprimer`). */
+  actionHref: (action: string) => string;
   back: string;
   canAct: boolean;
   className?: string;
@@ -138,7 +141,7 @@ export async function UserCard({
     getTranslations("quota.name"),
   ]);
   const subject = { type: "user" as const, id: user.id };
-  const [plan, memberships, lastSession, profile, coursesInProgress, certificates] =
+  const [plan, memberships, lastSession, profile, coursesInProgress, certificates, check] =
     await Promise.all([
       resolvePlan(db, subject, now),
       db.membership.findMany({
@@ -157,7 +160,9 @@ export async function UserCard({
       }),
       db.enrollment.count({ where: { userId: user.id, completedAt: null } }),
       db.certificate.count({ where: { enrollment: { userId: user.id }, revokedAt: null } }),
+      accountCheck(db, user.id),
     ]);
+  const deleted = user.status === "deleted";
   const subscription = plan?.subscriptionId
     ? await db.subscription.findUnique({
         where: { id: plan.subscriptionId },
@@ -240,12 +245,14 @@ export async function UserCard({
         </Link>
       </div>
       <div className="my-3.5 flex items-center gap-3">
-        <Initials name={user.name} size={52} />
+        <Initials name={displayName(t, user)} size={52} />
         <div className="flex min-w-0 flex-1 flex-col">
-          <span className="text-[16px] leading-[22px] font-semibold">{user.name}</span>
-          <span className="text-[11px] leading-[15px] break-words text-ardoise">
-            {[user.email, place].filter(Boolean).join(" · ")}
-          </span>
+          <span className="text-[16px] leading-[22px] font-semibold">{displayName(t, user)}</span>
+          {!deleted && (
+            <span className="text-[11px] leading-[15px] break-words text-ardoise">
+              {[user.email, place].filter(Boolean).join(" · ")}
+            </span>
+          )}
         </div>
         <Tag tone={statusTone[state]}>{t(`users.status.${state}`)}</Tag>
       </div>
@@ -263,7 +270,55 @@ export async function UserCard({
         </dl>
       </Block>
 
-      {plan && (
+      {deleted && (
+        <p className="mb-3.5 flex items-start gap-2.5 rounded-[14px] bg-brume px-3 py-2.5 text-[12px] leading-[17px]">
+          <Icon name="info" className="mt-px size-3.5 shrink-0" />
+          {t("users.deletedNote")}
+        </p>
+      )}
+
+      {check && !deleted && (
+        <Block title={t("users.detail.check")}>
+          <dl className="flex flex-col gap-2">
+            <Row label={t("users.detail.email")}>
+              <span
+                className={cx(
+                  "inline-flex items-center gap-1.5",
+                  !check.emailVerified && "text-ambre-texte",
+                )}
+              >
+                <Icon
+                  name={check.emailVerified ? "valider" : "alerte"}
+                  className="size-3.5 shrink-0"
+                />
+                {t(
+                  check.emailVerified
+                    ? "users.detail.emailVerified"
+                    : "users.detail.emailUnverified",
+                )}
+              </span>
+            </Row>
+            <Row label={t("users.detail.twoFactor")}>
+              {t(check.twoFactor ? "users.detail.twoFactorOn" : "users.detail.twoFactorOff")}
+            </Row>
+            <Row label={t("users.detail.methods")}>
+              {check.methods.length
+                ? check.methods
+                    .map((method) => {
+                      const key = `users.method.${method === "magic-link" ? "magicLink" : method}`;
+                      return t.has(key as never) ? t(key as never) : method;
+                    })
+                    .join(", ")
+                : t("users.detail.noMethod")}
+            </Row>
+            <Row label={t("users.detail.lastSignIn")}>
+              {check.lastSignIn ? ago(check.lastSignIn, now) : t("users.neverActive")}
+            </Row>
+          </dl>
+        </Block>
+      )}
+
+      {plan && !deleted && (
         <Block title={t("users.detail.subscription")}>
           <dl className="flex flex-col gap-2">
             <Row label={t("users.col.plan")}>
@@ -350,6 +405,25 @@ export async function UserCard({
           <Row label={t("users.detail.coursesInProgress")}>{coursesInProgress}</Row>
           <Row label={t("users.detail.certificates")}>{certificates}</Row>
         </dl>
+        {check && check.certificates.length > 0 && (
+          <ul aria-label={t("users.detail.certificateList")} className="flex flex-col gap-1.5 pt-1">
+            {check.certificates.map((certificate) => (
+              <li
+                key={certificate.id}
+                className="flex items-center gap-2 text-[12px] leading-[17px]"
+              >
+                <Icon name="certificat" className="size-3.5 shrink-0" />
+                <span className="min-w-0 flex-1 truncate">
+                  {t("users.detail.certificateLine", {
+                    course: certificate.course,
+                    date: formatShortDate(certificate.issuedAt),
+                  })}
+                </span>
+                {certificate.revoked && <Tag tone="error">{t("users.detail.revoked")}</Tag>}
+              </li>
+            ))}
+          </ul>
+        )}
       </Block>
 
       <p className="flex items-start gap-2.5 rounded-[14px] bg-creme px-3 py-2.5 text-[11px] leading-4">
@@ -357,9 +431,54 @@ export async function UserCard({
         {t("users.detail.privateNote")}
       </p>
 
-      {canAct && (
+      {canAct && !deleted && (
         <nav aria-label={t("users.detail.actions")} className="mt-3.5">
           <ul className="flex flex-col gap-1.5">
+            {check && !check.emailVerified && (
+              <>
+                <li>
+                  <form action={resendVerificationAction}>
+                    <input type="hidden" name="userId" value={user.id} />
+                    <input type="hidden" name="back" value={back} />
+                    <button type="submit" className={actionLine}>
+                      <Icon name="send" className="size-4 shrink-0" />
+                      {t("users.action.resendVerification")}
+                    </button>
+                  </form>
+                </li>
+                <ActionLink href={actionHref("verifier")} icon="valider">
+                  {t("users.action.verifyEmail.text")}
+                </ActionLink>
+              </>
+            )}
+            {check?.methods.includes("credential") && (
+              <li>
+                <form action={sendResetLinkAction}>
+                  <input type="hidden" name="userId" value={user.id} />
+                  <input type="hidden" name="back" value={back} />
+                  <button type="submit" className={actionLine}>
+                    <Icon name="lock" className="size-4 shrink-0" />
+                    {t("users.action.resetPassword")}
+                  </button>
+                </form>
+              </li>
+            )}
+            <ActionLink href={actionHref("forfait")} icon="portefeuille">
+              {t("users.action.grantPlan.text")}
+            </ActionLink>
+            <ActionLink href={actionHref("credits")} icon="intelligence">
+              {t("users.action.credits.text")}
+            </ActionLink>
+            <li>
+              <a
+                href={`/admin/utilisateurs/donnees?id=${encodeURIComponent(user.id)}`}
+                download
+                className={actionLine}
+              >
+                <Icon name="telecharger" className="size-4 shrink-0" />
+                {t("users.action.exportData")}
+              </a>
+            </li>
             <ActionLink href={`${back}#utilisateurs-roles`} icon="edit">
               {t("users.action.roles.text")}
             </ActionLink>
@@ -380,6 +499,9 @@ export async function UserCard({
                 {t("users.action.suspend.text")}
               </ActionLink>
             )}
+            <ActionLink href={actionHref("supprimer")} icon="fermer" danger>
+              {t("users.action.delete.text")}
+            </ActionLink>
           </ul>
         </nav>
       )}

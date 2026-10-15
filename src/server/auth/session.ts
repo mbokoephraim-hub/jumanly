@@ -19,7 +19,7 @@ export const getCurrentUser = cache(async () => {
   const session = await getSession();
   if (!session) return null;
   const user = await db.user.findUnique({ where: { id: session.user.id } });
-  if (!user || user.status === "suspended") return null;
+  if (!user || user.status !== "active") return null;
   return user;
 });
 

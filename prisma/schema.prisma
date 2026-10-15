@@ -499,6 +499,8 @@ enum PlatformRole {
 enum UserStatus {
   active
   suspended
+  /// Account deleted and anonymized (partie 10): kept only so applications and payments stay whole.
+  deleted
 }
 
 model User {

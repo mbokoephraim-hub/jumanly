@@ -139,7 +139,7 @@ export const auth = betterAuth({
               deletionScheduledAt: true,
             },
           });
-          if (user?.status === "suspended") return false;
+          if (user && user.status !== "active") return false;
           if (user) await bootstrapAdminIfListed(db, user);
           if (user?.deletionScheduledAt) {
             await db.user.update({
