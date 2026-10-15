@@ -84,13 +84,15 @@ export function ExportPanel({
       <h2 id="cv-export" className="text-[17px] font-semibold">
         {labels.title}
       </h2>
-      <p className="flex items-center gap-2 rounded-[14px] px-4 py-3 text-sm font-semibold ring-2 ring-sapin">
+      <p className="flex items-center gap-2.5 rounded-[16px] bg-blanc px-4 py-3 text-sm font-semibold ring-2 ring-sapin">
         <Icon name="doc" className="size-4" />
         <span className="flex-1">{labels.pdf}</span>
-        <Icon name="check" className="size-4 text-feuille" />
+        <span className="grid size-6 place-items-center rounded-full bg-lime">
+          <Icon name="check" className="size-3.5" />
+        </span>
       </p>
       {pages > 0 && (
-        <p className="text-xs text-ardoise">
+        <p className="text-xs leading-[1.5] [overflow-wrap:anywhere] text-ardoise">
           {labels.fileLines[Math.min(pages, labels.fileLines.length) - 1]}
         </p>
       )}

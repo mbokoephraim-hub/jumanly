@@ -232,6 +232,8 @@ export async function setPrimaryCv(formData: FormData) {
     }),
     db.document.update({ where: { id: cv.id }, data: { isPrimary: true } }),
   ]);
+  // From the « … » menu of « Mes CV », the person stays on the list.
+  if (formData.get("retour") === "liste") redirect("/app/career/cv?ok=principal");
   back(cv.id, { ok: "1" });
 }
 

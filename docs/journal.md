@@ -2,6 +2,29 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Mes CV et éditeur de CV v2 (15 octobre 2026)
+
+- `/app/career/cv` refait d'après `docs/refonte-career/BRIEF-CV-V2.md` et les maquettes
+  `mes-cv-v2` : hero Profondeur (CV créés « {count} sur 10 », score du CV principal, éventail des
+  vignettes des modèles utilisés, Orbi, Amani « montre »), grande carte du CV principal (vignette,
+  modèle, ATS, score et ses trois critères réels, « Pourquoi ce score ? »), grille des autres CV
+  (vignette inclinée qui se redresse, score en pastille, menu « … »), carte « Nouveau CV » avec le
+  nombre restant (masquée à la limite), bandeau des modèles (total, inclus selon les droits,
+  polices). Composants dans `src/components/career/cv/`.
+- `/app/career/cv/[id]` refait d'après `editeur-cv-v2` : barre d'atelier collante (sélecteur de
+  CV, « Enregistré », Nouveau, Dupliquer, « … », Télécharger le PDF ; en mobile, barre d'action
+  fixe au-dessus du menu bas), trois colonnes (Contenu / Mise en forme avec pilule glissante,
+  plan de travail collant avec compteur de pages, zoom et plein écran, colonne coach / export /
+  pages / adapter). Les sections affichent leur contenu réel ; la section ouverte est surlignée
+  sur la feuille, jamais dans le PDF. `StylePanel`, `PagesPanel` et `ExportPanel` ne changent que
+  d'habillage (densité dessinée, polices écrites dans leur police, pastilles de 30 px).
+- 47 textes ajoutés (`career.cv.list.*`, `criteria.*`, `progress.*`, `preview.*`…).
+- Tests : `tests/e2e/cv-v2.spec.ts` (liste, menu « … », limite de 10 avec `fill-cvs.ts` ;
+  éditeur : vue dans l'adresse, surlignage, PDF sans surlignage, barre collante, mobile), aussi en
+  animations réduites. Captures 1440 et 390 px : `/mnt/project-files/captures/cv-v2/`.
+- Décisions et écarts : `docs/decisions/2026-10-15-refonte-mes-cv.md` (colonne de droite non
+  collante, nombre de pages absent de la liste car non enregistré).
+
 ## Refonte visuelle · lot 12 A : Tarifs et demande de devis (15 octobre 2026)
 
 - `/tarifs` refait d'après la maquette 05-01 : les quatre familles sont empilées (ancres `#talents`,

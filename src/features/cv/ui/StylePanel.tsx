@@ -59,13 +59,13 @@ export async function StylePanel({
     </form>
   );
   const swatches = (ats: boolean) => (
-    <div className="flex flex-wrap gap-2">
+    <div className="grid grid-cols-8 gap-1.5">
       {cvColors
         .filter((color) => color.ats === ats)
         .map((color) => {
           const active = accent.toUpperCase() === color.hex;
           return (
-            <span key={color.code}>
+            <span key={color.code} className="flex justify-center">
               {setting(
                 "accent",
                 color.code,
@@ -75,7 +75,7 @@ export async function StylePanel({
                   pressed: active,
                   color: color.hex,
                   className: cx(
-                    "flex size-9 items-center justify-center rounded-full ring-offset-2 focus-visible:outline-2 focus-visible:outline-sapin",
+                    "flex size-[30px] items-center justify-center rounded-full ring-offset-2 ring-offset-blanc focus-visible:outline-2 focus-visible:outline-sapin pointer-coarse:size-9",
                     active && "ring-2 ring-sapin",
                   ),
                 },
@@ -89,24 +89,28 @@ export async function StylePanel({
 
   return (
     <div className="flex flex-col gap-5">
-      <div className="flex items-center gap-3">
+      <div className="flex items-center gap-3.5 rounded-[20px] bg-creme p-3">
         <Image
           src={`/cv-templates/${String(number).padStart(2, "0")}-${template.id}.png`}
           alt=""
           width={600}
           height={849}
-          className="h-[78px] w-[56px] shrink-0 rounded-md object-cover object-top ring-1 ring-brume"
+          className="h-[90px] w-16 shrink-0 rounded-md bg-blanc object-cover object-top shadow-[0_10px_20px_-12px_rgb(11_26_31/0.5)] ring-1 ring-brume"
         />
-        <div className="flex min-w-0 flex-1 flex-col">
+        <div className="flex min-w-0 flex-1 flex-col items-start gap-1.5">
           <p className="font-semibold">{d(`template.name.${templateKey(template.id)}`)}</p>
-          <p className="text-xs text-ardoise">{t(`template.ats.${template.ats}`)}</p>
+          <p className="inline-flex items-center gap-1 rounded-pill bg-lime-clair px-2.5 py-0.5 text-xs font-semibold">
+            <Icon name="check" className="size-3" />
+            {t(`template.ats.${template.ats}`)}
+          </p>
+          <Link
+            href={`/app/career/cv/modeles?cv=${documentId}`}
+            className="inline-flex min-h-11 items-center gap-1 text-sm font-semibold text-up-texte hover:underline lg:min-h-0"
+          >
+            {t("template.change")}
+            <Icon name="chev-r" className="size-4" />
+          </Link>
         </div>
-        <Link
-          href={`/app/career/cv/modeles?cv=${documentId}`}
-          className="text-sm font-semibold text-up-texte hover:underline"
-        >
-          {t("template.change")}
-        </Link>
       </div>
 
       <section aria-labelledby="style-color" className={cx(divider, "flex flex-col gap-3")}>
@@ -123,7 +127,7 @@ export async function StylePanel({
           <label htmlFor="style-custom" className="sr-only">
             {t("style.color.custom")}
           </label>
-          <span className="flex h-11 min-w-0 flex-1 items-center gap-2 rounded-[14px] bg-blanc px-3 ring-1 ring-brume focus-within:ring-2 focus-within:ring-sapin">
+          <span className="flex h-11 min-w-[150px] flex-1 items-center gap-2 rounded-pill bg-blanc px-3.5 ring-1 ring-brume focus-within:ring-2 focus-within:ring-sapin">
             <span
               aria-hidden
               className="size-5 shrink-0 rounded-full"
@@ -188,8 +192,8 @@ export async function StylePanel({
                 {
                   pressed: active,
                   className: cx(
-                    "flex min-h-11 w-full items-center gap-3 rounded-[14px] px-4 py-2 hover:bg-creme",
-                    active && "bg-creme ring-2 ring-sapin ring-inset",
+                    "flex min-h-12 w-full items-center gap-3 rounded-[16px] px-4 py-2 hover:bg-creme",
+                    active && "bg-blanc ring-2 ring-sapin ring-inset hover:bg-blanc",
                   ),
                 },
               )}
@@ -203,17 +207,29 @@ export async function StylePanel({
         <h3 id="style-density" className={cx(eyebrow, "text-ardoise")}>
           {t("template.density.text")}
         </h3>
-        <div className="flex flex-wrap gap-1">
-          {cvDensities.map((density) => (
-            <span key={density}>
-              {setting("density", density, t(`template.density.${density}`), {
-                pressed: style.density === density,
-                className: pillClass(
-                  style.density === density ? "dark" : "outline",
-                  "sm",
-                  "h-11 px-4 ring-0",
-                ),
-              })}
+        <div className="grid grid-cols-3 gap-2">
+          {cvDensities.map((density, index) => (
+            <span key={density} className="flex">
+              {setting(
+                "density",
+                density,
+                <>
+                  <span aria-hidden className="flex w-8 flex-col" style={{ gap: 6 - index * 2 }}>
+                    {Array.from({ length: 3 + index }, (_, line) => (
+                      <span key={line} className="block h-0.5 rounded-sm bg-current" />
+                    ))}
+                  </span>
+                  {t(`template.density.${density}`)}
+                </>,
+                {
+                  pressed: style.density === density,
+                  className: cx(
+                    "flex min-h-[72px] flex-1 flex-col items-center justify-center gap-2 rounded-[16px] bg-blanc px-2 py-2.5 text-xs font-semibold ring-1 ring-brume ring-inset hover:bg-creme",
+                    style.density === density &&
+                      "ring-2 ring-sapin shadow-[0_0_0_3px_var(--color-lime)]",
+                  ),
+                },
+              )}
             </span>
           ))}
         </div>
@@ -246,8 +262,8 @@ export async function StylePanel({
               label: t("info.photo.text"),
               pressed: style.showPhoto,
               className: cx(
-                "flex h-7 w-12 shrink-0 items-center rounded-full p-1",
-                style.showPhoto ? "bg-sapin" : "bg-brume",
+                "flex h-7 w-12 shrink-0 items-center rounded-full p-1 [&>span]:bg-blanc",
+                style.showPhoto ? "bg-sapin [&>span]:bg-lime" : "bg-brume",
               ),
             },
           )
@@ -265,15 +281,14 @@ export async function StylePanel({
         <h3 id="style-language" className={cx(eyebrow, "text-ardoise")}>
           {t("style.titlesLanguage.text")}
         </h3>
-        <div className="flex gap-1">
+        <div className="grid grid-cols-2 gap-1 rounded-pill bg-creme p-1">
           {cvTitleLanguages.map((language) => (
-            <span key={language}>
+            <span key={language} className="flex">
               {setting("titlesLanguage", language, t(`style.titlesLanguage.${language}`), {
                 pressed: style.titlesLanguage === language,
-                className: pillClass(
-                  style.titlesLanguage === language ? "dark" : "outline",
-                  "sm",
-                  "h-11 px-5 ring-0",
+                className: cx(
+                  "flex h-11 flex-1 items-center justify-center rounded-pill text-sm font-semibold",
+                  style.titlesLanguage === language ? "bg-sapin text-blanc" : "hover:bg-blanc/70",
                 ),
               })}
             </span>
