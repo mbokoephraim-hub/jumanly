@@ -5652,6 +5652,7 @@ Conventions :
 | `pricing.payment.methods` | Paiement par Mobile Money ou carte bancaire. Prix en USD, par mois. |
 | `pricing.payment.prepaid` | Sans engagement. Avec Mobile Money, l'abonnement est prépayé pour un mois : rien n'est prélevé sans votre accord. |
 | `pricing.payment.localCurrency` | Le montant est converti dans votre monnaie au moment du paiement, selon le taux appliqué par l'opérateur ou la banque. |
+| `pricing.payment.prepaidShort` | Sans engagement, prépayé pour un mois avec Mobile Money |
 | `pricing.card.perMonth` | /mois |
 | `pricing.card.currency` | USD |
 | `pricing.card.free` | Gratuit |
@@ -6014,6 +6015,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `pricing.faq.title` | Questions sur la facturation |
+| `pricing.faq.eyebrow` | FAQ |
 | `pricing.faq.q1` | Quels moyens de paiement acceptez-vous ? |
 | `pricing.faq.a1` | Mobile Money et carte bancaire. Les opérateurs disponibles dépendent de votre pays et s'affichent au moment du paiement. |
 | `pricing.faq.q2` | Pourquoi les prix sont-ils en USD ? |
@@ -6570,6 +6572,8 @@ Note d'intégration : `quota.reached.addon` n'est affiché que si une option de 
 | Clé | Texte |
 |---|---|
 | `quote.title` | Demander un devis Company Premium |
+| `quote.hero.title` | Demander un devis |
+| `quote.hero.text` | Pour les grands groupes et les organisations aux besoins particuliers : décrivez votre projet, nous construisons la proposition avec vous. |
 | `quote.subtitle` | Décrivez votre organisation et vos besoins. Nous préparons une proposition adaptée et vous répondons par e-mail. |
 | `quote.org.label` | Nom de l'organisation |
 | `quote.org.placeholder` | Raison sociale ou nom du groupe |

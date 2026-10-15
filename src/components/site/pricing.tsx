@@ -5,7 +5,7 @@ import { compareRows, type CompareCell } from "@/config/pricing-compare";
 import { dynamic, numbered } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
-import { ButtonLink, PlanCard } from "@/components/ui";
+import { ButtonLink } from "@/components/ui";
 import { limitOf, planCtaHref, plansOf, type PublicPlan } from "@/server/services/plans";
 
 /** Values injected in a plan's texts: price, seats and active jobs, all read from the database. */
@@ -17,43 +17,7 @@ export function planValues(plan: PublicPlan) {
   };
 }
 
-/** Plan cards of one family, with the texts of each plan's `contentKey`. */
-export async function FamilyPlans({ plans, family }: { plans: PublicPlan[]; family: PlanFamily }) {
-  const t = dynamic(await getTranslations());
-  const list = plansOf(plans, family);
-  return (
-    <ul
-      className={cx(
-        "grid gap-4 md:grid-cols-2",
-        list.length === 4 ? "xl:grid-cols-4" : "lg:grid-cols-3",
-      )}
-    >
-      {list.map((plan, index) => {
-        const key = plan.contentKey;
-        const values = planValues(plan);
-        const previous = index > 0 && t.has(`${key}.includes`) ? list[index - 1] : undefined;
-        return (
-          <li key={plan.code} className="flex [&>article]:flex-1">
-            <PlanCard
-              name={plan.name}
-              priceCents={plan.priceCents}
-              audience={t(`${key}.ideal`)}
-              features={numbered(t, `${key}.f`, values)}
-              includesPlan={previous?.name}
-              recommended={plan.recommended}
-              badge={t.has(`${key}.badge`) ? t(`${key}.badge`) : undefined}
-              note={t.has(`${key}.note`) ? t(`${key}.note`) : undefined}
-              ctaLabel={t(`${key}.cta`)}
-              ctaHref={planCtaHref(plan)}
-            />
-          </li>
-        );
-      })}
-    </ul>
-  );
-}
-
-const comparePrefix: Partial<Record<PlanFamily, string>> = {
+export const comparePrefix: Partial<Record<PlanFamily, string>> = {
   talent: "pricing.talent.compare",
   rh: "pricing.rh.compare",
   company: "pricing.company.compare",

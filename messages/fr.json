@@ -6887,7 +6887,8 @@
     "payment": {
       "methods": "Paiement par Mobile Money ou carte bancaire. Prix en USD, par mois.",
       "prepaid": "Sans engagement. Avec Mobile Money, l'abonnement est prépayé pour un mois : rien n'est prélevé sans votre accord.",
-      "localCurrency": "Le montant est converti dans votre monnaie au moment du paiement, selon le taux appliqué par l'opérateur ou la banque."
+      "localCurrency": "Le montant est converti dans votre monnaie au moment du paiement, selon le taux appliqué par l'opérateur ou la banque.",
+      "prepaidShort": "Sans engagement, prépayé pour un mois avec Mobile Money"
     },
     "card": {
       "perMonth": "/mois",
@@ -7303,6 +7304,7 @@
     },
     "faq": {
       "title": "Questions sur la facturation",
+      "eyebrow": "FAQ",
       "q1": "Quels moyens de paiement acceptez-vous ?",
       "a1": "Mobile Money et carte bancaire. Les opérateurs disponibles dépendent de votre pays et s'affichent au moment du paiement.",
       "q2": "Pourquoi les prix sont-ils en USD ?",
@@ -7922,6 +7924,10 @@
   },
   "quote": {
     "title": "Demander un devis Company Premium",
+    "hero": {
+      "title": "Demander un devis",
+      "text": "Pour les grands groupes et les organisations aux besoins particuliers : décrivez votre projet, nous construisons la proposition avec vous."
+    },
     "subtitle": "Décrivez votre organisation et vos besoins. Nous préparons une proposition adaptée et vous répondons par e-mail.",
     "org": {
       "label": "Nom de l'organisation",

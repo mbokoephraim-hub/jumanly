@@ -2,6 +2,24 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · lot 12 A : Tarifs et demande de devis (15 octobre 2026)
+
+- `/tarifs` refait d'après la maquette 05-01 : les quatre familles sont empilées (ancres `#talents`,
+  `#rh`, `#companies`, `#partners`) et non plus en onglets ; les segments du hero suivent la famille
+  visible et collent sous l'en-tête au défilement (`PricingFamilyNav`, petit composant client).
+  Cartes Blanc, Sapin, Lime et Nuit (`src/components/site/tarifs.tsx`) : la couleur vient des
+  données du forfait (recommandé → Sapin, sur devis → Nuit, dernier d'une famille de quatre →
+  Lime), jamais de son nom. Comparatifs repliés, celui des Talents déplié sur grand écran.
+  Connecté, la carte de sa formule (personnelle, ou de l'organisation possédée) affiche « Votre
+  formule actuelle » (lecture de session dans un `Suspense`, la page reste prérendue).
+- `/contact?sujet=devis` ouvre la demande de devis Company Premium (maquette 05-06) : formulaire en
+  deux colonnes (`QuoteForm`, textes `quote.*`), besoins particuliers, carte Nuit du forfait lu en
+  base, confirmation. Champs obligatoires : organisation, nom, fonction, e-mail, pays,
+  utilisateurs, consentement ; nombres validés (`quoteSchema`). Envoi par e-mail à la boîte pro,
+  comme avant ; préremplissage organisation, nom, e-mail et pays si l'utilisateur est connecté.
+- Non repris (aucune fonction derrière, ou hors périmètre) : la fenêtre de devis dans
+  l'application (en-tête d'espace de la maquette), l'icône dans la liste des pays.
+
 ## Accueil Career v2 (15 octobre 2026)
 
 Brief `docs/refonte-career/BRIEF-CAREER-V2.md` et maquette `docs/refonte-career/maquette/`

@@ -30,6 +30,17 @@ export const partnerTypes = [
 ] as const;
 export const partnerPlans = ["starter", "pro", "premium", "unsure"] as const;
 
+/** Particular needs of a Company Premium quote request (texts `quote.needs.*`). */
+export const quoteNeeds = [
+  "workflows",
+  "integrations",
+  "dashboards",
+  "onboarding",
+  "support",
+  "partners",
+] as const;
+export type QuoteNeed = (typeof quoteNeeds)[number];
+
 /** Error codes, mapped to texts `contact.form.error.*` and `partners.contact.form.error.*`. */
 export type FieldError =
   "required" | "email" | "messageShort" | "messageLong" | "consent" | "number";
