@@ -1,0 +1,14 @@
+Refonte de l'accueil Career (/app/career), maquette validée par le propriétaire.
+
+1. Lis docs/refonte-career/BRIEF-CAREER-V2.md en entier, puis ouvre la maquette docs/refonte-career/maquette/career-v2.html dans un navigateur (desktop 1440 px, puis mobile 390 px) et les captures career-v2-desktop.jpg et career-v2-mobile.jpg. Pour cette route, cette maquette remplace la maquette 03-08.
+2. Relis aussi docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md (bandeau d'univers, rail d'onglets, motion.css, animations réduites) : la refonte s'appuie dessus.
+3. Propose-moi un plan court (composants, fonctions, textes, tests), puis exécute-le sur une branche dédiée, avec une pull request.
+
+Règles à tenir :
+- Garde le chargement des données actuel de src/app/app/career/page.tsx. Toutes les valeurs affichées sont réelles : les chiffres de la maquette ne sont que des exemples d'un compte Free.
+- Aucun nom de forfait dans le code : les verrous, le badge, le prix et le bandeau d'offre viennent de can(), talentPlanFor() et listPublicPlans().
+- Aucun texte en dur : ajoute les clés du § 8 du brief dans textes/textes-application.md (section /app/career), puis pnpm messages.
+- Réutilise Character (Amani « joie », Kofi « téléphone », Fatou « montre »), Orbi, Pattern, Radar, Gauge et src/styles/motion.css. N'ajoute aucune image. Seuls transform et opacity sont animés, et tout est immobile en animations réduites.
+- Ne touche pas aux fichiers des modèles de CV (docs/modeles-cv/, éditeur et modèles de CV) ni au diagnostic.
+
+Avant de terminer : lint, typecheck, test, test:e2e et test:e2e:reduced passent ; rendu conforme aux deux captures, sans défilement horizontal ; docs/journal.md à jour ; une note dans docs/decisions/ pour les règles du parcours (seuil de 60) et le choix de la formule du bandeau.

@@ -1,0 +1,588 @@
+<title>Jumanly Career v2</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap">
+<style>
+/* Maquette « Career v2 » : panneau Crème posé sur le menu Sapin, hero sombre à scène flottante,
+   options regroupées par étape du parcours en grilles bento. Un seul thème : celui de l'app. */
+:root{
+  --sapin:#0F3F37; --lime:#A6F26B; --creme:#F2EDE5; --blanc:#FFFFFF; --feuille:#3DA14F;
+  --menthe:#2FD3A6; --nuit:#0B1A1F; --neon:#E3F67C; --ardoise:#5B6B68; --brume:#DCE5E1;
+  --lime-c:#EEFBDD; --menthe-c:#DDF6EE; --sapin-08:rgba(15,63,55,.08);
+  --g-signature:linear-gradient(135deg,#D9FA72 0%,#7DE36B 50%,#1E9A64 100%);
+  --g-ia:linear-gradient(45deg,#0F3F37 0%,#14745F 55%,#2FD3A6 100%);
+  --g-profondeur:linear-gradient(160deg,#0F3F37 0%,#0B1A1F 100%);
+  --orbe:radial-gradient(circle at 38% 32%,#F4FFB8,#A6F26B 45%,#3DA14F);
+  --font:"Sora",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --r-card:28px; --r-md:18px; --r-sm:12px;
+  --ombre:0 1px 0 rgba(15,63,55,.04),0 18px 40px -22px rgba(15,63,55,.35);
+  --ombre-haute:0 2px 0 rgba(15,63,55,.04),0 30px 60px -26px rgba(15,63,55,.45);
+  --elan:cubic-bezier(.65,0,.35,1); --arrivee:cubic-bezier(.16,1,.3,1);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--sapin);color:var(--sapin);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:600;letter-spacing:-.02em}
+p{margin:0}
+button,a{font:inherit;color:inherit}
+.i{width:20px;height:20px;flex:none}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px;border-radius:12px}
+
+/* ---------- Cadre de l'app ---------- */
+.app{display:grid;grid-template-columns:92px minmax(0,1fr);min-height:100%;padding:14px 14px 14px 0}
+.rail{display:flex;flex-direction:column;align-items:center;gap:6px;padding:12px 0 8px;color:#CFE3DC;position:relative}
+.rail::before{content:"";position:absolute;inset:0;background:radial-gradient(120px 260px at 50% 30%,rgba(166,242,107,.12),transparent 70%);pointer-events:none}
+.logo{width:48px;height:48px;border-radius:15px;background:var(--lime);display:grid;place-items:center;margin-bottom:26px;box-shadow:0 10px 30px -10px rgba(166,242,107,.6)}
+.nav-i{display:flex;flex-direction:column;align-items:center;gap:4px;width:74px;padding:10px 0;border-radius:18px;font-size:11px;font-weight:500;text-decoration:none;color:#CFE3DC;position:relative}
+.nav-i .i{width:22px;height:22px}
+.nav-i[aria-current]{background:var(--lime);color:var(--sapin);box-shadow:0 12px 26px -12px rgba(166,242,107,.75)}
+.rail .bas{margin-top:auto;display:flex;flex-direction:column;gap:6px}
+.panel{background:var(--creme);border-radius:34px;padding:22px 28px 36px;min-width:0;position:relative;overflow:hidden;display:flex;flex-direction:column;gap:26px}
+.panel::before{content:"";position:absolute;inset:0 0 auto 0;height:520px;background:
+  radial-gradient(600px 300px at 85% 0%,rgba(166,242,107,.22),transparent 70%),
+  radial-gradient(500px 260px at 0% 20%,rgba(47,211,166,.10),transparent 70%);pointer-events:none}
+.panel>*{position:relative}
+
+/* ---------- Barre haute ---------- */
+.top{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.top .fil{font-size:12px;color:var(--ardoise);font-weight:500}
+.top h2{font-size:22px}
+.top .titre{margin-right:auto}
+.search{display:flex;align-items:center;gap:10px;background:rgba(255,255,255,.75);backdrop-filter:blur(10px);border:1px solid rgba(15,63,55,.06);border-radius:999px;padding:11px 18px;width:300px;color:var(--ardoise)}
+.rond{width:44px;height:44px;border-radius:50%;background:var(--blanc);display:grid;place-items:center;position:relative;border:1px solid rgba(15,63,55,.06)}
+.rond .pt{position:absolute;top:10px;right:11px;width:8px;height:8px;border-radius:50%;background:var(--feuille);box-shadow:0 0 0 2px #fff}
+.moi{display:flex;align-items:center;gap:10px;background:var(--blanc);border-radius:999px;padding:5px 16px 5px 5px;border:1px solid rgba(15,63,55,.06)}
+.av{width:36px;height:36px;border-radius:50%;background:var(--g-signature);display:grid;place-items:center;font-weight:600;font-size:13px}
+.moi b{display:block;font-size:13px;font-weight:600;line-height:1.2}
+.moi small{font-size:11px;color:var(--ardoise)}
+.plan-free{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--brume);padding:2px 7px;border-radius:999px;margin-left:4px}
+
+/* ---------- Rail d'onglets ---------- */
+.tabrail{position:relative;background:var(--sapin-08);border-radius:999px;padding:5px}
+.tabs{display:flex;gap:4px;overflow-x:auto;scrollbar-width:none;scroll-snap-type:x proximity;-webkit-mask-image:linear-gradient(90deg,#000 92%,transparent)}
+.tabs::-webkit-scrollbar{display:none}
+.tab{display:flex;align-items:center;gap:8px;white-space:nowrap;padding:9px 16px;border-radius:999px;font-size:13px;font-weight:500;text-decoration:none;scroll-snap-align:start;color:var(--sapin)}
+.tab .i{width:16px;height:16px}
+.tab:hover{background:rgba(255,255,255,.7)}
+.tab[aria-current]{background:var(--sapin);color:var(--blanc);position:relative}
+.tab[aria-current]::after{content:"";position:absolute;inset:-2px;border-radius:999px;padding:2px;background:var(--g-signature);-webkit-mask:linear-gradient(#000 0 0) content-box,linear-gradient(#000 0 0);-webkit-mask-composite:xor;mask-composite:exclude}
+.tab .cad{width:13px;height:13px;opacity:.55}
+
+/* ---------- Hero ---------- */
+.hero{border-radius:32px;background:var(--g-profondeur);color:var(--blanc);display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,.85fr);overflow:hidden;position:relative;isolation:isolate;min-height:400px}
+.hero::before{content:"";position:absolute;inset:0;z-index:-1;background:
+  radial-gradient(420px 300px at 78% 55%,rgba(166,242,107,.28),transparent 70%),
+  radial-gradient(380px 260px at 98% 0%,rgba(47,211,166,.30),transparent 70%),
+  radial-gradient(500px 300px at 10% 110%,rgba(30,154,100,.35),transparent 70%);
+  background-size:140% 140%;animation:flow 24s var(--elan) infinite alternate}
+.hero .traj{position:absolute;inset:0;z-index:-1;width:100%;height:100%;opacity:.5}
+.hero-txt{padding:40px 8px 36px 44px;display:flex;flex-direction:column;gap:18px;min-width:0}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.16em;text-transform:uppercase;color:var(--neon);display:flex;align-items:center;gap:10px}
+.eyebrow::before{content:"";width:22px;height:2px;border-radius:2px;background:var(--neon)}
+.hero h1{font-size:46px;line-height:1.05;letter-spacing:-.035em;max-width:13ch}
+.hero h1 em{font-style:normal;background:var(--g-signature);-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p.lead{font-size:16px;line-height:1.6;color:#C9DDD6;max-width:46ch;font-weight:300}
+.parcours{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.10);border-radius:22px;padding:16px 18px;backdrop-filter:blur(6px);display:flex;flex-direction:column;gap:12px;max-width:560px}
+.parcours-h{display:flex;justify-content:space-between;align-items:baseline;font-size:12px;color:#C9DDD6}
+.parcours-h b{color:var(--blanc);font-weight:600;font-size:13px}
+.barre{height:6px;border-radius:6px;background:rgba(255,255,255,.12);overflow:hidden}
+.barre i{display:block;height:100%;width:var(--v);border-radius:6px;background:var(--g-signature)}
+.etapes{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;list-style:none;margin:0;padding:0}
+.etape{display:flex;gap:8px;align-items:flex-start;font-size:12px;line-height:1.3;color:#A9C3BB;min-width:0}
+.etape .n{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center;font-size:11px;font-weight:600;border:1.5px solid rgba(255,255,255,.25)}
+.etape.fait .n{background:var(--lime);border-color:var(--lime);color:var(--sapin)}
+.etape.cours .n{border-color:var(--lime);color:var(--lime);box-shadow:0 0 0 4px rgba(166,242,107,.15)}
+.etape.fait,.etape.cours{color:var(--blanc)}
+.etape small{display:block;color:#A9C3BB;font-size:11px}
+.ctas{display:flex;gap:10px;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:8px;padding:13px 22px;border-radius:999px;font-weight:600;font-size:14px;text-decoration:none;border:0;cursor:pointer;transition:transform .25s var(--arrivee),box-shadow .25s}
+.btn .i{width:16px;height:16px}
+.btn-lime{background:var(--lime);color:var(--sapin);box-shadow:0 14px 30px -14px rgba(166,242,107,.9)}
+.btn-lime:hover{transform:translateY(-2px)}
+.btn-verre{background:rgba(255,255,255,.08);color:var(--blanc);border:1px solid rgba(255,255,255,.22)}
+.btn-sapin{background:var(--sapin);color:var(--blanc)}
+.btn-contour{background:transparent;border:1.5px solid var(--sapin);color:var(--sapin);padding:10px 18px;font-size:13px}
+
+/* scène flottante */
+.scene{position:relative;min-height:400px}
+.orbites{position:absolute;left:50%;top:54%;width:440px;height:440px;translate:-50% -50%}
+.orbites span{position:absolute;inset:0;border-radius:50%;border:1.5px solid rgba(47,211,166,.28)}
+.orbites span:nth-child(2){inset:60px;border-color:rgba(166,242,107,.25)}
+.orbites span:nth-child(3){inset:120px;border-style:dashed;border-color:rgba(227,246,124,.25);animation:tourne 60s linear infinite}
+.socle{position:absolute;left:50%;bottom:34px;width:230px;height:46px;translate:-50% 0;border-radius:50%;background:radial-gradient(closest-side,rgba(166,242,107,.55),rgba(166,242,107,0));filter:blur(2px)}
+.perso{position:absolute;left:50%;bottom:44px;width:190px;translate:-50% 0}
+.perso svg{width:100%;height:auto;display:block;filter:drop-shadow(0 20px 30px rgba(0,0,0,.35))}
+.flot{position:absolute;background:rgba(255,255,255,.96);color:var(--sapin);border-radius:18px;padding:12px 14px;box-shadow:0 24px 50px -20px rgba(0,0,0,.55);display:flex;gap:10px;align-items:center;font-size:12px;line-height:1.3}
+.flot b{display:block;font-size:13px}
+.flot small{color:var(--ardoise)}
+.flot.f1{top:46px;left:6%;rotate:-4deg}
+.flot.f2{bottom:96px;left:2%;rotate:3deg}
+.flot.f3{top:120px;right:5%;rotate:4deg}
+.jauge{--v:7;width:46px;height:46px;border-radius:50%;flex:none;display:grid;place-items:center;font-weight:700;font-size:13px;background:conic-gradient(var(--feuille) calc(var(--v)*1%),var(--brume) 0);position:relative}
+.jauge::before{content:"";position:absolute;inset:5px;border-radius:50%;background:var(--blanc)}
+.jauge span{position:relative}
+.puce{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;flex:none}
+.puce-lime{background:var(--lime)} .puce-sapin{background:var(--sapin);color:var(--neon)}
+.orbi{position:absolute;top:30px;right:18%;width:38px;height:38px;border-radius:50%;background:var(--orbe);box-shadow:0 0 0 10px rgba(166,242,107,.12),0 0 40px rgba(166,242,107,.6)}
+.etin{position:absolute;width:16px;height:16px;background:var(--neon);clip-path:polygon(50% 0,61% 39%,100% 50%,61% 61%,50% 100%,39% 61%,0 50%,39% 39%)}
+
+/* ---------- Groupes d'options ---------- */
+.groupe{display:flex;flex-direction:column;gap:14px}
+.groupe-h{display:flex;align-items:center;gap:14px;flex-wrap:wrap}
+.groupe-h .num{width:34px;height:34px;border-radius:12px;background:var(--sapin);color:var(--neon);display:grid;place-items:center;font-weight:600;font-size:14px}
+.groupe-h h2{font-size:22px}
+.groupe-h p{color:var(--ardoise);font-size:13px;margin-left:auto}
+.bento{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:16px}
+.c7{grid-column:span 7}.c5{grid-column:span 5}.c6{grid-column:span 6}.c3{grid-column:span 3}.r2{grid-row:span 2}
+
+.opt{background:var(--blanc);border-radius:var(--r-card);box-shadow:var(--ombre);display:flex;flex-direction:column;overflow:hidden;position:relative;transition:transform .35s var(--arrivee),box-shadow .35s;min-width:0}
+.opt:hover{transform:translateY(-4px);box-shadow:var(--ombre-haute)}
+.opt:hover .art .fl{translate:0 -6px}
+.art{position:relative;height:170px;overflow:hidden;flex:none}
+.art .fl{position:absolute;transition:translate .5s var(--arrivee)}
+.corps{padding:20px 22px 18px;display:flex;flex-direction:column;gap:8px;flex:1}
+.tete{display:flex;align-items:center;gap:12px}
+.tete .puce{width:38px;height:38px;border-radius:12px;background:var(--lime-c)}
+.tete h3{font-size:18px;line-height:1.25}
+.corps p{color:var(--ardoise);font-size:13.5px;line-height:1.55;max-width:52ch}
+.pied{margin-top:auto;padding-top:14px;border-top:1px solid var(--brume);display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.etat{font-size:12px;color:var(--ardoise);display:flex;flex-direction:column;gap:6px;min-width:120px}
+.etat b{color:var(--sapin);font-weight:600}
+.mini{height:5px;width:140px;border-radius:5px;background:var(--brume);overflow:hidden}
+.mini i{display:block;height:100%;width:var(--v);background:var(--g-signature);border-radius:5px}
+.lien{display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px;color:var(--feuille);text-decoration:none;white-space:nowrap}
+.lien .i{width:16px;height:16px;transition:translate .25s}
+.opt:hover .lien .i{translate:3px 0}
+.badge{position:absolute;top:14px;right:14px;z-index:2;display:inline-flex;align-items:center;gap:6px;font-size:11px;font-weight:600;padding:6px 11px 6px 9px;border-radius:999px;letter-spacing:.02em}
+.badge .i{width:13px;height:13px}
+.b-starter{background:var(--sapin);color:var(--lime)}
+.b-pro{background:var(--nuit);color:var(--neon);box-shadow:inset 0 0 0 1px rgba(227,246,124,.4)}
+.b-bientot{background:rgba(255,255,255,.85);color:var(--ardoise);backdrop-filter:blur(6px)}
+.b-gratuit{background:var(--lime);color:var(--sapin)}
+.verrou .art::after{content:"";position:absolute;inset:0;background:linear-gradient(180deg,transparent 40%,rgba(255,255,255,.55))}
+.verrou .tete .puce{background:var(--brume)}
+.prix{font-size:12px;color:var(--ardoise)}
+.prix b{color:var(--sapin)}
+
+/* fonds d'illustration */
+.a-ia{background:var(--g-ia)}
+.a-lime{background:linear-gradient(135deg,#F4FDE6,#D7F6B4 60%,#B9EE8C)}
+.a-menthe{background:linear-gradient(135deg,#ECFBF6,#C6F1E3 60%,#9EE6CF)}
+.a-creme{background:linear-gradient(135deg,#FBF8F3,#EFE8DC)}
+.a-neon{background:linear-gradient(135deg,#FBFDE9,#EEF7B8 70%,#DCEF86)}
+.a-sapin{background:linear-gradient(150deg,#14524A,#0F3F37 60%,#0B2A27)}
+.motif{position:absolute;inset:0;background-image:radial-gradient(rgba(15,63,55,.16) 1.2px,transparent 1.3px);background-size:16px 16px;-webkit-mask-image:linear-gradient(180deg,#000,transparent 85%)}
+.motif.clair{background-image:radial-gradient(rgba(255,255,255,.14) 1.2px,transparent 1.3px)}
+
+/* Diagnostic (grande carte sombre) */
+.opt.sombre{background:var(--nuit);color:var(--blanc)}
+.opt.sombre .art{height:auto;flex:1;min-height:250px}
+.diag{display:grid;grid-template-columns:minmax(0,1fr) 260px;gap:8px;align-items:stretch;flex:1}
+.diag .corps{padding:28px 0 24px 28px;gap:12px}
+.diag .corps p{color:#BFD6CF}
+.diag .tete .puce{background:rgba(166,242,107,.16);color:var(--lime)}
+.opt.sombre .pied{border-color:rgba(255,255,255,.12)}
+.opt.sombre .etat{color:#A9C3BB}.opt.sombre .etat b{color:var(--blanc)}
+.opt.sombre .lien{color:var(--lime)}
+.stades{display:flex;gap:6px;flex-wrap:wrap}
+.stade{font-size:11px;padding:5px 10px;border-radius:999px;border:1px solid rgba(255,255,255,.18);color:#A9C3BB}
+.stade.on{background:var(--lime);color:var(--sapin);border-color:var(--lime);font-weight:600}
+.radar-zone{position:relative;display:grid;place-items:center;padding:18px}
+.radar-zone svg{width:100%;max-width:240px;height:auto;overflow:visible}
+
+/* papier CV flottant */
+.feuille{background:var(--blanc);border-radius:10px;box-shadow:0 22px 40px -18px rgba(15,63,55,.45);padding:14px}
+.ln{height:6px;border-radius:4px;background:var(--brume);margin-top:7px}
+.ln.f{background:var(--sapin);height:8px;width:60%}
+.ln.l{background:var(--lime);width:30%}
+.cv-art{height:auto;min-height:300px;flex:1}
+.r2 .corps{flex:0 0 auto}
+.cv-art .feuille{width:190px;height:250px}
+.cv-art .p1{left:50%;top:36px;translate:-80% 0;rotate:-7deg}
+.cv-art .p2{left:50%;top:22px;translate:-20% 0;rotate:5deg}
+.cv-art .score{right:22px;bottom:22px;background:var(--blanc);border-radius:18px;padding:12px 14px;display:flex;gap:12px;align-items:center;box-shadow:0 20px 40px -20px rgba(15,63,55,.5)}
+.cv-art .conseil{left:20px;bottom:24px;background:var(--sapin);color:var(--blanc);border-radius:16px;padding:10px 12px;font-size:12px;display:flex;gap:8px;align-items:center;max-width:230px}
+.cv-art .conseil .i{color:var(--lime);width:16px;height:16px}
+.cv-act{display:flex;gap:8px;flex-wrap:wrap}
+.chip{font-size:12px;padding:6px 11px;border-radius:999px;background:var(--lime-c);font-weight:500}
+
+/* illustrations diverses */
+.lettre{width:120px;height:140px}
+.env{width:150px;height:96px;border-radius:12px;background:var(--sapin);overflow:hidden}
+.env::before{content:"";position:absolute;inset:0;background:linear-gradient(155deg,transparent 49%,#155246 50%),linear-gradient(205deg,transparent 49%,#155246 50%)}
+.li-card{width:210px;border-radius:16px;background:var(--blanc);overflow:hidden;box-shadow:0 22px 40px -18px rgba(15,63,55,.4)}
+.li-card .ban{height:44px;background:var(--g-ia)}
+.li-card .av{width:44px;height:44px;margin:-22px 0 0 14px;border:3px solid #fff}
+.li-card .tx{padding:6px 14px 14px}
+.cadre{width:120px;height:86px;border-radius:12px;background:var(--blanc);box-shadow:0 18px 30px -16px rgba(15,63,55,.45);padding:8px}
+.cadre i{display:block;height:46px;border-radius:7px}
+.onde{display:flex;align-items:center;gap:4px;height:40px}
+.onde i{width:5px;border-radius:4px;background:var(--sapin);height:var(--h);animation:onde 1.6s ease-in-out infinite;animation-delay:var(--d)}
+.bulle{background:var(--blanc);border-radius:16px 16px 16px 4px;padding:10px 12px;font-size:12px;box-shadow:0 18px 30px -16px rgba(15,63,55,.4);max-width:200px;line-height:1.35}
+.fiche{width:130px;height:90px;border-radius:14px;background:var(--blanc);box-shadow:0 14px 24px -14px rgba(15,63,55,.35);padding:12px;border:1px dashed rgba(15,63,55,.18)}
+.plan-art .jalon{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--ardoise);background:rgba(255,255,255,.8);border:1.5px dashed rgba(15,63,55,.2);border-radius:14px;padding:8px 12px;width:210px}
+.plan-art .jalon .n{width:22px;height:22px;border-radius:50%;border:1.5px dashed rgba(15,63,55,.35);flex:none}
+
+/* ---------- Bandeau Starter ---------- */
+.offre{border-radius:32px;background:var(--g-signature);display:grid;grid-template-columns:minmax(0,1fr) 300px;overflow:hidden;position:relative;isolation:isolate}
+.offre::before{content:"";position:absolute;inset:0;z-index:-1;background:radial-gradient(400px 240px at 90% 100%,rgba(15,63,55,.35),transparent 70%)}
+.offre-txt{padding:34px 40px;display:flex;flex-direction:column;gap:14px}
+.offre h2{font-size:28px;max-width:20ch}
+.offre ul{list-style:none;margin:0;padding:0;display:flex;gap:8px;flex-wrap:wrap}
+.offre li{display:flex;align-items:center;gap:6px;background:rgba(255,255,255,.7);padding:7px 12px;border-radius:999px;font-size:13px;font-weight:500}
+.offre li .i{width:15px;height:15px;color:var(--feuille)}
+.offre .prix-xl{display:flex;align-items:baseline;gap:8px;font-size:13px}
+.offre .prix-xl b{font-size:30px;letter-spacing:-.03em;white-space:nowrap}
+.offre-scene{position:relative;min-height:240px}
+.offre-scene .perso{width:150px;bottom:10px;left:56%}
+.offre-scene .socle{bottom:2px;background:radial-gradient(closest-side,rgba(15,63,55,.35),transparent)}
+
+/* ---------- Notes de conception ---------- */
+.notes{background:var(--blanc);border-radius:var(--r-card);padding:26px 28px;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 28px;box-shadow:var(--ombre)}
+.notes h2{grid-column:1/-1;font-size:18px;display:flex;align-items:center;gap:10px}
+.notes h2 span{white-space:nowrap;font-size:11px;font-weight:600;letter-spacing:.12em;text-transform:uppercase;background:var(--neon);padding:4px 9px;border-radius:999px}
+.note b{display:block;font-size:14px;margin-bottom:4px}
+.note p{color:var(--ardoise);font-size:13px;line-height:1.55}
+.exemple{font-size:11px;color:var(--ardoise);text-align:center}
+
+/* ---------- Animations ---------- */
+.float{animation:float 6s ease-in-out infinite}
+.d1{animation-delay:-1.5s}.d2{animation-delay:-3s}.d3{animation-delay:-4.5s}
+@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
+@keyframes flow{0%{background-position:0% 0%}100%{background-position:100% 100%}}
+@keyframes tourne{to{rotate:360deg}}
+@keyframes onde{0%,100%{transform:scaleY(.45)}50%{transform:scaleY(1)}}
+@keyframes entree{from{opacity:.001;transform:translateY(14px)}to{opacity:1;transform:none}}
+.groupe,.hero,.offre{animation:entree .7s var(--arrivee) both}
+.groupe:nth-of-type(2){animation-delay:.08s}.groupe:nth-of-type(3){animation-delay:.16s}
+@media (prefers-reduced-motion:reduce){*,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ---------- Barre mobile ---------- */
+.basnav{display:none}
+
+/* ---------- Responsive ---------- */
+@media (max-width:1180px){
+  .search{display:none}
+  .c7,.c5{grid-column:span 12}
+  .c3{grid-column:span 6}
+  .hero{grid-template-columns:1fr}
+  .scene{min-height:340px}
+  .offre{grid-template-columns:1fr}
+  .offre-scene{display:none}
+  .notes{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:760px){
+  body{background:var(--creme)}
+  .app{display:block;padding:0}
+  .rail{display:none}
+  .panel{border-radius:0;padding:14px max(16px,env(safe-area-inset-right,0px)) 110px max(16px,env(safe-area-inset-left,0px));gap:20px}
+  .top .fil,.top .moi div{display:none}
+  .moi{padding:4px}
+  .top h2{font-size:20px}
+  .hero-txt{padding:26px 22px 8px}
+  .hero h1{font-size:34px}
+  .hero p.lead{font-size:14px}
+  .etapes{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+  .scene{min-height:310px}
+  .orbites{width:320px;height:320px}
+  .perso{width:150px}
+  .flot.f1{left:4%;top:24px}.flot.f2{left:3%;bottom:60px}.flot.f3{right:3%;top:100px}
+  .bento{gap:12px}
+  .c6,.c3{grid-column:span 12}
+  .r2{grid-row:auto}
+  .diag{grid-template-columns:1fr}
+  .diag .corps{padding:24px 22px 0}
+  .radar-zone{padding:4px 18px 10px}
+  .radar-zone svg{max-width:200px}
+  .diag .pied-zone{padding:0 22px 18px}
+  .groupe-h p{margin-left:0;width:100%}
+  .cv-art{min-height:270px}
+  .cv-art .conseil{display:none}
+  .diag .corps{padding-top:58px}
+  .flot{padding:9px 11px;font-size:11px;gap:8px}
+  .flot b{font-size:12px}
+  .flot .jauge{width:38px;height:38px;font-size:12px}
+  .flot .puce{width:28px;height:28px}
+  .flot.f1{left:3%;top:18px}.flot.f3{right:3%;top:150px}.flot.f2{left:3%;bottom:54px}
+  .bulle.fl{top:52px!important}
+  .offre-txt{padding:26px 22px}
+  .offre h2{font-size:23px}
+  .notes{grid-template-columns:1fr;padding:22px}
+  .basnav{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:10;justify-content:space-around;background:var(--sapin);padding:8px max(10px,env(safe-area-inset-right,0px)) calc(8px + env(safe-area-inset-bottom,0px)) max(10px,env(safe-area-inset-left,0px));border-radius:24px 24px 0 0}
+  .basnav .nav-i{width:64px;padding:8px 0;font-size:10.5px}
+}
+</style>
+
+<svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" style="display:none" ><symbol id="jm-learn" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5c3-1.5 6-1.5 9 .5 3-2 6-2 9-.5V19c-3-1.5-6-1.5-9 .5-3-2-6-2-9-.5z"/><path d="M12 6v13.5"/></g></symbol><symbol id="jm-career" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></g></symbol><symbol id="jm-jobs" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7M3 12.5h18"/></g></symbol><symbol id="jm-hire" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="4"/><path d="M3 20c0-3.5 3-6 7-6 1.5 0 2.8.3 3.8.9M15 18l2 2 4-4"/></g></symbol><symbol id="jm-connect" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="8" r="2.5"/><circle cx="10" cy="18" r="2.5"/><path d="M8.3 7l7.3.7M7 8.3l2.2 7.3M16.5 10.1l-4.6 6.1"/></g></symbol><symbol id="jm-intelligence" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/><path d="M19 16v4M17 18h4"/></g></symbol><symbol id="jm-accueil" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V18a2 2 0 0 1-2 2h-3.5v-5.5h-5V20H6a2 2 0 0 1-2-2z"/></g></symbol><symbol id="jm-recherche" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></g></symbol><symbol id="jm-notification" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10.5a6 6 0 0 1 12 0V15l2 3H4l2-3z"/><path d="M10 21h4"/></g></symbol><symbol id="jm-message" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 3.5V18H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></g></symbol><symbol id="jm-profil" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></g></symbol><symbol id="jm-reglages" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></g></symbol><symbol id="jm-filtre" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7.5V19l-4 1.5v-8z"/></g></symbol><symbol id="jm-ajouter" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></g></symbol><symbol id="jm-valider" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></g></symbol><symbol id="jm-fermer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></g></symbol><symbol id="jm-suivant" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></g></symbol><symbol id="jm-telecharger" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></g></symbol><symbol id="jm-partager" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="M8.2 10.8l7.6-4.1M8.2 13.2l7.6 4.1"/></g></symbol><symbol id="jm-favori" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10a1 1 0 0 1 1 1v15.5l-6-4-6 4V5a1 1 0 0 1 1-1z"/></g></symbol><symbol id="jm-lien" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></g></symbol><symbol id="jm-diplome" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5 12 5l9.5 4.5L12 14z"/><path d="M6.5 11.5V16c1.5 1.6 3.4 2.5 5.5 2.5s4-.9 5.5-2.5v-4.5"/><path d="M21.5 9.5V14"/></g></symbol><symbol id="jm-certificat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9.5" r="5.5"/><path d="M8.5 13.8 7.5 21l4.5-2.5 4.5 2.5-1-7.2"/></g></symbol><symbol id="jm-cours-video" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13" rx="3"/><path d="M10.5 9v5l4-2.5z"/><path d="M8 21h8"/></g></symbol><symbol id="jm-quiz" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.5"/><path d="M12 16.8v.2"/></g></symbol><symbol id="jm-competence" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17.5h6M10 21h4"/><path d="M8.5 14.5A6 6 0 1 1 15.5 14.5c-.6.5-.9 1.2-.9 2v1H9.4v-1c0-.8-.3-1.5-.9-2z"/></g></symbol><symbol id="jm-objectif" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></g></symbol><symbol id="jm-statistiques" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M7 16.5v-4M12 16.5V7.5M17 16.5v-7"/></g></symbol><symbol id="jm-cv" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3.5H7.5A1.5 1.5 0 0 0 6 5v14a1.5 1.5 0 0 0 1.5 1.5h9A1.5 1.5 0 0 0 18 19V7.5z"/><path d="M14 3.5v4h4"/><path d="M9 12.5h6M9 16h4"/></g></symbol><symbol id="jm-entreprise" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5h16"/><path d="M6 20.5V5.5A1.5 1.5 0 0 1 7.5 4h6A1.5 1.5 0 0 1 15 5.5v15"/><path d="M15 9.5h3a1.5 1.5 0 0 1 1.5 1.5v9.5"/><path d="M9 8h3M9 11.5h3M9 15h3"/></g></symbol><symbol id="jm-equipe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.6-3 3-4.8 6-4.8s5.4 1.8 6 4.8"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 5.8"/><path d="M17.5 14.9c1.8.6 3.1 2.2 3.5 4.6"/></g></symbol><symbol id="jm-calendrier" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></g></symbol><symbol id="jm-horloge" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g></symbol><symbol id="jm-localisation" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.5"/></g></symbol><symbol id="jm-etoile" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l2.4 5 5.3.6-3.9 3.7 1 5.3L12 16l-4.8 2.6 1-5.3-3.9-3.7 5.3-.6z"/></g></symbol><symbol id="jm-confidentialite" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/><path d="M12 14.5V17"/></g></symbol><symbol id="jm-securite" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l7 2.8v5.2c0 4.4-2.9 7.8-7 9-4.1-1.2-7-4.6-7-9V6.3z"/><path d="M9 12l2.2 2.2L15.5 10"/></g></symbol><symbol id="jm-transparence" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g></symbol><symbol id="jm-mobile-money" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="11" height="18" rx="2.5"/><path d="M8 17.5h3"/><path d="M18 9a4 4 0 0 1 0 6M20.5 7a7 7 0 0 1 0 10"/></g></symbol><symbol id="jm-portefeuille" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V7.5A2.5 2.5 0 0 1 6.5 5H17v3"/><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M15.5 13.5h1"/></g></symbol><symbol id="jm-langue" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.3 2.4 3.5 5.2 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.2-3.5-8.5s1.2-6.1 3.5-8.5z"/></g></symbol><symbol id="jm-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2.5"/><path d="M8 11V8a4 4 0 018 0v3"/></g></symbol><symbol id="jm-mic" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3.5" width="6" height="11" rx="3"/><path d="M5.5 11.5a6.5 6.5 0 0013 0M12 18v2.5"/></g></symbol><symbol id="jm-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g></symbol><symbol id="jm-chev-r" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></g></symbol><symbol id="jm-check" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></g></symbol><symbol id="jm-plus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></g></symbol><symbol id="jm-logout" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h3.5A2.5 2.5 0 0120 6.5v11a2.5 2.5 0 01-2.5 2.5H14"/><path d="M9.5 16l-4-4 4-4M5.5 12H15"/></g></symbol><symbol id="jm-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7l4.5 4.5v11a2 2 0 01-2 2H7a2 2 0 01-2-2v-13.5a2 2 0 012-2z"/><path d="M14 3.5V8h4.5M8.5 13h7M8.5 16.5h5"/></g></symbol></svg>
+
+
+<div class="app">
+  <aside class="rail" aria-label="Menu principal">
+    <div class="logo"><svg width="30" height="30" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="23.5 19.5 58 78" ><g transform="translate(0.00 0.00) scale(1.00000)"><path d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#0F3F37" stroke-width="17" stroke-linecap="round"/><circle cx="70" cy="31" r="11.5" fill="#0F3F37"/></g></svg></div>
+    <a class="nav-i" href="#"><svg class="i"><use href="#jm-accueil"/></svg>Accueil</a>
+    <a class="nav-i" href="#"><svg class="i"><use href="#jm-learn"/></svg>Learn</a>
+    <a class="nav-i" href="#" aria-current="page"><svg class="i"><use href="#jm-career"/></svg>Career</a>
+    <a class="nav-i" href="#"><svg class="i"><use href="#jm-jobs"/></svg>Jobs</a>
+    <a class="nav-i" href="#"><svg class="i"><use href="#jm-message"/></svg>Messages</a>
+    <div class="bas">
+      <a class="nav-i" href="#"><svg class="i"><use href="#jm-reglages"/></svg>Paramètres</a>
+      <a class="nav-i" href="#"><svg class="i"><use href="#jm-logout"/></svg>Quitter</a>
+    </div>
+  </aside>
+
+  <main class="panel">
+    <header class="top">
+      <div class="titre"><div class="fil">Espace talent · Career</div><h2>Career</h2></div>
+      <div class="search"><svg class="i"><use href="#jm-recherche"/></svg>Rechercher sur Jumanly</div>
+      <div class="rond"><svg class="i"><use href="#jm-notification"/></svg><span class="pt"></span></div>
+      <div class="moi"><span class="av">GM</span><div><b>Grâce Mbuyi</b><small>Talent <span class="plan-free">Free</span></small></div></div>
+    </header>
+
+    <nav class="tabrail" aria-label="Rubriques Career">
+      <div class="tabs">
+        <a class="tab" href="#" aria-current="page"><svg class="i"><use href="#jm-career"/></svg>Accueil Career</a>
+        <a class="tab" href="#"><svg class="i"><use href="#jm-objectif"/></svg>Diagnostic</a>
+        <a class="tab" href="#"><svg class="i"><use href="#jm-cv"/></svg>Mon CV</a>
+        <a class="tab" href="#"><svg class="i"><use href="#jm-doc"/></svg>Lettres et documents<svg class="cad"><use href="#jm-lock"/></svg></a>
+        <a class="tab" href="#"><svg class="i"><use href="#jm-partager"/></svg>Préparation LinkedIn<svg class="cad"><use href="#jm-lock"/></svg></a>
+        <a class="tab" href="#"><svg class="i"><use href="#jm-mic"/></svg>Simulations d'entretien<svg class="cad"><use href="#jm-lock"/></svg></a>
+        <a class="tab" href="#"><svg class="i"><use href="#jm-calendrier"/></svg>Plan de progression</a>
+        <a class="tab" href="#"><svg class="i"><use href="#jm-lien"/></svg>Portfolio<svg class="cad"><use href="#jm-lock"/></svg></a>
+      </div>
+    </nav>
+
+    <!-- HERO -->
+    <section class="hero" aria-labelledby="h-hero">
+      <svg class="traj" viewBox="0 0 1200 400" preserveAspectRatio="none" aria-hidden="true">
+        <g fill="none" stroke="#A6F26B" stroke-width="1.2" opacity=".35">
+          <path d="M-20 360 C 220 300 360 120 620 150 S 1000 360 1240 80"/>
+          <path d="M-20 390 C 260 330 420 170 660 200 S 1020 380 1240 140" opacity=".6"/>
+          <path d="M-20 420 C 300 370 470 230 700 250 S 1040 400 1240 200" opacity=".35"/>
+        </g>
+      </svg>
+      <div class="hero-txt">
+        <div class="eyebrow">Career · votre espace carrière</div>
+        <h1 id="h-hero">Votre identité <em>professionnelle</em>, étape par étape</h1>
+        <p class="lead">Faites le point, construisez un CV solide, préparez vos candidatures et entraînez-vous. Jumanly vous indique toujours la prochaine étape.</p>
+        <div class="parcours">
+          <div class="parcours-h"><b>Votre parcours Career</b><span>1 étape terminée sur 4</span></div>
+          <div class="barre"><i style="--v:32%"></i></div>
+          <ol class="etapes">
+            <li class="etape fait"><span class="n"><svg class="i" style="width:13px;height:13px"><use href="#jm-check"/></svg></span><span>Faire le point<small>15 oct. 2026</small></span></li>
+            <li class="etape cours"><span class="n">2</span><span>Construire mon CV<small>En cours</small></span></li>
+            <li class="etape"><span class="n">3</span><span>Préparer mes candidatures<small>À venir</small></span></li>
+            <li class="etape"><span class="n">4</span><span>M'entraîner<small>À venir</small></span></li>
+          </ol>
+        </div>
+        <div class="ctas">
+          <a class="btn btn-lime" href="#">Continuer mon CV<svg class="i"><use href="#jm-chev-r"/></svg></a>
+          <a class="btn btn-verre" href="#">Voir mon diagnostic</a>
+        </div>
+      </div>
+      <div class="scene" aria-hidden="true">
+        <div class="orbites"><span></span><span></span><span></span></div>
+        <div class="orbi float d2"></div>
+        <span class="etin float" style="top:70px;left:46%"></span>
+        <span class="etin float d3" style="bottom:120px;right:14%;width:11px;height:11px"></span>
+        <div class="socle"></div>
+        <div class="perso float"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-130 -470 260 490"><g transform="translate(0 0) scale(1 1)"><ellipse cx="0" cy="2" rx="46" ry="9" fill="#0F3F37" opacity="0.1"/><g transform="rotate(0 0 -196)"><path d="M-27 -306 L-58 -359.69 L-66.07 -417.13" fill="none" stroke="#88c658" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><circle cx="-66.07" cy="-417.13" r="11.5" fill="#71462c"/><rect x="-58" y="-316" width="44" height="82" rx="20" fill="#3DA14F"/></g><path d="M-15 -196 L-29.24 -115.25 L-20.88 -35.68" fill="none" stroke="#0c342d" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(-20.88 -35.68) rotate(-1.2)"><rect x="-12" y="-6" width="40" height="17" rx="8.5" fill="#091519"/></g><path d="M15 -196 L29.24 -115.25 L20.88 -35.68" fill="none" stroke="#0F3F37" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(20.88 -35.68) rotate(1.2)"><rect x="-12" y="-6" width="40" height="17" rx="8.5" fill="#0B1A1F"/></g><g transform="rotate(0 0 -196)"><g transform="rotate(0 0 -330) translate(0 -364)"><path d="M-34 -10 L-44 92" stroke="#1B120D" stroke-width="13" stroke-linecap="round"/><circle cx="-44" cy="100" r="6.5" fill="#F2B33D"/><path d="M-22 -10 L-32 104" stroke="#1B120D" stroke-width="13" stroke-linecap="round"/><circle cx="-32" cy="112" r="6.5" fill="#F2B33D"/><path d="M-10 -10 L-20 98" stroke="#1B120D" stroke-width="13" stroke-linecap="round"/><circle cx="-20" cy="106" r="6.5" fill="#F2B33D"/></g><rect x="-37" y="-222" width="74" height="42" rx="18" fill="#0F3F37"/><rect x="-43" y="-330" width="86" height="130" rx="34" fill="#A6F26B"/><path d="M-30 -326 L-24 -260" stroke="#2e793b" stroke-width="7" stroke-linecap="round"/><rect x="-11" y="-346" width="22" height="26" rx="8" fill="#71462c"/><g transform="rotate(0 0 -330) translate(0 -364)"><circle cx="0" cy="-4" r="45" fill="#1B120D"/><circle r="40" fill="#8A5536"/><path d="M-41.5 -2 A41.5 41.5 0 0 1 41.5 -2 C 22 -16 -6 -22 -41.5 -2 Z" fill="#1B120D"/><circle cx="-12" cy="4" r="4" fill="#0B1A1F"/><circle cx="12" cy="4" r="4" fill="#0B1A1F"/><path d="M-9 19 Q 0 28 9 19" stroke="#0B1A1F" stroke-width="3.5" fill="none" stroke-linecap="round"/></g><path d="M27 -306 L58 -359.69 L66.07 -417.13" fill="none" stroke="#abf374" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><circle cx="66.07" cy="-417.13" r="11.5" fill="#8A5536"/></g></g></svg></div>
+        <div class="flot f1 float d1"><div class="jauge" style="--v:7"><span>7</span></div><div><b>Score du CV</b><small>7/100 · à renforcer</small></div></div>
+        <div class="flot f2 float d3"><span class="puce puce-lime"><svg class="i"><use href="#jm-objectif"/></svg></span><div><b>Diagnostic fait</b><small>le 15 oct. 2026</small></div></div>
+        <div class="flot f3 float d2"><span class="puce puce-sapin"><svg class="i"><use href="#jm-suivant"/></svg></span><div><b>Prochaine étape</b><small>Compléter mon CV</small></div></div>
+      </div>
+    </section>
+
+    <!-- 1. FAIRE LE POINT -->
+    <section class="groupe" aria-labelledby="g1">
+      <div class="groupe-h"><span class="num">1</span><h2 id="g1">Faire le point</h2><p>Savoir où vous en êtes et où vous allez</p></div>
+      <div class="bento">
+        <article class="opt sombre c7">
+          <span class="badge b-gratuit">Inclus dans Free</span>
+          <div class="diag">
+            <div style="display:flex;flex-direction:column;gap:12px;min-width:0">
+              <div class="corps">
+                <div class="tete"><span class="puce"><svg class="i"><use href="#jm-objectif"/></svg></span><h3>Diagnostic de carrière</h3></div>
+                <p>Un bilan en 6 dimensions : clarté du projet, compétences, expérience, outils de candidature, entretiens et réseau. Chaque note est expliquée.</p>
+                <div class="stades"><span class="stade">Découverte</span><span class="stade on">Construction</span><span class="stade">Prêt</span><span class="stade">Compétitif</span></div>
+              </div>
+              <div class="pied-zone" style="padding:0 0 22px 28px;margin-top:auto">
+                <div class="pied"><div class="etat">Dernier diagnostic<b>15 oct. 2026</b></div><a class="lien" href="#">Voir mon diagnostic<svg class="i"><use href="#jm-chev-r"/></svg></a></div>
+              </div>
+            </div>
+            <div class="art a-ia radar-zone" style="border-radius:0">
+              <div class="motif clair"></div>
+              <svg viewBox="-34 0 308 240" aria-label="Exemple de radar en 6 dimensions"><polygon points="120.0,94.0 142.5,107.0 142.5,133.0 120.0,146.0 97.5,133.0 97.5,107.0" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1"/><polygon points="120.0,68.0 165.0,94.0 165.0,146.0 120.0,172.0 75.0,146.0 75.0,94.0" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1"/><polygon points="120.0,42.0 187.5,81.0 187.5,159.0 120.0,198.0 52.5,159.0 52.5,81.0" fill="none" stroke="rgba(255,255,255,.22)" stroke-width="1"/><line x1="120" y1="120" x2="120.0" y2="42.0" stroke="rgba(255,255,255,.15)"/><line x1="120" y1="120" x2="187.5" y2="81.0" stroke="rgba(255,255,255,.15)"/><line x1="120" y1="120" x2="187.5" y2="159.0" stroke="rgba(255,255,255,.15)"/><line x1="120" y1="120" x2="120.0" y2="198.0" stroke="rgba(255,255,255,.15)"/><line x1="120" y1="120" x2="52.5" y2="159.0" stroke="rgba(255,255,255,.15)"/><line x1="120" y1="120" x2="52.5" y2="81.0" stroke="rgba(255,255,255,.15)"/><defs><linearGradient id="rg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#D9FA72"/><stop offset="1" stop-color="#2FD3A6"/></linearGradient></defs><polygon points="120.0,71.6 157.2,98.5 145.7,134.8 120.0,137.2 89.6,137.6 96.4,106.3" fill="url(#rg)" fill-opacity=".45" stroke="#A6F26B" stroke-width="2" stroke-linejoin="round"/><circle cx="120.0" cy="71.6" r="3.5" fill="#E3F67C"/><circle cx="157.2" cy="98.5" r="3.5" fill="#E3F67C"/><circle cx="145.7" cy="134.8" r="3.5" fill="#E3F67C"/><circle cx="120.0" cy="137.2" r="3.5" fill="#E3F67C"/><circle cx="89.6" cy="137.6" r="3.5" fill="#E3F67C"/><circle cx="96.4" cy="106.3" r="3.5" fill="#E3F67C"/><text x="120.0" y="26.0" text-anchor="middle" font-size="10.5" font-family="Sora,sans-serif" fill="#CFE3DC">Projet</text><text x="204.9" y="75.0" text-anchor="start" font-size="10.5" font-family="Sora,sans-serif" fill="#CFE3DC">Compétences</text><text x="204.9" y="173.0" text-anchor="start" font-size="10.5" font-family="Sora,sans-serif" fill="#CFE3DC">Expérience</text><text x="120.0" y="222.0" text-anchor="middle" font-size="10.5" font-family="Sora,sans-serif" fill="#CFE3DC">Outils</text><text x="35.1" y="173.0" text-anchor="end" font-size="10.5" font-family="Sora,sans-serif" fill="#CFE3DC">Entretiens</text><text x="35.1" y="75.0" text-anchor="end" font-size="10.5" font-family="Sora,sans-serif" fill="#CFE3DC">Réseau</text></svg>
+              <div class="orbi fl float" style="top:22px;right:26px;width:26px;height:26px"></div>
+            </div>
+          </div>
+        </article>
+
+        <article class="opt c5">
+          <div class="art a-neon plan-art">
+            <div class="motif"></div>
+            <div class="fl float" style="left:26px;top:22px;display:flex;flex-direction:column;gap:8px">
+              <div class="jalon"><span class="n"></span>Objectif à 6 mois</div>
+              <div class="jalon" style="margin-left:22px"><span class="n"></span>Étapes de la semaine</div>
+              <div class="jalon" style="margin-left:44px"><span class="n"></span>Formations Learn</div>
+            </div>
+            <div class="fl float d2" style="right:22px;bottom:20px"><span class="puce puce-sapin" style="width:44px;height:44px;border-radius:14px"><svg class="i"><use href="#jm-calendrier"/></svg></span></div>
+          </div>
+          <div class="corps">
+            <div class="tete"><span class="puce"><svg class="i"><use href="#jm-calendrier"/></svg></span><h3>Plan de progression</h3></div>
+            <p>Vos objectifs, vos étapes et les formations qui vous font avancer.</p>
+            <div class="pied"><div class="etat">Pas encore de plan<b>Créé à partir de votre diagnostic</b></div><a class="lien" href="#">Créer mon plan<svg class="i"><use href="#jm-chev-r"/></svg></a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 2. CANDIDATURES -->
+    <section class="groupe" aria-labelledby="g2">
+      <div class="groupe-h"><span class="num">2</span><h2 id="g2">Préparer mes candidatures</h2><p>Les documents que les recruteurs liront</p></div>
+      <div class="bento">
+        <article class="opt c6 r2">
+          <span class="badge b-gratuit">Inclus dans Free</span>
+          <div class="art a-lime cv-art">
+            <div class="motif"></div>
+            <div class="fl feuille p1 float d1"><div class="ln f"></div><div class="ln" style="width:40%"></div><div class="ln l" style="margin-top:16px"></div><div class="ln"></div><div class="ln" style="width:85%"></div><div class="ln"></div><div class="ln l" style="margin-top:16px"></div><div class="ln"></div><div class="ln" style="width:70%"></div></div>
+            <div class="fl feuille p2 float d3"><div style="display:flex;gap:8px;align-items:center"><span class="av" style="width:30px;height:30px;font-size:10px">GM</span><div style="flex:1"><div class="ln f" style="margin:0;width:80%"></div><div class="ln" style="width:50%"></div></div></div><div class="ln l" style="margin-top:18px"></div><div class="ln"></div><div class="ln" style="width:90%"></div><div class="ln"></div><div class="ln l" style="margin-top:16px"></div><div class="ln" style="width:75%"></div><div class="ln"></div><div class="ln" style="width:60%"></div></div>
+            <div class="fl score float"><div class="jauge" style="--v:7;width:54px;height:54px;font-size:15px"><span>7</span></div><div style="font-size:12px;line-height:1.35"><b style="font-size:14px">Score du CV</b><br><span style="color:var(--ardoise)">sur 100 · à renforcer</span></div></div>
+            <div class="fl conseil float d2"><svg class="i"><use href="#jm-intelligence"/></svg>Ajoutez vos expériences pour gagner des points</div>
+          </div>
+          <div class="corps">
+            <div class="tete"><span class="puce"><svg class="i"><use href="#jm-cv"/></svg></span><h3>Mon CV</h3></div>
+            <p>Éditez votre CV par sections, choisissez un modèle et exportez-le en PDF. Le score vous dit quoi améliorer en premier.</p>
+            <div class="cv-act"><span class="chip">5 modèles gratuits</span><span class="chip">Export PDF</span><span class="chip">Score expliqué</span></div>
+            <div class="pied"><div class="etat">Score du CV : <b>7/100</b><span class="mini"><i style="--v:7%"></i></span></div><a class="btn btn-sapin" href="#" style="padding:11px 18px;font-size:13px">Ouvrir mon CV<svg class="i"><use href="#jm-chev-r"/></svg></a></div>
+          </div>
+        </article>
+
+        <article class="opt c3 verrou">
+          <span class="badge b-starter"><svg class="i"><use href="#jm-lock"/></svg>Starter</span>
+          <div class="art a-menthe">
+            <div class="motif"></div>
+            <div class="fl env float" style="left:24px;bottom:22px"></div>
+            <div class="fl feuille lettre float d2" style="left:84px;top:22px;rotate:6deg;padding:12px"><div class="ln f" style="width:50%"></div><div class="ln"></div><div class="ln"></div><div class="ln" style="width:70%"></div><div class="ln"></div><div class="ln l" style="width:40%;margin-top:12px"></div></div>
+          </div>
+          <div class="corps">
+            <div class="tete"><span class="puce"><svg class="i"><use href="#jm-doc"/></svg></span><h3>Lettres et documents</h3></div>
+            <p>Lettres de motivation, biographie, correction de textes.</p>
+            <div class="pied"><span class="prix">Avec <b>Starter</b></span><a class="lien" href="#">Débloquer<svg class="i"><use href="#jm-chev-r"/></svg></a></div>
+          </div>
+        </article>
+
+        <article class="opt c3 verrou">
+          <span class="badge b-starter"><svg class="i"><use href="#jm-lock"/></svg>Starter</span>
+          <div class="art a-creme">
+            <div class="motif"></div>
+            <div class="fl li-card float d1" style="left:50%;top:24px;translate:-50% 0;rotate:-3deg">
+              <div class="ban"></div><span class="av">GM</span>
+              <div class="tx"><div class="ln f" style="width:70%"></div><div class="ln" style="width:90%"></div><div style="display:flex;gap:4px;margin-top:8px"><span class="ln l" style="width:40px;margin:0;height:10px"></span><span class="ln l" style="width:52px;margin:0;height:10px"></span><span class="ln l" style="width:34px;margin:0;height:10px"></span></div></div>
+            </div>
+          </div>
+          <div class="corps">
+            <div class="tete"><span class="puce"><svg class="i"><use href="#jm-partager"/></svg></span><h3>Préparation LinkedIn</h3></div>
+            <p>Un titre, un résumé et des compétences prêts à copier.</p>
+            <div class="pied"><span class="prix">Avec <b>Starter</b></span><a class="lien" href="#">Débloquer<svg class="i"><use href="#jm-chev-r"/></svg></a></div>
+          </div>
+        </article>
+
+        <article class="opt c6 verrou">
+          <span class="badge b-pro"><svg class="i"><use href="#jm-lock"/></svg>Pro</span>
+          <div class="art a-sapin" style="height:150px">
+            <div class="motif clair"></div>
+            <div class="fl cadre float" style="left:8%;top:34px;rotate:-8deg"><i style="background:var(--g-signature)"></i><div class="ln" style="width:70%"></div></div>
+            <div class="fl cadre float d2" style="left:50%;top:20px;translate:-50% 0;z-index:1"><i style="background:var(--g-ia)"></i><div class="ln" style="width:60%"></div></div>
+            <div class="fl cadre float d3" style="right:8%;top:38px;rotate:8deg"><i style="background:linear-gradient(135deg,#E3F67C,#A6F26B)"></i><div class="ln" style="width:80%"></div></div>
+          </div>
+          <div class="corps">
+            <div class="tete"><span class="puce"><svg class="i"><use href="#jm-lien"/></svg></span><h3>Portfolio</h3></div>
+            <p>Montrez vos projets sur une page à partager avec les recruteurs.</p>
+            <div class="pied"><span class="prix">Avec <b>Pro</b> · 19,9 USD/mois</span><a class="lien" href="#">Découvrir Pro<svg class="i"><use href="#jm-chev-r"/></svg></a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- 3. S'ENTRAÎNER -->
+    <section class="groupe" aria-labelledby="g3">
+      <div class="groupe-h"><span class="num">3</span><h2 id="g3">M'entraîner</h2><p>Arriver prêt le jour de l'entretien</p></div>
+      <div class="bento">
+        <article class="opt c7 verrou">
+          <span class="badge b-starter"><svg class="i"><use href="#jm-lock"/></svg>Starter</span>
+          <div class="art a-lime" style="height:200px">
+            <div class="motif"></div>
+            <div class="fl" style="left:6%;bottom:-6px;width:110px"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-130 -470 260 490"><g transform="translate(0 0) scale(1 1)"><ellipse cx="0" cy="2" rx="70" ry="9" fill="#0F3F37" opacity="0.1"/><g transform="rotate(0 0 -166)"><path d="M-23.85 -276 L-31.41 -214.46 L-32.42 -156.47" fill="none" stroke="#328441" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><circle cx="-32.42" cy="-156.47" r="11.5" fill="#3d2215"/></g><path d="M-13.2 -166 L-17.49 -84.11 L-21.68 -4.22" fill="none" stroke="#091519" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(-21.68 -4.22) rotate(0.6)"><rect x="-12" y="-6" width="40" height="17" rx="8.5" fill="#d1d1d1"/></g><path d="M13.35 -166 L17.64 -84.11 L21.83 -4.22" fill="none" stroke="#0B1A1F" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(21.83 -4.22) rotate(-0.6)"><rect x="-12" y="-6" width="40" height="17" rx="8.5" fill="#FFFFFF"/></g><g transform="rotate(0 0 -166)"><rect x="-37" y="-192" width="74" height="42" rx="18" fill="#0B1A1F"/><rect x="-43" y="-300" width="86" height="130" rx="34" fill="#3DA14F"/><rect x="-10.1" y="-316" width="22" height="26" rx="8" fill="#3d2215"/><g transform="rotate(9 0.9 -300) translate(0.9 -334)"><circle cx="-3" cy="-14" r="56" fill="#1B120D"/><circle r="40" fill="#4A2A1A"/><path d="M-42 -4 A42 42 0 0 1 42 -4 C 30 -26 -24 -26 -42 -4 Z" fill="#1B120D"/><circle cx="-9.8" cy="4" r="4" fill="#0B1A1F"/><circle cx="14.2" cy="4" r="4" fill="#0B1A1F"/></g><path d="M24.15 -276 L32.78 -214.6 L-17.45 -243.6" fill="none" stroke="#49a75a" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><circle cx="-17.45" cy="-243.6" r="11.5" fill="#4A2A1A"/><g transform="translate(-17.45 -249.6) rotate(-12)"><rect x="-11" y="-22" width="22" height="38" rx="6" fill="#0B1A1F"/><rect x="-7" y="-17" width="14" height="24" rx="3" fill="#A6F26B"/></g><circle cx="-17.45" cy="-243.6" r="11.5" fill="#4A2A1A"/></g></g></svg></div>
+            <div class="fl bulle float d1" style="left:calc(6% + 120px);top:26px">« Présentez-vous en deux minutes. »</div>
+            <div class="fl float d3" style="left:calc(6% + 120px);top:96px;background:var(--sapin);border-radius:16px;padding:10px 14px;display:flex;gap:12px;align-items:center">
+              <span class="puce puce-lime" style="width:30px;height:30px;border-radius:50%"><svg class="i" style="width:16px;height:16px"><use href="#jm-mic"/></svg></span>
+              <div class="onde"><i style="--h:14px;--d:0s;background:var(--lime)"></i><i style="--h:30px;--d:-.2s;background:var(--lime)"></i><i style="--h:22px;--d:-.4s;background:var(--lime)"></i><i style="--h:36px;--d:-.6s;background:var(--lime)"></i><i style="--h:18px;--d:-.8s;background:var(--lime)"></i><i style="--h:28px;--d:-1s;background:var(--lime)"></i><i style="--h:12px;--d:-1.2s;background:var(--lime)"></i><i style="--h:24px;--d:-1.4s;background:var(--lime)"></i></div>
+            </div>
+          </div>
+          <div class="corps">
+            <div class="tete"><span class="puce"><svg class="i"><use href="#jm-mic"/></svg></span><h3>Simulations d'entretien</h3></div>
+            <p>Entraînez-vous à l'écrit puis à l'oral, avec un retour détaillé sur chaque réponse.</p>
+            <div class="pied"><span class="prix">Avec <b>Starter</b> · 4,9 USD/mois</span><a class="lien" href="#">Débloquer<svg class="i"><use href="#jm-chev-r"/></svg></a></div>
+          </div>
+        </article>
+
+        <article class="opt c5" style="background:rgba(255,255,255,.55);box-shadow:none;border:1.5px dashed rgba(15,63,55,.18)">
+          <span class="badge b-bientot"><svg class="i"><use href="#jm-horloge"/></svg>Bientôt disponible</span>
+          <div class="art a-creme" style="height:200px;background:transparent">
+            <div class="fl fiche float" style="left:12%;top:40px;rotate:-6deg"><div class="ln f" style="width:60%"></div><div class="ln"></div><div class="ln" style="width:70%"></div></div>
+            <div class="fl fiche float d2" style="left:50%;top:24px;translate:-50% 0;z-index:1"><div class="ln f" style="width:50%"></div><div class="ln"></div><div class="ln l" style="width:45%"></div></div>
+            <div class="fl fiche float d3" style="right:12%;top:46px;rotate:6deg"><div class="ln f" style="width:70%"></div><div class="ln"></div><div class="ln" style="width:55%"></div></div>
+          </div>
+          <div class="corps">
+            <div class="tete"><span class="puce" style="background:var(--brume)"><svg class="i"><use href="#jm-eye"/></svg></span><h3>Conseils de préparation</h3></div>
+            <p>Des fiches pratiques pour préparer chaque étape d'un recrutement.</p>
+            <div class="pied"><span class="prix">Arrive prochainement</span><a class="lien" href="#" style="color:var(--ardoise)">Me prévenir<svg class="i"><use href="#jm-notification"/></svg></a></div>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- OFFRE -->
+    <section class="offre" aria-labelledby="h-offre">
+      <div class="offre-txt">
+        <div class="eyebrow" style="color:var(--sapin)">Formule Starter</div>
+        <h2 id="h-offre">Débloquez trois outils pour candidater mieux</h2>
+        <ul>
+          <li><svg class="i"><use href="#jm-valider"/></svg>Lettres et documents</li>
+          <li><svg class="i"><use href="#jm-valider"/></svg>Préparation LinkedIn</li>
+          <li><svg class="i"><use href="#jm-valider"/></svg>Simulations d'entretien</li>
+        </ul>
+        <div style="display:flex;align-items:center;gap:18px;flex-wrap:wrap">
+          <div class="prix-xl"><b>4,9 USD</b>par mois · paiement Mobile Money</div>
+          <a class="btn btn-sapin" href="#">Voir les formules<svg class="i"><use href="#jm-chev-r"/></svg></a>
+        </div>
+      </div>
+      <div class="offre-scene" aria-hidden="true">
+        <div class="socle"></div>
+        <div class="perso float"><svg aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-130 -470 260 490"><g transform="translate(0 0) scale(1 1)"><ellipse cx="0" cy="2" rx="70" ry="9" fill="#0F3F37" opacity="0.1"/><g transform="rotate(-3 0 -166)"><path d="M-18.6 -276 L-26.16 -214.46 L-27.17 -156.47" fill="none" stroke="#b94b3e" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><circle cx="-27.17" cy="-156.47" r="11.5" fill="#57321e"/></g><path d="M-10.2 -166 L-14.49 -84.11 L-18.68 -4.22" fill="none" stroke="#0c342d" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(-18.68 -4.22) rotate(0.6)"><rect x="-12" y="-6" width="40" height="17" rx="8.5" fill="#091519"/></g><path d="M10.6 -166 L14.89 -84.11 L19.08 -4.22" fill="none" stroke="#0F3F37" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(19.08 -4.22) rotate(-0.6)"><rect x="-12" y="-6" width="40" height="17" rx="8.5" fill="#0B1A1F"/></g><g transform="rotate(-3 0 -166)"><rect x="-37" y="-192" width="74" height="42" rx="18" fill="#0F3F37"/><rect x="-43" y="-300" width="86" height="130" rx="34" fill="#E25C4B"/><rect x="-8.6" y="-316" width="22" height="26" rx="8" fill="#57321e"/><g transform="rotate(-6 2.4 -300) translate(2.4 -334)"><circle cx="-8" cy="-50" r="24" fill="#1B120D"/><circle cx="0" cy="-4" r="43.5" fill="#1B120D"/><circle r="40" fill="#6A3D25"/><path d="M-41.5 -2 A41.5 41.5 0 0 1 41.5 -2 C 22 -16 -6 -22 -41.5 -2 Z" fill="#1B120D"/><circle cx="-3.2" cy="4" r="4" fill="#0B1A1F"/><circle cx="20.8" cy="4" r="4" fill="#0B1A1F"/><g fill="none" stroke="#0B1A1F" stroke-width="3"><circle cx="-3.2" cy="4" r="10"/><circle cx="20.8" cy="4" r="10"/><path d="M6.8 4 H10.8"/></g><path d="M-0.2 19 Q 8.8 28 17.8 19" stroke="#0B1A1F" stroke-width="3.5" fill="none" stroke-linecap="round"/></g><path d="M19.4 -276 L81.36 -278.16 L139.33 -280.19" fill="none" stroke="#e46656" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><circle cx="139.33" cy="-280.19" r="11.5" fill="#6A3D25"/><g transform="translate(141.33 -284.19) rotate(-10)"><rect x="-22" y="-18" width="44" height="32" rx="5" fill="#A6F26B"/><rect x="-1.5" y="-18" width="3" height="32" fill="#0F3F37"/></g><circle cx="139.33" cy="-280.19" r="11.5" fill="#6A3D25"/></g></g></svg></div>
+        <span class="etin float d1" style="top:40px;left:24%;background:var(--sapin)"></span>
+        <span class="etin float d3" style="top:110px;right:16%;width:11px;height:11px;background:var(--blanc)"></span>
+      </div>
+    </section>
+
+    <!-- NOTES -->
+    <section class="notes" aria-labelledby="h-notes">
+      <h2 id="h-notes"><span>À valider</span>Ce qui change par rapport à la page actuelle</h2>
+      <div class="note"><b>Un hero qui montre où vous en êtes</b><p>Le bandeau sombre au dégradé Profondeur affiche le parcours en 4 étapes, la prochaine action et une scène flottante : Amani, Orbi et trois cartes d'état.</p></div>
+      <div class="note"><b>Les 8 outils rangés en 3 étapes</b><p>Faire le point, préparer ses candidatures, s'entraîner. Les cartes ont des tailles différentes selon leur importance (grille bento) au lieu de huit cases identiques.</p></div>
+      <div class="note"><b>Chaque carte a son illustration</b><p>Une zone en dégradé de la charte, avec des objets qui flottent doucement et montent au survol : feuilles de CV, lettre, profil, cadres, micro.</p></div>
+      <div class="note"><b>Des verrous lisibles</b><p>Le badge Starter ou Pro passe dans le coin de l'image : il ne serre plus le titre. Le pied de carte dit avec quelle formule l'outil s'ouvre, et propose « Débloquer ».</p></div>
+      <div class="note"><b>Des états visuels</b><p>Le score du CV devient une jauge, le diagnostic affiche son stade, le plan vide propose de partir du diagnostic. « Bientôt disponible » prend une carte en pointillés.</p></div>
+      <div class="note"><b>Une offre Starter claire</b><p>Un bandeau au dégradé Signature regroupe les trois outils Starter et le prix. Il disparaît dès que le talent a la formule.</p></div>
+    </section>
+    <p class="exemple">Maquette Career v2 · données d'exemple d'un compte Free (score du CV et date reprises de la capture) · 15 octobre 2026</p>
+  </main>
+</div>
+
+<nav class="basnav" aria-label="Menu mobile">
+  <a class="nav-i" href="#"><svg class="i"><use href="#jm-accueil"/></svg>Accueil</a>
+  <a class="nav-i" href="#"><svg class="i"><use href="#jm-learn"/></svg>Learn</a>
+  <a class="nav-i" href="#" aria-current="page"><svg class="i"><use href="#jm-career"/></svg>Career</a>
+  <a class="nav-i" href="#"><svg class="i"><use href="#jm-jobs"/></svg>Jobs</a>
+  <a class="nav-i" href="#"><svg class="i"><use href="#jm-message"/></svg>Messages</a>
+</nav>
