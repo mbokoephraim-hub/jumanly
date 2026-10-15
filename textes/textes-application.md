@@ -2607,7 +2607,7 @@ Conventions :
 | `career.diagnostic.title` | Diagnostic de carrière |
 | `career.diagnostic.eyebrow` | Career · Diagnostic de carrière |
 | `career.diagnostic.intro.simple` | Six dimensions, 6 à 8 minutes. Votre bilan est calculé par des règles fixes, expliquées point par point. |
-| `career.diagnostic.intro.personalized` | Six dimensions et quatre questions de plus, 8 à 10 minutes. Jumanly Intelligence explique vos résultats et propose des pistes ; les notes restent calculées par des règles fixes. |
+| `career.diagnostic.intro.personalized` | Six dimensions, quatre questions de plus et deux questions de relance, 8 à 10 minutes. Jumanly Intelligence explique vos résultats et propose des pistes ; les notes restent calculées par des règles fixes. |
 | `career.diagnostic.badge.simple` | Diagnostic simplifié |
 | `career.diagnostic.badge.personalized` | Diagnostic personnalisé |
 | `career.diagnostic.upsell` | Le diagnostic personnalisé est disponible avec {plan}. |
@@ -2933,6 +2933,42 @@ Conventions :
 | `career.diagnostic.scan.dimensions` | Calcul de vos 6 dimensions |
 | `career.diagnostic.scan.priorities` | Préparation de vos priorités |
 | `career.diagnostic.scan.ai` | Rédaction de votre synthèse par Jumanly Intelligence |
+| `career.diagnostic.followUp.badge` | Question de relance {current} sur {total} · Jumanly Intelligence |
+| `career.diagnostic.followUp.hint` | Jumanly Intelligence vous pose cette question à partir de vos réponses. Elle est facultative et ne change pas vos notes. |
+| `career.diagnostic.followUp.loading` | Jumanly Intelligence prépare deux questions de relance… |
+| `career.diagnostic.followUp.rule.achievementResult` | Quel a été le résultat concret de la réalisation que vous avez décrite : un chiffre, un délai, un retour reçu ? |
+| `career.diagnostic.followUp.rule.achievementStory` | Racontez une situation où vous avez réglé un problème, au travail ou en formation : qu'avez-vous fait, et avec quel résultat ? |
+| `career.diagnostic.followUp.rule.energy` | Quelles tâches vous donnent le plus d'énergie, même si vous ne savez pas encore quel métier les propose ? |
+| `career.diagnostic.followUp.rule.obstacleTried` | Qu'avez-vous déjà essayé face à ce qui vous freine, et qu'est-ce qui a bloqué ? |
+| `career.diagnostic.followUp.rule.skillProof` | Comment pourriez-vous montrer votre niveau en {skill} à un recruteur dans les prochaines semaines ? |
+| `career.diagnostic.followUp.rule.pitch` | Si vous deviez présenter votre parcours en deux phrases, que diriez-vous ? |
+| `career.diagnostic.followUp.rule.nextJob` | Qu'attendez-vous en priorité de votre prochain poste ? |
+| `career.diagnostic.followUp.rule.proudSkill` | Quelle compétence vos collègues ou vos formateurs vous reconnaissent-ils le plus ? |
+| `career.diagnostic.miniPlan.title` | Votre mini plan gratuit |
+| `career.diagnostic.miniPlan.intro` | Trois actions gratuites pour cette semaine, choisies par Jumanly Intelligence à partir de vos priorités. |
+| `career.diagnostic.miniPlan.free` | Gratuit |
+| `career.diagnostic.miniPlan.why` | chaque action répond à l'une de vos trois priorités, qui sont vos dimensions les plus basses. |
+| `career.diagnostic.miniPlan.step.role.title` | Choisir une piste de métier |
+| `career.diagnostic.miniPlan.step.role.text` | Ouvrez cinq offres qui vous attirent et notez les compétences qui reviennent le plus souvent. |
+| `career.diagnostic.miniPlan.step.skills.title` | Renforcer une compétence demandée |
+| `career.diagnostic.miniPlan.step.skills.text` | Suivez une formation gratuite sur une compétence demandée dans vos offres cibles. |
+| `career.diagnostic.miniPlan.step.experience.title` | Valoriser une réalisation |
+| `career.diagnostic.miniPlan.step.experience.text` | Ajoutez à votre profil une réalisation chiffrée : le contexte, ce que vous avez fait, le résultat. |
+| `career.diagnostic.miniPlan.step.cv.title` | Mettre votre CV à jour |
+| `career.diagnostic.miniPlan.step.cv.text` | Refaites votre CV avec un modèle gratuit, puis faites-le relire par une personne de confiance. |
+| `career.diagnostic.miniPlan.step.interview.title` | Préparer votre présentation |
+| `career.diagnostic.miniPlan.step.interview.text` | Entraînez-vous à présenter votre parcours en 2 minutes, à voix haute, trois fois cette semaine. |
+| `career.diagnostic.miniPlan.step.search.title` | Candidater cette semaine |
+| `career.diagnostic.miniPlan.step.search.text` | Postulez à trois offres qui vous correspondent : candidater est toujours gratuit. |
+| `career.diagnostic.miniPlan.step.network.title` | Activer votre réseau |
+| `career.diagnostic.miniPlan.step.network.text` | Rendez votre profil visible des recruteurs, puis écrivez à trois professionnels de votre domaine. |
+| `career.diagnostic.upgrade.title` | Pour aller plus loin |
+| `career.diagnostic.upgrade.intro` | Ces accompagnements font partie des offres payantes. Votre mini plan et vos candidatures restent gratuits. |
+| `career.diagnostic.upgrade.item.progressPlan` | Un plan de progression complet, à suivre semaine après semaine |
+| `career.diagnostic.upgrade.item.personalized` | Un diagnostic personnalisé par Jumanly Intelligence, avec des questions de relance |
+| `career.diagnostic.upgrade.item.interview` | Des simulations d'entretien avec un retour détaillé |
+| `career.diagnostic.upgrade.item.documents` | Des lettres de motivation et une bio rédigées avec l'IA |
+| `career.diagnostic.upgrade.item.recommendations` | Des formations recommandées pour les compétences à renforcer |
 | `career.diagnostic.scan.done` | terminé |
 | `career.diagnostic.scan.running` | en cours |
 | `career.diagnostic.scan.ready` | Votre diagnostic est prêt |

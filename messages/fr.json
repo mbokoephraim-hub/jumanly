@@ -3559,7 +3559,7 @@
       "eyebrow": "Career · Diagnostic de carrière",
       "intro": {
         "simple": "Six dimensions, 6 à 8 minutes. Votre bilan est calculé par des règles fixes, expliquées point par point.",
-        "personalized": "Six dimensions et quatre questions de plus, 8 à 10 minutes. Jumanly Intelligence explique vos résultats et propose des pistes ; les notes restent calculées par des règles fixes."
+        "personalized": "Six dimensions, quatre questions de plus et deux questions de relance, 8 à 10 minutes. Jumanly Intelligence explique vos résultats et propose des pistes ; les notes restent calculées par des règles fixes."
       },
       "badge": {
         "simple": "Diagnostic simplifié",
@@ -4007,6 +4007,68 @@
         "fallback": "Jumanly Intelligence n'a pas répondu à temps : votre bilan est calculé par les règles fixes, sans crédit consommé. Vous pourrez relancer la version personnalisée plus tard.",
         "error": "L'analyse n'a pas pu aboutir. Vos réponses sont enregistrées : réessayez.",
         "retry": "Réessayer"
+      },
+      "followUp": {
+        "badge": "Question de relance {current} sur {total} · Jumanly Intelligence",
+        "hint": "Jumanly Intelligence vous pose cette question à partir de vos réponses. Elle est facultative et ne change pas vos notes.",
+        "loading": "Jumanly Intelligence prépare deux questions de relance…",
+        "rule": {
+          "achievementResult": "Quel a été le résultat concret de la réalisation que vous avez décrite : un chiffre, un délai, un retour reçu ?",
+          "achievementStory": "Racontez une situation où vous avez réglé un problème, au travail ou en formation : qu'avez-vous fait, et avec quel résultat ?",
+          "energy": "Quelles tâches vous donnent le plus d'énergie, même si vous ne savez pas encore quel métier les propose ?",
+          "obstacleTried": "Qu'avez-vous déjà essayé face à ce qui vous freine, et qu'est-ce qui a bloqué ?",
+          "skillProof": "Comment pourriez-vous montrer votre niveau en {skill} à un recruteur dans les prochaines semaines ?",
+          "pitch": "Si vous deviez présenter votre parcours en deux phrases, que diriez-vous ?",
+          "nextJob": "Qu'attendez-vous en priorité de votre prochain poste ?",
+          "proudSkill": "Quelle compétence vos collègues ou vos formateurs vous reconnaissent-ils le plus ?"
+        }
+      },
+      "miniPlan": {
+        "title": "Votre mini plan gratuit",
+        "intro": "Trois actions gratuites pour cette semaine, choisies par Jumanly Intelligence à partir de vos priorités.",
+        "free": "Gratuit",
+        "why": "chaque action répond à l'une de vos trois priorités, qui sont vos dimensions les plus basses.",
+        "step": {
+          "role": {
+            "title": "Choisir une piste de métier",
+            "text": "Ouvrez cinq offres qui vous attirent et notez les compétences qui reviennent le plus souvent."
+          },
+          "skills": {
+            "title": "Renforcer une compétence demandée",
+            "text": "Suivez une formation gratuite sur une compétence demandée dans vos offres cibles."
+          },
+          "experience": {
+            "title": "Valoriser une réalisation",
+            "text": "Ajoutez à votre profil une réalisation chiffrée : le contexte, ce que vous avez fait, le résultat."
+          },
+          "cv": {
+            "title": "Mettre votre CV à jour",
+            "text": "Refaites votre CV avec un modèle gratuit, puis faites-le relire par une personne de confiance."
+          },
+          "interview": {
+            "title": "Préparer votre présentation",
+            "text": "Entraînez-vous à présenter votre parcours en 2 minutes, à voix haute, trois fois cette semaine."
+          },
+          "search": {
+            "title": "Candidater cette semaine",
+            "text": "Postulez à trois offres qui vous correspondent : candidater est toujours gratuit."
+          },
+          "network": {
+            "title": "Activer votre réseau",
+            "text": "Rendez votre profil visible des recruteurs, puis écrivez à trois professionnels de votre domaine."
+          }
+        }
+      },
+      "upgrade": {
+        "title": "Pour aller plus loin",
+        "intro": "Ces accompagnements font partie des offres payantes. Votre mini plan et vos candidatures restent gratuits.",
+        "item": {
+          "progressPlan": "Un plan de progression complet, à suivre semaine après semaine",
+          "personalized": "Un diagnostic personnalisé par Jumanly Intelligence, avec des questions de relance",
+          "interview": "Des simulations d'entretien avec un retour détaillé",
+          "documents": "Des lettres de motivation et une bio rédigées avec l'IA",
+          "recommendations": "Des formations recommandées pour les compétences à renforcer"
+        }
       },
       "stage": {
         "discovery": "Découverte",

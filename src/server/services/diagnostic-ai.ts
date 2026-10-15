@@ -5,8 +5,15 @@
  */
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { AiError, runAi } from "@/server/ai";
+import { z } from "zod";
 import { mergePersonalized, personalizedOutputSchema, type DiagnosticV2 } from "./diagnostic";
-import { choiceAnswers, type Answers } from "./diagnostic-scoring";
+import {
+  choiceAnswers,
+  FOLLOW_UPS,
+  ruleFollowUps,
+  type Answers,
+  type Draft,
+} from "./diagnostic-scoring";
 
 export const DIAGNOSTIC_GATE = { key: "career.diagnostic.level", levels: ["personalized"] };
 
@@ -16,7 +23,9 @@ const SYSTEM = [
   "- summary : 3 à 5 phrases, concrètes, sans flatterie ni promesse d'emploi ;",
   "- strengths : 2 à 4 atouts, chacun appuyé sur une réponse ou un élément du profil ;",
   "- roles : 2 à 4 métiers à explorer cohérents avec les réponses ;",
-  "- priorities et steps : choisis dans les listes fournies, 3 au plus.",
+  "- priorities et steps : choisis dans les listes fournies, 3 au plus ;",
+  "- miniPlan : pour chaque priorité retenue, une action gratuite à faire cette semaine (une phrase, à l'impératif), réalisable sans abonnement : profil, CV, formations gratuites, candidatures, réseau.",
+  "Les réponses aux questions de relance (followUps) précisent les autres réponses : tiens-en compte.",
   "Les notes sur 100 sont calculées par des règles fixes : tu ne les modifies pas, tu les expliques.",
   "N'invente aucun fait. N'utilise et ne mentionne jamais : âge, genre, photo, origine, nationalité, religion, situation familiale, santé.",
 ].join("\n");
@@ -103,6 +112,7 @@ export async function personalizedDiagnostic(
     workStyle: said("workStyle", answers.workStyle),
     feedback: answers.feedback,
     horizon: answers.horizon,
+    followUps: (answers.followUps ?? []).filter((item) => item.answer.trim()),
   };
   const scores = {
     score: base.score,
@@ -133,6 +143,7 @@ export async function personalizedDiagnostic(
         priorities: base.priorities,
         roles: base.roles,
         steps: base.steps,
+        miniPlan: [],
       }),
     });
     if (run.source !== "ai") return { level: "simple" as const, result: base };
@@ -146,3 +157,67 @@ export async function personalizedDiagnostic(
 
 export type DiagnosticOutcome = Awaited<ReturnType<typeof personalizedDiagnostic>>;
 export const asJson = (value: unknown) => value as Prisma.InputJsonValue;
+
+// ─── Follow-up questions (docs/experience-animee § 5.3, personalized level) ──
+
+const FOLLOW_UP_SYSTEM = [
+  "Tu es le conseiller carrière de Jumanly, plateforme d'emploi africaine. Tu écris en français simple et bienveillant, en vouvoyant.",
+  `Tu poses exactement ${FOLLOW_UPS} questions de relance, courtes (moins de 200 caractères), ouvertes, chacune sur une réponse précise du questionnaire qui reste vague ou incomplète (ex. après une réalisation vague : « Quel a été le résultat concret ? »).`,
+  "Ne pose aucune question sur l'âge, le genre, l'origine, la nationalité, la religion, la situation familiale, la santé ou le handicap. Pas de question fermée par oui ou non.",
+].join("\n");
+
+export const followUpOutputSchema = z.object({ questions: z.array(z.string()) });
+
+/**
+ * Two follow-up questions written by Jumanly Intelligence from the answers (1 credit, consent and
+ * entitlement checked by `runAi`). Without the model (refused, unavailable, no credit), the
+ * rules' questions are asked and nothing is spent.
+ */
+export async function followUpQuestions(
+  db: PrismaClient,
+  userId: string,
+  draft: Draft,
+  ruleText: (item: { code: string; skill?: string }) => string,
+  label: AnswerLabels,
+) {
+  const fallback = ruleFollowUps(draft).map(ruleText);
+  const said = (question: keyof typeof choiceAnswers, code: string | undefined) =>
+    code ? label(question, code) : null;
+  const facts = {
+    situation: said("situation", draft.situation),
+    goal: said("goal", draft.goal),
+    targetRole: draft.targetRole,
+    topSkills: draft.topSkills,
+    selfAssessedSkills: (draft.skillChecks ?? []).map((item) => ({
+      skill: item.skill,
+      levelOutOf4: item.level,
+      proof: label("skillProof", item.proof),
+    })),
+    experience: said("experience", draft.experience),
+    achievement: draft.achievement,
+    pitch: said("pitch", draft.pitch),
+    obstacle: said("obstacle", draft.obstacle),
+    feedback: draft.feedback,
+    horizon: draft.horizon,
+  };
+  try {
+    const run = await runAi(db, {
+      userId,
+      feature: "diagnostic_followup",
+      gate: DIAGNOSTIC_GATE,
+      system: FOLLOW_UP_SYSTEM,
+      prompt: ["Réponses au questionnaire (JSON) :", JSON.stringify(facts)].join("\n\n"),
+      schema: followUpOutputSchema,
+      timeoutMs: DIAGNOSTIC_AI_TIMEOUT_MS,
+      template: () => ({ questions: fallback }),
+    });
+    const questions = run.output.questions
+      .map((question) => question.trim().slice(0, 240))
+      .filter(Boolean)
+      .slice(0, FOLLOW_UPS);
+    return { source: run.source, questions: questions.length > 0 ? questions : fallback };
+  } catch (error) {
+    if (error instanceof AiError) return { source: "rules" as const, questions: fallback };
+    throw error;
+  }
+}
