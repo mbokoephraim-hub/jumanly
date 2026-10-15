@@ -44,3 +44,15 @@ export function formatRelative(date: Date, now = new Date()): string {
   if (Math.abs(days) < 30) return format.format(Math.trunc(days / 7), "week");
   return format.format(Math.trunc(days / 30), "month");
 }
+
+/** "15 oct. 2026, 14:05": journals, where the hour matters. */
+export function formatDateTime(date: Date, timeZone = defaultTimeZone()): string {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    hour: "2-digit",
+    minute: "2-digit",
+    timeZone,
+  }).format(date);
+}

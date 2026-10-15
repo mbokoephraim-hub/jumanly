@@ -5,7 +5,8 @@ import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { PlanImpact, type TrackedField } from "@/components/admin/forfaits-impact";
 import { PlanFamilySegments, PlanTable, plansOfFamily } from "@/components/admin/forfaits-table";
-import { AdminPageHeader, Tag } from "@/components/admin/kit";
+import { AuditHistory } from "@/components/admin/audit";
+import { AdminDone, AdminPageHeader, Tag } from "@/components/admin/kit";
 import { Alert } from "@/components/ui";
 import { inputClasses } from "@/components/ui/field";
 import type { EntitlementType } from "@/generated/prisma/client";
@@ -171,7 +172,7 @@ export default async function AdminPlan({
       <PlanFamilySegments current={plan.family} />
       <PlanTable plans={plans} currentCode={plan.code} />
 
-      {query.ok && <Alert tone="success" title={t("saved")} />}
+      {query.ok && <AdminDone title={t("saved")} journal={{ type: "plan", id: plan.id }} />}
       {query.erreur === "prix" && <Alert tone="error" title={t("error.price")} />}
       {query.erreur === "champs" && <Alert tone="error" title={t("error.fields")} />}
       {query.erreur === "valeur" && (
@@ -457,6 +458,7 @@ export default async function AdminPlan({
           />
         </div>
       </form>
+      <AuditHistory targetType="plan" targetId={plan.id} />
     </>
   );
 }

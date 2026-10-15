@@ -8643,6 +8643,180 @@ Conventions :
 | `admin.sensitive.reason` | Motif |
 | `admin.sensitive.close` | Fermer |
 
+### Jumanly Admin · éléments communs (v2)
+
+| Clé | Texte |
+|---|---|
+| `admin.kit.seeJournal` | Voir dans le journal |
+| `admin.kit.pager.label` | Pages |
+| `admin.kit.pager.previous` | Page précédente |
+| `admin.kit.pager.next` | Page suivante |
+| `admin.kit.pager.status` | Page {page} sur {pages} |
+| `admin.kit.pager.range` | {from} à {to} sur {total} |
+| `admin.kit.summary` | En résumé |
+| `admin.platformRole.user` | Utilisateur |
+| `admin.platformRole.content_editor` | Éditeur de contenus |
+| `admin.platformRole.support_agent` | Support |
+| `admin.platformRole.platform_admin` | Administrateur |
+| `admin.memberRole.talent` | Talent |
+| `admin.memberRole.org_owner` | Propriétaire d'organisation |
+| `admin.memberRole.org_admin` | Administrateur d'organisation |
+| `admin.memberRole.recruiter` | Recruteur |
+| `admin.memberRole.hiring_manager` | Responsable du recrutement |
+| `admin.memberRole.viewer` | Lecteur |
+| `admin.memberRole.partner_manager` | Gestionnaire partenaire |
+
+### `/admin/journal` · Journal d'audit
+
+*Qui a fait quoi, sur quoi, avec quel motif. Lecture seule (administrateurs et support).*
+
+| Clé | Texte |
+|---|---|
+| `admin.journal.title` | Journal d'audit |
+| `admin.journal.subtitle` | Chaque action d'administration, avec son auteur, sa cible et son motif. |
+| `admin.journal.filter.actor` | Auteur : nom ou e-mail |
+| `admin.journal.filter.family` | Action |
+| `admin.journal.filter.target` | Cible |
+| `admin.journal.filter.period` | Période |
+| `admin.journal.filter.all` | Toutes |
+| `admin.journal.filter.allPeriods` | Depuis le début |
+| `admin.journal.filter.days` | {count, plural, one {Dernières 24 heures} other {# derniers jours}} |
+| `admin.journal.filter.oneTarget` | Une seule cible |
+| `admin.journal.filter.clear` | Effacer les filtres |
+| `admin.journal.count` | {count, plural, =0 {Aucune action} one {# action} other {# actions}} |
+| `admin.journal.export` | Exporter en CSV |
+| `admin.journal.col.when` | Date |
+| `admin.journal.col.who` | Auteur |
+| `admin.journal.col.what` | Action |
+| `admin.journal.col.target` | Cible |
+| `admin.journal.col.reason` | Motif |
+| `admin.journal.system` | Jumanly (automatique) |
+| `admin.journal.deletedActor` | Compte supprimé |
+| `admin.journal.noReason` | Sans motif |
+| `admin.journal.reasonLabel` | Motif : {reason} |
+| `admin.journal.empty.title` | Aucune action ne correspond |
+| `admin.journal.empty.text` | Élargissez la période ou retirez un filtre. |
+| `admin.journal.stats.today` | Aujourd'hui |
+| `admin.journal.stats.week` | 7 derniers jours |
+| `admin.journal.stats.actors` | Personnes actives (7 jours) |
+| `admin.journal.stats.sensitive` | Actions sensibles (7 jours) |
+| `admin.journal.csv.file` | journal-audit-jumanly |
+| `admin.journal.csv.action` | Code de l'action |
+| `admin.journal.csv.targetId` | Identifiant de la cible |
+| `admin.journal.history.title` | Historique |
+| `admin.journal.history.empty` | Aucune action enregistrée sur cette fiche. |
+| `admin.journal.history.all` | Tout l'historique |
+| `admin.journal.action.user_suspend` | a suspendu le compte |
+| `admin.journal.action.user_unsuspend` | a réactivé le compte |
+| `admin.journal.action.user_role` | a changé le rôle plateforme |
+| `admin.journal.action.org_verification_verify` | a vérifié l'organisation |
+| `admin.journal.action.org_verification_reject` | a refusé la vérification |
+| `admin.journal.action.org_verification_request` | a demandé la vérification |
+| `admin.journal.action.org_invite` | a invité un membre |
+| `admin.journal.action.org_transferOwnership` | a transféré la propriété |
+| `admin.journal.action.plan_update` | a modifié le forfait |
+| `admin.journal.action.payment_refund` | a remboursé le paiement |
+| `admin.journal.action.course_create` | a créé la formation |
+| `admin.journal.action.course_update` | a modifié la fiche de la formation |
+| `admin.journal.action.course_status` | a changé le statut de la formation |
+| `admin.journal.action.course_module_add` | a ajouté un module |
+| `admin.journal.action.course_module_rename` | a renommé un module |
+| `admin.journal.action.course_module_delete` | a supprimé un module |
+| `admin.journal.action.course_lesson_add` | a ajouté une leçon |
+| `admin.journal.action.course_lesson_update` | a modifié une leçon |
+| `admin.journal.action.course_lesson_delete` | a supprimé une leçon |
+| `admin.journal.action.course_quiz_update` | a modifié le quiz |
+| `admin.journal.action.course_question_save` | a enregistré une question |
+| `admin.journal.action.course_question_delete` | a supprimé une question |
+| `admin.journal.action.certificate_revoke` | a révoqué une attestation |
+| `admin.journal.action.job_approve` | a accepté l'offre |
+| `admin.journal.action.job_refuse` | a refusé l'offre |
+| `admin.journal.action.job_publish` | a publié l'offre |
+| `admin.journal.action.job_close` | a clôturé l'offre |
+| `admin.journal.action.job_duplicate` | a dupliqué l'offre |
+| `admin.journal.action.job_assign` | a attribué l'offre |
+| `admin.journal.action.report_dismiss` | a classé le signalement |
+| `admin.journal.action.report_hide` | a masqué le contenu signalé |
+| `admin.journal.action.partner_create` | a créé le partenaire |
+| `admin.journal.action.partner_batch` | a créé un lot de licences |
+| `admin.journal.action.partner_inviteManager` | a invité un gestionnaire partenaire |
+| `admin.journal.action.license_activate` | a activé une licence |
+| `admin.journal.action.license_codes` | a généré des codes |
+| `admin.journal.action.license_invite` | a envoyé des invitations |
+| `admin.journal.action.license_link` | a créé un lien d'invitation |
+| `admin.journal.action.license_reinvite` | a relancé une invitation |
+| `admin.journal.action.license_revoke` | a retiré une licence |
+| `admin.journal.action.matching_weights_update` | a modifié les poids du matching |
+| `admin.journal.action.match_dispute_confirmed` | a confirmé un score contesté |
+| `admin.journal.action.match_dispute_corrected` | a corrigé un score contesté |
+| `admin.journal.action.match_dispute_in_review` | a pris en charge une contestation de score |
+| `admin.journal.target.message` | Message |
+| `admin.journal.target.platform` | Plateforme |
+| `admin.journal.target.matchingWeights` | Poids du matching |
+| `admin.journal.target.talentProfile` | Profil talent |
+| `admin.journal.target.licenseBatch` | Lot de licences |
+| `admin.journal.action.content_faq_save` | a enregistré une question de la FAQ |
+| `admin.journal.action.content_faq_hide` | a masqué une question de la FAQ |
+| `admin.journal.action.content_faq_reset` | a rétabli une question de la FAQ |
+| `admin.journal.action.content_banner_save` | a enregistré une bannière |
+| `admin.journal.action.content_banner_delete` | a supprimé une bannière |
+| `admin.journal.action.profile_view` | a consulté un profil |
+| `admin.journal.action.talent_search` | a cherché des talents |
+| `admin.journal.action.security_abnormalUsage` | usage anormal détecté |
+| `admin.journal.action.admin_indicators_export` | a exporté les indicateurs |
+| `admin.journal.action.admin_audit_export` | a exporté le journal d'audit |
+| `admin.journal.family.user` | Comptes |
+| `admin.journal.family.org` | Organisations |
+| `admin.journal.family.plan` | Forfaits |
+| `admin.journal.family.payment` | Paiements |
+| `admin.journal.family.subscription` | Abonnements |
+| `admin.journal.family.course` | Formations |
+| `admin.journal.family.certificate` | Attestations |
+| `admin.journal.family.job` | Offres |
+| `admin.journal.family.report` | Signalements |
+| `admin.journal.family.partner` | Partenaires |
+| `admin.journal.family.license` | Licences |
+| `admin.journal.family.matching` | Poids du matching |
+| `admin.journal.family.match` | Contestations de score |
+| `admin.journal.family.content` | Contenus |
+| `admin.journal.family.profile` | Consultations de profil |
+| `admin.journal.family.talent` | Recherches de talents |
+| `admin.journal.family.security` | Sécurité |
+| `admin.journal.family.admin` | Exports |
+| `admin.journal.target.user` | Compte |
+| `admin.journal.target.organization` | Organisation |
+| `admin.journal.target.plan` | Forfait |
+| `admin.journal.target.subscription` | Abonnement |
+| `admin.journal.target.payment` | Paiement |
+| `admin.journal.target.course` | Formation |
+| `admin.journal.target.certificate` | Attestation |
+| `admin.journal.target.job` | Offre |
+| `admin.journal.target.report` | Signalement |
+| `admin.journal.target.license` | Licence |
+| `admin.journal.target.matchDispute` | Contestation de score |
+| `admin.journal.target.content` | Contenu |
+
+### `/admin/recherche` · Recherche globale
+
+| Clé | Texte |
+|---|---|
+| `admin.search.title` | Recherche |
+| `admin.search.label` | Rechercher un compte, une organisation, une offre, une formation ou un forfait |
+| `admin.search.labelEditor` | Rechercher une formation |
+| `admin.search.placeholder` | Nom, e-mail, titre ou identifiant |
+| `admin.search.submit` | Rechercher |
+| `admin.search.hint` | Saisissez au moins 2 caractères. |
+| `admin.search.results` | {count, plural, =0 {Aucun résultat pour « {q} »} one {# résultat pour « {q} »} other {# résultats pour « {q} »}} |
+| `admin.search.empty.title` | Rien trouvé |
+| `admin.search.empty.text` | Vérifiez l'orthographe, ou cherchez par e-mail ou par identifiant. |
+| `admin.search.kind.users` | Comptes |
+| `admin.search.kind.organizations` | Organisations |
+| `admin.search.kind.jobs` | Offres |
+| `admin.search.kind.courses` | Formations |
+| `admin.search.kind.plans` | Forfaits |
+| `admin.search.more` | Voir tous les résultats |
+| `admin.search.open` | Ouvrir |
+
 ### `/admin` · Indicateurs
 
 *Suivre la santé économique et l'usage de la plateforme (note conceptuelle § 11).*
@@ -8763,6 +8937,7 @@ Conventions :
 | `admin.users.action.roles.save` | Enregistrer le rôle |
 | `admin.users.selfProtected` | Vous ne pouvez pas modifier votre propre rôle ni suspendre votre propre compte. |
 | `admin.users.count` | {count, plural, one {# utilisateur} other {# utilisateurs}} |
+| `admin.users.stats.total` | Comptes |
 | `admin.users.summary` | Forfait : {plan} · inscrit le {date} |
 | `admin.users.filter.all` | Tous |
 | `admin.users.detail.id` | Identifiant |

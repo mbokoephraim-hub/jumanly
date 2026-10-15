@@ -194,9 +194,13 @@ export async function UserCard({
     .filter(Boolean)
     .join(", ");
   const roleList = [
-    ...(profile ? ["talent"] : []),
-    ...new Set(memberships.map((membership) => membership.role)),
-    ...(user.platformRole === "user" ? [] : [user.platformRole]),
+    ...(user.platformRole === "user"
+      ? []
+      : [t(`platformRole.${user.platformRole}` as "platformRole.user")]),
+    ...(profile ? [t("memberRole.talent")] : []),
+    ...[...new Set(memberships.map((membership) => membership.role))].map((role) =>
+      t(`memberRole.${role}`),
+    ),
   ].join(", ");
   const payment = subscription?.payments[0];
   const method =
@@ -252,11 +256,7 @@ export async function UserCard({
             <code className="text-[11.5px]">{user.id}</code>
           </Row>
           <Row label={t("users.col.created")}>{formatShortDate(user.createdAt)}</Row>
-          {roleList && (
-            <Row label={t("users.col.roles")}>
-              <code className="text-[11.5px]">{roleList}</code>
-            </Row>
-          )}
+          {roleList && <Row label={t("users.col.roles")}>{roleList}</Row>}
           <Row label={t("users.col.lastActive")}>
             {lastSession ? ago(lastSession.updatedAt, now) : t("users.neverActive")}
           </Row>

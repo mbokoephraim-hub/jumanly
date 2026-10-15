@@ -2,6 +2,28 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v2 · étape 1 : socle et recette (15 octobre 2026)
+
+- **Recette** : `tests/e2e/admin.spec.ts` ouvre les 14 écrans avec l'administrateur, le support et
+  l'éditeur de contenus, puis suspend, réactive et change le rôle d'un compte fictif créé pour
+  l'occasion (`tests/e2e/make-account.ts`), enregistre les poids du matching, cherche et exporte le
+  journal. Les autres actions (forfait, remboursement, vérification, partenaire et lot, formation,
+  FAQ et bannière) restent couvertes par leurs parcours, relancés sans régression.
+- **Corrigé grâce à la recette** : le support voyait « Formations » et « Contenus » dans le menu
+  mais tombait sur une page introuvable (liens retirés pour ce rôle) ; le motif des nouveaux poids
+  du matching n'était pas enregistré dans le journal ; la liste des utilisateurs s'arrêtait aux 50
+  premiers sans moyen d'aller plus loin (pagination ajoutée) ; les rôles s'affichaient en code
+  (`org_owner`) au lieu de mots.
+- **Kit v2** (`src/components/admin/kit.tsx`) : chiffres clés en tête de page (`AdminStats`),
+  pagination (`AdminPager`), état vide avec action (`AdminEmpty`), confirmation avec lien « Voir
+  dans le journal » (`AdminDone`, utilisée sur les pages qui confirment une action).
+- **Journal d'audit** : `/admin/journal` (administrateur et support) avec filtres auteur, action,
+  cible, période, export CSV journalisé ; encadré « Historique » sur les fiches utilisateur,
+  organisation, forfait et formation (`src/components/admin/audit.tsx`).
+- **Recherche globale** : `/admin/recherche`, branchée sur le champ de l'en-tête (ordinateur et
+  téléphone) ; l'éditeur de contenus ne cherche que les formations, le support tout sauf elles.
+- Compte de démonstration ajouté : `support@jumanly.test` (rôle Support, lecture seule).
+
 ## Jumanly Admin v2 · plan par étapes (15 octobre 2026)
 
 - Inventaire page par page de `/admin` et plan en 9 étapes avec un prompt prêt à coller par étape :

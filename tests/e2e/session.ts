@@ -9,6 +9,7 @@ export const demo = {
   talentStarter: "talent.starter@jumanly.test",
   editor: "editeur@jumanly.test",
   admin: "admin@jumanly.test",
+  support: "support@jumanly.test",
 } as const;
 
 const introHandled = new WeakSet<Page>();

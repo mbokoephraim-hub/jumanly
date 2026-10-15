@@ -111,7 +111,7 @@ export async function saveWeights(
       action: "matching.weights.update",
       targetType: "matchingWeights",
       targetId: row.id,
-      metadata: { version, weights: values },
+      metadata: { version, weights: values, reason: input.note },
     },
   });
   return row;

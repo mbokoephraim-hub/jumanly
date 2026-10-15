@@ -5,6 +5,7 @@ import type { Prisma, SubscriptionStatus } from "@/generated/prisma/client";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
   adminLabel,
+  AdminDone,
   AdminFilterBar,
   AdminPageHeader,
   AuditNotice,
@@ -189,7 +190,10 @@ export default async function AdminSubscriptions({
     <>
       <AdminPageHeader title={t("subscriptions.title")} />
       {params.ok === "remboursement" && (
-        <Alert tone="success" title={t("subscriptions.refunded")} />
+        <AdminDone
+          title={t("subscriptions.refunded")}
+          journal={paymentId ? { type: "payment", id: paymentId } : undefined}
+        />
       )}
       {params.erreur === "remboursement" && (
         <Alert tone="error" title={t("subscriptions.refundError")} />

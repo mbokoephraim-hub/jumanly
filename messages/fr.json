@@ -10324,6 +10324,197 @@
       "reason": "Motif",
       "close": "Fermer"
     },
+    "kit": {
+      "seeJournal": "Voir dans le journal",
+      "pager": {
+        "label": "Pages",
+        "previous": "Page précédente",
+        "next": "Page suivante",
+        "status": "Page {page} sur {pages}",
+        "range": "{from} à {to} sur {total}"
+      },
+      "summary": "En résumé"
+    },
+    "platformRole": {
+      "user": "Utilisateur",
+      "content_editor": "Éditeur de contenus",
+      "support_agent": "Support",
+      "platform_admin": "Administrateur"
+    },
+    "memberRole": {
+      "talent": "Talent",
+      "org_owner": "Propriétaire d'organisation",
+      "org_admin": "Administrateur d'organisation",
+      "recruiter": "Recruteur",
+      "hiring_manager": "Responsable du recrutement",
+      "viewer": "Lecteur",
+      "partner_manager": "Gestionnaire partenaire"
+    },
+    "journal": {
+      "title": "Journal d'audit",
+      "subtitle": "Chaque action d'administration, avec son auteur, sa cible et son motif.",
+      "filter": {
+        "actor": "Auteur : nom ou e-mail",
+        "family": "Action",
+        "target": "Cible",
+        "period": "Période",
+        "all": "Toutes",
+        "allPeriods": "Depuis le début",
+        "days": "{count, plural, one {Dernières 24 heures} other {# derniers jours}}",
+        "oneTarget": "Une seule cible",
+        "clear": "Effacer les filtres"
+      },
+      "count": "{count, plural, =0 {Aucune action} one {# action} other {# actions}}",
+      "export": "Exporter en CSV",
+      "col": {
+        "when": "Date",
+        "who": "Auteur",
+        "what": "Action",
+        "target": "Cible",
+        "reason": "Motif"
+      },
+      "system": "Jumanly (automatique)",
+      "deletedActor": "Compte supprimé",
+      "noReason": "Sans motif",
+      "reasonLabel": "Motif : {reason}",
+      "empty": {
+        "title": "Aucune action ne correspond",
+        "text": "Élargissez la période ou retirez un filtre."
+      },
+      "stats": {
+        "today": "Aujourd'hui",
+        "week": "7 derniers jours",
+        "actors": "Personnes actives (7 jours)",
+        "sensitive": "Actions sensibles (7 jours)"
+      },
+      "csv": {
+        "file": "journal-audit-jumanly",
+        "action": "Code de l'action",
+        "targetId": "Identifiant de la cible"
+      },
+      "history": {
+        "title": "Historique",
+        "empty": "Aucune action enregistrée sur cette fiche.",
+        "all": "Tout l'historique"
+      },
+      "action": {
+        "user_suspend": "a suspendu le compte",
+        "user_unsuspend": "a réactivé le compte",
+        "user_role": "a changé le rôle plateforme",
+        "org_verification_verify": "a vérifié l'organisation",
+        "org_verification_reject": "a refusé la vérification",
+        "org_verification_request": "a demandé la vérification",
+        "org_invite": "a invité un membre",
+        "org_transferOwnership": "a transféré la propriété",
+        "plan_update": "a modifié le forfait",
+        "payment_refund": "a remboursé le paiement",
+        "course_create": "a créé la formation",
+        "course_update": "a modifié la fiche de la formation",
+        "course_status": "a changé le statut de la formation",
+        "course_module_add": "a ajouté un module",
+        "course_module_rename": "a renommé un module",
+        "course_module_delete": "a supprimé un module",
+        "course_lesson_add": "a ajouté une leçon",
+        "course_lesson_update": "a modifié une leçon",
+        "course_lesson_delete": "a supprimé une leçon",
+        "course_quiz_update": "a modifié le quiz",
+        "course_question_save": "a enregistré une question",
+        "course_question_delete": "a supprimé une question",
+        "certificate_revoke": "a révoqué une attestation",
+        "job_approve": "a accepté l'offre",
+        "job_refuse": "a refusé l'offre",
+        "job_publish": "a publié l'offre",
+        "job_close": "a clôturé l'offre",
+        "job_duplicate": "a dupliqué l'offre",
+        "job_assign": "a attribué l'offre",
+        "report_dismiss": "a classé le signalement",
+        "report_hide": "a masqué le contenu signalé",
+        "partner_create": "a créé le partenaire",
+        "partner_batch": "a créé un lot de licences",
+        "partner_inviteManager": "a invité un gestionnaire partenaire",
+        "license_activate": "a activé une licence",
+        "license_codes": "a généré des codes",
+        "license_invite": "a envoyé des invitations",
+        "license_link": "a créé un lien d'invitation",
+        "license_reinvite": "a relancé une invitation",
+        "license_revoke": "a retiré une licence",
+        "matching_weights_update": "a modifié les poids du matching",
+        "match_dispute_confirmed": "a confirmé un score contesté",
+        "match_dispute_corrected": "a corrigé un score contesté",
+        "match_dispute_in_review": "a pris en charge une contestation de score",
+        "content_faq_save": "a enregistré une question de la FAQ",
+        "content_faq_hide": "a masqué une question de la FAQ",
+        "content_faq_reset": "a rétabli une question de la FAQ",
+        "content_banner_save": "a enregistré une bannière",
+        "content_banner_delete": "a supprimé une bannière",
+        "profile_view": "a consulté un profil",
+        "talent_search": "a cherché des talents",
+        "security_abnormalUsage": "usage anormal détecté",
+        "admin_indicators_export": "a exporté les indicateurs",
+        "admin_audit_export": "a exporté le journal d'audit"
+      },
+      "target": {
+        "message": "Message",
+        "platform": "Plateforme",
+        "matchingWeights": "Poids du matching",
+        "talentProfile": "Profil talent",
+        "licenseBatch": "Lot de licences",
+        "user": "Compte",
+        "organization": "Organisation",
+        "plan": "Forfait",
+        "subscription": "Abonnement",
+        "payment": "Paiement",
+        "course": "Formation",
+        "certificate": "Attestation",
+        "job": "Offre",
+        "report": "Signalement",
+        "license": "Licence",
+        "matchDispute": "Contestation de score",
+        "content": "Contenu"
+      },
+      "family": {
+        "user": "Comptes",
+        "org": "Organisations",
+        "plan": "Forfaits",
+        "payment": "Paiements",
+        "subscription": "Abonnements",
+        "course": "Formations",
+        "certificate": "Attestations",
+        "job": "Offres",
+        "report": "Signalements",
+        "partner": "Partenaires",
+        "license": "Licences",
+        "matching": "Poids du matching",
+        "match": "Contestations de score",
+        "content": "Contenus",
+        "profile": "Consultations de profil",
+        "talent": "Recherches de talents",
+        "security": "Sécurité",
+        "admin": "Exports"
+      }
+    },
+    "search": {
+      "title": "Recherche",
+      "label": "Rechercher un compte, une organisation, une offre, une formation ou un forfait",
+      "labelEditor": "Rechercher une formation",
+      "placeholder": "Nom, e-mail, titre ou identifiant",
+      "submit": "Rechercher",
+      "hint": "Saisissez au moins 2 caractères.",
+      "results": "{count, plural, =0 {Aucun résultat pour « {q} »} one {# résultat pour « {q} »} other {# résultats pour « {q} »}}",
+      "empty": {
+        "title": "Rien trouvé",
+        "text": "Vérifiez l'orthographe, ou cherchez par e-mail ou par identifiant."
+      },
+      "kind": {
+        "users": "Comptes",
+        "organizations": "Organisations",
+        "jobs": "Offres",
+        "courses": "Formations",
+        "plans": "Forfaits"
+      },
+      "more": "Voir tous les résultats",
+      "open": "Ouvrir"
+    },
     "dashboard": {
       "title": "Indicateurs",
       "period": "Période",
@@ -10488,6 +10679,9 @@
       },
       "selfProtected": "Vous ne pouvez pas modifier votre propre rôle ni suspendre votre propre compte.",
       "count": "{count, plural, one {# utilisateur} other {# utilisateurs}}",
+      "stats": {
+        "total": "Comptes"
+      },
       "summary": "Forfait : {plan} · inscrit le {date}",
       "neverActive": "Aucune connexion",
       "list": "Liste des utilisateurs"
