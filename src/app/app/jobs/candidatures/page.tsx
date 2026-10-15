@@ -480,14 +480,14 @@ export default async function ApplicationsPage({
                         {conversation ? t("openConversation") : t("viewJob")}
                       </Link>
                       {(conversation || sentCv || withdraw) && (
-                        <details className="group/more">
+                        <details className="group/more relative">
                           <summary
                             aria-label={t("more")}
                             className="flex size-9 cursor-pointer list-none items-center justify-center rounded-full bg-blanc text-sapin ring-1 ring-brume ring-inset [&::-webkit-details-marker]:hidden"
                           >
                             <Icon name="more" className="size-[18px]" />
                           </summary>
-                          <div className="absolute inset-x-4 z-20 mt-2 flex flex-col items-start gap-3 rounded-[18px] bg-blanc p-4 shadow-menu ring-1 ring-sapin/8">
+                          <div className="absolute right-0 bottom-full z-20 mb-2 flex w-[min(20rem,calc(100vw-4rem))] flex-col items-start gap-3 rounded-[18px] bg-blanc p-4 shadow-menu ring-1 ring-sapin/8">
                             {conversation && (
                               <Link href={jobHref} className="text-sm font-semibold underline">
                                 {t("viewJob")}

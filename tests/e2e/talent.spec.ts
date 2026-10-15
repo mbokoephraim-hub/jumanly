@@ -96,11 +96,11 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await page.goto("/app/jobs/candidatures");
   const card = page.locator("li").filter({ hasText: "Comptable" }).first();
   await expect(card).toContainText("Envoyée");
+  // On a phone the less frequent actions sit behind « … ».
+  const more = card.locator('summary[aria-label="Plus d\'actions"]');
+  if (page.viewportSize()!.width < 1024) await more.click();
   const sentHref = await card.getByRole("link", { name: "Voir le CV envoyé" }).getAttribute("href");
   expect((await page.request.get(sentHref!)).status()).toBe(200);
-  // On a phone the less frequent actions sit behind « … ».
-  const more = card.getByLabel("Plus d'actions");
-  if (await more.isVisible()) await more.click();
   await card
     .locator("summary")
     .filter({ hasText: "Retirer ma candidature", visible: true })
