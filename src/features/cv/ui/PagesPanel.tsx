@@ -59,18 +59,30 @@ export function PagesPanel({
         </span>
       </div>
       {pages > 0 && (
-        <ol className="flex gap-2">
+        <ol className="flex flex-wrap gap-2.5">
           {Array.from({ length: pages }, (_, index) => (
             <li
               key={index}
               className={cx(
-                "flex aspect-[210/297] w-14 items-end justify-center rounded-md bg-blanc pb-1 text-[10px] text-ardoise ring-1",
-                index < MAX_PAGES ? "ring-brume" : "ring-down-texte",
+                "flex aspect-[210/297] w-14 items-end justify-center rounded-md bg-blanc bg-[repeating-linear-gradient(180deg,transparent_0_9px,var(--color-brume)_9px_10px)] bg-[length:70%_70%] bg-[position:50%_30%] bg-no-repeat pb-1 text-[10px] text-ardoise shadow-[0_8px_16px_-10px_rgb(11_26_31/0.45)]",
+                index >= MAX_PAGES
+                  ? "ring-2 ring-down-texte"
+                  : index === 0
+                    ? "ring-2 ring-sapin"
+                    : "ring-1 ring-brume",
               )}
             >
               {labels.page.replace("{number}", String(index + 1))}
             </li>
           ))}
+          {pages < MAX_PAGES && (
+            <li
+              aria-hidden
+              className="grid aspect-[210/297] w-14 place-items-center rounded-md border-[1.5px] border-dashed border-brume text-ardoise"
+            >
+              <Icon name="plus" className="size-4" />
+            </li>
+          )}
         </ol>
       )}
       {result?.alert === "element-trop-long" && (
@@ -136,7 +148,7 @@ export function PagesPanel({
       <form action={updateCvStyleAction}>
         <input type="hidden" name="id" value={documentId} />
         <input type="hidden" name="setting" value="fitOne" />
-        <button type="submit" className={pillClass("outline", "sm", "h-10 w-full")}>
+        <button type="submit" className={pillClass("outline", "sm", "h-11 w-full")}>
           {labels.fitOne}
         </button>
       </form>

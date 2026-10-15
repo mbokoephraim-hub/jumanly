@@ -1,6 +1,7 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { AiOrb } from "@/components/brand/ai-orb";
+import { Orbi } from "@/components/brand/character";
 import { Icon } from "@/components/brand/icon";
 import { pillClass, ScoreRing } from "@/components/career/kit";
 import { Alert } from "@/components/ui";
@@ -27,6 +28,7 @@ export function CvCoachPanel({
   percents,
   targetTitle,
   outcome,
+  criteria,
 }: {
   documentId: string;
   score: CvScore;
@@ -37,6 +39,8 @@ export function CvCoachPanel({
   percents: Record<string, number>;
   targetTitle: string | null;
   outcome: { coach?: string; suggestion?: string };
+  /** The three criteria of the score, as bars (`CriteriaBars`). */
+  criteria: ReactNode;
 }) {
   const t = useTranslations();
   const box = "rounded-[20px] bg-sapin/35 p-4 ring-1 ring-blanc/10";
@@ -44,14 +48,16 @@ export function CvCoachPanel({
     <section
       id="coach"
       aria-labelledby="coach-title"
-      className="relative flex scroll-mt-24 flex-col gap-4 overflow-hidden rounded-[24px] bg-[linear-gradient(160deg,#2FD3A6_0%,#14745F_35%,#0F3F37_100%)] p-5 text-blanc"
+      className="relative flex scroll-mt-28 flex-col gap-4 overflow-hidden rounded-[24px] bg-[linear-gradient(160deg,#2FD3A6_0%,#14745F_35%,#0F3F37_100%)] p-5 text-blanc"
     >
       <span
         aria-hidden
         className="pointer-events-none absolute -top-16 -right-16 size-48 rounded-full ring-1 ring-blanc/20"
       />
       <div className="relative flex items-center gap-3">
-        <AiOrb size={40} />
+        <span className="jm-float block">
+          <Orbi size={40} />
+        </span>
         <div className="flex flex-col">
           <h2 id="coach-title" className="text-[17px] font-semibold">
             {t("ai.cvCoach.title")}
@@ -60,41 +66,36 @@ export function CvCoachPanel({
         </div>
       </div>
 
-      <div className="relative flex items-center gap-4 rounded-[20px] bg-blanc/10 p-4 ring-1 ring-blanc/15">
-        <ScoreRing
-          value={score.total}
-          label={t("ai.cvCoach.score.text", { score: score.total })}
-          size={84}
-          dark
-        />
-        <div className="flex min-w-0 flex-col gap-1">
-          <p className="text-[15px] font-semibold">
-            {t("ai.cvCoach.score.label", { level: t(`ai.cvCoach.score.level.${score.level}`) })}
-          </p>
-          <p className="text-xs leading-[17px] text-blanc/80">
-            {t("ai.cvCoach.score.detail.text", {
-              ats: score.ats,
-              impact: score.impact,
-              keywords: score.keywords,
-            })}
-          </p>
-          <details className="text-xs">
-            <summary className="inline-flex cursor-pointer items-center gap-1 font-semibold text-neon">
-              <Icon name="eye" className="size-3.5" />
-              {t("ai.card.why")}
-            </summary>
-            <p className="mt-2 leading-[17px] text-blanc/85">{t("ai.cvCoach.score.explain")}</p>
-            <ul className="mt-2 flex flex-col gap-1 text-blanc/85">
-              {(["ats", "impact", "keywords"] as const).map((key) => (
-                <li key={key}>
-                  {[t(`ai.cvCoach.score.${key}.text`), t(`ai.cvCoach.score.${key}.desc`)].join(
-                    " : ",
-                  )}
-                </li>
-              ))}
-            </ul>
-          </details>
+      <div className="relative flex flex-col gap-3.5 rounded-[20px] bg-blanc/10 p-4 ring-1 ring-blanc/15 backdrop-blur-sm">
+        <div className="flex items-center gap-3.5">
+          <ScoreRing
+            value={score.total}
+            label={t("ai.cvCoach.score.text", { score: score.total })}
+            size={76}
+            dark
+          />
+          <div className="flex min-w-0 flex-col gap-1">
+            <p className="text-[15px] leading-tight font-semibold">
+              {t("ai.cvCoach.score.label", { level: t(`ai.cvCoach.score.level.${score.level}`) })}
+            </p>
+            <p className="text-xs leading-[17px] text-blanc/75">{t("career.cv.score.noAi")}</p>
+          </div>
         </div>
+        {criteria}
+        <details className="text-xs">
+          <summary className="inline-flex min-h-11 cursor-pointer items-center gap-1 font-semibold text-neon lg:min-h-0">
+            <Icon name="eye" className="size-3.5" />
+            {t("ai.card.why")}
+          </summary>
+          <p className="mt-2 leading-[17px] text-blanc/85">{t("ai.cvCoach.score.explain")}</p>
+          <ul className="mt-2 flex flex-col gap-1 text-blanc/85">
+            {(["ats", "impact", "keywords"] as const).map((key) => (
+              <li key={key}>
+                {[t(`ai.cvCoach.score.${key}.text`), t(`ai.cvCoach.score.${key}.desc`)].join(" : ")}
+              </li>
+            ))}
+          </ul>
+        </details>
       </div>
 
       {outcome.coach === "unavailable" && <Alert tone="error" title={t("ai.card.error")} />}
@@ -202,12 +203,23 @@ export function CvCoachPanel({
           </Link>
         </Alert>
       ) : coach.state === "entitlement" || (coach.state === "quota" && !credits?.limit) ? (
-        <div className={cx(box, "relative flex flex-col gap-2")}>
+        <div className="relative flex flex-col gap-3">
           {coach.plan && (
-            <p className="text-sm">{t("ai.cvCoach.locked.free", { plan: coach.plan })}</p>
+            <p className="flex items-start gap-2.5 text-[13px] leading-[18px]">
+              <span className="inline-flex shrink-0 items-center gap-1 rounded-pill bg-lime px-2.5 py-1 text-[11px] font-semibold text-sapin">
+                <Icon name="lock" className="size-3" />
+                {coach.plan}
+              </span>
+              <span>{t("ai.cvCoach.locked.free", { plan: coach.plan })}</span>
+            </p>
           )}
-          <h3 className="font-semibold">{t("ai.cvCoach.tips.free.title")}</h3>
-          <p className="text-sm text-blanc/85">{t("ai.cvCoach.tips.free.body")}</p>
+          <div className={cx(box, "flex flex-col gap-1.5")}>
+            <h3 className="text-sm font-semibold">{t("ai.cvCoach.tips.free.title")}</h3>
+            <p className="flex gap-2 text-[13px] leading-[18px] text-blanc/85">
+              <span aria-hidden className="mt-1.5 size-1.5 shrink-0 rounded-full bg-lime" />
+              {t("ai.cvCoach.tips.free.body")}
+            </p>
+          </div>
         </div>
       ) : coach.state === "quota" ? (
         <Alert tone="warning" title={t("ai.credits.reached.title")}>

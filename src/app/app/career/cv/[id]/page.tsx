@@ -1,8 +1,9 @@
+import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Icon, type IconName } from "@/components/brand/icon";
+import { Icon } from "@/components/brand/icon";
 import { previewData } from "@/features/cv/document";
 import { templateKey } from "@/features/cv/examples";
 import { cvFileName } from "@/features/cv/export/pdf";
@@ -17,19 +18,19 @@ import { dynamic } from "@/i18n/dynamic";
 import { AppPageHeader } from "@/components/app/page-header";
 import { AiGateNotice } from "@/components/career/ai-gate";
 import { CvCoachPanel, type CoachState } from "@/components/career/cv-coach-panel";
-import { card, CareerTabs, eyebrow, pillClass } from "@/components/career/kit";
-import { Alert, Button, Checkbox, Select, TextArea, TextField } from "@/components/ui";
-import { cx } from "@/lib/cx";
-import { formatDate } from "@/lib/dates";
 import {
-  changeCvSection,
-  createCv,
-  deleteCv,
-  duplicateCv,
-  refreshCvFromProfile,
-  setPrimaryCv,
-  updateCvDetails,
-} from "@/server/actions/cv";
+  MobileActionBar,
+  ModeSwitch,
+  Notice,
+  SectionsPanel,
+  WorkshopBar,
+} from "@/components/career/cv/editor";
+import { CriteriaBars } from "@/components/career/cv/parts";
+import { Workbench } from "@/components/career/cv/workbench";
+import { card, CareerTabs, pillClass } from "@/components/career/kit";
+import { Alert, Checkbox, Select, TextArea, TextField } from "@/components/ui";
+import { cx } from "@/lib/cx";
+import { updateCvDetails } from "@/server/actions/cv";
 import { tailorCvAction } from "@/server/actions/career-documents";
 import { aiFeatures, aiReadiness, AI_CREDITS_KEY } from "@/server/ai";
 import { requireUser } from "@/server/auth/session";
@@ -91,7 +92,6 @@ export default async function CvEditorPage({
     orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
     select: { id: true, title: true, isPrimary: true },
   });
-  const count = cvs.length;
   const tHome = await getTranslations("career.home");
   const [tailor, tailorJobs] = await Promise.all([
     aiState(db, user.id, "cv_tailor", TAILOR_GATE),
@@ -190,308 +190,124 @@ export default async function CvEditorPage({
     skills: content.skills.length > 0,
     languages: content.languages.length > 0,
   };
-  const pdfLink = (className: string) => (
-    <span className={className}>
-      <a href={`/app/career/cv/${cv.id}/pdf`} className={pillClass("dark", "sm")} download>
-        <Icon name="telecharger" className="size-4" />
-        <span className="sr-only">{t("export.download")}</span> {t("export.text")}
-      </a>
-    </span>
+  const sectionCounts: Record<CvSectionId, number | null> = {
+    summary: null,
+    experience: content.experiences.length,
+    education: content.education.length,
+    skills: content.skills.length,
+    languages: content.languages.length,
+  };
+  // Names of the sections for the label on the highlighted block (src/styles/cv-v2.css).
+  const highlightLabels = Object.fromEntries(
+    cvSectionIds.map((sectionId) => [
+      `--jm-cv-label-${sectionId}`,
+      JSON.stringify(t(`section.${sectionId}`)),
+    ]),
+  ) as CSSProperties;
+  const tailorLocked = tailor.state === "entitlement";
+
+  const profileForm = (
+    <form action={updateCvDetails} className="flex flex-col gap-3 border-t border-brume pt-3">
+      <input type="hidden" name="id" value={cv.id} />
+      <TextField
+        id="cv-title"
+        name="title"
+        label={t("rename")}
+        placeholder={t("name.placeholder")}
+        defaultValue={cv.title}
+        required
+        maxLength={80}
+      />
+      <div className="flex flex-col gap-1">
+        <TextArea
+          id="cv-summary"
+          name="summary"
+          label={t("section.summary")}
+          defaultValue={content.summary}
+          rows={5}
+          maxLength={SUMMARY_MAX}
+        />
+        <p className="flex justify-between gap-2 text-xs text-ardoise">
+          <span>{t("summary.hint")}</span>
+          <span className="tabular-nums">
+            {t("summary.counter", { count: content.summary.length, max: SUMMARY_MAX })}
+          </span>
+        </p>
+      </div>
+      <Checkbox
+        id="cv-show-email"
+        name="showEmail"
+        value="on"
+        defaultChecked={content.info.showEmail}
+        label={t("info.showEmail")}
+        hint={t("info.contact.hint")}
+      />
+      <TextField
+        id="cv-phone"
+        name="phone"
+        type="tel"
+        autoComplete="tel"
+        label={t("info.phone.label")}
+        hint={t("info.phone.hint")}
+        defaultValue={content.info.phone}
+        maxLength={30}
+        error={query.erreur === "telephone" ? t("info.phone.invalid") : undefined}
+      />
+      <button type="submit" className={pillClass("dark", "sm", "h-11 self-start lg:h-9")}>
+        {tProfile("save")}
+      </button>
+    </form>
   );
 
   return (
     <>
-      <AppPageHeader
-        eyebrow={[tHome("eyebrow"), t("updated", { date: formatDate(cv.updatedAt) })].join(" · ")}
-        title={t("title")}
-        actions={pdfLink("lg:hidden")}
-      />
+      <AppPageHeader eyebrow={tHome("eyebrow")} title={t("title")} />
       <CareerTabs active="cv" />
-      {notice && <Alert tone="success" title={notice} />}
+      <WorkshopBar cv={{ id: cv.id, title: cv.title, isPrimary: cv.isPrimary }} cvs={cvs} />
+      {notice && <Notice>{notice}</Notice>}
       {error && <Alert tone="error" title={error} />}
-
       {!included && <Alert tone="error" title={t("template.downgraded", { templateName })} />}
 
       <CvPaginationProvider>
-        <div className="grid gap-5 lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)_330px]">
-          <div className="order-3 flex min-w-0 flex-col gap-5 lg:order-1 lg:row-span-2 xl:row-span-1">
-            <section aria-labelledby="cv-mine" className={cx(card, "flex flex-col gap-3 lg:p-4")}>
-              <h2 id="cv-mine" className={cx(eyebrow, "text-ardoise")}>
-                {t("myCvs")}
-              </h2>
-              <details className="group relative">
-                <summary className="flex cursor-pointer list-none items-center gap-3 rounded-[16px] bg-creme px-4 py-3 [&::-webkit-details-marker]:hidden">
-                  <Icon name="doc" className="size-4 shrink-0" />
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className="truncate text-sm font-semibold">{cv.title}</span>
-                    {cv.isPrimary && <span className="text-xs text-ardoise">{t("default")}</span>}
-                  </span>
-                  <Icon
-                    name="chev-d"
-                    className="size-4 shrink-0 transition group-open:rotate-180"
-                  />
-                </summary>
-                <ul className="mt-2 flex flex-col gap-1 rounded-[16px] bg-blanc p-2 ring-1 ring-brume">
-                  {cvs.map((item) => (
-                    <li key={item.id}>
-                      <Link
-                        href={`/app/career/cv/${item.id}`}
-                        aria-current={item.id === cv.id ? "page" : undefined}
-                        className="flex flex-col rounded-xl px-3 py-2 text-sm hover:bg-lime-clair aria-[current=page]:bg-lime-clair"
-                      >
-                        <span className="font-semibold">{item.title}</span>
-                        {item.isPrimary && (
-                          <span className="text-xs text-ardoise">{t("default")}</span>
-                        )}
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              </details>
-              <div className="flex flex-wrap gap-2">
-                <form action={createCv}>
-                  <button
-                    type="submit"
-                    disabled={count >= MAX_CVS}
-                    className={pillClass("outline", "sm", "h-9 px-3")}
-                  >
-                    <Icon name="plus" className="size-3.5" />
-                    {t("new")}
-                  </button>
-                </form>
-                <form action={duplicateCv}>
-                  <input type="hidden" name="id" value={cv.id} />
-                  <button
-                    type="submit"
-                    disabled={count >= MAX_CVS}
-                    className={pillClass("outline", "sm", "h-9 px-3")}
-                  >
-                    {t("duplicate")}
-                  </button>
-                </form>
-              </div>
-              {!cv.isPrimary && (
-                <form action={setPrimaryCv}>
-                  <input type="hidden" name="id" value={cv.id} />
-                  <button
-                    type="submit"
-                    className="text-left text-[13px] font-semibold text-up-texte hover:underline"
-                  >
-                    {t("setDefault")}
-                  </button>
-                </form>
-              )}
-              <details>
-                <summary className="cursor-pointer text-[13px] font-semibold text-ardoise">
-                  {t("delete.text")}
-                </summary>
-                <form
-                  action={deleteCv}
-                  className="mt-3 flex flex-col items-start gap-2 rounded-[16px] bg-creme p-3"
-                >
-                  <input type="hidden" name="id" value={cv.id} />
-                  <p className="text-sm font-semibold">
-                    {t("delete.confirm.title", { cvName: cv.title })}
-                  </p>
-                  <p className="text-xs">{t("delete.confirm.body")}</p>
-                  <Button type="submit" variant="danger" size="sm">
-                    {t("delete.confirm.cta")}
-                  </Button>
-                </form>
-              </details>
-            </section>
-
-            <nav
-              aria-label={t("tab.style")}
-              className="flex gap-1 rounded-pill bg-blanc p-1 ring-1 ring-brume"
-            >
-              {(
-                [
-                  ["content", t("tab.content"), `/app/career/cv/${cv.id}`],
-                  ["style", t("tab.style"), `/app/career/cv/${cv.id}?vue=style`],
-                ] as const
-              ).map(([key, label, href]) => (
-                <Link
-                  key={key}
-                  href={href}
-                  aria-current={view === key ? "page" : undefined}
-                  className="flex h-10 flex-1 items-center justify-center rounded-pill text-sm font-semibold hover:bg-creme aria-[current=page]:bg-sapin aria-[current=page]:text-blanc"
-                >
-                  {label}
-                </Link>
-              ))}
-            </nav>
-
+        <div
+          className="jm-cv-editor grid items-start gap-[18px] min-[900px]:grid-cols-[minmax(0,340px)_minmax(0,1fr)] xl:grid-cols-[340px_minmax(0,1fr)_330px]"
+          style={highlightLabels}
+        >
+          <section
+            aria-label={view === "style" ? t("tab.style") : t("tab.content")}
+            className="order-2 flex min-w-0 flex-col gap-4 rounded-[24px] bg-blanc p-3.5 min-[900px]:order-1 lg:p-4"
+          >
+            <ModeSwitch id={cv.id} view={view} />
             {view === "style" ? (
-              <section aria-label={t("tab.style")} className={cx(card, "lg:p-4")}>
-                <StylePanel
-                  documentId={cv.id}
-                  template={template}
-                  style={style}
-                  customError={customError}
-                />
-              </section>
+              <StylePanel
+                documentId={cv.id}
+                template={template}
+                style={style}
+                customError={customError}
+              />
             ) : (
-              <>
-                <section
-                  aria-labelledby="cv-sections"
-                  className={cx(card, "flex flex-col gap-2 lg:p-4")}
-                >
-                  <h2 id="cv-sections" className="px-2 pb-1 text-[17px] font-semibold">
-                    {t("sections")}
-                  </h2>
-                  <ul className="flex flex-col gap-1">
-                    {sections.map((section, index) => {
-                      const name = t(`section.${section.id}`);
-                      return (
-                        <li key={section.id}>
-                          <details className="group rounded-[14px] open:bg-creme">
-                            <summary className="flex cursor-pointer list-none items-center gap-3 rounded-[14px] px-2 py-2.5 hover:bg-creme [&::-webkit-details-marker]:hidden">
-                              <Icon name={sectionIcons[section.id]} className="size-4 shrink-0" />
-                              <span
-                                className={cx(
-                                  "min-w-0 flex-1 text-sm",
-                                  section.visible ? "font-medium" : "text-ardoise line-through",
-                                )}
-                              >
-                                {name}
-                              </span>
-                              {filled[section.id] ? (
-                                <Icon
-                                  name="check"
-                                  label={t("saved")}
-                                  className="size-4 text-feuille"
-                                />
-                              ) : (
-                                <span className="text-xs font-semibold text-down-texte">
-                                  {t("section.completion", { percent: 0 })}
-                                </span>
-                              )}
-                            </summary>
-                            <div className="flex flex-wrap gap-1 px-2 pb-2.5">
-                              {(
-                                [
-                                  ["up", t("section.moveUp"), index === 0, "up"],
-                                  [
-                                    "down",
-                                    t("section.moveDown"),
-                                    index === sections.length - 1,
-                                    "down",
-                                  ],
-                                  [
-                                    "toggle",
-                                    section.visible ? t("section.hide") : t("section.show"),
-                                    false,
-                                    section.visible ? "eye-off" : "eye",
-                                  ],
-                                ] as const
-                              ).map(([move, label, disabled, icon]) => (
-                                <form key={move} action={changeCvSection}>
-                                  <input type="hidden" name="id" value={cv.id} />
-                                  <input type="hidden" name="section" value={section.id} />
-                                  <input type="hidden" name="move" value={move} />
-                                  <button
-                                    type="submit"
-                                    disabled={disabled}
-                                    aria-label={[label, name].join(" · ")}
-                                    className="flex h-8 items-center gap-1 rounded-pill bg-blanc px-2.5 text-xs font-semibold ring-1 ring-brume ring-inset hover:bg-lime-clair disabled:opacity-40"
-                                  >
-                                    <Icon name={icon} className="size-3.5" />
-                                    {label}
-                                  </button>
-                                </form>
-                              ))}
-                            </div>
-                          </details>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </section>
-
-                <section
-                  aria-labelledby="cv-content"
-                  className={cx(card, "flex flex-col gap-3 lg:p-4")}
-                >
-                  <h2 id="cv-content" className="text-[17px] font-semibold">
-                    {t("section.info")}
-                  </h2>
-                  <p className="text-xs leading-[18px] text-ardoise">{t("fromProfileHint")}</p>
-                  <form action={refreshCvFromProfile}>
-                    <input type="hidden" name="id" value={cv.id} />
-                    <button
-                      type="submit"
-                      className={pillClass("outline", "sm", "h-auto min-h-9 px-3 py-1.5 text-left")}
-                    >
-                      <Icon name="profil" className="size-3.5 shrink-0" />
-                      {t("fromProfile")}
-                    </button>
-                  </form>
-                  <form action={updateCvDetails} className="flex flex-col gap-3">
-                    <input type="hidden" name="id" value={cv.id} />
-                    <TextField
-                      id="cv-title"
-                      name="title"
-                      label={t("rename")}
-                      placeholder={t("name.placeholder")}
-                      defaultValue={cv.title}
-                      required
-                      maxLength={80}
-                    />
-                    <TextArea
-                      id="cv-summary"
-                      name="summary"
-                      label={t("section.summary")}
-                      defaultValue={content.summary}
-                      rows={5}
-                      maxLength={1000}
-                    />
-                    <Checkbox
-                      id="cv-show-email"
-                      name="showEmail"
-                      value="on"
-                      defaultChecked={content.info.showEmail}
-                      label={t("info.showEmail")}
-                      hint={t("info.contact.hint")}
-                    />
-                    <TextField
-                      id="cv-phone"
-                      name="phone"
-                      type="tel"
-                      autoComplete="tel"
-                      label={t("info.phone.label")}
-                      hint={t("info.phone.hint")}
-                      defaultValue={content.info.phone}
-                      maxLength={30}
-                      error={query.erreur === "telephone" ? t("info.phone.invalid") : undefined}
-                    />
-                    <button type="submit" className={pillClass("dark", "sm", "self-start")}>
-                      {tProfile("save")}
-                    </button>
-                  </form>
-                </section>
-
-                <Link
-                  href={`/app/career/cv/${cv.id}?vue=style`}
-                  className={cx(
-                    card,
-                    "flex items-center gap-3 hover:ring-2 hover:ring-sapin lg:p-4",
-                  )}
-                >
-                  <Icon name="doc" className="size-5 shrink-0" />
-                  <span className="flex min-w-0 flex-1 flex-col">
-                    <span className={cx(eyebrow, "text-ardoise")}>{t("template.text")}</span>
-                    <span className="truncate text-sm font-semibold">{templateName}</span>
-                  </span>
-                  <span className="text-sm font-semibold text-up-texte">{t("tab.style")}</span>
-                </Link>
-              </>
+              <SectionsPanel
+                id={cv.id}
+                profileForm={profileForm}
+                sections={sections.map((section) => ({
+                  id: section.id,
+                  visible: section.visible,
+                  filled: filled[section.id],
+                  count: sectionCounts[section.id],
+                }))}
+              />
             )}
-          </div>
+          </section>
 
-          <div className="order-1 flex min-w-0 flex-col gap-4 lg:order-2">
+          <section
+            aria-labelledby="cv-preview"
+            className="order-1 flex min-w-0 flex-col gap-3 min-[900px]:sticky min-[900px]:top-[98px] min-[900px]:order-2"
+          >
+            <h2 id="cv-preview" className="sr-only">
+              {t("tab.preview")}
+            </h2>
             <TabRail name="cv-document">
-              <div className="flex w-max gap-2">
+              <div className="flex w-max gap-1 rounded-pill bg-blanc/70 p-1 ring-1 ring-sapin/6">
                 <span
                   className={pillClass("dark", "sm", "pointer-events-none shrink-0")}
                   aria-current="page"
@@ -500,123 +316,50 @@ export default async function CvEditorPage({
                 </span>
                 <Link
                   href="/app/career/documents"
-                  className={pillClass("outline", "sm", "shrink-0")}
+                  className={pillClass("outline", "sm", "shrink-0 bg-transparent ring-0")}
                 >
                   {t("tab.letter")}
                 </Link>
                 <Link
                   href="/app/career/linkedin"
-                  className={pillClass("outline", "sm", "shrink-0")}
+                  className={pillClass("outline", "sm", "shrink-0 bg-transparent ring-0")}
                 >
                   {t("tab.linkedin")}
                 </Link>
               </div>
             </TabRail>
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <span className="flex items-center gap-1.5 rounded-pill bg-lime-clair px-3 py-1 text-xs font-semibold">
-                <Icon name="check" className="size-3.5" />
-                {t("saved")}
-              </span>
-              {pdfLink("hidden lg:block")}
-            </div>
-
-            <section
-              id="adapter"
-              aria-labelledby="cv-tailor"
-              className={cx(card, "flex scroll-mt-24 flex-col gap-3 lg:p-5")}
+            {(demo || isEmptyCv(content)) && <Alert tone="info" title={t("empty")} />}
+            <Workbench
+              labels={{
+                pageOf: t("preview.pageOf", { page: "{page}", total: "{total}" }),
+                zoomIn: t("preview.zoomIn"),
+                zoomOut: t("preview.zoomOut"),
+                fullscreen: t("preview.fullscreen"),
+                close: tAll("common.close"),
+                hint: t("preview.highlightHint"),
+                label: t("tab.preview"),
+              }}
             >
-              <div className="flex items-start gap-3">
-                <Icon name="jobs" className="mt-0.5 size-5 shrink-0" />
-                <div className="flex min-w-0 flex-col gap-0.5">
-                  <h2 id="cv-tailor" className="text-[15px] font-semibold">
-                    {t("tailor.text")}
-                  </h2>
-                  <p className="text-[13px] leading-[18px] text-ardoise">
-                    {tailor.state === "entitlement"
-                      ? t("tailor.locked", { plan: tailorPlan })
-                      : t("tailor.desc")}
-                  </p>
-                </div>
-              </div>
-              {tailor.state !== "entitlement" && (
-                <>
-                  <AiGateNotice
-                    state={tailor.state}
-                    plan={tailorPlan}
-                    resetsAt={tailor.resetsAt}
-                    outcome={typeof query.adaptation === "string" ? query.adaptation : undefined}
-                  />
-                  {query.adaptation === "notFound" && (
-                    <Alert tone="error" title={t("tailor.notFound")} />
-                  )}
-                  {query.adaptation === "limit" && (
-                    <Alert tone="error" title={t("limit", { max: MAX_CVS })} />
-                  )}
-                  {tailor.state === "ready" &&
-                    (tailorJobs.length === 0 ? (
-                      <p className="text-[13px]">{t("tailor.noJobs")}</p>
-                    ) : (
-                      <form
-                        action={tailorCvAction}
-                        className="flex flex-wrap items-end gap-3 [&>div:first-of-type]:min-w-[220px] [&>div:first-of-type]:flex-1"
-                      >
-                        <input type="hidden" name="cvId" value={cv.id} />
-                        <Select
-                          id={`tailor-job-${cv.id}`}
-                          name="jobId"
-                          label={t("tailor.selectJob")}
-                          required
-                          options={tailorJobs.map((job) => ({ value: job.id, label: job.title }))}
-                        />
-                        <button type="submit" className={pillClass("outline", "sm", "h-11")}>
-                          {t("tailor.cta")}
-                        </button>
-                        <p className="w-full text-xs text-ardoise">
-                          {tAll("career.documents.generate.cost", {
-                            count: aiFeatures.cv_tailor.credits,
-                          })}
-                        </p>
-                      </form>
-                    ))}
-                </>
-              )}
-            </section>
+              <CvPreview data={data} template={template} style={style} label={t("tab.preview")} />
+            </Workbench>
+          </section>
 
-            <section aria-labelledby="cv-preview" className="flex flex-col gap-3">
-              <h2 id="cv-preview" className="sr-only">
-                {t("tab.preview")}
-              </h2>
-              {(demo || isEmptyCv(content)) && <Alert tone="info" title={t("empty")} />}
-              <div className="rounded-[16px] bg-creme p-3 sm:p-5">
-                <CvPreview data={data} template={template} style={style} label={t("tab.preview")} />
-              </div>
-            </section>
-          </div>
-
-          <div className="order-2 flex min-w-0 flex-col gap-5 lg:order-3 lg:col-start-2 xl:col-start-3">
-            {view === "style" && (
-              <PagesPanel
-                documentId={cv.id}
-                targets={breakTargets}
-                breaks={style.pageBreaks ?? []}
-                fitTried={query.ajuste === "1"}
-                labels={{
-                  title: t("pages.title"),
-                  count: t("pages.count", { count: "{count}", max: MAX_PAGES }),
-                  page: t("pages.page", { number: "{number}" }),
-                  breakHere: t("pages.breakHere"),
-                  breakTarget: t("pages.breakTarget"),
-                  breakLabel: t("pages.breakLabel", { sectionName: "{sectionName}" }),
-                  removeBreak: t("pages.removeBreak"),
-                  fitOne: t("pages.fitOne"),
-                  fitFailed: t("pages.fitFailed"),
-                  hint: t("pages.hint"),
-                  tooLong: t("export.tooLong"),
-                  overMax: t("pages.overMax", { max: MAX_PAGES }),
-                  itemTooLong: t("pages.itemTooLong"),
-                }}
-              />
-            )}
+          <div className="order-3 grid min-w-0 items-start gap-[18px] min-[900px]:col-span-2 min-[900px]:grid-cols-3 xl:col-span-1 xl:grid-cols-1">
+            <CvCoachPanel
+              documentId={cv.id}
+              score={score}
+              coach={coach}
+              credits={credits}
+              suggestions={suggestions}
+              missingKeywords={missingKeywords}
+              percents={targets.percents}
+              targetTitle={targets.title}
+              criteria={<CriteriaBars score={score} dark />}
+              outcome={{
+                coach: typeof query.coach === "string" ? query.coach : undefined,
+                suggestion: typeof query.suggestion === "string" ? query.suggestion : undefined,
+              }}
+            />
             <ExportPanel
               documentId={cv.id}
               fileName={fileName}
@@ -636,33 +379,96 @@ export default async function CvEditorPage({
                 neutral: t("template.neutral"),
               }}
             />
-            {view === "content" && (
-              <CvCoachPanel
-                documentId={cv.id}
-                score={score}
-                coach={coach}
-                credits={credits}
-                suggestions={suggestions}
-                missingKeywords={missingKeywords}
-                percents={targets.percents}
-                targetTitle={targets.title}
-                outcome={{
-                  coach: typeof query.coach === "string" ? query.coach : undefined,
-                  suggestion: typeof query.suggestion === "string" ? query.suggestion : undefined,
-                }}
-              />
-            )}
+            <PagesPanel
+              documentId={cv.id}
+              targets={breakTargets}
+              breaks={style.pageBreaks ?? []}
+              fitTried={query.ajuste === "1"}
+              labels={{
+                title: t("pages.title"),
+                count: t("pages.count", { count: "{count}", max: MAX_PAGES }),
+                page: t("pages.page", { number: "{number}" }),
+                breakHere: t("pages.breakHere"),
+                breakTarget: t("pages.breakTarget"),
+                breakLabel: t("pages.breakLabel", { sectionName: "{sectionName}" }),
+                removeBreak: t("pages.removeBreak"),
+                fitOne: t("pages.fitOne"),
+                fitFailed: t("pages.fitFailed"),
+                hint: t("pages.hint"),
+                tooLong: t("export.tooLong"),
+                overMax: t("pages.overMax", { max: MAX_PAGES }),
+                itemTooLong: t("pages.itemTooLong"),
+              }}
+            />
+            <section
+              id="adapter"
+              aria-labelledby="cv-tailor"
+              className={cx(card, "relative flex scroll-mt-28 flex-col gap-3 lg:p-5")}
+            >
+              {tailorLocked && tailorPlan && (
+                <span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-pill bg-nuit px-2.5 py-1 text-[11px] font-semibold text-neon">
+                  <Icon name="lock" className="size-3" />
+                  {tailorPlan}
+                </span>
+              )}
+              <div className={cx("flex items-start gap-3", tailorLocked && "pr-20")}>
+                <Icon name="jobs" className="mt-0.5 size-5 shrink-0" />
+                <div className="flex min-w-0 flex-col gap-0.5">
+                  <h2 id="cv-tailor" className="text-[15px] font-semibold">
+                    {t("tailor.text")}
+                  </h2>
+                  <p className="text-[13px] leading-[18px] text-ardoise">
+                    {tailorLocked ? t("tailor.locked", { plan: tailorPlan }) : t("tailor.desc")}
+                  </p>
+                </div>
+              </div>
+              {!tailorLocked && (
+                <>
+                  <AiGateNotice
+                    state={tailor.state}
+                    plan={tailorPlan}
+                    resetsAt={tailor.resetsAt}
+                    outcome={typeof query.adaptation === "string" ? query.adaptation : undefined}
+                  />
+                  {query.adaptation === "notFound" && (
+                    <Alert tone="error" title={t("tailor.notFound")} />
+                  )}
+                  {query.adaptation === "limit" && (
+                    <Alert tone="error" title={t("limit", { max: MAX_CVS })} />
+                  )}
+                  {tailor.state === "ready" &&
+                    (tailorJobs.length === 0 ? (
+                      <p className="text-[13px]">{t("tailor.noJobs")}</p>
+                    ) : (
+                      <form action={tailorCvAction} className="flex flex-col gap-3">
+                        <input type="hidden" name="cvId" value={cv.id} />
+                        <Select
+                          id={`tailor-job-${cv.id}`}
+                          name="jobId"
+                          label={t("tailor.selectJob")}
+                          required
+                          options={tailorJobs.map((job) => ({ value: job.id, label: job.title }))}
+                        />
+                        <button type="submit" className={pillClass("outline", "sm", "h-11")}>
+                          {t("tailor.cta")}
+                        </button>
+                        <p className="text-xs text-ardoise">
+                          {tAll("career.documents.generate.cost", {
+                            count: aiFeatures.cv_tailor.credits,
+                          })}
+                        </p>
+                      </form>
+                    ))}
+                </>
+              )}
+            </section>
           </div>
         </div>
       </CvPaginationProvider>
+      <MobileActionBar id={cv.id} />
     </>
   );
 }
 
-const sectionIcons: Record<CvSectionId, IconName> = {
-  summary: "profil",
-  experience: "career",
-  education: "diplome",
-  skills: "competence",
-  languages: "langue",
-};
+/** Limit of the CV summary (`updateCvDetails` checks it again). */
+const SUMMARY_MAX = 1000;

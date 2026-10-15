@@ -175,7 +175,7 @@ test.describe("modèles de CV : parcours", () => {
   test("galerie, mise en forme et couleur refusée", async ({ page }) => {
     await logIn(page, demo.talentStarter);
     await page.goto("/app/career/cv");
-    await page.getByRole("button", { name: "Nouveau CV" }).click();
+    await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
     await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
     const id = new URL(page.url()).pathname.split("/").pop()!;
 
@@ -216,7 +216,7 @@ test.describe("modèles de CV : parcours", () => {
   }) => {
     await logIn(page, demo.talentFree);
     await page.goto("/app/career/cv");
-    await page.getByRole("button", { name: "Nouveau CV" }).click();
+    await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
     await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
     const id = new URL(page.url()).pathname.split("/").pop()!;
 
@@ -247,7 +247,7 @@ test.describe("modèles de CV : parcours", () => {
     test.setTimeout(90_000);
     await logIn(page, demo.talentPro);
     await page.goto("/app/career/cv");
-    await page.getByRole("button", { name: "Nouveau CV" }).click();
+    await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
     await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
     const id = new URL(page.url()).pathname.split("/").pop()!;
     // The demo accounts use @jumanly.test addresses: the e-mail is left off this CV.

@@ -4144,7 +4144,16 @@
         "moveDown": "Descendre",
         "completion": "{percent} %",
         "moveColumn": "Changer de colonne",
-        "customTitleHint": "Un titre courant (« Expérience », « Formation ») est mieux reconnu par les logiciels de recrutement."
+        "customTitleHint": "Un titre courant (« Expérience », « Formation ») est mieux reconnu par les logiciels de recrutement.",
+        "count": {
+          "experience": "{count, plural, =0 {Aucun poste} one {# poste} other {# postes}}",
+          "education": "{count, plural, =0 {Aucun diplôme} one {# diplôme} other {# diplômes}}",
+          "skills": "{count, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}}",
+          "languages": "{count, plural, =0 {Aucune langue} one {# langue} other {# langues}}",
+          "summary": "Nom, titre, contact et résumé"
+        },
+        "toComplete": "À compléter",
+        "editInProfile": "Modifier dans mon profil"
       },
       "info": {
         "contact": {
@@ -4371,7 +4380,63 @@
       "fromProfileHint": "Le contenu des sections vient de votre profil. Modifiez-le dans votre profil, puis touchez « Remplir depuis mon profil ».",
       "fromProfileDone": "CV mis à jour à partir de votre profil.",
       "limit": "Vous pouvez avoir jusqu'à {max} CV.",
-      "back": "Mes CV"
+      "back": "Mes CV",
+      "list": {
+        "lead": "Gardez un CV par type de poste. Le CV principal est celui qui part avec vos candidatures.",
+        "count": "CV créés",
+        "countValue": "{count} sur {max}",
+        "primaryScore": "Score du CV principal",
+        "chooseTemplate": "Choisir un modèle",
+        "primaryTitle": "CV principal",
+        "primaryLead": "Envoyé par défaut avec vos candidatures",
+        "othersTitle": "Mes autres CV",
+        "othersLead": "Adaptés à d'autres postes",
+        "openEditor": "Ouvrir l'éditeur",
+        "why": "Pourquoi ce score ?",
+        "more": "Plus d'actions",
+        "newHint": "Rempli à partir de votre profil. Il vous reste {count} CV.",
+        "templatesTitle": "{total} modèles neutres, lisibles par les logiciels de recrutement",
+        "templatesBody": "{included, plural, one {# est inclus dans votre formule.} other {# sont inclus dans votre formule.}} Vos CV téléchargés ne portent ni logo ni mention Jumanly.",
+        "templatesColumns": "Une ou deux colonnes",
+        "templatesPhoto": "Avec ou sans photo",
+        "templatesFonts": "{count} polices",
+        "templatesCta": "Voir les modèles",
+        "templatesEyebrow": "Modèles de CV"
+      },
+      "criteria": {
+        "ats": "Lisibilité ATS",
+        "impact": "Impact",
+        "keywords": "Mots-clés"
+      },
+      "score": {
+        "noAi": "Calculé sur votre contenu, sans IA"
+      },
+      "progress": {
+        "done": "Toutes les sections sont remplies",
+        "todo": "{count, plural, one {# section à compléter} other {# sections à compléter}}",
+        "hint": "Changez l'ordre avec les flèches"
+      },
+      "profileCard": {
+        "title": "Le contenu vient de votre profil",
+        "body": "Modifiez votre profil, puis mettez ce CV à jour en un clic.",
+        "cta": "Remplir"
+      },
+      "preview": {
+        "pageOf": "Page {page} sur {total} · A4",
+        "zoomIn": "Agrandir",
+        "zoomOut": "Réduire",
+        "fullscreen": "Plein écran",
+        "highlightHint": "La section que vous modifiez est surlignée sur la page"
+      },
+      "toolbar": {
+        "label": "Actions du CV",
+        "download": "Télécharger le PDF",
+        "count": "{count, plural, one {# CV} other {# CV}}"
+      },
+      "summary": {
+        "counter": "{count} / {max}",
+        "hint": "3 à 4 lignes conseillées"
+      }
     },
     "documents": {
       "title": "Lettres et documents",

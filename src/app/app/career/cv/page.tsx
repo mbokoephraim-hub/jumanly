@@ -1,90 +1,148 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
-import { card, CareerTabs, IconTile, pillClass } from "@/components/career/kit";
-import { Alert, EmptyState } from "@/components/ui";
-import { cx } from "@/lib/cx";
-import { formatDate } from "@/lib/dates";
-import { createCv } from "@/server/actions/cv";
+import {
+  CvEmptyCard,
+  CvListHero,
+  enter,
+  NewCvCard,
+  OtherCvCard,
+  PrimaryCvCard,
+  TemplatesBand,
+  type CvRow,
+} from "@/components/career/cv/list";
+import { CareerTabs } from "@/components/career/kit";
+import { Alert } from "@/components/ui";
+import { cvFonts } from "@/features/cv/render/palette";
+import {
+  cvTemplateRegistry,
+  includesAccess,
+  templateOf,
+  type CvTemplate,
+} from "@/features/cv/templates/registry";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { MAX_CVS } from "@/server/services/cv";
+import { MAX_CVS, parseCv, templatesAccess } from "@/server/services/cv";
+import { cvScore, targetSkillsFor } from "@/server/services/cv-coach";
+import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.cv");
   return { title: { absolute: t("seo") }, robots: { index: false } };
 }
 
-/** « Mes CV »: the list, and a new CV filled from the profile. */
+/**
+ * « Mes CV » (docs/refonte-career/BRIEF-CV-V2.md § 1): the hero with the real figures, the CV
+ * principal in a large card, the other CVs, a « Nouveau CV » card and the templates band.
+ */
 export default async function CvListPage({ searchParams }: PageProps<"/app/career/cv">) {
   const params = await searchParams;
   const user = await requireUser("/app/career/cv");
   const t = await getTranslations("career.cv");
-  const cvs = await db.document.findMany({
-    where: { kind: "cv", profile: { userId: user.id } },
-    orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
-    select: { id: true, title: true, isPrimary: true, updatedAt: true },
-  });
   const tHome = await getTranslations("career.home");
-  const create = (
-    <form action={createCv}>
-      <button type="submit" disabled={cvs.length >= MAX_CVS} className={pillClass("dark", "sm")}>
-        <Icon name="plus" className="size-4" />
-        {t("new")}
-      </button>
-    </form>
-  );
+  const [documents, targets, granted, plans] = await Promise.all([
+    db.document.findMany({
+      where: { kind: "cv", profile: { userId: user.id } },
+      orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
+      select: {
+        id: true,
+        title: true,
+        isPrimary: true,
+        updatedAt: true,
+        templateId: true,
+        content: true,
+      },
+    }),
+    targetSkillsFor(db, user.id),
+    templatesAccess(db, { type: "user", id: user.id }),
+    listPublicPlans(db),
+  ]);
+  // At most MAX_CVS pure calls (§ 1.5).
+  const cvs: CvRow[] = documents.map((document) => ({
+    id: document.id,
+    title: document.title,
+    isPrimary: document.isPrimary,
+    updatedAt: document.updatedAt,
+    template: templateOf(document.templateId),
+    score: cvScore(parseCv(document.content), targets.skills),
+  }));
+  const primary = cvs.find((cv) => cv.isPrimary) ?? null;
+  const others = cvs.filter((cv) => cv !== primary);
+  const atLimit = cvs.length >= MAX_CVS;
+
+  const included = (template: CvTemplate) => includesAccess(granted, template.access);
+  const includedTemplates = cvTemplateRegistry.filter(included);
+  const used = [...new Map(cvs.map((cv) => [cv.template.id, cv.template])).values()];
+  const heroFan = [
+    ...used,
+    ...includedTemplates.filter((template) => !used.includes(template)),
+  ].slice(0, 3);
+  const lockedTemplate = cvTemplateRegistry.find((template) => !included(template));
+  const locked = lockedTemplate
+    ? {
+        template: lockedTemplate,
+        plan: talentPlanFor(
+          plans,
+          "career.cv.templates.access",
+          lockedTemplate.access === "pro" ? ["pro"] : ["starter", "pro"],
+        ),
+      }
+    : null;
+
   return (
     <>
-      <AppPageHeader
-        eyebrow={tHome("eyebrow")}
-        title={t("myCvs")}
-        actions={cvs.length > 0 ? create : undefined}
-      />
+      <AppPageHeader eyebrow={tHome("eyebrow")} title={t("title")} />
       <CareerTabs active="cv" />
       {params.ok === "supprime" && <Alert tone="success" title={t("deleted")} />}
-      {(params.erreur === "limite" || cvs.length >= MAX_CVS) && (
-        <Alert tone={params.erreur ? "error" : "info"} title={t("limit", { max: MAX_CVS })} />
-      )}
+      {params.ok === "principal" && <Alert tone="success" title={t("saved")} />}
+      {params.erreur === "limite" && <Alert tone="error" title={t("limit", { max: MAX_CVS })} />}
+
+      <CvListHero count={cvs.length} max={MAX_CVS} primary={primary} fan={heroFan} />
+
       {cvs.length === 0 ? (
-        <EmptyState title={t("empty")} description={t("fromProfileHint")} action={create} />
+        <CvEmptyCard />
       ) : (
-        <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
-          {cvs.map((cv) => (
-            <li key={cv.id} className={cx(card, "flex flex-col gap-4")}>
-              <div className="flex items-start justify-between gap-3">
-                <IconTile icon="doc" />
-                {cv.isPrimary && (
-                  <span className="rounded-pill bg-lime-clair px-2.5 py-1 text-[11px] font-semibold">
-                    {t("default")}
-                  </span>
-                )}
-              </div>
-              <div className="flex flex-col gap-1">
-                <h2 className="text-lg font-semibold">
-                  <Link href={`/app/career/cv/${cv.id}`} className="hover:underline">
-                    {cv.title}
-                  </Link>
+        <>
+          {primary && <PrimaryCvCard cv={primary} />}
+          {(others.length > 0 || !atLimit) && (
+            <section
+              id="cv-autres"
+              aria-labelledby="cv-others-title"
+              {...enter(2)}
+              className="jm-ch-in flex flex-col gap-4"
+            >
+              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                <h2 id="cv-others-title" className="text-[22px] font-semibold tracking-[-0.02em]">
+                  {t("list.othersTitle")}
                 </h2>
-                <p className="text-[13px] text-ardoise">
-                  {t("updated", { date: formatDate(cv.updatedAt) })}
-                </p>
+                <p className="text-sm text-ardoise">{t("list.othersLead")}</p>
               </div>
-              <div className="mt-auto flex flex-wrap gap-2 border-t border-brume pt-3">
-                <Link href={`/app/career/cv/${cv.id}`} className={pillClass("dark", "sm")}>
-                  {t("open")}
-                </Link>
-                <a href={`/app/career/cv/${cv.id}/pdf`} className={pillClass("outline", "sm")}>
-                  <Icon name="telecharger" className="size-4" />
-                  {t("export.text")}
-                </a>
-              </div>
-            </li>
-          ))}
-        </ul>
+              {atLimit && <Alert tone="info" title={t("limit", { max: MAX_CVS })} />}
+              <ul className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+                {others.map((cv, index) => (
+                  <OtherCvCard key={cv.id} cv={cv} index={index} />
+                ))}
+                {!atLimit && <NewCvCard left={MAX_CVS - cvs.length} />}
+              </ul>
+            </section>
+          )}
+        </>
       )}
+
+      <TemplatesBand
+        total={cvTemplateRegistry.length}
+        included={includedTemplates.length}
+        fonts={cvFonts.length}
+        fan={includedTemplates.slice(0, 3)}
+        locked={locked}
+        href={
+          primary
+            ? `/app/career/cv/modeles?cv=${primary.id}`
+            : cvs[0]
+              ? `/app/career/cv/modeles?cv=${cvs[0].id}`
+              : null
+        }
+      />
     </>
   );
 }

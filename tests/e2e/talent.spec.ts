@@ -71,7 +71,7 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
 
   // CV from the profile, then its PDF.
   await page.goto("/app/career/cv");
-  await page.getByRole("button", { name: "Nouveau CV" }).click();
+  await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
   await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
   await expect(page.locator("article")).toContainText("Assistante comptable");
   const pdfHref = await page.getByRole("link", { name: "Télécharger" }).getAttribute("href");

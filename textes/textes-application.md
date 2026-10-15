@@ -3232,6 +3232,53 @@ Conventions :
 | `career.cv.fromProfileDone` | CV mis à jour à partir de votre profil. |
 | `career.cv.limit` | Vous pouvez avoir jusqu'à {max} CV. |
 | `career.cv.back` | Mes CV |
+| `career.cv.list.lead` | Gardez un CV par type de poste. Le CV principal est celui qui part avec vos candidatures. |
+| `career.cv.list.count` | CV créés |
+| `career.cv.list.countValue` | {count} sur {max} |
+| `career.cv.list.primaryScore` | Score du CV principal |
+| `career.cv.list.chooseTemplate` | Choisir un modèle |
+| `career.cv.list.primaryTitle` | CV principal |
+| `career.cv.list.primaryLead` | Envoyé par défaut avec vos candidatures |
+| `career.cv.list.othersTitle` | Mes autres CV |
+| `career.cv.list.othersLead` | Adaptés à d'autres postes |
+| `career.cv.list.openEditor` | Ouvrir l'éditeur |
+| `career.cv.list.why` | Pourquoi ce score ? |
+| `career.cv.list.more` | Plus d'actions |
+| `career.cv.list.newHint` | Rempli à partir de votre profil. Il vous reste {count} CV. |
+| `career.cv.list.templatesTitle` | {total} modèles neutres, lisibles par les logiciels de recrutement |
+| `career.cv.list.templatesBody` | {included, plural, one {# est inclus dans votre formule.} other {# sont inclus dans votre formule.}} Vos CV téléchargés ne portent ni logo ni mention Jumanly. |
+| `career.cv.list.templatesColumns` | Une ou deux colonnes |
+| `career.cv.list.templatesPhoto` | Avec ou sans photo |
+| `career.cv.list.templatesFonts` | {count} polices |
+| `career.cv.list.templatesCta` | Voir les modèles |
+| `career.cv.list.templatesEyebrow` | Modèles de CV |
+| `career.cv.criteria.ats` | Lisibilité ATS |
+| `career.cv.criteria.impact` | Impact |
+| `career.cv.criteria.keywords` | Mots-clés |
+| `career.cv.score.noAi` | Calculé sur votre contenu, sans IA |
+| `career.cv.progress.done` | Toutes les sections sont remplies |
+| `career.cv.progress.todo` | {count, plural, one {# section à compléter} other {# sections à compléter}} |
+| `career.cv.progress.hint` | Changez l'ordre avec les flèches |
+| `career.cv.section.count.experience` | {count, plural, =0 {Aucun poste} one {# poste} other {# postes}} |
+| `career.cv.section.count.education` | {count, plural, =0 {Aucun diplôme} one {# diplôme} other {# diplômes}} |
+| `career.cv.section.count.skills` | {count, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}} |
+| `career.cv.section.count.languages` | {count, plural, =0 {Aucune langue} one {# langue} other {# langues}} |
+| `career.cv.section.count.summary` | Nom, titre, contact et résumé |
+| `career.cv.section.toComplete` | À compléter |
+| `career.cv.section.editInProfile` | Modifier dans mon profil |
+| `career.cv.profileCard.title` | Le contenu vient de votre profil |
+| `career.cv.profileCard.body` | Modifiez votre profil, puis mettez ce CV à jour en un clic. |
+| `career.cv.profileCard.cta` | Remplir |
+| `career.cv.preview.pageOf` | Page {page} sur {total} · A4 |
+| `career.cv.preview.zoomIn` | Agrandir |
+| `career.cv.preview.zoomOut` | Réduire |
+| `career.cv.preview.fullscreen` | Plein écran |
+| `career.cv.preview.highlightHint` | La section que vous modifiez est surlignée sur la page |
+| `career.cv.toolbar.label` | Actions du CV |
+| `career.cv.toolbar.download` | Télécharger le PDF |
+| `career.cv.toolbar.count` | {count, plural, one {# CV} other {# CV}} |
+| `career.cv.summary.counter` | {count} / {max} |
+| `career.cv.summary.hint` | 3 à 4 lignes conseillées |
 
 ### Document CV · Titres et niveaux imprimés sur le CV
 
