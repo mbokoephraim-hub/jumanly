@@ -6326,7 +6326,22 @@
       "rescheduled": "Nouveaux créneaux envoyés au candidat.",
       "upcoming": "À venir",
       "waiting": "En attente de réponse",
-      "past": "Passés et annulés"
+      "past": "Passés et annulés",
+      "previous": "Période précédente",
+      "next": "Période suivante",
+      "toConfirm": "À confirmer",
+      "linkSent": "lien envoyé au candidat",
+      "prepIntro": "Points à éclaircir en entretien, repérés par le score de compatibilité de {candidateName} :",
+      "prepWhy": "Ces points viennent du score et de l'offre. Ils ne changent pas le score et ne valent pas évaluation.",
+      "prepEmpty": "Le score ne relève ni critère à vérifier ni compétence manquante pour cette candidature.",
+      "prepOpen": "Voir le score détaillé",
+      "dayEmpty": "Aucun entretien ce jour-là.",
+      "selectHint": "Choisissez un entretien dans l'agenda pour voir son détail.",
+      "legend": "Légende des statuts",
+      "slotProposed": "Créneau proposé",
+      "actions": "Actions de l'entretien",
+      "close": "Fermer le détail",
+      "calendar": "Agenda des entretiens"
     },
     "reports": {
       "title": "Rapports",

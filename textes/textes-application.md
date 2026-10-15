@@ -5205,6 +5205,21 @@ Conventions :
 | `hire.interviews.upcoming` | À venir |
 | `hire.interviews.waiting` | En attente de réponse |
 | `hire.interviews.past` | Passés et annulés |
+| `hire.interviews.previous` | Période précédente |
+| `hire.interviews.next` | Période suivante |
+| `hire.interviews.toConfirm` | À confirmer |
+| `hire.interviews.linkSent` | lien envoyé au candidat |
+| `hire.interviews.prepIntro` | Points à éclaircir en entretien, repérés par le score de compatibilité de {candidateName} : |
+| `hire.interviews.prepWhy` | Ces points viennent du score et de l'offre. Ils ne changent pas le score et ne valent pas évaluation. |
+| `hire.interviews.prepEmpty` | Le score ne relève ni critère à vérifier ni compétence manquante pour cette candidature. |
+| `hire.interviews.prepOpen` | Voir le score détaillé |
+| `hire.interviews.dayEmpty` | Aucun entretien ce jour-là. |
+| `hire.interviews.selectHint` | Choisissez un entretien dans l'agenda pour voir son détail. |
+| `hire.interviews.legend` | Légende des statuts |
+| `hire.interviews.slotProposed` | Créneau proposé |
+| `hire.interviews.actions` | Actions de l'entretien |
+| `hire.interviews.close` | Fermer le détail |
+| `hire.interviews.calendar` | Agenda des entretiens |
 
 ---
 
