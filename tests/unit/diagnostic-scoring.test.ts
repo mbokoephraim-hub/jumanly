@@ -2,6 +2,7 @@
 import { describe, expect, it } from "vitest";
 import {
   mergePersonalized,
+  miniPlanLinks,
   parseDiagnosticResult,
   parseDiagnosticV2,
   ruleDiagnostic,
@@ -12,6 +13,7 @@ import {
   dimensions,
   globalScore,
   prioritiesFor,
+  ruleFollowUps,
   scoreDimensions,
   screensFor,
   stageFor,
@@ -242,5 +244,67 @@ describe("diagnostic · résultat", () => {
     expect(merged.priorities).toEqual(["interview"]);
     expect(merged.steps).toEqual(base.steps);
     expect(merged.summary).toBe("Synthèse.");
+  });
+});
+
+describe("diagnostic personnalisé · questions de relance et mini plan", () => {
+  it("les questions de relance s'ajoutent à la fin, seulement au niveau personnalisé", () => {
+    const followUps = [
+      { question: "Quel a été le résultat concret ?", answer: "" },
+      { question: "Qu'avez-vous déjà essayé ?", answer: "" },
+    ];
+    const asked = screensFor({ targetRole: "Comptable", followUps }, [], true);
+    expect(asked.slice(-2).map((screen) => screen.id)).toEqual(["followUp0", "followUp1"]);
+    expect(screensFor({ targetRole: "Comptable", followUps }, [], false).at(-1)?.id).toBe(
+      "contacts",
+    );
+  });
+
+  it("sans IA, les règles choisissent deux questions à partir des réponses", () => {
+    expect(
+      ruleFollowUps({ achievement: "J'ai aidé mon équipe.", targetRole: "", obstacle: "a3" }),
+    ).toEqual([{ code: "achievementResult" }, { code: "energy" }]);
+    expect(
+      ruleFollowUps({
+        targetRole: "Comptable",
+        obstacle: "a1",
+        skillChecks: [{ skill: "Excel", level: 2, proof: "a4" }],
+        pitch: "a3",
+      }),
+    ).toEqual([{ code: "skillProof", skill: "Excel" }, { code: "pitch" }]);
+    expect(ruleFollowUps({ targetRole: "Comptable" })).toHaveLength(2);
+  });
+
+  it("les relances ne changent pas les notes", () => {
+    const withFollowUps = {
+      ...expert,
+      followUps: [{ question: "Quel résultat ?", answer: "Trente pour cent de plus." }],
+    };
+    expect(ruleDiagnostic(withFollowUps).score).toBe(ruleDiagnostic(expert).score);
+  });
+
+  it("le mini plan de l'IA ne garde qu'une phrase par priorité retenue", () => {
+    const base = ruleDiagnostic(beginner);
+    const merged = mergePersonalized(base, {
+      summary: "",
+      strengths: [],
+      priorities: ["interview", "cv"],
+      roles: [],
+      steps: [],
+      miniPlan: [
+        { priority: "interview", text: " Répétez votre présentation. " },
+        { priority: "interview", text: "Doublon" },
+        { priority: "network", text: "Hors priorités" },
+      ],
+    });
+    expect(merged.miniPlan).toEqual([
+      { priority: "interview", text: "Répétez votre présentation." },
+    ]);
+  });
+
+  it("chaque étape du mini plan est gratuite : aucun lien vers une page payante", () => {
+    for (const href of Object.values(miniPlanLinks)) {
+      if (href) expect(href).not.toMatch(/entretiens|plan|tarifs/);
+    }
   });
 });

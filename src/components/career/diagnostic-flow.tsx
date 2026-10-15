@@ -14,6 +14,7 @@ import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { motionReduced } from "@/lib/motion";
 import {
+  diagnosticFollowUpsAction,
   diagnosticSkillsAction,
   readDiagnosticProfileAction,
   runDiagnosticAction,
@@ -82,6 +83,8 @@ export function DiagnosticFlow({
   const moved = useRef(false);
 
   const screens = screensFor(answers, skills.names, personalized);
+  // The follow-up questions are asked once, after the last question of the personalized level.
+  const askFollowUps = personalized && answers.followUps === undefined;
   const at = Math.max(0, Math.min(index, screens.length - 1));
   const screen = screens[at]!;
   // Every screen that may be asked, so that the page works as one long form without JavaScript.
@@ -121,6 +124,7 @@ export function DiagnosticFlow({
     });
 
   const valid = (item: Screen) => {
+    if ("followUp" in item) return true;
     if ("skill" in item) {
       const value = check(item.skill);
       return Boolean(value?.level && value.proof);
@@ -161,6 +165,32 @@ export function DiagnosticFlow({
       return;
     }
     setInvalid(false);
+    if (at === screens.length - 1 && askFollowUps) {
+      // Jumanly Intelligence reads the answers, then asks its two follow-up questions.
+      setBusy(true);
+      let questions: string[] = [];
+      try {
+        questions = await diagnosticFollowUpsAction(answers);
+      } catch {
+        questions = [];
+      } finally {
+        setBusy(false);
+      }
+      const next = {
+        ...answers,
+        followUps: questions.map((question) => ({ question, answer: "" })),
+      };
+      setAnswers(next);
+      if (questions.length === 0) {
+        setPhase("scan");
+        return;
+      }
+      moved.current = true;
+      setDir("next");
+      setIndex(at + 1);
+      void saveDiagnosticDraftAction(next, at + 1).then((ok) => ok && setSaved((n) => n + 1));
+      return;
+    }
     if (at === screens.length - 1) {
       setPhase("scan");
       return;
@@ -202,6 +232,47 @@ export function DiagnosticFlow({
     choiceAnswers[id].map((code) => ({ value: code, label: d(`q.${id}.${code}`) }));
 
   const body = (item: Screen): ReactNode => {
+    if ("followUp" in item) {
+      const value = answers.followUps?.[item.index]?.answer ?? "";
+      return (
+        <div className="flex flex-col gap-2.5">
+          <p className="flex items-center gap-2 self-start rounded-pill bg-sapin px-3 py-1 text-xs font-semibold text-neon">
+            <Icon name="intelligence" className="size-3.5" />
+            {t("followUp.badge", {
+              current: item.index + 1,
+              total: answers.followUps?.length ?? 0,
+            })}
+          </p>
+          <label
+            id={`diag-q-${item.id}`}
+            tabIndex={-1}
+            htmlFor={`diag-${item.id}`}
+            className="text-[19px] leading-snug font-semibold outline-none lg:text-[21px]"
+          >
+            {item.followUp}
+          </label>
+          <p id={`diag-${item.id}-hint`} className="text-[13px] text-ardoise">
+            {t("followUp.hint")}
+          </p>
+          <textarea
+            id={`diag-${item.id}`}
+            rows={5}
+            maxLength={500}
+            value={value}
+            aria-describedby={`diag-${item.id}-hint`}
+            onChange={(event) =>
+              setAnswers((current) => ({
+                ...current,
+                followUps: (current.followUps ?? []).map((entry, index) =>
+                  index === item.index ? { ...entry, answer: event.target.value } : entry,
+                ),
+              }))
+            }
+            className={cx(inputClasses, "py-3 text-[15px]")}
+          />
+        </div>
+      );
+    }
     if ("skill" in item) {
       const value = check(item.skill);
       return (
@@ -417,7 +488,7 @@ export function DiagnosticFlow({
     value: item.score,
   }));
   const radarText = radarAxes.map((axis) => `${axis.label} ${Math.round(axis.value)}`).join(", ");
-  const last = at === screens.length - 1;
+  const last = at === screens.length - 1 && !askFollowUps;
 
   return (
     <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
@@ -464,7 +535,7 @@ export function DiagnosticFlow({
           </p>
         </div>
 
-        {all.map((item) => {
+        {[...all, ...screens.filter((item) => "followUp" in item)].map((item) => {
           const shown = item.id === screen.id;
           return (
             <section
@@ -500,7 +571,12 @@ export function DiagnosticFlow({
             {t("previous")}
           </button>
           <span aria-live="polite" className="text-xs text-ardoise max-sm:order-last max-sm:w-full">
-            {saved > 0 ? (
+            {busy && at === screens.length - 1 && askFollowUps ? (
+              <span className="flex items-center gap-1.5">
+                <span aria-hidden className="jm-orb size-3 rounded-full" />
+                {t("followUp.loading")}
+              </span>
+            ) : saved > 0 ? (
               <span key={saved} className="flex items-center gap-1.5">
                 <Icon name="check" className="size-3.5 text-feuille" />
                 {t("savedAt")}

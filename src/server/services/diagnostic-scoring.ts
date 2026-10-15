@@ -93,6 +93,14 @@ export const skillCheckSchema = z.object({
 });
 export type SkillCheck = z.infer<typeof skillCheckSchema>;
 
+/** Follow-up questions asked by Jumanly Intelligence at the end of the personalized diagnostic. */
+export const FOLLOW_UPS = 2;
+export const followUpSchema = z.object({
+  question: z.string().trim().min(1).max(240),
+  answer: text(500),
+});
+export type FollowUp = z.infer<typeof followUpSchema>;
+
 /** Every answer of the questionnaire. Adaptive questions are optional: rules ignore them when they were not asked. */
 export const answersSchema = z.object({
   // 1. Clarté du projet
@@ -133,6 +141,11 @@ export const answersSchema = z.object({
   workStyle: optionalPick(choiceAnswers.workStyle),
   feedback: text(300),
   horizon: text(300),
+  /**
+   * The two follow-up questions of Jumanly Intelligence (personalized level), asked after the
+   * others from the answers so far. Undefined until they were asked; never scored.
+   */
+  followUps: z.array(followUpSchema).max(FOLLOW_UPS).optional(),
   useProfile: z.boolean().default(false),
 });
 export type Answers = z.infer<typeof answersSchema>;
@@ -141,11 +154,14 @@ export type Draft = Partial<Answers>;
 
 // ─── Questions, adaptive ─────────────────────────────────────────────────────
 
-export type Screen =
-  | { id: Exclude<keyof Answers, "skillChecks" | "useProfile">; dimension: Dimension | "more" }
-  | { id: `skill${number}`; dimension: "skills"; skill: string; index: number };
+type QuestionId = Exclude<keyof Answers, "skillChecks" | "useProfile" | "followUps">;
 
-const base: { id: Exclude<keyof Answers, "skillChecks" | "useProfile">; dimension: Dimension }[] = [
+export type Screen =
+  | { id: QuestionId; dimension: Dimension | "more" }
+  | { id: `skill${number}`; dimension: "skills"; skill: string; index: number }
+  | { id: `followUp${number}`; dimension: "more"; followUp: string; index: number };
+
+const base: { id: QuestionId; dimension: Dimension }[] = [
   { id: "situation", dimension: "clarity" },
   { id: "goal", dimension: "clarity" },
   { id: "targetRole", dimension: "clarity" },
@@ -190,7 +206,7 @@ export const optionalQuestions: readonly string[] = [
 /**
  * The screens to show for the answers so far: no question on the target job without one, no
  * question on figures in a job without experience, one screen per assessed skill. The
- * personalized level adds four questions at the end.
+ * personalized level adds four questions at the end, then the follow-ups once they are asked.
  */
 export function screensFor(draft: Draft, skills: string[], personalized: boolean): Screen[] {
   const hasRole = Boolean(draft.targetRole?.trim());
@@ -211,8 +227,34 @@ export function screensFor(draft: Draft, skills: string[], personalized: boolean
   if (personalized) {
     for (const id of ["values", "workStyle", "feedback", "horizon"] as const)
       screens.push({ id, dimension: "more" });
+    (draft.followUps ?? [])
+      .slice(0, FOLLOW_UPS)
+      .forEach((item, index) =>
+        screens.push({ id: `followUp${index}`, dimension: "more", followUp: item.question, index }),
+      );
   }
   return screens;
+}
+
+/**
+ * What the rules would ask next, most useful first: a vague achievement, no target job, the
+ * obstacle named, a skill without proof, no pitch. Used as the model's template, so the talent
+ * gets two questions even when the model is not there.
+ */
+export function ruleFollowUps(draft: Draft): { code: string; skill?: string }[] {
+  const codes: { code: string; skill?: string }[] = [];
+  const achievement = (draft.achievement ?? "").trim();
+  const worked = draft.experience !== undefined && draft.experience !== "a1";
+  if (achievement && (achievement.length < 80 || !/\d/.test(achievement)))
+    codes.push({ code: "achievementResult" });
+  else if (!achievement && worked) codes.push({ code: "achievementStory" });
+  if (!draft.targetRole?.trim()) codes.push({ code: "energy" });
+  if (draft.obstacle && draft.obstacle !== "a1") codes.push({ code: "obstacleTried" });
+  const unproven = draft.skillChecks?.find((item) => item.proof === "a4");
+  if (unproven) codes.push({ code: "skillProof", skill: unproven.skill });
+  if (draft.pitch === "a2" || draft.pitch === "a3") codes.push({ code: "pitch" });
+  codes.push({ code: "nextJob" }, { code: "proudSkill" });
+  return codes.slice(0, FOLLOW_UPS);
 }
 
 // ─── Barème ──────────────────────────────────────────────────────────────────

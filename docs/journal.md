@@ -2,6 +2,28 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Diagnostic : questions de relance et mini plan gratuit (15 octobre 2026)
+
+Décision du propriétaire après le lot C : ajouter les 2 questions de relance, puis faire proposer
+par l'IA un mini plan gratuit et montrer que les autres possibilités demandent une offre.
+
+- **Questions de relance** (niveau personnalisé, `career.diagnostic.level`) : après la dernière
+  question, Jumanly Intelligence lit les réponses et pose 2 questions ouvertes, facultatives
+  (`diagnostic_followup`, 1 crédit, consentement et droit vérifiés par `runAi`). Sans le modèle
+  (refus, indisponible, plus de crédit), les règles choisissent 2 questions (`ruleFollowUps`) sans
+  rien consommer. Les réponses sont gardées dans le brouillon et lues par la synthèse ; elles ne
+  changent aucune note.
+- **Mini plan gratuit** (tous les bilans v2) : une action gratuite par priorité (profil, CV,
+  formations, candidatures, réseau), avec son lien. Au niveau personnalisé, le modèle réécrit les
+  phrases (`miniPlan`) ; au niveau simplifié, elles sont fixes (pas d'appel à l'IA en Free, partie
+  05 § 3.1).
+- **Pour aller plus loin** : plan de progression, diagnostic personnalisé, simulations
+  d'entretien, documents, formations recommandées ; seulement ceux que le talent n'a pas, avec le
+  forfait le moins cher qui les ouvre (lu en base).
+- 36 textes ajoutés (`career.diagnostic.followUp.*`, `miniPlan.*`, `upgrade.*`),
+  `intro.personalized` mis à jour. Tests unitaires (5), e2e (parcours personnalisé). Captures dans
+  `/mnt/project-files/captures/diagnostic-relances/`.
+
 ## Refonte visuelle · lot 11 : espace recruteur et entreprise (15 octobre 2026)
 
 Maquettes `docs/maquettes/04-espace-recruteur-entreprise/` (04-01 à 04-10). Textes de
