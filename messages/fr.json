@@ -6887,7 +6887,8 @@
     "payment": {
       "methods": "Paiement par Mobile Money ou carte bancaire. Prix en USD, par mois.",
       "prepaid": "Sans engagement. Avec Mobile Money, l'abonnement est prépayé pour un mois : rien n'est prélevé sans votre accord.",
-      "localCurrency": "Le montant est converti dans votre monnaie au moment du paiement, selon le taux appliqué par l'opérateur ou la banque."
+      "localCurrency": "Le montant est converti dans votre monnaie au moment du paiement, selon le taux appliqué par l'opérateur ou la banque.",
+      "prepaidShort": "Sans engagement, prépayé pour un mois avec Mobile Money"
     },
     "card": {
       "perMonth": "/mois",
@@ -7303,6 +7304,7 @@
     },
     "faq": {
       "title": "Questions sur la facturation",
+      "eyebrow": "FAQ",
       "q1": "Quels moyens de paiement acceptez-vous ?",
       "a1": "Mobile Money et carte bancaire. Les opérateurs disponibles dépendent de votre pays et s'affichent au moment du paiement.",
       "q2": "Pourquoi les prix sont-ils en USD ?",
@@ -7375,7 +7377,10 @@
       },
       "freeTitle": "Vous utilisez la formule gratuite",
       "freeText": "Vous pouvez créer votre profil, consulter les offres et postuler gratuitement. Pour aller plus loin, découvrez les formules payantes.",
-      "freeCta": "Découvrir les formules"
+      "freeCta": "Découvrir les formules",
+      "includes": "Votre formule comprend",
+      "ring": "{days} j",
+      "nextRenewalDays": "Prochaine échéance : {date} · {days, plural, =0 {échéance aujourd'hui} one {# jour restant} other {# jours restants}}"
     },
     "quotas": {
       "title": "Vos quotas",
@@ -7404,7 +7409,8 @@
       "upgrade": "Passer à {plan}",
       "downgrade": "Passer à {plan}",
       "quote": "Demander un devis",
-      "unavailable": "Non disponible pour votre compte"
+      "unavailable": "Non disponible pour votre compte",
+      "note": "Une montée en gamme s'applique immédiatement, et le temps restant sur votre formule actuelle est pris en compte. Une réduction de gamme prend effet à la fin de la période déjà payée."
     },
     "upgrade": {
       "title": "Passer à {plan}",
@@ -7477,7 +7483,12 @@
       },
       "download": "Télécharger la facture",
       "downloadAlt": "Télécharger la facture {number} en PDF",
-      "empty": "Aucun paiement pour le moment."
+      "empty": "Aucun paiement pour le moment.",
+      "pdfNote": "Factures en PDF",
+      "method": {
+        "mobileMoney": "Mobile Money · {operator}",
+        "card": "Carte bancaire"
+      }
     },
     "invoice": {
       "pdf": {
@@ -7562,7 +7573,9 @@
       "amount": "{amount} USD",
       "credit": "Crédit déduit : {credit} USD",
       "total": "Total : {total} USD",
-      "local": "Environ {localAmount} {localCurrency}, au taux de votre opérateur ou de votre banque."
+      "local": "Environ {localAmount} {localCurrency}, au taux de votre opérateur ou de votre banque.",
+      "creditValue": "− {credit} USD",
+      "currency": "USD"
     },
     "method": {
       "title": "Choisissez votre moyen de paiement",
@@ -7582,6 +7595,14 @@
     },
     "applyFree": "Rappel : candidater reste gratuit, que vous payiez ou non.",
     "cancel": "Annuler et revenir",
+    "steps": {
+      "label": "Étapes du paiement",
+      "method": "Moyen de paiement",
+      "details": "Informations",
+      "confirm": "Confirmation",
+      "done": "terminée",
+      "current": "en cours"
+    },
     "mm": {
       "operator": {
         "title": "Votre opérateur",
@@ -7614,7 +7635,8 @@
         "never": "Jumanly ne vous demandera jamais votre code secret. Ne le communiquez à personne.",
         "cancel": "Annuler le paiement",
         "changeNumber": "Utiliser un autre numéro",
-        "illustrationAlt": "Téléphone affichant une demande de confirmation de paiement"
+        "illustrationAlt": "Téléphone affichant une demande de confirmation de paiement",
+        "status": "En attente de confirmation"
       },
       "checking": "Vérification du paiement…",
       "error": {
@@ -7631,6 +7653,7 @@
     },
     "card": {
       "title": "Carte bancaire",
+      "secureForm": "Formulaire sécurisé du prestataire",
       "number": {
         "label": "Numéro de carte",
         "placeholder": "1234 1234 1234 1234"
@@ -7700,6 +7723,9 @@
     },
     "duplicate": "Un paiement est déjà en cours pour cette formule. Attendez sa confirmation avant d'en lancer un autre.",
     "debitedNotActivated": "Vous avez été débité mais votre formule n'est pas active ? Écrivez-nous à infojumanly@gmail.com avec la référence {reference}. Nous régularisons au plus vite.",
+    "result": {
+      "eyebrow": "Résultat du paiement"
+    },
     "fake": "Paiement de démonstration : aucun argent n'est débité. Un numéro se terminant par 0000 simule un refus, 1111 un délai dépassé, 2222 une attente.",
     "trial": {
       "text": "Le paiement en ligne arrive bientôt. En attendant, vous pouvez essayer {plan} pendant {days} jours, sans rien payer.",
@@ -7922,6 +7948,10 @@
   },
   "quote": {
     "title": "Demander un devis Company Premium",
+    "hero": {
+      "title": "Demander un devis",
+      "text": "Pour les grands groupes et les organisations aux besoins particuliers : décrivez votre projet, nous construisons la proposition avec vous."
+    },
     "subtitle": "Décrivez votre organisation et vos besoins. Nous préparons une proposition adaptée et vous répondons par e-mail.",
     "org": {
       "label": "Nom de l'organisation",
@@ -9640,7 +9670,8 @@
         "activated": "Licences activées",
         "active": "Bénéficiaires actifs (30 derniers jours)",
         "activationRate": "Taux d'activation : {percent} %",
-        "available": "{count, plural, =0 {Aucune licence disponible} one {# licence disponible} other {# licences disponibles}}"
+        "available": "{count, plural, =0 {Aucune licence disponible} one {# licence disponible} other {# licences disponibles}}",
+        "batches": "{count, plural, =0 {Aucun lot} one {# lot} other {# lots}}"
       },
       "usage": {
         "title": "Usage agrégé",
@@ -9654,7 +9685,10 @@
           "text": "Embauches déclarées",
           "hint": "Nombre de bénéficiaires ayant indiqué un recrutement et accepté qu'il soit comptabilisé."
         },
-        "chartAria": "Évolution mensuelle des bénéficiaires actifs"
+        "chartAria": "Évolution mensuelle des bénéficiaires actifs",
+        "hoursValue": "{hours} h",
+        "batch": "Lot affiché",
+        "batchAll": "Tous les lots"
       },
       "batches": {
         "title": "Mes lots de licences",
@@ -9667,7 +9701,8 @@
       "contact": "Une question sur votre contrat ? Écrivez à assistant@jumanly.io.",
       "months": {
         "title": "Bénéficiaires actifs par mois",
-        "month": "Mois"
+        "month": "Mois",
+        "value": "{month} : {value}"
       }
     },
     "hidden": "Masqué",
@@ -9688,7 +9723,8 @@
         },
         "more": "Besoin de licences supplémentaires ? Écrivez à assistant@jumanly.io.",
         "none": "Aucun lot de licences pour l'instant. Votre contact Jumanly le créera après signature du contrat.",
-        "available": "{count, plural, =0 {Aucune licence disponible} one {# licence disponible} other {# licences disponibles}}"
+        "available": "{count, plural, =0 {Aucune licence disponible} one {# licence disponible} other {# licences disponibles}}",
+        "rate": "{percent} %"
       },
       "error": {
         "invalid": "Vérifiez les informations saisies.",
@@ -9767,7 +9803,9 @@
         "sent": "{count, plural, one {# invitation envoyée.} other {# invitations envoyées.}}",
         "privacy": "Les adresses servent uniquement à envoyer les invitations. Après activation, vous ne voyez plus que des statistiques agrégées.",
         "consent": "Je confirme que ces personnes ont accepté de recevoir une invitation Jumanly de notre part.",
-        "file": "Fichier CSV"
+        "file": "Fichier CSV",
+        "send": "Envoyer les invitations",
+        "noFile": "Aucun fichier choisi"
       },
       "invites": {
         "status": {
@@ -9781,7 +9819,9 @@
           "confirm": "Relancer {count, plural, one {# personne} other {# personnes}} ?"
         },
         "title": "Invitations par e-mail",
-        "resent": "{count, plural, =0 {Aucune invitation à relancer.} one {# invitation relancée.} other {# invitations relancées.}}"
+        "resent": "{count, plural, =0 {Aucune invitation à relancer.} one {# invitation relancée.} other {# invitations relancées.}}",
+        "desc": "Totaux du lot, sans détail par personne",
+        "count": "{label} · {count}"
       }
     },
     "reports": {
@@ -9817,7 +9857,8 @@
         "interviewSims": "Simulations d'entretien",
         "applications": "Candidatures envoyées",
         "interviews": "Entretiens obtenus",
-        "hiresDeclared": "Embauches déclarées (avec accord des bénéficiaires)"
+        "hiresDeclared": "Embauches déclarées (avec accord des bénéficiaires)",
+        "activatedOf": "sur {count, plural, one {# licence distribuée} other {# licences distribuées}}"
       },
       "export": {
         "pdf": "Exporter en PDF",
@@ -9829,7 +9870,11 @@
       },
       "monthly": "Recevoir le rapport chaque mois par e-mail",
       "empty": "Pas encore assez de données. Les premiers indicateurs apparaîtront quand au moins {minGroup} bénéficiaires auront activé leur licence.",
-      "requestNominative": "Vous avez besoin d'une information individuelle (par exemple pour un suivi de programme) ? Elle ne peut être transmise qu'avec l'accord explicite de chaque bénéficiaire. Écrivez à assistant@jumanly.io pour mettre en place une demande de consentement."
+      "requestNominative": "Vous avez besoin d'une information individuelle (par exemple pour un suivi de programme) ? Elle ne peut être transmise qu'avec l'accord explicite de chaque bénéficiaire. Écrivez à assistant@jumanly.io pour mettre en place une demande de consentement.",
+      "range": "Du {from, date, long} au {to, date, long}",
+      "hours": "{hours} h",
+      "percent": "{percent} %",
+      "hiresByBatch": "Embauches déclarées par lot"
     }
   },
   "admin": {

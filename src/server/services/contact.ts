@@ -11,6 +11,7 @@ import {
   MESSAGE_MIN,
   partnerPlans,
   partnerTypes,
+  quoteNeeds,
   type ContactSubject,
   type FieldError,
 } from "./contact-rules";
@@ -91,7 +92,49 @@ export const partnerContactSchema = z.object({
   consent,
 });
 
+const requiredCount = z
+  .string()
+  .trim()
+  .min(1, "required")
+  .transform((value, ctx) => {
+    const number = Number(value);
+    if (!Number.isInteger(number) || number < 1 || number > 1_000_000) {
+      ctx.addIssue({ code: "custom", message: "number" });
+      return z.NEVER;
+    }
+    return number;
+  });
+
+/**
+ * Company Premium quote request (/contact?sujet=devis, maquette 05-06). Required: organization,
+ * name, role, e-mail, country, number of users and consent. Numbers are validated.
+ */
+export const quoteSchema = z.object({
+  organization: required.pipe(z.string().max(200)),
+  name: required.pipe(z.string().max(120)),
+  role: required.pipe(z.string().max(120)),
+  email,
+  country: required.pipe(z.string().max(200)),
+  users: requiredCount,
+  entities: optionalCount,
+  jobs: optionalCount,
+  /** Unknown values are dropped. */
+  needs: z
+    .array(z.string())
+    .default([])
+    .transform((values) => quoteNeeds.filter((need) => values.includes(need))),
+  tools: optional,
+  message: z
+    .string()
+    .trim()
+    .max(MESSAGE_MAX, "messageLong")
+    .optional()
+    .transform((value) => value || undefined),
+  consent,
+});
+
 export type ContactInput = z.infer<typeof contactSchema>;
+export type QuoteInput = z.infer<typeof quoteSchema>;
 export type PartnerContactInput = z.infer<typeof partnerContactSchema>;
 
 export type Mailboxes = { pro: string; general: string };

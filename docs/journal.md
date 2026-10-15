@@ -2,6 +2,67 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · lot 12 A : Tarifs et demande de devis (15 octobre 2026)
+
+- `/tarifs` refait d'après la maquette 05-01 : les quatre familles sont empilées (ancres `#talents`,
+  `#rh`, `#companies`, `#partners`) et non plus en onglets ; les segments du hero suivent la famille
+  visible et collent sous l'en-tête au défilement (`PricingFamilyNav`, petit composant client).
+  Cartes Blanc, Sapin, Lime et Nuit (`src/components/site/tarifs.tsx`) : la couleur vient des
+  données du forfait (recommandé → Sapin, sur devis → Nuit, dernier d'une famille de quatre →
+  Lime), jamais de son nom. Comparatifs repliés, celui des Talents déplié sur grand écran.
+  Connecté, la carte de sa formule (personnelle, ou de l'organisation possédée) affiche « Votre
+  formule actuelle » (lecture de session dans un `Suspense`, la page reste prérendue).
+- `/contact?sujet=devis` ouvre la demande de devis Company Premium (maquette 05-06) : formulaire en
+  deux colonnes (`QuoteForm`, textes `quote.*`), besoins particuliers, carte Nuit du forfait lu en
+  base, confirmation. Champs obligatoires : organisation, nom, fonction, e-mail, pays,
+  utilisateurs, consentement ; nombres validés (`quoteSchema`). Envoi par e-mail à la boîte pro,
+  comme avant ; préremplissage organisation, nom, e-mail et pays si l'utilisateur est connecté.
+- Non repris (aucune fonction derrière, ou hors périmètre) : la fenêtre de devis dans
+  l'application (en-tête d'espace de la maquette), l'icône dans la liste des pays.
+
+## Refonte visuelle · lot 12, partie B : abonnement et paiement (15 octobre 2026)
+
+Maquettes `docs/maquettes/05-forfaits-paiement/` (05-02 à 05-05). Présentation seulement : mêmes
+routes, mêmes actions, même prestataire factice. Captures 1440 et 390 dans
+`/mnt/project-files/captures/refonte-lot-12/`.
+
+- **Mon abonnement** : bande « Candidater reste gratuit », carte Sapin de la formule actuelle
+  (anneau des jours restants, période, échéance, moyen du dernier paiement réussi, « Votre formule
+  comprend » tiré des textes du `contentKey`), quotas (Feuille, Ambre dès 80 % avec l'alerte
+  `quota.warn`, Corail à 100 %), tuiles « Changer de formule », informations de facturation,
+  historique en tableau (liste sur téléphone). « Résilier » ouvre le panneau de résiliation
+  (`?resilier=<famille>`, sans JavaScript) ; « Passer à Free » y mène aussi. Carte « Vous êtes
+  revenu à Free » pendant 30 jours après la fin d'une formule payante.
+- **Paiement** (`/app/abonnement/payer`) : indicateur d'étapes, tuiles de moyen de paiement,
+  tuiles d'opérateurs à initiales, récapitulatif à droite (à gauche en haut sur téléphone), attente
+  Mobile Money avec minuteur et vérification, carte de résultat (personnage, pastille) pour succès,
+  échec et délai dépassé, encadré « débité mais non activé ». L'inscription (étape 5) garde la mise
+  en page en une colonne.
+- 18 textes ajoutés (`billing.*`, `checkout.*`). Décisions et écarts :
+  `docs/decisions/2026-10-15-refonte-lot-12-paiement.md`.
+
+## Refonte lot 12 (partie C) · Espace partenaire (15 octobre 2026)
+
+Maquettes 06-01 à 06-03. Captures 1440 et 390 dans `/mnt/project-files/captures/refonte-lot-12/`
+(`partenaire-*.png`).
+
+- **Tableau de bord** : bandeau de confidentialité, 4 cartes KPI (comptage animé), tuiles d'usage
+  agrégé (hachurées quand masquées), bloc Sapin « Embauches déclarées », barres mensuelles
+  (`MonthBars`), liste des lots avec barre d'activation, bloc « Données masquées », contact.
+  Filtre « Tous les lots » (menu sans JavaScript) : `partnerDashboard` accepte un `batchId`
+  pour l'usage et les mois ; les mois sont extraits dans `monthlyActive()` (même seuil).
+- **Licences** : sélecteur de lot en puces, carte Sapin avec anneau d'activation, formulaire de
+  codes, confirmation en ligne, tableau des codes (colonnes réduites sur mobile), lien
+  d'invitation copiable, zone d'import CSV (`FileDrop`), bilan de vérification après envoi
+  (l'action renvoie aussi le nombre d'adresses valides), totaux des invitations.
+- **Rapports** : filtres période et lot en menus, carte « Ce que contiennent ces rapports »,
+  quatre sections numérotées en tuiles, barres mensuelles, thèmes en barres (part des
+  bénéficiaires), embauches déclarées par lot (un `impactReport` par lot, seuil appliqué à chaque
+  ligne), pied de rapport.
+- Écarts non comblés faute de fonction : tendance « +32 vs septembre », envoi mensuel du rapport
+  par e-mail, vérification du fichier avant envoi, liste des erreurs à télécharger, compteur
+  « Adresse injoignable ».
+
 ## Accueil Career v2 (15 octobre 2026)
 
 Brief `docs/refonte-career/BRIEF-CAREER-V2.md` et maquette `docs/refonte-career/maquette/`

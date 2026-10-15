@@ -6,7 +6,12 @@ import { parseConsent, readConsentCookie, serializeConsent } from "@/lib/consent
 import { durationParts } from "@/lib/format";
 import { hasPlaceholder, withoutPlaceholders } from "@/lib/placeholders";
 import { isSafeInternalPath, loginHref, signupHref } from "@/lib/signup";
-import { contactSchema, partnerContactSchema, routeContact } from "@/server/services/contact";
+import {
+  contactSchema,
+  partnerContactSchema,
+  quoteSchema,
+  routeContact,
+} from "@/server/services/contact";
 import { contractFilterOf, jobWhere, parseJobFilters } from "@/server/services/jobs";
 import { courseWhere, parseCourseFilters } from "@/server/services/courses";
 import {
@@ -145,6 +150,28 @@ describe("formulaire de contact", () => {
     expect(
       contactSchema.safeParse({ ...valid, subject: "quote", organization: "Démo SA" }).success,
     ).toBe(true);
+  });
+
+  it("demande de devis Company Premium : champs obligatoires et nombres validés", () => {
+    const quote = {
+      organization: "Groupe Démo",
+      name: "Awa Fictive",
+      role: "DRH",
+      email: "awa@exemple.org",
+      country: "Côte d'Ivoire",
+      users: "40",
+      consent: "on",
+    };
+    const ok = quoteSchema.safeParse({ ...quote, needs: ["workflows", "inconnu"] });
+    expect(ok.success).toBe(true);
+    expect(ok.data?.users).toBe(40);
+    expect(ok.data?.needs).toEqual(["workflows"]);
+    expect(quoteSchema.safeParse(quote).data?.needs).toEqual([]);
+    expect(quoteSchema.safeParse({ ...quote, role: "" }).success).toBe(false);
+    expect(quoteSchema.safeParse({ ...quote, country: "" }).success).toBe(false);
+    expect(quoteSchema.safeParse({ ...quote, users: "quarante" }).success).toBe(false);
+    expect(quoteSchema.safeParse({ ...quote, entities: "4,5" }).success).toBe(false);
+    expect(quoteSchema.safeParse({ ...quote, consent: undefined }).success).toBe(false);
   });
 
   it("envoie les demandes professionnelles à la boîte pro", () => {

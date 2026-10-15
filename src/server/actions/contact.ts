@@ -9,6 +9,7 @@ import {
   isRateLimited,
   mailboxes,
   partnerContactSchema,
+  quoteSchema,
   routeContact,
   saveAndForward,
   type FieldError,
@@ -137,6 +138,73 @@ export async function sendPartnerRequest(
   } catch (error) {
     void reportError(error, { message: "Formulaire partenaires : envoi impossible" });
     return { status: "failed", values };
+  }
+  return { status: "sent", email: input.email };
+}
+
+/**
+ * Company Premium quote request (/contact?sujet=devis, maquette 05-06): stored, then forwarded by
+ * e-mail to the professional mailbox. No online sale of Company Premium.
+ */
+export async function sendQuoteRequest(
+  _: ContactFormState,
+  formData: FormData,
+): Promise<ContactFormState> {
+  const values = formValues(formData);
+  const needs = formData.getAll("needs").filter((v): v is string => typeof v === "string");
+  const parsed = quoteSchema.safeParse({ ...values, needs });
+  // Checked needs come back as one comma-separated value, so the form can tick them again.
+  const kept = { ...values, needs: needs.join(",") };
+  if (!parsed.success) {
+    return { status: "invalid", errors: fieldErrors(parsed.error), values: kept };
+  }
+  const input = parsed.data;
+  if (await isRateLimited(db, input.email)) return { status: "rateLimited", values: kept };
+
+  const t = await getTranslations();
+  const line = (label: string, value?: string | number) =>
+    value === undefined || value === "" ? [] : [`${label} : ${value}`];
+  const needLabels = input.needs.map((need) => t(`quote.needs.${need}`)).join(", ");
+  const details: Record<string, string | number> = { role: input.role, users: input.users };
+  if (input.entities) details.entities = input.entities;
+  if (input.jobs) details.jobs = input.jobs;
+  if (input.needs.length > 0) details.needs = input.needs.join(",");
+  if (input.tools) details.tools = input.tools;
+  try {
+    await saveAndForward(db, emailSender(), {
+      audience: "contact",
+      subject: "quote",
+      name: input.name,
+      email: input.email,
+      organization: input.organization,
+      country: input.country,
+      message: input.message ?? "",
+      details,
+      routedTo: routeContact("quote", mailboxes()),
+      emailSubject: t("contactEmail.subject", {
+        subject: t("contact.form.subject.quote"),
+        name: input.name,
+      }),
+      emailLines: [
+        t("contactEmail.intro"),
+        "",
+        ...line(t("quote.org.label"), input.organization),
+        ...line(t("quote.name.label"), input.name),
+        ...line(t("quote.role.label"), input.role),
+        ...line(t("quote.email.label"), input.email),
+        ...line(t("quote.country.label"), input.country),
+        ...line(t("quote.users.label"), input.users),
+        ...line(t("quote.entities.label"), input.entities),
+        ...line(t("quote.jobs.label"), input.jobs),
+        ...line(t("quote.needs.label"), needLabels),
+        ...line(t("quote.tools.label"), input.tools),
+        "",
+        input.message ?? "",
+      ],
+    });
+  } catch (error) {
+    void reportError(error, { message: "Demande de devis : envoi impossible" });
+    return { status: "failed", values: kept };
   }
   return { status: "sent", email: input.email };
 }

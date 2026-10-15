@@ -19,9 +19,17 @@ const initials = (name: string) =>
     .slice(0, 2)
     .toUpperCase();
 
+/** Neutral initials tiles (no operator logo until the provider supplies one), in turn. */
+const tileColors = [
+  "bg-sapin text-lime",
+  "bg-neon text-sapin",
+  "bg-feuille-fonce text-blanc",
+  "bg-lime text-sapin",
+];
+
 /**
- * Method choice and Mobile Money details (textes, partie 05, `checkout.*`; mockup 02-08): two
- * method cards, operators as pills, the number, then the pay button.
+ * Method choice and details (textes, partie 05, `checkout.*`; mockups 05-03 and 05-04): two
+ * method tiles, the operators as initials tiles, the number, then the pay button.
  */
 export function CheckoutForm({
   plan,
@@ -50,13 +58,24 @@ export function CheckoutForm({
     return code ? t(`checkout.mm.error.${code}`, { operator: operatorName }) : undefined;
   };
   const lockIcon = <Icon name="lock" className="size-[18px]" />;
+  const submit = (label: string, busy: string) => (
+    <Button
+      type="submit"
+      size="lg"
+      loading={pending}
+      fullWidth
+      icon={pending ? undefined : lockIcon}
+    >
+      {pending ? busy : label}
+    </Button>
+  );
   return (
-    <form action={action} noValidate className="flex flex-col gap-4">
+    <form action={action} noValidate className="flex flex-col gap-5">
       {state.error && <Alert tone="error" title={t(`checkout.${state.error}`)} />}
       <input type="hidden" name="plan" value={plan} />
       <input type="hidden" name="context" value={context} />
-      <fieldset className="flex flex-col gap-3">
-        <legend className="mb-3 text-[11px] font-semibold tracking-[0.12em] text-ardoise uppercase">
+      <fieldset className="flex flex-col">
+        <legend className="mb-3 text-[17px] font-semibold tracking-tight">
           {t("checkout.method.title")}
         </legend>
         <div className="grid gap-3 sm:grid-cols-2">
@@ -65,8 +84,25 @@ export function CheckoutForm({
             return (
               <label
                 key={value}
-                className="flex cursor-pointer items-center gap-3 rounded-[20px] bg-blanc p-3.5 ring-[1.5px] ring-brume transition-shadow ring-inset hover:ring-sapin/40 has-checked:shadow-[0_0_0_5px_rgb(166_242_107/0.55)] has-checked:ring-2 has-checked:ring-sapin has-focus-visible:shadow-[0_0_0_5px_rgb(166_242_107/0.9)]"
+                className="group flex min-h-[76px] cursor-pointer items-center gap-3.5 rounded-[20px] bg-blanc px-4 py-3.5 ring-[1.5px] ring-brume transition-[box-shadow,background-color] ring-inset hover:ring-sapin/40 has-checked:bg-lime-clair has-checked:ring-2 has-checked:ring-sapin has-focus-visible:shadow-[0_0_0_5px_rgb(166_242_107/0.9)]"
               >
+                <span
+                  aria-hidden
+                  className="flex size-11 shrink-0 items-center justify-center rounded-[12px] bg-creme text-sapin transition-colors group-has-checked:bg-sapin group-has-checked:text-lime"
+                >
+                  <Icon
+                    name={value === "card" ? "portefeuille" : "mobile-money"}
+                    className="size-5"
+                  />
+                </span>
+                <span className="flex min-w-0 flex-1 flex-col">
+                  <span className="text-[15px] font-semibold">
+                    {t(`checkout.method.${key}.text`)}
+                  </span>
+                  <span className="text-xs leading-4 text-ardoise">
+                    {t(`checkout.method.${key}.help`)}
+                  </span>
+                </span>
                 <span className="relative flex size-[22px] shrink-0">
                   <input
                     type="radio"
@@ -81,123 +117,105 @@ export function CheckoutForm({
                     className="pointer-events-none absolute top-[7px] left-[7px] hidden size-2 rounded-full bg-lime peer-checked:block"
                   />
                 </span>
-                <span
-                  aria-hidden
-                  className={cx(
-                    "flex size-10 shrink-0 items-center justify-center rounded-[12px] text-sapin",
-                    value === "card" ? "bg-creme" : "bg-lime",
-                  )}
-                >
-                  <Icon
-                    name={value === "card" ? "portefeuille" : "mobile-money"}
-                    className="size-5"
-                  />
-                </span>
-                <span className="flex flex-col">
-                  <span className="text-[15px] font-semibold">
-                    {t(`checkout.method.${key}.text`)}
-                  </span>
-                  <span className="text-xs leading-4 text-ardoise">
-                    {t(`checkout.method.${key}.help`)}
-                  </span>
-                </span>
               </label>
             );
           })}
         </div>
       </fieldset>
-      <div className="flex flex-col gap-4 rounded-[24px] bg-blanc p-5 lg:p-[22px]">
-        {method === "mobile_money" ? (
-          <>
-            <fieldset className="flex flex-col gap-2">
-              <legend className="mb-2.5 text-[13px] font-semibold">
-                {t("checkout.mm.operator.label")}
-              </legend>
-              {operators.length === 0 ? (
-                <p className="text-sm text-ardoise">{t("checkout.mm.operator.none")}</p>
-              ) : (
-                <div className="flex flex-wrap gap-2">
-                  {operators.map((code) => {
-                    const name = t(`checkout.mm.operators.${code}`);
-                    return (
-                      <label
-                        key={code}
-                        className="flex h-10 cursor-pointer items-center gap-2 rounded-pill bg-blanc pr-4 pl-1.5 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset has-checked:bg-sapin has-checked:text-blanc has-checked:ring-sapin has-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)]"
+      {method === "mobile_money" ? (
+        <>
+          <fieldset className="flex flex-col gap-2.5">
+            <legend className="mb-3 flex w-full items-baseline justify-between gap-3">
+              <span className="text-[17px] font-semibold tracking-tight">
+                {t("checkout.mm.operator.title")}
+              </span>
+              <span className="text-xs text-ardoise">{t("checkout.mm.operator.label")}</span>
+            </legend>
+            {operators.length === 0 ? (
+              <p className="text-sm text-ardoise">{t("checkout.mm.operator.none")}</p>
+            ) : (
+              <div className="grid grid-cols-[repeat(auto-fit,minmax(104px,1fr))] gap-2.5 lg:gap-3">
+                {operators.map((code, index) => {
+                  const name = t(`checkout.mm.operators.${code}`);
+                  return (
+                    <label
+                      key={code}
+                      className="relative flex h-[88px] cursor-pointer flex-col items-center justify-center gap-2 rounded-[18px] bg-blanc px-2 text-center text-[13px] leading-4 font-semibold ring-[1.5px] ring-brume transition-shadow ring-inset hover:ring-sapin/40 has-checked:ring-2 has-checked:ring-sapin has-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)] lg:h-24"
+                    >
+                      <input
+                        type="radio"
+                        name="operator"
+                        value={code}
+                        checked={operator === code}
+                        onChange={() => setOperator(code)}
+                        className="peer sr-only"
+                      />
+                      <span
+                        aria-hidden
+                        className="absolute top-2 right-2 hidden size-5 items-center justify-center rounded-full bg-sapin text-lime peer-checked:flex"
                       >
-                        <input
-                          type="radio"
-                          name="operator"
-                          value={code}
-                          checked={operator === code}
-                          onChange={() => setOperator(code)}
-                          className="peer sr-only"
-                        />
-                        <span
-                          aria-hidden
-                          className="flex size-7 items-center justify-center rounded-full bg-lime-clair text-[9px] font-bold text-sapin peer-checked:bg-lime"
-                        >
-                          {initials(name)}
-                        </span>
-                        {name}
-                      </label>
-                    );
-                  })}
-                </div>
-              )}
-              <p className="text-xs leading-[17px] text-ardoise">
-                {t("checkout.mm.operator.help")}
-              </p>
-              {error("operator") && (
-                <p className="text-xs font-medium text-down-texte">{error("operator")}</p>
-              )}
-            </fieldset>
-            <TextField
-              id="checkout-number"
-              name="number"
-              type="tel"
-              inputMode="tel"
-              autoComplete="tel"
-              icon="mobile-money"
-              label={t("checkout.mm.number.label")}
-              placeholder={t("checkout.mm.number.placeholder")}
-              hint={
-                operatorName ? t("checkout.mm.number.help", { operator: operatorName }) : undefined
-              }
-              required
-              defaultValue={values.number}
-              error={error("number")}
-            />
-            {note && (
-              <p className="flex items-start gap-3 rounded-[16px] bg-[#E4FAD0] px-4 py-3.5 text-[13px] leading-[19px]">
-                <Icon name="horloge" className="mt-px size-4 shrink-0" />
-                {note}
-              </p>
+                        <Icon name="check" className="size-3" />
+                      </span>
+                      <span
+                        aria-hidden
+                        className={cx(
+                          "flex size-10 items-center justify-center rounded-[12px] text-sm font-bold lg:size-11 lg:text-[15px]",
+                          tileColors[index % tileColors.length],
+                        )}
+                      >
+                        {initials(name)}
+                      </span>
+                      {name}
+                    </label>
+                  );
+                })}
+              </div>
             )}
-            <Button
-              type="submit"
-              size="lg"
-              loading={pending}
-              fullWidth
-              iconAfter={pending ? undefined : lockIcon}
-            >
-              {pending ? t("checkout.mm.submitting") : t("checkout.mm.submit", { total })}
-            </Button>
-          </>
-        ) : (
-          <>
-            <p className="text-sm text-ardoise">{t("checkout.card.3ds")}</p>
-            <Button
-              type="submit"
-              size="lg"
-              loading={pending}
-              fullWidth
-              iconAfter={pending ? undefined : lockIcon}
-            >
-              {pending ? t("checkout.card.submitting") : t("checkout.card.submit", { total })}
-            </Button>
-          </>
-        )}
-      </div>
+            <p className="text-xs leading-[17px] text-ardoise">{t("checkout.mm.operator.help")}</p>
+            {error("operator") && (
+              <p className="text-xs font-medium text-down-texte">{error("operator")}</p>
+            )}
+          </fieldset>
+          <TextField
+            id="checkout-number"
+            name="number"
+            type="tel"
+            inputMode="tel"
+            autoComplete="tel"
+            icon="mobile-money"
+            label={t("checkout.mm.number.label")}
+            placeholder={t("checkout.mm.number.placeholder")}
+            hint={
+              operatorName ? t("checkout.mm.number.help", { operator: operatorName }) : undefined
+            }
+            required
+            defaultValue={values.number}
+            error={error("number")}
+          />
+          {note && (
+            <p className="flex items-start gap-3 rounded-[16px] bg-lime-clair px-4 py-3.5 text-[13px] leading-[19px]">
+              <Icon name="horloge" className="mt-px size-4 shrink-0" />
+              {note}
+            </p>
+          )}
+          {submit(t("checkout.mm.submit", { total }), t("checkout.mm.submitting"))}
+        </>
+      ) : (
+        <>
+          <div className="flex flex-wrap items-baseline justify-between gap-x-3 gap-y-1">
+            <h3 className="text-[17px] font-semibold tracking-tight">{t("checkout.card.title")}</h3>
+            <span className="flex items-center gap-1.5 text-xs text-ardoise">
+              <Icon name="lock" className="size-3.5" />
+              {t("checkout.card.secureForm")}
+            </span>
+          </div>
+          <p className="flex items-start gap-2.5 rounded-[16px] bg-creme px-4 py-3 text-xs leading-[17px]">
+            <Icon name="securite" className="mt-px size-4 shrink-0" />
+            {t("checkout.card.3ds")}
+          </p>
+          {submit(t("checkout.card.submit", { total }), t("checkout.card.submitting"))}
+        </>
+      )}
     </form>
   );
 }
@@ -216,4 +234,25 @@ export function PaymentPoller({ paymentId }: { paymentId: string }) {
     return () => clearInterval(timer);
   }, [paymentId, router]);
   return null;
+}
+
+/** Time left before the request expires (`checkout.mm.waiting.timer`), every second. */
+export function PaymentCountdown({ expiresAt }: { expiresAt: string }) {
+  const t = useTranslations("checkout.mm.waiting");
+  const end = new Date(expiresAt).getTime();
+  const [now, setNow] = useState<number | null>(null);
+  useEffect(() => {
+    const tick = () => setNow(Date.now());
+    tick();
+    const timer = setInterval(tick, 1000);
+    return () => clearInterval(timer);
+  }, []);
+  if (now === null) return null;
+  const left = Math.max(0, Math.round((end - now) / 1000));
+  return (
+    <span className="inline-flex h-7 items-center gap-1.5 rounded-pill bg-lime px-3 text-xs font-semibold text-sapin">
+      <Icon name="horloge" className="size-3.5" />
+      {t("timer", { minutes: Math.floor(left / 60), seconds: left % 60 })}
+    </span>
+  );
 }

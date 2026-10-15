@@ -5652,6 +5652,7 @@ Conventions :
 | `pricing.payment.methods` | Paiement par Mobile Money ou carte bancaire. Prix en USD, par mois. |
 | `pricing.payment.prepaid` | Sans engagement. Avec Mobile Money, l'abonnement est prépayé pour un mois : rien n'est prélevé sans votre accord. |
 | `pricing.payment.localCurrency` | Le montant est converti dans votre monnaie au moment du paiement, selon le taux appliqué par l'opérateur ou la banque. |
+| `pricing.payment.prepaidShort` | Sans engagement, prépayé pour un mois avec Mobile Money |
 | `pricing.card.perMonth` | /mois |
 | `pricing.card.currency` | USD |
 | `pricing.card.free` | Gratuit |
@@ -6014,6 +6015,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `pricing.faq.title` | Questions sur la facturation |
+| `pricing.faq.eyebrow` | FAQ |
 | `pricing.faq.q1` | Quels moyens de paiement acceptez-vous ? |
 | `pricing.faq.a1` | Mobile Money et carte bancaire. Les opérateurs disponibles dépendent de votre pays et s'affichent au moment du paiement. |
 | `pricing.faq.q2` | Pourquoi les prix sont-ils en USD ? |
@@ -6089,6 +6091,9 @@ Conventions :
 | `billing.current.freeTitle` | Vous utilisez la formule gratuite |
 | `billing.current.freeText` | Vous pouvez créer votre profil, consulter les offres et postuler gratuitement. Pour aller plus loin, découvrez les formules payantes. |
 | `billing.current.freeCta` | Découvrir les formules |
+| `billing.current.includes` | Votre formule comprend |
+| `billing.current.ring` | {days} j |
+| `billing.current.nextRenewalDays` | Prochaine échéance : {date} · {days, plural, =0 {échéance aujourd'hui} one {# jour restant} other {# jours restants}} |
 
 #### Jauges de quotas
 
@@ -6124,6 +6129,7 @@ Conventions :
 | `billing.change.downgrade` | Passer à {plan} |
 | `billing.change.quote` | Demander un devis |
 | `billing.change.unavailable` | Non disponible pour votre compte |
+| `billing.change.note` | Une montée en gamme s'applique immédiatement, et le temps restant sur votre formule actuelle est pris en compte. Une réduction de gamme prend effet à la fin de la période déjà payée. |
 | `billing.upgrade.title` | Passer à {plan} |
 | `billing.upgrade.text` | Votre nouvelle formule s'applique immédiatement. |
 | `billing.upgrade.summary.newPlan` | Nouvelle formule |
@@ -6194,6 +6200,9 @@ Conventions :
 | `billing.invoice.pdf.refunded` | Remboursée le {date} |
 | `billing.invoice.pdf.footer` | Facture émise par The Growth Lab pour la plateforme Jumanly. Montants en dollars américains (USD). |
 | `billing.history.empty` | Aucun paiement pour le moment. |
+| `billing.history.pdfNote` | Factures en PDF |
+| `billing.history.method.mobileMoney` | Mobile Money · {operator} |
+| `billing.history.method.card` | Carte bancaire |
 | `billing.invoiceDetails.title` | Informations de facturation |
 | `billing.invoiceDetails.text` | Ces informations apparaissent sur vos factures. |
 | `billing.invoiceDetails.name.label` | Nom ou raison sociale |
@@ -6255,6 +6264,14 @@ Conventions :
 | `checkout.terms.link` | conditions générales de vente |
 | `checkout.applyFree` | Rappel : candidater reste gratuit, que vous payiez ou non. |
 | `checkout.cancel` | Annuler et revenir |
+| `checkout.summary.creditValue` | − {credit} USD |
+| `checkout.summary.currency` | USD |
+| `checkout.steps.label` | Étapes du paiement |
+| `checkout.steps.method` | Moyen de paiement |
+| `checkout.steps.details` | Informations |
+| `checkout.steps.confirm` | Confirmation |
+| `checkout.steps.done` | terminée |
+| `checkout.steps.current` | en cours |
 
 ### Paiement · Mobile Money
 
@@ -6288,6 +6305,7 @@ Conventions :
 | `checkout.mm.waiting.changeNumber` | Utiliser un autre numéro |
 | `checkout.mm.waiting.illustrationAlt` | Téléphone affichant une demande de confirmation de paiement |
 | `checkout.mm.checking` | Vérification du paiement… |
+| `checkout.mm.waiting.status` | En attente de confirmation |
 | `checkout.mm.error.numberInvalid` | Ce numéro ne semble pas valide pour {operator}. Vérifiez l'indicatif et le nombre de chiffres. |
 | `checkout.mm.error.operatorRequired` | Choisissez votre opérateur. |
 | `checkout.mm.error.numberRequired` | Saisissez votre numéro Mobile Money. |
@@ -6299,6 +6317,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `checkout.card.title` | Carte bancaire |
+| `checkout.card.secureForm` | Formulaire sécurisé du prestataire |
 | `checkout.card.number.label` | Numéro de carte |
 | `checkout.card.number.placeholder` | 1234 1234 1234 1234 |
 | `checkout.card.expiry.label` | Date d'expiration |
@@ -6352,6 +6371,7 @@ Conventions :
 | `checkout.pending.cta` | Revenir à mon espace |
 | `checkout.duplicate` | Un paiement est déjà en cours pour cette formule. Attendez sa confirmation avant d'en lancer un autre. |
 | `checkout.debitedNotActivated` | Vous avez été débité mais votre formule n'est pas active ? Écrivez-nous à infojumanly@gmail.com avec la référence {reference}. Nous régularisons au plus vite. |
+| `checkout.result.eyebrow` | Résultat du paiement |
 | `checkout.mm.operators.mpesa` | M-Pesa |
 | `checkout.mm.operators.orange` | Orange Money |
 | `checkout.mm.operators.airtel` | Airtel Money |
@@ -6570,6 +6590,8 @@ Note d'intégration : `quota.reached.addon` n'est affiché que si une option de 
 | Clé | Texte |
 |---|---|
 | `quote.title` | Demander un devis Company Premium |
+| `quote.hero.title` | Demander un devis |
+| `quote.hero.text` | Pour les grands groupes et les organisations aux besoins particuliers : décrivez votre projet, nous construisons la proposition avec vous. |
 | `quote.subtitle` | Décrivez votre organisation et vos besoins. Nous préparons une proposition adaptée et vous répondons par e-mail. |
 | `quote.org.label` | Nom de l'organisation |
 | `quote.org.placeholder` | Raison sociale ou nom du groupe |
@@ -8181,6 +8203,11 @@ Conventions :
 | `partner.hidden` | Masqué |
 | `partner.dashboard.months.title` | Bénéficiaires actifs par mois |
 | `partner.dashboard.months.month` | Mois |
+| `partner.dashboard.months.value` | {month} : {value} |
+| `partner.dashboard.kpi.batches` | {count, plural, =0 {Aucun lot} one {# lot} other {# lots}} |
+| `partner.dashboard.usage.hoursValue` | {hours} h |
+| `partner.dashboard.usage.batch` | Lot affiché |
+| `partner.dashboard.usage.batchAll` | Tous les lots |
 
 ### `/app/partenaire/licences` · Lots, codes et invitations
 
@@ -8288,6 +8315,11 @@ Conventions :
 | `partner.licenses.invites.title` | Invitations par e-mail |
 | `partner.licenses.invites.resent` | {count, plural, =0 {Aucune invitation à relancer.} one {# invitation relancée.} other {# invitations relancées.}} |
 | `partner.licenses.import.file` | Fichier CSV |
+| `partner.licenses.batch.rate` | {percent} % |
+| `partner.licenses.invites.desc` | Totaux du lot, sans détail par personne |
+| `partner.licenses.invites.count` | {label} · {count} |
+| `partner.licenses.import.send` | Envoyer les invitations |
+| `partner.licenses.import.noFile` | Aucun fichier choisi |
 
 ### `/app/partenaire/rapports` · Rapports d'impact agrégés
 
@@ -8328,6 +8360,11 @@ Conventions :
 | `partner.reports.monthly` | Recevoir le rapport chaque mois par e-mail |
 | `partner.reports.empty` | Pas encore assez de données. Les premiers indicateurs apparaîtront quand au moins {minGroup} bénéficiaires auront activé leur licence. |
 | `partner.reports.requestNominative` | Vous avez besoin d'une information individuelle (par exemple pour un suivi de programme) ? Elle ne peut être transmise qu'avec l'accord explicite de chaque bénéficiaire. Écrivez à assistant@jumanly.io pour mettre en place une demande de consentement. |
+| `partner.reports.range` | Du {from, date, long} au {to, date, long} |
+| `partner.reports.metric.activatedOf` | sur {count, plural, one {# licence distribuée} other {# licences distribuées}} |
+| `partner.reports.hours` | {hours} h |
+| `partner.reports.percent` | {percent} % |
+| `partner.reports.hiresByBatch` | Embauches déclarées par lot |
 
 ---
 
