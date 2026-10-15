@@ -2,6 +2,12 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v2 · plan par étapes (15 octobre 2026)
+
+- Inventaire page par page de `/admin` et plan en 9 étapes avec un prompt prêt à coller par étape :
+  `docs/admin-v2/PLAN-ADMIN.md`. Aucun code modifié : le propriétaire envoie les étapes une par
+  une.
+
 ## Refonte visuelle · passe de cohérence finale (15 octobre 2026)
 
 - Parcours automatique de 70 pages (public, talent, recruteur, partenaire, admin) à 1440 et 390 px :
