@@ -2,6 +2,29 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v2 · étape 6 : formations (15 octobre 2026)
+
+- **Parcours guidé** : carte « Prête à publier ? » en tête de l'éditeur, avec une jauge (part des
+  contrôles remplis) et six étapes (informations, public et objectifs, programme, quiz,
+  attestation, publication), chacune cochée ou avec ce qui manque et un lien vers l'endroit où le
+  remplir. Le public et les objectifs sont conseillés, ils ne bloquent pas.
+- **Contrôle avant publication** : titre, résumé et description, une leçon, le formateur, des
+  questions dans chaque quiz, un quiz avec questions si l'attestation est activée, une image de
+  couverture. Un message clair par manque.
+- **Couverture** envoyée depuis l'ordinateur avec la fiche (PNG, JPEG, WebP, 4 Mo) : recadrée en
+  16:9 et convertie en WebP en 480, 960 et 1440 px (`sharp`), servie par `/medias/…` avec un cache
+  long. L'ancienne est supprimée.
+- **Vidéo d'une leçon** : avec Bunny Stream configuré, le navigateur envoie le fichier directement
+  (TUS signé par le serveur) puis la leçon affiche l'état de l'encodage. Sans hébergeur, une petite
+  vidéo (4 Mo) passe par le site ; une adresse https reste possible. Sous-titres : la transcription.
+- **Aperçu « comme un talent »** (`/admin/formations/[id]/apercu`), sans inscription ni progression.
+- **Dupliquer** : copie en brouillon du programme et des quiz, sans apprenants ni couverture.
+- **Chiffres** dans la liste : inscrits, part qui termine, moyenne au quiz, attestations.
+- Seul un administrateur révoque une attestation (l'éditeur ne voit plus le bloc).
+- Tests : unitaires (contrôles, jauge, type de vidéo), en base (4 : copie, chiffres, couverture,
+  vidéo) et e2e (couverture avant publication, aperçu, copie, pas de révocation pour l'éditeur).
+  Captures dans `captures/admin-v2/etape-6`.
+
 ## Jumanly Admin v2 · étape 5 : forfaits et abonnements (15 octobre 2026)
 
 - **Forfaits** : « Nouveau forfait » (part des droits du premier forfait de la famille) et

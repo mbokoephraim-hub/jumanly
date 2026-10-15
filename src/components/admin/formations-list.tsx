@@ -15,6 +15,7 @@ import { formatDate } from "@/lib/dates";
 import {
   catalogLevelOptions,
   courseStatuses,
+  type CourseStats,
   type listCoursesForAdmin,
 } from "@/server/services/course-admin";
 
@@ -142,12 +143,15 @@ export async function CourseListCard({
   filters,
   currentId,
   detailed = false,
+  stats,
 }: {
   courses: Course[];
   filters: CourseFilters;
   currentId?: string;
   /** On /admin/formations: the catalog level, lessons, learners and last change of each course. */
   detailed?: boolean;
+  /** Learners, completion, quiz average and attestations of each course (Admin v2, étape 6). */
+  stats?: Map<string, CourseStats>;
 }) {
   const t = await getTranslations("admin.courses");
   const learn = await getTranslations("learn.card");
@@ -193,7 +197,7 @@ export async function CourseListCard({
                     <Tag tone={courseStatusTone[course.status]}>{t(`status.${course.status}`)}</Tag>
                     {detailed && (
                       <span className="text-[11px] leading-[15px] text-ardoise">
-                        {t("listMeta", {
+                        {t(stats ? "v2.listMeta" : "listMeta", {
                           access:
                             course.requiredLevel === "specialized"
                               ? t("field.specialized")
@@ -205,6 +209,9 @@ export async function CourseListCard({
                         {t("updatedAt", { date: formatDate(course.updatedAt) })}
                       </span>
                     )}
+                    {detailed && stats?.get(course.id) && (
+                      <CourseStatsLine stats={stats.get(course.id)!} />
+                    )}
                   </span>
                 </Link>
               </li>
@@ -213,5 +220,21 @@ export async function CourseListCard({
         </ul>
       )}
     </section>
+  );
+}
+
+async function CourseStatsLine({ stats }: { stats: CourseStats }) {
+  const t = await getTranslations("admin.courses.v2.stats");
+  if (stats.enrolled === 0 || stats.completion === null)
+    return <span className="text-[11px] leading-[15px] text-ardoise">{t("empty")}</span>;
+  return (
+    <span className="text-[11px] leading-[15px] font-medium text-sapin">
+      {t("label", {
+        enrolled: stats.enrolled,
+        completion: t("completion", { value: stats.completion }),
+        quiz: stats.quizAverage === null ? t("none") : t("quiz", { value: stats.quizAverage }),
+        certificates: stats.certificates,
+      })}
+    </span>
   );
 }

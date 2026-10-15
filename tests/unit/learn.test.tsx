@@ -80,7 +80,17 @@ describe("Éditeur de formations", () => {
 
   it("refuse la publication d'une formation incomplète", () => {
     expect(
-      publishProblems({ modules: [], instructor: null, summary: "", description: "" }),
-    ).toEqual(["lessons", "instructor", "summary"]);
+      publishProblems({
+        modules: [],
+        instructor: null,
+        summary: "",
+        description: "",
+        title: "Formation",
+        objectives: [],
+        audience: "",
+        coverUrl: null,
+        certificateEnabled: false,
+      }),
+    ).toEqual(["summary", "lessons", "instructor", "cover"]);
   });
 });

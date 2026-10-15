@@ -11,6 +11,12 @@ async function newPage(browser: Browser, baseURL: string | undefined, isMobile: 
   return context.newPage();
 }
 
+// A 1 × 1 PNG: the site crops and enlarges it into a 16:9 cover.
+const PNG = Buffer.from(
+  "iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR42mNkYAAAAAYAAjCB0C8AAAAASUVORK5CYII=",
+  "base64",
+);
+
 const suffix = () =>
   Math.random()
     .toString(36)
@@ -42,8 +48,15 @@ test("un éditeur crée une formation, un talent Free la suit jusqu'à l'attesta
   await page.locator("#course-objectives").fill("Premier objectif\nSecond objectif");
   await page.locator("#course-instructor").fill("Formatrice fictive");
   await page.locator("#course-skills").fill("Communication orale");
+  // Admin v2, étape 6: the gauge lists the cover until one is sent with the card.
+  await expect(page.locator("#preparation")).toContainText("Ajoutez une image de couverture.");
+  await page
+    .locator("#course-cover-file")
+    .setInputFiles({ name: "couverture.png", mimeType: "image/png", buffer: PNG });
   await page.getByRole("button", { name: "Enregistrer la fiche" }).click();
   await expect(page.getByText("Modifications enregistrées.")).toBeVisible();
+  await expect(page.locator("#preparation")).not.toContainText("Ajoutez une image de couverture.");
+  await expect(page.getByRole("img", { name: "Couverture actuelle" })).toBeVisible();
 
   // Publishing without lessons is refused, with the reason.
   await page.locator("#course-status").selectOption("published");
@@ -189,4 +202,31 @@ test("aucune erreur d'accessibilité WCAG 2.2 AA dans l'éditeur de formations",
   await page.getByRole("link", { name: "Réussir son CV (démo)" }).click();
   await expect(page.locator("#fiche")).toBeVisible();
   await expectAccessible(page);
+});
+
+// Admin v2, étape 6: the editor previews a course as a talent and duplicates it as a draft; only
+// an administrator revokes an attestation.
+test("un éditeur prévisualise et duplique une formation, sans pouvoir révoquer", async ({
+  page,
+}) => {
+  await logIn(page, demo.editor, undefined, "/admin/formations");
+  await page.goto("/admin/formations");
+  await expect(page.getByText(/inscrits? ·|Aucun inscrit pour l'instant/).first()).toBeVisible();
+  await page.getByRole("link", { name: "Réussir son CV (démo)" }).click();
+  await expect(page.locator("#preparation")).toContainText("Prête à publier ?");
+  await expect(page.getByRole("link", { name: "Révoquer une attestation" })).toHaveCount(0);
+
+  await page.getByRole("link", { name: "Aperçu comme un talent" }).click();
+  await expect(page).toHaveURL(/\/apercu$/);
+  await expect(page.getByText("Aperçu réservé à l'équipe", { exact: false })).toBeVisible();
+  await page.getByRole("link", { name: "Retour à l'éditeur" }).click();
+
+  await page.getByRole("link", { name: "Dupliquer" }).click();
+  const title = `Copie fictive e2e ${suffix()}`;
+  await page.locator("#course-copy-title").fill(title);
+  await page.getByRole("button", { name: "Créer la copie" }).click();
+  await expect(page.getByText("Copie créée en brouillon.", { exact: false })).toBeVisible();
+  // The editor of the source course stays hidden in the page: check the visible card only.
+  await expect(page.getByRole("heading", { name: title })).toBeVisible();
+  await expect(page.locator("#fiche").filter({ hasText: title })).toContainText("Brouillon");
 });

@@ -8793,6 +8793,9 @@ Conventions :
 | `admin.journal.action.course_quiz_update` | a modifié le quiz |
 | `admin.journal.action.course_question_save` | a enregistré une question |
 | `admin.journal.action.course_question_delete` | a supprimé une question |
+| `admin.journal.action.course_duplicate` | a dupliqué une formation |
+| `admin.journal.action.course_cover` | a changé l'image de couverture |
+| `admin.journal.action.course_lesson_video` | a envoyé la vidéo d'une leçon |
 | `admin.journal.action.certificate_revoke` | a révoqué une attestation |
 | `admin.journal.action.job_approve` | a accepté l'offre |
 | `admin.journal.action.job_refuse` | a refusé l'offre |
@@ -9651,7 +9654,7 @@ Conventions :
 | `admin.courses.field.audience` | Public visé |
 | `admin.courses.field.duration` | Durée totale (minutes) |
 | `admin.courses.field.prerequisites` | Prérequis |
-| `admin.courses.field.cover` | Image de couverture (adresse https) |
+| `admin.courses.field.cover` | Image de couverture |
 | `admin.courses.field.jobFamilies.text` | Métiers des exercices |
 | `admin.courses.field.jobFamilies.hint` | Familles de métiers visées par les exercices métier, séparées par des virgules. |
 | `admin.courses.field.outcomesHint` | Un objectif par ligne. |
@@ -9739,7 +9742,7 @@ Conventions :
 | `admin.courses.certificate.revoke.done` | Attestation révoquée. La page de vérification l'indique désormais. |
 | `admin.courses.certificate.revoke.notFound` | Aucune attestation active avec ce numéro. |
 | `admin.courses.publish.text` | Publier |
-| `admin.courses.publish.check` | Avant de publier : au moins une leçon, un niveau de catalogue choisi, un formateur renseigné. |
+| `admin.courses.publish.check` | Avant de publier : un titre, un résumé, une image de couverture, au moins une leçon, un formateur renseigné et des questions dans chaque quiz. |
 | `admin.courses.published` | Formation publiée. |
 | `admin.courses.publish.problem.lessons` | Ajoutez au moins une leçon. |
 | `admin.courses.publish.problem.instructor` | Renseignez le formateur. |
@@ -9765,6 +9768,68 @@ Conventions :
 | `admin.courses.certificate.withFiche` | Pris en compte avec « Enregistrer la fiche ». |
 | `admin.courses.certificate.revoke.next` | Continuer |
 | `admin.courses.certificate.revoke.ask` | Saisissez le numéro de l'attestation de cette formation à révoquer. |
+| `admin.courses.publish.problem.title` | Donnez un titre d'au moins 3 caractères. |
+| `admin.courses.publish.problem.certificateQuiz` | L'attestation demande un quiz avec au moins une question. |
+| `admin.courses.publish.problem.cover` | Ajoutez une image de couverture. |
+| `admin.courses.v2.readiness.title` | Prête à publier ? |
+| `admin.courses.v2.readiness.percent` | {percent} % |
+| `admin.courses.v2.readiness.label` | Préparation de la formation : {percent} % |
+| `admin.courses.v2.readiness.ready` | Tout est prêt : la formation peut être publiée. |
+| `admin.courses.v2.readiness.missing` | {count, plural, one {Il reste # point à compléter.} other {Il reste # points à compléter.}} |
+| `admin.courses.v2.readiness.published` | Formation en ligne. Les modifications sont visibles aussitôt enregistrées. |
+| `admin.courses.v2.readiness.done` | (fait) |
+| `admin.courses.v2.readiness.todo` | (à faire) |
+| `admin.courses.v2.readiness.advice` | Conseillé, ne bloque pas la publication. |
+| `admin.courses.v2.step.info` | Informations |
+| `admin.courses.v2.step.audience` | Public et objectifs |
+| `admin.courses.v2.step.program` | Programme |
+| `admin.courses.v2.step.quiz` | Quiz |
+| `admin.courses.v2.step.certificate` | Attestation |
+| `admin.courses.v2.step.publish` | Publication |
+| `admin.courses.v2.preview` | Aperçu comme un talent |
+| `admin.courses.v2.duplicate.text` | Dupliquer |
+| `admin.courses.v2.duplicate.title` | Dupliquer la formation |
+| `admin.courses.v2.duplicate.confirm` | Une copie en brouillon de « {title} » est créée, avec ses modules, leçons et quiz. Les apprenants, leur progression et les attestations ne sont pas copiés. Ajoutez une image de couverture à la copie avant de la publier. |
+| `admin.courses.v2.duplicate.name` | Titre de la copie |
+| `admin.courses.v2.duplicate.defaultName` | {title} (copie) |
+| `admin.courses.v2.duplicate.submit` | Créer la copie |
+| `admin.courses.v2.duplicate.done` | Copie créée en brouillon. Ajoutez sa couverture avant de la publier. |
+| `admin.courses.v2.cover.current` | Couverture actuelle |
+| `admin.courses.v2.cover.none` | Aucune couverture pour l'instant. |
+| `admin.courses.v2.cover.file` | Envoyer une image |
+| `admin.courses.v2.cover.hint` | PNG, JPEG ou WebP, 4 Mo au plus. L'image est recadrée au format 16:9 et allégée pour les connexions lentes. Envoyée avec « Enregistrer la fiche ». |
+| `admin.courses.v2.cover.error.fileType` | Cette image n'a pas pu être lue. Envoyez un fichier PNG, JPEG ou WebP. |
+| `admin.courses.v2.cover.error.fileSize` | Cette image dépasse 4 Mo. |
+| `admin.courses.v2.cover.error.notFound` | Formation introuvable. |
+| `admin.courses.v2.stats.label` | {enrolled, plural, =0 {Aucun inscrit} one {# inscrit} other {# inscrits}} · {completion} · {quiz} · {certificates, plural, =0 {aucune attestation} one {# attestation} other {# attestations}} |
+| `admin.courses.v2.stats.completion` | {value} % terminent |
+| `admin.courses.v2.stats.quiz` | quiz {value} % en moyenne |
+| `admin.courses.v2.stats.none` | aucun quiz passé |
+| `admin.courses.v2.listMeta` | {access} · {lessons} |
+| `admin.courses.v2.stats.empty` | Aucun inscrit pour l'instant |
+| `admin.courses.v2.previewPage.title` | Aperçu : {title} |
+| `admin.courses.v2.previewPage.notice` | Aperçu réservé à l'équipe : la formation telle qu'un talent la verra, sans progression ni inscription. |
+| `admin.courses.v2.previewPage.back` | Retour à l'éditeur |
+| `admin.courses.v2.previewPage.status` | Statut actuel |
+| `admin.courses.v2.previewPage.empty` | Aucune leçon pour l'instant. |
+| `admin.courses.v2.previewPage.quiz` | {count, plural, =0 {Quiz sans question} one {Quiz de # question} other {Quiz de # questions}} · seuil {score} % |
+| `admin.courses.v2.previewPage.noVideo` | Vidéo pas encore envoyée. |
+| `admin.courses.video.title` | Vidéo de la leçon |
+| `admin.courses.video.file` | Fichier vidéo |
+| `admin.courses.video.hintDirect` | MP4, WebM ou MOV. Le fichier part directement chez l'hébergeur vidéo, qui l'encode pour une lecture adaptée aux réseaux lents. |
+| `admin.courses.video.hintSite` | MP4 ou WebM, 4 Mo au plus (aucun hébergeur vidéo n'est configuré). Pour une vidéo plus longue, collez son adresse dans le champ « Identifiant de la vidéo ». |
+| `admin.courses.video.send` | Envoyer la vidéo |
+| `admin.courses.video.sending` | Envoi en cours… |
+| `admin.courses.video.done` | Vidéo envoyée. L'encodage commence. |
+| `admin.courses.video.saved` | Vidéo enregistrée pour cette leçon. |
+| `admin.courses.video.state.none` | Aucune vidéo pour l'instant. |
+| `admin.courses.video.state.ready` | Vidéo prête à être lue. |
+| `admin.courses.video.state.processing` | Encodage en cours ({progress} %). |
+| `admin.courses.video.state.failed` | L'encodage a échoué. Envoyez le fichier à nouveau. |
+| `admin.courses.video.error.fileType` | Ce fichier n'est pas une vidéo MP4 ou WebM. |
+| `admin.courses.video.error.fileSize` | Cette vidéo dépasse 4 Mo. |
+| `admin.courses.video.error.upload` | L'envoi a échoué. Vérifiez la connexion puis réessayez. |
+| `admin.courses.video.captions` | Sous-titres et transcription : renseignez le champ « Transcription » de la leçon, il s'affiche sous la vidéo. |
 
 ### `/admin/offres` · Modération des offres
 

@@ -7,6 +7,7 @@ import {
   RevokeCertificateSection,
 } from "@/components/admin/formations-attestation";
 import { CourseFicheCard } from "@/components/admin/formations-fiche";
+import { CourseReadinessCard, DuplicateCoursePanel } from "@/components/admin/formations-readiness";
 import {
   CourseFilterBar,
   CourseListCard,
@@ -17,9 +18,11 @@ import { CourseModulesCard, LessonEditor } from "@/components/admin/formations-m
 import { Alert } from "@/components/ui";
 import { requireCourseEditor } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { getCourseForAdmin, listCoursesForAdmin } from "@/server/services/course-admin";
-
-const problems = ["lessons", "instructor", "summary", "quiz"] as const;
+import {
+  getCourseForAdmin,
+  listCoursesForAdmin,
+  publishProblemKeys,
+} from "@/server/services/course-admin";
 
 /**
  * Course editor (partie 07 § 12, mockup 07-06): the list on the left; on the right the course card,
@@ -31,7 +34,8 @@ export default async function AdminCourse({
 }: PageProps<"/admin/formations/[id]">) {
   const { id } = await params;
   const query = await searchParams;
-  if (!(await requireCourseEditor())) notFound();
+  const user = await requireCourseEditor();
+  if (!user) notFound();
   const course = await getCourseForAdmin(db, id);
   if (!course) notFound();
   const t = await getTranslations("admin.courses");
@@ -39,13 +43,14 @@ export default async function AdminCourse({
   const all = await listCoursesForAdmin(db);
   const filters = readCourseFilters(query);
   const courses = filterCourses(all, filters);
+  const coverError = param("erreur").startsWith("couverture-") ? param("erreur").slice(11) : "";
   const lesson = course.modules
     .flatMap((module) => module.lessons)
     .find((item) => item.id === param("lecon"));
   const publication = param("publication")
     .split(",")
-    .filter((item): item is (typeof problems)[number] =>
-      (problems as readonly string[]).includes(item),
+    .filter((item): item is (typeof publishProblemKeys)[number] =>
+      (publishProblemKeys as readonly string[]).includes(item),
     );
 
   return (
@@ -61,6 +66,12 @@ export default async function AdminCourse({
         <CourseListCard courses={courses} filters={filters} currentId={course.id} />
         <div className="flex min-w-0 flex-col gap-4">
           {param("ok") === "creee" && <Alert tone="success" title={t("created")} />}
+          {param("ok") === "copie" && <Alert tone="success" title={t("v2.duplicate.done")} />}
+          {(coverError === "fileType" ||
+            coverError === "fileSize" ||
+            coverError === "notFound") && (
+            <Alert tone="error" title={t(`v2.cover.error.${coverError}`)} />
+          )}
           {param("ok") === "fiche" && (
             <AdminDone title={t("saved")} journal={{ type: "course", id: course.id }} />
           )}
@@ -84,13 +95,17 @@ export default async function AdminCourse({
             </Alert>
           )}
 
+          <CourseReadinessCard course={course} />
+          {param("action") === "dupliquer" && <DuplicateCoursePanel course={course} />}
           <CourseFicheCard course={course} />
           <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
             <CourseModulesCard course={course} openLessonId={lesson?.id} />
             <CourseAttestationCard course={course} />
           </div>
           {lesson && <LessonEditor course={course} lessonId={lesson.id} query={param} />}
-          <RevokeCertificateSection course={course} query={param} />
+          {user.platformRole === "platform_admin" && (
+            <RevokeCertificateSection course={course} query={param} />
+          )}
           <AuditHistory targetType="course" targetId={course.id} />
         </div>
       </div>
