@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { FAKE_SIGNATURE_HEADER, signFakeWebhook } from "../../src/server/payments/fake";
 import { expectAccessible } from "./a11y";
 import { demo, logIn, signUpFromPricing, testEmail } from "./session";

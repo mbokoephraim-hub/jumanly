@@ -1,0 +1,115 @@
+import { expect, test, type Page } from "@playwright/test";
+import { DEMO_PASSWORD, PASSWORD, demo, signUpFromPricing, testEmail } from "./session";
+
+// docs/refonte-connexion/BRIEF-CONNEXION-V2.md: entry screen of /connexion and /inscription.
+
+test("l'écran d'entrée garde le profil des deux côtés et mène à l'étape forfait", async ({
+  page,
+}) => {
+  const email = testEmail("entree");
+  await page.goto("/connexion?profil=rh");
+  const roles = page.getByRole("group", { name: "Je suis" });
+  await expect(roles.getByRole("button", { name: "RH" })).toHaveAttribute("aria-pressed", "true");
+
+  await page.getByRole("tab", { name: "Créer un compte" }).click();
+  await expect(page).toHaveURL(/\/inscription\?profil=rh$/);
+  await expect(page.getByRole("heading", { name: "Créez votre compte gratuit" })).toBeVisible();
+  await expect(page.getByRole("radio", { name: "Professionnel RH" })).toBeChecked();
+
+  // The form and the stage stay in step, both ways.
+  await page.locator("label").filter({ hasText: "Entreprise" }).click();
+  await expect(roles.getByRole("button", { name: "Entreprise" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await roles.getByRole("button", { name: "Talent" }).click();
+  await expect(page.getByRole("radio", { name: "Talent" })).toBeChecked();
+  await expect(page.getByRole("heading", { level: 2 })).toContainText("employabilité");
+
+  await page.getByRole("textbox", { name: "E-mail" }).fill(email);
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/\/inscription\/forfait\?profil=talent$/);
+  // The e-mail waits in the sign-up cookie, never in the address.
+  expect(page.url()).not.toContain("jumanly.test");
+  await page.getByRole("button", { name: /Continuer/ }).click();
+  await expect(page).toHaveURL(/\/inscription\/compte/);
+  await expect(page.locator('input[name="email"]')).toHaveValue(email);
+});
+
+test("le dernier profil choisi est retrouvé sur cet appareil", async ({ page }) => {
+  await page.goto("/connexion");
+  const roles = page.getByRole("group", { name: "Je suis" });
+  await roles.getByRole("button", { name: "Entreprise" }).click();
+  await page.goto("/inscription");
+  await expect(roles.getByRole("button", { name: "Entreprise" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(page.getByRole("radio", { name: "Entreprise" })).toBeChecked();
+});
+
+/** Signs in through the e-mail form, without skipping the intro. */
+async function signInByEmail(page: Page, email: string, password: string) {
+  await page.goto("/connexion");
+  const form = page.locator("form").filter({ has: page.locator('input[name="password"]') });
+  await form.locator('input[name="email"]').fill(email);
+  await form.locator('input[name="password"]').fill(password);
+  await page.getByRole("button", { name: "Se connecter", exact: true }).click();
+}
+
+test.describe("générique d'entrée", () => {
+  test.skip(!!process.env.E2E_REDUCED_MOTION, "le générique ne se joue pas en animations réduites");
+
+  test("complet une seule fois par compte, puis court ; « Passer » rend la main à l'espace", async ({
+    page,
+  }) => {
+    test.setTimeout(90_000);
+    const email = testEmail("generique");
+    await signUpFromPricing(page, "Créer mon compte gratuit", email);
+
+    // New account: the full version plays over the welcome page, then « Passer » ends it.
+    const intro = page.getByRole("dialog", { name: "Présentation de Jumanly" });
+    await expect(intro).toBeVisible({ timeout: 20_000 });
+    await expect(intro.getByText("Bienvenue,", { exact: true })).toBeVisible();
+    await expect(page).not.toHaveURL(/arrivee=/);
+    const skip = intro.getByRole("button", { name: "Passer l'intro" });
+    await expect(skip).toBeFocused();
+    await skip.click();
+    await expect(intro).toBeHidden();
+    await expect(page.getByRole("main")).toBeFocused();
+    // A reload is not an arrival: nothing plays.
+    await page.reload();
+    await expect(page.getByRole("main")).toBeVisible();
+    await expect(intro).toBeHidden();
+
+    // Next sign-in: the short version, which ends on its own.
+    await page.context().clearCookies();
+    await signInByEmail(page, email, PASSWORD);
+    await expect(intro).toBeVisible({ timeout: 20_000 });
+    await expect(intro.locator(".jm-in-short")).toContainText("Bon retour, Awa");
+    await expect(intro.getByText("Bienvenue,", { exact: true })).toHaveCount(0);
+    await expect(intro).toBeHidden({ timeout: 10_000 });
+    await expect(page).toHaveURL(/\/app/);
+  });
+
+  test("Échap saute le générique", async ({ page }) => {
+    await signInByEmail(page, demo.talentStarter, DEMO_PASSWORD);
+    const intro = page.getByRole("dialog", { name: "Présentation de Jumanly" });
+    await expect(intro).toBeVisible({ timeout: 20_000 });
+    await page.keyboard.press("Escape");
+    await expect(intro).toBeHidden();
+  });
+});
+
+test.describe("générique en animations réduites", () => {
+  test.use({ reducedMotion: "reduce" });
+
+  test("aucun générique, le message d'accueil à la place", async ({ page }) => {
+    await signInByEmail(page, demo.talentFree, DEMO_PASSWORD);
+    await expect(page).toHaveURL(/\/app/);
+    await expect(
+      page.getByRole("status").getByText(/Bon retour|Bienvenue sur Jumanly/),
+    ).toBeVisible();
+    await expect(page.getByRole("dialog", { name: "Présentation de Jumanly" })).toHaveCount(0);
+  });
+});

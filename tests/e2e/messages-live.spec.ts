@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { signUpFromPricing, testEmail } from "./session";
 

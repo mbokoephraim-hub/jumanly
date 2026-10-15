@@ -135,7 +135,8 @@ export async function countPublishedCourses(db: PrismaClient) {
 
 export async function listCourseThemes(db: PrismaClient): Promise<string[]> {
   const rows = await db.course.findMany({
-    where: { status: "published" },
+    // A course published without a theme has no filter of its own (an empty radio has no label).
+    where: { status: "published", category: { not: "" } },
     distinct: ["category"],
     select: { category: true },
     orderBy: { category: "asc" },

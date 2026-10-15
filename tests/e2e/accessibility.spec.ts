@@ -1,4 +1,4 @@
-import { test } from "@playwright/test";
+import { test } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { demo, logIn } from "./session";
 

@@ -1,4 +1,4 @@
-import { expect, test, type Browser } from "@playwright/test";
+import { expect, test, type Browser } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { demo, logIn } from "./session";
 

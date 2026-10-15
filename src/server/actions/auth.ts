@@ -6,13 +6,14 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { isSafeInternalPath } from "@/lib/signup";
 import { sendWelcome } from "@/server/account-emails";
-import { auth } from "@/server/auth";
+import { auth, enabledProviders } from "@/server/auth";
 import { getSession } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
 import {
   emailField,
   passwordField,
+  pendingSocialSignup,
   setupAccount,
   signupAccountSchema,
   type AuthFieldError,
@@ -20,6 +21,7 @@ import {
 import { allowAttempt, clientIp } from "@/server/rate-limit";
 import { readSignupFlow, writeSignupFlow } from "@/server/signup-flow";
 import { reportError } from "@/server/observability";
+import { withArrival } from "@/lib/app-intro";
 
 export type AuthFormState = {
   status: "idle" | "invalid" | "error" | "sent" | "done";
@@ -60,6 +62,29 @@ const safeNext = (value: FormDataEntryValue | null) => {
   const text = typeof value === "string" ? value : "";
   return text && isSafeInternalPath(text) ? text : undefined;
 };
+
+// ─── Sign-up, step 1: « Vous êtes » and the e-mail (entry screen) ───
+
+const entrySchema = z.object({
+  profil: z.enum(["talent", "rh", "company"]).catch("talent"),
+  email: z.string().trim().max(200).optional().catch(undefined),
+  forfait: z.string().max(60).optional().catch(undefined),
+});
+
+/**
+ * « Continuer » of the « Créer un compte » tab: the profile goes to the plan step in the address;
+ * the e-mail waits in the short sign-up cookie (never in an address, so never in a log) to fill
+ * in the account step.
+ */
+export async function startSignup(formData: FormData) {
+  const input = entrySchema.parse(Object.fromEntries(formData));
+  const next = safeNext(formData.get("next"));
+  await writeSignupFlow({ profile: input.profil, email: input.email || undefined, next });
+  const query = new URLSearchParams({ profil: input.profil });
+  if (input.forfait) query.set("forfait", input.forfait);
+  if (next) query.set("suite", next);
+  redirect(`/inscription/forfait?${query}`);
+}
 
 // ─── Sign-up, step 3: create the account ───────────────────────────
 
@@ -174,7 +199,7 @@ export async function verifyEmail(_: AuthFormState, formData: FormData): Promise
   const paid = flow.plan
     ? await db.plan.findUnique({ where: { code: flow.plan }, select: { priceCents: true } })
     : null;
-  redirect(paid?.priceCents ? "/inscription/paiement" : "/app/bienvenue");
+  redirect(paid?.priceCents ? "/inscription/paiement" : withArrival("/app/bienvenue"));
 }
 
 export async function resendCode(_: AuthFormState): Promise<AuthFormState> {
@@ -242,7 +267,7 @@ export async function signIn(_: AuthFormState, formData: FormData): Promise<Auth
     return { status: "error", error: "invalidCredentials", values: kept };
   }
   if (twoFactor) redirect(`/connexion/deux-etapes?${new URLSearchParams({ suite: next })}`);
-  redirect(next);
+  redirect(withArrival(next));
 }
 
 export async function sendTwoFactorCode(_: AuthFormState): Promise<AuthFormState> {
@@ -273,7 +298,7 @@ export async function verifyTwoFactor(
       errors: { code: reason.includes("TOO_MANY") ? "codeTooManyAttempts" : "codeInvalid" },
     };
   }
-  redirect(safeNext(formData.get("next")) ?? "/app");
+  redirect(withArrival(safeNext(formData.get("next")) ?? "/app"));
 }
 
 export async function sendMagicLinkAction(
@@ -290,7 +315,10 @@ export async function sendMagicLinkAction(
   try {
     await auth.api.signInMagicLink({
       headers: await headers(),
-      body: { email: email.data, callbackURL: safeNext(formData.get("next")) ?? "/app" },
+      body: {
+        email: email.data,
+        callbackURL: withArrival(safeNext(formData.get("next")) ?? "/app"),
+      },
     });
   } catch {
     // Same answer whether or not an account exists (textes `login.magic.sent.text`).
@@ -298,14 +326,83 @@ export async function sendMagicLinkAction(
   return { status: "sent", email: email.data };
 }
 
-export async function signInWithGoogle(formData: FormData) {
-  const next = safeNext(formData.get("next")) ?? "/app";
+/**
+ * « Continuer avec Google, Apple ou LinkedIn » (docs/refonte-connexion § 6). The profile chosen on
+ * the entry screen waits in the sign-up cookie: a new account resumes the sign-up at the plan
+ * step with it, an existing one is simply signed in.
+ */
+export async function signInWithProvider(provider: string, formData: FormData) {
+  const id = enabledProviders().find((item) => item === provider);
+  if (!id) redirect("/connexion");
+  const next = safeNext(formData.get("next"));
+  const profile = entrySchema.shape.profil.parse(formData.get("profil"));
+  await writeSignupFlow({ profile, next });
+  const plan = typeof formData.get("forfait") === "string" ? String(formData.get("forfait")) : "";
+  const signupStep = new URLSearchParams({ profil: profile });
+  if (plan) signupStep.set("forfait", plan.slice(0, 60));
+  if (next) signupStep.set("suite", next);
   const result = await auth.api.signInSocial({
     headers: await headers(),
-    body: { provider: "google", callbackURL: next, errorCallbackURL: "/connexion?erreur=google" },
+    body: {
+      provider: id,
+      callbackURL: withArrival(next ?? "/app"),
+      newUserCallbackURL: `/inscription/forfait?${signupStep}`,
+      errorCallbackURL: `/connexion?erreur=${id}`,
+    },
   });
   if (result.url) redirect(result.url);
-  redirect("/connexion?erreur=google");
+  redirect(`/connexion?erreur=${id}`);
+}
+
+const socialSignupSchema = z.object({
+  profil: z.enum(["talent", "rh", "company"]),
+  forfait: z.string().max(60).optional(),
+  orgName: z.string().trim().max(120).optional(),
+  orgRole: z.string().trim().max(120).optional(),
+});
+
+/**
+ * Plan step of a sign-up started with a provider: the account exists already, so the step sets it
+ * up (organization for recruiters and companies) like the code check does for an e-mail account.
+ */
+export async function completeSocialSignup(formData: FormData) {
+  const session = await getSession();
+  if (!session) redirect("/connexion");
+  const parsed = socialSignupSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) redirect("/inscription");
+  const input = parsed.data;
+  if (input.profil !== "talent" && !input.orgName) {
+    const query = new URLSearchParams({ profil: input.profil, erreur: "organisation" });
+    if (input.forfait) query.set("forfait", input.forfait);
+    redirect(`/inscription/forfait?${query}`);
+  }
+  if (!(await pendingSocialSignup(db, session.user.id))) redirect("/app");
+  const user = await db.user.findUniqueOrThrow({ where: { id: session.user.id } });
+  const org = await setupAccount(db, user.id, {
+    profile: input.profil,
+    orgName: input.orgName,
+    orgRole: input.orgRole,
+  });
+  const plan = input.forfait
+    ? await db.plan.findUnique({ where: { code: input.forfait }, select: { priceCents: true } })
+    : null;
+  await writeSignupFlow({ profile: input.profil, plan: input.forfait });
+  const current = await resolvePlan(
+    db,
+    org ? { type: "organization", id: org.id } : { type: "user", id: user.id },
+  );
+  await sendWelcome(
+    user.email,
+    org
+      ? {
+          kind: input.profil === "company" ? "company" : "recruiter",
+          firstName: user.firstName ?? user.name,
+          plan: current?.planName ?? "",
+          org: org.name,
+        }
+      : { kind: "talent", firstName: user.firstName ?? user.name, plan: current?.planName ?? "" },
+  ).catch((error) => reportError(error, { message: "E-mail de bienvenue non envoyé" }));
+  redirect(plan?.priceCents ? "/inscription/paiement" : withArrival("/app/bienvenue"));
 }
 
 export async function signOut() {

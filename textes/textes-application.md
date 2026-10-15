@@ -1218,6 +1218,62 @@ Rappel du paramètre `?suite=` : si le visiteur arrive depuis une action (postul
 | `auth.legal.text` | En continuant, vous acceptez les {terms} et la {privacy} de Jumanly. |
 | `auth.legal.terms` | conditions générales |
 | `auth.legal.privacy` | politique de confidentialité |
+| `auth.orEmail` | ou avec votre e-mail |
+| `auth.entry.aria` | Connexion ou inscription |
+| `auth.entry.loginTab` | Se connecter |
+| `auth.entry.signupTab` | Créer un compte |
+| `auth.social.label` | Continuer avec |
+| `auth.social.signupLabel` | S'inscrire avec |
+| `auth.social.google` | Google |
+| `auth.social.apple` | Apple |
+| `auth.social.linkedin` | LinkedIn |
+| `auth.social.aria.continue` | Continuer avec {provider} |
+| `auth.social.aria.signup` | S'inscrire avec {provider} |
+
+#### Scène d'accueil de `/connexion` et `/inscription`
+
+*Décor animé à gauche du formulaire (docs/refonte-connexion/BRIEF-CONNEXION-V2.md). Les mots entre `<hl>` et `</hl>` s'affichent en dégradé. Les chiffres des cartes sont des illustrations de l'appli, identiques pour tout le monde, jamais des données d'un compte.*
+
+| Clé | Texte |
+|---|---|
+| `auth.stage.rolesLabel` | Je suis |
+| `auth.stage.roles.talent` | Talent |
+| `auth.stage.roles.rh` | RH |
+| `auth.stage.roles.company` | Entreprise |
+| `auth.stage.slogan` | Learn. Grow. <hl>Connect.</hl> |
+| `auth.stage.talent.eyebrow` | Pour les talents |
+| `auth.stage.talent.hook` | Prêt à <hl>booster votre employabilité</hl> ? |
+| `auth.stage.talent.sub` | Formez-vous, renforcez votre CV et laissez les offres venir à vous. |
+| `auth.stage.talent.line` | Connectez-vous pour reprendre votre parcours |
+| `auth.stage.talent.cards.1.value` | 82 |
+| `auth.stage.talent.cards.1.title` | Force du profil |
+| `auth.stage.talent.cards.1.text` | 82 % · en progression |
+| `auth.stage.talent.cards.2.title` | Nouvelle offre pour vous |
+| `auth.stage.talent.cards.2.text` | Analyste de données junior |
+| `auth.stage.talent.cards.2.pill` | Compatibilité 87 % |
+| `auth.stage.talent.cards.3.title` | Certificat obtenu |
+| `auth.stage.talent.cards.3.text` | Excel pour l'analyse |
+| `auth.stage.rh.eyebrow` | Pour les professionnels RH |
+| `auth.stage.rh.hook` | Prêt à recruter les <hl>bons profils</hl>, plus vite ? |
+| `auth.stage.rh.sub` | Publiez, triez et échangez avec vos candidats au même endroit, avec une IA qui explique ses choix. |
+| `auth.stage.rh.line` | Connectez-vous pour retrouver vos candidats |
+| `auth.stage.rh.cards.1.title` | Profil recommandé |
+| `auth.stage.rh.cards.1.text` | Kofi A. · Data analyst |
+| `auth.stage.rh.cards.1.pill` | Pourquoi ? |
+| `auth.stage.rh.cards.2.title` | Entretien planifié |
+| `auth.stage.rh.cards.2.text` | Jeudi · 10:00 |
+| `auth.stage.rh.cards.3.title` | Candidatures triées |
+| `auth.stage.rh.cards.3.text` | Pipeline à jour |
+| `auth.stage.company.eyebrow` | Pour les entreprises |
+| `auth.stage.company.hook` | Prêt à bâtir <hl>l'équipe</hl> qui fera grandir votre entreprise ? |
+| `auth.stage.company.sub` | Un vivier de talents formés, un suivi de recrutement clair et toute votre équipe sur la même page. |
+| `auth.stage.company.line` | Connectez-vous pour piloter vos recrutements |
+| `auth.stage.company.cards.1.title` | Offre publiée |
+| `auth.stage.company.cards.1.text` | Chargé(e) de clientèle |
+| `auth.stage.company.cards.2.title` | Votre équipe recrute |
+| `auth.stage.company.cards.2.text` | Recruteurs invités |
+| `auth.stage.company.cards.3.title` | Vivier de talents |
+| `auth.stage.company.cards.3.text` | Profils formés sur Jumanly |
 
 ---
 
@@ -1358,6 +1414,16 @@ Note d'intégration : l'étape « Paiement » n'apparaît dans l'indicateur que 
 | `signup.profile.beneficiary` | Vous êtes bénéficiaire et avez reçu un code de licence ? Choisissez « Talent », puis activez votre code. |
 | `signup.profile.error.required` | Choisissez le profil qui vous correspond. |
 | `signup.profile.cta` | Continuer |
+| `signup.entry.title` | Créez votre compte gratuit |
+| `signup.entry.subtitle` | Quelques secondes suffisent. Vous choisirez votre formule ensuite. |
+| `signup.entry.who` | Vous êtes |
+| `signup.entry.profiles.talent` | Talent |
+| `signup.entry.profiles.rh` | Professionnel RH |
+| `signup.entry.profiles.company` | Entreprise |
+| `signup.entry.continue` | Continuer |
+| `signup.entry.free` | Inscription gratuite |
+| `signup.entry.payment` | Mobile Money et carte |
+| `signup.entry.legal` | En créant un compte, vous acceptez les {terms} et la {privacy} de Jumanly. |
 
 ---
 
@@ -1677,8 +1743,10 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `auth.error.accountLocked` | Votre compte est temporairement verrouillé après plusieurs tentatives. Un e-mail vous a été envoyé pour le débloquer. |
 | `auth.error.accountSuspended` | Votre compte est suspendu. Pour en savoir plus, écrivez-nous à assistant@jumanly.io. |
 | `auth.error.accountDeleted` | Ce compte a été supprimé. Vous pouvez créer un nouveau compte avec cette adresse. |
-| `auth.error.googleOnly` | Ce compte a été créé avec Google. Utilisez « Continuer avec Google » ou définissez un mot de passe avec « Mot de passe oublié ». |
+| `auth.error.googleOnly` | Ce compte a été créé avec Google, Apple ou LinkedIn. Utilisez le bouton de ce service, ou définissez un mot de passe avec « Mot de passe oublié ». |
 | `auth.error.googleFailed` | La connexion avec Google n'a pas abouti. Réessayez ou utilisez votre e-mail. |
+| `auth.error.appleFailed` | La connexion avec Apple n'a pas abouti. Réessayez ou utilisez votre e-mail. |
+| `auth.error.linkedinFailed` | La connexion avec LinkedIn n'a pas abouti. Réessayez ou utilisez votre e-mail. |
 | `auth.error.googleCancelled` | Connexion avec Google annulée. |
 | `auth.error.magicLinkExpired` | Ce lien de connexion a expiré ou a déjà été utilisé. Demandez-en un nouveau. |
 | `auth.error.magicLinkOtherDevice` | Ce lien a été demandé depuis un autre appareil. Ouvrez-le sur l'appareil d'origine ou demandez-en un nouveau. |
@@ -1817,6 +1885,119 @@ Conventions :
 | `spaceSwitcher.joinHint` | Pour rejoindre une organisation, demandez une invitation à son administrateur. |
 | `spaceSwitcher.switched` | Vous êtes dans l'espace {space}. |
 | `spaceSwitcher.pendingInvites` | {count, plural, one {# invitation en attente} other {# invitations en attente}} |
+
+---
+
+### Espace · Générique d'entrée
+
+*Joué après une connexion réussie (docs/refonte-connexion/BRIEF-CONNEXION-V2.md § 7) : la version complète une seule fois par compte, la version courte ensuite, jamais en animations réduites (le message de bienvenue s'affiche à la place). Les cartes et leurs chiffres sont des illustrations de l'appli, identiques pour tout le monde, jamais des données du compte.*
+
+| Clé | Texte |
+|---|---|
+| `intro.label` | Présentation de Jumanly |
+| `intro.skip` | Passer l'intro |
+| `intro.skipKey` | Échap |
+| `intro.wordmark` | jumanly |
+| `intro.welcome` | Bienvenue, |
+| `intro.welcomeNoName` | Bienvenue |
+| `intro.back` | Bon retour, {name} |
+| `intro.backNoName` | Bon retour |
+| `intro.slogan` | Learn. Grow. Connect. |
+| `intro.live` | Bienvenue, {name}. Présentation de Jumanly. |
+| `intro.liveNoName` | Bienvenue. Présentation de Jumanly. |
+| `intro.toast.first` | Bienvenue sur Jumanly, {name} ! |
+| `intro.toast.back` | Bon retour, {name} ! |
+| `intro.talent.modules.1.tag` | Learn |
+| `intro.talent.modules.1.left` | Votre |
+| `intro.talent.modules.1.right` | formation |
+| `intro.talent.modules.1.cards.1.value` | 38 |
+| `intro.talent.modules.1.cards.1.title` | Leçon 3 sur 8 |
+| `intro.talent.modules.1.cards.1.text` | Excel pour l'analyse |
+| `intro.talent.modules.1.cards.2.title` | Certificat |
+| `intro.talent.modules.1.cards.2.text` | Délivré à la fin du parcours |
+| `intro.talent.modules.2.tag` | Career |
+| `intro.talent.modules.2.left` | Votre |
+| `intro.talent.modules.2.right` | CV |
+| `intro.talent.modules.2.cards.1.value` | 82 |
+| `intro.talent.modules.2.cards.1.title` | Score du CV |
+| `intro.talent.modules.2.cards.1.text` | 82/100 · Prêt |
+| `intro.talent.modules.2.cards.2.title` | Conseil de l'IA |
+| `intro.talent.modules.2.cards.2.text` | Ajoutez un résultat chiffré |
+| `intro.talent.modules.2.cards.2.pill` | Pourquoi ? |
+| `intro.talent.modules.3.tag` | Jobs |
+| `intro.talent.modules.3.left` | Votre |
+| `intro.talent.modules.3.right` | emploi |
+| `intro.talent.modules.3.cards.1.title` | Analyste de données junior |
+| `intro.talent.modules.3.cards.1.text` | Compatibilité 87 % |
+| `intro.talent.modules.3.cards.2.title` | Candidature envoyée |
+| `intro.talent.modules.3.cards.2.text` | Suivez-la dans Jobs |
+| `intro.talent.modules.4.tag` | Connect |
+| `intro.talent.modules.4.left` | Votre |
+| `intro.talent.modules.4.right` | réseau |
+| `intro.talent.modules.4.cards.1.title` | Nadia, recruteuse |
+| `intro.talent.modules.4.cards.1.text` | « Votre profil nous intéresse » |
+| `intro.talent.modules.4.cards.2.title` | Entretien |
+| `intro.talent.modules.4.cards.2.text` | Jeudi · 10:00 |
+| `intro.rh.modules.1.tag` | Jobs |
+| `intro.rh.modules.1.left` | Vos |
+| `intro.rh.modules.1.right` | offres |
+| `intro.rh.modules.1.cards.1.title` | Offre publiée |
+| `intro.rh.modules.1.cards.1.text` | Data analyst · Kinshasa |
+| `intro.rh.modules.1.cards.2.title` | Diffusée aux talents |
+| `intro.rh.modules.1.cards.2.text` | du vivier Jumanly |
+| `intro.rh.modules.2.tag` | Hire |
+| `intro.rh.modules.2.left` | Vos |
+| `intro.rh.modules.2.right` | candidats |
+| `intro.rh.modules.2.cards.1.value` | 55 |
+| `intro.rh.modules.2.cards.1.title` | Pipeline |
+| `intro.rh.modules.2.cards.1.text` | Nouveaux · Entretien · Offre |
+| `intro.rh.modules.2.cards.2.title` | Candidature avancée |
+| `intro.rh.modules.2.cards.2.text` | Étape Entretien |
+| `intro.rh.modules.3.tag` | Intelligence |
+| `intro.rh.modules.3.left` | Vos |
+| `intro.rh.modules.3.right` | profils |
+| `intro.rh.modules.3.cards.1.title` | Profil recommandé |
+| `intro.rh.modules.3.cards.1.text` | Kofi A. · Data analyst |
+| `intro.rh.modules.3.cards.1.pill` | Pourquoi ? |
+| `intro.rh.modules.3.cards.2.title` | Critères visibles |
+| `intro.rh.modules.3.cards.2.text` | L'IA explique chaque score |
+| `intro.rh.modules.4.tag` | Connect |
+| `intro.rh.modules.4.left` | Vos |
+| `intro.rh.modules.4.right` | échanges |
+| `intro.rh.modules.4.cards.1.title` | Kofi A. |
+| `intro.rh.modules.4.cards.1.text` | « Merci pour l'invitation » |
+| `intro.rh.modules.4.cards.2.title` | Entretien planifié |
+| `intro.rh.modules.4.cards.2.text` | Jeudi · 10:00 |
+| `intro.company.modules.1.tag` | Jobs |
+| `intro.company.modules.1.left` | Vos |
+| `intro.company.modules.1.right` | offres |
+| `intro.company.modules.1.cards.1.title` | Offre publiée |
+| `intro.company.modules.1.cards.1.text` | Chargé(e) de clientèle |
+| `intro.company.modules.1.cards.2.title` | Page entreprise |
+| `intro.company.modules.1.cards.2.text` | Votre marque employeur |
+| `intro.company.modules.2.tag` | Vivier |
+| `intro.company.modules.2.left` | Votre |
+| `intro.company.modules.2.right` | vivier |
+| `intro.company.modules.2.cards.1.title` | Talents formés |
+| `intro.company.modules.2.cards.1.text` | Certificats vérifiables |
+| `intro.company.modules.2.cards.2.title` | Matching explicable |
+| `intro.company.modules.2.cards.2.text` | Chaque score a ses raisons |
+| `intro.company.modules.2.cards.2.pill` | Pourquoi ? |
+| `intro.company.modules.3.tag` | Équipe |
+| `intro.company.modules.3.left` | Votre |
+| `intro.company.modules.3.right` | équipe |
+| `intro.company.modules.3.cards.1.title` | Recruteurs invités |
+| `intro.company.modules.3.cards.1.text` | Rôles et droits par membre |
+| `intro.company.modules.3.cards.2.title` | Note de Nadia |
+| `intro.company.modules.3.cards.2.text` | « À rencontrer » |
+| `intro.company.modules.4.tag` | Hire |
+| `intro.company.modules.4.left` | Vos |
+| `intro.company.modules.4.right` | recrutements |
+| `intro.company.modules.4.cards.1.value` | 70 |
+| `intro.company.modules.4.cards.1.title` | Tableau de bord |
+| `intro.company.modules.4.cards.1.text` | Délais et étapes |
+| `intro.company.modules.4.cards.2.title` | Poste pourvu |
+| `intro.company.modules.4.cards.2.text` | Bienvenue dans l'équipe |
 
 ---
 
@@ -4254,6 +4435,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `settings.display.title` | Affichage |
 | `settings.display.reduceMotion.text` | Réduire les animations |
 | `settings.display.reduceMotion.hint` | Les pages s'affichent sans mouvement : mêmes informations, sans apparitions ni effets de lumière. Votre appareil peut aussi le demander pour tous les sites. |
+| `settings.display.replayIntro.text` | Revoir la présentation |
+| `settings.display.replayIntro.hint` | Rejoue le générique d'accueil de Jumanly, celui de votre première connexion. |
 
 #### Sécurité
 

@@ -1528,6 +1528,95 @@
       "terms": "conditions générales",
       "privacy": "politique de confidentialité"
     },
+    "orEmail": "ou avec votre e-mail",
+    "entry": {
+      "aria": "Connexion ou inscription",
+      "loginTab": "Se connecter",
+      "signupTab": "Créer un compte"
+    },
+    "social": {
+      "label": "Continuer avec",
+      "signupLabel": "S'inscrire avec",
+      "google": "Google",
+      "apple": "Apple",
+      "linkedin": "LinkedIn",
+      "aria": {
+        "continue": "Continuer avec {provider}",
+        "signup": "S'inscrire avec {provider}"
+      }
+    },
+    "stage": {
+      "rolesLabel": "Je suis",
+      "roles": {
+        "talent": "Talent",
+        "rh": "RH",
+        "company": "Entreprise"
+      },
+      "slogan": "Learn. Grow. <hl>Connect.</hl>",
+      "talent": {
+        "eyebrow": "Pour les talents",
+        "hook": "Prêt à <hl>booster votre employabilité</hl> ?",
+        "sub": "Formez-vous, renforcez votre CV et laissez les offres venir à vous.",
+        "line": "Connectez-vous pour reprendre votre parcours",
+        "cards": {
+          "1": {
+            "value": "82",
+            "title": "Force du profil",
+            "text": "82 % · en progression"
+          },
+          "2": {
+            "title": "Nouvelle offre pour vous",
+            "text": "Analyste de données junior",
+            "pill": "Compatibilité 87 %"
+          },
+          "3": {
+            "title": "Certificat obtenu",
+            "text": "Excel pour l'analyse"
+          }
+        }
+      },
+      "rh": {
+        "eyebrow": "Pour les professionnels RH",
+        "hook": "Prêt à recruter les <hl>bons profils</hl>, plus vite ?",
+        "sub": "Publiez, triez et échangez avec vos candidats au même endroit, avec une IA qui explique ses choix.",
+        "line": "Connectez-vous pour retrouver vos candidats",
+        "cards": {
+          "1": {
+            "title": "Profil recommandé",
+            "text": "Kofi A. · Data analyst",
+            "pill": "Pourquoi ?"
+          },
+          "2": {
+            "title": "Entretien planifié",
+            "text": "Jeudi · 10:00"
+          },
+          "3": {
+            "title": "Candidatures triées",
+            "text": "Pipeline à jour"
+          }
+        }
+      },
+      "company": {
+        "eyebrow": "Pour les entreprises",
+        "hook": "Prêt à bâtir <hl>l'équipe</hl> qui fera grandir votre entreprise ?",
+        "sub": "Un vivier de talents formés, un suivi de recrutement clair et toute votre équipe sur la même page.",
+        "line": "Connectez-vous pour piloter vos recrutements",
+        "cards": {
+          "1": {
+            "title": "Offre publiée",
+            "text": "Chargé(e) de clientèle"
+          },
+          "2": {
+            "title": "Votre équipe recrute",
+            "text": "Recruteurs invités"
+          },
+          "3": {
+            "title": "Vivier de talents",
+            "text": "Profils formés sur Jumanly"
+          }
+        }
+      }
+    },
     "error": {
       "required": "Ce champ est obligatoire.",
       "emailInvalid": "Saisissez une adresse e-mail valide, par exemple nom@exemple.com.",
@@ -1562,8 +1651,10 @@
       "accountLocked": "Votre compte est temporairement verrouillé après plusieurs tentatives. Un e-mail vous a été envoyé pour le débloquer.",
       "accountSuspended": "Votre compte est suspendu. Pour en savoir plus, écrivez-nous à assistant@jumanly.io.",
       "accountDeleted": "Ce compte a été supprimé. Vous pouvez créer un nouveau compte avec cette adresse.",
-      "googleOnly": "Ce compte a été créé avec Google. Utilisez « Continuer avec Google » ou définissez un mot de passe avec « Mot de passe oublié ».",
+      "googleOnly": "Ce compte a été créé avec Google, Apple ou LinkedIn. Utilisez le bouton de ce service, ou définissez un mot de passe avec « Mot de passe oublié ».",
       "googleFailed": "La connexion avec Google n'a pas abouti. Réessayez ou utilisez votre e-mail.",
+      "appleFailed": "La connexion avec Apple n'a pas abouti. Réessayez ou utilisez votre e-mail.",
+      "linkedinFailed": "La connexion avec LinkedIn n'a pas abouti. Réessayez ou utilisez votre e-mail.",
       "googleCancelled": "Connexion avec Google annulée.",
       "magicLinkExpired": "Ce lien de connexion a expiré ou a déjà été utilisé. Demandez-en un nouveau.",
       "magicLinkOtherDevice": "Ce lien a été demandé depuis un autre appareil. Ouvrez-le sur l'appareil d'origine ou demandez-en un nouveau.",
@@ -1724,6 +1815,20 @@
         "required": "Choisissez le profil qui vous correspond."
       },
       "cta": "Continuer"
+    },
+    "entry": {
+      "title": "Créez votre compte gratuit",
+      "subtitle": "Quelques secondes suffisent. Vous choisirez votre formule ensuite.",
+      "who": "Vous êtes",
+      "profiles": {
+        "talent": "Talent",
+        "rh": "Professionnel RH",
+        "company": "Entreprise"
+      },
+      "continue": "Continuer",
+      "free": "Inscription gratuite",
+      "payment": "Mobile Money et carte",
+      "legal": "En créant un compte, vous acceptez les {terms} et la {privacy} de Jumanly."
     },
     "plan": {
       "seo": {
@@ -2181,6 +2286,222 @@
     "joinHint": "Pour rejoindre une organisation, demandez une invitation à son administrateur.",
     "switched": "Vous êtes dans l'espace {space}.",
     "pendingInvites": "{count, plural, one {# invitation en attente} other {# invitations en attente}}"
+  },
+  "intro": {
+    "label": "Présentation de Jumanly",
+    "skip": "Passer l'intro",
+    "skipKey": "Échap",
+    "wordmark": "jumanly",
+    "welcome": "Bienvenue,",
+    "welcomeNoName": "Bienvenue",
+    "back": "Bon retour, {name}",
+    "backNoName": "Bon retour",
+    "slogan": "Learn. Grow. Connect.",
+    "live": "Bienvenue, {name}. Présentation de Jumanly.",
+    "liveNoName": "Bienvenue. Présentation de Jumanly.",
+    "toast": {
+      "first": "Bienvenue sur Jumanly, {name} !",
+      "back": "Bon retour, {name} !"
+    },
+    "talent": {
+      "modules": {
+        "1": {
+          "tag": "Learn",
+          "left": "Votre",
+          "right": "formation",
+          "cards": {
+            "1": {
+              "value": "38",
+              "title": "Leçon 3 sur 8",
+              "text": "Excel pour l'analyse"
+            },
+            "2": {
+              "title": "Certificat",
+              "text": "Délivré à la fin du parcours"
+            }
+          }
+        },
+        "2": {
+          "tag": "Career",
+          "left": "Votre",
+          "right": "CV",
+          "cards": {
+            "1": {
+              "value": "82",
+              "title": "Score du CV",
+              "text": "82/100 · Prêt"
+            },
+            "2": {
+              "title": "Conseil de l'IA",
+              "text": "Ajoutez un résultat chiffré",
+              "pill": "Pourquoi ?"
+            }
+          }
+        },
+        "3": {
+          "tag": "Jobs",
+          "left": "Votre",
+          "right": "emploi",
+          "cards": {
+            "1": {
+              "title": "Analyste de données junior",
+              "text": "Compatibilité 87 %"
+            },
+            "2": {
+              "title": "Candidature envoyée",
+              "text": "Suivez-la dans Jobs"
+            }
+          }
+        },
+        "4": {
+          "tag": "Connect",
+          "left": "Votre",
+          "right": "réseau",
+          "cards": {
+            "1": {
+              "title": "Nadia, recruteuse",
+              "text": "« Votre profil nous intéresse »"
+            },
+            "2": {
+              "title": "Entretien",
+              "text": "Jeudi · 10:00"
+            }
+          }
+        }
+      }
+    },
+    "rh": {
+      "modules": {
+        "1": {
+          "tag": "Jobs",
+          "left": "Vos",
+          "right": "offres",
+          "cards": {
+            "1": {
+              "title": "Offre publiée",
+              "text": "Data analyst · Kinshasa"
+            },
+            "2": {
+              "title": "Diffusée aux talents",
+              "text": "du vivier Jumanly"
+            }
+          }
+        },
+        "2": {
+          "tag": "Hire",
+          "left": "Vos",
+          "right": "candidats",
+          "cards": {
+            "1": {
+              "value": "55",
+              "title": "Pipeline",
+              "text": "Nouveaux · Entretien · Offre"
+            },
+            "2": {
+              "title": "Candidature avancée",
+              "text": "Étape Entretien"
+            }
+          }
+        },
+        "3": {
+          "tag": "Intelligence",
+          "left": "Vos",
+          "right": "profils",
+          "cards": {
+            "1": {
+              "title": "Profil recommandé",
+              "text": "Kofi A. · Data analyst",
+              "pill": "Pourquoi ?"
+            },
+            "2": {
+              "title": "Critères visibles",
+              "text": "L'IA explique chaque score"
+            }
+          }
+        },
+        "4": {
+          "tag": "Connect",
+          "left": "Vos",
+          "right": "échanges",
+          "cards": {
+            "1": {
+              "title": "Kofi A.",
+              "text": "« Merci pour l'invitation »"
+            },
+            "2": {
+              "title": "Entretien planifié",
+              "text": "Jeudi · 10:00"
+            }
+          }
+        }
+      }
+    },
+    "company": {
+      "modules": {
+        "1": {
+          "tag": "Jobs",
+          "left": "Vos",
+          "right": "offres",
+          "cards": {
+            "1": {
+              "title": "Offre publiée",
+              "text": "Chargé(e) de clientèle"
+            },
+            "2": {
+              "title": "Page entreprise",
+              "text": "Votre marque employeur"
+            }
+          }
+        },
+        "2": {
+          "tag": "Vivier",
+          "left": "Votre",
+          "right": "vivier",
+          "cards": {
+            "1": {
+              "title": "Talents formés",
+              "text": "Certificats vérifiables"
+            },
+            "2": {
+              "title": "Matching explicable",
+              "text": "Chaque score a ses raisons",
+              "pill": "Pourquoi ?"
+            }
+          }
+        },
+        "3": {
+          "tag": "Équipe",
+          "left": "Votre",
+          "right": "équipe",
+          "cards": {
+            "1": {
+              "title": "Recruteurs invités",
+              "text": "Rôles et droits par membre"
+            },
+            "2": {
+              "title": "Note de Nadia",
+              "text": "« À rencontrer »"
+            }
+          }
+        },
+        "4": {
+          "tag": "Hire",
+          "left": "Vos",
+          "right": "recrutements",
+          "cards": {
+            "1": {
+              "value": "70",
+              "title": "Tableau de bord",
+              "text": "Délais et étapes"
+            },
+            "2": {
+              "title": "Poste pourvu",
+              "text": "Bienvenue dans l'équipe"
+            }
+          }
+        }
+      }
+    }
   },
   "talent": {
     "dashboard": {
@@ -5252,6 +5573,10 @@
       "reduceMotion": {
         "text": "Réduire les animations",
         "hint": "Les pages s'affichent sans mouvement : mêmes informations, sans apparitions ni effets de lumière. Votre appareil peut aussi le demander pour tous les sites."
+      },
+      "replayIntro": {
+        "text": "Revoir la présentation",
+        "hint": "Rejoue le générique d'accueil de Jumanly, celui de votre première connexion."
       }
     },
     "security": {

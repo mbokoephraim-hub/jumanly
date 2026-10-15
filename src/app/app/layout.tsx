@@ -11,6 +11,8 @@ import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
 import { unreadNotifications } from "@/server/services/notifications";
 import { hireMemberships, partnerMemberships } from "@/server/services/organization";
+import { introData } from "@/components/app/app-intro-data";
+import { introProfile } from "@/lib/app-intro";
 
 /** Signed-in space: every page below needs a session (checked on the server). */
 export default function SignedInLayout({ children }: LayoutProps<"/app">) {
@@ -38,6 +40,14 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     getPartnerSpace(user.id),
     unreadNotifications(db, user.id),
   ]);
+  const intro = await introData({
+    profile: introProfile(
+      partnerSpace ? { partner: true } : space ? { type: space.organization.type } : null,
+    ),
+    name: user.firstName ?? user.name ?? null,
+    image: user.image,
+    seenAt: user.introSeenAt,
+  });
   const option = (membership: (typeof hire)[number]) => ({
     id: membership.organizationId,
     name: membership.organization.name,
@@ -51,6 +61,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       spaces={[...hire, ...partners].map(option)}
       unread={unread}
       reduceMotion={user.reduceMotion}
+      intro={intro}
       account={{
         name: user.name,
         planName: plan?.planName ?? "",

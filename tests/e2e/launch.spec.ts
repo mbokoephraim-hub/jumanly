@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { demo, logIn } from "./session";
 
 // E11: security headers, installable app, offline reading, structured data, editable contents.

@@ -1,8 +1,11 @@
+import { Suspense } from "react";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { useTranslations } from "next-intl";
 import { NotificationBell, type BellLabels } from "@/components/app/notification-bell";
 import { Toaster } from "@/components/motion/toaster";
+import { AppIntroGate } from "@/components/app/app-intro-gate";
+import type { IntroData } from "@/components/app/app-intro";
 import { hireNavigation, partnerNavigation, talentNavigation } from "@/config/navigation";
 import { Logo, Icon } from "@/components/brand";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
@@ -26,6 +29,7 @@ export function AppShell({
   spaces,
   unread,
   reduceMotion = false,
+  intro,
   children,
 }: {
   account: AccountSummary;
@@ -35,6 +39,8 @@ export function AppShell({
   unread: number;
   /** « Réduire les animations » (settings): no motion at all in the signed-in space. */
   reduceMotion?: boolean;
+  /** Welcome intro played after a sign-in (`?arrivee=1`), docs/refonte-connexion § 7. */
+  intro?: IntroData;
   children: ReactNode;
 }) {
   const t = useTranslations("appNav");
@@ -76,6 +82,11 @@ export function AppShell({
     >
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={tt("region.aria")} closeLabel={tt("close")} />
+      {intro && (
+        <Suspense fallback={null}>
+          <AppIntroGate data={intro} reduce={reduceMotion} />
+        </Suspense>
+      )}
       <a
         href="#content"
         className="sr-only z-50 rounded-pill bg-lime px-4 py-2 text-sapin focus:not-sr-only focus:fixed focus:top-3 focus:left-3"

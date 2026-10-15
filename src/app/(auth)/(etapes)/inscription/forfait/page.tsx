@@ -14,11 +14,15 @@ import { PlanSubmit } from "@/components/auth/plan-submit";
 import { Icon } from "@/components/brand/icon";
 import { CompareTable } from "@/components/site/pricing";
 import { ButtonLink, Skeleton } from "@/components/ui";
+import { TextField } from "@/components/ui/text-field";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
 import { readSignupParams, stepHref } from "@/lib/signup-params";
+import { completeSocialSignup } from "@/server/actions/auth";
+import { getSession } from "@/server/auth/session";
+import { db } from "@/server/db";
 import { getPublicPlans } from "@/server/queries/public";
-import { familiesForProfile } from "@/server/services/accounts";
+import { familiesForProfile, pendingSocialSignup } from "@/server/services/accounts";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("signup");
@@ -43,9 +47,16 @@ export default function SignupPlanPage({ searchParams }: PageProps<"/inscription
  * on /tarifs. Plans sold on quote are shown with the quote button, not as a choice.
  */
 async function PlanStep({ searchParams }: Pick<PageProps<"/inscription/forfait">, "searchParams">) {
-  const params = readSignupParams(await searchParams);
+  const query = await searchParams;
+  const params = readSignupParams(query);
   if (!params.profil || params.profil === "partner") redirect(stepHref("/inscription", params));
+  // An account just created with Google, Apple or LinkedIn finishes its sign-up here; any other
+  // signed-in person has nothing to sign up for.
+  const session = await getSession();
+  const social = session ? await pendingSocialSignup(db, session.user.id) : false;
+  if (session && !social) redirect(params.suite ?? "/app");
   const t = await getTranslations("signup");
+  const tAuth = await getTranslations("auth.error");
   const families = familiesForProfile(params.profil);
   const allPlans = await getPublicPlans();
   const plans = allPlans.filter((plan) => families.includes(plan.family));
@@ -73,9 +84,35 @@ async function PlanStep({ searchParams }: Pick<PageProps<"/inscription/forfait">
       <AuthNote icon="check" tone="lime">
         {t(`plan.freeReassurance.${params.profil}`)}
       </AuthNote>
-      <form action="/inscription/compte" method="get" className="flex flex-col gap-5">
+      <form
+        {...(social
+          ? { action: completeSocialSignup }
+          : { action: "/inscription/compte", method: "get" })}
+        className="flex flex-col gap-5"
+      >
         <input type="hidden" name="profil" value={params.profil} />
         {params.suite && <input type="hidden" name="suite" value={params.suite} />}
+        {social && params.profil !== "talent" && (
+          <div className="grid gap-4 sm:grid-cols-2">
+            <TextField
+              id="social-orgName"
+              name="orgName"
+              autoComplete="organization"
+              label={t("account.orgName.label")}
+              placeholder={t("account.orgName.placeholder")}
+              hint={t("account.orgName.help")}
+              required
+              error={query.erreur === "organisation" ? tAuth("orgNameRequired") : undefined}
+            />
+            <TextField
+              id="social-orgRole"
+              name="orgRole"
+              autoComplete="organization-title"
+              label={t("account.orgRole.label")}
+              placeholder={t("account.orgRole.placeholder")}
+            />
+          </div>
+        )}
         <PlanChoice plans={selectable} selected={selected} />
         {quotePlans.map((plan) => (
           <div
@@ -116,7 +153,7 @@ async function PlanStep({ searchParams }: Pick<PageProps<"/inscription/forfait">
           <p className="text-center text-xs text-ardoise">{t("plan.paidNote")}</p>
         </div>
       </form>
-      <SignupFooter back={stepHref("/inscription", params)} />
+      {!social && <SignupFooter back={stepHref("/inscription", params)} />}
     </AuthCard>
   );
 }

@@ -1,4 +1,4 @@
-import { expect, test, type Locator } from "@playwright/test";
+import { expect, test, type Locator } from "./fixtures";
 import { lastCode } from "./outbox";
 import { demo, logIn, testEmail } from "./session";
 
@@ -20,9 +20,9 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
     .getAttribute("href");
   await page.goto(href!);
   await page.getByRole("button", { name: "Continuer" }).click();
-  if (page.url().includes("/inscription/forfait")) {
-    await page.getByRole("button", { name: "Continuer" }).click();
-  }
+  // The entry screen leads to the plan step (docs/refonte-connexion § 5).
+  await expect(page).toHaveURL(/\/inscription\/forfait/);
+  await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/\/inscription\/compte/);
   await page.locator('input[name="firstName"]').fill("Awa");
   await page.locator('input[name="lastName"]').fill("Fictive");

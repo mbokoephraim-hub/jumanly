@@ -1,5 +1,5 @@
 import { expectAccessible } from "./a11y";
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Page } from "./fixtures";
 
 // Étape E1 (docs/specifications.md, partie 12): public site, rendered on the server and
 // readable without an account. Courses and jobs come from the fictional demo seed.

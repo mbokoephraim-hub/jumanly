@@ -519,6 +519,8 @@ model User {
   newsletter          Boolean                   @default(false)
   /// « Réduire les animations » (docs/experience-animee § 0.4): no motion in the signed-in space.
   reduceMotion        Boolean                   @default(false)
+  /// Full welcome intro seen (docs/refonte-connexion § 7): played once per account, on any device.
+  introSeenAt         DateTime?
   termsAcceptedAt     DateTime?
   /// Account deletion requested: effective at this date unless the user signs in again.
   deletionScheduledAt DateTime?
@@ -940,10 +942,10 @@ enum DiagnosticLevel {
 }
 
 model CareerDiagnostic {
-  id        String          @id @default(cuid(2))
-  userId    String
-  user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
-  level     DiagnosticLevel
+  id         String          @id @default(cuid(2))
+  userId     String
+  user       User            @relation(fields: [userId], references: [id], onDelete: Cascade)
+  level      DiagnosticLevel
   answers    Json
   result     Json
   /// « Refaire dans 30 jours »: a notification is sent at this date (hourly job).
