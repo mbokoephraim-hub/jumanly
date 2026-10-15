@@ -6061,8 +6061,16 @@
           "search": "Vous avez utilisé toutes vos recherches du mois. Elles se renouvellent le {date, date, long}. Cette limite protège les données des talents.",
           "contact": "Vous avez utilisé toutes vos demandes de mise en relation du mois. Elles se renouvellent le {date, date, long}."
         },
-        "upgrade": "Voir les forfaits"
+        "upgrade": "Voir les forfaits",
+        "title": "Quotas du mois",
+        "searches": "Recherches dans le vivier",
+        "contacts": "Demandes de mise en relation",
+        "value": "{used} sur {max}",
+        "unlimited": "Illimité",
+        "renewal": "Renouvellement le {date, date, long}. Cette limite protège les données des talents."
       },
+      "sort": "Trier : {value}",
+      "sortScore": "Compatibilité",
       "filter": {
         "skills": "Compétences",
         "experience": "Expérience",

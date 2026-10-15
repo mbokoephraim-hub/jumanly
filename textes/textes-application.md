@@ -4990,6 +4990,14 @@ Conventions :
 | `hire.talents.quota.reached.search` | Vous avez utilisé toutes vos recherches du mois. Elles se renouvellent le {date, date, long}. Cette limite protège les données des talents. |
 | `hire.talents.quota.reached.contact` | Vous avez utilisé toutes vos demandes de mise en relation du mois. Elles se renouvellent le {date, date, long}. |
 | `hire.talents.quota.upgrade` | Voir les forfaits |
+| `hire.talents.quota.title` | Quotas du mois |
+| `hire.talents.quota.searches` | Recherches dans le vivier |
+| `hire.talents.quota.contacts` | Demandes de mise en relation |
+| `hire.talents.quota.value` | {used} sur {max} |
+| `hire.talents.quota.unlimited` | Illimité |
+| `hire.talents.quota.renewal` | Renouvellement le {date, date, long}. Cette limite protège les données des talents. |
+| `hire.talents.sort` | Trier : {value} |
+| `hire.talents.sortScore` | Compatibilité |
 | `hire.talents.filter.skills` | Compétences |
 | `hire.talents.filter.experience` | Expérience |
 | `hire.talents.filter.location` | Localisation |

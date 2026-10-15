@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
-import { AiOrb } from "@/components/brand/ai-orb";
 import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
 import { CopyButton } from "@/components/career/copy-button";
@@ -23,14 +22,13 @@ import {
 } from "@/components/hire/kit";
 import { PipelineBoard, type BoardCard } from "@/components/hire/pipeline-board";
 import { tag } from "@/components/jobs/talent-kit";
-import { criterionText } from "@/components/matching/talent-why";
+import { ScoreButton, WhyPopover } from "@/components/matching/why-popover";
 import { SuccessBurst } from "@/components/motion/success-burst";
 import { TabRail } from "@/components/motion/tab-rail";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { Alert } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { siteUrl } from "@/lib/seo";
-import { dynamic } from "@/i18n/dynamic";
 import { moveApplicationAction, publishJobAction } from "@/server/actions/hire";
 import { db } from "@/server/db";
 import { level } from "@/server/entitlements";
@@ -70,7 +68,6 @@ export default async function PipelinePage({
   const { space, ctx } = await requireHire(`/app/hire/offres/${id}`, "readApplications");
   const t = await getTranslations("hire");
   const all = await getTranslations();
-  const d = dynamic(all);
   const format = await getFormatter();
   const { job, stages, applications } = await getPipeline(db, ctx, id).catch((error) => {
     if (error instanceof HireError) notFound();
@@ -151,93 +148,19 @@ export default async function PipelinePage({
   const days = (value: number) =>
     format.number(value, { maximumFractionDigits: 1, minimumFractionDigits: 0 });
 
-  const whyPanel = (applicationId: string, name: string, match: MatchExplanation) => {
-    const reasons = explainable
-      ? match.criteria
-      : match.criteria
-          .filter((criterion) => criterion.status === "met" || criterion.status === "partial")
-          .sort((a, b) => b.weight * b.value - a.weight * a.value)
-          .slice(0, 3);
-    return (
-      <div
-        id={`why-${applicationId}`}
-        popover="auto"
-        className="m-0 max-h-[calc(100dvh-24px)] w-auto overflow-y-auto rounded-[26px] border-0 bg-gradient-ai p-5 text-blanc shadow-float backdrop:bg-sapin/25 max-lg:inset-x-3 max-lg:top-auto max-lg:bottom-3 lg:inset-auto lg:top-24 lg:right-8 lg:w-[340px] lg:p-6"
-      >
-        <div className="flex items-center justify-between gap-2">
-          <p className="flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.12em] text-neon uppercase">
-            <AiOrb size={24} />
-            {all("ai.card.why")}
-          </p>
-          <button
-            type="button"
-            popoverTarget={`why-${applicationId}`}
-            popoverTargetAction="hide"
-            aria-label={all("ai.card.whyClose")}
-            className="grid size-8 place-items-center rounded-full hover:bg-blanc/10"
-          >
-            <Icon name="fermer" className="size-4" />
-          </button>
-        </div>
-        <p className="mt-2 text-[18px] leading-6 font-semibold">
-          {all("match.why.recruiter.title", { score: match.score, candidateName: name })}
-        </p>
-        <p className="mt-1.5 text-[12px] leading-[17px] text-blanc/80">
-          {all("match.why.recruiter.intro")}
-        </p>
-        <ul className="mt-4 flex flex-col gap-3">
-          {reasons.map((criterion) => {
-            const points = Math.round(criterion.weight * criterion.value);
-            return (
-              <li key={criterion.key} className="flex flex-col gap-1.5">
-                <p className="flex justify-between gap-3 text-[12px] leading-4">
-                  <span>{d(`match.criterion.${criterionText[criterion.key]}.text`)}</span>
-                  <span className="shrink-0 font-semibold">
-                    {all("match.criterion.points", { points, weight: criterion.weight })}
-                  </span>
-                </p>
-                <span aria-hidden className="block h-1.5 overflow-hidden rounded-pill bg-blanc/15">
-                  <span
-                    className="jm-gauge block h-full origin-left rounded-pill bg-lime"
-                    style={{
-                      transform: `scaleX(${criterion.weight ? points / criterion.weight : 0})`,
-                    }}
-                  />
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-        {explainPlan && (
-          <p className="mt-3 text-[12px] text-blanc/80">
-            {all("match.why.recruiter.suggestionsOnly", { plan: explainPlan })}
-          </p>
-        )}
-        {explainable && match.missingSkills.length > 0 && (
-          <p className="mt-4 rounded-[16px] bg-sapin/55 p-3.5 text-[12px] leading-[17px]">
-            <strong>{all("match.why.recruiter.missing.title")}</strong>{" "}
-            {match.missingSkills
-              .map((missing) =>
-                all("match.why.recruiter.missing.item", {
-                  skill: missing.skill,
-                  kind: all(`match.why.recruiter.missing.kind.${missing.importance}`),
-                }),
-              )
-              .join(", ")}
-          </p>
-        )}
-        <p className="mt-4 text-[12px] leading-[17px] text-neon">
-          {all("match.why.recruiter.rule")}
-        </p>
-        <Link
-          href={`/app/hire/candidats/${applicationId}#score-title`}
-          className="mt-3 inline-flex text-[12px] font-semibold underline underline-offset-4"
-        >
-          {t("pipeline.action.view")}
-        </Link>
-      </div>
-    );
-  };
+  const whyPanel = (applicationId: string, name: string, match: MatchExplanation) => (
+    <WhyPopover
+      id={applicationId}
+      name={name}
+      match={match}
+      explainable={explainable}
+      explainPlan={explainPlan}
+      link={{
+        href: `/app/hire/candidats/${applicationId}#score-title`,
+        label: t("pipeline.action.view"),
+      }}
+    />
+  );
 
   const cards: BoardCard[] = visible.map((application) => {
     const person = application.profile.user;
@@ -761,20 +684,5 @@ export default async function PipelinePage({
       )}
       <p className="text-[12px] text-ardoise">{t("dashboard.fairness")}</p>
     </div>
-  );
-}
-
-/** Score on the AI gradient; opens its « Pourquoi ? » panel (a native popover). */
-function ScoreButton({ id, score, aria }: { id: string; score: string; aria: string }) {
-  return (
-    <button
-      type="button"
-      popoverTarget={`why-${id}`}
-      aria-label={aria}
-      className="inline-flex h-7 items-center gap-1 rounded-pill bg-gradient-ai px-2.5 text-[11.5px] font-bold text-blanc transition-transform hover:scale-105"
-    >
-      <Icon name="intelligence" className="size-3.5 text-neon" />
-      {score}
-    </button>
   );
 }
