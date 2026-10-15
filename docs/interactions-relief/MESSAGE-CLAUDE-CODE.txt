@@ -1,0 +1,8 @@
+Nouvelle refonte transversale : interactions et relief v2 (curseur Orbi, épaisseur des cadres, en-têtes en îlots, effets).
+
+1. Lis docs/interactions-relief/BRIEF-INTERACTIONS-RELIEF-V2.md en entier.
+2. Ouvre docs/interactions-relief/maquette/app-v2.html et site-v2.html dans un navigateur, avec une souris : ce sont la référence visuelle et de comportement. Leurs blocs CSS « Relief : 4 niveaux » et « Curseur Orbi » et leur script donnent les valeurs exactes (ombres, tailles, durées, courbes). Les captures .jpg montrent les états clés.
+3. Ce brief prolonge docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md : réutilise src/styles/motion.css, AppMotionRoot et MotionRoot, n'ajoute aucune bibliothèque d'animation, n'anime que transform, opacity et filter, et respecte « Réduire les animations » et prefers-reduced-motion (le relief reste, le curseur et les animations disparaissent).
+4. Propose un plan court, puis travaille lot par lot (R1 Relief, R2 En-têtes et recherche Ctrl K, R3 Curseur Orbi avec le réglage User.orbiCursor, R4 Effets), un commit par lot, avec pnpm lint, typecheck, test, test:e2e et test:e2e:reduced verts.
+5. Textes nouveaux dans textes/textes-application.md puis pnpm messages. Note la décision « le relief remplace les ombres quasi nulles » dans docs/decisions/ et mets à jour docs/journal.md.
+6. À la fin, vérifie la « Définition de fini » (§ 7) à la souris, au clavier seul et sur téléphone, et liste ce qui reste éventuellement à arbitrer.
