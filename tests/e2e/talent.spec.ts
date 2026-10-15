@@ -113,15 +113,60 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await expect(page.getByRole("main")).toContainText("Retirée");
 });
 
-test("le diagnostic simplifié donne un bilan", async ({ page }) => {
+test("le diagnostic en six dimensions : une question par écran, le scan, puis le bilan", async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
   await logIn(page, demo.talentFree);
   await page.goto("/app/career/diagnostic");
-  const groups = page.locator("form#questions fieldset");
-  for (let index = 0; index < (await groups.count()); index++) {
-    await groups.nth(index).locator('input[type="radio"]').first().check();
+  await expect(
+    page.getByRole("heading", { name: "Faites le point, comme un vrai bilan" }),
+  ).toBeVisible();
+  const restart = page.getByRole("button", { name: "Recommencer à zéro" });
+  if (await restart.isVisible()) await restart.click();
+  else await page.getByRole("button", { name: "Lancer mon diagnostic" }).click();
+  await expect(page).toHaveURL(/etape=1/);
+
+  const flow = page.locator("#diagnostic-flow");
+  await expect(flow).toContainText("Étape 1 sur 6 · Clarté du projet");
+  // Next without an answer: the question asks for one.
+  await flow.getByRole("button", { name: "Suivant", exact: true }).click();
+  await expect(flow.getByRole("alert")).toHaveText(
+    "Choisissez au moins une réponse pour continuer.",
+  );
+
+  for (let step = 0; step < 60; step++) {
+    const screen = flow.locator("[data-screen]:not([hidden])");
+    const groups = screen.locator("fieldset");
+    for (let index = 0; index < (await groups.count()); index++) {
+      await groups.nth(index).locator("label").nth(1).click();
+    }
+    const finish = flow.getByRole("button", { name: "Terminer et lancer l'analyse" });
+    if (await finish.isVisible()) {
+      await finish.click();
+      break;
+    }
+    await flow.getByRole("button", { name: "Suivant", exact: true }).click();
   }
-  await page.getByRole("button", { name: "Voir mon bilan" }).click();
+
+  // The scan checks real steps, then the card turns over.
+  await expect(page.getByRole("heading", { name: "Analyse de votre diagnostic" })).toBeVisible();
+  await expect(page.getByText(/Comparaison avec les offres .*\(\d+ offres?\)/)).toBeVisible({
+    timeout: 20_000,
+  });
+  await page.getByRole("link", { name: "Voir mon diagnostic" }).click({ timeout: 30_000 });
   await expect(page).toHaveURL(/bilan=/);
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Votre bilan de carrière");
-  await expect(page.getByRole("main")).toContainText("Vos trois prochaines étapes");
+  const main = page.getByRole("main");
+  await expect(main.getByRole("heading", { name: "Votre niveau global" })).toBeVisible();
+  await expect(main.getByRole("table")).toContainText("Préparation aux entretiens");
+  await expect(
+    main.getByRole("heading", { name: "Le détail, dimension par dimension" }),
+  ).toBeVisible();
+  await expect(main).toContainText("Vos priorités");
+
+  // « Refaire dans 30 jours » plans a reminder.
+  await main.getByRole("button", { name: "Refaire dans 30 jours" }).click();
+  await expect(page).toHaveURL(/rappel=1/);
+  await expect(main).toContainText("Rappel prévu le");
 });

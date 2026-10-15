@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { db } from "@/server/db";
 import { paymentProvider } from "@/server/payments";
 import { runBillingJobs } from "@/server/services/billing-jobs";
+import { runDiagnosticReminders } from "@/server/services/diagnostic-store";
 
 function matches(given: Buffer, secret: string | undefined) {
   if (!secret) return false;
@@ -17,14 +18,15 @@ function authorized(request: Request) {
 }
 
 /**
- * Billing tasks, called by the host's scheduler every hour (`Authorization: Bearer JOBS_SECRET`,
+ * Billing tasks (and the « Refaire dans 30 jours » reminders of the career diagnostic), called by the host's scheduler every hour (`Authorization: Bearer JOBS_SECRET`,
  * or GET from Vercel Cron with `Bearer CRON_SECRET`). Without either secret the route is closed;
  * `pnpm jobs:billing` runs the same tasks.
  */
 export async function POST(request: Request) {
   if (!authorized(request)) return new NextResponse(null, { status: 401 });
   const report = await runBillingJobs(db, paymentProvider());
-  return NextResponse.json(report);
+  const diagnosticReminders = await runDiagnosticReminders(db);
+  return NextResponse.json({ ...report, diagnosticReminders });
 }
 
 export const GET = POST;

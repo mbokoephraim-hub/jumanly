@@ -5,12 +5,14 @@
 import { createSeedClient } from "../prisma/seed/client";
 import { paymentProvider } from "../src/server/payments";
 import { runBillingJobs } from "../src/server/services/billing-jobs";
+import { runDiagnosticReminders } from "../src/server/services/diagnostic-store";
 
 async function main() {
   const db = createSeedClient();
   try {
     const report = await runBillingJobs(db, paymentProvider());
-    console.log(JSON.stringify(report));
+    const diagnosticReminders = await runDiagnosticReminders(db);
+    console.log(JSON.stringify({ ...report, diagnosticReminders }));
   } finally {
     await db.$disconnect();
   }

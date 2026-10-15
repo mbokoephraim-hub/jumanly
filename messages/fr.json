@@ -3489,8 +3489,8 @@
       "title": "Diagnostic de carrière",
       "eyebrow": "Career · Diagnostic de carrière",
       "intro": {
-        "simple": "12 questions, environ 8 minutes. Vous recevez un bilan et des premières pistes.",
-        "personalized": "20 questions, environ 15 minutes. Jumanly Intelligence analyse vos réponses et votre profil pour un bilan personnalisé."
+        "simple": "Six dimensions, 6 à 8 minutes. Votre bilan est calculé par des règles fixes, expliquées point par point.",
+        "personalized": "Six dimensions et quatre questions de plus, 8 à 10 minutes. Jumanly Intelligence explique vos résultats et propose des pistes ; les notes restent calculées par des règles fixes."
       },
       "badge": {
         "simple": "Diagnostic simplifié",
@@ -3592,7 +3592,13 @@
           "a3": "3 à 6 heures",
           "a4": "Plus de 6 heures"
         },
-        "workMode": "Quel mode de travail préférez-vous ?",
+        "workMode": {
+          "text": "Quel mode de travail préférez-vous ?",
+          "a1": "Sur site",
+          "a2": "Hybride",
+          "a3": "Télétravail",
+          "a4": "Peu importe"
+        },
         "mobility": {
           "text": "Êtes-vous prêt à changer de ville ou de pays ?",
           "a1": "Non",
@@ -3624,7 +3630,88 @@
         "languages": "Dans quelles langues pouvez-vous travailler ?",
         "digital": "Quels outils numériques utilisez-vous avec aisance ?",
         "horizon": "Où vous voyez-vous dans trois ans ?",
-        "useProfile": "Utiliser mon profil et mon CV pour affiner le bilan"
+        "useProfile": "Utiliser mon profil et mon CV pour affiner le bilan",
+        "sectors": {
+          "text": "Quels secteurs vous attirent ?",
+          "placeholder": "Ex. : Banque, santé, numérique"
+        },
+        "familiarity": {
+          "text": "À quel point ce métier vous est-il familier ?",
+          "a1": "Je l'exerce",
+          "a2": "Je l'ai découvert en stage",
+          "a3": "J'en ai entendu parler",
+          "a4": "Je le découvre"
+        },
+        "companies": {
+          "text": "Connaissez-vous trois entreprises qui recrutent pour ce métier près de chez vous ?",
+          "a1": "Oui, trois ou plus",
+          "a2": "Une ou deux",
+          "a3": "Pas encore"
+        },
+        "skillsToBuildPlaceholder": "Ex. : Power BI, prise de parole, anglais",
+        "languagesPlaceholder": "Ex. : Français, anglais, lingala",
+        "digitalPlaceholder": "Ex. : Excel, Canva, Google Drive",
+        "skillLevel": {
+          "text": "Votre niveau en {skill} ?",
+          "source": {
+            "role": "L'une des compétences les plus demandées dans les offres publiées pour ce métier ({count, plural, one {# offre} other {# offres}}).",
+            "all": "L'une des compétences les plus demandées dans les offres publiées sur Jumanly ({count, plural, one {# offre} other {# offres}}).",
+            "own": "Une compétence que vous avez citée."
+          },
+          "l1": "Notions",
+          "l2": "Intermédiaire",
+          "l3": "Avancé",
+          "l4": "Expert",
+          "l1Hint": "Je connais les bases",
+          "l2Hint": "Je l'utilise avec un peu d'aide",
+          "l3Hint": "Je l'utilise seul, au quotidien",
+          "l4Hint": "Je pourrais l'enseigner"
+        },
+        "skillProof": {
+          "text": "Pouvez-vous le prouver ?",
+          "a1": "Oui, avec une attestation ou un certificat",
+          "a2": "Oui, avec un projet",
+          "a3": "Oui, par mon expérience",
+          "a4": "Rien encore"
+        },
+        "quantified": {
+          "text": "Avez-vous déjà travaillé avec des résultats chiffrés (ventes, délais, nombre de clients…) ?",
+          "a1": "Oui, souvent",
+          "a2": "Parfois",
+          "a3": "Pas encore"
+        },
+        "coverLetter": {
+          "text": "Avez-vous une lettre de motivation que vous pouvez adapter à chaque offre ?",
+          "a1": "Oui, prête à adapter",
+          "a2": "J'en ai une, mais elle reste générale",
+          "a3": "Pas encore"
+        },
+        "onlineProfile": {
+          "text": "Votre profil LinkedIn ou votre profil en ligne est-il à jour ?",
+          "a1": "Oui, il est à jour",
+          "a2": "Il existe, mais il n'est pas à jour",
+          "a3": "Je n'en ai pas"
+        },
+        "interviews": {
+          "text": "Combien d'entretiens d'embauche avez-vous passés ces 6 derniers mois ?",
+          "a1": "Aucun",
+          "a2": "1 ou 2",
+          "a3": "3 à 5",
+          "a4": "Plus de 5"
+        },
+        "pitch": {
+          "text": "Savez-vous présenter votre parcours en 2 minutes ?",
+          "a1": "Oui",
+          "a2": "À peu près",
+          "a3": "Non"
+        },
+        "contacts": {
+          "text": "Combien de professionnels de votre domaine pourriez-vous contacter cette semaine ?",
+          "a1": "Aucun",
+          "a2": "1 ou 2",
+          "a3": "3 à 5",
+          "a4": "Plus de 5"
+        }
       },
       "result": {
         "title": "Votre bilan de carrière",
@@ -3652,7 +3739,30 @@
         },
         "history": "Diagnostics précédents",
         "namedSkills": "Les compétences que vous citez : {skills}",
-        "rolesEmpty": "Vous n'avez pas encore de métier précis en tête. Les offres et les formations peuvent vous donner des idées."
+        "rolesEmpty": "Vous n'avez pas encore de métier précis en tête. Les offres et les formations peuvent vous donner des idées.",
+        "global": "Votre niveau global",
+        "score": "{score} sur 100",
+        "outOf": "sur 100",
+        "track": "Les quatre stades du diagnostic",
+        "youAreHere": "Vous êtes ici",
+        "radar": "Vos 6 dimensions",
+        "detail": "Le détail, dimension par dimension",
+        "offers": "{count, plural, =0 {Aucune offre publiée comparée} one {# offre comparée} other {# offres comparées}}",
+        "legacy": "Ce bilan a été établi avec la première version du diagnostic, en trois niveaux.",
+        "evolution": {
+          "title": "Votre évolution",
+          "since": "Depuis votre diagnostic du {date, date, long}",
+          "up": "En hausse de {value} points",
+          "down": "En baisse de {value} points",
+          "same": "Stable",
+          "first": "C'est votre premier diagnostic en six dimensions : refaites-le dans 30 jours pour mesurer vos progrès."
+        },
+        "remind": {
+          "cta": "Refaire dans 30 jours",
+          "hint": "Nous vous enverrons une notification ce jour-là.",
+          "done": "Rappel prévu le {date, date, long}.",
+          "sent": "Le rappel a été envoyé le {date, date, long}."
+        }
       },
       "rule": {
         "strength": {
@@ -3670,7 +3780,8 @@
           "cv": "Mettre votre CV à jour",
           "interview": "Vous préparer aux entretiens",
           "search": "Trouver des offres adaptées et candidater régulièrement",
-          "network": "Développer votre réseau professionnel"
+          "network": "Développer votre réseau professionnel",
+          "experience": "Valoriser votre expérience : projets, stages, engagements"
         },
         "step": {
           "profile": "Compléter votre profil professionnel",
@@ -3682,6 +3793,174 @@
           "role": "Lister trois métiers qui vous attirent, puis refaire le diagnostic",
           "cta": "Y aller"
         }
+      },
+      "welcome": {
+        "title": "Faites le point, comme un vrai bilan",
+        "text": "Six dimensions, une question à la fois. Vous voyez votre profil se dessiner pendant que vous répondez, puis vous recevez un bilan expliqué point par point.",
+        "duration": "6 à 8 minutes",
+        "launch": "Lancer mon diagnostic",
+        "resume": "Reprendre mon diagnostic, étape {current} sur {total}",
+        "restart": "Recommencer à zéro",
+        "prefillHint": "Nous reprenons ce que votre profil dit déjà (métier visé, secteurs, compétences, langues, études, CV). Vous pouvez tout modifier.",
+        "constellation": "Les six dimensions de votre bilan",
+        "noscript": "Sans JavaScript, toutes les questions s'affichent sur une seule page."
+      },
+      "card": {
+        "label": "Votre carte professionnelle",
+        "noTarget": "Métier visé à préciser",
+        "skills": "{count, plural, =0 {Aucune compétence déclarée} one {# compétence déclarée} other {# compétences déclarées}}"
+      },
+      "step": {
+        "label": "Étape {current} sur {total} · {name}",
+        "trail": "Les six étapes du diagnostic",
+        "done": "terminée",
+        "current": "en cours"
+      },
+      "analyze": "Terminer et lancer l'analyse",
+      "prefilled": "Pré-rempli depuis votre profil. Modifiez si besoin.",
+      "cvScore": "Votre CV sur Jumanly a un score de {score} sur 100.",
+      "savedAt": "Réponse enregistrée",
+      "dimension": {
+        "clarity": {
+          "name": "Clarté du projet",
+          "short": "Projet",
+          "finding": {
+            "low": "Votre projet reste à préciser : choisir un métier cible rendra chaque autre effort plus utile.",
+            "mid": "Vous avez une direction. Connaître le métier et ses recruteurs de plus près la rendra solide.",
+            "high": "Vous savez où vous allez et qui recrute pour ce métier."
+          },
+          "action": "Explorer les offres"
+        },
+        "skills": {
+          "name": "Compétences",
+          "short": "Compétences",
+          "finding": {
+            "low": "Les compétences demandées pour votre cible sont encore à construire ou à prouver.",
+            "mid": "Vous avez des bases. Une preuve (attestation, projet) pour chaque compétence fera la différence.",
+            "high": "Vos compétences correspondent à ce que demandent les offres, avec des preuves à l'appui."
+          },
+          "action": "Voir les formations"
+        },
+        "experience": {
+          "name": "Expérience",
+          "short": "Expérience",
+          "finding": {
+            "low": "Votre expérience est encore courte : stages, projets et engagements comptent, montrez-les.",
+            "mid": "Vous avez de l'expérience. Des résultats chiffrés la rendront plus convaincante.",
+            "high": "Votre expérience est solide et vous savez la décrire avec des résultats."
+          },
+          "action": "Ajouter un projet à mon portfolio"
+        },
+        "tools": {
+          "name": "Outils de candidature",
+          "short": "Outils",
+          "finding": {
+            "low": "Vos outils de candidature sont à créer : un CV à jour est la première étape.",
+            "mid": "Vos outils existent. Les mettre à jour et les adapter à chaque offre augmentera vos réponses.",
+            "high": "CV, lettre et profil en ligne sont prêts à être envoyés."
+          },
+          "action": "Améliorer mon CV"
+        },
+        "interviews": {
+          "name": "Préparation aux entretiens",
+          "short": "Entretiens",
+          "finding": {
+            "low": "Les entretiens sont votre chantier principal : entraînez-vous à présenter votre parcours.",
+            "mid": "Vous êtes à l'aise par moments. Quelques simulations vous donneront de l'assurance.",
+            "high": "Vous êtes prêt pour le jour J."
+          },
+          "action": "M'entraîner à l'entretien"
+        },
+        "search": {
+          "name": "Recherche active et réseau",
+          "short": "Recherche",
+          "finding": {
+            "low": "Votre recherche est peu active : un rythme régulier et quelques contacts changeront la donne.",
+            "mid": "Vous cherchez régulièrement. Élargir votre réseau multipliera les occasions.",
+            "high": "Vous êtes visible et régulier dans votre recherche."
+          },
+          "action": "Voir les offres"
+        },
+        "whyIntro": "Les réponses qui ont compté, selon le barème fixe :",
+        "points": "{points} sur {max}",
+        "score": "{score} sur 100",
+        "reason": {
+          "targetRole": "Métier visé renseigné",
+          "familiarity": "Connaissance du métier",
+          "companies": "Entreprises qui recrutent, connues",
+          "sectors": "Secteurs choisis",
+          "obstacle": "Frein principal autre que le choix du métier",
+          "skillLevels": "Niveau dans les compétences demandées",
+          "skillProofs": "Preuves de ces compétences",
+          "topSkills": "Compétences solides citées",
+          "languages": "Langues de travail",
+          "digital": "Outils numériques",
+          "experience": "Années d'expérience",
+          "education": "Niveau d'études",
+          "quantified": "Résultats chiffrés",
+          "achievement": "Réalisation décrite",
+          "cvStatus": "État du CV",
+          "coverLetter": "Lettre de motivation",
+          "onlineProfile": "Profil en ligne",
+          "confidence": "Confiance en entretien",
+          "interviews": "Entretiens passés",
+          "pitch": "Présentation de votre parcours",
+          "applications": "Candidatures du mois dernier",
+          "time": "Temps disponible chaque semaine",
+          "contacts": "Professionnels à contacter"
+        }
+      },
+      "radar": {
+        "live": "Votre profil se dessine",
+        "liveHint": "Chaque réponse fait grandir l'axe concerné. Notes provisoires, calculées par des règles fixes.",
+        "caption": "Notes par dimension, sur 100",
+        "dimension": "Dimension",
+        "score": "Note",
+        "delta": "Évolution",
+        "current": "Ce diagnostic",
+        "previous": "Diagnostic précédent (pointillés)"
+      },
+      "scan": {
+        "title": "Analyse de votre diagnostic",
+        "answers": "Lecture de vos réponses",
+        "profile": "Lecture de votre profil et de votre CV",
+        "offers": "Comparaison avec les offres de votre métier",
+        "offersRole": "Comparaison avec les offres de votre métier ({count, plural, =0 {aucune offre publiée} one {# offre} other {# offres}})",
+        "offersAll": "Comparaison avec les offres publiées sur Jumanly ({count, plural, =0 {aucune offre publiée} one {# offre} other {# offres}})",
+        "dimensions": "Calcul de vos 6 dimensions",
+        "priorities": "Préparation de vos priorités",
+        "ai": "Rédaction de votre synthèse par Jumanly Intelligence",
+        "done": "terminé",
+        "running": "en cours",
+        "ready": "Votre diagnostic est prêt",
+        "level": "Niveau {stage}",
+        "cta": "Voir mon diagnostic",
+        "fallback": "Jumanly Intelligence n'a pas répondu à temps : votre bilan est calculé par les règles fixes, sans crédit consommé. Vous pourrez relancer la version personnalisée plus tard.",
+        "error": "L'analyse n'a pas pu aboutir. Vos réponses sont enregistrées : réessayez.",
+        "retry": "Réessayer"
+      },
+      "stage": {
+        "discovery": "Découverte",
+        "building": "Construction",
+        "ready": "Prêt",
+        "competitive": "Compétitif",
+        "range": "{from} à {to}",
+        "discoveryText": "Vous posez les bases : clarifiez votre projet et créez vos premiers outils.",
+        "buildingText": "Vous avez des bases solides : quelques chantiers ciblés vous rendront prêt.",
+        "readyText": "Vous êtes prêt à candidater : travaillez vos points faibles pour vous démarquer.",
+        "competitiveText": "Vous êtes compétitif : visez les offres exigeantes et entretenez votre réseau."
+      },
+      "pdf": {
+        "title": "Bilan de carrière",
+        "subtitle": "{name} · établi le {date, date, long}",
+        "footer": "Document établi par Jumanly à partir des réponses du talent, selon un barème fixe (diagnostic_scoring_v2). Il n'est jamais montré aux recruteurs.",
+        "global": "Niveau global",
+        "dimensions": "Six dimensions",
+        "priorities": "Priorités",
+        "summary": "Synthèse de Jumanly Intelligence"
+      },
+      "toast": {
+        "ready": "Votre diagnostic est prêt."
       }
     },
     "cv": {
@@ -8178,6 +8457,8 @@
       "licenseExpiring": "Votre licence {plan} offerte par {sponsorName} se termine le {date}.",
       "licenseExpired": "Votre licence offerte par {sponsorName} est terminée. Vous êtes au forfait {freePlan}, vos données sont conservées.",
       "licensesLow": "{count, plural, =0 {Plus aucune licence disponible} one {Il reste # licence disponible} other {Il reste # licences disponibles}} dans le lot « {batchName} ».",
+      "diagnosticReady": "Votre diagnostic de carrière est prêt : niveau {stage}.",
+      "diagnosticReminder": "Cela fait 30 jours depuis votre diagnostic de carrière. Refaites-le pour voir vos progrès.",
       "unread": "Non lue"
     }
   },

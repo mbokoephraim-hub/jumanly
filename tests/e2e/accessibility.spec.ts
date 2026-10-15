@@ -23,6 +23,7 @@ test("aucune erreur d'accessibilité WCAG 2.2 AA dans l'espace connecté", async
     "/app/profil",
     "/app/career",
     "/app/career/diagnostic",
+    "/app/career/diagnostic?etape=1",
     "/app/career/cv",
     "/app/jobs",
     "/app/jobs/demo-developpeur-web-douala",

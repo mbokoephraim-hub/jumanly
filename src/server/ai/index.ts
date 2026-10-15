@@ -81,6 +81,14 @@ export async function aiReadiness(
   return "ready";
 }
 
+function withTimeout<V>(promise: Promise<V>, ms: number): Promise<V> {
+  let timer: ReturnType<typeof setTimeout> | undefined;
+  const late = new Promise<never>((_, reject) => {
+    timer = setTimeout(() => reject(new AiUnavailableError(new Error(`timeout ${ms} ms`))), ms);
+  });
+  return Promise.race([promise, late]).finally(() => clearTimeout(timer));
+}
+
 export async function runAi<T>(
   db: PrismaClient,
   input: {
@@ -92,6 +100,8 @@ export async function runAi<T>(
     schema: GenerateInput<T>["schema"];
     template: () => T;
     maxTokens?: number;
+    /** Beyond this delay the call counts as unavailable: credits released, nothing kept. */
+    timeoutMs?: number;
   },
   options: { provider?: AiProvider; now?: Date } = {},
 ): Promise<AiRun<T>> {
@@ -132,7 +142,7 @@ export async function runAi<T>(
 
   let result;
   try {
-    result = await provider.generate({
+    const generation = provider.generate({
       tier: config.tier,
       system: input.system,
       prompt: input.prompt,
@@ -140,6 +150,7 @@ export async function runAi<T>(
       template: input.template,
       maxTokens: input.maxTokens,
     });
+    result = input.timeoutMs ? await withTimeout(generation, input.timeoutMs) : await generation;
   } catch (error) {
     if (credits > 0) await release(db, subject, AI_CREDITS_KEY, credits, now);
     await log("error", provider.name);
