@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, type ReactNode } from "react";
 import { Icon } from "@/components/brand/icon";
 import { cx } from "@/lib/cx";
 
@@ -42,8 +42,11 @@ export function PlanImpact({
   fields,
   labels,
   writable,
+  children,
 }: {
   formId: string;
+  /** Extra fields of the form shown above the button (the reason of the change). */
+  children?: ReactNode;
   fields: TrackedField[];
   labels: {
     title: string;
@@ -124,6 +127,7 @@ export function PlanImpact({
         )}
       </div>
       <p className="text-[13px] leading-[19px]">{labels.impact}</p>
+      {writable && children}
       {writable ? (
         <button
           type="submit"

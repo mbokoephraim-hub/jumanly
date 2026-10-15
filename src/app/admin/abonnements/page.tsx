@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import type { Prisma, SubscriptionStatus } from "@/generated/prisma/client";
+import type { SubscriptionStatus } from "@/generated/prisma/client";
 import { Icon, type IconName } from "@/components/brand/icon";
 import {
   adminLabel,
@@ -21,10 +21,12 @@ import { Alert, Button, ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatShortDate } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
+import { paymentMethodKey } from "@/lib/payment-method";
+import { SubscriptionCard, subscriptionTone } from "@/components/admin/subscription-card";
 import { refundPaymentAction } from "@/server/actions/admin";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { GRACE_DAYS } from "@/server/entitlements";
+import { subscriptionIndicators } from "@/server/services/admin-billing";
 import {
   listSubscriptions,
   recentPayments,
@@ -32,18 +34,30 @@ import {
 } from "@/server/services/billing-admin";
 
 const PAGE = "/admin/abonnements";
-const methods = ["mobile_money", "card", "manual"] as const;
+/** `?ok=` and `?erreur=` of the subscription actions (Admin v2, étape 5). */
+const doneKeys = {
+  prolonge: "extended",
+  forfait: "planNow",
+  forfaitEcheance: "planTerm",
+  resilie: "cancelNow",
+  resilieEcheance: "cancelTerm",
+  paiement: "manual",
+} as const;
+const errorKeys = {
+  motif: "reason",
+  champs: "fields",
+  date: "date",
+  plan: "plan",
+  same: "plan",
+  status: "status",
+  amount: "amount",
+  reference: "reference",
+  notFound: "notFound",
+} as const;
+const methods = ["mobile_money", "card", "bank_transfer", "cash", "manual"] as const;
 type Method = (typeof methods)[number];
-const methodKey = { mobile_money: "mobileMoney", card: "card", manual: "manual" } as const;
-
-const statusTone: Record<SubscriptionStatus, TagTone> = {
-  trialing: "neon",
-  active: "success",
-  past_due: "warning",
-  canceled: "neutral",
-  expired: "error",
-  sponsored: "menthe",
-};
+const methodKey = { ...paymentMethodKey, manual: "manual" } as const;
+const statusTone = subscriptionTone;
 const paymentTone = {
   succeeded: "success",
   pending: "warning",
@@ -90,6 +104,7 @@ export default async function AdminSubscriptions({
   const planName = one(params.forfait).slice(0, 80);
   const method = methods.find((value) => value === params.moyen);
   const paymentId = one(params.paiement).slice(0, 60);
+  const subscriptionId = one(params.abonnement).slice(0, 60);
   const action = one(params.action);
 
   const filters = {
@@ -106,30 +121,18 @@ export default async function AdminSubscriptions({
     return text ? `${PAGE}?${text}` : PAGE;
   };
 
-  const grace = new Date(now.getTime() - GRACE_DAYS * 86_400_000);
-  // Same rules as `effectiveStatus`, counted in the database.
-  const graceWhere: Prisma.SubscriptionWhereInput = {
-    OR: [
-      { status: "active", currentPeriodEnd: { lte: now, gt: grace } },
-      { status: "past_due", currentPeriodEnd: { gt: grace } },
-    ],
-  };
-  const [allSubscriptions, allPayments, plans, activeCount, graceCount, sponsoredCount, toVerify] =
-    await Promise.all([
-      listSubscriptions(db, filter as SubscriptionStatus | null),
-      recentPayments(db),
-      db.plan.findMany({
-        where: { active: true },
-        orderBy: [{ family: "asc" }, { sortOrder: "asc" }],
-        select: { name: true },
-      }),
-      db.subscription.count({ where: { status: "active", currentPeriodEnd: { gt: now } } }),
-      db.subscription.count({ where: graceWhere }),
-      db.subscription.count({ where: { status: "sponsored", currentPeriodEnd: { gt: now } } }),
-      db.payment.count({ where: { status: "pending" } }),
-    ]);
+  const [allSubscriptions, allPayments, plans, indicators] = await Promise.all([
+    listSubscriptions(db, filter as SubscriptionStatus | null),
+    recentPayments(db),
+    db.plan.findMany({
+      where: { active: true },
+      orderBy: [{ family: "asc" }, { sortOrder: "asc" }],
+      select: { name: true },
+    }),
+    subscriptionIndicators(db, now),
+  ]);
 
-  const methodOf = (payment?: { method: "mobile_money" | "card" }): Method =>
+  const methodOf = (payment?: { method: Exclude<Method, "manual"> }): Method =>
     payment ? payment.method : "manual";
   const matches = (holder: string, refs: (string | null | undefined)[]) =>
     !q || [holder, ...refs].some((value) => value?.toLowerCase().includes(q));
@@ -157,33 +160,35 @@ export default async function AdminSubscriptions({
   const dateTime = (date: Date) =>
     `${formatShortDate(date)} · ${new Intl.DateTimeFormat("fr-FR", { hour: "2-digit", minute: "2-digit", timeZone: process.env.DEFAULT_TIME_ZONE || "UTC" }).format(date)}`;
 
-  const kpis: { value: number; label: string; icon: IconName; tile: string }[] = [
+  const kpis: { value: string; label: string; icon: IconName; tile: string }[] = [
     {
-      value: activeCount,
-      label: t("subscriptions.status.active"),
+      value: new Intl.NumberFormat("fr-FR").format(indicators.active),
+      label: t("subscriptions.v2.kpi.active"),
       icon: "check",
       tile: "bg-lime-clair",
     },
     {
-      value: graceCount,
-      label: t("subscriptions.status.past_due"),
+      value: new Intl.NumberFormat("fr-FR").format(indicators.late),
+      label: t("subscriptions.v2.kpi.late"),
       icon: "horloge",
       tile: "bg-ambre-fond",
     },
     {
-      value: sponsoredCount,
-      label: t("subscriptions.status.sponsored"),
-      icon: "certificat",
+      value: new Intl.NumberFormat("fr-FR").format(indicators.renewSoon),
+      label: t("subscriptions.v2.kpi.renewSoon"),
+      icon: "calendrier",
       tile: "bg-menthe-claire",
     },
     {
-      value: toVerify,
-      label: t("subscriptions.kpi.toVerify"),
-      icon: "mobile-money",
+      value: amount(indicators.revenueCents),
+      label: t("subscriptions.v2.kpi.revenue"),
+      icon: "portefeuille",
       tile: "bg-neon/60",
     },
   ];
-  const number = new Intl.NumberFormat("fr-FR");
+  const cardBase = href({});
+  const cardHref = (id: string) =>
+    `${cardBase}${cardBase.includes("?") ? "&" : "?"}abonnement=${id}#abonnements-fiche`;
   const holderName = (holder: string) => holder.split(" · ")[0] ?? holder;
 
   return (
@@ -193,6 +198,18 @@ export default async function AdminSubscriptions({
         <AdminDone
           title={t("subscriptions.refunded")}
           journal={paymentId ? { type: "payment", id: paymentId } : undefined}
+        />
+      )}
+      {typeof params.ok === "string" && params.ok in doneKeys && (
+        <AdminDone
+          title={t(`subscriptions.v2.done.${doneKeys[params.ok as keyof typeof doneKeys]}`)}
+          journal={subscriptionId ? { type: "subscription", id: subscriptionId } : undefined}
+        />
+      )}
+      {typeof params.erreur === "string" && params.erreur in errorKeys && (
+        <Alert
+          tone="error"
+          title={t(`subscriptions.v2.error.${errorKeys[params.erreur as keyof typeof errorKeys]}`)}
         />
       )}
       {params.erreur === "remboursement" && (
@@ -272,13 +289,22 @@ export default async function AdminSubscriptions({
             </span>
             <span className="flex min-w-0 flex-col">
               <span className="text-[20px] leading-6 font-semibold tracking-[-0.02em] lg:text-[22px]">
-                {number.format(kpi.value)}
+                {kpi.value}
               </span>
               <span className="truncate text-[11px] leading-[15px] text-ardoise">{kpi.label}</span>
             </span>
           </li>
         ))}
       </ul>
+
+      {subscriptionId && (
+        <SubscriptionCard
+          id={subscriptionId}
+          action={action}
+          writable={writable}
+          pageHref={href({})}
+        />
+      )}
 
       {subscriptions.length === 0 ? (
         <p className="rounded-[24px] bg-blanc px-5 py-8 text-center text-[13.5px] text-ardoise">
@@ -326,7 +352,14 @@ export default async function AdminSubscriptions({
                       <td className="max-w-[280px] py-3 pr-1.5 pl-[18px]">
                         <span className="flex items-center gap-2.5">
                           <Initials name={holderName(row.holder)} size={28} />
-                          <Holder holder={row.holder} />
+                          <Link
+                            href={cardHref(row.id)}
+                            scroll={false}
+                            aria-label={t("subscriptions.v2.open", { holder: row.holder })}
+                            className="min-w-0 hover:underline"
+                          >
+                            <Holder holder={row.holder} />
+                          </Link>
                         </span>
                       </td>
                       <td className="px-1.5 py-3">{row.plan.name}</td>
@@ -369,22 +402,26 @@ export default async function AdminSubscriptions({
             className="rounded-[24px] bg-blanc px-3.5 py-1.5 lg:hidden"
           >
             {subscriptions.map((row) => (
-              <li
-                key={row.id}
-                className="flex items-center gap-3 border-brume py-3 not-first:border-t"
-              >
-                <Initials name={holderName(row.holder)} size={38} />
-                <span className="flex min-w-0 flex-1 flex-col">
-                  <span className="truncate text-[13.5px] leading-[18px] font-semibold">
-                    {holderName(row.holder)}
+              <li key={row.id} className="border-brume not-first:border-t">
+                <Link
+                  href={cardHref(row.id)}
+                  scroll={false}
+                  aria-label={t("subscriptions.v2.open", { holder: row.holder })}
+                  className="flex items-center gap-3 py-3"
+                >
+                  <Initials name={holderName(row.holder)} size={38} />
+                  <span className="flex min-w-0 flex-1 flex-col">
+                    <span className="truncate text-[13.5px] leading-[18px] font-semibold">
+                      {holderName(row.holder)}
+                    </span>
+                    <span className="truncate text-[11.5px] leading-4 text-ardoise">
+                      {[row.plan.name, formatShortDate(row.currentPeriodEnd)].join(" · ")}
+                    </span>
                   </span>
-                  <span className="truncate text-[11.5px] leading-4 text-ardoise">
-                    {[row.plan.name, formatShortDate(row.currentPeriodEnd)].join(" · ")}
-                  </span>
-                </span>
-                <Tag tone={statusTone[row.status]} className="max-w-[46%] truncate">
-                  {t(`subscriptions.status.${row.status}`)}
-                </Tag>
+                  <Tag tone={statusTone[row.status]} className="max-w-[46%] truncate">
+                    {t(`subscriptions.status.${row.status}`)}
+                  </Tag>
+                </Link>
               </li>
             ))}
           </ul>

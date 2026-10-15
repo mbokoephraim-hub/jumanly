@@ -7895,7 +7895,9 @@
       "pdfNote": "Factures en PDF",
       "method": {
         "mobileMoney": "Mobile Money · {operator}",
-        "card": "Carte bancaire"
+        "card": "Carte bancaire",
+        "bankTransfer": "Virement bancaire",
+        "cash": "Espèces"
       }
     },
     "invoice": {
@@ -9597,6 +9599,35 @@
       },
       "cta": "Revenir à {plan}"
     },
+    "subscriptionAdmin": {
+      "extended": {
+        "subject": "Votre forfait {plan} est prolongé",
+        "preheader": "Il reste actif jusqu'au {date, date, medium}.",
+        "p1": "Jumanly a prolongé votre forfait {plan} : il reste actif jusqu'au {date, date, long}."
+      },
+      "planNow": {
+        "subject": "Votre forfait passe à {newPlan}",
+        "preheader": "Le changement s'applique dès maintenant.",
+        "p1": "Jumanly a remplacé votre forfait {plan} par {newPlan}. Les droits de {newPlan} s'appliquent dès maintenant, jusqu'au {date, date, long}."
+      },
+      "planTerm": {
+        "subject": "Votre forfait passera à {newPlan}",
+        "preheader": "Le changement s'appliquera le {date, date, medium}.",
+        "p1": "Votre forfait {plan} reste actif jusqu'au {date, date, long}. Le renouvellement se fera ensuite avec {newPlan}."
+      },
+      "cancelNow": {
+        "subject": "Votre forfait {plan} est résilié",
+        "preheader": "Votre compte repasse au forfait gratuit.",
+        "p1": "Jumanly a résilié votre forfait {plan} le {date, date, long}. Votre compte repasse au forfait gratuit ; rien n'est supprimé."
+      },
+      "cancelTerm": {
+        "subject": "Votre forfait {plan} prendra fin le {date, date, medium}",
+        "preheader": "Il reste actif jusqu'à cette date.",
+        "p1": "Jumanly a résilié votre forfait {plan} à son échéance. Il reste actif jusqu'au {date, date, long}, puis votre compte repasse au forfait gratuit."
+      },
+      "reason": "Motif : {reason}. Pour toute question, écrivez à assistant@jumanly.io.",
+      "cta": "Voir mon abonnement"
+    },
     "licenseActivated": {
       "subject": "Votre accès {plan} offert par {sponsorName} est actif",
       "preheader": "Jusqu'au {date, date, medium}. Profitez-en pour avancer.",
@@ -10455,6 +10486,14 @@
         "org_suspend": "a suspendu l'organisation",
         "org_unsuspend": "a réactivé l'organisation",
         "plan_update": "a modifié le forfait",
+        "plan_create": "a créé le forfait",
+        "plan_duplicate": "a dupliqué un forfait",
+        "plan_withdraw": "a retiré le forfait de la vente",
+        "plan_delete": "a supprimé le forfait",
+        "subscription_extend": "a prolongé l'abonnement",
+        "subscription_plan": "a changé le forfait de l'abonnement",
+        "subscription_cancel": "a résilié l'abonnement",
+        "payment_manual": "a enregistré un paiement manuel",
         "payment_refund": "a remboursé le paiement",
         "course_create": "a créé la formation",
         "course_update": "a modifié la fiche de la formation",
@@ -11247,7 +11286,66 @@
         "partners": "Partners"
       },
       "subscribersCount": "{count, plural, =0 {Aucun abonné} one {# abonné} other {# abonnés}}",
-      "empty": "Aucun forfait dans cette famille."
+      "empty": "Aucun forfait dans cette famille.",
+      "v2": {
+        "field": {
+          "family": "Famille",
+          "code": {
+            "label": "Code du forfait",
+            "hint": "En minuscules, chiffres et « _ », par exemple talent_pro_2027. Il ne change plus ensuite."
+          },
+          "name": {
+            "label": "Nom affiché",
+            "hint": "Le nom vu par les clients."
+          }
+        },
+        "new": {
+          "confirm": "Le forfait part des droits du premier forfait de sa famille. Il est créé masqué et non vendu : réglez son prix et ses droits, puis mettez-le en vente.",
+          "submit": "Créer le forfait"
+        },
+        "duplicate": {
+          "confirm": "Le double reprend le prix et les droits de {plan}. Il est créé masqué et non vendu, à vérifier avant mise en vente.",
+          "name": "{plan} (copie)",
+          "submit": "Créer le double"
+        },
+        "withdraw": {
+          "text": "Retirer de la vente",
+          "confirm": "{plan} ne sera plus visible ni achetable. {count, plural, =0 {Personne ne l'a en ce moment.} one {# abonné le garde jusqu'à son échéance.} other {# abonnés le gardent jusqu'à leur échéance.}}"
+        },
+        "delete": {
+          "text": "Supprimer le forfait",
+          "confirm": "{plan} n'a jamais servi : il sera supprimé avec ses droits. Cette action est définitive.",
+          "used": "Ce forfait a déjà servi : il ne peut pas être supprimé, seulement retiré de la vente.",
+          "free": "Forfait gratuit de la famille : il ne peut être ni supprimé ni retiré de la vente."
+        },
+        "accounts": "{count, plural, =0 {Aucun compte sur ce forfait} one {# compte sur ce forfait} other {# comptes sur ce forfait}}",
+        "accountsLink": "Voir les comptes",
+        "reason": {
+          "label": "Motif de la modification",
+          "hint": "Enregistré avec la version du forfait."
+        },
+        "history": {
+          "title": "Versions du forfait",
+          "empty": "Aucune modification enregistrée pour l'instant.",
+          "price": "Prix",
+          "change": "{from} → {to}"
+        },
+        "done": {
+          "created": "Forfait créé, masqué et non vendu.",
+          "createdHint": "Vérifiez son prix et ses droits, puis cochez « Visible » et « Achetable en ligne » pour le mettre en vente.",
+          "withdrawn": "Forfait retiré de la vente.",
+          "deleted": "Forfait supprimé."
+        },
+        "error": {
+          "reason": "Indiquez le motif de la modification (3 caractères au moins).",
+          "motif": "Indiquez un motif (3 caractères au moins).",
+          "champs": "Vérifiez le code (minuscules, chiffres et « _ ») et le nom du forfait.",
+          "taken": "Ce code de forfait existe déjà. Choisissez-en un autre.",
+          "used": "Ce forfait a déjà servi : retirez-le de la vente au lieu de le supprimer.",
+          "free": "Le forfait gratuit d'une famille ne peut être ni supprimé ni retiré de la vente.",
+          "notFound": "Forfait introuvable."
+        }
+      }
     },
     "subscriptions": {
       "title": "Abonnements",
@@ -11283,7 +11381,9 @@
         "method": {
           "mobileMoney": "Mobile Money",
           "card": "Carte",
-          "manual": "Manuel"
+          "manual": "Manuel",
+          "bankTransfer": "Virement bancaire",
+          "cash": "Espèces"
         },
         "empty": "Aucun paiement pour l'instant.",
         "col": {
@@ -11319,6 +11419,84 @@
         "title": "Actions · {holder}",
         "open": "Actions pour {holder}",
         "none": "Aucune action disponible pour ce paiement."
+      },
+      "v2": {
+        "kpi": {
+          "active": "Actifs",
+          "late": "En retard (délai de grâce)",
+          "renewSoon": "À renouveler sous 7 jours",
+          "revenue": "Revenu du mois"
+        },
+        "open": "Ouvrir l'abonnement de {holder}",
+        "card": "Abonnement",
+        "notFound": "Abonnement introuvable.",
+        "period": "Période en cours",
+        "periodValue": "Du {start} au {end}",
+        "source": "Origine",
+        "sourceValue": {
+          "self": "Souscrit par le client",
+          "admin": "Offert par Jumanly",
+          "license": "Licence d'un partenaire"
+        },
+        "next": "Forfait au renouvellement",
+        "licence": "Licence d'un partenaire : elle se gère depuis l'espace du partenaire.",
+        "timeline": {
+          "title": "Historique",
+          "created": "Créé",
+          "paid": "Payé · {amount}",
+          "renewed": "Renouvelé · {amount}",
+          "failed": "Paiement échoué · {amount}",
+          "refunded": "Remboursé · {amount}",
+          "late": "En retard",
+          "canceled": "Résilié",
+          "ended": "Terminé"
+        },
+        "when": {
+          "label": "Quand ?"
+        },
+        "extend": {
+          "confirm": "L'abonnement de {holder} se termine le {date}. Choisissez la nouvelle date de fin. Le client est prévenu par e-mail.",
+          "until": "Nouvelle date de fin"
+        },
+        "change": {
+          "confirm": "{holder} a le forfait {plan}. Le client est prévenu par e-mail.",
+          "plan": "Nouveau forfait",
+          "term": "À l'échéance, le {date}",
+          "now": "Tout de suite, sans changer la date de fin",
+          "none": "Aucun autre forfait possible pour ce compte."
+        },
+        "cancel": {
+          "confirm": "Résilier le forfait {plan} de {holder} ? Le client est prévenu par e-mail ; rien n'est supprimé.",
+          "term": "À l'échéance : le forfait reste actif jusqu'au {date}",
+          "now": "Tout de suite : retour au forfait gratuit dès maintenant"
+        },
+        "manual": {
+          "confirm": "Un virement ou des espèces reçus de {holder}. La période, la facture et le reçu par e-mail sont ceux d'un paiement en ligne.",
+          "amount": "Montant reçu (USD)",
+          "amountHint": "Par exemple 9.99.",
+          "months": "Nombre de mois payés",
+          "reference": "Référence du paiement",
+          "referenceHint": "Référence du virement ou numéro du reçu remis. Elle figure sur la facture.",
+          "submit": "Enregistrer le paiement"
+        },
+        "done": {
+          "extended": "Abonnement prolongé. Le client est prévenu.",
+          "planNow": "Forfait changé. Le client est prévenu.",
+          "planTerm": "Changement de forfait prévu à l'échéance. Le client est prévenu.",
+          "cancelNow": "Abonnement résilié : retour au forfait gratuit. Le client est prévenu.",
+          "cancelTerm": "Abonnement résilié à l'échéance. Le client est prévenu.",
+          "manual": "Paiement enregistré. La facture et le reçu sont partis."
+        },
+        "error": {
+          "reason": "Indiquez un motif (3 caractères au moins).",
+          "fields": "Vérifiez les champs du formulaire.",
+          "date": "Choisissez une date après la fin actuelle, à deux ans au plus.",
+          "plan": "Ce forfait ne convient pas à ce compte.",
+          "status": "Cette action n'est pas possible dans l'état actuel de l'abonnement.",
+          "amount": "Indiquez un montant supérieur à zéro.",
+          "reference": "Cette référence de paiement est déjà enregistrée.",
+          "notFound": "Abonnement introuvable."
+        }
       }
     },
     "courses": {

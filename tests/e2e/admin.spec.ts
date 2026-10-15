@@ -364,3 +364,118 @@ test("une organisation : justificatif, complément, suspension puis réactivatio
   await expect(history.getByText("a suspendu l'organisation")).toBeVisible();
   await expect(history.getByText("a réactivé l'organisation")).toBeVisible();
 });
+
+test("un forfait : nouveau, modifié avec un motif, versions, puis supprimé", async ({
+  page,
+  isMobile,
+}) => {
+  test.skip(isMobile, "Crée un forfait partagé : une seule exécution.");
+  test.setTimeout(120_000);
+  const code = `test_e2e_${Date.now().toString(36)}`;
+  await logIn(page, demo.admin);
+  await page.goto("/admin/forfaits?famille=talent");
+  await page.getByRole("link", { name: "Nouveau forfait" }).click();
+  await page.locator("#forfaits-new-code").fill(code);
+  await page.locator("#forfaits-new-name").fill("Forfait test fictif");
+  await page.locator("#forfaits-new-reason").fill("Essai d'un nouveau forfait (fictif)");
+  await page.getByRole("button", { name: "Créer le forfait" }).click();
+  await expect(page.getByText("Forfait créé, masqué et non vendu.")).toBeVisible();
+  await expect(page).toHaveURL(new RegExp(`/admin/forfaits/${code}`));
+  await expectAccessible(page);
+
+  // A change needs its reason; the version says what changed and why.
+  await page.locator("#forfaits-price").fill("3.50");
+  await page.getByRole("button", { name: "Appliquer les modifications" }).click();
+  await expect(page.locator("#forfaits-reason:invalid")).toHaveCount(1);
+  await page.locator("#forfaits-reason").fill("Prix d'essai (fictif)");
+  await page.getByRole("button", { name: "Appliquer les modifications" }).click();
+  await expect(page.getByText("Forfait mis à jour.")).toBeVisible();
+  const versions = page.getByRole("region", { name: "Versions du forfait" });
+  await expect(versions.getByText("Sur devis → 3.50 USD")).toBeVisible();
+  await expect(versions.getByText("Motif : Prix d'essai (fictif)")).toBeVisible();
+
+  // Never used: it can be deleted.
+  await page.getByRole("link", { name: "Supprimer le forfait" }).click();
+  await page.locator("#forfaits-delete-reason").fill("Forfait d'essai (fictif)");
+  await page.getByRole("button", { name: "Supprimer le forfait" }).click();
+  await expect(page.getByText("Forfait supprimé.")).toBeVisible();
+
+  // A plan with subscribers is only withdrawn from sale.
+  await page.goto("/admin/forfaits/talent_pro");
+  await expect(page.getByText("Ce forfait a déjà servi")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Supprimer le forfait" })).toHaveCount(0);
+});
+
+test("un abonnement : prolongé, changé, payé à la main puis résilié", async ({ page }) => {
+  test.setTimeout(150_000);
+  const account = makeAccount("abonnement", "Compte Abonnement Fictif");
+  await logIn(page, demo.admin);
+  const done = (text: string) =>
+    expect(page.getByRole("status").filter({ hasText: text })).toBeVisible();
+  // A plan given from the user card gives the subscription to work on.
+  await page.goto(`/admin/utilisateurs?fiche=${account.id}&action=forfait`);
+  await page.locator("#utilisateurs-grant-plan").selectOption({ label: "Starter" });
+  await page.locator("#utilisateurs-grant-reason").fill("Base du test (fictif)");
+  await page.getByRole("button", { name: "Offrir le forfait" }).click();
+  await done("Forfait offert.");
+
+  await page.goto(`/admin/abonnements?q=${encodeURIComponent(account.email)}`);
+  await expect(page.getByText("À renouveler sous 7 jours")).toBeVisible();
+  await page
+    .getByRole("link", { name: /^Ouvrir l'abonnement de Compte Abonnement Fictif/ })
+    .filter({ visible: true })
+    .first()
+    .click();
+  const card = page.locator("#abonnements-fiche");
+  await expect(card.getByText("Offert par Jumanly")).toBeVisible();
+
+  await card.getByRole("link", { name: "Prolonger la période" }).click();
+  await page.locator("#abonnements-extend-reason").fill("Geste commercial (fictif)");
+  await page.getByRole("button", { name: "Prolonger la période" }).click();
+  await done("Abonnement prolongé.");
+
+  await card.getByRole("link", { name: "Changer de forfait" }).click();
+  await page.locator("#abonnements-change-plan").selectOption("talent_pro");
+  await page.getByLabel("Tout de suite, sans changer la date de fin").check();
+  await page.locator("#abonnements-change-reason").fill("Passage à Pro (fictif)");
+  await page.getByRole("button", { name: "Changer de forfait" }).click();
+  await done("Forfait changé.");
+  await expect(card.getByText("Pro", { exact: true })).toBeVisible();
+
+  await card.getByRole("link", { name: "Enregistrer un paiement manuel" }).click();
+  await page.locator("#abonnements-manual-method").selectOption("bank_transfer");
+  await page.locator("#abonnements-manual-reference").fill(`VIR-${Date.now().toString(36)}`);
+  await page.locator("#abonnements-manual-reason").fill("Virement reçu (fictif)");
+  await expectAccessible(page);
+  await page.getByRole("button", { name: "Enregistrer le paiement" }).click();
+  await done("Paiement enregistré.");
+  await expect(card.getByText(/^Payé ·/).first()).toBeVisible();
+  await expect(
+    page
+      .getByRole("link", { name: /^Actions pour Compte Abonnement Fictif/ })
+      .filter({ visible: true })
+      .first(),
+  ).toBeVisible();
+
+  await card.getByRole("link", { name: "Résilier" }).click();
+  await page.getByLabel("Tout de suite : retour au forfait gratuit dès maintenant").check();
+  await page.locator("#abonnements-cancel-reason").fill("Demande du client (fictif)");
+  await page.getByRole("button", { name: "Résilier" }).click();
+  await done("Abonnement résilié : retour au forfait gratuit.");
+  await expect(card.getByText("Terminé")).toBeVisible();
+});
+
+test("le support voit les abonnements sans pouvoir agir", async ({ page }) => {
+  test.setTimeout(90_000);
+  await logIn(page, demo.support);
+  await page.goto("/admin/forfaits?famille=talent");
+  await expect(page.getByRole("link", { name: "Nouveau forfait" })).toHaveCount(0);
+  await page.goto("/admin/abonnements");
+  await page
+    .getByRole("link", { name: /^Ouvrir l'abonnement de/ })
+    .filter({ visible: true })
+    .first()
+    .click();
+  await expect(page.locator("#abonnements-fiche")).toBeVisible();
+  await expect(page.getByRole("link", { name: "Prolonger la période" })).toHaveCount(0);
+});

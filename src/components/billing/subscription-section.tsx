@@ -9,6 +9,7 @@ import { dynamic, numbered } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { formatDate, formatShortDate } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
+import { paymentMethodKey } from "@/lib/payment-method";
 import {
   cancelSubscription,
   downgradeSubscription,
@@ -168,10 +169,12 @@ export async function SubscriptionSection({
   const methodText = lastPaid
     ? lastPaid.method === "card"
       ? tCheckout("method.card.text")
-      : t("current.method.mobileMoney", {
-          operator: opName(lastPaid.operator),
-          maskedNumber: lastPaid.msisdnMasked ?? "",
-        })
+      : lastPaid.method === "mobile_money"
+        ? t("current.method.mobileMoney", {
+            operator: opName(lastPaid.operator),
+            maskedNumber: lastPaid.msisdnMasked ?? "",
+          })
+        : t(`history.method.${paymentMethodKey[lastPaid.method] as "bankTransfer" | "cash"}`)
     : null;
 
   // Features of the plan in force, from its texts (`contentKey`), never from its name.
@@ -803,11 +806,13 @@ export async function SubscriptionSection({
                       role="cell"
                       className="col-start-1 row-start-3 text-xs text-ardoise lg:col-auto lg:row-auto lg:text-[13px]"
                     >
-                      {payment.method === "card"
-                        ? t("history.method.card")
-                        : t("history.method.mobileMoney", {
+                      {payment.method === "mobile_money"
+                        ? t("history.method.mobileMoney", {
                             operator: opName(payment.operator),
-                          })}
+                          })
+                        : t(
+                            `history.method.${paymentMethodKey[payment.method] as "card" | "bankTransfer" | "cash"}`,
+                          )}
                     </span>
                     <span
                       role="cell"

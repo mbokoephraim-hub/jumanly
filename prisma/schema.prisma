@@ -751,6 +751,9 @@ model Subscription {
 enum PaymentMethod {
   mobile_money
   card
+  /// Recorded by an administrator (Admin v2, étape 5): bank transfer or cash.
+  bank_transfer
+  cash
 }
 
 enum PaymentStatus {

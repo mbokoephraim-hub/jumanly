@@ -136,6 +136,9 @@ export async function updatePlan(formData: FormData) {
     })
     .safeParse(Object.fromEntries(formData));
   if (!fields.success) redirect(withParam(path, "erreur", "champs"));
+  // Admin v2, étape 5: every version of a plan says why it changed.
+  const reason = String(formData.get("reason") ?? "").trim();
+  if (reason.length < 3 || reason.length > 1000) redirect(withParam(path, "erreur", "motif"));
   const { price } = fields.data;
   let priceCents: number | null = null;
   if (price !== "") {
@@ -192,6 +195,7 @@ export async function updatePlan(formData: FormData) {
       recommended: plan.recommended,
     },
     entitlements: changes,
+    reason,
   });
   invalidate();
   updateTag("plans");

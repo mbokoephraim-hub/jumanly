@@ -2,6 +2,27 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v2 · étape 5 : forfaits et abonnements (15 octobre 2026)
+
+- **Forfaits** : « Nouveau forfait » (part des droits du premier forfait de la famille) et
+  « Dupliquer » ; le forfait créé est masqué, non vendu, prix « sur devis » pour un nouveau, dernier
+  de sa famille. Chaque modification demande un motif ; « Versions du forfait » liste qui a changé
+  quoi (avant → après, champs et droits) et pourquoi. Nombre de comptes et lien « Voir les comptes ».
+  Un forfait qui a déjà servi (abonnement, paiement, licence) ne se supprime pas : il se retire de
+  la vente. Le forfait gratuit d'une famille n'est ni supprimé ni retiré.
+- **Abonnements** : fiche (`?abonnement=`) en frise (créé, payé, renouvelé, échec, remboursé,
+  actions de l'admin, en retard, résilié, terminé) ; prolonger (nouvelle date de fin, deux ans au
+  plus, un abonnement en délai de grâce redevient actif), changer de forfait (tout de suite ou à
+  l'échéance), résilier (à l'échéance ou tout de suite avec `returnedToFree`), paiement manuel
+  (virement ou espèces, migration `admin_manual_payment_methods`) confirmé par
+  `applyPaymentStatus` : période, facture, reçu et notification comme un paiement en ligne. Motif
+  obligatoire, e-mail au client (`mail.subscriptionAdmin.*`), journal d'audit.
+- **Indicateurs** en tête : actifs, en retard, à renouveler sous 7 jours, revenu du mois.
+- Libellés des moyens de paiement centralisés (`src/lib/payment-method.ts`) ; le reçu n'écrit plus
+  « Carte » en dur.
+- Tests : unitaires (date de fin, versions), en base (6) et e2e (forfait, abonnement, support en
+  lecture seule). Captures dans `captures/admin-v2/etape-5`.
+
 ## Jumanly Admin v2 · étape 4 : organisations (15 octobre 2026)
 
 - **Justificatifs** : l'organisation joint des PDF ou images à sa demande de vérification (onglet

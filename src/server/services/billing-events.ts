@@ -6,6 +6,8 @@
 import type { PrismaClient, SubjectType } from "@/generated/prisma/client";
 import { formatDate } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
+import { paymentMethodKey } from "@/lib/payment-method";
+import { t } from "../../../emails/_components/translator";
 import { sendPaymentReceipt } from "@/server/account-emails";
 import { sendDowngraded, sendPaymentFailed } from "@/server/billing-emails";
 import { freePlan, invalidate, limit, parseLimit, type Subject } from "@/server/entitlements";
@@ -34,8 +36,6 @@ export async function billingRecipients(
   return owners.map((row) => row.user);
 }
 
-const methodText = { card: "Carte", mobile_money: "Mobile Money" } as const;
-
 export async function paymentSucceeded(db: PrismaClient, paymentId: string, now = new Date()) {
   const payment = await db.payment.findUnique({
     where: { id: paymentId },
@@ -62,7 +62,7 @@ export async function paymentSucceeded(db: PrismaClient, paymentId: string, now 
       firstName: user.firstName,
       plan,
       amount: formatUsd(payment.amountCents),
-      method: methodText[payment.method],
+      method: t(`admin.subscriptions.payments.method.${paymentMethodKey[payment.method]}`),
       startDate: payment.periodStart,
       endDate: payment.periodEnd,
       invoiceId: invoice?.id,
