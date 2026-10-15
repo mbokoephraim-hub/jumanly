@@ -1538,6 +1538,8 @@
       "label": "Continuer avec",
       "signupLabel": "S'inscrire avec",
       "google": "Google",
+      "apple": "Apple",
+      "linkedin": "LinkedIn",
       "aria": {
         "continue": "Continuer avec {provider}",
         "signup": "S'inscrire avec {provider}"
@@ -1649,8 +1651,10 @@
       "accountLocked": "Votre compte est temporairement verrouillé après plusieurs tentatives. Un e-mail vous a été envoyé pour le débloquer.",
       "accountSuspended": "Votre compte est suspendu. Pour en savoir plus, écrivez-nous à assistant@jumanly.io.",
       "accountDeleted": "Ce compte a été supprimé. Vous pouvez créer un nouveau compte avec cette adresse.",
-      "googleOnly": "Ce compte a été créé avec Google. Utilisez « Continuer avec Google » ou définissez un mot de passe avec « Mot de passe oublié ».",
+      "googleOnly": "Ce compte a été créé avec Google, Apple ou LinkedIn. Utilisez le bouton de ce service, ou définissez un mot de passe avec « Mot de passe oublié ».",
       "googleFailed": "La connexion avec Google n'a pas abouti. Réessayez ou utilisez votre e-mail.",
+      "appleFailed": "La connexion avec Apple n'a pas abouti. Réessayez ou utilisez votre e-mail.",
+      "linkedinFailed": "La connexion avec LinkedIn n'a pas abouti. Réessayez ou utilisez votre e-mail.",
       "googleCancelled": "Connexion avec Google annulée.",
       "magicLinkExpired": "Ce lien de connexion a expiré ou a déjà été utilisé. Demandez-en un nouveau.",
       "magicLinkOtherDevice": "Ce lien a été demandé depuis un autre appareil. Ouvrez-le sur l'appareil d'origine ou demandez-en un nouveau.",

@@ -1225,6 +1225,8 @@ Rappel du paramètre `?suite=` : si le visiteur arrive depuis une action (postul
 | `auth.social.label` | Continuer avec |
 | `auth.social.signupLabel` | S'inscrire avec |
 | `auth.social.google` | Google |
+| `auth.social.apple` | Apple |
+| `auth.social.linkedin` | LinkedIn |
 | `auth.social.aria.continue` | Continuer avec {provider} |
 | `auth.social.aria.signup` | S'inscrire avec {provider} |
 
@@ -1741,8 +1743,10 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `auth.error.accountLocked` | Votre compte est temporairement verrouillé après plusieurs tentatives. Un e-mail vous a été envoyé pour le débloquer. |
 | `auth.error.accountSuspended` | Votre compte est suspendu. Pour en savoir plus, écrivez-nous à assistant@jumanly.io. |
 | `auth.error.accountDeleted` | Ce compte a été supprimé. Vous pouvez créer un nouveau compte avec cette adresse. |
-| `auth.error.googleOnly` | Ce compte a été créé avec Google. Utilisez « Continuer avec Google » ou définissez un mot de passe avec « Mot de passe oublié ». |
+| `auth.error.googleOnly` | Ce compte a été créé avec Google, Apple ou LinkedIn. Utilisez le bouton de ce service, ou définissez un mot de passe avec « Mot de passe oublié ». |
 | `auth.error.googleFailed` | La connexion avec Google n'a pas abouti. Réessayez ou utilisez votre e-mail. |
+| `auth.error.appleFailed` | La connexion avec Apple n'a pas abouti. Réessayez ou utilisez votre e-mail. |
+| `auth.error.linkedinFailed` | La connexion avec LinkedIn n'a pas abouti. Réessayez ou utilisez votre e-mail. |
 | `auth.error.googleCancelled` | Connexion avec Google annulée. |
 | `auth.error.magicLinkExpired` | Ce lien de connexion a expiré ou a déjà été utilisé. Demandez-en un nouveau. |
 | `auth.error.magicLinkOtherDevice` | Ce lien a été demandé depuis un autre appareil. Ouvrez-le sur l'appareil d'origine ou demandez-en un nouveau. |

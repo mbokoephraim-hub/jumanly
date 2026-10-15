@@ -1,8 +1,9 @@
 /**
  * Authentication (docs/specifications.md, partie 10 § 10.1) with Better Auth:
  * e-mail + password (10 characters minimum, leaked passwords refused outside local and preview),
- * 6-digit e-mail code valid 15 minutes with 5 attempts, magic link, Google when configured,
- * 30-day sliding sessions in httpOnly cookies, e-mail two-step verification, rate limits.
+ * 6-digit e-mail code valid 15 minutes with 5 attempts, magic link, Google, Apple and LinkedIn
+ * when configured, 30-day sliding sessions in httpOnly cookies, e-mail two-step verification,
+ * rate limits.
  */
 import "server-only";
 import { betterAuth } from "better-auth";
@@ -34,11 +35,25 @@ async function firstNameOf(email: string) {
 export const googleEnabled = Boolean(
   process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET,
 );
+export const appleEnabled = Boolean(process.env.APPLE_CLIENT_ID && process.env.APPLE_CLIENT_SECRET);
+export const linkedinEnabled = Boolean(
+  process.env.LINKEDIN_CLIENT_ID && process.env.LINKEDIN_CLIENT_SECRET,
+);
 
-/** Providers offered on the entry screen, in the order of its buttons. */
-export function enabledProviders() {
-  return googleEnabled ? (["google"] as const) : [];
+export type SocialProviderId = "google" | "apple" | "linkedin";
+
+/** Providers offered on the entry screen, in the order of its buttons (configured ones only). */
+export function enabledProviders(): SocialProviderId[] {
+  const all: [SocialProviderId, boolean][] = [
+    ["google", googleEnabled],
+    ["apple", appleEnabled],
+    ["linkedin", linkedinEnabled],
+  ];
+  return all.filter(([, enabled]) => enabled).map(([id]) => id);
 }
+
+/** Apple may hide the address behind its relay: that address is the one Apple verified. */
+const APPLE_RELAY = /@privaterelay\.appleid\.com$/i;
 
 export const auth = betterAuth({
   appName: "Jumanly",
@@ -61,16 +76,35 @@ export const auth = betterAuth({
     },
   },
   emailVerification: { autoSignInAfterVerification: true },
-  socialProviders: googleEnabled
-    ? {
-        google: {
-          clientId: process.env.GOOGLE_CLIENT_ID!,
-          clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
-          prompt: "select_account",
-        },
-      }
-    : {},
-  account: { accountLinking: { enabled: true, trustedProviders: ["google"] } },
+  socialProviders: {
+    ...(googleEnabled && {
+      google: {
+        clientId: process.env.GOOGLE_CLIENT_ID!,
+        clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
+        prompt: "select_account" as const,
+      },
+    }),
+    ...(appleEnabled && {
+      apple: {
+        clientId: process.env.APPLE_CLIENT_ID!,
+        clientSecret: process.env.APPLE_CLIENT_SECRET!,
+        appBundleIdentifier: process.env.APPLE_APP_BUNDLE_IDENTIFIER || undefined,
+        mapProfileToUser: (profile: { email?: string }) =>
+          profile.email && APPLE_RELAY.test(profile.email) ? { emailVerified: true } : {},
+      },
+    }),
+    ...(linkedinEnabled && {
+      linkedin: {
+        clientId: process.env.LINKEDIN_CLIENT_ID!,
+        clientSecret: process.env.LINKEDIN_CLIENT_SECRET!,
+      },
+    }),
+  },
+  // Apple answers with a POST from its own site.
+  trustedOrigins: appleEnabled ? ["https://appleid.apple.com"] : [],
+  account: {
+    accountLinking: { enabled: true, trustedProviders: ["google", "apple", "linkedin"] },
+  },
   session: { expiresIn: 30 * DAY, updateAge: DAY },
   user: {
     additionalFields: {

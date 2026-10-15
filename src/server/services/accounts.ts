@@ -133,6 +133,27 @@ export async function setupAccount(
   });
 }
 
+/**
+ * An account created with Google, Apple or LinkedIn in the last 24 hours that has not finished the
+ * sign-up (no organization, plan step not done): the plan step sets it up.
+ */
+export async function pendingSocialSignup(db: PrismaClient, userId: string) {
+  const user = await db.user.findUnique({
+    where: { id: userId },
+    select: {
+      createdAt: true,
+      accounts: { select: { providerId: true } },
+      memberships: { select: { id: true }, take: 1 },
+    },
+  });
+  if (!user) return false;
+  const recent = Date.now() - user.createdAt.getTime() < 24 * 60 * 60 * 1000;
+  const social =
+    user.accounts.length > 0 &&
+    !user.accounts.some((account) => account.providerId === "credential");
+  return recent && social && user.memberships.length === 0;
+}
+
 /** The organization a person owns (for organization plans), if any. */
 export async function ownedOrganization(db: PrismaClient, userId: string) {
   const membership = await db.membership.findFirst({

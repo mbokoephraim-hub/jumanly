@@ -6,20 +6,20 @@ import { getTranslations } from "next-intl/server";
 import {
   AuthCard,
   AuthHeading,
-  GoogleButton,
   OrSeparator,
   SignupFooter,
   SignupStepper,
 } from "@/components/auth/auth-card";
 import { SignupAccountForm } from "@/components/auth/forms";
+import { SocialButtons } from "@/components/auth/social-buttons";
 import { Icon } from "@/components/brand/icon";
 import { Skeleton } from "@/components/ui";
 import { countryOptions } from "@/config/countries";
 import { formatUsd } from "@/lib/money";
 import { pageMetadata } from "@/lib/seo";
 import { readSignupParams, stepHref } from "@/lib/signup-params";
-import { signInWithGoogle } from "@/server/actions/auth";
-import { googleEnabled } from "@/server/auth";
+import { signInWithProvider } from "@/server/actions/auth";
+import { enabledProviders } from "@/server/auth";
 import { getSession } from "@/server/auth/session";
 import { readSignupFlow } from "@/server/signup-flow";
 import { getPublicPlans } from "@/server/queries/public";
@@ -43,7 +43,7 @@ export default function SignupAccountPage({ searchParams }: PageProps<"/inscript
   );
 }
 
-/** Step 3 · account. Google sign-up is offered to talents (an organization needs its name). */
+/** Step 3 · account. Providers are offered to talents here (an organization needs its name). */
 async function AccountStep({
   searchParams,
 }: Pick<PageProps<"/inscription/compte">, "searchParams">) {
@@ -52,6 +52,8 @@ async function AccountStep({
   if (await getSession()) redirect(params.suite ?? "/app");
   const profile = params.profil;
   const t = await getTranslations("signup");
+  const tAuth = await getTranslations("auth");
+  const providers = enabledProviders().map((id) => ({ id, label: tAuth(`social.${id}`) }));
   const families = familiesForProfile(profile);
   const plans = (await getPublicPlans()).filter((plan) => families.includes(plan.family));
   const plan =
@@ -84,15 +86,18 @@ async function AccountStep({
           </Link>
         </p>
       )}
-      {googleEnabled && profile === "talent" && (
+      {providers.length > 0 && profile === "talent" && (
         <>
-          <form action={signInWithGoogle}>
-            <input
-              type="hidden"
-              name="next"
-              value={stepHref("/app/bienvenue", { suite: params.suite })}
+          <form>
+            <input type="hidden" name="profil" value={profile} />
+            {plan && <input type="hidden" name="forfait" value={plan.code} />}
+            {params.suite && <input type="hidden" name="next" value={params.suite} />}
+            <SocialButtons
+              providers={providers}
+              label={tAuth("social.signupLabel")}
+              aria={tAuth("social.aria.signup", { provider: "{provider}" })}
+              action={signInWithProvider}
             />
-            <GoogleButton label={t("account.google")} />
           </form>
           <OrSeparator />
         </>

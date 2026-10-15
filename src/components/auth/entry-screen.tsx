@@ -141,6 +141,10 @@ export async function EntryScreen({ mode, params }: { mode: EntryMode; params: P
           {params.erreur === "google" && (
             <Alert tone="error" title={t("auth.error.googleFailed")} />
           )}
+          {params.erreur === "apple" && <Alert tone="error" title={t("auth.error.appleFailed")} />}
+          {params.erreur === "linkedin" && (
+            <Alert tone="error" title={t("auth.error.linkedinFailed")} />
+          )}
           {suite && (
             <p className="flex items-start gap-3 rounded-[16px] bg-menthe-claire px-4 py-3.5 text-[13px] leading-[19px]">
               <Icon name="jobs" className="mt-px size-4 shrink-0" />
