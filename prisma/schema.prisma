@@ -529,6 +529,7 @@ model User {
   memberships         Membership[]
   talentProfile       TalentProfile?
   diagnostics         CareerDiagnostic[]
+  diagnosticDraft     CareerDiagnosticDraft?
   savedJobs           SavedJob[]
   jobsCreated         Job[]                     @relation("JobCreator")
   jobsAssigned        Job[]                     @relation("JobAssignee")
@@ -943,11 +944,25 @@ model CareerDiagnostic {
   userId    String
   user      User            @relation(fields: [userId], references: [id], onDelete: Cascade)
   level     DiagnosticLevel
-  answers   Json
-  result    Json
-  createdAt DateTime        @default(now())
+  answers    Json
+  result     Json
+  /// « Refaire dans 30 jours »: a notification is sent at this date (hourly job).
+  remindAt   DateTime?
+  remindedAt DateTime?
+  createdAt  DateTime        @default(now())
 
   @@index([userId, createdAt])
+  @@index([remindAt])
+}
+
+/// Answers of a diagnostic in progress, saved at each answer so the talent can resume it.
+model CareerDiagnosticDraft {
+  userId    String   @id
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  answers   Json
+  /// Index of the screen the talent was on.
+  step      Int      @default(0)
+  updatedAt DateTime @updatedAt
 }
 
 // ─── Candidatures (Jobs, partie 04) ─────────────────────────────

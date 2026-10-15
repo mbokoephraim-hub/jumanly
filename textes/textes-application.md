@@ -2561,8 +2561,8 @@ Conventions :
 |---|---|
 | `career.diagnostic.title` | Diagnostic de carrière |
 | `career.diagnostic.eyebrow` | Career · Diagnostic de carrière |
-| `career.diagnostic.intro.simple` | 12 questions, environ 8 minutes. Vous recevez un bilan et des premières pistes. |
-| `career.diagnostic.intro.personalized` | 20 questions, environ 15 minutes. Jumanly Intelligence analyse vos réponses et votre profil pour un bilan personnalisé. |
+| `career.diagnostic.intro.simple` | Six dimensions, 6 à 8 minutes. Votre bilan est calculé par des règles fixes, expliquées point par point. |
+| `career.diagnostic.intro.personalized` | Six dimensions et quatre questions de plus, 8 à 10 minutes. Jumanly Intelligence explique vos résultats et propose des pistes ; les notes restent calculées par des règles fixes. |
 | `career.diagnostic.badge.simple` | Diagnostic simplifié |
 | `career.diagnostic.badge.personalized` | Diagnostic personnalisé |
 | `career.diagnostic.upsell` | Le diagnostic personnalisé est disponible avec {plan}. |
@@ -2645,7 +2645,7 @@ Conventions :
 | `career.diagnostic.q.time.a2` | 1 à 3 heures |
 | `career.diagnostic.q.time.a3` | 3 à 6 heures |
 | `career.diagnostic.q.time.a4` | Plus de 6 heures |
-| `career.diagnostic.q.workMode` | Quel mode de travail préférez-vous ? |
+| `career.diagnostic.q.workMode.text` | Quel mode de travail préférez-vous ? |
 | `career.diagnostic.q.mobility.text` | Êtes-vous prêt à changer de ville ou de pays ? |
 | `career.diagnostic.q.mobility.a1` | Non |
 | `career.diagnostic.q.mobility.a2` | Dans mon pays |
@@ -2721,6 +2721,218 @@ Conventions :
 | `career.diagnostic.rule.step.network` | Rendre votre profil visible des recruteurs |
 | `career.diagnostic.rule.step.role` | Lister trois métiers qui vous attirent, puis refaire le diagnostic |
 | `career.diagnostic.rule.step.cta` | Y aller |
+
+#### Diagnostic en 6 dimensions : accueil, questions, scan, résultat (barème `diagnostic_scoring_v2`)
+
+*Brief docs/experience-animee § 5. Une question par écran, le radar se dessine pendant les réponses, le scan coche les étapes réelles, le résultat donne une note sur 100 par dimension et un niveau sur 4 stades.*
+
+| Clé | Texte |
+|---|---|
+| `career.diagnostic.welcome.title` | Faites le point, comme un vrai bilan |
+| `career.diagnostic.welcome.text` | Six dimensions, une question à la fois. Vous voyez votre profil se dessiner pendant que vous répondez, puis vous recevez un bilan expliqué point par point. |
+| `career.diagnostic.welcome.duration` | 6 à 8 minutes |
+| `career.diagnostic.welcome.launch` | Lancer mon diagnostic |
+| `career.diagnostic.welcome.resume` | Reprendre mon diagnostic, étape {current} sur {total} |
+| `career.diagnostic.welcome.restart` | Recommencer à zéro |
+| `career.diagnostic.welcome.prefillHint` | Nous reprenons ce que votre profil dit déjà (métier visé, secteurs, compétences, langues, études, CV). Vous pouvez tout modifier. |
+| `career.diagnostic.welcome.constellation` | Les six dimensions de votre bilan |
+| `career.diagnostic.welcome.noscript` | Sans JavaScript, toutes les questions s'affichent sur une seule page. |
+| `career.diagnostic.card.label` | Votre carte professionnelle |
+| `career.diagnostic.card.noTarget` | Métier visé à préciser |
+| `career.diagnostic.card.skills` | {count, plural, =0 {Aucune compétence déclarée} one {# compétence déclarée} other {# compétences déclarées}} |
+| `career.diagnostic.step.label` | Étape {current} sur {total} · {name} |
+| `career.diagnostic.step.trail` | Les six étapes du diagnostic |
+| `career.diagnostic.step.done` | terminée |
+| `career.diagnostic.step.current` | en cours |
+| `career.diagnostic.analyze` | Terminer et lancer l'analyse |
+| `career.diagnostic.prefilled` | Pré-rempli depuis votre profil. Modifiez si besoin. |
+| `career.diagnostic.cvScore` | Votre CV sur Jumanly a un score de {score} sur 100. |
+| `career.diagnostic.savedAt` | Réponse enregistrée |
+| `career.diagnostic.dimension.clarity.name` | Clarté du projet |
+| `career.diagnostic.dimension.skills.name` | Compétences |
+| `career.diagnostic.dimension.experience.name` | Expérience |
+| `career.diagnostic.dimension.tools.name` | Outils de candidature |
+| `career.diagnostic.dimension.interviews.name` | Préparation aux entretiens |
+| `career.diagnostic.dimension.search.name` | Recherche active et réseau |
+| `career.diagnostic.dimension.clarity.short` | Projet |
+| `career.diagnostic.dimension.skills.short` | Compétences |
+| `career.diagnostic.dimension.experience.short` | Expérience |
+| `career.diagnostic.dimension.tools.short` | Outils |
+| `career.diagnostic.dimension.interviews.short` | Entretiens |
+| `career.diagnostic.dimension.search.short` | Recherche |
+| `career.diagnostic.dimension.clarity.finding.low` | Votre projet reste à préciser : choisir un métier cible rendra chaque autre effort plus utile. |
+| `career.diagnostic.dimension.clarity.finding.mid` | Vous avez une direction. Connaître le métier et ses recruteurs de plus près la rendra solide. |
+| `career.diagnostic.dimension.clarity.finding.high` | Vous savez où vous allez et qui recrute pour ce métier. |
+| `career.diagnostic.dimension.skills.finding.low` | Les compétences demandées pour votre cible sont encore à construire ou à prouver. |
+| `career.diagnostic.dimension.skills.finding.mid` | Vous avez des bases. Une preuve (attestation, projet) pour chaque compétence fera la différence. |
+| `career.diagnostic.dimension.skills.finding.high` | Vos compétences correspondent à ce que demandent les offres, avec des preuves à l'appui. |
+| `career.diagnostic.dimension.experience.finding.low` | Votre expérience est encore courte : stages, projets et engagements comptent, montrez-les. |
+| `career.diagnostic.dimension.experience.finding.mid` | Vous avez de l'expérience. Des résultats chiffrés la rendront plus convaincante. |
+| `career.diagnostic.dimension.experience.finding.high` | Votre expérience est solide et vous savez la décrire avec des résultats. |
+| `career.diagnostic.dimension.tools.finding.low` | Vos outils de candidature sont à créer : un CV à jour est la première étape. |
+| `career.diagnostic.dimension.tools.finding.mid` | Vos outils existent. Les mettre à jour et les adapter à chaque offre augmentera vos réponses. |
+| `career.diagnostic.dimension.tools.finding.high` | CV, lettre et profil en ligne sont prêts à être envoyés. |
+| `career.diagnostic.dimension.interviews.finding.low` | Les entretiens sont votre chantier principal : entraînez-vous à présenter votre parcours. |
+| `career.diagnostic.dimension.interviews.finding.mid` | Vous êtes à l'aise par moments. Quelques simulations vous donneront de l'assurance. |
+| `career.diagnostic.dimension.interviews.finding.high` | Vous êtes prêt pour le jour J. |
+| `career.diagnostic.dimension.search.finding.low` | Votre recherche est peu active : un rythme régulier et quelques contacts changeront la donne. |
+| `career.diagnostic.dimension.search.finding.mid` | Vous cherchez régulièrement. Élargir votre réseau multipliera les occasions. |
+| `career.diagnostic.dimension.search.finding.high` | Vous êtes visible et régulier dans votre recherche. |
+| `career.diagnostic.dimension.clarity.action` | Explorer les offres |
+| `career.diagnostic.dimension.skills.action` | Voir les formations |
+| `career.diagnostic.dimension.experience.action` | Ajouter un projet à mon portfolio |
+| `career.diagnostic.dimension.tools.action` | Améliorer mon CV |
+| `career.diagnostic.dimension.interviews.action` | M'entraîner à l'entretien |
+| `career.diagnostic.dimension.search.action` | Voir les offres |
+| `career.diagnostic.dimension.whyIntro` | Les réponses qui ont compté, selon le barème fixe : |
+| `career.diagnostic.dimension.points` | {points} sur {max} |
+| `career.diagnostic.dimension.score` | {score} sur 100 |
+| `career.diagnostic.dimension.reason.targetRole` | Métier visé renseigné |
+| `career.diagnostic.dimension.reason.familiarity` | Connaissance du métier |
+| `career.diagnostic.dimension.reason.companies` | Entreprises qui recrutent, connues |
+| `career.diagnostic.dimension.reason.sectors` | Secteurs choisis |
+| `career.diagnostic.dimension.reason.obstacle` | Frein principal autre que le choix du métier |
+| `career.diagnostic.dimension.reason.skillLevels` | Niveau dans les compétences demandées |
+| `career.diagnostic.dimension.reason.skillProofs` | Preuves de ces compétences |
+| `career.diagnostic.dimension.reason.topSkills` | Compétences solides citées |
+| `career.diagnostic.dimension.reason.languages` | Langues de travail |
+| `career.diagnostic.dimension.reason.digital` | Outils numériques |
+| `career.diagnostic.dimension.reason.experience` | Années d'expérience |
+| `career.diagnostic.dimension.reason.education` | Niveau d'études |
+| `career.diagnostic.dimension.reason.quantified` | Résultats chiffrés |
+| `career.diagnostic.dimension.reason.achievement` | Réalisation décrite |
+| `career.diagnostic.dimension.reason.cvStatus` | État du CV |
+| `career.diagnostic.dimension.reason.coverLetter` | Lettre de motivation |
+| `career.diagnostic.dimension.reason.onlineProfile` | Profil en ligne |
+| `career.diagnostic.dimension.reason.confidence` | Confiance en entretien |
+| `career.diagnostic.dimension.reason.interviews` | Entretiens passés |
+| `career.diagnostic.dimension.reason.pitch` | Présentation de votre parcours |
+| `career.diagnostic.dimension.reason.applications` | Candidatures du mois dernier |
+| `career.diagnostic.dimension.reason.time` | Temps disponible chaque semaine |
+| `career.diagnostic.dimension.reason.contacts` | Professionnels à contacter |
+| `career.diagnostic.q.sectors.text` | Quels secteurs vous attirent ? |
+| `career.diagnostic.q.sectors.placeholder` | Ex. : Banque, santé, numérique |
+| `career.diagnostic.q.familiarity.text` | À quel point ce métier vous est-il familier ? |
+| `career.diagnostic.q.familiarity.a1` | Je l'exerce |
+| `career.diagnostic.q.familiarity.a2` | Je l'ai découvert en stage |
+| `career.diagnostic.q.familiarity.a3` | J'en ai entendu parler |
+| `career.diagnostic.q.familiarity.a4` | Je le découvre |
+| `career.diagnostic.q.companies.text` | Connaissez-vous trois entreprises qui recrutent pour ce métier près de chez vous ? |
+| `career.diagnostic.q.companies.a1` | Oui, trois ou plus |
+| `career.diagnostic.q.companies.a2` | Une ou deux |
+| `career.diagnostic.q.companies.a3` | Pas encore |
+| `career.diagnostic.q.skillsToBuildPlaceholder` | Ex. : Power BI, prise de parole, anglais |
+| `career.diagnostic.q.languagesPlaceholder` | Ex. : Français, anglais, lingala |
+| `career.diagnostic.q.digitalPlaceholder` | Ex. : Excel, Canva, Google Drive |
+| `career.diagnostic.q.skillLevel.text` | Votre niveau en {skill} ? |
+| `career.diagnostic.q.skillLevel.source.role` | L'une des compétences les plus demandées dans les offres publiées pour ce métier ({count, plural, one {# offre} other {# offres}}). |
+| `career.diagnostic.q.skillLevel.source.all` | L'une des compétences les plus demandées dans les offres publiées sur Jumanly ({count, plural, one {# offre} other {# offres}}). |
+| `career.diagnostic.q.skillLevel.source.own` | Une compétence que vous avez citée. |
+| `career.diagnostic.q.skillLevel.l1` | Notions |
+| `career.diagnostic.q.skillLevel.l2` | Intermédiaire |
+| `career.diagnostic.q.skillLevel.l3` | Avancé |
+| `career.diagnostic.q.skillLevel.l4` | Expert |
+| `career.diagnostic.q.skillLevel.l1Hint` | Je connais les bases |
+| `career.diagnostic.q.skillLevel.l2Hint` | Je l'utilise avec un peu d'aide |
+| `career.diagnostic.q.skillLevel.l3Hint` | Je l'utilise seul, au quotidien |
+| `career.diagnostic.q.skillLevel.l4Hint` | Je pourrais l'enseigner |
+| `career.diagnostic.q.skillProof.text` | Pouvez-vous le prouver ? |
+| `career.diagnostic.q.skillProof.a1` | Oui, avec une attestation ou un certificat |
+| `career.diagnostic.q.skillProof.a2` | Oui, avec un projet |
+| `career.diagnostic.q.skillProof.a3` | Oui, par mon expérience |
+| `career.diagnostic.q.skillProof.a4` | Rien encore |
+| `career.diagnostic.q.quantified.text` | Avez-vous déjà travaillé avec des résultats chiffrés (ventes, délais, nombre de clients…) ? |
+| `career.diagnostic.q.quantified.a1` | Oui, souvent |
+| `career.diagnostic.q.quantified.a2` | Parfois |
+| `career.diagnostic.q.quantified.a3` | Pas encore |
+| `career.diagnostic.q.coverLetter.text` | Avez-vous une lettre de motivation que vous pouvez adapter à chaque offre ? |
+| `career.diagnostic.q.coverLetter.a1` | Oui, prête à adapter |
+| `career.diagnostic.q.coverLetter.a2` | J'en ai une, mais elle reste générale |
+| `career.diagnostic.q.coverLetter.a3` | Pas encore |
+| `career.diagnostic.q.onlineProfile.text` | Votre profil LinkedIn ou votre profil en ligne est-il à jour ? |
+| `career.diagnostic.q.onlineProfile.a1` | Oui, il est à jour |
+| `career.diagnostic.q.onlineProfile.a2` | Il existe, mais il n'est pas à jour |
+| `career.diagnostic.q.onlineProfile.a3` | Je n'en ai pas |
+| `career.diagnostic.q.interviews.text` | Combien d'entretiens d'embauche avez-vous passés ces 6 derniers mois ? |
+| `career.diagnostic.q.interviews.a1` | Aucun |
+| `career.diagnostic.q.interviews.a2` | 1 ou 2 |
+| `career.diagnostic.q.interviews.a3` | 3 à 5 |
+| `career.diagnostic.q.interviews.a4` | Plus de 5 |
+| `career.diagnostic.q.pitch.text` | Savez-vous présenter votre parcours en 2 minutes ? |
+| `career.diagnostic.q.pitch.a1` | Oui |
+| `career.diagnostic.q.pitch.a2` | À peu près |
+| `career.diagnostic.q.pitch.a3` | Non |
+| `career.diagnostic.q.workMode.a1` | Sur site |
+| `career.diagnostic.q.workMode.a2` | Hybride |
+| `career.diagnostic.q.workMode.a3` | Télétravail |
+| `career.diagnostic.q.workMode.a4` | Peu importe |
+| `career.diagnostic.q.contacts.text` | Combien de professionnels de votre domaine pourriez-vous contacter cette semaine ? |
+| `career.diagnostic.q.contacts.a1` | Aucun |
+| `career.diagnostic.q.contacts.a2` | 1 ou 2 |
+| `career.diagnostic.q.contacts.a3` | 3 à 5 |
+| `career.diagnostic.q.contacts.a4` | Plus de 5 |
+| `career.diagnostic.radar.live` | Votre profil se dessine |
+| `career.diagnostic.radar.liveHint` | Chaque réponse fait grandir l'axe concerné. Notes provisoires, calculées par des règles fixes. |
+| `career.diagnostic.radar.caption` | Notes par dimension, sur 100 |
+| `career.diagnostic.radar.dimension` | Dimension |
+| `career.diagnostic.radar.score` | Note |
+| `career.diagnostic.radar.delta` | Évolution |
+| `career.diagnostic.radar.current` | Ce diagnostic |
+| `career.diagnostic.radar.previous` | Diagnostic précédent (pointillés) |
+| `career.diagnostic.scan.title` | Analyse de votre diagnostic |
+| `career.diagnostic.scan.answers` | Lecture de vos réponses |
+| `career.diagnostic.scan.profile` | Lecture de votre profil et de votre CV |
+| `career.diagnostic.scan.offers` | Comparaison avec les offres de votre métier |
+| `career.diagnostic.scan.offersRole` | Comparaison avec les offres de votre métier ({count, plural, =0 {aucune offre publiée} one {# offre} other {# offres}}) |
+| `career.diagnostic.scan.offersAll` | Comparaison avec les offres publiées sur Jumanly ({count, plural, =0 {aucune offre publiée} one {# offre} other {# offres}}) |
+| `career.diagnostic.scan.dimensions` | Calcul de vos 6 dimensions |
+| `career.diagnostic.scan.priorities` | Préparation de vos priorités |
+| `career.diagnostic.scan.ai` | Rédaction de votre synthèse par Jumanly Intelligence |
+| `career.diagnostic.scan.done` | terminé |
+| `career.diagnostic.scan.running` | en cours |
+| `career.diagnostic.scan.ready` | Votre diagnostic est prêt |
+| `career.diagnostic.scan.level` | Niveau {stage} |
+| `career.diagnostic.scan.cta` | Voir mon diagnostic |
+| `career.diagnostic.scan.fallback` | Jumanly Intelligence n'a pas répondu à temps : votre bilan est calculé par les règles fixes, sans crédit consommé. Vous pourrez relancer la version personnalisée plus tard. |
+| `career.diagnostic.scan.error` | L'analyse n'a pas pu aboutir. Vos réponses sont enregistrées : réessayez. |
+| `career.diagnostic.scan.retry` | Réessayer |
+| `career.diagnostic.stage.discovery` | Découverte |
+| `career.diagnostic.stage.building` | Construction |
+| `career.diagnostic.stage.ready` | Prêt |
+| `career.diagnostic.stage.competitive` | Compétitif |
+| `career.diagnostic.stage.range` | {from} à {to} |
+| `career.diagnostic.stage.discoveryText` | Vous posez les bases : clarifiez votre projet et créez vos premiers outils. |
+| `career.diagnostic.stage.buildingText` | Vous avez des bases solides : quelques chantiers ciblés vous rendront prêt. |
+| `career.diagnostic.stage.readyText` | Vous êtes prêt à candidater : travaillez vos points faibles pour vous démarquer. |
+| `career.diagnostic.stage.competitiveText` | Vous êtes compétitif : visez les offres exigeantes et entretenez votre réseau. |
+| `career.diagnostic.result.global` | Votre niveau global |
+| `career.diagnostic.result.score` | {score} sur 100 |
+| `career.diagnostic.result.outOf` | sur 100 |
+| `career.diagnostic.result.track` | Les quatre stades du diagnostic |
+| `career.diagnostic.result.youAreHere` | Vous êtes ici |
+| `career.diagnostic.result.radar` | Vos 6 dimensions |
+| `career.diagnostic.result.detail` | Le détail, dimension par dimension |
+| `career.diagnostic.result.offers` | {count, plural, =0 {Aucune offre publiée comparée} one {# offre comparée} other {# offres comparées}} |
+| `career.diagnostic.result.legacy` | Ce bilan a été établi avec la première version du diagnostic, en trois niveaux. |
+| `career.diagnostic.result.evolution.title` | Votre évolution |
+| `career.diagnostic.result.evolution.since` | Depuis votre diagnostic du {date, date, long} |
+| `career.diagnostic.result.evolution.up` | En hausse de {value} points |
+| `career.diagnostic.result.evolution.down` | En baisse de {value} points |
+| `career.diagnostic.result.evolution.same` | Stable |
+| `career.diagnostic.result.evolution.first` | C'est votre premier diagnostic en six dimensions : refaites-le dans 30 jours pour mesurer vos progrès. |
+| `career.diagnostic.result.remind.cta` | Refaire dans 30 jours |
+| `career.diagnostic.result.remind.hint` | Nous vous enverrons une notification ce jour-là. |
+| `career.diagnostic.result.remind.done` | Rappel prévu le {date, date, long}. |
+| `career.diagnostic.result.remind.sent` | Le rappel a été envoyé le {date, date, long}. |
+| `career.diagnostic.rule.priority.experience` | Valoriser votre expérience : projets, stages, engagements |
+| `career.diagnostic.pdf.title` | Bilan de carrière |
+| `career.diagnostic.pdf.subtitle` | {name} · établi le {date, date, long} |
+| `career.diagnostic.pdf.footer` | Document établi par Jumanly à partir des réponses du talent, selon un barème fixe (diagnostic_scoring_v2). Il n'est jamais montré aux recruteurs. |
+| `career.diagnostic.pdf.global` | Niveau global |
+| `career.diagnostic.pdf.dimensions` | Six dimensions |
+| `career.diagnostic.pdf.priorities` | Priorités |
+| `career.diagnostic.pdf.summary` | Synthèse de Jumanly Intelligence |
+| `career.diagnostic.toast.ready` | Votre diagnostic est prêt. |
 
 ### `/app/career/cv` · Éditeur de CV et coach IA
 
@@ -6839,6 +7051,8 @@ Conventions :
 | `notifications.item.licenseExpiring` | Votre licence {plan} offerte par {sponsorName} se termine le {date}. |
 | `notifications.item.licenseExpired` | Votre licence offerte par {sponsorName} est terminée. Vous êtes au forfait {freePlan}, vos données sont conservées. |
 | `notifications.item.licensesLow` | {count, plural, =0 {Plus aucune licence disponible} one {Il reste # licence disponible} other {Il reste # licences disponibles}} dans le lot « {batchName} ». |
+| `notifications.item.diagnosticReady` | Votre diagnostic de carrière est prêt : niveau {stage}. |
+| `notifications.item.diagnosticReminder` | Cela fait 30 jours depuis votre diagnostic de carrière. Refaites-le pour voir vos progrès. |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)

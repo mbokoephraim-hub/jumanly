@@ -1,17 +1,12 @@
 /**
- * Personalized diagnostic (partie 08 § 8.9 `diagnostic`): the simplified rules give the base,
- * the model writes a summary, strengths and roles from the answers (and the profile only when
+ * Personalized diagnostic (partie 08 § 8.9 `diagnostic`): the fixed rules give the scores, the
+ * model writes a summary, strengths and roles from the answers (and the profile only when
  * the talent ticked « Utiliser mon profil »). Without the model, the rules' result is kept.
  */
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { AiError, runAi } from "@/server/ai";
-import {
-  mergePersonalized,
-  personalizedOutputSchema,
-  simpleDiagnostic,
-  type PersonalAnswers,
-  type SimpleAnswers,
-} from "./diagnostic";
+import { mergePersonalized, personalizedOutputSchema, type DiagnosticV2 } from "./diagnostic";
+import { choiceAnswers, type Answers } from "./diagnostic-scoring";
 
 export const DIAGNOSTIC_GATE = { key: "career.diagnostic.level", levels: ["personalized"] };
 
@@ -22,6 +17,7 @@ const SYSTEM = [
   "- strengths : 2 à 4 atouts, chacun appuyé sur une réponse ou un élément du profil ;",
   "- roles : 2 à 4 métiers à explorer cohérents avec les réponses ;",
   "- priorities et steps : choisis dans les listes fournies, 3 au plus.",
+  "Les notes sur 100 sont calculées par des règles fixes : tu ne les modifies pas, tu les expliques.",
   "N'invente aucun fait. N'utilise et ne mentionne jamais : âge, genre, photo, origine, nationalité, religion, situation familiale, santé.",
 ].join("\n");
 
@@ -61,36 +57,60 @@ async function profileFacts(db: PrismaClient, userId: string) {
 /** Labels of the coded answers, so that the model reads words rather than codes. */
 export type AnswerLabels = (question: string, code: string) => string;
 
+/** Beyond 25 s the rules' result is kept and no credit is spent (docs/experience-animee § 5.4). */
+export const DIAGNOSTIC_AI_TIMEOUT_MS = 25_000;
+
 export async function personalizedDiagnostic(
   db: PrismaClient,
   userId: string,
-  simple: SimpleAnswers,
-  personal: PersonalAnswers,
+  answers: Answers,
+  base: DiagnosticV2,
   label: AnswerLabels,
 ) {
-  const base = simpleDiagnostic(simple);
-  const answers = {
-    situation: label("situation", simple.situation),
-    experience: label("experience", simple.experience),
-    education: simple.education,
-    goal: label("goal", simple.goal),
-    targetRole: simple.targetRole,
-    topSkills: simple.topSkills,
-    confidenceOutOf5: simple.confidence,
-    cvStatus: label("cvStatus", simple.cvStatus),
-    applications: label("applications", simple.applications),
-    obstacle: label("obstacle", simple.obstacle),
-    weeklyTime: label("time", simple.time),
-    mobility: label("mobility", simple.mobility),
-    achievement: personal.achievement,
-    values: personal.values.map((code) => label("values", code)),
-    workStyle: label("workStyle", personal.workStyle),
-    feedback: personal.feedback,
-    languages: personal.languages,
-    digitalTools: personal.digital,
-    horizon: personal.horizon,
+  const said = (question: keyof typeof choiceAnswers, code: string | undefined) =>
+    code ? label(question, code) : null;
+  const facts = {
+    situation: said("situation", answers.situation),
+    goal: said("goal", answers.goal),
+    targetRole: answers.targetRole,
+    familiarityWithRole: said("familiarity", answers.familiarity),
+    sectors: answers.sectors,
+    topSkills: answers.topSkills,
+    skillsToBuild: answers.skillsToBuild,
+    selfAssessedSkills: answers.skillChecks.map((item) => ({
+      skill: item.skill,
+      levelOutOf4: item.level,
+      proof: label("skillProof", item.proof),
+    })),
+    languages: answers.languages,
+    digitalTools: answers.digital,
+    experience: said("experience", answers.experience),
+    education: answers.education,
+    achievement: answers.achievement,
+    cvStatus: said("cvStatus", answers.cvStatus),
+    coverLetter: said("coverLetter", answers.coverLetter),
+    onlineProfile: said("onlineProfile", answers.onlineProfile),
+    interviewConfidenceOutOf5: answers.confidence,
+    interviewsLast6Months: said("interviews", answers.interviews),
+    pitch: said("pitch", answers.pitch),
+    applications: said("applications", answers.applications),
+    obstacle: said("obstacle", answers.obstacle),
+    weeklyTime: said("time", answers.time),
+    mobility: said("mobility", answers.mobility),
+    workMode: said("workMode", answers.workMode),
+    contactsThisWeek: said("contacts", answers.contacts),
+    values: answers.values.map((code) => label("values", code)),
+    workStyle: said("workStyle", answers.workStyle),
+    feedback: answers.feedback,
+    horizon: answers.horizon,
   };
-  const profile = personal.useProfile ? await profileFacts(db, userId) : null;
+  const scores = {
+    score: base.score,
+    stage: base.stage,
+    dimensions: base.dimensions.map((item) => ({ key: item.key, score: item.score })),
+    priorities: base.priorities,
+  };
+  const profile = answers.useProfile ? await profileFacts(db, userId) : null;
   try {
     const run = await runAi(db, {
       userId,
@@ -99,16 +119,16 @@ export async function personalizedDiagnostic(
       system: SYSTEM,
       prompt: [
         "Réponses au questionnaire (JSON) :",
-        JSON.stringify(answers),
+        JSON.stringify(facts),
         profile ? `Profil (JSON) :\n${JSON.stringify(profile)}` : "Profil : non partagé.",
-        `Bilan par règles fixes, à affiner (JSON) :\n${JSON.stringify(base)}`,
-        "priorities possibles : role, skills, cv, interview, search, network.",
+        `Notes calculées par des règles fixes, à ne pas modifier (JSON) :\n${JSON.stringify(scores)}`,
+        "priorities possibles : role, skills, experience, cv, interview, search, network.",
         "steps possibles : profile, cv, skills, interview, jobs, network, role.",
       ].join("\n\n"),
       schema: personalizedOutputSchema,
+      timeoutMs: DIAGNOSTIC_AI_TIMEOUT_MS,
       template: () => ({
         summary: "",
-        readiness: base.readiness,
         strengths: [],
         priorities: base.priorities,
         roles: base.roles,

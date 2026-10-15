@@ -1220,6 +1220,25 @@ Chaque appel : vérifie le consentement IA de l'utilisateur, le droit, le quota 
 - Revue trimestrielle des poids ; toute nouvelle version de poids est datée et réversible.
 - Tests automatiques : contrefactuels (attributs exclus), monotonie (ajouter une compétence requise ne peut pas faire baisser le score), bornes (0 à 100), critère non applicable bien retiré.
 
+### 8.11 Barème du diagnostic de carrière (`diagnostic_scoring_v2`)
+
+Le diagnostic de carrière (`/app/career/diagnostic`) note six dimensions sur 100 par des règles fixes et versionnées (`src/server/services/diagnostic-scoring.ts`, tests `tests/unit/diagnostic-scoring.test.ts`). Mêmes réponses, même résultat. L'IA du diagnostic personnalisé ne note pas : elle explique les notes et propose des pistes (règle d'or 3). Aucune donnée exclue du matching n'est demandée ; la mobilité et le mode de travail servent aux conseils, pas à la note.
+
+| Dimension | Réponses et points (total 100) |
+|---|---|
+| Clarté du projet | Métier visé renseigné 35 ; familiarité avec ce métier (je l'exerce 25, découvert en stage 18, entendu parler 8, je le découvre 0) ; trois entreprises qui recrutent connues (oui 20, une ou deux 10, non 0) ; au moins un secteur 10 ; frein principal autre que « je ne sais pas quel métier choisir » 10 |
+| Compétences | Pour les compétences évaluées (les 5 plus demandées dans les offres publiées du métier visé, sinon dans toutes les offres publiées, sinon celles que cite le talent) : niveau moyen (Notions 0 à Expert 1) × 40 ; preuve moyenne (attestation 1, projet 0,8, expérience 0,8, rien 0) × 30 ; compétences solides citées (3 et plus 15, 1 ou 2 8) ; langues (2 et plus 8, une 4) ; outils numériques 7 |
+| Expérience | Années (aucune 0, moins d'un an 15, 1 à 3 ans 30, 3 à 5 ans 40, plus de 5 ans 50) ; études (aucune 0, secondaire 8, professionnelle 15, licence 20, master ou doctorat 25) ; résultats chiffrés (souvent 15, parfois 8, non 0) ; réalisation décrite en 30 caractères au moins 10 |
+| Outils de candidature | CV (aucun 0, pas à jour 20, à jour 45) ; lettre adaptable (oui 30, générale 15, non 0) ; profil en ligne (à jour 25, pas à jour 10, aucun 0) |
+| Préparation aux entretiens | Confiance de 1 à 5 : (confiance − 1) / 4 × 40 ; entretiens des 6 derniers mois (aucun 0, 1 ou 2 15, 3 à 5 25, plus de 5 30) ; présenter son parcours en 2 minutes (oui 30, à peu près 15, non 0) |
+| Recherche active et réseau | Candidatures du mois dernier (aucune 0, 1 à 5 15, 6 à 15 28, plus de 15 35) ; temps par semaine (moins d'1 h 5, 1 à 3 h 12, 3 à 6 h 20, plus de 6 h 25) ; professionnels à contacter cette semaine (aucun 0, 1 ou 2 15, 3 à 5 30, plus de 5 40) |
+
+- **Note globale** : moyenne arrondie des six dimensions. **Stades** : Découverte 0–39, Construction 40–59, Prêt 60–79, Compétitif 80–100.
+- **Questions adaptatives** : familiarité et entreprises seulement avec un métier visé ; résultats chiffrés seulement avec de l'expérience ; un écran par compétence évaluée. Une question non posée ou pas encore répondue compte 0 (le radar se dessine pendant les réponses).
+- **Priorités** : les trois dimensions les plus faibles (à égalité, dans l'ordre du questionnaire), traduites en priorités (métier cible, compétences, expérience, CV, entretiens, recherche ou réseau quand le talent a peu de contacts).
+- **Constat par dimension** : à construire sous 40, en bonne voie de 40 à 69, solide à partir de 70. Le « Pourquoi ? » liste les points obtenus réponse par réponse.
+- Le résultat garde les champs de la première version (`readiness`, `priorities`, `steps`) pour le plan de progression ; les diagnostics de la première version restent lisibles dans l'historique.
+
 ---
 
 ## Partie 09 · Paiements : Mobile Money et carte

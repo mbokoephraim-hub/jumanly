@@ -2,6 +2,49 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Espace connecté animé · lot C : le diagnostic de carrière (15 octobre 2026)
+
+Brief `docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md` § 5. PR unique, captures 1440 et 390 dans
+`/mnt/project-files/captures/experience-animee-lot-c/`.
+
+- **Barème v2** (`diagnostic_scoring_v2`, partie 08 § 8.11) : six dimensions sur 100, note globale,
+  quatre stades, priorités et constats, questions adaptatives. Testé (`tests/unit/diagnostic-scoring.test.ts`).
+- **Questions** : 13 nouvelles (familiarité, entreprises, niveau et preuve de 5 compétences tirées
+  des vraies offres, résultats chiffrés, lettre, profil en ligne, entretiens passés, présentation en
+  2 minutes, mode de travail, contacts). Langues, outils numériques et réalisation passent dans le
+  questionnaire de tous ; le personnalisé garde valeurs, style de travail, retours, horizon.
+- **Accueil** : carte du talent qui flotte, Orbi en orbite, constellation des 6 dimensions,
+  « Utiliser mon profil et mon CV » pré-remplit métier visé, secteurs, compétences, langues, études
+  et état du CV (avec le score du CV Jumanly).
+- **Questions** : une par écran, trajectoire des 6 étapes, glissé latéral, cartes à coche dessinée,
+  radar en direct, enregistrement de chaque réponse (`CareerDiagnosticDraft`) et « Reprendre mon
+  diagnostic, étape n sur 6 ». Sans JavaScript : toutes les questions sur une page.
+- **Scan** : balayage de la carte, Orbi accélère, les compétences sont aspirées, les étapes réelles se
+  cochent (avec le vrai nombre d'offres comparées), la constellation s'allume, la carte se retourne.
+  Toast et notification « Votre diagnostic est prêt ». IA du personnalisé : au-delà de 25 s, retour
+  aux règles sans crédit consommé (`runAi` reçoit un `timeoutMs`).
+- **Résultat** : stade sur une trajectoire, note qui compte, radar (avec le précédent en
+  pointillés) et tableau, détail par dimension avec « Pourquoi ? » et action, priorités, atouts,
+  évolution, PDF, « Refaire dans 30 jours » (notification par la tâche horaire).
+
+### Définition de fini
+
+| Critère | État |
+|---|---|
+| Lint, types, tests unitaires (182) et base (130), build | ✓ |
+| `pnpm test:e2e` et `pnpm test:e2e:reduced` | ✓ 221 et 221 |
+| Barème couvert : 6 dimensions, 4 stades, questions adaptatives | ✓ |
+| Aucun nombre inventé à l'écran | ✓ offres comptées en base, notes calculées |
+| Textes dans `textes/textes-application.md` | ✓ |
+
+### Écarts restants
+
+- Les 2 questions de relance générées par l'IA (diagnostic personnalisé) ne sont pas faites : elles
+  demandent un appel d'IA au milieu du questionnaire ; à décider avec le propriétaire.
+- Le radar en direct est redessiné image par image pendant 0,5 s (points du polygone SVG) : ce n'est
+  pas une propriété `transform`, mais rien n'est recalculé dans la mise en page.
+- Mesure Lighthouse (Moto G4) non faite dans cet environnement.
+
 ## Refonte visuelle · lot 10 : Jobs, candidatures, messages, notifications, paramètres (15 octobre 2026)
 
 Maquettes `docs/maquettes/03-espace-talent/` 03-16 à 03-23. Décisions :

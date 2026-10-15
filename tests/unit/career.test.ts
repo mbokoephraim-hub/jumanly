@@ -8,7 +8,6 @@ import {
   parseCv,
   toggleSection,
 } from "@/server/services/cv";
-import { simpleDiagnostic, simpleAnswersSchema, stepLinks } from "@/server/services/diagnostic";
 import { completeness, experienceSchema, type FullProfile } from "@/server/services/profile";
 
 const emptyProfile = {
@@ -64,55 +63,6 @@ describe("expérience", () => {
     const parsed = experienceSchema.safeParse({ ...base, start: "2022-05", end: "2021-01" });
     expect(parsed.success).toBe(false);
     expect(parsed.error?.issues[0]?.message).toBe("endBeforeStart");
-  });
-});
-
-describe("diagnostic simplifié", () => {
-  const answers = simpleAnswersSchema.parse({
-    situation: "a3",
-    experience: "a1",
-    education: "secondary",
-    goal: "a1",
-    targetRole: "",
-    topSkills: "Excel, rédaction, service client, vente",
-    confidence: "2",
-    cvStatus: "a1",
-    applications: "a1",
-    obstacle: "a3",
-    time: "a1",
-    mobility: "a1",
-  });
-
-  it("mêmes réponses, même résultat (règles fixes)", () => {
-    expect(simpleDiagnostic(answers)).toEqual(simpleDiagnostic(answers));
-  });
-
-  it("donne au plus trois priorités et trois étapes, chacune avec un lien", () => {
-    const result = simpleDiagnostic(answers);
-    expect(result.readiness).toBe("low");
-    expect(result.priorities[0]).toBe("cv");
-    expect(result.priorities.length).toBeLessThanOrEqual(3);
-    expect(result.steps).toHaveLength(3);
-    expect(result.steps[0]).toBe("profile");
-    for (const step of result.steps) expect(stepLinks[step]).toMatch(/^\//);
-    expect(result.skills).toEqual(["Excel", "rédaction", "service client"]);
-  });
-
-  it("un profil expérimenté est prêt à candidater", () => {
-    const result = simpleDiagnostic({
-      ...answers,
-      experience: "a5",
-      education: "master",
-      confidence: 5,
-      cvStatus: "a3",
-      applications: "a3",
-      targetRole: "Comptable",
-    });
-    expect(result.readiness).toBe("high");
-    expect(result.strengths).toEqual(
-      expect.arrayContaining(["experience", "education", "interview"]),
-    );
-    expect(result.roles).toEqual(["Comptable"]);
   });
 });
 

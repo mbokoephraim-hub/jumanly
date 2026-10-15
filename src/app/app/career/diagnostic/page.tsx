@@ -1,54 +1,54 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
-import { AiOrb } from "@/components/brand/ai-orb";
-import { Icon, type IconName } from "@/components/brand/icon";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
+import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
-import {
-  AiBrand,
-  AiPanel,
-  card,
-  cardTitle,
-  CareerTabs,
-  IconTile,
-  pillClass,
-} from "@/components/career/kit";
-import { Alert, Checkbox, TextArea, TextField } from "@/components/ui";
+import { DiagnosticFlow, type SkillSource } from "@/components/career/diagnostic-flow";
+import { AiBrand, AiPanel, card, cardTitle, CareerTabs, pillClass } from "@/components/career/kit";
+import type { ScanCard } from "@/components/motion/scan";
+import { Alert } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { dynamic } from "@/i18n/dynamic";
 import { formatDate } from "@/lib/dates";
 import { aiReadiness } from "@/server/ai";
-import { submitDiagnostic } from "@/server/actions/diagnostic";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { level } from "@/server/entitlements";
 import {
-  choiceQuestions,
-  DIAGNOSTIC_QUESTIONS,
-  DIAGNOSTIC_QUESTIONS_PERSONALIZED,
-  diagnosticParts,
-  educationAnswers,
   parseDiagnosticResult,
+  parseDiagnosticV2,
   parsePersonalized,
   stepLinks,
-  valueAnswers,
-  workStyleAnswers,
 } from "@/server/services/diagnostic";
 import { DIAGNOSTIC_GATE } from "@/server/services/diagnostic-ai";
+import {
+  dimensions,
+  educationAnswers,
+  screensFor,
+  type Draft,
+} from "@/server/services/diagnostic-scoring";
+import {
+  demandedSkills,
+  diagnosticBadge,
+  diagnosticPrefill,
+  getDraft,
+} from "@/server/services/diagnostic-store";
 import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
+import { DiagnosticResultV2 } from "./result";
+import { DiagnosticWelcome } from "./welcome";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.diagnostic");
   return { title: { absolute: t("seo") }, robots: { index: false } };
 }
 
-type ChoiceQuestion = keyof typeof choiceQuestions;
-
 /**
- * Career diagnostic (partie 07 § 4): the questions on one page (works without JavaScript and
- * on a slow network). Simplified: fixed rules, no AI (E3). Personalized (E6, from
- * `career.diagnostic.level`): eight more questions and a summary by Jumanly Intelligence.
+ * Career diagnostic (partie 07 § 4, docs/experience-animee § 5): the welcome screen, then one
+ * question per screen (`?etape=`), the scan, and the result (`?bilan=`). Scores by the fixed rules
+ * `diagnostic_scoring_v2` for everyone; the personalized level adds four questions and a summary
+ * by Jumanly Intelligence. Without JavaScript the questions are one long form.
  */
 export default async function DiagnosticPage({
   searchParams,
@@ -56,28 +56,37 @@ export default async function DiagnosticPage({
   const params = await searchParams;
   const user = await requireUser("/app/career/diagnostic");
   const t = await getTranslations("career.diagnostic");
+  const tAi = await getTranslations("ai");
   const history = await db.careerDiagnostic.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
     take: 10,
-    select: { id: true, createdAt: true, result: true, level: true },
+    select: {
+      id: true,
+      createdAt: true,
+      result: true,
+      level: true,
+      remindAt: true,
+      remindedAt: true,
+    },
   });
   const wanted = typeof params.bilan === "string" ? params.bilan : undefined;
   const current = wanted ? history.find((item) => item.id === wanted) : undefined;
-  const result = current ? parseDiagnosticResult(current.result) : null;
-  const personal = current?.level === "personalized" ? parsePersonalized(current.result) : null;
-  const tAi = await getTranslations("ai");
 
-  if (current && result) {
-    const levels = ["low", "medium", "high"] as const;
-    const reached = levels.indexOf(result.readiness);
-    const roleIcons: IconName[] = ["statistiques", "competence", "portefeuille"];
-    const strengths =
-      personal && personal.strengthTexts.length > 0
-        ? personal.strengthTexts
-        : result.strengths.length === 0
-          ? [t("rule.strength.none")]
-          : result.strengths.map((key) => t(`rule.strength.${key}`));
+  if (current) {
+    const v2 = parseDiagnosticV2(current.result);
+    const legacy = parseDiagnosticResult(current.result);
+    const personal = current.level === "personalized" ? parsePersonalized(current.result) : null;
+    const older = history[history.findIndex((item) => item.id === current.id) + 1];
+    const aside = (
+      <>
+        <History history={history} currentId={current.id} />
+        <p className="flex gap-2 text-xs leading-[17px] text-ardoise">
+          <Icon name="lock" className="mt-px size-4 shrink-0" />
+          {t("privacy")}
+        </p>
+      </>
+    );
     return (
       <>
         <AppPageHeader eyebrow={t("eyebrow")} title={t("result.title")} />
@@ -92,242 +101,35 @@ export default async function DiagnosticPage({
             <Icon name="intelligence" className="size-3.5" />
             {personal ? t("badge.personalized") : t("badge.simple")}
           </span>
-          {[
-            t("result.date", { date: current.createdAt }),
-            t("result.questions", {
-              count: personal ? DIAGNOSTIC_QUESTIONS_PERSONALIZED : DIAGNOSTIC_QUESTIONS,
-            }),
-          ].join(" · ")}
+          {t("result.date", { date: current.createdAt })}
         </p>
-        {params.ia === "unavailable" && <Alert tone="error" title={tAi("card.error")} />}
+        {params.ia === "unavailable" && <Alert tone="warning" title={t("scan.fallback")} />}
         {params.ia === "quota" && <Alert tone="warning" title={tAi("credits.reached.title")} />}
         {params.ia === "consent" && <Alert title={tAi("consent.declined.state")} />}
-
-        <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
-          <div className="flex min-w-0 flex-col gap-5">
-            <section aria-labelledby="readiness" className={cx(card, "flex flex-col gap-4")}>
-              <div className="flex flex-wrap items-center justify-between gap-2">
-                <h2 id="readiness" className={cardTitle}>
-                  {t("result.readiness.text")}
-                </h2>
-                <span className="rounded-pill bg-lime-clair px-2.5 py-1 text-xs font-semibold">
-                  {t(`result.readiness.${result.readiness}`)}
-                </span>
-              </div>
-              <ol className="grid grid-cols-3 gap-2">
-                {levels.map((code, index) => (
-                  <li key={code} className="flex flex-col gap-2">
-                    <span
-                      aria-hidden
-                      className={cx(
-                        "h-2 rounded-pill",
-                        index < reached
-                          ? "bg-lime"
-                          : index === reached
-                            ? "bg-feuille"
-                            : "bg-gris-clair",
-                      )}
-                    />
-                    <span
-                      aria-current={index === reached ? "step" : undefined}
-                      className={cx(
-                        "text-xs",
-                        index === reached ? "font-semibold" : "text-ardoise",
-                      )}
-                    >
-                      {t(`result.readiness.${code}`)}
-                    </span>
-                  </li>
-                ))}
-              </ol>
-            </section>
-
-            <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-              <section aria-labelledby="strengths" className={cx(card, "flex flex-col gap-4")}>
-                <h2 id="strengths" className={cardTitle}>
-                  {t("result.strengths")}
-                </h2>
-                {result.skills.length > 0 && (
-                  <p className="text-sm">
-                    {t("result.namedSkills", { skills: result.skills.join(", ") })}
-                  </p>
-                )}
-                <ul className="flex flex-col gap-3">
-                  {strengths.map((text) => (
-                    <li key={text} className="flex gap-3 text-[15px] leading-6">
-                      <span className="mt-0.5 flex size-5 shrink-0 items-center justify-center rounded-full bg-lime-clair text-feuille">
-                        <Icon name="check" className="size-3" />
-                      </span>
-                      {text}
-                    </li>
-                  ))}
-                </ul>
-              </section>
-              <section aria-labelledby="priorities" className={cx(card, "flex flex-col gap-4")}>
-                <h2 id="priorities" className={cardTitle}>
-                  {t("result.priorities")}
-                </h2>
-                <ol className="flex flex-col gap-3">
-                  {result.priorities.map((key) => (
-                    <li key={key} className="flex gap-3 text-[15px] leading-6 font-semibold">
-                      <span className="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full bg-lime text-sapin">
-                        <Icon name="objectif" className="size-3.5" />
-                      </span>
-                      {t(`rule.priority.${key}`)}
-                    </li>
-                  ))}
-                </ol>
-              </section>
-            </div>
-
-            <section aria-labelledby="roles" className={cx(card, "flex flex-col gap-4")}>
-              <h2 id="roles" className={cardTitle}>
-                {t("result.roles")}
-              </h2>
-              {result.roles.length === 0 ? (
-                <p className="text-sm text-ardoise">{t("result.rolesEmpty")}</p>
-              ) : (
-                <ul className="grid grid-cols-1 gap-3 md:grid-cols-3">
-                  {result.roles.map((role, index) => (
-                    <li key={role} className="flex flex-col gap-2 rounded-[18px] bg-creme p-4">
-                      <IconTile
-                        icon={roleIcons[index % roleIcons.length]!}
-                        tone="bg-blanc"
-                        size="sm"
-                      />
-                      <p className="mt-1 text-[15px] font-semibold">{role}</p>
-                      <Link
-                        href={`/app/jobs?q=${encodeURIComponent(role)}`}
-                        className="flex items-center gap-1 text-[13px] font-semibold text-up-texte hover:underline"
-                      >
-                        {t("result.exploreJobs")}
-                        <Icon name="chev-r" className="size-3.5" />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
-              )}
-            </section>
-
-            <section aria-labelledby="next-steps" className={cx(card, "flex flex-col gap-4")}>
-              <h2 id="next-steps" className={cardTitle}>
-                {t("result.nextSteps")}
-              </h2>
-              <ol className="flex flex-col gap-3">
-                {result.steps.map((step, index) => (
-                  <li key={step} className="flex flex-wrap items-center gap-3">
-                    <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-sapin text-sm font-semibold text-lime">
-                      {index + 1}
-                    </span>
-                    <span className="min-w-0 flex-1 text-[15px]">{t(`rule.step.${step}`)}</span>
-                    <Link
-                      href={stepLinks[step]}
-                      className="text-[13px] font-semibold text-up-texte hover:underline"
-                    >
-                      {t("rule.step.cta")}
-                    </Link>
-                  </li>
-                ))}
-              </ol>
-              <Link href="/app/career/plan" className={pillClass("dark", "md", "mt-2 self-start")}>
-                {t("result.createPlan")}
-                <Icon name="chev-r" className="size-4" />
-              </Link>
-            </section>
-          </div>
-
-          <aside className="flex flex-col gap-5">
-            <AiPanel>
-              <AiBrand />
-              {personal && personal.summary && (
-                <p className="text-sm leading-6 whitespace-pre-line">{personal.summary}</p>
-              )}
-              <p className="text-[13px] leading-5 text-blanc/85">
-                {personal ? t("result.personalized.note") : t("result.simple.note")}
-              </p>
-            </AiPanel>
-            <section className={cx(card, "flex flex-col gap-3")}>
-              <Link href="/app/career/diagnostic#questions" className={pillClass("outline")}>
-                {t("restart")}
-              </Link>
-            </section>
-            <History history={history} currentId={current.id} />
-            <p className="flex gap-2 text-xs leading-[17px] text-ardoise">
-              <Icon name="lock" className="mt-px size-4 shrink-0" />
-              {t("privacy")}
-            </p>
-          </aside>
-        </div>
+        {v2 ? (
+          <DiagnosticResultV2
+            id={current.id}
+            result={v2}
+            personal={personal}
+            previous={
+              older ? { date: older.createdAt, result: parseDiagnosticV2(older.result) } : null
+            }
+            reminder={current.remindAt}
+            reminded={current.remindedAt}
+            aside={aside}
+          />
+        ) : legacy ? (
+          <LegacyResult
+            result={legacy}
+            summary={personal?.summary ?? null}
+            personal={Boolean(personal)}
+            strengthTexts={personal?.strengthTexts ?? []}
+            aside={aside}
+          />
+        ) : null}
       </>
     );
   }
-
-  const tProfile = await getTranslations("talent.profile.education.level");
-  const choice = (id: ChoiceQuestion) => (
-    <Choices
-      legend={t(`q.${id}.text`)}
-      name={id}
-      required
-      options={choiceQuestions[id].map((code) => ({
-        value: code,
-        label: dynamic(t)(`q.${id}.${code}`),
-      }))}
-    />
-  );
-  const questions: Record<string, ReactNode> = {
-    situation: choice("situation"),
-    experience: choice("experience"),
-    education: (
-      <Choices
-        legend={t("q.education")}
-        name="education"
-        required
-        options={educationAnswers.map((code) => ({ value: code, label: tProfile(code) }))}
-      />
-    ),
-    goal: choice("goal"),
-    targetRole: (
-      <TextField
-        id="targetRole"
-        name="targetRole"
-        label={t("q.targetRole.text")}
-        placeholder={t("q.targetRole.placeholder")}
-        hint={t("q.targetRole.hint")}
-        maxLength={120}
-      />
-    ),
-    topSkills: (
-      <TextField
-        id="topSkills"
-        name="topSkills"
-        label={t("q.topSkills")}
-        placeholder={t("q.topSkillsPlaceholder")}
-        hint={t("q.topSkillsHint")}
-        maxLength={200}
-      />
-    ),
-    confidence: (
-      <Choices
-        legend={t("q.confidence.text")}
-        name="confidence"
-        required
-        options={[1, 2, 3, 4, 5].map((value) => ({
-          value: String(value),
-          label:
-            value === 1
-              ? `1 · ${t("q.confidence.min")}`
-              : value === 5
-                ? `5 · ${t("q.confidence.max")}`
-                : String(value),
-        }))}
-      />
-    ),
-    cvStatus: choice("cvStatus"),
-    applications: choice("applications"),
-    obstacle: choice("obstacle"),
-    time: choice("time"),
-    mobility: choice("mobility"),
-  };
 
   const subject = { type: "user" as const, id: user.id };
   const personalized = DIAGNOSTIC_GATE.levels.includes(
@@ -342,70 +144,20 @@ export default async function DiagnosticPage({
     : (cheapestPlanWhere(await listPublicPlans(db), ["talent"], (plan) =>
         DIAGNOSTIC_GATE.levels.includes(levelOf(plan, DIAGNOSTIC_GATE.key)),
       )?.name ?? null);
-  const total = withAi ? DIAGNOSTIC_QUESTIONS_PERSONALIZED : DIAGNOSTIC_QUESTIONS;
-  const extra = (
-    <section aria-labelledby="part-more" className={cx(card, "flex flex-col gap-5")}>
-      <h2 id="part-more" className={cx(cardTitle, "flex items-center gap-2")}>
-        <AiOrb />
-        {t("section", {
-          current: diagnosticParts.length + 1,
-          total: diagnosticParts.length + 1,
-          name: t("part.more"),
-        })}
-      </h2>
-      <TextArea
-        id="achievement"
-        name="achievement"
-        label={t("q.achievement.text")}
-        placeholder={t("q.achievement.placeholder")}
-        rows={4}
-        maxLength={1000}
-      />
-      <fieldset className="flex flex-col gap-3">
-        <legend className="mb-2 text-label">{t("q.values.text")}</legend>
-        {valueAnswers.map((code) => (
-          <Checkbox
-            key={code}
-            id={`values-${code}`}
-            name="values"
-            value={code}
-            label={dynamic(t)(`q.values.${code}`)}
-          />
-        ))}
-      </fieldset>
-      <Choices
-        legend={t("q.workStyle.text")}
-        name="workStyle"
-        required
-        options={workStyleAnswers.map((code) => ({
-          value: code,
-          label: dynamic(t)(`q.workStyle.${code}`),
-        }))}
-      />
-      <TextField id="feedback" name="feedback" label={t("q.feedback")} maxLength={300} />
-      <TextField id="languages" name="languages" label={t("q.languages")} maxLength={200} />
-      <TextField id="digital" name="digital" label={t("q.digital")} maxLength={200} />
-      <TextField id="horizon" name="horizon" label={t("q.horizon")} maxLength={300} />
-      <Checkbox id="useProfile" name="useProfile" value="on" label={t("q.useProfile")} />
-    </section>
-  );
-
-  return (
+  const [badgeFacts, draft] = await Promise.all([
+    diagnosticBadge(db, user.id),
+    getDraft(db, user.id),
+  ]);
+  const badge: ScanCard = {
+    initials: badgeFacts.initials,
+    firstName: badgeFacts.firstName,
+    targetJob: badgeFacts.targetJob ?? t("card.noTarget"),
+    city: badgeFacts.city,
+    skills: t("card.skills", { count: badgeFacts.skills }),
+    label: t("card.label"),
+  };
+  const alerts = (
     <>
-      <AppPageHeader eyebrow={t("eyebrow")} title={t("title")} />
-      <CareerTabs active="diagnostic" />
-      <p className="flex flex-wrap items-center gap-3 text-[13px] text-ardoise">
-        <span
-          className={cx(
-            "flex items-center gap-1.5 rounded-pill px-3 py-1.5 text-xs font-semibold",
-            withAi ? "bg-sapin text-neon" : "bg-gris-clair text-sapin",
-          )}
-        >
-          <Icon name="intelligence" className="size-3.5" />
-          {withAi ? t("badge.personalized") : t("badge.simple")}
-        </span>
-        {withAi ? t("intro.personalized") : t("intro.simple")}
-      </p>
       {upsellPlan && <Alert title={t("upsell", { plan: upsellPlan })} />}
       {personalized && readiness === "consent" && (
         <Alert title={tAi("consent.declined.state")}>
@@ -418,103 +170,218 @@ export default async function DiagnosticPage({
         <Alert tone="warning" title={tAi("credits.reached.title")} />
       )}
       {params.erreur && <Alert tone="error" title={t("error")} />}
-      <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
-        <form
-          id="questions"
-          action={submitDiagnostic}
-          className="flex min-w-0 scroll-mt-24 flex-col gap-5"
-        >
-          {diagnosticParts.map((part, index) => (
-            <section
-              key={part.id}
-              aria-labelledby={`part-${part.id}`}
-              className={cx(card, "flex flex-col gap-6")}
-            >
-              <h2 id={`part-${part.id}`} className="flex flex-col gap-1">
-                <span className="text-xs font-semibold text-up-texte">
-                  {t("section", {
-                    current: index + 1,
-                    total: diagnosticParts.length,
-                    name: t(`part.${part.id}`),
-                  })}
-                </span>
-              </h2>
-              {part.questions.map((id) => (
-                <div key={id}>{questions[id]}</div>
-              ))}
-            </section>
-          ))}
-          {withAi && (
-            <>
-              <input type="hidden" name="personalized" value="1" />
-              {extra}
-            </>
-          )}
-          <div className="flex flex-wrap items-center gap-4">
-            <button type="submit" className={pillClass("dark")}>
-              {t("finish")}
-              <Icon name="chev-r" className="size-4" />
-            </button>
-            <p className="text-sm text-ardoise">{t("progress", { current: total, total })}</p>
-          </div>
-        </form>
-        <aside className="flex flex-col gap-5 self-start xl:sticky xl:top-6">
+    </>
+  );
+  const header = (
+    <>
+      <AppPageHeader eyebrow={t("eyebrow")} title={t("title")} />
+      <CareerTabs active="diagnostic" />
+    </>
+  );
+
+  if (typeof params.etape !== "string") {
+    const resumeAt = draft
+      ? screensFor(
+          draft.answers,
+          (draft.answers.skillChecks ?? []).map((item) => item.skill),
+          withAi,
+        )[draft.step]
+      : undefined;
+    return (
+      <>
+        {header}
+        {alerts}
+        <DiagnosticWelcome
+          badge={badge}
+          withAi={withAi}
+          resume={
+            draft
+              ? resumeAt && resumeAt.dimension !== "more"
+                ? dimensions.indexOf(resumeAt.dimension) + 1
+                : resumeAt
+                  ? dimensions.length
+                  : 1
+              : null
+          }
+        />
+        <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
           <AiPanel>
             <AiBrand />
             <p className="text-sm leading-6">
               {withAi ? t("intro.personalized") : t("intro.simple")}
             </p>
+            <p className="text-[13px] leading-5 text-blanc/85">{t("result.simple.note")}</p>
           </AiPanel>
           <History history={history} />
-          <p className="flex gap-2 text-xs leading-[17px] text-ardoise">
-            <Icon name="check" className="mt-px size-4 shrink-0 text-feuille" />
-            {t("saved")}
-          </p>
-          <p className="flex gap-2 text-xs leading-[17px] text-ardoise">
-            <Icon name="lock" className="mt-px size-4 shrink-0" />
-            {t("privacy")}
-          </p>
-        </aside>
-      </div>
+        </div>
+      </>
+    );
+  }
+
+  const resume = params.etape === "reprendre" && draft ? draft : null;
+  const useProfile = !resume && params.profil === "1";
+  const prefill = await diagnosticPrefill(db, user.id);
+  const initial: Draft = resume
+    ? resume.answers
+    : { ...(useProfile ? prefill.draft : {}), useProfile };
+  const found = await demandedSkills(db, initial.targetRole ?? "");
+  const skills: SkillSource =
+    found.skills.length > 0
+      ? { names: found.skills, offers: found.offers, scope: found.scope }
+      : { names: [], offers: 0, scope: "own" };
+  const assessed = (initial.skillChecks ?? []).map((item) => item.skill);
+  const tProfile = await getTranslations("talent.profile.education.level");
+  const messages = await getMessages();
+  const diagnosticMessages = { career: { diagnostic: messages.career.diagnostic } };
+
+  return (
+    <>
+      {header}
+      {alerts}
+      <NextIntlClientProvider messages={diagnosticMessages as unknown as typeof messages}>
+        <DiagnosticFlow
+          initial={initial}
+          initialIndex={resume?.step ?? 0}
+          skills={
+            resume && assessed.length > 0 && skills.scope === "own"
+              ? { names: assessed, offers: 0, scope: "own" }
+              : skills
+          }
+          personalized={withAi}
+          prefilled={useProfile ? Object.keys(prefill.draft) : []}
+          cvScore={prefill.cvScore}
+          education={educationAnswers.map((code) => ({ value: code, label: tProfile(code) }))}
+          badge={badge}
+        />
+      </NextIntlClientProvider>
     </>
   );
 }
 
-/** One question with its answers as option cards (a radio button in each). */
-function Choices({
-  legend,
-  name,
-  options,
-  required = false,
+/** Result of a diagnostic of the first version (three readiness levels), kept for the history. */
+async function LegacyResult({
+  result,
+  summary,
+  personal,
+  strengthTexts,
+  aside,
 }: {
-  legend: string;
-  name: string;
-  options: { value: string; label: string }[];
-  required?: boolean;
+  result: NonNullable<ReturnType<typeof parseDiagnosticResult>>;
+  summary: string | null;
+  personal: boolean;
+  strengthTexts: string[];
+  aside: ReactNode;
 }) {
+  const t = await getTranslations("career.diagnostic");
+  const d = dynamic(t);
+  const levels = ["low", "medium", "high"] as const;
+  const reached = levels.indexOf(result.readiness);
+  const strengths =
+    strengthTexts.length > 0
+      ? strengthTexts
+      : result.strengths.length === 0
+        ? [t("rule.strength.none")]
+        : result.strengths.map((key) => d(`rule.strength.${key}`));
   return (
-    <fieldset className="flex flex-col gap-2.5">
-      <legend className="mb-3 text-[17px] leading-snug font-semibold">{legend}</legend>
-      <div className="grid gap-2.5 sm:grid-cols-2">
-        {options.map((option) => (
-          <label
-            key={option.value}
-            htmlFor={`${name}-${option.value}`}
-            className="flex min-h-12 cursor-pointer items-center gap-3 rounded-[14px] border border-brume bg-blanc px-4 py-2.5 text-sm hover:bg-creme has-checked:border-sapin has-checked:bg-lime-clair"
-          >
-            <input
-              id={`${name}-${option.value}`}
-              type="radio"
-              name={name}
-              value={option.value}
-              required={required}
-              className="size-5 shrink-0 accent-sapin"
-            />
-            {option.label}
-          </label>
-        ))}
+    <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
+      <div className="flex min-w-0 flex-col gap-5">
+        <Alert title={t("result.legacy")} />
+        <section aria-labelledby="readiness" className={cx(card, "flex flex-col gap-4")}>
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 id="readiness" className={cardTitle}>
+              {t("result.readiness.text")}
+            </h2>
+            <span className="rounded-pill bg-lime-clair px-2.5 py-1 text-xs font-semibold">
+              {t(`result.readiness.${result.readiness}`)}
+            </span>
+          </div>
+          <ol className="grid grid-cols-3 gap-2">
+            {levels.map((code, index) => (
+              <li key={code} className="flex flex-col gap-2">
+                <span
+                  aria-hidden
+                  className={cx(
+                    "h-2 rounded-pill",
+                    index < reached
+                      ? "bg-lime"
+                      : index === reached
+                        ? "bg-feuille"
+                        : "bg-gris-clair",
+                  )}
+                />
+                <span
+                  aria-current={index === reached ? "step" : undefined}
+                  className={cx("text-xs", index === reached ? "font-semibold" : "text-ardoise")}
+                >
+                  {t(`result.readiness.${code}`)}
+                </span>
+              </li>
+            ))}
+          </ol>
+        </section>
+        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
+          <section aria-labelledby="strengths" className={cx(card, "flex flex-col gap-4")}>
+            <h2 id="strengths" className={cardTitle}>
+              {t("result.strengths")}
+            </h2>
+            <ul className="flex flex-col gap-3">
+              {strengths.map((text) => (
+                <li key={text} className="flex gap-3 text-[15px] leading-6">
+                  <Icon name="check" className="mt-1 size-4 shrink-0 text-feuille" />
+                  {text}
+                </li>
+              ))}
+            </ul>
+          </section>
+          <section aria-labelledby="priorities" className={cx(card, "flex flex-col gap-4")}>
+            <h2 id="priorities" className={cardTitle}>
+              {t("result.priorities")}
+            </h2>
+            <ol className="flex flex-col gap-3">
+              {result.priorities.map((key) => (
+                <li key={key} className="text-[15px] leading-6 font-semibold">
+                  {d(`rule.priority.${key}`)}
+                </li>
+              ))}
+            </ol>
+          </section>
+        </div>
+        <section aria-labelledby="next-steps" className={cx(card, "flex flex-col gap-4")}>
+          <h2 id="next-steps" className={cardTitle}>
+            {t("result.nextSteps")}
+          </h2>
+          <ol className="flex flex-col gap-3">
+            {result.steps.map((step, index) => (
+              <li key={step} className="flex flex-wrap items-center gap-3">
+                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-sapin text-sm font-semibold text-lime">
+                  {index + 1}
+                </span>
+                <span className="min-w-0 flex-1 text-[15px]">{t(`rule.step.${step}`)}</span>
+                <Link
+                  href={stepLinks[step]}
+                  className="text-[13px] font-semibold text-up-texte hover:underline"
+                >
+                  {t("rule.step.cta")}
+                </Link>
+              </li>
+            ))}
+          </ol>
+        </section>
       </div>
-    </fieldset>
+      <aside className="flex flex-col gap-5">
+        <AiPanel>
+          <AiBrand />
+          {summary && <p className="text-sm leading-6 whitespace-pre-line">{summary}</p>}
+          <p className="text-[13px] leading-5 text-blanc/85">
+            {personal ? t("result.personalized.note") : t("result.simple.note")}
+          </p>
+        </AiPanel>
+        <Link href="/app/career/diagnostic" className={pillClass("outline")}>
+          {t("restart")}
+        </Link>
+        {aside}
+      </aside>
+    </div>
   );
 }
 
@@ -522,10 +389,11 @@ async function History({
   history,
   currentId,
 }: {
-  history: { id: string; createdAt: Date; level: string }[];
+  history: { id: string; createdAt: Date; level: string; result: unknown }[];
   currentId?: string;
 }) {
   const t = await getTranslations("career.diagnostic");
+  const d = dynamic(t);
   const others = history.filter((item) => item.id !== currentId);
   if (others.length === 0) return null;
   return (
@@ -534,24 +402,34 @@ async function History({
         {t("result.history")}
       </h2>
       <ul className="flex flex-col divide-y divide-brume">
-        {others.map((item) => (
-          <li key={item.id} className="flex items-center justify-between gap-3 py-3">
-            <Link
-              href={`/app/career/diagnostic?bilan=${item.id}`}
-              className="text-sm underline-offset-4 hover:underline"
-            >
-              {formatDate(item.createdAt)}
-            </Link>
-            <span
-              className={cx(
-                "rounded-pill px-2.5 py-1 text-[11px] font-semibold",
-                item.level === "personalized" ? "bg-menthe-claire" : "bg-gris-clair",
-              )}
-            >
-              {item.level === "personalized" ? t("badge.personalized") : t("badge.simple")}
-            </span>
-          </li>
-        ))}
+        {others.map((item) => {
+          const v2 = parseDiagnosticV2(item.result as never);
+          return (
+            <li key={item.id} className="flex items-center justify-between gap-3 py-3">
+              <Link
+                href={`/app/career/diagnostic?bilan=${item.id}`}
+                className="text-sm underline-offset-4 hover:underline"
+              >
+                {formatDate(item.createdAt)}
+              </Link>
+              <span className="flex flex-wrap justify-end gap-1.5">
+                {v2 && (
+                  <span className="rounded-pill bg-lime-clair px-2.5 py-1 text-[11px] font-semibold">
+                    {d(`stage.${v2.stage}`)} · {v2.score}
+                  </span>
+                )}
+                <span
+                  className={cx(
+                    "rounded-pill px-2.5 py-1 text-[11px] font-semibold",
+                    item.level === "personalized" ? "bg-menthe-claire" : "bg-gris-clair",
+                  )}
+                >
+                  {item.level === "personalized" ? t("badge.personalized") : t("badge.simple")}
+                </span>
+              </span>
+            </li>
+          );
+        })}
       </ul>
     </section>
   );

@@ -60,6 +60,8 @@ const categoryOf: Record<NotificationType, Category> = {
   licenseExpiring: "account",
   licenseExpired: "account",
   licensesLow: "account",
+  diagnosticReady: "learn",
+  diagnosticReminder: "learn",
 };
 
 const categoryStyle: Record<Category, { icon: IconName; tile: string }> = {
@@ -75,6 +77,8 @@ const typeIcon: Partial<Record<NotificationType, IconName>> = {
   paymentSucceeded: "portefeuille",
   paymentFailed: "portefeuille",
   statusChange: "check",
+  diagnosticReady: "intelligence",
+  diagnosticReminder: "calendrier",
 };
 
 const actions = [
