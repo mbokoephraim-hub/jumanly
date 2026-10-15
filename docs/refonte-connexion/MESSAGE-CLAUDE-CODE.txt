@@ -1,0 +1,15 @@
+Refonte de la connexion, de l'entrée de l'inscription et générique d'entrée dans l'appli, maquettes validées par le propriétaire.
+
+1. Lis docs/refonte-connexion/BRIEF-CONNEXION-V2.md en entier, puis ouvre dans un navigateur docs/refonte-connexion/maquette/connexion-v2.html (desktop 1440 px puis mobile 390 px, essaie les trois profils et l'onglet « Créer un compte ») et docs/refonte-connexion/maquette/generique.html (trois profils, « Première entrée » et « Retour (court) »). Regarde aussi les captures .jpg du même dossier. Pour ces écrans, ces maquettes remplacent les maquettes 02-01 et 02-04.
+2. Relis docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md (motion.css, MotionRoot, AppMotionRoot, animations réduites) : la refonte s'appuie dessus.
+3. Propose-moi un plan court (composants, migration, fournisseurs, textes, tests), puis exécute-le sur une branche dédiée, avec une pull request. Découpe en trois commits lisibles : page de connexion et d'inscription, fournisseurs Apple et LinkedIn, générique.
+
+Règles à tenir :
+- Ne touche pas à la logique d'authentification existante (mot de passe, code e-mail, lien magique, deux étapes, limites de tentatives, ?suite=). On restyle LoginForm, MagicLinkForm et PasswordField sans réécrire leur logique.
+- Apple et LinkedIn passent par les socialProviders de Better Auth, chacun activé seulement si ses variables d'environnement existent (comme googleEnabled). Ajoute les variables dans .env.example et la marche à suivre dans docs/deploiement-vercel.md. Je ferai moi-même la configuration chez Apple et LinkedIn.
+- Toutes les connexions réussies arrivent sur l'espace avec ?arrivee=1. Le générique complet se joue une seule fois par compte (User.introSeenAt, migration Prisma), la version courte aux connexions suivantes, jamais sans ?arrivee=1 ni en animations réduites.
+- Aucun texte en dur : ajoute les textes du § 9 dans textes/textes-application.md (partie 02 et section de l'espace), puis pnpm messages. Les chiffres des cartes flottantes sont décoratifs et restent dans les textes.
+- Réutilise Character, Orbi, les illustrations de public/illustrations et src/styles/motion.css. Aucune bibliothèque d'animation. Seuls transform et opacity sont animés, et tout est immobile en animations réduites. Aucun numéro de téléphone.
+- Le budget JavaScript des pages publiques (200 Ko) doit tenir : AuthStage et AppIntro restent légers, AppIntro chargé à la demande.
+
+Avant de terminer : lint, typecheck, test, test:e2e et test:e2e:reduced passent ; rendu conforme aux captures à 1440 px et 390 px, sans défilement horizontal ; docs/journal.md à jour ; une note dans docs/decisions/ pour le choix de LinkedIn comme troisième fournisseur et les règles d'affichage du générique.
