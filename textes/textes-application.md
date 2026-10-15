@@ -5420,6 +5420,10 @@ Conventions :
 | `org.members.transferOwnership.text` | Transférer la propriété |
 | `org.members.transferOwnership.confirm` | {memberName} deviendra propriétaire de {org}, avec accès à la facturation et à la suppression. Vous deviendrez administrateur. |
 | `org.members.lastOwner` | Une organisation doit garder au moins un propriétaire. |
+| `org.invite.expiresIn` | Expire {time} |
+| `org.members.filter.all` | Tous les rôles |
+| `org.members.searchEmpty` | Aucun membre ne correspond à votre recherche. |
+| `org.members.actions` | Actions pour {name} |
 | `org.members.team.none` | Aucune équipe |
 | `org.members.team.save` | Changer l'équipe |
 | `org.members.teamDone` | Équipe mise à jour. |

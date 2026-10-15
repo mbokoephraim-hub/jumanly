@@ -6588,6 +6588,11 @@
         "confirm": "{memberName} deviendra propriétaire de {org}, avec accès à la facturation et à la suppression. Vous deviendrez administrateur."
       },
       "lastOwner": "Une organisation doit garder au moins un propriétaire.",
+      "filter": {
+        "all": "Tous les rôles"
+      },
+      "searchEmpty": "Aucun membre ne correspond à votre recherche.",
+      "actions": "Actions pour {name}",
       "team": {
         "none": "Aucune équipe",
         "save": "Changer l'équipe"
@@ -6596,6 +6601,7 @@
       "transferDone": "Propriété transférée."
     },
     "invite": {
+      "expiresIn": "Expire {time}",
       "title": "Inviter des membres",
       "emails": {
         "text": "Adresses e-mail",

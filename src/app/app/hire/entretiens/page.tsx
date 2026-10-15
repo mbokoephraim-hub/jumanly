@@ -425,7 +425,12 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
   };
 
   const weekGrid = (
-    <div className="overflow-x-auto rounded-[24px] bg-blanc max-lg:hidden">
+    <div
+      tabIndex={0}
+      role="region"
+      aria-label={t("hire.interviews.calendar")}
+      className="overflow-x-auto rounded-[24px] bg-blanc max-lg:hidden"
+    >
       <div className="min-w-[640px] p-4 pt-3">
         <div
           className="grid border-b border-gris-clair pb-3"

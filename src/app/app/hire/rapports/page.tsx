@@ -396,7 +396,12 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
           {report.stats.byJob.length > 0 && (
             <>
               <h3 className="mt-1 text-[16px] font-semibold">{t("hire.reports.stats.byJob")}</h3>
-              <div className="overflow-x-auto rounded-[24px] bg-blanc">
+              <div
+                tabIndex={0}
+                role="region"
+                aria-label={t("hire.reports.stats.byJob")}
+                className="overflow-x-auto rounded-[24px] bg-blanc"
+              >
                 <table className="w-full min-w-[480px]">
                   <caption className="sr-only">{t("hire.reports.stats.byJob")}</caption>
                   <thead className="border-b border-gris-clair">
@@ -447,7 +452,12 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
                 <h3 className="text-[16px] font-semibold">
                   {t("hire.reports.advanced.byRecruiter")}
                 </h3>
-                <div className="overflow-x-auto rounded-[24px] bg-blanc">
+                <div
+                  tabIndex={0}
+                  role="region"
+                  aria-label={t("hire.reports.advanced.byRecruiter")}
+                  className="overflow-x-auto rounded-[24px] bg-blanc"
+                >
                   <table className="w-full min-w-[460px]">
                     <caption className="sr-only">{t("hire.reports.advanced.byRecruiter")}</caption>
                     <thead className="border-b border-gris-clair">
