@@ -39,6 +39,24 @@ export function remoteFilterOf(remote: RemoteMode): RemoteFilter {
 
 export const jobSorts = ["recent", "deadline"] as const;
 
+/** "Expérience" filter (texts `talent.jobs.filter.experience.*`): years the offer asks for. */
+export const experienceFilters = {
+  none: { lte: 0 },
+  junior: { lt: 2 },
+  mid: { gte: 2, lte: 5 },
+  senior: { gt: 5 },
+} as const satisfies Record<string, Prisma.IntFilter>;
+
+export type ExperienceFilter = keyof typeof experienceFilters;
+
+/** "Date de publication" filter (texts `talent.jobs.filter.posted.*`), in hours. */
+export const postedFilters = { "24h": 24, "7d": 24 * 7, "30d": 24 * 30 } as const;
+
+export type PostedFilter = keyof typeof postedFilters;
+
+/** "Compatibilité minimale" filter of the signed-in search (scores on 100). */
+export const compatibilityFilters = [50, 70, 85] as const;
+
 const optionalEnum = <T extends readonly [string, ...string[]]>(values: T) =>
   z.enum(values).optional().catch(undefined);
 
@@ -52,6 +70,14 @@ export const jobFiltersSchema = z.object({
   contrat: optionalEnum(Object.keys(contractFilters) as [ContractFilter, ...ContractFilter[]]),
   teletravail: optionalEnum(Object.keys(remoteFilters) as [RemoteFilter, ...RemoteFilter[]]),
   tri: optionalEnum(jobSorts),
+  experience: optionalEnum(
+    Object.keys(experienceFilters) as [ExperienceFilter, ...ExperienceFilter[]],
+  ),
+  /** "indique": offers that give a salary. */
+  salaire: optionalEnum(["indique"]),
+  publie: optionalEnum(Object.keys(postedFilters) as [PostedFilter, ...PostedFilter[]]),
+  /** "1": verified companies only. */
+  verifiees: optionalEnum(["1"]),
   page: z.coerce.number().int().min(1).max(500).optional().catch(undefined),
 });
 
@@ -88,6 +114,13 @@ export function jobWhere(filters: JobFilters, now: Date): Prisma.JobWhereInput {
   if (filters.pays) and.push({ country: filters.pays });
   if (filters.contrat) and.push({ contractType: { in: [...contractFilters[filters.contrat]] } });
   if (filters.teletravail) and.push({ remote: remoteFilters[filters.teletravail] });
+  if (filters.experience) and.push({ experienceMin: experienceFilters[filters.experience] });
+  if (filters.salaire) and.push({ salaryMin: { not: null } });
+  if (filters.publie) {
+    const since = new Date(now.getTime() - postedFilters[filters.publie] * 3_600_000);
+    and.push({ publishedAt: { gte: since } });
+  }
+  if (filters.verifiees) and.push({ organization: { verifiedAt: { not: null } } });
   return { AND: and };
 }
 
@@ -135,6 +168,51 @@ export async function searchJobs(db: PrismaClient, filters: JobFilters, now = ne
     }),
   ]);
   return { total, page, pageCount: Math.max(1, Math.ceil(total / JOBS_PER_PAGE)), jobs };
+}
+
+/**
+ * Ids of the offers matching `filters`, most recent first, for a ranking done afterwards (the
+ * compatibility of the signed-in search). Capped: the score is computed for each of them.
+ */
+export async function matchingJobIds(
+  db: PrismaClient,
+  filters: JobFilters,
+  now = new Date(),
+  take = 120,
+): Promise<string[]> {
+  const rows = await db.job.findMany({
+    where: jobWhere(filters, now),
+    orderBy: jobOrderBy("recent"),
+    take,
+    select: { id: true },
+  });
+  return rows.map((row) => row.id);
+}
+
+/** Cards of the given offers, in the given order. */
+export async function jobCards(db: PrismaClient, ids: string[]) {
+  const rows = await db.job.findMany({ where: { id: { in: ids } }, select: publicCardSelect });
+  const byId = new Map(rows.map((row) => [row.id, row]));
+  return ids.flatMap((id) => byId.get(id) ?? []);
+}
+
+/** Companies with the most open offers (sidebar « Entreprises qui recrutent »). */
+export async function hiringCompanies(db: PrismaClient, take = 3, now = new Date()) {
+  const groups = await db.job.groupBy({
+    by: ["organizationId"],
+    where: openJobWhere(now),
+    _count: { _all: true },
+    orderBy: { _count: { organizationId: "desc" } },
+    take,
+  });
+  const orgs = await db.organization.findMany({
+    where: { id: { in: groups.map((group) => group.organizationId) } },
+    select: { id: true, name: true, slug: true, sector: true },
+  });
+  return groups.flatMap((group) => {
+    const org = orgs.find((item) => item.id === group.organizationId);
+    return org ? [{ ...org, openJobs: group._count._all }] : [];
+  });
 }
 
 export async function countOpenJobs(db: PrismaClient, now = new Date()) {

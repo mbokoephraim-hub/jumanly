@@ -3473,6 +3473,13 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.search.loading` | Recherche des offres… |
 | `talent.jobs.search.loadMore` | Voir plus d'offres |
 | `talent.jobs.seo` | Offres · Jumanly |
+| `talent.jobs.search.tabs` | Vues des offres |
+| `talent.jobs.filters.remove` | Retirer le filtre : {label} |
+| `talent.jobs.filters.close` | Fermer les filtres |
+| `talent.jobs.filter.any` | Peu importe |
+| `talent.jobs.sidebar.companies.count` | {count, plural, one {# offre} other {# offres}} |
+| `talent.jobs.aiPanel.job` | {job} · {company} |
+| `talent.jobs.aiPanel.updated` | Calcul expliqué, mis à jour {time} |
 | `talent.jobs.search.previous` | Page précédente |
 | `talent.jobs.search.next` | Page suivante |
 
@@ -3492,6 +3499,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.card.compatibility.aria` | Compatibilité {score} sur 100, {band} |
 | `talent.jobs.card.posted` | {time, relative} |
 | `talent.jobs.card.closingSoon` | Clôture {time, relative} |
+| `talent.jobs.card.closingIn` | Clôture {time} |
 | `talent.jobs.card.applied` | Candidature envoyée |
 | `talent.jobs.card.save` | Enregistrer l'offre |
 | `talent.jobs.card.unsave` | Retirer des offres enregistrées |
@@ -3515,6 +3523,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.detail.back` | Retour aux {count} offres |
 | `talent.jobs.detail.eyebrow` | Détail de l'offre |
 | `talent.jobs.detail.posted` | Publiée {time, relative} |
+| `talent.jobs.detail.publishedAgo` | Publiée {time} |
+| `talent.jobs.detail.facts.experience.min` | {min, plural, =0 {Sans expérience} one {# an minimum} other {# ans minimum}} |
 | `talent.jobs.detail.applicants` | {count, plural, one {# candidat} other {# candidats}} |
 | `talent.jobs.detail.apply` | Postuler gratuitement |
 | `talent.jobs.detail.applied.text` | Candidature envoyée le {date, date, medium} |
@@ -3563,6 +3573,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 
 | Clé | Texte |
 |---|---|
+| `talent.jobs.apply.heading` | Postuler |
 | `talent.jobs.apply.title` | Postuler à {jobTitle} |
 | `talent.jobs.apply.subtitle` | chez {company} |
 | `talent.jobs.apply.free` | Candidature gratuite, quel que soit votre forfait. |
@@ -3612,8 +3623,9 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.applications.tab.active` | En cours ({count}) |
 | `talent.jobs.applications.tab.closed` | Terminées ({count}) |
 | `talent.jobs.applications.tab.all` | Toutes |
+| `talent.jobs.applications.tab.empty` | Aucune candidature dans cet onglet. |
 | `talent.jobs.applications.sentOn` | Envoyée le {date, date, medium} |
-| `talent.jobs.applications.updated` | Mise à jour {time, relative} |
+| `talent.jobs.applications.updated` | Mise à jour {time} |
 | `talent.jobs.applications.status.sent` | Envoyée |
 | `talent.jobs.applications.status.viewed` | Consultée par le recruteur |
 | `talent.jobs.applications.status.shortlisted` | Présélectionnée |
@@ -3647,6 +3659,15 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.applications.event.withdrawn` | Candidature retirée |
 | `talent.jobs.applications.event.stage_changed` | Nouvelle étape : {stage} |
 | `talent.jobs.applications.event.decision` | Décision du recruteur |
+| `talent.jobs.applications.tracker` | Étapes de la candidature |
+| `talent.jobs.applications.toggle` | Afficher le détail : {job} |
+| `talent.jobs.applications.score` | Score au moment de la candidature : {score} %, {band} |
+| `talent.jobs.applications.ai.title` | {count, plural, one {# nouvelle offre très compatible avec votre profil.} other {# nouvelles offres très compatibles avec votre profil.}} |
+| `talent.jobs.applications.ai.job` | {job} · {company} · {score} % compatible |
+| `talent.jobs.applications.ai.reason` | {criteria} : ce que l'offre demande correspond à votre profil. |
+| `talent.jobs.applications.review.title` | Le score vous semble faux ? |
+| `talent.jobs.applications.review.body` | Une personne de l'équipe Jumanly vérifiera le calcul. Votre candidature reste examinée pendant la révision. |
+| `talent.jobs.applications.more` | Plus d'actions |
 
 ### `/app/jobs/enregistrees` · Offres enregistrées
 
@@ -3663,6 +3684,10 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.saved.empty.text` | Aucune offre enregistrée. Touchez l'icône d'enregistrement sur une offre pour la retrouver ici. |
 | `talent.jobs.saved.empty.cta` | Rechercher des offres |
 | `talent.jobs.saved.clearClosed` | Retirer les offres clôturées |
+| `talent.jobs.saved.soonCount` | {count, plural, one {# clôture bientôt} other {# clôturent bientôt}} |
+| `talent.jobs.saved.sort.recent` | Ajoutées récemment |
+| `talent.jobs.saved.sort.deadline` | Date limite |
+| `talent.jobs.saved.closedNote` | Cette offre n'accepte plus de candidatures. |
 | `talent.jobs.saved.seo` | Offres enregistrées · Jumanly |
 
 ---
@@ -3689,6 +3714,11 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `connect.list.item.attachment` | Pièce jointe |
 | `connect.list.item.invitation` | Invitation à un entretien |
 | `connect.list.item.documentRequest` | Document demandé |
+| `connect.list.unread` | {count, plural, one {# non lu} other {# non lus}} |
+| `connect.list.filters` | Filtrer les conversations |
+| `connect.list.pick` | Choisissez une conversation pour la lire. |
+| `connect.side.file.receivedPlain` | Reçu |
+| `connect.thread.more` | Plus d'actions |
 | `connect.list.empty.text` | Aucune conversation. Elles s'ouvrent quand vous candidatez ou acceptez une mise en relation. |
 | `connect.list.empty.cta` | Voir les offres |
 | `connect.list.archive` | Archiver |
@@ -6766,6 +6796,14 @@ Conventions :
 | `notifications.panel.title` | Dernières notifications |
 | `notifications.panel.seeAll` | Voir toutes les notifications |
 | `notifications.panel.close` | Fermer les notifications |
+| `notifications.tab.unreadCount` | Non lues ({count}) |
+| `notifications.tabs` | Filtrer les notifications |
+| `notifications.time.yesterday` | Hier à {time} |
+| `notifications.action.interviewInvite` | Choisir un créneau |
+| `notifications.action.newMessage` | Répondre |
+| `notifications.action.documentRequest` | Déposer |
+| `notifications.action.certificateIssued` | Voir l'attestation |
+| `notifications.action.contactRequest` | Répondre à la demande |
 | `notifications.item.newApplication` | Nouvelle candidature de {candidateName} pour « {jobTitle} » |
 | `notifications.item.statusChange` | Votre candidature à « {jobTitle} » chez {company} est passée à l'étape « {stage} » |
 | `notifications.item.notSelected` | {company} n'a pas retenu votre candidature à « {jobTitle} » |

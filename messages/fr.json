@@ -2652,6 +2652,7 @@
         },
         "loading": "Recherche des offres…",
         "loadMore": "Voir plus d'offres",
+        "tabs": "Vues des offres",
         "previous": "Page précédente",
         "next": "Page suivante"
       },
@@ -2659,7 +2660,9 @@
         "text": "Filtres",
         "count": "Filtres · {count}",
         "reset": "Réinitialiser",
-        "apply": "Afficher {count, plural, one {# offre} other {# offres}}"
+        "apply": "Afficher {count, plural, one {# offre} other {# offres}}",
+        "remove": "Retirer le filtre : {label}",
+        "close": "Fermer les filtres"
       },
       "filter": {
         "contract": "Type de contrat",
@@ -2694,7 +2697,8 @@
           "text": "Compatibilité minimale",
           "value": "{score} % et plus"
         },
-        "verified": "Entreprises vérifiées uniquement"
+        "verified": "Entreprises vérifiées uniquement",
+        "any": "Peu importe"
       },
       "sort": {
         "text": "Trier :",
@@ -2731,12 +2735,17 @@
         "free": "Les candidatures sont toujours gratuites.",
         "companies": {
           "text": "Entreprises qui recrutent",
-          "meta": "{count, plural, one {# offre} other {# offres}} · {sector}"
+          "meta": "{count, plural, one {# offre} other {# offres}} · {sector}",
+          "count": "{count, plural, one {# offre} other {# offres}}"
         },
         "follow": "Suivre",
         "following": "Suivie"
       },
       "seo": "Offres · Jumanly",
+      "aiPanel": {
+        "job": "{job} · {company}",
+        "updated": "Calcul expliqué, mis à jour {time}"
+      },
       "card": {
         "new": "Nouveau",
         "verified": "Entreprise vérifiée",
@@ -2752,6 +2761,7 @@
         },
         "posted": "{time, relative}",
         "closingSoon": "Clôture {time, relative}",
+        "closingIn": "Clôture {time}",
         "applied": "Candidature envoyée",
         "save": "Enregistrer l'offre",
         "unsave": "Retirer des offres enregistrées",
@@ -2776,6 +2786,19 @@
         "back": "Retour aux {count} offres",
         "eyebrow": "Détail de l'offre",
         "posted": "Publiée {time, relative}",
+        "publishedAgo": "Publiée {time}",
+        "facts": {
+          "experience": {
+            "min": "{min, plural, =0 {Sans expérience} one {# an minimum} other {# ans minimum}}",
+            "text": "Expérience",
+            "value": "{min} à {max} ans"
+          },
+          "contract": "Contrat",
+          "salary": "Salaire",
+          "start": "Début",
+          "location": "Lieu",
+          "deadline": "Date limite"
+        },
         "applicants": "{count, plural, one {# candidat} other {# candidats}}",
         "apply": "Postuler gratuitement",
         "applied": {
@@ -2786,17 +2809,6 @@
         "save": "Enregistrer",
         "share": "Partager",
         "report": "Signaler cette offre",
-        "facts": {
-          "contract": "Contrat",
-          "salary": "Salaire",
-          "experience": {
-            "text": "Expérience",
-            "value": "{min} à {max} ans"
-          },
-          "start": "Début",
-          "location": "Lieu",
-          "deadline": "Date limite"
-        },
         "missions": "Vos missions",
         "profile": "Profil recherché",
         "skills": {
@@ -2841,6 +2853,7 @@
         "backToJobs": "Toutes les offres"
       },
       "apply": {
+        "heading": "Postuler",
         "title": "Postuler à {jobTitle}",
         "subtitle": "chez {company}",
         "free": "Candidature gratuite, quel que soit votre forfait.",
@@ -2897,10 +2910,11 @@
         "tab": {
           "active": "En cours ({count})",
           "closed": "Terminées ({count})",
-          "all": "Toutes"
+          "all": "Toutes",
+          "empty": "Aucune candidature dans cet onglet."
         },
         "sentOn": "Envoyée le {date, date, medium}",
-        "updated": "Mise à jour {time, relative}",
+        "updated": "Mise à jour {time}",
         "status": {
           "sent": "Envoyée",
           "viewed": "Consultée par le recruteur",
@@ -2951,7 +2965,20 @@
           "withdrawn": "Candidature retirée",
           "stage_changed": "Nouvelle étape : {stage}",
           "decision": "Décision du recruteur"
-        }
+        },
+        "tracker": "Étapes de la candidature",
+        "toggle": "Afficher le détail : {job}",
+        "score": "Score au moment de la candidature : {score} %, {band}",
+        "ai": {
+          "title": "{count, plural, one {# nouvelle offre très compatible avec votre profil.} other {# nouvelles offres très compatibles avec votre profil.}}",
+          "job": "{job} · {company} · {score} % compatible",
+          "reason": "{criteria} : ce que l'offre demande correspond à votre profil."
+        },
+        "review": {
+          "title": "Le score vous semble faux ?",
+          "body": "Une personne de l'équipe Jumanly vérifiera le calcul. Votre candidature reste examinée pendant la révision."
+        },
+        "more": "Plus d'actions"
       },
       "saved": {
         "title": "Offres enregistrées",
@@ -2965,6 +2992,12 @@
           "cta": "Rechercher des offres"
         },
         "clearClosed": "Retirer les offres clôturées",
+        "soonCount": "{count, plural, one {# clôture bientôt} other {# clôturent bientôt}}",
+        "sort": {
+          "recent": "Ajoutées récemment",
+          "deadline": "Date limite"
+        },
+        "closedNote": "Cette offre n'accepte plus de candidatures.",
         "seo": "Offres enregistrées · Jumanly"
       }
     }
@@ -4522,6 +4555,9 @@
         "invitation": "Invitation à un entretien",
         "documentRequest": "Document demandé"
       },
+      "unread": "{count, plural, one {# non lu} other {# non lus}}",
+      "filters": "Filtrer les conversations",
+      "pick": "Choisissez une conversation pour la lire.",
       "empty": {
         "text": "Aucune conversation. Elles s'ouvrent quand vous candidatez ou acceptez une mise en relation.",
         "cta": "Voir les offres"
@@ -4531,7 +4567,23 @@
       "markUnread": "Marquer comme non lu",
       "readOnly": "Votre rôle permet de lire les conversations, pas d'y répondre."
     },
+    "side": {
+      "file": {
+        "receivedPlain": "Reçu",
+        "sent": "Envoyé · {size}",
+        "received": "Reçu · {size}"
+      },
+      "verified": "Recruteur vérifié",
+      "linkedApplication": "Candidature liée",
+      "stage": "Étape : {stage}",
+      "files": {
+        "text": "Fichiers partagés",
+        "empty": "Aucun fichier partagé."
+      },
+      "viewApplication": "Voir ma candidature"
+    },
     "thread": {
+      "more": "Plus d'actions",
       "online": "En ligne",
       "lastSeen": "Vu {time, relative}",
       "today": "Aujourd'hui",
@@ -4554,20 +4606,6 @@
       "back": "Toutes les conversations",
       "you": "Vous",
       "error": "Le message n'a pas pu être envoyé. Vérifiez son contenu et réessayez."
-    },
-    "side": {
-      "verified": "Recruteur vérifié",
-      "linkedApplication": "Candidature liée",
-      "stage": "Étape : {stage}",
-      "files": {
-        "text": "Fichiers partagés",
-        "empty": "Aucun fichier partagé."
-      },
-      "file": {
-        "sent": "Envoyé · {size}",
-        "received": "Reçu · {size}"
-      },
-      "viewApplication": "Voir ma candidature"
     },
     "invite": {
       "title": "Invitation à un entretien",
@@ -8067,7 +8105,8 @@
       "messages": "Messages",
       "learn": "Formations",
       "account": "Compte",
-      "hire": "Recrutement"
+      "hire": "Recrutement",
+      "unreadCount": "Non lues ({count})"
     },
     "markAllRead": "Tout marquer comme lu",
     "markRead": "Marquer comme lu",
@@ -8091,6 +8130,17 @@
       "title": "Dernières notifications",
       "seeAll": "Voir toutes les notifications",
       "close": "Fermer les notifications"
+    },
+    "tabs": "Filtrer les notifications",
+    "time": {
+      "yesterday": "Hier à {time}"
+    },
+    "action": {
+      "interviewInvite": "Choisir un créneau",
+      "newMessage": "Répondre",
+      "documentRequest": "Déposer",
+      "certificateIssued": "Voir l'attestation",
+      "contactRequest": "Répondre à la demande"
     },
     "item": {
       "newApplication": "Nouvelle candidature de {candidateName} pour « {jobTitle} »",
