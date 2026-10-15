@@ -260,7 +260,7 @@ export async function signIn(_: AuthFormState, formData: FormData): Promise<Auth
       where: { email: parsed.data.email },
       select: { status: true, accounts: { select: { providerId: true } } },
     });
-    if (user?.status === "suspended") {
+    if (user && user.status !== "active") {
       return { status: "error", error: "accountSuspended", values: kept };
     }
     if (user && !user.accounts.some((account) => account.providerId === "credential")) {

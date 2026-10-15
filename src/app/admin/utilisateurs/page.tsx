@@ -21,28 +21,60 @@ import {
 } from "@/components/admin/kit";
 import {
   ago,
+  displayName,
   planTone,
   statuses,
   statusTone,
   UserCard,
   userState,
 } from "@/components/admin/utilisateurs-fiche";
+import { UserPanels } from "@/components/admin/user-panels";
+import { UserRights } from "@/components/admin/user-rights";
 import { Alert, Button, ButtonLink } from "@/components/ui";
 import { formatShortDate } from "@/lib/dates";
 import { cx } from "@/lib/cx";
 import { setUserRole, setUserStatus } from "@/server/actions/admin";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { GRACE_DAYS, resolvePlan } from "@/server/entitlements";
-import type { Prisma } from "@/generated/prisma/client";
+import { resolvePlan } from "@/server/entitlements";
+import {
+  grantedPlans,
+  PLATFORM_ROLES,
+  readUserFilters,
+  userListWhere,
+  userRights,
+} from "@/server/services/admin-users";
 
 const PAGE = "/admin/utilisateurs";
 const PAGE_SIZE = 50;
-const roles = ["user", "content_editor", "support_agent", "platform_admin"] as const;
-const liveStatuses = ["sponsored", "active", "trialing", "past_due", "canceled"] as const;
+const roles = PLATFORM_ROLES;
 function one(value: string | string[] | undefined) {
   return typeof value === "string" ? value : "";
 }
+const DONE = [
+  "codeSent",
+  "resetSent",
+  "verified",
+  "planGranted",
+  "planRevoked",
+  "creditsAdded",
+  "overrideRemoved",
+  "deleted",
+] as const;
+const ERRORS = [
+  "champs",
+  "motif",
+  "until",
+  "plan",
+  "quota",
+  "unlimited",
+  "grant",
+  "confirm",
+  "self",
+  "lastAdmin",
+  "owner",
+  "deleted",
+] as const;
 
 /**
  * Users (mockup 07-02): dense table, user card on the right (`?fiche=<id>`), suspension panel
@@ -58,11 +90,8 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
   const writable = canWriteAdmin(admin);
   const now = new Date();
 
-  const q = one(params.q).trim().slice(0, 120);
-  const planCode = one(params.forfait).slice(0, 60);
-  const role = roles.find((value) => value === params.role);
-  const state = statuses.find((value) => value === params.statut);
-  const country = one(params.pays).slice(0, 2).toUpperCase();
+  const userFilters = readUserFilters(params);
+  const { q, planCode, role, state, country } = userFilters;
   const ficheId = one(params.fiche).slice(0, 60);
   const action = one(params.action);
   const page = pageParam(params.page);
@@ -84,42 +113,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
   });
   const chosenPlan = plans.find((plan) => plan.code === planCode);
 
-  const and: Prisma.UserWhereInput[] = [];
-  if (q)
-    and.push({
-      OR: [
-        { email: { contains: q, mode: "insensitive" } },
-        { name: { contains: q, mode: "insensitive" } },
-        { id: q },
-      ],
-    });
-  if (role) and.push({ platformRole: role });
-  if (country) and.push({ country });
-  if (state === "suspended") and.push({ status: "suspended" });
-  if (state === "deletionScheduled")
-    and.push({ status: { not: "suspended" }, deletionScheduledAt: { not: null } });
-  if (state === "active" || state === "unverified")
-    and.push({
-      status: "active",
-      deletionScheduledAt: null,
-      emailVerified: state === "active",
-    });
-  if (chosenPlan) {
-    // Same window as the entitlement engine: live subscriptions, grace period included.
-    const live = await db.subscription.findMany({
-      where: {
-        subjectType: "user",
-        status: { in: [...liveStatuses] },
-        currentPeriodStart: { lte: now },
-        currentPeriodEnd: { gt: new Date(now.getTime() - GRACE_DAYS * 86_400_000) },
-        ...(chosenPlan.priceCents === 0 ? {} : { plan: { code: chosenPlan.code } }),
-      },
-      select: { subjectId: true },
-    });
-    const ids = live.map((row) => row.subjectId);
-    and.push(chosenPlan.priceCents === 0 ? { id: { notIn: ids } } : { id: { in: ids } });
-  }
-  const where: Prisma.UserWhereInput = and.length ? { AND: and } : {};
+  const where = await userListWhere(db, userFilters, now);
 
   const [count, users, countries, totals] = await Promise.all([
     db.user.count({ where }),
@@ -139,7 +133,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
       orderBy: { country: "asc" },
     }),
     Promise.all([
-      db.user.count(),
+      db.user.count({ where: { status: { not: "deleted" } } }),
       db.user.count({
         where: { status: "active", emailVerified: true, deletionScheduledAt: null },
       }),
@@ -163,17 +157,28 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
 
   const fiche = ficheId ? await db.user.findUnique({ where: { id: ficheId } }) : null;
   const ficheHref = fiche ? href({ fiche: fiche.id }) : href({});
-  const canAct = writable && fiche !== null && fiche.id !== admin.id;
+  const canAct = writable && fiche !== null && fiche.id !== admin.id && fiche.status !== "deleted";
   const suspending = canAct && action === "suspendre" && fiche.status !== "suspended";
+  const actionHref = (name: string, extra = "") =>
+    `${ficheHref}&action=${name}${extra}#utilisateurs-panneau`;
+  const [rights, granted] =
+    fiche && fiche.status !== "deleted"
+      ? await Promise.all([userRights(db, fiche.id, now), grantedPlans(db, fiche.id, now)])
+      : [null, []];
+  const done = DONE.find((value) => value === params.ok);
+  const error = ERRORS.find((value) => value === params.erreur);
 
   // Roles in words (« Talent », « Recruteur », « Administrateur »), the platform role first.
-  const roleList = (user: (typeof users)[number]) => [
-    ...(user.platformRole === "user" ? [] : [t(`platformRole.${user.platformRole}`)]),
-    ...(user.talentProfile ? [t("memberRole.talent")] : []),
-    ...[...new Set(user.memberships.map((membership) => membership.role))].map((value) =>
-      t(`memberRole.${value}`),
-    ),
-  ];
+  const roleList = (user: (typeof users)[number]) =>
+    user.status === "deleted"
+      ? []
+      : [
+          ...(user.platformRole === "user" ? [] : [t(`platformRole.${user.platformRole}`)]),
+          ...(user.talentProfile ? [t("memberRole.talent")] : []),
+          ...[...new Set(user.memberships.map((membership) => membership.role))].map((value) =>
+            t(`memberRole.${value}`),
+          ),
+        ];
 
   const ficheBlock = fiche ? (
     <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
@@ -205,6 +210,35 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
               </form>
             </SensitivePanel>
           </div>
+        )}
+        {canAct && (
+          <UserPanels
+            user={fiche}
+            action={action}
+            params={params}
+            ficheHref={ficheHref}
+            actorId={admin.id}
+            rights={rights}
+            granted={granted}
+          />
+        )}
+        {rights && (
+          <UserRights
+            plan={rights.plan}
+            source={rights.source}
+            rows={rights.rows}
+            granted={granted}
+            removeHref={
+              canAct
+                ? (id) => actionHref("retirer-ajout", `&ajout=${encodeURIComponent(id)}`)
+                : undefined
+            }
+            revokeHref={
+              canAct
+                ? (id) => actionHref("retirer-forfait", `&abonnement=${encodeURIComponent(id)}`)
+                : undefined
+            }
+          />
         )}
         {canAct && (
           <div className="flex flex-col gap-2">
@@ -262,6 +296,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
           now={now}
           closeHref={href({})}
           suspendHref={`${ficheHref}&action=suspendre`}
+          actionHref={(name) => actionHref(name)}
           back={ficheHref}
           canAct={canAct}
         />
@@ -313,12 +348,12 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
       />
       {params.ok && (
         <AdminDone
-          title={t("users.updated")}
+          title={done ? t(`users.done.${done}`) : t("users.updated")}
           journal={fiche ? { type: "user", id: fiche.id } : undefined}
         />
       )}
       {params.erreur === "soi" && <Alert tone="error" title={t("users.selfProtected")} />}
-      {params.erreur === "motif" && <Alert tone="error" title={t("reason.required")} />}
+      {error && <Alert tone="error" title={t(`users.error.${error}`)} />}
 
       <AdminFilterBar
         action={PAGE}
@@ -404,6 +439,32 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
         />
       ) : (
         <>
+          {writable && (
+            <form
+              id="utilisateurs-export"
+              method="get"
+              action="/admin/utilisateurs.csv"
+              className="flex flex-col gap-2 rounded-[18px] bg-blanc/70 px-4 py-3 sm:flex-row sm:items-center"
+            >
+              {Object.entries({
+                q,
+                forfait: planCode,
+                role,
+                statut: state,
+                pays: country,
+              }).map(([key, value]) =>
+                value ? <input key={key} type="hidden" name={key} value={value} /> : null,
+              )}
+              <p className="flex flex-1 items-start gap-2 text-[11.5px] leading-4 text-ardoise">
+                <Icon name="info" className="size-3.5 shrink-0" />
+                {t("users.export.hint")}
+              </p>
+              <Button type="submit" variant="secondary" size="sm">
+                <Icon name="telecharger" className="size-4" />
+                {t("users.export.selection")}
+              </Button>
+            </form>
+          )}
           {/* Desktop: dense table. */}
           <div
             role="region"
@@ -411,15 +472,26 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
             tabIndex={0}
             className="hidden overflow-x-auto rounded-[24px] bg-blanc py-1.5 lg:block"
           >
-            <table className="w-full min-w-[920px] border-collapse text-left text-[13px]">
+            <table className="w-full min-w-[1000px] border-collapse text-left text-[13px]">
               <caption className="sr-only">{t("users.list")}</caption>
               <thead>
                 <tr className="text-[11px] leading-[14px] font-semibold tracking-[0.09em] text-ardoise uppercase">
-                  <th scope="col" className="px-[18px] py-2.5 font-semibold">
+                  {writable && (
+                    <th scope="col" className="w-10 py-2.5 pl-[18px]">
+                      <span className="sr-only">{t("users.export.selection")}</span>
+                    </th>
+                  )}
+                  <th
+                    scope="col"
+                    className={cx("py-2.5 font-semibold", writable ? "px-1.5" : "px-[18px]")}
+                  >
                     {t("users.col.name")}
                   </th>
                   <th scope="col" className="px-1.5 py-2.5 font-semibold">
                     {t("users.col.email")}
+                  </th>
+                  <th scope="col" className="px-1.5 py-2.5 font-semibold">
+                    {t("users.col.verification")}
                   </th>
                   <th scope="col" className="px-1.5 py-2.5 font-semibold">
                     {t("users.col.plan")}
@@ -449,7 +521,21 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
                       key={user.id}
                       className={cx("border-t border-brume", current && "bg-creme/50")}
                     >
-                      <td className="py-3.5 pr-1.5 pl-[18px]">
+                      {writable && (
+                        <td className="py-3.5 pl-[18px]">
+                          {user.status !== "deleted" && (
+                            <input
+                              type="checkbox"
+                              name="id"
+                              value={user.id}
+                              form="utilisateurs-export"
+                              aria-label={t("users.export.select", { name: user.name })}
+                              className="size-4 accent-sapin"
+                            />
+                          )}
+                        </td>
+                      )}
+                      <td className={cx("py-3.5 pr-1.5", writable ? "pl-1.5" : "pl-[18px]")}>
                         <Link
                           href={`${href({ fiche: user.id })}#utilisateurs-fiche`}
                           aria-current={current ? "true" : undefined}
@@ -458,14 +544,45 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
                             current && "underline",
                           )}
                         >
-                          <Initials name={user.name} size={30} />
-                          <span className="min-w-0">{user.name}</span>
+                          <Initials name={displayName(t, user)} size={30} />
+                          <span className="min-w-0 whitespace-nowrap">{displayName(t, user)}</span>
                         </Link>
                       </td>
-                      <td className="max-w-[230px] px-1.5 py-3.5">
+                      <td className="max-w-[210px] px-1.5 py-3.5">
                         <span className="block truncate text-[12px] text-ardoise">
-                          {user.email}
+                          {user.status === "deleted" ? "" : user.email}
                         </span>
+                      </td>
+                      <td className="px-1.5 py-3.5">
+                        {user.status !== "deleted" && (
+                          <span className="flex items-center gap-1.5">
+                            {user.emailVerified ? (
+                              <Icon
+                                name="valider"
+                                label={t("users.verification.email")}
+                                className="size-4 text-up-texte"
+                              />
+                            ) : (
+                              <Icon
+                                name="alerte"
+                                label={t("users.verification.emailMissing")}
+                                className="size-4 text-ambre-texte"
+                              />
+                            )}
+                            {user.twoFactorEnabled && (
+                              <span
+                                title={t("users.verification.twoFactor")}
+                                className="rounded-[6px] bg-brume px-1.5 py-px text-[10.5px] font-semibold"
+                              >
+                                {t("users.verification.twoFactorShort")}
+                                <span className="sr-only">
+                                  {" "}
+                                  {t("users.verification.twoFactor")}
+                                </span>
+                              </span>
+                            )}
+                          </span>
+                        )}
                       </td>
                       <td className="px-1.5 py-3.5">
                         {plan && <Tag tone={planTone(plan)}>{plan.planName}</Tag>}
@@ -514,10 +631,10 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
                     aria-current={user.id === fiche?.id ? "true" : undefined}
                     className="flex items-center gap-3 py-3"
                   >
-                    <Initials name={user.name} size={38} />
+                    <Initials name={displayName(t, user)} size={38} />
                     <span className="flex min-w-0 flex-1 flex-col">
                       <span className="truncate text-[13.5px] leading-[18px] font-semibold">
-                        {user.name}
+                        {displayName(t, user)}
                       </span>
                       <span className="truncate text-[11.5px] leading-4 text-ardoise">
                         {[plan?.planName, seen ? ago(seen, now) : t("users.neverActive")]

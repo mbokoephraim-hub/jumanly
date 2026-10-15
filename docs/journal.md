@@ -2,6 +2,29 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v2 · étape 3 : utilisateurs (15 octobre 2026)
+
+- **Vérifier un utilisateur** : la fiche montre l'état du compte (e-mail vérifié ou non, double
+  authentification, moyens de connexion, dernière connexion, organisations, attestations obtenues).
+  Actions : renvoyer le code de vérification, marquer l'e-mail comme vérifié à la main (motif
+  obligatoire), envoyer un lien de réinitialisation du mot de passe.
+- **Droits et quotas** : nouvelle carte qui liste chaque droit du compte, sa valeur, la
+  consommation de la période et son origine (forfait payé, licence, forfait offert, forfait
+  gratuit, ajout manuel). Les droits ont désormais des noms en français (`admin.entitlement.*`).
+- **Forfait offert** jusqu'à une date (abonnement `sponsored`, source `admin`), retirable ;
+  **crédits ajoutés** sur un quota de la période jusqu'à une date (`EntitlementOverride`),
+  retirables.
+- **Export des données** d'une personne en JSON (même contenu que « Télécharger mes données »,
+  désormais dans `src/server/services/personal-data.ts`), journalisé.
+- **Suppression du compte** en deux temps (motif, puis e-mail saisi) : anonymisation, candidatures
+  et paiements conservés sans données personnelles. Impossible sur soi, sur le dernier
+  administrateur et sur un propriétaire d'organisation. Nouveau statut `deleted`.
+- **Corrigé** : les suppressions demandées depuis Paramètres n'étaient jamais exécutées après les
+  30 jours de délai. La tâche horaire (`/api/jobs/billing`, `pnpm jobs:billing`) les exécute
+  maintenant.
+- **Liste** : colonne « Vérification », comptes supprimés à part (filtre « Supprimé »), export CSV
+  de la sélection ou de la liste filtrée, journalisé.
+
 ## Jumanly Admin v2 · étape 2 : indicateurs intelligents (15 octobre 2026)
 
 - **Tableau de bord `/admin`** : quatre chiffres clés en tête (utilisateurs actifs, revenu mensuel

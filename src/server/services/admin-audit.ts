@@ -127,7 +127,10 @@ async function describeTargets(db: PrismaClient, rows: { targetType: string; tar
     ...new Set(rows.filter((row) => row.targetType === type).map((row) => row.targetId)),
   ];
   const [users, orgs, plans, courses, jobs] = await Promise.all([
-    db.user.findMany({ where: { id: { in: ids("user") } }, select: { id: true, name: true } }),
+    db.user.findMany({
+      where: { id: { in: ids("user") } },
+      select: { id: true, name: true, status: true },
+    }),
     db.organization.findMany({
       where: { id: { in: ids("organization") } },
       select: { id: true, name: true },
@@ -142,10 +145,11 @@ async function describeTargets(db: PrismaClient, rows: { targetType: string; tar
     }),
     db.job.findMany({ where: { id: { in: ids("job") } }, select: { id: true, title: true } }),
   ]);
-  const map = new Map<string, { label: string; href: string }>();
+  const map = new Map<string, { label: string | null; href: string }>();
   for (const user of users)
     map.set(`user:${user.id}`, {
-      label: user.name,
+      // An anonymized account has no name left: the journal says « Compte ».
+      label: user.status === "deleted" ? null : user.name,
       href: `/admin/utilisateurs?fiche=${user.id}`,
     });
   for (const org of orgs)

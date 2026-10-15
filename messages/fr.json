@@ -10452,7 +10452,17 @@
         "security_abnormalUsage": "usage anormal détecté",
         "admin_indicators_export": "a exporté les indicateurs",
         "admin_audit_export": "a exporté le journal d'audit",
-        "cost_save": "a saisi les coûts du mois"
+        "cost_save": "a saisi les coûts du mois",
+        "user_email_verify": "a marqué l'e-mail comme vérifié",
+        "user_email_resend": "a renvoyé le code de vérification",
+        "user_password_reset": "a envoyé un lien de réinitialisation du mot de passe",
+        "user_plan_grant": "a offert un forfait",
+        "user_plan_revoke": "a retiré un forfait offert",
+        "user_quota_add": "a ajouté des crédits",
+        "user_quota_remove": "a retiré un ajout de crédits",
+        "user_export": "a exporté les données du compte",
+        "user_export_list": "a exporté la liste des utilisateurs",
+        "user_delete": "a supprimé le compte"
       },
       "target": {
         "message": "Message",
@@ -10493,6 +10503,9 @@
         "security": "Sécurité",
         "admin": "Exports",
         "cost": "Coûts"
+      },
+      "reason": {
+        "scheduled": "Suppression demandée par la personne (délai de 30 jours écoulé)"
       }
     },
     "search": {
@@ -10694,13 +10707,15 @@
         "roles": "Rôles",
         "created": "Inscrit le",
         "lastActive": "Dernière activité",
-        "status": "Statut"
+        "status": "Statut",
+        "verification": "Vérification"
       },
       "status": {
         "active": "Actif",
         "unverified": "E-mail non vérifié",
         "suspended": "Suspendu",
-        "deletionScheduled": "Suppression programmée"
+        "deletionScheduled": "Suppression programmée",
+        "deleted": "Supprimé"
       },
       "detail": {
         "title": "Fiche utilisateur",
@@ -10720,7 +10735,21 @@
         "applications": "Candidatures",
         "coursesInProgress": "Formations en cours",
         "certificates": "Attestations",
-        "actions": "Actions sur le compte"
+        "actions": "Actions sur le compte",
+        "check": "Vérification du compte",
+        "email": "E-mail",
+        "emailVerified": "Vérifié",
+        "emailUnverified": "Non vérifié",
+        "twoFactor": "Double authentification",
+        "twoFactorOn": "Activée",
+        "twoFactorOff": "Désactivée",
+        "methods": "Connexion par",
+        "noMethod": "Aucun moyen de connexion",
+        "lastSignIn": "Dernière connexion",
+        "certificateList": "Attestations obtenues",
+        "noCertificate": "Aucune attestation pour l'instant.",
+        "certificateLine": "{course} · {date}",
+        "revoked": "Retirée"
       },
       "action": {
         "suspend": {
@@ -10738,13 +10767,49 @@
         "resetPassword": "Envoyer un lien de réinitialisation",
         "grantPlan": {
           "text": "Attribuer un forfait manuellement",
-          "until": "Jusqu'au"
+          "until": "Jusqu'au",
+          "confirm": "Le forfait choisi s'applique tout de suite et s'arrête seul à la date indiquée, sans paiement. Le forfait payé ou la licence de la personne, s'il en a un, n'est pas modifié.",
+          "plan": "Forfait offert",
+          "submit": "Offrir le forfait",
+          "revoke": "Retirer",
+          "revokeTitle": "Retirer le forfait offert",
+          "revokeConfirm": "Retirer le forfait {plan} offert jusqu'au {date} ? La personne revient à son forfait habituel."
         },
         "exportData": "Générer l'export de ses données",
         "delete": {
           "text": "Supprimer le compte",
-          "confirm": "Supprimer définitivement le compte de {userName} ? Cette action est irréversible."
-        }
+          "confirm": "Supprimer définitivement le compte de {userName} ? Cette action est irréversible.",
+          "intro": "Le compte est anonymisé : nom, e-mail, profil, CV, expériences et historique sont effacés ; les candidatures et paiements sont conservés sans données personnelles. La personne ne peut plus se connecter.",
+          "step1": "Étape 1 sur 2 · Motif",
+          "step2": "Étape 2 sur 2 · Confirmation",
+          "continue": "Continuer",
+          "reasonShown": "Motif : {reason}",
+          "typeEmail": "Saisissez l'e-mail du compte pour confirmer ({email})",
+          "submit": "Supprimer définitivement"
+        },
+        "verifyEmail": {
+          "text": "Marquer l'e-mail comme vérifié",
+          "confirm": "Marquer l'adresse {email} comme vérifiée ? Faites-le seulement si vous avez confirmé par un autre moyen qu'elle appartient bien à cette personne.",
+          "reason": "Comment l'adresse a été confirmée",
+          "submit": "Marquer comme vérifié"
+        },
+        "resendHint": "Un nouveau code est envoyé à l'adresse du compte.",
+        "credits": {
+          "text": "Ajouter des crédits",
+          "confirm": "Les crédits s'ajoutent au quota de la période en cours, jusqu'à la date indiquée. Un nouvel ajout remplace le précédent et s'y additionne.",
+          "quota": "Quota",
+          "amount": "Nombre à ajouter",
+          "current": "Aujourd'hui : {used} utilisé(s) sur {limit}.",
+          "submit": "Ajouter",
+          "none": "Le forfait de cette personne n'a pas de quota à augmenter (tout est illimité ou non inclus)."
+        },
+        "override": {
+          "removeTitle": "Retirer l'ajout",
+          "removeConfirm": "Retirer l'ajout sur « {right} » ? La valeur du forfait s'applique de nouveau."
+        },
+        "exportHint": "Fichier JSON avec tout ce que Jumanly conserve sur la personne (droit d'accès). Le téléchargement est journalisé.",
+        "until": "Jusqu'au",
+        "reason": "Motif"
       },
       "suspended": "Compte suspendu.",
       "updated": "Utilisateur mis à jour.",
@@ -10760,7 +10825,158 @@
       },
       "summary": "Forfait : {plan} · inscrit le {date}",
       "neverActive": "Aucune connexion",
-      "list": "Liste des utilisateurs"
+      "list": "Liste des utilisateurs",
+      "deletedName": "Compte supprimé",
+      "deletedNote": "Ce compte a été supprimé et anonymisé. Ses candidatures et paiements sont conservés sans données personnelles.",
+      "verification": {
+        "email": "E-mail vérifié",
+        "emailMissing": "E-mail non vérifié",
+        "twoFactor": "Double authentification",
+        "twoFactorShort": "2FA"
+      },
+      "method": {
+        "credential": "Mot de passe",
+        "google": "Google",
+        "linkedin": "LinkedIn",
+        "apple": "Apple",
+        "magicLink": "Lien par e-mail"
+      },
+      "block": {
+        "self": "Vous ne pouvez pas supprimer votre propre compte.",
+        "lastAdmin": "C'est le dernier administrateur de la plateforme : nommez-en un autre avant de supprimer ce compte.",
+        "owner": "Cette personne est propriétaire d'une organisation : la propriété doit être transférée avant la suppression.",
+        "deleted": "Ce compte est déjà supprimé."
+      },
+      "done": {
+        "codeSent": "Code de vérification envoyé.",
+        "resetSent": "Lien de réinitialisation envoyé.",
+        "verified": "Adresse e-mail marquée comme vérifiée.",
+        "planGranted": "Forfait offert.",
+        "planRevoked": "Forfait offert retiré.",
+        "creditsAdded": "Crédits ajoutés.",
+        "overrideRemoved": "Ajout retiré.",
+        "deleted": "Compte supprimé et anonymisé."
+      },
+      "error": {
+        "champs": "Vérifiez les champs du formulaire.",
+        "motif": "Indiquez un motif (3 caractères au moins).",
+        "until": "Choisissez une date de fin entre demain et dans deux ans.",
+        "plan": "Ce forfait ne peut pas être offert.",
+        "quota": "Ce quota n'existe pas dans le forfait de la personne.",
+        "unlimited": "Ce quota est déjà illimité.",
+        "grant": "Ce forfait offert n'existe plus.",
+        "confirm": "L'e-mail saisi ne correspond pas au compte, ou l'envoi a échoué.",
+        "self": "Vous ne pouvez pas faire cette action sur votre propre compte.",
+        "lastAdmin": "C'est le dernier administrateur de la plateforme.",
+        "owner": "Cette personne est propriétaire d'une organisation.",
+        "deleted": "Ce compte est supprimé."
+      },
+      "rights": {
+        "title": "Droits et quotas",
+        "intro": "Ce que le compte peut faire aujourd'hui, et d'où vient chaque droit.",
+        "col": {
+          "right": "Droit",
+          "value": "Valeur",
+          "used": "Utilisé",
+          "source": "Origine"
+        },
+        "source": {
+          "plan": "Forfait payé",
+          "license": "Licence partenaire",
+          "gift": "Forfait offert",
+          "free": "Forfait gratuit",
+          "override": "Ajout manuel"
+        },
+        "overrideUntil": "Ajout jusqu'au {date}",
+        "overrideNoEnd": "Ajout sans échéance",
+        "planLine": "Forfait {plan}",
+        "granted": "Forfaits offerts en cours",
+        "grantedLine": "{plan} jusqu'au {date}",
+        "yes": "Inclus",
+        "no": "Non inclus",
+        "unlimited": "Illimité",
+        "contract": "Selon contrat",
+        "usedOf": "{used} sur {limit}",
+        "usedOnly": "{used}"
+      },
+      "export": {
+        "selection": "Exporter en CSV",
+        "hint": "Cochez des comptes pour n'exporter qu'eux ; sinon toute la liste filtrée est exportée. L'export est journalisé.",
+        "select": "Sélectionner {name}"
+      },
+      "csv": {
+        "file": "jumanly-utilisateurs",
+        "id": "Identifiant",
+        "emailVerified": "E-mail vérifié",
+        "twoFactor": "Double authentification",
+        "yes": "oui",
+        "no": "non"
+      }
+    },
+    "entitlement": {
+      "jobs_apply": "Postuler aux offres",
+      "jobs_track": "Suivre ses candidatures",
+      "connect_messaging_application": "Messagerie liée aux candidatures",
+      "career_diagnostic_level": "Diagnostic de carrière",
+      "career_cv_templates_access": "Modèles de CV",
+      "career_cv_tailor": "CV adapté à une offre",
+      "career_documents": "Documents de candidature",
+      "career_linkedin": "Optimisation LinkedIn",
+      "career_progress_plan": "Plan de progression",
+      "career_progress_plan_recommendations": "Recommandations du plan de progression",
+      "career_portfolio_level": "Portfolio",
+      "career_tools_extended": "Outils de carrière avancés",
+      "career_interview_text_monthly": "Simulations d'entretien écrites par mois",
+      "career_interview_voice_monthly": "Simulations d'entretien vocales par mois",
+      "learn_catalog_level": "Catalogue de formations",
+      "learn_exercises_job_specific": "Exercices par métier",
+      "learn_resources_specialized": "Ressources spécialisées",
+      "ai_credits_monthly": "Crédits d'assistance IA par mois",
+      "reports_progress_detailed": "Rapport de progression détaillé",
+      "support_priority": "Support prioritaire",
+      "org_seats": "Sièges",
+      "org_seats_min": "Sièges garantis",
+      "jobs_active_max": "Offres actives",
+      "hire_pipeline_level": "Suivi des candidatures",
+      "hire_talent_search": "Recherche dans le vivier",
+      "hire_talent_search_monthly": "Recherches dans le vivier par mois",
+      "hire_contact_requests_monthly": "Demandes de mise en relation par mois",
+      "hire_matching_level": "Matching",
+      "hire_cv_analysis": "Analyse des CV",
+      "hire_shortlist": "Présélection",
+      "hire_collaboration": "Recrutement en équipe",
+      "hire_scorecards": "Grilles d'évaluation",
+      "hire_decision_history": "Historique des décisions",
+      "connect_appointments": "Prise de rendez-vous",
+      "org_verified_profile": "Profil d'entreprise vérifié",
+      "org_teams": "Équipes",
+      "org_entities": "Entités et filiales",
+      "org_permissions_level": "Permissions",
+      "org_talent_pools_shared": "Viviers partagés",
+      "reports_level": "Rapports",
+      "reports_export": "Export des rapports",
+      "hire_workflows_custom": "Processus personnalisés",
+      "integrations": "Intégrations"
+    },
+    "entitlementLevel": {
+      "none": "Non inclus",
+      "simple": "Simple",
+      "personalized": "Personnalisé",
+      "free": "Gratuit",
+      "starter": "Starter",
+      "pro": "Pro",
+      "standard": "Standard",
+      "enriched": "Enrichi",
+      "fundamentals": "Fondamentaux",
+      "advanced": "Avancé",
+      "multi": "Plusieurs étapes",
+      "deep": "Approfondi",
+      "suggestions": "Suggestions",
+      "explainable": "Explicable",
+      "basic": "Basique",
+      "stats": "Statistiques",
+      "consolidated": "Consolidé",
+      "custom": "Sur mesure"
     },
     "orgs": {
       "title": "Organisations",

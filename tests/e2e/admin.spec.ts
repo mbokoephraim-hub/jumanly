@@ -27,7 +27,7 @@ const adminPages: [path: string, title: string][] = [
 ];
 
 /** A fresh fictional account created in the database, so the shared demo accounts stay intact. */
-function makeAccount(prefix: string, name: string) {
+function makeAccount(prefix: string, name: string, state?: "unverified") {
   const email = testEmail(prefix);
   const id = execFileSync("pnpm", [
     "exec",
@@ -35,6 +35,7 @@ function makeAccount(prefix: string, name: string) {
     "tests/e2e/make-account.ts",
     email,
     name,
+    ...(state ? [state] : []),
   ]).toString();
   return { email, id: id.trim().split("\n").at(-1)! };
 }
@@ -230,4 +231,80 @@ test("les indicateurs montrent les forfaits utilisés et se complètent avec les
   await expect(costs.getByText(/Coûts de la période, IA comprise/)).toBeVisible();
   await expect(costs.getByRole("link", { name: "Modifier les coûts" })).toBeVisible();
   await expectAccessible(page);
+});
+
+test("vérifier un compte, lui offrir un forfait et des crédits, exporter ses données, le supprimer", async ({
+  page,
+}) => {
+  test.setTimeout(150_000);
+  const account = makeAccount("fiche", "Compte Fiche Fictif", "unverified");
+  await logIn(page, demo.admin);
+  await page.goto(`/admin/utilisateurs?fiche=${account.id}`);
+  const card = page.locator("#utilisateurs-fiche");
+  await expect(card.getByText("Non vérifié", { exact: true })).toBeVisible();
+  const done = (text: string) =>
+    expect(page.getByRole("status").filter({ hasText: text })).toBeVisible();
+
+  // E-mail confirmed by hand, with how it was confirmed.
+  await card.getByRole("link", { name: "Marquer l'e-mail comme vérifié" }).click();
+  await page.locator("#utilisateurs-verify-reason").fill("Adresse confirmée par écrit (fictif)");
+  await page.getByRole("button", { name: "Marquer comme vérifié" }).click();
+  await done("Adresse e-mail marquée comme vérifiée.");
+  await expect(card.getByText("Vérifié", { exact: true })).toBeVisible();
+
+  // A plan given until a date: it shows in the rights, with its origin.
+  await card.getByRole("link", { name: "Attribuer un forfait manuellement" }).click();
+  await page.locator("#utilisateurs-grant-plan").selectOption({ label: "Pro" });
+  await page.locator("#utilisateurs-grant-reason").fill("Geste commercial fictif");
+  await page.getByRole("button", { name: "Offrir le forfait" }).click();
+  await done("Forfait offert.");
+  const rights = page.locator("#utilisateurs-droits");
+  await expect(rights.getByText("Forfait Pro")).toBeVisible();
+  await expect(rights.getByText("Forfait offert", { exact: true })).toBeVisible();
+
+  // Extra AI credits for the period.
+  await card.getByRole("link", { name: "Ajouter des crédits" }).click();
+  await page.locator("#utilisateurs-credits-key").selectOption("ai.credits.monthly");
+  await page.locator("#utilisateurs-credits-amount").fill("20");
+  await page.locator("#utilisateurs-credits-reason").fill("Crédits offerts (fictif)");
+  await page.getByRole("button", { name: "Ajouter", exact: true }).click();
+  await done("Crédits ajoutés.");
+  await expect(rights.getByText("0 sur 170")).toBeVisible();
+  await expect(rights.getByText("Ajout manuel")).toBeVisible();
+  await expectAccessible(page);
+
+  // Export of the person's data (droit d'accès).
+  const download = page.waitForEvent("download");
+  await card.getByRole("link", { name: "Générer l'export de ses données" }).click();
+  const { readFileSync } = await import("node:fs");
+  const data = JSON.parse(readFileSync(await (await download).path(), "utf8"));
+  expect(data.account.email).toBe(account.email);
+  expect(JSON.stringify(data)).not.toMatch(/password|token/i);
+
+  // Deletion in two steps: the reason, then the e-mail typed again.
+  await card.getByRole("link", { name: "Supprimer le compte" }).click();
+  await page.locator("#utilisateurs-delete-reason").fill("Demande écrite de la personne (fictif)");
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await page.locator("#utilisateurs-delete-email").fill(account.email);
+  await page.getByRole("button", { name: "Supprimer définitivement" }).click();
+  await done("Compte supprimé et anonymisé.");
+  await expect(card.getByText("Compte supprimé", { exact: true })).toBeVisible();
+  await expect(card.getByText(account.email)).toHaveCount(0);
+  const history = page.getByRole("region", { name: "Historique" });
+  await expect(history.getByText("a supprimé le compte")).toBeVisible();
+  await expect(history.getByText("a offert un forfait")).toBeVisible();
+});
+
+test("la liste des utilisateurs s'exporte en CSV", async ({ page }) => {
+  test.setTimeout(90_000);
+  const account = makeAccount("export", "Compte Export Fictif");
+  await logIn(page, demo.admin);
+  await page.goto(`/admin/utilisateurs?q=${encodeURIComponent(account.email)}`);
+  const download = page.waitForEvent("download");
+  await page.getByRole("button", { name: "Exporter en CSV" }).click();
+  const { readFileSync } = await import("node:fs");
+  const csv = readFileSync(await (await download).path(), "utf8");
+  expect(csv).toContain("E-mail vérifié");
+  expect(csv).toContain(account.email);
+  expect(csv.trim().split("\n")).toHaveLength(2);
 });

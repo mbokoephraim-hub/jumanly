@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 import messages from "../../messages/fr.json";
 import {
+  deletionBlock,
+  parseUntil,
+  readUserFilters,
+  userState,
+} from "@/server/services/admin-users";
+import {
   AUDIT_FAMILIES,
   AUDIT_TARGETS,
   familyOf,
@@ -134,5 +140,51 @@ describe("indicateurs intelligents (Admin v2, étape 2)", () => {
     );
     expect(totals.hosting).toBe(1500 + 1500);
     expect(totals.other).toBe(0);
+  });
+});
+
+describe("utilisateurs (Admin v2, étape 3)", () => {
+  const base = {
+    actorId: "admin",
+    targetId: "cible",
+    targetRole: "user",
+    otherAdmins: 1,
+    ownsOrganization: false,
+    status: "active",
+  };
+
+  it("bloque la suppression de soi, du dernier administrateur et d'un propriétaire", () => {
+    expect(deletionBlock(base)).toBeNull();
+    expect(deletionBlock({ ...base, targetId: "admin" })).toBe("self");
+    expect(deletionBlock({ ...base, targetRole: "platform_admin", otherAdmins: 0 })).toBe(
+      "lastAdmin",
+    );
+    expect(deletionBlock({ ...base, targetRole: "platform_admin", otherAdmins: 2 })).toBeNull();
+    expect(deletionBlock({ ...base, ownsOrganization: true })).toBe("owner");
+    expect(deletionBlock({ ...base, status: "deleted" })).toBe("deleted");
+    // The job deleting accounts on schedule has no author.
+    expect(deletionBlock({ ...base, actorId: null })).toBeNull();
+  });
+
+  it("accepte une date de fin entre demain et deux ans", () => {
+    const now = new Date("2026-10-15T12:00:00Z");
+    expect(parseUntil("2026-10-15", now)).toBeNull();
+    expect(parseUntil("2026-10-16", now)?.toISOString()).toBe("2026-10-16T23:59:59.999Z");
+    expect(parseUntil("2028-10-15", now)).toBeNull();
+    expect(parseUntil("16/10/2026", now)).toBeNull();
+  });
+
+  it("donne l'état d'un compte et lit les filtres de la liste", () => {
+    const user = { status: "active", deletionScheduledAt: null, emailVerified: true };
+    expect(userState(user)).toBe("active");
+    expect(userState({ ...user, emailVerified: false })).toBe("unverified");
+    expect(userState({ ...user, deletionScheduledAt: new Date() })).toBe("deletionScheduled");
+    expect(userState({ ...user, status: "suspended" })).toBe("suspended");
+    expect(userState({ ...user, status: "deleted" })).toBe("deleted");
+    expect(readUserFilters({ statut: "deleted", pays: "cd", role: "intrus" })).toMatchObject({
+      state: "deleted",
+      country: "CD",
+      role: undefined,
+    });
   });
 });

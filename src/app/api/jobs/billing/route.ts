@@ -4,6 +4,7 @@ import { db } from "@/server/db";
 import { paymentProvider } from "@/server/payments";
 import { runBillingJobs } from "@/server/services/billing-jobs";
 import { runDiagnosticReminders } from "@/server/services/diagnostic-store";
+import { purgeScheduledDeletions } from "@/server/services/admin-users";
 
 function matches(given: Buffer, secret: string | undefined) {
   if (!secret) return false;
@@ -26,7 +27,9 @@ export async function POST(request: Request) {
   if (!authorized(request)) return new NextResponse(null, { status: 401 });
   const report = await runBillingJobs(db, paymentProvider());
   const diagnosticReminders = await runDiagnosticReminders(db);
-  return NextResponse.json({ ...report, diagnosticReminders });
+  // Account deletions asked from Paramètres, once their 30 days of grace are over (partie 10).
+  const deletedAccounts = await purgeScheduledDeletions(db);
+  return NextResponse.json({ ...report, diagnosticReminders, deletedAccounts });
 }
 
 export const GET = POST;

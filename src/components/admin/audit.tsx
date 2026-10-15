@@ -48,6 +48,12 @@ export function targetLabel(t: Translate, type: string) {
   return t.has(key as never) ? t(key as never) : type;
 }
 
+/** A reason recorded by the platform itself (« scheduled ») has its own sentence. */
+export function reasonText(t: Translate, reason: string) {
+  const key = `journal.reason.${reason}`;
+  return /^[a-z]+$/.test(reason) && t.has(key as never) ? t(key as never) : reason;
+}
+
 /** Rows of the journal (a list of cards: it reads the same at 1440 and 390 px). */
 export async function AuditRows({
   entries,
@@ -101,7 +107,7 @@ export async function AuditRows({
               </p>
               {entry.reason && (
                 <p className="rounded-[10px] bg-creme px-3 py-1.5 text-[12.5px] leading-[18px] break-words">
-                  {t("journal.reasonLabel", { reason: entry.reason })}
+                  {t("journal.reasonLabel", { reason: reasonText(t, entry.reason) })}
                 </p>
               )}
               <p className="flex flex-wrap gap-x-3 text-[11.5px] leading-4 text-ardoise">

@@ -1,11 +1,12 @@
 /**
  * Test helper run with tsx (Playwright cannot load the Prisma client): creates an obviously
  * fictional, verified account that an admin journey can act on without touching the shared demo
- * accounts. `tsx tests/e2e/make-account.ts <email> <name>` prints the new account's id.
+ * accounts. `tsx tests/e2e/make-account.ts <email> <name> [unverified]` prints the new account's
+ * id.
  */
 import { createSeedClient } from "../../prisma/seed/client";
 
-const [email, name] = process.argv.slice(2);
+const [email, name, state] = process.argv.slice(2);
 const db = createSeedClient();
 
 async function main() {
@@ -13,7 +14,7 @@ async function main() {
     data: {
       email: email!,
       name: name ?? "Compte Fictif",
-      emailVerified: true,
+      emailVerified: state !== "unverified",
       country: "CD",
       city: "Kinshasa",
       termsAcceptedAt: new Date(),

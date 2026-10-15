@@ -9022,6 +9022,200 @@ Conventions :
 | `admin.users.neverActive` | Aucune connexion |
 | `admin.users.list` | Liste des utilisateurs |
 
+### `/admin/utilisateurs` · fiche v2 (vérification, droits, export, suppression)
+
+| Clé | Texte |
+|---|---|
+| `admin.users.status.deleted` | Supprimé |
+| `admin.users.deletedName` | Compte supprimé |
+| `admin.users.deletedNote` | Ce compte a été supprimé et anonymisé. Ses candidatures et paiements sont conservés sans données personnelles. |
+| `admin.users.col.verification` | Vérification |
+| `admin.users.verification.email` | E-mail vérifié |
+| `admin.users.verification.emailMissing` | E-mail non vérifié |
+| `admin.users.verification.twoFactor` | Double authentification |
+| `admin.users.verification.twoFactorShort` | 2FA |
+| `admin.users.detail.check` | Vérification du compte |
+| `admin.users.detail.email` | E-mail |
+| `admin.users.detail.emailVerified` | Vérifié |
+| `admin.users.detail.emailUnverified` | Non vérifié |
+| `admin.users.detail.twoFactor` | Double authentification |
+| `admin.users.detail.twoFactorOn` | Activée |
+| `admin.users.detail.twoFactorOff` | Désactivée |
+| `admin.users.detail.methods` | Connexion par |
+| `admin.users.detail.noMethod` | Aucun moyen de connexion |
+| `admin.users.detail.lastSignIn` | Dernière connexion |
+| `admin.users.detail.certificateList` | Attestations obtenues |
+| `admin.users.detail.noCertificate` | Aucune attestation pour l'instant. |
+| `admin.users.detail.certificateLine` | {course} · {date} |
+| `admin.users.detail.revoked` | Retirée |
+| `admin.users.method.credential` | Mot de passe |
+| `admin.users.method.google` | Google |
+| `admin.users.method.linkedin` | LinkedIn |
+| `admin.users.method.apple` | Apple |
+| `admin.users.method.magicLink` | Lien par e-mail |
+| `admin.users.action.verifyEmail.text` | Marquer l'e-mail comme vérifié |
+| `admin.users.action.verifyEmail.confirm` | Marquer l'adresse {email} comme vérifiée ? Faites-le seulement si vous avez confirmé par un autre moyen qu'elle appartient bien à cette personne. |
+| `admin.users.action.verifyEmail.reason` | Comment l'adresse a été confirmée |
+| `admin.users.action.verifyEmail.submit` | Marquer comme vérifié |
+| `admin.users.action.resendHint` | Un nouveau code est envoyé à l'adresse du compte. |
+| `admin.users.action.grantPlan.confirm` | Le forfait choisi s'applique tout de suite et s'arrête seul à la date indiquée, sans paiement. Le forfait payé ou la licence de la personne, s'il en a un, n'est pas modifié. |
+| `admin.users.action.grantPlan.plan` | Forfait offert |
+| `admin.users.action.grantPlan.submit` | Offrir le forfait |
+| `admin.users.action.grantPlan.revoke` | Retirer |
+| `admin.users.action.grantPlan.revokeTitle` | Retirer le forfait offert |
+| `admin.users.action.grantPlan.revokeConfirm` | Retirer le forfait {plan} offert jusqu'au {date} ? La personne revient à son forfait habituel. |
+| `admin.users.action.credits.text` | Ajouter des crédits |
+| `admin.users.action.credits.confirm` | Les crédits s'ajoutent au quota de la période en cours, jusqu'à la date indiquée. Un nouvel ajout remplace le précédent et s'y additionne. |
+| `admin.users.action.credits.quota` | Quota |
+| `admin.users.action.credits.amount` | Nombre à ajouter |
+| `admin.users.action.credits.current` | Aujourd'hui : {used} utilisé(s) sur {limit}. |
+| `admin.users.action.credits.submit` | Ajouter |
+| `admin.users.action.credits.none` | Le forfait de cette personne n'a pas de quota à augmenter (tout est illimité ou non inclus). |
+| `admin.users.action.override.removeTitle` | Retirer l'ajout |
+| `admin.users.action.override.removeConfirm` | Retirer l'ajout sur « {right} » ? La valeur du forfait s'applique de nouveau. |
+| `admin.users.action.exportHint` | Fichier JSON avec tout ce que Jumanly conserve sur la personne (droit d'accès). Le téléchargement est journalisé. |
+| `admin.users.action.delete.intro` | Le compte est anonymisé : nom, e-mail, profil, CV, expériences et historique sont effacés ; les candidatures et paiements sont conservés sans données personnelles. La personne ne peut plus se connecter. |
+| `admin.users.action.delete.step1` | Étape 1 sur 2 · Motif |
+| `admin.users.action.delete.step2` | Étape 2 sur 2 · Confirmation |
+| `admin.users.action.delete.continue` | Continuer |
+| `admin.users.action.delete.reasonShown` | Motif : {reason} |
+| `admin.users.action.delete.typeEmail` | Saisissez l'e-mail du compte pour confirmer ({email}) |
+| `admin.users.action.delete.submit` | Supprimer définitivement |
+| `admin.users.action.until` | Jusqu'au |
+| `admin.users.action.reason` | Motif |
+| `admin.users.block.self` | Vous ne pouvez pas supprimer votre propre compte. |
+| `admin.users.block.lastAdmin` | C'est le dernier administrateur de la plateforme : nommez-en un autre avant de supprimer ce compte. |
+| `admin.users.block.owner` | Cette personne est propriétaire d'une organisation : la propriété doit être transférée avant la suppression. |
+| `admin.users.block.deleted` | Ce compte est déjà supprimé. |
+| `admin.users.done.codeSent` | Code de vérification envoyé. |
+| `admin.users.done.resetSent` | Lien de réinitialisation envoyé. |
+| `admin.users.done.verified` | Adresse e-mail marquée comme vérifiée. |
+| `admin.users.done.planGranted` | Forfait offert. |
+| `admin.users.done.planRevoked` | Forfait offert retiré. |
+| `admin.users.done.creditsAdded` | Crédits ajoutés. |
+| `admin.users.done.overrideRemoved` | Ajout retiré. |
+| `admin.users.done.deleted` | Compte supprimé et anonymisé. |
+| `admin.users.error.champs` | Vérifiez les champs du formulaire. |
+| `admin.users.error.motif` | Indiquez un motif (3 caractères au moins). |
+| `admin.users.error.until` | Choisissez une date de fin entre demain et dans deux ans. |
+| `admin.users.error.plan` | Ce forfait ne peut pas être offert. |
+| `admin.users.error.quota` | Ce quota n'existe pas dans le forfait de la personne. |
+| `admin.users.error.unlimited` | Ce quota est déjà illimité. |
+| `admin.users.error.grant` | Ce forfait offert n'existe plus. |
+| `admin.users.error.confirm` | L'e-mail saisi ne correspond pas au compte, ou l'envoi a échoué. |
+| `admin.users.error.self` | Vous ne pouvez pas faire cette action sur votre propre compte. |
+| `admin.users.error.lastAdmin` | C'est le dernier administrateur de la plateforme. |
+| `admin.users.error.owner` | Cette personne est propriétaire d'une organisation. |
+| `admin.users.error.deleted` | Ce compte est supprimé. |
+| `admin.users.rights.title` | Droits et quotas |
+| `admin.users.rights.intro` | Ce que le compte peut faire aujourd'hui, et d'où vient chaque droit. |
+| `admin.users.rights.col.right` | Droit |
+| `admin.users.rights.col.value` | Valeur |
+| `admin.users.rights.col.used` | Utilisé |
+| `admin.users.rights.col.source` | Origine |
+| `admin.users.rights.source.plan` | Forfait payé |
+| `admin.users.rights.source.license` | Licence partenaire |
+| `admin.users.rights.source.gift` | Forfait offert |
+| `admin.users.rights.source.free` | Forfait gratuit |
+| `admin.users.rights.source.override` | Ajout manuel |
+| `admin.users.rights.overrideUntil` | Ajout jusqu'au {date} |
+| `admin.users.rights.overrideNoEnd` | Ajout sans échéance |
+| `admin.users.rights.planLine` | Forfait {plan} |
+| `admin.users.rights.granted` | Forfaits offerts en cours |
+| `admin.users.rights.grantedLine` | {plan} jusqu'au {date} |
+| `admin.users.rights.yes` | Inclus |
+| `admin.users.rights.no` | Non inclus |
+| `admin.users.rights.unlimited` | Illimité |
+| `admin.users.rights.contract` | Selon contrat |
+| `admin.users.rights.usedOf` | {used} sur {limit} |
+| `admin.users.rights.usedOnly` | {used} |
+| `admin.users.export.selection` | Exporter en CSV |
+| `admin.users.export.hint` | Cochez des comptes pour n'exporter qu'eux ; sinon toute la liste filtrée est exportée. L'export est journalisé. |
+| `admin.users.export.select` | Sélectionner {name} |
+| `admin.users.csv.file` | jumanly-utilisateurs |
+| `admin.users.csv.id` | Identifiant |
+| `admin.users.csv.emailVerified` | E-mail vérifié |
+| `admin.users.csv.twoFactor` | Double authentification |
+| `admin.users.csv.yes` | oui |
+| `admin.users.csv.no` | non |
+
+### Jumanly Admin · noms des droits et des niveaux
+
+| Clé | Texte |
+|---|---|
+| `admin.entitlement.jobs_apply` | Postuler aux offres |
+| `admin.entitlement.jobs_track` | Suivre ses candidatures |
+| `admin.entitlement.connect_messaging_application` | Messagerie liée aux candidatures |
+| `admin.entitlement.career_diagnostic_level` | Diagnostic de carrière |
+| `admin.entitlement.career_cv_templates_access` | Modèles de CV |
+| `admin.entitlement.career_cv_tailor` | CV adapté à une offre |
+| `admin.entitlement.career_documents` | Documents de candidature |
+| `admin.entitlement.career_linkedin` | Optimisation LinkedIn |
+| `admin.entitlement.career_progress_plan` | Plan de progression |
+| `admin.entitlement.career_progress_plan_recommendations` | Recommandations du plan de progression |
+| `admin.entitlement.career_portfolio_level` | Portfolio |
+| `admin.entitlement.career_tools_extended` | Outils de carrière avancés |
+| `admin.entitlement.career_interview_text_monthly` | Simulations d'entretien écrites par mois |
+| `admin.entitlement.career_interview_voice_monthly` | Simulations d'entretien vocales par mois |
+| `admin.entitlement.learn_catalog_level` | Catalogue de formations |
+| `admin.entitlement.learn_exercises_job_specific` | Exercices par métier |
+| `admin.entitlement.learn_resources_specialized` | Ressources spécialisées |
+| `admin.entitlement.ai_credits_monthly` | Crédits d'assistance IA par mois |
+| `admin.entitlement.reports_progress_detailed` | Rapport de progression détaillé |
+| `admin.entitlement.support_priority` | Support prioritaire |
+| `admin.entitlement.org_seats` | Sièges |
+| `admin.entitlement.org_seats_min` | Sièges garantis |
+| `admin.entitlement.jobs_active_max` | Offres actives |
+| `admin.entitlement.hire_pipeline_level` | Suivi des candidatures |
+| `admin.entitlement.hire_talent_search` | Recherche dans le vivier |
+| `admin.entitlement.hire_talent_search_monthly` | Recherches dans le vivier par mois |
+| `admin.entitlement.hire_contact_requests_monthly` | Demandes de mise en relation par mois |
+| `admin.entitlement.hire_matching_level` | Matching |
+| `admin.entitlement.hire_cv_analysis` | Analyse des CV |
+| `admin.entitlement.hire_shortlist` | Présélection |
+| `admin.entitlement.hire_collaboration` | Recrutement en équipe |
+| `admin.entitlement.hire_scorecards` | Grilles d'évaluation |
+| `admin.entitlement.hire_decision_history` | Historique des décisions |
+| `admin.entitlement.connect_appointments` | Prise de rendez-vous |
+| `admin.entitlement.org_verified_profile` | Profil d'entreprise vérifié |
+| `admin.entitlement.org_teams` | Équipes |
+| `admin.entitlement.org_entities` | Entités et filiales |
+| `admin.entitlement.org_permissions_level` | Permissions |
+| `admin.entitlement.org_talent_pools_shared` | Viviers partagés |
+| `admin.entitlement.reports_level` | Rapports |
+| `admin.entitlement.reports_export` | Export des rapports |
+| `admin.entitlement.hire_workflows_custom` | Processus personnalisés |
+| `admin.entitlement.integrations` | Intégrations |
+| `admin.entitlementLevel.none` | Non inclus |
+| `admin.entitlementLevel.simple` | Simple |
+| `admin.entitlementLevel.personalized` | Personnalisé |
+| `admin.entitlementLevel.free` | Gratuit |
+| `admin.entitlementLevel.starter` | Starter |
+| `admin.entitlementLevel.pro` | Pro |
+| `admin.entitlementLevel.standard` | Standard |
+| `admin.entitlementLevel.enriched` | Enrichi |
+| `admin.entitlementLevel.fundamentals` | Fondamentaux |
+| `admin.entitlementLevel.advanced` | Avancé |
+| `admin.entitlementLevel.multi` | Plusieurs étapes |
+| `admin.entitlementLevel.deep` | Approfondi |
+| `admin.entitlementLevel.suggestions` | Suggestions |
+| `admin.entitlementLevel.explainable` | Explicable |
+| `admin.entitlementLevel.basic` | Basique |
+| `admin.entitlementLevel.stats` | Statistiques |
+| `admin.entitlementLevel.consolidated` | Consolidé |
+| `admin.entitlementLevel.custom` | Sur mesure |
+| `admin.journal.action.user_email_verify` | a marqué l'e-mail comme vérifié |
+| `admin.journal.action.user_email_resend` | a renvoyé le code de vérification |
+| `admin.journal.action.user_password_reset` | a envoyé un lien de réinitialisation du mot de passe |
+| `admin.journal.action.user_plan_grant` | a offert un forfait |
+| `admin.journal.action.user_plan_revoke` | a retiré un forfait offert |
+| `admin.journal.action.user_quota_add` | a ajouté des crédits |
+| `admin.journal.action.user_quota_remove` | a retiré un ajout de crédits |
+| `admin.journal.action.user_export` | a exporté les données du compte |
+| `admin.journal.action.user_export_list` | a exporté la liste des utilisateurs |
+| `admin.journal.action.user_delete` | a supprimé le compte |
+| `admin.journal.reason.scheduled` | Suppression demandée par la personne (délai de 30 jours écoulé) |
+
 ### `/admin/organisations` · Organisations et vérification
 
 | Clé | Texte |
