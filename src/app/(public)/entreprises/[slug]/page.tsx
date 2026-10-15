@@ -25,7 +25,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const t = await getTranslations("companyPage");
   const company = await getCompany(slug);
-  if (!company) return { title: { absolute: t("notFound.title") }, robots: { index: false } };
+  if (!company) return { title: t("notFound.title"), robots: { index: false } };
   return pageMetadata({
     path: `/entreprises/${company.slug}`,
     title: t("seo.title", { company: company.name }),

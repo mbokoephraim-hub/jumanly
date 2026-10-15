@@ -39,7 +39,7 @@ import { acceptedContacts } from "@/server/services/talent-search";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.dashboard");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 /** Tints of the day tiles of the agenda, in turn (mockup 04-01). */

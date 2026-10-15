@@ -40,7 +40,7 @@ const allRoles = ["org_owner", "org_admin", "recruiter", "hiring_manager", "view
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("org");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");

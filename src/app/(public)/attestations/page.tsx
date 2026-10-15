@@ -11,7 +11,7 @@ export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("certificate.verify");
   return pageMetadata({
     path: "/attestations",
-    title: t("title"),
+    title: t("seo.title"),
     description: t("seo.description"),
   });
 }

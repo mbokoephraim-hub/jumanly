@@ -32,7 +32,7 @@ import { TabRail } from "@/components/motion/tab-rail";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("learn");
-  return { title: { absolute: t("seo") }, robots: { index: false } };
+  return { title: t("seo"), robots: { index: false } };
 }
 
 const lists = {

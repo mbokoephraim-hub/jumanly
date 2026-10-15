@@ -28,7 +28,7 @@ import {
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.pools");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
@@ -68,7 +68,8 @@ export default async function CvTemplatesPage({
         orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
         include: { profile: { select: { user: { select: { image: true } } } } },
       });
-  if (!cv) notFound();
+  // No CV yet: the CV page is where one is created.
+  if (!cv) return cvId ? notFound() : redirect("/app/career/cv");
   const t = await getTranslations("career.cv");
   const d = dynamic(t);
   const tHome = await getTranslations("career.home");

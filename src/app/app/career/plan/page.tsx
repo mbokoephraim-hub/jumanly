@@ -35,7 +35,7 @@ import { REPORT_KEY } from "@/server/services/progress-report";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.plan");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 /**

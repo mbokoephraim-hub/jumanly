@@ -24,7 +24,7 @@ import { impactReport, listBatches, monthlyActive, type Cell } from "@/server/se
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("partner.reports");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 const filterChip =

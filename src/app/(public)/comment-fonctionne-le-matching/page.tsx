@@ -88,8 +88,8 @@ export default async function MatchingPage() {
         style={{ backgroundImage: iaFlow }}
       >
         <Shape
-          name="forme-orbites-blanc"
-          className="jm-drift -top-[200px] -right-[200px] w-[720px] opacity-16"
+          name="forme-orbites-lime"
+          className="jm-drift -top-[200px] -right-[200px] w-[720px] opacity-16 brightness-0 invert"
         />
         <Glow className="-bottom-48 -left-40 size-[520px] bg-lime/20" delay={-6} />
         <div aria-hidden className="jm-spotlight pointer-events-none absolute inset-0" />
@@ -407,8 +407,8 @@ export default async function MatchingPage() {
             style={{ backgroundImage: iaFlow }}
           >
             <Shape
-              name="forme-orbites-blanc"
-              className="jm-drift -top-[140px] -right-[120px] w-[420px] opacity-20"
+              name="forme-orbites-lime"
+              className="jm-drift -top-[140px] -right-[120px] w-[420px] opacity-20 brightness-0 invert"
             />
             <AiOrb size={56} className="jm-pulse relative" />
             <h2 className="relative flex-1 text-[26px] leading-8 font-semibold tracking-[-0.025em] lg:text-[32px] lg:leading-[38px]">

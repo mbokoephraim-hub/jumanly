@@ -31,7 +31,7 @@ import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.linkedin");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 const checklist = ["photo", "url", "open", "certificates"] as const;

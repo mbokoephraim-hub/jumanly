@@ -23,7 +23,7 @@ import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.reports");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 const card = "flex min-w-0 flex-col gap-4 rounded-[24px] bg-blanc p-5 lg:p-6";

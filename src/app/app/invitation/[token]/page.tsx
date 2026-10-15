@@ -9,7 +9,7 @@ import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("org.invite");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 /** Invitation to join an organization: the signed-in person accepts it with the invited address. */

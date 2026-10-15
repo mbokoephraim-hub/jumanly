@@ -47,7 +47,7 @@ import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/p
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.pipeline");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 const one = (value: string | string[] | undefined) =>

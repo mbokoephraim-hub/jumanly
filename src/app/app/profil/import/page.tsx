@@ -16,7 +16,7 @@ import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talent.profile");
-  return { title: { absolute: t("importCv.text") }, robots: { index: false } };
+  return { title: t("importCv.text"), robots: { index: false } };
 }
 
 /**
