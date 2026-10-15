@@ -5293,6 +5293,14 @@ Conventions :
 | `hire.reports.pdf.title` | Rapport de recrutement · {org} |
 | `hire.reports.pdf.period` | Du {from, date, long} au {to, date, long} |
 | `hire.reports.pdf.generated` | Édité le {date, date, long} sur Jumanly |
+| `hire.reports.stats.sourcesTotal` | {count, plural, one {candidature} other {candidatures}} |
+| `hire.reports.advanced.candidateExperienceHint` | Part des candidats non retenus qui ont reçu un message de refus. |
+| `hire.reports.scorecards.average` | Moyenne sur 5 |
+| `hire.reports.scorecards.recommendations` | Recommandations |
+| `hire.reports.consolidated.share` | Part des candidatures |
+| `hire.reports.col.job` | Offre |
+| `hire.reports.col.recruiter` | Recruteur |
+| `hire.reports.days` | {days} j |
 
 ---
 

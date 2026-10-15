@@ -6372,7 +6372,8 @@
         },
         "responseTime": "Délai moyen de première réponse",
         "sources": "Origine des candidatures",
-        "byJob": "Par offre"
+        "byJob": "Par offre",
+        "sourcesTotal": "{count, plural, one {candidature} other {candidatures}}"
       },
       "advanced": {
         "title": "Tableaux de bord avancés",
@@ -6380,13 +6381,15 @@
         "byRecruiter": "Activité par recruteur",
         "scorecards": "Synthèse des évaluations",
         "decisions": "Motifs de décision",
-        "candidateExperience": "Candidats informés de la décision"
+        "candidateExperience": "Candidats informés de la décision",
+        "candidateExperienceHint": "Part des candidats non retenus qui ont reçu un message de refus."
       },
       "consolidated": {
         "title": "Rapports consolidés",
         "locked": "Rapports par équipe et département · Disponible avec {plan}",
         "byTeam": "Par équipe",
-        "byDepartment": "Par département"
+        "byDepartment": "Par département",
+        "share": "Part des candidatures"
       },
       "custom": {
         "title": "Tableaux de bord personnalisés",
@@ -6415,7 +6418,9 @@
         "decisions": "Décisions",
         "notes": "Notes",
         "section": "Section",
-        "rate": "Taux"
+        "rate": "Taux",
+        "job": "Offre",
+        "recruiter": "Recruteur"
       },
       "rate": "{rate} %",
       "none": "Non disponible",
@@ -6425,13 +6430,16 @@
         "talent_search": "Recherche dans le vivier"
       },
       "scorecards": {
-        "summary": "{count, plural, =0 {Aucune évaluation} one {# évaluation} other {# évaluations}} · moyenne {average}/5"
+        "summary": "{count, plural, =0 {Aucune évaluation} one {# évaluation} other {# évaluations}} · moyenne {average}/5",
+        "average": "Moyenne sur 5",
+        "recommendations": "Recommandations"
       },
       "pdf": {
         "title": "Rapport de recrutement · {org}",
         "period": "Du {from, date, long} au {to, date, long}",
         "generated": "Édité le {date, date, long} sur Jumanly"
-      }
+      },
+      "days": "{days} j"
     }
   },
   "org": {
