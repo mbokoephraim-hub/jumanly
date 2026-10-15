@@ -15,12 +15,13 @@ import { formatDate } from "@/lib/dates";
 import { aiReadiness } from "@/server/ai";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { level } from "@/server/entitlements";
+import { can, level, limit } from "@/server/entitlements";
 import {
   parseDiagnosticResult,
   parseDiagnosticV2,
   parsePersonalized,
   stepLinks,
+  upgradeOptions,
 } from "@/server/services/diagnostic";
 import { DIAGNOSTIC_GATE } from "@/server/services/diagnostic-ai";
 import {
@@ -35,7 +36,12 @@ import {
   diagnosticPrefill,
   getDraft,
 } from "@/server/services/diagnostic-store";
-import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
+import {
+  cheapestPlanWhere,
+  levelOf,
+  listPublicPlans,
+  talentPlanFor,
+} from "@/server/services/plans";
 import { DiagnosticResultV2 } from "./result";
 import { DiagnosticWelcome } from "./welcome";
 
@@ -116,6 +122,7 @@ export default async function DiagnosticPage({
             }
             reminder={current.remindAt}
             reminded={current.remindedAt}
+            upgrades={v2 ? await upgradesFor(user.id) : []}
             aside={aside}
           />
         ) : legacy ? (
@@ -256,6 +263,30 @@ export default async function DiagnosticPage({
       </NextIntlClientProvider>
     </>
   );
+}
+
+/**
+ * « Pour aller plus loin »: the paid options the talent does not have yet, each with the cheapest
+ * plan that opens it (from the database, never a plan name in code, CLAUDE.md § 2).
+ */
+async function upgradesFor(userId: string) {
+  const subject = { type: "user" as const, id: userId };
+  const plans = await listPublicPlans(db);
+  const missing = await Promise.all(
+    upgradeOptions.map(async (option) => {
+      const has =
+        "levels" in option
+          ? (option.levels as readonly string[]).includes(await level(db, subject, option.key))
+          : option.key.endsWith(".monthly")
+            ? (await limit(db, subject, option.key)) !== 0
+            : await can(db, subject, option.key);
+      const plan = has
+        ? ""
+        : talentPlanFor(plans, option.key, "levels" in option ? [...option.levels] : undefined);
+      return plan ? { code: option.code, icon: option.icon, plan } : null;
+    }),
+  );
+  return missing.filter((item) => item !== null);
 }
 
 /** Result of a diagnostic of the first version (three readiness levels), kept for the history. */

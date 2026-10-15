@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test, type Locator } from "@playwright/test";
 import { lastCode } from "./outbox";
 import { demo, logIn, testEmail } from "./session";
 
@@ -113,6 +113,31 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await expect(page.getByRole("main")).toContainText("Retirée");
 });
 
+/** Answers every screen of the diagnostic (second answer of each choice), then starts the scan. Returns the number of follow-up questions met. */
+async function answerDiagnostic(flow: Locator) {
+  let followUps = 0;
+  for (let step = 0; step < 70; step++) {
+    // While Jumanly Intelligence writes its follow-up questions, the button waits.
+    await expect(flow.locator("button[aria-busy]")).toHaveCount(0, { timeout: 30_000 });
+    const screen = flow.locator("[data-screen]:not([hidden])");
+    const groups = screen.locator("fieldset");
+    for (let index = 0; index < (await groups.count()); index++) {
+      await groups.nth(index).locator("label").nth(1).click();
+    }
+    if (await screen.getByText(/Question de relance \d sur 2/).isVisible()) {
+      followUps++;
+      await screen.getByRole("textbox").fill("Une réponse de démonstration, fictive.");
+    }
+    const finish = flow.getByRole("button", { name: "Terminer et lancer l'analyse" });
+    if (await finish.isVisible()) {
+      await finish.click();
+      break;
+    }
+    await flow.getByRole("button", { name: "Suivant", exact: true }).click();
+  }
+  return followUps;
+}
+
 test("le diagnostic en six dimensions : une question par écran, le scan, puis le bilan", async ({
   page,
 }) => {
@@ -135,19 +160,7 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
     "Choisissez au moins une réponse pour continuer.",
   );
 
-  for (let step = 0; step < 60; step++) {
-    const screen = flow.locator("[data-screen]:not([hidden])");
-    const groups = screen.locator("fieldset");
-    for (let index = 0; index < (await groups.count()); index++) {
-      await groups.nth(index).locator("label").nth(1).click();
-    }
-    const finish = flow.getByRole("button", { name: "Terminer et lancer l'analyse" });
-    if (await finish.isVisible()) {
-      await finish.click();
-      break;
-    }
-    await flow.getByRole("button", { name: "Suivant", exact: true }).click();
-  }
+  expect(await answerDiagnostic(flow)).toBe(0);
 
   // The scan checks real steps, then the card turns over.
   await expect(page.getByRole("heading", { name: "Analyse de votre diagnostic" })).toBeVisible();
@@ -164,9 +177,40 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
     main.getByRole("heading", { name: "Le détail, dimension par dimension" }),
   ).toBeVisible();
   await expect(main).toContainText("Vos priorités");
+  // The free mini plan, and what a paid plan would add.
+  const miniPlan = main.getByRole("region", { name: "Votre mini plan gratuit" });
+  await expect(miniPlan.getByRole("listitem")).toHaveCount(3);
+  const upgrades = main.getByRole("region", { name: "Pour aller plus loin" });
+  await expect(upgrades).toContainText("Un plan de progression complet");
+  await expect(upgrades).toContainText("Forfait requis");
 
   // « Refaire dans 30 jours » plans a reminder.
   await main.getByRole("button", { name: "Refaire dans 30 jours" }).click();
   await expect(page).toHaveURL(/rappel=1/);
   await expect(main).toContainText("Rappel prévu le");
+});
+
+test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini plan gratuit", async ({
+  page,
+}) => {
+  test.setTimeout(180_000);
+  await logIn(page, demo.talentPro);
+  await page.goto("/app/career/diagnostic");
+  await expect(
+    page.getByRole("heading", { name: "Faites le point, comme un vrai bilan" }),
+  ).toBeVisible();
+  const restart = page.getByRole("button", { name: "Recommencer à zéro" });
+  if (await restart.isVisible()) await restart.click();
+  else await page.getByRole("button", { name: "Lancer mon diagnostic" }).click();
+  await expect(page).toHaveURL(/etape=1/);
+  const flow = page.locator("#diagnostic-flow");
+  expect(await answerDiagnostic(flow)).toBe(2);
+
+  await page.getByRole("link", { name: "Voir mon diagnostic" }).click({ timeout: 30_000 });
+  await expect(page).toHaveURL(/bilan=/);
+  const main = page.getByRole("main");
+  const miniPlan = main.getByRole("region", { name: "Votre mini plan gratuit" });
+  await expect(miniPlan.getByRole("listitem")).toHaveCount(3);
+  // Every paid option is already in this plan: nothing more to offer.
+  await expect(main.getByRole("region", { name: "Pour aller plus loin" })).toHaveCount(0);
 });

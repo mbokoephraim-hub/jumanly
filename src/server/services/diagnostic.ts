@@ -163,6 +163,37 @@ export const stepLinks: Record<Step, string> = {
   role: "/app/career/diagnostic",
 };
 
+// ─── Free mini plan ──────────────────────────────────────────────────────────
+
+/**
+ * The free mini plan of every diagnostic: one action per priority that needs no subscription
+ * (profile, CV, free courses, applying, network), with where to do it. Texts
+ * `career.diagnostic.miniPlan.step.<priority>.*`; the personalized level rewrites the sentences.
+ */
+export const miniPlanLinks: Record<Priority, string | null> = {
+  role: "/app/jobs",
+  skills: "/app/learn",
+  experience: "/app/profil",
+  cv: "/app/career/cv",
+  interview: null,
+  search: "/app/jobs",
+  network: "/app/profil",
+};
+
+/** What a talent without the entitlement could get by subscribing, in the order shown. */
+export const upgradeOptions = [
+  { code: "progressPlan", key: "career.progress_plan", icon: "objectif" },
+  {
+    code: "personalized",
+    key: "career.diagnostic.level",
+    levels: ["personalized"],
+    icon: "intelligence",
+  },
+  { code: "interview", key: "career.interview.text.monthly", icon: "message" },
+  { code: "documents", key: "career.documents", icon: "doc" },
+  { code: "recommendations", key: "career.progress_plan.recommendations", icon: "competence" },
+] as const;
+
 // ─── Personalized diagnostic (E6, `career.diagnostic.level` = personalized) ──
 
 export const priorities = [
@@ -183,13 +214,20 @@ export const personalizedOutputSchema = z.object({
   priorities: z.array(z.enum(priorities)),
   roles: z.array(z.string()),
   steps: z.array(z.enum(steps)),
+  /** One free action per priority, written for this talent (the mini plan). */
+  miniPlan: z
+    .array(z.object({ priority: z.enum(priorities), text: z.string() }))
+    .optional()
+    .default([]),
 });
-export type PersonalizedOutput = z.infer<typeof personalizedOutputSchema>;
+export type PersonalizedOutput = z.input<typeof personalizedOutputSchema>;
 
 /** The personalized result keeps the rules' scores, plus the sentences of the model. */
 export type PersonalizedResult<T extends DiagnosticResult = DiagnosticResult> = T & {
   summary: string;
   strengthTexts: string[];
+  /** Sentences of the model for the free mini plan, by priority. */
+  miniPlan?: { priority: Priority; text: string }[];
 };
 
 /** The model explains and proposes; the scores and the stage stay those of the rules. */
@@ -199,11 +237,12 @@ export function mergePersonalized<T extends DiagnosticResult>(
 ): PersonalizedResult<T> {
   const unique = <V>(values: V[]) =>
     values.filter((value, index) => values.indexOf(value) === index);
-  const chosen = unique(output.priorities).slice(0, 3);
+  const picked = unique(output.priorities).slice(0, 3);
+  const chosen = picked.length > 0 ? picked : base.priorities;
   const steps = unique(output.steps).slice(0, 3);
   return {
     ...base,
-    priorities: chosen.length > 0 ? chosen : base.priorities,
+    priorities: chosen,
     steps: steps.length > 0 ? steps : base.steps,
     roles: unique(
       [...base.roles, ...output.roles].map((role) => role.trim()).filter(Boolean),
@@ -213,13 +252,25 @@ export function mergePersonalized<T extends DiagnosticResult>(
       .map((text) => text.trim())
       .filter(Boolean)
       .slice(0, 4),
+    miniPlan: (output.miniPlan ?? [])
+      .map((item) => ({ priority: item.priority, text: item.text.trim().slice(0, 300) }))
+      .filter(
+        (item, index, all) =>
+          item.text &&
+          chosen.includes(item.priority) &&
+          all.findIndex((other) => other.priority === item.priority) === index,
+      ),
   };
 }
 
 export function parsePersonalized(value: Prisma.JsonValue): PersonalizedResult | null {
   const base = parseDiagnosticResult(value);
   const extra = z
-    .object({ summary: z.string(), strengthTexts: z.array(z.string()) })
+    .object({
+      summary: z.string(),
+      strengthTexts: z.array(z.string()),
+      miniPlan: z.array(z.object({ priority: z.enum(priorities), text: z.string() })).optional(),
+    })
     .safeParse(value);
   return base && extra.success ? { ...base, ...extra.data } : null;
 }

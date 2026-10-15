@@ -23,6 +23,8 @@ export const aiFeatures = {
   cv_parse: { credits: 1, tier: "fast" },
   cv_coach: { credits: 2, tier: "default" },
   diagnostic: { credits: 2, tier: "default" },
+  // The two follow-up questions of the personalized diagnostic (docs/experience-animee § 5.3).
+  diagnostic_followup: { credits: 1, tier: "fast" },
   // E10. Interview simulations are paid by their own quota (`career.interview.*.monthly`, one
   // per session), so their model calls cost no credit.
   interview_questions: { credits: 0, tier: "fast" },

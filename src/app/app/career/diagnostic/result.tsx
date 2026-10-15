@@ -2,16 +2,29 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
-import { AiBrand, AiPanel, card, cardTitle, IconTile, pillClass } from "@/components/career/kit";
+import {
+  AiBrand,
+  AiPanel,
+  card,
+  cardTitle,
+  IconTile,
+  pillClass,
+  Why,
+} from "@/components/career/kit";
 import { CountUp } from "@/components/motion/count-up";
 import { Gauge } from "@/components/motion/gauge";
 import { Radar } from "@/components/motion/radar";
 import { StageTrack } from "@/components/motion/stage-track";
 import { Alert } from "@/components/ui";
+import { PlanLock } from "@/components/ui/plan-lock";
 import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { remindDiagnosticAction } from "@/server/actions/diagnostic";
-import type { DiagnosticV2, PersonalizedResult } from "@/server/services/diagnostic";
+import {
+  miniPlanLinks,
+  type DiagnosticV2,
+  type PersonalizedResult,
+} from "@/server/services/diagnostic";
 import {
   bandFor,
   dimensionLinks,
@@ -43,6 +56,7 @@ export async function DiagnosticResultV2({
   previous,
   reminder,
   reminded,
+  upgrades,
   aside,
 }: {
   id: string;
@@ -51,6 +65,8 @@ export async function DiagnosticResultV2({
   previous: { date: Date; result: DiagnosticV2 | null } | null;
   reminder: Date | null;
   reminded: Date | null;
+  /** What the talent could add with a paid plan, with the cheapest plan that opens it. */
+  upgrades: { code: string; icon: IconName; plan: string }[];
   /** History and privacy note, at the end of the side column. */
   aside?: ReactNode;
 }) {
@@ -144,6 +160,78 @@ export async function DiagnosticResultV2({
             ].join(" · ")}
           </p>
         </section>
+
+        <AiPanel labelledBy="mini-plan">
+          <AiBrand />
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <h2 id="mini-plan" className="text-[20px] leading-tight font-semibold">
+              {t("miniPlan.title")}
+            </h2>
+            <span className="rounded-pill bg-lime px-3 py-1 text-xs font-semibold text-sapin">
+              {t("miniPlan.free")}
+            </span>
+          </div>
+          <p className="text-sm leading-6 text-blanc/90">{t("miniPlan.intro")}</p>
+          <ol className="grid grid-cols-1 gap-3 md:grid-cols-3">
+            {result.priorities.map((key, index) => {
+              const href = miniPlanLinks[key];
+              const written = personal?.miniPlan?.find((item) => item.priority === key)?.text;
+              return (
+                <li
+                  key={key}
+                  data-reveal
+                  className="flex flex-col gap-2 rounded-[18px] bg-sapin/60 p-4 ring-1 ring-blanc/10"
+                >
+                  <span className="flex size-7 items-center justify-center rounded-full bg-lime text-sm font-semibold text-sapin">
+                    {index + 1}
+                  </span>
+                  <p className="text-[15px] leading-5 font-semibold">
+                    {d(`miniPlan.step.${key}.title`)}
+                  </p>
+                  <p className="text-[13px] leading-5 text-blanc/90">
+                    {written ?? d(`miniPlan.step.${key}.text`)}
+                  </p>
+                  {href && (
+                    <Link
+                      href={href}
+                      className="mt-auto flex items-center gap-1 pt-1 text-[13px] font-semibold text-neon hover:underline"
+                    >
+                      {t("rule.step.cta")}
+                      <Icon name="chev-r" className="size-3.5" />
+                    </Link>
+                  )}
+                </li>
+              );
+            })}
+          </ol>
+          <Why dark>{t("miniPlan.why")}</Why>
+        </AiPanel>
+
+        {upgrades.length > 0 && (
+          <section aria-labelledby="upgrades" className={cx(card, "flex flex-col gap-4")}>
+            <div className="flex flex-col gap-1">
+              <h2 id="upgrades" className={cardTitle}>
+                {t("upgrade.title")}
+              </h2>
+              <p className="text-sm text-ardoise">{t("upgrade.intro")}</p>
+            </div>
+            <ul className="flex flex-col divide-y divide-brume">
+              {upgrades.map((item) => (
+                <li key={item.code} className="flex flex-wrap items-center gap-3 py-3">
+                  <IconTile icon={item.icon} tone="bg-gris-clair" size="sm" />
+                  <span className="min-w-0 flex-1 basis-48 text-[14px] leading-5 font-medium">
+                    {d(`upgrade.item.${item.code}`)}
+                  </span>
+                  <PlanLock plan={item.plan} compact />
+                </li>
+              ))}
+            </ul>
+            <Link href="/tarifs" className={pillClass("dark", "md", "self-start")}>
+              {tCommon("seePlans")}
+              <Icon name="chev-r" className="size-4" />
+            </Link>
+          </section>
+        )}
 
         <section aria-labelledby="radar-title" className={cx(card, "flex flex-col gap-4")}>
           <h2 id="radar-title" className={cardTitle}>

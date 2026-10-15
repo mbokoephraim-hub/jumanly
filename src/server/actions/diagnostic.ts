@@ -7,7 +7,11 @@ import { db } from "@/server/db";
 import { level } from "@/server/entitlements";
 import { dynamic } from "@/i18n/dynamic";
 import { ruleDiagnostic } from "@/server/services/diagnostic";
-import { DIAGNOSTIC_GATE, personalizedDiagnostic } from "@/server/services/diagnostic-ai";
+import {
+  DIAGNOSTIC_GATE,
+  followUpQuestions,
+  personalizedDiagnostic,
+} from "@/server/services/diagnostic-ai";
 import { answersSchema, SKILLS_ASSESSED, type Answers } from "@/server/services/diagnostic-scoring";
 import {
   demandedSkills,
@@ -113,6 +117,30 @@ export async function runDiagnosticAction(input: {
 export async function saveDiagnosticDraftAction(answers: unknown, step: number) {
   const user = await requireUser(PATH);
   return saveDraft(db, user.id, answers, Number.isFinite(step) ? step : 0);
+}
+
+/**
+ * The two follow-up questions of the personalized level (docs/experience-animee § 5.3): written
+ * by Jumanly Intelligence from the answers so far, or by the rules when the model is not there.
+ * None without the `career.diagnostic.level` entitlement.
+ */
+export async function diagnosticFollowUpsAction(answers: unknown): Promise<string[]> {
+  const user = await requireUser(PATH);
+  const parsed = answersSchema.partial().safeParse(answers);
+  if (!parsed.success) return [];
+  const allowed = DIAGNOSTIC_GATE.levels.includes(
+    await level(db, { type: "user", id: user.id }, DIAGNOSTIC_GATE.key),
+  );
+  if (!allowed) return [];
+  const t = dynamic(await getTranslations("career.diagnostic"));
+  const { questions } = await followUpQuestions(
+    db,
+    user.id,
+    parsed.data,
+    (item) => t(`followUp.rule.${item.code}`, { skill: item.skill ?? "" }),
+    (question, code) => (t.has(`q.${question}.${code}`) ? t(`q.${question}.${code}`) : code),
+  );
+  return questions;
 }
 
 /** The skills to assess for a target job, from the real published offers. */
