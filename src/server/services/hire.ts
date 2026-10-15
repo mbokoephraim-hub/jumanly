@@ -739,3 +739,106 @@ async function audit(
     },
   });
 }
+
+/**
+ * What the pipeline cards and figures show beyond the applications (mockup 04-04): the skills a
+ * candidate shares with the job, a Jumanly attestation, the team notes and ratings, the next
+ * interview, and the job's figures. Never a filter: every application stays in its column.
+ */
+export async function pipelineDetails(
+  db: PrismaClient,
+  ctx: HireContext,
+  job: { id: string },
+  applications: { id: string; profileId: string; createdAt: Date; matchScore: number | null }[],
+  now = new Date(),
+) {
+  assert(hirePermissions(ctx.role).readApplications);
+  const ids = applications.map((application) => application.id);
+  const weekAgo = new Date(now.getTime() - 7 * 86_400_000);
+  const weekAhead = new Date(now.getTime() + 7 * 86_400_000);
+  const [jobSkills, skills, notes, scorecards, interviews, answered] = await Promise.all([
+    db.jobSkill.findMany({ where: { jobId: job.id }, select: { skillId: true } }),
+    db.profileSkill.findMany({
+      where: { profileId: { in: applications.map((application) => application.profileId) } },
+      orderBy: { level: "desc" },
+      select: { profileId: true, skillId: true, verified: true, skill: { select: { name: true } } },
+    }),
+    db.applicationEvent.groupBy({
+      by: ["applicationId"],
+      where: { applicationId: { in: ids }, type: "note" },
+      _count: { _all: true },
+    }),
+    db.scorecard.findMany({
+      where: { applicationId: { in: ids } },
+      select: { applicationId: true, ratings: true },
+    }),
+    db.interview.findMany({
+      where: {
+        applicationId: { in: ids },
+        organizationId: ctx.organizationId,
+        status: "confirmed",
+        startsAt: { gte: now },
+      },
+      orderBy: { startsAt: "asc" },
+      select: { applicationId: true, startsAt: true },
+    }),
+    db.applicationEvent.findMany({
+      where: { applicationId: { in: ids }, type: { in: ["stage_changed", "decision"] } },
+      orderBy: { createdAt: "asc" },
+      select: { applicationId: true, createdAt: true },
+    }),
+  ]);
+  const wanted = new Set(jobSkills.map((item) => item.skillId));
+  const cards = new Map<
+    string,
+    {
+      skills: string[];
+      certified: boolean;
+      notes: number;
+      rating: number | null;
+      interviewAt: Date | null;
+    }
+  >();
+  for (const application of applications) {
+    const own = skills.filter((item) => item.profileId === application.profileId);
+    const shared = own.filter((item) => wanted.has(item.skillId));
+    const ratings = scorecards
+      .filter((card) => card.applicationId === application.id)
+      .flatMap((card) => (Array.isArray(card.ratings) ? card.ratings : []))
+      .map((item) =>
+        item && typeof item === "object" && !Array.isArray(item) ? Number(item.rating) : NaN,
+      )
+      .filter((value) => value >= 1 && value <= 5);
+    cards.set(application.id, {
+      skills: (shared.length ? shared : own).slice(0, 2).map((item) => item.skill.name),
+      certified: shared.some((item) => item.verified),
+      notes: notes.find((row) => row.applicationId === application.id)?._count._all ?? 0,
+      rating: ratings.length
+        ? Math.round(ratings.reduce((sum, value) => sum + value, 0) / ratings.length)
+        : null,
+      interviewAt: interviews.find((row) => row.applicationId === application.id)?.startsAt ?? null,
+    });
+  }
+  const delays = applications.flatMap((application) => {
+    const first = answered.find((row) => row.applicationId === application.id);
+    return first
+      ? [(first.createdAt.getTime() - application.createdAt.getTime()) / 86_400_000]
+      : [];
+  });
+  const values = applications
+    .map((application) => application.matchScore)
+    .filter((value): value is number => value !== null)
+    .sort((a, b) => b - a);
+  const mean = (list: number[]) =>
+    list.length ? Math.round(list.reduce((sum, value) => sum + value, 0) / list.length) : null;
+  return {
+    cards,
+    thisWeek: applications.filter((application) => application.createdAt >= weekAgo).length,
+    responseDays: delays.length
+      ? Math.round((delays.reduce((a, b) => a + b, 0) / delays.length) * 10) / 10
+      : null,
+    interviews: interviews.length,
+    interviewsThisWeek: interviews.filter((row) => row.startsAt! < weekAhead).length,
+    compatibility: { average: mean(values), top: mean(values.slice(0, 10)) },
+  };
+}

@@ -1062,3 +1062,34 @@
     opacity: 0;
   }
 }
+
+/*
+ * Pipeline (mockup 04-04): the card held under the pointer is lifted (shadow, slight tilt) and
+ * follows it without delay; a card that lands in its new column settles in. Without motion, the
+ * held card is only lifted.
+ */
+.jm-drag-ghost {
+  box-shadow: 0 18px 40px rgb(15 63 55 / 0.22);
+  outline: 2px solid var(--color-sapin);
+  cursor: grabbing;
+}
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-reduce-motion]) .jm-drag-ghost {
+    transform: rotate(2.5deg) scale(1.03);
+    animation: jm-lift 0.16s var(--jm-elan) both;
+  }
+  html:not([data-reduce-motion]) .jm-card-in {
+    animation: jm-card-in 0.28s var(--jm-arrivee) both;
+  }
+}
+@keyframes jm-lift {
+  from {
+    transform: rotate(0) scale(1);
+  }
+}
+@keyframes jm-card-in {
+  from {
+    opacity: 0.4;
+    transform: translateY(-6px) scale(0.98);
+  }
+}

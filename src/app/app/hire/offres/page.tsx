@@ -5,7 +5,14 @@ import { Icon } from "@/components/brand";
 import { AppPageHeader } from "@/components/app/page-header";
 import { CopyButton } from "@/components/career/copy-button";
 import { pillClass } from "@/components/career/kit";
-import { jobStatusTone, MenuChip, menuItem, moreButton, OrgMark } from "@/components/hire/kit";
+import {
+  jobStatusTone,
+  MenuChip,
+  menuItem,
+  moreButton,
+  OrgMark,
+  statusKey,
+} from "@/components/hire/kit";
 import { chip, chipOff, chipOn, tag, tagTone } from "@/components/jobs/talent-kit";
 import { TabRail } from "@/components/motion/tab-rail";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
@@ -38,15 +45,6 @@ const groups = {
   fermees: ["closed"],
 } as const satisfies Record<string, readonly JobStatus[]>;
 type Tab = keyof typeof groups | "toutes";
-
-const statusKey = {
-  draft: "draft",
-  pending_review: "pendingReview",
-  published: "published",
-  closed: "closed",
-  rejected: "rejected",
-  archived: "closed",
-} as const satisfies Record<JobStatus, string>;
 
 /** Desktop columns of the table (mockup 04-02); on a phone each job is a card. */
 const columns =

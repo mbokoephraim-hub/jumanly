@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { CountUp } from "@/components/motion/count-up";
+import type { JobStatus } from "@/generated/prisma/client";
 import { cx } from "@/lib/cx";
 
 /**
@@ -300,6 +301,16 @@ export function QuotaLine({
     </div>
   );
 }
+
+/** Text key of each job status in `hire.jobs.status.*`. */
+export const statusKey = {
+  draft: "draft",
+  pending_review: "pendingReview",
+  published: "published",
+  closed: "closed",
+  rejected: "rejected",
+  archived: "closed",
+} as const satisfies Record<JobStatus, string>;
 
 /** Status of a job (mockup 04-02), from `hire.jobs.status.*`. */
 export const jobStatusTone = {

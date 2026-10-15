@@ -4715,6 +4715,7 @@ Conventions :
 | `hire.pipeline.card.withdrawn` | Candidature retirée |
 | `hire.pipeline.card.comments` | {count, plural, one {# commentaire} other {# commentaires}} |
 | `hire.pipeline.card.menu` | Actions |
+| `hire.pipeline.card.more` | + {count} autres |
 
 #### Actions
 
@@ -4818,6 +4819,12 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `hire.application.back` | Retour au pipeline |
+| `hire.application.title` | Fiche candidature |
+| `hire.application.decision.title` | Votre décision |
+| `hire.application.decision.advance` | Étape suivante · {stage} |
+| `hire.application.skills.matched` | Correspondent à l'offre |
+| `hire.application.skills.other` | Autres compétences |
+| `hire.application.position` | {index} sur {total} |
 | `hire.application.appliedFor` | Candidature à {jobTitle} |
 | `hire.application.appliedOn` | Reçue le {date, date, long} |
 | `hire.application.source.direct` | Candidature directe |
@@ -4858,6 +4865,7 @@ Conventions :
 | `hire.application.score.value` | {score} % · {band} |
 | `hire.application.score.why` | Pourquoi ? |
 | `hire.application.score.updated` | Calculé {time, relative} |
+| `hire.application.score.computed` | Calculé {time} |
 | `hire.application.score.disabled` | Ce candidat a choisi de ne pas faire calculer sa compatibilité. Examinez son profil directement. |
 | `hire.application.score.disputed` | Le candidat a demandé une révision humaine de ce score. |
 

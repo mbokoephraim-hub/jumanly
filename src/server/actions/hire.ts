@@ -181,6 +181,44 @@ export async function moveApplicationAction(formData: FormData) {
   back(formData, applicationId, moved ? `ok=deplacee` : "");
 }
 
+export type MoveCardResult =
+  | { status: "moved"; stage: string }
+  | { status: "unchanged" }
+  | { status: "decision"; href: string }
+  | { status: "error" };
+
+/**
+ * Drag and drop in the pipeline (mockup 04-04): the same move as `moveApplicationAction`, answered
+ * without a redirect so the card stays where it was dropped. « Non retenu » still opens the
+ * decision form: a rejection is never made by a drop alone.
+ */
+export async function moveCardAction(input: {
+  applicationId: string;
+  stageId: string;
+}): Promise<MoveCardResult> {
+  const { ctx } = await requireHire("/app/hire", "manage");
+  const applicationId = String(input.applicationId).slice(0, 60);
+  const stageId = String(input.stageId).slice(0, 60);
+  const stage = await db.pipelineStage.findUnique({
+    where: { id: stageId },
+    select: { kind: true },
+  });
+  if (stage?.kind === "rejected")
+    return {
+      status: "decision",
+      href: `/app/hire/candidats/${applicationId}?decision=refus#decision`,
+    };
+  try {
+    const moved = await moveApplication(db, ctx, applicationId, stageId);
+    if (!moved) return { status: "unchanged" };
+    await onStageChanged(applicationId, moved.to).catch((error) => reportError(error));
+    return { status: "moved", stage: moved.to.name };
+  } catch (error) {
+    if (error instanceof HireError) return { status: "error" };
+    throw error;
+  }
+}
+
 const rejectSchema = z.object({
   reason: z.enum(rejectReasons),
   message: z.string().max(4000).default(""),

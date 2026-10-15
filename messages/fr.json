@@ -5740,7 +5740,8 @@
         "availableNow": "Disponible de suite",
         "withdrawn": "Candidature retirée",
         "comments": "{count, plural, one {# commentaire} other {# commentaires}}",
-        "menu": "Actions"
+        "menu": "Actions",
+        "more": "+ {count} autres"
       },
       "action": {
         "view": "Voir le profil",
@@ -5859,6 +5860,16 @@
     },
     "application": {
       "back": "Retour au pipeline",
+      "title": "Fiche candidature",
+      "decision": {
+        "title": "Votre décision",
+        "advance": "Étape suivante · {stage}"
+      },
+      "skills": {
+        "matched": "Correspondent à l'offre",
+        "other": "Autres compétences"
+      },
+      "position": "{index} sur {total}",
       "appliedFor": "Candidature à {jobTitle}",
       "appliedOn": "Reçue le {date, date, long}",
       "source": {
@@ -5913,6 +5924,7 @@
         "value": "{score} % · {band}",
         "why": "Pourquoi ?",
         "updated": "Calculé {time, relative}",
+        "computed": "Calculé {time}",
         "disabled": "Ce candidat a choisi de ne pas faire calculer sa compatibilité. Examinez son profil directement.",
         "disputed": "Le candidat a demandé une révision humaine de ce score."
       },
