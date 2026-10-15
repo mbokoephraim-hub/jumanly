@@ -13,7 +13,12 @@ export interface FileStorage {
   put(key: string, object: StoredObject): Promise<void>;
   get(key: string): Promise<StoredObject | null>;
   remove(key: string): Promise<void>;
+  /** Removes every file whose key starts with `prefix` (the old sizes of a replaced image). */
+  removePrefix(prefix: string): Promise<void>;
 }
+
+/** Keys under this prefix are served to anyone by `/medias/…`; nothing private goes there. */
+export const PUBLIC_PREFIX = "public/";
 
 export function databaseStorage(db: PrismaClient): FileStorage {
   return {
@@ -32,6 +37,9 @@ export function databaseStorage(db: PrismaClient): FileStorage {
     async remove(key) {
       await db.storedFile.deleteMany({ where: { key } });
     },
+    async removePrefix(prefix) {
+      await db.storedFile.deleteMany({ where: { key: { startsWith: prefix } } });
+    },
   };
 }
 
@@ -46,6 +54,9 @@ export function fakeStorage(): FileStorage {
     },
     async remove(key) {
       files.delete(key);
+    },
+    async removePrefix(prefix) {
+      for (const key of [...files.keys()]) if (key.startsWith(prefix)) files.delete(key);
     },
   };
 }

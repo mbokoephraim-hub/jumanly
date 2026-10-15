@@ -4,8 +4,12 @@ import { headers } from "next/headers";
 import { notFound, redirect } from "next/navigation";
 import { refresh, updateTag } from "next/cache";
 import type { Prisma } from "@/generated/prisma/client";
+import { videoProvider, type VideoUpload } from "@/server/adapters/video";
 import { requireCourseEditor } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { reportError } from "@/server/observability";
+import { CourseMediaError, saveCover, saveLessonVideoFile } from "@/server/services/course-media";
+import { fileStorage } from "@/server/storage";
 import {
   addLesson,
   addModule,
@@ -16,6 +20,7 @@ import {
   deleteLesson,
   deleteModule,
   deleteQuestion,
+  duplicateCourse,
   lessonFormSchema,
   questionFormSchema,
   quizSettingsSchema,
@@ -84,6 +89,18 @@ export async function updateCourseAction(formData: FormData) {
   const parsed = courseFormSchema.safeParse(Object.fromEntries(formData));
   if (!parsed.success) back(id, { erreur: "fiche" }, "#fiche");
   const result = await updateCourse(db, id, parsed.data!);
+  // The cover sent with the card (Admin v2, étape 6): resized, then saved on the course.
+  const cover = formData.get("cover");
+  if (cover instanceof File && cover.size > 0) {
+    try {
+      await saveCover(db, fileStorage(db), id, new Uint8Array(await cover.arrayBuffer()));
+      await audit(user.id, "course.cover", id);
+    } catch (error) {
+      if (!(error instanceof CourseMediaError)) throw error;
+      await invalidate(id, result.previousSlug);
+      back(id, { erreur: `couverture-${error.code}` }, "#fiche");
+    }
+  }
   await audit(user.id, "course.update", id);
   await invalidate(id, result.previousSlug);
   back(
@@ -211,8 +228,80 @@ export async function deleteQuestionAction(formData: FormData) {
   back(id, { lecon: lessonId }, "#quiz");
 }
 
+/** « Dupliquer »: a draft copy, opened at once. */
+export async function duplicateCourseAction(formData: FormData) {
+  const user = await editor();
+  const id = value(formData, "course");
+  const copy = await duplicateCourse(db, id, value(formData, "title", 200));
+  if (!copy) notFound();
+  await audit(user.id, "course.duplicate", copy.id, { from: id });
+  redirect(`/admin/formations/${copy.id}?ok=copie`);
+}
+
+/** A lesson video sent through the site (no provider taking direct uploads). */
+export async function uploadLessonVideoAction(formData: FormData) {
+  const user = await editor();
+  const id = value(formData, "course");
+  const lessonId = value(formData, "lesson");
+  const file = formData.get("video");
+  if (!(file instanceof File) || file.size === 0)
+    back(id, { lecon: lessonId, erreur: "video-fileType" }, "#lecon");
+  try {
+    await saveLessonVideoFile(
+      db,
+      fileStorage(db),
+      id,
+      lessonId,
+      new Uint8Array(await (file as File).arrayBuffer()),
+    );
+  } catch (error) {
+    if (!(error instanceof CourseMediaError)) throw error;
+    back(id, { lecon: lessonId, erreur: `video-${error.code}` }, "#lecon");
+  }
+  await audit(user.id, "course.lesson.video", id, { lessonId });
+  await invalidate(id);
+  back(id, { lecon: lessonId, ok: "video" }, "#lecon");
+}
+
+/**
+ * Direct upload to the video provider: the browser sends the file itself (no size limit of the
+ * site), with a signature valid for this one video.
+ */
+export async function prepareVideoUploadAction(
+  courseId: string,
+  lessonId: string,
+): Promise<VideoUpload | null> {
+  await editor();
+  const lesson = await db.lesson.findFirst({
+    where: { id: lessonId, module: { courseId } },
+    select: { title: true },
+  });
+  if (!lesson) return null;
+  try {
+    return await videoProvider().createUpload(lesson.title);
+  } catch (error) {
+    reportError(error, { message: "Envoi vidéo non préparé" });
+    return null;
+  }
+}
+
+/** Once the browser has sent the file: the lesson plays this video. */
+export async function attachVideoAction(courseId: string, lessonId: string, videoId: string) {
+  const user = await editor();
+  if (!/^[\w-]{8,64}$/.test(videoId)) return;
+  const updated = await db.lesson.updateMany({
+    where: { id: lessonId, module: { courseId } },
+    data: { videoId, kind: "video" },
+  });
+  if (updated.count === 0) return;
+  await audit(user.id, "course.lesson.video", courseId, { lessonId });
+  await invalidate(courseId);
+}
+
 export async function revokeCertificateAction(formData: FormData) {
   const user = await editor();
+  // Revoking an attestation is for administrators only (Admin v2, étape 6).
+  if (user.platformRole !== "platform_admin") notFound();
   const id = value(formData, "course");
   const code = value(formData, "code", 20).trim().toUpperCase();
   // A sensitive action: the reason is required and kept in the audit log.

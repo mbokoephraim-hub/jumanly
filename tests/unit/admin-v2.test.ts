@@ -2,6 +2,8 @@ import { describe, expect, it } from "vitest";
 import messages from "../../messages/fr.json";
 import { parseEndDate, versionChanges } from "@/server/services/admin-billing";
 import { cleanFileName } from "@/server/services/admin-orgs";
+import { courseReadiness, publishProblems } from "@/server/services/course-admin";
+import { coverAt, sniffVideoType } from "@/server/services/course-media";
 import { sniffDocumentType } from "@/server/storage";
 import {
   deletionBlock,
@@ -236,5 +238,64 @@ describe("forfaits et abonnements (étape 5)", () => {
       { field: "ai.credits.monthly", from: "100", to: "150" },
     ]);
     expect(versionChanges(null)).toEqual([]);
+  });
+});
+
+describe("formations : prête à publier (étape 6)", () => {
+  const quiz = (questions: number) => ({
+    kind: "quiz",
+    quiz: { questions: Array.from({ length: questions }, () => ({})) },
+  });
+  const course = (change: Record<string, unknown> = {}) =>
+    ({
+      title: "Bien négocier son salaire",
+      summary: "Résumé",
+      description: "Description",
+      instructor: "Formatrice fictive",
+      coverUrl: "/medias/courses/c1/cover-abc-960.webp",
+      certificateEnabled: true,
+      audience: "Talents",
+      objectives: ["Préparer un argumentaire"],
+      status: "draft",
+      modules: [{ lessons: [{ kind: "text", quiz: null }, quiz(2)] }],
+      ...change,
+    }) as unknown as Parameters<typeof courseReadiness>[0];
+
+  it("une formation complète est prête, à 100 %", () => {
+    const readiness = courseReadiness(course());
+    expect(readiness.ready).toBe(true);
+    expect(readiness.percent).toBe(100);
+    expect(readiness.steps.find((step) => step.step === "publish")?.done).toBe(false);
+  });
+
+  it("l'attestation demande un quiz avec des questions, la couverture est obligatoire", () => {
+    expect(
+      publishProblems(course({ modules: [{ lessons: [{ kind: "text", quiz: null }] }] })),
+    ).toEqual(["certificateQuiz"]);
+    expect(publishProblems(course({ coverUrl: null }))).toEqual(["cover"]);
+    expect(publishProblems(course({ modules: [{ lessons: [quiz(0)] }] }))).toEqual([
+      "quiz",
+      "certificateQuiz",
+    ]);
+  });
+
+  it("chaque manque est rangé dans son étape ; le public ne bloque pas", () => {
+    const readiness = courseReadiness(course({ coverUrl: null, audience: "" }));
+    expect(readiness.ready).toBe(false);
+    expect(readiness.steps.find((step) => step.step === "info")?.missing).toEqual(["cover"]);
+    expect(readiness.steps.find((step) => step.step === "audience")?.done).toBe(false);
+    expect(publishProblems(course({ audience: "" }))).toEqual([]);
+    expect(readiness.percent).toBe(75);
+  });
+
+  it("reconnaît une vidéo MP4 ou WebM à ses premiers octets", () => {
+    expect(sniffVideoType(new Uint8Array([0, 0, 0, 0x18, 0x66, 0x74, 0x79, 0x70]))).toBe(
+      "video/mp4",
+    );
+    expect(sniffVideoType(new Uint8Array([0x1a, 0x45, 0xdf, 0xa3, 0, 0, 0, 0]))).toBe("video/webm");
+    expect(sniffVideoType(new Uint8Array([0x25, 0x50, 0x44, 0x46, 0, 0, 0, 0]))).toBeNull();
+    expect(coverAt("/medias/courses/c1/cover-abc-960.webp", 480)).toBe(
+      "/medias/courses/c1/cover-abc-480.webp",
+    );
   });
 });

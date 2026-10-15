@@ -13,7 +13,7 @@ import { cx } from "@/lib/cx";
 import { createCourseAction } from "@/server/actions/course-admin";
 import { requireCourseEditor } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { listCoursesForAdmin } from "@/server/services/course-admin";
+import { courseStats, listCoursesForAdmin } from "@/server/services/course-admin";
 
 /**
  * Courses of the Learn catalog (partie 07 § 12, mockup 07-06): content editors and administrators.
@@ -26,6 +26,10 @@ export default async function AdminCourses({ searchParams }: PageProps<"/admin/f
   const all = await listCoursesForAdmin(db);
   const filters = readCourseFilters(params);
   const courses = filterCourses(all, filters);
+  const stats = await courseStats(
+    db,
+    courses.map((course) => course.id),
+  );
 
   return (
     <>
@@ -37,7 +41,7 @@ export default async function AdminCourses({ searchParams }: PageProps<"/admin/f
         shown={courses.length}
       />
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <CourseListCard courses={courses} filters={filters} detailed />
+        <CourseListCard courses={courses} filters={filters} stats={stats} detailed />
         <div className="flex flex-col gap-4">
           <section
             aria-labelledby="admin-courses-new-title"

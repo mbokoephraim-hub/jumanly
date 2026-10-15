@@ -81,7 +81,7 @@ async function course(requiredLevel: "free" | "fundamentals", maxAttempts = 0) {
     prerequisites: "",
     requiredLevel,
     certificateEnabled: "on",
-    coverUrl: "",
+    coverUrl: "/medias/courses/test/cover-test-960.webp",
     skills: skill.name,
     jobFamilies: "",
   });
@@ -91,7 +91,8 @@ async function course(requiredLevel: "free" | "fundamentals", maxAttempts = 0) {
   await db.quiz.update({ where: { lessonId: quiz!.id }, data: { maxAttempts } });
   expect(await setCourseStatus(db, created!.id, "published")).toMatchObject({
     ok: false,
-    problems: ["quiz"],
+    // An empty quiz, and an attestation without a quiz that has questions (Admin v2, étape 6).
+    problems: ["quiz", "certificateQuiz"],
   });
   await addQuestion(db, created!.id, quiz!.id, {
     prompt: "Deux plus deux ?",

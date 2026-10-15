@@ -10507,6 +10507,9 @@
         "course_quiz_update": "a modifié le quiz",
         "course_question_save": "a enregistré une question",
         "course_question_delete": "a supprimé une question",
+        "course_duplicate": "a dupliqué une formation",
+        "course_cover": "a changé l'image de couverture",
+        "course_lesson_video": "a envoyé la vidéo d'une leçon",
         "certificate_revoke": "a révoqué une attestation",
         "job_approve": "a accepté l'offre",
         "job_refuse": "a refusé l'offre",
@@ -11548,7 +11551,7 @@
         "audience": "Public visé",
         "duration": "Durée totale (minutes)",
         "prerequisites": "Prérequis",
-        "cover": "Image de couverture (adresse https)",
+        "cover": "Image de couverture",
         "jobFamilies": {
           "text": "Métiers des exercices",
           "hint": "Familles de métiers visées par les exercices métier, séparées par des virgules."
@@ -11673,12 +11676,15 @@
       },
       "publish": {
         "text": "Publier",
-        "check": "Avant de publier : au moins une leçon, un niveau de catalogue choisi, un formateur renseigné.",
+        "check": "Avant de publier : un titre, un résumé, une image de couverture, au moins une leçon, un formateur renseigné et des questions dans chaque quiz.",
         "problem": {
           "lessons": "Ajoutez au moins une leçon.",
           "instructor": "Renseignez le formateur.",
           "summary": "Renseignez le résumé et la description.",
-          "quiz": "Chaque quiz doit avoir au moins une question."
+          "quiz": "Chaque quiz doit avoir au moins une question.",
+          "title": "Donnez un titre d'au moins 3 caractères.",
+          "certificateQuiz": "L'attestation demande un quiz avec au moins une question.",
+          "cover": "Ajoutez une image de couverture."
         }
       },
       "published": "Formation publiée.",
@@ -11698,7 +11704,88 @@
         "on": "(activé)",
         "off": "(désactivé)"
       },
-      "indicators": "Indicateurs calculés à partir du niveau de catalogue et des leçons : l'aperçu public et les exercices métier se règlent dans chaque leçon."
+      "indicators": "Indicateurs calculés à partir du niveau de catalogue et des leçons : l'aperçu public et les exercices métier se règlent dans chaque leçon.",
+      "v2": {
+        "readiness": {
+          "title": "Prête à publier ?",
+          "percent": "{percent} %",
+          "label": "Préparation de la formation : {percent} %",
+          "ready": "Tout est prêt : la formation peut être publiée.",
+          "missing": "{count, plural, one {Il reste # point à compléter.} other {Il reste # points à compléter.}}",
+          "published": "Formation en ligne. Les modifications sont visibles aussitôt enregistrées.",
+          "done": "(fait)",
+          "todo": "(à faire)",
+          "advice": "Conseillé, ne bloque pas la publication."
+        },
+        "step": {
+          "info": "Informations",
+          "audience": "Public et objectifs",
+          "program": "Programme",
+          "quiz": "Quiz",
+          "certificate": "Attestation",
+          "publish": "Publication"
+        },
+        "preview": "Aperçu comme un talent",
+        "duplicate": {
+          "text": "Dupliquer",
+          "title": "Dupliquer la formation",
+          "confirm": "Une copie en brouillon de « {title} » est créée, avec ses modules, leçons et quiz. Les apprenants, leur progression et les attestations ne sont pas copiés. Ajoutez une image de couverture à la copie avant de la publier.",
+          "name": "Titre de la copie",
+          "defaultName": "{title} (copie)",
+          "submit": "Créer la copie",
+          "done": "Copie créée en brouillon. Ajoutez sa couverture avant de la publier."
+        },
+        "cover": {
+          "current": "Couverture actuelle",
+          "none": "Aucune couverture pour l'instant.",
+          "file": "Envoyer une image",
+          "hint": "PNG, JPEG ou WebP, 4 Mo au plus. L'image est recadrée au format 16:9 et allégée pour les connexions lentes. Envoyée avec « Enregistrer la fiche ».",
+          "error": {
+            "fileType": "Cette image n'a pas pu être lue. Envoyez un fichier PNG, JPEG ou WebP.",
+            "fileSize": "Cette image dépasse 4 Mo.",
+            "notFound": "Formation introuvable."
+          }
+        },
+        "stats": {
+          "label": "{enrolled, plural, =0 {Aucun inscrit} one {# inscrit} other {# inscrits}} · {completion} · {quiz} · {certificates, plural, =0 {aucune attestation} one {# attestation} other {# attestations}}",
+          "completion": "{value} % terminent",
+          "quiz": "quiz {value} % en moyenne",
+          "none": "aucun quiz passé",
+          "empty": "Aucun inscrit pour l'instant"
+        },
+        "listMeta": "{access} · {lessons}",
+        "previewPage": {
+          "title": "Aperçu : {title}",
+          "notice": "Aperçu réservé à l'équipe : la formation telle qu'un talent la verra, sans progression ni inscription.",
+          "back": "Retour à l'éditeur",
+          "status": "Statut actuel",
+          "empty": "Aucune leçon pour l'instant.",
+          "quiz": "{count, plural, =0 {Quiz sans question} one {Quiz de # question} other {Quiz de # questions}} · seuil {score} %",
+          "noVideo": "Vidéo pas encore envoyée."
+        }
+      },
+      "video": {
+        "title": "Vidéo de la leçon",
+        "file": "Fichier vidéo",
+        "hintDirect": "MP4, WebM ou MOV. Le fichier part directement chez l'hébergeur vidéo, qui l'encode pour une lecture adaptée aux réseaux lents.",
+        "hintSite": "MP4 ou WebM, 4 Mo au plus (aucun hébergeur vidéo n'est configuré). Pour une vidéo plus longue, collez son adresse dans le champ « Identifiant de la vidéo ».",
+        "send": "Envoyer la vidéo",
+        "sending": "Envoi en cours…",
+        "done": "Vidéo envoyée. L'encodage commence.",
+        "saved": "Vidéo enregistrée pour cette leçon.",
+        "state": {
+          "none": "Aucune vidéo pour l'instant.",
+          "ready": "Vidéo prête à être lue.",
+          "processing": "Encodage en cours ({progress} %).",
+          "failed": "L'encodage a échoué. Envoyez le fichier à nouveau."
+        },
+        "error": {
+          "fileType": "Ce fichier n'est pas une vidéo MP4 ou WebM.",
+          "fileSize": "Cette vidéo dépasse 4 Mo.",
+          "upload": "L'envoi a échoué. Vérifiez la connexion puis réessayez."
+        },
+        "captions": "Sous-titres et transcription : renseignez le champ « Transcription » de la leçon, il s'affiche sous la vidéo."
+      }
     },
     "jobs": {
       "title": "Modération des offres",

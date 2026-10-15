@@ -4,6 +4,8 @@ import { IconTile, Tag, adminCard, adminTitle } from "@/components/admin/kit";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { Alert, Button, ButtonLink, Checkbox, Select, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
+import { VideoUploader } from "@/components/admin/video-uploader";
+import { videoProvider } from "@/server/adapters/video";
 import {
   addLessonAction,
   addModuleAction,
@@ -14,6 +16,7 @@ import {
   saveQuestionAction,
   updateLessonAction,
   updateQuizAction,
+  uploadLessonVideoAction,
 } from "@/server/actions/course-admin";
 import {
   answerForEditor,
@@ -395,6 +398,8 @@ export async function LessonEditor({
         </Button>
       </form>
 
+      {lesson.kind === "video" && <LessonVideo course={course} lesson={lesson} query={query} />}
+
       {lesson.kind === "quiz" && lesson.quiz && (
         <div id="quiz" className="flex scroll-mt-6 flex-col gap-3.5 border-t border-brume pt-4">
           <h3 className="text-[16px] leading-[22px] font-semibold">{t("quiz.title")}</h3>
@@ -516,5 +521,90 @@ export async function LessonEditor({
         </div>
       )}
     </section>
+  );
+}
+
+/**
+ * The video of a lesson (Admin v2, étape 6): sent from the computer, straight to the video
+ * provider when one is configured, through the site otherwise (small files); then where its
+ * encoding stands.
+ */
+async function LessonVideo({
+  course,
+  lesson,
+  query,
+}: {
+  course: AdminCourse;
+  lesson: AdminCourse["modules"][number]["lessons"][number];
+  query: (key: string) => string;
+}) {
+  const t = await getTranslations("admin.courses.video");
+  const provider = videoProvider();
+  const direct =
+    provider.id === "bunny" &&
+    !!process.env.BUNNY_STREAM_LIBRARY_ID &&
+    !!process.env.BUNNY_STREAM_API_KEY;
+  const status = lesson.videoId ? await provider.status(lesson.videoId).catch(() => null) : null;
+  const error = query("erreur").startsWith("video-") ? query("erreur").slice(6) : "";
+  return (
+    <div
+      id="lecon-video"
+      className="flex scroll-mt-6 flex-col gap-3 rounded-[16px] bg-creme/60 p-4"
+    >
+      <h3 className="text-[15px] leading-5 font-semibold">{t("title")}</h3>
+      {query("ok") === "video" && <Alert tone="success" title={t("saved")} />}
+      {(error === "fileType" || error === "fileSize") && (
+        <Alert tone="error" title={t(`error.${error}`)} />
+      )}
+      <p className="text-[12.5px]">
+        {!lesson.videoId
+          ? t("state.none")
+          : status === null
+            ? t("state.ready")
+            : status.state === "ready"
+              ? t("state.ready")
+              : status.state === "failed"
+                ? t("state.failed")
+                : t("state.processing", { progress: status.progress })}
+      </p>
+      {direct ? (
+        <VideoUploader
+          courseId={course.id}
+          lessonId={lesson.id}
+          labels={{
+            file: t("file"),
+            hint: t("hintDirect"),
+            send: t("send"),
+            sending: t("sending"),
+            done: t("done"),
+            error: t("error.upload"),
+          }}
+        />
+      ) : (
+        <form action={uploadLessonVideoAction} className="flex flex-col gap-2">
+          <input type="hidden" name="course" value={course.id} />
+          <input type="hidden" name="lesson" value={lesson.id} />
+          <label htmlFor="lesson-video-file" className="text-[13px] font-semibold">
+            {t("file")}
+          </label>
+          <input
+            id="lesson-video-file"
+            name="video"
+            type="file"
+            required
+            accept="video/mp4,video/webm"
+            aria-describedby="lesson-video-file-hint"
+            className="text-[13px] file:mr-3 file:h-9 file:rounded-pill file:border-0 file:bg-blanc file:px-4 file:font-semibold"
+          />
+          <p id="lesson-video-file-hint" className="text-[11.5px] text-ardoise">
+            {t("hintSite")}
+          </p>
+          <Button type="submit" variant="secondary" size="sm" className="self-start">
+            {t("send")}
+          </Button>
+        </form>
+      )}
+      <p className="text-[11.5px] text-ardoise">{t("captions")}</p>
+    </div>
   );
 }

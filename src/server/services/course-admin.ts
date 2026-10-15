@@ -3,7 +3,7 @@
  * database work, called by the admin actions after the role check (content editor or administrator).
  */
 import { z } from "zod";
-import type { PrismaClient } from "@/generated/prisma/client";
+import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { slugify } from "./accounts";
 import { lessonResourceSchema } from "./learn";
 import { findSkill } from "./profile";
@@ -181,21 +181,99 @@ export async function updateCourse(
   };
 }
 
-/** What a course needs before publication (textes: admin.courses.publish.check). */
-export function publishProblems(
-  course: Pick<AdminCourse, "modules" | "instructor" | "summary" | "description">,
-) {
-  const problems: ("lessons" | "instructor" | "summary" | "quiz")[] = [];
+export const publishProblemKeys = [
+  "title",
+  "summary",
+  "lessons",
+  "instructor",
+  "quiz",
+  "certificateQuiz",
+  "cover",
+] as const;
+export type PublishProblem = (typeof publishProblemKeys)[number];
+
+type ReadinessCourse = Pick<
+  AdminCourse,
+  | "modules"
+  | "instructor"
+  | "summary"
+  | "description"
+  | "title"
+  | "coverUrl"
+  | "certificateEnabled"
+  | "audience"
+  | "objectives"
+>;
+
+/**
+ * What a course needs before publication (Admin v2, étape 6; textes admin.courses.publish.problem):
+ * a title, a summary and a description, at least one lesson, the instructor, questions in every
+ * quiz, a quiz with questions when it delivers an attestation, and a cover image.
+ */
+export function publishProblems(course: ReadinessCourse) {
+  const problems: PublishProblem[] = [];
   const lessons = course.modules.flatMap((module) => module.lessons);
+  const quizzes = lessons.filter((lesson) => lesson.kind === "quiz");
+  if (course.title.trim().length < 3) problems.push("title");
+  if (!course.summary || !course.description) problems.push("summary");
   if (lessons.length === 0) problems.push("lessons");
   if (!course.instructor) problems.push("instructor");
-  if (!course.summary || !course.description) problems.push("summary");
+  if (quizzes.some((lesson) => (lesson.quiz?.questions.length ?? 0) === 0)) problems.push("quiz");
   if (
-    lessons.some((lesson) => lesson.kind === "quiz" && (lesson.quiz?.questions.length ?? 0) === 0)
-  ) {
-    problems.push("quiz");
-  }
+    course.certificateEnabled &&
+    !quizzes.some((lesson) => (lesson.quiz?.questions.length ?? 0) > 0)
+  )
+    problems.push("certificateQuiz");
+  if (!course.coverUrl) problems.push("cover");
   return problems;
+}
+
+export const readinessSteps = [
+  "info",
+  "audience",
+  "program",
+  "quiz",
+  "certificate",
+  "publish",
+] as const;
+export type ReadinessStep = (typeof readinessSteps)[number];
+
+/** Which step of the guided path each missing piece belongs to. */
+const stepOf: Record<PublishProblem, ReadinessStep> = {
+  title: "info",
+  summary: "info",
+  instructor: "info",
+  cover: "info",
+  lessons: "program",
+  quiz: "quiz",
+  certificateQuiz: "certificate",
+};
+
+/**
+ * « Prête à publier »: the six steps of the guided path, each done or with what it misses, and the
+ * share of the checks already met. The audience step is advice (it never blocks publication).
+ */
+export function courseReadiness(course: ReadinessCourse & { status: string }) {
+  const problems = publishProblems(course);
+  const audienceDone = course.audience.trim().length > 0 && course.objectives.length > 0;
+  const steps = readinessSteps.map((step) => {
+    const missing = problems.filter((problem) => stepOf[problem] === step);
+    const done =
+      step === "audience"
+        ? audienceDone
+        : step === "publish"
+          ? course.status === "published"
+          : missing.length === 0;
+    return { step, done, missing };
+  });
+  const checks = publishProblemKeys.length + 1;
+  const met = publishProblemKeys.length - problems.length + (audienceDone ? 1 : 0);
+  return {
+    steps,
+    problems,
+    percent: Math.round((100 * met) / checks),
+    ready: problems.length === 0,
+  };
 }
 
 export async function setCourseStatus(
@@ -217,6 +295,139 @@ export async function setCourseStatus(
     },
   });
   return { ok: true as const, slug: course.slug };
+}
+
+/**
+ * « Dupliquer »: a draft copy with its modules, lessons and quizzes (never its learners, their
+ * progress or attestations). The copy has no cover: its own is sent before publication, so the
+ * files of the source can be replaced without breaking the copy.
+ */
+export async function duplicateCourse(db: PrismaClient, id: string, title: string) {
+  const source = await getCourseForAdmin(db, id);
+  if (!source) return null;
+  const name = title.trim().slice(0, 160) || source.title;
+  return db.course.create({
+    data: {
+      slug: await uniqueSlug(db, name),
+      title: name,
+      summary: source.summary,
+      description: source.description,
+      objectives: source.objectives,
+      audience: source.audience,
+      category: source.category,
+      level: source.level,
+      language: source.language,
+      durationMinutes: source.durationMinutes,
+      coverUrl: null,
+      requiredLevel: source.requiredLevel,
+      jobFamilies: source.jobFamilies,
+      certificateEnabled: source.certificateEnabled,
+      instructor: source.instructor,
+      prerequisites: source.prerequisites,
+      status: "draft",
+      skills: { create: source.skills.map((item) => ({ skillId: item.skillId })) },
+      modules: {
+        create: source.modules.map((module) => ({
+          title: module.title,
+          order: module.order,
+          lessons: {
+            create: module.lessons.map((lesson) => ({
+              title: lesson.title,
+              kind: lesson.kind,
+              order: lesson.order,
+              videoId: lesson.videoId,
+              durationSec: lesson.durationSec,
+              content: (lesson.content ?? {}) as Prisma.InputJsonValue,
+              resources: (lesson.resources ?? []) as Prisma.InputJsonValue,
+              transcript: lesson.transcript,
+              isPreview: lesson.isPreview,
+              jobSpecific: lesson.jobSpecific,
+              ...(lesson.quiz
+                ? {
+                    quiz: {
+                      create: {
+                        passingScore: lesson.quiz.passingScore,
+                        maxAttempts: lesson.quiz.maxAttempts,
+                        questions: {
+                          create: lesson.quiz.questions.map((question) => ({
+                            order: question.order,
+                            type: question.type,
+                            prompt: question.prompt,
+                            options: question.options,
+                            answer: question.answer,
+                            explanation: question.explanation,
+                          })),
+                        },
+                      },
+                    },
+                  }
+                : {}),
+            })),
+          },
+        })),
+      },
+    },
+  });
+}
+
+export type CourseStats = {
+  enrolled: number;
+  /** Share of the learners who finished, 0 to 100; null without learners. */
+  completion: number | null;
+  /** Average best score of the learners at the course's quizzes, 0 to 100; null without attempts. */
+  quizAverage: number | null;
+  certificates: number;
+};
+
+/** Figures of each course for the list: learners, completion, quiz average, attestations. */
+export async function courseStats(db: PrismaClient, courseIds: string[]) {
+  const stats = new Map<string, CourseStats>();
+  if (courseIds.length === 0) return stats;
+  const [enrolled, completed, certificates, attempts] = await Promise.all([
+    db.enrollment.groupBy({
+      by: ["courseId"],
+      where: { courseId: { in: courseIds } },
+      _count: true,
+    }),
+    db.enrollment.groupBy({
+      by: ["courseId"],
+      where: { courseId: { in: courseIds }, completedAt: { not: null } },
+      _count: true,
+    }),
+    db.certificate.findMany({
+      where: { revokedAt: null, enrollment: { courseId: { in: courseIds } } },
+      select: { enrollment: { select: { courseId: true } } },
+    }),
+    db.quizAttempt.groupBy({
+      by: ["userId", "quizId"],
+      where: { quiz: { lesson: { module: { courseId: { in: courseIds } } } } },
+      _max: { score: true },
+    }),
+  ]);
+  const quizCourse = new Map(
+    (
+      await db.quiz.findMany({
+        where: { id: { in: [...new Set(attempts.map((row) => row.quizId))] } },
+        select: { id: true, lesson: { select: { module: { select: { courseId: true } } } } },
+      })
+    ).map((quiz) => [quiz.id, quiz.lesson.module.courseId]),
+  );
+  for (const id of courseIds) {
+    const count = enrolled.find((row) => row.courseId === id)?._count ?? 0;
+    const done = completed.find((row) => row.courseId === id)?._count ?? 0;
+    const scores = attempts
+      .filter((row) => quizCourse.get(row.quizId) === id)
+      .map((row) => row._max.score ?? 0);
+    stats.set(id, {
+      enrolled: count,
+      completion: count ? Math.round((100 * done) / count) : null,
+      quizAverage: scores.length
+        ? Math.round(scores.reduce((sum, score) => sum + score, 0) / scores.length)
+        : null,
+      certificates: certificates.filter((row) => row.enrollment.courseId === id).length,
+    });
+  }
+  return stats;
 }
 
 // ─── Modules and lessons ───────────────────────────────────────────────────────

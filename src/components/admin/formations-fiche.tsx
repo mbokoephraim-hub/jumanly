@@ -8,6 +8,7 @@ import { cx } from "@/lib/cx";
 import { formatDate } from "@/lib/dates";
 import { updateCourseAction } from "@/server/actions/course-admin";
 import { catalogLevelOptions, type AdminCourse } from "@/server/services/course-admin";
+import { coverAt } from "@/server/services/course-media";
 
 /** Id of the course form: the attestation switch, in its own card, belongs to it. */
 export const courseFormId = "admin-course-fiche";
@@ -252,13 +253,6 @@ export async function CourseFicheCard({ course }: { course: AdminCourse }) {
             defaultValue={course.jobFamilies.join(", ")}
             maxLength={500}
           />
-          <TextField
-            id="course-cover"
-            name="coverUrl"
-            label={t("field.cover")}
-            defaultValue={course.coverUrl ?? ""}
-            maxLength={500}
-          />
           <TextArea
             id="course-prerequisites"
             name="prerequisites"
@@ -268,6 +262,48 @@ export async function CourseFicheCard({ course }: { course: AdminCourse }) {
             rows={3}
           />
         </div>
+        <fieldset className="flex flex-col gap-2.5">
+          <legend className="mb-2 text-[13px] leading-[18px] font-semibold">
+            {t("field.cover")}
+          </legend>
+          <input type="hidden" name="coverUrl" value={course.coverUrl ?? ""} />
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
+            {course.coverUrl ? (
+              // eslint-disable-next-line @next/next/no-img-element -- already resized WebP
+              <img
+                src={
+                  course.coverUrl.startsWith("/medias/")
+                    ? coverAt(course.coverUrl, 480)
+                    : course.coverUrl
+                }
+                alt={t("v2.cover.current")}
+                width={240}
+                height={135}
+                className="aspect-video w-full max-w-[240px] rounded-[14px] bg-creme object-cover"
+              />
+            ) : (
+              <p className="grid aspect-video w-full max-w-[240px] place-items-center rounded-[14px] bg-creme px-4 text-center text-[12px] text-ardoise">
+                {t("v2.cover.none")}
+              </p>
+            )}
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="course-cover-file" className="text-[13px] font-semibold">
+                {t("v2.cover.file")}
+              </label>
+              <input
+                id="course-cover-file"
+                name="cover"
+                type="file"
+                accept="image/png,image/jpeg,image/webp"
+                aria-describedby="course-cover-file-hint"
+                className="text-[13px] file:mr-3 file:h-9 file:rounded-pill file:border-0 file:bg-creme file:px-4 file:font-semibold"
+              />
+              <p id="course-cover-file-hint" className="text-[11.5px] leading-4 text-ardoise">
+                {t("v2.cover.hint")}
+              </p>
+            </div>
+          </div>
+        </fieldset>
         <Button type="submit" variant="secondary" className="self-start">
           {t("save")}
         </Button>
