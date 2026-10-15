@@ -84,7 +84,8 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await logIn(talent, demo.talentFree);
   await talent.goto(`/app/jobs/${slug}`);
   await expect(talent.getByRole("heading", { level: 1 })).toHaveText(title);
-  await talent.locator('select[name="cv"]').selectOption("");
+  await talent.goto(`/app/jobs/${slug}?postuler=1`);
+  await talent.locator('input[name="cv"][value=""]').check();
   await talent.getByRole("button", { name: "Envoyer ma candidature" }).click();
   await expect(talent.getByText("Candidature envoyée !")).toBeVisible();
 

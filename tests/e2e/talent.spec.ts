@@ -82,6 +82,12 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
 
   // Apply with that CV.
   await page.goto(`/app/jobs/${JOB}`);
+  await page
+    .getByRole("link", { name: "Postuler gratuitement" })
+    .filter({ visible: true })
+    .last()
+    .click();
+  await expect(page).toHaveURL(/postuler=1/);
   await page.locator("#apply-letter").fill("Ce poste correspond à mon expérience en comptabilité.");
   await page.getByRole("button", { name: "Envoyer ma candidature" }).click();
   await expect(page.getByText("Candidature envoyée !")).toBeVisible();
@@ -90,10 +96,19 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await page.goto("/app/jobs/candidatures");
   const card = page.locator("li").filter({ hasText: "Comptable" }).first();
   await expect(card).toContainText("Envoyée");
+  // On a phone the less frequent actions sit behind « … ».
+  const more = card.locator('summary[aria-label="Plus d\'actions"]');
+  if (page.viewportSize()!.width < 1024) await more.click();
   const sentHref = await card.getByRole("link", { name: "Voir le CV envoyé" }).getAttribute("href");
   expect((await page.request.get(sentHref!)).status()).toBe(200);
-  await card.locator("summary").filter({ hasText: "Retirer ma candidature" }).click();
-  await card.getByRole("button", { name: "Retirer", exact: true }).click();
+  await card
+    .locator("summary")
+    .filter({ hasText: "Retirer ma candidature", visible: true })
+    .click();
+  await card
+    .getByRole("button", { name: "Retirer", exact: true })
+    .filter({ visible: true })
+    .click();
   await expect(page).toHaveURL(/onglet=terminees/);
   await expect(page.getByRole("main")).toContainText("Retirée");
 });

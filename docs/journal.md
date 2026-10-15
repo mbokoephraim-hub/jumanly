@@ -2,6 +2,42 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · lot 10 : Jobs, candidatures, messages, notifications, paramètres (15 octobre 2026)
+
+Maquettes `docs/maquettes/03-espace-talent/` 03-16 à 03-23. Décisions :
+`docs/decisions/2026-10-15-refonte-lot-10.md`. Captures 1440 et 390 px dans
+`captures/refonte-lot-10/` (dossier du projet).
+
+- `/app/jobs` : recherche en pilule, onglets Tous / Recommandées / Récentes, filtres en puces dans
+  un rail (contrat, télétravail, expérience, salaire indiqué, date de publication, compatibilité
+  minimale, entreprises vérifiées) et panneau « Filtres » complet, filtres actifs retirables.
+  Cartes d'offre `TalentJobCard` (score sur le dégradé IA, « Pourquoi ? », enregistrement), colonne
+  Intelligence, suivi des candidatures et entreprises qui recrutent.
+- `/app/jobs/[slug]` : fiche détaillée (faits, missions, compétences cochées quand le talent les a,
+  questions éliminatoires, étapes, recruteur, entreprise, offres proches) et panneau de
+  compatibilité. « Postuler » ouvre `?postuler=1` : choix du CV en cartes, lettre, envoi.
+- `/app/jobs/candidatures` : suivi par étapes définies par le recruteur (`applicationTracker`),
+  historique et prochain entretien dépliables (un à la fois), messages, CV envoyé, retrait.
+- `/app/jobs/enregistrees` : grille de cartes, tri par date limite, offres qui se clôturent bientôt.
+- `/app/messages` : liste (recherche, filtres, demande de mise en relation en attente), conversation
+  qui s'ouvre sur le dernier message, colonne de contexte (interlocuteur, candidature liée,
+  fichiers partagés). Sur téléphone, la liste puis la conversation seule.
+- `/app/notifications` : groupées par jour, filtrées par sorte, avec l'action principale.
+- `/app/parametres` : navigation verticale, carte du forfait, interrupteurs (dont « Réduire les
+  animations »), explication de Jumanly Intelligence, colonne données et sécurité.
+- Textes ajoutés dans `textes/textes-application.md` (Jobs, candidatures, enregistrées, Connect,
+  notifications).
+
+### Écarts restants
+
+- Sans fonction derrière, donc non affichés : alertes d'offres, suivre une entreprise, masquer une
+  offre, rayon en km, filtres secteur et langue, questions du recruteur (étape 2) et lettre en
+  fichier, date de début, délai de réponse du recruteur, score du CV choisi, préférences de
+  notifications par canal (le lien mène à Confidentialité), onglets « Notifications » et « Langue
+  et région » des paramètres, « Lu » sur les messages, compteur de messages non lus par
+  conversation, statut « En ligne ».
+- Le « Pourquoi ? » détaillé reste la carte claire `TalentWhy` (testée), pas un panneau sombre.
+
 ## Espace connecté animé · lot B : les messages (14 octobre 2026)
 
 Brief : `docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md` § 4. Décisions :

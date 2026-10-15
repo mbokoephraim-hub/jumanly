@@ -2,16 +2,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import {
-  Alert,
-  Badge,
-  Button,
-  ButtonLink,
-  Checkbox,
-  RadioGroup,
-  Select,
-  TextField,
-} from "@/components/ui";
+import { Alert, Badge, Button, ButtonLink, RadioGroup, Select, TextField } from "@/components/ui";
 import { countryOptions } from "@/config/countries";
 import { formatDate } from "@/lib/dates";
 import { DELETION_GRACE_DAYS, PASSWORD_MIN } from "@/lib/password";
@@ -34,11 +25,20 @@ import { resolvePlan } from "@/server/entitlements";
 import { ownedOrganization } from "@/server/services/accounts";
 import { AppPageHeader } from "@/components/app/page-header";
 import { TabRail } from "@/components/motion/tab-rail";
+import { Icon } from "@/components/brand/icon";
+import { pillClass } from "@/components/career/kit";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("settings.seo");
   return { title: { absolute: t("title") }, robots: { index: false } };
 }
+
+const tabIcons = {
+  compte: "profil",
+  securite: "securite",
+  confidentialite: "confidentialite",
+  donnees: "doc",
+} as const;
 
 const tabs = [
   { id: "compte", key: "account" },
@@ -58,22 +58,23 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
   const user = await requireUser("/app/parametres");
   const t = await getTranslations();
   const active: TabId = tabs.find((tab) => tab.id === one(params.onglet))?.id ?? "compte";
+  const plan = await resolvePlan(db, { type: "user", id: user.id });
   return (
-    <div className="flex flex-col gap-6">
+    <div className="flex flex-col gap-5 lg:gap-6">
       <AppPageHeader title={t("settings.title")} />
-      <nav aria-label={t("settings.title")}>
+      <nav aria-label={t("settings.title")} className="lg:hidden">
         <TabRail name="parametres">
-          <div className="flex w-max gap-6 px-3">
+          <div className="flex w-max gap-1.5">
             {tabs.map((tab) => (
               <Link
                 key={tab.id}
                 href={`/app/parametres?onglet=${tab.id}`}
                 aria-current={tab.id === active ? "page" : undefined}
                 className={cx(
-                  "-mb-px border-b-2 py-3 text-[15px] font-medium whitespace-nowrap",
+                  "inline-flex h-[34px] shrink-0 items-center rounded-pill px-3.5 text-[13px] font-medium whitespace-nowrap",
                   tab.id === active
-                    ? "border-feuille text-sapin"
-                    : "border-transparent text-sapin hover:border-brume",
+                    ? "bg-sapin text-blanc"
+                    : "bg-blanc text-sapin ring-[1.5px] ring-brume ring-inset",
                 )}
               >
                 {t(`settings.tab.${tab.key}`)}
@@ -82,18 +83,137 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
           </div>
         </TabRail>
       </nav>
-      {active === "compte" && <AccountTab user={user} params={params} />}
-      {active === "securite" && <SecurityTab user={user} params={params} />}
-      {active === "confidentialite" && <PrivacyTab user={user} params={params} />}
-      {active === "donnees" && <DataTab user={user} params={params} />}
+      <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[250px_minmax(0,1fr)] xl:grid-cols-[250px_minmax(0,1fr)_290px]">
+        <div className="hidden flex-col gap-4 lg:flex">
+          <nav
+            aria-label={t("settings.title")}
+            className="flex flex-col gap-1 rounded-[24px] bg-blanc p-3"
+          >
+            {tabs.map((tab) => (
+              <Link
+                key={tab.id}
+                href={`/app/parametres?onglet=${tab.id}`}
+                aria-current={tab.id === active ? "page" : undefined}
+                className={cx(
+                  "flex items-center gap-3 rounded-[16px] px-3.5 py-3 text-sm font-medium",
+                  tab.id === active ? "bg-sapin text-blanc" : "text-sapin hover:bg-creme",
+                )}
+              >
+                <Icon
+                  name={tabIcons[tab.id]}
+                  className={cx("size-[18px]", tab.id === active && "text-neon")}
+                />
+                {t(`settings.tab.${tab.key}`)}
+              </Link>
+            ))}
+          </nav>
+          {plan && (
+            <section className="flex flex-col gap-2 rounded-[24px] bg-sapin p-5 text-blanc">
+              <p className="text-[11px] font-semibold tracking-[0.09em] text-neon uppercase">
+                {t("settings.account.plan.text")}
+              </p>
+              <p className="text-xl font-semibold">{plan.planName}</p>
+              <Link href="/app/abonnement" className={pillClass("lime", "sm", "self-start")}>
+                {t("settings.account.plan.manage")}
+              </Link>
+            </section>
+          )}
+        </div>
+        <div className="min-w-0">
+          {active === "compte" && <AccountTab user={user} params={params} />}
+          {active === "securite" && <SecurityTab user={user} params={params} />}
+          {active === "confidentialite" && <PrivacyTab user={user} params={params} />}
+          {active === "donnees" && <DataTab user={user} params={params} />}
+        </div>
+        <aside className="hidden flex-col gap-4 xl:flex">
+          {active !== "donnees" && (
+            <section className="flex flex-col gap-2 rounded-[24px] bg-blanc p-5">
+              <h2 className="text-[15px] font-semibold">{t("settings.data.title")}</h2>
+              <p className="text-xs text-ardoise">{t("settings.data.export.desc")}</p>
+              <Link
+                href="/app/parametres?onglet=donnees"
+                className={pillClass("outline", "sm", "self-start")}
+              >
+                <Icon name="telecharger" className="size-4" />
+                {t("settings.data.export.cta")}
+              </Link>
+            </section>
+          )}
+          {active !== "securite" && (
+            <section className="flex flex-col gap-2 rounded-[24px] bg-blanc p-5">
+              <h2 className="text-[15px] font-semibold">{t("settings.tab.security")}</h2>
+              <Link
+                href="/app/parametres?onglet=securite"
+                className="flex items-center justify-between gap-2 text-sm hover:underline"
+              >
+                {t("settings.security.2fa.text")}
+                <span
+                  className={cx(
+                    "rounded-pill px-2.5 py-0.5 text-[11px] font-semibold",
+                    user.twoFactorEnabled ? "bg-menthe-clair text-[#0B5E49]" : "bg-brume",
+                  )}
+                >
+                  {user.twoFactorEnabled
+                    ? t("settings.security.2fa.on")
+                    : t("settings.security.2fa.off")}
+                </span>
+              </Link>
+            </section>
+          )}
+          <p className="flex items-start gap-2 px-1 text-xs text-ardoise">
+            <Icon name="info" className="size-3.5 shrink-0" />
+            {t("settings.data.contact")}
+          </p>
+        </aside>
+      </div>
+    </div>
+  );
+}
+
+/** Switch made of a native checkbox, so that the form posts it like any other field. */
+function Toggle({
+  id,
+  name,
+  label,
+  hint,
+  defaultChecked,
+}: {
+  id: string;
+  name: string;
+  label: string;
+  hint?: string;
+  defaultChecked?: boolean;
+}) {
+  return (
+    <div className="flex items-start justify-between gap-4">
+      <div className="flex flex-col gap-0.5">
+        <label htmlFor={id} className="text-sm leading-5 font-medium text-sapin">
+          {label}
+        </label>
+        {hint && (
+          <p id={`${id}-hint`} className="text-xs leading-[17px] text-ardoise">
+            {hint}
+          </p>
+        )}
+      </div>
+      <input
+        id={id}
+        name={name}
+        value="on"
+        type="checkbox"
+        role="switch"
+        defaultChecked={defaultChecked}
+        aria-describedby={hint ? `${id}-hint` : undefined}
+        className="relative mt-0.5 h-[26px] w-11 shrink-0 cursor-pointer appearance-none rounded-pill bg-brume transition-colors before:absolute before:top-[3px] before:left-[3px] before:size-5 before:rounded-full before:bg-blanc before:shadow-sm before:transition-transform checked:bg-sapin checked:before:translate-x-[18px] checked:before:bg-lime focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-sapin motion-reduce:transition-none motion-reduce:before:transition-none"
+      />
     </div>
   );
 }
 
 function Panel({ title, children }: { title: string; children: React.ReactNode }) {
   return (
-    <section className="flex flex-col gap-4 rounded-card bg-blanc p-6" aria-label={title}>
-      <h2 className="text-h2">{title}</h2>
+    <section className="flex flex-col gap-4 rounded-[24px] bg-blanc p-5 lg:p-7" aria-label={title}>
+      <h2 className="text-lg font-semibold">{title}</h2>
       {children}
     </section>
   );
@@ -167,10 +287,9 @@ async function AccountTab({ user, params }: { user: CurrentUser; params: Params 
       </Panel>
       <Panel title={t("settings.display.title")}>
         <form action={updateDisplay} className="flex flex-col items-start gap-4">
-          <Checkbox
+          <Toggle
             id="reduceMotion"
             name="reduceMotion"
-            value="on"
             defaultChecked={user.reduceMotion}
             label={t("settings.display.reduceMotion.text")}
             hint={t("settings.display.reduceMotion.hint")}
@@ -389,18 +508,39 @@ async function PrivacyTab({ user, params }: { user: CurrentUser; params: Params 
           <p className="text-sm text-ardoise">{t("talent.profile.visibility.always")}</p>
           <fieldset className="flex flex-col gap-3">
             <legend className="mb-2 text-label">{t("settings.privacy.ai.text")}</legend>
-            <Checkbox
+            <div className="flex flex-col gap-3 rounded-[18px] bg-creme p-4 text-sm">
+              <p className="font-semibold">{t("ai.consent.title")}</p>
+              <p className="text-ardoise">{t("ai.consent.intro")}</p>
+              <ul className="flex flex-col gap-2.5">
+                {(
+                  [
+                    ["uses", "check", "text-feuille-fonce"],
+                    ["never", "eye-off", "text-[#B3261E]"],
+                    ["control", "transparence", "text-sapin"],
+                  ] as const
+                ).map(([key, icon, tone]) => (
+                  <li key={key} className="flex gap-2.5">
+                    <Icon name={icon} className={cx("mt-0.5 size-4 shrink-0", tone)} />
+                    <span>
+                      <strong className="font-semibold">{t(`ai.consent.${key}.title`)}</strong>
+                      {" · "}
+                      <span className="text-ardoise">{t(`ai.consent.${key}.body`)}</span>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+              <p className="text-xs text-ardoise">{t("ai.consent.optional")}</p>
+            </div>
+            <Toggle
               id="ai"
               name="ai"
-              value="on"
               defaultChecked={Boolean(user.aiConsentAt)}
               label={t("settings.privacy.ai.desc")}
               hint={t("settings.privacy.ai.hint")}
             />
-            <Checkbox
+            <Toggle
               id="matching"
               name="matching"
-              value="on"
               defaultChecked={profile?.matchingEnabled ?? true}
               label={t("settings.privacy.ai.matching.text")}
               hint={t("settings.privacy.ai.matching.hint")}
@@ -413,19 +553,17 @@ async function PrivacyTab({ user, params }: { user: CurrentUser; params: Params 
             <legend className="mb-2 text-label">
               {t("settings.privacy.contactRequests.legend")}
             </legend>
-            <Checkbox
+            <Toggle
               id="contact-requests"
               name="contactRequests"
-              value="on"
               defaultChecked={profile?.acceptsContactRequests ?? true}
               label={t("settings.privacy.contactRequests.text")}
               hint={t("settings.privacy.contactRequests.hint")}
             />
           </fieldset>
-          <Checkbox
+          <Toggle
             id="newsletter"
             name="newsletter"
-            value="on"
             defaultChecked={user.newsletter}
             label={t("settings.notifications.group.news")}
           />

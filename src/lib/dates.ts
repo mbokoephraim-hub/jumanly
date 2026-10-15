@@ -25,3 +25,12 @@ export function formatRelativeDays(date: Date, now = new Date()): string {
 export function languageName(code: string): string {
   return new Intl.DisplayNames(["fr-FR"], { type: "language" }).of(code) ?? code;
 }
+
+/** "il y a 2 jours", "il y a 1 semaine", "dans 3 jours": days, then weeks, then months. */
+export function formatRelative(date: Date, now = new Date()): string {
+  const days = Math.round((date.getTime() - now.getTime()) / 86_400_000);
+  const format = new Intl.RelativeTimeFormat("fr-FR", { numeric: "auto" });
+  if (Math.abs(days) < 7) return format.format(days, "day");
+  if (Math.abs(days) < 30) return format.format(Math.trunc(days / 7), "week");
+  return format.format(Math.trunc(days / 30), "month");
+}

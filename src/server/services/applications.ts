@@ -189,10 +189,67 @@ export async function listApplications(db: PrismaClient, userId: string) {
           contractType: true,
           remote: true,
           organization: { select: { name: true } },
+          // Steps the recruiter defined, for the tracker of « Mes candidatures ».
+          stages: { select: { kind: true, name: true, order: true }, orderBy: { order: "asc" } },
         },
+      },
+      conversation: { select: { id: true, _count: { select: { messages: true } } } },
+      interviews: {
+        where: { status: "confirmed", startsAt: { not: null } },
+        orderBy: { startsAt: "asc" },
+        select: { id: true, mode: true, durationMinutes: true, startsAt: true, timezone: true },
       },
     },
   });
+}
+
+/**
+ * Steps shown to the talent for one application: sent, read by the recruiter, then the stages the
+ * recruiter defined (without the first inbox stage and the final decision). Each step is done,
+ * current or still to come.
+ */
+export type TrackerStep = {
+  key: string;
+  status: TalentApplicationStatus;
+  state: "done" | "current" | "next";
+};
+
+const trackedKinds: Partial<Record<StageKind, TalentApplicationStatus>> = {
+  screening: "shortlisted",
+  test: "test",
+  interview: "interview",
+  offer: "offer",
+};
+
+export function applicationTracker(
+  application: {
+    viewedAt: Date | null;
+    stage: { kind: StageKind };
+    job: { stages: { kind: StageKind; name: string; order: number }[] };
+  },
+  status: TalentApplicationStatus,
+): TrackerStep[] {
+  const stages = application.job.stages.filter((stage) => stage.kind in trackedKinds);
+  const kinds = stages.length
+    ? stages.map((stage) => stage.kind)
+    : (["screening", "interview", "offer"] as StageKind[]);
+  const steps: { key: string; status: TalentApplicationStatus; kind?: StageKind }[] = [
+    { key: "sent", status: "sent" },
+    { key: "viewed", status: "viewed" },
+    ...kinds.map((kind, index) => ({ key: `${kind}-${index}`, status: trackedKinds[kind]!, kind })),
+  ];
+  const currentKind = application.stage.kind;
+  let current = steps.findIndex((step) => step.kind === currentKind);
+  if (current < 0) {
+    if (currentKind === "hired") current = steps.length - 1;
+    else current = application.viewedAt || currentKind !== "new" ? 1 : 0;
+  }
+  const finished = status === "hired";
+  return steps.map((step, index) => ({
+    key: step.key,
+    status: step.status,
+    state: index < current || finished ? "done" : index === current ? "current" : "next",
+  }));
 }
 
 export type TalentApplication = Awaited<ReturnType<typeof listApplications>>[number];
