@@ -61,7 +61,7 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
       : admin.platformRole !== "support_agent" || !contentKeys.includes(link.key),
   );
   const pill = (editorOnly ? pillKeys.editor : pillKeys.admin) as readonly string[];
-  const t = await getTranslations("admin");
+  const [t, a11y] = await Promise.all([getTranslations("admin"), getTranslations("a11y")]);
   const home = editorOnly ? "/admin/formations" : "/admin";
   const initials = admin.name
     .split(/[\s-]+/)
@@ -73,6 +73,13 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
   // green header with the search and the account, the Crème sheet and the floating pill.
   return (
     <div className="jm-admin-bg min-h-dvh text-sapin lg:flex">
+      {/* First stop of the keyboard: skips the column of icons (and the phone header). */}
+      <a
+        href="#content"
+        className="sr-only z-50 rounded-pill bg-lime px-4 py-2 text-sapin focus:not-sr-only focus:fixed focus:top-3 focus:left-3"
+      >
+        {a11y("skipToContent")}
+      </a>
       {/* Admin v3 (docs/admin-v3/PLAN.md, étape 1): a floating gradient column of icons, as tall as
           its content and centered in the window; each label shows in a tooltip. */}
       <aside className="hidden shrink-0 lg:sticky lg:top-0 lg:flex lg:h-dvh lg:items-center lg:pl-4">
@@ -156,7 +163,8 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
       <div className="min-h-[calc(100dvh-72px)] min-w-0 flex-1 rounded-t-[28px] bg-creme lg:min-h-0 lg:rounded-none lg:bg-transparent">
         <main
           id="content"
-          className="jm-admin-page mx-auto flex w-full max-w-[1400px] flex-col gap-5 px-4 pt-5 pb-32 sm:px-6 lg:px-6 lg:pt-4 lg:pb-8 xl:px-8"
+          tabIndex={-1}
+          className="jm-admin-page mx-auto flex w-full max-w-[1400px] flex-col gap-5 px-4 pt-5 pb-32 outline-none sm:px-6 lg:px-6 lg:pt-4 lg:pb-8 xl:px-8"
         >
           {admin.platformRole === "support_agent" && (
             <p className="order-1 flex items-center gap-2.5 rounded-[14px] bg-neon px-4 py-2.5 text-[12px] font-medium">
