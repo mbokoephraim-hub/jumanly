@@ -17,6 +17,31 @@ reste valable si l'on y revient.
 Celles de `docs/deploiement-hostinger.md` (§ 3), plus `CRON_SECRET` (32 caractères aléatoires ou
 plus ; sans elle, la route refuse l'appel du cron).
 
+## E-mails (codes de connexion, liens, reçus) · Resend
+
+Sans `RESEND_API_KEY`, aucun e-mail ne part : les codes s'affichent seulement dans les journaux
+Vercel (« e-mail factice »). Pour les envoyer vraiment :
+
+1. Créer un compte sur [resend.com](https://resend.com) → Domains → **Add Domain** → `jumanly.io`,
+   région **eu-west-1 (Irlande)**.
+2. Resend affiche 3 ou 4 enregistrements DNS (un `TXT` `resend._domainkey`, un `MX` et un `TXT`
+   sur `send`, parfois un `TXT` `_dmarc`). Les recopier un par un chez Hostinger → Domaines →
+   `jumanly.io` → **DNS / Serveurs de noms** (nom, type, valeur, priorité 10 pour le `MX`).
+   Ces enregistrements portent sur le sous-domaine `send` : ils ne touchent ni au site ni à une
+   future boîte de réception.
+3. Revenir dans Resend → **Verify DNS Records** jusqu'à « Verified » (quelques minutes à quelques
+   heures).
+4. Resend → API Keys → **Create API Key** (permission « Sending access », domaine `jumanly.io`).
+   Copier la clé (`re_…`), elle ne s'affiche qu'une fois.
+5. Vercel → Paramètres → Variables d'environnement : `RESEND_API_KEY` = la clé, et
+   `EMAIL_FROM` = `Jumanly <assistant@jumanly.io>` (environnement Production). Puis
+   Deployments → dernier déploiement → **Redeploy**.
+6. Tester : se connecter avec un code sur jumanly.io ; l'e-mail arrive (regarder aussi les
+   indésirables la première fois). En cas d'échec, Vercel → Logs affiche la raison donnée par
+   Resend (« Resend a répondu 403 … »).
+
+L'offre gratuite de Resend couvre 3 000 e-mails par mois (100 par jour).
+
 ## Connexion par Google, Apple et LinkedIn
 
 Chaque bouton de `/connexion` et `/inscription` n'apparaît que si les clés de son service sont

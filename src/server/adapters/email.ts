@@ -54,7 +54,11 @@ export class ResendEmailSender implements EmailSender {
         reply_to: email.replyTo,
       }),
     });
-    if (!response.ok) throw new Error(`Resend a répondu ${response.status}`);
+    if (!response.ok) {
+      // Resend explains the refusal (unverified domain, invalid key…): keep it in the logs.
+      const detail = (await response.text().catch(() => "")).slice(0, 300);
+      throw new Error(`Resend a répondu ${response.status} ${detail}`.trim());
+    }
   }
 }
 
@@ -66,6 +70,11 @@ export function emailSender(): EmailSender {
     sender = apiKey
       ? new ResendEmailSender(apiKey, process.env.EMAIL_FROM ?? "Jumanly <assistant@jumanly.io>")
       : new FakeEmailSender();
+    if (!apiKey && process.env.VERCEL_ENV === "production") {
+      console.error(
+        "[e-mail] RESEND_API_KEY manquante en production : aucun e-mail ne part (codes visibles seulement dans les journaux).",
+      );
+    }
   }
   return sender;
 }
