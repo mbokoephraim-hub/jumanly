@@ -125,7 +125,8 @@ test("vérification de l'entreprise et page publique", async ({
   await page.goto("/app/organisation?onglet=verification");
   await expectAccessible(page);
   const submit = page.getByRole("button", { name: /Envoyer la demande|Compléter la demande/ });
-  if (await submit.isVisible()) {
+  const sent = await submit.isVisible();
+  if (sent) {
     await page.locator("#verify-registration").fill("RCCM-FICTIF-E2E");
     await page.locator("#verify-mandate").fill("Directrice des ressources humaines (fictive)");
     // A supporting document (Admin v2, étape 4): a tiny fictional PDF.
@@ -143,9 +144,10 @@ test("vérification de l'entreprise et page publique", async ({
     await admin.goto("/admin/organisations?onglet=en-attente");
     await expectAccessible(admin);
     await admin.getByRole("link", { name: "Groupe Démo (groupe fictif)" }).click();
-    await expect(
-      admin.locator("#organisations-fiche").getByRole("link", { name: /Ouvrir registre-fictif/ }),
-    ).toBeVisible();
+    if (sent)
+      await expect(
+        admin.locator("#organisations-fiche").getByRole("link", { name: /Ouvrir registre-fictif/ }),
+      ).toBeVisible();
     await admin.getByRole("button", { name: "Approuver la vérification" }).click();
     await expect(admin.getByText("Groupe Démo (groupe fictif) est vérifiée.")).toBeVisible();
     await admin.context().close();
