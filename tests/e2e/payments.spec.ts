@@ -65,7 +65,7 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
 
   // Upgrade: the unused time of Starter is deducted.
   await page.goto("/app/abonnement/payer?forfait=talent_pro");
-  await expect(page.getByText(/Crédit déduit/)).toBeVisible();
+  await expect(page.getByText(/Crédit pour le temps restant sur Starter/)).toBeVisible();
   await page.goto("/app/abonnement");
   await expect(page.getByRole("main")).toContainText("Starter");
   await expect(page.getByRole("link", { name: /Télécharger la facture JMN-/ })).toHaveCount(1);

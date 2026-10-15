@@ -15,6 +15,16 @@ export function formatDate(date: Date, timeZone = defaultTimeZone()): string {
   }).format(date);
 }
 
+/** "2 oct. 2026": tables and lists where the long month would not fit. */
+export function formatShortDate(date: Date, timeZone = defaultTimeZone()): string {
+  return new Intl.DateTimeFormat("fr-FR", {
+    day: "numeric",
+    month: "short",
+    year: "numeric",
+    timeZone,
+  }).format(date);
+}
+
 /** "il y a 3 jours", "aujourd'hui", "hier". */
 export function formatRelativeDays(date: Date, now = new Date()): string {
   const days = Math.round((date.getTime() - now.getTime()) / 86_400_000);
