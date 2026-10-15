@@ -7377,7 +7377,10 @@
       },
       "freeTitle": "Vous utilisez la formule gratuite",
       "freeText": "Vous pouvez créer votre profil, consulter les offres et postuler gratuitement. Pour aller plus loin, découvrez les formules payantes.",
-      "freeCta": "Découvrir les formules"
+      "freeCta": "Découvrir les formules",
+      "includes": "Votre formule comprend",
+      "ring": "{days} j",
+      "nextRenewalDays": "Prochaine échéance : {date} · {days, plural, =0 {échéance aujourd'hui} one {# jour restant} other {# jours restants}}"
     },
     "quotas": {
       "title": "Vos quotas",
@@ -7406,7 +7409,8 @@
       "upgrade": "Passer à {plan}",
       "downgrade": "Passer à {plan}",
       "quote": "Demander un devis",
-      "unavailable": "Non disponible pour votre compte"
+      "unavailable": "Non disponible pour votre compte",
+      "note": "Une montée en gamme s'applique immédiatement, et le temps restant sur votre formule actuelle est pris en compte. Une réduction de gamme prend effet à la fin de la période déjà payée."
     },
     "upgrade": {
       "title": "Passer à {plan}",
@@ -7479,7 +7483,12 @@
       },
       "download": "Télécharger la facture",
       "downloadAlt": "Télécharger la facture {number} en PDF",
-      "empty": "Aucun paiement pour le moment."
+      "empty": "Aucun paiement pour le moment.",
+      "pdfNote": "Factures en PDF",
+      "method": {
+        "mobileMoney": "Mobile Money · {operator}",
+        "card": "Carte bancaire"
+      }
     },
     "invoice": {
       "pdf": {
@@ -7564,7 +7573,9 @@
       "amount": "{amount} USD",
       "credit": "Crédit déduit : {credit} USD",
       "total": "Total : {total} USD",
-      "local": "Environ {localAmount} {localCurrency}, au taux de votre opérateur ou de votre banque."
+      "local": "Environ {localAmount} {localCurrency}, au taux de votre opérateur ou de votre banque.",
+      "creditValue": "− {credit} USD",
+      "currency": "USD"
     },
     "method": {
       "title": "Choisissez votre moyen de paiement",
@@ -7584,6 +7595,14 @@
     },
     "applyFree": "Rappel : candidater reste gratuit, que vous payiez ou non.",
     "cancel": "Annuler et revenir",
+    "steps": {
+      "label": "Étapes du paiement",
+      "method": "Moyen de paiement",
+      "details": "Informations",
+      "confirm": "Confirmation",
+      "done": "terminée",
+      "current": "en cours"
+    },
     "mm": {
       "operator": {
         "title": "Votre opérateur",
@@ -7616,7 +7635,8 @@
         "never": "Jumanly ne vous demandera jamais votre code secret. Ne le communiquez à personne.",
         "cancel": "Annuler le paiement",
         "changeNumber": "Utiliser un autre numéro",
-        "illustrationAlt": "Téléphone affichant une demande de confirmation de paiement"
+        "illustrationAlt": "Téléphone affichant une demande de confirmation de paiement",
+        "status": "En attente de confirmation"
       },
       "checking": "Vérification du paiement…",
       "error": {
@@ -7633,6 +7653,7 @@
     },
     "card": {
       "title": "Carte bancaire",
+      "secureForm": "Formulaire sécurisé du prestataire",
       "number": {
         "label": "Numéro de carte",
         "placeholder": "1234 1234 1234 1234"
@@ -7702,6 +7723,9 @@
     },
     "duplicate": "Un paiement est déjà en cours pour cette formule. Attendez sa confirmation avant d'en lancer un autre.",
     "debitedNotActivated": "Vous avez été débité mais votre formule n'est pas active ? Écrivez-nous à infojumanly@gmail.com avec la référence {reference}. Nous régularisons au plus vite.",
+    "result": {
+      "eyebrow": "Résultat du paiement"
+    },
     "fake": "Paiement de démonstration : aucun argent n'est débité. Un numéro se terminant par 0000 simule un refus, 1111 un délai dépassé, 2222 une attente.",
     "trial": {
       "text": "Le paiement en ligne arrive bientôt. En attendant, vous pouvez essayer {plan} pendant {days} jours, sans rien payer.",

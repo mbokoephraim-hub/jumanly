@@ -20,7 +20,7 @@ test.describe("inscription avec forfait", () => {
     await expect(page).toHaveURL(/\/app$/);
     await page.goto("/app/abonnement");
     await expect(page.getByRole("main")).toContainText("Pro");
-    await expect(page.getByRole("main")).toContainText("Formule actuelleProActive");
+    await expect(page.getByRole("main")).toContainText("Formule actuelleActivePro");
   });
 
   test("payer plus tard laisse le compte en Free", async ({ page }) => {

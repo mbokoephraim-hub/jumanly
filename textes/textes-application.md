@@ -6091,6 +6091,9 @@ Conventions :
 | `billing.current.freeTitle` | Vous utilisez la formule gratuite |
 | `billing.current.freeText` | Vous pouvez créer votre profil, consulter les offres et postuler gratuitement. Pour aller plus loin, découvrez les formules payantes. |
 | `billing.current.freeCta` | Découvrir les formules |
+| `billing.current.includes` | Votre formule comprend |
+| `billing.current.ring` | {days} j |
+| `billing.current.nextRenewalDays` | Prochaine échéance : {date} · {days, plural, =0 {échéance aujourd'hui} one {# jour restant} other {# jours restants}} |
 
 #### Jauges de quotas
 
@@ -6126,6 +6129,7 @@ Conventions :
 | `billing.change.downgrade` | Passer à {plan} |
 | `billing.change.quote` | Demander un devis |
 | `billing.change.unavailable` | Non disponible pour votre compte |
+| `billing.change.note` | Une montée en gamme s'applique immédiatement, et le temps restant sur votre formule actuelle est pris en compte. Une réduction de gamme prend effet à la fin de la période déjà payée. |
 | `billing.upgrade.title` | Passer à {plan} |
 | `billing.upgrade.text` | Votre nouvelle formule s'applique immédiatement. |
 | `billing.upgrade.summary.newPlan` | Nouvelle formule |
@@ -6196,6 +6200,9 @@ Conventions :
 | `billing.invoice.pdf.refunded` | Remboursée le {date} |
 | `billing.invoice.pdf.footer` | Facture émise par The Growth Lab pour la plateforme Jumanly. Montants en dollars américains (USD). |
 | `billing.history.empty` | Aucun paiement pour le moment. |
+| `billing.history.pdfNote` | Factures en PDF |
+| `billing.history.method.mobileMoney` | Mobile Money · {operator} |
+| `billing.history.method.card` | Carte bancaire |
 | `billing.invoiceDetails.title` | Informations de facturation |
 | `billing.invoiceDetails.text` | Ces informations apparaissent sur vos factures. |
 | `billing.invoiceDetails.name.label` | Nom ou raison sociale |
@@ -6257,6 +6264,14 @@ Conventions :
 | `checkout.terms.link` | conditions générales de vente |
 | `checkout.applyFree` | Rappel : candidater reste gratuit, que vous payiez ou non. |
 | `checkout.cancel` | Annuler et revenir |
+| `checkout.summary.creditValue` | − {credit} USD |
+| `checkout.summary.currency` | USD |
+| `checkout.steps.label` | Étapes du paiement |
+| `checkout.steps.method` | Moyen de paiement |
+| `checkout.steps.details` | Informations |
+| `checkout.steps.confirm` | Confirmation |
+| `checkout.steps.done` | terminée |
+| `checkout.steps.current` | en cours |
 
 ### Paiement · Mobile Money
 
@@ -6290,6 +6305,7 @@ Conventions :
 | `checkout.mm.waiting.changeNumber` | Utiliser un autre numéro |
 | `checkout.mm.waiting.illustrationAlt` | Téléphone affichant une demande de confirmation de paiement |
 | `checkout.mm.checking` | Vérification du paiement… |
+| `checkout.mm.waiting.status` | En attente de confirmation |
 | `checkout.mm.error.numberInvalid` | Ce numéro ne semble pas valide pour {operator}. Vérifiez l'indicatif et le nombre de chiffres. |
 | `checkout.mm.error.operatorRequired` | Choisissez votre opérateur. |
 | `checkout.mm.error.numberRequired` | Saisissez votre numéro Mobile Money. |
@@ -6301,6 +6317,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `checkout.card.title` | Carte bancaire |
+| `checkout.card.secureForm` | Formulaire sécurisé du prestataire |
 | `checkout.card.number.label` | Numéro de carte |
 | `checkout.card.number.placeholder` | 1234 1234 1234 1234 |
 | `checkout.card.expiry.label` | Date d'expiration |
@@ -6354,6 +6371,7 @@ Conventions :
 | `checkout.pending.cta` | Revenir à mon espace |
 | `checkout.duplicate` | Un paiement est déjà en cours pour cette formule. Attendez sa confirmation avant d'en lancer un autre. |
 | `checkout.debitedNotActivated` | Vous avez été débité mais votre formule n'est pas active ? Écrivez-nous à infojumanly@gmail.com avec la référence {reference}. Nous régularisons au plus vite. |
+| `checkout.result.eyebrow` | Résultat du paiement |
 | `checkout.mm.operators.mpesa` | M-Pesa |
 | `checkout.mm.operators.orange` | Orange Money |
 | `checkout.mm.operators.airtel` | Airtel Money |

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { SponsoredCard } from "@/components/billing/sponsored-card";
-import { SubscriptionSection } from "@/components/billing/subscription-section";
+import { ApplyFreeBand, SubscriptionSection } from "@/components/billing/subscription-section";
 import { Alert } from "@/components/ui";
 import { formatDate } from "@/lib/dates";
 import { requireUser } from "@/server/auth/session";
@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: { absolute: t("title") }, robots: { index: false } };
 }
 
-/** « Mon abonnement »: the personal plan, and the organization's plan for its owner. */
+/** « Mon abonnement » (mockup 05-02): the personal plan, and the organization's plan for its owner. */
 export default async function BillingPage({ searchParams }: PageProps<"/app/abonnement">) {
   const params = await searchParams;
   const user = await requireUser("/app/abonnement");
@@ -29,17 +29,11 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/abon
     resolvePlan(db, { type: "user", id: user.id }, now),
   ]);
   const activated = licenses.find((license) => license.id === params.licence);
+  const cancelFamily = typeof params.resilier === "string" ? params.resilier : undefined;
   return (
-    <div className="flex flex-col gap-8">
-      <AppPageHeader
-        title={t("billing.title")}
-        subtitle={
-          <>
-            <p>{t("billing.subtitle")}</p>
-            <p className="font-semibold">{t("billing.applyFree")}</p>
-          </>
-        }
-      />
+    <div className="jm-page flex flex-col gap-5 lg:gap-6">
+      <AppPageHeader title={t("billing.title")} subtitle={t("billing.subtitle")} />
+      <ApplyFreeBand>{t("billing.applyFree")}</ApplyFreeBand>
       {activated &&
         (activated.pending ? (
           <Alert tone="info" title={t("activate.pending.title")}>
@@ -75,6 +69,7 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/abon
           family="rh"
           families={["rh", "company"]}
           heading={t("orgBilling.title", { orgName: org.name })}
+          cancelOpen={cancelFamily === "rh"}
         />
       )}
       {licenses.map((license) => (
@@ -90,12 +85,8 @@ export default async function BillingPage({ searchParams }: PageProps<"/app/abon
         family="talent"
         families={["talent"]}
         heading={org ? t("spaceSwitcher.personal.text") : undefined}
+        cancelOpen={cancelFamily === "talent"}
       />
-      <p className="text-sm text-ardoise">
-        {t("billing.help.text", {
-          email: org ? t("billing.help.emailPro") : t("billing.help.emailPersonal"),
-        })}
-      </p>
     </div>
   );
 }
