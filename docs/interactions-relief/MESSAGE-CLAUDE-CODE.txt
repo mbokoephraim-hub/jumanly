@@ -1,0 +1,9 @@
+Nouvelle refonte transversale : interactions et cadres v2.1 (curseur Orbi avec zoom des liens au survol et au clic, ombres douces sur les cadres sans changer l'identité, en-têtes en îlots, effets).
+
+1. Lis docs/interactions-relief/BRIEF-INTERACTIONS-RELIEF-V2.md en entier.
+2. Garde l'identité visuelle actuelle (couleurs, icônes, boutons, contenu des pages) : on ne change que les cadres, l'en-tête, le curseur et les effets.
+3. Ouvre docs/interactions-relief/maquette/app-v2.html et site-v2.html dans un navigateur, avec une souris : ce sont la référence visuelle et de comportement. Leurs blocs CSS « Ombres douces » et « Curseur Orbi » et leur script donnent les valeurs exactes (ombres, tailles, durées, courbes). Les captures .jpg montrent les états clés.
+4. Ce brief prolonge docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md : réutilise src/styles/motion.css, AppMotionRoot et MotionRoot, n'ajoute aucune bibliothèque d'animation, n'anime que transform, opacity et filter, et respecte « Réduire les animations » et prefers-reduced-motion (les ombres restent, le curseur et les animations disparaissent).
+5. Propose un plan court, puis travaille lot par lot (R1 Cadres, R2 En-têtes et recherche Ctrl K, R3 Curseur Orbi avec le réglage User.orbiCursor, R4 Effets), un commit par lot, avec pnpm lint, typecheck, test, test:e2e et test:e2e:reduced verts.
+6. Textes nouveaux dans textes/textes-application.md puis pnpm messages. Note la décision « ombres douces sur les cadres » dans docs/decisions/ et mets à jour docs/journal.md.
+7. À la fin, vérifie la « Définition de fini » (§ 7) à la souris, au clavier seul et sur téléphone, et liste ce qui reste éventuellement à arbitrer.

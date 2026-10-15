@@ -1,0 +1,494 @@
+<title>Jumanly Site Relief</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap">
+<style>
+/* ===== Jumanly · Interactions et cadres v2.1 (socle commun des maquettes) =====
+   Couche 1 : cadres à ombres douces (cartes, encadrés, champs), identité inchangée.
+   Couche 2 : curseur Orbi (orbe + loupe qui inverse le fond, anneau qui se resserre sur un lien).
+   Couche 3 : mouvements d'entrée, de survol, de clic. État final = état par défaut. */
+:root{
+  --sapin:#0F3F37; --lime:#A6F26B; --creme:#F2EDE5; --blanc:#FFFFFF; --feuille:#3DA14F;
+  --menthe:#2FD3A6; --nuit:#0B1A1F; --neon:#E3F67C; --ardoise:#5B6B68; --brume:#DCE5E1;
+  --lime-c:#EEFBDD; --menthe-c:#DDF6EE; --ambre:#F2B33D;
+  --g-signature:linear-gradient(135deg,#D9FA72 0%,#7DE36B 50%,#1E9A64 100%);
+  --g-ia:linear-gradient(45deg,#0F3F37 0%,#14745F 55%,#2FD3A6 100%);
+  --g-profondeur:linear-gradient(160deg,#0F3F37 0%,#0B1A1F 100%);
+  --orbe:radial-gradient(circle at 38% 32%,#F4FFB8,#A6F26B 45%,#3DA14F);
+  --font:"Sora",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+
+  /* --- Ombres douces (modèle : image 6 d'Ephraïm) ---
+     Pas d'épaisseur ni d'arête : une carte blanche, un contour presque invisible
+     et une ombre large et légère qui la détache du fond Crème. */
+  --ombre-carte:
+    0 0 0 1px rgba(15,63,55,.045),
+    0 1px 2px rgba(15,63,55,.04),
+    0 12px 32px -12px rgba(15,63,55,.14);
+  /* Survol d'une carte cliquable : l'ombre s'ouvre un peu. */
+  --ombre-carte-h:
+    0 0 0 1px rgba(15,63,55,.06),
+    0 2px 4px rgba(15,63,55,.04),
+    0 20px 44px -14px rgba(15,63,55,.20);
+  /* Élément posé dans une carte (ligne de liste, sous-encadré, puce, bouton blanc). */
+  --ombre-douce:
+    0 0 0 1px rgba(15,63,55,.05),
+    0 4px 14px -6px rgba(15,63,55,.12);
+  /* Zone secondaire dans une carte (valeur clé, piste de jauge, champ) : simple fond, sans creux. */
+  --zone:#F6F3EE;
+  /* Surfaces sombres : même ombre, plus profonde. */
+  --ombre-sombre:0 14px 36px -16px rgba(11,26,31,.45);
+  /* Compatibilité avec les classes de la maquette */
+  --relief-1:var(--ombre-carte); --relief-1h:var(--ombre-carte-h); --relief-sombre:var(--ombre-sombre);
+  --puits-fond:var(--zone); --puits:none;
+  --cadre-fond:transparent; --cadre-ombre:none;
+
+  --r-card:24px; --r-md:18px; --r-sm:14px; --r-pill:999px;
+  --elan:cubic-bezier(.2,.8,.2,1); --rebond:cubic-bezier(.34,1.56,.64,1);
+  --arrivee:cubic-bezier(0,0,.2,1); --depart:cubic-bezier(.4,0,1,1);
+  color-scheme:light;
+}
+*{box-sizing:border-box}
+html,body{background:var(--sapin)}
+body{margin:0;color:var(--sapin);font-family:var(--font);font-size:14px;line-height:1.5;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;text-wrap:balance;font-weight:600;letter-spacing:-.02em}
+p{margin:0}
+button,a,input,textarea{font:inherit;color:inherit}
+button{background:none;border:0;padding:0}
+a{text-decoration:none}
+.i{width:20px;height:20px;flex:none}
+:focus-visible{outline:3px solid var(--lime);outline-offset:3px;border-radius:12px}
+
+/* ---------- Cadres (ombres douces) ---------- */
+.carte{background:#fff;border-radius:var(--r-card);box-shadow:var(--ombre-carte);position:relative;
+  transition:box-shadow .35s var(--elan),transform .35s var(--elan)}
+.carte.sombre{background:var(--g-profondeur);color:var(--blanc);box-shadow:var(--ombre-sombre)}
+.cadre{display:contents}
+.puits{background:var(--zone);border-radius:var(--r-sm)}
+.sombre .puits{background:rgba(255,255,255,.08)}
+
+/* Tuile d'icône : l'identité actuelle (aplat), avec la même ombre douce. */
+.tuile{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;flex:none;position:relative;
+  background:var(--sapin);color:var(--lime);box-shadow:0 6px 14px -6px rgba(15,63,55,.35)}
+.tuile .i{width:22px;height:22px}
+.tuile.lime{background:var(--lime);color:var(--sapin);box-shadow:0 6px 14px -6px rgba(61,161,79,.45)}
+.tuile.menthe{background:var(--menthe);color:var(--sapin);box-shadow:0 6px 14px -6px rgba(47,211,166,.45)}
+.tuile.creme{background:var(--creme);color:var(--sapin);box-shadow:0 0 0 1px rgba(15,63,55,.06)}
+
+/* Boutons : les pilules actuelles, avec une ombre douce. */
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:var(--r-pill);
+  font-weight:600;font-size:14px;white-space:nowrap;position:relative;cursor:pointer;
+  transition:transform .22s var(--elan),box-shadow .22s var(--elan),background .2s}
+.btn .i{width:18px;height:18px}
+.btn-lime{background:var(--lime);color:var(--sapin);box-shadow:0 6px 16px -8px rgba(61,161,79,.6)}
+.btn-lime:hover{background:#8FD957}
+.btn-sapin{background:var(--sapin);color:var(--blanc);box-shadow:0 6px 16px -8px rgba(11,26,31,.5)}
+.btn-sapin:hover{background:#145045}
+.btn-blanc{background:#fff;color:var(--sapin);box-shadow:var(--ombre-douce)}
+.btn-sm{height:36px;padding:0 14px;font-size:13px}
+
+/* Champ (le « rectangle pour écrire ») : fond Crème clair, contour fin. */
+.champ{display:flex;align-items:center;gap:10px;height:48px;padding:0 8px 0 16px;border-radius:16px;
+  background:var(--zone);box-shadow:inset 0 0 0 1px rgba(15,63,55,.06);color:var(--ardoise);transition:box-shadow .25s,background .25s}
+.champ input,.champ textarea{flex:1;min-width:0;border:0;background:none;outline:none;color:var(--sapin);font-size:14px}
+.champ input::placeholder,.champ textarea::placeholder{color:#7C8986}
+.champ:focus-within{background:#fff;box-shadow:0 0 0 2px var(--lime),0 0 0 6px rgba(166,242,107,.22)}
+kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#fff;color:var(--ardoise);box-shadow:0 0 0 1px rgba(15,63,55,.08)}
+
+/* Logo J animé */
+.jlogo svg{display:block;overflow:visible}
+.jlogo .point{transform-box:fill-box;transform-origin:center}
+.jlogo:hover .point{animation:j-orbite 1.1s var(--elan)}
+@keyframes j-orbite{0%{transform:translate(0,0)}25%{transform:translate(9px,9px)}50%{transform:translate(0,18px)}75%{transform:translate(-9px,9px)}100%{transform:translate(0,0)}}
+.entree .jlogo .point{animation:j-chute .9s var(--rebond) .15s both}
+@keyframes j-chute{0%{transform:translateY(-40px) scale(.4);opacity:0}60%{opacity:1}100%{transform:none}}
+.entree .jlogo .tige{stroke-dasharray:80;animation:j-trace .8s var(--elan) both}
+@keyframes j-trace{from{stroke-dashoffset:80}to{stroke-dashoffset:0}}
+
+/* ---------- Curseur Orbi ---------- */
+.orbi-on, .orbi-on *{cursor:none !important}
+.orbi-on input,.orbi-on textarea{cursor:text !important}
+#orbi-loupe,#orbi-teinte,#orbi-anneau,#orbi-orbe,#orbi-onde{position:fixed;left:0;top:0;pointer-events:none;z-index:9998;border-radius:50%;opacity:0;will-change:transform}
+/* La loupe : inverse le fond (blanc → vert, Sapin → menthe claire) en gardant le texte lisible. */
+#orbi-loupe{width:96px;height:96px;margin:-48px 0 0 -48px;-webkit-backdrop-filter:invert(1) hue-rotate(180deg);backdrop-filter:invert(1) hue-rotate(180deg)}
+#orbi-teinte{width:96px;height:96px;margin:-48px 0 0 -48px;background:#0F3F37;mix-blend-mode:screen}
+/* L'orbite : anneau Lime avec un satellite. */
+#orbi-anneau{width:96px;height:96px;margin:-48px 0 0 -48px;border:1.5px solid rgba(166,242,107,.85);
+  box-shadow:0 0 0 1px rgba(15,63,55,.25),0 0 18px rgba(166,242,107,.35)}
+#orbi-anneau::after{content:"";position:absolute;width:8px;height:8px;border-radius:50%;background:var(--lime);
+  top:-4px;left:calc(50% - 4px);box-shadow:0 0 8px var(--lime);transform-origin:4px 52px;animation:satellite 3.2s linear infinite}
+@keyframes satellite{to{transform:rotate(360deg)}}
+/* Orbi : l'orbe au bout du pointeur. */
+#orbi-orbe{width:14px;height:14px;margin:-7px 0 0 -7px;background:var(--orbe);box-shadow:0 0 0 2px rgba(15,63,55,.55),0 0 14px rgba(166,242,107,.9);z-index:9999}
+#orbi-onde{width:40px;height:40px;margin:-20px 0 0 -20px;border:2px solid var(--lime)}
+.orbi-on #orbi-loupe,.orbi-on #orbi-teinte,.orbi-on #orbi-anneau,.orbi-on #orbi-orbe{opacity:1;transition:opacity .25s}
+.orbi-on.orbi-dehors #orbi-loupe,.orbi-on.orbi-dehors #orbi-teinte,.orbi-on.orbi-dehors #orbi-anneau,.orbi-on.orbi-dehors #orbi-orbe{opacity:0}
+/* Sur un élément cliquable : la loupe s'efface, l'anneau se resserre, l'élément grandit un peu. */
+.orbi-on.orbi-lien #orbi-loupe,.orbi-on.orbi-lien #orbi-teinte{opacity:0}
+.orbi-on.orbi-lien #orbi-anneau::after{animation-duration:.9s}
+/* Dans un champ : l'orbe se range, le curseur texte reprend la main. */
+.orbi-on.orbi-saisie #orbi-loupe,.orbi-on.orbi-saisie #orbi-teinte,.orbi-on.orbi-saisie #orbi-anneau,.orbi-on.orbi-saisie #orbi-orbe{opacity:0}
+/* Sur le menu Sapin : la torche prend le relais, la loupe s'efface. */
+.orbi-on.orbi-menu #orbi-loupe,.orbi-on.orbi-menu #orbi-teinte{opacity:0}
+
+/* Lien ou bouton : il zoome quand Orbi le survole, et zoome encore au clic (puis revient). */
+.cible{transition:transform .22s var(--rebond),box-shadow .3s var(--elan),filter .2s}
+.cible.chaud{transform:translate(var(--tx,0px),var(--ty,0px)) scale(var(--zoom,1.06))}
+.cible.chaud.clic{--zoom:1.12}
+.cible.carte.chaud,.cible.racc.chaud,.cible.offre.chaud{--zoom:1.02;box-shadow:var(--ombre-carte-h)}
+.cible.carte.chaud.clic,.cible.racc.chaud.clic,.cible.offre.chaud.clic{--zoom:1.04}
+.cible.chaud .tuile{animation:tuile-saut .45s var(--rebond)}
+@keyframes tuile-saut{40%{transform:translateY(-4px) rotate(-6deg)}100%{transform:none}}
+
+/* Toucher (téléphone) : onde Lime depuis le doigt + le lien zoome. */
+.onde-toucher{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:rgba(166,242,107,.55);pointer-events:none;animation:onde .5s var(--arrivee) forwards}
+@keyframes onde{to{transform:scale(9);opacity:0}}
+.appui-tactile{transform:scale(1.06)!important}
+
+/* Carte qui s'incline vers le pointeur, avec reflet. */
+[data-incline]{transform-style:preserve-3d;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(var(--zoom,1))}
+[data-incline] .reflet{position:absolute;inset:0;border-radius:inherit;pointer-events:none;opacity:0;transition:opacity .3s;
+  background:radial-gradient(260px circle at var(--lx,50%) var(--ly,0%),rgba(255,255,255,.35),transparent 60%);mix-blend-mode:soft-light}
+[data-incline].chaud .reflet{opacity:1}
+
+/* Mode « avant » pour comparer : ombres retirées. */
+.plat .carte,.plat .tuile,.plat .btn,.plat .ilot,.plat .champ,.plat .universe,.plat .offre,.plat .racc{box-shadow:none !important}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{animation:none !important;transition:none !important}
+}
+.calme *,.calme *::before,.calme *::after{animation:none !important;transition:none !important}
+
+/* Incliné + survolé : on garde l'inclinaison et on ajoute le zoom. */
+[data-incline].cible.chaud{transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(var(--zoom,1.015))}
+
+/* ---------- Entrée (data-e) : tout est visible sans animation ---------- */
+.entree [data-e]{animation:e-monte .75s var(--elan) calc(var(--d,0) * 70ms + 180ms) both}
+.entree [data-e="chute"]{animation-name:e-chute;animation-duration:.6s}
+.entree [data-e="deplie"]{animation-name:e-deplie;animation-duration:.8s;transform-origin:50% 0}
+.entree [data-e="pop"]{animation-name:e-pop;animation-timing-function:var(--rebond);animation-duration:.55s}
+.entree [data-e="gauche"]{animation-name:e-gauche}
+.entree .attente{animation-play-state:paused}
+@keyframes e-monte{from{opacity:0;transform:translateY(22px) scale(.975);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes e-chute{from{opacity:0;transform:translateY(-18px) scale(.96);filter:blur(4px)}to{opacity:1;transform:none;filter:none}}
+@keyframes e-deplie{from{opacity:0;transform:scaleY(.86) translateY(-8px)}to{opacity:1;transform:none}}
+@keyframes e-pop{from{opacity:0;transform:scale(.5) translateY(10px)}to{opacity:1;transform:none}}
+@keyframes e-gauche{from{opacity:0;transform:translateX(-24px)}to{opacity:1;transform:none}}
+/* Titre mot par mot */
+.entree .mot{display:inline-block;animation:e-mot .6s var(--elan) calc(var(--m,0) * 60ms + 420ms) both}
+@keyframes e-mot{from{opacity:0;transform:translateY(.5em) rotate(2deg);filter:blur(3px)}to{opacity:1;transform:none;filter:none}}
+/* Anneau de progression qui se trace */
+.entree .trace{animation:e-trace 1.2s var(--elan) .5s both}
+@keyframes e-trace{from{stroke-dashoffset:var(--long,300)}}
+/* Barre qui se remplit */
+.entree .remplit{animation:e-remplit 1s var(--elan) .6s both;transform-origin:0 50%}
+@keyframes e-remplit{from{transform:scaleX(0)}}
+
+/* ===== Site public v2 : en-tête en îlot flottant (plus de bande de bout en bout) ===== */
+html,body{background:var(--creme)}
+.page{position:relative;overflow:hidden;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.page::before{content:"";position:absolute;inset:0 0 auto;height:900px;pointer-events:none;opacity:.08;
+  background:repeating-radial-gradient(circle at 78% 18%,transparent 0 38px,#0F3F37 38px 39.5px);
+  -webkit-mask:linear-gradient(#000 30%,transparent);mask:linear-gradient(#000 30%,transparent)}
+
+/* L'îlot */
+.entete{position:sticky;top:calc(env(safe-area-inset-top,0px) + 14px);z-index:30;max-width:1180px;margin:14px auto 0;
+  transition:transform .45s var(--elan)}
+.entete.cache{transform:translateY(calc(-100% - 24px))}
+.ilot{display:flex;align-items:center;gap:22px;padding:10px 10px 10px 18px;border-radius:26px;
+  background:linear-gradient(180deg,rgba(255,255,255,.94),rgba(255,255,255,.80));
+  -webkit-backdrop-filter:blur(16px) saturate(1.4);backdrop-filter:blur(16px) saturate(1.4);
+  box-shadow:var(--ombre-carte);
+  transition:padding .35s var(--elan),box-shadow .35s var(--elan)}
+.entete.compact .ilot{padding-top:6px;padding-bottom:6px;box-shadow:var(--ombre-carte-h)}
+.marque{display:flex;align-items:center;gap:8px;font-weight:700;font-size:22px;letter-spacing:-.04em;color:var(--sapin);padding:4px 6px;border-radius:14px}
+.liens{display:flex;gap:2px;flex:1;justify-content:center;list-style:none;margin:0;padding:0}
+.liens a{display:block;padding:10px 12px;border-radius:14px;font-size:14px;font-weight:500;color:var(--ardoise);position:relative}
+.liens a:hover,.liens a[aria-current]{color:var(--sapin)}
+.liens a[aria-current]::after{content:"";position:absolute;left:12px;right:12px;bottom:4px;height:3px;border-radius:3px;background:var(--lime);box-shadow:0 0 8px var(--lime)}
+.liens a.chaud{background:var(--lime-c);color:var(--sapin)}
+.cta{display:flex;gap:8px}
+.menu-btn{display:none;width:44px;height:44px;border-radius:15px;place-items:center;color:var(--sapin)}
+.feuille{display:none}
+
+/* Héros */
+.heros{max-width:1180px;margin:0 auto;padding:72px 0 40px;display:grid;grid-template-columns:minmax(0,1.05fr) minmax(0,1fr);gap:48px;align-items:center;position:relative}
+.sur{display:inline-flex;align-items:center;gap:8px;padding:6px 12px 6px 6px;border-radius:99px;font-size:12.5px;font-weight:600;background:#fff;box-shadow:var(--relief-1)}
+.sur .pt{width:22px;height:22px;border-radius:50%;background:var(--orbe);box-shadow:0 0 10px rgba(166,242,107,.8)}
+.heros h1{font-size:54px;line-height:1.05;letter-spacing:-.035em;margin:20px 0 18px}
+.heros h1 em{font-style:normal}
+.heros h1 em,.heros h1 em .mot{background:linear-gradient(135deg,#7DE36B 0%,#3DA14F 45%,#1E9A64 100%);-webkit-background-clip:text;background-clip:text;color:transparent}
+.heros p.intro{font-size:17px;color:var(--ardoise);max-width:34em;line-height:1.6}
+.heros .actions{display:flex;gap:12px;margin-top:28px;flex-wrap:wrap}
+.heros .btn{height:52px;padding:0 24px;font-size:15px}
+.scene{position:relative;height:440px}
+.scene .carte{position:absolute;padding:18px}
+.c1{left:0;top:30px;width:270px}
+.c2{right:0;top:0;width:250px}
+.c3{left:40px;bottom:10px;width:400px}
+.scene .orbi{position:absolute;right:90px;bottom:70px;width:110px;height:110px}
+.scene .orbi i{position:absolute;inset:30px;border-radius:50%;background:var(--orbe);box-shadow:0 0 36px rgba(166,242,107,.8),inset -6px -8px 14px rgba(15,63,55,.3);animation:flotte 4s ease-in-out infinite}
+.scene .orbi b{position:absolute;inset:0;border-radius:50%;border:1px dashed rgba(15,63,55,.25);animation:tourne 12s linear infinite}
+.scene .orbi b::after{content:"";position:absolute;top:-5px;left:50%;width:10px;height:10px;border-radius:50%;background:var(--lime);box-shadow:0 0 10px var(--lime)}
+@keyframes tourne{to{transform:rotate(360deg)}} @keyframes flotte{50%{transform:translateY(-8px)}}
+.ligne{display:flex;align-items:center;gap:12px}
+.ligne b{display:block;font-size:14px}.ligne small{display:block;font-size:12px;color:var(--ardoise)}
+.barre{height:12px;border-radius:99px;padding:2px;margin-top:14px}
+.barre i{display:block;height:100%;border-radius:99px;background:var(--g-signature);box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.score{display:flex;align-items:baseline;gap:6px;padding:12px 14px;margin-top:12px}
+.score b{font-size:32px;font-weight:600;letter-spacing:-.03em;line-height:1}
+.badge{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:99px;font-size:12px;font-weight:600;background:var(--menthe-c);color:#0B5D47;box-shadow:0 0 0 1px rgba(47,211,166,.35)}
+.badge::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--menthe)}
+
+/* Sections */
+.bloc{max-width:1180px;margin:0 auto;padding:40px 0}
+.bloc h2{font-size:32px;letter-spacing:-.03em;margin-bottom:8px}
+.bloc .chapo{color:var(--ardoise);font-size:15px;margin-bottom:26px}
+.publics{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px}
+.public{padding:22px;display:flex;flex-direction:column;gap:12px}
+.public h3{font-size:18px}
+.public p{color:var(--ardoise);font-size:13.5px}
+.public .suite{margin-top:auto;display:inline-flex;align-items:center;gap:6px;font-weight:600;font-size:13px;color:var(--feuille)}
+.public .suite .i{width:16px;height:16px;transition:transform .3s var(--rebond)}
+.public.chaud .suite .i{transform:translateX(4px)}
+.parcours{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:18px;counter-reset:e}
+.etape{padding:22px;display:flex;flex-direction:column;gap:10px}
+.etape .num{font-size:12px;font-weight:700;color:var(--feuille);letter-spacing:.06em}
+.etape h3{font-size:17px}
+.etape p{font-size:13.5px;color:var(--ardoise)}
+.pied{max-width:1180px;margin:30px auto 0;padding:26px 0 120px;color:var(--ardoise);font-size:13px;display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap;border-top:1px solid rgba(15,63,55,.1)}
+
+.dock{position:fixed;right:max(18px,env(safe-area-inset-right,0px));bottom:max(18px,env(safe-area-inset-bottom,0px));z-index:50;display:flex;align-items:center;gap:6px;padding:6px;border-radius:22px;
+  background:rgba(11,26,31,.86);-webkit-backdrop-filter:blur(14px);backdrop-filter:blur(14px);color:#fff;box-shadow:0 18px 40px -14px rgba(0,0,0,.6),inset 0 1px 0 rgba(255,255,255,.12)}
+.dock .note{font-size:11px;color:rgba(255,255,255,.6);padding:0 10px 0 8px;max-width:160px;line-height:1.3}
+.dock button{height:36px;padding:0 12px;border-radius:14px;font-size:12px;font-weight:600;color:#fff;background:rgba(255,255,255,.08)}
+.dock button[aria-pressed="true"]{background:var(--lime);color:var(--sapin)}
+
+@media (max-width:1100px){
+  .liens,.cta .btn-blanc{display:none}
+  .menu-btn{display:grid}
+  .ilot{gap:10px;justify-content:space-between}
+  .feuille{display:block;position:absolute;left:0;right:0;top:calc(100% + 8px);padding:10px;border-radius:24px;background:#fff;box-shadow:var(--ombre-carte);
+    transform-origin:50% 0;transition:transform .35s var(--rebond),opacity .2s;transform:scale(.96) translateY(-6px);opacity:0;pointer-events:none}
+  .entete.ouvert .feuille{transform:none;opacity:1;pointer-events:auto}
+  .feuille a{display:block;padding:12px 14px;border-radius:14px;font-weight:500}
+  .feuille a:hover{background:var(--lime-c)}
+  .heros{grid-template-columns:1fr;padding-top:44px}
+  .publics,.parcours{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:640px){
+  .heros h1{font-size:36px}
+  .scene{height:auto;display:flex;flex-direction:column;gap:14px}
+  .scene .carte{position:relative;left:auto;right:auto;top:auto;bottom:auto;width:auto}
+  .scene .orbi{display:none}
+  .publics,.parcours{grid-template-columns:1fr}
+  .cta .btn{height:40px;padding:0 14px;font-size:13px}
+  .marque span{display:none}
+  .dock .note{display:none}
+}
+</style>
+<svg width="0" height="0" style="position:absolute"><symbol id="jm-learn" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5c3-1.5 6-1.5 9 .5 3-2 6-2 9-.5V19c-3-1.5-6-1.5-9 .5-3-2-6-2-9-.5z"/><path d="M12 6v13.5"/></g></symbol><symbol id="jm-career" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></g></symbol><symbol id="jm-jobs" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7M3 12.5h18"/></g></symbol><symbol id="jm-hire" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="4"/><path d="M3 20c0-3.5 3-6 7-6 1.5 0 2.8.3 3.8.9M15 18l2 2 4-4"/></g></symbol><symbol id="jm-connect" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="8" r="2.5"/><circle cx="10" cy="18" r="2.5"/><path d="M8.3 7l7.3.7M7 8.3l2.2 7.3M16.5 10.1l-4.6 6.1"/></g></symbol><symbol id="jm-intelligence" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/><path d="M19 16v4M17 18h4"/></g></symbol><symbol id="jm-accueil" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V18a2 2 0 0 1-2 2h-3.5v-5.5h-5V20H6a2 2 0 0 1-2-2z"/></g></symbol><symbol id="jm-recherche" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></g></symbol><symbol id="jm-notification" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10.5a6 6 0 0 1 12 0V15l2 3H4l2-3z"/><path d="M10 21h4"/></g></symbol><symbol id="jm-message" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 3.5V18H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></g></symbol><symbol id="jm-profil" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></g></symbol><symbol id="jm-reglages" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></g></symbol><symbol id="jm-filtre" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7.5V19l-4 1.5v-8z"/></g></symbol><symbol id="jm-ajouter" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></g></symbol><symbol id="jm-valider" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></g></symbol><symbol id="jm-fermer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></g></symbol><symbol id="jm-suivant" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></g></symbol><symbol id="jm-telecharger" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></g></symbol><symbol id="jm-partager" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="M8.2 10.8l7.6-4.1M8.2 13.2l7.6 4.1"/></g></symbol><symbol id="jm-favori" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10a1 1 0 0 1 1 1v15.5l-6-4-6 4V5a1 1 0 0 1 1-1z"/></g></symbol><symbol id="jm-lien" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></g></symbol><symbol id="jm-diplome" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5 12 5l9.5 4.5L12 14z"/><path d="M6.5 11.5V16c1.5 1.6 3.4 2.5 5.5 2.5s4-.9 5.5-2.5v-4.5"/><path d="M21.5 9.5V14"/></g></symbol><symbol id="jm-certificat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9.5" r="5.5"/><path d="M8.5 13.8 7.5 21l4.5-2.5 4.5 2.5-1-7.2"/></g></symbol><symbol id="jm-cours-video" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13" rx="3"/><path d="M10.5 9v5l4-2.5z"/><path d="M8 21h8"/></g></symbol><symbol id="jm-quiz" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.5"/><path d="M12 16.8v.2"/></g></symbol><symbol id="jm-competence" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17.5h6M10 21h4"/><path d="M8.5 14.5A6 6 0 1 1 15.5 14.5c-.6.5-.9 1.2-.9 2v1H9.4v-1c0-.8-.3-1.5-.9-2z"/></g></symbol><symbol id="jm-objectif" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></g></symbol><symbol id="jm-statistiques" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M7 16.5v-4M12 16.5V7.5M17 16.5v-7"/></g></symbol><symbol id="jm-cv" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3.5H7.5A1.5 1.5 0 0 0 6 5v14a1.5 1.5 0 0 0 1.5 1.5h9A1.5 1.5 0 0 0 18 19V7.5z"/><path d="M14 3.5v4h4"/><path d="M9 12.5h6M9 16h4"/></g></symbol><symbol id="jm-entreprise" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5h16"/><path d="M6 20.5V5.5A1.5 1.5 0 0 1 7.5 4h6A1.5 1.5 0 0 1 15 5.5v15"/><path d="M15 9.5h3a1.5 1.5 0 0 1 1.5 1.5v9.5"/><path d="M9 8h3M9 11.5h3M9 15h3"/></g></symbol><symbol id="jm-equipe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.6-3 3-4.8 6-4.8s5.4 1.8 6 4.8"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 5.8"/><path d="M17.5 14.9c1.8.6 3.1 2.2 3.5 4.6"/></g></symbol><symbol id="jm-calendrier" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></g></symbol><symbol id="jm-horloge" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g></symbol><symbol id="jm-localisation" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.5"/></g></symbol><symbol id="jm-etoile" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l2.4 5 5.3.6-3.9 3.7 1 5.3L12 16l-4.8 2.6 1-5.3-3.9-3.7 5.3-.6z"/></g></symbol><symbol id="jm-confidentialite" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/><path d="M12 14.5V17"/></g></symbol><symbol id="jm-securite" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l7 2.8v5.2c0 4.4-2.9 7.8-7 9-4.1-1.2-7-4.6-7-9V6.3z"/><path d="M9 12l2.2 2.2L15.5 10"/></g></symbol><symbol id="jm-transparence" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g></symbol><symbol id="jm-mobile-money" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="11" height="18" rx="2.5"/><path d="M8 17.5h3"/><path d="M18 9a4 4 0 0 1 0 6M20.5 7a7 7 0 0 1 0 10"/></g></symbol><symbol id="jm-portefeuille" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V7.5A2.5 2.5 0 0 1 6.5 5H17v3"/><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M15.5 13.5h1"/></g></symbol><symbol id="jm-langue" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.3 2.4 3.5 5.2 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.2-3.5-8.5s1.2-6.1 3.5-8.5z"/></g></symbol><symbol id="jm-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2.5"/><path d="M8 11V8a4 4 0 018 0v3"/></g></symbol><symbol id="jm-check" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></g></symbol><symbol id="jm-logout" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h3.5A2.5 2.5 0 0120 6.5v11a2.5 2.5 0 01-2.5 2.5H14"/><path d="M9.5 16l-4-4 4-4M5.5 12H15"/></g></symbol><symbol id="jm-chev-r" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></g></symbol><symbol id="jm-plus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></g></symbol></svg>
+
+<div class="page">
+  <header class="entete" id="entete">
+    <div class="ilot" data-e="chute">
+      <a class="marque jlogo cible" href="#" aria-label="Jumanly, accueil"><svg viewBox="23.5 19.5 58 78" height="30" width="22" aria-hidden="true"><path class="tige" d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#0F3F37" stroke-width="17" stroke-linecap="round"/><circle class="point" cx="70" cy="31" r="11.5" fill="#A6F26B"/></svg><span>jumanly</span></a>
+      <nav aria-label="Menu du site" style="flex:1;display:flex;justify-content:center">
+        <ul class="liens">
+          <li><a class="cible" href="#" aria-current="page">Talents</a></li>
+          <li><a class="cible" href="#">Recruteurs</a></li>
+          <li><a class="cible" href="#">Entreprises</a></li>
+          <li><a class="cible" href="#">Partenaires</a></li>
+          <li><a class="cible" href="#">Formations</a></li>
+          <li><a class="cible" href="#">Offres</a></li>
+          <li><a class="cible" href="#">Tarifs</a></li>
+        </ul>
+      </nav>
+      <div class="cta">
+        <a class="btn btn-blanc cible" href="#">Se connecter</a>
+        <a class="btn btn-lime cible" href="#">Créer un compte</a>
+        <button class="menu-btn cible" id="menu" aria-expanded="false" aria-controls="feuille" aria-label="Ouvrir le menu"><svg class="i" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M4 7h16M4 12h16M4 17h10"/></svg></button>
+      </div>
+    </div>
+    <nav class="feuille" id="feuille" aria-label="Menu du site">
+      <a href="#">Talents</a><a href="#">Recruteurs</a><a href="#">Entreprises</a><a href="#">Partenaires</a><a href="#">Formations</a><a href="#">Offres</a><a href="#">Tarifs</a><a href="#">Se connecter</a>
+    </nav>
+  </header>
+
+  <section class="heros">
+    <div>
+      <span class="sur" data-e style="--d:1"><span class="pt"></span>Learn. Grow. Connect.</span>
+      <h1 id="titre">Se former, se faire voir, <em>être recruté·e.</em></h1>
+      <p class="intro" data-e style="--d:6">Jumanly réunit la formation, la carrière et le recrutement dans un seul parcours, pensé pour les talents et les employeurs africains.</p>
+      <div class="actions" data-e style="--d:7">
+        <a class="btn btn-lime cible" href="#">Créer mon compte gratuit</a>
+        <a class="btn btn-blanc cible" href="#">Je recrute</a>
+      </div>
+    </div>
+    <div class="scene" aria-label="Aperçu de l'application (exemple)">
+      <article class="carte c1 cible" data-incline="7" data-e style="--d:4">
+        <div class="ligne"><span class="tuile lime"><svg class="i"><use href="#jm-learn"/></svg></span><span><b>Réussir son entretien</b><small>Formation · Module 3 sur 6</small></span></div>
+        <div class="barre puits"><i class="remplit" style="width:45%"></i></div>
+      </article>
+      <article class="carte c2 cible" data-incline="7" data-e style="--d:5">
+        <p style="font-size:12px;font-weight:600;color:var(--ardoise);letter-spacing:.06em;text-transform:uppercase">Score du CV</p>
+        <div class="score puits"><b data-compte="78">78</b><span style="color:var(--ardoise)">/100</span></div>
+      </article>
+      <article class="carte c3 cible" data-incline="5" data-e style="--d:6">
+        <div class="ligne"><span class="tuile">BQ</span><span style="flex:1"><b>Chargé·e de clientèle</b><small>Banque · CDI · Abidjan</small></span><span class="badge">Compatible</span></div>
+      </article>
+      <span class="orbi" aria-hidden="true"><b></b><i></i></span>
+    </div>
+  </section>
+
+  <section class="bloc">
+    <h2 data-e>Pour qui ?</h2>
+    <p class="chapo" data-e style="--d:1">Un parcours pour chacun, une seule plateforme.</p>
+    <div class="publics">
+      <a class="carte public cible" href="#" data-e style="--d:2"><span class="tuile lime"><svg class="i"><use href="#jm-profil"/></svg></span><h3>Talents</h3><p>Étudiants, diplômés, personnes en recherche d'emploi.</p><span class="suite">Découvrir<svg class="i"><use href="#jm-suivant"/></svg></span></a>
+      <a class="carte public cible" href="#" data-e style="--d:3"><span class="tuile"><svg class="i"><use href="#jm-hire"/></svg></span><h3>Recruteurs</h3><p>Professionnels RH qui veulent recruter plus vite et mieux.</p><span class="suite">Découvrir<svg class="i"><use href="#jm-suivant"/></svg></span></a>
+      <a class="carte public cible" href="#" data-e style="--d:4"><span class="tuile menthe"><svg class="i"><use href="#jm-entreprise"/></svg></span><h3>Entreprises</h3><p>PME et grands groupes, avec un outil de suivi des candidatures.</p><span class="suite">Découvrir<svg class="i"><use href="#jm-suivant"/></svg></span></a>
+      <a class="carte public cible" href="#" data-e style="--d:5"><span class="tuile creme"><svg class="i"><use href="#jm-connect"/></svg></span><h3>Partenaires</h3><p>Banques, universités, fondations et ONG qui offrent des licences.</p><span class="suite">Découvrir<svg class="i"><use href="#jm-suivant"/></svg></span></a>
+    </div>
+  </section>
+
+  <section class="bloc">
+    <h2 data-e>Un parcours continu</h2>
+    <p class="chapo" data-e style="--d:1">Chaque étape nourrit la suivante.</p>
+    <div class="parcours">
+      <article class="carte etape" data-e style="--d:2"><span class="num">ÉTAPE 1</span><h3>Se former</h3><p>Des formations courtes, utiles pour votre métier.</p></article>
+      <article class="carte etape" data-e style="--d:3"><span class="num">ÉTAPE 2</span><h3>Enrichir son profil</h3><p>Vos certificats et compétences rejoignent votre profil.</p></article>
+      <article class="carte etape" data-e style="--d:4"><span class="num">ÉTAPE 3</span><h3>Candidater</h3><p>Des offres expliquées, des candidatures gratuites.</p></article>
+      <article class="carte etape" data-e style="--d:5"><span class="num">ÉTAPE 4</span><h3>Être recruté·e</h3><p>Les recruteurs vous trouvent et vous suivez chaque étape.</p></article>
+    </div>
+  </section>
+
+  <footer class="pied"><span>Une plateforme développée par The Growth Lab</span><span>assistant@jumanly.io</span></footer>
+</div>
+
+<div class="dock" role="toolbar" aria-label="Démonstration">
+  <span class="note">Maquette · faites défiler pour voir l'îlot se compacter</span>
+  <button id="b-orbi" aria-pressed="true">Orbi</button>
+  <button id="b-relief" aria-pressed="true">Ombres</button>
+  <button id="b-entree">Rejouer</button>
+</div>
+
+<script>
+/* Jumanly · Interactions v2 : curseur Orbi, torche, inclinaison, toucher, entrée chorégraphiée. */
+(function(){
+  const html=document.documentElement;
+  const fine=matchMedia('(pointer:fine)').matches;
+  const reduit=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const el={};
+  ['loupe','teinte','anneau','onde','orbe'].forEach(n=>{const d=document.createElement('div');d.id='orbi-'+n;d.setAttribute('aria-hidden','true');document.body.appendChild(d);el[n]=d;});
+
+  /* ---- Curseur Orbi ---- */
+  let actif=false;
+  window.orbi=function(v){actif=!!v&&fine&&!reduit&&!html.classList.contains('calme');html.classList.toggle('orbi-on',actif);if(!actif&&chaud){chaud.classList.remove('chaud');chaud=null;}return actif;};
+  let x=-300,y=-300,lx=x,ly=y,s=1,ts=1,chaud=null,vu=false;
+  const CLIC='a,button,[role="button"],summary,label[for],.cible';
+  addEventListener('pointermove',e=>{
+    if(e.pointerType!=='mouse'||!actif)return;
+    x=e.clientX;y=e.clientY;
+    if(!vu){lx=x;ly=y;vu=true;}
+    html.classList.remove('orbi-dehors');
+    const t=e.target instanceof Element?e.target:null; if(!t)return;
+    const saisie=t.closest('input,textarea,[contenteditable="true"]');
+    const menu=t.closest('[data-torche]');
+    const lien=saisie?null:t.closest(CLIC);
+    html.classList.toggle('orbi-saisie',!!saisie);
+    html.classList.toggle('orbi-menu',!!menu);
+    html.classList.toggle('orbi-lien',!!lien);
+    ts=saisie?0:lien?.42:1;
+    const c=lien?(lien.closest('.cible')||null):null;
+    if(c!==chaud){if(chaud){chaud.classList.remove('chaud');chaud.style.removeProperty('--tx');chaud.style.removeProperty('--ty');}chaud=c;if(c)c.classList.add('chaud');}
+    if(chaud&&!chaud.hasAttribute('data-incline')){ // attraction magnétique, 4 px au plus
+      const r=chaud.getBoundingClientRect();
+      const k=Math.min(1,40/Math.max(r.width,r.height));
+      chaud.style.setProperty('--tx',((x-(r.left+r.width/2))*.12*k*4/4).toFixed(1)+'px');
+      chaud.style.setProperty('--ty',((y-(r.top+r.height/2))*.18*k).toFixed(1)+'px');
+    }
+  },{passive:true});
+  document.addEventListener('pointerleave',()=>html.classList.add('orbi-dehors'));
+  addEventListener('blur',()=>html.classList.add('orbi-dehors'));
+  addEventListener('pointerdown',e=>{
+    if(e.pointerType==='mouse'&&actif){
+      s*=.72;
+      if(chaud){const c=chaud;c.classList.add('clic');const fin=()=>{setTimeout(()=>c.classList.remove('clic'),160);removeEventListener('pointerup',fin);};addEventListener('pointerup',fin);}
+      el.onde.animate([{transform:`translate(${x}px,${y}px) scale(.4)`,opacity:1},{transform:`translate(${x}px,${y}px) scale(2.6)`,opacity:0}],{duration:520,easing:'cubic-bezier(0,0,.2,1)'});
+    }
+    if(e.pointerType!=='mouse'&&!html.classList.contains('calme')&&!reduit){ // toucher : onde depuis le doigt
+      const t=e.target instanceof Element?e.target.closest('.cible,.btn'):null; if(!t)return;
+      const r=t.getBoundingClientRect(); const o=document.createElement('span'); o.className='onde-toucher';
+      o.style.left=(e.clientX-r.left)+'px';o.style.top=(e.clientY-r.top)+'px';
+      if(getComputedStyle(t).position==='static')t.style.position='relative';
+      t.style.overflow='hidden'; t.appendChild(o); t.classList.add('appui-tactile');
+      setTimeout(()=>o.remove(),520);
+      const fin=()=>{t.classList.remove('appui-tactile');removeEventListener('pointerup',fin);removeEventListener('pointercancel',fin);};
+      addEventListener('pointerup',fin);addEventListener('pointercancel',fin);
+    }
+  });
+  (function boucle(){
+    lx+=(x-lx)*.24; ly+=(y-ly)*.24; s+=(ts-s)*.2;
+    const m=`translate(${lx.toFixed(1)}px,${ly.toFixed(1)}px) scale(${s.toFixed(3)})`;
+    el.loupe.style.transform=m; el.teinte.style.transform=m; el.anneau.style.transform=m;
+    el.orbe.style.transform=`translate(${x}px,${y}px)`;
+    requestAnimationFrame(boucle);
+  })();
+
+  /* ---- Torche du menu Sapin (révèle le motif orbites) ---- */
+  document.querySelectorAll('[data-torche]').forEach(z=>{
+    z.addEventListener('pointermove',e=>{if(e.pointerType!=='mouse'||html.classList.contains('calme'))return;const r=z.getBoundingClientRect();z.style.setProperty('--mx',(e.clientX-r.left)+'px');z.style.setProperty('--my',(e.clientY-r.top)+'px');z.setAttribute('data-allume','');});
+    z.addEventListener('pointerleave',()=>z.removeAttribute('data-allume'));
+  });
+
+  /* ---- Cartes qui s'inclinent vers le pointeur ---- */
+  document.querySelectorAll('[data-incline]').forEach(c=>{
+    if(!c.querySelector('.reflet')){const r=document.createElement('span');r.className='reflet';r.setAttribute('aria-hidden','true');c.appendChild(r);}
+    c.addEventListener('pointermove',e=>{
+      if(e.pointerType!=='mouse'||html.classList.contains('calme'))return;
+      const r=c.getBoundingClientRect(); const px=(e.clientX-r.left)/r.width-.5, py=(e.clientY-r.top)/r.height-.5;
+      const a=+(c.dataset.incline||4);
+      c.style.setProperty('--ry',(px*a).toFixed(2)+'deg'); c.style.setProperty('--rx',(-py*a).toFixed(2)+'deg');
+      c.style.setProperty('--lx',((px+.5)*100).toFixed(1)+'%'); c.style.setProperty('--ly',((py+.5)*100).toFixed(1)+'%');
+      c.classList.add('chaud');
+    });
+    c.addEventListener('pointerleave',()=>{c.style.setProperty('--rx','0deg');c.style.setProperty('--ry','0deg');if(!c.classList.contains('cible'))c.classList.remove('chaud');});
+  });
+
+  /* ---- Entrée chorégraphiée ; l'état final est l'état par défaut ---- */
+  const compter=n=>{
+    const fin=+n.dataset.compte, suf=n.dataset.suffixe||''; if(html.classList.contains('calme')||reduit){n.textContent=fin+suf;return;}
+    const t0=performance.now(), d=900;
+    (function f(t){const p=Math.min(1,(t-t0)/d), v=Math.round(fin*(1-Math.pow(1-p,3)));n.textContent=v+suf;if(p<1)requestAnimationFrame(f);})(t0);
+  };
+  let io=null;
+  window.entree=function(){
+    if(reduit||html.classList.contains('calme'))return;
+    html.classList.remove('entree'); void html.offsetWidth; html.classList.add('entree');
+    if(io)io.disconnect();
+    io=new IntersectionObserver(es=>es.forEach(e=>{if(e.isIntersecting){e.target.classList.remove('attente');io.unobserve(e.target);}}),{rootMargin:'0px 0px -8% 0px'});
+    document.querySelectorAll('[data-e]').forEach(n=>{if(n.getBoundingClientRect().top>innerHeight){n.classList.add('attente');io.observe(n);}});
+    setTimeout(()=>document.querySelectorAll('[data-compte]').forEach(compter),450);
+  };
+  addEventListener('load',()=>{orbi(true);entree();});
+})();
+
+(function(){
+  const html=document.documentElement, e=document.getElementById('entete');
+  const h=document.getElementById('titre');
+  h.querySelectorAll('em').forEach(x=>x.outerHTML=`<em>${x.textContent.split(' ').map(w=>`<span class="mot-g">${w}</span>`).join(' ')}</em>`);
+  let i=0; const walk=n=>{[...n.childNodes].forEach(c=>{if(c.nodeType===3){const s=document.createElement('span');s.innerHTML=c.textContent.split(/(\s+)/).map(w=>/^\s+$/.test(w)||!w?w:`<span class="mot" style="--m:${i++}">${w}</span>`).join('');c.replaceWith(...s.childNodes);}else if(c.classList&&c.classList.contains('mot-g')){c.classList.replace('mot-g','mot');c.style.setProperty('--m',i++);}else walk(c);});};
+  walk(h);
+  /* Îlot : se compacte au défilement, se cache en descendant, revient en remontant */
+  let y0=scrollY;
+  addEventListener('scroll',()=>{const y=scrollY;e.classList.toggle('compact',y>40);if(!e.classList.contains('ouvert'))e.classList.toggle('cache',y>y0&&y>220);y0=y;},{passive:true});
+  const m=document.getElementById('menu');
+  m.addEventListener('click',()=>{const o=!e.classList.contains('ouvert');e.classList.toggle('ouvert',o);m.setAttribute('aria-expanded',o);m.setAttribute('aria-label',o?'Fermer le menu':'Ouvrir le menu');});
+  document.querySelectorAll('a[href="#"]').forEach(a=>a.addEventListener('click',ev=>ev.preventDefault()));
+  const bo=document.getElementById('b-orbi'), br=document.getElementById('b-relief');
+  if(!matchMedia('(pointer:fine)').matches)bo.hidden=true;
+  bo.addEventListener('click',()=>{const v=bo.getAttribute('aria-pressed')!=='true';bo.setAttribute('aria-pressed',v);orbi(v);});
+  br.addEventListener('click',()=>{const v=br.getAttribute('aria-pressed')!=='true';br.setAttribute('aria-pressed',v);html.classList.toggle('plat',!v);});
+  document.getElementById('b-entree').addEventListener('click',()=>{scrollTo({top:0});entree();});
+})();
+</script>
