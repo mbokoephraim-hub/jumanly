@@ -204,12 +204,18 @@ export function FilterMenu({
   label,
   group,
   options,
+  tone,
 }: {
   label: string;
   group: string;
   options: { href: string; label: string; current: boolean }[];
+  /** « sapin »: always filled (the period of the indicators), with the label as given. */
+  tone?: "sapin";
 }) {
-  const active = options.find((option) => option.current && option !== options[0]);
+  const active =
+    tone === "sapin"
+      ? undefined
+      : options.find((option) => option.current && option !== options[0]);
   return (
     <details name={`filter-${group}`} className="group/menu relative shrink-0">
       <summary
@@ -217,6 +223,7 @@ export function FilterMenu({
           chipClasses,
           "cursor-pointer list-none [&::-webkit-details-marker]:hidden",
           active && chipOnClasses,
+          tone === "sapin" && "h-9 !bg-sapin !text-blanc !ring-0",
         )}
       >
         {active ? `${label} : ${active.label}` : label}
@@ -318,12 +325,14 @@ export async function ReasonField({
   name = "reason",
   defaultValue,
   rows = 3,
+  maxLength = 2000,
 }: {
   id: string;
   label?: string;
   name?: string;
   defaultValue?: string;
   rows?: number;
+  maxLength?: number;
 }) {
   const t = await getTranslations("admin");
   return (
@@ -339,6 +348,7 @@ export async function ReasonField({
         name={name}
         required
         rows={rows}
+        maxLength={maxLength}
         defaultValue={defaultValue}
         aria-describedby={`${id}-hint`}
         className="w-full rounded-[16px] bg-blanc px-4 py-3 text-[13.5px] leading-5 text-sapin ring-[1.5px] ring-brume ring-inset focus:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus:ring-2 focus:ring-sapin focus:outline-none"

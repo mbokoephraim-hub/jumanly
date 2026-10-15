@@ -78,20 +78,27 @@ test("l'administrateur crée un partenaire et un lot de licences", async ({ page
   const name = `Université test ${Date.now()} (fictive)`;
   await logIn(page, demo.admin, undefined, "/admin/partenaires");
   await page.goto("/admin/partenaires");
-  await page.getByText("Nouveau partenaire").click();
-  await page.getByLabel("Organisation partenaire").fill(name);
-  await page.getByLabel("Type").selectOption("university");
-  await page.getByLabel("Responsable partenaire (e-mail)").fill("responsable.test@jumanly.test");
-  await page.getByRole("button", { name: "Créer le partenaire" }).click();
+  await page.getByRole("link", { name: "Nouveau partenaire" }).click();
+  const creation = page.getByRole("region", { name: "Nouveau partenaire" });
+  await creation.getByLabel("Organisation partenaire").fill(name);
+  await creation.getByLabel("Type").selectOption("university");
+  await creation
+    .getByLabel("Responsable partenaire (e-mail)")
+    .fill("responsable.test@jumanly.test");
+  await creation.getByRole("button", { name: "Créer le partenaire" }).click();
   await expect(page.getByText(/Partenaire créé/)).toBeVisible();
 
-  const card = page.locator("li").filter({ has: page.getByRole("heading", { name }) });
-  await card.getByText("Nouveau lot de licences").click();
-  await card.getByLabel("Nom du lot").fill("Lot test");
-  await card.getByLabel("Nombre de licences").fill("25");
+  // The newest partner opens in the sheet; the batch panel opens from it.
+  await page.getByRole("link", { name, exact: true }).click();
+  const sheet = page.getByRole("region", { name, exact: true });
+  await sheet.getByRole("link", { name: "Nouveau lot de licences" }).click();
+  const panel = page.getByRole("region", { name: "Nouveau lot de licences" });
+  await panel.getByLabel("Nom du lot").fill("Lot test");
+  await panel.getByLabel("Nombre de licences").fill("25");
   const end = new Date(Date.now() + 180 * 86_400_000).toISOString().slice(0, 10);
-  await card.getByLabel("Fin").fill(end);
-  await card.getByRole("button", { name: "Créer le lot" }).click();
+  await panel.getByLabel("Fin").fill(end);
+  await panel.getByRole("button", { name: "Créer le lot" }).click();
   await expect(page.getByText(/Lot créé/)).toBeVisible();
-  await expect(card.getByText(/0 activées sur 25/)).toBeVisible();
+  await page.getByRole("link", { name, exact: true }).click();
+  await expect(page.getByRole("region", { name, exact: true }).getByText("0/25")).toBeVisible();
 });

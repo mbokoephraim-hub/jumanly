@@ -58,6 +58,13 @@ const groupOf = (formData: FormData): FaqGroup => {
 export async function saveFaqItemAction(formData: FormData) {
   const user = await editor();
   const group = groupOf(formData);
+  // A published text: the reason is required and kept in the audit log.
+  const reason = String(formData.get("reason") ?? "")
+    .trim()
+    .slice(0, 500);
+  if (!reason) {
+    redirect(`/admin/contenus?${new URLSearchParams({ groupe: group, erreur: "motif" })}`);
+  }
   let n: number;
   try {
     n = await saveFaqItem(db, user.id, await getMessages(), Object.fromEntries(formData));
@@ -67,6 +74,7 @@ export async function saveFaqItemAction(formData: FormData) {
   }
   await audit(user.id, "content.faq.save", `${group}.q${n}`, {
     question: String(formData.get("question") ?? "").slice(0, 300),
+    reason,
   });
   back({ groupe: group, ok: "enregistre" }, `#question-${n}`);
 }

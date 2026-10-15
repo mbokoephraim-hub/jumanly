@@ -20,8 +20,8 @@ type UsageRow = {
 };
 
 /** Calls, failures, tokens and cost per feature and per plan over the last 30 days. */
-export async function usageReport(db: PrismaClient, now = new Date()) {
-  const since = new Date(now.getTime() - USAGE_PERIOD_DAYS * 86_400_000);
+export async function usageReport(db: PrismaClient, now = new Date(), days = USAGE_PERIOD_DAYS) {
+  const since = new Date(now.getTime() - days * 86_400_000);
   const rows = await db.aiUsage.findMany({
     where: { createdAt: { gte: since } },
     select: {

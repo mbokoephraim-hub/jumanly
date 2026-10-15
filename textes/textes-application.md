@@ -8675,6 +8675,34 @@ Conventions :
 | `admin.dashboard.alerts.disputes` | {count, plural, one {# révision de score demandée} other {# révisions de score demandées}} |
 | `admin.dashboard.alerts.payments` | {count, plural, one {# paiement à vérifier} other {# paiements à vérifier}} |
 | `admin.dashboard.export` | Exporter les indicateurs |
+| `admin.dashboard.periodValue` | Période : {days} derniers jours |
+| `admin.dashboard.periodOption` | {days} derniers jours |
+| `admin.dashboard.kpi.vsPrevious` | vs période précédente |
+| `admin.dashboard.kpi.deltaPercent` | {value} % |
+| `admin.dashboard.kpi.deltaPoints` | {count, plural, one {{value} pt} other {{value} pts}} |
+| `admin.dashboard.kpi.lowerIsBetter` | Pour un coût, une baisse est une bonne nouvelle. |
+| `admin.dashboard.activity.monthly` | Mensuel |
+| `admin.dashboard.activity.aria` | Activité mois par mois, de {from} à {to} : inscriptions, candidatures, offres publiées et attestations délivrées. |
+| `admin.dashboard.family.title` | Par famille |
+| `admin.dashboard.family.hint` | Talents, RH, Companies, Partners |
+| `admin.dashboard.family.talent` | Talents |
+| `admin.dashboard.family.rh` | RH |
+| `admin.dashboard.family.company` | Companies |
+| `admin.dashboard.family.partner` | Partners |
+| `admin.dashboard.plan.hint` | Comptes payants et sponsorisés |
+| `admin.dashboard.plan.col.plan` | Forfait |
+| `admin.dashboard.plan.col.subscribers` | Abonnés |
+| `admin.dashboard.plan.col.revenue` | Revenu (USD) |
+| `admin.dashboard.plan.col.margin` | Marge brute |
+| `admin.dashboard.plan.empty` | Aucun compte payant ou sponsorisé pour l'instant. |
+| `admin.dashboard.ai.other` | Autres |
+| `admin.dashboard.ai.link` | Voir IA et matching |
+| `admin.dashboard.ai.empty` | Aucun appel d'IA sur la période. |
+| `admin.dashboard.alerts.empty` | Rien à traiter pour l'instant. |
+| `admin.dashboard.csv.file` | indicateurs-jumanly |
+| `admin.dashboard.csv.indicator` | Indicateur |
+| `admin.dashboard.csv.value` | Valeur |
+| `admin.dashboard.csv.previous` | Période précédente |
 
 ### `/admin/utilisateurs` · Utilisateurs
 
@@ -8727,6 +8755,20 @@ Conventions :
 | `admin.users.selfProtected` | Vous ne pouvez pas modifier votre propre rôle ni suspendre votre propre compte. |
 | `admin.users.count` | {count, plural, one {# utilisateur} other {# utilisateurs}} |
 | `admin.users.summary` | Forfait : {plan} · inscrit le {date} |
+| `admin.users.filter.all` | Tous |
+| `admin.users.detail.id` | Identifiant |
+| `admin.users.detail.method` | Moyen |
+| `admin.users.detail.planPrice` | {plan} · {price} USD/mois |
+| `admin.users.detail.until` | {status} jusqu'au {date} |
+| `admin.users.detail.noEnd` | Sans échéance |
+| `admin.users.detail.noMembership` | Aucune appartenance |
+| `admin.users.detail.noQuota` | Aucun quota mesuré pour ce forfait. |
+| `admin.users.detail.applications` | Candidatures |
+| `admin.users.detail.coursesInProgress` | Formations en cours |
+| `admin.users.detail.certificates` | Attestations |
+| `admin.users.detail.actions` | Actions sur le compte |
+| `admin.users.neverActive` | Aucune connexion |
+| `admin.users.list` | Liste des utilisateurs |
 
 ### `/admin/organisations` · Organisations et vérification
 
@@ -8771,6 +8813,26 @@ Conventions :
 | `admin.orgs.verify.field.website` | Site web : {value} |
 | `admin.orgs.verify.reasonRequired` | Indiquez le motif communiqué à l'organisation. |
 | `admin.orgs.empty` | Aucune organisation dans cette liste. |
+| `admin.orgs.tab.pendingShort` | En attente ({count}) |
+| `admin.orgs.search` | Nom de l'organisation |
+| `admin.orgs.filter.country` | Pays |
+| `admin.orgs.filter.all` | Toutes |
+| `admin.orgs.type.recruiter` | Cabinet RH |
+| `admin.orgs.type.company` | Entreprise |
+| `admin.orgs.type.partner` | Partenaire |
+| `admin.orgs.status.none` | Non vérifiée |
+| `admin.orgs.status.pending` | En attente |
+| `admin.orgs.status.verified` | Vérifiée |
+| `admin.orgs.status.rejected` | Refusée |
+| `admin.orgs.doc.registration` | Immatriculation |
+| `admin.orgs.doc.taxId` | Identification fiscale |
+| `admin.orgs.doc.domainEmail` | E-mail sur le domaine |
+| `admin.orgs.doc.mandate` | Fonction du demandeur |
+| `admin.orgs.doc.website` | Site web |
+| `admin.orgs.verify.noDocuments` | Aucun élément fourni pour l'instant. |
+| `admin.orgs.list` | Liste des organisations |
+| `admin.orgs.count` | {count, plural, one {# organisation} other {# organisations}} |
+| `admin.orgs.members` | {count, plural, one {# membre} other {# membres}} |
 
 ### `/admin/forfaits` · Forfaits et droits
 
@@ -8835,6 +8897,16 @@ Conventions :
 | `admin.plans.field.public` | Visible sur la page Tarifs |
 | `admin.plans.error.value` | Valeur non valable pour {key}. Pour un quota : un nombre entier, -1 pour illimité. |
 | `admin.plans.error.price` | Indiquez un prix valable, par exemple 9.99. |
+| `admin.plans.error.fields` | Vérifiez les informations du forfait : le nom est obligatoire et l'ordre d'affichage est un nombre entier. |
+| `admin.plans.families` | Familles de forfaits |
+| `admin.plans.familyShort.talents` | Talents |
+| `admin.plans.familyShort.rh` | RH |
+| `admin.plans.familyShort.companies` | Companies |
+| `admin.plans.familyShort.partners` | Partners |
+| `admin.plans.subscribersCount` | {count, plural, =0 {Aucun abonné} one {# abonné} other {# abonnés}} |
+| `admin.plans.empty` | Aucun forfait dans cette famille. |
+| `admin.plans.save.none` | Aucune modification pour l'instant. Modifiez un champ ou un droit pour voir son impact ici. |
+| `admin.plans.save.readOnly` | Lecture seule : votre rôle ne permet pas de modifier les forfaits. |
 
 ### `/admin/abonnements` · Abonnements et paiements
 
@@ -8879,6 +8951,15 @@ Conventions :
 | `admin.subscriptions.payments.col.reference` | Référence |
 | `admin.subscriptions.payments.credit` | Crédit déduit : {credit} USD |
 | `admin.subscriptions.refundError` | Remboursement non enregistré : indiquez la référence du remboursement. |
+| `admin.subscriptions.search` | Titulaire, référence |
+| `admin.subscriptions.filter.plan` | Forfait |
+| `admin.subscriptions.filter.method` | Moyen de paiement |
+| `admin.subscriptions.kpi.toVerify` | Paiements à vérifier |
+| `admin.subscriptions.list` | Liste des abonnements |
+| `admin.subscriptions.payments.list` | Liste des paiements |
+| `admin.subscriptions.actions.title` | Actions · {holder} |
+| `admin.subscriptions.actions.open` | Actions pour {holder} |
+| `admin.subscriptions.actions.none` | Aucune action disponible pour ce paiement. |
 
 ### `/admin/formations` · Formations (Learn)
 
@@ -9018,6 +9099,25 @@ Conventions :
 | `admin.courses.publish.problem.summary` | Renseignez le résumé et la description. |
 | `admin.courses.publish.problem.quiz` | Chaque quiz doit avoir au moins une question. |
 | `admin.courses.editorOnly` | Votre rôle Éditeur de contenus permet de créer et publier des formations. |
+| `admin.courses.filter.search` | Titre de formation |
+| `admin.courses.filter.catalog` | Niveau de catalogue |
+| `admin.courses.filter.all` | Tous |
+| `admin.courses.filter.count` | {count, plural, =0 {Aucune formation} one {# formation} other {# formations}} |
+| `admin.courses.filter.empty` | Aucune formation ne correspond à ces filtres. |
+| `admin.courses.updatedAt` | Enregistrée le {date} |
+| `admin.courses.listMeta` | {access} · {lessons} · {learners, plural, =0 {aucun apprenant} one {# apprenant} other {# apprenants}} |
+| `admin.courses.pick` | Choisissez une formation dans la liste pour modifier sa fiche, ses modules et son attestation. |
+| `admin.courses.moreFields` | Présentation détaillée |
+| `admin.courses.indicator.on` | (activé) |
+| `admin.courses.indicator.off` | (désactivé) |
+| `admin.courses.indicators` | Indicateurs calculés à partir du niveau de catalogue et des leçons : l'aperçu public et les exercices métier se règlent dans chaque leçon. |
+| `admin.courses.lesson.resourcesCount` | {count, plural, one {# ressource} other {# ressources}} |
+| `admin.courses.lesson.editNamed` | Modifier la leçon « {title} » |
+| `admin.courses.lesson.deleteNamed` | Supprimer la leçon « {title} » |
+| `admin.courses.quiz.meta` | {count, plural, =0 {Aucune question} one {# question} other {# questions}} · Seuil {score} % · {attempts, plural, =0 {Tentatives illimitées} one {# tentative} other {# tentatives}} |
+| `admin.courses.certificate.withFiche` | Pris en compte avec « Enregistrer la fiche ». |
+| `admin.courses.certificate.revoke.next` | Continuer |
+| `admin.courses.certificate.revoke.ask` | Saisissez le numéro de l'attestation de cette formation à révoquer. |
 
 ### `/admin/offres` · Modération des offres
 
@@ -9045,6 +9145,27 @@ Conventions :
 | `admin.jobs.unpublish.confirm` | Dépublier « {jobTitle} » ? Les candidats seront informés que l'offre n'est plus disponible. |
 | `admin.jobs.approved` | Offre approuvée et publiée. |
 | `admin.jobs.rejected` | Offre refusée. Le recruteur a été prévenu. |
+| `admin.jobs.search` | Titre, organisation |
+| `admin.jobs.list` | Offres à modérer |
+| `admin.jobs.filter.flag` | Signal automatique |
+| `admin.jobs.filter.country` | Pays |
+| `admin.jobs.filter.contract` | Type de contrat |
+| `admin.jobs.filter.all` | Tous |
+| `admin.jobs.filter.none` | Sans signal |
+| `admin.jobs.count` | {count, plural, =0 {Aucune offre} one {# offre} other {# offres}} |
+| `admin.jobs.noFlag` | Aucun signal automatique |
+| `admin.jobs.unverified` | Organisation non vérifiée |
+| `admin.jobs.publishedBy` | publiée par {name} |
+| `admin.jobs.excerpt` | Extrait de l'offre |
+| `admin.jobs.excerptHint` | Les passages surlignés ont déclenché le signal automatique. |
+| `admin.jobs.reports` | {count, plural, one {# signalement ouvert} other {# signalements ouverts}} |
+| `admin.jobs.seeReports` | Voir les signalements |
+| `admin.jobs.cancel` | Annuler |
+| `admin.jobs.requestChangesHint` | L'offre est renvoyée au recruteur avec votre motif : il la corrige puis la soumet à nouveau. |
+| `admin.jobs.empty.pending` | Aucune offre à vérifier. Les offres signalées automatiquement à la publication apparaîtront ici. |
+| `admin.jobs.empty.flagged` | Aucune offre signalée par les utilisateurs. |
+| `admin.jobs.empty.all` | Aucune offre publiée. |
+| `admin.jobs.empty.filtered` | Aucune offre ne correspond à ces filtres. |
 
 ### `/admin/partenaires` · Partenaires et lots de licences
 
@@ -9089,6 +9210,28 @@ Conventions :
 | `admin.partners.batch.contract` | Contrat {reference} |
 | `admin.partners.batch.amountHelp` | En USD, tel que prévu au contrat (facultatif). |
 | `admin.partners.batch.none` | Aucun lot pour ce partenaire. |
+| `admin.partners.list` | Liste des partenaires |
+| `admin.partners.search` | Rechercher un partenaire |
+| `admin.partners.filter.all` | Tous |
+| `admin.partners.col.batches` | Lots |
+| `admin.partners.summary` | {batches, plural, =0 {Aucun lot} one {# lot} other {# lots}} · {seats, plural, =0 {aucune licence} one {# licence} other {# licences}} |
+| `admin.partners.status.active` | Actif |
+| `admin.partners.status.upcoming` | À venir |
+| `admin.partners.status.ended` | Terminé |
+| `admin.partners.status.none` | Sans lot |
+| `admin.partners.since` | Partenaire depuis le {date, date, long} |
+| `admin.partners.contract.none` | Aucun contrat enregistré. La référence, le montant et les dates du contrat sont saisis avec chaque lot de licences. |
+| `admin.partners.contract.fromBatch` | Contrat du lot le plus récent, « {name} ». |
+| `admin.partners.batches.title` | Lots de licences |
+| `admin.partners.batches.plan` | Forfait |
+| `admin.partners.batches.seats` | Licences |
+| `admin.partners.batches.months` | Durée |
+| `admin.partners.batches.minGroup` | Seuil |
+| `admin.partners.batches.status` | Statut |
+| `admin.partners.batches.monthsValue` | {months} mois |
+| `admin.partners.batch.minGroupHint` | Tout indicateur portant sur moins de {count} personnes est masqué. |
+| `admin.partners.creation` | Création |
+| `admin.partners.cancel` | Annuler |
 
 ### `/admin/ia` · IA et poids du matching
 
@@ -9163,6 +9306,27 @@ Conventions :
 | `admin.ai.audit.title` | Journal d'audit IA |
 | `admin.ai.audit.desc` | Chaque calcul de score conserve les poids utilisés, les critères évalués et la version du modèle, pour permettre une explication et une révision. |
 | `admin.ai.audit.filter` | Filtrer par utilisateur, offre ou fonction |
+| `admin.ai.weights.desc.requiredSkills` | Les compétences que l'offre exige, comparées à celles du profil et à leur niveau. |
+| `admin.ai.weights.desc.preferredSkills` | Les compétences qui sont un plus pour le poste. |
+| `admin.ai.weights.desc.experience` | Les années d'expérience utiles au poste, stages et engagements compris. |
+| `admin.ai.weights.desc.education` | Le niveau et le domaine d'études, ou l'expérience équivalente si l'offre l'accepte. |
+| `admin.ai.weights.desc.languages` | Les langues demandées et le niveau attendu. |
+| `admin.ai.weights.desc.location` | La distance au lieu de travail, la mobilité et le mode de travail accepté. |
+| `admin.ai.weights.desc.contract` | Le contrat proposé et la date de disponibilité, comparés aux souhaits du talent. |
+| `admin.ai.weights.desc.semantic` | Similarité entre le profil et l'offre, calculée par le modèle. |
+| `admin.ai.weights.excluded.list` | Genre, Âge, Photo, Origine, Religion, Situation familiale, État de santé, Forfait du talent |
+| `admin.ai.weights.excluded.locked` | Cette liste ne peut pas être modifiée. |
+| `admin.ai.usage.cost.label` | Coût estimé |
+| `admin.ai.usage.calls` | Appels |
+| `admin.ai.usage.share` | {percent} % |
+| `admin.ai.disputes.days` | {count} j |
+| `admin.ai.disputes.seeAll` | Traiter les révisions |
+| `admin.ai.audit.action.weights` | Nouvelle version des poids |
+| `admin.ai.audit.action.inReview` | Révision prise en charge |
+| `admin.ai.audit.action.corrected` | Score corrigé et talent prévenu |
+| `admin.ai.audit.action.confirmed` | Score confirmé et expliqué |
+| `admin.ai.audit.empty` | Aucune action sur le matching pour le moment. |
+| `admin.ai.audit.by` | Par {name} |
 
 ### `/admin/contenus` · Contenus éditables
 
@@ -9218,6 +9382,29 @@ Conventions :
 | `admin.content.saved` | Modification enregistrée. |
 | `admin.content.deleted` | Contenu supprimé. |
 | `admin.content.error` | Vérifiez les champs : la question fait au moins 3 caractères, la réponse au moins 3, et la date de fin suit la date de début. |
+| `admin.content.reasonMissing` | Indiquez le motif de la modification avant de publier. |
+| `admin.content.search` | Question ou réponse |
+| `admin.content.col.status` | Statut |
+| `admin.content.col.updated` | Modifié |
+| `admin.content.faq.status.original` | D'origine |
+| `admin.content.faq.pick` | Choisissez une question dans la liste pour la modifier, ou ajoutez-en une ci-dessous. |
+| `admin.content.faq.searchEmpty` | Aucune question ne correspond à cette recherche. |
+| `admin.content.preview` | Aperçu |
+| `admin.content.changes.title` | Dernières modifications |
+| `admin.content.changes.empty` | Aucune modification enregistrée pour l'instant. |
+| `admin.content.changes.by` | {date} · {name} |
+| `admin.content.changes.version` | Version {number} |
+| `admin.content.changes.current` | En ligne |
+| `admin.content.changes.action.faqSave` | Question enregistrée |
+| `admin.content.changes.action.faqHide` | Question masquée |
+| `admin.content.changes.action.faqReset` | Texte d'origine rétabli |
+| `admin.content.changes.action.bannerSave` | Bannière enregistrée |
+| `admin.content.changes.action.bannerDelete` | Bannière supprimée |
+| `admin.content.changes.unknownActor` | Compte supprimé |
+| `admin.content.banner.status.scheduled` | Programmée |
+| `admin.content.banner.status.live` | En ligne |
+| `admin.content.banner.status.ended` | Terminée |
+| `admin.content.banner.count` | {count, plural, =0 {Aucune bannière} one {# bannière} other {# bannières}} |
 
 ### `/admin/signalements` · Signalements
 
@@ -9251,6 +9438,26 @@ Conventions :
 | `admin.reports.action.notifyReporter` | Informer la personne qui a signalé |
 | `admin.reports.resolved` | Signalement traité. |
 | `admin.reports.empty` | Aucun signalement ouvert. |
+| `admin.reports.search` | Motif, auteur |
+| `admin.reports.filter.priority` | Priorité |
+| `admin.reports.filter.all` | Tous |
+| `admin.reports.priority.normal` | Normale |
+| `admin.reports.count` | {count, plural, one {# signalement} other {# signalements}} |
+| `admin.reports.detail.title.job` | Offre signalée |
+| `admin.reports.detail.title.message` | Message signalé |
+| `admin.reports.detail.title.conversation` | Conversation signalée |
+| `admin.reports.detail.author` | Auteur |
+| `admin.reports.detail.flagged` | message signalé |
+| `admin.reports.detail.hidden` | Ce contenu est déjà masqué. |
+| `admin.reports.detail.details` | Précisions de la personne qui a signalé |
+| `admin.reports.detail.seeJob` | Voir l'offre publiée |
+| `admin.reports.detail.decision` | Décision : {action} |
+| `admin.reports.confirm.dismiss` | Le signalement sera clôturé sans autre action. |
+| `admin.reports.confirm.hide` | Le contenu signalé ne sera plus visible et le signalement sera clôturé. L'identité de la personne qui a signalé n'est jamais communiquée à l'auteur. |
+| `admin.reports.emptyInProgress` | Aucun signalement en cours. |
+| `admin.reports.emptyClosed` | Aucun signalement clôturé. |
+| `admin.reports.emptyFiltered` | Aucun signalement ne correspond à ces filtres. |
+| `admin.reports.list` | Liste des signalements |
 
 
 ---

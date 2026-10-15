@@ -10339,7 +10339,11 @@
         "revenue30": "Encaissé sur 30 jours",
         "none": "Pas encore de données",
         "period": "Sur les 30 derniers jours : conversion des comptes créés, renouvellement des périodes arrivées à échéance, dépenses IA estimées.",
-        "delta": "{delta} % par rapport à la période précédente"
+        "delta": "{delta} % par rapport à la période précédente",
+        "vsPrevious": "vs période précédente",
+        "deltaPercent": "{value} %",
+        "deltaPoints": "{count, plural, one {{value} pt} other {{value} pts}}",
+        "lowerIsBetter": "Pour un coût, une baisse est une bonne nouvelle."
       },
       "byFamily": "Par famille : Talents, RH, Companies, Partners",
       "byPlan": "Par forfait",
@@ -10348,7 +10352,9 @@
         "signups": "Inscriptions",
         "applications": "Candidatures",
         "jobs": "Offres publiées",
-        "certificates": "Attestations délivrées"
+        "certificates": "Attestations délivrées",
+        "monthly": "Mensuel",
+        "aria": "Activité mois par mois, de {from} à {to} : inscriptions, candidatures, offres publiées et attestations délivrées."
       },
       "alerts": {
         "title": "À traiter",
@@ -10356,9 +10362,41 @@
         "jobs": "{count, plural, one {# offre à modérer} other {# offres à modérer}}",
         "reports": "{count, plural, one {# signalement ouvert} other {# signalements ouverts}}",
         "disputes": "{count, plural, one {# révision de score demandée} other {# révisions de score demandées}}",
-        "payments": "{count, plural, one {# paiement à vérifier} other {# paiements à vérifier}}"
+        "payments": "{count, plural, one {# paiement à vérifier} other {# paiements à vérifier}}",
+        "empty": "Rien à traiter pour l'instant."
       },
-      "export": "Exporter les indicateurs"
+      "export": "Exporter les indicateurs",
+      "periodValue": "Période : {days} derniers jours",
+      "periodOption": "{days} derniers jours",
+      "family": {
+        "title": "Par famille",
+        "hint": "Talents, RH, Companies, Partners",
+        "talent": "Talents",
+        "rh": "RH",
+        "company": "Companies",
+        "partner": "Partners"
+      },
+      "plan": {
+        "hint": "Comptes payants et sponsorisés",
+        "col": {
+          "plan": "Forfait",
+          "subscribers": "Abonnés",
+          "revenue": "Revenu (USD)",
+          "margin": "Marge brute"
+        },
+        "empty": "Aucun compte payant ou sponsorisé pour l'instant."
+      },
+      "ai": {
+        "other": "Autres",
+        "link": "Voir IA et matching",
+        "empty": "Aucun appel d'IA sur la période."
+      },
+      "csv": {
+        "file": "indicateurs-jumanly",
+        "indicator": "Indicateur",
+        "value": "Valeur",
+        "previous": "Période précédente"
+      }
     },
     "users": {
       "title": "Utilisateurs",
@@ -10370,7 +10408,8 @@
         "plan": "Forfait",
         "role": "Rôle",
         "status": "Statut",
-        "country": "Pays"
+        "country": "Pays",
+        "all": "Tous"
       },
       "col": {
         "name": "Nom",
@@ -10394,7 +10433,18 @@
         "memberships": "Organisations",
         "quotas": "Quotas et consommation",
         "activity": "Activité",
-        "privateNote": "Les messages privés, CV et documents des utilisateurs ne sont pas visibles depuis l'administration."
+        "privateNote": "Les messages privés, CV et documents des utilisateurs ne sont pas visibles depuis l'administration.",
+        "id": "Identifiant",
+        "method": "Moyen",
+        "planPrice": "{plan} · {price} USD/mois",
+        "until": "{status} jusqu'au {date}",
+        "noEnd": "Sans échéance",
+        "noMembership": "Aucune appartenance",
+        "noQuota": "Aucun quota mesuré pour ce forfait.",
+        "applications": "Candidatures",
+        "coursesInProgress": "Formations en cours",
+        "certificates": "Attestations",
+        "actions": "Actions sur le compte"
       },
       "action": {
         "suspend": {
@@ -10429,7 +10479,9 @@
       },
       "selfProtected": "Vous ne pouvez pas modifier votre propre rôle ni suspendre votre propre compte.",
       "count": "{count, plural, one {# utilisateur} other {# utilisateurs}}",
-      "summary": "Forfait : {plan} · inscrit le {date}"
+      "summary": "Forfait : {plan} · inscrit le {date}",
+      "neverActive": "Aucune connexion",
+      "list": "Liste des utilisateurs"
     },
     "orgs": {
       "title": "Organisations",
@@ -10439,7 +10491,8 @@
         "verified": "Vérifiées",
         "partners": "Partenaires",
         "rejected": "Refusées",
-        "none": "Non vérifiées"
+        "none": "Non vérifiées",
+        "pendingShort": "En attente ({count})"
       },
       "col": {
         "name": "Organisation",
@@ -10476,7 +10529,8 @@
           "mandate": "Fonction du demandeur : {value}",
           "website": "Site web : {value}"
         },
-        "reasonRequired": "Indiquez le motif communiqué à l'organisation."
+        "reasonRequired": "Indiquez le motif communiqué à l'organisation.",
+        "noDocuments": "Aucun élément fourni pour l'instant."
       },
       "revoke": {
         "text": "Retirer le badge vérifié",
@@ -10486,7 +10540,33 @@
         "text": "Suspendre l'organisation",
         "confirm": "Suspendre {org} ? Ses offres seront retirées et ses membres ne pourront plus accéder à l'espace Hire. Les candidats seront prévenus."
       },
-      "empty": "Aucune organisation dans cette liste."
+      "empty": "Aucune organisation dans cette liste.",
+      "search": "Nom de l'organisation",
+      "filter": {
+        "country": "Pays",
+        "all": "Toutes"
+      },
+      "type": {
+        "recruiter": "Cabinet RH",
+        "company": "Entreprise",
+        "partner": "Partenaire"
+      },
+      "status": {
+        "none": "Non vérifiée",
+        "pending": "En attente",
+        "verified": "Vérifiée",
+        "rejected": "Refusée"
+      },
+      "doc": {
+        "registration": "Immatriculation",
+        "taxId": "Identification fiscale",
+        "domainEmail": "E-mail sur le domaine",
+        "mandate": "Fonction du demandeur",
+        "website": "Site web"
+      },
+      "list": "Liste des organisations",
+      "count": "{count, plural, one {# organisation} other {# organisations}}",
+      "members": "{count, plural, one {# membre} other {# membres}}"
     },
     "plans": {
       "title": "Forfaits et droits",
@@ -10559,7 +10639,9 @@
       "save": {
         "preview": "Aperçu de l'impact",
         "impact": "{count, plural, one {# abonné concerné} other {# abonnés concernés}}. Les quotas réduits s'appliquent à la prochaine période.",
-        "confirm": "Appliquer les modifications"
+        "confirm": "Appliquer les modifications",
+        "none": "Aucune modification pour l'instant. Modifiez un champ ou un droit pour voir son impact ici.",
+        "readOnly": "Lecture seule : votre rôle ne permet pas de modifier les forfaits."
       },
       "saved": "Forfait mis à jour.",
       "priceChange": {
@@ -10570,14 +10652,26 @@
       "back": "Tous les forfaits",
       "error": {
         "value": "Valeur non valable pour {key}. Pour un quota : un nombre entier, -1 pour illimité.",
-        "price": "Indiquez un prix valable, par exemple 9.99."
-      }
+        "price": "Indiquez un prix valable, par exemple 9.99.",
+        "fields": "Vérifiez les informations du forfait : le nom est obligatoire et l'ordre d'affichage est un nombre entier."
+      },
+      "families": "Familles de forfaits",
+      "familyShort": {
+        "talents": "Talents",
+        "rh": "RH",
+        "companies": "Companies",
+        "partners": "Partners"
+      },
+      "subscribersCount": "{count, plural, =0 {Aucun abonné} one {# abonné} other {# abonnés}}",
+      "empty": "Aucun forfait dans cette famille."
     },
     "subscriptions": {
       "title": "Abonnements",
       "filter": {
         "status": "Statut",
-        "all": "Tous"
+        "all": "Tous",
+        "plan": "Forfait",
+        "method": "Moyen de paiement"
       },
       "status": {
         "trialing": "Essai",
@@ -10614,7 +10708,8 @@
           "status": "Statut",
           "reference": "Référence"
         },
-        "credit": "Crédit déduit : {credit} USD"
+        "credit": "Crédit déduit : {credit} USD",
+        "list": "Liste des paiements"
       },
       "action": {
         "extend": "Prolonger la période",
@@ -10630,7 +10725,17 @@
       "refunded": "Remboursement enregistré.",
       "invoice": "Voir la facture",
       "empty": "Aucun abonnement pour ce filtre.",
-      "refundError": "Remboursement non enregistré : indiquez la référence du remboursement."
+      "refundError": "Remboursement non enregistré : indiquez la référence du remboursement.",
+      "search": "Titulaire, référence",
+      "kpi": {
+        "toVerify": "Paiements à vérifier"
+      },
+      "list": "Liste des abonnements",
+      "actions": {
+        "title": "Actions · {holder}",
+        "open": "Actions pour {holder}",
+        "none": "Aucune action disponible pour ce paiement."
+      }
     },
     "courses": {
       "title": "Formations",
@@ -10751,7 +10856,10 @@
         },
         "subtitles": "Sous-titres",
         "resources": "Ressources à télécharger",
-        "transcript": "Transcription"
+        "transcript": "Transcription",
+        "resourcesCount": "{count, plural, one {# ressource} other {# ressources}}",
+        "editNamed": "Modifier la leçon « {title} »",
+        "deleteNamed": "Supprimer la leçon « {title} »"
       },
       "quiz": {
         "add": "Ajouter un quiz",
@@ -10778,7 +10886,8 @@
           "single": "Choix unique",
           "multiple": "Choix multiples",
           "text": "Réponse libre"
-        }
+        },
+        "meta": "{count, plural, =0 {Aucune question} one {# question} other {# questions}} · Seuil {score} % · {attempts, plural, =0 {Tentatives illimitées} one {# tentative} other {# tentatives}}"
       },
       "certificate": {
         "title": "Attestation",
@@ -10794,8 +10903,11 @@
           "code": "Numéro de l'attestation",
           "submit": "Révoquer l'attestation",
           "done": "Attestation révoquée. La page de vérification l'indique désormais.",
-          "notFound": "Aucune attestation active avec ce numéro."
-        }
+          "notFound": "Aucune attestation active avec ce numéro.",
+          "next": "Continuer",
+          "ask": "Saisissez le numéro de l'attestation de cette formation à révoquer."
+        },
+        "withFiche": "Pris en compte avec « Enregistrer la fiche »."
       },
       "publish": {
         "text": "Publier",
@@ -10808,7 +10920,23 @@
         }
       },
       "published": "Formation publiée.",
-      "editorOnly": "Votre rôle Éditeur de contenus permet de créer et publier des formations."
+      "editorOnly": "Votre rôle Éditeur de contenus permet de créer et publier des formations.",
+      "filter": {
+        "search": "Titre de formation",
+        "catalog": "Niveau de catalogue",
+        "all": "Tous",
+        "count": "{count, plural, =0 {Aucune formation} one {# formation} other {# formations}}",
+        "empty": "Aucune formation ne correspond à ces filtres."
+      },
+      "updatedAt": "Enregistrée le {date}",
+      "listMeta": "{access} · {lessons} · {learners, plural, =0 {aucun apprenant} one {# apprenant} other {# apprenants}}",
+      "pick": "Choisissez une formation dans la liste pour modifier sa fiche, ses modules et son attestation.",
+      "moreFields": "Présentation détaillée",
+      "indicator": {
+        "on": "(activé)",
+        "off": "(désactivé)"
+      },
+      "indicators": "Indicateurs calculés à partir du niveau de catalogue et des leçons : l'aperçu public et les exercices métier se règlent dans chaque leçon."
     },
     "jobs": {
       "title": "Modération des offres",
@@ -10842,7 +10970,32 @@
         "confirm": "Dépublier « {jobTitle} » ? Les candidats seront informés que l'offre n'est plus disponible."
       },
       "approved": "Offre approuvée et publiée.",
-      "rejected": "Offre refusée. Le recruteur a été prévenu."
+      "rejected": "Offre refusée. Le recruteur a été prévenu.",
+      "search": "Titre, organisation",
+      "list": "Offres à modérer",
+      "filter": {
+        "flag": "Signal automatique",
+        "country": "Pays",
+        "contract": "Type de contrat",
+        "all": "Tous",
+        "none": "Sans signal"
+      },
+      "count": "{count, plural, =0 {Aucune offre} one {# offre} other {# offres}}",
+      "noFlag": "Aucun signal automatique",
+      "unverified": "Organisation non vérifiée",
+      "publishedBy": "publiée par {name}",
+      "excerpt": "Extrait de l'offre",
+      "excerptHint": "Les passages surlignés ont déclenché le signal automatique.",
+      "reports": "{count, plural, one {# signalement ouvert} other {# signalements ouverts}}",
+      "seeReports": "Voir les signalements",
+      "cancel": "Annuler",
+      "requestChangesHint": "L'offre est renvoyée au recruteur avec votre motif : il la corrige puis la soumet à nouveau.",
+      "empty": {
+        "pending": "Aucune offre à vérifier. Les offres signalées automatiquement à la publication apparaîtront ici.",
+        "flagged": "Aucune offre signalée par les utilisateurs.",
+        "all": "Aucune offre publiée.",
+        "filtered": "Aucune offre ne correspond à ces filtres."
+      }
     },
     "partners": {
       "title": "Partenaires",
@@ -10865,7 +11018,9 @@
         "reference": "Référence du contrat",
         "amount": "Montant",
         "start": "Début",
-        "end": "Fin"
+        "end": "Fin",
+        "none": "Aucun contrat enregistré. La référence, le montant et les dates du contrat sont saisis avec chaque lot de licences.",
+        "fromBatch": "Contrat du lot le plus récent, « {name} »."
       },
       "batch": {
         "new": "Nouveau lot de licences",
@@ -10878,7 +11033,8 @@
         "create": "Créer le lot",
         "contract": "Contrat {reference}",
         "amountHelp": "En USD, tel que prévu au contrat (facultatif).",
-        "none": "Aucun lot pour ce partenaire."
+        "none": "Aucun lot pour ce partenaire.",
+        "minGroupHint": "Tout indicateur portant sur moins de {count} personnes est masqué."
       },
       "noOnlinePurchase": "Les licences Partners ne s'achètent pas en ligne : le lot est créé ici après signature du contrat.",
       "subtitle": "Organisations partenaires, contrats et lots de licences sponsorisées.",
@@ -10891,7 +11047,34 @@
       "pending": "Invitation en attente : {emails}",
       "inviteManager": "Inviter un responsable",
       "invite": "Inviter",
-      "create": "Créer le partenaire"
+      "create": "Créer le partenaire",
+      "list": "Liste des partenaires",
+      "search": "Rechercher un partenaire",
+      "filter": {
+        "all": "Tous"
+      },
+      "col": {
+        "batches": "Lots"
+      },
+      "summary": "{batches, plural, =0 {Aucun lot} one {# lot} other {# lots}} · {seats, plural, =0 {aucune licence} one {# licence} other {# licences}}",
+      "status": {
+        "active": "Actif",
+        "upcoming": "À venir",
+        "ended": "Terminé",
+        "none": "Sans lot"
+      },
+      "since": "Partenaire depuis le {date, date, long}",
+      "batches": {
+        "title": "Lots de licences",
+        "plan": "Forfait",
+        "seats": "Licences",
+        "months": "Durée",
+        "minGroup": "Seuil",
+        "status": "Statut",
+        "monthsValue": "{months} mois"
+      },
+      "creation": "Création",
+      "cancel": "Annuler"
     },
     "ai": {
       "title": "IA et matching",
@@ -10906,7 +11089,8 @@
         "byPlan": "Par forfait",
         "cost": {
           "text": "Coût estimé : {amount} {currency}",
-          "perFeature": "Coût par crédit, à mettre à jour selon le fournisseur"
+          "perFeature": "Coût par crédit, à mettre à jour selon le fournisseur",
+          "label": "Coût estimé"
         },
         "credits": "Crédits consommés : {count}",
         "feature": {
@@ -10933,7 +11117,9 @@
           "none": "Sans forfait"
         },
         "empty": "Aucun appel d'IA sur la période.",
-        "noPrice": "Prix inconnu pour {models} : le coût de ces appels n'est pas estimé. Ajoutez le tarif dans src/server/ai/prices.ts."
+        "noPrice": "Prix inconnu pour {models} : le coût de ces appels n'est pas estimé. Ajoutez le tarif dans src/server/ai/prices.ts.",
+        "calls": "Appels",
+        "share": "{percent} %"
       },
       "scores": {
         "title": "Répartition des scores calculés",
@@ -10953,7 +11139,9 @@
         },
         "excluded": {
           "title": "Données exclues du calcul",
-          "body": "Genre, âge, photo, origine, religion, situation familiale, état de santé, forfait du talent. Cette liste ne peut pas être modifiée."
+          "body": "Genre, âge, photo, origine, religion, situation familiale, état de santé, forfait du talent. Cette liste ne peut pas être modifiée.",
+          "list": "Genre, Âge, Photo, Origine, Religion, Situation familiale, État de santé, Forfait du talent",
+          "locked": "Cette liste ne peut pas être modifiée."
         },
         "impact": "Les scores existants seront recalculés. Les recruteurs et les talents verront la nouvelle explication.",
         "save": "Enregistrer les poids",
@@ -10962,7 +11150,17 @@
         "note": "Motif du changement",
         "history": "Versions précédentes",
         "historyItem": "{version}, du {date}",
-        "saved": "Poids enregistrés. Recalcul des scores en cours."
+        "saved": "Poids enregistrés. Recalcul des scores en cours.",
+        "desc": {
+          "requiredSkills": "Les compétences que l'offre exige, comparées à celles du profil et à leur niveau.",
+          "preferredSkills": "Les compétences qui sont un plus pour le poste.",
+          "experience": "Les années d'expérience utiles au poste, stages et engagements compris.",
+          "education": "Le niveau et le domaine d'études, ou l'expérience équivalente si l'offre l'accepte.",
+          "languages": "Les langues demandées et le niveau attendu.",
+          "location": "La distance au lieu de travail, la mobilité et le mode de travail accepté.",
+          "contract": "Le contrat proposé et la date de disponibilité, comparés aux souhaits du talent.",
+          "semantic": "Similarité entre le profil et l'offre, calculée par le modèle."
+        }
       },
       "disputes": {
         "title": "Révisions humaines demandées",
@@ -10982,12 +11180,22 @@
         "scoreBefore": "Score contesté : {score} %",
         "recruiterNotified": "Le talent souhaite que le recruteur soit prévenu.",
         "responseHint": "Obligatoire pour confirmer le score : expliquez au talent ce qui a été vérifié.",
-        "responseMissing": "Écrivez une réponse au talent pour confirmer le score."
+        "responseMissing": "Écrivez une réponse au talent pour confirmer le score.",
+        "days": "{count} j",
+        "seeAll": "Traiter les révisions"
       },
       "audit": {
         "title": "Journal d'audit IA",
         "desc": "Chaque calcul de score conserve les poids utilisés, les critères évalués et la version du modèle, pour permettre une explication et une révision.",
-        "filter": "Filtrer par utilisateur, offre ou fonction"
+        "filter": "Filtrer par utilisateur, offre ou fonction",
+        "action": {
+          "weights": "Nouvelle version des poids",
+          "inReview": "Révision prise en charge",
+          "corrected": "Score corrigé et talent prévenu",
+          "confirmed": "Score confirmé et expliqué"
+        },
+        "empty": "Aucune action sur le matching pour le moment.",
+        "by": "Par {name}"
       }
     },
     "content": {
@@ -11007,13 +11215,16 @@
         "status": {
           "edited": "Modifiée",
           "added": "Ajoutée",
-          "hidden": "Masquée"
+          "hidden": "Masquée",
+          "original": "D'origine"
         },
         "edit": "Modifier",
         "hide": "Masquer cette question",
         "show": "Afficher à nouveau",
         "reset": "Rétablir le texte d'origine",
-        "delete": "Supprimer cette question"
+        "delete": "Supprimer cette question",
+        "pick": "Choisissez une question dans la liste pour la modifier, ou ajoutez-en une ci-dessous.",
+        "searchEmpty": "Aucune question ne correspond à cette recherche."
       },
       "banner": {
         "add": "Nouvelle bannière",
@@ -11037,7 +11248,13 @@
         "always": "Sans date de fin",
         "delete": "Supprimer la bannière",
         "save": "Enregistrer la bannière",
-        "where": "La bannière « Tous » s'affiche aussi sur le site public ; les autres seulement dans l'espace connecté correspondant."
+        "where": "La bannière « Tous » s'affiche aussi sur le site public ; les autres seulement dans l'espace connecté correspondant.",
+        "status": {
+          "scheduled": "Programmée",
+          "live": "En ligne",
+          "ended": "Terminée"
+        },
+        "count": "{count, plural, =0 {Aucune bannière} one {# bannière} other {# bannières}}"
       },
       "texts": {
         "key": "Clé",
@@ -11056,7 +11273,29 @@
       },
       "saved": "Modification enregistrée.",
       "deleted": "Contenu supprimé.",
-      "error": "Vérifiez les champs : la question fait au moins 3 caractères, la réponse au moins 3, et la date de fin suit la date de début."
+      "error": "Vérifiez les champs : la question fait au moins 3 caractères, la réponse au moins 3, et la date de fin suit la date de début.",
+      "reasonMissing": "Indiquez le motif de la modification avant de publier.",
+      "search": "Question ou réponse",
+      "col": {
+        "status": "Statut",
+        "updated": "Modifié"
+      },
+      "preview": "Aperçu",
+      "changes": {
+        "title": "Dernières modifications",
+        "empty": "Aucune modification enregistrée pour l'instant.",
+        "by": "{date} · {name}",
+        "version": "Version {number}",
+        "current": "En ligne",
+        "action": {
+          "faqSave": "Question enregistrée",
+          "faqHide": "Question masquée",
+          "faqReset": "Texte d'origine rétabli",
+          "bannerSave": "Bannière enregistrée",
+          "bannerDelete": "Bannière supprimée"
+        },
+        "unknownActor": "Compte supprimé"
+      }
     },
     "reports": {
       "title": "Signalements",
@@ -11066,7 +11305,9 @@
         "closed": "Clôturés"
       },
       "filter": {
-        "type": "Type de contenu"
+        "type": "Type de contenu",
+        "priority": "Priorité",
+        "all": "Tous"
       },
       "type": {
         "job": "Offre",
@@ -11087,7 +11328,8 @@
         "high": {
           "text": "Prioritaire",
           "hint": "Arnaque, demande de paiement ou harcèlement"
-        }
+        },
+        "normal": "Normale"
       },
       "messageAccess": "Seul le message signalé et son contexte immédiat sont visibles, pour l'instruction du signalement.",
       "action": {
@@ -11100,7 +11342,30 @@
         "notifyReporter": "Informer la personne qui a signalé"
       },
       "resolved": "Signalement traité.",
-      "empty": "Aucun signalement ouvert."
+      "empty": "Aucun signalement ouvert.",
+      "search": "Motif, auteur",
+      "count": "{count, plural, one {# signalement} other {# signalements}}",
+      "detail": {
+        "title": {
+          "job": "Offre signalée",
+          "message": "Message signalé",
+          "conversation": "Conversation signalée"
+        },
+        "author": "Auteur",
+        "flagged": "message signalé",
+        "hidden": "Ce contenu est déjà masqué.",
+        "details": "Précisions de la personne qui a signalé",
+        "seeJob": "Voir l'offre publiée",
+        "decision": "Décision : {action}"
+      },
+      "confirm": {
+        "dismiss": "Le signalement sera clôturé sans autre action.",
+        "hide": "Le contenu signalé ne sera plus visible et le signalement sera clôturé. L'identité de la personne qui a signalé n'est jamais communiquée à l'auteur."
+      },
+      "emptyInProgress": "Aucun signalement en cours.",
+      "emptyClosed": "Aucun signalement clôturé.",
+      "emptyFiltered": "Aucun signalement ne correspond à ces filtres.",
+      "list": "Liste des signalements"
     }
   },
   "legal": {
