@@ -9640,7 +9640,8 @@
         "activated": "Licences activées",
         "active": "Bénéficiaires actifs (30 derniers jours)",
         "activationRate": "Taux d'activation : {percent} %",
-        "available": "{count, plural, =0 {Aucune licence disponible} one {# licence disponible} other {# licences disponibles}}"
+        "available": "{count, plural, =0 {Aucune licence disponible} one {# licence disponible} other {# licences disponibles}}",
+        "batches": "{count, plural, =0 {Aucun lot} one {# lot} other {# lots}}"
       },
       "usage": {
         "title": "Usage agrégé",
@@ -9654,7 +9655,10 @@
           "text": "Embauches déclarées",
           "hint": "Nombre de bénéficiaires ayant indiqué un recrutement et accepté qu'il soit comptabilisé."
         },
-        "chartAria": "Évolution mensuelle des bénéficiaires actifs"
+        "chartAria": "Évolution mensuelle des bénéficiaires actifs",
+        "hoursValue": "{hours} h",
+        "batch": "Lot affiché",
+        "batchAll": "Tous les lots"
       },
       "batches": {
         "title": "Mes lots de licences",
@@ -9667,7 +9671,8 @@
       "contact": "Une question sur votre contrat ? Écrivez à assistant@jumanly.io.",
       "months": {
         "title": "Bénéficiaires actifs par mois",
-        "month": "Mois"
+        "month": "Mois",
+        "value": "{month} : {value}"
       }
     },
     "hidden": "Masqué",
@@ -9688,7 +9693,8 @@
         },
         "more": "Besoin de licences supplémentaires ? Écrivez à assistant@jumanly.io.",
         "none": "Aucun lot de licences pour l'instant. Votre contact Jumanly le créera après signature du contrat.",
-        "available": "{count, plural, =0 {Aucune licence disponible} one {# licence disponible} other {# licences disponibles}}"
+        "available": "{count, plural, =0 {Aucune licence disponible} one {# licence disponible} other {# licences disponibles}}",
+        "rate": "{percent} %"
       },
       "error": {
         "invalid": "Vérifiez les informations saisies.",
@@ -9767,7 +9773,9 @@
         "sent": "{count, plural, one {# invitation envoyée.} other {# invitations envoyées.}}",
         "privacy": "Les adresses servent uniquement à envoyer les invitations. Après activation, vous ne voyez plus que des statistiques agrégées.",
         "consent": "Je confirme que ces personnes ont accepté de recevoir une invitation Jumanly de notre part.",
-        "file": "Fichier CSV"
+        "file": "Fichier CSV",
+        "send": "Envoyer les invitations",
+        "noFile": "Aucun fichier choisi"
       },
       "invites": {
         "status": {
@@ -9781,7 +9789,9 @@
           "confirm": "Relancer {count, plural, one {# personne} other {# personnes}} ?"
         },
         "title": "Invitations par e-mail",
-        "resent": "{count, plural, =0 {Aucune invitation à relancer.} one {# invitation relancée.} other {# invitations relancées.}}"
+        "resent": "{count, plural, =0 {Aucune invitation à relancer.} one {# invitation relancée.} other {# invitations relancées.}}",
+        "desc": "Totaux du lot, sans détail par personne",
+        "count": "{label} · {count}"
       }
     },
     "reports": {
@@ -9817,7 +9827,8 @@
         "interviewSims": "Simulations d'entretien",
         "applications": "Candidatures envoyées",
         "interviews": "Entretiens obtenus",
-        "hiresDeclared": "Embauches déclarées (avec accord des bénéficiaires)"
+        "hiresDeclared": "Embauches déclarées (avec accord des bénéficiaires)",
+        "activatedOf": "sur {count, plural, one {# licence distribuée} other {# licences distribuées}}"
       },
       "export": {
         "pdf": "Exporter en PDF",
@@ -9829,7 +9840,11 @@
       },
       "monthly": "Recevoir le rapport chaque mois par e-mail",
       "empty": "Pas encore assez de données. Les premiers indicateurs apparaîtront quand au moins {minGroup} bénéficiaires auront activé leur licence.",
-      "requestNominative": "Vous avez besoin d'une information individuelle (par exemple pour un suivi de programme) ? Elle ne peut être transmise qu'avec l'accord explicite de chaque bénéficiaire. Écrivez à assistant@jumanly.io pour mettre en place une demande de consentement."
+      "requestNominative": "Vous avez besoin d'une information individuelle (par exemple pour un suivi de programme) ? Elle ne peut être transmise qu'avec l'accord explicite de chaque bénéficiaire. Écrivez à assistant@jumanly.io pour mettre en place une demande de consentement.",
+      "range": "Du {from, date, long} au {to, date, long}",
+      "hours": "{hours} h",
+      "percent": "{percent} %",
+      "hiresByBatch": "Embauches déclarées par lot"
     }
   },
   "admin": {

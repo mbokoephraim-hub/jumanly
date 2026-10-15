@@ -917,9 +917,41 @@ export async function impactReport(
   };
 }
 
-/** Partner dashboard: licence counts, then the last 30 days and six months of activity. */
-export async function partnerDashboard(db: PrismaClient, ctx: PartnerContext, now = new Date()) {
+/**
+ * Beneficiaries active each month, the current month last (`count` months). A month with fewer
+ * than `minGroup` active people is hidden.
+ */
+export async function monthlyActive(
+  db: PrismaClient,
+  ctx: PartnerContext,
+  input: { batchId?: string; count?: number; now?: Date } = {},
+) {
+  const now = input.now ?? new Date();
+  if (input.batchId) await ownBatch(db, ctx, input.batchId);
+  const { list, minGroup } = await beneficiaries(db, ctx.organizationId, input.batchId);
+  const months = [];
+  for (let back = (input.count ?? 6) - 1; back >= 0; back--) {
+    const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - back, 1));
+    const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - back + 1, 1));
+    const ids = list.filter((item) => item.activatedAt < end).map((item) => item.userId);
+    const active = ids.length >= minGroup ? (await activeUsers(db, ids, start, end)).size : 0;
+    months.push({ month: start, active: cell(active, active, minGroup) });
+  }
+  return months;
+}
+
+/**
+ * Partner dashboard: licence counts, the last 30 days, then the usage and six months of activity
+ * of all batches or of one (`batchId`).
+ */
+export async function partnerDashboard(
+  db: PrismaClient,
+  ctx: PartnerContext,
+  now = new Date(),
+  batchId?: string,
+) {
   const batches = await listBatches(db, ctx, now);
+  const only = batches.some((batch) => batch.id === batchId) ? batchId : undefined;
   const totals = batches.reduce(
     (sum, batch) => ({
       purchased: sum.purchased + batch.seats,
@@ -933,24 +965,17 @@ export async function partnerDashboard(db: PrismaClient, ctx: PartnerContext, no
     from: new Date(now.getTime() - 30 * DAY_MS),
     to: now,
   });
-  const overall = await impactReport(db, ctx, { from: new Date(0), to: now });
-  const { list, minGroup } = await beneficiaries(db, ctx.organizationId);
-  const months = [];
-  for (let back = 5; back >= 0; back--) {
-    const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - back, 1));
-    const end = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth() - back + 1, 1));
-    const ids = list.filter((item) => item.activatedAt < end).map((item) => item.userId);
-    const active = ids.length >= minGroup ? (await activeUsers(db, ids, start, end)).size : 0;
-    months.push({ month: start, active: cell(active, active, minGroup) });
-  }
+  const overall = await impactReport(db, ctx, { batchId: only, from: new Date(0), to: now });
+  const months = await monthlyActive(db, ctx, { batchId: only, now });
   return {
     batches,
+    batchId: only,
     totals,
     activationRate: totals.purchased ? Math.round((totals.activated / totals.purchased) * 100) : 0,
     active30: recent.reach.active,
     usage: overall,
     months,
-    minGroup,
+    minGroup: overall.minGroup,
   };
 }
 
