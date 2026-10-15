@@ -116,6 +116,7 @@ export async function inviteEmailsAction(formData: FormData) {
   back(batchId, "import", {
     ok: "invitations",
     sent: outcome.invitations.length,
+    valides: outcome.valid,
     invalid: outcome.invalid,
     doublons: outcome.duplicates,
     deja: outcome.alreadyInvited,

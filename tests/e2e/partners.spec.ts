@@ -31,7 +31,11 @@ test("le partenaire distribue des codes et ne voit que des agrégats", async ({ 
 
   await page.goto("/app/partenaire/rapports");
   await expect(page.getByRole("heading", { name: "Rapports d'impact", level: 1 })).toBeVisible();
-  await expect(page.getByRole("cell", { name: "Formations terminées" })).toBeVisible();
+  await expect(
+    page
+      .getByRole("region", { name: "Formation", exact: true })
+      .getByText("Formations terminées", { exact: true }),
+  ).toBeVisible();
   await expect(page.locator("main")).not.toContainText("beneficiaire");
   await expectAccessible(page);
 });

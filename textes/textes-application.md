@@ -8203,6 +8203,11 @@ Conventions :
 | `partner.hidden` | Masqué |
 | `partner.dashboard.months.title` | Bénéficiaires actifs par mois |
 | `partner.dashboard.months.month` | Mois |
+| `partner.dashboard.months.value` | {month} : {value} |
+| `partner.dashboard.kpi.batches` | {count, plural, =0 {Aucun lot} one {# lot} other {# lots}} |
+| `partner.dashboard.usage.hoursValue` | {hours} h |
+| `partner.dashboard.usage.batch` | Lot affiché |
+| `partner.dashboard.usage.batchAll` | Tous les lots |
 
 ### `/app/partenaire/licences` · Lots, codes et invitations
 
@@ -8310,6 +8315,11 @@ Conventions :
 | `partner.licenses.invites.title` | Invitations par e-mail |
 | `partner.licenses.invites.resent` | {count, plural, =0 {Aucune invitation à relancer.} one {# invitation relancée.} other {# invitations relancées.}} |
 | `partner.licenses.import.file` | Fichier CSV |
+| `partner.licenses.batch.rate` | {percent} % |
+| `partner.licenses.invites.desc` | Totaux du lot, sans détail par personne |
+| `partner.licenses.invites.count` | {label} · {count} |
+| `partner.licenses.import.send` | Envoyer les invitations |
+| `partner.licenses.import.noFile` | Aucun fichier choisi |
 
 ### `/app/partenaire/rapports` · Rapports d'impact agrégés
 
@@ -8350,6 +8360,11 @@ Conventions :
 | `partner.reports.monthly` | Recevoir le rapport chaque mois par e-mail |
 | `partner.reports.empty` | Pas encore assez de données. Les premiers indicateurs apparaîtront quand au moins {minGroup} bénéficiaires auront activé leur licence. |
 | `partner.reports.requestNominative` | Vous avez besoin d'une information individuelle (par exemple pour un suivi de programme) ? Elle ne peut être transmise qu'avec l'accord explicite de chaque bénéficiaire. Écrivez à assistant@jumanly.io pour mettre en place une demande de consentement. |
+| `partner.reports.range` | Du {from, date, long} au {to, date, long} |
+| `partner.reports.metric.activatedOf` | sur {count, plural, one {# licence distribuée} other {# licences distribuées}} |
+| `partner.reports.hours` | {hours} h |
+| `partner.reports.percent` | {percent} % |
+| `partner.reports.hiresByBatch` | Embauches déclarées par lot |
 
 ---
 

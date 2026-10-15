@@ -41,6 +41,28 @@ routes, mêmes actions, même prestataire factice. Captures 1440 et 390 dans
 - 18 textes ajoutés (`billing.*`, `checkout.*`). Décisions et écarts :
   `docs/decisions/2026-10-15-refonte-lot-12-paiement.md`.
 
+## Refonte lot 12 (partie C) · Espace partenaire (15 octobre 2026)
+
+Maquettes 06-01 à 06-03. Captures 1440 et 390 dans `/mnt/project-files/captures/refonte-lot-12/`
+(`partenaire-*.png`).
+
+- **Tableau de bord** : bandeau de confidentialité, 4 cartes KPI (comptage animé), tuiles d'usage
+  agrégé (hachurées quand masquées), bloc Sapin « Embauches déclarées », barres mensuelles
+  (`MonthBars`), liste des lots avec barre d'activation, bloc « Données masquées », contact.
+  Filtre « Tous les lots » (menu sans JavaScript) : `partnerDashboard` accepte un `batchId`
+  pour l'usage et les mois ; les mois sont extraits dans `monthlyActive()` (même seuil).
+- **Licences** : sélecteur de lot en puces, carte Sapin avec anneau d'activation, formulaire de
+  codes, confirmation en ligne, tableau des codes (colonnes réduites sur mobile), lien
+  d'invitation copiable, zone d'import CSV (`FileDrop`), bilan de vérification après envoi
+  (l'action renvoie aussi le nombre d'adresses valides), totaux des invitations.
+- **Rapports** : filtres période et lot en menus, carte « Ce que contiennent ces rapports »,
+  quatre sections numérotées en tuiles, barres mensuelles, thèmes en barres (part des
+  bénéficiaires), embauches déclarées par lot (un `impactReport` par lot, seuil appliqué à chaque
+  ligne), pied de rapport.
+- Écarts non comblés faute de fonction : tendance « +32 vs septembre », envoi mensuel du rapport
+  par e-mail, vérification du fichier avant envoi, liste des erreurs à télécharger, compteur
+  « Adresse injoignable ».
+
 ## Accueil Career v2 (15 octobre 2026)
 
 Brief `docs/refonte-career/BRIEF-CAREER-V2.md` et maquette `docs/refonte-career/maquette/`
