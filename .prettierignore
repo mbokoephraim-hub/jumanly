@@ -12,5 +12,6 @@ ressources/
 src/components/brand/icon-paths.ts
 docs/maquettes/
 docs/refonte-career/maquette/
+docs/refonte-connexion/maquette/
 docs/modeles-cv/
 src/features/cv/templates/*.css
