@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ModerationChanges } from "@/components/hire/moderation-changes";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand";
 import { AppPageHeader } from "@/components/app/page-header";
@@ -41,7 +42,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 const groups = {
   publiees: ["published", "pending_review"],
-  brouillons: ["draft", "rejected"],
+  brouillons: ["draft", "rejected", "changes_requested"],
   fermees: ["closed"],
 } as const satisfies Record<string, readonly JobStatus[]>;
 type Tab = keyof typeof groups | "toutes";
@@ -355,7 +356,10 @@ export default async function HireJobsPage({ searchParams }: PageProps<"/app/hir
             {shown.map((job) => {
               const live = job.status === "published" || job.status === "pending_review";
               const editable = permissions.manage && job.status !== "closed";
-              const draft = job.status === "draft" || job.status === "rejected";
+              const draft =
+                job.status === "draft" ||
+                job.status === "rejected" ||
+                job.status === "changes_requested";
               const meta = [
                 job.city,
                 all(`jobs.search.remote.${remoteFilterOf(job.remote)}`),
@@ -544,6 +548,13 @@ export default async function HireJobsPage({ searchParams }: PageProps<"/app/hir
                       <span className="max-lg:hidden">{menu}</span>
                     </div>
                   </div>
+                  {job.status === "changes_requested" && (
+                    <ModerationChanges
+                      job={job}
+                      fixHref={editable ? `/app/hire/offres/${job.id}/modifier` : undefined}
+                      className="mb-3 max-lg:mt-3"
+                    />
+                  )}
                   {job.status === "rejected" && job.moderationReason && (
                     <div className="mb-3 flex flex-col gap-3 rounded-[16px] bg-down-fond px-4 py-3 text-down-texte max-lg:mt-3 lg:flex-row lg:items-center">
                       <p className="flex min-w-0 flex-1 items-start gap-2 text-[12.5px] leading-[17px]">

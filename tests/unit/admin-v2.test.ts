@@ -3,6 +3,7 @@ import messages from "../../messages/fr.json";
 import { parseEndDate, versionChanges } from "@/server/services/admin-billing";
 import { cleanFileName } from "@/server/services/admin-orgs";
 import { courseReadiness, publishProblems } from "@/server/services/course-admin";
+import { jobSeverity, reportSeverity, sortReports } from "@/server/services/moderation";
 import { coverAt, sniffVideoType } from "@/server/services/course-media";
 import { sniffDocumentType } from "@/server/storage";
 import {
@@ -297,5 +298,33 @@ describe("formations : prête à publier (étape 6)", () => {
     expect(coverAt("/medias/courses/c1/cover-abc-960.webp", 480)).toBe(
       "/medias/courses/c1/cover-abc-480.webp",
     );
+  });
+});
+
+describe("modération : gravité et ordre de la file (étape 7)", () => {
+  it("les signalements graves passent d'abord, puis les plus anciens", () => {
+    const at = (day: number) => new Date(Date.UTC(2026, 9, day));
+    const sorted = sortReports([
+      { id: "spam-ancien", reason: "spam", createdAt: at(1) },
+      { id: "arnaque-recente", reason: "scam", createdAt: at(10) },
+      { id: "faux-ancien", reason: "fakeJob", createdAt: at(2) },
+      { id: "harcelement-ancien", reason: "harassment", createdAt: at(3) },
+    ]);
+    expect(sorted.map((item) => item.id)).toEqual([
+      "harcelement-ancien",
+      "arnaque-recente",
+      "faux-ancien",
+      "spam-ancien",
+    ]);
+    expect([
+      reportSeverity("scam"),
+      reportSeverity("personalData"),
+      reportSeverity("other"),
+    ]).toEqual([2, 1, 0]);
+  });
+
+  it("une demande de paiement pèse plus qu'une organisation récente", () => {
+    expect(jobSeverity(["payment"])).toBeGreaterThan(jobSeverity(["newOrg"]));
+    expect(jobSeverity([])).toBe(0);
   });
 });

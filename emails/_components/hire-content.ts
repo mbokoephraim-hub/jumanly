@@ -327,3 +327,29 @@ export function orgNoticeEmail(
     },
   };
 }
+
+/**
+ * Moderation (Admin v2, étape 7): the warning sent to the author of a reported content, and the
+ * notice to the person who reported it once it is closed. The reporter is never named.
+ */
+export function moderationEmail(
+  firstName: string | null | undefined,
+  input:
+    | { kind: "warning"; reason: string }
+    | { kind: "reportClosed"; decision: "dismiss" | "hide" | "warn" },
+): HireEmail {
+  const key = input.kind === "warning" ? "mail.moderationWarning" : "mail.reportClosed";
+  const values =
+    input.kind === "warning"
+      ? { reason: input.reason, decision: "" }
+      : { reason: "", decision: t(`mail.reportClosed.decision.${input.decision}`) };
+  return {
+    subject: t(`${key}.subject`),
+    props: {
+      preview: t(`${key}.preheader`),
+      greeting: greeting(firstName),
+      paragraphs: [t(`${key}.p1`, values), t(`${key}.p2`)],
+      cta: { label: t(`${key}.cta`), href: url("/app") },
+    },
+  };
+}

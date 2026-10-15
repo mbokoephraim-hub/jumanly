@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { ModerationChanges } from "@/components/hire/moderation-changes";
 import { notFound } from "next/navigation";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
@@ -416,6 +417,12 @@ export default async function PipelinePage({
       {job.status === "rejected" && job.moderationReason && (
         <Alert tone="error" title={t("jobs.rejected.reason", { reason: job.moderationReason })} />
       )}
+      {job.status === "changes_requested" && (
+        <ModerationChanges
+          job={job}
+          fixHref={permissions.manage ? `/app/hire/offres/${job.id}/modifier` : undefined}
+        />
+      )}
       {!permissions.manage && <Alert title={t("pipeline.permission.readOnly")} />}
 
       <section
@@ -573,14 +580,17 @@ export default async function PipelinePage({
           )}
         </div>
         <span className="flex-1 max-lg:hidden" />
-        {permissions.manage && (job.status === "draft" || job.status === "rejected") && (
-          <form action={publishJobAction}>
-            <input type="hidden" name="id" value={job.id} />
-            <button type="submit" className={pillClass("dark", "md")}>
-              {t("jobForm.publish.text")}
-            </button>
-          </form>
-        )}
+        {permissions.manage &&
+          (job.status === "draft" ||
+            job.status === "rejected" ||
+            job.status === "changes_requested") && (
+            <form action={publishJobAction}>
+              <input type="hidden" name="id" value={job.id} />
+              <button type="submit" className={pillClass("dark", "md")}>
+                {t("jobForm.publish.text")}
+              </button>
+            </form>
+          )}
         {permissions.manage && job.status !== "closed" && job.status !== "archived" && (
           <Link
             href={`/app/hire/offres/${job.id}/modifier`}

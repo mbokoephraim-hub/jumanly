@@ -4684,6 +4684,7 @@ Conventions :
 | `hire.jobs.status.paused` | En pause |
 | `hire.jobs.status.closed` | Fermée |
 | `hire.jobs.status.rejected` | Refusée par la modération |
+| `hire.jobs.status.changesRequested` | Correction demandée |
 | `hire.jobs.status.expired` | Expirée |
 | `hire.jobs.row.applications` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} |
 | `hire.jobs.row.new` | {count, plural, one {# nouvelle} other {# nouvelles}} |
@@ -4709,6 +4710,15 @@ Conventions :
 | `hire.jobs.delete.confirm.body` | Cette action est définitive. |
 | `hire.jobs.rejected.reason` | Motif de la modération : {reason} |
 | `hire.jobs.rejected.fix` | Corriger et soumettre de nouveau |
+| `hire.jobs.changes.title` | La modération demande une correction |
+| `hire.jobs.changes.reason` | Message de la modération : {reason} |
+| `hire.jobs.changes.points` | Points à corriger |
+| `hire.jobs.changes.point.real` | Rendre le poste et l'organisation clairement identifiables |
+| `hire.jobs.changes.point.noPayment` | Retirer toute demande de paiement aux candidats |
+| `hire.jobs.changes.point.noDiscrimination` | Retirer les critères liés au genre, à l'âge, à l'origine, à la religion, à la situation familiale ou à la santé |
+| `hire.jobs.changes.point.knockout` | Justifier par le poste les critères éliminatoires, ou les retirer |
+| `hire.jobs.changes.resend` | Corrigez l'offre puis publiez-la de nouveau : elle repart en vérification. |
+| `hire.jobs.changes.fix` | Corriger l'offre |
 | `hire.jobs.empty.published` | Aucune offre publiée. |
 | `hire.jobs.empty.drafts` | Aucun brouillon. |
 | `hire.jobs.empty.closed` | Aucune offre fermée. |
@@ -7471,6 +7481,9 @@ Conventions :
 | `notifications.item.orgInvite` | {inviterName} vous invite à rejoindre {org} |
 | `notifications.item.jobApproved` | Votre offre « {jobTitle} » a été validée et publiée |
 | `notifications.item.jobRejected` | Votre offre « {jobTitle} » a été refusée par la modération |
+| `notifications.item.jobChangesRequested` | La modération demande une correction sur votre offre « {jobTitle} » |
+| `notifications.item.reportClosed` | Votre signalement a été traité. Merci de nous aider à garder Jumanly sûr. |
+| `notifications.item.moderationWarning` | Jumanly vous adresse un avertissement : un contenu que vous avez publié ne respecte pas les règles. |
 | `notifications.item.certificateIssued` | Votre attestation « {courseTitle} » est prête |
 | `notifications.item.matchReviewed` | Votre demande de révision du score pour « {jobTitle} » a été traitée |
 | `notifications.item.paymentSucceeded` | Paiement reçu : {amount} USD pour {plan}. Merci ! |
@@ -7816,6 +7829,19 @@ Conventions :
 | `mail.orgReactivated.p1` | Jumanly a réactivé {org}. |
 | `mail.orgReactivated.p2` | Les offres fermées par la suspension sont republiées si leur date limite n'est pas passée. |
 | `mail.orgReactivated.cta` | Ouvrir mon espace recrutement |
+| `mail.moderationWarning.subject` | Avertissement de la modération Jumanly |
+| `mail.moderationWarning.preheader` | Un contenu que vous avez publié ne respecte pas les règles de Jumanly. |
+| `mail.moderationWarning.p1` | Après un signalement, la modération de Jumanly a constaté qu'un contenu que vous avez publié ne respecte pas les règles de la plateforme. Motif : {reason} |
+| `mail.moderationWarning.p2` | Merci d'en tenir compte : en cas de nouvel écart, votre compte peut être suspendu. Pour toute question, écrivez à assistant@jumanly.io. |
+| `mail.moderationWarning.cta` | Ouvrir Jumanly |
+| `mail.reportClosed.subject` | Votre signalement a été traité |
+| `mail.reportClosed.preheader` | Merci de nous aider à garder Jumanly sûr. |
+| `mail.reportClosed.p1` | La modération de Jumanly a examiné votre signalement et l'a clôturé : {decision}. |
+| `mail.reportClosed.p2` | Par respect pour chacun, nous ne détaillons pas les mesures prises envers un autre compte. Merci de votre vigilance. |
+| `mail.reportClosed.cta` | Ouvrir Jumanly |
+| `mail.reportClosed.decision.dismiss` | aucune infraction aux règles n'a été constatée |
+| `mail.reportClosed.decision.hide` | le contenu a été retiré |
+| `mail.reportClosed.decision.warn` | son auteur a reçu un avertissement |
 
 ### E-mail · Nouvelle candidature (recruteur)
 
@@ -8805,6 +8831,11 @@ Conventions :
 | `admin.journal.action.job_assign` | a attribué l'offre |
 | `admin.journal.action.report_dismiss` | a classé le signalement |
 | `admin.journal.action.report_hide` | a masqué le contenu signalé |
+| `admin.journal.action.report_warn` | a averti l'auteur du contenu signalé |
+| `admin.journal.action.report_note` | a ajouté une note interne au signalement |
+| `admin.journal.action.report_context` | a lu le contexte d'un message signalé |
+| `admin.journal.action.job_changes` | a demandé une correction de l'offre |
+| `admin.journal.action.job_resubmit` | a renvoyé l'offre corrigée |
 | `admin.journal.action.partner_create` | a créé le partenaire |
 | `admin.journal.action.partner_batch` | a créé un lot de licences |
 | `admin.journal.action.partner_inviteManager` | a invité un gestionnaire partenaire |
@@ -9878,6 +9909,34 @@ Conventions :
 | `admin.jobs.empty.flagged` | Aucune offre signalée par les utilisateurs. |
 | `admin.jobs.empty.all` | Aucune offre publiée. |
 | `admin.jobs.empty.filtered` | Aucune offre ne correspond à ces filtres. |
+| `admin.jobs.tab.changes` | Correction demandée ({count}) |
+| `admin.jobs.empty.changes` | Aucune offre en attente de correction. |
+| `admin.jobs.changesSent` | Correction demandée. Le recruteur la voit sur son offre et la renverra corrigée. |
+| `admin.jobs.changesPending` | En attente de la version corrigée du recruteur. |
+| `admin.jobs.error.motif` | Indiquez un motif d'au moins 3 caractères. |
+| `admin.jobs.fix.legend` | Points à corriger |
+| `admin.jobs.fix.hint` | Cochez ce que le recruteur doit corriger : il voit ces points sur son offre. |
+| `admin.jobs.fix.real` | Rendre le poste et l'organisation clairement identifiables |
+| `admin.jobs.fix.noPayment` | Retirer toute demande de paiement aux candidats |
+| `admin.jobs.fix.noDiscrimination` | Retirer les critères liés au genre, à l'âge, à l'origine, à la religion, à la situation familiale ou à la santé |
+| `admin.jobs.fix.knockout` | Justifier par le poste les critères éliminatoires, ou les retirer |
+| `admin.jobs.auto.title` | Avis du contrôle automatique |
+| `admin.jobs.auto.review` | À vérifier : {count, plural, one {# point repéré} other {# points repérés}} |
+| `admin.jobs.auto.clear` | Rien de suspect repéré |
+| `admin.jobs.auto.why` | Pourquoi ? |
+| `admin.jobs.auto.whyTitle` | Pourquoi cet avis ? |
+| `admin.jobs.auto.whyText` | Le contrôle automatique cherche des tournures précises dans le texte de l'offre et regarde l'ancienneté de l'organisation. Il ne décide jamais : c'est vous qui approuvez, demandez une correction ou refusez. |
+| `admin.jobs.auto.rule.payment` | Une phrase évoque une somme à payer par le candidat (frais, dossier, formation payante…). |
+| `admin.jobs.auto.rule.discrimination` | Une phrase cite un critère protégé : genre, âge, origine, religion, situation familiale ou santé. |
+| `admin.jobs.auto.rule.contactOutside` | Une phrase invite à poursuivre hors de Jumanly (numéro, messagerie, adresse e-mail). |
+| `admin.jobs.auto.rule.newOrg` | L'organisation a été créée il y a moins de 30 jours et n'est pas encore vérifiée. |
+| `admin.jobs.auto.rule.none` | Aucune de ces règles ne s'applique à cette offre. |
+| `admin.jobs.nav.label` | Parcourir la file |
+| `admin.jobs.nav.prev` | Offre précédente |
+| `admin.jobs.nav.next` | Offre suivante |
+| `admin.jobs.nav.position` | {position} sur {total} |
+| `admin.jobs.nav.hint` | Raccourcis clavier : J pour la suivante, K pour la précédente. |
+| `admin.jobs.order` | Les plus graves d'abord, puis les plus anciennes. |
 
 ### `/admin/partenaires` · Partenaires et lots de licences
 
@@ -10166,10 +10225,48 @@ Conventions :
 | `admin.reports.detail.decision` | Décision : {action} |
 | `admin.reports.confirm.dismiss` | Le signalement sera clôturé sans autre action. |
 | `admin.reports.confirm.hide` | Le contenu signalé ne sera plus visible et le signalement sera clôturé. L'identité de la personne qui a signalé n'est jamais communiquée à l'auteur. |
+| `admin.reports.confirm.warn` | L'auteur reçoit un avertissement par e-mail et le signalement est clôturé. L'identité de la personne qui a signalé n'est jamais communiquée. |
 | `admin.reports.emptyInProgress` | Aucun signalement en cours. |
 | `admin.reports.emptyClosed` | Aucun signalement clôturé. |
 | `admin.reports.emptyFiltered` | Aucun signalement ne correspond à ces filtres. |
 | `admin.reports.list` | Liste des signalements |
+| `admin.reports.tab.inProgressCount` | En cours ({count}) |
+| `admin.reports.tab.closedCount` | Clôturés ({count}) |
+| `admin.reports.order` | Les plus graves d'abord, puis les plus anciens. |
+| `admin.reports.severity.2` | Grave |
+| `admin.reports.severity.1` | À examiner |
+| `admin.reports.severity.0` | Mineur |
+| `admin.reports.context.show` | Lire le contexte de la conversation |
+| `admin.reports.context.hint` | Les deux messages avant et après le message signalé. Cette lecture est enregistrée dans le journal. |
+| `admin.reports.context.title` | Contexte de la conversation |
+| `admin.reports.context.talent` | Talent |
+| `admin.reports.context.org` | Recruteur |
+| `admin.reports.context.reported` | Message signalé |
+| `admin.reports.context.hidden` | Message masqué par la modération |
+| `admin.reports.jobText` | Texte de l'offre |
+| `admin.reports.author.title` | Auteur du contenu |
+| `admin.reports.author.none` | Auteur inconnu ou compte supprimé. |
+| `admin.reports.author.suspend` | Suspendre l'auteur |
+| `admin.reports.author.suspendHint` | Ouvre sa fiche utilisateur, où la suspension demande un motif. |
+| `admin.reports.decide.title` | Clôturer le signalement |
+| `admin.reports.decide.legend` | Décision |
+| `admin.reports.decide.hint` | Les autres signalements ouverts sur ce même contenu sont clôturés avec la même décision. Chaque personne qui a signalé est informée, sans détail sur l'auteur. |
+| `admin.reports.decide.submit` | Clôturer avec cette décision |
+| `admin.reports.decide.warnHint` | L'auteur reçoit un e-mail d'avertissement avec votre motif ; le contenu reste visible. |
+| `admin.reports.decide.dismissHint` | Aucune infraction : le contenu reste visible. |
+| `admin.reports.decide.hideHint` | Une offre est retirée (refusée), un message est masqué. |
+| `admin.reports.note.title` | Notes internes |
+| `admin.reports.note.label` | Ajouter une note interne |
+| `admin.reports.note.hint` | Visible seulement par l'équipe Jumanly. Le signalement passe « En cours ». |
+| `admin.reports.note.submit` | Ajouter la note |
+| `admin.reports.note.empty` | Aucune note pour l'instant. |
+| `admin.reports.note.saved` | Note ajoutée. |
+| `admin.reports.closedOn` | Clôturé le {date} |
+| `admin.reports.decisionReason` | Motif : {reason} |
+| `admin.reports.error.motif` | Choisissez une décision et indiquez un motif d'au moins 3 caractères. |
+| `admin.reports.error.note` | La note doit compter au moins 3 caractères. |
+| `admin.reports.nav.prev` | Signalement précédent |
+| `admin.reports.nav.next` | Signalement suivant |
 
 
 ---

@@ -17,22 +17,31 @@ import {
   Tag,
 } from "@/components/admin/kit";
 import { initialsOf } from "@/components/hire/kit";
-import { Button, ButtonLink } from "@/components/ui";
+import { Alert, Button, ButtonLink, Checkbox } from "@/components/ui";
 import type { ContractType } from "@/generated/prisma/client";
 import { cx } from "@/lib/cx";
 import { formatRelative } from "@/lib/dates";
 import { moderateJob } from "@/server/actions/admin";
+import { requestJobChangesAction } from "@/server/actions/admin-moderation";
+import { AuditHistory } from "@/components/admin/audit";
+import { QueueNav } from "@/components/admin/queue-nav";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { moderationFlags } from "@/server/services/hire";
-import { jobFlags, liveJobs, moderationQueue } from "@/server/services/moderation";
+import {
+  changesRequestedJobs,
+  correctionPoints,
+  jobFlags,
+  liveJobs,
+  moderationQueue,
+} from "@/server/services/moderation";
 
 const flagKeys = ["payment", "discrimination", "contactOutside", "newOrg"] as const;
 type FlagKey = (typeof flagKeys)[number];
 /** Payment requests and discriminating criteria are the serious ones (Corail); others Ambre. */
 const seriousFlags: FlagKey[] = ["payment", "discrimination"];
 
-const tabs = ["a-verifier", "signalees", "toutes"] as const;
+const tabs = ["a-verifier", "signalees", "corrections", "toutes"] as const;
 type Tab = (typeof tabs)[number];
 const actions = ["refuser", "correction", "depublier"] as const;
 type Action = (typeof actions)[number];
@@ -142,7 +151,7 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
     _count: { _all: true },
   });
   const reportCount = new Map(openReports.map((row) => [row.targetId, row._count._all]));
-  const [queue, reported, live] = await Promise.all([
+  const [queue, reported, live, corrections] = await Promise.all([
     moderationQueue(db),
     db.job.findMany({
       where: { id: { in: [...reportCount.keys()] } },
@@ -150,8 +159,16 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
       include: { organization: { select: { name: true, verifiedAt: true, createdAt: true } } },
     }),
     tab === "toutes" ? liveJobs(db) : Promise.resolve([]),
+    changesRequestedJobs(db),
   ]);
-  const source = tab === "toutes" ? live : tab === "signalees" ? reported : queue;
+  const source =
+    tab === "toutes"
+      ? live
+      : tab === "signalees"
+        ? reported
+        : tab === "corrections"
+          ? corrections
+          : queue;
 
   const flagsOf = (job: (typeof source)[number]) =>
     jobFlags(job).filter((flag): flag is FlagKey => (flagKeys as readonly string[]).includes(flag));
@@ -214,6 +231,12 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
   const selectedReports = selected ? (reportCount.get(selected.id) ?? 0) : 0;
 
   const doneId = one(params.id);
+  // Position in the queue, « Précédente / Suivante » and the shortcuts J and K.
+  const index = selected ? jobs.findIndex((job) => job.id === selected.id) : -1;
+  const around = (offset: number) => {
+    const job = index >= 0 ? jobs[index + offset] : undefined;
+    return job ? href({ id: job.id, action: undefined }) : undefined;
+  };
   return (
     <>
       <AdminPageHeader title={t("title")} />
@@ -223,6 +246,13 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
           journal={doneId ? { type: "job", id: doneId } : undefined}
         />
       )}
+      {params.ok === "correction" && (
+        <AdminDone
+          title={t("changesSent")}
+          journal={doneId ? { type: "job", id: doneId } : undefined}
+        />
+      )}
+      {params.erreur === "motif" && <Alert tone="error" title={t("error.motif")} />}
       {params.ok === "refusee" && (
         <AdminDone
           title={t("rejected")}
@@ -301,6 +331,7 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
         items={[
           { id: "a-verifier" as const, label: t("tab.pending", { count: queue.length }) },
           { id: "signalees" as const, label: t("tab.flagged", { count: reported.length }) },
+          { id: "corrections" as const, label: t("tab.changes", { count: corrections.length }) },
           { id: "toutes" as const, label: t("tab.all") },
         ].map((item) => ({
           href: item.id === "a-verifier" ? "/admin/offres" : `/admin/offres?onglet=${item.id}`,
@@ -319,7 +350,9 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
                 ? t("empty.all")
                 : tab === "signalees"
                   ? t("empty.flagged")
-                  : t("empty.pending")}
+                  : tab === "corrections"
+                    ? t("empty.changes")
+                    : t("empty.pending")}
           </p>
         ) : (
           <ul aria-label={t("list")} className="flex flex-col gap-2.5">
@@ -383,6 +416,17 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
         {/* Detail of the chosen job, then the sensitive action. */}
         {selected && (
           <div className="flex min-w-0 flex-col gap-4">
+            {index >= 0 && (
+              <QueueNav
+                label={t("nav.label")}
+                prev={around(-1)}
+                next={around(1)}
+                prevLabel={t("nav.prev")}
+                nextLabel={t("nav.next")}
+                position={t("nav.position", { position: index + 1, total: jobs.length })}
+                hint={t("nav.hint")}
+              />
+            )}
             <section
               aria-labelledby="offres-detail-title"
               className="flex flex-col gap-3.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
@@ -421,20 +465,28 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
                 )}
               </div>
 
-              {selectedFlags.map((flag) => (
-                <p
-                  key={flag}
-                  className={cx(
-                    "flex items-start gap-2.5 rounded-[14px] px-3.5 py-3 text-[13px] leading-[19px] font-semibold",
-                    seriousFlags.includes(flag)
-                      ? "bg-down-fond text-down-texte"
-                      : "bg-ambre-fond text-ambre-texte",
-                  )}
-                >
-                  <Icon name="securite" aria-hidden className="mt-0.5 size-4 shrink-0" />
-                  {t("autoFlag.text", { reason: t(`autoFlag.${flag}`) })}
+              {selected.status === "pending_review" && <AutoCheck flags={selectedFlags} />}
+              {selected.status === "changes_requested" && (
+                <p className="flex items-start gap-2.5 rounded-[14px] bg-ambre-fond px-3.5 py-3 text-[13px] leading-[19px] font-semibold text-ambre-texte">
+                  <Icon name="horloge" aria-hidden className="mt-0.5 size-4 shrink-0" />
+                  {t("changesPending")}
                 </p>
-              ))}
+              )}
+              {selected.status !== "pending_review" &&
+                selectedFlags.map((flag) => (
+                  <p
+                    key={flag}
+                    className={cx(
+                      "flex items-start gap-2.5 rounded-[14px] px-3.5 py-3 text-[13px] leading-[19px] font-semibold",
+                      seriousFlags.includes(flag)
+                        ? "bg-down-fond text-down-texte"
+                        : "bg-ambre-fond text-ambre-texte",
+                    )}
+                  >
+                    <Icon name="securite" aria-hidden className="mt-0.5 size-4 shrink-0" />
+                    {t("autoFlag.text", { reason: t(`autoFlag.${flag}`) })}
+                  </p>
+                ))}
               {selectedReports > 0 && (
                 <p className="flex flex-wrap items-center gap-2.5 rounded-[14px] bg-down-fond px-3.5 py-3 text-[13px] leading-[19px] font-semibold text-down-texte">
                   <Icon name="alerte" aria-hidden className="size-4 shrink-0" />
@@ -549,9 +601,36 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
                   icon={panel === "correction" ? "edit" : "securite"}
                   closeHref={closeHref}
                 >
-                  <form action={moderateJob} className="flex flex-col gap-3.5">
+                  <form
+                    action={panel === "correction" ? requestJobChangesAction : moderateJob}
+                    className="flex flex-col gap-3.5"
+                  >
                     <input type="hidden" name="job" value={selected.id} />
                     <input type="hidden" name="decision" value="refuse" />
+                    <input type="hidden" name="panel" value={panel} />
+                    {panel === "correction" && (
+                      <fieldset className="flex flex-col gap-2.5">
+                        <legend className="mb-1 text-[13px] font-semibold">
+                          {t("fix.legend")}
+                        </legend>
+                        <p className="text-[11.5px] leading-4 text-ardoise">{t("fix.hint")}</p>
+                        {correctionPoints.map((point) => (
+                          <Checkbox
+                            key={point}
+                            id={`offres-fix-${point}`}
+                            name="points"
+                            value={point}
+                            label={t(`fix.${point}`)}
+                            defaultChecked={
+                              (point === "noPayment" && selectedFlags.includes("payment")) ||
+                              (point === "noDiscrimination" &&
+                                selectedFlags.includes("discrimination"))
+                            }
+                            className="[&_label]:text-[13px]"
+                          />
+                        ))}
+                      </fieldset>
+                    )}
                     <ReasonField id="offres-reason" label={t("reject.reason")} />
                     <div className="flex flex-wrap justify-end gap-2">
                       <ButtonLink href={closeHref} scroll={false} variant="tertiary">
@@ -572,10 +651,59 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
                 </SensitivePanel>
               </>
             )}
+            <AuditHistory targetType="job" targetId={selected.id} />
             <AuditNotice />
           </div>
         )}
       </div>
     </>
+  );
+}
+
+/**
+ * « Avis du contrôle automatique » with its « Pourquoi ? »: which rule matched, in plain words.
+ * The automatic check only flags; the moderator decides (CLAUDE.md, règle d'or 3).
+ */
+async function AutoCheck({ flags }: { flags: FlagKey[] }) {
+  const t = await getTranslations("admin.jobs.auto");
+  const serious = flags.some((flag) => seriousFlags.includes(flag));
+  return (
+    <div
+      className={cx(
+        "flex flex-col gap-2 rounded-[14px] px-3.5 py-3",
+        flags.length === 0 ? "bg-lime-clair" : serious ? "bg-down-fond" : "bg-ambre-fond",
+      )}
+    >
+      <div className="flex flex-wrap items-center gap-2">
+        <Icon name="intelligence" aria-hidden className="size-4 shrink-0" />
+        <p className="text-[12px] font-semibold">{t("title")}</p>
+        <p
+          className={cx(
+            "text-[13px] leading-[19px] font-semibold",
+            flags.length > 0 && (serious ? "text-down-texte" : "text-ambre-texte"),
+          )}
+        >
+          {flags.length === 0 ? t("clear") : t("review", { count: flags.length })}
+        </p>
+      </div>
+      <details className="group text-[12.5px] leading-[18px]">
+        <summary className="inline-flex cursor-pointer items-center gap-1 font-semibold underline underline-offset-2">
+          {t("why")}
+        </summary>
+        <div className="mt-2 flex flex-col gap-1.5">
+          <p className="font-semibold">{t("whyTitle")}</p>
+          {flags.length === 0 ? (
+            <p>{t("rule.none")}</p>
+          ) : (
+            <ul className="flex list-disc flex-col gap-1 pl-5">
+              {flags.map((flag) => (
+                <li key={flag}>{t(`rule.${flag}`)}</li>
+              ))}
+            </ul>
+          )}
+          <p className="text-ardoise">{t("whyText")}</p>
+        </div>
+      </details>
+    </div>
   );
 }
