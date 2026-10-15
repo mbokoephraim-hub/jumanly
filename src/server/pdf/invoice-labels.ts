@@ -2,6 +2,7 @@ import { getTranslations } from "next-intl/server";
 import type { Invoice, Payment } from "@/generated/prisma/client";
 import { formatDate } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
+import { paymentMethodKey } from "@/lib/payment-method";
 import type { InvoiceLabels } from "./invoice-document";
 
 /** Every text of an invoice PDF, translated (textes `billing.invoice.pdf.*`). */
@@ -10,7 +11,7 @@ export async function invoiceLabels(
 ): Promise<InvoiceLabels> {
   const t = await getTranslations("billing.invoice.pdf");
   const common = await getTranslations("common");
-  const methods = await getTranslations("admin.subscriptions.payments.method");
+  const admin = await getTranslations("admin");
   const amount = (cents: number) => t("amount", { amount: formatUsd(cents) });
   const lines = [{ label: t("price"), amount: amount(invoice.amountCents + invoice.creditCents) }];
   if (invoice.creditCents > 0) {
@@ -39,7 +40,7 @@ export async function invoiceLabels(
     total: { label: t("total"), amount: amount(invoice.amountCents) },
     meta: [
       t("method", {
-        method: methods(invoice.payment.method === "card" ? "card" : "mobileMoney"),
+        method: admin(`subscriptions.payments.method.${paymentMethodKey[invoice.payment.method]}`),
       }),
       t("reference", { reference: invoice.payment.providerRef }),
     ],

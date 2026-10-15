@@ -103,6 +103,7 @@ test.describe("administration des forfaits", () => {
     const before = await field.inputValue();
     try {
       await field.fill("4");
+      await admin.locator("#forfaits-reason").fill("Test du quota (fictif)");
       await admin.getByRole("button", { name: "Appliquer les modifications" }).click();
       await expect(admin.getByText("Forfait mis à jour.")).toBeVisible();
 
@@ -111,6 +112,7 @@ test.describe("administration des forfaits", () => {
     } finally {
       await admin.goto("/admin/forfaits/talent_free");
       await admin.locator('input[name="e:career.interview.text.monthly"]').fill(before);
+      await admin.locator("#forfaits-reason").fill("Retour à la valeur d'avant (fictif)");
       await admin.getByRole("button", { name: "Appliquer les modifications" }).click();
       await expect(admin.getByText("Forfait mis à jour.")).toBeVisible();
     }

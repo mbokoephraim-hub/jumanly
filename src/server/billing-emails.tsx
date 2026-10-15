@@ -76,3 +76,27 @@ export async function sendDowngraded(
     cta: { label: t("mail.downgraded.cta", values), href: renewHref },
   });
 }
+
+/**
+ * A change made by Jumanly on a subscription (Admin v2, étape 5): extension, other plan,
+ * cancellation. Keys `mail.subscriptionAdmin.<kind>.*`; the reason is always quoted.
+ */
+export async function sendSubscriptionChanged(
+  to: Recipient,
+  kind: "extended" | "planNow" | "planTerm" | "cancelNow" | "cancelTerm",
+  input: { plan: string; newPlan?: string; date: Date; reason: string },
+) {
+  const values = {
+    plan: input.plan,
+    newPlan: input.newPlan ?? "",
+    date: input.date,
+    reason: input.reason,
+  };
+  const key = `mail.subscriptionAdmin.${kind}` as const;
+  await send(to.email, t(`${key}.subject`, values), {
+    preview: t(`${key}.preheader`, values),
+    greeting: greeting(to.firstName),
+    paragraphs: [t(`${key}.p1`, values), t("mail.subscriptionAdmin.reason", values)],
+    cta: { label: t("mail.subscriptionAdmin.cta"), href: renewHref },
+  });
+}

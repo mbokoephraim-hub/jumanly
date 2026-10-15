@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { PlanImpact, type TrackedField } from "@/components/admin/forfaits-impact";
 import { PlanFamilySegments, PlanTable, plansOfFamily } from "@/components/admin/forfaits-table";
-import { AuditHistory } from "@/components/admin/audit";
+import { PlanActions, PlanError, PlanPanels, PlanVersions } from "@/components/admin/plan-panels";
 import { AdminDone, AdminPageHeader, Tag } from "@/components/admin/kit";
 import { Alert } from "@/components/ui";
 import { inputClasses } from "@/components/ui/field";
@@ -14,6 +14,7 @@ import { cx } from "@/lib/cx";
 import { updatePlan } from "@/server/actions/admin";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { planUsage } from "@/server/services/admin-billing";
 
 const formId = "forfaits-edit";
 /** The tarifs page section that holds the comparison of each family. */
@@ -114,13 +115,16 @@ export default async function AdminPlan({
   // Content editors see the admin shell, but only the courses.
   if (!admin) notFound();
   const writable = canWriteAdmin(admin);
-  const t = await getTranslations("admin.plans");
+  const [t, ta] = await Promise.all([getTranslations("admin.plans"), getTranslations("admin")]);
   const plan = await db.plan.findUnique({
     where: { code },
     include: { entitlements: { orderBy: { key: "asc" } } },
   });
   if (!plan) notFound();
-  const plans = await plansOfFamily(plan.family);
+  const [plans, usage] = await Promise.all([plansOfFamily(plan.family), planUsage(db, plan.id)]);
+  const cardHref = `/admin/forfaits/${plan.code}`;
+  const action = typeof query.action === "string" ? query.action : "";
+  const accountsHref = `/admin/abonnements?forfait=${encodeURIComponent(plan.name)}`;
   const subscribers = plans.find((item) => item.id === plan.id)?._count.subscriptions ?? 0;
   const index = plans.findIndex((item) => item.id === plan.id);
   const previous = index > 0 ? plans[index - 1] : undefined;
@@ -172,8 +176,41 @@ export default async function AdminPlan({
       <PlanFamilySegments current={plan.family} />
       <PlanTable plans={plans} currentCode={plan.code} />
 
-      {query.ok && <AdminDone title={t("saved")} journal={{ type: "plan", id: plan.id }} />}
+      {query.ok === "1" && <AdminDone title={t("saved")} journal={{ type: "plan", id: plan.id }} />}
+      {(query.ok === "cree" || query.ok === "copie") && (
+        <AdminDone title={t("v2.done.created")} journal={{ type: "plan", id: plan.id }}>
+          {t("v2.done.createdHint")}
+        </AdminDone>
+      )}
+      {query.ok === "retire" && (
+        <AdminDone title={t("v2.done.withdrawn")} journal={{ type: "plan", id: plan.id }} />
+      )}
+      {typeof query.erreur === "string" && !["prix", "champs", "valeur"].includes(query.erreur) && (
+        <PlanError t={ta} code={query.erreur} />
+      )}
+      {writable && usage && (
+        <div className="flex flex-col gap-3 rounded-[24px] bg-blanc p-4 lg:flex-row lg:items-center lg:justify-between lg:px-[22px]">
+          <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
+            <span className="font-semibold">{t("v2.accounts", { count: subscribers })}</span>
+            <Link href={accountsHref} className="font-medium underline underline-offset-2">
+              {t("v2.accountsLink")}
+            </Link>
+          </p>
+          <PlanActions plan={plan} usage={usage} cardHref={cardHref} />
+        </div>
+      )}
+      {writable && usage && action && (
+        <div id="forfaits-panneau" className="scroll-mt-4">
+          <PlanPanels
+            plan={plan}
+            action={action}
+            usage={{ ...usage, subscriptions: subscribers }}
+            cardHref={cardHref}
+          />
+        </div>
+      )}
       {query.erreur === "prix" && <Alert tone="error" title={t("error.price")} />}
+      {query.erreur === "motif" && <Alert tone="error" title={t("v2.error.reason")} />}
       {query.erreur === "champs" && <Alert tone="error" title={t("error.fields")} />}
       {query.erreur === "valeur" && (
         <Alert tone="error" title={t("error.value", { key: errorKey })} />
@@ -455,10 +492,33 @@ export default async function AdminPlan({
               off: t("entitlements.value.off"),
               readOnly: t("save.readOnly"),
             }}
-          />
+          >
+            <div className="flex flex-col gap-1.5">
+              <label htmlFor="forfaits-reason" className="text-[13px] font-semibold">
+                {t("v2.reason.label")}{" "}
+                <span aria-hidden className="text-lime">
+                  *
+                </span>
+              </label>
+              <textarea
+                id="forfaits-reason"
+                name="reason"
+                form={formId}
+                required
+                minLength={3}
+                maxLength={1000}
+                rows={3}
+                aria-describedby="forfaits-reason-hint"
+                className="w-full rounded-[16px] bg-blanc px-4 py-3 text-[13.5px] leading-5 text-sapin focus:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus:outline-none"
+              />
+              <p id="forfaits-reason-hint" className="text-[11px] leading-4 text-blanc/75">
+                {t("v2.reason.hint")}
+              </p>
+            </div>
+          </PlanImpact>
         </div>
       </form>
-      <AuditHistory targetType="plan" targetId={plan.id} />
+      <PlanVersions planId={plan.id} />
     </>
   );
 }

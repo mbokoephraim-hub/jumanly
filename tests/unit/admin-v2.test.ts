@@ -1,5 +1,6 @@
 import { describe, expect, it } from "vitest";
 import messages from "../../messages/fr.json";
+import { parseEndDate, versionChanges } from "@/server/services/admin-billing";
 import { cleanFileName } from "@/server/services/admin-orgs";
 import { sniffDocumentType } from "@/server/storage";
 import {
@@ -208,5 +209,32 @@ describe("organisations (Admin v2, étape 4)", () => {
     expect(cleanFileName("../../etc/passwd")).toBe("..-..-etc-passwd");
     expect(cleanFileName('  statuts  "2026".pdf ')).toBe("statuts -2026-.pdf");
     expect(cleanFileName("")).toBe("document");
+  });
+});
+
+describe("forfaits et abonnements (étape 5)", () => {
+  const now = new Date("2026-10-15T10:00:00Z");
+  it("une nouvelle fin d'abonnement vient après la fin actuelle, à deux ans au plus", () => {
+    const end = new Date("2026-11-01T00:00:00Z");
+    expect(parseEndDate("2026-12-01", end, now)?.toISOString()).toBe("2026-12-01T23:59:59.999Z");
+    expect(parseEndDate("2026-10-20", end, now)).toBeNull();
+    expect(parseEndDate("2026-02-30", end, now)).toBeNull();
+    expect(parseEndDate("2029-01-01", end, now)).toBeNull();
+    expect(parseEndDate("demain", end, now)).toBeNull();
+  });
+
+  it("une version de forfait liste ce qui a changé, champs et droits", () => {
+    expect(
+      versionChanges({
+        fields: { name: "Pro", priceCents: 1299, isPublic: true },
+        before: { name: "Pro", priceCents: 999, isPublic: true },
+        entitlements: [{ key: "ai.credits.monthly", from: "100", to: "150" }],
+        reason: "Ajustement",
+      }),
+    ).toEqual([
+      { field: "priceCents", from: "999", to: "1299" },
+      { field: "ai.credits.monthly", from: "100", to: "150" },
+    ]);
+    expect(versionChanges(null)).toEqual([]);
   });
 });

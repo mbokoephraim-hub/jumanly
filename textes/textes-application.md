@@ -6447,6 +6447,8 @@ Conventions :
 | `billing.history.pdfNote` | Factures en PDF |
 | `billing.history.method.mobileMoney` | Mobile Money · {operator} |
 | `billing.history.method.card` | Carte bancaire |
+| `billing.history.method.bankTransfer` | Virement bancaire |
+| `billing.history.method.cash` | Espèces |
 | `billing.invoiceDetails.title` | Informations de facturation |
 | `billing.invoiceDetails.text` | Ces informations apparaissent sur vos factures. |
 | `billing.invoiceDetails.name.label` | Nom ou raison sociale |
@@ -7938,6 +7940,23 @@ Conventions :
 | `mail.downgraded.p3.talent` | Vous pouvez toujours postuler gratuitement et être recruté au même titre que tous. |
 | `mail.downgraded.p3.org` | Si votre organisation dépasse les limites de {freePlan} (offres actives, utilisateurs), les éléments en trop sont mis en pause, jamais supprimés. Un propriétaire peut choisir lesquels garder actifs. |
 | `mail.downgraded.cta` | Revenir à {plan} |
+| `mail.subscriptionAdmin.extended.subject` | Votre forfait {plan} est prolongé |
+| `mail.subscriptionAdmin.extended.preheader` | Il reste actif jusqu'au {date, date, medium}. |
+| `mail.subscriptionAdmin.extended.p1` | Jumanly a prolongé votre forfait {plan} : il reste actif jusqu'au {date, date, long}. |
+| `mail.subscriptionAdmin.planNow.subject` | Votre forfait passe à {newPlan} |
+| `mail.subscriptionAdmin.planNow.preheader` | Le changement s'applique dès maintenant. |
+| `mail.subscriptionAdmin.planNow.p1` | Jumanly a remplacé votre forfait {plan} par {newPlan}. Les droits de {newPlan} s'appliquent dès maintenant, jusqu'au {date, date, long}. |
+| `mail.subscriptionAdmin.planTerm.subject` | Votre forfait passera à {newPlan} |
+| `mail.subscriptionAdmin.planTerm.preheader` | Le changement s'appliquera le {date, date, medium}. |
+| `mail.subscriptionAdmin.planTerm.p1` | Votre forfait {plan} reste actif jusqu'au {date, date, long}. Le renouvellement se fera ensuite avec {newPlan}. |
+| `mail.subscriptionAdmin.cancelNow.subject` | Votre forfait {plan} est résilié |
+| `mail.subscriptionAdmin.cancelNow.preheader` | Votre compte repasse au forfait gratuit. |
+| `mail.subscriptionAdmin.cancelNow.p1` | Jumanly a résilié votre forfait {plan} le {date, date, long}. Votre compte repasse au forfait gratuit ; rien n'est supprimé. |
+| `mail.subscriptionAdmin.cancelTerm.subject` | Votre forfait {plan} prendra fin le {date, date, medium} |
+| `mail.subscriptionAdmin.cancelTerm.preheader` | Il reste actif jusqu'à cette date. |
+| `mail.subscriptionAdmin.cancelTerm.p1` | Jumanly a résilié votre forfait {plan} à son échéance. Il reste actif jusqu'au {date, date, long}, puis votre compte repasse au forfait gratuit. |
+| `mail.subscriptionAdmin.reason` | Motif : {reason}. Pour toute question, écrivez à assistant@jumanly.io. |
+| `mail.subscriptionAdmin.cta` | Voir mon abonnement |
 
 ### E-mail · Licence sponsorisée activée
 
@@ -8753,6 +8772,14 @@ Conventions :
 | `admin.journal.action.org_suspend` | a suspendu l'organisation |
 | `admin.journal.action.org_unsuspend` | a réactivé l'organisation |
 | `admin.journal.action.plan_update` | a modifié le forfait |
+| `admin.journal.action.plan_create` | a créé le forfait |
+| `admin.journal.action.plan_duplicate` | a dupliqué un forfait |
+| `admin.journal.action.plan_withdraw` | a retiré le forfait de la vente |
+| `admin.journal.action.plan_delete` | a supprimé le forfait |
+| `admin.journal.action.subscription_extend` | a prolongé l'abonnement |
+| `admin.journal.action.subscription_plan` | a changé le forfait de l'abonnement |
+| `admin.journal.action.subscription_cancel` | a résilié l'abonnement |
+| `admin.journal.action.payment_manual` | a enregistré un paiement manuel |
 | `admin.journal.action.payment_refund` | a remboursé le paiement |
 | `admin.journal.action.course_create` | a créé la formation |
 | `admin.journal.action.course_update` | a modifié la fiche de la formation |
@@ -9425,6 +9452,46 @@ Conventions :
 | `admin.plans.save.none` | Aucune modification pour l'instant. Modifiez un champ ou un droit pour voir son impact ici. |
 | `admin.plans.save.readOnly` | Lecture seule : votre rôle ne permet pas de modifier les forfaits. |
 
+### `/admin/forfaits` · versions, nouveau forfait, retrait (Admin v2, étape 5)
+
+| Clé | Texte |
+|---|---|
+| `admin.plans.v2.field.family` | Famille |
+| `admin.plans.v2.field.code.label` | Code du forfait |
+| `admin.plans.v2.field.code.hint` | En minuscules, chiffres et « _ », par exemple talent_pro_2027. Il ne change plus ensuite. |
+| `admin.plans.v2.field.name.label` | Nom affiché |
+| `admin.plans.v2.field.name.hint` | Le nom vu par les clients. |
+| `admin.plans.v2.new.confirm` | Le forfait part des droits du premier forfait de sa famille. Il est créé masqué et non vendu : réglez son prix et ses droits, puis mettez-le en vente. |
+| `admin.plans.v2.new.submit` | Créer le forfait |
+| `admin.plans.v2.duplicate.confirm` | Le double reprend le prix et les droits de {plan}. Il est créé masqué et non vendu, à vérifier avant mise en vente. |
+| `admin.plans.v2.duplicate.name` | {plan} (copie) |
+| `admin.plans.v2.duplicate.submit` | Créer le double |
+| `admin.plans.v2.withdraw.text` | Retirer de la vente |
+| `admin.plans.v2.withdraw.confirm` | {plan} ne sera plus visible ni achetable. {count, plural, =0 {Personne ne l'a en ce moment.} one {# abonné le garde jusqu'à son échéance.} other {# abonnés le gardent jusqu'à leur échéance.}} |
+| `admin.plans.v2.delete.text` | Supprimer le forfait |
+| `admin.plans.v2.delete.confirm` | {plan} n'a jamais servi : il sera supprimé avec ses droits. Cette action est définitive. |
+| `admin.plans.v2.delete.used` | Ce forfait a déjà servi : il ne peut pas être supprimé, seulement retiré de la vente. |
+| `admin.plans.v2.delete.free` | Forfait gratuit de la famille : il ne peut être ni supprimé ni retiré de la vente. |
+| `admin.plans.v2.accounts` | {count, plural, =0 {Aucun compte sur ce forfait} one {# compte sur ce forfait} other {# comptes sur ce forfait}} |
+| `admin.plans.v2.accountsLink` | Voir les comptes |
+| `admin.plans.v2.reason.label` | Motif de la modification |
+| `admin.plans.v2.reason.hint` | Enregistré avec la version du forfait. |
+| `admin.plans.v2.history.title` | Versions du forfait |
+| `admin.plans.v2.history.empty` | Aucune modification enregistrée pour l'instant. |
+| `admin.plans.v2.history.price` | Prix |
+| `admin.plans.v2.history.change` | {from} → {to} |
+| `admin.plans.v2.done.created` | Forfait créé, masqué et non vendu. |
+| `admin.plans.v2.done.createdHint` | Vérifiez son prix et ses droits, puis cochez « Visible » et « Achetable en ligne » pour le mettre en vente. |
+| `admin.plans.v2.done.withdrawn` | Forfait retiré de la vente. |
+| `admin.plans.v2.done.deleted` | Forfait supprimé. |
+| `admin.plans.v2.error.reason` | Indiquez le motif de la modification (3 caractères au moins). |
+| `admin.plans.v2.error.motif` | Indiquez un motif (3 caractères au moins). |
+| `admin.plans.v2.error.champs` | Vérifiez le code (minuscules, chiffres et « _ ») et le nom du forfait. |
+| `admin.plans.v2.error.taken` | Ce code de forfait existe déjà. Choisissez-en un autre. |
+| `admin.plans.v2.error.used` | Ce forfait a déjà servi : retirez-le de la vente au lieu de le supprimer. |
+| `admin.plans.v2.error.free` | Le forfait gratuit d'une famille ne peut être ni supprimé ni retiré de la vente. |
+| `admin.plans.v2.error.notFound` | Forfait introuvable. |
+
 ### `/admin/abonnements` · Abonnements et paiements
 
 | Clé | Texte |
@@ -9449,6 +9516,8 @@ Conventions :
 | `admin.subscriptions.payments.method.mobileMoney` | Mobile Money |
 | `admin.subscriptions.payments.method.card` | Carte |
 | `admin.subscriptions.payments.method.manual` | Manuel |
+| `admin.subscriptions.payments.method.bankTransfer` | Virement bancaire |
+| `admin.subscriptions.payments.method.cash` | Espèces |
 | `admin.subscriptions.action.extend` | Prolonger la période |
 | `admin.subscriptions.action.changePlan` | Changer de forfait |
 | `admin.subscriptions.action.cancel` | Résilier |
@@ -9477,6 +9546,67 @@ Conventions :
 | `admin.subscriptions.actions.title` | Actions · {holder} |
 | `admin.subscriptions.actions.open` | Actions pour {holder} |
 | `admin.subscriptions.actions.none` | Aucune action disponible pour ce paiement. |
+
+### `/admin/abonnements` · fiche d'abonnement et actions (Admin v2, étape 5)
+
+| Clé | Texte |
+|---|---|
+| `admin.subscriptions.v2.kpi.active` | Actifs |
+| `admin.subscriptions.v2.kpi.late` | En retard (délai de grâce) |
+| `admin.subscriptions.v2.kpi.renewSoon` | À renouveler sous 7 jours |
+| `admin.subscriptions.v2.kpi.revenue` | Revenu du mois |
+| `admin.subscriptions.v2.open` | Ouvrir l'abonnement de {holder} |
+| `admin.subscriptions.v2.card` | Abonnement |
+| `admin.subscriptions.v2.notFound` | Abonnement introuvable. |
+| `admin.subscriptions.v2.period` | Période en cours |
+| `admin.subscriptions.v2.periodValue` | Du {start} au {end} |
+| `admin.subscriptions.v2.source` | Origine |
+| `admin.subscriptions.v2.sourceValue.self` | Souscrit par le client |
+| `admin.subscriptions.v2.sourceValue.admin` | Offert par Jumanly |
+| `admin.subscriptions.v2.sourceValue.license` | Licence d'un partenaire |
+| `admin.subscriptions.v2.next` | Forfait au renouvellement |
+| `admin.subscriptions.v2.licence` | Licence d'un partenaire : elle se gère depuis l'espace du partenaire. |
+| `admin.subscriptions.v2.timeline.title` | Historique |
+| `admin.subscriptions.v2.timeline.created` | Créé |
+| `admin.subscriptions.v2.timeline.paid` | Payé · {amount} |
+| `admin.subscriptions.v2.timeline.renewed` | Renouvelé · {amount} |
+| `admin.subscriptions.v2.timeline.failed` | Paiement échoué · {amount} |
+| `admin.subscriptions.v2.timeline.refunded` | Remboursé · {amount} |
+| `admin.subscriptions.v2.timeline.late` | En retard |
+| `admin.subscriptions.v2.timeline.canceled` | Résilié |
+| `admin.subscriptions.v2.timeline.ended` | Terminé |
+| `admin.subscriptions.v2.when.label` | Quand ? |
+| `admin.subscriptions.v2.extend.confirm` | L'abonnement de {holder} se termine le {date}. Choisissez la nouvelle date de fin. Le client est prévenu par e-mail. |
+| `admin.subscriptions.v2.extend.until` | Nouvelle date de fin |
+| `admin.subscriptions.v2.change.confirm` | {holder} a le forfait {plan}. Le client est prévenu par e-mail. |
+| `admin.subscriptions.v2.change.plan` | Nouveau forfait |
+| `admin.subscriptions.v2.change.term` | À l'échéance, le {date} |
+| `admin.subscriptions.v2.change.now` | Tout de suite, sans changer la date de fin |
+| `admin.subscriptions.v2.change.none` | Aucun autre forfait possible pour ce compte. |
+| `admin.subscriptions.v2.cancel.confirm` | Résilier le forfait {plan} de {holder} ? Le client est prévenu par e-mail ; rien n'est supprimé. |
+| `admin.subscriptions.v2.cancel.term` | À l'échéance : le forfait reste actif jusqu'au {date} |
+| `admin.subscriptions.v2.cancel.now` | Tout de suite : retour au forfait gratuit dès maintenant |
+| `admin.subscriptions.v2.manual.confirm` | Un virement ou des espèces reçus de {holder}. La période, la facture et le reçu par e-mail sont ceux d'un paiement en ligne. |
+| `admin.subscriptions.v2.manual.amount` | Montant reçu (USD) |
+| `admin.subscriptions.v2.manual.amountHint` | Par exemple 9.99. |
+| `admin.subscriptions.v2.manual.months` | Nombre de mois payés |
+| `admin.subscriptions.v2.manual.reference` | Référence du paiement |
+| `admin.subscriptions.v2.manual.referenceHint` | Référence du virement ou numéro du reçu remis. Elle figure sur la facture. |
+| `admin.subscriptions.v2.manual.submit` | Enregistrer le paiement |
+| `admin.subscriptions.v2.done.extended` | Abonnement prolongé. Le client est prévenu. |
+| `admin.subscriptions.v2.done.planNow` | Forfait changé. Le client est prévenu. |
+| `admin.subscriptions.v2.done.planTerm` | Changement de forfait prévu à l'échéance. Le client est prévenu. |
+| `admin.subscriptions.v2.done.cancelNow` | Abonnement résilié : retour au forfait gratuit. Le client est prévenu. |
+| `admin.subscriptions.v2.done.cancelTerm` | Abonnement résilié à l'échéance. Le client est prévenu. |
+| `admin.subscriptions.v2.done.manual` | Paiement enregistré. La facture et le reçu sont partis. |
+| `admin.subscriptions.v2.error.reason` | Indiquez un motif (3 caractères au moins). |
+| `admin.subscriptions.v2.error.fields` | Vérifiez les champs du formulaire. |
+| `admin.subscriptions.v2.error.date` | Choisissez une date après la fin actuelle, à deux ans au plus. |
+| `admin.subscriptions.v2.error.plan` | Ce forfait ne convient pas à ce compte. |
+| `admin.subscriptions.v2.error.status` | Cette action n'est pas possible dans l'état actuel de l'abonnement. |
+| `admin.subscriptions.v2.error.amount` | Indiquez un montant supérieur à zéro. |
+| `admin.subscriptions.v2.error.reference` | Cette référence de paiement est déjà enregistrée. |
+| `admin.subscriptions.v2.error.notFound` | Abonnement introuvable. |
 
 ### `/admin/formations` · Formations (Learn)
 

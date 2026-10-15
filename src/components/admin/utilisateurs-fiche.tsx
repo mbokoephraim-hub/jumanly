@@ -6,6 +6,7 @@ import { adminLabel, Initials, Tag, type TagTone } from "@/components/admin/kit"
 import { formatShortDate } from "@/lib/dates";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
+import { paymentMethodKey } from "@/lib/payment-method";
 import { setUserStatus } from "@/server/actions/admin";
 import { resendVerificationAction, sendResetLinkAction } from "@/server/actions/admin-users";
 import { db } from "@/server/db";
@@ -214,9 +215,7 @@ export async function UserCard({
       : subscription?.source === "admin"
         ? t("subscriptions.payments.method.manual")
         : payment
-          ? t(
-              `subscriptions.payments.method.${payment.method === "mobile_money" ? "mobileMoney" : "card"}`,
-            )
+          ? t(`subscriptions.payments.method.${paymentMethodKey[payment.method]}`)
           : null;
 
   return (

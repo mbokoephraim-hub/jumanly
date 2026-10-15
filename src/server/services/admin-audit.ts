@@ -171,6 +171,7 @@ async function describeTargets(db: PrismaClient, rows: { targetType: string; tar
 
 function fallbackHref(targetType: string, targetId: string) {
   if (targetType === "payment") return `/admin/abonnements?paiement=${targetId}`;
+  if (targetType === "subscription") return `/admin/abonnements?abonnement=${targetId}`;
   if (targetType === "matchDispute") return "/admin/ia?onglet=revisions";
   if (targetType === "content") return "/admin/contenus";
   if (targetType === "license") return "/admin/partenaires";
