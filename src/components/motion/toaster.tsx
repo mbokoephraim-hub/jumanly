@@ -10,6 +10,10 @@ export type ToastInput = {
   tone?: "success" | "error" | "info";
   /** Where the toast leads when clicked. */
   href?: string;
+  /** A short action inside the toast (« Annuler » after a move). */
+  action?: { label: string; run: () => void };
+  /** Second line, smaller (« Le candidat a été informé… »). */
+  detail?: string;
 };
 type Shown = ToastInput & { id: number };
 
@@ -102,7 +106,12 @@ function ToastItem({
       >
         <Icon name={icons[tone]} className="size-3.5" />
       </span>
-      <span className="flex-1 py-1.5 text-sm leading-5">{toast.message}</span>
+      <span className="flex flex-1 flex-col py-1.5 text-sm leading-5">
+        {toast.message}
+        {toast.detail && (
+          <span className="text-[11.5px] leading-4 text-blanc/70">{toast.detail}</span>
+        )}
+      </span>
     </>
   );
   return (
@@ -121,6 +130,18 @@ function ToastItem({
         </Link>
       ) : (
         <span className="flex flex-1 items-center gap-3">{body}</span>
+      )}
+      {toast.action && (
+        <button
+          type="button"
+          onClick={() => {
+            toast.action!.run();
+            onDone();
+          }}
+          className="shrink-0 rounded-pill px-3 py-2 text-sm font-semibold text-lime hover:bg-blanc/10"
+        >
+          {toast.action.label}
+        </button>
       )}
       <button
         type="button"

@@ -176,3 +176,24 @@ test("les écrans Hire avancés sont accessibles", async ({ page }) => {
   await expect(page.locator("#grille")).toBeVisible();
   await expectAccessible(page);
 });
+
+// Mockup 04-07: a pool is created from the side panel, then renamed and deleted in place.
+test("créer, renommer et supprimer un vivier", async ({ page }) => {
+  test.setTimeout(120_000);
+  const name = `Vivier e2e ${Math.random().toString(36).slice(2, 7)}`;
+  await logIn(page, group.owner);
+  await page.goto("/app/hire/viviers");
+  await page.getByRole("link", { name: "Nouveau vivier" }).click();
+  await page.locator("#pool-name").fill(name);
+  await page.getByRole("button", { name: "Créer le vivier" }).click();
+  await expect(page.locator("#vivier-title")).toHaveText(name);
+  await expect(page.getByText("Vivier créé.").first()).toBeVisible();
+  await page.locator("summary", { hasText: "Renommer" }).click();
+  await page.locator("#pool-rename").fill(`${name} bis`);
+  await page.getByRole("button", { name: "Enregistrer" }).click();
+  await expect(page.locator("#vivier-title")).toHaveText(`${name} bis`);
+  await page.locator("summary", { hasText: "Supprimer le vivier" }).click();
+  await page.getByRole("button", { name: "Supprimer le vivier" }).click();
+  await expect(page.getByText("Vivier supprimé.").first()).toBeVisible();
+  await expect(page.getByRole("heading", { name: `${name} bis` })).toHaveCount(0);
+});

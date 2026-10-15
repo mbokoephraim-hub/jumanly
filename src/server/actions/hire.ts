@@ -12,6 +12,7 @@ import { addTeamNote } from "@/server/services/evaluation";
 import {
   closeJob,
   deleteDraft,
+  duplicateJob,
   HireError,
   moveApplication,
   publishJob,
@@ -21,6 +22,7 @@ import {
 } from "@/server/services/hire";
 import { hireMemberships, partnerMemberships } from "@/server/services/organization";
 import { reportError } from "@/server/observability";
+import { writeJob, type JobWriterInput, type JobWriterResult } from "@/server/services/job-writer";
 
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
 
@@ -86,6 +88,9 @@ export async function saveJobAction(formData: FormData) {
   });
   if (job.status === "published") refreshPublicJobs(job.slug);
   if (intent === "draft") redirect(`/app/hire/offres/${result.jobId}/modifier?ok=brouillon`);
+  // Publishing needs the certification that the job is real; the job stays saved as a draft.
+  if (formData.get("certify") !== "on")
+    redirect(`/app/hire/offres/${result.jobId}/modifier?erreur=certify&champ=certify`);
   await publishAndRedirect(result.jobId);
 }
 
@@ -114,6 +119,29 @@ export async function closeJobAction(formData: FormData) {
   const job = await db.job.findUniqueOrThrow({ where: { id: jobId }, select: { slug: true } });
   refreshPublicJobs(job.slug);
   redirect("/app/hire/offres?onglet=fermees&ok=fermee");
+}
+
+/** « Rouvrir » a closed job: published again within the active-job limit. */
+export async function reopenJobAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const jobId = id(formData.get("id"));
+  const result = await guarded(() => publishJob(db, ctx, jobId), "/app/hire/offres");
+  if (result.status === "limit") redirect("/app/hire/offres?onglet=fermees&erreur=limite");
+  if (result.status === "incomplete") redirect(`/app/hire/offres/${jobId}/modifier`);
+  const job = await db.job.findUniqueOrThrow({ where: { id: jobId }, select: { slug: true } });
+  refreshPublicJobs(job.slug);
+  redirect(
+    `/app/hire/offres/${jobId}?publiee=${result.status === "published" ? "1" : "verification"}`,
+  );
+}
+
+export async function duplicateJobAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  const copy = await guarded(
+    () => duplicateJob(db, ctx, id(formData.get("id"))),
+    "/app/hire/offres",
+  );
+  redirect(`/app/hire/offres/${copy}/modifier?ok=copie`);
 }
 
 export async function deleteDraftAction(formData: FormData) {
@@ -151,6 +179,44 @@ export async function moveApplicationAction(formData: FormData) {
   );
   if (moved) await onStageChanged(applicationId, moved.to).catch((error) => reportError(error));
   back(formData, applicationId, moved ? `ok=deplacee` : "");
+}
+
+export type MoveCardResult =
+  | { status: "moved"; stage: string }
+  | { status: "unchanged" }
+  | { status: "decision"; href: string }
+  | { status: "error" };
+
+/**
+ * Drag and drop in the pipeline (mockup 04-04): the same move as `moveApplicationAction`, answered
+ * without a redirect so the card stays where it was dropped. « Non retenu » still opens the
+ * decision form: a rejection is never made by a drop alone.
+ */
+export async function moveCardAction(input: {
+  applicationId: string;
+  stageId: string;
+}): Promise<MoveCardResult> {
+  const { ctx } = await requireHire("/app/hire", "manage");
+  const applicationId = String(input.applicationId).slice(0, 60);
+  const stageId = String(input.stageId).slice(0, 60);
+  const stage = await db.pipelineStage.findUnique({
+    where: { id: stageId },
+    select: { kind: true },
+  });
+  if (stage?.kind === "rejected")
+    return {
+      status: "decision",
+      href: `/app/hire/candidats/${applicationId}?decision=refus#decision`,
+    };
+  try {
+    const moved = await moveApplication(db, ctx, applicationId, stageId);
+    if (!moved) return { status: "unchanged" };
+    await onStageChanged(applicationId, moved.to).catch((error) => reportError(error));
+    return { status: "moved", stage: moved.to.name };
+  } catch (error) {
+    if (error instanceof HireError) return { status: "error" };
+    throw error;
+  }
 }
 
 const rejectSchema = z.object({
@@ -224,4 +290,12 @@ export async function requestDocumentAction(formData: FormData) {
     documentRequest: { name: parsed.data.name, due },
   }).catch((error) => reportError(error));
   redirect(`/app/hire/candidats/${applicationId}?ok=document`);
+}
+
+// ─── Help to write a job (lot 11) ─────────────────────────────────────────────
+
+/** « Rédiger une première version » and « Améliorer la clarté avec l'IA » on the job form. */
+export async function jobWriterAction(input: JobWriterInput): Promise<JobWriterResult> {
+  const { ctx } = await requireHire("/app/hire/offres", "manage");
+  return writeJob(db, ctx, input);
 }

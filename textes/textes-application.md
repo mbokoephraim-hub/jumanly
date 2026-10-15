@@ -1757,6 +1757,7 @@ Conventions :
 | `appNav.hire.interviews` | Entretiens |
 | `appNav.hire.reports` | Rapports |
 | `appNav.hire.pools` | Viviers |
+| `appNav.hire.messages` | Connect |
 | `appNav.organization` | Organisation |
 | `appNav.partner` | Partenaire |
 | `appNav.partnerLicenses` | Licences |
@@ -4333,6 +4334,15 @@ Conventions :
 | `hire.dashboard.verifyBanner.cta` | Demander la vérification |
 | `hire.dashboard.fairness` | Rappel : les profils Free sont des candidats comme les autres. Le forfait d'un talent n'influence jamais son score. |
 | `hire.dashboard.verifyBanner.pending` | Votre demande de vérification est en cours d'examen. |
+| `hire.dashboard.banner.jobs` | {count, plural, =0 {Aucune offre active} one {# offre active} other {# offres actives}} |
+| `hire.dashboard.banner.team` | {count, plural, one {# recruteur dans l'équipe} other {# recruteurs dans l'équipe}} |
+| `hire.dashboard.kpi.none` | — |
+| `hire.dashboard.toDo.scorecardsHint` | Après vos derniers entretiens |
+| `hire.dashboard.toDo.contactHint` | Depuis la recherche de talents |
+| `hire.dashboard.jobs.newTag` | {count, plural, one {# nouvelle} other {# nouvelles}} |
+| `hire.dashboard.jobs.bar` | Candidats par étape : {detail} |
+| `hire.dashboard.interviews.with` | {mode} · avec {memberName} |
+| `hire.dashboard.interviews.where` | {mode} · {place} |
 
 ---
 
@@ -4395,6 +4405,20 @@ Conventions :
 | `hire.jobs.assign.locked` | Attribution des offres aux responsables · Disponible avec {plan} |
 | `hire.jobs.filter.all` | Tous |
 | `hire.jobs.filter.submit` | Filtrer |
+| `hire.jobs.col.job` | Offre |
+| `hire.jobs.col.status` | Statut |
+| `hire.jobs.col.applications` | Candidatures |
+| `hire.jobs.col.publication` | Publication |
+| `hire.jobs.col.actions` | Actions |
+| `hire.jobs.row.sent` | Envoyée le {date, date, medium} |
+| `hire.jobs.row.notPublished` | Pas encore publiée |
+| `hire.jobs.row.menu` | Actions pour « {jobTitle} » |
+| `hire.jobs.search.submit` | Rechercher |
+| `hire.jobs.search.empty` | Aucune offre ne correspond à « {query} ». |
+| `hire.jobs.cancel` | Annuler |
+| `hire.jobs.reopened.limit` | Vous avez atteint la limite d'offres actives de votre forfait. Fermez une offre ou passez à un forfait supérieur pour rouvrir celle-ci. |
+| `hire.jobs.tabs` | Offres par statut |
+| `hire.jobs.filter.locked` | Disponible avec {plan} |
 | `hire.assign.title` | Attribution |
 | `hire.assign.subtitle` | Qui est responsable de cette offre et qui peut voir ses candidats. |
 | `hire.assign.none` | Non attribué |
@@ -4602,6 +4626,27 @@ Conventions :
 | `hire.jobForm.skills.separator` | Séparez les compétences par une virgule. |
 | `hire.jobForm.skills.unknown` | Compétences absentes du référentiel : {skills}. Vérifiez l'orthographe ou choisissez une compétence proche. |
 | `hire.jobForm.salary.unit` | Montants mensuels, en USD. |
+| `hire.jobForm.step.current` | Étape {current} sur {total} · {step} |
+| `hire.jobForm.step.aria` | Étapes de l'offre |
+| `hire.jobForm.draftSavedAt` | Brouillon enregistré {time} |
+| `hire.jobForm.ai.draftHint` | À partir de l'intitulé et de l'essentiel saisis à l'étape 1. |
+| `hire.jobForm.ai.draftCta` | Rédiger |
+| `hire.jobForm.ai.drafted` | Première version ajoutée dans les champs vides. Relisez-la et adaptez-la. |
+| `hire.jobForm.ai.draftNothing` | L'IA n'a rien proposé de plus. Vos champs sont inchangés. |
+| `hire.jobForm.ai.improveIntro` | L'IA relit vos missions et propose des formulations plus claires. Vous choisissez ce que vous gardez. |
+| `hire.jobForm.ai.improveEmpty` | Aucune amélioration proposée : vos missions sont déjà claires. |
+| `hire.jobForm.ai.needTitle` | Indiquez d'abord l'intitulé du poste à l'étape 1. |
+| `hire.jobForm.ai.needMissions` | Ajoutez au moins une mission pour que l'IA la relise. |
+| `hire.jobForm.ai.consent` | Activez Jumanly Intelligence dans vos paramètres de confidentialité pour utiliser l'aide à la rédaction. |
+| `hire.jobForm.ai.locked` | L'aide à la rédaction est disponible avec {plan}. Vous pouvez rédiger votre offre librement. |
+| `hire.jobForm.ai.quota` | Les crédits IA de votre organisation sont épuisés pour ce mois. Vous pouvez rédiger votre offre librement. |
+| `hire.jobForm.preview.salaryRange` | {min} – {max} USD/mois |
+| `hire.jobForm.preview.salaryOne` | {amount} USD/mois |
+| `hire.jobForm.preview.verified` | Entreprise vérifiée |
+| `hire.jobForm.error.certify` | Cochez la case de certification pour publier l'offre. |
+| `hire.jobForm.draft.copied` | Copie créée en brouillon. Vérifiez-la puis publiez-la. |
+| `hire.jobForm.benefits.remove` | Retirer « {benefit} » |
+| `hire.jobForm.templates.empty` | Aucune offre à reprendre pour l'instant. |
 
 ---
 
@@ -4670,6 +4715,7 @@ Conventions :
 | `hire.pipeline.card.withdrawn` | Candidature retirée |
 | `hire.pipeline.card.comments` | {count, plural, one {# commentaire} other {# commentaires}} |
 | `hire.pipeline.card.menu` | Actions |
+| `hire.pipeline.card.more` | + {count} autres |
 
 #### Actions
 
@@ -4773,6 +4819,12 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `hire.application.back` | Retour au pipeline |
+| `hire.application.title` | Fiche candidature |
+| `hire.application.decision.title` | Votre décision |
+| `hire.application.decision.advance` | Étape suivante · {stage} |
+| `hire.application.skills.matched` | Correspondent à l'offre |
+| `hire.application.skills.other` | Autres compétences |
+| `hire.application.position` | {index} sur {total} |
 | `hire.application.appliedFor` | Candidature à {jobTitle} |
 | `hire.application.appliedOn` | Reçue le {date, date, long} |
 | `hire.application.source.direct` | Candidature directe |
@@ -4813,6 +4865,7 @@ Conventions :
 | `hire.application.score.value` | {score} % · {band} |
 | `hire.application.score.why` | Pourquoi ? |
 | `hire.application.score.updated` | Calculé {time, relative} |
+| `hire.application.score.computed` | Calculé {time} |
 | `hire.application.score.disabled` | Ce candidat a choisi de ne pas faire calculer sa compatibilité. Examinez son profil directement. |
 | `hire.application.score.disputed` | Le candidat a demandé une révision humaine de ce score. |
 
@@ -4937,6 +4990,14 @@ Conventions :
 | `hire.talents.quota.reached.search` | Vous avez utilisé toutes vos recherches du mois. Elles se renouvellent le {date, date, long}. Cette limite protège les données des talents. |
 | `hire.talents.quota.reached.contact` | Vous avez utilisé toutes vos demandes de mise en relation du mois. Elles se renouvellent le {date, date, long}. |
 | `hire.talents.quota.upgrade` | Voir les forfaits |
+| `hire.talents.quota.title` | Quotas du mois |
+| `hire.talents.quota.searches` | Recherches dans le vivier |
+| `hire.talents.quota.contacts` | Demandes de mise en relation |
+| `hire.talents.quota.value` | {used} sur {max} |
+| `hire.talents.quota.unlimited` | Illimité |
+| `hire.talents.quota.renewal` | Renouvellement le {date, date, long}. Cette limite protège les données des talents. |
+| `hire.talents.sort` | Trier : {value} |
+| `hire.talents.sortScore` | Compatibilité |
 | `hire.talents.filter.skills` | Compétences |
 | `hire.talents.filter.experience` | Expérience |
 | `hire.talents.filter.location` | Localisation |
@@ -5020,6 +5081,7 @@ Conventions :
 | `hire.pools.name.text` | Nom du vivier |
 | `hire.pools.name.placeholder` | Ex. : Analystes data · Kinshasa |
 | `hire.pools.description` | Description (facultatif) |
+| `hire.pools.descriptionShort` | Description |
 | `hire.pools.visibility.text` | Visibilité |
 | `hire.pools.visibility.private` | Moi uniquement |
 | `hire.pools.visibility.team` | Mon équipe |
@@ -5057,6 +5119,17 @@ Conventions :
 | `hire.pools.addedOn` | Ajouté le {date, date, medium} |
 | `hire.pools.error.forbidden` | Cette action n'est pas permise pour votre rôle. |
 | `hire.pools.error.notFound` | Ce vivier ou ce profil n'est plus disponible. |
+| `hire.pools.search` | Rechercher un vivier |
+| `hire.pools.searchEmpty` | Aucun vivier ne correspond à « {query} ». |
+| `hire.pools.updatedAgo` | Mis à jour {time} |
+| `hire.pools.addedAgo` | Ajouté {time} |
+| `hire.pools.table.talent` | Talent |
+| `hire.pools.table.origin` | Origine |
+| `hire.pools.table.added` | Ajout |
+| `hire.pools.origin.applied` | Candidat · {jobTitle} |
+| `hire.pools.origin.contact` | Mise en relation acceptée |
+| `hire.pools.origin.search` | Depuis la recherche de talents |
+| `hire.pools.actions` | Actions pour {name} |
 
 ---
 
@@ -5132,6 +5205,20 @@ Conventions :
 | `hire.interviews.upcoming` | À venir |
 | `hire.interviews.waiting` | En attente de réponse |
 | `hire.interviews.past` | Passés et annulés |
+| `hire.interviews.previous` | Période précédente |
+| `hire.interviews.next` | Période suivante |
+| `hire.interviews.toConfirm` | À confirmer |
+| `hire.interviews.linkSent` | lien envoyé au candidat |
+| `hire.interviews.prepIntro` | Points à éclaircir en entretien, repérés par le score de compatibilité de {candidateName} : |
+| `hire.interviews.prepWhy` | Ces points viennent du score et de l'offre. Ils ne changent pas le score et ne valent pas évaluation. |
+| `hire.interviews.prepEmpty` | Le score ne relève ni critère à vérifier ni compétence manquante pour cette candidature. |
+| `hire.interviews.prepOpen` | Voir le score détaillé |
+| `hire.interviews.dayEmpty` | Aucun entretien ce jour-là. |
+| `hire.interviews.selectHint` | Choisissez un entretien dans l'agenda pour voir son détail. |
+| `hire.interviews.legend` | Légende des statuts |
+| `hire.interviews.slotProposed` | Créneau proposé |
+| `hire.interviews.actions` | Actions de l'entretien |
+| `hire.interviews.calendar` | Agenda des entretiens |
 
 ---
 
@@ -5205,6 +5292,14 @@ Conventions :
 | `hire.reports.pdf.title` | Rapport de recrutement · {org} |
 | `hire.reports.pdf.period` | Du {from, date, long} au {to, date, long} |
 | `hire.reports.pdf.generated` | Édité le {date, date, long} sur Jumanly |
+| `hire.reports.stats.sourcesTotal` | {count, plural, one {candidature} other {candidatures}} |
+| `hire.reports.advanced.candidateExperienceHint` | Part des candidats non retenus qui ont reçu un message de refus. |
+| `hire.reports.scorecards.average` | Moyenne sur 5 |
+| `hire.reports.scorecards.recommendations` | Recommandations |
+| `hire.reports.consolidated.share` | Part des candidatures |
+| `hire.reports.col.job` | Offre |
+| `hire.reports.col.recruiter` | Recruteur |
+| `hire.reports.days` | {days} j |
 
 ---
 
@@ -5324,6 +5419,10 @@ Conventions :
 | `org.members.transferOwnership.text` | Transférer la propriété |
 | `org.members.transferOwnership.confirm` | {memberName} deviendra propriétaire de {org}, avec accès à la facturation et à la suppression. Vous deviendrez administrateur. |
 | `org.members.lastOwner` | Une organisation doit garder au moins un propriétaire. |
+| `org.invite.expiresIn` | Expire {time} |
+| `org.members.filter.all` | Tous les rôles |
+| `org.members.searchEmpty` | Aucun membre ne correspond à votre recherche. |
+| `org.members.actions` | Actions pour {name} |
 | `org.members.team.none` | Aucune équipe |
 | `org.members.team.save` | Changer l'équipe |
 | `org.members.teamDone` | Équipe mise à jour. |

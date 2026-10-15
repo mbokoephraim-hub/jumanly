@@ -16,6 +16,7 @@ import type { EducationLevel, Prisma, PrismaClient, RemoteMode } from "@/generat
 import { can, consume, level, QuotaExceededError, usage } from "@/server/entitlements";
 import { matchesForUser } from "@/server/matching/service";
 import { educationRanks } from "@/server/matching/normalize";
+import type { MatchExplanation } from "@/server/matching/types";
 import { hirePermissions, HireError, remoteModes, type HireContext } from "./hire";
 import { notify } from "./notifications";
 
@@ -112,6 +113,8 @@ export type TalentResult = {
   certified: boolean;
   contact: "none" | "pending" | "accepted" | "declined";
   score: number | null;
+  /** The « Pourquoi ? » of the score, when there is one. */
+  explanation: MatchExplanation | null;
 };
 
 export type SearchResult =
@@ -280,10 +283,10 @@ export async function searchTalents(
     const status =
       request?.status === "pending" && request.expiresAt <= now ? "expired" : request?.status;
     const known = applied.has(row.id) || status === "accepted";
-    let score: number | null = null;
+    let explanation: MatchExplanation | null = null;
     if (job && matchingLevel !== "none" && row.matchingEnabled) {
       const match = (await matchesForUser(db, row.userId, [job.id], now)).get(job.id);
-      if (match?.state === "ok") score = match.explanation.score;
+      if (match?.state === "ok") explanation = match.explanation;
     }
     results.push({
       profileId: row.id,
@@ -296,7 +299,8 @@ export async function searchTalents(
       certified: row.skills.some((item) => item.verified),
       contact:
         status === "pending" || status === "accepted" || status === "declined" ? status : "none",
-      score,
+      score: explanation?.score ?? null,
+      explanation,
     });
   }
   await db.auditLog.create({
@@ -718,6 +722,15 @@ export async function listPools(db: PrismaClient, ctx: HireContext) {
     include: {
       owner: { select: { name: true } },
       _count: { select: { entries: { where: entryVisible(ctx.organizationId) } } },
+      entries: {
+        where: entryVisible(ctx.organizationId),
+        orderBy: { createdAt: "desc" },
+        take: 3,
+        select: {
+          profileId: true,
+          profile: { select: { visibility: true, user: { select: { name: true } } } },
+        },
+      },
     },
   });
 }
@@ -777,7 +790,8 @@ export async function getPool(db: PrismaClient, ctx: HireContext, poolId: string
               user: { select: { name: true, city: true } },
               applications: {
                 where: { job: { organizationId: ctx.organizationId } },
-                select: { id: true },
+                orderBy: { createdAt: "desc" },
+                select: { id: true, job: { select: { title: true } } },
                 take: 1,
               },
               contactRequests: {
@@ -806,6 +820,11 @@ export async function getPool(db: PrismaClient, ctx: HireContext, poolId: string
         headline: entry.profile.headline ?? "",
         city: entry.profile.user.city,
         createdAt: entry.createdAt,
+        origin: entry.profile.applications[0]
+          ? ({ kind: "applied", jobTitle: entry.profile.applications[0].job.title } as const)
+          : entry.profile.contactRequests.length > 0
+            ? ({ kind: "contact" } as const)
+            : ({ kind: "search" } as const),
       };
     }),
   };

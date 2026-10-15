@@ -60,6 +60,8 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await page.locator("#job-country").fill("Côte d'Ivoire");
   await page.locator("#job-salaryMin").fill("400");
   await page.locator("#job-salaryMax").fill("700");
+  const next = page.getByRole("button", { name: "Continuer" });
+  await next.click();
   await page
     .locator("#job-description-text")
     .fill(
@@ -68,7 +70,13 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await page
     .locator("#job-responsibilities")
     .fill("Préparer les rapports mensuels\nNettoyer les données");
+  await next.click();
   await page.locator("#job-requiredSkills").fill("Analyse de données");
+  // Criteria and process keep their defaults; publishing asks for the certification.
+  await next.click();
+  await next.click();
+  await next.click();
+  await page.getByLabel(/Je certifie que cette offre/).check();
   await page.getByRole("button", { name: "Publier l'offre" }).click();
   await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/?]+\?publiee=1/);
   await expect(page.getByRole("main")).toContainText("Votre offre est en ligne !");
@@ -95,6 +103,27 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
     `Nouvelle candidature de Amani Fictif pour « ${title} »`,
   );
   await page.goto(pipelineUrl);
+  if (!isMobile) {
+    // Drag and drop: the card follows the mouse, the column lights up, « Annuler » puts it back.
+    const card = page.locator("#pipeline-board li").filter({ hasText: "Amani Fictif" });
+    const column = (name: RegExp) =>
+      page.locator("#pipeline-board section").filter({ has: page.getByRole("heading", { name }) });
+    const target = column(/^Présélection/);
+    await card.scrollIntoViewIfNeeded();
+    const from = (await card.boundingBox())!;
+    const to = (await target.boundingBox())!;
+    await page.mouse.move(from.x + 30, from.y + 12);
+    await page.mouse.down();
+    await page.mouse.move(from.x + 60, from.y + 30, { steps: 4 });
+    await page.mouse.move(to.x + to.width / 2, from.y + 30, { steps: 8 });
+    await expect(target).toHaveAttribute("data-drop-over", "");
+    await page.mouse.up();
+    const toast = page.getByRole("status").filter({ hasText: "est passé en « Présélection »" });
+    await expect(toast).toBeVisible();
+    await expect(target).toContainText("Amani Fictif");
+    await toast.getByRole("button", { name: "Annuler" }).click();
+    await expect(column(/^Nouvelles/)).toContainText("Amani Fictif");
+  }
   await page.getByRole("link", { name: "Amani Fictif" }).click();
   await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
   const candidateUrl = page.url();

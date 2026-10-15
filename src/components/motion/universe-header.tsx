@@ -18,6 +18,7 @@ export function UniverseHeader({
   actions,
   titleAs: Title = "h1",
   module,
+  illustration,
   className,
 }: {
   eyebrow?: ReactNode;
@@ -28,6 +29,8 @@ export function UniverseHeader({
   titleAs?: "h1" | "p";
   /** Universe of the page; by default the one of the current path. */
   module?: UniverseKey;
+  /** A character standing at the bottom right (`public/illustrations/…svg`), decorative. */
+  illustration?: string;
   className?: string;
 }) {
   const pathname = usePathname();
@@ -40,6 +43,7 @@ export function UniverseHeader({
       className={cx(
         "jm-universe relative isolate flex min-h-24 flex-wrap items-center justify-between gap-x-4 gap-y-3 overflow-hidden rounded-[28px] px-5 py-5 lg:min-h-[132px] lg:px-8 lg:py-6",
         dark ? "bg-sapin text-blanc" : "bg-blanc text-sapin ring-1 ring-sapin/8",
+        illustration && "pr-[118px] lg:pr-[210px]",
         className,
       )}
     >
@@ -62,6 +66,14 @@ export function UniverseHeader({
           style={{ backgroundImage: `url(/marque/formes/${world.shape}.svg)` }}
         />
       </span>
+      {illustration && (
+        // eslint-disable-next-line @next/next/no-img-element -- static SVG illustration
+        <img
+          src={illustration}
+          alt=""
+          className="jm-float pointer-events-none absolute right-3 -bottom-1 -z-10 h-[124px] w-auto lg:right-6 lg:h-[156px]"
+        />
+      )}
       <div className="flex min-w-0 items-center gap-3 lg:gap-4">
         <span
           aria-hidden

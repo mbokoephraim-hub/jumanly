@@ -1,19 +1,24 @@
 import type { Metadata } from "next";
-import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { AppPageHeader } from "@/components/app/page-header";
 import { JobForm } from "@/components/hire/job-form";
+import { JobFormBack, jobFormContext } from "@/components/hire/job-form-shell";
 import { JobStatusBadge } from "@/components/hire/job-status";
+import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
 import { getOrgJob, HireError } from "@/server/services/hire";
-import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.jobForm");
   return { title: { absolute: t("title.edit") }, robots: { index: false } };
 }
 
+const one = (value: string | string[] | undefined) =>
+  typeof value === "string" ? value : undefined;
+
+/** The same guided form, filled with the job (mockup 04-03). */
 export default async function EditJobPage({
   params,
   searchParams,
@@ -26,25 +31,30 @@ export default async function EditJobPage({
     throw error;
   });
   if (job.status === "closed" || job.status === "archived") notFound();
-  const one = (value: string | string[] | undefined) =>
-    typeof value === "string" ? value : undefined;
+  const context = await jobFormContext(ctx, job.id);
+  const ok = one(query.ok);
   return (
-    <div className="flex max-w-3xl flex-col gap-6">
-      <Link href="/app/hire/offres" className="text-sm underline">
-        {t("jobs.title")}
-      </Link>
+    <div className="flex flex-col gap-4 lg:gap-5">
+      {ok === "brouillon" && <ToastOnLoad message={t("jobForm.draft.ok")} />}
+      {ok === "copie" && <ToastOnLoad message={t("jobForm.draft.copied")} />}
       <AppPageHeader
+        eyebrow={<JobFormBack />}
         title={t("jobForm.title.edit")}
         actions={<JobStatusBadge status={job.status} />}
       />
       <JobForm
         job={job}
+        org={context.org}
+        verified={context.verified}
+        ai={context.ai}
+        templates={context.templates}
         params={{
           erreur: one(query.erreur),
           champ: one(query.champ),
           inconnues: one(query.inconnues),
           max: one(query.max),
-          ok: one(query.ok),
+          ok,
+          etape: one(query.etape),
         }}
       />
     </div>

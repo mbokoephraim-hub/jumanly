@@ -31,6 +31,8 @@ export const aiFeatures = {
   proofread: { credits: 1, tier: "fast" },
   linkedin: { credits: 2, tier: "default" },
   cv_tailor: { credits: 2, tier: "default" },
+  // Lot 11 · help to write a job (mockup 04-03), paid by the organization's credits.
+  job_writer: { credits: 1, tier: "fast" },
 } as const;
 export type AiFeature = keyof typeof aiFeatures;
 
@@ -102,12 +104,14 @@ export async function runAi<T>(
     maxTokens?: number;
     /** Beyond this delay the call counts as unavailable: credits released, nothing kept. */
     timeoutMs?: number;
+    /** Who pays the credits and holds the gate: the person by default, or their organization. */
+    subject?: Subject;
   },
   options: { provider?: AiProvider; now?: Date } = {},
 ): Promise<AiRun<T>> {
   const now = options.now ?? new Date();
   const config = aiFeatures[input.feature];
-  const subject: Subject = { type: "user", id: input.userId };
+  const subject: Subject = input.subject ?? { type: "user", id: input.userId };
 
   const user = await db.user.findUnique({
     where: { id: input.userId },
