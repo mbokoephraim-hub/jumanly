@@ -182,7 +182,7 @@ export async function TarifPlanCards({
                   {formatUsd(plan.priceCents)}
                 </span>
                 <span className="font-semibold">{t("pricing.card.currency")}</span>
-                <span className="text-xs opacity-70">{t("pricing.card.perMonth")}</span>
+                <span className="text-xs opacity-85">{t("pricing.card.perMonth")}</span>
               </p>
             )}
             {current.includes(plan.code) ? (
@@ -226,7 +226,7 @@ export async function TarifPlanCards({
               ))}
             </ul>
             {t.has(`${key}.note`) && (
-              <p className="text-xs leading-[17px] opacity-72">{t(`${key}.note`)}</p>
+              <p className="text-xs leading-[17px] opacity-85">{t(`${key}.note`)}</p>
             )}
             <div className="flex-1" />
             <p
