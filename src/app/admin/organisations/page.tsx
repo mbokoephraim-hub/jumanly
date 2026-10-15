@@ -290,7 +290,7 @@ export default async function AdminOrganizations({
       <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
         <div className="flex min-w-0 flex-1 flex-col gap-4 max-lg:contents">
           {organizations.length === 0 ? (
-            <p className="rounded-[24px] bg-blanc px-5 py-8 text-center text-[13.5px] text-ardoise">
+            <p className="jm-admin-card rounded-[24px] bg-blanc px-5 py-8 text-center text-[13.5px] text-ardoise">
               {t("orgs.empty")}
             </p>
           ) : (
@@ -299,7 +299,7 @@ export default async function AdminOrganizations({
                 role="region"
                 aria-label={t("orgs.list")}
                 tabIndex={0}
-                className="hidden overflow-x-auto rounded-[24px] bg-blanc py-1.5 lg:block"
+                className="jm-admin-card hidden overflow-x-auto rounded-[24px] bg-blanc py-1.5 lg:block"
               >
                 <table className="w-full min-w-[640px] border-collapse text-left text-[13.5px]">
                   <caption className="sr-only">{t("orgs.list")}</caption>
@@ -378,7 +378,7 @@ export default async function AdminOrganizations({
 
               <ul
                 aria-label={t("orgs.list")}
-                className="rounded-[24px] bg-blanc px-3.5 py-1.5 lg:hidden"
+                className="jm-admin-card rounded-[24px] bg-blanc px-3.5 py-1.5 lg:hidden"
               >
                 {organizations.map((organization, index) => (
                   <li key={organization.id} className="border-brume not-first:border-t">

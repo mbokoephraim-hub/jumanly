@@ -343,7 +343,7 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(300px,420px)_minmax(0,1fr)]">
         {/* List of jobs. */}
         {jobs.length === 0 ? (
-          <p className="rounded-[24px] bg-blanc p-5 text-[13px] leading-5 text-ardoise lg:col-span-2">
+          <p className="jm-admin-card rounded-[24px] bg-blanc p-5 text-[13px] leading-5 text-ardoise lg:col-span-2">
             {q || signal || country || contract
               ? t("empty.filtered")
               : tab === "toutes"
@@ -367,7 +367,7 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
                     scroll={false}
                     aria-current={on ? "true" : undefined}
                     className={cx(
-                      "flex flex-col gap-2 rounded-[24px] bg-blanc px-4 py-3.5 transition-shadow hover:shadow-[0_0_0_2px_var(--color-brume)] motion-reduce:transition-none",
+                      "jm-admin-card flex flex-col gap-2 rounded-[24px] bg-blanc px-4 py-3.5 transition-shadow hover:shadow-[0_0_0_2px_var(--color-brume)] motion-reduce:transition-none",
                       on &&
                         "shadow-[0_0_0_2px_var(--color-sapin)] hover:shadow-[0_0_0_2px_var(--color-sapin)]",
                     )}
@@ -429,7 +429,7 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
             )}
             <section
               aria-labelledby="offres-detail-title"
-              className="flex flex-col gap-3.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
+              className="jm-admin-card flex flex-col gap-3.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
             >
               <div className="flex flex-col gap-3 sm:flex-row sm:items-start">
                 <OrgTile name={selected.organization.name} size={52} />

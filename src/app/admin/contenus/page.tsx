@@ -205,7 +205,10 @@ async function FaqTab({
       <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_340px] xl:grid-cols-[minmax(0,1fr)_360px]">
         <div className="flex min-w-0 flex-col gap-4">
           <Notices notice={notice} />
-          <section aria-labelledby="faq-title" className="rounded-[24px] bg-blanc py-1.5">
+          <section
+            aria-labelledby="faq-title"
+            className="jm-admin-card rounded-[24px] bg-blanc py-1.5"
+          >
             <h2 id="faq-title" className="sr-only">
               {t("tab.faq")} · {labels[FAQ_GROUPS.indexOf(group)]}
             </h2>

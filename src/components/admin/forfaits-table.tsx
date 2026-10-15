@@ -97,10 +97,14 @@ export async function PlanTable({
       ? t(`field.interval.${plan.interval as "month" | "quarter" | "year"}`)
       : plan.interval;
   if (plans.length === 0) {
-    return <p className="rounded-[24px] bg-blanc p-5 text-[13px] text-ardoise">{t("empty")}</p>;
+    return (
+      <p className="jm-admin-card rounded-[24px] bg-blanc p-5 text-[13px] text-ardoise">
+        {t("empty")}
+      </p>
+    );
   }
   return (
-    <div className="rounded-[24px] bg-blanc px-4 py-1.5 lg:px-0">
+    <div className="jm-admin-card rounded-[24px] bg-blanc px-4 py-1.5 lg:px-0">
       <div role="table" aria-label={t("title")} className="flex flex-col">
         <div role="row" className={cx(grid, "hidden py-2.5", adminLabel)}>
           <span role="columnheader">{t("col.code")}</span>

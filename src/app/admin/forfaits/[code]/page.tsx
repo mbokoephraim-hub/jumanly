@@ -189,7 +189,7 @@ export default async function AdminPlan({
         <PlanError t={ta} code={query.erreur} />
       )}
       {writable && usage && (
-        <div className="flex flex-col gap-3 rounded-[24px] bg-blanc p-4 lg:flex-row lg:items-center lg:justify-between lg:px-[22px]">
+        <div className="jm-admin-card flex flex-col gap-3 rounded-[24px] bg-blanc p-4 lg:flex-row lg:items-center lg:justify-between lg:px-[22px]">
           <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[13px]">
             <span className="font-semibold">{t("v2.accounts", { count: subscribers })}</span>
             <Link href={accountsHref} className="font-medium underline underline-offset-2">
@@ -226,7 +226,7 @@ export default async function AdminPlan({
           {/* Plan fields. */}
           <fieldset
             disabled={!writable}
-            className="flex min-w-0 flex-col gap-3.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
+            className="jm-admin-card flex min-w-0 flex-col gap-3.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
           >
             <legend className="sr-only">{t("edit")}</legend>
             <div className="flex flex-col gap-0.5">
@@ -334,7 +334,7 @@ export default async function AdminPlan({
           {/* Entitlements. */}
           <fieldset
             disabled={!writable}
-            className="flex min-w-0 flex-col gap-3 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
+            className="jm-admin-card flex min-w-0 flex-col gap-3 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
           >
             <legend className="sr-only">{t("entitlements.title")}</legend>
             <div className="flex flex-col gap-1 sm:flex-row sm:items-start sm:justify-between sm:gap-4">

@@ -65,21 +65,18 @@ export async function AuditRows({
 }) {
   const t = await getTranslations("admin");
   return (
-    <ol className="flex flex-col">
+    <ol className={cx("jm-admin-timeline flex flex-col", compact && "jm-admin-timeline-compact")}>
       {entries.map((entry) => {
         const who = entry.actor
           ? entry.actor.name
           : t(entry.actorId ? "journal.deletedActor" : "journal.system");
         return (
-          <li
-            key={entry.id}
-            className="flex gap-3 border-b border-brume py-3 first:pt-0 last:border-b-0 last:pb-0"
-          >
+          <li key={entry.id} className="flex gap-3 pb-4 last:pb-0">
             <span
               aria-hidden
               className={cx(
                 "mt-0.5 grid shrink-0 place-items-center rounded-[10px] text-sapin",
-                compact ? "size-7 bg-creme" : "size-9 bg-creme",
+                compact ? "jm-admin-tile size-7" : "jm-admin-tile size-9",
               )}
             >
               <Icon

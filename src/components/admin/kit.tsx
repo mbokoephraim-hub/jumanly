@@ -2,7 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
-import { Alert } from "@/components/ui";
+import { Character, type CharacterName, type Pose } from "@/components/brand/character";
 import { chipClasses, chipOnClasses } from "@/components/ui/filter-chip";
 import { cx } from "@/lib/cx";
 import { getCurrentUser } from "@/server/auth/session";
@@ -315,6 +315,7 @@ export async function SensitivePanel({
       aria-label={title}
       className={cx(
         "flex flex-col gap-3.5 rounded-[24px] bg-blanc p-5 shadow-[0_14px_34px_rgba(11,26,31,0.08)] ring-1 ring-brume lg:p-[22px]",
+        tone === "danger" && "jm-admin-danger",
         className,
       )}
     >
@@ -491,28 +492,47 @@ export async function AdminDone({
 }) {
   const [t, user] = await Promise.all([getTranslations("admin"), getCurrentUser()]);
   const reads = user?.platformRole === "platform_admin" || user?.platformRole === "support_agent";
+  // Admin v3: a white card with a Lime ring and a check that draws itself (still under reduced
+  // motion), instead of the flat success alert.
   return (
-    <Alert
-      tone="success"
-      title={title}
-      action={
-        journal && reads ? (
+    <div
+      role="status"
+      className="jm-admin-card jm-admin-done flex items-start gap-3.5 rounded-[20px] bg-blanc px-[18px] py-4 ring-[1.5px] ring-lime ring-inset"
+    >
+      <span
+        aria-hidden
+        className="jm-admin-tile grid size-9 shrink-0 place-items-center rounded-full text-sapin"
+      >
+        <svg viewBox="0 0 24 24" className="size-[18px]" fill="none">
+          <path
+            d="M5 12.5l4.2 4.2L19 7"
+            pathLength={1}
+            className="jm-check"
+            stroke="currentColor"
+            strokeWidth={2.4}
+            strokeLinecap="round"
+            strokeLinejoin="round"
+          />
+        </svg>
+      </span>
+      <div className="flex min-w-0 flex-1 flex-col gap-1 pt-1">
+        <p className="text-sm leading-5 font-semibold">{title}</p>
+        {children && <div className="text-sm leading-5">{children}</div>}
+        {journal && reads && (
           <Link
             href={
               typeof journal === "string"
                 ? journal
                 : `/admin/journal?cible=${journal.type}&id=${encodeURIComponent(journal.id)}`
             }
-            className="inline-flex items-center gap-1 text-[13px] font-semibold underline underline-offset-2"
+            className="mt-1 inline-flex w-fit items-center gap-1 text-[13px] font-semibold underline underline-offset-2"
           >
             <Icon name="doc" className="size-3.5" />
             {t("kit.seeJournal")}
           </Link>
-        ) : undefined
-      }
-    >
-      {children}
-    </Alert>
+        )}
+      </div>
+    </div>
   );
 }
 
@@ -638,21 +658,42 @@ export function AdminEmpty({
   title,
   text,
   icon = "recherche",
+  character = { name: "amani", pose: "perplexe" },
   action,
 }: {
   title: string;
   text?: ReactNode;
   icon?: IconName;
+  /** Admin v3: an illustrated character above the message; `null` keeps the icon tile alone. */
+  character?: { name: CharacterName; pose: Pose } | null;
   action?: ReactNode;
 }) {
   return (
     <div className="jm-admin-card flex flex-col items-center gap-2.5 rounded-[24px] bg-blanc px-6 py-10 text-center">
-      <span
-        aria-hidden
-        className="jm-admin-tile grid size-14 place-items-center rounded-[18px] text-sapin"
-      >
-        <Icon name={icon} className="size-6" />
-      </span>
+      {character ? (
+        <span className="relative">
+          <span
+            aria-hidden
+            className="absolute inset-x-[-30px] bottom-0 h-20 rounded-full bg-lime-clair"
+          />
+          <span className="relative block">
+            <Character name={character.name} pose={character.pose} height={136} />
+          </span>
+          <span
+            aria-hidden
+            className="jm-admin-tile absolute -right-3 bottom-1 grid size-10 place-items-center rounded-[13px] text-sapin"
+          >
+            <Icon name={icon} className="size-[18px]" />
+          </span>
+        </span>
+      ) : (
+        <span
+          aria-hidden
+          className="jm-admin-tile grid size-14 place-items-center rounded-[18px] text-sapin"
+        >
+          <Icon name={icon} className="size-6" />
+        </span>
+      )}
       <p className="text-[16px] leading-[22px] font-semibold">{title}</p>
       {text && <p className="max-w-[46ch] text-[13px] leading-5 text-ardoise">{text}</p>}
       {action && <div className="mt-1.5">{action}</div>}

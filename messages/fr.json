@@ -10681,6 +10681,10 @@
     },
     "dashboard": {
       "title": "Indicateurs",
+      "banner": {
+        "subtitle": "Les {days} derniers jours en un coup d'œil : ce qui avance, et ce qui attend une décision.",
+        "attention": "Éléments à traiter"
+      },
       "period": "Période",
       "compare": "Comparer à la période précédente",
       "kpi": {

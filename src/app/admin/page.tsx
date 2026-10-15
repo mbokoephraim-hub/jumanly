@@ -47,6 +47,13 @@ const familyTone: Record<FamilyKey, string> = {
   company: "bg-sapin",
   partner: "bg-menthe",
 };
+// Admin v3: the share bars take the family color as a gradient.
+const familyBar: Record<FamilyKey, string> = {
+  talent: "bg-linear-to-r from-neon via-lime to-feuille",
+  rh: "bg-linear-to-r from-[#f4fbc0] to-neon",
+  company: "bg-linear-to-r from-ia to-sapin",
+  partner: "bg-linear-to-r from-menthe-claire to-menthe",
+};
 
 const number = new Intl.NumberFormat("fr-FR", { maximumFractionDigits: 1 });
 const signed = (value: number) =>
@@ -233,7 +240,15 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
 
   return (
     <>
-      <AdminPageHeader title={t("dashboard.title")} />
+      <AdminPageHeader
+        title={t("dashboard.title")}
+        subtitle={t("dashboard.banner.subtitle", { days })}
+        stats={[
+          { label: t("dashboard.banner.attention"), value: number.format(attentionTotal) },
+          { label: t("dashboard.kpi.activeUsers"), value: number.format(activeNow) },
+          { label: t("dashboard.kpi.mrr"), value: usd(now.mrrCents) },
+        ]}
+      />
       {params.erreur === "lecture" && <Alert tone="warning" title={t("notAllowed")} />}
 
       <div className="flex flex-col gap-2.5 lg:flex-row lg:items-center">
@@ -284,10 +299,14 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
         aria-label={t("dashboard.hero")}
         className="grid grid-cols-2 gap-2.5 lg:grid-cols-4 lg:gap-3.5"
       >
-        {hero.map((kpi) => (
+        {hero.map((kpi, index) => (
           <li
             key={kpi.key}
-            className="flex min-w-0 flex-col gap-2 rounded-[24px] bg-blanc px-[18px] py-[18px] lg:px-[22px]"
+            className={cx(
+              "jm-admin-card flex min-w-0 flex-col gap-2 rounded-[24px] px-[18px] py-[18px] lg:px-[22px]",
+              // Admin v3: the first figure stands on the signature gradient (Sapin text).
+              index === 0 ? "jm-admin-feature" : "bg-blanc",
+            )}
           >
             <div className="flex items-start justify-between gap-2">
               <span className="text-[12.5px] leading-4 font-semibold">
@@ -295,7 +314,10 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
               </span>
               <span
                 aria-hidden
-                className={cx("grid size-9 shrink-0 place-items-center rounded-full", kpi.disc)}
+                className={cx(
+                  "grid size-9 shrink-0 place-items-center rounded-full",
+                  index === 0 ? "bg-blanc/70" : kpi.disc,
+                )}
               >
                 <Icon name={kpi.icon} className="size-[18px]" />
               </span>
@@ -343,7 +365,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
                       aria-hidden
                       className={cx(
                         "grid size-10 shrink-0 place-items-center rounded-[14px] text-sapin",
-                        index === 0 || item.overdue ? "bg-ambre-fond" : "bg-creme",
+                        index === 0 || item.overdue ? "bg-ambre-fond" : "jm-admin-tile",
                       )}
                     >
                       <Icon name={attentionIcon[item.kind]} className="size-[18px]" />
@@ -446,7 +468,7 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
         {kpis.map((kpi) => (
           <li
             key={kpi.key}
-            className="flex min-w-0 flex-col gap-1.5 rounded-[20px] bg-blanc px-4 py-3.5"
+            className="jm-admin-card flex min-w-0 flex-col gap-1.5 rounded-[20px] bg-blanc px-4 py-3.5"
           >
             <span className="flex items-start justify-between gap-2 text-[11.5px] leading-4 font-medium text-ardoise">
               {t(`dashboard.kpi.${kpi.key}`)}
@@ -539,10 +561,10 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
                         </span>
                         <span
                           aria-hidden
-                          className="block h-1.5 overflow-hidden rounded-pill bg-blanc"
+                          className="block h-2 overflow-hidden rounded-pill bg-blanc"
                         >
                           <span
-                            className={cx("block h-full rounded-pill", familyTone[group.family])}
+                            className={cx("block h-full rounded-pill", familyBar[group.family])}
                             style={{ width: `${share}%` }}
                           />
                         </span>

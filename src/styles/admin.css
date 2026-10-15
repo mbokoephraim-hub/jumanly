@@ -175,20 +175,61 @@
   box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.45);
 }
 
-/* Cartes : ombre douce, liseré qui s'éclaire au survol des cartes cliquables. */
-.jm-admin-card {
+/* Cartes : ombre douce, liseré qui s'éclaire au survol des cartes cliquables. L'ombre passe par
+   les variables de Tailwind pour garder les anneaux (`ring-*`) posés sur la même carte. */
+.jm-admin-card,
+.jm-admin-danger {
+  --jm-card-shadow: 0 1px 0 rgb(11 26 31 / 0.03), 0 12px 32px rgb(11 26 31 / 0.06);
   box-shadow:
-    0 1px 0 rgb(11 26 31 / 0.03),
-    0 12px 32px rgb(11 26 31 / 0.06);
+    var(--tw-inset-shadow, 0 0 #0000), var(--tw-inset-ring-shadow, 0 0 #0000),
+    var(--tw-ring-offset-shadow, 0 0 #0000), var(--tw-ring-shadow, 0 0 #0000), var(--jm-card-shadow);
 }
 a.jm-admin-card:hover,
 .jm-admin-card-link:hover {
-  box-shadow:
-    0 0 0 1.5px rgb(166 242 107 / 0.9),
-    0 16px 36px rgb(11 26 31 / 0.09);
+  --jm-card-shadow: 0 0 0 1.5px rgb(166 242 107 / 0.9), 0 16px 36px rgb(11 26 31 / 0.09);
+}
+/* Action sensible : un liseré Corail sur le bord gauche. */
+.jm-admin-danger {
+  --jm-card-shadow: inset 4px 0 0 var(--jm-corail), 0 14px 34px rgb(11 26 31 / 0.08);
+}
+
+/* Historique en frise : un trait relie la tuile d'une action à la suivante. */
+.jm-admin-timeline {
+  --dot: 36px;
+}
+.jm-admin-timeline-compact {
+  --dot: 28px;
+}
+.jm-admin-timeline > li {
+  position: relative;
+}
+.jm-admin-timeline > li:not(:last-child)::before {
+  content: "";
+  position: absolute;
+  top: calc(var(--dot) + 6px);
+  bottom: 4px;
+  left: calc(var(--dot) / 2 - 1px);
+  width: 2px;
+  border-radius: 2px;
+  background: linear-gradient(180deg, rgb(166 242 107 / 0.9), var(--jm-brume));
+}
+
+/* Tableaux : la ligne survolée s'éclaire. */
+.jm-admin-page tbody tr:hover > * {
+  background: rgb(242 237 229 / 0.55);
+}
+
+/* Chiffre vedette sur le dégradé signature (premier chiffre du tableau de bord). */
+.jm-admin-feature {
+  background:
+    radial-gradient(240px 140px at 100% 0%, rgb(255 255 255 / 0.35), transparent 70%),
+    var(--jm-degrade-signature);
 }
 
 @media (prefers-reduced-motion: no-preference) {
+  html:not([data-reduce-motion]) .jm-admin-done .jm-check {
+    animation: jm-check-draw 0.45s var(--jm-arrivee) 0.1s both;
+  }
   html:not([data-reduce-motion]) .jm-admin-tip {
     transition:
       opacity 0.15s ease,
@@ -215,4 +256,11 @@ a.jm-admin-card:hover,
   html:not([data-reduce-motion]) .jm-admin-page > :nth-child(n + 4) {
     animation-delay: 120ms;
   }
+}
+
+/* Fiche (utilisateur, organisation, abonnement) : un voile Lime en tête de carte. */
+.jm-admin-fiche {
+  background-image:
+    radial-gradient(320px 150px at 100% 0%, rgb(166 242 107 / 0.32), transparent 70%),
+    linear-gradient(180deg, rgb(228 250 208 / 0.75), transparent 150px);
 }

@@ -223,7 +223,7 @@ export async function UserCard({
       id="utilisateurs-fiche"
       aria-labelledby="utilisateurs-fiche-title"
       className={cx(
-        "flex scroll-mt-4 flex-col rounded-[24px] bg-blanc px-5 py-5 lg:w-[400px] lg:shrink-0 lg:px-[22px]",
+        "jm-admin-fiche jm-admin-card flex scroll-mt-4 flex-col rounded-[24px] bg-blanc px-5 py-5 lg:w-[400px] lg:shrink-0 lg:px-[22px]",
         className,
       )}
     >

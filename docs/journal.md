@@ -2,6 +2,24 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v3 · étape 2 : habillage de tous les écrans (15 octobre 2026)
+
+- **Tableau de bord** : bandeau avec une phrase de contexte et trois chiffres (éléments à traiter,
+  utilisateurs actifs, revenu mensuel récurrent) ; premier chiffre clé sur le dégradé signature ;
+  file « Ce qui demande votre attention » avec tuiles en dégradé ; barres des forfaits utilisés en
+  dégradé de la couleur de chaque famille.
+- **Cartes** : toutes les cartes blanches de l'admin prennent l'ombre douce `jm-admin-card` (les
+  anneaux `ring-*` sont conservés : l'ombre passe par les variables de Tailwind). Lignes de tableau
+  éclairées au survol.
+- **Fiches** utilisateur et organisation : voile Lime en tête de carte (`jm-admin-fiche`).
+  **Historique** et journal en frise (un trait relie chaque action). **Actions sensibles** : liseré
+  Corail à gauche.
+- **Confirmations** (`AdminDone`) : carte blanche à anneau Lime, coche qui se dessine (immobile en
+  mouvement réduit), lien « Voir dans le journal » conservé.
+- **États vides** (`AdminEmpty`) : un personnage de la marque (Amani par défaut) avec la tuile de
+  l'icône.
+- Captures : `/mnt/project-files/captures/admin-v3/etape-2/` (12 écrans, 1440 et 390 px).
+
 ## Jumanly Admin v3 · étape 1 : coque et identité visuelle (15 octobre 2026)
 
 - **Plan** `docs/admin-v3/PLAN.md` : 7 étapes (coque, habillage, Studio formations, éditeur par

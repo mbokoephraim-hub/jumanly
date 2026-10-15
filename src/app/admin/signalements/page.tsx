@@ -207,7 +207,7 @@ export default async function AdminReports({ searchParams }: PageProps<"/admin/s
       ) : (
         <>
           {/* Desktop: table. */}
-          <div className="hidden rounded-[24px] bg-blanc py-1.5 lg:block">
+          <div className="jm-admin-card hidden rounded-[24px] bg-blanc py-1.5 lg:block">
             <table className="w-full table-fixed border-collapse text-left text-[13px]">
               <caption className="sr-only">{t("list")}</caption>
               <thead>
@@ -270,7 +270,7 @@ export default async function AdminReports({ searchParams }: PageProps<"/admin/s
           </div>
 
           {/* Phones: list of cards. */}
-          <ul className="flex flex-col rounded-[24px] bg-blanc px-5 py-1 lg:hidden">
+          <ul className="jm-admin-card flex flex-col rounded-[24px] bg-blanc px-5 py-1 lg:hidden">
             {rows.map((report, index) => {
               const kind = typeOf(report.targetType);
               return (
