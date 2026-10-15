@@ -19,6 +19,12 @@ import {
 } from "@/server/services/org-structure";
 import { requestVerification } from "@/server/services/verification";
 import {
+  addVerificationDocuments,
+  OrgAdminError,
+  removeVerificationDocument,
+} from "@/server/services/admin-orgs";
+import { fileStorage } from "@/server/storage";
+import {
   acceptInvitation,
   changeRole,
   inviteMembers,
@@ -189,8 +195,40 @@ export async function transferOwnershipAction(formData: FormData) {
   back("membres", { ok: "transfert" });
 }
 
+/** Supporting documents first (PDF or image), so a refused field does not lose them. */
+async function saveDocuments(
+  ctx: Parameters<typeof addVerificationDocuments>[2],
+  formData: FormData,
+) {
+  const files = await Promise.all(
+    formData
+      .getAll("documents")
+      .filter((value): value is File => value instanceof File && value.size > 0)
+      .map(async (file) => ({ name: file.name, bytes: new Uint8Array(await file.arrayBuffer()) })),
+  );
+  try {
+    await addVerificationDocuments(db, fileStorage(db), ctx, files);
+  } catch (error) {
+    if (error instanceof OrgAdminError && error.code !== "forbidden" && error.code !== "notFound")
+      back("verification", { erreur: error.code });
+    throw error;
+  }
+}
+
+export async function removeVerificationDocumentAction(formData: FormData) {
+  const { ctx } = await requireHire("/app/organisation", "administer");
+  try {
+    await removeVerificationDocument(db, fileStorage(db), ctx, id(formData.get("id")));
+  } catch (error) {
+    if (error instanceof OrgAdminError) back("verification", { erreur: "status" });
+    throw error;
+  }
+  back("verification", { ok: "documentRetire" });
+}
+
 export async function requestVerificationAction(formData: FormData) {
   const { ctx } = await requireHire("/app/organisation", "administer");
+  await saveDocuments(ctx, formData);
   let saved = false;
   await guarded(async () => {
     saved = await requestVerification(db, ctx, Object.fromEntries(formData));

@@ -10,13 +10,15 @@ import { cache } from "react";
 import { requireUser, type CurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { hirePermissions, type HireContext } from "@/server/services/hire";
-import { resolveSpace } from "@/server/services/organization";
+import { hireMemberships, resolveSpace } from "@/server/services/organization";
 
 export const SPACE_COOKIE = "jm_space";
 
 export const getActiveSpace = cache(async (userId: string) => {
   const wanted = (await cookies()).get(SPACE_COOKIE)?.value;
-  return resolveSpace(db, userId, wanted);
+  const space = await resolveSpace(db, userId, wanted);
+  // A suspended organization (Admin v2, étape 4) is no space: its members cannot act in Hire.
+  return space && !space.organization.suspendedAt ? space : null;
 });
 
 export type ActiveSpace = NonNullable<Awaited<ReturnType<typeof getActiveSpace>>>;
@@ -41,7 +43,14 @@ export async function requireHire(
 ): Promise<{ user: CurrentUser; space: ActiveSpace; ctx: HireContext }> {
   const user = await requireUser(suite);
   const space = await getActiveSpace(user.id);
-  if (!space) redirect("/app/acces-refuse");
+  if (!space) {
+    const memberships = await hireMemberships(db, user.id);
+    redirect(
+      memberships.some((membership) => membership.organization.suspendedAt)
+        ? "/app/acces-refuse?raison=organisation"
+        : "/app/acces-refuse",
+    );
+  }
   const ctx = { userId: user.id, organizationId: space.organizationId, role: space.role };
   if (need && !hirePermissions(space.role)[need]) notFound();
   return { user, space, ctx };

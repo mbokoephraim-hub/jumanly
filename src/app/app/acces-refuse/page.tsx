@@ -34,9 +34,11 @@ export default async function AccessDeniedPage({ searchParams }: PageProps<"/app
   const body =
     raison === "suspendu"
       ? t("system.403.suspended")
-      : canSwitch
-        ? t("system.403.wrongSpace")
-        : t("system.403.body");
+      : raison === "organisation"
+        ? t("system.403.orgSuspended")
+        : canSwitch
+          ? t("system.403.wrongSpace")
+          : t("system.403.body");
   return (
     <AppSystemCard eyebrow={t("common.brand")} title={t("system.403.pageTitle")}>
       <SystemHero

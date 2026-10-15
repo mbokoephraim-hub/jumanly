@@ -83,6 +83,8 @@ enum OrgVerificationStatus {
   pending
   verified
   rejected
+  /// The administrator asked for more (Admin v2, étape 4); back to pending when the organization answers.
+  info_requested
 }
 
 model Organization {
@@ -126,8 +128,40 @@ model Organization {
   /// Partner organizations only (E9): bank, university, foundation, company, cooperation, public.
   partnerKind             String?
   licenseBatches          LicenseBatch[]
+  /// Supporting documents of the verification request (Admin v2, étape 4).
+  documents               OrganizationDocument[]
+  /// Suspended by a Jumanly administrator: jobs hidden, Hire closed to its members.
+  suspendedAt             DateTime?
+  suspensionReason        String?
+  /// Jobs that were live when the organization was suspended, published again on reactivation.
+  suspendedJobIds         String[]              @default([])
   createdAt               DateTime              @default(now())
   updatedAt               DateTime              @updatedAt
+}
+
+/// A supporting document (PDF or image) sent with a verification request. The bytes live in the
+/// file storage (`src/server/storage`), under `storageKey`.
+model OrganizationDocument {
+  id             String       @id @default(cuid(2))
+  organizationId String
+  organization   Organization @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  storageKey     String       @unique
+  name           String
+  contentType    String
+  size           Int
+  uploadedById   String?
+  createdAt      DateTime     @default(now())
+
+  @@index([organizationId])
+}
+
+/// Files kept in the database by the default storage driver (no S3 configured).
+model StoredFile {
+  key         String   @id
+  contentType String
+  size        Int
+  data        Bytes
+  createdAt   DateTime @default(now())
 }
 
 // ─── Référentiel de compétences ─────────────────────────────────

@@ -294,3 +294,36 @@ export function orgVerificationEmail(
     },
   };
 }
+
+/** Admin v2, étape 4: complement asked, suspension and reactivation of an organization. */
+export function orgNoticeEmail(
+  firstName: string | null | undefined,
+  input: { org: string; kind: "infoRequested" | "suspended" | "reactivated"; reason: string },
+): HireEmail {
+  const key = (
+    {
+      infoRequested: "mail.orgVerificationInfo",
+      suspended: "mail.orgSuspended",
+      reactivated: "mail.orgReactivated",
+    } as const
+  )[input.kind];
+  const values = { org: input.org, reason: input.reason };
+  return {
+    subject: t(`${key}.subject`, values),
+    props: {
+      preview: t(`${key}.preheader`, values),
+      greeting: greeting(firstName),
+      paragraphs: [t(`${key}.p1`, values), t(`${key}.p2`, values)],
+      cta: {
+        label: t(`${key}.cta`),
+        href: url(
+          input.kind === "infoRequested"
+            ? "/app/organisation?onglet=verification"
+            : input.kind === "reactivated"
+              ? "/app/hire"
+              : "/app",
+        ),
+      },
+    },
+  };
+}

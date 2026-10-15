@@ -33,6 +33,7 @@ export async function requirePartner(suite = "/app/partenaire") {
   const membership =
     memberships.find((item) => item.organizationId === wanted) ?? memberships[0] ?? null;
   if (!membership) redirect("/app/acces-refuse");
+  if (membership.organization.suspendedAt) redirect("/app/acces-refuse?raison=organisation");
   const ctx: PartnerContext = { userId: user.id, organizationId: membership.organizationId };
   return { user, ctx, organization: membership.organization };
 }

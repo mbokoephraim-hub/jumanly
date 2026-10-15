@@ -16,7 +16,11 @@ export async function hireMemberships(db: PrismaClient, userId: string) {
   return db.membership.findMany({
     where: { userId, status: "active", organization: { type: { in: ["recruiter", "company"] } } },
     orderBy: { createdAt: "asc" },
-    include: { organization: { select: { id: true, name: true, type: true, verifiedAt: true } } },
+    include: {
+      organization: {
+        select: { id: true, name: true, type: true, verifiedAt: true, suspendedAt: true },
+      },
+    },
   });
 }
 
@@ -30,7 +34,11 @@ export async function partnerMemberships(db: PrismaClient, userId: string) {
       organization: { type: "partner" },
     },
     orderBy: { createdAt: "asc" },
-    include: { organization: { select: { id: true, name: true, type: true, verifiedAt: true } } },
+    include: {
+      organization: {
+        select: { id: true, name: true, type: true, verifiedAt: true, suspendedAt: true },
+      },
+    },
   });
 }
 

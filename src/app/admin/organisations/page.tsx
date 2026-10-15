@@ -17,9 +17,14 @@ import {
 } from "@/components/admin/kit";
 import { OrgCard, orgStatusTone } from "@/components/admin/organisations-fiche";
 import { planTone } from "@/components/admin/utilisateurs-fiche";
-import { Alert, Button, ButtonLink } from "@/components/ui";
+import { Alert, Button, ButtonLink, TextArea } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { decideVerificationAction } from "@/server/actions/admin";
+import {
+  reactivateOrganizationAction,
+  suspendOrganizationAction,
+} from "@/server/actions/admin-orgs";
+import { organizationDetail } from "@/server/services/admin-orgs";
 import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { GRACE_DAYS, resolvePlan } from "@/server/entitlements";
@@ -29,6 +34,7 @@ const PAGE = "/admin/organisations";
 const tabs = {
   toutes: null,
   "en-attente": "pending",
+  complement: "info_requested",
   verifiees: "verified",
   refusees: "rejected",
   "non-verifiees": "none",
@@ -151,14 +157,31 @@ export default async function AdminOrganizations({
       })
     : null;
   const ficheHref = fiche ? href({ fiche: fiche.id }) : href({});
-  const verifiable = writable && fiche !== null && fiche.type !== "partner";
+  const canAct = writable && fiche !== null;
+  const verifiable = canAct && fiche.type !== "partner";
   const revoking = verifiable && action === "retirer" && fiche.verificationStatus === "verified";
+  const suspending = canAct && action === "suspendre" && !fiche.suspendedAt;
+  const reactivating = canAct && action === "reactiver" && !!fiche.suspendedAt;
+  const actionHref = (name: string) => `${ficheHref}&action=${name}#organisations-panneau`;
+  const [detail, fichePlan] = fiche
+    ? await Promise.all([
+        organizationDetail(db, fiche.id, now),
+        resolvePlan(db, { type: "organization", id: fiche.id }, now),
+      ])
+    : [null, null];
+  const doneKey = (["infoRequested", "suspended", "reactivated"] as const).find(
+    (value) => value === params.ok,
+  );
+  const errorKey = (["status", "reason", "notFound"] as const).find(
+    (value) => value === params.erreur,
+  );
   const okOrg = one(params.org);
 
   const tabLabel = (id: TabParam) =>
     ({
       toutes: t("orgs.tab.all"),
       "en-attente": t("orgs.tab.pending", { count: pending }),
+      complement: t("orgs.tab.info"),
       verifiees: t("orgs.tab.verified"),
       refusees: t("orgs.tab.rejected"),
       "non-verifiees": t("orgs.tab.none"),
@@ -181,6 +204,18 @@ export default async function AdminOrganizations({
         />
       )}
       {params.erreur === "motif" && <Alert tone="error" title={t("orgs.verify.reasonRequired")} />}
+      {doneKey && (
+        <AdminDone
+          title={t(`orgs.done.${doneKey}`)}
+          journal={fiche ? { type: "organization", id: fiche.id } : undefined}
+        />
+      )}
+      {errorKey && (
+        <Alert
+          tone="error"
+          title={t(errorKey === "reason" ? "orgs.error.reason" : "orgs.error.status")}
+        />
+      )}
 
       <div className="max-lg:hidden">
         <AdminFilterBar
@@ -323,11 +358,16 @@ export default async function AdminOrganizations({
                           <td className="px-1.5 py-3.5">{organization._count.memberships}</td>
                           <td className="px-1.5 py-3.5">{organization._count.jobs}</td>
                           <td className="py-3.5 pr-[18px] pl-1.5">
-                            {organization.type !== "partner" && (
-                              <Tag tone={orgStatusTone[organization.verificationStatus]}>
-                                {t(`orgs.status.${organization.verificationStatus}`)}
-                              </Tag>
-                            )}
+                            <span className="flex flex-wrap gap-1">
+                              {organization.type !== "partner" && (
+                                <Tag tone={orgStatusTone[organization.verificationStatus]}>
+                                  {t(`orgs.status.${organization.verificationStatus}`)}
+                                </Tag>
+                              )}
+                              {organization.suspendedAt && (
+                                <Tag tone="error">{t("orgs.suspendedTag")}</Tag>
+                              )}
+                            </span>
                           </td>
                         </tr>
                       );
@@ -361,10 +401,14 @@ export default async function AdminOrganizations({
                             .join(" · ")}
                         </span>
                       </span>
-                      {organization.type !== "partner" && (
-                        <Tag tone={orgStatusTone[organization.verificationStatus]}>
-                          {t(`orgs.status.${organization.verificationStatus}`)}
-                        </Tag>
+                      {organization.suspendedAt ? (
+                        <Tag tone="error">{t("orgs.suspendedTag")}</Tag>
+                      ) : (
+                        organization.type !== "partner" && (
+                          <Tag tone={orgStatusTone[organization.verificationStatus]}>
+                            {t(`orgs.status.${organization.verificationStatus}`)}
+                          </Tag>
+                        )
                       )}
                     </Link>
                   </li>
@@ -373,8 +417,71 @@ export default async function AdminOrganizations({
             </>
           )}
 
+          {suspending && (
+            <div
+              id="organisations-panneau"
+              className="flex scroll-mt-6 flex-col gap-2 max-lg:order-2"
+            >
+              <SectionRule>{t("sensitive.label")}</SectionRule>
+              <SensitivePanel
+                title={t("orgs.suspend.text")}
+                text={t("orgs.suspend.confirm", { org: fiche.name })}
+                closeHref={ficheHref}
+              >
+                <form action={suspendOrganizationAction} className="flex flex-col gap-3.5">
+                  <input type="hidden" name="organizationId" value={fiche.id} />
+                  <input type="hidden" name="back" value={`${ficheHref}&action=suspendre`} />
+                  <ReasonField id="organisations-suspend-reason" label={t("orgs.suspend.reason")} />
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <ButtonLink href={ficheHref} scroll={false} variant="tertiary">
+                      {tc("cancel")}
+                    </ButtonLink>
+                    <Button type="submit" variant="danger">
+                      {t("orgs.suspend.text")}
+                    </Button>
+                  </div>
+                </form>
+              </SensitivePanel>
+            </div>
+          )}
+          {reactivating && (
+            <div
+              id="organisations-panneau"
+              className="flex scroll-mt-6 flex-col gap-2 max-lg:order-2"
+            >
+              <SectionRule>{t("sensitive.label")}</SectionRule>
+              <SensitivePanel
+                title={t("orgs.reactivate.text")}
+                text={t("orgs.reactivate.confirm", { org: fiche.name })}
+                closeHref={ficheHref}
+                icon="valider"
+                tone="neutral"
+              >
+                <form action={reactivateOrganizationAction} className="flex flex-col gap-3.5">
+                  <input type="hidden" name="organizationId" value={fiche.id} />
+                  <input type="hidden" name="back" value={`${ficheHref}&action=reactiver`} />
+                  <TextArea
+                    id="organisations-reactivate-note"
+                    name="reason"
+                    rows={2}
+                    maxLength={1000}
+                    label={t("orgs.reactivate.note")}
+                  />
+                  <div className="flex flex-wrap justify-end gap-2">
+                    <ButtonLink href={ficheHref} scroll={false} variant="tertiary">
+                      {tc("cancel")}
+                    </ButtonLink>
+                    <Button type="submit">{t("orgs.reactivate.text")}</Button>
+                  </div>
+                </form>
+              </SensitivePanel>
+            </div>
+          )}
           {revoking && (
-            <div className="flex flex-col gap-2 max-lg:order-2">
+            <div
+              id="organisations-panneau"
+              className="flex scroll-mt-6 flex-col gap-2 max-lg:order-2"
+            >
               <SectionRule>{t("sensitive.label")}</SectionRule>
               <SensitivePanel
                 title={t("orgs.revoke.text")}
@@ -406,9 +513,12 @@ export default async function AdminOrganizations({
           <div className="flex flex-col gap-4 max-lg:order-1 lg:w-[400px] lg:shrink-0">
             <OrgCard
               organization={fiche}
+              detail={detail!}
+              plan={fichePlan}
               closeHref={href({ fiche: undefined })}
-              revokeHref={`${ficheHref}&action=retirer`}
-              canAct={verifiable}
+              actionHref={actionHref}
+              back={ficheHref}
+              canAct={canAct}
             />
             <AuditHistory targetType="organization" targetId={fiche.id} />
           </div>
