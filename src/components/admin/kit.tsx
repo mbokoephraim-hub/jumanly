@@ -2,6 +2,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
+import { Alert } from "@/components/ui";
 import { chipClasses, chipOnClasses } from "@/components/ui/filter-chip";
 import { cx } from "@/lib/cx";
 import { getCurrentUser } from "@/server/auth/session";
@@ -49,12 +50,12 @@ export async function AdminPageHeader({
           {t("header.logged")}
         </span>
         <form
-          action="/admin/utilisateurs"
+          action="/admin/recherche"
           role="search"
           className="relative hidden w-[260px] shrink-0 lg:block"
         >
           <label htmlFor="admin-header-search" className="sr-only">
-            {t("header.searchLabel")}
+            {t(role === "content_editor" ? "search.labelEditor" : "search.label")}
           </label>
           <Icon
             name="recherche"
@@ -151,6 +152,7 @@ export function AdminFilterBar({
   action,
   searchLabel,
   q,
+  name = "q",
   hidden,
   children,
   aside,
@@ -158,6 +160,8 @@ export function AdminFilterBar({
   action: string;
   searchLabel: string;
   q?: string;
+  /** Name of the search field (« q » by default). */
+  name?: string;
   /** Query parameters kept when searching (current tab, filters). */
   hidden?: Record<string, string | undefined>;
   children?: ReactNode;
@@ -179,7 +183,7 @@ export function AdminFilterBar({
         />
         <input
           id={`${action}-q`}
-          name="q"
+          name={name}
           type="search"
           defaultValue={q}
           placeholder={searchLabel}
@@ -445,4 +449,195 @@ export function IconTile({
       <Icon name={icon} className="size-[17px]" />
     </span>
   );
+}
+
+/**
+ * Confirmation after an action (Admin v2): says what changed and, for the roles that read the
+ * journal, links to the entry it wrote.
+ */
+export async function AdminDone({
+  title,
+  children,
+  journal,
+}: {
+  title: string;
+  children?: ReactNode;
+  /** The target of the action (« Voir dans le journal »), or the journal address to open. */
+  journal?: { type: string; id: string } | string;
+}) {
+  const [t, user] = await Promise.all([getTranslations("admin"), getCurrentUser()]);
+  const reads = user?.platformRole === "platform_admin" || user?.platformRole === "support_agent";
+  return (
+    <Alert
+      tone="success"
+      title={title}
+      action={
+        journal && reads ? (
+          <Link
+            href={
+              typeof journal === "string"
+                ? journal
+                : `/admin/journal?cible=${journal.type}&id=${encodeURIComponent(journal.id)}`
+            }
+            className="inline-flex items-center gap-1 text-[13px] font-semibold underline underline-offset-2"
+          >
+            <Icon name="doc" className="size-3.5" />
+            {t("kit.seeJournal")}
+          </Link>
+        ) : undefined
+      }
+    >
+      {children}
+    </Alert>
+  );
+}
+
+export type AdminStat = {
+  label: string;
+  value: ReactNode;
+  icon?: IconName;
+  /** A figure that asks for action (pending items) is drawn in Ambre when not zero. */
+  tone?: "neutral" | "attention" | "success";
+  href?: string;
+};
+
+/**
+ * Summary figures at the top of a list page (Admin v2): 2 to 5 tiles, two per row on phones.
+ * A tile with a link filters the list.
+ */
+export async function AdminStats({ items }: { items: AdminStat[] }) {
+  const t = await getTranslations("admin.kit");
+  return (
+    <section aria-label={t("summary")}>
+      <ul className="grid grid-cols-2 gap-2.5 sm:grid-cols-[repeat(auto-fit,minmax(170px,1fr))] lg:gap-3.5">
+        {items.map((item) => {
+          const body = (
+            <>
+              <span className="flex items-center justify-between gap-2 text-[12px] leading-4 text-ardoise">
+                {item.label}
+                {item.icon && (
+                  <span
+                    aria-hidden
+                    className={cx(
+                      "grid size-7 shrink-0 place-items-center rounded-full",
+                      item.tone === "attention"
+                        ? "bg-ambre-fond text-ambre-texte"
+                        : item.tone === "success"
+                          ? "bg-lime-clair text-up-texte"
+                          : "bg-creme text-sapin",
+                    )}
+                  >
+                    <Icon name={item.icon} className="size-3.5" />
+                  </span>
+                )}
+              </span>
+              <span className="text-[22px] leading-7 font-semibold tracking-[-0.02em] lg:text-[26px] lg:leading-8">
+                {item.value}
+              </span>
+            </>
+          );
+          const box = cx(
+            "flex h-full flex-col gap-1.5 rounded-[20px] bg-blanc px-4 py-3.5 lg:px-[18px]",
+            item.tone === "attention" && "ring-[1.5px] ring-ambre-fond ring-inset",
+          );
+          return (
+            <li key={item.label}>
+              {item.href ? (
+                <Link
+                  href={item.href}
+                  className={cx(
+                    box,
+                    "hover:shadow-[0_8px_22px_rgba(11,26,31,0.07)] focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus-visible:outline-none",
+                  )}
+                >
+                  {body}
+                </Link>
+              ) : (
+                <div className={box}>{body}</div>
+              )}
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+}
+
+/** Previous / next pages of a long list, with « 51 à 100 sur 240 ». Links: works without JS. */
+export async function AdminPager({
+  page,
+  total,
+  pageSize,
+  href,
+}: {
+  page: number;
+  total: number;
+  pageSize: number;
+  href: (page: number) => string;
+}) {
+  const pages = Math.max(1, Math.ceil(total / pageSize));
+  if (pages <= 1) return null;
+  const t = await getTranslations("admin.kit.pager");
+  const from = (page - 1) * pageSize + 1;
+  const to = Math.min(total, page * pageSize);
+  const link =
+    "inline-flex h-9 items-center gap-1.5 rounded-pill bg-blanc px-3.5 text-[12.5px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin";
+  return (
+    <nav aria-label={t("label")} className="flex flex-wrap items-center justify-between gap-3">
+      <p className="text-[12.5px] text-ardoise">
+        {t("range", { from, to, total })}
+        <span className="sr-only">
+          {" · "}
+          {t("status", { page, pages })}
+        </span>
+      </p>
+      <div className="flex gap-2">
+        {page > 1 && (
+          <Link href={href(page - 1)} className={link} rel="prev">
+            <Icon name="chev-l" className="size-3.5" />
+            {t("previous")}
+          </Link>
+        )}
+        {page < pages && (
+          <Link href={href(page + 1)} className={link} rel="next">
+            {t("next")}
+            <Icon name="chev-r" className="size-3.5" />
+          </Link>
+        )}
+      </div>
+    </nav>
+  );
+}
+
+/** Empty list or search (Admin v2): an illustrated tile, what happened, and the useful action. */
+export function AdminEmpty({
+  title,
+  text,
+  icon = "recherche",
+  action,
+}: {
+  title: string;
+  text?: ReactNode;
+  icon?: IconName;
+  action?: ReactNode;
+}) {
+  return (
+    <div className="flex flex-col items-center gap-2.5 rounded-[24px] bg-blanc px-6 py-10 text-center">
+      <span
+        aria-hidden
+        className="grid size-14 place-items-center rounded-[18px] bg-neon/60 text-sapin"
+      >
+        <Icon name={icon} className="size-6" />
+      </span>
+      <p className="text-[16px] leading-[22px] font-semibold">{title}</p>
+      {text && <p className="max-w-[46ch] text-[13px] leading-5 text-ardoise">{text}</p>}
+      {action && <div className="mt-1.5">{action}</div>}
+    </div>
+  );
+}
+
+/** Reads `?page=` (1 when missing or invalid). */
+export function pageParam(value: string | string[] | undefined) {
+  const number = Number(typeof value === "string" ? value : "1");
+  return Number.isInteger(number) && number > 0 ? Math.min(number, 10_000) : 1;
 }

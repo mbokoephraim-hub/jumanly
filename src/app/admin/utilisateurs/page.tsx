@@ -2,9 +2,14 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
+import { AuditHistory } from "@/components/admin/audit";
 import {
+  AdminDone,
+  AdminEmpty,
   AdminFilterBar,
   AdminPageHeader,
+  AdminPager,
+  AdminStats,
   AuditNotice,
   FilterMenu,
   Initials,
@@ -12,6 +17,7 @@ import {
   SectionRule,
   SensitivePanel,
   Tag,
+  pageParam,
 } from "@/components/admin/kit";
 import {
   ago,
@@ -59,11 +65,13 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
   const country = one(params.pays).slice(0, 2).toUpperCase();
   const ficheId = one(params.fiche).slice(0, 60);
   const action = one(params.action);
+  const page = pageParam(params.page);
 
   const filters = { q, forfait: planCode, role, statut: state, pays: country };
   const href = (changes: Record<string, string | undefined>) => {
     const query = new URLSearchParams();
-    for (const [key, value] of Object.entries({ ...filters, ...changes }))
+    const kept = { ...filters, page: page > 1 ? String(page) : undefined };
+    for (const [key, value] of Object.entries({ ...kept, ...changes }))
       if (value) query.set(key, value);
     const text = query.toString();
     return text ? `${PAGE}?${text}` : PAGE;
@@ -113,11 +121,12 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
   }
   const where: Prisma.UserWhereInput = and.length ? { AND: and } : {};
 
-  const [count, users, countries] = await Promise.all([
+  const [count, users, countries, totals] = await Promise.all([
     db.user.count({ where }),
     db.user.findMany({
       where,
       orderBy: { createdAt: "desc" },
+      skip: (page - 1) * PAGE_SIZE,
       take: PAGE_SIZE,
       include: {
         talentProfile: { select: { id: true } },
@@ -129,7 +138,18 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
       where: { country: { not: null } },
       orderBy: { country: "asc" },
     }),
+    Promise.all([
+      db.user.count(),
+      db.user.count({
+        where: { status: "active", emailVerified: true, deletionScheduledAt: null },
+      }),
+      db.user.count({
+        where: { status: "active", emailVerified: false, deletionScheduledAt: null },
+      }),
+      db.user.count({ where: { status: "suspended" } }),
+    ]),
   ]);
+  const [totalUsers, activeUsers, unverifiedUsers, suspendedUsers] = totals;
   const [userPlans, lastSessions] = await Promise.all([
     Promise.all(users.map((user) => resolvePlan(db, { type: "user", id: user.id }))),
     db.session.groupBy({
@@ -146,12 +166,109 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
   const canAct = writable && fiche !== null && fiche.id !== admin.id;
   const suspending = canAct && action === "suspendre" && fiche.status !== "suspended";
 
-  const roleList = (user: (typeof users)[number]) =>
-    [
-      ...(user.talentProfile ? ["talent"] : []),
-      ...new Set(user.memberships.map((membership) => membership.role)),
-      ...(user.platformRole === "user" ? [] : [user.platformRole]),
-    ].join(", ");
+  // Roles in words (« Talent », « Recruteur », « Administrateur »), the platform role first.
+  const roleList = (user: (typeof users)[number]) => [
+    ...(user.platformRole === "user" ? [] : [t(`platformRole.${user.platformRole}`)]),
+    ...(user.talentProfile ? [t("memberRole.talent")] : []),
+    ...[...new Set(user.memberships.map((membership) => membership.role))].map((value) =>
+      t(`memberRole.${value}`),
+    ),
+  ];
+
+  const ficheBlock = fiche ? (
+    <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
+      <div className="flex min-w-0 flex-1 flex-col gap-4">
+        {suspending && (
+          <div className="flex flex-col gap-2">
+            <SectionRule>{t("sensitive.label")}</SectionRule>
+            <SensitivePanel
+              title={t("users.action.suspend.text")}
+              text={t("users.action.suspend.confirm", { userName: fiche.name })}
+              closeHref={ficheHref}
+            >
+              <form action={setUserStatus} className="flex flex-col gap-3.5">
+                <input type="hidden" name="userId" value={fiche.id} />
+                <input type="hidden" name="back" value={ficheHref} />
+                <input type="hidden" name="status" value="suspended" />
+                <ReasonField
+                  id="utilisateurs-suspend-reason"
+                  label={t("users.action.suspend.reason")}
+                />
+                <div className="flex flex-wrap justify-end gap-2">
+                  <ButtonLink href={ficheHref} scroll={false} variant="tertiary">
+                    {tc("cancel")}
+                  </ButtonLink>
+                  <Button type="submit" variant="danger">
+                    {t("users.action.suspend.text")}
+                  </Button>
+                </div>
+              </form>
+            </SensitivePanel>
+          </div>
+        )}
+        {canAct && (
+          <div className="flex flex-col gap-2">
+            <SectionRule>{t("users.col.roles")}</SectionRule>
+            <section
+              id="utilisateurs-roles"
+              aria-labelledby="utilisateurs-roles-title"
+              className="flex scroll-mt-6 flex-col gap-3 rounded-[24px] bg-blanc px-5 py-5 lg:px-[22px]"
+            >
+              <h2
+                id="utilisateurs-roles-title"
+                className="text-[16px] leading-[22px] font-semibold tracking-[-0.01em]"
+              >
+                {t("users.action.roles.text")}
+              </h2>
+              <p className="flex items-start gap-2.5 rounded-[12px] bg-ambre-fond px-3 py-2.5 text-[11px] leading-[15px] text-ambre-texte">
+                <Icon name="securite" className="mt-px size-3.5 shrink-0" />
+                {t("users.action.roles.warning")}
+              </p>
+              <form action={setUserRole} className="flex flex-col gap-3">
+                <input type="hidden" name="userId" value={fiche.id} />
+                <input type="hidden" name="back" value={ficheHref} />
+                <fieldset className="flex flex-col gap-2.5">
+                  <legend className="sr-only">{t("users.action.roles.text")}</legend>
+                  {[...roles].reverse().map((value) => (
+                    <label
+                      key={value}
+                      className="flex cursor-pointer items-start gap-2.5 text-[13px] leading-5"
+                    >
+                      <input
+                        type="radio"
+                        name="role"
+                        value={value}
+                        defaultChecked={fiche.platformRole === value}
+                        className="mt-px size-5 shrink-0 accent-sapin"
+                      />
+                      <span>{value === "user" ? t("users.role.user") : t(`role.${value}`)}</span>
+                    </label>
+                  ))}
+                </fieldset>
+                <div className="flex justify-end">
+                  <Button type="submit" variant="secondary" size="sm">
+                    {t("users.action.roles.save")}
+                  </Button>
+                </div>
+              </form>
+            </section>
+          </div>
+        )}
+        <AuditNotice />
+      </div>
+      <div className="flex flex-col gap-4 max-lg:order-first lg:w-[400px] lg:shrink-0">
+        <UserCard
+          user={fiche}
+          now={now}
+          closeHref={href({})}
+          suspendHref={`${ficheHref}&action=suspendre`}
+          back={ficheHref}
+          canAct={canAct}
+        />
+        <AuditHistory targetType="user" targetId={fiche.id} />
+      </div>
+    </div>
+  ) : null;
 
   return (
     <>
@@ -164,7 +281,42 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
           </>
         }
       />
-      {params.ok && <Alert tone="success" title={t("users.updated")} />}
+      <AdminStats
+        items={[
+          {
+            label: t("users.stats.total"),
+            value: totalUsers,
+            icon: "profil",
+            href: PAGE,
+          },
+          {
+            label: t("users.status.active"),
+            value: activeUsers,
+            icon: "valider",
+            tone: "success",
+            href: `${PAGE}?statut=active`,
+          },
+          {
+            label: t("users.status.unverified"),
+            value: unverifiedUsers,
+            icon: "alerte",
+            tone: unverifiedUsers > 0 ? "attention" : "neutral",
+            href: `${PAGE}?statut=unverified`,
+          },
+          {
+            label: t("users.status.suspended"),
+            value: suspendedUsers,
+            icon: "lock",
+            href: `${PAGE}?statut=suspended`,
+          },
+        ]}
+      />
+      {params.ok && (
+        <AdminDone
+          title={t("users.updated")}
+          journal={fiche ? { type: "user", id: fiche.id } : undefined}
+        />
+      )}
       {params.erreur === "soi" && <Alert tone="error" title={t("users.selfProtected")} />}
       {params.erreur === "motif" && <Alert tone="error" title={t("reason.required")} />}
 
@@ -239,10 +391,17 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
         />
       </AdminFilterBar>
 
+      {fiche && ficheBlock}
+
       {users.length === 0 ? (
-        <p className="rounded-[24px] bg-blanc px-5 py-8 text-center text-[13.5px] text-ardoise">
-          {t("users.empty")}
-        </p>
+        <AdminEmpty
+          title={t("users.empty")}
+          action={
+            <ButtonLink href={PAGE} variant="secondary" size="sm">
+              {t("journal.filter.clear")}
+            </ButtonLink>
+          }
+        />
       ) : (
         <>
           {/* Desktop: dense table. */}
@@ -292,8 +451,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
                     >
                       <td className="py-3.5 pr-1.5 pl-[18px]">
                         <Link
-                          href={href({ fiche: user.id })}
-                          scroll={false}
+                          href={`${href({ fiche: user.id })}#utilisateurs-fiche`}
                           aria-current={current ? "true" : undefined}
                           className={cx(
                             "flex items-center gap-2.5 font-semibold hover:underline",
@@ -312,8 +470,17 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
                       <td className="px-1.5 py-3.5">
                         {plan && <Tag tone={planTone(plan)}>{plan.planName}</Tag>}
                       </td>
-                      <td className="px-1.5 py-3.5">
-                        <code className="text-[11px] leading-[15px]">{roleList(user)}</code>
+                      <td className="max-w-[220px] px-1.5 py-3.5">
+                        <span className="flex flex-wrap gap-1">
+                          {roleList(user).map((label) => (
+                            <span
+                              key={label}
+                              className="rounded-[8px] bg-creme px-2 py-0.5 text-[11px] leading-4 font-medium"
+                            >
+                              {label}
+                            </span>
+                          ))}
+                        </span>
                       </td>
                       <td className="px-1.5 py-3.5 whitespace-nowrap">
                         {formatShortDate(user.createdAt)}
@@ -367,104 +534,13 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
         </>
       )}
 
-      {fiche ? (
-        <div className="flex flex-col gap-4 lg:flex-row lg:items-start">
-          <div className="flex min-w-0 flex-1 flex-col gap-4">
-            {suspending && (
-              <div className="flex flex-col gap-2">
-                <SectionRule>{t("sensitive.label")}</SectionRule>
-                <SensitivePanel
-                  title={t("users.action.suspend.text")}
-                  text={t("users.action.suspend.confirm", { userName: fiche.name })}
-                  closeHref={ficheHref}
-                >
-                  <form action={setUserStatus} className="flex flex-col gap-3.5">
-                    <input type="hidden" name="userId" value={fiche.id} />
-                    <input type="hidden" name="back" value={ficheHref} />
-                    <input type="hidden" name="status" value="suspended" />
-                    <ReasonField
-                      id="utilisateurs-suspend-reason"
-                      label={t("users.action.suspend.reason")}
-                    />
-                    <div className="flex flex-wrap justify-end gap-2">
-                      <ButtonLink href={ficheHref} scroll={false} variant="tertiary">
-                        {tc("cancel")}
-                      </ButtonLink>
-                      <Button type="submit" variant="danger">
-                        {t("users.action.suspend.text")}
-                      </Button>
-                    </div>
-                  </form>
-                </SensitivePanel>
-              </div>
-            )}
-            {canAct && (
-              <div className="flex flex-col gap-2">
-                <SectionRule>{t("users.col.roles")}</SectionRule>
-                <section
-                  id="utilisateurs-roles"
-                  aria-labelledby="utilisateurs-roles-title"
-                  className="flex scroll-mt-6 flex-col gap-3 rounded-[24px] bg-blanc px-5 py-5 lg:px-[22px]"
-                >
-                  <h2
-                    id="utilisateurs-roles-title"
-                    className="text-[16px] leading-[22px] font-semibold tracking-[-0.01em]"
-                  >
-                    {t("users.action.roles.text")}
-                  </h2>
-                  <p className="flex items-start gap-2.5 rounded-[12px] bg-ambre-fond px-3 py-2.5 text-[11px] leading-[15px] text-ambre-texte">
-                    <Icon name="securite" className="mt-px size-3.5 shrink-0" />
-                    {t("users.action.roles.warning")}
-                  </p>
-                  <form action={setUserRole} className="flex flex-col gap-3">
-                    <input type="hidden" name="userId" value={fiche.id} />
-                    <input type="hidden" name="back" value={ficheHref} />
-                    <fieldset className="flex flex-col gap-2.5">
-                      <legend className="sr-only">{t("users.action.roles.text")}</legend>
-                      {[...roles].reverse().map((value) => (
-                        <label
-                          key={value}
-                          className="flex cursor-pointer items-start gap-2.5 text-[13px] leading-5"
-                        >
-                          <input
-                            type="radio"
-                            name="role"
-                            value={value}
-                            defaultChecked={fiche.platformRole === value}
-                            className="mt-px size-5 shrink-0 accent-sapin"
-                          />
-                          <span>
-                            {value !== "user" && <code>{value}</code>}
-                            {value !== "user" && " · "}
-                            {value === "user" ? t("users.role.user") : t(`role.${value}`)}
-                          </span>
-                        </label>
-                      ))}
-                    </fieldset>
-                    <div className="flex justify-end">
-                      <Button type="submit" variant="secondary" size="sm">
-                        {t("users.action.roles.save")}
-                      </Button>
-                    </div>
-                  </form>
-                </section>
-              </div>
-            )}
-            <AuditNotice />
-          </div>
-          <UserCard
-            user={fiche}
-            now={now}
-            closeHref={href({})}
-            suspendHref={`${ficheHref}&action=suspendre`}
-            back={ficheHref}
-            canAct={canAct}
-            className="max-lg:order-first"
-          />
-        </div>
-      ) : (
-        <AuditNotice />
-      )}
+      <AdminPager
+        page={page}
+        total={count}
+        pageSize={PAGE_SIZE}
+        href={(number) => href({ page: number > 1 ? String(number) : undefined, fiche: undefined })}
+      />
+      {!fiche && <AuditNotice />}
     </>
   );
 }

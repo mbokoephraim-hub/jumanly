@@ -37,6 +37,7 @@ const links = [
   { key: "ai", href: "/admin/ia", icon: "intelligence" },
   { key: "content", href: "/admin/contenus", icon: "edit" },
   { key: "reports", href: "/admin/signalements", icon: "securite" },
+  { key: "audit", href: "/admin/journal", icon: "doc" },
 ] as const satisfies readonly { key: string; href: string; icon: IconName }[];
 
 // Mockup 07-01 (mobile): the floating pill shows the three most used sections and « more ».
@@ -49,8 +50,13 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
   const admin = await requireAdminShell();
   if (!admin) notFound();
   const editorOnly = admin.platformRole === "content_editor";
-  const visible = links.filter(
-    (link) => !editorOnly || link.key === "courses" || link.key === "content",
+  // Content editors only see courses and contents; support agents (read only) see everything
+  // except these two editing tools, which they cannot open.
+  const contentKeys: readonly string[] = ["courses", "content"];
+  const visible = links.filter((link) =>
+    editorOnly
+      ? contentKeys.includes(link.key)
+      : admin.platformRole !== "support_agent" || !contentKeys.includes(link.key),
   );
   const pill = (editorOnly ? pillKeys.editor : pillKeys.admin) as readonly string[];
   const t = await getTranslations("admin");
@@ -103,9 +109,9 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
         <Link href={home} className="shrink-0 rounded-sm">
           <Logo variant="tile" height={42} />
         </Link>
-        <form action="/admin/utilisateurs" role="search" className="relative min-w-0 flex-1">
+        <form action="/admin/recherche" role="search" className="relative min-w-0 flex-1">
           <label htmlFor="admin-mobile-search" className="sr-only">
-            {t("header.searchLabel")}
+            {t(editorOnly ? "search.labelEditor" : "search.label")}
           </label>
           <Icon
             name="recherche"

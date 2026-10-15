@@ -222,7 +222,9 @@ export async function moderateJob(formData: FormData) {
           : `/app/hire/offres/${job.id}/modifier`,
     });
   }
-  redirect(`/admin/offres?ok=${decision === "approve" ? "approuvee" : "refusee"}`);
+  redirect(
+    `/admin/offres?ok=${decision === "approve" ? "approuvee" : "refusee"}&id=${encodeURIComponent(jobId)}`,
+  );
 }
 
 export async function resolveReportAction(formData: FormData) {
@@ -273,7 +275,9 @@ export async function refundPaymentAction(formData: FormData) {
   if (!input.success) redirect("/admin/abonnements?erreur=remboursement");
   await recordRefund(db, admin.id, input.data);
   refresh();
-  redirect("/admin/abonnements?ok=remboursement");
+  redirect(
+    `/admin/abonnements?ok=remboursement&paiement=${encodeURIComponent(input.data.payment)}`,
+  );
 }
 
 /** Verification of an organization (E8): approved or refused with a reason, owners told by e-mail. */

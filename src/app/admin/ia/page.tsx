@@ -4,6 +4,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { AiOrb } from "@/components/brand/ai-orb";
 import { Icon } from "@/components/brand/icon";
 import {
+  AdminDone,
   AdminPageHeader,
   AdminTabs,
   AuditNotice,
@@ -362,7 +363,9 @@ async function WeightsTab({
   const [weights, history] = await Promise.all([activeWeights(db), weightsHistory(db)]);
   return (
     <form id="poids" action={saveWeightsAction} className="flex flex-col gap-4">
-      {ok && <Alert tone="success" title={t("admin.ai.weights.saved")} />}
+      {ok && (
+        <AdminDone title={t("admin.ai.weights.saved")} journal="/admin/journal?action=matching" />
+      )}
       {error && <Alert tone="error" title={t("admin.ai.weights.error")} />}
       <section aria-labelledby="ia-weights" className={cx(adminCard, "flex flex-col gap-3")}>
         <WeightsEditor

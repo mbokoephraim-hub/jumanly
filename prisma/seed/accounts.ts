@@ -75,6 +75,12 @@ const accounts: AccountSeed[] = [
   },
   { email: "talent.licence@jumanly.test", firstName: "Lionel", lastName: "Fictif" },
   {
+    email: "support@jumanly.test",
+    firstName: "Sylvie",
+    lastName: "Fictive",
+    platformRole: "support_agent",
+  },
+  {
     email: "admin@jumanly.test",
     firstName: "Esther",
     lastName: "Fictive",

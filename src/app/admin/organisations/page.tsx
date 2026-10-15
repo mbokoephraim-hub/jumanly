@@ -1,7 +1,9 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { AuditHistory } from "@/components/admin/audit";
 import {
+  AdminDone,
   AdminFilterBar,
   AdminPageHeader,
   AdminTabs,
@@ -167,9 +169,17 @@ export default async function AdminOrganizations({
     <>
       <AdminPageHeader title={t("orgs.title")} />
       {params.ok === "verifiee" && (
-        <Alert tone="success" title={t("orgs.verify.approved", { org: okOrg })} />
+        <AdminDone
+          title={t("orgs.verify.approved", { org: okOrg })}
+          journal={fiche ? { type: "organization", id: fiche.id } : undefined}
+        />
       )}
-      {params.ok === "refusee" && <Alert tone="success" title={t("orgs.verify.rejected")} />}
+      {params.ok === "refusee" && (
+        <AdminDone
+          title={t("orgs.verify.rejected")}
+          journal={fiche ? { type: "organization", id: fiche.id } : undefined}
+        />
+      )}
       {params.erreur === "motif" && <Alert tone="error" title={t("orgs.verify.reasonRequired")} />}
 
       <div className="max-lg:hidden">
@@ -393,13 +403,15 @@ export default async function AdminOrganizations({
           <AuditNotice className="max-lg:order-2" />
         </div>
         {fiche && (
-          <OrgCard
-            organization={fiche}
-            closeHref={href({ fiche: undefined })}
-            revokeHref={`${ficheHref}&action=retirer`}
-            canAct={verifiable}
-            className="max-lg:order-1"
-          />
+          <div className="flex flex-col gap-4 max-lg:order-1 lg:w-[400px] lg:shrink-0">
+            <OrgCard
+              organization={fiche}
+              closeHref={href({ fiche: undefined })}
+              revokeHref={`${ficheHref}&action=retirer`}
+              canAct={verifiable}
+            />
+            <AuditHistory targetType="organization" targetId={fiche.id} />
+          </div>
         )}
       </div>
     </>

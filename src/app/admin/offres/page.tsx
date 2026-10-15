@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
 import { OffresChecklist } from "@/components/admin/offres-checklist";
 import {
+  AdminDone,
   AdminFilterBar,
   AdminPageHeader,
   AdminTabs,
@@ -16,7 +17,7 @@ import {
   Tag,
 } from "@/components/admin/kit";
 import { initialsOf } from "@/components/hire/kit";
-import { Alert, Button, ButtonLink } from "@/components/ui";
+import { Button, ButtonLink } from "@/components/ui";
 import type { ContractType } from "@/generated/prisma/client";
 import { cx } from "@/lib/cx";
 import { formatRelative } from "@/lib/dates";
@@ -212,11 +213,22 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
   const selectedFlags = selected ? flagsOf(selected) : [];
   const selectedReports = selected ? (reportCount.get(selected.id) ?? 0) : 0;
 
+  const doneId = one(params.id);
   return (
     <>
       <AdminPageHeader title={t("title")} />
-      {params.ok === "approuvee" && <Alert tone="success" title={t("approved")} />}
-      {params.ok === "refusee" && <Alert tone="success" title={t("rejected")} />}
+      {params.ok === "approuvee" && (
+        <AdminDone
+          title={t("approved")}
+          journal={doneId ? { type: "job", id: doneId } : undefined}
+        />
+      )}
+      {params.ok === "refusee" && (
+        <AdminDone
+          title={t("rejected")}
+          journal={doneId ? { type: "job", id: doneId } : undefined}
+        />
+      )}
 
       <AdminFilterBar
         action="/admin/offres"

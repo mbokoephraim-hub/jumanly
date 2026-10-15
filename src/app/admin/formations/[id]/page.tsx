@@ -1,6 +1,7 @@
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AdminPageHeader } from "@/components/admin/kit";
+import { AuditHistory } from "@/components/admin/audit";
+import { AdminDone, AdminPageHeader } from "@/components/admin/kit";
 import {
   CourseAttestationCard,
   RevokeCertificateSection,
@@ -60,7 +61,9 @@ export default async function AdminCourse({
         <CourseListCard courses={courses} filters={filters} currentId={course.id} />
         <div className="flex min-w-0 flex-col gap-4">
           {param("ok") === "creee" && <Alert tone="success" title={t("created")} />}
-          {param("ok") === "fiche" && <Alert tone="success" title={t("saved")} />}
+          {param("ok") === "fiche" && (
+            <AdminDone title={t("saved")} journal={{ type: "course", id: course.id }} />
+          )}
           {param("ok") === "statut" && (
             <Alert
               tone="success"
@@ -88,6 +91,7 @@ export default async function AdminCourse({
           </div>
           {lesson && <LessonEditor course={course} lessonId={lesson.id} query={param} />}
           <RevokeCertificateSection course={course} query={param} />
+          <AuditHistory targetType="course" targetId={course.id} />
         </div>
       </div>
     </>
