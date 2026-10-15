@@ -2,6 +2,20 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v2 · étape 9 : passe finale (15 octobre 2026)
+
+- **Parcours automatique** `tests/e2e/admin-pass.spec.ts` : 27 écrans de l'admin (onglets et fiches
+  compris) à 1440 px et 390 px. Chaque écran s'ouvre, a un seul titre, aucun défilement
+  horizontal, aucune clé de texte brute, aucune erreur d'accessibilité WCAG 2.2 AA (axe), et la
+  touche Tab atteint un élément visible.
+- **Corrigé** : `/admin/recherche` débordait de 96 px sur téléphone (une colonne de grille sans
+  largeur minimale autour des résultats tronqués).
+- `tests/e2e/admin.spec.ts` complet et `pnpm test:e2e:reduced` relancés.
+- `docs/decisions/2026-10-15-refonte-lot-13.md` à jour : ce que le lot 13 n'avait pas construit
+  l'est maintenant, étape par étape ; restent hors de l'admin les textes de l'interface.
+- **Guide du propriétaire** `docs/guide-admin.md` : vérifier un compte, offrir un forfait, ajouter
+  une formation, modérer, traiter un signalement, partenaires, IA, contenus, journal.
+
 ## Jumanly Admin v2 · étape 8 : partenaires, IA et contenus (15 octobre 2026)
 
 - **Partenaires** : « Modifier le partenaire » (nom, type) et motif obligatoire à la création d'un
