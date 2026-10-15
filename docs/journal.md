@@ -2,6 +2,14 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Envoi réel des e-mails (15 octobre 2026)
+
+- Le propriétaire ne recevait pas ses codes : `RESEND_API_KEY` n'était pas renseignée en
+  production, donc l'adaptateur factice écrivait les e-mails dans les journaux. Le code d'envoi
+  Resend existait déjà ; marche à suivre ajoutée dans `docs/deploiement-vercel.md`.
+- L'erreur Resend garde désormais la raison du refus, et un message d'erreur apparaît dans les
+  journaux Vercel si la clé manque en production.
+
 ## Connexion v2 et générique d'entrée (15 octobre 2026)
 
 - `/connexion` et `/inscription` refaits d'après `docs/refonte-connexion/` (remplace les maquettes
