@@ -722,6 +722,15 @@ export async function listPools(db: PrismaClient, ctx: HireContext) {
     include: {
       owner: { select: { name: true } },
       _count: { select: { entries: { where: entryVisible(ctx.organizationId) } } },
+      entries: {
+        where: entryVisible(ctx.organizationId),
+        orderBy: { createdAt: "desc" },
+        take: 3,
+        select: {
+          profileId: true,
+          profile: { select: { visibility: true, user: { select: { name: true } } } },
+        },
+      },
     },
   });
 }
@@ -781,7 +790,8 @@ export async function getPool(db: PrismaClient, ctx: HireContext, poolId: string
               user: { select: { name: true, city: true } },
               applications: {
                 where: { job: { organizationId: ctx.organizationId } },
-                select: { id: true },
+                orderBy: { createdAt: "desc" },
+                select: { id: true, job: { select: { title: true } } },
                 take: 1,
               },
               contactRequests: {
@@ -810,6 +820,11 @@ export async function getPool(db: PrismaClient, ctx: HireContext, poolId: string
         headline: entry.profile.headline ?? "",
         city: entry.profile.user.city,
         createdAt: entry.createdAt,
+        origin: entry.profile.applications[0]
+          ? ({ kind: "applied", jobTitle: entry.profile.applications[0].job.title } as const)
+          : entry.profile.contactRequests.length > 0
+            ? ({ kind: "contact" } as const)
+            : ({ kind: "search" } as const),
       };
     }),
   };

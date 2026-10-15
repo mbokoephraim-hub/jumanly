@@ -158,9 +158,9 @@ export async function createPoolAction(formData: FormData) {
   const { ctx } = await requireHire("/app/hire/viviers", "manage");
   const pool = await guarded(
     () => createPool(db, ctx, Object.fromEntries(formData)),
-    "/app/hire/viviers",
+    "/app/hire/viviers?nouveau=1",
   );
-  redirect(`/app/hire/viviers/${pool.id}?ok=cree`);
+  redirect(`/app/hire/viviers?vivier=${pool.id}&ok=cree`);
 }
 
 export async function addToPoolAction(formData: FormData) {
@@ -183,7 +183,7 @@ export async function addToPoolAction(formData: FormData) {
 export async function removeFromPoolAction(formData: FormData) {
   const { ctx } = await requireHire("/app/hire/viviers", "manage");
   const poolId = id(formData.get("pool"));
-  const page = `/app/hire/viviers/${poolId}`;
+  const page = `/app/hire/viviers?vivier=${poolId}`;
   await guarded(() => removeFromPool(db, ctx, poolId, id(formData.get("profile"))), page);
   redirect(withParam(page, "ok", "retire"));
 }
@@ -191,7 +191,7 @@ export async function removeFromPoolAction(formData: FormData) {
 export async function renamePoolAction(formData: FormData) {
   const { ctx } = await requireHire("/app/hire/viviers", "manage");
   const poolId = id(formData.get("pool"));
-  const page = `/app/hire/viviers/${poolId}`;
+  const page = `/app/hire/viviers?vivier=${poolId}`;
   await guarded(() => renamePool(db, ctx, poolId, text(formData.get("name"), 80)), page);
   redirect(withParam(page, "ok", "renomme"));
 }
@@ -199,7 +199,7 @@ export async function renamePoolAction(formData: FormData) {
 export async function deletePoolAction(formData: FormData) {
   const { ctx } = await requireHire("/app/hire/viviers", "manage");
   const poolId = id(formData.get("pool"));
-  await guarded(() => deletePool(db, ctx, poolId), `/app/hire/viviers/${poolId}`);
+  await guarded(() => deletePool(db, ctx, poolId), `/app/hire/viviers?vivier=${poolId}`);
   redirect("/app/hire/viviers?ok=supprime");
 }
 

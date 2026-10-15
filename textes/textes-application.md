@@ -5081,6 +5081,7 @@ Conventions :
 | `hire.pools.name.text` | Nom du vivier |
 | `hire.pools.name.placeholder` | Ex. : Analystes data · Kinshasa |
 | `hire.pools.description` | Description (facultatif) |
+| `hire.pools.descriptionShort` | Description |
 | `hire.pools.visibility.text` | Visibilité |
 | `hire.pools.visibility.private` | Moi uniquement |
 | `hire.pools.visibility.team` | Mon équipe |
@@ -5118,6 +5119,17 @@ Conventions :
 | `hire.pools.addedOn` | Ajouté le {date, date, medium} |
 | `hire.pools.error.forbidden` | Cette action n'est pas permise pour votre rôle. |
 | `hire.pools.error.notFound` | Ce vivier ou ce profil n'est plus disponible. |
+| `hire.pools.search` | Rechercher un vivier |
+| `hire.pools.searchEmpty` | Aucun vivier ne correspond à « {query} ». |
+| `hire.pools.updatedAgo` | Mis à jour {time} |
+| `hire.pools.addedAgo` | Ajouté {time} |
+| `hire.pools.table.talent` | Talent |
+| `hire.pools.table.origin` | Origine |
+| `hire.pools.table.added` | Ajout |
+| `hire.pools.origin.applied` | Candidat · {jobTitle} |
+| `hire.pools.origin.contact` | Mise en relation acceptée |
+| `hire.pools.origin.search` | Depuis la recherche de talents |
+| `hire.pools.actions` | Actions pour {name} |
 
 ---
 

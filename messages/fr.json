@@ -6168,6 +6168,7 @@
         "placeholder": "Ex. : Analystes data · Kinshasa"
       },
       "description": "Description (facultatif)",
+      "descriptionShort": "Description",
       "visibility": {
         "text": "Visibilité",
         "private": "Moi uniquement",
@@ -6216,7 +6217,22 @@
       "error": {
         "forbidden": "Cette action n'est pas permise pour votre rôle.",
         "notFound": "Ce vivier ou ce profil n'est plus disponible."
-      }
+      },
+      "search": "Rechercher un vivier",
+      "searchEmpty": "Aucun vivier ne correspond à « {query} ».",
+      "updatedAgo": "Mis à jour {time}",
+      "addedAgo": "Ajouté {time}",
+      "table": {
+        "talent": "Talent",
+        "origin": "Origine",
+        "added": "Ajout"
+      },
+      "origin": {
+        "applied": "Candidat · {jobTitle}",
+        "contact": "Mise en relation acceptée",
+        "search": "Depuis la recherche de talents"
+      },
+      "actions": "Actions pour {name}"
     },
     "interviews": {
       "title": "Entretiens",
