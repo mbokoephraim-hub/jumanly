@@ -236,7 +236,7 @@ export default async function TalentJobPage({
           <form
             id="postuler"
             action={applyAction}
-            className={cx(card, "flex flex-col gap-5 pb-24 lg:pb-6")}
+            className={cx(card, "flex flex-col gap-5 pb-6 max-lg:mb-28")}
           >
             <input type="hidden" name="job" value={job.slug} />
             <div className="flex flex-wrap items-center justify-between gap-2">
@@ -343,7 +343,7 @@ export default async function TalentJobPage({
               </p>
             )}
 
-            <div className="fixed inset-x-0 bottom-0 z-30 flex gap-3 border-t border-brume bg-blanc p-4 lg:static lg:justify-end lg:border-t lg:bg-transparent lg:p-0 lg:pt-5">
+            <div className="fixed inset-x-3 bottom-[calc(max(26px,env(safe-area-inset-bottom))+72px)] z-30 flex gap-3 rounded-[22px] bg-blanc p-3 shadow-float lg:static lg:justify-end lg:rounded-none lg:border-t lg:border-brume lg:bg-transparent lg:p-0 lg:pt-5 lg:shadow-none">
               <Link
                 href={`/app/jobs/${job.slug}`}
                 className={pillClass("outline", "md", "h-12 max-lg:hidden")}
@@ -429,7 +429,7 @@ export default async function TalentJobPage({
   ) : null;
 
   return (
-    <div className="flex flex-col gap-5 pb-20 lg:pb-0">
+    <div className="flex flex-col gap-5 pb-40 lg:pb-0">
       <AppPageHeader
         eyebrow={
           <Link href="/app/jobs" className="inline-flex items-center gap-1 hover:underline">
@@ -963,7 +963,7 @@ export default async function TalentJobPage({
       </div>
 
       {/* Phone: fixed action bar (save + apply). */}
-      <div className="fixed inset-x-0 bottom-0 z-30 flex items-center gap-3 border-t border-brume bg-blanc p-4 lg:hidden">
+      <div className="fixed inset-x-3 bottom-[calc(max(26px,env(safe-area-inset-bottom))+72px)] z-30 flex items-center gap-3 rounded-[22px] bg-blanc p-3 shadow-float lg:hidden">
         {jobRow &&
           saveForm(
             "flex size-12 items-center justify-center rounded-full ring-[1.5px] ring-brume ring-inset",

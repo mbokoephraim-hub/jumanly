@@ -85,7 +85,7 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await page
     .getByRole("link", { name: "Postuler gratuitement" })
     .filter({ visible: true })
-    .first()
+    .last()
     .click();
   await expect(page).toHaveURL(/postuler=1/);
   await page.locator("#apply-letter").fill("Ce poste correspond à mon expérience en comptabilité.");
