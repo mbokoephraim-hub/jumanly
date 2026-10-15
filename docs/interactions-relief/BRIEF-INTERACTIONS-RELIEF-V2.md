@@ -1,13 +1,13 @@
-# Jumanly · Interactions et relief v2
+# Jumanly · Interactions et cadres v2.1
 
-Version 2.0 · 15 octobre 2026 · demande d'Ephraïm Mboko.
+Version 2.1 · 15 octobre 2026 · demande d'Ephraïm Mboko. La v2.1 remplace le relief à épaisseur de la v2.0 par des ombres douces (retour d'Ephraïm : trop d'épaisseur ; garder l'identité) et ajoute le zoom au clic.
 
 Maquettes de référence (à ouvrir dans un navigateur, souris en main) :
 - `docs/interactions-relief/maquette/app-v2.html` : espace connecté.
 - `docs/interactions-relief/maquette/site-v2.html` : site public.
 - Captures : `maquette/*.jpg`.
 
-Les maquettes sont la référence visuelle et de comportement. Leurs CSS et JS (`common.css`, `common.js` intégrés aux HTML) donnent les valeurs exactes : ombres, durées, courbes, tailles. Les données affichées sont des exemples.
+Les maquettes sont la référence visuelle et de comportement. **Leur contenu (héros du site, cartes du tableau de bord) n'est qu'un banc d'essai : les pages gardent leur contenu et leur mise en page actuels**, seuls les cadres, l'en-tête, le curseur et les effets changent. Leurs CSS et JS (`common.css`, `common.js` intégrés aux HTML) donnent les valeurs exactes : ombres, durées, courbes, tailles. Les données affichées sont des exemples.
 
 ---
 
@@ -16,7 +16,7 @@ Les maquettes sont la référence visuelle et de comportement. Leurs CSS et JS (
 Jumanly doit se comporter comme une **application** et non comme une page web posée sur du papier blanc. Quatre chantiers, valables **partout** (site public, connexion, espace talent, recruteur, entreprise, partenaire, admin) :
 
 1. **Le curseur Orbi.** Le pointeur de la souris devient Orbi, l'orbe de la marque, entouré de son orbite. L'orbite est une **loupe** : sous elle, le fond s'inverse (un fond blanc ou Crème devient Vert Sapin, un fond Sapin devient menthe claire) et le texte passe automatiquement dans la couleur lisible (vert clair sur fond foncé, vert foncé sur fond clair). Quand Orbi passe sur quelque chose de **cliquable**, la loupe s'efface, l'orbite se resserre autour de l'orbe et l'élément **grandit légèrement** : on sent la différence entre un texte qu'on lit et un lien qui mène ailleurs.
-2. **Le relief.** Chaque cadre (carte, encadré, champ, tuile d'icône, bouton) a une **petite épaisseur visible** : arête claire en haut, arête sombre en bas, ombre portée douce. Un cadre se distingue nettement du fond, il ne ressemble plus à un trait dessiné sur une feuille.
+2. **Des cadres qui se détachent du fond.** Sans changer l'identité visuelle : les cartes et encadrés reçoivent une ombre large et légère et un contour presque invisible (modèle : image 6), pour qu'on voie tout de suite qu'il s'agit d'un cadre.
 3. **Les en-têtes en îlots.** Fin des bandes qui vont d'un bord à l'autre. Le site public a un en-tête **flottant**, détaché des bords, aux coins arrondis (modèle joint par Ephraïm). Dans l'application, la barre du haut devient deux îlots flottants, et **le vide à gauche** (au-dessus du bandeau vert de chaque page) est comblé par le **champ de recherche** (le rectangle où l'on écrit) et deux raccourcis.
 4. **Des effets partout.** Entrer sur une page, survoler, cliquer, ouvrir : chaque geste a une réponse visible. Le logo lui-même s'anime.
 
@@ -28,7 +28,7 @@ Ce brief **prolonge** `docs/experience-animee/BRIEF-ESPACE-UTILISATEUR.md` (v1.0
 
 1. **Un seul système de mouvement** : on étend `src/styles/motion.css`, `AppMotionRoot` (`src/components/motion/app-motion-root.tsx`) et `MotionRoot` (`src/components/site/motion.tsx`). Pas de second système, **aucune bibliothèque d'animation** ajoutée.
 2. **On n'anime que `transform`, `opacity`, `filter`** (et des `@property`). Jamais `width`, `height`, `top`, `left`, `box-shadow` en boucle (une ombre peut changer en transition au survol, jamais dans une animation infinie).
-3. **Animations réduites** (`prefers-reduced-motion: reduce` ou réglage « Réduire les animations », `User.reduceMotion`, `html[data-reduce-motion]`) : pas de curseur Orbi, pas d'inclinaison, pas d'entrée chorégraphiée. Le **relief reste** (il n'est pas une animation).
+3. **Animations réduites** (`prefers-reduced-motion: reduce` ou réglage « Réduire les animations », `User.reduceMotion`, `html[data-reduce-motion]`) : pas de curseur Orbi, pas d'inclinaison, pas d'entrée chorégraphiée. Les **ombres des cadres restent** (elles ne sont pas une animation).
 4. **L'état final est l'état par défaut** : sans JavaScript, la page est complète. Une animation d'entrée part d'un état visible et ne laisse jamais un bloc à `opacity: 0` en attendant un observateur, sauf un bloc situé sous la ligne de flottaison.
 5. **Accessibilité** : le contour de focus clavier (`:focus-visible`, Lime 3 px) ne change pas et ne dépend pas du curseur. Le curseur Orbi n'est qu'un décor : `aria-hidden`, `pointer-events: none`.
 6. Identité v1 inchangée : Sora, Sapin `#0F3F37`, Lime `#A6F26B`, Crème `#F2EDE5`. Aucun texte en dur : chaque nouveau texte va dans `textes/textes-application.md`, puis `pnpm messages`. Aucun chiffre inventé, aucun numéro de téléphone.
@@ -76,10 +76,11 @@ Un élément peut demander d'être traité comme du texte (pas de zoom) avec `da
 ### 1.5 Le zoom des éléments cliquables
 - Classe `.jm-cible` posée **automatiquement** sur l'élément cliquable survolé (pas besoin de la mettre à la main), retirée à la sortie.
 - `transform: translate(var(--tx), var(--ty)) scale(var(--zoom))` avec transition 220 ms `--jm-elan`.
-- `--zoom` : **1,045** pour un bouton, un lien, une puce, une icône ; **1,015** pour une carte entièrement cliquable (une grande carte qui grossit de 4,5 % serait trop). Règle : si l'élément fait plus de 240 px de large ou de haut, 1,015.
+- `--zoom` au survol : **1,06** pour un bouton, un lien, une puce, une icône ; **1,02** pour une carte ou une ligne de liste entièrement cliquable. Règle : si l'élément fait plus de 240 px de large ou de haut, la valeur « carte ».
+- **Au clic** (`pointerdown`), l'élément **zoome encore** : **1,12** (carte : 1,04), puis revient à la valeur de survol 160 ms après le relâchement, courbe `--jm-rebond`. C'est le signal « ce lien m'emmène ailleurs » demandé par Ephraïm.
 - **Attraction** : l'élément se décale de 4 px au plus vers le pointeur (`--tx`, `--ty`).
 - Les **liens dans un paragraphe** ne zooment pas (ils feraient bouger le texte) : soulignement Lime qui se dessine de gauche à droite à la place.
-- Une carte cliquable gagne aussi l'ombre de survol `--jm-relief-1h` ; une ligne de liste cliquable gagne un liseré Lime 1,5 px et sa flèche avance de 3 px en passant au Lime.
+- Une carte cliquable gagne aussi l'ombre de survol `--jm-ombre-carte-h` ; une ligne de liste cliquable gagne un liseré Lime 1,5 px et sa flèche avance de 3 px en passant au Lime.
 - Les tuiles d'icône dans un élément survolé font un petit saut (−4 px, −6°, 450 ms `--jm-rebond`).
 
 ### 1.6 Réglage
@@ -91,52 +92,49 @@ Dans `/app/parametres`, section « Affichage », sous « Réduire les animations
 
 ---
 
-## 2. Le relief
+## 2. Les cadres : ombres douces
 
-### 2.1 Jetons (à ajouter dans `src/styles/tokens.css`, exposés dans `globals.css` comme `--shadow-*`)
-Valeurs exactes dans la maquette (`common.css`, bloc « Relief : 4 niveaux ») :
+**L'identité visuelle ne change pas** : mêmes couleurs, mêmes tuiles d'icône en aplat, mêmes boutons en pilule, mêmes pages et contenus (`docs/maquettes/`). On améliore seulement la façon dont les cadres se détachent du fond, sur le modèle de l'image 6 d'Ephraïm : cartes blanches, contour presque invisible, ombre large et légère. **Aucune épaisseur, aucune arête, aucun bouton qui s'enfonce, aucun dégradé ajouté.**
 
-| Niveau | Jeton | Usage |
+### 2.1 Jetons (dans `src/styles/tokens.css`, exposés dans `globals.css` comme `--shadow-*`)
+Valeurs exactes dans la maquette (`common.css`, bloc « Ombres douces ») :
+
+| Jeton | Valeur | Usage |
 |---|---|---|
-| 0 · fond | aucun | panneau Crème, page |
-| 1 · carte | `--jm-relief-1`, survol `--jm-relief-1h` | toutes les cartes de l'app et du site, lignes de liste, rangées |
-| 2 · cadre | `--jm-cadre-fond` + `--jm-cadre-ombre`, padding 7 px | carte mise en avant (profil, étapes, offre recommandée, formule conseillée) : un liseré translucide entoure la carte, comme un écrin |
-| −1 · puits | `--jm-puits-fond` `#EFEBE3` + `--jm-puits` | champs de saisie, valeur clé (« 4 candidatures »), jauges, barres de progression, sélecteurs |
-| sombre | `--jm-relief-sombre` | bandeau d'univers, cartes IA, cartes Sapin |
+| `--jm-ombre-carte` | `0 0 0 1px rgba(15,63,55,.045), 0 1px 2px rgba(15,63,55,.04), 0 12px 32px -12px rgba(15,63,55,.14)` | toutes les cartes de l'app et du site, îlots de l'en-tête, menus, palette de recherche |
+| `--jm-ombre-carte-h` | `0 0 0 1px rgba(15,63,55,.06), 0 2px 4px rgba(15,63,55,.04), 0 20px 44px -14px rgba(15,63,55,.20)` | survol d'une carte cliquable |
+| `--jm-ombre-douce` | `0 0 0 1px rgba(15,63,55,.05), 0 4px 14px -6px rgba(15,63,55,.12)` | élément posé dans une carte : ligne de liste, sous-encadré, raccourci, bouton blanc |
+| `--jm-zone` | `#F6F3EE` | zone secondaire dans une carte : valeur clé (« 4 candidatures »), piste de jauge et de barre, champ de saisie (avec contour 1 px Sapin 6 %) |
+| `--jm-ombre-sombre` | `0 14px 36px -16px rgba(11,26,31,.45)` | bandeau d'univers, cartes IA et Sapin |
 
-Principe de chaque relief : **arête claire en haut** (`inset 0 1px 0` blanc), **arête sombre en bas** (`inset 0 -2px 0` Sapin 5 %), **contour d'un pixel** (Sapin 6 %), **ombre courte** + **ombre portée longue et douce**. La carte a aussi un très léger dégradé vertical `#FFFFFF → #FCFBF8`.
+Les boutons Lime et Sapin gardent leur aplat et reçoivent seulement une ombre colorée très légère (`0 6px 16px -8px` Lime ou Sapin). Les tuiles d'icône gardent leur aplat, avec une ombre de même famille (`0 6px 14px -6px`).
 
 ### 2.2 Composants à modifier
-- `Card` (`src/components/ui/card.tsx`) : relief 1 par défaut ; nouvelle prop `elevation?: "flat" | "raised" | "framed"` (défaut `raised`) ; `framed` enveloppe la carte dans le cadre (niveau 2). Les teintes de module (`learn`, `career`…) gardent leur fond et reçoivent le même relief.
-- `Button` (`src/components/ui/button.tsx`) : **épaisseur** de 3 px sous le bouton (`0 3px 0` d'une teinte plus foncée : Lime `#6DBA3D`, Sapin `#072620`, blanc `#D8D1C5`), dégradé vertical, arête claire. **À l'appui (`:active`) le bouton s'enfonce** : `translateY(3px)` et l'épaisseur disparaît. Le variant `tertiary` devient un bouton blanc à épaisseur.
-- Champs (`text-field`, `text-area`, `select`, `search-field`) : **puits**. Au focus, le champ remonte : fond blanc, anneau Lime 2 px + halo Lime 25 %.
-- **Tuiles d'icône** (icônes de module, raccourcis, entreprise, état) : composant `IconTile` (`src/components/ui/icon-tile.tsx`), 4 teintes `sapin | lime | menthe | creme`, dégradé, reflet en haut (`::after`), épaisseur 3 px, ombre portée, icône avec ombre d'un pixel. Tailles 42, 46, 56 px.
-- Badges, pastilles de compatibilité, cases à cocher : arête claire + contour coloré 1 px ; la case cochée est une petite tuile Lime à épaisseur 2 px.
-- Barres de progression et jauges : piste en puits, remplissage en dégradé Signature avec arête claire.
-- Le panneau Crème de l'espace connecté reçoit une arête claire intérieure (`inset 0 1px 0 rgba(255,255,255,.7)`).
+- `Card` (`src/components/ui/card.tsx`) : `--jm-ombre-carte` par défaut (prop `flat` pour s'en passer) ; carte cliquable : `--jm-ombre-carte-h` au survol. Les teintes de module gardent leur fond.
+- `Button` : ombre légère sur `primary` et `secondary`, `--jm-ombre-douce` sur `white` et `tertiary`. Rien d'autre ne change.
+- Champs (`text-field`, `text-area`, `select`, `search-field`) : fond `--jm-zone` + contour 1 px ; au focus, fond blanc + anneau Lime 2 px + halo Lime 22 %.
+- Listes cliquables (offres, candidatures, notifications) : chaque ligne devient un petit encadré blanc à `--jm-ombre-douce`, espacé de 10 px.
+- Barres et jauges : piste `--jm-zone`, remplissage inchangé.
 
 ### 2.3 Ce qu'on ne fait pas
-- Pas de relief sur le texte courant, les titres, les séparateurs.
-- Pas d'ombre sur un élément posé dans une carte qui a déjà une ombre, sauf tuiles, boutons et lignes de liste (relief plus faible : ombre portée `0 6px 14px -10px`).
-- Pas de néomorphisme gris sur gris : les contours restent nets et le contraste des textes AA.
-
----
+- Pas d'ombre sur le texte, les titres, les séparateurs, les badges.
+- Pas de deuxième ombre forte sur un élément déjà posé dans une carte : `--jm-ombre-douce` au plus.
 
 ## 3. Les en-têtes en îlots
 
 ### 3.1 Site public (`src/components/layout/public-header.tsx`)
-- L'en-tête devient un **îlot flottant** : `position: sticky; top: calc(env(safe-area-inset-top) + 14px)`, largeur max 1180 px, centré, marge 14 px au-dessus, coins 26 px, fond blanc 94 → 80 % + `backdrop-filter: blur(16px) saturate(1.4)`, relief de l'îlot (maquette `.ilot`).
-- Contenu inchangé : logo, les 7 liens (soulignement Lime lumineux sous la page courante), « Se connecter » (bouton blanc à épaisseur), « Créer un compte » (bouton Lime à épaisseur).
+- L'en-tête devient un **îlot flottant** : `position: sticky; top: calc(env(safe-area-inset-top) + 14px)`, largeur max 1180 px, centré, marge 14 px au-dessus, coins 26 px, fond blanc 94 → 80 % + `backdrop-filter: blur(16px) saturate(1.4)`, ombre `--jm-ombre-carte`.
+- Contenu inchangé : logo, les 7 liens (soulignement Lime lumineux sous la page courante), « Se connecter » (bouton blanc), « Créer un compte » (bouton Lime).
 - Défilement : après 40 px l'îlot se **compacte** (padding vertical 10 → 6 px, ombre plus profonde) ; en descendant au-delà de 220 px il **se cache** (`translateY(-100% - 24px)`), il **revient** dès qu'on remonte. Menu ouvert : il ne se cache jamais.
 - Mobile et tablette (< 1280 px, comme aujourd'hui) : logo, « Créer un compte », bouton menu. Le menu s'ouvre en **feuille** qui se déplie sous l'îlot (`scale(.96) → 1`, `--jm-rebond`), toujours en `<details>` natif ou bouton `aria-expanded`.
 
 ### 3.2 Espace connecté (`src/components/layout/app-shell.tsx`)
 La barre de 78 px alignée à droite est remplacée par une rangée de **deux îlots** :
-- **Îlot gauche (comble le vide)** : le **champ de recherche** en puits, `flex: 1`, max 620 px, placeholder « Rechercher une offre, une formation, une page… », raccourci clavier affiché `Ctrl K` (`⌘ K` sur Mac). Puis deux **raccourcis** en puces : dans l'espace talent « Mon CV » (`/app/career/cv`) et « Offres suivies » (`/app/jobs/favoris` ou la route existante des favoris) ; dans l'espace recruteur « Publier une offre » et « Vivier » ; partenaire « Mes licences » et « Rapports ». Les raccourcis se cachent sous 1280 px.
-- **Îlot droit** : sélecteur d'espace, cloche, compte (avatar à épaisseur, nom, formule), séparés par de fins traits.
+- **Îlot gauche (comble le vide)** : le **champ de recherche** (fond `--jm-zone`), `flex: 1`, max 620 px, placeholder « Rechercher une offre, une formation, une page… », raccourci clavier affiché `Ctrl K` (`⌘ K` sur Mac). Puis deux **raccourcis** en puces : dans l'espace talent « Mon CV » (`/app/career/cv`) et « Offres suivies » (`/app/jobs/favoris` ou la route existante des favoris) ; dans l'espace recruteur « Publier une offre » et « Vivier » ; partenaire « Mes licences » et « Rapports ». Les raccourcis se cachent sous 1280 px.
+- **Îlot droit** : sélecteur d'espace, cloche, compte (avatar, nom, formule), séparés par de fins traits.
 - Mobile : l'en-tête Sapin reste ; le **champ de recherche** se place en haut de la feuille Crème, en îlot pleine largeur.
 
-**Recherche** (nouveau composant `src/components/app/command-search.tsx`) : `Ctrl K` / `⌘ K` ou clic ouvre une palette en modale (îlot cadre, entrée `jm-pop-in`). Elle cherche, sans nouvelle API au premier lot : (1) les pages de l'espace d'après `src/config/navigation.ts` et les sous-pages connues ; (2) un renvoi « Chercher “…” dans les offres » vers `/app/jobs?q=…` et « … dans les formations » vers `/app/learn?q=…` (ou les routes de recherche existantes). Navigation au clavier (flèches, Entrée, Échap), `role="combobox"` + `listbox`. Textes dans `textes/textes-application.md` (`app.recherche.*`).
+**Recherche** (nouveau composant `src/components/app/command-search.tsx`) : `Ctrl K` / `⌘ K` ou clic ouvre une palette en modale (carte blanche à `--jm-ombre-carte`, entrée `jm-pop-in`). Elle cherche, sans nouvelle API au premier lot : (1) les pages de l'espace d'après `src/config/navigation.ts` et les sous-pages connues ; (2) un renvoi « Chercher “…” dans les offres » vers `/app/jobs?q=…` et « … dans les formations » vers `/app/learn?q=…` (ou les routes de recherche existantes). Navigation au clavier (flèches, Entrée, Échap), `role="combobox"` + `listbox`. Textes dans `textes/textes-application.md` (`app.recherche.*`).
 
 ### 3.3 Logo animé (`src/components/brand/logo.tsx`)
 - Le point Lime du J et la tige deviennent deux éléments SVG distincts (`.tige`, `.point`).
@@ -165,12 +163,11 @@ Changement de page : le contenu sortant part en 220 ms (`opacity → 0`, `transl
 - Cartes IA : anneau lumineux conique qui tourne autour du bord (`@property --a`, 4 s).
 
 ### 4.3 Toucher (téléphone)
-- Tout élément cliquable : **onde Lime** qui part du doigt (24 px → ×9, 500 ms) et **appui** `scale(.97)` tant que le doigt est posé.
-- Les boutons s'enfoncent (épaisseur qui disparaît) comme à la souris.
+- Tout élément cliquable : **onde Lime** qui part du doigt (24 px → ×9, 500 ms) et le lien **zoome** (`scale(1.06)`) tant que le doigt est posé.
 
 ### 4.4 Cliquer
 - Onde de l'orbite (§ 1.2) + l'anneau se contracte un instant.
-- Bouton : s'enfonce de 3 px.
+- L'élément cliqué zoome à 1,12 puis revient (§ 1.5).
 - Action réussie : `success-burst.tsx` existant.
 
 ### 4.5 Ambiance
@@ -182,17 +179,16 @@ Changement de page : le contenu sortant part en 220 ms (`opacity → 0`, `transl
 ## 5. Organisation du code
 
 ```
-src/styles/tokens.css            // + jetons relief (§ 2.1), ombres d'épaisseur des boutons
+src/styles/tokens.css            // + jetons d'ombres douces (§ 2.1)
 src/styles/motion.css            // + curseur Orbi, cible, inclinaison, entrée (data-enter), îlots
 src/components/motion/
   orbi-cursor.tsx                // § 1 : calques, boucle rAF, états, onde
   app-motion-root.tsx            // + entrée chorégraphiée, inclinaison, onde tactile généralisée
 src/components/site/motion.tsx   // MotionRoot : mêmes ajouts pour le site public
 src/components/ui/
-  card.tsx                       // relief + elevation
-  button.tsx                     // épaisseur + appui
-  icon-tile.tsx                  // nouveau
-  text-field.tsx, text-area.tsx, select.tsx, search-field.tsx  // puits
+  card.tsx                       // ombre douce + survol
+  button.tsx                     // ombre légère
+  text-field.tsx, text-area.tsx, select.tsx, search-field.tsx  // fond --jm-zone + contour
 src/components/layout/
   public-header.tsx              // îlot flottant
   app-shell.tsx                  // deux îlots + recherche
@@ -203,19 +199,19 @@ prisma/schema.prisma             // User.orbiCursor
 
 ## 6. Ordre de travail (lots)
 
-1. **Lot R1 · Relief** : jetons, `Card`, `Button`, champs, `IconTile`, badges, barres. Toutes les pages en profitent sans y toucher. Vérifier quelques pages clés contre `maquette/app-v2.html` (bouton « Relief » de la maquette pour comparer avant/après).
+1. **Lot R1 · Cadres** : jetons, `Card`, `Button`, champs, listes, barres. Toutes les pages en profitent sans y toucher. Vérifier quelques pages clés contre `maquette/app-v2.html` (bouton « Ombres » de la maquette pour comparer avant/après).
 2. **Lot R2 · En-têtes** : îlot du site public, deux îlots de l'app, palette de recherche, logo animé.
 3. **Lot R3 · Curseur Orbi** : composant, états, zoom automatique, réglage `orbiCursor` (migration), exclusions (`data-orbi="off"`, vidéo, canvas).
 4. **Lot R4 · Effets** : entrée chorégraphiée, transition de page, inclinaison, onde tactile partout, ambiance du bandeau.
 
-Un commit par lot ; `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e` et `pnpm test:e2e:reduced` verts à chaque lot. Noter la décision « relief remplace ombres quasi nulles » dans `docs/decisions/`.
+Un commit par lot ; `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:e2e` et `pnpm test:e2e:reduced` verts à chaque lot. Noter la décision « ombres douces sur les cadres, à la place des ombres quasi nulles » dans `docs/decisions/`.
 
 ## 7. Définition de fini
 
 - Souris : sur n'importe quelle page, le pointeur est Orbi ; un fond blanc passe au vert sous l'orbite avec un texte lisible ; un bouton ou un lien grossit légèrement et l'orbite se resserre ; dans un champ, curseur texte normal.
 - Clavier seul : tout est utilisable, le focus est visible, rien ne dépend du curseur.
-- Téléphone : pas de curseur, onde au toucher, boutons qui s'enfoncent.
-- Chaque cadre a une épaisseur visible ; champs et valeurs clés sont creusés ; les tuiles d'icône ont du volume.
+- Téléphone : pas de curseur, onde au toucher, le lien touché zoome.
+- Chaque cadre se détache du fond par une ombre douce ; aucune épaisseur ; couleurs, icônes et boutons inchangés.
 - Site public : en-tête en îlot qui se compacte, se cache et revient. App : plus de vide à gauche de la barre du haut, recherche `Ctrl K` fonctionnelle.
-- Animations réduites ou réglage désactivé : aucune animation, pointeur normal, relief conservé, page complète.
+- Animations réduites ou réglage désactivé : aucune animation, pointeur normal, ombres conservées, page complète.
 - 60 images/s au survol sur un portable ordinaire ; aucun décalage de mise en page (CLS) causé par les zooms (ils sont en `transform`).

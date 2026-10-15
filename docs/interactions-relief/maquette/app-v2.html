@@ -3,8 +3,8 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap">
 <style>
-/* ===== Jumanly · Interactions et profondeur v2 (socle commun des maquettes) =====
-   Couche 1 : relief (cartes, cadres, puits, tuiles d'icône, boutons à épaisseur).
+/* ===== Jumanly · Interactions et cadres v2.1 (socle commun des maquettes) =====
+   Couche 1 : cadres à ombres douces (cartes, encadrés, champs), identité inchangée.
    Couche 2 : curseur Orbi (orbe + loupe qui inverse le fond, anneau qui se resserre sur un lien).
    Couche 3 : mouvements d'entrée, de survol, de clic. État final = état par défaut. */
 :root{
@@ -17,43 +17,30 @@
   --orbe:radial-gradient(circle at 38% 32%,#F4FFB8,#A6F26B 45%,#3DA14F);
   --font:"Sora",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
 
-  /* --- Relief : 4 niveaux --- */
-  /* 0 · fond (Crème) : aucun relief.
-     1 · carte : arête claire en haut, arête sombre en bas, ombre courte + ombre portée douce. */
-  --relief-1:
-    inset 0 1px 0 rgba(255,255,255,.95),
-    inset 0 -2px 0 rgba(15,63,55,.05),
+  /* --- Ombres douces (modèle : image 6 d'Ephraïm) ---
+     Pas d'épaisseur ni d'arête : une carte blanche, un contour presque invisible
+     et une ombre large et légère qui la détache du fond Crème. */
+  --ombre-carte:
+    0 0 0 1px rgba(15,63,55,.045),
+    0 1px 2px rgba(15,63,55,.04),
+    0 12px 32px -12px rgba(15,63,55,.14);
+  /* Survol d'une carte cliquable : l'ombre s'ouvre un peu. */
+  --ombre-carte-h:
     0 0 0 1px rgba(15,63,55,.06),
-    0 1px 2px rgba(11,26,31,.05),
-    0 4px 8px -2px rgba(11,26,31,.05),
-    0 16px 32px -14px rgba(15,63,55,.22);
-  /* 1 au survol : la carte monte. */
-  --relief-1h:
-    inset 0 1px 0 rgba(255,255,255,.95),
-    inset 0 -2px 0 rgba(15,63,55,.05),
-    0 0 0 1px rgba(15,63,55,.08),
-    0 2px 4px rgba(11,26,31,.06),
-    0 10px 18px -6px rgba(11,26,31,.08),
-    0 28px 48px -18px rgba(15,63,55,.32);
-  /* 2 · cadre (bezel) : liseré translucide autour d'une carte mise en avant. */
-  --cadre-fond:linear-gradient(180deg,rgba(255,255,255,.85),rgba(255,255,255,.45));
-  --cadre-ombre:
-    inset 0 1px 0 rgba(255,255,255,1),
-    0 0 0 1px rgba(15,63,55,.07),
-    0 2px 4px rgba(11,26,31,.05),
-    0 24px 44px -20px rgba(15,63,55,.30);
-  /* -1 · puits : zone creusée pour un champ, une valeur, une jauge. */
-  --puits-fond:#EFEBE3;
-  --puits:
-    inset 0 2px 4px rgba(15,63,55,.10),
-    inset 0 1px 1px rgba(15,63,55,.08),
-    inset 0 -1px 0 rgba(255,255,255,.9);
-  /* Surfaces sombres */
-  --relief-sombre:
-    inset 0 1px 0 rgba(255,255,255,.14),
-    inset 0 0 0 1px rgba(255,255,255,.06),
-    inset 0 -3px 0 rgba(0,0,0,.18),
-    0 22px 44px -22px rgba(11,26,31,.65);
+    0 2px 4px rgba(15,63,55,.04),
+    0 20px 44px -14px rgba(15,63,55,.20);
+  /* Élément posé dans une carte (ligne de liste, sous-encadré, puce, bouton blanc). */
+  --ombre-douce:
+    0 0 0 1px rgba(15,63,55,.05),
+    0 4px 14px -6px rgba(15,63,55,.12);
+  /* Zone secondaire dans une carte (valeur clé, piste de jauge, champ) : simple fond, sans creux. */
+  --zone:#F6F3EE;
+  /* Surfaces sombres : même ombre, plus profonde. */
+  --ombre-sombre:0 14px 36px -16px rgba(11,26,31,.45);
+  /* Compatibilité avec les classes de la maquette */
+  --relief-1:var(--ombre-carte); --relief-1h:var(--ombre-carte-h); --relief-sombre:var(--ombre-sombre);
+  --puits-fond:var(--zone); --puits:none;
+  --cadre-fond:transparent; --cadre-ombre:none;
 
   --r-card:24px; --r-md:18px; --r-sm:14px; --r-pill:999px;
   --elan:cubic-bezier(.2,.8,.2,1); --rebond:cubic-bezier(.34,1.56,.64,1);
@@ -71,57 +58,41 @@ a{text-decoration:none}
 .i{width:20px;height:20px;flex:none}
 :focus-visible{outline:3px solid var(--lime);outline-offset:3px;border-radius:12px}
 
-/* ---------- Relief ---------- */
-.carte{background:linear-gradient(180deg,#FFFFFF 0%,#FCFBF8 100%);border-radius:var(--r-card);box-shadow:var(--relief-1);position:relative;
+/* ---------- Cadres (ombres douces) ---------- */
+.carte{background:#fff;border-radius:var(--r-card);box-shadow:var(--ombre-carte);position:relative;
   transition:box-shadow .35s var(--elan),transform .35s var(--elan)}
-.carte.sombre{background:var(--g-profondeur);color:var(--blanc);box-shadow:var(--relief-sombre)}
-.cadre{padding:7px;border-radius:calc(var(--r-card) + 7px);background:var(--cadre-fond);box-shadow:var(--cadre-ombre);
-  transition:transform .35s var(--elan),box-shadow .35s var(--elan)}
-.cadre>.carte{box-shadow:inset 0 1px 0 rgba(255,255,255,.14),0 1px 0 rgba(255,255,255,.6),0 6px 14px -6px rgba(11,26,31,.25)}
-.puits{background:var(--puits-fond);box-shadow:var(--puits);border-radius:var(--r-sm)}
-.sombre .puits{background:rgba(0,0,0,.22);box-shadow:inset 0 2px 5px rgba(0,0,0,.35),inset 0 -1px 0 rgba(255,255,255,.08)}
+.carte.sombre{background:var(--g-profondeur);color:var(--blanc);box-shadow:var(--ombre-sombre)}
+.cadre{display:contents}
+.puits{background:var(--zone);border-radius:var(--r-sm)}
+.sombre .puits{background:rgba(255,255,255,.08)}
 
-/* Tuile d'icône en volume : dégradé, arête claire, épaisseur en bas, ombre portée. */
+/* Tuile d'icône : l'identité actuelle (aplat), avec la même ombre douce. */
 .tuile{width:46px;height:46px;border-radius:15px;display:grid;place-items:center;flex:none;position:relative;
-  background:linear-gradient(180deg,#1A5A4E 0%,#0F3F37 100%);color:var(--lime);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.22),inset 0 -3px 0 rgba(0,0,0,.25),0 3px 0 #0A2C26,0 10px 18px -8px rgba(11,26,31,.55)}
-.tuile .i{width:22px;height:22px;filter:drop-shadow(0 1px 0 rgba(0,0,0,.35))}
-.tuile.lime{background:linear-gradient(180deg,#C4FA95 0%,#A6F26B 60%,#93E258 100%);color:var(--sapin);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -3px 0 rgba(61,161,79,.35),0 3px 0 #74C243,0 10px 18px -8px rgba(61,161,79,.6)}
-.tuile.lime .i{filter:drop-shadow(0 1px 0 rgba(255,255,255,.5))}
-.tuile.menthe{background:linear-gradient(180deg,#5BE3BE 0%,#2FD3A6 100%);color:var(--sapin);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.55),inset 0 -3px 0 rgba(15,63,55,.18),0 3px 0 #1FA883,0 10px 18px -8px rgba(47,211,166,.6)}
-.tuile.creme{background:linear-gradient(180deg,#FFFFFF 0%,#F2EDE5 100%);color:var(--sapin);
-  box-shadow:inset 0 1px 0 #fff,inset 0 -3px 0 rgba(15,63,55,.08),0 3px 0 #D9D2C6,0 10px 18px -8px rgba(15,63,55,.3)}
-/* reflet en haut de toutes les tuiles */
-.tuile::after{content:"";position:absolute;inset:2px 4px auto;height:45%;border-radius:12px 12px 40% 40%;
-  background:linear-gradient(180deg,rgba(255,255,255,.28),rgba(255,255,255,0));pointer-events:none}
+  background:var(--sapin);color:var(--lime);box-shadow:0 6px 14px -6px rgba(15,63,55,.35)}
+.tuile .i{width:22px;height:22px}
+.tuile.lime{background:var(--lime);color:var(--sapin);box-shadow:0 6px 14px -6px rgba(61,161,79,.45)}
+.tuile.menthe{background:var(--menthe);color:var(--sapin);box-shadow:0 6px 14px -6px rgba(47,211,166,.45)}
+.tuile.creme{background:var(--creme);color:var(--sapin);box-shadow:0 0 0 1px rgba(15,63,55,.06)}
 
-/* Boutons à épaisseur : on les enfonce. */
+/* Boutons : les pilules actuelles, avec une ombre douce. */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:44px;padding:0 20px;border-radius:var(--r-pill);
   font-weight:600;font-size:14px;white-space:nowrap;position:relative;cursor:pointer;
-  transition:transform .18s var(--elan),box-shadow .18s var(--elan),filter .2s}
+  transition:transform .22s var(--elan),box-shadow .22s var(--elan),background .2s}
 .btn .i{width:18px;height:18px}
-.btn-lime{background:linear-gradient(180deg,#BEF78E 0%,#A6F26B 55%,#98E85C 100%);color:var(--sapin);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.75),inset 0 -2px 0 rgba(61,161,79,.25),0 3px 0 #6DBA3D,0 10px 20px -8px rgba(61,161,79,.7)}
-.btn-sapin{background:linear-gradient(180deg,#1C5B4F 0%,#0F3F37 100%);color:var(--blanc);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),inset 0 -2px 0 rgba(0,0,0,.25),0 3px 0 #072620,0 10px 20px -8px rgba(11,26,31,.6)}
-.btn-blanc{background:linear-gradient(180deg,#FFFFFF 0%,#F6F3EE 100%);color:var(--sapin);
-  box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(15,63,55,.10),0 3px 0 #D8D1C5,0 8px 16px -8px rgba(15,63,55,.3)}
-.btn:active,.btn.appui{transform:translateY(3px)}
-.btn-lime:active,.btn-lime.appui{box-shadow:inset 0 1px 0 rgba(255,255,255,.6),inset 0 2px 4px rgba(61,161,79,.25),0 0 0 #6DBA3D,0 3px 8px -4px rgba(61,161,79,.6)}
-.btn-sapin:active,.btn-sapin.appui{box-shadow:inset 0 2px 4px rgba(0,0,0,.3),0 0 0 #072620,0 3px 8px -4px rgba(11,26,31,.5)}
-.btn-blanc:active,.btn-blanc.appui{box-shadow:inset 0 2px 4px rgba(15,63,55,.12),0 0 0 1px rgba(15,63,55,.1),0 0 0 #D8D1C5}
+.btn-lime{background:var(--lime);color:var(--sapin);box-shadow:0 6px 16px -8px rgba(61,161,79,.6)}
+.btn-lime:hover{background:#8FD957}
+.btn-sapin{background:var(--sapin);color:var(--blanc);box-shadow:0 6px 16px -8px rgba(11,26,31,.5)}
+.btn-sapin:hover{background:#145045}
+.btn-blanc{background:#fff;color:var(--sapin);box-shadow:var(--ombre-douce)}
 .btn-sm{height:36px;padding:0 14px;font-size:13px}
 
-/* Champ creusé (le « rectangle pour écrire ») */
+/* Champ (le « rectangle pour écrire ») : fond Crème clair, contour fin. */
 .champ{display:flex;align-items:center;gap:10px;height:48px;padding:0 8px 0 16px;border-radius:16px;
-  background:var(--puits-fond);box-shadow:var(--puits);color:var(--ardoise);transition:box-shadow .25s,background .25s}
+  background:var(--zone);box-shadow:inset 0 0 0 1px rgba(15,63,55,.06);color:var(--ardoise);transition:box-shadow .25s,background .25s}
 .champ input,.champ textarea{flex:1;min-width:0;border:0;background:none;outline:none;color:var(--sapin);font-size:14px}
 .champ input::placeholder,.champ textarea::placeholder{color:#7C8986}
-.champ:focus-within{background:#fff;box-shadow:inset 0 2px 4px rgba(15,63,55,.06),0 0 0 2px var(--lime),0 0 0 6px rgba(166,242,107,.25)}
-kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#fff;color:var(--ardoise);
-  box-shadow:inset 0 -2px 0 rgba(15,63,55,.10),0 0 0 1px rgba(15,63,55,.08)}
+.champ:focus-within{background:#fff;box-shadow:0 0 0 2px var(--lime),0 0 0 6px rgba(166,242,107,.22)}
+kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#fff;color:var(--ardoise);box-shadow:0 0 0 1px rgba(15,63,55,.08)}
 
 /* Logo J animé */
 .jlogo svg{display:block;overflow:visible}
@@ -159,17 +130,19 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 /* Sur le menu Sapin : la torche prend le relais, la loupe s'efface. */
 .orbi-on.orbi-menu #orbi-loupe,.orbi-on.orbi-menu #orbi-teinte{opacity:0}
 
-/* Cible survolée : léger zoom + montée (cliquable = différent du texte). */
-.cible{transition:transform .22s var(--elan),box-shadow .3s var(--elan),filter .2s}
-.cible.chaud{transform:translate(var(--tx,0px),var(--ty,0px)) scale(var(--zoom,1.045))}
-.cible.carte.chaud{--zoom:1.015;box-shadow:var(--relief-1h)}
+/* Lien ou bouton : il zoome quand Orbi le survole, et zoome encore au clic (puis revient). */
+.cible{transition:transform .22s var(--rebond),box-shadow .3s var(--elan),filter .2s}
+.cible.chaud{transform:translate(var(--tx,0px),var(--ty,0px)) scale(var(--zoom,1.06))}
+.cible.chaud.clic{--zoom:1.12}
+.cible.carte.chaud,.cible.racc.chaud,.cible.offre.chaud{--zoom:1.02;box-shadow:var(--ombre-carte-h)}
+.cible.carte.chaud.clic,.cible.racc.chaud.clic,.cible.offre.chaud.clic{--zoom:1.04}
 .cible.chaud .tuile{animation:tuile-saut .45s var(--rebond)}
 @keyframes tuile-saut{40%{transform:translateY(-4px) rotate(-6deg)}100%{transform:none}}
 
-/* Toucher (téléphone) : onde Lime depuis le doigt + appui. */
+/* Toucher (téléphone) : onde Lime depuis le doigt + le lien zoome. */
 .onde-toucher{position:absolute;width:24px;height:24px;margin:-12px 0 0 -12px;border-radius:50%;background:rgba(166,242,107,.55);pointer-events:none;animation:onde .5s var(--arrivee) forwards}
 @keyframes onde{to{transform:scale(9);opacity:0}}
-.appui-tactile{transform:scale(.97)!important}
+.appui-tactile{transform:scale(1.06)!important}
 
 /* Carte qui s'incline vers le pointeur, avec reflet. */
 [data-incline]{transform-style:preserve-3d;transform:perspective(900px) rotateX(var(--rx,0deg)) rotateY(var(--ry,0deg)) scale(var(--zoom,1))}
@@ -177,11 +150,8 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
   background:radial-gradient(260px circle at var(--lx,50%) var(--ly,0%),rgba(255,255,255,.35),transparent 60%);mix-blend-mode:soft-light}
 [data-incline].chaud .reflet{opacity:1}
 
-/* Mode « avant » pour comparer : relief retiré. */
-.plat .carte,.plat .cadre,.plat .tuile,.plat .btn,.plat .ilot,.plat .puits,.plat .champ,.plat .universe{box-shadow:none !important}
-.plat .cadre{background:none;padding:0}
-.plat .tuile::after{display:none}
-.plat .carte{background:#fff}
+/* Mode « avant » pour comparer : ombres retirées. */
+.plat .carte,.plat .tuile,.plat .btn,.plat .ilot,.plat .champ,.plat .universe,.plat .offre,.plat .racc{box-shadow:none !important}
 
 @media (prefers-reduced-motion:reduce){
   *,*::before,*::after{animation:none !important;transition:none !important}
@@ -223,7 +193,7 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 .rail .halo{position:absolute;inset:0;z-index:-1;opacity:0;transition:opacity .3s;background:radial-gradient(circle 80px at var(--mx,50%) var(--my,30%),rgba(166,242,107,.22),transparent 70%)}
 .rail[data-allume] .motif,.rail[data-allume] .halo{opacity:1}
 .rail .logo{width:50px;height:50px;border-radius:16px;display:grid;place-items:center;margin-bottom:26px;
-  background:linear-gradient(180deg,#C4FA95,#A6F26B 60%,#93E258);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -3px 0 rgba(61,161,79,.35),0 3px 0 #5FA834,0 12px 24px -10px rgba(166,242,107,.7)}
+  background:var(--lime);box-shadow:0 10px 24px -10px rgba(166,242,107,.6)}
 .nav{display:flex;flex-direction:column;gap:6px;position:relative}
 .nav-i{display:flex;flex-direction:column;align-items:center;gap:5px;width:74px;padding:10px 0 8px;border-radius:18px;font-size:11px;font-weight:500;color:#CFE3DC;position:relative;z-index:1;transition:color .25s}
 .nav-i .i{width:22px;height:22px;transition:transform .3s var(--rebond)}
@@ -231,8 +201,7 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 .nav-i:hover .i{transform:translateY(-3px)}
 .nav-i[aria-current]{color:var(--sapin)}
 .nav .pilule{position:absolute;left:0;top:0;width:74px;height:62px;border-radius:18px;z-index:0;
-  background:linear-gradient(180deg,#C4FA95,#A6F26B 60%,#93E258);
-  box-shadow:inset 0 1px 0 rgba(255,255,255,.7),inset 0 -3px 0 rgba(61,161,79,.35),0 3px 0 #5FA834,0 12px 26px -12px rgba(166,242,107,.8);
+  background:var(--lime);box-shadow:0 12px 26px -12px rgba(166,242,107,.75);
   transition:transform .45s var(--rebond)}
 .rail .bas{margin-top:auto;display:flex;flex-direction:column;gap:6px}
 
@@ -246,9 +215,9 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 /* Barre du haut : plus de bande de bout en bout, des îlots. À gauche, le champ de recherche comble le vide. */
 .haut{display:flex;align-items:center;gap:14px;position:relative;z-index:5}
 .ilot{display:flex;align-items:center;gap:6px;padding:6px;border-radius:24px;
-  background:linear-gradient(180deg,rgba(255,255,255,.92),rgba(255,255,255,.72));
+  background:rgba(255,255,255,.9);
   -webkit-backdrop-filter:blur(14px) saturate(1.3);backdrop-filter:blur(14px) saturate(1.3);
-  box-shadow:inset 0 1px 0 #fff,0 0 0 1px rgba(15,63,55,.07),0 2px 4px rgba(11,26,31,.05),0 18px 34px -18px rgba(15,63,55,.35)}
+  box-shadow:var(--ombre-carte)}
 .ilot.recherche{flex:1;max-width:620px}
 .ilot.recherche .champ{flex:1;height:44px;border-radius:18px}
 .ilot .rac{display:flex;gap:6px}
@@ -262,7 +231,7 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 .compte{display:flex;align-items:center;gap:10px;padding:4px 14px 4px 4px;height:44px;border-radius:16px}
 .compte:hover{background:var(--lime-c)}
 .avatar{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;font-weight:700;font-size:13px;color:var(--sapin);
-  background:linear-gradient(180deg,#C4FA95,#A6F26B);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 2px 0 #74C243}
+  background:var(--lime);box-shadow:none}
 .compte b{display:block;font-size:13px;line-height:1.2}
 .compte small{display:block;font-size:11px;color:var(--ardoise)}
 .sep{width:1px;height:26px;background:rgba(15,63,55,.10)}
@@ -280,8 +249,7 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 .universe h1{font-size:32px;line-height:1.15;margin-top:2px}
 .universe .sous{color:rgba(255,255,255,.85);font-size:15px;margin-top:4px}
 .u-actions{display:flex;gap:10px;flex-wrap:wrap;position:relative;z-index:1}
-.btn-verre{background:rgba(255,255,255,.10);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 0 1px rgba(255,255,255,.18),0 3px 0 rgba(0,0,0,.25)}
-.btn-verre:active,.btn-verre.appui{box-shadow:inset 0 2px 4px rgba(0,0,0,.3),inset 0 0 0 1px rgba(255,255,255,.18)}
+.btn-verre{background:rgba(255,255,255,.10);color:#fff;box-shadow:inset 0 0 0 1px rgba(255,255,255,.22)}
 .orbi-scene{position:absolute;right:470px;top:50%;width:120px;height:120px;margin-top:-60px;pointer-events:none;z-index:-1}
 .orbi-scene .o{position:absolute;inset:38px;border-radius:50%;background:var(--orbe);box-shadow:0 0 30px rgba(166,242,107,.7),inset -6px -8px 14px rgba(15,63,55,.35)}
 .orbi-scene .r{position:absolute;inset:0;border-radius:50%;border:1px solid rgba(166,242,107,.45);animation:tourne 9s linear infinite}
@@ -295,7 +263,6 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 .bento{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:20px}
 .s3{grid-column:span 3}.s4{grid-column:span 4}.s5{grid-column:span 5}.s6{grid-column:span 6}.s7{grid-column:span 7}
 .carte{padding:22px}
-.cadre>.carte{height:100%}
 .t-carte{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-bottom:16px}
 .t-carte h2{font-size:17px}
 .t-carte .lien{font-size:13px;font-weight:600;color:var(--feuille);display:inline-flex;align-items:center;gap:4px;padding:6px 10px;border-radius:12px}
@@ -312,9 +279,9 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 .jauge .val small{display:block;font-size:11px;color:var(--ardoise);margin-top:2px}
 .etapes{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:9px;flex:1;min-width:0}
 .etapes li{display:flex;align-items:center;gap:10px;font-size:13px}
-.coche{width:22px;height:22px;border-radius:8px;display:grid;place-items:center;flex:none;background:linear-gradient(180deg,#C4FA95,#A6F26B);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 2px 0 #74C243}
+.coche{width:22px;height:22px;border-radius:8px;display:grid;place-items:center;flex:none;background:var(--lime);box-shadow:none}
 .coche .i{width:14px;height:14px}
-.coche.vide{background:var(--puits-fond);box-shadow:var(--puits)}
+.coche.vide{background:var(--zone);box-shadow:inset 0 0 0 1px rgba(15,63,55,.12)}
 .etapes .fait{color:var(--ardoise);text-decoration:line-through;text-decoration-color:rgba(15,63,55,.3)}
 .profil-pied{margin-top:18px;display:flex;justify-content:flex-end}
 
@@ -348,7 +315,7 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 /* Offres */
 .offres{display:flex;flex-direction:column;gap:10px}
 .offre{display:flex;align-items:center;gap:14px;padding:12px 14px;border-radius:18px;background:#fff;
-  box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 rgba(15,63,55,.04),0 0 0 1px rgba(15,63,55,.06),0 6px 14px -10px rgba(15,63,55,.3)}
+  box-shadow:var(--ombre-douce)}
 .offre.chaud{box-shadow:inset 0 1px 0 #fff,0 0 0 1.5px rgba(166,242,107,.9),0 14px 26px -14px rgba(15,63,55,.4)}
 .offre .tuile{width:42px;height:42px;border-radius:14px;font-weight:700;font-size:13px}
 .offre .txt{flex:1;min-width:0}
@@ -357,21 +324,21 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 .badge{display:inline-flex;align-items:center;gap:6px;height:28px;padding:0 11px;border-radius:99px;font-size:12px;font-weight:600;white-space:nowrap}
 .badge.ok{background:var(--menthe-c);color:#0B5D47;box-shadow:inset 0 1px 0 rgba(255,255,255,.8),0 0 0 1px rgba(47,211,166,.35)}
 .badge.ok::before{content:"";width:7px;height:7px;border-radius:50%;background:var(--menthe);box-shadow:0 0 6px var(--menthe)}
-.offre .fl{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--puits-fond);box-shadow:var(--puits);transition:transform .3s var(--rebond)}
+.offre .fl{width:34px;height:34px;border-radius:12px;display:grid;place-items:center;background:var(--zone);transition:transform .3s var(--rebond)}
 .offre .fl .i{width:16px;height:16px}
-.offre.chaud .fl{transform:translateX(3px);background:var(--lime);box-shadow:0 2px 0 #74C243}
+.offre.chaud .fl{transform:translateX(3px);background:var(--lime)}
 
 /* Raccourcis */
 .raccourcis{display:grid;grid-template-columns:1fr 1fr;gap:12px}
 .racc{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:20px;background:linear-gradient(180deg,#fff,#FAF8F4);
-  box-shadow:inset 0 1px 0 #fff,inset 0 -2px 0 rgba(15,63,55,.04),0 0 0 1px rgba(15,63,55,.06),0 8px 16px -12px rgba(15,63,55,.35)}
+  box-shadow:var(--ombre-douce)}
 .racc b{font-size:14px}
 .racc small{color:var(--ardoise);font-size:12px;display:block;margin-top:-8px}
 .racc.chaud{box-shadow:inset 0 1px 0 #fff,0 0 0 1.5px rgba(166,242,107,.9),0 16px 26px -14px rgba(15,63,55,.4)}
 
 /* Formation */
 .cours{display:flex;gap:16px;align-items:center}
-.vignette{width:118px;height:88px;border-radius:18px;flex:none;position:relative;overflow:hidden;background:var(--g-ia);box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 3px 0 #0A2C26,0 10px 18px -8px rgba(11,26,31,.5)}
+.vignette{width:118px;height:88px;border-radius:18px;flex:none;position:relative;overflow:hidden;background:var(--g-ia);box-shadow:0 10px 22px -10px rgba(11,26,31,.45)}
 .vignette::before{content:"";position:absolute;inset:0;background:repeating-radial-gradient(circle at 100% 100%,transparent 0 12px,rgba(166,242,107,.3) 12px 13px)}
 .vignette .play{position:absolute;inset:0;margin:auto;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.95);display:grid;place-items:center;box-shadow:0 6px 14px -4px rgba(0,0,0,.4)}
 .vignette .play::before{content:"";border-left:11px solid var(--sapin);border-top:7px solid transparent;border-bottom:7px solid transparent;margin-left:3px}
@@ -422,10 +389,10 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
   .bento{gap:14px}
   .s3,.s4,.s5,.s6,.s7{grid-column:span 12}
   .profil{flex-direction:column;align-items:flex-start}
-  .pill-nav{display:flex;gap:4px;position:fixed;left:50%;transform:translateX(-50%);bottom:max(22px,env(safe-area-inset-bottom,0px));z-index:40;padding:7px;border-radius:99px;background:linear-gradient(180deg,#1A5A4E,#0F3F37);
-    box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 3px 0 #072620,0 18px 34px -10px rgba(11,26,31,.55)}
+  .pill-nav{display:flex;gap:4px;position:fixed;left:50%;transform:translateX(-50%);bottom:max(22px,env(safe-area-inset-bottom,0px));z-index:40;padding:7px;border-radius:99px;background:var(--sapin);
+    box-shadow:0 18px 34px -12px rgba(11,26,31,.5)}
   .pill-nav a{width:52px;height:46px;border-radius:99px;display:grid;place-items:center;color:#CFE3DC}
-  .pill-nav a[aria-current]{background:linear-gradient(180deg,#C4FA95,#A6F26B);color:var(--sapin);box-shadow:inset 0 1px 0 rgba(255,255,255,.7),0 2px 0 #5FA834}
+  .pill-nav a[aria-current]{background:var(--lime);color:var(--sapin)}
   .dock{bottom:calc(max(22px,env(safe-area-inset-bottom,0px)) + 76px);left:50%;right:auto;transform:translateX(-50%)}
   .dock .note,.dock .lib{display:none}
 }
@@ -499,8 +466,7 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
       </header>
 
       <section class="bento" aria-label="Tableau de bord">
-        <div class="cadre s5" data-e style="--d:4">
-          <article class="carte" style="height:100%">
+        <article class="carte s5" data-e style="--d:4">
             <div class="t-carte"><h2>Votre profil</h2><a class="lien cible" href="#">Détails<svg class="i"><use href="#jm-suivant"/></svg></a></div>
             <div class="profil">
               <div class="jauge puits">
@@ -518,8 +484,7 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
               </ul>
             </div>
             <div class="profil-pied"><a class="btn btn-sapin cible" href="#">Compléter mon profil</a></div>
-          </article>
-        </div>
+        </article>
 
         <article class="carte s4 cible" data-incline="5" data-e style="--d:5">
           <div class="t-carte"><h2>Mes candidatures</h2><a class="lien cible" href="#">Suivi<svg class="i"><use href="#jm-suivant"/></svg></a></div>
@@ -597,7 +562,7 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
 <div class="dock" role="toolbar" aria-label="Démonstration">
   <span class="note">Maquette · données d'exemple</span>
   <button id="b-orbi" aria-pressed="true"><span class="lib">Curseur</span> Orbi</button>
-  <button id="b-relief" aria-pressed="true">Relief</button>
+  <button id="b-relief" aria-pressed="true">Ombres</button>
   <button id="b-entree">Rejouer l'entrée</button>
 </div>
 
@@ -642,6 +607,7 @@ kbd{font:600 11px/1 var(--font);padding:5px 7px;border-radius:8px;background:#ff
   addEventListener('pointerdown',e=>{
     if(e.pointerType==='mouse'&&actif){
       s*=.72;
+      if(chaud){const c=chaud;c.classList.add('clic');const fin=()=>{setTimeout(()=>c.classList.remove('clic'),160);removeEventListener('pointerup',fin);};addEventListener('pointerup',fin);}
       el.onde.animate([{transform:`translate(${x}px,${y}px) scale(.4)`,opacity:1},{transform:`translate(${x}px,${y}px) scale(2.6)`,opacity:0}],{duration:520,easing:'cubic-bezier(0,0,.2,1)'});
     }
     if(e.pointerType!=='mouse'&&!html.classList.contains('calme')&&!reduit){ // toucher : onde depuis le doigt

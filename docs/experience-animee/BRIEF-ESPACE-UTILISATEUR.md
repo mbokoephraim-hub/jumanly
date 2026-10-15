@@ -2,7 +2,7 @@
 
 Version 1.0 · 14 octobre 2026 · demande d'Ephraïm Mboko.
 
-> **Mise à jour du 15 octobre 2026** : `docs/interactions-relief/BRIEF-INTERACTIONS-RELIEF-V2.md` remplace le § 2 (hors torche, conservée) et le § 8 de ce brief : curseur Orbi, relief des cadres, en-têtes en îlots, entrée chorégraphiée. Le reste de ce brief reste valable.
+> **Mise à jour du 15 octobre 2026** : `docs/interactions-relief/BRIEF-INTERACTIONS-RELIEF-V2.md` remplace le § 2 (hors torche, conservée) et le § 8 de ce brief : curseur Orbi, ombres douces des cadres, en-têtes en îlots, entrée chorégraphiée. Le reste de ce brief reste valable.
 
 Ce brief rend l'espace connecté (`/app/...`) vivant, dynamique et technologique, **sans changer l'identité** : mêmes couleurs, mêmes cartes, mêmes icônes, mêmes maquettes (`docs/maquettes/`). Il ajoute le mouvement, la lumière, les fonds de la marque et des moments forts (bienvenue, vérification, notifications, diagnostic, évaluations).
 
