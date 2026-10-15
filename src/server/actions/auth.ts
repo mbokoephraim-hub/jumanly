@@ -6,7 +6,7 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { isSafeInternalPath } from "@/lib/signup";
 import { sendWelcome } from "@/server/account-emails";
-import { auth } from "@/server/auth";
+import { auth, enabledProviders } from "@/server/auth";
 import { getSession } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
@@ -60,6 +60,29 @@ const safeNext = (value: FormDataEntryValue | null) => {
   const text = typeof value === "string" ? value : "";
   return text && isSafeInternalPath(text) ? text : undefined;
 };
+
+// ─── Sign-up, step 1: « Vous êtes » and the e-mail (entry screen) ───
+
+const entrySchema = z.object({
+  profil: z.enum(["talent", "rh", "company"]).catch("talent"),
+  email: z.string().trim().max(200).optional().catch(undefined),
+  forfait: z.string().max(60).optional().catch(undefined),
+});
+
+/**
+ * « Continuer » of the « Créer un compte » tab: the profile goes to the plan step in the address;
+ * the e-mail waits in the short sign-up cookie (never in an address, so never in a log) to fill
+ * in the account step.
+ */
+export async function startSignup(formData: FormData) {
+  const input = entrySchema.parse(Object.fromEntries(formData));
+  const next = safeNext(formData.get("next"));
+  await writeSignupFlow({ profile: input.profil, email: input.email || undefined, next });
+  const query = new URLSearchParams({ profil: input.profil });
+  if (input.forfait) query.set("forfait", input.forfait);
+  if (next) query.set("suite", next);
+  redirect(`/inscription/forfait?${query}`);
+}
 
 // ─── Sign-up, step 3: create the account ───────────────────────────
 
@@ -296,6 +319,28 @@ export async function sendMagicLinkAction(
     // Same answer whether or not an account exists (textes `login.magic.sent.text`).
   }
   return { status: "sent", email: email.data };
+}
+
+/**
+ * Sign-in or sign-up with a provider of the entry screen. The profile chosen there waits in the
+ * sign-up cookie: a new account resumes the sign-up at the plan step with it.
+ */
+export async function signInWithProvider(provider: string, formData: FormData) {
+  const id = enabledProviders().find((item) => item === provider);
+  if (!id) redirect("/connexion");
+  const next = safeNext(formData.get("next"));
+  const profile = entrySchema.shape.profil.parse(formData.get("profil"));
+  await writeSignupFlow({ profile, next });
+  const result = await auth.api.signInSocial({
+    headers: await headers(),
+    body: {
+      provider: id,
+      callbackURL: next ?? "/app",
+      errorCallbackURL: `/connexion?erreur=${id}`,
+    },
+  });
+  if (result.url) redirect(result.url);
+  redirect(`/connexion?erreur=${id}`);
 }
 
 export async function signInWithGoogle(formData: FormData) {

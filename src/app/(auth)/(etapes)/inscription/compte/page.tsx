@@ -21,6 +21,7 @@ import { readSignupParams, stepHref } from "@/lib/signup-params";
 import { signInWithGoogle } from "@/server/actions/auth";
 import { googleEnabled } from "@/server/auth";
 import { getSession } from "@/server/auth/session";
+import { readSignupFlow } from "@/server/signup-flow";
 import { getPublicPlans } from "@/server/queries/public";
 import { familiesForProfile } from "@/server/services/accounts";
 
@@ -101,6 +102,7 @@ async function AccountStep({
         plan={plan?.code}
         next={params.suite}
         countries={countryOptions("code")}
+        defaultEmail={(await readSignupFlow()).email}
       />
       <SignupFooter back={stepHref("/inscription/forfait", { ...params, forfait: plan?.code })} />
     </AuthCard>

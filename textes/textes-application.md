@@ -1218,6 +1218,60 @@ Rappel du paramètre `?suite=` : si le visiteur arrive depuis une action (postul
 | `auth.legal.text` | En continuant, vous acceptez les {terms} et la {privacy} de Jumanly. |
 | `auth.legal.terms` | conditions générales |
 | `auth.legal.privacy` | politique de confidentialité |
+| `auth.orEmail` | ou avec votre e-mail |
+| `auth.entry.aria` | Connexion ou inscription |
+| `auth.entry.loginTab` | Se connecter |
+| `auth.entry.signupTab` | Créer un compte |
+| `auth.social.label` | Continuer avec |
+| `auth.social.signupLabel` | S'inscrire avec |
+| `auth.social.google` | Google |
+| `auth.social.aria.continue` | Continuer avec {provider} |
+| `auth.social.aria.signup` | S'inscrire avec {provider} |
+
+#### Scène d'accueil de `/connexion` et `/inscription`
+
+*Décor animé à gauche du formulaire (docs/refonte-connexion/BRIEF-CONNEXION-V2.md). Les mots entre `<hl>` et `</hl>` s'affichent en dégradé. Les chiffres des cartes sont des illustrations de l'appli, identiques pour tout le monde, jamais des données d'un compte.*
+
+| Clé | Texte |
+|---|---|
+| `auth.stage.rolesLabel` | Je suis |
+| `auth.stage.roles.talent` | Talent |
+| `auth.stage.roles.rh` | RH |
+| `auth.stage.roles.company` | Entreprise |
+| `auth.stage.slogan` | Learn. Grow. <hl>Connect.</hl> |
+| `auth.stage.talent.eyebrow` | Pour les talents |
+| `auth.stage.talent.hook` | Prêt à <hl>booster votre employabilité</hl> ? |
+| `auth.stage.talent.sub` | Formez-vous, renforcez votre CV et laissez les offres venir à vous. |
+| `auth.stage.talent.line` | Connectez-vous pour reprendre votre parcours |
+| `auth.stage.talent.cards.1.value` | 82 |
+| `auth.stage.talent.cards.1.title` | Force du profil |
+| `auth.stage.talent.cards.1.text` | 82 % · en progression |
+| `auth.stage.talent.cards.2.title` | Nouvelle offre pour vous |
+| `auth.stage.talent.cards.2.text` | Analyste de données junior |
+| `auth.stage.talent.cards.2.pill` | Compatibilité 87 % |
+| `auth.stage.talent.cards.3.title` | Certificat obtenu |
+| `auth.stage.talent.cards.3.text` | Excel pour l'analyse |
+| `auth.stage.rh.eyebrow` | Pour les professionnels RH |
+| `auth.stage.rh.hook` | Prêt à recruter les <hl>bons profils</hl>, plus vite ? |
+| `auth.stage.rh.sub` | Publiez, triez et échangez avec vos candidats au même endroit, avec une IA qui explique ses choix. |
+| `auth.stage.rh.line` | Connectez-vous pour retrouver vos candidats |
+| `auth.stage.rh.cards.1.title` | Profil recommandé |
+| `auth.stage.rh.cards.1.text` | Kofi A. · Data analyst |
+| `auth.stage.rh.cards.1.pill` | Pourquoi ? |
+| `auth.stage.rh.cards.2.title` | Entretien planifié |
+| `auth.stage.rh.cards.2.text` | Jeudi · 10:00 |
+| `auth.stage.rh.cards.3.title` | Candidatures triées |
+| `auth.stage.rh.cards.3.text` | Pipeline à jour |
+| `auth.stage.company.eyebrow` | Pour les entreprises |
+| `auth.stage.company.hook` | Prêt à bâtir <hl>l'équipe</hl> qui fera grandir votre entreprise ? |
+| `auth.stage.company.sub` | Un vivier de talents formés, un suivi de recrutement clair et toute votre équipe sur la même page. |
+| `auth.stage.company.line` | Connectez-vous pour piloter vos recrutements |
+| `auth.stage.company.cards.1.title` | Offre publiée |
+| `auth.stage.company.cards.1.text` | Chargé(e) de clientèle |
+| `auth.stage.company.cards.2.title` | Votre équipe recrute |
+| `auth.stage.company.cards.2.text` | Recruteurs invités |
+| `auth.stage.company.cards.3.title` | Vivier de talents |
+| `auth.stage.company.cards.3.text` | Profils formés sur Jumanly |
 
 ---
 
@@ -1358,6 +1412,16 @@ Note d'intégration : l'étape « Paiement » n'apparaît dans l'indicateur que 
 | `signup.profile.beneficiary` | Vous êtes bénéficiaire et avez reçu un code de licence ? Choisissez « Talent », puis activez votre code. |
 | `signup.profile.error.required` | Choisissez le profil qui vous correspond. |
 | `signup.profile.cta` | Continuer |
+| `signup.entry.title` | Créez votre compte gratuit |
+| `signup.entry.subtitle` | Quelques secondes suffisent. Vous choisirez votre formule ensuite. |
+| `signup.entry.who` | Vous êtes |
+| `signup.entry.profiles.talent` | Talent |
+| `signup.entry.profiles.rh` | Professionnel RH |
+| `signup.entry.profiles.company` | Entreprise |
+| `signup.entry.continue` | Continuer |
+| `signup.entry.free` | Inscription gratuite |
+| `signup.entry.payment` | Mobile Money et carte |
+| `signup.entry.legal` | En créant un compte, vous acceptez les {terms} et la {privacy} de Jumanly. |
 
 ---
 

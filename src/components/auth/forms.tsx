@@ -105,7 +105,20 @@ export function LoginForm({ next }: { next?: string }) {
           {t("login.forgot")}
         </Link>
       </div>
-      <Button type="submit" size="lg" loading={pending} fullWidth>
+      <Button
+        type="submit"
+        size="lg"
+        loading={pending}
+        fullWidth
+        className="jm-ae-submit"
+        iconAfter={
+          pending ? undefined : (
+            <span aria-hidden className="jm-ae-arrow">
+              <Icon name="suivant" className="size-4" />
+            </span>
+          )
+        }
+      >
         {pending ? t("login.submitting") : t("login.submit")}
       </Button>
     </form>
@@ -320,12 +333,15 @@ export function SignupAccountForm({
   next,
   countries,
   defaultCountry,
+  defaultEmail,
 }: {
   profile: "talent" | "rh" | "company";
   plan?: string;
   next?: string;
   countries: { value: string; label: string }[];
   defaultCountry?: string;
+  /** E-mail typed on the entry screen (sign-up cookie). */
+  defaultEmail?: string;
 }) {
   const t = useTranslations();
   const errorText = useErrorText();
@@ -395,7 +411,7 @@ export function SignupAccountForm({
         placeholder={t("signup.account.email.placeholder")}
         hint={isOrg ? t("signup.account.email.helpOrg") : t("signup.account.email.help")}
         required
-        defaultValue={values.email}
+        defaultValue={values.email ?? defaultEmail}
         error={errors.email === "emailTaken" ? undefined : errorText(errors.email)}
       />
       <PasswordField

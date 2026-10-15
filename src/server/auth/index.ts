@@ -35,6 +35,11 @@ export const googleEnabled = Boolean(
   process.env.GOOGLE_CLIENT_ID && process.env.GOOGLE_CLIENT_SECRET,
 );
 
+/** Providers offered on the entry screen, in the order of its buttons. */
+export function enabledProviders() {
+  return googleEnabled ? (["google"] as const) : [];
+}
+
 export const auth = betterAuth({
   appName: "Jumanly",
   baseURL: process.env.BETTER_AUTH_URL || siteUrl(),
