@@ -142,12 +142,15 @@ test("vérification de l'entreprise et page publique", async ({
     await admin.context().close();
   }
 
-  await page.goto("/entreprises/demo-groupe-fictif");
+  // The public page is cached: the approval refreshes it, a reload shows the new badge.
+  await expect(async () => {
+    await page.goto("/entreprises/demo-groupe-fictif");
+    await expect(page.getByText("Entreprise vérifiée").first()).toBeVisible({ timeout: 3_000 });
+  }).toPass({ timeout: 30_000 });
   await expect(page.getByRole("heading", { level: 1 })).toContainText("Groupe Démo");
   await expect(
     page.getByRole("link", { name: "Analyste de données (poste fictif)" }),
   ).toBeVisible();
-  await expect(page.getByText("Entreprise vérifiée").first()).toBeVisible();
   await expectAccessible(page);
 });
 

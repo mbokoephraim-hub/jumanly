@@ -168,7 +168,8 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
     timeout: 20_000,
   });
   await page.getByRole("link", { name: "Voir mon diagnostic" }).click({ timeout: 30_000 });
-  await expect(page).toHaveURL(/bilan=/);
+  // The flipped card navigates on the client; a busy CI runner can take a while.
+  await expect(page).toHaveURL(/bilan=/, { timeout: 30_000 });
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Votre bilan de carrière");
   const main = page.getByRole("main");
   await expect(main.getByRole("heading", { name: "Votre niveau global" })).toBeVisible();
@@ -207,7 +208,8 @@ test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini
   expect(await answerDiagnostic(flow)).toBe(2);
 
   await page.getByRole("link", { name: "Voir mon diagnostic" }).click({ timeout: 30_000 });
-  await expect(page).toHaveURL(/bilan=/);
+  // The flipped card navigates on the client; a busy CI runner can take a while.
+  await expect(page).toHaveURL(/bilan=/, { timeout: 30_000 });
   const main = page.getByRole("main");
   const miniPlan = main.getByRole("region", { name: "Votre mini plan gratuit" });
   await expect(miniPlan.getByRole("listitem")).toHaveCount(3);
