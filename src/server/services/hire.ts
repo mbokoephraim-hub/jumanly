@@ -361,6 +361,52 @@ export async function closeJob(db: PrismaClient, ctx: HireContext, jobId: string
   await audit(db, ctx, "job.close", job.id);
 }
 
+/** « Dupliquer » (mockup 04-02): the same job as a new draft, without candidates nor pipeline. */
+export async function duplicateJob(db: PrismaClient, ctx: HireContext, jobId: string) {
+  assert(hirePermissions(ctx.role).manage);
+  const job = await getOrgJob(db, ctx, jobId);
+  const copy = await db.job.create({
+    data: {
+      organizationId: ctx.organizationId,
+      createdById: ctx.userId,
+      slug: await uniqueSlug(db, job.title, job.city),
+      status: "draft",
+      title: job.title,
+      description: job.description,
+      responsibilities: job.responsibilities,
+      requirements: job.requirements,
+      benefits: job.benefits,
+      contractType: job.contractType,
+      city: job.city,
+      country: job.country,
+      remote: job.remote,
+      salaryMin: job.salaryMin,
+      salaryMax: job.salaryMax,
+      currency: job.currency,
+      experienceMin: job.experienceMin,
+      educationLevelMin: job.educationLevelMin,
+      languagesRequired: job.languagesRequired ?? [],
+      knockoutCriteria: job.knockoutCriteria ?? [],
+      rejectionTemplate: job.rejectionTemplate,
+      scorecardTemplate: job.scorecardTemplate ?? [],
+      assignedToId: job.assignedToId,
+      teamId: job.teamId,
+      departmentId: job.departmentId,
+      entityId: job.entityId,
+      skills: {
+        create: job.skills.map((skill) => ({
+          skillId: skill.skillId,
+          importance: skill.importance,
+          weight: skill.weight,
+          minLevel: skill.minLevel,
+        })),
+      },
+    },
+  });
+  await audit(db, ctx, "job.duplicate", copy.id, { from: job.id });
+  return copy.id;
+}
+
 export async function deleteDraft(db: PrismaClient, ctx: HireContext, jobId: string) {
   assert(hirePermissions(ctx.role).manage);
   const job = await getOrgJob(db, ctx, jobId);
@@ -573,28 +619,107 @@ export async function addNote(
 }
 
 /** Counts for the dashboard, all scoped to the organization. */
-export async function hireDashboard(db: PrismaClient, ctx: HireContext) {
+/** Response time the dashboard compares to (« Objectif 2 j », mockup 04-01). */
+export const RESPONSE_GOAL_DAYS = 2;
+/** Days after which a new application counts as waiting for an answer. */
+export const WAITING_DAYS = 5;
+
+/**
+ * What the Hire dashboard shows (partie 07 § 4, mockup 04-01): active jobs with the spread of their
+ * candidates over the steps, what needs an action, and a few key figures. Everything is limited to
+ * the jobs the member can see (`jobScope`).
+ */
+export async function hireDashboard(db: PrismaClient, ctx: HireContext, now = new Date()) {
   const scope = await jobScope(db, ctx);
   const where = { job: scope };
-  const [jobs, applications, unseen, waiting] = await Promise.all([
-    db.job.findMany({
-      where: { AND: [scope, { status: { in: [...activeStatuses] } }] },
-      orderBy: { publishedAt: "desc" },
-      select: { id: true, title: true, status: true, _count: { select: { applications: true } } },
-    }),
-    db.application.count({ where }),
-    db.application.count({ where: { ...where, viewedAt: null, status: "active" } }),
-    db.application.count({
-      where: {
-        ...where,
-        status: "active",
-        stage: { kind: "new" },
-        createdAt: { lt: new Date(Date.now() - 5 * 86_400_000) },
-      },
-    }),
-  ]);
-  return { jobs, applications, unseen, waiting };
+  const weekAgo = new Date(now.getTime() - 7 * 86_400_000);
+  const waitingSince = new Date(now.getTime() - WAITING_DAYS * 86_400_000);
+  const quarterAgo = new Date(now.getTime() - 90 * 86_400_000);
+  const [jobs, applications, thisWeek, unseenRows, waitingRows, scores, answered] =
+    await Promise.all([
+      db.job.findMany({
+        where: { AND: [scope, { status: { in: [...activeStatuses] } }] },
+        orderBy: { publishedAt: "desc" },
+        select: {
+          id: true,
+          title: true,
+          status: true,
+          _count: { select: { applications: true } },
+          applications: {
+            where: { status: "active" },
+            select: { viewedAt: true, stage: { select: { kind: true } } },
+          },
+        },
+      }),
+      db.application.count({ where }),
+      db.application.count({ where: { ...where, createdAt: { gte: weekAgo } } }),
+      db.application.findMany({
+        where: { ...where, viewedAt: null, status: "active" },
+        select: { job: { select: { id: true, title: true } } },
+      }),
+      db.application.findMany({
+        where: {
+          ...where,
+          status: "active",
+          stage: { kind: "new" },
+          createdAt: { lt: waitingSince },
+        },
+        select: { job: { select: { id: true, title: true } } },
+      }),
+      db.application.findMany({
+        where: { ...where, status: "active", matchScore: { not: null } },
+        select: { matchScore: true },
+      }),
+      // First answer of the team (a step change or a decision) to the recent applications.
+      db.application.findMany({
+        where: { ...where, createdAt: { gte: quarterAgo } },
+        select: {
+          createdAt: true,
+          events: {
+            where: { type: { in: ["stage_changed", "decision"] } },
+            orderBy: { createdAt: "asc" },
+            take: 1,
+            select: { createdAt: true },
+          },
+        },
+      }),
+    ]);
+  const delays = answered
+    .filter((row) => row.events[0])
+    .map((row) => (row.events[0]!.createdAt.getTime() - row.createdAt.getTime()) / 86_400_000);
+  const values = scores.map((row) => row.matchScore!).sort((a, b) => b - a);
+  const mean = (list: number[]) =>
+    list.length ? Math.round(list.reduce((sum, value) => sum + value, 0) / list.length) : null;
+  const jobsOf = (rows: { job: { id: string; title: string } }[]) => {
+    const seen = new Map<string, string>();
+    for (const row of rows) seen.set(row.job.id, row.job.title);
+    return [...seen].map(([id, title]) => ({ id, title }));
+  };
+  return {
+    jobs: jobs.map(({ applications: active, ...job }) => ({
+      ...job,
+      unseen: active.filter((item) => !item.viewedAt).length,
+      stages: stageKinds.map((kind) => ({
+        kind,
+        count: active.filter((item) => item.stage.kind === kind).length,
+      })),
+    })),
+    applications,
+    thisWeek,
+    unseen: unseenRows.length,
+    unseenJobs: jobsOf(unseenRows),
+    waiting: waitingRows.length,
+    waitingJobs: jobsOf(waitingRows),
+    /** Average days before the team's first answer, one decimal; null without any answer yet. */
+    responseDays: delays.length
+      ? Math.round((delays.reduce((a, b) => a + b, 0) / delays.length) * 10) / 10
+      : null,
+    compatibility: { average: mean(values), top: mean(values.slice(0, 10)) },
+  };
 }
+
+/** Steps shown in the dashboard bars and the pipeline columns, in order (no « Non retenu »). */
+export const stageKinds = ["new", "screening", "test", "interview", "offer", "hired"] as const;
 
 async function audit(
   db: PrismaClient,

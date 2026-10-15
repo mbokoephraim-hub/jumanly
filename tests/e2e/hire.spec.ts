@@ -60,6 +60,8 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await page.locator("#job-country").fill("Côte d'Ivoire");
   await page.locator("#job-salaryMin").fill("400");
   await page.locator("#job-salaryMax").fill("700");
+  const next = page.getByRole("button", { name: "Continuer" });
+  await next.click();
   await page
     .locator("#job-description-text")
     .fill(
@@ -68,7 +70,13 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await page
     .locator("#job-responsibilities")
     .fill("Préparer les rapports mensuels\nNettoyer les données");
+  await next.click();
   await page.locator("#job-requiredSkills").fill("Analyse de données");
+  // Criteria and process keep their defaults; publishing asks for the certification.
+  await next.click();
+  await next.click();
+  await next.click();
+  await page.getByLabel(/Je certifie que cette offre/).check();
   await page.getByRole("button", { name: "Publier l'offre" }).click();
   await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/?]+\?publiee=1/);
   await expect(page.getByRole("main")).toContainText("Votre offre est en ligne !");

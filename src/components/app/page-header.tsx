@@ -14,6 +14,7 @@ export function AppPageHeader(props: {
   /** "p" when the page's h1 is further down (the lesson title in the player). */
   titleAs?: "h1" | "p";
   module?: UniverseKey;
+  illustration?: string;
   className?: string;
 }) {
   return <UniverseHeader {...props} />;

@@ -425,7 +425,12 @@ export async function upcomingTalentInterviews(db: PrismaClient, userId: string,
 export async function upcomingOrgInterviews(db: PrismaClient, ctx: HireContext, now = new Date()) {
   const week = new Date(now.getTime() + 7 * 86_400_000);
   const scope = await jobScope(db, ctx);
-  const [next, thisWeek] = await Promise.all([
+  const confirmed = {
+    organizationId: ctx.organizationId,
+    application: { job: scope },
+    status: "confirmed" as const,
+  };
+  const [next, thisWeek, total] = await Promise.all([
     db.interview.findMany({
       where: {
         organizationId: ctx.organizationId,
@@ -445,6 +450,7 @@ export async function upcomingOrgInterviews(db: PrismaClient, ctx: HireContext, 
         startsAt: { gte: now, lt: week },
       },
     }),
+    db.interview.count({ where: { ...confirmed, startsAt: { gte: now } } }),
   ]);
-  return { next, thisWeek };
+  return { next, thisWeek, total };
 }

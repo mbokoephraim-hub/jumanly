@@ -2113,7 +2113,8 @@
       "talents": "Talents",
       "interviews": "Entretiens",
       "reports": "Rapports",
-      "pools": "Viviers"
+      "pools": "Viviers",
+      "messages": "Connect"
     },
     "organization": "Organisation",
     "partner": "Partenaire",
@@ -5236,7 +5237,8 @@
         "activeJobs": {
           "text": "Offres actives",
           "value": "{count} sur {max}"
-        }
+        },
+        "none": "—"
       },
       "toDo": {
         "title": "À traiter",
@@ -5244,7 +5246,9 @@
         "noReply": "{count, plural, one {# candidat attend une réponse depuis plus de {days} jours} other {# candidats attendent une réponse depuis plus de {days} jours}}",
         "scorecards": "{count, plural, one {# évaluation à compléter} other {# évaluations à compléter}}",
         "contactAccepted": "{count, plural, one {# mise en relation acceptée} other {# mises en relation acceptées}}",
-        "empty": "Rien en attente. Beau travail."
+        "empty": "Rien en attente. Beau travail.",
+        "scorecardsHint": "Après vos derniers entretiens",
+        "contactHint": "Depuis la recherche de talents"
       },
       "jobs": {
         "title": "Offres actives",
@@ -5253,13 +5257,17 @@
         "empty": {
           "text": "Aucune offre active. Publiez votre première offre en quelques minutes.",
           "cta": "Créer une offre"
-        }
+        },
+        "newTag": "{count, plural, one {# nouvelle} other {# nouvelles}}",
+        "bar": "Candidats par étape : {detail}"
       },
       "interviews": {
         "title": "Entretiens à venir",
         "row": "{time} · {candidateName} · {jobTitle}",
         "empty": "Aucun entretien planifié.",
-        "locked": "Rendez-vous et agenda · Disponible avec {plan}"
+        "locked": "Rendez-vous et agenda · Disponible avec {plan}",
+        "with": "{mode} · avec {memberName}",
+        "where": "{mode} · {place}"
       },
       "quotas": {
         "title": "Quotas de l'organisation",
@@ -5280,7 +5288,11 @@
         "cta": "Demander la vérification",
         "pending": "Votre demande de vérification est en cours d'examen."
       },
-      "fairness": "Rappel : les profils Free sont des candidats comme les autres. Le forfait d'un talent n'influence jamais son score."
+      "fairness": "Rappel : les profils Free sont des candidats comme les autres. Le forfait d'un talent n'influence jamais son score.",
+      "banner": {
+        "jobs": "{count, plural, =0 {Aucune offre active} one {# offre active} other {# offres actives}}",
+        "team": "{count, plural, one {# recruteur dans l'équipe} other {# recruteurs dans l'équipe}}"
+      }
     },
     "jobs": {
       "title": "Mes offres",
@@ -5292,7 +5304,9 @@
         "all": "Toutes"
       },
       "search": {
-        "placeholder": "Rechercher une offre"
+        "placeholder": "Rechercher une offre",
+        "submit": "Rechercher",
+        "empty": "Aucune offre ne correspond à « {query} »."
       },
       "filter": {
         "owner": "Responsable",
@@ -5300,7 +5314,8 @@
         "department": "Département",
         "entity": "Entité",
         "all": "Tous",
-        "submit": "Filtrer"
+        "submit": "Filtrer",
+        "locked": "Disponible avec {plan}"
       },
       "limit": {
         "text": "{count, plural, one {# offre active} other {# offres actives}} sur {max} incluses dans {plan}",
@@ -5324,7 +5339,10 @@
         "new": "{count, plural, one {# nouvelle} other {# nouvelles}}",
         "published": "Publiée le {date, date, medium}",
         "expires": "Expire le {date, date, medium}",
-        "owner": "Responsable : {memberName}"
+        "owner": "Responsable : {memberName}",
+        "sent": "Envoyée le {date, date, medium}",
+        "notPublished": "Pas encore publiée",
+        "menu": "Actions pour « {jobTitle} »"
       },
       "action": {
         "pipeline": "Ouvrir le pipeline",
@@ -5367,7 +5385,19 @@
       },
       "assign": {
         "locked": "Attribution des offres aux responsables · Disponible avec {plan}"
-      }
+      },
+      "col": {
+        "job": "Offre",
+        "status": "Statut",
+        "applications": "Candidatures",
+        "publication": "Publication",
+        "actions": "Actions"
+      },
+      "cancel": "Annuler",
+      "reopened": {
+        "limit": "Vous avez atteint la limite d'offres actives de votre forfait. Fermez une offre ou passez à un forfait supérieur pour rouvrir celle-ci."
+      },
+      "tabs": "Offres par statut"
     },
     "assign": {
       "title": "Attribution",
@@ -5396,7 +5426,9 @@
         "skills": "Compétences",
         "criteria": "Critères",
         "process": "Processus",
-        "preview": "Aperçu et publication"
+        "preview": "Aperçu et publication",
+        "current": "Étape {current} sur {total} · {step}",
+        "aria": "Étapes de l'offre"
       },
       "next": "Continuer",
       "back": "Retour",
@@ -5464,7 +5496,8 @@
       "benefits": {
         "text": "Avantages",
         "add": "Ajouter un avantage",
-        "placeholder": "Ex. : Assurance santé, budget formation"
+        "placeholder": "Ex. : Assurance santé, budget formation",
+        "remove": "Retirer « {benefit} »"
       },
       "about": "À propos de l'équipe (facultatif)",
       "language": "Langue de l'offre",
@@ -5593,7 +5626,10 @@
           "salary": "Rémunération indiquée (recommandé)",
           "location": "Lieu et mode de travail",
           "deadline": "Date limite"
-        }
+        },
+        "salaryRange": "{min} – {max} USD/mois",
+        "salaryOne": "{amount} USD/mois",
+        "verified": "Entreprise vérifiée"
       },
       "publish": {
         "text": "Publier l'offre",
@@ -5612,10 +5648,12 @@
       },
       "error": {
         "required": "Ce champ est obligatoire pour publier.",
-        "invalid": "Certaines informations ne sont pas valides. Vérifiez le formulaire."
+        "invalid": "Certaines informations ne sont pas valides. Vérifiez le formulaire.",
+        "certify": "Cochez la case de certification pour publier l'offre."
       },
       "draft": {
-        "ok": "Brouillon enregistré."
+        "ok": "Brouillon enregistré.",
+        "copied": "Copie créée en brouillon. Vérifiez-la puis publiez-la."
       },
       "summary": {
         "text": "Présentation du poste",
@@ -5623,6 +5661,23 @@
       },
       "lines": {
         "hint": "Un élément par ligne."
+      },
+      "draftSavedAt": "Brouillon enregistré {time}",
+      "ai": {
+        "draftHint": "À partir de l'intitulé et de l'essentiel saisis à l'étape 1.",
+        "draftCta": "Rédiger",
+        "drafted": "Première version ajoutée dans les champs vides. Relisez-la et adaptez-la.",
+        "draftNothing": "L'IA n'a rien proposé de plus. Vos champs sont inchangés.",
+        "improveIntro": "L'IA relit vos missions et propose des formulations plus claires. Vous choisissez ce que vous gardez.",
+        "improveEmpty": "Aucune amélioration proposée : vos missions sont déjà claires.",
+        "needTitle": "Indiquez d'abord l'intitulé du poste à l'étape 1.",
+        "needMissions": "Ajoutez au moins une mission pour que l'IA la relise.",
+        "consent": "Activez Jumanly Intelligence dans vos paramètres de confidentialité pour utiliser l'aide à la rédaction.",
+        "locked": "L'aide à la rédaction est disponible avec {plan}. Vous pouvez rédiger votre offre librement.",
+        "quota": "Les crédits IA de votre organisation sont épuisés pour ce mois. Vous pouvez rédiger votre offre librement."
+      },
+      "templates": {
+        "empty": "Aucune offre à reprendre pour l'instant."
       }
     },
     "pipeline": {

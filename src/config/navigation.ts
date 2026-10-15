@@ -54,6 +54,7 @@ export type AppNavigationKey =
   | "hire.pools"
   | "hire.interviews"
   | "hire.reports"
+  | "hire.messages"
   | "organization"
   | "partnerLicenses"
   | "partnerReports";
@@ -79,11 +80,11 @@ export const talentNavigation: AppNavigationItem[] = [
 export const hireNavigation: AppNavigationItem[] = [
   { key: "home", href: "/app/hire", icon: "accueil" },
   { key: "hire.jobs", href: "/app/hire/offres", icon: "jobs" },
-  { key: "hire.talents", href: "/app/hire/talents", icon: "recherche" },
+  { key: "hire.talents", href: "/app/hire/talents", icon: "hire" },
   { key: "hire.pools", href: "/app/hire/viviers", icon: "equipe", pill: false },
   { key: "hire.interviews", href: "/app/hire/entretiens", icon: "calendrier", pill: false },
+  { key: "hire.messages", href: "/app/messages", icon: "connect" },
   { key: "hire.reports", href: "/app/hire/rapports", icon: "statistiques", pill: false },
-  { key: "messages", href: "/app/messages", icon: "message" },
   { key: "organization", href: "/app/organisation", icon: "entreprise" },
 ];
 
