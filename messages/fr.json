@@ -2287,6 +2287,222 @@
     "switched": "Vous êtes dans l'espace {space}.",
     "pendingInvites": "{count, plural, one {# invitation en attente} other {# invitations en attente}}"
   },
+  "intro": {
+    "label": "Présentation de Jumanly",
+    "skip": "Passer l'intro",
+    "skipKey": "Échap",
+    "wordmark": "jumanly",
+    "welcome": "Bienvenue,",
+    "welcomeNoName": "Bienvenue",
+    "back": "Bon retour, {name}",
+    "backNoName": "Bon retour",
+    "slogan": "Learn. Grow. Connect.",
+    "live": "Bienvenue, {name}. Présentation de Jumanly.",
+    "liveNoName": "Bienvenue. Présentation de Jumanly.",
+    "toast": {
+      "first": "Bienvenue sur Jumanly, {name} !",
+      "back": "Bon retour, {name} !"
+    },
+    "talent": {
+      "modules": {
+        "1": {
+          "tag": "Learn",
+          "left": "Votre",
+          "right": "formation",
+          "cards": {
+            "1": {
+              "value": "38",
+              "title": "Leçon 3 sur 8",
+              "text": "Excel pour l'analyse"
+            },
+            "2": {
+              "title": "Certificat",
+              "text": "Délivré à la fin du parcours"
+            }
+          }
+        },
+        "2": {
+          "tag": "Career",
+          "left": "Votre",
+          "right": "CV",
+          "cards": {
+            "1": {
+              "value": "82",
+              "title": "Score du CV",
+              "text": "82/100 · Prêt"
+            },
+            "2": {
+              "title": "Conseil de l'IA",
+              "text": "Ajoutez un résultat chiffré",
+              "pill": "Pourquoi ?"
+            }
+          }
+        },
+        "3": {
+          "tag": "Jobs",
+          "left": "Votre",
+          "right": "emploi",
+          "cards": {
+            "1": {
+              "title": "Analyste de données junior",
+              "text": "Compatibilité 87 %"
+            },
+            "2": {
+              "title": "Candidature envoyée",
+              "text": "Suivez-la dans Jobs"
+            }
+          }
+        },
+        "4": {
+          "tag": "Connect",
+          "left": "Votre",
+          "right": "réseau",
+          "cards": {
+            "1": {
+              "title": "Nadia, recruteuse",
+              "text": "« Votre profil nous intéresse »"
+            },
+            "2": {
+              "title": "Entretien",
+              "text": "Jeudi · 10:00"
+            }
+          }
+        }
+      }
+    },
+    "rh": {
+      "modules": {
+        "1": {
+          "tag": "Jobs",
+          "left": "Vos",
+          "right": "offres",
+          "cards": {
+            "1": {
+              "title": "Offre publiée",
+              "text": "Data analyst · Kinshasa"
+            },
+            "2": {
+              "title": "Diffusée aux talents",
+              "text": "du vivier Jumanly"
+            }
+          }
+        },
+        "2": {
+          "tag": "Hire",
+          "left": "Vos",
+          "right": "candidats",
+          "cards": {
+            "1": {
+              "value": "55",
+              "title": "Pipeline",
+              "text": "Nouveaux · Entretien · Offre"
+            },
+            "2": {
+              "title": "Candidature avancée",
+              "text": "Étape Entretien"
+            }
+          }
+        },
+        "3": {
+          "tag": "Intelligence",
+          "left": "Vos",
+          "right": "profils",
+          "cards": {
+            "1": {
+              "title": "Profil recommandé",
+              "text": "Kofi A. · Data analyst",
+              "pill": "Pourquoi ?"
+            },
+            "2": {
+              "title": "Critères visibles",
+              "text": "L'IA explique chaque score"
+            }
+          }
+        },
+        "4": {
+          "tag": "Connect",
+          "left": "Vos",
+          "right": "échanges",
+          "cards": {
+            "1": {
+              "title": "Kofi A.",
+              "text": "« Merci pour l'invitation »"
+            },
+            "2": {
+              "title": "Entretien planifié",
+              "text": "Jeudi · 10:00"
+            }
+          }
+        }
+      }
+    },
+    "company": {
+      "modules": {
+        "1": {
+          "tag": "Jobs",
+          "left": "Vos",
+          "right": "offres",
+          "cards": {
+            "1": {
+              "title": "Offre publiée",
+              "text": "Chargé(e) de clientèle"
+            },
+            "2": {
+              "title": "Page entreprise",
+              "text": "Votre marque employeur"
+            }
+          }
+        },
+        "2": {
+          "tag": "Vivier",
+          "left": "Votre",
+          "right": "vivier",
+          "cards": {
+            "1": {
+              "title": "Talents formés",
+              "text": "Certificats vérifiables"
+            },
+            "2": {
+              "title": "Matching explicable",
+              "text": "Chaque score a ses raisons",
+              "pill": "Pourquoi ?"
+            }
+          }
+        },
+        "3": {
+          "tag": "Équipe",
+          "left": "Votre",
+          "right": "équipe",
+          "cards": {
+            "1": {
+              "title": "Recruteurs invités",
+              "text": "Rôles et droits par membre"
+            },
+            "2": {
+              "title": "Note de Nadia",
+              "text": "« À rencontrer »"
+            }
+          }
+        },
+        "4": {
+          "tag": "Hire",
+          "left": "Vos",
+          "right": "recrutements",
+          "cards": {
+            "1": {
+              "value": "70",
+              "title": "Tableau de bord",
+              "text": "Délais et étapes"
+            },
+            "2": {
+              "title": "Poste pourvu",
+              "text": "Bienvenue dans l'équipe"
+            }
+          }
+        }
+      }
+    }
+  },
   "talent": {
     "dashboard": {
       "title": "Accueil",
@@ -5357,6 +5573,10 @@
       "reduceMotion": {
         "text": "Réduire les animations",
         "hint": "Les pages s'affichent sans mouvement : mêmes informations, sans apparitions ni effets de lumière. Votre appareil peut aussi le demander pour tous les sites."
+      },
+      "replayIntro": {
+        "text": "Revoir la présentation",
+        "hint": "Rejoue le générique d'accueil de Jumanly, celui de votre première connexion."
       }
     },
     "security": {

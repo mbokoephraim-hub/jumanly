@@ -1888,6 +1888,119 @@ Conventions :
 
 ---
 
+### Espace · Générique d'entrée
+
+*Joué après une connexion réussie (docs/refonte-connexion/BRIEF-CONNEXION-V2.md § 7) : la version complète une seule fois par compte, la version courte ensuite, jamais en animations réduites (le message de bienvenue s'affiche à la place). Les cartes et leurs chiffres sont des illustrations de l'appli, identiques pour tout le monde, jamais des données du compte.*
+
+| Clé | Texte |
+|---|---|
+| `intro.label` | Présentation de Jumanly |
+| `intro.skip` | Passer l'intro |
+| `intro.skipKey` | Échap |
+| `intro.wordmark` | jumanly |
+| `intro.welcome` | Bienvenue, |
+| `intro.welcomeNoName` | Bienvenue |
+| `intro.back` | Bon retour, {name} |
+| `intro.backNoName` | Bon retour |
+| `intro.slogan` | Learn. Grow. Connect. |
+| `intro.live` | Bienvenue, {name}. Présentation de Jumanly. |
+| `intro.liveNoName` | Bienvenue. Présentation de Jumanly. |
+| `intro.toast.first` | Bienvenue sur Jumanly, {name} ! |
+| `intro.toast.back` | Bon retour, {name} ! |
+| `intro.talent.modules.1.tag` | Learn |
+| `intro.talent.modules.1.left` | Votre |
+| `intro.talent.modules.1.right` | formation |
+| `intro.talent.modules.1.cards.1.value` | 38 |
+| `intro.talent.modules.1.cards.1.title` | Leçon 3 sur 8 |
+| `intro.talent.modules.1.cards.1.text` | Excel pour l'analyse |
+| `intro.talent.modules.1.cards.2.title` | Certificat |
+| `intro.talent.modules.1.cards.2.text` | Délivré à la fin du parcours |
+| `intro.talent.modules.2.tag` | Career |
+| `intro.talent.modules.2.left` | Votre |
+| `intro.talent.modules.2.right` | CV |
+| `intro.talent.modules.2.cards.1.value` | 82 |
+| `intro.talent.modules.2.cards.1.title` | Score du CV |
+| `intro.talent.modules.2.cards.1.text` | 82/100 · Prêt |
+| `intro.talent.modules.2.cards.2.title` | Conseil de l'IA |
+| `intro.talent.modules.2.cards.2.text` | Ajoutez un résultat chiffré |
+| `intro.talent.modules.2.cards.2.pill` | Pourquoi ? |
+| `intro.talent.modules.3.tag` | Jobs |
+| `intro.talent.modules.3.left` | Votre |
+| `intro.talent.modules.3.right` | emploi |
+| `intro.talent.modules.3.cards.1.title` | Analyste de données junior |
+| `intro.talent.modules.3.cards.1.text` | Compatibilité 87 % |
+| `intro.talent.modules.3.cards.2.title` | Candidature envoyée |
+| `intro.talent.modules.3.cards.2.text` | Suivez-la dans Jobs |
+| `intro.talent.modules.4.tag` | Connect |
+| `intro.talent.modules.4.left` | Votre |
+| `intro.talent.modules.4.right` | réseau |
+| `intro.talent.modules.4.cards.1.title` | Nadia, recruteuse |
+| `intro.talent.modules.4.cards.1.text` | « Votre profil nous intéresse » |
+| `intro.talent.modules.4.cards.2.title` | Entretien |
+| `intro.talent.modules.4.cards.2.text` | Jeudi · 10:00 |
+| `intro.rh.modules.1.tag` | Jobs |
+| `intro.rh.modules.1.left` | Vos |
+| `intro.rh.modules.1.right` | offres |
+| `intro.rh.modules.1.cards.1.title` | Offre publiée |
+| `intro.rh.modules.1.cards.1.text` | Data analyst · Kinshasa |
+| `intro.rh.modules.1.cards.2.title` | Diffusée aux talents |
+| `intro.rh.modules.1.cards.2.text` | du vivier Jumanly |
+| `intro.rh.modules.2.tag` | Hire |
+| `intro.rh.modules.2.left` | Vos |
+| `intro.rh.modules.2.right` | candidats |
+| `intro.rh.modules.2.cards.1.value` | 55 |
+| `intro.rh.modules.2.cards.1.title` | Pipeline |
+| `intro.rh.modules.2.cards.1.text` | Nouveaux · Entretien · Offre |
+| `intro.rh.modules.2.cards.2.title` | Candidature avancée |
+| `intro.rh.modules.2.cards.2.text` | Étape Entretien |
+| `intro.rh.modules.3.tag` | Intelligence |
+| `intro.rh.modules.3.left` | Vos |
+| `intro.rh.modules.3.right` | profils |
+| `intro.rh.modules.3.cards.1.title` | Profil recommandé |
+| `intro.rh.modules.3.cards.1.text` | Kofi A. · Data analyst |
+| `intro.rh.modules.3.cards.1.pill` | Pourquoi ? |
+| `intro.rh.modules.3.cards.2.title` | Critères visibles |
+| `intro.rh.modules.3.cards.2.text` | L'IA explique chaque score |
+| `intro.rh.modules.4.tag` | Connect |
+| `intro.rh.modules.4.left` | Vos |
+| `intro.rh.modules.4.right` | échanges |
+| `intro.rh.modules.4.cards.1.title` | Kofi A. |
+| `intro.rh.modules.4.cards.1.text` | « Merci pour l'invitation » |
+| `intro.rh.modules.4.cards.2.title` | Entretien planifié |
+| `intro.rh.modules.4.cards.2.text` | Jeudi · 10:00 |
+| `intro.company.modules.1.tag` | Jobs |
+| `intro.company.modules.1.left` | Vos |
+| `intro.company.modules.1.right` | offres |
+| `intro.company.modules.1.cards.1.title` | Offre publiée |
+| `intro.company.modules.1.cards.1.text` | Chargé(e) de clientèle |
+| `intro.company.modules.1.cards.2.title` | Page entreprise |
+| `intro.company.modules.1.cards.2.text` | Votre marque employeur |
+| `intro.company.modules.2.tag` | Vivier |
+| `intro.company.modules.2.left` | Votre |
+| `intro.company.modules.2.right` | vivier |
+| `intro.company.modules.2.cards.1.title` | Talents formés |
+| `intro.company.modules.2.cards.1.text` | Certificats vérifiables |
+| `intro.company.modules.2.cards.2.title` | Matching explicable |
+| `intro.company.modules.2.cards.2.text` | Chaque score a ses raisons |
+| `intro.company.modules.2.cards.2.pill` | Pourquoi ? |
+| `intro.company.modules.3.tag` | Équipe |
+| `intro.company.modules.3.left` | Votre |
+| `intro.company.modules.3.right` | équipe |
+| `intro.company.modules.3.cards.1.title` | Recruteurs invités |
+| `intro.company.modules.3.cards.1.text` | Rôles et droits par membre |
+| `intro.company.modules.3.cards.2.title` | Note de Nadia |
+| `intro.company.modules.3.cards.2.text` | « À rencontrer » |
+| `intro.company.modules.4.tag` | Hire |
+| `intro.company.modules.4.left` | Vos |
+| `intro.company.modules.4.right` | recrutements |
+| `intro.company.modules.4.cards.1.value` | 70 |
+| `intro.company.modules.4.cards.1.title` | Tableau de bord |
+| `intro.company.modules.4.cards.1.text` | Délais et étapes |
+| `intro.company.modules.4.cards.2.title` | Poste pourvu |
+| `intro.company.modules.4.cards.2.text` | Bienvenue dans l'équipe |
+
+---
+
 ### `/app` · Tableau de bord talent
 
 *Accueillir, montrer la prochaine étape et rappeler que tout le parcours mène à l'emploi.*
@@ -4322,6 +4435,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `settings.display.title` | Affichage |
 | `settings.display.reduceMotion.text` | Réduire les animations |
 | `settings.display.reduceMotion.hint` | Les pages s'affichent sans mouvement : mêmes informations, sans apparitions ni effets de lumière. Votre appareil peut aussi le demander pour tous les sites. |
+| `settings.display.replayIntro.text` | Revoir la présentation |
+| `settings.display.replayIntro.hint` | Rejoue le générique d'accueil de Jumanly, celui de votre première connexion. |
 
 #### Sécurité
 

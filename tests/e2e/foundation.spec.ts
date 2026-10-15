@@ -1,4 +1,4 @@
-import { expect, test } from "@playwright/test";
+import { expect, test } from "./fixtures";
 import { demo, logIn } from "./session";
 
 test("la page d'accueil publique s'affiche en français", async ({ page }) => {

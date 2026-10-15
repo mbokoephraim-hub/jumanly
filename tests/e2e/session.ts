@@ -11,8 +11,27 @@ export const demo = {
   admin: "admin@jumanly.test",
 } as const;
 
+const introHandled = new WeakSet<Page>();
+
+/**
+ * The welcome intro plays over the space after each sign-in (docs/refonte-connexion § 7): journeys
+ * that are not about it skip it as soon as it shows. Tests of the intro itself do not call this.
+ */
+export async function skipIntro(page: Page) {
+  if (introHandled.has(page)) return;
+  introHandled.add(page);
+  await page.addLocatorHandler(
+    page.getByRole("button", { name: "Passer l'intro" }),
+    // By keyboard: a click would leave the pointer top right, where toasts show (and pause).
+    async (button) => {
+      await button.press("Enter");
+    },
+  );
+}
+
 export async function logIn(page: Page, email: string, password = DEMO_PASSWORD, next?: string) {
   const since = Date.now();
+  await skipIntro(page);
   await page.goto(next ? `/connexion?suite=${encodeURIComponent(next)}` : "/connexion");
   const form = page.locator("form").filter({ has: page.locator('input[name="password"]') });
   await form.locator('input[name="email"]').fill(email);

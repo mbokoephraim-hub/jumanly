@@ -296,6 +296,17 @@ async function AccountTab({ user, params }: { user: CurrentUser; params: Params 
           />
           <Button type="submit">{t("settings.save")}</Button>
         </form>
+        <div className="mt-5 flex flex-col items-start gap-1.5 border-t border-brume pt-5">
+          <ButtonLink
+            href="/app/parametres?onglet=compte&arrivee=1&revoir=1"
+            variant="tertiary"
+            size="sm"
+            iconAfter={<Icon name="play" className="size-3.5" />}
+          >
+            {t("settings.display.replayIntro.text")}
+          </ButtonLink>
+          <p className="text-sm text-ardoise">{t("settings.display.replayIntro.hint")}</p>
+        </div>
       </Panel>
       <Panel title={t("settings.account.memberships.text")}>
         {memberships.length === 0 ? (

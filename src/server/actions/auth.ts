@@ -21,6 +21,7 @@ import {
 import { allowAttempt, clientIp } from "@/server/rate-limit";
 import { readSignupFlow, writeSignupFlow } from "@/server/signup-flow";
 import { reportError } from "@/server/observability";
+import { withArrival } from "@/lib/app-intro";
 
 export type AuthFormState = {
   status: "idle" | "invalid" | "error" | "sent" | "done";
@@ -198,7 +199,7 @@ export async function verifyEmail(_: AuthFormState, formData: FormData): Promise
   const paid = flow.plan
     ? await db.plan.findUnique({ where: { code: flow.plan }, select: { priceCents: true } })
     : null;
-  redirect(paid?.priceCents ? "/inscription/paiement" : "/app/bienvenue");
+  redirect(paid?.priceCents ? "/inscription/paiement" : withArrival("/app/bienvenue"));
 }
 
 export async function resendCode(_: AuthFormState): Promise<AuthFormState> {
@@ -266,7 +267,7 @@ export async function signIn(_: AuthFormState, formData: FormData): Promise<Auth
     return { status: "error", error: "invalidCredentials", values: kept };
   }
   if (twoFactor) redirect(`/connexion/deux-etapes?${new URLSearchParams({ suite: next })}`);
-  redirect(next);
+  redirect(withArrival(next));
 }
 
 export async function sendTwoFactorCode(_: AuthFormState): Promise<AuthFormState> {
@@ -297,7 +298,7 @@ export async function verifyTwoFactor(
       errors: { code: reason.includes("TOO_MANY") ? "codeTooManyAttempts" : "codeInvalid" },
     };
   }
-  redirect(safeNext(formData.get("next")) ?? "/app");
+  redirect(withArrival(safeNext(formData.get("next")) ?? "/app"));
 }
 
 export async function sendMagicLinkAction(
@@ -314,7 +315,10 @@ export async function sendMagicLinkAction(
   try {
     await auth.api.signInMagicLink({
       headers: await headers(),
-      body: { email: email.data, callbackURL: safeNext(formData.get("next")) ?? "/app" },
+      body: {
+        email: email.data,
+        callbackURL: withArrival(safeNext(formData.get("next")) ?? "/app"),
+      },
     });
   } catch {
     // Same answer whether or not an account exists (textes `login.magic.sent.text`).
@@ -341,7 +345,7 @@ export async function signInWithProvider(provider: string, formData: FormData) {
     headers: await headers(),
     body: {
       provider: id,
-      callbackURL: next ?? "/app",
+      callbackURL: withArrival(next ?? "/app"),
       newUserCallbackURL: `/inscription/forfait?${signupStep}`,
       errorCallbackURL: `/connexion?erreur=${id}`,
     },
@@ -398,7 +402,7 @@ export async function completeSocialSignup(formData: FormData) {
         }
       : { kind: "talent", firstName: user.firstName ?? user.name, plan: current?.planName ?? "" },
   ).catch((error) => reportError(error, { message: "E-mail de bienvenue non envoyé" }));
-  redirect(plan?.priceCents ? "/inscription/paiement" : "/app/bienvenue");
+  redirect(plan?.priceCents ? "/inscription/paiement" : withArrival("/app/bienvenue"));
 }
 
 export async function signOut() {

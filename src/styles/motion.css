@@ -1206,8 +1206,8 @@
  * docs/refonte-connexion/BRIEF-CONNEXION-V2.md. Entrée de /connexion et /inscription (`.jm-ae`) :
  * scène animée à gauche (en haut sous 980 px), formulaire sur Crème à droite (feuille qui remonte
  * sous 980 px). L'état final de chaque élément est son état par défaut : en animations réduites,
- * tout est affiché, rien ne tourne. Seuls `transform` et `opacity` sont animés (plus le flou de
- * `jm-word`, repris tel quel).
+ * tout est affiché, rien ne tourne. Seuls `transform` et `opacity` sont animés : les mots de la
+ * bulle montent comme `jm-word`, mais sans son flou (images-clés `jm-in-word`, plus bas).
  */
 .jm-ae {
   display: grid;
@@ -2080,7 +2080,7 @@
     animation: jm-ae-pop 0.8s var(--jm-rebond) var(--t, 0.9s) both;
   }
   .jm-ae-w {
-    animation: jm-word 0.7s var(--jm-arrivee) calc(var(--w0) + var(--i) * 70ms) both;
+    animation: jm-in-word 0.7s var(--jm-arrivee) calc(var(--w0) + var(--i) * 70ms) both;
   }
   .jm-ae-eyebrow,
   .jm-ae-sub {
@@ -2259,5 +2259,822 @@
   }
   .jm-ae-social span {
     display: none;
+  }
+}
+
+/* ── Générique d'entrée de l'espace (src/components/app/app-intro.tsx) ──
+ * Plein écran Nuit par-dessus l'espace qui se charge dessous. Les tailles sont en `cqw` (largeur
+ * de l'écran). Seuls transform et opacité bougent, plus la couleur du bandeau (transition de
+ * `background-color` sur un seul élément). Jamais joué en animations réduites (voir AppIntroGate) ;
+ * les règles globales de réduction coupent de toute façon tout mouvement. */
+.jm-in {
+  --in-arrive: cubic-bezier(0.16, 1, 0.3, 1);
+  --in-bounce: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --in-leave: cubic-bezier(0.7, 0, 0.84, 0);
+  --in-glide: cubic-bezier(0.65, 0, 0.35, 1);
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  overflow: hidden;
+  isolation: isolate;
+  container-type: inline-size;
+  color: #fff;
+  cursor: pointer;
+}
+.jm-in-veil {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: radial-gradient(60% 55% at 50% 50%, #123c35 0%, #0b1a1f 70%);
+  transition: opacity 0.7s ease;
+}
+.jm-in-veil::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  opacity: 0.6;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.06) 1px, transparent 1.4px);
+  background-size: 22px 22px;
+  mask-image: radial-gradient(60% 60% at 50% 50%, #000, transparent);
+}
+.jm-in-rings {
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  pointer-events: none;
+  transition: opacity 0.6s;
+}
+.jm-in-rings i {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  border-radius: 50%;
+  border: 1px solid rgba(166, 242, 107, 0.16);
+  transform: translate(-50%, -50%) scale(0.2);
+  opacity: 0;
+  transition:
+    transform 1.4s var(--in-arrive),
+    opacity 1s;
+}
+.jm-in-rings i:nth-child(1) {
+  width: 34cqw;
+  height: 34cqw;
+}
+.jm-in-rings i:nth-child(2) {
+  width: 56cqw;
+  height: 56cqw;
+  border-color: rgba(207, 227, 220, 0.1);
+  transition-delay: 0.12s;
+}
+.jm-in-rings i:nth-child(3) {
+  width: 80cqw;
+  height: 80cqw;
+  border-style: dashed;
+  border-color: rgba(227, 246, 124, 0.12);
+  transition-delay: 0.24s;
+}
+.jm-in:not([data-step="idle"]) .jm-in-rings i {
+  transform: translate(-50%, -50%) scale(1);
+  opacity: 1;
+}
+
+/* Scène 1 : le point tombe, le symbole éclot, le logotype glisse */
+.jm-in-logo {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.jm-in-mark {
+  display: flex;
+  align-items: center;
+  gap: 1.4cqw;
+}
+.jm-in-sym {
+  width: 7cqw;
+  height: 7cqw;
+  max-width: none;
+  transform: scale(0) rotate(-30deg);
+  opacity: 0;
+}
+.jm-in-wm-mask {
+  overflow: hidden;
+}
+.jm-in-wm {
+  display: block;
+  font-size: 6cqw;
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.1;
+  transform: translateX(-110%);
+  opacity: 0;
+}
+.jm-in-drop,
+.jm-in-pulse {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  width: 2cqw;
+  height: 2cqw;
+  margin: -1cqw;
+  border-radius: 50%;
+  background: #a6f26b;
+  opacity: 0;
+  box-shadow: 0 0 3cqw 1cqw rgba(166, 242, 107, 0.5);
+}
+.jm-in[data-step="logo"] .jm-in-drop {
+  animation: jm-in-drop 1s var(--in-bounce) both;
+}
+.jm-in[data-step="short"] .jm-in-pulse {
+  animation: jm-in-drop 0.9s var(--in-bounce) both;
+}
+.jm-in[data-step="logo"] .jm-in-sym {
+  animation: jm-in-sym 0.8s var(--in-bounce) 0.55s both;
+}
+.jm-in[data-step="logo"] .jm-in-wm {
+  animation: jm-in-wm 0.8s var(--in-arrive) 0.85s both;
+}
+.jm-in[data-step="logo"] .jm-in-logo {
+  animation: jm-in-away 0.5s var(--in-leave) 1.75s both;
+}
+.jm-in:not([data-step="idle"]):not([data-step="logo"]) .jm-in-logo {
+  opacity: 0;
+}
+@keyframes jm-in-drop {
+  0% {
+    opacity: 0;
+    transform: translateY(-30cqw) scale(0.6);
+  }
+  45% {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+  70% {
+    transform: scale(1.4);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(0.2);
+  }
+}
+@keyframes jm-in-sym {
+  to {
+    transform: scale(1) rotate(0);
+    opacity: 1;
+  }
+}
+@keyframes jm-in-wm {
+  to {
+    transform: translateX(0);
+    opacity: 1;
+  }
+}
+@keyframes jm-in-away {
+  to {
+    opacity: 0;
+    transform: scale(1.15);
+  }
+}
+
+/* Le bandeau, le portrait et les mots */
+.jm-in-band {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 3;
+  width: 76cqw;
+  height: 24cqw;
+  margin: -12cqw 0 0 -38cqw;
+  border-radius: 3cqw;
+  background-color: var(--band);
+  box-shadow: 0 3cqw 6cqw -3cqw rgba(0, 0, 0, 0.6);
+  transform: scaleX(0);
+  opacity: 0;
+  transition:
+    transform 0.9s var(--in-arrive),
+    opacity 0.4s,
+    background-color 0.6s var(--in-glide);
+}
+.jm-in-band::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: radial-gradient(60% 120% at 50% 0%, rgba(255, 255, 255, 0.35), transparent 60%);
+  mix-blend-mode: soft-light;
+}
+.jm-in-banded .jm-in-band {
+  transform: scaleX(1);
+  opacity: 1;
+}
+.jm-in-portrait {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 4;
+  width: 22cqw;
+  height: 22cqw;
+  margin: -11cqw;
+  overflow: hidden;
+  border-radius: 50%;
+  background: var(--pbg);
+  border: 0.7cqw solid #0b1a1f;
+  box-shadow:
+    0 0 0 0.5cqw rgba(166, 242, 107, 0.35),
+    0 3cqw 5cqw -2cqw rgba(0, 0, 0, 0.6);
+  transform: scale(0);
+  transition:
+    transform 0.8s var(--in-bounce),
+    opacity 0.35s;
+}
+/* Le personnage est cadré en buste (sa hauteur est fixée en ligne par <Character>). */
+.jm-in-portrait > img {
+  position: absolute;
+  left: 50%;
+  top: 9%;
+  width: auto !important;
+  height: 175% !important;
+  max-width: none;
+  transform: translateX(-50%);
+}
+.jm-in-photo > img {
+  inset: 0;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover;
+  transform: none;
+}
+.jm-in-banded .jm-in-portrait {
+  transform: scale(1);
+}
+.jm-in-words {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  grid-template-columns: 1fr 26cqw 1fr;
+  align-items: center;
+  pointer-events: none;
+  color: #0f3f37;
+  transition:
+    opacity 0.35s,
+    transform 0.5s var(--in-leave);
+}
+.jm-in-word {
+  font-size: calc(var(--fs, 5.6) * 1cqw);
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  line-height: 1;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.jm-in-l {
+  justify-self: end;
+  padding-right: 1cqw;
+}
+.jm-in-r {
+  justify-self: start;
+  padding-left: 1cqw;
+}
+.jm-in-banded .jm-in-word {
+  opacity: 1;
+}
+.jm-in-word > span {
+  display: inline-block;
+  animation: jm-in-word 0.6s var(--in-arrive) both;
+}
+.jm-in-r > span {
+  animation-delay: 0.08s;
+}
+@keyframes jm-in-word {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+}
+
+/* Cartes de l'appli autour du bandeau */
+.jm-in-card {
+  position: absolute;
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 1cqw;
+  width: 21cqw;
+  padding: 1cqw 1.4cqw 1cqw 1cqw;
+  border-radius: 1.6cqw;
+  background: #fff;
+  color: #0f3f37;
+  box-shadow: 0 2.4cqw 4cqw -1.6cqw rgba(0, 0, 0, 0.6);
+  opacity: 0;
+  transform: translate(var(--fx), var(--fy)) rotate(calc(var(--r) * 3)) scale(0.7);
+  transition:
+    transform 0.9s var(--in-arrive),
+    opacity 0.5s;
+}
+.jm-in-card.jm-in-on {
+  opacity: 1;
+  transform: rotate(var(--r));
+}
+.jm-in-card.jm-in-out {
+  opacity: 0;
+  transform: translate(calc(var(--fx) * -0.4), calc(var(--fy) * -0.4)) scale(0.5);
+  transition:
+    transform 0.6s var(--in-leave),
+    opacity 0.45s;
+}
+.jm-in-ic {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 3.6cqw;
+  height: 3.6cqw;
+  border-radius: 1.1cqw;
+  background: var(--bg, #eefbdd);
+}
+.jm-in-ic-icon {
+  width: 1.8cqw;
+  height: 1.8cqw;
+}
+.jm-in-card b {
+  display: block;
+  font-size: 1.15cqw;
+  font-weight: 600;
+  line-height: 1.25;
+}
+.jm-in-card small {
+  display: block;
+  font-size: 1cqw;
+  line-height: 1.35;
+  color: #5b6b68;
+}
+.jm-in-pill {
+  display: inline-flex;
+  margin-top: 0.3cqw;
+  padding: 0.15cqw 0.7cqw;
+  border-radius: 999px;
+  background: #ddf6ee;
+  color: #0d5c4a;
+  font-size: 0.85cqw;
+  font-weight: 600;
+}
+.jm-in-bar {
+  display: block;
+  height: 0.45cqw;
+  margin-top: 0.5cqw;
+  overflow: hidden;
+  border-radius: 1cqw;
+  background: #dce5e1;
+}
+.jm-in-bar i {
+  display: block;
+  width: var(--v);
+  height: 100%;
+  border-radius: inherit;
+  background: linear-gradient(135deg, #d9fa72 0%, #7de36b 50%, #1e9a64 100%);
+}
+.jm-in-gauge {
+  display: grid;
+  place-items: center;
+  flex: none;
+  width: 3.8cqw;
+  height: 3.8cqw;
+  border-radius: 50%;
+  background: conic-gradient(#3da14f calc(var(--v) * 1%), #dce5e1 0);
+}
+.jm-in-gauge span {
+  display: grid;
+  place-items: center;
+  width: 2.9cqw;
+  height: 2.9cqw;
+  border-radius: 50%;
+  background: #fff;
+  font-size: 1cqw;
+  font-weight: 700;
+}
+.jm-in-p0 {
+  left: 9cqw;
+  top: 6.5cqw;
+  --fx: -20cqw;
+  --fy: -12cqw;
+  --r: -4deg;
+}
+.jm-in-p1 {
+  right: 9cqw;
+  bottom: 6.5cqw;
+  --fx: 20cqw;
+  --fy: 12cqw;
+  --r: 3deg;
+}
+.jm-in-p2 {
+  right: 10cqw;
+  top: 6.5cqw;
+  --fx: 20cqw;
+  --fy: -12cqw;
+  --r: 4deg;
+}
+.jm-in-p3 {
+  left: 10cqw;
+  bottom: 6.5cqw;
+  --fx: -20cqw;
+  --fy: 12cqw;
+  --r: -3deg;
+}
+.jm-in-tag {
+  position: absolute;
+  left: 50%;
+  top: calc(50% - 15.6cqw);
+  z-index: 6;
+  display: flex;
+  align-items: center;
+  gap: 0.7cqw;
+  margin: 0;
+  padding: 0.6cqw 1.3cqw;
+  border-radius: 999px;
+  background: rgba(255, 255, 255, 0.08);
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: #e3f67c;
+  font-size: 1.15cqw;
+  font-weight: 600;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  transform: translateX(-50%);
+  animation: jm-in-tag 0.5s var(--in-arrive) both;
+}
+.jm-in-tag-icon {
+  width: 1.5cqw;
+  height: 1.5cqw;
+}
+.jm-in:not(.jm-in-mod) .jm-in-tag {
+  opacity: 0;
+  transition: opacity 0.35s;
+}
+@keyframes jm-in-tag {
+  from {
+    opacity: 0;
+    transform: translate(-50%, 10px);
+  }
+}
+
+/* Pastilles de progression des modules */
+.jm-in-dots {
+  position: absolute;
+  left: 50%;
+  bottom: 4cqw;
+  z-index: 6;
+  display: flex;
+  gap: 1.3cqw;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 0.4s;
+}
+.jm-in-banded .jm-in-dots {
+  opacity: 1;
+}
+.jm-in-dots i {
+  position: relative;
+  width: 1.6cqw;
+  height: 1.6cqw;
+  border-radius: 50%;
+  border: 2px solid var(--c);
+  transition: transform 0.4s var(--in-bounce);
+}
+.jm-in-dots i::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 50%;
+  background: var(--c);
+  opacity: 0;
+  transition: opacity 0.3s;
+}
+.jm-in-dots i.jm-in-dot-on {
+  transform: scale(1.15);
+}
+.jm-in-dots i.jm-in-dot-on::after {
+  opacity: 1;
+}
+
+/* Final : slogan, puis ouverture en disque Lime sur l'espace */
+.jm-in-slogan {
+  position: absolute;
+  inset: 0;
+  z-index: 5;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+  transition: opacity 0.3s;
+}
+.jm-in-slogan p {
+  margin: 0;
+  padding: 0 1cqw;
+  color: #0f3f37;
+  font-size: 4.6cqw;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  opacity: 0;
+  transform: scale(0.9);
+  transition:
+    opacity 0.4s,
+    transform 0.6s var(--in-bounce);
+}
+.jm-in[data-step="final"] .jm-in-slogan p {
+  opacity: 1;
+  transform: scale(1);
+}
+.jm-in[data-step="final"] .jm-in-words,
+.jm-in[data-step="final"] .jm-in-portrait {
+  opacity: 0;
+  transform: scale(0.6);
+}
+.jm-in-burst {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  z-index: 7;
+  width: 6cqw;
+  height: 6cqw;
+  margin: -3cqw;
+  border-radius: 50%;
+  background: #a6f26b;
+  transform: scale(0);
+  pointer-events: none;
+}
+.jm-in[data-step="reveal"] .jm-in-burst {
+  animation: jm-in-burst 1.1s var(--in-glide) both;
+}
+@keyframes jm-in-burst {
+  0% {
+    opacity: 1;
+    transform: scale(0);
+  }
+  55% {
+    opacity: 1;
+    transform: scale(40);
+  }
+  100% {
+    opacity: 0;
+    transform: scale(40);
+  }
+}
+.jm-in[data-step="reveal"]
+  :is(
+    .jm-in-veil,
+    .jm-in-rings,
+    .jm-in-band,
+    .jm-in-dots,
+    .jm-in-slogan,
+    .jm-in-short,
+    .jm-in-portrait,
+    .jm-in-words,
+    .jm-in-logo
+  ) {
+  opacity: 0;
+  transition: opacity 0.3s 0.35s;
+}
+
+/* Version courte (connexions suivantes) */
+.jm-in-short {
+  position: absolute;
+  inset: 0;
+  z-index: 6;
+  display: grid;
+  place-items: center;
+  pointer-events: none;
+}
+.jm-in-short p {
+  margin: 0;
+  padding: 0 6cqw;
+  font-size: 5cqw;
+  font-weight: 700;
+  letter-spacing: -0.035em;
+  text-align: center;
+}
+.jm-in-sw {
+  display: inline-block;
+  opacity: 0;
+}
+.jm-in[data-step="short"] .jm-in-sw,
+.jm-in[data-step="reveal"] .jm-in-sw {
+  animation: jm-in-sw 0.7s var(--in-arrive) calc(0.35s + var(--i) * 90ms) both;
+}
+@keyframes jm-in-sw {
+  from {
+    opacity: 0;
+    transform: translateY(0.5em);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.jm-in-hl {
+  display: inline-block;
+  padding-bottom: 0.1em;
+  background: linear-gradient(135deg, #d9fa72 0%, #7de36b 50%, #1e9a64 100%);
+  background-clip: text;
+  color: transparent;
+}
+
+/* Commandes */
+.jm-in-skip {
+  position: absolute;
+  z-index: 9;
+  top: max(16px, 2cqw);
+  right: max(16px, 2cqw);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 9px 16px 9px 14px;
+  border-radius: 999px;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  color: #fff;
+  font-size: 13px;
+  font-weight: 600;
+  cursor: pointer;
+}
+.jm-in-skip:focus-visible {
+  outline: 3px solid #a6f26b;
+  outline-offset: 3px;
+}
+.jm-in-skip kbd {
+  padding: 1px 6px;
+  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.14);
+  color: #cfe3dc;
+  font: inherit;
+  font-size: 11px;
+}
+.jm-in-progress {
+  position: absolute;
+  z-index: 9;
+  inset: auto 0 0;
+  height: 3px;
+  background: rgba(255, 255, 255, 0.06);
+}
+.jm-in-progress i {
+  display: block;
+  height: 100%;
+  background: linear-gradient(135deg, #d9fa72 0%, #7de36b 50%, #1e9a64 100%);
+  transform: scaleX(0);
+  transform-origin: left;
+  animation: jm-in-progress var(--total) linear both;
+}
+@keyframes jm-in-progress {
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* L'espace se pose quand le générique s'ouvre */
+html[data-intro-landing] #content {
+  animation: jm-in-land 0.9s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+@keyframes jm-in-land {
+  from {
+    opacity: 0.4;
+    transform: scale(1.08);
+  }
+}
+
+/* Téléphone : écran vertical, bandeau presque carré, mots au-dessus et au-dessous du portrait */
+@media (max-width: 700px) {
+  .jm-in-band {
+    width: 92cqw;
+    height: 100cqw;
+    margin: -50cqw 0 0 -46cqw;
+    border-radius: 6cqw;
+  }
+  .jm-in-words {
+    grid-template-columns: 1fr;
+    grid-template-rows: 1fr 46cqw 1fr;
+    justify-items: center;
+  }
+  .jm-in-word {
+    font-size: calc(var(--fs, 5.6) * 1.6cqw);
+    padding: 0;
+    justify-self: center;
+  }
+  .jm-in-l {
+    align-self: end;
+    margin-bottom: 3cqw;
+  }
+  .jm-in-r {
+    align-self: start;
+    margin-top: 3cqw;
+  }
+  .jm-in-portrait {
+    width: 34cqw;
+    height: 34cqw;
+    margin: -17cqw;
+  }
+  .jm-in-card {
+    width: 62cqw;
+    gap: 2.6cqw;
+    padding: 2.4cqw 3cqw 2.4cqw 2.4cqw;
+    border-radius: 4cqw;
+  }
+  .jm-in-ic,
+  .jm-in-gauge {
+    width: 9cqw;
+    height: 9cqw;
+    border-radius: 3cqw;
+  }
+  .jm-in-gauge {
+    border-radius: 50%;
+  }
+  .jm-in-gauge span {
+    width: 7cqw;
+    height: 7cqw;
+    font-size: 2.6cqw;
+  }
+  .jm-in-ic-icon {
+    width: 4.6cqw;
+    height: 4.6cqw;
+  }
+  .jm-in-card b {
+    font-size: 3.2cqw;
+  }
+  .jm-in-card small {
+    font-size: 2.8cqw;
+  }
+  .jm-in-pill {
+    padding: 0.3cqw 2cqw;
+    font-size: 2.4cqw;
+  }
+  .jm-in-bar {
+    height: 1.2cqw;
+  }
+  .jm-in-p0,
+  .jm-in-p2 {
+    top: calc(50% - 50cqw - 38cqw);
+    bottom: auto;
+  }
+  .jm-in-p1,
+  .jm-in-p3 {
+    bottom: calc(50% - 50cqw - 38cqw);
+    top: auto;
+  }
+  .jm-in-p0 {
+    left: 6cqw;
+    right: auto;
+  }
+  .jm-in-p2 {
+    right: 6cqw;
+    left: auto;
+  }
+  .jm-in-p1 {
+    right: 6cqw;
+    left: auto;
+  }
+  .jm-in-p3 {
+    left: 6cqw;
+    right: auto;
+  }
+  .jm-in-tag {
+    top: calc(50% - 50cqw - 11cqw);
+    gap: 1.6cqw;
+    padding: 1.6cqw 3.4cqw;
+    font-size: 3cqw;
+  }
+  .jm-in-tag-icon {
+    width: 4cqw;
+    height: 4cqw;
+  }
+  .jm-in-dots {
+    bottom: max(24px, 9cqw);
+    gap: 3cqw;
+  }
+  .jm-in-dots i {
+    width: 4cqw;
+    height: 4cqw;
+  }
+  .jm-in-slogan p {
+    max-width: 70cqw;
+    font-size: 11cqw;
+    line-height: 1.1;
+    text-align: center;
+  }
+  .jm-in-short p {
+    font-size: 10cqw;
+  }
+  .jm-in-sym {
+    width: 16cqw;
+    height: 16cqw;
+  }
+  .jm-in-wm {
+    font-size: 13cqw;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .jm-in *,
+  html[data-intro-landing] #content {
+    animation: none !important;
+    transition: none !important;
   }
 }

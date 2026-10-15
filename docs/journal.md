@@ -2,6 +2,31 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Connexion v2 et générique d'entrée (15 octobre 2026)
+
+- `/connexion` et `/inscription` refaits d'après `docs/refonte-connexion/` (remplace les maquettes
+  02-01 et 02-04) : un seul écran d'entrée, scène animée à gauche (sélecteur Talent · RH ·
+  Entreprise, orbite d'avatars, bulle, trois cartes, personnage du profil) et formulaire à droite
+  avec onglets Connexion / Inscription. Le profil vient de `?profil=`, puis du dernier choix
+  (stockage local), sinon Talent, et reste synchronisé entre la scène et le formulaire. Les
+  autres étapes de l'inscription gardent l'ancien cadre (groupe de routes `(auth)/(etapes)`).
+  `LoginForm`, `MagicLinkForm` et `PasswordField` sont seulement rhabillés.
+- Fournisseurs **Apple** et **LinkedIn** à côté de Google, chacun affiché seulement si ses
+  variables existent (`.env.example`, marche à suivre dans `docs/deploiement-vercel.md`). Une
+  seule action `signInWithProvider` ; un nouveau compte social reprend l'inscription à l'étape
+  forfait (nom de l'organisation demandé là pour RH et Entreprise).
+- **Générique d'entrée** (`AppIntro`) après chaque connexion (`?arrivee=1`) : complet une fois
+  par compte (`User.introSeenAt`, migration `user_intro_seen_at`), court ensuite, jamais en
+  animations réduites (message d'accueil à la place). « Revoir la présentation » dans les
+  paramètres. Chargé à la demande.
+- Textes : `auth.entry.*`, `auth.stage.*`, `auth.social.*`, `signup.entry.*`, `intro.*`,
+  `settings.display.replayIntro.*`.
+- Tests : unitaires `auth-entry` et `app-intro` ; e2e `connexion-v2.spec.ts` (profil synchronisé,
+  inscription jusqu'au forfait, générique complet puis court, « Passer », `Échap`, animations
+  réduites). Les autres parcours passent le générique (`tests/e2e/fixtures.ts`, `skipIntro`).
+  Captures 1440 et 390 px : `/mnt/project-files/captures/connexion-v2/`.
+- Décisions : `docs/decisions/2026-10-15-connexion-v2.md` (LinkedIn, règles du générique, écarts).
+
 ## Mes CV et éditeur de CV v2 (15 octobre 2026)
 
 - `/app/career/cv` refait d'après `docs/refonte-career/BRIEF-CV-V2.md` et les maquettes

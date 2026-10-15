@@ -1,4 +1,4 @@
-import { expect, test, type Browser, type Page } from "@playwright/test";
+import { expect, test, type Browser, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { lastCode } from "./outbox";
 import { demo, logIn, testEmail } from "./session";
@@ -7,9 +7,9 @@ import { demo, logIn, testEmail } from "./session";
 async function signUpRecruiter(page: Page, email: string, orgName: string) {
   await page.goto("/inscription?profil=rh");
   await page.getByRole("button", { name: "Continuer" }).click();
-  if (page.url().includes("/inscription/forfait")) {
-    await page.getByRole("button", { name: "Continuer" }).click();
-  }
+  // The entry screen leads to the plan step (docs/refonte-connexion § 5).
+  await expect(page).toHaveURL(/\/inscription\/forfait/);
+  await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/\/inscription\/compte/);
   await page.locator('input[name="firstName"]').fill("Chanelle");
   await page.locator('input[name="lastName"]').fill("Fictive");
