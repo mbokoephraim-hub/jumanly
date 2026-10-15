@@ -2,6 +2,7 @@
 
 import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
 import type Hls from "hls.js";
+import { slowConnection, subscribeDataSaver } from "@/lib/connection";
 
 export type VideoPlayerLabels = {
   quality: string;
@@ -25,18 +26,6 @@ type Props = {
 
 export const speeds = ["0.75", "1", "1.25", "1.5", "2"];
 
-/** Slow connection reported by the browser (Network Information API, when available). */
-function slowConnection() {
-  const connection = (
-    navigator as Navigator & { connection?: { effectiveType?: string; saveData?: boolean } }
-  ).connection;
-  return Boolean(
-    connection?.saveData || ["slow-2g", "2g"].includes(connection?.effectiveType ?? ""),
-  );
-}
-
-const subscribeNever = () => () => undefined;
-
 /**
  * Lesson video (partie 02: adaptive HLS, manual quality choice). Native controls stay available
  * for the keyboard and screen readers; hls.js is only loaded when the browser has no HLS support.
@@ -44,7 +33,7 @@ const subscribeNever = () => () => undefined;
 export function VideoPlayer({ src, poster, lowMp4, title, labels }: Props) {
   const video = useRef<HTMLVideoElement>(null);
   const hls = useRef<Hls | null>(null);
-  const slow = useSyncExternalStore(subscribeNever, slowConnection, () => false);
+  const slow = useSyncExternalStore(subscribeDataSaver, slowConnection, () => false);
   const [choice, setChoice] = useState<"auto" | "low" | null>(null);
   const quality = choice ?? (slow ? "low" : "auto");
   const [failed, setFailed] = useState(false);

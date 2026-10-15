@@ -29,13 +29,16 @@ export const viewport: Viewport = {
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {
-  // Only the texts of the error page and of the offline notice go to every page.
+  // Only the texts of the connection notices go to every page (the 500 page has its own file).
   const { system } = await getMessages();
   const texts = {
     system: {
-      500: system["500"],
-      error: { reference: system.error.reference },
-      offline: { banner: system.offline.banner },
+      error: { retry: system.error.retry },
+      offline: {
+        banner: system.offline.banner,
+        back: system.offline.back,
+        slow: system.offline.slow,
+      },
     },
   };
   return (

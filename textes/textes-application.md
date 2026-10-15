@@ -8015,6 +8015,8 @@ Conventions :
 | `system.404.cta.jobs` | Voir les offres |
 | `system.404.cta.courses` | Voir les formations |
 | `system.404.search` | Ou cherchez ce qu'il vous faut : |
+| `system.404.searchPlaceholder` | Rechercher une formation, une offre… |
+| `system.404.pageTitle` | Page introuvable |
 
 ### Page 403 · Accès refusé
 
@@ -8029,6 +8031,7 @@ Conventions :
 | `system.403.switchSpace` | Changer d'espace |
 | `system.403.suspended` | Votre compte est suspendu. Écrivez à assistant@jumanly.io pour en savoir plus. |
 | `system.403.cta` | Retour à l'accueil |
+| `system.403.pageTitle` | Accès refusé |
 
 ### Verrou de forfait et quota atteint
 
@@ -8044,6 +8047,7 @@ Conventions :
 | `system.500.body` | Notre équipe est prévenue. Vos données sont en sécurité. Réessayez dans quelques minutes. |
 | `system.500.cta.retry` | Réessayer |
 | `system.500.cta.home` | Retour à l'accueil |
+| `system.500.footer` | Une plateforme développée par The Growth Lab · assistant@jumanly.io |
 
 ### Maintenance
 
@@ -8058,6 +8062,8 @@ Conventions :
 | `system.maintenance.banner.text` | Maintenance prévue le {date, date, long} de {start} à {end} ({timezone}). Jumanly sera indisponible pendant ce créneau. |
 | `system.maintenance.banner.dismiss` | J'ai compris |
 | `system.maintenance.readOnly` | Maintenance en cours : Jumanly est en lecture seule. Vous pourrez enregistrer vos modifications dans quelques minutes. |
+| `system.maintenance.badge` | Maintenance en cours |
+| `system.maintenance.timezone` | heure de {city} |
 
 ### Hors ligne
 
@@ -8071,6 +8077,8 @@ Conventions :
 | `system.offline.draftKept` | Votre saisie est conservée sur cet appareil. |
 | `system.offline.slow` | Connexion lente. Le chargement peut prendre un peu plus de temps. |
 | `system.offline.dataSaver` | Activer le mode économie de données |
+| `system.offline.dataSaverOn` | Mode économie de données activé |
+| `system.offline.dataSaverHint` | Les vidéos se chargent en qualité réduite sur cet appareil. |
 
 ### Session expirée et authentification
 
@@ -9788,6 +9796,8 @@ Textes ajoutés à l'étape E0 : composants de base, textes alternatifs des pers
 | `foundation.sampleDocument` | Copie du diplôme |
 | `foundation.sampleRole` | Recruteur |
 | `foundation.sampleCourse` | Réussir son CV |
+| `foundation.sampleEmail` | aicha.exemple@exemple.com |
+| `foundation.sampleMode` | Visio |
 
 ### Page /dev/composants
 

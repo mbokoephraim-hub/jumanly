@@ -9619,7 +9619,8 @@
       "wrongSpace": "Cette page appartient à un autre espace. Changez d'espace dans le menu pour y accéder.",
       "switchSpace": "Changer d'espace",
       "suspended": "Votre compte est suspendu. Écrivez à assistant@jumanly.io pour en savoir plus.",
-      "cta": "Retour à l'accueil"
+      "cta": "Retour à l'accueil",
+      "pageTitle": "Accès refusé"
     },
     "404": {
       "meta": {
@@ -9635,7 +9636,9 @@
         "jobs": "Voir les offres",
         "courses": "Voir les formations"
       },
-      "search": "Ou cherchez ce qu'il vous faut :"
+      "search": "Ou cherchez ce qu'il vous faut :",
+      "searchPlaceholder": "Rechercher une formation, une offre…",
+      "pageTitle": "Page introuvable"
     },
     "500": {
       "meta": {
@@ -9647,7 +9650,8 @@
       "cta": {
         "retry": "Réessayer",
         "home": "Retour à l'accueil"
-      }
+      },
+      "footer": "Une plateforme développée par The Growth Lab · assistant@jumanly.io"
     },
     "error": {
       "generic": {
@@ -9685,7 +9689,9 @@
         "text": "Maintenance prévue le {date, date, long} de {start} à {end} ({timezone}). Jumanly sera indisponible pendant ce créneau.",
         "dismiss": "J'ai compris"
       },
-      "readOnly": "Maintenance en cours : Jumanly est en lecture seule. Vous pourrez enregistrer vos modifications dans quelques minutes."
+      "readOnly": "Maintenance en cours : Jumanly est en lecture seule. Vous pourrez enregistrer vos modifications dans quelques minutes.",
+      "badge": "Maintenance en cours",
+      "timezone": "heure de {city}"
     },
     "offline": {
       "banner": "Vous êtes hors ligne. Certaines actions sont indisponibles.",
@@ -9697,7 +9703,9 @@
       "queued": "Hors ligne : votre message sera envoyé dès le retour de la connexion.",
       "draftKept": "Votre saisie est conservée sur cet appareil.",
       "slow": "Connexion lente. Le chargement peut prendre un peu plus de temps.",
-      "dataSaver": "Activer le mode économie de données"
+      "dataSaver": "Activer le mode économie de données",
+      "dataSaverOn": "Mode économie de données activé",
+      "dataSaverHint": "Les vidéos se chargent en qualité réduite sur cet appareil."
     },
     "session": {
       "expired": {
@@ -11763,7 +11771,9 @@
     "sampleStage": "Entretien",
     "sampleDocument": "Copie du diplôme",
     "sampleRole": "Recruteur",
-    "sampleCourse": "Réussir son CV"
+    "sampleCourse": "Réussir son CV",
+    "sampleEmail": "aicha.exemple@exemple.com",
+    "sampleMode": "Visio"
   },
   "devComponents": {
     "title": "Bibliothèque de composants",

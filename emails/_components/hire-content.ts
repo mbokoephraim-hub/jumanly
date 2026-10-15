@@ -3,7 +3,7 @@
  * (src/server/hire-emails.tsx) and the local previews (`pnpm email:dev`).
  * Messages are never copied into an e-mail (`mail.newMessage.p2`): only who wrote and where.
  */
-import type { TransactionalEmailProps } from "../transactional";
+import { initials, type TransactionalEmailProps } from "../transactional";
 import { siteUrl, t } from "./translator";
 
 export type HireEmail = { subject: string; props: TransactionalEmailProps };
@@ -23,6 +23,7 @@ export function newApplicationEmail(
   return {
     subject: t("mail.newApplication.subject", { jobTitle: input.jobTitle }),
     props: {
+      essential: false,
       preview: t("mail.newApplication.preheader", { candidateName: input.candidateName }),
       greeting: greeting(firstName),
       paragraphs: [
@@ -41,6 +42,7 @@ export function applicationSentEmail(
   return {
     subject: t("mail.applicationSent.subject", input),
     props: {
+      essential: false,
       preview: t("mail.applicationSent.preheader"),
       greeting: greeting(firstName),
       paragraphs: [t("mail.applicationSent.p1", input), t("mail.applicationSent.p2")],
@@ -64,6 +66,7 @@ export function statusChangeEmail(
   return {
     subject: t("mail.statusChange.subject", { company: input.company }),
     props: {
+      essential: false,
       preview: t("mail.statusChange.preheader", { stage: input.stage }),
       greeting: greeting(firstName),
       paragraphs: [
@@ -82,6 +85,7 @@ export function notSelectedEmail(
   return {
     subject: t("mail.notSelected.subject", { company: input.company }),
     props: {
+      essential: false,
       preview: t("mail.notSelected.preheader", { company: input.company }),
       greeting: greeting(firstName),
       paragraphs: [
@@ -101,6 +105,7 @@ export function documentRequestEmail(
   return {
     subject: t("mail.documentRequest.subject", { company: input.company }),
     props: {
+      essential: false,
       preview: t("mail.documentRequest.preheader", input),
       greeting: greeting(firstName),
       paragraphs: [t("mail.documentRequest.p1", input), t("mail.documentRequest.p2", input)],
@@ -116,6 +121,7 @@ export function newMessageEmail(
   return {
     subject: t("mail.newMessage.subject", { count: 1, senderName: input.senderName }),
     props: {
+      essential: false,
       preview: t("mail.newMessage.p2"),
       greeting: greeting(firstName),
       paragraphs: [t("mail.newMessage.p1", input), t("mail.newMessage.p2")],
@@ -149,6 +155,11 @@ export function orgInviteEmail(input: {
 }
 
 /** Slots in the organizer's time zone, as the talent will read them. */
+/** « heure de {timezone} »: the city of the time zone (« Africa/Kinshasa » → « Kinshasa »). */
+export function zoneCity(timeZone: string) {
+  return (timeZone.split("/").at(-1) ?? timeZone).replaceAll("_", " ");
+}
+
 export function slotList(slots: Date[], timeZone: string) {
   const format = new Intl.DateTimeFormat("fr", {
     timeZone,
@@ -182,17 +193,25 @@ export function interviewInviteEmail(
   return {
     subject: t("mail.interviewInvite.subject", values),
     props: {
+      essential: false,
       preview: t("mail.interviewInvite.preheader", values),
       greeting: greeting(firstName),
       paragraphs: [
         t("mail.interviewInvite.p1", values),
-        t("mail.interviewInvite.details", values),
-        t("mail.interviewInvite.slots", {
-          slots: slotList(input.slots, input.timezone),
-          timezone: input.timezone,
-        }),
+        {
+          text: t("mail.interviewInvite.slots", {
+            slots: slotList(input.slots, input.timezone),
+            timezone: zoneCity(input.timezone),
+          }),
+          small: true,
+        },
         t("mail.interviewInvite.p2"),
       ],
+      card: {
+        initials: initials(input.company),
+        title: input.jobTitle,
+        meta: t("mail.interviewInvite.details", values),
+      },
       cta: { label: t("mail.interviewInvite.cta"), href: url(input.href) },
     },
   };
@@ -207,10 +226,11 @@ export function interviewConfirmedEmail(
     hour: "2-digit",
     minute: "2-digit",
   }).format(input.date);
-  const values = { ...input, time };
+  const values = { ...input, time, timezone: zoneCity(input.timezone) };
   return {
     subject: t("mail.interviewConfirmed.subject", values),
     props: {
+      essential: false,
       preview: t("mail.interviewConfirmed.preheader", values),
       greeting: greeting(firstName),
       paragraphs: [t("mail.interviewConfirmed.p1", values), t("mail.interviewConfirmed.p2")],
@@ -226,6 +246,7 @@ export function contactRequestedEmail(
   return {
     subject: t("mail.contactRequested.subject", input),
     props: {
+      essential: false,
       preview: t("mail.contactRequested.preheader"),
       greeting: greeting(firstName),
       paragraphs: [
@@ -245,6 +266,7 @@ export function contactAcceptedEmail(
   return {
     subject: t("mail.contactAccepted.subject", input),
     props: {
+      essential: false,
       preview: t("mail.contactAccepted.preheader"),
       greeting: greeting(firstName),
       paragraphs: [t("mail.contactAccepted.p1", input), t("mail.contactAccepted.p2")],

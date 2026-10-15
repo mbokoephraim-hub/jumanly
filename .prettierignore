@@ -1,6 +1,7 @@
 pnpm-lock.yaml
 src/generated/
 messages/fr.json
+messages/fr.systeme.json
 .next/
 playwright-report/
 test-results/
