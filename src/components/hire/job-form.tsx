@@ -3,6 +3,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
 import { pillClass } from "@/components/career/kit";
+import { ModerationChanges } from "@/components/hire/moderation-changes";
 import { Alert, ButtonLink, Checkbox, Select, TextArea, TextField } from "@/components/ui";
 import type { Job } from "@/generated/prisma/client";
 import { cx } from "@/lib/cx";
@@ -166,6 +167,7 @@ export async function JobForm({
           }
         />
       )}
+      {job?.status === "changes_requested" && <ModerationChanges job={job} />}
       {job?.status === "rejected" && job.moderationReason && (
         <Alert
           tone="error"

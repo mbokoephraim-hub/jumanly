@@ -2,6 +2,28 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v2 · étape 7 : modération (15 octobre 2026)
+
+- **Correction demandée** : nouveau statut d'offre `changes_requested` (migration
+  `admin_moderation_changes_requested`), distinct du refus. Le modérateur coche les points à
+  corriger et écrit un motif ; le recruteur les voit sur son offre, la liste et le formulaire, puis
+  la publie de nouveau : elle repart en vérification même sans signal. Notification
+  `jobChangesRequested`. Onglet « Correction demandée » et historique des échanges (journal) sur la
+  fiche. Refuser ou dépublier demande désormais un motif côté serveur.
+- **Avis du contrôle automatique** avec son « Pourquoi ? » : la règle repérée, en clair, et le
+  rappel que l'humain décide. File triée par gravité puis ancienneté, « Précédente / Suivante » et
+  raccourcis J et K.
+- **Signalements** : gravité en trois niveaux, compteurs par statut, file la plus grave et la plus
+  ancienne d'abord. Contexte d'un message (deux avant, deux après) lu seulement sur demande et
+  journalisé ; texte complet d'une offre ; auteur du contenu avec « Suspendre l'auteur » (fiche
+  utilisateur de l'étape 3). Notes internes (le signalement passe « En cours »). Clôture toujours
+  avec une décision (classer, avertir l'auteur, masquer le contenu) et un motif ; les doublons sur
+  le même contenu sont clôturés ensemble ; l'auteur averti reçoit un e-mail, chaque personne qui a
+  signalé une notification et un e-mail, sans détail sur l'auteur.
+- Tests : unitaires (gravité, ordre), en base (correction puis renvoi, contexte, note, clôture),
+  e2e (offre corrigée puis refusée, signalement de bout en bout, support en lecture seule).
+  Captures dans `captures/admin-v2/etape-7`.
+
 ## Jumanly Admin v2 · étape 6 : formations (15 octobre 2026)
 
 - **Parcours guidé** : carte « Prête à publier ? » en tête de l'éditeur, avec une jauge (part des

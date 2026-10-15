@@ -5853,6 +5853,7 @@
         "paused": "En pause",
         "closed": "Fermée",
         "rejected": "Refusée par la modération",
+        "changesRequested": "Correction demandée",
         "expired": "Expirée"
       },
       "row": {
@@ -5897,6 +5898,19 @@
       "rejected": {
         "reason": "Motif de la modération : {reason}",
         "fix": "Corriger et soumettre de nouveau"
+      },
+      "changes": {
+        "title": "La modération demande une correction",
+        "reason": "Message de la modération : {reason}",
+        "points": "Points à corriger",
+        "point": {
+          "real": "Rendre le poste et l'organisation clairement identifiables",
+          "noPayment": "Retirer toute demande de paiement aux candidats",
+          "noDiscrimination": "Retirer les critères liés au genre, à l'âge, à l'origine, à la religion, à la situation familiale ou à la santé",
+          "knockout": "Justifier par le poste les critères éliminatoires, ou les retirer"
+        },
+        "resend": "Corrigez l'offre puis publiez-la de nouveau : elle repart en vérification.",
+        "fix": "Corriger l'offre"
       },
       "empty": {
         "published": "Aucune offre publiée.",
@@ -9119,6 +9133,9 @@
       "orgInvite": "{inviterName} vous invite à rejoindre {org}",
       "jobApproved": "Votre offre « {jobTitle} » a été validée et publiée",
       "jobRejected": "Votre offre « {jobTitle} » a été refusée par la modération",
+      "jobChangesRequested": "La modération demande une correction sur votre offre « {jobTitle} »",
+      "reportClosed": "Votre signalement a été traité. Merci de nous aider à garder Jumanly sûr.",
+      "moderationWarning": "Jumanly vous adresse un avertissement : un contenu que vous avez publié ne respecte pas les règles.",
       "certificateIssued": "Votre attestation « {courseTitle} » est prête",
       "matchReviewed": "Votre demande de révision du score pour « {jobTitle} » a été traitée",
       "paymentSucceeded": "Paiement reçu : {amount} USD pour {plan}. Merci !",
@@ -9490,6 +9507,25 @@
       "p1": "Jumanly a réactivé {org}.",
       "p2": "Les offres fermées par la suspension sont republiées si leur date limite n'est pas passée.",
       "cta": "Ouvrir mon espace recrutement"
+    },
+    "moderationWarning": {
+      "subject": "Avertissement de la modération Jumanly",
+      "preheader": "Un contenu que vous avez publié ne respecte pas les règles de Jumanly.",
+      "p1": "Après un signalement, la modération de Jumanly a constaté qu'un contenu que vous avez publié ne respecte pas les règles de la plateforme. Motif : {reason}",
+      "p2": "Merci d'en tenir compte : en cas de nouvel écart, votre compte peut être suspendu. Pour toute question, écrivez à assistant@jumanly.io.",
+      "cta": "Ouvrir Jumanly"
+    },
+    "reportClosed": {
+      "subject": "Votre signalement a été traité",
+      "preheader": "Merci de nous aider à garder Jumanly sûr.",
+      "p1": "La modération de Jumanly a examiné votre signalement et l'a clôturé : {decision}.",
+      "p2": "Par respect pour chacun, nous ne détaillons pas les mesures prises envers un autre compte. Merci de votre vigilance.",
+      "cta": "Ouvrir Jumanly",
+      "decision": {
+        "dismiss": "aucune infraction aux règles n'a été constatée",
+        "hide": "le contenu a été retiré",
+        "warn": "son auteur a reçu un avertissement"
+      }
     },
     "newApplication": {
       "subject": "Nouvelle candidature : {jobTitle}",
@@ -10519,6 +10555,11 @@
         "job_assign": "a attribué l'offre",
         "report_dismiss": "a classé le signalement",
         "report_hide": "a masqué le contenu signalé",
+        "report_warn": "a averti l'auteur du contenu signalé",
+        "report_note": "a ajouté une note interne au signalement",
+        "report_context": "a lu le contexte d'un message signalé",
+        "job_changes": "a demandé une correction de l'offre",
+        "job_resubmit": "a renvoyé l'offre corrigée",
         "partner_create": "a créé le partenaire",
         "partner_batch": "a créé un lot de licences",
         "partner_inviteManager": "a invité un gestionnaire partenaire",
@@ -11792,7 +11833,8 @@
       "tab": {
         "pending": "À vérifier ({count})",
         "flagged": "Signalées ({count})",
-        "all": "Toutes"
+        "all": "Toutes",
+        "changes": "Correction demandée ({count})"
       },
       "autoFlag": {
         "text": "Signal automatique : {reason}",
@@ -11843,8 +11885,45 @@
         "pending": "Aucune offre à vérifier. Les offres signalées automatiquement à la publication apparaîtront ici.",
         "flagged": "Aucune offre signalée par les utilisateurs.",
         "all": "Aucune offre publiée.",
-        "filtered": "Aucune offre ne correspond à ces filtres."
-      }
+        "filtered": "Aucune offre ne correspond à ces filtres.",
+        "changes": "Aucune offre en attente de correction."
+      },
+      "changesSent": "Correction demandée. Le recruteur la voit sur son offre et la renverra corrigée.",
+      "changesPending": "En attente de la version corrigée du recruteur.",
+      "error": {
+        "motif": "Indiquez un motif d'au moins 3 caractères."
+      },
+      "fix": {
+        "legend": "Points à corriger",
+        "hint": "Cochez ce que le recruteur doit corriger : il voit ces points sur son offre.",
+        "real": "Rendre le poste et l'organisation clairement identifiables",
+        "noPayment": "Retirer toute demande de paiement aux candidats",
+        "noDiscrimination": "Retirer les critères liés au genre, à l'âge, à l'origine, à la religion, à la situation familiale ou à la santé",
+        "knockout": "Justifier par le poste les critères éliminatoires, ou les retirer"
+      },
+      "auto": {
+        "title": "Avis du contrôle automatique",
+        "review": "À vérifier : {count, plural, one {# point repéré} other {# points repérés}}",
+        "clear": "Rien de suspect repéré",
+        "why": "Pourquoi ?",
+        "whyTitle": "Pourquoi cet avis ?",
+        "whyText": "Le contrôle automatique cherche des tournures précises dans le texte de l'offre et regarde l'ancienneté de l'organisation. Il ne décide jamais : c'est vous qui approuvez, demandez une correction ou refusez.",
+        "rule": {
+          "payment": "Une phrase évoque une somme à payer par le candidat (frais, dossier, formation payante…).",
+          "discrimination": "Une phrase cite un critère protégé : genre, âge, origine, religion, situation familiale ou santé.",
+          "contactOutside": "Une phrase invite à poursuivre hors de Jumanly (numéro, messagerie, adresse e-mail).",
+          "newOrg": "L'organisation a été créée il y a moins de 30 jours et n'est pas encore vérifiée.",
+          "none": "Aucune de ces règles ne s'applique à cette offre."
+        }
+      },
+      "nav": {
+        "label": "Parcourir la file",
+        "prev": "Offre précédente",
+        "next": "Offre suivante",
+        "position": "{position} sur {total}",
+        "hint": "Raccourcis clavier : J pour la suivante, K pour la précédente."
+      },
+      "order": "Les plus graves d'abord, puis les plus anciennes."
     },
     "partners": {
       "title": "Partenaires",
@@ -12151,7 +12230,9 @@
       "tab": {
         "open": "Ouverts ({count})",
         "inProgress": "En cours",
-        "closed": "Clôturés"
+        "closed": "Clôturés",
+        "inProgressCount": "En cours ({count})",
+        "closedCount": "Clôturés ({count})"
       },
       "filter": {
         "type": "Type de contenu",
@@ -12209,12 +12290,62 @@
       },
       "confirm": {
         "dismiss": "Le signalement sera clôturé sans autre action.",
-        "hide": "Le contenu signalé ne sera plus visible et le signalement sera clôturé. L'identité de la personne qui a signalé n'est jamais communiquée à l'auteur."
+        "hide": "Le contenu signalé ne sera plus visible et le signalement sera clôturé. L'identité de la personne qui a signalé n'est jamais communiquée à l'auteur.",
+        "warn": "L'auteur reçoit un avertissement par e-mail et le signalement est clôturé. L'identité de la personne qui a signalé n'est jamais communiquée."
       },
       "emptyInProgress": "Aucun signalement en cours.",
       "emptyClosed": "Aucun signalement clôturé.",
       "emptyFiltered": "Aucun signalement ne correspond à ces filtres.",
-      "list": "Liste des signalements"
+      "list": "Liste des signalements",
+      "order": "Les plus graves d'abord, puis les plus anciens.",
+      "severity": {
+        "0": "Mineur",
+        "1": "À examiner",
+        "2": "Grave"
+      },
+      "context": {
+        "show": "Lire le contexte de la conversation",
+        "hint": "Les deux messages avant et après le message signalé. Cette lecture est enregistrée dans le journal.",
+        "title": "Contexte de la conversation",
+        "talent": "Talent",
+        "org": "Recruteur",
+        "reported": "Message signalé",
+        "hidden": "Message masqué par la modération"
+      },
+      "jobText": "Texte de l'offre",
+      "author": {
+        "title": "Auteur du contenu",
+        "none": "Auteur inconnu ou compte supprimé.",
+        "suspend": "Suspendre l'auteur",
+        "suspendHint": "Ouvre sa fiche utilisateur, où la suspension demande un motif."
+      },
+      "decide": {
+        "title": "Clôturer le signalement",
+        "legend": "Décision",
+        "hint": "Les autres signalements ouverts sur ce même contenu sont clôturés avec la même décision. Chaque personne qui a signalé est informée, sans détail sur l'auteur.",
+        "submit": "Clôturer avec cette décision",
+        "warnHint": "L'auteur reçoit un e-mail d'avertissement avec votre motif ; le contenu reste visible.",
+        "dismissHint": "Aucune infraction : le contenu reste visible.",
+        "hideHint": "Une offre est retirée (refusée), un message est masqué."
+      },
+      "note": {
+        "title": "Notes internes",
+        "label": "Ajouter une note interne",
+        "hint": "Visible seulement par l'équipe Jumanly. Le signalement passe « En cours ».",
+        "submit": "Ajouter la note",
+        "empty": "Aucune note pour l'instant.",
+        "saved": "Note ajoutée."
+      },
+      "closedOn": "Clôturé le {date}",
+      "decisionReason": "Motif : {reason}",
+      "error": {
+        "motif": "Choisissez une décision et indiquez un motif d'au moins 3 caractères.",
+        "note": "La note doit compter au moins 3 caractères."
+      },
+      "nav": {
+        "prev": "Signalement précédent",
+        "next": "Signalement suivant"
+      }
     }
   },
   "legal": {

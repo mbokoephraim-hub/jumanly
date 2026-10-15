@@ -33,7 +33,15 @@ import {
   removeMember,
   revokeInvitation,
 } from "@/server/services/organization";
-import { createReport, resolveReport } from "@/server/services/moderation";
+import {
+  addReportNote,
+  closeReport,
+  createReport,
+  messageContext,
+  moderationQueue,
+  reportNotes,
+  requestJobChanges,
+} from "@/server/services/moderation";
 import { cleanup, db, newOrganization, newUser } from "./helpers";
 
 const users: string[] = [];
@@ -359,9 +367,124 @@ describe("modération et Connect", () => {
     const stored = await db.report.findFirstOrThrow({ where: { reporterId: userId } });
     const admin = await newUser();
     users.push(admin.id);
-    expect(await resolveReport(db, admin.id, stored.id, "hide")).toBe(true);
+    const closed = await closeReport(db, admin.id, {
+      report: stored.id,
+      decision: "hide",
+      reason: "Demande de paiement",
+    });
+    expect(closed?.reporterIds).toEqual([userId]);
     const message = await db.message.findUniqueOrThrow({ where: { id: sent.messageId } });
     expect(message.hiddenAt).not.toBeNull();
     await db.report.deleteMany({ where: { reporterId: userId } });
+  });
+
+  it("une correction demandée renvoie l'offre au recruteur, puis en vérification", async () => {
+    const ctx = await member((await org()).id);
+    const saved = await saveJob(db, ctx, {
+      ...form(),
+      description: "Frais de dossier de 20 USD à payer avant l'entretien.",
+    });
+    if (!saved.ok) throw new Error("save");
+    expect((await publishJob(db, ctx, saved.jobId)).status).toBe("pending_review");
+    expect((await moderationQueue(db)).some((job) => job.id === saved.jobId)).toBe(true);
+    const admin = await newUser();
+    users.push(admin.id);
+    const job = await requestJobChanges(db, admin.id, {
+      job: saved.jobId,
+      reason: "Retirez les frais de dossier.",
+      points: ["noPayment", "noPayment"],
+    });
+    expect(job).not.toBeNull();
+    const sent = await db.job.findUniqueOrThrow({ where: { id: saved.jobId } });
+    expect(sent.status).toBe("changes_requested");
+    expect(sent.moderationChecks).toEqual(["noPayment"]);
+    // Only a job in review can be sent back.
+    expect(
+      await requestJobChanges(db, admin.id, { job: saved.jobId, reason: "Encore", points: [] }),
+    ).toBeNull();
+    // Corrected and published again: back to a moderator, even without any flag left.
+    await saveJob(db, ctx, form(), saved.jobId);
+    expect((await publishJob(db, ctx, saved.jobId)).status).toBe("pending_review");
+    const back = await db.job.findUniqueOrThrow({ where: { id: saved.jobId } });
+    expect(back.moderationChecks).toEqual([]);
+    const history = await db.auditLog.findMany({
+      where: { targetType: "job", targetId: saved.jobId },
+      orderBy: { createdAt: "asc" },
+      select: { action: true },
+    });
+    expect(history.map((row) => row.action)).toEqual(
+      expect.arrayContaining(["job.changes", "job.resubmit"]),
+    );
+  });
+
+  it("un signalement se clôt avec une décision et un motif, tous les doublons avec lui", async () => {
+    const ctx = await member((await org()).id);
+    const jobId = await publishedJob(ctx);
+    const first = await applicant(jobId);
+    const conversation = await ensureApplicationConversation(db, first.applicationId);
+    for (const body of ["Un", "Deux", "Trois"])
+      await sendMessage(db, { userId: first.userId }, conversation.id, { body });
+    const sent = await sendMessage(db, { userId: ctx.userId, hire: ctx }, conversation.id, {
+      body: "Message signalé",
+    });
+    for (const body of ["Quatre", "Cinq", "Six"])
+      await sendMessage(db, { userId: first.userId }, conversation.id, { body });
+    expect(
+      await createReport(db, first.userId, {
+        targetType: "message",
+        targetId: sent.messageId,
+        reason: "harassment",
+      }),
+    ).toBe("created");
+    const report = await db.report.findFirstOrThrow({ where: { reporterId: first.userId } });
+    const admin = await newUser();
+    users.push(admin.id);
+
+    // The context: two messages before, two after, and the read is logged.
+    const thread = (await messageContext(db, admin.id, report.id))!;
+    expect(thread.map((item) => item.body)).toEqual([
+      "Deux",
+      "Trois",
+      "Message signalé",
+      "Quatre",
+      "Cinq",
+    ]);
+    expect(thread.find((item) => item.reported)?.side).toBe("org");
+    expect(
+      await db.auditLog.count({
+        where: { actorId: admin.id, action: "report.context", targetId: sent.messageId },
+      }),
+    ).toBe(1);
+
+    // A note moves it to « En cours ».
+    expect(await addReportNote(db, admin.id, { report: report.id, note: "À vérifier." })).toBe(
+      true,
+    );
+    expect((await db.report.findUniqueOrThrow({ where: { id: report.id } })).status).toBe(
+      "in_progress",
+    );
+    expect((await reportNotes(db, report.id)).map((note) => note.note)).toEqual(["À vérifier."]);
+
+    // « Avertir l'auteur »: closed with the reason, the author is returned to be warned.
+    const closed = (await closeReport(db, admin.id, {
+      report: report.id,
+      decision: "warn",
+      reason: "Propos déplacés.",
+    }))!;
+    expect(closed.author?.id).toBe(ctx.userId);
+    expect(closed.reporterIds).toEqual([first.userId]);
+    const stored = await db.report.findUniqueOrThrow({ where: { id: report.id } });
+    expect(stored).toMatchObject({
+      status: "closed",
+      resolution: "warn",
+      resolutionReason: "Propos déplacés.",
+    });
+    expect(stored.closedAt).not.toBeNull();
+    const message = await db.message.findUniqueOrThrow({ where: { id: sent.messageId } });
+    expect(message.hiddenAt).toBeNull();
+    expect(
+      await closeReport(db, admin.id, { report: report.id, decision: "hide", reason: "Encore" }),
+    ).toBeNull();
+    await db.report.deleteMany({ where: { reporterId: first.userId } });
   });
 });

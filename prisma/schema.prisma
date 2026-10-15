@@ -88,10 +88,10 @@ enum OrgVerificationStatus {
 }
 
 model Organization {
-  id                      String                @id @default(cuid(2))
+  id                      String                 @id @default(cuid(2))
   type                    OrganizationType
   name                    String
-  slug                    String                @unique
+  slug                    String                 @unique
   logo                    String?
   description             String?
   website                 String?
@@ -106,15 +106,15 @@ model Organization {
   category                String?
   contactEmail            String?
   /// Verification by Jumanly (admin, E8). `verifiedAt` stays the badge's source.
-  verificationStatus      OrgVerificationStatus @default(none)
+  verificationStatus      OrgVerificationStatus  @default(none)
   /// { registration, taxId, domainEmail, mandate } as typed by the organization.
   verificationRequest     Json?
   verificationRequestedAt DateTime?
   verificationReason      String?
   verifiedById            String?
   parentId                String?
-  parent                  Organization?         @relation("OrganizationEntities", fields: [parentId], references: [id])
-  entities                Organization[]        @relation("OrganizationEntities")
+  parent                  Organization?          @relation("OrganizationEntities", fields: [parentId], references: [id])
+  entities                Organization[]         @relation("OrganizationEntities")
   jobs                    Job[]
   memberships             Membership[]
   invitations             Invitation[]
@@ -134,9 +134,9 @@ model Organization {
   suspendedAt             DateTime?
   suspensionReason        String?
   /// Jobs that were live when the organization was suspended, published again on reactivation.
-  suspendedJobIds         String[]              @default([])
-  createdAt               DateTime              @default(now())
-  updatedAt               DateTime              @updatedAt
+  suspendedJobIds         String[]               @default([])
+  createdAt               DateTime               @default(now())
+  updatedAt               DateTime               @updatedAt
 }
 
 /// A supporting document (PDF or image) sent with a verification request. The bytes live in the
@@ -204,6 +204,8 @@ enum JobStatus {
   archived
   /// Refused by moderation; the recruiter can correct and submit again.
   rejected
+  /// Sent back by moderation with the points to correct; resubmitted, it goes back to review.
+  changes_requested
 }
 
 enum SkillImportance {
@@ -264,6 +266,8 @@ model Job {
   /// Automatic check results (`admin.jobs.autoFlag.*`) and the moderator's reason.
   moderationFlags   String[]
   moderationReason  String?
+  /// Points to correct ticked by the moderator (`admin.jobs.fix.*`), with `changes_requested`.
+  moderationChecks  String[]         @default([])
   skills            JobSkill[]
   stages            PipelineStage[]
   applications      Application[]
@@ -1280,18 +1284,21 @@ enum ReportStatus {
 }
 
 model Report {
-  id           String       @id @default(cuid(2))
-  reporterId   String
+  id               String       @id @default(cuid(2))
+  reporterId       String
   /// job, message, conversation, profile, organization
-  targetType   String
-  targetId     String
-  reason       String
-  details      String?
-  status       ReportStatus @default(open)
-  resolution   String?
-  resolvedById String?
-  createdAt    DateTime     @default(now())
-  updatedAt    DateTime     @updatedAt
+  targetType       String
+  targetId         String
+  reason           String
+  details          String?
+  status           ReportStatus @default(open)
+  /// dismiss, hide, warn: always closed with a decision and a reason.
+  resolution       String?
+  resolutionReason String?
+  resolvedById     String?
+  closedAt         DateTime?
+  createdAt        DateTime     @default(now())
+  updatedAt        DateTime     @updatedAt
 
   @@unique([reporterId, targetType, targetId])
   @@index([status, createdAt])

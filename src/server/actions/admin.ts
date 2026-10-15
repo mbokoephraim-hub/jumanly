@@ -8,7 +8,7 @@ import { canWriteAdmin, requireAdmin } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { invalidate } from "@/server/entitlements";
 import type { Prisma } from "@/generated/prisma/client";
-import { approveJob, refuseJob, resolveReport } from "@/server/services/moderation";
+import { approveJob, refuseJob } from "@/server/services/moderation";
 import { hiringTeam, notify } from "@/server/services/notifications";
 import { disputeResolutionSchema, resolveDispute } from "@/server/matching/service";
 import { criterionKeys } from "@/server/matching/types";
@@ -205,13 +205,19 @@ export async function updatePlan(formData: FormData) {
 // ─── Moderation (partie 10 § 10.7) ────────────────────────────────────────────────
 
 export async function moderateJob(formData: FormData) {
-  const admin = await adminWriter();
-  const jobId = String(formData.get("job") ?? "");
+  const jobId = String(formData.get("job") ?? "").slice(0, 60);
   const decision = formData.get("decision");
+  // Refusing or unpublishing is sensitive: the reason is required (Admin v2, étape 7).
+  const reason = String(formData.get("reason") ?? "").trim();
+  if (decision !== "approve" && reason.length < 3)
+    redirect(
+      `/admin/offres?id=${encodeURIComponent(jobId)}&action=${formData.get("panel") === "depublier" ? "depublier" : "refuser"}&erreur=motif`,
+    );
+  const admin = await adminWriter();
   const job =
     decision === "approve"
       ? await approveJob(db, admin.id, jobId)
-      : await refuseJob(db, admin.id, jobId, String(formData.get("reason") ?? ""));
+      : await refuseJob(db, admin.id, jobId, reason);
   if (job) {
     updateTag("jobs");
     updateTag(`job:${job.slug}`);
@@ -229,14 +235,6 @@ export async function moderateJob(formData: FormData) {
   redirect(
     `/admin/offres?ok=${decision === "approve" ? "approuvee" : "refusee"}&id=${encodeURIComponent(jobId)}`,
   );
-}
-
-export async function resolveReportAction(formData: FormData) {
-  const admin = await adminWriter();
-  const action = formData.get("action") === "hide" ? "hide" : "dismiss";
-  await resolveReport(db, admin.id, String(formData.get("report") ?? ""), action);
-  updateTag("jobs");
-  redirect("/admin/signalements?ok=1");
 }
 
 /** New version of the matching weights (total 100), audited in the service. */

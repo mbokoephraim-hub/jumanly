@@ -335,7 +335,9 @@ export async function publishJob(
   if (max >= 0 && (await activeJobCount(db, ctx.organizationId)) >= max)
     return { status: "limit", max };
   const flags = moderationFlags(job);
-  const status = flags.length > 0 ? "pending_review" : "published";
+  // A job sent back for correction returns to a moderator, flagged or not (Admin v2, étape 7).
+  const resubmitted = job.status === "changes_requested";
+  const status = flags.length > 0 || resubmitted ? "pending_review" : "published";
   const stages = await ensureStages(db, job.id);
   await db.job.update({
     where: { id: job.id },
@@ -343,6 +345,7 @@ export async function publishJob(
       status,
       moderationFlags: flags,
       moderationReason: null,
+      moderationChecks: [],
       publishedAt: status === "published" ? (job.publishedAt ?? now) : job.publishedAt,
       process:
         job.process.length > 0
@@ -350,7 +353,7 @@ export async function publishJob(
           : stages.filter((s) => s.kind !== "rejected").map((s) => s.name),
     },
   });
-  await audit(db, ctx, "job.publish", job.id, { status, flags });
+  await audit(db, ctx, resubmitted ? "job.resubmit" : "job.publish", job.id, { status, flags });
   return { status, jobId: job.id };
 }
 

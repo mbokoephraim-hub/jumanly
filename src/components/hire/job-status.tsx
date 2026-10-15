@@ -8,6 +8,7 @@ const keys = {
   published: "published",
   closed: "closed",
   rejected: "rejected",
+  changes_requested: "changesRequested",
   archived: "closed",
 } as const satisfies Record<JobStatus, string>;
 
@@ -17,6 +18,7 @@ const tones: Record<JobStatus, BadgeTone> = {
   published: "success",
   closed: "neutral",
   rejected: "error",
+  changes_requested: "warning",
   archived: "neutral",
 };
 
