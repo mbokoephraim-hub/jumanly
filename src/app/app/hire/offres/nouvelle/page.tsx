@@ -7,7 +7,7 @@ import { requireHire } from "@/server/hire-context";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.jobForm");
-  return { title: { absolute: t("title.new") }, robots: { index: false } };
+  return { title: t("title.new"), robots: { index: false } };
 }
 
 const one = (value: string | string[] | undefined) =>

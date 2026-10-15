@@ -14,7 +14,7 @@ import { myCertificates } from "@/server/services/learn";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("learn.certificates");
-  return { title: { absolute: t("seo") }, robots: { index: false } };
+  return { title: t("seo"), robots: { index: false } };
 }
 
 /** An attestation delivered in the last 30 days is announced at the top of the page. */

@@ -30,7 +30,7 @@ import { ensureProfile } from "@/server/services/profile";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.portfolio");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 /**

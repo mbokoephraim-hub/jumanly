@@ -22,7 +22,7 @@ import { partnerDashboard, type Cell } from "@/server/services/partners";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("partner.dashboard");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 /**

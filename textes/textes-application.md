@@ -2637,6 +2637,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `certificate.verify.title` | Vérification d'attestation |
+| `certificate.verify.seo.title` | Vérification d'attestation · Jumanly |
 | `certificate.verify.seo.description` | Vérifiez l'authenticité d'une attestation de formation Jumanly à partir de son numéro. |
 | `certificate.verify.intro` | Saisissez le numéro inscrit sur l'attestation pour vérifier qu'elle a bien été délivrée par Jumanly. |
 | `certificate.verify.valid.badge` | Attestation authentique |

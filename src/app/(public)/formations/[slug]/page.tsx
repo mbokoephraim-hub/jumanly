@@ -39,7 +39,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const t = await getTranslations();
   const data = await getCourse(slug);
-  if (!data) return { title: { absolute: t("training.notFound.title") }, robots: { index: false } };
+  if (!data) return { title: t("training.notFound.title"), robots: { index: false } };
   const { course } = data;
   const duration = durationParts(course.durationMinutes);
   return pageMetadata({

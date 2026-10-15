@@ -12,7 +12,7 @@ import { getOrgJob, HireError } from "@/server/services/hire";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.jobForm");
-  return { title: { absolute: t("title.edit") }, robots: { index: false } };
+  return { title: t("title.edit"), robots: { index: false } };
 }
 
 const one = (value: string | string[] | undefined) =>

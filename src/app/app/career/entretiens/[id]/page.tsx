@@ -16,7 +16,7 @@ import { ANSWER_MAX, getInterview, type FeedbackLine } from "@/server/services/i
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.interviews");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 const levelTone = { solid: "success", developing: "ai", toWork: "warning" } as const;

@@ -31,7 +31,7 @@ import {
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("partner.licenses");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 /** Status tags of a code (mockup 06-02): Sapin or dark text on light tints. */

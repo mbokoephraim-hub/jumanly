@@ -19,7 +19,7 @@ import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.talents");
-  return { title: { absolute: t("result.view") }, robots: { index: false } };
+  return { title: t("result.view"), robots: { index: false } };
 }
 
 const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");

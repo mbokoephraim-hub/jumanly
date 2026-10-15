@@ -31,7 +31,7 @@ export async function generateMetadata({ params }: PageProps<"/offres/[slug]">):
   const { slug } = await params;
   const t = await getTranslations();
   const data = await getJob(slug);
-  if (!data) return { title: { absolute: t("job.notFound.title") }, robots: { index: false } };
+  if (!data) return { title: t("job.notFound.title"), robots: { index: false } };
   const { job } = data;
   const values = { title: job.title, company: job.organization.name, city: job.city };
   return pageMetadata({
@@ -301,8 +301,8 @@ export default async function JobPage({ params }: PageProps<"/offres/[slug]">) {
               style={{ backgroundImage: iaFlow }}
             >
               <Shape
-                name="forme-orbites-blanc"
-                className="jm-drift -top-24 -right-24 w-[260px] opacity-20"
+                name="forme-orbites-lime"
+                className="jm-drift -top-24 -right-24 w-[260px] opacity-20 brightness-0 invert"
               />
               <p className="relative flex items-center gap-2.5">
                 <AiOrb size={28} className="jm-pulse" />

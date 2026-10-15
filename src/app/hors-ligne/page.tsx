@@ -5,7 +5,7 @@ import { OfflineActions } from "@/components/site/offline-actions";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("system.offline.page");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 /**

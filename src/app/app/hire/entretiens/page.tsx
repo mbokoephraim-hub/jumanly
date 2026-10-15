@@ -33,7 +33,7 @@ import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hire.interviews");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");

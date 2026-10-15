@@ -41,7 +41,7 @@ export async function generateMetadata({
     select: { title: true },
   });
   return {
-    title: { absolute: t("seo", { title: course?.title ?? slug }) },
+    title: t("seo", { title: course?.title ?? slug }),
     robots: { index: false },
   };
 }

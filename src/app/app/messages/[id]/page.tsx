@@ -30,7 +30,7 @@ import { talentContactRequests } from "@/server/services/talent-search";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("connect");
-  return { title: { absolute: t("list.title") }, robots: { index: false } };
+  return { title: t("list.title"), robots: { index: false } };
 }
 
 type Payload = {

@@ -2,6 +2,20 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte visuelle · passe de cohérence finale (15 octobre 2026)
+
+- Parcours automatique de 70 pages (public, talent, recruteur, partenaire, admin) à 1440 et 390 px :
+  aucun débordement horizontal, aucune image cassée, un seul titre h1 par page, aucun texte brut
+  (clé) visible, aucun numéro de téléphone.
+- Titres d'onglet : 36 pages (espace connecté, pages « introuvable », hors ligne, vérification
+  d'attestation) n'affichaient pas « · Jumanly ». Elles passent par le modèle de titre commun.
+  Nouveau texte : `certificate.verify.seo.title`.
+- Forme décorative `forme-orbites-blanc` inexistante (404 sur le matching et les offres) : remplacée
+  par la forme Lime passée en blanc par filtre CSS.
+- `/app/career/cv/modeles` sans CV renvoyait une page introuvable : redirige vers « Mes CV ».
+- Restent volontairement : les mentions entre crochets des pages légales (relecture juridique
+  attendue) et la colonne « Clé » de l'admin des contenus.
+
 ## Refonte visuelle · lot 14 : pages système et e-mails (15 octobre 2026)
 
 - 404 (maquette 08-01) : code en dégradé Signature, Fatou perplexe, recherche en pilule (envoyée

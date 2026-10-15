@@ -27,7 +27,7 @@ import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("career.documents");
-  return { title: { absolute: t("title") }, robots: { index: false } };
+  return { title: t("title"), robots: { index: false } };
 }
 
 /** A document: proposed corrections to accept one by one, then the text to edit, copy or export. */
