@@ -124,3 +124,58 @@ test("un talent Pro publie un projet dans son portfolio", async ({ page, isMobil
   await expect(page.getByText(/Présentation enrichie · Disponible avec/)).toBeVisible();
   await expectAccessible(page);
 });
+
+// Career home v2 (docs/refonte-career/BRIEF-CAREER-V2.md § 9).
+test("accueil Career : un talent Free voit ses verrous, les formules et le bandeau d'offre", async ({
+  page,
+}) => {
+  await logIn(page, demo.talentFree);
+  await page.goto("/app/career");
+  const hero = page.locator("#career-journey");
+  await expect(hero.getByText(/sur 4$/)).toBeVisible();
+  await expect(hero.locator('[aria-current="step"]')).toHaveCount(1);
+
+  const locked = page.locator("#career-apply .jm-ch-locked, #career-train .jm-ch-locked");
+  await expect(locked).toHaveCount(4);
+  for (const id of ["documents", "linkedin", "portfolio", "interviews"]) {
+    const card = page.locator(`#career-${id}`);
+    await expect(card.getByText(/^Avec .+ · [\d,]+ USD\/mois$/)).toBeVisible();
+    await expect(card.getByRole("link", { name: "Débloquer" })).toHaveAttribute(
+      "href",
+      "/app/abonnement",
+    );
+  }
+  await expect(page.locator("#career-cv").getByText("Inclus", { exact: true })).toBeVisible();
+  await expect(page.locator("#career-tips").getByText("Bientôt disponible")).toBeVisible();
+
+  const band = page.locator("#career-upgrade");
+  await expect(
+    band.getByRole("heading", { name: /^Débloquez .+ pour candidater mieux$/ }),
+  ).toBeVisible();
+  await expect(band.getByText(/^[\d,]+ USD$/)).toBeVisible();
+  await expect(band.getByRole("link", { name: "Voir les formules" })).toHaveAttribute(
+    "href",
+    "/app/abonnement",
+  );
+  await expect(page.locator("nav").getByText("(outil verrouillé)")).toHaveCount(4);
+  await expectAccessible(page);
+
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
+});
+
+test("accueil Career : un talent dont la formule ouvre tout ne voit ni verrou ni bandeau", async ({
+  page,
+}) => {
+  await logIn(page, demo.talentPro);
+  await page.goto("/app/career");
+  await expect(page.locator("#career-journey")).toBeVisible();
+  await expect(
+    page.locator("#career-portfolio").getByRole("link", { name: "Ouvrir" }),
+  ).toBeVisible();
+  await expect(page.locator(".jm-ch-locked")).toHaveCount(0);
+  await expect(page.locator("#career-upgrade")).toHaveCount(0);
+  await expect(page.locator("nav").getByText("(outil verrouillé)")).toHaveCount(0);
+});
