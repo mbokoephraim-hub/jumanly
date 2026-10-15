@@ -1,5 +1,7 @@
 import { describe, expect, it } from "vitest";
 import messages from "../../messages/fr.json";
+import { cleanFileName } from "@/server/services/admin-orgs";
+import { sniffDocumentType } from "@/server/storage";
 import {
   deletionBlock,
   parseUntil,
@@ -186,5 +188,25 @@ describe("utilisateurs (Admin v2, étape 3)", () => {
       country: "CD",
       role: undefined,
     });
+  });
+});
+
+describe("organisations (Admin v2, étape 4)", () => {
+  it("reconnaît un justificatif à ses premiers octets, pas à son nom", () => {
+    expect(sniffDocumentType(new Uint8Array([0x25, 0x50, 0x44, 0x46, 0x2d]))).toBe(
+      "application/pdf",
+    );
+    expect(sniffDocumentType(new Uint8Array([0x89, 0x50, 0x4e, 0x47, 0x0d]))).toBe("image/png");
+    expect(sniffDocumentType(new Uint8Array([0xff, 0xd8, 0xff, 0xe0]))).toBe("image/jpeg");
+    const webp = new TextEncoder().encode("RIFF\0\0\0\0WEBPVP8 ");
+    expect(sniffDocumentType(webp)).toBe("image/webp");
+    expect(sniffDocumentType(new TextEncoder().encode("RIFF\0\0\0\0WAVEfmt "))).toBeNull();
+    expect(sniffDocumentType(new TextEncoder().encode("<svg onload=alert(1)>"))).toBeNull();
+  });
+
+  it("nettoie le nom d'un fichier envoyé", () => {
+    expect(cleanFileName("../../etc/passwd")).toBe("..-..-etc-passwd");
+    expect(cleanFileName('  statuts  "2026".pdf ')).toBe("statuts -2026-.pdf");
+    expect(cleanFileName("")).toBe("document");
   });
 });

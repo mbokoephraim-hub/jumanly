@@ -7,6 +7,9 @@ const nextConfig: NextConfig = {
   partialPrefetching: true,
   // Pas d'en-tête « X-Powered-By » : on n'expose pas la technologie utilisée.
   poweredByHeader: false,
+  // Justificatifs de vérification (Admin v2, étape 4) : 4 Mo par envoi, sous la limite de 4,5 Mo
+  // d'une requête sur Vercel.
+  experimental: { serverActions: { bodySizeLimit: "4.2mb" } },
   // Export PDF des CV par Chromium (docs/modeles-cv § 6.3) : ces paquets restent hors du bundle.
   serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium", "playwright-core"],
   outputFileTracingIncludes: {

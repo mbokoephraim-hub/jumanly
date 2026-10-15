@@ -2,6 +2,23 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v2 · étape 4 : organisations (15 octobre 2026)
+
+- **Justificatifs** : l'organisation joint des PDF ou images à sa demande de vérification (onglet
+  Vérification, 4 Mo par envoi, 6 au plus), reconnus par leurs premiers octets. Stockage derrière
+  l'interface `src/server/storage` (pilote `database` par défaut, `fake` pour les tests).
+  L'administrateur les ouvre depuis la fiche ; chaque ouverture est journalisée.
+- **Demander un complément** : nouveau statut « complément demandé » (onglet dédié), message à
+  l'organisation par notification et e-mail ; sa réponse remet la demande « en attente ».
+- **Suspension** (motif obligatoire) : offres en ligne fermées et mémorisées, espace recrutement
+  fermé à ses membres (page 403 dédiée), candidats et membres prévenus ; les candidatures restent
+  visibles des talents. **Réactivation** : les offres fermées par la suspension reviennent en ligne
+  si leur date limite n'est pas passée.
+- **Fiche** : membres et rôles (liens vers leurs fiches), forfait et quotas, offres en ligne avec
+  leurs candidatures, liens vers les abonnements et la modération, historique.
+- Tests : unitaires (type de fichier, nom), en base (justificatifs, complément, suspension) et e2e
+  (parcours admin complet ; envoi d'un justificatif dans le parcours de vérification existant).
+
 ## Jumanly Admin v2 · étape 3 : utilisateurs (15 octobre 2026)
 
 - **Vérifier un utilisateur** : la fiche montre l'état du compte (e-mail vérifié ou non, double

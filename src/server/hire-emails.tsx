@@ -10,6 +10,7 @@ import {
   interviewConfirmedEmail,
   interviewInviteEmail,
   orgVerificationEmail,
+  orgNoticeEmail,
   documentRequestEmail,
   newApplicationEmail,
   newMessageEmail,
@@ -75,3 +76,6 @@ export const mailOrgVerification = (
   to: Person,
   input: Parameters<typeof orgVerificationEmail>[1],
 ) => deliver(to.email, orgVerificationEmail(to.firstName, input));
+
+export const mailOrgNotice = (to: Person, input: Parameters<typeof orgNoticeEmail>[1]) =>
+  deliver(to.email, orgNoticeEmail(to.firstName, input));

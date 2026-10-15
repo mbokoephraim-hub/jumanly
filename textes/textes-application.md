@@ -5698,6 +5698,19 @@ Conventions :
 | `org.verification.form.mandate` | Votre fonction et ce qui l'atteste |
 | `org.verification.form.mandateHint` | Ex. : Directrice des ressources humaines, mandat signé par la direction générale. |
 | `org.verification.invalid` | Complétez le numéro d'immatriculation et votre fonction. |
+| `org.verification.status.info_requested` | Complément demandé |
+| `org.verification.infoRequested` | Jumanly a besoin d'un complément : {reason} |
+| `org.verification.answer` | Envoyer le complément |
+| `org.verification.form.documents` | Justificatifs (PDF ou image) |
+| `org.verification.form.documentsHint` | Registre du commerce, pièce attestant votre fonction… 4 Mo au total par envoi, 6 documents au plus. |
+| `org.verification.documents.title` | Justificatifs envoyés |
+| `org.verification.documents.remove` | Retirer {name} |
+| `org.verification.documents.removed` | Justificatif retiré. |
+| `org.verification.documents.meta` | {size} · envoyé le {date, date, medium} |
+| `org.verification.fileError.fileType` | Seuls les PDF et les images (PNG, JPEG, WEBP) sont acceptés. |
+| `org.verification.fileError.fileSize` | Les justificatifs dépassent 4 Mo pour cet envoi. Envoyez-les en plusieurs fois. |
+| `org.verification.fileError.fileCount` | Vous avez atteint 6 justificatifs. Retirez-en un pour en ajouter un autre. |
+| `org.verification.fileError.status` | Votre organisation est déjà vérifiée. |
 
 #### Membres et invitations
 
@@ -7477,6 +7490,10 @@ Conventions :
 | `notifications.item.interviewCanceled` | {company} a annulé l'entretien pour {jobTitle}. |
 | `notifications.item.orgVerified` | {org} est maintenant une entreprise vérifiée. |
 | `notifications.item.orgVerificationRejected` | La vérification de {org} n'a pas été acceptée. Consultez le motif. |
+| `notifications.item.orgVerificationInfo` | Jumanly a besoin d'un complément pour vérifier {org}. |
+| `notifications.item.orgSuspended` | {org} a été suspendue par Jumanly. Écrivez à assistant@jumanly.io pour en savoir plus. |
+| `notifications.item.orgReactivated` | {org} est de nouveau active. |
+| `notifications.item.jobUnavailable` | L'offre « {job} » de {org} n'est plus disponible. Votre candidature reste dans votre suivi. |
 | `notifications.item.abnormalUsage` | Usage inhabituel : {count} profils consultés en une heure par un membre de {org}. Accès suspendu une heure. |
 | `notifications.item.licenseActivated` | Votre licence {plan} offerte par {sponsorName} est active jusqu'au {date}. |
 | `notifications.item.licenseOnHold` | Votre licence {licensePlan} offerte par {sponsorName} est en attente : votre forfait {plan} actuel est supérieur. Elle commencera le {date}. |
@@ -7782,6 +7799,21 @@ Conventions :
 | `mail.orgVerificationRejected.p1` | Nous n'avons pas pu vérifier {org}. Motif : {reason} |
 | `mail.orgVerificationRejected.p2` | Vous pouvez compléter et renvoyer votre demande à tout moment. |
 | `mail.orgVerificationRejected.cta` | Compléter la demande |
+| `mail.orgVerificationInfo.subject` | Vérification de {org} : un complément est demandé |
+| `mail.orgVerificationInfo.preheader` | Il nous manque un élément pour terminer la vérification. |
+| `mail.orgVerificationInfo.p1` | Pour vérifier {org}, nous avons besoin d'un complément : {reason} |
+| `mail.orgVerificationInfo.p2` | Ajoutez-le depuis l'onglet Vérification de votre organisation : la demande reprend dès votre réponse. |
+| `mail.orgVerificationInfo.cta` | Compléter la demande |
+| `mail.orgSuspended.subject` | {org} est suspendue |
+| `mail.orgSuspended.preheader` | Vos offres sont retirées et l'espace recrutement est fermé. |
+| `mail.orgSuspended.p1` | Jumanly a suspendu {org}. Motif : {reason} |
+| `mail.orgSuspended.p2` | Vos offres ne sont plus visibles et l'espace recrutement est fermé. Pour en parler, écrivez à assistant@jumanly.io. |
+| `mail.orgSuspended.cta` | Ouvrir Jumanly |
+| `mail.orgReactivated.subject` | {org} est de nouveau active |
+| `mail.orgReactivated.preheader` | Votre espace recrutement est rouvert. |
+| `mail.orgReactivated.p1` | Jumanly a réactivé {org}. |
+| `mail.orgReactivated.p2` | Les offres fermées par la suspension sont republiées si leur date limite n'est pas passée. |
+| `mail.orgReactivated.cta` | Ouvrir mon espace recrutement |
 
 ### E-mail · Nouvelle candidature (recruteur)
 
@@ -8031,6 +8063,7 @@ Conventions :
 | `system.403.wrongSpace` | Cette page appartient à un autre espace. Changez d'espace dans le menu pour y accéder. |
 | `system.403.switchSpace` | Changer d'espace |
 | `system.403.suspended` | Votre compte est suspendu. Écrivez à assistant@jumanly.io pour en savoir plus. |
+| `system.403.orgSuspended` | Cette organisation est suspendue par Jumanly : son espace recrutement est fermé. Écrivez à assistant@jumanly.io pour en savoir plus. |
 | `system.403.cta` | Retour à l'accueil |
 | `system.403.pageTitle` | Accès refusé |
 
@@ -8714,6 +8747,11 @@ Conventions :
 | `admin.journal.action.org_verification_request` | a demandé la vérification |
 | `admin.journal.action.org_invite` | a invité un membre |
 | `admin.journal.action.org_transferOwnership` | a transféré la propriété |
+| `admin.journal.action.org_document_add` | a joint des justificatifs |
+| `admin.journal.action.org_document_view` | a consulté un justificatif |
+| `admin.journal.action.org_verification_info` | a demandé un complément |
+| `admin.journal.action.org_suspend` | a suspendu l'organisation |
+| `admin.journal.action.org_unsuspend` | a réactivé l'organisation |
 | `admin.journal.action.plan_update` | a modifié le forfait |
 | `admin.journal.action.payment_refund` | a remboursé le paiement |
 | `admin.journal.action.course_create` | a créé la formation |
@@ -9279,6 +9317,39 @@ Conventions :
 | `admin.orgs.list` | Liste des organisations |
 | `admin.orgs.count` | {count, plural, one {# organisation} other {# organisations}} |
 | `admin.orgs.members` | {count, plural, one {# membre} other {# membres}} |
+| `admin.orgs.status.info_requested` | À compléter |
+| `admin.orgs.tab.info` | Complément demandé |
+| `admin.orgs.suspendedTag` | Suspendue |
+| `admin.orgs.suspendedSince` | Suspendue le {date, date, medium} · {reason} |
+| `admin.orgs.verify.files` | Justificatifs joints |
+| `admin.orgs.verify.noFiles` | Aucun justificatif joint. |
+| `admin.orgs.verify.fileOpen` | Ouvrir {name} |
+| `admin.orgs.verify.fileMeta` | {size} · {date, date, medium} |
+| `admin.orgs.verify.fileHint` | Chaque ouverture est enregistrée dans le journal. |
+| `admin.orgs.verify.moreReason` | Ce qu'il manque (envoyé à l'organisation) |
+| `admin.orgs.verify.moreSubmit` | Demander ce complément |
+| `admin.orgs.verify.infoPending` | Complément demandé : {reason} |
+| `admin.orgs.suspend.reason` | Motif (communiqué à l'organisation) |
+| `admin.orgs.reactivate.text` | Réactiver l'organisation |
+| `admin.orgs.reactivate.confirm` | Réactiver {org} ? Ses membres retrouvent l'espace recrutement et les offres fermées par la suspension sont republiées si leur date limite n'est pas passée. |
+| `admin.orgs.reactivate.note` | Note (facultative) |
+| `admin.orgs.done.infoRequested` | Demande de complément envoyée. |
+| `admin.orgs.done.suspended` | Organisation suspendue. |
+| `admin.orgs.done.reactivated` | Organisation réactivée. |
+| `admin.orgs.error.status` | Cette action n'est plus possible dans l'état actuel de l'organisation. |
+| `admin.orgs.error.reason` | Indiquez un motif (3 caractères au moins). |
+| `admin.orgs.detail.members` | Membres et rôles |
+| `admin.orgs.detail.noMember` | Aucun membre. |
+| `admin.orgs.detail.memberSuspended` | suspendu |
+| `admin.orgs.detail.plan` | Forfait et quotas |
+| `admin.orgs.detail.quotaLine` | {used} sur {limit} |
+| `admin.orgs.detail.quotaUnlimited` | {used} · illimité |
+| `admin.orgs.detail.jobs` | Offres en ligne |
+| `admin.orgs.detail.noJob` | Aucune offre en ligne. |
+| `admin.orgs.detail.jobApplications` | {count, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} |
+| `admin.orgs.detail.jobsSummary` | {published} en ligne · {closed} fermées · {total} au total |
+| `admin.orgs.detail.subscriptions` | Voir ses abonnements et paiements |
+| `admin.orgs.detail.allJobs` | Voir ses offres dans la modération |
 
 ### `/admin/forfaits` · Forfaits et droits
 

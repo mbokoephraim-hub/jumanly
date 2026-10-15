@@ -6,7 +6,14 @@
 import { z } from "zod";
 import { Prisma } from "@/generated/prisma/client";
 import type { EntitlementType, PrismaClient } from "@/generated/prisma/client";
-import { GRACE_DAYS, invalidate, parseLimit, resolvePlan, usage } from "@/server/entitlements";
+import {
+  GRACE_DAYS,
+  invalidate,
+  parseLimit,
+  resolvePlan,
+  usage,
+  type Subject,
+} from "@/server/entitlements";
 
 const DAY = 86_400_000;
 /** A plan or extra quota given by hand lasts two years at most. */
@@ -128,7 +135,11 @@ export type RightRow = {
 };
 
 export async function userRights(db: PrismaClient, userId: string, now = new Date()) {
-  const subject = { type: "user" as const, id: userId };
+  return subjectRights(db, { type: "user", id: userId }, now);
+}
+
+/** Rights of a person or an organization, with the origin of each one. */
+export async function subjectRights(db: PrismaClient, subject: Subject, now = new Date()) {
   invalidate(subject);
   const plan = await resolvePlan(db, subject, now);
   if (!plan) return null;
@@ -140,8 +151,8 @@ export async function userRights(db: PrismaClient, userId: string, now = new Dat
     }),
     db.entitlementOverride.findMany({
       where: {
-        subjectType: "user",
-        subjectId: userId,
+        subjectType: subject.type,
+        subjectId: subject.id,
         OR: [{ expiresAt: null }, { expiresAt: { gt: now } }],
       },
       orderBy: { createdAt: "asc" },

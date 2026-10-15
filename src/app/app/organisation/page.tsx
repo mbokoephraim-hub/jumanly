@@ -69,7 +69,15 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
     verificationOn,
     plans,
   ] = await Promise.all([
-    db.organization.findUniqueOrThrow({ where: { id: ctx.organizationId } }),
+    db.organization.findUniqueOrThrow({
+      where: { id: ctx.organizationId },
+      include: {
+        documents: {
+          orderBy: { createdAt: "asc" },
+          select: { id: true, name: true, size: true, createdAt: true },
+        },
+      },
+    }),
     listMembers(db, ctx),
     seatUsage(db, ctx.organizationId),
     level(db, subject, "org.permissions.level"),
@@ -98,6 +106,7 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
     transfert: t("members.transferDone"),
     cree: t("structure.created"),
     supprime: t("structure.deleted"),
+    documentRetire: t("verification.documents.removed"),
   };
   const errorText: Record<string, string> = {
     alreadyMember: t("invite.error.alreadyMember", { email: one(params.email) }),
@@ -107,6 +116,10 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
     forbidden: t("roles.error.selfDemote"),
     notEmpty: t("structure.notEmpty"),
     verification: t("verification.invalid"),
+    fileType: t("verification.fileError.fileType"),
+    fileSize: t("verification.fileError.fileSize"),
+    fileCount: t("verification.fileError.fileCount"),
+    status: t("verification.fileError.status"),
     ...(tab !== "profil" && tab !== "membres" ? { invalid: t("structure.invalid") } : {}),
   };
   const full = seats.max >= 0 && seats.used >= seats.max;

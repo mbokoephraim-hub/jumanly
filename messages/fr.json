@@ -7035,7 +7035,8 @@
         "pending": "Vérification en cours",
         "verified": "Entreprise vérifiée",
         "rejected": "Vérification refusée",
-        "expired": "Vérification à renouveler"
+        "expired": "Vérification à renouveler",
+        "info_requested": "Complément demandé"
       },
       "docs": "Documents demandés",
       "doc": {
@@ -7062,9 +7063,25 @@
         "taxId": "Numéro d'identification fiscale (facultatif)",
         "domainEmail": "Votre adresse e-mail sur le domaine de l'organisation (facultatif)",
         "mandate": "Votre fonction et ce qui l'atteste",
-        "mandateHint": "Ex. : Directrice des ressources humaines, mandat signé par la direction générale."
+        "mandateHint": "Ex. : Directrice des ressources humaines, mandat signé par la direction générale.",
+        "documents": "Justificatifs (PDF ou image)",
+        "documentsHint": "Registre du commerce, pièce attestant votre fonction… 4 Mo au total par envoi, 6 documents au plus."
       },
-      "invalid": "Complétez le numéro d'immatriculation et votre fonction."
+      "invalid": "Complétez le numéro d'immatriculation et votre fonction.",
+      "infoRequested": "Jumanly a besoin d'un complément : {reason}",
+      "answer": "Envoyer le complément",
+      "documents": {
+        "title": "Justificatifs envoyés",
+        "remove": "Retirer {name}",
+        "removed": "Justificatif retiré.",
+        "meta": "{size} · envoyé le {date, date, medium}"
+      },
+      "fileError": {
+        "fileType": "Seuls les PDF et les images (PNG, JPEG, WEBP) sont acceptés.",
+        "fileSize": "Les justificatifs dépassent 4 Mo pour cet envoi. Envoyez-les en plusieurs fois.",
+        "fileCount": "Vous avez atteint 6 justificatifs. Retirez-en un pour en ajouter un autre.",
+        "status": "Votre organisation est déjà vérifiée."
+      }
     },
     "members": {
       "title": "Membres",
@@ -9121,6 +9138,10 @@
       "interviewCanceled": "{company} a annulé l'entretien pour {jobTitle}.",
       "orgVerified": "{org} est maintenant une entreprise vérifiée.",
       "orgVerificationRejected": "La vérification de {org} n'a pas été acceptée. Consultez le motif.",
+      "orgVerificationInfo": "Jumanly a besoin d'un complément pour vérifier {org}.",
+      "orgSuspended": "{org} a été suspendue par Jumanly. Écrivez à assistant@jumanly.io pour en savoir plus.",
+      "orgReactivated": "{org} est de nouveau active.",
+      "jobUnavailable": "L'offre « {job} » de {org} n'est plus disponible. Votre candidature reste dans votre suivi.",
       "abnormalUsage": "Usage inhabituel : {count} profils consultés en une heure par un membre de {org}. Accès suspendu une heure.",
       "licenseActivated": "Votre licence {plan} offerte par {sponsorName} est active jusqu'au {date}.",
       "licenseOnHold": "Votre licence {licensePlan} offerte par {sponsorName} est en attente : votre forfait {plan} actuel est supérieur. Elle commencera le {date}.",
@@ -9447,6 +9468,27 @@
       "p2": "Vous pouvez compléter et renvoyer votre demande à tout moment.",
       "cta": "Compléter la demande"
     },
+    "orgVerificationInfo": {
+      "subject": "Vérification de {org} : un complément est demandé",
+      "preheader": "Il nous manque un élément pour terminer la vérification.",
+      "p1": "Pour vérifier {org}, nous avons besoin d'un complément : {reason}",
+      "p2": "Ajoutez-le depuis l'onglet Vérification de votre organisation : la demande reprend dès votre réponse.",
+      "cta": "Compléter la demande"
+    },
+    "orgSuspended": {
+      "subject": "{org} est suspendue",
+      "preheader": "Vos offres sont retirées et l'espace recrutement est fermé.",
+      "p1": "Jumanly a suspendu {org}. Motif : {reason}",
+      "p2": "Vos offres ne sont plus visibles et l'espace recrutement est fermé. Pour en parler, écrivez à assistant@jumanly.io.",
+      "cta": "Ouvrir Jumanly"
+    },
+    "orgReactivated": {
+      "subject": "{org} est de nouveau active",
+      "preheader": "Votre espace recrutement est rouvert.",
+      "p1": "Jumanly a réactivé {org}.",
+      "p2": "Les offres fermées par la suspension sont republiées si leur date limite n'est pas passée.",
+      "cta": "Ouvrir mon espace recrutement"
+    },
     "newApplication": {
       "subject": "Nouvelle candidature : {jobTitle}",
       "preheader": "{candidateName} a postulé.",
@@ -9620,6 +9662,7 @@
       "wrongSpace": "Cette page appartient à un autre espace. Changez d'espace dans le menu pour y accéder.",
       "switchSpace": "Changer d'espace",
       "suspended": "Votre compte est suspendu. Écrivez à assistant@jumanly.io pour en savoir plus.",
+      "orgSuspended": "Cette organisation est suspendue par Jumanly : son espace recrutement est fermé. Écrivez à assistant@jumanly.io pour en savoir plus.",
       "cta": "Retour à l'accueil",
       "pageTitle": "Accès refusé"
     },
@@ -10406,6 +10449,11 @@
         "org_verification_request": "a demandé la vérification",
         "org_invite": "a invité un membre",
         "org_transferOwnership": "a transféré la propriété",
+        "org_document_add": "a joint des justificatifs",
+        "org_document_view": "a consulté un justificatif",
+        "org_verification_info": "a demandé un complément",
+        "org_suspend": "a suspendu l'organisation",
+        "org_unsuspend": "a réactivé l'organisation",
         "plan_update": "a modifié le forfait",
         "payment_refund": "a remboursé le paiement",
         "course_create": "a créé la formation",
@@ -10987,7 +11035,8 @@
         "partners": "Partenaires",
         "rejected": "Refusées",
         "none": "Non vérifiées",
-        "pendingShort": "En attente ({count})"
+        "pendingShort": "En attente ({count})",
+        "info": "Complément demandé"
       },
       "col": {
         "name": "Organisation",
@@ -11025,7 +11074,15 @@
           "website": "Site web : {value}"
         },
         "reasonRequired": "Indiquez le motif communiqué à l'organisation.",
-        "noDocuments": "Aucun élément fourni pour l'instant."
+        "noDocuments": "Aucun élément fourni pour l'instant.",
+        "files": "Justificatifs joints",
+        "noFiles": "Aucun justificatif joint.",
+        "fileOpen": "Ouvrir {name}",
+        "fileMeta": "{size} · {date, date, medium}",
+        "fileHint": "Chaque ouverture est enregistrée dans le journal.",
+        "moreReason": "Ce qu'il manque (envoyé à l'organisation)",
+        "moreSubmit": "Demander ce complément",
+        "infoPending": "Complément demandé : {reason}"
       },
       "revoke": {
         "text": "Retirer le badge vérifié",
@@ -11033,7 +11090,8 @@
       },
       "suspend": {
         "text": "Suspendre l'organisation",
-        "confirm": "Suspendre {org} ? Ses offres seront retirées et ses membres ne pourront plus accéder à l'espace Hire. Les candidats seront prévenus."
+        "confirm": "Suspendre {org} ? Ses offres seront retirées et ses membres ne pourront plus accéder à l'espace Hire. Les candidats seront prévenus.",
+        "reason": "Motif (communiqué à l'organisation)"
       },
       "empty": "Aucune organisation dans cette liste.",
       "search": "Nom de l'organisation",
@@ -11050,7 +11108,8 @@
         "none": "Non vérifiée",
         "pending": "En attente",
         "verified": "Vérifiée",
-        "rejected": "Refusée"
+        "rejected": "Refusée",
+        "info_requested": "À compléter"
       },
       "doc": {
         "registration": "Immatriculation",
@@ -11061,7 +11120,37 @@
       },
       "list": "Liste des organisations",
       "count": "{count, plural, one {# organisation} other {# organisations}}",
-      "members": "{count, plural, one {# membre} other {# membres}}"
+      "members": "{count, plural, one {# membre} other {# membres}}",
+      "suspendedTag": "Suspendue",
+      "suspendedSince": "Suspendue le {date, date, medium} · {reason}",
+      "reactivate": {
+        "text": "Réactiver l'organisation",
+        "confirm": "Réactiver {org} ? Ses membres retrouvent l'espace recrutement et les offres fermées par la suspension sont republiées si leur date limite n'est pas passée.",
+        "note": "Note (facultative)"
+      },
+      "done": {
+        "infoRequested": "Demande de complément envoyée.",
+        "suspended": "Organisation suspendue.",
+        "reactivated": "Organisation réactivée."
+      },
+      "error": {
+        "status": "Cette action n'est plus possible dans l'état actuel de l'organisation.",
+        "reason": "Indiquez un motif (3 caractères au moins)."
+      },
+      "detail": {
+        "members": "Membres et rôles",
+        "noMember": "Aucun membre.",
+        "memberSuspended": "suspendu",
+        "plan": "Forfait et quotas",
+        "quotaLine": "{used} sur {limit}",
+        "quotaUnlimited": "{used} · illimité",
+        "jobs": "Offres en ligne",
+        "noJob": "Aucune offre en ligne.",
+        "jobApplications": "{count, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}}",
+        "jobsSummary": "{published} en ligne · {closed} fermées · {total} au total",
+        "subscriptions": "Voir ses abonnements et paiements",
+        "allJobs": "Voir ses offres dans la modération"
+      }
     },
     "plans": {
       "title": "Forfaits et droits",

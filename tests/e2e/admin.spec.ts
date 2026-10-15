@@ -40,6 +40,12 @@ function makeAccount(prefix: string, name: string, state?: "unverified") {
   return { email, id: id.trim().split("\n").at(-1)! };
 }
 
+/** A fresh fictional company waiting for verification, with a document and a live job. */
+function makeOrganization(name: string) {
+  const id = execFileSync("pnpm", ["exec", "tsx", "tests/e2e/make-org.ts", name]).toString();
+  return id.trim().split("\n").at(-1)!;
+}
+
 async function expectTitle(page: Page, title: string) {
   await expect(page.getByRole("heading", { level: 1 })).toHaveText(title);
 }
@@ -307,4 +313,54 @@ test("la liste des utilisateurs s'exporte en CSV", async ({ page }) => {
   expect(csv).toContain("E-mail vérifié");
   expect(csv).toContain(account.email);
   expect(csv.trim().split("\n")).toHaveLength(2);
+});
+
+test("une organisation : justificatif, complément, suspension puis réactivation", async ({
+  page,
+}) => {
+  test.setTimeout(150_000);
+  const name = `Entreprise Recette ${Date.now()} (fictive)`;
+  const id = makeOrganization(name);
+  await logIn(page, demo.admin);
+  await page.goto(`/admin/organisations?fiche=${id}`);
+  const card = page.locator("#organisations-fiche");
+  const done = (text: string) =>
+    expect(page.getByRole("status").filter({ hasText: text })).toBeVisible();
+
+  // The supporting document opens (and its opening is recorded).
+  const file = card.getByRole("link", { name: "Ouvrir registre-fictif.pdf" });
+  const response = await page.request.get((await file.getAttribute("href"))!);
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toBe("application/pdf");
+  await expect(card.getByText("Poste fictif (recette admin)")).toBeVisible();
+  await expectAccessible(page);
+
+  // Ask for more: the request leaves « en attente ».
+  await card.getByText("Demander un complément").click();
+  await page.locator("#organisations-more-reason").fill("Registre du commerce plus lisible");
+  await page.getByRole("button", { name: "Demander ce complément" }).click();
+  await done("Demande de complément envoyée.");
+  await expect(
+    card.getByText("Complément demandé : Registre du commerce plus lisible"),
+  ).toBeVisible();
+
+  // Suspension: the live job closes.
+  await card.getByRole("link", { name: "Suspendre l'organisation" }).click();
+  await page.locator("#organisations-suspend-reason").fill("Recette de l'admin (fictif)");
+  await page.getByRole("button", { name: "Suspendre l'organisation" }).click();
+  await done("Organisation suspendue.");
+  await expect(card.getByText("Suspendue", { exact: true })).toBeVisible();
+  await expect(card.getByText("Aucune offre en ligne.")).toBeVisible();
+
+  // Reactivation: the job is back online.
+  await card.getByRole("link", { name: "Réactiver l'organisation" }).click();
+  await page.getByRole("button", { name: "Réactiver l'organisation" }).click();
+  await done("Organisation réactivée.");
+  await expect(card.getByText("Poste fictif (recette admin)")).toBeVisible();
+
+  const history = page.getByRole("region", { name: "Historique" });
+  await expect(history.getByText("a consulté un justificatif")).toBeVisible();
+  await expect(history.getByText("a demandé un complément")).toBeVisible();
+  await expect(history.getByText("a suspendu l'organisation")).toBeVisible();
+  await expect(history.getByText("a réactivé l'organisation")).toBeVisible();
 });
