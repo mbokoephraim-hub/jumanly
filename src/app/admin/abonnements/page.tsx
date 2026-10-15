@@ -481,7 +481,7 @@ export default async function AdminSubscriptions({
                           <Link
                             href={`${href({ paiement: row.id })}#abonnements-actions`}
                             aria-label={t("subscriptions.actions.open", {
-                              holder: holderName(row.holder),
+                              holder: row.holder,
                             })}
                             className={cx(moreButton, "inline-grid bg-creme ring-0")}
                           >
@@ -522,6 +522,7 @@ export default async function AdminSubscriptions({
                     {hasActions(row) ? (
                       <Link
                         href={`${href({ paiement: row.id })}#abonnements-actions`}
+                        aria-label={t("subscriptions.actions.open", { holder: row.holder })}
                         className="flex items-center gap-3 py-3"
                       >
                         {content}

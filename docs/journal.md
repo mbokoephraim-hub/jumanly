@@ -2,6 +2,21 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte lot 13 : Jumanly Admin (15 octobre 2026)
+
+- Les 11 pages de `/admin` refaites d'après les maquettes 07-01 à 07-11 : cadre (barre Nuit avec
+  tuile Lime et tag « Administration », en-tête mobile Sapin, pilule flottante), puis Indicateurs,
+  Utilisateurs, Organisations, Forfaits et droits, Abonnements, Formations, Modération des offres,
+  Partenaires, IA et matching, Contenus, Signalements. Kit partagé `src/components/admin/kit.tsx`.
+- Indicateurs : période, comparaison, activité mensuelle, « À traiter », familles et forfaits,
+  dépenses IA par fonction, export CSV (`src/server/services/admin-dashboard.ts`).
+- Motif obligatoire ajouté à la révocation d'attestation et à la publication de FAQ.
+- Textes : `admin.header.*`, `admin.sensitive.*`, `admin.nav.more`, `admin.nav.mobile`, et des
+  compléments dans chaque section admin.
+- e2e mis à jour : `payments`, `partners`, `launch`, `hire-advanced`.
+- Captures 1440 et 390 px : `/mnt/project-files/captures/refonte-lot-13/`.
+- Écarts et éléments non construits : `docs/decisions/2026-10-15-refonte-lot-13.md`.
+
 ## Connexion v2 et générique d'entrée (15 octobre 2026)
 
 - `/connexion` et `/inscription` refaits d'après `docs/refonte-connexion/` (remplace les maquettes

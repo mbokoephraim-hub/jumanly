@@ -77,10 +77,12 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
   await logIn(admin, demo.admin, undefined, "/admin/abonnements");
   await admin.goto("/admin/abonnements");
   await expectAccessible(admin);
-  const item = admin.locator("tr").filter({ hasText: email }).filter({ hasText: "Réussi" });
-  await item
+  // Table on desktop, list on phones: the link's name carries the e-mail either way.
+  await admin
+    .locator("tr:visible, li:visible")
+    .filter({ hasText: "Réussi" })
+    .getByRole("link", { name: new RegExp(`^Actions pour .*${email.replace(/[.+]/g, "\\$&")}`) })
     .first()
-    .getByRole("link", { name: /^Actions pour / })
     .click();
   await admin.getByRole("link", { name: "Rembourser manuellement" }).click();
   await admin.getByLabel("Référence du remboursement").fill("REMB-TEST-001");
