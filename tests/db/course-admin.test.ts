@@ -6,9 +6,13 @@ import {
   addModule,
   addQuestion,
   courseStats,
+  courseReadiness,
   createCourse,
+  createCourseFromTemplate,
   duplicateCourse,
   getCourseForAdmin,
+  readinessPercents,
+  type TemplateLabels,
 } from "@/server/services/course-admin";
 import {
   CourseMediaError,
@@ -136,5 +140,76 @@ describe("formations (Admin v2, étape 6)", () => {
         new Uint8Array([1, 2, 3, 4, 5, 6, 7, 8]),
       ),
     ).rejects.toMatchObject({ code: "fileType" });
+  });
+});
+
+// Admin v3, étape 3: a new course from a starting template.
+const labels: TemplateLabels = {
+  module: (index) => `Module ${index}`,
+  finalModule: "Évaluation finale",
+  lesson: (label, index) => `${label} ${index}`,
+};
+const base = {
+  category: "Test",
+  level: "beginner" as const,
+  language: "fr",
+  requiredLevel: "fundamentals" as const,
+};
+
+describe("Studio formations (Admin v3, étape 3)", () => {
+  it("le parcours certifiant crée 3 modules et une évaluation finale, attestation activée", async () => {
+    const course = await createCourseFromTemplate(
+      db,
+      { ...base, title: `Parcours test ${randomUUID().slice(0, 8)}`, template: "certifying" },
+      labels,
+    );
+    courses.push(course.id);
+    const full = (await getCourseForAdmin(db, course.id))!;
+    expect(full.status).toBe("draft");
+    expect(full.requiredLevel).toBe("fundamentals");
+    expect(full.certificateEnabled).toBe(true);
+    expect(full.modules.map((module) => module.title)).toEqual([
+      "Module 1",
+      "Module 2",
+      "Module 3",
+      "Évaluation finale",
+    ]);
+    expect(full.modules[0]!.lessons.map((lesson) => lesson.kind)).toEqual([
+      "video",
+      "text",
+      "quiz",
+    ]);
+    // Every quiz lesson has its (empty) quiz: the readiness lists the questions still missing.
+    const quizzes = full.modules.flatMap((module) =>
+      module.lessons.filter((lesson) => lesson.kind === "quiz"),
+    );
+    expect(quizzes).toHaveLength(4);
+    expect(quizzes.every((lesson) => lesson.quiz?.questions.length === 0)).toBe(true);
+    expect(courseReadiness(full).problems).toContain("quiz");
+    expect((await readinessPercents(db, [course.id])).get(course.id)).toBe(
+      courseReadiness(full).percent,
+    );
+  });
+
+  it("l'atelier numérote ses exercices, partir de zéro ne crée aucun module", async () => {
+    const workshop = await createCourseFromTemplate(
+      db,
+      { ...base, title: `Atelier test ${randomUUID().slice(0, 8)}`, template: "workshop" },
+      labels,
+    );
+    const blank = await createCourseFromTemplate(
+      db,
+      { ...base, title: `Vide test ${randomUUID().slice(0, 8)}`, template: "blank" },
+      labels,
+    );
+    courses.push(workshop.id, blank.id);
+    const full = (await getCourseForAdmin(db, workshop.id))!;
+    expect(full.certificateEnabled).toBe(false);
+    expect(full.modules[0]!.lessons.map((lesson) => lesson.title)).toEqual([
+      "intro 1",
+      "exercise 1",
+      "exercise 2",
+    ]);
+    expect((await getCourseForAdmin(db, blank.id))!.modules).toHaveLength(0);
   });
 });

@@ -2,6 +2,23 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v3 · étape 3 : Studio formations, galerie et création (15 octobre 2026)
+
+- `/admin/formations` devient le **Studio formations** : bandeau avec les formations publiées, les
+  brouillons, les inscriptions et attestations des 30 derniers jours ; **galerie** de cartes
+  (couverture, ou couverture générée dans un dégradé de la marque selon le thème ; statut ; niveau
+  de catalogue ; durée ; modules et leçons ; inscrits, achèvement, quiz, attestations) avec
+  l'anneau « prête à publier » des brouillons ; bascule **Galerie / Liste** (`?vue=liste`, la liste
+  compacte d'avant) qui suit les filtres.
+- **Nouvelle formation** : page `/admin/formations/nouvelle` (titre, thème avec suggestions,
+  niveau, langue, niveau de catalogue) et **modèle de départ** dessiné en blocs : formation courte
+  (1 module, vidéo, lecture, quiz), parcours certifiant (3 modules terminés par un quiz, évaluation
+  finale, attestation), atelier pratique (vidéo et deux exercices), partir de zéro. Les modules et
+  leçons créés ont des titres provisoires venant des textes ; rien n'est inventé ni publié.
+  « Dupliquer une formation » sur la même page. Service `createCourseFromTemplate`, testé en base.
+- Le simple champ « Titre » de l'ancienne liste est remplacé par cette page (e2e Learn adapté).
+- Captures : `/mnt/project-files/captures/admin-v3/etape-3/`.
+
 ## Jumanly Admin v3 · étape 2 : habillage de tous les écrans (15 octobre 2026)
 
 - **Tableau de bord** : bandeau avec une phrase de contexte et trois chiffres (éléments à traiter,

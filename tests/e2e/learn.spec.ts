@@ -39,8 +39,12 @@ test("un éditeur crée une formation, un talent Free la suit jusqu'à l'attesta
   await page.goto("/admin");
   await expect(page).toHaveURL(/\/admin\/formations$/);
   await expect(page.getByRole("link", { name: "Forfaits et droits" })).toHaveCount(0);
+  // Admin v3, étape 3: « Nouvelle formation » opens its own page with the starting templates.
+  await page.getByRole("link", { name: "Nouvelle formation" }).first().click();
+  await expect(page).toHaveURL(/\/admin\/formations\/nouvelle$/);
   await page.locator("#course-new-title").fill(title);
-  await page.getByRole("button", { name: "Créer le brouillon" }).click();
+  await page.locator('label[for="course-new-template-blank"]').click();
+  await page.getByRole("button", { name: "Créer la formation" }).click();
   await expect(page.getByText("Brouillon créé.", { exact: false })).toBeVisible();
 
   await page.locator("#course-summary").fill("Résumé fictif pour le test de bout en bout.");

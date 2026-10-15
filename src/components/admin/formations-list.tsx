@@ -74,22 +74,31 @@ export function courseFilterQuery(filters: CourseFilters, change: Partial<Course
   return text ? `?${text}` : "";
 }
 
+function withKeep(href: string, keep?: Record<string, string>) {
+  if (!keep) return href;
+  const extra = new URLSearchParams(keep).toString();
+  return `${href}${href.includes("?") ? "&" : "?"}${extra}`;
+}
+
 export async function CourseFilterBar({
   base,
   courses,
   filters,
   shown,
+  keep,
 }: {
   base: string;
   courses: Course[];
   filters: CourseFilters;
   shown: number;
+  /** Other query parameters kept by the filters (the Studio view, `vue=liste`). */
+  keep?: Record<string, string>;
 }) {
   const t = await getTranslations("admin.courses");
   const themes = [...new Set(courses.map((course) => course.category).filter(Boolean))].sort();
   const options = (key: keyof CourseFilters, values: { value: string; label: string }[]) =>
     [{ value: "", label: t("filter.all") }, ...values].map((option) => ({
-      href: `${base}${courseFilterQuery(filters, { [key]: option.value })}`,
+      href: withKeep(`${base}${courseFilterQuery(filters, { [key]: option.value })}`, keep),
       label: option.label,
       current: filters[key] === option.value,
     }));
@@ -98,7 +107,7 @@ export async function CourseFilterBar({
       action={base}
       searchLabel={t("filter.search")}
       q={filters.q}
-      hidden={{ statut: filters.statut, theme: filters.theme, niveau: filters.niveau }}
+      hidden={{ statut: filters.statut, theme: filters.theme, niveau: filters.niveau, ...keep }}
       aside={
         <span className="text-[12.5px] text-ardoise">{t("filter.count", { count: shown })}</span>
       }
@@ -168,7 +177,7 @@ export async function CourseListCard({
         >
           {t("title")}
         </h2>
-        <ButtonLink href="/admin/formations#course-new-title" size="sm" icon={<Icon name="plus" />}>
+        <ButtonLink href="/admin/formations/nouvelle" size="sm" icon={<Icon name="plus" />}>
           {t("new")}
         </ButtonLink>
       </div>

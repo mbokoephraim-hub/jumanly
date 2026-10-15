@@ -66,6 +66,7 @@ export default async function AdminCourse({
         <CourseListCard courses={courses} filters={filters} currentId={course.id} />
         <div className="flex min-w-0 flex-col gap-4">
           {param("ok") === "creee" && <Alert tone="success" title={t("created")} />}
+          {param("ok") === "modele" && <Alert tone="success" title={t("v3.createdFromTemplate")} />}
           {param("ok") === "copie" && <Alert tone="success" title={t("v2.duplicate.done")} />}
           {(coverError === "fileType" ||
             coverError === "fileSize" ||
