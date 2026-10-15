@@ -29,6 +29,7 @@ export async function listCoursesForAdmin(db: PrismaClient) {
       slug: true,
       title: true,
       status: true,
+      category: true,
       requiredLevel: true,
       updatedAt: true,
       enrollmentCount: true,

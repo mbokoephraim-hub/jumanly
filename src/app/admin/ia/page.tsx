@@ -1,7 +1,22 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { Alert, Badge, Button, Table, Td, Th, TextArea, TextField } from "@/components/ui";
+import { AiOrb } from "@/components/brand/ai-orb";
+import { Icon } from "@/components/brand/icon";
+import {
+  AdminPageHeader,
+  AdminTabs,
+  AuditNotice,
+  ReasonField,
+  SectionRule,
+  SensitivePanel,
+  Tag,
+  adminCard,
+  adminLabel,
+  adminTitle,
+} from "@/components/admin/kit";
+import { WeightsEditor } from "@/components/admin/ia-weights";
+import { Alert, Button, Table, Td, Th, TextArea } from "@/components/ui";
 import { criterionText } from "@/components/matching/talent-why";
 import { cx } from "@/lib/cx";
 import { formatDate, formatRelativeDays } from "@/lib/dates";
@@ -17,18 +32,54 @@ import {
   weightsHistory,
 } from "@/server/services/ai-admin";
 
-const tabs = { consommation: "usage", poids: "weights", revisions: "disputes" } as const;
+const tabs = {
+  consommation: "usage",
+  poids: "weights",
+  revisions: "disputes",
+  journal: "audit",
+} as const;
 type Tab = keyof typeof tabs;
 
-const featureText: Record<string, "cvParse" | "cvCoach" | "diagnostic"> = {
+/** AI features (`AiUsage.feature`) → their name in « Consommation par fonction ». */
+const featureText: Record<
+  string,
+  | "cvParse"
+  | "cvCoach"
+  | "diagnostic"
+  | "documents"
+  | "linkedin"
+  | "interviewText"
+  | "cvAnalysis"
+  | "jobDraft"
+> = {
   cv_parse: "cvParse",
   cv_coach: "cvCoach",
+  cv_tailor: "cvCoach",
   diagnostic: "diagnostic",
+  diagnostic_followup: "diagnostic",
+  career_document: "documents",
+  proofread: "documents",
+  linkedin: "linkedin",
+  interview_feedback: "interviewText",
+  interview_questions: "interviewText",
+  hire_cv_analysis: "cvAnalysis",
+  job_writer: "jobDraft",
 };
 
 const statusKey = { open: "open", in_review: "inReview" } as const;
 
-/** IA et matching (partie 07, partie 08 § 8.10): consumption, weights, human reviews. */
+/** Colors of the four score bands (mockup 07-09, « Bandes de score »): low in Brume, never red. */
+const bands = [
+  { band: "veryHigh", color: "bg-lime", width: 15 },
+  { band: "high", color: "bg-menthe-claire", width: 15 },
+  { band: "partial", color: "bg-ambre-fond", width: 20 },
+  { band: "low", color: "bg-brume", width: 50 },
+] as const;
+
+type Disputes = Awaited<ReturnType<typeof openDisputes>>;
+type Usage = Awaited<ReturnType<typeof usageReport>>;
+
+/** IA et matching (partie 07, partie 08 § 8.10): consumption, weights, human reviews, audit. */
 export default async function AdminAi({ searchParams }: PageProps<"/admin/ia">) {
   const params = await searchParams;
   const admin = await requireAdmin();
@@ -40,263 +91,261 @@ export default async function AdminAi({ searchParams }: PageProps<"/admin/ia">) 
     typeof params.onglet === "string" && params.onglet in tabs
       ? (params.onglet as Tab)
       : "consommation";
-  const disputes = await openDisputes(db);
-  const money = (micro: number) =>
+  const [disputes, usage] = await Promise.all([openDisputes(db), usageReport(db)]);
+  const money = (micro: number, digits = 4) =>
     format.number(micro / 1_000_000, {
       style: "currency",
       currency: "USD",
-      maximumFractionDigits: 4,
+      currencyDisplay: "code",
+      maximumFractionDigits: digits,
     });
+  const featureLabel = (feature: string) =>
+    featureText[feature] ? t(`admin.ai.usage.feature.${featureText[feature]}`) : feature;
 
   return (
     <>
-      <h1 className="text-h1">{t("admin.ai.title")}</h1>
-      <nav aria-label={t("admin.ai.title")} className="flex flex-wrap gap-2">
-        {(Object.keys(tabs) as Tab[]).map((id) => (
-          <Link
-            key={id}
-            href={`/admin/ia?onglet=${id}`}
-            aria-current={tab === id ? "page" : undefined}
-            className={cx(
-              "rounded-pill px-4 py-2 text-[15px] font-medium",
-              tab === id ? "bg-sapin text-blanc" : "bg-blanc",
-            )}
-          >
-            {id === "revisions"
+      <AdminPageHeader title={t("admin.ai.title")} />
+      <AdminTabs
+        label={t("admin.ai.title")}
+        items={(Object.keys(tabs) as Tab[]).map((id) => ({
+          href: `/admin/ia?onglet=${id}`,
+          current: tab === id,
+          label:
+            id === "revisions" && disputes.length > 0
               ? [t("admin.ai.tab.disputes"), `(${disputes.length})`].join(" ")
-              : t(`admin.ai.tab.${tabs[id]}`)}
-          </Link>
-        ))}
-      </nav>
+              : t(`admin.ai.tab.${tabs[id]}`),
+        }))}
+      />
 
-      {tab === "consommation" && <UsageTab money={money} />}
-      {tab === "poids" && (
-        <WeightsTab writable={writable} ok={params.ok === "1"} error={params.erreur === "1"} />
-      )}
-      {tab === "revisions" && (
-        <section aria-labelledby="disputes" className="flex flex-col gap-4">
-          <h2 id="disputes" className="text-h2">
-            {t("admin.ai.disputes.title")}
-          </h2>
-          {params.ok === "1" && <Alert tone="success" title={t("admin.ai.disputes.resolved")} />}
-          {params.erreur === "reponse" && (
-            <Alert tone="error" title={t("admin.ai.disputes.responseMissing")} />
+      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_320px] xl:grid-cols-[minmax(0,1fr)_360px]">
+        <div className="flex min-w-0 flex-col gap-4">
+          {tab === "consommation" && <UsageTab usage={usage} money={money} label={featureLabel} />}
+          {tab === "poids" && (
+            <WeightsTab writable={writable} ok={params.ok === "1"} error={params.erreur === "1"} />
           )}
-          {disputes.length === 0 ? (
-            <p className="rounded-card bg-blanc p-6">{t("admin.ai.disputes.empty")}</p>
-          ) : (
-            <ul className="flex flex-col gap-4">
-              {disputes.map((dispute) => {
-                const reason = (disputeReasons as readonly string[]).includes(dispute.reason)
-                  ? t(`ai.dispute.what.${dispute.reason as (typeof disputeReasons)[number]}`)
-                  : dispute.reason;
-                const status = dispute.status === "in_review" ? "in_review" : "open";
-                return (
-                  <li key={dispute.id} className="flex flex-col gap-3 rounded-card bg-blanc p-6">
-                    <div className="flex flex-wrap items-center gap-2">
-                      <Badge tone={status === "open" ? "warning" : "ai"}>
-                        {t(`ai.dispute.status.${statusKey[status]}`)}
-                      </Badge>
-                      <span className="text-sm text-ardoise">
-                        {[
-                          formatDate(dispute.createdAt),
-                          formatRelativeDays(dispute.createdAt),
-                        ].join(" · ")}
-                      </span>
-                    </div>
-                    <dl className="grid gap-1 text-sm sm:grid-cols-[max-content_1fr] sm:gap-x-4">
-                      <dt className="font-semibold">{t("admin.ai.disputes.col.talent")}</dt>
-                      <dd>{[dispute.user.name, dispute.user.email].filter(Boolean).join(" · ")}</dd>
-                      <dt className="font-semibold">{t("admin.ai.disputes.col.job")}</dt>
-                      <dd>
-                        {dispute.job
-                          ? [dispute.job.title, dispute.job.organization.name].join(" · ")
-                          : dispute.jobId}
-                      </dd>
-                      <dt className="font-semibold">{t("admin.ai.disputes.col.reason")}</dt>
-                      <dd>{reason}</dd>
-                    </dl>
-                    <p className="text-sm font-medium">
-                      {t("admin.ai.disputes.scoreBefore", { score: dispute.scoreBefore })}
-                    </p>
-                    <p className="rounded-md bg-creme p-3 text-sm whitespace-pre-line">
-                      {dispute.details}
-                    </p>
-                    {dispute.notifyRecruiter && (
-                      <p className="text-sm">{t("admin.ai.disputes.recruiterNotified")}</p>
-                    )}
-                    {writable && (
-                      <form action={resolveDisputeAction} className="flex flex-col gap-3">
-                        <input type="hidden" name="id" value={dispute.id} />
-                        <TextArea
-                          id={`resolution-${dispute.id}`}
-                          name="resolution"
-                          rows={3}
-                          maxLength={2000}
-                          label={t("admin.ai.disputes.response")}
-                          hint={t("admin.ai.disputes.responseHint")}
-                        />
-                        <div className="flex flex-wrap gap-2">
-                          {status === "open" && (
-                            <Button
-                              type="submit"
-                              name="outcome"
-                              value="in_review"
-                              size="sm"
-                              variant="tertiary"
-                            >
-                              {t("admin.ai.disputes.take")}
-                            </Button>
-                          )}
-                          <Button type="submit" name="outcome" value="corrected" size="sm">
-                            {t("admin.ai.disputes.correct")}
-                          </Button>
-                          <Button
-                            type="submit"
-                            name="outcome"
-                            value="confirmed"
-                            size="sm"
-                            variant="secondary"
-                          >
-                            {t("admin.ai.disputes.confirm")}
-                          </Button>
-                        </div>
-                      </form>
-                    )}
-                  </li>
-                );
-              })}
-            </ul>
+          {tab === "revisions" && (
+            <DisputesTab
+              disputes={disputes}
+              writable={writable}
+              ok={params.ok === "1"}
+              missing={params.erreur === "reponse"}
+            />
           )}
-        </section>
-      )}
+          {tab === "journal" && <AuditTab />}
+        </div>
+        <aside className="flex min-w-0 flex-col gap-4">
+          <UsageCard usage={usage} money={money} label={featureLabel} />
+          {tab !== "revisions" && <DisputesCard disputes={disputes} />}
+          <AuditNotice />
+        </aside>
+      </div>
     </>
   );
 }
 
-async function UsageTab({ money }: { money: (micro: number) => string }) {
-  const t = await getTranslations();
-  const [usage, bands, plans] = await Promise.all([
-    usageReport(db),
-    scoreDistribution(db),
-    db.plan.findMany({ select: { code: true, name: true } }),
-  ]);
-  const featureLabel = (feature: string) =>
-    featureText[feature] ? t(`admin.ai.usage.feature.${featureText[feature]}`) : feature;
-  const planLabel = (code: string) =>
-    code ? (plans.find((plan) => plan.code === code)?.name ?? code) : t("admin.ai.usage.plan.none");
-  const totalScores = bands.reduce((sum, item) => sum + item.count, 0);
-
-  const table = (
-    caption: string,
-    column: string,
-    rows: typeof usage.byFeature,
-    label: (key: string) => string,
-  ) => (
-    <Table caption={caption}>
-      <thead>
-        <tr>
-          <Th>{column}</Th>
-          <Th>{t("admin.ai.usage.col.calls")}</Th>
-          <Th>{t("admin.ai.usage.col.failures")}</Th>
-          <Th>{t("admin.ai.usage.col.tokens")}</Th>
-          <Th>{t("admin.ai.usage.col.cost")}</Th>
-        </tr>
-      </thead>
-      <tbody>
-        {rows.map((row) => (
-          <tr key={row.key}>
-            <Td>{label(row.key)}</Td>
-            <Td>{row.calls}</Td>
-            <Td>{row.failures}</Td>
-            <Td>{[row.inputTokens, row.outputTokens].join(" / ")}</Td>
-            <Td>{money(row.costMicroUsd)}</Td>
-          </tr>
-        ))}
-      </tbody>
-    </Table>
-  );
-
+/** Dark AI-gradient card « Consommation · Par fonction » (mockup 07-09). */
+async function UsageCard({
+  usage,
+  money,
+  label,
+}: {
+  usage: Usage;
+  money: (micro: number, digits?: number) => string;
+  label: (feature: string) => string;
+}) {
+  const t = await getTranslations("admin.ai");
+  const calls = usage.byFeature.reduce((sum, row) => sum + row.calls, 0);
+  // Share of the estimated cost; of the calls while no call has a price.
+  const byCost = usage.total > 0;
+  const merged = new Map<string, number>();
+  for (const row of usage.byFeature) {
+    const name = label(row.key);
+    merged.set(name, (merged.get(name) ?? 0) + (byCost ? row.costMicroUsd : row.calls));
+  }
+  const whole = byCost ? usage.total : calls;
+  const shares = [...merged.entries()]
+    .map(([name, amount]) => ({ name, percent: whole ? Math.round((100 * amount) / whole) : 0 }))
+    .sort((a, b) => b.percent - a.percent);
+  const top = Math.max(1, ...shares.map((item) => item.percent));
   return (
-    <>
-      <section aria-labelledby="usage" className="flex flex-col gap-4">
-        <div className="flex flex-wrap items-baseline justify-between gap-2">
-          <h2 id="usage" className="text-h2">
-            {t("admin.ai.tab.usage")}
-          </h2>
-          <p className="text-sm text-ardoise">
-            {[
-              t("admin.ai.usage.period"),
-              t("admin.ai.usage.cost.text", { amount: money(usage.total), currency: "" }).trim(),
-            ].join(" · ")}
-          </p>
-        </div>
-        {usage.unpriced.length > 0 && (
-          <Alert
-            tone="warning"
-            title={t("admin.ai.usage.noPrice", { models: usage.unpriced.join(", ") })}
-          />
-        )}
-        {usage.byFeature.length === 0 ? (
-          <p className="rounded-card bg-blanc p-6">{t("admin.ai.usage.empty")}</p>
-        ) : (
-          <>
-            <h3 className="font-semibold text-h3">{t("admin.ai.usage.byFeature")}</h3>
-            {table(
-              t("admin.ai.usage.byFeature"),
-              t("admin.ai.usage.col.feature"),
-              usage.byFeature,
-              featureLabel,
-            )}
-            <h3 className="font-semibold text-h3">{t("admin.ai.usage.byPlan")}</h3>
-            {table(
-              t("admin.ai.usage.byPlan"),
-              t("admin.ai.usage.col.plan"),
-              usage.byPlan,
-              planLabel,
-            )}
-          </>
-        )}
-        <p className="text-sm text-ardoise">{t("admin.ai.usage.cost.perFeature")}</p>
-      </section>
-
-      <section aria-labelledby="scores" className="flex flex-col gap-3 rounded-card bg-blanc p-6">
-        <h2 id="scores" className="text-h2">
-          {t("admin.ai.scores.title")}
+    <section
+      aria-labelledby="ia-usage-card"
+      className="relative isolate flex flex-col gap-2.5 overflow-hidden rounded-[24px] bg-gradient-ai p-5 text-blanc"
+    >
+      <span
+        aria-hidden
+        className="absolute -top-[70px] -right-[70px] -z-10 size-[220px] bg-[url(/marque/formes/forme-orbites-lime.svg)] bg-contain bg-no-repeat opacity-20"
+      />
+      <div className="flex items-center justify-between gap-3">
+        <h2 id="ia-usage-card" className={cx(adminLabel, "text-neon")}>
+          {[t("tab.usage"), t("usage.byFeature")].join(" · ")}
         </h2>
-        {totalScores === 0 ? (
-          <p>{t("admin.ai.scores.empty")}</p>
-        ) : (
-          <ul className="flex flex-col gap-2">
-            {bands.map((item) => (
-              <li key={item.band} className="flex flex-col gap-1">
-                <span className="flex justify-between text-sm">
-                  <span>
-                    {[t(`match.band.${item.band}.text`), t(`match.band.${item.band}.range`)].join(
-                      " · ",
-                    )}
+        <AiOrb size={22} />
+      </div>
+      <div className="flex flex-wrap gap-x-4 gap-y-1">
+        <p className="flex flex-col">
+          <span className="text-[22px] leading-7 font-semibold tracking-[-0.02em]">
+            {money(usage.total, 2)}
+          </span>
+          <span className="text-[11px] leading-[15px] text-blanc/70">{t("usage.cost.label")}</span>
+        </p>
+        <p className="flex flex-col">
+          <span className="text-[22px] leading-7 font-semibold tracking-[-0.02em]">{calls}</span>
+          <span className="text-[11px] leading-[15px] text-blanc/70">{t("usage.calls")}</span>
+        </p>
+      </div>
+      {shares.length === 0 ? (
+        <p className="text-[12px] leading-[17px] text-blanc/80">{t("usage.empty")}</p>
+      ) : (
+        <ul className="flex flex-col gap-2.5">
+          {shares.map((item) => (
+            <li key={item.name} className="flex flex-col gap-1">
+              <span className="flex justify-between gap-3 text-[11px] leading-[15px]">
+                <span>{item.name}</span>
+                <span className="font-semibold">{t("usage.share", { percent: item.percent })}</span>
+              </span>
+              <span aria-hidden className="h-[5px] overflow-hidden rounded-pill bg-blanc/18">
+                <span
+                  className="block h-full rounded-pill bg-lime"
+                  style={{ width: `${(100 * item.percent) / top}%` }}
+                />
+              </span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <p className="text-[11px] leading-[15px] text-blanc/70">
+        {[t("usage.period"), t("usage.cost.perFeature")].join(" · ")}
+      </p>
+    </section>
+  );
+}
+
+/** Side card « Révisions humaines demandées »: the oldest open reviews. */
+async function DisputesCard({ disputes }: { disputes: Disputes }) {
+  const t = await getTranslations();
+  const disputeReason = await disputeReasonText();
+  const now = new Date();
+  const days = (date: Date) =>
+    t("admin.ai.disputes.days", {
+      count: Math.max(0, Math.floor((now.getTime() - date.getTime()) / 86_400_000)),
+    });
+  return (
+    <section aria-labelledby="ia-disputes-card" className={cx(adminCard, "flex flex-col gap-2.5")}>
+      <div className="flex items-center justify-between gap-3">
+        <h2 id="ia-disputes-card" className="text-[16px] leading-[22px] font-semibold">
+          {t("admin.ai.disputes.title")}
+        </h2>
+        {disputes.length > 0 && <Tag tone="warning">{disputes.length}</Tag>}
+      </div>
+      {disputes.length === 0 ? (
+        <p className="text-[12.5px] text-ardoise">{t("admin.ai.disputes.empty")}</p>
+      ) : (
+        <>
+          <ul className="flex flex-col">
+            {disputes.slice(0, 3).map((dispute, index) => (
+              <li
+                key={dispute.id}
+                className={cx("flex flex-col gap-1 py-2.5", index > 0 && "border-t border-brume")}
+              >
+                <span className="flex items-baseline justify-between gap-3">
+                  <Link
+                    href={`/admin/ia?onglet=revisions#ia-dispute-${dispute.id}`}
+                    className="text-[12.5px] leading-[17px] font-semibold hover:underline"
+                  >
+                    {[dispute.user.name, dispute.job?.title].filter(Boolean).join(" · ")}
+                  </Link>
+                  <span className="shrink-0 text-[11px] text-ardoise">
+                    {days(dispute.createdAt)}
                   </span>
-                  <span>{t("admin.ai.scores.count", { count: item.count })}</span>
                 </span>
-                <span aria-hidden className="h-2 rounded-pill bg-brume">
-                  <span
-                    className="block h-2 rounded-pill bg-sapin"
-                    style={{ width: `${Math.round((100 * item.count) / totalScores)}%` }}
-                  />
+                <span className="text-[11px] leading-[15px] text-ardoise">
+                  {disputeReason(dispute.reason)}
                 </span>
               </li>
             ))}
           </ul>
-        )}
-      </section>
+          <Link
+            href="/admin/ia?onglet=revisions"
+            className="inline-flex h-8 items-center self-start rounded-pill px-3.5 text-[12px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
+          >
+            {t("admin.ai.disputes.seeAll")}
+          </Link>
+        </>
+      )}
+      <p className="text-[11px] leading-[15px] text-ardoise">{t("admin.ai.audit.desc")}</p>
+    </section>
+  );
+}
 
-      <section aria-labelledby="audit" className="flex flex-col gap-2">
-        <h2 id="audit" className="text-h2">
-          {t("admin.ai.audit.title")}
+async function disputeReasonText() {
+  const t = await getTranslations("ai.dispute.what");
+  return (reason: string) =>
+    (disputeReasons as readonly string[]).includes(reason)
+      ? t(reason as (typeof disputeReasons)[number])
+      : reason;
+}
+
+/** « Bandes de score »: the four display thresholds (partie 08). */
+async function BandsCard() {
+  const t = await getTranslations();
+  return (
+    <section aria-labelledby="ia-bands" className={cx(adminCard, "flex flex-col gap-3")}>
+      <h2 id="ia-bands" className="text-[16px] leading-[22px] font-semibold">
+        {t("admin.ai.weights.bands.title")}
+      </h2>
+      <span aria-hidden className="flex h-3.5 flex-row-reverse overflow-hidden rounded-pill">
+        {bands.map((item) => (
+          <span key={item.band} className={item.color} style={{ width: `${item.width}%` }} />
+        ))}
+      </span>
+      <ul className="flex flex-col gap-2">
+        {bands.map((item) => (
+          <li key={item.band} className="flex items-center gap-2 text-[11px] leading-[15px]">
+            <span aria-hidden className={cx("size-2.5 shrink-0 rounded-full", item.color)} />
+            <span className="flex-1 font-medium">{t(`match.band.${item.band}.text`)}</span>
+            <span className="text-ardoise">{t(`match.band.${item.band}.range`)}</span>
+          </li>
+        ))}
+      </ul>
+      <p className="text-[11px] leading-[15px] text-ardoise">{t("admin.ai.weights.bands.hint")}</p>
+    </section>
+  );
+}
+
+/** Sapin card « Données exclues du calcul » (lock): fixed list, rule 4 of CLAUDE.md. */
+async function ExcludedCard() {
+  const t = await getTranslations("admin.ai.weights.excluded");
+  return (
+    <section
+      aria-labelledby="ia-excluded"
+      className="flex flex-col gap-2.5 rounded-[24px] bg-sapin p-5 text-blanc"
+    >
+      <div className="flex items-center gap-2.5">
+        <span
+          aria-hidden
+          className="grid size-9 shrink-0 place-items-center rounded-[11px] bg-lime text-sapin"
+        >
+          <Icon name="lock" className="size-[18px]" />
+        </span>
+        <h2 id="ia-excluded" className="text-[16px] leading-[22px] font-semibold">
+          {t("title")}
         </h2>
-        <p className="text-sm">{t("admin.ai.audit.desc")}</p>
-      </section>
-    </>
+      </div>
+      <ul className="flex flex-wrap gap-1.5">
+        {t("list")
+          .split(",")
+          .map((item) => (
+            <li
+              key={item}
+              className="inline-flex h-[26px] items-center rounded-pill bg-blanc/10 px-2.5 text-[11px] font-semibold"
+            >
+              {item.trim()}
+            </li>
+          ))}
+      </ul>
+      <p className="text-[11px] leading-[15px] text-blanc/70">{t("locked")}</p>
+    </section>
   );
 }
 
@@ -312,62 +361,407 @@ async function WeightsTab({
   const t = await getTranslations();
   const [weights, history] = await Promise.all([activeWeights(db), weightsHistory(db)]);
   return (
-    <section id="poids" aria-labelledby="weights" className="flex flex-col gap-4">
-      <h2 id="weights" className="text-h2">
-        {t("admin.ai.weights.title")}
-      </h2>
-      <p className="text-sm">{t("admin.ai.weights.subtitle")}</p>
-      <p className="text-sm font-medium">
-        {history.length > 0
-          ? t("admin.ai.weights.version", { version: weights.version })
-          : t("admin.ai.weights.default")}
-      </p>
+    <form id="poids" action={saveWeightsAction} className="flex flex-col gap-4">
       {ok && <Alert tone="success" title={t("admin.ai.weights.saved")} />}
       {error && <Alert tone="error" title={t("admin.ai.weights.error")} />}
-      <form action={saveWeightsAction} className="flex flex-col gap-4 rounded-card bg-blanc p-6">
-        <fieldset className="grid gap-3 sm:grid-cols-2" disabled={!writable}>
-          <legend className="sr-only">{t("admin.ai.weights.title")}</legend>
-          {criterionKeys.map((key) => (
-            <TextField
-              key={key}
-              id={`weight-${key}`}
-              name={key}
-              type="number"
-              min={0}
-              max={100}
-              step={1}
-              required
-              defaultValue={weights.values[key]}
-              label={t(`match.criterion.${criterionText[key]}.text`)}
-            />
-          ))}
-        </fieldset>
-        <p className="text-sm text-ardoise">
-          {[t("admin.ai.weights.bands.title"), t("admin.ai.weights.bands.hint")].join(" : ")}
+      <section aria-labelledby="ia-weights" className={cx(adminCard, "flex flex-col gap-3")}>
+        <WeightsEditor
+          disabled={!writable}
+          rows={criterionKeys.map((key) => ({
+            key,
+            value: weights.values[key],
+            label: t(`match.criterion.${criterionText[key]}.text`),
+            desc: t(`admin.ai.weights.desc.${criterionText[key]}`),
+          }))}
+          labels={{
+            criterion: t("admin.ai.weights.criterion"),
+            value: t("admin.ai.weights.value"),
+            total: t("admin.ai.weights.total", { total: "{total}" }),
+            error: t("admin.ai.weights.error"),
+          }}
+          header={
+            <div className="flex items-start gap-2.5">
+              <AiOrb size={30} className="mt-0.5" />
+              <div className="flex flex-col">
+                <h2 id="ia-weights" className={adminTitle}>
+                  {t("admin.ai.weights.title")}
+                </h2>
+                <p className="text-[11px] leading-4 text-ardoise">
+                  {t("admin.ai.weights.subtitle")}
+                </p>
+                <p className="mt-1 text-[11px] leading-4 font-medium">
+                  {history.length > 0
+                    ? t("admin.ai.weights.version", { version: weights.version })
+                    : t("admin.ai.weights.default")}
+                </p>
+              </div>
+            </div>
+          }
+        />
+        <p className="flex items-start gap-2.5 rounded-[12px] bg-creme px-3 py-2.5 text-[11px] leading-4">
+          <Icon name="notification" className="size-4 shrink-0" />
+          {t("admin.ai.weights.impact")}
         </p>
-        {writable && (
-          <>
-            <TextField
-              id="weights-note"
-              name="note"
-              maxLength={300}
-              label={t("admin.ai.weights.note")}
-            />
-            <p className="text-sm">{t("admin.ai.weights.impact")}</p>
-            <Button type="submit" className="self-start">
-              {t("admin.ai.weights.save")}
-            </Button>
-          </>
-        )}
-      </form>
-      <div className="flex flex-col gap-1 rounded-card bg-blanc p-6">
-        <h3 className="font-semibold text-h3">{t("admin.ai.weights.excluded.title")}</h3>
-        <p className="text-sm">{t("admin.ai.weights.excluded.body")}</p>
+      </section>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <BandsCard />
+        <ExcludedCard />
       </div>
+
+      {writable && (
+        <>
+          <SectionRule>{t("admin.sensitive.label")}</SectionRule>
+          <SensitivePanel
+            title={t("admin.ai.weights.save")}
+            text={t("admin.ai.weights.impact")}
+            tone="neutral"
+          >
+            <ReasonField id="ia-weights-note" name="note" maxLength={300} />
+            <div className="flex flex-wrap justify-end gap-2">
+              <Button type="reset" variant="tertiary">
+                {t("common.cancel")}
+              </Button>
+              <Button type="submit" variant="secondary">
+                {t("admin.ai.weights.save")}
+              </Button>
+            </div>
+          </SensitivePanel>
+        </>
+      )}
+    </form>
+  );
+}
+
+async function UsageTab({
+  usage,
+  money,
+  label,
+}: {
+  usage: Usage;
+  money: (micro: number) => string;
+  label: (feature: string) => string;
+}) {
+  const t = await getTranslations();
+  const [distribution, plans] = await Promise.all([
+    scoreDistribution(db),
+    db.plan.findMany({ select: { code: true, name: true } }),
+  ]);
+  const planLabel = (code: string) =>
+    code ? (plans.find((plan) => plan.code === code)?.name ?? code) : t("admin.ai.usage.plan.none");
+  const totalScores = distribution.reduce((sum, item) => sum + item.count, 0);
+  const color = Object.fromEntries(bands.map((item) => [item.band, item.color]));
+
+  const table = (
+    id: string,
+    caption: string,
+    column: string,
+    rows: Usage["byFeature"],
+    name: (key: string) => string,
+  ) => (
+    <section aria-labelledby={id} className={cx(adminCard, "flex flex-col gap-3")}>
+      <h2 id={id} className="text-[16px] leading-[22px] font-semibold">
+        {caption}
+      </h2>
+      <div className="-mx-5 lg:-mx-[22px]">
+        <Table caption={caption}>
+          <thead>
+            <tr>
+              <Th>{column}</Th>
+              <Th>{t("admin.ai.usage.col.calls")}</Th>
+              <Th>{t("admin.ai.usage.col.failures")}</Th>
+              <Th>{t("admin.ai.usage.col.tokens")}</Th>
+              <Th>{t("admin.ai.usage.col.cost")}</Th>
+            </tr>
+          </thead>
+          <tbody>
+            {rows.map((row) => (
+              <tr key={row.key}>
+                <Td>{name(row.key)}</Td>
+                <Td>{row.calls}</Td>
+                <Td>{row.failures}</Td>
+                <Td>{[row.inputTokens, row.outputTokens].join(" / ")}</Td>
+                <Td>{money(row.costMicroUsd)}</Td>
+              </tr>
+            ))}
+          </tbody>
+        </Table>
+      </div>
+    </section>
+  );
+
+  return (
+    <>
+      <div className="flex flex-wrap items-baseline justify-between gap-2">
+        <h2 className={adminTitle}>{t("admin.ai.tab.usage")}</h2>
+        <p className="text-[13px] text-ardoise">
+          {[
+            t("admin.ai.usage.period"),
+            t("admin.ai.usage.cost.text", { amount: money(usage.total), currency: "" }).trim(),
+          ].join(" · ")}
+        </p>
+      </div>
+      {usage.unpriced.length > 0 && (
+        <Alert
+          tone="warning"
+          title={t("admin.ai.usage.noPrice", { models: usage.unpriced.join(", ") })}
+        />
+      )}
+      {usage.byFeature.length === 0 ? (
+        <p className={cx(adminCard, "text-[13.5px]")}>{t("admin.ai.usage.empty")}</p>
+      ) : (
+        <>
+          {table(
+            "ia-by-feature",
+            t("admin.ai.usage.byFeature"),
+            t("admin.ai.usage.col.feature"),
+            usage.byFeature,
+            label,
+          )}
+          {table(
+            "ia-by-plan",
+            t("admin.ai.usage.byPlan"),
+            t("admin.ai.usage.col.plan"),
+            usage.byPlan,
+            planLabel,
+          )}
+        </>
+      )}
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <section aria-labelledby="ia-scores" className={cx(adminCard, "flex flex-col gap-3")}>
+          <h2 id="ia-scores" className="text-[16px] leading-[22px] font-semibold">
+            {t("admin.ai.scores.title")}
+          </h2>
+          {totalScores === 0 ? (
+            <p className="text-[12.5px] text-ardoise">{t("admin.ai.scores.empty")}</p>
+          ) : (
+            <ul className="flex flex-col gap-2.5">
+              {distribution.map((item) => (
+                <li key={item.band} className="flex flex-col gap-1">
+                  <span className="flex justify-between gap-3 text-[11.5px]">
+                    <span className="font-medium">{t(`match.band.${item.band}.text`)}</span>
+                    <span className="text-ardoise">
+                      {t("admin.ai.scores.count", { count: item.count })}
+                    </span>
+                  </span>
+                  <span aria-hidden className="h-2 overflow-hidden rounded-pill bg-creme">
+                    <span
+                      className={cx("block h-2 rounded-pill", color[item.band])}
+                      style={{ width: `${Math.round((100 * item.count) / totalScores)}%` }}
+                    />
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </section>
+        <BandsCard />
+      </div>
+    </>
+  );
+}
+
+async function DisputesTab({
+  disputes,
+  writable,
+  ok,
+  missing,
+}: {
+  disputes: Disputes;
+  writable: boolean;
+  ok: boolean;
+  missing: boolean;
+}) {
+  const t = await getTranslations();
+  const disputeReason = await disputeReasonText();
+  return (
+    <section aria-labelledby="ia-disputes" className="flex flex-col gap-4">
+      <div className="flex items-center justify-between gap-3">
+        <h2 id="ia-disputes" className={adminTitle}>
+          {t("admin.ai.disputes.title")}
+        </h2>
+        <Tag tone="warning">{disputes.length}</Tag>
+      </div>
+      {ok && <Alert tone="success" title={t("admin.ai.disputes.resolved")} />}
+      {missing && <Alert tone="error" title={t("admin.ai.disputes.responseMissing")} />}
+      {disputes.length === 0 ? (
+        <p className={cx(adminCard, "text-[13.5px]")}>{t("admin.ai.disputes.empty")}</p>
+      ) : (
+        <ul className="flex flex-col gap-4">
+          {disputes.map((dispute) => {
+            const status = dispute.status === "in_review" ? "in_review" : "open";
+            return (
+              <li
+                key={dispute.id}
+                id={`ia-dispute-${dispute.id}`}
+                className={cx(adminCard, "flex scroll-mt-6 flex-col gap-3")}
+              >
+                <div className="flex flex-wrap items-center gap-2">
+                  <Tag tone={status === "open" ? "warning" : "menthe"}>
+                    {t(`ai.dispute.status.${statusKey[status]}`)}
+                  </Tag>
+                  <Tag tone="neutral">
+                    {t("admin.ai.disputes.scoreBefore", { score: dispute.scoreBefore })}
+                  </Tag>
+                  <span className="ml-auto text-[11.5px] text-ardoise">
+                    {[formatDate(dispute.createdAt), formatRelativeDays(dispute.createdAt)].join(
+                      " · ",
+                    )}
+                  </span>
+                </div>
+                <h3 className="text-[15px] leading-5 font-semibold">
+                  {dispute.job
+                    ? [dispute.job.title, dispute.job.organization.name].join(" · ")
+                    : dispute.jobId}
+                </h3>
+                <dl className="grid gap-1 text-[13px] leading-5 sm:grid-cols-[max-content_1fr] sm:gap-x-4">
+                  <dt className="text-ardoise">{t("admin.ai.disputes.col.talent")}</dt>
+                  <dd className="font-medium break-words">
+                    {[dispute.user.name, dispute.user.email].filter(Boolean).join(" · ")}
+                  </dd>
+                  <dt className="text-ardoise">{t("admin.ai.disputes.col.reason")}</dt>
+                  <dd className="font-medium">{disputeReason(dispute.reason)}</dd>
+                </dl>
+                <p className="rounded-[14px] bg-creme px-3.5 py-3 text-[13px] leading-5 whitespace-pre-line">
+                  {dispute.details}
+                </p>
+                {dispute.notifyRecruiter && (
+                  <p className="flex items-center gap-1.5 text-[12px] text-ardoise">
+                    <Icon name="info" className="size-3.5 shrink-0" />
+                    {t("admin.ai.disputes.recruiterNotified")}
+                  </p>
+                )}
+                {writable && (
+                  <form action={resolveDisputeAction} className="flex flex-col gap-3">
+                    <input type="hidden" name="id" value={dispute.id} />
+                    <TextArea
+                      id={`ia-resolution-${dispute.id}`}
+                      name="resolution"
+                      rows={3}
+                      maxLength={2000}
+                      label={t("admin.ai.disputes.response")}
+                      hint={t("admin.ai.disputes.responseHint")}
+                    />
+                    <div className="flex flex-wrap gap-2">
+                      {status === "open" && (
+                        <Button
+                          type="submit"
+                          name="outcome"
+                          value="in_review"
+                          size="sm"
+                          variant="tertiary"
+                        >
+                          {t("admin.ai.disputes.take")}
+                        </Button>
+                      )}
+                      <Button
+                        type="submit"
+                        name="outcome"
+                        value="corrected"
+                        size="sm"
+                        variant="tertiary"
+                      >
+                        {t("admin.ai.disputes.correct")}
+                      </Button>
+                      <Button
+                        type="submit"
+                        name="outcome"
+                        value="confirmed"
+                        size="sm"
+                        variant="secondary"
+                      >
+                        {t("admin.ai.disputes.confirm")}
+                      </Button>
+                    </div>
+                  </form>
+                )}
+              </li>
+            );
+          })}
+        </ul>
+      )}
+    </section>
+  );
+}
+
+const auditActions = {
+  "matching.weights.update": "weights",
+  "match.dispute.in_review": "inReview",
+  "match.dispute.corrected": "corrected",
+  "match.dispute.confirmed": "confirmed",
+} as const;
+
+/** « Journal d'audit »: the matching decisions (weights, reviews) and the weight versions. */
+async function AuditTab() {
+  const t = await getTranslations();
+  const [entries, history] = await Promise.all([
+    db.auditLog.findMany({
+      where: { action: { in: Object.keys(auditActions) } },
+      orderBy: { createdAt: "desc" },
+      take: 50,
+      select: { id: true, action: true, createdAt: true, actorId: true },
+    }),
+    weightsHistory(db),
+  ]);
+  const actors = await db.user.findMany({
+    where: {
+      id: {
+        in: [
+          ...new Set(
+            entries.map((entry) => entry.actorId).filter((id): id is string => Boolean(id)),
+          ),
+        ],
+      },
+    },
+    select: { id: true, name: true },
+  });
+  return (
+    <>
+      <section aria-labelledby="ia-audit" className={cx(adminCard, "flex flex-col gap-3")}>
+        <h2 id="ia-audit" className={adminTitle}>
+          {t("admin.ai.audit.title")}
+        </h2>
+        <p className="text-[12.5px] leading-[18px] text-ardoise">{t("admin.ai.audit.desc")}</p>
+        {entries.length === 0 ? (
+          <p className="text-[13px]">{t("admin.ai.audit.empty")}</p>
+        ) : (
+          <ul className="flex flex-col">
+            {entries.map((entry, index) => {
+              const actor = actors.find((user) => user.id === entry.actorId);
+              return (
+                <li
+                  key={entry.id}
+                  className={cx(
+                    "flex flex-wrap items-baseline justify-between gap-x-4 gap-y-0.5 py-2.5 text-[13px]",
+                    index > 0 && "border-t border-brume",
+                  )}
+                >
+                  <span className="font-medium">
+                    {t(
+                      `admin.ai.audit.action.${auditActions[entry.action as keyof typeof auditActions]}`,
+                    )}
+                  </span>
+                  <span className="text-[11.5px] text-ardoise">
+                    {[
+                      formatDate(entry.createdAt),
+                      actor ? t("admin.ai.audit.by", { name: actor.name }) : null,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </span>
+                </li>
+              );
+            })}
+          </ul>
+        )}
+      </section>
       {history.length > 0 && (
-        <div className="flex flex-col gap-2">
-          <h3 className="font-semibold text-h3">{t("admin.ai.weights.history")}</h3>
-          <ul className="flex flex-col gap-1 text-sm">
+        <section aria-labelledby="ia-history" className={cx(adminCard, "flex flex-col gap-2")}>
+          <h2 id="ia-history" className="text-[16px] leading-[22px] font-semibold">
+            {t("admin.ai.weights.history")}
+          </h2>
+          <ul className="flex flex-col gap-1 text-[13px]">
             {history.map((row) => (
               <li key={row.id}>
                 {[
@@ -382,8 +776,8 @@ async function WeightsTab({
               </li>
             ))}
           </ul>
-        </div>
+        </section>
       )}
-    </section>
+    </>
   );
 }

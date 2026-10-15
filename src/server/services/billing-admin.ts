@@ -105,12 +105,12 @@ export async function recordRefund(
 }
 
 /**
- * Revenue figures over the last 30 days: cash received (refunds deducted), Free → paid
+ * Revenue figures over the last `days` days (30 by default): cash received (refunds deducted), Free → paid
  * conversion of the accounts created in the period, renewal rate of the paid periods that ended
  * in it, and the AI spend.
  */
-export async function revenueIndicators(db: PrismaClient, now = new Date()) {
-  const since = new Date(now.getTime() - 30 * DAY_MS);
+export async function revenueIndicators(db: PrismaClient, now = new Date(), days = 30) {
+  const since = new Date(now.getTime() - days * DAY_MS);
   const [received, refunded, newUsers, ended, ai] = await Promise.all([
     db.payment.aggregate({
       where: { status: { in: ["succeeded", "refunded"] }, paidAt: { gte: since } },

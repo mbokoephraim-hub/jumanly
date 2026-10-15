@@ -325,6 +325,8 @@ export async function revokeCertificate(
   actorId: string,
   code: string,
   now = new Date(),
+  /** Reason given in the admin (« Motif »), kept in the audit log. */
+  reason?: string,
 ) {
   const certificate = await verifyCertificate(db, code);
   if (!certificate || certificate.revokedAt) return false;
@@ -335,6 +337,7 @@ export async function revokeCertificate(
       action: "certificate.revoke",
       targetType: "certificate",
       targetId: certificate.id,
+      ...(reason ? { metadata: { reason } } : {}),
     },
   });
   return true;

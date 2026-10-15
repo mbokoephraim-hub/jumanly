@@ -136,11 +136,8 @@ test("vérification de l'entreprise et page publique", async ({
     await logIn(admin, demo.admin);
     await admin.goto("/admin/organisations?onglet=en-attente");
     await expectAccessible(admin);
-    await admin
-      .locator("li")
-      .filter({ hasText: "Groupe Démo (groupe fictif)" })
-      .getByRole("button", { name: "Approuver la vérification" })
-      .click();
+    await admin.getByRole("link", { name: "Groupe Démo (groupe fictif)" }).click();
+    await admin.getByRole("button", { name: "Approuver la vérification" }).click();
     await expect(admin.getByText("Groupe Démo (groupe fictif) est vérifiée.")).toBeVisible();
     await admin.context().close();
   }

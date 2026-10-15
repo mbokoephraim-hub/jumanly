@@ -102,6 +102,7 @@ test("un éditeur modifie la FAQ et publie une bannière (/admin/contenus)", asy
   const add = page.locator("#nouvelle-question");
   await add.getByLabel("Question").fill(question);
   await add.getByLabel("Réponse").fill("Réponse fictive de test.");
+  await add.getByLabel("Motif").fill("Test de bout en bout.");
   await add.getByRole("button", { name: "Publier" }).click();
   await expect(page.getByText("Modification enregistrée.")).toBeVisible();
 
@@ -129,10 +130,8 @@ test("un éditeur modifie la FAQ et publie une bannière (/admin/contenus)", asy
     .click();
   await expect(page.getByText("Contenu supprimé.")).toBeVisible();
   await page.goto("/admin/contenus?groupe=faq.partners");
-  await page
-    .locator("li", { hasText: question })
-    .getByRole("button", { name: "Supprimer cette question" })
-    .click();
+  await page.getByRole("link", { name: question }).click();
+  await page.getByRole("button", { name: "Supprimer cette question" }).click();
   await expect(page.getByText("Modification enregistrée.")).toBeVisible();
   await onPage("/faq", question, 0);
   await onPage("/", bannerText, 0);

@@ -215,12 +215,15 @@ export async function revokeCertificateAction(formData: FormData) {
   const user = await editor();
   const id = value(formData, "course");
   const code = value(formData, "code", 20).trim().toUpperCase();
+  // A sensitive action: the reason is required and kept in the audit log.
+  const reason = value(formData, "reason", 500).trim();
+  if (!reason) back(id, { action: "revoquer", code }, "#attestation");
   // Only an attestation of this course can be revoked from its page.
   const ofCourse = await db.certificate.findFirst({
     where: { code, enrollment: { courseId: id } },
     select: { id: true },
   });
-  const revoked = ofCourse ? await revokeCertificate(db, user.id, code) : false;
+  const revoked = ofCourse ? await revokeCertificate(db, user.id, code, new Date(), reason) : false;
   if (revoked) updateTag(`certificate:${code}`);
   back(id, { attestation: revoked ? "revoquee" : "introuvable" }, "#attestation");
 }
