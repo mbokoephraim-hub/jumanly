@@ -1,6 +1,6 @@
 import { expectAccessible } from "./a11y";
 import { expect, test } from "./fixtures";
-import { demo, logIn } from "./session";
+import { demo, logIn, signUpFromPricing, testEmail } from "./session";
 
 // Mobile Talent v5, prompt 1 (docs/ux-mobile-talent): the button range, the visual cards and the
 // interaction states are shown with all their states on the internal components page.
@@ -115,5 +115,63 @@ test("navigation Talent : quatre destinations, menu de l'avatar, Mon espace et S
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   expect(overflow).toBeLessThanOrEqual(0);
+  await expectAccessible(page);
+});
+
+// Prompt 3: from the sign-up to « Pour moi », through the goal screen (screens 01-05).
+test("inscription, écran d'objectif puis Pour moi selon l'objectif", async ({ page, isMobile }) => {
+  await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("objectif"));
+  await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Qu'est-ce qui vous amène sur Jumanly ?" }),
+  ).toBeVisible();
+  await expect(page.getByRole("button", { name: "Plus tard" })).toBeVisible();
+  // The goal screen has its own action bar: no bottom bar on a phone.
+  if (isMobile)
+    await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
+  await expectAccessible(page);
+
+  await page
+    .locator("label")
+    .filter({ hasText: "Trouver un emploi ou un stage", visible: true })
+    .click();
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/\/app\/bienvenue\?etape=2/);
+  await page.getByLabel("Métiers recherchés").fill("Analyste de données");
+  await page.getByLabel("Où souhaitez-vous travailler ?").fill("Kinshasa");
+  await expectAccessible(page);
+  await page.getByRole("button", { name: "Voir mes offres" }).click();
+
+  await expect(page).toHaveURL(/\/app$/, { timeout: 20_000 });
+  await expect(page.getByRole("heading", { name: "Trouver un emploi ou un stage" })).toBeVisible();
+  await expect(page.getByText("Mon objectif")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Opportunités pour vous" })).toBeVisible();
+  // No skill yet: the offers say they are a general selection.
+  await expect(page.getByText("Sélection générale, non personnalisée.")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Préparez votre candidature" })).toBeVisible();
+  await expect(page.getByRole("link", { name: /^Mon CV/ })).toHaveAttribute(
+    "href",
+    "/app/career/cv",
+  );
+  const overflow = await page.evaluate(
+    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+  );
+  expect(overflow).toBeLessThanOrEqual(0);
+  await expectAccessible(page);
+
+  // Changing the goal reorders the home: courses first.
+  await page.getByRole("link", { name: "Modifier mon objectif" }).click();
+  await expect(page).toHaveURL(/\/app\/bienvenue$/);
+  await page
+    .locator("label")
+    .filter({ hasText: "Développer mes compétences", visible: true })
+    .click();
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/etape=2/);
+  await page.getByRole("button", { name: "Passer" }).click();
+  await expect(page).toHaveURL(/\/app$/, { timeout: 20_000 });
+  await expect(page.getByRole("heading", { name: "Développer mes compétences" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Progression et certificats" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Offres liées à vos compétences" })).toBeVisible();
   await expectAccessible(page);
 });

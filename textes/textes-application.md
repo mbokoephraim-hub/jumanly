@@ -1633,6 +1633,28 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `welcome.talent.next.training` | Commencer une formation gratuite |
 | `welcome.talent.next.code` | Activer un code de licence |
 | `welcome.talent.reminder` | Bon à savoir : vos candidatures sont toujours gratuites, quelle que soit votre formule. |
+| `welcome.talent.step1.eyebrow` | Étape 1 sur 2 · moins d'une minute |
+| `welcome.talent.step1.title` | Qu'est-ce qui vous amène sur Jumanly ? |
+| `welcome.talent.step1.hint` | Modifiable à tout moment. |
+| `welcome.talent.step1.later` | Plus tard |
+| `welcome.talent.step1.next` | Continuer |
+| `welcome.talent.focus.job.text` | Trouver un emploi ou un stage |
+| `welcome.talent.focus.job.line` | Offres d'abord |
+| `welcome.talent.focus.skills.text` | Développer mes compétences |
+| `welcome.talent.focus.skills.line` | Formations d'abord |
+| `welcome.talent.focus.career.text` | Faire évoluer ma carrière |
+| `welcome.talent.focus.career.line` | Postes à responsabilité |
+| `welcome.talent.step2.eyebrow` | Étape 2 sur 2 · tout est facultatif |
+| `welcome.talent.step2.title` | Quelques précisions pour vos offres |
+| `welcome.talent.step2.titles.label` | Métiers recherchés |
+| `welcome.talent.step2.titles.placeholder` | Ex. : analyste de données, chargé d'études |
+| `welcome.talent.step2.skills.label` | Vos compétences |
+| `welcome.talent.step2.locations.label` | Où souhaitez-vous travailler ? |
+| `welcome.talent.step2.locations.placeholder` | Ex. : Kinshasa |
+| `welcome.talent.step2.preferences` | Préférences (contrat, télétravail) |
+| `welcome.talent.step2.skip` | Passer |
+| `welcome.talent.step2.next` | Voir mes offres |
+| `welcome.talent.step2.back` | Revenir à l'étape 1 |
 
 #### Recruteur et entreprise
 
@@ -2141,6 +2163,83 @@ Conventions :
 | `talent.dashboard.pastDueBanner.cta` | Régler maintenant |
 
 ---
+
+### `/app` · Pour moi
+
+*Accueil de l'espace talent (docs/ux-mobile-talent, prompt 3, écrans 03 à 05) : le contenu suit l'objectif choisi à l'écran de bienvenue (emploi, compétences, carrière). Chiffres réels seulement ; un chiffre absent n'est pas affiché. Aucun sous-titre de section.*
+
+| Clé | Texte |
+|---|---|
+| `talent.forMe.seo` | Pour moi · Jumanly |
+| `talent.forMe.goal.eyebrow` | Mon objectif |
+| `talent.forMe.goal.none` | Choisissez votre objectif |
+| `talent.forMe.goal.edit` | Modifier mon objectif |
+| `talent.forMe.goal.choose` | Choisir mon objectif |
+| `talent.forMe.stats.applications` | {count, plural, one {candidature} other {candidatures}} |
+| `talent.forMe.stats.interviews` | {count, plural, one {entretien} other {entretiens}} |
+| `talent.forMe.stats.courses` | {count, plural, one {formation en cours} other {formations en cours}} |
+| `talent.forMe.stats.certificates` | {count, plural, one {attestation} other {attestations}} |
+| `talent.forMe.stats.skills` | {count, plural, one {compétence à renforcer} other {compétences à renforcer}} |
+| `talent.forMe.stats.profile` | profil |
+| `talent.forMe.stats.percent` | {percent} % |
+| `talent.forMe.jobs.title.job` | Opportunités pour vous |
+| `talent.forMe.jobs.title.skills` | Offres liées à vos compétences |
+| `talent.forMe.jobs.title.career` | Postes pour votre évolution |
+| `talent.forMe.jobs.all` | Voir toutes les offres |
+| `talent.forMe.jobs.general` | Sélection générale, non personnalisée. |
+| `talent.forMe.jobs.complete` | Personnaliser |
+| `talent.forMe.jobs.empty` | Aucune offre ouverte pour le moment. |
+| `talent.forMe.courses.title.job` | Formations recommandées |
+| `talent.forMe.courses.title.skills` | Formations recommandées |
+| `talent.forMe.courses.title.career` | Formations de spécialisation |
+| `talent.forMe.courses.explore` | Explorer |
+| `talent.forMe.courses.resume` | Reprendre |
+| `talent.forMe.courses.discover` | Découvrir |
+| `talent.forMe.courses.locked` | Non incluse dans votre formule |
+| `talent.forMe.courses.progress` | Progression : {percent} % |
+| `talent.forMe.resume.eyebrow` | Reprendre ma formation |
+| `talent.forMe.resume.left` | {count, plural, =0 {Toutes les leçons sont faites} one {# leçon restante} other {# leçons restantes}} |
+| `talent.forMe.resume.lesson` | Prochaine leçon : {lesson} |
+| `talent.forMe.resume.cta` | Reprendre |
+| `talent.forMe.tools.title` | Préparez votre candidature |
+| `talent.forMe.tools.locked` | Non inclus dans votre formule |
+| `talent.forMe.tools.cv` | Mon CV |
+| `talent.forMe.tools.cvLine` | Créer ou améliorer |
+| `talent.forMe.tools.profile` | Mon profil |
+| `talent.forMe.tools.profileLine` | Le rendre visible |
+| `talent.forMe.tools.interview` | Entretien |
+| `talent.forMe.tools.interviewLine` | S'entraîner |
+| `talent.forMe.tools.documents` | Documents |
+| `talent.forMe.tools.documentsLine` | Lettres et attestations |
+| `talent.forMe.position.title` | Me positionner |
+| `talent.forMe.position.diagnostic` | Diagnostic carrière |
+| `talent.forMe.position.diagnosticLine` | Faire le point sur votre parcours |
+| `talent.forMe.position.linkedin` | Optimisation LinkedIn |
+| `talent.forMe.position.linkedinLine` | Titre, résumé, compétences |
+| `talent.forMe.position.portfolio` | Portfolio |
+| `talent.forMe.position.portfolioLine` | Montrer vos réalisations |
+| `talent.forMe.skills.title` | Compétences à renforcer |
+| `talent.forMe.skills.search` | Chercher une formation en {name} |
+| `talent.forMe.skills.why` | Pourquoi ces compétences ? |
+| `talent.forMe.skills.whyText` | Elles sont demandées par les offres que vous avez enregistrées ou auxquelles vous avez postulé, et ne figurent pas encore sur votre profil. |
+| `talent.forMe.skills.offers` | {name} : {count, plural, one {demandée par # offre} other {demandée par # offres}} |
+| `talent.forMe.progress.title` | Progression et certificats |
+| `talent.forMe.progress.all` | Mes acquis |
+| `talent.forMe.progress.certificate` | Attestation · {title} |
+| `talent.forMe.progress.issued` | Obtenue le {date, date, long} |
+| `talent.forMe.progress.courses` | {inProgress, plural, one {# formation en cours} other {# formations en cours}}, {done, plural, one {# terminée} other {# terminées}} |
+| `talent.forMe.progress.coursesLine` | Voir mes formations |
+| `talent.forMe.actions.title.job` | Mes prochaines actions |
+| `talent.forMe.actions.title.skills` | Mes prochaines actions |
+| `talent.forMe.actions.title.career` | Prochaines étapes |
+| `talent.forMe.actions.interview` | Confirmer votre entretien |
+| `talent.forMe.actions.interviewLine` | {company} · {date, date, long} |
+| `talent.forMe.actions.document` | Envoyer un document |
+| `talent.forMe.actions.message` | Répondre au recruteur |
+| `talent.forMe.actions.messageLine` | Nouveau message |
+| `talent.forMe.actions.course` | Reprendre votre formation |
+| `talent.forMe.actions.profile` | Compléter votre profil |
+| `talent.forMe.actions.profileLine` | Profil complet à {percent} % |
 
 ### `/app/suivi` · Suivi
 

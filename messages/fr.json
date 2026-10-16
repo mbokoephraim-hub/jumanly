@@ -2069,7 +2069,47 @@
         "training": "Commencer une formation gratuite",
         "code": "Activer un code de licence"
       },
-      "reminder": "Bon à savoir : vos candidatures sont toujours gratuites, quelle que soit votre formule."
+      "reminder": "Bon à savoir : vos candidatures sont toujours gratuites, quelle que soit votre formule.",
+      "step1": {
+        "eyebrow": "Étape 1 sur 2 · moins d'une minute",
+        "title": "Qu'est-ce qui vous amène sur Jumanly ?",
+        "hint": "Modifiable à tout moment.",
+        "later": "Plus tard",
+        "next": "Continuer"
+      },
+      "focus": {
+        "job": {
+          "text": "Trouver un emploi ou un stage",
+          "line": "Offres d'abord"
+        },
+        "skills": {
+          "text": "Développer mes compétences",
+          "line": "Formations d'abord"
+        },
+        "career": {
+          "text": "Faire évoluer ma carrière",
+          "line": "Postes à responsabilité"
+        }
+      },
+      "step2": {
+        "eyebrow": "Étape 2 sur 2 · tout est facultatif",
+        "title": "Quelques précisions pour vos offres",
+        "titles": {
+          "label": "Métiers recherchés",
+          "placeholder": "Ex. : analyste de données, chargé d'études"
+        },
+        "skills": {
+          "label": "Vos compétences"
+        },
+        "locations": {
+          "label": "Où souhaitez-vous travailler ?",
+          "placeholder": "Ex. : Kinshasa"
+        },
+        "preferences": "Préférences (contrat, télétravail)",
+        "skip": "Passer",
+        "next": "Voir mes offres",
+        "back": "Revenir à l'étape 1"
+      }
     },
     "org": {
       "title": "Bienvenue, {firstName}",
@@ -2699,6 +2739,104 @@
       "pastDueBanner": {
         "text": "Votre paiement est en attente. Votre forfait {plan} reste actif jusqu'au {date, date, long}.",
         "cta": "Régler maintenant"
+      }
+    },
+    "forMe": {
+      "seo": "Pour moi · Jumanly",
+      "goal": {
+        "eyebrow": "Mon objectif",
+        "none": "Choisissez votre objectif",
+        "edit": "Modifier mon objectif",
+        "choose": "Choisir mon objectif"
+      },
+      "stats": {
+        "applications": "{count, plural, one {candidature} other {candidatures}}",
+        "interviews": "{count, plural, one {entretien} other {entretiens}}",
+        "courses": "{count, plural, one {formation en cours} other {formations en cours}}",
+        "certificates": "{count, plural, one {attestation} other {attestations}}",
+        "skills": "{count, plural, one {compétence à renforcer} other {compétences à renforcer}}",
+        "profile": "profil",
+        "percent": "{percent} %"
+      },
+      "jobs": {
+        "title": {
+          "job": "Opportunités pour vous",
+          "skills": "Offres liées à vos compétences",
+          "career": "Postes pour votre évolution"
+        },
+        "all": "Voir toutes les offres",
+        "general": "Sélection générale, non personnalisée.",
+        "complete": "Personnaliser",
+        "empty": "Aucune offre ouverte pour le moment."
+      },
+      "courses": {
+        "title": {
+          "job": "Formations recommandées",
+          "skills": "Formations recommandées",
+          "career": "Formations de spécialisation"
+        },
+        "explore": "Explorer",
+        "resume": "Reprendre",
+        "discover": "Découvrir",
+        "locked": "Non incluse dans votre formule",
+        "progress": "Progression : {percent} %"
+      },
+      "resume": {
+        "eyebrow": "Reprendre ma formation",
+        "left": "{count, plural, =0 {Toutes les leçons sont faites} one {# leçon restante} other {# leçons restantes}}",
+        "lesson": "Prochaine leçon : {lesson}",
+        "cta": "Reprendre"
+      },
+      "tools": {
+        "title": "Préparez votre candidature",
+        "locked": "Non inclus dans votre formule",
+        "cv": "Mon CV",
+        "cvLine": "Créer ou améliorer",
+        "profile": "Mon profil",
+        "profileLine": "Le rendre visible",
+        "interview": "Entretien",
+        "interviewLine": "S'entraîner",
+        "documents": "Documents",
+        "documentsLine": "Lettres et attestations"
+      },
+      "position": {
+        "title": "Me positionner",
+        "diagnostic": "Diagnostic carrière",
+        "diagnosticLine": "Faire le point sur votre parcours",
+        "linkedin": "Optimisation LinkedIn",
+        "linkedinLine": "Titre, résumé, compétences",
+        "portfolio": "Portfolio",
+        "portfolioLine": "Montrer vos réalisations"
+      },
+      "skills": {
+        "title": "Compétences à renforcer",
+        "search": "Chercher une formation en {name}",
+        "why": "Pourquoi ces compétences ?",
+        "whyText": "Elles sont demandées par les offres que vous avez enregistrées ou auxquelles vous avez postulé, et ne figurent pas encore sur votre profil.",
+        "offers": "{name} : {count, plural, one {demandée par # offre} other {demandée par # offres}}"
+      },
+      "progress": {
+        "title": "Progression et certificats",
+        "all": "Mes acquis",
+        "certificate": "Attestation · {title}",
+        "issued": "Obtenue le {date, date, long}",
+        "courses": "{inProgress, plural, one {# formation en cours} other {# formations en cours}}, {done, plural, one {# terminée} other {# terminées}}",
+        "coursesLine": "Voir mes formations"
+      },
+      "actions": {
+        "title": {
+          "job": "Mes prochaines actions",
+          "skills": "Mes prochaines actions",
+          "career": "Prochaines étapes"
+        },
+        "interview": "Confirmer votre entretien",
+        "interviewLine": "{company} · {date, date, long}",
+        "document": "Envoyer un document",
+        "message": "Répondre au recruteur",
+        "messageLine": "Nouveau message",
+        "course": "Reprendre votre formation",
+        "profile": "Compléter votre profil",
+        "profileLine": "Profil complet à {percent} %"
       }
     },
     "suivi": {

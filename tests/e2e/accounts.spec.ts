@@ -16,7 +16,7 @@ test.describe("inscription avec forfait", () => {
     await expect(page.getByText("Paiement confirmé")).toBeVisible({ timeout: 20_000 });
     await page.getByRole("link", { name: "Continuer" }).click();
     await expect(page).toHaveURL(/\/app\/bienvenue/);
-    await page.getByRole("button", { name: "Accéder à mon espace" }).click();
+    await page.getByRole("button", { name: "Plus tard" }).click();
     await expect(page).toHaveURL(/\/app$/);
     await page.goto("/app/abonnement");
     await expect(page.getByRole("main")).toContainText("Pro");
@@ -29,7 +29,7 @@ test.describe("inscription avec forfait", () => {
     await expect(page).toHaveURL(/\/inscription\/paiement/, { timeout: 20_000 });
     await page.getByRole("link", { name: "Commencer en Free et payer plus tard" }).click();
     await expect(page).toHaveURL(/\/app\/bienvenue/);
-    await page.getByRole("button", { name: "Accéder à mon espace" }).click();
+    await page.getByRole("button", { name: "Plus tard" }).click();
     await expect(page).toHaveURL(/\/app/);
     await page.goto("/app/abonnement");
     await expect(page.getByRole("main")).toContainText("Free");

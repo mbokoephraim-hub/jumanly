@@ -2,6 +2,23 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Mobile Talent et Jumanly AI · prompt 3 : objectif et « Pour moi » (16 octobre 2026)
+
+- Écran d'objectif à la première connexion (`/app/bienvenue`, écrans 01-02) : une question, trois
+  réponses en cartes, « Plus tard » ; étape 2 facultative (métiers, compétences du référentiel,
+  lieux, contrat, télétravail). Rangé dans `TalentProfile.goal`, sans migration ; `homeFocus(goal)`.
+- « Pour moi » remplace le tableau de bord sur `/app` (resté à `/app/tableau-de-bord`) : carte
+  objectif à chiffres réels, puis l'ordre de l'objectif (offres, formations, outils en cartes
+  visuelles, prochaines actions ; ou reprise de formation, formations, offres liées, progression ;
+  ou postes, « Me positionner », spécialisation, compétences à renforcer). Aucun sous-titre de
+  section. Offres non personnalisées signalées comme telles.
+- Pas de barre du bas sur l'écran d'objectif (il a sa barre d'action).
+- Tests : unitaires `homeFocus`/`goalForFocus`, e2e inscription → objectif → Pour moi, puis
+  changement d'objectif ; anciens tests passés de « Accéder à mon espace » à « Plus tard ».
+- Décision : `docs/decisions/2026-10-16-mobile-talent-objectif.md` (domaines et niveau
+  d'expérience de la maquette 02 non posés : aucun référentiel ni champ ; éléments sans donnée
+  réelle non repris).
+
 ## Mobile Talent et Jumanly AI · prompt 2 : navigation (16 octobre 2026)
 
 - Téléphone : barre du haut de 52 px (logo sur Pour moi, titre de la section ailleurs, recherche,
