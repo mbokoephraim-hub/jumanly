@@ -2419,6 +2419,11 @@ Conventions :
 | `learn.catalog.domains.count` | {count, plural, =0 {Bientôt} one {# formation} other {# formations}} |
 | `learn.catalog.domain.eyebrow` | Domaine |
 | `learn.catalog.domain.empty` | Aucune formation publiée dans ce domaine pour l'instant. |
+| `learn.catalog.paths.title` | Parcours |
+| `learn.catalog.paths.subtitle` | Plusieurs formations à suivre dans l'ordre pour atteindre un objectif. |
+| `learn.catalog.paths.courses` | {count, plural, one {# formation} other {# formations}} |
+| `learn.catalog.paths.open` | Voir le parcours |
+| `learn.catalog.paths.label` | Parcours |
 | `learn.editorial.originals` | Jumanly Originals |
 | `learn.editorial.expert_series` | Jumanly Expert Series |
 | `learn.editorial.partner_programs` | Jumanly Partner Programs |
@@ -2518,6 +2523,38 @@ Conventions :
 | `learn.paths.completedOn` | Terminée le {date} |
 | `learn.paths.certificate` | Voir l'attestation |
 | `learn.paths.open` | Ouvrir |
+| `learn.paths.followed.title` | Parcours suivis |
+| `learn.paths.followed.progress` | {done} sur {total} formations terminées |
+| `learn.paths.followed.next` | Prochaine formation : {course} |
+| `learn.paths.followed.finished` | Parcours terminé |
+| `learn.paths.followed.discover` | Découvrir les parcours |
+
+### `/app/learn/parcours/[parcours]` · Un parcours (Learn v2, étape 2)
+
+*Les formations d'un parcours dans l'ordre conseillé, avec la progression et l'étape suivante.*
+
+| Clé | Texte |
+|---|---|
+| `learn.path.seo` | Learn · Parcours |
+| `learn.path.eyebrow` | Parcours |
+| `learn.path.back` | Explorer |
+| `learn.path.progress` | {done} sur {total} formations terminées |
+| `learn.path.start` | Commencer le parcours |
+| `learn.path.continue` | Continuer : {course} |
+| `learn.path.finished` | Parcours terminé, bravo. Vos attestations sont dans « Certifications ». |
+| `learn.path.followed` | Parcours ajouté à « Mes parcours ». |
+| `learn.path.unfollowed` | Parcours retiré de « Mes parcours ». Vos formations et votre progression restent. |
+| `learn.path.unfollow` | Ne plus suivre ce parcours |
+| `learn.path.steps` | Les étapes du parcours |
+| `learn.path.step` | Étape {number} |
+| `learn.path.state.done` | Terminée |
+| `learn.path.state.active` | En cours · {percent} % |
+| `learn.path.state.todo` | À faire |
+| `learn.path.state.locked` | Disponible avec {plan} |
+| `learn.path.open` | Ouvrir la formation |
+| `learn.path.access` | Le parcours n'ouvre pas de formation à lui seul : chaque formation garde l'accès de votre formule. |
+| `learn.path.nextLocked` | La prochaine formation demande la formule {plan}. |
+| `learn.path.plans` | Voir les formules |
 
 ### `/app/learn/evaluations` · Exercices et évaluations
 
@@ -10459,6 +10496,66 @@ Conventions :
 | `admin.courses.field.domainNone` | Sans domaine |
 | `admin.courses.field.editorial` | Collection |
 | `admin.courses.field.editorialHint` | Jumanly Partner Programs seulement avec une convention signée avec le partenaire. |
+
+### `/admin/formations/parcours` · Parcours (Learn v2, étape 2)
+
+*Enchaîner plusieurs formations publiées dans un ordre conseillé ; un parcours n'ouvre aucun accès.*
+
+| Clé | Texte |
+|---|---|
+| `admin.courses.paths.link` | Parcours |
+| `admin.courses.paths.title` | Parcours |
+| `admin.courses.paths.eyebrow` | Jumanly Admin · Learn |
+| `admin.courses.paths.subtitle` | Un parcours enchaîne plusieurs formations dans un ordre conseillé. Il n'ouvre aucun accès : chaque formation garde son niveau. |
+| `admin.courses.paths.back` | Studio formations |
+| `admin.courses.paths.empty` | Aucun parcours pour l'instant. |
+| `admin.courses.paths.courses` | {count, plural, =0 {Aucune formation} one {# formation} other {# formations}} |
+| `admin.courses.paths.followers` | {count, plural, =0 {Aucun apprenant} one {# apprenant} other {# apprenants}} |
+| `admin.courses.paths.status.draft` | Brouillon |
+| `admin.courses.paths.status.review` | En relecture |
+| `admin.courses.paths.status.published` | Publié |
+| `admin.courses.paths.status.archived` | Archivé |
+| `admin.courses.paths.edit` | Modifier |
+| `admin.courses.paths.new.title` | Nouveau parcours |
+| `admin.courses.paths.new.field` | Titre du parcours |
+| `admin.courses.paths.new.submit` | Créer le parcours |
+| `admin.courses.paths.new.error` | Donnez un titre d'au moins 3 caractères. |
+| `admin.courses.paths.all` | Tous les parcours |
+| `admin.courses.paths.info.title` | Informations |
+| `admin.courses.paths.field.title` | Titre |
+| `admin.courses.paths.field.summary` | Présentation |
+| `admin.courses.paths.field.summaryHint` | Ce que l'apprenant saura faire à la fin du parcours. |
+| `admin.courses.paths.save` | Enregistrer |
+| `admin.courses.paths.list.title` | Formations du parcours |
+| `admin.courses.paths.list.hint` | Dans l'ordre conseillé. Une formation en brouillon n'apparaît pas aux apprenants. |
+| `admin.courses.paths.list.empty` | Ajoutez au moins deux formations publiées. |
+| `admin.courses.paths.list.add` | Ajouter une formation |
+| `admin.courses.paths.list.choose` | Choisir une formation |
+| `admin.courses.paths.list.addSubmit` | Ajouter |
+| `admin.courses.paths.list.up` | Monter « {title} » |
+| `admin.courses.paths.list.down` | Descendre « {title} » |
+| `admin.courses.paths.list.remove` | Retirer « {title} » |
+| `admin.courses.paths.list.notPublished` | Non visible : formation {status} |
+| `admin.courses.paths.publication.title` | Publication |
+| `admin.courses.paths.publication.current` | Statut : |
+| `admin.courses.paths.publication.publish` | Publier |
+| `admin.courses.paths.publication.draft` | Repasser en brouillon |
+| `admin.courses.paths.publication.archive` | Archiver |
+| `admin.courses.paths.publication.problems` | Avant de publier : |
+| `admin.courses.paths.publication.view` | Voir comme un apprenant |
+| `admin.courses.paths.problem.summary` | ajoutez une présentation |
+| `admin.courses.paths.problem.courses` | ajoutez au moins {count} formations publiées |
+| `admin.courses.paths.ok.created` | Parcours créé. Ajoutez une présentation et ses formations. |
+| `admin.courses.paths.ok.saved` | Modifications enregistrées. |
+| `admin.courses.paths.ok.course` | Liste des formations mise à jour. |
+| `admin.courses.paths.ok.published` | Parcours publié. |
+| `admin.courses.paths.ok.draft` | Parcours repassé en brouillon. |
+| `admin.courses.paths.ok.archived` | Parcours archivé ; il n'apparaît plus aux apprenants. |
+| `admin.courses.paths.error.infos` | Vérifiez le titre (3 caractères au moins). |
+| `admin.courses.paths.error.already` | Cette formation est déjà dans le parcours. |
+| `admin.courses.paths.error.full` | Un parcours compte 20 formations au plus. |
+| `admin.courses.paths.error.notFound` | Formation introuvable. |
+| `admin.courses.paths.error.publication` | Le parcours n'est pas encore prêt à être publié. |
 ### `/admin/offres` · Modération des offres
 
 | Clé | Texte |

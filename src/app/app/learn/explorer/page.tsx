@@ -37,7 +37,9 @@ import {
   listDomains,
 } from "@/server/services/learn-domains";
 import { catalogLevelOf, myEnrollments, opensCourse } from "@/server/services/learn";
+import { listPublishedPaths } from "@/server/services/learn-paths";
 import { planForCatalogLevel } from "@/server/services/plans";
+import { PathCard } from "@/components/learn/path-card";
 import { TabRail } from "@/components/motion/tab-rail";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -76,13 +78,14 @@ export default async function LearnExplorePage({ searchParams }: PageProps<"/app
     })
   )?.desiredJobTitles[0];
 
-  const [total, freeCount, domains, languages, skills, featured] = await Promise.all([
+  const [total, freeCount, domains, languages, skills, featured, paths] = await Promise.all([
     countPublishedCourses(db),
     db.course.count({ where: { status: "published", requiredLevel: "free" } }),
     listDomains(db),
     listCourseLanguages(db),
     listCourseSkills(db),
     featuredCourses(db, 8),
+    listPublishedPaths(db, filters.domaine),
   ]);
   const inProgress = enrollments.filter((enrollment) => !enrollment.completedAt);
   const domain = domains.find((item) => item.slug === filters.domaine);
@@ -415,6 +418,25 @@ export default async function LearnExplorePage({ searchParams }: PageProps<"/app
             {enrollmentBySlug.has(hero.slug) ? t("learn.card.resume") : t("learn.card.start")}
             <Icon name="chev-r" className="size-4" />
           </Link>
+        </section>
+      )}
+
+      {/* Paths (Learn v2, étape 2): on the catalog home and on a domain page, not in a search. */}
+      {paths.length > 0 && !filters.q && activeFilters === 0 && search.page === 1 && (
+        <section aria-labelledby="learn-paths" className="flex flex-col gap-3">
+          <div className="flex flex-col gap-1">
+            <h2 id="learn-paths" className={sectionTitle}>
+              {t("learn.catalog.paths.title")}
+            </h2>
+            <p className="text-[14px] text-ardoise">{t("learn.catalog.paths.subtitle")}</p>
+          </div>
+          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {paths.slice(0, 6).map((path) => (
+              <li key={path.slug} className="min-w-0">
+                <PathCard path={path} />
+              </li>
+            ))}
+          </ul>
         </section>
       )}
 

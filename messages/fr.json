@@ -3422,6 +3422,13 @@
         "eyebrow": "Domaine",
         "empty": "Aucune formation publiée dans ce domaine pour l'instant."
       },
+      "paths": {
+        "title": "Parcours",
+        "subtitle": "Plusieurs formations à suivre dans l'ordre pour atteindre un objectif.",
+        "courses": "{count, plural, one {# formation} other {# formations}}",
+        "open": "Voir le parcours",
+        "label": "Parcours"
+      },
       "sort": {
         "text": "Trier",
         "popular": "Popularité",
@@ -3553,7 +3560,38 @@
       "remaining": "{count, plural, one {# leçon restante} other {# leçons restantes}}",
       "completedOn": "Terminée le {date}",
       "certificate": "Voir l'attestation",
-      "open": "Ouvrir"
+      "open": "Ouvrir",
+      "followed": {
+        "title": "Parcours suivis",
+        "progress": "{done} sur {total} formations terminées",
+        "next": "Prochaine formation : {course}",
+        "finished": "Parcours terminé",
+        "discover": "Découvrir les parcours"
+      }
+    },
+    "path": {
+      "seo": "Learn · Parcours",
+      "eyebrow": "Parcours",
+      "back": "Explorer",
+      "progress": "{done} sur {total} formations terminées",
+      "start": "Commencer le parcours",
+      "continue": "Continuer : {course}",
+      "finished": "Parcours terminé, bravo. Vos attestations sont dans « Certifications ».",
+      "followed": "Parcours ajouté à « Mes parcours ».",
+      "unfollowed": "Parcours retiré de « Mes parcours ». Vos formations et votre progression restent.",
+      "unfollow": "Ne plus suivre ce parcours",
+      "steps": "Les étapes du parcours",
+      "step": "Étape {number}",
+      "state": {
+        "done": "Terminée",
+        "active": "En cours · {percent} %",
+        "todo": "À faire",
+        "locked": "Disponible avec {plan}"
+      },
+      "open": "Ouvrir la formation",
+      "access": "Le parcours n'ouvre pas de formation à lui seul : chaque formation garde l'accès de votre formule.",
+      "nextLocked": "La prochaine formation demande la formule {plan}.",
+      "plans": "Voir les formules"
     },
     "evaluations": {
       "seo": "Learn · Exercices et évaluations",
@@ -12550,6 +12588,79 @@
         },
         "error": "Vérifiez le nom (2 caractères au moins) et l'ordre (un nombre).",
         "readOnly": "Seul un administrateur de la plateforme peut supprimer un domaine."
+      },
+      "paths": {
+        "link": "Parcours",
+        "title": "Parcours",
+        "eyebrow": "Jumanly Admin · Learn",
+        "subtitle": "Un parcours enchaîne plusieurs formations dans un ordre conseillé. Il n'ouvre aucun accès : chaque formation garde son niveau.",
+        "back": "Studio formations",
+        "empty": "Aucun parcours pour l'instant.",
+        "courses": "{count, plural, =0 {Aucune formation} one {# formation} other {# formations}}",
+        "followers": "{count, plural, =0 {Aucun apprenant} one {# apprenant} other {# apprenants}}",
+        "status": {
+          "draft": "Brouillon",
+          "review": "En relecture",
+          "published": "Publié",
+          "archived": "Archivé"
+        },
+        "edit": "Modifier",
+        "new": {
+          "title": "Nouveau parcours",
+          "field": "Titre du parcours",
+          "submit": "Créer le parcours",
+          "error": "Donnez un titre d'au moins 3 caractères."
+        },
+        "all": "Tous les parcours",
+        "info": {
+          "title": "Informations"
+        },
+        "field": {
+          "title": "Titre",
+          "summary": "Présentation",
+          "summaryHint": "Ce que l'apprenant saura faire à la fin du parcours."
+        },
+        "save": "Enregistrer",
+        "list": {
+          "title": "Formations du parcours",
+          "hint": "Dans l'ordre conseillé. Une formation en brouillon n'apparaît pas aux apprenants.",
+          "empty": "Ajoutez au moins deux formations publiées.",
+          "add": "Ajouter une formation",
+          "choose": "Choisir une formation",
+          "addSubmit": "Ajouter",
+          "up": "Monter « {title} »",
+          "down": "Descendre « {title} »",
+          "remove": "Retirer « {title} »",
+          "notPublished": "Non visible : formation {status}"
+        },
+        "publication": {
+          "title": "Publication",
+          "current": "Statut :",
+          "publish": "Publier",
+          "draft": "Repasser en brouillon",
+          "archive": "Archiver",
+          "problems": "Avant de publier :",
+          "view": "Voir comme un apprenant"
+        },
+        "problem": {
+          "summary": "ajoutez une présentation",
+          "courses": "ajoutez au moins {count} formations publiées"
+        },
+        "ok": {
+          "created": "Parcours créé. Ajoutez une présentation et ses formations.",
+          "saved": "Modifications enregistrées.",
+          "course": "Liste des formations mise à jour.",
+          "published": "Parcours publié.",
+          "draft": "Parcours repassé en brouillon.",
+          "archived": "Parcours archivé ; il n'apparaît plus aux apprenants."
+        },
+        "error": {
+          "infos": "Vérifiez le titre (3 caractères au moins).",
+          "already": "Cette formation est déjà dans le parcours.",
+          "full": "Un parcours compte 20 formations au plus.",
+          "notFound": "Formation introuvable.",
+          "publication": "Le parcours n'est pas encore prêt à être publié."
+        }
       }
     },
     "jobs": {

@@ -11,7 +11,10 @@ reconstruire ni supprimer de table ou de donnée.
    Partner Programs). Catalogue Explorer par domaine, filtres (niveau, durée, langue, accès,
    compétence, ligne éditoriale), administration `/admin/formations/domaines`. Retour arrière :
    `retour-arriere/etape-1-domaines.sql`.
-2. Parcours (`LearningPath`, `LearningPathCourse`).
+2. **Parcours** : tables `LearningPath`, `LearningPathCourse`, `LearningPathFollow` (migration
+   `learn_paths`). Section « Parcours » d'Explorer, page d'un parcours, « Parcours suivis »,
+   administration `/admin/formations/parcours`. Retour arrière :
+   `retour-arriere/etape-2-parcours.sql`.
 3. Progression par leçon (`LessonProgress`), reprise à la seconde près.
 4. Learning Room : onglets résumé et transcription, sous-titres WebVTT, temps restant, barre
    compacte sur téléphone.

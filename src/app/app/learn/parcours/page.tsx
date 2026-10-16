@@ -18,6 +18,8 @@ import { db } from "@/server/db";
 import { courseSummariesByIds } from "@/server/services/courses";
 import { myEnrollments, savedCourseIds } from "@/server/services/learn";
 import { nextLessons } from "@/server/services/learn-academy";
+import { myPaths } from "@/server/services/learn-paths";
+import { PathCard } from "@/components/learn/path-card";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("learn.paths");
@@ -41,10 +43,11 @@ export default async function LearnPathsPage({ searchParams }: PageProps<"/app/l
   const user = await requireUser("/app/learn/parcours");
   const t = await getTranslations();
   const format = await getFormatter();
-  const [enrollments, active, savedIds] = await Promise.all([
+  const [enrollments, active, savedIds, paths] = await Promise.all([
     myEnrollments(db, user.id),
     nextLessons(db, user.id),
     savedCourseIds(db, user.id),
+    myPaths(db, user.id),
   ]);
   const completed = enrollments.filter((enrollment) => enrollment.completedAt);
   const saved = list === "enregistrees" ? await courseSummariesByIds(db, savedIds) : [];
@@ -59,6 +62,34 @@ export default async function LearnPathsPage({ searchParams }: PageProps<"/app/l
     <div className="flex flex-col gap-5">
       <AppPageHeader eyebrow={t("learn.paths.eyebrow")} title={t("learn.paths.title")} />
       {params.enregistre === "0" && <Alert tone="info" title={t("learn.save.removed")} />}
+
+      {/* Learn v2, étape 2: the paths the learner follows, above their courses. */}
+      {paths.length > 0 && (
+        <section aria-labelledby="followed-paths" className="flex flex-col gap-3">
+          <h2 id="followed-paths" className="text-[20px] leading-tight font-bold tracking-tight">
+            {t("learn.paths.followed.title")}
+          </h2>
+          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-3">
+            {paths.map((path) => (
+              <li key={path.slug} className="min-w-0">
+                <PathCard
+                  path={{
+                    slug: path.slug,
+                    title: path.title,
+                    summary: path.summary,
+                    editorialLine: path.editorialLine,
+                    domain: path.domain,
+                    courseCount: path.total,
+                    durationMinutes: path.durationMinutes,
+                    courseSlugs: path.courses.map((course) => course.slug),
+                  }}
+                  progress={{ done: path.done, total: path.total, percent: path.percent }}
+                />
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
       <nav aria-label={t("learn.paths.tabs")} className="max-w-full min-w-0">
         <TabRail name="learn-parcours" className="bg-transparent! p-0!">

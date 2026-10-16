@@ -318,18 +318,62 @@ enum EditorialLine {
 /// A domain of the catalog (Learn v2, étape 1): Career & Employability, AI & Digital Tools…
 /// Created by the migration, edited in the admin; a course belongs to one domain at most.
 model LearningDomain {
-  id          String   @id @default(cuid(2))
-  slug        String   @unique
+  id          String         @id @default(cuid(2))
+  slug        String         @unique
   name        String
-  description String   @default("")
+  description String         @default("")
   /// Name of a brand icon (`Icon`), chosen in the admin.
-  icon        String   @default("learn")
-  order       Int      @default(0)
+  icon        String         @default("learn")
+  order       Int            @default(0)
   courses     Course[]
-  createdAt   DateTime @default(now())
-  updatedAt   DateTime @updatedAt
+  paths       LearningPath[]
+  createdAt   DateTime       @default(now())
+  updatedAt   DateTime       @updatedAt
 
   @@index([order])
+}
+
+/// Learn v2, étape 2: a path is an ordered series of courses (Domaine → Parcours → Formation).
+/// A course keeps its own access level; the path adds no access of its own.
+model LearningPath {
+  id            String               @id @default(cuid(2))
+  slug          String               @unique
+  title         String
+  summary       String               @default("")
+  domainId      String?
+  domain        LearningDomain?      @relation(fields: [domainId], references: [id], onDelete: SetNull)
+  editorialLine EditorialLine        @default(originals)
+  status        CourseStatus         @default(draft)
+  publishedAt   DateTime?
+  courses       LearningPathCourse[]
+  followers     LearningPathFollow[]
+  createdAt     DateTime             @default(now())
+  updatedAt     DateTime             @updatedAt
+
+  @@index([status, domainId])
+}
+
+model LearningPathCourse {
+  pathId   String
+  path     LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  courseId String
+  course   Course       @relation(fields: [courseId], references: [id], onDelete: Cascade)
+  order    Int
+
+  @@id([pathId, courseId])
+  @@index([courseId])
+}
+
+/// A learner who follows a path (« Mes parcours »). Progress comes from the course enrollments.
+model LearningPathFollow {
+  userId    String
+  user      User         @relation(fields: [userId], references: [id], onDelete: Cascade)
+  pathId    String
+  path      LearningPath @relation(fields: [pathId], references: [id], onDelete: Cascade)
+  startedAt DateTime     @default(now())
+
+  @@id([userId, pathId])
+  @@index([pathId])
 }
 
 enum CourseStatus {
@@ -348,8 +392,8 @@ enum LessonKind {
 }
 
 model Course {
-  id                 String           @id @default(cuid(2))
-  slug               String           @unique
+  id                 String               @id @default(cuid(2))
+  slug               String               @unique
   title              String
   summary            String
   description        String
@@ -358,28 +402,29 @@ model Course {
   category           String
   /// Domain of the catalog (Learn v2); null until the team files the course.
   domainId           String?
-  domain             LearningDomain?  @relation(fields: [domainId], references: [id], onDelete: SetNull)
-  editorialLine      EditorialLine    @default(originals)
+  domain             LearningDomain?      @relation(fields: [domainId], references: [id], onDelete: SetNull)
+  editorialLine      EditorialLine        @default(originals)
   level              CourseLevel
-  language           String           @default("fr")
+  language           String               @default("fr")
   durationMinutes    Int
   coverUrl           String?
   requiredLevel      CatalogLevel
   /// Job families of the course's job-specific exercises (`learn.exercises.job_specific`).
-  jobFamilies        String[]         @default([])
-  status             CourseStatus     @default(draft)
-  certificateEnabled Boolean          @default(true)
+  jobFamilies        String[]             @default([])
+  status             CourseStatus         @default(draft)
+  certificateEnabled Boolean              @default(true)
   instructor         String?
   prerequisites      String?
-  enrollmentCount    Int              @default(0)
+  enrollmentCount    Int                  @default(0)
   publishedAt        DateTime?
   modules            CourseModule[]
   skills             CourseSkill[]
   enrollments        Enrollment[]
   savedBy            SavedCourse[]
+  inPaths            LearningPathCourse[]
   documents          CourseDocument[]
-  createdAt          DateTime         @default(now())
-  updatedAt          DateTime         @updatedAt
+  createdAt          DateTime             @default(now())
+  updatedAt          DateTime             @updatedAt
 
   @@index([status, publishedAt])
   @@index([domainId])
@@ -661,6 +706,7 @@ model User {
   notifications       Notification[]
   participations      ConversationParticipant[]
   enrollments         Enrollment[]
+  learningPaths       LearningPathFollow[]
   quizAttempts        QuizAttempt[]
   lessonNotes         LessonNote[]
   savedCourses        SavedCourse[]

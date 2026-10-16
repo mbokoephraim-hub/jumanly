@@ -2,6 +2,26 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Learn v2 · étape 2 : les parcours (16 octobre 2026)
+
+- Un parcours enchaîne plusieurs formations dans un ordre conseillé (Domaine → Parcours →
+  Formation). Tables `LearningPath`, `LearningPathCourse`, `LearningPathFollow` (migration
+  `learn_paths`, retour arrière `docs/learn-v2/retour-arriere/etape-2-parcours.sql`). Aucune table
+  existante modifiée.
+- Un parcours n'ouvre aucun accès : chaque formation garde son niveau (`learn.catalog.level`).
+  Une étape que la formule n'ouvre pas s'affiche « Disponible avec … ».
+- Talent : section « Parcours » dans Explorer (et sur la page d'un domaine), page
+  `/app/learn/parcours/[parcours]` avec les étapes, la progression et « Commencer » ou
+  « Continuer » (inscrit à la formation suivante si elle est ouverte), « Parcours suivis » en
+  haut de « Mes parcours », « Ne plus suivre » qui garde les inscriptions.
+- Admin : `/admin/formations/parcours` (éditeur de contenu et administrateur) : créer, présenter,
+  ranger dans un domaine et une collection, ajouter, déplacer et retirer des formations, publier
+  (présentation et deux formations publiées au moins), repasser en brouillon, archiver. Chaque
+  action est journalisée. Pas de suppression : on archive.
+- Démo (local et previews) : parcours fictif « Décrocher son premier emploi (démo) ».
+- La validation par Jumanly avant publication (statut « Validé ») viendra à l'étape 5, pour les
+  formations comme pour les parcours.
+
 ## Learn v2 · étape 1 : domaines et lignes éditoriales (16 octobre 2026)
 
 - Analyse du module Learn et plan en quatre phases : `docs/learn-v2/PLAN.md`.
