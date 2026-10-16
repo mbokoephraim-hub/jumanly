@@ -83,6 +83,14 @@ export default async function AdminCourses({ searchParams }: PageProps<"/admin/f
           >
             {t("domains.link")}
           </ButtonLink>
+          <ButtonLink
+            href="/admin/formations/parcours"
+            variant="secondary"
+            icon={<Icon name="objectif" />}
+            className="w-full sm:w-fit"
+          >
+            {t("paths.link")}
+          </ButtonLink>
         </div>
         <nav aria-label={t("v3.view.label")} className={segmentedList}>
           {(["galerie", "liste"] as const).map((view) => {

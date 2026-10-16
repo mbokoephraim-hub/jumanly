@@ -214,6 +214,7 @@ test("aucune erreur d'accessibilité WCAG 2.2 AA dans Learn", async ({ page }) =
     "/app/learn/explorer",
     "/app/learn/explorer?domaine=career-employability&niveau=beginner",
     "/app/learn/parcours",
+    "/app/learn/parcours/demo-premier-emploi",
     "/app/learn/evaluations",
     "/app/learn/coach",
     "/app/learn/demo-reussir-son-cv",
@@ -354,4 +355,73 @@ test("le catalogue par domaine, ses filtres et l'administration des domaines", a
   await card.getByRole("button", { name: "Supprimer" }).click();
   await expect(admin.getByText("Domaine supprimé", { exact: false })).toBeVisible();
   await expect(admin.getByRole("heading", { name })).toHaveCount(0);
+});
+
+// Learn v2, étape 2: a learner follows a path from the Explorer; the editor builds and publishes
+// one in the admin (summary and two published courses needed), then archives it.
+test("les parcours : suivre un parcours et en publier un dans l'admin", async ({
+  page,
+  browser,
+  baseURL,
+  isMobile,
+}) => {
+  test.setTimeout(180_000);
+  await logIn(page, "grace.ux@jumanly.test");
+  await page.goto("/app/learn/explorer?domaine=career-employability");
+  const paths = page.locator("section", { has: page.locator("#learn-paths") });
+  await paths.getByRole("link", { name: "Décrocher son premier emploi (démo)" }).click();
+  await expect(page).toHaveURL(/\/app\/learn\/parcours\/demo-premier-emploi/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Décrocher son premier emploi (démo)" }),
+  ).toBeVisible();
+  const steps = page.locator("section", { has: page.locator("#path-steps") });
+  await expect(steps.getByRole("listitem")).toHaveCount(4);
+  await expect(steps.getByRole("listitem").first().getByText("Terminée")).toBeVisible();
+  await expectAccessible(page);
+  await page.getByRole("button", { name: /Continuer : Préparer un entretien/ }).click();
+  await expect(page).toHaveURL(/\/app\/learn\/demo-preparer-un-entretien/);
+
+  await page.goto("/app/learn/parcours");
+  const followed = page.locator("section", { has: page.locator("#followed-paths") });
+  await expect(
+    followed.getByRole("link", { name: "Décrocher son premier emploi (démo)" }),
+  ).toBeVisible();
+  await expect(followed.getByText(/sur 4 formations terminées/).first()).toBeVisible();
+  await page.goto("/app/learn/parcours/demo-premier-emploi");
+  await page.getByRole("button", { name: "Ne plus suivre ce parcours" }).click();
+  await expect(
+    page.getByText("Parcours retiré de « Mes parcours »", { exact: false }),
+  ).toBeVisible();
+
+  // The editor: not publishable before a summary and two published courses.
+  const title = `Parcours fictif e2e ${suffix()}`;
+  const editor = await newPage(browser, baseURL, isMobile);
+  await logIn(editor, demo.editor, undefined, "/admin/formations");
+  await editor.goto("/admin/formations");
+  await editor.getByRole("link", { name: "Parcours", exact: true }).click();
+  await expect(editor.getByRole("heading", { level: 1, name: "Parcours" })).toBeVisible();
+  await editor.locator("#path-new-title").fill(title);
+  await editor.getByRole("button", { name: "Créer le parcours" }).click();
+  await expect(editor.getByText("Parcours créé.", { exact: false })).toBeVisible();
+  await expect(editor.getByRole("button", { name: "Publier" })).toBeDisabled();
+  for (const course of ["Réussir son CV (démo)", "Préparer un entretien d'embauche (démo)"]) {
+    await editor.locator("#path-add-course").selectOption({ label: course });
+    await editor.getByRole("button", { name: "Ajouter", exact: true }).click();
+    await expect(editor.getByText("Liste des formations mise à jour.")).toBeVisible();
+  }
+  await editor
+    .getByRole("button", { name: "Monter « Préparer un entretien d'embauche (démo) »" })
+    .click();
+  await expect(
+    editor.locator("#formations ol li").first().getByText("Préparer un entretien"),
+  ).toBeVisible();
+  await editor.locator("#path-summary").fill("Parcours fictif créé par un test automatique.");
+  await editor.getByRole("button", { name: "Enregistrer" }).click();
+  await expect(editor.getByText("Modifications enregistrées.")).toBeVisible();
+  await editor.getByRole("button", { name: "Publier" }).click();
+  await expect(editor.getByText("Parcours publié.")).toBeVisible();
+  await editor.goto(editor.url().split("?")[0]!);
+  await expectAccessible(editor);
+  await editor.getByRole("button", { name: "Archiver" }).click();
+  await expect(editor.getByText("Parcours archivé", { exact: false })).toBeVisible();
 });
