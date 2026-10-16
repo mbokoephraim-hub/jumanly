@@ -3,6 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { AppPageHeader } from "@/components/app/page-header";
+import { TopSearch } from "@/components/layout/top-search";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { conversationLabels } from "@/components/connect/conversation-list";
 import { db } from "@/server/db";
@@ -26,11 +27,25 @@ export default async function SearchPage({ searchParams }: PageProps<"/app/reche
   const query = (typeof params.q === "string" ? params.q : "").trim().slice(0, 100);
   const { viewer } = await connectViewer("/app/recherche");
   const t = await getTranslations("appNav.search");
+  const tNav = await getTranslations("appNav");
+  // Phone and tablet: the top bar shows only an icon, so the field is here.
+  const field = (
+    <TopSearch
+      id="recherche-q"
+      action="/app/recherche"
+      label={tNav("search.aria")}
+      placeholder={tNav("search.placeholder")}
+      shortcut={tNav("search.shortcut")}
+      defaultValue={query}
+      className="max-w-none lg:hidden"
+    />
+  );
 
   if (!query) {
     return (
       <div className="flex flex-col gap-5">
         <AppPageHeader title={t("title")} subtitle={t("subtitle")} />
+        {field}
         <p className="rounded-[20px] bg-blanc p-5 text-[14px] text-ardoise">{t("prompt")}</p>
       </div>
     );
@@ -51,6 +66,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/app/reche
   return (
     <div className="flex flex-col gap-5">
       <AppPageHeader title={t("title")} subtitle={t("results", { count: total, query })} />
+      {field}
       {total === 0 ? (
         <p className="rounded-[20px] bg-blanc p-5 text-[14px] text-ardoise">
           {t("empty", { query })}

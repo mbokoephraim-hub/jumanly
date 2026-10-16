@@ -26,7 +26,9 @@ import { OFFLINE_SLOT_ID } from "@/lib/connection";
  * Desktop: the floating gradient column of icons on the left (settings and sign out below), and
  * on top of the page a light bar: the sub-sections of the current section on the left, the space
  * switcher, notifications and the account on the right.
- * Mobile: deep green header, Crème sheet with the sub-sections on top, floating gradient pill.
+ * Tablet (from 768 px): the same column and bar, the search behind an icon.
+ * Phone: deep green header (search icon), Crème sheet with the sub-sections on top, floating
+ * gradient pill.
  */
 export function AppShell({
   account,
@@ -86,6 +88,20 @@ export function AppShell({
     close: tn("panel.close"),
     empty: tn("empty.text"),
   };
+  // Phone and tablet: the search opens on its own page (with its field) from an icon.
+  const searchLink = (tone: "light" | "dark") => (
+    <Link
+      href="/app/recherche"
+      aria-label={t("search.aria")}
+      className={
+        tone === "dark"
+          ? "grid size-10 shrink-0 place-items-center rounded-full text-blanc hover:bg-blanc/10"
+          : "grid size-10 shrink-0 place-items-center rounded-full bg-blanc text-sapin ring-1 ring-sapin/10 hover:bg-creme"
+      }
+    >
+      <Icon name="recherche" className="size-5" />
+    </Link>
+  );
   const notifications = (tone: "light" | "dark") => (
     <NotificationBell initialUnread={unread} tone={tone} labels={bellLabels} />
   );
@@ -93,7 +109,7 @@ export function AppShell({
   return (
     <div
       data-reduce-motion={reduceMotion ? "" : undefined}
-      className="jm-admin-bg min-h-dvh text-sapin lg:flex"
+      className="jm-admin-bg min-h-dvh text-sapin md:flex"
     >
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={tt("region.aria")} closeLabel={tt("close")} />
@@ -128,36 +144,40 @@ export function AppShell({
         }
       />
 
-      <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc lg:hidden">
+      <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc md:hidden">
         <Link href={home} aria-label={a11y("logo")} className="shrink-0">
           <Logo variant="negative" height={26} />
         </Link>
         <div className="flex min-w-0 items-center gap-1">
+          {searchLink("dark")}
           <SpaceSwitcher current={space} spaces={spaces} tone="dark" />
           {notifications("dark")}
           <AccountMenu account={account} tone="dark" />
         </div>
       </header>
 
-      <div className="relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme lg:min-h-0 lg:flex-1 lg:rounded-none lg:bg-transparent">
+      <div className="relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme md:min-h-0 md:flex-1 md:rounded-none md:bg-transparent">
         {/* The secondary menu, above the page: sub-sections left, tools right. */}
-        <div className="jm-topbar sticky top-0 z-30 flex items-center gap-3 px-4 pt-3 sm:px-6 lg:h-[68px] lg:gap-5 lg:px-6 lg:pt-0 xl:px-8">
+        <div className="jm-topbar sticky top-0 z-30 flex items-center gap-3 px-4 pt-3 sm:px-6 md:h-[68px] md:pt-0 lg:gap-5 lg:px-6 xl:px-[max(2rem,calc((100%-1400px)/2+2rem))]">
           <SectionNav sections={sections} className="min-w-0 flex-1" />
-          <div className="ml-auto hidden min-w-0 shrink items-center justify-end gap-3 lg:flex lg:w-[min(36%,460px)] 2xl:w-[min(42%,560px)]">
-            <TopSearch
-              id="app-search"
-              action="/app/recherche"
-              label={t("search.aria")}
-              placeholder={t("search.placeholder")}
-              shortcut={t("search.shortcut")}
-            />
+          <div className="ml-auto hidden min-w-0 shrink-0 items-center justify-end gap-3 md:flex lg:w-[min(36%,460px)] lg:shrink 2xl:w-[min(42%,560px)]">
+            <div className="hidden min-w-0 flex-1 justify-end lg:flex">
+              <TopSearch
+                id="app-search"
+                action="/app/recherche"
+                label={t("search.aria")}
+                placeholder={t("search.placeholder")}
+                shortcut={t("search.shortcut")}
+              />
+            </div>
+            <span className="lg:hidden">{searchLink("light")}</span>
             <SpaceSwitcher current={space} spaces={spaces} tone="light" />
             {notifications("light")}
           </div>
         </div>
         <main
           id="content"
-          className="relative mx-auto flex w-full max-w-[1400px] flex-col gap-5 px-4 pt-4 pb-32 sm:px-6 lg:px-6 lg:pt-2 lg:pb-8 xl:px-8"
+          className="relative mx-auto flex w-full max-w-[1400px] flex-col gap-5 px-4 pt-4 pb-32 sm:px-6 md:pt-2 md:pb-8 lg:px-6 xl:px-8"
         >
           <div id={OFFLINE_SLOT_ID} role="status" className="empty:-mb-5" />
           {children}
@@ -167,7 +187,7 @@ export function AppShell({
       <nav
         aria-label={t("mobile.aria")}
         data-autohide
-        className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin bg-(image:--jm-degrade-rail-h) p-[7px] shadow-float lg:hidden"
+        className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin bg-(image:--jm-degrade-rail-h) p-[7px] shadow-float md:hidden"
       >
         <ul data-nav-slide="pill" className="flex gap-1">
           {pillLinks}
