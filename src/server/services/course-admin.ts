@@ -33,6 +33,8 @@ export async function listCoursesForAdmin(db: PrismaClient) {
       requiredLevel: true,
       updatedAt: true,
       enrollmentCount: true,
+      coverUrl: true,
+      durationMinutes: true,
       modules: { select: { _count: { select: { lessons: true } } } },
     },
   });
@@ -57,6 +59,39 @@ export async function getCourseForAdmin(db: PrismaClient, id: string) {
 }
 
 export type AdminCourse = NonNullable<Awaited<ReturnType<typeof getCourseForAdmin>>>;
+
+/** « Prête à publier » percent of several courses at once (drafts of the Studio gallery). */
+export async function readinessPercents(db: PrismaClient, ids: string[]) {
+  if (ids.length === 0) return new Map<string, number>();
+  const courses = await db.course.findMany({
+    where: { id: { in: ids } },
+    include: {
+      skills: { include: { skill: { select: { name: true } } } },
+      modules: {
+        orderBy: { order: "asc" },
+        include: {
+          lessons: {
+            orderBy: { order: "asc" },
+            include: { quiz: { include: { questions: { orderBy: { order: "asc" } } } } },
+          },
+        },
+      },
+    },
+  });
+  return new Map(courses.map((course) => [course.id, courseReadiness(course).percent]));
+}
+
+/** Figures of the Studio banner: published courses, drafts, learners and attestations (30 days). */
+export async function studioFigures(db: PrismaClient, now: Date) {
+  const since = new Date(now.getTime() - 30 * 24 * 60 * 60 * 1000);
+  const [published, drafts, enrolled, certificates] = await Promise.all([
+    db.course.count({ where: { status: "published" } }),
+    db.course.count({ where: { status: { in: ["draft", "review"] } } }),
+    db.enrollment.count({ where: { startedAt: { gte: since } } }),
+    db.certificate.count({ where: { issuedAt: { gte: since }, revokedAt: null } }),
+  ]);
+  return { published, drafts, enrolled, certificates };
+}
 
 async function uniqueSlug(db: PrismaClient, wanted: string, exceptId?: string) {
   const base = slugify(wanted).slice(0, 70) || "formation";
@@ -85,6 +120,130 @@ export async function createCourse(db: PrismaClient, title: string) {
       durationMinutes: 60,
       requiredLevel: "free",
       status: "draft",
+    },
+  });
+}
+
+// ─── Studio formations: new course from a starting template (Admin v3, étape 3) ──────────────
+
+export const courseTemplates = ["short", "certifying", "workshop", "blank"] as const;
+export type CourseTemplate = (typeof courseTemplates)[number];
+export type TemplateLessonLabel =
+  "intro" | "lesson" | "reading" | "moduleQuiz" | "finalQuiz" | "exercise";
+type TemplateLesson = { kind: (typeof lessonKinds)[number]; label: TemplateLessonLabel };
+
+/**
+ * Structure of each starting template: modules (the last one may be the final assessment), lessons
+ * and whether the course delivers an attestation. Titles are texts given by the caller.
+ */
+export const courseTemplateStructure: Record<
+  CourseTemplate,
+  { modules: { final?: boolean; lessons: TemplateLesson[] }[]; certificate: boolean }
+> = {
+  short: {
+    certificate: false,
+    modules: [
+      {
+        lessons: [
+          { kind: "video", label: "intro" },
+          { kind: "text", label: "reading" },
+          { kind: "quiz", label: "finalQuiz" },
+        ],
+      },
+    ],
+  },
+  certifying: {
+    certificate: true,
+    modules: [
+      ...[1, 2, 3].map(() => ({
+        lessons: [
+          { kind: "video" as const, label: "lesson" as const },
+          { kind: "text" as const, label: "reading" as const },
+          { kind: "quiz" as const, label: "moduleQuiz" as const },
+        ],
+      })),
+      { final: true, lessons: [{ kind: "quiz", label: "finalQuiz" }] },
+    ],
+  },
+  workshop: {
+    certificate: false,
+    modules: [
+      {
+        lessons: [
+          { kind: "video", label: "intro" },
+          { kind: "exercise", label: "exercise" },
+          { kind: "exercise", label: "exercise" },
+        ],
+      },
+    ],
+  },
+  blank: { certificate: true, modules: [] },
+};
+
+export const newCourseSchema = z.object({
+  title: text(160).min(3),
+  category: text(80),
+  level: z.enum(["beginner", "intermediate", "advanced"]),
+  language: text(8).min(2),
+  requiredLevel: z.enum(catalogLevelOptions),
+  template: z.enum(courseTemplates),
+});
+
+export type TemplateLabels = {
+  module: (index: number) => string;
+  finalModule: string;
+  lesson: (label: TemplateLessonLabel, index: number) => string;
+};
+
+/**
+ * « Nouvelle formation » from a template: a draft with its first fields and the template's modules
+ * and lessons (quiz lessons get their empty quiz). No content is invented: titles are placeholders
+ * to rename, and nothing is published.
+ */
+export async function createCourseFromTemplate(
+  db: PrismaClient,
+  input: z.infer<typeof newCourseSchema>,
+  labels: TemplateLabels,
+) {
+  const structure = courseTemplateStructure[input.template];
+  let moduleNumber = 0;
+  return db.course.create({
+    data: {
+      slug: await uniqueSlug(db, input.title),
+      title: input.title,
+      summary: "",
+      description: "",
+      objectives: [],
+      audience: "",
+      category: input.category,
+      level: input.level,
+      language: input.language,
+      durationMinutes: 60,
+      requiredLevel: input.requiredLevel,
+      certificateEnabled: structure.certificate,
+      status: "draft",
+      modules: {
+        create: structure.modules.map((module, index) => {
+          if (!module.final) moduleNumber += 1;
+          const counts = new Map<TemplateLessonLabel, number>();
+          return {
+            order: index + 1,
+            title: module.final ? labels.finalModule : labels.module(moduleNumber),
+            lessons: {
+              create: module.lessons.map((lesson, position) => {
+                const count = (counts.get(lesson.label) ?? 0) + 1;
+                counts.set(lesson.label, count);
+                return {
+                  order: position + 1,
+                  kind: lesson.kind,
+                  title: labels.lesson(lesson.label, count),
+                  ...(lesson.kind === "quiz" ? { quiz: { create: {} } } : {}),
+                };
+              }),
+            },
+          };
+        }),
+      },
     },
   });
 }

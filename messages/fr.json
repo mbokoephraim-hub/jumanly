@@ -11848,6 +11848,80 @@
           "upload": "L'envoi a échoué. Vérifiez la connexion puis réessayez."
         },
         "captions": "Sous-titres et transcription : renseignez le champ « Transcription » de la leçon, il s'affiche sous la vidéo."
+      },
+      "v3": {
+        "title": "Studio formations",
+        "eyebrow": "Jumanly Admin · Learn",
+        "subtitle": "Créez, préparez et publiez les formations du catalogue Learn.",
+        "figures": {
+          "published": "Publiées",
+          "drafts": "Brouillons",
+          "enrolled": "Inscriptions (30 jours)",
+          "certificates": "Attestations (30 jours)"
+        },
+        "view": {
+          "label": "Affichage",
+          "galerie": "Galerie",
+          "liste": "Liste"
+        },
+        "gallery": {
+          "duration": "{minutes} min",
+          "program": "{modules, plural, =0 {Aucun module} one {# module} other {# modules}}"
+        },
+        "createdFromTemplate": "Brouillon créé à partir du modèle. Renommez les modules et les leçons, puis complétez la fiche.",
+        "create": {
+          "title": "Nouvelle formation",
+          "subtitle": "Donnez un titre et choisissez un modèle de départ : le brouillon s'ouvre avec son programme, prêt à être complété.",
+          "invalid": "Certains champs sont incomplets. Donnez un titre d'au moins 3 caractères et choisissez un modèle.",
+          "basics": "L'essentiel",
+          "themeHint": "Choisissez un thème existant ou saisissez-en un nouveau.",
+          "template": "Modèle de départ",
+          "templateHint": "Le modèle crée les modules et les leçons, vides, avec des titres provisoires à renommer. Rien n'est publié.",
+          "submit": "Créer la formation",
+          "draftNote": "La formation est créée en brouillon : elle n'apparaît pas dans le catalogue avant sa publication.",
+          "copyTitle": "Ou dupliquer une formation",
+          "copyText": "Reprenez le programme et les quiz d'une formation existante, sans ses inscrits ni ses attestations.",
+          "copySource": "Formation à copier",
+          "copyName": "Titre de la copie",
+          "copySubmit": "Dupliquer en brouillon",
+          "tipsTitle": "Bon à savoir",
+          "tips": {
+            "one": "Avant la publication, il faut une couverture, un résumé, une description et un formateur.",
+            "two": "Une attestation demande au moins un quiz avec des questions.",
+            "three": "Enregistrez quand vous voulez et revenez plus tard : rien n'est visible avant la publication."
+          }
+        },
+        "template": {
+          "moduleTitle": "Module {index}",
+          "finalModule": "Évaluation finale",
+          "lessonTitle": {
+            "intro": "Introduction",
+            "lesson": "Leçon en vidéo",
+            "reading": "À lire",
+            "moduleQuiz": "Quiz du module",
+            "finalQuiz": "Quiz final",
+            "exercise": "Exercice {index}"
+          },
+          "summary": "{modules, plural, =0 {Programme libre} one {# module} other {# modules}} · {lessons, plural, =0 {aucune leçon} one {# leçon} other {# leçons}}",
+          "withCertificate": "Avec attestation",
+          "withoutCertificate": "Sans attestation",
+          "short": {
+            "name": "Formation courte",
+            "text": "Un module pour transmettre un savoir précis : une vidéo, une lecture et un quiz de fin."
+          },
+          "certifying": {
+            "name": "Parcours certifiant",
+            "text": "Trois modules qui se terminent chacun par un quiz, puis une évaluation finale qui ouvre l'attestation."
+          },
+          "workshop": {
+            "name": "Atelier pratique",
+            "text": "Une démonstration en vidéo, puis deux exercices pour s'entraîner."
+          },
+          "blank": {
+            "name": "Partir de zéro",
+            "text": "Une formation vide : vous construisez le programme vous-même."
+          }
+        }
       }
     },
     "jobs": {

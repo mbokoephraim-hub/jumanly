@@ -1,23 +1,31 @@
+import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AdminPageHeader, adminCard, adminTitle } from "@/components/admin/kit";
+import { AdminEmpty, AdminPageHeader } from "@/components/admin/kit";
 import {
   CourseFilterBar,
   CourseListCard,
+  courseFilterQuery,
   filterCourses,
   readCourseFilters,
 } from "@/components/admin/formations-list";
+import { CourseGallery } from "@/components/admin/formations-studio";
 import { Icon } from "@/components/brand/icon";
-import { Alert, Button, TextField } from "@/components/ui";
+import { ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
-import { createCourseAction } from "@/server/actions/course-admin";
 import { requireCourseEditor } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { courseStats, listCoursesForAdmin } from "@/server/services/course-admin";
+import {
+  courseStats,
+  listCoursesForAdmin,
+  readinessPercents,
+  studioFigures,
+} from "@/server/services/course-admin";
 
 /**
- * Courses of the Learn catalog (partie 07 § 12, mockup 07-06): content editors and administrators.
- * The list with its filters, and the form « Nouvelle formation »; the editor opens on /[id].
+ * Studio formations (Admin v3, étape 3; partie 07 § 12): content editors and administrators. The
+ * gallery of courses (or the compact list, `?vue=liste`) with the filters, the Studio figures in
+ * the banner, and « Nouvelle formation », which opens /admin/formations/nouvelle.
  */
 export default async function AdminCourses({ searchParams }: PageProps<"/admin/formations">) {
   const params = await searchParams;
@@ -26,52 +34,90 @@ export default async function AdminCourses({ searchParams }: PageProps<"/admin/f
   const all = await listCoursesForAdmin(db);
   const filters = readCourseFilters(params);
   const courses = filterCourses(all, filters);
-  const stats = await courseStats(
-    db,
-    courses.map((course) => course.id),
-  );
+  const list = params.vue === "liste";
+  const [stats, readiness, figures] = await Promise.all([
+    courseStats(
+      db,
+      courses.map((course) => course.id),
+    ),
+    readinessPercents(
+      db,
+      courses.filter((course) => course.status !== "published").map((course) => course.id),
+    ),
+    studioFigures(db, new Date()),
+  ]);
+  const query = courseFilterQuery(filters);
+  const viewHref = (view: "galerie" | "liste") => {
+    const next = new URLSearchParams(query.slice(1));
+    if (view === "liste") next.set("vue", "liste");
+    const text = next.toString();
+    return `/admin/formations${text ? `?${text}` : ""}`;
+  };
 
   return (
     <>
-      <AdminPageHeader title={t("title")} />
+      <AdminPageHeader
+        title={t("v3.title")}
+        eyebrow={t("v3.eyebrow")}
+        subtitle={t("v3.subtitle")}
+        stats={[
+          { label: t("v3.figures.published"), value: figures.published },
+          { label: t("v3.figures.drafts"), value: figures.drafts },
+          { label: t("v3.figures.enrolled"), value: figures.enrolled },
+          { label: t("v3.figures.certificates"), value: figures.certificates },
+        ]}
+      />
+      <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+        <ButtonLink
+          href="/admin/formations/nouvelle"
+          icon={<Icon name="plus" />}
+          className="w-full sm:w-fit"
+        >
+          {t("new")}
+        </ButtonLink>
+        <nav aria-label={t("v3.view.label")} className="flex gap-1 rounded-pill bg-blanc p-1">
+          {(["galerie", "liste"] as const).map((view) => {
+            const current = (view === "liste") === list;
+            return (
+              <Link
+                key={view}
+                href={viewHref(view)}
+                aria-current={current ? "page" : undefined}
+                className={cx(
+                  "inline-flex h-9 items-center gap-1.5 rounded-pill px-3.5 text-[12.5px] font-semibold",
+                  current ? "bg-sapin text-blanc" : "text-sapin hover:bg-creme",
+                )}
+              >
+                <Icon name={view === "liste" ? "menu" : "grid"} className="size-4" />
+                {t(`v3.view.${view}`)}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
       <CourseFilterBar
         base="/admin/formations"
         courses={all}
         filters={filters}
         shown={courses.length}
+        keep={list ? { vue: "liste" } : undefined}
       />
-      <div className="grid items-start gap-4 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <CourseListCard courses={courses} filters={filters} stats={stats} detailed />
-        <div className="flex flex-col gap-4">
-          <section
-            aria-labelledby="admin-courses-new-title"
-            className={cx(adminCard, "flex flex-col gap-3.5")}
-          >
-            <h2 id="admin-courses-new-title" className={adminTitle}>
+      {courses.length === 0 ? (
+        <AdminEmpty
+          icon="learn"
+          character={{ name: "fatou", pose: "montre" }}
+          title={Object.values(filters).some(Boolean) ? t("filter.empty") : t("list.empty")}
+          action={
+            <ButtonLink href="/admin/formations/nouvelle" icon={<Icon name="plus" />}>
               {t("new")}
-            </h2>
-            {params.erreur === "titre" && <Alert tone="error" title={t("create.invalid")} />}
-            <form action={createCourseAction} className="flex flex-col gap-3">
-              <TextField
-                id="course-new-title"
-                name="title"
-                label={t("create.label")}
-                minLength={3}
-                maxLength={160}
-                required
-              />
-              <Button type="submit" variant="secondary" icon={<Icon name="plus" />}>
-                {t("create.submit")}
-              </Button>
-            </form>
-            <p className="text-[11.5px] leading-4 text-ardoise">{t("editorOnly")}</p>
-          </section>
-          <p className="flex items-start gap-2.5 rounded-[16px] bg-brume/70 px-4 py-3 text-[11.5px] leading-4 max-lg:hidden">
-            <Icon name="info" className="size-4 shrink-0" />
-            {t("pick")}
-          </p>
-        </div>
-      </div>
+            </ButtonLink>
+          }
+        />
+      ) : list ? (
+        <CourseListCard courses={courses} filters={filters} stats={stats} detailed />
+      ) : (
+        <CourseGallery courses={courses} stats={stats} readiness={readiness} query={query} />
+      )}
     </>
   );
 }

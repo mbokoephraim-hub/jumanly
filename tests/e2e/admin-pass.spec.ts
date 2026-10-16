@@ -20,6 +20,8 @@ const groups: Record<string, string[]> = {
     "/admin/forfaits/talent_pro",
     "/admin/abonnements",
     "/admin/formations",
+    "/admin/formations?vue=liste",
+    "/admin/formations/nouvelle",
   ],
   modération: [
     "/admin/offres",
@@ -91,7 +93,10 @@ test("passe finale de l'admin · fiches ouvertes", async ({ page, isMobile }) =>
   await logIn(page, demo.admin);
   // The first course, user and organization of each list, opened on their own page.
   await page.goto("/admin/formations");
-  const course = await page.locator('a[href^="/admin/formations/"]').first().getAttribute("href");
+  const course = await page
+    .locator('a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"])')
+    .first()
+    .getAttribute("href");
   for (const path of [course, `${course?.split("?")[0]}/apercu`].filter(Boolean) as string[])
     await check(page, path);
   await page.goto("/admin/utilisateurs?q=talent.free%40jumanly.test");

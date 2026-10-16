@@ -59,3 +59,33 @@ test("le menu d'un éditeur de contenus ne montre que ses rubriques", async ({ p
   await expect(nav.getByRole("link", { name: "Formations", exact: true })).toBeVisible();
   await expect(nav.getByRole("link", { name: "Contenus", exact: true })).toBeVisible();
 });
+
+// Admin v3, étape 3: the Studio gallery and a new course from the « Parcours certifiant » template.
+test("Studio formations : galerie, puis création à partir d'un modèle", async ({ page }) => {
+  test.setTimeout(90_000);
+  await logIn(page, demo.editor, undefined, "/admin/formations");
+  await page.goto("/admin/formations");
+  await expect(page.getByRole("heading", { level: 1, name: "Studio formations" })).toBeVisible();
+  const gallery = page.getByRole("list", { name: "Formations" });
+  await expect(gallery.getByRole("link", { name: /Réussir son CV \(démo\)/ })).toBeVisible();
+
+  await page.getByRole("link", { name: "Liste", exact: true }).click();
+  await expect(page).toHaveURL(/vue=liste/);
+  await expect(page.getByRole("link", { name: "Liste", exact: true })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+
+  await page.getByRole("link", { name: "Nouvelle formation" }).first().click();
+  const title = `Parcours fictif e2e ${Date.now().toString(36)}`;
+  await page.locator("#course-new-title").fill(title);
+  await page.locator("#course-new-theme").fill("Thème fictif");
+  await page.locator('label[for="course-new-template-certifying"]').click();
+  await expect(page.locator("#course-new-template-certifying")).toBeChecked();
+  await page.getByRole("button", { name: "Créer la formation" }).click();
+  await expect(
+    page.getByText("Brouillon créé à partir du modèle.", { exact: false }),
+  ).toBeVisible();
+  for (const name of ["Module 1", "Module 2", "Module 3", "Évaluation finale"])
+    await expect(page.getByText(name).filter({ visible: true }).first()).toBeVisible();
+});

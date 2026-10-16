@@ -9880,6 +9880,63 @@ Conventions :
 | `admin.courses.video.error.upload` | L'envoi a échoué. Vérifiez la connexion puis réessayez. |
 | `admin.courses.video.captions` | Sous-titres et transcription : renseignez le champ « Transcription » de la leçon, il s'affiche sous la vidéo. |
 
+### `/admin/formations` · Studio formations (Admin v3)
+
+*Galerie des formations et création à partir d'un modèle de départ (`docs/admin-v3/PLAN.md`, étape 3).*
+
+| Clé | Texte |
+|---|---|
+| `admin.courses.v3.title` | Studio formations |
+| `admin.courses.v3.eyebrow` | Jumanly Admin · Learn |
+| `admin.courses.v3.subtitle` | Créez, préparez et publiez les formations du catalogue Learn. |
+| `admin.courses.v3.figures.published` | Publiées |
+| `admin.courses.v3.figures.drafts` | Brouillons |
+| `admin.courses.v3.figures.enrolled` | Inscriptions (30 jours) |
+| `admin.courses.v3.figures.certificates` | Attestations (30 jours) |
+| `admin.courses.v3.view.label` | Affichage |
+| `admin.courses.v3.view.galerie` | Galerie |
+| `admin.courses.v3.view.liste` | Liste |
+| `admin.courses.v3.gallery.duration` | {minutes} min |
+| `admin.courses.v3.gallery.program` | {modules, plural, =0 {Aucun module} one {# module} other {# modules}} |
+| `admin.courses.v3.createdFromTemplate` | Brouillon créé à partir du modèle. Renommez les modules et les leçons, puis complétez la fiche. |
+| `admin.courses.v3.create.title` | Nouvelle formation |
+| `admin.courses.v3.create.subtitle` | Donnez un titre et choisissez un modèle de départ : le brouillon s'ouvre avec son programme, prêt à être complété. |
+| `admin.courses.v3.create.invalid` | Certains champs sont incomplets. Donnez un titre d'au moins 3 caractères et choisissez un modèle. |
+| `admin.courses.v3.create.basics` | L'essentiel |
+| `admin.courses.v3.create.themeHint` | Choisissez un thème existant ou saisissez-en un nouveau. |
+| `admin.courses.v3.create.template` | Modèle de départ |
+| `admin.courses.v3.create.templateHint` | Le modèle crée les modules et les leçons, vides, avec des titres provisoires à renommer. Rien n'est publié. |
+| `admin.courses.v3.create.submit` | Créer la formation |
+| `admin.courses.v3.create.draftNote` | La formation est créée en brouillon : elle n'apparaît pas dans le catalogue avant sa publication. |
+| `admin.courses.v3.create.copyTitle` | Ou dupliquer une formation |
+| `admin.courses.v3.create.copyText` | Reprenez le programme et les quiz d'une formation existante, sans ses inscrits ni ses attestations. |
+| `admin.courses.v3.create.copySource` | Formation à copier |
+| `admin.courses.v3.create.copyName` | Titre de la copie |
+| `admin.courses.v3.create.copySubmit` | Dupliquer en brouillon |
+| `admin.courses.v3.create.tipsTitle` | Bon à savoir |
+| `admin.courses.v3.create.tips.one` | Avant la publication, il faut une couverture, un résumé, une description et un formateur. |
+| `admin.courses.v3.create.tips.two` | Une attestation demande au moins un quiz avec des questions. |
+| `admin.courses.v3.create.tips.three` | Enregistrez quand vous voulez et revenez plus tard : rien n'est visible avant la publication. |
+| `admin.courses.v3.template.moduleTitle` | Module {index} |
+| `admin.courses.v3.template.finalModule` | Évaluation finale |
+| `admin.courses.v3.template.lessonTitle.intro` | Introduction |
+| `admin.courses.v3.template.lessonTitle.lesson` | Leçon en vidéo |
+| `admin.courses.v3.template.lessonTitle.reading` | À lire |
+| `admin.courses.v3.template.lessonTitle.moduleQuiz` | Quiz du module |
+| `admin.courses.v3.template.lessonTitle.finalQuiz` | Quiz final |
+| `admin.courses.v3.template.lessonTitle.exercise` | Exercice {index} |
+| `admin.courses.v3.template.summary` | {modules, plural, =0 {Programme libre} one {# module} other {# modules}} · {lessons, plural, =0 {aucune leçon} one {# leçon} other {# leçons}} |
+| `admin.courses.v3.template.withCertificate` | Avec attestation |
+| `admin.courses.v3.template.withoutCertificate` | Sans attestation |
+| `admin.courses.v3.template.short.name` | Formation courte |
+| `admin.courses.v3.template.short.text` | Un module pour transmettre un savoir précis : une vidéo, une lecture et un quiz de fin. |
+| `admin.courses.v3.template.certifying.name` | Parcours certifiant |
+| `admin.courses.v3.template.certifying.text` | Trois modules qui se terminent chacun par un quiz, puis une évaluation finale qui ouvre l'attestation. |
+| `admin.courses.v3.template.workshop.name` | Atelier pratique |
+| `admin.courses.v3.template.workshop.text` | Une démonstration en vidéo, puis deux exercices pour s'entraîner. |
+| `admin.courses.v3.template.blank.name` | Partir de zéro |
+| `admin.courses.v3.template.blank.text` | Une formation vide : vous construisez le programme vous-même. |
+
 ### `/admin/offres` · Modération des offres
 
 | Clé | Texte |

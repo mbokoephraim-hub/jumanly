@@ -5,6 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { refresh, updateTag } from "next/cache";
 import type { Prisma } from "@/generated/prisma/client";
 import { videoProvider, type VideoUpload } from "@/server/adapters/video";
+import { getTranslations } from "next-intl/server";
 import { requireCourseEditor } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { reportError } from "@/server/observability";
@@ -17,11 +18,13 @@ import {
   courseFormSchema,
   courseStatuses,
   createCourse,
+  createCourseFromTemplate,
   deleteLesson,
   deleteModule,
   deleteQuestion,
   duplicateCourse,
   lessonFormSchema,
+  newCourseSchema,
   questionFormSchema,
   quizSettingsSchema,
   renameModule,
@@ -81,6 +84,26 @@ export async function createCourseAction(formData: FormData) {
   if (!course) redirect("/admin/formations?erreur=titre");
   await audit(user.id, "course.create", course.id);
   redirect(`/admin/formations/${course.id}?ok=creee`);
+}
+
+/**
+ * « Nouvelle formation » of the Studio (Admin v3, étape 3): first fields and a starting template;
+ * the draft opens in the editor with the template's modules and lessons to rename.
+ */
+export async function createCourseFromTemplateAction(formData: FormData) {
+  const user = await editor();
+  const parsed = newCourseSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) redirect("/admin/formations/nouvelle?erreur=champs");
+  const t = await getTranslations("admin.courses.v3.template");
+  const course = await createCourseFromTemplate(db, parsed.data, {
+    module: (index) => t("moduleTitle", { index }),
+    finalModule: t("finalModule"),
+    lesson: (label, index) => t(`lessonTitle.${label}`, { index }),
+  });
+  await audit(user.id, "course.create", course.id, { template: parsed.data.template });
+  redirect(
+    `/admin/formations/${course.id}?ok=${parsed.data.template === "blank" ? "creee" : "modele"}`,
+  );
 }
 
 export async function updateCourseAction(formData: FormData) {
