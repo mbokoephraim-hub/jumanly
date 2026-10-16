@@ -349,7 +349,8 @@ export default async function PartnerDashboardPage({ searchParams }: PageProps<"
               </Link>
               {anyHidden && (
                 <MaskedNote className="mt-4">
-                  {t("partner.dashboard.smallGroup", { minGroup: data.minGroup })}
+                  {t("partner.dashboard.smallGroup", { minGroup: data.minGroup })}{" "}
+                  {t("partner.dashboard.smallGroupWhen", { minGroup: data.minGroup })}
                 </MaskedNote>
               )}
               <p className="mt-4 flex items-start gap-3 rounded-[16px] bg-creme px-4 py-3.5 text-[12.5px] leading-[18px]">

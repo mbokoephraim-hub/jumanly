@@ -6,6 +6,7 @@
  * See /mnt/project-files/ux-test/PROMPT.md.
  */
 import { hashPassword } from "better-auth/crypto";
+import { freezeApplicationMatch } from "../../src/server/matching/service";
 import { defaultStages } from "../../src/server/services/applications";
 import type { ContractType, RemoteMode, StageKind } from "../../src/generated/prisma/client";
 import type { SeedClient } from "./client";
@@ -974,9 +975,10 @@ export async function seedUxScenario(db: SeedClient) {
       });
       if (existing) {
         await db.application.update({ where: { id: existing.id }, data: { stageId: stage.id } });
+        if (existing.matchScore === null) await freezeApplicationMatch(db, existing.id);
         continue;
       }
-      await db.application.create({
+      const created = await db.application.create({
         data: {
           jobId: job.id,
           profileId: profile.id,
@@ -987,6 +989,8 @@ export async function seedUxScenario(db: SeedClient) {
           events: { create: { type: "submitted", createdAt: ago(index + 1) } },
         },
       });
+      // As in the real application flow, the score shown when applying is frozen.
+      await freezeApplicationMatch(db, created.id);
     }
 
     for (const [slug, share] of talent.courses) {

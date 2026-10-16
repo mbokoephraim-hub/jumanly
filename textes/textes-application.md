@@ -2064,6 +2064,8 @@ Conventions :
 | `talent.dashboard.kpi.delta.points` | +{value} pts |
 | `talent.dashboard.journey.title` | Votre parcours |
 | `talent.dashboard.journey.subtitle` | Se former, enrichir son profil, candidater, être recruté. |
+| `talent.dashboard.journey.next` | Votre prochaine étape : {step} |
+| `talent.dashboard.journey.go` | Y aller |
 | `talent.dashboard.journey.learn.text` | Se former |
 | `talent.dashboard.journey.learn.status` | {count, plural, =0 {Aucune formation active} one {# formation active} other {# formations actives}} |
 | `talent.dashboard.journey.profile.text` | Enrichir son profil |
@@ -2661,6 +2663,8 @@ Conventions :
 | `learn.player.transcript` | Transcription |
 | `learn.player.markComplete` | Marquer comme terminée |
 | `learn.player.completed` | Leçon terminée |
+| `learn.player.moduleDone.title` | Module {number} terminé, bravo {firstName} ! |
+| `learn.player.moduleDone.body` | « {title} » est derrière vous. Place au module {number} : {next}. |
 | `learn.player.next` | Leçon suivante |
 | `learn.player.previous` | Leçon précédente |
 | `learn.player.resumeAt` | Reprendre à {time} |
@@ -4956,6 +4960,8 @@ Conventions :
 | `hire.dashboard.toDo.scorecards` | {count, plural, one {# évaluation à compléter} other {# évaluations à compléter}} |
 | `hire.dashboard.toDo.contactAccepted` | {count, plural, one {# mise en relation acceptée} other {# mises en relation acceptées}} |
 | `hire.dashboard.toDo.empty` | Rien en attente. Beau travail. |
+| `hire.dashboard.toDo.emptyCandidates` | Revoir les candidats de vos offres |
+| `hire.dashboard.toDo.emptyPublish` | Publier une offre |
 | `hire.dashboard.jobs.title` | Offres actives |
 | `hire.dashboard.jobs.row` | {jobTitle} · {count, plural, one {# candidature} other {# candidatures}} |
 | `hire.dashboard.jobs.seeAll` | Toutes les offres |
@@ -8853,6 +8859,7 @@ Conventions :
 | `partner.dashboard.batches.period` | Du {start, date, medium} au {end, date, medium} |
 | `partner.dashboard.batches.seeAll` | Gérer les licences |
 | `partner.dashboard.smallGroup` | Données masquées : moins de {minGroup} bénéficiaires concernés. |
+| `partner.dashboard.smallGroupWhen` | Chaque chiffre s'affiche dès qu'il concerne au moins {minGroup} bénéficiaires : plus vous distribuez de codes, plus vite ils apparaissent (« Gérer les licences »). |
 | `partner.dashboard.empty` | Aucun lot de licences pour l'instant. Votre contact Jumanly le créera après signature du contrat. |
 | `partner.dashboard.contact` | Une question sur votre contrat ? Écrivez à assistant@jumanly.io. |
 | `partner.hidden` | Masqué |

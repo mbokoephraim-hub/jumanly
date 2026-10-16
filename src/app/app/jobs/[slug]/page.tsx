@@ -384,7 +384,7 @@ export default async function TalentJobPage({
                   {scoreTag}
                   <Link
                     href={`/app/jobs/${job.slug}#compatibilite`}
-                    className="flex items-center gap-1 text-[11px] font-semibold text-[#14745F] hover:underline"
+                    className="jm-tap flex items-center gap-1 text-[11px] font-semibold text-[#14745F] hover:underline"
                   >
                     <Icon name="eye" className="size-3.5" />
                     {t("common.why")}
@@ -531,7 +531,7 @@ export default async function TalentJobPage({
                   )}
                   <a
                     href="#compatibilite"
-                    className="flex items-center gap-1 text-xs font-semibold text-neon"
+                    className="jm-tap flex items-center gap-1 text-xs font-semibold text-neon"
                   >
                     <Icon name="eye" className="size-3.5" />
                     {t("common.why")}
@@ -807,7 +807,7 @@ export default async function TalentJobPage({
                 <AiBrand />
                 <a
                   href="#compatibilite"
-                  className="flex shrink-0 items-center gap-1 text-xs font-semibold whitespace-nowrap text-neon hover:underline"
+                  className="jm-tap flex shrink-0 items-center gap-1 text-xs font-semibold whitespace-nowrap text-neon hover:underline"
                 >
                   <Icon name="eye" className="size-3.5" />
                   {t("common.why")}
@@ -948,7 +948,7 @@ export default async function TalentJobPage({
               {query.signalement === "deja" && <Alert title={t("report.already")} />}
               <p className="text-xs text-ardoise">{t("job.safety.text")}</p>
               <details open={query.signaler === "1"}>
-                <summary className="cursor-pointer text-sm font-medium underline">
+                <summary className="jm-tap cursor-pointer text-sm font-medium underline">
                   {t("job.cta.report")}
                 </summary>
                 <ReportForm

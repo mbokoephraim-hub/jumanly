@@ -48,6 +48,23 @@ export function requiredLessons(course: Pick<LearnerCourse, "modules">) {
   return lessonsOf(course).filter((lesson) => !lesson.jobSpecific);
 }
 
+/**
+ * The module a lesson belongs to, when every required lesson of that module is now done: the
+ * player then celebrates the module (ux-test, étape 4). `null` while lessons remain.
+ */
+export function finishedModule(
+  course: Pick<LearnerCourse, "modules">,
+  completedLessons: readonly string[],
+  lessonId: string,
+) {
+  const owner = course.modules.find((item) =>
+    item.lessons.some((lesson) => lesson.id === lessonId),
+  );
+  if (!owner) return null;
+  const done = new Set(completedLessons);
+  return owner.lessons.every((lesson) => lesson.jobSpecific || done.has(lesson.id)) ? owner : null;
+}
+
 export const JOB_EXERCISES_KEY = "learn.exercises.job_specific";
 
 /** A published course with its program, the learner's enrollment and whether it is open. */

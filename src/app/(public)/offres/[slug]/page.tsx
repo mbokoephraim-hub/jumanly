@@ -336,7 +336,7 @@ export default async function JobPage({ params }: PageProps<"/offres/[slug]">) {
                 </ButtonLink>
                 <Link
                   href="/comment-fonctionne-le-matching"
-                  className="inline-flex items-center gap-1.5 text-xs font-semibold text-neon hover:underline"
+                  className="jm-tap inline-flex items-center gap-1.5 text-xs font-semibold text-neon hover:underline"
                 >
                   <Icon name="eye" className="size-3.5" />
                   {t("common.why")}
@@ -353,7 +353,7 @@ export default async function JobPage({ params }: PageProps<"/offres/[slug]">) {
               </p>
               <Link
                 href={loginHref(`/app/jobs/${job.slug}?signaler=1#signaler`)}
-                className="ml-[30px] inline-flex items-center gap-1.5 text-[13px] font-semibold hover:underline"
+                className="jm-tap ml-[30px] inline-flex items-center gap-1.5 text-[13px] font-semibold hover:underline"
               >
                 <Icon name="notification" className="size-3.5" />
                 {t("job.cta.report")}

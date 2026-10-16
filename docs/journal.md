@@ -2,6 +2,22 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Test utilisateur · étapes 4 et 5 : fin de module et finitions (16 octobre 2026)
+
+- Lecteur : terminer la dernière leçon d'un module (ou réussir son quiz) affiche une petite
+  célébration « Module N terminé, bravo » sur la première leçon du module suivant
+  (`finishedModule`, paramètre `module=`). Les exercices métier facultatifs ne comptent pas.
+- Tableau de bord talent : sur grand écran, « Votre parcours » passe en vertical à côté de la carte
+  IA et se termine par « Votre prochaine étape » : plus de grand blanc.
+- Partenaire : sous les données masquées, la règle des 10 bénéficiaires et le moyen d'y
+  arriver (distribuer des codes depuis « Gérer les licences »).
+- Hire : « À traiter » vide propose « Revoir les candidats » (ou « Publier une offre ») ; le
+  scénario UX fige le score des candidatures comme le vrai parcours, la compatibilité moyenne
+  s'affiche.
+- Petits liens (« Pourquoi ? », « Tout voir », « Signaler cette offre ») : zone tactile invisible
+  de 44 px sur écran tactile (`.jm-tap`), sans changer leur apparence.
+- Captures : `/mnt/project-files/ux-test/captures/etape-4-5/`.
+
 ## Test utilisateur · étapes 2 et 3 : académie Learn et Coach IA (16 octobre 2026)
 
 - Learn devient une académie en six espaces (onglets du haut) : Mon espace, Explorer, Mes parcours,

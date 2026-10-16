@@ -363,10 +363,19 @@ export default async function HireDashboardPage({ searchParams }: PageProps<"/ap
             {toDoCount > 0 && <span className={cx(tag, tagTone.sapin)}>{toDoCount}</span>}
           </div>
           {toDo.length === 0 ? (
-            <p className="mt-3 flex items-center gap-2 text-sm text-ardoise">
-              <Icon name="valider" className="size-4 text-feuille" />
-              {t("toDo.empty")}
-            </p>
+            <>
+              <p className="mt-3 flex items-center gap-2 text-sm text-ardoise">
+                <Icon name="valider" className="size-4 text-feuille" />
+                {t("toDo.empty")}
+              </p>
+              <Link
+                href={activeJobs > 0 ? "/app/hire/candidats" : "/app/hire/offres/nouvelle"}
+                className="jm-tap mt-3 flex items-center gap-1 self-start text-[13px] font-semibold text-feuille-fonce hover:underline"
+              >
+                {t(activeJobs > 0 ? "toDo.emptyCandidates" : "toDo.emptyPublish")}
+                <Icon name="chev-r" className="size-4" />
+              </Link>
+            </>
           ) : (
             <ul className="mt-1.5 flex flex-col">
               {toDo.map((item) => (
@@ -395,7 +404,7 @@ export default async function HireDashboardPage({ searchParams }: PageProps<"/ap
             </h2>
             <Link
               href="/app/hire/offres"
-              className="flex items-center gap-1 text-[12px] font-semibold whitespace-nowrap text-feuille-fonce hover:underline lg:text-[13px]"
+              className="jm-tap flex items-center gap-1 text-[12px] font-semibold whitespace-nowrap text-feuille-fonce hover:underline lg:text-[13px]"
             >
               {t("jobs.seeAll")}
               <Icon name="chev-r" className="size-3.5" />

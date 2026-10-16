@@ -166,7 +166,7 @@ function Group({
       {more && (
         <Link
           href={more}
-          className="mt-1 self-start text-[13px] font-semibold underline-offset-4 hover:underline"
+          className="jm-tap mt-1 self-start text-[13px] font-semibold underline-offset-4 hover:underline"
         >
           {seeAll}
         </Link>
