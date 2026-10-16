@@ -1,6 +1,7 @@
 import Link from "next/link";
 import type { ComponentProps, ReactNode } from "react";
 import { cx } from "@/lib/cx";
+import { PendingMark } from "./pending-mark";
 import { Spinner } from "./spinner";
 
 export type ButtonVariant = "primary" | "secondary" | "tertiary" | "white" | "inverse" | "danger";
@@ -44,7 +45,7 @@ export function buttonClasses({
 }: StyleProps = {}) {
   return cx(
     "inline-flex shrink-0 items-center justify-center rounded-pill font-semibold whitespace-nowrap",
-    "transition-colors disabled:pointer-events-none disabled:opacity-45",
+    "jm-press transition-[color,background-color,box-shadow,transform] disabled:pointer-events-none disabled:opacity-45",
     variants[variant],
     sizes[size],
     fullWidth && "w-full",
@@ -81,6 +82,7 @@ export function Button({
       {loading ? <Spinner size="sm" /> : icon}
       {children}
       {iconAfter}
+      {type === "submit" && !loading && <PendingMark />}
     </button>
   );
 }

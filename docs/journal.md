@@ -2,6 +2,25 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Test utilisateur · étape 1 : le clic qui répond (16 octobre 2026)
+
+- Test utilisateur complet (5 profils, ordinateur, téléphone, réseau lent) : prompt, rapport et
+  plan dans `/mnt/project-files/ux-test/`. Constat principal : entre un clic et la page suivante,
+  rien ne bougeait (jusqu'à 1,2 s sur réseau lent), d'où les clics répétés.
+- Scénario de démonstration `prisma/seed/ux.ts` (local et previews seulement) : 5 talents,
+  5 entreprises avec leur recruteur, 5 offres, 5 formations avec un vrai contenu de leçon, 5
+  partenaires ; comptes `*.ux@jumanly.test`, mot de passe de démo habituel.
+- Écrans de chargement `loading.tsx` pour `/app` et `/admin` : l'adresse change tout de suite et la
+  page prend sa forme pendant que les données arrivent.
+- `NavigationFeedback` (racine) : barre fine en haut de l'écran dès qu'un lien ou un formulaire de
+  recherche ouvre une page, lien marqué `data-nav-pending` jusqu'à l'arrivée du contenu.
+- `Button` de type envoi : roue et blocage du second clic pendant l'envoi (`PendingMark`,
+  `useFormStatus`).
+- Effet « enfoncé » sur tous les boutons, liens-boutons et onglets (`src/styles/feedback.css`),
+  remplacé par un changement de teinte quand les animations sont réduites.
+- Barre du haut : avec un sélecteur d'organisation, la grande recherche n'apparaît qu'à partir de
+  1536 px (icône en dessous) ; elle ne s'écrase plus en un « / » sous le sélecteur.
+
 ## Jumanly Admin v4 · étape 8, lot D : admin (16 octobre 2026)
 
 - `AdminTabs` (onglets de toutes les pages d'admin), les familles de forfaits et la vue
