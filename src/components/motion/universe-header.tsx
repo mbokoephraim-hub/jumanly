@@ -77,22 +77,3 @@ export function UniverseHeader({
     </header>
   );
 }
-
-/** Pattern of the module, very light, behind the top of the Crème page (§ 1). */
-export function UniverseBackdrop() {
-  const world = universeFor(usePathname());
-  if (!world.pattern) return null;
-  return (
-    <span
-      aria-hidden
-      className="pointer-events-none absolute inset-x-0 top-0 h-[560px] overflow-hidden rounded-t-[inherit]"
-      style={{
-        backgroundImage: `url(/marque/motifs/motif-${world.pattern}-clair.svg)`,
-        backgroundSize: "600px",
-        opacity: 0.08,
-        maskImage: "linear-gradient(#000 0%, transparent 100%)",
-        WebkitMaskImage: "linear-gradient(#000 0%, transparent 100%)",
-      }}
-    />
-  );
-}

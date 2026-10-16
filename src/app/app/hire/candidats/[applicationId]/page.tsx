@@ -179,7 +179,7 @@ export default async function CandidatePage({
         eyebrow={
           <Link
             href={`/app/hire/offres/${job.id}`}
-            className="flex w-fit items-center gap-1.5 text-[12px] font-medium text-blanc/80 hover:text-blanc"
+            className="flex w-fit items-center gap-1.5 text-[12px] font-medium text-ardoise hover:text-sapin"
           >
             <Icon name="chev-l" className="size-3.5" />
             {t("application.back")}
