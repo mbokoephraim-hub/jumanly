@@ -24,10 +24,11 @@ export const tagTone = {
   lime: "bg-lime-clair text-sapin",
 } as const;
 
-/** Chip of the filter row (34 px, Brume ring; Sapin when on). */
+/** Filter button of the filter row (38 px, visible ring and an arrow; Sapin when on). */
 export const chip =
-  "inline-flex h-[34px] shrink-0 cursor-pointer list-none items-center gap-1.5 rounded-pill px-3.5 text-[12.5px] font-medium whitespace-nowrap [&::-webkit-details-marker]:hidden";
-export const chipOff = "bg-blanc text-sapin ring-[1.5px] ring-brume ring-inset hover:bg-lime-clair";
+  "inline-flex h-[38px] shrink-0 cursor-pointer list-none items-center gap-1.5 rounded-pill px-4 text-[13px] font-semibold whitespace-nowrap shadow-[0_1px_2px_rgb(11_26_31/0.05)] transition-colors [&::-webkit-details-marker]:hidden";
+export const chipOff =
+  "bg-blanc text-sapin ring-[1.5px] ring-sapin/20 ring-inset hover:bg-lime-clair hover:ring-sapin/45";
 export const chipOn = "bg-sapin text-blanc";
 
 const NEW_DAYS = 3;
@@ -265,8 +266,14 @@ export function FilterChipToggle({
 }) {
   return (
     <details id={`jf-${menu}`} name="jobs-filter" className="shrink-0">
-      <summary className={cx(chip, active ? chipOn : chipOff)}>
+      <summary
+        className={cx(
+          chip,
+          active ? chipOn : icon ? "bg-brume text-sapin hover:bg-lime-clair" : chipOff,
+        )}
+      >
         {icon}
+        {active && !icon && <Icon name="check" className="size-3.5 text-lime" />}
         {label}
         {!icon && <Icon name="chev-d" className="size-3.5" />}
       </summary>

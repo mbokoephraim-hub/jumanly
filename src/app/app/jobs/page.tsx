@@ -2,10 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
+import { ApplicationStats } from "@/components/jobs/application-stats";
 import { AppPageHeader } from "@/components/app/page-header";
 import { AiBrand, AiPanel, ScoreRing, pillClass } from "@/components/career/kit";
 import {
-  CountLine,
   FilterChipToggle,
   FilterMenu,
   TalentJobCard,
@@ -188,8 +188,9 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
   const firstState = jobs.map((job) => matches.get(job.id)).find(Boolean);
 
   const sortLabel = t(`jobs.sort.${filters.tri ?? "recent"}`);
+  // Admin v4, étape 7: two clearly bounded boxes in one white search bar, the button inside it.
   const field =
-    "flex min-w-0 flex-1 items-center gap-3 px-4 py-2.5 lg:px-0 lg:py-0 [&_input]:w-full [&_input]:bg-transparent [&_input]:text-sm [&_input]:font-semibold [&_input]:outline-none [&_input]:placeholder:font-normal [&_input]:placeholder:text-ardoise";
+    "flex min-w-0 flex-1 cursor-text items-center gap-3 rounded-[16px] bg-creme px-4 py-2.5 text-sapin ring-[1.5px] ring-transparent ring-inset transition-shadow hover:ring-sapin/30 focus-within:bg-blanc focus-within:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus-within:ring-sapin [&_input]:w-full [&_input]:bg-transparent [&_input]:text-[15px] [&_input]:font-semibold [&_input]:outline-none [&_input]:placeholder:font-normal [&_input]:placeholder:text-ardoise";
 
   return (
     <div className="flex flex-col gap-5">
@@ -202,18 +203,17 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
         action="/app/jobs"
         method="get"
         role="search"
-        className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-0 lg:rounded-[22px] lg:bg-blanc lg:py-2.5 lg:pr-2.5 lg:pl-5"
+        className="flex flex-col gap-2 rounded-[22px] bg-blanc p-2 shadow-[0_6px_20px_rgb(11_26_31/0.06)] ring-[1.5px] ring-sapin/15 ring-inset lg:flex-row lg:items-stretch"
       >
         {view !== "tous" && <input type="hidden" name="vue" value={view} />}
         {filters.tri && <input type="hidden" name="tri" value={filters.tri} />}
-        <div className="flex flex-col rounded-[22px] bg-blanc px-1 py-1 lg:flex-1 lg:flex-row lg:items-center lg:rounded-none lg:p-0">
+        <div className="flex flex-col gap-2 lg:flex-1 lg:flex-row">
           <div className={field}>
             <Icon name="recherche" className="size-[18px] shrink-0" />
             <label className="flex min-w-0 flex-1 flex-col">
-              <span className="hidden text-[10.5px] leading-[14px] text-ardoise lg:block">
+              <span className="text-[11px] leading-[14px] font-semibold text-ardoise">
                 {t("talent.jobs.search.keyword.label")}
               </span>
-              <span className="sr-only lg:hidden">{t("talent.jobs.search.keyword.label")}</span>
               <input
                 id="job-keyword"
                 name="q"
@@ -223,14 +223,12 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
               />
             </label>
           </div>
-          <span aria-hidden className="mx-4 h-px bg-brume lg:mx-5 lg:h-9 lg:w-px" />
-          <div className={cx(field, "lg:max-w-[460px]")}>
+          <div className={cx(field, "lg:max-w-[420px]")}>
             <Icon name="localisation" className="size-[18px] shrink-0" />
             <label className="flex min-w-0 flex-1 flex-col">
-              <span className="hidden text-[10.5px] leading-[14px] text-ardoise lg:block">
+              <span className="text-[11px] leading-[14px] font-semibold text-ardoise">
                 {t("talent.jobs.search.location.label")}
               </span>
-              <span className="sr-only lg:hidden">{t("talent.jobs.search.location.label")}</span>
               <input
                 id="job-city"
                 name="ville"
@@ -242,17 +240,18 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
         </div>
         <button
           type="submit"
-          className="h-12 shrink-0 rounded-pill bg-sapin px-6 text-sm font-semibold text-blanc hover:bg-sapin/90 lg:ml-3"
+          className="flex h-12 shrink-0 items-center justify-center gap-2 rounded-[16px] bg-sapin px-7 text-[15px] font-semibold text-blanc hover:bg-sapin/90 lg:h-auto"
         >
+          <Icon name="recherche" className="size-[18px]" />
           {t("talent.jobs.search.submit")}
         </button>
       </form>
 
       <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-end justify-between gap-x-4 gap-y-2">
+        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <nav
             aria-label={t("talent.jobs.search.tabs")}
-            className="flex gap-5 border-b border-brume"
+            className="flex max-w-full gap-1 overflow-x-auto rounded-pill bg-brume/70 p-1"
           >
             {views.map((key) => (
               <Link
@@ -260,10 +259,10 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
                 href={hrefWith({ vue: key === "tous" ? undefined : key })}
                 aria-current={view === key ? "page" : undefined}
                 className={cx(
-                  "-mb-px border-b-2 pb-2.5 text-[13px] whitespace-nowrap",
+                  "flex h-9 items-center rounded-pill px-4 text-[13px] whitespace-nowrap transition-colors",
                   view === key
-                    ? "border-sapin font-semibold text-sapin"
-                    : "border-transparent text-ardoise hover:text-sapin",
+                    ? "bg-blanc font-semibold text-sapin shadow-[0_1px_3px_rgb(11_26_31/0.12)]"
+                    : "font-medium text-sapin/80 hover:bg-blanc/60 hover:text-sapin",
                 )}
               >
                 {key === "tous"
@@ -277,14 +276,14 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
             ))}
           </nav>
           {!ranked && (
-            <details className="relative pb-2">
-              <summary className="flex cursor-pointer list-none items-center gap-1 text-xs text-ardoise [&::-webkit-details-marker]:hidden">
+            <details className="relative">
+              <summary className="flex h-10 cursor-pointer list-none items-center gap-1.5 rounded-pill bg-blanc px-4 text-[13px] text-ardoise ring-[1.5px] ring-sapin/20 ring-inset hover:ring-sapin/45 [&::-webkit-details-marker]:hidden">
                 <Icon name="sort" className="size-3.5 lg:hidden" />
                 <span className="hidden lg:inline">{t("talent.jobs.sort.text")}</span>
                 <strong className="font-semibold text-sapin">{sortLabel}</strong>
                 <Icon name="chev-d" className="size-3.5" />
               </summary>
-              <ul className="absolute top-7 right-0 z-30 flex min-w-48 flex-col gap-0.5 rounded-[18px] bg-blanc p-1.5 text-sm shadow-menu ring-1 ring-sapin/8">
+              <ul className="absolute top-12 right-0 z-30 flex min-w-48 flex-col gap-0.5 rounded-[18px] bg-blanc p-1.5 text-sm shadow-menu ring-1 ring-sapin/8">
                 {jobSorts.map((sort) => (
                   <li key={sort}>
                     <Link
@@ -689,58 +688,26 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
             </AiPanel>
           )}
 
-          <section
-            aria-labelledby="jobs-applications"
-            className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5"
-          >
-            <div className="flex items-center justify-between gap-2">
-              <h2 id="jobs-applications" className="text-[15px] font-semibold">
-                {t("talent.jobs.sidebar.applications.text")}
-              </h2>
-              <Link
-                href="/app/jobs/candidatures"
-                className="text-xs font-semibold text-feuille-fonce hover:underline"
-              >
-                {t("talent.jobs.sidebar.applications.link")}
-              </Link>
-            </div>
-            <div className="flex flex-col gap-2.5">
-              <CountLine
-                dot="bg-brume"
-                label={t("talent.jobs.sidebar.sent")}
-                value={statuses.length}
-              />
-              <CountLine
-                dot="bg-lime"
-                label={t("talent.jobs.sidebar.viewed")}
-                value={
-                  statuses.filter(
-                    (status) =>
-                      status !== "sent" && status !== "withdrawn" && status !== "jobClosed",
-                  ).length
-                }
-              />
-              <CountLine
-                dot="bg-feuille"
-                label={t("talent.jobs.sidebar.interviews")}
-                value={statuses.filter((status) => status === "interview").length}
-              />
-              <CountLine
-                dot="bg-sapin"
-                label={t("talent.jobs.sidebar.offers")}
-                value={statuses.filter((status) => status === "offer" || status === "hired").length}
-              />
-            </div>
-            <p className="flex items-center gap-2 border-t border-brume pt-3 text-xs text-ardoise">
-              <Icon name="check" className="size-3.5 text-feuille" />
-              {t("talent.jobs.sidebar.free")}
-            </p>
+          <div className="flex flex-col gap-3">
+            <ApplicationStats
+              headingId="jobs-applications"
+              link
+              counts={{
+                sent: statuses.length,
+                viewed: statuses.filter(
+                  (status) => status !== "sent" && status !== "withdrawn" && status !== "jobClosed",
+                ).length,
+                interviews: statuses.filter((status) => status === "interview").length,
+                offers: statuses.filter((status) => status === "offer" || status === "hired")
+                  .length,
+              }}
+            />
             {statuses.some((status) => !isClosedStatus(status)) && (
               <Link href="/app/jobs/candidatures" className={pillClass("outline", "sm")}>
                 {t("talent.jobs.applications.title")}
               </Link>
             )}
-          </section>
+          </div>
 
           <Link
             href="/app/jobs/enregistrees"

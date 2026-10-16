@@ -3,13 +3,13 @@ import { useTranslations } from "next-intl";
 import { cx } from "@/lib/cx";
 
 /**
- * Mockup 00-02: white field, radius 14, 1.5 px Brume border drawn inside; focus Sapin + Lime
- * halo; error Corail with its message; valid state Feuille.
+ * Mockup 00-02: white field, radius 14, 1.5 px border drawn inside (Sapin at 20 % since Admin v4,
+ * étape 7, so it is easy to spot); focus Sapin + Lime halo; error Corail with its message.
  */
 export const inputClasses = cx(
-  "w-full rounded-sm bg-blanc px-4 text-sm text-sapin ring-[1.5px] ring-brume ring-inset",
-  "placeholder:text-[#8a9794] transition-shadow",
-  "hover:ring-sapin/35",
+  "w-full rounded-sm bg-blanc px-4 text-sm text-sapin ring-[1.5px] ring-sapin/20 ring-inset",
+  "placeholder:text-ardoise transition-shadow",
+  "hover:ring-sapin/50",
   "focus:shadow-[0_0_0_6px_rgb(166_242_107/0.55)] focus:ring-2 focus:ring-sapin focus:outline-none",
   "disabled:cursor-not-allowed disabled:bg-creme disabled:text-ardoise",
   "aria-invalid:ring-corail",

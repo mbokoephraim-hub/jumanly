@@ -4117,6 +4117,10 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.sidebar.interviews` | Entretiens |
 | `talent.jobs.sidebar.offers` | Offres reçues |
 | `talent.jobs.sidebar.free` | Les candidatures sont toujours gratuites. |
+| `talent.jobs.sidebar.rate` | {value} sur {total} |
+| `talent.jobs.sidebar.chart` | Parcours de vos candidatures, de l'envoi à l'offre |
+| `talent.jobs.sidebar.empty` | Pas encore de candidature. Votre suivi s'affichera ici dès la première. |
+| `talent.jobs.sidebar.emptyCta` | Trouver une offre |
 | `talent.jobs.sidebar.companies.text` | Entreprises qui recrutent |
 | `talent.jobs.sidebar.companies.meta` | {count, plural, one {# offre} other {# offres}} · {sector} |
 | `talent.jobs.sidebar.follow` | Suivre |

@@ -23,8 +23,8 @@ export function SearchField({
         id={id}
         type="search"
         className={cx(
-          "h-12 w-full rounded-pill bg-blanc pr-5 pl-11 text-[13px] text-sapin ring-[1.5px] ring-brume ring-inset",
-          "transition-shadow placeholder:text-ardoise hover:ring-sapin/35",
+          "h-12 w-full rounded-pill bg-blanc pr-5 pl-11 text-[13px] text-sapin ring-[1.5px] ring-sapin/20 ring-inset",
+          "transition-shadow placeholder:text-ardoise hover:ring-sapin/50",
           "focus:shadow-[0_0_0_6px_rgb(166_242_107/0.55)] focus:ring-2 focus:ring-sapin focus:outline-none",
         )}
         {...rest}

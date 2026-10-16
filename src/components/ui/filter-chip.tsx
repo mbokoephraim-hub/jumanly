@@ -5,8 +5,8 @@ import { cx } from "@/lib/cx";
 /** Pill look shared by filters (`.chip` of the mockups): white with a Brume outline, Sapin when on. */
 export const chipClasses = cx(
   "touch-target inline-flex h-[34px] shrink-0 items-center gap-1.5 rounded-pill bg-blanc px-3.5",
-  "text-[12.5px] font-medium whitespace-nowrap text-sapin ring-[1.5px] ring-brume ring-inset transition-colors",
-  "hover:ring-sapin/40 [&_svg]:size-3.5",
+  "text-[12.5px] font-medium whitespace-nowrap text-sapin ring-[1.5px] ring-sapin/20 ring-inset transition-colors",
+  "hover:ring-sapin/50 [&_svg]:size-3.5",
 );
 
 export const chipOnClasses = "bg-sapin text-blanc ring-0 hover:ring-0";

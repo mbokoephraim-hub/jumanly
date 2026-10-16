@@ -2,9 +2,10 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
+import { ApplicationStats } from "@/components/jobs/application-stats";
 import { AppPageHeader } from "@/components/app/page-header";
 import { AiBrand, AiPanel, Why, pillClass } from "@/components/career/kit";
-import { CountLine, tag, tagTone } from "@/components/jobs/talent-kit";
+import { tag, tagTone } from "@/components/jobs/talent-kit";
 import { criterionText } from "@/components/matching/talent-why";
 import { Alert, CompanyLogo, EmptyState } from "@/components/ui";
 import { dynamic } from "@/i18n/dynamic";
@@ -518,45 +519,17 @@ export default async function ApplicationsPage({
         </div>
 
         <aside className="flex flex-col gap-4 max-lg:hidden">
-          <section
-            aria-labelledby="applications-counts"
-            className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5"
-          >
-            <h2 id="applications-counts" className="text-[15px] font-semibold">
-              {tr("talent.jobs.sidebar.applications.text")}
-            </h2>
-            <div className="flex flex-col gap-2.5">
-              <CountLine
-                dot="bg-brume"
-                label={tr("talent.jobs.sidebar.sent")}
-                value={statuses.length}
-              />
-              <CountLine
-                dot="bg-lime"
-                label={tr("talent.jobs.sidebar.viewed")}
-                value={
-                  statuses.filter(
-                    (status) =>
-                      status !== "sent" && status !== "withdrawn" && status !== "jobClosed",
-                  ).length
-                }
-              />
-              <CountLine
-                dot="bg-sapin"
-                label={tr("talent.jobs.sidebar.interviews")}
-                value={reached(["interview"])}
-              />
-              <CountLine
-                dot="bg-neon"
-                label={tr("talent.jobs.sidebar.offers")}
-                value={reached(["offer", "hired"])}
-              />
-            </div>
-            <p className="flex items-center gap-2 border-t border-brume pt-3 text-xs text-ardoise">
-              <Icon name="check" className="size-3.5 text-feuille" />
-              {tr("talent.jobs.sidebar.free")}
-            </p>
-          </section>
+          <ApplicationStats
+            headingId="applications-counts"
+            counts={{
+              sent: statuses.length,
+              viewed: statuses.filter(
+                (status) => status !== "sent" && status !== "withdrawn" && status !== "jobClosed",
+              ).length,
+              interviews: reached(["interview"]),
+              offers: reached(["offer", "hired"]),
+            }}
+          />
 
           {suggested && strong[0] && (
             <AiPanel labelledBy="applications-ai">
