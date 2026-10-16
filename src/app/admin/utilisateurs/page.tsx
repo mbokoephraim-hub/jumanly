@@ -246,7 +246,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
             <section
               id="utilisateurs-roles"
               aria-labelledby="utilisateurs-roles-title"
-              className="flex scroll-mt-6 flex-col gap-3 rounded-[24px] bg-blanc px-5 py-5 lg:px-[22px]"
+              className="jm-admin-card flex scroll-mt-6 flex-col gap-3 rounded-[24px] bg-blanc px-5 py-5 lg:px-[22px]"
             >
               <h2
                 id="utilisateurs-roles-title"
@@ -470,7 +470,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
             role="region"
             aria-label={t("users.list")}
             tabIndex={0}
-            className="hidden overflow-x-auto rounded-[24px] bg-blanc py-1.5 lg:block"
+            className="jm-admin-card hidden overflow-x-auto rounded-[24px] bg-blanc py-1.5 lg:block"
           >
             <table className="w-full min-w-[1000px] border-collapse text-left text-[13px]">
               <caption className="sr-only">{t("users.list")}</caption>
@@ -618,7 +618,7 @@ export default async function AdminUsers({ searchParams }: PageProps<"/admin/uti
           {/* Phones: compact list of cards. */}
           <ul
             aria-label={t("users.list")}
-            className="rounded-[24px] bg-blanc px-3.5 py-1.5 lg:hidden"
+            className="jm-admin-card rounded-[24px] bg-blanc px-3.5 py-1.5 lg:hidden"
           >
             {users.map((user, index) => {
               const plan = userPlans[index];

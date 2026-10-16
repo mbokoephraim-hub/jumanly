@@ -280,11 +280,11 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
         <div className="flex min-w-0 flex-col gap-4">
           {/* Table of partners. */}
           {shown.length === 0 ? (
-            <p className="rounded-[24px] bg-blanc p-5 text-[13px] leading-5 text-ardoise">
+            <p className="jm-admin-card rounded-[24px] bg-blanc p-5 text-[13px] leading-5 text-ardoise">
               {t("empty")}
             </p>
           ) : (
-            <div className="rounded-[24px] bg-blanc px-4 py-1.5 lg:px-0">
+            <div className="jm-admin-card rounded-[24px] bg-blanc px-4 py-1.5 lg:px-0">
               <div role="table" aria-label={t("list")} className="flex flex-col">
                 <div
                   role="row"
@@ -352,7 +352,7 @@ export default async function AdminPartners({ searchParams }: PageProps<"/admin/
           {selected && (
             <section
               aria-labelledby={`partenaires-${selected.id}`}
-              className="flex flex-col gap-3.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
+              className="jm-admin-card flex flex-col gap-3.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
             >
               <div className="flex items-center gap-3">
                 <OrgTile name={selected.name} size={46} />
@@ -898,7 +898,7 @@ async function BatchSheet({
     <section
       id="lot"
       aria-labelledby="partenaires-lot-title"
-      className="flex scroll-mt-6 flex-col gap-3.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
+      className="jm-admin-card flex scroll-mt-6 flex-col gap-3.5 rounded-[24px] bg-blanc p-5 lg:p-[22px]"
     >
       <div className="flex flex-wrap items-start justify-between gap-3">
         <div className="flex min-w-0 flex-col gap-0.5">

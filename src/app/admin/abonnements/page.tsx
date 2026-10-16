@@ -276,7 +276,7 @@ export default async function AdminSubscriptions({
         {kpis.map((kpi) => (
           <li
             key={kpi.label}
-            className="flex items-center gap-3 rounded-[20px] bg-blanc p-3.5 lg:rounded-[24px] lg:px-[18px] lg:py-4"
+            className="jm-admin-card flex items-center gap-3 rounded-[20px] bg-blanc p-3.5 lg:rounded-[24px] lg:px-[18px] lg:py-4"
           >
             <span
               aria-hidden
@@ -307,7 +307,7 @@ export default async function AdminSubscriptions({
       )}
 
       {subscriptions.length === 0 ? (
-        <p className="rounded-[24px] bg-blanc px-5 py-8 text-center text-[13.5px] text-ardoise">
+        <p className="jm-admin-card rounded-[24px] bg-blanc px-5 py-8 text-center text-[13.5px] text-ardoise">
           {t("subscriptions.empty")}
         </p>
       ) : (
@@ -316,7 +316,7 @@ export default async function AdminSubscriptions({
             role="region"
             aria-label={t("subscriptions.list")}
             tabIndex={0}
-            className="hidden overflow-x-auto rounded-[24px] bg-blanc py-1.5 lg:block"
+            className="jm-admin-card hidden overflow-x-auto rounded-[24px] bg-blanc py-1.5 lg:block"
           >
             <table className="w-full min-w-[760px] border-collapse text-left text-[13.5px]">
               <caption className="sr-only">{t("subscriptions.list")}</caption>
@@ -399,7 +399,7 @@ export default async function AdminSubscriptions({
           </div>
           <ul
             aria-label={t("subscriptions.list")}
-            className="rounded-[24px] bg-blanc px-3.5 py-1.5 lg:hidden"
+            className="jm-admin-card rounded-[24px] bg-blanc px-3.5 py-1.5 lg:hidden"
           >
             {subscriptions.map((row) => (
               <li key={row.id} className="border-brume not-first:border-t">
@@ -436,7 +436,7 @@ export default async function AdminSubscriptions({
           {t("subscriptions.payments.title")}
         </h2>
         {payments.length === 0 ? (
-          <p className="rounded-[24px] bg-blanc px-5 py-8 text-center text-[13.5px] text-ardoise">
+          <p className="jm-admin-card rounded-[24px] bg-blanc px-5 py-8 text-center text-[13.5px] text-ardoise">
             {t("subscriptions.payments.empty")}
           </p>
         ) : (
@@ -445,7 +445,7 @@ export default async function AdminSubscriptions({
               role="region"
               aria-label={t("subscriptions.payments.list")}
               tabIndex={0}
-              className="hidden overflow-x-auto rounded-[24px] bg-blanc py-1.5 lg:block"
+              className="jm-admin-card hidden overflow-x-auto rounded-[24px] bg-blanc py-1.5 lg:block"
             >
               <table className="w-full min-w-[820px] border-collapse text-left text-[13.5px]">
                 <caption className="sr-only">{t("subscriptions.payments.list")}</caption>
@@ -537,7 +537,7 @@ export default async function AdminSubscriptions({
             </div>
             <ul
               aria-label={t("subscriptions.payments.list")}
-              className="rounded-[24px] bg-blanc px-3.5 py-1.5 lg:hidden"
+              className="jm-admin-card rounded-[24px] bg-blanc px-3.5 py-1.5 lg:hidden"
             >
               {payments.map((row) => {
                 const content = (
@@ -589,7 +589,7 @@ export default async function AdminSubscriptions({
                 aria-label={t("subscriptions.actions.title", {
                   holder: holderName(payment.holder),
                 })}
-                className="flex scroll-mt-4 flex-col gap-1 rounded-[24px] bg-blanc px-5 py-4"
+                className="jm-admin-card flex scroll-mt-4 flex-col gap-1 rounded-[24px] bg-blanc px-5 py-4"
               >
                 <div className="flex items-center justify-between gap-2">
                   <h2 className={adminLabel}>

@@ -8939,6 +8939,8 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `admin.dashboard.title` | Indicateurs |
+| `admin.dashboard.banner.subtitle` | Les {days} derniers jours en un coup d'œil : ce qui avance, et ce qui attend une décision. |
+| `admin.dashboard.banner.attention` | Éléments à traiter |
 | `admin.dashboard.period` | Période |
 | `admin.dashboard.compare` | Comparer à la période précédente |
 | `admin.dashboard.kpi.usersFree` | Utilisateurs gratuits |
