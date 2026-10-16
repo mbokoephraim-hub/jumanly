@@ -9,7 +9,7 @@ les liens avec les autres briefs. Maquettes validées par Claude (validation dé
 `maquette/mobile-talent.html` (ouvrir dans un navigateur), `maquette/mobile-talent-planche.jpg`
 (toutes les maquettes) et `maquette/ecrans/NN.jpg` (chaque écran, 390 px ×2). Version 3 du 16 octobre
 2026 : v2 (10 et 17 refaits, 20 à 33, planche « États d’interaction »), puis v3 (planche « Boutons » avec
-boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly AI 35 à 43 ; v4 : toucher l’orbe 44 et simulations d’entretien 45 à 49, voir
+boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly AI 35 à 43 ; v4 : toucher l’orbe 44 et simulations d’entretien 45 à 49 ; v5 : planche « Cartes », objectif en carte, moins de texte, messages et décisions 50 à 56, voir
 `docs/jumanly-ai/`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
 
 | N° | Écran | N° | Écran |
@@ -38,7 +38,10 @@ boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly 
 | 43 | Jumanly AI · ordinateur, Hire | 44 | Jumanly AI · toucher l’orbe |
 | 45 | Simulation d’entretien · choix | 46 | Simulation écrite · retour |
 | 47 | Test de connaissances | 48 | Simulation orale en direct |
-| 49 | Simulation · bilan | | |
+| 49 | Simulation · bilan | 50 | Messages · options du + |
+| 51 | Messages · pièces en cartes | 52 | Refus reçu |
+| 53 | Candidature retenue | 54 | Recruteur · modèles de message |
+| 55 | Recruteur · refus relu avant envoi | 56 | Mes CV · télécharger |
 
 Les contenus sont des exemples (persona fictive Grâce Mbuyi, entreprises fictives). **En production, tout
 vient des données réelles** (règle d’or 11) ; une section sans donnée affiche son état vide ou se masque.
@@ -119,3 +122,36 @@ vient des données réelles** (règle d’or 11) ; une section sans donnée affi
 
 Chaque phase : tests à 360, 390 et 430 px et sur ordinateur, `pnpm lint`, `typecheck`, `test`, `build`,
 e2e du parcours touché, `docs/journal.md` à jour.
+
+## 5. Version 5 (16 octobre 2026) : cartes, messages, décisions
+
+Demande du propriétaire : des cases visuelles, beaucoup moins de texte, un meilleur bloc objectif, des
+options de message, des CV téléchargeables, des refus sobres à l’en-tête de l’entreprise.
+
+1. **Moins de texte.** Une carte = un titre + une ligne au plus. Pas de sous-titre sous les titres de
+   section. Les notes de confiance tiennent en une ligne (« Rien ne part sans vous. »). Les textes longs
+   restent dans les aides et les pages légales.
+2. **Planche « Cartes »** (composants dans `src/components/ui`) : `GoalCard` (carte objectif en dégradé
+   principal avec motif d’orbites, 3 chiffres réels, bouton Lime pour changer), `ProfileCard` (bandeau,
+   avatar, titre, 3 compétences, visibilité), `VisualTile` (zone d’illustration : scène en formes simples
+   ou personnage de `ressources/`, puis titre et une ligne), `AiBento` (signature IA), `FileCard`,
+   `SlotCard`, `DecisionCard`. Aucune image de stock : scènes en CSS/SVG et personnages existants.
+3. **Objectif (03-05)** : `GoalCard` remplace la ligne « Objectif : … ». Chiffres réels selon l’objectif
+   (emploi : candidatures actives, entretiens à venir, complétude ; compétences : formations en cours,
+   attestations, complétude ; évolution : compétences à renforcer, formations, complétude). Un chiffre
+   absent est masqué, jamais inventé.
+4. **Options du + (50)** : créneau, mon CV, ma lettre, relance par l’IA (brouillon à relire, mode
+   `follow` de Jumanly AI), document, lien. Un CV ou une lettre s’envoie en carte fichier téléchargeable
+   (51) ; un créneau s’envoie en carte avec Accepter / Autre moment (réutilise `Interview.slots`).
+   `MessageKind` gagne `file`, `slot` et `decision` (migration nommée) ; `invitation` et
+   `document_request` restent.
+5. **Décisions (52-53)** : quand l’équipe passe une candidature à `rejected` ou `hired`, le message est
+   une `DecisionCard` : logo et nom de l’entreprise, poste, bandeau (« Candidature non retenue » en
+   Sapin sobre, « Candidature retenue » en Lime), texte court, signataire et date ; pas une bulle de
+   discussion. Sous un refus : « Pour rebondir » (offres proches réelles, simulation d’entretien).
+6. **Recruteur (54-55)** : modèles de message Hire (convocation, demande de document, relance,
+   acceptation, refus, écrire avec l’IA), modifiables par l’organisation (filtre `organizationId`).
+   Le refus s’affiche en aperçu exact et part **seulement après le clic** du recruteur (règle d’or 3,
+   aucun rejet automatique).
+7. **Mes CV (56)** : vignettes A4 réelles, bouton PDF (état en cours, puis toast), PDF sans mention
+   Jumanly, menu « … » (dupliquer, renommer, supprimer). Réutilise le rendu de `docs/modeles-cv`.
