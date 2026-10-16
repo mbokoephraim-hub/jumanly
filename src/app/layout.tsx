@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from "next";
 import localFont from "next/font/local";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
+import { NavigationFeedback } from "@/components/motion/navigation-feedback";
 import { ServiceWorker } from "@/components/site/service-worker";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
@@ -31,6 +32,7 @@ export const viewport: Viewport = {
 export default async function RootLayout({ children }: LayoutProps<"/">) {
   // Only the texts of the connection notices go to every page (the 500 page has its own file).
   const { system } = await getMessages();
+  const t = await getTranslations("loading");
   const texts = {
     system: {
       error: { retry: system.error.retry },
@@ -45,6 +47,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
     <html lang="fr" className={`${sora.variable} antialiased`}>
       <body className="min-h-dvh">
         <NextIntlClientProvider messages={texts}>
+          <NavigationFeedback label={t("aria")} />
           {children}
           <ServiceWorker enabled={process.env.NODE_ENV === "production"} />
         </NextIntlClientProvider>

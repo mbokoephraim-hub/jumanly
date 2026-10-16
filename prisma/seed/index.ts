@@ -13,6 +13,7 @@ import { seedIntelligence } from "./intelligence";
 import { seedPartner } from "./partners";
 import { seedPlans } from "./plans";
 import { seedSkills } from "./skills";
+import { seedUxScenario } from "./ux";
 
 async function main() {
   const db = createSeedClient();
@@ -26,6 +27,7 @@ async function main() {
       await seedGroup(db);
       await seedPartner(db);
       await seedCareer(db);
+      await seedUxScenario(db);
     } else console.log("Démo ignorée : APP_ENV n'est ni local ni preview.");
   } finally {
     await db.$disconnect();

@@ -1,0 +1,85 @@
+/*
+ * Click feedback (ux-test, étape 1, /mnt/project-files/ux-test/rapport.md § 1-2).
+ * Every pressable thing answers at once: it sinks slightly while pressed, the link that opens a
+ * page is marked until the page is there, a sending button shows it works and refuses a second click,
+ * and a thin bar runs along the top of the screen during a page change.
+ */
+@layer base {
+  a,
+  button,
+  summary,
+  [role="button"],
+  [role="tab"] {
+    -webkit-tap-highlight-color: transparent;
+    touch-action: manipulation;
+  }
+  /* Inline text links are not transformed (transform does not apply to inline boxes). */
+  :where(button:not(:disabled), a[href], summary, [role="button"], [role="tab"]):active {
+    transform: scale(0.97);
+    transition-duration: 60ms;
+  }
+}
+
+.jm-press:active {
+  transform: scale(0.96);
+}
+
+/* The link or button that opened a page that is still loading. */
+[data-nav-pending] {
+  cursor: progress;
+  opacity: 0.72;
+  transition: opacity 120ms ease;
+}
+
+/* A button whose form is being sent: no second click. */
+[data-sending] {
+  pointer-events: none;
+  cursor: progress;
+}
+
+.jm-nav-progress {
+  position: fixed;
+  inset: 0 0 auto 0;
+  z-index: 100;
+  height: 3px;
+  pointer-events: none;
+  background: linear-gradient(90deg, var(--color-lime), var(--color-neon), var(--color-feuille));
+  box-shadow: 0 0 10px rgb(166 242 107 / 0.7);
+  transform-origin: left;
+  transform: scaleX(0);
+  opacity: 0;
+}
+.jm-nav-progress[data-active] {
+  opacity: 1;
+  /* Runs fast at first, then slows down: the page is « almost there » without lying about when. */
+  animation: jm-nav-progress 8s cubic-bezier(0.08, 0.7, 0.2, 1) forwards;
+}
+@keyframes jm-nav-progress {
+  0% {
+    transform: scaleX(0);
+  }
+  10% {
+    transform: scaleX(0.35);
+  }
+  100% {
+    transform: scaleX(0.94);
+  }
+}
+
+/* Less motion asked: no sinking or running bar, a change of shade and a still bar instead. */
+@media (prefers-reduced-motion: reduce) {
+  :where(button:not(:disabled), a[href], summary, [role="button"], [role="tab"]):active,
+  .jm-press:active {
+    transform: none;
+    filter: brightness(0.92);
+  }
+  .jm-nav-progress[data-active] {
+    animation: none;
+    transform: scaleX(0.6);
+  }
+}
+[data-reduce-motion] :where(button:not(:disabled), a[href], summary, [role="button"]):active,
+[data-reduce-motion] .jm-press:active {
+  transform: none;
+  filter: brightness(0.92);
+}
