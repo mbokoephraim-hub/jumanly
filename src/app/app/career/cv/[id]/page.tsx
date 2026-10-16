@@ -27,7 +27,7 @@ import {
 } from "@/components/career/cv/editor";
 import { CriteriaBars } from "@/components/career/cv/parts";
 import { Workbench } from "@/components/career/cv/workbench";
-import { card, CareerTabs, pillClass } from "@/components/career/kit";
+import { card, pillClass } from "@/components/career/kit";
 import { Alert, Checkbox, Select, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { updateCvDetails } from "@/server/actions/cv";
@@ -262,7 +262,6 @@ export default async function CvEditorPage({
   return (
     <>
       <AppPageHeader eyebrow={tHome("eyebrow")} title={t("title")} />
-      <CareerTabs active="cv" />
       <WorkshopBar cv={{ id: cv.id, title: cv.title, isPrimary: cv.isPrimary }} cvs={cvs} />
       {notice && <Notice>{notice}</Notice>}
       {error && <Alert tone="error" title={error} />}

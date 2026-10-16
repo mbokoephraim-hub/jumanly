@@ -6,7 +6,7 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
 import { DiagnosticFlow, type SkillSource } from "@/components/career/diagnostic-flow";
-import { AiBrand, AiPanel, card, cardTitle, CareerTabs, pillClass } from "@/components/career/kit";
+import { AiBrand, AiPanel, card, cardTitle, pillClass } from "@/components/career/kit";
 import type { ScanCard } from "@/components/motion/scan";
 import { Alert } from "@/components/ui";
 import { cx } from "@/lib/cx";
@@ -96,7 +96,6 @@ export default async function DiagnosticPage({
     return (
       <>
         <AppPageHeader eyebrow={t("eyebrow")} title={t("result.title")} />
-        <CareerTabs active="diagnostic" />
         <p className="flex flex-wrap items-center gap-3 text-[13px] text-ardoise">
           <span
             className={cx(
@@ -182,7 +181,6 @@ export default async function DiagnosticPage({
   const header = (
     <>
       <AppPageHeader eyebrow={t("eyebrow")} title={t("title")} />
-      <CareerTabs active="diagnostic" />
     </>
   );
 

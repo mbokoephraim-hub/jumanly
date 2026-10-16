@@ -8,7 +8,6 @@ import {
   AiPanel,
   card,
   cardTitle,
-  CareerTabs,
   eyebrow,
   IconTile,
   pillClass,
@@ -74,7 +73,6 @@ export default async function InterviewsPage({
         eyebrow={t("career.interviews.subtitle")}
         title={t("career.interviews.title")}
       />
-      <CareerTabs active="interviews" />
 
       {query.erreur === "consent" && (
         <Alert title={t("career.interviews.error.consent")}>

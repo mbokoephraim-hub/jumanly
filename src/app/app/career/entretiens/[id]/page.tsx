@@ -5,7 +5,7 @@ import { getTranslations } from "next-intl/server";
 import { AiOrb } from "@/components/brand/ai-orb";
 import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
-import { card, cardTitle, CareerTabs, eyebrow, pillClass } from "@/components/career/kit";
+import { card, cardTitle, eyebrow, pillClass } from "@/components/career/kit";
 import { VoiceAnswer } from "@/components/career/voice-answer";
 import { Alert, Badge, TextArea } from "@/components/ui";
 import { cx } from "@/lib/cx";
@@ -54,7 +54,6 @@ export default async function InterviewSessionPage({
           </Link>
         }
       />
-      <CareerTabs active="interviews" />
       <div className="flex flex-col gap-2">
         <p className="text-[13px] font-semibold">
           {t("career.interviews.session.progress", { done, total })}

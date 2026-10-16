@@ -6,15 +6,7 @@ import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
 import { AiGateNotice } from "@/components/career/ai-gate";
 import { CopyButton } from "@/components/career/copy-button";
-import {
-  AiBrand,
-  AiPanel,
-  card,
-  cardTitle,
-  CareerTabs,
-  eyebrow,
-  pillClass,
-} from "@/components/career/kit";
+import { AiBrand, AiPanel, card, cardTitle, eyebrow, pillClass } from "@/components/career/kit";
 import { EmptyState } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { generateLinkedinAction } from "@/server/actions/career-documents";
@@ -94,7 +86,6 @@ export default async function LinkedinPage({ searchParams }: PageProps<"/app/car
   return (
     <>
       <AppPageHeader eyebrow={t("career.linkedin.subtitle")} title={t("career.linkedin.title")} />
-      <CareerTabs active="linkedin" />
 
       <div className="grid gap-5 lg:grid-cols-[minmax(0,1fr)_380px]">
         <div className="order-2 flex min-w-0 flex-col gap-5 lg:order-1">

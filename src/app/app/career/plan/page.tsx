@@ -7,7 +7,6 @@ import { AppPageHeader } from "@/components/app/page-header";
 import {
   card,
   cardTitle,
-  CareerTabs,
   eyebrow,
   IconTile,
   pillClass,
@@ -61,7 +60,6 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
     return (
       <>
         <AppPageHeader eyebrow={t("career.plan.subtitle")} title={t("career.plan.title")} />
-        <CareerTabs active="plan" />
         <PlanLock
           plan={planFor("career.progress_plan")}
           description={t("career.plan.locked", { plan: planFor("career.progress_plan") })}
@@ -85,7 +83,6 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
   return (
     <>
       <AppPageHeader eyebrow={t("career.plan.subtitle")} title={t("career.plan.title")} />
-      <CareerTabs active="plan" />
       {query.ok && <Alert tone="success" title={t("career.plan.saved")} />}
       {query.erreur && <Alert tone="error" title={t("talent.profile.error")} />}
 

@@ -1,11 +1,8 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { AiOrb } from "@/components/brand/ai-orb";
 import { Icon, type IconName } from "@/components/brand/icon";
-import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
-import { TabRail } from "@/components/motion/tab-rail";
 
 /** Shared pieces of the Career pages (mockups 03-08 to 03-15). */
 
@@ -21,50 +18,6 @@ export const careerTabs = [
 ] as const satisfies readonly { key: string; href: string; icon: IconName }[];
 
 export type CareerTab = (typeof careerTabs)[number]["key"];
-
-/** The Career sections, as pills under the page title (scrolls sideways on a phone). */
-export async function CareerTabs({
-  active,
-  locked = [],
-}: {
-  active: CareerTab;
-  /** Tabs whose tool is locked: a small padlock follows their label. */
-  locked?: CareerTab[];
-}) {
-  const t = await getTranslations("career");
-  const d = dynamic(t);
-  return (
-    <nav aria-label={t("nav.label")}>
-      <TabRail name="career">
-        <ul className="flex w-max gap-1.5">
-          {careerTabs.map((tab) => (
-            <li key={tab.key}>
-              <Link
-                href={tab.href}
-                aria-current={tab.key === active ? "page" : undefined}
-                className={cx(
-                  "relative flex h-9 items-center gap-[5px] rounded-pill px-[11px] text-xs font-medium whitespace-nowrap",
-                  tab.key === active
-                    ? "bg-sapin text-blanc"
-                    : "bg-blanc text-sapin ring-1 ring-brume ring-inset hover:bg-lime-clair",
-                )}
-              >
-                <Icon name={tab.icon} className="size-3.5" />
-                {tab.key === "home" ? t("nav.home") : d(`home.${tab.key}.title`)}
-                {locked.includes(tab.key) && (
-                  <>
-                    <Icon name="lock" className="size-[13px] opacity-55" />
-                    <span className="sr-only">{t("nav.locked")}</span>
-                  </>
-                )}
-              </Link>
-            </li>
-          ))}
-        </ul>
-      </TabRail>
-    </nav>
-  );
-}
 
 export const card = "rounded-[24px] bg-blanc p-5 lg:p-6";
 export const cardTitle = "text-[20px] leading-tight font-semibold lg:text-[22px]";

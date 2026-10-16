@@ -8,21 +8,26 @@ import { AppIntroGate } from "@/components/app/app-intro-gate";
 import type { IntroData } from "@/components/app/app-intro";
 import { hireNavigation, partnerNavigation, talentNavigation } from "@/config/navigation";
 import { Logo, Icon } from "@/components/brand";
+import { careerTabs } from "@/components/career/kit";
+import type { Section } from "@/config/section-navigation";
+import { dynamic } from "@/i18n/dynamic";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
 import { UniverseBackdrop } from "@/components/motion/universe-header";
 import { signOut } from "@/server/actions/auth";
 import { AccountMenu, type AccountSummary } from "./account-menu";
+import { IconRail, RailButton } from "./icon-rail";
 import { NavLink } from "./nav-link";
+import { SectionNav } from "./section-nav";
 import { SpaceSwitcher, type SpaceOption } from "./space-switcher";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 
 /**
- * Signed-in space layout (mockup 00-04).
- * Desktop: 92 px Sapin sidebar (settings and logout at the bottom), Crème main panel with
- * 32 px corners, top bar with the space switcher, notifications and the account pill.
- * Mobile: Sapin header, Crème sheet rising over it, floating pill navigation.
- * Motion (docs/experience-animee, lot A): torch over the sidebar, active item that slides, pattern
- * of the module behind the top of the page; all off with « Réduire les animations ».
+ * Signed-in space layout (Admin v4, étape 2: same shell as Jumanly Admin, for every plan; a plan
+ * only changes which tools open, through the rights).
+ * Desktop: the floating gradient column of icons on the left (settings and sign out below), and
+ * on top of the page a light bar: the sub-sections of the current section on the left, the space
+ * switcher, notifications and the account on the right.
+ * Mobile: deep green header, Crème sheet with the sub-sections on top, floating gradient pill.
  */
 export function AppShell({
   account,
@@ -48,16 +53,21 @@ export function AppShell({
   const a11y = useTranslations("a11y");
   const tn = useTranslations("notifications");
   const tt = useTranslations("toast");
+  const tc = useTranslations("career");
   const navigation = space?.partner ? partnerNavigation : space ? hireNavigation : talentNavigation;
   const home = space?.partner ? "/app/partenaire" : space ? "/app/hire" : "/app";
-  const links = (placement: "sidebar" | "pill") =>
-    navigation
-      .filter((item) => placement === "sidebar" || item.pill !== false)
-      .map(({ key, href, icon }) => (
-        <li key={key}>
-          <NavLink href={href} label={t(key)} icon={<Icon name={icon} />} placement={placement} />
-        </li>
-      ));
+  const pillLinks = navigation
+    .filter((item) => item.pill !== false)
+    .map(({ key, href, icon }) => (
+      <li key={key}>
+        <NavLink href={href} label={t(key)} icon={<Icon name={icon} />} placement="pill" />
+      </li>
+    ));
+
+  const sections = appSections({
+    t,
+    career: (key) => (key === "home" ? tc("nav.home") : dynamic(tc)(`home.${key}.title`)),
+  });
 
   const bellLabels: BellLabels = {
     aria: {
@@ -79,7 +89,7 @@ export function AppShell({
   return (
     <div
       data-reduce-motion={reduceMotion ? "" : undefined}
-      className="min-h-dvh bg-sapin lg:flex lg:py-3.5 lg:pr-3.5"
+      className="jm-admin-bg min-h-dvh text-sapin lg:flex"
     >
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={tt("region.aria")} closeLabel={tt("close")} />
@@ -95,38 +105,26 @@ export function AppShell({
         {t("skipToContent")}
       </a>
 
-      <aside
-        data-torch
-        className="sticky top-3.5 isolate hidden h-[calc(100dvh-28px)] w-[92px] shrink-0 flex-col items-center pt-3 pb-1.5 lg:flex"
-      >
-        <span aria-hidden className="jm-torch jm-torch-pattern absolute inset-0 -z-10" />
-        <span aria-hidden className="jm-torch jm-torch-halo absolute inset-0 -z-10" />
-        <Link href={home} aria-label={a11y("logo")} className="rounded-sm">
-          <Logo variant="tile" height={44} />
-        </Link>
-        <nav aria-label={a11y("mainNav")} className="mt-[34px]">
-          <ul data-nav-slide="sidebar" className="flex flex-col gap-1.5">
-            {links("sidebar")}
-          </ul>
-        </nav>
-        <div className="mt-auto flex flex-col gap-1.5">
-          <NavLink
-            href="/app/parametres"
-            label={t("settings")}
-            icon={<Icon name="reglages" />}
-            placement="sidebar"
-          />
-          <form action={signOut}>
-            <button
-              type="submit"
-              className="flex w-16 flex-col items-center gap-[5px] rounded-[18px] pt-[9px] pb-[7px] text-center text-[10px] leading-3 font-medium text-blanc/65 hover:bg-blanc/10 hover:text-blanc"
-            >
-              <Icon name="logout" className="size-[22px]" />
-              {t("logout")}
-            </button>
-          </form>
-        </div>
-      </aside>
+      <IconRail
+        home={home}
+        homeLabel={a11y("logo")}
+        homeTip={t("brand.text")}
+        label={a11y("mainNav")}
+        groups={[{ items: navigation.map((item) => ({ ...item, label: t(item.key) })) }]}
+        footer={
+          <>
+            <NavLink
+              href="/app/parametres"
+              label={t("settings")}
+              icon={<Icon name="reglages" />}
+              placement="rail"
+            />
+            <form action={signOut}>
+              <RailButton icon="logout" label={t("logout")} />
+            </form>
+          </>
+        }
+      />
 
       <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc lg:hidden">
         <Link href={home} aria-label={a11y("logo")} className="shrink-0">
@@ -139,16 +137,20 @@ export function AppShell({
         </div>
       </header>
 
-      <div className="relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme lg:min-h-0 lg:flex-1 lg:rounded-panel">
+      <div className="relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme lg:min-h-0 lg:flex-1 lg:rounded-none lg:bg-transparent">
         <UniverseBackdrop />
-        <div className="relative hidden h-[78px] items-center justify-end gap-3.5 px-[30px] pt-[26px] lg:flex">
-          <SpaceSwitcher current={space} spaces={spaces} tone="light" />
-          {notifications("light")}
-          <AccountMenu account={account} tone="light" />
+        {/* The secondary menu, above the page: sub-sections left, tools right. */}
+        <div className="jm-topbar sticky top-0 z-30 flex items-center gap-3 px-4 pt-3 sm:px-6 lg:h-[68px] lg:gap-5 lg:px-6 lg:pt-0 xl:px-8">
+          <SectionNav sections={sections} className="flex-1" />
+          <div className="ml-auto hidden shrink-0 items-center gap-3 lg:flex">
+            <SpaceSwitcher current={space} spaces={spaces} tone="light" />
+            {notifications("light")}
+            <AccountMenu account={account} tone="light" />
+          </div>
         </div>
         <main
           id="content"
-          className="relative flex w-full flex-col gap-5 px-4 pt-5 pb-32 sm:px-6 lg:px-[30px] lg:pt-5 lg:pb-[30px]"
+          className="relative mx-auto flex w-full max-w-[1400px] flex-col gap-5 px-4 pt-4 pb-32 sm:px-6 lg:px-6 lg:pt-2 lg:pb-8 xl:px-8"
         >
           <div id={OFFLINE_SLOT_ID} role="status" className="empty:-mb-5" />
           {children}
@@ -158,12 +160,80 @@ export function AppShell({
       <nav
         aria-label={t("mobile.aria")}
         data-autohide
-        className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin p-[7px] shadow-float lg:hidden"
+        className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin bg-(image:--jm-degrade-rail-h) p-[7px] shadow-float lg:hidden"
       >
         <ul data-nav-slide="pill" className="flex gap-1">
-          {links("pill")}
+          {pillLinks}
         </ul>
       </nav>
     </div>
   );
+}
+
+/** Sub-sections of each section of the signed-in space (the secondary horizontal menu). */
+function appSections({
+  t,
+  career,
+}: {
+  t: ReturnType<typeof useTranslations<"appNav">>;
+  career: (key: (typeof careerTabs)[number]["key"]) => string;
+}): Section[] {
+  const section = (name: string, match: string[], links: [string, string][]): Section => ({
+    match,
+    label: t("section.aria", { section: name }),
+    links: links.map(([href, label]) => ({ href, label })),
+  });
+  return [
+    section(
+      t("section.account"),
+      ["/app", "/app/profil", "/app/notifications", "/app/abonnement", "/app/parametres"],
+      [
+        ["/app", t("section.dashboard")],
+        ["/app/profil", t("section.profile")],
+        ["/app/notifications", t("notifications")],
+        ["/app/abonnement", t("section.subscription")],
+        ["/app/parametres", t("settings")],
+      ],
+    ),
+    section(
+      t("learn"),
+      ["/app/learn"],
+      [
+        ["/app/learn", t("section.catalog")],
+        ["/app/learn/attestations", t("section.certificates")],
+      ],
+    ),
+    section(
+      t("career"),
+      ["/app/career"],
+      careerTabs.map((tab) => [tab.href, career(tab.key)]),
+    ),
+    section(
+      t("jobs"),
+      ["/app/jobs"],
+      [
+        ["/app/jobs", t("section.offers")],
+        ["/app/jobs/candidatures", t("section.applications")],
+        ["/app/jobs/enregistrees", t("section.saved")],
+      ],
+    ),
+    section(
+      t("hire.text"),
+      ["/app/hire", "/app/organisation"],
+      [
+        ["/app/hire", t("section.dashboard")],
+        ...hireNavigation
+          .filter((item) => item.key !== "home" && item.key !== "hire.messages")
+          .map((item): [string, string] => [item.href, t(item.key)]),
+      ],
+    ),
+    section(
+      t("partner"),
+      ["/app/partenaire"],
+      partnerNavigation.map((item): [string, string] => [
+        item.href,
+        item.key === "home" ? t("section.dashboard") : t(item.key),
+      ]),
+    ),
+  ];
 }
