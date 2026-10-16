@@ -13,9 +13,9 @@ Career ou Connect, et on ne change pas l’identité visuelle.
 
 Références obligatoires, dans cet ordre :
 
-1. `docs/ux-mobile-talent/maquette/mobile-talent.html` et `maquette/ecrans/01.jpg` à `43.jpg` : les 43 écrans
-   à reproduire fidèlement, plus les planches « Boutons » et « États d’interaction ». Les écrans 34 à 43
-   (menu du haut, Jumanly AI) sont détaillés dans `docs/jumanly-ai/`.
+1. `docs/ux-mobile-talent/maquette/mobile-talent.html` et `maquette/ecrans/01.jpg` à `49.jpg` : les 49 écrans
+   à reproduire fidèlement, plus les planches « Boutons » et « États d’interaction ». Les écrans 34 à 49
+   (menu du haut, Jumanly AI, simulations) sont détaillés dans `docs/jumanly-ai/`.
 2. `docs/ux-mobile-talent/BRIEF-MOBILE-TALENT.md` : routes, choix par défaut, données existantes.
 3. `CLAUDE.md` (règles d’or), `docs/specifications.md` parties 05, 07, 08 et 11.
 4. Briefs déjà livrés, à respecter : `docs/interactions-relief/` (ombres douces v2.1), `docs/experience-animee/`

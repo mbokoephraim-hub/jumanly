@@ -3,7 +3,7 @@
 Date : 16 octobre 2026. Demande du propriétaire : `CAHIER-DES-CHARGES-JUMANLY-AI.md` (ce dossier), qui fait
 foi. Ce brief dit comment l’intégrer au code existant. Maquettes validées par Claude (validation déléguée par
 le propriétaire) : `docs/ux-mobile-talent/maquette/mobile-talent.html`, sections « Boutons », « Menu du
-haut » et « Jumanly AI », écrans 34 à 43.
+haut », « Jumanly AI » et « Simulation d’entretien », écrans 34 à 49.
 
 ## 0. Maquettes
 
@@ -19,6 +19,12 @@ haut » et « Jumanly AI », écrans 34 à 43.
 | 41 | Historique : crédits du mois, recherche, filtres par contexte, renommer · rouvrir · supprimer |
 | 42 | Crédits épuisés : ce qui continue, formules qui incluent l’IA |
 | 43 | Ordinateur, Hire : panneau latéral en mode recruteur sur l’éditeur d’offre |
+| 44 | Toucher l’orbe : « Que voulez-vous faire ? » avec 4 actions phares, suggestions, question libre, micro |
+| 45 | Simulation d’entretien : à l’écrit ou à voix haute, poste visé, type, durée, test facultatif |
+| 46 | Simulation écrite : question, réponse, retour (ce qui marche, à renforcer), meilleure formulation |
+| 47 | Test de connaissances tiré des compétences de l’offre, correction expliquée |
+| 48 | Simulation orale en direct : orbe qui écoute, sous-titres, micro, pause, terminer |
+| 49 | Bilan d’entraînement : points forts, à travailler, formulations gardées, résultat du test |
 
 ## 1. Ce qui existe et se réutilise
 
@@ -80,7 +86,22 @@ haut » et « Jumanly AI », écrans 34 à 43.
      bord, Paramètres, « Tout Mon espace », Se déconnecter.
    - Identité IA propre : fond nuit aurore, contour irisé, orbe Lime, étincelle. Réservée à l’IA, jamais
      sur un bouton ordinaire (voir la planche « Boutons »).
-10. **Mesure** : `AiUsage` par mode (`feature = "assistant.<mode>"`), coût par utilisateur et par mode
+10. **Accueil de l’orbe (écran 44)** : toucher l’orbe ouvre d’abord « Que voulez-vous faire ? » avec quatre
+    actions phares, toujours les mêmes : Simulation d’entretien, Diagnostic de mon profil (service
+    `diagnostic-ai` existant), Préparer une candidature (choisir une offre, puis CV et lettre), Mon plan de la
+    semaine (3 actions tirées des vraies données : candidatures, entretiens, formation en cours). Dessous,
+    2 ou 3 suggestions du mode de la page, puis la question libre et le micro (dictée).
+11. **Simulations d’entretien (écrans 45 à 49)** : route `/app/career/entretiens` (partie 07, étape E10),
+    mode `interview` de l’assistant. Écrite à partir de Starter, orale à partir de Pro, nombre par mois en
+    base (clés de droits, aucun nom de forfait). Questions tirées de l’offre ou du poste visé ; chaque réponse
+    reçoit « ce qui marche », « à renforcer » et une meilleure formulation faite **des mots de l’utilisateur**,
+    avec des crochets pour ses vrais chiffres ; « Garder cette formulation » l’enregistre dans ses notes de
+    préparation. Test de connaissances facultatif (questions à choix, correction expliquée, lien vers la
+    leçon Learn). Orale : transcription et synthèse derrière l’adaptateur `NEXT_PUBLIC_VOICE_PROVIDER`
+    (partie 02), micro autorisé seulement sur cette page (`Permissions-Policy`, partie 10), voix jamais
+    enregistrée, transcription gardée seulement si l’utilisateur le choisit. Bilan sans note d’embauche
+    (partie 08 § 8.9) et jamais visible des recruteurs.
+12. **Mesure** : `AiUsage` par mode (`feature = "assistant.<mode>"`), coût par utilisateur et par mode
     visible dans l’admin IA existante (`ai-admin`).
 
 ## 3. Risques de sécurité à traiter dans le diagnostic
@@ -94,10 +115,10 @@ du contexte bornée) ; clés API uniquement côté serveur.
 ## 4. Étapes (cahier des charges § 10)
 
 1. Service `assistant` + modes, `AiFab`, `AiPanel`, panneau ordinateur, suggestions de départ.
-2. Modes `job`, `follow`, `cv` branchés sur Offres, Suivi, CV Builder.
+2. Modes `job`, `follow`, `cv` branchés sur Offres, Suivi, CV Builder ; accueil de l’orbe (44).
 3. Suggestions applicables et retour arrière, historique (`AiConversation`), affichage des crédits.
-4. Modes `learn` et `hire`.
-5. Voix et personnalisation : non commencé tant que le propriétaire ne l’a pas demandé.
+4. Modes `learn` et `hire` ; simulation écrite et test (45-47, 49).
+5. Voix : simulation orale (48) et dictée ; personnalisation avancée.
 
 Chaque étape : `pnpm lint`, `typecheck`, `test` (droits, appartenance, quota, « jamais bloquant »),
 `build`, e2e du parcours, `docs/journal.md`.

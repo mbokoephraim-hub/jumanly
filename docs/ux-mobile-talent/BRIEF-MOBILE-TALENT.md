@@ -9,7 +9,7 @@ les liens avec les autres briefs. Maquettes validées par Claude (validation dé
 `maquette/mobile-talent.html` (ouvrir dans un navigateur), `maquette/mobile-talent-planche.jpg`
 (toutes les maquettes) et `maquette/ecrans/NN.jpg` (chaque écran, 390 px ×2). Version 3 du 16 octobre
 2026 : v2 (10 et 17 refaits, 20 à 33, planche « États d’interaction »), puis v3 (planche « Boutons » avec
-boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly AI 35 à 43, voir
+boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly AI 35 à 43 ; v4 : toucher l’orbe 44 et simulations d’entretien 45 à 49, voir
 `docs/jumanly-ai/`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
 
 | N° | Écran | N° | Écran |
@@ -35,7 +35,10 @@ boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly 
 | 37 | Jumanly AI · exigences et profil | 38 | Jumanly AI · CV Builder |
 | 39 | Jumanly AI · Learning Room | 40 | Jumanly AI · relance (Suivi) |
 | 41 | Jumanly AI · historique et crédits | 42 | Jumanly AI · crédits épuisés |
-| 43 | Jumanly AI · ordinateur, Hire | | |
+| 43 | Jumanly AI · ordinateur, Hire | 44 | Jumanly AI · toucher l’orbe |
+| 45 | Simulation d’entretien · choix | 46 | Simulation écrite · retour |
+| 47 | Test de connaissances | 48 | Simulation orale en direct |
+| 49 | Simulation · bilan | | |
 
 Les contenus sont des exemples (persona fictive Grâce Mbuyi, entreprises fictives). **En production, tout
 vient des données réelles** (règle d’or 11) ; une section sans donnée affiche son état vide ou se masque.
