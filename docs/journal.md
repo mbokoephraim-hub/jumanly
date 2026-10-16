@@ -2,6 +2,23 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Mobile Talent et Jumanly AI · prompt 2 : navigation (16 octobre 2026)
+
+- Téléphone : barre du haut de 52 px (logo sur Pour moi, titre de la section ailleurs, recherche,
+  notifications, avatar) et barre du bas à quatre destinations (Pour moi, Offres, Apprendre, Suivi),
+  zones de 56 px, actif sur Lime, pastille réelle sur Suivi. Nouvelle icône `jm-suivi`.
+- Menu de l'avatar (écran 34) : Messages (pastille des non-lus), Mon profil, Mes CV, Tableau de bord,
+  Paramètres, « Tout Mon espace », Se déconnecter ; Échap, toucher dehors, focus piégé,
+  `aria-expanded`. Sur ordinateur, le menu du compte reprend ces raccourcis.
+- Nouvelles pages : `/app/espace` (écran 17 : profil et complétude, outils carrière en cartes
+  visuelles avec cadenas selon la formule, acquis, compte, sélecteur d'espace) et `/app/suivi`
+  (à traiter, candidatures, messages, offres enregistrées ; contenu complet au prompt 5).
+- Tableau de bord déplacé tel quel à `/app/tableau-de-bord` ; `/app` l'affiche jusqu'au prompt 3.
+- Ordinateur : colonne = quatre destinations + Career. Hire et Partenaire inchangés.
+- Décision : `docs/decisions/2026-10-16-mobile-talent-navigation.md` (barre du bas sous 768 px et
+  non jusqu'à `lg`, contrairement au plan).
+- Reste : la ligne Jumanly AI du menu de l'avatar (prompt 7).
+
 ## Mobile Talent et Jumanly AI · prompt 1 : socle visuel (16 octobre 2026)
 
 - Boutons de la planche « Boutons » ajoutés au `Button` existant : `principal` (dégradé Sapin →

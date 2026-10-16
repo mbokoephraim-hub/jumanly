@@ -70,4 +70,5 @@ export const iconPaths = {
   "info": "<circle cx=\"12\" cy=\"12\" r=\"8.5\"/><path d=\"M12 11v5.5M12 7.5h.01\"/>",
   "menu": "<path d=\"M4 7h16M4 12h16M4 17h16\"/>",
   "precedent": "<path d=\"M19 12H5M11 6l-6 6 6 6\"/>",
+  "suivi": "<path d=\"M8.5 4.5H7A2 2 0 0 0 5 6.5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-13a2 2 0 0 0-2-2h-1.5\"/><rect x=\"8.5\" y=\"2.5\" width=\"7\" height=\"4\" rx=\"1.4\"/><path d=\"M9 11.5h.01M12 11.5h3.5M9 15.5h.01M12 15.5h3.5\"/>",
 } as const;

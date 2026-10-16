@@ -343,7 +343,7 @@ export default async function TalentJobPage({
               </p>
             )}
 
-            <div className="fixed inset-x-3 bottom-[calc(max(26px,env(safe-area-inset-bottom))+72px)] z-30 flex gap-3 rounded-[22px] bg-blanc p-3 shadow-float lg:static lg:justify-end lg:rounded-none lg:border-t lg:border-brume lg:bg-transparent lg:p-0 lg:pt-5 lg:shadow-none">
+            <div className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 flex gap-3 rounded-[22px] bg-blanc p-3 shadow-float lg:static lg:justify-end lg:rounded-none lg:border-t lg:border-brume lg:bg-transparent lg:p-0 lg:pt-5 lg:shadow-none">
               <Link
                 href={`/app/jobs/${job.slug}`}
                 className={pillClass("outline", "md", "h-12 max-lg:hidden")}
@@ -963,7 +963,7 @@ export default async function TalentJobPage({
       </div>
 
       {/* Phone: fixed action bar (save + apply). */}
-      <div className="fixed inset-x-3 bottom-[calc(max(26px,env(safe-area-inset-bottom))+72px)] z-30 flex items-center gap-3 rounded-[22px] bg-blanc p-3 shadow-float lg:hidden">
+      <div className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 flex items-center gap-3 rounded-[22px] bg-blanc p-3 shadow-float lg:hidden">
         {jobRow &&
           saveForm(
             "flex size-12 items-center justify-center rounded-full ring-[1.5px] ring-brume ring-inset",

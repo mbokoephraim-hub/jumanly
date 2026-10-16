@@ -194,7 +194,7 @@ export async function MobileActionBar({ id }: { id: string }) {
     <>
       <div
         id="cv-barre-mobile"
-        className="fixed inset-x-3 bottom-[calc(max(26px,env(safe-area-inset-bottom))+72px)] z-30 flex items-center justify-between gap-3 rounded-[22px] bg-blanc/92 p-2.5 shadow-float ring-1 ring-sapin/6 backdrop-blur-[14px] lg:hidden"
+        className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 flex items-center justify-between gap-3 rounded-[22px] bg-blanc/92 p-2.5 shadow-float ring-1 ring-sapin/6 backdrop-blur-[14px] lg:hidden"
       >
         <SavedPill className="inline-flex" />
         <a href={`/app/career/cv/${id}/pdf`} className={pillClass("dark", "md")} download>

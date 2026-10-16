@@ -42,9 +42,9 @@ test("l'espace connecté propose la navigation adaptée à l'écran", async ({ p
   await page.goto("/app");
   const navigation = page.getByRole("navigation", { name: "Navigation principale" });
   await expect(navigation.filter({ visible: true })).toHaveCount(1);
-  const lienAccueil = navigation.filter({ visible: true }).getByRole("link", { name: "Accueil" });
+  const lienAccueil = navigation.filter({ visible: true }).getByRole("link", { name: "Pour moi" });
   await expect(lienAccueil).toHaveAttribute("aria-current", "page");
-  // Desktop : barre latérale de 92 px ; mobile : navigation flottante en bas de l'écran.
+  // Desktop : colonne d'icônes à gauche ; mobile : barre du bas à quatre destinations.
   const boite = await navigation.filter({ visible: true }).boundingBox();
   const viewport = page.viewportSize();
   if (isMobile) expect(boite!.y).toBeGreaterThan(viewport!.height / 2);

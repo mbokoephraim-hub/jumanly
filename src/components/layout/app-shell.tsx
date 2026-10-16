@@ -6,18 +6,28 @@ import { NotificationBell, type BellLabels } from "@/components/app/notification
 import { Toaster } from "@/components/motion/toaster";
 import { AppIntroGate } from "@/components/app/app-intro-gate";
 import type { IntroData } from "@/components/app/app-intro";
-import { hireNavigation, partnerNavigation, talentNavigation } from "@/config/navigation";
+import {
+  hireNavigation,
+  partnerNavigation,
+  talentMenu,
+  talentNavigation,
+} from "@/config/navigation";
 import { Logo, Icon, type IconName } from "@/components/brand";
 import { careerTabs } from "@/components/career/kit";
 import type { Section } from "@/config/section-navigation";
 import { dynamic } from "@/i18n/dynamic";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
+import { Avatar } from "@/components/ui/avatar";
+import { signOut } from "@/server/actions/auth";
 import { AccountMenu, type AccountSummary } from "./account-menu";
 import { IconRail } from "./icon-rail";
 import { NavLink } from "./nav-link";
 import { SectionNav } from "./section-nav";
 import { TopSearch } from "./top-search";
 import { SpaceSwitcher, type SpaceOption } from "./space-switcher";
+import { TabBar } from "./tab-bar";
+import { TopMenu } from "./top-menu";
+import { TopTitle } from "./top-title";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { cx } from "@/lib/cx";
 
@@ -30,6 +40,9 @@ import { cx } from "@/lib/cx";
  * Tablet (from 768 px): the same column and bar, the search behind an icon.
  * Phone: deep green header (search icon), Crème sheet with the sub-sections on top, floating
  * gradient pill.
+ * Talent space (docs/ux-mobile-talent, prompt 2): on a phone, a 52 px top bar (logo or title of
+ * the section, search, notifications, the avatar and its menu) and a bottom bar of four
+ * destinations; on a computer, the same four destinations plus Career in the column of icons.
  */
 export function AppShell({
   account,
@@ -39,8 +52,14 @@ export function AppShell({
   reduceMotion = false,
   intro,
   lockedCareer = [],
+  followUp = 0,
+  unreadMessages = 0,
   children,
 }: {
+  /** Talent: real number of actions to take (badge of Suivi). */
+  followUp?: number;
+  /** Talent: conversations with an unread message (badge of Messages in the avatar menu). */
+  unreadMessages?: number;
   account: AccountSummary;
   /** Career tools the plan keeps locked: a padlock in the Career menu. */
   lockedCareer?: readonly string[];
@@ -59,6 +78,7 @@ export function AppShell({
   const tn = useTranslations("notifications");
   const tt = useTranslations("toast");
   const tc = useTranslations("career");
+  const talent = !space;
   const navigation = space?.partner ? partnerNavigation : space ? hireNavigation : talentNavigation;
   const home = space?.partner ? "/app/partenaire" : space ? "/app/hire" : "/app";
   const pillLinks = navigation
@@ -140,22 +160,65 @@ export function AppShell({
               icon={<Icon name="reglages" />}
               placement="rail"
             />
-            <AccountMenu account={account} tone="rail" />
+            <AccountMenu account={account} tone="rail" talent={talent} />
           </>
         }
       />
 
-      <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc md:hidden">
-        <Link href={home} aria-label={a11y("logo")} className="shrink-0">
-          <Logo variant="negative" height={26} />
-        </Link>
-        <div className="flex min-w-0 items-center gap-1">
+      {talent ? (
+        <header className="flex h-[52px] items-center gap-1 pr-2 pl-[18px] text-blanc md:hidden">
+          <div className="flex min-w-0 flex-1 items-center">
+            <TopTitle
+              logo={
+                <Link href={home} aria-label={a11y("logo")} className="shrink-0">
+                  <Logo variant="negative" height={24} />
+                </Link>
+              }
+              titles={{
+                "/app/jobs": t("tabs.offers"),
+                "/app/learn": t("tabs.learn"),
+                "/app/suivi": t("tabs.suivi"),
+                "/app/career": t("title.career"),
+                "/app/messages": t("title.messages"),
+                "/app/notifications": t("title.notifications"),
+                "/app/profil": t("title.profile"),
+                "/app/abonnement": t("title.subscription"),
+                "/app/parametres": t("title.settings"),
+                "/app/tableau-de-bord": t("title.dashboard"),
+                "/app/recherche": t("title.search"),
+              }}
+            />
+          </div>
           {searchLink("dark")}
-          <SpaceSwitcher current={space} spaces={spaces} tone="dark" />
           {notifications("dark")}
-          <AccountMenu account={account} tone="dark" />
-        </div>
-      </header>
+          <TopMenu
+            label={t("topMenu.label")}
+            openLabel={t("topMenu.open")}
+            trigger={
+              <Avatar
+                name={account.name}
+                image={account.image ?? undefined}
+                size="sm"
+                className="ring-2 ring-lime/70"
+              />
+            }
+          >
+            <TalentMenu account={account} unreadMessages={unreadMessages} />
+          </TopMenu>
+        </header>
+      ) : (
+        <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc md:hidden">
+          <Link href={home} aria-label={a11y("logo")} className="shrink-0">
+            <Logo variant="negative" height={26} />
+          </Link>
+          <div className="flex min-w-0 items-center gap-1">
+            {searchLink("dark")}
+            <SpaceSwitcher current={space} spaces={spaces} tone="dark" />
+            {notifications("dark")}
+            <AccountMenu account={account} tone="dark" />
+          </div>
+        </header>
+      )}
 
       <div className="relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme md:min-h-0 md:flex-1 md:rounded-none md:bg-transparent">
         {/* The secondary menu, above the page: sub-sections left, tools right. */}
@@ -191,16 +254,109 @@ export function AppShell({
         </main>
       </div>
 
-      <nav
-        aria-label={t("mobile.aria")}
-        data-autohide
-        className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin bg-(image:--jm-degrade-rail-h) p-[7px] shadow-float md:hidden"
-      >
-        <ul data-nav-slide="pill" className="flex gap-1">
-          {pillLinks}
-        </ul>
-      </nav>
+      {talent ? (
+        <TabBar
+          label={t("mobile.aria")}
+          tabs={talentNavigation
+            .filter((item) => item.pill !== false)
+            .map(({ key, href, icon }) => ({ key, href, icon, label: t(key) }))}
+          badge={{
+            key: "tabs.suivi",
+            count: followUp,
+            label: t("tabs.badge", { count: followUp }),
+          }}
+        />
+      ) : (
+        <nav
+          aria-label={t("mobile.aria")}
+          data-autohide
+          className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin bg-(image:--jm-degrade-rail-h) p-[7px] shadow-float md:hidden"
+        >
+          <ul data-nav-slide="pill" className="flex gap-1">
+            {pillLinks}
+          </ul>
+        </nav>
+      )}
     </div>
+  );
+}
+
+/**
+ * The card of the avatar menu (screen 34): who is signed in, the shortcuts, then « Tout Mon
+ * espace » and sign out. Jumanly AI takes the first line once the assistant exists (prompt 7).
+ */
+function TalentMenu({
+  account,
+  unreadMessages,
+}: {
+  account: AccountSummary;
+  unreadMessages: number;
+}) {
+  const t = useTranslations();
+  return (
+    <>
+      <div className="flex items-center gap-3 px-2.5 pt-2 pb-3">
+        <Avatar name={account.name} image={account.image ?? undefined} size="md" />
+        <div className="flex min-w-0 flex-col">
+          <span className="truncate text-[15px] font-semibold">{account.name}</span>
+          <span className="truncate text-[13px] text-ardoise">
+            {t("account.menu.roleBadge.text", {
+              space: t("account.menu.roleBadge.talent"),
+              plan: account.planName,
+            })}
+          </span>
+        </div>
+      </div>
+      <ul className="flex flex-col gap-0.5">
+        {talentMenu.map((item) => (
+          <li key={item.key}>
+            <Link
+              href={item.href}
+              className="jm-press flex min-h-12 items-center gap-3 rounded-[16px] px-2 py-1.5 text-[15px] hover:bg-creme active:bg-lime-clair"
+            >
+              <span
+                aria-hidden
+                className={cx(
+                  "grid size-9 shrink-0 place-items-center rounded-[11px] [&_svg]:size-[18px]",
+                  item.tone,
+                )}
+              >
+                <Icon name={item.icon} />
+              </span>
+              <span className="min-w-0 flex-1 truncate">{t(`appNav.topMenu.${item.key}`)}</span>
+              {item.key === "messages" && unreadMessages > 0 && (
+                <>
+                  <span
+                    aria-hidden
+                    className="grid h-6 min-w-6 place-items-center rounded-full bg-sapin px-1.5 text-[12px] font-bold text-lime"
+                  >
+                    {unreadMessages > 9 ? "9+" : unreadMessages}
+                  </span>
+                  <span className="sr-only">
+                    {t("appNav.topMenu.unread", { count: unreadMessages })}
+                  </span>
+                </>
+              )}
+              <Icon name="chev-r" className="size-4 shrink-0 text-ardoise" />
+            </Link>
+          </li>
+        ))}
+      </ul>
+      <div className="mt-1 flex items-center justify-between gap-2 border-t border-brume px-2 pt-2 pb-1">
+        <Link
+          href="/app/espace"
+          className="flex min-h-11 items-center gap-1 text-[14px] font-semibold whitespace-nowrap text-feuille-fonce"
+        >
+          {t("appNav.topMenu.all")}
+          <Icon name="chev-r" className="size-4" />
+        </Link>
+        <form action={signOut}>
+          <button type="submit" className="min-h-11 px-1 text-[15px] font-semibold text-down-texte">
+            {t("account.menu.logout")}
+          </button>
+        </form>
+      </div>
+    </>
   );
 }
 
@@ -228,9 +384,15 @@ function appSections({
   return [
     section(
       t("section.account"),
-      ["/app", "/app/profil", "/app/notifications", "/app/abonnement", "/app/parametres"],
       [
-        ["/app", t("section.dashboard"), "accueil"],
+        "/app/tableau-de-bord",
+        "/app/profil",
+        "/app/notifications",
+        "/app/abonnement",
+        "/app/parametres",
+      ],
+      [
+        ["/app/tableau-de-bord", t("section.dashboard"), "statistiques"],
         ["/app/profil", t("section.profile"), "profil"],
         ["/app/notifications", t("notifications"), "notification"],
         ["/app/abonnement", t("section.subscription"), "portefeuille"],
@@ -259,9 +421,10 @@ function appSections({
       })),
       lockedLabel,
     },
+    // Offres itself has no sub-sections any more (prompt 2): its pages below keep them.
     section(
       t("jobs"),
-      ["/app/jobs"],
+      ["/app/jobs/candidatures", "/app/jobs/enregistrees"],
       [
         ["/app/jobs", t("section.offers"), "recherche"],
         ["/app/jobs/candidatures", t("section.applications"), "send"],

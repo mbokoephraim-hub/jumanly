@@ -1807,7 +1807,7 @@ Conventions :
 
 ### Navigation · Barre latérale (desktop) et pilule flottante (mobile)
 
-*Repères permanents : cinq destinations pour le talent, plus le menu Hire quand l'espace Organisation est actif.*
+*Repères permanents : quatre destinations pour le talent (barre du bas sur téléphone, plus Career dans la colonne d'icônes sur ordinateur), le menu de l'avatar, et le menu Hire quand l'espace Organisation est actif.*
 
 | Clé | Texte |
 |---|---|
@@ -1850,6 +1850,28 @@ Conventions :
 | `appNav.expand` | Déplier le menu |
 | `appNav.mobile.aria` | Navigation principale |
 | `appNav.mobile.more` | Plus |
+| `appNav.tabs.forMe` | Pour moi |
+| `appNav.tabs.offers` | Offres |
+| `appNav.tabs.learn` | Apprendre |
+| `appNav.tabs.suivi` | Suivi |
+| `appNav.tabs.badge` | {count, plural, one {# action à traiter} other {# actions à traiter}} |
+| `appNav.topMenu.open` | Mon espace |
+| `appNav.topMenu.label` | Menu de mon espace |
+| `appNav.topMenu.messages` | Messages |
+| `appNav.topMenu.profile` | Mon profil |
+| `appNav.topMenu.cvs` | Mes CV |
+| `appNav.topMenu.dashboard` | Tableau de bord |
+| `appNav.topMenu.settings` | Paramètres |
+| `appNav.topMenu.all` | Tout Mon espace |
+| `appNav.topMenu.unread` | {count, plural, one {# message non lu} other {# messages non lus}} |
+| `appNav.title.career` | Career |
+| `appNav.title.messages` | Messages |
+| `appNav.title.notifications` | Notifications |
+| `appNav.title.profile` | Mon profil |
+| `appNav.title.subscription` | Abonnement |
+| `appNav.title.settings` | Paramètres |
+| `appNav.title.dashboard` | Tableau de bord |
+| `appNav.title.search` | Recherche |
 | `appNav.skipToContent` | Aller au contenu principal |
 | `appNav.section.aria` | Sous-rubriques de {section} |
 | `appNav.section.dashboard` | Tableau de bord |
@@ -2020,7 +2042,7 @@ Conventions :
 
 ---
 
-### `/app` · Tableau de bord talent
+### `/app/tableau-de-bord` · Tableau de bord talent
 
 *Accueillir, montrer la prochaine étape et rappeler que tout le parcours mène à l'emploi.*
 
@@ -2119,6 +2141,81 @@ Conventions :
 | `talent.dashboard.pastDueBanner.cta` | Régler maintenant |
 
 ---
+
+### `/app/suivi` · Suivi
+
+*Quatrième destination de la barre du bas (docs/ux-mobile-talent, prompt 2) : ce qui attend une action, puis les candidatures, les messages et les offres enregistrées. Contenu complet au prompt 5.*
+
+| Clé | Texte |
+|---|---|
+| `talent.suivi.seo` | Suivi · Jumanly |
+| `talent.suivi.title` | Suivi |
+| `talent.suivi.todo.title` | À traiter |
+| `talent.suivi.todo.empty` | Rien à traiter pour le moment. |
+| `talent.suivi.todo.interviews` | {count, plural, one {# entretien à confirmer} other {# entretiens à confirmer}} |
+| `talent.suivi.todo.documents` | {count, plural, one {# document demandé} other {# documents demandés}} |
+| `talent.suivi.todo.messages` | {count, plural, one {# message non lu} other {# messages non lus}} |
+| `talent.suivi.todo.line` | Ouvrir mes messages |
+| `talent.suivi.links.title` | Mon suivi |
+| `talent.suivi.links.applications` | Mes candidatures |
+| `talent.suivi.links.applicationsLine` | {count, plural, =0 {Aucune candidature en cours} one {# en cours} other {# en cours}} |
+| `talent.suivi.links.messages` | Messages |
+| `talent.suivi.links.messagesLine` | Échanges avec les recruteurs |
+| `talent.suivi.links.saved` | Offres enregistrées |
+| `talent.suivi.links.savedLine` | {count, plural, =0 {Aucune offre enregistrée} one {# offre} other {# offres}} |
+
+### `/app/espace` · Mon espace
+
+*Tout l'espace personnel sur une page (écran 17) : profil, outils carrière, acquis, compte. Ouverte depuis « Tout Mon espace » dans le menu de l'avatar.*
+
+| Clé | Texte |
+|---|---|
+| `talent.espace.seo` | Mon espace · Jumanly |
+| `talent.espace.title` | Mon espace |
+| `talent.espace.back` | Retour |
+| `talent.espace.completeness` | Profil complété à {percent} % |
+| `talent.espace.complete` | Compléter |
+| `talent.espace.missing` | Il manque : {sections}. |
+| `talent.espace.spaces` | Changer d'espace |
+| `talent.espace.tiles.dashboard` | Tableau de bord |
+| `talent.espace.tiles.dashboardLine` | Mon activité |
+| `talent.espace.tiles.subscription` | Abonnement |
+| `talent.espace.tiles.subscriptionLine` | Formule {plan} |
+| `talent.espace.groups.profile` | Profil professionnel |
+| `talent.espace.groups.tools` | Outils carrière |
+| `talent.espace.groups.acquired` | Acquis |
+| `talent.espace.groups.account` | Mon compte |
+| `talent.espace.rows.edit` | Modifier mes informations |
+| `talent.espace.rows.editLine` | Titre, résumé, coordonnées |
+| `talent.espace.rows.skills` | Mes compétences |
+| `talent.espace.rows.skillsLine` | {count, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}} |
+| `talent.espace.rows.portfolio` | Mon portfolio |
+| `talent.espace.rows.portfolioLine` | Vos réalisations |
+| `talent.espace.rows.visibility` | Visibilité auprès des recruteurs |
+| `talent.espace.rows.visibilityLine` | Qui peut voir mon profil |
+| `talent.espace.tools.builder` | CV Builder |
+| `talent.espace.tools.builderLine` | Créer un CV |
+| `talent.espace.tools.cvs` | Mes CV |
+| `talent.espace.tools.cvsLine` | {count, plural, =0 {Aucun CV} one {# CV} other {# CV}} |
+| `talent.espace.tools.documents` | Lettres et documents |
+| `talent.espace.tools.documentsLine` | Modèles et pièces |
+| `talent.espace.tools.linkedin` | Optimisation LinkedIn |
+| `talent.espace.tools.linkedinLine` | Titre, résumé |
+| `talent.espace.tools.interviews` | Simulations d'entretien |
+| `talent.espace.tools.interviewsLine` | À l'écrit ou à l'oral |
+| `talent.espace.tools.career` | Tous les outils Career |
+| `talent.espace.tools.careerLine` | Diagnostic, plan, conseils |
+| `talent.espace.tools.locked` | Outil non inclus dans votre formule |
+| `talent.espace.acquired.certificates` | Certificats et attestations |
+| `talent.espace.acquired.certificatesLine` | {count, plural, =0 {Aucune attestation} one {# attestation} other {# attestations}} |
+| `talent.espace.acquired.evaluations` | Compétences évaluées |
+| `talent.espace.acquired.evaluationsLine` | Résultats de vos évaluations |
+| `talent.espace.account.billing` | Abonnement et facturation |
+| `talent.espace.account.notifications` | Notifications |
+| `talent.espace.account.settings` | Paramètres et confidentialité |
+| `talent.espace.account.matching` | Comment fonctionne le matching |
+| `talent.espace.account.license` | Activer un code de licence |
+| `talent.espace.account.help` | Assistance |
 
 ### `/app/profil` · Profil professionnel
 

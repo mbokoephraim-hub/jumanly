@@ -75,8 +75,9 @@ Signalés, non créés (brief § 2.6) : questions du recruteur sur une offre, of
    neuf, pour ne casser aucun écran ; `primary` prend le dégradé principal de la maquette.
 2. **Écran d'objectif** : on réutilise `/app/bienvenue` (déjà affiché après l'inscription) en lui donnant
    la forme des écrans 01-02, au lieu d'un second écran.
-3. **Barre du bas sur tablette** : elle reste visible jusqu'à `lg` pour que les barres d'action fixes
-   aient toujours un repère (corrige le trou 768-1024 px).
+3. **Barre du bas sur tablette** : ~~elle reste visible jusqu'à `lg`~~. Révisé au prompt 2 : elle
+   s'arrête à 768 px (la colonne d'icônes prend le relais) et se retire sur les écrans qui ont une
+   barre d'action fixe ; voir `docs/decisions/2026-10-16-mobile-talent-navigation.md`.
 4. **Hire et Partenaire** : leur pilule actuelle reste ; seul le Talent passe à la nouvelle barre.
 
 ## 7. Découpage confirmé
