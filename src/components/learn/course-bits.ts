@@ -1,5 +1,11 @@
 /** Small helpers shared by the course page, the player and the quiz (mockups 03-04 to 03-06). */
 
+/**
+ * Playback speeds of the lesson video. Kept out of the client player: a server page importing a
+ * value from a "use client" file gets a reference, not the array (a video lesson then failed).
+ */
+export const speeds = ["0.75", "1", "1.25", "1.5", "2"];
+
 /** "08:12" for a lesson of 492 seconds. */
 export function clock(seconds: number) {
   const total = Math.max(0, Math.round(seconds));

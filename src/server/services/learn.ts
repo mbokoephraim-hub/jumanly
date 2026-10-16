@@ -123,7 +123,7 @@ export class LearnError extends Error {
 }
 
 /** The lesson, its course and the learner's enrollment; the course must be open to them. */
-async function lessonContext(db: PrismaClient, userId: string, lessonId: string) {
+export async function lessonContext(db: PrismaClient, userId: string, lessonId: string) {
   const lesson = await db.lesson.findUnique({
     where: { id: lessonId },
     include: { module: { select: { course: { select: { slug: true } } } } },

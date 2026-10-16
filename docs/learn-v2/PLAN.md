@@ -15,7 +15,9 @@ reconstruire ni supprimer de table ou de donnée.
    `learn_paths`). Section « Parcours » d'Explorer, page d'un parcours, « Parcours suivis »,
    administration `/admin/formations/parcours`. Retour arrière :
    `retour-arriere/etape-2-parcours.sql`.
-3. Progression par leçon (`LessonProgress`), reprise à la seconde près.
+3. **Reprise à la seconde près** : table `LessonProgress` (migration `learn_lesson_progress`),
+   `POST /api/learn/position`, reprise dans le lecteur. Retour arrière :
+   `retour-arriere/etape-3-reprise-video.sql`.
 4. Learning Room : onglets résumé et transcription, sous-titres WebVTT, temps restant, barre
    compacte sur téléphone.
 5. Statut « Validé » (Brouillon → En vérification → Validé → Publié → Archivé), historique des

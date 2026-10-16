@@ -7,11 +7,12 @@ import { AiOrb } from "@/components/brand/ai-orb";
 import { CoachChat } from "@/components/learn/coach-chat";
 import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
-import { clock, initialsOf, moduleMinutes } from "@/components/learn/course-bits";
+import { clock, initialsOf, moduleMinutes, speeds } from "@/components/learn/course-bits";
 import { CourseOverview } from "@/components/learn/course-overview";
 import { LessonNotes } from "@/components/learn/lesson-notes";
 import { QuizPanel } from "@/components/learn/quiz-panel";
-import { VideoPlayer, speeds } from "@/components/learn/video-player";
+import { VideoPlayer } from "@/components/learn/video-player";
+import { lessonResume } from "@/server/services/lesson-progress";
 import { Pattern } from "@/components/site/marketing";
 import { Alert, ButtonLink } from "@/components/ui";
 import { dynamic } from "@/i18n/dynamic";
@@ -124,6 +125,8 @@ export default async function LearnCoursePage({
   const paragraphs = lessonParagraphs(current.content);
   const resources = parseResources(current.resources);
   const playback = current.kind === "video" ? videoProvider().playback(current.videoId) : null;
+  // Learn v2, étape 3: the second where the learner stopped in this video.
+  const resumeSeconds = playback ? await lessonResume(db, user.id, current.id) : 0;
   const certificate = enrollment.certificate;
   const congrats = param("bravo") && certificate?.id === param("bravo");
   const position = t("learn.player.position", {
@@ -463,6 +466,13 @@ export default async function LearnCoursePage({
                     error: t("learn.player.error.text"),
                     retry: t("learn.player.error.retry"),
                     lowBandwidth: t("learn.player.lowBandwidth"),
+                  }}
+                  resume={{
+                    lessonId: current.id,
+                    at: resumeSeconds,
+                    endpoint: "/api/learn/position",
+                    resumed: t("learn.player.resume.text", { time: clock(resumeSeconds) }),
+                    restart: t("learn.player.resume.restart"),
                   }}
                 />
               ) : (

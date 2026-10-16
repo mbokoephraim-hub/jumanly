@@ -2712,6 +2712,8 @@ Conventions :
 | `learn.player.mute` | Couper le son |
 | `learn.player.time` | {current} / {total} |
 | `learn.player.lowBandwidth` | Connexion lente détectée. Nous passons en qualité réduite pour éviter les coupures. |
+| `learn.player.resume.text` | Reprise là où vous vous étiez arrêté, à {time}. |
+| `learn.player.resume.restart` | Reprendre au début |
 | `learn.player.transcript` | Transcription |
 | `learn.player.markComplete` | Marquer comme terminée |
 | `learn.player.completed` | Leçon terminée |

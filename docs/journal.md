@@ -2,6 +2,22 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Learn v2 · étape 3 : reprendre une vidéo à la seconde près (16 octobre 2026)
+
+- Table `LessonProgress` (migration `learn_lesson_progress`, retour arrière
+  `docs/learn-v2/retour-arriere/etape-3-reprise-video.sql`) : la position de lecture de chaque
+  leçon vidéo, par apprenant. Les leçons terminées restent dans `Enrollment.completedLessons`.
+- Le lecteur envoie la position toutes les 15 secondes de lecture, à la pause, à la fin et quand on
+  quitte la page (`navigator.sendBeacon`) vers `POST /api/learn/position` (valider → session →
+  inscription et formule → service ; même origine uniquement).
+- En revenant sur la leçon, la vidéo repart à la seconde près, avec « Reprise là où vous vous étiez
+  arrêté, à 03:12 » et « Reprendre au début ». Pas de reprise dans les 5 premières secondes ni dans
+  les 10 dernières.
+- Correction : une leçon avec une vraie vidéo plantait (la liste des vitesses était importée d'un
+  fichier client par une page serveur). Elle vit maintenant dans `course-bits.ts`.
+- Test e2e avec une petite vidéo fictive (`tests/e2e/assets/lecon-fictive.webm`, 8 Ko) servie par le
+  test, et une formation fictive créée puis supprimée par `tests/e2e/make-video-course.ts`.
+
 ## Learn v2 · étape 2 : les parcours (16 octobre 2026)
 
 - Un parcours enchaîne plusieurs formations dans un ordre conseillé (Domaine → Parcours →
