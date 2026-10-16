@@ -4328,15 +4328,41 @@
         }
       },
       "welcome": {
-        "title": "Faites le point, comme un vrai bilan",
+        "title": "Où en êtes-vous vraiment ?",
+        "titleAgain": "Refaites le point",
+        "tagline": "{duration}, une question à la fois. Vos réponses restent privées.",
         "text": "Six dimensions, une question à la fois. Vous voyez votre profil se dessiner pendant que vous répondez, puis vous recevez un bilan expliqué point par point.",
         "duration": "6 à 8 minutes",
         "launch": "Lancer mon diagnostic",
         "resume": "Reprendre mon diagnostic, étape {current} sur {total}",
         "restart": "Recommencer à zéro",
-        "prefillHint": "Nous reprenons ce que votre profil dit déjà (métier visé, secteurs, compétences, langues, études, CV). Vous pouvez tout modifier.",
+        "prefillHint": "Métier visé, compétences, langues, études et CV déjà remplis : vous pouvez tout modifier.",
+        "hook": {
+          "dimensions": "6 dimensions",
+          "dimensionsText": "Projet, compétences, expérience, outils, entretiens, recherche.",
+          "steps": "Une question à la fois",
+          "stepsText": "Votre profil se dessine pendant que vous répondez.",
+          "explained": "Un bilan expliqué",
+          "explainedText": "Une note sur 100 et vos priorités, point par point."
+        },
+        "plans": "Voir les formules",
+        "ai": {
+          "simple": "Chaque note est calculée par des règles fixes et expliquée.",
+          "personalized": "Jumanly Intelligence explique vos résultats et vous propose des pistes."
+        },
         "constellation": "Les six dimensions de votre bilan",
         "noscript": "Sans JavaScript, toutes les questions s'affichent sur une seule page."
+      },
+      "last": {
+        "title": "Votre dernier bilan",
+        "headerCta": "Revoir mon dernier bilan",
+        "date": "Fait le {date}",
+        "score": "{score} sur 100",
+        "up": "+{points} points depuis le {date}",
+        "down": "{points} points depuis le {date}",
+        "same": "Stable depuis le {date}",
+        "first": "Votre premier bilan : refaites-le dans un mois pour mesurer vos progrès.",
+        "open": "Voir mon bilan complet"
       },
       "card": {
         "label": "Votre carte professionnelle",

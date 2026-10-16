@@ -145,7 +145,7 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
   await logIn(page, demo.talentFree);
   await page.goto("/app/career/diagnostic");
   await expect(
-    page.getByRole("heading", { name: "Faites le point, comme un vrai bilan" }),
+    page.getByRole("heading", { name: /^(Où en êtes-vous vraiment \?|Refaites le point)$/ }),
   ).toBeVisible();
   const restart = page.getByRole("button", { name: "Recommencer à zéro" });
   if (await restart.isVisible()) await restart.click();
@@ -189,6 +189,14 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
   await main.getByRole("button", { name: "Refaire dans 30 jours" }).click();
   await expect(page).toHaveURL(/rappel=1/);
   await expect(main).toContainText("Rappel prévu le");
+
+  // Back on the welcome screen, the latest result comes first with a quick way back to it.
+  await page.goto("/app/career/diagnostic");
+  await expect(page.getByRole("heading", { name: "Refaites le point" })).toBeVisible();
+  const last = page.getByRole("region", { name: /Découverte|Construction|Prêt|Compétitif/ });
+  await expect(last).toContainText("Votre dernier bilan");
+  await page.getByRole("link", { name: "Revoir mon dernier bilan" }).click();
+  await expect(page).toHaveURL(/bilan=/);
 });
 
 test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini plan gratuit", async ({
@@ -198,7 +206,7 @@ test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini
   await logIn(page, demo.talentPro);
   await page.goto("/app/career/diagnostic");
   await expect(
-    page.getByRole("heading", { name: "Faites le point, comme un vrai bilan" }),
+    page.getByRole("heading", { name: /^(Où en êtes-vous vraiment \?|Refaites le point)$/ }),
   ).toBeVisible();
   const restart = page.getByRole("button", { name: "Recommencer à zéro" });
   if (await restart.isVisible()) await restart.click();

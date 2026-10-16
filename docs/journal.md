@@ -2,6 +2,22 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Accueil du diagnostic de carrière, plus direct (16 octobre 2026)
+
+Demande du propriétaire (trois captures de `/app/career/diagnostic`), prompt dans
+`/mnt/project-files/admin-v4/PROMPT-diagnostic.md`.
+
+- Celui qui a déjà un bilan le retrouve tout de suite : bouton « Revoir mon dernier bilan » en haut
+  à droite, puis un premier bloc « Votre dernier bilan » (score sur 100 en grand, étape atteinte,
+  date, évolution par rapport au bilan v2 précédent, « Voir mon bilan complet »). Les diagnostics
+  précédents passent du bas de la page à côté de ce bloc.
+- Carte de lancement raccourcie : une accroche (« Où en êtes-vous vraiment ? », ou « Refaites le
+  point » pour un talent qui revient), une ligne durée et confidentialité, trois accroches avec
+  icône, la case « profil et CV » avec une ligne d'aide, un seul bouton principal.
+- Jumanly Intelligence en une phrase sous le bouton (l'orbe et la phrase), à la place du grand
+  encadré vert ; le message de forfait devient une petite ligne avec « Voir les formules ».
+- Données réelles seulement : score, dates et évolution viennent des diagnostics enregistrés.
+
 ## Jumanly Admin v4 · étape 6 : responsive et passe finale (16 octobre 2026)
 
 - Tablette (à partir de 768 px) : la colonne d'icônes et le menu horizontal remplacent l'en-tête

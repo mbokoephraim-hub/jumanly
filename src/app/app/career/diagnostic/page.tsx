@@ -6,7 +6,7 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
 import { DiagnosticFlow, type SkillSource } from "@/components/career/diagnostic-flow";
-import { AiBrand, AiPanel, card, cardTitle, pillClass } from "@/components/career/kit";
+import { AiBrand, AiPanel, ScoreRing, card, cardTitle, pillClass } from "@/components/career/kit";
 import type { ScanCard } from "@/components/motion/scan";
 import { Alert } from "@/components/ui";
 import { cx } from "@/lib/cx";
@@ -164,7 +164,6 @@ export default async function DiagnosticPage({
   };
   const alerts = (
     <>
-      {upsellPlan && <Alert title={t("upsell", { plan: upsellPlan })} />}
       {personalized && readiness === "consent" && (
         <Alert title={tAi("consent.declined.state")}>
           <Link href="/app/parametres?onglet=confidentialite" className="font-medium underline">
@@ -178,11 +177,6 @@ export default async function DiagnosticPage({
       {params.erreur && <Alert tone="error" title={t("error")} />}
     </>
   );
-  const header = (
-    <>
-      <AppPageHeader eyebrow={t("eyebrow")} title={t("title")} />
-    </>
-  );
 
   if (typeof params.etape !== "string") {
     const resumeAt = draft
@@ -192,13 +186,41 @@ export default async function DiagnosticPage({
           withAi,
         )[draft.step]
       : undefined;
+    const latest = history[0];
     return (
       <>
-        {header}
+        <AppPageHeader
+          eyebrow={t("eyebrow")}
+          title={t("title")}
+          actions={
+            latest ? (
+              <Link
+                href={`/app/career/diagnostic?bilan=${latest.id}`}
+                className={pillClass("dark", "md")}
+              >
+                <Icon name="eye" className="size-4" />
+                {t("last.headerCta")}
+              </Link>
+            ) : null
+          }
+        />
         {alerts}
+        {latest && (
+          <div
+            className={cx(
+              "grid grid-cols-1 items-start gap-5",
+              history.length > 1 && "xl:grid-cols-[minmax(0,1fr)_380px]",
+            )}
+          >
+            <LastResult history={history} />
+            <History history={history} currentId={latest.id} max={4} />
+          </div>
+        )}
         <DiagnosticWelcome
           badge={badge}
           withAi={withAi}
+          again={Boolean(latest)}
+          upsell={upsellPlan}
           resume={
             draft
               ? resumeAt && resumeAt.dimension !== "more"
@@ -209,16 +231,6 @@ export default async function DiagnosticPage({
               : null
           }
         />
-        <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
-          <AiPanel>
-            <AiBrand />
-            <p className="text-sm leading-6">
-              {withAi ? t("intro.personalized") : t("intro.simple")}
-            </p>
-            <p className="text-[13px] leading-5 text-blanc/85">{t("result.simple.note")}</p>
-          </AiPanel>
-          <History history={history} />
-        </div>
       </>
     );
   }
@@ -241,7 +253,7 @@ export default async function DiagnosticPage({
 
   return (
     <>
-      {header}
+      <AppPageHeader eyebrow={t("eyebrow")} title={t("title")} />
       {alerts}
       <NextIntlClientProvider messages={diagnosticMessages as unknown as typeof messages}>
         <DiagnosticFlow
@@ -414,16 +426,102 @@ async function LegacyResult({
   );
 }
 
-async function History({
+/**
+ * « Votre dernier bilan », first on the welcome screen for a returning talent: the score in large,
+ * the stage reached, and the change since the previous diagnostic (real saved results only).
+ */
+async function LastResult({
   history,
-  currentId,
 }: {
   history: { id: string; createdAt: Date; level: string; result: unknown }[];
-  currentId?: string;
 }) {
   const t = await getTranslations("career.diagnostic");
   const d = dynamic(t);
-  const others = history.filter((item) => item.id !== currentId);
+  const [latest] = history;
+  if (!latest) return null;
+  const v2 = parseDiagnosticV2(latest.result as never);
+  const before = history
+    .slice(1)
+    .map((item) => ({ date: item.createdAt, v2: parseDiagnosticV2(item.result as never) }))
+    .find((item) => item.v2);
+  const delta = v2 && before?.v2 ? v2.score - before.v2.score : null;
+  const trend =
+    delta === null || !before
+      ? t("last.first")
+      : delta > 0
+        ? t("last.up", { points: delta, date: formatDate(before.date) })
+        : delta < 0
+          ? t("last.down", { points: delta, date: formatDate(before.date) })
+          : t("last.same", { date: formatDate(before.date) });
+  return (
+    <section
+      aria-labelledby="last-result"
+      className="flex flex-col gap-5 rounded-[22px] border border-sapin/8 bg-blanc p-4 text-sapin sm:flex-row sm:items-center sm:p-5 lg:p-6"
+    >
+      {v2 && (
+        <span className="self-center">
+          <ScoreRing value={v2.score} label={String(v2.score)} size={128} />
+          <span className="sr-only">{t("last.score", { score: v2.score })}</span>
+        </span>
+      )}
+      <div className="flex min-w-0 flex-1 flex-col gap-3">
+        <div className="flex flex-col gap-1">
+          <p className="text-xs font-semibold tracking-wide text-feuille-fonce uppercase">
+            {t("last.title")}
+          </p>
+          <h2 id="last-result" className="text-[24px] leading-tight font-semibold tracking-tight">
+            {v2 ? d(`stage.${v2.stage}`) : t("result.title")}
+          </h2>
+          {v2 && <p className="text-sm text-ardoise">{d(`stage.${v2.stage}Text`)}</p>}
+        </div>
+        <p className="flex flex-wrap items-center gap-2 text-[13px]">
+          <span className="rounded-pill bg-creme px-2.5 py-1 font-semibold">
+            {t("last.date", { date: formatDate(latest.createdAt) })}
+          </span>
+          {v2 && (
+            <span
+              className={cx(
+                "flex items-center gap-1 rounded-pill px-2.5 py-1 font-semibold",
+                delta !== null && delta > 0 ? "bg-lime-clair" : "bg-creme",
+              )}
+            >
+              {delta !== null && delta !== 0 && (
+                <Icon name={delta > 0 ? "up" : "down"} className="size-3.5" />
+              )}
+              {trend}
+            </span>
+          )}
+        </p>
+        <div className="flex flex-wrap gap-2.5">
+          <Link
+            href={`/app/career/diagnostic?bilan=${latest.id}`}
+            className={pillClass("lime", "md")}
+          >
+            {t("last.open")}
+            <Icon name="chev-r" className="size-4" />
+          </Link>
+          <a href="#diagnostic-welcome" className={pillClass("outline", "md")}>
+            {t("restart")}
+          </a>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+async function History({
+  history,
+  currentId,
+  max,
+}: {
+  history: { id: string; createdAt: Date; level: string; result: unknown }[];
+  currentId?: string;
+  /** Shows only the most recent ones (welcome screen). */
+  max?: number;
+}) {
+  const t = await getTranslations("career.diagnostic");
+  const d = dynamic(t);
+  const others = history.filter((item) => item.id !== currentId).slice(0, max);
   if (others.length === 0) return null;
   return (
     <section aria-labelledby="history" className={cx(card, "flex flex-col gap-2")}>
@@ -437,7 +535,7 @@ async function History({
             <li key={item.id} className="flex items-center justify-between gap-3 py-3">
               <Link
                 href={`/app/career/diagnostic?bilan=${item.id}`}
-                className="text-sm underline-offset-4 hover:underline"
+                className="text-sm whitespace-nowrap underline-offset-4 hover:underline"
               >
                 {formatDate(item.createdAt)}
               </Link>

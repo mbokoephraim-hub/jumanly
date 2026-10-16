@@ -3067,13 +3067,33 @@ Conventions :
 
 | Clé | Texte |
 |---|---|
-| `career.diagnostic.welcome.title` | Faites le point, comme un vrai bilan |
+| `career.diagnostic.welcome.title` | Où en êtes-vous vraiment ? |
+| `career.diagnostic.welcome.titleAgain` | Refaites le point |
+| `career.diagnostic.welcome.tagline` | {duration}, une question à la fois. Vos réponses restent privées. |
 | `career.diagnostic.welcome.text` | Six dimensions, une question à la fois. Vous voyez votre profil se dessiner pendant que vous répondez, puis vous recevez un bilan expliqué point par point. |
 | `career.diagnostic.welcome.duration` | 6 à 8 minutes |
 | `career.diagnostic.welcome.launch` | Lancer mon diagnostic |
 | `career.diagnostic.welcome.resume` | Reprendre mon diagnostic, étape {current} sur {total} |
 | `career.diagnostic.welcome.restart` | Recommencer à zéro |
-| `career.diagnostic.welcome.prefillHint` | Nous reprenons ce que votre profil dit déjà (métier visé, secteurs, compétences, langues, études, CV). Vous pouvez tout modifier. |
+| `career.diagnostic.welcome.prefillHint` | Métier visé, compétences, langues, études et CV déjà remplis : vous pouvez tout modifier. |
+| `career.diagnostic.welcome.hook.dimensions` | 6 dimensions |
+| `career.diagnostic.welcome.hook.dimensionsText` | Projet, compétences, expérience, outils, entretiens, recherche. |
+| `career.diagnostic.welcome.hook.steps` | Une question à la fois |
+| `career.diagnostic.welcome.hook.stepsText` | Votre profil se dessine pendant que vous répondez. |
+| `career.diagnostic.welcome.hook.explained` | Un bilan expliqué |
+| `career.diagnostic.welcome.hook.explainedText` | Une note sur 100 et vos priorités, point par point. |
+| `career.diagnostic.welcome.plans` | Voir les formules |
+| `career.diagnostic.welcome.ai.simple` | Chaque note est calculée par des règles fixes et expliquée. |
+| `career.diagnostic.welcome.ai.personalized` | Jumanly Intelligence explique vos résultats et vous propose des pistes. |
+| `career.diagnostic.last.title` | Votre dernier bilan |
+| `career.diagnostic.last.headerCta` | Revoir mon dernier bilan |
+| `career.diagnostic.last.date` | Fait le {date} |
+| `career.diagnostic.last.score` | {score} sur 100 |
+| `career.diagnostic.last.up` | +{points} points depuis le {date} |
+| `career.diagnostic.last.down` | {points} points depuis le {date} |
+| `career.diagnostic.last.same` | Stable depuis le {date} |
+| `career.diagnostic.last.first` | Votre premier bilan : refaites-le dans un mois pour mesurer vos progrès. |
+| `career.diagnostic.last.open` | Voir mon bilan complet |
 | `career.diagnostic.welcome.constellation` | Les six dimensions de votre bilan |
 | `career.diagnostic.welcome.noscript` | Sans JavaScript, toutes les questions s'affichent sur une seule page. |
 | `career.diagnostic.card.label` | Votre carte professionnelle |
