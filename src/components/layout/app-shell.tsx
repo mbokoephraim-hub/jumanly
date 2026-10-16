@@ -7,7 +7,7 @@ import { Toaster } from "@/components/motion/toaster";
 import { AppIntroGate } from "@/components/app/app-intro-gate";
 import type { IntroData } from "@/components/app/app-intro";
 import { hireNavigation, partnerNavigation, talentNavigation } from "@/config/navigation";
-import { Logo, Icon } from "@/components/brand";
+import { Logo, Icon, type IconName } from "@/components/brand";
 import { careerTabs } from "@/components/career/kit";
 import type { Section } from "@/config/section-navigation";
 import { dynamic } from "@/i18n/dynamic";
@@ -209,29 +209,33 @@ function appSections({
   lockedCareer: readonly string[];
   lockedLabel: string;
 }): Section[] {
-  const section = (name: string, match: string[], links: [string, string][]): Section => ({
+  const section = (
+    name: string,
+    match: string[],
+    links: [string, string, IconName][],
+  ): Section => ({
     match,
     label: t("section.aria", { section: name }),
-    links: links.map(([href, label]) => ({ href, label })),
+    links: links.map(([href, label, icon]) => ({ href, label, icon })),
   });
   return [
     section(
       t("section.account"),
       ["/app", "/app/profil", "/app/notifications", "/app/abonnement", "/app/parametres"],
       [
-        ["/app", t("section.dashboard")],
-        ["/app/profil", t("section.profile")],
-        ["/app/notifications", t("notifications")],
-        ["/app/abonnement", t("section.subscription")],
-        ["/app/parametres", t("settings")],
+        ["/app", t("section.dashboard"), "accueil"],
+        ["/app/profil", t("section.profile"), "profil"],
+        ["/app/notifications", t("notifications"), "notification"],
+        ["/app/abonnement", t("section.subscription"), "portefeuille"],
+        ["/app/parametres", t("settings"), "reglages"],
       ],
     ),
     section(
       t("learn"),
       ["/app/learn"],
       [
-        ["/app/learn", t("section.catalog")],
-        ["/app/learn/attestations", t("section.certificates")],
+        ["/app/learn", t("section.catalog"), "learn"],
+        ["/app/learn/attestations", t("section.certificates"), "certificat"],
       ],
     ),
     {
@@ -239,6 +243,7 @@ function appSections({
       links: careerTabs.map((tab) => ({
         href: tab.href,
         label: career(tab.key),
+        icon: tab.icon,
         locked: lockedCareer.includes(tab.key),
       })),
       lockedLabel,
@@ -247,27 +252,28 @@ function appSections({
       t("jobs"),
       ["/app/jobs"],
       [
-        ["/app/jobs", t("section.offers")],
-        ["/app/jobs/candidatures", t("section.applications")],
-        ["/app/jobs/enregistrees", t("section.saved")],
+        ["/app/jobs", t("section.offers"), "recherche"],
+        ["/app/jobs/candidatures", t("section.applications"), "send"],
+        ["/app/jobs/enregistrees", t("section.saved"), "favori"],
       ],
     ),
     section(
       t("hire.text"),
       ["/app/hire", "/app/organisation"],
       [
-        ["/app/hire", t("section.dashboard")],
+        ["/app/hire", t("section.dashboard"), "accueil"],
         ...hireNavigation
           .filter((item) => item.key !== "home" && item.key !== "hire.messages")
-          .map((item): [string, string] => [item.href, t(item.key)]),
+          .map((item): [string, string, IconName] => [item.href, t(item.key), item.icon]),
       ],
     ),
     section(
       t("partner"),
       ["/app/partenaire"],
-      partnerNavigation.map((item): [string, string] => [
+      partnerNavigation.map((item): [string, string, IconName] => [
         item.href,
         item.key === "home" ? t("section.dashboard") : t(item.key),
+        item.icon,
       ]),
     ),
   ];

@@ -75,10 +75,11 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
     const links: SectionLink[] = items.map((link) => ({
       href: link.href,
       label: t(`nav.${link.key}`),
+      icon: link.icon,
     }));
     // The costs and revenue page belongs to the dashboard's group.
     if (group === "steer" && !editorOnly)
-      links.push({ href: "/admin/indicateurs/couts", label: t("nav.costs") });
+      links.push({ href: "/admin/indicateurs/couts", label: t("nav.costs"), icon: "portefeuille" });
     return {
       match: [
         ...items.map((link) => link.href),

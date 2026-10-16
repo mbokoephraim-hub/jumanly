@@ -3076,6 +3076,10 @@
         "interviews": "Entretiens",
         "offers": "Offres reçues",
         "free": "Les candidatures sont toujours gratuites.",
+        "rate": "{value} sur {total}",
+        "chart": "Parcours de vos candidatures, de l'envoi à l'offre",
+        "empty": "Pas encore de candidature. Votre suivi s'affichera ici dès la première.",
+        "emptyCta": "Trouver une offre",
         "companies": {
           "text": "Entreprises qui recrutent",
           "meta": "{count, plural, one {# offre} other {# offres}} · {sector}",

@@ -32,7 +32,7 @@ export function TopSearch({
       <Icon
         name="recherche"
         aria-hidden
-        className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-ardoise"
+        className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-sapin"
       />
       <input
         id={id}
@@ -41,7 +41,7 @@ export function TopSearch({
         placeholder={placeholder}
         defaultValue={defaultValue}
         aria-describedby={`${id}-shortcut`}
-        className="h-11 w-full rounded-pill bg-blanc pr-12 pl-11 text-[13.5px] text-sapin shadow-[0_1px_2px_rgb(11_26_31/0.05)] ring-1 ring-sapin/10 ring-inset placeholder:text-ardoise focus:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus:outline-none"
+        className="h-11 w-full rounded-pill bg-blanc pr-12 pl-11 text-[13.5px] text-sapin shadow-[0_1px_2px_rgb(11_26_31/0.05)] ring-[1.5px] ring-sapin/20 transition-shadow ring-inset placeholder:text-ardoise hover:ring-sapin/50 focus:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus:ring-2 focus:ring-sapin focus:outline-none"
       />
       <kbd
         id={`${id}-shortcut`}

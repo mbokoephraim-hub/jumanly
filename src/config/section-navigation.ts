@@ -1,9 +1,11 @@
+import type { IconName } from "@/components/brand/icon";
+
 /**
  * Secondary horizontal menu (Admin v4, étape 2): the sub-sections of the section open in the
  * column of icons. `label` keys are resolved on the server (`appNav.…`, `career.…`, `admin.nav.…`).
  */
 /** `locked`: a tool the plan does not open yet (a padlock follows the label). */
-export type SectionLink = { href: string; label: string; locked?: boolean };
+export type SectionLink = { href: string; label: string; locked?: boolean; icon?: IconName };
 export type Section = {
   /** Paths of the section: the path and everything below it (`"/app"` and `"/admin"`: exact). */
   match: readonly string[];

@@ -21,8 +21,8 @@ const placements = {
   },
   // Floating gradient column of Jumanly Admin (Admin v3): icon only, label in a tooltip.
   rail: {
-    base: "jm-admin-link relative grid size-10 shrink-0 place-items-center rounded-full transition-colors [&_svg]:size-[21px]",
-    on: "bg-lime text-sapin shadow-[0_0_18px_rgb(166_242_107/0.55)]",
+    base: "jm-admin-link relative grid size-[46px] shrink-0 place-items-center rounded-full transition-colors [&_svg]:size-[22px]",
+    on: "bg-lime text-sapin shadow-[0_0_0_4px_rgb(166_242_107/0.18),0_0_22px_rgb(166_242_107/0.6)]",
     off: "text-blanc/75 hover:bg-blanc/12 hover:text-blanc",
   },
   // Wide Nuit menu of Jumanly Admin (« more » sheet on phones): icon and label on one line.

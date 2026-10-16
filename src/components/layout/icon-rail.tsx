@@ -30,24 +30,24 @@ export function IconRail({
 }) {
   return (
     <aside className="hidden shrink-0 md:sticky md:top-0 md:z-40 md:flex md:h-dvh md:items-center md:pl-3 lg:pl-4">
-      <div className="jm-admin-rail flex w-[68px] flex-col items-center gap-1.5 px-3.5 py-3">
+      <div className="jm-admin-rail flex w-[78px] flex-col items-center gap-3.5 px-4 py-6">
         <Link
           href={home}
           aria-label={homeLabel}
-          className="jm-admin-link relative mb-1 grid size-10 place-items-center rounded-[13px]"
+          className="jm-admin-link relative mb-1.5 grid size-11 place-items-center rounded-[14px]"
         >
-          <Logo variant="tile" height={40} />
+          <Logo variant="tile" height={44} />
           <span aria-hidden className="jm-admin-tip">
             {homeTip}
           </span>
         </Link>
-        <nav aria-label={label} className="flex flex-col items-center gap-1.5">
+        <nav aria-label={label} className="flex flex-col items-center gap-3.5">
           {groups
             .filter(({ items }) => items.length > 0)
             .map((group, index) => (
               <Fragment key={group.label ?? index}>
                 {index > 0 && <span aria-hidden className="jm-admin-sep" />}
-                <ul aria-label={group.label} className="flex flex-col gap-0.5">
+                <ul aria-label={group.label} className="flex flex-col gap-2">
                   {group.items.map((item) => (
                     <li key={item.key}>
                       <NavLink
@@ -65,7 +65,7 @@ export function IconRail({
         {footer && (
           <>
             <span aria-hidden className="jm-admin-sep" />
-            <div className="flex flex-col items-center gap-0.5">{footer}</div>
+            <div className="flex flex-col items-center gap-1.5">{footer}</div>
           </>
         )}
       </div>

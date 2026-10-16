@@ -2,6 +2,25 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v4 · étape 7 : finitions visuelles (16 octobre 2026)
+
+Prompt : `/mnt/project-files/admin-v4/PROMPT-finitions.md` (cinq captures du propriétaire).
+
+- Colonne d'icônes plus haute et plus large (78 px, rubriques de 46 px, icônes de 22 px), dégradé
+  plus contrasté avec un reflet sur le bord, rubrique active avec halo et trait plus long.
+- Sous-menu du haut dans une barre-pilule blanche bordée ; chaque onglet a son icône ; l'onglet
+  courant est plein (dégradé Sapin, texte blanc).
+- Champs de saisie : bordure Sapin à 20 % (au lieu de Brume) dans `inputClasses`, `SearchField`,
+  `TopSearch`, et par une règle de `admin.css` pour les champs écrits à la main dans les espaces
+  connectés. La recherche de Jobs devient une barre blanche à deux cases nettes et bouton intégré.
+- Filtres de Jobs en vrais boutons (bordure, flèche, coche quand actif) ; « Filtres » sur fond
+  Brume ; « Tous / Recommandées / Récentes » en sélecteur segmenté ; « Trier » en bouton bordé.
+- « Vos candidatures » (Jobs et Mes candidatures) : barres de progression de l'envoi à l'offre,
+  quatre tuiles avec le chiffre en grand et la part atteinte (« 2 sur 5 »), état vide avec un lien
+  vers les offres (`src/components/jobs/application-stats.tsx`).
+- Captures dans `/mnt/project-files/captures/admin-v4/etape-7/`, aucun débordement à 390, 768 et
+  1440 px.
+
 ## Accueil du diagnostic de carrière, plus direct (16 octobre 2026)
 
 Demande du propriétaire (trois captures de `/app/career/diagnostic`), prompt dans
