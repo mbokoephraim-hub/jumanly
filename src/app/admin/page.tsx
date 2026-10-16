@@ -3,6 +3,7 @@ import { notFound, redirect } from "next/navigation";
 import { connection } from "next/server";
 import { getTranslations } from "next-intl/server";
 import { AiOrb, Icon, type IconName } from "@/components/brand";
+import { HeaderAction } from "@/components/app/header-action";
 import { AdminPageHeader, adminCard, adminTitle, FilterMenu, Tag } from "@/components/admin/kit";
 import { Alert, ButtonLink } from "@/components/ui";
 import { cx } from "@/lib/cx";
@@ -248,6 +249,19 @@ export default async function AdminDashboard({ searchParams }: PageProps<"/admin
           { label: t("dashboard.kpi.activeUsers"), value: number.format(activeNow) },
           { label: t("dashboard.kpi.mrr"), value: usd(now.mrrCents) },
         ]}
+        action={
+          attention[0] && (
+            <HeaderAction
+              href={attention[0].href}
+              icon="alerte"
+              label={t("dashboard.attention.first", {
+                item: t(`dashboard.attention.kind.${attention[0].kind}`, {
+                  count: attention[0].count,
+                }),
+              })}
+            />
+          )
+        }
       />
       {params.erreur === "lecture" && <Alert tone="warning" title={t("notAllowed")} />}
 

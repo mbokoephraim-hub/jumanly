@@ -11,8 +11,7 @@ import {
 } from "@/components/admin/formations-list";
 import { CourseGallery } from "@/components/admin/formations-studio";
 import { Icon } from "@/components/brand/icon";
-import { ButtonLink } from "@/components/ui";
-import { cx } from "@/lib/cx";
+import { ButtonLink, segmentedItem, segmentedList } from "@/components/ui";
 import { requireCourseEditor } from "@/server/auth/session";
 import { db } from "@/server/db";
 import {
@@ -75,7 +74,7 @@ export default async function AdminCourses({ searchParams }: PageProps<"/admin/f
         >
           {t("new")}
         </ButtonLink>
-        <nav aria-label={t("v3.view.label")} className="flex gap-1 rounded-pill bg-blanc p-1">
+        <nav aria-label={t("v3.view.label")} className={segmentedList}>
           {(["galerie", "liste"] as const).map((view) => {
             const current = (view === "liste") === list;
             return (
@@ -83,10 +82,7 @@ export default async function AdminCourses({ searchParams }: PageProps<"/admin/f
                 key={view}
                 href={viewHref(view)}
                 aria-current={current ? "page" : undefined}
-                className={cx(
-                  "inline-flex h-9 items-center gap-1.5 rounded-pill px-3.5 text-[12.5px] font-semibold",
-                  current ? "bg-sapin text-blanc" : "text-sapin hover:bg-creme",
-                )}
+                className={segmentedItem(current)}
               >
                 <Icon name={view === "liste" ? "menu" : "grid"} className="size-4" />
                 {t(`v3.view.${view}`)}

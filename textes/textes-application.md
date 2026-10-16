@@ -9166,6 +9166,7 @@ Conventions :
 | `admin.dashboard.attention.title` | Ce qui demande votre attention |
 | `admin.dashboard.attention.hint` | Du plus urgent au moins urgent |
 | `admin.dashboard.attention.open` | Traiter |
+| `admin.dashboard.attention.first` | Traiter : {item} |
 | `admin.dashboard.attention.why` | Pourquoi ? |
 | `admin.dashboard.attention.overdue` | En retard |
 | `admin.dashboard.attention.oldest` | {days, plural, =0 {Le plus ancien date d'aujourd'hui} one {Le plus ancien attend depuis # jour} other {Le plus ancien attend depuis # jours}} |

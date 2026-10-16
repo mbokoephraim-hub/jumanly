@@ -10960,6 +10960,7 @@
         "title": "Ce qui demande votre attention",
         "hint": "Du plus urgent au moins urgent",
         "open": "Traiter",
+        "first": "Traiter : {item}",
         "why": "Pourquoi ?",
         "overdue": "En retard",
         "oldest": "{days, plural, =0 {Le plus ancien date d'aujourd'hui} one {Le plus ancien attend depuis # jour} other {Le plus ancien attend depuis # jours}}",
