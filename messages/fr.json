@@ -3767,6 +3767,10 @@
       "mute": "Couper le son",
       "time": "{current} / {total}",
       "lowBandwidth": "Connexion lente détectée. Nous passons en qualité réduite pour éviter les coupures.",
+      "resume": {
+        "text": "Reprise là où vous vous étiez arrêté, à {time}.",
+        "restart": "Reprendre au début"
+      },
       "transcript": "Transcription",
       "markComplete": "Marquer comme terminée",
       "completed": "Leçon terminée",

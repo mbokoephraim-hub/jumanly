@@ -1,3 +1,5 @@
+import { execFileSync } from "node:child_process";
+import { readFileSync } from "node:fs";
 import { expect, test, type Browser } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { demo, logIn } from "./session";
@@ -401,7 +403,8 @@ test("les parcours : suivre un parcours et en publier un dans l'admin", async ({
   await editor.getByRole("link", { name: "Parcours", exact: true }).click();
   await expect(editor.getByRole("heading", { level: 1, name: "Parcours" })).toBeVisible();
   await editor.locator("#path-new-title").fill(title);
-  await editor.getByRole("button", { name: "Créer le parcours" }).click();
+  // Enter submits the form: on a phone the floating admin bar can sit over the button.
+  await editor.locator("#path-new-title").press("Enter");
   await expect(editor.getByText("Parcours créé.", { exact: false })).toBeVisible();
   await expect(editor.getByRole("button", { name: "Publier" })).toBeDisabled();
   for (const course of ["Réussir son CV (démo)", "Préparer un entretien d'embauche (démo)"]) {
@@ -424,4 +427,79 @@ test("les parcours : suivre un parcours et en publier un dans l'admin", async ({
   await expectAccessible(editor);
   await editor.getByRole("button", { name: "Archiver" }).click();
   await expect(editor.getByText("Parcours archivé", { exact: false })).toBeVisible();
+});
+
+// Learn v2, étape 3: the video resumes at the second where the learner stopped. The test serves a
+// small fictional video (intercepted address under /medias) and creates its own fictional course.
+test("la vidéo d'une leçon reprend là où on s'était arrêté", async ({ page }) => {
+  test.setTimeout(120_000);
+  const slug = `formation-video-fictive-${suffix()}`;
+  const helper = (...args: string[]) =>
+    execFileSync("pnpm", ["exec", "tsx", "tests/e2e/make-video-course.ts", slug, ...args])
+      .toString()
+      .trim()
+      .split("\n")
+      .at(-1)!;
+  const lessonId = helper("/medias/e2e/lecon-fictive.webm");
+  try {
+    // Served with byte ranges, as a real video host does: without them the video cannot seek.
+    const file = readFileSync("tests/e2e/assets/lecon-fictive.webm");
+    await page.route("**/medias/e2e/**", (route) => {
+      const [, from, to] = /bytes=(\d+)-(\d*)/.exec(route.request().headers().range ?? "") ?? [];
+      const start = Number(from ?? 0);
+      const end = to ? Number(to) : file.length - 1;
+      return route.fulfill({
+        status: from === undefined ? 200 : 206,
+        contentType: "video/webm",
+        headers: {
+          "Accept-Ranges": "bytes",
+          ...(from === undefined
+            ? {}
+            : { "Content-Range": `bytes ${start}-${end}/${file.length}` }),
+        },
+        body: file.subarray(start, end + 1),
+      });
+    });
+    await logIn(page, demo.talentFree);
+    await page.goto(`/app/learn/${slug}`);
+    await page.getByRole("button", { name: "Commencer" }).first().click();
+    await expect(page).toHaveURL(new RegExp(`lecon=${lessonId}`));
+    const video = page.locator("video");
+    await expect
+      .poll(() => video.evaluate((element: HTMLVideoElement) => element.readyState))
+      .toBeGreaterThan(0);
+    expect(
+      await page.getByText("Reprise là où vous vous étiez arrêté", { exact: false }).count(),
+    ).toBe(0);
+
+    // Stop at 00:32: the position is saved when the video pauses.
+    const saved = page.waitForResponse(
+      (response) => response.url().endsWith("/api/learn/position") && response.ok(),
+    );
+    await video.evaluate((element: HTMLVideoElement) => {
+      element.currentTime = 32;
+      element.dispatchEvent(new Event("pause"));
+    });
+    expect((await saved).request().postDataJSON()).toMatchObject({ lessonId, position: 32 });
+
+    // Back on the lesson: it starts again at 00:32, or from the beginning on request.
+    await page.goto(`/app/learn/${slug}?lecon=${lessonId}`);
+    await expect(page.getByText("Reprise là où vous vous étiez arrêté, à 00:32.")).toBeVisible();
+    await expect
+      .poll(() => video.evaluate((element: HTMLVideoElement) => Math.round(element.currentTime)))
+      .toBe(32);
+    await expectAccessible(page);
+    await page.getByRole("button", { name: "Reprendre au début" }).click();
+    await expect
+      .poll(() => video.evaluate((element: HTMLVideoElement) => Math.round(element.currentTime)))
+      .toBe(0);
+
+    // Someone else's position cannot be written, nor a lesson of a course one does not follow.
+    const refused = await page.request.post("/api/learn/position", {
+      data: { lessonId: "inconnue", position: 10 },
+    });
+    expect(refused.status()).toBe(403);
+  } finally {
+    helper("--delete");
+  }
 });

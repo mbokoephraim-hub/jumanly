@@ -376,6 +376,21 @@ model LearningPathFollow {
   @@index([pathId])
 }
 
+/// Learn v2, étape 3: where a learner stopped in a lesson video, to resume at the second.
+/// Completion stays in `Enrollment.completedLessons`; this table only keeps the position.
+model LessonProgress {
+  userId          String
+  user            User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId        String
+  lesson          Lesson   @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  positionSeconds Int      @default(0)
+  durationSeconds Int?
+  updatedAt       DateTime @updatedAt
+
+  @@id([userId, lessonId])
+  @@index([lessonId])
+}
+
 enum CourseStatus {
   draft
   review
@@ -460,6 +475,7 @@ model Lesson {
   transcript  String?
   quiz        Quiz?
   notes       LessonNote[]
+  progress    LessonProgress[]
   documents   CourseDocument[]
 
   @@unique([moduleId, order])
@@ -709,6 +725,7 @@ model User {
   learningPaths       LearningPathFollow[]
   quizAttempts        QuizAttempt[]
   lessonNotes         LessonNote[]
+  lessonProgress      LessonProgress[]
   savedCourses        SavedCourse[]
   aiUsages            AiUsage[]
   aiSuggestions       AiSuggestion[]
