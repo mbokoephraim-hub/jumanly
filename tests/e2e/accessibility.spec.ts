@@ -11,6 +11,8 @@ for (const path of ["/", "/dev/composants", "/connexion", "/inscription", "/mot-
 }
 
 test("aucune erreur d'accessibilité WCAG 2.2 AA dans l'espace connecté", async ({ page }) => {
+  // Sixteen pages, each fully analysed: more than the default 30 s when tests run in parallel.
+  test.setTimeout(90_000);
   await logIn(page, demo.talentPro);
   for (const path of [
     "/app",
@@ -90,6 +92,7 @@ const sweeps: { name: string; email: string; paths: string[] }[] = [
 
 for (const sweep of sweeps) {
   test(`aucune erreur d'accessibilité WCAG 2.2 AA · espace ${sweep.name}`, async ({ browser }) => {
+    test.setTimeout(120_000);
     const context = await browser.newContext();
     const page = await context.newPage();
     await logIn(page, sweep.email);

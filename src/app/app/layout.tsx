@@ -13,6 +13,7 @@ import { unreadNotifications } from "@/server/services/notifications";
 import { hireMemberships, partnerMemberships } from "@/server/services/organization";
 import { introData } from "@/components/app/app-intro-data";
 import { introProfile } from "@/lib/app-intro";
+import { lockedTools } from "@/server/services/career-offer";
 
 /** Signed-in space: every page below needs a session (checked on the server). */
 export default function SignedInLayout({ children }: LayoutProps<"/app">) {
@@ -62,6 +63,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       unread={unread}
       reduceMotion={user.reduceMotion}
       intro={intro}
+      lockedCareer={plan ? lockedTools(plan.values) : []}
       account={{
         name: user.name,
         planName: plan?.planName ?? "",

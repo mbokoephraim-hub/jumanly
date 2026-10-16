@@ -36,9 +36,12 @@ export function AppShell({
   unread,
   reduceMotion = false,
   intro,
+  lockedCareer = [],
   children,
 }: {
   account: AccountSummary;
+  /** Career tools the plan keeps locked: a padlock in the Career menu. */
+  lockedCareer?: readonly string[];
   /** Active organization space, or null for the personal space. */
   space: (SpaceOption & { partner?: boolean }) | null;
   spaces: SpaceOption[];
@@ -67,6 +70,8 @@ export function AppShell({
   const sections = appSections({
     t,
     career: (key) => (key === "home" ? tc("nav.home") : dynamic(tc)(`home.${key}.title`)),
+    lockedCareer,
+    lockedLabel: tc("nav.locked"),
   });
 
   const bellLabels: BellLabels = {
@@ -174,9 +179,13 @@ export function AppShell({
 function appSections({
   t,
   career,
+  lockedCareer,
+  lockedLabel,
 }: {
   t: ReturnType<typeof useTranslations<"appNav">>;
   career: (key: (typeof careerTabs)[number]["key"]) => string;
+  lockedCareer: readonly string[];
+  lockedLabel: string;
 }): Section[] {
   const section = (name: string, match: string[], links: [string, string][]): Section => ({
     match,
@@ -203,11 +212,15 @@ function appSections({
         ["/app/learn/attestations", t("section.certificates")],
       ],
     ),
-    section(
-      t("career"),
-      ["/app/career"],
-      careerTabs.map((tab) => [tab.href, career(tab.key)]),
-    ),
+    {
+      ...section(t("career"), ["/app/career"], []),
+      links: careerTabs.map((tab) => ({
+        href: tab.href,
+        label: career(tab.key),
+        locked: lockedCareer.includes(tab.key),
+      })),
+      lockedLabel,
+    },
     section(
       t("jobs"),
       ["/app/jobs"],

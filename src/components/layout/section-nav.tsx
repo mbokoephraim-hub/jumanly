@@ -2,6 +2,7 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
+import { Icon } from "@/components/brand/icon";
 import { activeLink, sectionIndex, type Section } from "@/config/section-navigation";
 import { cx } from "@/lib/cx";
 
@@ -31,6 +32,12 @@ export function SectionNav({ sections, className }: { sections: Section[]; class
               )}
             >
               {link.label}
+              {link.locked && (
+                <>
+                  <Icon name="lock" className="ml-1.5 size-[13px] opacity-55" />
+                  <span className="sr-only">{section.lockedLabel}</span>
+                </>
+              )}
             </Link>
           </li>
         ))}

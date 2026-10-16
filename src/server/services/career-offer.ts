@@ -25,6 +25,14 @@ export function planOpens(plan: PublicPlan, tool: LockableTool): boolean {
   return value !== "false" && value !== "0" && value !== "none";
 }
 
+/** The tools a subject's resolved values keep locked (the Career menu shows a padlock on them). */
+export function lockedTools(values: Record<string, string>): LockableTool[] {
+  return lockableTools.filter((tool) => {
+    const value = values[toolGates[tool]];
+    return value === undefined || value === "false" || value === "0" || value === "none";
+  });
+}
+
 const price = (plan: PublicPlan) => plan.priceCents ?? Infinity;
 
 /** Paid talent plans, cheapest first. */
