@@ -241,7 +241,11 @@ function appSections({
       t("learn"),
       ["/app/learn"],
       [
-        ["/app/learn", t("section.catalog"), "learn"],
+        ["/app/learn", t("section.learnHome"), "accueil"],
+        ["/app/learn/explorer", t("section.catalog"), "recherche"],
+        ["/app/learn/parcours", t("section.learnPaths"), "learn"],
+        ["/app/learn/evaluations", t("section.learnEvaluations"), "quiz"],
+        ["/app/learn/coach", t("section.learnCoach"), "intelligence"],
         ["/app/learn/attestations", t("section.certificates"), "certificat"],
       ],
     ),

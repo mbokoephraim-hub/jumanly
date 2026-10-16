@@ -1,367 +1,349 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getTranslations } from "next-intl/server";
+import { redirect } from "next/navigation";
+import { getFormatter, getTranslations } from "next-intl/server";
 import { HeaderAction } from "@/components/app/header-action";
 import { AppPageHeader } from "@/components/app/page-header";
-import { Icon } from "@/components/brand/icon";
-import { Pagination, withParams } from "@/components/site/navigation-bits";
-import { PublicCourseCard } from "@/components/site/public-cards";
-import {
-  Alert,
-  ButtonLink,
-  EmptyState,
-  ProgressBar,
-  SearchField,
-  segmentedItem,
-  segmentedList,
-} from "@/components/ui";
-import { durationParts } from "@/lib/format";
-import { cx } from "@/lib/cx";
+import { AiOrb } from "@/components/brand/ai-orb";
+import { Icon, type IconName } from "@/components/brand/icon";
 import { RecommendedCourses } from "@/components/matching/recommendations";
+import { ButtonLink, ProgressBar, ProgressRing } from "@/components/ui";
+import { cx } from "@/lib/cx";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { getCourseSearch, getPublicPlans } from "@/server/queries/public";
-import {
-  countPublishedCourses,
-  courseSummariesByIds,
-  featuredCourses,
-  listCourseThemes,
-  parseCourseFilters,
-  type CourseSummary,
-} from "@/server/services/courses";
-import {
-  catalogLevelOf,
-  myEnrollments,
-  opensCourse,
-  savedCourseIds,
-} from "@/server/services/learn";
-import { planForCatalogLevel } from "@/server/services/plans";
-import { TabRail } from "@/components/motion/tab-rail";
+import { learnerEvaluations, nextLessons } from "@/server/services/learn-academy";
+import { myCertificates, myEnrollments } from "@/server/services/learn";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("learn");
+  const t = await getTranslations("learn.home");
   return { title: t("seo"), robots: { index: false } };
 }
 
-const lists = {
-  toutes: "all",
-  mes: "mine",
-  enregistrees: "saved",
-  terminees: "completed",
-} as const;
-type List = keyof typeof lists;
+/** Old catalog addresses (`?q=`, `?liste=`…) keep working: they lead to the new spaces. */
+const catalogParams = ["q", "theme", "niveau", "acces", "page", "enregistre"];
+const legacyLists: Record<string, string> = {
+  toutes: "",
+  mes: "",
+  terminees: "?liste=terminees",
+  enregistrees: "?liste=enregistrees",
+};
+
+const card = "rounded-[22px] border border-sapin/8 bg-blanc p-5 lg:p-6";
+const sectionTitle = "text-[18px] leading-tight font-bold tracking-tight lg:text-[20px]";
 
 /**
- * Learn catalog for a signed-in talent (partie 07 § 3): every published course, with a lock when
- * the plan's `learn.catalog.level` does not open it, and the learner's own lists.
+ * « Mon espace d'apprentissage », the home of the Learn academy (ux-test, étape 2): the next lesson
+ * in one click, what is left to do, the AI coach, the latest attestation and the recommendations.
  */
-export default async function LearnPage({ searchParams }: PageProps<"/app/learn">) {
+export default async function LearnHomePage({ searchParams }: PageProps<"/app/learn">) {
   const params = await searchParams;
+  const query = new URLSearchParams();
+  for (const [key, value] of Object.entries(params))
+    if (typeof value === "string") query.set(key, value);
+  if (typeof params.liste === "string" && params.liste in legacyLists)
+    redirect(
+      params.liste === "toutes"
+        ? "/app/learn/explorer"
+        : `/app/learn/parcours${legacyLists[params.liste]}`,
+    );
+  if (catalogParams.some((key) => query.has(key))) redirect(`/app/learn/explorer?${query}`);
+
   const user = await requireUser("/app/learn");
   const t = await getTranslations();
-  const list: List =
-    typeof params.liste === "string" && params.liste in lists ? (params.liste as List) : "toutes";
-  const filters = parseCourseFilters(params);
-  const [plans, planLevel, enrollments, savedIds] = await Promise.all([
-    getPublicPlans(),
-    catalogLevelOf(db, user.id),
+  const format = await getFormatter();
+  const [courses, enrollments, evaluations, certificates, profile] = await Promise.all([
+    nextLessons(db, user.id),
     myEnrollments(db, user.id),
-    savedCourseIds(db, user.id),
-  ]);
-  const enrollmentBySlug = new Map(
-    enrollments.map((enrollment) => [enrollment.course.slug, enrollment]),
-  );
-
-  let courses: CourseSummary[] = [];
-  let search: Awaited<ReturnType<typeof getCourseSearch>> | null = null;
-  if (list === "toutes") {
-    search = await getCourseSearch(filters);
-    courses = search.courses;
-  } else {
-    const ids =
-      list === "enregistrees"
-        ? savedIds
-        : enrollments
-            .filter((enrollment) =>
-              list === "terminees" ? enrollment.completedAt : !enrollment.completedAt,
-            )
-            .map((enrollment) => enrollment.courseId);
-    courses = await courseSummariesByIds(db, ids);
-  }
-  const { page: _page, ...current } = filters;
-  void _page;
-  const saved = params.enregistre;
-  const goal = (
-    await db.talentProfile.findUnique({
+    learnerEvaluations(db, user.id),
+    myCertificates(db, user.id),
+    db.talentProfile.findUnique({
       where: { userId: user.id },
       select: { desiredJobTitles: true },
-    })
-  )?.desiredJobTitles[0];
-
-  const [total, freeCount, themes, featured] = await Promise.all([
-    countPublishedCourses(db),
-    db.course.count({ where: { status: "published", requiredLevel: "free" } }),
-    listCourseThemes(db),
-    featuredCourses(db, 1),
+    }),
   ]);
-  const inProgress = enrollments.filter((enrollment) => !enrollment.completedAt);
-  const filtered = Boolean(
-    filters.q ||
-    filters.theme ||
-    filters.niveau ||
-    filters.acces ||
-    (search?.page && search.page > 1),
-  );
-  const hero = list === "toutes" && !filtered ? featured[0] : undefined;
-  const lockedPlan = (course: CourseSummary) =>
-    opensCourse(planLevel, course.requiredLevel)
-      ? undefined
-      : planForCatalogLevel(plans, course.requiredLevel)?.name;
+  const current = courses[0];
+  const others = courses.slice(1, 4);
+  const lessonsDone = enrollments.reduce((sum, row) => sum + row.completedLessons.length, 0);
+  const passed = evaluations.filter((item) => item.status === "passed").length;
+  const valid = certificates.filter((certificate) => !certificate.revokedAt);
+  const todo = [
+    ...evaluations.filter((item) => item.status === "review"),
+    ...evaluations.filter((item) => item.status === "todo"),
+  ].slice(0, 3);
+  const lessonHref = (slug: string, id?: string) =>
+    id ? `/app/learn/${slug}?lecon=${id}` : `/app/learn/${slug}`;
 
-  const footer = (course: CourseSummary) => {
-    const enrollment = enrollmentBySlug.get(course.slug);
-    if (enrollment?.completedAt) {
-      return (
-        <p className="mt-1 flex items-center gap-1.5 text-xs font-semibold text-up-texte">
-          <Icon name="check" className="size-3.5" />
-          {t("learn.card.completed")}
-        </p>
-      );
-    }
-    if (enrollment) {
-      return (
-        <div className="mt-1 flex items-center gap-2 text-xs font-semibold">
-          <ProgressBar
-            value={enrollment.progress}
-            tone="feuille"
-            label={t("learn.card.progress", { percent: enrollment.progress })}
-          />
-          <span className="shrink-0">
-            {t("learn.card.progress", { percent: enrollment.progress })}
-          </span>
-        </div>
-      );
-    }
-    if (lockedPlan(course)) {
-      return (
-        <p className="mt-1 flex items-center gap-1.5 text-xs font-semibold">
-          <Icon name="play" className="size-3" />
-          {t("learn.lock.preview")}
-        </p>
-      );
-    }
-    return null;
-  };
-
-  const tabHref = (key: List) => (key === "toutes" ? "/app/learn" : `/app/learn?liste=${key}`);
-  const chip = (active: boolean) =>
-    cx(
-      "inline-flex h-9 shrink-0 items-center rounded-pill px-4 text-[13px] font-semibold whitespace-nowrap",
-      active
-        ? "bg-sapin text-blanc"
-        : "bg-blanc ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40",
-    );
-  const sectionTitle = "text-[20px] leading-tight font-bold tracking-tight lg:text-[22px]";
+  const stats: { label: string; value: number; icon: IconName; tone: string }[] = [
+    {
+      label: t("learn.home.stats.inProgress"),
+      value: courses.length,
+      icon: "learn",
+      tone: "bg-lime",
+    },
+    {
+      label: t("learn.home.stats.lessons"),
+      value: lessonsDone,
+      icon: "cours-video",
+      tone: "bg-menthe-claire",
+    },
+    {
+      label: t("learn.home.stats.passed"),
+      value: passed,
+      icon: "quiz",
+      tone: "bg-lime-clair",
+    },
+    {
+      label: t("learn.home.stats.certificates"),
+      value: valid.length,
+      icon: "certificat",
+      tone: "bg-neon",
+    },
+  ];
 
   return (
     <div className="flex flex-col gap-5">
       <AppPageHeader
-        eyebrow={t("learn.catalog.eyebrow", { count: total, free: freeCount })}
-        title={t("learn.catalog.title")}
+        eyebrow={t("learn.home.eyebrow")}
+        title={t("learn.home.title", { firstName: user.firstName ?? user.name })}
         actions={
-          inProgress[0] ? (
+          current ? (
             <HeaderAction
-              href={`/app/learn/${inProgress[0].course.slug}`}
+              href={lessonHref(current.slug, current.next?.id)}
               icon="play"
-              label={t("learn.catalog.resume", { percent: inProgress[0].progress })}
+              label={t("learn.catalog.resume", { percent: current.progress })}
             />
           ) : null
         }
       />
 
-      <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
-        <nav aria-label={t("learn.catalog.tabs")} className="max-w-full min-w-0">
-          <TabRail name="learn-listes">
-            <ul className={segmentedList}>
-              {(Object.keys(lists) as List[]).map((key) => (
-                <li key={key}>
-                  <Link
-                    href={tabHref(key)}
-                    aria-current={list === key ? "page" : undefined}
-                    className={segmentedItem(list === key)}
-                  >
-                    {t(`learn.catalog.tab.${lists[key]}`)}
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link href="/app/learn/attestations" className={segmentedItem(false)}>
-                  <Icon name="certificat" className="size-4" />
-                  {t("learn.catalog.certificatesLink")}
-                </Link>
-              </li>
-            </ul>
-          </TabRail>
-        </nav>
-        {list === "toutes" && (
-          <form action="/app/learn" method="get" role="search" className="w-full lg:w-[440px]">
-            {filters.theme && <input type="hidden" name="theme" value={filters.theme} />}
-            <SearchField
-              id="learn-search"
-              name="q"
-              label={t("learn.catalog.search.label")}
-              placeholder={t("learn.catalog.search.placeholder")}
-              defaultValue={filters.q}
+      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.7fr)_minmax(0,1fr)]">
+        {current ? (
+          <section
+            aria-labelledby="learn-next"
+            className={cx(card, "flex flex-col gap-4 sm:flex-row sm:items-center sm:gap-6")}
+          >
+            <ProgressRing
+              value={current.progress}
+              size={96}
+              label={t("learn.card.progress", { percent: current.progress })}
             />
-          </form>
+            <div className="flex min-w-0 flex-1 flex-col gap-1.5">
+              <p className="text-[12px] font-semibold tracking-[0.08em] text-feuille-fonce uppercase">
+                {t("learn.home.next.eyebrow")}
+              </p>
+              <h2 id="learn-next" className="text-[20px] leading-tight font-bold tracking-tight">
+                {current.title}
+              </h2>
+              {current.next && (
+                <p className="text-[15px] font-medium">
+                  {t("learn.home.next.position", {
+                    module: current.next.module,
+                    lesson: current.next.title,
+                  })}
+                </p>
+              )}
+              <p className="text-[13px] text-ardoise">
+                {t("learn.home.next.remaining", { count: current.remaining })}
+              </p>
+            </div>
+            <ButtonLink
+              href={lessonHref(current.slug, current.next?.id)}
+              size="lg"
+              icon={<Icon name="play" />}
+              className="self-start sm:self-center"
+            >
+              {t("learn.home.next.cta")}
+            </ButtonLink>
+          </section>
+        ) : (
+          <section
+            aria-labelledby="learn-start"
+            className={cx(card, "flex flex-col items-start gap-3")}
+          >
+            <span className="flex size-12 items-center justify-center rounded-[14px] bg-lime">
+              <Icon name="learn" className="size-6" />
+            </span>
+            <h2 id="learn-start" className={sectionTitle}>
+              {t("learn.home.start.title")}
+            </h2>
+            <p className="max-w-[560px] text-[15px] text-ardoise">{t("learn.home.start.body")}</p>
+            <ButtonLink href="/app/learn/explorer?acces=free" iconAfter={<Icon name="chev-r" />}>
+              {t("learn.home.start.cta")}
+            </ButtonLink>
+          </section>
         )}
+
+        <section
+          aria-labelledby="learn-coach"
+          className="relative flex flex-col gap-3 overflow-hidden rounded-[22px] bg-sapin p-5 text-blanc lg:p-6"
+        >
+          <p className="flex items-center gap-2 text-[12px] font-semibold tracking-[0.12em] text-neon uppercase">
+            <AiOrb size={22} />
+            {t("learn.home.coach.eyebrow")}
+          </p>
+          <h2 id="learn-coach" className="text-[20px] leading-tight font-bold tracking-tight">
+            {t("learn.home.coach.title")}
+          </h2>
+          <p className="text-[14px] leading-6 text-blanc/85">{t("learn.home.coach.body")}</p>
+          <ButtonLink
+            href="/app/learn/coach"
+            variant="primary"
+            iconAfter={<Icon name="chev-r" />}
+            className="mt-auto self-start"
+          >
+            {t("learn.home.coach.cta")}
+          </ButtonLink>
+        </section>
       </div>
 
-      {list === "toutes" && themes.length > 0 && (
-        <nav aria-label={t("learn.catalog.filter.theme")}>
-          <TabRail name="learn-themes">
-            <ul className="flex w-max gap-2">
-              <li>
-                <Link
-                  href={withParams("/app/learn", { ...current, theme: undefined })}
-                  className={chip(!filters.theme)}
-                >
-                  {t("learn.catalog.tab.all")}
-                </Link>
-              </li>
-              {themes.filter(Boolean).map((theme) => (
-                <li key={theme}>
+      <section aria-label={t("learn.home.stats.aria")}>
+        <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4">
+          {stats.map((stat) => (
+            <li key={stat.label} className={cx(card, "flex items-center gap-3 p-4 lg:p-5")}>
+              <span
+                aria-hidden
+                className={cx(
+                  "flex size-11 shrink-0 items-center justify-center rounded-full",
+                  stat.tone,
+                )}
+              >
+                <Icon name={stat.icon} className="size-5" />
+              </span>
+              <span className="flex min-w-0 flex-col">
+                <span className="text-[24px] leading-none font-bold">{stat.value}</span>
+                <span className="text-[12.5px] leading-tight text-ardoise">{stat.label}</span>
+              </span>
+            </li>
+          ))}
+        </ul>
+      </section>
+
+      <div className="grid gap-4 lg:grid-cols-2">
+        <section aria-labelledby="learn-todo" className={cx(card, "flex flex-col gap-3")}>
+          <div className="flex items-center justify-between gap-3">
+            <h2 id="learn-todo" className={sectionTitle}>
+              {t("learn.home.todo.title")}
+            </h2>
+            <Link
+              href="/app/learn/evaluations"
+              className="flex items-center gap-1 text-[13px] font-semibold text-feuille-fonce"
+            >
+              {t("learn.home.todo.all")}
+              <Icon name="chev-r" className="size-3.5" />
+            </Link>
+          </div>
+          {todo.length === 0 ? (
+            <p className="text-[14px] text-ardoise">{t("learn.home.todo.empty")}</p>
+          ) : (
+            <ul className="flex flex-col divide-y divide-sapin/8">
+              {todo.map((item) => (
+                <li key={item.lessonId}>
                   <Link
-                    href={withParams("/app/learn", { ...current, theme })}
-                    aria-current={filters.theme === theme ? "true" : undefined}
-                    className={chip(filters.theme === theme)}
+                    href={lessonHref(item.courseSlug, item.lessonId)}
+                    className="flex items-center gap-3 py-3 hover:bg-creme/60"
                   >
-                    {theme}
+                    <span
+                      aria-hidden
+                      className={cx(
+                        "flex size-10 shrink-0 items-center justify-center rounded-[12px]",
+                        item.status === "review" ? "bg-ambre-fond" : "bg-lime-clair",
+                      )}
+                    >
+                      <Icon name={item.kind === "quiz" ? "quiz" : "edit"} className="size-5" />
+                    </span>
+                    <span className="flex min-w-0 flex-1 flex-col">
+                      <span className="truncate text-[14px] font-semibold">{item.title}</span>
+                      <span className="truncate text-[12.5px] text-ardoise">
+                        {t(`learn.evaluations.kind.${item.kind}`)} · {item.courseTitle}
+                      </span>
+                    </span>
+                    <span className="shrink-0 text-[13px] font-semibold text-feuille-fonce">
+                      {t(
+                        item.status === "review"
+                          ? "learn.evaluations.cta.retry"
+                          : "learn.evaluations.cta.start",
+                      )}
+                    </span>
                   </Link>
                 </li>
               ))}
             </ul>
-          </TabRail>
-        </nav>
-      )}
-
-      {saved === "1" && <Alert tone="success" title={t("learn.save.success")} />}
-      {saved === "0" && <Alert tone="info" title={t("learn.save.removed")} />}
-
-      {hero && (
-        <section
-          aria-labelledby="learn-hero"
-          className="relative grid gap-3 overflow-hidden rounded-[22px] border border-sapin/8 bg-blanc p-4 text-sapin sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-x-8"
-        >
-          <div className="flex min-w-0 flex-col gap-2.5">
-            <p className="relative flex flex-wrap gap-2 text-[11px] font-semibold">
-              {hero.category && (
-                <span className="rounded-pill bg-lime px-2.5 py-1 text-sapin">{hero.category}</span>
-              )}
-              <span className="rounded-pill px-2.5 py-1 text-sapin ring-1 ring-brume ring-inset">
-                {lockedPlan(hero)
-                  ? t("learn.lock.badge", { plan: lockedPlan(hero) ?? "" })
-                  : hero.requiredLevel === "free"
-                    ? t("learn.card.badge.free")
-                    : t("learn.card.badge.included", {
-                        plan: planForCatalogLevel(plans, hero.requiredLevel)?.name ?? "",
-                      })}
-              </span>
-            </p>
-            <h2
-              id="learn-hero"
-              className="relative max-w-[640px] text-[20px] leading-[1.2] font-semibold tracking-tight lg:text-[22px]"
-            >
-              {hero.title}
-            </h2>
-            <ul className="relative flex flex-wrap gap-x-5 gap-y-2 text-[13px] text-ardoise">
-              <li className="flex items-center gap-1.5">
-                <Icon name="learn" className="size-4 text-feuille" />
-                {t("learn.card.modules", { count: hero.moduleCount })}
-              </li>
-              <li className="flex items-center gap-1.5">
-                <Icon name="horloge" className="size-4 text-feuille" />
-                {t(
-                  `ui.duration.${durationParts(hero.durationMinutes).key}`,
-                  durationParts(hero.durationMinutes).values,
-                )}
-              </li>
-              {hero.certificateEnabled && (
-                <li className="flex items-center gap-1.5">
-                  <Icon name="certificat" className="size-4 text-feuille" />
-                  {t("learn.card.certificate")}
-                </li>
-              )}
-              <li className="flex items-center gap-1.5">
-                <Icon name="cours-video" className="size-4 text-feuille" />
-                {t("learn.card.lessons", { count: hero.lessonCount })}
-              </li>
-            </ul>
-          </div>
-          <Link
-            href={`/app/learn/${hero.slug}`}
-            className="relative flex h-11 items-center gap-2 self-start rounded-pill bg-lime px-5 text-[15px] font-semibold text-sapin transition-transform hover:-translate-y-0.5 lg:self-center"
-          >
-            {enrollmentBySlug.has(hero.slug) ? t("learn.card.resume") : t("learn.card.start")}
-            <Icon name="chev-r" className="size-4" />
-          </Link>
+          )}
         </section>
-      )}
 
-      {list === "toutes" && !filtered && inProgress.length > 0 && (
-        <section aria-labelledby="learn-continue" className="flex flex-col gap-3">
+        <section aria-labelledby="learn-cert" className={cx(card, "flex flex-col gap-3")}>
           <div className="flex items-center justify-between gap-3">
-            <h2 id="learn-continue" className={sectionTitle}>
-              {t("learn.catalog.section.continue")}
+            <h2 id="learn-cert" className={sectionTitle}>
+              {t("learn.home.certificate.title")}
             </h2>
             <Link
-              href="/app/learn?liste=mes"
+              href="/app/learn/attestations"
               className="flex items-center gap-1 text-[13px] font-semibold text-feuille-fonce"
             >
-              {t("learn.catalog.tab.mine")}
+              {t("learn.home.certificate.cta")}
+              <Icon name="chev-r" className="size-3.5" />
+            </Link>
+          </div>
+          {valid[0] ? (
+            <Link
+              href="/app/learn/attestations"
+              className="flex items-center gap-4 rounded-[18px] bg-lime p-4"
+            >
+              <span className="flex size-12 shrink-0 items-center justify-center rounded-full bg-sapin text-lime">
+                <Icon name="certificat" className="size-6" />
+              </span>
+              <span className="flex min-w-0 flex-col">
+                <span className="font-semibold">{valid[0].courseTitle}</span>
+                <span className="text-[13px]">
+                  {t("learn.home.certificate.issued", {
+                    date: format.dateTime(valid[0].issuedAt, { dateStyle: "long" }),
+                  })}
+                </span>
+              </span>
+            </Link>
+          ) : (
+            <p className="text-[14px] text-ardoise">{t("learn.home.certificate.empty")}</p>
+          )}
+        </section>
+      </div>
+
+      {others.length > 0 && (
+        <section aria-labelledby="learn-others" className="flex flex-col gap-3">
+          <div className="flex items-center justify-between gap-3">
+            <h2 id="learn-others" className={sectionTitle}>
+              {t("learn.home.next.others")}
+            </h2>
+            <Link
+              href="/app/learn/parcours"
+              className="flex items-center gap-1 text-[13px] font-semibold text-feuille-fonce"
+            >
+              {t("appNav.section.learnPaths")}
               <Icon name="chev-r" className="size-3.5" />
             </Link>
           </div>
           <ul className="grid gap-3 md:grid-cols-2 xl:grid-cols-3">
-            {inProgress.slice(0, 3).map((enrollment, index) => (
-              <li
-                key={enrollment.id}
-                className="flex items-center gap-3 rounded-[20px] bg-blanc p-3"
-              >
-                <span
-                  aria-hidden
-                  className={cx(
-                    "flex size-14 shrink-0 items-center justify-center rounded-[14px]",
-                    ["bg-lime", "bg-neon", "bg-menthe-claire"][index % 3],
-                  )}
+            {others.map((course) => (
+              <li key={course.enrollmentId}>
+                <Link
+                  href={lessonHref(course.slug, course.next?.id)}
+                  className={cx(card, "flex flex-col gap-2 p-4 hover:border-sapin/25 lg:p-4")}
                 >
-                  <Icon name="learn" className="size-5" />
-                </span>
-                <span className="flex min-w-0 flex-1 flex-col gap-1.5">
-                  <Link
-                    href={`/app/learn/${enrollment.course.slug}`}
-                    className="line-clamp-2 text-sm leading-[18px] font-semibold hover:underline"
-                  >
-                    {enrollment.course.title}
-                  </Link>
-                  <span className="flex items-center gap-2 text-[11px] font-semibold">
+                  <span className="line-clamp-2 text-[15px] font-semibold">{course.title}</span>
+                  {course.next && (
+                    <span className="truncate text-[12.5px] text-ardoise">
+                      {t("learn.paths.next", { lesson: course.next.title })}
+                    </span>
+                  )}
+                  <span className="flex items-center gap-2 text-[12px] font-semibold">
                     <ProgressBar
-                      value={enrollment.progress}
+                      value={course.progress}
                       tone="feuille"
-                      label={t("learn.card.progress", { percent: enrollment.progress })}
+                      label={t("learn.card.progress", { percent: course.progress })}
                     />
                     <span className="shrink-0">
-                      {t("learn.card.progress", { percent: enrollment.progress })}
+                      {t("learn.card.progress", { percent: course.progress })}
                     </span>
                   </span>
-                </span>
-                <Link
-                  href={`/app/learn/${enrollment.course.slug}`}
-                  aria-hidden
-                  tabIndex={-1}
-                  className="flex h-9 shrink-0 items-center rounded-pill bg-sapin px-4 text-[13px] font-semibold text-blanc max-sm:hidden"
-                >
-                  {t("learn.card.resume")}
                 </Link>
               </li>
             ))}
@@ -369,74 +351,7 @@ export default async function LearnPage({ searchParams }: PageProps<"/app/learn"
         </section>
       )}
 
-      {list === "toutes" && !filtered && (
-        <RecommendedCourses userId={user.id} goal={goal ?? undefined} />
-      )}
-
-      <section aria-labelledby="learn-list" className="flex flex-col gap-3">
-        {list === "toutes" && (
-          <h2 id="learn-list" className={sectionTitle}>
-            {filtered ? t("learn.catalog.title") : t("learn.catalog.section.popular")}
-          </h2>
-        )}
-        {list !== "toutes" && (
-          <h2 id="learn-list" className="sr-only">
-            {t(`learn.catalog.tab.${lists[list]}`)}
-          </h2>
-        )}
-        {courses.length === 0 ? (
-          list === "toutes" ? (
-            <EmptyState
-              title={t("learn.catalog.empty.text")}
-              action={
-                <ButtonLink href="/app/learn" variant="secondary">
-                  {t("learn.catalog.empty.cta")}
-                </ButtonLink>
-              }
-            />
-          ) : list === "mes" ? (
-            <EmptyState
-              title={t("learn.mine.empty.text")}
-              action={
-                <ButtonLink href="/app/learn?acces=free">{t("learn.mine.empty.cta")}</ButtonLink>
-              }
-            />
-          ) : (
-            <EmptyState
-              title={t(list === "enregistrees" ? "learn.saved.empty" : "learn.completed.empty")}
-            />
-          )
-        ) : (
-          <ul className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
-            {courses.map((course, index) => (
-              <li key={course.slug} className="flex min-w-0 [&>article]:min-w-0 [&>article]:flex-1">
-                <PublicCourseCard
-                  course={course}
-                  plans={plans}
-                  index={index}
-                  href={`/app/learn/${course.slug}`}
-                  locked={lockedPlan(course)}
-                  footer={footer(course)}
-                />
-              </li>
-            ))}
-          </ul>
-        )}
-      </section>
-
-      {search && (
-        <Pagination
-          page={search.page}
-          pageCount={search.pageCount}
-          path="/app/learn"
-          params={current}
-          labels={{
-            prev: t("trainings.pagination.prev"),
-            next: t("trainings.pagination.next"),
-            page: t("trainings.pagination.page", { page: search.page, total: search.pageCount }),
-          }}
-        />
-      )}
+      <RecommendedCourses userId={user.id} goal={profile?.desiredJobTitles[0] ?? undefined} />
     </div>
   );
 }

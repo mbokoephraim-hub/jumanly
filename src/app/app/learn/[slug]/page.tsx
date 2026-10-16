@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
+import { AiOrb } from "@/components/brand/ai-orb";
+import { CoachChat } from "@/components/learn/coach-chat";
 import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
 import { clock, initialsOf, moduleMinutes } from "@/components/learn/course-bits";
@@ -94,6 +97,11 @@ export default async function LearnCoursePage({
     );
   }
 
+  const messages = await getMessages();
+  const coachMessages = {
+    learn: { coach: messages.learn.coach },
+    ai: { orb: messages.ai.orb },
+  } as unknown as typeof messages;
   const lessons = lessonsOf(course);
   const current =
     lessons.find((lesson) => lesson.id === param("lecon")) ??
@@ -467,7 +475,7 @@ export default async function LearnCoursePage({
             <span className="flex flex-1 flex-wrap items-center justify-end gap-3">
               {!locked &&
                 (done.has(current.id) ? (
-                  <span className={cx(navButton, "bg-lime-clair")}>
+                  <span className="flex h-11 items-center gap-1.5 px-1 text-[14px] font-semibold text-up-texte">
                     <Icon name="check" className="size-4" />
                     {t("learn.player.completed")}
                   </span>
@@ -516,6 +524,15 @@ export default async function LearnCoursePage({
               <a href="#notes" className="pb-3 text-[15px] text-ardoise hover:text-sapin">
                 {t("learn.player.tab.notes")}
               </a>
+              {!locked && (
+                <a
+                  href="#coach"
+                  className="flex items-center gap-1.5 pb-3 text-[15px] text-ardoise hover:text-sapin"
+                >
+                  <AiOrb size={16} />
+                  {t("appNav.section.learnCoach")}
+                </a>
+              )}
             </nav>
 
             <div id="apercu" className="flex scroll-mt-24 flex-col gap-4">
@@ -631,6 +648,32 @@ export default async function LearnCoursePage({
 
             <LessonNotes userId={user.id} slug={course.slug} lessonId={current.id} />
           </section>
+
+          {!locked && (
+            <section
+              id="coach"
+              aria-labelledby="coach-title"
+              className="flex scroll-mt-24 flex-col gap-4 rounded-[24px] bg-blanc p-5 lg:p-6"
+            >
+              <div className="flex items-start gap-3">
+                <AiOrb size={30} className="mt-0.5" />
+                <div className="flex flex-col gap-1">
+                  <h2 id="coach-title" className="text-[18px] leading-tight font-bold">
+                    {t("learn.coach.player.title")}
+                  </h2>
+                  <p className="text-[14px] text-ardoise">{t("learn.coach.player.body")}</p>
+                </div>
+              </div>
+              <NextIntlClientProvider messages={coachMessages}>
+                <CoachChat
+                  fixed
+                  courses={[{ slug: course.slug, title: course.title, lessons: [] }]}
+                  firstName={user.firstName ?? user.name}
+                  initial={{ slug: course.slug, lessonId: current.id }}
+                />
+              </NextIntlClientProvider>
+            </section>
+          )}
         </div>
       </div>
     </>

@@ -35,6 +35,8 @@ export const aiFeatures = {
   cv_tailor: { credits: 2, tier: "default" },
   // Lot 11 · help to write a job (mockup 04-03), paid by the organization's credits.
   job_writer: { credits: 1, tier: "fast" },
+  // ux-test, étape 2 · the AI Learning Coach, grounded in the lessons of one course.
+  learn_coach: { credits: 1, tier: "fast" },
 } as const;
 export type AiFeature = keyof typeof aiFeatures;
 

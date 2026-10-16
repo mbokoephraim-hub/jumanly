@@ -2259,8 +2259,12 @@
       "dashboard": "Tableau de bord",
       "profile": "Mon profil",
       "subscription": "Abonnement",
-      "catalog": "Catalogue",
-      "certificates": "Mes attestations",
+      "catalog": "Explorer",
+      "certificates": "Certifications",
+      "learnHome": "Mon espace",
+      "learnPaths": "Mes parcours",
+      "learnEvaluations": "Exercices et évaluations",
+      "learnCoach": "Coach IA",
       "offers": "Offres",
       "applications": "Mes candidatures",
       "saved": "Offres enregistrées",
@@ -3354,7 +3358,7 @@
   "learn": {
     "catalog": {
       "eyebrow": "Learn · {count, plural, one {# formation} other {# formations}}, dont {free} gratuites",
-      "title": "Catalogue de formations",
+      "title": "Explorer les formations",
       "search": {
         "label": "Rechercher une formation",
         "submit": "Rechercher",
@@ -3468,6 +3472,173 @@
     "save": {
       "success": "Formation enregistrée.",
       "removed": "Formation retirée de vos enregistrements."
+    },
+    "home": {
+      "seo": "Learn · Mon espace d'apprentissage",
+      "eyebrow": "Learn · Mon espace d'apprentissage",
+      "title": "Bonjour {firstName}, on apprend quoi aujourd'hui ?",
+      "next": {
+        "eyebrow": "Votre prochaine leçon",
+        "position": "Module {module} · {lesson}",
+        "remaining": "{count, plural, one {Encore # leçon avant l'attestation} other {Encore # leçons avant l'attestation}}",
+        "cta": "Reprendre la leçon",
+        "others": "Vos autres formations en cours"
+      },
+      "start": {
+        "title": "Commencez votre première formation",
+        "body": "Choisissez une formation gratuite : votre progression, vos évaluations et vos attestations s'afficheront ici.",
+        "cta": "Explorer les formations"
+      },
+      "stats": {
+        "aria": "Votre progression",
+        "inProgress": "Formations en cours",
+        "lessons": "Leçons terminées",
+        "passed": "Évaluations réussies",
+        "certificates": "Attestations"
+      },
+      "todo": {
+        "title": "À faire maintenant",
+        "empty": "Rien à rattraper : vos évaluations sont à jour.",
+        "all": "Exercices et évaluations"
+      },
+      "coach": {
+        "eyebrow": "Coach IA",
+        "title": "Une notion vous résiste ?",
+        "body": "Le Coach IA explique, reformule et donne des exemples à partir de vos leçons. Il ne donne pas les réponses des évaluations.",
+        "cta": "Parler au Coach IA"
+      },
+      "certificate": {
+        "title": "Dernière attestation",
+        "issued": "Délivrée le {date}",
+        "cta": "Mes certifications",
+        "empty": "Terminez une formation pour obtenir votre première attestation."
+      }
+    },
+    "paths": {
+      "seo": "Learn · Mes parcours",
+      "eyebrow": "Learn · Mes parcours",
+      "title": "Mes parcours",
+      "tabs": "Listes de formations",
+      "tab": {
+        "active": "En cours",
+        "completed": "Terminées",
+        "saved": "Enregistrées"
+      },
+      "next": "Prochaine leçon : {lesson}",
+      "remaining": "{count, plural, one {# leçon restante} other {# leçons restantes}}",
+      "completedOn": "Terminée le {date}",
+      "certificate": "Voir l'attestation",
+      "open": "Ouvrir"
+    },
+    "evaluations": {
+      "seo": "Learn · Exercices et évaluations",
+      "eyebrow": "Learn · Exercices et évaluations",
+      "title": "Exercices et évaluations",
+      "intro": "Les évaluations valident vos formations ; les exercices vous entraînent. Le Coach IA peut vous aider à comprendre une erreur, sans donner les réponses.",
+      "tabs": "Filtrer les évaluations",
+      "tab": {
+        "todo": "À faire · {count}",
+        "review": "À revoir · {count}",
+        "passed": "Réussies · {count}"
+      },
+      "kind": {
+        "quiz": "Évaluation",
+        "exercise": "Exercice"
+      },
+      "questions": "{count, plural, one {# question} other {# questions}}",
+      "minutes": "{minutes} min",
+      "passing": "Réussie à partir de {score} %",
+      "best": "Meilleur score : {score} %",
+      "attempts": "{count, plural, one {# essai} other {# essais}}",
+      "cta": {
+        "start": "Commencer",
+        "retry": "Réessayer",
+        "review": "Revoir",
+        "coach": "Comprendre avec le Coach IA"
+      },
+      "empty": {
+        "todo": "Tout est à jour. Explorez une nouvelle formation pour continuer à progresser.",
+        "review": "Aucune évaluation à revoir.",
+        "passed": "Vos évaluations réussies s'afficheront ici.",
+        "cta": "Explorer les formations"
+      }
+    },
+    "coach": {
+      "seo": "Learn · Coach IA",
+      "eyebrow": "Learn · Coach IA",
+      "title": "Votre Coach IA",
+      "intro": "Il explique, reformule et donne des exemples à partir de vos leçons. Il ne donne pas les réponses des évaluations : il vous aide à les trouver.",
+      "welcome": "Bonjour {firstName} ! Choisissez ce dont vous avez besoin ou posez votre question sur la formation.",
+      "form": {
+        "course": "Formation",
+        "lesson": "Leçon",
+        "lessonAll": "Toute la formation",
+        "intents": "Que voulez-vous faire ?",
+        "question": "Votre question",
+        "placeholder": "Ex. : je ne comprends pas la différence entre deux notions de la leçon",
+        "submit": "Demander au Coach",
+        "sending": "Le Coach prépare sa réponse…",
+        "credit": "Réponse reformulée par Jumanly Intelligence : 1 crédit IA."
+      },
+      "intent": {
+        "explain": "Expliquer une notion",
+        "rephrase": "Reformuler la leçon",
+        "example": "Un autre exemple",
+        "question": "Poser une question",
+        "exercise": "Un exercice en plus",
+        "mistake": "Comprendre mon erreur",
+        "revision": "Que réviser ?"
+      },
+      "chat": {
+        "aria": "Conversation avec le Coach IA",
+        "you": "Vous",
+        "coach": "Coach IA",
+        "reset": "Nouvelle conversation"
+      },
+      "source": {
+        "ai": "Réponse de Jumanly Intelligence, à partir de votre cours",
+        "course": "Réponse tirée directement de votre cours"
+      },
+      "why": "Pourquoi ?",
+      "sources": "Leçons utilisées : {list}",
+      "noSources": "Le Coach n'a trouvé aucune leçon qui en parle.",
+      "limit": {
+        "consent": "Activez l'IA dans vos paramètres pour des réponses reformulées par Jumanly Intelligence.",
+        "entitlement": "Les réponses reformulées par Jumanly Intelligence ne sont pas incluses dans votre forfait : le Coach répond avec les passages du cours.",
+        "quota": "Vos crédits IA du mois sont utilisés : le Coach répond avec les passages du cours.",
+        "unavailable": "Jumanly Intelligence est indisponible pour l'instant, aucun crédit n'a été utilisé : le Coach répond avec les passages du cours."
+      },
+      "rule": "L'IA recommande, vous décidez. Le Coach ne remplace pas la leçon et ne donne pas les réponses des évaluations.",
+      "error": {
+        "notEnrolled": "Commencez cette formation pour poser vos questions au Coach.",
+        "locked": "Cette formation n'est pas ouverte avec votre forfait.",
+        "notFound": "Formation introuvable.",
+        "invalid": "Écrivez votre question en quelques mots.",
+        "failed": "Le Coach n'a pas pu répondre. Réessayez dans un instant."
+      },
+      "empty": {
+        "title": "Le Coach IA vous accompagne dans vos formations",
+        "body": "Commencez une formation : vous pourrez ensuite lui poser toutes vos questions.",
+        "cta": "Explorer les formations"
+      },
+      "player": {
+        "title": "Une question sur cette leçon ?",
+        "body": "Le Coach IA explique, reformule ou donne un exemple à partir de ce cours."
+      },
+      "answer": {
+        "explain": "Voici ce que dit votre cours à ce sujet :",
+        "rephrase": "En résumé, avec les mots du cours :",
+        "example": "Un exemple donné dans votre cours :",
+        "noExample": "Votre cours ne donne pas d'autre exemple sur ce point. Essayez d'appliquer la notion à une situation de votre travail ou de votre quartier, puis relisez la leçon pour vérifier.",
+        "exercise": "Exercice d'entraînement sur « {lesson} » : en trois à cinq lignes, appliquez ces points à une situation que vous connaissez, puis relisez la leçon pour vérifier votre réponse.",
+        "mistake": "Voici les questions à retravailler. Relisez le passage indiqué, puis retentez l'évaluation :",
+        "mistakeHint": "À relire dans « {lesson} » :",
+        "noMistake": "Aucune erreur à revoir dans cette formation pour l'instant. Bravo !",
+        "revision": "Je vous conseille de revoir, dans cet ordre :",
+        "noRevision": "Rien à réviser en priorité : vous pouvez avancer vers la leçon suivante.",
+        "notCovered": "Votre cours n'aborde pas ce point. Je préfère ne rien inventer : reformulez votre question avec les mots de la leçon, ou ouvrez la leçon la plus proche.",
+        "declined": "Je ne donne pas les réponses des évaluations : elles servent à valider ce que vous avez appris. En revanche, je peux vous expliquer la notion ou vous proposer un exercice pour vous entraîner."
+      }
     },
     "course": {
       "back": "Retour au catalogue",
@@ -12562,6 +12733,7 @@
           "interviewVoice": "Simulations orales",
           "cvAnalysis": "Analyse de CV (recruteurs)",
           "jobDraft": "Rédaction d'offres",
+          "learnCoach": "Coach IA des formations",
           "cvParse": "Lecture de CV à l'import"
         },
         "period": "30 derniers jours",
