@@ -281,6 +281,7 @@ export async function updateQuizAction(formData: FormData) {
   const parsed = quizSettingsSchema.safeParse(Object.fromEntries(formData));
   if (parsed.success) await updateQuizSettings(db, id, lessonId, parsed.data);
   await audit(user.id, "course.quiz.update", id, { lessonId });
+  await invalidate(id);
   back(
     id,
     { lecon: lessonId, ...(parsed.success ? { ok: "quiz" } : { erreur: "quiz" }) },
@@ -300,7 +301,10 @@ export async function saveQuestionAction(formData: FormData) {
     (questionId
       ? await updateQuestion(db, id, questionId, parsed.data)
       : await addQuestion(db, id, lessonId, parsed.data));
-  if (saved) await audit(user.id, "course.question.save", id, { lessonId });
+  if (saved) {
+    await audit(user.id, "course.question.save", id, { lessonId });
+    await invalidate(id);
+  }
   back(
     id,
     { lecon: lessonId, ...(saved ? { ok: "quiz" } : { erreur: "question" }) },
@@ -315,6 +319,7 @@ export async function deleteQuestionAction(formData: FormData) {
   const lessonId = value(formData, "lesson");
   await deleteQuestion(db, id, value(formData, "question"));
   await audit(user.id, "course.question.delete", id, { lessonId });
+  await invalidate(id);
   back(id, { lecon: lessonId }, "#quiz", stepFrom(formData, "programme"));
 }
 

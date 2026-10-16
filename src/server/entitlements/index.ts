@@ -3,9 +3,13 @@
  * never for a plan: `can(subject, "career.linkedin")`, `consume(subject, "ai.credits.monthly")`.
  *
  * Resolution: the highest running plan (a sponsored licence wins a tie, partie 05 § 6; a payment in
- * grace comes last) > free plan of the family, then per-subject overrides. Resolved values are cached 60 s in memory and invalidated on every
- * subscription or plan change.
+ * grace comes last) > free plan of the family, then per-subject overrides.
+ *
+ * Resolved values are kept for one request only (React `cache`): a change made in the admin
+ * applies from the next request, on every server instance (Admin v4, étape 1). Within a request,
+ * `invalidate` drops what a change made stale. Outside a request (scripts, tests) nothing is kept.
  */
+import { cache } from "react";
 import type { PlanFamily, PrismaClient, SubjectType } from "@/generated/prisma/client";
 import { GRACE_DAYS, addMonths, effectiveStatus, periodAround } from "./periods";
 
@@ -37,14 +41,14 @@ export type ResolvedPlan = {
   values: Record<string, string>;
 };
 
-const TTL_MS = 60_000;
-const cache = new Map<string, { expires: number; plan: ResolvedPlan }>();
+/** One map per request (a fresh one each call outside a request). */
+const requestPlans = cache(() => new Map<string, ResolvedPlan>());
 
 const keyOf = (subject: Subject) => `${subject.type}:${subject.id}`;
 
 export function invalidate(subject?: Subject) {
-  if (subject) cache.delete(keyOf(subject));
-  else cache.clear();
+  if (subject) requestPlans().delete(keyOf(subject));
+  else requestPlans().clear();
 }
 
 /** Plan family of the free fallback: a person is a talent; an organization starts with RH Free. */
@@ -87,8 +91,9 @@ export async function resolvePlan(
   subject: Subject,
   now = new Date(),
 ): Promise<ResolvedPlan | null> {
-  const cached = cache.get(keyOf(subject));
-  if (cached && cached.expires > now.getTime() && cached.plan.periodEnd > now) return cached.plan;
+  const plans = requestPlans();
+  const cached = plans.get(keyOf(subject));
+  if (cached && cached.periodEnd > now) return cached;
 
   const subscriptions = await db.subscription.findMany({
     where: {
@@ -166,7 +171,7 @@ export async function resolvePlan(
   });
   for (const override of overrides) resolved.values[override.key] = override.value;
 
-  cache.set(keyOf(subject), { expires: now.getTime() + TTL_MS, plan: resolved });
+  plans.set(keyOf(subject), resolved);
   return resolved;
 }
 

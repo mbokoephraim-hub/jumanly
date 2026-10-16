@@ -2,6 +2,19 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v4 · étape 1 : l'admin se voit tout de suite (16 octobre 2026)
+
+- Plan `docs/admin-v4/PLAN.md` (6 étapes : synchronisation, nouvelle coque des espaces connectés,
+  titres et recherche inspirés de Patreon, palette épurée, application à tous les écrans,
+  responsive).
+- Inventaire `docs/admin-v4/synchronisation.md` : chaque élément de l'admin, les pages qui
+  l'affichent et ce qui les rafraîchit.
+- Corrigé : droits et quotas gardés 60 s dans la mémoire de chaque instance (un forfait ou un droit
+  modifié pouvait tarder sur une autre instance) → gardés le temps d'une requête
+  (`docs/decisions/2026-10-16-admin-v4-etape-1.md`) ; les poids du matching n'effaçaient pas le cache
+  de la page publique ; les réglages et questions de quiz n'effaçaient pas celui des formations.
+- Test : un droit accordé ailleurs s'applique à la requête suivante.
+
 ## Jumanly Admin v3 · étape 7 : passe finale et bilan (16 octobre 2026)
 
 - Parcours automatique `tests/e2e/admin-pass.spec.ts` étendu : les 7 étapes de l'éditeur, les
