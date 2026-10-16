@@ -7,20 +7,29 @@ les liens avec les autres briefs. Maquettes validées par Claude (validation dé
 ## 0. Maquettes
 
 `maquette/mobile-talent.html` (ouvrir dans un navigateur), `maquette/mobile-talent-planche.jpg`
-(toutes les maquettes sur une planche) et `maquette/ecrans/NN.jpg` (chaque écran, 390 px ×2) :
+(toutes les maquettes) et `maquette/ecrans/NN.jpg` (chaque écran, 390 px ×2). Version 2 du 16 octobre
+2026 après les retours du propriétaire : 10 et 17 refaits, 20 à 33 ajoutés, planche « États
+d’interaction » ajoutée. Le prompt complet est `PROMPT-AMELIORE.md`.
 
 | N° | Écran | N° | Écran |
 |---|---|---|---|
-| 01 | Première connexion · objectif | 11 | Candidature · confirmation |
-| 02 | Première connexion · précisions facultatives | 12 | Candidature · erreur réseau |
-| 03 | Pour moi · trouver un emploi | 13 | Apprendre |
-| 04 | Pour moi · développer mes compétences | 14 | Learning Room |
-| 05 | Pour moi · faire évoluer ma carrière | 15 | Suivi |
-| 06 | Offres | 16 | Suivi · état vide |
-| 07 | Offres · panneau de filtres | 17 | Mon espace |
-| 08 | Détail d’une offre | 18 | Recherche |
-| 09 | Candidature · étape 1 (CV) | 19 | Notifications |
-| 10 | Candidature · vérification | | |
+| 01 | Première connexion · objectif | 18 | Recherche |
+| 02 | Première connexion · précisions | 19 | Notifications |
+| 03 | Pour moi · emploi | 20 | Entretien · confirmer un créneau |
+| 04 | Pour moi · compétences | 21 | Entretien · proposer un autre moment |
+| 05 | Pour moi · évolution | 22 | Entretien confirmé |
+| 06 | Offres | 23 | Messages · conversations |
+| 07 | Offres · filtres | 24 | Conversation et écriture |
+| 08 | Détail d’une offre | 25 | Mon profil · photo, bio, construction |
+| 09 | Candidature · CV | 26 | Changer la photo |
+| 10 | Candidature · vérification | 27 | Mes CV · créer un CV |
+| 11 | Candidature · confirmation | 28 | Éditeur de CV · contenu et suggestion IA |
+| 12 | Candidature · erreur réseau | 29 | Éditeur de CV · mise en forme |
+| 13 | Apprendre | 30 | Assistant IA · conversation |
+| 14 | Learning Room | 31 | Assistant IA dans Offres |
+| 15 | Suivi | 32 | Catalogue des formations |
+| 16 | Suivi · état vide | 33 | Fiche formation |
+| 17 | Mon espace | | |
 
 Les contenus sont des exemples (persona fictive Grâce Mbuyi, entreprises fictives). **En production, tout
 vient des données réelles** (règle d’or 11) ; une section sans donnée affiche son état vide ou se masque.
