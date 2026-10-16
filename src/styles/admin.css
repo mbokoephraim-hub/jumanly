@@ -1,0 +1,218 @@
+/* ─────────────── Jumanly Admin v3 ───────────────
+ * docs/admin-v3/PLAN.md, étape 1 : colonne de menu flottante en dégradé (icônes seules, libellé en
+ * infobulle), fond clair aux halos du site, bandeau de page vert profond à trame de points.
+ * Touches douces seulement (règle des espaces connectés) : aucune animation sous mouvement réduit.
+ */
+:root {
+  --jm-degrade-rail: linear-gradient(180deg, #0f3f37 0%, #14745f 58%, #1fa98a 100%);
+  --jm-degrade-rail-h: linear-gradient(90deg, #0f3f37 0%, #14745f 58%, #1fa98a 100%);
+}
+
+/* Fond de page : Crème, deux halos (Lime en haut à droite, Émeraude en bas à gauche), trame de
+   points qui s'efface vers le bas. Sur téléphone, l'en-tête vert profond reste au-dessus. */
+.jm-admin-bg {
+  position: relative;
+  isolation: isolate;
+  background: var(--jm-degrade-profondeur);
+}
+@media (min-width: 64rem) {
+  .jm-admin-bg {
+    background: var(--jm-creme);
+  }
+  .jm-admin-bg::before,
+  .jm-admin-bg::after {
+    content: "";
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+  }
+  .jm-admin-bg::before {
+    background:
+      radial-gradient(46% 40% at 96% 0%, rgb(166 242 107 / 0.3), transparent 70%),
+      radial-gradient(40% 44% at 0% 100%, rgb(47 211 166 / 0.2), transparent 72%),
+      radial-gradient(30% 30% at 55% 40%, rgb(227 246 124 / 0.12), transparent 70%);
+  }
+  .jm-admin-bg::after {
+    background-image: radial-gradient(rgb(15 63 55 / 0.11) 1.2px, transparent 1.3px);
+    background-size: 22px 22px;
+    -webkit-mask-image: linear-gradient(180deg, #000, transparent 70%);
+    mask-image: linear-gradient(180deg, #000, transparent 70%);
+  }
+}
+
+/* La colonne : sa hauteur suit son contenu, extrémités entièrement arrondies, dégradé vertical. */
+.jm-admin-rail {
+  position: relative;
+  border-radius: 999px;
+  background: var(--jm-degrade-rail);
+  box-shadow:
+    0 22px 44px rgb(11 26 31 / 0.26),
+    0 2px 6px rgb(11 26 31 / 0.12),
+    inset 0 1px 0 rgb(255 255 255 / 0.14);
+}
+.jm-admin-rail::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  background-image: radial-gradient(rgb(255 255 255 / 0.08) 1px, transparent 1.4px);
+  background-size: 12px 12px;
+}
+.jm-admin-rail > * {
+  position: relative;
+}
+.jm-admin-sep {
+  width: 4px;
+  height: 4px;
+  border-radius: 999px;
+  background: rgb(255 255 255 / 0.32);
+}
+/* Rubrique active : petit trait lumineux contre le bord gauche de la colonne. */
+.jm-admin-rail .jm-admin-link[aria-current="page"]::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -14px;
+  width: 4px;
+  height: 20px;
+  border-radius: 0 4px 4px 0;
+  background: var(--jm-lime);
+  box-shadow: 0 0 10px rgb(166 242 107 / 0.9);
+  transform: translateY(-50%);
+}
+
+/* Infobulle du libellé, à droite de l'icône, au survol et au focus clavier (sans JavaScript). Le
+   lien porte déjà le libellé en nom accessible : la bulle est décorative. */
+.jm-admin-tip {
+  position: absolute;
+  top: 50%;
+  left: calc(100% + 18px);
+  z-index: 40;
+  padding: 7px 12px;
+  border-radius: 10px;
+  background: var(--jm-nuit);
+  color: var(--jm-blanc);
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 16px;
+  white-space: nowrap;
+  box-shadow: var(--jm-ombre-menu);
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transform: translate(-4px, -50%);
+}
+.jm-admin-tip::before {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -4px;
+  width: 9px;
+  height: 9px;
+  border-radius: 2px;
+  background: inherit;
+  transform: translateY(-50%) rotate(45deg);
+}
+.jm-admin-link:hover .jm-admin-tip,
+.jm-admin-link:focus-visible .jm-admin-tip {
+  opacity: 1;
+  visibility: visible;
+  transform: translate(0, -50%);
+}
+.jm-admin-link:focus-visible {
+  outline: 2px solid var(--jm-lime);
+  outline-offset: 3px;
+}
+
+/* Fenêtre basse : rubriques plus serrées ; très basse : la colonne défile en elle-même. */
+@media (max-height: 760px) {
+  .jm-admin-rail .jm-admin-link {
+    width: 36px;
+    height: 36px;
+  }
+  .jm-admin-rail .jm-admin-link[aria-current="page"]::before {
+    left: -16px;
+  }
+}
+@media (max-height: 660px) {
+  .jm-admin-rail {
+    max-height: calc(100dvh - 32px);
+    overflow-y: auto;
+    scrollbar-width: none;
+  }
+  .jm-admin-rail::-webkit-scrollbar {
+    display: none;
+  }
+}
+
+/* Bandeau de page : vert profond du héros du site, halo Lime, trame de points qui s'efface. */
+.jm-admin-hero {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  background:
+    radial-gradient(440px 240px at 94% -10%, rgb(166 242 107 / 0.3), transparent 70%),
+    radial-gradient(360px 220px at -4% 110%, rgb(47 211 166 / 0.22), transparent 72%),
+    var(--jm-degrade-profondeur);
+}
+.jm-admin-hero::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: radial-gradient(rgb(255 255 255 / 0.1) 1.2px, transparent 1.4px);
+  background-size: 18px 18px;
+  -webkit-mask-image: linear-gradient(100deg, transparent 30%, #000 85%);
+  mask-image: linear-gradient(100deg, transparent 30%, #000 85%);
+}
+
+/* Tuile d'icône en dégradé signature (chiffres clés, états vides). */
+.jm-admin-tile {
+  background: var(--jm-degrade-signature);
+  box-shadow: inset 0 1px 0 rgb(255 255 255 / 0.45);
+}
+
+/* Cartes : ombre douce, liseré qui s'éclaire au survol des cartes cliquables. */
+.jm-admin-card {
+  box-shadow:
+    0 1px 0 rgb(11 26 31 / 0.03),
+    0 12px 32px rgb(11 26 31 / 0.06);
+}
+a.jm-admin-card:hover,
+.jm-admin-card-link:hover {
+  box-shadow:
+    0 0 0 1.5px rgb(166 242 107 / 0.9),
+    0 16px 36px rgb(11 26 31 / 0.09);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  html:not([data-reduce-motion]) .jm-admin-tip {
+    transition:
+      opacity 0.15s ease,
+      transform 0.15s ease,
+      visibility 0.15s;
+  }
+  html:not([data-reduce-motion]) .jm-admin-link,
+  html:not([data-reduce-motion]) .jm-admin-card {
+    transition:
+      background-color 0.15s ease,
+      color 0.15s ease,
+      box-shadow 0.2s ease;
+  }
+  /* « backwards » : aucun effet une fois l'entrée jouée (les menus déroulants restent au-dessus). */
+  html:not([data-reduce-motion]) .jm-admin-page > * {
+    animation: jm-page-in 0.28s var(--jm-elan) backwards;
+  }
+  html:not([data-reduce-motion]) .jm-admin-page > :nth-child(2) {
+    animation-delay: 40ms;
+  }
+  html:not([data-reduce-motion]) .jm-admin-page > :nth-child(3) {
+    animation-delay: 80ms;
+  }
+  html:not([data-reduce-motion]) .jm-admin-page > :nth-child(n + 4) {
+    animation-delay: 120ms;
+  }
+}

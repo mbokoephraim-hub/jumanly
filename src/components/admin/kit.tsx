@@ -13,46 +13,53 @@ import { getCurrentUser } from "@/server/auth/session";
  * audit notice. Filters and panels are links and GET forms: the admin works without JavaScript.
  */
 
-export const adminCard = "rounded-[24px] bg-blanc p-5 lg:p-[22px]";
+export const adminCard = "jm-admin-card rounded-[24px] bg-blanc p-5 lg:p-[22px]";
 export const adminTitle =
   "text-[18px] leading-[24px] font-semibold tracking-[-0.015em] lg:text-[20px] lg:leading-[26px]";
 /** Small capital label of a section (« DOCUMENTS FOURNIS », « COMPTE »). */
 export const adminLabel =
   "text-[11px] leading-4 font-semibold tracking-[0.1em] text-ardoise uppercase";
 
-/** Title of an admin page (mockup 07-01, `.top`). The tools on the right show from `lg`. */
+/**
+ * Title of an admin page. Admin v3 (docs/admin-v3/PLAN.md, étape 1): a deep green banner with the
+ * site's dots and Lime halo, the Néon eyebrow, the white title, and from `lg` the logged-actions
+ * tag, the search and the account pill; optional key figures as translucent chips.
+ */
 export async function AdminPageHeader({
   title,
   eyebrow,
   subtitle,
+  stats,
 }: {
   title: ReactNode;
   /** Replaces « Jumanly Admin » above the title (the user count on mobile, for instance). */
   eyebrow?: ReactNode;
   subtitle?: ReactNode;
+  /** 2 to 4 key figures shown in the banner. */
+  stats?: { label: string; value: ReactNode }[];
 }) {
   const t = await getTranslations("admin");
   const user = await getCurrentUser();
   const role = user?.platformRole ?? "user";
   return (
-    <header className="flex flex-col gap-2">
-      <div className="flex items-center gap-3.5 lg:min-h-[52px]">
-        <div className="flex min-w-0 flex-1 flex-col">
-          <span className="text-[12px] leading-4 text-ardoise lg:text-[13px]">
+    <header className="jm-admin-hero flex flex-col gap-3 rounded-[28px] px-5 py-5 text-blanc lg:px-8 lg:py-7">
+      <div className="flex items-center gap-3.5">
+        <div className="flex min-w-0 flex-1 flex-col gap-1">
+          <span className="text-[11px] leading-4 font-semibold tracking-[0.14em] text-neon uppercase lg:text-[12px]">
             {eyebrow ?? t("nav.title")}
           </span>
-          <h1 className="text-[24px] leading-[30px] font-semibold tracking-[-0.025em] lg:text-[30px] lg:leading-9">
+          <h1 className="text-[24px] leading-[30px] font-semibold tracking-[-0.025em] lg:text-[32px] lg:leading-[38px]">
             {title}
           </h1>
         </div>
-        <span className="hidden h-8 shrink-0 items-center gap-1.5 rounded-pill bg-brume px-3.5 text-[11px] font-semibold xl:inline-flex">
+        <span className="hidden h-8 shrink-0 items-center gap-1.5 rounded-pill bg-blanc/10 px-3.5 text-[11px] font-semibold text-neon ring-1 ring-blanc/15 ring-inset xl:inline-flex">
           <Icon name="doc" className="size-3.5" />
           {t("header.logged")}
         </span>
         <form
           action="/admin/recherche"
           role="search"
-          className="relative hidden w-[260px] shrink-0 lg:block"
+          className="relative hidden w-[240px] shrink-0 lg:block xl:w-[260px]"
         >
           <label htmlFor="admin-header-search" className="sr-only">
             {t(role === "content_editor" ? "search.labelEditor" : "search.label")}
@@ -60,34 +67,51 @@ export async function AdminPageHeader({
           <Icon
             name="recherche"
             aria-hidden
-            className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-ardoise"
+            className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-blanc/75"
           />
           <input
             id="admin-header-search"
             name="q"
             type="search"
             placeholder={t("header.search")}
-            className="h-11 w-full rounded-pill bg-blanc pr-4 pl-11 text-[13px] text-sapin placeholder:text-ardoise focus:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus:outline-none"
+            className="h-11 w-full rounded-pill bg-blanc/10 pr-4 pl-11 text-[13px] text-blanc ring-1 ring-blanc/20 ring-inset placeholder:text-blanc/75 focus:bg-blanc/15 focus:shadow-[0_0_0_4px_rgb(166_242_107/0.45)] focus:outline-none"
           />
         </form>
         {user && (
-          <span className="hidden shrink-0 items-center gap-2.5 rounded-pill bg-blanc py-[5px] pr-3.5 pl-[5px] lg:flex">
+          <span className="hidden shrink-0 items-center gap-2.5 rounded-pill bg-blanc/10 py-[5px] pr-3.5 pl-[5px] ring-1 ring-blanc/15 ring-inset lg:flex">
             <span
               aria-hidden
-              className="grid size-9 place-items-center rounded-full bg-[#14745f] text-[13px] font-semibold text-neon"
+              className="grid size-9 place-items-center rounded-full bg-lime text-[13px] font-semibold text-sapin"
             >
               {initialsOf(user.name)}
             </span>
             <span className="flex flex-col">
               <span className="text-[13px] leading-[17px] font-semibold">{user.name}</span>
-              <span className="text-[11px] leading-[15px] text-ardoise">
+              <span className="text-[11px] leading-[15px] text-blanc/75">
                 {t(`role.${role === "user" ? "readOnly" : role}`)}
               </span>
             </span>
           </span>
         )}
       </div>
-      {subtitle && <p className="text-[13px] leading-5 text-ardoise">{subtitle}</p>}
+      {subtitle && (
+        <p className="max-w-[72ch] text-[13px] leading-5 text-blanc/80 lg:text-[14px] lg:leading-[22px]">
+          {subtitle}
+        </p>
+      )}
+      {stats && stats.length > 0 && (
+        <dl className="flex flex-wrap gap-2">
+          {stats.map((stat) => (
+            <div
+              key={stat.label}
+              className="flex items-baseline gap-2 rounded-pill bg-blanc/10 px-3.5 py-1.5 ring-1 ring-blanc/15 ring-inset"
+            >
+              <dd className="text-[16px] leading-6 font-semibold text-lime">{stat.value}</dd>
+              <dt className="text-[12px] leading-4 text-blanc/80">{stat.label}</dt>
+            </div>
+          ))}
+        </dl>
+      )}
     </header>
   );
 }
@@ -433,7 +457,7 @@ export function Tag({
 /** Rounded icon tile (lists « À traiter », documents, lessons). */
 export function IconTile({
   icon,
-  tone = "bg-creme",
+  tone = "jm-admin-tile",
   size = 38,
 }: {
   icon: IconName;
@@ -519,25 +543,25 @@ export async function AdminStats({ items }: { items: AdminStat[] }) {
                   <span
                     aria-hidden
                     className={cx(
-                      "grid size-7 shrink-0 place-items-center rounded-full",
+                      "grid size-9 shrink-0 place-items-center rounded-[12px]",
                       item.tone === "attention"
                         ? "bg-ambre-fond text-ambre-texte"
                         : item.tone === "success"
                           ? "bg-lime-clair text-up-texte"
-                          : "bg-creme text-sapin",
+                          : "jm-admin-tile text-sapin",
                     )}
                   >
-                    <Icon name={item.icon} className="size-3.5" />
+                    <Icon name={item.icon} className="size-4" />
                   </span>
                 )}
               </span>
-              <span className="text-[22px] leading-7 font-semibold tracking-[-0.02em] lg:text-[26px] lg:leading-8">
+              <span className="text-[24px] leading-8 font-semibold tracking-[-0.025em] lg:text-[30px] lg:leading-9">
                 {item.value}
               </span>
             </>
           );
           const box = cx(
-            "flex h-full flex-col gap-1.5 rounded-[20px] bg-blanc px-4 py-3.5 lg:px-[18px]",
+            "jm-admin-card flex h-full flex-col gap-1.5 rounded-[22px] bg-blanc px-4 py-3.5 lg:px-5 lg:py-4",
             item.tone === "attention" && "ring-[1.5px] ring-ambre-fond ring-inset",
           );
           return (
@@ -547,7 +571,7 @@ export async function AdminStats({ items }: { items: AdminStat[] }) {
                   href={item.href}
                   className={cx(
                     box,
-                    "hover:shadow-[0_8px_22px_rgba(11,26,31,0.07)] focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus-visible:outline-none",
+                    "jm-admin-card-link focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus-visible:outline-none",
                   )}
                 >
                   {body}
@@ -622,10 +646,10 @@ export function AdminEmpty({
   action?: ReactNode;
 }) {
   return (
-    <div className="flex flex-col items-center gap-2.5 rounded-[24px] bg-blanc px-6 py-10 text-center">
+    <div className="jm-admin-card flex flex-col items-center gap-2.5 rounded-[24px] bg-blanc px-6 py-10 text-center">
       <span
         aria-hidden
-        className="grid size-14 place-items-center rounded-[18px] bg-neon/60 text-sapin"
+        className="jm-admin-tile grid size-14 place-items-center rounded-[18px] text-sapin"
       >
         <Icon name={icon} className="size-6" />
       </span>

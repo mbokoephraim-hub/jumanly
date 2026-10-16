@@ -8722,6 +8722,12 @@ Conventions :
 | `admin.header.searchLabel` | Rechercher un compte par nom, e-mail ou identifiant |
 | `admin.nav.more` | Toutes les rubriques |
 | `admin.nav.mobile` | Rubriques de Jumanly Admin |
+| `admin.nav.home` | Accueil de Jumanly Admin |
+| `admin.nav.group.steer` | Pilotage |
+| `admin.nav.group.accounts` | Comptes et partenaires |
+| `admin.nav.group.offer` | Forfaits et abonnements |
+| `admin.nav.group.content` | Formations et contenus |
+| `admin.nav.group.control` | Modération et contrôle |
 | `admin.sensitive.label` | Action sensible · motif obligatoire |
 | `admin.sensitive.reason` | Motif |
 | `admin.sensitive.close` | Fermer |

@@ -2,6 +2,28 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v3 · étape 1 : coque et identité visuelle (15 octobre 2026)
+
+- **Plan** `docs/admin-v3/PLAN.md` : 7 étapes (coque, habillage, Studio formations, éditeur par
+  étapes, PDF à joindre, PDF générés, passe finale), une PR chacune.
+- **Menu en colonne flottante** (`src/app/admin/layout.tsx`) : 68 px de large, hauteur qui suit
+  son contenu, centrée verticalement, extrémités entièrement arrondies, dégradé vertical Sapin →
+  `#14745f` → Émeraude adouci (`--jm-degrade-rail`, `src/styles/admin.css`), trame de points. Icônes
+  seules, groupées par thème (pilotage, comptes, offre, contenus, contrôle) avec un point
+  séparateur ; libellé en infobulle au survol et au focus clavier (CSS, sans JavaScript), nom
+  accessible sur chaque lien ; rubrique active en pastille Lime avec un trait lumineux. Fenêtre
+  basse : icônes plus serrées, puis défilement dans la colonne.
+- **Fond** clair aux halos Lime et Émeraude avec la trame de points du site ; contenu jusqu'à
+  1400 px. **En-tête de page** en bandeau vert profond (dégradé profondeur, halo, points), titre
+  blanc, surtitre Néon, recherche et compte translucides, chiffres facultatifs (`stats`).
+- **Kit** : cartes à ombre douce (`jm-admin-card`), tuiles d'icônes en dégradé signature, chiffres
+  clés plus grands, états vides avec tuile en dégradé ; entrée douce des blocs (coupée en
+  mouvement réduit, sans effet une fois jouée pour ne pas gêner les menus déroulants).
+- **Téléphone** : en-tête vert profond, pilule du bas en dégradé.
+- Test e2e `tests/e2e/admin-v3.spec.ts` (noms accessibles, colonne plus courte que la fenêtre,
+  infobulle au focus, menu réduit de l'éditeur de contenus). Captures :
+  `/mnt/project-files/captures/admin-v3/etape-1/`.
+
 ## Jumanly Admin v2 · étape 9 : passe finale (15 octobre 2026)
 
 - **Parcours automatique** `tests/e2e/admin-pass.spec.ts` : 27 écrans de l'admin (onglets et fiches

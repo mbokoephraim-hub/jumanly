@@ -59,6 +59,10 @@ async function check(page: Page, path: string) {
     return body.innerText;
   });
   expect(text.match(RAW_KEY)?.[0] ?? null, `${path} · clé brute`).toBeNull();
+  // A link to a fiche (`#utilisateurs-fiche`) sets where the keyboard starts; when the fiche
+  // streams in after the browser has looked for it, that point is lost and Tab leaves the page.
+  // Start from the main content instead, as the skip link does.
+  if (path.includes("#")) await page.locator("#content").focus();
   await page.keyboard.press("Tab");
   expect(
     await page.evaluate(() => {

@@ -24,7 +24,7 @@ export function NavLink({
   placement: NavPlacement;
 }) {
   const active = isActive(usePathname(), href);
-  const hideLabel = placement === "pill" && !active;
+  const hideLabel = (placement === "pill" && !active) || placement === "rail";
   return (
     <Link
       href={href}
@@ -34,6 +34,11 @@ export function NavLink({
     >
       {icon}
       {!hideLabel && <span>{label}</span>}
+      {placement === "rail" && (
+        <span aria-hidden className="jm-admin-tip">
+          {label}
+        </span>
+      )}
     </Link>
   );
 }
