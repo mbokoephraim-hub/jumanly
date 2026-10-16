@@ -1,3 +1,4 @@
+import { isTester } from "@/server/services/tester";
 import { Suspense } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { Skeleton } from "@/components/ui";
@@ -68,6 +69,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         name: user.name,
         planName: plan?.planName ?? "",
         isAdmin: (ADMIN_ROLES as readonly string[]).includes(user.platformRole),
+        isTester: isTester(user),
       }}
     >
       <ContentBanners audience={partnerSpace ? "partners" : space ? "recruiters" : "talents"} />
