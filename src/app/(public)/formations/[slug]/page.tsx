@@ -23,6 +23,7 @@ import {
   staticSlugParams,
 } from "@/server/queries/public";
 import { planForCatalogLevel } from "@/server/services/plans";
+import { CourseDocumentList } from "@/components/learn/course-documents";
 
 // Known slugs are prerendered; a new one renders in full before responding, so that search engines
 // get the whole page and a real 404 for an unknown slug.
@@ -69,7 +70,7 @@ export default async function TrainingPage({ params }: PageProps<"/formations/[s
   const t = await getTranslations();
   const [data, plans] = await Promise.all([getCourse(slug), getPublicPlans()]);
   if (!data) notFound();
-  const { course, related } = data;
+  const { course, related, documents } = data;
 
   const requiredPlan = planForCatalogLevel(plans, course.requiredLevel);
   const isFree = course.requiredLevel === "free";
@@ -476,6 +477,13 @@ export default async function TrainingPage({ params }: PageProps<"/formations/[s
                 </details>
               </div>
             )}
+            <CourseDocumentList
+              id="documents"
+              title={t("learn.documents.publicTitle")}
+              documents={documents}
+              single
+              className="rounded-[24px] bg-creme p-6"
+            />
             {course.instructor && (
               <div
                 data-reveal

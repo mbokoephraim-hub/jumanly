@@ -99,7 +99,15 @@ test("passe finale de l'admin · fiches ouvertes", async ({ page, isMobile }) =>
     .getAttribute("href");
   const base = course?.split("?")[0];
   // Admin v3, étape 4: every step of the course editor.
-  const steps = ["informations", "public", "programme", "quiz", "attestation", "publication"];
+  const steps = [
+    "informations",
+    "public",
+    "programme",
+    "documents",
+    "quiz",
+    "attestation",
+    "publication",
+  ];
   for (const path of [
     course,
     ...steps.map((step) => `${base}?etape=${step}`),

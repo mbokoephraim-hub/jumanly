@@ -108,7 +108,7 @@ test("éditeur par étapes : programme, quiz, attestation et publication", async
   await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
 
   const steps = page.getByRole("navigation", { name: "Étapes de la formation" });
-  await expect(steps.getByRole("listitem")).toHaveCount(6);
+  await expect(steps.getByRole("listitem")).toHaveCount(7);
   await expect(steps.getByRole("link", { name: /^Informations/ })).toHaveAttribute(
     "aria-current",
     "step",
@@ -145,4 +145,52 @@ test("éditeur par étapes : programme, quiz, attestation et publication", async
   await page.getByRole("button", { name: "Changer le statut" }).click();
   await expect(page.getByText("Statut mis à jour.")).toBeVisible();
   await expect(page.getByText("Statut actuel : En relecture")).toBeVisible();
+});
+
+// Admin v3, étape 5: a PDF attached to a course. Sent from the Documents step, listed with its
+// pages, downloadable by the team, refused to a visitor while the course is a draft.
+test("documents PDF : envoi, téléchargement par l'équipe, refus au visiteur", async ({
+  page,
+  browser,
+  baseURL,
+}) => {
+  test.setTimeout(120_000);
+  await logIn(page, demo.editor, undefined, "/admin/formations");
+  await page.goto("/admin/formations/nouvelle");
+  const title = `Documents fictifs e2e ${Date.now().toString(36)}`;
+  await page.locator("#course-new-title").fill(title);
+  await page.locator('label[for="course-new-template-short"]').click();
+  await page.getByRole("button", { name: "Créer la formation" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+
+  const steps = page.getByRole("navigation", { name: "Étapes de la formation" });
+  await steps.getByRole("link", { name: /^Documents/ }).click();
+  const { PDFDocument } = await import("pdf-lib");
+  const pdf = await PDFDocument.create();
+  pdf.addPage();
+  pdf.addPage();
+  await page.locator("#document-new-file").setInputFiles({
+    name: "support-fictif.pdf",
+    mimeType: "application/pdf",
+    buffer: Buffer.from(await pdf.save()),
+  });
+  await page.locator("#document-new-title").fill("Support fictif e2e");
+  await page.locator("#document-new-visibility-public").check();
+  await page.getByRole("button", { name: "Envoyer le document" }).click();
+  await expect(page.getByText("Document enregistré.")).toBeVisible();
+
+  const download = page
+    .locator("#documents")
+    .getByRole("link", { name: "Télécharger « Support fictif e2e »" });
+  const href = await download.getAttribute("href");
+  expect(href).toMatch(/^\/formations\/documents\//);
+  const response = await page.request.get(href!);
+  expect(response.status()).toBe(200);
+  expect(response.headers()["content-type"]).toBe("application/pdf");
+  expect(response.headers()["content-disposition"]).toContain("support-fictif-e2e.pdf");
+
+  // A visitor: the course is still a draft, so the document stays hidden.
+  const visitor = await browser.newContext({ baseURL });
+  expect((await visitor.request.get(href!)).status()).toBe(404);
+  await visitor.close();
 });

@@ -14,6 +14,7 @@ import {
   PublicationCard,
   QuizOverview,
 } from "@/components/admin/formations-editor";
+import { CourseDocumentsCard, LessonDocuments } from "@/components/admin/formations-documents";
 import { CourseAttestationForm, CourseFicheCard } from "@/components/admin/formations-fiche";
 import { DuplicateCoursePanel } from "@/components/admin/formations-readiness";
 import { CourseModulesCard, LessonEditor } from "@/components/admin/formations-modules";
@@ -28,6 +29,7 @@ import {
   publishProblemKeys,
   type EditorStep,
 } from "@/server/services/course-admin";
+import { listCourseDocuments } from "@/server/services/course-documents";
 
 /**
  * Course editor (partie 07 § 12, mockup 07-06; Admin v3, étape 4): the course in the banner, the
@@ -64,6 +66,7 @@ export default async function AdminCourse({
       (publishProblemKeys as readonly string[]).includes(item),
     );
   const totals = programTotals(course);
+  const documents = await listCourseDocuments(db, course.id);
 
   return (
     <>
@@ -86,7 +89,7 @@ export default async function AdminCourse({
           !lesson && "xl:grid-cols-[220px_minmax(0,1fr)_300px]",
         )}
       >
-        <EditorStepNav course={course} current={step} />
+        <EditorStepNav course={course} current={step} documents={documents.length} />
         <div className="flex min-w-0 flex-col gap-4">
           {param("ok") === "creee" && <Alert tone="success" title={t("created")} />}
           {param("ok") === "modele" && <Alert tone="success" title={t("v3.createdFromTemplate")} />}
@@ -138,10 +141,27 @@ export default async function AdminCourse({
               )}
               {lesson && (
                 <div className="xl:sticky xl:top-4">
-                  <LessonEditor course={course} lessonId={lesson.id} query={param} step={step} />
+                  <LessonEditor
+                    course={course}
+                    lessonId={lesson.id}
+                    query={param}
+                    step={step}
+                    documents={
+                      <LessonDocuments
+                        course={course}
+                        lessonId={lesson.id}
+                        documents={documents}
+                        step={step}
+                        query={param}
+                      />
+                    }
+                  />
                 </div>
               )}
             </div>
+          )}
+          {step === "documents" && (
+            <CourseDocumentsCard course={course} documents={documents} query={param} />
           )}
           {step === "attestation" && (
             <>

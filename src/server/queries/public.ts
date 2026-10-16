@@ -11,6 +11,7 @@ import * as learn from "@/server/services/learn";
 import * as plans from "@/server/services/plans";
 import { publicCompany } from "@/server/services/verification";
 import { activeWeights } from "@/server/matching/service";
+import { visibleDocuments } from "@/server/services/course-documents";
 
 export async function getPublicPlans() {
   "use cache";
@@ -44,8 +45,22 @@ export async function getCourse(slug: string) {
   cacheTag("courses", `course:${slug}`);
   const course = await courses.getPublicCourse(db, slug);
   if (!course) return null;
-  const related = await courses.relatedCourses(db, course);
-  return { course, related };
+  const [related, documents] = await Promise.all([
+    courses.relatedCourses(db, course),
+    // Admin v3, étape 5: the documents anyone may download (public, or of a preview lesson).
+    visibleDocuments(db, { ...course, status: "published" }, null),
+  ]);
+  return {
+    course,
+    related,
+    documents: documents.map(({ id, title, kind, pages, size }) => ({
+      id,
+      title,
+      kind,
+      pages,
+      size,
+    })),
+  };
 }
 
 export async function getJobSearch(filters: jobs.JobFilters) {
