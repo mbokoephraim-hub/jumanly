@@ -2,7 +2,17 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { Alert, Badge, Button, ButtonLink, RadioGroup, Select, TextField } from "@/components/ui";
+import {
+  Alert,
+  Badge,
+  Button,
+  ButtonLink,
+  RadioGroup,
+  Select,
+  TextField,
+  segmentedItem,
+  segmentedList,
+} from "@/components/ui";
 import { countryOptions } from "@/config/countries";
 import { formatDate } from "@/lib/dates";
 import { DELETION_GRACE_DAYS, PASSWORD_MIN } from "@/lib/password";
@@ -63,19 +73,14 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
     <div className="flex flex-col gap-5 lg:gap-6">
       <AppPageHeader title={t("settings.title")} />
       <nav aria-label={t("settings.title")} className="lg:hidden">
-        <TabRail name="parametres">
-          <div className="flex w-max gap-1.5">
+        <TabRail name="parametres" className="bg-transparent! p-0!">
+          <div className={segmentedList}>
             {tabs.map((tab) => (
               <Link
                 key={tab.id}
                 href={`/app/parametres?onglet=${tab.id}`}
                 aria-current={tab.id === active ? "page" : undefined}
-                className={cx(
-                  "inline-flex h-[34px] shrink-0 items-center rounded-pill px-3.5 text-[13px] font-medium whitespace-nowrap",
-                  tab.id === active
-                    ? "bg-sapin text-blanc"
-                    : "bg-blanc text-sapin ring-[1.5px] ring-brume ring-inset",
-                )}
+                className={segmentedItem(tab.id === active)}
               >
                 {t(`settings.tab.${tab.key}`)}
               </Link>
