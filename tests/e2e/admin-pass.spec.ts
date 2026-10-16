@@ -97,7 +97,14 @@ test("passe finale de l'admin · fiches ouvertes", async ({ page, isMobile }) =>
     .locator('a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"])')
     .first()
     .getAttribute("href");
-  for (const path of [course, `${course?.split("?")[0]}/apercu`].filter(Boolean) as string[])
+  const base = course?.split("?")[0];
+  // Admin v3, étape 4: every step of the course editor.
+  const steps = ["informations", "public", "programme", "quiz", "attestation", "publication"];
+  for (const path of [
+    course,
+    ...steps.map((step) => `${base}?etape=${step}`),
+    `${base}/apercu`,
+  ].filter(Boolean) as string[])
     await check(page, path);
   await page.goto("/admin/utilisateurs?q=talent.free%40jumanly.test");
   const user = await page.locator('a[href*="fiche="]').first().getAttribute("href");

@@ -11,6 +11,9 @@ import {
   createCourseFromTemplate,
   duplicateCourse,
   getCourseForAdmin,
+  moveLesson,
+  moveModule,
+  programTotals,
   readinessPercents,
   type TemplateLabels,
 } from "@/server/services/course-admin";
@@ -211,5 +214,28 @@ describe("Studio formations (Admin v3, étape 3)", () => {
       "exercise 2",
     ]);
     expect((await getCourseForAdmin(db, blank.id))!.modules).toHaveLength(0);
+  });
+});
+
+describe("Éditeur par étapes (Admin v3, étape 4)", () => {
+  it("déplace un module et une leçon d'un cran, sans sortir des bornes", async () => {
+    const course = await createCourseFromTemplate(
+      db,
+      { ...base, title: `Ordre test ${randomUUID().slice(0, 8)}`, template: "certifying" },
+      labels,
+    );
+    courses.push(course.id);
+    const before = (await getCourseForAdmin(db, course.id))!;
+    const [first, second] = before.modules;
+    expect(await moveModule(db, course.id, first!.id, "up")).toBe(false);
+    expect(await moveModule(db, course.id, first!.id, "down")).toBe(true);
+    const lesson = first!.lessons[0]!;
+    expect(await moveLesson(db, course.id, lesson.id, "down")).toBe(true);
+    expect(await moveLesson(db, randomUUID(), lesson.id, "down")).toBe(false);
+
+    const after = (await getCourseForAdmin(db, course.id))!;
+    expect(after.modules.map((module) => module.id).slice(0, 2)).toEqual([second!.id, first!.id]);
+    expect(after.modules[1]!.lessons.map((item) => item.kind)).toEqual(["text", "video", "quiz"]);
+    expect(programTotals(after)).toEqual({ modules: 4, lessons: 10, quizzes: 4, minutes: 0 });
   });
 });

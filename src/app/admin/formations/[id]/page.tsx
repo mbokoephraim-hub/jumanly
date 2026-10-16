@@ -6,27 +6,33 @@ import {
   CourseAttestationCard,
   RevokeCertificateSection,
 } from "@/components/admin/formations-attestation";
-import { CourseFicheCard } from "@/components/admin/formations-fiche";
-import { CourseReadinessCard, DuplicateCoursePanel } from "@/components/admin/formations-readiness";
 import {
-  CourseFilterBar,
-  CourseListCard,
-  filterCourses,
-  readCourseFilters,
-} from "@/components/admin/formations-list";
+  CourseReadinessCard,
+  EditorStepIntro,
+  EditorStepNav,
+  EditorStepPager,
+  PublicationCard,
+  QuizOverview,
+} from "@/components/admin/formations-editor";
+import { CourseAttestationForm, CourseFicheCard } from "@/components/admin/formations-fiche";
+import { DuplicateCoursePanel } from "@/components/admin/formations-readiness";
 import { CourseModulesCard, LessonEditor } from "@/components/admin/formations-modules";
 import { Alert } from "@/components/ui";
+import { cx } from "@/lib/cx";
 import { requireCourseEditor } from "@/server/auth/session";
 import { db } from "@/server/db";
 import {
   getCourseForAdmin,
-  listCoursesForAdmin,
+  isEditorStep,
+  programTotals,
   publishProblemKeys,
+  type EditorStep,
 } from "@/server/services/course-admin";
 
 /**
- * Course editor (partie 07 § 12, mockup 07-06): the list on the left; on the right the course card,
- * the modules and lessons, the attestation and publication, then the revocation of an attestation.
+ * Course editor (partie 07 § 12, mockup 07-06; Admin v3, étape 4): the course in the banner, the
+ * steps on the left (`?etape=`), the current step in the middle and « Prête à publier ? » on the
+ * right. A lesson opens in a panel beside the program (`?lecon=`), a quiz beside the quiz list.
  */
 export default async function AdminCourse({
   params,
@@ -40,30 +46,47 @@ export default async function AdminCourse({
   if (!course) notFound();
   const t = await getTranslations("admin.courses");
   const param = (key: string) => (typeof query[key] === "string" ? (query[key] as string) : "");
-  const all = await listCoursesForAdmin(db);
-  const filters = readCourseFilters(query);
-  const courses = filterCourses(all, filters);
+  const step: EditorStep = isEditorStep(param("etape"))
+    ? (param("etape") as EditorStep)
+    : "informations";
   const coverError = param("erreur").startsWith("couverture-") ? param("erreur").slice(11) : "";
-  const lesson = course.modules
-    .flatMap((module) => module.lessons)
-    .find((item) => item.id === param("lecon"));
+  const lesson =
+    step === "programme" || step === "quiz"
+      ? course.modules
+          .flatMap((module) => module.lessons)
+          .find(
+            (item) => item.id === param("lecon") && (step === "programme" || item.kind === "quiz"),
+          )
+      : undefined;
   const publication = param("publication")
     .split(",")
     .filter((item): item is (typeof publishProblemKeys)[number] =>
       (publishProblemKeys as readonly string[]).includes(item),
     );
+  const totals = programTotals(course);
 
   return (
     <>
-      <AdminPageHeader title={t("title")} />
-      <CourseFilterBar
-        base={`/admin/formations/${course.id}`}
-        courses={all}
-        filters={filters}
-        shown={courses.length}
+      <AdminPageHeader
+        title={course.title}
+        eyebrow={t("v3.eyebrow")}
+        stats={[
+          { label: t("v3.editor.stats.status"), value: t(`status.${course.status}`) },
+          { label: t("v3.editor.stats.modules"), value: totals.modules },
+          { label: t("v3.editor.stats.lessons"), value: totals.lessons },
+          {
+            label: t("v3.editor.stats.duration"),
+            value: t("v3.editor.stats.minutes", { minutes: totals.minutes }),
+          },
+        ]}
       />
-      <div className="grid items-start gap-4 lg:grid-cols-[260px_minmax(0,1fr)] xl:grid-cols-[300px_minmax(0,1fr)]">
-        <CourseListCard courses={courses} filters={filters} currentId={course.id} />
+      <div
+        className={cx(
+          "grid grid-cols-[minmax(0,1fr)] items-start gap-4 lg:grid-cols-[220px_minmax(0,1fr)]",
+          !lesson && "xl:grid-cols-[220px_minmax(0,1fr)_300px]",
+        )}
+      >
+        <EditorStepNav course={course} current={step} />
         <div className="flex min-w-0 flex-col gap-4">
           {param("ok") === "creee" && <Alert tone="success" title={t("created")} />}
           {param("ok") === "modele" && <Alert tone="success" title={t("v3.createdFromTemplate")} />}
@@ -95,20 +118,57 @@ export default async function AdminCourse({
               </ul>
             </Alert>
           )}
+          {param("action") === "dupliquer" && <DuplicateCoursePanel course={course} step={step} />}
 
-          <CourseReadinessCard course={course} />
-          {param("action") === "dupliquer" && <DuplicateCoursePanel course={course} />}
-          <CourseFicheCard course={course} />
-          <div className="grid items-start gap-4 xl:grid-cols-[minmax(0,1fr)_340px]">
-            <CourseModulesCard course={course} openLessonId={lesson?.id} />
-            <CourseAttestationCard course={course} />
-          </div>
-          {lesson && <LessonEditor course={course} lessonId={lesson.id} query={param} />}
-          {user.platformRole === "platform_admin" && (
-            <RevokeCertificateSection course={course} query={param} />
+          <EditorStepIntro step={step} />
+          {(step === "informations" || step === "public") && (
+            <CourseFicheCard course={course} step={step} />
           )}
-          <AuditHistory targetType="course" targetId={course.id} />
+          {(step === "programme" || step === "quiz") && (
+            <div
+              className={cx(
+                "grid grid-cols-[minmax(0,1fr)] items-start gap-4",
+                lesson && "xl:grid-cols-[minmax(0,0.85fr)_minmax(0,1.15fr)]",
+              )}
+            >
+              {step === "programme" ? (
+                <CourseModulesCard course={course} openLessonId={lesson?.id} />
+              ) : (
+                <QuizOverview course={course} openLessonId={lesson?.id} />
+              )}
+              {lesson && (
+                <div className="xl:sticky xl:top-4">
+                  <LessonEditor course={course} lessonId={lesson.id} query={param} step={step} />
+                </div>
+              )}
+            </div>
+          )}
+          {step === "attestation" && (
+            <>
+              <CourseAttestationForm course={course} />
+              <CourseAttestationCard course={course} />
+              {user.platformRole === "platform_admin" && (
+                <RevokeCertificateSection course={course} query={param} />
+              )}
+            </>
+          )}
+          {step === "publication" && (
+            <>
+              <PublicationCard course={course} />
+              <AuditHistory targetType="course" targetId={course.id} />
+            </>
+          )}
+          <EditorStepPager
+            course={course}
+            step={step}
+            form={step === "informations" || step === "public"}
+          />
         </div>
+        {!lesson && (
+          <div className="lg:col-start-2 xl:sticky xl:top-4 xl:col-start-auto">
+            <CourseReadinessCard course={course} step={step} />
+          </div>
+        )}
       </div>
     </>
   );

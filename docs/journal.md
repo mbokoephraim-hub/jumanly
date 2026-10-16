@@ -2,6 +2,28 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v3 · étape 4 : éditeur de formation par étapes (16 octobre 2026)
+
+- L'éditeur `/admin/formations/[id]` est découpé en **6 étapes** (`?etape=`) : Informations,
+  Public et objectifs, Programme, Quiz, Attestation, Publication (Documents arrive à l'étape 5).
+  Colonne des étapes à gauche (pastilles à faire défiler sur téléphone), chaque étape cochée quand
+  elle est complète ; « Prête à publier ? » à droite (anneau, ce qui manque avec un lien vers
+  l'étape, aperçu, dupliquer) ; boutons « Étape précédente / suivante ». Le bandeau montre le titre,
+  le statut, les modules, les leçons et la durée.
+- La fiche est répartie entre Informations et Public et objectifs ; chaque étape renvoie la fiche
+  entière (les champs non affichés partent en champs cachés), rien n'est perdu.
+- **Programme** : un bloc par module avec ses totaux, flèches pour monter ou descendre un module ou
+  une leçon (`moveModule`, `moveLesson`, journalisés), ajout de leçon en pied de module, renommer et
+  supprimer repliés ; la leçon s'ouvre dans un **panneau** à côté du programme (`?lecon=`).
+- **Quiz** : la liste des quiz du programme, leurs questions et leur seuil, ceux à compléter ; les
+  questions s'éditent dans le même panneau. **Attestation** : le réglage, ses conditions et un
+  **aperçu** de l'attestation (nom et numéro fictifs). **Publication** : récapitulatif des étapes,
+  « Publier », changement de statut avec un **motif facultatif** gardé dans le journal, historique.
+- Correctif : la colonne des étapes ne provoque plus de défilement horizontal sur téléphone (les
+  textes pour lecteurs d'écran sortaient du conteneur défilant).
+- Tests : déplacements en base ; e2e « éditeur par étapes », parcours Learn adapté aux étapes, passe
+  admin sur chaque étape.
+
 ## Jumanly Admin v3 · étape 3 : Studio formations, galerie et création (15 octobre 2026)
 
 - `/admin/formations` devient le **Studio formations** : bandeau avec les formations publiées, les

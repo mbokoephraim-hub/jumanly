@@ -51,17 +51,36 @@ export function GeneratedCover({ title, theme }: { title: string; theme: string 
 }
 
 /** Readiness ring of a draft (0 to 100). */
-function ReadinessRing({ percent, text, label }: { percent: number; text: string; label: string }) {
+/** Ring of the share of publication checks met; `large` in the editor's « Prête à publier ? ». */
+export function ReadinessRing({
+  percent,
+  text,
+  label,
+  large = false,
+}: {
+  percent: number;
+  text: string;
+  label: string;
+  large?: boolean;
+}) {
   return (
     <span
       role="img"
       aria-label={label}
-      className="grid size-11 shrink-0 place-items-center rounded-full bg-blanc/95 shadow-[0_6px_16px_rgba(11,26,31,0.18)]"
+      className={cx(
+        "grid shrink-0 place-items-center rounded-full bg-blanc/95 shadow-[0_6px_16px_rgba(11,26,31,0.18)]",
+        large ? "size-16" : "size-11",
+      )}
       style={{
         backgroundImage: `conic-gradient(var(--color-feuille) ${percent}%, var(--color-brume) 0)`,
       }}
     >
-      <span className="grid size-[34px] place-items-center rounded-full bg-blanc text-[10.5px] font-semibold text-sapin">
+      <span
+        className={cx(
+          "grid place-items-center rounded-full bg-blanc font-semibold text-sapin",
+          large ? "size-[50px] text-[14px]" : "size-[34px] text-[10.5px]",
+        )}
+      >
         {text}
       </span>
     </span>
