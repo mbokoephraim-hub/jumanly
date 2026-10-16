@@ -6,7 +6,15 @@ import { AppPageHeader } from "@/components/app/page-header";
 import { Icon } from "@/components/brand/icon";
 import { Pagination, withParams } from "@/components/site/navigation-bits";
 import { PublicCourseCard } from "@/components/site/public-cards";
-import { Alert, ButtonLink, EmptyState, ProgressBar, SearchField } from "@/components/ui";
+import {
+  Alert,
+  Button,
+  ButtonLink,
+  EmptyState,
+  ProgressBar,
+  SearchField,
+  Select,
+} from "@/components/ui";
 import { durationParts } from "@/lib/format";
 import { cx } from "@/lib/cx";
 import { RecommendedCourses } from "@/components/matching/recommendations";
@@ -14,12 +22,20 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { getCourseSearch, getPublicPlans } from "@/server/queries/public";
 import {
+  accessFilters,
   countPublishedCourses,
+  courseLevels,
+  durationFilters,
+  editorialFilters,
   featuredCourses,
-  listCourseThemes,
   parseCourseFilters,
   type CourseSummary,
 } from "@/server/services/courses";
+import {
+  listCourseLanguages,
+  listCourseSkills,
+  listDomains,
+} from "@/server/services/learn-domains";
 import { catalogLevelOf, myEnrollments, opensCourse } from "@/server/services/learn";
 import { planForCatalogLevel } from "@/server/services/plans";
 import { TabRail } from "@/components/motion/tab-rail";
@@ -60,16 +76,31 @@ export default async function LearnExplorePage({ searchParams }: PageProps<"/app
     })
   )?.desiredJobTitles[0];
 
-  const [total, freeCount, themes, featured] = await Promise.all([
+  const [total, freeCount, domains, languages, skills, featured] = await Promise.all([
     countPublishedCourses(db),
     db.course.count({ where: { status: "published", requiredLevel: "free" } }),
-    listCourseThemes(db),
+    listDomains(db),
+    listCourseLanguages(db),
+    listCourseSkills(db),
     featuredCourses(db, 8),
   ]);
   const inProgress = enrollments.filter((enrollment) => !enrollment.completedAt);
+  const domain = domains.find((item) => item.slug === filters.domaine);
+  // Filters of the « Filtres » panel (Learn v2, étape 1): the domain and the search have their own.
+  const panelKeys = ["niveau", "duree", "langue", "acces", "competence", "ligne"] as const;
+  const activeFilters = panelKeys.filter((key) => filters[key]).length;
   const filtered = Boolean(
-    filters.q || filters.theme || filters.niveau || filters.acces || search.page > 1,
+    filters.q || filters.theme || filters.domaine || activeFilters || search.page > 1,
   );
+  const languageLabel = (code: string) =>
+    code === "fr" || code === "en" ? t(`learn.catalog.language.${code}`) : code.toUpperCase();
+  const accessLabels = {
+    free: "free",
+    fundamentals: "starter",
+    standard: "pro",
+    advanced: "premium",
+  } as const;
+  const durationLabels = { court: "short", moyen: "medium", long: "long" } as const;
   // A course to discover: never one the learner already follows or finished.
   const hero = filtered ? undefined : featured.find((course) => !enrollmentBySlug.has(course.slug));
   const lockedPlan = (course: CourseSummary) =>
@@ -112,9 +143,9 @@ export default async function LearnExplorePage({ searchParams }: PageProps<"/app
     return null;
   };
 
-  const chip = (active: boolean) =>
+  const domainChip = (active: boolean) =>
     cx(
-      "inline-flex h-9 shrink-0 items-center rounded-pill px-4 text-[13px] font-semibold whitespace-nowrap",
+      "inline-flex h-11 shrink-0 items-center gap-2 rounded-pill px-4 text-[13px] font-semibold whitespace-nowrap",
       active
         ? "bg-sapin text-blanc"
         : "bg-blanc ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40",
@@ -143,7 +174,11 @@ export default async function LearnExplorePage({ searchParams }: PageProps<"/app
         role="search"
         className="w-full lg:max-w-[640px]"
       >
-        {filters.theme && <input type="hidden" name="theme" value={filters.theme} />}
+        {filters.domaine && <input type="hidden" name="domaine" value={filters.domaine} />}
+        {panelKeys.map(
+          (key) =>
+            filters[key] && <input key={key} type="hidden" name={key} value={filters[key]} />,
+        )}
         <SearchField
           id="learn-search"
           name="q"
@@ -153,26 +188,37 @@ export default async function LearnExplorePage({ searchParams }: PageProps<"/app
         />
       </form>
 
-      {themes.length > 0 && (
-        <nav aria-label={t("learn.catalog.filter.theme")}>
-          <TabRail name="learn-themes">
+      {domains.length > 0 && (
+        <nav aria-label={t("learn.catalog.domains.title")}>
+          <TabRail name="learn-domains">
             <ul className="flex w-max gap-2">
               <li>
                 <Link
-                  href={withParams("/app/learn/explorer", { ...current, theme: undefined })}
-                  className={chip(!filters.theme)}
+                  href={withParams("/app/learn/explorer", { ...current, domaine: undefined })}
+                  aria-current={!filters.domaine ? "true" : undefined}
+                  className={domainChip(!filters.domaine)}
                 >
-                  {t("learn.catalog.tab.all")}
+                  <Icon name="grid" className="size-4" />
+                  {t("learn.catalog.domains.all")}
                 </Link>
               </li>
-              {themes.filter(Boolean).map((theme) => (
-                <li key={theme}>
+              {domains.map((item) => (
+                <li key={item.slug}>
                   <Link
-                    href={withParams("/app/learn/explorer", { ...current, theme })}
-                    aria-current={filters.theme === theme ? "true" : undefined}
-                    className={chip(filters.theme === theme)}
+                    href={withParams("/app/learn/explorer", { ...current, domaine: item.slug })}
+                    aria-current={filters.domaine === item.slug ? "true" : undefined}
+                    className={domainChip(filters.domaine === item.slug)}
                   >
-                    {theme}
+                    <Icon name={item.icon} className="size-4" />
+                    <span>{item.name}</span>
+                    <span
+                      className={cx(
+                        "text-[11.5px] font-medium",
+                        filters.domaine === item.slug ? "text-blanc/80" : "text-ardoise",
+                      )}
+                    >
+                      {t("learn.catalog.domains.count", { count: item.courseCount })}
+                    </span>
                   </Link>
                 </li>
               ))}
@@ -180,6 +226,127 @@ export default async function LearnExplorePage({ searchParams }: PageProps<"/app
           </TabRail>
         </nav>
       )}
+
+      {domain && (
+        <section
+          aria-labelledby="learn-domain"
+          className="flex items-start gap-4 rounded-[22px] border border-sapin/8 bg-blanc p-4 lg:p-5"
+        >
+          <span
+            aria-hidden
+            className="flex size-12 shrink-0 items-center justify-center rounded-[14px] bg-lime"
+          >
+            <Icon name={domain.icon} className="size-5" />
+          </span>
+          <div className="flex min-w-0 flex-col gap-1">
+            <p className="text-[11.5px] font-semibold tracking-[0.08em] text-feuille-fonce uppercase">
+              {t("learn.catalog.domain.eyebrow")}
+            </p>
+            <h2 id="learn-domain" className="text-[20px] leading-tight font-bold tracking-tight">
+              {domain.name}
+            </h2>
+            {domain.description && <p className="text-[14px] text-ardoise">{domain.description}</p>}
+          </div>
+        </section>
+      )}
+
+      <details
+        className="group/filters rounded-[22px] border border-sapin/8 bg-blanc"
+        open={activeFilters > 0}
+      >
+        <summary className="flex min-h-12 cursor-pointer list-none items-center gap-2 px-4 text-[14px] font-semibold [&::-webkit-details-marker]:hidden">
+          <Icon name="filtre" className="size-4" />
+          {t("learn.catalog.filters.text")}
+          {activeFilters > 0 && (
+            <span className="rounded-pill bg-lime px-2 py-0.5 text-[11.5px] text-sapin">
+              {t("learn.catalog.filter.active", { count: activeFilters })}
+            </span>
+          )}
+          <Icon
+            name="chev-d"
+            className="ml-auto size-4 transition-transform group-open/filters:rotate-180"
+          />
+        </summary>
+        <form
+          action="/app/learn/explorer"
+          method="get"
+          className="grid gap-3 border-t border-brume p-4 sm:grid-cols-2 lg:grid-cols-3"
+        >
+          {filters.q && <input type="hidden" name="q" value={filters.q} />}
+          {filters.domaine && <input type="hidden" name="domaine" value={filters.domaine} />}
+          <Select
+            id="learn-filter-level"
+            name="niveau"
+            label={t("learn.catalog.filter.level.text")}
+            defaultValue={filters.niveau ?? ""}
+            placeholder={t("learn.catalog.filter.any")}
+            options={courseLevels.map((level) => ({
+              value: level,
+              label: t(`learn.catalog.filter.level.${level}`),
+            }))}
+          />
+          <Select
+            id="learn-filter-duration"
+            name="duree"
+            label={t("learn.catalog.filter.duration.text")}
+            defaultValue={filters.duree ?? ""}
+            placeholder={t("learn.catalog.filter.any")}
+            options={durationFilters.map((value) => ({
+              value,
+              label: t(`learn.catalog.filter.duration.${durationLabels[value]}`),
+            }))}
+          />
+          <Select
+            id="learn-filter-language"
+            name="langue"
+            label={t("learn.catalog.filter.language")}
+            defaultValue={filters.langue ?? ""}
+            placeholder={t("learn.catalog.filter.any")}
+            options={languages.map((code) => ({ value: code, label: languageLabel(code) }))}
+          />
+          <Select
+            id="learn-filter-access"
+            name="acces"
+            label={t("learn.catalog.filter.access.text")}
+            defaultValue={filters.acces ?? ""}
+            placeholder={t("learn.catalog.filter.any")}
+            options={accessFilters.map((level) => ({
+              value: level,
+              label: t(`trainings.filters.access.${accessLabels[level]}`),
+            }))}
+          />
+          <Select
+            id="learn-filter-skill"
+            name="competence"
+            label={t("learn.catalog.filter.skill")}
+            defaultValue={filters.competence ?? ""}
+            placeholder={t("learn.catalog.filter.any")}
+            options={skills.map((skill) => ({ value: skill.slug, label: skill.name }))}
+          />
+          <Select
+            id="learn-filter-editorial"
+            name="ligne"
+            label={t("learn.catalog.filter.editorial")}
+            defaultValue={filters.ligne ?? ""}
+            placeholder={t("learn.catalog.filter.any")}
+            options={editorialFilters.map((line) => ({
+              value: line,
+              label: t(`learn.editorial.${line}`),
+            }))}
+          />
+          <div className="flex flex-wrap items-center gap-3 sm:col-span-2 lg:col-span-3">
+            <Button type="submit">{t("learn.catalog.filter.submit")}</Button>
+            {activeFilters > 0 && (
+              <ButtonLink
+                href={withParams("/app/learn/explorer", { q: filters.q, domaine: filters.domaine })}
+                variant="tertiary"
+              >
+                {t("learn.catalog.filters.reset")}
+              </ButtonLink>
+            )}
+          </div>
+        </form>
+      </details>
 
       {saved === "1" && <Alert tone="success" title={t("learn.save.success")} />}
       {saved === "0" && <Alert tone="info" title={t("learn.save.removed")} />}
@@ -191,8 +358,15 @@ export default async function LearnExplorePage({ searchParams }: PageProps<"/app
         >
           <div className="flex min-w-0 flex-col gap-2.5">
             <p className="relative flex flex-wrap gap-2 text-[11px] font-semibold">
-              {hero.category && (
-                <span className="rounded-pill bg-lime px-2.5 py-1 text-sapin">{hero.category}</span>
+              {(hero.domain?.name || hero.category) && (
+                <span className="rounded-pill bg-lime px-2.5 py-1 text-sapin">
+                  {hero.domain?.name || hero.category}
+                </span>
+              )}
+              {hero.editorialLine !== "originals" && (
+                <span className="rounded-pill bg-sapin px-2.5 py-1 text-blanc">
+                  {t(`learn.editorial.${hero.editorialLine}`)}
+                </span>
               )}
               <span className="rounded-pill px-2.5 py-1 text-sapin ring-1 ring-brume ring-inset">
                 {lockedPlan(hero)
@@ -252,7 +426,11 @@ export default async function LearnExplorePage({ searchParams }: PageProps<"/app
         </h2>
         {courses.length === 0 ? (
           <EmptyState
-            title={t("learn.catalog.empty.text")}
+            title={
+              domain && domain.courseCount === 0
+                ? t("learn.catalog.domain.empty")
+                : t("learn.catalog.empty.text")
+            }
             action={
               <ButtonLink href="/app/learn/explorer" variant="secondary">
                 {t("learn.catalog.empty.cta")}

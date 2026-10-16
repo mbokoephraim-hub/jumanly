@@ -110,6 +110,11 @@ export function PublicCourseCard({
         >
           <Icon name={categoryIcon(course.category)} className="size-5" />
         </span>
+        {course.editorialLine && course.editorialLine !== "originals" && (
+          <span className="absolute top-3 left-3 rounded-pill bg-sapin px-2.5 py-1 text-[11px] font-semibold text-blanc">
+            {t(`learn.editorial.${course.editorialLine}`)}
+          </span>
+        )}
         {locked && (
           <span
             aria-hidden
@@ -122,7 +127,7 @@ export function PublicCourseCard({
       <div className="flex flex-1 flex-col gap-1.5 px-2">
         <div className="flex items-center justify-between gap-2">
           <span className="min-w-0 truncate text-[11px] leading-[15px] font-semibold text-feuille-fonce">
-            {course.category ?? t(`trainings.filters.level.${course.level}`)}
+            {course.domain?.name || course.category || t(`trainings.filters.level.${course.level}`)}
           </span>
           {locked ? (
             <span

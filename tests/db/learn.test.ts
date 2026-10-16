@@ -84,6 +84,8 @@ async function course(requiredLevel: "free" | "fundamentals", maxAttempts = 0) {
     coverUrl: "/medias/courses/test/cover-test-960.webp",
     skills: skill.name,
     jobFamilies: "",
+    domainId: "",
+    editorialLine: "originals",
   });
   const firstModule = await addModule(db, created!.id, "Module test");
   const text = await addLesson(db, created!.id, firstModule!.id, { title: "Texte", kind: "text" });

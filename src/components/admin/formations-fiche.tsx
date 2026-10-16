@@ -9,6 +9,8 @@ import { formatDate } from "@/lib/dates";
 import { updateCourseAction } from "@/server/actions/course-admin";
 import { catalogLevelOptions, type AdminCourse } from "@/server/services/course-admin";
 import { coverAt } from "@/server/services/course-media";
+import { db } from "@/server/db";
+import { editorialLines, listDomains } from "@/server/services/learn-domains";
 
 /** Id of the course form: the attestation switch, in its own card, belongs to it. */
 export const courseFormId = "admin-course-fiche";
@@ -40,6 +42,8 @@ const fieldsOf = {
     "slug",
     "summary",
     "category",
+    "domainId",
+    "editorialLine",
     "level",
     "language",
     "instructor",
@@ -65,6 +69,8 @@ function savedValues(course: AdminCourse): Record<string, string> {
     slug: course.slug,
     summary: course.summary,
     category: course.category,
+    domainId: course.domainId ?? "",
+    editorialLine: course.editorialLine,
     level: course.level,
     language: course.language,
     instructor: course.instructor ?? "",
@@ -129,6 +135,8 @@ export async function CourseFicheCard({
 }) {
   const t = await getTranslations("admin.courses");
   const levels = await getTranslations("trainings.filters.level");
+  const learn = await getTranslations("learn");
+  const domains = step === "informations" ? await listDomains(db) : [];
   const lessons = course.modules.flatMap((module) => module.lessons);
   const indicators = [
     {
@@ -199,6 +207,27 @@ export async function CourseFicheCard({
               defaultValue={course.summary}
               maxLength={300}
             />
+            <div className="grid gap-3 sm:grid-cols-2">
+              <Select
+                id="course-domain"
+                name="domainId"
+                label={t("field.domain")}
+                defaultValue={course.domainId ?? ""}
+                placeholder={t("field.domainNone")}
+                options={domains.map((domain) => ({ value: domain.id, label: domain.name }))}
+              />
+              <Select
+                id="course-editorial"
+                name="editorialLine"
+                label={t("field.editorial")}
+                hint={t("field.editorialHint")}
+                defaultValue={course.editorialLine}
+                options={editorialLines.map((line) => ({
+                  value: line,
+                  label: learn(`editorial.${line}`),
+                }))}
+              />
+            </div>
             <div className="grid gap-3 sm:grid-cols-2 xl:grid-cols-[1.2fr_1fr_0.85fr_0.85fr]">
               <TextField
                 id="course-category"

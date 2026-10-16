@@ -2,6 +2,20 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Learn v2 · étape 1 : domaines et lignes éditoriales (16 octobre 2026)
+
+- Analyse du module Learn et plan en quatre phases : `docs/learn-v2/PLAN.md`.
+- Les 7 domaines (Career & Employability … Skills Monetisation & Freelancing) sont créés par la
+  migration `learn_domains` ; les formations existantes sont rangées d'après leur thème. Aucune
+  table ni donnée supprimée. Décision : `docs/decisions/2026-10-16-learn-v2-domaines.md`.
+- Explorer : rangée « Domaines » avec le nombre de formations, page de domaine, panneau
+  « Filtres » (niveau, durée, langue, accès, compétence, ligne éditoriale).
+- Cartes : nom du domaine et badge « Expert Series » ou « Partner Programs ».
+- Admin : `/admin/formations/domaines` (éditeur de contenu et administrateur ; suppression par
+  l'administrateur seulement, journalisée) ; domaine et ligne éditoriale dans la fiche formation.
+- Tests : unitaires (filtres), en base (domaines, filtres, suppression sans perte de formation),
+  e2e (catalogue par domaine, filtres, administration, accessibilité).
+
 ## Test utilisateur · étapes 4 et 5 : fin de module et finitions (16 octobre 2026)
 
 - Lecteur : terminer la dernière leçon d'un module (ou réussir son quiz) affiche une petite

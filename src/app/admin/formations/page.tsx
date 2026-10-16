@@ -67,13 +67,23 @@ export default async function AdminCourses({ searchParams }: PageProps<"/admin/f
         ]}
       />
       <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
-        <ButtonLink
-          href="/admin/formations/nouvelle"
-          icon={<Icon name="plus" />}
-          className="w-full sm:w-fit"
-        >
-          {t("new")}
-        </ButtonLink>
+        <div className="flex flex-col gap-2 sm:flex-row">
+          <ButtonLink
+            href="/admin/formations/nouvelle"
+            icon={<Icon name="plus" />}
+            className="w-full sm:w-fit"
+          >
+            {t("new")}
+          </ButtonLink>
+          <ButtonLink
+            href="/admin/formations/domaines"
+            variant="secondary"
+            icon={<Icon name="grid" />}
+            className="w-full sm:w-fit"
+          >
+            {t("domains.link")}
+          </ButtonLink>
+        </div>
         <nav aria-label={t("v3.view.label")} className={segmentedList}>
           {(["galerie", "liste"] as const).map((view) => {
             const current = (view === "liste") === list;

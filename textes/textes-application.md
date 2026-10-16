@@ -2407,6 +2407,21 @@ Conventions :
 | `learn.catalog.filter.duration.long` | Plus de 10 h |
 | `learn.catalog.filter.language` | Langue |
 | `learn.catalog.filter.certificate` | Avec attestation |
+| `learn.catalog.filter.skill` | Compétence |
+| `learn.catalog.filter.editorial` | Collection |
+| `learn.catalog.filter.any` | Tous |
+| `learn.catalog.filter.submit` | Appliquer |
+| `learn.catalog.filter.active` | {count, plural, one {# filtre actif} other {# filtres actifs}} |
+| `learn.catalog.language.fr` | Français |
+| `learn.catalog.language.en` | Anglais |
+| `learn.catalog.domains.title` | Domaines |
+| `learn.catalog.domains.all` | Tous les domaines |
+| `learn.catalog.domains.count` | {count, plural, =0 {Bientôt} one {# formation} other {# formations}} |
+| `learn.catalog.domain.eyebrow` | Domaine |
+| `learn.catalog.domain.empty` | Aucune formation publiée dans ce domaine pour l'instant. |
+| `learn.editorial.originals` | Jumanly Originals |
+| `learn.editorial.expert_series` | Jumanly Expert Series |
+| `learn.editorial.partner_programs` | Jumanly Partner Programs |
 | `learn.catalog.sort.text` | Trier |
 | `learn.catalog.sort.popular` | Popularité |
 | `learn.catalog.sort.recent` | Plus récentes |
@@ -10413,6 +10428,37 @@ Conventions :
 | `admin.courses.v3.pdf.download` | Télécharger le PDF « {name} » |
 | `admin.courses.v3.pdf.logged` | Chaque téléchargement par l'équipe est journalisé. |
 
+
+### `/admin/formations/domaines` · Domaines et collections (Learn v2, étape 1)
+
+*Ranger les formations du catalogue par domaine ; les 7 domaines de départ sont créés automatiquement.*
+
+| Clé | Texte |
+|---|---|
+| `admin.courses.domains.link` | Domaines |
+| `admin.courses.domains.title` | Domaines du catalogue |
+| `admin.courses.domains.eyebrow` | Jumanly Admin · Learn |
+| `admin.courses.domains.subtitle` | Les domaines organisent le catalogue Learn. Chaque formation appartient à un domaine ; renommer un domaine garde son adresse. |
+| `admin.courses.domains.back` | Studio formations |
+| `admin.courses.domains.count` | {count, plural, =0 {Aucune formation publiée} one {# formation publiée} other {# formations publiées}} |
+| `admin.courses.domains.field.name` | Nom |
+| `admin.courses.domains.field.description` | Description |
+| `admin.courses.domains.field.icon` | Icône |
+| `admin.courses.domains.field.order` | Ordre d'affichage |
+| `admin.courses.domains.save` | Enregistrer |
+| `admin.courses.domains.delete` | Supprimer |
+| `admin.courses.domains.deleteHint` | Les formations de ce domaine restent publiées, sans domaine, jusqu'à ce que vous les rangiez ailleurs. |
+| `admin.courses.domains.new.title` | Nouveau domaine |
+| `admin.courses.domains.new.submit` | Créer le domaine |
+| `admin.courses.domains.ok.created` | Domaine créé. |
+| `admin.courses.domains.ok.saved` | Domaine enregistré. |
+| `admin.courses.domains.ok.deleted` | Domaine supprimé ; ses formations sont maintenant sans domaine. |
+| `admin.courses.domains.error` | Vérifiez le nom (2 caractères au moins) et l'ordre (un nombre). |
+| `admin.courses.domains.readOnly` | Seul un administrateur de la plateforme peut supprimer un domaine. |
+| `admin.courses.field.domain` | Domaine |
+| `admin.courses.field.domainNone` | Sans domaine |
+| `admin.courses.field.editorial` | Collection |
+| `admin.courses.field.editorialHint` | Jumanly Partner Programs seulement avec une convention signée avec le partenaire. |
 ### `/admin/offres` · Modération des offres
 
 | Clé | Texte |

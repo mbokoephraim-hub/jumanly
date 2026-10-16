@@ -3,6 +3,7 @@
  * database work, called by the admin actions after the role check (content editor or administrator).
  */
 import { z } from "zod";
+import { editorialLines } from "./learn-domains";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { slugify } from "./accounts";
 import { lessonResourceSchema } from "./learn";
@@ -273,6 +274,9 @@ export const courseFormSchema = z.object({
   ]),
   skills: text(500),
   jobFamilies: text(500).default(""),
+  /** Learn v2, étape 1: the domain (empty = none) and the editorial line. */
+  domainId: text(40).default(""),
+  editorialLine: z.enum(editorialLines).default("originals"),
 });
 
 /** Saves the course fields; returns the skill names not found in the reference list. */
@@ -295,6 +299,9 @@ export async function updateCourse(
     names.map(async (name) => ({ name, skill: await findSkill(db, name) })),
   );
   const skillIds = [...new Set(found.flatMap((item) => (item.skill ? [item.skill.id] : [])))];
+  const domain = input.domainId
+    ? await db.learningDomain.findUnique({ where: { id: input.domainId }, select: { id: true } })
+    : null;
   await db.$transaction([
     db.course.update({
       where: { id },
@@ -306,6 +313,8 @@ export async function updateCourse(
         objectives: lines(input.objectives),
         audience: input.audience,
         category: input.category,
+        domainId: domain?.id ?? null,
+        editorialLine: input.editorialLine,
         level: input.level,
         language: input.language,
         durationMinutes: input.durationMinutes,
