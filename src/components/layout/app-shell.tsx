@@ -12,7 +12,6 @@ import { careerTabs } from "@/components/career/kit";
 import type { Section } from "@/config/section-navigation";
 import { dynamic } from "@/i18n/dynamic";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
-import { UniverseBackdrop } from "@/components/motion/universe-header";
 import { AccountMenu, type AccountSummary } from "./account-menu";
 import { IconRail } from "./icon-rail";
 import { NavLink } from "./nav-link";
@@ -141,7 +140,6 @@ export function AppShell({
       </header>
 
       <div className="relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme lg:min-h-0 lg:flex-1 lg:rounded-none lg:bg-transparent">
-        <UniverseBackdrop />
         {/* The secondary menu, above the page: sub-sections left, tools right. */}
         <div className="jm-topbar sticky top-0 z-30 flex items-center gap-3 px-4 pt-3 sm:px-6 lg:h-[68px] lg:gap-5 lg:px-6 lg:pt-0 xl:px-8">
           <SectionNav sections={sections} className="min-w-0 flex-1" />

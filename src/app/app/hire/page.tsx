@@ -211,7 +211,7 @@ export default async function HireDashboardPage({ searchParams }: PageProps<"/ap
     <div className="flex flex-col gap-4 lg:gap-5">
       <AppPageHeader
         eyebrow={
-          <span className="font-semibold tracking-[0.09em] text-neon uppercase">
+          <span className="font-semibold tracking-[0.09em] text-feuille-fonce uppercase">
             {all("talent.dashboard.date", { date: now })}
           </span>
         }

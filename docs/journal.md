@@ -2,6 +2,24 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v4 · étape 4 : palette épurée et éléments plus légers (16 octobre 2026)
+
+- Espaces connectés et admin (`.jm-admin-bg`, `src/styles/admin.css`) : fond Crème plus clair
+  (`#f7f5f0`), halos et motif de points atténués, cartes blanches à bordure fine et ombre très
+  légère, barre du haut plus transparente.
+- Typographie : le « gras » passe en semi-gras (600) dans ces espaces ; sur ordinateur, l'unité
+  d'espacement du contenu baisse de 0,25 à 0,23 rem (marges et hauteurs un cran plus serrées).
+- Grand fond animé sous les titres (`UniverseBackdrop`) retiré.
+- Contraste : surtitre de l'accueil Hire et liens de retour (offre, candidat) passés en couleurs
+  sombres, ils étaient prévus pour l'ancien bandeau foncé.
+- Hauteur des pages à 1440 × 900 (avant → après, en px) : `/app` 1292 → 1238, `/app/career`
+  2341 → 2292, `/app/jobs` 2020 → 1923, `/app/learn` 1671 → 1610, `/app/profil` 3432 → 3214,
+  `/app/abonnement` 1424 → 1344, `/admin` 2175 → 2095, `/admin/utilisateurs` 3590 → 3439,
+  `/admin/formations` 4954 → 4793. Le reste du gain viendra de l'étape 5 (gros blocs sombres
+  encore présents dans certaines pages).
+- Écart : jetons posés sur la coque connectée et non dans `tokens.css`, pour ne pas toucher les
+  pages publiques (`docs/decisions/2026-10-16-admin-v4-etape-4.md`).
+
 ## Jumanly Admin v4 · étape 3 : titres, recherche et profil inspirés de Patreon (16 octobre 2026)
 
 - Titres de page sans bandeau (`UniverseHeader`, `AdminPageHeader`) : petite tuile au dégradé de la
@@ -27,7 +45,7 @@ Une entrée par étape : ce qui a été fait, les décisions prises, les dettes 
   dégradé de la colonne ; à droite, espace, notifications et compte. Configuration
   `src/config/section-navigation.ts`.
 - Les pastilles Career sous le titre (`CareerTabs`) sont retirées : le menu horizontal les remplace.
-  Le cadenas des outils verrouillés reste sur les cartes de l'accueil Career, pas dans le menu.
+  Les outils que le forfait garde fermés portent un cadenas dans ce menu (lu dans les droits).
 - Fond clair à halos de l'admin pour tout l'espace connecté ; pilule du téléphone en dégradé.
 
 ## Jumanly Admin v4 · étape 1 : l'admin se voit tout de suite (16 octobre 2026)
