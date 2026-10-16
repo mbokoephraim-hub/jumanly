@@ -2127,6 +2127,7 @@ Conventions :
 | `talent.profile.tabs.visibility` | Visibilité |
 | `talent.profile.subtitle` | Votre profil alimente votre CV, vos candidatures et les suggestions d'offres. |
 | `talent.profile.completion.text` | Profil complété à {percent} % |
+| `talent.profile.completion.next` | Compléter : {section} |
 | `talent.profile.completion.hint` | Un profil complet aide les recruteurs à vous comprendre. |
 | `talent.profile.completion.missing` | Il manque : {sections} |
 | `talent.profile.preview.text` | Aperçu côté recruteur |
@@ -2375,6 +2376,7 @@ Conventions :
 | `learn.catalog.search.submit` | Rechercher |
 | `learn.catalog.tabs` | Listes de formations |
 | `learn.catalog.certificatesLink` | Mes attestations |
+| `learn.catalog.resume` | Reprendre ma formation · {percent} % |
 | `learn.catalog.search.placeholder` | Rechercher une formation, une compétence, un formateur |
 | `learn.catalog.tab.all` | Toutes |
 | `learn.catalog.tab.mine` | Mes formations |
@@ -3337,6 +3339,7 @@ Conventions :
 |---|---|
 | `career.cv.eyebrow` | Career · Dernière modification {time, relative} |
 | `career.cv.title` | Mon CV |
+| `career.cv.openPrimary` | Ouvrir mon CV principal |
 | `career.cv.myCvs` | Mes CV |
 | `career.cv.new` | Nouveau CV |
 | `career.cv.duplicate` | Dupliquer |
@@ -3672,6 +3675,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | Clé | Texte |
 |---|---|
 | `career.documents.title` | Lettres et documents |
+| `career.documents.openLast` | Ouvrir mon dernier document |
 | `career.documents.subtitle` | Lettres de motivation, biographies et correction de vos textes. |
 | `career.documents.locked.title` | Disponible avec {plan} |
 | `career.documents.locked.body` | La création et la correction de documents professionnels sont incluses à partir de {plan}. |
@@ -3759,6 +3763,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 |---|---|
 | `career.linkedin.title` | Préparation LinkedIn |
 | `career.linkedin.subtitle` | Des propositions à partir de votre profil Jumanly. Copiez-les sur LinkedIn après relecture. |
+| `career.linkedin.aiLine` | Votre titre et votre résumé LinkedIn, écrits à partir de votre profil. |
 | `career.linkedin.locked` | Disponible avec {plan} |
 | `career.linkedin.headline.text` | Titre |
 | `career.linkedin.headline.hint` | 220 caractères maximum sur LinkedIn. |
@@ -3788,6 +3793,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | Clé | Texte |
 |---|---|
 | `career.interviews.title` | Simulations d'entretien |
+| `career.interviews.lastSession` | Revoir ma dernière séance |
+| `career.interviews.aiLine` | Après chaque séance, un retour clair : vos points forts et quoi travailler. |
 | `career.interviews.subtitle` | Entraînez-vous sans pression. Vous recevez un retour détaillé après chaque séance. |
 | `career.interviews.mode.text.text` | À l'écrit |
 | `career.interviews.mode.text.desc` | Vous répondez par écrit, à votre rythme. |

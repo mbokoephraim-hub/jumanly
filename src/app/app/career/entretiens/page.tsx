@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
+import { HeaderAction } from "@/components/app/header-action";
 import { AppPageHeader } from "@/components/app/page-header";
 import {
   AiBrand,
@@ -72,6 +73,15 @@ export default async function InterviewsPage({
       <AppPageHeader
         eyebrow={t("career.interviews.subtitle")}
         title={t("career.interviews.title")}
+        actions={
+          latest ? (
+            <HeaderAction
+              href={`/app/career/entretiens/${latest.id}`}
+              icon="eye"
+              label={t("career.interviews.lastSession")}
+            />
+          ) : null
+        }
       />
 
       {query.erreur === "consent" && (
@@ -390,9 +400,7 @@ export default async function InterviewsPage({
               <h2 id="interview-feedback" className="text-xl leading-tight font-semibold">
                 {t("career.interviews.feedback.title")}
               </h2>
-              <p className="text-sm leading-5 text-blanc/90">
-                {t("career.interviews.feedback.none")}
-              </p>
+              <p className="text-[18px] leading-6 font-semibold">{t("career.interviews.aiLine")}</p>
               <p className="text-xs leading-[17px] text-blanc/75">
                 {t("career.interviews.voice.noRecording")}
               </p>

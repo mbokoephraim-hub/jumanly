@@ -2675,6 +2675,7 @@
       "subtitle": "Votre profil alimente votre CV, vos candidatures et les suggestions d'offres.",
       "completion": {
         "text": "Profil complété à {percent} %",
+        "next": "Compléter : {section}",
         "hint": "Un profil complet aide les recruteurs à vous comprendre.",
         "missing": "Il manque : {sections}"
       },
@@ -3360,6 +3361,7 @@
       },
       "tabs": "Listes de formations",
       "certificatesLink": "Mes attestations",
+      "resume": "Reprendre ma formation · {percent} %",
       "tab": {
         "all": "Toutes",
         "mine": "Mes formations",
@@ -4591,6 +4593,7 @@
     "cv": {
       "eyebrow": "Career · Dernière modification {time, relative}",
       "title": "Mon CV",
+      "openPrimary": "Ouvrir mon CV principal",
       "myCvs": "Mes CV",
       "new": "Nouveau CV",
       "duplicate": "Dupliquer",
@@ -4934,6 +4937,7 @@
     },
     "documents": {
       "title": "Lettres et documents",
+      "openLast": "Ouvrir mon dernier document",
       "subtitle": "Lettres de motivation, biographies et correction de vos textes.",
       "locked": {
         "title": "Disponible avec {plan}",
@@ -5054,6 +5058,7 @@
     "linkedin": {
       "title": "Préparation LinkedIn",
       "subtitle": "Des propositions à partir de votre profil Jumanly. Copiez-les sur LinkedIn après relecture.",
+      "aiLine": "Votre titre et votre résumé LinkedIn, écrits à partir de votre profil.",
       "locked": "Disponible avec {plan}",
       "headline": {
         "text": "Titre",
@@ -5084,6 +5089,8 @@
     },
     "interviews": {
       "title": "Simulations d'entretien",
+      "lastSession": "Revoir ma dernière séance",
+      "aiLine": "Après chaque séance, un retour clair : vos points forts et quoi travailler.",
       "subtitle": "Entraînez-vous sans pression. Vous recevez un retour détaillé après chaque séance.",
       "mode": {
         "text": {

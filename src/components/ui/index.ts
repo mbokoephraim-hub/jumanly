@@ -26,3 +26,4 @@ export * from "./stat-card";
 export * from "./table";
 export * from "./text-area";
 export * from "./text-field";
+export * from "./segmented";

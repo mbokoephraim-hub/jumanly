@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
+import { HeaderAction } from "@/components/app/header-action";
 import { AppPageHeader } from "@/components/app/page-header";
 import {
   CvEmptyCard,
@@ -85,7 +86,19 @@ export default async function CvListPage({ searchParams }: PageProps<"/app/caree
 
   return (
     <>
-      <AppPageHeader eyebrow={tHome("eyebrow")} title={t("title")} />
+      <AppPageHeader
+        eyebrow={tHome("eyebrow")}
+        title={t("title")}
+        actions={
+          primary ? (
+            <HeaderAction
+              href={`/app/career/cv/${primary.id}`}
+              icon="edit"
+              label={t("openPrimary")}
+            />
+          ) : null
+        }
+      />
       {params.ok === "supprime" && <Alert tone="success" title={t("deleted")} />}
       {params.ok === "principal" && <Alert tone="success" title={t("saved")} />}
       {params.erreur === "limite" && <Alert tone="error" title={t("limit", { max: MAX_CVS })} />}

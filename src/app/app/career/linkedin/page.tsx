@@ -163,7 +163,7 @@ export default async function LinkedinPage({ searchParams }: PageProps<"/app/car
                 {t("career.linkedin.generate")}
               </h2>
               <AiBrand />
-              <p className="text-sm leading-5 text-blanc/90">{t("career.linkedin.subtitle")}</p>
+              <p className="text-[18px] leading-6 font-semibold">{t("career.linkedin.aiLine")}</p>
               <AiGateNotice
                 state={state.state}
                 plan={plan}
