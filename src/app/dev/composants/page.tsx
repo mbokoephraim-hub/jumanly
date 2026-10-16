@@ -55,6 +55,7 @@ import { Tabs } from "@/components/ui/tabs";
 import { pickMessages } from "@/i18n/client-messages";
 import { isInternalEnv } from "@/lib/env";
 import { DrawerDemo, ModalDemo, ToastDemo } from "./interactive-demos";
+import { MobileRange } from "./mobile-range";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("devComponents");
@@ -351,6 +352,8 @@ export default function ComponentsPage() {
           </div>
         </div>
       </Section>
+
+      <MobileRange />
 
       <Section title={t("sections.fields")}>
         <div className="grid gap-6 md:grid-cols-2">

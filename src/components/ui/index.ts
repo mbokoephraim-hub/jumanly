@@ -2,6 +2,7 @@
 // Toast) are imported from their own file, so that pages that do not use them ship no extra
 // JavaScript. Brand elements (Logo, AiOrb) live in `@/components/brand`.
 export * from "./ai-card";
+export * from "./ai-chip";
 export * from "./alert";
 export * from "./avatar";
 export * from "./badge";
@@ -16,6 +17,7 @@ export * from "./job-card";
 export * from "./pipeline-steps";
 export * from "./plan-card";
 export * from "./plan-lock";
+export * from "./pressable";
 export * from "./progress";
 export * from "./quota-gauge";
 export * from "./search-field";
@@ -26,4 +28,5 @@ export * from "./stat-card";
 export * from "./table";
 export * from "./text-area";
 export * from "./text-field";
+export * from "./visual-cards";
 export * from "./segmented";

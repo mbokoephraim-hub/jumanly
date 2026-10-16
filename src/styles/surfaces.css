@@ -1,0 +1,148 @@
+/*
+ * Mobile Talent v5 (docs/ux-mobile-talent, prompt 1): the button range, the AI signature, the
+ * visual cards and the pressed state of the mockup (planches « Boutons », « Cartes », « États
+ * d'interaction »). Gradients reuse the brand colours already in tokens.css: no new colour.
+ */
+:root {
+  /* Principal: Sapin → Émeraude, the action that moves forward (one per screen). */
+  --jm-degrade-principal: linear-gradient(100deg, #0f3f37 0%, #14745f 62%, #1fa98a 100%);
+  /* Accent: Lime, always with Sapin text (progress, offers). */
+  --jm-degrade-accent: linear-gradient(100deg, #e3f67c 0%, #a6f26b 55%, #7de36b 100%);
+  /* Jumanly AI only: night with a Lime and Menthe aurora, iridescent outline. */
+  --jm-degrade-aurore:
+    radial-gradient(120% 90% at 85% 0%, rgb(47 211 166 / 0.45), transparent 55%),
+    radial-gradient(90% 80% at 0% 100%, rgb(166 242 107 / 0.35), transparent 60%), #0b1a1f;
+  --jm-degrade-irise: conic-gradient(from 210deg, #a6f26b, #2fd3a6, #e3f67c, #7de36b, #a6f26b);
+  --jm-ombre-douce: 0 6px 18px rgb(11 26 31 / 0.08);
+  --jm-ombre-principal: 0 8px 18px rgb(15 63 55 / 0.24);
+}
+
+@utility bg-gradient-principal {
+  background-color: #14745f;
+  background-image: var(--jm-degrade-principal);
+}
+@utility bg-gradient-accent {
+  background-color: var(--jm-lime);
+  background-image: var(--jm-degrade-accent);
+}
+@utility bg-aurore {
+  background-color: var(--jm-nuit);
+  background-image: var(--jm-degrade-aurore);
+}
+@utility shadow-douce {
+  box-shadow: var(--jm-ombre-douce);
+}
+
+/* The AI signature: aurora inside, iridescent ring outside (never on an ordinary button). */
+.jm-ai-surface {
+  border: 1.5px solid transparent;
+  background:
+    radial-gradient(120% 90% at 85% 0%, rgb(47 211 166 / 0.45), transparent 55%) padding-box,
+    radial-gradient(90% 80% at 0% 100%, rgb(166 242 107 / 0.35), transparent 60%) padding-box,
+    linear-gradient(var(--jm-nuit), var(--jm-nuit)) padding-box,
+    var(--jm-degrade-irise) border-box;
+}
+/* The AI suggestion chip: white inside, iridescent ring. */
+.jm-ai-outline {
+  border: 1.5px solid transparent;
+  background:
+    linear-gradient(var(--jm-blanc), var(--jm-blanc)) padding-box,
+    var(--jm-degrade-irise) border-box;
+}
+
+/*
+ * Pressable (planche « États d'interaction »): what can be touched shows it (white, soft shadow,
+ * arrow in a round), what was touched shows it at once (Lime light, Lime ring, 0.98, 120 ms), and a
+ * page that takes more than 300 ms turns the arrow into a spinner.
+ */
+.jm-pressable {
+  position: relative;
+  background-color: var(--jm-blanc);
+  box-shadow: var(--jm-ombre-douce);
+  outline: 2px solid transparent;
+  outline-offset: -2px;
+  transition:
+    background-color 120ms ease,
+    outline-color 120ms ease,
+    transform 120ms ease;
+}
+.jm-pressable:active,
+.jm-pressable[data-pressed] {
+  background-color: var(--jm-lime-clair);
+  outline-color: var(--jm-lime);
+  transform: scale(0.98);
+}
+.jm-pressable-arrow {
+  display: inline-flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  border-radius: 9999px;
+  background-color: var(--jm-creme);
+  color: var(--jm-sapin);
+  transition:
+    background-color 120ms ease,
+    color 120ms ease;
+}
+.jm-pressable:active .jm-pressable-arrow,
+.jm-pressable[data-pressed] .jm-pressable-arrow {
+  background-color: var(--jm-sapin);
+  color: var(--jm-lime);
+}
+.jm-pressable-arrow > .jm-pressable-wait {
+  display: none;
+}
+/* Opening: after 300 ms without the new page, the arrow becomes a spinner. */
+.jm-pressable[data-nav-pending],
+.jm-pressable[data-loading] {
+  opacity: 1;
+  background-color: var(--jm-lime-clair);
+}
+.jm-pressable[data-nav-pending] .jm-pressable-arrow > svg,
+.jm-pressable[data-loading] .jm-pressable-arrow > svg {
+  animation: jm-pressable-hide 0s 300ms forwards;
+}
+.jm-pressable[data-nav-pending] .jm-pressable-arrow > .jm-pressable-wait,
+.jm-pressable[data-loading] .jm-pressable-arrow > .jm-pressable-wait {
+  display: block;
+  opacity: 0;
+  position: absolute;
+  animation: jm-pressable-show 0s 300ms forwards;
+}
+@keyframes jm-pressable-hide {
+  to {
+    opacity: 0;
+  }
+}
+@keyframes jm-pressable-show {
+  to {
+    opacity: 1;
+  }
+}
+
+/* Visual card scenes: simple shapes only, no stock image. */
+.jm-scene-sheet {
+  position: absolute;
+  border-radius: 8px;
+  background-color: var(--jm-blanc);
+  box-shadow: 0 4px 10px rgb(11 26 31 / 0.12);
+}
+.jm-orbits {
+  pointer-events: none;
+  position: absolute;
+  border-radius: 9999px;
+  border: 1px solid rgb(166 242 107 / 0.28);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .jm-pressable,
+  .jm-pressable-arrow {
+    transition: none;
+  }
+  .jm-pressable:active,
+  .jm-pressable[data-pressed] {
+    transform: none;
+  }
+}

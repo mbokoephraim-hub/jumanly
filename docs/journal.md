@@ -2,6 +2,33 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Mobile Talent et Jumanly AI · prompt 1 : socle visuel (16 octobre 2026)
+
+- Boutons de la planche « Boutons » ajoutés au `Button` existant : `principal` (dégradé Sapin →
+  Émeraude, rond Lime et flèche), `accent` (dégradé Lime, texte Sapin), `soft`, `outline`, `link`,
+  `ai`, `dangerOutline` ; tailles L, M, S ; états repos, appui, en cours, fait, désactivé (gris plat).
+- Identité IA : `AiChip` (plein ou suggestion) et `AiSignature`, réservés à Jumanly AI.
+- Cartes de la planche « Cartes » : `GoalCard`, `ProfileCard`, `VisualTile`, `AiBento`, `FileCard`,
+  `SlotCard`, `DecisionCard` (`src/components/ui/visual-cards.tsx`). Textes et chiffres fournis par
+  l'appelant ; un chiffre absent n'est pas affiché.
+- Appui visible unique : `Pressable` et `.jm-pressable` (fond Lime clair, contour Lime, 0,98, 120 ms,
+  couleur seule en animations réduites ; indicateur de chargement après 300 ms).
+- Jetons dans `src/styles/surfaces.css`, sans nouvelle couleur. Tout est visible sur `/dev/composants`
+  (trois nouvelles sections) ; aucune page n'a changé. Décision :
+  `docs/decisions/2026-10-16-mobile-talent-socle.md`.
+- Les maquettes HTML de `docs/ux-mobile-talent/maquette/` sont exclues de Prettier, comme les autres.
+
+## Mobile Talent et Jumanly AI · prompt 0 : diagnostic et plan (16 octobre 2026)
+
+- Diagnostic du code existant et plan des 9 prompts dans `docs/ux-mobile-talent/PLAN.md` :
+  composants à créer et à réutiliser, migrations prévues (`application_drafts`,
+  `message_kinds_file_slot_decision`, `hire_message_templates`, `assistant_conversations`,
+  `interview_practice_notes`), risques, tests existants à adapter.
+- Écarts proposés : étendre le `Button` existant au lieu d'un nouveau composant, réutiliser
+  `/app/bienvenue` pour l'écran d'objectif, barre du bas visible jusqu'à `lg`, Hire et Partenaire
+  inchangés.
+- Aucun code modifié.
+
 ## Learn v2 · étape 3 : reprendre une vidéo à la seconde près (16 octobre 2026)
 
 - Table `LessonProgress` (migration `learn_lesson_progress`, retour arrière
