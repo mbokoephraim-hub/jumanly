@@ -16,7 +16,14 @@ import {
 import { CloseDetails } from "@/components/jobs/close-details";
 import { criterionText } from "@/components/matching/talent-why";
 import { TabRail } from "@/components/motion/tab-rail";
-import { Checkbox, CompanyLogo, EmptyState, Select } from "@/components/ui";
+import {
+  Checkbox,
+  CompanyLogo,
+  EmptyState,
+  Select,
+  segmentedItem,
+  segmentedList,
+} from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -251,19 +258,14 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
         <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
           <nav
             aria-label={t("talent.jobs.search.tabs")}
-            className="flex max-w-full gap-1 overflow-x-auto rounded-pill bg-brume/70 p-1"
+            className={cx(segmentedList, "overflow-x-auto")}
           >
             {views.map((key) => (
               <Link
                 key={key}
                 href={hrefWith({ vue: key === "tous" ? undefined : key })}
                 aria-current={view === key ? "page" : undefined}
-                className={cx(
-                  "flex h-9 items-center rounded-pill px-4 text-[13px] whitespace-nowrap transition-colors",
-                  view === key
-                    ? "bg-blanc font-semibold text-sapin shadow-[0_1px_3px_rgb(11_26_31/0.12)]"
-                    : "font-medium text-sapin/80 hover:bg-blanc/60 hover:text-sapin",
-                )}
+                className={segmentedItem(view === key)}
               >
                 {key === "tous"
                   ? t("talent.jobs.search.tab.all", {

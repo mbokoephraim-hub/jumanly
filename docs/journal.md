@@ -2,6 +2,21 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v4 · étape 8, lot A : pages Talent à la manière du Diagnostic (16 octobre 2026)
+
+Prompt : `/mnt/project-files/admin-v4/PROMPT-pages-partout.md` (lot A sur quatre).
+
+- Nouveau sélecteur segmenté partagé (`src/components/ui/segmented.ts`) : onglets de Learn, de
+  « Mes candidatures » et de Jobs ; il servira aux lots B à D.
+- Nouveau bouton de titre `HeaderAction` (`src/components/app/header-action.tsx`) : « Reprendre ma
+  formation » (tableau de bord, Learn), « Ouvrir mon CV principal », « Revoir mon dernier
+  entretien », « Ouvrir mon dernier document », seulement quand l'élément existe.
+- Profil : anneau de progression plus grand et bouton Lime « Compléter : {section} » vers la
+  première section manquante.
+- LinkedIn et Entretiens : l'encadré Jumanly Intelligence devient une phrase.
+- Captures avant et après : `/mnt/project-files/captures/admin-v4/etape-8/` (1440 et 390 px, sans
+  défilement horizontal).
+
 ## Jumanly Admin v4 · étape 7 : finitions visuelles (16 octobre 2026)
 
 Prompt : `/mnt/project-files/admin-v4/PROMPT-finitions.md` (cinq captures du propriétaire).

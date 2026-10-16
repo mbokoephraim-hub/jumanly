@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
+import { HeaderAction } from "@/components/app/header-action";
 import { AppPageHeader } from "@/components/app/page-header";
 import { AiGateNotice } from "@/components/career/ai-gate";
 import { DocumentsAiPanel, DocumentsAside } from "@/components/career/documents-kit";
@@ -48,7 +49,19 @@ export default async function DocumentsPage({ searchParams }: PageProps<"/app/ca
 
   return (
     <>
-      <AppPageHeader eyebrow={t("career.documents.subtitle")} title={t("career.documents.title")} />
+      <AppPageHeader
+        eyebrow={t("career.documents.subtitle")}
+        title={t("career.documents.title")}
+        actions={
+          documents[0] ? (
+            <HeaderAction
+              href={`/app/career/documents/${documents[0].id}`}
+              icon="doc"
+              label={t("career.documents.openLast")}
+            />
+          ) : null
+        }
+      />
       {query.ok === "supprime" && <Alert tone="success" title={t("career.documents.deleted")} />}
       {query.erreur === "input" && <Alert tone="error" title={t("career.documents.error.input")} />}
 
