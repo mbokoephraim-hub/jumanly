@@ -72,19 +72,3 @@ export function IconRail({
     </aside>
   );
 }
-
-/** A rail action that is not a navigation link (sign out): same look, tooltip and name. */
-export function RailButton({ icon, label }: { icon: IconName; label: string }) {
-  return (
-    <button
-      type="submit"
-      aria-label={label}
-      className="jm-admin-link relative grid size-10 place-items-center rounded-full text-blanc/75 transition-colors hover:bg-blanc/12 hover:text-blanc [&_svg]:size-[21px]"
-    >
-      <Icon name={icon} />
-      <span aria-hidden className="jm-admin-tip">
-        {label}
-      </span>
-    </button>
-  );
-}

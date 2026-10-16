@@ -21,9 +21,9 @@ export const adminLabel =
   "text-[11px] leading-4 font-semibold tracking-[0.1em] text-ardoise uppercase";
 
 /**
- * Title of an admin page. Admin v3 (docs/admin-v3/PLAN.md, étape 1): a deep green banner with the
- * site's dots and Lime halo, the Néon eyebrow, the white title, and from `lg` the logged-actions
- * tag, the search and the account pill; optional key figures as translucent chips.
+ * Title of an admin page. Admin v4, étape 3 (inspired by Patreon's creator pages): a plain title
+ * on the light page, the eyebrow above it, the logged-actions tag on the right and the key figures
+ * as small white chips. The search sits in the top bar, the account at the foot of the column.
  */
 export async function AdminPageHeader({
   title,
@@ -35,95 +35,39 @@ export async function AdminPageHeader({
   /** Replaces « Jumanly Admin » above the title (the user count on mobile, for instance). */
   eyebrow?: ReactNode;
   subtitle?: ReactNode;
-  /** 2 to 4 key figures shown in the banner. */
+  /** 2 to 4 key figures shown under the title. */
   stats?: { label: string; value: ReactNode }[];
 }) {
   const t = await getTranslations("admin");
-  const user = await getCurrentUser();
-  const role = user?.platformRole ?? "user";
   return (
-    <header className="jm-admin-hero flex flex-col gap-3 rounded-[28px] px-5 py-5 text-blanc lg:px-8 lg:py-7">
-      <div className="flex items-center gap-3.5">
-        <div className="flex min-w-0 flex-1 flex-col gap-1">
-          <span className="text-[11px] leading-4 font-semibold tracking-[0.14em] text-neon uppercase lg:text-[12px]">
-            {eyebrow ?? t("nav.title")}
-          </span>
-          <h1 className="text-[24px] leading-[30px] font-semibold tracking-[-0.025em] lg:text-[32px] lg:leading-[38px]">
+    <header className="flex flex-col gap-2.5 pt-1 lg:pt-2">
+      <div className="flex items-end gap-3.5">
+        <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+          <span className="text-[12.5px] leading-4 text-ardoise">{eyebrow ?? t("nav.title")}</span>
+          <h1 className="text-[24px] leading-[30px] font-semibold tracking-[-0.02em] lg:text-[28px] lg:leading-[34px]">
             {title}
           </h1>
         </div>
-        <span className="hidden h-8 shrink-0 items-center gap-1.5 rounded-pill bg-blanc/10 px-3.5 text-[11px] font-semibold text-neon ring-1 ring-blanc/15 ring-inset xl:inline-flex">
+        <span className="hidden h-8 shrink-0 items-center gap-1.5 rounded-pill bg-blanc px-3.5 text-[11.5px] font-semibold text-sapin ring-1 ring-sapin/10 ring-inset xl:inline-flex">
           <Icon name="doc" className="size-3.5" />
           {t("header.logged")}
         </span>
-        <form
-          action="/admin/recherche"
-          role="search"
-          className="relative hidden w-[240px] shrink-0 lg:block xl:w-[260px]"
-        >
-          <label htmlFor="admin-header-search" className="sr-only">
-            {t(role === "content_editor" ? "search.labelEditor" : "search.label")}
-          </label>
-          <Icon
-            name="recherche"
-            aria-hidden
-            className="pointer-events-none absolute top-1/2 left-4 size-[18px] -translate-y-1/2 text-blanc/75"
-          />
-          <input
-            id="admin-header-search"
-            name="q"
-            type="search"
-            placeholder={t("header.search")}
-            className="h-11 w-full rounded-pill bg-blanc/10 pr-4 pl-11 text-[13px] text-blanc ring-1 ring-blanc/20 ring-inset placeholder:text-blanc/75 focus:bg-blanc/15 focus:shadow-[0_0_0_4px_rgb(166_242_107/0.45)] focus:outline-none"
-          />
-        </form>
-        {user && (
-          <span className="hidden shrink-0 items-center gap-2.5 rounded-pill bg-blanc/10 py-[5px] pr-3.5 pl-[5px] ring-1 ring-blanc/15 ring-inset lg:flex">
-            <span
-              aria-hidden
-              className="grid size-9 place-items-center rounded-full bg-lime text-[13px] font-semibold text-sapin"
-            >
-              {initialsOf(user.name)}
-            </span>
-            <span className="flex flex-col">
-              <span className="text-[13px] leading-[17px] font-semibold">{user.name}</span>
-              <span className="text-[11px] leading-[15px] text-blanc/75">
-                {t(`role.${role === "user" ? "readOnly" : role}`)}
-              </span>
-            </span>
-          </span>
-        )}
       </div>
-      {subtitle && (
-        <p className="max-w-[72ch] text-[13px] leading-5 text-blanc/80 lg:text-[14px] lg:leading-[22px]">
-          {subtitle}
-        </p>
-      )}
+      {subtitle && <p className="max-w-[72ch] text-[13.5px] leading-5 text-ardoise">{subtitle}</p>}
       {stats && stats.length > 0 && (
         <dl className="flex flex-wrap gap-2">
           {stats.map((stat) => (
             <div
               key={stat.label}
-              className="flex items-baseline gap-2 rounded-pill bg-blanc/10 px-3.5 py-1.5 ring-1 ring-blanc/15 ring-inset"
+              className="flex items-baseline gap-2 rounded-pill bg-blanc px-3.5 py-1.5 ring-1 ring-sapin/8 ring-inset"
             >
-              <dd className="text-[16px] leading-6 font-semibold text-lime">{stat.value}</dd>
-              <dt className="text-[12px] leading-4 text-blanc/80">{stat.label}</dt>
+              <dd className="text-[15px] leading-5 font-semibold">{stat.value}</dd>
+              <dt className="text-[12px] leading-4 text-ardoise">{stat.label}</dt>
             </div>
           ))}
         </dl>
       )}
     </header>
-  );
-}
-
-function initialsOf(name: string) {
-  return (
-    name
-      .split(/[\s-]+/)
-      .filter(Boolean)
-      .slice(0, 2)
-      .map((word) => word[0]?.toUpperCase())
-      .join("") || "?"
   );
 }
 

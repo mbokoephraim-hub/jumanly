@@ -2,6 +2,20 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v4 · étape 3 : titres, recherche et profil inspirés de Patreon (16 octobre 2026)
+
+- Titres de page sans bandeau (`UniverseHeader`, `AdminPageHeader`) : petite tuile au dégradé de la
+  colonne, surtitre, titre en semi-gras, une ligne de sous-titre, actions à droite ; chiffres clés
+  de l'admin en petites pastilles blanches.
+- Recherche large et arrondie dans la barre du haut (`TopSearch`), raccourci « / » : espace
+  connecté → nouvelle page `/app/recherche` (formations, offres, conversations, groupées) ; admin
+  → `/admin/recherche`.
+- Compte en bas de la colonne : avatar, nom et forfait en infobulle, menu qui s'ouvre à côté
+  (profil, abonnement, paramètres, administration, déconnexion). Dans l'admin, avatar et rôle.
+- Page profil : couverture fine, avatar, nom, titre, ligne d'informations, puis les parties du
+  profil en onglets horizontaux (ancres vers chaque partie : un seul formulaire par partie reste).
+- Test `tests/e2e/admin-v4.spec.ts`.
+
 ## Jumanly Admin v4 · étape 2 : nouvelle coque des espaces connectés (16 octobre 2026)
 
 - Colonne d'icônes partagée `src/components/layout/icon-rail.tsx` (celle de l'admin v3) : l'espace

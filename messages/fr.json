@@ -2237,7 +2237,12 @@
         "jobs": "Offres",
         "messages": "Messages"
       },
-      "seeAll": "Voir tous les résultats"
+      "seeAll": "Voir tous les résultats",
+      "shortcut": "Raccourci : touche barre oblique",
+      "title": "Recherche",
+      "subtitle": "Formations, offres et conversations",
+      "prompt": "Tapez un mot pour chercher une formation, une offre ou une conversation.",
+      "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} »"
     },
     "unreadBadge": {
       "aria": "{count, plural, one {# élément non lu} other {# éléments non lus}}"
@@ -2663,6 +2668,10 @@
     },
     "profile": {
       "title": "Mon profil professionnel",
+      "tabs": {
+        "aria": "Parties du profil",
+        "visibility": "Visibilité"
+      },
       "subtitle": "Votre profil alimente votre CV, vos candidatures et les suggestions d'offres.",
       "completion": {
         "text": "Profil complété à {percent} %",

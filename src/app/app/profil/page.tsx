@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import Link from "next/link";
-import { AppPageHeader } from "@/components/app/page-header";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { Pattern } from "@/components/site/marketing";
 import {
@@ -114,9 +113,46 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
 
   return (
     <div className="flex flex-col gap-5">
-      <AppPageHeader eyebrow={t("talent.profile.subtitle")} title={t("talent.profile.title")} />
-      <div className="flex flex-wrap items-center justify-between gap-3">
-        <p className="flex flex-wrap gap-2 text-xs font-semibold">
+      {/* Admin v4, étape 3 (inspired by Patreon's profile pages): a thin cover, the avatar, the
+          name and one line of facts, then the parts of the profile as horizontal tabs. */}
+      <section
+        aria-labelledby="profil-titre"
+        className="overflow-hidden rounded-[24px] bg-blanc ring-1 ring-sapin/6"
+      >
+        <div aria-hidden className="jm-profile-cover h-20 lg:h-24" />
+        <div className="flex flex-wrap items-end gap-x-4 gap-y-3 px-5 pt-3 lg:px-6">
+          <span
+            aria-hidden
+            className="-mt-12 grid size-[76px] shrink-0 place-items-center self-start rounded-full bg-lime text-[24px] font-semibold text-sapin ring-4 ring-blanc lg:size-[84px]"
+          >
+            {initials(user.name)}
+          </span>
+          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+            <h1 id="profil-titre" className="text-[12.5px] leading-4 text-ardoise">
+              {t("talent.profile.title")}
+            </h1>
+            <p className="text-[22px] leading-7 font-semibold tracking-[-0.02em] lg:text-[26px] lg:leading-8">
+              {user.name}
+            </p>
+            {profile.headline && (
+              <p className="text-[13.5px] leading-5 text-ardoise">{profile.headline}</p>
+            )}
+          </div>
+          <a
+            href="#apercu"
+            className="flex h-10 items-center gap-2 rounded-pill bg-blanc px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
+          >
+            <Icon name="eye" className="size-4" />
+            {t("talent.profile.preview.text")}
+          </a>
+        </div>
+        <p className="flex flex-wrap items-center gap-2 px-5 pt-3 text-xs font-semibold lg:px-6">
+          {[profile.user.city, profile.user.country].some(Boolean) && (
+            <span className="flex items-center gap-1.5 text-ardoise">
+              <Icon name="localisation" className="size-3.5" />
+              {[profile.user.city, profile.user.country].filter(Boolean).join(", ")}
+            </span>
+          )}
           <span className="flex items-center gap-1.5 rounded-pill bg-lime-clair px-3 py-1.5 text-up-texte">
             <Icon name="check" className="size-3.5" />
             {t("talent.profile.autosaved")}
@@ -128,14 +164,32 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
             {t(`talent.profile.visibility.badge.${profile.visibility}`)}
           </span>
         </p>
-        <a
-          href="#apercu"
-          className="flex h-10 items-center gap-2 rounded-pill bg-blanc px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
-        >
-          <Icon name="eye" className="size-4" />
-          {t("talent.profile.preview.text")}
-        </a>
-      </div>
+        <nav aria-label={t("talent.profile.tabs.aria")} className="mt-3 border-t border-sapin/8">
+          <ul className="jm-section-tabs flex gap-1 overflow-x-auto px-3 py-1.5 lg:px-4">
+            {(
+              [
+                ["#identite", t("talent.profile.identity.title")],
+                ["#resume", sectionNames.summary],
+                ["#experiences", sectionNames.experience],
+                ["#formations", sectionNames.education],
+                ["#competences", sectionNames.skills],
+                ["#langues", sectionNames.languages],
+                ["#preferences", sectionNames.preferences],
+                ["#visibilite", t("talent.profile.tabs.visibility")],
+              ] as const
+            ).map(([href, label]) => (
+              <li key={href} className="shrink-0">
+                <a
+                  href={href}
+                  className="flex h-9 items-center rounded-pill px-3 text-[13px] font-medium whitespace-nowrap text-ardoise hover:bg-sapin/5 hover:text-sapin"
+                >
+                  {label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        </nav>
+      </section>
       {one(params.import) !== undefined && (
         <Alert
           tone="success"
@@ -152,7 +206,7 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
           <Languages profile={profile} notice={notice} />
           <Preferences profile={profile} notice={notice} />
         </div>
-        <aside className="flex flex-col gap-5 max-xl:-order-1 xl:sticky xl:top-5">
+        <aside className="flex flex-col gap-5 max-xl:-order-1 xl:sticky xl:top-[84px]">
           <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5">
             <div className="flex items-center gap-4">
               <ProgressRing

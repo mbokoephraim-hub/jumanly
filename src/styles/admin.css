@@ -300,3 +300,20 @@ a.jm-admin-card:hover,
   border-radius: 3px;
   background: var(--jm-degrade-rail-h);
 }
+
+/* ─────────────── Admin v4, étape 3 ───────────────
+ * Titres de page sans bandeau (inspirés de Patreon) : une petite tuile au dégradé de la colonne.
+ */
+.jm-title-tile {
+  background: var(--jm-degrade-rail);
+  box-shadow:
+    0 6px 14px rgb(15 63 55 / 0.18),
+    inset 0 1px 0 rgb(255 255 255 / 0.18);
+}
+/* Couverture fine de la page profil : dégradé de la colonne et trame de points. */
+.jm-profile-cover {
+  background:
+    radial-gradient(rgb(255 255 255 / 0.1) 1.2px, transparent 1.4px) 0 0 / 16px 16px,
+    radial-gradient(60% 120% at 92% 0%, rgb(166 242 107 / 0.35), transparent 70%),
+    var(--jm-degrade-rail-h);
+}
