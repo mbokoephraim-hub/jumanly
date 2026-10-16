@@ -11599,6 +11599,80 @@ Textes ajoutés à l'étape E0 : composants de base, textes alternatifs des pers
 | `devComponents.drawer.title` | Filtres |
 | `devComponents.drawer.text` | Sur mobile, les filtres s'ouvrent dans ce tiroir qui remonte du bas de l'écran. |
 | `devComponents.drawer.apply` | Afficher les résultats |
+| `devComponents.sections.mobileButtons` | Gamme mobile : boutons |
+| `devComponents.sections.mobileCards` | Gamme mobile : cartes |
+| `devComponents.sections.mobileStates` | Gamme mobile : états d'interaction |
+| `devComponents.mobile.principal` | Principal |
+| `devComponents.mobile.accent` | Accent |
+| `devComponents.mobile.soft` | Secondaire |
+| `devComponents.mobile.outline` | Contour |
+| `devComponents.mobile.link` | Lien |
+| `devComponents.mobile.ai` | Jumanly AI |
+| `devComponents.mobile.danger` | Danger |
+| `devComponents.mobile.rest` | Repos |
+| `devComponents.mobile.loading` | En cours |
+| `devComponents.mobile.done` | Fait |
+| `devComponents.mobile.disabled` | Désactivé |
+| `devComponents.mobile.sizeL` | L · 52 px |
+| `devComponents.mobile.sizeM` | M · 44 px |
+| `devComponents.mobile.sizeS` | S · 36 px |
+| `devComponents.mobile.apply` | Postuler |
+| `devComponents.mobile.sending` | Envoi… |
+| `devComponents.mobile.sent` | Envoyée |
+| `devComponents.mobile.confirm` | Confirmer |
+| `devComponents.mobile.reply` | Répondre |
+| `devComponents.mobile.resume` | Reprendre |
+| `devComponents.mobile.upgrade` | Passer à Pro |
+| `devComponents.mobile.start` | Commencer |
+| `devComponents.mobile.later` | Plus tard |
+| `devComponents.mobile.edit` | Modifier |
+| `devComponents.mobile.seeAll` | Tout voir |
+| `devComponents.mobile.save` | Enregistrer l'offre |
+| `devComponents.mobile.askAi` | Demander à Jumanly AI |
+| `devComponents.mobile.improve` | Améliorer |
+| `devComponents.mobile.analyse` | Analyser les exigences |
+| `devComponents.mobile.delete` | Supprimer |
+| `devComponents.mobile.confirmDelete` | Oui, supprimer |
+| `devComponents.mobile.goalEyebrow` | Mon objectif |
+| `devComponents.mobile.goalTitle` | Trouver un emploi |
+| `devComponents.mobile.goalEdit` | Changer d'objectif |
+| `devComponents.mobile.statApplications` | candidatures |
+| `devComponents.mobile.statInterviews` | entretien |
+| `devComponents.mobile.statProfile` | profil |
+| `devComponents.mobile.profileSubtitle` | Analyste de données · Ville exemple |
+| `devComponents.mobile.visible` | Visible des recruteurs |
+| `devComponents.mobile.tileCv` | Mon CV |
+| `devComponents.mobile.tileCvLine` | Créer, télécharger |
+| `devComponents.mobile.tileInterview` | Entretien |
+| `devComponents.mobile.tileInterviewLine` | S'entraîner |
+| `devComponents.mobile.tileLocked` | Outil non inclus dans votre formule |
+| `devComponents.mobile.aiTitle` | Jumanly AI |
+| `devComponents.mobile.aiLine` | Votre copilote carrière |
+| `devComponents.mobile.chipCv` | CV |
+| `devComponents.mobile.chipJobs` | Offres |
+| `devComponents.mobile.chipInterview` | Entretien |
+| `devComponents.mobile.fileName` | CV · Analyste de données |
+| `devComponents.mobile.fileMeta` | PDF · 2 pages · 184 Ko |
+| `devComponents.mobile.fileKind` | PDF |
+| `devComponents.mobile.download` | Télécharger |
+| `devComponents.mobile.slotWeekday` | jeu. |
+| `devComponents.mobile.slotDay` | 23 |
+| `devComponents.mobile.slotMonth` | oct. |
+| `devComponents.mobile.slotTitle` | Entretien · 10 h |
+| `devComponents.mobile.slotMeta` | Visio · 45 min |
+| `devComponents.mobile.accept` | Accepter |
+| `devComponents.mobile.otherTime` | Autre moment |
+| `devComponents.mobile.decisionJob` | Analyste de données junior |
+| `devComponents.mobile.rejectedBanner` | Candidature non retenue |
+| `devComponents.mobile.rejectedHello` | Bonjour Aïcha, |
+| `devComponents.mobile.rejectedBody` | Merci pour votre candidature. Nous avons retenu un autre profil pour ce poste. |
+| `devComponents.mobile.hiredBanner` | Candidature retenue |
+| `devComponents.mobile.hiredBody` | Nous avons le plaisir de vous proposer le poste. Prochaine étape : un échange sur votre arrivée. |
+| `devComponents.mobile.signer` | Recruteur exemple · Recrutement |
+| `devComponents.mobile.decisionDate` | 16 oct. |
+| `devComponents.mobile.rowTitle` | Modifier mes informations |
+| `devComponents.mobile.rowLine` | Photo, bio, titre |
+| `devComponents.mobile.rowPressed` | Ligne appuyée |
 
 ### Site public (étape E1)
 
