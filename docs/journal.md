@@ -66,6 +66,24 @@ Prompt : `/mnt/project-files/admin-v4/PROMPT-finitions.md` (cinq captures du pro
 - Captures dans `/mnt/project-files/captures/admin-v4/etape-7/`, aucun débordement à 390, 768 et
   1440 px.
 
+## Compte passe-partout : le mode testeur (16 octobre 2026)
+
+Demande du propriétaire : un compte unique pour essayer lui-même chaque forfait, de Free à Premium,
+côté talent comme côté entreprise, plus l'administration. Décision :
+`docs/decisions/2026-10-16-compte-passe-partout.md`.
+
+- Variable `TESTER_EMAILS` : les adresses listées et vérifiées voient « Mode testeur » dans le menu
+  du compte, qui ouvre `/app/testeur` (404 pour tous les autres).
+- Sur cette page : choisir n'importe quel forfait talent pour soi, créer une organisation de test et
+  lui donner n'importe quel forfait RH ou Entreprise, créer une institution partenaire de test,
+  ouvrir l'administration. Aucun paiement : un abonnement « accordé par l'administration » d'un an.
+- Choisir un forfait, même celui en cours, remet les quotas à zéro. Company Premium reçoit les
+  limites d'un contrat d'essai (sinon tout vaut 0). Chaque changement est inscrit au journal d'audit
+  (`subscription.tester`, `org.tester`).
+- Tests : `tests/unit/tester.test.ts`, `tests/db/tester.test.ts`.
+- Point ouvert : une licence Partners active plus chère que le forfait choisi garde la priorité
+  (règle normale de résolution).
+
 ## Accueil du diagnostic de carrière, plus direct (16 octobre 2026)
 
 Demande du propriétaire (trois captures de `/app/career/diagnostic`), prompt dans

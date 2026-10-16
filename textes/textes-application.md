@@ -4698,6 +4698,47 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `settings.data.delete.confirm.error` | Tapez SUPPRIMER, en majuscules, pour confirmer. |
 | `settings.data.contact` | Une question sur vos données ? Écrivez-nous à assistant@jumanly.io. |
 
+### `/app/testeur` · Mode testeur (compte passe-partout)
+
+*Réservé aux adresses listées dans la variable TESTER_EMAILS : essayer chaque forfait soi-même, sans paiement. Chaque changement est inscrit au journal d'audit.*
+
+| Clé | Texte |
+|---|---|
+| `tester.seo.title` | Mode testeur · Jumanly |
+| `tester.eyebrow` | Compte passe-partout |
+| `tester.title` | Mode testeur |
+| `tester.subtitle` | Passez d'un forfait à l'autre sans paiement pour essayer chaque page vous-même. |
+| `tester.notice` | Ce mode ne s'affiche que pour votre compte. Choisir un forfait, même celui en cours, remet vos quotas à zéro. Chaque changement est inscrit au journal d'audit. |
+| `tester.saved` | C'est fait : le forfait {plan} est actif. |
+| `tester.created` | Votre espace de test est prêt. |
+| `tester.error` | Ce changement n'a pas pu être fait. Réessayez. |
+| `tester.current` | Forfait actuel |
+| `tester.choose` | Utiliser ce forfait |
+| `tester.reset` | Remettre les quotas à zéro |
+| `tester.free` | Gratuit |
+| `tester.onQuote` | Sur devis |
+| `tester.talent.title` | Côté talent |
+| `tester.talent.text` | Votre espace personnel : Learn, Career, Jobs et messages. |
+| `tester.talent.open` | Ouvrir mon espace talent |
+| `tester.org.title` | Côté recruteur et entreprise |
+| `tester.org.text` | Les forfaits RH et Entreprise s'appliquent à votre organisation de test, dont vous êtes propriétaire. |
+| `tester.org.empty` | Vous n'avez pas encore d'organisation. Créez-en une pour essayer Hire. |
+| `tester.org.create` | Créer mon organisation de test |
+| `tester.org.open` | Ouvrir l'espace {name} |
+| `tester.org.defaultName` | Organisation de test |
+| `tester.org.family.rh` | Recruteurs et cabinets RH |
+| `tester.org.family.company` | Entreprises |
+| `tester.partner.title` | Côté partenaire |
+| `tester.partner.text` | Une institution de test dont vous êtes gestionnaire. Les lots de licences se créent depuis l'administration. |
+| `tester.partner.create` | Créer mon institution de test |
+| `tester.partner.open` | Ouvrir l'espace {name} |
+| `tester.partner.defaultName` | Institution de test |
+| `tester.admin.title` | Administration |
+| `tester.admin.text` | Forfaits, abonnements, utilisateurs et journal d'audit. |
+| `tester.admin.open` | Ouvrir l'administration |
+| `tester.admin.missing` | Votre compte n'est pas encore administrateur. Ajoutez aussi votre adresse dans la variable ADMIN_BOOTSTRAP_EMAIL, puis reconnectez-vous. |
+| `account.menu.tester` | Mode testeur |
+
 
 ---
 

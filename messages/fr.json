@@ -2285,7 +2285,8 @@
       "howMatchingWorks": "Comment fonctionne le matching",
       "activateLicense": "Activer un code de licence",
       "logout": "Se déconnecter",
-      "sponsored": "Licence offerte par {sponsorName}"
+      "sponsored": "Licence offerte par {sponsorName}",
+      "tester": "Mode testeur"
     }
   },
   "spaceSwitcher": {
@@ -5891,6 +5892,53 @@
         "canceled": "Suppression annulée. Bon retour parmi nous."
       },
       "contact": "Une question sur vos données ? Écrivez-nous à assistant@jumanly.io."
+    }
+  },
+  "tester": {
+    "seo": {
+      "title": "Mode testeur · Jumanly"
+    },
+    "eyebrow": "Compte passe-partout",
+    "title": "Mode testeur",
+    "subtitle": "Passez d'un forfait à l'autre sans paiement pour essayer chaque page vous-même.",
+    "notice": "Ce mode ne s'affiche que pour votre compte. Choisir un forfait, même celui en cours, remet vos quotas à zéro. Chaque changement est inscrit au journal d'audit.",
+    "saved": "C'est fait : le forfait {plan} est actif.",
+    "created": "Votre espace de test est prêt.",
+    "error": "Ce changement n'a pas pu être fait. Réessayez.",
+    "current": "Forfait actuel",
+    "choose": "Utiliser ce forfait",
+    "reset": "Remettre les quotas à zéro",
+    "free": "Gratuit",
+    "onQuote": "Sur devis",
+    "talent": {
+      "title": "Côté talent",
+      "text": "Votre espace personnel : Learn, Career, Jobs et messages.",
+      "open": "Ouvrir mon espace talent"
+    },
+    "org": {
+      "title": "Côté recruteur et entreprise",
+      "text": "Les forfaits RH et Entreprise s'appliquent à votre organisation de test, dont vous êtes propriétaire.",
+      "empty": "Vous n'avez pas encore d'organisation. Créez-en une pour essayer Hire.",
+      "create": "Créer mon organisation de test",
+      "open": "Ouvrir l'espace {name}",
+      "defaultName": "Organisation de test",
+      "family": {
+        "rh": "Recruteurs et cabinets RH",
+        "company": "Entreprises"
+      }
+    },
+    "partner": {
+      "title": "Côté partenaire",
+      "text": "Une institution de test dont vous êtes gestionnaire. Les lots de licences se créent depuis l'administration.",
+      "create": "Créer mon institution de test",
+      "open": "Ouvrir l'espace {name}",
+      "defaultName": "Institution de test"
+    },
+    "admin": {
+      "title": "Administration",
+      "text": "Forfaits, abonnements, utilisateurs et journal d'audit.",
+      "open": "Ouvrir l'administration",
+      "missing": "Votre compte n'est pas encore administrateur. Ajoutez aussi votre adresse dans la variable ADMIN_BOOTSTRAP_EMAIL, puis reconnectez-vous."
     }
   },
   "hire": {

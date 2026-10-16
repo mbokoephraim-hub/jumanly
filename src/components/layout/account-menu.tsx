@@ -5,7 +5,13 @@ import { Avatar, Badge } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { signOut } from "@/server/actions/auth";
 
-export type AccountSummary = { name: string; planName: string; isAdmin: boolean };
+export type AccountSummary = {
+  name: string;
+  planName: string;
+  isAdmin: boolean;
+  /** Listed in TESTER_EMAILS: the « Mode testeur » panel (compte passe-partout). */
+  isTester?: boolean;
+};
 
 const items = [
   { key: "account.menu.profile", href: "/app/profil", icon: "profil" },
@@ -88,6 +94,14 @@ export function AccountMenu({
               </Link>
             </li>
           ))}
+          {account.isTester && (
+            <li>
+              <Link href="/app/testeur" className={item}>
+                <Icon name="portefeuille" className="size-[18px]" />
+                {t("account.menu.tester")}
+              </Link>
+            </li>
+          )}
           {account.isAdmin && (
             <li>
               <Link href="/admin" className={item}>
