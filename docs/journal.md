@@ -2,6 +2,30 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v3 · étape 7 : passe finale et bilan (16 octobre 2026)
+
+- Parcours automatique `tests/e2e/admin-pass.spec.ts` étendu : les 7 étapes de l'éditeur, les
+  cinq PDF avec les trois rôles (administrateur et éditeur : oui ; support : page introuvable et
+  404), le Studio et l'éditeur à 1024 px. Vérifié aussi en mouvement réduit
+  (`pnpm test:e2e:reduced` sur admin-v3 et admin-pass).
+- `docs/guide-admin.md` : description du nouveau menu (colonne flottante, pilule sur téléphone) et
+  section « Créer une formation de A à Z » (modèles, 7 étapes, documents PDF, PDF générés,
+  publication).
+
+### Bilan Admin v3 (étapes 1 à 7)
+
+Menu en colonne d'icônes arrondie et en dégradé, habillage de tous les écrans aux couleurs du site,
+Studio formations avec modèles, éditeur par étapes, PDF à joindre, cinq PDF générés, guide à jour.
+
+### Écarts restants
+
+- Fichiers de 4 Mo au plus (limite d'hébergement) au lieu de 10 Mo : un envoi direct vers un
+  stockage externe lèvera la limite.
+- Le cache des PDF générés vit en mémoire : il repart de zéro à chaque redémarrage du serveur.
+- Pas de date d'activité par inscrit : le bilan indique où les inscrits s'arrêtent, pas depuis
+  quand.
+- Une leçon ne change pas de module avec les flèches (on la recrée dans l'autre module).
+
 ## Jumanly Admin v3 · étape 6 : PDF générés pour chaque formation (16 octobre 2026)
 
 - Gabarit commun `src/server/pdf/course-kit.tsx` : bandeau en dégradé profondeur avec le
