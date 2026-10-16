@@ -16,6 +16,11 @@ propriétaire et à l'équipe, sans connaissance technique.
   et sert de mémoire à toute l'équipe.
 - **La recherche** en haut de chaque page trouve un compte, une organisation, une offre ou une
   formation.
+- **Le menu** est une colonne flottante d'icônes, arrondie en haut et en bas, sur la gauche de
+  l'écran. Passez la souris sur une icône (ou atteignez-la avec la touche Tab) : son nom apparaît
+  dans une bulle. L'icône de la page ouverte est mise en avant. Sur téléphone, le menu devient une
+  pilule en dégradé en bas de l'écran ; le bouton « Toutes les rubriques » ouvre les autres. Un éditeur
+  de contenus ne voit que Formations et Contenus.
 
 ## Lire les indicateurs (`Indicateurs`)
 
@@ -63,16 +68,60 @@ un e-mail à chaque action.
 4. En cas d'abus, « Suspendre » ferme ses offres et son espace recrutement ; « Réactiver » les
    rouvre.
 
-## Ajouter une formation (`Formations`)
+## Créer une formation de A à Z (`Formations`)
 
-1. Cliquez sur « Nouvelle formation » et donnez un titre.
-2. Suivez la carte « Prête à publier ? » : elle indique, étape par étape, ce qui manque
-   (informations, public et objectifs, programme, quiz, couverture, attestation).
-3. Remplissez la fiche, ajoutez une image de couverture, puis les modules et les leçons (texte ou
-   vidéo).
-4. Ajoutez le quiz final si la formation délivre une attestation.
-5. « Aperçu » montre la formation comme un apprenant la verra.
-6. Quand tout est prêt, passez le statut à « Publiée ». « Dupliquer » crée une copie en brouillon.
+La page `Formations` s'appelle le **Studio formations** : chaque formation y est une carte avec
+son statut, son nombre de modules, ses inscrits et son état de préparation. « Liste » donne la vue
+en tableau.
+
+1. **Choisir un modèle.** « Nouvelle formation », un titre, puis un modèle : *Formation courte*,
+   *Parcours certifiant*, *Atelier pratique* ou *Partir de zéro*. Le modèle crée les modules et les
+   leçons de départ, que vous renommez ensuite.
+2. **Suivre les 7 étapes** de la colonne de gauche. Une coche verte marque une étape terminée ;
+   « Étape suivante » en bas de page passe à la suivante. Pensez à enregistrer avant de changer
+   d'étape.
+   - *Informations* : titre, résumé, description, catégorie, niveau, durée, image de couverture.
+   - *Public et objectifs* : à qui s'adresse la formation, prérequis, objectifs, compétences
+     validées, niveau de forfait qui l'ouvre.
+   - *Programme* : modules et leçons. Les flèches changent l'ordre ; « Modifier » ouvre la leçon à
+     côté du programme (texte, vidéo, transcription, ressources, documents de la leçon).
+   - *Documents* : les PDF à joindre (voir plus bas).
+   - *Quiz* : les questions, le seuil de réussite et le nombre de tentatives.
+   - *Attestation* : délivrer ou non une attestation, avec son aperçu.
+   - *Publication* : le récapitulatif, le statut (brouillon, en relecture, publiée, archivée) avec
+     un motif gardé dans l'historique, et les PDF de la formation.
+3. **La carte « Prête à publier ? »** à droite donne un pourcentage et la liste de ce qui manque ;
+   chaque point mène à la bonne étape. « Aperçu comme un talent » montre la formation telle qu'un
+   apprenant la verra ; « Dupliquer » crée une copie en brouillon.
+
+### Joindre des PDF (étape Documents)
+
+- Choisissez un fichier PDF (4 Mo au plus, sans mot de passe), un titre et un type : support de
+  cours, fiche d'exercices, lecture, modèle à remplir, corrigé ou autre.
+- **Rattaché à** : toute la formation, ou une leçon précise.
+- **Qui peut le télécharger ?** Tout le monde (il apparaît sur la fiche publique), les inscrits dont
+  le forfait ouvre la formation, ou l'équipe Jumanly seulement. Un corrigé reste toujours à
+  l'équipe.
+- **Réservé aux forfaits avec ressources spécialisées** : seuls les comptes qui ont ce droit le
+  téléchargent.
+- Chaque document se réordonne, se renomme, se remplace par un nouveau fichier ou se supprime. Le
+  nombre de pages et de téléchargements s'affiche sous son titre.
+
+### Les PDF que Jumanly fabrique (encart « PDF de la formation »)
+
+Ils sont faits à la demande à partir du contenu actuel, aux couleurs de Jumanly :
+
+- **Programme** : objectifs, public, prérequis, modules et leçons avec leur durée, compétences. Les
+  visiteurs le téléchargent aussi depuis la fiche publique.
+- **Support de cours complet** : toutes les leçons en un fichier, pour lire hors connexion. Les
+  inscrits le téléchargent depuis le lecteur.
+- **Quiz et corrigé** (équipe) : questions, bonnes réponses et explications.
+- **Aperçu de l'attestation** (équipe) : l'attestation avec un nom d'exemple et la mention
+  « Aperçu ».
+- **Bilan de la formation** (équipe) : inscrits, achèvement, où s'arrêtent ceux qui n'ont pas
+  terminé, notes moyennes des quiz, attestations ; choisissez la période. Aucun nom n'y figure.
+
+Chaque téléchargement par l'équipe est inscrit dans l'historique de la formation.
 
 ## Modérer les offres (`Modération des offres`)
 

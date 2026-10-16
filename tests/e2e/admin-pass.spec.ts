@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
-import { demo, logIn } from "./session";
+import { demo, logIn, skipIntro } from "./session";
 
 /**
  * Admin v2, étape 9 · passe finale: every screen of Jumanly Admin at 1440 px (desktop) and 390 px
@@ -120,4 +120,63 @@ test("passe finale de l'admin · fiches ouvertes", async ({ page, isMobile }) =>
   await page.goto("/admin/organisations");
   const org = await page.locator('a[href*="fiche="]').first().getAttribute("href");
   if (org) await check(page, org);
+});
+
+// Admin v3, étape 7: the course PDFs with the three roles. The administrator and the content editor
+// download all five; support, who never edits courses, gets none.
+test("passe finale de l'admin · PDF des formations et rôles", async ({ browser, baseURL }) => {
+  test.setTimeout(240_000);
+  const kinds = ["programme", "support", "quiz", "attestation", "bilan"];
+  const open = async (email: string) => {
+    const context = await browser.newContext({ baseURL });
+    const page = await context.newPage();
+    await skipIntro(page);
+    await logIn(page, email);
+    return { context, page };
+  };
+
+  const admin = await open(demo.admin);
+  await admin.page.goto("/admin/formations");
+  const href = await admin.page
+    .locator('a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"])')
+    .first()
+    .getAttribute("href");
+  const base = href!.split("?")[0]!;
+  for (const kind of kinds) {
+    const response = await admin.page.request.get(`${base}/pdf/${kind}`);
+    expect(response.status(), kind).toBe(200);
+    expect((await response.body()).subarray(0, 4).toString(), kind).toBe("%PDF");
+  }
+  await admin.context.close();
+
+  const editor = await open(demo.editor);
+  expect((await editor.page.request.get(`${base}/pdf/quiz`)).status()).toBe(200);
+  await editor.context.close();
+
+  const support = await open(demo.support);
+  // A streamed page keeps its 200 status: the not-found page is what support sees.
+  await support.page.goto("/admin/formations");
+  await expect(
+    support.page.getByRole("heading", { level: 1, name: "Cette page est introuvable" }),
+  ).toBeVisible();
+  for (const kind of kinds)
+    expect((await support.page.request.get(`${base}/pdf/${kind}`)).status(), kind).toBe(404);
+  await support.context.close();
+});
+
+// Admin v3, étape 7: the Studio and the course editor at 1024 px (a small laptop or a tablet held
+// sideways), where the menu becomes the floating column and the editor keeps its step column.
+test("passe finale de l'admin · Studio et éditeur à 1024 px", async ({ page, isMobile }) => {
+  test.skip(isMobile, "La largeur de 1024 px se vérifie une fois, sur le projet bureau.");
+  test.setTimeout(240_000);
+  await page.setViewportSize({ width: 1024, height: 768 });
+  await logIn(page, demo.editor, undefined, "/admin/formations");
+  await check(page, "/admin/formations");
+  const href = await page
+    .locator('a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"])')
+    .first()
+    .getAttribute("href");
+  const base = href!.split("?")[0]!;
+  for (const step of ["informations", "programme", "documents", "publication"])
+    await check(page, `${base}?etape=${step}`);
 });
