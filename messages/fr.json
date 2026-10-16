@@ -5983,6 +5983,7 @@
         "seePlans": "Voir les forfaits"
       },
       "newCta": "Nouvelle offre",
+      "resume": "{count, plural, one {Voir # nouveau candidat} other {Voir # nouveaux candidats}} · {jobTitle}",
       "verifyBanner": {
         "text": "Faites vérifier votre organisation pour afficher le badge « Entreprise vérifiée » sur vos offres.",
         "cta": "Demander la vérification",
@@ -10351,6 +10352,7 @@
       "eyebrow": "Jumanly Partners · {org}",
       "title": "Tableau de bord",
       "subtitle": "L'accès que vous financez, et son usage, en chiffres agrégés.",
+      "openReport": "Voir le rapport détaillé",
       "privacy": "Aucune donnée nominative n'est partagée : vous voyez des totaux et des moyennes, jamais le CV, les messages ou les informations personnelles d'un bénéficiaire.",
       "kpi": {
         "purchased": "Licences achetées",

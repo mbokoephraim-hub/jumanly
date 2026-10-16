@@ -8,7 +8,16 @@ import { pillClass } from "@/components/career/kit";
 import { Initials, MenuChip, menuItem, moreButton } from "@/components/hire/kit";
 import { criterionText } from "@/components/matching/talent-why";
 import { SuccessBurst } from "@/components/motion/success-burst";
-import { Alert, EmptyState, PlanLock, Select, TextArea, TextField } from "@/components/ui";
+import {
+  Alert,
+  EmptyState,
+  PlanLock,
+  Select,
+  TextArea,
+  TextField,
+  segmentedItem,
+  segmentedList,
+} from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { defaultTimeZone } from "@/lib/dates";
 import { dynamic } from "@/i18n/dynamic";
@@ -1122,11 +1131,7 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
     </section>
   );
 
-  const toggle = (active: boolean) =>
-    cx(
-      "inline-flex h-9 items-center rounded-pill px-4 text-[13.5px] font-semibold",
-      active ? "bg-sapin text-blanc" : "hover:bg-creme",
-    );
+  const toggle = (active: boolean) => segmentedItem(active);
   const agenda = view !== "liste";
 
   return (
@@ -1160,7 +1165,7 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
       {error && <Alert tone="error" title={error} />}
 
       <div className="flex flex-wrap items-center gap-2">
-        <nav aria-label={t("hire.interviews.calendar")} className="flex rounded-pill bg-blanc p-1">
+        <nav aria-label={t("hire.interviews.calendar")} className={segmentedList}>
           <Link
             href={hrefWith({ vue: null })}
             aria-current={agenda ? "page" : undefined}
@@ -1177,7 +1182,7 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
           </Link>
         </nav>
         {agenda && (
-          <div className="flex rounded-pill bg-blanc p-1 max-lg:hidden">
+          <div className={cx(segmentedList, "max-lg:hidden")}>
             {(
               [
                 ["jour", "day"],

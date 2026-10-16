@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Alert } from "@/components/ui";
 import { Icon, type IconName } from "@/components/brand";
+import { HeaderAction } from "@/components/app/header-action";
 import { AppPageHeader } from "@/components/app/page-header";
 import { pillClass } from "@/components/career/kit";
 import { tag, tagTone } from "@/components/jobs/talent-kit";
@@ -205,6 +206,7 @@ export default async function HireDashboardPage({ searchParams }: PageProps<"/ap
       {t("fairness")}
     </p>
   );
+  const fresh = data.jobs.find((job) => job.unseen > 0);
   const goalMissed = data.responseDays !== null && data.responseDays > RESPONSE_GOAL_DAYS;
 
   return (
@@ -221,6 +223,13 @@ export default async function HireDashboardPage({ searchParams }: PageProps<"/ap
         actions={
           permissions.manage ? (
             <>
+              {fresh && (
+                <HeaderAction
+                  href={`/app/hire/offres/${fresh.id}`}
+                  icon="equipe"
+                  label={t("resume", { count: fresh.unseen, jobTitle: fresh.title })}
+                />
+              )}
               {permissions.manage && (
                 <Link href="/app/hire/offres/nouvelle" className={pillClass("lime", "md")}>
                   <Icon name="ajouter" className="size-4" />
