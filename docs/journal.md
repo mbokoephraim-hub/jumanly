@@ -2,6 +2,16 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v4 · étape 8, lot C : compte (16 octobre 2026)
+
+- Sélecteur segmenté sur les filtres de Connect, les onglets de Notifications et ceux de
+  Paramètres sur téléphone.
+- Connect : bouton « Reprendre avec {nom} » en haut à droite, vers la conversation non lue la plus
+  récente (ou la dernière).
+- Abonnement et Recherche inchangés : leur contenu suit déjà la méthode (pas d'index des factures
+  vers lequel pointer).
+- Captures avant et après : `/mnt/project-files/captures/admin-v4/etape-8/`.
+
 ## Jumanly Admin v4 · étape 8, lot B : recruteur et partenaire (16 octobre 2026)
 
 - Sélecteur segmenté partagé sur les onglets d'Offres, d'Organisation, les vues d'Entretiens, les

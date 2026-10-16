@@ -5,7 +5,7 @@ import { AppPageHeader } from "@/components/app/page-header";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { pillClass } from "@/components/career/kit";
 import { TabRail } from "@/components/motion/tab-rail";
-import { Alert, EmptyState } from "@/components/ui";
+import { Alert, EmptyState, segmentedItem, segmentedList } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { markNotificationsReadAction } from "@/server/actions/connect";
 import { requireUser } from "@/server/auth/session";
@@ -180,8 +180,8 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
       {params.ok === "lues" && <Alert tone="success" title={t("allRead")} />}
       <div className="flex flex-wrap items-center justify-between gap-3">
         <nav aria-label={t("tabs")} className="max-w-full min-w-0">
-          <TabRail name="notifications-tabs">
-            <div className="flex w-max gap-1.5">
+          <TabRail name="notifications-tabs" className="bg-transparent! p-0!">
+            <div className={segmentedList}>
               {tabs.map((item) => {
                 const active = item.id === tab;
                 return (
@@ -193,12 +193,7 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
                         : `/app/notifications?onglet=${item.id}`
                     }
                     aria-current={active ? "page" : undefined}
-                    className={cx(
-                      "inline-flex h-[34px] shrink-0 items-center rounded-pill px-3.5 text-[12.5px] font-medium whitespace-nowrap",
-                      active
-                        ? "bg-sapin text-blanc"
-                        : "bg-blanc text-sapin ring-[1.5px] ring-brume ring-inset hover:bg-lime-clair",
-                    )}
+                    className={segmentedItem(active)}
                   >
                     {item.label}
                   </Link>

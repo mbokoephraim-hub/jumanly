@@ -4367,6 +4367,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 |---|---|
 | `connect.eyebrow` | Messagerie · {count, plural, =0 {Tout est lu} one {# non lu} other {# non lus}} |
 | `connect.title` | Connect |
+| `connect.resume` | Reprendre avec {name} |
 | `connect.list.title` | Messages |
 | `connect.list.search.placeholder` | Rechercher |
 | `connect.list.filter.all` | Tous |
