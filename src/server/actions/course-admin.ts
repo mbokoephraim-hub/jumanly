@@ -27,7 +27,11 @@ import {
   newCourseSchema,
   questionFormSchema,
   quizSettingsSchema,
+  isEditorStep,
+  moveLesson,
+  moveModule,
   renameModule,
+  type EditorStep,
   setCourseStatus,
   updateCourse,
   updateLesson,
@@ -73,9 +77,17 @@ async function invalidate(courseId: string, ...slugs: string[]) {
     updateTag(`course:${slug}`);
 }
 
-function back(courseId: string, params: Record<string, string>, anchor = "") {
+/** The editor step a form was sent from (`etape`), or the step its action belongs to. */
+const stepFrom = (formData: FormData, fallback: EditorStep): EditorStep => {
+  const step = formData.get("etape");
+  return isEditorStep(step) ? step : fallback;
+};
+
+/** Back to the editor, on the step of the change (Admin v3, étape 4). */
+function back(courseId: string, params: Record<string, string>, anchor: string, step: EditorStep) {
   refresh();
-  redirect(`/admin/formations/${courseId}?${new URLSearchParams(params)}${anchor}`);
+  const query = new URLSearchParams({ etape: step, ...params });
+  redirect(`/admin/formations/${courseId}?${query}${anchor}`);
 }
 
 export async function createCourseAction(formData: FormData) {
@@ -110,7 +122,7 @@ export async function updateCourseAction(formData: FormData) {
   const user = await editor();
   const id = value(formData, "course");
   const parsed = courseFormSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) back(id, { erreur: "fiche" }, "#fiche");
+  if (!parsed.success) back(id, { erreur: "fiche" }, "#fiche", stepFrom(formData, "informations"));
   const result = await updateCourse(db, id, parsed.data!);
   // The cover sent with the card (Admin v2, étape 6): resized, then saved on the course.
   const cover = formData.get("cover");
@@ -121,7 +133,12 @@ export async function updateCourseAction(formData: FormData) {
     } catch (error) {
       if (!(error instanceof CourseMediaError)) throw error;
       await invalidate(id, result.previousSlug);
-      back(id, { erreur: `couverture-${error.code}` }, "#fiche");
+      back(
+        id,
+        { erreur: `couverture-${error.code}` },
+        "#fiche",
+        stepFrom(formData, "informations"),
+      );
     }
   }
   await audit(user.id, "course.update", id);
@@ -133,6 +150,7 @@ export async function updateCourseAction(formData: FormData) {
       ...(result.unknown.length ? { inconnues: result.unknown.join(", ").slice(0, 300) } : {}),
     },
     "#fiche",
+    stepFrom(formData, "informations"),
   );
 }
 
@@ -140,12 +158,14 @@ export async function setCourseStatusAction(formData: FormData) {
   const user = await editor();
   const id = value(formData, "course");
   const status = courseStatuses.find((item) => item === formData.get("status"));
-  if (!status) back(id, {});
+  if (!status) back(id, {}, "", "publication");
   const result = await setCourseStatus(db, id, status!);
-  if (!result.ok) back(id, { publication: result.problems.join(",") });
-  await audit(user.id, "course.status", id, { status: status! });
+  if (!result.ok) back(id, { publication: result.problems.join(",") }, "", "publication");
+  // Admin v3, étape 4: an optional reason, kept in the audit log with the new status.
+  const reason = value(formData, "reason", 500).trim();
+  await audit(user.id, "course.status", id, { status: status!, ...(reason ? { reason } : {}) });
   await invalidate(id);
-  back(id, { ok: "statut" });
+  back(id, { ok: "statut" }, "", "publication");
 }
 
 export async function addModuleAction(formData: FormData) {
@@ -154,7 +174,7 @@ export async function addModuleAction(formData: FormData) {
   const created = await addModule(db, id, value(formData, "title", 200));
   if (created) await audit(user.id, "course.module.add", id, { moduleId: created.id });
   await invalidate(id);
-  back(id, {}, "#programme");
+  back(id, {}, "#programme", "programme");
 }
 
 export async function renameModuleAction(formData: FormData) {
@@ -163,7 +183,7 @@ export async function renameModuleAction(formData: FormData) {
   await renameModule(db, id, value(formData, "module"), value(formData, "title", 200));
   await audit(user.id, "course.module.rename", id);
   await invalidate(id);
-  back(id, {}, "#programme");
+  back(id, {}, "#programme", "programme");
 }
 
 export async function deleteModuleAction(formData: FormData) {
@@ -172,7 +192,34 @@ export async function deleteModuleAction(formData: FormData) {
   await deleteModule(db, id, value(formData, "module"));
   await audit(user.id, "course.module.delete", id);
   await invalidate(id);
-  back(id, {}, "#programme");
+  back(id, {}, "#programme", "programme");
+}
+
+/** Moves a module one place up or down in the program (Admin v3, étape 4). */
+export async function moveModuleAction(formData: FormData) {
+  const user = await editor();
+  const id = value(formData, "course");
+  const direction = formData.get("direction") === "up" ? "up" : "down";
+  const moved = await moveModule(db, id, value(formData, "module"), direction);
+  if (moved) {
+    await audit(user.id, "course.module.move", id, { direction });
+    await invalidate(id);
+  }
+  back(id, {}, `#module-${value(formData, "module")}`, "programme");
+}
+
+/** Moves a lesson one place up or down within its module. */
+export async function moveLessonAction(formData: FormData) {
+  const user = await editor();
+  const id = value(formData, "course");
+  const lessonId = value(formData, "lesson");
+  const direction = formData.get("direction") === "up" ? "up" : "down";
+  const moved = await moveLesson(db, id, lessonId, direction);
+  if (moved) {
+    await audit(user.id, "course.lesson.move", id, { lessonId, direction });
+    await invalidate(id);
+  }
+  back(id, {}, `#lesson-row-${lessonId}`, "programme");
 }
 
 export async function addLessonAction(formData: FormData) {
@@ -182,10 +229,10 @@ export async function addLessonAction(formData: FormData) {
     title: value(formData, "title", 200),
     kind: value(formData, "kind"),
   });
-  if (!lesson) back(id, {}, "#programme");
+  if (!lesson) back(id, {}, "#programme", "programme");
   await audit(user.id, "course.lesson.add", id, { lessonId: lesson!.id });
   await invalidate(id);
-  back(id, { lecon: lesson!.id }, "#lecon");
+  back(id, { lecon: lesson!.id }, "#lecon", "programme");
 }
 
 export async function updateLessonAction(formData: FormData) {
@@ -193,7 +240,8 @@ export async function updateLessonAction(formData: FormData) {
   const id = value(formData, "course");
   const lessonId = value(formData, "lesson");
   const parsed = lessonFormSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) back(id, { lecon: lessonId, erreur: "lecon" }, "#lecon");
+  if (!parsed.success)
+    back(id, { lecon: lessonId, erreur: "lecon" }, "#lecon", stepFrom(formData, "programme"));
   const result = await updateLesson(db, id, lessonId, parsed.data!);
   await audit(user.id, "course.lesson.update", id, { lessonId });
   await invalidate(id);
@@ -205,6 +253,7 @@ export async function updateLessonAction(formData: FormData) {
       ...(result?.invalid ? { ignorees: String(result.invalid) } : {}),
     },
     "#lecon",
+    stepFrom(formData, "programme"),
   );
 }
 
@@ -214,7 +263,7 @@ export async function deleteLessonAction(formData: FormData) {
   await deleteLesson(db, id, value(formData, "lesson"));
   await audit(user.id, "course.lesson.delete", id);
   await invalidate(id);
-  back(id, {}, "#programme");
+  back(id, {}, "#programme", stepFrom(formData, "programme"));
 }
 
 export async function updateQuizAction(formData: FormData) {
@@ -224,7 +273,12 @@ export async function updateQuizAction(formData: FormData) {
   const parsed = quizSettingsSchema.safeParse(Object.fromEntries(formData));
   if (parsed.success) await updateQuizSettings(db, id, lessonId, parsed.data);
   await audit(user.id, "course.quiz.update", id, { lessonId });
-  back(id, { lecon: lessonId, ...(parsed.success ? { ok: "quiz" } : { erreur: "quiz" }) }, "#quiz");
+  back(
+    id,
+    { lecon: lessonId, ...(parsed.success ? { ok: "quiz" } : { erreur: "quiz" }) },
+    "#quiz",
+    stepFrom(formData, "programme"),
+  );
 }
 
 export async function saveQuestionAction(formData: FormData) {
@@ -239,7 +293,12 @@ export async function saveQuestionAction(formData: FormData) {
       ? await updateQuestion(db, id, questionId, parsed.data)
       : await addQuestion(db, id, lessonId, parsed.data));
   if (saved) await audit(user.id, "course.question.save", id, { lessonId });
-  back(id, { lecon: lessonId, ...(saved ? { ok: "quiz" } : { erreur: "question" }) }, "#quiz");
+  back(
+    id,
+    { lecon: lessonId, ...(saved ? { ok: "quiz" } : { erreur: "question" }) },
+    "#quiz",
+    stepFrom(formData, "programme"),
+  );
 }
 
 export async function deleteQuestionAction(formData: FormData) {
@@ -248,7 +307,7 @@ export async function deleteQuestionAction(formData: FormData) {
   const lessonId = value(formData, "lesson");
   await deleteQuestion(db, id, value(formData, "question"));
   await audit(user.id, "course.question.delete", id, { lessonId });
-  back(id, { lecon: lessonId }, "#quiz");
+  back(id, { lecon: lessonId }, "#quiz", stepFrom(formData, "programme"));
 }
 
 /** « Dupliquer »: a draft copy, opened at once. */
@@ -268,7 +327,12 @@ export async function uploadLessonVideoAction(formData: FormData) {
   const lessonId = value(formData, "lesson");
   const file = formData.get("video");
   if (!(file instanceof File) || file.size === 0)
-    back(id, { lecon: lessonId, erreur: "video-fileType" }, "#lecon");
+    back(
+      id,
+      { lecon: lessonId, erreur: "video-fileType" },
+      "#lecon",
+      stepFrom(formData, "programme"),
+    );
   try {
     await saveLessonVideoFile(
       db,
@@ -279,11 +343,16 @@ export async function uploadLessonVideoAction(formData: FormData) {
     );
   } catch (error) {
     if (!(error instanceof CourseMediaError)) throw error;
-    back(id, { lecon: lessonId, erreur: `video-${error.code}` }, "#lecon");
+    back(
+      id,
+      { lecon: lessonId, erreur: `video-${error.code}` },
+      "#lecon",
+      stepFrom(formData, "programme"),
+    );
   }
   await audit(user.id, "course.lesson.video", id, { lessonId });
   await invalidate(id);
-  back(id, { lecon: lessonId, ok: "video" }, "#lecon");
+  back(id, { lecon: lessonId, ok: "video" }, "#lecon", stepFrom(formData, "programme"));
 }
 
 /**
@@ -329,7 +398,7 @@ export async function revokeCertificateAction(formData: FormData) {
   const code = value(formData, "code", 20).trim().toUpperCase();
   // A sensitive action: the reason is required and kept in the audit log.
   const reason = value(formData, "reason", 500).trim();
-  if (!reason) back(id, { action: "revoquer", code }, "#attestation");
+  if (!reason) back(id, { action: "revoquer", code }, "#attestation", "attestation");
   // Only an attestation of this course can be revoked from its page.
   const ofCourse = await db.certificate.findFirst({
     where: { code, enrollment: { courseId: id } },
@@ -337,5 +406,5 @@ export async function revokeCertificateAction(formData: FormData) {
   });
   const revoked = ofCourse ? await revokeCertificate(db, user.id, code, new Date(), reason) : false;
   if (revoked) updateTag(`certificate:${code}`);
-  back(id, { attestation: revoked ? "revoquee" : "introuvable" }, "#attestation");
+  back(id, { attestation: revoked ? "revoquee" : "introuvable" }, "#attestation", "attestation");
 }

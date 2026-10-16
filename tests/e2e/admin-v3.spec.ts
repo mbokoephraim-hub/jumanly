@@ -86,6 +86,63 @@ test("Studio formations : galerie, puis création à partir d'un modèle", async
   await expect(
     page.getByText("Brouillon créé à partir du modèle.", { exact: false }),
   ).toBeVisible();
+  await page
+    .getByRole("navigation", { name: "Étapes de la formation" })
+    .getByRole("link", { name: /^Programme/ })
+    .click();
   for (const name of ["Module 1", "Module 2", "Module 3", "Évaluation finale"])
     await expect(page.getByText(name).filter({ visible: true }).first()).toBeVisible();
+});
+
+// Admin v3, étape 4: the editor in steps. A template draft, a lesson moved down, a lesson opened in
+// the panel beside the program, the quiz list, the attestation preview, then a status change with
+// its reason.
+test("éditeur par étapes : programme, quiz, attestation et publication", async ({ page }) => {
+  test.setTimeout(120_000);
+  await logIn(page, demo.editor, undefined, "/admin/formations");
+  await page.goto("/admin/formations/nouvelle");
+  const title = `Étapes fictives e2e ${Date.now().toString(36)}`;
+  await page.locator("#course-new-title").fill(title);
+  await page.locator('label[for="course-new-template-short"]').click();
+  await page.getByRole("button", { name: "Créer la formation" }).click();
+  await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
+
+  const steps = page.getByRole("navigation", { name: "Étapes de la formation" });
+  await expect(steps.getByRole("listitem")).toHaveCount(6);
+  await expect(steps.getByRole("link", { name: /^Informations/ })).toHaveAttribute(
+    "aria-current",
+    "step",
+  );
+
+  await steps.getByRole("link", { name: /^Programme/ }).click();
+  const program = page.locator("#programme");
+  await expect(program.locator("li").first()).toContainText("Introduction");
+  await page.getByRole("button", { name: /^Descendre la leçon « Introduction/ }).click();
+  await expect(program.locator("li").first()).not.toContainText("Introduction");
+  await expect(page.getByRole("button", { name: /^Monter la leçon « Introduction/ })).toBeVisible();
+
+  await page.getByRole("link", { name: /^Modifier la leçon « Introduction/ }).click();
+  await expect(page.locator("#lecon-title")).toContainText("Introduction");
+  await expect(page.locator("#programme")).toBeVisible();
+  await page.getByRole("link", { name: "Fermer la leçon" }).click();
+  await expect(page.locator("#lecon")).toHaveCount(0);
+
+  await steps.getByRole("link", { name: /^Quiz/ }).click();
+  await expect(page.getByText("À compléter : ajoutez au moins une question.")).toBeVisible();
+  await page.getByRole("link", { name: /^Modifier les questions de/ }).click();
+  await expect(page.locator("#quiz")).toBeVisible();
+
+  await steps.getByRole("link", { name: /^Attestation/ }).click();
+  await expect(page.getByText("Aucune attestation n'est délivrée", { exact: false })).toBeVisible();
+  await page.getByRole("switch", { name: "Délivrer une attestation" }).check();
+  await page.getByRole("button", { name: "Enregistrer l'attestation" }).click();
+  await expect(page.getByText("Attestation de réussite")).toBeVisible();
+  await expect(page.locator("#preparation")).toContainText("Ajoutez une image de couverture.");
+
+  await steps.getByRole("link", { name: /^Publication/ }).click();
+  await page.locator("#course-status").selectOption("review");
+  await page.locator("#course-status-reason").fill("Relecture fictive demandée");
+  await page.getByRole("button", { name: "Changer le statut" }).click();
+  await expect(page.getByText("Statut mis à jour.")).toBeVisible();
+  await expect(page.getByText("Statut actuel : En relecture")).toBeVisible();
 });

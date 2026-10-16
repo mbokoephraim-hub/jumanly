@@ -47,11 +47,17 @@ test("un éditeur crée une formation, un talent Free la suit jusqu'à l'attesta
   await page.getByRole("button", { name: "Créer la formation" }).click();
   await expect(page.getByText("Brouillon créé.", { exact: false })).toBeVisible();
 
+  // Admin v3, étape 4: the editor opens on « Informations »; each step saves the whole course.
+  const steps = page.getByRole("navigation", { name: "Étapes de la formation" });
+  const goToStep = async (name: string) => {
+    await steps.getByRole("link", { name: new RegExp(`^${name}`) }).click();
+    await expect(steps.getByRole("link", { name: new RegExp(`^${name}`) })).toHaveAttribute(
+      "aria-current",
+      "step",
+    );
+  };
   await page.locator("#course-summary").fill("Résumé fictif pour le test de bout en bout.");
-  await page.locator("#course-description").fill("Description fictive : contenu de test.");
-  await page.locator("#course-objectives").fill("Premier objectif\nSecond objectif");
   await page.locator("#course-instructor").fill("Formatrice fictive");
-  await page.locator("#course-skills").fill("Communication orale");
   // Admin v2, étape 6: the gauge lists the cover until one is sent with the card.
   await expect(page.locator("#preparation")).toContainText("Ajoutez une image de couverture.");
   await page
@@ -62,11 +68,24 @@ test("un éditeur crée une formation, un talent Free la suit jusqu'à l'attesta
   await expect(page.locator("#preparation")).not.toContainText("Ajoutez une image de couverture.");
   await expect(page.getByRole("img", { name: "Couverture actuelle" })).toBeVisible();
 
+  await goToStep("Public et objectifs");
+  await page.locator("#course-description").fill("Description fictive : contenu de test.");
+  await page.locator("#course-objectives").fill("Premier objectif\nSecond objectif");
+  await page.locator("#course-skills").fill("Communication orale");
+  await page.getByRole("button", { name: "Enregistrer la fiche" }).click();
+  await expect(page.getByText("Modifications enregistrées.")).toBeVisible();
+  // The fields of « Informations » were kept.
+  await expect(page.locator("#preparation")).not.toContainText("Renseignez le formateur.");
+
   // Publishing without lessons is refused, with the reason.
+  await goToStep("Publication");
   await page.locator("#course-status").selectOption("published");
   await page.getByRole("button", { name: "Changer le statut" }).click();
-  await expect(page.getByText("Ajoutez au moins une leçon.")).toBeVisible();
+  await expect(
+    page.getByRole("alert").filter({ hasText: "Ajoutez au moins une leçon." }),
+  ).toBeVisible();
 
+  await goToStep("Programme");
   await page.locator("#module-new-title").fill("Module fictif");
   await page.getByRole("button", { name: "Ajouter un module" }).click();
   const moduleCard = page.locator("#programme > div").first();
@@ -93,9 +112,11 @@ test("un éditeur crée une formation, un talent Free la suit jusqu'à l'attesta
   await page.getByRole("button", { name: "Enregistrer la question" }).last().click();
   await expect(page.getByText("Quiz enregistré.")).toBeVisible();
 
+  await goToStep("Publication");
   await page.locator("#course-status").selectOption("published");
   await page.getByRole("button", { name: "Changer le statut" }).click();
   await expect(page.getByText("Formation publiée.")).toBeVisible();
+  await goToStep("Informations");
   const slug = (await page.locator("#course-slug").inputValue()).trim();
 
   // The preview lesson is visible on the public page.
@@ -231,6 +252,6 @@ test("un éditeur prévisualise et duplique une formation, sans pouvoir révoque
   await page.getByRole("button", { name: "Créer la copie" }).click();
   await expect(page.getByText("Copie créée en brouillon.", { exact: false })).toBeVisible();
   // The editor of the source course stays hidden in the page: check the visible card only.
-  await expect(page.getByRole("heading", { name: title })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
   await expect(page.locator("#fiche").filter({ hasText: title })).toContainText("Brouillon");
 });

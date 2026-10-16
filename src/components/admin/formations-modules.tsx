@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { IconTile, Tag, adminCard, adminTitle } from "@/components/admin/kit";
+import { IconTile, Tag, adminCard, adminLabel, adminTitle } from "@/components/admin/kit";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { Alert, Button, ButtonLink, Checkbox, Select, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
@@ -12,6 +12,8 @@ import {
   deleteLessonAction,
   deleteModuleAction,
   deleteQuestionAction,
+  moveLessonAction,
+  moveModuleAction,
   renameModuleAction,
   saveQuestionAction,
   updateLessonAction,
@@ -21,6 +23,7 @@ import {
 import {
   answerForEditor,
   lessonKinds,
+  programTotals,
   questionTypes,
   type AdminCourse,
 } from "@/server/services/course-admin";
@@ -39,9 +42,13 @@ const kindTile: Record<string, { icon: IconName; tone: string }> = {
 const clock = (seconds: number) =>
   `${String(Math.floor(seconds / 60)).padStart(2, "0")}:${String(seconds % 60).padStart(2, "0")}`;
 
+const moveButton =
+  "touch-target grid size-8 shrink-0 place-items-center rounded-full text-sapin hover:bg-creme disabled:pointer-events-none disabled:opacity-30";
+
 /**
- * « Modules » card of mockup 07-06: one panel per module (the one being edited is open), its
- * lessons with their details, and the forms to add a lesson or a module.
+ * « Programme » step of the editor (Admin v3, étape 4; mockup 07-06): the totals, then one card
+ * per module with its lessons, each moved up or down with the arrows and opened in the lesson
+ * panel; a lesson is added at the foot of its module, a module at the foot of the program.
  */
 export async function CourseModulesCard({
   course,
@@ -52,19 +59,22 @@ export async function CourseModulesCard({
 }) {
   const t = await getTranslations("admin.courses");
   const hidden = <input type="hidden" name="course" value={course.id} />;
-  const openModule =
-    course.modules.find((module) => module.lessons.some((item) => item.id === openLessonId))?.id ??
-    course.modules[0]?.id;
+  const totals = programTotals(course);
 
   return (
     <section
       aria-labelledby="programme-title"
-      className={cx(adminCard, "flex min-w-0 flex-col gap-3")}
+      className={cx(adminCard, "flex min-w-0 flex-col gap-3.5")}
     >
-      <div className="flex items-center justify-between gap-3">
-        <h2 id="programme-title" className={cx(adminTitle, "lg:text-[22px]")}>
-          {t("modules")}
-        </h2>
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex flex-col gap-0.5">
+          <h2 id="programme-title" className={cx(adminTitle, "lg:text-[22px]")}>
+            {t("modules")}
+          </h2>
+          <p className="text-[12.5px] leading-[18px] text-ardoise">
+            {t("v3.editor.program.totals", totals)}
+          </p>
+        </div>
         <ButtonLink
           href="#module-new-title"
           variant="tertiary"
@@ -74,94 +84,149 @@ export async function CourseModulesCard({
           {t("module.add")}
         </ButtonLink>
       </div>
-      <div id="programme" className="flex scroll-mt-6 flex-col gap-2">
+      <div id="programme" className="flex scroll-mt-6 flex-col gap-3">
         {course.modules.length === 0 && (
-          <p className="text-[13px] text-ardoise">{t("modulesEmpty")}</p>
+          <p className="rounded-[16px] border-[1.5px] border-dashed border-brume px-4 py-5 text-center text-[13px] text-ardoise">
+            {t("modulesEmpty")}
+          </p>
         )}
-        {course.modules.map((module) => (
-          <div key={module.id}>
-            <details
-              open={module.id === openModule}
-              className="group/module rounded-[18px] open:bg-creme open:p-3"
+        {course.modules.map((module, index) => {
+          const minutes = Math.round(
+            module.lessons.reduce((sum, lesson) => sum + lesson.durationSec, 0) / 60,
+          );
+          const moduleHidden = (
+            <>
+              {hidden}
+              <input type="hidden" name="module" value={module.id} />
+            </>
+          );
+          return (
+            <div
+              key={module.id}
+              id={`module-${module.id}`}
+              className="flex scroll-mt-6 flex-col gap-2.5 rounded-[20px] bg-creme/70 p-3 ring-[1.5px] ring-brume/70 ring-inset sm:p-3.5"
             >
-              <summary className="flex cursor-pointer list-none items-center justify-between gap-3 rounded-[12px] p-1 text-[13px] font-semibold group-open/module:px-1 group-open/module:pt-0.5 group-open/module:pb-1.5 hover:bg-creme [&::-webkit-details-marker]:hidden">
-                <span>
-                  {t("module.number", { number: module.order })} · {module.title}
-                </span>
-                <Icon
-                  name="chev-r"
-                  className="size-4 shrink-0 transition-transform group-open/module:rotate-90"
-                />
-              </summary>
-              <div className="flex flex-col gap-2 pt-1">
-                {module.lessons.length === 0 ? (
-                  <p className="px-1 text-[12.5px] text-ardoise">{t("module.empty")}</p>
-                ) : (
-                  <ol className="flex flex-col gap-2">
-                    {module.lessons.map((item) => (
-                      <LessonRow
-                        key={item.id}
-                        courseId={course.id}
-                        lesson={item}
-                        current={item.id === openLessonId}
-                      />
-                    ))}
-                  </ol>
-                )}
-                <form
-                  action={addLessonAction}
-                  className="flex flex-col gap-2.5 rounded-[14px] bg-blanc p-3"
+              <div className="flex items-center gap-2.5">
+                <span
+                  aria-hidden
+                  className="grid size-9 shrink-0 place-items-center rounded-[12px] bg-sapin bg-(image:--jm-degrade-rail) text-[14px] font-semibold text-lime"
                 >
-                  {hidden}
-                  <input type="hidden" name="module" value={module.id} />
-                  <TextField
-                    id={`module-${module.id}-lesson`}
-                    name="title"
-                    label={t("lesson.title")}
-                    required
-                    maxLength={160}
-                  />
-                  <Select
-                    id={`module-${module.id}-kind`}
-                    name="kind"
-                    label={t("lesson.kind.text")}
-                    defaultValue="video"
-                    options={lessonKinds.map((kind) => ({
-                      value: kind,
-                      label: t(`lesson.kind.${kindLabel(kind)}`),
-                    }))}
-                  />
-                  <Button
+                  {index + 1}
+                </span>
+                <div className="flex min-w-0 flex-1 flex-col">
+                  <h3 className="text-[14px] leading-5 font-semibold">
+                    {t("module.number", { number: index + 1 })} · {module.title}
+                  </h3>
+                  <p className="text-[11.5px] leading-4 text-ardoise">
+                    {t("v3.editor.program.moduleMeta", {
+                      lessons: module.lessons.length,
+                      minutes,
+                    })}
+                  </p>
+                </div>
+                <form action={moveModuleAction} className="flex shrink-0">
+                  {moduleHidden}
+                  <button
                     type="submit"
-                    variant="tertiary"
-                    size="sm"
-                    icon={<Icon name="plus" />}
-                    className="self-start bg-blanc"
+                    name="direction"
+                    value="up"
+                    disabled={index === 0}
+                    aria-label={t("v3.editor.program.moveModuleUp", { title: module.title })}
+                    className={moveButton}
                   >
-                    {t("lesson.add")}
-                  </Button>
+                    <Icon name="chev-r" className="size-4 -rotate-90" />
+                  </button>
+                  <button
+                    type="submit"
+                    name="direction"
+                    value="down"
+                    disabled={index === course.modules.length - 1}
+                    aria-label={t("v3.editor.program.moveModuleDown", { title: module.title })}
+                    className={moveButton}
+                  >
+                    <Icon name="chev-r" className="size-4 rotate-90" />
+                  </button>
                 </form>
-                <div className="flex flex-col gap-2 rounded-[14px] bg-blanc p-3">
+              </div>
+
+              {module.lessons.length === 0 ? (
+                <p className="px-1 text-[12.5px] text-ardoise">{t("module.empty")}</p>
+              ) : (
+                <ol className="flex flex-col gap-1.5">
+                  {module.lessons.map((item, position) => (
+                    <LessonRow
+                      key={item.id}
+                      courseId={course.id}
+                      lesson={item}
+                      current={item.id === openLessonId}
+                      first={position === 0}
+                      last={position === module.lessons.length - 1}
+                    />
+                  ))}
+                </ol>
+              )}
+
+              <form
+                action={addLessonAction}
+                className="grid gap-2.5 rounded-[14px] bg-blanc p-3 sm:grid-cols-[minmax(0,1fr)_170px] sm:items-end"
+              >
+                {moduleHidden}
+                <p className={cx(adminLabel, "sm:col-span-2")}>
+                  {t("v3.editor.program.addLesson")}
+                </p>
+                <TextField
+                  id={`module-${module.id}-lesson`}
+                  name="title"
+                  label={t("lesson.title")}
+                  required
+                  maxLength={160}
+                />
+                <Select
+                  id={`module-${module.id}-kind`}
+                  name="kind"
+                  label={t("lesson.kind.text")}
+                  defaultValue="video"
+                  options={lessonKinds.map((kind) => ({
+                    value: kind,
+                    label: t(`lesson.kind.${kindLabel(kind)}`),
+                  }))}
+                />
+                <Button
+                  type="submit"
+                  variant="tertiary"
+                  size="sm"
+                  icon={<Icon name="plus" />}
+                  className="self-start bg-blanc sm:col-span-2"
+                >
+                  {t("lesson.add")}
+                </Button>
+              </form>
+
+              <details className="group/tools rounded-[14px] bg-blanc/70 px-3 py-2">
+                <summary className="flex cursor-pointer list-none items-center gap-1.5 text-[12.5px] font-semibold [&::-webkit-details-marker]:hidden">
+                  <Icon
+                    name="chev-r"
+                    className="size-3.5 transition-transform group-open/tools:rotate-90"
+                  />
+                  {t("v3.editor.program.moduleTools")}
+                </summary>
+                <div className="flex flex-col gap-2 pt-2.5">
                   <form action={renameModuleAction} className="flex flex-col gap-2.5">
-                    {hidden}
-                    <input type="hidden" name="module" value={module.id} />
-                    <div className="flex-1">
-                      <TextField
-                        id={`module-${module.id}-title`}
-                        name="title"
-                        label={t("module.number", { number: module.order })}
-                        defaultValue={module.title}
-                        required
-                        maxLength={160}
-                      />
-                    </div>
+                    {moduleHidden}
+                    <TextField
+                      id={`module-${module.id}-title`}
+                      name="title"
+                      label={t("module.number", { number: index + 1 })}
+                      defaultValue={module.title}
+                      required
+                      maxLength={160}
+                    />
                     <Button type="submit" variant="tertiary" size="sm" className="self-start">
                       {t("module.rename")}
                     </Button>
                   </form>
                   <form action={deleteModuleAction} className="self-start">
-                    {hidden}
-                    <input type="hidden" name="module" value={module.id} />
+                    {moduleHidden}
                     <Button
                       type="submit"
                       variant="tertiary"
@@ -172,34 +237,29 @@ export async function CourseModulesCard({
                     </Button>
                   </form>
                 </div>
-              </div>
-            </details>
-          </div>
-        ))}
-        <form
-          action={addModuleAction}
-          className="mt-1 flex flex-col gap-2.5 border-t border-brume pt-3"
-        >
-          {hidden}
-          <div className="flex-1">
-            <TextField
-              id="module-new-title"
-              name="title"
-              label={t("module.title")}
-              required
-              maxLength={160}
-            />
-          </div>
-          <Button
-            type="submit"
-            variant="tertiary"
-            icon={<Icon name="plus" />}
-            className="self-start"
-          >
-            {t("module.add")}
-          </Button>
-        </form>
+              </details>
+            </div>
+          );
+        })}
       </div>
+      <form
+        action={addModuleAction}
+        className="flex flex-col gap-2.5 rounded-[18px] border-[1.5px] border-dashed border-sapin/25 p-3.5 sm:flex-row sm:items-end"
+      >
+        {hidden}
+        <div className="flex-1">
+          <TextField
+            id="module-new-title"
+            name="title"
+            label={t("module.title")}
+            required
+            maxLength={160}
+          />
+        </div>
+        <Button type="submit" variant="secondary" icon={<Icon name="plus" />} className="sm:mb-0.5">
+          {t("module.add")}
+        </Button>
+      </form>
     </section>
   );
 }
@@ -208,10 +268,14 @@ async function LessonRow({
   courseId,
   lesson,
   current,
+  first,
+  last,
 }: {
   courseId: string;
   lesson: Lesson;
   current: boolean;
+  first: boolean;
+  last: boolean;
 }) {
   const t = await getTranslations("admin.courses");
   const tile = kindTile[lesson.kind] ?? kindTile.text!;
@@ -231,15 +295,25 @@ async function LessonRow({
           lesson.transcript ? t("lesson.transcript") : null,
           resources > 0 ? t("lesson.resourcesCount", { count: resources }) : null,
         ].filter(Boolean);
+  const lessonHidden = (
+    <>
+      <input type="hidden" name="course" value={courseId} />
+      <input type="hidden" name="lesson" value={lesson.id} />
+    </>
+  );
   return (
     <li
+      id={`lesson-row-${lesson.id}`}
       className={cx(
-        "flex items-center gap-2.5 rounded-[12px] bg-blanc px-3 py-2.5",
+        "flex scroll-mt-6 items-center gap-2 rounded-[14px] bg-blanc py-2 pr-1.5 pl-2.5",
         current && "ring-2 ring-sapin ring-inset",
       )}
     >
       <IconTile icon={tile.icon} tone={tile.tone} size={30} />
-      <span className="flex min-w-0 flex-1 flex-col gap-0.5">
+      <Link
+        href={`/admin/formations/${courseId}?etape=programme&lecon=${lesson.id}#lecon`}
+        className="flex min-w-0 flex-1 flex-col gap-0.5 rounded-[8px] hover:underline"
+      >
         <span className="text-[12.5px] leading-4 font-semibold">{lesson.title}</span>
         <span className="text-[11px] leading-[15px] text-ardoise">{meta.join(" · ")}</span>
         {(lesson.isPreview || lesson.jobSpecific) && (
@@ -248,17 +322,39 @@ async function LessonRow({
             {lesson.jobSpecific && <Tag tone="menthe">{t("lesson.jobSpecific.badge")}</Tag>}
           </span>
         )}
-      </span>
+      </Link>
+      <form action={moveLessonAction} className="flex shrink-0">
+        {lessonHidden}
+        <button
+          type="submit"
+          name="direction"
+          value="up"
+          disabled={first}
+          aria-label={t("v3.editor.program.moveLessonUp", { title: lesson.title })}
+          className={moveButton}
+        >
+          <Icon name="chev-r" className="size-4 -rotate-90" />
+        </button>
+        <button
+          type="submit"
+          name="direction"
+          value="down"
+          disabled={last}
+          aria-label={t("v3.editor.program.moveLessonDown", { title: lesson.title })}
+          className={moveButton}
+        >
+          <Icon name="chev-r" className="size-4 rotate-90" />
+        </button>
+      </form>
       <Link
-        href={`/admin/formations/${courseId}?lecon=${lesson.id}#lecon`}
+        href={`/admin/formations/${courseId}?etape=programme&lecon=${lesson.id}#lecon`}
         aria-label={t("lesson.editNamed", { title: lesson.title })}
         className="touch-target grid size-8 shrink-0 place-items-center rounded-full hover:bg-creme"
       >
         <Icon name="edit" className="size-4" />
       </Link>
       <form action={deleteLessonAction}>
-        <input type="hidden" name="course" value={courseId} />
-        <input type="hidden" name="lesson" value={lesson.id} />
+        {lessonHidden}
         <button
           type="submit"
           aria-label={t("lesson.deleteNamed", { title: lesson.title })}
@@ -276,10 +372,12 @@ export async function LessonEditor({
   course,
   lessonId,
   query,
+  step = "programme",
 }: {
   course: AdminCourse;
   lessonId: string;
   query: (key: string) => string;
+  step?: "programme" | "quiz";
 }) {
   const t = await getTranslations("admin.courses");
   const lesson = course.modules
@@ -289,6 +387,7 @@ export async function LessonEditor({
     <>
       <input type="hidden" name="course" value={course.id} />
       <input type="hidden" name="lesson" value={lesson.id} />
+      <input type="hidden" name="etape" value={step} />
     </>
   );
   const ignored = Number(query("ignorees")) || 0;
@@ -296,16 +395,19 @@ export async function LessonEditor({
     <section
       id="lecon"
       aria-labelledby="lecon-title"
-      className={cx(adminCard, "flex scroll-mt-6 flex-col gap-4")}
+      className={cx(adminCard, "flex scroll-mt-6 flex-col gap-4 ring-2 ring-lime ring-inset")}
     >
       <div className="flex items-center gap-3">
         <IconTile icon={(kindTile[lesson.kind] ?? kindTile.text!).icon} tone="bg-lime-clair" />
-        <h2 id="lecon-title" className={cx(adminTitle, "flex-1")}>
-          {t("lesson.editing", { title: lesson.title })}
-        </h2>
+        <div className="flex min-w-0 flex-1 flex-col">
+          <p className={adminLabel}>{t("v3.editor.program.panel")}</p>
+          <h2 id="lecon-title" className={adminTitle}>
+            {t("lesson.editing", { title: lesson.title })}
+          </h2>
+        </div>
         <Link
-          href={`/admin/formations/${course.id}#programme`}
-          aria-label={t("back")}
+          href={`/admin/formations/${course.id}?etape=${step}#lesson-row-${lesson.id}`}
+          aria-label={t("v3.editor.program.close")}
           className="grid size-8 shrink-0 place-items-center rounded-full bg-creme hover:bg-brume"
         >
           <Icon name="fermer" className="size-4" />
@@ -584,6 +686,7 @@ async function LessonVideo({
         <form action={uploadLessonVideoAction} className="flex flex-col gap-2">
           <input type="hidden" name="course" value={course.id} />
           <input type="hidden" name="lesson" value={lesson.id} />
+          <input type="hidden" name="etape" value="programme" />
           <label htmlFor="lesson-video-file" className="text-[13px] font-semibold">
             {t("file")}
           </label>

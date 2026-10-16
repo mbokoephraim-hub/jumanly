@@ -589,6 +589,43 @@ export async function courseStats(db: PrismaClient, courseIds: string[]) {
   return stats;
 }
 
+// ─── Editor steps (Admin v3, étape 4) ─────────────────────────────────────────
+
+/** The steps of the course editor (`?etape=`), in order. */
+export const editorSteps = [
+  "informations",
+  "public",
+  "programme",
+  "quiz",
+  "attestation",
+  "publication",
+] as const;
+export type EditorStep = (typeof editorSteps)[number];
+
+export const isEditorStep = (value: unknown): value is EditorStep =>
+  (editorSteps as readonly unknown[]).includes(value);
+
+/** The editor step where each step of the guided path « Prête à publier ? » is filled in. */
+export const editorStepOf: Record<ReadinessStep, EditorStep> = {
+  info: "informations",
+  audience: "public",
+  program: "programme",
+  quiz: "quiz",
+  certificate: "attestation",
+  publish: "publication",
+};
+
+/** Totals shown above the program: modules, lessons, quizzes and the length of the lessons. */
+export function programTotals(course: Pick<AdminCourse, "modules">) {
+  const lessons = course.modules.flatMap((module) => module.lessons);
+  return {
+    modules: course.modules.length,
+    lessons: lessons.length,
+    quizzes: lessons.filter((lesson) => lesson.kind === "quiz").length,
+    minutes: Math.round(lessons.reduce((sum, lesson) => sum + lesson.durationSec, 0) / 60),
+  };
+}
+
 // ─── Modules and lessons ───────────────────────────────────────────────────────
 
 const nextOrder = (orders: number[]) => (orders.length === 0 ? 1 : Math.max(...orders) + 1);
@@ -615,6 +652,62 @@ export async function renameModule(
 
 export async function deleteModule(db: PrismaClient, courseId: string, moduleId: string) {
   await db.courseModule.deleteMany({ where: { id: moduleId, courseId } });
+}
+
+/**
+ * Moves a module one place up or down: its order is swapped with its neighbour's, through a
+ * free value because the order is unique within a course.
+ */
+export async function moveModule(
+  db: PrismaClient,
+  courseId: string,
+  moduleId: string,
+  direction: "up" | "down",
+) {
+  const modules = await db.courseModule.findMany({
+    where: { courseId },
+    orderBy: { order: "asc" },
+    select: { id: true, order: true },
+  });
+  const index = modules.findIndex((item) => item.id === moduleId);
+  const current = modules[index];
+  const other = modules[index + (direction === "up" ? -1 : 1)];
+  if (!current || !other) return false;
+  await db.$transaction([
+    db.courseModule.update({ where: { id: current.id }, data: { order: -1 } }),
+    db.courseModule.update({ where: { id: other.id }, data: { order: current.order } }),
+    db.courseModule.update({ where: { id: current.id }, data: { order: other.order } }),
+  ]);
+  return true;
+}
+
+/** Moves a lesson one place up or down within its module (same swap as the modules). */
+export async function moveLesson(
+  db: PrismaClient,
+  courseId: string,
+  lessonId: string,
+  direction: "up" | "down",
+) {
+  const lesson = await db.lesson.findFirst({
+    where: { id: lessonId, module: { courseId } },
+    select: { moduleId: true },
+  });
+  if (!lesson) return false;
+  const lessons = await db.lesson.findMany({
+    where: { moduleId: lesson.moduleId },
+    orderBy: { order: "asc" },
+    select: { id: true, order: true },
+  });
+  const index = lessons.findIndex((item) => item.id === lessonId);
+  const current = lessons[index];
+  const other = lessons[index + (direction === "up" ? -1 : 1)];
+  if (!current || !other) return false;
+  await db.$transaction([
+    db.lesson.update({ where: { id: current.id }, data: { order: -1 } }),
+    db.lesson.update({ where: { id: other.id }, data: { order: current.order } }),
+    db.lesson.update({ where: { id: current.id }, data: { order: other.order } }),
+  ]);
+  return true;
 }
 
 export async function addLesson(

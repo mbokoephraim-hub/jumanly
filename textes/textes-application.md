@@ -8824,6 +8824,8 @@ Conventions :
 | `admin.journal.action.course_module_add` | a ajouté un module |
 | `admin.journal.action.course_module_rename` | a renommé un module |
 | `admin.journal.action.course_module_delete` | a supprimé un module |
+| `admin.journal.action.course_module_move` | a déplacé un module |
+| `admin.journal.action.course_lesson_move` | a déplacé une leçon |
 | `admin.journal.action.course_lesson_add` | a ajouté une leçon |
 | `admin.journal.action.course_lesson_update` | a modifié une leçon |
 | `admin.journal.action.course_lesson_delete` | a supprimé une leçon |
@@ -9936,6 +9938,63 @@ Conventions :
 | `admin.courses.v3.template.workshop.text` | Une démonstration en vidéo, puis deux exercices pour s'entraîner. |
 | `admin.courses.v3.template.blank.name` | Partir de zéro |
 | `admin.courses.v3.template.blank.text` | Une formation vide : vous construisez le programme vous-même. |
+| `admin.courses.v3.editor.nav` | Étapes de la formation |
+| `admin.courses.v3.editor.studio` | Studio formations |
+| `admin.courses.v3.editor.position` | Étape {number} sur {total} |
+| `admin.courses.v3.editor.next` | Étape suivante : {name} |
+| `admin.courses.v3.editor.previous` | Étape précédente : {name} |
+| `admin.courses.v3.editor.saveFirst` | Pensez à enregistrer avant de passer à l'étape suivante. |
+| `admin.courses.v3.editor.stats.modules` | Modules |
+| `admin.courses.v3.editor.stats.lessons` | Leçons |
+| `admin.courses.v3.editor.stats.duration` | Durée des leçons |
+| `admin.courses.v3.editor.stats.minutes` | {minutes} min |
+| `admin.courses.v3.editor.stats.status` | Statut |
+| `admin.courses.v3.editor.intro.informations` | Le titre, le résumé, le thème, le niveau du catalogue et l'image de couverture : ce que le talent voit d'abord. |
+| `admin.courses.v3.editor.intro.public` | À qui s'adresse la formation, ce qu'on y apprend et les compétences que l'attestation valide. |
+| `admin.courses.v3.editor.intro.programme` | Construisez le programme module par module. Déplacez les modules et les leçons avec les flèches, ouvrez une leçon pour la rédiger. |
+| `admin.courses.v3.editor.intro.quiz` | Les quiz de la formation, leurs questions et leur seuil de réussite. |
+| `admin.courses.v3.editor.intro.attestation` | L'attestation délivrée à la fin de la formation, ses conditions et son apparence. |
+| `admin.courses.v3.editor.intro.publication` | Le récapitulatif avant la mise en ligne, puis le statut de la formation. |
+| `admin.courses.v3.editor.aside.title` | À compléter |
+| `admin.courses.v3.editor.aside.none` | Rien à compléter : la formation peut être publiée. |
+| `admin.courses.v3.editor.aside.actions` | Actions |
+| `admin.courses.v3.editor.program.totals` | {modules, plural, =0 {Aucun module} one {# module} other {# modules}} · {lessons, plural, =0 {aucune leçon} one {# leçon} other {# leçons}} · {quizzes, plural, =0 {aucun quiz} one {# quiz} other {# quiz}} · {minutes} min |
+| `admin.courses.v3.editor.program.moduleMeta` | {lessons, plural, =0 {Aucune leçon} one {# leçon} other {# leçons}} · {minutes} min |
+| `admin.courses.v3.editor.program.moveModuleUp` | Monter le module « {title} » |
+| `admin.courses.v3.editor.program.moveModuleDown` | Descendre le module « {title} » |
+| `admin.courses.v3.editor.program.moveLessonUp` | Monter la leçon « {title} » |
+| `admin.courses.v3.editor.program.moveLessonDown` | Descendre la leçon « {title} » |
+| `admin.courses.v3.editor.program.moduleTools` | Renommer ou supprimer |
+| `admin.courses.v3.editor.program.addLesson` | Nouvelle leçon dans ce module |
+| `admin.courses.v3.editor.program.panel` | Rédaction de la leçon |
+| `admin.courses.v3.editor.program.close` | Fermer la leçon |
+| `admin.courses.v3.editor.quiz.title` | Quiz de la formation |
+| `admin.courses.v3.editor.quiz.empty` | Aucun quiz pour l'instant. Ajoutez une leçon de type Quiz dans le programme. |
+| `admin.courses.v3.editor.quiz.toProgram` | Aller au programme |
+| `admin.courses.v3.editor.quiz.edit` | Modifier les questions de « {title} » |
+| `admin.courses.v3.editor.quiz.missing` | À compléter : ajoutez au moins une question. |
+| `admin.courses.v3.editor.quiz.ready` | Prêt |
+| `admin.courses.v3.editor.quiz.certificate` | L'attestation demande au moins un quiz avec des questions. |
+| `admin.courses.v3.editor.attestation.save` | Enregistrer l'attestation |
+| `admin.courses.v3.editor.attestation.saveHint` | Le réglage est enregistré avec la fiche de la formation. |
+| `admin.courses.v3.editor.attestation.preview` | Aperçu de l'attestation |
+| `admin.courses.v3.editor.attestation.heading` | Attestation de réussite |
+| `admin.courses.v3.editor.attestation.awarded` | décernée à |
+| `admin.courses.v3.editor.attestation.learner` | Prénom Nom du talent |
+| `admin.courses.v3.editor.attestation.forCourse` | pour avoir suivi et réussi la formation |
+| `admin.courses.v3.editor.attestation.skills` | Compétences validées |
+| `admin.courses.v3.editor.attestation.code` | Numéro de vérification : JMN-XXXX-XXXX |
+| `admin.courses.v3.editor.attestation.note` | Aperçu indicatif : l'attestation réelle porte le nom du talent, la date et un numéro vérifiable sur jumanly.io. |
+| `admin.courses.v3.editor.attestation.off` | Aucune attestation n'est délivrée pour cette formation. |
+| `admin.courses.v3.editor.publication.recap` | Récapitulatif |
+| `admin.courses.v3.editor.publication.current` | Statut actuel : {status} |
+| `admin.courses.v3.editor.publication.ready` | La formation est prête à être publiée. |
+| `admin.courses.v3.editor.publication.notReady` | Complétez les points ci-dessous avant de publier. |
+| `admin.courses.v3.editor.publication.go` | Compléter |
+| `admin.courses.v3.editor.publication.change` | Changer le statut |
+| `admin.courses.v3.editor.publication.reason` | Motif (facultatif) |
+| `admin.courses.v3.editor.publication.reasonHint` | Gardé dans le journal de la formation. |
+| `admin.courses.v3.editor.publication.history` | Historique de la formation |
 
 ### `/admin/offres` · Modération des offres
 
