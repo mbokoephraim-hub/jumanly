@@ -29,7 +29,7 @@ export function IconRail({
   footer?: ReactNode;
 }) {
   return (
-    <aside className="hidden shrink-0 lg:sticky lg:top-0 lg:flex lg:h-dvh lg:items-center lg:pl-4">
+    <aside className="hidden shrink-0 lg:sticky lg:top-0 lg:z-40 lg:flex lg:h-dvh lg:items-center lg:pl-4">
       <div className="jm-admin-rail flex w-[68px] flex-col items-center gap-1.5 px-3.5 py-3">
         <Link
           href={home}
@@ -70,21 +70,5 @@ export function IconRail({
         )}
       </div>
     </aside>
-  );
-}
-
-/** A rail action that is not a navigation link (sign out): same look, tooltip and name. */
-export function RailButton({ icon, label }: { icon: IconName; label: string }) {
-  return (
-    <button
-      type="submit"
-      aria-label={label}
-      className="jm-admin-link relative grid size-10 place-items-center rounded-full text-blanc/75 transition-colors hover:bg-blanc/12 hover:text-blanc [&_svg]:size-[21px]"
-    >
-      <Icon name={icon} />
-      <span aria-hidden className="jm-admin-tip">
-        {label}
-      </span>
-    </button>
   );
 }

@@ -1840,6 +1840,11 @@ Conventions :
 | `appNav.search.section.jobs` | Offres |
 | `appNav.search.section.messages` | Messages |
 | `appNav.search.seeAll` | Voir tous les résultats |
+| `appNav.search.shortcut` | Raccourci : touche barre oblique |
+| `appNav.search.title` | Recherche |
+| `appNav.search.subtitle` | Formations, offres et conversations |
+| `appNav.search.prompt` | Tapez un mot pour chercher une formation, une offre ou une conversation. |
+| `appNav.search.results` | {count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} » |
 | `appNav.unreadBadge.aria` | {count, plural, one {# élément non lu} other {# éléments non lus}} |
 | `appNav.collapse` | Réduire le menu |
 | `appNav.expand` | Déplier le menu |
@@ -2118,6 +2123,8 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `talent.profile.title` | Mon profil professionnel |
+| `talent.profile.tabs.aria` | Parties du profil |
+| `talent.profile.tabs.visibility` | Visibilité |
 | `talent.profile.subtitle` | Votre profil alimente votre CV, vos candidatures et les suggestions d'offres. |
 | `talent.profile.completion.text` | Profil complété à {percent} % |
 | `talent.profile.completion.hint` | Un profil complet aide les recruteurs à vous comprendre. |

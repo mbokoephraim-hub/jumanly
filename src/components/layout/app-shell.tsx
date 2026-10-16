@@ -13,11 +13,11 @@ import type { Section } from "@/config/section-navigation";
 import { dynamic } from "@/i18n/dynamic";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
 import { UniverseBackdrop } from "@/components/motion/universe-header";
-import { signOut } from "@/server/actions/auth";
 import { AccountMenu, type AccountSummary } from "./account-menu";
-import { IconRail, RailButton } from "./icon-rail";
+import { IconRail } from "./icon-rail";
 import { NavLink } from "./nav-link";
 import { SectionNav } from "./section-nav";
+import { TopSearch } from "./top-search";
 import { SpaceSwitcher, type SpaceOption } from "./space-switcher";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 
@@ -124,9 +124,7 @@ export function AppShell({
               icon={<Icon name="reglages" />}
               placement="rail"
             />
-            <form action={signOut}>
-              <RailButton icon="logout" label={t("logout")} />
-            </form>
+            <AccountMenu account={account} tone="rail" />
           </>
         }
       />
@@ -146,11 +144,17 @@ export function AppShell({
         <UniverseBackdrop />
         {/* The secondary menu, above the page: sub-sections left, tools right. */}
         <div className="jm-topbar sticky top-0 z-30 flex items-center gap-3 px-4 pt-3 sm:px-6 lg:h-[68px] lg:gap-5 lg:px-6 lg:pt-0 xl:px-8">
-          <SectionNav sections={sections} className="flex-1" />
-          <div className="ml-auto hidden shrink-0 items-center gap-3 lg:flex">
+          <SectionNav sections={sections} className="min-w-0 flex-1" />
+          <div className="ml-auto hidden min-w-0 shrink items-center justify-end gap-3 lg:flex lg:w-[min(42%,560px)]">
+            <TopSearch
+              id="app-search"
+              action="/app/recherche"
+              label={t("search.aria")}
+              placeholder={t("search.placeholder")}
+              shortcut={t("search.shortcut")}
+            />
             <SpaceSwitcher current={space} spaces={spaces} tone="light" />
             {notifications("light")}
-            <AccountMenu account={account} tone="light" />
           </div>
         </div>
         <main

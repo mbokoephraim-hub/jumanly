@@ -7,6 +7,7 @@ import { Icon, Logo, type IconName } from "@/components/brand";
 import { IconRail } from "@/components/layout/icon-rail";
 import { NavLink } from "@/components/layout/nav-link";
 import { SectionNav } from "@/components/layout/section-nav";
+import { TopSearch } from "@/components/layout/top-search";
 import type { Section, SectionLink } from "@/config/section-navigation";
 import { Skeleton } from "@/components/ui";
 import { requireAdminShell } from "@/server/auth/session";
@@ -64,7 +65,11 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
       : admin.platformRole !== "support_agent" || !contentKeys.includes(link.key),
   );
   const pill = (editorOnly ? pillKeys.editor : pillKeys.admin) as readonly string[];
-  const [t, a11y] = await Promise.all([getTranslations("admin"), getTranslations("a11y")]);
+  const [t, a11y, tNav] = await Promise.all([
+    getTranslations("admin"),
+    getTranslations("a11y"),
+    getTranslations("appNav"),
+  ]);
   const sections: Section[] = groups.map((group) => {
     const items = visible.filter((link) => link.group === group);
     const links: SectionLink[] = items.map((link) => ({
@@ -84,6 +89,7 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
     };
   });
   const home = editorOnly ? "/admin/formations" : "/admin";
+  const roleLabel = t(`role.${admin.platformRole === "user" ? "readOnly" : admin.platformRole}`);
   const initials = admin.name
     .split(/[\s-]+/)
     .filter(Boolean)
@@ -115,16 +121,29 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
             .map((link) => ({ ...link, label: t(`nav.${link.key}`) })),
         }))}
         footer={
-          <Link
-            href="/app"
-            aria-label={t("nav.backToApp")}
-            className="jm-admin-link relative grid size-10 place-items-center rounded-full text-blanc/75 hover:bg-blanc/12 hover:text-blanc"
-          >
-            <Icon name="chev-l" className="size-[21px]" />
-            <span aria-hidden className="jm-admin-tip">
-              {t("nav.backToApp")}
-            </span>
-          </Link>
+          <>
+            {/* Admin v4, étape 3: the account at the foot of the column (name and role in the tip). */}
+            <Link
+              href="/app/profil"
+              aria-label={`${admin.name} · ${roleLabel}`}
+              className="jm-admin-link relative mt-1 grid size-10 place-items-center rounded-full bg-lime text-[13px] font-semibold text-sapin ring-2 ring-lime/50"
+            >
+              {initials}
+              <span aria-hidden className="jm-admin-tip">
+                {admin.name} · {roleLabel}
+              </span>
+            </Link>
+            <Link
+              href="/app"
+              aria-label={t("nav.backToApp")}
+              className="jm-admin-link relative grid size-10 place-items-center rounded-full text-blanc/75 hover:bg-blanc/12 hover:text-blanc"
+            >
+              <Icon name="chev-l" className="size-[21px]" />
+              <span aria-hidden className="jm-admin-tip">
+                {t("nav.backToApp")}
+              </span>
+            </Link>
+          </>
         }
       />
 
@@ -160,8 +179,17 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
 
       <div className="min-h-[calc(100dvh-72px)] min-w-0 flex-1 rounded-t-[28px] bg-creme lg:min-h-0 lg:rounded-none lg:bg-transparent">
         {/* Admin v4, étape 2: the other sections of the same group, as a horizontal menu. */}
-        <div className="jm-topbar sticky top-0 z-30 flex items-center px-4 pt-3 sm:px-6 lg:h-[60px] lg:px-6 lg:pt-0 xl:px-8">
-          <SectionNav sections={sections} className="flex-1" />
+        <div className="jm-topbar sticky top-0 z-30 flex items-center gap-5 px-4 pt-3 sm:px-6 lg:h-[68px] lg:px-6 lg:pt-0 xl:px-8">
+          <SectionNav sections={sections} className="min-w-0 flex-1" />
+          <div className="ml-auto hidden w-[min(40%,420px)] shrink-0 justify-end lg:flex">
+            <TopSearch
+              id="admin-search"
+              action="/admin/recherche"
+              label={t(editorOnly ? "search.labelEditor" : "search.label")}
+              placeholder={t("header.search")}
+              shortcut={tNav("search.shortcut")}
+            />
+          </div>
         </div>
         <main
           id="content"

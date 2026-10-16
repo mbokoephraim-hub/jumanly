@@ -7,9 +7,10 @@ import { universe, universeFor, type UniverseKey } from "@/config/universes";
 import { cx } from "@/lib/cx";
 
 /**
- * Banner at the top of each signed-in page (docs/experience-animee § 1): the module's background,
- * a tint that slowly flows over it, a brand shape drifting with the scroll, then the icon, the
- * eyebrow and the title. The title appears word by word when the page opens.
+ * Title of each signed-in page. Admin v4, étape 3 (inspired by Patreon's creator pages): a plain
+ * title on the light page, no banner. A small tile in the column's gradient carries the module's
+ * icon; the eyebrow and one line of subtitle sit around the title, the page actions on the right.
+ * The title appears word by word when the page opens.
  */
 export function UniverseHeader({
   eyebrow,
@@ -18,7 +19,6 @@ export function UniverseHeader({
   actions,
   titleAs: Title = "h1",
   module,
-  illustration,
   className,
 }: {
   eyebrow?: ReactNode;
@@ -29,68 +29,31 @@ export function UniverseHeader({
   titleAs?: "h1" | "p";
   /** Universe of the page; by default the one of the current path. */
   module?: UniverseKey;
-  /** A character standing at the bottom right (`public/illustrations/…svg`), decorative. */
+  /** Former banner character: no longer shown (Admin v4, étape 3). */
   illustration?: string;
   className?: string;
 }) {
   const pathname = usePathname();
   const world = module ? universe(module) : universeFor(pathname);
-  const dark = world.tone === "dark";
   const words = typeof title === "string" ? title.split(/(\s+)/) : null;
   return (
     <header
       data-universe={world.key}
       className={cx(
-        "jm-universe relative isolate flex min-h-24 flex-wrap items-center justify-between gap-x-4 gap-y-3 overflow-hidden rounded-[28px] px-5 py-5 lg:min-h-[132px] lg:px-8 lg:py-6",
-        dark ? "bg-sapin text-blanc" : "bg-blanc text-sapin ring-1 ring-sapin/8",
-        illustration && "pr-[118px] lg:pr-[210px]",
+        "flex flex-wrap items-end justify-between gap-x-6 gap-y-3 pt-1 pb-1 lg:pt-2",
         className,
       )}
     >
-      <span
-        aria-hidden
-        className="absolute inset-0 -z-20 bg-cover bg-right"
-        style={{
-          backgroundImage: `url(/marque/fonds/${world.background}-16x9.svg)`,
-          opacity: dark ? 0.9 : 0.6,
-        }}
-      />
-      <span
-        aria-hidden
-        className="jm-flow-slow absolute inset-0 -z-10"
-        style={{ backgroundImage: world.tint }}
-      />
-      <span aria-hidden className="absolute inset-y-0 right-[8%] -z-10 hidden w-[180px] sm:block">
-        <span
-          className="jm-parallax block size-full bg-contain bg-center bg-no-repeat opacity-30"
-          style={{ backgroundImage: `url(/marque/formes/${world.shape}.svg)` }}
-        />
-      </span>
-      {illustration && (
-        // eslint-disable-next-line @next/next/no-img-element -- static SVG illustration
-        <img
-          src={illustration}
-          alt=""
-          className="jm-float pointer-events-none absolute right-3 -bottom-1 -z-10 h-[124px] w-auto lg:right-6 lg:h-[156px]"
-        />
-      )}
-      <div className="flex min-w-0 items-center gap-3 lg:gap-4">
+      <div className="flex min-w-0 items-center gap-3 lg:gap-3.5">
         <span
           aria-hidden
-          className={cx(
-            "hidden size-12 shrink-0 items-center justify-center rounded-[16px] sm:flex [&_svg]:size-6",
-            dark ? "bg-blanc/12 text-lime ring-1 ring-blanc/20" : "bg-sapin text-lime",
-          )}
+          className="jm-title-tile hidden size-10 shrink-0 items-center justify-center rounded-[13px] text-blanc sm:flex [&_svg]:size-5"
         >
           <Icon name={world.icon} />
         </span>
         <div className="flex min-w-0 flex-col gap-0.5">
-          {eyebrow && (
-            <p className={cx("text-xs lg:text-[13px]", dark ? "text-blanc/80" : "text-sapin/80")}>
-              {eyebrow}
-            </p>
-          )}
-          <Title className="text-[24px] leading-[1.15] font-bold tracking-tight lg:text-[30px]">
+          {eyebrow && <p className="text-[12.5px] leading-4 text-ardoise">{eyebrow}</p>}
+          <Title className="text-[24px] leading-[1.2] font-semibold tracking-[-0.02em] lg:text-[28px]">
             {words
               ? words.map((word, index) =>
                   /^\s+$/.test(word) ? (
@@ -107,23 +70,10 @@ export function UniverseHeader({
                 )
               : title}
           </Title>
-          {subtitle && (
-            <div className={cx("text-sm lg:text-[15px]", dark ? "text-blanc/85" : "text-sapin/85")}>
-              {subtitle}
-            </div>
-          )}
+          {subtitle && <div className="text-[13.5px] leading-5 text-ardoise">{subtitle}</div>}
         </div>
       </div>
-      {actions && (
-        <div
-          className={cx(
-            "flex flex-wrap gap-2",
-            dark && "items-center rounded-[22px] bg-blanc/95 p-1.5 text-sapin",
-          )}
-        >
-          {actions}
-        </div>
-      )}
+      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
     </header>
   );
 }

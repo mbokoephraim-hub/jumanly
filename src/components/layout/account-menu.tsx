@@ -30,7 +30,8 @@ export function AccountMenu({
   tone,
 }: {
   account: AccountSummary;
-  tone: "light" | "dark";
+  /** "rail": the avatar at the foot of the column of icons, the menu opening beside it. */
+  tone: "light" | "dark" | "rail";
 }) {
   const t = useTranslations();
   const item = "flex items-center gap-2.5 rounded-sm px-3 py-2.5 text-sm hover:bg-creme";
@@ -39,15 +40,22 @@ export function AccountMenu({
     plan: account.planName,
   });
   return (
-    <details className="relative shrink-0">
+    <details className="group/account relative shrink-0">
       <summary
         aria-label={t("account.menu.aria")}
         className={cx(
           "flex cursor-pointer list-none items-center gap-2.5 rounded-pill [&::-webkit-details-marker]:hidden",
           tone === "light" && "bg-blanc py-[5px] pr-3.5 pl-[5px]",
+          tone === "rail" &&
+            "jm-admin-link relative mt-1 ring-2 ring-lime/70 group-open/account:ring-lime",
         )}
       >
         <Avatar name={account.name} size="sm" />
+        {tone === "rail" && (
+          <span aria-hidden className="jm-admin-tip">
+            {account.name} · {account.planName}
+          </span>
+        )}
         {tone === "light" && (
           <span className="hidden max-w-36 flex-col leading-tight xl:flex">
             <span className="truncate text-[13px] font-semibold">{account.name}</span>
@@ -56,7 +64,12 @@ export function AccountMenu({
         )}
         {tone === "light" && <Icon name="chev-d" className="size-4 text-ardoise" />}
       </summary>
-      <div className="absolute right-0 z-30 mt-2 flex w-[300px] flex-col rounded-box bg-blanc p-2.5 text-sapin shadow-menu">
+      <div
+        className={cx(
+          "absolute z-30 flex w-[300px] flex-col rounded-box bg-blanc p-2.5 text-sapin shadow-menu",
+          tone === "rail" ? "bottom-0 left-[calc(100%+22px)]" : "right-0 mt-2",
+        )}
+      >
         <div className="flex items-center gap-2.5 p-2.5">
           <Avatar name={account.name} size="md" />
           <div className="flex min-w-0 flex-col items-start gap-1">
