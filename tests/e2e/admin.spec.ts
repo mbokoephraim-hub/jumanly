@@ -16,7 +16,7 @@ const adminPages: [path: string, title: string][] = [
   ["/admin/forfaits", "Forfaits et droits"],
   ["/admin/forfaits/talent_free", "Forfaits et droits"],
   ["/admin/abonnements", "Abonnements"],
-  ["/admin/formations", "Formations"],
+  ["/admin/formations", "Studio formations"],
   ["/admin/offres", "Modération des offres"],
   ["/admin/partenaires", "Partenaires"],
   ["/admin/ia", "IA et matching"],
@@ -90,7 +90,7 @@ test("l'éditeur de contenus ne voit que les formations et les contenus", async 
   test.setTimeout(90_000);
   await logIn(page, demo.editor);
   for (const [path, title] of [
-    ["/admin/formations", "Formations"],
+    ["/admin/formations", "Studio formations"],
     ["/admin/contenus", "Contenus"],
     ["/admin/recherche", "Recherche"],
   ] as const) {
