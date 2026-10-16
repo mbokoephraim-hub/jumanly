@@ -212,6 +212,7 @@ test("aucune erreur d'accessibilité WCAG 2.2 AA dans Learn", async ({ page }) =
   for (const path of [
     "/app/learn",
     "/app/learn/explorer",
+    "/app/learn/explorer?domaine=career-employability&niveau=beginner",
     "/app/learn/parcours",
     "/app/learn/evaluations",
     "/app/learn/coach",
@@ -296,4 +297,61 @@ test("l'académie Learn : mon espace, mes parcours, évaluations et Coach IA qui
   await expect(page.getByText("C comme Calmer", { exact: false }).last()).toBeVisible();
   await page.getByRole("button", { name: "Un autre exemple" }).click();
   await expect(page.getByText("Un exemple donné dans votre cours")).toBeVisible();
+});
+
+// Learn v2, étape 1: the catalog by domain and the filters; the editor files a course in a domain
+// and edits the domains; only an administrator deletes one.
+test("le catalogue par domaine, ses filtres et l'administration des domaines", async ({
+  page,
+  browser,
+  baseURL,
+  isMobile,
+}) => {
+  test.setTimeout(180_000);
+  await logIn(page, demo.talentPro);
+  await page.goto("/app/learn/explorer");
+  const domains = page.getByRole("navigation", { name: "Domaines" });
+  // On a phone the rail scrolls into place once hydrated: retry the tap until it navigates.
+  await expect(async () => {
+    await domains.getByRole("link", { name: /Career & Employability/ }).click();
+    await expect(page).toHaveURL(/domaine=career-employability/, { timeout: 3000 });
+  }).toPass({ timeout: 20_000 });
+  await expect(page.getByRole("heading", { name: "Career & Employability" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Réussir son CV (démo)" }).first()).toBeVisible();
+
+  // The filters: a short course in the domain; then a domain without any course yet.
+  await page.getByText("Filtres", { exact: true }).click();
+  await page.locator("#learn-filter-duration").selectOption("long");
+  await page.getByRole("button", { name: "Appliquer" }).click();
+  await expect(page).toHaveURL(/duree=long/);
+  await expect(page).toHaveURL(/domaine=career-employability/);
+  await page.goto("/app/learn/explorer?domaine=skills-monetisation-freelancing");
+  await expect(
+    page.getByText("Aucune formation publiée dans ce domaine pour l'instant."),
+  ).toBeVisible();
+
+  // The editor creates a domain; the administrator deletes it.
+  const name = `Domaine fictif e2e ${suffix()}`;
+  const editor = await newPage(browser, baseURL, isMobile);
+  await logIn(editor, demo.editor, undefined, "/admin/formations");
+  await editor.goto("/admin/formations");
+  await editor.getByRole("link", { name: "Domaines" }).click();
+  await expect(editor.getByRole("heading", { name: "Domaines du catalogue" })).toBeVisible();
+  await expect(editor.getByRole("button", { name: "Supprimer" })).toHaveCount(0);
+  await editor.locator("#domain-new-name").fill(name);
+  await editor.locator("#domain-new-order").fill("950");
+  await editor.getByRole("button", { name: "Créer le domaine" }).click();
+  await expect(editor.getByText("Domaine créé.")).toBeVisible();
+  await expect(editor.getByRole("heading", { name })).toBeVisible();
+  // At the top of the page: a button under the sticky bar would count as too small a target.
+  await editor.goto("/admin/formations/domaines");
+  await expectAccessible(editor);
+
+  const admin = await newPage(browser, baseURL, isMobile);
+  await logIn(admin, demo.admin, undefined, "/admin/formations/domaines");
+  await admin.goto("/admin/formations/domaines");
+  const card = admin.locator("article", { has: admin.getByRole("heading", { name }) });
+  await card.getByRole("button", { name: "Supprimer" }).click();
+  await expect(admin.getByText("Domaine supprimé", { exact: false })).toBeVisible();
+  await expect(admin.getByRole("heading", { name })).toHaveCount(0);
 });

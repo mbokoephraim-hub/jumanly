@@ -3402,7 +3402,25 @@
           "long": "Plus de 10 h"
         },
         "language": "Langue",
-        "certificate": "Avec attestation"
+        "certificate": "Avec attestation",
+        "skill": "Compétence",
+        "editorial": "Collection",
+        "any": "Tous",
+        "submit": "Appliquer",
+        "active": "{count, plural, one {# filtre actif} other {# filtres actifs}}"
+      },
+      "language": {
+        "fr": "Français",
+        "en": "Anglais"
+      },
+      "domains": {
+        "title": "Domaines",
+        "all": "Tous les domaines",
+        "count": "{count, plural, =0 {Bientôt} one {# formation} other {# formations}}"
+      },
+      "domain": {
+        "eyebrow": "Domaine",
+        "empty": "Aucune formation publiée dans ce domaine pour l'instant."
       },
       "sort": {
         "text": "Trier",
@@ -3428,6 +3446,11 @@
       "loading": "Chargement des formations…"
     },
     "seo": "Learn · Formations",
+    "editorial": {
+      "originals": "Jumanly Originals",
+      "expert_series": "Jumanly Expert Series",
+      "partner_programs": "Jumanly Partner Programs"
+    },
     "card": {
       "modules": "{count, plural, one {# module} other {# modules}}",
       "lessons": "{count, plural, one {# leçon} other {# leçons}}",
@@ -12052,7 +12075,11 @@
         "skills": {
           "text": "Compétences validées par l'attestation",
           "hint": "Elles sont ajoutées au profil du talent comme compétences validées et utilisées par le matching."
-        }
+        },
+        "domain": "Domaine",
+        "domainNone": "Sans domaine",
+        "editorial": "Collection",
+        "editorialHint": "Jumanly Partner Programs seulement avec une convention signée avec le partenaire."
       },
       "modules": "Modules",
       "module": {
@@ -12495,6 +12522,34 @@
           "download": "Télécharger le PDF « {name} »",
           "logged": "Chaque téléchargement par l'équipe est journalisé."
         }
+      },
+      "domains": {
+        "link": "Domaines",
+        "title": "Domaines du catalogue",
+        "eyebrow": "Jumanly Admin · Learn",
+        "subtitle": "Les domaines organisent le catalogue Learn. Chaque formation appartient à un domaine ; renommer un domaine garde son adresse.",
+        "back": "Studio formations",
+        "count": "{count, plural, =0 {Aucune formation publiée} one {# formation publiée} other {# formations publiées}}",
+        "field": {
+          "name": "Nom",
+          "description": "Description",
+          "icon": "Icône",
+          "order": "Ordre d'affichage"
+        },
+        "save": "Enregistrer",
+        "delete": "Supprimer",
+        "deleteHint": "Les formations de ce domaine restent publiées, sans domaine, jusqu'à ce que vous les rangiez ailleurs.",
+        "new": {
+          "title": "Nouveau domaine",
+          "submit": "Créer le domaine"
+        },
+        "ok": {
+          "created": "Domaine créé.",
+          "saved": "Domaine enregistré.",
+          "deleted": "Domaine supprimé ; ses formations sont maintenant sans domaine."
+        },
+        "error": "Vérifiez le nom (2 caractères au moins) et l'ordre (un nombre).",
+        "readOnly": "Seul un administrateur de la plateforme peut supprimer un domaine."
       }
     },
     "jobs": {

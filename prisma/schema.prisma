@@ -308,6 +308,30 @@ enum CatalogLevel {
   specialized
 }
 
+/// Editorial line of a course (Learn v2, étape 1): who stands behind its content.
+enum EditorialLine {
+  originals
+  expert_series
+  partner_programs
+}
+
+/// A domain of the catalog (Learn v2, étape 1): Career & Employability, AI & Digital Tools…
+/// Created by the migration, edited in the admin; a course belongs to one domain at most.
+model LearningDomain {
+  id          String   @id @default(cuid(2))
+  slug        String   @unique
+  name        String
+  description String   @default("")
+  /// Name of a brand icon (`Icon`), chosen in the admin.
+  icon        String   @default("learn")
+  order       Int      @default(0)
+  courses     Course[]
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@index([order])
+}
+
 enum CourseStatus {
   draft
   review
@@ -332,6 +356,10 @@ model Course {
   objectives         String[]
   audience           String
   category           String
+  /// Domain of the catalog (Learn v2); null until the team files the course.
+  domainId           String?
+  domain             LearningDomain?  @relation(fields: [domainId], references: [id], onDelete: SetNull)
+  editorialLine      EditorialLine    @default(originals)
   level              CourseLevel
   language           String           @default("fr")
   durationMinutes    Int
@@ -354,6 +382,7 @@ model Course {
   updatedAt          DateTime         @updatedAt
 
   @@index([status, publishedAt])
+  @@index([domainId])
 }
 
 model CourseModule {

@@ -7,6 +7,9 @@ export const COURSES_PER_PAGE = 12;
 
 export const courseLevels = ["beginner", "intermediate", "advanced"] as const;
 export const courseSorts = ["recent", "popular", "duration"] as const;
+/** Duration filter (Learn v2, étape 1): under 2 h, 2 to 10 h, over 10 h. */
+export const durationFilters = ["court", "moyen", "long"] as const;
+export const editorialFilters = ["originals", "expert_series", "partner_programs"] as const;
 
 /** Catalog levels offered in the "Accès" filter: "free", or "included up to this level". */
 export const accessFilters = ["free", "fundamentals", "standard", "advanced"] as const;
@@ -20,6 +23,26 @@ export const courseFiltersSchema = z.object({
   theme: z.string().trim().max(80).optional().catch(undefined),
   niveau: optionalEnum(courseLevels),
   acces: optionalEnum(accessFilters),
+  domaine: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9-]{1,60}$/)
+    .optional()
+    .catch(undefined),
+  langue: z
+    .string()
+    .trim()
+    .regex(/^[a-z]{2,3}(-[A-Za-z]{2})?$/)
+    .optional()
+    .catch(undefined),
+  duree: optionalEnum(durationFilters),
+  competence: z
+    .string()
+    .trim()
+    .regex(/^[a-z0-9-]{1,80}$/)
+    .optional()
+    .catch(undefined),
+  ligne: optionalEnum(editorialFilters),
   tri: optionalEnum(courseSorts),
   page: z.coerce.number().int().min(1).max(500).optional().catch(undefined),
 });
@@ -43,10 +66,18 @@ export function courseWhere(filters: CourseFilters): Prisma.CourseWhereInput {
       { title: { contains: filters.q, mode: "insensitive" } },
       { summary: { contains: filters.q, mode: "insensitive" } },
       { category: { contains: filters.q, mode: "insensitive" } },
+      { domain: { name: { contains: filters.q, mode: "insensitive" } } },
       { skills: { some: { skill: { name: { contains: filters.q, mode: "insensitive" } } } } },
     ];
   }
   if (filters.theme) where.category = filters.theme;
+  if (filters.domaine) where.domain = { slug: filters.domaine };
+  if (filters.langue) where.language = filters.langue;
+  if (filters.duree === "court") where.durationMinutes = { lt: 120 };
+  else if (filters.duree === "moyen") where.durationMinutes = { gte: 120, lte: 600 };
+  else if (filters.duree === "long") where.durationMinutes = { gt: 600 };
+  if (filters.competence) where.skills = { some: { skill: { slug: filters.competence } } };
+  if (filters.ligne) where.editorialLine = filters.ligne;
   if (filters.niveau) where.level = filters.niveau;
   if (filters.acces === "free") where.requiredLevel = "free";
   else if (filters.acces) {
@@ -72,6 +103,8 @@ const cardSelect = {
   title: true,
   summary: true,
   category: true,
+  domain: { select: { slug: true, name: true } },
+  editorialLine: true,
   level: true,
   durationMinutes: true,
   coverUrl: true,
