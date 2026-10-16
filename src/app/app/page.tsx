@@ -574,7 +574,7 @@ export default async function DashboardPage() {
               {t("talent.dashboard.continue.title")}
             </h2>
             <Link
-              href="/app/learn?liste=mes"
+              href="/app/learn/parcours"
               className="text-[13px] font-semibold text-feuille-fonce"
             >
               {t("talent.dashboard.continue.seeAll")}

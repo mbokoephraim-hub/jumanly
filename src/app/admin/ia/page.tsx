@@ -58,6 +58,7 @@ const featureText: Record<
   | "interviewText"
   | "cvAnalysis"
   | "jobDraft"
+  | "learnCoach"
 > = {
   cv_parse: "cvParse",
   cv_coach: "cvCoach",
@@ -71,6 +72,7 @@ const featureText: Record<
   interview_questions: "interviewText",
   hire_cv_analysis: "cvAnalysis",
   job_writer: "jobDraft",
+  learn_coach: "learnCoach",
 };
 
 const statusKey = { open: "open", in_review: "inReview" } as const;

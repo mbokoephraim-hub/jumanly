@@ -78,7 +78,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/app/reche
             icon="learn"
             title={t("section.courses")}
             count={courses.total}
-            more={courses.total > PER_GROUP ? `/app/learn?q=${encoded}` : undefined}
+            more={courses.total > PER_GROUP ? `/app/learn/explorer?q=${encoded}` : undefined}
             seeAll={t("seeAll")}
           >
             {courses.courses.slice(0, PER_GROUP).map((course) => (

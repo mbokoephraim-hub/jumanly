@@ -64,7 +64,7 @@ export async function CourseOverview({
         />
         <div className="relative flex min-w-0 flex-col items-start gap-4">
           <Link
-            href="/app/learn"
+            href="/app/learn/explorer"
             className="flex items-center gap-1 text-[13px] font-semibold text-neon underline-offset-4 hover:underline"
           >
             <Icon name="chev-l" className="size-4" />

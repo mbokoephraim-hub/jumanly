@@ -2,6 +2,21 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Test utilisateur · étapes 2 et 3 : académie Learn et Coach IA (16 octobre 2026)
+
+- Learn devient une académie en six espaces (onglets du haut) : Mon espace, Explorer, Mes parcours,
+  Exercices et évaluations, Coach IA, Certifications. Décision :
+  `docs/decisions/2026-10-16-academie-learn-coach.md`.
+- Mon espace : prochaine leçon en un clic avec l'anneau de progression, chiffres (formations,
+  leçons, évaluations réussies, attestations), « À faire maintenant », dernière attestation, autres
+  formations en cours, recommandations de l'IA.
+- Explorer ne met plus en avant une formation déjà suivie ou terminée.
+- Coach IA (`learn_coach`) : sur sa page et sous chaque leçon ; expliquer, reformuler, exemple,
+  question, exercice, erreur, révision ; réponses tirées du cours, « Pourquoi ? » avec les leçons
+  utilisées ; jamais les réponses des évaluations.
+- Lecteur : « Leçon terminée » n'a plus l'air d'un bouton.
+- Les étapes 2 et 3 du plan sont livrées ensemble : la page Évaluations renvoie vers le Coach.
+
 ## Test utilisateur · étape 1 : le clic qui répond (16 octobre 2026)
 
 - Test utilisateur complet (5 profils, ordinateur, téléphone, réseau lent) : prompt, rapport et

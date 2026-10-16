@@ -1855,8 +1855,12 @@ Conventions :
 | `appNav.section.dashboard` | Tableau de bord |
 | `appNav.section.profile` | Mon profil |
 | `appNav.section.subscription` | Abonnement |
-| `appNav.section.catalog` | Catalogue |
-| `appNav.section.certificates` | Mes attestations |
+| `appNav.section.catalog` | Explorer |
+| `appNav.section.certificates` | Certifications |
+| `appNav.section.learnHome` | Mon espace |
+| `appNav.section.learnPaths` | Mes parcours |
+| `appNav.section.learnEvaluations` | Exercices et évaluations |
+| `appNav.section.learnCoach` | Coach IA |
 | `appNav.section.offers` | Offres |
 | `appNav.section.applications` | Mes candidatures |
 | `appNav.section.saved` | Offres enregistrées |
@@ -2370,7 +2374,7 @@ Conventions :
 | Clé | Texte |
 |---|---|
 | `learn.catalog.eyebrow` | Learn · {count, plural, one {# formation} other {# formations}}, dont {free} gratuites |
-| `learn.catalog.title` | Catalogue de formations |
+| `learn.catalog.title` | Explorer les formations |
 | `learn.seo` | Learn · Formations |
 | `learn.catalog.search.label` | Rechercher une formation |
 | `learn.catalog.search.submit` | Rechercher |
@@ -2444,6 +2448,153 @@ Conventions :
 | `learn.catalog.loading` | Chargement des formations… |
 | `learn.save.success` | Formation enregistrée. |
 | `learn.save.removed` | Formation retirée de vos enregistrements. |
+
+### `/app/learn` · Académie : Mon espace d'apprentissage
+
+*L'accueil de l'académie : la prochaine leçon en un clic, ce qui reste à faire, l'aide du Coach IA et les attestations obtenues. Encourager sans culpabiliser.*
+
+| Clé | Texte |
+|---|---|
+| `learn.home.seo` | Learn · Mon espace d'apprentissage |
+| `learn.home.eyebrow` | Learn · Mon espace d'apprentissage |
+| `learn.home.title` | Bonjour {firstName}, on apprend quoi aujourd'hui ? |
+| `learn.home.next.eyebrow` | Votre prochaine leçon |
+| `learn.home.next.position` | Module {module} · {lesson} |
+| `learn.home.next.remaining` | {count, plural, one {Encore # leçon avant l'attestation} other {Encore # leçons avant l'attestation}} |
+| `learn.home.next.cta` | Reprendre la leçon |
+| `learn.home.next.others` | Vos autres formations en cours |
+| `learn.home.start.title` | Commencez votre première formation |
+| `learn.home.start.body` | Choisissez une formation gratuite : votre progression, vos évaluations et vos attestations s'afficheront ici. |
+| `learn.home.start.cta` | Explorer les formations |
+| `learn.home.stats.aria` | Votre progression |
+| `learn.home.stats.inProgress` | Formations en cours |
+| `learn.home.stats.lessons` | Leçons terminées |
+| `learn.home.stats.passed` | Évaluations réussies |
+| `learn.home.stats.certificates` | Attestations |
+| `learn.home.todo.title` | À faire maintenant |
+| `learn.home.todo.empty` | Rien à rattraper : vos évaluations sont à jour. |
+| `learn.home.todo.all` | Exercices et évaluations |
+| `learn.home.coach.eyebrow` | Coach IA |
+| `learn.home.coach.title` | Une notion vous résiste ? |
+| `learn.home.coach.body` | Le Coach IA explique, reformule et donne des exemples à partir de vos leçons. Il ne donne pas les réponses des évaluations. |
+| `learn.home.coach.cta` | Parler au Coach IA |
+| `learn.home.certificate.title` | Dernière attestation |
+| `learn.home.certificate.issued` | Délivrée le {date} |
+| `learn.home.certificate.cta` | Mes certifications |
+| `learn.home.certificate.empty` | Terminez une formation pour obtenir votre première attestation. |
+
+### `/app/learn/parcours` · Mes parcours
+
+*Toutes les formations du talent, avec l'étape suivante de chacune.*
+
+| Clé | Texte |
+|---|---|
+| `learn.paths.seo` | Learn · Mes parcours |
+| `learn.paths.eyebrow` | Learn · Mes parcours |
+| `learn.paths.title` | Mes parcours |
+| `learn.paths.tabs` | Listes de formations |
+| `learn.paths.tab.active` | En cours |
+| `learn.paths.tab.completed` | Terminées |
+| `learn.paths.tab.saved` | Enregistrées |
+| `learn.paths.next` | Prochaine leçon : {lesson} |
+| `learn.paths.remaining` | {count, plural, one {# leçon restante} other {# leçons restantes}} |
+| `learn.paths.completedOn` | Terminée le {date} |
+| `learn.paths.certificate` | Voir l'attestation |
+| `learn.paths.open` | Ouvrir |
+
+### `/app/learn/evaluations` · Exercices et évaluations
+
+*Les quiz qui valident une formation et les exercices qui entraînent, rangés par ce qu'il reste à faire.*
+
+| Clé | Texte |
+|---|---|
+| `learn.evaluations.seo` | Learn · Exercices et évaluations |
+| `learn.evaluations.eyebrow` | Learn · Exercices et évaluations |
+| `learn.evaluations.title` | Exercices et évaluations |
+| `learn.evaluations.intro` | Les évaluations valident vos formations ; les exercices vous entraînent. Le Coach IA peut vous aider à comprendre une erreur, sans donner les réponses. |
+| `learn.evaluations.tabs` | Filtrer les évaluations |
+| `learn.evaluations.tab.todo` | À faire · {count} |
+| `learn.evaluations.tab.review` | À revoir · {count} |
+| `learn.evaluations.tab.passed` | Réussies · {count} |
+| `learn.evaluations.kind.quiz` | Évaluation |
+| `learn.evaluations.kind.exercise` | Exercice |
+| `learn.evaluations.questions` | {count, plural, one {# question} other {# questions}} |
+| `learn.evaluations.minutes` | {minutes} min |
+| `learn.evaluations.passing` | Réussie à partir de {score} % |
+| `learn.evaluations.best` | Meilleur score : {score} % |
+| `learn.evaluations.attempts` | {count, plural, one {# essai} other {# essais}} |
+| `learn.evaluations.cta.start` | Commencer |
+| `learn.evaluations.cta.retry` | Réessayer |
+| `learn.evaluations.cta.review` | Revoir |
+| `learn.evaluations.cta.coach` | Comprendre avec le Coach IA |
+| `learn.evaluations.empty.todo` | Tout est à jour. Explorez une nouvelle formation pour continuer à progresser. |
+| `learn.evaluations.empty.review` | Aucune évaluation à revoir. |
+| `learn.evaluations.empty.passed` | Vos évaluations réussies s'afficheront ici. |
+| `learn.evaluations.empty.cta` | Explorer les formations |
+
+### `/app/learn/coach` · Coach IA (assistant pédagogique)
+
+*Un assistant qui accompagne l'apprenant à partir du contenu de ses formations uniquement : il explique, reformule, donne des exemples, propose des exercices, aide à comprendre une erreur et conseille quoi réviser. Il n'invente rien et ne donne jamais les réponses des évaluations.*
+
+| Clé | Texte |
+|---|---|
+| `learn.coach.seo` | Learn · Coach IA |
+| `learn.coach.eyebrow` | Learn · Coach IA |
+| `learn.coach.title` | Votre Coach IA |
+| `learn.coach.intro` | Il explique, reformule et donne des exemples à partir de vos leçons. Il ne donne pas les réponses des évaluations : il vous aide à les trouver. |
+| `learn.coach.welcome` | Bonjour {firstName} ! Choisissez ce dont vous avez besoin ou posez votre question sur la formation. |
+| `learn.coach.form.course` | Formation |
+| `learn.coach.form.lesson` | Leçon |
+| `learn.coach.form.lessonAll` | Toute la formation |
+| `learn.coach.form.intents` | Que voulez-vous faire ? |
+| `learn.coach.form.question` | Votre question |
+| `learn.coach.form.placeholder` | Ex. : je ne comprends pas la différence entre deux notions de la leçon |
+| `learn.coach.form.submit` | Demander au Coach |
+| `learn.coach.form.sending` | Le Coach prépare sa réponse… |
+| `learn.coach.form.credit` | Réponse reformulée par Jumanly Intelligence : 1 crédit IA. |
+| `learn.coach.intent.explain` | Expliquer une notion |
+| `learn.coach.intent.rephrase` | Reformuler la leçon |
+| `learn.coach.intent.example` | Un autre exemple |
+| `learn.coach.intent.question` | Poser une question |
+| `learn.coach.intent.exercise` | Un exercice en plus |
+| `learn.coach.intent.mistake` | Comprendre mon erreur |
+| `learn.coach.intent.revision` | Que réviser ? |
+| `learn.coach.chat.aria` | Conversation avec le Coach IA |
+| `learn.coach.chat.you` | Vous |
+| `learn.coach.chat.coach` | Coach IA |
+| `learn.coach.chat.reset` | Nouvelle conversation |
+| `learn.coach.source.ai` | Réponse de Jumanly Intelligence, à partir de votre cours |
+| `learn.coach.source.course` | Réponse tirée directement de votre cours |
+| `learn.coach.why` | Pourquoi ? |
+| `learn.coach.sources` | Leçons utilisées : {list} |
+| `learn.coach.noSources` | Le Coach n'a trouvé aucune leçon qui en parle. |
+| `learn.coach.limit.consent` | Activez l'IA dans vos paramètres pour des réponses reformulées par Jumanly Intelligence. |
+| `learn.coach.limit.entitlement` | Les réponses reformulées par Jumanly Intelligence ne sont pas incluses dans votre forfait : le Coach répond avec les passages du cours. |
+| `learn.coach.limit.quota` | Vos crédits IA du mois sont utilisés : le Coach répond avec les passages du cours. |
+| `learn.coach.limit.unavailable` | Jumanly Intelligence est indisponible pour l'instant, aucun crédit n'a été utilisé : le Coach répond avec les passages du cours. |
+| `learn.coach.rule` | L'IA recommande, vous décidez. Le Coach ne remplace pas la leçon et ne donne pas les réponses des évaluations. |
+| `learn.coach.error.notEnrolled` | Commencez cette formation pour poser vos questions au Coach. |
+| `learn.coach.error.locked` | Cette formation n'est pas ouverte avec votre forfait. |
+| `learn.coach.error.notFound` | Formation introuvable. |
+| `learn.coach.error.invalid` | Écrivez votre question en quelques mots. |
+| `learn.coach.error.failed` | Le Coach n'a pas pu répondre. Réessayez dans un instant. |
+| `learn.coach.empty.title` | Le Coach IA vous accompagne dans vos formations |
+| `learn.coach.empty.body` | Commencez une formation : vous pourrez ensuite lui poser toutes vos questions. |
+| `learn.coach.empty.cta` | Explorer les formations |
+| `learn.coach.player.title` | Une question sur cette leçon ? |
+| `learn.coach.player.body` | Le Coach IA explique, reformule ou donne un exemple à partir de ce cours. |
+| `learn.coach.answer.explain` | Voici ce que dit votre cours à ce sujet : |
+| `learn.coach.answer.rephrase` | En résumé, avec les mots du cours : |
+| `learn.coach.answer.example` | Un exemple donné dans votre cours : |
+| `learn.coach.answer.noExample` | Votre cours ne donne pas d'autre exemple sur ce point. Essayez d'appliquer la notion à une situation de votre travail ou de votre quartier, puis relisez la leçon pour vérifier. |
+| `learn.coach.answer.exercise` | Exercice d'entraînement sur « {lesson} » : en trois à cinq lignes, appliquez ces points à une situation que vous connaissez, puis relisez la leçon pour vérifier votre réponse. |
+| `learn.coach.answer.mistake` | Voici les questions à retravailler. Relisez le passage indiqué, puis retentez l'évaluation : |
+| `learn.coach.answer.mistakeHint` | À relire dans « {lesson} » : |
+| `learn.coach.answer.noMistake` | Aucune erreur à revoir dans cette formation pour l'instant. Bravo ! |
+| `learn.coach.answer.revision` | Je vous conseille de revoir, dans cet ordre : |
+| `learn.coach.answer.noRevision` | Rien à réviser en priorité : vous pouvez avancer vers la leçon suivante. |
+| `learn.coach.answer.notCovered` | Votre cours n'aborde pas ce point. Je préfère ne rien inventer : reformulez votre question avec les mots de la leçon, ou ouvrez la leçon la plus proche. |
+| `learn.coach.answer.declined` | Je ne donne pas les réponses des évaluations : elles servent à valider ce que vous avez appris. En revanche, je peux vous expliquer la notion ou vous proposer un exercice pour vous entraîner. |
 
 ### `/app/learn/[slug]` · Fiche formation (avant de commencer)
 
@@ -10455,6 +10606,7 @@ Conventions :
 | `admin.ai.usage.feature.interviewVoice` | Simulations orales |
 | `admin.ai.usage.feature.cvAnalysis` | Analyse de CV (recruteurs) |
 | `admin.ai.usage.feature.jobDraft` | Rédaction d'offres |
+| `admin.ai.usage.feature.learnCoach` | Coach IA des formations |
 | `admin.ai.usage.feature.cvParse` | Lecture de CV à l'import |
 | `admin.ai.usage.period` | 30 derniers jours |
 | `admin.ai.usage.col.feature` | Fonction |

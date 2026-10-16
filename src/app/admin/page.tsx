@@ -27,7 +27,14 @@ import {
 
 /** Text key of each AI feature in `admin.ai.usage.feature.*`; the others are « Autres ». */
 type AiFeatureText =
-  "cvCoach" | "interviewText" | "cvParse" | "documents" | "linkedin" | "diagnostic" | "jobDraft";
+  | "cvCoach"
+  | "interviewText"
+  | "cvParse"
+  | "documents"
+  | "linkedin"
+  | "diagnostic"
+  | "jobDraft"
+  | "learnCoach";
 const aiFeature: Record<string, AiFeatureText> = {
   cv_coach: "cvCoach",
   cv_tailor: "cvCoach",
@@ -40,6 +47,7 @@ const aiFeature: Record<string, AiFeatureText> = {
   diagnostic: "diagnostic",
   diagnostic_followup: "diagnostic",
   job_writer: "jobDraft",
+  learn_coach: "learnCoach",
 };
 
 const familyTone: Record<FamilyKey, string> = {

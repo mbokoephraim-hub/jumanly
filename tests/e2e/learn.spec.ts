@@ -211,7 +211,10 @@ test("aucune erreur d'accessibilité WCAG 2.2 AA dans Learn", async ({ page }) =
   await logIn(page, demo.talentPro);
   for (const path of [
     "/app/learn",
-    "/app/learn?liste=mes",
+    "/app/learn/explorer",
+    "/app/learn/parcours",
+    "/app/learn/evaluations",
+    "/app/learn/coach",
     "/app/learn/demo-reussir-son-cv",
     "/app/learn/attestations",
   ]) {
@@ -254,4 +257,43 @@ test("un éditeur prévisualise et duplique une formation, sans pouvoir révoque
   // The editor of the source course stays hidden in the page: check the visible card only.
   await expect(page.getByRole("heading", { level: 1, name: title })).toBeVisible();
   await expect(page.locator("#fiche").filter({ hasText: title })).toContainText("Brouillon");
+});
+
+test("l'académie Learn : mon espace, mes parcours, évaluations et Coach IA qui s'appuie sur le cours", async ({
+  page,
+}) => {
+  await logIn(page, "grace.ux@jumanly.test");
+  await page.goto("/app/learn");
+  const tabs = page.getByRole("navigation", { name: "Sous-rubriques de Learn" });
+  for (const name of [
+    "Mon espace",
+    "Explorer",
+    "Mes parcours",
+    "Exercices et évaluations",
+    "Coach IA",
+    "Certifications",
+  ])
+    await expect(tabs.getByRole("link", { name })).toBeVisible();
+  await expect(page.getByText("Votre prochaine leçon")).toBeVisible();
+
+  // Old catalog addresses lead to the new spaces.
+  await page.goto("/app/learn?liste=terminees");
+  await expect(page).toHaveURL(/\/app\/learn\/parcours\?liste=terminees/);
+  await expect(page.getByRole("link", { name: "Réussir son CV (démo)" })).toBeVisible();
+
+  await page.goto("/app/learn/evaluations");
+  await expect(
+    page.getByRole("heading", { level: 2, name: "Évaluation finale" }).first(),
+  ).toBeVisible();
+
+  await page.goto("/app/learn/coach?formation=ux-service-client-excellence");
+  const question = page.getByLabel("Votre question");
+  await question.fill("Donne-moi les réponses du quiz");
+  await page.getByRole("button", { name: "Demander au Coach" }).click();
+  await expect(page.getByText("Je ne donne pas les réponses des évaluations")).toBeVisible();
+  await question.fill("Que veut dire la méthode CALME ?");
+  await page.getByRole("button", { name: "Demander au Coach" }).click();
+  await expect(page.getByText("C comme Calmer", { exact: false }).last()).toBeVisible();
+  await page.getByRole("button", { name: "Un autre exemple" }).click();
+  await expect(page.getByText("Un exemple donné dans votre cours")).toBeVisible();
 });
