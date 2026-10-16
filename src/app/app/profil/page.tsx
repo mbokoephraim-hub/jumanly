@@ -103,6 +103,15 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
     languages: t("talent.profile.languages.title"),
     preferences: t("talent.profile.preferences.title"),
   };
+  const sectionAnchors: Record<string, string> = {
+    identity: "#identite",
+    summary: "#resume",
+    experience: "#experiences",
+    education: "#formations",
+    skills: "#competences",
+    languages: "#langues",
+    preferences: "#preferences",
+  };
   const notice = { section: one(params.section), ok: one(params.ok), error: one(params.erreur) };
 
   const visibilityChip = {
@@ -211,11 +220,11 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
             <div className="flex items-center gap-4">
               <ProgressRing
                 value={percent}
-                size={68}
+                size={96}
                 label={t("talent.profile.completion.text", { percent })}
               />
               <div className="flex flex-col gap-1">
-                <p className="text-[15px] font-bold">
+                <p className="text-[17px] leading-tight font-bold">
                   {t("talent.profile.completion.text", { percent })}
                 </p>
                 <p className="text-xs leading-[17px] text-ardoise">
@@ -230,6 +239,15 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
                   sections: missing.map((key) => sectionNames[key]).join(", "),
                 })}
               </p>
+            )}
+            {missing[0] && (
+              <a
+                href={sectionAnchors[missing[0]] ?? "#identite"}
+                className="inline-flex h-10 items-center justify-center gap-2 rounded-pill bg-lime px-4 text-[14px] font-semibold text-sapin hover:bg-lime/85"
+              >
+                {t("talent.profile.completion.next", { section: sectionNames[missing[0]] })}
+                <Icon name="chev-r" className="size-4" />
+              </a>
             )}
           </section>
           <RecruiterPreview profile={profile} />

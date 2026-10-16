@@ -1,11 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { HeaderAction } from "@/components/app/header-action";
 import { AppPageHeader } from "@/components/app/page-header";
 import { Icon } from "@/components/brand/icon";
 import { Pagination, withParams } from "@/components/site/navigation-bits";
 import { PublicCourseCard } from "@/components/site/public-cards";
-import { Alert, ButtonLink, EmptyState, ProgressBar, SearchField } from "@/components/ui";
+import {
+  Alert,
+  ButtonLink,
+  EmptyState,
+  ProgressBar,
+  SearchField,
+  segmentedItem,
+  segmentedList,
+} from "@/components/ui";
 import { durationParts } from "@/lib/format";
 import { cx } from "@/lib/cx";
 import { RecommendedCourses } from "@/components/matching/recommendations";
@@ -159,33 +168,34 @@ export default async function LearnPage({ searchParams }: PageProps<"/app/learn"
       <AppPageHeader
         eyebrow={t("learn.catalog.eyebrow", { count: total, free: freeCount })}
         title={t("learn.catalog.title")}
+        actions={
+          inProgress[0] ? (
+            <HeaderAction
+              href={`/app/learn/${inProgress[0].course.slug}`}
+              icon="play"
+              label={t("learn.catalog.resume", { percent: inProgress[0].progress })}
+            />
+          ) : null
+        }
       />
 
       <div className="flex flex-wrap items-center justify-between gap-x-6 gap-y-3">
         <nav aria-label={t("learn.catalog.tabs")} className="max-w-full min-w-0">
           <TabRail name="learn-listes">
-            <ul className="flex w-max gap-5 px-3">
+            <ul className={segmentedList}>
               {(Object.keys(lists) as List[]).map((key) => (
                 <li key={key}>
                   <Link
                     href={tabHref(key)}
                     aria-current={list === key ? "page" : undefined}
-                    className={cx(
-                      "-mb-px inline-flex h-11 items-center border-b-2 text-[15px] whitespace-nowrap",
-                      list === key
-                        ? "border-sapin font-semibold"
-                        : "border-transparent text-sapin hover:border-brume",
-                    )}
+                    className={segmentedItem(list === key)}
                   >
                     {t(`learn.catalog.tab.${lists[key]}`)}
                   </Link>
                 </li>
               ))}
               <li>
-                <Link
-                  href="/app/learn/attestations"
-                  className="-mb-px inline-flex h-11 items-center gap-1.5 border-b-2 border-transparent text-[15px] whitespace-nowrap text-sapin hover:border-brume"
-                >
+                <Link href="/app/learn/attestations" className={segmentedItem(false)}>
                   <Icon name="certificat" className="size-4" />
                   {t("learn.catalog.certificatesLink")}
                 </Link>

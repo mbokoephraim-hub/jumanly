@@ -7,7 +7,7 @@ import { AppPageHeader } from "@/components/app/page-header";
 import { AiBrand, AiPanel, Why, pillClass } from "@/components/career/kit";
 import { tag, tagTone } from "@/components/jobs/talent-kit";
 import { criterionText } from "@/components/matching/talent-why";
-import { Alert, CompanyLogo, EmptyState } from "@/components/ui";
+import { Alert, CompanyLogo, EmptyState, segmentedItem, segmentedList } from "@/components/ui";
 import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { formatRelative } from "@/lib/dates";
@@ -119,19 +119,14 @@ export default async function ApplicationsPage({
       {params.ok === "retiree" && <Alert tone="success" title={t("withdrawn.toast")} />}
       <nav
         aria-label={t("title")}
-        className="flex [scrollbar-width:none] gap-6 overflow-x-auto border-b border-brume text-sm"
+        className={cx(segmentedList, "[scrollbar-width:none] overflow-x-auto")}
       >
         {tabs.map((item) => (
           <Link
             key={item.id}
             href={`/app/jobs/candidatures?onglet=${item.id}`}
             aria-current={tab === item.id ? "page" : undefined}
-            className={cx(
-              "-mb-px border-b-[2.5px] px-0.5 py-3 whitespace-nowrap",
-              tab === item.id
-                ? "border-sapin font-semibold"
-                : "border-transparent text-ardoise hover:text-sapin",
-            )}
+            className={segmentedItem(tab === item.id)}
           >
             {item.label}
           </Link>

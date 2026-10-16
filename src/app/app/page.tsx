@@ -3,6 +3,7 @@ import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { Icon, type IconName } from "@/components/brand/icon";
+import { HeaderAction } from "@/components/app/header-action";
 import { AppPageHeader } from "@/components/app/page-header";
 import { DailyWelcome } from "@/components/app/daily-welcome";
 import { Alert, ButtonLink, ProgressBar } from "@/components/ui";
@@ -334,6 +335,15 @@ export default async function DashboardPage() {
             href={welcome.href}
             closeLabel={t("talent.dashboard.welcome.close")}
           />
+        }
+        actions={
+          inProgress[0] ? (
+            <HeaderAction
+              href={`/app/learn/${inProgress[0].course.slug}`}
+              icon="play"
+              label={t("learn.catalog.resume", { percent: inProgress[0].progress })}
+            />
+          ) : null
         }
       />
 
