@@ -45,6 +45,10 @@ export const legalNavigation = [
 
 export type AppNavigationKey =
   | "home"
+  | "tabs.forMe"
+  | "tabs.offers"
+  | "tabs.learn"
+  | "tabs.suivi"
   | "learn"
   | "career"
   | "jobs"
@@ -67,14 +71,45 @@ type AppNavigationItem = {
   pill?: boolean;
 };
 
-/** Talent space modules. `key` points to `appNav.<key>`; icons from ressources/icones. */
+/**
+ * Talent space (docs/ux-mobile-talent, prompt 2): four destinations in the bottom bar of a phone,
+ * the same four plus Career in the column of icons of a computer. Messages, the profile, the CVs
+ * and the dashboard are in the menu of the avatar and in Mon espace. `key` points to `appNav.<key>`.
+ */
 export const talentNavigation: AppNavigationItem[] = [
-  { key: "home", href: "/app", icon: "accueil" },
-  { key: "learn", href: "/app/learn", icon: "learn" },
-  { key: "career", href: "/app/career", icon: "career" },
-  { key: "jobs", href: "/app/jobs", icon: "jobs" },
-  { key: "messages", href: "/app/messages", icon: "message" },
+  { key: "tabs.forMe", href: "/app", icon: "accueil" },
+  { key: "tabs.offers", href: "/app/jobs", icon: "jobs" },
+  { key: "tabs.learn", href: "/app/learn", icon: "diplome" },
+  { key: "tabs.suivi", href: "/app/suivi", icon: "suivi" },
+  { key: "career", href: "/app/career", icon: "career", pill: false },
 ];
+
+/** Shortcuts of the avatar menu (screen 34), in order. `key` points to `appNav.topMenu.<key>`. */
+export const talentMenu = [
+  { key: "messages", href: "/app/messages", icon: "message", tone: "bg-lime" },
+  { key: "profile", href: "/app/profil", icon: "profil", tone: "bg-lime-clair" },
+  { key: "cvs", href: "/app/career/cv", icon: "cv", tone: "bg-menthe-claire" },
+  { key: "dashboard", href: "/app/tableau-de-bord", icon: "statistiques", tone: "bg-gris-clair" },
+  { key: "settings", href: "/app/parametres", icon: "reglages", tone: "bg-creme" },
+] as const satisfies readonly { key: string; href: string; icon: IconName; tone: string }[];
+
+/**
+ * Talent screens with their own fixed action bar at the bottom of a phone: the bottom bar steps
+ * aside there (offer detail and application, Learning Room, conversation, CV editor, Mon espace).
+ */
+export function hidesTalentTabBar(pathname: string) {
+  const [, app, section, page, more] = pathname.split("/");
+  if (app !== "app" || !section) return false;
+  if (section === "espace") return true;
+  if (section === "jobs") return Boolean(page) && !["candidatures", "enregistrees"].includes(page);
+  if (section === "messages") return Boolean(page);
+  if (section === "learn") {
+    const lists = ["attestations", "coach", "evaluations", "explorer", "parcours"];
+    return Boolean(page) && !lists.includes(page);
+  }
+  if (section === "career") return page === "cv" && Boolean(more) && more !== "modeles";
+  return false;
+}
 
 /** Organization space (Hire): shown when an organization is chosen in the space switcher. */
 export const hireNavigation: AppNavigationItem[] = [

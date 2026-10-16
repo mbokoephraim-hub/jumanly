@@ -38,19 +38,31 @@ test.describe("inscription avec forfait", () => {
 });
 
 test.describe("connexion", () => {
-  test("se connecter, se déconnecter, réinitialiser le mot de passe", async ({ page }) => {
+  test("se connecter, se déconnecter, réinitialiser le mot de passe", async ({
+    page,
+    isMobile,
+  }) => {
     const email = testEmail("reset");
     await signUpFromPricing(page, "Créer mon compte gratuit", email);
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
     await page.goto("/app/parametres");
-    await page.locator("summary[aria-label]").filter({ visible: true }).first().click();
-    // The sidebar has its own logout button too: use the one of the open account menu.
-    await page
-      .locator("details[open]")
-      .getByRole("button", { name: "Se déconnecter" })
-      .filter({ visible: true })
-      .click();
+    if (isMobile) {
+      // Phone: the avatar of the top bar opens the menu of Mon espace.
+      await page.getByRole("button", { name: "Mon espace" }).click();
+      await page
+        .getByRole("dialog", { name: "Menu de mon espace" })
+        .getByRole("button", { name: "Se déconnecter" })
+        .click();
+    } else {
+      await page.locator("summary[aria-label]").filter({ visible: true }).first().click();
+      // The sidebar has its own logout button too: use the one of the open account menu.
+      await page
+        .locator("details[open]")
+        .getByRole("button", { name: "Se déconnecter" })
+        .filter({ visible: true })
+        .click();
+    }
     await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
 
     await page.goto("/app");

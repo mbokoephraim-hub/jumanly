@@ -2253,6 +2253,34 @@
       "aria": "Navigation principale",
       "more": "Plus"
     },
+    "tabs": {
+      "forMe": "Pour moi",
+      "offers": "Offres",
+      "learn": "Apprendre",
+      "suivi": "Suivi",
+      "badge": "{count, plural, one {# action à traiter} other {# actions à traiter}}"
+    },
+    "topMenu": {
+      "open": "Mon espace",
+      "label": "Menu de mon espace",
+      "messages": "Messages",
+      "profile": "Mon profil",
+      "cvs": "Mes CV",
+      "dashboard": "Tableau de bord",
+      "settings": "Paramètres",
+      "all": "Tout Mon espace",
+      "unread": "{count, plural, one {# message non lu} other {# messages non lus}}"
+    },
+    "title": {
+      "career": "Career",
+      "messages": "Messages",
+      "notifications": "Notifications",
+      "profile": "Mon profil",
+      "subscription": "Abonnement",
+      "settings": "Paramètres",
+      "dashboard": "Tableau de bord",
+      "search": "Recherche"
+    },
     "skipToContent": "Aller au contenu principal",
     "section": {
       "aria": "Sous-rubriques de {section}",
@@ -2671,6 +2699,87 @@
       "pastDueBanner": {
         "text": "Votre paiement est en attente. Votre forfait {plan} reste actif jusqu'au {date, date, long}.",
         "cta": "Régler maintenant"
+      }
+    },
+    "suivi": {
+      "seo": "Suivi · Jumanly",
+      "title": "Suivi",
+      "todo": {
+        "title": "À traiter",
+        "empty": "Rien à traiter pour le moment.",
+        "interviews": "{count, plural, one {# entretien à confirmer} other {# entretiens à confirmer}}",
+        "documents": "{count, plural, one {# document demandé} other {# documents demandés}}",
+        "messages": "{count, plural, one {# message non lu} other {# messages non lus}}",
+        "line": "Ouvrir mes messages"
+      },
+      "links": {
+        "title": "Mon suivi",
+        "applications": "Mes candidatures",
+        "applicationsLine": "{count, plural, =0 {Aucune candidature en cours} one {# en cours} other {# en cours}}",
+        "messages": "Messages",
+        "messagesLine": "Échanges avec les recruteurs",
+        "saved": "Offres enregistrées",
+        "savedLine": "{count, plural, =0 {Aucune offre enregistrée} one {# offre} other {# offres}}"
+      }
+    },
+    "espace": {
+      "seo": "Mon espace · Jumanly",
+      "title": "Mon espace",
+      "back": "Retour",
+      "completeness": "Profil complété à {percent} %",
+      "complete": "Compléter",
+      "missing": "Il manque : {sections}.",
+      "spaces": "Changer d'espace",
+      "tiles": {
+        "dashboard": "Tableau de bord",
+        "dashboardLine": "Mon activité",
+        "subscription": "Abonnement",
+        "subscriptionLine": "Formule {plan}"
+      },
+      "groups": {
+        "profile": "Profil professionnel",
+        "tools": "Outils carrière",
+        "acquired": "Acquis",
+        "account": "Mon compte"
+      },
+      "rows": {
+        "edit": "Modifier mes informations",
+        "editLine": "Titre, résumé, coordonnées",
+        "skills": "Mes compétences",
+        "skillsLine": "{count, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}}",
+        "portfolio": "Mon portfolio",
+        "portfolioLine": "Vos réalisations",
+        "visibility": "Visibilité auprès des recruteurs",
+        "visibilityLine": "Qui peut voir mon profil"
+      },
+      "tools": {
+        "builder": "CV Builder",
+        "builderLine": "Créer un CV",
+        "cvs": "Mes CV",
+        "cvsLine": "{count, plural, =0 {Aucun CV} one {# CV} other {# CV}}",
+        "documents": "Lettres et documents",
+        "documentsLine": "Modèles et pièces",
+        "linkedin": "Optimisation LinkedIn",
+        "linkedinLine": "Titre, résumé",
+        "interviews": "Simulations d'entretien",
+        "interviewsLine": "À l'écrit ou à l'oral",
+        "career": "Tous les outils Career",
+        "careerLine": "Diagnostic, plan, conseils",
+        "locked": "Outil non inclus dans votre formule"
+      },
+      "acquired": {
+        "certificates": "Certificats et attestations",
+        "certificatesLine": "{count, plural, =0 {Aucune attestation} one {# attestation} other {# attestations}}",
+        "evaluations": "Compétences évaluées",
+        "evaluationsLine": "Résultats de vos évaluations"
+      },
+      "account": {
+        "billing": "Abonnement et facturation",
+        "notifications": "Notifications",
+        "settings": "Paramètres et confidentialité",
+        "matching": "Comment fonctionne le matching",
+        "license": "Activer un code de licence",
+        "help": "Assistance"
       }
     },
     "profile": {

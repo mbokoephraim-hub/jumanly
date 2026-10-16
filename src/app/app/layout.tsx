@@ -15,6 +15,8 @@ import { hireMemberships, partnerMemberships } from "@/server/services/organizat
 import { introData } from "@/components/app/app-intro-data";
 import { introProfile } from "@/lib/app-intro";
 import { lockedTools } from "@/server/services/career-offer";
+import { unreadCount } from "@/server/services/connect";
+import { followUpActions } from "@/server/services/follow-up";
 
 /** Signed-in space: every page below needs a session (checked on the server). */
 export default function SignedInLayout({ children }: LayoutProps<"/app">) {
@@ -42,6 +44,14 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     getPartnerSpace(user.id),
     unreadNotifications(db, user.id),
   ]);
+  // Personal space: badges of Suivi (actions to take) and of Messages (avatar menu).
+  const personal = !partnerSpace && !space;
+  const [followUp, unreadMessages] = personal
+    ? await Promise.all([
+        followUpActions(db, user.id).then((actions) => actions.total),
+        unreadCount(db, { userId: user.id }),
+      ])
+    : [0, 0];
   const intro = await introData({
     profile: introProfile(
       partnerSpace ? { partner: true } : space ? { type: space.organization.type } : null,
@@ -65,8 +75,11 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       reduceMotion={user.reduceMotion}
       intro={intro}
       lockedCareer={plan ? lockedTools(plan.values) : []}
+      followUp={followUp}
+      unreadMessages={unreadMessages}
       account={{
         name: user.name,
+        image: user.image,
         planName: plan?.planName ?? "",
         isAdmin: (ADMIN_ROLES as readonly string[]).includes(user.platformRole),
         isTester: isTester(user),

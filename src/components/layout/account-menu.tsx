@@ -9,9 +9,17 @@ export type AccountSummary = {
   name: string;
   planName: string;
   isAdmin: boolean;
+  image?: string | null;
   /** Listed in TESTER_EMAILS: the « Mode testeur » panel (compte passe-partout). */
   isTester?: boolean;
 };
+
+/** Talent space on a computer (prompt 2): the shortcuts of the phone's avatar menu come first. */
+const talentItems = [
+  { key: "appNav.topMenu.messages", href: "/app/messages", icon: "message" },
+  { key: "appNav.topMenu.cvs", href: "/app/career/cv", icon: "cv" },
+  { key: "appNav.topMenu.dashboard", href: "/app/tableau-de-bord", icon: "statistiques" },
+] as const satisfies readonly { key: string; href: string; icon: IconName }[];
 
 const items = [
   { key: "account.menu.profile", href: "/app/profil", icon: "profil" },
@@ -34,8 +42,11 @@ const items = [
 export function AccountMenu({
   account,
   tone,
+  talent = false,
 }: {
   account: AccountSummary;
+  /** Personal space: adds the talent shortcuts and « Tout Mon espace ». */
+  talent?: boolean;
   /** "rail": the avatar at the foot of the column of icons, the menu opening beside it. */
   tone: "light" | "dark" | "rail";
 }) {
@@ -72,7 +83,7 @@ export function AccountMenu({
       </summary>
       <div
         className={cx(
-          "absolute z-30 flex w-[300px] flex-col rounded-box bg-blanc p-2.5 text-sapin shadow-menu",
+          "absolute z-30 flex max-h-[calc(100dvh-24px)] w-[300px] flex-col overflow-y-auto rounded-box bg-blanc p-2.5 text-sapin shadow-menu",
           tone === "rail" ? "bottom-0 left-[calc(100%+22px)]" : "right-0 mt-2",
         )}
       >
@@ -86,7 +97,7 @@ export function AccountMenu({
           </div>
         </div>
         <ul className="flex flex-col border-y border-brume py-1">
-          {items.map(({ key, href, icon }) => (
+          {[...(talent ? talentItems : []), ...items].map(({ key, href, icon }) => (
             <li key={key}>
               <Link href={href} className={item}>
                 <Icon name={icon} className="size-[18px]" />
@@ -111,6 +122,12 @@ export function AccountMenu({
             </li>
           )}
         </ul>
+        {talent && (
+          <Link href="/app/espace" className={cx(item, "mt-1 font-semibold text-feuille-fonce")}>
+            {t("appNav.topMenu.all")}
+            <Icon name="chev-r" className="ml-auto size-4" />
+          </Link>
+        )}
         <form action={signOut} className="pt-1">
           <button type="submit" className={cx(item, "w-full text-left text-down-texte")}>
             <Icon name="logout" className="size-[18px]" />
