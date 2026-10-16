@@ -32,17 +32,17 @@ test("espace connecté : menu horizontal, recherche et compte en bas de la colon
   await expectAccessible(page);
 
   // The account sits at the foot of the column and opens its menu beside it.
-  await page.locator("aside summary[aria-label]").click();
-  await expect(
-    page.locator("aside details[open]").getByRole("button", { name: "Se déconnecter" }),
-  ).toBeVisible();
-
   // The profile: the parts as horizontal tabs.
   await page.goto("/app/profil");
   const parts = page.getByRole("navigation", { name: "Parties du profil" });
   await expect(parts.getByRole("link")).toHaveCount(8);
   await parts.getByRole("link", { name: "Langues" }).click();
   await expect(page).toHaveURL(/#langues$/);
+
+  // The account sits at the foot of the column; its menu opens above the page.
+  await page.locator("aside summary[aria-label]").click();
+  await page.locator("aside details[open]").getByRole("button", { name: "Se déconnecter" }).click();
+  await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
 });
 
 test("admin : rubriques du groupe en haut et recherche de la barre", async ({ page, isMobile }) => {

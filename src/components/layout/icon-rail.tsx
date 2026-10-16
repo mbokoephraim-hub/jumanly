@@ -29,7 +29,7 @@ export function IconRail({
   footer?: ReactNode;
 }) {
   return (
-    <aside className="hidden shrink-0 lg:sticky lg:top-0 lg:flex lg:h-dvh lg:items-center lg:pl-4">
+    <aside className="hidden shrink-0 lg:sticky lg:top-0 lg:z-40 lg:flex lg:h-dvh lg:items-center lg:pl-4">
       <div className="jm-admin-rail flex w-[68px] flex-col items-center gap-1.5 px-3.5 py-3">
         <Link
           href={home}
