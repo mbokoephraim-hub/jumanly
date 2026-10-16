@@ -2586,6 +2586,8 @@
       "journey": {
         "title": "Votre parcours",
         "subtitle": "Se former, enrichir son profil, candidater, être recruté.",
+        "next": "Votre prochaine étape : {step}",
+        "go": "Y aller",
         "learn": {
           "text": "Se former",
           "status": "{count, plural, =0 {Aucune formation active} one {# formation active} other {# formations actives}}"
@@ -3707,6 +3709,10 @@
       "transcript": "Transcription",
       "markComplete": "Marquer comme terminée",
       "completed": "Leçon terminée",
+      "moduleDone": {
+        "title": "Module {number} terminé, bravo {firstName} !",
+        "body": "« {title} » est derrière vous. Place au module {number} : {next}."
+      },
       "next": "Leçon suivante",
       "previous": "Leçon précédente",
       "resumeAt": "Reprendre à {time}",
@@ -6167,6 +6173,8 @@
         "scorecards": "{count, plural, one {# évaluation à compléter} other {# évaluations à compléter}}",
         "contactAccepted": "{count, plural, one {# mise en relation acceptée} other {# mises en relation acceptées}}",
         "empty": "Rien en attente. Beau travail.",
+        "emptyCandidates": "Revoir les candidats de vos offres",
+        "emptyPublish": "Publier une offre",
         "scorecardsHint": "Après vos derniers entretiens",
         "contactHint": "Depuis la recherche de talents"
       },
@@ -10607,6 +10615,7 @@
         "seeAll": "Gérer les licences"
       },
       "smallGroup": "Données masquées : moins de {minGroup} bénéficiaires concernés.",
+      "smallGroupWhen": "Chaque chiffre s'affiche dès qu'il concerne au moins {minGroup} bénéficiaires : plus vous distribuez de codes, plus vite ils apparaissent (« Gérer les licences »).",
       "empty": "Aucun lot de licences pour l'instant. Votre contact Jumanly le créera après signature du contrat.",
       "contact": "Une question sur votre contrat ? Écrivez à assistant@jumanly.io.",
       "months": {

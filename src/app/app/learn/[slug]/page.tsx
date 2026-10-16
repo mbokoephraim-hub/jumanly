@@ -137,6 +137,9 @@ export default async function LearnCoursePage({
   const moduleDone = (module: (typeof course.modules)[number]) =>
     module.lessons.every((lesson) => lesson.jobSpecific || done.has(lesson.id));
   const nextModule = course.modules.find((module) => module.order > current.module.order);
+  const finished = course.modules.find(
+    (module) => String(module.order) === param("module") && moduleDone(module),
+  );
 
   const alerts = (
     <>
@@ -153,6 +156,23 @@ export default async function LearnCoursePage({
           }
         >
           <p>{t("learn.certificates.congrats.body", { courseTitle: course.title })}</p>
+        </SuccessBurst>
+      )}
+      {finished && !congrats && (
+        <SuccessBurst
+          className="py-5!"
+          title={t("learn.player.moduleDone.title", {
+            number: finished.order,
+            firstName: user.firstName ?? user.name,
+          })}
+        >
+          <p className="text-[14px] text-ardoise">
+            {t("learn.player.moduleDone.body", {
+              title: finished.title,
+              number: current.module.order,
+              next: current.module.title,
+            })}
+          </p>
         </SuccessBurst>
       )}
       {param("termine") === "1" && enrollment.completedAt && !congrats && (

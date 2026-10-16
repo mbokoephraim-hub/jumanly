@@ -428,16 +428,17 @@ export default async function DashboardPage() {
               {t("talent.dashboard.journey.subtitle")}
             </p>
           </div>
-          <ol className="grid gap-4 sm:grid-cols-4 sm:gap-0">
+          {/* Vertical next to the AI card on a wide screen, so the card has no large blank. */}
+          <ol className="grid gap-4 sm:grid-cols-4 sm:gap-0 xl:grid-cols-1 xl:gap-5">
             {journey.map((step, index) => {
               const isCurrent = index === current;
               return (
                 <li
                   key={step.key}
                   className={cx(
-                    "relative flex items-center gap-3 sm:flex-col sm:items-start sm:gap-2.5",
+                    "relative flex items-center gap-3 sm:flex-col sm:items-start sm:gap-2.5 xl:flex-row xl:items-center xl:gap-3",
                     index < journey.length - 1 &&
-                      "sm:after:absolute sm:after:top-[21px] sm:after:right-0 sm:after:left-[44px] sm:after:h-[3px] sm:after:rounded-pill",
+                      "sm:after:absolute sm:after:top-[21px] sm:after:right-0 sm:after:left-[44px] sm:after:h-[3px] sm:after:rounded-pill xl:after:top-[44px] xl:after:right-auto xl:after:left-[20.5px] xl:after:h-5 xl:after:w-[3px]",
                     index < journey.length - 1 &&
                       (step.done ? "sm:after:bg-lime" : "sm:after:bg-brume"),
                   )}
@@ -469,6 +470,23 @@ export default async function DashboardPage() {
               );
             })}
           </ol>
+          {journey[current] && (
+            <Link
+              href={journey[current].href}
+              className="mt-auto flex items-center gap-3 rounded-[18px] bg-creme px-4 py-3 text-[14px] hover:bg-lime-clair"
+            >
+              <Icon name={journey[current].icon} className="size-[18px] shrink-0" />
+              <span className="min-w-0 flex-1">
+                {t("talent.dashboard.journey.next", {
+                  step: d(`talent.dashboard.journey.${journey[current].key}.text`),
+                })}
+              </span>
+              <span className="flex shrink-0 items-center gap-1 font-semibold">
+                {t("talent.dashboard.journey.go")}
+                <Icon name="chev-r" className="size-4" />
+              </span>
+            </Link>
+          )}
         </section>
 
         {profile.matchingEnabled && (
@@ -575,7 +593,7 @@ export default async function DashboardPage() {
             </h2>
             <Link
               href="/app/learn/parcours"
-              className="text-[13px] font-semibold text-feuille-fonce"
+              className="jm-tap text-[13px] font-semibold text-feuille-fonce"
             >
               {t("talent.dashboard.continue.seeAll")}
             </Link>
@@ -719,7 +737,7 @@ export default async function DashboardPage() {
             </h2>
             <Link
               href="/app/jobs/candidatures"
-              className="flex items-center gap-1 text-[13px] font-semibold text-feuille-fonce"
+              className="jm-tap flex items-center gap-1 text-[13px] font-semibold text-feuille-fonce"
             >
               {t("talent.dashboard.applications.seeAll")}
               <Icon name="chev-r" className="size-3.5" />

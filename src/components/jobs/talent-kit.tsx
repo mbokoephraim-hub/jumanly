@@ -114,7 +114,7 @@ export async function TalentJobCard({
   const why = ok ? (
     <Link
       href={`${href}#compatibilite`}
-      className="relative z-10 flex items-center gap-1 text-[11px] leading-[15px] font-semibold whitespace-nowrap text-[#14745F] hover:underline"
+      className="jm-tap relative z-10 flex items-center gap-1 text-[11px] leading-[15px] font-semibold whitespace-nowrap text-[#14745F] hover:underline"
     >
       <Icon name="eye" className="size-3.5" />
       {t("common.why")}

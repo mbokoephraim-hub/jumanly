@@ -675,7 +675,7 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
                 <Icon name="eye" className="size-4 shrink-0 text-neon" />
                 <Link
                   href={`/app/jobs/${best.job.slug}#compatibilite`}
-                  className="font-semibold whitespace-nowrap text-neon hover:underline"
+                  className="jm-tap font-semibold whitespace-nowrap text-neon hover:underline"
                 >
                   {t("common.why")}
                 </Link>

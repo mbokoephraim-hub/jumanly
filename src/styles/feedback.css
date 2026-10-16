@@ -83,3 +83,22 @@
   transform: none;
   filter: brightness(0.92);
 }
+
+/*
+ * Small text links (« Pourquoi ? », « Tout voir », « Signaler cette offre ») keep their look but,
+ * on a touch screen, get an invisible 44 px touch zone around them (ux-test, étape 5, § 10).
+ */
+@media (pointer: coarse) {
+  .jm-tap {
+    position: relative;
+  }
+  .jm-tap::after {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: max(100%, 44px);
+    height: max(100%, 44px);
+    transform: translate(-50%, -50%);
+  }
+}

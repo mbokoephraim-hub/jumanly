@@ -13,6 +13,7 @@ import {
   enroll,
   getLearnerCourse,
   LearnError,
+  finishedModule,
   lessonsOf,
   submitQuiz,
   toggleSavedCourse,
@@ -60,6 +61,22 @@ export async function toggleSavedCourseAction(formData: FormData) {
 }
 
 /** After a lesson or a quiz: the next lesson, or the congratulations when the course is finished. */
+/**
+ * The lesson after `lessonId` and, when that lesson closed its module, the `&module=` flag that
+ * shows the module's small celebration (ux-test, étape 4).
+ */
+async function moduleStep(userId: string, slug: string, lessonId: string) {
+  const found = await getLearnerCourse(db, userId, slug);
+  const lessons = found ? lessonsOf(found.course) : [];
+  const next = lessons[lessons.findIndex((lesson) => lesson.id === lessonId) + 1];
+  const finished = found?.enrollment
+    ? finishedModule(found.course, found.enrollment.completedLessons, lessonId)
+    : null;
+  const celebrate =
+    finished && next && next.module.id !== finished.id ? `&module=${finished.order}` : "";
+  return { next, celebrate };
+}
+
 async function afterProgress(
   user: { id: string; email: string; firstName?: string | null },
   slug: string,
@@ -81,13 +98,10 @@ async function afterProgress(
     await send(user.email, email.subject, email.props).catch((error) => reportError(error));
     redirect(`${coursePath(slug)}?bravo=${certificate.id}`);
   }
-  const found = await getLearnerCourse(db, user.id, slug);
-  const lessons = found ? lessonsOf(found.course) : [];
-  const index = lessons.findIndex((lesson) => lesson.id === lessonId);
-  const next = lessons[index + 1];
+  const { next, celebrate } = await moduleStep(user.id, slug, lessonId);
   redirect(
     next
-      ? `${coursePath(slug)}?lecon=${next.id}`
+      ? `${coursePath(slug)}?lecon=${next.id}${celebrate}`
       : `${coursePath(slug)}?lecon=${lessonId}&termine=1`,
   );
 }
@@ -112,7 +126,8 @@ export async function submitQuizAction(formData: FormData) {
   }
   const result = await learnerGuard(slug, () => submitQuiz(db, user.id, lessonId, answers));
   if (result.certificate) await afterProgress(user, slug, lessonId, result.certificate);
-  redirect(`${coursePath(slug)}?lecon=${lessonId}&tentative=${result.attemptId}`);
+  const celebrate = result.passed ? (await moduleStep(user.id, slug, lessonId)).celebrate : "";
+  redirect(`${coursePath(slug)}?lecon=${lessonId}&tentative=${result.attemptId}${celebrate}`);
 }
 
 export async function addNoteAction(formData: FormData) {

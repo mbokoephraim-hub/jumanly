@@ -191,7 +191,7 @@ export default async function ApplicationsPage({
                   application.matchScore !== null ? (
                     <Link
                       href={`${jobHref}#compatibilite`}
-                      className="flex items-center gap-1 text-[11px] font-semibold whitespace-nowrap text-[#14745F] hover:underline"
+                      className="jm-tap flex items-center gap-1 text-[11px] font-semibold whitespace-nowrap text-[#14745F] hover:underline"
                     >
                       <Icon name="eye" className="size-3.5" />
                       {tr("common.why")}
