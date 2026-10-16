@@ -155,3 +155,7 @@ options de message, des CV téléchargeables, des refus sobres à l’en-tête d
    aucun rejet automatique).
 7. **Mes CV (56)** : vignettes A4 réelles, bouton PDF (état en cours, puis toast), PDF sans mention
    Jumanly, menu « … » (dupliquer, renommer, supprimer). Réutilise le rendu de `docs/modeles-cv`.
+8. **Reprise de tous les écrans (01 à 33)** : textes raccourcis partout, outils de Mon espace en cartes
+   visuelles, ancien « Assistant » renommé Jumanly AI avec sa signature (28, 30, 31, bio 25). Les écrans
+   30 et 31 restent valables comme vue plein écran de Jumanly AI ; le panneau (36 à 44) fait foi pour le
+   comportement.
