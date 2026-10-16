@@ -94,7 +94,9 @@ test("passe finale de l'admin · fiches ouvertes", async ({ page, isMobile }) =>
   // The first course, user and organization of each list, opened on their own page.
   await page.goto("/admin/formations");
   const course = await page
-    .locator('a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"])')
+    .locator(
+      'a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"]):not([href^="/admin/formations/domaines"])',
+    )
     .first()
     .getAttribute("href");
   const base = course?.split("?")[0];
@@ -138,7 +140,9 @@ test("passe finale de l'admin · PDF des formations et rôles", async ({ browser
   const admin = await open(demo.admin);
   await admin.page.goto("/admin/formations");
   const href = await admin.page
-    .locator('a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"])')
+    .locator(
+      'a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"]):not([href^="/admin/formations/domaines"])',
+    )
     .first()
     .getAttribute("href");
   const base = href!.split("?")[0]!;
@@ -173,7 +177,9 @@ test("passe finale de l'admin · Studio et éditeur à 1024 px", async ({ page, 
   await logIn(page, demo.editor, undefined, "/admin/formations");
   await check(page, "/admin/formations");
   const href = await page
-    .locator('a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"])')
+    .locator(
+      'a[href^="/admin/formations/"]:not([href^="/admin/formations/nouvelle"]):not([href^="/admin/formations/domaines"])',
+    )
     .first()
     .getAttribute("href");
   const base = href!.split("?")[0]!;
