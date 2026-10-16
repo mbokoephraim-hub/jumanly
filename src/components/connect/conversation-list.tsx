@@ -3,7 +3,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
 import { pillClass } from "@/components/career/kit";
 import { TabRail } from "@/components/motion/tab-rail";
-import { CompanyLogo } from "@/components/ui";
+import { CompanyLogo, segmentedItem, segmentedList } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { respondContactAction } from "@/server/actions/connect";
 import type { listConversations, Viewer } from "@/server/services/connect";
@@ -119,8 +119,8 @@ export async function ConversationList({
         />
       </form>
       <nav aria-label={t("list.filters")}>
-        <TabRail name="conversations-filters">
-          <div className="flex w-max gap-1.5">
+        <TabRail name="conversations-filters" className="bg-transparent! p-0!">
+          <div className={segmentedList}>
             {filters.map((item) => {
               const on = item.id === filter;
               return (
@@ -128,18 +128,11 @@ export async function ConversationList({
                   key={item.id}
                   href={item.id === "tous" ? "/app/messages" : `/app/messages?filtre=${item.id}`}
                   aria-current={on ? "page" : undefined}
-                  className={cx(
-                    "inline-flex h-[30px] shrink-0 items-center gap-1.5 rounded-pill px-3 text-xs font-medium whitespace-nowrap",
-                    on
-                      ? "bg-sapin text-blanc"
-                      : "bg-blanc text-sapin ring-[1.5px] ring-brume ring-inset hover:bg-lime-clair",
-                  )}
+                  className={segmentedItem(on, "h-8 px-3 text-xs")}
                 >
                   {item.label}
                   {item.count !== undefined && (
-                    <b className={cx("font-semibold", on ? "text-neon" : "text-feuille-fonce")}>
-                      {item.count}
-                    </b>
+                    <b className="font-semibold text-feuille-fonce">{item.count}</b>
                   )}
                 </Link>
               );

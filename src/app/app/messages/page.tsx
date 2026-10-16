@@ -1,11 +1,16 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { HeaderAction } from "@/components/app/header-action";
 import { AppPageHeader } from "@/components/app/page-header";
 import { Character } from "@/components/brand/character";
 import { pillClass } from "@/components/career/kit";
 import { ContactRequests } from "@/components/connect/contact-requests";
-import { ConversationList, type ListFilter } from "@/components/connect/conversation-list";
+import {
+  ConversationList,
+  conversationLabels,
+  type ListFilter,
+} from "@/components/connect/conversation-list";
 import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
 import { listConversations } from "@/server/services/connect";
@@ -35,11 +40,24 @@ export default async function MessagesPage({ searchParams }: PageProps<"/app/mes
       : params.filtre === "non-lus"
         ? "non-lus"
         : "tous";
+  const latest = unread[0] ?? conversations[0];
   const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");
 
   return (
     <div className="flex flex-col gap-5 lg:gap-6">
-      <AppPageHeader eyebrow={t("eyebrow", { count: unread.length })} title={t("title")} />
+      <AppPageHeader
+        eyebrow={t("eyebrow", { count: unread.length })}
+        title={t("title")}
+        actions={
+          latest && (
+            <HeaderAction
+              href={`/app/messages/${latest.id}`}
+              icon="message"
+              label={t("resume", { name: conversationLabels(latest, viewer).name })}
+            />
+          )
+        }
+      />
       <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[340px_minmax(0,1fr)]">
         <ConversationList
           viewer={viewer}
