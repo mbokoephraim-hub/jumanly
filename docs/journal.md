@@ -2,6 +2,26 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v3 · étape 6 : PDF générés pour chaque formation (16 octobre 2026)
+
+- Gabarit commun `src/server/pdf/course-kit.tsx` : bandeau en dégradé profondeur avec le
+  pictogramme Jumanly, filet dégradé en haut des pages suivantes, pied de page avec jumanly.io et
+  les deux e-mails de contact (aucun téléphone), date de génération et numéro de page.
+- Cinq PDF (`src/server/pdf/course-pdfs.tsx`, données dans `src/server/services/course-pdf.ts`) :
+  programme (public), support de cours complet (inscrits dont le forfait ouvre la formation),
+  quiz et corrigé, aperçu de l'attestation avec filigrane « Aperçu », bilan de la formation
+  (30, 90, 365 jours ou depuis la création ; aucun nom).
+- Routes : `/formations/[slug]/programme`, `/app/learn/[slug]/support`,
+  `/admin/formations/[id]/pdf/[kind]` (équipe Learn, chaque téléchargement journalisé
+  `course.pdf.download`).
+- Encart « PDF de la formation » dans l'éditeur (colonne de droite et étape Publication), liens
+  « Télécharger le programme » sur la fiche publique et la page de la formation, « Télécharger le
+  support de cours » dans le lecteur.
+- Tests : `tests/db/course-pdf.test.ts` (contenu, bilan sans nom, cache, texte lu avec `pdftotext`
+  quand il est installé) et e2e « PDF générés » (droits route par route). Captures et exemples de
+  PDF dans `captures/admin-v3/etape-6`.
+- Décisions : `docs/decisions/2026-10-16-admin-v3-etape-6.md`.
+
 ## Jumanly Admin v3 · étape 5 : PDF à joindre aux formations (16 octobre 2026)
 
 - Nouvelle étape **Documents** dans l'éditeur (7 étapes) : envoi d'un PDF avec titre, type

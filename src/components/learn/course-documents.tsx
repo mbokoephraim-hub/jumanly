@@ -77,3 +77,54 @@ export async function CourseDocumentList({
     </section>
   );
 }
+
+/**
+ * The PDFs Jumanly makes from a course (Admin v3, étape 6): the programme for everyone, the full
+ * support for a talent who follows the course, to read offline on a slow network.
+ */
+export async function CoursePdfLinks({
+  slug,
+  support = false,
+  id,
+  className,
+}: {
+  slug: string;
+  support?: boolean;
+  id: string;
+  className?: string;
+}) {
+  const t = await getTranslations("learn.pdf");
+  const links = [
+    { href: `/formations/${slug}/programme`, label: t("programme"), hint: t("programmeHint") },
+    ...(support
+      ? [{ href: `/app/learn/${slug}/support`, label: t("support"), hint: t("supportHint") }]
+      : []),
+  ];
+  return (
+    <section aria-labelledby={id} className={cx("flex flex-col gap-3", className)}>
+      <h2 id={id} className="text-[11px] font-semibold tracking-[0.12em] text-ardoise uppercase">
+        {t("title")}
+      </h2>
+      <ul className="grid gap-2">
+        {links.map((link) => (
+          <li key={link.href}>
+            <a
+              href={link.href}
+              className="group flex items-center gap-3 rounded-[18px] border border-brume bg-blanc p-3.5 transition-colors hover:border-sapin/30"
+            >
+              <span className="flex size-11 shrink-0 items-center justify-center rounded-xl bg-lime-clair">
+                <Icon name="telecharger" className="size-5" />
+              </span>
+              <span className="flex min-w-0 flex-1 flex-col">
+                <span className="text-sm font-semibold underline-offset-4 group-hover:underline">
+                  {link.label}
+                </span>
+                <span className="text-xs text-ardoise">{link.hint}</span>
+              </span>
+            </a>
+          </li>
+        ))}
+      </ul>
+    </section>
+  );
+}

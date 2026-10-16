@@ -1,5 +1,5 @@
 import { expect, test } from "./fixtures";
-import { demo, logIn } from "./session";
+import { demo, logIn, skipIntro } from "./session";
 
 /**
  * Admin v3 (docs/admin-v3/PLAN.md): the floating column of icons. Every section has an accessible
@@ -193,4 +193,71 @@ test("documents PDF : envoi, téléchargement par l'équipe, refus au visiteur",
   const visitor = await browser.newContext({ baseURL });
   expect((await visitor.request.get(href!)).status()).toBe(404);
   await visitor.close();
+});
+
+// Admin v3, étape 6: the PDFs Jumanly makes for a course. The team downloads all five from the
+// Publication step; a visitor gets the programme only; a talent never gets the answer key.
+test("PDF générés : l'équipe télécharge les cinq, le visiteur le programme seulement", async ({
+  page,
+  browser,
+  baseURL,
+}) => {
+  test.setTimeout(120_000);
+  await logIn(page, demo.editor, undefined, "/admin/formations");
+  await page.goto("/admin/formations");
+  await page.getByRole("link", { name: "Réussir son CV (démo)" }).click();
+  await expect(page.locator("#course-pdf-side")).toBeVisible();
+  const steps = page.getByRole("navigation", { name: "Étapes de la formation" });
+  await steps.getByRole("link", { name: /^Publication/ }).click();
+  const card = page.locator("#course-pdf");
+  await expect(card).toBeVisible();
+  const pdf = async (href: string) => {
+    const response = await page.request.get(href);
+    expect(response.status(), href).toBe(200);
+    expect(response.headers()["content-type"]).toBe("application/pdf");
+    expect((await response.body()).subarray(0, 4).toString()).toBe("%PDF");
+    return href;
+  };
+  const hrefs: string[] = [];
+  for (const name of [
+    "Programme",
+    "Support de cours complet",
+    "Quiz et corrigé",
+    "Aperçu de l'attestation",
+  ]) {
+    const href = await card
+      .getByRole("link", { name: `Télécharger le PDF « ${name} »` })
+      .getAttribute("href");
+    hrefs.push(await pdf(href!));
+  }
+  await page.locator("#course-pdf-period").selectOption("30");
+  const download = page.waitForEvent("download");
+  await card.getByRole("button", { name: "Télécharger le bilan" }).click();
+  expect((await download).suggestedFilename()).toBe("bilan-demo-reussir-son-cv.pdf");
+
+  // The team's downloads are in the audit history of the course.
+  await page.reload();
+  await expect(page.getByText("a téléchargé un PDF de formation").first()).toBeVisible();
+
+  const visitor = await browser.newContext({ baseURL });
+  await expect(
+    (await visitor.request.get("/formations/demo-reussir-son-cv/programme")).status(),
+  ).toBe(200);
+  for (const href of hrefs)
+    expect((await visitor.request.get(href, { maxRedirects: 0 })).status(), href).not.toBe(200);
+  expect(
+    (
+      await visitor.request.get("/app/learn/demo-reussir-son-cv/support", { maxRedirects: 0 })
+    ).status(),
+  ).not.toBe(200);
+  await visitor.close();
+
+  const talentContext = await browser.newContext({ baseURL });
+  const talent = await talentContext.newPage();
+  await skipIntro(talent);
+  await logIn(talent, demo.talentFree);
+  expect((await talent.request.get(hrefs[2]!, { maxRedirects: 0 })).status()).not.toBe(200);
+  await talent.goto("/formations/demo-reussir-son-cv");
+  await expect(talent.getByRole("link", { name: /Télécharger le programme/ })).toBeVisible();
+  await talentContext.close();
 });
