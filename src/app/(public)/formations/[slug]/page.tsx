@@ -23,7 +23,7 @@ import {
   staticSlugParams,
 } from "@/server/queries/public";
 import { planForCatalogLevel } from "@/server/services/plans";
-import { CourseDocumentList } from "@/components/learn/course-documents";
+import { CourseDocumentList, CoursePdfLinks } from "@/components/learn/course-documents";
 
 // Known slugs are prerendered; a new one renders in full before responding, so that search engines
 // get the whole page and a real 404 for an unknown slug.
@@ -482,6 +482,11 @@ export default async function TrainingPage({ params }: PageProps<"/formations/[s
               title={t("learn.documents.publicTitle")}
               documents={documents}
               single
+              className="rounded-[24px] bg-creme p-6"
+            />
+            <CoursePdfLinks
+              id="course-pdf"
+              slug={course.slug}
               className="rounded-[24px] bg-creme p-6"
             />
             {course.instructor && (

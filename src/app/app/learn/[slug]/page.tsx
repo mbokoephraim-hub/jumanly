@@ -30,7 +30,7 @@ import {
 } from "@/server/services/learn";
 import { planForCatalogLevel, talentPlanFor } from "@/server/services/plans";
 import { SuccessBurst } from "@/components/motion/success-burst";
-import { CourseDocumentList } from "@/components/learn/course-documents";
+import { CourseDocumentList, CoursePdfLinks } from "@/components/learn/course-documents";
 import { documentViewer, visibleDocuments } from "@/server/services/course-documents";
 
 export async function generateMetadata({
@@ -89,6 +89,7 @@ export default async function LearnCoursePage({
           title={t("learn.documents.title")}
           documents={documents}
         />
+        <CoursePdfLinks id="course-pdf" slug={course.slug} />
       </>
     );
   }
@@ -617,6 +618,7 @@ export default async function LearnCoursePage({
               title={t("learn.documents.title")}
               documents={documents.filter((document) => !document.lessonId)}
             />
+            <CoursePdfLinks id="course-pdf" slug={course.slug} support />
 
             {!locked && current.transcript && (
               <details className="rounded-[18px] bg-creme p-4">

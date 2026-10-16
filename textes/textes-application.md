@@ -2524,6 +2524,82 @@ Conventions :
 | `learn.documents.kind.template` | Modèle à remplir |
 | `learn.documents.kind.answer_key` | Corrigé |
 | `learn.documents.kind.other` | Autre document |
+| `learn.pdf.title` | En PDF |
+| `learn.pdf.programme` | Télécharger le programme |
+| `learn.pdf.programmeHint` | Objectifs, modules et leçons, pour le garder ou le partager. |
+| `learn.pdf.support` | Télécharger le support de cours |
+| `learn.pdf.supportHint` | Toutes les leçons en un seul fichier, pour lire hors connexion. |
+| `learn.pdf.doc.footer` | jumanly.io · assistant@jumanly.io · infojumanly@gmail.com |
+| `learn.pdf.doc.page` | Page {page} sur {total} |
+| `learn.pdf.doc.generated` | Document généré le {date, date, long} |
+| `learn.pdf.doc.level.beginner` | Débutant |
+| `learn.pdf.doc.level.intermediate` | Intermédiaire |
+| `learn.pdf.doc.level.advanced` | Avancé |
+| `learn.pdf.doc.kind.video` | Vidéo |
+| `learn.pdf.doc.kind.text` | Lecture |
+| `learn.pdf.doc.kind.exercise` | Exercice |
+| `learn.pdf.doc.kind.quiz` | Quiz |
+| `learn.pdf.doc.kind.resource` | Ressource |
+| `learn.pdf.doc.minutes` | {minutes} min |
+| `learn.pdf.doc.module` | Module {number} · {title} |
+| `learn.pdf.doc.program.eyebrow` | Programme de formation |
+| `learn.pdf.doc.program.summary` | En bref |
+| `learn.pdf.doc.program.audience` | Pour qui ? |
+| `learn.pdf.doc.program.prerequisites` | Prérequis |
+| `learn.pdf.doc.program.prerequisitesNone` | Aucun prérequis. |
+| `learn.pdf.doc.program.objectives` | Objectifs |
+| `learn.pdf.doc.program.level` | Niveau |
+| `learn.pdf.doc.program.duration` | Durée |
+| `learn.pdf.doc.program.lessons` | Leçons |
+| `learn.pdf.doc.program.lessonsValue` | {modules, plural, one {# module} other {# modules}}, {lessons, plural, one {# leçon} other {# leçons}} |
+| `learn.pdf.doc.program.certificate` | Attestation |
+| `learn.pdf.doc.program.certificateYes` | Attestation de réussite délivrée |
+| `learn.pdf.doc.program.certificateNo` | Pas d'attestation |
+| `learn.pdf.doc.program.program` | Programme |
+| `learn.pdf.doc.program.skills` | Compétences validées |
+| `learn.pdf.doc.program.url` | Fiche en ligne : {url} |
+| `learn.pdf.doc.support.eyebrow` | Support de cours |
+| `learn.pdf.doc.support.intro` | Toutes les leçons de la formation, module par module, pour lire hors connexion. |
+| `learn.pdf.doc.support.transcript` | Transcription de la vidéo |
+| `learn.pdf.doc.support.online` | Cette leçon se suit en ligne. |
+| `learn.pdf.doc.support.quiz` | Quiz de {count, plural, one {# question} other {# questions}}, à faire en ligne. |
+| `learn.pdf.doc.support.documents` | Documents de la formation |
+| `learn.pdf.doc.support.documentsHint` | Téléchargez-les depuis la page de la formation, connecté à votre compte. |
+| `learn.pdf.doc.quiz.eyebrow` | Quiz et corrigé · Réservé à l'équipe |
+| `learn.pdf.doc.quiz.title` | Quiz · {lesson} |
+| `learn.pdf.doc.quiz.rules` | Seuil de réussite : {score} % · Tentatives : {attempts} |
+| `learn.pdf.doc.quiz.unlimited` | illimitées |
+| `learn.pdf.doc.quiz.question` | Question {number} |
+| `learn.pdf.doc.quiz.type.single` | Une seule réponse |
+| `learn.pdf.doc.quiz.type.multiple` | Plusieurs réponses |
+| `learn.pdf.doc.quiz.type.text` | Réponse écrite |
+| `learn.pdf.doc.quiz.right` | Bonne réponse |
+| `learn.pdf.doc.quiz.accepted` | Réponses acceptées : {answers} |
+| `learn.pdf.doc.quiz.explanation` | Explication : {text} |
+| `learn.pdf.doc.quiz.empty` | Ce quiz n'a pas encore de question. |
+| `learn.pdf.doc.quiz.none` | Cette formation n'a pas encore de quiz. |
+| `learn.pdf.doc.certificate.watermark` | Aperçu |
+| `learn.pdf.doc.certificate.code` | JMN-APER-CU00 |
+| `learn.pdf.doc.report.eyebrow` | Bilan de la formation · Réservé à l'équipe |
+| `learn.pdf.doc.report.period` | Période : {period} |
+| `learn.pdf.doc.report.periodAll` | depuis la création de la formation |
+| `learn.pdf.doc.report.periodDays` | les {days} derniers jours |
+| `learn.pdf.doc.report.privacy` | Chiffres d'ensemble : aucun nom de talent n'apparaît dans ce bilan. |
+| `learn.pdf.doc.report.enrollments` | Inscriptions |
+| `learn.pdf.doc.report.enrolled` | Inscrits |
+| `learn.pdf.doc.report.completed` | Formation terminée |
+| `learn.pdf.doc.report.inProgress` | En cours |
+| `learn.pdf.doc.report.completionRate` | Taux d'achèvement |
+| `learn.pdf.doc.report.percent` | {value} % |
+| `learn.pdf.doc.report.stops` | Où s'arrêtent les inscrits qui n'ont pas terminé |
+| `learn.pdf.doc.report.notStarted` | Pas encore commencé |
+| `learn.pdf.doc.report.quizzes` | Quiz |
+| `learn.pdf.doc.report.quizLine` | Moyenne {average} % · {attempts, plural, one {# tentative} other {# tentatives}} · réussite {passRate} % |
+| `learn.pdf.doc.report.quizNone` | Aucune tentative sur la période. |
+| `learn.pdf.doc.report.certificates` | Attestations |
+| `learn.pdf.doc.report.issued` | Délivrées |
+| `learn.pdf.doc.report.revoked` | Révoquées |
+| `learn.pdf.doc.report.none` | Aucun quiz dans cette formation. |
 | `learn.player.notes.placeholder` | Prenez des notes. Elles sont privées et liées au moment de la vidéo. |
 | `learn.player.notes.add` | Ajouter une note à {time} |
 | `learn.player.notes.saved` | Note enregistrée. |
@@ -8845,6 +8921,7 @@ Conventions :
 | `admin.journal.action.course_document_replace` | a remplacé le fichier d'un document PDF |
 | `admin.journal.action.course_document_delete` | a supprimé un document PDF |
 | `admin.journal.action.course_document_move` | a déplacé un document PDF |
+| `admin.journal.action.course_pdf_download` | a téléchargé un PDF de formation |
 | `admin.journal.action.course_lesson_add` | a ajouté une leçon |
 | `admin.journal.action.course_lesson_update` | a modifié une leçon |
 | `admin.journal.action.course_lesson_delete` | a supprimé une leçon |
@@ -10062,6 +10139,26 @@ Conventions :
 | `admin.courses.v3.editor.documents.panelEmpty` | Aucun document rattaché à cette leçon. |
 | `admin.courses.v3.editor.documents.size.kb` | {size} Ko |
 | `admin.courses.v3.editor.documents.size.mb` | {size} Mo |
+| `admin.courses.v3.pdf.title` | PDF de la formation |
+| `admin.courses.v3.pdf.intro` | Générés à la demande à partir du contenu actuel de la formation. |
+| `admin.courses.v3.pdf.programme` | Programme |
+| `admin.courses.v3.pdf.programmeHint` | Public : objectifs, modules et leçons |
+| `admin.courses.v3.pdf.support` | Support de cours complet |
+| `admin.courses.v3.pdf.supportHint` | Toutes les leçons, pour lire hors connexion |
+| `admin.courses.v3.pdf.quiz` | Quiz et corrigé |
+| `admin.courses.v3.pdf.quizHint` | Équipe : questions, bonnes réponses, explications |
+| `admin.courses.v3.pdf.attestation` | Aperçu de l'attestation |
+| `admin.courses.v3.pdf.attestationHint` | Équipe : avec un nom d'exemple |
+| `admin.courses.v3.pdf.report` | Bilan de la formation |
+| `admin.courses.v3.pdf.reportHint` | Équipe : inscrits, achèvement, quiz, attestations, sans nom |
+| `admin.courses.v3.pdf.periodLabel` | Période du bilan |
+| `admin.courses.v3.pdf.period.30` | 30 derniers jours |
+| `admin.courses.v3.pdf.period.90` | 90 derniers jours |
+| `admin.courses.v3.pdf.period.365` | 12 derniers mois |
+| `admin.courses.v3.pdf.period.all` | Depuis la création |
+| `admin.courses.v3.pdf.reportSubmit` | Télécharger le bilan |
+| `admin.courses.v3.pdf.download` | Télécharger le PDF « {name} » |
+| `admin.courses.v3.pdf.logged` | Chaque téléchargement par l'équipe est journalisé. |
 
 ### `/admin/offres` · Modération des offres
 

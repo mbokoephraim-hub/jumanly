@@ -15,6 +15,7 @@ import {
   QuizOverview,
 } from "@/components/admin/formations-editor";
 import { CourseDocumentsCard, LessonDocuments } from "@/components/admin/formations-documents";
+import { CoursePdfCard } from "@/components/admin/formations-pdf";
 import { CourseAttestationForm, CourseFicheCard } from "@/components/admin/formations-fiche";
 import { DuplicateCoursePanel } from "@/components/admin/formations-readiness";
 import { CourseModulesCard, LessonEditor } from "@/components/admin/formations-modules";
@@ -175,6 +176,7 @@ export default async function AdminCourse({
           {step === "publication" && (
             <>
               <PublicationCard course={course} />
+              <CoursePdfCard course={course} full />
               <AuditHistory targetType="course" targetId={course.id} />
             </>
           )}
@@ -185,8 +187,9 @@ export default async function AdminCourse({
           />
         </div>
         {!lesson && (
-          <div className="lg:col-start-2 xl:sticky xl:top-4 xl:col-start-auto">
+          <div className="flex flex-col gap-4 lg:col-start-2 xl:sticky xl:top-4 xl:col-start-auto">
             <CourseReadinessCard course={course} step={step} />
+            {step !== "publication" && <CoursePdfCard course={course} />}
           </div>
         )}
       </div>

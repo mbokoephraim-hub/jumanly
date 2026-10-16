@@ -3608,6 +3608,102 @@
         "other": "Autre document"
       }
     },
+    "pdf": {
+      "title": "En PDF",
+      "programme": "Télécharger le programme",
+      "programmeHint": "Objectifs, modules et leçons, pour le garder ou le partager.",
+      "support": "Télécharger le support de cours",
+      "supportHint": "Toutes les leçons en un seul fichier, pour lire hors connexion.",
+      "doc": {
+        "footer": "jumanly.io · assistant@jumanly.io · infojumanly@gmail.com",
+        "page": "Page {page} sur {total}",
+        "generated": "Document généré le {date, date, long}",
+        "level": {
+          "beginner": "Débutant",
+          "intermediate": "Intermédiaire",
+          "advanced": "Avancé"
+        },
+        "kind": {
+          "video": "Vidéo",
+          "text": "Lecture",
+          "exercise": "Exercice",
+          "quiz": "Quiz",
+          "resource": "Ressource"
+        },
+        "minutes": "{minutes} min",
+        "module": "Module {number} · {title}",
+        "program": {
+          "eyebrow": "Programme de formation",
+          "summary": "En bref",
+          "audience": "Pour qui ?",
+          "prerequisites": "Prérequis",
+          "prerequisitesNone": "Aucun prérequis.",
+          "objectives": "Objectifs",
+          "level": "Niveau",
+          "duration": "Durée",
+          "lessons": "Leçons",
+          "lessonsValue": "{modules, plural, one {# module} other {# modules}}, {lessons, plural, one {# leçon} other {# leçons}}",
+          "certificate": "Attestation",
+          "certificateYes": "Attestation de réussite délivrée",
+          "certificateNo": "Pas d'attestation",
+          "program": "Programme",
+          "skills": "Compétences validées",
+          "url": "Fiche en ligne : {url}"
+        },
+        "support": {
+          "eyebrow": "Support de cours",
+          "intro": "Toutes les leçons de la formation, module par module, pour lire hors connexion.",
+          "transcript": "Transcription de la vidéo",
+          "online": "Cette leçon se suit en ligne.",
+          "quiz": "Quiz de {count, plural, one {# question} other {# questions}}, à faire en ligne.",
+          "documents": "Documents de la formation",
+          "documentsHint": "Téléchargez-les depuis la page de la formation, connecté à votre compte."
+        },
+        "quiz": {
+          "eyebrow": "Quiz et corrigé · Réservé à l'équipe",
+          "title": "Quiz · {lesson}",
+          "rules": "Seuil de réussite : {score} % · Tentatives : {attempts}",
+          "unlimited": "illimitées",
+          "question": "Question {number}",
+          "type": {
+            "single": "Une seule réponse",
+            "multiple": "Plusieurs réponses",
+            "text": "Réponse écrite"
+          },
+          "right": "Bonne réponse",
+          "accepted": "Réponses acceptées : {answers}",
+          "explanation": "Explication : {text}",
+          "empty": "Ce quiz n'a pas encore de question.",
+          "none": "Cette formation n'a pas encore de quiz."
+        },
+        "certificate": {
+          "watermark": "Aperçu",
+          "code": "JMN-APER-CU00"
+        },
+        "report": {
+          "eyebrow": "Bilan de la formation · Réservé à l'équipe",
+          "period": "Période : {period}",
+          "periodAll": "depuis la création de la formation",
+          "periodDays": "les {days} derniers jours",
+          "privacy": "Chiffres d'ensemble : aucun nom de talent n'apparaît dans ce bilan.",
+          "enrollments": "Inscriptions",
+          "enrolled": "Inscrits",
+          "completed": "Formation terminée",
+          "inProgress": "En cours",
+          "completionRate": "Taux d'achèvement",
+          "percent": "{value} %",
+          "stops": "Où s'arrêtent les inscrits qui n'ont pas terminé",
+          "notStarted": "Pas encore commencé",
+          "quizzes": "Quiz",
+          "quizLine": "Moyenne {average} % · {attempts, plural, one {# tentative} other {# tentatives}} · réussite {passRate} %",
+          "quizNone": "Aucune tentative sur la période.",
+          "certificates": "Attestations",
+          "issued": "Délivrées",
+          "revoked": "Révoquées",
+          "none": "Aucun quiz dans cette formation."
+        }
+      }
+    },
     "quiz": {
       "title": "Quiz · {moduleTitle}",
       "eyebrow": "Learn · {courseTitle}",
@@ -10577,6 +10673,7 @@
         "course_document_replace": "a remplacé le fichier d'un document PDF",
         "course_document_delete": "a supprimé un document PDF",
         "course_document_move": "a déplacé un document PDF",
+        "course_pdf_download": "a téléchargé un PDF de formation",
         "course_lesson_add": "a ajouté une leçon",
         "course_lesson_update": "a modifié une leçon",
         "course_lesson_delete": "a supprimé une leçon",
@@ -12081,6 +12178,30 @@
               "mb": "{size} Mo"
             }
           }
+        },
+        "pdf": {
+          "title": "PDF de la formation",
+          "intro": "Générés à la demande à partir du contenu actuel de la formation.",
+          "programme": "Programme",
+          "programmeHint": "Public : objectifs, modules et leçons",
+          "support": "Support de cours complet",
+          "supportHint": "Toutes les leçons, pour lire hors connexion",
+          "quiz": "Quiz et corrigé",
+          "quizHint": "Équipe : questions, bonnes réponses, explications",
+          "attestation": "Aperçu de l'attestation",
+          "attestationHint": "Équipe : avec un nom d'exemple",
+          "report": "Bilan de la formation",
+          "reportHint": "Équipe : inscrits, achèvement, quiz, attestations, sans nom",
+          "periodLabel": "Période du bilan",
+          "period": {
+            "30": "30 derniers jours",
+            "90": "90 derniers jours",
+            "365": "12 derniers mois",
+            "all": "Depuis la création"
+          },
+          "reportSubmit": "Télécharger le bilan",
+          "download": "Télécharger le PDF « {name} »",
+          "logged": "Chaque téléchargement par l'équipe est journalisé."
         }
       }
     },
