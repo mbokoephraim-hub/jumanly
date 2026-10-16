@@ -5,7 +5,7 @@ import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
-import { card, CareerTabs, eyebrow, pillClass } from "@/components/career/kit";
+import { card, eyebrow, pillClass } from "@/components/career/kit";
 import { Alert } from "@/components/ui";
 import { previewData } from "@/features/cv/document";
 import { templateKey } from "@/features/cv/examples";
@@ -143,7 +143,6 @@ export default async function CvTemplatesPage({
         eyebrow={[tHome("eyebrow"), cv.title].join(" · ")}
         title={t("templates.title")}
       />
-      <CareerTabs active="cv" />
       {query.erreur === "modele" && (
         <Alert tone="error" title={t("template.locked", { plan: lockPlan(selected) })} />
       )}

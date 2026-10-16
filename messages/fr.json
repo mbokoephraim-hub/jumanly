@@ -2248,7 +2248,19 @@
       "aria": "Navigation principale",
       "more": "Plus"
     },
-    "skipToContent": "Aller au contenu principal"
+    "skipToContent": "Aller au contenu principal",
+    "section": {
+      "aria": "Sous-rubriques de {section}",
+      "dashboard": "Tableau de bord",
+      "profile": "Mon profil",
+      "subscription": "Abonnement",
+      "catalog": "Catalogue",
+      "certificates": "Mes attestations",
+      "offers": "Offres",
+      "applications": "Mes candidatures",
+      "saved": "Offres enregistrées",
+      "account": "Mon espace"
+    }
   },
   "account": {
     "menu": {
@@ -10532,7 +10544,9 @@
         "offer": "Forfaits et abonnements",
         "content": "Formations et contenus",
         "control": "Modération et contrôle"
-      }
+      },
+      "costs": "Coûts et revenus",
+      "section": "Rubriques de « {group} »"
     },
     "env": {
       "badge": "Administration"

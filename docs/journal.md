@@ -2,6 +2,20 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v4 · étape 2 : nouvelle coque des espaces connectés (16 octobre 2026)
+
+- Colonne d'icônes partagée `src/components/layout/icon-rail.tsx` (celle de l'admin v3) : l'espace
+  connecté la reprend pour tous les forfaits (talent, recruteur, partenaire), avec Paramètres et
+  Se déconnecter en bas. Le forfait ne change pas le design, seulement les outils ouverts (droits).
+- Menu secondaire horizontal `src/components/layout/section-nav.tsx`, collé en haut de la page :
+  sous-rubriques de la rubrique active (Mon espace, Learn, Career, Jobs, Hire, Partenaire ; dans
+  l'admin, les rubriques du même groupe et « Coûts et revenus »), onglet courant souligné du
+  dégradé de la colonne ; à droite, espace, notifications et compte. Configuration
+  `src/config/section-navigation.ts`.
+- Les pastilles Career sous le titre (`CareerTabs`) sont retirées : le menu horizontal les remplace.
+  Le cadenas des outils verrouillés reste sur les cartes de l'accueil Career, pas dans le menu.
+- Fond clair à halos de l'admin pour tout l'espace connecté ; pilule du téléphone en dégradé.
+
 ## Jumanly Admin v4 · étape 1 : l'admin se voit tout de suite (16 octobre 2026)
 
 - Plan `docs/admin-v4/PLAN.md` (6 étapes : synchronisation, nouvelle coque des espaces connectés,

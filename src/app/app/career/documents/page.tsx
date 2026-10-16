@@ -4,7 +4,7 @@ import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
 import { AiGateNotice } from "@/components/career/ai-gate";
 import { DocumentsAiPanel, DocumentsAside } from "@/components/career/documents-kit";
-import { card, cardTitle, CareerTabs, IconTile, pillClass } from "@/components/career/kit";
+import { card, cardTitle, IconTile, pillClass } from "@/components/career/kit";
 import { Alert, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { proofreadAction } from "@/server/actions/career-documents";
@@ -49,7 +49,6 @@ export default async function DocumentsPage({ searchParams }: PageProps<"/app/ca
   return (
     <>
       <AppPageHeader eyebrow={t("career.documents.subtitle")} title={t("career.documents.title")} />
-      <CareerTabs active="documents" />
       {query.ok === "supprime" && <Alert tone="success" title={t("career.documents.deleted")} />}
       {query.erreur === "input" && <Alert tone="error" title={t("career.documents.error.input")} />}
 

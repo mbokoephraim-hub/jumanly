@@ -1846,6 +1846,16 @@ Conventions :
 | `appNav.mobile.aria` | Navigation principale |
 | `appNav.mobile.more` | Plus |
 | `appNav.skipToContent` | Aller au contenu principal |
+| `appNav.section.aria` | Sous-rubriques de {section} |
+| `appNav.section.dashboard` | Tableau de bord |
+| `appNav.section.profile` | Mon profil |
+| `appNav.section.subscription` | Abonnement |
+| `appNav.section.catalog` | Catalogue |
+| `appNav.section.certificates` | Mes attestations |
+| `appNav.section.offers` | Offres |
+| `appNav.section.applications` | Mes candidatures |
+| `appNav.section.saved` | Offres enregistrées |
+| `appNav.section.account` | Mon espace |
 
 ### Navigation · Menu du compte
 
@@ -8818,6 +8828,8 @@ Conventions :
 | `admin.nav.group.offer` | Forfaits et abonnements |
 | `admin.nav.group.content` | Formations et contenus |
 | `admin.nav.group.control` | Modération et contrôle |
+| `admin.nav.costs` | Coûts et revenus |
+| `admin.nav.section` | Rubriques de « {group} » |
 | `admin.sensitive.label` | Action sensible · motif obligatoire |
 | `admin.sensitive.reason` | Motif |
 | `admin.sensitive.close` | Fermer |

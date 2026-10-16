@@ -5,7 +5,7 @@ import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
 import { CopyButton } from "@/components/career/copy-button";
 import { DocumentsAiPanel, DocumentsAside } from "@/components/career/documents-kit";
-import { card, CareerTabs, pillClass } from "@/components/career/kit";
+import { card, pillClass } from "@/components/career/kit";
 import { Alert, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import {
@@ -56,7 +56,6 @@ export default async function DocumentPage({
   return (
     <>
       <AppPageHeader eyebrow={t("career.documents.subtitle")} title={t("career.documents.title")} />
-      <CareerTabs active="documents" />
 
       <div className="grid gap-5 lg:grid-cols-[290px_minmax(0,1fr)] xl:grid-cols-[290px_minmax(0,1fr)_360px]">
         <div className="order-3 lg:order-1 lg:row-span-2 xl:row-span-1">

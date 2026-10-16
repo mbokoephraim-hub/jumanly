@@ -3,7 +3,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
-import { card, cardTitle, CareerTabs, pillClass } from "@/components/career/kit";
+import { card, cardTitle, pillClass } from "@/components/career/kit";
 import { CopyField } from "@/components/partner/copy-field";
 import { Pattern } from "@/components/site/marketing";
 import { Alert, Checkbox, PlanLock, Select, TextArea, TextField } from "@/components/ui";
@@ -49,7 +49,6 @@ export default async function PortfolioPage({ searchParams }: PageProps<"/app/ca
   const header = (
     <>
       <AppPageHeader eyebrow={t("career.portfolio.subtitle")} title={t("career.portfolio.title")} />
-      <CareerTabs active="portfolio" />
     </>
   );
   if (tier === "none") {

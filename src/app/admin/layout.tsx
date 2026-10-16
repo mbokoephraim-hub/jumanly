@@ -1,10 +1,13 @@
-import { Fragment, Suspense } from "react";
+import { Suspense } from "react";
 import Link from "next/link";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { Icon, Logo, type IconName } from "@/components/brand";
+import { IconRail } from "@/components/layout/icon-rail";
 import { NavLink } from "@/components/layout/nav-link";
+import { SectionNav } from "@/components/layout/section-nav";
+import type { Section, SectionLink } from "@/config/section-navigation";
 import { Skeleton } from "@/components/ui";
 import { requireAdminShell } from "@/server/auth/session";
 
@@ -62,6 +65,24 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
   );
   const pill = (editorOnly ? pillKeys.editor : pillKeys.admin) as readonly string[];
   const [t, a11y] = await Promise.all([getTranslations("admin"), getTranslations("a11y")]);
+  const sections: Section[] = groups.map((group) => {
+    const items = visible.filter((link) => link.group === group);
+    const links: SectionLink[] = items.map((link) => ({
+      href: link.href,
+      label: t(`nav.${link.key}`),
+    }));
+    // The costs and revenue page belongs to the dashboard's group.
+    if (group === "steer" && !editorOnly)
+      links.push({ href: "/admin/indicateurs/couts", label: t("nav.costs") });
+    return {
+      match: [
+        ...items.map((link) => link.href),
+        ...(group === "steer" ? ["/admin/indicateurs"] : []),
+      ],
+      label: t("nav.section", { group: t(`nav.group.${group}`) }),
+      links,
+    };
+  });
   const home = editorOnly ? "/admin/formations" : "/admin";
   const initials = admin.name
     .split(/[\s-]+/)
@@ -82,41 +103,18 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
       </a>
       {/* Admin v3 (docs/admin-v3/PLAN.md, étape 1): a floating gradient column of icons, as tall as
           its content and centered in the window; each label shows in a tooltip. */}
-      <aside className="hidden shrink-0 lg:sticky lg:top-0 lg:flex lg:h-dvh lg:items-center lg:pl-4">
-        <div className="jm-admin-rail flex w-[68px] flex-col items-center gap-1.5 px-3.5 py-3">
-          <Link
-            href={home}
-            aria-label={t("nav.home")}
-            className="jm-admin-link relative mb-1 grid size-10 place-items-center rounded-[13px]"
-          >
-            <Logo variant="tile" height={40} />
-            <span aria-hidden className="jm-admin-tip">
-              {t("nav.title")} · {t("env.badge")}
-            </span>
-          </Link>
-          <nav aria-label={t("nav.title")} className="flex flex-col items-center gap-1.5">
-            {groups
-              .map((group) => ({ group, items: visible.filter((link) => link.group === group) }))
-              .filter(({ items }) => items.length > 0)
-              .map(({ group, items }, index) => (
-                <Fragment key={group}>
-                  {index > 0 && <span aria-hidden className="jm-admin-sep" />}
-                  <ul aria-label={t(`nav.group.${group}`)} className="flex flex-col gap-0.5">
-                    {items.map((link) => (
-                      <li key={link.key}>
-                        <NavLink
-                          href={link.href}
-                          label={t(`nav.${link.key}`)}
-                          icon={<Icon name={link.icon} />}
-                          placement="rail"
-                        />
-                      </li>
-                    ))}
-                  </ul>
-                </Fragment>
-              ))}
-          </nav>
-          <span aria-hidden className="jm-admin-sep" />
+      <IconRail
+        home={home}
+        homeLabel={t("nav.home")}
+        homeTip={`${t("nav.title")} · ${t("env.badge")}`}
+        label={t("nav.title")}
+        groups={groups.map((group) => ({
+          label: t(`nav.group.${group}`),
+          items: visible
+            .filter((link) => link.group === group)
+            .map((link) => ({ ...link, label: t(`nav.${link.key}`) })),
+        }))}
+        footer={
           <Link
             href="/app"
             aria-label={t("nav.backToApp")}
@@ -127,8 +125,8 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
               {t("nav.backToApp")}
             </span>
           </Link>
-        </div>
-      </aside>
+        }
+      />
 
       <header className="flex h-[72px] items-center gap-2.5 px-4 text-blanc lg:hidden">
         <Link href={home} className="shrink-0 rounded-sm">
@@ -161,6 +159,10 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
       </header>
 
       <div className="min-h-[calc(100dvh-72px)] min-w-0 flex-1 rounded-t-[28px] bg-creme lg:min-h-0 lg:rounded-none lg:bg-transparent">
+        {/* Admin v4, étape 2: the other sections of the same group, as a horizontal menu. */}
+        <div className="jm-topbar sticky top-0 z-30 flex items-center px-4 pt-3 sm:px-6 lg:h-[60px] lg:px-6 lg:pt-0 xl:px-8">
+          <SectionNav sections={sections} className="flex-1" />
+        </div>
         <main
           id="content"
           tabIndex={-1}

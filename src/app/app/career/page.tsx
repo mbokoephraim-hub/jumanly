@@ -7,7 +7,7 @@ import { Icon } from "@/components/brand/icon";
 import { CareerArt } from "@/components/career/home/art";
 import { CareerGroup, CareerHero, CareerUpgradeBand } from "@/components/career/home/sections";
 import { CareerToolCard, ToolLink, type ToolBadge } from "@/components/career/home/tool-card";
-import { AiBrand, AiPanel, CareerTabs, pillClass, Why } from "@/components/career/kit";
+import { AiBrand, AiPanel, pillClass, Why } from "@/components/career/kit";
 import { Gauge } from "@/components/motion/gauge";
 import { initialsOf } from "@/components/hire/kit";
 import { dynamic } from "@/i18n/dynamic";
@@ -204,7 +204,6 @@ export default async function CareerPage() {
   return (
     <>
       <AppPageHeader eyebrow={t("eyebrow")} title={t("title")} />
-      <CareerTabs active="home" locked={locked} />
 
       <CareerHero
         journey={journey}

@@ -11,7 +11,6 @@ import {
   TemplatesBand,
   type CvRow,
 } from "@/components/career/cv/list";
-import { CareerTabs } from "@/components/career/kit";
 import { Alert } from "@/components/ui";
 import { cvFonts } from "@/features/cv/render/palette";
 import {
@@ -92,7 +91,6 @@ export default async function CvListPage({ searchParams }: PageProps<"/app/caree
   return (
     <>
       <AppPageHeader eyebrow={tHome("eyebrow")} title={t("title")} />
-      <CareerTabs active="cv" />
       {params.ok === "supprime" && <Alert tone="success" title={t("deleted")} />}
       {params.ok === "principal" && <Alert tone="success" title={t("saved")} />}
       {params.erreur === "limite" && <Alert tone="error" title={t("limit", { max: MAX_CVS })} />}
