@@ -2,6 +2,24 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v4 · étape 5 : les grands bandeaux deviennent des cartes légères (16 octobre 2026)
+
+- Les gros blocs sombres en tête de page sont remplacés par des cartes blanches à bordure fine,
+  sans illustration ni motif : accueil Career (parcours en 4 étapes, score du CV, prochaine étape,
+  boutons ; la phrase d'accroche passe sous le titre de page), Mes CV (chiffres et boutons),
+  accueil du diagnostic (la scène animée reste à droite), formation mise en avant de Learn,
+  objectif du plan de progression, formule actuelle dans Mon abonnement, « Votre prochaine étape »
+  du tableau de bord.
+- Studio formations (admin) : vignettes des cartes moins hautes (16/7).
+- Menu horizontal : les onglets qui ne tiennent pas s'estompent à droite et défilent ; la
+  recherche est un peu plus étroite entre 1024 et 1536 px pour laisser la place aux onglets.
+- Espaces recruteur, partenaire et admin : déjà en cartes claires après les étapes 3 et 4,
+  vérifiés à l'écran sans autre changement.
+- Hauteur à 1440 × 900 (étape 4 → étape 5, en px) : `/app` 1238 → 1206, `/app/career`
+  2292 → 1978, `/app/learn` 1610 → 1486, `/app/abonnement` 1344 → 1277, `/admin/formations`
+  4793 → 4562. Mes CV 1784, diagnostic 1582, plan 900 (tient dans l'écran).
+- Captures : `/mnt/project-files/captures/admin-v4/etape-5/`.
+
 ## Jumanly Admin v4 · étape 4 : palette épurée et éléments plus légers (16 octobre 2026)
 
 - Espaces connectés et admin (`.jm-admin-bg`, `src/styles/admin.css`) : fond Crème plus clair

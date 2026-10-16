@@ -1,11 +1,10 @@
 import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Character, Orbi } from "@/components/brand/character";
+import { Character } from "@/components/brand/character";
 import { Icon } from "@/components/brand/icon";
 import { cardShadow } from "@/components/career/home/tool-card";
 import { pillClass, ScoreRing } from "@/components/career/kit";
-import { Pattern } from "@/components/site/marketing";
 import { Button } from "@/components/ui";
 import { templateKey } from "@/features/cv/examples";
 import type { CvTemplate } from "@/features/cv/templates/registry";
@@ -46,15 +45,7 @@ export async function NewCvButton({
   const t = await getTranslations("career.cv");
   return (
     <form action={createCv}>
-      <button
-        type="submit"
-        disabled={disabled}
-        className={pillClass(
-          tone,
-          "md",
-          tone === "lime" ? "shadow-[0_14px_30px_-14px_rgb(166_242_107/0.9)]" : undefined,
-        )}
-      >
+      <button type="submit" disabled={disabled} className={pillClass(tone, "md")}>
         <Icon name="plus" className="size-4" />
         {t("new")}
       </button>
@@ -62,7 +53,7 @@ export async function NewCvButton({
   );
 }
 
-/** A glass card of the hero, with its Signature bar. */
+/** A figure of the « Mes CV » head, with its Signature bar. */
 function HeroStat({
   label,
   children,
@@ -73,11 +64,11 @@ function HeroStat({
   ratio: number;
 }) {
   return (
-    <div className="flex min-w-0 flex-1 flex-col gap-1.5 rounded-[18px] border border-blanc/12 bg-blanc/6 px-4 py-3 backdrop-blur-sm sm:max-w-[200px]">
-      <dt className="text-xs text-[#C9DDD6]">{label}</dt>
-      <dd className="flex flex-col gap-2">
-        <span className="text-sm text-[#C9DDD6]">{children}</span>
-        <span aria-hidden className="block h-1.5 overflow-hidden rounded-md bg-blanc/12">
+    <div className="flex min-w-0 flex-1 flex-col gap-1.5 rounded-[14px] bg-creme px-3.5 py-2.5 sm:max-w-[200px]">
+      <dt className="text-xs text-ardoise">{label}</dt>
+      <dd className="flex flex-col gap-1.5">
+        <span className="text-sm text-ardoise">{children}</span>
+        <span aria-hidden className="block h-1.5 overflow-hidden rounded-md bg-gris-clair">
           <span
             className="jm-gauge block h-full origin-left rounded-md bg-[image:var(--jm-degrade-signature)]"
             style={{ transform: `scaleX(${Math.max(0, Math.min(1, ratio))})` }}
@@ -88,69 +79,48 @@ function HeroStat({
   );
 }
 
-/** § 1.1: title, the two real figures, the buttons, and the fan of the templates in use. */
+/**
+ * § 1.1, lightened in Admin v4 étape 5: one white card with the lead, the two real figures and the
+ * buttons (the page title sits above, in the page header).
+ */
 export async function CvListHero({
   count,
   max,
   primary,
-  fan,
 }: {
   count: number;
   max: number;
   primary: CvRow | null;
-  /** Templates actually used by the CVs (up to 3), else the first included ones. */
-  fan: CvTemplate[];
 }) {
   const t = await getTranslations("career.cv");
   const tHome = await getTranslations("career.home");
   const tAi = await getTranslations("ai.cvCoach.score");
-  const name = await templateNamer();
   // « {count} sur {max} »: the count is written large, the rest of the sentence after it.
   const countValue = t("list.countValue", { count, max });
   const countRest = countValue.startsWith(String(count))
     ? countValue.slice(String(count).length).trim()
     : countValue;
-  const fanStyle = [
-    { rotate: "-12deg", x: "-58%", y: "10px", delay: "-1s" },
-    { rotate: "-2deg", x: "-50%", y: "-14px", delay: "-3s" },
-    { rotate: "9deg", x: "-42%", y: "8px", delay: "-5s" },
-  ];
   return (
     <section
       aria-labelledby="cv-hero-title"
       {...enter(0)}
-      className="jm-ch-in relative isolate grid overflow-hidden rounded-[32px] bg-[image:var(--jm-degrade-profondeur)] text-blanc xl:grid-cols-[minmax(0,1.1fr)_minmax(0,0.9fr)]"
+      className="jm-ch-in grid gap-4 rounded-[22px] border border-sapin/8 bg-blanc p-4 sm:p-5 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center xl:gap-8"
     >
-      <div aria-hidden className="absolute -inset-[15%] -z-10">
-        <span className="jm-drift absolute inset-0 bg-[radial-gradient(420px_300px_at_78%_55%,rgb(166_242_107/0.24),transparent_70%),radial-gradient(380px_260px_at_98%_0%,rgb(47_211_166/0.28),transparent_70%),radial-gradient(500px_300px_at_10%_100%,rgb(30_154_100/0.35),transparent_70%)] [animation-duration:24s]" />
-      </div>
-      <Pattern
-        name="motif-trajectoires-sombre"
-        size={320}
-        opacity={0.35}
-        className="-z-10 [mask-image:linear-gradient(90deg,transparent_25%,#000)]"
-      />
-
-      <div className="flex min-w-0 flex-col gap-[18px] px-[22px] pt-[26px] pb-2 lg:py-9 lg:pr-2 lg:pl-11">
-        <p className="flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.16em] text-neon uppercase before:h-0.5 before:w-[22px] before:rounded-sm before:bg-neon">
-          {[tHome("eyebrow"), t("title")].join(" · ")}
-        </p>
-        <h2
-          id="cv-hero-title"
-          className="text-[34px] leading-[1.05] font-semibold tracking-[-0.035em] lg:text-[44px]"
-        >
+      <div className="flex min-w-0 flex-col gap-1">
+        <h2 id="cv-hero-title" className="text-[15px] font-semibold text-sapin">
           {t("myCvs")}
         </h2>
-        <p className="max-w-[46ch] text-sm leading-[1.6] font-light text-[#C9DDD6] lg:text-base">
-          {t("list.lead")}
-        </p>
-        <dl className="flex flex-wrap gap-3">
+        <p className="max-w-[60ch] text-sm leading-5 text-ardoise">{t("list.lead")}</p>
+        {count >= max && <p className="text-xs text-ardoise">{t("limit", { max })}</p>}
+      </div>
+      <div className="flex flex-wrap items-center gap-3">
+        <dl className="flex flex-wrap gap-2">
           <HeroStat label={t("list.count")} ratio={count / max}>
-            <b className="text-[22px] font-semibold text-blanc">{count}</b> {countRest}
+            <b className="text-[18px] font-semibold text-sapin">{count}</b> {countRest}
           </HeroStat>
           {primary && (
             <HeroStat label={t("list.primaryScore")} ratio={primary.score.total / 100}>
-              <b className="text-[22px] font-semibold text-blanc">{primary.score.total}</b>{" "}
+              <b className="text-[18px] font-semibold text-sapin">{primary.score.total}</b>{" "}
               {[tHome("stats.cvUnit"), tAi(`level.${primary.score.level}`).toLowerCase()].join(
                 " · ",
               )}
@@ -159,75 +129,16 @@ export async function CvListHero({
         </dl>
         {/* Without any CV, the large empty card below carries the button. */}
         {count > 0 && (
-          <div className="flex flex-wrap gap-2.5">
+          <div className="flex flex-wrap gap-2">
             <NewCvButton disabled={count >= max} />
             {primary && (
-              <Link href={`/app/career/cv/modeles?cv=${primary.id}`} className={pillClass("ghost")}>
+              <Link
+                href={`/app/career/cv/modeles?cv=${primary.id}`}
+                className={pillClass("outline")}
+              >
                 {t("list.chooseTemplate")}
               </Link>
             )}
-          </div>
-        )}
-        {count >= max && <p className="text-xs text-[#C9DDD6]">{t("limit", { max })}</p>}
-      </div>
-
-      <div
-        aria-hidden
-        className="relative min-h-[300px] [--spread:64px] sm:min-h-[340px] sm:[--spread:96px] xl:min-h-[380px]"
-      >
-        <span className="absolute bottom-[26px] left-[46%] h-[46px] w-[260px] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgb(166_242_107/0.45),rgb(166_242_107/0))] blur-[2px]" />
-        {fan.map((template, index) => {
-          const place = fanStyle[index] ?? fanStyle[1]!;
-          return (
-            <span
-              key={`${template.id}-${index}`}
-              className="absolute top-[30px] left-[44%] sm:top-[36px]"
-              style={{
-                transform: `translate(${place.x}, ${place.y}) rotate(${place.rotate})`,
-                zIndex: index === 1 ? 2 : 1,
-                marginLeft: `calc(${index - 1} * var(--spread))`,
-              }}
-            >
-              <span className="jm-float block" style={{ animationDelay: place.delay }}>
-                <CvSheet
-                  template={template}
-                  width={index === 1 ? 124 : 104}
-                  className="sm:hidden"
-                />
-                <CvSheet
-                  template={template}
-                  width={index === 1 ? 168 : 146}
-                  className="hidden sm:block"
-                />
-              </span>
-            </span>
-          );
-        })}
-        <div className="jm-float absolute top-[22px] right-[14%]" style={{ animationDelay: "-2s" }}>
-          <Orbi size={34} />
-        </div>
-        <span
-          className="jm-ch-spark jm-float absolute top-[24px] left-[18%] size-4 bg-neon"
-          style={{ animationDelay: "-4s" }}
-        />
-        <div className="jm-float absolute right-[2%] bottom-[18px] z-[3] drop-shadow-[0_20px_30px_rgb(0_0_0/0.35)]">
-          <span className="block sm:hidden">
-            <Character name="amani" pose="montre" height={200} />
-          </span>
-          <span className="hidden sm:block">
-            <Character name="amani" pose="montre" height={250} />
-          </span>
-        </div>
-        {primary && (
-          <div
-            className="jm-float absolute bottom-[34px] left-[4%] z-[3] flex -rotate-3 items-center gap-2.5 rounded-[18px] bg-blanc/96 px-3.5 py-3 text-sapin shadow-[0_24px_50px_-20px_rgb(0_0_0/0.55)]"
-            style={{ animationDelay: "-1.5s" }}
-          >
-            <ScoreRing value={primary.score.total} label={String(primary.score.total)} size={40} />
-            <span className="text-xs leading-[1.3]">
-              <b className="block text-[13px]">{t("default")}</b>
-              <small className="text-[11px] text-ardoise">{name(primary.template)}</small>
-            </span>
           </div>
         )}
       </div>

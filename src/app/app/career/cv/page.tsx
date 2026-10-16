@@ -71,11 +71,6 @@ export default async function CvListPage({ searchParams }: PageProps<"/app/caree
 
   const included = (template: CvTemplate) => includesAccess(granted, template.access);
   const includedTemplates = cvTemplateRegistry.filter(included);
-  const used = [...new Map(cvs.map((cv) => [cv.template.id, cv.template])).values()];
-  const heroFan = [
-    ...used,
-    ...includedTemplates.filter((template) => !used.includes(template)),
-  ].slice(0, 3);
   const lockedTemplate = cvTemplateRegistry.find((template) => !included(template));
   const locked = lockedTemplate
     ? {
@@ -95,7 +90,7 @@ export default async function CvListPage({ searchParams }: PageProps<"/app/caree
       {params.ok === "principal" && <Alert tone="success" title={t("saved")} />}
       {params.erreur === "limite" && <Alert tone="error" title={t("limit", { max: MAX_CVS })} />}
 
-      <CvListHero count={cvs.length} max={MAX_CVS} primary={primary} fan={heroFan} />
+      <CvListHero count={cvs.length} max={MAX_CVS} primary={primary} />
 
       {cvs.length === 0 ? (
         <CvEmptyCard />

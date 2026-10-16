@@ -4,16 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { AiOrb } from "@/components/brand/ai-orb";
 import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
-import {
-  card,
-  cardTitle,
-  eyebrow,
-  IconTile,
-  pillClass,
-  ScoreRing,
-  Why,
-} from "@/components/career/kit";
-import { Pattern } from "@/components/site/marketing";
+import { card, cardTitle, IconTile, pillClass, ScoreRing, Why } from "@/components/career/kit";
 import { Alert, PlanLock, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import {
@@ -90,26 +81,20 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
         <div className="flex min-w-0 flex-col gap-5">
           <section
             aria-labelledby="plan-goal-title"
-            className="relative grid gap-5 overflow-hidden rounded-[28px] bg-sapin p-6 text-blanc sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center lg:p-[30px]"
+            className="relative grid gap-4 overflow-hidden rounded-[22px] border border-sapin/8 bg-blanc p-4 text-sapin sm:grid-cols-[minmax(0,1fr)_auto] sm:items-center sm:p-5"
           >
-            <Pattern
-              name="motif-trajectoires-sombre"
-              size={260}
-              opacity={0.45}
-              className="[mask-image:linear-gradient(90deg,transparent_35%,#000)]"
-            />
             <div className="relative flex flex-col gap-2">
-              <p className={cx(eyebrow, "text-neon")}>{t("career.plan.goal.text")}</p>
+              <p className="text-xs font-medium text-ardoise">{t("career.plan.goal.text")}</p>
               <h2
                 id="plan-goal-title"
-                className="text-[24px] leading-[1.15] font-bold tracking-tight lg:text-[30px]"
+                className="text-[20px] leading-[1.2] font-semibold tracking-tight lg:text-[22px]"
               >
                 {plan?.goal || t("career.plan.goal.add")}
               </h2>
-              <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-blanc/85">
+              <p className="flex flex-wrap items-center gap-x-4 gap-y-1 text-[13px] text-ardoise">
                 {plan && (
                   <span className="flex items-center gap-1.5">
-                    <Icon name="calendrier" className="size-4 text-lime" />
+                    <Icon name="calendrier" className="size-4 text-feuille" />
                     {t("career.plan.updated", { date: plan.updatedAt })}
                   </span>
                 )}
@@ -117,7 +102,7 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
                   href="/app/career/diagnostic"
                   className="flex items-center gap-1.5 hover:underline"
                 >
-                  <Icon name="objectif" className="size-4 text-lime" />
+                  <Icon name="objectif" className="size-4 text-feuille" />
                   {t("career.diagnostic.title")}
                 </Link>
               </p>
@@ -128,12 +113,11 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
                   value={doneCount}
                   max={steps.length}
                   label={t("career.home.stats.ratio", { value: doneCount, max: steps.length })}
-                  size={92}
-                  dark
+                  size={64}
                 />
                 <div className="flex max-w-[220px] flex-col gap-1">
                   <p className="text-[15px] font-semibold">{progress}</p>
-                  <p className="text-xs leading-[17px] text-blanc/80">
+                  <p className="text-xs leading-[17px] text-ardoise">
                     {t("career.plan.encouragement", { done: doneCount })}
                   </p>
                 </div>

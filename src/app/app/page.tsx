@@ -5,7 +5,6 @@ import { redirect } from "next/navigation";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
 import { DailyWelcome } from "@/components/app/daily-welcome";
-import { Pattern } from "@/components/site/marketing";
 import { Alert, ButtonLink, ProgressBar } from "@/components/ui";
 import { criterionText } from "@/components/matching/talent-why";
 import { dynamic } from "@/i18n/dynamic";
@@ -352,42 +351,28 @@ export default async function DashboardPage() {
 
       <section
         aria-labelledby="next-step"
-        className="relative flex flex-wrap items-center gap-4 overflow-hidden rounded-[24px] bg-sapin px-5 py-5 text-blanc lg:flex-nowrap lg:gap-5 lg:px-[26px]"
+        className="relative flex flex-wrap items-center gap-4 overflow-hidden rounded-[22px] border border-sapin/8 bg-blanc px-4 py-4 text-sapin lg:flex-nowrap lg:gap-5 lg:px-5"
       >
-        <Pattern
-          name="motif-trajectoires-sombre"
-          size={260}
-          opacity={0.35}
-          className="[mask-image:linear-gradient(90deg,transparent_20%,#000)]"
-        />
         <span
           aria-hidden
-          className="relative flex size-12 shrink-0 items-center justify-center rounded-[16px] bg-lime text-sapin lg:size-[52px]"
+          className="relative flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-lime text-sapin"
         >
           <Icon name={nextStep.icon} className="size-6" />
         </span>
         <div className="relative flex min-w-0 flex-1 basis-56 flex-col gap-1">
-          <p id="next-step" className="text-xs font-bold tracking-[0.12em] text-neon uppercase">
+          <p id="next-step" className="text-xs font-medium text-ardoise">
             {t("talent.dashboard.nextStep.title")}
           </p>
-          <p className="text-base leading-[22px] font-semibold lg:text-lg lg:leading-6">
-            {nextStep.text}
-          </p>
-          <p className="text-[13px] text-blanc/70 max-lg:hidden">{nextStep.hint}</p>
+          <p className="text-[15px] leading-[21px] font-semibold">{nextStep.text}</p>
+          <p className="text-[13px] text-ardoise max-lg:hidden">{nextStep.hint}</p>
         </div>
         <Link
           href={nextStep.href}
-          className="relative flex h-11 items-center gap-2 rounded-pill bg-lime px-6 text-[15px] font-semibold text-sapin transition-transform hover:-translate-y-0.5 lg:h-12"
+          className="relative flex h-10 items-center gap-2 rounded-pill bg-sapin px-5 text-[14px] font-semibold text-blanc transition-transform hover:-translate-y-0.5"
         >
           {t("talent.dashboard.nextStep.cta")}
           <Icon name="chev-r" className="size-4" />
         </Link>
-        {/* eslint-disable-next-line @next/next/no-img-element -- static SVG illustration */}
-        <img
-          src="/illustrations/jumanly-kofi-montre.svg"
-          alt=""
-          className="relative -mr-1.5 -mb-5 h-[116px] w-auto self-end max-lg:hidden"
-        />
       </section>
 
       <ul className="grid grid-cols-2 gap-3 lg:grid-cols-4 lg:gap-4">
