@@ -30,6 +30,8 @@ import {
 } from "@/server/services/learn";
 import { planForCatalogLevel, talentPlanFor } from "@/server/services/plans";
 import { SuccessBurst } from "@/components/motion/success-burst";
+import { CourseDocumentList } from "@/components/learn/course-documents";
+import { documentViewer, visibleDocuments } from "@/server/services/course-documents";
 
 export async function generateMetadata({
   params,
@@ -64,6 +66,8 @@ export default async function LearnCoursePage({
   const t = await getTranslations();
   const td = dynamic(t);
   const { course, enrollment, open, saved } = found;
+  // Admin v3, étape 5: the PDF documents this talent may download.
+  const documents = await visibleDocuments(db, course, await documentViewer(db, user, course));
   const requiredPlan = planForCatalogLevel(plans, course.requiredLevel);
   const param = (key: string) =>
     typeof query[key] === "string" ? (query[key] as string) : undefined;
@@ -80,6 +84,11 @@ export default async function LearnCoursePage({
         {param("enregistre") === "1" && <Alert tone="success" title={t("learn.save.success")} />}
         {param("enregistre") === "0" && <Alert tone="info" title={t("learn.save.removed")} />}
         <CourseOverview course={course} open={open} saved={saved} planName={requiredPlan?.name} />
+        <CourseDocumentList
+          id="course-documents"
+          title={t("learn.documents.title")}
+          documents={documents}
+        />
       </>
     );
   }
@@ -595,6 +604,19 @@ export default async function LearnCoursePage({
                 </ul>
               </section>
             )}
+
+            {!locked && (
+              <CourseDocumentList
+                id="lesson-documents"
+                title={t("learn.documents.lessonTitle")}
+                documents={documents.filter((document) => document.lessonId === current.id)}
+              />
+            )}
+            <CourseDocumentList
+              id="course-documents"
+              title={t("learn.documents.title")}
+              documents={documents.filter((document) => !document.lessonId)}
+            />
 
             {!locked && current.transcript && (
               <details className="rounded-[18px] bg-creme p-4">

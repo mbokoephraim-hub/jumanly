@@ -20,7 +20,15 @@ import {
 /** The step of the guided path « Prête à publier ? » each editor step stands for. */
 const readinessOf = Object.fromEntries(
   Object.entries(editorStepOf).map(([readiness, step]) => [step, readiness]),
-) as Record<EditorStep, ReadinessStep>;
+) as Partial<Record<EditorStep, ReadinessStep>>;
+
+type Translate = Awaited<ReturnType<typeof getTranslations<"admin.courses">>>;
+
+/** Name of a step: the step of the guided path, or « Documents » (no publication check). */
+const stepName = (t: Translate, step: EditorStep) => {
+  const readiness = readinessOf[step];
+  return readiness ? t(`v2.step.${readiness}`) : t("v3.editor.documents.step");
+};
 
 export const editorHref = (courseId: string, step: EditorStep, anchor = "") =>
   `/admin/formations/${courseId}?etape=${step}${anchor}`;
@@ -32,14 +40,19 @@ export const editorHref = (courseId: string, step: EditorStep, anchor = "") =>
 export async function EditorStepNav({
   course,
   current,
+  documents,
 }: {
   course: AdminCourse;
   current: EditorStep;
+  /** Number of PDF documents: the « Documents » step is ticked when there is one. */
+  documents: number;
 }) {
   const t = await getTranslations("admin.courses");
   const readiness = courseReadiness(course);
   const done = (step: EditorStep) =>
-    readiness.steps.find((item) => item.step === readinessOf[step])?.done ?? false;
+    step === "documents"
+      ? documents > 0
+      : (readiness.steps.find((item) => item.step === readinessOf[step])?.done ?? false);
   return (
     <nav
       aria-label={t("v3.editor.nav")}
@@ -81,7 +94,7 @@ export async function EditorStepNav({
                 >
                   {complete && !on ? <Icon name="check" className="size-3.5" /> : index + 1}
                 </span>
-                {t(`v2.step.${readinessOf[step]}`)}
+                {stepName(t, step)}
                 <span className="sr-only">
                   {" "}
                   {complete ? t("v2.readiness.done") : t("v2.readiness.todo")}
@@ -105,7 +118,7 @@ export async function EditorStepIntro({ step }: { step: EditorStep }) {
         {t("v3.editor.position", { number: index + 1, total: editorSteps.length })}
       </p>
       <h2 className="text-[22px] leading-7 font-semibold tracking-[-0.02em] lg:text-[26px] lg:leading-8">
-        {t(`v2.step.${readinessOf[step]}`)}
+        {stepName(t, step)}
       </h2>
       <p className="max-w-[68ch] text-[13px] leading-[19px] text-ardoise">
         {t(`v3.editor.intro.${step}`)}
@@ -142,14 +155,14 @@ export async function EditorStepPager({
             size="sm"
             icon={<Icon name="chev-l" />}
           >
-            {t("v3.editor.previous", { name: t(`v2.step.${readinessOf[previous]}`) })}
+            {t("v3.editor.previous", { name: stepName(t, previous) })}
           </ButtonLink>
         ) : (
           <span />
         )}
         {next && (
           <ButtonLink href={editorHref(course.id, next)} size="sm">
-            {t("v3.editor.next", { name: t(`v2.step.${readinessOf[next]}`) })}
+            {t("v3.editor.next", { name: stepName(t, next) })}
           </ButtonLink>
         )}
       </div>

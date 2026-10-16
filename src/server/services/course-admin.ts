@@ -596,6 +596,7 @@ export const editorSteps = [
   "informations",
   "public",
   "programme",
+  "documents",
   "quiz",
   "attestation",
   "publication",

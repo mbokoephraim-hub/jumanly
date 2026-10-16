@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { IconTile, Tag, adminCard, adminLabel, adminTitle } from "@/components/admin/kit";
@@ -373,11 +374,14 @@ export async function LessonEditor({
   lessonId,
   query,
   step = "programme",
+  documents,
 }: {
   course: AdminCourse;
   lessonId: string;
   query: (key: string) => string;
   step?: "programme" | "quiz";
+  /** The PDF documents of the lesson (Admin v3, étape 5), shown under the lesson form. */
+  documents?: ReactNode;
 }) {
   const t = await getTranslations("admin.courses");
   const lesson = course.modules
@@ -499,6 +503,8 @@ export async function LessonEditor({
           {t("lesson.save")}
         </Button>
       </form>
+
+      {documents}
 
       {lesson.kind === "video" && <LessonVideo course={course} lesson={lesson} query={query} />}
 

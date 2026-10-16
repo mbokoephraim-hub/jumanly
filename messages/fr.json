@@ -3588,6 +3588,26 @@
         "certificateHint": "Ajoutée automatiquement à votre profil Career."
       }
     },
+    "documents": {
+      "title": "Documents de la formation",
+      "lessonTitle": "Documents de la leçon",
+      "publicTitle": "Documents à télécharger",
+      "meta": "{kind} · {pages, plural, one {# page} other {# pages}} · {size}",
+      "download": "Télécharger",
+      "downloadNamed": "Télécharger « {title} »",
+      "size": {
+        "kb": "{size} Ko",
+        "mb": "{size} Mo"
+      },
+      "kind": {
+        "support": "Support de cours",
+        "exercises": "Fiche d'exercices",
+        "reading": "Lecture complémentaire",
+        "template": "Modèle à remplir",
+        "answer_key": "Corrigé",
+        "other": "Autre document"
+      }
+    },
     "quiz": {
       "title": "Quiz · {moduleTitle}",
       "eyebrow": "Learn · {courseTitle}",
@@ -10552,6 +10572,11 @@
         "course_module_delete": "a supprimé un module",
         "course_module_move": "a déplacé un module",
         "course_lesson_move": "a déplacé une leçon",
+        "course_document_add": "a ajouté un document PDF",
+        "course_document_update": "a modifié un document PDF",
+        "course_document_replace": "a remplacé le fichier d'un document PDF",
+        "course_document_delete": "a supprimé un document PDF",
+        "course_document_move": "a déplacé un document PDF",
         "course_lesson_add": "a ajouté une leçon",
         "course_lesson_update": "a modifié une leçon",
         "course_lesson_delete": "a supprimé une leçon",
@@ -11944,7 +11969,8 @@
             "programme": "Construisez le programme module par module. Déplacez les modules et les leçons avec les flèches, ouvrez une leçon pour la rédiger.",
             "quiz": "Les quiz de la formation, leurs questions et leur seuil de réussite.",
             "attestation": "L'attestation délivrée à la fin de la formation, ses conditions et son apparence.",
-            "publication": "Le récapitulatif avant la mise en ligne, puis le statut de la formation."
+            "publication": "Le récapitulatif avant la mise en ligne, puis le statut de la formation.",
+            "documents": "Les fichiers PDF de la formation : supports de cours, fiches d'exercices, lectures, modèles et corrigés, et qui peut les télécharger."
           },
           "aside": {
             "title": "À compléter",
@@ -11995,6 +12021,65 @@
             "reason": "Motif (facultatif)",
             "reasonHint": "Gardé dans le journal de la formation.",
             "history": "Historique de la formation"
+          },
+          "documents": {
+            "step": "Documents",
+            "title": "Documents PDF",
+            "empty": "Aucun document pour l'instant. Ajoutez un support de cours, une fiche d'exercices ou un corrigé.",
+            "add": "Ajouter un document",
+            "file": "Fichier PDF",
+            "fileHint": "PDF uniquement, 4 Mo au plus. Un fichier protégé par un mot de passe est refusé.",
+            "submit": "Envoyer le document",
+            "field": {
+              "title": "Titre du document",
+              "kind": "Type de document",
+              "visibility": "Qui peut le télécharger ?",
+              "specialized": "Réservé aux forfaits avec ressources spécialisées",
+              "lesson": "Rattaché à",
+              "replace": "Remplacer le fichier",
+              "replaceHint": "Facultatif : le titre et les réglages sont gardés."
+            },
+            "wholeCourse": "Toute la formation",
+            "kind": {
+              "support": "Support de cours",
+              "exercises": "Fiche d'exercices",
+              "reading": "Lecture complémentaire",
+              "template": "Modèle à remplir",
+              "answer_key": "Corrigé",
+              "other": "Autre document"
+            },
+            "visibility": {
+              "public": "Tout le monde, sur la fiche publique",
+              "enrolled": "Les inscrits dont le forfait ouvre la formation",
+              "team": "L'équipe Jumanly seulement"
+            },
+            "answerKey": "Un corrigé reste toujours réservé à l'équipe.",
+            "meta": "{kind} · {pages, plural, one {# page} other {# pages}} · {size} · {downloads, plural, =0 {aucun téléchargement} one {# téléchargement} other {# téléchargements}}",
+            "lesson": "Leçon : {title}",
+            "specializedTag": "Ressource spécialisée",
+            "edit": "Modifier « {title} »",
+            "save": "Enregistrer le document",
+            "download": "Télécharger « {title} »",
+            "delete": "Supprimer « {title} »",
+            "moveUp": "Monter « {title} »",
+            "moveDown": "Descendre « {title} »",
+            "saved": "Document enregistré.",
+            "deleted": "Document supprimé.",
+            "error": {
+              "champs": "Vérifiez le titre et le type du document.",
+              "fileType": "Envoyez un fichier PDF.",
+              "fileSize": "Le fichier dépasse 4 Mo.",
+              "unreadable": "Ce PDF est illisible. Exportez-le à nouveau, puis réessayez.",
+              "encrypted": "Ce PDF est protégé par un mot de passe. Envoyez une version sans protection.",
+              "notFound": "Document introuvable."
+            },
+            "links": "Les liens vers des fichiers hébergés ailleurs restent dans « Ressources à télécharger » de chaque leçon.",
+            "panel": "Documents PDF de la leçon",
+            "panelEmpty": "Aucun document rattaché à cette leçon.",
+            "size": {
+              "kb": "{size} Ko",
+              "mb": "{size} Mo"
+            }
           }
         }
       }

@@ -10,6 +10,14 @@ import { requireCourseEditor } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { reportError } from "@/server/observability";
 import { CourseMediaError, saveCover, saveLessonVideoFile } from "@/server/services/course-media";
+import {
+  addCourseDocument,
+  CourseDocumentError,
+  deleteCourseDocument,
+  documentFormSchema,
+  moveCourseDocument,
+  updateCourseDocument,
+} from "@/server/services/course-documents";
 import { fileStorage } from "@/server/storage";
 import {
   addLesson,
@@ -407,4 +415,97 @@ export async function revokeCertificateAction(formData: FormData) {
   const revoked = ofCourse ? await revokeCertificate(db, user.id, code, new Date(), reason) : false;
   if (revoked) updateTag(`certificate:${code}`);
   back(id, { attestation: revoked ? "revoquee" : "introuvable" }, "#attestation", "attestation");
+}
+
+// ─── PDF documents (Admin v3, étape 5) ─────────────────────────────────────────
+
+const pdfOf = async (formData: FormData) => {
+  const file = formData.get("file");
+  return file instanceof File && file.size > 0 ? new Uint8Array(await file.arrayBuffer()) : null;
+};
+
+/** Where a document form goes back: its lesson panel, or the « Documents » step. */
+const documentBack = (formData: FormData, courseId: string, params: Record<string, string>) => {
+  const lessonId = value(formData, "panel");
+  if (lessonId)
+    back(
+      courseId,
+      { lecon: lessonId, ...params },
+      "#lecon-documents",
+      stepFrom(formData, "programme"),
+    );
+  back(courseId, params, "#documents", "documents");
+};
+
+/** Sends a PDF: checked (type, size, readable), stored privately, then listed. */
+export async function addCourseDocumentAction(formData: FormData) {
+  const user = await editor();
+  const id = value(formData, "course");
+  const parsed = documentFormSchema.safeParse(Object.fromEntries(formData));
+  const bytes = await pdfOf(formData);
+  if (!parsed.success) documentBack(formData, id, { erreur: "document-champs" });
+  if (!bytes) documentBack(formData, id, { erreur: "document-fileType" });
+  try {
+    const document = await addCourseDocument(db, fileStorage(db), {
+      courseId: id,
+      authorId: user.id,
+      form: parsed.data!,
+      bytes: bytes!,
+    });
+    await audit(user.id, "course.document.add", id, { documentId: document.id });
+  } catch (error) {
+    if (!(error instanceof CourseDocumentError)) throw error;
+    documentBack(formData, id, { erreur: `document-${error.code}` });
+  }
+  await invalidate(id);
+  documentBack(formData, id, { ok: "document" });
+}
+
+/** Renames, reclassifies, moves to a lesson, or replaces the file of a document. */
+export async function updateCourseDocumentAction(formData: FormData) {
+  const user = await editor();
+  const id = value(formData, "course");
+  const documentId = value(formData, "document");
+  const parsed = documentFormSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) documentBack(formData, id, { erreur: "document-champs" });
+  const bytes = await pdfOf(formData);
+  try {
+    await updateCourseDocument(db, fileStorage(db), {
+      courseId: id,
+      id: documentId,
+      form: parsed.data!,
+      ...(bytes ? { bytes } : {}),
+    });
+    await audit(user.id, bytes ? "course.document.replace" : "course.document.update", id, {
+      documentId,
+    });
+  } catch (error) {
+    if (!(error instanceof CourseDocumentError)) throw error;
+    documentBack(formData, id, { erreur: `document-${error.code}` });
+  }
+  await invalidate(id);
+  documentBack(formData, id, { ok: "document" });
+}
+
+export async function deleteCourseDocumentAction(formData: FormData) {
+  const user = await editor();
+  const id = value(formData, "course");
+  const documentId = value(formData, "document");
+  if (await deleteCourseDocument(db, fileStorage(db), id, documentId)) {
+    await audit(user.id, "course.document.delete", id, { documentId });
+    await invalidate(id);
+  }
+  documentBack(formData, id, { ok: "document-supprime" });
+}
+
+export async function moveCourseDocumentAction(formData: FormData) {
+  const user = await editor();
+  const id = value(formData, "course");
+  const documentId = value(formData, "document");
+  const direction = formData.get("direction") === "up" ? "up" : "down";
+  if (await moveCourseDocument(db, id, documentId, direction)) {
+    await audit(user.id, "course.document.move", id, { documentId, direction });
+    await invalidate(id);
+  }
+  back(id, {}, `#document-${documentId}`, "documents");
 }

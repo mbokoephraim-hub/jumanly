@@ -2510,6 +2510,20 @@ Conventions :
 | `learn.player.resources.meta` | {type} · {size} |
 | `learn.player.resources.empty` | Aucune ressource pour cette leçon. |
 | `learn.player.resources.locked` | Ressources spécialisées · Disponible avec {plan} |
+| `learn.documents.title` | Documents de la formation |
+| `learn.documents.lessonTitle` | Documents de la leçon |
+| `learn.documents.publicTitle` | Documents à télécharger |
+| `learn.documents.meta` | {kind} · {pages, plural, one {# page} other {# pages}} · {size} |
+| `learn.documents.download` | Télécharger |
+| `learn.documents.downloadNamed` | Télécharger « {title} » |
+| `learn.documents.size.kb` | {size} Ko |
+| `learn.documents.size.mb` | {size} Mo |
+| `learn.documents.kind.support` | Support de cours |
+| `learn.documents.kind.exercises` | Fiche d'exercices |
+| `learn.documents.kind.reading` | Lecture complémentaire |
+| `learn.documents.kind.template` | Modèle à remplir |
+| `learn.documents.kind.answer_key` | Corrigé |
+| `learn.documents.kind.other` | Autre document |
 | `learn.player.notes.placeholder` | Prenez des notes. Elles sont privées et liées au moment de la vidéo. |
 | `learn.player.notes.add` | Ajouter une note à {time} |
 | `learn.player.notes.saved` | Note enregistrée. |
@@ -8826,6 +8840,11 @@ Conventions :
 | `admin.journal.action.course_module_delete` | a supprimé un module |
 | `admin.journal.action.course_module_move` | a déplacé un module |
 | `admin.journal.action.course_lesson_move` | a déplacé une leçon |
+| `admin.journal.action.course_document_add` | a ajouté un document PDF |
+| `admin.journal.action.course_document_update` | a modifié un document PDF |
+| `admin.journal.action.course_document_replace` | a remplacé le fichier d'un document PDF |
+| `admin.journal.action.course_document_delete` | a supprimé un document PDF |
+| `admin.journal.action.course_document_move` | a déplacé un document PDF |
 | `admin.journal.action.course_lesson_add` | a ajouté une leçon |
 | `admin.journal.action.course_lesson_update` | a modifié une leçon |
 | `admin.journal.action.course_lesson_delete` | a supprimé une leçon |
@@ -9995,6 +10014,54 @@ Conventions :
 | `admin.courses.v3.editor.publication.reason` | Motif (facultatif) |
 | `admin.courses.v3.editor.publication.reasonHint` | Gardé dans le journal de la formation. |
 | `admin.courses.v3.editor.publication.history` | Historique de la formation |
+| `admin.courses.v3.editor.intro.documents` | Les fichiers PDF de la formation : supports de cours, fiches d'exercices, lectures, modèles et corrigés, et qui peut les télécharger. |
+| `admin.courses.v3.editor.documents.step` | Documents |
+| `admin.courses.v3.editor.documents.title` | Documents PDF |
+| `admin.courses.v3.editor.documents.empty` | Aucun document pour l'instant. Ajoutez un support de cours, une fiche d'exercices ou un corrigé. |
+| `admin.courses.v3.editor.documents.add` | Ajouter un document |
+| `admin.courses.v3.editor.documents.file` | Fichier PDF |
+| `admin.courses.v3.editor.documents.fileHint` | PDF uniquement, 4 Mo au plus. Un fichier protégé par un mot de passe est refusé. |
+| `admin.courses.v3.editor.documents.submit` | Envoyer le document |
+| `admin.courses.v3.editor.documents.field.title` | Titre du document |
+| `admin.courses.v3.editor.documents.field.kind` | Type de document |
+| `admin.courses.v3.editor.documents.field.visibility` | Qui peut le télécharger ? |
+| `admin.courses.v3.editor.documents.field.specialized` | Réservé aux forfaits avec ressources spécialisées |
+| `admin.courses.v3.editor.documents.field.lesson` | Rattaché à |
+| `admin.courses.v3.editor.documents.field.replace` | Remplacer le fichier |
+| `admin.courses.v3.editor.documents.field.replaceHint` | Facultatif : le titre et les réglages sont gardés. |
+| `admin.courses.v3.editor.documents.wholeCourse` | Toute la formation |
+| `admin.courses.v3.editor.documents.kind.support` | Support de cours |
+| `admin.courses.v3.editor.documents.kind.exercises` | Fiche d'exercices |
+| `admin.courses.v3.editor.documents.kind.reading` | Lecture complémentaire |
+| `admin.courses.v3.editor.documents.kind.template` | Modèle à remplir |
+| `admin.courses.v3.editor.documents.kind.answer_key` | Corrigé |
+| `admin.courses.v3.editor.documents.kind.other` | Autre document |
+| `admin.courses.v3.editor.documents.visibility.public` | Tout le monde, sur la fiche publique |
+| `admin.courses.v3.editor.documents.visibility.enrolled` | Les inscrits dont le forfait ouvre la formation |
+| `admin.courses.v3.editor.documents.visibility.team` | L'équipe Jumanly seulement |
+| `admin.courses.v3.editor.documents.answerKey` | Un corrigé reste toujours réservé à l'équipe. |
+| `admin.courses.v3.editor.documents.meta` | {kind} · {pages, plural, one {# page} other {# pages}} · {size} · {downloads, plural, =0 {aucun téléchargement} one {# téléchargement} other {# téléchargements}} |
+| `admin.courses.v3.editor.documents.lesson` | Leçon : {title} |
+| `admin.courses.v3.editor.documents.specializedTag` | Ressource spécialisée |
+| `admin.courses.v3.editor.documents.edit` | Modifier « {title} » |
+| `admin.courses.v3.editor.documents.save` | Enregistrer le document |
+| `admin.courses.v3.editor.documents.download` | Télécharger « {title} » |
+| `admin.courses.v3.editor.documents.delete` | Supprimer « {title} » |
+| `admin.courses.v3.editor.documents.moveUp` | Monter « {title} » |
+| `admin.courses.v3.editor.documents.moveDown` | Descendre « {title} » |
+| `admin.courses.v3.editor.documents.saved` | Document enregistré. |
+| `admin.courses.v3.editor.documents.deleted` | Document supprimé. |
+| `admin.courses.v3.editor.documents.error.champs` | Vérifiez le titre et le type du document. |
+| `admin.courses.v3.editor.documents.error.fileType` | Envoyez un fichier PDF. |
+| `admin.courses.v3.editor.documents.error.fileSize` | Le fichier dépasse 4 Mo. |
+| `admin.courses.v3.editor.documents.error.unreadable` | Ce PDF est illisible. Exportez-le à nouveau, puis réessayez. |
+| `admin.courses.v3.editor.documents.error.encrypted` | Ce PDF est protégé par un mot de passe. Envoyez une version sans protection. |
+| `admin.courses.v3.editor.documents.error.notFound` | Document introuvable. |
+| `admin.courses.v3.editor.documents.links` | Les liens vers des fichiers hébergés ailleurs restent dans « Ressources à télécharger » de chaque leçon. |
+| `admin.courses.v3.editor.documents.panel` | Documents PDF de la leçon |
+| `admin.courses.v3.editor.documents.panelEmpty` | Aucun document rattaché à cette leçon. |
+| `admin.courses.v3.editor.documents.size.kb` | {size} Ko |
+| `admin.courses.v3.editor.documents.size.mb` | {size} Mo |
 
 ### `/admin/offres` · Modération des offres
 

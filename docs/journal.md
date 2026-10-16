@@ -2,6 +2,24 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v3 · étape 5 : PDF à joindre aux formations (16 octobre 2026)
+
+- Nouvelle étape **Documents** dans l'éditeur (7 étapes) : envoi d'un PDF avec titre, type
+  (support, exercices, lecture, modèle, corrigé, autre), leçon de rattachement et visibilité
+  (tout le monde, inscrits dont le forfait ouvre la formation, équipe). Option « ressources
+  spécialisées » testée par le droit `learn.resources.specialized`, jamais par un nom de forfait.
+- Contrôles du fichier : 4 Mo au plus, vrai PDF (signature), lisible, non protégé par mot de passe ;
+  le nombre de pages est lu et affiché. Un corrigé reste toujours à l'équipe.
+- Ordre, modification, remplacement du fichier et suppression, chaque action journalisée
+  (`course.document.*`). Les documents d'une leçon se gèrent aussi dans le panneau de la leçon.
+- Téléchargement par `/formations/documents/[id]` : stockage privé, règle `documentAccess`, compteur
+  de téléchargements. Les documents visibles s'affichent sur la fiche publique, sur la page de la
+  formation et dans le lecteur (par leçon et pour toute la formation).
+- Nouvelle table `CourseDocument` (migration `20261016003017_admin_course_documents`).
+- Tests : `tests/db/course-documents.test.ts` (fichiers, visibilités, accès en base) et e2e « documents
+  PDF » dans `tests/e2e/admin-v3.spec.ts`. Captures dans `captures/admin-v3/etape-5`.
+- Décisions : `docs/decisions/2026-10-16-admin-v3-etape-5.md`.
+
 ## Jumanly Admin v3 · étape 4 : éditeur de formation par étapes (16 octobre 2026)
 
 - L'éditeur `/admin/formations/[id]` est découpé en **6 étapes** (`?etape=`) : Informations,
