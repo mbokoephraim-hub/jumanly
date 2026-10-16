@@ -16,6 +16,8 @@ Une entrée par étape : ce qui a été fait, les décisions prises, les dettes 
 
 - Sélecteur segmenté sur les filtres de Connect, les onglets de Notifications et ceux de
   Paramètres sur téléphone.
+- Filtre « Demandes de mise en relation » de Connect raccourci en « Demandes », pour tenir en entier
+  dans la colonne (demande du propriétaire).
 - Connect : bouton « Reprendre avec {nom} » en haut à droite, vers la conversation non lue la plus
   récente (ou la dernière).
 - Abonnement et Recherche inchangés : leur contenu suit déjà la méthode (pas d'index des factures
