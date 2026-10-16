@@ -7,7 +7,15 @@ import { pillClass } from "@/components/career/kit";
 import { Initials, MenuChip, menuItem, moreButton, OrgMark } from "@/components/hire/kit";
 import { TabRail } from "@/components/motion/tab-rail";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
-import { Alert, PlanLock, Select, TextArea, TextField } from "@/components/ui";
+import {
+  Alert,
+  PlanLock,
+  Select,
+  TextArea,
+  TextField,
+  segmentedItem,
+  segmentedList,
+} from "@/components/ui";
 import type { MembershipRole } from "@/generated/prisma/client";
 import { cx } from "@/lib/cx";
 import { EntitiesTab, TeamsTab, VerificationTab } from "@/components/org/structure-tabs";
@@ -850,23 +858,20 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
         </div>
       </section>
 
-      <TabRail name="organisation">
-        <nav aria-label={t("title")} className="flex w-max gap-1 lg:gap-2">
+      <TabRail name="organisation" className="bg-transparent! p-0!">
+        <nav aria-label={t("title")} className={segmentedList}>
           {tabItems.map((item) => (
             <Link
               key={item.id}
               href={`/app/organisation?onglet=${item.id}`}
               aria-current={tab === item.id ? "page" : undefined}
-              className="flex h-10 shrink-0 items-center rounded-pill px-3.5 text-[14.5px] font-medium text-ardoise hover:text-sapin aria-[current=page]:text-sapin"
+              className={segmentedItem(tab === item.id)}
             >
               {item.label}
             </Link>
           ))}
           {admin && (
-            <Link
-              href="/app/abonnement"
-              className="flex h-10 shrink-0 items-center rounded-pill px-3.5 text-[14.5px] font-medium text-ardoise hover:text-sapin"
-            >
+            <Link href="/app/abonnement" className={segmentedItem(false)}>
               {t("tab.subscription")}
             </Link>
           )}

@@ -4784,6 +4784,7 @@ Conventions :
 | `hire.dashboard.quotas.notIncluded` | Non inclus |
 | `hire.dashboard.quotas.seePlans` | Voir les forfaits |
 | `hire.dashboard.newCta` | Nouvelle offre |
+| `hire.dashboard.resume` | {count, plural, one {Voir # nouveau candidat} other {Voir # nouveaux candidats}} · {jobTitle} |
 | `hire.dashboard.verifyBanner.text` | Faites vérifier votre organisation pour afficher le badge « Entreprise vérifiée » sur vos offres. |
 | `hire.dashboard.verifyBanner.cta` | Demander la vérification |
 | `hire.dashboard.fairness` | Rappel : les profils Free sont des candidats comme les autres. Le forfait d'un talent n'influence jamais son score. |
@@ -8636,6 +8637,7 @@ Conventions :
 | `partner.dashboard.eyebrow` | Jumanly Partners · {org} |
 | `partner.dashboard.title` | Tableau de bord |
 | `partner.dashboard.subtitle` | L'accès que vous financez, et son usage, en chiffres agrégés. |
+| `partner.dashboard.openReport` | Voir le rapport détaillé |
 | `partner.dashboard.privacy` | Aucune donnée nominative n'est partagée : vous voyez des totaux et des moyennes, jamais le CV, les messages ou les informations personnelles d'un bénéficiaire. |
 | `partner.dashboard.kpi.purchased` | Licences achetées |
 | `partner.dashboard.kpi.distributed` | Licences distribuées |
