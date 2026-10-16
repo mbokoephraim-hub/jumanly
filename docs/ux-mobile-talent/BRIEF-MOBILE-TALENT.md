@@ -7,9 +7,10 @@ les liens avec les autres briefs. Maquettes validées par Claude (validation dé
 ## 0. Maquettes
 
 `maquette/mobile-talent.html` (ouvrir dans un navigateur), `maquette/mobile-talent-planche.jpg`
-(toutes les maquettes) et `maquette/ecrans/NN.jpg` (chaque écran, 390 px ×2). Version 2 du 16 octobre
-2026 après les retours du propriétaire : 10 et 17 refaits, 20 à 33 ajoutés, planche « États
-d’interaction » ajoutée. Le prompt complet est `PROMPT-AMELIORE.md`.
+(toutes les maquettes) et `maquette/ecrans/NN.jpg` (chaque écran, 390 px ×2). Version 3 du 16 octobre
+2026 : v2 (10 et 17 refaits, 20 à 33, planche « États d’interaction »), puis v3 (planche « Boutons » avec
+boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly AI 35 à 43, voir
+`docs/jumanly-ai/`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
 
 | N° | Écran | N° | Écran |
 |---|---|---|---|
@@ -29,7 +30,12 @@ d’interaction » ajoutée. Le prompt complet est `PROMPT-AMELIORE.md`.
 | 14 | Learning Room | 31 | Assistant IA dans Offres |
 | 15 | Suivi | 32 | Catalogue des formations |
 | 16 | Suivi · état vide | 33 | Fiche formation |
-| 17 | Mon espace | | |
+| 17 | Mon espace | 34 | Menu du haut |
+| 35 | Bouton flottant Jumanly AI | 36 | Jumanly AI · offre |
+| 37 | Jumanly AI · exigences et profil | 38 | Jumanly AI · CV Builder |
+| 39 | Jumanly AI · Learning Room | 40 | Jumanly AI · relance (Suivi) |
+| 41 | Jumanly AI · historique et crédits | 42 | Jumanly AI · crédits épuisés |
+| 43 | Jumanly AI · ordinateur, Hire | | |
 
 Les contenus sont des exemples (persona fictive Grâce Mbuyi, entreprises fictives). **En production, tout
 vient des données réelles** (règle d’or 11) ; une section sans donnée affiche son état vide ou se masque.
@@ -68,7 +74,7 @@ vient des données réelles** (règle d’or 11) ; une section sans donnée affi
    Icônes : `accueil`, `jobs`, `diplome` ; « Suivi » demande une icône presse-papiers avec liste, au même
    trait que la marque : à ajouter au jeu d’icônes (dessin dans la maquette, symbole `jm-suivi`).
 5. **Barre du haut** compacte (52 px) : logo sur Pour moi, titre de la section ailleurs ; Recherche,
-   Notifications, avatar (= Mon espace). Le sélecteur d’espace (Hire, Partenaire) passe en tête de Mon
+   Notifications, avatar qui ouvre le menu du haut (écran 34), dont « Tout Mon espace » mène à la page. Le sélecteur d’espace (Hire, Partenaire) passe en tête de Mon
    espace. Les sous-onglets de section (`SectionNav`) ne s’affichent plus sur Pour moi, Offres et Suivi.
 6. **Candidature en étapes** sur la route actuelle (`/app/jobs/[slug]?postuler=1&etape=…`) : CV, lettre,
    questions, vérification, envoi, confirmation. Le modèle n’a aujourd’hui ni questions du recruteur ni

@@ -13,8 +13,9 @@ Career ou Connect, et on ne change pas l’identité visuelle.
 
 Références obligatoires, dans cet ordre :
 
-1. `docs/ux-mobile-talent/maquette/mobile-talent.html` et `maquette/ecrans/01.jpg` à `33.jpg` : les 33 écrans
-   à reproduire fidèlement, plus la planche « États d’interaction ».
+1. `docs/ux-mobile-talent/maquette/mobile-talent.html` et `maquette/ecrans/01.jpg` à `43.jpg` : les 43 écrans
+   à reproduire fidèlement, plus les planches « Boutons » et « États d’interaction ». Les écrans 34 à 43
+   (menu du haut, Jumanly AI) sont détaillés dans `docs/jumanly-ai/`.
 2. `docs/ux-mobile-talent/BRIEF-MOBILE-TALENT.md` : routes, choix par défaut, données existantes.
 3. `CLAUDE.md` (règles d’or), `docs/specifications.md` parties 05, 07, 08 et 11.
 4. Briefs déjà livrés, à respecter : `docs/interactions-relief/` (ombres douces v2.1), `docs/experience-animee/`
@@ -26,7 +27,22 @@ Références obligatoires, dans cet ordre :
 Sora ; Vert Sapin `#0F3F37`, Lime `#A6F26B`, Crème `#F2EDE5` ; en-tête Sapin et feuille Crème sur
 téléphone ; cartes blanches à ombre douce (rayon 24), pas de relief ; texte Sapin sur Lime, jamais blanc ;
 icônes de `ressources/icones` (une seule nouvelle : « Suivi », presse-papiers avec liste, même trait) ;
-personnages et Orbi existants. L’IA se reconnaît à son dégradé (Sapin → Émeraude → Menthe) et à l’orbe.
+personnages et Orbi existants.
+
+**Gamme de boutons (planche « Boutons », version 3).** Un seul composant `<Button variant size>` :
+- `principal` : dégradé Sapin → Émeraude (`--g-principal`), texte blanc, rond Lime avec flèche à droite pour
+  les actions qui avancent (Postuler, Envoyer, Section suivante). Une seule par écran.
+- `accent` : dégradé Lime (`--g-accent`), texte Sapin. Pour une offre ou un passage de formule.
+- `secondaire` (blanc, ombre douce), `contour`, `lien`, `icone` (rond 44 px), `danger` (texte rouge) et
+  `danger-plein` (seulement dans une confirmation de suppression).
+- Tailles L (56 px, barres d’action), M (48 px), S (36 px, puces et cartes).
+- États : repos, appui (échelle 0,97, dégradé assombri), en cours (indicateur, désactivé), fait (coche,
+  après réponse du serveur), désactivé (opacité 0,45, jamais le seul indice).
+
+**L’IA a sa propre identité**, jamais prêtée à un bouton ordinaire : fond nuit aurore (`--g-aurore`), contour
+irisé (`--g-irise`), orbe Lime avec étincelle, marque « Jumanly » + pastille « AI ». Composants `AiChip`
+(puce dans les pages), `AiFab` (bouton flottant), `AiPanel`. Les jetons sont dans `source/style3.css` de la
+maquette ; les reporter dans les jetons CSS du projet, sans nouvelle couleur.
 
 ## 3. Navigation
 
@@ -35,8 +51,13 @@ personnages et Orbi existants. L’IA se reconnaît à son dégradé (Sapin → 
   zone de sécurité respectée, pastille de Suivi = nombre réel d’actions à traiter. Masquée sur le détail
   d’offre, la candidature, la Learning Room, la conversation, l’éditeur de CV, l’assistant et Mon espace,
   qui ont une barre d’action fixe en bas.
-- **Barre du haut, 52 px** : logo (Pour moi) ou titre de section ; Recherche ; Notifications ; avatar qui
-  ouvre **Mon espace** (`/app/espace`, une vraie page pour que Retour fonctionne).
+- **Barre du haut, 52 px** : logo (Pour moi) ou titre de section ; Recherche ; Notifications ; avatar.
+- **Menu du haut (écran 34)** : toucher l’avatar ouvre un petit menu ancré sous lui (pas une page) :
+  Jumanly AI en première ligne avec son identité, puis Messages (pastille réelle), Mon profil, Mes CV,
+  Tableau de bord, Paramètres ; en pied « Tout Mon espace » (page `/app/espace`, pour que Retour
+  fonctionne) et Se déconnecter. Fermeture au toucher dehors, Échap, focus piégé, `aria-expanded`.
+- **Bouton flottant Jumanly AI** au-dessus de la barre du bas (écran 35), masqué quand une barre d’action
+  fixe est présente. Pas de cinquième onglet.
 - Chaque onglet garde son état (filtres, position) quand on y revient. Retour ramène toujours à l’écran
   précédent, jamais à l’accueil par surprise.
 - Espaces Hire et Partenaire : inchangés. Ordinateur : rail = les 4 destinations + Career, aucune
@@ -98,7 +119,7 @@ avec aperçu A4 réel, modèles (verrous selon `career.cv.templates.access`), co
 Télécharger le PDF. Le CV exporté ne porte ni logo ni mention Jumanly. Réutiliser `docs/modeles-cv` et
 BRIEF-CV-V2, ne pas réécrire le rendu.
 
-**Assistant IA (30-31)** : on lui écrit ; il propose des **modifications concrètes** (CV, profil, lettre,
+**Assistant IA (30-31, et 34 à 43 pour Jumanly AI, voir `docs/jumanly-ai/`)** : on lui écrit ; il propose des **modifications concrètes** (CV, profil, lettre,
 filtres de recherche) en avant / après, appliquées **seulement si l’utilisateur touche Appliquer**, chacune
 avec « Pourquoi ? » (règle d’or 3). L’utilisateur choisit ce que l’assistant voit (CV, recherches,
 candidatures). L’assistant n’invente aucun chiffre : il laisse des valeurs à remplir entre crochets.

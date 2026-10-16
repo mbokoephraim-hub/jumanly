@@ -1,0 +1,15 @@
+Nouveau module : Jumanly AI, un copilote unique présent dans toute l'application.
+
+À lire, dans cet ordre :
+1. docs/jumanly-ai/CAHIER-DES-CHARGES-JUMANLY-AI.md : ma demande, elle fait foi.
+2. docs/jumanly-ai/BRIEF-JUMANLY-AI.md : comment l'intégrer au code existant (choix par défaut, tables, risques).
+3. docs/ux-mobile-talent/maquette/mobile-talent.html, sections « Boutons », « Menu du haut » et « Jumanly AI » (écrans 34 à 43, captures dans maquette/ecrans/). Reproduis-les fidèlement.
+4. docs/ux-mobile-talent/PROMPT-AMELIORE.md § 2 et § 5 : la gamme de boutons et les états d'interaction s'appliquent aussi ici.
+5. CLAUDE.md (règles d'or 1, 2, 3, 4, 6, 11, 12).
+
+Trois exigences que je ne négocie pas :
+- Un seul assistant avec des modes (Pour moi, Offres, CV, Suivi, Learn, Hire), qui réutilise runAi, AiUsage, AiSuggestion, cv-coach, learn-coach et job-writer. Pas cinq chatbots, pas de cinquième onglet.
+- Rien ne change et rien ne part sans mon clic : une correction s'applique avec « Appliquer », une relance s'envoie depuis la messagerie, aucun rejet, aucune candidature, aucun e-mail par l'IA. Elle n'invente ni expérience, ni diplôme, ni chiffre, ni décision.
+- Consulter une offre et postuler restent gratuits et ne consomment aucun crédit.
+
+Ta première réponse : un diagnostic de l'architecture existante (navigation, Career, Jobs, Learn, Hire, authentification, rôles, abonnements, couche IA), la liste des composants à créer ou réutiliser, les données nécessaires, les risques de sécurité et ton plan par étape. Pas de code avant ma validation. Ensuite, étape par étape, avec les tests, sans dégrader ce qui marche.
