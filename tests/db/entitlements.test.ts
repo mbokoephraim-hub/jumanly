@@ -232,3 +232,22 @@ describe("moteur de droits : règles", () => {
     expect((await usage(db, talent, "ai.credits.monthly")).used).toBe(0);
   });
 });
+
+// Admin v4, étape 1: a change written by another server instance (the admin) applies from the
+// next request, without waiting for a cache to expire and without calling `invalidate`.
+describe("changement fait ailleurs", () => {
+  it("un droit accordé dans l'admin s'applique à la requête suivante", async () => {
+    const talent = await subjectFor("talent");
+    expect(await can(db, talent, "career.linkedin")).toBe(false);
+    await db.entitlementOverride.create({
+      data: {
+        subjectType: "user",
+        subjectId: talent.id,
+        key: "career.linkedin",
+        value: "true",
+        reason: "test",
+      },
+    });
+    expect(await can(db, talent, "career.linkedin")).toBe(true);
+  });
+});

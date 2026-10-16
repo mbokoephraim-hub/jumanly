@@ -252,6 +252,8 @@ export async function saveWeightsAction(formData: FormData) {
   const admin = await adminWriter();
   if (!input.success) redirect("/admin/ia?onglet=poids&erreur=1#poids");
   await saveWeights(db, admin.id, input.data);
+  // The public page « Comment fonctionne le matching » shows the active weights (cached).
+  updateTag("matching-weights");
   refresh();
   redirect("/admin/ia?onglet=poids&ok=1");
 }
