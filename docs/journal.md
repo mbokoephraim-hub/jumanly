@@ -2,6 +2,16 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v4 · étape 8, lot D : admin (16 octobre 2026)
+
+- `AdminTabs` (onglets de toutes les pages d'admin), les familles de forfaits et la vue
+  galerie/liste des formations passent au sélecteur segmenté partagé ; plus d'onglets soulignés.
+- `AdminPageHeader` accepte une action en haut à droite ; le tableau de bord l'utilise pour
+  « Traiter : {premier élément à traiter} », seulement quand il y a quelque chose à traiter.
+- Les filtres restaient déjà des boutons bordés à flèche (`FilterMenu`) ; la colonne d'icônes
+  dense est conservée.
+- Captures avant et après : `/mnt/project-files/captures/admin-v4/etape-8/`.
+
 ## Jumanly Admin v4 · étape 8, lot C : compte (16 octobre 2026)
 
 - Sélecteur segmenté sur les filtres de Connect, les onglets de Notifications et ceux de

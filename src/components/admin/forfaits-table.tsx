@@ -5,6 +5,7 @@ import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
 import { db } from "@/server/db";
 import { adminLabel, Tag } from "./kit";
+import { segmentedItem, segmentedList } from "@/components/ui/segmented";
 
 /** Families of plans, in the order of the segments (mockup 07-04). */
 export const planFamilies = [
@@ -47,8 +48,8 @@ const colon = " : ";
 export async function PlanFamilySegments({ current }: { current: PlanFamily }) {
   const t = await getTranslations("admin.plans");
   return (
-    <nav aria-label={t("families")} className="-mx-4 overflow-x-auto px-4 lg:mx-0 lg:px-0">
-      <ul className="flex gap-2 lg:inline-flex lg:gap-1 lg:rounded-pill lg:bg-blanc lg:p-[5px]">
+    <nav aria-label={t("families")} className="max-w-full overflow-x-auto">
+      <ul className={segmentedList}>
         {planFamilies.map(({ family, key }) => {
           const on = family === current;
           return (
@@ -56,12 +57,7 @@ export async function PlanFamilySegments({ current }: { current: PlanFamily }) {
               <Link
                 href={`/admin/forfaits?famille=${family}`}
                 aria-current={on ? "page" : undefined}
-                className={cx(
-                  "inline-flex h-[34px] items-center rounded-pill px-3.5 text-[12.5px] font-medium lg:h-9 lg:px-[18px] lg:text-[12px] lg:font-semibold",
-                  on
-                    ? "bg-sapin text-blanc"
-                    : "bg-blanc ring-[1.5px] ring-brume ring-inset hover:bg-creme lg:ring-0",
-                )}
+                className={segmentedItem(on)}
               >
                 <span className="lg:hidden">{t(`familyShort.${key}`)}</span>
                 <span className="max-lg:hidden">{t(`family.${key}`)}</span>

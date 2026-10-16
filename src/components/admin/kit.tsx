@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { Character, type CharacterName, type Pose } from "@/components/brand/character";
 import { chipClasses, chipOnClasses } from "@/components/ui/filter-chip";
+import { segmentedItem, segmentedList } from "@/components/ui/segmented";
 import { cx } from "@/lib/cx";
 import { getCurrentUser } from "@/server/auth/session";
 
@@ -30,6 +31,7 @@ export async function AdminPageHeader({
   eyebrow,
   subtitle,
   stats,
+  action,
 }: {
   title: ReactNode;
   /** Replaces « Jumanly Admin » above the title (the user count on mobile, for instance). */
@@ -37,6 +39,8 @@ export async function AdminPageHeader({
   subtitle?: ReactNode;
   /** 2 to 4 key figures shown under the title. */
   stats?: { label: string; value: ReactNode }[];
+  /** « Traiter… » / « Reprendre… » in the top right (étape 8): the next thing to open. */
+  action?: ReactNode;
 }) {
   const t = await getTranslations("admin");
   return (
@@ -52,7 +56,9 @@ export async function AdminPageHeader({
           <Icon name="doc" className="size-3.5" />
           {t("header.logged")}
         </span>
+        {action && <div className="shrink-0 max-sm:hidden">{action}</div>}
       </div>
+      {action && <div className="sm:hidden">{action}</div>}
       {subtitle && <p className="max-w-[72ch] text-[13.5px] leading-5 text-ardoise">{subtitle}</p>}
       {stats && stats.length > 0 && (
         <dl className="flex flex-wrap gap-2">
@@ -75,8 +81,8 @@ export async function AdminPageHeader({
 export { Initials, OrgMark } from "@/components/hire/kit";
 
 /**
- * Underlined tabs (mockups 07-03, 07-07, 07-09): links, the current one in Sapin with a 2 px bar.
- * On phones they become a row of chips that scrolls.
+ * Page tabs (Admin v4, étape 8): the segmented selector shared with the signed-in space, the
+ * current tab raised in white. It scrolls sideways when it does not fit.
  */
 export function AdminTabs({
   label,
@@ -86,25 +92,14 @@ export function AdminTabs({
   items: { href: string; label: string; current: boolean }[];
 }) {
   return (
-    <nav aria-label={label} className="-mx-4 overflow-x-auto px-4 lg:mx-0 lg:px-0">
-      <ul className="flex gap-2 lg:gap-7 lg:border-b lg:border-brume">
+    <nav aria-label={label} className="max-w-full overflow-x-auto">
+      <ul className={segmentedList}>
         {items.map((item) => (
           <li key={item.href} className="shrink-0">
             <Link
               href={item.href}
               aria-current={item.current ? "page" : undefined}
-              className={cx(
-                // Phones: chips.
-                "max-lg:inline-flex max-lg:h-[34px] max-lg:items-center max-lg:rounded-pill max-lg:px-3.5 max-lg:text-[12.5px] max-lg:font-medium",
-                item.current
-                  ? "max-lg:bg-sapin max-lg:text-blanc"
-                  : "max-lg:bg-blanc max-lg:ring-[1.5px] max-lg:ring-brume max-lg:ring-inset",
-                // Desktop: underlined text.
-                "lg:-mb-px lg:inline-flex lg:h-11 lg:items-center lg:border-b-2 lg:text-[14.5px]",
-                item.current
-                  ? "lg:border-sapin lg:font-semibold lg:text-sapin"
-                  : "lg:border-transparent lg:text-ardoise lg:hover:text-sapin",
-              )}
+              className={segmentedItem(item.current)}
             >
               {item.label}
             </Link>
