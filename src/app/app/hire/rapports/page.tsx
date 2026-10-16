@@ -6,7 +6,7 @@ import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
 import { pillClass } from "@/components/career/kit";
 import { Initials, Kpi, MenuChip, menuItem, stageTone } from "@/components/hire/kit";
-import { EmptyState, PlanLock, TextField } from "@/components/ui";
+import { EmptyState, PlanLock, TextField, segmentedItem, segmentedList } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
@@ -118,7 +118,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
       <span className="text-[13px] text-ardoise max-lg:hidden">
         {t("hire.reports.period.text")}
       </span>
-      <div className="flex shrink-0 gap-1 lg:rounded-pill lg:bg-blanc lg:p-1">
+      <div className={cx(segmentedList, "shrink-0")}>
         {reportPeriods.map((value) => {
           const active = value === "custom" ? custom : !custom && range.period === value;
           return (
@@ -130,12 +130,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
                   : `/app/hire/rapports?periode=${value}`
               }
               aria-current={active ? "page" : undefined}
-              className={cx(
-                "inline-flex h-9 shrink-0 items-center rounded-pill px-4 text-[13px] font-semibold whitespace-nowrap",
-                active
-                  ? "bg-sapin text-blanc"
-                  : "bg-blanc ring-[1.5px] ring-brume ring-inset hover:bg-creme lg:ring-0",
-              )}
+              className={segmentedItem(active)}
             >
               {t(`hire.reports.period.${value}`)}
             </Link>

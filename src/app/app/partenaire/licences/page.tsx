@@ -7,7 +7,15 @@ import { IconTile, pillClass, ScoreRing } from "@/components/career/kit";
 import { CopyField } from "@/components/partner/copy-field";
 import { FileDrop } from "@/components/partner/file-drop";
 import { batchTag, partnerCard, partnerTitle } from "@/components/partner/kit";
-import { Alert, Checkbox, EmptyState, TextArea, TextField } from "@/components/ui";
+import {
+  Alert,
+  Checkbox,
+  EmptyState,
+  TextArea,
+  TextField,
+  segmentedItem,
+  segmentedList,
+} from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatDate } from "@/lib/dates";
 import { siteUrl } from "@/lib/seo";
@@ -163,32 +171,27 @@ export default async function PartnerLicensesPage({
       {batches.length > 1 && (
         <nav
           aria-label={t("batch.select")}
-          className="-mx-4 flex items-center gap-2 overflow-x-auto px-4 lg:mx-0 lg:flex-wrap lg:overflow-visible lg:px-0"
+          className="flex max-w-full items-center gap-3 overflow-x-auto"
         >
-          <span className="mr-1 text-[11px] font-semibold tracking-[0.12em] text-ardoise uppercase max-lg:hidden">
+          <span className="shrink-0 text-[11px] font-semibold tracking-[0.12em] text-ardoise uppercase max-lg:hidden">
             {t("batch.select")}
           </span>
-          {batches.map((item) => {
-            const active = item.id === batch.id;
-            return (
-              <Link
-                key={item.id}
-                href={`/app/partenaire/licences?lot=${item.id}`}
-                aria-current={active ? "page" : undefined}
-                className={cx(
-                  "inline-flex h-11 shrink-0 items-center gap-2 rounded-pill px-4 text-[13px] font-semibold whitespace-nowrap lg:h-9",
-                  active
-                    ? "bg-sapin text-blanc"
-                    : "bg-blanc ring-[1.5px] ring-brume ring-inset hover:bg-creme",
-                )}
-              >
-                {item.name}
-                <span className={cx("font-medium", active ? "text-neon" : "text-feuille-fonce")}>
-                  {item.plan.name}
-                </span>
-              </Link>
-            );
-          })}
+          <div className={segmentedList}>
+            {batches.map((item) => {
+              const active = item.id === batch.id;
+              return (
+                <Link
+                  key={item.id}
+                  href={`/app/partenaire/licences?lot=${item.id}`}
+                  aria-current={active ? "page" : undefined}
+                  className={segmentedItem(active)}
+                >
+                  {item.name}
+                  <span className="font-medium text-feuille-fonce">{item.plan.name}</span>
+                </Link>
+              );
+            })}
+          </div>
         </nav>
       )}
 

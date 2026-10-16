@@ -17,7 +17,7 @@ import {
 import { chip, chipOff, chipOn, tag, tagTone } from "@/components/jobs/talent-kit";
 import { TabRail } from "@/components/motion/tab-rail";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
-import { EmptyState } from "@/components/ui";
+import { EmptyState, segmentedItem, segmentedList } from "@/components/ui";
 import type { JobStatus } from "@/generated/prisma/client";
 import { cx } from "@/lib/cx";
 import { siteUrl } from "@/lib/seo";
@@ -225,9 +225,9 @@ export default async function HireJobsPage({ searchParams }: PageProps<"/app/hir
         </section>
       )}
 
-      <nav aria-label={t("tabs")} className="max-w-full min-w-0 lg:border-b lg:border-brume">
-        <TabRail name="hire-offres" className="lg:bg-transparent! lg:p-0!">
-          <div className="flex w-max gap-1.5 lg:gap-7">
+      <nav aria-label={t("tabs")} className="max-w-full min-w-0">
+        <TabRail name="hire-offres" className="bg-transparent! p-0!">
+          <div className={segmentedList}>
             {tabs.map((item) => {
               const current = item.id === tab;
               return (
@@ -235,12 +235,7 @@ export default async function HireJobsPage({ searchParams }: PageProps<"/app/hir
                   key={item.id}
                   href={hrefWith({ onglet: item.id })}
                   aria-current={current ? "page" : undefined}
-                  className={cx(
-                    "inline-flex h-[34px] shrink-0 items-center rounded-pill px-3.5 text-[12.5px] font-medium whitespace-nowrap lg:h-11 lg:rounded-none lg:border-b-2 lg:px-0.5 lg:text-[15px] lg:before:hidden",
-                    current
-                      ? "bg-sapin text-blanc lg:border-sapin lg:bg-transparent lg:font-semibold lg:text-sapin"
-                      : "bg-blanc text-sapin ring-[1.5px] ring-brume ring-inset lg:border-transparent lg:bg-transparent lg:text-ardoise lg:ring-0 lg:hover:text-sapin",
-                  )}
+                  className={segmentedItem(current)}
                 >
                   {item.label}
                 </Link>

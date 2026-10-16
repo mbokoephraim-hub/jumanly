@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
+import { HeaderAction } from "@/components/app/header-action";
 import { AppPageHeader } from "@/components/app/page-header";
 import { pillClass } from "@/components/career/kit";
 import { Kpi, MenuChip, menuItem } from "@/components/hire/kit";
@@ -89,10 +90,19 @@ export default async function PartnerDashboardPage({ searchParams }: PageProps<"
         title={t("partner.dashboard.title")}
         subtitle={t("partner.dashboard.subtitle")}
         actions={
-          <span className="inline-flex h-8 items-center gap-1.5 rounded-pill bg-lime px-3 text-[12px] font-semibold text-sapin">
-            <Icon name="certificat" className="size-3.5" />
-            {t("partner.nav.badge")}
-          </span>
+          <>
+            {data.batches.length > 0 && (
+              <HeaderAction
+                href="/app/partenaire/rapports"
+                icon="statistiques"
+                label={t("partner.dashboard.openReport")}
+              />
+            )}
+            <span className="inline-flex h-8 items-center gap-1.5 rounded-pill bg-lime px-3 text-[12px] font-semibold text-sapin">
+              <Icon name="certificat" className="size-3.5" />
+              {t("partner.nav.badge")}
+            </span>
+          </>
         }
       />
 

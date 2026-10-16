@@ -20,6 +20,16 @@ côté talent comme côté entreprise, plus l'administration. Décision :
 - Point ouvert : une licence Partners active plus chère que le forfait choisi garde la priorité
   (règle normale de résolution).
 
+## Jumanly Admin v4 · étape 8, lot B : recruteur et partenaire (16 octobre 2026)
+
+- Sélecteur segmenté partagé sur les onglets d'Offres, d'Organisation, les vues d'Entretiens, les
+  périodes des rapports Hire et les lots de licences.
+- Tableau de bord Hire : bouton « Voir N nouveaux candidats · {offre} » en haut à droite, quand
+  une offre a des candidatures non vues.
+- Espace partenaire : bouton « Voir le rapport détaillé » en haut à droite.
+- Captures avant et après : `/mnt/project-files/captures/admin-v4/etape-8/` (1440 et 390 px, sans
+  défilement horizontal).
+
 ## Jumanly Admin v4 · étape 8, lot A : pages Talent à la manière du Diagnostic (16 octobre 2026)
 
 Prompt : `/mnt/project-files/admin-v4/PROMPT-pages-partout.md` (lot A sur quatre).
