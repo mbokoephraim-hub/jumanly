@@ -140,6 +140,12 @@
   outline-offset: 3px;
 }
 
+/* Menu long (admin) : rubriques de 40 px pour que la colonne tienne sur un écran portable. */
+.jm-rail-dense .jm-admin-link {
+  width: 40px;
+  height: 40px;
+}
+
 /* Fenêtre basse : rubriques plus serrées ; très basse : la colonne défile en elle-même. */
 @media (max-height: 760px) {
   .jm-admin-rail .jm-admin-link {
