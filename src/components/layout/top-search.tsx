@@ -1,4 +1,5 @@
 import { Icon } from "@/components/brand/icon";
+import { cx } from "@/lib/cx";
 import { SlashFocus } from "./slash-focus";
 
 /**
@@ -11,6 +12,8 @@ export function TopSearch({
   label,
   placeholder,
   shortcut,
+  defaultValue,
+  className,
 }: {
   id: string;
   action: string;
@@ -18,9 +21,11 @@ export function TopSearch({
   placeholder: string;
   /** Read by screen readers: « Raccourci : / ». */
   shortcut: string;
+  defaultValue?: string;
+  className?: string;
 }) {
   return (
-    <form action={action} role="search" className="relative w-full max-w-[420px]">
+    <form action={action} role="search" className={cx("relative w-full max-w-[420px]", className)}>
       <label htmlFor={id} className="sr-only">
         {label}
       </label>
@@ -34,6 +39,7 @@ export function TopSearch({
         name="q"
         type="search"
         placeholder={placeholder}
+        defaultValue={defaultValue}
         aria-describedby={`${id}-shortcut`}
         className="h-11 w-full rounded-pill bg-blanc pr-12 pl-11 text-[13.5px] text-sapin shadow-[0_1px_2px_rgb(11_26_31/0.05)] ring-1 ring-sapin/10 ring-inset placeholder:text-ardoise focus:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus:outline-none"
       />

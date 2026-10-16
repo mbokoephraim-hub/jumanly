@@ -26,7 +26,7 @@
     --spacing: 0.23rem;
   }
 }
-@media (min-width: 64rem) {
+@media (min-width: 48rem) {
   .jm-admin-bg {
     background: var(--jm-creme);
   }
@@ -284,7 +284,7 @@ a.jm-admin-card:hover,
   -webkit-backdrop-filter: blur(14px);
   backdrop-filter: blur(14px);
 }
-@media (min-width: 64rem) {
+@media (min-width: 48rem) {
   .jm-topbar {
     background: rgb(247 245 240 / 0.8);
     box-shadow: 0 1px 0 rgb(15 63 55 / 0.07);

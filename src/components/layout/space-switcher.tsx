@@ -77,7 +77,8 @@ export function SpaceSwitcher({
             <Icon name="profil" className="size-4" />
           </span>
         )}
-        <span className="truncate">
+        {/* In the top bar, below 1280 px, the logo alone leaves room for the section tabs. */}
+        <span className={cx("truncate", tone === "light" && "max-xl:sr-only")}>
           {current ? current.name : t("spaceSwitcher.personal.text")}
         </span>
         <Icon name="chev-d" className="size-4 shrink-0 opacity-70" />

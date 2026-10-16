@@ -14,13 +14,31 @@ propriétaire et à l'équipe, sans connaissance technique.
 - **Le motif** : chaque action sensible (suspendre, offrir un forfait, refuser une offre, restaurer
   un contenu…) demande un motif. Écrivez une phrase claire : elle est gardée dans le journal d'audit
   et sert de mémoire à toute l'équipe.
-- **La recherche** en haut de chaque page trouve un compte, une organisation, une offre ou une
-  formation.
+- **La recherche** est la grande barre arrondie en haut à droite de chaque page : elle trouve un
+  compte, une organisation, une offre ou une formation. La touche « / » y place le curseur.
 - **Le menu** est une colonne flottante d'icônes, arrondie en haut et en bas, sur la gauche de
   l'écran. Passez la souris sur une icône (ou atteignez-la avec la touche Tab) : son nom apparaît
-  dans une bulle. L'icône de la page ouverte est mise en avant. Sur téléphone, le menu devient une
-  pilule en dégradé en bas de l'écran ; le bouton « Toutes les rubriques » ouvre les autres. Un éditeur
-  de contenus ne voit que Formations et Contenus.
+  dans une bulle. L'icône de la page ouverte est mise en avant. En bas de la colonne, votre
+  avatar (nom et rôle en bulle) et le retour à l'espace utilisateur.
+- **Le menu du haut** montre les autres pages de la même rubrique (par exemple « Forfaits et
+  droits » et « Abonnements ») ; l'onglet ouvert est souligné. S'il y a trop d'onglets, faites-les
+  glisser.
+- **Sur tablette** (à partir de 768 px), la colonne et le menu du haut restent. **Sur téléphone**,
+  le menu devient une pilule en dégradé en bas de l'écran ; le bouton « Toutes les rubriques »
+  ouvre les autres, et la recherche est en haut. Un éditeur de contenus ne voit que Formations et
+  Contenus.
+- **Ce que vous modifiez se voit tout de suite** dans les pages des utilisateurs (forfaits, droits,
+  formations, contenus, bandeaux…), sans redéployer : le détail est dans
+  `docs/admin-v4/synchronisation.md`.
+
+## Espace des utilisateurs (ce qu'ils voient)
+
+Tous les forfaits ont la même présentation : la colonne d'icônes à gauche (Accueil, Learn, Career,
+Jobs, Messages ; Hire et ses pages pour un recruteur ; licences et rapports pour un partenaire),
+le menu du haut avec les pages de la rubrique, la recherche, les notifications et le compte en bas
+de la colonne (profil, abonnement, paramètres, déconnexion). Le forfait change seulement les outils
+ouverts : un outil fermé porte un petit cadenas dans le menu du haut. Sur téléphone, une icône
+loupe ouvre la recherche.
 
 ## Lire les indicateurs (`Indicateurs`)
 

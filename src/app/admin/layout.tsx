@@ -99,7 +99,7 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
   // Admin v3: the page sits on the site's light background (halos and dots); phones keep the deep
   // green header with the search and the account, the Crème sheet and the floating pill.
   return (
-    <div className="jm-admin-bg min-h-dvh text-sapin lg:flex">
+    <div className="jm-admin-bg min-h-dvh text-sapin md:flex">
       {/* First stop of the keyboard: skips the column of icons (and the phone header). */}
       <a
         href="#content"
@@ -147,7 +147,7 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
         }
       />
 
-      <header className="flex h-[72px] items-center gap-2.5 px-4 text-blanc lg:hidden">
+      <header className="flex h-[72px] items-center gap-2.5 px-4 text-blanc md:hidden">
         <Link href={home} className="shrink-0 rounded-sm">
           <Logo variant="tile" height={42} />
         </Link>
@@ -177,11 +177,11 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
         </Link>
       </header>
 
-      <div className="min-h-[calc(100dvh-72px)] min-w-0 flex-1 rounded-t-[28px] bg-creme lg:min-h-0 lg:rounded-none lg:bg-transparent">
+      <div className="min-h-[calc(100dvh-72px)] min-w-0 flex-1 rounded-t-[28px] bg-creme md:min-h-0 md:rounded-none md:bg-transparent">
         {/* Admin v4, étape 2: the other sections of the same group, as a horizontal menu. */}
-        <div className="jm-topbar sticky top-0 z-30 flex items-center gap-5 px-4 pt-3 sm:px-6 lg:h-[68px] lg:px-6 lg:pt-0 xl:px-8">
+        <div className="jm-topbar sticky top-0 z-30 flex items-center gap-5 px-4 pt-3 sm:px-6 md:h-[68px] md:pt-0 lg:px-6 xl:px-[max(2rem,calc((100%-1400px)/2+2rem))]">
           <SectionNav sections={sections} className="min-w-0 flex-1" />
-          <div className="ml-auto hidden w-[min(40%,420px)] shrink-0 justify-end lg:flex">
+          <div className="ml-auto hidden w-[min(40%,420px)] shrink-0 justify-end md:flex">
             <TopSearch
               id="admin-search"
               action="/admin/recherche"
@@ -194,7 +194,7 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
         <main
           id="content"
           tabIndex={-1}
-          className="jm-admin-page mx-auto flex w-full max-w-[1400px] flex-col gap-5 px-4 pt-5 pb-32 outline-none sm:px-6 lg:px-6 lg:pt-4 lg:pb-8 xl:px-8"
+          className="jm-admin-page mx-auto flex w-full max-w-[1400px] flex-col gap-5 px-4 pt-5 pb-32 outline-none sm:px-6 md:pt-4 md:pb-8 lg:px-6 xl:px-8"
         >
           {admin.platformRole === "support_agent" && (
             <p className="order-1 flex items-center gap-2.5 rounded-[14px] bg-neon px-4 py-2.5 text-[12px] font-medium">
@@ -208,7 +208,7 @@ async function AdminShell({ children }: { children: React.ReactNode }) {
 
       <nav
         aria-label={t("nav.mobile")}
-        className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin bg-(image:--jm-degrade-rail-h) p-[7px] shadow-float lg:hidden"
+        className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin bg-(image:--jm-degrade-rail-h) p-[7px] shadow-float md:hidden"
       >
         <ul className="flex items-center gap-1">
           {visible

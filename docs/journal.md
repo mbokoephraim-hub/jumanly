@@ -2,6 +2,23 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Jumanly Admin v4 · étape 6 : responsive et passe finale (16 octobre 2026)
+
+- Tablette (à partir de 768 px) : la colonne d'icônes et le menu horizontal remplacent l'en-tête
+  vert et la pilule du bas, dans l'espace connecté comme dans l'admin ; la recherche s'ouvre depuis
+  une icône (page `/app/recherche`, qui porte désormais son propre champ).
+- Téléphone (390 px) : icône loupe dans l'en-tête, pilule du bas inchangée.
+- Grand écran (1920 px) : le menu du haut s'aligne sur la largeur du contenu (1400 px).
+- Changement d'espace dans la barre du haut : logo seul sous 1280 px, pour laisser la place aux
+  onglets (le nom reste lu par les lecteurs d'écran).
+- Message du jour du tableau de bord : n'occupe plus de place une fois replié (plus de ligne vide
+  sous le titre), style clair.
+- Vérifié : aucun défilement horizontal à 390, 768, 1280, 1440 et 1920 px sur 12 pages (talent,
+  recruteur, partenaire, admin) ; captures dans `/mnt/project-files/captures/admin-v4/etape-6/`.
+- Guide admin mis à jour (colonne, menu du haut, recherche, tablette, espace des utilisateurs).
+- Reste à faire (prompt des finitions, `/mnt/project-files/admin-v4/PROMPT-finitions.md`) : colonne
+  plus haute, sous-menu plus visible, champs et filtres plus marqués, statistiques des candidatures.
+
 ## Jumanly Admin v4 · étape 5 : les grands bandeaux deviennent des cartes légères (16 octobre 2026)
 
 - Les gros blocs sombres en tête de page sont remplacés par des cartes blanches à bordure fine,
