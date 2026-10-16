@@ -100,7 +100,7 @@ export const talentMenu = [
 export function hidesTalentTabBar(pathname: string) {
   const [, app, section, page, more] = pathname.split("/");
   if (app !== "app" || !section) return false;
-  if (section === "espace") return true;
+  if (section === "espace" || section === "bienvenue") return true;
   if (section === "jobs") return Boolean(page) && !["candidatures", "enregistrees"].includes(page);
   if (section === "messages") return Boolean(page);
   if (section === "learn") {

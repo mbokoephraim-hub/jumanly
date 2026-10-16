@@ -3,16 +3,15 @@ import Link from "next/link";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { SkillsInput } from "@/components/app/skills-input";
-import { SignupStepper } from "@/components/auth/auth-card";
 import { Character } from "@/components/brand";
 import { Icon } from "@/components/brand/icon";
-import { Pattern } from "@/components/site/marketing";
 import { Alert, Button, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { pickMessages } from "@/i18n/client-messages";
-import { welcomeGoals } from "@/lib/welcome";
+import { homeFocus, homeFocuses } from "@/lib/welcome";
+import { contractPreferences } from "@/server/services/profile";
 import { requireUser } from "@/server/auth/session";
-import { finishWelcome, saveTalentWelcome } from "@/server/actions/welcome";
+import { finishWelcome, saveWelcomeDetails, saveWelcomeGoal } from "@/server/actions/welcome";
 import { db } from "@/server/db";
 import { limit, resolvePlan } from "@/server/entitlements";
 import { ownedOrganization } from "@/server/services/accounts";
@@ -23,8 +22,11 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: { absolute: t("title") }, robots: { index: false } };
 }
 
-/** Step 6 · first steps, for a talent or for the owner of a new organization. */
-export default async function WelcomePage() {
+/**
+ * Step 6 · first steps, for the owner of a new organization, or for a talent the goal screen of
+ * docs/ux-mobile-talent (screens 01 and 02): one question, then optional details.
+ */
+export default async function WelcomePage({ searchParams }: PageProps<"/app/bienvenue">) {
   const user = await requireUser("/app/bienvenue");
   const t = await getTranslations("welcome");
   const flow = await readSignupFlow();
@@ -133,252 +135,198 @@ export default async function WelcomePage() {
     );
   }
 
-  const plan = await resolvePlan(db, { type: "user", id: user.id });
   const profile = await db.talentProfile.findUnique({
     where: { userId: user.id },
     include: { skills: { include: { skill: { select: { name: true } } } } },
   });
-  const hasCv = profile
-    ? (await db.document.count({ where: { profileId: profile.id, kind: "cv" } })) > 0
-    : false;
-  const suggestions = (
-    await db.skill.findMany({ select: { name: true }, orderBy: { name: "asc" } })
-  ).map((skill) => skill.name);
-  const paidPlan = flow.plan
-    ? await db.plan.findUnique({ where: { code: flow.plan }, select: { priceCents: true } })
-    : null;
-  const messages = await getMessages();
-  const skills = profile?.skills.map((entry) => entry.skill.name) ?? [];
-  const done = {
-    goal: Boolean(profile?.goal),
-    skills: skills.length > 0,
-    cv: hasCv,
-    // The visibility is asked here: it counts once this screen has been saved.
-    visibility: Boolean(profile?.goal || profile?.targetJob),
-  };
-  const doneCount = Object.values(done).filter(Boolean).length;
-  const total = Object.keys(done).length;
-  const quick = suggestions.filter((name) => !skills.includes(name)).slice(0, 3);
-  const next = [
-    { key: "diagnostic", href: "/app/career/diagnostic", icon: "up", tile: "bg-lime-clair" },
-    { key: "jobs", href: "/app/jobs", icon: "jobs", tile: "bg-menthe-claire" },
-    { key: "training", href: "/formations?acces=free", icon: "learn", tile: "bg-lime" },
-    { key: "code", href: "/activer", icon: "certificat", tile: "bg-creme" },
-  ] as const;
-  const card = "flex flex-col gap-4 rounded-[24px] bg-blanc p-5 lg:p-6";
-  const heading = (step: keyof typeof done, index: number, title: string) => (
-    <h2 id={`welcome-${step}`} className="mb-1 flex items-center gap-3 text-lg font-bold">
-      <span
-        aria-hidden
-        className={cx(
-          "flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
-          done[step] ? "bg-lime text-sapin" : "bg-sapin text-lime",
-        )}
-      >
-        {done[step] ? <Icon name="check" className="size-4" /> : index}
-      </span>
-      {title}
-    </h2>
-  );
+  const step = (await searchParams).etape === "2" ? 2 : 1;
+  const current = homeFocus(profile?.goal);
+  const choice = current.personalised ? current.focus : "job";
+  // Fixed at the bottom of a phone, in the flow of the page from a tablet up.
+  const bar =
+    "fixed inset-x-0 bottom-0 z-30 flex gap-3 border-t border-brume bg-creme px-4 pt-3 pb-[max(12px,env(safe-area-inset-bottom))] md:static md:z-auto md:justify-end md:border-0 md:bg-transparent md:p-0";
+  const focusTiles = { job: "bg-lime", skills: "bg-neon", career: "bg-menthe-claire" } as const;
+  const focusIcons = { job: "jobs", skills: "diplome", career: "objectif" } as const;
 
-  return (
-    <div className="flex max-w-[1312px] flex-col gap-7">
-      <header className="flex items-start gap-6">
-        <span className="jm-slide-in hidden shrink-0 md:block">
-          <Character name="amani" pose="salut" height={170} />
+  if (step === 1) {
+    return (
+      <div className="mx-auto flex w-full max-w-[560px] flex-col gap-5 pb-24 md:pb-0">
+        {resume}
+        <span className="jm-slide-in flex justify-center">
+          <Character name="amani" pose="joie" height={150} />
         </span>
-        <div className="flex flex-1 flex-col gap-4">
-          <div className="max-w-[620px]">
-            <SignupStepper current="welcome" paid={Boolean(paidPlan?.priceCents)} />
-          </div>
-          <div className="flex flex-wrap items-center gap-3">
-            <span
-              aria-hidden
-              className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-sapin text-lime lg:size-12"
-            >
-              <svg viewBox="0 0 24 24" className="size-7" fill="none">
-                <path
-                  d="M15 9.5v6a4.5 4.5 0 0 1-9 0"
-                  pathLength={1}
-                  className="jm-letter"
-                  stroke="currentColor"
-                  strokeWidth={3.2}
-                  strokeLinecap="round"
-                />
-                <circle
-                  cx="15"
-                  cy="4"
-                  r="0.01"
-                  className="jm-letter-dot"
-                  stroke="currentColor"
-                  strokeWidth={3.2}
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
-            <h1 className="text-[30px] leading-[1.1] font-bold tracking-tight lg:text-[40px]">
-              {t("talent.title", { firstName })}
-            </h1>
-            <Link
-              href="/app/abonnement"
-              className="flex items-center gap-1.5 rounded-pill bg-sapin px-3 py-1.5 text-xs font-semibold text-lime"
-            >
-              <Icon name="etoile" className="size-3.5" />
-              {t("talent.plan", { plan: plan?.planName ?? "" })}
-            </Link>
-          </div>
-          <p className="text-[15px] text-ardoise lg:text-base">{t("talent.subtitle")}</p>
-          <div className="flex items-center gap-3">
-            <span
-              role="progressbar"
-              aria-valuemin={0}
-              aria-valuemax={total}
-              aria-valuenow={doneCount}
-              aria-label={t("progress", { done: doneCount, total })}
-              className="h-1.5 w-full max-w-[350px] overflow-hidden rounded-pill bg-brume"
-            >
-              <span
-                className="jm-fill block h-full rounded-pill bg-feuille"
-                style={{ width: `${(doneCount / total) * 100}%` }}
-              />
-            </span>
-            <span className="shrink-0 rounded-pill bg-[#E4FAD0] px-2.5 py-1 text-[11px] font-semibold">
-              {t("progress", { done: doneCount, total })}
-            </span>
-          </div>
+        <div className="flex flex-col gap-2">
+          <p className="text-[13px] font-semibold text-feuille-fonce">
+            {t("talent.step1.eyebrow")}
+          </p>
+          <h1 className="text-[28px] leading-[1.15] font-bold tracking-tight">
+            {t("talent.step1.title")}
+          </h1>
+          <p className="text-[14px] text-ardoise">{t("talent.step1.hint")}</p>
         </div>
-      </header>
-      {resume}
-      <div className="grid gap-6 lg:grid-cols-[1fr_400px] lg:gap-7">
-        <form action={saveTalentWelcome} className="jm-steps flex flex-col gap-4">
-          <div role="group" aria-labelledby="welcome-goal" className={card}>
-            {heading("goal", 1, t("talent.goal.title"))}
-            <div className="flex flex-wrap gap-2">
-              {welcomeGoals.map((goal) => (
-                <label
-                  key={goal}
-                  className="flex h-10 cursor-pointer items-center gap-2 rounded-pill bg-blanc px-4 text-[13px] font-medium ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40 has-checked:bg-sapin has-checked:text-blanc has-checked:ring-sapin has-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)]"
+        <form action={saveWelcomeGoal} className="flex flex-col gap-3">
+          <fieldset className="flex flex-col gap-3">
+            <legend className="sr-only">{t("talent.step1.title")}</legend>
+            {homeFocuses.map((focus) => (
+              <label
+                key={focus}
+                className="group jm-pressable flex min-h-[76px] cursor-pointer items-center gap-4 rounded-[22px] px-4 py-3 has-checked:ring-2 has-checked:ring-sapin has-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)]"
+              >
+                <input
+                  type="radio"
+                  name="focus"
+                  value={focus}
+                  defaultChecked={choice === focus}
+                  className="sr-only"
+                />
+                <span
+                  aria-hidden
+                  className={cx(
+                    "grid size-12 shrink-0 place-items-center rounded-[14px]",
+                    focusTiles[focus],
+                  )}
                 >
-                  <input
-                    type="radio"
-                    name="goal"
-                    value={goal}
-                    defaultChecked={profile?.goal === goal}
-                    className="peer sr-only"
-                  />
-                  <Icon name="check" className="hidden size-4 text-lime peer-checked:block" />
-                  {t(`talent.goal.${goal}`)}
-                </label>
-              ))}
-            </div>
-            <TextField
-              id="welcome-target"
-              name="targetJob"
-              icon="objectif"
-              label={t("talent.targetJob.label")}
-              placeholder={t("talent.targetJob.placeholder")}
-              defaultValue={profile?.targetJob ?? ""}
-            />
-          </div>
-          <div role="group" aria-labelledby="welcome-skills" className={card}>
-            {heading("skills", 2, t("talent.skills.title"))}
-            <NextIntlClientProvider messages={pickMessages(messages, ["welcome"])}>
-              <SkillsInput
-                suggestions={suggestions}
-                initial={skills}
-                quick={quick}
-                label={t("talent.skills.label")}
-              />
-            </NextIntlClientProvider>
-          </div>
-          <div role="group" aria-labelledby="welcome-cv" className={card}>
-            {heading("cv", 3, t("talent.cv.title"))}
-            <Link
-              href="/app/career/cv"
-              className="group flex flex-col gap-1.5 rounded-[18px] bg-neon p-5 transition-transform hover:-translate-y-0.5"
-            >
-              <Icon name="doc" className="size-5" />
-              <span className="mt-1 text-[15px] font-bold">{t("talent.cv.create.text")}</span>
-              <span className="text-xs text-sapin/80">{t("talent.cv.create.help")}</span>
-            </Link>
-          </div>
-          <div role="group" aria-labelledby="welcome-visibility" className={card}>
-            {heading("visibility", 4, t("talent.visibility.title"))}
-            <div className="flex flex-col gap-2.5">
-              {(["private", "recruiters", "anonymous"] as const).map((value) => (
-                <label
-                  key={value}
-                  className="flex cursor-pointer items-center gap-3 rounded-[16px] bg-blanc px-4 py-3 text-sm ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40 has-checked:bg-[#E4FAD0] has-checked:ring-0 has-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)]"
-                >
-                  <span className="relative flex size-[22px] shrink-0">
-                    <input
-                      type="radio"
-                      name="visibility"
-                      value={value}
-                      defaultChecked={(profile?.visibility ?? "private") === value}
-                      className="peer size-[22px] cursor-pointer appearance-none rounded-full bg-blanc ring-[1.5px] ring-[#8a9794] ring-inset checked:bg-sapin checked:ring-sapin"
-                    />
-                    <span
-                      aria-hidden
-                      className="pointer-events-none absolute top-[7px] left-[7px] hidden size-2 rounded-full bg-lime peer-checked:block"
-                    />
+                  <Icon name={focusIcons[focus]} className="size-6" />
+                </span>
+                <span className="flex min-w-0 flex-1 flex-col">
+                  <span className="text-[16px] leading-snug font-semibold">
+                    {t(`talent.focus.${focus}.text`)}
                   </span>
-                  {t(`talent.visibility.${value}`)}
-                </label>
-              ))}
-            </div>
-            <p className="text-xs text-ardoise">{t("talent.visibility.help")}</p>
-          </div>
-          <div className="flex flex-col gap-3 sm:flex-row sm:items-center">
-            <p className="flex-1 text-xs text-ardoise">{t("later")}</p>
-            <Button type="submit" formAction={finishWelcome} variant="tertiary" size="lg">
-              {t("skip")}
+                  <span className="text-[13px] text-ardoise">
+                    {t(`talent.focus.${focus}.line`)}
+                  </span>
+                </span>
+                <span
+                  aria-hidden
+                  className="grid size-6 shrink-0 place-items-center rounded-full ring-2 ring-brume group-has-checked:bg-sapin group-has-checked:ring-sapin"
+                >
+                  <span className="size-2.5 rounded-full bg-blanc opacity-0 group-has-checked:opacity-100" />
+                </span>
+              </label>
+            ))}
+          </fieldset>
+          <div className={bar}>
+            <Button type="submit" formAction={finishWelcome} variant="soft" size="L">
+              {t("talent.step1.later")}
             </Button>
-            <Button type="submit" size="lg" iconAfter={<Icon name="chev-r" className="size-5" />}>
-              {t("finish")}
+            <Button
+              type="submit"
+              variant="principal"
+              size="L"
+              arrow
+              className="flex-1 md:flex-none"
+            >
+              {t("talent.step1.next")}
             </Button>
           </div>
         </form>
-        <aside className="flex flex-col gap-4 self-start lg:sticky lg:top-24">
-          <section className="relative overflow-hidden rounded-[28px] bg-sapin p-6">
-            <Pattern name="motif-trajectoires-sombre" size={360} opacity={0.6} />
-            <div className="relative flex flex-col gap-3">
-              <h2 className="mb-1 text-xs font-bold tracking-[0.14em] text-lime uppercase">
-                {t("talent.next.title")}
-              </h2>
-              {next.map((item) => (
-                <Link
-                  key={item.key}
-                  href={item.href}
-                  className="group flex items-center gap-3.5 rounded-[18px] bg-blanc p-3.5 text-sm font-semibold transition-transform hover:-translate-y-0.5"
-                >
-                  <span
-                    aria-hidden
-                    className={cx(
-                      "flex size-10 shrink-0 items-center justify-center rounded-[12px]",
-                      item.tile,
-                    )}
-                  >
-                    <Icon name={item.icon} className="size-5" />
-                  </span>
-                  <span className="flex-1">{t(`talent.next.${item.key}`)}</span>
-                  <Icon
-                    name="chev-r"
-                    className="size-4 text-ardoise transition-transform group-hover:translate-x-0.5"
-                  />
-                </Link>
-              ))}
-            </div>
-          </section>
-          <p className="flex items-start gap-3 rounded-[18px] bg-[#E4FAD0] px-4 py-3.5 text-[13px] leading-[19px]">
-            <Icon name="check" className="mt-px size-4 shrink-0 text-feuille-fonce" />
-            {t("talent.reminder")}
-          </p>
-          <span className="jm-float hidden justify-center lg:flex">
-            <Character name="amani" pose="joie" height={220} />
-          </span>
-        </aside>
       </div>
+    );
+  }
+
+  const suggestions = (
+    await db.skill.findMany({ select: { name: true }, orderBy: { name: "asc" } })
+  ).map((skill) => skill.name);
+  const messages = await getMessages();
+  const skills = profile?.skills.map((entry) => entry.skill.name) ?? [];
+  const quick = suggestions.filter((name) => !skills.includes(name)).slice(0, 3);
+  const tp = await getTranslations("talent.profile.preferences");
+  const chip =
+    "flex h-10 cursor-pointer items-center gap-2 rounded-pill bg-blanc px-4 text-[13px] font-medium ring-[1.5px] ring-brume ring-inset has-checked:bg-sapin has-checked:text-blanc has-checked:ring-sapin has-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)]";
+
+  return (
+    <div className="mx-auto flex w-full max-w-[560px] flex-col gap-5 pb-24 md:pb-0">
+      {resume}
+      <div className="flex flex-col gap-2">
+        <p className="text-[13px] font-semibold text-feuille-fonce">{t("talent.step2.eyebrow")}</p>
+        <h1 className="text-[28px] leading-[1.15] font-bold tracking-tight">
+          {t("talent.step2.title")}
+        </h1>
+      </div>
+      <form action={saveWelcomeDetails} className="flex flex-col gap-5">
+        <TextField
+          id="welcome-titles"
+          name="titles"
+          icon="recherche"
+          label={t("talent.step2.titles.label")}
+          placeholder={t("talent.step2.titles.placeholder")}
+          defaultValue={profile?.desiredJobTitles.join(", ") ?? ""}
+        />
+        <div className="flex flex-col gap-2">
+          <NextIntlClientProvider messages={pickMessages(messages, ["welcome"])}>
+            <SkillsInput
+              suggestions={suggestions}
+              initial={skills}
+              quick={quick}
+              label={t("talent.step2.skills.label")}
+            />
+          </NextIntlClientProvider>
+        </div>
+        <TextField
+          id="welcome-locations"
+          name="locations"
+          icon="localisation"
+          label={t("talent.step2.locations.label")}
+          placeholder={t("talent.step2.locations.placeholder")}
+          defaultValue={profile?.desiredLocations.join(", ") ?? ""}
+        />
+        <details className="group rounded-[22px] bg-blanc shadow-douce">
+          <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 px-5 text-[15px] font-semibold [&::-webkit-details-marker]:hidden">
+            {t("talent.step2.preferences")}
+            <Icon name="chev-d" className="size-5 transition-transform group-open:rotate-180" />
+          </summary>
+          <div className="flex flex-col gap-4 px-5 pb-5">
+            <fieldset className="flex flex-col gap-2">
+              <legend className="mb-2 text-[13px] font-semibold">{tp("contract.text")}</legend>
+              <div className="flex flex-wrap gap-2">
+                {contractPreferences.map((contract) => (
+                  <label key={contract} className={chip}>
+                    <input
+                      type="checkbox"
+                      name="contracts"
+                      value={contract}
+                      defaultChecked={profile?.desiredContracts.includes(contract)}
+                      className="sr-only"
+                    />
+                    {tp(`contract.${contract}`)}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <fieldset className="flex flex-col gap-2">
+              <legend className="mb-2 text-[13px] font-semibold">{tp("remote.text")}</legend>
+              <div className="flex flex-wrap gap-2">
+                {(["onsite", "hybrid", "remote"] as const).map((mode) => (
+                  <label key={mode} className={chip}>
+                    <input
+                      type="checkbox"
+                      name="remote"
+                      value={mode}
+                      defaultChecked={profile?.remotePreferences.includes(mode)}
+                      className="sr-only"
+                    />
+                    {tp(`remote.${mode}`)}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          </div>
+        </details>
+        <Link
+          href="/app/bienvenue"
+          className="self-start text-[14px] font-semibold text-feuille-fonce underline"
+        >
+          {t("talent.step2.back")}
+        </Link>
+        <div className={bar}>
+          <Button type="submit" formAction={finishWelcome} variant="soft" size="L">
+            {t("talent.step2.skip")}
+          </Button>
+          <Button type="submit" variant="principal" size="L" arrow className="flex-1 md:flex-none">
+            {t("talent.step2.next")}
+          </Button>
+        </div>
+      </form>
     </div>
   );
 }

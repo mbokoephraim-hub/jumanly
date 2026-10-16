@@ -15,6 +15,7 @@ describe("navigation Talent (docs/ux-mobile-talent, prompt 2)", () => {
       "/app/messages/abc",
       "/app/career/cv/abc",
       "/app/espace",
+      "/app/bienvenue",
     ])
       expect(hidesTalentTabBar(path), path).toBe(true);
   });

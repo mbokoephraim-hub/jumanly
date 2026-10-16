@@ -37,7 +37,7 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await page.locator('input[name="code"]').fill(await lastCode(email, since));
   await page.getByRole("button", { name: "Vérifier" }).click();
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
-  await page.getByRole("button", { name: "Accéder à mon espace" }).click();
+  await page.getByRole("button", { name: "Plus tard" }).click();
   await expect(page).toHaveURL(new RegExp(`/app/jobs/${JOB}`));
 
   // Profile: summary, an experience, three skills.
