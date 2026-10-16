@@ -1,0 +1,672 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Jumanly mobile Talent</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>:root{
+  --sapin:#0F3F37; --lime:#A6F26B; --creme:#F2EDE5; --blanc:#FFFFFF; --feuille:#3DA14F;
+  --menthe:#2FD3A6; --nuit:#0B1A1F; --neon:#E3F67C; --ardoise:#5B6B68; --brume:#DCE5E1;
+  --lime-c:#EEFBDD; --menthe-c:#DDF6EE; --ambre:#F2B33D; --corail:#E25C4B;
+  --g-profondeur:linear-gradient(160deg,#0F3F37 0%,#0B1A1F 100%);
+  --g-rail-h:linear-gradient(90deg,#0f3f37 0%,#14745f 58%,#1fa98a 100%);
+  --ombre-carte:0 0 0 1px rgba(15,63,55,.045),0 1px 2px rgba(15,63,55,.04),0 12px 32px -12px rgba(15,63,55,.14);
+  --ombre-douce:0 0 0 1px rgba(15,63,55,.05),0 4px 14px -6px rgba(15,63,55,.12);
+  --ombre-sombre:0 14px 36px -16px rgba(11,26,31,.45);
+  --zone:#F6F3EE;
+  --font:"Sora",ui-sans-serif,system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#E9E3D9}
+body{color:var(--sapin);font-family:var(--font);font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+h1,h2,h3{margin:0;font-weight:600;letter-spacing:-.02em;text-wrap:balance}
+p{margin:0} ul{margin:0;padding-left:18px}
+a{color:inherit;text-decoration:none;cursor:pointer} button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+code{font-size:.92em;background:rgba(15,63,55,.07);padding:1px 5px;border-radius:6px}
+.i{width:20px;height:20px;flex:none} .i.s{width:16px;height:16px} .i.xs{width:13px;height:13px} .i.l{width:28px;height:28px}
+.mute{opacity:.45}
+
+/* ---------- Page galerie ---------- */
+.couv{background:var(--g-profondeur);color:#fff;padding:56px max(24px,calc((100% - 1240px)/2)) 40px}
+.couv .marque{display:flex;align-items:center;gap:10px;font-weight:600;font-size:22px}
+.couv h1{font-size:40px;margin:22px 0 10px}
+.couv p{max-width:760px;opacity:.82;font-size:15px}
+.sommaire{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:24px 0 0}
+.sommaire a{display:block;padding:8px 14px;border-radius:999px;background:rgba(255,255,255,.1);font-size:13px}
+.sommaire a:hover{background:var(--lime);color:var(--sapin)}
+.bloc{padding:48px max(24px,calc((100% - 1240px)/2)) 8px}
+.bloc-tete h2{font-size:26px}
+.bloc-tete p{color:var(--ardoise);max-width:760px;margin-top:6px}
+.rangee{display:flex;flex-wrap:wrap;gap:36px 32px;margin-top:28px;align-items:flex-start}
+.ecran{margin:0;width:390px}
+.ecran figcaption{margin-top:14px;font-size:13px}
+.ecran figcaption b{display:block;font-size:14px;margin-bottom:4px}
+.ecran figcaption ul{color:var(--ardoise);padding-left:16px}
+.ecran figcaption li{margin:2px 0}
+
+/* ---------- Téléphone ---------- */
+.phone{position:relative;width:390px;display:flex;flex-direction:column;border-radius:44px;overflow:hidden;background:var(--sapin);
+  box-shadow:0 0 0 8px #fff,0 0 0 9px rgba(15,63,55,.08),0 30px 60px -30px rgba(11,26,31,.45)}
+.barre-statut{height:44px;display:flex;align-items:center;justify-content:space-between;padding:0 30px 0 34px;color:#fff;font-size:14px;font-weight:600}
+.barre-statut .ind{display:flex;gap:3px}.barre-statut .ind i{width:4px;height:10px;border-radius:2px;background:#fff}
+.barre-statut .ind i:nth-child(2){height:8px}.barre-statut .ind i:nth-child(3){height:6px}
+.home-ind{position:absolute;bottom:8px;left:50%;transform:translateX(-50%);width:134px;height:5px;border-radius:3px;background:var(--sapin);opacity:.85;z-index:9}
+
+/* Barre supérieure compacte : 52 px */
+.top{height:52px;display:flex;align-items:center;gap:6px;padding:0 10px 4px 18px;color:#fff}
+.top .marque{display:flex;align-items:center;gap:8px;font-weight:600;font-size:19px;letter-spacing:-.02em}
+.titre-top{font-size:19px;flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.top-actions{display:flex;align-items:center;gap:2px;margin-left:auto}
+.rond{position:relative;display:grid;place-items:center;width:44px;height:44px;border-radius:50%;color:#fff}
+.top > .rond:first-child{margin-left:-12px}
+.point-notif{position:absolute;top:10px;right:11px;width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 2px var(--sapin)}
+.avatar-btn{width:44px;height:44px;display:grid;place-items:center}
+.avatar-btn span{width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--neon);color:var(--sapin);font-size:12px;font-weight:700;box-shadow:0 0 0 2px rgba(166,242,107,.7)}
+
+/* Feuille Crème */
+.sheet{background:var(--creme);border-radius:28px 28px 0 0;flex:1;padding:18px 16px 40px;display:flex;flex-direction:column;gap:14px;position:relative}
+.sheet.avec-nav{padding-bottom:124px}
+.sheet.avec-barre{padding-bottom:120px}
+.sheet.plein{padding:0 0 120px;gap:0;overflow:hidden}
+
+/* Barre de navigation inférieure (4 destinations) */
+.nav{position:absolute;left:12px;right:12px;bottom:24px;z-index:8;display:grid;grid-template-columns:repeat(4,1fr);gap:4px;
+  padding:6px;border-radius:26px;background:var(--sapin);background-image:var(--g-rail-h);box-shadow:0 14px 34px rgba(11,26,31,.25)}
+.nav a{position:relative;min-height:56px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border-radius:20px;
+  color:rgba(255,255,255,.74);font-size:11.5px;font-weight:500}
+.nav a.on{background:var(--lime);color:var(--sapin);font-weight:600}
+.nav .i{width:22px;height:22px}
+.pastille{position:absolute;top:6px;left:calc(50% + 6px);min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--neon);color:var(--sapin);font-size:10px;display:grid;place-items:center;font-style:normal;box-shadow:0 0 0 2px #156b59}
+
+/* Barre d'action fixe (pages sans navigation) */
+.barre-action{position:absolute;left:0;right:0;bottom:0;z-index:8;display:flex;gap:10px;align-items:center;padding:12px 16px 30px;background:rgba(242,237,229,.94);backdrop-filter:blur(10px);box-shadow:0 -1px 0 rgba(15,63,55,.07)}
+.btn-prim,.btn-sec,.btn-lime,.btn-large{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 20px;border-radius:999px;font-weight:600;font-size:15px}
+.btn-prim{background:var(--sapin);color:#fff;flex:1}
+.btn-prim.plein{flex:1}
+.btn-sec{background:#fff;box-shadow:var(--ombre-douce);padding:0 18px}
+.btn-lime{background:var(--lime);color:var(--sapin);align-self:flex-start;min-height:44px;margin-top:12px}
+.btn-large{background:#fff;box-shadow:var(--ombre-douce);width:100%;font-size:14px;min-height:48px}
+.btn-icone{width:50px;height:50px;border-radius:50%;background:#fff;box-shadow:var(--ombre-douce);display:grid;place-items:center;flex:none}
+.btn-mini{display:inline-flex;align-items:center;min-height:36px;padding:0 13px;border-radius:999px;background:#fff;box-shadow:var(--ombre-douce);font-size:12.5px;font-weight:600;white-space:nowrap;flex:none}
+.btn-mini.plein{background:var(--sapin);color:#fff;box-shadow:none}
+.btn-txt{display:inline-flex;align-items:center;gap:4px;font-weight:600;font-size:13px;margin-top:8px}
+.lien{display:inline-flex;align-items:center;gap:3px;font-weight:600;font-size:13px;color:#14745F;white-space:nowrap}
+
+/* Éléments */
+.carte{background:#fff;border-radius:24px;box-shadow:var(--ombre-carte);position:relative}
+.carte.sombre{background:var(--g-profondeur);color:#fff;box-shadow:var(--ombre-sombre)}
+.carte.pad{padding:16px}
+.sec{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-top:12px}
+.sec h2{font-size:17px}
+.sec .sous,.sous{color:var(--ardoise);font-size:12.5px;margin-top:2px}
+.salut{display:flex;flex-direction:column;gap:8px}
+.salut > p{font-size:22px;font-weight:600;letter-spacing:-.02em}
+.objectif{display:flex;align-items:center;justify-content:space-between;gap:8px;background:#fff;box-shadow:var(--ombre-douce);border-radius:999px;padding:7px 8px 7px 14px;font-size:12.5px}
+.objectif span{display:inline-flex;align-items:center;gap:6px}
+.objectif a{font-weight:600;color:#14745F;padding:4px 8px}
+.pile{display:flex;flex-direction:column;gap:10px}
+.chips{display:flex;flex-wrap:wrap;gap:6px}
+.chips.defile{flex-wrap:nowrap;overflow-x:auto;margin:0 -16px;padding:2px 16px;scrollbar-width:none}
+.chip{display:inline-flex;align-items:center;gap:5px;min-height:28px;padding:0 10px;border-radius:999px;background:var(--zone);font-size:12px;white-space:nowrap}
+.chip.on{background:var(--sapin);color:#fff}
+.chip.ok{background:var(--lime-c)}
+.chip.grand{min-height:36px;padding:0 14px;font-size:13px;background:var(--lime-c)}
+.chip.petit{min-height:30px;background:#fff;box-shadow:var(--ombre-douce)}
+.defile .chip{min-height:36px;padding:0 14px;font-size:13px;background:#fff;box-shadow:var(--ombre-douce)}
+.defile .chip.on{background:var(--sapin);color:#fff;box-shadow:none}
+
+.t-sapin{background:var(--sapin);color:var(--lime)} .t-lime{background:var(--lime);color:var(--sapin)} .t-neon{background:var(--neon);color:var(--sapin)}
+.t-menthe{background:#BFEFDF;color:var(--sapin)} .t-brume{background:var(--brume);color:var(--sapin)} .t-zone{background:var(--zone);color:var(--sapin)}
+.t-ambre{background:#FCE7BC;color:#7a4d00}
+
+/* Carte d'offre */
+.offre{padding:14px 14px 12px}
+.o-tete{display:flex;gap:12px;align-items:flex-start}
+.logo-ent{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.logo-ent.grand{width:56px;height:56px;border-radius:17px;font-size:16px}
+.o-txt{flex:1;min-width:0}
+.o-txt h3{font-size:15px;line-height:1.3}
+.o-txt p{color:var(--ardoise);font-size:13px;margin-top:1px}
+.fav{width:40px;height:40px;margin:-6px -6px 0 0;border-radius:50%;display:grid;place-items:center;color:var(--ardoise);flex:none}
+.fav.on{color:var(--sapin)} .fav.on svg{fill:var(--lime)}
+.offre .chips{margin-top:10px}
+.o-pied{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:10px;padding-top:10px;border-top:1px solid rgba(15,63,55,.07);font-size:12px}
+.quand{color:var(--ardoise)}
+.lien-o{display:inline-flex;align-items:center;gap:3px;font-weight:600;font-size:13px}
+.etat{display:inline-flex;align-items:center;gap:5px;font-weight:600;font-size:12px;padding:4px 9px;border-radius:999px}
+.etat.ok{background:var(--lime-c);color:#24713a}
+.etat.ext{background:var(--zone)}
+.offre.compact .chips{margin-top:8px}
+
+/* Carte de formation */
+.carrousel{display:flex;gap:12px;overflow-x:auto;margin:0 -16px;padding:4px 16px 14px;scroll-snap-type:x mandatory;scroll-padding-inline:16px;scrollbar-width:none}
+.form{flex:0 0 232px;scroll-snap-align:start;overflow:hidden;display:flex;flex-direction:column}
+.f-visuel{height:96px;position:relative;display:grid;place-items:center}
+.f-visuel .acces{position:absolute;top:10px;left:10px;background:rgba(255,255,255,.9);border-radius:999px;padding:3px 9px;font-size:11px;font-weight:600}
+.f-corps{padding:12px 14px 14px;display:flex;flex-direction:column}
+.dom{font-size:11px;color:var(--ardoise);font-weight:500}
+.form h3{font-size:14.5px;line-height:1.3;margin-top:3px}
+.meta{font-size:12px;color:var(--ardoise);margin-top:4px}
+.jauge{height:6px;border-radius:3px;background:var(--zone);overflow:hidden;margin-top:9px}
+.jauge i{display:block;height:100%;background:var(--feuille);border-radius:3px}
+.jauge.cl{background:rgba(255,255,255,.15)} .jauge.cl i{background:var(--lime)}
+
+.grille2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.outil{padding:14px;display:flex;flex-direction:column;gap:2px}
+.outil .tuile{margin-bottom:8px}
+.outil b{font-size:14px} .outil span:last-child{font-size:12px;color:var(--ardoise)}
+.tuile{width:40px;height:40px;border-radius:13px;display:grid;place-items:center;flex:none}
+
+.liste{padding:4px 0}
+.ligne,.notif,.cand,.recap{display:flex;align-items:center;gap:12px;padding:11px 14px;min-height:60px}
+.liste > * + *{border-top:1px solid rgba(15,63,55,.06)}
+.l-txt{flex:1;min-width:0;display:flex;flex-direction:column}
+.l-txt b{font-size:13.5px;font-weight:600;line-height:1.3}
+.l-txt span{font-size:12px;color:var(--ardoise);line-height:1.35}
+.heure{font-size:11.5px;color:var(--ardoise);align-self:flex-start;margin-top:3px;white-space:nowrap}
+
+.reprise{padding:18px}
+.kicker{font-size:11.5px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--lime)}
+.reprise h3{font-size:19px;margin-top:6px}
+.meta-cl{font-size:12.5px;opacity:.75;margin-top:4px}
+.note-perso{display:flex;gap:7px;align-items:flex-start;font-size:12.5px;background:var(--lime-c);padding:10px 12px;border-radius:14px;margin-top:-4px}
+.note-perso svg{margin-top:2px}
+.note-perso a{font-weight:600;text-decoration:underline}
+.pourquoi{display:inline-flex;gap:6px;align-items:center;font-size:12.5px;font-weight:600;color:#14745F;margin-top:12px}
+
+/* Première connexion */
+.onb{display:flex;flex-direction:column;gap:12px;padding-top:6px}
+.onb-perso{display:flex;justify-content:center;margin:-6px 0 -4px}
+.etape{font-size:12px;font-weight:600;color:#14745F}
+.h-onb{font-size:24px;line-height:1.2}
+.choix{display:flex;flex-direction:column;gap:10px;margin-top:4px}
+.opt{display:flex;align-items:center;gap:12px;padding:14px;border-radius:20px;background:#fff;box-shadow:var(--ombre-carte);cursor:pointer}
+.opt > span:nth-child(2){flex:1;display:flex;flex-direction:column}
+.opt b{font-size:14.5px} .opt small{font-size:12px;color:var(--ardoise)}
+.opt.on{box-shadow:0 0 0 2px var(--sapin),var(--ombre-carte)}
+.radio{width:22px;height:22px;border-radius:50%;box-shadow:inset 0 0 0 2px rgba(15,63,55,.25);flex:none}
+.opt.on .radio{box-shadow:inset 0 0 0 7px var(--sapin)}
+.champ{display:flex;flex-direction:column;gap:8px}
+.champ label{font-size:13px;font-weight:600}
+.saisie{display:flex;align-items:center;gap:9px;min-height:48px;padding:0 14px;border-radius:16px;background:#fff;box-shadow:var(--ombre-douce);font-size:14px}
+.saisie .ph{color:var(--ardoise)}
+.saisie.grande{flex:1}
+.saisie.focus{box-shadow:0 0 0 2px var(--sapin)}
+.curseur{width:1.5px;height:18px;background:var(--sapin);margin-left:-6px;flex:1;max-width:1.5px}
+.saisie.focus > svg:last-child{margin-left:auto}
+.seg{display:flex;background:#fff;box-shadow:var(--ombre-douce);border-radius:999px;padding:4px}
+.seg span{flex:1;text-align:center;font-size:12px;padding:8px 2px;border-radius:999px;white-space:nowrap}
+.seg span.on{background:var(--sapin);color:#fff;font-weight:600}
+.plus-pref summary{list-style:none;display:flex;align-items:center;justify-content:space-between;font-size:13.5px;font-weight:600;padding:14px;background:#fff;border-radius:16px;box-shadow:var(--ombre-douce)}
+.plus-pref summary::-webkit-details-marker{display:none}
+
+/* Offres */
+.recherche-bloc{display:flex;gap:10px;align-items:center}
+.filtre-btn{position:relative;width:48px;height:48px;border-radius:16px;background:var(--sapin);color:#fff;display:grid;place-items:center;flex:none}
+.filtre-btn b{position:absolute;top:-5px;right:-5px;width:19px;height:19px;border-radius:50%;background:var(--lime);color:var(--sapin);font-size:11px;display:grid;place-items:center;box-shadow:0 0 0 2px var(--creme)}
+.onglets{display:flex;gap:4px;background:rgba(15,63,55,.06);border-radius:999px;padding:4px}
+.onglets span{flex:1;text-align:center;padding:9px 6px;border-radius:999px;font-size:13px;font-weight:500;white-space:nowrap}
+.onglets span.on{background:#fff;box-shadow:var(--ombre-douce);font-weight:600}
+.onglets.defile{overflow-x:auto;scrollbar-width:none}
+.onglets.defile span{flex:none;padding:9px 14px}
+.recentes{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.mute-t{font-size:12px;color:var(--ardoise);margin-right:2px}
+.fin-liste{text-align:center;font-size:12px;color:var(--ardoise);margin-top:4px}
+
+/* Feuille de filtres */
+.voile{position:absolute;inset:0;background:rgba(11,26,31,.45);z-index:5}
+.feuille{position:absolute;left:0;right:0;bottom:0;top:150px;z-index:6;background:var(--creme);border-radius:28px 28px 0 0;padding:10px 16px 120px;display:flex;flex-direction:column;gap:16px}
+.poignee{width:40px;height:5px;border-radius:3px;background:rgba(15,63,55,.2);align-self:center}
+.f-tete{display:flex;justify-content:space-between;align-items:center}
+.f-tete h2{font-size:20px}
+.barre-action.haute{z-index:7}
+
+/* Détail d'offre */
+.d-tete{padding:18px;display:flex;flex-direction:column;gap:8px}
+.d-tete h1{font-size:21px;line-height:1.25;margin-top:4px}
+.d-tete .ent{color:var(--ardoise);font-size:14px;margin-top:-4px}
+.d-dates{display:flex;flex-wrap:wrap;gap:6px 14px;font-size:12px;color:var(--ardoise);margin-top:2px}
+.d-dates span{display:inline-flex;align-items:center;gap:5px}
+.d-dates .urgent{color:#8a5a00;font-weight:600}
+.adapter{display:flex;align-items:center;gap:12px;padding:14px;background:var(--lime-c);box-shadow:none}
+.adapter > span{flex:1;display:flex;flex-direction:column}
+.adapter b{font-size:13.5px} .adapter small{font-size:12px;color:var(--ardoise)}
+.adapter.mince{background:#fff;box-shadow:var(--ombre-douce)}
+.accordeon{padding:2px 0}
+.accordeon details + details{border-top:1px solid rgba(15,63,55,.06)}
+.accordeon summary{list-style:none;display:flex;align-items:center;justify-content:space-between;gap:8px;padding:15px 16px;font-weight:600;font-size:14px;min-height:52px}
+.accordeon summary::-webkit-details-marker{display:none}
+.accordeon details[open] summary svg:last-child{transform:rotate(180deg)}
+.accordeon details > p,.accordeon details > ul,.accordeon details > .chips{margin:0 16px 14px;font-size:13.5px;color:#2c4a44}
+.accordeon details > ul{padding-left:34px;margin-left:0}
+.accordeon.solo summary{gap:10px}
+.accordeon.solo summary svg:first-child{flex:none}
+.accordeon.solo summary{justify-content:flex-start}
+.accordeon.solo summary svg:last-child{margin-left:auto}
+.petit-txt{font-size:12px;color:var(--ardoise);margin:0 16px 14px}
+.sheet > .petit-txt{margin:0}
+.centre{text-align:center}
+
+/* Candidature */
+.cand-ctx{font-size:12.5px;color:var(--ardoise);font-weight:500}
+.stepper{display:flex;list-style:none;padding:0;margin:0;gap:4px}
+.stepper li{flex:1;display:flex;flex-direction:column;gap:6px;font-size:10.5px;color:var(--ardoise)}
+.stepper li i{height:5px;border-radius:3px;background:rgba(15,63,55,.12)}
+.stepper li.fait i{background:var(--feuille)}
+.stepper li.on i{background:var(--sapin)}
+.stepper li.on{color:var(--sapin);font-weight:600}
+.h-etape{font-size:21px;margin-top:6px}
+.brouillon{display:flex;align-items:center;gap:6px;font-size:12px;color:#24713a;font-weight:500;margin-top:auto}
+.recap{min-height:56px}
+.recap .k{width:74px;flex:none;font-size:12px;color:var(--ardoise)}
+.recap b{flex:1;font-size:13px;font-weight:500;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.recap a{font-size:12.5px;font-weight:600;color:#14745F;padding:6px 0 6px 6px}
+.consent{display:flex;gap:10px;align-items:flex-start;font-size:13px}
+.case{width:22px;height:22px;border-radius:7px;display:grid;place-items:center;flex:none;box-shadow:inset 0 0 0 2px rgba(15,63,55,.25)}
+.case.on{background:var(--sapin);color:var(--lime);box-shadow:none}
+.confirm{display:flex;flex-direction:column;gap:14px;align-items:stretch;padding-top:26px}
+.confirm .h-onb,.confirm > .sous{text-align:center}
+.confirm > .sous{font-size:13.5px;margin-bottom:6px}
+.sceau{width:84px;height:84px;border-radius:50%;background:var(--lime);display:grid;place-items:center;align-self:center;box-shadow:0 0 0 10px rgba(166,242,107,.25)}
+.alerte{display:flex;gap:12px;background:#FFF6E3;border-radius:20px;padding:14px;margin-top:8px}
+.alerte b{font-size:14px} .alerte p{font-size:12.5px;color:#5b4a2a;margin-top:4px}
+
+/* Learning Room */
+.video{position:relative;aspect-ratio:16/9;background:linear-gradient(135deg,#123f37,#0b1a1f);display:grid;place-items:center;border-radius:28px 28px 0 0}
+.video .play{width:62px;height:62px;border-radius:50%;background:var(--lime);color:var(--sapin);display:grid;place-items:center}
+.sous-t{position:absolute;top:12px;right:14px;font-size:10px;font-weight:700;color:#fff;border:1.5px solid rgba(255,255,255,.7);border-radius:5px;padding:1px 5px}
+.v-barre{position:absolute;left:14px;right:14px;bottom:12px;height:4px;border-radius:2px;background:rgba(255,255,255,.25)}
+.v-barre i{display:block;height:100%;background:var(--lime);border-radius:2px}
+.v-temps{position:absolute;left:14px;bottom:22px;font-size:11px;color:#fff;opacity:.85}
+.lr{padding:16px;display:flex;flex-direction:column;gap:12px}
+.lr-ctx{font-size:12px;color:var(--ardoise)}
+.lr-titre{font-size:19px;line-height:1.25;margin-top:-6px}
+.lr-prog{display:flex;flex-direction:column;gap:6px;font-size:12px;color:var(--ardoise)}
+.lr-prog .jauge{margin:0}
+.lr-contenu p{font-size:13.5px}
+.lr-contenu ul{font-size:13.5px;margin-top:8px}
+
+/* Suivi */
+.rdv{display:flex;gap:14px;padding:14px;box-shadow:0 0 0 2px var(--lime),var(--ombre-carte)}
+.rdv-date{width:54px;height:62px;border-radius:16px;background:var(--sapin);color:#fff;display:flex;flex-direction:column;align-items:center;justify-content:center;flex:none}
+.rdv-date b{font-size:22px;line-height:1;color:var(--lime)} .rdv-date span{font-size:11px}
+.rdv-txt{flex:1;min-width:0}
+.kicker-s{font-size:11px;font-weight:600;color:#8a5a00;text-transform:uppercase;letter-spacing:.04em}
+.rdv h3{font-size:15px;margin-top:2px} .rdv p{font-size:12.5px;color:var(--ardoise);margin-top:2px}
+.rdv-act{display:flex;gap:6px;margin-top:10px;flex-wrap:wrap}
+.msg{display:flex;gap:12px;align-items:center;padding:14px}
+.av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none}
+.av.grand{width:56px;height:56px;font-size:16px}
+.statut{font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;white-space:nowrap}
+.s-entretien{background:var(--lime)} .s-vue{background:#BFEFDF} .s-ext{background:var(--zone)}
+.cand .logo-ent{width:38px;height:38px;border-radius:12px;font-size:12px}
+.vide{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:30px 12px 0}
+.vide h2{font-size:19px} .vide p{color:var(--ardoise);font-size:13.5px;max-width:280px}
+.vide .btn-prim{flex:none;margin-top:8px;padding:0 24px}
+
+/* Mon espace */
+.m-tete{display:flex;align-items:center;gap:12px}
+.m-tete > div{flex:1;display:flex;flex-direction:column;gap:4px}
+.m-tete b{font-size:17px}
+.badge-plan{align-self:flex-start;font-size:11.5px;font-weight:600;background:var(--lime-c);padding:3px 9px;border-radius:999px}
+.m-raccourcis{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.m-raccourcis a{background:#fff;box-shadow:var(--ombre-carte);border-radius:18px;padding:12px 4px;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11px;font-weight:600;text-align:center;line-height:1.2}
+.m-groupe{padding:0 0 4px}
+.m-groupe summary{list-style:none;display:flex;justify-content:space-between;align-items:center;padding:15px 16px 9px;font-size:12px;font-weight:600;letter-spacing:.04em;text-transform:uppercase;color:var(--ardoise)}
+.m-groupe summary::-webkit-details-marker{display:none}
+.m-groupe:not([open]) summary{padding-bottom:15px}
+.m-groupe[open] summary svg{transform:rotate(180deg)}
+.m-ligne{display:flex;align-items:center;gap:12px;min-height:48px;padding:0 16px;font-size:14px}
+.m-ligne span{flex:1}
+.m-ligne em{font-style:normal;font-size:11.5px;color:var(--ardoise);background:var(--zone);padding:2px 8px;border-radius:999px}
+.m-ligne.deco{color:var(--corail);font-weight:600;background:#fff;border-radius:18px;box-shadow:var(--ombre-carte)}
+
+/* Recherche et notifications */
+.r-groupe,.n-groupe{display:flex;flex-direction:column;gap:8px}
+.r-groupe h3,.n-groupe h3{font-size:13px;font-weight:600;color:var(--ardoise);display:flex;align-items:center;gap:6px;text-transform:uppercase;letter-spacing:.04em}
+.r-groupe h3 em{font-style:normal;background:#fff;border-radius:999px;padding:1px 8px;font-size:11px;box-shadow:var(--ombre-douce)}
+.r-groupe h3 .lien{margin-left:auto;text-transform:none;letter-spacing:0}
+.notif{position:relative}
+.notif.nl{background:linear-gradient(90deg,rgba(166,242,107,.16),transparent 70%)}
+.notif.nl::before{content:"";position:absolute;left:5px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:var(--feuille)}
+.centre-b{justify-content:center;margin-top:4px}
+
+/* Domaines */
+.domaines{display:flex;flex-wrap:wrap;gap:8px}
+.dom-t{display:inline-flex;align-items:center;gap:7px;min-height:40px;padding:0 13px;border-radius:14px;background:#fff;box-shadow:var(--ombre-douce);font-size:12.5px;font-weight:500}
+
+@media (max-width:440px){
+  .rangee{gap:28px} .ecran{width:100%} .phone{width:100%}
+  .couv h1{font-size:30px}
+}
+.carte.liste{overflow:hidden}
+/* Page galerie en thème sombre (les téléphones gardent l'identité claire de l'appli) */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]) body{background:#0B1A1F}
+ :root:not([data-theme="light"]) .bloc-tete h2,:root:not([data-theme="light"]) .ecran figcaption b{color:#F2EDE5}
+ :root:not([data-theme="light"]) .bloc-tete p,:root:not([data-theme="light"]) .ecran figcaption ul{color:#A9B8B4}}
+:root[data-theme="dark"] body{background:#0B1A1F}
+:root[data-theme="dark"] .bloc-tete h2,:root[data-theme="dark"] .ecran figcaption b{color:#F2EDE5}
+:root[data-theme="dark"] .bloc-tete p,:root[data-theme="dark"] .ecran figcaption ul{color:#A9B8B4}
+</style></head><body>
+<svg width="0" height="0" style="position:absolute"><symbol id="jm-learn" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 5.5c3-1.5 6-1.5 9 .5 3-2 6-2 9-.5V19c-3-1.5-6-1.5-9 .5-3-2-6-2-9-.5z"/><path d="M12 6v13.5"/></g></symbol><symbol id="jm-career" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 17l6-6 4 4 8-8"/><path d="M15 7h6v6"/></g></symbol><symbol id="jm-jobs" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="3"/><path d="M8 7V5.5A1.5 1.5 0 0 1 9.5 4h5A1.5 1.5 0 0 1 16 5.5V7M3 12.5h18"/></g></symbol><symbol id="jm-hire" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="10" cy="8" r="4"/><path d="M3 20c0-3.5 3-6 7-6 1.5 0 2.8.3 3.8.9M15 18l2 2 4-4"/></g></symbol><symbol id="jm-connect" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="8" r="2.5"/><circle cx="10" cy="18" r="2.5"/><path d="M8.3 7l7.3.7M7 8.3l2.2 7.3M16.5 10.1l-4.6 6.1"/></g></symbol><symbol id="jm-intelligence" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3c.6 4.6 2.4 6.4 7 7-4.6.6-6.4 2.4-7 7-.6-4.6-2.4-6.4-7-7 4.6-.6 6.4-2.4 7-7z"/><path d="M19 16v4M17 18h4"/></g></symbol><symbol id="jm-accueil" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 10.5 12 4l8 6.5V18a2 2 0 0 1-2 2h-3.5v-5.5h-5V20H6a2 2 0 0 1-2-2z"/></g></symbol><symbol id="jm-recherche" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="6.5"/><path d="M16 16l4.5 4.5"/></g></symbol><symbol id="jm-notification" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 10.5a6 6 0 0 1 12 0V15l2 3H4l2-3z"/><path d="M10 21h4"/></g></symbol><symbol id="jm-message" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 5h14a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2h-8l-5 3.5V18H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2z"/></g></symbol><symbol id="jm-profil" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8.5" r="3.5"/><path d="M5 20c.8-3.6 3.6-5.5 7-5.5s6.2 1.9 7 5.5"/></g></symbol><symbol id="jm-reglages" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h9M17 7h3M4 17h3M11 17h9"/><circle cx="15" cy="7" r="2"/><circle cx="9" cy="17" r="2"/></g></symbol><symbol id="jm-filtre" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16l-6 7.5V19l-4 1.5v-8z"/></g></symbol><symbol id="jm-ajouter" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></g></symbol><symbol id="jm-valider" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></g></symbol><symbol id="jm-fermer" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 6l12 12M18 6L6 18"/></g></symbol><symbol id="jm-suivant" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></g></symbol><symbol id="jm-telecharger" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11M7 10.5l5 5 5-5M5 20h14"/></g></symbol><symbol id="jm-partager" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5.5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="18.5" r="2.5"/><path d="M8.2 10.8l7.6-4.1M8.2 13.2l7.6 4.1"/></g></symbol><symbol id="jm-favori" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 4h10a1 1 0 0 1 1 1v15.5l-6-4-6 4V5a1 1 0 0 1 1-1z"/></g></symbol><symbol id="jm-lien" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1"/><path d="M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"/></g></symbol><symbol id="jm-diplome" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 9.5 12 5l9.5 4.5L12 14z"/><path d="M6.5 11.5V16c1.5 1.6 3.4 2.5 5.5 2.5s4-.9 5.5-2.5v-4.5"/><path d="M21.5 9.5V14"/></g></symbol><symbol id="jm-certificat" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="9.5" r="5.5"/><path d="M8.5 13.8 7.5 21l4.5-2.5 4.5 2.5-1-7.2"/></g></symbol><symbol id="jm-cours-video" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="13" rx="3"/><path d="M10.5 9v5l4-2.5z"/><path d="M8 21h8"/></g></symbol><symbol id="jm-quiz" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M9.6 9.5a2.5 2.5 0 1 1 3.4 2.3c-.6.3-1 .8-1 1.5v.5"/><path d="M12 16.8v.2"/></g></symbol><symbol id="jm-competence" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 17.5h6M10 21h4"/><path d="M8.5 14.5A6 6 0 1 1 15.5 14.5c-.6.5-.9 1.2-.9 2v1H9.4v-1c0-.8-.3-1.5-.9-2z"/></g></symbol><symbol id="jm-objectif" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="4.5"/><circle cx="12" cy="12" r="1"/></g></symbol><symbol id="jm-statistiques" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h16"/><path d="M7 16.5v-4M12 16.5V7.5M17 16.5v-7"/></g></symbol><symbol id="jm-cv" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 3.5H7.5A1.5 1.5 0 0 0 6 5v14a1.5 1.5 0 0 0 1.5 1.5h9A1.5 1.5 0 0 0 18 19V7.5z"/><path d="M14 3.5v4h4"/><path d="M9 12.5h6M9 16h4"/></g></symbol><symbol id="jm-entreprise" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20.5h16"/><path d="M6 20.5V5.5A1.5 1.5 0 0 1 7.5 4h6A1.5 1.5 0 0 1 15 5.5v15"/><path d="M15 9.5h3a1.5 1.5 0 0 1 1.5 1.5v9.5"/><path d="M9 8h3M9 11.5h3M9 15h3"/></g></symbol><symbol id="jm-equipe" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="8.5" r="3.2"/><path d="M3 19.5c.6-3 3-4.8 6-4.8s5.4 1.8 6 4.8"/><path d="M15.5 5.6a3.2 3.2 0 0 1 0 5.8"/><path d="M17.5 14.9c1.8.6 3.1 2.2 3.5 4.6"/></g></symbol><symbol id="jm-calendrier" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="3"/><path d="M3.5 10h17M8 3v4M16 3v4"/></g></symbol><symbol id="jm-horloge" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></g></symbol><symbol id="jm-localisation" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s-6.5-5.6-6.5-11a6.5 6.5 0 0 1 13 0c0 5.4-6.5 11-6.5 11z"/><circle cx="12" cy="10" r="2.5"/></g></symbol><symbol id="jm-etoile" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4l2.4 5 5.3.6-3.9 3.7 1 5.3L12 16l-4.8 2.6 1-5.3-3.9-3.7 5.3-.6z"/></g></symbol><symbol id="jm-confidentialite" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="3"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/><path d="M12 14.5V17"/></g></symbol><symbol id="jm-securite" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3.5l7 2.8v5.2c0 4.4-2.9 7.8-7 9-4.1-1.2-7-4.6-7-9V6.3z"/><path d="M9 12l2.2 2.2L15.5 10"/></g></symbol><symbol id="jm-transparence" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g></symbol><symbol id="jm-mobile-money" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="3" width="11" height="18" rx="2.5"/><path d="M8 17.5h3"/><path d="M18 9a4 4 0 0 1 0 6M20.5 7a7 7 0 0 1 0 10"/></g></symbol><symbol id="jm-portefeuille" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 8V7.5A2.5 2.5 0 0 1 6.5 5H17v3"/><rect x="4" y="8" width="16" height="11" rx="2.5"/><path d="M15.5 13.5h1"/></g></symbol><symbol id="jm-langue" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M3.5 12h17"/><path d="M12 3.5c2.3 2.4 3.5 5.2 3.5 8.5s-1.2 6.1-3.5 8.5c-2.3-2.4-3.5-5.2-3.5-8.5s1.2-6.1 3.5-8.5z"/></g></symbol><symbol id="jm-lock" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="11" width="14" height="9.5" rx="2.5"/><path d="M8 11V8a4 4 0 018 0v3"/></g></symbol><symbol id="jm-check" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></g></symbol><symbol id="jm-chev-r" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 6l6 6-6 6"/></g></symbol><symbol id="jm-chev-l" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 6l-6 6 6 6"/></g></symbol><symbol id="jm-chev-d" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 9l6 6 6-6"/></g></symbol><symbol id="jm-plus" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 5v14M5 12h14"/></g></symbol><symbol id="jm-more" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="5.5" cy="12" r="1.2"/><circle cx="12" cy="12" r="1.2"/><circle cx="18.5" cy="12" r="1.2"/></g></symbol><symbol id="jm-play" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 5.8v12.4a.8.8 0 001.2.7l10-6.2a.8.8 0 000-1.4l-10-6.2A.8.8 0 008 5.8z" fill="currentColor"/></g></symbol><symbol id="jm-edit" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 00-4-4L4 16z"/><path d="M13.5 6.5l4 4"/></g></symbol><symbol id="jm-doc" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M7 3.5h7l4.5 4.5v11a2 2 0 01-2 2H7a2 2 0 01-2-2v-13.5a2 2 0 012-2z"/><path d="M14 3.5V8h4.5M8.5 13h7M8.5 16.5h5"/></g></symbol><symbol id="jm-logout" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 4h3.5A2.5 2.5 0 0120 6.5v11a2.5 2.5 0 01-2.5 2.5H14"/><path d="M9.5 16l-4-4 4-4M5.5 12H15"/></g></symbol><symbol id="jm-send" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4.5 12L20 4.5 15.5 20l-3.5-6.5z"/><path d="M12 13.5l8-9"/></g></symbol><symbol id="jm-eye" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M2.5 12S6 5.5 12 5.5 21.5 12 21.5 12 18 18.5 12 18.5 2.5 12 2.5 12z"/><circle cx="12" cy="12" r="3"/></g></symbol><symbol id="jm-video" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="13" height="12" rx="3"/><path d="M16 10.5l5-3v9l-5-3"/></g></symbol><symbol id="jm-clip" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19.5 11l-7.8 7.8a5 5 0 01-7-7L13 3.5a3.3 3.3 0 014.7 4.7l-8.3 8.3a1.7 1.7 0 01-2.4-2.4L14.5 6.6"/></g></symbol><symbol id="jm-info" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5.5M12 7.5h.01"/></g></symbol><symbol id="jm-suivi" viewBox="0 0 24 24"><g fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 4.5H7A2 2 0 0 0 5 6.5v13a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-13a2 2 0 0 0-2-2h-1.5"/><rect x="8.5" y="2.5" width="7" height="4" rx="1.4"/><path d="M9 11.5h.01M12 11.5h3.5M9 15.5h.01M12 15.5h3.5"/></g></symbol></svg>
+
+<header class="couv">
+  <span class="marque"><svg viewBox="23.5 19.5 58 78" height="34" width="25" aria-hidden="true"><path d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#FFFFFF" stroke-width="17" stroke-linecap="round"/><circle cx="70" cy="31" r="11.5" fill="#A6F26B"/></svg><span>jumanly</span></span>
+  <h1>Expérience mobile Talent</h1>
+  <p>Maquettes du cahier des charges UX mobile (module 1), 16 octobre 2026. Identité inchangée : Sora, Vert Sapin, Lime, Crème, ombres douces des cadres v2.1. Les contenus sont des exemples (persona fictive) : en production, tout vient des données réelles, et une section sans donnée affiche son état vide.</p>
+  <ol class="sommaire"><li><a href="#s1">Première connexion</a></li><li><a href="#s2">Pour moi</a></li><li><a href="#s3">Offres et candidature</a></li><li><a href="#s4">Apprendre</a></li><li><a href="#s5">Suivi</a></li><li><a href="#s6">Mon espace, recherche, notifications</a></li></ol>
+</header>
+<div id="s1"><section class="bloc"><header class="bloc-tete"><h2>1 · Première connexion</h2><p>Une seule question obligatoire, l’objectif. Le reste est facultatif et redemandé plus tard, au moment où il sert.</p></header><div class="rangee"><figure class="ecran" id="e01"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><div class="sheet  avec-barre">
+<div class="onb">
+  <div class="onb-perso"><svg height="150" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-130 -470 260 490" ><g transform="translate(0 0) scale(1 1)"><ellipse cx="0" cy="2" rx="46" ry="9" fill="#0F3F37" opacity="0.1"/><g transform="rotate(0 0 -196)"><path d="M-27 -306 L-58 -359.69 L-66.07 -417.13" fill="none" stroke="#88c658" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><circle cx="-66.07" cy="-417.13" r="11.5" fill="#71462c"/><rect x="-58" y="-316" width="44" height="82" rx="20" fill="#3DA14F"/></g><path d="M-15 -196 L-29.24 -115.25 L-20.88 -35.68" fill="none" stroke="#0c342d" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(-20.88 -35.68) rotate(-1.2)"><rect x="-12" y="-6" width="40" height="17" rx="8.5" fill="#091519"/></g><path d="M15 -196 L29.24 -115.25 L20.88 -35.68" fill="none" stroke="#0F3F37" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(20.88 -35.68) rotate(1.2)"><rect x="-12" y="-6" width="40" height="17" rx="8.5" fill="#0B1A1F"/></g><g transform="rotate(0 0 -196)"><g transform="rotate(0 0 -330) translate(0 -364)"><path d="M-34 -10 L-44 92" stroke="#1B120D" stroke-width="13" stroke-linecap="round"/><circle cx="-44" cy="100" r="6.5" fill="#F2B33D"/><path d="M-22 -10 L-32 104" stroke="#1B120D" stroke-width="13" stroke-linecap="round"/><circle cx="-32" cy="112" r="6.5" fill="#F2B33D"/><path d="M-10 -10 L-20 98" stroke="#1B120D" stroke-width="13" stroke-linecap="round"/><circle cx="-20" cy="106" r="6.5" fill="#F2B33D"/></g><rect x="-37" y="-222" width="74" height="42" rx="18" fill="#0F3F37"/><rect x="-43" y="-330" width="86" height="130" rx="34" fill="#A6F26B"/><path d="M-30 -326 L-24 -260" stroke="#2e793b" stroke-width="7" stroke-linecap="round"/><rect x="-11" y="-346" width="22" height="26" rx="8" fill="#71462c"/><g transform="rotate(0 0 -330) translate(0 -364)"><circle cx="0" cy="-4" r="45" fill="#1B120D"/><circle r="40" fill="#8A5536"/><path d="M-41.5 -2 A41.5 41.5 0 0 1 41.5 -2 C 22 -16 -6 -22 -41.5 -2 Z" fill="#1B120D"/><circle cx="-12" cy="4" r="4" fill="#0B1A1F"/><circle cx="12" cy="4" r="4" fill="#0B1A1F"/><path d="M-9 19 Q 0 28 9 19" stroke="#0B1A1F" stroke-width="3.5" fill="none" stroke-linecap="round"/></g><path d="M27 -306 L58 -359.69 L66.07 -417.13" fill="none" stroke="#abf374" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><circle cx="66.07" cy="-417.13" r="11.5" fill="#8A5536"/></g></g></svg></div>
+  <p class="etape">Étape 1 sur 2 · moins d’une minute</p>
+  <h1 class="h-onb">Qu’est-ce qui vous amène sur Jumanly&nbsp;?</h1>
+  <p class="sous">Votre accueil s’adapte à votre réponse. Vous pourrez la changer à tout moment dans vos préférences.</p>
+  <div class="choix" role="radiogroup">
+    <label class="opt on"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg></span><span><b>Trouver un emploi ou un stage</b><small>Des offres d’abord, puis de quoi vous démarquer.</small></span><i class="radio"></i></label>
+    <label class="opt"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-diplome"/></svg></span><span><b>Développer mes compétences</b><small>Vos formations et parcours en premier.</small></span><i class="radio"></i></label>
+    <label class="opt"><span class="tuile t-menthe"><svg class="i" aria-hidden="true"><use href="#jm-objectif"/></svg></span><span><b>Faire évoluer ma carrière</b><small>Postes à responsabilité, positionnement, spécialisation.</small></span><i class="radio"></i></label>
+  </div>
+</div></div><div class="barre-action"><a class="btn-sec">Plus tard</a><a class="btn-prim">Continuer<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div><div class="home-ind"></div></div><figcaption><b>01 · Objectif principal</b><ul><li>Trois choix, enregistrés dans <code>TalentProfile.goal</code> via une correspondance avec les 6 valeurs actuelles.</li><li>« Plus tard » ouvre « Pour moi » en mode emploi, non personnalisé.</li></ul></figcaption></figure><figure class="ecran" id="e02"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><div class="sheet  avec-barre">
+<div class="onb">
+  <p class="etape">Étape 2 sur 2 · tout est facultatif</p>
+  <h1 class="h-onb">Quelques précisions pour vos offres</h1>
+  <p class="sous">Répondez à ce que vous voulez : vous voyez déjà les offres et les formations gratuites.</p>
+  <div class="champ"><label>Métiers recherchés</label><div class="saisie"><svg class="i s mute" aria-hidden="true"><use href="#jm-recherche"/></svg><span class="ph">Ex. : analyste de données</span></div>
+    <div class="chips"><span class="chip on">Analyste de données<svg class="i xs" aria-hidden="true"><use href="#jm-fermer"/></svg></span><span class="chip on">Chargée d’études<svg class="i xs" aria-hidden="true"><use href="#jm-fermer"/></svg></span></div></div>
+  <div class="champ"><label>Domaine</label><div class="chips"><span class="chip">Finance</span><span class="chip on">Data et numérique</span><span class="chip">Commerce</span><span class="chip">Santé</span><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-plus"/></svg>Autre</span></div></div>
+  <div class="champ"><label>Où souhaitez-vous travailler ?</label><div class="saisie"><svg class="i s mute" aria-hidden="true"><use href="#jm-localisation"/></svg><span>Kinshasa</span></div></div>
+  <div class="champ"><label>Expérience</label><div class="seg"><span>Débutant</span><span class="on">1 à 3 ans</span><span>3 à 7 ans</span><span>+7 ans</span></div></div>
+  <details class="plus-pref"><summary>Préférences (contrat, télétravail)<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary></details>
+</div></div><div class="barre-action"><a class="btn-sec">Passer</a><a class="btn-prim">Voir mes offres<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div><div class="home-ind"></div></div><figcaption><b>02 · Précisions facultatives</b><ul><li>Métiers, domaine, lieu, expérience ; préférences repliées.</li><li>Rien n’est obligatoire pour voir les offres et formations gratuites.</li></ul></figcaption></figure></div></section></div>
+<div id="s2"><section class="bloc"><header class="bloc-tete"><h2>2 · Pour moi</h2><p>La page d’ouverture. Pas de statistiques en tête : les contenus et les actions qui servent l’objectif. Les quatre menus du bas ne changent jamais.</p></header><div class="rangee"><figure class="ecran" id="e03"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><span class="marque"><svg viewBox="23.5 19.5 58 78" height="24" width="18" aria-hidden="true"><path d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#FFFFFF" stroke-width="17" stroke-linecap="round"/><circle cx="70" cy="31" r="11.5" fill="#A6F26B"/></svg><span>jumanly</span></span><div class="top-actions"><button class="rond" aria-label="Rechercher"><svg class="i" aria-hidden="true"><use href="#jm-recherche"/></svg></button><button class="rond" aria-label="Notifications, 3 non lues"><svg class="i" aria-hidden="true"><use href="#jm-notification"/></svg><b class="point-notif"></b></button><button class="avatar-btn" aria-label="Mon espace"><span>GM</span></button></div></header><div class="sheet  avec-nav">
+<div class="salut"><p>Bonsoir Grâce</p><div class="objectif"><span><svg class="i xs" aria-hidden="true"><use href="#jm-objectif"/></svg>Objectif : trouver un emploi</span><a>Modifier</a></div></div>
+<div class="sec"><div><h2>Opportunités pour vous</h2><p class="sous">D’après vos préférences : analyste de données · Kinshasa</p></div></div>
+<div class="pile">
+<article class="carte offre"><div class="o-tete"><span class="logo-ent t-sapin">BF</span><div class="o-txt"><h3>Analyste de données junior</h3><p>Baobab Fintech</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDI</span><span class="chip">Hybride</span></div><div class="o-pied"><span class="quand">Publiée il y a 2 jours</span><a class=lien-o>Voir l’offre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte offre"><div class="o-tete"><span class="logo-ent t-neon">RB</span><div class="o-txt"><h3>Chargée d’études marketing</h3><p>Rawbank</p></div><button class="fav on" aria-label="Retirer des offres enregistrées"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDD 12 mois</span></div><div class="o-pied"><span class="quand">Clôture le 30 octobre</span><a class=lien-o>Voir l’offre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte offre"><div class="o-tete"><span class="logo-ent t-brume">CD</span><div class="o-txt"><h3>Assistante business intelligence</h3><p>Congo Data Lab</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Lubumbashi</span><span class="chip">Stage</span></div><div class="o-pied"><span class="quand">Publiée hier</span><span class="etat ok"><svg class="i xs" aria-hidden="true"><use href="#jm-check"/></svg>Candidature envoyée</span></div></article>
+</div>
+<a class="btn-large">Voir toutes les offres</a>
+<div class="sec"><div><h2>Formations recommandées</h2><p class="sous">Pour renforcer votre candidature</p></div><a class="lien">Explorer<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div>
+<div class="carrousel">
+<article class="carte form"><div class="f-visuel t-lime"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Gratuite</span></div><div class="f-corps"><span class="dom">Digital & Productivity</span><h3>Excel pour l’analyse de données</h3><p class="meta">Intermédiaire · 3 h 20</p><div class="jauge"><i style="width:40%"></i></div><a class="btn-txt">Reprendre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte form"><div class="f-visuel t-neon"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Gratuite</span></div><div class="f-corps"><span class="dom">Career & Employability</span><h3>Réussir son entretien d’embauche</h3><p class="meta">Débutant · 1 h 45</p><a class="btn-txt">Découvrir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte form"><div class="f-visuel t-menthe"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Starter</span></div><div class="f-corps"><span class="dom">AI & Digital Tools</span><h3>Power BI : premiers tableaux</h3><p class="meta">Débutant · 2 h 30</p><a class="btn-txt">Découvrir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+</div>
+<div class="sec"><div><h2>Préparez votre candidature</h2></div></div>
+<div class="grille2">
+<a class="outil carte"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-cv"/></svg></span><b>Mon CV</b><span>Créer ou améliorer</span></a>
+<a class="outil carte"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-profil"/></svg></span><b>Mon profil</b><span>Le rendre visible</span></a>
+<a class="outil carte"><span class="tuile t-menthe"><svg class="i" aria-hidden="true"><use href="#jm-message"/></svg></span><b>Entretien</b><span>S’entraîner</span></a>
+<a class="outil carte"><span class="tuile t-brume"><svg class="i" aria-hidden="true"><use href="#jm-doc"/></svg></span><b>Documents</b><span>Lettres et attestations</span></a>
+</div>
+<div class="sec"><div><h2>Mes prochaines actions</h2><p class="sous">Seulement ce qui attend une réponse de votre part</p></div></div>
+<div class="carte liste">
+<div class="ligne"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-calendrier"/></svg></span><div class="l-txt"><b>Confirmer votre entretien</b><span>Baobab Fintech · jeudi 23 oct., 10 h</span></div><a class="btn-mini">Confirmer</a></div>
+<div class="ligne"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-message"/></svg></span><div class="l-txt"><b>Répondre à Moussa Kanté</b><span>Baobab Fintech · hier</span></div><a class="btn-mini">Répondre</a></div>
+<div class="ligne"><span class="tuile t-zone"><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg></span><div class="l-txt"><b>Terminer votre candidature</b><span>Rawbank · brouillon enregistré</span></div><a class="btn-mini">Reprendre</a></div>
+</div>
+</div><nav class="nav" aria-label="Navigation principale"><a class="on" aria-current=page><svg class="i" aria-hidden="true"><use href="#jm-accueil"/></svg><span>Pour moi</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg><span>Offres</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-diplome"/></svg><span>Apprendre</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-suivi"/></svg><span>Suivi</span><b class="pastille" aria-label="2 actions à traiter">2</b></a></nav><div class="home-ind"></div></div><figcaption><b>03 · Pour moi · trouver un emploi</b><ul><li>Ordre : opportunités, formations, préparer sa candidature, prochaines actions.</li><li>Une offre déjà postulée porte « Candidature envoyée ».</li><li>« Mes prochaines actions » ne montre que ce qui attend l’utilisateur.</li></ul></figcaption></figure><figure class="ecran" id="e04"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><span class="marque"><svg viewBox="23.5 19.5 58 78" height="24" width="18" aria-hidden="true"><path d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#FFFFFF" stroke-width="17" stroke-linecap="round"/><circle cx="70" cy="31" r="11.5" fill="#A6F26B"/></svg><span>jumanly</span></span><div class="top-actions"><button class="rond" aria-label="Rechercher"><svg class="i" aria-hidden="true"><use href="#jm-recherche"/></svg></button><button class="rond" aria-label="Notifications, 3 non lues"><svg class="i" aria-hidden="true"><use href="#jm-notification"/></svg><b class="point-notif"></b></button><button class="avatar-btn" aria-label="Mon espace"><span>GM</span></button></div></header><div class="sheet  avec-nav">
+<div class="salut"><p>Bonsoir Grâce</p><div class="objectif"><span><svg class="i xs" aria-hidden="true"><use href="#jm-objectif"/></svg>Objectif : développer mes compétences</span><a>Modifier</a></div></div>
+<article class="carte sombre reprise">
+  <span class="kicker">Reprendre ma formation</span>
+  <h3>Excel pour l’analyse de données</h3>
+  <p class="meta-cl">Leçon 4 sur 9 · Tableaux croisés · reprise à 06:12</p>
+  <div class="jauge cl"><i style="width:40%"></i></div>
+  <a class="btn-lime"><svg class="i s" aria-hidden="true"><use href="#jm-play"/></svg>Reprendre</a>
+</article>
+<div class="sec"><div><h2>Parcours et formations recommandés</h2></div><a class="lien">Tout voir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div>
+<div class="carrousel">
+<article class="carte form"><div class="f-visuel t-menthe"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Gratuit</span></div><div class="f-corps"><span class="dom">Parcours · 5 formations</span><h3>Parcours Analyste de données</h3><p class="meta">Débutant · 14 h</p><a class="btn-txt">Découvrir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte form"><div class="f-visuel t-neon"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Gratuite</span></div><div class="f-corps"><span class="dom">AI & Digital Tools</span><h3>SQL pour débuter</h3><p class="meta">Débutant · 2 h 10</p><a class="btn-txt">Découvrir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte form"><div class="f-visuel t-lime"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Starter</span></div><div class="f-corps"><span class="dom">Professional Communication</span><h3>Présenter des chiffres clairement</h3><p class="meta">Intermédiaire · 1 h 30</p><a class="btn-txt">Découvrir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+</div>
+<div class="sec"><div><h2>Prochain exercice</h2></div></div>
+<div class="carte liste"><div class="ligne"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-quiz"/></svg></span><div class="l-txt"><b>Quiz · Tableaux croisés dynamiques</b><span>Excel pour l’analyse de données · 10 questions</span></div><a class="btn-mini">Commencer</a></div></div>
+<div class="sec"><div><h2>Offres liées à vos compétences</h2><p class="sous">Sélection générale · non personnalisée</p></div><a class="lien">Voir les offres<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div>
+<p class="note-perso"><svg class="i xs" aria-hidden="true"><use href="#jm-info"/></svg>Indiquez les métiers que vous visez pour des offres adaptées. <a>Compléter</a></p>
+<div class="pile">
+<article class="carte offre compact"><div class="o-tete"><span class="logo-ent t-menthe">KL</span><div class="o-txt"><h3>Assistant administratif et données</h3><p>Kivu Logistique</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Goma</span><span class="chip">CDD</span></div><div class="o-pied"><span class="quand">Publiée il y a 3 jours</span><a class=lien-o>Voir l’offre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte offre compact"><div class="o-tete"><span class="logo-ent t-lime">AC</span><div class="o-txt"><h3>Stagiaire analyse financière</h3><p>Afriland Conseil</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">Stage</span></div><div class="o-pied"><span class="quand">Clôture le 2 novembre</span><a class=lien-o>Voir l’offre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+</div>
+<div class="sec"><div><h2>Progression et certificats</h2></div><a class="lien">Mes acquis<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div>
+<div class="carte liste">
+<div class="ligne"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-certificat"/></svg></span><div class="l-txt"><b>Attestation · Bureautique essentielle</b><span>Obtenue le 2 octobre</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+<div class="ligne"><span class="tuile t-zone"><svg class="i" aria-hidden="true"><use href="#jm-learn"/></svg></span><div class="l-txt"><b>1 formation en cours, 2 terminées</b><span>Voir l’historique</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+</div>
+</div><nav class="nav" aria-label="Navigation principale"><a class="on" aria-current=page><svg class="i" aria-hidden="true"><use href="#jm-accueil"/></svg><span>Pour moi</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg><span>Offres</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-diplome"/></svg><span>Apprendre</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-suivi"/></svg><span>Suivi</span><b class="pastille" aria-label="2 actions à traiter">2</b></a></nav><div class="home-ind"></div></div><figcaption><b>04 · Pour moi · développer mes compétences</b><ul><li>Ordre : reprendre, recommandations, exercice, offres liées, acquis.</li><li>Exemple de bloc non personnalisé, signalé comme tel avec l’action pour y remédier.</li></ul></figcaption></figure><figure class="ecran" id="e05"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><span class="marque"><svg viewBox="23.5 19.5 58 78" height="24" width="18" aria-hidden="true"><path d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#FFFFFF" stroke-width="17" stroke-linecap="round"/><circle cx="70" cy="31" r="11.5" fill="#A6F26B"/></svg><span>jumanly</span></span><div class="top-actions"><button class="rond" aria-label="Rechercher"><svg class="i" aria-hidden="true"><use href="#jm-recherche"/></svg></button><button class="rond" aria-label="Notifications, 3 non lues"><svg class="i" aria-hidden="true"><use href="#jm-notification"/></svg><b class="point-notif"></b></button><button class="avatar-btn" aria-label="Mon espace"><span>GM</span></button></div></header><div class="sheet  avec-nav">
+<div class="salut"><p>Bonsoir Grâce</p><div class="objectif"><span><svg class="i xs" aria-hidden="true"><use href="#jm-objectif"/></svg>Objectif : faire évoluer ma carrière</span><a>Modifier</a></div></div>
+<div class="sec"><div><h2>Postes pour votre évolution</h2><p class="sous">Objectif : responsable analyse de données</p></div></div>
+<div class="pile">
+<article class="carte offre"><div class="o-tete"><span class="logo-ent t-neon">ME</span><div class="o-txt"><h3>Responsable reporting et données</h3><p>Mwinda Énergie</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDI</span><span class="chip">Sur site</span></div><div class="o-pied"><span class="quand">Publiée il y a 4 jours</span><a class=lien-o>Voir l’offre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte offre"><div class="o-tete"><span class="logo-ent t-sapin">BF</span><div class="o-txt"><h3>Lead data analyst</h3><p>Baobab Fintech</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDI</span><span class="chip">Hybride</span></div><div class="o-pied"><span class="quand">Clôture le 8 novembre</span><a class=lien-o>Voir l’offre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+</div>
+<a class="btn-large">Voir toutes les offres</a>
+<div class="sec"><div><h2>Me positionner</h2></div></div>
+<div class="carte liste">
+<div class="ligne"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-statistiques"/></svg></span><div class="l-txt"><b>Diagnostic carrière</b><span>Faire le point sur 6 dimensions</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+<div class="ligne"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-lien"/></svg></span><div class="l-txt"><b>Optimisation LinkedIn</b><span>Titre, résumé, compétences</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+<div class="ligne"><span class="tuile t-menthe"><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg></span><div class="l-txt"><b>Portfolio</b><span>Montrer vos réalisations</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+</div>
+<div class="sec"><div><h2>Formations de spécialisation</h2></div><a class="lien">Explorer<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div>
+<div class="carrousel">
+<article class="carte form"><div class="f-visuel t-menthe"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Pro</span></div><div class="f-corps"><span class="dom">Business & Management</span><h3>Piloter une équipe data</h3><p class="meta">Avancé · 4 h</p><a class="btn-txt">Découvrir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte form"><div class="f-visuel t-lime"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Gratuite</span></div><div class="f-corps"><span class="dom">Career & Employability</span><h3>Négocier son évolution</h3><p class="meta">Intermédiaire · 1 h 20</p><a class="btn-txt">Découvrir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+</div>
+<div class="sec"><div><h2>Compétences à renforcer</h2><p class="sous">Demandées dans les offres que vous suivez et absentes de votre profil</p></div></div>
+<div class="carte pad"><div class="chips">
+<span class="chip grand">Power BI<svg class="i xs" aria-hidden="true"><use href="#jm-plus"/></svg></span><span class="chip grand">Gestion d’équipe<svg class="i xs" aria-hidden="true"><use href="#jm-plus"/></svg></span><span class="chip grand">Python<svg class="i xs" aria-hidden="true"><use href="#jm-plus"/></svg></span></div>
+<a class="pourquoi"><svg class="i xs" aria-hidden="true"><use href="#jm-transparence"/></svg>Pourquoi ces compétences ?</a></div>
+<div class="sec"><div><h2>Prochaines étapes</h2></div></div>
+<div class="carte liste">
+<div class="ligne"><span class="tuile t-zone"><svg class="i" aria-hidden="true"><use href="#jm-statistiques"/></svg></span><div class="l-txt"><b>Reprendre votre diagnostic</b><span>Interrompu à la question 12</span></div><a class="btn-mini">Reprendre</a></div>
+<div class="ligne"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-calendrier"/></svg></span><div class="l-txt"><b>Simulation d’entretien prévue</b><span>Samedi 25 oct. · 15 min</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+</div>
+</div><nav class="nav" aria-label="Navigation principale"><a class="on" aria-current=page><svg class="i" aria-hidden="true"><use href="#jm-accueil"/></svg><span>Pour moi</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg><span>Offres</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-diplome"/></svg><span>Apprendre</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-suivi"/></svg><span>Suivi</span><b class="pastille" aria-label="2 actions à traiter">2</b></a></nav><div class="home-ind"></div></div><figcaption><b>05 · Pour moi · faire évoluer ma carrière</b><ul><li>Ordre : postes visés, positionnement, spécialisation, compétences, étapes.</li><li>Compétences proposées : celles des offres suivies absentes du profil, avec « Pourquoi ? ».</li></ul></figcaption></figure></div></section></div>
+<div id="s3"><section class="bloc"><header class="bloc-tete"><h2>3 · Offres et candidature</h2><p>La recherche d’emploi tient dans un seul menu. La candidature passe en étapes courtes, le brouillon est enregistré à chaque étape.</p></header><div class="rangee"><figure class="ecran" id="e06"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><h1 class="titre-top">Offres</h1><div class="top-actions"><button class="rond" aria-label="Rechercher"><svg class="i" aria-hidden="true"><use href="#jm-recherche"/></svg></button><button class="rond" aria-label="Notifications, 3 non lues"><svg class="i" aria-hidden="true"><use href="#jm-notification"/></svg><b class="point-notif"></b></button><button class="avatar-btn" aria-label="Mon espace"><span>GM</span></button></div></header><div class="sheet  avec-nav">
+<div class="recherche-bloc">
+  <div class="saisie grande"><svg class="i s mute" aria-hidden="true"><use href="#jm-recherche"/></svg><span class="ph">Métier, entreprise, mot-clé</span></div>
+  <button class="filtre-btn" aria-label="Filtres, 2 actifs"><svg class="i" aria-hidden="true"><use href="#jm-filtre"/></svg><b>2</b></button>
+</div>
+<div class="chips defile"><span class="chip on">Kinshasa<svg class="i xs" aria-hidden="true"><use href="#jm-fermer"/></svg></span><span class="chip on">CDI<svg class="i xs" aria-hidden="true"><use href="#jm-fermer"/></svg></span><span class="chip">Télétravail</span><span class="chip">Moins de 7 jours</span><span class="chip">Débutant</span></div>
+<div class="onglets" role="tablist"><span class="on">Pour vous</span><span>Récentes</span><span>Enregistrées · 3</span></div>
+<div class="recentes"><span class="mute-t">Recherches récentes</span><span class="chip petit"><svg class="i xs" aria-hidden="true"><use href="#jm-horloge"/></svg>analyste Kinshasa</span><span class="chip petit"><svg class="i xs" aria-hidden="true"><use href="#jm-horloge"/></svg>stage finance</span></div>
+<div class="pile">
+<article class="carte offre"><div class="o-tete"><span class="logo-ent t-sapin">BF</span><div class="o-txt"><h3>Analyste de données junior</h3><p>Baobab Fintech</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDI</span><span class="chip">Hybride</span></div><div class="o-pied"><span class="quand">Publiée il y a 2 jours</span><a class=lien-o>Voir l’offre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte offre"><div class="o-tete"><span class="logo-ent t-neon">ME</span><div class="o-txt"><h3>Contrôleuse de gestion</h3><p>Mwinda Énergie</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDI</span></div><div class="o-pied"><span class="quand">Clôture le 5 novembre</span><span class="etat ext"><svg class="i xs" aria-hidden="true"><use href="#jm-lien"/></svg>Sur le site de l’employeur</span></div></article>
+<article class="carte offre"><div class="o-tete"><span class="logo-ent t-neon">RB</span><div class="o-txt"><h3>Chargée d’études marketing</h3><p>Rawbank</p></div><button class="fav on" aria-label="Retirer des offres enregistrées"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDI</span></div><div class="o-pied"><span class="quand">Publiée il y a 5 jours</span><a class=lien-o>Voir l’offre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte offre"><div class="o-tete"><span class="logo-ent t-brume">CD</span><div class="o-txt"><h3>Assistante business intelligence</h3><p>Congo Data Lab</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDI</span></div><div class="o-pied"><span class="quand">Publiée hier</span><span class="etat ok"><svg class="i xs" aria-hidden="true"><use href="#jm-check"/></svg>Candidature envoyée</span></div></article>
+</div>
+<p class="fin-liste">Les offres clôturées ne s’affichent plus.</p>
+</div><nav class="nav" aria-label="Navigation principale"><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-accueil"/></svg><span>Pour moi</span></a><a class="on" aria-current=page><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg><span>Offres</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-diplome"/></svg><span>Apprendre</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-suivi"/></svg><span>Suivi</span><b class="pastille" aria-label="2 actions à traiter">2</b></a></nav><div class="home-ind"></div></div><figcaption><b>06 · Offres</b><ul><li>Recherche, filtres actifs en puces, onglets Pour vous / Récentes / Enregistrées.</li><li>Candidature déjà envoyée et offre externe identifiées sur la carte.</li></ul></figcaption></figure><figure class="ecran" id="e07"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><h1 class="titre-top">Offres</h1><div class="top-actions"><button class="rond" aria-label="Rechercher"><svg class="i" aria-hidden="true"><use href="#jm-recherche"/></svg></button><button class="rond" aria-label="Notifications, 3 non lues"><svg class="i" aria-hidden="true"><use href="#jm-notification"/></svg><b class="point-notif"></b></button><button class="avatar-btn" aria-label="Mon espace"><span>GM</span></button></div></header><div class="sheet  avec-barre">
+<div class="recherche-bloc"><div class="saisie grande"><svg class="i s mute" aria-hidden="true"><use href="#jm-recherche"/></svg><span class="ph">Métier, entreprise, mot-clé</span></div><button class="filtre-btn"><svg class="i" aria-hidden="true"><use href="#jm-filtre"/></svg><b>2</b></button></div>
+<div class="pile"><article class="carte offre"><div class="o-tete"><span class="logo-ent t-sapin">BF</span><div class="o-txt"><h3>Analyste de données junior</h3><p>Baobab Fintech</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDI</span></div><div class="o-pied"><span class="quand">Publiée il y a 2 jours</span><a class=lien-o>Voir l’offre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article><article class="carte offre"><div class="o-tete"><span class="logo-ent t-neon">ME</span><div class="o-txt"><h3>Contrôleuse de gestion</h3><p>Mwinda Énergie</p></div><button class="fav" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button></div><div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDI</span></div><div class="o-pied"><span class="quand">Clôture le 5 novembre</span><a class=lien-o>Voir l’offre<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article></div>
+</div><div class="voile"></div>
+<div class="feuille" role="dialog" aria-label="Filtres">
+  <div class="poignee"></div>
+  <div class="f-tete"><h2>Filtres</h2><a class="lien">Tout effacer</a></div>
+  <div class="champ"><label>Métier</label><div class="saisie"><svg class="i s mute" aria-hidden="true"><use href="#jm-recherche"/></svg><span>Analyste de données</span></div></div>
+  <div class="champ"><label>Localisation</label><div class="saisie"><svg class="i s mute" aria-hidden="true"><use href="#jm-localisation"/></svg><span>Kinshasa</span></div></div>
+  <div class="champ"><label>Type de contrat</label><div class="chips"><span class="chip on">CDI</span><span class="chip">CDD</span><span class="chip">Stage</span><span class="chip">Freelance</span><span class="chip">Alternance</span></div></div>
+  <div class="champ"><label>Mode de travail</label><div class="seg"><span class="on">Tous</span><span>Sur site</span><span>Hybride</span><span>À distance</span></div></div>
+  <div class="champ"><label>Date de publication</label><div class="seg"><span>24 h</span><span class="on">7 jours</span><span>30 jours</span><span>Toutes</span></div></div>
+  <details class="plus-pref"><summary>Domaine et expérience<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary></details>
+</div><div class="barre-action haute"><a class="btn-prim plein">Afficher les offres</a></div><div class="home-ind"></div></div><figcaption><b>07 · Panneau de filtres</b><ul><li>Feuille du bas ; filtres avancés repliés.</li><li>Le bouton applique et ferme.</li></ul></figcaption></figure><figure class="ecran" id="e08"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><button class="rond" aria-label="Retour"><svg class="i" aria-hidden="true"><use href="#jm-chev-l"/></svg></button><h1 class="titre-top">Offre</h1><div class="top-actions"><button class="rond" aria-label="Rechercher"><svg class="i" aria-hidden="true"><use href="#jm-recherche"/></svg></button><button class="rond" aria-label="Notifications, 3 non lues"><svg class="i" aria-hidden="true"><use href="#jm-notification"/></svg><b class="point-notif"></b></button><button class="avatar-btn" aria-label="Mon espace"><span>GM</span></button></div></header><div class="sheet  avec-barre">
+<div class="d-tete carte">
+  <span class="logo-ent t-sapin grand">BF</span>
+  <h1>Analyste de données junior</h1>
+  <p class="ent">Baobab Fintech</p>
+  <div class="chips"><span class="chip"><svg class="i xs" aria-hidden="true"><use href="#jm-localisation"/></svg>Kinshasa</span><span class="chip">CDI</span><span class="chip">Hybride</span><span class="chip">1 à 3 ans</span></div>
+  <div class="d-dates"><span><svg class="i xs" aria-hidden="true"><use href="#jm-calendrier"/></svg>Publiée le 14 octobre</span><span class="urgent"><svg class="i xs" aria-hidden="true"><use href="#jm-horloge"/></svg>Clôture le 30 octobre</span></div>
+</div>
+<a class="carte adapter"><svg class="i" aria-hidden="true"><use href="#jm-cv"/></svg><span><b>Adapter mon CV à cette offre</b><small>À partir de votre CV principal</small></span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a>
+<div class="carte accordeon">
+  <details open><summary>Le poste<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary><p>Vous rejoignez l’équipe produit pour suivre l’usage de nos services de paiement mobile et préparer les tableaux de bord de la direction.</p></details>
+  <details open><summary>Responsabilités<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary><ul><li>Préparer les rapports hebdomadaires</li><li>Fiabiliser les données des agences</li><li>Présenter les résultats aux équipes</li></ul></details>
+  <details><summary>Qualifications<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary></details>
+  <details open><summary>Compétences demandées<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary><div class="chips"><span class="chip ok"><svg class="i xs" aria-hidden="true"><use href="#jm-check"/></svg>Excel</span><span class="chip ok"><svg class="i xs" aria-hidden="true"><use href="#jm-check"/></svg>SQL</span><span class="chip">Power BI</span><span class="chip">Français et anglais</span></div><p class="petit-txt">Coche verte : compétence présente dans votre profil.</p></details>
+  <details><summary>Conditions de candidature<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary></details>
+</div>
+<p class="petit-txt centre">Candidature dans Jumanly · gratuite</p>
+</div><div class="barre-action"><button class="btn-icone" aria-label="Enregistrer l’offre"><svg class="i" aria-hidden="true"><use href="#jm-favori"/></svg></button><a class="btn-prim plein">Postuler</a></div><div class="home-ind"></div></div><figcaption><b>08 · Détail d’une offre</b><ul><li>Sections repliables, barre d’action fixe Enregistrer + Postuler.</li><li>« Adapter mon CV » seulement si l’utilisateur a un CV.</li><li>Barre du bas masquée sur cette page.</li></ul></figcaption></figure><figure class="ecran" id="e09"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><button class="rond" aria-label="Retour"><svg class="i" aria-hidden="true"><use href="#jm-chev-l"/></svg></button><h1 class="titre-top">Candidature</h1><div class="top-actions"></div></header><div class="sheet  avec-barre">
+<p class="cand-ctx">Analyste de données junior · Baobab Fintech</p>
+<ol class="stepper"><li class="on"><i></i><span>CV</span></li><li class=""><i></i><span>Lettre</span></li><li class=""><i></i><span>Questions</span></li><li class=""><i></i><span>Vérification</span></li><li class=""><i></i><span>Envoi</span></li></ol>
+<h2 class="h-etape">Quel CV envoyer ?</h2>
+<div class="choix">
+  <label class="opt on"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-cv"/></svg></span><span><b>CV principal · Analyste de données</b><small>Modifié le 12 octobre</small></span><i class="radio"></i></label>
+  <label class="opt"><span class="tuile t-zone"><svg class="i" aria-hidden="true"><use href="#jm-cv"/></svg></span><span><b>CV · Chargée d’études</b><small>Modifié le 2 octobre</small></span><i class="radio"></i></label>
+  <label class="opt"><span class="tuile t-zone"><svg class="i" aria-hidden="true"><use href="#jm-profil"/></svg></span><span><b>Mon profil Jumanly seul</b><small>Sans CV joint</small></span><i class="radio"></i></label>
+</div>
+<a class="carte adapter mince"><svg class="i" aria-hidden="true"><use href="#jm-edit"/></svg><span><b>Adapter ce CV à l’offre avant l’envoi</b><small>Une copie est créée, l’original ne change pas</small></span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a>
+<p class="brouillon"><svg class="i xs" aria-hidden="true"><use href="#jm-check"/></svg>Brouillon enregistré à 20 h 12</p>
+</div><div class="barre-action"><a class="btn-sec">Quitter</a><a class="btn-prim">Continuer<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div><div class="home-ind"></div></div><figcaption><b>09 · Candidature · étape 1</b><ul><li>5 étapes : CV, lettre, questions, vérification, envoi.</li><li>Une étape sans objet est sautée (pas de question du recruteur, par exemple).</li></ul></figcaption></figure><figure class="ecran" id="e10"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><button class="rond" aria-label="Retour"><svg class="i" aria-hidden="true"><use href="#jm-chev-l"/></svg></button><h1 class="titre-top">Candidature</h1><div class="top-actions"></div></header><div class="sheet  avec-barre">
+<p class="cand-ctx">Analyste de données junior · Baobab Fintech</p>
+<ol class="stepper"><li class="fait"><i></i><span>CV</span></li><li class="fait"><i></i><span>Lettre</span></li><li class="fait"><i></i><span>Questions</span></li><li class="on"><i></i><span>Vérification</span></li><li class=""><i></i><span>Envoi</span></li></ol>
+<h2 class="h-etape">Vérifiez avant l’envoi</h2>
+<div class="carte liste">
+  <div class="recap"><span class="k">CV</span><b>CV principal · Analyste de données</b><a>Modifier</a></div>
+  <div class="recap"><span class="k">Lettre</span><b>« Madame, Monsieur, votre annonce… »</b><a>Modifier</a></div>
+  <div class="recap"><span class="k">Questions</span><b>2 réponses sur 2</b><a>Modifier</a></div>
+  <div class="recap"><span class="k">Contact</span><b>grace.mbuyi@exemple.cd</b><a>Modifier</a></div>
+</div>
+<label class="consent"><i class="case on"><svg class="i xs" aria-hidden="true"><use href="#jm-check"/></svg></i><span>J’accepte que Baobab Fintech consulte ma candidature et mon profil.</span></label>
+<p class="brouillon"><svg class="i xs" aria-hidden="true"><use href="#jm-check"/></svg>Brouillon enregistré à 20 h 14</p>
+</div><div class="barre-action"><a class="btn-sec">Retour</a><a class="btn-prim"><svg class="i s" aria-hidden="true"><use href="#jm-send"/></svg>Envoyer</a></div><div class="home-ind"></div></div><figcaption><b>10 · Candidature · vérification</b><ul><li>Chaque bloc renvoie à son étape sans perdre le reste.</li></ul></figcaption></figure><figure class="ecran" id="e11"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><h1 class="titre-top">Candidature</h1><div class="top-actions"></div></header><div class="sheet ">
+<div class="confirm">
+  <span class="sceau"><svg class="i l" aria-hidden="true"><use href="#jm-valider"/></svg></span>
+  <h1 class="h-onb">Candidature envoyée</h1>
+  <p class="sous">Baobab Fintech l’a bien reçue le 16 octobre à 20 h 15. Vous serez prévenue dès que son statut change.</p>
+  <div class="carte liste">
+    <div class="ligne"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-suivi"/></svg></span><div class="l-txt"><b>Suivre ma candidature</b><span>Dans Suivi, avec son historique</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+    <div class="ligne"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-message"/></svg></span><div class="l-txt"><b>Préparer l’entretien</b><span>Simulation et conseils</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+  </div>
+  <a class="btn-large">Continuer à explorer les offres</a>
+</div></div><div class="home-ind"></div></div><figcaption><b>11 · Confirmation</b><ul><li>Affichée seulement après la réponse du serveur, avec l’heure de réception.</li></ul></figcaption></figure><figure class="ecran" id="e12"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><button class="rond" aria-label="Retour"><svg class="i" aria-hidden="true"><use href="#jm-chev-l"/></svg></button><h1 class="titre-top">Candidature</h1><div class="top-actions"></div></header><div class="sheet  avec-barre">
+<p class="cand-ctx">Analyste de données junior · Baobab Fintech</p>
+<ol class="stepper"><li class="fait"><i></i><span>CV</span></li><li class="fait"><i></i><span>Lettre</span></li><li class="fait"><i></i><span>Questions</span></li><li class="fait"><i></i><span>Vérification</span></li><li class="on"><i></i><span>Envoi</span></li></ol>
+<div class="alerte">
+  <span class="tuile t-ambre"><svg class="i" aria-hidden="true"><use href="#jm-notification"/></svg></span>
+  <div><b>Votre candidature n’est pas encore envoyée</b><p>La connexion a été coupée pendant l’envoi. Rien n’est perdu : votre brouillon est conservé sur ce téléphone et dans votre compte.</p></div>
+</div>
+<div class="carte liste">
+  <div class="recap"><span class="k">État</span><b>Brouillon, non envoyé</b></div>
+  <div class="recap"><span class="k">Dernier enregistrement</span><b>Aujourd’hui à 20 h 14</b></div>
+</div>
+<p class="petit-txt">Jumanly n’affiche « Candidature envoyée » qu’après la confirmation du serveur.</p>
+</div><div class="barre-action"><a class="btn-sec">Plus tard</a><a class="btn-prim">Réessayer</a></div><div class="home-ind"></div></div><figcaption><b>12 · Erreur réseau</b><ul><li>Jamais « envoyée » sans confirmation ; brouillon conservé, bouton Réessayer.</li></ul></figcaption></figure></div></section></div>
+<div id="s4"><section class="bloc"><header class="bloc-tete"><h2>4 · Apprendre</h2><p>Les contenus d’abord. La Learning Room range ses éléments en onglets au lieu de tout empiler.</p></header><div class="rangee"><figure class="ecran" id="e13"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><h1 class="titre-top">Apprendre</h1><div class="top-actions"><button class="rond" aria-label="Rechercher"><svg class="i" aria-hidden="true"><use href="#jm-recherche"/></svg></button><button class="rond" aria-label="Notifications, 3 non lues"><svg class="i" aria-hidden="true"><use href="#jm-notification"/></svg><b class="point-notif"></b></button><button class="avatar-btn" aria-label="Mon espace"><span>GM</span></button></div></header><div class="sheet  avec-nav">
+<article class="carte sombre reprise">
+  <span class="kicker">Formation en cours</span>
+  <h3>Excel pour l’analyse de données</h3>
+  <p class="meta-cl">Leçon 4 sur 9 · reprise à 06:12</p>
+  <div class="jauge cl"><i style="width:40%"></i></div>
+  <a class="btn-lime"><svg class="i s" aria-hidden="true"><use href="#jm-play"/></svg>Reprendre</a>
+</article>
+<div class="sec"><div><h2>Recommandées pour vous</h2></div><a class="lien">Tout voir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div>
+<div class="carrousel">
+<article class="carte form"><div class="f-visuel t-neon"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Gratuite</span></div><div class="f-corps"><span class="dom">AI & Digital Tools</span><h3>SQL pour débuter</h3><p class="meta">Débutant · 2 h 10</p><a class="btn-txt">Découvrir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte form"><div class="f-visuel t-lime"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Gratuite</span></div><div class="f-corps"><span class="dom">Career & Employability</span><h3>Réussir son entretien d’embauche</h3><p class="meta">Débutant · 1 h 45</p><a class="btn-txt">Découvrir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+<article class="carte form"><div class="f-visuel t-menthe"><svg class="i l" aria-hidden="true"><use href="#jm-cours-video"/></svg><span class="acces">Starter</span></div><div class="f-corps"><span class="dom">AI & Digital Tools</span><h3>Power BI : premiers tableaux</h3><p class="meta">Débutant · 2 h 30</p><a class="btn-txt">Découvrir<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div></article>
+</div>
+<div class="sec"><div><h2>Domaines</h2></div></div>
+<div class="domaines">
+<a class="dom-t"><svg class="i s" aria-hidden="true"><use href="#jm-career"/></svg>Career & Employability</a><a class="dom-t"><svg class="i s" aria-hidden="true"><use href="#jm-statistiques"/></svg>Digital & Productivity</a>
+<a class="dom-t"><svg class="i s" aria-hidden="true"><use href="#jm-edit"/></svg>Design & Creative</a><a class="dom-t"><svg class="i s" aria-hidden="true"><use href="#jm-entreprise"/></svg>Business & Management</a>
+<a class="dom-t"><svg class="i s" aria-hidden="true"><use href="#jm-message"/></svg>Professional Communication</a><a class="dom-t"><svg class="i s" aria-hidden="true"><use href="#jm-intelligence"/></svg>AI & Digital Tools</a>
+<a class="dom-t"><svg class="i s" aria-hidden="true"><use href="#jm-mobile-money"/></svg>Monetisation & Freelancing</a>
+</div>
+<a class="btn-large"><svg class="i s" aria-hidden="true"><use href="#jm-recherche"/></svg>Explorer le catalogue</a>
+<div class="sec"><div><h2>Exercices et certificats</h2></div></div>
+<div class="carte liste">
+<div class="ligne"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-quiz"/></svg></span><div class="l-txt"><b>Mes évaluations</b><span>1 quiz à faire</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+<div class="ligne"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-certificat"/></svg></span><div class="l-txt"><b>Mes attestations</b><span>1 attestation obtenue</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+<div class="ligne"><span class="tuile t-menthe"><svg class="i" aria-hidden="true"><use href="#jm-objectif"/></svg></span><div class="l-txt"><b>Parcours suivis</b><span>Analyste de données</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+</div>
+</div><nav class="nav" aria-label="Navigation principale"><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-accueil"/></svg><span>Pour moi</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg><span>Offres</span></a><a class="on" aria-current=page><svg class="i" aria-hidden="true"><use href="#jm-diplome"/></svg><span>Apprendre</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-suivi"/></svg><span>Suivi</span><b class="pastille" aria-label="2 actions à traiter">2</b></a></nav><div class="home-ind"></div></div><figcaption><b>13 · Apprendre</b><ul><li>Formation en cours et Reprendre en tête, puis recommandations, domaines (les 7 de Learn v2), catalogue, exercices et certificats.</li></ul></figcaption></figure><figure class="ecran" id="e14"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><button class="rond" aria-label="Retour"><svg class="i" aria-hidden="true"><use href="#jm-chev-l"/></svg></button><h1 class="titre-top">Leçon</h1><div class="top-actions"></div></header><div class="sheet plein avec-barre">
+<div class="video"><button class="play" aria-label="Lire"><svg class="i l" aria-hidden="true"><use href="#jm-play"/></svg></button><span class="sous-t">CC</span><div class="v-barre"><i style="width:38%"></i></div><span class="v-temps">06:12 / 16:40</span></div>
+<div class="lr">
+  <p class="lr-ctx">Excel pour l’analyse de données · Module 2</p>
+  <h1 class="lr-titre">Leçon 4 · Les tableaux croisés dynamiques</h1>
+  <div class="lr-prog"><div class="jauge"><i style="width:40%"></i></div><span>Leçon 4 sur 9 · 10 min restantes</span></div>
+  <div class="onglets defile" role="tablist"><span class="on">Résumé</span><span>Modules</span><span>Transcription</span><span>Ressources</span><span>Notes</span></div>
+  <div class="carte pad lr-contenu">
+    <p>Un tableau croisé regroupe vos lignes par catégorie et calcule une somme, une moyenne ou un nombre en quelques clics.</p>
+    <ul><li>Préparer une plage propre, avec des titres</li><li>Choisir lignes, colonnes et valeurs</li><li>Filtrer et actualiser après un changement</li></ul>
+  </div>
+  <details class="carte accordeon solo"><summary><svg class="i s" aria-hidden="true"><use href="#jm-quiz"/></svg>Exercice de la leçon · 5 questions<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary></details>
+</div></div><div class="barre-action"><a class="btn-sec"><svg class="i s" aria-hidden="true"><use href="#jm-chev-l"/></svg>Précédente</a><a class="btn-prim">Leçon suivante<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div><div class="home-ind"></div></div><figcaption><b>14 · Learning Room</b><ul><li>Vidéo, titre, progression, puis onglets Résumé / Modules / Transcription / Ressources / Notes.</li><li>Barre du bas masquée ; Précédente / Suivante fixes.</li></ul></figcaption></figure></div></section></div>
+<div id="s5"><section class="bloc"><header class="bloc-tete"><h2>5 · Suivi</h2><p>Les démarches, par urgence puis par date. Aucune statistique générale.</p></header><div class="rangee"><figure class="ecran" id="e15"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><h1 class="titre-top">Suivi</h1><div class="top-actions"><button class="rond" aria-label="Rechercher"><svg class="i" aria-hidden="true"><use href="#jm-recherche"/></svg></button><button class="rond" aria-label="Notifications, 3 non lues"><svg class="i" aria-hidden="true"><use href="#jm-notification"/></svg><b class="point-notif"></b></button><button class="avatar-btn" aria-label="Mon espace"><span>GM</span></button></div></header><div class="sheet  avec-nav">
+<div class="chips defile"><span class="chip on">Tout</span><span class="chip">Candidatures</span><span class="chip">Entretiens</span><span class="chip">Messages</span><span class="chip">À reprendre</span></div>
+<div class="sec"><div><h2>À traiter</h2><p class="sous">Ce qui attend une réponse de votre part</p></div></div>
+<article class="carte rdv">
+  <div class="rdv-date"><b>23</b><span>oct.</span></div>
+  <div class="rdv-txt"><span class="kicker-s">Entretien à confirmer</span><h3>Analyste de données junior</h3><p>Baobab Fintech · jeudi, 10 h · visioconférence</p>
+  <div class="rdv-act"><a class="btn-mini plein">Confirmer</a><a class="btn-mini">Proposer un autre moment</a></div></div>
+</article>
+<article class="carte msg">
+  <span class="av t-sapin">MK</span><div class="l-txt"><b>Moussa Kanté · Baobab Fintech</b><span>« Pouvez-vous nous envoyer votre attestation de… »</span></div><span class="heure">hier</span>
+</article>
+<div class="sec"><div><h2>Mes candidatures</h2></div><a class="lien">Toutes<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div>
+<div class="carte liste">
+  <div class="cand"><span class="logo-ent t-sapin">BF</span><div class="l-txt"><b>Analyste de données junior</b><span>Statut communiqué le 15 oct.</span></div><span class="statut s-entretien">Entretien</span></div>
+  <div class="cand"><span class="logo-ent t-brume">CD</span><div class="l-txt"><b>Assistante business intelligence</b><span>Envoyée le 12 oct.</span></div><span class="statut s-vue">Consultée</span></div>
+  <div class="cand"><span class="logo-ent t-neon">ME</span><div class="l-txt"><b>Contrôleuse de gestion</b><span>Sur le site de l’employeur · 9 oct.</span></div><span class="statut s-ext">Externe</span></div>
+</div>
+<div class="sec"><div><h2>À reprendre</h2></div></div>
+<div class="carte liste">
+<div class="ligne"><span class="tuile t-zone"><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg></span><div class="l-txt"><b>Candidature · Chargée d’études marketing</b><span>Rawbank · étape 2 sur 5</span></div><a class="btn-mini">Reprendre</a></div>
+<div class="ligne"><span class="tuile t-zone"><svg class="i" aria-hidden="true"><use href="#jm-statistiques"/></svg></span><div class="l-txt"><b>Diagnostic carrière</b><span>Question 12 sur 30</span></div><a class="btn-mini">Reprendre</a></div>
+</div>
+</div><nav class="nav" aria-label="Navigation principale"><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-accueil"/></svg><span>Pour moi</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg><span>Offres</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-diplome"/></svg><span>Apprendre</span></a><a class="on" aria-current=page><svg class="i" aria-hidden="true"><use href="#jm-suivi"/></svg><span>Suivi</span><b class="pastille" aria-label="2 actions à traiter">2</b></a></nav><div class="home-ind"></div></div><figcaption><b>15 · Suivi</b><ul><li>Filtres Tout / Candidatures / Entretiens / Messages / À reprendre.</li><li>Le statut affiché est celui communiqué par le recruteur, daté.</li></ul></figcaption></figure><figure class="ecran" id="e16"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><h1 class="titre-top">Suivi</h1><div class="top-actions"><button class="rond" aria-label="Rechercher"><svg class="i" aria-hidden="true"><use href="#jm-recherche"/></svg></button><button class="rond" aria-label="Notifications, 3 non lues"><svg class="i" aria-hidden="true"><use href="#jm-notification"/></svg><b class="point-notif"></b></button><button class="avatar-btn" aria-label="Mon espace"><span>GM</span></button></div></header><div class="sheet  avec-nav">
+<div class="chips defile"><span class="chip">Tout</span><span class="chip on">Candidatures</span><span class="chip">Entretiens</span><span class="chip">Messages</span><span class="chip">À reprendre</span></div>
+<div class="vide">
+  <svg height="170" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" viewBox="-130 -470 260 490" ><g transform="translate(0 0) scale(1 1)"><ellipse cx="0" cy="2" rx="46" ry="9" fill="#0F3F37" opacity="0.1"/><g transform="rotate(0 0 -196)"><path d="M-27 -306 L-58 -359.69 L-66.07 -417.13" fill="none" stroke="#88c658" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><circle cx="-66.07" cy="-417.13" r="11.5" fill="#71462c"/><rect x="-58" y="-316" width="44" height="82" rx="20" fill="#3DA14F"/></g><path d="M-15 -196 L-29.24 -115.25 L-20.88 -35.68" fill="none" stroke="#0c342d" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(-20.88 -35.68) rotate(-1.2)"><rect x="-12" y="-6" width="40" height="17" rx="8.5" fill="#091519"/></g><path d="M15 -196 L29.24 -115.25 L20.88 -35.68" fill="none" stroke="#0F3F37" stroke-width="27" stroke-linecap="round" stroke-linejoin="round"/><g transform="translate(20.88 -35.68) rotate(1.2)"><rect x="-12" y="-6" width="40" height="17" rx="8.5" fill="#0B1A1F"/></g><g transform="rotate(0 0 -196)"><g transform="rotate(0 0 -330) translate(0 -364)"><path d="M-34 -10 L-44 92" stroke="#1B120D" stroke-width="13" stroke-linecap="round"/><circle cx="-44" cy="100" r="6.5" fill="#F2B33D"/><path d="M-22 -10 L-32 104" stroke="#1B120D" stroke-width="13" stroke-linecap="round"/><circle cx="-32" cy="112" r="6.5" fill="#F2B33D"/><path d="M-10 -10 L-20 98" stroke="#1B120D" stroke-width="13" stroke-linecap="round"/><circle cx="-20" cy="106" r="6.5" fill="#F2B33D"/></g><rect x="-37" y="-222" width="74" height="42" rx="18" fill="#0F3F37"/><rect x="-43" y="-330" width="86" height="130" rx="34" fill="#A6F26B"/><path d="M-30 -326 L-24 -260" stroke="#2e793b" stroke-width="7" stroke-linecap="round"/><rect x="-11" y="-346" width="22" height="26" rx="8" fill="#71462c"/><g transform="rotate(0 0 -330) translate(0 -364)"><circle cx="0" cy="-4" r="45" fill="#1B120D"/><circle r="40" fill="#8A5536"/><path d="M-41.5 -2 A41.5 41.5 0 0 1 41.5 -2 C 22 -16 -6 -22 -41.5 -2 Z" fill="#1B120D"/><circle cx="-12" cy="4" r="4" fill="#0B1A1F"/><circle cx="12" cy="4" r="4" fill="#0B1A1F"/><path d="M-9 19 Q 0 28 9 19" stroke="#0B1A1F" stroke-width="3.5" fill="none" stroke-linecap="round"/></g><path d="M27 -306 L58 -359.69 L66.07 -417.13" fill="none" stroke="#abf374" stroke-width="21" stroke-linecap="round" stroke-linejoin="round"/><circle cx="66.07" cy="-417.13" r="11.5" fill="#8A5536"/></g></g></svg>
+  <h2>Aucune candidature pour l’instant</h2>
+  <p>Vos candidatures apparaîtront ici avec leur statut et leur historique.</p>
+  <a class="btn-prim"><svg class="i s" aria-hidden="true"><use href="#jm-jobs"/></svg>Explorer les offres</a>
+  <a class="lien">Préparer mon CV d’abord</a>
+</div></div><nav class="nav" aria-label="Navigation principale"><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-accueil"/></svg><span>Pour moi</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg><span>Offres</span></a><a class="" ><svg class="i" aria-hidden="true"><use href="#jm-diplome"/></svg><span>Apprendre</span></a><a class="on" aria-current=page><svg class="i" aria-hidden="true"><use href="#jm-suivi"/></svg><span>Suivi</span><b class="pastille" aria-label="2 actions à traiter">2</b></a></nav><div class="home-ind"></div></div><figcaption><b>16 · Suivi · état vide</b><ul><li>Chaque filtre vide propose l’action utile.</li></ul></figcaption></figure></div></section></div>
+<div id="s6"><section class="bloc"><header class="bloc-tete"><h2>6 · Mon espace, recherche, notifications</h2><p>Ce qui est personnel ou administratif quitte la barre du bas et passe derrière l’avatar en haut à droite.</p></header><div class="rangee"><figure class="ecran" id="e17"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><button class="rond" aria-label="Retour"><svg class="i" aria-hidden="true"><use href="#jm-chev-l"/></svg></button><h1 class="titre-top">Mon espace</h1><div class="top-actions"></div></header><div class="sheet ">
+<div class="m-tete">
+  <span class="av grand t-sapin">GM</span>
+  <div><b>Grâce Mbuyi</b><span class="badge-plan">Talent · Free</span></div>
+  <a class="lien">Voir mon profil</a>
+</div>
+<div class="m-raccourcis">
+  <a><svg class="i" aria-hidden="true"><use href="#jm-statistiques"/></svg><span>Tableau de bord</span></a><a><svg class="i" aria-hidden="true"><use href="#jm-cv"/></svg><span>Mes CV</span></a><a><svg class="i" aria-hidden="true"><use href="#jm-certificat"/></svg><span>Certificats</span></a><a><svg class="i" aria-hidden="true"><use href="#jm-portefeuille"/></svg><span>Abonnement</span></a>
+</div>
+<details class="carte m-groupe" open><summary>Profil professionnel<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-profil"/></svg><span>Modifier mes informations</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-competence"/></svg><span>Mes compétences</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-jobs"/></svg><span>Mon portfolio</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-eye"/></svg><span>Visibilité auprès des recruteurs</span><em>Privé</em><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></details>
+<details class="carte m-groupe" open><summary>Outils carrière<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-cv"/></svg><span>CV Builder</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-doc"/></svg><span>Lettres et documents</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-lien"/></svg><span>Optimisation LinkedIn</span><em>Starter</em><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-intelligence"/></svg><span>Coach carrière</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-message"/></svg><span>Simulations d’entretien</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></details>
+<details class="carte m-groupe" ><summary>Acquis<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-certificat"/></svg><span>Certificats et attestations</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-etoile"/></svg><span>Réalisations</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-competence"/></svg><span>Compétences évaluées</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></details>
+<details class="carte m-groupe" ><summary>Mon compte<svg class="i s" aria-hidden="true"><use href="#jm-chev-d"/></svg></summary><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-portefeuille"/></svg><span>Abonnement et facturation</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-mobile-money"/></svg><span>Paiements</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-notification"/></svg><span>Notifications</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-confidentialite"/></svg><span>Confidentialité</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-reglages"/></svg><span>Paramètres</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a><a class="m-ligne"><svg class="i s" aria-hidden="true"><use href="#jm-info"/></svg><span>Assistance</span><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></details>
+<a class="m-ligne deco"><svg class="i s" aria-hidden="true"><use href="#jm-logout"/></svg><span>Se déconnecter</span></a>
+</div><div class="home-ind"></div></div><figcaption><b>17 · Mon espace</b><ul><li>4 raccourcis, puis 4 groupes repliables : profil, outils carrière, acquis, compte.</li><li>Le tableau de bord actuel devient « Tableau de bord » ici.</li><li>Le sélecteur d’espace (Hire, Partenaire) s’ajoute en tête s’il existe.</li></ul></figcaption></figure><figure class="ecran" id="e18"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><button class="rond" aria-label="Retour"><svg class="i" aria-hidden="true"><use href="#jm-chev-l"/></svg></button><h1 class="titre-top">Rechercher</h1><div class="top-actions"></div></header><div class="sheet ">
+<div class="saisie grande focus"><svg class="i s" aria-hidden="true"><use href="#jm-recherche"/></svg><span>analyste</span><span class="curseur"></span><svg class="i s mute" aria-hidden="true"><use href="#jm-fermer"/></svg></div>
+<div class="onglets"><span class="on">Tout</span><span>Offres</span><span>Formations</span></div>
+<div class="r-groupe"><h3>Offres <em>3</em></h3>
+<div class="carte liste">
+<div class="ligne"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg></span><div class="l-txt"><b>Analyste de données junior</b><span>Baobab Fintech · Kinshasa · CDI</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+<div class="ligne"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg></span><div class="l-txt"><b>Analyste crédit</b><span>Rawbank · Kinshasa · CDD</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+<div class="ligne"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg></span><div class="l-txt"><b>Lead data analyst</b><span>Baobab Fintech · Kinshasa · CDI</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+</div><a class="lien">Voir les offres pour « analyste »<svg class="i s" aria-hidden="true"><use href="#jm-chev-r"/></svg></a></div>
+<div class="r-groupe"><h3>Formations <em>2</em></h3>
+<div class="carte liste">
+<div class="ligne"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-learn"/></svg></span><div class="l-txt"><b>Parcours Analyste de données</b><span>Parcours · 5 formations</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+<div class="ligne"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-learn"/></svg></span><div class="l-txt"><b>Excel pour l’analyse de données</b><span>Formation en cours</span></div><svg class="i s mute" aria-hidden="true"><use href="#jm-chev-r"/></svg></div>
+</div></div>
+<div class="r-groupe"><h3>Recherches récentes <a class="lien petit">Effacer</a></h3>
+<div class="chips"><span class="chip petit"><svg class="i xs" aria-hidden="true"><use href="#jm-horloge"/></svg>stage finance</span><span class="chip petit"><svg class="i xs" aria-hidden="true"><use href="#jm-horloge"/></svg>Power BI</span></div></div>
+</div><div class="home-ind"></div></div><figcaption><b>18 · Recherche</b><ul><li>Résultats groupés Offres / Formations ; recherches récentes seulement si l’utilisateur l’a permis.</li></ul></figcaption></figure><figure class="ecran" id="e19"><div class="phone" style="min-height:844px"><div class="barre-statut"><span>9:41</span><span class="ind"><i></i><i></i><i></i></span></div><header class="top"><button class="rond" aria-label="Retour"><svg class="i" aria-hidden="true"><use href="#jm-chev-l"/></svg></button><h1 class="titre-top">Notifications</h1><div class="top-actions"></div></header><div class="sheet ">
+<div class="n-groupe"><h3>Important</h3><div class="carte liste">
+<div class="notif nl"><span class="tuile t-lime"><svg class="i" aria-hidden="true"><use href="#jm-message"/></svg></span><div class="l-txt"><b>Nouveau message de Moussa Kanté</b><span>Baobab Fintech · Analyste de données junior</span></div><span class="heure">20 h 02</span></div>
+<div class="notif nl"><span class="tuile t-neon"><svg class="i" aria-hidden="true"><use href="#jm-calendrier"/></svg></span><div class="l-txt"><b>Entretien déplacé au jeudi 23 oct., 10 h</b><span>Baobab Fintech · à confirmer</span></div><span class="heure">18 h 40</span></div>
+<div class="notif nl"><span class="tuile t-menthe"><svg class="i" aria-hidden="true"><use href="#jm-suivi"/></svg></span><div class="l-txt"><b>Candidature consultée</b><span>Congo Data Lab · Assistante business intelligence</span></div><span class="heure">hier</span></div>
+</div></div>
+<div class="n-groupe"><h3>Pour vous</h3><div class="carte liste">
+<div class="notif"><span class="tuile t-zone"><svg class="i" aria-hidden="true"><use href="#jm-jobs"/></svg></span><div class="l-txt"><b>Nouvelle offre : Lead data analyst</b><span>Correspond à vos métiers recherchés</span></div><span class="heure">hier</span></div>
+<div class="notif"><span class="tuile t-zone"><svg class="i" aria-hidden="true"><use href="#jm-learn"/></svg></span><div class="l-txt"><b>Votre leçon vous attend</b><span>Excel pour l’analyse de données · leçon 4</span></div><span class="heure">lundi</span></div>
+</div></div>
+<div class="n-groupe"><h3>Jumanly</h3><div class="carte liste">
+<div class="notif"><span class="tuile t-zone"><svg class="i" aria-hidden="true"><use href="#jm-etoile"/></svg></span><div class="l-txt"><b>Nouveau parcours disponible</b><span>AI & Digital Tools</span></div><span class="heure">12 oct.</span></div>
+</div></div>
+<a class="lien centre-b"><svg class="i s" aria-hidden="true"><use href="#jm-reglages"/></svg>Préférences de notification</a>
+</div><div class="home-ind"></div></div><figcaption><b>19 · Notifications</b><ul><li>Important d’abord (recruteurs, entretiens, candidatures), puis Pour vous, puis Jumanly.</li></ul></figcaption></figure></div></section></div>
+</body></html>

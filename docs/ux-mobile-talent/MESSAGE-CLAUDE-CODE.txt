@@ -1,0 +1,18 @@
+Nouveau chantier : l'expérience mobile de l'espace Talent.
+
+Lis d'abord, dans cet ordre :
+1. docs/ux-mobile-talent/CAHIER-DES-CHARGES-UX-MOBILE.md : ma demande, elle fait foi.
+2. docs/ux-mobile-talent/BRIEF-MOBILE-TALENT.md : les choix d'intégration et les liens avec les autres briefs.
+3. Les maquettes : docs/ux-mobile-talent/maquette/mobile-talent.html (ouvre-la dans un navigateur) et les captures maquette/ecrans/01.jpg à 19.jpg.
+
+Respecte aussi docs/interactions-relief/, docs/experience-animee/, docs/refonte-career/ et docs/learn-v2/PLAN.md : ce chantier réorganise la navigation et les accueils, il ne refait ni l'identité visuelle ni les modules Learn, Jobs et Career.
+
+Ta première réponse doit présenter ton diagnostic du code existant et le plan d'intégration UX, sans écrire de code :
+- routes et pages concernées, composants de navigation (AppShell, IconRail, AccountMenu, SectionNav, config/navigation.ts) ;
+- rôles, espaces et droits à préserver ;
+- services réutilisés pour les offres, les formations, les candidatures, les entretiens et les messages ;
+- ce qui manque dans les données (questions du recruteur, offres externes, brouillons de candidature, analytics) et ce que tu proposes ;
+- la liste des fichiers que tu comptes modifier ou créer, phase par phase (1 à 4) ;
+- les points où tu t'écartes du brief, avec la raison.
+
+Attends ma validation avant de commencer la phase 1.
