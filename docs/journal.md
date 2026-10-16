@@ -2,6 +2,17 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Mobile Talent et Jumanly AI · prompt 0 : diagnostic et plan (16 octobre 2026)
+
+- Diagnostic du code existant et plan des 9 prompts dans `docs/ux-mobile-talent/PLAN.md` :
+  composants à créer et à réutiliser, migrations prévues (`application_drafts`,
+  `message_kinds_file_slot_decision`, `hire_message_templates`, `assistant_conversations`,
+  `interview_practice_notes`), risques, tests existants à adapter.
+- Écarts proposés : étendre le `Button` existant au lieu d'un nouveau composant, réutiliser
+  `/app/bienvenue` pour l'écran d'objectif, barre du bas visible jusqu'à `lg`, Hire et Partenaire
+  inchangés.
+- Aucun code modifié.
+
 ## Learn v2 · étape 3 : reprendre une vidéo à la seconde près (16 octobre 2026)
 
 - Table `LessonProgress` (migration `learn_lesson_progress`, retour arrière
