@@ -203,7 +203,7 @@ export default async function CareerPage() {
 
   return (
     <>
-      <AppPageHeader eyebrow={t("eyebrow")} title={t("title")} />
+      <AppPageHeader eyebrow={t("eyebrow")} title={t("title")} subtitle={t("heroLead")} />
 
       <CareerHero
         journey={journey}

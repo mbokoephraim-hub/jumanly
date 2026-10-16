@@ -121,7 +121,7 @@ export async function CourseGallery({
               href={`/admin/formations/${course.id}${query}`}
               className="jm-admin-card group flex h-full flex-col overflow-hidden rounded-[24px] bg-blanc focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus-visible:outline-none"
             >
-              <span className="relative block aspect-video overflow-hidden">
+              <span className="relative block aspect-[16/7] overflow-hidden">
                 {course.coverUrl ? (
                   <img
                     src={coverAt(course.coverUrl, 480)}

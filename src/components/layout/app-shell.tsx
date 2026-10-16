@@ -143,7 +143,7 @@ export function AppShell({
         {/* The secondary menu, above the page: sub-sections left, tools right. */}
         <div className="jm-topbar sticky top-0 z-30 flex items-center gap-3 px-4 pt-3 sm:px-6 lg:h-[68px] lg:gap-5 lg:px-6 lg:pt-0 xl:px-8">
           <SectionNav sections={sections} className="min-w-0 flex-1" />
-          <div className="ml-auto hidden min-w-0 shrink items-center justify-end gap-3 lg:flex lg:w-[min(42%,560px)]">
+          <div className="ml-auto hidden min-w-0 shrink items-center justify-end gap-3 lg:flex lg:w-[min(36%,460px)] 2xl:w-[min(42%,560px)]">
             <TopSearch
               id="app-search"
               action="/app/recherche"

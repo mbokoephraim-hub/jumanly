@@ -201,7 +201,7 @@ export async function SubscriptionSection({
 
   const infoRow = (icon: IconName, text: string) => (
     <p className="flex items-start gap-2">
-      <Icon name={icon} className="mt-px size-4 shrink-0 text-lime" />
+      <Icon name={icon} className="mt-px size-4 shrink-0 text-feuille" />
       <span>{text}</span>
     </p>
   );
@@ -295,16 +295,10 @@ export async function SubscriptionSection({
       )}
 
       <div className="grid gap-5 lg:grid-cols-[1.25fr_1fr]">
-        {/* Current plan: Sapin card, motif, days-left ring. */}
-        <div className="relative isolate flex flex-col gap-4 overflow-hidden rounded-[28px] bg-sapin p-5 text-blanc lg:px-7 lg:py-[26px]">
-          <span
-            aria-hidden
-            className="absolute inset-0 -z-10 bg-[url(/marque/motifs/motif-trajectoires-sombre.svg)] bg-[length:360px] opacity-30"
-          />
+        {/* Current plan: white card with the days-left ring (Admin v4: light palette). */}
+        <div className="relative isolate flex flex-col gap-3.5 overflow-hidden rounded-[22px] border border-sapin/8 bg-blanc p-5 text-sapin lg:px-6 lg:py-5">
           <div className="flex items-center justify-between gap-3">
-            <p className="text-[11px] leading-[14px] font-semibold tracking-[0.09em] text-neon uppercase">
-              {t("current.title")}
-            </p>
+            <p className="text-xs font-medium text-ardoise">{t("current.title")}</p>
             {current ? (
               <Badge tone={statusTone[statusKey]}>
                 {t(`current.status.${statusKey}`, {
@@ -319,10 +313,10 @@ export async function SubscriptionSection({
           </div>
           <div className="flex items-center gap-5">
             <div className="flex min-w-0 flex-1 flex-col gap-1">
-              <p className="text-[34px] leading-[1.1] font-semibold tracking-[-0.03em] lg:text-[42px]">
+              <p className="text-[26px] leading-[1.1] font-semibold tracking-[-0.02em] lg:text-[30px]">
                 {t("current.plan", { plan: plan.planName })}
               </p>
-              <p className="text-base font-semibold text-lime">
+              <p className="text-[15px] font-semibold text-feuille-fonce">
                 {current
                   ? t("current.price", { price: formatUsd(current.plan.priceCents ?? 0) })
                   : currentPrice > 0
@@ -331,14 +325,14 @@ export async function SubscriptionSection({
               </p>
             </div>
             {current && (
-              <div aria-hidden className="relative size-[72px] shrink-0 lg:size-24">
+              <div aria-hidden className="relative size-[64px] shrink-0 lg:size-[76px]">
                 <svg viewBox="0 0 96 96" className="size-full -rotate-90">
                   <circle
                     cx="48"
                     cy="48"
                     r="43.5"
                     fill="none"
-                    stroke="rgb(255 255 255 / 0.14)"
+                    stroke="var(--color-gris-clair)"
                     strokeWidth="9"
                   />
                   <circle
@@ -346,7 +340,7 @@ export async function SubscriptionSection({
                     cy="48"
                     r="43.5"
                     fill="none"
-                    stroke="var(--color-lime)"
+                    stroke="var(--color-feuille)"
                     strokeWidth="9"
                     strokeLinecap="round"
                     pathLength={1}
@@ -354,14 +348,14 @@ export async function SubscriptionSection({
                     className="jm-ring-arc"
                   />
                 </svg>
-                <span className="absolute inset-0 grid place-items-center text-base font-semibold lg:text-lg">
+                <span className="absolute inset-0 grid place-items-center text-sm font-semibold lg:text-base">
                   {t("current.ring", { days: daysLeft })}
                 </span>
               </div>
             )}
           </div>
           {current ? (
-            <div className="flex flex-col gap-2 text-[13px] text-blanc/85">
+            <div className="flex flex-col gap-2 text-[13px] text-ardoise">
               {infoRow(
                 "calendrier",
                 t("current.period", {
@@ -383,14 +377,14 @@ export async function SubscriptionSection({
             plan.status !== "sponsored" && (
               <div className="flex flex-col gap-1.5">
                 <p className="font-semibold">{t("current.freeTitle")}</p>
-                <p className="text-[13px] leading-5 text-blanc/85">{t("current.freeText")}</p>
+                <p className="text-[13px] leading-5 text-ardoise">{t("current.freeText")}</p>
               </div>
             )
           )}
           {current?.pendingPlan && (
             <form
               action={downgradeSubscription}
-              className="flex flex-wrap items-center gap-3 rounded-[16px] bg-blanc/10 px-4 py-3 text-[13px]"
+              className="flex flex-wrap items-center gap-3 rounded-[16px] bg-creme px-4 py-3 text-[13px]"
             >
               <input type="hidden" name="family" value={family} />
               <input type="hidden" name="plan" value="" />
@@ -400,7 +394,7 @@ export async function SubscriptionSection({
                   date: formatDate(current.currentPeriodEnd),
                 })}
               </span>
-              <Button type="submit" variant="inverse" size="sm">
+              <Button type="submit" variant="tertiary" size="sm">
                 {t("current.scheduled.cancel")}
               </Button>
             </form>
@@ -413,13 +407,13 @@ export async function SubscriptionSection({
                     {t("current.renew")}
                   </ButtonLink>
                 )}
-                <ButtonLink href={`#${prefix}-change`} variant="inverse">
+                <ButtonLink href={`#${prefix}-change`} variant="tertiary">
                   {t("current.change")}
                 </ButtonLink>
                 {status === "canceled" ? (
                   <form action={resumeSubscription} className="flex">
                     <input type="hidden" name="family" value={family} />
-                    <Button type="submit" variant="inverse" className="w-full">
+                    <Button type="submit" variant="tertiary" className="w-full">
                       {t("current.resume")}
                     </Button>
                   </form>
@@ -427,7 +421,7 @@ export async function SubscriptionSection({
                   canCancel && (
                     <Link
                       href={cancelHref}
-                      className="inline-flex h-10 items-center justify-center rounded-pill px-[18px] text-[13px] font-semibold text-blanc hover:bg-blanc/10"
+                      className="inline-flex h-10 items-center justify-center rounded-pill px-[18px] text-[13px] font-semibold text-sapin hover:bg-creme"
                     >
                       {t("current.cancel")}
                     </Link>
@@ -442,15 +436,13 @@ export async function SubscriptionSection({
           </div>
           <div className="flex-1" />
           {features.length > 0 && (
-            <div className="flex flex-col gap-2.5 rounded-[18px] bg-nuit/35 px-4 py-3.5">
-              <p className="text-[11px] leading-[14px] font-semibold tracking-[0.09em] text-neon uppercase">
-                {t("current.includes")}
-              </p>
+            <div className="flex flex-col gap-2.5 rounded-[16px] bg-creme px-4 py-3">
+              <p className="text-xs font-medium text-ardoise">{t("current.includes")}</p>
               <ul className="flex flex-wrap gap-1.5">
                 {features.map((feature) => (
                   <li
                     key={feature}
-                    className="rounded-pill bg-blanc/10 px-3 py-1.5 text-[11px] leading-4 font-semibold"
+                    className="rounded-pill bg-blanc px-3 py-1.5 text-[11px] leading-4 font-medium ring-1 ring-brume ring-inset"
                   >
                     {feature}
                   </li>

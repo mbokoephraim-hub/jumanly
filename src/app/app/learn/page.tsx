@@ -3,7 +3,6 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { AppPageHeader } from "@/components/app/page-header";
 import { Icon } from "@/components/brand/icon";
-import { Pattern } from "@/components/site/marketing";
 import { Pagination, withParams } from "@/components/site/navigation-bits";
 import { PublicCourseCard } from "@/components/site/public-cards";
 import { Alert, ButtonLink, EmptyState, ProgressBar, SearchField } from "@/components/ui";
@@ -242,60 +241,56 @@ export default async function LearnPage({ searchParams }: PageProps<"/app/learn"
       {hero && (
         <section
           aria-labelledby="learn-hero"
-          className="relative flex flex-col gap-5 overflow-hidden rounded-[28px] bg-sapin p-6 text-blanc lg:p-9"
+          className="relative grid gap-3 overflow-hidden rounded-[22px] border border-sapin/8 bg-blanc p-4 text-sapin sm:p-5 lg:grid-cols-[minmax(0,1fr)_auto] lg:items-center lg:gap-x-8"
         >
-          <Pattern
-            name="motif-trajectoires-sombre"
-            size={300}
-            opacity={0.5}
-            className="[mask-image:linear-gradient(90deg,transparent_30%,#000)]"
-          />
-          <p className="relative flex flex-wrap gap-2 text-[11px] font-semibold">
-            {hero.category && (
-              <span className="rounded-pill bg-lime px-2.5 py-1 text-sapin">{hero.category}</span>
-            )}
-            <span className="rounded-pill px-2.5 py-1 text-lime ring-1 ring-lime ring-inset">
-              {lockedPlan(hero)
-                ? t("learn.lock.badge", { plan: lockedPlan(hero) ?? "" })
-                : hero.requiredLevel === "free"
-                  ? t("learn.card.badge.free")
-                  : t("learn.card.badge.included", {
-                      plan: planForCatalogLevel(plans, hero.requiredLevel)?.name ?? "",
-                    })}
-            </span>
-          </p>
-          <h2
-            id="learn-hero"
-            className="relative max-w-[640px] text-[26px] leading-[1.15] font-bold tracking-tight lg:text-[36px]"
-          >
-            {hero.title}
-          </h2>
-          <ul className="relative flex flex-wrap gap-x-5 gap-y-2 text-[13px] text-blanc/85">
-            <li className="flex items-center gap-1.5">
-              <Icon name="learn" className="size-4 text-lime" />
-              {t("learn.card.modules", { count: hero.moduleCount })}
-            </li>
-            <li className="flex items-center gap-1.5">
-              <Icon name="horloge" className="size-4 text-lime" />
-              {t(
-                `ui.duration.${durationParts(hero.durationMinutes).key}`,
-                durationParts(hero.durationMinutes).values,
+          <div className="flex min-w-0 flex-col gap-2.5">
+            <p className="relative flex flex-wrap gap-2 text-[11px] font-semibold">
+              {hero.category && (
+                <span className="rounded-pill bg-lime px-2.5 py-1 text-sapin">{hero.category}</span>
               )}
-            </li>
-            {hero.certificateEnabled && (
+              <span className="rounded-pill px-2.5 py-1 text-sapin ring-1 ring-brume ring-inset">
+                {lockedPlan(hero)
+                  ? t("learn.lock.badge", { plan: lockedPlan(hero) ?? "" })
+                  : hero.requiredLevel === "free"
+                    ? t("learn.card.badge.free")
+                    : t("learn.card.badge.included", {
+                        plan: planForCatalogLevel(plans, hero.requiredLevel)?.name ?? "",
+                      })}
+              </span>
+            </p>
+            <h2
+              id="learn-hero"
+              className="relative max-w-[640px] text-[20px] leading-[1.2] font-semibold tracking-tight lg:text-[22px]"
+            >
+              {hero.title}
+            </h2>
+            <ul className="relative flex flex-wrap gap-x-5 gap-y-2 text-[13px] text-ardoise">
               <li className="flex items-center gap-1.5">
-                <Icon name="certificat" className="size-4 text-lime" />
-                {t("learn.card.certificate")}
+                <Icon name="learn" className="size-4 text-feuille" />
+                {t("learn.card.modules", { count: hero.moduleCount })}
               </li>
-            )}
-            <li className="flex items-center gap-1.5">
-              <Icon name="cours-video" className="size-4 text-lime" />
-              {t("learn.card.lessons", { count: hero.lessonCount })}
-            </li>
-          </ul>
+              <li className="flex items-center gap-1.5">
+                <Icon name="horloge" className="size-4 text-feuille" />
+                {t(
+                  `ui.duration.${durationParts(hero.durationMinutes).key}`,
+                  durationParts(hero.durationMinutes).values,
+                )}
+              </li>
+              {hero.certificateEnabled && (
+                <li className="flex items-center gap-1.5">
+                  <Icon name="certificat" className="size-4 text-feuille" />
+                  {t("learn.card.certificate")}
+                </li>
+              )}
+              <li className="flex items-center gap-1.5">
+                <Icon name="cours-video" className="size-4 text-feuille" />
+                {t("learn.card.lessons", { count: hero.lessonCount })}
+              </li>
+            </ul>
+          </div>
           <Link
             href={`/app/learn/${hero.slug}`}
-            className="relative flex h-12 items-center gap-2 self-start rounded-pill bg-lime px-6 text-[15px] font-semibold text-sapin transition-transform hover:-translate-y-0.5"
+            className="relative flex h-11 items-center gap-2 self-start rounded-pill bg-lime px-5 text-[15px] font-semibold text-sapin transition-transform hover:-translate-y-0.5 lg:self-center"
           >
             {enrollmentBySlug.has(hero.slug) ? t("learn.card.resume") : t("learn.card.start")}
             <Icon name="chev-r" className="size-4" />

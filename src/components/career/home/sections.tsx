@@ -1,10 +1,9 @@
 import type { CSSProperties, ReactNode } from "react";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { Character, Orbi } from "@/components/brand/character";
+import { Character } from "@/components/brand/character";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { pillClass } from "@/components/career/kit";
-import { Pattern } from "@/components/site/marketing";
 import { cx } from "@/lib/cx";
 import type { Journey } from "@/server/services/career-journey";
 import { ScoreDial } from "./art";
@@ -16,31 +15,13 @@ function Spark({ className, style }: { className: string; style?: CSSProperties 
   return <span className={cx("jm-ch-spark jm-float absolute", className)} style={style} />;
 }
 
-/** A white floating card of the hero's scene. */
-function FloatCard({
-  className,
-  delay,
-  icon,
-  title,
-  sub,
-}: {
-  className: string;
-  delay: string;
-  icon: ReactNode;
-  title: string;
-  sub: string;
-}) {
+/** A small fact of the Career head: an icon, a title and one line. */
+function Fact({ icon, title, sub }: { icon: ReactNode; title: string; sub: string }) {
   return (
-    <div
-      className={cx(
-        "jm-float absolute flex items-center gap-2 rounded-[18px] bg-blanc/96 px-[11px] py-[9px] text-[11px] leading-[1.3] text-sapin shadow-[0_24px_50px_-20px_rgb(0_0_0/0.55)] sm:gap-2.5 sm:px-3.5 sm:py-3 sm:text-xs",
-        className,
-      )}
-      style={{ animationDelay: delay }}
-    >
+    <div className="flex min-w-0 flex-1 basis-[140px] items-center gap-2 rounded-[14px] bg-creme px-3 py-2 text-[11px] leading-[1.3] text-sapin">
       {icon}
-      <span>
-        <b className="block text-xs sm:text-[13px]">{title}</b>
+      <span className="min-w-0">
+        <b className="block text-xs">{title}</b>
         <small className="text-[11px] text-ardoise">{sub}</small>
       </span>
     </div>
@@ -50,18 +31,18 @@ function FloatCard({
 const chip = (tone: "lime" | "sapin", icon: IconName) => (
   <span
     className={cx(
-      "grid size-7 shrink-0 place-items-center rounded-[11px] sm:size-[34px]",
+      "grid size-[30px] shrink-0 place-items-center rounded-[10px]",
       tone === "lime" ? "bg-lime text-sapin" : "bg-sapin text-neon",
     )}
   >
-    <Icon name={icon} className="size-4 sm:size-5" />
+    <Icon name={icon} className="size-4" />
   </span>
 );
 
 /**
- * The hero of the Career home (BRIEF-CAREER-V2 § 3): the title, the four-step journey and its
- * buttons on the left; a decorative scene on the right (Amani, Orbi, orbits and three cards
- * carrying the real CV score, the diagnostic date and the next step).
+ * The head of the Career home (BRIEF-CAREER-V2 § 3, lightened in Admin v4 étape 5): one white card
+ * with the four-step journey, the real CV score, the next step and the two buttons. The page title
+ * and its lead sit above, in the page header.
  */
 export async function CareerHero({
   journey,
@@ -79,9 +60,6 @@ export async function CareerHero({
 }) {
   const t = await getTranslations("career.home");
   const format = await getFormatter();
-  const title = t("heroTitle");
-  const accent = t("heroTitleAccent");
-  const [before, after] = title.includes(accent) ? title.split(accent) : [title, null];
   const stepLabel = (key: string) => t(`journey.step.${key}` as "journey.step.point");
   const next = journey.current ? stepLabel(journey.current) : t("journey.finished");
 
@@ -89,153 +67,74 @@ export async function CareerHero({
     <section
       aria-labelledby="career-hero-title"
       {...enter(0)}
-      className="jm-ch-in relative isolate grid overflow-hidden rounded-[32px] bg-[image:var(--jm-degrade-profondeur)] text-blanc xl:grid-cols-[minmax(0,1.15fr)_minmax(0,0.85fr)]"
+      className="jm-ch-in grid gap-4 rounded-[22px] border border-sapin/8 bg-blanc p-4 sm:p-5 xl:grid-cols-[minmax(0,1fr)_auto] xl:items-center xl:gap-8"
     >
-      <div aria-hidden className="absolute -inset-[15%] -z-10">
-        <span className="jm-drift absolute inset-0 bg-[radial-gradient(420px_300px_at_78%_55%,rgb(166_242_107/0.28),transparent_70%),radial-gradient(380px_260px_at_98%_0%,rgb(47_211_166/0.3),transparent_70%),radial-gradient(500px_300px_at_10%_100%,rgb(30_154_100/0.35),transparent_70%)] [animation-duration:24s]" />
-      </div>
-      <Pattern
-        name="motif-trajectoires-sombre"
-        size={320}
-        opacity={0.35}
-        className="-z-10 [mask-image:linear-gradient(90deg,transparent_25%,#000)]"
-      />
-
-      <div className="flex min-w-0 flex-col gap-[18px] px-[22px] pt-[26px] pb-2 lg:py-9 lg:pr-2 lg:pl-11">
-        <p className="flex items-center gap-2.5 text-[11px] font-semibold tracking-[0.16em] text-neon uppercase before:h-0.5 before:w-[22px] before:rounded-sm before:bg-neon">
-          {t("eyebrow")}
-        </p>
-        <h2
-          id="career-hero-title"
-          className="max-w-[13ch] text-[34px] leading-[1.05] font-semibold tracking-[-0.035em] text-balance lg:text-[46px]"
-        >
-          {before}
-          {after !== null && (
-            <>
-              <span className="jm-ch-accent">{accent}</span>
-              {after}
-            </>
-          )}
-        </h2>
-        <p className="max-w-[46ch] text-sm leading-[1.6] font-light text-[#C9DDD6] lg:text-base">
-          {t("heroLead")}
-        </p>
-
-        <div
-          id="career-journey"
-          className="flex max-w-[560px] flex-col gap-3 rounded-[22px] border border-blanc/10 bg-blanc/6 px-[18px] py-4 backdrop-blur-sm"
-        >
-          <div className="flex flex-wrap items-baseline justify-between gap-x-3 text-xs text-[#C9DDD6]">
-            <h3 className="text-[13px] font-semibold text-blanc">{t("journey.title")}</h3>
-            <span>{t("journey.count", { done: journey.done })}</span>
-          </div>
-          <span aria-hidden className="block h-1.5 overflow-hidden rounded-md bg-blanc/12">
-            <span
-              className="jm-gauge block h-full origin-left rounded-md bg-[image:var(--jm-degrade-signature)]"
-              style={{ transform: `scaleX(${journey.progress / 100})` }}
-            />
-          </span>
-          <ol className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-2">
-            {journey.steps.map((step, index) => (
-              <li
-                key={step.key}
-                aria-current={step.state === "current" ? "step" : undefined}
+      <div id="career-journey" className="flex min-w-0 flex-col gap-3">
+        <div className="flex flex-wrap items-baseline justify-between gap-x-3 text-xs text-ardoise">
+          <h2 id="career-hero-title" className="text-[15px] font-semibold text-sapin">
+            {t("journey.title")}
+          </h2>
+          <span>{t("journey.count", { done: journey.done })}</span>
+        </div>
+        <span aria-hidden className="block h-1.5 overflow-hidden rounded-md bg-gris-clair">
+          <span
+            className="jm-gauge block h-full origin-left rounded-md bg-[image:var(--jm-degrade-signature)]"
+            style={{ transform: `scaleX(${journey.progress / 100})` }}
+          />
+        </span>
+        <ol className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-2">
+          {journey.steps.map((step, index) => (
+            <li
+              key={step.key}
+              aria-current={step.state === "current" ? "step" : undefined}
+              className={cx(
+                "flex min-w-0 items-start gap-2 text-xs leading-[1.3]",
+                step.state === "next" ? "text-ardoise" : "text-sapin",
+              )}
+            >
+              <span
+                aria-hidden
                 className={cx(
-                  "flex min-w-0 items-start gap-2 text-xs leading-[1.3]",
-                  step.state === "next" ? "text-[#A9C3BB]" : "text-blanc",
+                  "grid size-[22px] shrink-0 place-items-center rounded-full border-[1.5px] text-[11px] font-semibold",
+                  step.state === "done" && "border-lime bg-lime text-sapin",
+                  step.state === "current" &&
+                    "border-sapin text-sapin shadow-[0_0_0_4px_rgb(166_242_107/0.3)]",
+                  step.state === "next" && "border-sapin/20",
                 )}
               >
-                <span
-                  aria-hidden
-                  className={cx(
-                    "grid size-[22px] shrink-0 place-items-center rounded-full border-[1.5px] text-[11px] font-semibold",
-                    step.state === "done" && "border-lime bg-lime text-sapin",
-                    step.state === "current" &&
-                      "border-lime text-lime shadow-[0_0_0_4px_rgb(166_242_107/0.15)]",
-                    step.state === "next" && "border-blanc/25",
-                  )}
-                >
-                  {step.state === "done" ? (
-                    <Icon name="check" className="size-[13px]" />
-                  ) : (
-                    index + 1
-                  )}
-                </span>
-                <span className="min-w-0">
-                  {stepLabel(step.key)}
-                  <small className="block text-[11px] text-[#A9C3BB]">
-                    {step.key === "point" && step.state === "done" && diagnosticAt
-                      ? format.dateTime(diagnosticAt, { dateStyle: "medium" })
-                      : t(`journey.state.${step.state}`)}
-                  </small>
-                </span>
-              </li>
-            ))}
-          </ol>
-        </div>
+                {step.state === "done" ? <Icon name="check" className="size-[13px]" /> : index + 1}
+              </span>
+              <span className="min-w-0">
+                {stepLabel(step.key)}
+                <small className="block text-[11px] text-ardoise">
+                  {step.key === "point" && step.state === "done" && diagnosticAt
+                    ? format.dateTime(diagnosticAt, { dateStyle: "medium" })
+                    : t(`journey.state.${step.state}`)}
+                </small>
+              </span>
+            </li>
+          ))}
+        </ol>
+      </div>
 
-        <div className="flex flex-wrap gap-2.5">
-          <Link
-            href={continueHref}
-            className={pillClass("lime", "md", "shadow-[0_14px_30px_-14px_rgb(166_242_107/0.9)]")}
-          >
+      <div className="flex flex-col gap-3 xl:w-[360px]">
+        <div className="flex flex-wrap gap-2">
+          <Fact
+            icon={cv ? <ScoreDial score={cv.score} size={30} /> : chip("lime", "cv")}
+            title={t("float.cv")}
+            sub={cv ? t("float.cvSub", { score: cv.score, band: cv.band }) : t("cv.none")}
+          />
+          <Fact icon={chip("sapin", "suivant")} title={t("float.next")} sub={next} />
+        </div>
+        <div className="flex flex-wrap gap-2">
+          <Link href={continueHref} className={pillClass("lime", "md")}>
             {t("journey.continue")}
             <Icon name="chev-r" className="size-4" />
           </Link>
-          <Link href={diagnosticHref} className={pillClass("ghost")}>
+          <Link href={diagnosticHref} className={pillClass("outline")}>
             {diagnosticAt ? t("diagnostic.cta.view") : t("diagnostic.cta.start")}
           </Link>
         </div>
-      </div>
-
-      <div aria-hidden className="relative min-h-[310px] sm:min-h-[340px] xl:min-h-[400px]">
-        <div className="absolute top-[54%] left-1/2 size-[320px] -translate-1/2 sm:size-[440px]">
-          <span className="absolute inset-0 rounded-full border-[1.5px] border-menthe/28" />
-          <span className="absolute inset-[44px] rounded-full border-[1.5px] border-lime/25 sm:inset-[60px]" />
-          <span className="jm-ch-orbit absolute inset-[88px] rounded-full border-[1.5px] border-dashed border-neon/25 sm:inset-[120px]" />
-        </div>
-        <div className="jm-float absolute top-[30px] right-[18%]" style={{ animationDelay: "-3s" }}>
-          <Orbi size={38} />
-        </div>
-        <Spark className="top-[70px] left-[46%] size-4 bg-neon" />
-        <Spark
-          className="right-[14%] bottom-[120px] size-[11px] bg-neon"
-          style={{ animationDelay: "-4.5s" }}
-        />
-        <span className="absolute bottom-[34px] left-1/2 h-[46px] w-[230px] -translate-x-1/2 rounded-[50%] bg-[radial-gradient(closest-side,rgb(166_242_107/0.55),rgb(166_242_107/0))] blur-[2px]" />
-        <div className="jm-float absolute bottom-11 left-1/2 -translate-x-1/2 drop-shadow-[0_20px_30px_rgb(0_0_0/0.35)]">
-          <span className="block sm:hidden">
-            <Character name="amani" pose="joie" height={230} />
-          </span>
-          <span className="hidden sm:block">
-            <Character name="amani" pose="joie" height={290} />
-          </span>
-        </div>
-        <FloatCard
-          className="top-[18px] left-[3%] -rotate-4 sm:top-[46px] sm:left-[6%]"
-          delay="-1.5s"
-          icon={cv ? <ScoreDial score={cv.score} size={38} /> : chip("lime", "cv")}
-          title={t("float.cv")}
-          sub={cv ? t("float.cvSub", { score: cv.score, band: cv.band }) : t("cv.none")}
-        />
-        <FloatCard
-          className="bottom-[54px] left-[3%] rotate-3 sm:bottom-[96px] sm:left-[2%]"
-          delay="-4.5s"
-          icon={chip("lime", "objectif")}
-          title={diagnosticAt ? t("float.diagnostic") : t("diagnostic.none")}
-          sub={
-            diagnosticAt
-              ? t("float.diagnosticSub", { date: diagnosticAt })
-              : t("diagnostic.cta.start")
-          }
-        />
-        <FloatCard
-          className="top-[150px] right-[3%] rotate-4 sm:top-[120px] sm:right-[5%]"
-          delay="-3s"
-          icon={chip("sapin", "suivant")}
-          title={t("float.next")}
-          sub={next}
-        />
       </div>
     </section>
   );

@@ -292,6 +292,9 @@ a.jm-admin-card:hover,
 }
 .jm-section-tabs {
   scrollbar-width: none;
+  /* Tabs that do not fit fade out on the right and scroll with the finger or the wheel. */
+  padding-right: 28px;
+  mask-image: linear-gradient(90deg, #000 calc(100% - 28px), transparent);
 }
 .jm-section-tabs::-webkit-scrollbar {
   display: none;
