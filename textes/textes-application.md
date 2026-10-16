@@ -4373,7 +4373,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `connect.list.filter.all` | Tous |
 | `connect.list.filter.unread` | Non lus |
 | `connect.list.filter.recruiters` | Recruteurs |
-| `connect.list.filter.requests` | Demandes de mise en relation |
+| `connect.list.filter.requests` | Demandes |
 | `connect.list.filter.archived` | Archivés |
 | `connect.list.item.role` | {company} · {role} |
 | `connect.list.item.you` | Vous : {message} |
