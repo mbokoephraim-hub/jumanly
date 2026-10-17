@@ -2185,3 +2185,12 @@ toutes dans `docs/specifications.md`.
   qui l'utilise (variables déjà dans `.env.example`).
 - Le dépôt n'avait pas de branche `main` : création soumise à l'accord du propriétaire.
 - Accueil et tableau de bord sont provisoires (bloc principal seulement) : complets en E1 et E3.
+
+## 2026-10-17 · Expérience mobile Talent, version 7 (maquettes et brief)
+
+- Retours d'Ephraïm : `docs/ux-mobile-talent/CAHIER-DES-CHARGES-V7.md` (dictée + reformulation).
+- En-tête sans logo, titre en grand, barre de recherche unique « Orbi » (nom de l'IA), barre du bas floutée et
+  animée, leçon en blocs colorés, import de CV et expériences, mise en forme modernisée, modèles de refus et
+  d'acceptation, réalisations mises en avant, connexions, badges Premium et Cap ; écrans 67 à 80.
+- Brief § 7, prompt amélioré et prompts (prompt 10 ajouté) mis à jour. Quota de réalisations par forfait à
+  confirmer dans la partie 05.

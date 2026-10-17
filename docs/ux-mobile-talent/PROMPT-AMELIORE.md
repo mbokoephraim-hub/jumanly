@@ -48,13 +48,17 @@ maquette ; les reporter dans les jetons CSS du projet, sans nouvelle couleur.
 ligne au plus, avec une scène visuelle ; objectif en `GoalCard` ; messages en cartes (fichier, créneau,
 décision à l’en-tête de l’entreprise).
 
-## 3. Navigation (version 6, voir `CAHIER-DES-CHARGES-V6.md`)
+## 3. Navigation (versions 6 et 7, voir `CAHIER-DES-CHARGES-V6.md` et `CAHIER-DES-CHARGES-V7.md`)
+
+- **v7** : en-tête sans logo (Menu ; +, Messages, Notifications), titre de page en grand, une seule barre
+  de recherche « Rechercher ou demander à Orbi » avec filtres sur chaque onglet sauf Compte ; barre du bas en
+  verre flouté, rond Pour moi vert, animation au toucher ; plus de bouton flottant. Orbi = nom de l’IA.
 
 - **Barre du bas, 5 onglets** : Offres (`/app/jobs`), Apprendre (`/app/learn`), **Pour moi** (`/app`, au
   centre, rond surélevé, onglet principal), Suivi (`/app/suivi`), Compte (`/app/compte`, avatar). Actif en
   pastille Lime, texte Sapin ; zones de 56 px ; pastille de Suivi réelle. Masquée sur les écrans qui ont
   une barre d’action fixe en bas.
-- **En-tête sans bande verte** : Menu + logo ou titre ; Rechercher, +, Notifications, Messages.
+- **En-tête sans bande verte** (remplacé par la v7 ci-dessus).
 - **Menu du haut** (bouton Menu) : Jumanly AI, Mes CV, Tableau de bord, Mes candidatures, Simulations
   d’entretien, Attestations, « Tout Mon espace ». Fermeture au toucher dehors, Échap, focus piégé.
 - **Bouton +** : feuille « Créer » (écran 60). **Retour** en tête de toute page qui n’est pas un onglet.

@@ -12,7 +12,9 @@ les liens avec les autres briefs. Maquettes validées par Claude (validation dé
 boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly AI 35 à 43 ; v4 : toucher l’orbe 44 et simulations d’entretien 45 à 49 ; v5 : planche « Cartes », objectif en carte, moins de texte, messages et décisions 50 à 56, voir
 `docs/jumanly-ai/` ; v6 du 17 octobre : barre du bas à 5 onglets, page Compte, en-tête sans bande verte,
 bouton retour, bouton +, thème Vert, ouverture par le logo, bannières d’entreprise, écrans 57 à 66, voir § 6
-et `CAHIER-DES-CHARGES-V6.md`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
+et `CAHIER-DES-CHARGES-V6.md` ; v7 du 17 octobre : en-tête sans logo, titre en grand et barre de recherche
+Orbi unique, barre du bas floutée, leçon, import de CV, réalisations, connexions et badges, écrans 67 à 80, voir § 7
+et `CAHIER-DES-CHARGES-V7.md`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
 
 | N° | Écran | N° | Écran |
 |---|---|---|---|
@@ -49,6 +51,13 @@ et `CAHIER-DES-CHARGES-V6.md`). La persona est en formule Starter, car Free n’
 | 61 | Compte · thème Clair | 62 | Compte · thème Vert |
 | 63 | Offres avec bannières | 64 | Détail d’offre · bannière |
 | 65 | Détail d’offre · thème Vert | 66 | Recruteur · bannière et logo de l’offre |
+| 67 | Leçon · Modules | 68 | Leçon · Transcription |
+| 69 | Leçon · Ressources | 70 | Importer un CV |
+| 71 | Vérifier l’import | 72 | Mes expériences |
+| 73 | Modifier une expérience | 74 | Offres · thème Vert |
+| 75 | Mettre une réalisation en avant | 76 | Rapport PDF en carrousel |
+| 77 | Profil d’un membre | 78 | Connexions |
+| 79 | Opportunité trouvée | 80 | Recruteur · acceptation proposée |
 
 Les contenus sont des exemples (persona fictive Grâce Mbuyi, entreprises fictives). **En production, tout
 vient des données réelles** (règle d’or 11) ; une section sans donnée affiche son état vide ou se masque.
@@ -202,3 +211,43 @@ Elle **remplace** la navigation du § 2 (barre à 4, avatar et menu du haut de l
    de l’entreprise, titre, lieu, contrat. Sans bannière : motif Jumanly. Isolation par `organizationId`.
 10. **Exemples** : les entreprises des maquettes sont fictives (Baobab Tech, Fleuve Banque, Kasaï
     Conseil…). Aucun logo ni nom de vraie entreprise dans le seed (règle d’or 11).
+
+## 7. Version 7 (17 octobre 2026) : en-tête, recherche Orbi, réalisations et connexions
+
+Demande du propriétaire : `CAHIER-DES-CHARGES-V7.md` (l’emporte sur la v6). Écrans refaits : 11, 12, 14, 18,
+25, 29, 30, 49, 55, 59, 60 ; nouveaux : 67 à 80 ; planche « 0d ».
+
+1. **En-tête** (`AppHeader`) : Menu (nouvelle icône `jm-menu`, trois traits + point Feuille) ; +, Messages,
+   Notifications. Plus de logo ni de bouton Rechercher. Sur chaque onglet : `PageTitle` (30 px, Sora 700)
+   puis `SearchBar` unique (placeholder « Rechercher ou demander à Orbi », orbe à droite, bouton Filtres ;
+   pastille du nombre de filtres actifs). Pas de barre sur Compte. La recherche ouvre une liste déroulante
+   (`SearchPopover`, écran 18) dont la première ligne envoie la requête à Orbi.
+2. **Orbi** est le nom affiché de l’assistant (le module reste `assistant` / Jumanly AI dans le code). Le
+   bouton flottant n’est plus affiché : la barre de recherche, le menu et les puces IA ouvrent Orbi.
+3. **Barre du bas** : verre (`backdrop-filter: blur(22px) saturate(1.8)`, fond blanc 55 %), contenu qui
+   défile derrière ; rond central en `--g-principal` ; animation au toucher (échelle 0,9 à l’appui, pastille
+   qui glisse, rebond de l’icône 280 ms ; couleur seule en animations réduites).
+4. **Leçon** : onglets en cartes, blocs titrés en couleur (`LessonBlock`), modules en cartes, transcription
+   synchronisée (lignes horodatées cliquables), ressources téléchargeables (`CourseDocument` existant).
+5. **Modèles de message** : refus et acceptation réécrits (voir maquette), tons Chaleureux / Formel / Court,
+   variables `{prenom}`, `{poste}`, `{point_fort}` ; réutilise `message-templates.ts`. Envoi au clic.
+6. **CV** : import via `cv-import.ts` existant, avec écran de vérification élément par élément ;
+   expériences CRUD sur `Experience` ; mise en forme en onglets ; bilan d’entraînement en PDF
+   (`interview-sim.ts`).
+7. **Réalisations** : s’appuient sur le portfolio existant (`Document` de type `portfolio_item`,
+   `career.portfolio.level`). À ajouter (migration nommée `highlights_and_connections`) : type (projet,
+   nouveau poste, opportunité, rapport PDF), titre, texte (400 caractères), image ou PDF, compétences,
+   `featured` ; pas de commentaires. Quota par clé de droit `career.highlights.max` (nombre), illimité =
+   badge Premium (clé `career.highlights.unlimited`), **sans nom de forfait dans le code**. Valeurs
+   proposées, à confirmer dans la partie 05 : Free 5, Starter 10, Pro 20, Premium illimité.
+8. **PDF en carrousel** : rendu page par page côté serveur en images (cache), lecteur à balayage ;
+   téléchargement seulement si l’auteur l’autorise.
+9. **Connexions** : table `Connection` (demandeur, destinataire, statut pending / accepted / declined,
+   dates), unicité de la paire, limite d’envoi par jour, blocage et signalement (`Report`). Une connexion
+   voit les réalisations ; le reste suit la visibilité du profil (règle d’or 5 inchangée pour les
+   recruteurs ; chaque consultation de profil reste journalisée).
+10. **Badge Cap** : `TalentProfile.capTarget` (métier, lieu) et `capVisibility` (tous | recruteurs | aucun) ;
+    pastille boussole à côté du nom, jamais sur la photo ; retiré depuis « Opportunité trouvée ».
+11. **Opportunité trouvée** : `OpportunityReport` (entreprise, poste, source : offre Jumanly, connexion,
+    formation, date) ; sert à la mesure d’impact ; peut créer la réalisation « Nouveau poste ».
+12. **Thème Vert** : jetons enrichis dans `style7.css` (halos, cartes en verre).
