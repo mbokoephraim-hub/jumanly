@@ -5,7 +5,7 @@
  * EMAIL_OUTBOX_FILE is set (end-to-end tests), each message is also appended to that file as JSON.
  */
 import { appendFileSync } from "node:fs";
-import nodemailer from "nodemailer";
+import { createTransport } from "nodemailer";
 
 export type OutgoingEmail = {
   to: string;
@@ -73,13 +73,13 @@ export type SmtpSettings = {
 
 export class SmtpEmailSender implements EmailSender {
   readonly id = "smtp";
-  private readonly transport: nodemailer.Transporter;
+  private readonly transport: ReturnType<typeof createTransport>;
 
   constructor(
     settings: SmtpSettings,
     private readonly from: string,
   ) {
-    this.transport = nodemailer.createTransport({
+    this.transport = createTransport({
       host: settings.host,
       port: settings.port,
       secure: settings.port === 465,
