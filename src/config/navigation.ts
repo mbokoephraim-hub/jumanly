@@ -58,6 +58,7 @@ export type AppNavigationKey =
   | "hire.pools"
   | "hire.interviews"
   | "hire.reports"
+  | "hire.templates"
   | "hire.messages"
   | "organization"
   | "partnerLicenses"
@@ -103,6 +104,7 @@ export function hidesTalentTabBar(pathname: string) {
   if (section === "espace" || section === "bienvenue") return true;
   if (section === "jobs") return Boolean(page) && !["candidatures", "enregistrees"].includes(page);
   if (section === "messages") return Boolean(page);
+  if (section === "suivi") return page === "entretiens" && Boolean(more);
   if (section === "learn") {
     const lists = ["attestations", "coach", "evaluations", "explorer", "parcours"];
     return Boolean(page) && !lists.includes(page);
@@ -120,6 +122,7 @@ export const hireNavigation: AppNavigationItem[] = [
   { key: "hire.interviews", href: "/app/hire/entretiens", icon: "calendrier", pill: false },
   { key: "hire.messages", href: "/app/messages", icon: "connect" },
   { key: "hire.reports", href: "/app/hire/rapports", icon: "statistiques", pill: false },
+  { key: "hire.templates", href: "/app/hire/modeles", icon: "edit", pill: false },
   { key: "organization", href: "/app/organisation", icon: "entreprise" },
 ];
 

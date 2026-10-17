@@ -1848,6 +1848,7 @@ Conventions :
 | `appNav.hire.reports` | Rapports |
 | `appNav.hire.pools` | Viviers |
 | `appNav.hire.messages` | Connect |
+| `appNav.hire.templates` | Modèles |
 | `appNav.organization` | Organisation |
 | `appNav.partner` | Partenaire |
 | `appNav.partnerLicenses` | Licences |
@@ -2267,6 +2268,85 @@ Conventions :
 | `talent.suivi.links.messagesLine` | Échanges avec les recruteurs |
 | `talent.suivi.links.saved` | Offres enregistrées |
 | `talent.suivi.links.savedLine` | {count, plural, =0 {Aucune offre enregistrée} one {# offre} other {# offres}} |
+| `talent.suivi.filters.label` | Filtrer le suivi |
+| `talent.suivi.filters.tout` | Tout |
+| `talent.suivi.filters.candidatures` | Candidatures |
+| `talent.suivi.filters.entretiens` | Entretiens |
+| `talent.suivi.filters.messages` | Messages |
+| `talent.suivi.filters.messagesCount` | Messages · {count} |
+| `talent.suivi.todo.document` | Document demandé |
+| `talent.suivi.todo.due` | avant le {date, date, long} |
+| `talent.suivi.applications.title` | Mes candidatures |
+| `talent.suivi.applications.all` | Toutes |
+| `talent.suivi.applications.details` | Voir le détail |
+| `talent.suivi.applications.sent` | Envoyée le {date, date, medium} |
+| `talent.suivi.applications.changed` | Statut communiqué le {date, date, medium} |
+| `talent.suivi.messages.waiting` | Réponse attendue |
+| `talent.suivi.messages.unread` | Message non lu |
+| `talent.suivi.messages.search` | Rechercher une conversation |
+| `talent.suivi.messages.noResult` | Aucune conversation ne correspond à votre recherche. |
+| `talent.suivi.messages.who` | Seuls vos recruteurs peuvent vous écrire. |
+| `talent.suivi.empty.candidatures.title` | Aucune candidature pour l'instant |
+| `talent.suivi.empty.candidatures.text` | Elles apparaîtront ici. |
+| `talent.suivi.empty.candidatures.cta` | Explorer les offres |
+| `talent.suivi.empty.candidatures.secondary` | Préparer mon CV d'abord |
+| `talent.suivi.empty.entretiens.title` | Aucun entretien pour l'instant |
+| `talent.suivi.empty.entretiens.text` | Quand un recruteur vous propose un entretien, il apparaît ici. |
+| `talent.suivi.empty.entretiens.cta` | M'entraîner à l'entretien |
+| `talent.suivi.empty.messages.title` | Aucun message pour l'instant |
+| `talent.suivi.empty.messages.text` | Les recruteurs des offres où vous avez postulé peuvent vous écrire ici. |
+| `talent.suivi.empty.messages.cta` | Explorer les offres |
+| `talent.suivi.ok.confirmed` | Présence confirmée. {company} est prévenue. |
+| `talent.suivi.ok.proposed` | Vos propositions sont envoyées. Le recruteur va vous répondre. |
+| `talent.suivi.ok.declined` | Votre réponse est envoyée. |
+| `talent.suivi.resume.title` | À reprendre |
+| `talent.suivi.resume.application` | Candidature · {job} |
+| `talent.suivi.resume.cta` | Reprendre |
+| `talent.suivi.links.savedHint` | Les offres gardées pour plus tard |
+| `talent.suivi.interviews.title` | Entretiens à venir |
+| `talent.suivi.prepare.title` | Préparer |
+| `talent.suivi.prepare.simulation` | Simulation d'entretien |
+| `talent.suivi.prepare.simulationLine` | Questions du poste, à l'écrit ou à l'oral |
+| `talent.suivi.prepare.offer` | Revoir l'offre |
+| `talent.suivi.interview.noDate` | date |
+| `talent.suivi.interview.unknown` | ? |
+| `talent.suivi.interview.toConfirm` | Entretien à confirmer |
+| `talent.suivi.interview.confirmed` | Confirmé |
+| `talent.suivi.interview.waiting` | En attente du recruteur |
+| `talent.suivi.interview.proposedLine` | {company} · vous avez proposé {count, plural, one {# créneau} other {# créneaux}} le {date, date, long} |
+| `talent.suivi.interview.when` | {day}, {start} – {end} (heure de {city}) |
+| `talent.suivi.interview.confirm` | Confirmer |
+| `talent.suivi.interview.propose` | Proposer un autre moment |
+| `talent.suivi.interview.editProposals` | Modifier mes propositions |
+| `talent.suivi.interview.join` | Rejoindre |
+| `talent.suivi.interview.joinLater` | Le lien s'active {hours, plural, one {# heure} other {# heures}} avant. |
+| `talent.suivi.interview.calendar` | Ajouter à mon agenda |
+| `talent.suivi.calendar.summary` | Entretien · {job} · {company} |
+| `talent.suivi.confirm.title` | Confirmer l'entretien |
+| `talent.suivi.confirm.confirmedTitle` | Votre entretien |
+| `talent.suivi.confirm.with` | Avec {name} |
+| `talent.suivi.confirm.format` | {mode} · {minutes} minutes |
+| `talent.suivi.confirm.addressLater` | Adresse communiquée par le recruteur |
+| `talent.suivi.confirm.linkLater` | Lien après confirmation |
+| `talent.suivi.confirm.back` | Retour |
+| `talent.suivi.confirm.close` | Fermer |
+| `talent.suivi.confirm.choose` | Choisissez un des créneaux proposés |
+| `talent.suivi.confirm.slotLine` | {start} – {end} · heure de {city} |
+| `talent.suivi.confirm.none` | Aucun ne me convient : proposer un autre moment |
+| `talent.suivi.confirm.submit` | Confirmer ce créneau |
+| `talent.suivi.confirm.propose.title` | Proposer un autre moment |
+| `talent.suivi.confirm.propose.hint` | Jusqu'à {max} créneaux, à l'heure de {city}. |
+| `talent.suivi.confirm.propose.error` | Choisissez au moins un créneau à venir. |
+| `talent.suivi.confirm.propose.hour` | {hour} h 00 |
+| `talent.suivi.confirm.propose.days` | Jour |
+| `talent.suivi.confirm.propose.hours` | Heure |
+| `talent.suivi.confirm.propose.chosen` | Vos propositions · {count} sur {max} |
+| `talent.suivi.confirm.propose.item` | {day} · {hour} |
+| `talent.suivi.confirm.propose.remove` | Retirer {slot} |
+| `talent.suivi.confirm.propose.full` | Vous avez choisi {max} créneaux. Retirez-en un pour en changer. |
+| `talent.suivi.confirm.propose.messageLabel` | Un mot pour le recruteur |
+| `talent.suivi.confirm.propose.message` | Un mot pour le recruteur (facultatif) |
+| `talent.suivi.confirm.propose.send` | Envoyer mes propositions |
 
 ### `/app/espace` · Mon espace
 
@@ -4863,6 +4943,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `connect.list.item.attachment` | Pièce jointe |
 | `connect.list.item.invitation` | Invitation à un entretien |
 | `connect.list.item.documentRequest` | Document demandé |
+| `connect.list.item.slot` | Créneau proposé |
+| `connect.list.item.decision` | Décision sur la candidature |
 | `connect.list.unread` | {count, plural, one {# non lu} other {# non lus}} |
 | `connect.list.filters` | Filtrer les conversations |
 | `connect.list.pick` | Choisissez une conversation pour la lire. |
@@ -4941,6 +5023,54 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `connect.invite.done` | Réponse envoyée. |
 | `connect.invite.error` | Choisissez un créneau à venir. |
 | `connect.invite.slot` | Créneau {number} |
+| `connect.thread.application` | Candidature · {job} |
+| `connect.pill.pending` | Entretien proposé · {count, plural, one {# créneau} other {# créneaux}} |
+| `connect.pill.reschedule` | Autres moments proposés |
+| `connect.pill.confirmed` | Entretien confirmé · {date} à {time} |
+| `connect.pill.closed` | Entretien clos |
+| `connect.pill.see` | Voir |
+| `connect.templates.use` | Utiliser un modèle |
+| `connect.file.kind` | PDF |
+| `connect.file.meta.cv` | CV · PDF |
+| `connect.file.meta.text` | Document · PDF |
+| `connect.file.download` | Télécharger |
+| `connect.slot.title` | Créneau proposé · {time} |
+| `connect.slot.zone` | Heure de {city} |
+| `connect.decision.hired` | Candidature retenue |
+| `connect.decision.rejected` | Candidature non retenue |
+| `connect.decision.signer` | {name} · Recrutement |
+| `connect.decision.bounce.title` | Pour rebondir |
+| `connect.decision.bounce.offers` | {count, plural, one {# offre proche} other {# offres proches}} |
+| `connect.decision.bounce.train` | S'entraîner |
+| `connect.decision.bounce.trainLine` | Simulation d'entretien |
+| `connect.plus.title` | Envoyer |
+| `connect.plus.close` | Fermer |
+| `connect.plus.back` | Retour |
+| `connect.plus.open` | Envoyer un créneau, un document ou un lien |
+| `connect.plus.creneau.title` | Proposer un créneau |
+| `connect.plus.creneau.label` | Un créneau |
+| `connect.plus.creneau.date` | Date |
+| `connect.plus.creneau.time` | Heure |
+| `connect.plus.creneau.note` | Un mot (facultatif) |
+| `connect.plus.cv.title` | Envoyer un CV |
+| `connect.plus.cv.label` | Mon CV |
+| `connect.plus.cv.empty` | Créer mon premier CV |
+| `connect.plus.lettre.title` | Envoyer une lettre |
+| `connect.plus.lettre.label` | Ma lettre |
+| `connect.plus.lettre.empty` | Écrire une lettre dans Career |
+| `connect.plus.document.title` | Envoyer un document |
+| `connect.plus.document.label` | Un document |
+| `connect.plus.document.empty` | Créer un document dans Career |
+| `connect.plus.lien.title` | Envoyer un lien |
+| `connect.plus.lien.label` | Un lien |
+| `connect.plus.lien.url` | Adresse du lien |
+| `connect.plus.lien.placeholder` | https:// |
+| `connect.plus.lien.text` | Texte du lien (facultatif) |
+| `connect.plus.ai.label` | Relance IA |
+| `connect.plus.ai.soon` | Bientôt disponible |
+| `connect.plus.updated` | Modifié le {date, date, long} |
+| `connect.plus.copy` | Une copie est envoyée : vos modifications suivantes ne la changent pas. |
+| `connect.plus.send` | Envoyer |
 
 #### Demandes de documents
 
@@ -5770,6 +5900,56 @@ Conventions :
 | `hire.reject.confirm` | Confirmer |
 | `hire.reject.done` | Décision enregistrée. |
 | `hire.reject.aiRule` | Rappel : un score bas ou un critère non rempli ne suffit pas à justifier une décision. Elle vous appartient. |
+| `hire.templates.write` | Écrire avec un modèle |
+| `hire.templates.message.title` | Message |
+| `hire.templates.message.back` | Retour |
+| `hire.templates.message.choose` | Choisir un modèle |
+| `hire.templates.message.ai` | Écrire avec l'IA |
+| `hire.templates.message.aiSoon` | Bientôt disponible |
+| `hire.templates.message.manage` | Gérer les modèles de l'organisation |
+| `hire.templates.message.decided` | La décision est déjà prise pour cette candidature. |
+| `hire.templates.message.titleFor` | {kind} · {name} |
+| `hire.templates.message.preview` | Aperçu de ce que reçoit {firstName} |
+| `hire.templates.message.edit` | Modifier le texte |
+| `hire.templates.message.text` | Texte du message |
+| `hire.templates.message.refresh` | Mettre à jour l'aperçu |
+| `hire.templates.message.afterClick` | Envoyé seulement après votre clic. |
+| `hire.templates.message.cancel` | Annuler |
+| `hire.templates.message.send` | Envoyer |
+| `hire.templates.message.withoutMessage` | Enregistrer la décision sans message |
+| `hire.templates.message.error` | Le message n'est pas parti. Vérifiez le texte et réessayez. |
+| `hire.templates.message.convocationHint` | Pour proposer des créneaux que le candidat confirme en un geste : |
+| `hire.templates.message.schedule` | planifier l'entretien |
+| `hire.templates.kind.convocation` | Convocation |
+| `hire.templates.kind.document` | Demander un document |
+| `hire.templates.kind.relance` | Relance |
+| `hire.templates.kind.acceptation` | Acceptation |
+| `hire.templates.kind.refus` | Refus |
+| `hire.templates.banner.hired` | Candidature retenue |
+| `hire.templates.banner.rejected` | Candidature non retenue |
+| `hire.templates.signer` | {name} · Recrutement |
+| `hire.templates.today` | aujourd'hui |
+| `hire.templates.default.convocation.body` | Bonjour {firstName},\n\nMerci pour votre candidature au poste de {jobTitle}. Nous aimerions vous rencontrer pour un entretien.\n\nJe vous propose des créneaux dans cette conversation : dites-moi celui qui vous convient.\n\n{signer}, {company} |
+| `hire.templates.default.document.body` | Bonjour {firstName}, pour avancer sur votre candidature au poste de {jobTitle}, pourriez-vous nous envoyer ce document ? |
+| `hire.templates.default.relance.body` | Bonjour {firstName},\n\nJe reviens vers vous au sujet de votre candidature au poste de {jobTitle}. Avez-vous pu lire mon dernier message ?\n\n{signer}, {company} |
+| `hire.templates.default.acceptation.body` | Bonjour {firstName},\n\nNous avons le plaisir de vous proposer le poste de {jobTitle}.\n\nProchaine étape : un échange sur votre arrivée. Nous revenons vers vous dans cette conversation. |
+| `hire.templates.default.refus.body` | Bonjour {firstName},\n\nMerci pour votre candidature au poste de {jobTitle} et pour le temps que vous y avez consacré. Nous avons retenu un autre profil pour ce poste.\n\nCette décision tient aux besoins précis du poste et ne remet pas en cause vos qualités. Nous gardons votre profil pour nos prochaines offres. |
+| `hire.templates.page.title` | Modèles de message |
+| `hire.templates.page.subtitle` | Les textes de votre organisation, pour écrire plus vite aux candidats. |
+| `hire.templates.page.saved` | Modèle enregistré. |
+| `hire.templates.page.deleted` | Modèle supprimé. |
+| `hire.templates.page.error` | Vérifiez le nom et le texte du modèle. |
+| `hire.templates.page.placeholders` | Dans un modèle, '{prenom}', '{poste}', '{entreprise}' et '{signataire}' sont remplacés au moment d'écrire au candidat. |
+| `hire.templates.page.empty` | Aucun modèle pour l'instant. Jumanly propose un texte par défaut pour chaque type. |
+| `hire.templates.page.edit` | Modifier |
+| `hire.templates.page.view` | Voir |
+| `hire.templates.page.kind` | Type |
+| `hire.templates.page.name` | Nom du modèle |
+| `hire.templates.page.save` | Enregistrer |
+| `hire.templates.page.delete` | Supprimer |
+| `hire.templates.page.new` | Nouveau modèle |
+| `hire.templates.page.bodyPlaceholder` | Bonjour '{prenom}', … |
+| `hire.templates.page.create` | Créer le modèle |
 
 #### Filtres du pipeline
 

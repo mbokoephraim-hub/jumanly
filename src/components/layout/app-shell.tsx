@@ -28,6 +28,7 @@ import { SpaceSwitcher, type SpaceOption } from "./space-switcher";
 import { TabBar } from "./tab-bar";
 import { TopMenu } from "./top-menu";
 import { TopTitle } from "./top-title";
+import { TOP_BAR_SLOT_ID } from "@/lib/top-bar";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { cx } from "@/lib/cx";
 
@@ -166,8 +167,9 @@ export function AppShell({
       />
 
       {talent ? (
-        <header className="flex h-[52px] items-center gap-1 pr-2 pl-[18px] text-blanc md:hidden">
-          <div className="flex min-w-0 flex-1 items-center">
+        <header className="group/top flex h-[52px] items-center gap-1 pr-2 pl-[18px] text-blanc md:hidden">
+          <div id={TOP_BAR_SLOT_ID} className="contents" />
+          <div className="flex min-w-0 flex-1 items-center group-has-[[data-top-override][data-active]]/top:hidden">
             <TopTitle
               logo={
                 <Link href={home} aria-label={a11y("logo")} className="shrink-0">
@@ -189,22 +191,24 @@ export function AppShell({
               }}
             />
           </div>
-          {searchLink("dark")}
-          {notifications("dark")}
-          <TopMenu
-            label={t("topMenu.label")}
-            openLabel={t("topMenu.open")}
-            trigger={
-              <Avatar
-                name={account.name}
-                image={account.image ?? undefined}
-                size="sm"
-                className="ring-2 ring-lime/70"
-              />
-            }
-          >
-            <TalentMenu account={account} unreadMessages={unreadMessages} />
-          </TopMenu>
+          <div className="flex items-center gap-1 group-has-[[data-top-override][data-active]]/top:hidden">
+            {searchLink("dark")}
+            {notifications("dark")}
+            <TopMenu
+              label={t("topMenu.label")}
+              openLabel={t("topMenu.open")}
+              trigger={
+                <Avatar
+                  name={account.name}
+                  image={account.image ?? undefined}
+                  size="sm"
+                  className="ring-2 ring-lime/70"
+                />
+              }
+            >
+              <TalentMenu account={account} unreadMessages={unreadMessages} />
+            </TopMenu>
+          </div>
         </header>
       ) : (
         <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc md:hidden">

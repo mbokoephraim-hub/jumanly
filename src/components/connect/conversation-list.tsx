@@ -198,11 +198,15 @@ export async function ConversationList({
                 ? t("list.item.invitation")
                 : last.kind === "document_request"
                   ? t("list.item.documentRequest")
-                  : last.senderId === viewer.userId
-                    ? t("list.item.you", { message: last.body.slice(0, 120) })
-                    : payload.document
-                      ? t("list.item.attachment")
-                      : last.body.slice(0, 120);
+                  : last.kind === "slot"
+                    ? t("list.item.slot")
+                    : last.kind === "decision"
+                      ? t("list.item.decision")
+                      : last.senderId === viewer.userId
+                        ? t("list.item.you", { message: last.body.slice(0, 120) })
+                        : payload.document
+                          ? t("list.item.attachment")
+                          : last.body.slice(0, 120);
             return (
               <li key={conversation.id}>
                 <Link

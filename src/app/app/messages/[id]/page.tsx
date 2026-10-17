@@ -7,12 +7,30 @@ import { AppPageHeader } from "@/components/app/page-header";
 import { Icon } from "@/components/brand/icon";
 import { pillClass } from "@/components/career/kit";
 import { tag, tagTone } from "@/components/jobs/talent-kit";
-import { Alert, Button, CompanyLogo, Select } from "@/components/ui";
+import { zoneCity } from "@/components/suivi/interview-item";
+import {
+  Alert,
+  Button,
+  CompanyLogo,
+  DecisionCard,
+  FileCard,
+  Select,
+  SlotCard,
+  VisualTile,
+} from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { ConversationList } from "@/components/connect/conversation-list";
 import { InterviewCard } from "@/components/connect/interview-card";
 import { ReportForm } from "@/components/connect/report-form";
-import { answerDocumentAction, blockAction, sendMessageAction } from "@/server/actions/connect";
+import { TopBarOverride } from "@/components/layout/top-bar-override";
+import {
+  answerDocumentAction,
+  blockAction,
+  sendDocumentAction,
+  sendLinkAction,
+  sendMessageAction,
+  sendSlotAction,
+} from "@/server/actions/connect";
 import { switchSpace } from "@/server/actions/hire";
 import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
@@ -26,6 +44,13 @@ import {
 import { applicationTracker, isClosedStatus, talentStatus } from "@/server/services/applications";
 import { hirePermissions } from "@/server/services/hire";
 import { interviewsForConversation } from "@/server/services/interviews";
+import {
+  attachableDocuments,
+  conversationTimeZone,
+  type AttachmentKind,
+} from "@/server/services/conversation-attachments";
+import { similarJobs } from "@/server/services/jobs";
+import { decisionParagraphs } from "@/server/services/message-templates";
 import { talentContactRequests } from "@/server/services/talent-search";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -37,9 +62,23 @@ type Payload = {
   name?: string;
   due?: string;
   submittedAt?: string;
-  document?: { title?: string };
+  document?: { title?: string; type?: string };
   interviewId?: string;
+  /** Text with a link (prompt 5). */
+  link?: string;
+  /** Slot (prompt 5). */
+  startsAt?: string;
+  timezone?: string;
+  note?: string;
+  /** Decision (prompt 5). */
+  outcome?: "rejected" | "hired";
+  company?: string;
+  jobTitle?: string;
+  signer?: string;
 };
+
+const plusChoices = ["creneau", "cv", "lettre", "document", "lien"] as const;
+type PlusChoice = (typeof plusChoices)[number];
 
 const DAY = 86_400_000;
 
@@ -170,6 +209,33 @@ export default async function ThreadPage({
       )
     ).map((interview) => [interview.id, interview]),
   );
+  // « Pour rebondir » under the latest refusal (prompt 5): close offers that are really open.
+  const lastDecisionId = conversation.messages.findLast(
+    (message) => message.kind === "decision" && !message.hiddenAt,
+  )?.id;
+  const appliedJob =
+    !fromOrganization && lastDecisionId && conversation.application
+      ? await db.job.findUnique({
+          where: { slug: conversation.application.job.slug },
+          select: { slug: true, contractType: true, country: true },
+        })
+      : null;
+  const similar = appliedJob ? await similarJobs(db, appliedJob, 3) : [];
+  // « + » (prompt 5, screen 50): only the talent sends files, slots and links.
+  const plus = !fromOrganization && canWrite && !conversation.blockedAt;
+  const plusChoice: PlusChoice | "menu" | null = !plus
+    ? null
+    : plusChoices.includes(query.envoyer as PlusChoice)
+      ? (query.envoyer as PlusChoice)
+      : query.envoyer === "1"
+        ? "menu"
+        : null;
+  const attachKind: AttachmentKind | null =
+    plusChoice === "cv" || plusChoice === "lettre" || plusChoice === "document" ? plusChoice : null;
+  const [attachable, slotZone] = await Promise.all([
+    attachKind ? attachableDocuments(db, user.id, attachKind) : Promise.resolve([]),
+    plusChoice === "creneau" ? conversationTimeZone(db, conversation.id) : Promise.resolve(""),
+  ]);
   const ti = await getTranslations("connect.invite");
   const te = await getTranslations("system.error");
   const tc = await getTranslations("connect.contactRequest");
@@ -258,6 +324,31 @@ export default async function ThreadPage({
 
   return (
     <div className="flex flex-col gap-5 lg:gap-6">
+      {!fromOrganization && (
+        <TopBarOverride>
+          <Link
+            href="/app/suivi?filtre=messages"
+            aria-label={t("thread.back")}
+            className="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-blanc/10"
+          >
+            <Icon name="chev-l" className="size-6" />
+          </Link>
+          <p className="min-w-0 flex-1 truncate text-[20px] font-semibold tracking-[-0.02em]">
+            {otherPersonName ?? otherName}
+          </p>
+          <details className="relative">
+            <summary
+              aria-label={t("thread.more")}
+              className="flex size-10 cursor-pointer list-none items-center justify-center rounded-full hover:bg-blanc/10 [&::-webkit-details-marker]:hidden"
+            >
+              <Icon name="more" className="size-5" />
+            </summary>
+            <div className="absolute top-full right-0 z-40 mt-2 flex w-[min(20rem,calc(100vw-2rem))] flex-wrap items-start gap-2 rounded-[18px] bg-blanc p-3 text-sapin shadow-menu ring-1 ring-sapin/8">
+              {actions}
+            </div>
+          </details>
+        </TopBarOverride>
+      )}
       <AppPageHeader
         eyebrow={t("eyebrow", { count: conversations.filter((item) => item.unread).length })}
         title={t("title")}
@@ -296,9 +387,17 @@ export default async function ThreadPage({
 
         <section
           aria-labelledby="thread-title"
-          className="flex min-w-0 flex-col overflow-hidden rounded-[24px] bg-blanc lg:h-[calc(100dvh-300px)] lg:min-h-[520px]"
+          className={cx(
+            "flex min-w-0 flex-col overflow-hidden rounded-[24px] bg-blanc lg:h-[calc(100dvh-300px)] lg:min-h-[520px]",
+            !fromOrganization && "max-md:-mx-4 max-md:rounded-none max-md:bg-transparent",
+          )}
         >
-          <header className="flex flex-wrap items-center gap-3 border-b border-brume px-4 py-3.5 lg:px-[22px] lg:py-4">
+          <header
+            className={cx(
+              "flex flex-wrap items-center gap-3 border-b border-brume px-4 py-3.5 lg:px-[22px] lg:py-4",
+              !fromOrganization && "max-md:hidden",
+            )}
+          >
             <Link
               href="/app/messages"
               aria-label={t("thread.back")}
@@ -321,12 +420,20 @@ export default async function ThreadPage({
             </div>
             {actions && <div className="flex items-center gap-2 max-sm:w-full">{actions}</div>}
             {fromOrganization && conversation.application && (
-              <Link
-                href={`/app/hire/candidats/${conversation.application.id}`}
-                className={pillClass("outline", "sm")}
-              >
-                {t("side.linkedApplication")}
-              </Link>
+              <>
+                <Link
+                  href={`/app/hire/candidats/${conversation.application.id}/message`}
+                  className={pillClass("outline", "sm")}
+                >
+                  {t("templates.use")}
+                </Link>
+                <Link
+                  href={`/app/hire/candidats/${conversation.application.id}`}
+                  className={pillClass("outline", "sm")}
+                >
+                  {t("side.linkedApplication")}
+                </Link>
+              </>
             )}
             {fromOrganization && contact && (
               <Link
@@ -337,6 +444,20 @@ export default async function ThreadPage({
               </Link>
             )}
           </header>
+          {!fromOrganization && conversation.application && linked && (
+            <Link
+              href="/app/suivi?filtre=candidatures"
+              className="mx-4 mt-3 flex items-center gap-2.5 rounded-[18px] bg-blanc px-3.5 py-2.5 shadow-douce lg:mx-6"
+            >
+              <Icon name="jobs" className="size-4 shrink-0 text-ardoise" />
+              <span className="min-w-0 flex-1 truncate text-[13.5px] text-ardoise">
+                {t("thread.application", { job: jobTitle })}
+              </span>
+              <span className="shrink-0 rounded-pill bg-lime px-3 py-1 text-[12.5px] font-semibold">
+                {tj(`applications.status.${talentStatus(linked, now)}`)}
+              </span>
+            </Link>
+          )}
 
           {/* Reversed column: the thread opens on the latest message. */}
           <div className="flex min-h-0 flex-1 flex-col-reverse overflow-y-auto">
@@ -367,9 +488,27 @@ export default async function ThreadPage({
                     hour: "2-digit",
                     minute: "2-digit",
                   });
+                  const interview =
+                    message.kind === "invitation"
+                      ? interviews.get(payload.interviewId ?? "")
+                      : undefined;
+                  // The talent answers an invitation on its own screen (screen 24): a pill here.
+                  const pill = !message.hiddenAt && !fromOrganization && Boolean(interview);
                   const card =
                     !message.hiddenAt &&
+                    !pill &&
                     (message.kind === "invitation" || message.kind === "document_request");
+                  // Files, slots and decisions have their own cards, never a bubble (prompt 5).
+                  const bare =
+                    !message.hiddenAt &&
+                    (message.kind === "file" ||
+                      message.kind === "slot" ||
+                      message.kind === "decision");
+                  const textBubble = !card && !bare && !pill && !message.hiddenAt;
+                  const waiting =
+                    !fromOrganization &&
+                    message.kind === "document_request" &&
+                    !payload.submittedAt;
                   return (
                     <li
                       key={message.id}
@@ -384,25 +523,160 @@ export default async function ThreadPage({
                       <div
                         className={cx(
                           "flex max-w-full flex-col gap-1",
-                          mine ? "items-end" : "items-start",
+                          pill ? "items-center" : mine ? "items-end" : "items-start",
                         )}
                       >
                         <div
                           className={cx(
                             "max-w-[min(460px,92%)] text-[13.5px] leading-5",
-                            card
-                              ? "w-[460px] rounded-[18px] bg-blanc p-4 ring-[1.5px] ring-brume ring-inset"
-                              : mine
-                                ? "rounded-[20px_20px_6px_20px] bg-sapin px-4 py-3 text-blanc"
-                                : "rounded-[20px_20px_20px_6px] bg-creme px-4 py-3",
+                            pill
+                              ? "max-w-full!"
+                              : bare
+                                ? cx("w-[460px]", message.kind === "decision" && "max-w-full!")
+                                : card
+                                  ? cx(
+                                      "w-[460px] rounded-[22px] bg-blanc p-4 ring-inset",
+                                      waiting
+                                        ? "ring-2 shadow-douce ring-ambre"
+                                        : "ring-[1.5px] ring-brume",
+                                    )
+                                  : mine
+                                    ? "rounded-[22px_22px_6px_22px] bg-sapin px-4 py-3 text-[15px] leading-[22px] text-blanc"
+                                    : cx(
+                                        "rounded-[22px_22px_22px_6px] bg-creme px-4 py-3 text-[15px] leading-[22px]",
+                                        !fromOrganization && "max-md:bg-blanc max-md:shadow-douce",
+                                      ),
                           )}
                         >
                           {message.hiddenAt ? (
                             <p className="italic">{tr("hidden")}</p>
-                          ) : message.kind === "invitation" &&
-                            interviews.get(payload.interviewId ?? "") ? (
+                          ) : message.kind === "file" ? (
+                            <FileCard
+                              name={payload.document?.title ?? message.body}
+                              kind={t("file.kind")}
+                              meta={
+                                payload.document?.type === "text"
+                                  ? t("file.meta.text")
+                                  : t("file.meta.cv")
+                              }
+                              href={`/app/messages/${conversation.id}/document/${message.id}`}
+                              downloadLabel={t("file.download")}
+                              className={mine ? "bg-lime-clair!" : undefined}
+                            />
+                          ) : message.kind === "slot" && payload.startsAt ? (
+                            (() => {
+                              const startsAt = new Date(payload.startsAt);
+                              const timeZone = payload.timezone ?? "UTC";
+                              return (
+                                <SlotCard
+                                  weekday={format.dateTime(startsAt, {
+                                    weekday: "short",
+                                    timeZone,
+                                  })}
+                                  day={format.dateTime(startsAt, { day: "numeric", timeZone })}
+                                  month={format.dateTime(startsAt, { month: "short", timeZone })}
+                                  title={t("slot.title", {
+                                    time: format.dateTime(startsAt, {
+                                      hour: "2-digit",
+                                      minute: "2-digit",
+                                      timeZone,
+                                    }),
+                                  })}
+                                  meta={[t("slot.zone", { city: zoneCity(timeZone) }), payload.note]
+                                    .filter(Boolean)
+                                    .join(" · ")}
+                                />
+                              );
+                            })()
+                          ) : message.kind === "decision" ? (
+                            <div className="flex flex-col gap-4">
+                              <DecisionCard
+                                outcome={payload.outcome === "hired" ? "hired" : "rejected"}
+                                company={payload.company ?? otherName}
+                                job={payload.jobTitle ?? jobTitle}
+                                banner={
+                                  payload.outcome === "hired"
+                                    ? t("decision.hired")
+                                    : t("decision.rejected")
+                                }
+                                paragraphs={decisionParagraphs(message.body)}
+                                signer={t("decision.signer", { name: payload.signer ?? author })}
+                                date={format.dateTime(message.createdAt, {
+                                  day: "numeric",
+                                  month: "short",
+                                })}
+                              />
+                              {!fromOrganization &&
+                                payload.outcome !== "hired" &&
+                                message.id === lastDecisionId && (
+                                  <section
+                                    aria-labelledby={`rebondir-${message.id}`}
+                                    className="flex flex-col gap-2.5"
+                                  >
+                                    <h2
+                                      id={`rebondir-${message.id}`}
+                                      className="text-[14px] font-semibold text-ardoise"
+                                    >
+                                      {t("decision.bounce.title")}
+                                    </h2>
+                                    <div className="grid grid-cols-2 gap-3">
+                                      {similar.length > 0 && (
+                                        <VisualTile
+                                          href="/app/jobs?vue=recentes"
+                                          tone="lime"
+                                          scene="jobs"
+                                          title={t("decision.bounce.offers", {
+                                            count: similar.length,
+                                          })}
+                                          line={similar
+                                            .map((job) => job.title)
+                                            .slice(0, 2)
+                                            .join(" · ")}
+                                        />
+                                      )}
+                                      <VisualTile
+                                        href="/app/career/entretiens"
+                                        tone="menthe"
+                                        scene="interview"
+                                        title={t("decision.bounce.train")}
+                                        line={t("decision.bounce.trainLine")}
+                                      />
+                                    </div>
+                                  </section>
+                                )}
+                            </div>
+                          ) : pill && interview ? (
+                            <Link
+                              href={`/app/suivi/entretiens/${interview.id}`}
+                              className="inline-flex max-w-full items-center gap-2 rounded-pill bg-lime-clair px-4 py-2.5 text-[14px] text-sapin"
+                            >
+                              <Icon name="calendrier" className="size-4 shrink-0" />
+                              <span className="min-w-0">
+                                {interview.status === "pending"
+                                  ? t("pill.pending", { count: interview.slots.length })
+                                  : interview.status === "reschedule"
+                                    ? t("pill.reschedule")
+                                    : interview.status === "confirmed" && interview.startsAt
+                                      ? t("pill.confirmed", {
+                                          date: format.dateTime(interview.startsAt, {
+                                            weekday: "long",
+                                            day: "numeric",
+                                            timeZone: interview.timezone,
+                                          }),
+                                          time: format.dateTime(interview.startsAt, {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            timeZone: interview.timezone,
+                                          }),
+                                        })
+                                      : t("pill.closed")}
+                                {" · "}
+                                <span className="font-semibold underline">{t("pill.see")}</span>
+                              </span>
+                            </Link>
+                          ) : message.kind === "invitation" && interview ? (
                             <InterviewCard
-                              interview={interviews.get(payload.interviewId ?? "")!}
+                              interview={interview}
                               conversationId={conversation.id}
                               talent={!fromOrganization}
                               now={now}
@@ -467,16 +741,23 @@ export default async function ThreadPage({
                                       value={conversation.id}
                                     />
                                     <input type="hidden" name="request" value={message.id} />
-                                    <Select
-                                      id={`document-${message.id}`}
-                                      name="document"
-                                      required
-                                      label={t("docRequest.chooseExisting")}
-                                      options={cvs.map((cv) => ({ value: cv.id, label: cv.title }))}
-                                    />
+                                    {cvs.length === 1 ? (
+                                      <input type="hidden" name="document" value={cvs[0]!.id} />
+                                    ) : (
+                                      <Select
+                                        id={`document-${message.id}`}
+                                        name="document"
+                                        required
+                                        label={t("docRequest.chooseExisting")}
+                                        options={cvs.map((cv) => ({
+                                          value: cv.id,
+                                          label: cv.title,
+                                        }))}
+                                      />
+                                    )}
                                     <button
                                       type="submit"
-                                      className={pillClass("lime", "sm", "self-start")}
+                                      className={pillClass("dark", "sm", "self-start")}
                                     >
                                       <Icon name="up" className="size-4" />
                                       {t("docRequest.send")}
@@ -491,6 +772,17 @@ export default async function ThreadPage({
                           ) : (
                             <>
                               <p className="whitespace-pre-line">{message.body}</p>
+                              {payload.link && (
+                                <a
+                                  href={payload.link}
+                                  rel="noopener noreferrer nofollow ugc"
+                                  target="_blank"
+                                  className="mt-1 inline-flex items-center gap-1.5 text-sm font-semibold break-all underline"
+                                >
+                                  <Icon name="lien" className="size-4 shrink-0" />
+                                  {payload.link}
+                                </a>
+                              )}
                               {payload.document && (
                                 <a
                                   href={`/app/messages/${conversation.id}/document/${message.id}`}
@@ -500,19 +792,40 @@ export default async function ThreadPage({
                                   {t("document.view")}
                                 </a>
                               )}
+                              <span
+                                className={cx(
+                                  "mt-1 block text-right text-[12px]",
+                                  mine ? "text-blanc/70" : "text-ardoise",
+                                )}
+                              >
+                                {time}
+                              </span>
                             </>
                           )}
                         </div>
-                        <p className="text-[11px] text-ardoise">
-                          {mine ? time : `${author} · ${time}`}
-                        </p>
-                        {!mine && !fromOrganization && !message.hiddenAt && message.senderId && (
-                          <details className="text-xs">
-                            <summary className="cursor-pointer text-ardoise underline">
-                              {tr("title.message")}
-                            </summary>
-                            <ReportForm targetType="message" targetId={message.id} back={back} />
-                          </details>
+                        {!pill && (
+                          <div className="flex flex-wrap items-center gap-x-2 text-[11px] text-ardoise">
+                            {textBubble ? (
+                              !mine && <span>{author}</span>
+                            ) : (
+                              <span>{mine ? time : `${author} · ${time}`}</span>
+                            )}
+                            {!mine &&
+                              !fromOrganization &&
+                              !message.hiddenAt &&
+                              message.senderId && (
+                                <details className="text-xs">
+                                  <summary className="cursor-pointer list-none text-ardoise underline [&::-webkit-details-marker]:hidden">
+                                    {tr("title.message")}
+                                  </summary>
+                                  <ReportForm
+                                    targetType="message"
+                                    targetId={message.id}
+                                    back={back}
+                                  />
+                                </details>
+                              )}
+                          </div>
                         )}
                       </div>
                     </li>
@@ -522,11 +835,231 @@ export default async function ThreadPage({
             </div>
           </div>
 
+          {plusChoice && (
+            <section
+              id="envoyer"
+              aria-labelledby="envoyer-titre"
+              className="flex flex-col gap-3 border-t border-brume bg-creme px-4 py-4 lg:px-6"
+            >
+              <div className="flex items-center justify-between gap-3">
+                <h2 id="envoyer-titre" className="text-[19px] font-semibold">
+                  {plusChoice === "menu" ? t("plus.title") : t(`plus.${plusChoice}.title`)}
+                </h2>
+                <Link
+                  href={plusChoice === "menu" ? back : `${back}?envoyer=1#envoyer`}
+                  aria-label={plusChoice === "menu" ? t("plus.close") : t("plus.back")}
+                  className="grid size-11 place-items-center rounded-full bg-blanc shadow-douce"
+                >
+                  <Icon name={plusChoice === "menu" ? "fermer" : "chev-l"} className="size-5" />
+                </Link>
+              </div>
+              {plusChoice === "menu" && (
+                <ul className="grid grid-cols-3 gap-3">
+                  {(
+                    [
+                      ["creneau", "calendrier", "bg-lime"],
+                      ["cv", "doc", "bg-neon"],
+                      ["lettre", "edit", "bg-menthe-claire"],
+                    ] as const
+                  ).map(([key, icon, tone]) => (
+                    <li key={key}>
+                      <Link
+                        href={`${back}?envoyer=${key}#envoyer`}
+                        className="jm-pressable flex flex-col items-center gap-2 rounded-[22px] p-2 pb-3 text-center"
+                      >
+                        <span
+                          aria-hidden
+                          className={cx("grid h-16 w-full place-items-center rounded-[16px]", tone)}
+                        >
+                          <span className="grid size-10 place-items-center rounded-[12px] bg-blanc">
+                            <Icon name={icon} className="size-5" />
+                          </span>
+                        </span>
+                        <span className="text-[14px] font-semibold">{t(`plus.${key}.label`)}</span>
+                      </Link>
+                    </li>
+                  ))}
+                  <li>
+                    <span
+                      aria-disabled="true"
+                      className="jm-ai-surface flex flex-col items-center gap-2 rounded-[22px] p-2 pb-3 text-center text-blanc opacity-70"
+                    >
+                      <span aria-hidden className="grid h-16 w-full place-items-center">
+                        <span className="grid size-10 place-items-center rounded-[12px] bg-lime text-sapin">
+                          <Icon name="intelligence" className="size-5" />
+                        </span>
+                      </span>
+                      <span className="text-[14px] font-semibold">{t("plus.ai.label")}</span>
+                      <span className="text-[11.5px]">{t("plus.ai.soon")}</span>
+                    </span>
+                  </li>
+                  {(
+                    [
+                      ["document", "clip", "bg-brume"],
+                      ["lien", "lien", "bg-blanc"],
+                    ] as const
+                  ).map(([key, icon, tone]) => (
+                    <li key={key}>
+                      <Link
+                        href={`${back}?envoyer=${key}#envoyer`}
+                        className="jm-pressable flex flex-col items-center gap-2 rounded-[22px] p-2 pb-3 text-center"
+                      >
+                        <span
+                          aria-hidden
+                          className={cx("grid h-16 w-full place-items-center rounded-[16px]", tone)}
+                        >
+                          <span className="grid size-10 place-items-center rounded-[12px] bg-blanc shadow-douce">
+                            <Icon name={icon} className="size-5" />
+                          </span>
+                        </span>
+                        <span className="text-[14px] font-semibold">{t(`plus.${key}.label`)}</span>
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+              {attachKind &&
+                (attachable.length === 0 ? (
+                  <p className="text-[14px]">
+                    <Link
+                      href={attachKind === "cv" ? "/app/career/cv" : "/app/career/documents"}
+                      className="font-semibold underline"
+                    >
+                      {t(`plus.${attachKind}.empty`)}
+                    </Link>
+                  </p>
+                ) : (
+                  <form action={sendDocumentAction} className="flex flex-col gap-3">
+                    <input type="hidden" name="conversation" value={conversation.id} />
+                    <fieldset className="flex flex-col gap-2">
+                      <legend className="sr-only">{t(`plus.${attachKind}.title`)}</legend>
+                      {attachable.map((document, index) => (
+                        <label
+                          key={document.id}
+                          className="flex cursor-pointer items-center gap-3 rounded-[18px] bg-blanc p-3 shadow-douce has-checked:ring-2 has-checked:ring-sapin has-focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)]"
+                        >
+                          <input
+                            type="radio"
+                            name="document"
+                            value={document.id}
+                            defaultChecked={index === 0}
+                            required
+                            className="sr-only"
+                          />
+                          <span
+                            aria-hidden
+                            className="grid size-10 shrink-0 place-items-center rounded-[12px] bg-creme"
+                          >
+                            <Icon name="doc" className="size-5" />
+                          </span>
+                          <span className="flex min-w-0 flex-col">
+                            <span className="truncate text-[14.5px] font-semibold">
+                              {document.title}
+                            </span>
+                            <span className="text-[12.5px] text-ardoise">
+                              {t("plus.updated", { date: document.updatedAt })}
+                            </span>
+                          </span>
+                        </label>
+                      ))}
+                    </fieldset>
+                    <p className="flex items-center gap-1.5 text-xs text-ardoise">
+                      <Icon name="lock" className="size-3.5 shrink-0" />
+                      {t("plus.copy")}
+                    </p>
+                    <Button type="submit" variant="principal" size="M" className="self-start">
+                      {t("plus.send")}
+                    </Button>
+                  </form>
+                ))}
+              {plusChoice === "creneau" && (
+                <form action={sendSlotAction} className="flex flex-col gap-3">
+                  <input type="hidden" name="conversation" value={conversation.id} />
+                  <div className="grid grid-cols-2 gap-3">
+                    <label className="flex flex-col gap-1.5 text-[13.5px] font-semibold">
+                      {t("plus.creneau.date")}
+                      <input
+                        type="date"
+                        name="date"
+                        required
+                        className="h-12 rounded-[14px] bg-blanc px-3 text-[15px] font-normal shadow-douce"
+                      />
+                    </label>
+                    <label className="flex flex-col gap-1.5 text-[13.5px] font-semibold">
+                      {t("plus.creneau.time")}
+                      <input
+                        type="time"
+                        name="time"
+                        required
+                        step={900}
+                        className="h-12 rounded-[14px] bg-blanc px-3 text-[15px] font-normal shadow-douce"
+                      />
+                    </label>
+                  </div>
+                  <p className="text-[12.5px] text-ardoise">
+                    {t("slot.zone", { city: zoneCity(slotZone) })}
+                  </p>
+                  <label className="flex flex-col gap-1.5 text-[13.5px] font-semibold">
+                    {t("plus.creneau.note")}
+                    <input
+                      type="text"
+                      name="note"
+                      maxLength={300}
+                      className="h-12 rounded-[14px] bg-blanc px-3 text-[15px] font-normal shadow-douce"
+                    />
+                  </label>
+                  <Button type="submit" variant="principal" size="M" className="self-start">
+                    {t("plus.send")}
+                  </Button>
+                </form>
+              )}
+              {plusChoice === "lien" && (
+                <form action={sendLinkAction} className="flex flex-col gap-3">
+                  <input type="hidden" name="conversation" value={conversation.id} />
+                  <label className="flex flex-col gap-1.5 text-[13.5px] font-semibold">
+                    {t("plus.lien.url")}
+                    <input
+                      type="url"
+                      name="url"
+                      required
+                      maxLength={500}
+                      inputMode="url"
+                      placeholder={t("plus.lien.placeholder")}
+                      className="h-12 rounded-[14px] bg-blanc px-3 text-[15px] font-normal shadow-douce"
+                    />
+                  </label>
+                  <label className="flex flex-col gap-1.5 text-[13.5px] font-semibold">
+                    {t("plus.lien.text")}
+                    <input
+                      type="text"
+                      name="label"
+                      maxLength={120}
+                      className="h-12 rounded-[14px] bg-blanc px-3 text-[15px] font-normal shadow-douce"
+                    />
+                  </label>
+                  <Button type="submit" variant="principal" size="M" className="self-start">
+                    {t("plus.send")}
+                  </Button>
+                </form>
+              )}
+            </section>
+          )}
+
           {canWrite ? (
             <form
               action={sendMessageAction}
               className="flex items-end gap-2.5 border-t border-brume px-3 py-3 lg:px-[18px] lg:py-3.5"
             >
+              {plus && (
+                <Link
+                  href={plusChoice ? back : `${back}?envoyer=1#envoyer`}
+                  aria-label={t("plus.open")}
+                  aria-expanded={Boolean(plusChoice)}
+                  className="grid size-11 shrink-0 place-items-center rounded-full bg-blanc ring-[1.5px] ring-brume ring-inset"
+                >
+                  <Icon name="plus" className="size-5" />
+                </Link>
+              )}
               <input type="hidden" name="conversation" value={conversation.id} />
               <label htmlFor="message-body" className="sr-only">
                 {t("thread.composer.placeholder")}
@@ -538,7 +1071,7 @@ export default async function ThreadPage({
                 rows={1}
                 maxLength={MESSAGE_MAX}
                 placeholder={t("thread.composer.placeholder")}
-                className="field-sizing-content max-h-40 min-h-11 flex-1 resize-none rounded-[22px] bg-creme px-4 py-3 text-sm placeholder:text-ardoise focus-visible:outline-2 focus-visible:outline-sapin"
+                className="field-sizing-content max-h-40 min-h-11 flex-1 resize-none rounded-[22px] bg-creme px-4 py-3 text-sm placeholder:text-ardoise focus-visible:outline-2 focus-visible:outline-sapin max-md:bg-blanc max-md:text-[15px] max-md:shadow-douce"
               />
               <button
                 type="submit"

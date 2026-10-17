@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
 import { pillClass } from "@/components/career/kit";
@@ -10,14 +10,9 @@ import { tag } from "@/components/jobs/talent-kit";
 import { RecruiterWhy } from "@/components/matching/recruiter-why";
 import { TabRail } from "@/components/motion/tab-rail";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
-import { Alert, Button, RadioGroup, Select, TextArea, TextField } from "@/components/ui";
+import { Alert, Button, Select, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
-import {
-  addNoteAction,
-  moveApplicationAction,
-  rejectApplicationAction,
-  requestDocumentAction,
-} from "@/server/actions/hire";
+import { addNoteAction, moveApplicationAction, requestDocumentAction } from "@/server/actions/hire";
 import { addToPoolAction, deleteNoteAction, editNoteAction } from "@/server/actions/hire-advanced";
 import { db } from "@/server/db";
 import { can, level } from "@/server/entitlements";
@@ -25,7 +20,7 @@ import { requireHire } from "@/server/hire-context";
 import { applicationMatches } from "@/server/matching/service";
 import { ensureApplicationConversation } from "@/server/services/connect";
 import { scorecardCriteria, scorecardView, visibleNotes } from "@/server/services/evaluation";
-import { HireError, hirePermissions, recordView, rejectReasons } from "@/server/services/hire";
+import { HireError, hirePermissions, recordView } from "@/server/services/hire";
 import { parseCriteria } from "@/server/services/jobs";
 import { cheapestPlanWhere, levelOf, listPublicPlans, orgPlanFor } from "@/server/services/plans";
 import { listPools } from "@/server/services/talent-search";
@@ -55,7 +50,10 @@ export default async function CandidatePage({
   searchParams,
 }: PageProps<"/app/hire/candidats/[applicationId]">) {
   const [{ applicationId }, query] = await Promise.all([params, searchParams]);
-  const { user, space, ctx } = await requireHire(
+  // The refusal form moved to its exact preview (prompt 5); old links lead there.
+  if (query.decision === "refus")
+    redirect(`/app/hire/candidats/${applicationId}/message?modele=refus`);
+  const { user, ctx } = await requireHire(
     `/app/hire/candidats/${applicationId}`,
     "readApplications",
   );
@@ -124,15 +122,6 @@ export default async function CandidatePage({
   const describe = (event: (typeof application.events)[number]) =>
     describeEvent(t, memberName(event.actorId), event);
 
-  const defaultRejection = (
-    job.rejectionTemplate ??
-    t("reject.message.default", {
-      firstName: person.firstName ?? person.name,
-      org: space.organization.name,
-      jobTitle: job.title,
-      recruiterName: user.name,
-    })
-  ).replaceAll("\\n", "\n");
   const decided = application.stage.kind === "rejected" || application.stage.kind === "hired";
   // Neighbours in the pipeline order (newest first), for « Candidat précédent / suivant ».
   const siblings = await db.application.findMany({
@@ -276,6 +265,16 @@ export default async function CandidatePage({
               <Icon name="message" className="size-4" />
               {t("application.message")}
             </Link>
+            {permissions.manage && (
+              <Link
+                href={`/app/hire/candidats/${application.id}/message`}
+                aria-label={t("templates.write")}
+                className={pillClass("outline", "md", "max-lg:w-11 max-lg:px-0")}
+              >
+                <Icon name="edit" className="size-4" />
+                <span className="max-lg:hidden">{t("templates.write")}</span>
+              </Link>
+            )}
             {live && application.status === "active" && appointments && (
               <Link
                 href={`/app/hire/entretiens?candidature=${application.id}#planifier`}
@@ -849,63 +848,13 @@ export default async function CandidatePage({
                   </details>
                 )}
                 {!decided && (
-                  <details
+                  <Link
                     id="decision"
-                    open={query.decision === "refus"}
-                    className="open:col-span-2"
+                    href={`/app/hire/candidats/${application.id}/message?modele=refus`}
+                    className={actionPill}
                   >
-                    <summary className={actionPill}>{t("pipeline.action.reject")}</summary>
-                    <form
-                      action={rejectApplicationAction}
-                      className="mt-3 flex flex-col gap-4 rounded-[18px] bg-creme p-4"
-                    >
-                      <input type="hidden" name="application" value={application.id} />
-                      <p className="font-semibold">
-                        {t("reject.title", { candidateName: person.name })}
-                      </p>
-                      {query.erreur === "1" && (
-                        <Alert tone="error" title={t("jobForm.error.invalid")} />
-                      )}
-                      <Select
-                        id="reject-reason"
-                        name="reason"
-                        required
-                        label={t("reject.reason.text")}
-                        hint={t("reject.reason.hint")}
-                        placeholder={t("reject.reason.text")}
-                        defaultValue=""
-                        options={rejectReasons.map((reason) => ({
-                          value: reason,
-                          label: t(`reject.reason.${reason}`),
-                        }))}
-                      />
-                      <TextArea
-                        id="reject-message"
-                        name="message"
-                        rows={10}
-                        maxLength={4000}
-                        label={t("reject.message.text")}
-                        hint={t("reject.message.hint")}
-                        defaultValue={defaultRejection}
-                      />
-                      <RadioGroup
-                        legend={t("reject.message.text")}
-                        name="send"
-                        defaultValue="now"
-                        options={[
-                          { value: "now", label: t("reject.send.now") },
-                          {
-                            value: "none",
-                            label: t("reject.send.none.text"),
-                            hint: t("reject.send.none.warning"),
-                          },
-                        ]}
-                      />
-                      <Button type="submit" variant="danger" className="self-start">
-                        {t("reject.confirm")}
-                      </Button>
-                    </form>
-                  </details>
+                    {t("pipeline.action.reject")}
+                  </Link>
                 )}
               </div>
               <p className="flex gap-2 rounded-[16px] bg-creme px-4 py-3 text-[12px] leading-[17px]">

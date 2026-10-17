@@ -12,11 +12,20 @@ import {
   blockConversation,
   ConnectError,
   sendMessage,
+  type SentMessage,
+  type Viewer,
 } from "@/server/services/connect";
 import { createReport } from "@/server/services/moderation";
 import { markNotificationsRead } from "@/server/services/notifications";
 import { mailContactAccepted, mailInterviewConfirmed } from "@/server/hire-emails";
 import { answerInterview } from "@/server/services/interviews";
+import {
+  linkSchema,
+  sendDocument,
+  sendLink,
+  sendSlot,
+  slotSchema,
+} from "@/server/services/conversation-attachments";
 import { respondContactRequest } from "@/server/services/talent-search";
 import { reportError } from "@/server/observability";
 
@@ -129,6 +138,9 @@ export async function answerInterviewAction(formData: FormData) {
   const interviewId = id(formData.get("interview"));
   const raw = String(formData.get("answer"));
   const message = String(formData.get("message") ?? "");
+  // From Suivi (prompt 5, screens 20-22) the answer comes back to Suivi.
+  const fromSuivi = formData.get("from") === "suivi";
+  const suiviPage = `/app/suivi/entretiens/${interviewId}`;
   try {
     await answerInterview(
       db,
@@ -146,6 +158,7 @@ export async function answerInterviewAction(formData: FormData) {
     );
   } catch (error) {
     if ((error as Error).name !== "HireError") throw error;
+    if (fromSuivi) redirect(`${suiviPage}?${raw === "propose" ? "proposer=1&" : ""}erreur=1`);
     redirect(`/app/messages/${conversationId}?erreur=entretien#entretien-${interviewId}`);
   }
   if (raw === "accept") {
@@ -162,9 +175,60 @@ export async function answerInterviewAction(formData: FormData) {
         jobTitle: interview.application.job.title,
         date: interview.startsAt,
         timezone: interview.timezone,
-        href: `/app/messages/${conversationId}`,
+        href: conversationId ? `/app/messages/${conversationId}` : "/app/suivi?filtre=entretiens",
       });
+  }
+  if (fromSuivi) {
+    const ok = raw === "accept" ? "confirme" : raw === "propose" ? "propose" : "decline";
+    redirect(`/app/suivi?filtre=entretiens&ok=${ok}&entretien=${interviewId}`);
   }
   refresh();
   redirect(`/app/messages/${conversationId}?ok=entretien#entretien-${interviewId}`);
+}
+
+// ─── « + » in a conversation (prompt 5, screen 50) ──────────────────────────────
+
+async function attach(
+  formData: FormData,
+  send: (viewer: Viewer, conversationId: string) => Promise<SentMessage>,
+) {
+  const conversationId = id(formData.get("conversation"));
+  const { user, viewer } = await connectViewer(`/app/messages/${conversationId}`);
+  if (!(await allowAttempt("message", user.id))) {
+    redirect(`/app/messages/${conversationId}?erreur=trop`);
+  }
+  try {
+    const sent = await send(viewer, conversationId);
+    await onMessageSent({ ...sent, senderName: user.name }).catch((error) => reportError(error));
+  } catch (error) {
+    if (!(error instanceof ConnectError)) throw error;
+    redirect(`/app/messages/${conversationId}?erreur=${error.code}`);
+  }
+  refresh();
+  redirect(`/app/messages/${conversationId}#dernier`);
+}
+
+/** Mon CV, Ma lettre, Un document: a copy of one of the talent's own documents. */
+export async function sendDocumentAction(formData: FormData) {
+  await attach(formData, (viewer, conversationId) =>
+    sendDocument(db, viewer, conversationId, id(formData.get("document"))),
+  );
+}
+
+/** Un créneau: a time the talent suggests. */
+export async function sendSlotAction(formData: FormData) {
+  const parsed = slotSchema.safeParse(Object.fromEntries(formData));
+  await attach(formData, (viewer, conversationId) => {
+    if (!parsed.success) throw new ConnectError("invalid");
+    return sendSlot(db, viewer, conversationId, parsed.data);
+  });
+}
+
+/** Un lien: an http(s) address. */
+export async function sendLinkAction(formData: FormData) {
+  const parsed = linkSchema.safeParse(Object.fromEntries(formData));
+  await attach(formData, (viewer, conversationId) => {
+    if (!parsed.success) throw new ConnectError("invalid");
+    return sendLink(db, viewer, conversationId, parsed.data);
+  });
 }
