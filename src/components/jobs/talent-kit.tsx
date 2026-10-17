@@ -8,7 +8,7 @@ import { cx } from "@/lib/cx";
 import { formatRelative } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
 import type { MatchExplanation } from "@/server/matching/types";
-import { toggleSaveAction } from "@/server/actions/jobs";
+import { SaveJobButton } from "./save-job-button";
 import { contractFilterOf, remoteFilterOf, type PublicJobSummary } from "@/server/services/jobs";
 
 /** Shared pieces of the signed-in Jobs pages (mockups 03-16 to 03-20). */
@@ -122,18 +122,20 @@ export async function TalentJobCard({
     </Link>
   ) : null;
   const save = (
-    <form action={toggleSaveAction} className="relative z-10">
-      <input type="hidden" name="job" value={job.slug} />
-      <input type="hidden" name="back" value={back} />
-      <button
-        type="submit"
-        aria-pressed={saved}
-        aria-label={`${saved ? t("talent.jobs.card.unsave") : t("talent.jobs.card.save")} · ${job.title}`}
-        className="flex size-8 items-center justify-center rounded-full text-sapin hover:bg-creme"
-      >
-        <Icon name="favori" className={cx("size-[18px]", saved && "fill-sapin")} />
-      </button>
-    </form>
+    <SaveJobButton
+      slug={job.slug}
+      saved={saved}
+      back={back}
+      name={job.title}
+      labels={{
+        save: t("talent.jobs.card.save"),
+        unsave: t("talent.jobs.card.unsave"),
+        saved: t("talent.jobs.card.saved.toast"),
+        removed: t("talent.jobs.card.unsaved.toast"),
+        undo: t("common.cancel"),
+      }}
+      className="flex size-11 items-center justify-center rounded-full text-sapin hover:bg-creme lg:size-8"
+    />
   );
 
   return (

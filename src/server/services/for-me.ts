@@ -4,6 +4,7 @@
  */
 import type { PrismaClient } from "@/generated/prisma/client";
 import { recommendedCourses, recommendedJobs } from "@/server/matching/service";
+import { openDrafts } from "./application-draft";
 import { listConversations } from "./connect";
 import { jobOrderBy, openJobWhere } from "./jobs";
 import { catalogLevelOf, opensCourse } from "./learn";
@@ -40,6 +41,8 @@ export type ForMeCourse = {
   open: boolean;
   /** Progress in percent when the talent follows the course. */
   progress: number | null;
+  /** Recommended: the skills it brings that the recommended offers ask for (the « Pourquoi ? »). */
+  reason: string[];
 };
 
 const courseSelect = {
@@ -89,6 +92,7 @@ export async function forMeCourses(
     free: course.requiredLevel === "free",
     open: opens(course.requiredLevel),
     progress,
+    reason: [],
   });
   const list = enrollments
     .filter((row) => !row.completedAt)
@@ -118,7 +122,10 @@ export async function forMeCourses(
   for (const course of [...picked, ...newest]) {
     if (seen.has(course.slug)) continue;
     seen.add(course.slug);
-    list.push(toCourse(course, null));
+    list.push({
+      ...toCourse(course, null),
+      reason: recommended.find((item) => item.slug === course.slug)?.skills ?? [],
+    });
   }
   return list.slice(0, options.take);
 }
@@ -158,13 +165,14 @@ export async function skillsToStrengthen(db: PrismaClient, userId: string, take 
 export type NextAction =
   | { kind: "interview"; href: string; company: string; job: string; at: Date }
   | { kind: "document"; href: string; company: string; name: string }
+  | { kind: "draft"; href: string; company: string; job: string }
   | { kind: "message"; href: string; company: string }
   | { kind: "course"; href: string; title: string }
   | { kind: "profile"; href: string; percent: number };
 
 /**
  * The next real actions of the talent, most urgent first: interviews to confirm, documents asked
- * for, unread messages, then the course in progress and the profile to complete.
+ * for, applications left as drafts, unread messages, then the course in progress and the profile.
  */
 export async function nextActions(
   db: PrismaClient,
@@ -173,7 +181,7 @@ export async function nextActions(
   take = 3,
   now = new Date(),
 ): Promise<NextAction[]> {
-  const [interviews, requests, conversations] = await Promise.all([
+  const [interviews, requests, conversations, drafts] = await Promise.all([
     db.interview.findMany({
       where: { application: { profile: { userId } }, status: "pending", slots: { isEmpty: false } },
       orderBy: { createdAt: "desc" },
@@ -199,6 +207,7 @@ export async function nextActions(
       },
     }),
     listConversations(db, { userId }),
+    openDrafts(db, userId, now),
   ]);
   const actions: NextAction[] = [];
   const counted = new Set<string>();
@@ -226,6 +235,13 @@ export async function nextActions(
       name: typeof payload.name === "string" ? payload.name : "",
     });
   }
+  for (const draft of drafts)
+    actions.push({
+      kind: "draft",
+      href: `/app/jobs/${draft.job.slug}?postuler=1`,
+      company: draft.job.organization.name,
+      job: draft.job.title,
+    });
   for (const conversation of conversations) {
     if (!conversation.unread || counted.has(conversation.id)) continue;
     actions.push({

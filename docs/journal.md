@@ -2,6 +2,26 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Mobile Talent et Jumanly AI · prompt 4 : offres, candidature, Apprendre (17 octobre 2026)
+
+- Offres (écrans 06-07) : onglets Pour vous (classées par score, ou sélection générale signalée),
+  Récentes, Enregistrées ; enregistrement immédiat avec toast « Annuler ».
+- Détail d'offre (écran 08) : sections repliables, compétences demandées avec celles du profil
+  cochées, carte « Adapter mon CV », barre fixe Enregistrer + Postuler (ou « Reprendre ma
+  candidature »).
+- Candidature en trois étapes (écrans 09-12) : CV ou profil seul, lettre, vérification par blocs
+  avec consentement obligatoire, envoi, confirmation après la réponse du serveur, écran d'erreur
+  réseau avec « Réessayer ». Brouillon serveur `ApplicationDraft` à chaque étape, repris depuis
+  l'offre, « Pour moi » (prochaines actions) et Suivi.
+- Apprendre (écran 13) : formation en cours en tête, recommandées avec « Pourquoi ? », domaines,
+  exercices et certificats ; barre fixe sur la fiche formation (téléphone).
+- Tests : e2e « trouver une offre et postuler » (onglets, recherche, Annuler, Quitter, reprise,
+  coupure réseau, Réessayer) et « reprendre une formation » ; parcours talent et recruteur adaptés
+  aux étapes.
+- Décision : `docs/decisions/2026-10-17-mobile-talent-offres-candidature.md` (étape Questions
+  sautée faute de questions, bloc IA et recherches récentes non affichés, plafond de 120 offres
+  pour le classement).
+
 ## Mobile Talent et Jumanly AI · prompt 3 : objectif et « Pour moi » (16 octobre 2026)
 
 - Écran d'objectif à la première connexion (`/app/bienvenue`, écrans 01-02) : une question, trois

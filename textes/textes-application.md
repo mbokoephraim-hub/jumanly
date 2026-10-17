@@ -2196,6 +2196,7 @@ Conventions :
 | `talent.forMe.courses.resume` | Reprendre |
 | `talent.forMe.courses.discover` | Découvrir |
 | `talent.forMe.courses.locked` | Non incluse dans votre formule |
+| `talent.forMe.courses.why` | Pourquoi ? Vos offres demandent : {skills}. |
 | `talent.forMe.courses.progress` | Progression : {percent} % |
 | `talent.forMe.resume.eyebrow` | Reprendre ma formation |
 | `talent.forMe.resume.left` | {count, plural, =0 {Toutes les leçons sont faites} one {# leçon restante} other {# leçons restantes}} |
@@ -2235,6 +2236,8 @@ Conventions :
 | `talent.forMe.actions.interview` | Confirmer votre entretien |
 | `talent.forMe.actions.interviewLine` | {company} · {date, date, long} |
 | `talent.forMe.actions.document` | Envoyer un document |
+| `talent.forMe.actions.draft` | Terminer votre candidature |
+| `talent.forMe.actions.draftLine` | {job} · {company} · brouillon enregistré |
 | `talent.forMe.actions.message` | Répondre au recruteur |
 | `talent.forMe.actions.messageLine` | Nouveau message |
 | `talent.forMe.actions.course` | Reprendre votre formation |
@@ -2255,6 +2258,8 @@ Conventions :
 | `talent.suivi.todo.documents` | {count, plural, one {# document demandé} other {# documents demandés}} |
 | `talent.suivi.todo.messages` | {count, plural, one {# message non lu} other {# messages non lus}} |
 | `talent.suivi.todo.line` | Ouvrir mes messages |
+| `talent.suivi.drafts.title` | Candidatures en brouillon |
+| `talent.suivi.drafts.line` | {company} · enregistrée le {date, date, long} |
 | `talent.suivi.links.title` | Mon suivi |
 | `talent.suivi.links.applications` | Mes candidatures |
 | `talent.suivi.links.applicationsLine` | {count, plural, =0 {Aucune candidature en cours} one {# en cours} other {# en cours}} |
@@ -2700,6 +2705,17 @@ Conventions :
 | `learn.home.certificate.issued` | Délivrée le {date} |
 | `learn.home.certificate.cta` | Mes certifications |
 | `learn.home.certificate.empty` | Terminez une formation pour obtenir votre première attestation. |
+| `learn.home.reco.title` | Recommandées pour vous |
+| `learn.home.reco.all` | Tout voir |
+| `learn.home.domains.title` | Domaines |
+| `learn.home.domains.explore` | Explorer le catalogue |
+| `learn.home.acquired.title` | Exercices et certificats |
+| `learn.home.acquired.evaluations` | Mes évaluations |
+| `learn.home.acquired.evaluationsTodo` | {count, plural, one {# exercice à faire} other {# exercices à faire}} |
+| `learn.home.acquired.certificates` | Mes attestations |
+| `learn.home.acquired.certificatesCount` | {count, plural, =0 {Aucune attestation pour le moment} one {# attestation obtenue} other {# attestations obtenues}} |
+| `learn.home.acquired.paths` | Mes parcours |
+| `learn.home.acquired.pathsLine` | {count, plural, =0 {Aucune formation en cours} one {# formation en cours} other {# formations en cours}} |
 
 ### `/app/learn/parcours` · Mes parcours
 
@@ -4480,6 +4496,11 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.search.tab.all` | Tous ({count}) |
 | `talent.jobs.search.tab.recommended` | Recommandées |
 | `talent.jobs.search.tab.recent` | Récentes |
+| `talent.jobs.search.tab.forYou` | Pour vous |
+| `talent.jobs.search.tab.saved` | Enregistrées · {count} |
+| `talent.jobs.search.general` | Sélection générale, non personnalisée : ajoutez vos compétences pour voir les offres qui vous correspondent. |
+| `talent.jobs.search.personalise` | Personnaliser |
+| `talent.jobs.search.closedHidden` | Les offres clôturées ne s'affichent plus. |
 | `talent.jobs.filters.text` | Filtres |
 | `talent.jobs.filters.count` | Filtres · {count} |
 | `talent.jobs.filters.reset` | Réinitialiser |
@@ -4614,6 +4635,10 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.detail.profile` | Profil recherché |
 | `talent.jobs.detail.skills.required` | Compétences requises |
 | `talent.jobs.detail.skills.preferred` | Compétences souhaitées |
+| `talent.jobs.detail.skills.title` | Compétences demandées |
+| `talent.jobs.detail.skills.owned` | Coche : déjà dans votre profil. |
+| `talent.jobs.detail.tailor.text` | Adapter mon CV à cette offre |
+| `talent.jobs.detail.tailor.line` | À partir de votre CV principal |
 | `talent.jobs.detail.knockout.text` | Critères indispensables |
 | `talent.jobs.detail.knockout.hint` | Le recruteur a indiqué ces critères comme indispensables. Vous pouvez quand même postuler : c'est lui qui décide. |
 | `talent.jobs.detail.benefits` | Avantages |
@@ -4679,6 +4704,59 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.apply.already` | Vous avez déjà postulé à cette offre. |
 | `talent.jobs.apply.cancel.confirm` | Abandonner la candidature ? Vos réponses ne seront pas enregistrées. |
 | `talent.jobs.apply.cv.profileOnly` | Envoyer seulement mon profil |
+| `talent.jobs.apply.flow.title` | Candidature |
+| `talent.jobs.apply.flow.job` | {job} · {company} |
+| `talent.jobs.apply.flow.steps` | Étapes de la candidature |
+| `talent.jobs.apply.flow.step.cv` | CV |
+| `talent.jobs.apply.flow.step.lettre` | Lettre |
+| `talent.jobs.apply.flow.step.verification` | Vérification |
+| `talent.jobs.apply.flow.stepState.done` | , terminée |
+| `talent.jobs.apply.flow.stepState.current` | , en cours |
+| `talent.jobs.apply.flow.cv.title` | Quel CV envoyer ? |
+| `talent.jobs.apply.flow.cv.updated` | Modifié le {date, date, long} |
+| `talent.jobs.apply.flow.cv.primary` | CV principal · {line} |
+| `talent.jobs.apply.flow.cv.profile` | Mon profil Jumanly seul |
+| `talent.jobs.apply.flow.cv.profileLine` | Sans CV joint |
+| `talent.jobs.apply.flow.cv.tailor` | Adapter ce CV à l'offre avant l'envoi |
+| `talent.jobs.apply.flow.cv.tailorLine` | Une copie est créée, l'original ne change pas |
+| `talent.jobs.apply.flow.letter.title` | Votre lettre de motivation |
+| `talent.jobs.apply.flow.letter.label` | Lettre de motivation (facultative) |
+| `talent.jobs.apply.flow.review.ready` | Votre candidature est prête |
+| `talent.jobs.apply.flow.review.readyLine` | Touchez « Modifier » pour changer un bloc. |
+| `talent.jobs.apply.flow.review.checked` | Vérifié |
+| `talent.jobs.apply.flow.review.cv` | CV |
+| `talent.jobs.apply.flow.review.change` | Changer |
+| `talent.jobs.apply.flow.review.letter` | Lettre de motivation |
+| `talent.jobs.apply.flow.review.noLetter` | Pas de lettre : elle est facultative. |
+| `talent.jobs.apply.flow.review.words` | {count, plural, one {# mot} other {# mots}} |
+| `talent.jobs.apply.flow.review.editLetter` | Modifier la lettre |
+| `talent.jobs.apply.flow.review.profile` | Profil partagé |
+| `talent.jobs.apply.flow.review.editProfile` | Modifier mon profil |
+| `talent.jobs.apply.flow.review.moreSkills` | +{count} |
+| `talent.jobs.apply.flow.review.seenBy` | Vu par ce recruteur seulement |
+| `talent.jobs.apply.flow.review.contact` | Contact |
+| `talent.jobs.apply.flow.review.edit` | Modifier |
+| `talent.jobs.apply.flow.review.consent` | J'accepte que {company} consulte ma candidature. |
+| `talent.jobs.apply.flow.saved` | Brouillon enregistré à {time, time, short} |
+| `talent.jobs.apply.flow.quit` | Quitter |
+| `talent.jobs.apply.flow.continue` | Continuer |
+| `talent.jobs.apply.flow.previous` | Étape précédente |
+| `talent.jobs.apply.flow.kept` | Brouillon gardé. Vous pourrez reprendre votre candidature depuis Pour moi ou cette offre. |
+| `talent.jobs.apply.flow.resume` | Reprendre ma candidature |
+| `talent.jobs.apply.flow.error.title` | Votre candidature n'est pas encore envoyée |
+| `talent.jobs.apply.flow.error.body` | Connexion coupée. Votre brouillon est gardé. |
+| `talent.jobs.apply.flow.error.state` | État |
+| `talent.jobs.apply.flow.error.draft` | Brouillon, non envoyé |
+| `talent.jobs.apply.flow.error.lastSave` | Dernier enregistrement |
+| `talent.jobs.apply.flow.error.lastSaveValue` | {date, date, medium} à {date, time, short} |
+| `talent.jobs.apply.flow.error.later` | Plus tard |
+| `talent.jobs.apply.flow.error.retry` | Réessayer |
+| `talent.jobs.apply.flow.sent.received` | Reçue par {company}. |
+| `talent.jobs.apply.flow.sent.track` | Suivre ma candidature |
+| `talent.jobs.apply.flow.sent.trackLine` | Dans Suivi, avec son historique |
+| `talent.jobs.apply.flow.sent.prepare` | Préparer l'entretien |
+| `talent.jobs.apply.flow.sent.prepareLine` | Simulation et conseils |
+| `talent.jobs.apply.flow.sent.explore` | Continuer à explorer les offres |
 | `talent.jobs.detail.seo` | {jobTitle} · Jumanly |
 | `talent.jobs.detail.backToJobs` | Toutes les offres |
 

@@ -10,6 +10,7 @@ import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
 import { isClosedStatus, listApplications, talentStatus } from "@/server/services/applications";
 import { unreadCount } from "@/server/services/connect";
+import { openDrafts } from "@/server/services/application-draft";
 import { followUpActions } from "@/server/services/follow-up";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -57,11 +58,12 @@ export default async function SuiviPage() {
   if (await getPartnerSpace(user.id)) redirect("/app/partenaire");
   const t = await getTranslations("talent.suivi");
   const now = new Date();
-  const [actions, applications, unread, saved] = await Promise.all([
+  const [actions, applications, unread, saved, drafts] = await Promise.all([
     followUpActions(db, user.id, now),
     listApplications(db, user.id),
     unreadCount(db, { userId: user.id }),
     db.savedJob.count({ where: { userId: user.id } }),
+    openDrafts(db, user.id, now),
   ]);
   const active = applications.filter(
     (application) => !isClosedStatus(talentStatus(application, now)),
@@ -100,6 +102,27 @@ export default async function SuiviPage() {
             ))
         )}
       </section>
+
+      {drafts.length > 0 && (
+        <section aria-labelledby="suivi-brouillons" className="flex flex-col gap-2.5">
+          <h2 id="suivi-brouillons" className="text-[17px] font-semibold">
+            {t("drafts.title")}
+          </h2>
+          {drafts.map((draft) => (
+            <Row
+              key={draft.job.slug}
+              href={`/app/jobs/${draft.job.slug}?postuler=1`}
+              icon="jobs"
+              tone="bg-creme"
+              title={draft.job.title}
+              line={t("drafts.line", {
+                company: draft.job.organization.name,
+                date: draft.updatedAt,
+              })}
+            />
+          ))}
+        </section>
+      )}
 
       <section aria-labelledby="suivi-liens" className="flex flex-col gap-2.5">
         <h2 id="suivi-liens" className="text-[17px] font-semibold">

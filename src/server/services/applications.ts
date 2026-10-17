@@ -93,6 +93,8 @@ export async function applyToJob(
     });
     // The score shown at that moment is kept with the application; applying never waits on it.
     await freezeApplicationMatch(db, application.id, now).catch((error) => reportError(error));
+    // The draft of the staged form has done its job (docs/ux-mobile-talent, prompt 4).
+    await db.applicationDraft.deleteMany({ where: { userId: input.userId, jobId: job.id } });
     return { status: "applied", applicationId: application.id };
   } catch (error) {
     // Two clicks at once: the unique (job, profile) pair keeps a single application.

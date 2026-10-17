@@ -146,7 +146,7 @@ export async function CourseOverview({
             )}
           </div>
           {open ? (
-            <form action={enrollAction}>
+            <form action={enrollAction} className="max-md:hidden">
               <input type="hidden" name="slug" value={course.slug} />
               <button
                 type="submit"
@@ -175,7 +175,7 @@ export async function CourseOverview({
               </Link>
             </div>
           )}
-          <form action={toggleSavedCourseAction}>
+          <form action={toggleSavedCourseAction} className={open ? "max-md:hidden" : undefined}>
             <input type="hidden" name="slug" value={course.slug} />
             <button
               type="submit"
@@ -341,6 +341,35 @@ export async function CourseOverview({
           )}
         </div>
       </div>
+      {open && (
+        <>
+          {/* Phone (screen 33): save and start stay at hand in a fixed bar. */}
+          <div aria-hidden className="h-24 md:hidden" />
+          <div className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 flex items-center gap-3 rounded-[22px] bg-blanc p-3 shadow-float md:hidden">
+            <form action={toggleSavedCourseAction}>
+              <input type="hidden" name="slug" value={course.slug} />
+              <button
+                type="submit"
+                aria-pressed={saved}
+                aria-label={saved ? t("learn.card.saved") : t("learn.card.save")}
+                className="grid size-12 place-items-center rounded-full ring-[1.5px] ring-brume ring-inset"
+              >
+                <Icon name="favori" className={saved ? "size-5 fill-sapin" : "size-5"} />
+              </button>
+            </form>
+            <form action={enrollAction} className="flex-1">
+              <input type="hidden" name="slug" value={course.slug} />
+              <button
+                type="submit"
+                className="flex h-12 w-full items-center justify-center gap-2 rounded-pill bg-gradient-principal text-base font-semibold text-blanc"
+              >
+                <Icon name="play" className="size-4" />
+                {t("learn.course.start")}
+              </button>
+            </form>
+          </div>
+        </>
+      )}
     </>
   );
 }
