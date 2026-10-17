@@ -236,7 +236,7 @@ export default async function InterviewAnswerPage({
       {query.erreur === "1" && <Alert tone="error" title={ti("error")} />}
       <form action={answerInterviewAction} className="flex flex-col gap-4">
         {hidden("accept")}
-        <fieldset className="flex flex-col gap-3">
+        <fieldset className="flex min-w-0 flex-col gap-3">
           <legend className="mb-3 text-[15px] font-semibold">{t("choose")}</legend>
           {slots.map((slot, index) => (
             <label

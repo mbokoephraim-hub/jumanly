@@ -60,11 +60,11 @@ export function SlotPicker({
     );
 
   return (
-    <div className="flex flex-col gap-4">
+    <div className="flex min-w-0 flex-col gap-4">
       {picked.map((slot) => (
         <input key={slot} type="hidden" name="slot" value={slot} />
       ))}
-      <fieldset className="flex flex-col gap-2">
+      <fieldset className="flex min-w-0 flex-col gap-2">
         <legend className="sr-only">{labels.days}</legend>
         <div className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0">
           {days.map((item) => (
@@ -91,7 +91,7 @@ export function SlotPicker({
       </fieldset>
 
       {current && (
-        <fieldset className="flex flex-col gap-2.5">
+        <fieldset className="flex min-w-0 flex-col gap-2.5">
           <legend className="mb-2.5 text-[15px] font-semibold">{current.long}</legend>
           <span className="sr-only">{labels.hours}</span>
           <div className="grid grid-cols-3 gap-2.5">
