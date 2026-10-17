@@ -2445,6 +2445,63 @@ Conventions :
 | `talent.profile.save` | Enregistrer |
 | `talent.profile.saved` | Profil enregistré. |
 | `talent.profile.autosaved` | Enregistré automatiquement |
+| `talent.profile.phone.title` | Mon profil |
+| `talent.profile.phone.back` | Retour à Mon espace |
+| `talent.profile.phone.backProfile` | Retour à mon profil |
+| `talent.profile.phone.photo.change` | Changer la photo |
+| `talent.profile.phone.photo.title` | Photo de profil |
+| `talent.profile.phone.photo.close` | Fermer |
+| `talent.profile.phone.photo.take` | Prendre une photo |
+| `talent.profile.phone.photo.choose` | Choisir dans la galerie |
+| `talent.profile.phone.photo.remove` | Retirer la photo |
+| `talent.profile.phone.photo.never` | Jamais utilisée pour le matching. |
+| `talent.profile.phone.photo.zoom` | Agrandir la photo |
+| `talent.profile.phone.photo.cancel` | Annuler |
+| `talent.profile.phone.photo.save` | Enregistrer la photo |
+| `talent.profile.phone.photo.empty` | Choisissez ou prenez une photo pour la recadrer. |
+| `talent.profile.phone.photo.drag` | Faites glisser la photo pour la centrer. |
+| `talent.profile.phone.photo.error.type` | Ce fichier n'est pas une image JPEG, PNG ou WebP. |
+| `talent.profile.phone.photo.error.size` | Cette image est trop lourde. Essayez-en une autre. |
+| `talent.profile.phone.photo.error.photo` | La photo n'a pas pu être envoyée. Réessayez. |
+| `talent.profile.phone.photo.saved` | Photo enregistrée. |
+| `talent.profile.phone.photo.removed` | Photo retirée. |
+| `talent.profile.phone.build.title` | Construire mon profil |
+| `talent.profile.phone.build.count` | {done} étapes sur {total} |
+| `talent.profile.phone.build.add` | Ajouter |
+| `talent.profile.phone.build.done` | Fait |
+| `talent.profile.phone.build.step.photo` | Photo |
+| `talent.profile.phone.build.step.headline` | Titre et métier visé |
+| `talent.profile.phone.build.step.bio` | Bio |
+| `talent.profile.phone.build.step.experiences` | Expériences |
+| `talent.profile.phone.build.step.skills` | Compétences |
+| `talent.profile.phone.build.step.education` | Formation |
+| `talent.profile.phone.headline.label` | Titre |
+| `talent.profile.phone.headline.placeholder` | Ex. : Analyste de données |
+| `talent.profile.phone.bio.label` | Bio |
+| `talent.profile.phone.bio.hint` | ce que les recruteurs lisent en premier |
+| `talent.profile.phone.bio.placeholder` | En deux ou trois phrases : ce que vous faites et ce que vous cherchez. |
+| `talent.profile.phone.bio.counter` | {count} / {max} |
+| `talent.profile.phone.bio.ai` | M'aider à l'écrire |
+| `talent.profile.phone.bio.aiSoon` | Bientôt disponible |
+| `talent.profile.phone.status.saved` | Enregistré |
+| `talent.profile.phone.status.saving` | Enregistrement… |
+| `talent.profile.phone.status.error` | Non enregistré, réessayez |
+| `talent.profile.phone.status.idle` | Enregistré au fil de la saisie |
+| `talent.profile.phone.rows.label` | Parties du profil |
+| `talent.profile.phone.rows.experiences` | Expériences |
+| `talent.profile.phone.rows.experiencesCount` | {count, plural, =0 {Ajouter un poste} one {# poste} other {# postes}} |
+| `talent.profile.phone.rows.education` | Formation |
+| `talent.profile.phone.rows.educationCount` | {count, plural, =0 {Ajouter un diplôme} one {# diplôme} other {# diplômes}} |
+| `talent.profile.phone.rows.skills` | Compétences |
+| `talent.profile.phone.rows.skillsCount` | {count, plural, =0 {Ajouter une compétence} one {# compétence} other {# compétences}} |
+| `talent.profile.phone.rows.languages` | Langues |
+| `talent.profile.phone.rows.languagesEmpty` | Ajouter une langue |
+| `talent.profile.phone.rows.place` | Lieu et préférences |
+| `talent.profile.phone.rows.placeEmpty` | Ajouter vos préférences |
+| `talent.profile.phone.rows.identity` | Identité |
+| `talent.profile.phone.rows.visibility` | Visibilité |
+| `talent.profile.phone.rows.import` | Importer mon CV |
+| `talent.profile.phone.preview` | Voir mon profil côté recruteur |
 | `talent.profile.unsaved` | Modifications non enregistrées |
 | `talent.profile.edit` | Modifier |
 | `talent.profile.add` | Ajouter |

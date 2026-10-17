@@ -713,6 +713,7 @@ model User {
   talentProfile       TalentProfile?
   diagnostics         CareerDiagnostic[]
   diagnosticDraft     CareerDiagnosticDraft?
+  profilePhoto        ProfilePhoto?
   savedJobs           SavedJob[]
   applicationDrafts   ApplicationDraft[]
   jobsCreated         Job[]                     @relation("JobCreator")
@@ -2022,4 +2023,17 @@ model LicenseLink {
   disabledAt DateTime?
   licenses   License[]
   createdAt  DateTime     @default(now())
+}
+
+/// Profile photo (docs/ux-mobile-talent, prompt 6, screen 26): cropped and resized in the browser
+/// (square JPEG), kept here and served at /api/photo/{token}: an unguessable address, renewed at
+/// each change, shown where the person's avatar or CV is shown. Never used for matching (CLAUDE.md,
+/// golden rule 4).
+model ProfilePhoto {
+  userId      String   @id
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token       String   @unique
+  contentType String
+  bytes       Bytes
+  updatedAt   DateTime @updatedAt
 }

@@ -3090,6 +3090,81 @@
       "save": "Enregistrer",
       "saved": "Profil enregistré.",
       "autosaved": "Enregistré automatiquement",
+      "phone": {
+        "title": "Mon profil",
+        "back": "Retour à Mon espace",
+        "backProfile": "Retour à mon profil",
+        "photo": {
+          "change": "Changer la photo",
+          "title": "Photo de profil",
+          "close": "Fermer",
+          "take": "Prendre une photo",
+          "choose": "Choisir dans la galerie",
+          "remove": "Retirer la photo",
+          "never": "Jamais utilisée pour le matching.",
+          "zoom": "Agrandir la photo",
+          "cancel": "Annuler",
+          "save": "Enregistrer la photo",
+          "empty": "Choisissez ou prenez une photo pour la recadrer.",
+          "drag": "Faites glisser la photo pour la centrer.",
+          "error": {
+            "type": "Ce fichier n'est pas une image JPEG, PNG ou WebP.",
+            "size": "Cette image est trop lourde. Essayez-en une autre.",
+            "photo": "La photo n'a pas pu être envoyée. Réessayez."
+          },
+          "saved": "Photo enregistrée.",
+          "removed": "Photo retirée."
+        },
+        "build": {
+          "title": "Construire mon profil",
+          "count": "{done} étapes sur {total}",
+          "add": "Ajouter",
+          "done": "Fait",
+          "step": {
+            "photo": "Photo",
+            "headline": "Titre et métier visé",
+            "bio": "Bio",
+            "experiences": "Expériences",
+            "skills": "Compétences",
+            "education": "Formation"
+          }
+        },
+        "headline": {
+          "label": "Titre",
+          "placeholder": "Ex. : Analyste de données"
+        },
+        "bio": {
+          "label": "Bio",
+          "hint": "ce que les recruteurs lisent en premier",
+          "placeholder": "En deux ou trois phrases : ce que vous faites et ce que vous cherchez.",
+          "counter": "{count} / {max}",
+          "ai": "M'aider à l'écrire",
+          "aiSoon": "Bientôt disponible"
+        },
+        "status": {
+          "saved": "Enregistré",
+          "saving": "Enregistrement…",
+          "error": "Non enregistré, réessayez",
+          "idle": "Enregistré au fil de la saisie"
+        },
+        "rows": {
+          "label": "Parties du profil",
+          "experiences": "Expériences",
+          "experiencesCount": "{count, plural, =0 {Ajouter un poste} one {# poste} other {# postes}}",
+          "education": "Formation",
+          "educationCount": "{count, plural, =0 {Ajouter un diplôme} one {# diplôme} other {# diplômes}}",
+          "skills": "Compétences",
+          "skillsCount": "{count, plural, =0 {Ajouter une compétence} one {# compétence} other {# compétences}}",
+          "languages": "Langues",
+          "languagesEmpty": "Ajouter une langue",
+          "place": "Lieu et préférences",
+          "placeEmpty": "Ajouter vos préférences",
+          "identity": "Identité",
+          "visibility": "Visibilité",
+          "import": "Importer mon CV"
+        },
+        "preview": "Voir mon profil côté recruteur"
+      },
       "unsaved": "Modifications non enregistrées",
       "edit": "Modifier",
       "add": "Ajouter",

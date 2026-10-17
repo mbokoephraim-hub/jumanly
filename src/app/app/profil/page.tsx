@@ -3,6 +3,9 @@ import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { Icon, type IconName } from "@/components/brand/icon";
+import { PhoneTitle } from "@/components/layout/phone-title";
+import { PhoneOverview, phoneParts, type PhonePart } from "@/components/profile/phone-overview";
+import { PhotoEditor } from "@/components/profile/photo-editor";
 import { Pattern } from "@/components/site/marketing";
 import {
   Alert,
@@ -113,6 +116,27 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
     preferences: "#preferences",
   };
   const notice = { section: one(params.section), ok: one(params.ok), error: one(params.erreur) };
+  // Prompt 6 (screen 25): on a phone the overview comes first and each part opens alone; after a
+  // save the part just saved stays open. The desktop keeps every part on one page.
+  const isPart = (value?: string): value is PhonePart => phoneParts.includes(value as PhonePart);
+  const partie = isPart(one(params.partie))
+    ? (one(params.partie) as PhonePart)
+    : isPart(notice.section)
+      ? notice.section
+      : undefined;
+  const only = (...ids: PhonePart[]) => (partie && ids.includes(partie) ? "" : "max-md:hidden");
+  const partTitles: Record<PhonePart, string> = {
+    identite: t("talent.profile.identity.title"),
+    resume: t("talent.profile.summary.title"),
+    experiences: t("talent.profile.experience.title"),
+    formations: t("talent.profile.education.title"),
+    competences: t("talent.profile.skills.title"),
+    langues: t("talent.profile.languages.title"),
+    preferences: t("talent.profile.availability.title"),
+    visibilite: t("talent.profile.tabs.visibility"),
+  };
+  const photoOpen = one(params.photo) === "1";
+  const photoError = one(params.erreur);
 
   const visibilityChip = {
     private: "bg-gris-clair",
@@ -122,20 +146,60 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
 
   return (
     <div className="flex flex-col gap-5">
+      {partie ? (
+        <PhoneTitle
+          back="/app/profil"
+          backLabel={t("talent.profile.phone.backProfile")}
+          title={partTitles[partie]}
+        />
+      ) : (
+        <PhoneTitle
+          back="/app"
+          backLabel={t("talent.profile.phone.back")}
+          title={t("talent.profile.phone.title")}
+        />
+      )}
+      {(notice.ok === "photo" || notice.ok === "photo-retiree") && (
+        <Alert
+          tone="success"
+          title={t(
+            notice.ok === "photo"
+              ? "talent.profile.phone.photo.saved"
+              : "talent.profile.phone.photo.removed",
+          )}
+        />
+      )}
+      {!partie && <PhoneOverview profile={profile} />}
       {/* Admin v4, étape 3 (inspired by Patreon's profile pages): a thin cover, the avatar, the
           name and one line of facts, then the parts of the profile as horizontal tabs. */}
       <section
         aria-labelledby="profil-titre"
-        className="overflow-hidden rounded-[24px] bg-blanc ring-1 ring-sapin/6"
+        className="overflow-hidden rounded-[24px] bg-blanc ring-1 ring-sapin/6 max-md:hidden"
       >
         <div aria-hidden className="jm-profile-cover h-20 lg:h-24" />
         <div className="flex flex-wrap items-end gap-x-4 gap-y-3 px-5 pt-3 lg:px-6">
-          <span
-            aria-hidden
-            className="-mt-12 grid size-[76px] shrink-0 place-items-center self-start rounded-full bg-lime text-[24px] font-semibold text-sapin ring-4 ring-blanc lg:size-[84px]"
+          <Link
+            href="/app/profil?photo=1"
+            aria-label={t("talent.profile.phone.photo.change")}
+            className="-mt-12 shrink-0 self-start rounded-full ring-4 ring-blanc"
           >
-            {initials(user.name)}
-          </span>
+            {profile.user.image ? (
+              // A small square served with a long cache: next/image has nothing to add.
+              // eslint-disable-next-line @next/next/no-img-element
+              <img
+                src={profile.user.image}
+                alt=""
+                className="size-[76px] rounded-full object-cover lg:size-[84px]"
+              />
+            ) : (
+              <span
+                aria-hidden
+                className="grid size-[76px] place-items-center rounded-full bg-lime text-[24px] font-semibold text-sapin lg:size-[84px]"
+              >
+                {initials(user.name)}
+              </span>
+            )}
+          </Link>
           <div className="flex min-w-0 flex-1 flex-col gap-0.5">
             <h1 id="profil-titre" className="text-[12.5px] leading-4 text-ardoise">
               {t("talent.profile.title")}
@@ -199,7 +263,7 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
           </ul>
         </nav>
       </section>
-      {one(params.import) !== undefined && (
+      {one(params.import) !== undefined && !partie && (
         <Alert
           tone="success"
           title={t("ai.cvImport.done", { count: Number(one(params.import)) || 0 })}
@@ -207,16 +271,30 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
       )}
       <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
         <div className="flex min-w-0 flex-col gap-5">
-          <Identity profile={profile} notice={notice} />
-          <Summary profile={profile} notice={notice} />
-          <Experiences profile={profile} notice={notice} />
-          <Educations profile={profile} notice={notice} />
-          <Skills profile={profile} notice={notice} />
-          <Languages profile={profile} notice={notice} />
-          <Preferences profile={profile} notice={notice} />
+          <div className={only("identite")}>
+            <Identity profile={profile} notice={notice} />
+          </div>
+          <div className={only("resume")}>
+            <Summary profile={profile} notice={notice} />
+          </div>
+          <div className={only("experiences")}>
+            <Experiences profile={profile} notice={notice} />
+          </div>
+          <div className={only("formations")}>
+            <Educations profile={profile} notice={notice} />
+          </div>
+          <div className={only("competences")}>
+            <Skills profile={profile} notice={notice} />
+          </div>
+          <div className={only("langues")}>
+            <Languages profile={profile} notice={notice} />
+          </div>
+          <div className={only("preferences")}>
+            <Preferences profile={profile} notice={notice} />
+          </div>
         </div>
         <aside className="flex flex-col gap-5 max-xl:-order-1 xl:sticky xl:top-[84px]">
-          <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5">
+          <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5 max-md:hidden">
             <div className="flex items-center gap-4">
               <ProgressRing
                 value={percent}
@@ -250,9 +328,13 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
               </a>
             )}
           </section>
-          <RecruiterPreview profile={profile} />
-          <Visibility profile={profile} notice={notice} />
-          <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5">
+          <div className={only("visibilite")}>
+            <RecruiterPreview profile={profile} />
+          </div>
+          <div className={only("visibilite")}>
+            <Visibility profile={profile} notice={notice} />
+          </div>
+          <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5 max-md:hidden">
             <p className="flex items-center gap-3 text-[15px] font-bold">
               <span
                 aria-hidden
@@ -275,6 +357,66 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
           </section>
         </aside>
       </div>
+      {photoOpen && (
+        // Screen 26: a sheet over the profile on a phone, a dialog on a computer. Closing goes back
+        // to the profile, so the sheet works without JavaScript.
+        <div className="fixed inset-0 z-[60] flex items-end justify-center md:items-center md:p-6">
+          <Link
+            href="/app/profil"
+            aria-hidden
+            tabIndex={-1}
+            className="absolute inset-0 bg-sapin/55"
+          />
+          <section
+            role="dialog"
+            aria-modal="true"
+            aria-labelledby="photo-titre"
+            className="relative flex max-h-[94dvh] w-full flex-col gap-4 overflow-y-auto rounded-t-[28px] bg-creme px-5 pt-3 md:max-w-[440px] md:rounded-[28px]"
+          >
+            <span
+              aria-hidden
+              className="mx-auto block h-1.5 w-10 rounded-full bg-brume md:hidden"
+            />
+            <div className="flex items-center justify-between gap-3">
+              <h2 id="photo-titre" className="text-[26px] font-bold tracking-[-0.02em]">
+                {t("talent.profile.phone.photo.title")}
+              </h2>
+              <Link
+                href="/app/profil"
+                aria-label={t("talent.profile.phone.photo.close")}
+                className="grid size-12 shrink-0 place-items-center rounded-full bg-blanc shadow-douce"
+              >
+                <Icon name="fermer" className="size-5" />
+              </Link>
+            </div>
+            {photoError && (
+              <Alert
+                tone="error"
+                title={t(
+                  photoError === "type" || photoError === "size"
+                    ? `talent.profile.phone.photo.error.${photoError}`
+                    : "talent.profile.phone.photo.error.photo",
+                )}
+              />
+            )}
+            <PhotoEditor
+              current={profile.user.image ?? undefined}
+              hasPhoto={Boolean(profile.user.image)}
+              labels={{
+                take: t("talent.profile.phone.photo.take"),
+                choose: t("talent.profile.phone.photo.choose"),
+                remove: t("talent.profile.phone.photo.remove"),
+                never: t("talent.profile.phone.photo.never"),
+                zoom: t("talent.profile.phone.photo.zoom"),
+                cancel: t("talent.profile.phone.photo.cancel"),
+                save: t("talent.profile.phone.photo.save"),
+                empty: t("talent.profile.phone.photo.empty"),
+                drag: t("talent.profile.phone.photo.drag"),
+              }}
+            />
+          </section>
+        </div>
+      )}
     </div>
   );
 }
@@ -410,16 +552,32 @@ async function Identity({ profile, notice }: SectionProps) {
   return (
     <Section id="identite" title={t("identity.title")} icon="profil" notice={notice}>
       <div className="flex items-center gap-4 rounded-[18px] bg-creme p-4">
-        <span
-          aria-hidden
-          className="flex size-14 shrink-0 items-center justify-center rounded-full bg-lime text-lg font-bold"
-        >
-          {initials(profile.user.name)}
-        </span>
-        <span className="flex flex-col gap-0.5">
+        {profile.user.image ? (
+          // eslint-disable-next-line @next/next/no-img-element
+          <img
+            src={profile.user.image}
+            alt=""
+            className="size-14 shrink-0 rounded-full object-cover"
+          />
+        ) : (
+          <span
+            aria-hidden
+            className="flex size-14 shrink-0 items-center justify-center rounded-full bg-lime text-lg font-bold"
+          >
+            {initials(profile.user.name)}
+          </span>
+        )}
+        <span className="flex min-w-0 flex-1 flex-col gap-0.5">
           <span className="text-sm font-semibold">{t("identity.photo.text")}</span>
           <span className="text-xs text-ardoise">{t("identity.photo.hint")}</span>
         </span>
+        <Link
+          href="/app/profil?photo=1"
+          className="flex h-9 shrink-0 items-center gap-1.5 rounded-pill bg-blanc px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
+        >
+          <Icon name="edit" className="size-3.5" />
+          {t(profile.user.image ? "identity.photo.change" : "identity.photo.upload")}
+        </Link>
       </div>
       <form action={saveIdentity} className="grid gap-4 sm:grid-cols-2">
         <TextField

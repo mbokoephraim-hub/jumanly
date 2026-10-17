@@ -1,5 +1,6 @@
 "use server";
 
+import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import type { z } from "zod";
 import { requireUser } from "@/server/auth/session";
@@ -20,7 +21,9 @@ import {
   splitList,
   summarySchema,
   contractPreferences,
+  introSchema,
 } from "@/server/services/profile";
+import { PhotoError, removePhoto, savePhoto } from "@/server/services/profile-photo";
 
 /** Profile sections, also the anchors of /app/profil. */
 type Section =
@@ -256,4 +259,50 @@ export async function saveVisibility(formData: FormData) {
     data: { visibility: visibility as "private" | "recruiters" | "anonymous" },
   });
   back("visibilite", { ok: "1", visibilite: visibility });
+}
+
+export type IntroState = { status: "idle" | "saved" | "error"; savedAt?: number };
+
+/**
+ * Title and bio of the phone profile (prompt 6, screen 25), saved without leaving the page: the
+ * form reports « Enregistré » once the server has answered.
+ */
+export async function saveIntroAction(_previous: IntroState, formData: FormData) {
+  const { profile } = await profileOf();
+  const parsed = introSchema.safeParse(fields(formData));
+  if (!parsed.success) return { status: "error" } satisfies IntroState;
+  await db.talentProfile.update({
+    where: { id: profile.id },
+    data: { headline: parsed.data.headline || null, summary: parsed.data.summary || null },
+  });
+  await refreshCompleteness(db, profile.id);
+  revalidatePath("/app/profil");
+  return { status: "saved", savedAt: Date.now() } satisfies IntroState;
+}
+
+/**
+ * The photo of screen 26: the square JPEG cropped in the browser or, without JavaScript, the file
+ * picked by the camera or the gallery field (both are named `photo`, one of them is empty).
+ */
+export async function savePhotoAction(formData: FormData) {
+  const { user } = await profileOf();
+  const file = formData
+    .getAll("photo")
+    .find((entry): entry is File => entry instanceof File && entry.size > 0);
+  if (!file) redirect("/app/profil?photo=1&erreur=photo");
+  try {
+    await savePhoto(db, user.id, new Uint8Array(await file.arrayBuffer()));
+  } catch (error) {
+    if (error instanceof PhotoError) redirect(`/app/profil?photo=1&erreur=${error.code}`);
+    throw error;
+  }
+  revalidatePath("/app", "layout");
+  redirect("/app/profil?ok=photo");
+}
+
+export async function removePhotoAction() {
+  const { user } = await profileOf();
+  await removePhoto(db, user.id);
+  revalidatePath("/app", "layout");
+  redirect("/app/profil?ok=photo-retiree");
 }
