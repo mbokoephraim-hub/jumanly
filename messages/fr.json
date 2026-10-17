@@ -2070,8 +2070,14 @@
         "code": "Activer un code de licence"
       },
       "reminder": "Bon à savoir : vos candidatures sont toujours gratuites, quelle que soit votre formule.",
+      "country": {
+        "eyebrow": "Étape 1 sur 3",
+        "title": "Dans quel pays vivez-vous ?",
+        "next": "Continuer",
+        "later": "Plus tard"
+      },
       "step1": {
-        "eyebrow": "Étape 1 sur 2 · moins d'une minute",
+        "eyebrow": "Étape 2 sur 3",
         "title": "Qu'est-ce qui vous amène sur Jumanly ?",
         "hint": "Modifiable à tout moment.",
         "later": "Plus tard",
@@ -2091,8 +2097,20 @@
           "line": "Postes à responsabilité"
         }
       },
+      "places": {
+        "eyebrow": "Étape 3 sur 3",
+        "title": "Où souhaitez-vous travailler ?",
+        "hint": "Plusieurs pays possibles.",
+        "remote": {
+          "text": "Télétravail accepté",
+          "line": "Offres à distance de tous pays"
+        },
+        "back": "Retour",
+        "next": "Voir mes offres",
+        "details": "Préciser mes métiers et compétences"
+      },
       "step2": {
-        "eyebrow": "Étape 2 sur 2 · tout est facultatif",
+        "eyebrow": "Facultatif · tout est modifiable",
         "title": "Quelques précisions pour vos offres",
         "titles": {
           "label": "Métiers recherchés",
@@ -2101,14 +2119,10 @@
         "skills": {
           "label": "Vos compétences"
         },
-        "locations": {
-          "label": "Où souhaitez-vous travailler ?",
-          "placeholder": "Ex. : Kinshasa"
-        },
         "preferences": "Préférences (contrat, télétravail)",
         "skip": "Passer",
         "next": "Voir mes offres",
-        "back": "Revenir à l'étape 1"
+        "back": "Revenir aux lieux"
       }
     },
     "org": {
@@ -2142,6 +2156,24 @@
       "privacy": "Les talents choisissent la visibilité de leur profil. Vous voyez le profil complet des personnes qui postulent à vos offres.",
       "personal": "Vous avez aussi un espace personnel de talent. Passez de l'un à l'autre avec le sélecteur d'espace."
     }
+  },
+  "places": {
+    "region": {
+      "central_africa": "Afrique centrale",
+      "west_africa": "Afrique de l'Ouest",
+      "other_africa": "Reste de l'Afrique",
+      "world": "Hors d'Afrique"
+    },
+    "search": "Rechercher un pays",
+    "none": "Aucun pays ne correspond.",
+    "wholeCountry": "Tout le pays",
+    "citiesAndProvinces": "Villes et provinces",
+    "cities": "Villes",
+    "more": "Plus de lieux",
+    "add": "Ajouter un pays",
+    "remove": "Retirer {country}",
+    "close": "Fermer",
+    "empty": "Choisissez au moins un pays."
   },
   "activate": {
     "seo": {
@@ -3616,6 +3648,7 @@
           "value": "{score} % et plus"
         },
         "verified": "Entreprises vérifiées uniquement",
+        "places": "Mes lieux de travail",
         "any": "Peu importe"
       },
       "sort": {

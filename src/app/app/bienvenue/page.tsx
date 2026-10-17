@@ -5,16 +5,25 @@ import { getMessages, getTranslations } from "next-intl/server";
 import { SkillsInput } from "@/components/app/skills-input";
 import { Character } from "@/components/brand";
 import { Icon } from "@/components/brand/icon";
+import { CountryPicker } from "@/components/places/country-picker";
+import { WorkPlaces } from "@/components/places/work-places";
 import { Alert, Button, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { pickMessages } from "@/i18n/client-messages";
 import { homeFocus, homeFocuses } from "@/lib/welcome";
 import { contractPreferences } from "@/server/services/profile";
 import { requireUser } from "@/server/auth/session";
-import { finishWelcome, saveWelcomeDetails, saveWelcomeGoal } from "@/server/actions/welcome";
+import {
+  finishWelcome,
+  saveWelcomeCountry,
+  saveWelcomeDetails,
+  saveWelcomeGoal,
+  saveWelcomePlaces,
+} from "@/server/actions/welcome";
 import { db } from "@/server/db";
 import { limit, resolvePlan } from "@/server/entitlements";
 import { ownedOrganization } from "@/server/services/accounts";
+import { listCountries, listLocalities } from "@/server/services/places";
 import { readSignupFlow } from "@/server/signup-flow";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -23,8 +32,9 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Step 6 · first steps, for the owner of a new organization, or for a talent the goal screen of
- * docs/ux-mobile-talent (screens 01 and 02): one question, then optional details.
+ * Step 6 · first steps, for the owner of a new organization, or for a talent three short screens
+ * (docs/ux-mobile-talent, V8 § B1): the country where they live (81), their goal (01), where they
+ * want to work (82); then, if they wish, optional details (02).
  */
 export default async function WelcomePage({ searchParams }: PageProps<"/app/bienvenue">) {
   const user = await requireUser("/app/bienvenue");
@@ -139,7 +149,15 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
     where: { userId: user.id },
     include: { skills: { include: { skill: { select: { name: true } } } } },
   });
-  const step = (await searchParams).etape === "2" ? 2 : 1;
+  const { etape, seul } = await searchParams;
+  const step =
+    etape === "objectif"
+      ? "goal"
+      : etape === "lieux"
+        ? "places"
+        : etape === "2" || etape === "precisions"
+          ? "details"
+          : "country";
   const current = homeFocus(profile?.goal);
   const choice = current.personalised ? current.focus : "job";
   // Fixed at the bottom of a phone, in the flow of the page from a tablet up.
@@ -148,7 +166,112 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
   const focusTiles = { job: "bg-lime", skills: "bg-neon", career: "bg-menthe-claire" } as const;
   const focusIcons = { job: "jobs", skills: "diplome", career: "objectif" } as const;
 
-  if (step === 1) {
+  const messages = await getMessages();
+
+  if (step === "country") {
+    const countries = await listCountries(db);
+    const known = countries.some((country) => country.code === user.country);
+    return (
+      <div className="mx-auto flex w-full max-w-[560px] flex-col gap-5 pb-24 md:pb-0">
+        {resume}
+        <form action={saveWelcomeCountry} className="flex flex-col gap-3">
+          <div className="flex flex-col gap-3">
+            <div className="flex items-center justify-between gap-3">
+              <p className="text-[12px] font-semibold text-feuille-fonce">
+                {t("talent.country.eyebrow")}
+              </p>
+              <Button type="submit" formAction={finishWelcome} variant="link" size="S">
+                {t("talent.country.later")}
+              </Button>
+            </div>
+            <h1 className="text-[24px] leading-[1.2] font-bold tracking-tight">
+              {t("talent.country.title")}
+            </h1>
+          </div>
+          <NextIntlClientProvider messages={pickMessages(messages, ["places"])}>
+            <CountryPicker countries={countries} initial={known ? user.country : "CD"} />
+          </NextIntlClientProvider>
+          <div className={bar}>
+            <Button
+              type="submit"
+              variant="principal"
+              size="L"
+              arrow
+              className="flex-1 md:flex-none"
+            >
+              {t("talent.country.next")}
+            </Button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+
+  if (step === "places") {
+    const [countries, localities] = await Promise.all([listCountries(db), listLocalities(db)]);
+    const chosen =
+      profile && profile.desiredCountries.length > 0
+        ? profile.desiredCountries
+        : user.country && countries.some((country) => country.code === user.country)
+          ? [user.country]
+          : [];
+    return (
+      <div className="mx-auto flex w-full max-w-[560px] flex-col gap-5 pb-24 md:pb-0">
+        {resume}
+        <div className="flex flex-col gap-3">
+          <p className="text-[12px] font-semibold text-feuille-fonce">
+            {t("talent.places.eyebrow")}
+          </p>
+          <h1 className="text-[24px] leading-[1.2] font-bold tracking-tight">
+            {t("talent.places.title")}
+          </h1>
+          <p className="text-[13.5px] text-ardoise">{t("talent.places.hint")}</p>
+        </div>
+        <form action={saveWelcomePlaces} className="flex flex-col gap-3">
+          <NextIntlClientProvider messages={pickMessages(messages, ["places"])}>
+            <WorkPlaces
+              countries={countries}
+              localities={localities}
+              initialCountries={chosen}
+              initialPlaces={profile?.desiredLocations ?? []}
+              initialRemote={profile?.remotePreferences.includes("remote") ?? false}
+              remoteLabel={t("talent.places.remote.text")}
+              remoteLine={t("talent.places.remote.line")}
+            />
+          </NextIntlClientProvider>
+          <Button
+            type="submit"
+            name="then"
+            value="details"
+            variant="link"
+            size="S"
+            className="self-start text-feuille-fonce underline"
+          >
+            {t("talent.places.details")}
+          </Button>
+          <div className={bar}>
+            <Link
+              href="/app/bienvenue?etape=objectif"
+              className="inline-flex h-[52px] items-center justify-center rounded-pill bg-blanc px-6 text-[15px] font-semibold text-sapin shadow-douce focus-visible:shadow-[0_0_0_4px_rgb(166_242_107/0.9)] focus-visible:outline-none"
+            >
+              {t("talent.places.back")}
+            </Link>
+            <Button
+              type="submit"
+              variant="principal"
+              size="L"
+              arrow
+              className="flex-1 md:flex-none"
+            >
+              {t("talent.places.next")}
+            </Button>
+          </div>
+        </form>
+      </div>
+    );
+  }
+
+  if (step === "goal") {
     return (
       <div className="mx-auto flex w-full max-w-[560px] flex-col gap-5 pb-24 md:pb-0">
         {resume}
@@ -165,6 +288,8 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
           <p className="text-[14px] text-ardoise">{t("talent.step1.hint")}</p>
         </div>
         <form action={saveWelcomeGoal} className="flex flex-col gap-3">
+          {/* « Modifier mon objectif » from the home page goes straight back to it. */}
+          {seul === "1" && <input type="hidden" name="only" value="1" />}
           <fieldset className="flex flex-col gap-3">
             <legend className="sr-only">{t("talent.step1.title")}</legend>
             {homeFocuses.map((focus) => (
@@ -227,7 +352,6 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
   const suggestions = (
     await db.skill.findMany({ select: { name: true }, orderBy: { name: "asc" } })
   ).map((skill) => skill.name);
-  const messages = await getMessages();
   const skills = profile?.skills.map((entry) => entry.skill.name) ?? [];
   const quick = suggestions.filter((name) => !skills.includes(name)).slice(0, 3);
   const tp = await getTranslations("talent.profile.preferences");
@@ -262,14 +386,6 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
             />
           </NextIntlClientProvider>
         </div>
-        <TextField
-          id="welcome-locations"
-          name="locations"
-          icon="localisation"
-          label={t("talent.step2.locations.label")}
-          placeholder={t("talent.step2.locations.placeholder")}
-          defaultValue={profile?.desiredLocations.join(", ") ?? ""}
-        />
         <details className="group rounded-[22px] bg-blanc shadow-douce">
           <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 px-5 text-[15px] font-semibold [&::-webkit-details-marker]:hidden">
             {t("talent.step2.preferences")}
@@ -313,7 +429,7 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
           </div>
         </details>
         <Link
-          href="/app/bienvenue"
+          href="/app/bienvenue?etape=lieux"
           className="self-start text-[14px] font-semibold text-feuille-fonce underline"
         >
           {t("talent.step2.back")}

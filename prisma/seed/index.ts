@@ -1,6 +1,6 @@
 /**
  * Database seed (`pnpm db:seed`).
- * Plans with their entitlement matrix and the skills reference run everywhere; the obviously fictional
+ * Plans with their entitlement matrix, the skills reference and the places run everywhere; the obviously fictional
  * demo dataset only runs in local and preview (CLAUDE.md § 11).
  */
 import { isInternalEnv } from "../../src/lib/env";
@@ -12,6 +12,7 @@ import { seedGroup } from "./group";
 import { seedIntelligence } from "./intelligence";
 import { seedLearnDomains, seedLearnPaths } from "./learn";
 import { seedPartner } from "./partners";
+import { seedPlaces } from "./places";
 import { seedPlans } from "./plans";
 import { seedSkills } from "./skills";
 import { seedUxScenario } from "./ux";
@@ -21,6 +22,7 @@ async function main() {
   try {
     await seedPlans(db);
     await seedSkills(db);
+    await seedPlaces(db);
     await seedIntelligence(db);
     if (isInternalEnv()) {
       await seedDemo(db);

@@ -2223,3 +2223,20 @@ toutes dans `docs/specifications.md`.
   `docs/ux-mobile-talent/retour-arriere/prompt-2bis-theme.sql`).
 - Ouverture de l'appli installée : `/ouverture` (écrans 57, 58), adresse de départ du manifeste.
 - Choix et écarts : `docs/decisions/2026-10-17-mobile-talent-navigation-v6.md`.
+
+## 2026-10-17 · Prompt 3 bis : pays avec drapeaux, villes et provinces (écrans 81 et 82)
+
+- Référentiel en base : `Country` (249 pays ISO 3166, nom en français, région) et `Locality` (villes et
+  provinces réelles, de la plus grande à la plus petite), migration `20261017115314_places`, données dans
+  `prisma/seed/places-data.ts`, chargées partout par le seed. Retour arrière :
+  `docs/ux-mobile-talent/retour-arriere/prompt-3bis-lieux.sql`.
+- Drapeaux SVG libres (flag-icons 7.2.3, MIT) dans `public/drapeaux/`.
+- Première connexion talent en trois écrans : pays (81, RD Congo en tête puis Afrique centrale, Afrique de
+  l'Ouest, reste de l'Afrique, hors d'Afrique, recherche sans accents), objectif (01), où travailler (82 :
+  plusieurs pays, « Tout le pays » ou villes et provinces, télétravail). Les précisions (métiers,
+  compétences, contrats) restent facultatives, accessibles depuis l'écran 82.
+- `TalentProfile.desiredCountries` (codes ISO) ; les lieux sont vérifiés contre le référentiel côté serveur.
+- Offres : filtre « Mes lieux de travail » (`/app/jobs?lieux=1`), ouvert après « Voir mes offres ».
+- La barre d'action fixe du téléphone restait dans le flux de la page (animation d'entrée gardant une
+  transformation) : l'entrée des pages utilise désormais `backwards`.
+- Choix et écarts : `docs/decisions/2026-10-17-mobile-talent-lieux.md`.

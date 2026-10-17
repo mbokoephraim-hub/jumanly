@@ -537,9 +537,11 @@
     will-change: transform;
   }
 
-  /* Entrée dans une page : les blocs arrivent l'un après l'autre (8 au plus). */
+  /* Entrée dans une page : les blocs arrivent l'un après l'autre (8 au plus). « backwards » et non
+     « both » : une transformation gardée après l'entrée empêcherait les barres d'action fixes du
+     téléphone de rester en bas de l'écran. */
   .jm-page > * {
-    animation: jm-page-in 0.28s var(--jm-elan) both;
+    animation: jm-page-in 0.28s var(--jm-elan) backwards;
   }
   .jm-page > :nth-child(2) {
     animation-delay: 40ms;

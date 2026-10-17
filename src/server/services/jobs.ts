@@ -1,6 +1,7 @@
 /** Public job offers (Jobs), read without an account (docs/specifications.md, partie 07 § 1). */
 import { z } from "zod";
 import type { ContractType, Prisma, PrismaClient, RemoteMode } from "@/generated/prisma/client";
+import { countryCode } from "@/server/matching/geo";
 
 export const JOBS_PER_PAGE = 12;
 
@@ -78,10 +79,21 @@ export const jobFiltersSchema = z.object({
   publie: optionalEnum(Object.keys(postedFilters) as [PostedFilter, ...PostedFilter[]]),
   /** "1": verified companies only. */
   verifiees: optionalEnum(["1"]),
+  /** "1": the places the talent chose (screen 82), resolved by the page into `places`. */
+  lieux: optionalEnum(["1"]),
   page: z.coerce.number().int().min(1).max(500).optional().catch(undefined),
 });
 
+/**
+ * Where the talent wants to work, as offers write it: each area is one country (its spellings in
+ * `Job.country`) and, if they picked some, its cities; `remote` adds the offers fully remote.
+ */
+export type JobPlaces = { areas: { countries: string[]; cities: string[] }[]; remote: boolean };
+
 export type JobFilters = z.infer<typeof jobFiltersSchema>;
+
+/** The filters of a search, plus the talent's places when « Mes lieux » is on. */
+export type JobQuery = JobFilters & { places?: JobPlaces };
 
 export function parseJobFilters(params: Record<string, string | string[] | undefined>): JobFilters {
   const flat = Object.fromEntries(
@@ -98,7 +110,7 @@ export function openJobWhere(now: Date): Prisma.JobWhereInput {
   return { status: "published", OR: [{ closesAt: null }, { closesAt: { gt: now } }] };
 }
 
-export function jobWhere(filters: JobFilters, now: Date): Prisma.JobWhereInput {
+export function jobWhere(filters: JobQuery, now: Date): Prisma.JobWhereInput {
   const and: Prisma.JobWhereInput[] = [openJobWhere(now)];
   if (filters.q) {
     and.push({
@@ -121,6 +133,20 @@ export function jobWhere(filters: JobFilters, now: Date): Prisma.JobWhereInput {
     and.push({ publishedAt: { gte: since } });
   }
   if (filters.verifiees) and.push({ organization: { verifiedAt: { not: null } } });
+  if (filters.places) {
+    const { areas, remote } = filters.places;
+    and.push({
+      OR: [
+        ...areas.map((area) => ({
+          country: { in: area.countries },
+          ...(area.cities.length > 0 && {
+            city: { in: area.cities, mode: "insensitive" as const },
+          }),
+        })),
+        ...(remote ? [{ remote: "remote" as const }] : []),
+      ],
+    });
+  }
   return { AND: and };
 }
 
@@ -154,7 +180,7 @@ const publicCardSelect = {
 
 export type PublicJobSummary = Prisma.JobGetPayload<{ select: typeof publicCardSelect }>;
 
-export async function searchJobs(db: PrismaClient, filters: JobFilters, now = new Date()) {
+export async function searchJobs(db: PrismaClient, filters: JobQuery, now = new Date()) {
   const where = jobWhere(filters, now);
   const page = filters.page ?? 1;
   const [total, jobs] = await Promise.all([
@@ -176,7 +202,7 @@ export async function searchJobs(db: PrismaClient, filters: JobFilters, now = ne
  */
 export async function matchingJobIds(
   db: PrismaClient,
-  filters: JobFilters,
+  filters: JobQuery,
   now = new Date(),
   take = 120,
 ): Promise<string[]> {
@@ -227,6 +253,44 @@ export async function listJobCountries(db: PrismaClient, now = new Date()): Prom
     orderBy: { country: "asc" },
   });
   return rows.map((row) => row.country);
+}
+
+/**
+ * Turns the places of a profile (ISO codes, place names) into the `places` filter. Offers name
+ * their country freely (« RD Congo »): each spelling in use is matched to its code. Offers only
+ * give a city, so a country where a province was picked is kept whole.
+ */
+export async function jobPlacesFor(
+  db: PrismaClient,
+  profile: {
+    desiredCountries: string[];
+    desiredLocations: string[];
+    remotePreferences: RemoteMode[];
+  },
+  now = new Date(),
+): Promise<JobPlaces | null> {
+  if (profile.desiredCountries.length === 0) return null;
+  const [spellings, localities] = await Promise.all([
+    listJobCountries(db, now),
+    db.locality.findMany({
+      where: {
+        countryCode: { in: profile.desiredCountries },
+        name: { in: profile.desiredLocations },
+      },
+      select: { countryCode: true, name: true, kind: true },
+    }),
+  ]);
+  return {
+    areas: profile.desiredCountries.map((code) => {
+      const picked = localities.filter((place) => place.countryCode === code);
+      const wholeCountry = picked.length === 0 || picked.some((place) => place.kind === "province");
+      return {
+        countries: spellings.filter((value) => countryCode(value) === code),
+        cities: wholeCountry ? [] : picked.map((place) => place.name),
+      };
+    }),
+    remote: profile.remotePreferences.includes("remote"),
+  };
 }
 
 export async function latestJobs(db: PrismaClient, take = 3, now = new Date()) {
