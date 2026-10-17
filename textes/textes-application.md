@@ -5024,6 +5024,11 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `connect.invite.error` | Choisissez un créneau à venir. |
 | `connect.invite.slot` | Créneau {number} |
 | `connect.thread.application` | Candidature · {job} |
+| `connect.pill.pending` | Entretien proposé · {count, plural, one {# créneau} other {# créneaux}} |
+| `connect.pill.reschedule` | Autres moments proposés |
+| `connect.pill.confirmed` | Entretien confirmé · {date} à {time} |
+| `connect.pill.closed` | Entretien clos |
+| `connect.pill.see` | Voir |
 | `connect.templates.use` | Utiliser un modèle |
 | `connect.file.kind` | PDF |
 | `connect.file.meta.cv` | CV · PDF |

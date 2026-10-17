@@ -28,6 +28,11 @@ Date : 17 octobre 2026.
 - **Bouton + des messages.** Créneau, mon CV, ma lettre, un document de Career, un lien. Le talent
   n'envoie que ses propres documents ; le recruteur n'envoie jamais ceux du talent. La relance IA
   et « Écrire avec l'IA » sont des emplacements désactivés jusqu'au prompt 8.
+- **Conversation comme les écrans 24 et 51.** Sur téléphone, côté talent : la barre du haut porte
+  la flèche retour et le nom de l'interlocuteur (« Signaler » et « Bloquer » passent dans le menu
+  « ⋯ »), plus de carte blanche autour du fil, bulles blanches avec l'heure dedans. Une invitation
+  à un entretien devient une pastille « Entretien proposé · N créneaux · Voir » qui ouvre l'écran
+  de confirmation ; le recruteur garde la carte complète. Le bandeau de sécurité reste.
 - **Modèles Hire.** Nouvelle page `/app/hire/modeles` (entrée « Modèles » du menu Hire). Seuls les
   rôles qui gèrent les candidatures écrivent un modèle.
 

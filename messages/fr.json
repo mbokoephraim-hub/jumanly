@@ -6339,6 +6339,13 @@
       "error": "Choisissez un créneau à venir.",
       "slot": "Créneau {number}"
     },
+    "pill": {
+      "pending": "Entretien proposé · {count, plural, one {# créneau} other {# créneaux}}",
+      "reschedule": "Autres moments proposés",
+      "confirmed": "Entretien confirmé · {date} à {time}",
+      "closed": "Entretien clos",
+      "see": "Voir"
+    },
     "templates": {
       "use": "Utiliser un modèle"
     },

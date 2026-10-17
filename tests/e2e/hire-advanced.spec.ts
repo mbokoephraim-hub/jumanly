@@ -104,11 +104,19 @@ test("un entretien est planifié puis confirmé par le talent", async ({
     .getByRole("link", { name: /Groupe Démo/ })
     .first()
     .click();
-  const card = talent.locator('[id^="entretien-"]').last();
-  await card.getByRole("radio").first().check();
-  await card.getByRole("button", { name: "Accepter" }).click();
-  await expect(talent.getByText("Réponse envoyée.")).toBeVisible();
-  await expect(talent.locator('[id^="entretien-"]').last()).toContainText("Confirmé");
+  // Screen 24: the invitation is a pill in the conversation, answered on its own screen.
+  await talent.waitForURL(/\/app\/messages\/.+/);
+  const thread = talent.url();
+  await talent
+    .getByRole("link", { name: /Entretien proposé · 1 créneau · Voir/ })
+    .last()
+    .click();
+  await talent.getByRole("button", { name: "Confirmer ce créneau" }).click();
+  await expect(talent).toHaveURL(/ok=confirme/);
+  await talent.goto(thread);
+  await expect(
+    talent.getByRole("link", { name: /Entretien confirmé · .* · Voir/ }).last(),
+  ).toBeVisible();
   await talent.context().close();
 });
 

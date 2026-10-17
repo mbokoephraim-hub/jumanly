@@ -22,6 +22,7 @@ import { cx } from "@/lib/cx";
 import { ConversationList } from "@/components/connect/conversation-list";
 import { InterviewCard } from "@/components/connect/interview-card";
 import { ReportForm } from "@/components/connect/report-form";
+import { TopBarOverride } from "@/components/layout/top-bar-override";
 import {
   answerDocumentAction,
   blockAction,
@@ -323,6 +324,31 @@ export default async function ThreadPage({
 
   return (
     <div className="flex flex-col gap-5 lg:gap-6">
+      {!fromOrganization && (
+        <TopBarOverride>
+          <Link
+            href="/app/suivi?filtre=messages"
+            aria-label={t("thread.back")}
+            className="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-blanc/10"
+          >
+            <Icon name="chev-l" className="size-6" />
+          </Link>
+          <p className="min-w-0 flex-1 truncate text-[20px] font-semibold tracking-[-0.02em]">
+            {otherPersonName ?? otherName}
+          </p>
+          <details className="relative">
+            <summary
+              aria-label={t("thread.more")}
+              className="flex size-10 cursor-pointer list-none items-center justify-center rounded-full hover:bg-blanc/10 [&::-webkit-details-marker]:hidden"
+            >
+              <Icon name="more" className="size-5" />
+            </summary>
+            <div className="absolute top-full right-0 z-40 mt-2 flex w-[min(20rem,calc(100vw-2rem))] flex-wrap items-start gap-2 rounded-[18px] bg-blanc p-3 text-sapin shadow-menu ring-1 ring-sapin/8">
+              {actions}
+            </div>
+          </details>
+        </TopBarOverride>
+      )}
       <AppPageHeader
         eyebrow={t("eyebrow", { count: conversations.filter((item) => item.unread).length })}
         title={t("title")}
@@ -361,9 +387,17 @@ export default async function ThreadPage({
 
         <section
           aria-labelledby="thread-title"
-          className="flex min-w-0 flex-col overflow-hidden rounded-[24px] bg-blanc lg:h-[calc(100dvh-300px)] lg:min-h-[520px]"
+          className={cx(
+            "flex min-w-0 flex-col overflow-hidden rounded-[24px] bg-blanc lg:h-[calc(100dvh-300px)] lg:min-h-[520px]",
+            !fromOrganization && "max-md:-mx-4 max-md:rounded-none max-md:bg-transparent",
+          )}
         >
-          <header className="flex flex-wrap items-center gap-3 border-b border-brume px-4 py-3.5 lg:px-[22px] lg:py-4">
+          <header
+            className={cx(
+              "flex flex-wrap items-center gap-3 border-b border-brume px-4 py-3.5 lg:px-[22px] lg:py-4",
+              !fromOrganization && "max-md:hidden",
+            )}
+          >
             <Link
               href="/app/messages"
               aria-label={t("thread.back")}
@@ -454,8 +488,15 @@ export default async function ThreadPage({
                     hour: "2-digit",
                     minute: "2-digit",
                   });
+                  const interview =
+                    message.kind === "invitation"
+                      ? interviews.get(payload.interviewId ?? "")
+                      : undefined;
+                  // The talent answers an invitation on its own screen (screen 24): a pill here.
+                  const pill = !message.hiddenAt && !fromOrganization && Boolean(interview);
                   const card =
                     !message.hiddenAt &&
+                    !pill &&
                     (message.kind === "invitation" || message.kind === "document_request");
                   // Files, slots and decisions have their own cards, never a bubble (prompt 5).
                   const bare =
@@ -463,6 +504,11 @@ export default async function ThreadPage({
                     (message.kind === "file" ||
                       message.kind === "slot" ||
                       message.kind === "decision");
+                  const textBubble = !card && !bare && !pill && !message.hiddenAt;
+                  const waiting =
+                    !fromOrganization &&
+                    message.kind === "document_request" &&
+                    !payload.submittedAt;
                   return (
                     <li
                       key={message.id}
@@ -477,19 +523,29 @@ export default async function ThreadPage({
                       <div
                         className={cx(
                           "flex max-w-full flex-col gap-1",
-                          mine ? "items-end" : "items-start",
+                          pill ? "items-center" : mine ? "items-end" : "items-start",
                         )}
                       >
                         <div
                           className={cx(
                             "max-w-[min(460px,92%)] text-[13.5px] leading-5",
-                            bare
-                              ? cx("w-[460px]", message.kind === "decision" && "max-w-full!")
-                              : card
-                                ? "w-[460px] rounded-[18px] bg-blanc p-4 ring-[1.5px] ring-brume ring-inset"
-                                : mine
-                                  ? "rounded-[20px_20px_6px_20px] bg-sapin px-4 py-3 text-blanc"
-                                  : "rounded-[20px_20px_20px_6px] bg-creme px-4 py-3",
+                            pill
+                              ? "max-w-full!"
+                              : bare
+                                ? cx("w-[460px]", message.kind === "decision" && "max-w-full!")
+                                : card
+                                  ? cx(
+                                      "w-[460px] rounded-[22px] bg-blanc p-4 ring-inset",
+                                      waiting
+                                        ? "ring-2 shadow-douce ring-ambre"
+                                        : "ring-[1.5px] ring-brume",
+                                    )
+                                  : mine
+                                    ? "rounded-[22px_22px_6px_22px] bg-sapin px-4 py-3 text-[15px] leading-[22px] text-blanc"
+                                    : cx(
+                                        "rounded-[22px_22px_22px_6px] bg-creme px-4 py-3 text-[15px] leading-[22px]",
+                                        !fromOrganization && "max-md:bg-blanc max-md:shadow-douce",
+                                      ),
                           )}
                         >
                           {message.hiddenAt ? (
@@ -589,10 +645,38 @@ export default async function ThreadPage({
                                   </section>
                                 )}
                             </div>
-                          ) : message.kind === "invitation" &&
-                            interviews.get(payload.interviewId ?? "") ? (
+                          ) : pill && interview ? (
+                            <Link
+                              href={`/app/suivi/entretiens/${interview.id}`}
+                              className="inline-flex max-w-full items-center gap-2 rounded-pill bg-lime-clair px-4 py-2.5 text-[14px] text-sapin"
+                            >
+                              <Icon name="calendrier" className="size-4 shrink-0" />
+                              <span className="min-w-0">
+                                {interview.status === "pending"
+                                  ? t("pill.pending", { count: interview.slots.length })
+                                  : interview.status === "reschedule"
+                                    ? t("pill.reschedule")
+                                    : interview.status === "confirmed" && interview.startsAt
+                                      ? t("pill.confirmed", {
+                                          date: format.dateTime(interview.startsAt, {
+                                            weekday: "long",
+                                            day: "numeric",
+                                            timeZone: interview.timezone,
+                                          }),
+                                          time: format.dateTime(interview.startsAt, {
+                                            hour: "2-digit",
+                                            minute: "2-digit",
+                                            timeZone: interview.timezone,
+                                          }),
+                                        })
+                                      : t("pill.closed")}
+                                {" · "}
+                                <span className="font-semibold underline">{t("pill.see")}</span>
+                              </span>
+                            </Link>
+                          ) : message.kind === "invitation" && interview ? (
                             <InterviewCard
-                              interview={interviews.get(payload.interviewId ?? "")!}
+                              interview={interview}
                               conversationId={conversation.id}
                               talent={!fromOrganization}
                               now={now}
@@ -657,16 +741,23 @@ export default async function ThreadPage({
                                       value={conversation.id}
                                     />
                                     <input type="hidden" name="request" value={message.id} />
-                                    <Select
-                                      id={`document-${message.id}`}
-                                      name="document"
-                                      required
-                                      label={t("docRequest.chooseExisting")}
-                                      options={cvs.map((cv) => ({ value: cv.id, label: cv.title }))}
-                                    />
+                                    {cvs.length === 1 ? (
+                                      <input type="hidden" name="document" value={cvs[0]!.id} />
+                                    ) : (
+                                      <Select
+                                        id={`document-${message.id}`}
+                                        name="document"
+                                        required
+                                        label={t("docRequest.chooseExisting")}
+                                        options={cvs.map((cv) => ({
+                                          value: cv.id,
+                                          label: cv.title,
+                                        }))}
+                                      />
+                                    )}
                                     <button
                                       type="submit"
-                                      className={pillClass("lime", "sm", "self-start")}
+                                      className={pillClass("dark", "sm", "self-start")}
                                     >
                                       <Icon name="up" className="size-4" />
                                       {t("docRequest.send")}
@@ -701,19 +792,40 @@ export default async function ThreadPage({
                                   {t("document.view")}
                                 </a>
                               )}
+                              <span
+                                className={cx(
+                                  "mt-1 block text-right text-[12px]",
+                                  mine ? "text-blanc/70" : "text-ardoise",
+                                )}
+                              >
+                                {time}
+                              </span>
                             </>
                           )}
                         </div>
-                        <p className="text-[11px] text-ardoise">
-                          {mine ? time : `${author} · ${time}`}
-                        </p>
-                        {!mine && !fromOrganization && !message.hiddenAt && message.senderId && (
-                          <details className="text-xs">
-                            <summary className="cursor-pointer text-ardoise underline">
-                              {tr("title.message")}
-                            </summary>
-                            <ReportForm targetType="message" targetId={message.id} back={back} />
-                          </details>
+                        {!pill && (
+                          <div className="flex flex-wrap items-center gap-x-2 text-[11px] text-ardoise">
+                            {textBubble ? (
+                              !mine && <span>{author}</span>
+                            ) : (
+                              <span>{mine ? time : `${author} · ${time}`}</span>
+                            )}
+                            {!mine &&
+                              !fromOrganization &&
+                              !message.hiddenAt &&
+                              message.senderId && (
+                                <details className="text-xs">
+                                  <summary className="cursor-pointer list-none text-ardoise underline [&::-webkit-details-marker]:hidden">
+                                    {tr("title.message")}
+                                  </summary>
+                                  <ReportForm
+                                    targetType="message"
+                                    targetId={message.id}
+                                    back={back}
+                                  />
+                                </details>
+                              )}
+                          </div>
                         )}
                       </div>
                     </li>
@@ -959,7 +1071,7 @@ export default async function ThreadPage({
                 rows={1}
                 maxLength={MESSAGE_MAX}
                 placeholder={t("thread.composer.placeholder")}
-                className="field-sizing-content max-h-40 min-h-11 flex-1 resize-none rounded-[22px] bg-creme px-4 py-3 text-sm placeholder:text-ardoise focus-visible:outline-2 focus-visible:outline-sapin"
+                className="field-sizing-content max-h-40 min-h-11 flex-1 resize-none rounded-[22px] bg-creme px-4 py-3 text-sm placeholder:text-ardoise focus-visible:outline-2 focus-visible:outline-sapin max-md:bg-blanc max-md:text-[15px] max-md:shadow-douce"
               />
               <button
                 type="submit"
