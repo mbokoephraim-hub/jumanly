@@ -384,7 +384,9 @@ test("reprendre une formation depuis Apprendre", async ({ page }) => {
 async function openLesson(page: Page, name: RegExp) {
   const main = page.locator("main").filter({ visible: true });
   await main.getByRole("tab", { name: "Modules" }).click();
-  const unit = main.locator("details").filter({ has: page.getByRole("link", { name }) });
+  const unit = main
+    .locator("details")
+    .filter({ has: page.getByRole("link", { name, includeHidden: true }) });
   if (!(await unit.evaluate((element) => (element as HTMLDetailsElement).open)))
     await unit.locator("summary").click();
   await unit.getByRole("link", { name }).click();

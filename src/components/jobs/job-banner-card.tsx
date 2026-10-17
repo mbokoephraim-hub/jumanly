@@ -7,7 +7,7 @@ import { OrgBanner } from "./org-banner";
 
 /** The save button over the banner (`.fav` of screen 63). */
 export const jobCardSaveClass =
-  "jm-job-save absolute top-2.5 right-2.5 z-10 flex size-[38px] items-center justify-center rounded-full bg-blanc/92 text-sapin hover:bg-blanc";
+  "jm-job-save flex size-[38px] items-center justify-center rounded-full bg-blanc/92 text-sapin hover:bg-blanc";
 
 /** Fact of a job card (`.chip` of the mockups): place, contract, work mode. */
 const cardChip =
@@ -61,7 +61,7 @@ export function JobBannerCard({
       )}
     >
       <OrgBanner src={banner} className="h-24" />
-      {save}
+      {save && <div className="absolute top-2.5 right-2.5 z-10">{save}</div>}
       <div className="relative flex flex-col gap-1.5 px-4 pt-[30px] pb-3">
         <CompanyLogo
           name={company}
@@ -100,7 +100,7 @@ export function JobBannerCard({
           ))}
           {score && (
             <span
-              className={cx(cardChip, "bg-gradient-ai font-semibold text-blanc")}
+              className={cx(cardChip, "bg-gradient-ai font-semibold text-blanc!")}
               aria-label={score.aria}
             >
               <Icon name="intelligence" className="size-3 text-neon" />

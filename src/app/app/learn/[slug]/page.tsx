@@ -914,7 +914,13 @@ export default async function LearnCoursePage({
 
   return (
     <>
-      <AppPageHeader eyebrow={t("learn.player.eyebrow")} title={course.title} titleAs="p" />
+      {/* Phone (screen 14): the video first; the course is named above the lesson title. */}
+      <AppPageHeader
+        eyebrow={t("learn.player.eyebrow")}
+        title={course.title}
+        titleAs="p"
+        className="max-md:hidden"
+      />
       {alerts}
       <div className="grid grid-cols-1 gap-5 pb-28 md:pb-0 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="flex min-w-0 flex-col gap-4">

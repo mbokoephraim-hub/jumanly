@@ -47,7 +47,9 @@ export function LessonTabs({
   }, [tabs]);
 
   const onKeyDown = (event: KeyboardEvent<HTMLDivElement>) => {
-    const index = tabs.findIndex((tab) => tab.id === active);
+    // From the tab that has the focus (arrows move it and open that tab).
+    const focused = buttons.current.findIndex((button) => button === document.activeElement);
+    const index = focused >= 0 ? focused : tabs.findIndex((tab) => tab.id === active);
     const moves: Record<string, number> = {
       ArrowRight: index + 1,
       ArrowLeft: index - 1,
