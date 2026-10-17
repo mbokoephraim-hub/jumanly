@@ -2,12 +2,12 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { Icon } from "@/components/brand/icon";
-import { CompanyLogo } from "@/components/ui";
-import { dynamic, type DynamicTranslator } from "@/i18n/dynamic";
+import type { DynamicTranslator } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
-import { formatRelative } from "@/lib/dates";
+import { formatDayMonth, formatRelative } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
 import type { MatchExplanation } from "@/server/matching/types";
+import { JobBannerCard, jobCardSaveClass } from "./job-banner-card";
 import { SaveJobButton } from "./save-job-button";
 import { contractFilterOf, remoteFilterOf, type PublicJobSummary } from "@/server/services/jobs";
 
@@ -63,9 +63,10 @@ export type CardMatch =
   | undefined;
 
 /**
- * Offer card of the signed-in search (mockup 03-16): company tile, title with « Nouveau » and the
- * verified company, facts in Brume, the application or closing state; on the right, the score on the
- * AI gradient with its « Pourquoi ? », the date and the save button. A low score never blocks.
+ * Offer card of the signed-in search (V6 § B9, screen 63): the company's banner (or the Jumanly
+ * pattern), its logo over it, its name with the verified mark, the title, the place and the
+ * contract, then the date and « Voir l'offre ». The score and its « Pourquoi ? » show when there
+ * is one; a low score never blocks.
  */
 export async function TalentJobCard({
   job,
@@ -92,146 +93,70 @@ export async function TalentJobCard({
     job.closesAt !== null && job.closesAt.getTime() - now.getTime() < CLOSING_DAYS * 86_400_000;
   const verified = job.organization.verifiedAt !== null;
   const posted = job.publishedAt ? relativeLabel(job.publishedAt, now) : null;
-  const location = t("talent.jobs.card.location", {
-    city: job.city,
-    workMode: t(`jobs.card.remote.${remoteFilterOf(job.remote)}`),
-  });
+  const when =
+    closingSoon && job.closesAt
+      ? t("talent.jobs.card.closesOn", { date: formatDayMonth(job.closesAt) })
+      : posted;
   const contract = t(`jobs.search.contract.${contractFilterOf(job.contractType)}`);
-  const salary = salaryText(dynamic(t), job);
+  const workMode = t(`jobs.card.remote.${remoteFilterOf(job.remote)}`);
   const ok = match?.state === "ok" ? match.explanation : null;
-  const score = ok ? (
-    <span
-      className={cx(tag, "h-[26px] bg-gradient-ai text-blanc")}
-      aria-label={t("talent.jobs.card.compatibility.aria", {
-        score: Math.round(ok.score),
-        band: t(`match.band.${ok.band}.text`),
-      })}
-    >
-      <Icon name="intelligence" className="size-3 text-neon" />
-      {t("talent.jobs.card.compatibility.text", { score: Math.round(ok.score) })}
-    </span>
-  ) : null;
-  const why = ok ? (
-    <Link
-      href={`${href}#compatibilite`}
-      className="jm-tap relative z-10 flex items-center gap-1 text-[11px] leading-[15px] font-semibold whitespace-nowrap text-[#14745F] hover:underline"
-    >
-      <Icon name="eye" className="size-3.5" />
-      {t("common.why")}
-      <span className="sr-only">{job.title}</span>
-    </Link>
-  ) : null;
-  const save = (
-    <SaveJobButton
-      slug={job.slug}
-      saved={saved}
-      back={back}
-      name={job.title}
-      labels={{
-        save: t("talent.jobs.card.save"),
-        unsave: t("talent.jobs.card.unsave"),
-        saved: t("talent.jobs.card.saved.toast"),
-        removed: t("talent.jobs.card.unsaved.toast"),
-        undo: t("common.cancel"),
-      }}
-      className="flex size-11 items-center justify-center rounded-full text-sapin hover:bg-creme lg:size-8"
-    />
-  );
 
   return (
-    <article
-      className={cx(
-        "group relative grid grid-cols-[44px_minmax(0,1fr)] gap-x-3 rounded-[24px] bg-blanc px-4 py-4 lg:flex lg:gap-4 lg:px-5 lg:py-[18px]",
-        selected && "ring-2 ring-sapin",
-      )}
-    >
-      <CompanyLogo
-        name={job.organization.name}
-        size="md"
-        className="size-11! rounded-[14px]! text-base! lg:size-[52px]! lg:rounded-[16px]! lg:text-lg!"
-      />
-      <div className="flex min-w-0 flex-1 flex-col gap-1">
-        <div className="flex items-start gap-2">
-          <div className="flex min-w-0 flex-1 flex-wrap items-center gap-2">
-            <h3 className="text-[15px] leading-5 font-semibold tracking-[-0.01em] lg:text-base lg:leading-[22px]">
-              <Link href={href} className="after:absolute after:inset-0 focus-visible:outline-none">
-                {job.title}
-              </Link>
-            </h3>
-            {isNew && (
-              <span className={cx(tag, tagTone.neon, "max-lg:hidden")}>
-                {t("talent.jobs.card.new")}
-              </span>
-            )}
-            {verified && (
-              <span className={cx(tag, tagTone.menthe, "max-lg:hidden")}>
-                <Icon name="check" className="size-3" />
-                {t("talent.jobs.card.verified")}
-              </span>
-            )}
-          </div>
-          <div className="-mt-1 -mr-1 lg:hidden">{save}</div>
-        </div>
-        <p className="text-xs leading-[17px] text-ardoise">
-          {job.organization.name}
-          {posted && (
-            <>
-              <span aria-hidden className="mx-1 lg:hidden">
-                {"·"}
-              </span>
-              <span className="lg:hidden">{posted}</span>
-            </>
-          )}
-        </p>
-        <div className="mt-1.5 flex flex-wrap gap-2">
-          {isNew && (
-            <span className={cx(tag, tagTone.neon, "lg:hidden")}>{t("talent.jobs.card.new")}</span>
-          )}
-          <span className={cx(tag, tagTone.brume)}>
-            <Icon name="localisation" className="hidden size-3 lg:block" />
-            {location}
-          </span>
-          <span className={cx(tag, tagTone.brume)}>{contract}</span>
-          <span className={cx(tag, tagTone.brume, "max-lg:hidden")}>
-            <Icon name="portefeuille" className="size-3" />
-            {salary}
-          </span>
-          {applied && (
-            <span className={cx(tag, tagTone.sapin)}>
-              <Icon name="check" className="size-3" />
-              {t("talent.jobs.card.applied")}
-            </span>
-          )}
-          {closingSoon && job.closesAt && (
-            <span className={cx(tag, tagTone.ambre)}>
-              <Icon name="horloge" className="hidden size-3 lg:block" />
-              {t("talent.jobs.card.closingIn", { time: formatRelative(job.closesAt, now) })}
-            </span>
-          )}
-        </div>
-      </div>
-      {/* Phone: salary and score on one line, the band and « Pourquoi ? » under it. */}
-      <div className="col-span-2 mt-3 flex items-center justify-between gap-2 lg:hidden">
-        <span className="text-sm font-semibold">{salary}</span>
-        {score}
-      </div>
-      {ok && (
-        <div className="col-span-2 mt-2 flex items-center justify-between gap-2 lg:hidden">
-          <span className="text-xs text-ardoise">{t(`match.band.${ok.band}.text`)}</span>
-          {why}
-        </div>
-      )}
-      <div className="hidden shrink-0 flex-col items-end gap-1.5 lg:flex">
-        {score}
-        {why}
-        {posted && <span className="text-[11px] leading-[15px] text-ardoise">{posted}</span>}
-        {save}
-      </div>
-      <span
-        aria-hidden
-        className="pointer-events-none absolute inset-0 rounded-[24px] ring-sapin group-focus-within:ring-2 group-hover:ring-2"
-      />
-    </article>
+    <JobBannerCard
+      href={href}
+      title={job.title}
+      company={job.organization.name}
+      verified={verified ? t("talent.jobs.card.verified") : null}
+      banner={job.organization.banner}
+      logo={job.organization.logo}
+      chips={[
+        ...(isNew ? [{ label: t("talent.jobs.card.new"), tone: "new" as const }] : []),
+        { label: job.city, icon: "localisation" as const },
+        { label: contract },
+        { label: workMode },
+        ...(applied
+          ? [
+              {
+                label: t("talent.jobs.card.applied"),
+                icon: "check" as const,
+                tone: "applied" as const,
+              },
+            ]
+          : []),
+      ]}
+      score={
+        ok
+          ? {
+              text: t("talent.jobs.card.compatibility.text", { score: Math.round(ok.score) }),
+              aria: t("talent.jobs.card.compatibility.aria", {
+                score: Math.round(ok.score),
+                band: t(`match.band.${ok.band}.text`),
+              }),
+              why: t("common.why"),
+            }
+          : null
+      }
+      when={when}
+      closingSoon={closingSoon}
+      cta={t("jobs.card.cta")}
+      selected={selected}
+      save={
+        <SaveJobButton
+          slug={job.slug}
+          saved={saved}
+          back={back}
+          name={job.title}
+          labels={{
+            save: t("talent.jobs.card.save"),
+            unsave: t("talent.jobs.card.unsave"),
+            saved: t("talent.jobs.card.saved.toast"),
+            removed: t("talent.jobs.card.unsaved.toast"),
+            undo: t("common.cancel"),
+          }}
+          className={jobCardSaveClass}
+        />
+      }
+    />
   );
 }
 

@@ -11,6 +11,7 @@ import { saveJobAction } from "@/server/actions/hire";
 import { KNOCKOUT_MAX, REQUIRED_SKILLS_MAX, remoteModes } from "@/server/services/hire";
 import { contractFilters, parseCriteria } from "@/server/services/jobs";
 import { JOB_STEPS } from "./job-steps";
+import type { JobBrand } from "./brand-identity";
 import { ChipLines, JobWizard } from "./job-wizard";
 
 type EditedJob = Job & { skills: { importance: string; skill: { name: string } }[] };
@@ -108,6 +109,7 @@ export async function JobForm({
   params,
   org,
   verified,
+  brand,
   ai,
   templates,
 }: {
@@ -115,6 +117,7 @@ export async function JobForm({
   params: JobFormParams;
   org: string;
   verified: boolean;
+  brand: JobBrand;
   ai: JobFormAi;
   templates?: ReactNode;
 }) {
@@ -149,7 +152,11 @@ export async function JobForm({
         ? JOB_STEPS.length
         : (fieldStep[params.champ ?? ""] ?? 1);
   const formId = job ? `job-form-${job.id}` : "job-form-new";
-  const pick = { hire: { jobForm: messages.hire.jobForm }, ai: messages.ai };
+  const pick = {
+    hire: { jobForm: messages.hire.jobForm },
+    ai: messages.ai,
+    a11y: { avatar: messages.a11y.avatar },
+  };
   const submitRow = "flex flex-wrap items-center gap-2.5 border-t border-gris-clair pt-4";
 
   return (
@@ -179,6 +186,7 @@ export async function JobForm({
         initialStep={initialStep}
         org={org}
         verified={verified}
+        brand={brand}
         readiness={ai.readiness}
         credits={ai.credits}
         lockText={ai.lockText}

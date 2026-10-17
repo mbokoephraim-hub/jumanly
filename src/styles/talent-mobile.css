@@ -429,3 +429,38 @@
     animation: none;
   }
 }
+
+/*
+ * Offres and the offer in the Vert theme (V7 § B10, screens 74 and 65): glass cards whose logo
+ * border takes the card's colour, outlined chips, Lime links, the closing date in light amber.
+ */
+@media (max-width: 47.99rem) {
+  .jm-vert main .jm-job-logo {
+    border-color: #1b3a34;
+  }
+  .jm-vert main .jm-hero-logo {
+    border-color: #123a33;
+  }
+  .jm-vert main :is(.jm-job-chip, .jm-hero-chip):not(.bg-neon, .bg-sapin, .bg-gradient-ai) {
+    background: transparent;
+    color: #fff;
+    box-shadow: inset 0 0 0 1px rgb(255 255 255 / 0.16);
+  }
+  .jm-vert main .jm-job-company,
+  .jm-vert main .jm-job-when:not(.jm-job-closing) {
+    color: rgb(255 255 255 / 0.62);
+  }
+  .jm-vert main .jm-job-foot {
+    border-color: rgb(255 255 255 / 0.08);
+  }
+  .jm-vert main :is(.jm-job-cta, .jm-job-why, .jm-hero-link) {
+    color: var(--jm-lime);
+  }
+  .jm-vert main :is(.jm-job-closing, .jm-hero-closing) {
+    color: #ffd27a;
+  }
+  .jm-vert main .jm-job-save {
+    background: rgb(11 26 31 / 0.55);
+    color: #fff;
+  }
+}

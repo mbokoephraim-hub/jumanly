@@ -83,14 +83,17 @@ export function SendApplication({
               <span className="text-[13.5px] text-[#6B4A00]">{labels.errorBody}</span>
             </span>
           </div>
-          <dl className="overflow-hidden rounded-[22px] bg-blanc shadow-douce">
-            <div className="flex gap-3 border-b border-brume px-4 py-3.5">
-              <dt className="w-32 shrink-0 text-[13px] text-ardoise">{labels.state}</dt>
-              <dd className="text-[14px] font-semibold">{labels.draft}</dd>
+          {/* `.kv` of screen 12: the label on the left, its value right-aligned on the same line. */}
+          <dl className="rounded-[22px] bg-blanc px-3.5 py-1 shadow-douce">
+            <div className="flex min-h-[54px] items-center justify-between gap-3">
+              <dt className="text-[12.5px] whitespace-nowrap text-ardoise">{labels.state}</dt>
+              <dd className="rounded-pill bg-[#FFF0CC] px-[11px] py-[5px] text-right text-[12px] font-semibold whitespace-nowrap text-[#7A5200]">
+                {labels.draft}
+              </dd>
             </div>
-            <div className="flex gap-3 px-4 py-3.5">
-              <dt className="w-32 shrink-0 text-[13px] text-ardoise">{labels.lastSave}</dt>
-              <dd className="text-[14px] font-semibold">{savedAt}</dd>
+            <div className="flex min-h-[54px] items-center justify-between gap-3 border-t border-sapin/7">
+              <dt className="text-[12.5px] whitespace-nowrap text-ardoise">{labels.lastSave}</dt>
+              <dd className="text-right text-[13.5px] font-semibold">{savedAt}</dd>
             </div>
           </dl>
         </div>

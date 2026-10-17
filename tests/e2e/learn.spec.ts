@@ -139,6 +139,7 @@ test("un éditeur crée une formation, un talent Free la suit jusqu'à l'attesta
   ).toBeVisible();
   await expect(talent.getByRole("heading", { level: 1 })).toHaveText("Leçon texte fictive");
   await expect(talent.getByText("Second paragraphe fictif.")).toBeVisible();
+  await talent.getByRole("tab", { name: "Notes" }).click();
   await talent.locator("#note-body").fill("Note privée fictive.");
   await talent.getByRole("button", { name: "Enregistrer la note" }).click();
   await expect(talent.getByText("Note privée fictive.")).toBeVisible();

@@ -46,6 +46,7 @@ export default async function EditJobPage({
         job={job}
         org={context.org}
         verified={context.verified}
+        brand={context.brand}
         ai={context.ai}
         templates={context.templates}
         params={{

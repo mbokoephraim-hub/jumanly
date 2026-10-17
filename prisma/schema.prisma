@@ -98,7 +98,10 @@ model Organization {
   type                    OrganizationType
   name                    String
   slug                    String                 @unique
+  /// Square logo, address of its 256 px WebP (`/medias/orgs/…`, prompt 4 bis).
   logo                    String?
+  /// Wide 3:1 banner shown on job cards and pages, address of its 1000 px WebP (prompt 4 bis).
+  banner                  String?
   description             String?
   website                 String?
   country                 String?

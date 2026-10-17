@@ -166,7 +166,7 @@ const cardSelect = {
   remote: true,
   publishedAt: true,
   closesAt: true,
-  organization: { select: { name: true, verifiedAt: true } },
+  organization: { select: { name: true, verifiedAt: true, logo: true, banner: true } },
 } satisfies Prisma.JobSelect;
 
 export type JobSummary = Prisma.JobGetPayload<{ select: typeof cardSelect }>;
@@ -314,6 +314,7 @@ export async function getPublicJob(db: PrismaClient, slug: string) {
           description: true,
           verifiedAt: true,
           logo: true,
+          banner: true,
           sector: true,
           size: true,
         },

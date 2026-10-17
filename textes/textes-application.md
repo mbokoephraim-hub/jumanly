@@ -3215,6 +3215,46 @@ Conventions :
 | `learn.player.resources.meta` | {type} · {size} |
 | `learn.player.resources.empty` | Aucune ressource pour cette leçon. |
 | `learn.player.resources.locked` | Ressources spécialisées · Disponible avec {plan} |
+| `learn.player.previousShort` | Précédente |
+| `learn.player.context` | {course} · Module {number} |
+| `learn.player.meta` | Leçon {index} sur {total} · {duration} |
+| `learn.player.metaShort` | Leçon {index} sur {total} |
+| `learn.player.courseProgress` | Progression dans la formation |
+| `learn.player.tabs.label` | Contenu de la leçon |
+| `learn.player.tabs.summary` | Résumé |
+| `learn.player.tabs.modules` | Modules |
+| `learn.player.tabs.transcript` | Transcription |
+| `learn.player.tabs.resources` | Ressources |
+| `learn.player.tabs.notes` | Notes |
+| `learn.player.summary.brief` | En bref |
+| `learn.player.summary.plan` | Ce que vous allez faire |
+| `learn.player.summary.minutes` | {count} min |
+| `learn.player.summary.takeaways` | À retenir |
+| `learn.player.summary.content` | La leçon |
+| `learn.player.summary.exercise` | Exercice de la leçon |
+| `learn.player.summary.exerciseMeta` | {count, plural, one {# question} other {# questions}} · {duration} |
+| `learn.player.summary.exerciseStart` | Commencer |
+| `learn.player.modules.done` | {count, plural, one {# leçon} other {# leçons}} · terminé |
+| `learn.player.modules.progress` | {count, plural, one {# leçon} other {# leçons}} · {done} sur {count} |
+| `learn.player.modules.progressAria` | {done} leçons sur {count} terminées |
+| `learn.player.modules.current` | Leçon en cours |
+| `learn.player.modules.certificate` | Attestation |
+| `learn.player.modules.certificateLocked` | Après le quiz final |
+| `learn.player.modules.certificateReady` | Obtenue · voir mes attestations |
+| `learn.player.transcriptPanel.search` | Chercher dans la leçon |
+| `learn.player.transcriptPanel.follows` | Suit la vidéo |
+| `learn.player.transcriptPanel.none` | Aucune ligne ne correspond à votre recherche. |
+| `learn.player.transcriptPanel.empty` | Pas encore de transcription pour cette leçon. |
+| `learn.player.transcriptPanel.seekHint` | Toucher une ligne relance la vidéo à ce moment. |
+| `learn.player.transcriptPanel.seek` | Reprendre la vidéo à |
+| `learn.player.resourcesPanel.download` | À télécharger |
+| `learn.player.resourcesPanel.further` | Pour aller plus loin |
+| `learn.player.resourcesPanel.downloadNamed` | Télécharger « {title} » |
+| `learn.player.resourcesPanel.open` | Ouvrir « {title} » |
+| `learn.player.resourcesPanel.nextLesson` | Leçon suivante · {duration} |
+| `learn.player.resourcesPanel.offline` | Une fois téléchargés, les fichiers s'ouvrent sans connexion. |
+| `learn.player.resourcesPanel.link` | LIEN |
+| `learn.player.resourcesPanel.video` | VID |
 | `learn.documents.title` | Documents de la formation |
 | `learn.documents.lessonTitle` | Documents de la leçon |
 | `learn.documents.publicTitle` | Documents à télécharger |
@@ -4896,6 +4936,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.card.posted` | {time, relative} |
 | `talent.jobs.card.closingSoon` | Clôture {time, relative} |
 | `talent.jobs.card.closingIn` | Clôture {time} |
+| `talent.jobs.card.closesOn` | Clôture le {date} |
 | `talent.jobs.card.applied` | Candidature envoyée |
 | `talent.jobs.card.save` | Enregistrer l'offre |
 | `talent.jobs.card.unsave` | Retirer des offres enregistrées |
@@ -5051,17 +5092,23 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.apply.flow.error.title` | Votre candidature n'est pas encore envoyée |
 | `talent.jobs.apply.flow.error.body` | Connexion coupée. Votre brouillon est gardé. |
 | `talent.jobs.apply.flow.error.state` | État |
-| `talent.jobs.apply.flow.error.draft` | Brouillon, non envoyé |
+| `talent.jobs.apply.flow.error.draft` | Brouillon non envoyé |
 | `talent.jobs.apply.flow.error.lastSave` | Dernier enregistrement |
 | `talent.jobs.apply.flow.error.lastSaveValue` | {date, date, medium} à {date, time, short} |
+| `talent.jobs.apply.flow.error.lastSaveToday` | Aujourd'hui, {date, time, short} |
 | `talent.jobs.apply.flow.error.later` | Plus tard |
 | `talent.jobs.apply.flow.error.retry` | Réessayer |
-| `talent.jobs.apply.flow.sent.received` | Reçue par {company}. |
-| `talent.jobs.apply.flow.sent.track` | Suivre ma candidature |
-| `talent.jobs.apply.flow.sent.trackLine` | Dans Suivi, avec son historique |
+| `talent.jobs.apply.flow.sent.received` | Reçue par {company} à {time, time, short}. |
+| `talent.jobs.apply.flow.sent.track` | Suivre |
+| `talent.jobs.apply.flow.sent.trackLine` | Dans Suivi |
 | `talent.jobs.apply.flow.sent.prepare` | Préparer l'entretien |
-| `talent.jobs.apply.flow.sent.prepareLine` | Simulation et conseils |
-| `talent.jobs.apply.flow.sent.explore` | Continuer à explorer les offres |
+| `talent.jobs.apply.flow.sent.prepareLine` | Avec Orbi |
+| `talent.jobs.apply.flow.sent.adapt` | Adapter mon CV |
+| `talent.jobs.apply.flow.sent.adaptLine` | Pour une autre offre |
+| `talent.jobs.apply.flow.sent.similar` | Offres proches |
+| `talent.jobs.apply.flow.sent.similarLine` | {count, plural, =0 {À découvrir} one {# offre} other {# offres}} |
+| `talent.jobs.apply.flow.sent.back` | Revenir à l'offre |
+| `talent.jobs.apply.flow.sent.explore` | Explorer d'autres offres |
 | `talent.jobs.detail.seo` | {jobTitle} · Jumanly |
 | `talent.jobs.detail.backToJobs` | Toutes les offres |
 
@@ -5953,6 +6000,28 @@ Conventions :
 | `hire.jobForm.preview.check.salary` | Rémunération indiquée (recommandé) |
 | `hire.jobForm.preview.check.location` | Lieu et mode de travail |
 | `hire.jobForm.preview.check.deadline` | Date limite |
+| `hire.jobForm.preview.inJobs` | Aperçu dans Offres |
+| `hire.jobForm.preview.today` | Aujourd'hui |
+| `hire.jobForm.preview.see` | Voir l'offre |
+| `hire.jobForm.preview.city` | Ville |
+| `hire.jobForm.brand.title` | Identité de l'entreprise |
+| `hire.jobForm.brand.banner` | Bannière |
+| `hire.jobForm.brand.logo` | Logo |
+| `hire.jobForm.brand.hint` | Bannière au format 3:1 (1500 × 500), logo carré. Reprises sur toutes vos offres. |
+| `hire.jobForm.brand.adminOnly` | Reprises sur toutes vos offres. Un administrateur de l'organisation peut les changer. |
+| `hire.jobForm.brand.editBanner` | Bannière de l'entreprise |
+| `hire.jobForm.brand.editLogo` | Logo de l'entreprise |
+| `hire.jobForm.brand.bannerHint` | Image large, cadrée au format 3:1. Sans bannière, les offres montrent le motif Jumanly. |
+| `hire.jobForm.brand.logoHint` | Image carrée. Sans logo, les offres montrent les initiales de l'entreprise. |
+| `hire.jobForm.brand.editor.choose` | Choisir une image |
+| `hire.jobForm.brand.editor.zoom` | Zoom |
+| `hire.jobForm.brand.editor.drag` | Cadrage de l'image : faites-la glisser ou utilisez les flèches du clavier. |
+| `hire.jobForm.brand.editor.empty` | Choisissez une image (JPEG, PNG ou WebP, 4 Mo au plus). |
+| `hire.jobForm.brand.editor.cancel` | Annuler |
+| `hire.jobForm.brand.editor.save` | Enregistrer |
+| `hire.jobForm.brand.editor.removeBanner` | Retirer la bannière |
+| `hire.jobForm.brand.editor.removeLogo` | Retirer le logo |
+| `hire.jobForm.brand.editor.error` | Image refusée : choisissez un JPEG, un PNG ou un WebP de 4 Mo au plus. |
 | `hire.jobForm.publish.text` | Publier l'offre |
 | `hire.jobForm.publish.schedule` | Programmer la publication |
 | `hire.jobForm.publish.terms` | Je certifie que cette offre correspond à un poste réel et respecte les conditions d'utilisation de Jumanly. |
@@ -9473,6 +9542,7 @@ Conventions :
 | `a11y.previousPage` | Page précédente |
 | `a11y.avatar.text` | Photo de {name} |
 | `a11y.avatar.initials` | Initiales de {name} |
+| `a11y.avatar.logo` | Logo de {name} |
 | `a11y.logo` | Jumanly, retour à l'accueil |
 | `a11y.notifications` | Notifications |
 | `a11y.unread` | non lu |
@@ -10847,6 +10917,13 @@ Conventions :
 | `admin.courses.lesson.subtitles` | Sous-titres |
 | `admin.courses.lesson.resources` | Ressources à télécharger |
 | `admin.courses.lesson.transcript` | Transcription |
+| `admin.courses.lesson.transcriptHint` | Une phrase par ligne. Commencez une ligne par son moment dans la vidéo (ex. : 05:40 Avant tout, vérifiez…) pour que la transcription suive la vidéo. |
+| `admin.courses.lesson.brief` | En bref |
+| `admin.courses.lesson.briefHint` | L'idée de la leçon en une ou deux phrases. Facultatif. |
+| `admin.courses.lesson.steps` | Ce que vous allez faire |
+| `admin.courses.lesson.stepsHint` | Une étape par ligne : Titre | minutes (ex. : Préparer une plage propre | 2). Six au plus. Facultatif. |
+| `admin.courses.lesson.takeaways` | À retenir |
+| `admin.courses.lesson.takeawaysHint` | Un point par ligne, trois au plus. Facultatif. |
 | `admin.courses.quiz.add` | Ajouter un quiz |
 | `admin.courses.quiz.passScore` | Seuil de réussite (%) |
 | `admin.courses.quiz.attempts` | Nombre de tentatives (0 = illimité) |

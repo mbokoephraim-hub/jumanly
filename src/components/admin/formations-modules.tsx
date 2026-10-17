@@ -28,7 +28,7 @@ import {
   questionTypes,
   type AdminCourse,
 } from "@/server/services/course-admin";
-import { lessonParagraphs, parseResources } from "@/server/services/learn";
+import { lessonOutline, lessonParagraphs, parseResources } from "@/server/services/learn";
 
 type Lesson = AdminCourse["modules"][number]["lessons"][number];
 
@@ -395,6 +395,7 @@ export async function LessonEditor({
     </>
   );
   const ignored = Number(query("ignorees")) || 0;
+  const outline = lessonOutline(lesson.content);
   return (
     <section
       id="lecon"
@@ -469,6 +470,33 @@ export async function LessonEditor({
             rows={7}
           />
         </div>
+        <div className="md:col-span-2">
+          <TextArea
+            id="lesson-brief"
+            name="brief"
+            label={t("lesson.brief")}
+            hint={t("lesson.briefHint")}
+            defaultValue={outline.brief ?? ""}
+            maxLength={600}
+            rows={2}
+          />
+        </div>
+        <TextArea
+          id="lesson-steps"
+          name="steps"
+          label={t("lesson.steps")}
+          hint={t("lesson.stepsHint")}
+          defaultValue={outline.steps.map((step) => `${step.title} | ${step.minutes}`).join("\n")}
+          rows={3}
+        />
+        <TextArea
+          id="lesson-takeaways"
+          name="takeaways"
+          label={t("lesson.takeaways")}
+          hint={t("lesson.takeawaysHint")}
+          defaultValue={outline.takeaways.join("\n")}
+          rows={3}
+        />
         <TextArea
           id="lesson-resources"
           name="resources"
@@ -483,6 +511,7 @@ export async function LessonEditor({
           id="lesson-transcript"
           name="transcript"
           label={t("lesson.transcript")}
+          hint={t("lesson.transcriptHint")}
           defaultValue={lesson.transcript ?? ""}
           rows={3}
         />

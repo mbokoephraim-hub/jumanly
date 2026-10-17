@@ -324,6 +324,12 @@ type Lesson = {
   kind: "text" | "video" | "exercise" | "quiz";
   minutes: number;
   paragraphs: string[];
+  /** Outline of screen 14 (`content.brief`, `content.steps`, `content.takeaways`). */
+  brief?: string;
+  steps?: { title: string; minutes: number }[];
+  takeaways?: string[];
+  /** One line per sentence, starting with its time in the video (screen 68). */
+  transcript?: string;
 };
 type Course = {
   slug: string;
@@ -373,6 +379,12 @@ const courses: Course[] = [
             title: "Écouter et reformuler",
             kind: "video",
             minutes: 9,
+            transcript: [
+              "00:05 Écouter, c'est d'abord laisser le client finir sa phrase.",
+              "00:18 Ensuite, on reformule avec ses propres mots.",
+              "00:31 « Si je comprends bien, votre forfait n'a pas été activé. »",
+              "00:44 Le client confirme ou corrige : le malentendu est évité.",
+            ].join("\n"),
             paragraphs: [
               "Écouter, c'est laisser le client finir sans l'interrompre, puis reformuler : « Si je comprends bien, votre forfait n'a pas été activé ».",
               "La reformulation montre que vous avez compris et évite les malentendus.",
@@ -387,6 +399,14 @@ const courses: Course[] = [
             title: "La méthode CALME pour une réclamation",
             kind: "text",
             minutes: 8,
+            brief:
+              "Une réclamation se traite en cinq temps : calmer, accepter, localiser, mettre en œuvre, engager un suivi.",
+            steps: [
+              { title: "Laisser le client s'exprimer", minutes: 2 },
+              { title: "Poser les bonnes questions", minutes: 3 },
+              { title: "Proposer une solution tenable", minutes: 3 },
+            ],
+            takeaways: ["On n'interrompt pas", "On reformule", "On ne promet que le tenable"],
             paragraphs: [
               "C comme Calmer : on laisse le client s'exprimer. A comme Accepter son ressenti. L comme Localiser le problème par des questions. M comme Mettre en œuvre une solution. E comme Engager un suivi.",
               "On ne promet jamais ce qu'on ne peut pas tenir : mieux vaut un délai réaliste qu'une promesse rompue.",
@@ -882,7 +902,13 @@ export async function seedUxScenario(db: SeedClient) {
               kind: lesson.kind,
               durationSec: lesson.minutes * 60,
               isPreview: moduleIndex === 0 && lessonIndex === 0,
-              content: { paragraphs: lesson.paragraphs },
+              content: {
+                paragraphs: lesson.paragraphs,
+                ...(lesson.brief ? { brief: lesson.brief } : {}),
+                ...(lesson.steps ? { steps: lesson.steps } : {}),
+                ...(lesson.takeaways ? { takeaways: lesson.takeaways } : {}),
+              },
+              transcript: lesson.transcript ?? null,
               ...(lesson.kind === "quiz"
                 ? {
                     quiz: {

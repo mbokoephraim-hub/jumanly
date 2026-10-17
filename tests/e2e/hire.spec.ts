@@ -1,3 +1,4 @@
+import sharp from "sharp";
 import { expect, test, type Browser, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { lastCode } from "./outbox";
@@ -267,4 +268,52 @@ test("l'admin consulte la modération des offres et les signalements", async ({ 
   await page.goto("/admin/signalements");
   await expect(page.getByRole("heading", { level: 1 })).toHaveText("Signalements");
   await expectAccessible(page);
+});
+
+// Prompt 4 bis (screens 63 to 66): an administrator frames the company's banner and logo; every
+// offer shows them, and removing the banner brings the Jumanly pattern back.
+test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ page }) => {
+  test.setTimeout(120_000);
+  await signUpRecruiter(page, testEmail("marque"), "Marque fictive e2e");
+  await page.goto("/app/organisation");
+  const main = page.locator("main").filter({ visible: true });
+  const picture = await sharp({
+    create: { width: 1200, height: 600, channels: 3, background: "#1FA98A" },
+  })
+    .png()
+    .toBuffer();
+
+  await main.getByRole("button", { name: "Bannière" }).click();
+  const dialog = page.getByRole("dialog", { name: "Bannière de l'entreprise" });
+  await expect(dialog).toBeVisible();
+  await expectAccessible(page);
+  await dialog
+    .locator('input[type="file"]')
+    .setInputFiles({ name: "banniere.png", mimeType: "image/png", buffer: picture });
+  await dialog.getByRole("group", { name: /Cadrage de l'image/ }).press("ArrowLeft");
+  await dialog.getByRole("button", { name: "Enregistrer" }).click();
+  await expect(dialog).toHaveCount(0);
+  const banner = main.locator('img[src^="/medias/orgs/"][src*="/banner-"]');
+  await expect(banner).toBeVisible();
+  const src = await banner.getAttribute("src");
+  expect((await page.request.get(src!)).headers()["content-type"]).toBe("image/webp");
+
+  await main.getByRole("button", { name: "Logo" }).click();
+  const logo = page.getByRole("dialog", { name: "Logo de l'entreprise" });
+  await logo
+    .locator('input[type="file"]')
+    .setInputFiles({ name: "logo.png", mimeType: "image/png", buffer: picture });
+  await logo.getByRole("button", { name: "Enregistrer" }).click();
+  await expect(main.getByRole("img", { name: "Logo de Marque fictive e2e" })).toBeVisible();
+
+  // The job editor shows the same identity and the card as talents will see it.
+  await page.goto("/app/hire/offres/nouvelle");
+  const editor = page.locator("main").filter({ visible: true });
+  await expect(editor.getByRole("heading", { name: "Aperçu dans Offres" })).toBeVisible();
+  await expect(editor.locator(`img[src="${src}"]`).first()).toBeAttached();
+
+  await page.goto("/app/organisation");
+  await main.getByRole("button", { name: "Bannière" }).click();
+  await page.getByRole("button", { name: "Retirer la bannière" }).click();
+  await expect(main.locator('img[src^="/medias/orgs/"][src*="/banner-"]')).toHaveCount(0);
 });
