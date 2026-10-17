@@ -11,8 +11,8 @@ export const jobCardSaveClass =
 
 /** Fact of a job card (`.chip` of the mockups): place, contract, work mode. */
 const cardChip =
-  "jm-job-chip inline-flex min-h-7 items-center gap-[5px] rounded-pill bg-[#F6F3EE] px-2.5 text-[12px] whitespace-nowrap text-sapin";
-const chipTones = { new: "bg-neon", applied: "bg-sapin text-neon" } as const;
+  "jm-job-chip inline-flex min-h-7 items-center gap-[5px] rounded-pill px-2.5 text-[12px] whitespace-nowrap";
+const chipTones = { new: "bg-neon text-sapin", applied: "bg-sapin text-neon" } as const;
 
 export type JobCardChip = { label: string; icon?: IconName; tone?: keyof typeof chipTones };
 
@@ -93,14 +93,17 @@ export function JobBannerCard({
         </h3>
         <div className="mt-0.5 flex flex-wrap gap-1.5">
           {chips.map((chip) => (
-            <span key={chip.label} className={cx(cardChip, chip.tone && chipTones[chip.tone])}>
+            <span
+              key={chip.label}
+              className={cx(cardChip, chip.tone ? chipTones[chip.tone] : "bg-[#F6F3EE] text-sapin")}
+            >
               {chip.icon && <Icon name={chip.icon} className="size-[13px]" />}
               {chip.label}
             </span>
           ))}
           {score && (
             <span
-              className={cx(cardChip, "bg-gradient-ai font-semibold text-blanc!")}
+              className={cx(cardChip, "bg-gradient-ai font-semibold text-blanc")}
               aria-label={score.aria}
             >
               <Icon name="intelligence" className="size-3 text-neon" />
