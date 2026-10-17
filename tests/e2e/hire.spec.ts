@@ -93,9 +93,17 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await talent.goto(`/app/jobs/${slug}`);
   await expect(talent.getByRole("heading", { level: 1 })).toHaveText(title);
   await talent.goto(`/app/jobs/${slug}?postuler=1`);
-  await talent.locator('input[name="cv"][value=""]').check();
+  await talent
+    .locator("label")
+    .filter({ hasText: "Mon profil Jumanly seul", visible: true })
+    .click();
+  await talent.getByRole("button", { name: "Continuer" }).click();
+  await expect(talent).toHaveURL(/etape=lettre/);
+  await talent.getByRole("button", { name: "Continuer" }).click();
+  await expect(talent).toHaveURL(/etape=verification/);
+  await talent.getByLabel(/consulte ma candidature/).check();
   await talent.getByRole("button", { name: "Envoyer ma candidature" }).click();
-  await expect(talent.getByText("Candidature envoyée !")).toBeVisible();
+  await expect(talent.getByRole("heading", { name: "Candidature envoyée !" })).toBeVisible();
 
   // The recruiter sees a notification, opens the candidate and moves them to « Entretien ».
   await page.goto("/app/notifications");

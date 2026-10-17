@@ -82,6 +82,11 @@ export async function ForMeCourseCard({ course, index }: { course: ForMeCourse; 
           {" · "}
           {t(`ui.duration.${duration.key}`, duration.values)}
         </p>
+        {course.reason.length > 0 && (
+          <p className="line-clamp-2 text-[12px] text-feuille-fonce">
+            {t("talent.forMe.courses.why", { skills: course.reason.slice(0, 3).join(", ") })}
+          </p>
+        )}
         {following && (
           <div className="mt-1">
             <ProgressBar

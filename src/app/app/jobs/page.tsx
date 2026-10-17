@@ -54,51 +54,64 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: { absolute: t("seo") }, robots: { index: false } };
 }
 
-const views = ["tous", "recommandees", "recentes"] as const;
+/** « tous » and « recommandees » are older addresses, still served; the tabs show the first two. */
+const views = ["pour-vous", "recentes", "tous", "recommandees"] as const;
 type View = (typeof views)[number];
 
 /** Score from which an offer counts as « recommandée » (band « Compatible » and above). */
 const RECOMMENDED_MIN = 70;
 
 /**
- * Jobs (partie 07 § 5, mockup 03-16): the search with what only a signed-in talent has: the
- * compatibility of each offer and its « Pourquoi ? », the offers saved or already applied to, and
- * the follow-up of applications. A low score never hides an offer from « Tous » and never blocks
- * applying, which stays free and unlimited.
+ * Jobs (partie 07 § 5, mockup 03-16, docs/ux-mobile-talent screen 06): the search with what only a
+ * signed-in talent has: « Pour vous » ranks the offers by compatibility, with its « Pourquoi ? »;
+ * without a score it says the selection is general. A low score never hides an offer from « Pour
+ * vous » and never blocks applying, which stays free and unlimited.
  */
 export default async function TalentJobsPage({ searchParams }: PageProps<"/app/jobs">) {
   const params = await searchParams;
   const user = await requireUser("/app/jobs");
   const t = await getTranslations();
-  const view: View = views.includes(params.vue as View) ? (params.vue as View) : "tous";
+  const asked: View = views.includes(params.vue as View) ? (params.vue as View) : "pour-vous";
+  const view = asked === "tous" ? "pour-vous" : asked;
   const compat = compatibilityFilters.find((value) => String(value) === params.compat);
   const parsed = parseJobFilters(params);
   const filters = view === "recentes" ? { ...parsed, publie: parsed.publie ?? "7d" } : parsed;
   const page = filters.page ?? 1;
 
-  // Ranking by compatibility (« Recommandées » or a minimum score) scores the matching offers,
-  // most recent first; « Tous » and « Récentes » keep the database order and score the page only.
-  const ranked = view === "recommandees" || compat !== undefined;
-  const search = await getJobSearch(ranked ? { ...filters, page: 1 } : filters);
+  // « Pour vous » (or a minimum score) scores the matching offers, most recent first, and ranks
+  // them; « Récentes » keeps the database order and scores the page only.
+  const wantsRanking = view !== "recentes" || compat !== undefined;
+  const search = await getJobSearch(wantsRanking ? { ...filters, page: 1 } : filters);
   let jobs: PublicJobSummary[] = search.jobs;
   let total = search.total;
   let matches = new Map<string, CardMatch>();
-  if (ranked) {
+  let ranked = false;
+  if (wantsRanking) {
     const ids = await matchingJobIds(db, filters, search.now);
     const all = await matchesForUser(db, user.id, ids);
-    const min = Math.max(compat ?? 0, view === "recommandees" ? RECOMMENDED_MIN : 0);
-    const kept = ids
-      .flatMap((id) => {
-        const match = all.get(id);
-        return match?.state === "ok" && match.explanation.score >= min
-          ? [{ id, score: match.explanation.score }]
-          : [];
-      })
-      .sort((a, b) => b.score - a.score);
-    total = kept.length;
-    const pageIds = kept.slice((page - 1) * JOBS_PER_PAGE, page * JOBS_PER_PAGE).map((k) => k.id);
-    jobs = await jobCards(db, pageIds);
-    matches = new Map(pageIds.map((id) => [id, all.get(id)]));
+    const scored = ids.flatMap((id) => {
+      const match = all.get(id);
+      return match?.state === "ok" ? [{ id, score: match.explanation.score }] : [];
+    });
+    // No score at all (no skill yet, calculation off): the general selection, in database order.
+    ranked = scored.length > 0 || compat !== undefined || view === "recommandees";
+    if (ranked) {
+      const min = Math.max(compat ?? 0, view === "recommandees" ? RECOMMENDED_MIN : 0);
+      const kept = scored.filter((row) => row.score >= min).sort((a, b) => b.score - a.score);
+      // « Pour vous » never hides an offer: those without a score follow, in their order.
+      const rest =
+        min === 0 ? ids.filter((id) => !scored.some((row) => row.id === id)) : ([] as string[]);
+      const order = [...kept.map((row) => row.id), ...rest];
+      total = order.length;
+      const pageIds = order.slice((page - 1) * JOBS_PER_PAGE, page * JOBS_PER_PAGE);
+      jobs = await jobCards(db, pageIds);
+      matches = new Map(pageIds.map((id) => [id, all.get(id)]));
+    } else {
+      const plain = await getJobSearch(filters);
+      jobs = plain.jobs;
+      total = plain.total;
+      matches = new Map(jobs.map((job) => [job.id, all.get(job.id)]));
+    }
   } else {
     matches = await matchesForUser(
       db,
@@ -106,6 +119,7 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
       jobs.map((job) => job.id),
     );
   }
+  const general = view === "pour-vous" && !ranked;
   const pageCount = Math.max(1, Math.ceil(total / JOBS_PER_PAGE));
 
   const [applications, saved, companies] = await Promise.all([
@@ -212,7 +226,7 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
         role="search"
         className="flex flex-col gap-2 rounded-[22px] bg-blanc p-2 shadow-[0_6px_20px_rgb(11_26_31/0.06)] ring-[1.5px] ring-sapin/15 ring-inset lg:flex-row lg:items-stretch"
       >
-        {view !== "tous" && <input type="hidden" name="vue" value={view} />}
+        {view !== "pour-vous" && <input type="hidden" name="vue" value={view} />}
         {filters.tri && <input type="hidden" name="tri" value={filters.tri} />}
         <div className="flex flex-col gap-2 lg:flex-1 lg:flex-row">
           <div className={field}>
@@ -260,22 +274,25 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
             aria-label={t("talent.jobs.search.tabs")}
             className={cx(segmentedList, "overflow-x-auto")}
           >
-            {views.map((key) => (
+            {(["pour-vous", "recentes"] as const).map((key) => (
               <Link
                 key={key}
-                href={hrefWith({ vue: key === "tous" ? undefined : key })}
-                aria-current={view === key ? "page" : undefined}
-                className={segmentedItem(view === key)}
+                href={hrefWith({ vue: key === "pour-vous" ? undefined : key })}
+                aria-current={
+                  view === key || (key === "pour-vous" && view === "recommandees")
+                    ? "page"
+                    : undefined
+                }
+                className={segmentedItem(
+                  view === key || (key === "pour-vous" && view === "recommandees"),
+                )}
               >
-                {key === "tous"
-                  ? t("talent.jobs.search.tab.all", {
-                      count: view === "tous" ? total : search.total,
-                    })
-                  : t(
-                      `talent.jobs.search.tab.${key === "recommandees" ? "recommended" : "recent"}`,
-                    )}
+                {t(`talent.jobs.search.tab.${key === "pour-vous" ? "forYou" : "recent"}`)}
               </Link>
             ))}
+            <Link href="/app/jobs/enregistrees" className={segmentedItem(false)}>
+              {t("talent.jobs.search.tab.saved", { count: saved.length })}
+            </Link>
           </nav>
           {!ranked && (
             <details className="relative">
@@ -328,7 +345,7 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
               >
                 {filters.q && <input type="hidden" name="q" value={filters.q} />}
                 {filters.ville && <input type="hidden" name="ville" value={filters.ville} />}
-                {view !== "tous" && <input type="hidden" name="vue" value={view} />}
+                {view !== "pour-vous" && <input type="hidden" name="vue" value={view} />}
                 {filters.tri && <input type="hidden" name="tri" value={filters.tri} />}
                 <div className="flex items-center justify-between gap-3">
                   <p className="text-lg font-semibold">{t("talent.jobs.filters.text")}</p>
@@ -550,10 +567,22 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
 
       <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="flex flex-col gap-3">
-          {firstState?.state === "incomplete" && (
-            <p className="rounded-[18px] bg-blanc px-4 py-3 text-sm text-ardoise">
-              {t("match.score.unavailable")}
+          {general && firstState?.state !== "optedOut" ? (
+            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-[18px] bg-lime-clair px-4 py-3 text-sm">
+              <span className="min-w-0 flex-1">{t("talent.jobs.search.general")}</span>
+              <Link
+                href="/app/profil#competences"
+                className="flex min-h-11 items-center font-semibold underline underline-offset-2"
+              >
+                {t("talent.jobs.search.personalise")}
+              </Link>
             </p>
+          ) : (
+            firstState?.state === "incomplete" && (
+              <p className="rounded-[18px] bg-blanc px-4 py-3 text-sm text-ardoise">
+                {t("match.score.unavailable")}
+              </p>
+            )
           )}
           {firstState?.state === "optedOut" && (
             <p className="rounded-[18px] bg-blanc px-4 py-3 text-sm text-ardoise">
@@ -608,6 +637,11 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
                 </Link>
               )}
             </div>
+          )}
+          {jobs.length > 0 && (
+            <p className="text-center text-xs text-ardoise">
+              {t("talent.jobs.search.closedHidden")}
+            </p>
           )}
           <p className="flex items-center justify-center gap-2 text-xs text-ardoise lg:hidden">
             <Icon name="check" className="size-3.5 text-feuille" />

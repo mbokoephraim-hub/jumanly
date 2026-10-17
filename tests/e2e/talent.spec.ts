@@ -88,9 +88,15 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
     .last()
     .click();
   await expect(page).toHaveURL(/postuler=1/);
+  // Staged form (docs/ux-mobile-talent, prompt 4): CV, letter, review, then sending.
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/etape=lettre/);
   await page.locator("#apply-letter").fill("Ce poste correspond à mon expérience en comptabilité.");
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/etape=verification/);
+  await page.getByLabel(/consulte ma candidature/).check();
   await page.getByRole("button", { name: "Envoyer ma candidature" }).click();
-  await expect(page.getByText("Candidature envoyée !")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Candidature envoyée !" })).toBeVisible();
 
   // Follow it, read the CV that was sent, then withdraw.
   await page.goto("/app/jobs/candidatures");

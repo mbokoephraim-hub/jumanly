@@ -214,11 +214,11 @@ enum SkillImportance {
 }
 
 model Job {
-  id                String           @id @default(cuid(2))
+  id                String             @id @default(cuid(2))
   organizationId    String
-  organization      Organization     @relation(fields: [organizationId], references: [id])
+  organization      Organization       @relation(fields: [organizationId], references: [id])
   title             String
-  slug              String           @unique
+  slug              String             @unique
   description       String
   /// One item per line.
   responsibilities  String[]
@@ -232,32 +232,32 @@ model Job {
   /// USD cents per month; optional.
   salaryMin         Int?
   salaryMax         Int?
-  currency          String           @default("USD")
-  experienceMin     Int              @default(0)
+  currency          String             @default("USD")
+  experienceMin     Int                @default(0)
   educationLevelMin String?
   /// [{ code: "fr", level: "C1" }]
-  languagesRequired Json             @default("[]")
+  languagesRequired Json               @default("[]")
   /// Explicit criteria set by the recruiter: ["Permis B", …]
-  knockoutCriteria  Json             @default("[]")
-  status            JobStatus        @default(draft)
+  knockoutCriteria  Json               @default("[]")
+  status            JobStatus          @default(draft)
   publishedAt       DateTime?
   /// Set when the end of a paid plan put this offer back in draft (partie 09 § 9.2); restored
   /// automatically when the organization pays again, within its limit.
   pausedByBillingAt DateTime?
   closesAt          DateTime?
   createdById       String?
-  createdBy         User?            @relation("JobCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  createdBy         User?              @relation("JobCreator", fields: [createdById], references: [id], onDelete: SetNull)
   /// Recruiter in charge (« attribution des offres », partie 05 § 2.3).
   assignedToId      String?
-  assignedTo        User?            @relation("JobAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  assignedTo        User?              @relation("JobAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
   teamId            String?
-  team              Team?            @relation("JobTeam", fields: [teamId], references: [id], onDelete: SetNull)
+  team              Team?              @relation("JobTeam", fields: [teamId], references: [id], onDelete: SetNull)
   departmentId      String?
-  department        Team?            @relation("JobDepartment", fields: [departmentId], references: [id], onDelete: SetNull)
+  department        Team?              @relation("JobDepartment", fields: [departmentId], references: [id], onDelete: SetNull)
   entityId          String?
-  entity            OrgEntity?       @relation(fields: [entityId], references: [id], onDelete: SetNull)
+  entity            OrgEntity?         @relation(fields: [entityId], references: [id], onDelete: SetNull)
   /// Scorecard template: [{ name, description }] (`hire.scorecards`).
-  scorecardTemplate Json             @default("[]")
+  scorecardTemplate Json               @default("[]")
   /// Members given access to this job only (hiring managers, per-job permissions).
   assignments       JobAssignment[]
   contactRequests   ContactRequest[]
@@ -267,14 +267,15 @@ model Job {
   moderationFlags   String[]
   moderationReason  String?
   /// Points to correct ticked by the moderator (`admin.jobs.fix.*`), with `changes_requested`.
-  moderationChecks  String[]         @default([])
+  moderationChecks  String[]           @default([])
   skills            JobSkill[]
   stages            PipelineStage[]
   applications      Application[]
   savedBy           SavedJob[]
+  applicationDrafts ApplicationDraft[]
   matchResults      MatchResult[]
-  createdAt         DateTime         @default(now())
-  updatedAt         DateTime         @updatedAt
+  createdAt         DateTime           @default(now())
+  updatedAt         DateTime           @updatedAt
 
   @@index([status, publishedAt])
 }
@@ -712,6 +713,7 @@ model User {
   diagnostics         CareerDiagnostic[]
   diagnosticDraft     CareerDiagnosticDraft?
   savedJobs           SavedJob[]
+  applicationDrafts   ApplicationDraft[]
   jobsCreated         Job[]                     @relation("JobCreator")
   jobsAssigned        Job[]                     @relation("JobAssignee")
   jobAssignments      JobAssignment[]
@@ -1237,6 +1239,26 @@ model SavedJob {
   createdAt DateTime @default(now())
 
   @@id([userId, jobId])
+}
+
+/// Application in progress (docs/ux-mobile-talent, prompt 4): saved at each step of the staged
+/// form, removed when the application is sent. Never seen by the organization.
+model ApplicationDraft {
+  userId       String
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId        String
+  job          Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  /// Last step reached: cv | lettre | verification.
+  step         String   @default("cv")
+  /// Chosen CV; null with `profileOnly` = « Mon profil Jumanly seul », null alone = not chosen yet.
+  cvDocumentId String?
+  profileOnly  Boolean  @default(false)
+  coverLetter  String   @default("")
+  createdAt    DateTime @default(now())
+  updatedAt    DateTime @updatedAt
+
+  @@id([userId, jobId])
+  @@index([jobId])
 }
 
 enum SkillSource {

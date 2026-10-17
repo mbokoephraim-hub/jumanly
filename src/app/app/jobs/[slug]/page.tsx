@@ -3,7 +3,6 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Character } from "@/components/brand/character";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { AiBrand, AiPanel, ScoreRing, pillClass } from "@/components/career/kit";
 import { CopyButton } from "@/components/career/copy-button";
@@ -11,14 +10,15 @@ import { ReportForm } from "@/components/connect/report-form";
 import { relativeLabel, salaryText, tag, tagTone } from "@/components/jobs/talent-kit";
 import { DisputePanel } from "@/components/matching/dispute-panel";
 import { TalentWhy, criterionText } from "@/components/matching/talent-why";
-import { SuccessBurst } from "@/components/motion/success-burst";
 import { AppPageHeader } from "@/components/app/page-header";
 import { Alert, CompanyLogo } from "@/components/ui";
 import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { siteUrl } from "@/lib/seo";
 import { formatDate, formatRelative } from "@/lib/dates";
-import { applyAction, toggleSaveAction } from "@/server/actions/jobs";
+import { ApplyFlow } from "@/components/jobs/apply-flow";
+import { getApplicationDraft, applyStepOf } from "@/server/services/application-draft";
+import { SaveJobButton } from "@/components/jobs/save-job-button";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { gapCourses, matchForUser, type MatchState } from "@/server/matching/service";
@@ -47,6 +47,22 @@ export async function generateMetadata({
 const NEW_DAYS = 3;
 const card = "rounded-[24px] bg-blanc p-5 lg:p-6";
 const h2 = "text-[17px] leading-6 font-semibold tracking-[-0.01em] lg:text-lg";
+
+/** A section of the offer that folds (screen 08); the summary carries the section title. */
+function Fold({ title, open, children }: { title: string; open: boolean; children: ReactNode }) {
+  return (
+    <details open={open} className="group border-b border-brume last:border-b-0">
+      <summary className="flex min-h-14 cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
+        <h2 className={h2}>{title}</h2>
+        <Icon
+          name="chev-d"
+          className="size-5 shrink-0 transition-transform group-open:rotate-180"
+        />
+      </summary>
+      <div className="flex flex-col gap-3 pb-5">{children}</div>
+    </details>
+  );
+}
 
 function CheckList({ items }: { items: string[] }) {
   return (
@@ -100,12 +116,13 @@ export default async function TalentJobPage({
     where: { userId: user.id },
     select: {
       id: true,
-      skills: { select: { skillId: true } },
+      skills: { select: { skillId: true, skill: { select: { name: true } } } },
       documents: {
         where: { kind: "cv" },
         orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
-        select: { id: true, title: true, updatedAt: true },
+        select: { id: true, title: true, isPrimary: true, updatedAt: true },
       },
+      headline: true,
     },
   });
   const jobRow = await db.job.findUnique({
@@ -173,240 +190,114 @@ export default async function TalentJobPage({
     </span>
   );
   const saveForm = (className: string, withLabel: boolean) => (
-    <form action={toggleSaveAction}>
-      <input type="hidden" name="job" value={job.slug} />
-      <input type="hidden" name="back" value={`/app/jobs/${job.slug}`} />
-      <button
-        type="submit"
-        aria-pressed={Boolean(saved)}
-        aria-label={withLabel ? undefined : t("talent.jobs.card.save")}
-        className={className}
-      >
-        <Icon name="favori" className={cx("size-4", saved && "fill-sapin")} />
-        {withLabel && (saved ? t("talent.jobs.card.unsave") : t("talent.jobs.detail.save"))}
-      </button>
-    </form>
+    <SaveJobButton
+      slug={job.slug}
+      saved={Boolean(saved)}
+      back={`/app/jobs/${job.slug}`}
+      showLabel={withLabel}
+      iconClassName="size-4"
+      className={className}
+      labels={{
+        save: withLabel ? t("talent.jobs.detail.save") : t("talent.jobs.card.save"),
+        unsave: t("talent.jobs.card.unsave"),
+        saved: t("talent.jobs.card.saved.toast"),
+        removed: t("talent.jobs.card.unsaved.toast"),
+        undo: t("common.cancel"),
+      }}
+    />
   );
 
-  // ─── After sending: the success screen (mockup 03-18, « Après l'envoi »). ──────────────────
-  if (outcome === "envoyee") {
+  // ─── After sending (screen 11): shown only once the server has recorded the application. ───
+  if (outcome === "envoyee" && application) {
+    const tf = await getTranslations("talent.jobs.apply.flow");
     return (
-      <div className="flex flex-col gap-5">
-        <SuccessBurst
-          title={t("talent.jobs.apply.success.title")}
-          className="py-10"
-          action={
-            <>
-              <Link href="/app/jobs/candidatures" className={pillClass("dark", "md")}>
-                {t("talent.jobs.apply.success.track")}
-              </Link>
-              <Link href="/app/jobs" className={pillClass("outline", "md")}>
-                {t("talent.jobs.apply.success.continue")}
-              </Link>
-            </>
-          }
+      <div className="mx-auto flex w-full max-w-[640px] flex-col items-center gap-5 pt-6 pb-6 text-center">
+        <span
+          aria-hidden
+          className="grid size-28 place-items-center rounded-full bg-lime-clair ring-[10px] ring-lime-clair/60"
         >
-          <span className="mx-auto">
-            <Character name="amani" pose="joie" height={150} />
+          <span className="grid size-20 place-items-center rounded-full bg-lime text-sapin">
+            <Icon name="check" className="size-9" />
           </span>
-          <p>{t("talent.jobs.apply.success.body", { company })}</p>
-        </SuccessBurst>
-      </div>
-    );
-  }
-
-  // ─── The application form (mockup 03-18). ──────────────────────────────────────────────
-  if (applying) {
-    return (
-      <div className="flex flex-col gap-5">
-        <AppPageHeader
-          eyebrow={
-            <Link
-              href={`/app/jobs/${job.slug}`}
-              className="inline-flex items-center gap-1 hover:underline"
-            >
-              <Icon name="chev-l" className="size-3.5" />
-              {t("talent.jobs.aiPanel.job", { job: job.title, company })}
-            </Link>
-          }
-          title={t("talent.jobs.apply.heading")}
-          titleAs="p"
-        />
-        <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
-          <form
-            id="postuler"
-            action={applyAction}
-            className={cx(card, "flex flex-col gap-5 pb-6 max-lg:mb-28")}
-          >
-            <input type="hidden" name="job" value={job.slug} />
-            <div className="flex flex-wrap items-center justify-between gap-2">
-              <p className="text-[11px] font-semibold tracking-[0.09em] text-ardoise uppercase">
-                {t("talent.jobs.apply.step.text", { current: 1, total: 1 })}
-              </p>
-              <p className={cx(tag, "bg-lime-clair text-feuille-fonce")}>
-                <Icon name="check" className="size-3" />
-                {t("talent.jobs.apply.free")}
-              </p>
-            </div>
-            <div className="flex flex-col gap-1">
-              <h1 className="text-[22px] leading-7 font-semibold tracking-[-0.02em] lg:text-[26px] lg:leading-8">
-                {t("talent.jobs.apply.title", { jobTitle: job.title })}
-              </h1>
-              <p className="text-sm text-ardoise">{t("talent.jobs.apply.subtitle", { company })}</p>
-            </div>
-
-            <fieldset className="flex flex-col gap-3">
-              <div className="flex items-center justify-between gap-2">
-                <legend className="text-[15px] font-semibold">
-                  {t("talent.jobs.apply.cv.text")}
-                </legend>
-                <Link
-                  href="/app/career/cv"
-                  className="text-xs font-semibold text-feuille-fonce hover:underline"
-                >
-                  {t("talent.jobs.apply.cv.select")}
-                </Link>
-              </div>
-              {cvs.length === 0 && (
-                <Alert tone="info" title={t("talent.jobs.apply.cv.none")}>
-                  <Link href="/app/career/cv" className="font-medium underline">
-                    {t("talent.jobs.apply.cv.create")}
-                  </Link>
-                </Alert>
-              )}
-              {[...cvs.map((cv) => ({ id: cv.id, title: cv.title, date: cv.updatedAt })), null].map(
-                (cv, index) => (
-                  <label
-                    key={cv?.id ?? "profile"}
-                    className="flex cursor-pointer items-center gap-3 rounded-[18px] bg-blanc px-4 py-3 ring-[1.5px] ring-brume ring-inset has-checked:bg-lime-clair has-checked:ring-lime"
-                  >
-                    <input
-                      type="radio"
-                      name="cv"
-                      value={cv?.id ?? ""}
-                      defaultChecked={index === 0}
-                      className="size-5 shrink-0 accent-sapin"
-                    />
-                    <span
-                      aria-hidden
-                      className="flex size-9 shrink-0 items-center justify-center rounded-xl bg-blanc"
-                    >
-                      <Icon name={cv ? "doc" : "profil"} className="size-4" />
-                    </span>
-                    <span className="flex min-w-0 flex-col">
-                      <span className="truncate text-[13px] font-semibold">
-                        {cv ? cv.title : t("talent.jobs.apply.cv.profileOnly")}
-                      </span>
-                      {cv && (
-                        <span className="text-[11px] text-ardoise">
-                          {t("career.cv.updated", { date: formatDate(cv.date) })}
-                        </span>
-                      )}
-                    </span>
-                  </label>
-                ),
-              )}
-            </fieldset>
-
-            <div className="h-px bg-brume" />
-
-            <div className="flex flex-col gap-2">
-              <div className="flex flex-wrap items-center gap-2">
-                <label htmlFor="apply-letter" className="text-[15px] font-semibold">
-                  {t("talent.jobs.apply.letter.text")}
-                </label>
-                <span className={cx(tag, tagTone.brume)}>
-                  {t("talent.jobs.apply.letter.optional")}
-                </span>
-              </div>
-              <p id="apply-letter-hint" className="text-xs text-ardoise">
-                {t("talent.jobs.apply.letter.placeholder")}
-              </p>
-              <textarea
-                id="apply-letter"
-                name="coverLetter"
-                rows={6}
-                maxLength={5000}
-                aria-describedby="apply-letter-hint"
-                className="rounded-[18px] bg-blanc px-4 py-3 text-sm ring-[1.5px] ring-brume outline-none ring-inset focus:ring-2 focus:ring-sapin"
-              />
-            </div>
-
-            <p className="bg-menthe-clair/60 flex items-start gap-2.5 rounded-[14px] px-4 py-3 text-xs leading-[17px] text-[#0B5E49]">
-              <Icon name="eye" className="mt-px size-4 shrink-0" />
-              {t("talent.jobs.apply.profileShared")}
-            </p>
-            {criteria.length > 0 && (
-              <p className="flex items-start gap-2.5 rounded-[14px] bg-[#FCEBC6] px-4 py-3 text-xs leading-[17px] text-[#8A5A00]">
-                <Icon name="objectif" className="mt-px size-4 shrink-0" />
-                {t("talent.jobs.detail.knockout.hint")}
-              </p>
-            )}
-
-            <div className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 flex gap-3 rounded-[22px] bg-blanc p-3 shadow-float lg:static lg:justify-end lg:rounded-none lg:border-t lg:border-brume lg:bg-transparent lg:p-0 lg:pt-5 lg:shadow-none">
+        </span>
+        <h1 className="text-[28px] leading-tight font-bold tracking-tight">
+          {t("talent.jobs.apply.success.title")}
+        </h1>
+        <p className="text-[15px] text-ardoise">{tf("sent.received", { company })}</p>
+        <ul className="flex w-full flex-col overflow-hidden rounded-[22px] bg-blanc text-left shadow-douce">
+          {(
+            [
+              [
+                "/app/jobs/candidatures",
+                "suivi",
+                "bg-lime",
+                tf("sent.track"),
+                tf("sent.trackLine"),
+              ],
+              [
+                "/app/career/entretiens",
+                "message",
+                "bg-lime-clair",
+                tf("sent.prepare"),
+                tf("sent.prepareLine"),
+              ],
+            ] as const
+          ).map(([href, icon, tone, title, line]) => (
+            <li key={href} className="border-b border-brume last:border-b-0">
               <Link
-                href={`/app/jobs/${job.slug}`}
-                className={pillClass("outline", "md", "h-12 max-lg:hidden")}
+                href={href}
+                className="jm-press flex min-h-16 items-center gap-3 px-4 py-3 hover:bg-creme"
               >
-                {t("talent.jobs.apply.back")}
+                <span
+                  aria-hidden
+                  className={cx("grid size-11 shrink-0 place-items-center rounded-[13px]", tone)}
+                >
+                  <Icon name={icon} className="size-5" />
+                </span>
+                <span className="flex min-w-0 flex-1 flex-col">
+                  <span className="text-[15px] font-semibold">{title}</span>
+                  <span className="text-[13px] text-ardoise">{line}</span>
+                </span>
+                <Icon name="chev-r" className="size-4 shrink-0 text-ardoise" />
               </Link>
-              <button type="submit" className={pillClass("lime", "md", "h-12 flex-1 lg:flex-none")}>
-                {t("talent.jobs.apply.submit")}
-                <Icon name="send" className="size-4" />
-              </button>
-            </div>
-          </form>
-
-          <aside className="flex flex-col gap-4">
-            <div className={cx(card, "flex flex-col gap-3")}>
-              <div className="flex items-center gap-3">
-                <CompanyLogo
-                  name={company}
-                  size="md"
-                  className="size-11! rounded-[14px]! text-base!"
-                />
-                <div className="flex min-w-0 flex-col">
-                  <p className="text-[14px] font-semibold">{job.title}</p>
-                  <p className="text-[11px] text-ardoise">
-                    {t("talent.jobs.aiPanel.job", {
-                      job: company,
-                      company: t("talent.jobs.card.location", { city: job.city, workMode }),
-                    })}
-                  </p>
-                </div>
-              </div>
-              <div className="flex flex-wrap gap-2">
-                <span className={cx(tag, tagTone.brume)}>{contract}</span>
-                <span className={cx(tag, tagTone.brume)}>{salary}</span>
-              </div>
-              {ok && (
-                <div className="flex items-center justify-between gap-2">
-                  {scoreTag}
-                  <Link
-                    href={`/app/jobs/${job.slug}#compatibilite`}
-                    className="jm-tap flex items-center gap-1 text-[11px] font-semibold text-[#14745F] hover:underline"
-                  >
-                    <Icon name="eye" className="size-3.5" />
-                    {t("common.why")}
-                  </Link>
-                </div>
-              )}
-            </div>
-            <div className="relative flex flex-col gap-2 overflow-hidden rounded-[24px] bg-sapin p-5 text-blanc">
-              <span
-                aria-hidden
-                className="flex size-10 items-center justify-center rounded-xl bg-lime text-sapin"
-              >
-                <Icon name="check" className="size-5" />
-              </span>
-              <p className="text-[15px] font-semibold">{t("talent.jobs.sidebar.free")}</p>
-              <p className="text-xs text-blanc/70">{t("talent.jobs.apply.free")}</p>
-            </div>
-          </aside>
-        </div>
+            </li>
+          ))}
+        </ul>
+        <Link
+          href="/app/jobs"
+          className="jm-press flex min-h-12 w-full items-center justify-center rounded-pill bg-blanc text-[15px] font-semibold shadow-douce"
+        >
+          {tf("sent.explore")}
+        </Link>
       </div>
     );
   }
+
+  // ─── The staged application (screens 09-12). ─────────────────────────────────────────────
+  if (applying && jobRow) {
+    const draft = await getApplicationDraft(db, user.id, jobRow.id);
+    const step = applyStepOf(query.etape ?? draft?.step);
+    return (
+      <ApplyFlow
+        job={{ slug: job.slug, title: job.title }}
+        company={company}
+        step={step}
+        draft={draft}
+        cvs={cvs}
+        person={{
+          name: user.name,
+          image: user.image ?? undefined,
+          email: user.email,
+          headline: profile?.headline ?? null,
+          city: user.city ?? null,
+          skills: profile?.skills.map((entry) => entry.skill.name) ?? [],
+        }}
+      />
+    );
+  }
+
+  const draft =
+    jobRow && open && !application ? await getApplicationDraft(db, user.id, jobRow.id) : null;
 
   // ─── The offer. ─────────────────────────────────────────────────────────────────────
   const applyBlock = application ? (
@@ -423,7 +314,7 @@ export default async function TalentJobPage({
       href={`/app/jobs/${job.slug}?postuler=1`}
       className={pillClass("lime", "md", "h-12 px-6")}
     >
-      {t("talent.jobs.detail.apply")}
+      {draft ? t("talent.jobs.apply.flow.resume") : t("talent.jobs.detail.apply")}
       <Icon name="chev-r" className="size-4" />
     </Link>
   ) : null;
@@ -441,6 +332,9 @@ export default async function TalentJobPage({
         titleAs="p"
       />
       {outcome === "deja" && <Alert tone="info" title={t("talent.jobs.apply.already")} />}
+      {query.brouillon === "1" && draft && (
+        <Alert tone="info" title={t("talent.jobs.apply.flow.kept")} />
+      )}
       {(outcome === "close" || !open) && (
         <Alert tone="warning" title={t("talent.jobs.detail.closed")} />
       )}
@@ -502,6 +396,20 @@ export default async function TalentJobPage({
           <span className="max-lg:hidden">{applyBlock}</span>
         </div>
       </header>
+
+      {open && !application && cvs[0] && (
+        <Link
+          href={`/app/career/cv/${cvs[0].id}#adapter`}
+          className="jm-press flex min-h-16 items-center gap-3 rounded-[22px] bg-lime-clair px-4 py-3"
+        >
+          <Icon name="doc" className="size-5 shrink-0" />
+          <span className="flex min-w-0 flex-1 flex-col">
+            <span className="text-[15px] font-semibold">{t("talent.jobs.detail.tailor.text")}</span>
+            <span className="text-[13px] text-ardoise">{t("talent.jobs.detail.tailor.line")}</span>
+          </span>
+          <Icon name="chev-r" className="size-4 shrink-0 text-ardoise" />
+        </Link>
+      )}
 
       <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
         <div className="flex min-w-0 flex-col gap-5">
@@ -568,64 +476,60 @@ export default async function TalentJobPage({
               )}
             </dl>
 
-            <div className="flex flex-col gap-3">
-              <h2 className={h2}>{t("job.description.title")}</h2>
-              <p className="text-[13.5px] leading-[21px] whitespace-pre-line">{job.description}</p>
-            </div>
-            {job.responsibilities.length > 0 && (
-              <div className="flex flex-col gap-3">
-                <h2 className={h2}>{t("talent.jobs.detail.missions")}</h2>
-                <CheckList items={job.responsibilities} />
-              </div>
-            )}
-            {job.requirements.length > 0 && (
-              <div className="flex flex-col gap-3">
-                <h2 className={h2}>{t("talent.jobs.detail.profile")}</h2>
-                <CheckList items={job.requirements} />
-              </div>
-            )}
-            {job.skills.length > 0 && (
-              <div className="grid gap-5 sm:grid-cols-2">
-                {(["required", "preferred"] as const).map((importance) => {
-                  const skills = job.skills.filter((skill) => skill.importance === importance);
-                  return skills.length === 0 ? null : (
-                    <div key={importance} className="flex flex-col gap-2.5">
-                      <h2 className={h2}>{t(`talent.jobs.detail.skills.${importance}`)}</h2>
-                      <ul className="flex flex-wrap gap-2">
-                        {skills.map((skill) => (
-                          <li
-                            key={skill.skillId}
-                            className={cx(
-                              tag,
-                              "h-7",
-                              importance === "required" ? "bg-lime text-sapin" : tagTone.brume,
-                            )}
-                          >
-                            {mySkills.has(skill.skillId) && (
-                              <Icon name="check" className="size-3" />
-                            )}
-                            {skill.skill.name}
-                          </li>
-                        ))}
-                      </ul>
-                    </div>
-                  );
-                })}
-              </div>
-            )}
-            {criteria.length > 0 && (
-              <div className="flex gap-3 rounded-[18px] bg-[#F7F4D2] p-4 lg:p-5">
-                <span
-                  aria-hidden
-                  className="hidden size-10 shrink-0 items-center justify-center rounded-xl bg-blanc lg:flex"
-                >
-                  <Icon name="objectif" className="size-[18px]" />
-                </span>
-                <div className="flex flex-col gap-2">
-                  <h2 className="flex items-center gap-2 text-[15px] font-semibold">
-                    <Icon name="objectif" className="size-4 lg:hidden" />
-                    {t("talent.jobs.detail.knockout.text")}
-                  </h2>
+            <div className="flex flex-col">
+              <Fold title={t("job.description.title")} open>
+                <p className="text-[13.5px] leading-[21px] whitespace-pre-line">
+                  {job.description}
+                </p>
+              </Fold>
+              {job.responsibilities.length > 0 && (
+                <Fold title={t("talent.jobs.detail.missions")} open>
+                  <CheckList items={job.responsibilities} />
+                </Fold>
+              )}
+              {job.requirements.length > 0 && (
+                <Fold title={t("talent.jobs.detail.profile")} open={false}>
+                  <CheckList items={job.requirements} />
+                </Fold>
+              )}
+              {job.skills.length > 0 && (
+                <Fold title={t("talent.jobs.detail.skills.title")} open>
+                  <div className="grid gap-5 sm:grid-cols-2">
+                    {(["required", "preferred"] as const).map((importance) => {
+                      const skills = job.skills.filter((skill) => skill.importance === importance);
+                      return skills.length === 0 ? null : (
+                        <div key={importance} className="flex flex-col gap-2.5">
+                          <h3 className="text-[14px] font-semibold">
+                            {t(`talent.jobs.detail.skills.${importance}`)}
+                          </h3>
+                          <ul className="flex flex-wrap gap-2">
+                            {skills.map((skill) => (
+                              <li
+                                key={skill.skillId}
+                                className={cx(
+                                  tag,
+                                  "h-7",
+                                  importance === "required" ? "bg-lime text-sapin" : tagTone.brume,
+                                )}
+                              >
+                                {mySkills.has(skill.skillId) && (
+                                  <Icon name="check" className="size-3" />
+                                )}
+                                {skill.skill.name}
+                              </li>
+                            ))}
+                          </ul>
+                        </div>
+                      );
+                    })}
+                  </div>
+                  {job.skills.some((skill) => mySkills.has(skill.skillId)) && (
+                    <p className="text-xs text-ardoise">{t("talent.jobs.detail.skills.owned")}</p>
+                  )}
+                </Fold>
+              )}
+              {criteria.length > 0 && (
+                <Fold title={t("talent.jobs.detail.knockout.text")} open>
                   <ul className="flex flex-wrap gap-1.5">
                     {criteria.map((criterion) => (
                       <li
@@ -634,7 +538,7 @@ export default async function TalentJobPage({
                           tag,
                           "h-auto min-h-6 py-1 whitespace-normal",
                           tagTone.lime,
-                          "bg-blanc",
+                          "bg-[#F7F4D2]",
                         )}
                       >
                         <Icon name="check" className="size-3" />
@@ -645,44 +549,42 @@ export default async function TalentJobPage({
                   <p className="text-xs leading-[17px] text-ardoise">
                     {t("talent.jobs.detail.knockout.hint")}
                   </p>
-                </div>
-              </div>
-            )}
-            {job.benefits.length > 0 && (
-              <div className="flex flex-col gap-2.5">
-                <h2 className={h2}>{t("talent.jobs.detail.benefits")}</h2>
-                <ul className="flex flex-wrap gap-2">
-                  {job.benefits.map((benefit) => (
-                    <li key={benefit} className={cx(tag, tagTone.brume, "h-7")}>
-                      {benefit}
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            )}
-            {job.process.length > 0 && (
-              <div className="flex flex-col gap-2.5">
-                <h2 className={h2}>{t("talent.jobs.detail.process.text")}</h2>
-                <ol className="flex flex-col gap-2 lg:flex-row lg:flex-wrap">
-                  {job.process.map((step, index) => (
-                    <li
-                      key={step}
-                      className="flex items-center gap-2.5 rounded-[14px] text-[12.5px] font-medium lg:flex-1 lg:bg-creme lg:px-3 lg:py-2.5"
-                    >
-                      <span
-                        className={cx(
-                          "flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
-                          index === 0 ? "bg-lime" : "bg-creme lg:bg-blanc",
-                        )}
+                </Fold>
+              )}
+              {job.benefits.length > 0 && (
+                <Fold title={t("talent.jobs.detail.benefits")} open={false}>
+                  <ul className="flex flex-wrap gap-2">
+                    {job.benefits.map((benefit) => (
+                      <li key={benefit} className={cx(tag, tagTone.brume, "h-7")}>
+                        {benefit}
+                      </li>
+                    ))}
+                  </ul>
+                </Fold>
+              )}
+              {job.process.length > 0 && (
+                <Fold title={t("talent.jobs.detail.process.text")} open={false}>
+                  <ol className="flex flex-col gap-2 lg:flex-row lg:flex-wrap">
+                    {job.process.map((step, index) => (
+                      <li
+                        key={step}
+                        className="flex items-center gap-2.5 rounded-[14px] text-[12.5px] font-medium lg:flex-1 lg:bg-creme lg:px-3 lg:py-2.5"
                       >
-                        {index + 1}
-                      </span>
-                      {step}
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            )}
+                        <span
+                          className={cx(
+                            "flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
+                            index === 0 ? "bg-lime" : "bg-creme lg:bg-blanc",
+                          )}
+                        >
+                          {index + 1}
+                        </span>
+                        {step}
+                      </li>
+                    ))}
+                  </ol>
+                </Fold>
+              )}
+            </div>
             <div className="flex flex-wrap items-center justify-between gap-3 border-t border-brume pt-4 text-xs text-ardoise">
               <span className="flex items-center gap-2">
                 <Icon name="check" className="size-3.5 text-feuille" />

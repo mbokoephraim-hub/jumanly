@@ -47,6 +47,7 @@ const THRESHOLD = 70;
 const actionLook: Record<NextAction["kind"], { icon: IconName; tone: string }> = {
   interview: { icon: "calendrier", tone: "bg-lime" },
   document: { icon: "doc", tone: "bg-neon" },
+  draft: { icon: "jobs", tone: "bg-creme" },
   message: { icon: "message", tone: "bg-lime-clair" },
   course: { icon: "learn", tone: "bg-menthe-claire" },
   profile: { icon: "profil", tone: "bg-creme" },
@@ -247,17 +248,25 @@ export default async function ForMePage() {
                     title: t("talent.forMe.actions.document"),
                     line: [action.company, action.name].filter(Boolean).join(" · "),
                   }
-                : action.kind === "message"
+                : action.kind === "draft"
                   ? {
-                      title: t("talent.forMe.actions.message"),
-                      line: action.company || t("talent.forMe.actions.messageLine"),
+                      title: t("talent.forMe.actions.draft"),
+                      line: t("talent.forMe.actions.draftLine", {
+                        job: action.job,
+                        company: action.company,
+                      }),
                     }
-                  : action.kind === "course"
-                    ? { title: t("talent.forMe.actions.course"), line: action.title }
-                    : {
-                        title: t("talent.forMe.actions.profile"),
-                        line: t("talent.forMe.actions.profileLine", { percent: action.percent }),
-                      };
+                  : action.kind === "message"
+                    ? {
+                        title: t("talent.forMe.actions.message"),
+                        line: action.company || t("talent.forMe.actions.messageLine"),
+                      }
+                    : action.kind === "course"
+                      ? { title: t("talent.forMe.actions.course"), line: action.title }
+                      : {
+                          title: t("talent.forMe.actions.profile"),
+                          line: t("talent.forMe.actions.profileLine", { percent: action.percent }),
+                        };
           return (
             <ForMeRow
               key={`${action.kind}-${index}`}
