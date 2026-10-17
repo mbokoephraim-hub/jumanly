@@ -309,7 +309,7 @@ test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ p
   // The job editor shows the same identity and the card as talents will see it.
   await page.goto("/app/hire/offres/nouvelle");
   const editor = page.locator("main").filter({ visible: true });
-  await expect(editor.getByRole("heading", { name: "Aperçu dans Offres" })).toBeVisible();
+  // On a phone the preview shows at the last step; the banner is already in it.
   await expect(editor.locator(`img[src="${src}"]`).first()).toBeAttached();
 
   await page.goto("/app/organisation");

@@ -1,5 +1,5 @@
 import { expectAccessible } from "./a11y";
-import { expect, test } from "./fixtures";
+import { expect, test, type Page } from "./fixtures";
 import { demo, logIn, signUpFromPricing, testEmail } from "./session";
 
 // Mobile Talent v5, prompt 1 (docs/ux-mobile-talent): the button range, the visual cards and the
@@ -380,6 +380,17 @@ test("reprendre une formation depuis Apprendre", async ({ page }) => {
 
 // Prompt 4 bis: the lesson v7 (screens 14, 67 to 69): tabs as cards, titled blocks, modules,
 // transcript and resources. Switching tab keeps the page (and the video) where it is.
+/** Opens a lesson from the Modules tab, unfolding its module when it is not the current one. */
+async function openLesson(page: Page, name: RegExp) {
+  const main = page.locator("main").filter({ visible: true });
+  await main.getByRole("tab", { name: "Modules" }).click();
+  const unit = main.locator("details").filter({ has: page.getByRole("link", { name }) });
+  if (!(await unit.evaluate((element) => (element as HTMLDetailsElement).open)))
+    await unit.locator("summary").click();
+  await unit.getByRole("link", { name }).click();
+  await expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
+}
+
 test("une leçon : résumé en blocs, modules, transcription et ressources", async ({ page }) => {
   test.setTimeout(120_000);
   await logIn(page, "grace.ux@jumanly.test");
@@ -387,13 +398,7 @@ test("une leçon : résumé en blocs, modules, transcription et ressources", asy
   const main = () => page.locator("main").filter({ visible: true });
 
   // The video lesson's transcript, searchable.
-  await main().getByRole("tab", { name: "Modules" }).click();
-  await main()
-    .getByRole("link", { name: /Écouter et reformuler/ })
-    .click();
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Écouter et reformuler" }),
-  ).toBeVisible();
+  await openLesson(page, /Écouter et reformuler/);
   // Another lesson opens on its summary.
   await expect(main().getByRole("tab", { name: "Résumé" })).toHaveAttribute(
     "aria-selected",
@@ -407,11 +412,7 @@ test("une leçon : résumé en blocs, modules, transcription et ressources", asy
   await expectAccessible(page);
 
   // The text lesson: titled blocks, then modules and resources.
-  await main().getByRole("tab", { name: "Modules" }).click();
-  await main()
-    .getByRole("link", { name: /La méthode CALME/ })
-    .click();
-  await expect(page.getByRole("heading", { level: 1, name: /La méthode CALME/ })).toBeVisible();
+  await openLesson(page, /La méthode CALME/);
   await expect(main().getByRole("heading", { name: "En bref" })).toBeVisible();
   await expect(main().getByRole("heading", { name: "Ce que vous allez faire" })).toBeVisible();
   await expect(main().getByText("Poser les bonnes questions")).toBeVisible();
