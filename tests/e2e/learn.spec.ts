@@ -267,7 +267,8 @@ test("l'académie Learn : mon espace, mes parcours, évaluations et Coach IA qui
   page,
 }) => {
   await logIn(page, "grace.ux@jumanly.test");
-  await page.goto("/app/learn");
+  // The sub-sections show on every Learn page (on a phone, not on the Apprendre tab itself).
+  await page.goto("/app/learn/explorer");
   const tabs = page.getByRole("navigation", { name: "Sous-rubriques de Learn" });
   for (const name of [
     "Mon espace",
@@ -278,6 +279,7 @@ test("l'académie Learn : mon espace, mes parcours, évaluations et Coach IA qui
     "Certifications",
   ])
     await expect(tabs.getByRole("link", { name })).toBeVisible();
+  await page.goto("/app/learn");
   await expect(page.getByText("Votre prochaine leçon")).toBeVisible();
 
   // Old catalog addresses lead to the new spaces.

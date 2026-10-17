@@ -333,7 +333,7 @@ export default async function ThreadPage({
           <details className="relative">
             <summary
               aria-label={t("thread.more")}
-              className="flex size-10 cursor-pointer list-none items-center justify-center rounded-full hover:bg-blanc/10 [&::-webkit-details-marker]:hidden"
+              className="jm-top-round flex size-10 cursor-pointer list-none items-center justify-center rounded-full [&::-webkit-details-marker]:hidden"
             >
               <Icon name="more" className="size-5" />
             </summary>

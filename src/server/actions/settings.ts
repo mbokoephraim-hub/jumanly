@@ -183,3 +183,18 @@ export async function updateDisplay(formData: FormData) {
   refresh();
   back("compte", { ok: "1" });
 }
+
+const themeSchema = z.object({ theme: z.enum(["light", "green"]) });
+
+/**
+ * Thème Clair ou Vert (docs/ux-mobile-talent V6 § B7): kept on the account. The switch on Compte
+ * changes the page at once; without JavaScript the form posts and the page comes back themed.
+ */
+export async function updateTheme(formData: FormData) {
+  const parsed = themeSchema.safeParse(Object.fromEntries(formData));
+  const user = await requireUser("/app/compte");
+  if (!parsed.success) return;
+  await db.user.update({ where: { id: user.id }, data: { theme: parsed.data.theme } });
+  // The shell (layout) carries the theme: it must render again, not only the page.
+  refresh();
+}

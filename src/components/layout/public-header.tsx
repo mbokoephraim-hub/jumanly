@@ -64,7 +64,7 @@ export function PublicHeader() {
             className="flex size-10 cursor-pointer list-none items-center justify-center rounded-full bg-creme [&::-webkit-details-marker]:hidden"
             aria-label={t("menu.open")}
           >
-            <Icon name="menu" className="size-5" />
+            <Icon name="liste" className="size-5" />
           </summary>
           <nav
             aria-label={t("menu.label")}

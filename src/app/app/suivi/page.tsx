@@ -355,7 +355,10 @@ export default async function SuiviPage({ searchParams }: PageProps<"/app/suivi"
       {query.ok === "decline" && <Alert tone="success" title={t("ok.declined")} />}
 
       <nav aria-label={t("filters.label")}>
-        <ul className="-mx-4 flex gap-2 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0">
+        <ul
+          id="suivi-filtres"
+          className="-mx-4 flex scroll-mt-4 gap-2 overflow-x-auto px-4 pb-1 md:mx-0 md:px-0"
+        >
           {filters.map(chip)}
         </ul>
       </nav>

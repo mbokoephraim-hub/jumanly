@@ -49,6 +49,7 @@ export type AppNavigationKey =
   | "tabs.offers"
   | "tabs.learn"
   | "tabs.suivi"
+  | "tabs.account"
   | "learn"
   | "career"
   | "jobs"
@@ -73,25 +74,37 @@ type AppNavigationItem = {
 };
 
 /**
- * Talent space (docs/ux-mobile-talent, prompt 2): four destinations in the bottom bar of a phone,
- * the same four plus Career in the column of icons of a computer. Messages, the profile, the CVs
- * and the dashboard are in the menu of the avatar and in Mon espace. `key` points to `appNav.<key>`.
+ * Talent space (docs/ux-mobile-talent, V6 § B2): five destinations in the bottom bar of a phone,
+ * Pour moi in the middle; the same five plus Career in the column of icons of a computer. `key`
+ * points to `appNav.<key>`.
  */
 export const talentNavigation: AppNavigationItem[] = [
-  { key: "tabs.forMe", href: "/app", icon: "accueil" },
   { key: "tabs.offers", href: "/app/jobs", icon: "jobs" },
   { key: "tabs.learn", href: "/app/learn", icon: "diplome" },
+  { key: "tabs.forMe", href: "/app", icon: "accueil" },
   { key: "tabs.suivi", href: "/app/suivi", icon: "suivi" },
+  { key: "tabs.account", href: "/app/compte", icon: "profil" },
   { key: "career", href: "/app/career", icon: "career", pill: false },
 ];
 
-/** Shortcuts of the avatar menu (screen 34), in order. `key` points to `appNav.topMenu.<key>`. */
+/** The destinations themselves: their page opens on the big title and the search (V7 § B1). */
+export const talentTabPaths = ["/app", "/app/jobs", "/app/learn", "/app/suivi", "/app/compte"];
+
+/**
+ * Shortcuts of the Menu button (screen 34, V6 § B3), in order, after Orbi. `key` points to
+ * `appNav.topMenu.<key>`.
+ */
 export const talentMenu = [
-  { key: "messages", href: "/app/messages", icon: "message", tone: "bg-lime" },
-  { key: "profile", href: "/app/profil", icon: "profil", tone: "bg-lime-clair" },
-  { key: "cvs", href: "/app/career/cv", icon: "cv", tone: "bg-menthe-claire" },
-  { key: "dashboard", href: "/app/tableau-de-bord", icon: "statistiques", tone: "bg-gris-clair" },
-  { key: "settings", href: "/app/parametres", icon: "reglages", tone: "bg-creme" },
+  { key: "cvs", href: "/app/career/cv", icon: "cv", tone: "bg-lime" },
+  { key: "dashboard", href: "/app/tableau-de-bord", icon: "statistiques", tone: "bg-neon" },
+  { key: "applications", href: "/app/jobs/candidatures", icon: "jobs", tone: "bg-[#BFEFDF]" },
+  { key: "interviews", href: "/app/career/entretiens", icon: "message", tone: "bg-brume" },
+  {
+    key: "certificates",
+    href: "/app/learn/attestations",
+    icon: "certificat",
+    tone: "bg-[#F6F3EE]",
+  },
 ] as const satisfies readonly { key: string; href: string; icon: IconName; tone: string }[];
 
 /**

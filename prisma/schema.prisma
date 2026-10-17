@@ -16,6 +16,12 @@ datasource db {
 // Plans and entitlements live in the database and are edited in the admin.
 // Code never tests a plan code or name, only entitlement keys (CLAUDE.md § 2).
 
+/// Theme of the signed-in space: Clair (Crème, white cards) or Vert (Sapin to Nuit, glass cards).
+enum UserTheme {
+  light
+  green
+}
+
 enum PlanFamily {
   talent
   rh
@@ -700,6 +706,8 @@ model User {
   newsletter          Boolean                   @default(false)
   /// « Réduire les animations » (docs/experience-animee § 0.4): no motion in the signed-in space.
   reduceMotion        Boolean                   @default(false)
+  /// Theme of the signed-in space (docs/ux-mobile-talent V6 § B7): light (Crème) or green.
+  theme               UserTheme                 @default(light)
   /// Full welcome intro seen (docs/refonte-connexion § 7): played once per account, on any device.
   introSeenAt         DateTime?
   termsAcceptedAt     DateTime?

@@ -102,7 +102,7 @@ export default async function AdminCourses({ searchParams }: PageProps<"/admin/f
                 aria-current={current ? "page" : undefined}
                 className={segmentedItem(current)}
               >
-                <Icon name={view === "liste" ? "menu" : "grid"} className="size-4" />
+                <Icon name={view === "liste" ? "liste" : "grid"} className="size-4" />
                 {t(`v3.view.${view}`)}
               </Link>
             );

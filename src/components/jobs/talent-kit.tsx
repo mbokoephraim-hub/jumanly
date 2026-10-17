@@ -257,9 +257,12 @@ export function FilterChipToggle({
   label,
   active,
   icon,
+  open,
   children,
 }: {
   menu: FilterMenuKey | "all";
+  /** Opened from the « Filtres » button of the search bar (`?filtres=1`). */
+  open?: boolean;
   label: ReactNode;
   active?: boolean;
   icon?: ReactNode;
@@ -267,7 +270,7 @@ export function FilterChipToggle({
   children?: ReactNode;
 }) {
   return (
-    <details id={`jf-${menu}`} name="jobs-filter" className="shrink-0">
+    <details id={`jf-${menu}`} name="jobs-filter" open={open} className="shrink-0">
       <summary
         className={cx(
           chip,

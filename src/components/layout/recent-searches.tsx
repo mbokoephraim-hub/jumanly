@@ -25,6 +25,11 @@ function read(): string[] {
   }
 }
 
+/** The recent searches of this browser, empty without the « preferences » consent. */
+export function recentSearches(): string[] {
+  return allowed() ? read() : [];
+}
+
 /**
  * Recent searches (screen 18), kept in this browser only and only with the « preferences » cookie
  * consent. The current words are remembered when they are searched.

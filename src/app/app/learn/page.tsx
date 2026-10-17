@@ -79,7 +79,9 @@ export default async function LearnHomePage({ searchParams }: PageProps<"/app/le
 
   return (
     <div className="flex flex-col gap-5">
+      {/* On a phone the header already says « Apprendre » (screen 13). */}
       <AppPageHeader
+        className="max-md:sr-only"
         eyebrow={t("learn.home.eyebrow")}
         title={t("learn.home.title", { firstName: user.firstName ?? user.name })}
         actions={

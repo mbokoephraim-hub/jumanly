@@ -41,8 +41,9 @@ test("la gamme mobile (boutons, cartes, états) est présentée dans la biblioth
   await expectAccessible(page);
 });
 
-// Prompt 2: four destinations, the avatar menu (screen 34), Mon espace (screen 17) and Suivi.
-test("navigation Talent : quatre destinations, menu de l'avatar, Mon espace et Suivi", async ({
+// Prompts 2 and 2 bis: five destinations with Pour moi in the middle, the top menu (screen 34),
+// Mon espace (screen 17) and Suivi.
+test("navigation Talent : cinq destinations, menu du haut, Mon espace et Suivi", async ({
   page,
   isMobile,
 }) => {
@@ -51,7 +52,7 @@ test("navigation Talent : quatre destinations, menu de l'avatar, Mon espace et S
   const navigation = page
     .getByRole("navigation", { name: "Navigation principale" })
     .filter({ visible: true });
-  for (const name of ["Pour moi", "Offres", "Apprendre", /^Suivi/])
+  for (const name of ["Pour moi", "Offres", "Apprendre", /^Suivi/, "Compte"])
     await expect(navigation.getByRole("link", { name })).toBeVisible();
   await expect(navigation.getByRole("link", { name: "Pour moi" })).toHaveAttribute(
     "aria-current",
@@ -61,20 +62,41 @@ test("navigation Talent : quatre destinations, menu de l'avatar, Mon espace et S
   await expect(navigation.getByRole("link", { name: "Career" })).toHaveCount(isMobile ? 0 : 1);
 
   if (isMobile) {
-    // The avatar opens a small menu anchored under it; Escape closes it and gives the focus back.
-    const avatar = page.getByRole("button", { name: "Mon espace" });
-    await avatar.click();
+    // Pour moi sits in the middle of the bar, Compte at the end.
+    const labels = await navigation.getByRole("link").allInnerTexts();
+    expect(labels.map((label) => label.trim().split("\n")[0])).toEqual([
+      "Offres",
+      "Apprendre",
+      "Pour moi",
+      "Suivi",
+      "Compte",
+    ]);
+    // The Menu button (top left) opens the shortcuts; Escape closes it and gives the focus back.
+    const button = page.getByRole("button", { name: "Menu", exact: true });
+    await button.click();
     const menu = page.getByRole("dialog", { name: "Menu de mon espace" });
     await expect(menu).toBeVisible();
-    await expect(avatar).toHaveAttribute("aria-expanded", "true");
-    for (const name of ["Mon profil", "Mes CV", "Tableau de bord", "Paramètres", "Tout Mon espace"])
+    await expect(button).toHaveAttribute("aria-expanded", "true");
+    for (const name of ["Mes CV", "Tableau de bord", "Tout Mon espace"])
       await expect(menu.getByRole("link", { name })).toBeVisible();
-    await expect(menu.getByRole("link", { name: /^Messages/ })).toBeVisible();
     await expectAccessible(page);
     await page.keyboard.press("Escape");
     await expect(menu).toBeHidden();
-    await expect(avatar).toBeFocused();
-    await avatar.click();
+    await expect(button).toBeFocused();
+
+    // « + » opens the Créer sheet; Escape closes it.
+    await page.getByRole("button", { name: "Créer", exact: true }).click();
+    const sheet = page.getByRole("dialog", { name: "Créer" });
+    await expect(sheet.getByRole("link", { name: /candidature/i }).first()).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(sheet).toBeHidden();
+
+    // Messages moved to the top of the screen.
+    await expect(
+      page.getByRole("link", { name: /^Messages/ }).filter({ visible: true }),
+    ).toHaveAttribute("href", "/app/messages");
+
+    await button.click();
     await menu.getByRole("link", { name: "Tout Mon espace" }).click();
   } else {
     await page.goto("/app/espace");
@@ -183,6 +205,7 @@ test("inscription, écran d'objectif puis Pour moi selon l'objectif", async ({ p
 test("trouver une offre et postuler : étapes, brouillon et coupure réseau", async ({
   page,
   context,
+  isMobile,
 }) => {
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("postuler"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
@@ -197,8 +220,16 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
   await expect(tabs.getByRole("link", { name: "Enregistrées · 0" })).toBeVisible();
   // No skill yet: the list says it is a general selection.
   await expect(page.getByText(/Sélection générale, non personnalisée/)).toBeVisible();
-  await page.locator("#job-keyword").fill("assistant administratif");
-  await page.getByRole("button", { name: "Rechercher" }).click();
+  if (isMobile) {
+    // Phone: the search of the header (screen 18) searches the offers on this tab.
+    const search = page.getByRole("combobox", { name: /Rechercher/ });
+    await search.fill("assistant administratif");
+    await search.press("Enter");
+    await expect(page).toHaveURL(/q=assistant/);
+  } else {
+    await page.locator("#job-keyword").fill("assistant administratif");
+    await page.getByRole("button", { name: "Rechercher" }).click();
+  }
   await page.getByRole("link", { name: "Assistant administratif (démo)" }).first().click();
   await expect(page).toHaveURL(/\/app\/jobs\/demo-assistant-administratif-kinshasa/);
   await expect(page.locator("summary").filter({ hasText: "Description du poste" })).toBeVisible();

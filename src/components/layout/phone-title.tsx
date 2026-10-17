@@ -1,6 +1,5 @@
 import type { ReactNode } from "react";
-import Link from "next/link";
-import { Icon } from "@/components/brand/icon";
+import { BackButton } from "./back-button";
 import { TopBarOverride } from "./top-bar-override";
 
 /**
@@ -20,13 +19,7 @@ export function PhoneTitle({
 }) {
   return (
     <TopBarOverride>
-      <Link
-        href={back}
-        aria-label={backLabel}
-        className="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-blanc/10"
-      >
-        <Icon name="chev-l" className="size-6" />
-      </Link>
+      <BackButton fallback={back} label={backLabel} history={false} className="mr-2" />
       <p className="min-w-0 flex-1 truncate text-[20px] font-semibold tracking-[-0.02em]">
         {title}
       </p>

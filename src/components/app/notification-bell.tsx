@@ -43,7 +43,7 @@ export function NotificationBell({
   labels,
 }: {
   initialUnread: number;
-  tone: "light" | "dark";
+  tone: "light" | "dark" | "round";
   labels: BellLabels;
 }) {
   const panelId = useId();
@@ -151,7 +151,11 @@ export function NotificationBell({
         }}
         className={cx(
           "relative flex size-10 items-center justify-center rounded-full",
-          tone === "light" ? "bg-blanc hover:bg-brume" : "hover:bg-blanc/10",
+          tone === "light"
+            ? "bg-blanc hover:bg-brume"
+            : tone === "round"
+              ? "jm-top-round"
+              : "hover:bg-blanc/10",
         )}
       >
         <span key={ring} className={cx("flex", ring > 0 && "jm-bell-ring")}>
