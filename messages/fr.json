@@ -3117,7 +3117,7 @@
         },
         "build": {
           "title": "Construire mon profil",
-          "count": "{done} étapes sur {total}",
+          "count": "{done, plural, one {# étape} other {# étapes}} sur {total}",
           "add": "Ajouter",
           "done": "Fait",
           "step": {
@@ -3145,7 +3145,7 @@
           "saved": "Enregistré",
           "saving": "Enregistrement…",
           "error": "Non enregistré, réessayez",
-          "idle": "Enregistré au fil de la saisie"
+          "idle": "Enregistré"
         },
         "rows": {
           "label": "Parties du profil",

@@ -2466,7 +2466,7 @@ Conventions :
 | `talent.profile.phone.photo.saved` | Photo enregistrée. |
 | `talent.profile.phone.photo.removed` | Photo retirée. |
 | `talent.profile.phone.build.title` | Construire mon profil |
-| `talent.profile.phone.build.count` | {done} étapes sur {total} |
+| `talent.profile.phone.build.count` | {done, plural, one {# étape} other {# étapes}} sur {total} |
 | `talent.profile.phone.build.add` | Ajouter |
 | `talent.profile.phone.build.done` | Fait |
 | `talent.profile.phone.build.step.photo` | Photo |
@@ -2486,7 +2486,7 @@ Conventions :
 | `talent.profile.phone.status.saved` | Enregistré |
 | `talent.profile.phone.status.saving` | Enregistrement… |
 | `talent.profile.phone.status.error` | Non enregistré, réessayez |
-| `talent.profile.phone.status.idle` | Enregistré au fil de la saisie |
+| `talent.profile.phone.status.idle` | Enregistré |
 | `talent.profile.phone.rows.label` | Parties du profil |
 | `talent.profile.phone.rows.experiences` | Expériences |
 | `talent.profile.phone.rows.experiencesCount` | {count, plural, =0 {Ajouter un poste} one {# poste} other {# postes}} |

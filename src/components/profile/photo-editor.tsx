@@ -111,7 +111,11 @@ export function PhotoEditor({
     const canvas = document.createElement("canvas");
     canvas.width = EXPORT_SIDE;
     canvas.height = EXPORT_SIDE;
-    canvas.getContext("2d")!.drawImage(img, sx, sy, side, side, 0, 0, EXPORT_SIDE, EXPORT_SIDE);
+    const context = canvas.getContext("2d")!;
+    // A JPEG has no transparency: a transparent PNG would turn black without this white ground.
+    context.fillStyle = "#ffffff";
+    context.fillRect(0, 0, EXPORT_SIDE, EXPORT_SIDE);
+    context.drawImage(img, sx, sy, side, side, 0, 0, EXPORT_SIDE, EXPORT_SIDE);
     canvas.toBlob(
       (blob) => {
         if (!blob) return;
@@ -171,7 +175,7 @@ export function PhotoEditor({
           className="pointer-events-none absolute top-1/2 left-1/2 aspect-square h-[78%] -translate-1/2 rounded-full shadow-[0_0_0_9999px_rgb(15_45_38/0.45)] ring-[3px] ring-blanc"
         />
         {!shown && (
-          <p className="absolute inset-x-6 top-1/2 -translate-y-1/2 text-center text-[15px] text-blanc">
+          <p className="absolute inset-x-[26%] top-1/2 -translate-y-1/2 text-center text-[15px] leading-5 text-blanc">
             {labels.empty}
           </p>
         )}

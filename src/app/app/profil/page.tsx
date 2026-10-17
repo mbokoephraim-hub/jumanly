@@ -145,218 +145,222 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
   }[profile.visibility];
 
   return (
-    <div className="flex flex-col gap-5">
-      {partie ? (
-        <PhoneTitle
-          back="/app/profil"
-          backLabel={t("talent.profile.phone.backProfile")}
-          title={partTitles[partie]}
-        />
-      ) : (
-        <PhoneTitle
-          back="/app"
-          backLabel={t("talent.profile.phone.back")}
-          title={t("talent.profile.phone.title")}
-        />
-      )}
-      {(notice.ok === "photo" || notice.ok === "photo-retiree") && (
-        <Alert
-          tone="success"
-          title={t(
-            notice.ok === "photo"
-              ? "talent.profile.phone.photo.saved"
-              : "talent.profile.phone.photo.removed",
-          )}
-        />
-      )}
-      {!partie && <PhoneOverview profile={profile} />}
-      {/* Admin v4, étape 3 (inspired by Patreon's profile pages): a thin cover, the avatar, the
+    <>
+      <div className="flex flex-col gap-5">
+        {partie ? (
+          <PhoneTitle
+            back="/app/profil"
+            backLabel={t("talent.profile.phone.backProfile")}
+            title={partTitles[partie]}
+          />
+        ) : (
+          <PhoneTitle
+            back="/app"
+            backLabel={t("talent.profile.phone.back")}
+            title={t("talent.profile.phone.title")}
+          />
+        )}
+        {(notice.ok === "photo" || notice.ok === "photo-retiree") && (
+          <Alert
+            tone="success"
+            title={t(
+              notice.ok === "photo"
+                ? "talent.profile.phone.photo.saved"
+                : "talent.profile.phone.photo.removed",
+            )}
+          />
+        )}
+        {!partie && <PhoneOverview profile={profile} />}
+        {/* Admin v4, étape 3 (inspired by Patreon's profile pages): a thin cover, the avatar, the
           name and one line of facts, then the parts of the profile as horizontal tabs. */}
-      <section
-        aria-labelledby="profil-titre"
-        className="overflow-hidden rounded-[24px] bg-blanc ring-1 ring-sapin/6 max-md:hidden"
-      >
-        <div aria-hidden className="jm-profile-cover h-20 lg:h-24" />
-        <div className="flex flex-wrap items-end gap-x-4 gap-y-3 px-5 pt-3 lg:px-6">
-          <Link
-            href="/app/profil?photo=1"
-            aria-label={t("talent.profile.phone.photo.change")}
-            className="-mt-12 shrink-0 self-start rounded-full ring-4 ring-blanc"
-          >
-            {profile.user.image ? (
-              // A small square served with a long cache: next/image has nothing to add.
-              // eslint-disable-next-line @next/next/no-img-element
-              <img
-                src={profile.user.image}
-                alt=""
-                className="size-[76px] rounded-full object-cover lg:size-[84px]"
-              />
-            ) : (
-              <span
-                aria-hidden
-                className="grid size-[76px] place-items-center rounded-full bg-lime text-[24px] font-semibold text-sapin lg:size-[84px]"
-              >
-                {initials(user.name)}
-              </span>
-            )}
-          </Link>
-          <div className="flex min-w-0 flex-1 flex-col gap-0.5">
-            <h1 id="profil-titre" className="text-[12.5px] leading-4 text-ardoise">
-              {t("talent.profile.title")}
-            </h1>
-            <p className="text-[22px] leading-7 font-semibold tracking-[-0.02em] lg:text-[26px] lg:leading-8">
-              {user.name}
-            </p>
-            {profile.headline && (
-              <p className="text-[13.5px] leading-5 text-ardoise">{profile.headline}</p>
-            )}
-          </div>
-          <a
-            href="#apercu"
-            className="flex h-10 items-center gap-2 rounded-pill bg-blanc px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
-          >
-            <Icon name="eye" className="size-4" />
-            {t("talent.profile.preview.text")}
-          </a>
-        </div>
-        <p className="flex flex-wrap items-center gap-2 px-5 pt-3 text-xs font-semibold lg:px-6">
-          {[profile.user.city, profile.user.country].some(Boolean) && (
-            <span className="flex items-center gap-1.5 text-ardoise">
-              <Icon name="localisation" className="size-3.5" />
-              {[profile.user.city, profile.user.country].filter(Boolean).join(", ")}
-            </span>
-          )}
-          <span className="flex items-center gap-1.5 rounded-pill bg-lime-clair px-3 py-1.5 text-up-texte">
-            <Icon name="check" className="size-3.5" />
-            {t("talent.profile.autosaved")}
-          </span>
-          <span
-            className={cx("flex items-center gap-1.5 rounded-pill px-3 py-1.5", visibilityChip)}
-          >
-            <Icon name="eye" className="size-3.5" />
-            {t(`talent.profile.visibility.badge.${profile.visibility}`)}
-          </span>
-        </p>
-        <nav aria-label={t("talent.profile.tabs.aria")} className="mt-3 border-t border-sapin/8">
-          <ul className="jm-section-tabs flex gap-1 overflow-x-auto px-3 py-1.5 lg:px-4">
-            {(
-              [
-                ["#identite", t("talent.profile.identity.title")],
-                ["#resume", sectionNames.summary],
-                ["#experiences", sectionNames.experience],
-                ["#formations", sectionNames.education],
-                ["#competences", sectionNames.skills],
-                ["#langues", sectionNames.languages],
-                ["#preferences", sectionNames.preferences],
-                ["#visibilite", t("talent.profile.tabs.visibility")],
-              ] as const
-            ).map(([href, label]) => (
-              <li key={href} className="shrink-0">
-                <a
-                  href={href}
-                  className="flex h-9 items-center rounded-pill px-3 text-[13px] font-medium whitespace-nowrap text-ardoise hover:bg-sapin/5 hover:text-sapin"
-                >
-                  {label}
-                </a>
-              </li>
-            ))}
-          </ul>
-        </nav>
-      </section>
-      {one(params.import) !== undefined && !partie && (
-        <Alert
-          tone="success"
-          title={t("ai.cvImport.done", { count: Number(one(params.import)) || 0 })}
-        />
-      )}
-      <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
-        <div className="flex min-w-0 flex-col gap-5">
-          <div className={only("identite")}>
-            <Identity profile={profile} notice={notice} />
-          </div>
-          <div className={only("resume")}>
-            <Summary profile={profile} notice={notice} />
-          </div>
-          <div className={only("experiences")}>
-            <Experiences profile={profile} notice={notice} />
-          </div>
-          <div className={only("formations")}>
-            <Educations profile={profile} notice={notice} />
-          </div>
-          <div className={only("competences")}>
-            <Skills profile={profile} notice={notice} />
-          </div>
-          <div className={only("langues")}>
-            <Languages profile={profile} notice={notice} />
-          </div>
-          <div className={only("preferences")}>
-            <Preferences profile={profile} notice={notice} />
-          </div>
-        </div>
-        <aside className="flex flex-col gap-5 max-xl:-order-1 xl:sticky xl:top-[84px]">
-          <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5 max-md:hidden">
-            <div className="flex items-center gap-4">
-              <ProgressRing
-                value={percent}
-                size={96}
-                label={t("talent.profile.completion.text", { percent })}
-              />
-              <div className="flex flex-col gap-1">
-                <p className="text-[17px] leading-tight font-bold">
-                  {t("talent.profile.completion.text", { percent })}
-                </p>
-                <p className="text-xs leading-[17px] text-ardoise">
-                  {t("talent.profile.completion.hint")}
-                </p>
-              </div>
-            </div>
-            {missing.length > 0 && (
-              <p className="flex items-start gap-2 rounded-[14px] bg-[#FBF6C9] px-3 py-2 text-xs">
-                <Icon name="objectif" className="mt-px size-3.5 shrink-0" />
-                {t("talent.profile.completion.missing", {
-                  sections: missing.map((key) => sectionNames[key]).join(", "),
-                })}
-              </p>
-            )}
-            {missing[0] && (
-              <a
-                href={sectionAnchors[missing[0]] ?? "#identite"}
-                className="inline-flex h-10 items-center justify-center gap-2 rounded-pill bg-lime px-4 text-[14px] font-semibold text-sapin hover:bg-lime/85"
-              >
-                {t("talent.profile.completion.next", { section: sectionNames[missing[0]] })}
-                <Icon name="chev-r" className="size-4" />
-              </a>
-            )}
-          </section>
-          <div className={only("visibilite")}>
-            <RecruiterPreview profile={profile} />
-          </div>
-          <div className={only("visibilite")}>
-            <Visibility profile={profile} notice={notice} />
-          </div>
-          <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5 max-md:hidden">
-            <p className="flex items-center gap-3 text-[15px] font-bold">
-              <span
-                aria-hidden
-                className="flex size-9 items-center justify-center rounded-[12px] bg-lime-clair"
-              >
-                <Icon name="cv" className="size-[18px]" />
-              </span>
-              {t("talent.profile.importCv.text")}
-            </p>
-            <p className="text-xs leading-[17px] text-ardoise">
-              {t("talent.profile.importCv.hint")}
-            </p>
+        <section
+          aria-labelledby="profil-titre"
+          className="overflow-hidden rounded-[24px] bg-blanc ring-1 ring-sapin/6 max-md:hidden"
+        >
+          <div aria-hidden className="jm-profile-cover h-20 lg:h-24" />
+          <div className="flex flex-wrap items-end gap-x-4 gap-y-3 px-5 pt-3 lg:px-6">
             <Link
-              href="/app/profil/import"
-              className="flex h-9 items-center gap-2 self-start rounded-pill px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
+              href="/app/profil?photo=1"
+              aria-label={t("talent.profile.phone.photo.change")}
+              className="-mt-12 shrink-0 self-start rounded-full ring-4 ring-blanc"
             >
-              <Icon name="telecharger" className="size-4" />
-              {t("talent.profile.importCv.action")}
+              {profile.user.image ? (
+                // A small square served with a long cache: next/image has nothing to add.
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  src={profile.user.image}
+                  alt=""
+                  className="size-[76px] rounded-full object-cover lg:size-[84px]"
+                />
+              ) : (
+                <span
+                  aria-hidden
+                  className="grid size-[76px] place-items-center rounded-full bg-lime text-[24px] font-semibold text-sapin lg:size-[84px]"
+                >
+                  {initials(user.name)}
+                </span>
+              )}
             </Link>
-          </section>
-        </aside>
+            <div className="flex min-w-0 flex-1 flex-col gap-0.5">
+              <h1 id="profil-titre" className="text-[12.5px] leading-4 text-ardoise">
+                {t("talent.profile.title")}
+              </h1>
+              <p className="text-[22px] leading-7 font-semibold tracking-[-0.02em] lg:text-[26px] lg:leading-8">
+                {user.name}
+              </p>
+              {profile.headline && (
+                <p className="text-[13.5px] leading-5 text-ardoise">{profile.headline}</p>
+              )}
+            </div>
+            <a
+              href="#apercu"
+              className="flex h-10 items-center gap-2 rounded-pill bg-blanc px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
+            >
+              <Icon name="eye" className="size-4" />
+              {t("talent.profile.preview.text")}
+            </a>
+          </div>
+          <p className="flex flex-wrap items-center gap-2 px-5 pt-3 text-xs font-semibold lg:px-6">
+            {[profile.user.city, profile.user.country].some(Boolean) && (
+              <span className="flex items-center gap-1.5 text-ardoise">
+                <Icon name="localisation" className="size-3.5" />
+                {[profile.user.city, profile.user.country].filter(Boolean).join(", ")}
+              </span>
+            )}
+            <span className="flex items-center gap-1.5 rounded-pill bg-lime-clair px-3 py-1.5 text-up-texte">
+              <Icon name="check" className="size-3.5" />
+              {t("talent.profile.autosaved")}
+            </span>
+            <span
+              className={cx("flex items-center gap-1.5 rounded-pill px-3 py-1.5", visibilityChip)}
+            >
+              <Icon name="eye" className="size-3.5" />
+              {t(`talent.profile.visibility.badge.${profile.visibility}`)}
+            </span>
+          </p>
+          <nav aria-label={t("talent.profile.tabs.aria")} className="mt-3 border-t border-sapin/8">
+            <ul className="jm-section-tabs flex gap-1 overflow-x-auto px-3 py-1.5 lg:px-4">
+              {(
+                [
+                  ["#identite", t("talent.profile.identity.title")],
+                  ["#resume", sectionNames.summary],
+                  ["#experiences", sectionNames.experience],
+                  ["#formations", sectionNames.education],
+                  ["#competences", sectionNames.skills],
+                  ["#langues", sectionNames.languages],
+                  ["#preferences", sectionNames.preferences],
+                  ["#visibilite", t("talent.profile.tabs.visibility")],
+                ] as const
+              ).map(([href, label]) => (
+                <li key={href} className="shrink-0">
+                  <a
+                    href={href}
+                    className="flex h-9 items-center rounded-pill px-3 text-[13px] font-medium whitespace-nowrap text-ardoise hover:bg-sapin/5 hover:text-sapin"
+                  >
+                    {label}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          </nav>
+        </section>
+        {one(params.import) !== undefined && !partie && (
+          <Alert
+            tone="success"
+            title={t("ai.cvImport.done", { count: Number(one(params.import)) || 0 })}
+          />
+        )}
+        <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_340px]">
+          <div className="flex min-w-0 flex-col gap-5">
+            <div className={only("identite")}>
+              <Identity profile={profile} notice={notice} />
+            </div>
+            <div className={only("resume")}>
+              <Summary profile={profile} notice={notice} />
+            </div>
+            <div className={only("experiences")}>
+              <Experiences profile={profile} notice={notice} />
+            </div>
+            <div className={only("formations")}>
+              <Educations profile={profile} notice={notice} />
+            </div>
+            <div className={only("competences")}>
+              <Skills profile={profile} notice={notice} />
+            </div>
+            <div className={only("langues")}>
+              <Languages profile={profile} notice={notice} />
+            </div>
+            <div className={only("preferences")}>
+              <Preferences profile={profile} notice={notice} />
+            </div>
+          </div>
+          <aside className="flex flex-col gap-5 max-xl:-order-1 xl:sticky xl:top-[84px]">
+            <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5 max-md:hidden">
+              <div className="flex items-center gap-4">
+                <ProgressRing
+                  value={percent}
+                  size={96}
+                  label={t("talent.profile.completion.text", { percent })}
+                />
+                <div className="flex flex-col gap-1">
+                  <p className="text-[17px] leading-tight font-bold">
+                    {t("talent.profile.completion.text", { percent })}
+                  </p>
+                  <p className="text-xs leading-[17px] text-ardoise">
+                    {t("talent.profile.completion.hint")}
+                  </p>
+                </div>
+              </div>
+              {missing.length > 0 && (
+                <p className="flex items-start gap-2 rounded-[14px] bg-[#FBF6C9] px-3 py-2 text-xs">
+                  <Icon name="objectif" className="mt-px size-3.5 shrink-0" />
+                  {t("talent.profile.completion.missing", {
+                    sections: missing.map((key) => sectionNames[key]).join(", "),
+                  })}
+                </p>
+              )}
+              {missing[0] && (
+                <a
+                  href={sectionAnchors[missing[0]] ?? "#identite"}
+                  className="inline-flex h-10 items-center justify-center gap-2 rounded-pill bg-lime px-4 text-[14px] font-semibold text-sapin hover:bg-lime/85"
+                >
+                  {t("talent.profile.completion.next", { section: sectionNames[missing[0]] })}
+                  <Icon name="chev-r" className="size-4" />
+                </a>
+              )}
+            </section>
+            <div className={only("visibilite")}>
+              <RecruiterPreview profile={profile} />
+            </div>
+            <div className={only("visibilite")}>
+              <Visibility profile={profile} notice={notice} />
+            </div>
+            <section className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5 max-md:hidden">
+              <p className="flex items-center gap-3 text-[15px] font-bold">
+                <span
+                  aria-hidden
+                  className="flex size-9 items-center justify-center rounded-[12px] bg-lime-clair"
+                >
+                  <Icon name="cv" className="size-[18px]" />
+                </span>
+                {t("talent.profile.importCv.text")}
+              </p>
+              <p className="text-xs leading-[17px] text-ardoise">
+                {t("talent.profile.importCv.hint")}
+              </p>
+              <Link
+                href="/app/profil/import"
+                className="flex h-9 items-center gap-2 self-start rounded-pill px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
+              >
+                <Icon name="telecharger" className="size-4" />
+                {t("talent.profile.importCv.action")}
+              </Link>
+            </section>
+          </aside>
+        </div>
       </div>
+      {/* Outside the page block: its entrance animation leaves a transform that would pin a fixed
+          sheet to the page instead of the screen. */}
       {photoOpen && (
         // Screen 26: a sheet over the profile on a phone, a dialog on a computer. Closing goes back
         // to the profile, so the sheet works without JavaScript.
@@ -417,7 +421,7 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
           </section>
         </div>
       )}
-    </div>
+    </>
   );
 }
 

@@ -77,7 +77,7 @@ export async function PhoneOverview({ profile }: { profile: FullProfile }) {
   const rows: { id: PhonePart; icon: IconName; title: string; detail: string; empty: boolean }[] = [
     {
       id: "experiences",
-      icon: "career",
+      icon: "jobs",
       title: t("rows.experiences"),
       detail: t("rows.experiencesCount", { count: profile.experiences.length }),
       empty: profile.experiences.length === 0,

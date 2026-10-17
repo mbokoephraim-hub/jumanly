@@ -112,7 +112,7 @@ export function IntroForm({
         <p
           role="status"
           className={cx(
-            "flex min-w-0 shrink items-center gap-1.5 text-[14px] font-semibold",
+            "flex shrink-0 items-center gap-1.5 text-[15px] font-semibold",
             state.status === "error" ? "text-down-texte" : "text-feuille-fonce",
           )}
         >
