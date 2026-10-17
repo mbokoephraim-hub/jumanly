@@ -2194,3 +2194,10 @@ toutes dans `docs/specifications.md`.
   d'acceptation, réalisations mises en avant, connexions, badges Premium et Cap ; écrans 67 à 80.
 - Brief § 7, prompt amélioré et prompts (prompt 10 ajouté) mis à jour. Quota de réalisations par forfait à
   confirmer dans la partie 05.
+
+## 2026-10-17 · Expérience mobile, version 8 (maquettes et brief)
+
+- `docs/ux-mobile-talent/CAHIER-DES-CHARGES-V8.md` : pays avec drapeaux (RD Congo puis Afrique centrale,
+  Afrique de l'Ouest, reste de l'Afrique, hors d'Afrique, A à Z), villes par pays, ajout d'image et de PDF,
+  profils suggérés (formules payantes), connexion avant tout message, recruteur sur mobile ; écrans 81 à 94.
+- Brief § 8 et prompts (prompts 3 et 10 complétés, prompt 11 recruteur ajouté).

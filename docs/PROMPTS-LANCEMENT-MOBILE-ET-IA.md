@@ -1,12 +1,12 @@
 # Prompts Claude Code · expérience mobile Talent et Jumanly AI
 
-Date : 16 octobre 2026, mis à jour le 17 octobre (versions 6 et 7). Onze prompts à coller dans Claude Code **un par un, dans l’ordre**. Chaque prompt
+Date : 16 octobre 2026, mis à jour le 17 octobre (versions 6, 7 et 8). Douze prompts à coller dans Claude Code **un par un, dans l’ordre**. Chaque prompt
 attend la fin du précédent (code fusionné, vérifications vertes) avant d’être envoyé.
 
 Références déposées sur `main` :
 - `docs/ux-mobile-talent/` : cahier des charges mobile (fait foi), `BRIEF-MOBILE-TALENT.md`,
-  `PROMPT-AMELIORE.md`, **`CAHIER-DES-CHARGES-V6.md` puis `CAHIER-DES-CHARGES-V7.md` (la v7 l’emporte)**, maquettes
-  `maquette/mobile-talent.html`, `maquette/ecrans/01.jpg` à `80.jpg` et styles d’origine `maquette/source/`.
+  `PROMPT-AMELIORE.md`, **`CAHIER-DES-CHARGES-V6.md`, `V7.md` puis `V8.md` (la plus récente l’emporte)**, maquettes
+  `maquette/mobile-talent.html`, `maquette/ecrans/01.jpg` à `94.jpg` et styles d’origine `maquette/source/`.
 - `docs/jumanly-ai/` : cahier des charges Jumanly AI (fait foi), `BRIEF-JUMANLY-AI.md`.
 
 | N° | Prompt | Écrans |
@@ -14,14 +14,15 @@ Références déposées sur `main` :
 | 0 | Diagnostic et plan, sans code | tous |
 | 1 | Socle visuel : boutons, cartes, états d’interaction | planches Boutons, Cartes, États |
 | 2 | Navigation : 5 onglets, en-tête v7, recherche Orbi, retour, +, Compte, thèmes, ouverture | 17, 18, 34, 57-62 |
-| 3 | Objectif et Pour moi | 01-05 |
+| 3 | Première connexion (pays, lieux), objectif et Pour moi | 01-05, 81-82 |
 | 4 | Offres avec bannières, candidature en étapes, Apprendre et leçon | 06-14, 31-33, 63-69, 74 |
 | 5 | Suivi, entretiens, messages et décisions | 15-16, 20-24, 50-55 |
 | 6 | Profil, CV mobile, import, expériences, notifications, mesure | 19, 25-29, 56, 70-73 |
 | 7 | Jumanly AI : assistant central, bouton, panneau | 35-36, 41-44 |
 | 8 | Jumanly AI : offres, CV, suivi, suggestions applicables | 30, 37-38, 40 |
 | 9 | Jumanly AI : Learn, Hire, simulations d’entretien | 39, 43, 45-49 |
-| 10 | Réalisations, connexions, badges Premium et Cap | 60, 75-79, planche 0d |
+| 10 | Réalisations, connexions, profils suggérés, badges | 60, 75-79, 83-90, planches 0d |
+| 11 | Recruteur sur mobile (RH et entreprise) | 54-55, 66, 80, 91-94 |
 
 ---
 
@@ -32,9 +33,9 @@ Nous lançons deux chantiers liés : l’expérience mobile de l’espace Talent
 
 Lis, dans cet ordre :
 1. CLAUDE.md (règles d’or).
-2. docs/ux-mobile-talent/CAHIER-DES-CHARGES-UX-MOBILE.md (ma demande), puis CAHIER-DES-CHARGES-V6.md et CAHIER-DES-CHARGES-V7.md (la v7 l’emporte en cas de différence), BRIEF-MOBILE-TALENT.md (choix par défaut, § 5 cartes et messages, § 6 version 6, § 7 version 7), PROMPT-AMELIORE.md.
+2. docs/ux-mobile-talent/CAHIER-DES-CHARGES-UX-MOBILE.md (ma demande), puis CAHIER-DES-CHARGES-V6.md, V7.md et V8.md (la plus récente l’emporte en cas de différence), BRIEF-MOBILE-TALENT.md (choix par défaut, § 5 cartes et messages, § 6, § 7 et § 8), PROMPT-AMELIORE.md.
 3. docs/jumanly-ai/CAHIER-DES-CHARGES-JUMANLY-AI.md (ma demande, elle fait foi) et BRIEF-JUMANLY-AI.md.
-4. Les maquettes : docs/ux-mobile-talent/maquette/mobile-talent.html (planches Boutons, Cartes, États d’interaction, puis 80 écrans), maquette/ecrans/01.jpg à 80.jpg et les styles d’origine maquette/source/style.css à style7.css.
+4. Les maquettes : docs/ux-mobile-talent/maquette/mobile-talent.html (planches Boutons, Cartes, États d’interaction, puis 94 écrans), maquette/ecrans/01.jpg à 94.jpg et les styles d’origine maquette/source/style.css à style8.css.
 5. Les briefs déjà livrés qu’il faut respecter : docs/interactions-relief, docs/experience-animee, docs/refonte-career, docs/modeles-cv, docs/learn-v2/PLAN.md, docs/refonte-connexion.
 
 Ne code rien. Ta réponse est un diagnostic et un plan :
@@ -45,7 +46,7 @@ Ne code rien. Ta réponse est un diagnostic et un plan :
 - les risques (sécurité, isolation des organisations, données personnelles, coûts IA, budget JS mobile) ;
 - les écarts que tu proposes par rapport aux briefs, avec la raison ;
 - pourquoi le rendu actuel s’écarte des maquettes (jetons, composants, ombres, rayons) et comment tu garantis la fidélité : valeurs reprises de maquette/source/, capture Playwright à 390 px comparée à maquette/ecrans/NN.jpg pour chaque écran ;
-- le découpage en 10 prompts que je t’enverrai ensuite (socle visuel, navigation, Pour moi, Offres et candidature, Suivi et messages, profil et CV, puis Jumanly AI en 3 temps) : confirme-le ou propose mieux.
+- le découpage en 11 prompts que je t’enverrai ensuite (socle visuel, navigation, Pour moi, Offres et candidature, Suivi et messages, profil et CV, puis Jumanly AI en 3 temps) : confirme-le ou propose mieux.
 
 Attends ma validation.
 ```
@@ -55,9 +56,9 @@ Attends ma validation.
 ## Prompt 1 · Socle visuel
 
 ```text
-Prompt 1 sur 10 : le socle visuel, pour tout l’espace Talent.
+Prompt 1 sur 11 : le socle visuel, pour tout l’espace Talent.
 
-Références : planches « Boutons », « Cartes » et « États d’interaction » de docs/ux-mobile-talent/maquette/mobile-talent.html ; PROMPT-AMELIORE.md § 2 et § 5 ; BRIEF-MOBILE-TALENT.md § 5 ; styles d’origine dans docs/ux-mobile-talent/maquette/source/ (style.css à style7.css) : reporte leurs valeurs exactes dans nos jetons, sans approximation ni nouvelle couleur, y compris les jetons du thème Vert (.vert de style6.css).
+Références : planches « Boutons », « Cartes » et « États d’interaction » de docs/ux-mobile-talent/maquette/mobile-talent.html ; PROMPT-AMELIORE.md § 2 et § 5 ; BRIEF-MOBILE-TALENT.md § 5 ; styles d’origine dans docs/ux-mobile-talent/maquette/source/ (style.css à style8.css) : reporte leurs valeurs exactes dans nos jetons, sans approximation ni nouvelle couleur, y compris les jetons du thème Vert (.vert de style6.css).
 
 À faire :
 - <Button variant="primary|accent|secondary|outline|link|ai|danger" size="L|M|S"> avec les états repos, appui, en cours, fait, désactivé ; principal en dégradé Sapin → Émeraude avec le rond Lime et la flèche ; accent en dégradé Lime, texte Sapin ; jamais blanc sur Lime.
@@ -74,7 +75,7 @@ Fin : lint, typecheck, test, build, test:e2e:reduced sur /dev/composants, captur
 ## Prompt 2 · Navigation
 
 ```text
-Prompt 2 sur 10 : navigation mobile de l’espace Talent, version 6.
+Prompt 2 sur 11 : navigation mobile de l’espace Talent, version 6.
 
 Références : CAHIER-DES-CHARGES-V6.md et V7.md partie B (la v7 fait foi), BRIEF-MOBILE-TALENT.md § 6 et § 7 points 1 à 3, PROMPT-AMELIORE.md § 3 ; maquette, section « En-tête, retour et barre du bas », écrans 03, 17, 18, 34 et 57 à 62, planche 0d (barre de recherche, animation).
 
@@ -98,11 +99,13 @@ Fin : 360, 390, 430 px et ordinateur, dans les deux thèmes ; captures Playwrigh
 ## Prompt 3 · Objectif et Pour moi
 
 ```text
-Prompt 3 sur 10 : objectif et page Pour moi.
+Prompt 3 sur 11 : objectif et page Pour moi.
 
-Références : écrans 01 à 05, BRIEF-MOBILE-TALENT.md § 2 points 1 et 7, § 5 point 3.
+Références : écrans 01 à 05, 81 et 82, planche 0e ; BRIEF-MOBILE-TALENT.md § 2 points 1 et 7, § 5 point 3, § 8 points 1 et 2.
 
 À faire :
+- Pays à la première connexion (81) : référentiel Country et Locality (migration places, seed depuis ISO 3166 et GeoNames), drapeaux SVG libres, RD Congo en tête puis Afrique centrale, Afrique de l’Ouest, reste de l’Afrique, hors d’Afrique, A à Z dans chaque groupe, recherche.
+- « Où souhaitez-vous travailler ? » (82) : plusieurs pays, puis villes et provinces, télétravail ; branché sur les filtres d’offres.
 - Écran d’objectif à la première connexion (après le générique d’entrée), une seule question, « Plus tard » possible ; homeFocus(goal) sans migration.
 - Pour moi selon l’objectif, avec GoalCard (chiffres réels, chiffre absent = masqué), offres de recommendedJobs ou « non personnalisée », formations, outils en VisualTile, prochaines actions réelles.
 - Aucun sous-titre de section, aucun texte long, aucune donnée inventée.
@@ -115,7 +118,7 @@ Fin : vérifications complètes, e2e du parcours d’inscription jusqu’à Pour
 ## Prompt 4 · Offres, candidature, Apprendre
 
 ```text
-Prompt 4 sur 10 : Offres, candidature en étapes, Apprendre.
+Prompt 4 sur 11 : Offres, candidature en étapes, Apprendre.
 
 Références : écrans 06 à 14, 31 à 33 ; BRIEF-MOBILE-TALENT.md § 2 point 6 ; docs/learn-v2/PLAN.md.
 
@@ -137,7 +140,7 @@ Fin : vérifications complètes, e2e « trouver une offre et postuler » et « r
 ## Prompt 5 · Suivi, entretiens, messages et décisions
 
 ```text
-Prompt 5 sur 10 : Suivi, entretiens, messages et décisions.
+Prompt 5 sur 11 : Suivi, entretiens, messages et décisions.
 
 Ajout v7 : modèles de refus et d’acceptation bien écrits (écrans 55 et 80, BRIEF-MOBILE-TALENT.md § 7 point 5), tons Chaleureux / Formel / Court, variables remplies seules, envoi au clic ; réutilise message-templates.ts.
 
@@ -158,7 +161,7 @@ Fin : vérifications complètes, e2e entretien et refus (côté recruteur puis c
 ## Prompt 6 · Profil, CV, recherche, notifications
 
 ```text
-Prompt 6 sur 10 : profil, CV mobile, recherche, notifications, mesure.
+Prompt 6 sur 11 : profil, CV mobile, recherche, notifications, mesure.
 
 Références : écrans 19, 25 à 29, 49, 56 et 70 à 73 ; BRIEF-MOBILE-TALENT.md § 7 point 6 ; BRIEF-MOBILE-TALENT.md § 2 points 8 et 9, § 5 point 7 ; docs/refonte-career/BRIEF-CV-V2.md ; docs/modeles-cv (ne pas toucher au rendu).
 
@@ -178,7 +181,7 @@ Fin : vérifications complètes, e2e « compléter mon profil », « importer un
 ## Prompt 7 · Jumanly AI, socle
 
 ```text
-Prompt 7 sur 10 : Jumanly AI, étape 1 du cahier des charges.
+Prompt 7 sur 11 : Jumanly AI, étape 1 du cahier des charges.
 
 Références : docs/jumanly-ai/CAHIER-DES-CHARGES-JUMANLY-AI.md, BRIEF-JUMANLY-AI.md (§ 2 en entier, § 3 risques), écrans 34 à 36 et 41 à 44.
 
@@ -197,7 +200,7 @@ Fin : vérifications complètes, e2e ouverture du panneau et conversation (fourn
 ## Prompt 8 · Jumanly AI dans Offres, CV et Suivi
 
 ```text
-Prompt 8 sur 10 : Jumanly AI, étapes 2 et 3 du cahier des charges.
+Prompt 8 sur 11 : Jumanly AI, étapes 2 et 3 du cahier des charges.
 
 Références : écrans 30, 31, 37, 38, 40 ; BRIEF-JUMANLY-AI.md § 2 points 7 et 8.
 
@@ -215,7 +218,7 @@ Fin : vérifications complètes, e2e « adapter mon CV à une offre » et « rev
 ## Prompt 9 · Learn, Hire et simulations d’entretien
 
 ```text
-Prompt 9 sur 10 : Jumanly AI, étapes 4 et 5 du cahier des charges.
+Prompt 9 sur 11 : Jumanly AI, étapes 4 et 5 du cahier des charges.
 
 Références : écrans 39, 43, 45 à 49 ; BRIEF-JUMANLY-AI.md § 2 points 10 et 11 ; docs/specifications.md parties 05, 07 (/app/career/entretiens), 08 § 8.9, 10.
 
@@ -233,9 +236,9 @@ Fin : vérifications complètes, e2e simulation écrite et mode recruteur (isola
 ## Prompt 10 · Réalisations, connexions et badges
 
 ```text
-Prompt 10 sur 10 : réalisations mises en avant, connexions professionnelles, badges Premium et Cap.
+Prompt 10 sur 11 : réalisations mises en avant, connexions professionnelles, badges Premium et Cap.
 
-Références : CAHIER-DES-CHARGES-V7.md § B8 et B9, BRIEF-MOBILE-TALENT.md § 7 points 7 à 11 ; écrans 25, 60, 75 à 79 et planche 0d ; docs/specifications.md parties 05 (forfaits), 10 (données personnelles, modération).
+Références : CAHIER-DES-CHARGES-V7.md § B8 et B9, V8.md § B2 et B3, BRIEF-MOBILE-TALENT.md § 7 points 7 à 11 et § 8 points 3 à 5 ; écrans 25, 60, 75 à 79, 83 à 90 et planche 0d ; docs/specifications.md parties 05 (forfaits), 10 (données personnelles, modération).
 
 Avant de coder : propose les valeurs du quota de réalisations par forfait (proposition : 5, 10, 20, illimité) à ajouter dans la partie 05 et le seed, et attends ma validation.
 
@@ -245,7 +248,30 @@ Avant de coder : propose les valeurs du quota de réalisations par forfait (prop
 - Connexions : table Connection (migration highlights_and_connections), demander, accepter, refuser, annuler ; limite d’envoi quotidienne ; blocage et signalement. Profil d’un membre (77) : bio, réalisations, parcours. Règle d’or 5 inchangée pour les recruteurs ; chaque consultation de profil reste journalisée.
 - Badge Cap : cible (métier, lieu) et visibilité (tous, recruteurs, aucun) ; jamais utilisé par le matching ni pour trier les candidats.
 - Opportunité trouvée (79) : OpportunityReport, réalisation « Nouveau poste » facultative, retrait du badge Cap.
-- Bouton + (60) : brancher toutes ses entrées.
+- Ajout d’image, de PDF (couverture, ordre, téléchargement, visibilité) ou de lien (83-84).
+- Profils suggérés (86-87) : service people-suggest déterministe, raison affichée, aucun champ exclu du matching ; droit connect.suggestions, aperçu flouté sinon. Rechercher une personne (88), gratuit.
+- Aucun message direct sans connexion acceptée ; notification connection.accepted avec « Laisser un message » (89-90).
+- Bouton + (85) : brancher toutes ses entrées.
 
-Fin : vérifications complètes, tests de droits (quota, illimité, aucun nom de forfait), e2e « mettre une réalisation en avant » et « demande de connexion acceptée » ; captures à côté des maquettes ; journal ; bilan des 10 prompts et points ouverts.
+Fin : vérifications complètes, tests de droits (quota, illimité, suggestions, aucun nom de forfait), test « pas de message sans connexion », e2e « mettre une réalisation en avant » et « demande de connexion acceptée » ; captures à côté des maquettes ; journal ; bilan des prompts 1 à 10 et points ouverts.
+```
+
+---
+
+## Prompt 11 · Recruteur sur mobile
+
+```text
+Prompt 11 sur 11 : l’expérience mobile du recruteur (RH et entreprise).
+
+Références : CAHIER-DES-CHARGES-V8.md § B4, BRIEF-MOBILE-TALENT.md § 6 point 9 et § 8 point 6 ; écrans 54, 55, 66, 80, 91 à 94 ; docs/specifications.md parties 05, 07 (Hire), 08 (score et « Pourquoi ? »), 10.
+
+À faire :
+- AppShell choisit la navigation selon l’espace actif : Hire = Tableau, Offres, Recruter (centre), Candidats, Compte ; sélecteur d’organisation en haut ; même en-tête et même SearchBar que l’espace Talent.
+- Première connexion recruteur (91) : pays, villes et domaines recrutés (Organization.recruitLocations).
+- Tableau (92) : vraies données (nouveaux candidats, entretiens du jour, offres en ligne, à faire).
+- Recherche de candidats (93) : profils rendus visibles seulement (règle d’or 5), filtres compétence, métier, lieu, badge Cap ; score et « Pourquoi ? » du matching ; « Inviter à postuler » ; aucun message tant que le candidat n’a pas accepté ou candidaté ; quotas par clés de droits ; filtre organizationId partout.
+- Profil d’un candidat (94) : consultation journalisée et visible du candidat.
+- Bannière et logo de l’organisation (66), modèles de message (54, 55, 80) sur mobile.
+
+Fin : vérifications complètes, tests d’isolation des organisations et de visibilité, e2e « rechercher un candidat et l’inviter » ; captures à côté des maquettes ; journal ; bilan des 11 prompts et points ouverts.
 ```

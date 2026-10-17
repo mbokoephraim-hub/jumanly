@@ -14,7 +14,8 @@ boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly 
 bouton retour, bouton +, thème Vert, ouverture par le logo, bannières d’entreprise, écrans 57 à 66, voir § 6
 et `CAHIER-DES-CHARGES-V6.md` ; v7 du 17 octobre : en-tête sans logo, titre en grand et barre de recherche
 Orbi unique, barre du bas floutée, leçon, import de CV, réalisations, connexions et badges, écrans 67 à 80, voir § 7
-et `CAHIER-DES-CHARGES-V7.md`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
+et `CAHIER-DES-CHARGES-V7.md` ; v8 : pays et villes, image et PDF, profils suggérés, connexions,
+recruteur sur mobile, écrans 81 à 94, voir § 8 et `CAHIER-DES-CHARGES-V8.md`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
 
 | N° | Écran | N° | Écran |
 |---|---|---|---|
@@ -58,6 +59,13 @@ et `CAHIER-DES-CHARGES-V7.md`). La persona est en formule Starter, car Free n’
 | 75 | Mettre une réalisation en avant | 76 | Rapport PDF en carrousel |
 | 77 | Profil d’un membre | 78 | Connexions |
 | 79 | Opportunité trouvée | 80 | Recruteur · acceptation proposée |
+| 81 | Première connexion · votre pays | 82 | Où travailler · pays et villes |
+| 83 | Ajouter image, PDF ou lien | 84 | Importer un PDF (couverture, pages) |
+| 85 | Bouton + · se connecter | 86 | Profils suggérés |
+| 87 | Profils suggérés · formule gratuite | 88 | Rechercher une personne |
+| 89 | Notification · connexion acceptée | 90 | Connexion établie · premier message |
+| 91 | Recruteur · où recruter | 92 | Recruteur · Tableau |
+| 93 | Recruteur · rechercher un candidat | 94 | Recruteur · profil d’un candidat |
 
 Les contenus sont des exemples (persona fictive Grâce Mbuyi, entreprises fictives). **En production, tout
 vient des données réelles** (règle d’or 11) ; une section sans donnée affiche son état vide ou se masque.
@@ -251,3 +259,31 @@ Demande du propriétaire : `CAHIER-DES-CHARGES-V7.md` (l’emporte sur la v6). �
 11. **Opportunité trouvée** : `OpportunityReport` (entreprise, poste, source : offre Jumanly, connexion,
     formation, date) ; sert à la mesure d’impact ; peut créer la réalisation « Nouveau poste ».
 12. **Thème Vert** : jetons enrichis dans `style7.css` (halos, cartes en verre).
+
+## 8. Version 8 (17 octobre 2026) : pays, connexions, recruteur mobile
+
+Demande du propriétaire : `CAHIER-DES-CHARGES-V8.md` (l’emporte sur la v7). Écrans 81 à 94, planche « 0e ».
+
+1. **Référentiel des lieux** : table `Country` (code ISO, nom français, groupe : `central_africa`,
+   `west_africa`, `africa`, `world`, ordre) et `Locality` (pays, nom, type ville ou province), chargés par le
+   seed depuis une source publique (ISO 3166, GeoNames, licence CC BY) ; RD Congo épinglée en tête, puis
+   tri A à Z dans chaque groupe. `User.country` et `User.city` existent : y stocker le code et l’identifiant.
+   Drapeaux : jeu SVG libre (ex. `flag-icons`, MIT), chargé à la demande, pas d’émoji.
+2. **Où travailler** : `TalentProfile.workLocations` (liste de pays + localités, ou pays entier) et
+   télétravail ; réutilisé par les filtres d’offres et le matching (distance = même ville, même pays).
+   Recruteur : `Organization.recruitLocations` et domaines recrutés.
+3. **Image et PDF** : stockage existant (`StoredFile`), images recadrées et optimisées, PDF : 20 pages,
+   15 Mo au plus, pages rendues en images côté serveur, couverture et ordre enregistrés, téléchargement
+   autorisé ou non, visibilité (connexions, recruteurs, tous). Modération avant publication.
+4. **Profils suggérés** : service `people-suggest` déterministe (domaine, compétences communes, formations
+   suivies, lieu, rôle recruteur), jamais nom, genre, âge, photo, nationalité (règle d’or 4) ; chaque
+   suggestion a sa raison. Droit `connect.suggestions` (formules payantes, aucun nom de forfait dans le
+   code) ; la recherche de personnes reste gratuite.
+5. **Connexion avant message** : `Conversation` directe entre membres seulement si `Connection.accepted` ;
+   exception inchangée : candidat et recruteur d’une candidature (messagerie Hire existante). Notification
+   `connection.accepted` avec « Laisser un message » ; écran de premier message avec suggestions.
+6. **Recruteur mobile** : `AppShell` choisit la navigation selon l’espace actif (Talent ou Hire). Hire :
+   Tableau, Offres, Recruter (centre), Candidats, Compte, sélecteur d’organisation. Recherche de candidats
+   sur les profils visibles (règle d’or 5), score et « Pourquoi ? » du matching (partie 08), « Inviter à
+   postuler » (le candidat accepte avant tout message), consultation journalisée, filtre `organizationId`.
+   Quotas de recherche et d’invitations par clés de droits (RH et Companies).
