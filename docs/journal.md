@@ -2260,3 +2260,14 @@ toutes dans `docs/specifications.md`.
   Le plan de la leçon (`content.brief`, `content.steps`, `content.takeaways`) s'écrit dans l'admin.
 - Offres et détail d'une offre en Vert (écrans 65, 74).
 - Choix et écarts : `docs/decisions/2026-10-17-mobile-talent-bannieres.md`.
+
+## 2026-10-17 · Refonte de l'expérience mobile, étape 1 : fondations
+
+- Après le début des tests, Ephraïm demande de simplifier : une expérience par objectif (talent : se former,
+  être accompagné, saisir l'opportunité ; recruteur : publier, trier, rassembler, décider, programmer).
+- `docs/refonte-mobile/CAHIER-DES-CHARGES-REFONTE-MOBILE.md` : dictée telle quelle, diagnostic, objectifs
+  mesurables, principes, architecture talent, recruteur et entreprise, étapes. Remplacera les cahiers mobiles
+  v1 à v9 pour la forme dès validation ; leurs règles métier restent.
+- Planche des fondations (`docs/refonte-mobile/maquette/`) : 51 icônes, barres du bas avec Orbi au centre,
+  en-têtes, recherche, options, boutons, cartes, Orbi sans dégradé, états, trois écrans d'aperçu.
+- À ne pas implémenter avant validation des étapes 2 à 4 (talent, recruteur, entreprise).
