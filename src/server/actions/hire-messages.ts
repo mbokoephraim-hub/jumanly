@@ -15,11 +15,20 @@ import {
   rejectReasons,
 } from "@/server/services/hire";
 import {
+  ARRIVAL_CALL_MINUTES,
+  scheduleInterview,
+  slotToDate,
+  SLOTS_MAX,
+  validTimeZone,
+} from "@/server/services/interviews";
+import {
   deleteTemplate,
   saveTemplate,
   TEMPLATE_BODY_MAX,
   templateSchema,
+  templateTones,
 } from "@/server/services/message-templates";
+import { can } from "@/server/entitlements";
 
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
 
@@ -54,15 +63,39 @@ export async function sendDecisionAction(formData: FormData) {
   const applicationId = id(formData.get("application"));
   const parsed = decisionSchema.safeParse(Object.fromEntries(formData));
   const page = `/app/hire/candidats/${applicationId}/message`;
-  if (!parsed.success) {
+  const tone = templateTones.find((value) => value === formData.get("ton"));
+  const back = (error: string): never => {
     const model = formData.get("outcome") === "hired" ? "acceptation" : "refus";
-    redirect(`${page}?modele=${model}&erreur=1`);
-  }
-  const input = parsed.data;
+    const call = formData.getAll("slot").length > 0 ? "&creneau=1" : "";
+    redirect(`${page}?modele=${model}${tone ? `&ton=${tone}` : ""}${call}&erreur=${error}`);
+  };
+  if (!parsed.success) back("1");
+  const input = parsed.data!;
   const application = await guarded(
     () => getOrgApplication(db, ctx, applicationId),
     "/app/hire/offres",
   );
+  // « Ajouter un créneau » (V7, screen 80): the call to fix the arrival date is checked before
+  // anything is decided, and proposed right after the decision card.
+  const slots = formData
+    .getAll("slot")
+    .map((value) => String(value).slice(0, 20))
+    .filter(Boolean);
+  const timezone = String(formData.get("timezone") ?? "").slice(0, 60);
+  if (input.outcome === "hired" && slots.length > 0) {
+    const allowed = await can(
+      db,
+      { type: "organization", id: ctx.organizationId },
+      "connect.appointments",
+    );
+    const now = new Date();
+    const valid =
+      allowed &&
+      slots.length <= SLOTS_MAX &&
+      validTimeZone(timezone) &&
+      slots.every((slot) => (slotToDate(slot, timezone)?.getTime() ?? 0) > now.getTime());
+    if (!valid) back("creneau");
+  }
   const message =
     input.outcome === "hired" ? input.message : input.send === "now" ? input.message.trim() : "";
   const moved = await guarded(
@@ -88,6 +121,14 @@ export async function sendDecisionAction(formData: FormData) {
       }).catch((error) => reportError(error));
     }
     await onStageChanged(applicationId, moved.to, message).catch((error) => reportError(error));
+    if (input.outcome === "hired" && slots.length > 0)
+      await scheduleInterview(db, ctx, {
+        application: applicationId,
+        mode: "audio",
+        duration: ARRIVAL_CALL_MINUTES,
+        slots,
+        timezone,
+      }).catch((error) => reportError(error));
   }
   redirect(`/app/hire/candidats/${applicationId}?ok=decision`);
 }

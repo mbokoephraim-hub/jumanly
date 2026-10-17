@@ -5,6 +5,7 @@
  */
 import { z } from "zod";
 import type { MessageTemplateKind, PrismaClient } from "@/generated/prisma/client";
+import type { MatchExplanation } from "@/server/matching/types";
 import { HireError, hirePermissions, type HireContext } from "./hire";
 
 export const templateKinds = [
@@ -100,4 +101,69 @@ export function decisionParagraphs(body: string) {
     .split(/\n\s*\n/)
     .map((paragraph) => paragraph.trim())
     .filter(Boolean);
+}
+
+/**
+ * The tones Jumanly's own refusal and acceptance texts come in (V7, screens 55 and 80). « organisation »
+ * is the organization's (or the job's) own text, offered first when it exists.
+ */
+export const templateTones = ["chaleureux", "formel", "court"] as const;
+export type TemplateTone = (typeof templateTones)[number];
+
+/** The tone « Plus … » proposes under a refusal preview: warmer first, then shorter, then formal. */
+export function nextTone(tone: TemplateTone | "organisation"): TemplateTone {
+  return tone === "chaleureux" ? "court" : tone === "court" ? "formel" : "chaleureux";
+}
+
+/**
+ * The candidate's strongest skill for the job, from the explanation frozen at application (doc 08):
+ * a skill of the job the talent covers fully, verified ones and required ones first. Null when none
+ * is fully covered: the texts then simply leave the sentence out.
+ */
+export function strongestSkill(explanation: MatchExplanation | null): string | null {
+  if (!explanation) return null;
+  const evidence = explanation.criteria.flatMap((criterion) => criterion.evidence ?? []);
+  const covered = evidence
+    .filter((item) => item.coverage >= 1 && item.talent !== null)
+    .sort(
+      (a, b) =>
+        Number(b.verified) - Number(a.verified) ||
+        b.required - a.required ||
+        (b.talent ?? 0) - (a.talent ?? 0),
+    );
+  return covered[0]?.skill ?? null;
+}
+
+/**
+ * The text cut where the values filled in by Jumanly appear, so the page can highlight them
+ * (« Les champs surlignés se remplissent seuls », screen 80). The longest values are matched first.
+ */
+export function highlightSegments(text: string, values: (string | null | undefined)[]) {
+  const wanted = [...new Set(values.filter((value): value is string => !!value?.trim()))].sort(
+    (a, b) => b.length - a.length,
+  );
+  if (wanted.length === 0) return [{ text, filled: false }];
+  const pattern = new RegExp(
+    wanted.map((value) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&")).join("|"),
+    "g",
+  );
+  const segments: { text: string; filled: boolean }[] = [];
+  let last = 0;
+  for (const match of text.matchAll(pattern)) {
+    if (match.index > last) segments.push({ text: text.slice(last, match.index), filled: false });
+    segments.push({ text: match[0], filled: true });
+    last = match.index + match[0].length;
+  }
+  if (last < text.length) segments.push({ text: text.slice(last), filled: false });
+  return segments;
+}
+
+/** A text written from sentence pieces: no double spaces or blank sentences when a piece is empty. */
+export function tidyText(text: string) {
+  return text
+    .split("\n")
+    .map((line) => line.replace(/ {2,}/g, " ").trim())
+    .join("\n")
+    .replace(/\n{3,}/g, "\n\n")
+    .trim();
 }

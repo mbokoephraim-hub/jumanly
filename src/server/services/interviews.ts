@@ -17,6 +17,8 @@ export const INTERVIEW_MODES = [
 ] as const satisfies readonly InterviewMode[];
 export const INTERVIEW_DURATIONS = [15, 30, 45, 60, 90] as const;
 export const SLOTS_MAX = 3;
+/** The call proposed with an acceptance to fix the arrival date (V7, screen 80). */
+export const ARRIVAL_CALL_MINUTES = 30;
 /** The video link is shown to the talent this many hours before the interview. */
 export const LINK_VISIBLE_HOURS = 24;
 
@@ -92,7 +94,9 @@ export async function scheduleInterview(
   if (!parsed.success) return { status: "invalid" };
   const input = parsed.data;
   const application = await getOrgApplication(db, ctx, input.application);
-  if (application.status !== "active") return { status: "invalid" };
+  // A hired candidate can still be invited (« un appel pour fixer votre date d'arrivée », V7 screen 80).
+  if (application.status !== "active" && application.status !== "hired")
+    return { status: "invalid" };
   const slots = input.slots
     .filter(Boolean)
     .map((slot) => slotToDate(slot, input.timezone))

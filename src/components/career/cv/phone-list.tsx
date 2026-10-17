@@ -56,8 +56,11 @@ export async function PhoneCvList({
             key={cv.id}
             className="flex min-w-0 flex-col gap-2 rounded-[24px] bg-blanc p-3 shadow-douce"
           >
+            {/* The picture repeats the title's link: hidden from keyboards and screen readers. */}
             <Link
               href={`/app/career/cv/${cv.id}`}
+              aria-hidden
+              tabIndex={-1}
               className="relative flex h-[132px] items-start justify-center overflow-hidden rounded-[16px] bg-[linear-gradient(160deg,var(--color-creme),#ECE6DA)] pt-4"
             >
               <CvSheet template={cv.template} width={96} />
@@ -68,7 +71,10 @@ export async function PhoneCvList({
               )}
             </Link>
             <h2 className="truncate px-1 text-[16px] leading-6 font-semibold">
-              <Link href={`/app/career/cv/${cv.id}`}>{cv.title}</Link>
+              <Link href={`/app/career/cv/${cv.id}`}>
+                {cv.title}
+                {cv.isPrimary && <span className="sr-only"> · {t("list.primaryTitle")}</span>}
+              </Link>
             </h2>
             <p className="truncate px-1 text-[14px] text-ardoise">
               {[
