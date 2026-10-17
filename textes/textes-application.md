@@ -1633,7 +1633,11 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `welcome.talent.next.training` | Commencer une formation gratuite |
 | `welcome.talent.next.code` | Activer un code de licence |
 | `welcome.talent.reminder` | Bon à savoir : vos candidatures sont toujours gratuites, quelle que soit votre formule. |
-| `welcome.talent.step1.eyebrow` | Étape 1 sur 2 · moins d'une minute |
+| `welcome.talent.country.eyebrow` | Étape 1 sur 3 |
+| `welcome.talent.country.title` | Dans quel pays vivez-vous ? |
+| `welcome.talent.country.next` | Continuer |
+| `welcome.talent.country.later` | Plus tard |
+| `welcome.talent.step1.eyebrow` | Étape 2 sur 3 |
 | `welcome.talent.step1.title` | Qu'est-ce qui vous amène sur Jumanly ? |
 | `welcome.talent.step1.hint` | Modifiable à tout moment. |
 | `welcome.talent.step1.later` | Plus tard |
@@ -1644,17 +1648,42 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `welcome.talent.focus.skills.line` | Formations d'abord |
 | `welcome.talent.focus.career.text` | Faire évoluer ma carrière |
 | `welcome.talent.focus.career.line` | Postes à responsabilité |
-| `welcome.talent.step2.eyebrow` | Étape 2 sur 2 · tout est facultatif |
+| `welcome.talent.places.eyebrow` | Étape 3 sur 3 |
+| `welcome.talent.places.title` | Où souhaitez-vous travailler ? |
+| `welcome.talent.places.hint` | Plusieurs pays possibles. |
+| `welcome.talent.places.remote.text` | Télétravail accepté |
+| `welcome.talent.places.remote.line` | Offres à distance de tous pays |
+| `welcome.talent.places.back` | Retour |
+| `welcome.talent.places.next` | Voir mes offres |
+| `welcome.talent.places.details` | Préciser mes métiers et compétences |
+| `welcome.talent.step2.eyebrow` | Facultatif · tout est modifiable |
 | `welcome.talent.step2.title` | Quelques précisions pour vos offres |
 | `welcome.talent.step2.titles.label` | Métiers recherchés |
 | `welcome.talent.step2.titles.placeholder` | Ex. : analyste de données, chargé d'études |
 | `welcome.talent.step2.skills.label` | Vos compétences |
-| `welcome.talent.step2.locations.label` | Où souhaitez-vous travailler ? |
-| `welcome.talent.step2.locations.placeholder` | Ex. : Kinshasa |
 | `welcome.talent.step2.preferences` | Préférences (contrat, télétravail) |
 | `welcome.talent.step2.skip` | Passer |
 | `welcome.talent.step2.next` | Voir mes offres |
-| `welcome.talent.step2.back` | Revenir à l'étape 1 |
+| `welcome.talent.step2.back` | Revenir aux lieux |
+
+#### Pays et lieux (écrans 81 et 82)
+
+| Clé | Texte |
+|---|---|
+| `places.region.central_africa` | Afrique centrale |
+| `places.region.west_africa` | Afrique de l'Ouest |
+| `places.region.other_africa` | Reste de l'Afrique |
+| `places.region.world` | Hors d'Afrique |
+| `places.search` | Rechercher un pays |
+| `places.none` | Aucun pays ne correspond. |
+| `places.wholeCountry` | Tout le pays |
+| `places.citiesAndProvinces` | Villes et provinces |
+| `places.cities` | Villes |
+| `places.more` | Plus de lieux |
+| `places.add` | Ajouter un pays |
+| `places.remove` | Retirer {country} |
+| `places.close` | Fermer |
+| `places.empty` | Choisissez au moins un pays. |
 
 #### Recruteur et entreprise
 
@@ -4803,6 +4832,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `talent.jobs.filter.compatibility.text` | Compatibilité minimale |
 | `talent.jobs.filter.compatibility.value` | {score} % et plus |
 | `talent.jobs.filter.verified` | Entreprises vérifiées uniquement |
+| `talent.jobs.filter.places` | Mes lieux de travail |
 | `talent.jobs.sort.text` | Trier : |
 | `talent.jobs.sort.compatibility` | Compatibilité |
 | `talent.jobs.sort.recent` | Plus récentes |

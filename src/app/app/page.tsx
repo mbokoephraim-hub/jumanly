@@ -316,7 +316,7 @@ export default async function ForMePage() {
         eyebrow={t("talent.forMe.goal.eyebrow")}
         title={personalised ? t(`welcome.talent.focus.${focus}.text`) : t("talent.forMe.goal.none")}
         stats={stats}
-        editHref="/app/bienvenue"
+        editHref="/app/bienvenue?etape=objectif&seul=1"
         editLabel={personalised ? t("talent.forMe.goal.edit") : t("talent.forMe.goal.choose")}
       />
 

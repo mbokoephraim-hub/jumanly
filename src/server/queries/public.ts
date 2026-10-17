@@ -63,7 +63,7 @@ export async function getCourse(slug: string) {
   };
 }
 
-export async function getJobSearch(filters: jobs.JobFilters) {
+export async function getJobSearch(filters: jobs.JobQuery) {
   "use cache";
   cacheLife("minutes");
   cacheTag("jobs");

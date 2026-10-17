@@ -1012,6 +1012,9 @@ model TalentProfile {
   /// Values of `talent.profile.preferences.contract.*` (cdi, cdd, internship…).
   desiredContracts       String[]
   desiredLocations       String[]
+  /// ISO 3166-1 codes of the countries where the person wants to work (screen 82). A country
+  /// without any of its places in `desiredLocations` means « Tout le pays ».
+  desiredCountries       String[]          @default([])
   remotePreferences      RemoteMode[]
   relocation             Boolean           @default(false)
   /// Never shown to recruiters. Whole USD (or `salaryCurrency`) per `salaryPeriod`.
@@ -2044,4 +2047,39 @@ model ProfilePhoto {
   contentType String
   bytes       Bytes
   updatedAt   DateTime @updatedAt
+}
+
+/// Region used to order the country list (V8 § B1): RD Congo first, then Afrique centrale, Afrique
+/// de l'Ouest, the rest of Africa, then the rest of the world.
+enum PlaceRegion {
+  central_africa
+  west_africa
+  other_africa
+  world
+}
+
+enum LocalityKind {
+  city
+  province
+}
+
+/// ISO 3166-1 countries with their French name (reference, seeded everywhere).
+model Country {
+  code       String      @id
+  name       String
+  region     PlaceRegion
+  localities Locality[]
+}
+
+/// Main cities and provinces of a country (GeoNames), largest first by `rank`.
+model Locality {
+  id          String       @id @default(cuid())
+  countryCode String
+  country     Country      @relation(fields: [countryCode], references: [code], onDelete: Cascade)
+  name        String
+  kind        LocalityKind @default(city)
+  rank        Int          @default(0)
+
+  @@unique([countryCode, name])
+  @@index([countryCode, rank])
 }

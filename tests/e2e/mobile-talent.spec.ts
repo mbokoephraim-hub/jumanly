@@ -138,27 +138,102 @@ test("navigation Talent : cinq destinations, menu du haut, Mon espace et Suivi",
   await expectAccessible(page);
 });
 
-// Prompt 3: from the sign-up to « Pour moi », through the goal screen (screens 01-05).
-test("inscription, écran d'objectif puis Pour moi selon l'objectif", async ({ page, isMobile }) => {
+// Prompts 3 and 3 bis: from the sign-up to « Pour moi », through the country (81), the goal (01)
+// and the places (82) screens, then the offers filtered by those places.
+test("inscription, pays, objectif, lieux puis Pour moi selon l'objectif", async ({
+  page,
+  isMobile,
+}) => {
+  // Sign-up, then five screens each checked for accessibility.
+  test.setTimeout(120_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("objectif"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+
+  // Screen 81: RD Congo first, the regions in order, a search.
   await expect(
-    page.getByRole("heading", { level: 1, name: "Qu'est-ce qui vous amène sur Jumanly ?" }),
+    page.getByRole("heading", { level: 1, name: "Dans quel pays vivez-vous ?" }),
   ).toBeVisible();
+  await expect(page.getByText("Étape 1 sur 3")).toBeVisible();
+  const main = page.locator("main");
+  const central = main.getByRole("group", { name: "Afrique centrale" });
+  await expect(central.getByRole("radio").first()).toHaveAccessibleName("RD Congo");
+  await expect(central.getByRole("radio", { name: "RD Congo" })).toBeChecked();
+  await expect(main.getByRole("group", { name: "Afrique de l'Ouest" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Plus tard" })).toBeVisible();
-  // The goal screen has its own action bar: no bottom bar on a phone.
   if (isMobile)
     await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
   await expectAccessible(page);
+  await page.getByRole("searchbox", { name: "Rechercher un pays" }).fill("cote");
+  await expect(page.getByRole("radio", { name: /^Côte d.Ivoire$/ })).toBeVisible();
+  await expect(page.getByRole("radio", { name: "Angola" })).toBeHidden();
+  await page.getByRole("searchbox", { name: "Rechercher un pays" }).fill("");
+  await page.locator("label").filter({ hasText: "RD Congo", visible: true }).click();
+  await page.getByRole("button", { name: "Continuer" }).click();
 
+  // Screen 01: the goal.
+  await expect(page).toHaveURL(/etape=objectif/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Qu'est-ce qui vous amène sur Jumanly ?" }),
+  ).toBeVisible();
+  await expectAccessible(page);
   await page
     .locator("label")
     .filter({ hasText: "Trouver un emploi ou un stage", visible: true })
     .click();
   await page.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/\/app\/bienvenue\?etape=2/);
+
+  // Screen 82: the country chosen is already there, with its cities and provinces.
+  await expect(page).toHaveURL(/etape=lieux/);
+  await expect(
+    page.getByRole("heading", { level: 1, name: "Où souhaitez-vous travailler ?" }),
+  ).toBeVisible();
+  const congo = page.getByRole("region", { name: "RD Congo" });
+  await expect(congo.getByText("Villes et provinces")).toBeVisible();
+  await expect(congo.getByRole("button", { name: "Tout le pays" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await congo.getByRole("button", { name: "Kinshasa" }).click();
+  await expect(congo.getByRole("button", { name: "Kinshasa" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await expect(congo.getByRole("button", { name: "Tout le pays" })).toHaveAttribute(
+    "aria-pressed",
+    "false",
+  );
+  await page.getByRole("button", { name: "Ajouter un pays" }).click();
+  await page.getByRole("searchbox", { name: "Rechercher un pays" }).fill("congo");
+  await page.getByRole("button", { name: "Congo", exact: true }).click();
+  const brazza = page.getByRole("region", { name: "Congo", exact: true });
+  await expect(brazza.getByText("Villes", { exact: true })).toBeVisible();
+  await brazza.getByRole("button", { name: "Brazzaville" }).click();
+  await page.getByRole("switch", { name: "Télétravail accepté" }).click();
+  await expect(page.getByRole("switch", { name: "Télétravail accepté" })).toHaveAttribute(
+    "aria-checked",
+    "true",
+  );
+  await expectAccessible(page);
+  await page.getByRole("button", { name: "Voir mes offres" }).click();
+
+  // The offers are filtered by those places, with a chip to remove the filter.
+  await expect(page).toHaveURL(/\/app\/jobs\?lieux=1/, { timeout: 20_000 });
+  await page.goto("/app/jobs?lieux=1&vue=recentes");
+  await expect(page.getByRole("link", { name: /Mes lieux de travail/ }).first()).toBeVisible();
+
+  // The choices are kept: back on screen 82, Kinshasa and Brazzaville are still picked.
+  await page.goto("/app/bienvenue?etape=lieux");
+  await expect(
+    page.getByRole("region", { name: "RD Congo" }).getByRole("button", { name: "Kinshasa" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await expect(
+    page
+      .getByRole("region", { name: "Congo", exact: true })
+      .getByRole("button", { name: "Brazzaville" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await page.getByRole("button", { name: "Préciser mes métiers et compétences" }).click();
+  await expect(page).toHaveURL(/etape=precisions/);
   await page.getByLabel("Métiers recherchés").fill("Analyste de données");
-  await page.getByLabel("Où souhaitez-vous travailler ?").fill("Kinshasa");
   await expectAccessible(page);
   await page.getByRole("button", { name: "Voir mes offres" }).click();
 
@@ -181,14 +256,12 @@ test("inscription, écran d'objectif puis Pour moi selon l'objectif", async ({ p
 
   // Changing the goal reorders the home: courses first.
   await page.getByRole("link", { name: "Modifier mon objectif" }).click();
-  await expect(page).toHaveURL(/\/app\/bienvenue$/);
+  await expect(page).toHaveURL(/etape=objectif/);
   await page
     .locator("label")
     .filter({ hasText: "Développer mes compétences", visible: true })
     .click();
   await page.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/etape=2/);
-  await page.getByRole("button", { name: "Passer" }).click();
   await expect(page).toHaveURL(/\/app$/, { timeout: 20_000 });
   await expect(page.getByRole("heading", { name: "Développer mes compétences" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Progression et certificats" })).toBeVisible();

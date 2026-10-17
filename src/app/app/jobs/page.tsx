@@ -40,6 +40,7 @@ import {
   jobCards,
   jobSorts,
   matchingJobIds,
+  jobPlacesFor,
   parseJobFilters,
   postedFilters,
   remoteFilters,
@@ -76,7 +77,16 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
   const view = asked === "tous" ? "pour-vous" : asked;
   const compat = compatibilityFilters.find((value) => String(value) === params.compat);
   const parsed = parseJobFilters(params);
-  const filters = view === "recentes" ? { ...parsed, publie: parsed.publie ?? "7d" } : parsed;
+  // « Mes lieux » (screen 82): the countries, cities and remote work chosen at first connection.
+  const profilePlaces = await db.talentProfile.findUnique({
+    where: { userId: user.id },
+    select: { desiredCountries: true, desiredLocations: true, remotePreferences: true },
+  });
+  const places = profilePlaces ? await jobPlacesFor(db, profilePlaces) : null;
+  const withPlaces =
+    parsed.lieux && places ? { ...parsed, places } : { ...parsed, lieux: undefined };
+  const filters =
+    view === "recentes" ? { ...withPlaces, publie: withPlaces.publie ?? "7d" } : withPlaces;
   const page = filters.page ?? 1;
 
   // « Pour vous » (or a minimum score) scores the matching offers, most recent first, and ranks
@@ -150,6 +160,7 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
   };
   const back = hrefWith({}, true);
   const resetHref = hrefWith({
+    lieux: undefined,
     pays: undefined,
     contrat: undefined,
     teletravail: undefined,
@@ -162,6 +173,7 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
 
   // Active filters, each with its own « × » (mockup: Lime clair chips), then « Réinitialiser ».
   const active: { key: string; label: string }[] = [];
+  if (filters.lieux) active.push({ key: "lieux", label: t("talent.jobs.filter.places") });
   if (filters.pays) active.push({ key: "pays", label: filters.pays });
   if (filters.contrat)
     active.push({ key: "contrat", label: t(`jobs.search.contract.${filters.contrat}`) });
@@ -442,6 +454,15 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
                   />
                 </div>
                 <div className="flex flex-col gap-2">
+                  {places && (
+                    <Checkbox
+                      id="jf-places"
+                      name="lieux"
+                      value="1"
+                      defaultChecked={Boolean(filters.lieux)}
+                      label={t("talent.jobs.filter.places")}
+                    />
+                  )}
                   <Checkbox
                     id="jf-salary"
                     name="salaire"
