@@ -12,7 +12,9 @@ import { scorecardView, submitScorecard, visibleNotes } from "@/server/services/
 import {
   getOrgApplication,
   HireError,
+  hireApplication,
   listOrgJobs,
+  rejectApplication,
   type HireContext,
 } from "@/server/services/hire";
 import { buildReport } from "@/server/services/hire-reports";
@@ -355,6 +357,24 @@ describe("entretiens", () => {
       answerInterview(db, other.userId, interview.id, { answer: "decline", message: "" }),
     ).rejects.toBeInstanceOf(HireError);
     await expect(cancelInterview(db, stranger, interview.id, "")).rejects.toBeInstanceOf(HireError);
+  });
+
+  it("propose encore un appel d'arrivée à un candidat retenu, jamais à un candidat refusé", async () => {
+    // Prompt 5 bis, screen 80: « Ajouter un créneau » under an acceptance.
+    const owner = await company();
+    const jobId = await job(owner);
+    const slot = new Date(Date.now() + 3 * day).toISOString().slice(0, 16);
+    const input = { mode: "audio", duration: "30", slots: [slot], timezone: "UTC" };
+    const hired = await apply(jobId, (await talent()).userId);
+    await hireApplication(db, owner, hired, { messageSent: true });
+    expect((await scheduleInterview(db, owner, { ...input, application: hired })).status).toBe(
+      "sent",
+    );
+    const rejected = await apply(jobId, (await talent()).userId);
+    await rejectApplication(db, owner, rejected, { reason: "otherCandidate", message: "" });
+    expect((await scheduleInterview(db, owner, { ...input, application: rejected })).status).toBe(
+      "invalid",
+    );
   });
 
   it("est fermé sans le droit de rendez-vous", async () => {

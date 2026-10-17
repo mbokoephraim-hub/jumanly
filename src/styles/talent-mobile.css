@@ -464,3 +464,13 @@
     color: #fff;
   }
 }
+
+/*
+ * A Hire screen with its own fixed action bar (decision preview, V7 screens 55 and 80): the pill
+ * navigation steps aside on a phone, as the talent tab bar does (PhoneBarFlag).
+ */
+@media (max-width: 767.98px) {
+  body[data-phone-bar] nav[data-autohide] {
+    display: none;
+  }
+}

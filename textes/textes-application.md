@@ -6212,6 +6212,23 @@ Conventions :
 | `hire.templates.message.send` | Envoyer |
 | `hire.templates.message.withoutMessage` | Enregistrer la décision sans message |
 | `hire.templates.message.error` | Le message n'est pas parti. Vérifiez le texte et réessayez. |
+| `hire.templates.message.tones` | Ton du message |
+| `hire.templates.message.callError` | Les créneaux doivent être à venir. Rien n'est parti : vérifiez-les et renvoyez. |
+| `hire.templates.message.modelProposed` | {kind} · modèle proposé |
+| `hire.templates.message.modelOwn` | {kind} · modèle de l'organisation |
+| `hire.templates.message.modelEdited` | {kind} · texte modifié |
+| `hire.templates.message.addCall` | Ajouter un créneau |
+| `hire.templates.message.removeCall` | Retirer les créneaux |
+| `hire.templates.message.callTitle` | Appel pour fixer l'arrivée |
+| `hire.templates.message.callHint` | Un appel de {minutes} minutes, heure de {timezone}. Le candidat choisit un créneau juste sous votre message. |
+| `hire.templates.message.callSlot` | Créneau {number} |
+| `hire.templates.message.more.chaleureux` | Plus chaleureux |
+| `hire.templates.message.more.formel` | Plus formel |
+| `hire.templates.message.more.court` | Plus court |
+| `hire.templates.message.orbi` | Personnaliser avec Orbi |
+| `hire.templates.message.filledAfterClick` | Les champs surlignés se remplissent seuls. Envoyé seulement après votre clic. |
+| `hire.templates.message.previewShort` | Aperçu |
+| `hire.templates.message.backToText` | Texte |
 | `hire.templates.message.convocationHint` | Pour proposer des créneaux que le candidat confirme en un geste : |
 | `hire.templates.message.schedule` | planifier l'entretien |
 | `hire.templates.kind.convocation` | Convocation |
@@ -6226,8 +6243,28 @@ Conventions :
 | `hire.templates.default.convocation.body` | Bonjour {firstName},\n\nMerci pour votre candidature au poste de {jobTitle}. Nous aimerions vous rencontrer pour un entretien.\n\nJe vous propose des créneaux dans cette conversation : dites-moi celui qui vous convient.\n\n{signer}, {company} |
 | `hire.templates.default.document.body` | Bonjour {firstName}, pour avancer sur votre candidature au poste de {jobTitle}, pourriez-vous nous envoyer ce document ? |
 | `hire.templates.default.relance.body` | Bonjour {firstName},\n\nJe reviens vers vous au sujet de votre candidature au poste de {jobTitle}. Avez-vous pu lire mon dernier message ?\n\n{signer}, {company} |
-| `hire.templates.default.acceptation.body` | Bonjour {firstName},\n\nNous avons le plaisir de vous proposer le poste de {jobTitle}.\n\nProchaine étape : un échange sur votre arrivée. Nous revenons vers vous dans cette conversation. |
-| `hire.templates.default.refus.body` | Bonjour {firstName},\n\nMerci pour votre candidature au poste de {jobTitle} et pour le temps que vous y avez consacré. Nous avons retenu un autre profil pour ce poste.\n\nCette décision tient aux besoins précis du poste et ne remet pas en cause vos qualités. Nous gardons votre profil pour nos prochaines offres. |
+| `hire.templates.toneName.organisation` | Notre modèle |
+| `hire.templates.toneName.chaleureux` | Chaleureux |
+| `hire.templates.toneName.formel` | Formel |
+| `hire.templates.toneName.court` | Court |
+| `hire.templates.tone.chaleureux.refus.body` | Bonjour {firstName},\n\nMerci pour votre candidature au poste de {jobTitle} et pour le temps que vous nous avez accordé.\n\nNous avons retenu un profil plus proche des besoins immédiats de l'équipe. {strengthLine}\n\nAvec votre accord, nous gardons votre profil pour nos prochaines offres. Belle suite à vous. |
+| `hire.templates.tone.chaleureux.refus.strength` | Votre maîtrise de {strength} nous a marqués. |
+| `hire.templates.tone.formel.refus.body` | Bonjour {firstName},\n\nNous vous remercions de l'intérêt que vous portez à {company} et de votre candidature au poste de {jobTitle}.\n\nAprès un examen attentif, nous ne sommes pas en mesure de donner une suite favorable à votre candidature. {strengthLine}\n\nNous vous souhaitons pleine réussite dans vos recherches. |
+| `hire.templates.tone.formel.refus.strength` | Nous avons apprécié votre maîtrise de {strength}. |
+| `hire.templates.tone.court.refus.body` | Bonjour {firstName},\n\nMerci pour votre candidature au poste de {jobTitle}. Nous avons retenu un autre profil. {strengthLine}\n\nBelle suite à vous. |
+| `hire.templates.tone.court.refus.strength` | Votre maîtrise de {strength} reste un vrai atout. |
+| `hire.templates.tone.chaleureux.acceptation.body` | Bonjour {firstName},\n\nBonne nouvelle : votre candidature au poste de {jobTitle} est retenue. {strengthLine}\n\n{nextLine}\n\nBienvenue chez {company} ! |
+| `hire.templates.tone.chaleureux.acceptation.strength` | Votre maîtrise de {strength} a convaincu l'équipe. |
+| `hire.templates.tone.chaleureux.acceptation.next` | Prochaine étape : un appel pour fixer votre date d'arrivée. Nous revenons vers vous dans cette conversation. |
+| `hire.templates.tone.chaleureux.acceptation.nextCall` | Prochaine étape : un appel pour fixer votre date d'arrivée. Choisissez un créneau ci-dessous. |
+| `hire.templates.tone.formel.acceptation.body` | Bonjour {firstName},\n\nNous avons le plaisir de vous informer que votre candidature au poste de {jobTitle} a été retenue. {strengthLine}\n\n{nextLine}\n\nNous nous réjouissons de vous accueillir chez {company}. |
+| `hire.templates.tone.formel.acceptation.strength` | Votre maîtrise de {strength} a particulièrement retenu notre attention. |
+| `hire.templates.tone.formel.acceptation.next` | Nous vous proposerons prochainement un échange pour convenir de votre date d'arrivée. |
+| `hire.templates.tone.formel.acceptation.nextCall` | Nous vous proposons un échange pour convenir de votre date d'arrivée : merci de choisir un créneau ci-dessous. |
+| `hire.templates.tone.court.acceptation.body` | Bonjour {firstName},\n\nVotre candidature au poste de {jobTitle} est retenue. {strengthLine}\n\n{nextLine} |
+| `hire.templates.tone.court.acceptation.strength` | Bravo pour votre maîtrise de {strength}. |
+| `hire.templates.tone.court.acceptation.next` | Nous revenons vers vous pour fixer votre arrivée. |
+| `hire.templates.tone.court.acceptation.nextCall` | Choisissez un créneau ci-dessous pour fixer votre arrivée. |
 | `hire.templates.page.title` | Modèles de message |
 | `hire.templates.page.subtitle` | Les textes de votre organisation, pour écrire plus vite aux candidats. |
 | `hire.templates.page.saved` | Modèle enregistré. |
