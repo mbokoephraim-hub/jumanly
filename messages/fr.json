@@ -2259,7 +2259,8 @@
       "interviews": "Entretiens",
       "reports": "Rapports",
       "pools": "Viviers",
-      "messages": "Connect"
+      "messages": "Connect",
+      "templates": "Modèles"
     },
     "organization": "Organisation",
     "partner": "Partenaire",
@@ -2851,7 +2852,9 @@
         "interviews": "{count, plural, one {# entretien à confirmer} other {# entretiens à confirmer}}",
         "documents": "{count, plural, one {# document demandé} other {# documents demandés}}",
         "messages": "{count, plural, one {# message non lu} other {# messages non lus}}",
-        "line": "Ouvrir mes messages"
+        "line": "Ouvrir mes messages",
+        "document": "Document demandé",
+        "due": "avant le {date, date, long}"
       },
       "drafts": {
         "title": "Candidatures en brouillon",
@@ -2864,7 +2867,114 @@
         "messages": "Messages",
         "messagesLine": "Échanges avec les recruteurs",
         "saved": "Offres enregistrées",
-        "savedLine": "{count, plural, =0 {Aucune offre enregistrée} one {# offre} other {# offres}}"
+        "savedLine": "{count, plural, =0 {Aucune offre enregistrée} one {# offre} other {# offres}}",
+        "savedHint": "Les offres gardées pour plus tard"
+      },
+      "filters": {
+        "label": "Filtrer le suivi",
+        "tout": "Tout",
+        "candidatures": "Candidatures",
+        "entretiens": "Entretiens",
+        "messages": "Messages",
+        "messagesCount": "Messages · {count}"
+      },
+      "applications": {
+        "title": "Mes candidatures",
+        "all": "Toutes",
+        "details": "Voir le détail",
+        "sent": "Envoyée le {date, date, medium}",
+        "changed": "Statut communiqué le {date, date, medium}"
+      },
+      "messages": {
+        "waiting": "Réponse attendue",
+        "unread": "Message non lu",
+        "search": "Rechercher une conversation",
+        "noResult": "Aucune conversation ne correspond à votre recherche.",
+        "who": "Seuls vos recruteurs peuvent vous écrire."
+      },
+      "empty": {
+        "candidatures": {
+          "title": "Aucune candidature pour l'instant",
+          "text": "Elles apparaîtront ici.",
+          "cta": "Explorer les offres",
+          "secondary": "Préparer mon CV d'abord"
+        },
+        "entretiens": {
+          "title": "Aucun entretien pour l'instant",
+          "text": "Quand un recruteur vous propose un entretien, il apparaît ici.",
+          "cta": "M'entraîner à l'entretien"
+        },
+        "messages": {
+          "title": "Aucun message pour l'instant",
+          "text": "Les recruteurs des offres où vous avez postulé peuvent vous écrire ici.",
+          "cta": "Explorer les offres"
+        }
+      },
+      "ok": {
+        "confirmed": "Présence confirmée. {company} est prévenue.",
+        "proposed": "Vos propositions sont envoyées. Le recruteur va vous répondre.",
+        "declined": "Votre réponse est envoyée."
+      },
+      "resume": {
+        "title": "À reprendre",
+        "application": "Candidature · {job}",
+        "cta": "Reprendre"
+      },
+      "interviews": {
+        "title": "Entretiens à venir"
+      },
+      "prepare": {
+        "title": "Préparer",
+        "simulation": "Simulation d'entretien",
+        "simulationLine": "Questions du poste, à l'écrit ou à l'oral",
+        "offer": "Revoir l'offre"
+      },
+      "interview": {
+        "noDate": "date",
+        "unknown": "?",
+        "toConfirm": "Entretien à confirmer",
+        "confirmed": "Confirmé",
+        "waiting": "En attente du recruteur",
+        "proposedLine": "{company} · vous avez proposé {count, plural, one {# créneau} other {# créneaux}} le {date, date, long}",
+        "when": "{day}, {start} – {end} (heure de {city})",
+        "confirm": "Confirmer",
+        "propose": "Proposer un autre moment",
+        "editProposals": "Modifier mes propositions",
+        "join": "Rejoindre",
+        "joinLater": "Le lien s'active {hours, plural, one {# heure} other {# heures}} avant.",
+        "calendar": "Ajouter à mon agenda"
+      },
+      "calendar": {
+        "summary": "Entretien · {job} · {company}"
+      },
+      "confirm": {
+        "title": "Confirmer l'entretien",
+        "confirmedTitle": "Votre entretien",
+        "with": "Avec {name}",
+        "format": "{mode} · {minutes} minutes",
+        "addressLater": "Adresse communiquée par le recruteur",
+        "linkLater": "Lien après confirmation",
+        "back": "Retour",
+        "close": "Fermer",
+        "choose": "Choisissez un des créneaux proposés",
+        "slotLine": "{start} – {end} · heure de {city}",
+        "none": "Aucun ne me convient : proposer un autre moment",
+        "submit": "Confirmer ce créneau",
+        "propose": {
+          "title": "Proposer un autre moment",
+          "hint": "Jusqu'à {max} créneaux, à l'heure de {city}.",
+          "error": "Choisissez au moins un créneau à venir.",
+          "hour": "{hour} h 00",
+          "days": "Jour",
+          "hours": "Heure",
+          "chosen": "Vos propositions · {count} sur {max}",
+          "item": "{day} · {hour}",
+          "remove": "Retirer {slot}",
+          "full": "Vous avez choisi {max} créneaux. Retirez-en un pour en changer.",
+          "messageLabel": "Un mot pour le recruteur",
+          "message": "Un mot pour le recruteur (facultatif)",
+          "send": "Envoyer mes propositions"
+        }
       }
     },
     "espace": {
@@ -6124,7 +6234,9 @@
         "you": "Vous : {message}",
         "attachment": "Pièce jointe",
         "invitation": "Invitation à un entretien",
-        "documentRequest": "Document demandé"
+        "documentRequest": "Document demandé",
+        "slot": "Créneau proposé",
+        "decision": "Décision sur la candidature"
       },
       "unread": "{count, plural, one {# non lu} other {# non lus}}",
       "filters": "Filtrer les conversations",
@@ -6171,6 +6283,7 @@
       "privacy": "Vos échanges sont privés : seuls vous et l'équipe de recrutement les voyez.",
       "safety": "Jumanly ne vous demandera jamais de payer pour un entretien ou un emploi. Signalez toute demande de ce type.",
       "loadEarlier": "Messages précédents",
+      "application": "Candidature · {job}",
       "blocked": "Le talent a bloqué cette conversation. Vous ne pouvez plus lui écrire.",
       "youBlocked": "Vous avez bloqué cette conversation : l'organisation ne peut plus vous écrire.",
       "withJob": "{name} · {jobTitle}",
@@ -6225,6 +6338,74 @@
       "done": "Réponse envoyée.",
       "error": "Choisissez un créneau à venir.",
       "slot": "Créneau {number}"
+    },
+    "templates": {
+      "use": "Utiliser un modèle"
+    },
+    "file": {
+      "kind": "PDF",
+      "meta": {
+        "cv": "CV · PDF",
+        "text": "Document · PDF"
+      },
+      "download": "Télécharger"
+    },
+    "slot": {
+      "title": "Créneau proposé · {time}",
+      "zone": "Heure de {city}"
+    },
+    "decision": {
+      "hired": "Candidature retenue",
+      "rejected": "Candidature non retenue",
+      "signer": "{name} · Recrutement",
+      "bounce": {
+        "title": "Pour rebondir",
+        "offers": "{count, plural, one {# offre proche} other {# offres proches}}",
+        "train": "S'entraîner",
+        "trainLine": "Simulation d'entretien"
+      }
+    },
+    "plus": {
+      "title": "Envoyer",
+      "close": "Fermer",
+      "back": "Retour",
+      "open": "Envoyer un créneau, un document ou un lien",
+      "creneau": {
+        "title": "Proposer un créneau",
+        "label": "Un créneau",
+        "date": "Date",
+        "time": "Heure",
+        "note": "Un mot (facultatif)"
+      },
+      "cv": {
+        "title": "Envoyer un CV",
+        "label": "Mon CV",
+        "empty": "Créer mon premier CV"
+      },
+      "lettre": {
+        "title": "Envoyer une lettre",
+        "label": "Ma lettre",
+        "empty": "Écrire une lettre dans Career"
+      },
+      "document": {
+        "title": "Envoyer un document",
+        "label": "Un document",
+        "empty": "Créer un document dans Career"
+      },
+      "lien": {
+        "title": "Envoyer un lien",
+        "label": "Un lien",
+        "url": "Adresse du lien",
+        "placeholder": "https://",
+        "text": "Texte du lien (facultatif)"
+      },
+      "ai": {
+        "label": "Relance IA",
+        "soon": "Bientôt disponible"
+      },
+      "updated": "Modifié le {date, date, long}",
+      "copy": "Une copie est envoyée : vos modifications suivantes ne la changent pas.",
+      "send": "Envoyer"
     },
     "docRequest": {
       "title": "Document demandé : {documentName}",
@@ -7216,6 +7397,78 @@
       "confirm": "Confirmer",
       "done": "Décision enregistrée.",
       "aiRule": "Rappel : un score bas ou un critère non rempli ne suffit pas à justifier une décision. Elle vous appartient."
+    },
+    "templates": {
+      "write": "Écrire avec un modèle",
+      "message": {
+        "title": "Message",
+        "back": "Retour",
+        "choose": "Choisir un modèle",
+        "ai": "Écrire avec l'IA",
+        "aiSoon": "Bientôt disponible",
+        "manage": "Gérer les modèles de l'organisation",
+        "decided": "La décision est déjà prise pour cette candidature.",
+        "titleFor": "{kind} · {name}",
+        "preview": "Aperçu de ce que reçoit {firstName}",
+        "edit": "Modifier le texte",
+        "text": "Texte du message",
+        "refresh": "Mettre à jour l'aperçu",
+        "afterClick": "Envoyé seulement après votre clic.",
+        "cancel": "Annuler",
+        "send": "Envoyer",
+        "withoutMessage": "Enregistrer la décision sans message",
+        "error": "Le message n'est pas parti. Vérifiez le texte et réessayez.",
+        "convocationHint": "Pour proposer des créneaux que le candidat confirme en un geste :",
+        "schedule": "planifier l'entretien"
+      },
+      "kind": {
+        "convocation": "Convocation",
+        "document": "Demander un document",
+        "relance": "Relance",
+        "acceptation": "Acceptation",
+        "refus": "Refus"
+      },
+      "banner": {
+        "hired": "Candidature retenue",
+        "rejected": "Candidature non retenue"
+      },
+      "signer": "{name} · Recrutement",
+      "today": "aujourd'hui",
+      "default": {
+        "convocation": {
+          "body": "Bonjour {firstName},\\n\\nMerci pour votre candidature au poste de {jobTitle}. Nous aimerions vous rencontrer pour un entretien.\\n\\nJe vous propose des créneaux dans cette conversation : dites-moi celui qui vous convient.\\n\\n{signer}, {company}"
+        },
+        "document": {
+          "body": "Bonjour {firstName}, pour avancer sur votre candidature au poste de {jobTitle}, pourriez-vous nous envoyer ce document ?"
+        },
+        "relance": {
+          "body": "Bonjour {firstName},\\n\\nJe reviens vers vous au sujet de votre candidature au poste de {jobTitle}. Avez-vous pu lire mon dernier message ?\\n\\n{signer}, {company}"
+        },
+        "acceptation": {
+          "body": "Bonjour {firstName},\\n\\nNous avons le plaisir de vous proposer le poste de {jobTitle}.\\n\\nProchaine étape : un échange sur votre arrivée. Nous revenons vers vous dans cette conversation."
+        },
+        "refus": {
+          "body": "Bonjour {firstName},\\n\\nMerci pour votre candidature au poste de {jobTitle} et pour le temps que vous y avez consacré. Nous avons retenu un autre profil pour ce poste.\\n\\nCette décision tient aux besoins précis du poste et ne remet pas en cause vos qualités. Nous gardons votre profil pour nos prochaines offres."
+        }
+      },
+      "page": {
+        "title": "Modèles de message",
+        "subtitle": "Les textes de votre organisation, pour écrire plus vite aux candidats.",
+        "saved": "Modèle enregistré.",
+        "deleted": "Modèle supprimé.",
+        "error": "Vérifiez le nom et le texte du modèle.",
+        "placeholders": "Dans un modèle, '{prenom}', '{poste}', '{entreprise}' et '{signataire}' sont remplacés au moment d'écrire au candidat.",
+        "empty": "Aucun modèle pour l'instant. Jumanly propose un texte par défaut pour chaque type.",
+        "edit": "Modifier",
+        "view": "Voir",
+        "kind": "Type",
+        "name": "Nom du modèle",
+        "save": "Enregistrer",
+        "delete": "Supprimer",
+        "new": "Nouveau modèle",
+        "bodyPlaceholder": "Bonjour '{prenom}', …",
+        "create": "Créer le modèle"
+      }
     },
     "application": {
       "back": "Retour au pipeline",

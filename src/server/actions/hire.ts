@@ -16,8 +16,6 @@ import {
   HireError,
   moveApplication,
   publishJob,
-  rejectApplication,
-  rejectReasons,
   saveJob,
 } from "@/server/services/hire";
 import { hireMemberships, partnerMemberships } from "@/server/services/organization";
@@ -25,6 +23,9 @@ import { reportError } from "@/server/observability";
 import { writeJob, type JobWriterInput, type JobWriterResult } from "@/server/services/job-writer";
 
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
+
+const decisionHref = (applicationId: string, kind: "rejected" | "hired") =>
+  `/app/hire/candidats/${applicationId}/message?modele=${kind === "rejected" ? "refus" : "acceptation"}`;
 
 /** Public job pages are cached: a change in Hire refreshes them. */
 function refreshPublicJobs(slug?: string) {
@@ -170,9 +171,9 @@ export async function moveApplicationAction(formData: FormData) {
     where: { id: stageId },
     select: { kind: true },
   });
-  // Rejection always goes through its own form, with a reason and a message.
-  if (stage?.kind === "rejected")
-    redirect(`/app/hire/candidats/${applicationId}?decision=refus#decision`);
+  // A decision always goes through its preview (prompt 5): the message leaves only on a click.
+  if (stage?.kind === "rejected" || stage?.kind === "hired")
+    redirect(decisionHref(applicationId, stage.kind));
   const moved = await guarded(
     () => moveApplication(db, ctx, applicationId, stageId),
     "/app/hire/offres",
@@ -189,8 +190,8 @@ export type MoveCardResult =
 
 /**
  * Drag and drop in the pipeline (mockup 04-04): the same move as `moveApplicationAction`, answered
- * without a redirect so the card stays where it was dropped. « Non retenu » still opens the
- * decision form: a rejection is never made by a drop alone.
+ * without a redirect so the card stays where it was dropped. « Non retenu » and « Embauché » open
+ * the decision preview: a decision is never made by a drop alone.
  */
 export async function moveCardAction(input: {
   applicationId: string;
@@ -203,11 +204,8 @@ export async function moveCardAction(input: {
     where: { id: stageId },
     select: { kind: true },
   });
-  if (stage?.kind === "rejected")
-    return {
-      status: "decision",
-      href: `/app/hire/candidats/${applicationId}?decision=refus#decision`,
-    };
+  if (stage?.kind === "rejected" || stage?.kind === "hired")
+    return { status: "decision", href: decisionHref(applicationId, stage.kind) };
   try {
     const moved = await moveApplication(db, ctx, applicationId, stageId);
     if (!moved) return { status: "unchanged" };
@@ -217,35 +215,6 @@ export async function moveCardAction(input: {
     if (error instanceof HireError) return { status: "error" };
     throw error;
   }
-}
-
-const rejectSchema = z.object({
-  reason: z.enum(rejectReasons),
-  message: z.string().max(4000).default(""),
-  send: z.enum(["now", "none"]).default("now"),
-});
-
-export async function rejectApplicationAction(formData: FormData) {
-  const { user, ctx } = await requireHire("/app/hire", "manage");
-  const applicationId = id(formData.get("application"));
-  const parsed = rejectSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success)
-    redirect(`/app/hire/candidats/${applicationId}?decision=refus&erreur=1#decision`);
-  const message = parsed.data.send === "now" ? parsed.data.message.trim() : "";
-  const moved = await guarded(
-    () => rejectApplication(db, ctx, applicationId, { reason: parsed.data.reason, message }),
-    "/app/hire/offres",
-  );
-  if (moved) {
-    if (message) {
-      const conversation = await ensureApplicationConversation(db, applicationId);
-      await sendMessage(db, { userId: user.id, hire: ctx }, conversation.id, {
-        body: message,
-      }).catch(() => undefined);
-    }
-    await onStageChanged(applicationId, moved.to, message).catch((error) => reportError(error));
-  }
-  redirect(`/app/hire/candidats/${applicationId}?ok=decision`);
 }
 
 export async function addNoteAction(formData: FormData) {

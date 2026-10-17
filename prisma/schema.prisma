@@ -125,6 +125,7 @@ model Organization {
   contactRequests         ContactRequest[]
   contactBlocks           ContactBlock[]
   interviews              Interview[]
+  messageTemplates        MessageTemplate[]
   /// Partner organizations only (E9): bank, university, foundation, company, cooperation, public.
   partnerKind             String?
   licenseBatches          LicenseBatch[]
@@ -1427,6 +1428,12 @@ enum MessageKind {
   document_request
   invitation
   system
+  /// A file sent by its owner (CV, letter, document): payload { document }.
+  file
+  /// A time suggested in the conversation: payload { startsAt, timezone, durationMinutes }.
+  slot
+  /// A recruitment decision (rejected or hired), shown as a DecisionCard, never as a bubble.
+  decision
 }
 
 model Message {
@@ -1883,6 +1890,29 @@ enum InterviewStatus {
   canceled
   done
   no_show
+}
+
+enum MessageTemplateKind {
+  convocation
+  document
+  relance
+  acceptation
+  refus
+}
+
+/// A message template of an organization (prompt 5): always read and written with its organizationId.
+model MessageTemplate {
+  id             String              @id @default(cuid(2))
+  organizationId String
+  organization   Organization        @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  kind           MessageTemplateKind
+  title          String
+  body           String
+  updatedById    String?
+  createdAt      DateTime            @default(now())
+  updatedAt      DateTime            @updatedAt
+
+  @@index([organizationId, kind])
 }
 
 /// An interview invitation (`connect.appointments`): the recruiter proposes slots, the talent picks.

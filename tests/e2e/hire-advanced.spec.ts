@@ -112,6 +112,74 @@ test("un entretien est planifié puis confirmé par le talent", async ({
   await talent.context().close();
 });
 
+/** The recruiter of the fictional group invites the visible talent to an interview with two slots. */
+async function inviteTalent(page: Page) {
+  await page.goto("/app/hire/entretiens?candidature=nouveau#planifier");
+  await page.locator("#interview-application").selectOption({ index: 1 });
+  const day = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 11);
+  await page.locator("#new-slot-0").fill(`${day(4)}10:00`);
+  await page.locator("#new-slot-1").fill(`${day(5)}15:00`);
+  await page.locator("#interview-link").fill("https://visio.example/e2e-suivi");
+  await page.getByRole("button", { name: "Envoyer l'invitation" }).click();
+  await expect(page.getByText("Invitation envoyée.")).toBeVisible();
+}
+
+// Prompt 5 (screens 15, 20-22): the talent answers from Suivi. A slot is confirmed only after the
+// server's answer; the confirmed interview can be added to a calendar. Other times can be proposed.
+test("Suivi : confirmer un entretien, l'ajouter à l'agenda, puis proposer d'autres moments", async ({
+  page,
+  browser,
+  baseURL,
+  isMobile,
+}) => {
+  test.skip(isMobile, "Partage la candidature de démonstration : une seule exécution.");
+  test.setTimeout(240_000);
+  await logIn(page, group.owner);
+  await inviteTalent(page);
+
+  const talent = await newPage(browser, baseURL, isMobile);
+  await logIn(talent, group.talent);
+  await talent.goto("/app/suivi");
+  const todo = talent.getByRole("region", { name: "À traiter" });
+  await expect(todo).toContainText("Entretien à confirmer");
+  await expectAccessible(talent);
+  await todo.getByRole("link", { name: "Confirmer", exact: true }).first().click();
+  await expect(talent.getByRole("heading", { name: "Confirmer l'entretien" })).toBeVisible();
+  await expect(talent.getByText("Choisissez un des créneaux proposés")).toBeVisible();
+  await expectAccessible(talent);
+  await talent.getByRole("button", { name: "Confirmer ce créneau" }).click();
+  await expect(talent).toHaveURL(/ok=confirme/);
+  await expect(talent.getByText(/Présence confirmée\. Groupe Démo.* est prévenue\./)).toBeVisible();
+  const id = new URL(talent.url()).searchParams.get("entretien")!;
+  const confirmed = talent.locator(`#entretien-${id}`);
+  await expect(confirmed).toContainText("Confirmé");
+  const agenda = await confirmed
+    .getByRole("link", { name: "Ajouter à mon agenda" })
+    .getAttribute("href");
+  const ics = await talent.request.get(agenda!);
+  expect(ics.status()).toBe(200);
+  expect(ics.headers()["content-type"]).toContain("text/calendar");
+  expect(await ics.text()).toContain("BEGIN:VEVENT");
+
+  // A second invitation: none of the slots suits, the talent proposes two other times.
+  await inviteTalent(page);
+  await talent.goto("/app/suivi?filtre=entretiens");
+  await talent.getByRole("link", { name: "Proposer un autre moment" }).first().click();
+  await expect(talent.getByRole("heading", { name: "Proposer un autre moment" })).toBeVisible();
+  const days = talent.locator("fieldset").first().getByRole("button");
+  await days.nth(2).click();
+  await talent.getByRole("button", { name: "10 h 00", exact: true }).click();
+  await talent.getByRole("button", { name: "14 h 00", exact: true }).click();
+  await expect(talent.getByText("Vos propositions · 2 sur 3")).toBeVisible();
+  await talent.locator("#propose-message").fill("Je suis en examen jeudi, fictif.");
+  await expectAccessible(talent);
+  await talent.getByRole("button", { name: "Envoyer mes propositions" }).click();
+  await expect(talent).toHaveURL(/ok=propose/);
+  await expect(talent.getByText("Vos propositions sont envoyées.")).toBeVisible();
+  await expect(talent.getByRole("main")).toContainText("En attente du recruteur");
+  await talent.context().close();
+});
+
 // Company verification by an administrator, then the public company page with its badge.
 test("vérification de l'entreprise et page publique", async ({
   page,

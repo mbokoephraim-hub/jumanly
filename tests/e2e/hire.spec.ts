@@ -177,10 +177,24 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   // Decision, with a human message.
   await page.goto(threadUrl);
   await expect(page.getByRole("main")).toContainText("mardi me convient");
+  // The refusal is shown exactly as the talent will receive it, and leaves on a click (prompt 5).
   await page.goto(`${candidateUrl}?decision=refus#decision`);
-  await page.locator("#reject-reason").selectOption("otherCandidate");
-  await page.getByRole("button", { name: "Confirmer" }).click();
+  await expect(page).toHaveURL(/\/message\?modele=refus/);
+  await expect(page.getByText("Aperçu de ce que reçoit Amani")).toBeVisible();
+  const preview = page.locator("article").filter({ hasText: "Candidature non retenue" });
+  await expect(preview).toContainText("Bonjour Amani,");
+  await expect(preview).toContainText(title);
+  await page.locator("#decision-reason").selectOption("otherCandidate");
+  await page.getByRole("button", { name: "Envoyer", exact: true }).click();
   await expect(page.getByRole("main")).toContainText("Décision enregistrée.");
+
+  // The talent receives a decision card, never a bubble, with real ways to bounce back.
+  await talent.goto(threadUrl);
+  const decision = talent.locator("article").filter({ hasText: "Candidature non retenue" });
+  await expect(decision).toContainText("Bonjour Amani,");
+  await expect(decision).toContainText("Recrutement");
+  await expect(talent.getByRole("heading", { name: "Pour rebondir" })).toBeVisible();
+  await expect(talent.getByRole("link", { name: /S'entraîner/ })).toBeVisible();
 
   await talent.goto("/app/jobs/candidatures?onglet=terminees");
   await expect(talent.locator("li").filter({ hasText: title }).first()).toContainText(

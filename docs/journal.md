@@ -2,6 +2,23 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Mobile Talent et Jumanly AI · prompt 5 : Suivi, entretiens, messages, décisions (17 octobre 2026)
+
+- Suivi (écran 15) : filtres Tout, Candidatures, Entretiens, Messages ; « À traiter » en tête
+  (entretiens à confirmer, documents demandés, messages non lus), états vides avec un personnage.
+- Entretiens (écrans 20-22) : confirmer un créneau, proposer jusqu'à trois autres moments,
+  confirmation après la réponse du serveur, « Rejoindre » et fichier `.ics`.
+- Messages (écrans 16, 23-24) : bouton + (créneau, CV, lettre, document, lien ; relance IA en
+  emplacement), cartes de fichier, de créneau et de décision.
+- Décisions (écrans 50-55) : refus et embauche passent par un aperçu exact, envoyé au clic du
+  recruteur ; carte de décision et « Pour rebondir » côté talent. Modèles de message par
+  organisation (`/app/hire/modeles`).
+- Migration additive `20261017015124_message_kinds_and_templates`, avec retour arrière.
+- Tests : base (isolation des modèles entre organisations, droits, pièces jointes, ordre du suivi,
+  embauche), unitaires (repères, `.ics`), e2e refus côté recruteur puis talent, et entretien
+  confirmé puis reporté depuis Suivi.
+- Décision : `docs/decisions/2026-10-17-mobile-talent-suivi-messages.md`.
+
 ## Mobile Talent et Jumanly AI · prompt 4 : offres, candidature, Apprendre (17 octobre 2026)
 
 - Offres (écrans 06-07) : onglets Pour vous (classées par score, ou sélection générale signalée),

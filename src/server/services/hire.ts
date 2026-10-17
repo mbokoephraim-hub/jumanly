@@ -601,6 +601,19 @@ export async function rejectApplication(
   });
 }
 
+/** « Retenir » (prompt 5): an explicit human decision, like a refusal, sent after a preview. */
+export async function hireApplication(
+  db: PrismaClient,
+  ctx: HireContext,
+  applicationId: string,
+  input: { messageSent: boolean },
+) {
+  const application = await getOrgApplication(db, ctx, applicationId);
+  const hired = application.job.stages.find((stage) => stage.kind === "hired");
+  if (!hired) throw new HireError("invalid");
+  return moveApplication(db, ctx, application.id, hired.id, { messageSent: input.messageSent });
+}
+
 export async function addNote(
   db: PrismaClient,
   ctx: HireContext,

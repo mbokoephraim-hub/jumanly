@@ -101,10 +101,12 @@ test("navigation Talent : quatre destinations, menu de l'avatar, Mon espace et S
   await page.goto("/app/suivi");
   await expect(page.getByRole("heading", { level: 1, name: "Suivi" })).toBeVisible();
   await expect(page.getByRole("heading", { level: 2, name: "À traiter" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /^Mes candidatures/ })).toHaveAttribute(
-    "href",
-    "/app/jobs/candidatures",
-  );
+  await expect(page.getByRole("heading", { level: 2, name: "Mes candidatures" })).toBeVisible();
+  await expect(
+    page
+      .getByRole("navigation", { name: "Filtrer le suivi" })
+      .getByRole("link", { name: "Entretiens" }),
+  ).toHaveAttribute("href", "/app/suivi?filtre=entretiens");
   await expect(
     page
       .getByRole("navigation", { name: "Navigation principale" })
