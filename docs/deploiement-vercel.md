@@ -17,10 +17,28 @@ reste valable si l'on y revient.
 Celles de `docs/deploiement-hostinger.md` (§ 3), plus `CRON_SECRET` (32 caractères aléatoires ou
 plus ; sans elle, la route refuse l'appel du cron).
 
-## E-mails (codes de connexion, liens, reçus) · Resend
+## E-mails (codes de connexion, liens, reçus)
 
-Sans `RESEND_API_KEY`, aucun e-mail ne part : les codes s'affichent seulement dans les journaux
-Vercel (« e-mail factice »). Pour les envoyer vraiment :
+Sans `RESEND_API_KEY` ni `SMTP_HOST`, aucun e-mail ne part : les codes s'affichent seulement dans
+les journaux Vercel (« e-mail factice »). Deux façons de les envoyer vraiment.
+
+### Solution simple : la boîte Gmail infojumanly@gmail.com (SMTP)
+
+Rien à changer chez Hostinger. Limite d'environ 500 e-mails par jour ; l'expéditeur affiché est
+infojumanly@gmail.com.
+
+1. Se connecter au compte Google infojumanly@gmail.com → [myaccount.google.com/security](https://myaccount.google.com/security)
+   → activer la **validation en deux étapes** (obligatoire pour l'étape suivante).
+2. [myaccount.google.com/apppasswords](https://myaccount.google.com/apppasswords) → nom « Jumanly »
+   → **Créer**. Google affiche un mot de passe de 16 lettres : le copier (sans les espaces).
+3. Vercel → Paramètres → Variables d'environnement (Production) : `SMTP_HOST` = `smtp.gmail.com`,
+   `SMTP_PORT` = `465`, `SMTP_USER` = `infojumanly@gmail.com`, `SMTP_PASSWORD` = le mot de passe
+   de 16 lettres. Supprimer `EMAIL_FROM` s'il existe. Puis Deployments → **Redeploy**.
+4. Tester une inscription ou une connexion par code.
+
+### Solution pour plus tard : Resend (envoi depuis assistant@jumanly.io)
+
+Prioritaire sur SMTP si `RESEND_API_KEY` est renseignée.
 
 1. Créer un compte sur [resend.com](https://resend.com) → Domains → **Add Domain** → `jumanly.io`,
    région **eu-west-1 (Irlande)**.
