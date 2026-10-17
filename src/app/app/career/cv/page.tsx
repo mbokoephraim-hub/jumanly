@@ -12,7 +12,11 @@ import {
   TemplatesBand,
   type CvRow,
 } from "@/components/career/cv/list";
+import { PhoneTitle } from "@/components/layout/phone-title";
+import { CreateCvSheet, PhoneCvList } from "@/components/career/cv/phone-list";
 import { Alert } from "@/components/ui";
+import { cvFileName } from "@/features/cv/export/pdf";
+import { splitName } from "@/features/cv/render/build";
 import { cvFonts } from "@/features/cv/render/palette";
 import {
   cvTemplateRegistry,
@@ -58,6 +62,18 @@ export default async function CvListPage({ searchParams }: PageProps<"/app/caree
     listPublicPlans(db),
   ]);
   // At most MAX_CVS pure calls (§ 1.5).
+  const fileNames = Object.fromEntries(
+    documents.map((document) => {
+      const { firstName, lastName } = splitName(parseCv(document.content).info.name.trim());
+      return [
+        document.id,
+        cvFileName(
+          [firstName, lastName].join(" "),
+          documents.length > 1 ? document.title : undefined,
+        ),
+      ];
+    }),
+  );
   const cvs: CvRow[] = documents.map((document) => ({
     id: document.id,
     title: document.title,
@@ -84,11 +100,15 @@ export default async function CvListPage({ searchParams }: PageProps<"/app/caree
       }
     : null;
 
+  const creating = params.creer === "1" && !atLimit;
+
   return (
     <>
+      <PhoneTitle back="/app/career" backLabel={t("phone.listBack")} title={t("phone.listTitle")} />
       <AppPageHeader
         eyebrow={tHome("eyebrow")}
         title={t("title")}
+        className="max-md:hidden"
         actions={
           primary ? (
             <HeaderAction
@@ -103,52 +123,61 @@ export default async function CvListPage({ searchParams }: PageProps<"/app/caree
       {params.ok === "principal" && <Alert tone="success" title={t("saved")} />}
       {params.erreur === "limite" && <Alert tone="error" title={t("limit", { max: MAX_CVS })} />}
 
-      <CvListHero count={cvs.length} max={MAX_CVS} primary={primary} />
-
-      {cvs.length === 0 ? (
-        <CvEmptyCard />
-      ) : (
-        <>
-          {primary && <PrimaryCvCard cv={primary} />}
-          {(others.length > 0 || !atLimit) && (
-            <section
-              id="cv-autres"
-              aria-labelledby="cv-others-title"
-              {...enter(2)}
-              className="jm-ch-in flex flex-col gap-4"
-            >
-              <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
-                <h2 id="cv-others-title" className="text-[22px] font-semibold tracking-[-0.02em]">
-                  {t("list.othersTitle")}
-                </h2>
-                <p className="text-sm text-ardoise">{t("list.othersLead")}</p>
-              </div>
-              {atLimit && <Alert tone="info" title={t("limit", { max: MAX_CVS })} />}
-              <ul className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
-                {others.map((cv, index) => (
-                  <OtherCvCard key={cv.id} cv={cv} index={index} />
-                ))}
-                {!atLimit && <NewCvCard left={MAX_CVS - cvs.length} />}
-              </ul>
-            </section>
-          )}
-        </>
+      <PhoneCvList cvs={cvs} fileNames={fileNames} atLimit={atLimit} />
+      {creating && (
+        <CreateCvSheet
+          suggested={cvs.length === 0 ? t("default") : `${t("default")} ${cvs.length + 1}`}
+        />
       )}
 
-      <TemplatesBand
-        total={cvTemplateRegistry.length}
-        included={includedTemplates.length}
-        fonts={cvFonts.length}
-        fan={includedTemplates.slice(0, 3)}
-        locked={locked}
-        href={
-          primary
-            ? `/app/career/cv/modeles?cv=${primary.id}`
-            : cvs[0]
-              ? `/app/career/cv/modeles?cv=${cvs[0].id}`
-              : null
-        }
-      />
+      <div className="contents max-md:hidden">
+        <CvListHero count={cvs.length} max={MAX_CVS} primary={primary} />
+
+        {cvs.length === 0 ? (
+          <CvEmptyCard />
+        ) : (
+          <>
+            {primary && <PrimaryCvCard cv={primary} />}
+            {(others.length > 0 || !atLimit) && (
+              <section
+                id="cv-autres"
+                aria-labelledby="cv-others-title"
+                {...enter(2)}
+                className="jm-ch-in flex flex-col gap-4"
+              >
+                <div className="flex flex-wrap items-baseline gap-x-3 gap-y-1">
+                  <h2 id="cv-others-title" className="text-[22px] font-semibold tracking-[-0.02em]">
+                    {t("list.othersTitle")}
+                  </h2>
+                  <p className="text-sm text-ardoise">{t("list.othersLead")}</p>
+                </div>
+                {atLimit && <Alert tone="info" title={t("limit", { max: MAX_CVS })} />}
+                <ul className="grid grid-cols-2 gap-3 sm:gap-4 xl:grid-cols-4">
+                  {others.map((cv, index) => (
+                    <OtherCvCard key={cv.id} cv={cv} index={index} />
+                  ))}
+                  {!atLimit && <NewCvCard left={MAX_CVS - cvs.length} />}
+                </ul>
+              </section>
+            )}
+          </>
+        )}
+
+        <TemplatesBand
+          total={cvTemplateRegistry.length}
+          included={includedTemplates.length}
+          fonts={cvFonts.length}
+          fan={includedTemplates.slice(0, 3)}
+          locked={locked}
+          href={
+            primary
+              ? `/app/career/cv/modeles?cv=${primary.id}`
+              : cvs[0]
+                ? `/app/career/cv/modeles?cv=${cvs[0].id}`
+                : null
+          }
+        />
+      </div>
     </>
   );
 }

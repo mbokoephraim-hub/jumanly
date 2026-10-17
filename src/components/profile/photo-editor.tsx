@@ -3,6 +3,7 @@
 import { useRef, useState, useTransition, type KeyboardEvent, type PointerEvent } from "react";
 import Link from "next/link";
 import { Icon } from "@/components/brand/icon";
+import { track } from "@/lib/track";
 import { removePhotoAction, savePhotoAction } from "@/server/actions/profile";
 
 /** Side of the exported square: enough for the largest avatar and the CV, light on the network. */
@@ -121,6 +122,7 @@ export function PhotoEditor({
         if (!blob) return;
         const data = new FormData();
         data.set("photo", blob, "photo.jpg");
+        track("profile_photo_saved");
         startTransition(() => savePhotoAction(data));
       },
       "image/jpeg",

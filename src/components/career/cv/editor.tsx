@@ -23,7 +23,15 @@ const menuItem =
   "flex min-h-11 w-full items-center gap-2.5 rounded-xl px-3 text-left text-sm font-medium hover:bg-creme lg:min-h-10";
 
 /** § 2.1: the sticky workshop bar (CV selector, save state, actions, download). */
-export async function WorkshopBar({ cv, cvs }: { cv: CvLink; cvs: CvLink[] }) {
+export async function WorkshopBar({
+  cv,
+  cvs,
+  className,
+}: {
+  cv: CvLink;
+  cvs: CvLink[];
+  className?: string;
+}) {
   const t = await getTranslations("career.cv");
   const count = cvs.length;
   return (
@@ -31,7 +39,10 @@ export async function WorkshopBar({ cv, cvs }: { cv: CvLink; cvs: CvLink[] }) {
       role="toolbar"
       aria-label={t("toolbar.label")}
       id="cv-atelier"
-      className="sticky top-[calc(10px+env(safe-area-inset-top))] z-30 flex items-center gap-2 rounded-[24px] bg-blanc/86 p-2 shadow-[0_18px_40px_-26px_rgb(15_63_55/0.45)] ring-1 ring-sapin/6 backdrop-blur-[14px] sm:gap-3"
+      className={cx(
+        "sticky top-[calc(10px+env(safe-area-inset-top))] z-30 flex items-center gap-2 rounded-[24px] bg-blanc/86 p-2 shadow-[0_18px_40px_-26px_rgb(15_63_55/0.45)] ring-1 ring-sapin/6 backdrop-blur-[14px] sm:gap-3",
+        className,
+      )}
     >
       <details className="group relative min-w-0 flex-1 lg:max-w-[340px]">
         <summary className="flex min-h-14 cursor-pointer list-none items-center gap-3 rounded-[18px] bg-creme py-2 pr-3 pl-2 hover:bg-lime-clair/60 [&::-webkit-details-marker]:hidden">
@@ -188,10 +199,10 @@ export async function SavedPill({ className }: { className?: string }) {
 }
 
 /** § 2.1 on a phone: « Enregistré » and the download, fixed above the bottom menu. */
-export async function MobileActionBar({ id }: { id: string }) {
+export async function MobileActionBar({ id, className }: { id: string; className?: string }) {
   const t = await getTranslations("career.cv");
   return (
-    <>
+    <div className={className}>
       <div
         id="cv-barre-mobile"
         className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 flex items-center justify-between gap-3 rounded-[22px] bg-blanc/92 p-2.5 shadow-float ring-1 ring-sapin/6 backdrop-blur-[14px] lg:hidden"
@@ -203,7 +214,7 @@ export async function MobileActionBar({ id }: { id: string }) {
         </a>
       </div>
       <div aria-hidden className="h-16 lg:hidden" />
-    </>
+    </div>
   );
 }
 

@@ -3,6 +3,7 @@ import { getTranslations } from "next-intl/server";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { Icon, type IconName } from "@/components/brand/icon";
+import { BodyPortal } from "@/components/layout/body-portal";
 import { PhoneTitle } from "@/components/layout/phone-title";
 import { PhoneOverview, phoneParts, type PhonePart } from "@/components/profile/phone-overview";
 import { PhotoEditor } from "@/components/profile/photo-editor";
@@ -364,62 +365,64 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
       {photoOpen && (
         // Screen 26: a sheet over the profile on a phone, a dialog on a computer. Closing goes back
         // to the profile, so the sheet works without JavaScript.
-        <div className="fixed inset-0 z-[60] flex items-end justify-center md:items-center md:p-6">
-          <Link
-            href="/app/profil"
-            aria-hidden
-            tabIndex={-1}
-            className="absolute inset-0 bg-sapin/55"
-          />
-          <section
-            role="dialog"
-            aria-modal="true"
-            aria-labelledby="photo-titre"
-            className="relative flex max-h-[94dvh] w-full flex-col gap-4 overflow-y-auto rounded-t-[28px] bg-creme px-5 pt-3 md:max-w-[440px] md:rounded-[28px]"
-          >
-            <span
+        <BodyPortal>
+          <div className="fixed inset-0 z-[60] flex items-end justify-center md:items-center md:p-6">
+            <Link
+              href="/app/profil"
               aria-hidden
-              className="mx-auto block h-1.5 w-10 rounded-full bg-brume md:hidden"
+              tabIndex={-1}
+              className="absolute inset-0 bg-sapin/55"
             />
-            <div className="flex items-center justify-between gap-3">
-              <h2 id="photo-titre" className="text-[26px] font-bold tracking-[-0.02em]">
-                {t("talent.profile.phone.photo.title")}
-              </h2>
-              <Link
-                href="/app/profil"
-                aria-label={t("talent.profile.phone.photo.close")}
-                className="grid size-12 shrink-0 place-items-center rounded-full bg-blanc shadow-douce"
-              >
-                <Icon name="fermer" className="size-5" />
-              </Link>
-            </div>
-            {photoError && (
-              <Alert
-                tone="error"
-                title={t(
-                  photoError === "type" || photoError === "size"
-                    ? `talent.profile.phone.photo.error.${photoError}`
-                    : "talent.profile.phone.photo.error.photo",
-                )}
+            <section
+              role="dialog"
+              aria-modal="true"
+              aria-labelledby="photo-titre"
+              className="relative flex max-h-[94dvh] w-full flex-col gap-4 overflow-y-auto rounded-t-[28px] bg-creme px-5 pt-3 md:max-w-[440px] md:rounded-[28px]"
+            >
+              <span
+                aria-hidden
+                className="mx-auto block h-1.5 w-10 rounded-full bg-brume md:hidden"
               />
-            )}
-            <PhotoEditor
-              current={profile.user.image ?? undefined}
-              hasPhoto={Boolean(profile.user.image)}
-              labels={{
-                take: t("talent.profile.phone.photo.take"),
-                choose: t("talent.profile.phone.photo.choose"),
-                remove: t("talent.profile.phone.photo.remove"),
-                never: t("talent.profile.phone.photo.never"),
-                zoom: t("talent.profile.phone.photo.zoom"),
-                cancel: t("talent.profile.phone.photo.cancel"),
-                save: t("talent.profile.phone.photo.save"),
-                empty: t("talent.profile.phone.photo.empty"),
-                drag: t("talent.profile.phone.photo.drag"),
-              }}
-            />
-          </section>
-        </div>
+              <div className="flex items-center justify-between gap-3">
+                <h2 id="photo-titre" className="text-[26px] font-bold tracking-[-0.02em]">
+                  {t("talent.profile.phone.photo.title")}
+                </h2>
+                <Link
+                  href="/app/profil"
+                  aria-label={t("talent.profile.phone.photo.close")}
+                  className="grid size-12 shrink-0 place-items-center rounded-full bg-blanc shadow-douce"
+                >
+                  <Icon name="fermer" className="size-5" />
+                </Link>
+              </div>
+              {photoError && (
+                <Alert
+                  tone="error"
+                  title={t(
+                    photoError === "type" || photoError === "size"
+                      ? `talent.profile.phone.photo.error.${photoError}`
+                      : "talent.profile.phone.photo.error.photo",
+                  )}
+                />
+              )}
+              <PhotoEditor
+                current={profile.user.image ?? undefined}
+                hasPhoto={Boolean(profile.user.image)}
+                labels={{
+                  take: t("talent.profile.phone.photo.take"),
+                  choose: t("talent.profile.phone.photo.choose"),
+                  remove: t("talent.profile.phone.photo.remove"),
+                  never: t("talent.profile.phone.photo.never"),
+                  zoom: t("talent.profile.phone.photo.zoom"),
+                  cancel: t("talent.profile.phone.photo.cancel"),
+                  save: t("talent.profile.phone.photo.save"),
+                  empty: t("talent.profile.phone.photo.empty"),
+                  drag: t("talent.profile.phone.photo.drag"),
+                }}
+              />
+            </section>
+          </div>
+        </BodyPortal>
       )}
     </>
   );

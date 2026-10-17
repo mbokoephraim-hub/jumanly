@@ -19,12 +19,15 @@ import { cvBlockTypes, DEFAULT_TEMPLATE_ID } from "@/features/cv/templates/regis
 import {
   applyTemplate,
   cvFromProfile,
+  cvPhoneParts,
   cvSectionIds,
+  emptyCv,
   MAX_CVS,
   parseCv,
   toggleSection,
   updateCvStyle,
   type CvContent,
+  type CvPhonePart,
 } from "@/server/services/cv";
 import { decideSuggestion, runCvCoach } from "@/server/services/cv-coach";
 import { ensureProfile, getFullProfile } from "@/server/services/profile";
@@ -43,6 +46,12 @@ async function ownedCv(profileId: string, id: FormDataEntryValue | null) {
   return cv;
 }
 
+/** The part of the phone editor the form came from (screen 28): the editor reopens on it. */
+function partOf(formData: FormData): Record<string, string> {
+  const part = formData.get("partie");
+  return cvPhoneParts.includes(part as CvPhonePart) ? { partie: String(part) } : {};
+}
+
 function back(id: string, params: Record<string, string> = {}): never {
   const query = new URLSearchParams(params).toString();
   redirect(`/app/career/cv/${id}${query ? `?${query}` : ""}`);
@@ -56,20 +65,49 @@ async function save(
   await db.document.update({ where: { id }, data: { ...data, content } });
 }
 
-export async function createCv() {
+const createSchema = z.object({
+  source: z.enum(["profile", "import", "blank"]).catch("profile"),
+  title: z.string().trim().max(80).catch(""),
+});
+
+/**
+ * A new CV (screen 27): from the profile (the default, also when nothing is sent), from an import
+ * (the pasted CV fills the profile first, then « Remplir » brings it in), or from a blank page that
+ * keeps only the name and the contact of the account.
+ */
+export async function createCv(formData?: FormData) {
+  const { source, title } = createSchema.parse({
+    source: formData?.get("source") ?? undefined,
+    title: formData?.get("title") ?? undefined,
+  });
+  if (source === "import") redirect("/app/profil/import");
   const { user, profile } = await owner();
   const count = await db.document.count({ where: { profileId: profile.id, kind: "cv" } });
   if (count >= MAX_CVS) redirect("/app/career/cv?erreur=limite");
   const t = await getTranslations("career.cv");
   const full = await getFullProfile(db, user.id);
+  const fromProfile = cvFromProfile(full);
+  const content: CvContent =
+    source === "blank"
+      ? {
+          ...emptyCv,
+          info: {
+            ...emptyCv.info,
+            name: fromProfile.info.name,
+            email: fromProfile.info.email,
+            city: fromProfile.info.city,
+            country: fromProfile.info.country,
+          },
+        }
+      : fromProfile;
   const cv = await db.document.create({
     data: {
       profileId: profile.id,
       kind: "cv",
-      title: count === 0 ? t("default") : `${t("default")} ${count + 1}`,
+      title: title || (count === 0 ? t("default") : `${t("default")} ${count + 1}`),
       templateId: DEFAULT_TEMPLATE_ID,
       isPrimary: count === 0,
-      content: cvFromProfile(full),
+      content,
     },
   });
   back(cv.id);
@@ -80,7 +118,7 @@ export async function refreshCvFromProfile(formData: FormData) {
   const cv = await ownedCv(profile.id, formData.get("id"));
   const full = await getFullProfile(db, user.id);
   await save(cv.id, cvFromProfile(full, parseCv(cv.content)));
-  back(cv.id, { ok: "profil" });
+  back(cv.id, { ok: "profil", ...partOf(formData) });
 }
 
 const detailsSchema = z.object({
@@ -105,7 +143,7 @@ export async function updateCvDetails(formData: FormData) {
   });
   if (!parsed.success) {
     const phone = parsed.error.issues.some((issue) => issue.path[0] === "phone");
-    back(cv.id, { erreur: phone ? "telephone" : "1" });
+    back(cv.id, { erreur: phone ? "telephone" : "1", ...partOf(formData) });
   }
   const content = parseCv(cv.content);
   await save(
@@ -121,7 +159,7 @@ export async function updateCvDetails(formData: FormData) {
     },
     { title: parsed.data.title },
   );
-  back(cv.id, { ok: "1" });
+  back(cv.id, { ok: "1", ...partOf(formData) });
 }
 
 const sectionSchema = z.object({
@@ -137,7 +175,7 @@ export async function changeCvSection(formData: FormData) {
     section: formData.get("section"),
     move: formData.get("move"),
   });
-  if (!parsed.success) back(cv.id);
+  if (!parsed.success) back(cv.id, partOf(formData));
   const { section, move } = parsed.data;
   if (move === "toggle") {
     await save(cv.id, toggleSection(parseCv(cv.content), section));
@@ -146,7 +184,7 @@ export async function changeCvSection(formData: FormData) {
       moveBlock(template, style, cvSectionIds, section, move === "up" ? -1 : 1),
     );
   }
-  back(cv.id);
+  back(cv.id, partOf(formData));
 }
 
 /**

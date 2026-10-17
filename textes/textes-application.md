@@ -4165,6 +4165,45 @@ Conventions :
 | `career.cv.toolbar.count` | {count, plural, one {# CV} other {# CV}} |
 | `career.cv.summary.counter` | {count} / {max} |
 | `career.cv.summary.hint` | 3 à 4 lignes conseillées |
+| `career.cv.phone.listTitle` | Mes CV |
+| `career.cv.phone.listBack` | Retour à Career |
+| `career.cv.phone.create` | Créer un CV |
+| `career.cv.phone.pdf` | PDF |
+| `career.cv.phone.preparing` | PDF… |
+| `career.cv.phone.preparingLabel` | Préparation du PDF… |
+| `career.cv.phone.downloaded` | CV téléchargé · sans mention Jumanly |
+| `career.cv.phone.shared` | CV prêt à partager · sans mention Jumanly |
+| `career.cv.phone.pdfError` | Le PDF n'a pas pu être préparé. Réessayez. |
+| `career.cv.phone.updatedShort` | {date} |
+| `career.cv.phone.sheet.title` | Créer un CV |
+| `career.cv.phone.sheet.close` | Fermer |
+| `career.cv.phone.sheet.legend` | Point de départ |
+| `career.cv.phone.sheet.profile` | À partir de mon profil |
+| `career.cv.phone.sheet.profileHint` | Recommandé |
+| `career.cv.phone.sheet.import` | Importer un CV existant |
+| `career.cv.phone.sheet.importHint` | Collez le texte de votre CV |
+| `career.cv.phone.sheet.blank` | Page vierge |
+| `career.cv.phone.sheet.blankHint` | Tout à remplir |
+| `career.cv.phone.sheet.name` | Nom du CV |
+| `career.cv.phone.sheet.submit` | Créer et ouvrir |
+| `career.cv.phone.sheet.limit` | Vous avez atteint {max} CV. Supprimez-en un pour en créer un autre. |
+| `career.cv.phone.back` | Retour à Mes CV |
+| `career.cv.phone.tabs` | Vues du CV |
+| `career.cv.phone.tab.content` | Contenu |
+| `career.cv.phone.tab.style` | Mise en forme |
+| `career.cv.phone.tab.preview` | Aperçu |
+| `career.cv.phone.parts` | Sections du CV |
+| `career.cv.phone.part.info` | Infos |
+| `career.cv.phone.next` | Section suivante |
+| `career.cv.phone.saved` | Enregistré |
+| `career.cv.phone.share` | Partager |
+| `career.cv.phone.download` | Télécharger le PDF |
+| `career.cv.phone.neutral` | Le CV téléchargé ne porte ni logo ni mention Jumanly. |
+| `career.cv.phone.missions` | Missions et résultats |
+| `career.cv.phone.present` | aujourd'hui |
+| `career.cv.phone.empty` | Rien ici pour l'instant. Ajoutez-le dans votre profil, puis mettez ce CV à jour. |
+| `career.cv.phone.refresh` | Mettre à jour depuis mon profil |
+| `career.cv.phone.hidden` | Masquée sur le CV |
 
 ### Document CV · Titres et niveaux imprimés sur le CV
 

@@ -5727,6 +5727,53 @@
       "summary": {
         "counter": "{count} / {max}",
         "hint": "3 à 4 lignes conseillées"
+      },
+      "phone": {
+        "listTitle": "Mes CV",
+        "listBack": "Retour à Career",
+        "create": "Créer un CV",
+        "pdf": "PDF",
+        "preparing": "PDF…",
+        "preparingLabel": "Préparation du PDF…",
+        "downloaded": "CV téléchargé · sans mention Jumanly",
+        "shared": "CV prêt à partager · sans mention Jumanly",
+        "pdfError": "Le PDF n'a pas pu être préparé. Réessayez.",
+        "updatedShort": "{date}",
+        "sheet": {
+          "title": "Créer un CV",
+          "close": "Fermer",
+          "legend": "Point de départ",
+          "profile": "À partir de mon profil",
+          "profileHint": "Recommandé",
+          "import": "Importer un CV existant",
+          "importHint": "Collez le texte de votre CV",
+          "blank": "Page vierge",
+          "blankHint": "Tout à remplir",
+          "name": "Nom du CV",
+          "submit": "Créer et ouvrir",
+          "limit": "Vous avez atteint {max} CV. Supprimez-en un pour en créer un autre."
+        },
+        "back": "Retour à Mes CV",
+        "tabs": "Vues du CV",
+        "tab": {
+          "content": "Contenu",
+          "style": "Mise en forme",
+          "preview": "Aperçu"
+        },
+        "parts": "Sections du CV",
+        "part": {
+          "info": "Infos"
+        },
+        "next": "Section suivante",
+        "saved": "Enregistré",
+        "share": "Partager",
+        "download": "Télécharger le PDF",
+        "neutral": "Le CV téléchargé ne porte ni logo ni mention Jumanly.",
+        "missions": "Missions et résultats",
+        "present": "aujourd'hui",
+        "empty": "Rien ici pour l'instant. Ajoutez-le dans votre profil, puis mettez ce CV à jour.",
+        "refresh": "Mettre à jour depuis mon profil",
+        "hidden": "Masquée sur le CV"
       }
     },
     "documents": {

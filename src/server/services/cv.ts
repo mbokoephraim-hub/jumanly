@@ -76,6 +76,17 @@ const cvContentSchema = z.object({
 
 export type CvContent = z.infer<typeof cvContentSchema>;
 
+/** The parts of the phone editor, one at a time (prompt 6, screen 28). */
+export const cvPhoneParts = [
+  "info",
+  "summary",
+  "experience",
+  "education",
+  "skills",
+  "languages",
+] as const;
+export type CvPhonePart = (typeof cvPhoneParts)[number];
+
 export const emptyCv: CvContent = {
   info: { name: "", headline: "", email: "", city: "", country: "", showEmail: true, phone: "" },
   summary: "",
