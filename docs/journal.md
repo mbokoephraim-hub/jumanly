@@ -2201,3 +2201,10 @@ toutes dans `docs/specifications.md`.
   Afrique de l'Ouest, reste de l'Afrique, hors d'Afrique, A à Z), villes par pays, ajout d'image et de PDF,
   profils suggérés (formules payantes), connexion avant tout message, recruteur sur mobile ; écrans 81 à 94.
 - Brief § 8 et prompts (prompts 3 et 10 complétés, prompt 11 recruteur ajouté).
+
+## 2026-10-17 · Expérience mobile, version 9 (maquettes et brief)
+
+- `docs/ux-mobile-talent/CAHIER-DES-CHARGES-V9.md` : une à trois photos par réalisation, vues en carrousel
+  dans le projet ; pour un nouveau poste, idées de photo (bureau, logo, carte de service) ; floutage des
+  numéros et codes par Orbi, validé par la personne ; écrans 95 à 99, planche 0f.
+- Brief § 9, prompt 10 complété. « C'est Irma » dans la dictée n'a pas été compris : noté dans le cahier.

@@ -15,7 +15,8 @@ bouton retour, bouton +, thème Vert, ouverture par le logo, bannières d’entr
 et `CAHIER-DES-CHARGES-V6.md` ; v7 du 17 octobre : en-tête sans logo, titre en grand et barre de recherche
 Orbi unique, barre du bas floutée, leçon, import de CV, réalisations, connexions et badges, écrans 67 à 80, voir § 7
 et `CAHIER-DES-CHARGES-V7.md` ; v8 : pays et villes, image et PDF, profils suggérés, connexions,
-recruteur sur mobile, écrans 81 à 94, voir § 8 et `CAHIER-DES-CHARGES-V8.md`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
+recruteur sur mobile, écrans 81 à 94, voir § 8 et `CAHIER-DES-CHARGES-V8.md` ; v9 : une à trois photos par
+réalisation, photo du nouveau poste et floutage, écrans 95 à 99, voir § 9 et `CAHIER-DES-CHARGES-V9.md`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
 
 | N° | Écran | N° | Écran |
 |---|---|---|---|
@@ -66,6 +67,9 @@ recruteur sur mobile, écrans 81 à 94, voir § 8 et `CAHIER-DES-CHARGES-V8.md`)
 | 89 | Notification · connexion acceptée | 90 | Connexion établie · premier message |
 | 91 | Recruteur · où recruter | 92 | Recruteur · Tableau |
 | 93 | Recruteur · rechercher un candidat | 94 | Recruteur · profil d’un candidat |
+| 95 | Réalisation · ajouter des photos | 96 | Projet · photos en carrousel |
+| 97 | Nouveau poste · idées de photo | 98 | Masquer une information |
+| 99 | Nouveau poste publié | | |
 
 Les contenus sont des exemples (persona fictive Grâce Mbuyi, entreprises fictives). **En production, tout
 vient des données réelles** (règle d’or 11) ; une section sans donnée affiche son état vide ou se masque.
@@ -287,3 +291,24 @@ Demande du propriétaire : `CAHIER-DES-CHARGES-V8.md` (l’emporte sur la v7). �
    sur les profils visibles (règle d’or 5), score et « Pourquoi ? » du matching (partie 08), « Inviter à
    postuler » (le candidat accepte avant tout message), consultation journalisée, filtre `organizationId`.
    Quotas de recherche et d’invitations par clés de droits (RH et Companies).
+
+## 9. Version 9 (17 octobre 2026) : photos dans les réalisations
+
+Demande du propriétaire : `CAHIER-DES-CHARGES-V9.md`. Écrans 95 à 99, planche « 0f ».
+
+1. **Photos** : une réalisation porte 0 à 3 images (`StoredFile`, relation ordonnée avec `position`,
+   `caption` 120 caractères, la première = couverture). Formats JPG, PNG, WebP, HEIC converti ; 10 Mo
+   par fichier à l'envoi ; réduites à 1600 px et servies en WebP avec vignettes. Le nombre de photos ne
+   dépend pas du forfait (le quota reste celui des réalisations).
+2. **Vie privée** : métadonnées EXIF supprimées côté serveur avant tout stockage public. Rappel à l'ajout :
+   pas de visage sans accord, pas de document interne.
+3. **Floutage** : outil de floutage manuel (rectangles enregistrés puis appliqués côté serveur à l'image
+   publiée, l'original n'est jamais exposé). Détection automatique des numéros, codes-barres et QR derrière
+   une interface (`image-redact`, implémentation `fake` qui ne détecte rien) ; proposition seulement, la
+   personne valide (règle d'or 3). Réglage `User.autoRedact`, activé par défaut.
+4. **Nouveau poste** : idées de photo (bureau, logo, carte de service, autre) ; le logo est proposé depuis
+   `Organization.logo` s'il existe. Photo facultative.
+5. **Affichage** : carrousel en haut de la page du projet (glisser, points, vignettes, légende) ; mosaïque
+   dans le fil et sur le profil. « Féliciter » = réaction unique, pas de commentaire.
+6. **Modération** : chaque photo passe par `moderation.ts` avant publication ; signalement possible.
+

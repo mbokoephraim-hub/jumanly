@@ -6,7 +6,7 @@ attend la fin du précédent (code fusionné, vérifications vertes) avant d’�
 Références déposées sur `main` :
 - `docs/ux-mobile-talent/` : cahier des charges mobile (fait foi), `BRIEF-MOBILE-TALENT.md`,
   `PROMPT-AMELIORE.md`, **`CAHIER-DES-CHARGES-V6.md`, `V7.md` puis `V8.md` (la plus récente l’emporte)**, maquettes
-  `maquette/mobile-talent.html`, `maquette/ecrans/01.jpg` à `94.jpg` et styles d’origine `maquette/source/`.
+  `maquette/mobile-talent.html`, `maquette/ecrans/01.jpg` à `99.jpg` et styles d’origine `maquette/source/`.
 - `docs/jumanly-ai/` : cahier des charges Jumanly AI (fait foi), `BRIEF-JUMANLY-AI.md`.
 
 | N° | Prompt | Écrans |
@@ -21,7 +21,7 @@ Références déposées sur `main` :
 | 7 | Jumanly AI : assistant central, bouton, panneau | 35-36, 41-44 |
 | 8 | Jumanly AI : offres, CV, suivi, suggestions applicables | 30, 37-38, 40 |
 | 9 | Jumanly AI : Learn, Hire, simulations d’entretien | 39, 43, 45-49 |
-| 10 | Réalisations, connexions, profils suggérés, badges | 60, 75-79, 83-90, planches 0d |
+| 10 | Réalisations, connexions, profils suggérés, badges | 60, 75-79, 83-90, 95-99, planches 0d et 0f |
 | 11 | Recruteur sur mobile (RH et entreprise) | 54-55, 66, 80, 91-94 |
 
 ---
@@ -35,7 +35,7 @@ Lis, dans cet ordre :
 1. CLAUDE.md (règles d’or).
 2. docs/ux-mobile-talent/CAHIER-DES-CHARGES-UX-MOBILE.md (ma demande), puis CAHIER-DES-CHARGES-V6.md, V7.md et V8.md (la plus récente l’emporte en cas de différence), BRIEF-MOBILE-TALENT.md (choix par défaut, § 5 cartes et messages, § 6, § 7 et § 8), PROMPT-AMELIORE.md.
 3. docs/jumanly-ai/CAHIER-DES-CHARGES-JUMANLY-AI.md (ma demande, elle fait foi) et BRIEF-JUMANLY-AI.md.
-4. Les maquettes : docs/ux-mobile-talent/maquette/mobile-talent.html (planches Boutons, Cartes, États d’interaction, puis 94 écrans), maquette/ecrans/01.jpg à 94.jpg et les styles d’origine maquette/source/style.css à style8.css.
+4. Les maquettes : docs/ux-mobile-talent/maquette/mobile-talent.html (planches Boutons, Cartes, États d’interaction, puis 99 écrans), maquette/ecrans/01.jpg à 99.jpg et les styles d’origine maquette/source/style.css à style9.css.
 5. Les briefs déjà livrés qu’il faut respecter : docs/interactions-relief, docs/experience-animee, docs/refonte-career, docs/modeles-cv, docs/learn-v2/PLAN.md, docs/refonte-connexion.
 
 Ne code rien. Ta réponse est un diagnostic et un plan :
@@ -58,7 +58,7 @@ Attends ma validation.
 ```text
 Prompt 1 sur 11 : le socle visuel, pour tout l’espace Talent.
 
-Références : planches « Boutons », « Cartes » et « États d’interaction » de docs/ux-mobile-talent/maquette/mobile-talent.html ; PROMPT-AMELIORE.md § 2 et § 5 ; BRIEF-MOBILE-TALENT.md § 5 ; styles d’origine dans docs/ux-mobile-talent/maquette/source/ (style.css à style8.css) : reporte leurs valeurs exactes dans nos jetons, sans approximation ni nouvelle couleur, y compris les jetons du thème Vert (.vert de style6.css).
+Références : planches « Boutons », « Cartes » et « États d’interaction » de docs/ux-mobile-talent/maquette/mobile-talent.html ; PROMPT-AMELIORE.md § 2 et § 5 ; BRIEF-MOBILE-TALENT.md § 5 ; styles d’origine dans docs/ux-mobile-talent/maquette/source/ (style.css à style9.css) : reporte leurs valeurs exactes dans nos jetons, sans approximation ni nouvelle couleur, y compris les jetons du thème Vert (.vert de style6.css).
 
 À faire :
 - <Button variant="primary|accent|secondary|outline|link|ai|danger" size="L|M|S"> avec les états repos, appui, en cours, fait, désactivé ; principal en dégradé Sapin → Émeraude avec le rond Lime et la flèche ; accent en dégradé Lime, texte Sapin ; jamais blanc sur Lime.
@@ -238,7 +238,7 @@ Fin : vérifications complètes, e2e simulation écrite et mode recruteur (isola
 ```text
 Prompt 10 sur 11 : réalisations mises en avant, connexions professionnelles, badges Premium et Cap.
 
-Références : CAHIER-DES-CHARGES-V7.md § B8 et B9, V8.md § B2 et B3, BRIEF-MOBILE-TALENT.md § 7 points 7 à 11 et § 8 points 3 à 5 ; écrans 25, 60, 75 à 79, 83 à 90 et planche 0d ; docs/specifications.md parties 05 (forfaits), 10 (données personnelles, modération).
+Références : CAHIER-DES-CHARGES-V7.md § B8 et B9, V8.md § B2 et B3, V9.md, BRIEF-MOBILE-TALENT.md § 7 points 7 à 11, § 8 points 3 à 5 et § 9 ; écrans 25, 60, 75 à 79, 83 à 90, 95 à 99 et planches 0d et 0f ; docs/specifications.md parties 05 (forfaits), 10 (données personnelles, modération).
 
 Avant de coder : propose les valeurs du quota de réalisations par forfait (proposition : 5, 10, 20, illimité) à ajouter dans la partie 05 et le seed, et attends ma validation.
 
@@ -252,8 +252,9 @@ Avant de coder : propose les valeurs du quota de réalisations par forfait (prop
 - Profils suggérés (86-87) : service people-suggest déterministe, raison affichée, aucun champ exclu du matching ; droit connect.suggestions, aperçu flouté sinon. Rechercher une personne (88), gratuit.
 - Aucun message direct sans connexion acceptée ; notification connection.accepted avec « Laisser un message » (89-90).
 - Bouton + (85) : brancher toutes ses entrées.
+- Photos (95-99) : une à trois par réalisation, ordre, couverture, légende ; carrousel en haut du projet ; idées de photo pour un nouveau poste (bureau, logo, carte de service) ; EXIF supprimé ; floutage manuel et proposition de floutage automatique (interface image-redact, implémentation fake), la personne valide ; modération.
 
-Fin : vérifications complètes, tests de droits (quota, illimité, suggestions, aucun nom de forfait), test « pas de message sans connexion », e2e « mettre une réalisation en avant » et « demande de connexion acceptée » ; captures à côté des maquettes ; journal ; bilan des prompts 1 à 10 et points ouverts.
+Fin : vérifications complètes, tests de droits (quota, illimité, suggestions, aucun nom de forfait), test « pas de message sans connexion », e2e « mettre une réalisation en avant avec trois photos » et « demande de connexion acceptée » ; captures à côté des maquettes ; journal ; bilan des prompts 1 à 10 et points ouverts.
 ```
 
 ---
