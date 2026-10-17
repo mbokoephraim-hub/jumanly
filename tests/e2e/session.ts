@@ -104,3 +104,20 @@ export async function signUpFromPricing(page: Page, planButton: string, email: s
   await page.locator('input[name="code"]').fill(await lastCode(email, since));
   await page.getByRole("button", { name: "Vérifier" }).click();
 }
+
+/**
+ * A new CV from « Mes CV » (prompt 6): « Nouveau CV » on a computer, the sheet « Créer un CV » on a
+ * phone. Returns its id once the editor is open.
+ */
+export async function newCvFromList(page: Page) {
+  await page.goto("/app/career/cv");
+  const desktop = page.getByRole("button", { name: "Nouveau CV", exact: true });
+  if (await desktop.isVisible()) {
+    await desktop.click();
+  } else {
+    await page.goto("/app/career/cv?creer=1");
+    await page.getByRole("button", { name: "Créer et ouvrir" }).click();
+  }
+  await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
+  return new URL(page.url()).pathname.split("/").pop()!;
+}

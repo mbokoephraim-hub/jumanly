@@ -1,6 +1,6 @@
 import { expect, test, type Locator } from "./fixtures";
 import { lastCode } from "./outbox";
-import { demo, logIn, testEmail } from "./session";
+import { demo, logIn, testEmail, newCvFromList } from "./session";
 
 const JOB = "demo-comptable-junior-abidjan";
 
@@ -41,14 +41,17 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await expect(page).toHaveURL(new RegExp(`/app/jobs/${JOB}`));
 
   // Profile: summary, an experience, three skills.
-  await page.goto("/app/profil");
+  // On a phone each part opens alone (prompt 6); the computer shows them all, whatever the address.
+  await page.goto("/app/profil?partie=resume");
   await page
     .locator("#summary")
     .fill("Comptable rigoureuse, cinq ans de saisie et de rapprochements bancaires en PME.");
   await page.locator("#resume").getByRole("button", { name: "Enregistrer" }).click();
   await expect(page.locator("#resume")).toContainText("Profil enregistré");
 
-  const experiences = page.locator("#experiences");
+  await page.goto("/app/profil?partie=experiences");
+  await page.waitForLoadState("networkidle");
+  const experiences = page.locator("#experiences").filter({ visible: true });
   await experiences.locator("summary").filter({ hasText: "Ajouter" }).click();
   await experiences.locator('input[name="title"]').fill("Assistante comptable");
   await experiences.locator('input[name="company"]').fill("Entreprise fictive");
@@ -58,24 +61,24 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
     .locator('textarea[name="description"]')
     .fill("Saisie des factures\nRapprochements bancaires");
   await experiences.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(page.locator("#experiences")).toContainText("Assistante comptable");
+  await expect(experiences).toContainText("Assistante comptable");
 
+  await page.goto("/app/profil?partie=competences");
+  // The disclosure is opened once the page is ready, or hydration closes it again.
+  await page.waitForLoadState("networkidle");
   for (const skill of ["Analyse de données", "Administration", "Achats"]) {
-    const skills = page.locator("#competences");
+    const skills = page.locator("#competences").filter({ visible: true });
     const form = skills.locator("form").filter({ has: page.locator('input[name="skill"]') });
     if (!(await form.isVisible())) await skills.locator("summary").last().click();
     await form.locator('input[name="skill"]').fill(skill);
     await form.getByRole("button", { name: "Ajouter" }).click();
-    await expect(page.locator("#competences")).toContainText(skill);
+    await expect(skills).toContainText(skill);
   }
 
   // CV from the profile, then its PDF.
-  await page.goto("/app/career/cv");
-  await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
-  await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
-  await expect(page.locator("article")).toContainText("Assistante comptable");
-  const pdfHref = await page.getByRole("link", { name: "Télécharger" }).getAttribute("href");
-  const pdf = await page.request.get(pdfHref!);
+  const cvId = await newCvFromList(page);
+  await expect(page.locator("article").first()).toContainText("Assistante comptable");
+  const pdf = await page.request.get(`/app/career/cv/${cvId}/pdf`);
   expect(pdf.status()).toBe(200);
   expect(pdf.headers()["content-type"]).toBe("application/pdf");
   expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");

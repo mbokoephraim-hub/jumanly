@@ -17,7 +17,8 @@ async function newCv(page: Page) {
   return new URL(page.url()).pathname.split("/").pop()!;
 }
 
-test("Mes CV : CV principal, autres CV, menu « … » et limite", async ({ page }) => {
+test("Mes CV : CV principal, autres CV, menu « … » et limite", async ({ page, isMobile }) => {
+  test.skip(isMobile, "Sur téléphone, Mes CV est une grille : mobile-profil-cv.spec.ts.");
   test.setTimeout(150_000);
   const email = testEmail("mes-cv");
   await signUpFromPricing(page, "Créer mon compte gratuit", email);
@@ -58,6 +59,7 @@ test("éditeur : vue dans l'adresse, section surlignée sur l'aperçu seulement,
   page,
   isMobile,
 }) => {
+  test.skip(isMobile, "Sur téléphone, l'éditeur a ses trois vues : mobile-profil-cv.spec.ts.");
   test.setTimeout(120_000);
   await logIn(page, demo.talentPro);
   const id = await newCv(page);
@@ -100,20 +102,6 @@ test("éditeur : vue dans l'adresse, section surlignée sur l'aperçu seulement,
 
   const width = await page.evaluate(() => document.documentElement.scrollWidth);
   expect(width).toBeLessThanOrEqual(page.viewportSize()!.width);
-
-  if (isMobile) {
-    // On a phone: the preview first, the download in a fixed bar above the bottom menu.
-    const previewBox = await page
-      .locator('section[aria-labelledby="cv-preview"]')
-      .filter({ visible: true })
-      .boundingBox();
-    const switchBox = await switcher.boundingBox();
-    expect(previewBox!.y).toBeLessThan(switchBox!.y);
-    const mobileBar = page.locator("#cv-barre-mobile").filter({ visible: true });
-    await expect(mobileBar).toHaveCSS("position", "fixed");
-    await expect(mobileBar).toBeInViewport();
-    await expect(mobileBar.getByRole("link", { name: "Télécharger le PDF" })).toBeVisible();
-  }
 
   // Clean up: the demo account keeps room for the other journeys.
   await page.evaluate(() => window.scrollTo(0, 0));

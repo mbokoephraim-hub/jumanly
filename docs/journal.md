@@ -2,6 +2,28 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Mobile Talent et Jumanly AI · prompt 6 : profil, CV, recherche, notifications (17 octobre 2026)
+
+- Profil sur téléphone (écrans 25-26) : photo (prendre, choisir, recadrer, retirer), « Construire
+  mon profil » en 6 étapes, titre et bio enregistrés en quittant le champ (« Enregistré » après la
+  réponse du serveur), une partie du profil à la fois. « M'aider à l'écrire » reste inactif
+  jusqu'au prompt 8.
+- CV (écrans 27-29, 56) : Mes CV en vignettes avec PDF (« PDF… » puis toast), « Créer un CV » (profil,
+  import, page vierge, nom), éditeur Contenu / Mise en forme / Aperçu, une section à la fois et
+  « Section suivante ».
+- Recherche groupée (écran 18) avec onglets, récentes seulement avec le consentement
+  « préférences » ; notifications rangées par priorité avec le lien vers les préférences (écran 19).
+- `track()` derrière le consentement « analytics », sans fournisseur branché.
+- Réseau lent : photo réduite à 512 px dans le navigateur, servie avec un cache long ; nouveaux
+  composants client petits (feuille, bouton PDF) ; pages publiques inchangées (budget de 200 Ko
+  vérifié par les e2e). Dette signalée : l'espace connecté charge environ 620 Ko de JavaScript
+  (mesure locale, même valeur à 3 Ko près sur profil, Mes CV, recherche et notifications), surtout
+  le cadre commun de l'application ; à réduire dans un lot dédié.
+- Migration additive `20261017052929_profile_photos`, avec retour arrière.
+- Tests : base (type de photo, taille, changement d'adresse, retrait), unitaires (`track`), e2e
+  « compléter mon profil » et « télécharger mon CV » sur téléphone.
+- Décision : `docs/decisions/2026-10-17-mobile-talent-profil-cv.md`.
+
 ## Mobile Talent et Jumanly AI · prompt 5 : Suivi, entretiens, messages, décisions (17 octobre 2026)
 
 - Suivi (écran 15) : filtres Tout, Candidatures, Entretiens, Messages ; « À traiter » en tête
