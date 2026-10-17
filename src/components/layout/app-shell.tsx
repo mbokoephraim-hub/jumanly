@@ -11,14 +11,14 @@ import {
   partnerNavigation,
   talentMenu,
   talentNavigation,
+  talentTabPaths,
 } from "@/config/navigation";
 import { Logo, Icon, type IconName } from "@/components/brand";
 import { careerTabs } from "@/components/career/kit";
 import type { Section } from "@/config/section-navigation";
 import { dynamic } from "@/i18n/dynamic";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
-import { Avatar } from "@/components/ui/avatar";
-import { signOut } from "@/server/actions/auth";
+import { initials as initialsOf } from "@/components/ui/avatar";
 import { AccountMenu, type AccountSummary } from "./account-menu";
 import { IconRail } from "./icon-rail";
 import { NavLink } from "./nav-link";
@@ -27,8 +27,10 @@ import { TopSearch } from "./top-search";
 import { SpaceSwitcher, type SpaceOption } from "./space-switcher";
 import { TabBar } from "./tab-bar";
 import { TopMenu } from "./top-menu";
-import { TopTitle } from "./top-title";
-import { TOP_BAR_SLOT_ID } from "@/lib/top-bar";
+import { CreateSheet, type CreateAction } from "./create-sheet";
+import { OrbiSearch } from "./orbi-search";
+import { PhoneHeader } from "./phone-header";
+import { ThemeRoot } from "./theme-root";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { cx } from "@/lib/cx";
 
@@ -55,8 +57,11 @@ export function AppShell({
   lockedCareer = [],
   followUp = 0,
   unreadMessages = 0,
+  theme = "light",
   children,
 }: {
+  /** Talent: Clair or Vert (Compte › Préférences, V6 § B7). */
+  theme?: "light" | "green";
   /** Talent: real number of actions to take (badge of Suivi). */
   followUp?: number;
   /** Talent: conversations with an unread message (badge of Messages in the avatar menu). */
@@ -131,8 +136,13 @@ export function AppShell({
   return (
     <div
       data-reduce-motion={reduceMotion ? "" : undefined}
-      className="jm-admin-bg min-h-dvh text-sapin md:flex"
+      className={cx(
+        "jm-admin-bg min-h-dvh text-sapin md:flex",
+        talent && "jm-talent",
+        talent && theme === "green" && "jm-vert",
+      )}
     >
+      {talent && <ThemeRoot theme={theme} />}
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={tt("region.aria")} closeLabel={tt("close")} />
       {intro && (
@@ -167,49 +177,80 @@ export function AppShell({
       />
 
       {talent ? (
-        <header className="group/top flex h-[52px] items-center gap-1 pr-2 pl-[18px] text-blanc md:hidden">
-          <div id={TOP_BAR_SLOT_ID} className="contents" />
-          <div className="flex min-w-0 flex-1 items-center group-has-[[data-top-override][data-active]]/top:hidden">
-            <TopTitle
-              logo={
-                <Link href={home} aria-label={a11y("logo")} className="shrink-0">
-                  <Logo variant="negative" height={24} />
-                </Link>
-              }
-              titles={{
-                "/app/jobs": t("tabs.offers"),
-                "/app/learn": t("tabs.learn"),
-                "/app/suivi": t("tabs.suivi"),
-                "/app/career": t("title.career"),
-                "/app/messages": t("title.messages"),
-                "/app/notifications": t("title.notifications"),
-                "/app/profil": t("title.profile"),
-                "/app/abonnement": t("title.subscription"),
-                "/app/parametres": t("title.settings"),
-                "/app/tableau-de-bord": t("title.dashboard"),
-                "/app/recherche": t("title.search"),
-              }}
-            />
-          </div>
-          <div className="flex items-center gap-1 group-has-[[data-top-override][data-active]]/top:hidden">
-            {searchLink("dark")}
-            {notifications("dark")}
+        <PhoneHeader
+          backLabel={t("back")}
+          titles={{
+            "/app": t("tabs.forMe"),
+            "/app/jobs": t("tabs.offers"),
+            "/app/learn": t("tabs.learn"),
+            "/app/suivi": t("tabs.suivi"),
+            "/app/compte": t("tabs.account"),
+            "/app/career": t("title.career"),
+            "/app/messages": t("title.messages"),
+            "/app/notifications": t("title.notifications"),
+            "/app/profil": t("title.profile"),
+            "/app/abonnement": t("title.subscription"),
+            "/app/parametres": t("title.settings"),
+            "/app/tableau-de-bord": t("title.dashboard"),
+            "/app/recherche": t("title.search"),
+            "/app/espace": t("topMenu.open"),
+          }}
+          menu={
             <TopMenu
               label={t("topMenu.label")}
-              openLabel={t("topMenu.open")}
-              trigger={
-                <Avatar
-                  name={account.name}
-                  image={account.image ?? undefined}
-                  size="sm"
-                  className="ring-2 ring-lime/70"
-                />
-              }
+              openLabel={t("topMenu.button")}
+              align="left"
+              triggerClassName="jm-top-round jm-menu-button grid size-10 place-items-center rounded-full"
+              trigger={<Icon name="menu" className="size-[22px]" />}
             >
-              <TalentMenu account={account} unreadMessages={unreadMessages} />
+              <TalentMenu />
             </TopMenu>
-          </div>
-        </header>
+          }
+          actions={
+            <>
+              <CreateSheet
+                label={t("header.create")}
+                title={t("create.title")}
+                closeLabel={t("create.close")}
+                actions={createActions(t)}
+              />
+              <Link
+                href="/app/messages"
+                aria-label={t("header.messagesUnread", { count: unreadMessages })}
+                className="jm-top-round relative grid size-10 shrink-0 place-items-center rounded-full"
+              >
+                <Icon name="message" className="size-5" />
+                {unreadMessages > 0 && (
+                  <span aria-hidden className="jm-top-badge">
+                    {unreadMessages > 9 ? "9+" : unreadMessages}
+                  </span>
+                )}
+              </Link>
+              <NotificationBell initialUnread={unread} tone="round" labels={bellLabels} />
+            </>
+          }
+          search={
+            <Suspense fallback={null}>
+              <OrbiSearch
+                labels={{
+                  label: t("orbiSearch.label"),
+                  placeholder: t("orbiSearch.placeholder"),
+                  filters: t("orbiSearch.filters"),
+                  filtersCount: {
+                    one: t("orbiSearch.filtersCount", { count: 1 }).replace("1", "#"),
+                    other: t("orbiSearch.filtersCount", { count: 2 }).replace("2", "#"),
+                  },
+                  askTitle: t("orbiSearch.ask.title"),
+                  askSoon: t("orbiSearch.ask.soon"),
+                  results: t("orbiSearch.results"),
+                  kind: { job: t("orbiSearch.kind.job"), course: t("orbiSearch.kind.course") },
+                  recent: t("search.recent.title"),
+                  seeAll: t("orbiSearch.seeAll"),
+                }}
+              />
+            </Suspense>
+          }
+        />
       ) : (
         <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc md:hidden">
           <Link href={home} aria-label={a11y("logo")} className="shrink-0">
@@ -224,10 +265,19 @@ export function AppShell({
         </header>
       )}
 
-      <div className="relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme md:min-h-0 md:flex-1 md:rounded-none md:bg-transparent">
+      <div
+        className={cx(
+          "relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme md:min-h-0 md:flex-1 md:rounded-none md:bg-transparent",
+          talent && "max-md:rounded-none max-md:bg-transparent",
+        )}
+      >
         {/* The secondary menu, above the page: sub-sections left, tools right. */}
         <div className="jm-topbar sticky top-0 z-30 flex items-center gap-3 px-4 pt-3 sm:px-6 md:h-[68px] md:pt-0 lg:gap-5 lg:px-6 xl:px-[max(2rem,calc((100%-1400px)/2+2rem))]">
-          <SectionNav sections={sections} className="min-w-0 flex-1" />
+          <SectionNav
+            sections={sections}
+            phoneHidden={talent ? talentTabPaths : undefined}
+            className="min-w-0 flex-1"
+          />
           <div className="ml-auto hidden min-w-0 shrink-0 items-center justify-end gap-3 md:flex lg:w-[min(36%,460px)] lg:shrink 2xl:w-[min(42%,560px)]">
             {/* With an organization switcher, the wide search needs a wide screen: an icon below. */}
             <div
@@ -264,6 +314,21 @@ export function AppShell({
           tabs={talentNavigation
             .filter((item) => item.pill !== false)
             .map(({ key, href, icon }) => ({ key, href, icon, label: t(key) }))}
+          center="tabs.forMe"
+          account={{
+            key: "tabs.account",
+            avatar: account.image ? (
+              // eslint-disable-next-line @next/next/no-img-element -- a 24 px avatar, already small
+              <img src={account.image} alt="" className="size-full object-cover" />
+            ) : (
+              <span
+                aria-hidden
+                className="grid size-full place-items-center bg-neon text-[9.5px] font-bold text-sapin"
+              >
+                {initialsOf(account.name)}
+              </span>
+            ),
+          }}
           badge={{
             key: "tabs.suivi",
             count: followUp,
@@ -286,30 +351,27 @@ export function AppShell({
 }
 
 /**
- * The card of the avatar menu (screen 34): who is signed in, the shortcuts, then « Tout Mon
- * espace » and sign out. Jumanly AI takes the first line once the assistant exists (prompt 7).
+ * The card of the Menu button (screen 34): Orbi first (its place, until the assistant arrives with
+ * prompt 7), the shortcuts, then « Tout Mon espace ».
  */
-function TalentMenu({
-  account,
-  unreadMessages,
-}: {
-  account: AccountSummary;
-  unreadMessages: number;
-}) {
-  const t = useTranslations();
+function TalentMenu() {
+  const t = useTranslations("appNav.topMenu");
   return (
     <>
-      <div className="flex items-center gap-3 px-2.5 pt-2 pb-3">
-        <Avatar name={account.name} image={account.image ?? undefined} size="md" />
-        <div className="flex min-w-0 flex-col">
-          <span className="truncate text-[15px] font-semibold">{account.name}</span>
-          <span className="truncate text-[13px] text-ardoise">
-            {t("account.menu.roleBadge.text", {
-              space: t("account.menu.roleBadge.talent"),
-              plan: account.planName,
-            })}
-          </span>
-        </div>
+      <div
+        aria-disabled="true"
+        className="jm-ai-surface mb-1 flex min-h-[60px] items-center gap-3 rounded-[18px] px-3 text-blanc"
+      >
+        <span
+          aria-hidden
+          className="grid size-9 shrink-0 place-items-center rounded-full bg-lime text-sapin"
+        >
+          <Icon name="intelligence" className="size-[18px]" />
+        </span>
+        <span className="flex min-w-0 flex-1 flex-col">
+          <span className="text-[15px] font-semibold">{t("orbi.title")}</span>
+          <span className="truncate text-[13px] text-blanc/75">{t("orbi.soon")}</span>
+        </span>
       </div>
       <ul className="flex flex-col gap-0.5">
         {talentMenu.map((item) => (
@@ -327,41 +389,72 @@ function TalentMenu({
               >
                 <Icon name={item.icon} />
               </span>
-              <span className="min-w-0 flex-1 truncate">{t(`appNav.topMenu.${item.key}`)}</span>
-              {item.key === "messages" && unreadMessages > 0 && (
-                <>
-                  <span
-                    aria-hidden
-                    className="grid h-6 min-w-6 place-items-center rounded-full bg-sapin px-1.5 text-[12px] font-bold text-lime"
-                  >
-                    {unreadMessages > 9 ? "9+" : unreadMessages}
-                  </span>
-                  <span className="sr-only">
-                    {t("appNav.topMenu.unread", { count: unreadMessages })}
-                  </span>
-                </>
-              )}
+              <span className="min-w-0 flex-1 truncate">{t(item.key)}</span>
               <Icon name="chev-r" className="size-4 shrink-0 text-ardoise" />
             </Link>
           </li>
         ))}
       </ul>
-      <div className="mt-1 flex items-center justify-between gap-2 border-t border-brume px-2 pt-2 pb-1">
+      <div className="mt-1 border-t border-brume px-2 pt-2 pb-1">
         <Link
           href="/app/espace"
           className="flex min-h-11 items-center gap-1 text-[14px] font-semibold whitespace-nowrap text-feuille-fonce"
         >
-          {t("appNav.topMenu.all")}
+          {t("all")}
           <Icon name="chev-r" className="size-4" />
         </Link>
-        <form action={signOut}>
-          <button type="submit" className="min-h-11 px-1 text-[15px] font-semibold text-down-texte">
-            {t("account.menu.logout")}
-          </button>
-        </form>
       </div>
     </>
   );
+}
+
+/** The tiles of « Créer » (screen 60): existing pages only, each with its own rules. */
+function createActions(t: ReturnType<typeof useTranslations<"appNav">>): CreateAction[] {
+  return [
+    {
+      key: "apply",
+      href: "/app/jobs",
+      icon: "send",
+      label: t("create.apply"),
+      tone: "bg-[#BFEFDF]",
+    },
+    {
+      key: "cv",
+      href: "/app/career/cv?creer=1",
+      icon: "cv",
+      label: t("create.cv"),
+      tone: "bg-brume",
+    },
+    {
+      key: "letter",
+      href: "/app/career/documents",
+      icon: "doc",
+      label: t("create.letter"),
+      tone: "bg-lime",
+    },
+    {
+      key: "interview",
+      href: "/app/career/entretiens",
+      icon: "message",
+      label: t("create.interview"),
+      tone: "bg-[#F6F3EE]",
+    },
+    {
+      key: "experience",
+      href: "/app/profil?partie=experiences",
+      icon: "jobs",
+      label: t("create.experience"),
+      tone: "bg-neon",
+    },
+    {
+      key: "premium",
+      href: "/app/abonnement",
+      icon: "etoile",
+      label: t("create.premium"),
+      tone: "bg-lime",
+      featured: true,
+    },
+  ];
 }
 
 /** Sub-sections of each section of the signed-in space (the secondary horizontal menu). */

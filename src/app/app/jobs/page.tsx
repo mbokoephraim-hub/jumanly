@@ -24,6 +24,7 @@ import {
   segmentedItem,
   segmentedList,
 } from "@/components/ui";
+import { TextField } from "@/components/ui/text-field";
 import { cx } from "@/lib/cx";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -215,16 +216,18 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
 
   return (
     <div className="flex flex-col gap-5">
+      {/* On a phone the shell shows « Offres » and the one search bar (V7 § B1). */}
       <AppPageHeader
         eyebrow={t("talent.jobs.search.eyebrow")}
         title={t("talent.jobs.search.title", { count: total })}
+        className="max-md:sr-only"
       />
 
       <form
         action="/app/jobs"
         method="get"
         role="search"
-        className="flex flex-col gap-2 rounded-[22px] bg-blanc p-2 shadow-[0_6px_20px_rgb(11_26_31/0.06)] ring-[1.5px] ring-sapin/15 ring-inset lg:flex-row lg:items-stretch"
+        className="flex flex-col gap-2 rounded-[22px] bg-blanc p-2 shadow-[0_6px_20px_rgb(11_26_31/0.06)] ring-[1.5px] ring-sapin/15 ring-inset max-md:hidden lg:flex-row lg:items-stretch"
       >
         {view !== "pour-vous" && <input type="hidden" name="vue" value={view} />}
         {filters.tri && <input type="hidden" name="tri" value={filters.tri} />}
@@ -326,6 +329,7 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
           <div className="flex items-center gap-2">
             <FilterChipToggle
               menu="all"
+              open={params.filtres === "1"}
               active={active.length > 0}
               icon={<Icon name="filtre" className="size-3.5" />}
               label={
@@ -344,7 +348,6 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
                 )}
               >
                 {filters.q && <input type="hidden" name="q" value={filters.q} />}
-                {filters.ville && <input type="hidden" name="ville" value={filters.ville} />}
                 {view !== "pour-vous" && <input type="hidden" name="vue" value={view} />}
                 {filters.tri && <input type="hidden" name="tri" value={filters.tri} />}
                 <div className="flex items-center justify-between gap-3">
@@ -354,6 +357,14 @@ export default async function TalentJobsPage({ searchParams }: PageProps<"/app/j
                   </CloseDetails>
                 </div>
                 <div className="grid gap-4 sm:grid-cols-2">
+                  {/* On a phone the search bar has no « Lieu » box (V7 § B1): the city is here. */}
+                  <TextField
+                    id="jf-city"
+                    name="ville"
+                    label={t("talent.jobs.search.location.label")}
+                    placeholder={t("talent.jobs.search.location.placeholder")}
+                    defaultValue={filters.ville ?? ""}
+                  />
                   <Select
                     id="jf-country"
                     name="pays"

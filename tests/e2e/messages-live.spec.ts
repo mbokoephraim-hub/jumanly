@@ -11,6 +11,9 @@ test("la cloche ouvre les dernières notifications, sonne à l'arrivée et marqu
   const email = testEmail("cloche");
   await signUpFromPricing(page, "Créer mon compte gratuit", email);
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+  // On a phone the bell sits at the top of the tabs (screen 03), not on the goal screen.
+  await page.getByRole("button", { name: "Plus tard" }).click();
+  await expect(page).toHaveURL(/\/app$/);
   const bell = page.locator("[data-bell]").filter({ visible: true });
   await expect(bell).toHaveAccessibleName("Notifications · aucune non lue");
 

@@ -8,20 +8,25 @@ import { cx } from "@/lib/cx";
 const FOCUSABLE = 'a[href], button:not([disabled]), input, [tabindex]:not([tabindex="-1"])';
 
 /**
- * Menu of the avatar in the top bar of a phone (docs/ux-mobile-talent, prompt 2, screen 34): a
- * small card anchored under the avatar, not a page. Without JavaScript the avatar is a link to Mon
+ * Menu of the top bar of a phone (docs/ux-mobile-talent, screen 34, V6 § B3): a small card
+ * anchored under the Menu button, not a page. Without JavaScript the button is a link to Mon
  * espace; with it, it opens the card. It closes on Escape, on a touch outside and on a new page;
- * the focus stays inside while it is open and comes back to the avatar when it closes.
+ * the focus stays inside while it is open and comes back to the button when it closes.
  */
 export function TopMenu({
   label,
   openLabel,
   trigger,
+  align = "right",
+  triggerClassName = "grid size-11 place-items-center rounded-full",
   children,
 }: {
+  /** Side the card hangs from: the Menu button is on the left of the bar (V6 § B3). */
+  align?: "left" | "right";
+  triggerClassName?: string;
   /** Names the card for screen readers. */
   label: string;
-  /** Names the avatar button. */
+  /** Names the button. */
   openLabel: string;
   trigger: ReactNode;
   children: ReactNode;
@@ -93,7 +98,7 @@ export function TopMenu({
             event.preventDefault();
             setOpen((value) => !value);
           }}
-          className="grid size-11 place-items-center rounded-full"
+          className={triggerClassName}
         >
           {trigger}
         </Link>
@@ -104,8 +109,11 @@ export function TopMenu({
           aria-label={label}
           hidden={!open}
           className={cx(
-            "jm-panel absolute top-[calc(100%+8px)] right-0 z-50 flex w-[min(300px,calc(100vw-24px))] origin-top-right flex-col rounded-[24px] bg-blanc p-2 text-sapin shadow-menu",
-            "before:absolute before:-top-1.5 before:right-4 before:size-3.5 before:rotate-45 before:rounded-[3px] before:bg-blanc",
+            "jm-panel absolute top-[calc(100%+8px)] z-50 flex w-[min(300px,calc(100vw-24px))] flex-col rounded-[24px] bg-blanc p-2 text-sapin shadow-menu",
+            "before:absolute before:-top-1.5 before:size-3.5 before:rotate-45 before:rounded-[3px] before:bg-blanc",
+            align === "left"
+              ? "left-0 origin-top-left before:left-4"
+              : "right-0 origin-top-right before:right-4",
           )}
         >
           {children}

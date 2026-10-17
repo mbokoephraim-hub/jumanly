@@ -285,11 +285,13 @@ export default async function ForMePage() {
   return (
     <div className="mx-auto flex w-full max-w-[720px] flex-col gap-6 pb-6">
       <div className="flex flex-col gap-2">
-        <h1 className="text-[26px] leading-tight font-semibold tracking-[-0.02em]">
+        {/* On a phone the page opens on « Pour moi » in big (V7 § B1): no greeting. */}
+        <h1 className="text-[26px] leading-tight font-semibold tracking-[-0.02em] max-md:sr-only">
           {applications.length === 0 && lessons.length === 0 && percent < 30
             ? t("talent.dashboard.greeting.first", { firstName })
             : t("talent.dashboard.greeting.neutral", { firstName })}
         </h1>
+        {/* The message of the day stays on a phone too: once a day, closed in one touch. */}
         <DailyWelcome
           person={user.id}
           sentence={welcome.sentence}

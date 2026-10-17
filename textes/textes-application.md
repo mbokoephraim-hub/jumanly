@@ -1898,6 +1898,39 @@ Conventions :
 | `appNav.topMenu.settings` | Paramètres |
 | `appNav.topMenu.all` | Tout Mon espace |
 | `appNav.topMenu.unread` | {count, plural, one {# message non lu} other {# messages non lus}} |
+| `appNav.tabs.account` | Compte |
+| `appNav.tabs.accountAria` | Compte de {name} |
+| `appNav.topMenu.button` | Menu |
+| `appNav.topMenu.orbi.title` | Orbi |
+| `appNav.topMenu.orbi.text` | Votre copilote |
+| `appNav.topMenu.orbi.soon` | Bientôt disponible |
+| `appNav.topMenu.applications` | Mes candidatures |
+| `appNav.topMenu.interviews` | Simulations d'entretien |
+| `appNav.topMenu.certificates` | Attestations |
+| `appNav.header.create` | Créer |
+| `appNav.header.messages` | Messages |
+| `appNav.header.messagesUnread` | {count, plural, =0 {Messages} one {Messages, # conversation non lue} other {Messages, # conversations non lues}} |
+| `appNav.back` | Retour |
+| `appNav.orbiSearch.placeholder` | Rechercher ou demander à Orbi |
+| `appNav.orbiSearch.label` | Rechercher sur Jumanly ou demander à Orbi |
+| `appNav.orbiSearch.filters` | Filtres |
+| `appNav.orbiSearch.filtersCount` | {count, plural, one {Filtres, # actif} other {Filtres, # actifs}} |
+| `appNav.orbiSearch.ask.title` | Demander à Orbi |
+| `appNav.orbiSearch.ask.soon` | Orbi arrive bientôt sur Jumanly. |
+| `appNav.orbiSearch.kind.job` | Offre |
+| `appNav.orbiSearch.kind.course` | Formation |
+| `appNav.orbiSearch.kind.message` | Message |
+| `appNav.orbiSearch.none` | Aucun résultat pour l'instant. |
+| `appNav.orbiSearch.seeAll` | Voir tous les résultats |
+| `appNav.orbiSearch.results` | Suggestions |
+| `appNav.create.title` | Créer |
+| `appNav.create.close` | Fermer |
+| `appNav.create.apply` | Envoyer une candidature |
+| `appNav.create.cv` | Créer un CV |
+| `appNav.create.letter` | Écrire une lettre |
+| `appNav.create.interview` | Simulation d'entretien |
+| `appNav.create.experience` | Ajouter une expérience |
+| `appNav.create.premium` | Passer à Premium |
 | `appNav.title.career` | Career |
 | `appNav.title.messages` | Messages |
 | `appNav.title.notifications` | Notifications |
@@ -2075,6 +2108,61 @@ Conventions :
 | `intro.company.modules.4.cards.2.text` | Bienvenue dans l'équipe |
 
 ---
+
+### `/app/compte` · Compte (écrans 61 et 62)
+
+*L'onglet Compte : la carte du profil, la sécurité, l'abonnement, Orbi, les réglages et les préférences, dont le thème Clair ou Vert.*
+
+| Clé | Texte |
+|---|---|
+| `accountPage.metaTitle` | Compte |
+| `accountPage.edit` | Modifier mon profil |
+| `accountPage.noTitle` | Ajoutez votre métier visé |
+| `accountPage.protect.title` | Protégez votre compte |
+| `accountPage.protect.text` | Créez un mot de passe |
+| `accountPage.protect.cta` | Créer |
+| `accountPage.group.subscription` | Abonnement |
+| `accountPage.group.account` | Compte et confidentialité |
+| `accountPage.group.preferences` | Préférences |
+| `accountPage.group.help` | Aide |
+| `accountPage.plan.title` | Formule {plan} |
+| `accountPage.plan.renews` | Renouvelée le {date} |
+| `accountPage.plan.ends` | Se termine le {date} |
+| `accountPage.plan.free` | Gratuite, sans échéance |
+| `accountPage.plan.manage` | Gérer |
+| `accountPage.orbi.title` | Orbi |
+| `accountPage.orbi.credits` | {used} crédits sur {limit} ce mois |
+| `accountPage.orbi.unlimited` | Crédits illimités ce mois |
+| `accountPage.orbi.none` | Pas de crédits avec cette formule |
+| `accountPage.info` | Informations personnelles |
+| `accountPage.security` | Mot de passe et sécurité |
+| `accountPage.privacy` | Confidentialité et données |
+| `accountPage.visibility` | Visibilité du profil |
+| `accountPage.notifications` | Notifications |
+| `accountPage.theme.label` | Thème |
+| `accountPage.theme.light` | Clair |
+| `accountPage.theme.green` | Vert |
+| `accountPage.theme.saved` | Thème enregistré |
+| `accountPage.language.label` | Langue |
+| `accountPage.language.value` | Français |
+| `accountPage.helpLink` | Aide et commentaires |
+| `accountPage.invite.label` | Inviter un proche |
+| `accountPage.invite.title` | Jumanly |
+| `accountPage.invite.text` | Je vous invite sur Jumanly pour se former, trouver des offres et suivre ses candidatures. |
+| `accountPage.invite.copied` | Lien copié |
+| `accountPage.logout` | Se déconnecter |
+
+### Ouverture de l'application (écrans 57 et 58)
+
+| Clé | Texte |
+|---|---|
+| `opening.loading` | Ouverture de Jumanly |
+| `opening.welcome.title` | Learn. Grow. Connect. |
+| `opening.welcome.text` | Vos offres, vos formations, votre suivi. |
+| `opening.welcome.start` | Commencer |
+| `opening.welcome.signIn` | J'ai déjà un compte |
+| `opening.welcome.chipJobs` | Des offres pour vous |
+| `opening.welcome.chipCertificate` | Attestation |
 
 ### `/app/tableau-de-bord` · Tableau de bord talent
 

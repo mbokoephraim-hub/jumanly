@@ -9,15 +9,28 @@ import { cx } from "@/lib/cx";
 /**
  * Secondary horizontal menu (Admin v4, étapes 2 and 7): the sub-sections of the current section,
  * as tabs with their icon in a white pill bar; the current one is filled with Sapin. Scrolls sideways on a phone. Nothing for a section without
- * sub-sections.
+ * sub-sections. On a phone the talent tabs (`phoneHidden`) go without it, like the mockups: their
+ * pages lead to the same places.
  */
-export function SectionNav({ sections, className }: { sections: Section[]; className?: string }) {
+export function SectionNav({
+  sections,
+  className,
+  phoneHidden,
+}: {
+  sections: Section[];
+  className?: string;
+  phoneHidden?: readonly string[];
+}) {
   const pathname = usePathname();
   const section = sections[sectionIndex(sections, pathname)];
   if (!section || section.links.length < 2) return null;
   const current = activeLink(section.links, pathname);
   return (
-    <nav aria-label={section.label} className={cx("min-w-0", className)}>
+    <nav
+      aria-label={section.label}
+      data-phone-hidden={phoneHidden?.includes(pathname) || undefined}
+      className={cx("min-w-0", className)}
+    >
       <ul className="jm-section-tabs flex w-fit max-w-full gap-1 overflow-x-auto rounded-pill p-1">
         {section.links.map((link, index) => (
           <li key={link.href} className="shrink-0">

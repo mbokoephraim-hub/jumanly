@@ -2208,3 +2208,18 @@ toutes dans `docs/specifications.md`.
   dans le projet ; pour un nouveau poste, idées de photo (bureau, logo, carte de service) ; floutage des
   numéros et codes par Orbi, validé par la personne ; écrans 95 à 99, planche 0f.
 - Brief § 9, prompt 10 complété. « C'est Irma » dans la dictée n'a pas été compris : noté dans le cahier.
+
+## 2026-10-17 · Prompt 2 bis : navigation à cinq onglets, Compte, thème Vert, ouverture
+
+- Rattrapage des ajouts V6-V8 au prompt 2 (choix d'Ephraïm « Rattraper d'abord »).
+- Barre du bas : Offres, Apprendre, **Pour moi** au centre (rond surélevé avec le J), Suivi, **Compte**
+  (photo ou initiales) ; pastille Lime qui glisse, petit rebond (couleur seule en mouvement réduit).
+- En-tête téléphone : bouton Menu à gauche (Mes CV, tableau de bord, candidatures, entretiens,
+  attestations, Mon espace ; Orbi « Bientôt disponible »), « + » qui ouvre « Créer », Messages avec son
+  nombre, Notifications ; titre en grand ; recherche « Rechercher ou demander à Orbi » avec aperçu
+  (offres et formations réelles) et bouton Filtres. Bouton Retour sur toutes les autres pages.
+- Nouvelle page `/app/compte` (écrans 61, 62) et thème Vert enregistré par personne
+  (`User.theme`, migration `20261017095528_user_theme`, retour arrière dans
+  `docs/ux-mobile-talent/retour-arriere/prompt-2bis-theme.sql`).
+- Ouverture de l'appli installée : `/ouverture` (écrans 57, 58), adresse de départ du manifeste.
+- Choix et écarts : `docs/decisions/2026-10-17-mobile-talent-navigation-v6.md`.

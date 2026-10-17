@@ -28,7 +28,7 @@ export function TopBarOverride({ children }: { children: ReactNode }) {
     <div
       ref={ref}
       data-top-override
-      className="-ml-2 hidden min-w-0 flex-1 items-center gap-1 data-active:flex"
+      className="hidden min-w-0 flex-1 items-center gap-1 data-active:flex"
     >
       {children}
     </div>,

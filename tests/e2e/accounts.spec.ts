@@ -48,12 +48,13 @@ test.describe("connexion", () => {
 
     await page.goto("/app/parametres");
     if (isMobile) {
-      // Phone: the avatar of the top bar opens the menu of Mon espace.
-      await page.getByRole("button", { name: "Mon espace" }).click();
+      // Phone: Se déconnecter sits at the bottom of Compte (screen 61).
       await page
-        .getByRole("dialog", { name: "Menu de mon espace" })
-        .getByRole("button", { name: "Se déconnecter" })
+        .getByRole("navigation", { name: "Navigation principale" })
+        .getByRole("link", { name: "Compte" })
         .click();
+      await expect(page).toHaveURL(/\/app\/compte$/);
+      await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
     } else {
       await page.locator("summary[aria-label]").filter({ visible: true }).first().click();
       // The sidebar has its own logout button too: use the one of the open account menu.

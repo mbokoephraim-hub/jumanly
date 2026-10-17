@@ -2314,7 +2314,9 @@
       "offers": "Offres",
       "learn": "Apprendre",
       "suivi": "Suivi",
-      "badge": "{count, plural, one {# action à traiter} other {# actions à traiter}}"
+      "badge": "{count, plural, one {# action à traiter} other {# actions à traiter}}",
+      "account": "Compte",
+      "accountAria": "Compte de {name}"
     },
     "topMenu": {
       "open": "Mon espace",
@@ -2325,7 +2327,50 @@
       "dashboard": "Tableau de bord",
       "settings": "Paramètres",
       "all": "Tout Mon espace",
-      "unread": "{count, plural, one {# message non lu} other {# messages non lus}}"
+      "unread": "{count, plural, one {# message non lu} other {# messages non lus}}",
+      "button": "Menu",
+      "orbi": {
+        "title": "Orbi",
+        "text": "Votre copilote",
+        "soon": "Bientôt disponible"
+      },
+      "applications": "Mes candidatures",
+      "interviews": "Simulations d'entretien",
+      "certificates": "Attestations"
+    },
+    "header": {
+      "create": "Créer",
+      "messages": "Messages",
+      "messagesUnread": "{count, plural, =0 {Messages} one {Messages, # conversation non lue} other {Messages, # conversations non lues}}"
+    },
+    "back": "Retour",
+    "orbiSearch": {
+      "placeholder": "Rechercher ou demander à Orbi",
+      "label": "Rechercher sur Jumanly ou demander à Orbi",
+      "filters": "Filtres",
+      "filtersCount": "{count, plural, one {Filtres, # actif} other {Filtres, # actifs}}",
+      "ask": {
+        "title": "Demander à Orbi",
+        "soon": "Orbi arrive bientôt sur Jumanly."
+      },
+      "kind": {
+        "job": "Offre",
+        "course": "Formation",
+        "message": "Message"
+      },
+      "none": "Aucun résultat pour l'instant.",
+      "seeAll": "Voir tous les résultats",
+      "results": "Suggestions"
+    },
+    "create": {
+      "title": "Créer",
+      "close": "Fermer",
+      "apply": "Envoyer une candidature",
+      "cv": "Créer un CV",
+      "letter": "Écrire une lettre",
+      "interview": "Simulation d'entretien",
+      "experience": "Ajouter une expérience",
+      "premium": "Passer à Premium"
     },
     "title": {
       "career": "Career",
@@ -2607,6 +2652,69 @@
           }
         }
       }
+    }
+  },
+  "accountPage": {
+    "metaTitle": "Compte",
+    "edit": "Modifier mon profil",
+    "noTitle": "Ajoutez votre métier visé",
+    "protect": {
+      "title": "Protégez votre compte",
+      "text": "Créez un mot de passe",
+      "cta": "Créer"
+    },
+    "group": {
+      "subscription": "Abonnement",
+      "account": "Compte et confidentialité",
+      "preferences": "Préférences",
+      "help": "Aide"
+    },
+    "plan": {
+      "title": "Formule {plan}",
+      "renews": "Renouvelée le {date}",
+      "ends": "Se termine le {date}",
+      "free": "Gratuite, sans échéance",
+      "manage": "Gérer"
+    },
+    "orbi": {
+      "title": "Orbi",
+      "credits": "{used} crédits sur {limit} ce mois",
+      "unlimited": "Crédits illimités ce mois",
+      "none": "Pas de crédits avec cette formule"
+    },
+    "info": "Informations personnelles",
+    "security": "Mot de passe et sécurité",
+    "privacy": "Confidentialité et données",
+    "visibility": "Visibilité du profil",
+    "notifications": "Notifications",
+    "theme": {
+      "label": "Thème",
+      "light": "Clair",
+      "green": "Vert",
+      "saved": "Thème enregistré"
+    },
+    "language": {
+      "label": "Langue",
+      "value": "Français"
+    },
+    "helpLink": "Aide et commentaires",
+    "invite": {
+      "label": "Inviter un proche",
+      "title": "Jumanly",
+      "text": "Je vous invite sur Jumanly pour se former, trouver des offres et suivre ses candidatures.",
+      "copied": "Lien copié"
+    },
+    "logout": "Se déconnecter"
+  },
+  "opening": {
+    "loading": "Ouverture de Jumanly",
+    "welcome": {
+      "title": "Learn. Grow. Connect.",
+      "text": "Vos offres, vos formations, votre suivi.",
+      "start": "Commencer",
+      "signIn": "J'ai déjà un compte",
+      "chipJobs": "Des offres pour vous",
+      "chipCertificate": "Attestation"
     }
   },
   "talent": {

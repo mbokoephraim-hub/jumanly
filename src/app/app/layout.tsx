@@ -77,6 +77,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       lockedCareer={plan ? lockedTools(plan.values) : []}
       followUp={followUp}
       unreadMessages={unreadMessages}
+      theme={user.theme}
       account={{
         name: user.name,
         image: user.image,
