@@ -1,14 +1,15 @@
 Nouveau chantier : l'expérience mobile de l'espace Talent.
 
 Lis d'abord, dans cet ordre :
-1. docs/ux-mobile-talent/PROMPT-AMELIORE.md : la demande complète, à suivre.
+1. docs/ux-mobile-talent/CAHIER-DES-CHARGES-V6.md (partie B) : la version 6, qui l'emporte sur tout le reste en cas de différence. Puis docs/ux-mobile-talent/PROMPT-AMELIORE.md : la demande complète.
 2. docs/ux-mobile-talent/BRIEF-MOBILE-TALENT.md : routes, choix par défaut, données existantes.
-3. Les maquettes : docs/ux-mobile-talent/maquette/mobile-talent.html (ouvre-la dans un navigateur, avec les planches « Boutons », « Cartes » et « États d'interaction ») et les captures maquette/ecrans/01.jpg à 56.jpg. Les écrans 34 à 49 (menu du haut, Jumanly AI, simulations d'entretien) relèvent du module docs/jumanly-ai/, à faire ensuite. Reproduis-les fidèlement.
+3. Les maquettes : docs/ux-mobile-talent/maquette/mobile-talent.html (ouvre-la dans un navigateur, avec les planches « Boutons », « Cartes » et « États d'interaction ») et les captures maquette/ecrans/01.jpg à 66.jpg. Les styles d'origine sont dans maquette/source/ : reprends leurs valeurs exactes et compare chaque écran livré à sa capture (Playwright, 390 px). Les écrans 34 à 49 (menu du haut, Jumanly AI, simulations d'entretien) relèvent du module docs/jumanly-ai/, à faire ensuite. Reproduis-les fidèlement.
 4. docs/ux-mobile-talent/CAHIER-DES-CHARGES-UX-MOBILE.md : mon texte d'origine, pour l'intention.
 
 Respecte aussi CLAUDE.md et les briefs déjà livrés : docs/interactions-relief/, docs/experience-animee/, docs/refonte-career/, docs/modeles-cv/ et docs/learn-v2/PLAN.md. Ce chantier réorganise la navigation, les accueils et les interactions ; il ne refait ni l'identité visuelle ni les modules Learn, Jobs, Career et Connect.
 
-Deux exigences auxquelles je tiens :
+Trois exigences auxquelles je tiens :
+- Le rendu doit ressembler aux maquettes, pas seulement en reprendre l'idée : mêmes couleurs, dégradés, rayons, ombres, tailles.
 - Tout ce qui se touche doit se voir cliquable, et on doit voir que ça a été touché (états repos, appui, ouverture, fait), avec un seul composant pour tout l'espace Talent.
 - L'assistant IA propose des modifications concrètes (CV, profil, lettre, recherches) que j'applique ou que j'ignore, toujours avec un « Pourquoi ? », sans jamais inventer de chiffre ni rien changer sans mon accord.
 

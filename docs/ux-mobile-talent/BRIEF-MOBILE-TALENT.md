@@ -10,7 +10,9 @@ les liens avec les autres briefs. Maquettes validées par Claude (validation dé
 (toutes les maquettes) et `maquette/ecrans/NN.jpg` (chaque écran, 390 px ×2). Version 3 du 16 octobre
 2026 : v2 (10 et 17 refaits, 20 à 33, planche « États d’interaction »), puis v3 (planche « Boutons » avec
 boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly AI 35 à 43 ; v4 : toucher l’orbe 44 et simulations d’entretien 45 à 49 ; v5 : planche « Cartes », objectif en carte, moins de texte, messages et décisions 50 à 56, voir
-`docs/jumanly-ai/`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
+`docs/jumanly-ai/` ; v6 du 17 octobre : barre du bas à 5 onglets, page Compte, en-tête sans bande verte,
+bouton retour, bouton +, thème Vert, ouverture par le logo, bannières d’entreprise, écrans 57 à 66, voir § 6
+et `CAHIER-DES-CHARGES-V6.md`). La persona est en formule Starter, car Free n’a pas de crédit IA aujourd’hui. Le prompt complet est `PROMPT-AMELIORE.md`.
 
 | N° | Écran | N° | Écran |
 |---|---|---|---|
@@ -42,6 +44,11 @@ boutons principaux en dégradé, appliqués partout ; menu du haut 34 ; Jumanly 
 | 51 | Messages · pièces en cartes | 52 | Refus reçu |
 | 53 | Candidature retenue | 54 | Recruteur · modèles de message |
 | 55 | Recruteur · refus relu avant envoi | 56 | Mes CV · télécharger |
+| 57 | Ouverture · logo (chaque fois) | 58 | Première ouverture · bienvenue |
+| 59 | Pour moi · thème Vert | 60 | Bouton + · Créer |
+| 61 | Compte · thème Clair | 62 | Compte · thème Vert |
+| 63 | Offres avec bannières | 64 | Détail d’offre · bannière |
+| 65 | Détail d’offre · thème Vert | 66 | Recruteur · bannière et logo de l’offre |
 
 Les contenus sont des exemples (persona fictive Grâce Mbuyi, entreprises fictives). **En production, tout
 vient des données réelles** (règle d’or 11) ; une section sans donnée affiche son état vide ou se masque.
@@ -159,3 +166,39 @@ options de message, des CV téléchargeables, des refus sobres à l’en-tête d
    visuelles, ancien « Assistant » renommé Jumanly AI avec sa signature (28, 30, 31, bio 25). Les écrans
    30 et 31 restent valables comme vue plein écran de Jumanly AI ; le panneau (36 à 44) fait foi pour le
    comportement.
+
+## 6. Version 6 (17 octobre 2026) : 5 onglets, Compte, thème Vert, bannières
+
+Demande du propriétaire, dictée puis reformulée : `CAHIER-DES-CHARGES-V6.md` (fait foi pour ce qui suit).
+Elle **remplace** la navigation du § 2 (barre à 4, avatar et menu du haut de l’écran 34 ancien).
+
+1. **Fidélité visuelle.** Les styles des maquettes sont dans `maquette/source/` (`style.css` à
+   `style6.css`). Reprendre leurs valeurs exactes dans nos jetons. Chaque écran livré est comparé, par une
+   capture Playwright à 390 px, à `maquette/ecrans/NN.jpg` ; les deux images vont dans le résumé.
+2. **Barre du bas à 5** (`config/navigation.ts`) : Offres, Apprendre, **Pour moi au centre** (rond
+   surélevé de 58 px, symbole J), Suivi, Compte (avatar). Ordinateur : rail = ces 5 destinations + Career.
+3. **En-tête** : plus de bande verte ; Menu + logo ou titre à gauche ; Rechercher, +, Notifications,
+   Messages (pastille réelle) à droite. Menu du haut : Jumanly AI, Mes CV, Tableau de bord, Mes
+   candidatures, Simulations d’entretien, Attestations, « Tout Mon espace ». Messages quitte le menu.
+4. **Retour** : composant `BackButton` (42 px, icône `jm-retour` à ajouter au sprite, `aria-label`
+   « Retour ») en tête de toute page qui n’est pas un onglet ; `router.back()` avec repli sur la page parente
+   si l’historique est vide.
+5. **Bouton + (60)** : feuille « Créer », 6 actions, chacune vers une route existante. Postuler reste
+   gratuit ; les actions IA passent par `runAi`.
+6. **Compte (61-62)** : route `/app/compte`, page de blocs (profil + crayon, « Protégez votre compte » si
+   aucun mot de passe, Abonnement, Jumanly AI, Compte et confidentialité, Notifications, Préférences,
+   Aide et commentaires, Inviter un proche, Se déconnecter). Réutilise les pages de paramètres existantes
+   comme sous-pages ; ne duplique pas leur logique. « Créer un mot de passe » réutilise le flux de
+   réinitialisation existant (`docs/refonte-connexion`). Inviter un proche : lien de partage simple, sans
+   parrainage ni récompense (non spécifié).
+7. **Thème Vert (59, 62, 65)** : `User.theme` (`light` | `green`, défaut `light`, migration nommée
+   `user_theme`), appliqué par une classe sur `<html>` rendue côté serveur (pas de flash). Jetons du thème
+   dans `style6.css` (`.vert`). Contraste AA vérifié par axe dans les e2e.
+8. **Ouverture (57-58)** : PWA, écran de démarrage = logo sur Sapin (manifest + animation CSS courte) ;
+   bienvenue une seule fois (`localStorage`, puis `User.onboardedAt` si connecté). La longue intro de
+   `docs/experience-animee` ne se rejoue plus à chaque ouverture.
+9. **Bannières (63-66)** : `Organization.banner` (URL, migration nommée `organization_banner`), envoi
+   d’image par le stockage existant, recadrage 3:1, formats optimisés. Carte d’offre : bannière, logo, nom
+   de l’entreprise, titre, lieu, contrat. Sans bannière : motif Jumanly. Isolation par `organizationId`.
+10. **Exemples** : les entreprises des maquettes sont fictives (Baobab Tech, Fleuve Banque, Kasaï
+    Conseil…). Aucun logo ni nom de vraie entreprise dans le seed (règle d’or 11).

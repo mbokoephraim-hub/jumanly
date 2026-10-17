@@ -82,8 +82,10 @@ haut », « Jumanly AI » et « Simulation d’entretien », écrans 34 à 49.
      l’en-tête.
    - Actions dans les pages : `AiChip` (« Pourquoi ces offres ? », « Améliorer », « M’aider à l’écrire »)
      ouvrent le panneau avec la bonne suggestion déjà lancée.
-   - Menu du haut (écran 34) : Jumanly AI en première ligne, puis Messages, Mon profil, Mes CV, Tableau de
-     bord, Paramètres, « Tout Mon espace », Se déconnecter.
+   - Menu du haut (écran 34, version 6) : bouton Menu de l’en-tête ; Jumanly AI en première ligne, puis Mes
+     CV, Tableau de bord, Mes candidatures, Simulations d’entretien, Attestations, « Tout Mon espace ».
+     La page Compte (écrans 61-62) a aussi un bloc Jumanly AI (crédits, historique, consentement), et le
+     bouton + de l’en-tête propose « Demander à l’IA » (écran 60).
    - Identité IA propre : fond nuit aurore, contour irisé, orbe Lime, étincelle. Réservée à l’IA, jamais
      sur un bouton ordinaire (voir la planche « Boutons »).
 10. **Accueil de l’orbe (écran 44)** : toucher l’orbe ouvre d’abord « Que voulez-vous faire ? » avec quatre

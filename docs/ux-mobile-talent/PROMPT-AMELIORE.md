@@ -24,9 +24,9 @@ Références obligatoires, dans cet ordre :
 
 ## 2. Identité (ne pas changer)
 
-Sora ; Vert Sapin `#0F3F37`, Lime `#A6F26B`, Crème `#F2EDE5` ; en-tête Sapin et feuille Crème sur
-téléphone ; cartes blanches à ombre douce (rayon 24), pas de relief ; texte Sapin sur Lime, jamais blanc ;
-icônes de `ressources/icones` (une seule nouvelle : « Suivi », presse-papiers avec liste, même trait) ;
+Sora ; Vert Sapin `#0F3F37`, Lime `#A6F26B`, Crème `#F2EDE5` ; fond Crème sans bande verte en haut (v6), thème Vert
+immersif au choix ; cartes blanches à ombre douce (rayon 24), pas de relief ; texte Sapin sur Lime, jamais blanc ;
+icônes de `ressources/icones` (nouvelles : « Suivi », presse-papiers avec liste, et « Retour », même trait) ;
 personnages et Orbi existants.
 
 **Gamme de boutons (planche « Boutons », version 3).** Un seul composant `<Button variant size>` :
@@ -48,24 +48,20 @@ maquette ; les reporter dans les jetons CSS du projet, sans nouvelle couleur.
 ligne au plus, avec une scène visuelle ; objectif en `GoalCard` ; messages en cartes (fichier, créneau,
 décision à l’en-tête de l’entreprise).
 
-## 3. Navigation
+## 3. Navigation (version 6, voir `CAHIER-DES-CHARGES-V6.md`)
 
-- **Barre du bas, 4 destinations, rien d’autre** : Pour moi (`/app`), Offres (`/app/jobs`), Apprendre
-  (`/app/learn`), Suivi (`/app/suivi`, nouvelle page). Icône + libellé, actif sur Lime, zones de 56 px,
-  zone de sécurité respectée, pastille de Suivi = nombre réel d’actions à traiter. Masquée sur le détail
-  d’offre, la candidature, la Learning Room, la conversation, l’éditeur de CV, l’assistant et Mon espace,
-  qui ont une barre d’action fixe en bas.
-- **Barre du haut, 52 px** : logo (Pour moi) ou titre de section ; Recherche ; Notifications ; avatar.
-- **Menu du haut (écran 34)** : toucher l’avatar ouvre un petit menu ancré sous lui (pas une page) :
-  Jumanly AI en première ligne avec son identité, puis Messages (pastille réelle), Mon profil, Mes CV,
-  Tableau de bord, Paramètres ; en pied « Tout Mon espace » (page `/app/espace`, pour que Retour
-  fonctionne) et Se déconnecter. Fermeture au toucher dehors, Échap, focus piégé, `aria-expanded`.
-- **Bouton flottant Jumanly AI** au-dessus de la barre du bas (écran 35), masqué quand une barre d’action
-  fixe est présente. Pas de cinquième onglet.
-- Chaque onglet garde son état (filtres, position) quand on y revient. Retour ramène toujours à l’écran
-  précédent, jamais à l’accueil par surprise.
-- Espaces Hire et Partenaire : inchangés. Ordinateur : rail = les 4 destinations + Career, aucune
-  régression.
+- **Barre du bas, 5 onglets** : Offres (`/app/jobs`), Apprendre (`/app/learn`), **Pour moi** (`/app`, au
+  centre, rond surélevé, onglet principal), Suivi (`/app/suivi`), Compte (`/app/compte`, avatar). Actif en
+  pastille Lime, texte Sapin ; zones de 56 px ; pastille de Suivi réelle. Masquée sur les écrans qui ont
+  une barre d’action fixe en bas.
+- **En-tête sans bande verte** : Menu + logo ou titre ; Rechercher, +, Notifications, Messages.
+- **Menu du haut** (bouton Menu) : Jumanly AI, Mes CV, Tableau de bord, Mes candidatures, Simulations
+  d’entretien, Attestations, « Tout Mon espace ». Fermeture au toucher dehors, Échap, focus piégé.
+- **Bouton +** : feuille « Créer » (écran 60). **Retour** en tête de toute page qui n’est pas un onglet.
+- **Compte** : une page de blocs (écrans 61-62). **Thèmes Clair et Vert** au choix dans Compte.
+- **Bouton flottant Jumanly AI** au-dessus de la barre du bas (écran 35).
+- Chaque onglet garde son état. Retour ramène à l’écran précédent, jamais à l’accueil par surprise.
+- Espaces Hire et Partenaire : inchangés, sauf la bannière d’organisation (écran 66).
 
 ## 4. Écrans et comportements
 
