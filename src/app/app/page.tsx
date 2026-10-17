@@ -291,14 +291,13 @@ export default async function ForMePage() {
             ? t("talent.dashboard.greeting.first", { firstName })
             : t("talent.dashboard.greeting.neutral", { firstName })}
         </h1>
-        <div className="max-md:hidden">
-          <DailyWelcome
-            person={user.id}
-            sentence={welcome.sentence}
-            href={welcome.href}
-            closeLabel={t("talent.dashboard.welcome.close")}
-          />
-        </div>
+        {/* The message of the day stays on a phone too: once a day, closed in one touch. */}
+        <DailyWelcome
+          person={user.id}
+          sentence={welcome.sentence}
+          href={welcome.href}
+          closeLabel={t("talent.dashboard.welcome.close")}
+        />
       </div>
 
       {showFinalize && (

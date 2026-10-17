@@ -85,8 +85,9 @@
 }
 
 /* Bottom bar: frosted glass, the Lime pill slides, Pour moi in our green. */
+/* Frosted, but opaque enough that the labels keep their contrast over any page (WCAG AA). */
 .jm-tabbar {
-  background: rgb(255 255 255 / 0.55);
+  background: rgb(255 255 255 / 0.86);
   -webkit-backdrop-filter: blur(22px) saturate(1.8);
   backdrop-filter: blur(22px) saturate(1.8);
   box-shadow:
@@ -94,7 +95,7 @@
     0 18px 40px -18px rgb(15 63 55 / 0.45);
 }
 .jm-tab {
-  color: rgb(15 63 55 / 0.72);
+  color: var(--jm-sapin);
   transition: transform 140ms ease;
 }
 .jm-tab[aria-current="page"] {
@@ -205,13 +206,13 @@
     color: rgb(255 255 255 / 0.62);
   }
   .jm-vert .jm-tabbar {
-    background: rgb(11 26 31 / 0.45);
+    background: rgb(11 26 31 / 0.86);
     box-shadow:
       inset 0 0 0 1px rgb(255 255 255 / 0.14),
       0 18px 40px -18px rgb(0 0 0 / 0.7);
   }
   .jm-vert .jm-tab {
-    color: rgb(255 255 255 / 0.75);
+    color: #fff;
   }
   .jm-vert .jm-tab[aria-current="page"] {
     color: var(--jm-sapin);

@@ -63,14 +63,10 @@ test("navigation Talent : cinq destinations, menu du haut, Mon espace et Suivi",
 
   if (isMobile) {
     // Pour moi sits in the middle of the bar, Compte at the end.
-    const labels = await navigation.getByRole("link").allInnerTexts();
-    expect(labels.map((label) => label.trim().split("\n")[0])).toEqual([
-      "Offres",
-      "Apprendre",
-      "Pour moi",
-      "Suivi",
-      "Compte",
-    ]);
+    const links = navigation.getByRole("link");
+    await expect(links).toHaveCount(5);
+    for (const [index, name] of ["Offres", "Apprendre", "Pour moi", "Suivi", "Compte"].entries())
+      await expect(links.nth(index)).toHaveAccessibleName(new RegExp(`^${name}`));
     // The Menu button (top left) opens the shortcuts; Escape closes it and gives the focus back.
     const button = page.getByRole("button", { name: "Menu", exact: true });
     await button.click();

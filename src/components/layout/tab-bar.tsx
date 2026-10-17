@@ -101,6 +101,7 @@ export function TabBar({
                   </span>
                 ) : tab.key === account.key ? (
                   <span
+                    aria-hidden
                     className={cx(
                       "jm-tab-icon grid size-6 place-items-center overflow-hidden rounded-full",
                       active && "ring-2 ring-sapin",
