@@ -447,3 +447,66 @@ export function lessonParagraphs(value: Prisma.JsonValue | null) {
   const parsed = z.object({ paragraphs: z.array(z.string()) }).safeParse(value);
   return parsed.success ? parsed.data.paragraphs : [];
 }
+
+/** Limits of the lesson outline (V7 § B4): what the admin form accepts and the player shows. */
+export const OUTLINE_STEPS_MAX = 6;
+export const OUTLINE_TAKEAWAYS_MAX = 3;
+
+const outlineSchema = z.object({
+  brief: z.string().max(600).optional(),
+  steps: z
+    .array(
+      z.object({ title: z.string().min(1).max(120), minutes: z.number().int().min(0).max(600) }),
+    )
+    .max(OUTLINE_STEPS_MAX)
+    .optional(),
+  takeaways: z.array(z.string().min(1).max(120)).max(OUTLINE_TAKEAWAYS_MAX).optional(),
+});
+
+export type LessonOutline = {
+  brief: string | null;
+  steps: { title: string; minutes: number }[];
+  takeaways: string[];
+};
+
+/**
+ * The outline of a lesson, written in the admin next to its paragraphs (`content.brief`,
+ * `content.steps`, `content.takeaways`): « En bref », « Ce que vous allez faire » and « À retenir »
+ * of screen 14. Each part is optional; a lesson without one simply does not show the block.
+ */
+export function lessonOutline(value: Prisma.JsonValue | null): LessonOutline {
+  const parsed = outlineSchema.safeParse(value ?? {});
+  const data = parsed.success ? parsed.data : {};
+  return {
+    brief: data.brief?.trim() || null,
+    steps: data.steps ?? [],
+    takeaways: data.takeaways ?? [],
+  };
+}
+
+/** A line of the transcript; `at` is the second of the video it belongs to, when given. */
+export type TranscriptCue = { at: number | null; text: string };
+
+const cueTime = /^\[?(?:(\d{1,2}):)?(\d{1,2}):(\d{2})\]?\s+(.+)$/;
+
+/**
+ * Transcript lines (screen 68). A line starting with a time (« 05:40 », « [05:40] » or
+ * « 1:05:40 ») is tied to that moment of the video, so the player can follow it and seek to it;
+ * other lines keep `at: null`. Blank lines separate nothing more than paragraphs.
+ */
+export function transcriptCues(transcript: string | null): TranscriptCue[] {
+  if (!transcript) return [];
+  return transcript
+    .split(/\r?\n/)
+    .map((line) => line.trim())
+    .filter(Boolean)
+    .map((line) => {
+      const match = cueTime.exec(line);
+      if (!match) return { at: null, text: line };
+      const [, hours, minutes, seconds, text] = match;
+      return {
+        at: Number(hours ?? 0) * 3600 + Number(minutes) * 60 + Number(seconds),
+        text: text!,
+      };
+    });
+}

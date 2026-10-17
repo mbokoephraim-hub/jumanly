@@ -25,6 +25,13 @@ import {
 } from "@/server/services/admin-orgs";
 import { fileStorage } from "@/server/storage";
 import {
+  BrandImageError,
+  brandImageKinds,
+  removeBrandImage,
+  saveBrandImage,
+  type BrandImageKind,
+} from "@/server/services/organization-brand";
+import {
   acceptInvitation,
   changeRole,
   inviteMembers,
@@ -234,4 +241,48 @@ export async function requestVerificationAction(formData: FormData) {
     saved = await requestVerification(db, ctx, Object.fromEntries(formData));
   }, "verification");
   back("verification", saved ? { ok: "1" } : { erreur: "verification" });
+}
+
+const brandKind = (value: FormDataEntryValue | null): BrandImageKind | null =>
+  (brandImageKinds as readonly string[]).includes(String(value)) ? (value as BrandImageKind) : null;
+
+/** Removes the banner or the logo: the cards go back to the Jumanly pattern or the initials. */
+export async function removeBrandImageAction(formData: FormData): Promise<BrandImageResult> {
+  const kind = brandKind(formData.get("kind"));
+  const { ctx } = await requireHire("/app/organisation", "administer");
+  if (!kind) return { ok: false, code: "image" };
+  await removeBrandImage(db, fileStorage(db), ctx.organizationId, kind);
+  updateTag("jobs");
+  return { ok: true };
+}
+
+export type BrandImageResult =
+  { ok: true } | { ok: false; code: "image" | "fileType" | "fileSize" };
+
+/**
+ * Banner (3:1) or logo (square) of the organization (V6 § B9, screens 63 to 66): the part framed in
+ * the browser. Administrators only. Answers instead of leaving the page, so a job being written in
+ * the job editor is kept.
+ */
+export async function uploadBrandImageAction(formData: FormData): Promise<BrandImageResult> {
+  const kind = brandKind(formData.get("kind"));
+  const file = formData
+    .getAll("image")
+    .find((entry): entry is File => entry instanceof File && entry.size > 0);
+  const { ctx } = await requireHire("/app/organisation", "administer");
+  if (!kind || !file) return { ok: false, code: "image" };
+  try {
+    await saveBrandImage(
+      db,
+      fileStorage(db),
+      ctx.organizationId,
+      kind,
+      new Uint8Array(await file.arrayBuffer()),
+    );
+  } catch (error) {
+    if (error instanceof BrandImageError) return { ok: false, code: error.code };
+    throw error;
+  }
+  updateTag("jobs");
+  return { ok: true };
 }

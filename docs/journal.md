@@ -2240,3 +2240,23 @@ toutes dans `docs/specifications.md`.
 - La barre d'action fixe du téléphone restait dans le flux de la page (animation d'entrée gardant une
   transformation) : l'entrée des pages utilise désormais `backwards`.
 - Choix et écarts : `docs/decisions/2026-10-17-mobile-talent-lieux.md`.
+
+## 2026-10-17 · Prompt 4 bis : bannières d'entreprise, offres, leçon v7, Offres en Vert
+
+- `Organization.banner` (migration `20261017125314_organization_banner`, retour arrière :
+  `docs/ux-mobile-talent/retour-arriere/prompt-4bis-banniere.sql`). Bannière (3:1) et logo (carré)
+  cadrés dans une fenêtre (glisser, flèches, zoom), envoyés en JPEG, enregistrés en WebP en plusieurs
+  largeurs (`src/server/services/organization-brand.ts`), servis par `/medias/orgs/…`. Réservé aux
+  administrateurs de l'organisation, depuis Organisation et depuis l'éditeur d'offre.
+- Cartes d'offres de l'espace talent avec bannière (ou motif Jumanly), logo, marque vérifiée, faits et
+  « Voir l'offre » (écrans 63, 66) ; même carte en aperçu dans l'éditeur d'offre. En-tête de l'offre
+  refait (écran 64).
+- Après l'envoi (écran 11) : quatre suites en cartes (Suivre, Préparer l'entretien, Adapter mon CV,
+  Offres proches avec leur nombre réel), heure de réception, retour en icône. Connexion coupée (12) :
+  valeurs alignées à droite, « Aujourd'hui, 20:14 ».
+- Leçon v7 (écrans 14, 67 à 69) : onglets en cartes sans rechargement (la vidéo continue), blocs
+  titrés « En bref », « Ce que vous allez faire », « La leçon », « À retenir », exercice en carte
+  sombre, modules en cartes, transcription qui suit la vidéo et se cherche, ressources en fichiers.
+  Le plan de la leçon (`content.brief`, `content.steps`, `content.takeaways`) s'écrit dans l'admin.
+- Offres et détail d'une offre en Vert (écrans 65, 74).
+- Choix et écarts : `docs/decisions/2026-10-17-mobile-talent-bannieres.md`.

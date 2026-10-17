@@ -6,7 +6,7 @@ import { documentHref } from "@/server/services/course-documents";
 export type DocumentItem = { id: string; title: string; kind: string; pages: number; size: number };
 
 const kinds = ["support", "exercises", "reading", "template", "answer_key", "other"] as const;
-const kindOf = (kind: string) =>
+export const documentKind = (kind: string) =>
   (kinds as readonly string[]).includes(kind) ? (kind as (typeof kinds)[number]) : "other";
 
 /**
@@ -57,7 +57,7 @@ export async function CourseDocumentList({
               <span className="text-sm font-semibold">{document.title}</span>
               <span className="text-xs text-ardoise">
                 {t("meta", {
-                  kind: t(`kind.${kindOf(document.kind)}`),
+                  kind: t(`kind.${documentKind(document.kind)}`),
                   pages: document.pages,
                   size: size(document.size),
                 })}

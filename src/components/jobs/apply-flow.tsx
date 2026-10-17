@@ -4,6 +4,7 @@ import { getTranslations } from "next-intl/server";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { Avatar, Button } from "@/components/ui";
 import { cx } from "@/lib/cx";
+import { formatDate } from "@/lib/dates";
 import { saveApplicationStepAction } from "@/server/actions/jobs";
 import { applySteps, type ApplyStep } from "@/server/services/application-draft";
 import { SendApplication } from "./send-application";
@@ -313,7 +314,11 @@ export async function ApplyFlow({
         }}
         previousHref={stepHref("lettre")}
         laterHref={`${base}?brouillon=1`}
-        savedAt={t("error.lastSaveValue", { date: lastSave })}
+        savedAt={
+          formatDate(lastSave) === formatDate(new Date())
+            ? t("error.lastSaveToday", { date: lastSave })
+            : t("error.lastSaveValue", { date: lastSave })
+        }
         labels={{
           submit: tr("submit"),
           sending: tr("submitting"),

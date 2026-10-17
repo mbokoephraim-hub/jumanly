@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getFormatter, getTranslations } from "next-intl/server";
+import { NextIntlClientProvider } from "next-intl";
+import { getFormatter, getMessages, getTranslations } from "next-intl/server";
+import { BrandIdentity } from "@/components/hire/brand-identity";
 import { Icon } from "@/components/brand/icon";
 import { AppPageHeader } from "@/components/app/page-header";
 import { pillClass } from "@/components/career/kit";
@@ -579,107 +581,124 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
     </div>
   );
 
+  const messages = await getMessages();
   const profileTab = (
-    <form action={updateOrganizationAction} className={panel}>
-      <div className="flex flex-col gap-1">
-        <h2 className="text-[20px] font-semibold">{t("profile.title")}</h2>
-        <p className="text-[13.5px] text-ardoise">{t("profile.subtitle")}</p>
+    <div className="flex flex-col gap-4">
+      {/* V6 § B9: the banner and the logo shown on every offer (screen 66). */}
+      <div className={panel}>
+        <NextIntlClientProvider
+          messages={{
+            hire: { jobForm: { brand: messages.hire.jobForm.brand } },
+            a11y: { avatar: messages.a11y.avatar },
+          }}
+        >
+          <BrandIdentity
+            org={organization.name}
+            brand={{ banner: organization.banner, logo: organization.logo, canEdit: admin }}
+          />
+        </NextIntlClientProvider>
       </div>
-      <fieldset disabled={!admin} className="flex flex-col gap-4">
-        <div className="grid gap-4 sm:grid-cols-2">
-          <TextField
-            id="org-name"
-            name="name"
-            required
-            minLength={2}
-            maxLength={120}
-            label={t("profile.name")}
-            defaultValue={organization.name}
-          />
-          <TextField
-            id="org-legal-name"
-            name="legalName"
-            maxLength={160}
-            label={t("profile.legalName")}
-            hint={t("profile.legalNameHint")}
-            defaultValue={organization.legalName ?? ""}
-          />
+      <form action={updateOrganizationAction} className={panel}>
+        <div className="flex flex-col gap-1">
+          <h2 className="text-[20px] font-semibold">{t("profile.title")}</h2>
+          <p className="text-[13.5px] text-ardoise">{t("profile.subtitle")}</p>
         </div>
-        <Select
-          id="org-category"
-          name="category"
-          label={t("profile.category.text")}
-          placeholder={t("profile.category.none")}
-          defaultValue={organization.category ?? ""}
-          options={organizationCategories.map((value) => ({
-            value,
-            label: t(`profile.category.${value}`),
-          }))}
-        />
-        <TextArea
-          id="org-description"
-          name="description"
-          rows={5}
-          maxLength={3000}
-          label={t("profile.description.text")}
-          placeholder={t("profile.description.placeholder")}
-          defaultValue={organization.description ?? ""}
-        />
-        <div className="grid gap-4 sm:grid-cols-2">
-          <TextField
-            id="org-sector"
-            name="sector"
-            maxLength={120}
-            label={t("profile.sector")}
-            defaultValue={organization.sector ?? ""}
+        <fieldset disabled={!admin} className="flex flex-col gap-4">
+          <div className="grid gap-4 sm:grid-cols-2">
+            <TextField
+              id="org-name"
+              name="name"
+              required
+              minLength={2}
+              maxLength={120}
+              label={t("profile.name")}
+              defaultValue={organization.name}
+            />
+            <TextField
+              id="org-legal-name"
+              name="legalName"
+              maxLength={160}
+              label={t("profile.legalName")}
+              hint={t("profile.legalNameHint")}
+              defaultValue={organization.legalName ?? ""}
+            />
+          </div>
+          <Select
+            id="org-category"
+            name="category"
+            label={t("profile.category.text")}
+            placeholder={t("profile.category.none")}
+            defaultValue={organization.category ?? ""}
+            options={organizationCategories.map((value) => ({
+              value,
+              label: t(`profile.category.${value}`),
+            }))}
           />
-          <TextField
-            id="org-size"
-            name="size"
-            maxLength={40}
-            label={t("profile.size.text")}
-            defaultValue={organization.size ?? ""}
+          <TextArea
+            id="org-description"
+            name="description"
+            rows={5}
+            maxLength={3000}
+            label={t("profile.description.text")}
+            placeholder={t("profile.description.placeholder")}
+            defaultValue={organization.description ?? ""}
           />
-          <TextField
-            id="org-city"
-            name="city"
-            maxLength={120}
-            label={t("profile.city")}
-            defaultValue={organization.city ?? ""}
-          />
-          <TextField
-            id="org-country"
-            name="country"
-            maxLength={2}
-            label={t("profile.country")}
-            hint={t("profile.countryHint")}
-            defaultValue={organization.country ?? ""}
-          />
-          <TextField
-            id="org-website"
-            name="website"
-            type="url"
-            maxLength={200}
-            label={t("profile.website.text")}
-            placeholder={t("profile.website.placeholder")}
-            defaultValue={organization.website ?? ""}
-          />
-          <TextField
-            id="org-contact-email"
-            name="contactEmail"
-            type="email"
-            maxLength={200}
-            label={t("profile.contactEmail")}
-            defaultValue={organization.contactEmail ?? ""}
-          />
-        </div>
-      </fieldset>
-      {admin && (
-        <button type="submit" className={pillClass("dark", "md", "self-start")}>
-          {t("profile.save")}
-        </button>
-      )}
-    </form>
+          <div className="grid gap-4 sm:grid-cols-2">
+            <TextField
+              id="org-sector"
+              name="sector"
+              maxLength={120}
+              label={t("profile.sector")}
+              defaultValue={organization.sector ?? ""}
+            />
+            <TextField
+              id="org-size"
+              name="size"
+              maxLength={40}
+              label={t("profile.size.text")}
+              defaultValue={organization.size ?? ""}
+            />
+            <TextField
+              id="org-city"
+              name="city"
+              maxLength={120}
+              label={t("profile.city")}
+              defaultValue={organization.city ?? ""}
+            />
+            <TextField
+              id="org-country"
+              name="country"
+              maxLength={2}
+              label={t("profile.country")}
+              hint={t("profile.countryHint")}
+              defaultValue={organization.country ?? ""}
+            />
+            <TextField
+              id="org-website"
+              name="website"
+              type="url"
+              maxLength={200}
+              label={t("profile.website.text")}
+              placeholder={t("profile.website.placeholder")}
+              defaultValue={organization.website ?? ""}
+            />
+            <TextField
+              id="org-contact-email"
+              name="contactEmail"
+              type="email"
+              maxLength={200}
+              label={t("profile.contactEmail")}
+              defaultValue={organization.contactEmail ?? ""}
+            />
+          </div>
+        </fieldset>
+        {admin && (
+          <button type="submit" className={pillClass("dark", "md", "self-start")}>
+            {t("profile.save")}
+          </button>
+        )}
+      </form>
+    </div>
   );
 
   const aside = (

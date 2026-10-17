@@ -57,7 +57,12 @@ export default async function CompanyPage({ params }: PageProps<"/entreprises/[s
   ].filter((item): item is { icon: "entreprise" | "equipe" | "localisation"; text: string } =>
     Boolean(item),
   );
-  const organization = { name: company.name, verifiedAt: company.verifiedAt };
+  const organization = {
+    name: company.name,
+    verifiedAt: company.verifiedAt,
+    logo: company.logo,
+    banner: company.banner,
+  };
 
   return (
     <>

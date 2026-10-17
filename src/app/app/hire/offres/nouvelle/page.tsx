@@ -25,6 +25,7 @@ export default async function NewJobPage({ searchParams }: PageProps<"/app/hire/
       <JobForm
         org={context.org}
         verified={context.verified}
+        brand={context.brand}
         ai={context.ai}
         templates={context.templates}
         params={{

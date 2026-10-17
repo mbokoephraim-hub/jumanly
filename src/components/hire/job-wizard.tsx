@@ -18,6 +18,8 @@ import { cx } from "@/lib/cx";
 import { jobWriterAction } from "@/server/actions/hire";
 import type { JobSuggestion } from "@/server/services/job-writer";
 import { JOB_STEPS } from "./job-steps";
+import { JobBannerCard, jobCardSaveClass } from "@/components/jobs/job-banner-card";
+import { BrandIdentity, type JobBrand } from "./brand-identity";
 
 type Readiness = "ready" | "consent" | "locked" | "quota";
 type Values = {
@@ -59,6 +61,7 @@ export function JobWizard({
   initialStep,
   org,
   verified,
+  brand,
   readiness,
   credits,
   lockText,
@@ -70,6 +73,7 @@ export function JobWizard({
   initialStep: number;
   org: string;
   verified: boolean;
+  brand: JobBrand;
   readiness: Readiness;
   credits: number;
   /** Why the help to write is not available (plan, credits). */
@@ -264,13 +268,6 @@ export function JobWizard({
   const ready = readiness === "ready";
   const blocked =
     readiness === "consent" ? t("ai.consent") : readiness === "ready" ? null : lockText;
-  const money = (value: string) => format.number(Number(value), { maximumFractionDigits: 0 });
-  const salary =
-    values.salaryMin && values.salaryMax
-      ? t("preview.salaryRange", { min: money(values.salaryMin), max: money(values.salaryMax) })
-      : values.salaryMin || values.salaryMax
-        ? t("preview.salaryOne", { amount: money(values.salaryMin || values.salaryMax) })
-        : null;
   const checks = [
     { key: "title", ok: values.title.length >= 3 },
     { key: "skills", ok: values.requiredSkills.length > 0 },
@@ -548,45 +545,30 @@ export function JobWizard({
                 {[t("preview.desktop"), t("preview.mobile")].join(" · ")}
               </span>
             </div>
-            <div className="flex flex-col gap-2.5 rounded-[18px] bg-creme p-4">
-              <div className="flex items-center gap-3">
-                <span
-                  aria-hidden
-                  className="grid size-9 shrink-0 place-items-center rounded-[11px] bg-sapin text-[12px] font-bold text-lime"
-                >
-                  {org
-                    .split(/\s+/)
-                    .slice(0, 2)
-                    .map((word) => word[0])
-                    .join("")
-                    .toUpperCase()}
+            {/* Screen 66: the company's identity, then the card as talents will see it. */}
+            <BrandIdentity org={org} brand={brand} />
+            <h3 className="text-[13px] font-semibold text-ardoise">{t("preview.inJobs")}</h3>
+            <JobBannerCard
+              href={null}
+              title={values.title || t("jobTitle.text")}
+              company={org}
+              verified={verified ? t("preview.verified") : null}
+              banner={brand.banner}
+              logo={brand.logo}
+              chips={[
+                { label: values.city || t("preview.city"), icon: "localisation" },
+                ...[values.contract, values.workMode]
+                  .filter((item): item is string => Boolean(item))
+                  .map((label) => ({ label })),
+              ]}
+              when={t("preview.today")}
+              cta={t("preview.see")}
+              save={
+                <span aria-hidden className={jobCardSaveClass}>
+                  <Icon name="favori" className="size-5" />
                 </span>
-                <div className="flex min-w-0 flex-col">
-                  <p className="truncate text-[14px] font-semibold">
-                    {values.title || t("jobTitle.text")}
-                  </p>
-                  <p className="truncate text-[11.5px] text-ardoise">
-                    {[org, values.city, values.country].filter(Boolean).join(" · ")}
-                  </p>
-                </div>
-              </div>
-              <p className="flex flex-wrap gap-1.5">
-                {[values.contract, values.workMode, salary].filter(Boolean).map((item) => (
-                  <span
-                    key={item}
-                    className="rounded-pill bg-blanc px-2.5 py-1 text-[11px] font-semibold"
-                  >
-                    {item}
-                  </span>
-                ))}
-                {verified && (
-                  <span className="flex items-center gap-1 rounded-pill bg-lime-clair px-2.5 py-1 text-[11px] font-semibold text-up-texte">
-                    <Icon name="check" className="size-3" />
-                    {t("preview.verified")}
-                  </span>
-                )}
-              </p>
-            </div>
+              }
+            />
             <h3 className="mt-1 text-[11px] font-semibold tracking-[0.09em] text-ardoise uppercase">
               {t("preview.checklist")}
             </h3>

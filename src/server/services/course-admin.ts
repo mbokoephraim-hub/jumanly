@@ -6,7 +6,7 @@ import { z } from "zod";
 import { editorialLines } from "./learn-domains";
 import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { slugify } from "./accounts";
-import { lessonResourceSchema } from "./learn";
+import { OUTLINE_STEPS_MAX, OUTLINE_TAKEAWAYS_MAX, lessonResourceSchema } from "./learn";
 import { findSkill } from "./profile";
 
 export const courseStatuses = ["draft", "review", "published", "archived"] as const;
@@ -750,6 +750,10 @@ export const lessonFormSchema = z.object({
   videoId: text(300),
   durationMinutes: z.coerce.number().int().min(0).max(600),
   paragraphs: text(20_000),
+  // The outline (screen 14); absent from older forms, hence the defaults.
+  brief: text(600).default(""),
+  steps: text(2000).default(""),
+  takeaways: text(1000).default(""),
   resources: text(3000),
   transcript: text(50_000),
   isPreview: z.literal("on").optional(),
@@ -766,6 +770,28 @@ export function parseResourceLines(value: string) {
     return parsed.success ? [parsed.data] : [];
   });
   return { resources, invalid };
+}
+
+/**
+ * The outline of a lesson (screen 14) from the admin form: « En bref », steps written
+ * « Titre | minutes » one per line, and up to three points to remember, one per line.
+ */
+export function outlineFromForm(input: { brief: string; steps: string; takeaways: string }) {
+  const steps = lines(input.steps)
+    .slice(0, OUTLINE_STEPS_MAX)
+    .map((line) => {
+      const [title, minutes] = line.split("|").map((part) => part.trim());
+      return { title: (title ?? "").slice(0, 120), minutes: Math.min(600, Number(minutes) || 0) };
+    })
+    .filter((step) => step.title);
+  const takeaways = lines(input.takeaways)
+    .slice(0, OUTLINE_TAKEAWAYS_MAX)
+    .map((line) => line.slice(0, 120));
+  return {
+    ...(input.brief.trim() ? { brief: input.brief.trim().slice(0, 600) } : {}),
+    ...(steps.length > 0 ? { steps } : {}),
+    ...(takeaways.length > 0 ? { takeaways } : {}),
+  };
 }
 
 export async function updateLesson(
@@ -788,7 +814,10 @@ export async function updateLesson(
       kind: input.kind,
       videoId: input.videoId || null,
       durationSec: input.durationMinutes * 60,
-      content: paragraphs.length > 0 ? { paragraphs } : {},
+      content: {
+        ...(paragraphs.length > 0 ? { paragraphs } : {}),
+        ...outlineFromForm(input),
+      },
       resources,
       transcript: input.transcript || null,
       isPreview: input.isPreview === "on",

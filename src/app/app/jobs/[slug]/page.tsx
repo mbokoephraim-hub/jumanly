@@ -11,11 +11,12 @@ import { relativeLabel, salaryText, tag, tagTone } from "@/components/jobs/talen
 import { DisputePanel } from "@/components/matching/dispute-panel";
 import { TalentWhy, criterionText } from "@/components/matching/talent-why";
 import { AppPageHeader } from "@/components/app/page-header";
-import { Alert, CompanyLogo } from "@/components/ui";
+import { Alert, ButtonLink, CompanyLogo } from "@/components/ui";
 import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { siteUrl } from "@/lib/seo";
-import { formatDate, formatRelative } from "@/lib/dates";
+import { formatDate, formatDayMonth, formatRelative } from "@/lib/dates";
+import { OrgBanner } from "@/components/jobs/org-banner";
 import { ApplyFlow } from "@/components/jobs/apply-flow";
 import { getApplicationDraft, applyStepOf } from "@/server/services/application-draft";
 import { SaveJobButton } from "@/components/jobs/save-job-button";
@@ -100,6 +101,10 @@ function Fact({ icon, label, value }: { icon: IconName; label: string; value: Re
  * entitlement, no quota, no plan is checked here or in the action (golden rule n° 1), and the
  * knockout criteria are information, never a block.
  */
+/** Fact under the title of an offer (`.chip` of screen 64). */
+const heroChip =
+  "jm-hero-chip inline-flex min-h-8 items-center gap-[5px] rounded-pill bg-[#E9E4DA] px-3 text-[12.5px] whitespace-nowrap text-sapin";
+
 export default async function TalentJobPage({
   params,
   searchParams,
@@ -210,65 +215,70 @@ export default async function TalentJobPage({
   // ─── After sending (screen 11): shown only once the server has recorded the application. ───
   if (outcome === "envoyee" && application) {
     const tf = await getTranslations("talent.jobs.apply.flow");
+    // `.ct` of screen 11: four next steps as tiles, the icon top left, a light disc top right.
+    const next: [string, IconName, string, string, string][] = [
+      ["/app/jobs/candidatures", "suivi", "bg-lime", tf("sent.track"), tf("sent.trackLine")],
+      [
+        "/app/career/entretiens",
+        "message",
+        "bg-[#BFEFDF]",
+        tf("sent.prepare"),
+        tf("sent.prepareLine"),
+      ],
+      ["/app/career/cv", "cv", "bg-neon", tf("sent.adapt"), tf("sent.adaptLine")],
+      [
+        "/app/jobs",
+        "jobs",
+        "bg-brume",
+        tf("sent.similar"),
+        tf("sent.similarLine", { count: similar.length }),
+      ],
+    ];
     return (
-      <div className="mx-auto flex w-full max-w-[640px] flex-col items-center gap-5 pt-6 pb-6 text-center">
+      <div className="mx-auto flex w-full max-w-[640px] flex-col gap-3.5 pt-[26px] pb-28 md:pb-6">
         <span
           aria-hidden
-          className="grid size-28 place-items-center rounded-full bg-lime-clair ring-[10px] ring-lime-clair/60"
+          className="grid size-[84px] place-items-center self-center rounded-full bg-lime text-sapin shadow-[0_0_0_10px_rgb(166_242_107/0.25)]"
         >
-          <span className="grid size-20 place-items-center rounded-full bg-lime text-sapin">
-            <Icon name="check" className="size-9" />
-          </span>
+          <Icon name="valider" className="size-9" />
         </span>
-        <h1 className="text-[28px] leading-tight font-bold tracking-tight">
+        <h1 className="text-center text-[26px] leading-tight font-bold tracking-[-0.02em]">
           {t("talent.jobs.apply.success.title")}
         </h1>
-        <p className="text-[15px] text-ardoise">{tf("sent.received", { company })}</p>
-        <ul className="flex w-full flex-col overflow-hidden rounded-[22px] bg-blanc text-left shadow-douce">
-          {(
-            [
-              [
-                "/app/jobs/candidatures",
-                "suivi",
-                "bg-lime",
-                tf("sent.track"),
-                tf("sent.trackLine"),
-              ],
-              [
-                "/app/career/entretiens",
-                "message",
-                "bg-lime-clair",
-                tf("sent.prepare"),
-                tf("sent.prepareLine"),
-              ],
-            ] as const
-          ).map(([href, icon, tone, title, line]) => (
-            <li key={href} className="border-b border-brume last:border-b-0">
+        <p className="mb-1.5 text-center text-[13.5px] text-ardoise">
+          {tf("sent.received", { company, time: application.createdAt })}
+        </p>
+        <ul className="grid grid-cols-2 gap-2.5">
+          {next.map(([href, icon, tone, title, line]) => (
+            <li key={href} className="flex">
               <Link
                 href={href}
-                className="jm-press flex min-h-16 items-center gap-3 px-4 py-3 hover:bg-creme"
+                className={cx(
+                  "jm-press relative flex min-h-[118px] w-full flex-col justify-end gap-[3px] overflow-hidden rounded-[22px] p-3.5 text-sapin after:absolute after:-top-6 after:-right-6 after:size-20 after:rounded-full after:bg-blanc/35 focus-visible:ring-4 focus-visible:ring-sapin/40 focus-visible:outline-none",
+                  tone,
+                )}
               >
-                <span
-                  aria-hidden
-                  className={cx("grid size-11 shrink-0 place-items-center rounded-[13px]", tone)}
-                >
-                  <Icon name={icon} className="size-5" />
-                </span>
-                <span className="flex min-w-0 flex-1 flex-col">
-                  <span className="text-[15px] font-semibold">{title}</span>
-                  <span className="text-[13px] text-ardoise">{line}</span>
-                </span>
-                <Icon name="chev-r" className="size-4 shrink-0 text-ardoise" />
+                <Icon name={icon} className="absolute top-3 left-3 size-[26px]" />
+                <span className="text-[14px] font-bold">{title}</span>
+                <span className="text-[11.5px] opacity-72">{line}</span>
               </Link>
             </li>
           ))}
         </ul>
-        <Link
-          href="/app/jobs"
-          className="jm-press flex min-h-12 w-full items-center justify-center rounded-pill bg-blanc text-[15px] font-semibold shadow-douce"
-        >
-          {tf("sent.explore")}
-        </Link>
+        <div className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 flex items-center gap-3 rounded-[22px] bg-blanc p-3 shadow-float md:static md:mt-2 md:bg-transparent md:p-0 md:shadow-none">
+          <ButtonLink
+            href={`/app/jobs/${job.slug}`}
+            aria-label={tf("sent.back")}
+            variant="soft"
+            size="L"
+            className="w-12 px-0!"
+          >
+            <Icon name="retour" className="size-5" />
+          </ButtonLink>
+          <ButtonLink href="/app/jobs" variant="principal" size="L" arrow className="flex-1">
+            {tf("sent.explore")}
+          </ButtonLink>
+        </div>
       </div>
     );
   }
@@ -339,61 +349,86 @@ export default async function TalentJobPage({
         <Alert tone="warning" title={t("talent.jobs.detail.closed")} />
       )}
 
-      <header
-        className={cx(
-          card,
-          "relative flex flex-col items-center gap-4 overflow-hidden text-center lg:flex-row lg:items-center lg:text-left",
-        )}
-      >
-        <CompanyLogo
-          name={company}
-          size="lg"
-          className="size-14! rounded-[16px]! text-lg! lg:size-16! lg:rounded-[18px]! lg:text-xl!"
-        />
-        <div className="flex min-w-0 flex-1 flex-col items-center gap-1.5 lg:items-start">
-          <div className="flex flex-wrap justify-center gap-2">
-            {isNew && <span className={cx(tag, tagTone.neon)}>{t("talent.jobs.card.new")}</span>}
-            {job.organization.verifiedAt && (
-              <span className={cx(tag, tagTone.menthe)}>
-                <Icon name="check" className="size-3" />
-                {t("talent.jobs.card.verified")}
-              </span>
-            )}
-            <span className="max-lg:hidden">{scoreTag}</span>
-          </div>
-          <h1 className="text-[22px] leading-7 font-semibold tracking-[-0.02em] lg:text-[28px] lg:leading-[34px]">
-            {job.title}
-          </h1>
-          <p className="flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-xs text-ardoise lg:justify-start">
-            <strong className="font-semibold text-sapin">{company}</strong>
-            <span className="flex items-center gap-1">
-              <Icon name="localisation" className="size-3.5" />
-              {t("talent.jobs.card.location", { city: job.city, workMode })}
-            </span>
-            {job.publishedAt && (
-              <span className="flex items-center gap-1">
-                <Icon name="horloge" className="size-3.5" />
-                {t("talent.jobs.detail.publishedAgo", {
-                  time: formatRelative(job.publishedAt, now),
-                })}
-              </span>
-            )}
-            <span className="flex items-center gap-1">
-              <Icon name="equipe" className="size-3.5" />
-              {t("talent.jobs.detail.applicants", { count: applicants })}
-            </span>
-          </p>
-        </div>
-        <div className="flex flex-wrap items-center justify-center gap-2.5">
-          <CopyButton
-            value={`${siteUrl()}/offres/${job.slug}`}
-            label={t("talent.jobs.detail.share")}
-            copiedLabel={t("job.cta.shareCopied")}
-            icon={<Icon name="partager" className="size-4" />}
-            className={pillClass("outline", "sm", "h-10")}
+      {/* Screen 64: the offer opens on the company's banner, its logo over the edge. */}
+      <header className="flex flex-col">
+        <div className="relative max-sm:-mx-4">
+          <OrgBanner
+            src={job.organization.banner}
+            priority
+            sizes="(min-width: 1024px) 1000px, 100vw"
+            className="h-[150px] rounded-b-[28px] sm:rounded-[24px] lg:h-[200px]"
           />
-          {jobRow && saveForm(cx(pillClass("outline", "sm", "h-10"), "max-lg:hidden"), true)}
-          <span className="max-lg:hidden">{applyBlock}</span>
+          <CompanyLogo
+            name={company}
+            src={job.organization.logo}
+            size="lg"
+            className="jm-hero-logo absolute! -bottom-[30px] left-5 size-[68px]! rounded-[20px]! border-4 border-creme text-[19px]! lg:left-6"
+          />
+        </div>
+        <div className="flex flex-col gap-4 pt-[38px] lg:flex-row lg:items-end lg:justify-between">
+          <div className="flex min-w-0 flex-col gap-1.5">
+            <p className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12.5px] font-medium text-ardoise">
+              <span className="inline-flex items-center gap-[5px]">
+                {company}
+                {job.organization.verifiedAt && (
+                  <span
+                    role="img"
+                    aria-label={t("talent.jobs.card.verified")}
+                    className="grid size-3.5 place-items-center rounded-full bg-[#14745F] text-blanc"
+                  >
+                    <Icon name="check" className="size-2.5" />
+                  </span>
+                )}
+              </span>
+              <Link
+                href={`/entreprises/${job.organization.slug}`}
+                className="jm-hero-link ml-1.5 flex min-h-8 items-center text-[12px] font-semibold text-[#14745F] hover:underline"
+              >
+                {t("talent.jobs.detail.company.see")}
+              </Link>
+            </p>
+            <h1 className="text-[22px] leading-[1.2] font-bold tracking-[-0.02em] lg:text-[28px]">
+              {job.title}
+            </h1>
+            <div className="mt-0.5 flex flex-wrap gap-1.5">
+              {isNew && (
+                <span className={cx(heroChip, "bg-neon")}>{t("talent.jobs.card.new")}</span>
+              )}
+              <span className={heroChip}>
+                <Icon name="localisation" className="size-[13px]" />
+                {job.city}
+              </span>
+              <span className={heroChip}>{contract}</span>
+              <span className={heroChip}>{workMode}</span>
+              <span className={heroChip}>
+                {t("talent.jobs.detail.facts.experience.min", { min: job.experienceMin })}
+              </span>
+              <span className="max-lg:hidden">{scoreTag}</span>
+            </div>
+            <p className="mt-0.5 text-[12.5px] text-ardoise">
+              {job.publishedAt &&
+                t("job.header.published", { date: formatDayMonth(job.publishedAt) })}
+              {job.publishedAt && job.closesAt && <span aria-hidden>{" · "}</span>}
+              {job.closesAt && (
+                <strong className="jm-hero-closing font-semibold text-[#8A5A00]">
+                  {t("talent.jobs.card.closesOn", { date: formatDayMonth(job.closesAt) })}
+                </strong>
+              )}
+              <span aria-hidden>{" · "}</span>
+              {t("talent.jobs.detail.applicants", { count: applicants })}
+            </p>
+          </div>
+          <div className="flex flex-wrap items-center gap-2.5">
+            <CopyButton
+              value={`${siteUrl()}/offres/${job.slug}`}
+              label={t("talent.jobs.detail.share")}
+              copiedLabel={t("job.cta.shareCopied")}
+              icon={<Icon name="partager" className="size-4" />}
+              className={pillClass("outline", "sm", "h-10")}
+            />
+            {jobRow && saveForm(cx(pillClass("outline", "sm", "h-10"), "max-lg:hidden"), true)}
+            <span className="max-lg:hidden">{applyBlock}</span>
+          </div>
         </div>
       </header>
 

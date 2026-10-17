@@ -146,6 +146,7 @@ export async function publicCompany(db: PrismaClient, slug: string) {
       name: true,
       slug: true,
       logo: true,
+      banner: true,
       description: true,
       website: true,
       country: true,

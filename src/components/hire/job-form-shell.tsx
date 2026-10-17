@@ -5,7 +5,7 @@ import { pillClass } from "@/components/career/kit";
 import { db } from "@/server/db";
 import { duplicateJobAction } from "@/server/actions/hire";
 import { aiFeatures, AI_CREDITS_KEY } from "@/server/ai";
-import type { HireContext } from "@/server/services/hire";
+import { hirePermissions, type HireContext } from "@/server/services/hire";
 import { jobWriterReadiness } from "@/server/services/job-writer";
 import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
 import type { JobFormAi } from "./job-form";
@@ -17,7 +17,7 @@ export async function jobFormContext(ctx: HireContext, exceptId?: string) {
   const [organization, readiness, plans, jobs] = await Promise.all([
     db.organization.findUniqueOrThrow({
       where: { id: ctx.organizationId },
-      select: { name: true, verificationStatus: true },
+      select: { name: true, verificationStatus: true, banner: true, logo: true },
     }),
     jobWriterReadiness(db, ctx),
     listPublicPlans(db),
@@ -70,6 +70,11 @@ export async function jobFormContext(ctx: HireContext, exceptId?: string) {
   return {
     org: organization.name,
     verified: organization.verificationStatus === "verified",
+    brand: {
+      banner: organization.banner,
+      logo: organization.logo,
+      canEdit: hirePermissions(ctx.role).administer,
+    },
     ai,
     templates,
   };

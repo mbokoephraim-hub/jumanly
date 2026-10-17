@@ -3717,6 +3717,7 @@
         "posted": "{time, relative}",
         "closingSoon": "Clôture {time, relative}",
         "closingIn": "Clôture {time}",
+        "closesOn": "Clôture le {date}",
         "applied": "Candidature envoyée",
         "save": "Enregistrer l'offre",
         "unsave": "Retirer des offres enregistrées",
@@ -3918,19 +3919,25 @@
             "title": "Votre candidature n'est pas encore envoyée",
             "body": "Connexion coupée. Votre brouillon est gardé.",
             "state": "État",
-            "draft": "Brouillon, non envoyé",
+            "draft": "Brouillon non envoyé",
             "lastSave": "Dernier enregistrement",
             "lastSaveValue": "{date, date, medium} à {date, time, short}",
+            "lastSaveToday": "Aujourd'hui, {date, time, short}",
             "later": "Plus tard",
             "retry": "Réessayer"
           },
           "sent": {
-            "received": "Reçue par {company}.",
-            "track": "Suivre ma candidature",
-            "trackLine": "Dans Suivi, avec son historique",
+            "received": "Reçue par {company} à {time, time, short}.",
+            "track": "Suivre",
+            "trackLine": "Dans Suivi",
             "prepare": "Préparer l'entretien",
-            "prepareLine": "Simulation et conseils",
-            "explore": "Continuer à explorer les offres"
+            "prepareLine": "Avec Orbi",
+            "adapt": "Adapter mon CV",
+            "adaptLine": "Pour une autre offre",
+            "similar": "Offres proches",
+            "similarLine": "{count, plural, =0 {À découvrir} one {# offre} other {# offres}}",
+            "back": "Revenir à l'offre",
+            "explore": "Explorer d'autres offres"
           }
         }
       },
@@ -4504,6 +4511,56 @@
         "meta": "{type} · {size}",
         "empty": "Aucune ressource pour cette leçon.",
         "locked": "Ressources spécialisées · Disponible avec {plan}"
+      },
+      "previousShort": "Précédente",
+      "context": "{course} · Module {number}",
+      "meta": "Leçon {index} sur {total} · {duration}",
+      "metaShort": "Leçon {index} sur {total}",
+      "courseProgress": "Progression dans la formation",
+      "tabs": {
+        "label": "Contenu de la leçon",
+        "summary": "Résumé",
+        "modules": "Modules",
+        "transcript": "Transcription",
+        "resources": "Ressources",
+        "notes": "Notes"
+      },
+      "summary": {
+        "brief": "En bref",
+        "plan": "Ce que vous allez faire",
+        "minutes": "{count} min",
+        "takeaways": "À retenir",
+        "content": "La leçon",
+        "exercise": "Exercice de la leçon",
+        "exerciseMeta": "{count, plural, one {# question} other {# questions}} · {duration}",
+        "exerciseStart": "Commencer"
+      },
+      "modules": {
+        "done": "{count, plural, one {# leçon} other {# leçons}} · terminé",
+        "progress": "{count, plural, one {# leçon} other {# leçons}} · {done} sur {count}",
+        "progressAria": "{done} leçons sur {count} terminées",
+        "current": "Leçon en cours",
+        "certificate": "Attestation",
+        "certificateLocked": "Après le quiz final",
+        "certificateReady": "Obtenue · voir mes attestations"
+      },
+      "transcriptPanel": {
+        "search": "Chercher dans la leçon",
+        "follows": "Suit la vidéo",
+        "none": "Aucune ligne ne correspond à votre recherche.",
+        "empty": "Pas encore de transcription pour cette leçon.",
+        "seekHint": "Toucher une ligne relance la vidéo à ce moment.",
+        "seek": "Reprendre la vidéo à"
+      },
+      "resourcesPanel": {
+        "download": "À télécharger",
+        "further": "Pour aller plus loin",
+        "downloadNamed": "Télécharger « {title} »",
+        "open": "Ouvrir « {title} »",
+        "nextLesson": "Leçon suivante · {duration}",
+        "offline": "Une fois téléchargés, les fichiers s'ouvrent sans connexion.",
+        "link": "LIEN",
+        "video": "VID"
       },
       "notes": {
         "placeholder": "Prenez des notes. Elles sont privées et liées au moment de la vidéo.",
@@ -7452,9 +7509,35 @@
           "location": "Lieu et mode de travail",
           "deadline": "Date limite"
         },
+        "inJobs": "Aperçu dans Offres",
+        "today": "Aujourd'hui",
+        "see": "Voir l'offre",
+        "city": "Ville",
         "salaryRange": "{min} – {max} USD/mois",
         "salaryOne": "{amount} USD/mois",
         "verified": "Entreprise vérifiée"
+      },
+      "brand": {
+        "title": "Identité de l'entreprise",
+        "banner": "Bannière",
+        "logo": "Logo",
+        "hint": "Bannière au format 3:1 (1500 × 500), logo carré. Reprises sur toutes vos offres.",
+        "adminOnly": "Reprises sur toutes vos offres. Un administrateur de l'organisation peut les changer.",
+        "editBanner": "Bannière de l'entreprise",
+        "editLogo": "Logo de l'entreprise",
+        "bannerHint": "Image large, cadrée au format 3:1. Sans bannière, les offres montrent le motif Jumanly.",
+        "logoHint": "Image carrée. Sans logo, les offres montrent les initiales de l'entreprise.",
+        "editor": {
+          "choose": "Choisir une image",
+          "zoom": "Zoom",
+          "drag": "Cadrage de l'image : faites-la glisser ou utilisez les flèches du clavier.",
+          "empty": "Choisissez une image (JPEG, PNG ou WebP, 4 Mo au plus).",
+          "cancel": "Annuler",
+          "save": "Enregistrer",
+          "removeBanner": "Retirer la bannière",
+          "removeLogo": "Retirer le logo",
+          "error": "Image refusée : choisissez un JPEG, un PNG ou un WebP de 4 Mo au plus."
+        }
       },
       "publish": {
         "text": "Publier l'offre",
@@ -11446,7 +11529,8 @@
     "previousPage": "Page précédente",
     "avatar": {
       "text": "Photo de {name}",
-      "initials": "Initiales de {name}"
+      "initials": "Initiales de {name}",
+      "logo": "Logo de {name}"
     },
     "logo": "Jumanly, retour à l'accueil",
     "notifications": "Notifications",
@@ -13066,6 +13150,13 @@
         "subtitles": "Sous-titres",
         "resources": "Ressources à télécharger",
         "transcript": "Transcription",
+        "transcriptHint": "Une phrase par ligne. Commencez une ligne par son moment dans la vidéo (ex. : 05:40 Avant tout, vérifiez…) pour que la transcription suive la vidéo.",
+        "brief": "En bref",
+        "briefHint": "L'idée de la leçon en une ou deux phrases. Facultatif.",
+        "steps": "Ce que vous allez faire",
+        "stepsHint": "Une étape par ligne : Titre",
+        "takeaways": "À retenir",
+        "takeawaysHint": "Un point par ligne, trois au plus. Facultatif.",
         "resourcesCount": "{count, plural, one {# ressource} other {# ressources}}",
         "editNamed": "Modifier la leçon « {title} »",
         "deleteNamed": "Supprimer la leçon « {title} »"

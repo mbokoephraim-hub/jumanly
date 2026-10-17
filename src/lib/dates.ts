@@ -56,3 +56,10 @@ export function formatDateTime(date: Date, timeZone = defaultTimeZone()): string
     timeZone,
   }).format(date);
 }
+
+/** "30 oct.": dates of the current season on cards, where the year goes without saying. */
+export function formatDayMonth(date: Date, timeZone = defaultTimeZone()): string {
+  return new Intl.DateTimeFormat("fr-FR", { day: "numeric", month: "short", timeZone }).format(
+    date,
+  );
+}

@@ -72,17 +72,36 @@ const logoSizes = {
   lg: "size-[52px] rounded-[16px] text-lg",
 };
 
-/** Company logo at initials (mockup 00-02): a rounded square, same palettes as avatars. */
+/**
+ * Company logo (mockup 00-02): a rounded square with the logo sent by the organization (prompt 4
+ * bis), or its initials on the same palettes as avatars.
+ */
 export function CompanyLogo({
   name,
   size = "md",
+  src,
   className,
 }: {
   name: string;
   size?: keyof typeof logoSizes;
+  /** The saved logo (256 px WebP); the 128 px one is used on small screens. */
+  src?: string | null;
   className?: string;
 }) {
   const t = useTranslations("a11y.avatar");
+  if (src)
+    return (
+      // Already resized WebP (128 and 256 px).
+      <img
+        src={src}
+        srcSet={`${src.replace(/-256\.webp$/, "-128.webp")} 128w, ${src} 256w`}
+        sizes="72px"
+        alt={t("logo", { name })}
+        loading="lazy"
+        decoding="async"
+        className={cx("shrink-0 bg-blanc object-cover", logoSizes[size], className)}
+      />
+    );
   return (
     <span
       role="img"
