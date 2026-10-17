@@ -22,7 +22,7 @@ import { cx } from "@/lib/cx";
 import { ConversationList } from "@/components/connect/conversation-list";
 import { InterviewCard } from "@/components/connect/interview-card";
 import { ReportForm } from "@/components/connect/report-form";
-import { TopBarOverride } from "@/components/layout/top-bar-override";
+import { PhoneTitle } from "@/components/layout/phone-title";
 import {
   answerDocumentAction,
   blockAction,
@@ -325,17 +325,11 @@ export default async function ThreadPage({
   return (
     <div className="flex flex-col gap-5 lg:gap-6">
       {!fromOrganization && (
-        <TopBarOverride>
-          <Link
-            href="/app/suivi?filtre=messages"
-            aria-label={t("thread.back")}
-            className="flex size-10 shrink-0 items-center justify-center rounded-full hover:bg-blanc/10"
-          >
-            <Icon name="chev-l" className="size-6" />
-          </Link>
-          <p className="min-w-0 flex-1 truncate text-[20px] font-semibold tracking-[-0.02em]">
-            {otherPersonName ?? otherName}
-          </p>
+        <PhoneTitle
+          back="/app/suivi?filtre=messages"
+          backLabel={t("thread.back")}
+          title={otherPersonName ?? otherName}
+        >
           <details className="relative">
             <summary
               aria-label={t("thread.more")}
@@ -347,7 +341,7 @@ export default async function ThreadPage({
               {actions}
             </div>
           </details>
-        </TopBarOverride>
+        </PhoneTitle>
       )}
       <AppPageHeader
         eyebrow={t("eyebrow", { count: conversations.filter((item) => item.unread).length })}

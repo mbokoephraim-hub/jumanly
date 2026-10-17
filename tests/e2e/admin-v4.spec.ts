@@ -27,8 +27,14 @@ test("espace connecté : menu horizontal, recherche et compte en bas de la colon
   await expect(page).toHaveURL(/\/app\/recherche\?q=CV/);
   const courses = page.getByRole("region", { name: /^Formations/ });
   await expect(courses.getByRole("link", { name: /Réussir son CV/ })).toBeVisible();
-  await expect(page.getByRole("region", { name: /^Offres/ })).toBeVisible();
-  await expect(page.getByRole("region", { name: /^Messages/ })).toBeVisible();
+  // Screen 18: Tout / Offres / Formations; a group without result is left out.
+  await page
+    .getByRole("navigation", { name: "Type de résultats" })
+    .getByRole("link", { name: "Formations" })
+    .click();
+  await expect(page).toHaveURL(/vue=formations/);
+  await expect(page.getByRole("region", { name: /^Formations/ })).toBeVisible();
+  await expect(page.getByRole("region", { name: /^Offres/ })).toHaveCount(0);
   await expectAccessible(page);
 
   // The account sits at the foot of the column and opens its menu beside it.

@@ -2283,7 +2283,22 @@
       "title": "Recherche",
       "subtitle": "Formations, offres et conversations",
       "prompt": "Tapez un mot pour chercher une formation, une offre ou une conversation.",
-      "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} »"
+      "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} »",
+      "phoneTitle": "Rechercher",
+      "back": "Retour à Pour moi",
+      "clear": "Effacer la recherche",
+      "tab": {
+        "label": "Type de résultats",
+        "all": "Tout",
+        "jobs": "Offres",
+        "courses": "Formations"
+      },
+      "seeJobs": "Voir les offres pour « {query} »",
+      "seeCourses": "Voir les formations pour « {query} »",
+      "recent": {
+        "title": "Recherches récentes",
+        "clear": "Effacer"
+      }
     },
     "unreadBadge": {
       "aria": "{count, plural, one {# élément non lu} other {# éléments non lus}}"
@@ -10186,6 +10201,13 @@
       "thisWeek": "Cette semaine",
       "earlier": "Plus tôt"
     },
+    "priority": {
+      "important": "Important",
+      "forYou": "Pour vous",
+      "jumanly": "Jumanly"
+    },
+    "preferences": "Préférences de notification",
+    "back": "Retour à Pour moi",
     "empty": {
       "text": "Vous êtes à jour. Aucune notification.",
       "unread": "Aucune notification non lue."

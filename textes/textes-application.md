@@ -1868,6 +1868,17 @@ Conventions :
 | `appNav.search.subtitle` | Formations, offres et conversations |
 | `appNav.search.prompt` | Tapez un mot pour chercher une formation, une offre ou une conversation. |
 | `appNav.search.results` | {count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} » |
+| `appNav.search.phoneTitle` | Rechercher |
+| `appNav.search.back` | Retour à Pour moi |
+| `appNav.search.clear` | Effacer la recherche |
+| `appNav.search.tab.label` | Type de résultats |
+| `appNav.search.tab.all` | Tout |
+| `appNav.search.tab.jobs` | Offres |
+| `appNav.search.tab.courses` | Formations |
+| `appNav.search.seeJobs` | Voir les offres pour « {query} » |
+| `appNav.search.seeCourses` | Voir les formations pour « {query} » |
+| `appNav.search.recent.title` | Recherches récentes |
+| `appNav.search.recent.clear` | Effacer |
 | `appNav.unreadBadge.aria` | {count, plural, one {# élément non lu} other {# éléments non lus}} |
 | `appNav.collapse` | Réduire le menu |
 | `appNav.expand` | Déplier le menu |
@@ -8309,6 +8320,11 @@ Conventions :
 | `notifications.group.yesterday` | Hier |
 | `notifications.group.thisWeek` | Cette semaine |
 | `notifications.group.earlier` | Plus tôt |
+| `notifications.priority.important` | Important |
+| `notifications.priority.forYou` | Pour vous |
+| `notifications.priority.jumanly` | Jumanly |
+| `notifications.preferences` | Préférences de notification |
+| `notifications.back` | Retour à Pour moi |
 | `notifications.empty.text` | Vous êtes à jour. Aucune notification. |
 | `notifications.empty.unread` | Aucune notification non lue. |
 | `notifications.loading` | Chargement des notifications… |
