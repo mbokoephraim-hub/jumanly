@@ -137,6 +137,7 @@ export async function getFullProfile(db: PrismaClient, userId: string) {
           email: true,
           city: true,
           country: true,
+          image: true,
         },
       },
       experiences: {
@@ -171,6 +172,9 @@ export const identitySchema = z.object({
 });
 
 export const summarySchema = z.object({ summary: line(PROFILE_SUMMARY_MAX) });
+
+/** Title and bio, edited together on the phone profile (prompt 6). */
+export const introSchema = z.object({ headline: line(120), summary: line(PROFILE_SUMMARY_MAX) });
 
 export const experienceSchema = z
   .object({

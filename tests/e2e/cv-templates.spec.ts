@@ -4,7 +4,7 @@ import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
-import { demo, logIn } from "./session";
+import { demo, logIn, newCvFromList } from "./session";
 
 /**
  * Definition of done of the CV templates (docs/modeles-cv/SPECIFICATION-MODELES-CV.md § 11):
@@ -172,24 +172,25 @@ test.describe("modèles de CV : rendu (desktop)", () => {
 });
 
 test.describe("modèles de CV : parcours", () => {
-  test("galerie, mise en forme et couleur refusée", async ({ page }) => {
+  test("galerie, mise en forme et couleur refusée", async ({ page, isMobile }) => {
     await logIn(page, demo.talentStarter);
-    await page.goto("/app/career/cv");
-    await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
-    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
-    const id = new URL(page.url()).pathname.split("/").pop()!;
+    const id = await newCvFromList(page);
 
     // Optional phone, on this CV only: kept once saved, refused when it is not a number (its place in
     // the document is checked by the unit tests).
-    const details = page.locator("form").filter({ has: page.locator("#cv-phone") });
-    await details.locator("#cv-phone").fill("abc");
+    // On a phone the field sits in the part « Infos » (prompt 6).
+    const field = isMobile ? "#cv-phone-phone" : "#cv-phone";
+    const details = page.locator("form").filter({ has: page.locator(field) });
+    await details.locator(field).fill("abc");
     await details.getByRole("button").last().click();
-    await expect(page.getByText("Numéro de téléphone non valide")).toBeVisible();
-    await details.locator("#cv-phone").fill("+243 970 000 000");
+    await expect(
+      page.getByText("Numéro de téléphone non valide").filter({ visible: true }),
+    ).toBeVisible();
+    await details.locator(field).fill("+243 970 000 000");
     await details.getByRole("button").last().click();
     await expect(page).toHaveURL(/ok=1/);
     await page.goto(`/app/career/cv/${id}`);
-    await expect(page.locator("#cv-phone")).toHaveValue("+243 970 000 000");
+    await expect(page.locator(field)).toHaveValue("+243 970 000 000");
 
     await page.goto(`/app/career/cv/modeles?cv=${id}&modele=moderne`);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Choisir un modèle");
@@ -215,10 +216,7 @@ test.describe("modèles de CV : parcours", () => {
     page,
   }) => {
     await logIn(page, demo.talentFree);
-    await page.goto("/app/career/cv");
-    await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
-    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
-    const id = new URL(page.url()).pathname.split("/").pop()!;
+    const id = await newCvFromList(page);
 
     // The apply action refuses a Pro template even when the form is forged.
     await page.goto(`/app/career/cv/modeles?cv=${id}&modele=moderne`);
@@ -246,14 +244,15 @@ test.describe("modèles de CV : parcours", () => {
   }) => {
     test.setTimeout(90_000);
     await logIn(page, demo.talentPro);
-    await page.goto("/app/career/cv");
-    await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
-    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
-    const id = new URL(page.url()).pathname.split("/").pop()!;
+    const id = await newCvFromList(page);
     // The demo accounts use @jumanly.test addresses: the e-mail is left off this CV.
-    await page.getByLabel("Afficher mon e-mail sur le CV").uncheck();
-    await page.getByRole("button", { name: "Enregistrer", exact: true }).click();
-    await expect(page.getByLabel("Afficher mon e-mail sur le CV")).not.toBeChecked();
+    const showEmail = page.getByLabel("Afficher mon e-mail sur le CV").filter({ visible: true });
+    await showEmail.uncheck();
+    await page
+      .getByRole("button", { name: "Enregistrer", exact: true })
+      .filter({ visible: true })
+      .click();
+    await expect(showEmail).not.toBeChecked();
 
     const response = await page.request.post(`/api/cv/${id}/export?format=pdf`);
     expect(response.status()).toBe(200);

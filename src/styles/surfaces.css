@@ -146,3 +146,10 @@
     transform: none;
   }
 }
+
+/* A page that writes its own phone top bar (PhoneTitle) has no section tabs on a phone. */
+@media (width < 48rem) {
+  body:has([data-top-override][data-active]) .jm-topbar {
+    display: none;
+  }
+}

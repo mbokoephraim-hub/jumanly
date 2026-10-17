@@ -102,6 +102,8 @@ export function hidesTalentTabBar(pathname: string) {
   const [, app, section, page, more] = pathname.split("/");
   if (app !== "app" || !section) return false;
   if (section === "espace" || section === "bienvenue") return true;
+  // Mon profil has its own bar « Enregistré · Voir mon profil côté recruteur » (screen 25).
+  if (section === "profil") return true;
   if (section === "jobs") return Boolean(page) && !["candidatures", "enregistrees"].includes(page);
   if (section === "messages") return Boolean(page);
   if (section === "suivi") return page === "entretiens" && Boolean(more);

@@ -7,6 +7,7 @@ import { pillClass } from "@/components/career/kit";
 import { TabRail } from "@/components/motion/tab-rail";
 import { Alert, EmptyState, segmentedItem, segmentedList } from "@/components/ui";
 import { cx } from "@/lib/cx";
+import { PhoneTitle } from "@/components/layout/phone-title";
 import { markNotificationsReadAction } from "@/server/actions/connect";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -73,7 +74,7 @@ const categoryOf: Record<NotificationType, Category> = {
 
 const categoryStyle: Record<Category, { icon: IconName; tile: string }> = {
   applications: { icon: "jobs", tile: "bg-lime-clair" },
-  messages: { icon: "message", tile: "bg-menthe-clair" },
+  messages: { icon: "message", tile: "bg-menthe-claire" },
   learn: { icon: "certificat", tile: "bg-neon" },
   account: { icon: "securite", tile: "bg-brume" },
 };
@@ -88,13 +89,35 @@ const typeIcon: Partial<Record<NotificationType, IconName>> = {
   diagnosticReminder: "calendrier",
 };
 
-const actions = [
+/** Types that ask for an answer: unread, they open the list under « Important » (screen 19). */
+const important = new Set<NotificationType>([
   "interviewInvite",
+  "interviewTeam",
+  "interviewConfirmed",
+  "interviewReschedule",
+  "interviewDeclined",
+  "interviewCanceled",
   "newMessage",
   "documentRequest",
-  "certificateIssued",
+  "mention",
+  "statusChange",
+  "notSelected",
+  "newApplication",
   "contactRequest",
-] as const;
+  "contactAccepted",
+  "contactDeclined",
+  "jobRejected",
+  "jobChangesRequested",
+  "moderationWarning",
+  "paymentFailed",
+  "renewalDue",
+  "grace",
+  "downgraded",
+  "orgSuspended",
+  "licenseExpiring",
+  "licenseExpired",
+  "abnormalUsage",
+]);
 
 const tabIds = ["toutes", "non-lues", "candidatures", "messages", "formations", "compte"] as const;
 type Tab = (typeof tabIds)[number];
@@ -151,12 +174,33 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
         : date.getTime() >= startOfToday.getTime() - 6 * DAY
           ? "thisWeek"
           : "earlier";
-  const groups = (["today", "yesterday", "thisWeek", "earlier"] as const)
-    .map((key) => ({ key, items: notifications.filter((item) => groupOf(item.createdAt) === key) }))
-    .filter((group) => group.items.length > 0);
-  const timeOf = (date: Date, group: string) => {
+  // « Toutes » is sorted by priority (screen 19): what asks for an answer, then what is for the
+  // person, then Jumanly's own news. The other tabs keep the days.
+  const priorityOf = (item: (typeof notifications)[number]) => {
+    const type = item.type as NotificationType;
+    if (!item.readAt && important.has(type)) return "important";
+    return categoryOf[type] === "account" ? "jumanly" : "forYou";
+  };
+  const groups =
+    tab === "toutes"
+      ? (["important", "forYou", "jumanly"] as const)
+          .map((key) => ({
+            key,
+            title: t(`priority.${key}`),
+            items: notifications.filter((item) => priorityOf(item) === key),
+          }))
+          .filter((group) => group.items.length > 0)
+      : (["today", "yesterday", "thisWeek", "earlier"] as const)
+          .map((key) => ({
+            key,
+            title: t(`group.${key}`),
+            items: notifications.filter((item) => groupOf(item.createdAt) === key),
+          }))
+          .filter((group) => group.items.length > 0);
+  const timeOf = (date: Date) => {
+    const group = groupOf(date);
     const time = format.dateTime(date, { hour: "2-digit", minute: "2-digit" });
-    if (group === "today") return format.relativeTime(date, now);
+    if (group === "today") return time;
     if (group === "yesterday") return t("time.yesterday", { time });
     if (group === "thisWeek") {
       const day = format.dateTime(date, { weekday: "long" });
@@ -176,9 +220,11 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
 
   return (
     <div className="flex flex-col gap-5 lg:gap-6">
-      <AppPageHeader title={t("title")} actions={markAll || undefined} />
+      <PhoneTitle back="/app" backLabel={t("back")} title={t("title")} />
+      <AppPageHeader title={t("title")} actions={markAll || undefined} className="max-md:hidden" />
+      {markAll && <div className="md:hidden">{markAll}</div>}
       {params.ok === "lues" && <Alert tone="success" title={t("allRead")} />}
-      <div className="flex flex-wrap items-center justify-between gap-3">
+      <div className="flex flex-wrap items-center justify-between gap-3 max-md:hidden">
         <nav aria-label={t("tabs")} className="max-w-full min-w-0">
           <TabRail name="notifications-tabs" className="bg-transparent! p-0!">
             <div className={segmentedList}>
@@ -225,16 +271,19 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
                 id={`notifications-${group.key}`}
                 className="px-1 text-[11px] font-semibold tracking-[0.09em] text-ardoise uppercase"
               >
-                {t(`group.${group.key}`)}
+                {group.title}
               </h2>
-              <ul className="flex flex-col overflow-hidden rounded-[24px] bg-blanc">
+              <ul
+                className={cx(
+                  "flex flex-col overflow-hidden rounded-[24px] bg-blanc shadow-douce",
+                  group.key === "important" &&
+                    "bg-linear-to-br from-lime-clair/70 via-blanc to-blanc",
+                )}
+              >
                 {group.items.map((notification, index) => {
                   const type = notification.type as NotificationType;
                   const style = categoryStyle[categoryOf[type]];
                   const unread = !notification.readAt;
-                  const action = (actions as readonly string[]).includes(type)
-                    ? t(`action.${type as (typeof actions)[number]}`)
-                    : null;
                   return (
                     <li key={notification.id} className={cx(index > 0 && "border-t border-brume")}>
                       <form action={markNotificationsReadAction}>
@@ -243,44 +292,34 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
                         <button
                           type="submit"
                           className={cx(
-                            "flex w-full items-start gap-3.5 px-4 py-4 text-left hover:bg-creme focus-visible:bg-creme lg:px-5",
-                            unread && "bg-lime-clair/40",
+                            "relative flex w-full items-center gap-3.5 py-4 pr-4 pl-5 text-left hover:bg-creme/60 focus-visible:bg-creme lg:pr-5",
                           )}
                         >
+                          {unread && (
+                            <span className="absolute top-1/2 left-2 size-2 -translate-y-1/2 rounded-full bg-feuille">
+                              <span className="sr-only">{t("item.unread")}</span>
+                            </span>
+                          )}
                           <span
                             aria-hidden
                             className={cx(
-                              "flex size-10 shrink-0 items-center justify-center rounded-xl text-sapin",
-                              style.tile,
+                              "flex size-12 shrink-0 items-center justify-center rounded-[16px] text-sapin",
+                              unread ? style.tile : "bg-creme",
                             )}
                           >
-                            <Icon name={typeIcon[type] ?? style.icon} className="size-[18px]" />
+                            <Icon name={typeIcon[type] ?? style.icon} className="size-5" />
                           </span>
-                          <span className="flex min-w-0 flex-1 flex-col gap-1">
-                            <span
-                              className={cx(
-                                "text-[13.5px] leading-5 text-sapin",
-                                unread && "font-semibold",
-                              )}
-                            >
-                              {t(`item.${type}`, notificationValues(notification.payload))}
-                            </span>
-                            <span className="text-xs text-ardoise">
-                              {timeOf(notification.createdAt, group.key)}
-                            </span>
-                            {action && (
-                              <span className={pillClass("dark", "sm", "mt-1 h-8 self-start")}>
-                                {action}
-                              </span>
+                          <span
+                            className={cx(
+                              "min-w-0 flex-1 text-[15px] leading-[21px] text-sapin",
+                              unread && "font-semibold",
                             )}
+                          >
+                            {t(`item.${type}`, notificationValues(notification.payload))}
                           </span>
-                          {unread ? (
-                            <span className="mt-1.5 size-2.5 shrink-0 rounded-full bg-feuille">
-                              <span className="sr-only">{t("item.unread")}</span>
-                            </span>
-                          ) : (
-                            <Icon name="chev-r" className="mt-1 size-4 shrink-0 text-ardoise" />
-                          )}
+                          <span className="shrink-0 self-start text-[13px] text-ardoise">
+                            {timeOf(notification.createdAt)}
+                          </span>
                         </button>
                       </form>
                     </li>
@@ -293,10 +332,10 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
       )}
       <Link
         href="/app/parametres?onglet=confidentialite"
-        className={pillClass("outline", "md", "lg:hidden")}
+        className="flex items-center justify-center gap-2 py-2 text-[15px] font-semibold text-feuille-fonce hover:underline md:hidden"
       >
-        <Icon name="reglages" className="size-4" />
-        {t("settings")}
+        <Icon name="filtre" className="size-[18px]" />
+        {t("preferences")}
       </Link>
     </div>
   );

@@ -2283,7 +2283,22 @@
       "title": "Recherche",
       "subtitle": "Formations, offres et conversations",
       "prompt": "Tapez un mot pour chercher une formation, une offre ou une conversation.",
-      "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} »"
+      "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} »",
+      "phoneTitle": "Rechercher",
+      "back": "Retour à Pour moi",
+      "clear": "Effacer la recherche",
+      "tab": {
+        "label": "Type de résultats",
+        "all": "Tout",
+        "jobs": "Offres",
+        "courses": "Formations"
+      },
+      "seeJobs": "Voir les offres pour « {query} »",
+      "seeCourses": "Voir les formations pour « {query} »",
+      "recent": {
+        "title": "Recherches récentes",
+        "clear": "Effacer"
+      }
     },
     "unreadBadge": {
       "aria": "{count, plural, one {# élément non lu} other {# éléments non lus}}"
@@ -3075,6 +3090,81 @@
       "save": "Enregistrer",
       "saved": "Profil enregistré.",
       "autosaved": "Enregistré automatiquement",
+      "phone": {
+        "title": "Mon profil",
+        "back": "Retour à Mon espace",
+        "backProfile": "Retour à mon profil",
+        "photo": {
+          "change": "Changer la photo",
+          "title": "Photo de profil",
+          "close": "Fermer",
+          "take": "Prendre une photo",
+          "choose": "Choisir dans la galerie",
+          "remove": "Retirer la photo",
+          "never": "Jamais utilisée pour le matching.",
+          "zoom": "Agrandir la photo",
+          "cancel": "Annuler",
+          "save": "Enregistrer la photo",
+          "empty": "Choisissez ou prenez une photo pour la recadrer.",
+          "drag": "Faites glisser la photo pour la centrer.",
+          "error": {
+            "type": "Ce fichier n'est pas une image JPEG, PNG ou WebP.",
+            "size": "Cette image est trop lourde. Essayez-en une autre.",
+            "photo": "La photo n'a pas pu être envoyée. Réessayez."
+          },
+          "saved": "Photo enregistrée.",
+          "removed": "Photo retirée."
+        },
+        "build": {
+          "title": "Construire mon profil",
+          "count": "{done, plural, one {# étape} other {# étapes}} sur {total}",
+          "add": "Ajouter",
+          "done": "Fait",
+          "step": {
+            "photo": "Photo",
+            "headline": "Titre et métier visé",
+            "bio": "Bio",
+            "experiences": "Expériences",
+            "skills": "Compétences",
+            "education": "Formation"
+          }
+        },
+        "headline": {
+          "label": "Titre",
+          "placeholder": "Ex. : Analyste de données"
+        },
+        "bio": {
+          "label": "Bio",
+          "hint": "ce que les recruteurs lisent en premier",
+          "placeholder": "En deux ou trois phrases : ce que vous faites et ce que vous cherchez.",
+          "counter": "{count} / {max}",
+          "ai": "M'aider à l'écrire",
+          "aiSoon": "Bientôt disponible"
+        },
+        "status": {
+          "saved": "Enregistré",
+          "saving": "Enregistrement…",
+          "error": "Non enregistré, réessayez",
+          "idle": "Enregistré"
+        },
+        "rows": {
+          "label": "Parties du profil",
+          "experiences": "Expériences",
+          "experiencesCount": "{count, plural, =0 {Ajouter un poste} one {# poste} other {# postes}}",
+          "education": "Formation",
+          "educationCount": "{count, plural, =0 {Ajouter un diplôme} one {# diplôme} other {# diplômes}}",
+          "skills": "Compétences",
+          "skillsCount": "{count, plural, =0 {Ajouter une compétence} one {# compétence} other {# compétences}}",
+          "languages": "Langues",
+          "languagesEmpty": "Ajouter une langue",
+          "place": "Lieu et préférences",
+          "placeEmpty": "Ajouter vos préférences",
+          "identity": "Identité",
+          "visibility": "Visibilité",
+          "import": "Importer mon CV"
+        },
+        "preview": "Voir mon profil côté recruteur"
+      },
       "unsaved": "Modifications non enregistrées",
       "edit": "Modifier",
       "add": "Ajouter",
@@ -5637,6 +5727,53 @@
       "summary": {
         "counter": "{count} / {max}",
         "hint": "3 à 4 lignes conseillées"
+      },
+      "phone": {
+        "listTitle": "Mes CV",
+        "listBack": "Retour à Career",
+        "create": "Créer un CV",
+        "pdf": "PDF",
+        "preparing": "PDF…",
+        "preparingLabel": "Préparation du PDF…",
+        "downloaded": "CV téléchargé · sans mention Jumanly",
+        "shared": "CV prêt à partager · sans mention Jumanly",
+        "pdfError": "Le PDF n'a pas pu être préparé. Réessayez.",
+        "updatedShort": "{date}",
+        "sheet": {
+          "title": "Créer un CV",
+          "close": "Fermer",
+          "legend": "Point de départ",
+          "profile": "À partir de mon profil",
+          "profileHint": "Recommandé",
+          "import": "Importer un CV existant",
+          "importHint": "Collez le texte de votre CV",
+          "blank": "Page vierge",
+          "blankHint": "Tout à remplir",
+          "name": "Nom du CV",
+          "submit": "Créer et ouvrir",
+          "limit": "Vous avez atteint {max} CV. Supprimez-en un pour en créer un autre."
+        },
+        "back": "Retour à Mes CV",
+        "tabs": "Vues du CV",
+        "tab": {
+          "content": "Contenu",
+          "style": "Mise en forme",
+          "preview": "Aperçu"
+        },
+        "parts": "Sections du CV",
+        "part": {
+          "info": "Infos"
+        },
+        "next": "Section suivante",
+        "saved": "Enregistré",
+        "share": "Partager",
+        "download": "Télécharger le PDF",
+        "neutral": "Le CV téléchargé ne porte ni logo ni mention Jumanly.",
+        "missions": "Missions et résultats",
+        "present": "aujourd'hui",
+        "empty": "Rien ici pour l'instant. Ajoutez-le dans votre profil, puis mettez ce CV à jour.",
+        "refresh": "Mettre à jour depuis mon profil",
+        "hidden": "Masquée sur le CV"
       }
     },
     "documents": {
@@ -10186,6 +10323,13 @@
       "thisWeek": "Cette semaine",
       "earlier": "Plus tôt"
     },
+    "priority": {
+      "important": "Important",
+      "forYou": "Pour vous",
+      "jumanly": "Jumanly"
+    },
+    "preferences": "Préférences de notification",
+    "back": "Retour à Pour moi",
     "empty": {
       "text": "Vous êtes à jour. Aucune notification.",
       "unread": "Aucune notification non lue."

@@ -26,6 +26,15 @@ import {
   WorkshopBar,
 } from "@/components/career/cv/editor";
 import { CriteriaBars } from "@/components/career/cv/parts";
+import {
+  PhoneEditorBar,
+  PhoneEditorTabs,
+  PhonePartChips,
+  PhoneSection,
+  type CvPhoneView,
+  type PhonePartChip,
+} from "@/components/career/cv/phone-editor";
+import { PhoneTitle } from "@/components/layout/phone-title";
 import { Workbench } from "@/components/career/cv/workbench";
 import { card, pillClass } from "@/components/career/kit";
 import { Alert, Checkbox, Select, TextArea, TextField } from "@/components/ui";
@@ -38,10 +47,12 @@ import { db } from "@/server/db";
 import { usage } from "@/server/entitlements";
 import {
   canUseTemplate,
+  cvPhoneParts,
   cvSectionIds,
   isEmptyCv,
   MAX_CVS,
   parseCv,
+  type CvPhonePart,
   type CvSectionId,
 } from "@/server/services/cv";
 import { aiState, TAILOR_GATE } from "@/server/services/career-documents";
@@ -85,6 +96,13 @@ export default async function CvEditorPage({
   const { data, demo } = await previewData(source);
   const included = await canUseTemplate(db, { type: "user", id: user.id }, template);
   const view = query.vue === "style" ? "style" : "content";
+  // Prompt 6 (screens 28, 29): on a phone, « Contenu » shows one part at a time, « Mise en forme »
+  // the page and its settings, « Aperçu » the page, the coach and the export.
+  const phoneView: CvPhoneView =
+    query.vue === "style" ? "style" : query.vue === "apercu" ? "preview" : "content";
+  const part: CvPhonePart = cvPhoneParts.includes(query.partie as CvPhonePart)
+    ? (query.partie as CvPhonePart)
+    : "info";
   const d = dynamic(t);
   const templateName = d(`template.name.${templateKey(template.id)}`);
   const cvs = await db.document.findMany({
@@ -205,6 +223,34 @@ export default async function CvEditorPage({
     ]),
   ) as CSSProperties;
   const tailorLocked = tailor.state === "entitlement";
+  const phoneParts: PhonePartChip[] = [
+    { key: "info", label: t("phone.part.info"), filled: content.info.name.trim().length > 0 },
+    { key: "summary", label: t("section.summary"), filled: filled.summary },
+    ...sectionOrder
+      .filter((sectionId) => sectionId !== "summary")
+      .map((sectionId) => ({
+        key: sectionId,
+        label: t(`section.${sectionId}`),
+        filled: filled[sectionId],
+      })),
+  ];
+  const partIndex = phoneParts.findIndex((chip) => chip.key === part);
+  const nextPart = phoneParts[partIndex + 1];
+  const listSections = sectionOrder.filter((sectionId) => sectionId !== "summary");
+  const detailsHidden = (except: "title" | "summary" | "contact") => (
+    <>
+      <input type="hidden" name="id" value={cv.id} />
+      <input type="hidden" name="partie" value={except === "summary" ? "summary" : "info"} />
+      {except !== "title" && <input type="hidden" name="title" value={cv.title} />}
+      {except !== "summary" && <input type="hidden" name="summary" value={content.summary} />}
+      {except !== "contact" && (
+        <>
+          {content.info.showEmail && <input type="hidden" name="showEmail" value="on" />}
+          <input type="hidden" name="phone" value={content.info.phone} />
+        </>
+      )}
+    </>
+  );
 
   const profileForm = (
     <form action={updateCvDetails} className="flex flex-col gap-3 border-t border-brume pt-3">
@@ -261,11 +307,98 @@ export default async function CvEditorPage({
 
   return (
     <>
-      <AppPageHeader eyebrow={tHome("eyebrow")} title={t("title")} />
-      <WorkshopBar cv={{ id: cv.id, title: cv.title, isPrimary: cv.isPrimary }} cvs={cvs} />
+      <PhoneTitle back="/app/career/cv" backLabel={t("phone.back")} title={cv.title} />
+      <AppPageHeader eyebrow={tHome("eyebrow")} title={t("title")} className="max-md:sr-only" />
+      <WorkshopBar
+        cv={{ id: cv.id, title: cv.title, isPrimary: cv.isPrimary }}
+        cvs={cvs}
+        className="max-md:hidden"
+      />
       {notice && <Notice>{notice}</Notice>}
       {error && <Alert tone="error" title={error} />}
       {!included && <Alert tone="error" title={t("template.downgraded", { templateName })} />}
+
+      <PhoneEditorTabs id={cv.id} view={phoneView} />
+      {phoneView === "content" && (
+        <>
+          <PhonePartChips id={cv.id} part={part} parts={phoneParts} />
+          {part === "info" && (
+            <form
+              action={updateCvDetails}
+              className="flex flex-col gap-4 rounded-[24px] bg-blanc p-5 shadow-douce md:hidden"
+            >
+              {detailsHidden("contact")}
+              <TextField
+                id="cv-phone-title"
+                name="title"
+                label={t("rename")}
+                placeholder={t("name.placeholder")}
+                defaultValue={cv.title}
+                required
+                maxLength={80}
+              />
+              <Checkbox
+                id="cv-phone-show-email"
+                name="showEmail"
+                value="on"
+                defaultChecked={content.info.showEmail}
+                label={t("info.showEmail")}
+                hint={t("info.contact.hint")}
+              />
+              <TextField
+                id="cv-phone-phone"
+                name="phone"
+                type="tel"
+                autoComplete="tel"
+                label={t("info.phone.label")}
+                hint={t("info.phone.hint")}
+                defaultValue={content.info.phone}
+                maxLength={30}
+                error={query.erreur === "telephone" ? t("info.phone.invalid") : undefined}
+              />
+              <button type="submit" className={pillClass("dark", "md", "self-start")}>
+                {tProfile("save")}
+              </button>
+            </form>
+          )}
+          {part === "summary" && (
+            <form
+              action={updateCvDetails}
+              className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5 shadow-douce md:hidden"
+            >
+              {detailsHidden("summary")}
+              <input type="hidden" name="title" value={cv.title} />
+              <TextArea
+                id="cv-phone-summary"
+                name="summary"
+                label={t("section.summary")}
+                defaultValue={content.summary}
+                rows={6}
+                maxLength={SUMMARY_MAX}
+              />
+              <p className="flex justify-between gap-2 text-[14px] text-ardoise">
+                <span>{t("summary.hint")}</span>
+                <span className="tabular-nums">
+                  {t("summary.counter", { count: content.summary.length, max: SUMMARY_MAX })}
+                </span>
+              </p>
+              <button type="submit" className={pillClass("dark", "md", "self-start")}>
+                {tProfile("save")}
+              </button>
+            </form>
+          )}
+          {part !== "info" && part !== "summary" && (
+            <PhoneSection
+              id={cv.id}
+              section={part}
+              content={content}
+              visible={sections.find((section) => section.id === part)?.visible ?? true}
+              first={listSections.indexOf(part) === 0}
+              last={listSections.indexOf(part) === listSections.length - 1}
+            />
+          )}
+        </>
+      )}
 
       <CvPaginationProvider>
         <div
@@ -274,9 +407,14 @@ export default async function CvEditorPage({
         >
           <section
             aria-label={view === "style" ? t("tab.style") : t("tab.content")}
-            className="order-2 flex min-w-0 flex-col gap-4 rounded-[24px] bg-blanc p-3.5 min-[900px]:order-1 lg:p-4"
+            className={cx(
+              "order-2 flex min-w-0 flex-col gap-4 rounded-[24px] bg-blanc p-3.5 min-[900px]:order-1 lg:p-4",
+              phoneView !== "style" && "max-md:hidden",
+            )}
           >
-            <ModeSwitch id={cv.id} view={view} />
+            <div className="max-md:hidden">
+              <ModeSwitch id={cv.id} view={view} />
+            </div>
             {view === "style" ? (
               <StylePanel
                 documentId={cv.id}
@@ -300,12 +438,15 @@ export default async function CvEditorPage({
 
           <section
             aria-labelledby="cv-preview"
-            className="order-1 flex min-w-0 flex-col gap-3 min-[900px]:sticky min-[900px]:top-[98px] min-[900px]:order-2"
+            className={cx(
+              "order-1 flex min-w-0 flex-col gap-3 min-[900px]:sticky min-[900px]:top-[98px] min-[900px]:order-2",
+              phoneView === "content" && "max-md:hidden",
+            )}
           >
             <h2 id="cv-preview" className="sr-only">
               {t("tab.preview")}
             </h2>
-            <TabRail name="cv-document">
+            <TabRail name="cv-document" className="max-md:hidden">
               <div className="flex w-max gap-1 rounded-pill bg-blanc/70 p-1 ring-1 ring-sapin/6">
                 <span
                   className={pillClass("dark", "sm", "pointer-events-none shrink-0")}
@@ -343,7 +484,12 @@ export default async function CvEditorPage({
             </Workbench>
           </section>
 
-          <div className="order-3 grid min-w-0 items-start gap-[18px] min-[900px]:col-span-2 min-[900px]:grid-cols-3 xl:col-span-1 xl:grid-cols-1">
+          <div
+            className={cx(
+              "order-3 grid min-w-0 items-start gap-[18px] min-[900px]:col-span-2 min-[900px]:grid-cols-3 xl:col-span-1 xl:grid-cols-1",
+              phoneView !== "preview" && "max-md:hidden",
+            )}
+          >
             <CvCoachPanel
               documentId={cv.id}
               score={score}
@@ -464,7 +610,21 @@ export default async function CvEditorPage({
           </div>
         </div>
       </CvPaginationProvider>
-      <MobileActionBar id={cv.id} />
+      {phoneView === "style" && (
+        <p className="text-[15px] text-ardoise md:hidden">{t("phone.neutral")}</p>
+      )}
+      <MobileActionBar id={cv.id} className="max-md:hidden" />
+      <PhoneEditorBar
+        id={cv.id}
+        view={phoneView}
+        next={
+          nextPart
+            ? `/app/career/cv/${cv.id}?partie=${nextPart.key}`
+            : `/app/career/cv/${cv.id}?vue=style`
+        }
+        fileName={fileName}
+        locked={!included}
+      />
     </>
   );
 }

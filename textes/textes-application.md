@@ -1868,6 +1868,17 @@ Conventions :
 | `appNav.search.subtitle` | Formations, offres et conversations |
 | `appNav.search.prompt` | Tapez un mot pour chercher une formation, une offre ou une conversation. |
 | `appNav.search.results` | {count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} » |
+| `appNav.search.phoneTitle` | Rechercher |
+| `appNav.search.back` | Retour à Pour moi |
+| `appNav.search.clear` | Effacer la recherche |
+| `appNav.search.tab.label` | Type de résultats |
+| `appNav.search.tab.all` | Tout |
+| `appNav.search.tab.jobs` | Offres |
+| `appNav.search.tab.courses` | Formations |
+| `appNav.search.seeJobs` | Voir les offres pour « {query} » |
+| `appNav.search.seeCourses` | Voir les formations pour « {query} » |
+| `appNav.search.recent.title` | Recherches récentes |
+| `appNav.search.recent.clear` | Effacer |
 | `appNav.unreadBadge.aria` | {count, plural, one {# élément non lu} other {# éléments non lus}} |
 | `appNav.collapse` | Réduire le menu |
 | `appNav.expand` | Déplier le menu |
@@ -2434,6 +2445,63 @@ Conventions :
 | `talent.profile.save` | Enregistrer |
 | `talent.profile.saved` | Profil enregistré. |
 | `talent.profile.autosaved` | Enregistré automatiquement |
+| `talent.profile.phone.title` | Mon profil |
+| `talent.profile.phone.back` | Retour à Mon espace |
+| `talent.profile.phone.backProfile` | Retour à mon profil |
+| `talent.profile.phone.photo.change` | Changer la photo |
+| `talent.profile.phone.photo.title` | Photo de profil |
+| `talent.profile.phone.photo.close` | Fermer |
+| `talent.profile.phone.photo.take` | Prendre une photo |
+| `talent.profile.phone.photo.choose` | Choisir dans la galerie |
+| `talent.profile.phone.photo.remove` | Retirer la photo |
+| `talent.profile.phone.photo.never` | Jamais utilisée pour le matching. |
+| `talent.profile.phone.photo.zoom` | Agrandir la photo |
+| `talent.profile.phone.photo.cancel` | Annuler |
+| `talent.profile.phone.photo.save` | Enregistrer la photo |
+| `talent.profile.phone.photo.empty` | Choisissez ou prenez une photo pour la recadrer. |
+| `talent.profile.phone.photo.drag` | Faites glisser la photo pour la centrer. |
+| `talent.profile.phone.photo.error.type` | Ce fichier n'est pas une image JPEG, PNG ou WebP. |
+| `talent.profile.phone.photo.error.size` | Cette image est trop lourde. Essayez-en une autre. |
+| `talent.profile.phone.photo.error.photo` | La photo n'a pas pu être envoyée. Réessayez. |
+| `talent.profile.phone.photo.saved` | Photo enregistrée. |
+| `talent.profile.phone.photo.removed` | Photo retirée. |
+| `talent.profile.phone.build.title` | Construire mon profil |
+| `talent.profile.phone.build.count` | {done, plural, one {# étape} other {# étapes}} sur {total} |
+| `talent.profile.phone.build.add` | Ajouter |
+| `talent.profile.phone.build.done` | Fait |
+| `talent.profile.phone.build.step.photo` | Photo |
+| `talent.profile.phone.build.step.headline` | Titre et métier visé |
+| `talent.profile.phone.build.step.bio` | Bio |
+| `talent.profile.phone.build.step.experiences` | Expériences |
+| `talent.profile.phone.build.step.skills` | Compétences |
+| `talent.profile.phone.build.step.education` | Formation |
+| `talent.profile.phone.headline.label` | Titre |
+| `talent.profile.phone.headline.placeholder` | Ex. : Analyste de données |
+| `talent.profile.phone.bio.label` | Bio |
+| `talent.profile.phone.bio.hint` | ce que les recruteurs lisent en premier |
+| `talent.profile.phone.bio.placeholder` | En deux ou trois phrases : ce que vous faites et ce que vous cherchez. |
+| `talent.profile.phone.bio.counter` | {count} / {max} |
+| `talent.profile.phone.bio.ai` | M'aider à l'écrire |
+| `talent.profile.phone.bio.aiSoon` | Bientôt disponible |
+| `talent.profile.phone.status.saved` | Enregistré |
+| `talent.profile.phone.status.saving` | Enregistrement… |
+| `talent.profile.phone.status.error` | Non enregistré, réessayez |
+| `talent.profile.phone.status.idle` | Enregistré |
+| `talent.profile.phone.rows.label` | Parties du profil |
+| `talent.profile.phone.rows.experiences` | Expériences |
+| `talent.profile.phone.rows.experiencesCount` | {count, plural, =0 {Ajouter un poste} one {# poste} other {# postes}} |
+| `talent.profile.phone.rows.education` | Formation |
+| `talent.profile.phone.rows.educationCount` | {count, plural, =0 {Ajouter un diplôme} one {# diplôme} other {# diplômes}} |
+| `talent.profile.phone.rows.skills` | Compétences |
+| `talent.profile.phone.rows.skillsCount` | {count, plural, =0 {Ajouter une compétence} one {# compétence} other {# compétences}} |
+| `talent.profile.phone.rows.languages` | Langues |
+| `talent.profile.phone.rows.languagesEmpty` | Ajouter une langue |
+| `talent.profile.phone.rows.place` | Lieu et préférences |
+| `talent.profile.phone.rows.placeEmpty` | Ajouter vos préférences |
+| `talent.profile.phone.rows.identity` | Identité |
+| `talent.profile.phone.rows.visibility` | Visibilité |
+| `talent.profile.phone.rows.import` | Importer mon CV |
+| `talent.profile.phone.preview` | Voir mon profil côté recruteur |
 | `talent.profile.unsaved` | Modifications non enregistrées |
 | `talent.profile.edit` | Modifier |
 | `talent.profile.add` | Ajouter |
@@ -4097,6 +4165,45 @@ Conventions :
 | `career.cv.toolbar.count` | {count, plural, one {# CV} other {# CV}} |
 | `career.cv.summary.counter` | {count} / {max} |
 | `career.cv.summary.hint` | 3 à 4 lignes conseillées |
+| `career.cv.phone.listTitle` | Mes CV |
+| `career.cv.phone.listBack` | Retour à Career |
+| `career.cv.phone.create` | Créer un CV |
+| `career.cv.phone.pdf` | PDF |
+| `career.cv.phone.preparing` | PDF… |
+| `career.cv.phone.preparingLabel` | Préparation du PDF… |
+| `career.cv.phone.downloaded` | CV téléchargé · sans mention Jumanly |
+| `career.cv.phone.shared` | CV prêt à partager · sans mention Jumanly |
+| `career.cv.phone.pdfError` | Le PDF n'a pas pu être préparé. Réessayez. |
+| `career.cv.phone.updatedShort` | {date} |
+| `career.cv.phone.sheet.title` | Créer un CV |
+| `career.cv.phone.sheet.close` | Fermer |
+| `career.cv.phone.sheet.legend` | Point de départ |
+| `career.cv.phone.sheet.profile` | À partir de mon profil |
+| `career.cv.phone.sheet.profileHint` | Recommandé |
+| `career.cv.phone.sheet.import` | Importer un CV existant |
+| `career.cv.phone.sheet.importHint` | Collez le texte de votre CV |
+| `career.cv.phone.sheet.blank` | Page vierge |
+| `career.cv.phone.sheet.blankHint` | Tout à remplir |
+| `career.cv.phone.sheet.name` | Nom du CV |
+| `career.cv.phone.sheet.submit` | Créer et ouvrir |
+| `career.cv.phone.sheet.limit` | Vous avez atteint {max} CV. Supprimez-en un pour en créer un autre. |
+| `career.cv.phone.back` | Retour à Mes CV |
+| `career.cv.phone.tabs` | Vues du CV |
+| `career.cv.phone.tab.content` | Contenu |
+| `career.cv.phone.tab.style` | Mise en forme |
+| `career.cv.phone.tab.preview` | Aperçu |
+| `career.cv.phone.parts` | Sections du CV |
+| `career.cv.phone.part.info` | Infos |
+| `career.cv.phone.next` | Section suivante |
+| `career.cv.phone.saved` | Enregistré |
+| `career.cv.phone.share` | Partager |
+| `career.cv.phone.download` | Télécharger le PDF |
+| `career.cv.phone.neutral` | Le CV téléchargé ne porte ni logo ni mention Jumanly. |
+| `career.cv.phone.missions` | Missions et résultats |
+| `career.cv.phone.present` | aujourd'hui |
+| `career.cv.phone.empty` | Rien ici pour l'instant. Ajoutez-le dans votre profil, puis mettez ce CV à jour. |
+| `career.cv.phone.refresh` | Mettre à jour depuis mon profil |
+| `career.cv.phone.hidden` | Masquée sur le CV |
 
 ### Document CV · Titres et niveaux imprimés sur le CV
 
@@ -8309,6 +8416,11 @@ Conventions :
 | `notifications.group.yesterday` | Hier |
 | `notifications.group.thisWeek` | Cette semaine |
 | `notifications.group.earlier` | Plus tôt |
+| `notifications.priority.important` | Important |
+| `notifications.priority.forYou` | Pour vous |
+| `notifications.priority.jumanly` | Jumanly |
+| `notifications.preferences` | Préférences de notification |
+| `notifications.back` | Retour à Pour moi |
 | `notifications.empty.text` | Vous êtes à jour. Aucune notification. |
 | `notifications.empty.unread` | Aucune notification non lue. |
 | `notifications.loading` | Chargement des notifications… |

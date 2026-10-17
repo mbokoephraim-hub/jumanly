@@ -29,7 +29,7 @@ export type CvRow = {
 /** Entrance of a block: rises 14 px and fades in, 80 ms after the previous one (§ 3). */
 export const enter = (index: number) => ({ style: { "--i": index } as CSSProperties });
 
-async function templateNamer() {
+export async function templateNamer() {
   const d = dynamic(await getTranslations("career.cv"));
   return (template: CvTemplate) => d(`template.name.${templateKey(template.id)}`);
 }
