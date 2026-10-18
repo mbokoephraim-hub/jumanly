@@ -233,3 +233,11 @@ Ce qui existe déjà et reste tel quel au MVP : Learning Room, reprise, vidéo a
 5. **Fournisseur Mobile Money** à choisir (aucun n'est branché aujourd'hui).
 
 Une fois ces choix faits, l'étape suivante est de reprendre la refonte mobile écran par écran sur cette liste de 20 pages, puis de rédiger les prompts Claude Code dans l'ordre du § 7.
+
+### Décisions d'Ephraïm (18/10/2026)
+
+1. Navigation Pour moi · Offres · Orbi (centre) · Apprendre · Suivi : **validée**.
+2. Nom de l'assistant : **Orbi**.
+3. Choix du forfait : **après l'onboarding**, Free par défaut.
+4. Offres externes au lancement : en attente (explication donnée).
+5. Mobile Money : fournisseurs ajoutés progressivement ; le paiement simulé ne doit pas partir en production.
