@@ -7,7 +7,7 @@ def bi(nom, extra='', cls=''):
     return f'<a class="bi {cls}" aria-label="{D[nom][0]}">{ic(nom, "s")}{extra}</a>'
 
 def nav(actif='accueil', role='talent'):
-    items = [('accueil','Accueil'),('former','Se former'),None,('opportunites','Opportunités'),('carriere','Carrière')] if role == 'talent' else \
+    items = [('accueil','Pour moi'),('opportunites','Offres'),None,('former','Apprendre'),('candidature','Suivi')] if role == 'talent' else \
             [('aujourdhui','Aujourd’hui'),('offre','Offres'),None,('candidats','Candidats'),('agenda','Agenda')]
     h = ''
     for it in items:
@@ -73,9 +73,9 @@ def formation(ban, tg, titre, meta, dur, cls='', barre=None):
 
 def piliers(court=False):
     return f'''<div class="piliers">
-<div class="pi p1"><span class="cases">{ic("former","s")}</span><b>Se former</b><span>2 sur 5 modules</span><span class="j"><i style="width:40%"></i></span></div>
-<div class="pi p2"><span class="cases">{ic("carriere","s")}</span><b>Carrière</b><span>Profil à 70 %</span><span class="j"><i style="width:70%"></i></span></div>
-<div class="pi p3"><span class="cases">{ic("opportunites","s")}</span><b>Opportunités</b><span>3 candidatures</span><span class="j"><i style="width:55%"></i></span></div></div>'''
+<div class="pi p1"><span class="cases">{ic("former","s")}</span><b>Apprendre</b><span>2 sur 5 modules</span><span class="j"><i style="width:40%"></i></span></div>
+<div class="pi p2"><span class="cases">{ic("carriere","s")}</span><b>Profil et CV</b><span>Profil à 70 %</span><span class="j"><i style="width:70%"></i></span></div>
+<div class="pi p3"><span class="cases">{ic("opportunites","s")}</span><b>Offres</b><span>3 candidatures</span><span class="j"><i style="width:55%"></i></span></div></div>'''
 
 def groupe3():
     def ln(lg, cls, t, e, s):
@@ -91,7 +91,7 @@ SURF = ''.join([
 <div class="anat"><div><b>Pilule</b>Rayon 40 px, flottante à 12 px des bords.</div><div><b>Verre</b>Blanc à 80 %, flou, filet lumineux en haut.</div>
 <div><b>Ombre</b>Large et douce, jamais un trait noir.</div><div><b>Rond central</b>Orbi déborde, entouré d’un halo vert clair.</div></div>''', 'l',
        'Repris de votre image de référence pour la forme et la matière, pas pour les icônes.'),
-    pl('Même matière : bandeau', f'''<div class="verre fort bandeau"><span class="ic-r">{ic("valider","s")}</span><div class="t"><b>Candidature envoyée à Baobab Fintech</b><span>11:12 · Suivez-la dans Opportunités</span></div></div>'''),
+    pl('Même matière : bandeau', f'''<div class="verre fort bandeau"><span class="ic-r">{ic("valider","s")}</span><div class="t"><b>Candidature envoyée à Baobab Fintech</b><span>11:12 · Suivez-la dans Suivi</span></div></div>'''),
     pl('Même matière : carrés et options', f'''<div class="aides"><div class="ai p1"><span class="cases">{ic("cv","s")}</span><b>Améliorer mon CV</b></div><div class="ai p2"><span class="cases">{ic("entretien","s")}</span><b>Préparer un entretien</b></div></div>
 <div class="verre liste"><div class="li"><span class="cases c1">{ic("former","s")}</span><div class="t"><b>Mes certificats</b></div>{ic("suivant")}</div><div class="li"><span class="cases c3">{ic("portefeuille","s")}</span><div class="t"><b>Paiement</b><span>Mobile Money</span></div>{ic("suivant")}</div></div>'''),
     pl('Même matière : recherche et puces', f'''<div class="verre rech">{ic("recherche","s")}<span>Rechercher une offre, une formation</span><a class="f">{ic("filtres","s")}</a></div>
@@ -110,12 +110,12 @@ PAL = '<div class="pal">' + ''.join(f'<div><i style="background:{c}"></i><b>{n}<
     ('#EEE8DE','Crème','Fond clair'), ('#0B1A1F','Nuit','Fond sombre'), ('#0F3F37','Sapin','Texte, bouton principal'),
     ('#A6F26B','Lime','Actif, réussite, Orbi'),
     ('linear-gradient(135deg,#D4FA9E,#A6F26B 48%,#5FE0B8)','Dégradé accent','Postuler, Orbi, interrupteur, puce active'),
-    ('linear-gradient(150deg,#ECFCD8,#C3F38E)','Se former','Pilier 1'), ('linear-gradient(150deg,#E2F8F0,#93E8CD)','Carrière','Pilier 2'),
-    ('linear-gradient(150deg,#FFF3D6,#F8CF73)','Opportunités','Pilier 3'), ('linear-gradient(135deg,#D4FA9E,#9BE9CF 55%,#CDE7F7)','Profil','Couverture du profil'),
+    ('linear-gradient(150deg,#ECFCD8,#C3F38E)','Apprendre','Pilier 1'), ('linear-gradient(150deg,#E2F8F0,#93E8CD)','Profil et CV','Pilier 2'),
+    ('linear-gradient(150deg,#FFF3D6,#F8CF73)','Offres','Pilier 3'), ('linear-gradient(135deg,#D4FA9E,#9BE9CF 55%,#CDE7F7)','Profil','Couverture du profil'),
     ('#E25C4B','Corail','Notification urgente, erreur')]) + '</div>'
 REGLES = '<div class="regles">' + ''.join(f'<div><b>{t}</b>{c}</div>' for t, c in [
     ('Dégradés clairs seulement', 'Du Lime vers le Menthe, de l’Ambre clair vers l’Ambre. Jamais de dégradé vert sombre.'),
-    ('Un pilier, une couleur', 'Se former en Lime, Carrière en Menthe, Opportunités en Ambre, partout dans l’application.'),
+    ('Un pilier, une couleur', 'Apprendre en Lime, Profil et CV en Menthe, Offres en Ambre, partout dans l’application.'),
     ('Moins de blanc', 'Fond Crème légèrement teinté en haut, cartes en verre, bannières colorées sur les offres et les formations.'),
     ('Sombre = Nuit', 'Fond Nuit, cartes en verre sombre, bouton principal Lime avec texte Sapin.')]) + '</div>'
 
@@ -129,7 +129,7 @@ NAVS = ''.join([
 
 # ---------- 5. En-têtes et recherche ----------
 TETES = ''.join([
-    pl('Page principale', tete("Opportunités"), note='Titre en grand ; notifications, messages, avatar (Compte).'),
+    pl('Page principale', tete("Offres"), note='Titre en grand ; notifications, messages, avatar (Compte).'),
     pl('Page secondaire', f'<div class="tete sec">{bi("retour")}<h1>Analyste de données junior</h1>{bi("partager")}</div>'),
     pl('Recruteur', f'{tete("Aujourd’hui")}<span class="verre org"><span class="lg">BF</span>Baobab Fintech{ic("suivant","xs")}</span>'),
     pl('Recherche : saisie', f'''<div class="verre rech focus">{ic("recherche","s")}<span>analyste<span class="cur"></span></span><a class="x">{ic("fermer","xs")}</a></div>
@@ -154,7 +154,7 @@ OPTS = ''.join([
 <div class="verre ch"><span class="radio"></span><div class="t"><b>Me former</b><span>Parcours d’employabilité d’abord</span></div></div>
 <div class="verre ch"><span class="radio"></span><div class="t"><b>Changer de voie</b><span>Orbi m’aide à choisir</span></div></div></div>'''),
     pl('Choix multiples et segments', f'''<div class="puces"><span class="puce on">{ic("valider","xs")}Power BI</span><span class="puce on">{ic("valider","xs")}SQL</span><span class="puce">Excel</span><span class="puce">{ic("plus","xs")}Autre</span></div>
-<div class="seg"><span class="on">Pour vous</span><span>Enregistrées</span><span>Candidatures<small>3</small></span></div>
+<div class="seg"><span class="on">Pour vous</span><span>Récentes</span><span>Enregistrées</span></div>
 <div class="champ"><label>E-mail</label><div class="verre saisie err">grace.mbuyi@</div><span class="aide err">Il manque la fin de l’adresse.</span></div>'''),
     pl('Feuille d’actions et menu', f'''<div class="verre fort feuille"><div class="poignee"></div><h3>Mettre à jour mon profil</h3>
 <div class="li"><span class="cases c2">{ic("cv","s")}</span><div class="t"><b>Importer un CV</b><span>PDF ou photo</span></div>{ic("suivant")}</div>
@@ -181,7 +181,7 @@ CARTES = ''.join([
     pl('Offre avec bannière', offre('baobab','BF','sap','Analyste de données junior','Baobab Fintech','Kinshasa',['CDI','Hybride'],86) + offre('mwinda','ME','amb','Analyste énergie solaire','Mwinda Énergie','Kinshasa',['CDI'],79,True),
        note='Bannière de l’entreprise, logo rond qui la chevauche. Trois offres tiennent dans un écran.'),
     pl('Formation avec bannière', formation('cv','Employabilité','Écrire un CV qui décroche un entretien','Module 2 sur 5','8 min', barre=40)),
-    pl('Groupe de trois (Accueil)', groupe3()),
+    pl('Groupe de trois (Pour moi)', groupe3()),
 ])
 
 # ---------- 9. Orbi ----------
@@ -226,13 +226,13 @@ A_ACC = phone(f'''{tete("Bonjour, Grâce")}
 <div class="verre carte etape compacte"><div class="corps"><span class="anneau"><b>70 %</b></span><div style="flex:1"><span class="k"><i></i>Prochaine étape</span><h3>Ajoutez 2 compétences</h3></div><a class="bt p s">{ic("suivant","xs")}</a></div></div>
 {piliers()}
 {groupe3()}''', 'accueil')
-A_OPP = phone(f'''{tete("Opportunités")}
+A_OPP = phone(f'''{tete("Offres")}
 <div class="verre rech">{ic("recherche","s")}<span style="color:var(--texte)">Analyste · Kinshasa · CDI</span><a class="f">{ic("filtres","s")}<b>2</b></a></div>
-<div class="seg"><span class="on">Pour vous</span><span>Enregistrées</span><span>Candidatures<small>3</small></span></div>
+<div class="seg"><span class="on">Pour vous</span><span>Récentes</span><span>Enregistrées</span></div>
 {offre('baobab','BF','sap','Analyste de données junior','Baobab Fintech','Kinshasa',['CDI','Hybride'],86)}
 {offre('mwinda','ME','amb','Analyste énergie solaire','Mwinda Énergie','Kinshasa',['CDI'],79,True)}
 {offre('fleuve','FB','mer','Chargée d’études marketing','Fleuve Banque','Kinshasa',['CDI'],72)}''', 'opportunites')
-A_FOR = phone(f'''{tete("Se former")}
+A_FOR = phone(f'''{tete("Apprendre")}
 <div class="verre rech">{ic("recherche","s")}<span>Rechercher une formation</span><a class="f">{ic("filtres","s")}</a></div>
 {formation('cv','Reprendre','Écrire un CV qui décroche un entretien','Module 2 sur 5 · Employabilité','8 min', barre=40)}
 <div class="sec-t"><h2>Parcours d’employabilité</h2><a>Tout voir</a></div>
@@ -258,8 +258,8 @@ SECTIONS = [
  ('s8','8 · Cartes','Bannières pour les offres et les formations, piliers en couleur.', [CARTES], True),
  ('s9','9 · Orbi','Sans dégradé sombre.', [ORBI], False),
  ('s10','10 · Profil','Mon profil et le profil vu par une autre personne.', [ecrans((P_MOI,'Mon profil','Couverture, objectif, complétude, réalisations.'),(P_AUTRE,'Le profil d’un autre','Se connecter ; message seulement après connexion.')), P_DETAILS], True),
- ('s11','11 · Aperçu en mode clair','Accueil, Opportunités (trois à l’écran), Se former, Orbi.', [ecrans((A_ACC,'Accueil','Prochaine étape, trois piliers, trois opportunités.'),(A_OPP,'Opportunités','Trois offres avec bannière à l’écran.'),(A_FOR,'Se former','Reprendre, puis les parcours avec bannière.'),(A_ORB,'Orbi','Quatre aides en couleur, la conversation.'))], True),
- ('s12','12 · Aperçu en mode sombre','Fond Nuit, mêmes couleurs de piliers, bouton principal Lime.', [ecrans((sombre(A_ACC),'Accueil',''),(sombre(A_OPP),'Opportunités',''),(sombre(A_FOR),'Se former',''),(sombre(P_AUTRE),'Profil d’un autre',''))], True),
+ ('s11','11 · Aperçu en mode clair','Pour moi, Offres (trois à l’écran), Apprendre, Orbi.', [ecrans((A_ACC,'Pour moi','Prochaine étape, trois piliers, trois opportunités.'),(A_OPP,'Offres','Trois offres avec bannière à l’écran.'),(A_FOR,'Apprendre','Reprendre, puis les parcours avec bannière.'),(A_ORB,'Orbi','Quatre aides en couleur, la conversation.'))], True),
+ ('s12','12 · Aperçu en mode sombre','Fond Nuit, mêmes couleurs de piliers, bouton principal Lime.', [ecrans((sombre(A_ACC),'Pour moi',''),(sombre(A_OPP),'Offres',''),(sombre(A_FOR),'Apprendre',''),(sombre(P_AUTRE),'Profil d’un autre',''))], True),
 ]
 som = ''.join(f'<li><a href="#{i}">{t.split(" · ")[1]}{"<span class=nouv>v2</span>" if n else ""}</a></li>' for i, t, _, _, n in SECTIONS)
 corps = ''.join(bloc(i, t, d, *p) for i, t, d, p, _ in SECTIONS)
@@ -268,7 +268,7 @@ html = f'''<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>{open(H + '/fondations.css').read()}</style></head><body>
 <header class="couv"><span class="k">{orbi(22)}Jumanly · refonte mobile · étape 1</span><h1>Les fondations</h1>
-<p>Version 2 du 18 octobre 2026, d’après vos retours : identité de la barre appliquée partout, icône Carrière, bannières, piliers en couleur, profil, modes clair et sombre. Contenus fictifs.</p>
+<p>Version 3 du 18 octobre 2026 : barre Pour moi · Offres · Orbi · Apprendre · Suivi validée après l’audit. Version 2 : identité de la barre appliquée partout, icône Carrière, bannières, piliers en couleur, profil, modes clair et sombre. Contenus fictifs.</p>
 <ul class="som">{som}</ul></header>{corps}<p class="fin">Jumanly · Learn. Grow. Connect.</p></body></html>'''
 out = os.path.join(H, '..', 'refonte-mobile-fondations.html')
 open(out, 'w').write(html); print(out, len(html))
