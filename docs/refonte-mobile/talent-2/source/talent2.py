@@ -14,11 +14,11 @@ CSS2 = '''
 .cvc .mini i{height:4px;border-radius:2px;background:#DCE5E1}.cvc .mini i:first-child{background:#0F3F37;width:70%}
 .cvc .t{flex:1}.cvc .t b{display:block;font-size:14px}.cvc .t span{font-size:12px;color:var(--texte2)}
 .cvc.on{box-shadow:0 0 0 2px var(--sapin),var(--verre)}.sombre .cvc.on{box-shadow:0 0 0 2px var(--lime),var(--verre)}
-.adp{font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--lime-c)}
+.cvc .t .adp{display:inline-block;margin-top:4px;color:var(--texte);font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--lime-c)}
 .pj{display:flex;gap:12px;align-items:center;padding:12px 14px}
 .pj .cases{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:var(--g-accomp);flex:none}
 .pj .t{flex:1}.pj .t b{display:block;font-size:13.5px}.pj .t span{font-size:12px;color:var(--texte2)}
-.ajout{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:22px;border:1.5px dashed var(--piste);font-size:13.5px;font-weight:600;color:var(--texte2)}
+.ajout{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:22px;border:1.5px dashed rgba(15,63,55,.28);font-size:13.5px;font-weight:600;color:var(--texte)}.sombre .ajout{border-color:rgba(255,255,255,.25)}
 .recap .li{min-height:52px}
 .bas-f{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:14px 16px 30px;display:flex;gap:10px;border-radius:28px 28px 0 0}
 .bas-f .bt{flex:1}
@@ -33,6 +33,7 @@ CSS2 = '''
 .grp-t b{font-size:11px;padding:2px 7px;border-radius:999px;background:var(--zone);color:var(--texte)}
 .cd{display:flex;flex-direction:column;gap:10px;padding:14px 16px}
 .cd .haut{display:flex;gap:12px;align-items:center}.cd .haut .t{flex:1;min-width:0}.cd .haut b{display:block;font-size:14px}.cd .haut span{font-size:12px;color:var(--texte2)}
+.cd .haut .t{display:flex;flex-direction:column}.cd .t .st{display:inline-block;align-self:flex-start;margin-top:6px;font-style:normal;color:var(--texte)}.cd .t .st.ret{color:var(--texte2)}.cd .t .st.ent{color:#0F3F37}
 .st{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}
 .st.en{background:var(--ciel-c)}.st.pre{background:var(--menthe-c)}.st.ent{background:var(--g-accent);color:#0F3F37}.st.env{background:var(--zone)}.st.nr{background:var(--corail-c)}.st.ret{background:var(--zone);color:var(--texte2)}
 .act{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:var(--ambre-c);font-size:12.5px;font-weight:600}
@@ -53,7 +54,7 @@ CSS2 = '''
 .creneaux span b{display:block;font-size:13.5px}.creneaux span.on{background:#0F3F37;color:#fff}
 .sombre .creneaux span{background:rgba(255,255,255,.08)}.sombre .creneaux span.on{background:var(--lime);color:#0F3F37}
 .inv .bts{flex-wrap:nowrap}
-.lignes .li{min-height:56px}
+.lignes .li{min-height:56px}.lignes .li .t span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .brief{display:flex;flex-direction:column;gap:12px;padding:16px}
 .brief h4{font-size:15px;font-weight:600}
 .opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
@@ -68,6 +69,18 @@ CSS2 = '''
 .fb-c h4{font-size:15px;font-weight:600}
 .fb-c .pt{display:flex;gap:10px;font-size:13px}.fb-c .pt i{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center}
 .fb-c .pt.ok i{background:var(--lime-c)}.fb-c .pt.ko i{background:var(--ambre-c)}.fb-c .pt i .ic{width:12px;height:12px}
+.rebond{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:18px;background:var(--g-former)}
+.rebond b{font-size:13.5px}.rebond span{font-size:12px;color:var(--texte2)}.rebond .bt{align-self:flex-start;margin-top:4px}
+.sombre .rebond span{color:var(--texte2)}
+.hm{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.nl{min-width:20px;height:20px;border-radius:10px;background:var(--lime);color:#0F3F37;font-size:11px;font-weight:700;display:grid;place-items:center}
+.li.nv{background:linear-gradient(90deg,rgba(166,242,107,.14),transparent 70%)}
+.jour{align-self:center;font-size:11.5px;font-weight:600;color:var(--texte2);padding:4px 12px;border-radius:999px;background:var(--zone)}
+.b-r{align-self:flex-start;max-width:82%;background:var(--plein);box-shadow:var(--verre);border-radius:24px 24px 24px 8px;padding:12px 16px;font-size:14px}
+.b-cr{padding:14px;display:flex;flex-direction:column;gap:10px;max-width:92%}
+.b-cr .bt{flex:none}.b-cr .k{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700}
+.b-cr .creneaux span{background:var(--zone)}.b-cr .creneaux span.on{background:#0F3F37;color:#fff}.sombre .b-cr .creneaux span.on{background:var(--lime);color:#0F3F37}
+.b-f{align-self:flex-end;display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:20px;background:var(--lime-c);font-size:12px}
+.b-f b{display:block;font-size:13px}.b-f span{color:var(--texte2)}
 '''
 
 def tete_f(titre, gauche='retour', droite='fermer'):
@@ -75,7 +88,7 @@ def tete_f(titre, gauche='retour', droite='fermer'):
 def pas(n, tot=3): return '<div class="pas">' + ''.join(f'<i class="{"ok" if k < n else ""}"></i>' for k in range(tot)) + '</div>'
 def cvc(t, s, on=False, adp=False):
     a = '<span class="adp">Adapté à l’offre</span>' if adp else ''
-    return f'<div class="verre cvc {"on" if on else ""}"><span class="mini"><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>{t}</b><span>{s}</span></div>{a}<span class="radio" style="{"box-shadow:inset 0 0 0 7px var(--sapin)" if on else ""}"></span></div>'
+    return f'<div class="verre cvc {"on" if on else ""}"><span class="mini"><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>{t}</b><span>{s}</span>{a}</div><span class="radio" style="{"box-shadow:inset 0 0 0 7px var(--sapin)" if on else ""}"></span></div>'
 OFF_L = '<div class="verre cd min"><div class="haut"><span class="lg-e sap">BF</span><div class="t"><b>Analyste de données junior</b><span>Baobab Fintech · Kinshasa</span></div></div></div>'
 
 # 1. Étape 1 : le CV
@@ -94,7 +107,7 @@ C2 = phone(f'''{tete_f("Postuler")}{pas(2)}<span class="pas-t">Étape 2 sur 3 ·
 <div class="verre pj"><span class="cases">{ic("document","s")}</span><div class="t"><b>Lettre de motivation</b><span>Rédigée le 18 oct.</span></div><a class="bi">{ic("modifier","s")}</a></div>
 <div class="verre pj"><span class="cases" style="background:var(--g-former)">{ic("certificat","s")}</span><div class="t"><b>Attestation SQL · Jumanly</b><span>Obtenue le 4 oct.</span></div><a class="bi">{ic("supprimer","s")}</a></div>
 <a class="ajout">{ic("plus","s")}Ajouter un document</a>
-<div class="verre carte sugg">{orbi(36)}<div class="t"><small>Orbi peut aider</small><b>Rédiger une lettre pour cette offre, à relire avant l’envoi.</b></div></div>''', avec_nav=False,
+<div class="verre carte sugg">{orbi(36)}<div class="t"><small>Orbi peut aider</small><b>Rédiger une lettre pour cette offre, à relire avant l’envoi.</b><div><a class="bt sec s">Rédiger avec Orbi</a></div></div></div>''', avec_nav=False,
  bas=f'<div class="verre fort bas-f"><a class="bt sec m">Passer</a><a class="bt p pl">Continuer</a></div>')
 
 # 3. Étape 3 : vérifier et envoyer
@@ -117,7 +130,7 @@ C4 = phone(f'''<span class="rond-ok">{ic("valider")}</span>
 # 5. Suivi, groupé par situation
 def cd(lg, cls, t, e, st, stc, act=None):
     a = f'<div class="act">{ic("horloge","xs")}<span>{act}</span>{ic("suivant","xs")}</div>' if act else ''
-    return f'<div class="verre cd"><div class="haut"><span class="lg-e {cls}">{lg}</span><div class="t"><b>{t}</b><span>{e}</span></div><span class="st {stc}">{st}</span></div>{a}</div>'
+    return f'<div class="verre cd"><div class="haut"><span class="lg-e {cls}">{lg}</span><div class="t"><b>{t}</b><span>{e}</span><em class="st {stc}">{st}</em></div></div>{a}</div>'
 SUIVI = phone(f'''{tete("Suivi")}
 <div class="seg"><span class="on">En cours<small>4</small></span><span>Terminées</span></div>
 <div class="grp-t">À faire <b>1</b></div>
@@ -180,17 +193,61 @@ FB = phone(f'''{tete_f("Votre retour", droite=None)}
 <div class="verre mg"><span class="vign">{FORM["numerique"]}</span><div class="t"><small>Pour progresser</small><b>SQL : jointures et sous-requêtes</b><span>45 min</span></div>{ic("suivant","s")}</div>''', avec_nav=False,
  bas=f'<div class="verre fort bas-f"><a class="bt sec m">Recommencer</a><a class="bt p pl">Terminer</a></div>')
 
+# 5 bis. Suivi, candidatures terminées (dont non retenue)
+TERM = phone(f"""{tete("Suivi")}
+<div class="seg"><span>En cours<small>4</small></span><span class="on">Terminées</span></div>
+<div class="verre cd"><div class="haut"><span class="lg-e kiv">KT</span><div class="t"><b>Analyste junior</b><span>Kivu Télécom · 12 oct.</span><em class="st nr">Non retenue</em></div></div>
+<div class="rebond"><b>Ce n’est pas la fin du parcours.</b><span>3 offres proches de celle-ci vous attendent.</span><a class="bt sec s">Voir les offres</a></div></div>
+{cd('ME','amb','Stage data','Mwinda Énergie · 2 oct.','Offre clôturée','ret')}
+{cd('FB','mer','Assistante marketing','Fleuve Banque · 28 sept.','Retirée','ret')}""", 'candidature')
+
+# 11. Messages
+def conv(lg, cls, nom, msg, h, nl=False):
+    n = '<span class="nl">1</span>' if nl else ''
+    return f'<div class="li"><span class="lg-e {cls}" style="width:44px;height:44px">{lg}</span><div class="t"><b>{nom}</b><span>{msg}</span></div><div class="hm"><span class="v">{h}</span>{n}</div></div>'
+MSGS = phone(f"""{tete_f("Messages", droite=None)}
+<div class="verre rech">{ic("recherche","s")}<span>Rechercher une conversation</span></div>
+<div class="verre liste lignes">
+{conv('BF','sap','Nadia K. · Baobab Fintech','Merci Grâce, voici les créneaux proposés…','10:12',True)}
+{conv('ME','amb','Mwinda Énergie','Pouvez-vous envoyer votre attestation SQL ?','Hier')}
+{conv('J','sap','Équipe Jumanly','Bienvenue sur Jumanly. Une question ? Écrivez-nous.','Lun.')}</div>
+<div class="gar">{ic("confidentialite","s")}Vos conversations avec les recruteurs. Orbi n’y a pas accès.</div>""", avec_nav=False)
+
+CONV = phone(f"""<div class="tete-f">{bi("retour")}<span class="lg-e sap" style="width:40px;height:40px;font-size:12px">BF</span><div style="flex:1"><b style="display:block;font-size:15px">Nadia K.</b><span style="font-size:12px;color:var(--texte2)">Baobab Fintech · recruteuse</span></div>{bi("plus-options")}</div>
+<div class="jour">Aujourd’hui</div>
+<div class="b-r">Bonjour Grâce, votre profil nous intéresse. Voici trois créneaux pour un entretien en visio.</div>
+<div class="verre b-cr"><span class="k">{ic("agenda","xs")}Créneaux proposés</span><div class="creneaux"><span class="on"><b>Mar. 22</b>10:00</span><span><b>Mar. 22</b>14:30</span><span><b>Mer. 23</b>09:00</span></div><a class="bt p m pl">Confirmer mardi 10:00</a></div>
+<div class="bulle-u">Merci beaucoup, je confirme mardi à 10 h.</div>
+<div class="b-f">{ic("document","s")}<div><b>Attestation_SQL.pdf</b><span>Envoyée · 240 Ko</span></div></div>""", avec_nav=False,
+ bas=f"""<div style="position:absolute;left:12px;right:12px;bottom:26px;z-index:4"><div class="verre fort compo"><a class="bi" style="background:none">{ic("plus","s")}</a><span>Écrire un message</span><a class="bi env">{ic("envoyer","s")}</a></div></div>""")
+
+# 12. Notifications
+def nt(cls, icn, t, s_, h, nv=False):
+    return f'<div class="li {"nv" if nv else ""}"><span class="cases {cls}">{ic(icn,"s")}</span><div class="t"><b>{t}</b><span>{s_}</span></div><span class="v">{h}</span></div>'
+NOTIFS = phone(f"""{tete_f("Notifications", droite="reglages")}
+<div class="grp-t">Aujourd’hui</div>
+<div class="verre liste lignes">
+{nt('c2','entretien','Invitation à un entretien','Baobab Fintech · choisissez un créneau','10:12',True)}
+{nt('c3','profil','Votre profil a été consulté','Fleuve Banque · Chargée d’études','08:40',True)}</div>
+<div class="grp-t">Cette semaine</div>
+<div class="verre liste lignes">
+{nt('c3','candidature','Présélectionnée','Mwinda Énergie · Analyste énergie solaire','Mar.')}
+{nt('c1','certificat','Attestation obtenue','SQL : les bases','Lun.')}
+{nt('','document','Document demandé','Baobab Fintech · copie du diplôme','Lun.')}</div>""", avec_nav=False)
+
 ECR = [
  ('c1','1 · Postuler en 3 étapes','CV, documents, vérification. Brouillon enregistré à chaque étape. Gratuit, toujours.',
   [ecrans((C1,'Le CV','Le CV adapté à l’offre est proposé en premier.'),(C2,'Les documents','Facultatif. Orbi peut rédiger une lettre, à relire.'),(C3,'Vérifier et envoyer','Ce que verra le recruteur, en clair.'),(C4,'Confirmation','Deux suites seulement.'))]),
  ('c2','2 · Suivi','Les candidatures groupées par situation : ce qui demande une action d’abord.',
-  [ecrans((SUIVI,'En cours','Statuts réels : Envoyée, En examen, Présélectionnée, Entretien.'),)]),
+  [ecrans((SUIVI,'En cours','Statuts réels : Envoyée, En examen, Présélectionnée, Entretien.'),(TERM,'Terminées','Non retenue avec une suite concrète, offre clôturée, retirée.'))]),
  ('c3','3 · Détail d’une candidature','Un seul écran pour l’invitation, la préparation, l’historique, le dossier et les messages.',
   [ecrans((DET,'Haut de page','Choisir un créneau, préparer l’entretien, historique.'),(DET2,'Bas de page','Dossier envoyé, messages, document demandé, retrait.'))]),
  ('c4','4 · S’entraîner avec Orbi','Briefing, simulation, retour, au même endroit, lancé depuis la candidature.',
   [ecrans((BRIEF,'Briefing','Ce qu’il faut savoir, durée, écrit ou oral.'),(SIM,'Simulation','Une question à la fois, un conseil d’Orbi.'),(FB,'Retour','Points forts, à travailler, formation liée.'))]),
- ('c5','5 · Mode sombre','',
-  [ecrans((sombre(C3),'Vérifier et envoyer',''),(sombre(SUIVI),'Suivi',''),(sombre(DET),'Détail d’une candidature',''))]),
+ ('c6','5 · Messages et notifications','Ouverts depuis l’en-tête. La messagerie avec les recruteurs reste séparée d’Orbi.',
+  [ecrans((MSGS,'Messages','Conversations avec les recruteurs et l’équipe.'),(CONV,'Conversation','Créneaux, fichiers, réponse.'),(NOTIFS,'Notifications','Groupées par jour, les nouvelles en surbrillance.'))]),
+ ('c5','6 · Mode sombre','',
+  [ecrans((sombre(C3),'Vérifier et envoyer',''),(sombre(SUIVI),'Suivi',''),(sombre(DET),'Détail d’une candidature',''),(sombre(CONV),'Conversation',''))]),
 ]
 som = ''.join(f'<li><a href="#{i}">{t.split(" · ")[1]}</a></li>' for i, t, _, _ in ECR)
 corps = ''.join(bloc(i, t, d, *p) for i, t, d, p in ECR)

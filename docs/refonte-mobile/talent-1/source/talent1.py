@@ -5,7 +5,7 @@ H = os.path.dirname(os.path.abspath(__file__))
 exec(open(H + '/build.py').read())   # aides, icônes, bannières (régénère aussi les fondations)
 
 CSS = '''
-.phone.long{height:auto;min-height:844px}.phone.long .contenu{position:relative;inset:auto;margin-top:46px}
+.phone.long{height:auto;min-height:844px}.phone.long .contenu{position:relative;inset:auto;margin-top:0}
 .voile{position:absolute;inset:0;background:rgba(11,26,31,.38);z-index:6}
 .sheet{position:absolute;left:8px;right:8px;bottom:8px;z-index:7;max-height:86%;overflow:hidden;border-radius:34px;padding:10px 18px 18px;display:flex;flex-direction:column;gap:12px;background:var(--plein)}
 .sheet h3{font-size:18px;font-weight:600;letter-spacing:-.01em}
