@@ -2279,3 +2279,8 @@ toutes dans `docs/specifications.md`.
   bannière, trois offres visibles par écran ; piliers en couleur (Lime, Menthe, Ambre) ; dégradés clairs
   seulement ; Postuler avec l'icône sur la ligne du texte ; profil (le mien, vu par un autre) ; modes clair et
   sombre (Nuit).
+
+## 2026-10-18 · Audit de l'espace Talent (cahier « Jumanly Talent MVP 1.0 »)
+
+- Audit sans développement : docs/audit-talent/AUDIT-TALENT.md. 16 fonctionnalités confrontées au code, doublons (tableau-de-bord, espace, explorer, jobs/candidatures, learn/coach, bouton +), navigation recommandée Pour moi · Offres · Orbi · Apprendre · Suivi, 20 pages au lieu de 44, 5 parcours, MVP / P2 / P3.
+- En attente des décisions d'Ephraïm (§ 8) avant tout prompt d'implémentation.
