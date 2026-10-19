@@ -5,6 +5,7 @@ _r1 = open(H + '/recruteur1.py').read(); exec(_r1[:_r1.index('\nCHEMINS = [')]) 
 _K = (CSS2, CSS3L, CSS4, CSSR)
 _s = open(H + '/web1.py').read(); exec(_s[:_s.index('\nECR = [')])
 CSS2, CSS3L, CSS4, CSSR = _K
+ORB_AT = ORB_AT.replace('entretien mercredi', 'entretien jeudi 22')   # le 22 octobre 2026 est un jeudi
 
 CSSWR1 = '''
 .w-c .col>.bt,.dlg .bts .bt,.w-h .bt{flex:none}
@@ -111,10 +112,10 @@ ACT4 = '''<div class="actions-g"><div class="verre ag"><span class="nb">4</span>
 CANDS = (cand("AM","","Amani M.","Analyste de données junior","il y a 2 h","Reçue",True) + cand("FN","a","Fatou N.","Analyste de données junior","hier","Reçue",True)
          + cand("DK","","David K.","Chargé de clientèle","hier","Reçue",True) + cand("RM","a","Ruth M.","Comptable confirmé","il y a 2 j","En examen"))
 ENTS = (ent("22","OCT","Grâce M.","Analyste de données junior","10:00","visio","Confirmé","ok-c") + ent("23","OCT","Joël T.","Chargé de clientèle","14:30","sur site","En attente de réponse","att-c")
-        + ent("25","OCT","Esther R.","Comptable confirmé","9:30","visio","Confirmé","ok-c"))
+        + ent("26","OCT","Esther R.","Comptable confirmé","9:30","visio","Confirmé","ok-c"))
 SEM = '''<div class="verre sem sem-w"><div class="h"><b>Candidatures cette semaine</b><span>12 au total</span></div><div class="bars"><div><i style="height:30%"></i>L</div><div><i style="height:45%"></i>M</div><div class="on"><i style="height:80%"></i>M</div><div><i style="height:20%"></i>J</div><div><i style="height:0%"></i>V</div><div><i style="height:0%"></i>S</div><div><i style="height:0%"></i>D</div></div></div>'''
 def a_traiter(t=False):
-    h = wh('Bonjour Nadia', 'Mardi 19 octobre · Baobab Fintech', PUB_B) + ORB_AT + ACT4
+    h = wh('Bonjour Nadia', 'Lundi 19 octobre · Baobab Fintech', PUB_B) + ORB_AT + ACT4
     if t:
         return h + f'<div class="sec-w"><h2>Nouvelles candidatures</h2><a>Tout voir</a></div><div class="cand4">{CANDS}</div><div class="g2e"><div class="col"><div class="sec-w"><h2>Entretiens à venir</h2><a>Agenda</a></div>{ENTS}</div><div class="col"><div class="sec-w"><h2>Offres actives</h2><a>Mes offres</a></div>{OC_A}</div></div>'
     return h + f'''<div class="g2"><div class="col"><div class="sec-w"><h2>Nouvelles candidatures</h2><a>Tout voir</a></div><div class="cand4 l1">{CANDS}</div></div>
@@ -124,7 +125,7 @@ W_AT = R(a_traiter())
 T_AT = RT(a_traiter(True))
 
 def vide():
-    return wh('Bonjour Nadia', 'Mardi 19 octobre · Baobab Fintech', PUB_B) + f'''<div class="g2"><div class="col"><div class="verre vide-r" style="padding:40px"><span class="rond-ok">{ic("valider")}</span><b>Rien à traiter pour l’instant</b><span>Les nouvelles candidatures et les réponses aux invitations arriveront ici.</span></div>
+    return wh('Bonjour Nadia', 'Lundi 19 octobre · Baobab Fintech', PUB_B) + f'''<div class="g2"><div class="col"><div class="verre vide-r" style="padding:40px"><span class="rond-ok">{ic("valider")}</span><b>Rien à traiter pour l’instant</b><span>Les nouvelles candidatures et les réponses aux invitations arriveront ici.</span></div>
 <div class="q3"><div class="verre"><b>12</b>candidatures cette semaine</div><div class="verre"><b>4</b>entretiens faits</div><div class="verre"><b>2</b>décisions prises</div></div></div>
 <div class="col"><div class="orbi-l">{orbi(26)}<div class="t"><b>Orbi</b> a repéré 6 talents visibles proches de <b>Chargé de clientèle</b>. Vous décidez de les contacter.</div><a class="bt sec s">Voir</a></div>
 <span class="ck-t">Pour avancer</span><div class="verre liste lignes">
