@@ -20,16 +20,22 @@ import { fileStorage } from "@/server/storage";
 
 const PROJECT = "/app/profil/projet";
 
-function failed(error: unknown, projectId?: string): never {
+/** The window of the web profile (`/app/profil?fenetre=projet`) or the page of the phone. */
+function failed(error: unknown, projectId?: string, inWindow = false): never {
   if (error instanceof PortfolioError)
     redirect(
-      `${PROJECT}?${new URLSearchParams({ ...(projectId ? { id: projectId } : {}), erreur: error.code })}`,
+      `${inWindow ? "/app/profil" : PROJECT}?${new URLSearchParams({
+        ...(inWindow ? { fenetre: "projet" } : {}),
+        ...(projectId ? { id: projectId } : {}),
+        erreur: error.code,
+      })}`,
     );
   throw error;
 }
 
 export async function saveProjectAction(formData: FormData) {
   const projectId = String(formData.get("id") ?? "").slice(0, 60) || undefined;
+  const inWindow = formData.get("fenetre") === "projet";
   const parsed = projectSchema.safeParse({
     title: formData.get("title"),
     context: formData.get("context") ?? "",
@@ -42,7 +48,7 @@ export async function saveProjectAction(formData: FormData) {
     visible: formData.get("visible") === "on",
     keep: formData.getAll("keep").map(String),
   });
-  if (!parsed.success) failed(new PortfolioError("notFound"), projectId);
+  if (!parsed.success) failed(new PortfolioError("notFound"), projectId, inWindow);
   const user = await requireUser(PROJECT);
   const files: NewProjectFile[] = [];
   for (const entry of formData.getAll("files")) {
@@ -52,7 +58,7 @@ export async function saveProjectAction(formData: FormData) {
   try {
     await saveProject(db, fileStorage(db), user.id, parsed.data, files, projectId);
   } catch (error) {
-    failed(error, projectId);
+    failed(error, projectId, inWindow);
   }
   refresh();
   redirect("/app/profil?ok=projets#projets");

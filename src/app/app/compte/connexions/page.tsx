@@ -109,24 +109,50 @@ export default async function ConnectionsPage({
     </ul>
   );
 
-  return (
-    <div className="t-flux">
-      <FlowHead
-        back="/app/compte"
-        backLabel={t("compte.title")}
-        title={t("reseau.title")}
-        end={
-          <SheetButton
-            target="rs-chercher"
-            className="t-bi t-press"
-            label={t("reseau.search.open")}
-          >
-            <TalentIcon name="recherche" size="s" />
-          </SheetButton>
-        }
-      />
+  const requestsEmpty = <p className="t-vide-t">{t("reseau.noRequest")}</p>;
 
-      <nav aria-label={t("reseau.tabs")} className="t-seg">
+  return (
+    <div className="t-flux t-w4 t-large">
+      <div className="t-w4-h">
+        <FlowHead
+          back="/app/compte"
+          backLabel={t("compte.title")}
+          title={t("reseau.title")}
+          end={
+            <SheetButton
+              target="rs-chercher"
+              className="t-bi t-press"
+              label={t("reseau.search.open")}
+            >
+              <TalentIcon name="recherche" size="s" />
+            </SheetButton>
+          }
+        />
+        <p className="t-w4-sub t-w4-web">
+          {t("talentW4.connections.count", {
+            count: connections.length,
+            received: received.length,
+          })}
+        </p>
+        <form action={back} className="t-verre t-rech t-w4-web t-w4-rech" role="search">
+          <input type="hidden" name="chercher" value="1" />
+          <TalentIcon name="recherche" size="s" />
+          <label htmlFor="rs-q-web" className="sr-only">
+            {t("reseau.search.label")}
+          </label>
+          <input
+            id="rs-q-web"
+            name="q"
+            type="search"
+            minLength={2}
+            maxLength={80}
+            placeholder={t("talentW4.connections.search")}
+            autoComplete="off"
+          />
+        </form>
+      </div>
+
+      <nav aria-label={t("reseau.tabs")} className="t-seg t-w4-tel">
         <Link
           href={back}
           aria-current={tab === "connexions" ? "page" : undefined}
@@ -150,68 +176,33 @@ export default async function ConnectionsPage({
       {signal === "ok" && <Notice tone="ok">{t("report.success")}</Notice>}
       {signal === "deja" && <Notice>{t("report.already")}</Notice>}
 
-      {tab === "connexions" && received.length > 0 && (
-        <section aria-labelledby="rs-recues" className="t-flux t-serre">
-          <h2 id="rs-recues" className="t-ck-t">
-            {t("reseau.received")}
-          </h2>
-          {requestRows}
-        </section>
-      )}
-
-      {tab === "connexions" ? (
-        <section aria-labelledby="rs-miennes" className="t-flux t-serre">
-          <h2 id="rs-miennes" className="t-ck-t">
-            {t("reseau.mine")}
-          </h2>
-          {connections.length === 0 ? (
-            <div className="t-verre t-carte t-vide">
-              <b>{t("reseau.empty.title")}</b>
-              <span>{t("reseau.empty.text")}</span>
-              <SheetButton target="rs-chercher" className="t-bt t-sec t-s t-press">
-                {t("reseau.search.open")}
-              </SheetButton>
-            </div>
-          ) : (
-            <ul className="t-verre t-liste t-lignes">
-              {connections.map((connection) => (
-                <li key={connection.id} className="t-li">
-                  <Link
-                    href={`${back}?personne=${connection.id}`}
-                    className="t-li-l t-press"
-                    aria-label={t("reseau.options", { name: connection.person.name })}
-                  >
-                    <Who person={connection.person} line={line(connection.person)} />
-                  </Link>
-                  {connection.conversationId && (
-                    <Link
-                      href={`/app/messages/${connection.conversationId}#dernier`}
-                      className="t-bi t-press"
-                      aria-label={t("reseau.write", { name: connection.person.name })}
-                    >
-                      <TalentIcon name="message" size="s" />
-                    </Link>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-        </section>
-      ) : (
-        <>
-          {received.length === 0 ? (
-            <p className="t-vide-t">{t("reseau.noRequest")}</p>
-          ) : (
-            <section aria-labelledby="rs-recues-d" className="t-flux t-serre">
-              <h2 id="rs-recues-d" className="t-ck-t">
+      {/* Téléphone : l'onglet choisit ; ordinateur : mes connexions à gauche, demandes à droite. */}
+      <div className="t-w4-g2r t-w4-inv t-w4-cx">
+        <div className="t-w4-col">
+          {received.length > 0 ? (
+            <section aria-labelledby="rs-recues" className="t-flux t-serre">
+              <h2 id="rs-recues" className="t-ck-t t-w4-sech">
                 {t("reseau.received")}
               </h2>
               {requestRows}
             </section>
+          ) : (
+            <section
+              aria-labelledby="rs-recues"
+              className={cx("t-flux t-serre", tab === "connexions" && "t-w4-web")}
+            >
+              <h2 id="rs-recues" className="t-ck-t t-w4-sech t-w4-web">
+                {t("reseau.received")}
+              </h2>
+              {requestsEmpty}
+            </section>
           )}
           {sent.length > 0 && (
-            <section aria-labelledby="rs-envoyees" className="t-flux t-serre">
-              <h2 id="rs-envoyees" className="t-ck-t">
+            <section
+              aria-labelledby="rs-envoyees"
+              className={cx("t-flux t-serre", tab === "connexions" && "t-w4-web")}
+            >
+              <h2 id="rs-envoyees" className="t-ck-t t-w4-sech">
                 {t("reseau.sent")}
               </h2>
               <ul className="t-verre t-liste t-lignes">
@@ -233,10 +224,60 @@ export default async function ConnectionsPage({
               </ul>
             </section>
           )}
-        </>
-      )}
+          <p className="t-gar t-w4-web">
+            <TalentIcon name="message" size="s" />
+            <span>{t("reseau.rule")}</span>
+          </p>
+        </div>
 
-      <p className="t-gar">
+        <div className="t-w4-col">
+          <section
+            aria-labelledby="rs-miennes"
+            className={cx("t-flux t-serre", tab === "demandes" && "t-w4-web")}
+          >
+            <h2 id="rs-miennes" className="t-ck-t t-w4-sech">
+              {t("reseau.mine")}
+            </h2>
+            {connections.length === 0 ? (
+              <div className="t-verre t-carte t-vide">
+                <b>{t("reseau.empty.title")}</b>
+                <span>{t("reseau.empty.text")}</span>
+                <SheetButton target="rs-chercher" className="t-bt t-sec t-s t-press">
+                  {t("reseau.search.open")}
+                </SheetButton>
+              </div>
+            ) : (
+              <ul className="t-verre t-liste t-lignes t-w4-pers">
+                {connections.map((connection) => (
+                  <li key={connection.id} className="t-li">
+                    <Link
+                      href={`${back}?personne=${connection.id}`}
+                      className="t-li-l t-press"
+                      aria-label={t("reseau.options", { name: connection.person.name })}
+                    >
+                      <Who person={connection.person} line={line(connection.person)} />
+                    </Link>
+                    {connection.conversationId && (
+                      <Link
+                        href={`/app/messages/${connection.conversationId}#dernier`}
+                        className="t-bi t-press"
+                        aria-label={t("reseau.write", { name: connection.person.name })}
+                      >
+                        <TalentIcon name="message" size="s" />
+                        <span className="t-w4-web" aria-hidden>
+                          {t("talentW4.connections.message")}
+                        </span>
+                      </Link>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+          </section>
+        </div>
+      </div>
+
+      <p className="t-gar t-w4-tel">
         <TalentIcon name="message" size="s" />
         <span>{t("reseau.rule")}</span>
       </p>

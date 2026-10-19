@@ -4224,6 +4224,31 @@ Conventions :
 | `recherche.empty` | Rien ne correspond à « {query} ». |
 | `recherche.results` | {count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} » |
 
+### Espace talent · Web lot 4b (compte, profil, abonnement, paramètres, aide)
+
+*Mise en page ordinateur et tablette (docs/refonte-web/talent-4, sections 3 à 10) : textes qui n'existent que sur grand écran. Les autres textes viennent des pages mobiles.*
+
+| Clé | Texte |
+|---|---|
+| `talentW4.account.line` | {place} · compte talent |
+| `talentW4.account.lineAlone` | Compte talent |
+| `talentW4.account.profile` | Voir mon profil |
+| `talentW4.account.contact` | Une question : {email}. Aucun numéro de téléphone, réponse par e-mail. |
+| `talentW4.connections.count` | {count, plural, =0 {Aucune connexion} one {# connexion} other {# connexions}} · {received, plural, =0 {aucune demande} one {# demande} other {# demandes}} |
+| `talentW4.connections.search` | Rechercher une personne |
+| `talentW4.connections.message` | Message |
+| `talentW4.window.cancel` | Annuler |
+| `talentW4.window.close` | Fermer |
+| `talentW4.profile.edit` | Modifier |
+| `talentW4.profile.searchEmpty` | Dites ce que vous cherchez : métiers, lieux, contrat. |
+| `talentW4.profile.salary` | À partir de {amount} $ par mois |
+| `talentW4.profile.previewText` | Aperçu, rien n’est envoyé |
+| `talentW4.profile.pointText` | Bilan de votre profil |
+| `talentW4.profile.askOrbi` | Demander à Orbi |
+| `talentW4.diagnostic.subtitle` | Six notes sur 100 et le plan qui en découle |
+| `talentW4.diagnostic.share` | Partager |
+| `talentW4.diagnostic.again` | Refaire le diagnostic |
+
 ### Navigation · Menu du compte
 
 *Accès au profil, à l'abonnement et aux réglages depuis l'avatar.*

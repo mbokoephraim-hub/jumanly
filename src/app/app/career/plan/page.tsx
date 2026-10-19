@@ -1,12 +1,11 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getFormatter, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { OrbiMark } from "@/components/talent/orbi-mark";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
-import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import {
   addStepAction,
@@ -23,6 +22,7 @@ import { recommendedCourses } from "@/server/matching/service";
 import { catalogLevelOf, opensCourse } from "@/server/services/learn";
 import { cheapestPlanWhere, isEnabled, listPublicPlans } from "@/server/services/plans";
 import { currentStepId, getPlan, stepState, type PlanStep } from "@/server/services/progress-plan";
+import { planStepLabels } from "@/components/talent/profile/plan-summary";
 import { REPORT_KEY } from "@/server/services/progress-report";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -39,8 +39,6 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
   const query = await searchParams;
   const user = await requireUser("/app/career/plan");
   const t = await getTranslations();
-  const d = dynamic(t);
-  const format = await getFormatter();
   const subject = { type: "user" as const, id: user.id };
   const [allowed, withRecommendations, detailed] = await Promise.all([
     can(db, subject, "career.progress_plan"),
@@ -86,34 +84,18 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
   const steps = plan?.steps ?? [];
   const done = steps.filter((step) => step.done).length;
   const current = currentStepId(steps);
-  const titleOf = (step: PlanStep) =>
-    step.title ||
-    (step.code ? d(`career.diagnostic.rule.step.${step.code}`) : t("plan.kind.custom"));
-  const dateOf = (due: string) =>
-    format.dateTime(new Date(`${due}T12:00:00Z`), { day: "numeric", month: "short" });
-  const lineOf = (step: PlanStep) => {
-    const state = stepState(step);
-    return [
-      t(`plan.kind.${step.kind}`),
-      step.due && state !== "done" ? t("plan.due", { date: dateOf(step.due) }) : null,
-      state === "done"
-        ? t("plan.state.done")
-        : state === "late"
-          ? t("plan.state.late")
-          : step.id === current
-            ? t("plan.state.current")
-            : null,
-    ]
-      .filter(Boolean)
-      .join(" · ");
-  };
+  const labels = await planStepLabels();
+  const titleOf = labels.titleOf;
+  const lineOf = (step: PlanStep) => labels.lineOf(step, current);
 
   return (
-    <div className="t-flux">
+    <div className="t-flux t-w4 t-large">
       {head}
       {query.ok && <Notice tone="ok">{t("plan.saved")}</Notice>}
       {query.erreur && <Notice tone="err">{t("plan.error")}</Notice>}
 
+      <div className="t-w4-g2e">
+      <div className="t-w4-col">
       <SheetButton target="pl-objectif" className="t-parc-h t-press">
         <span className="t-k">{t("plan.goal.kicker")}</span>
         <span className="t-h2">{plan?.goal || t("plan.goal.empty")}</span>
@@ -265,6 +247,9 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
         <TalentIcon name="pourquoi" size="s" />
         <span>{t("plan.note")}</span>
       </p>
+      </div>
+
+      <div className="t-w4-col">
 
       {courses.length > 0 && (
         <section aria-labelledby="pl-formations" className="t-flux t-serre">
@@ -306,6 +291,8 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
           <TalentIcon name="suivant" size="s" />
         </a>
       )}
+      </div>
+      </div>
     </div>
   );
 }

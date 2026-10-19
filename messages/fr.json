@@ -4975,6 +4975,36 @@
     "empty": "Rien ne correspond à « {query} ».",
     "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} »"
   },
+  "talentW4": {
+    "account": {
+      "line": "{place} · compte talent",
+      "lineAlone": "Compte talent",
+      "profile": "Voir mon profil",
+      "contact": "Une question : {email}. Aucun numéro de téléphone, réponse par e-mail."
+    },
+    "connections": {
+      "count": "{count, plural, =0 {Aucune connexion} one {# connexion} other {# connexions}} · {received, plural, =0 {aucune demande} one {# demande} other {# demandes}}",
+      "search": "Rechercher une personne",
+      "message": "Message"
+    },
+    "window": {
+      "cancel": "Annuler",
+      "close": "Fermer"
+    },
+    "profile": {
+      "edit": "Modifier",
+      "searchEmpty": "Dites ce que vous cherchez : métiers, lieux, contrat.",
+      "salary": "À partir de {amount} $ par mois",
+      "previewText": "Aperçu, rien n’est envoyé",
+      "pointText": "Bilan de votre profil",
+      "askOrbi": "Demander à Orbi"
+    },
+    "diagnostic": {
+      "subtitle": "Six notes sur 100 et le plan qui en découle",
+      "share": "Partager",
+      "again": "Refaire le diagnostic"
+    }
+  },
   "account": {
     "menu": {
       "aria": "Ouvrir le menu du compte",

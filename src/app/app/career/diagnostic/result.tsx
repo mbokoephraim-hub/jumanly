@@ -6,6 +6,7 @@ import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { OrbiMark } from "@/components/talent/orbi-mark";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
+import { PlanSummary } from "@/components/talent/profile/plan-summary";
 import { dynamic } from "@/i18n/dynamic";
 import type { DiagnosticV2 } from "@/server/services/diagnostic";
 
@@ -16,12 +17,14 @@ import type { DiagnosticV2 } from "@/server/services/diagnostic";
  * PDF to share at the top.
  */
 export async function DiagnosticResult({
+  userId,
   id,
   date,
   result,
   summary,
   notice,
 }: {
+  userId: string;
   id: string;
   date: Date;
   result: DiagnosticV2;
@@ -35,7 +38,8 @@ export async function DiagnosticResult({
   const name = (key: string) => d(`career.diagnostic.dimension.${key}.name`);
 
   return (
-    <div className="t-flux">
+    <div className="t-flux t-w4 t-large">
+      <div className="t-w4-h">
       <FlowHead
         back="/app/profil/point"
         backLabel={t("diag.back")}
@@ -51,6 +55,18 @@ export async function DiagnosticResult({
           </a>
         }
       />
+      <p className="t-w4-sub t-w4-web">{t("talentW4.diagnostic.subtitle")}</p>
+      <a
+        href={`/app/career/diagnostic/pdf?bilan=${id}`}
+        className="t-bt t-sec t-m t-press t-w4-web"
+        download
+      >
+        <TalentIcon name="partager" size="s" />
+        {t("talentW4.diagnostic.share")}
+      </a>
+      </div>
+      <div className="t-w4-g2e">
+      <div className="t-w4-col">
       {notice && <Notice tone="err">{notice}</Notice>}
       <section aria-labelledby="dg-niveau" className="t-verre t-diag-h">
         <span className="t-anneau" style={{ "--p": result.score } as CSSProperties}>
@@ -88,10 +104,23 @@ export async function DiagnosticResult({
           </div>
         ))}
       </dl>
-      <SheetButton target="dg-pourquoi" className="t-pq t-press">
-        <TalentIcon name="pourquoi" />
-        {t("diag.why.cta")}
-      </SheetButton>
+      <div className="t-w4-pqr">
+        <SheetButton target="dg-pourquoi" className="t-pq t-press">
+          <TalentIcon name="pourquoi" />
+          {t("diag.why.cta")}
+        </SheetButton>
+        <Link href="/app/career/diagnostic?refaire=1" className="t-bt t-sec t-m t-press t-w4-web">
+          {t("talentW4.diagnostic.again")}
+        </Link>
+      </div>
+      </div>
+      <section aria-labelledby="dg-plan" className="t-w4-col t-w4-web">
+        <div className="t-w4-sec">
+          <h2 id="dg-plan">{t("plan.title")}</h2>
+        </div>
+        <PlanSummary userId={userId} />
+      </section>
+      </div>
       <Sheet id="dg-pourquoi" title={t("diag.why.title")} closeLabel={t("diag.why.close")}>
         <div className="t-pq-d">
           <p className="t-vide-t">{t("diag.why.intro")}</p>
@@ -118,7 +147,7 @@ export async function DiagnosticResult({
           ))}
         </div>
       </Sheet>
-      <div className="t-verre t-fort t-bas-f">
+      <div className="t-verre t-fort t-bas-f t-w4-tel">
         <Link href="/app/career/diagnostic?refaire=1" className="t-bt t-sec t-m t-press">
           {t("diag.again")}
         </Link>
