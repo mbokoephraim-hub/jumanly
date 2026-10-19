@@ -3187,6 +3187,280 @@ Conventions :
 | `entrain.voice.transcript` | Votre réponse transcrite, à relire avant d'envoyer |
 | `entrain.voice.privacy` | Votre voix sert seulement à transcrire la réponse. Aucun enregistrement n'est gardé : l'audio n'est jamais envoyé. |
 
+### Refonte mobile · CV et documents
+
+*`/app/career/cv` (planche talent-4 § 6) : onglets CV, Lettres et LinkedIn, menu « … » de chaque document, « Nouveau CV », « Importer », « Nouvelle lettre ». Les lettres ne quittent jamais Jumanly sans que le talent les copie ou les télécharge.*
+
+| Clé | Texte |
+|---|---|
+| `docs.back` | Retour |
+| `docs.list.seo` | CV et documents |
+| `docs.list.title` | CV et documents |
+| `docs.list.tabs` | Mes CV, mes lettres, LinkedIn |
+| `docs.list.tab.cv` | CV |
+| `docs.list.tab.letters` | Lettres |
+| `docs.list.tab.linkedin` | LinkedIn |
+| `docs.list.cvLine` | {template} · modifié le {date} |
+| `docs.list.adapted` | Adapté à une offre · {date} |
+| `docs.list.primary` | Principal |
+| `docs.list.more` | Plus d'options pour « {title} » |
+| `docs.list.new` | Nouveau CV |
+| `docs.list.import` | Importer |
+| `docs.list.empty.title` | Pas encore de CV. |
+| `docs.list.empty.text` | Créez-le depuis votre profil ou importez celui que vous avez déjà. |
+| `docs.list.limit` | Vous pouvez avoir jusqu'à {max} CV. Supprimez-en un pour en créer un autre. |
+| `docs.list.cvDeleted` | CV supprimé. |
+| `docs.list.letterDeleted` | Document supprimé. |
+| `docs.list.primaryDone` | C'est votre CV principal : il est proposé en premier quand vous postulez. |
+| `docs.menu.open` | Ouvrir l'éditeur |
+| `docs.menu.openLetter` | Ouvrir |
+| `docs.menu.pdf` | Télécharger en PDF |
+| `docs.menu.primary` | En faire mon CV principal |
+| `docs.menu.primaryHint` | Proposé en premier quand vous postulez |
+| `docs.menu.template` | Choisir un modèle |
+| `docs.menu.duplicate` | Dupliquer |
+| `docs.menu.delete` | Supprimer |
+| `docs.menu.deleteHint` | Vos candidatures déjà envoyées gardent leur CV. |
+| `docs.pdf.preparing` | PDF… |
+| `docs.pdf.done` | CV téléchargé. |
+| `docs.pdf.error` | Le PDF n'a pas pu être préparé. Réessayez dans un instant. |
+| `docs.create.title` | Nouveau CV |
+| `docs.create.legend` | Partir de |
+| `docs.create.profile` | Depuis mon profil |
+| `docs.create.profileHint` | Expériences, études et compétences reprises |
+| `docs.create.blank` | Page vierge |
+| `docs.create.blankHint` | Seulement votre nom et votre e-mail |
+| `docs.create.name` | Nom du CV |
+| `docs.create.submit` | Créer et ouvrir |
+| `docs.letters.written` | Rédigée le {date} |
+| `docs.letters.line` | {type} · {date} |
+| `docs.letters.type.letter` | Lettre de motivation |
+| `docs.letters.type.bio` | Biographie |
+| `docs.letters.type.email` | E-mail de candidature |
+| `docs.letters.type.thankYou` | Message de remerciement |
+| `docs.letters.type.proofread` | Texte relu |
+| `docs.letters.linkedin.label` | LinkedIn |
+| `docs.letters.linkedin.text` | Orbi propose un titre, un résumé et 5 compétences à copier sur LinkedIn. |
+| `docs.letters.linkedin.cta` | Préparer mon LinkedIn |
+| `docs.letters.new` | Nouvelle lettre |
+| `docs.letters.inputError` | Vérifiez le texte : il est vide ou trop long. |
+| `docs.letters.create.title` | Nouvelle lettre |
+| `docs.letters.create.lead` | Orbi rédige à partir de votre profil et de l'offre. Vous relisez et modifiez avant tout envoi. |
+| `docs.letters.create.type` | Document |
+| `docs.letters.create.offer` | Pour l'offre |
+| `docs.letters.create.noOffer` | Sans offre précise |
+| `docs.letters.create.tone` | Ton |
+| `docs.letters.create.tones.formal` | Soutenu |
+| `docs.letters.create.tones.warm` | Chaleureux |
+| `docs.letters.create.tones.direct` | Direct |
+| `docs.letters.create.points` | À mettre en avant (facultatif) |
+| `docs.letters.create.note` | {count, plural, one {# crédit Orbi} other {# crédits Orbi}}. Orbi n'invente ni expérience ni chiffre. |
+| `docs.letters.create.submit` | Rédiger avec Orbi |
+| `docs.letters.proofread.open` | Faire relire un texte |
+| `docs.letters.proofread.title` | Faire relire un texte |
+| `docs.letters.proofread.lead` | Collez une lettre ou un e-mail : Orbi propose des corrections, vous gardez celles que vous voulez. |
+| `docs.letters.proofread.name` | Titre (facultatif) |
+| `docs.letters.proofread.text` | Votre texte |
+| `docs.letters.proofread.submit` | {count, plural, one {Relire · # crédit} other {Relire · # crédits}} |
+
+### Refonte mobile · Une lettre
+
+*`/app/career/documents/[id]` : une lettre ou un document de l'onglet Lettres, ses corrections à garder une à une, le texte à modifier, copier ou télécharger.*
+
+| Clé | Texte |
+|---|---|
+| `docs.letter.seo` | Lettre |
+| `docs.letter.more` | Plus d'options |
+| `docs.letter.created` | Orbi a rédigé ce texte avec votre profil. Relisez-le et modifiez-le avant de l'envoyer. |
+| `docs.letter.saved` | Enregistré. |
+| `docs.letter.error` | Vérifiez le titre et le texte. |
+| `docs.letter.corrections` | {count, plural, one {# correction proposée} other {# corrections proposées}} |
+| `docs.letter.before` | Avant : |
+| `docs.letter.after` | Après : |
+| `docs.letter.applyCorrections` | Appliquer les corrections cochées |
+| `docs.letter.name` | Titre |
+| `docs.letter.text` | Texte |
+| `docs.letter.note` | Rien n'est envoyé par Jumanly : vous copiez ou téléchargez ce texte quand il vous convient. |
+| `docs.letter.copy` | Copier |
+| `docs.letter.copied` | Texte copié. |
+| `docs.letter.save` | Enregistrer |
+
+### Refonte mobile · Préparer LinkedIn
+
+*`/app/career/linkedin` (droit `career.linkedin`) : titre, résumé et compétences proposés depuis le profil, à copier. Rien n'est publié.*
+
+| Clé | Texte |
+|---|---|
+| `docs.linkedin.seo` | Préparer LinkedIn |
+| `docs.linkedin.title` | Préparer LinkedIn |
+| `docs.linkedin.label` | LinkedIn |
+| `docs.linkedin.lead` | Orbi propose un titre, un résumé et 5 compétences à copier sur LinkedIn, à partir de votre profil. |
+| `docs.linkedin.generate` | {count, plural, one {Préparer · # crédit Orbi} other {Préparer · # crédits Orbi}} |
+| `docs.linkedin.regenerate` | {count, plural, one {Proposer à nouveau · # crédit} other {Proposer à nouveau · # crédits}} |
+| `docs.linkedin.headline` | Titre proposé |
+| `docs.linkedin.about` | Résumé proposé |
+| `docs.linkedin.skills` | {count, plural, one {# compétence à ajouter} other {# compétences à ajouter}} |
+| `docs.linkedin.proven` | ✓ : compétence prouvée sur Jumanly (formation ou évaluation). |
+| `docs.linkedin.copy` | Copier |
+| `docs.linkedin.copied` | Copié. Collez-le dans LinkedIn. |
+| `docs.linkedin.note` | Rien n'est publié sur LinkedIn : vous copiez ce que vous voulez. |
+
+### Refonte mobile · Importer un CV
+
+*`/app/profil/import` : un PDF ou un document Word, lu sur le serveur et jamais conservé ; ce qui est trouvé n'entre dans le profil qu'après l'accord du talent, groupe par groupe.*
+
+| Clé | Texte |
+|---|---|
+| `docs.import.seo` | Importer un CV |
+| `docs.import.title` | Importer un CV |
+| `docs.import.choose` | Choisir un fichier |
+| `docs.import.chooseHint` | PDF ou Word, {max} Mo au plus |
+| `docs.import.reading` | Lecture du fichier… |
+| `docs.import.linkedin` | Depuis LinkedIn |
+| `docs.import.linkedinHint` | Fichier PDF de votre profil |
+| `docs.import.readTitle` | Lu dans votre CV · à vérifier |
+| `docs.import.readIn` | Lu dans « {name} » · à vérifier |
+| `docs.import.found.experiences` | {count, plural, one {# expérience} other {# expériences}} |
+| `docs.import.found.skills` | {count, plural, one {# compétence} other {# compétences}} |
+| `docs.import.found.educations` | {count, plural, one {# diplôme} other {# diplômes}} |
+| `docs.import.undated` | {count, plural, one {Une expérience sans date de début n'est pas ajoutée : complétez-la dans votre profil.} other {# expériences sans date de début ne sont pas ajoutées : complétez-les dans votre profil.}} |
+| `docs.import.rulesOnly` | Sans l'aide de l'IA, seules les compétences sont reconnues. |
+| `docs.import.note` | Rien n'est ajouté sans votre accord. Le fichier n'est pas conservé. |
+| `docs.import.nothing.title` | Rien n'a été reconnu. |
+| `docs.import.nothing.text` | Essayez un autre fichier, ou remplissez votre profil vous-même. |
+| `docs.import.submit` | Ajouter à mon profil |
+| `docs.import.error.format` | Ce fichier n'est pas accepté. Choisissez un PDF ou un document Word (.docx). |
+| `docs.import.error.size` | Ce fichier dépasse {max} Mo. Choisissez un fichier plus léger. |
+| `docs.import.error.empty` | Ce fichier ne contient pas de texte lisible (un scan, par exemple). Essayez un autre fichier. |
+| `docs.import.error.unreadable` | Ce fichier n'a pas pu être lu. Essayez de l'enregistrer à nouveau en PDF. |
+
+### Refonte mobile · Studio CV
+
+*`/app/career/cv/[id]` et `/app/career/cv/modeles` : modèle (droit `career.cv.templates.access`), couleur, police, densité, sections à réordonner, « Améliorer », avant/après, « Adapter » à une offre ou à un texte collé (droit `career.cv.tailor`), PDF. L'IA propose, le talent décide.*
+
+| Clé | Texte |
+|---|---|
+| `docs.section.summary` | Résumé |
+| `docs.section.experience` | Expériences |
+| `docs.section.education` | Études |
+| `docs.section.skills` | Compétences |
+| `docs.section.languages` | Langues |
+| `docs.templates.seo` | Choisir un modèle |
+| `docs.templates.title` | Choisir un modèle |
+| `docs.templates.filters` | Familles de modèles |
+| `docs.templates.filter.tous` | Tous |
+| `docs.templates.filter.sobres` | Sobres |
+| `docs.templates.filter.colonne` | Colonne |
+| `docs.templates.filter.creatifs` | Créatifs |
+| `docs.templates.included` | Inclus |
+| `docs.templates.currentShort` | (modèle actuel) |
+| `docs.templates.use` | Utiliser « {name} » |
+| `docs.templates.current` | « {name} » est votre modèle |
+| `docs.templates.unlock` | Inclus dès {plan} · voir les formules |
+| `docs.templates.locked` | Ce modèle est inclus dès la formule {plan}. |
+| `docs.editor.seo` | Éditeur de CV |
+| `docs.editor.more` | Plus d'options |
+| `docs.editor.template` | Modèle {templateName} |
+| `docs.editor.savedOn` | Enregistré · {date} |
+| `docs.editor.preview` | Aperçu |
+| `docs.editor.demo` | Votre CV est encore vide : l'aperçu montre un exemple fictif. |
+| `docs.editor.changeTemplate` | Modèle |
+| `docs.editor.sections` | Sections · glisser pour réordonner |
+| `docs.editor.grip` | Déplacer « {section} » (flèches haut et bas) |
+| `docs.editor.moved` | « {section} » déplacée. |
+| `docs.editor.summaryLine` | {count, plural, one {# phrase} other {# phrases}} |
+| `docs.editor.toWrite` | À écrire |
+| `docs.editor.count` | {count, plural, =0 {Aucun élément} other {#}} |
+| `docs.editor.skillsLine` | {count, plural, =0 {Aucune, depuis le profil} other {#, depuis le profil}} |
+| `docs.editor.hiddenShort` | masquée |
+| `docs.editor.improve` | Améliorer |
+| `docs.editor.improveSummary` | {count, plural, one {Améliorer avec Orbi · # crédit} other {Améliorer avec Orbi · # crédits}} |
+| `docs.editor.summaryHint` | Deux ou trois phrases : votre métier, ce que vous savez faire, un résultat. |
+| `docs.editor.adapt` | Adapter |
+| `docs.editor.pdf` | PDF |
+| `docs.editor.save` | Enregistrer |
+| `docs.editor.saved` | Enregistré. |
+| `docs.editor.error` | Ce changement n'a pas pu être enregistré. Réessayez. |
+| `docs.editor.fromProfile` | CV mis à jour depuis votre profil. |
+| `docs.editor.templateApplied` | Modèle « {templateName} » appliqué. Votre contenu n'a pas changé. |
+| `docs.editor.changeApplied` | Changement appliqué. |
+| `docs.editor.changeRefused` | Votre texte reste tel quel. |
+| `docs.editor.orbiSame` | Orbi n'a rien de mieux à proposer pour l'instant. |
+| `docs.editor.orbiEmpty` | Écrivez d'abord quelques mots ou ajoutez une expérience : Orbi part de ce que vous avez écrit. |
+| `docs.editor.obsolete` | Ce texte a changé depuis la proposition d'Orbi : elle n'a pas été appliquée. |
+| `docs.editor.adapted` | Copie « {title} » créée pour {target}. Votre CV d'origine ne change pas. |
+| `docs.editor.changesLabel` | Orbi propose |
+| `docs.editor.changes` | {count, plural, one {# changement à revoir} other {# changements à revoir}} |
+| `docs.editor.rename` | Nom du CV |
+| `docs.editor.refresh` | Mettre à jour depuis mon profil |
+| `docs.editor.refreshHint` | Reprend vos expériences, études et compétences |
+| `docs.editor.present` | aujourd'hui |
+| `docs.editor.shown` | Sur le CV |
+| `docs.editor.shownOn` | Cette section est imprimée |
+| `docs.editor.shownOff` | Cette section est masquée |
+| `docs.editor.sectionEmpty` | Rien pour l'instant. Ajoutez-le dans votre profil. |
+| `docs.editor.editInProfile` | Modifier dans mon profil |
+| `docs.style.color` | Couleur |
+| `docs.style.colorAts` | Les quatre premières lignes sont les plus sûres pour les logiciels de recrutement. |
+| `docs.style.font` | Police |
+| `docs.style.fontChip` | Aa · {font} |
+| `docs.style.density` | Densité |
+| `docs.change.title.summary` | Améliorer le résumé |
+| `docs.change.title.headline` | Améliorer le titre |
+| `docs.change.title.bullet` | Améliorer une réalisation |
+| `docs.change.count` | {total, plural, other {Changement 1 sur #}} |
+| `docs.change.before` | Avant |
+| `docs.change.emptyBefore` | (vide) |
+| `docs.change.after` | Proposition d'Orbi |
+| `docs.change.yours` | Votre version |
+| `docs.change.note` | Rien n'est modifié sans votre accord. |
+| `docs.change.noteCredits` | Rien n'est modifié sans votre accord. {left, plural, =0 {Plus de crédit Orbi ce mois-ci.} one {# crédit Orbi restant.} other {# crédits Orbi restants.}} |
+| `docs.change.why` | Pourquoi ces changements ? |
+| `docs.change.whyMarked` | Les passages surlignés reprennent vos compétences et vos chiffres, déjà dans votre CV. |
+| `docs.change.whyFocus` | Mis en avant parce que l'offre le demande : {skills}. |
+| `docs.change.whyNothing` | Orbi n'ajoute aucune expérience, aucun diplôme, aucun chiffre. |
+| `docs.change.whyRefuse` | Si vous refusez, votre texte reste exactement tel quel. |
+| `docs.change.refuse` | Refuser |
+| `docs.change.edit` | Modifier |
+| `docs.change.accept` | Accepter |
+| `docs.change.cancel` | Annuler |
+| `docs.change.save` | Enregistrer |
+| `docs.tailor.offerTitle` | Adapter à une offre |
+| `docs.tailor.offerLegend` | L'offre visée |
+| `docs.tailor.listed` | {skills} : déjà dans votre CV |
+| `docs.tailor.written` | {skill} : à mettre en avant |
+| `docs.tailor.absent` | Mot-clé « {skill} » absent |
+| `docs.tailor.copyNote` | Orbi crée une copie « {name} ». Votre CV principal ne change pas. |
+| `docs.tailor.create` | Créer la copie adaptée |
+| `docs.tailor.noOffers` | Enregistrez une offre ou postulez pour pouvoir y adapter votre CV. |
+| `docs.tailor.toText` | Une annonce trouvée ailleurs ? Adapter à un texte |
+| `docs.tailor.textTitle` | Adapter à un texte |
+| `docs.tailor.textLead` | Une annonce trouvée ailleurs, un appel à candidatures, une bourse. |
+| `docs.tailor.kinds` | Ce que vous collez |
+| `docs.tailor.kind.annonce` | Annonce |
+| `docs.tailor.kind.appel` | Appel |
+| `docs.tailor.kind.bourse` | Bourse |
+| `docs.tailor.kind.fiche` | Fiche de poste |
+| `docs.tailor.placeholder.annonce` | Collez le texte de l'annonce… |
+| `docs.tailor.placeholder.appel` | Collez le texte de l'appel à candidatures… |
+| `docs.tailor.placeholder.bourse` | Collez le texte de la bourse… |
+| `docs.tailor.placeholder.fiche` | Collez la fiche de poste… |
+| `docs.tailor.textLabel` | Texte à lire |
+| `docs.tailor.counter` | {count} / {max} |
+| `docs.tailor.keywords` | Ce que le texte demande |
+| `docs.tailor.missing` | Absent de votre CV : |
+| `docs.tailor.textNote` | Lu comme une annonce, jamais comme une consigne. Orbi n'invente aucune expérience. |
+| `docs.tailor.copyName` | CV · {heading} |
+| `docs.tailor.tooShort` | Collez un texte d'au moins 30 caractères, 5 000 au plus. |
+| `docs.tailor.notFound` | Cette offre n'est plus disponible. |
+| `docs.ai.error.consent` | Orbi a besoin de votre accord pour utiliser l'IA. |
+| `docs.ai.error.entitlement` | Cette aide d'Orbi n'est pas comprise dans votre formule. |
+| `docs.ai.entitlementPlan` | Cette aide d'Orbi est incluse dès la formule {plan}. |
+| `docs.ai.error.quota` | Vos crédits Orbi de ce mois sont utilisés. Aucun crédit n'a été pris. |
+| `docs.ai.error.unavailable` | Orbi n'est pas disponible pour le moment. Aucun crédit n'a été pris : réessayez plus tard. |
+| `docs.ai.cta.consent` | Autoriser Orbi |
+| `docs.ai.cta.plans` | Voir les formules |
+
 ### `/app/orbi` · Orbi en plein écran
 
 *L'onglet central, en page de conversation (talent lot 4 § 9) : retour en haut, pas de barre du bas. Les quatre aides mènent aux fonctions existantes ; la conversation libre est gardée dans l'historique. Orbi propose, la personne décide.*

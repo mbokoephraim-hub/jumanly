@@ -172,43 +172,60 @@ test.describe("modèles de CV : rendu (desktop)", () => {
 });
 
 test.describe("modèles de CV : parcours", () => {
-  test("galerie, mise en forme et couleur refusée", async ({ page, isMobile }) => {
+  test("galerie, mise en forme et couleur refusée", async ({ page }) => {
     await logIn(page, demo.talentStarter);
     const id = await newCvFromList(page);
 
-    // Optional phone, on this CV only: kept once saved, refused when it is not a number (its place in
-    // the document is checked by the unit tests).
-    // On a phone the field sits in the part « Infos » (prompt 6).
-    const field = isMobile ? "#cv-phone-phone" : "#cv-phone";
-    const details = page.locator("form").filter({ has: page.locator(field) });
-    await details.locator(field).fill("abc");
-    await details.getByRole("button").last().click();
-    await expect(
-      page.getByText("Numéro de téléphone non valide").filter({ visible: true }),
-    ).toBeVisible();
-    await details.locator(field).fill("+243 970 000 000");
-    await details.getByRole("button").last().click();
+    // Optional phone, on this CV only (« … » of the editor, lot 6c): kept once saved, refused when
+    // it is not a number (its place in the document is checked by the unit tests).
+    await page.getByRole("button", { name: "Plus d'options" }).click();
+    const options = page.getByRole("dialog");
+    await options.locator("#cv-telephone").fill("abc");
+    await options
+      .locator("form")
+      .filter({ has: page.locator("#cv-telephone") })
+      .getByRole("button", { name: "Enregistrer" })
+      .click();
+    await expect(page.getByText("Numéro de téléphone non valide")).toBeVisible();
+    await page.getByRole("button", { name: "Plus d'options" }).click();
+    await options.locator("#cv-telephone").fill("+243 970 000 000");
+    await options
+      .locator("form")
+      .filter({ has: page.locator("#cv-telephone") })
+      .getByRole("button", { name: "Enregistrer" })
+      .click();
     await expect(page).toHaveURL(/ok=1/);
     await page.goto(`/app/career/cv/${id}`);
-    await expect(page.locator(field)).toHaveValue("+243 970 000 000");
+    await expect(page.locator("#cv-telephone")).toHaveValue("+243 970 000 000");
 
+    // The gallery (planche talent-4 § 6): families, « Inclus » or the plan, « Utiliser « X » ».
     await page.goto(`/app/career/cv/modeles?cv=${id}&modele=moderne`);
     await expect(page.getByRole("heading", { level: 1 })).toHaveText("Choisir un modèle");
+    await expect(page.getByRole("link", { name: "Sobres" })).toBeVisible();
     await expectAccessible(page);
-    await page.getByRole("button", { name: "Utiliser ce modèle" }).click();
+    await page.getByRole("button", { name: "Utiliser « Moderne »" }).click();
     await expect(page).toHaveURL(/vue=style/);
-    await expect(page.getByText("Modèle appliqué. Votre contenu n'a pas changé.")).toBeVisible();
+    await expect(
+      page.getByText("Modèle « Moderne » appliqué. Votre contenu n'a pas changé."),
+    ).toBeVisible();
 
-    // A Pro template shows its lock to a Starter account: no button to apply it.
+    // A Pro template shows its lock to a Starter account: no button to apply it, the plans instead.
     await page.goto(`/app/career/cv/modeles?cv=${id}&modele=academique`);
-    await expect(page.locator("#detail")).toContainText("Inclus dans");
-    await expect(page.getByRole("button", { name: "Utiliser ce modèle" })).toHaveCount(0);
+    await expect(
+      page.getByRole("link", { name: /^Inclus dès .+ · voir les formules$/ }),
+    ).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Utiliser/ })).toHaveCount(0);
 
-    // Colour under 4.5:1: refused, a darker one is proposed.
-    await page.goto(`/app/career/cv/${id}?vue=style`);
-    await page.locator("#style-custom").fill("#FFE066");
-    await page.locator("#style-custom").press("Enter");
-    await expect(page.getByRole("alert").filter({ hasText: "#" })).toBeVisible();
+    // Colour under 4.5:1, even through a forged form: refused, a darker one is proposed.
+    await page.goto(`/app/career/cv/${id}`);
+    await page.getByRole("button", { name: "Couleur" }).click();
+    const swatch = page.getByRole("dialog", { name: "Couleur" }).getByRole("button").nth(1);
+    await page.waitForLoadState("networkidle");
+    await swatch.evaluate((button: HTMLButtonElement) => {
+      button.value = "#FFE066";
+      button.form!.requestSubmit(button);
+    });
+    await expect(page.getByText(/trop claire pour être lue facilement\. Essayez #/)).toBeVisible();
     await expectAccessible(page);
   });
 
@@ -220,7 +237,7 @@ test.describe("modèles de CV : parcours", () => {
 
     // The apply action refuses a Pro template even when the form is forged.
     await page.goto(`/app/career/cv/modeles?cv=${id}&modele=moderne`);
-    const apply = page.getByRole("button", { name: "Utiliser ce modèle" });
+    const apply = page.getByRole("button", { name: /^Utiliser/ });
     await expect(apply).toBeEnabled();
     await page.waitForLoadState("networkidle");
     await apply.evaluate((button: HTMLButtonElement) => {
@@ -245,14 +262,21 @@ test.describe("modèles de CV : parcours", () => {
     test.setTimeout(90_000);
     await logIn(page, demo.talentPro);
     const id = await newCvFromList(page);
-    // The demo accounts use @jumanly.test addresses: the e-mail is left off this CV.
-    const showEmail = page.getByLabel("Afficher mon e-mail sur le CV").filter({ visible: true });
-    await showEmail.uncheck();
-    await page
-      .getByRole("button", { name: "Enregistrer", exact: true })
-      .filter({ visible: true })
-      .click();
-    await expect(showEmail).not.toBeChecked();
+    // The demo accounts use @jumanly.test addresses: the e-mail is left off this CV (« … »).
+    await page.getByRole("button", { name: "Plus d'options" }).click();
+    const contact = page
+      .getByRole("dialog")
+      .locator("form")
+      .filter({ has: page.locator("#cv-telephone") });
+    await contact
+      .getByRole("switch", { name: /Afficher mon e-mail sur le CV/ })
+      .uncheck({ force: true });
+    await contact.getByRole("button", { name: "Enregistrer" }).click();
+    await expect(page).toHaveURL(/ok=1/);
+    await page.getByRole("button", { name: "Plus d'options" }).click();
+    await expect(
+      page.getByRole("switch", { name: /Afficher mon e-mail sur le CV/ }),
+    ).not.toBeChecked();
 
     const response = await page.request.post(`/api/cv/${id}/export?format=pdf`);
     expect(response.status()).toBe(200);

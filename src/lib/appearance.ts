@@ -30,6 +30,10 @@ export const REDRAWN = [
   "/app/career/diagnostic",
   "/app/career/plan",
   "/app/career/entretiens",
+  // Lot 6c: CV et documents, LinkedIn, the letters and the CV studio.
+  "/app/career/cv",
+  "/app/career/linkedin",
+  "/app/career/documents",
 ];
 
 /**

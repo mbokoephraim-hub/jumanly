@@ -116,8 +116,11 @@ export function hidesTalentTabBar(pathname: string) {
   if (section === "learn") return Boolean(page);
   if (section === "career")
     return (
-      (page === "cv" && Boolean(more) && more !== "modeles") ||
-      // Lot 6b: the diagnostic, the plan and the practice draw their own head (planche talent-4 § 5).
+      // Lot 6b and 6c: the diagnostic, the plan, the practice, CV et documents, LinkedIn and the
+      // letters draw their own head (planche talent-4 § 5 and § 6).
+      page === "cv" ||
+      page === "linkedin" ||
+      page === "documents" ||
       page === "entretiens" ||
       page === "diagnostic" ||
       page === "plan"

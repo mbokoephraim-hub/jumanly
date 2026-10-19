@@ -1,76 +1,112 @@
-import type { CSSProperties } from "react";
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { getTranslations } from "next-intl/server";
-import { Icon } from "@/components/brand/icon";
+import { getFormatter, getTranslations } from "next-intl/server";
+import { Logo, toneOf } from "@/components/talent/art";
+import { FlowHead } from "@/components/talent/flow-head";
+import { TalentIcon } from "@/components/talent/icon";
+import { Notice } from "@/components/talent/notice";
+import { OrbiMark } from "@/components/talent/orbi-mark";
+import { Sheet, SheetButton } from "@/components/talent/sheet";
+import { OrbiLimit, orbiLimitCode } from "@/components/talent/cv/orbi-limit";
+import { PdfButton } from "@/components/talent/cv/pdf-button";
+import { SectionOrder } from "@/components/talent/cv/section-order";
+import { TailorOffer, TailorText } from "@/components/talent/cv/tailor";
 import { previewData } from "@/features/cv/document";
 import { templateKey } from "@/features/cv/examples";
 import { cvFileName } from "@/features/cv/export/pdf";
 import { splitName } from "@/features/cv/render/build";
 import { CvPaginationProvider, CvPreview } from "@/features/cv/render/CvPreview";
+import { cvColors, cvFonts, fontOf } from "@/features/cv/render/palette";
 import { cvSourceOf } from "@/features/cv/source";
-import { blockLayout, MAX_PAGES } from "@/features/cv/style";
-import { ExportPanel } from "@/features/cv/ui/ExportPanel";
-import { PagesPanel } from "@/features/cv/ui/PagesPanel";
-import { StylePanel } from "@/features/cv/ui/StylePanel";
+import { blockLayout, cvDensities, MAX_PAGES } from "@/features/cv/style";
 import { dynamic } from "@/i18n/dynamic";
-import { AppPageHeader } from "@/components/app/page-header";
-import { AiGateNotice } from "@/components/career/ai-gate";
-import { CvCoachPanel, type CoachState } from "@/components/career/cv-coach-panel";
-import {
-  MobileActionBar,
-  ModeSwitch,
-  Notice,
-  SectionsPanel,
-  WorkshopBar,
-} from "@/components/career/cv/editor";
-import { CriteriaBars } from "@/components/career/cv/parts";
-import {
-  PhoneEditorBar,
-  PhoneEditorTabs,
-  PhonePartChips,
-  PhoneSection,
-  type CvPhoneView,
-  type PhonePartChip,
-} from "@/components/career/cv/phone-editor";
-import { PhoneTitle } from "@/components/talent/page-title";
-import { Workbench } from "@/components/career/cv/workbench";
-import { card, pillClass } from "@/components/career/kit";
-import { Alert, Checkbox, Select, TextArea, TextField } from "@/components/ui";
 import { cx } from "@/lib/cx";
-import { updateCvDetails } from "@/server/actions/cv";
-import { tailorCvAction } from "@/server/actions/career-documents";
-import { aiFeatures, aiReadiness, AI_CREDITS_KEY } from "@/server/ai";
+import { languageName } from "@/lib/dates";
+import { tailorCvAction, tailorCvTextAction } from "@/server/actions/career-documents";
+import {
+  changeCvSection,
+  decideChangeAction,
+  deleteCv,
+  duplicateCv,
+  improveSummaryAction,
+  refreshCvFromProfile,
+  renameCv,
+  updateCvContact,
+  setPrimaryCv,
+  updateCvStyleAction,
+  updateCvSummary,
+} from "@/server/actions/cv";
+import { aiFeatures, AI_CREDITS_KEY } from "@/server/ai";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { usage } from "@/server/entitlements";
 import {
+  aiState,
+  fold,
+  offerGap,
+  TAILOR_GATE,
+  TAILOR_TEXT_MAX,
+  tailorOffers,
+  tailorTextKinds,
+} from "@/server/services/career-documents";
+import {
   canUseTemplate,
-  cvPhoneParts,
   cvSectionIds,
-  isEmptyCv,
   MAX_CVS,
   parseCv,
-  type CvPhonePart,
+  type CvContent,
   type CvSectionId,
 } from "@/server/services/cv";
-import { aiState, TAILOR_GATE } from "@/server/services/career-documents";
-import { cvScore, parseSuggestion, targetSkillsFor } from "@/server/services/cv-coach";
-import { interviewJobs } from "@/server/services/interview-sim";
-import { cheapestPlanWithLimit, listPublicPlans, talentPlanFor } from "@/server/services/plans";
-import { TabRail } from "@/components/motion/tab-rail";
+import { pendingSuggestions, type CoachSuggestion } from "@/server/services/cv-coach";
+import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("career.cv");
-  return { title: { absolute: t("seo") }, robots: { index: false } };
+  const t = await getTranslations("docs.editor");
+  return { title: t("seo"), robots: { index: false } };
 }
 
+type Section = Exclude<CvSectionId, "summary">;
+const sections: Section[] = ["experience", "education", "skills", "languages"];
+/** Where each part is written in the profile (the CV content comes from it). */
+const profileParts: Record<Section, string> = {
+  experience: "experiences",
+  education: "formations",
+  skills: "competences",
+  languages: "langues",
+};
+
+const escape = (value: string) => value.replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+
 /**
- * CV editor (partie 07 § 4). The content comes from the profile (« Remplir depuis mon profil »);
- * here the person chooses the title, the summary and the visibility of sections (« Contenu »), and
- * the template, colour, font, density and pages (« Mise en forme », docs/modeles-cv § 8.2). The
- * preview is the exported document itself, paginated in the browser.
+ * The proposal with what comes from the CV marked (planche `.avap.ap mark`): its skills and its
+ * figures, so the talent sees nothing was invented.
+ */
+function marked(text: string, words: string[]): ReactNode[] {
+  const names = [...new Set(words.filter((word) => word.trim().length > 1))]
+    .sort((a, b) => b.length - a.length)
+    .map(escape);
+  const pattern = new RegExp(
+    `(${[...names, "\\d+(?:[ ,.]\\d+)*(?:\\s?%)?(?:\\s[\\p{L}]+)?"].join("|")})`,
+    "giu",
+  );
+  return text
+    .split(pattern)
+    .map((part, index) => (index % 2 === 1 ? <mark key={index}>{part}</mark> : part));
+}
+
+const sentences = (text: string) =>
+  text
+    .split(/[.!?]+/)
+    .map((part) => part.trim())
+    .filter(Boolean).length;
+
+/**
+ * The CV editor (planche talent-4 § 6): the template and its look (colour, font, density), the
+ * sections in the order the talent drags them to, « Améliorer » on the summary, « Adapter » (to an
+ * offer or to a pasted text, `career.cv.tailor`) and the PDF. One view at a time in the address:
+ * `?vue=apercu`, `?vue=resume`, `?partie=<section>`, `?vue=ameliorer` (Orbi's changes, avant/après).
  */
 export default async function CvEditorPage({
   params,
@@ -83,551 +119,841 @@ export default async function CvEditorPage({
     where: { id, kind: "cv", profile: { userId: user.id } },
   });
   if (!cv) notFound();
-  const t = await getTranslations("career.cv");
-  const tProfile = await getTranslations("talent.profile");
+  const t = await getTranslations();
+  const d = dynamic(t);
+  const format = await getFormatter();
   const content = parseCv(cv.content);
-  const plans = await listPublicPlans(db);
   const owner = await db.user.findUniqueOrThrow({
     where: { id: user.id },
     select: { image: true },
   });
   const source = cvSourceOf(cv, owner.image);
   const { template, style } = source;
-  const { data, demo } = await previewData(source);
-  const included = await canUseTemplate(db, { type: "user", id: user.id }, template);
-  const view = query.vue === "style" ? "style" : "content";
-  // Prompt 6 (screens 28, 29): on a phone, « Contenu » shows one part at a time, « Mise en forme »
-  // the page and its settings, « Aperçu » the page, the coach and the export.
-  const phoneView: CvPhoneView =
-    query.vue === "style" ? "style" : query.vue === "apercu" ? "preview" : "content";
-  const part: CvPhonePart = cvPhoneParts.includes(query.partie as CvPhonePart)
-    ? (query.partie as CvPhonePart)
-    : "info";
-  const d = dynamic(t);
-  const templateName = d(`template.name.${templateKey(template.id)}`);
-  const cvs = await db.document.findMany({
-    where: { kind: "cv", profileId: cv.profileId },
-    orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
-    select: { id: true, title: true, isPrimary: true },
-  });
-  const tHome = await getTranslations("career.home");
-  const [tailor, tailorJobs] = await Promise.all([
-    aiState(db, user.id, "cv_tailor", TAILOR_GATE),
-    interviewJobs(db, user.id),
+  const [included, plans, changes, cvCount] = await Promise.all([
+    canUseTemplate(db, { type: "user", id: user.id }, template),
+    listPublicPlans(db),
+    pendingSuggestions(db, user.id, cv.id),
+    db.document.count({ where: { profileId: cv.profileId, kind: "cv" } }),
   ]);
+  const editor = `/app/career/cv/${cv.id}`;
+  const templateName = d(`career.cv.template.name.${templateKey(template.id)}`);
+  const { firstName, lastName } = splitName(content.info.name.trim());
+  const fileName = cvFileName([firstName, lastName].join(" "), cvCount > 1 ? cv.title : undefined);
+  const close = t("offer.close");
+  const pdfLabels = {
+    preparing: t("docs.pdf.preparing"),
+    done: t("docs.pdf.done"),
+    error: t("docs.pdf.error"),
+  };
+  const pdf = (className: string) => (
+    <PdfButton documentId={cv.id} fileName={fileName} labels={pdfLabels} className={className}>
+      <TalentIcon name="telecharger" size="s" />
+      {t("docs.editor.pdf")}
+    </PdfButton>
+  );
+  const part = sections.find((section) => section === query.partie);
+  const view =
+    query.vue === "ameliorer" && changes.length > 0
+      ? "ameliorer"
+      : query.vue === "apercu"
+        ? "apercu"
+        : query.vue === "resume"
+          ? "resume"
+          : part
+            ? "partie"
+            : "editeur";
+
+  const notices: ReactNode[] = [];
+  const ok = (key: string, text: string) =>
+    notices.push(
+      <Notice key={key} tone="ok">
+        {text}
+      </Notice>,
+    );
+  const err = (key: string, text: string) =>
+    notices.push(
+      <Notice key={key} tone="err">
+        {text}
+      </Notice>,
+    );
+  if (typeof query.adapte === "string")
+    ok("adapte", t("docs.editor.adapted", { title: cv.title, target: query.adapte }));
+  if (query.ok === "profil") ok("profil", t("docs.editor.fromProfile"));
+  else if (query.ok === "modele") ok("modele", t("docs.editor.templateApplied", { templateName }));
+  else if (query.ok === "change") ok("change", t("docs.editor.changeApplied"));
+  else if (query.ok === "refus") ok("refus", t("docs.editor.changeRefused"));
+  else if (query.ok) ok("ok", t("docs.editor.saved"));
+  if (query.orbi === "same") ok("same", t("docs.editor.orbiSame"));
+  if (query.orbi === "empty") err("empty", t("docs.editor.orbiEmpty"));
+  if (query.orbi === "obsolete") err("obsolete", t("docs.editor.obsolete"));
+  if (query.adaptation === "notFound") err("notFound", t("docs.tailor.notFound"));
+  if (query.adaptation === "limit") err("limit", t("docs.list.limit", { max: MAX_CVS }));
+  if (query.adaptation === "empty" || query.adaptation === "input")
+    err("vide", t("docs.tailor.tooShort"));
+  if (query.erreur === "modele")
+    err(
+      "modele",
+      t("docs.templates.locked", {
+        plan: talentPlanFor(plans, "career.cv.templates.access", ["pro"]),
+      }),
+    );
+  if (query.erreur === "couleur")
+    err(
+      "couleur",
+      t("career.cv.style.color.tooLight", {
+        suggestion: typeof query.proposee === "string" ? query.proposee : "",
+      }),
+    );
+  if (query.erreur === "1") err("erreur", t("docs.editor.error"));
+  if (query.erreur === "telephone") err("telephone", t("career.cv.info.phone.invalid"));
+  if (query.erreur === "limite") err("limite", t("docs.list.limit", { max: MAX_CVS }));
+  if (typeof query.export === "string")
+    err(
+      "export",
+      query.export === "overMax"
+        ? t("career.cv.pages.overMax", { max: MAX_PAGES })
+        : query.export === "locked"
+          ? t("career.cv.template.downgraded", { templateName })
+          : t("docs.pdf.error"),
+    );
+  if (!included && query.export !== "locked")
+    err("modeleRetire", t("career.cv.template.downgraded", { templateName }));
+  const aiCode = orbiLimitCode(query.orbi) ?? orbiLimitCode(query.adaptation);
   const tailorPlan = talentPlanFor(plans, TAILOR_GATE.key);
-  const tAll = await getTranslations();
-  const [readiness, credits, targets, pending] = await Promise.all([
-    aiReadiness(db, user.id, "cv_coach"),
-    usage(db, { type: "user", id: user.id }, AI_CREDITS_KEY),
-    targetSkillsFor(db, user.id),
-    db.aiSuggestion.findMany({
-      where: { userId: user.id, feature: "cv_coach", documentId: cv.id, status: "pending" },
-      orderBy: { createdAt: "asc" },
-    }),
+
+  // ─── Avant, après: Orbi's changes, one at a time ──────────────────────────────────────
+  if (view === "ameliorer") {
+    const [change] = changes as [{ id: string; payload: CoachSuggestion }];
+    const { payload } = change;
+    const editing = query.modifier === "1";
+    const credits = await usage(db, { type: "user", id: user.id }, AI_CREDITS_KEY);
+    const left = credits.limit < 0 ? null : Math.max(0, credits.limit - credits.used);
+    const words = [...content.skills.map((skill) => skill.name), ...(payload.focus ?? [])];
+    const section = payload.target.section;
+    const focus = (payload.focus ?? []).filter((word) =>
+      fold(payload.after ?? "").includes(fold(word)),
+    );
+    return (
+      <div className="t-flux t-od-bas">
+        <FlowHead
+          back={editor}
+          backLabel={t("docs.back")}
+          title={d(`docs.change.title.${section}`)}
+          end={
+            <Link href={editor} className="t-bi t-press" aria-label={close}>
+              <TalentIcon name="fermer" size="s" />
+            </Link>
+          }
+        />
+        {notices}
+        {changes.length > 1 && (
+          <p className="t-ck-t">{t("docs.change.count", { total: changes.length })}</p>
+        )}
+        <section aria-labelledby="avap-avant" className="t-verre t-avap t-av-a">
+          <h2 id="avap-avant">{t("docs.change.before")}</h2>
+          <p>{payload.before || t("docs.change.emptyBefore")}</p>
+        </section>
+        {editing ? (
+          <form id="avap-form" action={decideChangeAction} className="t-verre t-avap t-ap">
+            <input type="hidden" name="id" value={cv.id} />
+            <input type="hidden" name="suggestion" value={change.id} />
+            <input type="hidden" name="decision" value="applied" />
+            <label htmlFor="avap-texte">{t("docs.change.yours")}</label>
+            <textarea
+              id="avap-texte"
+              name="text"
+              rows={6}
+              maxLength={section === "summary" ? 1000 : 600}
+              defaultValue={payload.after ?? ""}
+              required
+            />
+          </form>
+        ) : (
+          <section aria-labelledby="avap-apres" className="t-verre t-avap t-ap">
+            <h2 id="avap-apres">{t("docs.change.after")}</h2>
+            <p>{marked(payload.after ?? "", words)}</p>
+          </section>
+        )}
+        <p className="t-gar">
+          <TalentIcon name="cadenas" size="s" />
+          {left === null ? t("docs.change.note") : t("docs.change.noteCredits", { left })}
+        </p>
+        <SheetButton target="avap-pourquoi" className="t-pq t-press">
+          <TalentIcon name="pourquoi" size="xs" />
+          {t("docs.change.why")}
+        </SheetButton>
+
+        <div className="t-verre t-fort t-bas-f">
+          {editing ? (
+            <>
+              <Link href={`${editor}?vue=ameliorer`} className="t-bt t-sec t-m t-press">
+                {t("docs.change.cancel")}
+              </Link>
+              <button type="submit" form="avap-form" className="t-bt t-p t-pl t-press">
+                <TalentIcon name="valider" size="s" />
+                {t("docs.change.save")}
+              </button>
+            </>
+          ) : (
+            <>
+              <form action={decideChangeAction} className="contents">
+                <input type="hidden" name="id" value={cv.id} />
+                <input type="hidden" name="suggestion" value={change.id} />
+                <button
+                  type="submit"
+                  name="decision"
+                  value="ignored"
+                  className="t-bt t-sec t-m t-press"
+                >
+                  {t("docs.change.refuse")}
+                </button>
+              </form>
+              <Link href={`${editor}?vue=ameliorer&modifier=1`} className="t-bt t-sec t-m t-press">
+                {t("docs.change.edit")}
+              </Link>
+              <form action={decideChangeAction} className="contents">
+                <input type="hidden" name="id" value={cv.id} />
+                <input type="hidden" name="suggestion" value={change.id} />
+                <button
+                  type="submit"
+                  name="decision"
+                  value="applied"
+                  className="t-bt t-p t-pl t-press"
+                >
+                  <TalentIcon name="valider" size="s" />
+                  {t("docs.change.accept")}
+                </button>
+              </form>
+            </>
+          )}
+        </div>
+
+        <Sheet id="avap-pourquoi" title={t("docs.change.why")} closeLabel={close}>
+          <ul className="t-verre t-ecart">
+            <li className="t-l t-ok">
+              <TalentIcon name="valider" size="s" />
+              {t("docs.change.whyMarked")}
+            </li>
+            {focus.length > 0 && (
+              <li className="t-l t-ok">
+                <TalentIcon name="valider" size="s" />
+                {t("docs.change.whyFocus", { skills: focus.join(", ") })}
+              </li>
+            )}
+            <li className="t-l t-ok">
+              <TalentIcon name="valider" size="s" />
+              {t("docs.change.whyNothing")}
+            </li>
+            <li className="t-l t-ok">
+              <TalentIcon name="valider" size="s" />
+              {t("docs.change.whyRefuse")}
+            </li>
+          </ul>
+        </Sheet>
+      </div>
+    );
+  }
+
+  // ─── Aperçu: the pages as they will be exported ───────────────────────────────────────
+  if (view === "apercu") {
+    const { data, demo } = await previewData(source);
+    return (
+      <div className="t-flux t-od-bas">
+        <FlowHead back={editor} backLabel={t("docs.back")} title={t("docs.editor.preview")} />
+        {notices}
+        {demo && (
+          <p className="t-gar">
+            <TalentIcon name="aide" size="s" />
+            {t("docs.editor.demo")}
+          </p>
+        )}
+        <div className="t-verre t-apercu">
+          <CvPaginationProvider>
+            <CvPreview
+              data={data}
+              template={template}
+              style={style}
+              label={t("docs.editor.preview")}
+            />
+          </CvPaginationProvider>
+        </div>
+        <p className="t-gar">
+          <TalentIcon name="confidentialite" size="s" />
+          {t("career.cv.template.neutral")}
+        </p>
+        <div className="t-verre t-fort t-bas-f">
+          <Link href={`/app/career/cv/modeles?cv=${cv.id}`} className="t-bt t-sec t-m t-press">
+            {t("docs.editor.changeTemplate")}
+          </Link>
+          {pdf("t-bt t-p t-pl t-press")}
+        </div>
+      </div>
+    );
+  }
+
+  // ─── Résumé: the talent's own words ────────────────────────────────────────────────────
+  if (view === "resume") {
+    return (
+      <div className="t-flux t-od-bas">
+        <FlowHead back={editor} backLabel={t("docs.back")} title={t("docs.section.summary")} />
+        {notices}
+        {aiCode && <OrbiLimit code={aiCode} />}
+        <form id="resume-form" action={updateCvSummary} className="t-flux">
+          <input type="hidden" name="id" value={cv.id} />
+          <div className="t-ta">
+            <label htmlFor="resume-texte" className="sr-only">
+              {t("docs.section.summary")}
+            </label>
+            <textarea
+              id="resume-texte"
+              name="summary"
+              rows={8}
+              maxLength={1000}
+              defaultValue={content.summary}
+            />
+          </div>
+          <p className="t-aide">{t("docs.editor.summaryHint")}</p>
+        </form>
+        <form action={improveSummaryAction}>
+          <input type="hidden" name="id" value={cv.id} />
+          <button type="submit" className="t-lien-m t-press w-full">
+            <OrbiMark size={20} />
+            {t("docs.editor.improveSummary", { count: aiFeatures.cv_coach.credits })}
+          </button>
+        </form>
+        <div className="t-verre t-fort t-bas-f">
+          <button type="submit" form="resume-form" className="t-bt t-p t-pl t-press">
+            {t("docs.editor.save")}
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  // ─── One section, read from the profile ────────────────────────────────────────────────
+  if (view === "partie" && part) {
+    const visible = content.sections.find((section) => section.id === part)?.visible ?? true;
+    const items = sectionItems(content, part, {
+      present: t("docs.editor.present"),
+      level: (level) => d(`talent.profile.languages.level.${level}`),
+    });
+    const name = t(`docs.section.${part}`);
+    return (
+      <div className="t-flux">
+        <FlowHead back={editor} backLabel={t("docs.back")} title={name} />
+        {notices}
+        <form action={changeCvSection} className="t-verre t-liste">
+          <input type="hidden" name="id" value={cv.id} />
+          <input type="hidden" name="section" value={part} />
+          <input type="hidden" name="move" value="toggle" />
+          <input type="hidden" name="partie" value={part} />
+          <div className="t-li">
+            <span className="t-t" id="partie-visible">
+              <b>{t("docs.editor.shown")}</b>
+              <span>{visible ? t("docs.editor.shownOn") : t("docs.editor.shownOff")}</span>
+            </span>
+            <button
+              type="submit"
+              role="switch"
+              aria-checked={visible}
+              aria-labelledby="partie-visible"
+              className="t-press"
+            >
+              <span aria-hidden className={cx("t-sw", visible && "t-on")} />
+            </button>
+          </div>
+        </form>
+        {items.length === 0 ? (
+          <p className="t-vide-t">{t("docs.editor.sectionEmpty")}</p>
+        ) : part === "skills" ? (
+          <ul className="t-verre t-carte t-comp">
+            {items.map((item) => (
+              <li key={item.key}>
+                <span>{item.title}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <ul className="t-verre t-liste t-lignes">
+            {items.map((item) => (
+              <li key={item.key} className="t-li">
+                <span className="t-t">
+                  <b>{item.title}</b>
+                  {item.detail && <span>{item.detail}</span>}
+                </span>
+              </li>
+            ))}
+          </ul>
+        )}
+        <Link href={`/app/profil?partie=${profileParts[part]}`} className="t-ajout t-press">
+          <TalentIcon name="modifier" size="s" />
+          {t("docs.editor.editInProfile")}
+        </Link>
+        <form action={refreshCvFromProfile}>
+          <input type="hidden" name="id" value={cv.id} />
+          <input type="hidden" name="partie" value={part} />
+          <button type="submit" className="t-lien-m t-press w-full">
+            <TalentIcon name="profil" size="s" />
+            {t("docs.editor.refresh")}
+          </button>
+        </form>
+      </div>
+    );
+  }
+
+  // ─── The editor ────────────────────────────────────────────────────────────────────────
+  // « Adapter mon CV » from an offer: `?adapter=<job id>` opens the sheet on that offer.
+  const adaptFor = typeof query.adapter === "string" ? query.adapter.slice(0, 60) : undefined;
+  const [tailor, offers] = await Promise.all([
+    aiState(db, user.id, "cv_tailor", TAILOR_GATE),
+    tailorOffers(db, user.id, adaptFor),
   ]);
-  const coachPlan =
-    cheapestPlanWithLimit(plans, "talent", AI_CREDITS_KEY, aiFeatures.cv_coach.credits)?.name ??
-    null;
-  const coach: CoachState =
-    readiness === "ready" || readiness === "consent"
-      ? { state: readiness }
-      : readiness === "unavailable"
-        ? { state: "ready" }
-        : { state: readiness, plan: coachPlan, resetsAt: credits.resetsAt };
-  const score = cvScore(content, targets.skills);
-  const cvWords = JSON.stringify(content).toLowerCase();
-  const missingKeywords = targets.skills.filter((skill) => !cvWords.includes(skill.toLowerCase()));
-  const suggestions = pending.flatMap((row) => {
-    const payload = parseSuggestion(row.payload);
-    return payload ? [{ id: row.id, payload }] : [];
-  });
-
-  const notice =
-    typeof query.adapte === "string"
-      ? t("tailor.created", { cvName: cv.title, jobTitle: query.adapte })
-      : query.ok === "profil"
-        ? t("fromProfileDone")
-        : query.ok === "modele"
-          ? t("template.applied")
-          : query.ok
-            ? t("saved")
-            : null;
-  const error =
-    query.erreur === "limite"
-      ? t("limit", { max: MAX_CVS })
-      : query.erreur === "modele"
-        ? t("template.locked", {
-            plan: talentPlanFor(plans, "career.cv.templates.access", ["pro"]),
-          })
-        : query.erreur === "couleur" || query.erreur === "telephone"
-          ? null
-          : query.export === "overMax"
-            ? t("pages.overMax", { max: MAX_PAGES })
-            : query.export === "locked"
-              ? t("template.downgraded", { templateName })
-              : query.export
-                ? t("export.error")
-                : query.erreur
-                  ? tProfile("error")
-                  : null;
-
-  // Sections in the order of the document (main column, then the secondary one).
-  const sectionOrder = blockLayout(template, style, cvSectionIds).map(
+  const order = blockLayout(template, style, cvSectionIds).map(
     (block) => block.type as CvSectionId,
   );
-  const sections = sectionOrder.map(
-    (id) => content.sections.find((section) => section.id === id) ?? { id, visible: true },
-  );
-  const breakTargets = demo
-    ? []
-    : data.blocks.flatMap((block) => [
-        { id: block.id, name: block.title },
-        ...("items" in block
-          ? block.items.map((item) => ({
-              id: item.id,
-              name: [block.title, item.title].join(" · "),
-            }))
-          : []),
-      ]);
-  const { firstName, lastName } = splitName(content.info.name.trim());
-  const fileName = cvFileName(
-    [firstName, lastName].join(" "),
-    cvs.length > 1 ? cv.title : undefined,
-  );
-  const customError =
-    query.erreur === "couleur"
-      ? typeof query.proposee === "string"
-        ? query.proposee
-        : "invalid"
-      : undefined;
-  const filled: Record<CvSectionId, boolean> = {
-    summary: content.summary.trim().length > 0,
-    experience: content.experiences.length > 0,
-    education: content.education.length > 0,
-    skills: content.skills.length > 0,
-    languages: content.languages.length > 0,
+  const hidden = new Set(content.sections.filter((s) => !s.visible).map((s) => s.id));
+  const color = cvColors.find((item) => item.code === style.accent);
+  const colorName = color ? d(`cv.colors.${color.code}`) : style.accent;
+  const colorHex = color?.hex ?? style.accent;
+  const line: Record<CvSectionId, string> = {
+    summary: content.summary.trim()
+      ? t("docs.editor.summaryLine", { count: sentences(content.summary) })
+      : t("docs.editor.toWrite"),
+    experience: t("docs.editor.count", { count: content.experiences.length }),
+    education: t("docs.editor.count", { count: content.education.length }),
+    skills: t("docs.editor.skillsLine", { count: content.skills.length }),
+    languages: t("docs.editor.count", { count: content.languages.length }),
   };
-  const sectionCounts: Record<CvSectionId, number | null> = {
-    summary: null,
-    experience: content.experiences.length,
-    education: content.education.length,
-    skills: content.skills.length,
-    languages: content.languages.length,
-  };
-  // Names of the sections for the label on the highlighted block (src/styles/cv-v2.css).
-  const highlightLabels = Object.fromEntries(
-    cvSectionIds.map((sectionId) => [
-      `--jm-cv-label-${sectionId}`,
-      JSON.stringify(t(`section.${sectionId}`)),
-    ]),
-  ) as CSSProperties;
-  const tailorLocked = tailor.state === "entitlement";
-  const phoneParts: PhonePartChip[] = [
-    { key: "info", label: t("phone.part.info"), filled: content.info.name.trim().length > 0 },
-    { key: "summary", label: t("section.summary"), filled: filled.summary },
-    ...sectionOrder
-      .filter((sectionId) => sectionId !== "summary")
-      .map((sectionId) => ({
-        key: sectionId,
-        label: t(`section.${sectionId}`),
-        filled: filled[sectionId],
-      })),
-  ];
-  const partIndex = phoneParts.findIndex((chip) => chip.key === part);
-  const nextPart = phoneParts[partIndex + 1];
-  const listSections = sectionOrder.filter((sectionId) => sectionId !== "summary");
-  const detailsHidden = (except: "title" | "summary" | "contact") => (
-    <>
-      <input type="hidden" name="id" value={cv.id} />
-      <input type="hidden" name="partie" value={except === "summary" ? "summary" : "info"} />
-      {except !== "title" && <input type="hidden" name="title" value={cv.title} />}
-      {except !== "summary" && <input type="hidden" name="summary" value={content.summary} />}
-      {except !== "contact" && (
+  const rows = order.map((section) => {
+    const name = t(`docs.section.${section}`);
+    const sub = [line[section], hidden.has(section) ? t("docs.editor.hiddenShort") : null]
+      .filter(Boolean)
+      .join(" · ");
+    return {
+      id: section,
+      name,
+      content: (
         <>
-          {content.info.showEmail && <input type="hidden" name="showEmail" value="on" />}
-          <input type="hidden" name="phone" value={content.info.phone} />
-        </>
-      )}
-    </>
-  );
-
-  const profileForm = (
-    <form action={updateCvDetails} className="flex flex-col gap-3 border-t border-brume pt-3">
-      <input type="hidden" name="id" value={cv.id} />
-      <TextField
-        id="cv-title"
-        name="title"
-        label={t("rename")}
-        placeholder={t("name.placeholder")}
-        defaultValue={cv.title}
-        required
-        maxLength={80}
-      />
-      <div className="flex flex-col gap-1">
-        <TextArea
-          id="cv-summary"
-          name="summary"
-          label={t("section.summary")}
-          defaultValue={content.summary}
-          rows={5}
-          maxLength={SUMMARY_MAX}
-        />
-        <p className="flex justify-between gap-2 text-xs text-ardoise">
-          <span>{t("summary.hint")}</span>
-          <span className="tabular-nums">
-            {t("summary.counter", { count: content.summary.length, max: SUMMARY_MAX })}
+          <span className="t-t">
+            <Link
+              href={section === "summary" ? `${editor}?vue=resume` : `${editor}?partie=${section}`}
+              className="t-lien"
+            >
+              <b>{name}</b>
+            </Link>
+            <span>{sub}</span>
           </span>
-        </p>
-      </div>
-      <Checkbox
-        id="cv-show-email"
-        name="showEmail"
-        value="on"
-        defaultChecked={content.info.showEmail}
-        label={t("info.showEmail")}
-        hint={t("info.contact.hint")}
-      />
-      <TextField
-        id="cv-phone"
-        name="phone"
-        type="tel"
-        autoComplete="tel"
-        label={t("info.phone.label")}
-        hint={t("info.phone.hint")}
-        defaultValue={content.info.phone}
-        maxLength={30}
-        error={query.erreur === "telephone" ? t("info.phone.invalid") : undefined}
-      />
-      <button type="submit" className={pillClass("dark", "sm", "h-11 self-start lg:h-9")}>
-        {tProfile("save")}
-      </button>
-    </form>
-  );
+          {section === "summary" ? (
+            <form action={improveSummaryAction}>
+              <input type="hidden" name="id" value={cv.id} />
+              <button type="submit" className="t-orb-b t-press">
+                <OrbiMark size={16} />
+                {t("docs.editor.improve")}
+              </button>
+            </form>
+          ) : (
+            <TalentIcon name="suivant" size="s" />
+          )}
+        </>
+      ),
+    };
+  });
+  const tailorRows = offers.map((offer) => {
+    const gap = offerGap(content, offer.skills);
+    const lines = [
+      ...(gap.listed.length > 0
+        ? [
+            {
+              tone: "ok" as const,
+              text: t("docs.tailor.listed", { skills: gap.listed.join(", ") }),
+            },
+          ]
+        : []),
+      ...gap.written.map((skill) => ({
+        tone: "ko" as const,
+        text: t("docs.tailor.written", { skill }),
+      })),
+      ...gap.absent.map((skill) => ({
+        tone: "ko" as const,
+        text: t("docs.tailor.absent", { skill }),
+      })),
+    ];
+    return {
+      id: offer.id,
+      lines: lines.slice(0, 4),
+      copyNote: t("docs.tailor.copyNote", {
+        name: t("career.cv.tailor.name", { jobTitle: offer.title }),
+      }),
+      card: (
+        <span className="t-haut">
+          <Logo name={offer.company} src={offer.logo} tone={toneOf(offer.company)} />
+          <span className="t-t">
+            <b>{offer.title}</b>
+            <span>{[offer.company, offer.city].filter(Boolean).join(" · ")}</span>
+          </span>
+        </span>
+      ),
+    };
+  });
+  const tailorBlocked = tailor.state !== "ready";
 
   return (
-    <>
-      <PhoneTitle back="/app/career/cv" backLabel={t("phone.back")} title={cv.title} />
-      <AppPageHeader eyebrow={tHome("eyebrow")} title={t("title")} className="max-md:sr-only" />
-      <WorkshopBar
-        cv={{ id: cv.id, title: cv.title, isPrimary: cv.isPrimary }}
-        cvs={cvs}
-        className="max-md:hidden"
+    <div className="t-flux t-od-bas">
+      <FlowHead
+        back="/app/career/cv"
+        backLabel={t("docs.back")}
+        title={cv.title}
+        end={
+          <SheetButton target="cv-options" className="t-bi t-press" label={t("docs.editor.more")}>
+            <TalentIcon name="plus-options" size="s" />
+          </SheetButton>
+        }
       />
-      {notice && <Notice>{notice}</Notice>}
-      {error && <Alert tone="error" title={error} />}
-      {!included && <Alert tone="error" title={t("template.downgraded", { templateName })} />}
+      {notices}
+      {aiCode && <OrbiLimit code={aiCode} plan={tailorPlan} />}
+      {changes.length > 0 && (
+        <Link href={`${editor}?vue=ameliorer`} className="t-verre t-carte t-sugg t-press">
+          <OrbiMark size={36} />
+          <span className="t-t">
+            <small>{t("docs.editor.changesLabel")}</small>
+            <b>{t("docs.editor.changes", { count: changes.length })}</b>
+          </span>
+          <TalentIcon name="suivant" size="s" />
+        </Link>
+      )}
 
-      <PhoneEditorTabs id={cv.id} view={phoneView} />
-      {phoneView === "content" && (
-        <>
-          <PhonePartChips id={cv.id} part={part} parts={phoneParts} />
-          {part === "info" && (
-            <form
-              action={updateCvDetails}
-              className="flex flex-col gap-4 rounded-[24px] bg-blanc p-5 shadow-douce md:hidden"
-            >
-              {detailsHidden("contact")}
-              <TextField
-                id="cv-phone-title"
-                name="title"
-                label={t("rename")}
-                placeholder={t("name.placeholder")}
-                defaultValue={cv.title}
-                required
-                maxLength={80}
-              />
-              <Checkbox
-                id="cv-phone-show-email"
+      <div className="t-verre t-ed-ap">
+        <span className="t-pg" aria-hidden>
+          <i className="t-h" />
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+          <i />
+        </span>
+        <span className="t-t">
+          <Link href={`/app/career/cv/modeles?cv=${cv.id}`} className="t-lien">
+            <b>{t("docs.editor.template", { templateName })}</b>
+          </Link>
+          <span>
+            {t("docs.editor.savedOn", {
+              date: format.dateTime(cv.updatedAt, { day: "numeric", month: "short" }),
+            })}
+          </span>
+        </span>
+        <Link href={`${editor}?vue=apercu`} className="t-bt t-sec t-s t-press">
+          {t("docs.editor.preview")}
+        </Link>
+      </div>
+
+      <div className="t-reg">
+        <SheetButton target="cv-couleur" className="t-press" label={t("docs.style.color")}>
+          <i style={{ background: colorHex }} />
+          {colorName}
+        </SheetButton>
+        <SheetButton target="cv-police" className="t-press" label={t("docs.style.font")}>
+          {t("docs.style.fontChip", { font: fontOf(style.font).label })}
+        </SheetButton>
+        <SheetButton target="cv-densite" className="t-press" label={t("docs.style.density")}>
+          {d(`career.cv.template.density.${style.density}`)}
+        </SheetButton>
+      </div>
+
+      <h2 className="t-ck-t">{t("docs.editor.sections")}</h2>
+      <SectionOrder
+        documentId={cv.id}
+        rows={rows}
+        labels={{
+          grip: t("docs.editor.grip", { section: "{section}" }),
+          moved: t("docs.editor.moved", { section: "{section}" }),
+          error: t("docs.editor.error"),
+        }}
+      />
+
+      <div className="t-verre t-fort t-bas-f">
+        <SheetButton target="cv-adapter" className="t-bt t-sec t-m t-press">
+          <TalentIcon name="opportunites" size="s" />
+          {t("docs.editor.adapt")}
+        </SheetButton>
+        {pdf("t-bt t-p t-pl t-press")}
+      </div>
+
+      <Sheet id="cv-options" title={cv.title} closeLabel={close}>
+        <form action={renameCv} className="t-champ">
+          <input type="hidden" name="id" value={cv.id} />
+          <label htmlFor="cv-nom">{t("docs.editor.rename")}</label>
+          <span className="t-verre t-saisie">
+            <input id="cv-nom" name="title" defaultValue={cv.title} maxLength={80} required />
+            <button type="submit" className="t-bt t-sec t-s t-press">
+              {t("docs.editor.save")}
+            </button>
+          </span>
+        </form>
+        <form action={updateCvContact} className="t-flux">
+          <input type="hidden" name="id" value={cv.id} />
+          <div className="t-verre t-liste">
+            <label className="t-li">
+              <span className="t-t">
+                <b>{t("career.cv.info.showEmail")}</b>
+                <span>{content.info.email}</span>
+              </span>
+              <input
+                type="checkbox"
+                role="switch"
                 name="showEmail"
-                value="on"
                 defaultChecked={content.info.showEmail}
-                label={t("info.showEmail")}
-                hint={t("info.contact.hint")}
+                className="sr-only"
               />
-              <TextField
-                id="cv-phone-phone"
+              <span aria-hidden className="t-sw" />
+            </label>
+          </div>
+          <div className="t-champ">
+            <label htmlFor="cv-telephone">{t("career.cv.info.phone.label")}</label>
+            <span className="t-verre t-saisie">
+              <input
+                id="cv-telephone"
                 name="phone"
                 type="tel"
                 autoComplete="tel"
-                label={t("info.phone.label")}
-                hint={t("info.phone.hint")}
-                defaultValue={content.info.phone}
+                defaultValue={content.info.phone ?? ""}
                 maxLength={30}
-                error={query.erreur === "telephone" ? t("info.phone.invalid") : undefined}
+                aria-describedby="cv-telephone-aide"
               />
-              <button type="submit" className={pillClass("dark", "md", "self-start")}>
-                {tProfile("save")}
+              <button type="submit" className="t-bt t-sec t-s t-press">
+                {t("docs.editor.save")}
               </button>
-            </form>
-          )}
-          {part === "summary" && (
-            <form
-              action={updateCvDetails}
-              className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5 shadow-douce md:hidden"
-            >
-              {detailsHidden("summary")}
-              <input type="hidden" name="title" value={cv.title} />
-              <TextArea
-                id="cv-phone-summary"
-                name="summary"
-                label={t("section.summary")}
-                defaultValue={content.summary}
-                rows={6}
-                maxLength={SUMMARY_MAX}
-              />
-              <p className="flex justify-between gap-2 text-[14px] text-ardoise">
-                <span>{t("summary.hint")}</span>
-                <span className="tabular-nums">
-                  {t("summary.counter", { count: content.summary.length, max: SUMMARY_MAX })}
-                </span>
-              </p>
-              <button type="submit" className={pillClass("dark", "md", "self-start")}>
-                {tProfile("save")}
-              </button>
-            </form>
-          )}
-          {part !== "info" && part !== "summary" && (
-            <PhoneSection
-              id={cv.id}
-              section={part}
-              content={content}
-              visible={sections.find((section) => section.id === part)?.visible ?? true}
-              first={listSections.indexOf(part) === 0}
-              last={listSections.indexOf(part) === listSections.length - 1}
-            />
-          )}
-        </>
-      )}
-
-      <CvPaginationProvider>
-        <div
-          className="jm-cv-editor grid items-start gap-[18px] min-[900px]:grid-cols-[minmax(0,340px)_minmax(0,1fr)] xl:grid-cols-[340px_minmax(0,1fr)_330px]"
-          style={highlightLabels}
-        >
-          <section
-            aria-label={view === "style" ? t("tab.style") : t("tab.content")}
-            className={cx(
-              "order-2 flex min-w-0 flex-col gap-4 rounded-[24px] bg-blanc p-3.5 min-[900px]:order-1 lg:p-4",
-              phoneView !== "style" && "max-md:hidden",
-            )}
-          >
-            <div className="max-md:hidden">
-              <ModeSwitch id={cv.id} view={view} />
-            </div>
-            {view === "style" ? (
-              <StylePanel
-                documentId={cv.id}
-                template={template}
-                style={style}
-                customError={customError}
-              />
-            ) : (
-              <SectionsPanel
-                id={cv.id}
-                profileForm={profileForm}
-                sections={sections.map((section) => ({
-                  id: section.id,
-                  visible: section.visible,
-                  filled: filled[section.id],
-                  count: sectionCounts[section.id],
-                }))}
-              />
-            )}
-          </section>
-
-          <section
-            aria-labelledby="cv-preview"
-            className={cx(
-              "order-1 flex min-w-0 flex-col gap-3 min-[900px]:sticky min-[900px]:top-[98px] min-[900px]:order-2",
-              phoneView === "content" && "max-md:hidden",
-            )}
-          >
-            <h2 id="cv-preview" className="sr-only">
-              {t("tab.preview")}
-            </h2>
-            <TabRail name="cv-document" className="max-md:hidden">
-              <div className="flex w-max gap-1 rounded-pill bg-blanc/70 p-1 ring-1 ring-sapin/6">
-                <span
-                  className={pillClass("dark", "sm", "pointer-events-none shrink-0")}
-                  aria-current="page"
-                >
-                  {t("tab.preview")}
-                </span>
-                <Link
-                  href="/app/career/documents"
-                  className={pillClass("outline", "sm", "shrink-0 bg-transparent ring-0")}
-                >
-                  {t("tab.letter")}
-                </Link>
-                <Link
-                  href="/app/career/linkedin"
-                  className={pillClass("outline", "sm", "shrink-0 bg-transparent ring-0")}
-                >
-                  {t("tab.linkedin")}
-                </Link>
-              </div>
-            </TabRail>
-            {(demo || isEmptyCv(content)) && <Alert tone="info" title={t("empty")} />}
-            <Workbench
-              labels={{
-                pageOf: t("preview.pageOf", { page: "{page}", total: "{total}" }),
-                zoomIn: t("preview.zoomIn"),
-                zoomOut: t("preview.zoomOut"),
-                fullscreen: t("preview.fullscreen"),
-                close: tAll("common.close"),
-                hint: t("preview.highlightHint"),
-                label: t("tab.preview"),
-              }}
-            >
-              <CvPreview data={data} template={template} style={style} label={t("tab.preview")} />
-            </Workbench>
-          </section>
-
-          <div
-            className={cx(
-              "order-3 grid min-w-0 items-start gap-[18px] min-[900px]:col-span-2 min-[900px]:grid-cols-3 xl:col-span-1 xl:grid-cols-1",
-              phoneView !== "preview" && "max-md:hidden",
-            )}
-          >
-            <CvCoachPanel
-              documentId={cv.id}
-              score={score}
-              coach={coach}
-              credits={credits}
-              suggestions={suggestions}
-              missingKeywords={missingKeywords}
-              percents={targets.percents}
-              targetTitle={targets.title}
-              criteria={<CriteriaBars score={score} dark />}
-              outcome={{
-                coach: typeof query.coach === "string" ? query.coach : undefined,
-                suggestion: typeof query.suggestion === "string" ? query.suggestion : undefined,
-              }}
-            />
-            <ExportPanel
-              documentId={cv.id}
-              fileName={fileName}
-              locked={!included}
-              labels={{
-                title: t("export.title"),
-                pdf: t("export.format.pdf"),
-                fileLines: Array.from({ length: MAX_PAGES + 3 }, (_, index) =>
-                  t("export.fileName", { fileName, count: index + 1 }),
-                ),
-                download: t("export.download"),
-                preparing: t("export.preparing"),
-                ready: t("export.ready"),
-                error: t("export.error"),
-                overMax: t("pages.overMax", { max: MAX_PAGES }),
-                locked: t("template.downgraded", { templateName }),
-                neutral: t("template.neutral"),
-              }}
-            />
-            <PagesPanel
-              documentId={cv.id}
-              targets={breakTargets}
-              breaks={style.pageBreaks ?? []}
-              fitTried={query.ajuste === "1"}
-              labels={{
-                title: t("pages.title"),
-                count: t("pages.count", { count: "{count}", max: MAX_PAGES }),
-                page: t("pages.page", { number: "{number}" }),
-                breakHere: t("pages.breakHere"),
-                breakTarget: t("pages.breakTarget"),
-                breakLabel: t("pages.breakLabel", { sectionName: "{sectionName}" }),
-                removeBreak: t("pages.removeBreak"),
-                fitOne: t("pages.fitOne"),
-                fitFailed: t("pages.fitFailed"),
-                hint: t("pages.hint"),
-                tooLong: t("export.tooLong"),
-                overMax: t("pages.overMax", { max: MAX_PAGES }),
-                itemTooLong: t("pages.itemTooLong"),
-              }}
-            />
-            <section
-              id="adapter"
-              aria-labelledby="cv-tailor"
-              className={cx(card, "relative flex scroll-mt-28 flex-col gap-3 lg:p-5")}
-            >
-              {tailorLocked && tailorPlan && (
-                <span className="absolute top-4 right-4 inline-flex items-center gap-1 rounded-pill bg-nuit px-2.5 py-1 text-[11px] font-semibold text-neon">
-                  <Icon name="lock" className="size-3" />
-                  {tailorPlan}
-                </span>
-              )}
-              <div className={cx("flex items-start gap-3", tailorLocked && "pr-20")}>
-                <Icon name="jobs" className="mt-0.5 size-5 shrink-0" />
-                <div className="flex min-w-0 flex-col gap-0.5">
-                  <h2 id="cv-tailor" className="text-[15px] font-semibold">
-                    {t("tailor.text")}
-                  </h2>
-                  <p className="text-[13px] leading-[18px] text-ardoise">
-                    {tailorLocked ? t("tailor.locked", { plan: tailorPlan }) : t("tailor.desc")}
-                  </p>
-                </div>
-              </div>
-              {!tailorLocked && (
-                <>
-                  <AiGateNotice
-                    state={tailor.state}
-                    plan={tailorPlan}
-                    resetsAt={tailor.resetsAt}
-                    outcome={typeof query.adaptation === "string" ? query.adaptation : undefined}
-                  />
-                  {query.adaptation === "notFound" && (
-                    <Alert tone="error" title={t("tailor.notFound")} />
-                  )}
-                  {query.adaptation === "limit" && (
-                    <Alert tone="error" title={t("limit", { max: MAX_CVS })} />
-                  )}
-                  {tailor.state === "ready" &&
-                    (tailorJobs.length === 0 ? (
-                      <p className="text-[13px]">{t("tailor.noJobs")}</p>
-                    ) : (
-                      <form action={tailorCvAction} className="flex flex-col gap-3">
-                        <input type="hidden" name="cvId" value={cv.id} />
-                        <Select
-                          id={`tailor-job-${cv.id}`}
-                          name="jobId"
-                          label={t("tailor.selectJob")}
-                          required
-                          options={tailorJobs.map((job) => ({ value: job.id, label: job.title }))}
-                        />
-                        <button type="submit" className={pillClass("outline", "sm", "h-11")}>
-                          {t("tailor.cta")}
-                        </button>
-                        <p className="text-xs text-ardoise">
-                          {tAll("career.documents.generate.cost", {
-                            count: aiFeatures.cv_tailor.credits,
-                          })}
-                        </p>
-                      </form>
-                    ))}
-                </>
-              )}
-            </section>
+            </span>
+            <p id="cv-telephone-aide" className="t-aide">
+              {t("career.cv.info.phone.hint")}
+            </p>
           </div>
+        </form>
+        <div className="t-verre t-liste t-lignes">
+          {!cv.isPrimary && (
+            <form action={setPrimaryCv} className="t-li">
+              <input type="hidden" name="id" value={cv.id} />
+              <span className="t-cases t-c3">
+                <TalentIcon name="favori" size="s" />
+              </span>
+              <span className="t-t">
+                <button type="submit" className="t-lien">
+                  <b>{t("docs.menu.primary")}</b>
+                </button>
+                <span>{t("docs.menu.primaryHint")}</span>
+              </span>
+            </form>
+          )}
+          <form action={refreshCvFromProfile} className="t-li">
+            <input type="hidden" name="id" value={cv.id} />
+            <span className="t-cases t-c1">
+              <TalentIcon name="profil" size="s" />
+            </span>
+            <span className="t-t">
+              <button type="submit" className="t-lien">
+                <b>{t("docs.editor.refresh")}</b>
+              </button>
+              <span>{t("docs.editor.refreshHint")}</span>
+            </span>
+          </form>
+          {cvCount < MAX_CVS && (
+            <form action={duplicateCv} className="t-li">
+              <input type="hidden" name="id" value={cv.id} />
+              <span className="t-cases">
+                <TalentIcon name="document" size="s" />
+              </span>
+              <span className="t-t">
+                <button type="submit" className="t-lien">
+                  <b>{t("docs.menu.duplicate")}</b>
+                </button>
+              </span>
+            </form>
+          )}
+          <form action={deleteCv} className="t-li t-danger">
+            <input type="hidden" name="id" value={cv.id} />
+            <span className="t-cases">
+              <TalentIcon name="supprimer" size="s" />
+            </span>
+            <span className="t-t">
+              <button type="submit" className="t-lien">
+                <b>{t("docs.menu.delete")}</b>
+              </button>
+              <span>{t("docs.menu.deleteHint")}</span>
+            </span>
+          </form>
         </div>
-      </CvPaginationProvider>
-      {phoneView === "style" && (
-        <p className="text-[15px] text-ardoise md:hidden">{t("phone.neutral")}</p>
+      </Sheet>
+
+      <Sheet id="cv-couleur" title={t("docs.style.color")} closeLabel={close}>
+        <p className="t-ss">{t("career.cv.style.color.hint")}</p>
+        <div className="t-teintes">
+          {cvColors.map((item) => (
+            <form key={item.code} action={updateCvStyleAction}>
+              <input type="hidden" name="id" value={cv.id} />
+              <input type="hidden" name="setting" value="accent" />
+              <button
+                type="submit"
+                name="value"
+                value={item.code}
+                aria-pressed={item.code === style.accent}
+                className="t-press"
+              >
+                <i style={{ background: item.hex }} />
+                {d(`cv.colors.${item.code}`)}
+              </button>
+            </form>
+          ))}
+        </div>
+        <p className="t-aide">{t("docs.style.colorAts")}</p>
+      </Sheet>
+
+      <Sheet id="cv-police" title={t("docs.style.font")} closeLabel={close}>
+        <div className="t-verre t-liste t-lignes">
+          {cvFonts.map((font) => (
+            <form key={font.code} action={updateCvStyleAction} className="t-li">
+              <input type="hidden" name="id" value={cv.id} />
+              <input type="hidden" name="setting" value="font" />
+              <span className="t-t">
+                <button
+                  type="submit"
+                  name="value"
+                  value={font.code}
+                  aria-pressed={font.code === style.font}
+                  className="t-lien"
+                >
+                  <b style={{ fontFamily: font.family }}>{font.label}</b>
+                </button>
+                {font.code === "sora" && <span>{t("career.cv.style.font.recommended")}</span>}
+              </span>
+              {font.code === style.font && <TalentIcon name="valider" size="s" />}
+            </form>
+          ))}
+        </div>
+        <p className="t-aide">{t("career.cv.style.font.hint")}</p>
+      </Sheet>
+
+      <Sheet id="cv-densite" title={t("docs.style.density")} closeLabel={close}>
+        <div className="t-verre t-liste t-lignes">
+          {cvDensities.map((density) => (
+            <form key={density} action={updateCvStyleAction} className="t-li">
+              <input type="hidden" name="id" value={cv.id} />
+              <input type="hidden" name="setting" value="density" />
+              <span className="t-t">
+                <button
+                  type="submit"
+                  name="value"
+                  value={density}
+                  aria-pressed={density === style.density}
+                  className="t-lien"
+                >
+                  <b>{d(`career.cv.template.density.${density}`)}</b>
+                </button>
+              </span>
+              {density === style.density && <TalentIcon name="valider" size="s" />}
+            </form>
+          ))}
+        </div>
+      </Sheet>
+
+      <Sheet
+        id="cv-adapter"
+        title={t("docs.tailor.offerTitle")}
+        closeLabel={close}
+        openParam="adapter"
+        defaultOpen={Boolean(adaptFor)}
+      >
+        {tailorBlocked ? (
+          <OrbiLimit code={tailor.state as "consent"} plan={tailorPlan} />
+        ) : tailorRows.length === 0 ? (
+          <p className="t-ss">{t("docs.tailor.noOffers")}</p>
+        ) : (
+          <form action={tailorCvAction} className="t-flux">
+            <input type="hidden" name="cvId" value={cv.id} />
+            <TailorOffer offers={tailorRows} legend={t("docs.tailor.offerLegend")}>
+              <button type="submit" className="t-bt t-p t-pl t-press">
+                <OrbiMark size={20} />
+                {t("docs.tailor.create")}
+              </button>
+            </TailorOffer>
+          </form>
+        )}
+        {!tailorBlocked && (
+          <SheetButton target="cv-adapter-texte" className="t-lien-m t-press">
+            <TalentIcon name="document" size="s" />
+            {t("docs.tailor.toText")}
+          </SheetButton>
+        )}
+      </Sheet>
+
+      {!tailorBlocked && (
+        <Sheet id="cv-adapter-texte" title={t("docs.tailor.textTitle")} closeLabel={close}>
+          <p className="t-ss">{t("docs.tailor.textLead")}</p>
+          <form action={tailorCvTextAction} className="t-flux">
+            <input type="hidden" name="cvId" value={cv.id} />
+            <TailorText
+              cvId={cv.id}
+              max={TAILOR_TEXT_MAX}
+              kinds={tailorTextKinds.map((kind) => ({
+                value: kind,
+                label: t(`docs.tailor.kind.${kind}`),
+                placeholder: t(`docs.tailor.placeholder.${kind}`),
+              }))}
+              labels={{
+                kinds: t("docs.tailor.kinds"),
+                text: t("docs.tailor.textLabel"),
+                count: t("docs.tailor.counter", {
+                  count: "{count}",
+                  max: TAILOR_TEXT_MAX.toLocaleString("fr-FR"),
+                }),
+                present: t("docs.tailor.keywords"),
+                missing: t("docs.tailor.missing"),
+              }}
+            />
+            <p className="t-gar">
+              <TalentIcon name="cadenas" size="s" />
+              {t("docs.tailor.textNote")}
+            </p>
+            <button type="submit" className="t-bt t-p t-pl t-press">
+              <OrbiMark size={20} />
+              {t("docs.tailor.create")}
+            </button>
+          </form>
+        </Sheet>
       )}
-      <MobileActionBar id={cv.id} className="max-md:hidden" />
-      <PhoneEditorBar
-        id={cv.id}
-        view={phoneView}
-        next={
-          nextPart
-            ? `/app/career/cv/${cv.id}?partie=${nextPart.key}`
-            : `/app/career/cv/${cv.id}?vue=style`
-        }
-        fileName={fileName}
-        locked={!included}
-      />
-    </>
+    </div>
   );
 }
 
-/** Limit of the CV summary (`updateCvDetails` checks it again). */
-const SUMMARY_MAX = 1000;
+/** The items of a section, as the CV prints them. */
+function sectionItems(
+  content: CvContent,
+  section: Section,
+  labels: { present: string; level: (level: string) => string },
+) {
+  const years = (start: string, end: string | null) =>
+    [start.slice(0, 4), end ? end.slice(0, 4) : labels.present]
+      .filter((value, index, all) => index === 0 || value !== all[0])
+      .join(" – ");
+  switch (section) {
+    case "experience":
+      return content.experiences.map((item, index) => ({
+        key: `${index}`,
+        title: item.title,
+        detail: [item.company, years(item.start, item.end)].filter(Boolean).join(" · "),
+      }));
+    case "education":
+      return content.education.map((item, index) => ({
+        key: `${index}`,
+        title: item.degree,
+        detail: [item.school, item.endYear ?? item.startYear].filter(Boolean).join(" · "),
+      }));
+    case "skills":
+      return content.skills.map((item) => ({ key: item.name, title: item.name, detail: "" }));
+    case "languages":
+      return content.languages.map((item) => ({
+        key: item.code,
+        title: languageName(item.code),
+        detail: [labels.level(item.level), item.cefr].filter(Boolean).join(" · "),
+      }));
+  }
+}

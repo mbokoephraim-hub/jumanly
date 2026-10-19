@@ -43,6 +43,11 @@ describe("navigation Talent (docs/refonte-mobile, brief § 2.1)", () => {
       "/app/compte",
       "/app/compte/connexions",
       "/app/career/cv/abc",
+      // Lot 6c: CV et documents opens from Compte and draws its own head.
+      "/app/career/cv",
+      "/app/career/cv/modeles",
+      "/app/career/linkedin",
+      "/app/career/documents/abc",
       "/app/espace",
       "/app/bienvenue",
       "/app/orbi",
@@ -58,8 +63,7 @@ describe("navigation Talent (docs/refonte-mobile, brief § 2.1)", () => {
       "/app/jobs/candidatures",
       "/app/jobs/enregistrees",
       "/app/learn",
-      "/app/career/cv",
-      "/app/career/cv/modeles",
+      "/app/career",
       "/app/suivi",
       "/app/tableau-de-bord",
     ])

@@ -74,6 +74,9 @@ export function ownHead(pathname: string) {
     // Lot 6b: faire le point, the diagnostic, the plan and the practice (planche talent-4 § 5).
     /^\/app\/profil\/point$/,
     /^\/app\/career\/(diagnostic|plan|entretiens)(\/.*)?$/,
+    // Lot 6c: CV et documents, LinkedIn, the letters, the CV studio and the CV import.
+    /^\/app\/career\/(cv|linkedin|documents)(\/.*)?$/,
+    /^\/app\/profil\/import$/,
   ].some((pattern) => pattern.test(pathname));
 }
 

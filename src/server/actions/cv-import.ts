@@ -5,7 +5,8 @@ import { redirect } from "next/navigation";
 import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { applyImport, CV_TEXT_MAX, importCvText } from "@/server/services/cv-import";
+import { CvFileError, readCvFile } from "@/server/services/cv-file";
+import { applyImport, CV_TEXT_MAX, importCvText, parseImport } from "@/server/services/cv-import";
 
 const PATH = "/app/profil/import";
 
@@ -19,19 +20,53 @@ export async function readCvAction(formData: FormData) {
   redirect(`${PATH}?etape=verification`);
 }
 
-const indexes = (formData: FormData, key: string) =>
-  formData
-    .getAll(key)
-    .map(Number)
-    .filter((value) => Number.isInteger(value) && value >= 0 && value < 100);
+/**
+ * Step 1 from a file (planche talent-4 § 6, « Choisir un fichier », « Depuis LinkedIn »): a PDF or
+ * a Word document is read on the server and never kept; its text goes through the same reading
+ * as a pasted CV.
+ */
+export async function readCvFileAction(formData: FormData) {
+  const user = await requireUser(PATH);
+  const file = formData.get("file");
+  if (!(file instanceof File) || file.size === 0) redirect(`${PATH}?erreur=empty`);
+  let read;
+  try {
+    read = await readCvFile(new Uint8Array(await file.arrayBuffer()));
+  } catch (error) {
+    if (error instanceof CvFileError) redirect(`${PATH}?erreur=${error.code}`);
+    throw error;
+  }
+  await importCvText(db, user.id, read.text, {
+    name: file.name,
+    kind: read.kind,
+    pages: read.pages,
+    size: file.size,
+  });
+  refresh();
+  redirect(`${PATH}?etape=verification`);
+}
 
-/** Step 2: only the items ticked by the talent enter the profile. */
+type ImportGroup = "experiences" | "educations" | "skills";
+
+/**
+ * Step 2 (« Lu dans votre fichier · à vérifier »): only the groups the talent left on enter the
+ * profile; nothing is added without this tap.
+ */
 export async function applyCvImportAction(formData: FormData) {
   const user = await requireUser(PATH);
-  const added = await applyImport(db, user.id, String(formData.get("import") ?? ""), {
-    experiences: indexes(formData, "experience"),
-    educations: indexes(formData, "education"),
-    skills: indexes(formData, "skill"),
+  const id = String(formData.get("import") ?? "").slice(0, 60);
+  const chosen = new Set(formData.getAll("groupe").map(String));
+  const pending = await db.aiSuggestion.findFirst({
+    where: { id, userId: user.id, feature: "cv_parse", status: "pending" },
+  });
+  const payload = pending ? parseImport(pending.payload) : null;
+  if (!payload) redirect(PATH);
+  const all = (group: ImportGroup) =>
+    chosen.has(group) ? payload[group].map((_, index) => index) : [];
+  const added = await applyImport(db, user.id, id, {
+    experiences: all("experiences"),
+    educations: all("educations"),
+    skills: all("skills"),
   });
   refresh();
   if (added === null) redirect(PATH);
@@ -45,5 +80,5 @@ export async function cancelCvImportAction() {
     data: { status: "ignored" },
   });
   refresh();
-  redirect("/app/profil");
+  redirect(PATH);
 }

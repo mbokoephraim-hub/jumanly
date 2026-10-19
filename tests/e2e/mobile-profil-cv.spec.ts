@@ -6,7 +6,8 @@ import { expect, test } from "./fixtures";
 import { signUpFromPricing, testEmail } from "./session";
 
 // Prompt 6 (docs/PROMPTS-LANCEMENT-MOBILE-ET-IA.md): « compléter mon profil » and « télécharger mon
-// CV » on a phone (screens 25 to 29 and 56). The PDF check needs poppler-utils (pdftotext).
+// CV » on a phone (screens 25 and 26; the CV is planche talent-4 § 6, lot 6c). The PDF check
+// needs poppler-utils (pdftotext).
 
 const photo = join(process.cwd(), "ressources/illustrations/png/jumanly-nadia-salut.png");
 
@@ -64,49 +65,44 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
   expect((await page.request.get(src!)).status()).toBe(404);
 });
 
-test("télécharger mon CV sur téléphone : créer, une section à la fois, PDF", async ({
-  page,
-  isMobile,
-}) => {
-  test.skip(!isMobile, "Parcours du téléphone (écrans 27 à 29 et 56).");
+test("télécharger mon CV sur téléphone : créer, aperçu, PDF", async ({ page, isMobile }) => {
+  test.skip(!isMobile, "Parcours du téléphone (planche talent-4 § 6).");
   test.setTimeout(150_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("cv-mobile"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
-  // « Créer un CV »: from the profile, named, then opened.
+  // « Nouveau CV »: from the profile, named, then opened (lot 6c).
   await page.goto("/app/career/cv");
-  await page.getByRole("link", { name: "Créer un CV" }).click();
-  const sheet = page.getByRole("dialog", { name: "Créer un CV" });
-  await expect(sheet.getByRole("radio", { name: /À partir de mon profil/ })).toBeChecked();
+  await expect(page.getByRole("navigation", { name: "Navigation principale" })).toHaveCount(0);
+  await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
+  const sheet = page.getByRole("dialog", { name: "Nouveau CV" });
+  await expect(sheet.getByRole("radio", { name: /Depuis mon profil/ })).toBeChecked();
   await sheet.getByLabel("Nom du CV").fill("CV Analyste");
   await sheet.getByRole("button", { name: "Créer et ouvrir" }).click();
   await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
   const id = new URL(page.url()).pathname.split("/").pop()!;
 
-  // The editor: three views, the parts one at a time, « Section suivante ».
-  const tabs = page.getByRole("navigation", { name: "Vues du CV" });
-  await expect(tabs.getByRole("link", { name: "Contenu" })).toHaveAttribute("aria-current", "page");
-  const parts = page.getByRole("navigation", { name: "Sections du CV" });
-  await expect(parts.getByRole("link", { name: "Infos" })).toHaveAttribute("aria-current", "page");
-  await expect(page.locator("#cv-phone-title")).toHaveValue("CV Analyste");
-  await page.getByRole("link", { name: "Section suivante" }).click();
-  await expect(page).toHaveURL(/partie=summary/);
-  await expect(parts.getByRole("link", { name: "Profil" })).toHaveAttribute("aria-current", "page");
-  await tabs.getByRole("link", { name: "Mise en forme" }).click();
-  await expect(page).toHaveURL(/vue=style/);
+  // The studio: its title, the sections, the bottom bar « Adapter » and « PDF ».
+  await expect(page.getByRole("heading", { name: "CV Analyste", level: 1 })).toBeVisible();
   await expect(
-    page.getByText("Le CV téléchargé ne porte ni logo ni mention Jumanly."),
+    page.getByRole("heading", { name: "Sections · glisser pour réordonner" }),
   ).toBeVisible();
-  await expect(page.getByRole("link", { name: "Télécharger le PDF" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Adapter", exact: true })).toBeInViewport();
+  await page.getByRole("link", { name: "Aperçu" }).click();
+  await expect(page).toHaveURL(/vue=apercu/);
+  await expect(page.locator(".cv-pages > .cv-page").first()).toBeVisible();
 
-  // Mes CV: the thumbnail grid and the PDF, « PDF… » then the toast; the file says nothing of us.
-  await page.getByRole("link", { name: "Retour à Mes CV" }).click();
-  const card = page.locator("li").filter({ hasText: "CV Analyste" }).filter({ visible: true });
+  // The list: « … » then « Télécharger en PDF », the toast; the file says nothing of us.
+  await page.goto("/app/career/cv");
+  await page.getByRole("button", { name: "Plus d'options pour « CV Analyste »" }).click();
   const download = page.waitForEvent("download");
-  await card.getByRole("link", { name: "PDF" }).click();
+  await page
+    .getByRole("dialog", { name: "CV Analyste" })
+    .getByRole("button", { name: "Télécharger en PDF" })
+    .click();
   const file = await download;
   expect(file.suggestedFilename()).toMatch(/^CV-Awa-Fictive.*\.pdf$/);
-  await expect(page.getByText("CV téléchargé · sans mention Jumanly")).toBeVisible();
+  await expect(page.getByText("CV téléchargé.")).toBeVisible();
   const path = join(mkdtempSync(join(tmpdir(), "cv-mobile-")), "cv.pdf");
   await file.saveAs(path);
   // The contact e-mail of the fictional account is the only place the word may appear.
@@ -114,9 +110,11 @@ test("télécharger mon CV sur téléphone : créer, une section à la fois, PDF
   expect(text.replace(/\S+@\S+/g, "")).not.toMatch(/Jumanly/i);
 
   // Clean up through the « … » menu.
-  await card.locator('summary[aria-label^="Plus d\'actions"]').click();
-  await card.locator("summary").filter({ hasText: "Supprimer ce CV" }).click();
-  await card.getByRole("button", { name: "Supprimer", exact: true }).click();
+  await page.getByRole("button", { name: "Plus d'options pour « CV Analyste »" }).click();
+  await page
+    .getByRole("dialog", { name: "CV Analyste" })
+    .getByRole("button", { name: "Supprimer" })
+    .click();
   await expect(page).toHaveURL(/ok=supprime/);
   expect(id).toBeTruthy();
 });

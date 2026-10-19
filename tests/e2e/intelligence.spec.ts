@@ -1,6 +1,6 @@
 import { expect, test, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
-import { demo, finishOnboarding, logIn, signUpWithEmail, testEmail } from "./session";
+import { demo, fictiveDocx, finishOnboarding, logIn, signUpWithEmail, testEmail } from "./session";
 
 const JOB = "demo-assistant-administratif-kinshasa";
 
@@ -26,17 +26,16 @@ test("score expliqué, import de CV et révision humaine", async ({ page, browse
   await page.goto(`/app/jobs/${JOB}`);
   await expect(page.getByRole("link", { name: "Ajouter mes compétences" }).first()).toBeVisible();
 
-  // Pasted CV → validated items → profile.
+  // A Word CV → « Lu dans votre fichier · à vérifier » → profile (lot 6c: the file is read, never kept).
   await page.goto("/app/profil/import");
   await page
-    .locator("#cv-import-text")
-    .fill("Assistante administrative. Maîtrise de Microsoft Excel et de l'archivage.");
-  await page.getByRole("button", { name: "Lire mon CV" }).click();
-  await expect(
-    page.getByRole("heading", { name: "Vérifiez les informations extraites" }),
-  ).toBeVisible();
-  await expect(page.getByLabel("Excel")).toBeChecked();
-  await page.getByRole("button", { name: "Valider" }).click();
+    .locator("#import-fichier")
+    .setInputFiles(
+      fictiveDocx(["Assistante administrative.", "Maîtrise de Microsoft Excel et de l'archivage."]),
+    );
+  await expect(page.getByText("Lu dans « cv-fictif.docx » · à vérifier")).toBeVisible();
+  await expect(page.getByRole("switch", { name: /compétence/ })).toBeChecked();
+  await page.getByRole("button", { name: "Ajouter à mon profil" }).click();
   await expect(page).toHaveURL(/\/app\/profil\?import=/);
   await expect(page.locator("#competences")).toContainText("Excel");
 

@@ -653,7 +653,7 @@ export default async function ThreadPage({
                   <div className="t-flux t-serre">
                     <p className="t-vide-t">{t(`connect.plus.${key}.empty`)}</p>
                     <Link
-                      href={key === "cv" ? "/app/career/cv" : "/app/career/documents"}
+                      href={key === "cv" ? "/app/career/cv" : "/app/career/cv?vue=lettres"}
                       className="t-bt t-sec t-pl t-press"
                     >
                       {t("inbox.plus.create")}
@@ -782,7 +782,7 @@ export default async function ThreadPage({
                 {documents.length === 0 ? (
                   <div className="t-flux t-serre">
                     <p className="t-vide-t">{t("candidature.requests.none")}</p>
-                    <Link href="/app/career/documents" className="t-bt t-sec t-pl t-press">
+                    <Link href="/app/career/cv?vue=lettres" className="t-bt t-sec t-pl t-press">
                       {t("inbox.plus.create")}
                     </Link>
                   </div>

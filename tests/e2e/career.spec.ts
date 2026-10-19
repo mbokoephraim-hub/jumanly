@@ -51,28 +51,39 @@ test("lettre, correction et LinkedIn à partir du profil", async ({ page, isMobi
   test.skip(isMobile, "Les crédits IA du mois sont partagés.");
   test.setTimeout(120_000);
   await logIn(page, demo.talentStarter);
+  // Lot 6c: the letters are a tab of « CV et documents »; the former address leads there.
   await page.goto("/app/career/documents");
-  await expect(page.getByRole("heading", { name: "Lettres et documents", level: 1 })).toBeVisible();
-  await page.getByRole("button", { name: "Générer une proposition" }).click();
-  await expect(page.getByText("Votre proposition est prête.", { exact: false })).toBeVisible();
+  await expect(page).toHaveURL(/\/app\/career\/cv\?vue=lettres$/);
+  await expect(page.getByRole("link", { name: /^Lettres/ })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await page.getByRole("button", { name: "Nouvelle lettre" }).click();
+  const create = page.getByRole("dialog", { name: "Nouvelle lettre" });
+  await create.getByRole("button", { name: "Rédiger avec Orbi" }).click();
+  await expect(page.getByText("Orbi a rédigé ce texte", { exact: false })).toBeVisible();
   await expect(page.getByRole("textbox", { name: /^Texte/ })).toContainText("Madame, Monsieur,");
-  await expect(page.getByRole("link", { name: "Télécharger en PDF" })).toBeVisible();
   await expectAccessible(page);
 
-  await page.goto("/app/career/documents");
-  await page.getByLabel("Collez votre texte").fill("bonjour,  je vous écris . merci");
-  await page.getByRole("button", { name: "Corriger" }).click();
+  await page.goto("/app/career/cv?vue=lettres");
+  await page.getByRole("button", { name: "Faire relire un texte" }).click();
+  const proofread = page.getByRole("dialog", { name: "Faire relire un texte" });
+  await proofread.getByLabel("Votre texte").fill("bonjour,  je vous écris . merci");
+  await proofread.getByRole("button", { name: /^Relire/ }).click();
   await expect(page.getByText(/corrections? proposées?/)).toBeVisible();
   await page.getByRole("button", { name: "Appliquer les corrections cochées" }).click();
   await expect(page.getByRole("textbox", { name: /^Texte/ })).toHaveValue(
     "Bonjour, je vous écris. Merci",
   );
 
-  await page.goto("/app/career/linkedin");
-  await page
-    .getByRole("button", { name: /Générer des propositions|Proposer une autre version/ })
-    .click();
-  await expect(page.getByRole("heading", { name: "Titre", level: 3 })).toBeVisible();
+  // « Préparer mon LinkedIn » from the Lettres tab: title, summary, 5 skills, nothing published.
+  await page.goto("/app/career/cv?vue=lettres");
+  await page.getByRole("link", { name: "Préparer mon LinkedIn" }).click();
+  await expect(page).toHaveURL(/\/app\/career\/linkedin$/);
+  await page.getByRole("button", { name: /^(Préparer|Proposer à nouveau)/ }).click();
+  await expect(page.getByRole("heading", { name: "Titre proposé", level: 2 })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Résumé proposé", level: 2 })).toBeVisible();
+  await expect(page.getByText("Rien n'est publié sur LinkedIn", { exact: false })).toBeVisible();
   await expect(
     page.getByText("Jumanly n'est pas affilié à LinkedIn", { exact: false }),
   ).toBeVisible();

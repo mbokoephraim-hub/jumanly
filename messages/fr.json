@@ -3791,6 +3791,309 @@
       "privacy": "Votre voix sert seulement à transcrire la réponse. Aucun enregistrement n'est gardé : l'audio n'est jamais envoyé."
     }
   },
+  "docs": {
+    "back": "Retour",
+    "list": {
+      "seo": "CV et documents",
+      "title": "CV et documents",
+      "tabs": "Mes CV, mes lettres, LinkedIn",
+      "tab": {
+        "cv": "CV",
+        "letters": "Lettres",
+        "linkedin": "LinkedIn"
+      },
+      "cvLine": "{template} · modifié le {date}",
+      "adapted": "Adapté à une offre · {date}",
+      "primary": "Principal",
+      "more": "Plus d'options pour « {title} »",
+      "new": "Nouveau CV",
+      "import": "Importer",
+      "empty": {
+        "title": "Pas encore de CV.",
+        "text": "Créez-le depuis votre profil ou importez celui que vous avez déjà."
+      },
+      "limit": "Vous pouvez avoir jusqu'à {max} CV. Supprimez-en un pour en créer un autre.",
+      "cvDeleted": "CV supprimé.",
+      "letterDeleted": "Document supprimé.",
+      "primaryDone": "C'est votre CV principal : il est proposé en premier quand vous postulez."
+    },
+    "menu": {
+      "open": "Ouvrir l'éditeur",
+      "openLetter": "Ouvrir",
+      "pdf": "Télécharger en PDF",
+      "primary": "En faire mon CV principal",
+      "primaryHint": "Proposé en premier quand vous postulez",
+      "template": "Choisir un modèle",
+      "duplicate": "Dupliquer",
+      "delete": "Supprimer",
+      "deleteHint": "Vos candidatures déjà envoyées gardent leur CV."
+    },
+    "pdf": {
+      "preparing": "PDF…",
+      "done": "CV téléchargé.",
+      "error": "Le PDF n'a pas pu être préparé. Réessayez dans un instant."
+    },
+    "create": {
+      "title": "Nouveau CV",
+      "legend": "Partir de",
+      "profile": "Depuis mon profil",
+      "profileHint": "Expériences, études et compétences reprises",
+      "blank": "Page vierge",
+      "blankHint": "Seulement votre nom et votre e-mail",
+      "name": "Nom du CV",
+      "submit": "Créer et ouvrir"
+    },
+    "letters": {
+      "written": "Rédigée le {date}",
+      "line": "{type} · {date}",
+      "type": {
+        "letter": "Lettre de motivation",
+        "bio": "Biographie",
+        "email": "E-mail de candidature",
+        "thankYou": "Message de remerciement",
+        "proofread": "Texte relu"
+      },
+      "linkedin": {
+        "label": "LinkedIn",
+        "text": "Orbi propose un titre, un résumé et 5 compétences à copier sur LinkedIn.",
+        "cta": "Préparer mon LinkedIn"
+      },
+      "new": "Nouvelle lettre",
+      "inputError": "Vérifiez le texte : il est vide ou trop long.",
+      "create": {
+        "title": "Nouvelle lettre",
+        "lead": "Orbi rédige à partir de votre profil et de l'offre. Vous relisez et modifiez avant tout envoi.",
+        "type": "Document",
+        "offer": "Pour l'offre",
+        "noOffer": "Sans offre précise",
+        "tone": "Ton",
+        "tones": {
+          "formal": "Soutenu",
+          "warm": "Chaleureux",
+          "direct": "Direct"
+        },
+        "points": "À mettre en avant (facultatif)",
+        "note": "{count, plural, one {# crédit Orbi} other {# crédits Orbi}}. Orbi n'invente ni expérience ni chiffre.",
+        "submit": "Rédiger avec Orbi"
+      },
+      "proofread": {
+        "open": "Faire relire un texte",
+        "title": "Faire relire un texte",
+        "lead": "Collez une lettre ou un e-mail : Orbi propose des corrections, vous gardez celles que vous voulez.",
+        "name": "Titre (facultatif)",
+        "text": "Votre texte",
+        "submit": "{count, plural, one {Relire · # crédit} other {Relire · # crédits}}"
+      }
+    },
+    "letter": {
+      "seo": "Lettre",
+      "more": "Plus d'options",
+      "created": "Orbi a rédigé ce texte avec votre profil. Relisez-le et modifiez-le avant de l'envoyer.",
+      "saved": "Enregistré.",
+      "error": "Vérifiez le titre et le texte.",
+      "corrections": "{count, plural, one {# correction proposée} other {# corrections proposées}}",
+      "before": "Avant :",
+      "after": "Après :",
+      "applyCorrections": "Appliquer les corrections cochées",
+      "name": "Titre",
+      "text": "Texte",
+      "note": "Rien n'est envoyé par Jumanly : vous copiez ou téléchargez ce texte quand il vous convient.",
+      "copy": "Copier",
+      "copied": "Texte copié.",
+      "save": "Enregistrer"
+    },
+    "linkedin": {
+      "seo": "Préparer LinkedIn",
+      "title": "Préparer LinkedIn",
+      "label": "LinkedIn",
+      "lead": "Orbi propose un titre, un résumé et 5 compétences à copier sur LinkedIn, à partir de votre profil.",
+      "generate": "{count, plural, one {Préparer · # crédit Orbi} other {Préparer · # crédits Orbi}}",
+      "regenerate": "{count, plural, one {Proposer à nouveau · # crédit} other {Proposer à nouveau · # crédits}}",
+      "headline": "Titre proposé",
+      "about": "Résumé proposé",
+      "skills": "{count, plural, one {# compétence à ajouter} other {# compétences à ajouter}}",
+      "proven": "✓ : compétence prouvée sur Jumanly (formation ou évaluation).",
+      "copy": "Copier",
+      "copied": "Copié. Collez-le dans LinkedIn.",
+      "note": "Rien n'est publié sur LinkedIn : vous copiez ce que vous voulez."
+    },
+    "import": {
+      "seo": "Importer un CV",
+      "title": "Importer un CV",
+      "choose": "Choisir un fichier",
+      "chooseHint": "PDF ou Word, {max} Mo au plus",
+      "reading": "Lecture du fichier…",
+      "linkedin": "Depuis LinkedIn",
+      "linkedinHint": "Fichier PDF de votre profil",
+      "readTitle": "Lu dans votre CV · à vérifier",
+      "readIn": "Lu dans « {name} » · à vérifier",
+      "found": {
+        "experiences": "{count, plural, one {# expérience} other {# expériences}}",
+        "skills": "{count, plural, one {# compétence} other {# compétences}}",
+        "educations": "{count, plural, one {# diplôme} other {# diplômes}}"
+      },
+      "undated": "{count, plural, one {Une expérience sans date de début n'est pas ajoutée : complétez-la dans votre profil.} other {# expériences sans date de début ne sont pas ajoutées : complétez-les dans votre profil.}}",
+      "rulesOnly": "Sans l'aide de l'IA, seules les compétences sont reconnues.",
+      "note": "Rien n'est ajouté sans votre accord. Le fichier n'est pas conservé.",
+      "nothing": {
+        "title": "Rien n'a été reconnu.",
+        "text": "Essayez un autre fichier, ou remplissez votre profil vous-même."
+      },
+      "submit": "Ajouter à mon profil",
+      "error": {
+        "format": "Ce fichier n'est pas accepté. Choisissez un PDF ou un document Word (.docx).",
+        "size": "Ce fichier dépasse {max} Mo. Choisissez un fichier plus léger.",
+        "empty": "Ce fichier ne contient pas de texte lisible (un scan, par exemple). Essayez un autre fichier.",
+        "unreadable": "Ce fichier n'a pas pu être lu. Essayez de l'enregistrer à nouveau en PDF."
+      }
+    },
+    "section": {
+      "summary": "Résumé",
+      "experience": "Expériences",
+      "education": "Études",
+      "skills": "Compétences",
+      "languages": "Langues"
+    },
+    "templates": {
+      "seo": "Choisir un modèle",
+      "title": "Choisir un modèle",
+      "filters": "Familles de modèles",
+      "filter": {
+        "tous": "Tous",
+        "sobres": "Sobres",
+        "colonne": "Colonne",
+        "creatifs": "Créatifs"
+      },
+      "included": "Inclus",
+      "currentShort": "(modèle actuel)",
+      "use": "Utiliser « {name} »",
+      "current": "« {name} » est votre modèle",
+      "unlock": "Inclus dès {plan} · voir les formules",
+      "locked": "Ce modèle est inclus dès la formule {plan}."
+    },
+    "editor": {
+      "seo": "Éditeur de CV",
+      "more": "Plus d'options",
+      "template": "Modèle {templateName}",
+      "savedOn": "Enregistré · {date}",
+      "preview": "Aperçu",
+      "demo": "Votre CV est encore vide : l'aperçu montre un exemple fictif.",
+      "changeTemplate": "Modèle",
+      "sections": "Sections · glisser pour réordonner",
+      "grip": "Déplacer « {section} » (flèches haut et bas)",
+      "moved": "« {section} » déplacée.",
+      "summaryLine": "{count, plural, one {# phrase} other {# phrases}}",
+      "toWrite": "À écrire",
+      "count": "{count, plural, =0 {Aucun élément} other {#}}",
+      "skillsLine": "{count, plural, =0 {Aucune, depuis le profil} other {#, depuis le profil}}",
+      "hiddenShort": "masquée",
+      "improve": "Améliorer",
+      "improveSummary": "{count, plural, one {Améliorer avec Orbi · # crédit} other {Améliorer avec Orbi · # crédits}}",
+      "summaryHint": "Deux ou trois phrases : votre métier, ce que vous savez faire, un résultat.",
+      "adapt": "Adapter",
+      "pdf": "PDF",
+      "save": "Enregistrer",
+      "saved": "Enregistré.",
+      "error": "Ce changement n'a pas pu être enregistré. Réessayez.",
+      "fromProfile": "CV mis à jour depuis votre profil.",
+      "templateApplied": "Modèle « {templateName} » appliqué. Votre contenu n'a pas changé.",
+      "changeApplied": "Changement appliqué.",
+      "changeRefused": "Votre texte reste tel quel.",
+      "orbiSame": "Orbi n'a rien de mieux à proposer pour l'instant.",
+      "orbiEmpty": "Écrivez d'abord quelques mots ou ajoutez une expérience : Orbi part de ce que vous avez écrit.",
+      "obsolete": "Ce texte a changé depuis la proposition d'Orbi : elle n'a pas été appliquée.",
+      "adapted": "Copie « {title} » créée pour {target}. Votre CV d'origine ne change pas.",
+      "changesLabel": "Orbi propose",
+      "changes": "{count, plural, one {# changement à revoir} other {# changements à revoir}}",
+      "rename": "Nom du CV",
+      "refresh": "Mettre à jour depuis mon profil",
+      "refreshHint": "Reprend vos expériences, études et compétences",
+      "present": "aujourd'hui",
+      "shown": "Sur le CV",
+      "shownOn": "Cette section est imprimée",
+      "shownOff": "Cette section est masquée",
+      "sectionEmpty": "Rien pour l'instant. Ajoutez-le dans votre profil.",
+      "editInProfile": "Modifier dans mon profil"
+    },
+    "style": {
+      "color": "Couleur",
+      "colorAts": "Les quatre premières lignes sont les plus sûres pour les logiciels de recrutement.",
+      "font": "Police",
+      "fontChip": "Aa · {font}",
+      "density": "Densité"
+    },
+    "change": {
+      "title": {
+        "summary": "Améliorer le résumé",
+        "headline": "Améliorer le titre",
+        "bullet": "Améliorer une réalisation"
+      },
+      "count": "{total, plural, other {Changement 1 sur #}}",
+      "before": "Avant",
+      "emptyBefore": "(vide)",
+      "after": "Proposition d'Orbi",
+      "yours": "Votre version",
+      "note": "Rien n'est modifié sans votre accord.",
+      "noteCredits": "Rien n'est modifié sans votre accord. {left, plural, =0 {Plus de crédit Orbi ce mois-ci.} one {# crédit Orbi restant.} other {# crédits Orbi restants.}}",
+      "why": "Pourquoi ces changements ?",
+      "whyMarked": "Les passages surlignés reprennent vos compétences et vos chiffres, déjà dans votre CV.",
+      "whyFocus": "Mis en avant parce que l'offre le demande : {skills}.",
+      "whyNothing": "Orbi n'ajoute aucune expérience, aucun diplôme, aucun chiffre.",
+      "whyRefuse": "Si vous refusez, votre texte reste exactement tel quel.",
+      "refuse": "Refuser",
+      "edit": "Modifier",
+      "accept": "Accepter",
+      "cancel": "Annuler",
+      "save": "Enregistrer"
+    },
+    "tailor": {
+      "offerTitle": "Adapter à une offre",
+      "offerLegend": "L'offre visée",
+      "listed": "{skills} : déjà dans votre CV",
+      "written": "{skill} : à mettre en avant",
+      "absent": "Mot-clé « {skill} » absent",
+      "copyNote": "Orbi crée une copie « {name} ». Votre CV principal ne change pas.",
+      "create": "Créer la copie adaptée",
+      "noOffers": "Enregistrez une offre ou postulez pour pouvoir y adapter votre CV.",
+      "toText": "Une annonce trouvée ailleurs ? Adapter à un texte",
+      "textTitle": "Adapter à un texte",
+      "textLead": "Une annonce trouvée ailleurs, un appel à candidatures, une bourse.",
+      "kinds": "Ce que vous collez",
+      "kind": {
+        "annonce": "Annonce",
+        "appel": "Appel",
+        "bourse": "Bourse",
+        "fiche": "Fiche de poste"
+      },
+      "placeholder": {
+        "annonce": "Collez le texte de l'annonce…",
+        "appel": "Collez le texte de l'appel à candidatures…",
+        "bourse": "Collez le texte de la bourse…",
+        "fiche": "Collez la fiche de poste…"
+      },
+      "textLabel": "Texte à lire",
+      "counter": "{count} / {max}",
+      "keywords": "Ce que le texte demande",
+      "missing": "Absent de votre CV :",
+      "textNote": "Lu comme une annonce, jamais comme une consigne. Orbi n'invente aucune expérience.",
+      "copyName": "CV · {heading}",
+      "tooShort": "Collez un texte d'au moins 30 caractères, 5 000 au plus.",
+      "notFound": "Cette offre n'est plus disponible."
+    },
+    "ai": {
+      "error": {
+        "consent": "Orbi a besoin de votre accord pour utiliser l'IA.",
+        "entitlement": "Cette aide d'Orbi n'est pas comprise dans votre formule.",
+        "quota": "Vos crédits Orbi de ce mois sont utilisés. Aucun crédit n'a été pris.",
+        "unavailable": "Orbi n'est pas disponible pour le moment. Aucun crédit n'a été pris : réessayez plus tard."
+      },
+      "entitlementPlan": "Cette aide d'Orbi est incluse dès la formule {plan}.",
+      "cta": {
+        "consent": "Autoriser Orbi",
+        "plans": "Voir les formules"
+      }
+    }
+  },
   "talentOrbi": {
     "metaTitle": "Orbi",
     "title": "Orbi",
