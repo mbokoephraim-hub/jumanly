@@ -290,6 +290,8 @@ def chemins():
 
 ECR = [
  ('q0','0 · Comment on y arrive','Pour chaque écran, le chemin depuis la barre.', []),
+ ('q0b','0 bis · L’onglet Candidats, appui par appui','Trois vues : ceux qui ont postulé, ceux qu’on découvre, ceux à qui on a proposé une offre. Et ce que chaque appui ouvre.',
+  [ecrans((CANDS,'Appui sur « Candidatures »','Les candidatures de l’offre choisie, par étape.'),(DOS,'Puis sur une personne','Son dossier complet.'),(TAL,'Appui sur « Rechercher des talents »','Sous-onglet Découvrir : profils visibles.'),(TPROF,'Puis sur « Consulter »','Le profil, avec Proposer l’offre.'),(PROPS,'Appui sur « Mes propositions »','Acceptées, en attente, refusées.'))]),
  ('q1','1 · Candidats','L’ATS mobile : une offre, un filtre par étape, des candidatures triées par correspondance. Un filtre ne rejette personne.',
   [ecrans((CANDS,'Candidatures','Offre choisie, étapes, score, nouveau.'),(TRI,'Trier et filtrer','Masquer n’est pas rejeter.'),(CANDS_VIDE,'Pas encore de candidature','État vide utile.'))]),
  ('q2','2 · Dossier d’une candidature','L’essentiel en haut, le reste replié. Trois actions toujours en bas : changer d’étape, entretien, message.',
@@ -303,7 +305,7 @@ ECR = [
  ('q6','6 · Mode sombre','',
   [ecrans((sombre(CANDS),'Candidatures',''),(sombre(DOS),'Dossier',''),(sombre(TAL),'Talents',''))]),
 ]
-EXTRA = {'q0': chemins()}
+EXTRA = {'q0': chemins(), 'q0b': CMAP}
 som = ''.join(f'<li><a href="#{i}">{t.split(" · ")[1]}</a></li>' for i, t, _, _ in ECR)
 corps = ''.join(bloc(i, t, d, *p).replace('</div></section>', EXTRA.get(i, '') + '</div></section>') if i in EXTRA else bloc(i, t, d, *p) for i, t, d, p in ECR)
 html = f'''<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">

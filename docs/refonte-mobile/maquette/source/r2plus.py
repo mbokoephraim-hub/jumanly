@@ -449,3 +449,55 @@ TPROF = TPROF.replace(_old_parc, f'''<div class="xp-h"><span class="cases" style
 <div class="verre xp"><div class="e"><span class="lg-e sap">UK</span><div class="t"><b>Licence en statistiques</b>Université de Kinshasa · 2023</div></div><div class="e"><span class="lg-e" style="background:var(--g-accent);color:#0F3F37">J</span><div class="t"><b>Power BI avancé<span class="cert">Attestation</span></b>Jumanly Learn · 2025</div></div></div>
 ''', 1)
 TPROF = TPROF.replace('<span class="vis-b">', f'<span class="vu-chip">{ic("confidentialite","xs")}Consultation enregistrée</span><span class="vis-b" style="display:none">', 1)
+
+# ---------- v2.5 : l'onglet Candidats, appui par appui (demande d'Ephraïm du 19/10) ----------
+CSSR += """
+.etq-s{display:inline-flex;align-items:center;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:99px;white-space:nowrap}
+.etq-s.ct{background:#DCE8FB;color:#24467A}.sombre .etq-s.ct{background:rgba(157,184,232,.2);color:#C9DAF7}
+.etq-s.nr{background:#EDE6DD;color:#7A5A4F}.sombre .etq-s.nr{background:rgba(255,255,255,.1);color:#D9C7BF}
+.etq-s.at{background:#FBE9C0;color:#7A5410}.sombre .etq-s.at{background:rgba(242,179,61,.2);color:#F8D68B}
+.pp{padding:0}
+.pp .r{display:flex;gap:12px;align-items:center;padding:11px 14px;border-top:1px solid var(--trait)}.pp .r:first-child{border-top:0}
+.pp .av{width:42px;height:42px;font-size:12px;box-shadow:none;color:#0F3F37}
+.pp .t{flex:1;min-width:0}.pp .t b{display:flex;gap:6px;align-items:center;font-size:13.5px}.pp .t span{font-size:11.5px;color:var(--texte2);display:block}
+.pp .bi{width:38px;height:38px}.pp .r .bt{height:32px;padding:0 12px;font-size:12px;flex:none}
+.pp-q{display:flex;flex-direction:column;gap:8px;padding:12px 14px}.pp-q .h{display:flex;justify-content:space-between;font-size:12.5px}.pp-q .h span{color:var(--texte2)}
+.pp-q .bar{height:8px;border-radius:5px;background:var(--trait);overflow:hidden}.pp-q .bar i{display:block;height:100%;background:linear-gradient(90deg,#A6F26B,#2FD3A6)}
+.cmap{display:flex;flex-direction:column;gap:14px;max-width:1180px;padding:6px 0 18px}
+.cmap .root{align-self:flex-start;display:inline-flex;align-items:center;gap:10px;padding:12px 18px;border-radius:18px;background:#0F3F37;color:#fff;font-weight:700;font-size:16px}
+.cmap .root .ic{width:20px;height:20px;color:#A6F26B}
+.cmap .cols{display:grid;grid-template-columns:1fr 1fr 1fr;gap:16px}
+.cmap .col{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:22px;background:#fff;box-shadow:0 14px 30px -18px rgba(15,63,55,.35)}
+.cmap .col .k{font-size:10.5px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#5D6B66}
+.cmap .col h4{margin:0;font-size:17px;color:#0F3F37}.cmap .col p{margin:0;font-size:13px;color:#5D6B66;line-height:1.5}
+.cmap .col .q{display:inline-flex;align-self:flex-start;font-size:12px;font-weight:700;padding:5px 11px;border-radius:99px}
+.cmap .col ul{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:6px}
+.cmap .col li{display:flex;gap:8px;align-items:flex-start;font-size:12.5px;color:#0F3F37}.cmap .col li:before{content:"→";color:#1E9C78;font-weight:700}
+.cmap .msg{display:flex;gap:12px;align-items:center;padding:14px 18px;border-radius:18px;background:#DCE8FB;color:#24467A;font-size:13.5px}
+.cmap .msg .ic{width:20px;height:20px}
+"""
+SUB_PROP = '<div class="sub-t"><a>Découvrir</a><a class="on">Mes propositions<small>18</small></a></div>'
+PROPS = phone(f'''{tete_r("Candidats")}
+{SEG_T}
+{SUB_PROP}
+<div class="verre rech">{ic("recherche","s")}<span>Nom, métier, offre</span></div>
+<div class="filtres-h"><span class="puce on">Toutes<small>18</small></span><span class="puce">Acceptées<small>12</small></span><span class="puce">En attente<small>4</small></span><span class="puce">Refusées<small>2</small></span></div>
+<div class="verre pp">
+<div class="r"><span class="av">RB</span><div class="t"><b>Ruth B.<span class="etq-s ct">Acceptée</span></b><span>Analyste de données junior · 17 oct.</span></div><a class="bi">{ic("message","s")}</a></div>
+<div class="r"><span class="av b">DK</span><div class="t"><b>David K.<span class="etq-s ct">Acceptée</span></b><span>Analyste de données junior · 15 oct.</span></div><a class="bi">{ic("message","s")}</a></div>
+<div class="r"><span class="av">MT</span><div class="t"><b>Merveille T.<span class="etq-s at">En attente</span></b><span>Envoyée il y a 2 j</span></div><a class="bt sec">Relancer</a></div>
+<div class="r"><span class="av a">SL</span><div class="t"><b>Sarah L.<span class="etq-s at">En attente</span></b><span>Envoyée il y a 5 j</span></div><a class="bt sec">Relancer</a></div>
+<div class="r"><span class="av b">YK</span><div class="t"><b>Yannick K.<span class="etq-s nr">Refusée</span></b><span>Chargé de clientèle · 3 oct.</span></div></div></div>
+<div class="verre pp-q"><div class="h"><b>Propositions ce mois</b><span>6 sur 10</span></div><span class="bar"><i style="width:60%"></i></span></div>''', 'candidats', 'long')
+
+def _col(k, titre, txt, q, qbg, items):
+    li = ''.join(f'<li>{x}</li>' for x in items)
+    return f'<div class="col"><span class="k">{k}</span><h4>{titre}</h4><p>{txt}</p><span class="q" style="background:{qbg}">{q}</span><ul>{li}</ul></div>'
+CMAP = f'''<div class="cmap"><span class="root">{ic("candidats","s")}Onglet Candidats = les personnes</span>
+<div class="cols">
+{_col("Appui 1 · Candidatures","Ceux qui ont postulé","Choisir une offre, voir les candidatures par étape, triées par score.","Ils sont venus à vous","#E4F8D2",["Appui sur une personne : son dossier","Analyser et classer : l’ATS d’Orbi","Changer d’étape, décider, répondre"])}
+{_col("Appui 2 · Rechercher des talents › Découvrir","Ceux qu’on peut découvrir","Profils rendus visibles par les talents, comparés à une de vos offres.","Vous allez vers eux","#D8F3EA",["Consulter : le profil complet (consultation enregistrée)","Proposer l’offre : le talent décide","Garder dans un vivier"])}
+{_col("Appui 3 · Rechercher des talents › Mes propositions","Ceux à qui on a proposé","Le suivi de vos propositions d’offre.","Ils vous répondent","#FBE9C0",["Acceptée : bouton Écrire, la conversation s’ouvre","En attente : Relancer","Refusée : rien à faire, sans détail"])}
+</div>
+<div class="msg">{ic("message","s")}<span><b>Onglet Messages = les conversations.</b> On n’y retrouve qu’un candidat ou un talent qui a accepté une proposition.</span></div></div>'''
+CANDS = CANDS.replace(OFFSEL, OFFSEL + f'<div class="orbi-l">{orbi(26)}<div class="t"><b>9 candidatures</b> pas encore analysées. Orbi peut les classer.</div><a class="bt p s">Analyser</a></div>', 1)
