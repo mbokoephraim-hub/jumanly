@@ -30,6 +30,8 @@ describe("navigation Talent (docs/refonte-mobile, brief § 2.1)", () => {
       "/app/career/cv/abc",
       "/app/espace",
       "/app/bienvenue",
+      "/app/orbi",
+      "/app/orbi/historique",
     ])
       expect(hidesTalentTabBar(path), path).toBe(true);
   });
@@ -44,7 +46,6 @@ describe("navigation Talent (docs/refonte-mobile, brief § 2.1)", () => {
       "/app/learn/explorer",
       "/app/learn/parcours/data",
       "/app/messages",
-      "/app/orbi",
       "/app/career/cv",
       "/app/career/cv/modeles",
       "/app/suivi",

@@ -2359,3 +2359,16 @@ toutes dans `docs/specifications.md`.
 
 - Audit sans développement : docs/audit-talent/AUDIT-TALENT.md. 16 fonctionnalités confrontées au code, doublons (tableau-de-bord, espace, explorer, jobs/candidatures, learn/coach, bouton +), navigation recommandée Pour moi · Offres · Orbi · Apprendre · Suivi, 20 pages au lieu de 44, 5 parcours, MVP / P2 / P3.
 - En attente des décisions d'Ephraïm (§ 8) avant tout prompt d'implémentation.
+
+## 2026-10-19 · Orbi : conversation libre et historique
+
+- Ephraïm demande comment rendre Orbi opérationnel : le code d'IA était prêt (clé `ANTHROPIC_API_KEY` à ajouter dans
+  Vercel), mais la zone « Écrire à Orbi » était inactive. Il choisit de la construire tout de suite.
+- `/app/orbi` en page de conversation (retour en haut, crédits sous le nom, sans barre du bas, champ « Écrire à
+  Orbi » avec nouvel échange, dictée et envoi) et `/app/orbi/historique` (recherche, effacer un échange ou tout).
+- Service `src/server/services/orbi.ts`, fonction IA `orbi_chat`, migration `orbi_conversations`. Choix et
+  garde-fous : `docs/decisions/2026-10-19-orbi-conversation.md`.
+- Tests : unitaires (sujet, règles, titre), base (crédit pris, consentement, quota, réponses d'évaluation refusées,
+  isolation des échanges), e2e Free sur téléphone et ordinateur. Captures 390 px dans le dossier du projet
+  `captures/orbi/`.
+

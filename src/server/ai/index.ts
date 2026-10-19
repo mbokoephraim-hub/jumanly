@@ -37,6 +37,8 @@ export const aiFeatures = {
   job_writer: { credits: 1, tier: "fast" },
   // ux-test, étape 2 · the AI Learning Coach, grounded in the lessons of one course.
   learn_coach: { credits: 1, tier: "fast" },
+  // Talent lot 4 § 9 · the free conversation with Orbi, one credit per answer.
+  orbi_chat: { credits: 1, tier: "fast" },
 } as const;
 export type AiFeature = keyof typeof aiFeatures;
 

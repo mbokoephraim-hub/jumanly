@@ -34,7 +34,8 @@ type AiFeatureText =
   | "linkedin"
   | "diagnostic"
   | "jobDraft"
-  | "learnCoach";
+  | "learnCoach"
+  | "orbiChat";
 const aiFeature: Record<string, AiFeatureText> = {
   cv_coach: "cvCoach",
   cv_tailor: "cvCoach",
@@ -48,6 +49,7 @@ const aiFeature: Record<string, AiFeatureText> = {
   diagnostic_followup: "diagnostic",
   job_writer: "jobDraft",
   learn_coach: "learnCoach",
+  orbi_chat: "orbiChat",
 };
 
 const familyTone: Record<FamilyKey, string> = {

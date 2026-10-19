@@ -59,6 +59,7 @@ const featureText: Record<
   | "cvAnalysis"
   | "jobDraft"
   | "learnCoach"
+  | "orbiChat"
 > = {
   cv_parse: "cvParse",
   cv_coach: "cvCoach",
@@ -73,6 +74,7 @@ const featureText: Record<
   hire_cv_analysis: "cvAnalysis",
   job_writer: "jobDraft",
   learn_coach: "learnCoach",
+  orbi_chat: "orbiChat",
 };
 
 const statusKey = { open: "open", in_review: "inReview" } as const;
