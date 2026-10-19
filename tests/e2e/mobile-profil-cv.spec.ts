@@ -104,7 +104,7 @@ test("télécharger mon CV sur téléphone : créer, aperçu, PDF", async ({ pag
   const pdf = await response;
   expect(pdf.status()).toBe(200);
   const path = join(mkdtempSync(join(tmpdir(), "cv-mobile-")), "cv.pdf");
-  writeFileSync(path, await pdf.body());
+  writeFileSync(path, await (await page.request.post(pdf.url())).body());
   // The contact e-mail of the fictional account is the only place the word may appear.
   const text = execFileSync("pdftotext", ["-layout", path, "-"]).toString();
   expect(text.replace(/\S+@\S+/g, "")).not.toMatch(/Jumanly/i);
