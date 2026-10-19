@@ -15,6 +15,7 @@ import { resolvePlan, usage } from "@/server/entitlements";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
 import { connectionCounts } from "@/server/services/connections";
+import { completeness, getFullProfile } from "@/server/services/profile";
 import { isTester } from "@/server/services/tester";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -73,7 +74,7 @@ export default async function AccountPage() {
   monthStart.setUTCHours(0, 0, 0, 0);
   const [profile, cvs, letters, attestations, practice, connections, plan, credits, spaces] =
     await Promise.all([
-      db.talentProfile.findUnique({ where: { userId: user.id }, select: { completeness: true } }),
+      getFullProfile(db, user.id),
       db.document.count({ where: { profile: { userId: user.id }, kind: "cv" } }),
       db.document.count({ where: { profile: { userId: user.id }, kind: "cover_letter" } }),
       db.certificate.count({ where: { enrollment: { userId: user.id } } }),
@@ -97,7 +98,7 @@ export default async function AccountPage() {
         <TalentAvatar name={user.name} image={user.image} />
         <span className="t-t">
           <b>{user.name}</b>
-          <span>{t("profile", { percent: profile?.completeness ?? 0 })}</span>
+          <span>{t("profile", { percent: completeness(profile).percent })}</span>
         </span>
         <TalentIcon name="suivant" size="s" />
       </Link>

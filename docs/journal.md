@@ -2,6 +2,87 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · revue des lots mobiles 1 à 6 (19 octobre 2026)
+
+Chaque écran talent des planches `talent-1` à `talent-4` (sections 1 à 6, 5 bis, 9 et 10, hors
+abonnement et paramètres) a été capturé à 390 px, clair et sombre, avec le bon compte de démo
+(`grace.ux@`, `talent.pro@` pour les écrans payants), puis comparé à la capture de la planche et à son
+générateur. Les corrections portent surtout sur des règles CSS de lots successifs qui se marchaient
+dessus ; elles sont réunies dans un bloc commenté en fin de `src/styles/talent.css`. Captures finales :
+`/mnt/project-files/captures/etape-1/revue-mobile/`. Écarts gardés : `docs/decisions/2026-10-19-refonte-etape-1-revue.md`.
+
+| Écran | Route | État |
+|---|---|---|
+| Connexion, mot de passe oublié | `/connexion`, `/mot-de-passe-oublie` | conforme (boutons Google et LinkedIn absents en local : fournisseurs non configurés) |
+| Inscription, création du compte | `/inscription`, `/inscription/compte` | corrigé : cases à cocher (taille, coche visible, texte Sapin), double cadre de focus des champs |
+| Pour moi | `/app` | corrigé : titres longs tronqués sur une ligne (lignes, objectifs), cartes « Recommandées » écrasées à 58 px |
+| Offres | `/app/jobs` | corrigé : titre et entreprise sur deux lignes, sous-titre tronqué, pastilles insécables, score à la suite des pastilles ; texte d'aide de la recherche repris de la planche |
+| Détail d'offre | `/app/jobs/[slug]` | corrigé : compétences en pastilles sur une ligne qui passe à la suivante |
+| Pourquoi ce score | `/app/jobs/[slug]?pourquoi=1` | conforme |
+| Postuler | `/app/jobs/[slug]/postuler` | conforme |
+| Suivi | `/app/suivi` | corrigé : sous-titres tronqués, date relative « il y a 3 j » (au lieu de « -3 j ») |
+| Détail de candidature | `/app/suivi/[id]` | corrigé : libellé « Ouvrir » (planche) pour la conversation |
+| Messages, conversation | `/app/messages`, `/app/messages/[id]` | corrigé : lignes tronquées, heure non écrasée, texte des bulles à la bonne taille et couleur |
+| Notifications | `/app/notifications` | conforme |
+| Apprendre | `/app/learn` | corrigé : tuiles de domaine à 84 px, cartes « Recommandées » à leur hauteur |
+| Rechercher une formation | `/app/learn/rechercher` | corrigé : bouton « Voir plus » secondaire centré |
+| Mes formations, attestations | `/app/learn/mes-formations` | corrigé : texte et interrupteur de partage visibles sur les cartes d'attestation |
+| Parcours | `/app/learn/parcours/[slug]` | corrigé : numéros d'étape lisibles (Sapin, Lime sur étape faite, clair et sombre) |
+| Formation | `/app/learn/[slug]` | corrigé : chiffres au-dessus de leur libellé, hauteur du bouton principal |
+| Leçon, quiz, exercice | `/app/learn/[slug]/[lecon]` | corrigé : bouton de fermeture × dans l'en-tête du quiz et de l'exercice |
+| Attestation (talent et publique) | `/app/learn/attestations/[code]`, `/attestations/[code]` | corrigé : libellé au-dessus de la valeur |
+| Compte | `/app/compte` | corrigé : taux de complétion calculé comme sur Pour moi et Mon profil (80 % au lieu de 70 %) |
+| Connexions | `/app/compte/connexions` | corrigé : boutons Accepter et Ignorer sous le nom (débordaient) |
+| Mon profil | `/app/profil` | corrigé : anneau de complétion centré et lisible, icônes de section visibles en sombre |
+| Modifier, aperçu, Faire le point, import | `/app/profil/*` | conforme |
+| Diagnostic, plan, entraînements | `/app/career/diagnostic`, `/plan`, `/entretiens*` | conforme |
+| CV et documents, lettres, modèles, studio CV | `/app/career/cv*` | conforme |
+| LinkedIn | `/app/career/linkedin` | conforme |
+| Orbi | `/app/orbi` | conforme |
+
+## Refonte complète · étape 1 (Talent) : diagnostic (19 octobre 2026)
+
+Point de départ : `main` après le lot mobile 6 (PR #103). Ordre fixé par `docs/PLAN-REFONTE-EN-3-ETAPES.md`.
+
+**Écrans talent déjà au nouveau design (mobile, lots 1 à 6, planches inchangées depuis leur code)** :
+connexion, mot de passe oublié, inscription, code, premiers pas (`/app/bienvenue`) ; Pour moi (`/app`) ;
+Offres, détail, Pourquoi, postuler (`/app/jobs/*`) ; Suivi et détail (`/app/suivi/*`) ; messages,
+notifications ; Apprendre, rechercher, mes formations, parcours, formation, salle de cours, quiz,
+attestations (`/app/learn/*`, `/attestations/[code]`) ; Compte, Connexions, Mon profil et ses écrans,
+Faire le point, diagnostic, plan, entraînements d'entretien, CV et documents, lettres, LinkedIn, studio
+CV mobile ; Orbi et son historique. Ils sont revus capture contre planche (390 px, clair et sombre) dans
+un lot de revue ; les écarts trouvés y sont corrigés.
+
+**Écrans talent encore à l'ancien design (mobile)** : abonnement, formules et paiement
+(`/app/abonnement`, `/app/abonnement/payer`), paramètres (`/app/parametres`), recherche de l'en-tête
+(`/app/recherche`), accueil Career (`/app/career`), conseils (`/app/career/conseils`), « Mon espace »
+(`/app/espace`), ancien tableau de bord (`/app/tableau-de-bord`, encore 859 lignes derrière sa
+redirection), outil testeur (`/app/testeur`), accès refusé. **Manquants** : factures
+(`/app/abonnement/factures`), aide (`/app/compte/aide`). Tout cela est le lot mobile 7.
+
+**Ordinateur et tablette** : aucune route talent n'a encore son écran web. Toutes affichent le
+rendu provisoire « colonne centrée » des lots mobiles (et l'ancien design pour les pages du lot 7).
+À faire : cadre W0 (barre latérale 232 px dès 1200 px, rail 84 px de 768 à 1199 px, barre du haut,
+`Ctrl K`, panneau Orbi `?orbi=1`, fenêtres et volets), puis lots web talent 1, 2, Studio CV, 3, 4.
+
+**Ancien design à supprimer (liste vérifiée par recherche d'imports dans chaque lot)** :
+- liste provisoire `REDRAWN` et classe `t-ancien` (`src/lib/appearance.ts`), colonne User.theme ;
+- ancien Career : `src/app/app/career/page.tsx` (accueil v2), `src/components/career/home/*`,
+  `src/components/motion/gauge.tsx`, `radar.tsx` ; `src/app/app/career/conseils` ;
+- `src/app/app/espace`, contenu de `src/app/app/tableau-de-bord`, `src/components/app/daily-welcome.tsx`,
+  `for-me.tsx`, `skills-input.tsx`, `src/components/layout/account-menu.tsx`, `space-switcher.tsx`
+  (si plus rien ne l'importe), `recent-searches.tsx`, `slash-focus.tsx`, `nav-link-styles.ts`,
+  `src/components/motion/tab-rail-client.tsx` ;
+- ancienne page abonnement et paramètres (`src/components/billing/subscription-section.tsx`,
+  `sponsored-card.tsx`, `checkout-form.tsx`, `src/components/account/account-controls.tsx`) une fois
+  remplacées ;
+- composants talent laissés par le lot 4 dans `src/components/connect/` ;
+- textes morts de l'ancien espace talent (`talent.forMe.*`, `talent.jobs.search.*`, etc.).
+Hire, partenaire et admin gardent `AppShell` et leurs composants jusqu'aux étapes 2 et 3.
+
+**Plan** : un lot = une branche et une PR. Revue des lots 1 à 6 ; lot mobile 7 ; W0 ; web talent 1,
+2, Studio CV, 3, 4 ; rapport de fin d'étape, captures dans `captures/etape-1/`.
+
 ## Refonte mobile · lot 6a : Compte, Connexions, Mon profil (19 octobre 2026)
 
 - Compte (`/app/compte`) refait d'après la planche talent-4 § 2 : profil, documents et réseau,

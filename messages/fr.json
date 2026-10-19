@@ -2612,7 +2612,7 @@
     "search": {
       "label": "Rechercher",
       "placeholder": "Rechercher une offre, une formation",
-      "placeholderOffers": "Rechercher une offre",
+      "placeholderOffers": "Poste, entreprise, compétence",
       "placeholderLearn": "Rechercher une formation",
       "filters": "Filtres"
     },
@@ -3027,7 +3027,7 @@
     },
     "messages": {
       "title": "Messages",
-      "open": "Ouvrir la conversation",
+      "open": "Ouvrir",
       "none": "Pas encore de message. Le recruteur vous écrira ici."
     },
     "requests": {

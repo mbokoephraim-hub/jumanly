@@ -2182,7 +2182,7 @@ Conventions :
 | `talentShell.header.back` | Retour |
 | `talentShell.search.label` | Rechercher |
 | `talentShell.search.placeholder` | Rechercher une offre, une formation |
-| `talentShell.search.placeholderOffers` | Rechercher une offre |
+| `talentShell.search.placeholderOffers` | Poste, entreprise, compétence |
 | `talentShell.search.placeholderLearn` | Rechercher une formation |
 | `talentShell.search.filters` | Filtres |
 | `talentShell.title.career` | Carrière |
@@ -2532,7 +2532,7 @@ Conventions :
 | `candidature.file.title` | Dossier envoyé |
 | `candidature.file.frozen` | Version figée du {date} |
 | `candidature.messages.title` | Messages |
-| `candidature.messages.open` | Ouvrir la conversation |
+| `candidature.messages.open` | Ouvrir |
 | `candidature.messages.none` | Pas encore de message. Le recruteur vous écrira ici. |
 | `candidature.requests.title` | Demandé par le recruteur |
 | `candidature.requests.due` | À envoyer avant le {date} |

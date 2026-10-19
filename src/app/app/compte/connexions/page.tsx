@@ -80,28 +80,30 @@ export default async function ConnectionsPage({
   const requestRows = (
     <ul aria-label={t("reseau.received")} className="t-verre t-liste t-lignes">
       {received.map((request) => (
-        <li key={request.id} className="t-li">
+        <li key={request.id} className="t-li t-dem">
           <Who person={request.person} line={line(request.person, true)} />
-          <form action={acceptConnectionAction}>
-            <input type="hidden" name="id" value={request.id} />
-            <button
-              type="submit"
-              className="t-bt t-p t-s t-press"
-              aria-label={t("reseau.acceptName", { name: request.person.name })}
-            >
-              {t("reseau.accept")}
-            </button>
-          </form>
-          <form action={ignoreConnectionAction}>
-            <input type="hidden" name="id" value={request.id} />
-            <button
-              type="submit"
-              className="t-bt t-sec t-s t-press"
-              aria-label={t("reseau.ignoreName", { name: request.person.name })}
-            >
-              {t("reseau.ignore")}
-            </button>
-          </form>
+          <div className="t-dem-a">
+            <form action={acceptConnectionAction}>
+              <input type="hidden" name="id" value={request.id} />
+              <button
+                type="submit"
+                className="t-bt t-p t-s t-press"
+                aria-label={t("reseau.acceptName", { name: request.person.name })}
+              >
+                {t("reseau.accept")}
+              </button>
+            </form>
+            <form action={ignoreConnectionAction}>
+              <input type="hidden" name="id" value={request.id} />
+              <button
+                type="submit"
+                className="t-bt t-sec t-s t-press"
+                aria-label={t("reseau.ignoreName", { name: request.person.name })}
+              >
+                {t("reseau.ignore")}
+              </button>
+            </form>
+          </div>
         </li>
       ))}
     </ul>

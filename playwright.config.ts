@@ -1,7 +1,8 @@
 import { defineConfig, devices } from "@playwright/test";
 import { OUTBOX_FILE } from "./tests/e2e/outbox";
 
-const port = 3100;
+// E2E_PORT lets several local runs (one per worktree) live side by side; CI keeps 3100.
+const port = Number(process.env.E2E_PORT) || 3100;
 
 export default defineConfig({
   testDir: "./tests/e2e",
