@@ -2,6 +2,78 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte mobile · lot 6a : Compte, Connexions, Mon profil (19 octobre 2026)
+
+- Compte (`/app/compte`) refait d'après la planche talent-4 § 2 : profil, documents et réseau,
+  abonnement et réglages, déconnexion. Connexions (`/app/compte/connexions`) : demandes reçues,
+  mes connexions, recherche, écrire, retirer, signaler, bloquer (table `Connection`, conversation
+  `peer`).
+- Mon profil (`/app/profil`) en sept sections dépliables, avec ses écrans : modifier (photo,
+  titre, résumé, pays, ville), expérience, compétence (avec preuve), ce que je cherche, projet
+  (fichiers), vu par un recruteur.
+- Supprimés : `src/components/profile/intro-form.tsx`, `src/components/profile/phone-overview.tsx`
+  (l'éditeur de photo passe dans `src/components/talent/profile/`).
+- Deux migrations additives ; aucune donnée retirée. Écarts : `docs/decisions/2026-10-19-refonte-mobile-lot-6a.md`.
+
+## Refonte mobile · lot 6b : faire le point, diagnostic, plan, simulations d'entretien (19 octobre 2026)
+
+- Faire le point (`/app/profil/point`, planche talent-4 § 5) : atouts, points à renforcer et
+  prochaine action, calculés sans IA (`career-point.ts`, tests unitaires), avec « Pourquoi ces
+  conseils ? ».
+- Diagnostic (`/app/career/diagnostic`) redessiné : accueil, questions une à une, analyse, puis
+  le résultat (anneau, six notes, « Pourquoi ces notes ? », Refaire, Mon plan). Services
+  déterministes inchangés.
+- Plan (`/app/career/plan`) : objectif en feuille, étapes numérotées que l'on modifie, coche ou
+  retire (`updateStepAction`).
+- Entraînements (`/app/career/entretiens`, planche § 5 bis) : quotas écrit et oral, entretien
+  prévu, quatre façons de s'entraîner, dernières sessions ; nouveau formulaire (métier, niveau,
+  types, format, durée) ; simulation écrite avec conseil d'Orbi, simulation orale (micro,
+  transcription relue, aucun son gardé) ; retour sur cinq critères sans note ; version gratuite
+  avec conseils et « Voir les formules ».
+- Anciens composants supprimés : `career/diagnostic-flow`, `career/voice-answer`,
+  `motion/radar-live`, `motion/scan`, `motion/stage-track`, `motion/step-trail`.
+- Écarts : `docs/decisions/2026-10-19-refonte-mobile-lot-6b.md`. Specs e2e mises à jour (career,
+  talent, accessibility), non lancées ici (base partagée).
+
+## Refonte mobile de l'espace talent · lot 6c : CV et documents, LinkedIn, import et studio CV (19 octobre 2026)
+
+- CV et documents (`/app/career/cv`, planche talent-4 § 6) : onglets CV, Lettres et LinkedIn ;
+  chaque CV avec sa vignette, « Principal » et son menu « … » (ouvrir, PDF, CV principal, modèle,
+  dupliquer, supprimer) ; « Nouveau CV » en feuille (depuis le profil ou page vierge) et
+  « Importer ». Onglet Lettres (`?vue=lettres`) : les lettres et documents, la carte Orbi
+  « Préparer mon LinkedIn », « Nouvelle lettre » et « Faire relire un texte » en feuilles.
+  `/app/career/documents` redirige vers cet onglet ; une lettre (`/app/career/documents/[id]`) est
+  redessinée (corrections à cocher, texte, copier, PDF).
+- Préparer LinkedIn (`/app/career/linkedin`, droit `career.linkedin`) : titre et résumé proposés
+  avec « Copier », 5 compétences à ajouter (✓ si prouvées sur Jumanly), rien n'est publié.
+- Importer un CV (`/app/profil/import`) : PDF ou Word (4 Mo), lu sur le serveur sans être gardé
+  (`src/server/services/cv-file.ts`, dépendances `unpdf` et `fflate`), « Depuis LinkedIn » (le PDF
+  du profil), puis « Lu dans votre fichier · à vérifier » groupe par groupe et « Ajouter à mon
+  profil ».
+- Choisir un modèle (`/app/career/cv/modeles`) : familles Tous, Sobres, Colonne, Créatifs,
+  vignettes réelles, « Inclus » ou la formule (droit `career.cv.templates.access`, nom lu en base),
+  « Utiliser « X » ».
+- Studio CV (`/app/career/cv/[id]`) : carte du modèle et « Aperçu », puces couleur, police et
+  densité en feuilles, sections à glisser (ou flèches du clavier) avec « Améliorer » sur le
+  résumé, barre du bas « Adapter » et « PDF », menu « … » (nom, coordonnées, CV principal, mise
+  à jour depuis le profil, dupliquer, supprimer). Avant/après (« Améliorer le résumé ») :
+  Refuser, Modifier, Accepter et « Pourquoi ces changements ? ». « Adapter à une offre » (écart
+  avec le CV) et « Adapter à un texte » (5 000 caractères, lu comme une donnée) créent une copie
+  dont les reformulations restent à valider une par une (droit `career.cv.tailor`).
+- Services : `improveCvSummary`, `pendingSuggestions`, `decideSuggestion` avec texte modifié
+  (`cv-coach.ts`) ; `tailorCvToText`, `tailorKeywords`, `tailorOffers`, `offerGap`
+  (`career-documents.ts`) ; `orderBlocks` (`src/features/cv/style.ts`). Aucune migration.
+- Mode sombre et colonne centrée pour ces pages (`src/lib/appearance.ts`) ; barre du bas masquée.
+- Supprimés : `src/components/career/cv/` (editor, list, parts, phone-editor, phone-list,
+  workbench, pdf-button), `src/components/career/cv-coach-panel.tsx`, `documents-kit.tsx`,
+  `ai-gate.tsx`, `src/features/cv/ui/` (ExportPanel, PagesPanel, StylePanel),
+  `src/styles/cv-v2.css`. `tests/e2e/cv-v2.spec.ts` devient `cv-documents.spec.ts`.
+- Tests : `tests/unit/cv-file.test.ts`, `tests/unit/cv-documents.test.ts` ; e2e mis à jour (non
+  lancés dans cette session, la base et le port 3100 servant à une autre) : `cv-documents`,
+  `cv-templates`, `career`, `mobile-profil-cv`, `intelligence`, `talent`, `accessibility`,
+  `session.ts`.
+- Choix et écarts : `docs/decisions/2026-10-19-refonte-mobile-lot-6c.md`.
+
 ## Refonte mobile de l'espace talent · lot 5 : Apprendre, salle de cours, quiz, attestations (19 octobre 2026)
 
 - Apprendre (`/app/learn`, planche talent-3 § 1) : la recherche sous le titre, l'accès à « Mes

@@ -21,7 +21,22 @@ describe("apparence de l'espace talent (brief § 2.10)", () => {
     expect(redrawn("/app/messages/abc")).toBe(true);
     expect(redrawn("/app/notifications")).toBe(true);
     expect(redrawn("/app/career/entretiens/nouveau")).toBe(true);
-    expect(redrawn("/app/career/entretiens")).toBe(false);
+    // Lot 6b.
+    expect(redrawn("/app/career/entretiens")).toBe(true);
+    expect(redrawn("/app/career/entretiens/abc")).toBe(true);
+    expect(redrawn("/app/career/diagnostic")).toBe(true);
+    expect(redrawn("/app/career/plan")).toBe(true);
+    expect(redrawn("/app/profil/point")).toBe(true);
+    expect(redrawn("/app/profil")).toBe(true);
+    expect(redrawn("/app/compte")).toBe(true);
+    // Lot 6c.
+    expect(redrawn("/app/career/cv")).toBe(true);
+    expect(redrawn("/app/career/cv/modeles")).toBe(true);
+    expect(redrawn("/app/career/cv/abc")).toBe(true);
+    expect(redrawn("/app/career/linkedin")).toBe(true);
+    expect(redrawn("/app/career/documents/abc")).toBe(true);
+    expect(redrawn("/app/profil/import")).toBe(true);
+    expect(redrawn("/app/career")).toBe(false);
   });
 
   it("pose la classe avant le premier affichage, selon le choix et le téléphone", () => {
@@ -34,6 +49,8 @@ describe("apparence de l'espace talent (brief § 2.10)", () => {
       ["dark", true, "/app/jobs/analyste-fictif", true],
       ["dark", true, "/app/jobs/candidatures", false],
       ["dark", true, "/app/abonnement", false],
+      ["dark", true, "/app/career/cv", true],
+      ["dark", true, "/app/profil/import", true],
     ] as const) {
       const classes = new Set<string>();
       const run = new Function("location", "window", "document", appearanceScript(appearance));

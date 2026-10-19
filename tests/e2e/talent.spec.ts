@@ -30,43 +30,32 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await finishOnboarding(page, { country: "Congo", city: "Kinshasa" });
   await expect(page).toHaveURL(new RegExp(`/app/jobs/${JOB}`));
 
-  // Profile: summary, an experience, three skills.
-  // On a phone each part opens alone (prompt 6); the computer shows them all, whatever the address.
-  await page.goto("/app/profil?partie=resume");
+  // Profile (planche talent-4 § 3): summary, an experience, three skills, each on its screen.
+  await page.goto("/app/profil/modifier");
   await page
-    .locator("#summary")
+    .locator("#pf-summary")
     .fill("Comptable rigoureuse, cinq ans de saisie et de rapprochements bancaires en PME.");
-  await page.locator("#resume").getByRole("button", { name: "Enregistrer" }).click();
-  await expect(page.locator("#resume")).toContainText("Profil enregistré");
+  await page.getByRole("button", { name: "Enregistrer", exact: true }).click();
+  await expect(page).toHaveURL(/\/app\/profil\?ok=identite/);
 
-  await page.goto("/app/profil?partie=experiences");
-  await page.waitForLoadState("networkidle");
-  const experiences = page.locator("#experiences").filter({ visible: true });
-  await experiences.locator("summary").filter({ hasText: "Ajouter" }).click();
-  await experiences.locator('input[name="title"]').fill("Assistante comptable");
-  await experiences.locator('input[name="company"]').fill("Entreprise fictive");
-  await experiences.locator('input[name="start"]').fill("2021-03");
-  await experiences.locator('input[name="current"]').check();
-  await experiences
-    .locator('textarea[name="description"]')
-    .fill("Saisie des factures\nRapprochements bancaires");
-  await experiences.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(experiences).toContainText("Assistante comptable");
+  await page.goto("/app/profil/experience");
+  await page.locator("#pf-exp-title").fill("Assistante comptable");
+  await page.locator("#pf-exp-company").fill("Entreprise fictive");
+  await page.locator("#pf-exp-start").fill("2021-03");
+  await page.getByText("Poste actuel", { exact: true }).click();
+  await page.locator("#pf-exp-result").fill("Saisie des factures\nRapprochements bancaires");
+  await page.getByRole("button", { name: "Ajouter", exact: true }).click();
+  await expect(page.locator("#experiences")).toContainText("Assistante comptable");
 
-  await page.goto("/app/profil?partie=competences");
-  // The disclosure is opened once the page is ready, or hydration closes it again.
-  await page.waitForLoadState("networkidle");
   for (const skill of ["Analyse de données", "Administration", "Achats"]) {
-    const skills = page.locator("#competences").filter({ visible: true });
-    const form = skills.locator("form").filter({ has: page.locator('input[name="skill"]') });
-    if (!(await form.isVisible())) await skills.locator("summary").last().click();
-    await form.locator('input[name="skill"]').fill(skill);
-    await form.getByRole("button", { name: "Ajouter" }).click();
-    await expect(skills).toContainText(skill);
+    await page.goto(`/app/profil/competence?q=${encodeURIComponent(skill)}`);
+    await page.getByRole("button", { name: /^Ajouter/ }).click();
+    await expect(page.locator("#competences")).toContainText(skill);
   }
 
   // CV from the profile, then its PDF.
   const cvId = await newCvFromList(page);
+  await page.goto(`/app/career/cv/${cvId}?vue=apercu`);
   await expect(page.locator("article").first()).toContainText("Assistante comptable");
   const pdf = await page.request.get(`/app/career/cv/${cvId}/pdf`);
   expect(pdf.status()).toBe(200);
@@ -133,7 +122,8 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
 }) => {
   test.setTimeout(180_000);
   await logIn(page, demo.talentFree);
-  await page.goto("/app/career/diagnostic");
+  // Lot 6b (planche talent-4 § 5): with a result, the page opens on it; « Refaire » starts again.
+  await page.goto("/app/career/diagnostic?refaire=1");
   await expect(
     page.getByRole("heading", { name: /^(Où en êtes-vous vraiment \?|Refaites le point)$/ }),
   ).toBeVisible();
@@ -152,41 +142,24 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
 
   expect(await answerDiagnostic(flow)).toBe(0);
 
-  // The scan checks real steps, then the card turns over.
-  await expect(page.getByRole("heading", { name: "Analyse de votre diagnostic" })).toBeVisible();
+  // The analysis checks real steps, then the result opens by itself.
   await expect(page.getByText(/Comparaison avec les offres .*\(\d+ offres?\)/)).toBeVisible({
     timeout: 20_000,
   });
-  await page.getByRole("link", { name: "Voir mon diagnostic" }).click({ timeout: 30_000 });
-  // The flipped card navigates on the client; a busy CI runner can take a while.
   await expect(page).toHaveURL(/bilan=/, { timeout: 30_000 });
-  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Votre bilan de carrière");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Diagnostic de carrière");
   const main = page.getByRole("main");
-  await expect(main.getByRole("heading", { name: "Votre niveau global" })).toBeVisible();
-  await expect(main.getByRole("table")).toContainText("Préparation aux entretiens");
-  await expect(
-    main.getByRole("heading", { name: "Le détail, dimension par dimension" }),
-  ).toBeVisible();
-  await expect(main).toContainText("Vos priorités");
-  // The free mini plan, and what a paid plan would add.
-  const miniPlan = main.getByRole("region", { name: "Votre mini plan gratuit" });
-  await expect(miniPlan.getByRole("listitem")).toHaveCount(3);
-  const upgrades = main.getByRole("region", { name: "Pour aller plus loin" });
-  await expect(upgrades).toContainText("Un plan de progression complet");
-  await expect(upgrades).toContainText("Forfait requis");
+  await expect(main.getByRole("definition").first()).toBeVisible();
+  await expect(main).toContainText("Préparation aux entretiens");
+  // « Pourquoi ces notes ? »: the points of every answer.
+  await main.getByRole("button", { name: "Pourquoi ces notes ?" }).click();
+  await expect(page.getByRole("dialog", { name: "Pourquoi ces notes" })).toBeVisible();
+  await page.getByRole("button", { name: "Fermer" }).click();
 
-  // « Refaire dans 30 jours » plans a reminder.
-  await main.getByRole("button", { name: "Refaire dans 30 jours" }).click();
-  await expect(page).toHaveURL(/rappel=1/);
-  await expect(main).toContainText("Rappel prévu le");
-
-  // Back on the welcome screen, the latest result comes first with a quick way back to it.
-  await page.goto("/app/career/diagnostic");
+  // « Mon plan » and « Refaire » at the bottom.
+  await expect(main.getByRole("link", { name: "Mon plan" })).toBeVisible();
+  await main.getByRole("link", { name: "Refaire" }).click();
   await expect(page.getByRole("heading", { name: "Refaites le point" })).toBeVisible();
-  const last = page.getByRole("region", { name: /Découverte|Construction|Prêt|Compétitif/ });
-  await expect(last).toContainText("Votre dernier bilan");
-  await page.getByRole("link", { name: "Revoir mon dernier bilan" }).click();
-  await expect(page).toHaveURL(/bilan=/);
 });
 
 test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini plan gratuit", async ({
@@ -194,7 +167,7 @@ test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini
 }) => {
   test.setTimeout(180_000);
   await logIn(page, demo.talentPro);
-  await page.goto("/app/career/diagnostic");
+  await page.goto("/app/career/diagnostic?refaire=1");
   await expect(
     page.getByRole("heading", { name: /^(Où en êtes-vous vraiment \?|Refaites le point)$/ }),
   ).toBeVisible();
@@ -205,12 +178,25 @@ test("diagnostic personnalisé : deux questions de relance de l'IA, puis le mini
   const flow = page.locator("#diagnostic-flow");
   expect(await answerDiagnostic(flow)).toBe(2);
 
-  await page.getByRole("link", { name: "Voir mon diagnostic" }).click({ timeout: 30_000 });
-  // The flipped card navigates on the client; a busy CI runner can take a while.
+  // The result opens by itself (or after Orbi's fallback notice, with « Voir mon diagnostic »).
+  const open = page.getByRole("link", { name: "Voir mon diagnostic" });
+  await expect(page)
+    .toHaveURL(/bilan=/, { timeout: 30_000 })
+    .catch(async () => open.click());
   await expect(page).toHaveURL(/bilan=/, { timeout: 30_000 });
+  await expect(page.getByRole("main")).toContainText("Calculé sur vos réponses");
+});
+
+test("faire le point : atouts, à renforcer, prochaine action et son pourquoi", async ({ page }) => {
+  await logIn(page, demo.talentFree);
+  await page.goto("/app/profil/point");
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText("Faire le point");
   const main = page.getByRole("main");
-  const miniPlan = main.getByRole("region", { name: "Votre mini plan gratuit" });
-  await expect(miniPlan.getByRole("listitem")).toHaveCount(3);
-  // Every paid option is already in this plan: nothing more to offer.
-  await expect(main.getByRole("region", { name: "Pour aller plus loin" })).toHaveCount(0);
+  await expect(main.getByRole("heading", { name: "Vos atouts" })).toBeVisible();
+  await expect(main.getByRole("heading", { name: "À renforcer" })).toBeVisible();
+  await expect(main.getByRole("heading", { name: "Prochaine action" })).toBeVisible();
+  await main.getByRole("button", { name: "Pourquoi ces conseils ?" }).click();
+  await expect(page.getByRole("dialog", { name: "Pourquoi ces conseils" })).toContainText(
+    "règles fixes",
+  );
 });

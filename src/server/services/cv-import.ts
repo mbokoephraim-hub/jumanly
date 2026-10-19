@@ -39,7 +39,10 @@ const MONTH = /^\d{4}-(0[1-9]|1[0-2])$/;
 
 /** Free extraction: the skills of the reference list whose name or alias appears in the text. */
 export async function extractByRules(db: PrismaClient, text: string): Promise<Extraction> {
-  const folded = ` ${normalize(text).replace(/[^a-z0-9+#.]+/g, " ")} `;
+  // A dot ending a sentence (« Excel. ») is not part of the word; « node.js » or « .net » keep theirs.
+  const folded = ` ${normalize(text)
+    .replace(/[^a-z0-9+#.]+/g, " ")
+    .replace(/\.+(?= |$)/g, " ")} `;
   const skills = await db.skill.findMany({ select: { name: true, aliases: true } });
   const found = skills
     .filter((skill) =>
@@ -86,14 +89,28 @@ function clean(extraction: Extraction): Extraction {
   };
 }
 
-export type ImportPayload = Extraction & { source: "ai" | "rules" };
+/** The file the text was read from (« Importer un CV »), shown while the talent checks the items. */
+export const importFileSchema = z.object({
+  name: z.string().max(200),
+  kind: z.enum(["pdf", "docx"]),
+  pages: z.number().int().nullable(),
+  size: z.number().int(),
+});
+export type ImportFile = z.infer<typeof importFileSchema>;
+
+export type ImportPayload = Extraction & { source: "ai" | "rules"; file?: ImportFile };
 
 /**
  * Reads a pasted CV. With AI consent and credits, the fast model extracts experiences, studies
  * and skills; otherwise the rules find the skills (« sans crédit IA »). The result waits for the
  * talent's validation as a pending AiSuggestion.
  */
-export async function importCvText(db: PrismaClient, userId: string, text: string) {
+export async function importCvText(
+  db: PrismaClient,
+  userId: string,
+  text: string,
+  file?: ImportFile,
+) {
   const trimmed = text.trim().slice(0, CV_TEXT_MAX);
   const rules = () => extractByRules(db, trimmed);
   let payload: ImportPayload;
@@ -116,6 +133,7 @@ export async function importCvText(db: PrismaClient, userId: string, text: strin
   } else {
     payload = { ...(await rules()), source: "rules" };
   }
+  if (file) payload.file = { ...file, name: file.name.slice(0, 200) };
   await db.aiSuggestion.deleteMany({ where: { userId, feature: "cv_parse", status: "pending" } });
   return db.aiSuggestion.create({
     data: { userId, feature: "cv_parse", payload: payload as unknown as Prisma.InputJsonValue },
@@ -123,7 +141,9 @@ export async function importCvText(db: PrismaClient, userId: string, text: strin
 }
 
 export function parseImport(value: Prisma.JsonValue): ImportPayload | null {
-  const parsed = extractionSchema.extend({ source: z.enum(["ai", "rules"]) }).safeParse(value);
+  const parsed = extractionSchema
+    .extend({ source: z.enum(["ai", "rules"]), file: importFileSchema.optional() })
+    .safeParse(value);
   return parsed.success ? parsed.data : null;
 }
 

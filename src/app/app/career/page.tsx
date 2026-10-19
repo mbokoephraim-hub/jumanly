@@ -123,7 +123,7 @@ export default async function CareerPage() {
       ? `/app/career/diagnostic?bilan=${lastDiagnostic.id}`
       : "/app/career/diagnostic",
     cv: primaryCv ? `/app/career/cv/${primaryCv.id}` : "/app/career/cv",
-    documents: "/app/career/documents",
+    documents: "/app/career/cv?vue=lettres",
     linkedin: "/app/career/linkedin",
     interviews: "/app/career/entretiens",
     plan: "/app/career/plan",

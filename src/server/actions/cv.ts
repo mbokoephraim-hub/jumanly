@@ -12,6 +12,7 @@ import {
   cvDensities,
   cvTitleLanguages,
   moveBlock,
+  orderBlocks,
   switchColumn,
   togglePageBreak,
 } from "@/features/cv/style";
@@ -29,7 +30,7 @@ import {
   type CvContent,
   type CvPhonePart,
 } from "@/server/services/cv";
-import { decideSuggestion, runCvCoach } from "@/server/services/cv-coach";
+import { decideSuggestion, improveCvSummary, pendingSuggestions } from "@/server/services/cv-coach";
 import { ensureProfile, getFullProfile } from "@/server/services/profile";
 
 async function owner() {
@@ -307,26 +308,113 @@ export async function deleteCv(formData: FormData) {
   redirect("/app/career/cv?ok=supprime");
 }
 
-/** « Analyser mon CV » : the coach checks consent, credits and logs the call (src/server/ai). */
-export async function runCoachAction(formData: FormData) {
+/** « Améliorer » on the summary (planche talent-4 § 6): Orbi proposes, the talent decides. */
+export async function improveSummaryAction(formData: FormData) {
   const { user, profile } = await owner();
   const cv = await ownedCv(profile.id, formData.get("id"));
-  const result = await runCvCoach(db, user.id, cv.id);
+  const result = await improveCvSummary(db, user.id, cv.id);
   refresh();
-  back(cv.id, { coach: result });
+  if (result === "done") back(cv.id, { vue: "ameliorer" });
+  back(cv.id, { orbi: result });
 }
 
-export async function decideSuggestionAction(formData: FormData) {
-  const decision = z.enum(["applied", "ignored"]).safeParse(formData.get("decision"));
+const changeSchema = z.object({
+  suggestion: z.string().min(1).max(60),
+  decision: z.enum(["applied", "ignored"]),
+  text: z.string().max(1000).optional(),
+});
+
+/**
+ * « Accepter », « Modifier » (the talent's own words) or « Refuser » on a change Orbi proposed;
+ * the next change follows, then the editor.
+ */
+export async function decideChangeAction(formData: FormData) {
   const { user, profile } = await owner();
   const cv = await ownedCv(profile.id, formData.get("id"));
-  if (!decision.success) back(cv.id);
-  const done = await decideSuggestion(
-    db,
-    user.id,
-    String(formData.get("suggestion") ?? ""),
-    decision.data,
+  const parsed = changeSchema.safeParse({
+    suggestion: formData.get("suggestion"),
+    decision: formData.get("decision"),
+    text: formData.get("text") ?? undefined,
+  });
+  if (!parsed.success) back(cv.id, { vue: "ameliorer", erreur: "1" });
+  const { suggestion, decision, text } = parsed.data;
+  const done = await decideSuggestion(db, user.id, suggestion, decision, text);
+  refresh();
+  if (!done) back(cv.id, { orbi: "obsolete" });
+  const left = await pendingSuggestions(db, user.id, cv.id);
+  if (left.length > 0) back(cv.id, { vue: "ameliorer" });
+  back(cv.id, { ok: decision === "applied" ? "change" : "refus" });
+}
+
+/** The summary written by the talent (the « Résumé » row of the editor). */
+export async function updateCvSummary(formData: FormData) {
+  const { profile } = await owner();
+  const cv = await ownedCv(profile.id, formData.get("id"));
+  const summary = z
+    .string()
+    .trim()
+    .max(1000)
+    .safeParse(formData.get("summary") ?? "");
+  if (!summary.success) back(cv.id, { vue: "resume", erreur: "1" });
+  const content = parseCv(cv.content);
+  await save(cv.id, { ...content, summary: summary.data });
+  back(cv.id, { ok: "1" });
+}
+
+/** « Renommer » in the « … » sheet of the editor. */
+export async function renameCv(formData: FormData) {
+  const { profile } = await owner();
+  const cv = await ownedCv(profile.id, formData.get("id"));
+  const title = z.string().trim().min(1).max(80).safeParse(formData.get("title"));
+  if (!title.success) back(cv.id, { erreur: "1" });
+  await db.document.update({ where: { id: cv.id }, data: { title: title.data } });
+  back(cv.id, { ok: "1" });
+}
+
+const contactSchema = detailsSchema.pick({ showEmail: true, phone: true });
+
+/** « Coordonnées affichées » of the options sheet: the e-mail shown or not, an optional phone. */
+export async function updateCvContact(formData: FormData) {
+  const { profile } = await owner();
+  const cv = await ownedCv(profile.id, formData.get("id"));
+  const parsed = contactSchema.safeParse({
+    showEmail: formData.get("showEmail") ?? undefined,
+    phone: formData.get("phone") ?? "",
+  });
+  if (!parsed.success) back(cv.id, { erreur: "telephone" });
+  const content = parseCv(cv.content);
+  await save(cv.id, {
+    ...content,
+    info: {
+      ...content.info,
+      showEmail: parsed.data.showEmail === "on",
+      phone: parsed.data.phone,
+    },
+  });
+  back(cv.id, { ok: "1" });
+}
+
+const orderSchema = z.object({
+  id: z.string().min(1).max(60),
+  order: z.array(z.enum(cvSectionIds)).min(1).max(cvSectionIds.length),
+});
+
+/**
+ * « Sections · glisser pour réordonner »: the new order, sent when the talent lets go of a row
+ * (or moves it with the keyboard). Only the settings change, never the content.
+ */
+export async function reorderCvSections(id: string, order: string[]) {
+  const parsed = orderSchema.safeParse({ id, order });
+  if (!parsed.success) return { ok: false as const };
+  const { user, profile } = await owner();
+  const cv = await db.document.findFirst({
+    where: { id: parsed.data.id, profileId: profile.id, kind: "cv" },
+    select: { id: true },
+  });
+  if (!cv) return { ok: false as const };
+  const result = await updateCvStyle(db, user.id, cv.id, (style, template) =>
+    orderBlocks(template, style, cvSectionIds, parsed.data.order),
   );
   refresh();
-  back(cv.id, { suggestion: done ? decision.data : "obsolete" });
+  return { ok: result === "saved" };
 }

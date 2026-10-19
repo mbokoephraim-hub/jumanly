@@ -21,13 +21,12 @@ test("espace talent : recherche de l'en-tête et compte derrière l'avatar", asy
   await expect(page.getByRole("region", { name: /^Offres/ })).toHaveCount(0);
   await expectAccessible(page);
 
-  // The profile: the parts as horizontal tabs.
+  // The profile (planche talent-4 § 3): sections that fold, Compétences open first.
   await page.goto("/app/profil");
-  const parts = page.getByRole("navigation", { name: "Parties du profil" });
-  await expect(parts.getByRole("link")).toHaveCount(8);
-  await parts.getByRole("link", { name: "Langues" }).click();
-  // A computer scrolls to the part, a phone opens it alone.
-  await expect(page).toHaveURL(/(#langues|partie=langues)$/);
+  await expect(page.locator("details.t-sect")).toHaveCount(7);
+  await expect(page.locator("#competences")).toHaveAttribute("open", "");
+  await page.locator("#langues > summary").click();
+  await expect(page.locator("#langues")).toHaveAttribute("open", "");
 
   // The account opens from the avatar of a destination; Se déconnecter sits in Compte.
   await page.goto("/app/learn");

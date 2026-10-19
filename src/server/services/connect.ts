@@ -3,8 +3,9 @@
  * talent and the recruiting team of the organization. Access rules:
  * - the talent of the conversation, from the personal space;
  * - an active member of the organization (not a viewer), from that organization's space.
+ * - for a « peer » conversation (lot 6, Connexions), the two talents of an accepted connection.
  * Anyone else gets "not found". A conversation blocked by the talent accepts no more messages
- * from the organization.
+ * from the organization; a peer conversation accepts messages only while the connection holds.
  */
 import type { MessageKind, Prisma, PrismaClient } from "@/generated/prisma/client";
 import { hirePermissions, type HireContext } from "./hire";
@@ -49,8 +50,15 @@ function accessWhere(viewer: Viewer): Prisma.ConversationWhereInput {
     if (!hirePermissions(viewer.hire.role).readApplications) return { id: "__none__" };
     return { organizationId: viewer.hire.organizationId };
   }
-  return { talentUserId: viewer.userId };
+  return {
+    OR: [
+      { talentUserId: viewer.userId, kind: { not: "peer" } },
+      { kind: "peer", participants: { some: { userId: viewer.userId } } },
+    ],
+  };
 }
+
+const peerSide = { select: { id: true, name: true, image: true } } as const;
 
 const listInclude = {
   organization: { select: { name: true, verifiedAt: true, logo: true } },
@@ -67,6 +75,9 @@ const listInclude = {
       job: { select: { title: true } },
       profile: { select: { id: true, user: { select: { name: true } } } },
     },
+  },
+  connection: {
+    select: { id: true, status: true, blockedById: true, requester: peerSide, addressee: peerSide },
   },
   messages: { where: { hiddenAt: null }, orderBy: { createdAt: "desc" }, take: 1 },
 } satisfies Prisma.ConversationInclude;
@@ -139,6 +150,8 @@ export async function sendMessage(
   if (fromOrganization && !hirePermissions(viewer.hire!.role).manage)
     throw new ConnectError("notFound");
   if (fromOrganization && conversation.blockedAt) throw new ConnectError("blocked");
+  if (conversation.kind === "peer" && conversation.connection?.status !== "accepted")
+    throw new ConnectError("blocked");
   const body = input.body.trim().slice(0, MESSAGE_MAX);
   if (!body) throw new ConnectError("invalid");
   const message = await db.message.create({
@@ -154,7 +167,10 @@ export async function sendMessage(
   await db.conversation.update({ where: { id: conversationId }, data: { lastMessageAt: now } });
   await markRead(db, viewer, conversationId, now);
   let recipients: string[];
-  if (fromOrganization) {
+  if (conversation.kind === "peer") {
+    const { requester, addressee } = conversation.connection!;
+    recipients = [requester.id === viewer.userId ? addressee.id : requester.id];
+  } else if (fromOrganization) {
     recipients = [conversation.talentUserId];
   } else {
     const senders = await db.message.findMany({
@@ -182,7 +198,10 @@ export async function sendMessage(
   return { conversationId, messageId: message.id, recipients, fromOrganization };
 }
 
-/** The talent stops all messages from the organization; applications are not withdrawn. */
+/**
+ * The talent stops all messages from the organization; applications are not withdrawn. In a peer
+ * conversation, the connection with the other talent is blocked instead.
+ */
 export async function blockConversation(
   db: PrismaClient,
   viewer: Viewer,
@@ -191,6 +210,23 @@ export async function blockConversation(
 ) {
   if (viewer.hire) throw new ConnectError("notFound");
   const conversation = await getConversation(db, viewer, conversationId);
+  if (conversation.kind === "peer") {
+    // Between two talents the connection is blocked, both ways; unblocking does not reconnect.
+    const connection = conversation.connection!;
+    if (blocked) {
+      if (connection.status === "blocked") return;
+      await db.connection.update({
+        where: { id: connection.id },
+        data: { status: "blocked", blockedById: viewer.userId, respondedAt: new Date() },
+      });
+    } else if (connection.status === "blocked" && connection.blockedById === viewer.userId) {
+      await db.connection.update({
+        where: { id: connection.id },
+        data: { status: "declined", blockedById: null },
+      });
+    }
+    return;
+  }
   await db.conversation.update({
     where: { id: conversation.id },
     data: { blockedAt: blocked ? new Date() : null },
@@ -243,3 +279,17 @@ export async function answerDocumentRequest(
     now,
   );
 }
+
+/** The other talent of a peer conversation, seen by `viewerId`. */
+export function peerOf(
+  conversation: {
+    connection: { requester: PeerSide; addressee: PeerSide } | null;
+  },
+  viewerId: string,
+) {
+  const connection = conversation.connection;
+  if (!connection) return null;
+  return connection.requester.id === viewerId ? connection.addressee : connection.requester;
+}
+
+type PeerSide = { id: string; name: string; image: string | null };

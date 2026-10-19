@@ -64,9 +64,7 @@ test("navigation Talent : cinq destinations, Orbi au milieu, Mon espace et Suivi
   );
   await page.getByRole("link", { name: /^Compte de / }).click();
   await expect(page).toHaveURL(/\/app\/compte$/);
-  await page.getByRole("link", { name: /^Mon espace/ }).click();
-
-  await expect(page).toHaveURL(/\/app\/espace$/);
+  await page.goto("/app/espace");
   await expect(page.getByRole("heading", { level: 1, name: "Mon espace" })).toBeVisible();
   for (const group of ["Profil professionnel", "Outils carrière", "Acquis", "Mon compte"])
     await expect(page.getByRole("region", { name: group })).toBeVisible();

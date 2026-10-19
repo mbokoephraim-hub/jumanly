@@ -17,7 +17,8 @@ export const reportReasons = [
   "other",
 ] as const;
 
-export const reportTargets = ["job", "message", "conversation"] as const;
+/** `profile`: a talent reported by another talent (Connexions, lot 6); the id is the profile. */
+export const reportTargets = ["job", "message", "conversation", "profile"] as const;
 
 export const reportSchema = z.object({
   targetType: z.enum(reportTargets),
@@ -71,6 +72,23 @@ export async function createReport(
       where: { id: input.targetId, status: { in: ["published", "closed"] } },
     });
     if (!job) return "notFound";
+  } else if (input.targetType === "profile") {
+    // Only someone the reporter is (or was) in touch with through Connexions.
+    const profile = await db.talentProfile.findUnique({
+      where: { id: input.targetId },
+      select: { userId: true },
+    });
+    const link = profile
+      ? await db.connection.findFirst({
+          where: {
+            OR: [
+              { requesterId: reporterId, addresseeId: profile.userId },
+              { requesterId: profile.userId, addresseeId: reporterId },
+            ],
+          },
+        })
+      : null;
+    if (!link) return "notFound";
   } else {
     const conversationId =
       input.targetType === "conversation"
@@ -82,7 +100,15 @@ export async function createReport(
             })
           )?.conversationId;
     const allowed = conversationId
-      ? await db.conversation.findFirst({ where: { id: conversationId, talentUserId: reporterId } })
+      ? await db.conversation.findFirst({
+          where: {
+            id: conversationId,
+            OR: [
+              { talentUserId: reporterId },
+              { kind: "peer", participants: { some: { userId: reporterId } } },
+            ],
+          },
+        })
       : null;
     if (!allowed) return "notFound";
   }
@@ -372,14 +398,21 @@ export async function reportAuthor(
             select: { senderId: true },
           })
         )?.senderId
-      : report.targetType === "job"
+      : report.targetType === "profile"
         ? (
-            await db.job.findUnique({
+            await db.talentProfile.findUnique({
               where: { id: report.targetId },
-              select: { createdById: true },
+              select: { userId: true },
             })
-          )?.createdById
-        : null;
+          )?.userId
+        : report.targetType === "job"
+          ? (
+              await db.job.findUnique({
+                where: { id: report.targetId },
+                select: { createdById: true },
+              })
+            )?.createdById
+          : null;
   return id
     ? db.user.findUnique({
         where: { id },

@@ -3555,6 +3555,545 @@
       "seal": "ATTESTATION VALIDÉE · SCEAU D’ORIGINALITÉ ·"
     }
   },
+  "point": {
+    "seo": "Faire le point",
+    "title": "Faire le point",
+    "back": "Retour",
+    "close": "Fermer",
+    "summary": {
+      "none": "Faites votre diagnostic de carrière : en quelques minutes, vous saurez où vous en êtes et par quoi commencer.",
+      "discovery": "Vous posez les bases de votre projet : quelques actions simples vous feront avancer vite.",
+      "building": "Vous avez des bases solides : quelques chantiers ciblés vous rendront prêt à candidater.",
+      "ready": "Votre profil est solide pour candidater : travaillez vos points faibles pour vous démarquer.",
+      "competitive": "Votre profil est compétitif : visez les offres exigeantes.",
+      "target": "Votre cible : {role}.",
+      "targetCity": "Votre cible : {role}, à {city}."
+    },
+    "strengths": "Vos atouts",
+    "strength": {
+      "certificate": "{name} prouvé par une attestation",
+      "result": "Une expérience décrite avec un résultat chiffré",
+      "proven": "{count, plural, one {# compétence prouvée} other {# compétences prouvées}} sur votre profil",
+      "dimension": "{name} : {score} sur 100 au diagnostic",
+      "none": "Vos atouts apparaîtront quand votre profil sera rempli."
+    },
+    "weaknesses": "À renforcer",
+    "weak": {
+      "skill": "{skill} : demandé par {count, plural, one {# offre} other {# offres}} sur {total}",
+      "noResult": "Aucune expérience décrite avec un résultat",
+      "noExperience": "Aucune expérience sur votre profil",
+      "dimension": "{name} : {score} sur 100 au diagnostic",
+      "none": "Rien de pressant : continuez sur votre lancée."
+    },
+    "next": {
+      "title": "Prochaine action",
+      "course": "Formation « {course} », {minutes} min",
+      "diagnostic": "Faire mon diagnostic de carrière, 6 à 8 minutes",
+      "profile": "Décrire une expérience avec un résultat, 10 min",
+      "start": "Commencer"
+    },
+    "diagnostic": "Voir mon diagnostic",
+    "why": {
+      "cta": "Pourquoi ces conseils ?",
+      "title": "Pourquoi ces conseils",
+      "intro": "Ces conseils sont calculés par des règles fixes, à partir de ce que vous avez déclaré. Les mêmes informations donnent toujours les mêmes conseils.",
+      "diagnostic": "Votre diagnostic du {date} : {score} sur 100.",
+      "noDiagnostic": "Pas encore de diagnostic : faites-le pour des conseils plus précis.",
+      "offers": "{count, plural, =0 {Aucune offre publiée comparée pour votre cible.} one {# offre publiée comparée pour votre cible.} other {# offres publiées comparées pour votre cible.}}",
+      "profile": "Votre profil : compétences et leurs preuves, expériences, attestations.",
+      "never": "Votre nom, votre âge, votre photo et votre origine n'entrent jamais dans ces conseils.",
+      "close": "Fermer"
+    }
+  },
+  "diag": {
+    "seo": "Diagnostic de carrière",
+    "title": "Diagnostic de carrière",
+    "back": "Retour",
+    "share": "Partager le bilan (PDF)",
+    "headline": {
+      "discovery": "Les bases de votre projet",
+      "building": "Un profil en construction",
+      "ready": "Prêt à candidater",
+      "competitive": "Compétitif sur vos offres"
+    },
+    "rules": "Calculé sur vos réponses, les mêmes donnent le même résultat.",
+    "score": "{score} sur 100",
+    "scores": "Vos six notes sur 100",
+    "date": "Fait le {date}",
+    "why": {
+      "cta": "Pourquoi ces notes ?",
+      "title": "Pourquoi ces notes",
+      "intro": "Chaque note sur 100 additionne des points fixes selon vos réponses. Voici le détail, dimension par dimension.",
+      "close": "Fermer"
+    },
+    "again": "Refaire",
+    "plan": "Mon plan",
+    "welcome": {
+      "hooks": "Ce que vous obtenez"
+    },
+    "flow": {
+      "close": "Quitter le diagnostic"
+    }
+  },
+  "plan": {
+    "seo": "Mon plan de progression",
+    "title": "Mon plan de progression",
+    "back": "Retour",
+    "goal": {
+      "kicker": "Objectif",
+      "empty": "Choisissez votre objectif",
+      "edit": "Modifier l'objectif",
+      "label": "Votre objectif",
+      "placeholder": "Par exemple : un premier poste dans la data"
+    },
+    "progress": "{done} sur {total} étapes faites",
+    "steps": "Les étapes",
+    "kind": {
+      "diagnostic": "Profil",
+      "course": "Formation",
+      "custom": "Action"
+    },
+    "state": {
+      "done": "faite",
+      "current": "en cours",
+      "late": "en retard"
+    },
+    "due": "avant le {date}",
+    "step": {
+      "edit": "Modifier l'étape",
+      "title": "Intitulé",
+      "due": "À faire avant le (facultatif)",
+      "save": "Enregistrer",
+      "open": "Ouvrir",
+      "markDone": "Marquer comme faite",
+      "markTodo": "Remettre à faire",
+      "remove": "Retirer cette étape"
+    },
+    "add": "Ajouter une étape",
+    "addTitle": "Nouvelle étape",
+    "close": "Fermer",
+    "note": "Orbi propose, vous choisissez : chaque étape se modifie ou se retire.",
+    "empty": {
+      "title": "Votre plan est vide",
+      "text": "Orbi peut le préparer à partir de votre dernier diagnostic. Vous gardez la main sur chaque étape.",
+      "fromDiagnostic": "Préparer mon plan",
+      "diagnostic": "Faire mon diagnostic"
+    },
+    "locked": {
+      "title": "Le plan de progression",
+      "text": "Disponible avec {plan}. Votre diagnostic et votre mini plan restent gratuits.",
+      "cta": "Voir les formules"
+    },
+    "saved": "Plan enregistré.",
+    "error": "Vérifiez ce que vous avez saisi.",
+    "courses": "Pour progresser",
+    "coursesWhy": "Les compétences qui manquent le plus souvent dans les offres qui vous correspondent.",
+    "report": "Télécharger le rapport (PDF)",
+    "reportText": "Votre plan, vos formations, vos entraînements et vos candidatures"
+  },
+  "entrain": {
+    "seo": "S'entraîner aux entretiens",
+    "title": "S'entraîner aux entretiens",
+    "back": "Retour",
+    "quotas": "Vos simulations ce mois",
+    "quota": {
+      "text": "Simulations écrites",
+      "voice": "Simulations vocales",
+      "used": "{used} sur {limit} ce mois",
+      "short": "{used} sur {limit}",
+      "unlimited": "Sans limite",
+      "locked": "Dès {plan}",
+      "reached": "Toutes utilisées : renouvelées le {date}"
+    },
+    "planned": "Entretien prévu",
+    "plannedTitle": "{company} · {job}",
+    "prepare": "Préparer cet entretien",
+    "free": {
+      "title": "S'entraîner librement",
+      "offer": "Sur une offre",
+      "offerText": "Enregistrée ou envoyée",
+      "job": "Sur un métier",
+      "jobText": "Le métier de votre choix",
+      "classic": "Questions classiques",
+      "classicText": "Se présenter, motivation",
+      "voice": "À l'oral",
+      "voiceText": "Avec votre voix"
+    },
+    "recent": "Derniers entraînements",
+    "recentTitle": "{job} · {mode}",
+    "mode": {
+      "text": "écrit",
+      "voice": "oral"
+    },
+    "recentLine": "{date} · {count, plural, one {# question} other {# questions}}",
+    "feedbackReady": "retour prêt",
+    "inProgress": "en cours",
+    "empty": "Vos entraînements apparaîtront ici. Ils restent privés.",
+    "private": "Privé : le recruteur ne voit jamais vos entraînements.",
+    "gratuit": "Gratuit",
+    "tipLine": "Conseils · {minutes} min",
+    "allTips": "Toutes les fiches de conseils",
+    "locked": {
+      "title": "Simulations avec Orbi dès {plan}",
+      "text": "Écrites dès {text}, à l'oral dès {voice}."
+    },
+    "applyFree": "Postuler et passer vos entretiens restent gratuits.",
+    "plans": "Voir les formules",
+    "error": {
+      "consent": "Les simulations utilisent l'IA. Activez-la dans vos paramètres de confidentialité pour commencer.",
+      "entitlement": "Ce format de simulation n'est pas inclus dans votre formule.",
+      "quota": "Vous avez utilisé toutes les simulations de ce format ce mois-ci.",
+      "invalid": "Vérifiez le métier et les options choisies."
+    },
+    "new": {
+      "title": "Nouvel entraînement",
+      "close": "Fermer",
+      "job": "Métier",
+      "offer": "Offre (facultatif)",
+      "noOffer": "Aucune, seulement le métier",
+      "level": "Niveau du poste",
+      "levels": {
+        "easy": "Junior",
+        "standard": "Confirmé",
+        "hard": "Senior"
+      },
+      "types": "Types de questions",
+      "type": {
+        "motivation": "Motivation",
+        "technical": "Techniques",
+        "behavioral": "Mises en situation",
+        "hr": "Questions RH"
+      },
+      "format": "Format",
+      "length": "Durée",
+      "formatLocked": "Dès {plan}"
+    },
+    "fb": {
+      "oralTitle": "Votre retour · oral",
+      "oral": "À l'oral",
+      "criteria": "Les 5 critères",
+      "criteriaNote": "Un niveau par critère, jamais une note.",
+      "review": "Revoir ma réponse {n}",
+      "reviewTip": "Avec la réponse proposée par Orbi",
+      "reviewPlain": "Votre réponse et le commentaire d'Orbi",
+      "why": "Pourquoi ce retour ?",
+      "whyTitle": "Pourquoi ce retour",
+      "close": "Fermer"
+    },
+    "voice": {
+      "kind": "{kind} · oral",
+      "time": "{time} / 2:00",
+      "record": "Parler",
+      "stop": "J'ai terminé",
+      "clear": "Effacer et recommencer",
+      "send": "Envoyer ma réponse",
+      "transcript": "Votre réponse transcrite, à relire avant d'envoyer",
+      "privacy": "Votre voix sert seulement à transcrire la réponse. Aucun enregistrement n'est gardé : l'audio n'est jamais envoyé."
+    }
+  },
+  "docs": {
+    "back": "Retour",
+    "list": {
+      "seo": "CV et documents",
+      "title": "CV et documents",
+      "tabs": "Mes CV, mes lettres, LinkedIn",
+      "tab": {
+        "cv": "CV",
+        "letters": "Lettres",
+        "linkedin": "LinkedIn"
+      },
+      "cvLine": "{template} · modifié le {date}",
+      "adapted": "Adapté à une offre · {date}",
+      "primary": "Principal",
+      "more": "Plus d'options pour « {title} »",
+      "new": "Nouveau CV",
+      "import": "Importer",
+      "empty": {
+        "title": "Pas encore de CV.",
+        "text": "Créez-le depuis votre profil ou importez celui que vous avez déjà."
+      },
+      "limit": "Vous pouvez avoir jusqu'à {max} CV. Supprimez-en un pour en créer un autre.",
+      "cvDeleted": "CV supprimé.",
+      "letterDeleted": "Document supprimé.",
+      "primaryDone": "C'est votre CV principal : il est proposé en premier quand vous postulez."
+    },
+    "menu": {
+      "open": "Ouvrir l'éditeur",
+      "openLetter": "Ouvrir",
+      "pdf": "Télécharger en PDF",
+      "primary": "En faire mon CV principal",
+      "primaryHint": "Proposé en premier quand vous postulez",
+      "template": "Choisir un modèle",
+      "duplicate": "Dupliquer",
+      "delete": "Supprimer",
+      "deleteHint": "Vos candidatures déjà envoyées gardent leur CV."
+    },
+    "pdf": {
+      "preparing": "PDF…",
+      "done": "CV téléchargé.",
+      "error": "Le PDF n'a pas pu être préparé. Réessayez dans un instant."
+    },
+    "create": {
+      "title": "Nouveau CV",
+      "legend": "Partir de",
+      "profile": "Depuis mon profil",
+      "profileHint": "Expériences, études et compétences reprises",
+      "blank": "Page vierge",
+      "blankHint": "Seulement votre nom et votre e-mail",
+      "name": "Nom du CV",
+      "submit": "Créer et ouvrir"
+    },
+    "letters": {
+      "written": "Rédigée le {date}",
+      "line": "{type} · {date}",
+      "type": {
+        "letter": "Lettre de motivation",
+        "bio": "Biographie",
+        "email": "E-mail de candidature",
+        "thankYou": "Message de remerciement",
+        "proofread": "Texte relu"
+      },
+      "linkedin": {
+        "label": "LinkedIn",
+        "text": "Orbi propose un titre, un résumé et 5 compétences à copier sur LinkedIn.",
+        "cta": "Préparer mon LinkedIn"
+      },
+      "new": "Nouvelle lettre",
+      "inputError": "Vérifiez le texte : il est vide ou trop long.",
+      "create": {
+        "title": "Nouvelle lettre",
+        "lead": "Orbi rédige à partir de votre profil et de l'offre. Vous relisez et modifiez avant tout envoi.",
+        "type": "Document",
+        "offer": "Pour l'offre",
+        "noOffer": "Sans offre précise",
+        "tone": "Ton",
+        "tones": {
+          "formal": "Soutenu",
+          "warm": "Chaleureux",
+          "direct": "Direct"
+        },
+        "points": "À mettre en avant (facultatif)",
+        "note": "{count, plural, one {# crédit Orbi} other {# crédits Orbi}}. Orbi n'invente ni expérience ni chiffre.",
+        "submit": "Rédiger avec Orbi"
+      },
+      "proofread": {
+        "open": "Faire relire un texte",
+        "title": "Faire relire un texte",
+        "lead": "Collez une lettre ou un e-mail : Orbi propose des corrections, vous gardez celles que vous voulez.",
+        "name": "Titre (facultatif)",
+        "text": "Votre texte",
+        "submit": "{count, plural, one {Relire · # crédit} other {Relire · # crédits}}"
+      }
+    },
+    "letter": {
+      "seo": "Lettre",
+      "more": "Plus d'options",
+      "created": "Orbi a rédigé ce texte avec votre profil. Relisez-le et modifiez-le avant de l'envoyer.",
+      "saved": "Enregistré.",
+      "error": "Vérifiez le titre et le texte.",
+      "corrections": "{count, plural, one {# correction proposée} other {# corrections proposées}}",
+      "before": "Avant :",
+      "after": "Après :",
+      "applyCorrections": "Appliquer les corrections cochées",
+      "name": "Titre",
+      "text": "Texte",
+      "note": "Rien n'est envoyé par Jumanly : vous copiez ou téléchargez ce texte quand il vous convient.",
+      "copy": "Copier",
+      "copied": "Texte copié.",
+      "save": "Enregistrer"
+    },
+    "linkedin": {
+      "seo": "Préparer LinkedIn",
+      "title": "Préparer LinkedIn",
+      "label": "LinkedIn",
+      "lead": "Orbi propose un titre, un résumé et 5 compétences à copier sur LinkedIn, à partir de votre profil.",
+      "generate": "{count, plural, one {Préparer · # crédit Orbi} other {Préparer · # crédits Orbi}}",
+      "regenerate": "{count, plural, one {Proposer à nouveau · # crédit} other {Proposer à nouveau · # crédits}}",
+      "headline": "Titre proposé",
+      "about": "Résumé proposé",
+      "skills": "{count, plural, one {# compétence à ajouter} other {# compétences à ajouter}}",
+      "proven": "✓ : compétence prouvée sur Jumanly (formation ou évaluation).",
+      "copy": "Copier",
+      "copied": "Copié. Collez-le dans LinkedIn.",
+      "note": "Rien n'est publié sur LinkedIn : vous copiez ce que vous voulez."
+    },
+    "import": {
+      "seo": "Importer un CV",
+      "title": "Importer un CV",
+      "choose": "Choisir un fichier",
+      "chooseHint": "PDF ou Word, {max} Mo au plus",
+      "reading": "Lecture du fichier…",
+      "linkedin": "Depuis LinkedIn",
+      "linkedinHint": "Fichier PDF de votre profil",
+      "readTitle": "Lu dans votre CV · à vérifier",
+      "readIn": "Lu dans « {name} » · à vérifier",
+      "found": {
+        "experiences": "{count, plural, one {# expérience} other {# expériences}}",
+        "skills": "{count, plural, one {# compétence} other {# compétences}}",
+        "educations": "{count, plural, one {# diplôme} other {# diplômes}}"
+      },
+      "undated": "{count, plural, one {Une expérience sans date de début n'est pas ajoutée : complétez-la dans votre profil.} other {# expériences sans date de début ne sont pas ajoutées : complétez-les dans votre profil.}}",
+      "rulesOnly": "Sans l'aide de l'IA, seules les compétences sont reconnues.",
+      "note": "Rien n'est ajouté sans votre accord. Le fichier n'est pas conservé.",
+      "nothing": {
+        "title": "Rien n'a été reconnu.",
+        "text": "Essayez un autre fichier, ou remplissez votre profil vous-même."
+      },
+      "submit": "Ajouter à mon profil",
+      "error": {
+        "format": "Ce fichier n'est pas accepté. Choisissez un PDF ou un document Word (.docx).",
+        "size": "Ce fichier dépasse {max} Mo. Choisissez un fichier plus léger.",
+        "empty": "Ce fichier ne contient pas de texte lisible (un scan, par exemple). Essayez un autre fichier.",
+        "unreadable": "Ce fichier n'a pas pu être lu. Essayez de l'enregistrer à nouveau en PDF."
+      }
+    },
+    "section": {
+      "summary": "Résumé",
+      "experience": "Expériences",
+      "education": "Études",
+      "skills": "Compétences",
+      "languages": "Langues"
+    },
+    "templates": {
+      "seo": "Choisir un modèle",
+      "title": "Choisir un modèle",
+      "filters": "Familles de modèles",
+      "filter": {
+        "tous": "Tous",
+        "sobres": "Sobres",
+        "colonne": "Colonne",
+        "creatifs": "Créatifs"
+      },
+      "included": "Inclus",
+      "currentShort": "(modèle actuel)",
+      "use": "Utiliser « {name} »",
+      "current": "« {name} » est votre modèle",
+      "unlock": "Inclus dès {plan} · voir les formules",
+      "locked": "Ce modèle est inclus dès la formule {plan}."
+    },
+    "editor": {
+      "seo": "Éditeur de CV",
+      "more": "Plus d'options",
+      "template": "Modèle {templateName}",
+      "savedOn": "Enregistré · {date}",
+      "preview": "Aperçu",
+      "demo": "Votre CV est encore vide : l'aperçu montre un exemple fictif.",
+      "changeTemplate": "Modèle",
+      "sections": "Sections · glisser pour réordonner",
+      "grip": "Déplacer « {section} » (flèches haut et bas)",
+      "moved": "« {section} » déplacée.",
+      "summaryLine": "{count, plural, one {# phrase} other {# phrases}}",
+      "toWrite": "À écrire",
+      "count": "{count, plural, =0 {Aucun élément} other {#}}",
+      "skillsLine": "{count, plural, =0 {Aucune, depuis le profil} other {#, depuis le profil}}",
+      "hiddenShort": "masquée",
+      "improve": "Améliorer",
+      "improveSummary": "{count, plural, one {Améliorer avec Orbi · # crédit} other {Améliorer avec Orbi · # crédits}}",
+      "summaryHint": "Deux ou trois phrases : votre métier, ce que vous savez faire, un résultat.",
+      "adapt": "Adapter",
+      "pdf": "PDF",
+      "save": "Enregistrer",
+      "saved": "Enregistré.",
+      "error": "Ce changement n'a pas pu être enregistré. Réessayez.",
+      "fromProfile": "CV mis à jour depuis votre profil.",
+      "templateApplied": "Modèle « {templateName} » appliqué. Votre contenu n'a pas changé.",
+      "changeApplied": "Changement appliqué.",
+      "changeRefused": "Votre texte reste tel quel.",
+      "orbiSame": "Orbi n'a rien de mieux à proposer pour l'instant.",
+      "orbiEmpty": "Écrivez d'abord quelques mots ou ajoutez une expérience : Orbi part de ce que vous avez écrit.",
+      "obsolete": "Ce texte a changé depuis la proposition d'Orbi : elle n'a pas été appliquée.",
+      "adapted": "Copie « {title} » créée pour {target}. Votre CV d'origine ne change pas.",
+      "changesLabel": "Orbi propose",
+      "changes": "{count, plural, one {# changement à revoir} other {# changements à revoir}}",
+      "rename": "Nom du CV",
+      "refresh": "Mettre à jour depuis mon profil",
+      "refreshHint": "Reprend vos expériences, études et compétences",
+      "present": "aujourd'hui",
+      "shown": "Sur le CV",
+      "shownOn": "Cette section est imprimée",
+      "shownOff": "Cette section est masquée",
+      "sectionEmpty": "Rien pour l'instant. Ajoutez-le dans votre profil.",
+      "editInProfile": "Modifier dans mon profil"
+    },
+    "style": {
+      "color": "Couleur",
+      "colorAts": "Les quatre premières lignes sont les plus sûres pour les logiciels de recrutement.",
+      "font": "Police",
+      "fontChip": "Aa · {font}",
+      "density": "Densité"
+    },
+    "change": {
+      "title": {
+        "summary": "Améliorer le résumé",
+        "headline": "Améliorer le titre",
+        "bullet": "Améliorer une réalisation"
+      },
+      "count": "{total, plural, other {Changement 1 sur #}}",
+      "before": "Avant",
+      "emptyBefore": "(vide)",
+      "after": "Proposition d'Orbi",
+      "yours": "Votre version",
+      "note": "Rien n'est modifié sans votre accord.",
+      "noteCredits": "Rien n'est modifié sans votre accord. {left, plural, =0 {Plus de crédit Orbi ce mois-ci.} one {# crédit Orbi restant.} other {# crédits Orbi restants.}}",
+      "why": "Pourquoi ces changements ?",
+      "whyMarked": "Les passages surlignés reprennent vos compétences et vos chiffres, déjà dans votre CV.",
+      "whyFocus": "Mis en avant parce que l'offre le demande : {skills}.",
+      "whyNothing": "Orbi n'ajoute aucune expérience, aucun diplôme, aucun chiffre.",
+      "whyRefuse": "Si vous refusez, votre texte reste exactement tel quel.",
+      "refuse": "Refuser",
+      "edit": "Modifier",
+      "accept": "Accepter",
+      "cancel": "Annuler",
+      "save": "Enregistrer"
+    },
+    "tailor": {
+      "offerTitle": "Adapter à une offre",
+      "offerLegend": "L'offre visée",
+      "listed": "{skills} : déjà dans votre CV",
+      "written": "{skill} : à mettre en avant",
+      "absent": "Mot-clé « {skill} » absent",
+      "copyNote": "Orbi crée une copie « {name} ». Votre CV principal ne change pas.",
+      "create": "Créer la copie adaptée",
+      "noOffers": "Enregistrez une offre ou postulez pour pouvoir y adapter votre CV.",
+      "toText": "Une annonce trouvée ailleurs ? Adapter à un texte",
+      "textTitle": "Adapter à un texte",
+      "textLead": "Une annonce trouvée ailleurs, un appel à candidatures, une bourse.",
+      "kinds": "Ce que vous collez",
+      "kind": {
+        "annonce": "Annonce",
+        "appel": "Appel",
+        "bourse": "Bourse",
+        "fiche": "Fiche de poste"
+      },
+      "placeholder": {
+        "annonce": "Collez le texte de l'annonce…",
+        "appel": "Collez le texte de l'appel à candidatures…",
+        "bourse": "Collez le texte de la bourse…",
+        "fiche": "Collez la fiche de poste…"
+      },
+      "textLabel": "Texte à lire",
+      "counter": "{count} / {max}",
+      "keywords": "Ce que le texte demande",
+      "missing": "Absent de votre CV :",
+      "textNote": "Lu comme une annonce, jamais comme une consigne. Orbi n'invente aucune expérience.",
+      "copyName": "CV · {heading}",
+      "tooShort": "Collez un texte d'au moins 30 caractères, 5 000 au plus.",
+      "notFound": "Cette offre n'est plus disponible."
+    },
+    "ai": {
+      "error": {
+        "consent": "Orbi a besoin de votre accord pour utiliser l'IA.",
+        "entitlement": "Cette aide d'Orbi n'est pas comprise dans votre formule.",
+        "quota": "Vos crédits Orbi de ce mois sont utilisés. Aucun crédit n'a été pris.",
+        "unavailable": "Orbi n'est pas disponible pour le moment. Aucun crédit n'a été pris : réessayez plus tard."
+      },
+      "entitlementPlan": "Cette aide d'Orbi est incluse dès la formule {plan}.",
+      "cta": {
+        "consent": "Autoriser Orbi",
+        "plans": "Voir les formules"
+      }
+    }
+  },
   "talentOrbi": {
     "metaTitle": "Orbi",
     "title": "Orbi",
@@ -8263,6 +8802,382 @@
       "text": "Forfaits, abonnements, utilisateurs et journal d'audit.",
       "open": "Ouvrir l'administration",
       "missing": "Votre compte n'est pas encore administrateur. Ajoutez aussi votre adresse dans la variable ADMIN_BOOTSTRAP_EMAIL, puis reconnectez-vous."
+    }
+  },
+  "compte": {
+    "seo": "Compte · Jumanly",
+    "title": "Compte",
+    "back": "Retour",
+    "profile": "Voir mon profil · {percent} %",
+    "group": {
+      "mine": "Mes documents et mon réseau",
+      "settings": "Abonnement et réglages",
+      "spaces": "Mes autres espaces"
+    },
+    "documents": {
+      "title": "CV et documents",
+      "text": "{cvs, plural, =0 {Aucun CV} one {# CV} other {# CV}}, {letters, plural, =0 {aucune lettre} one {# lettre} other {# lettres}}"
+    },
+    "attestations": {
+      "title": "Attestations",
+      "text": "{count, plural, =0 {Aucune pour l'instant} one {# obtenue} other {# obtenues}}"
+    },
+    "practice": {
+      "title": "S’entraîner aux entretiens",
+      "text": "{count, plural, =0 {Aucune simulation ce mois} one {# simulation ce mois} other {# simulations ce mois}}"
+    },
+    "connections": {
+      "title": "Connexions",
+      "text": "{count, plural, =0 {Aucune connexion} one {# personne} other {# personnes}}",
+      "requests": "{count, plural, =0 {Aucune connexion} one {# personne} other {# personnes}} · {received, plural, one {# demande} other {# demandes}}"
+    },
+    "plan": {
+      "title": "Abonnement",
+      "credits": "{count, plural, =0 {Aucun crédit Orbi} one {# crédit Orbi} other {# crédits Orbi}}",
+      "unlimited": "Crédits Orbi illimités"
+    },
+    "settings": {
+      "title": "Paramètres",
+      "text": "Sécurité, confidentialité, notifications"
+    },
+    "help": {
+      "title": "Aide",
+      "text": "assistant@jumanly.io"
+    },
+    "spaces": {
+      "title": "Espace recruteur",
+      "text": "Passer à mon organisation"
+    },
+    "tester": {
+      "title": "Mode testeur",
+      "text": "Changer de formule sans payer"
+    },
+    "admin": {
+      "title": "Administration",
+      "text": "Jumanly Admin"
+    },
+    "logout": "Se déconnecter"
+  },
+  "reseau": {
+    "seo": "Connexions · Jumanly",
+    "title": "Connexions",
+    "tabs": "Connexions et demandes",
+    "tab": {
+      "mine": "Mes connexions",
+      "requests": "Demandes"
+    },
+    "received": "Demandes reçues",
+    "sent": "Demandes envoyées",
+    "mine": "Mes connexions",
+    "mutual": "{count, plural, one {# en commun} other {# en commun}}",
+    "noTitle": "Talent Jumanly",
+    "accept": "Accepter",
+    "acceptName": "Accepter la demande de {name}",
+    "ignore": "Ignorer",
+    "ignoreName": "Ignorer la demande de {name}",
+    "withdraw": "Retirer",
+    "withdrawName": "Retirer ma demande à {name}",
+    "connect": "Se connecter",
+    "connectName": "Demander à {name} de se connecter",
+    "write": "Écrire à {name}",
+    "options": "{name} : écrire, retirer, bloquer ou signaler",
+    "rule": "On écrit seulement à une connexion acceptée.",
+    "noRequest": "Aucune demande en attente.",
+    "error": "Cette action n’est pas possible. La personne n’est peut-être plus disponible.",
+    "empty": {
+      "title": "Pas encore de connexion",
+      "text": "Retrouvez des personnes de votre domaine et échangez une fois la demande acceptée."
+    },
+    "done": {
+      "envoyee": "Demande envoyée. Vous pourrez écrire une fois qu’elle sera acceptée.",
+      "acceptee": "Connexion acceptée. Vous pouvez vous écrire.",
+      "ignoree": "Demande ignorée. La personne n’est pas prévenue.",
+      "retiree": "C’est fait. La conversation reste lisible, sans nouveaux messages.",
+      "bloquee": "Personne bloquée. Elle ne peut plus vous écrire ni vous demander.",
+      "deja": "Vous êtes déjà en lien avec cette personne."
+    },
+    "search": {
+      "open": "Chercher une personne",
+      "title": "Chercher une personne",
+      "label": "Nom ou métier",
+      "placeholder": "Nom ou métier",
+      "none": "Personne ne correspond à « {query} ».",
+      "privacy": "Seuls les profils visibles sous leur nom apparaissent ici."
+    },
+    "person": {
+      "write": "Écrire",
+      "remove": "Retirer la connexion",
+      "removeText": "La conversation reste lisible, sans nouveaux messages.",
+      "report": "Signaler cette personne",
+      "block": "Bloquer",
+      "blockText": "Plus de message ni de demande, dans les deux sens."
+    },
+    "thread": {
+      "subtitle": "Connexion",
+      "blocked": "Vous avez bloqué {name} : vous ne pouvez plus vous écrire.",
+      "ended": "Cette connexion a pris fin : la conversation reste lisible, sans nouveaux messages."
+    },
+    "block": {
+      "body": "Cette personne ne pourra plus vous écrire ni vous demander de vous connecter."
+    }
+  },
+  "profil": {
+    "seo": "Mon profil · Jumanly",
+    "back": "Retour",
+    "edit": "Modifier le profil",
+    "save": "Enregistrer",
+    "error": "Ce n’est pas enregistré. Vérifiez les champs puis réessayez.",
+    "aim": "Vise : {job}",
+    "point": "Faire le point",
+    "recruiterView": "Vu par un recruteur",
+    "saved": {
+      "default": "Enregistré.",
+      "photo": "Photo enregistrée.",
+      "partage": "Vos projets sont en ligne. Copiez le lien pour les partager.",
+      "prive": "Vos projets ne sont plus en ligne.",
+      "visibilite": "Visibilité enregistrée."
+    },
+    "completeness": {
+      "title": "Profil à {percent} %",
+      "ring": "{percent} %",
+      "done": "Profil complet. Faites le point avec Orbi.",
+      "next": {
+        "identity": "Ajoutez un titre et votre ville pour progresser",
+        "summary": "Ajoutez un résumé de quelques lignes pour progresser",
+        "experience": "Ajoutez une expérience pour progresser",
+        "education": "Ajoutez vos études pour progresser",
+        "skills": "Ajoutez au moins 3 compétences pour progresser",
+        "languages": "Ajoutez une langue pour progresser",
+        "preferences": "Dites ce que vous cherchez pour progresser"
+      }
+    },
+    "proof": {
+      "certificate": "Attestation",
+      "project": "Projet",
+      "experience": "Expérience",
+      "link": "Lien",
+      "none": "Déclarée",
+      "named": "({name})"
+    },
+    "skills": {
+      "seo": "Compétences · Jumanly",
+      "title": "Compétences",
+      "empty": "Ajoutez les compétences que vous savez montrer.",
+      "add": "Ajouter une compétence",
+      "addNamed": "Ajouter {skill}",
+      "search": "Chercher une compétence",
+      "pick": "Compétence trouvée",
+      "none": "Aucune compétence ne correspond à « {query} ». Essayez un autre mot.",
+      "level": "Niveau",
+      "levels": {
+        "beginner": "Débutant",
+        "intermediate": "Intermédiaire",
+        "advanced": "Avancé",
+        "expert": "Expert"
+      },
+      "proof": "Preuve",
+      "attestation": "Attestation Jumanly",
+      "project": "Un projet",
+      "declared": "Déclarée seulement",
+      "declaredText": "Sans preuve",
+      "keepProof": "Garder la preuve déjà donnée",
+      "verified": "Compétence vérifiée par une attestation Jumanly : son niveau et sa preuve restent.",
+      "remove": "Retirer cette compétence",
+      "error": {
+        "unknownSkill": "Choisissez une compétence de la liste.",
+        "max": "Vous avez atteint le nombre maximum de compétences. Retirez-en une d’abord."
+      }
+    },
+    "projects": {
+      "seo": "Projet · Jumanly",
+      "title": "Projets",
+      "add": "Ajouter un projet",
+      "new": "Nouveau projet",
+      "edit": "Modifier le projet",
+      "private": "Vous seul",
+      "locked": "Montrez vos projets",
+      "lockedText": "Inclus dans les formules payantes. Voir les formules.",
+      "files": "Ajouter des photos ou un PDF",
+      "filesHelp": "Jusqu’à {max} fichiers, 4 Mo par envoi",
+      "kept": "Fichiers du projet",
+      "titleLabel": "Titre",
+      "titlePlaceholder": "Prévision des ventes d’une boutique",
+      "text": "Ce que vous avez fait",
+      "textPlaceholder": "Le problème, votre rôle, le résultat chiffré",
+      "skills": "Compétences utilisées",
+      "addSkill": "Ajouter une compétence",
+      "visible": "Visible par les recruteurs",
+      "visibleText": "Sinon, seulement vous",
+      "remove": "Supprimer ce projet",
+      "error": {
+        "file": "Ces fichiers ne passent pas : photos ou PDF seulement, {max} fichiers et 4 Mo par envoi au plus.",
+        "limit": "Vous avez atteint le nombre maximum de projets."
+      }
+    },
+    "experience": {
+      "seo": "Expérience · Jumanly",
+      "title": "Expériences",
+      "empty": "Décrivez un stage, un emploi ou une mission, avec son résultat.",
+      "add": "Ajouter une expérience",
+      "addCta": "Ajouter",
+      "new": "Nouvelle expérience",
+      "edit": "Modifier l’expérience",
+      "now": "aujourd’hui",
+      "job": "Poste",
+      "jobPlaceholder": "Stagiaire data",
+      "company": "Organisation",
+      "start": "Début",
+      "end": "Fin",
+      "current": "Poste actuel",
+      "result": "Résultat obtenu",
+      "resultPlaceholder": "Rapport mensuel automatisé : 2 jours gagnés par mois",
+      "resultHelp": "Un résultat par ligne, avec un chiffre si possible.",
+      "endBeforeStart": "La fin ne peut pas être avant le début.",
+      "remove": "Supprimer cette expérience"
+    },
+    "education": {
+      "title": "Études",
+      "empty": "Ajoutez votre diplôme le plus récent.",
+      "add": "Ajouter des études",
+      "edit": "Modifier les études",
+      "degree": "Diplôme ou formation",
+      "degreePlaceholder": "Licence en économie",
+      "school": "Établissement",
+      "level": "Niveau",
+      "start": "Année de début",
+      "end": "Année de fin",
+      "ongoing": "en cours",
+      "remove": "Retirer ces études",
+      "short": {
+        "none": "Sans diplôme",
+        "secondary": "Secondaire",
+        "vocational": "Professionnelle",
+        "bachelor": "Licence",
+        "master": "Master",
+        "doctorate": "Doctorat"
+      }
+    },
+    "attestations": {
+      "title": "Attestations et certificats",
+      "empty": "Vos attestations Jumanly apparaissent ici quand vous les affichez sur votre profil.",
+      "line": "Vérifiable · {code}",
+      "manage": "Gérer mes attestations"
+    },
+    "languages": {
+      "title": "Langues",
+      "empty": "Ajoutez les langues que vous parlez.",
+      "add": "Ajouter une langue",
+      "language": "Langue",
+      "levelLabel": "Niveau",
+      "level": {
+        "native": "Langue maternelle",
+        "fluent": "Courant",
+        "professional": "Professionnel",
+        "intermediate": "Intermédiaire",
+        "basic": "Notions"
+      },
+      "cefr": "Niveau européen (facultatif)",
+      "cefrNone": "Sans",
+      "save": "Ajouter",
+      "remove": "Retirer {language}"
+    },
+    "search": {
+      "seo": "Ce que je cherche · Jumanly",
+      "title": "Ce que je cherche",
+      "jobs": "Métiers visés",
+      "places": "Où travailler",
+      "contracts": "Contrat et mode",
+      "available": "Disponibilité",
+      "edit": "Modifier",
+      "addJob": "Ajouter un métier",
+      "addPlace": "Ajouter une ville",
+      "salary": "Salaire souhaité",
+      "salaryPlaceholder": "À partir de… $ par mois",
+      "salaryHelp": "Visible seulement par vous et les recruteurs à qui vous postulez",
+      "availableNow": "Disponible",
+      "availableText": "Dès maintenant"
+    },
+    "contract": {
+      "cdi": "CDI",
+      "cdd": "CDD",
+      "internship": "Stage",
+      "freelance": "Freelance",
+      "apprenticeship": "Alternance",
+      "volunteer": "Volontariat",
+      "partTime": "Temps partiel"
+    },
+    "remote": {
+      "onsite": "Sur site",
+      "hybrid": "Hybride",
+      "remote": "À distance"
+    },
+    "availability": {
+      "open": "Disponible dès maintenant",
+      "listening": "À l’écoute",
+      "not_looking": "Pas en recherche"
+    },
+    "share": {
+      "open": "Partager mon profil",
+      "title": "Partager mes projets",
+      "text": "Une page publique montre votre nom, votre titre et vos projets visibles, rien d’autre.",
+      "public": "Mettre mes projets en ligne",
+      "publicText": "Toute personne qui a le lien peut les voir",
+      "save": "Enregistrer",
+      "copy": "Copier le lien",
+      "copied": "Lien copié",
+      "locked": "La page publique de vos projets fait partie des formules payantes.",
+      "plans": "Voir les formules",
+      "privacy": "Votre profil complet reste privé : un recruteur le voit seulement si vous postulez ou le rendez visible."
+    },
+    "head": {
+      "seo": "Modifier le profil · Jumanly",
+      "title": "Modifier le profil",
+      "headline": "Titre",
+      "headlinePlaceholder": "Analyste de données",
+      "summary": "Résumé",
+      "summaryPlaceholder": "Je transforme des données en décisions…",
+      "summaryHelp": "Facultatif · {max} caractères au plus",
+      "country": "Pays",
+      "city": "Ville",
+      "photo": "Photo de profil",
+      "photoTake": "Prendre une photo",
+      "photoChoose": "Choisir dans la galerie",
+      "photoRemove": "Retirer la photo",
+      "photoZoom": "Zoom",
+      "photoEmpty": "Choisissez une photo, puis cadrez-la.",
+      "photoDrag": "Glissez la photo ou utilisez les flèches pour la cadrer",
+      "photoRule": "La photo n’entre jamais dans le score. Vous pouvez ne pas en mettre.",
+      "photoSaved": "Photo enregistrée.",
+      "photoRemoved": "Photo retirée.",
+      "photoError": {
+        "type": "Ce fichier n’est pas une photo (JPEG, PNG ou WebP).",
+        "size": "Cette photo est trop lourde. Recadrez-la ou choisissez-en une autre.",
+        "photo": "Choisissez une photo avant d’enregistrer."
+      }
+    },
+    "preview": {
+      "seo": "Vu par un recruteur · Jumanly",
+      "title": "Vu par un recruteur",
+      "banner": "Aperçu : c’est ce que voit un recruteur à qui vous postulez.",
+      "headline": "Titre",
+      "skills": "Compétences",
+      "projects": "Projets",
+      "projectsValue": "{count, plural, =0 {Aucun projet public} one {# projet public} other {# projets publics}}",
+      "attestations": "Attestations",
+      "attestationsValue": "{count, plural, =0 {Aucune} one {#, vérifiable} other {#, vérifiables}}",
+      "cv": "CV",
+      "cvValue": "Celui envoyé avec la candidature",
+      "never": "Jamais utilisé pour le score",
+      "photoAge": "Photo, âge, genre",
+      "origin": "Nationalité, situation familiale",
+      "address": "Adresse précise",
+      "excluded": "exclus du matching",
+      "cityOnly": "ville seulement",
+      "rule": {
+        "private": "Un recruteur voit votre profil seulement si vous postulez.",
+        "recruiters": "Votre profil est visible par les recruteurs, et par ceux à qui vous postulez.",
+        "anonymous": "Les recruteurs voient votre profil sans votre nom, sauf si vous postulez."
+      }
     }
   },
   "hire": {

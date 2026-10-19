@@ -28,7 +28,13 @@ import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
 import { authLimits } from "@/server/rate-limit";
 import { talentStatus } from "@/server/services/applications";
-import { ConnectError, getConversation, markRead, MESSAGE_MAX } from "@/server/services/connect";
+import {
+  ConnectError,
+  getConversation,
+  markRead,
+  MESSAGE_MAX,
+  peerOf,
+} from "@/server/services/connect";
 import {
   attachableDocuments,
   conversationTimeZone,
@@ -112,7 +118,9 @@ export default async function ThreadPage({
   await markRead(db, viewer, conversation.id);
   const now = new Date();
   const back = `/app/messages/${conversation.id}`;
-  const company = conversation.organization?.name ?? "";
+  // A conversation with a connection (lot 6): the other talent stands where the company would.
+  const peer = conversation.kind === "peer" ? peerOf(conversation, user.id) : null;
+  const company = peer?.name ?? conversation.organization?.name ?? "";
   const jobTitle =
     conversation.application?.job.title ?? conversation.contactRequest?.job?.title ?? "";
   const senderIds = [
@@ -162,7 +170,12 @@ export default async function ThreadPage({
   )?.senderId;
   const personName = person ? senders.get(person) : undefined;
   const status = linked ? talentStatus(linked, now) : null;
-  const canWrite = !conversation.blockedAt;
+  const canWrite = peer ? conversation.connection?.status === "accepted" : !conversation.blockedAt;
+  // Blocked by me: the organization, or the other talent of the connection.
+  const iBlocked = peer
+    ? conversation.connection?.status === "blocked" &&
+      conversation.connection.blockedById === user.id
+    : Boolean(conversation.blockedAt);
   const cvs = documents.filter((document) => document.kind === "cv");
   const letters = documents.filter((document) => document.kind === "cover_letter");
   const lists = { cv: cvs, lettre: letters, document: documents } as const;
@@ -194,13 +207,19 @@ export default async function ThreadPage({
       >
         <Logo
           name={company}
-          src={conversation.organization?.logo}
+          src={peer ? peer.image : conversation.organization?.logo}
           tone={toneOf(company)}
           className="t-lg-s"
         />
         <div className="t-qui">
-          <h1>{personName ? shortName(personName) : company}</h1>
-          <span>{personName ? [company, jobTitle].filter(Boolean).join(" · ") : jobTitle}</span>
+          <h1>{personName && !peer ? shortName(personName) : company}</h1>
+          <span>
+            {peer
+              ? t("reseau.thread.subtitle")
+              : personName
+                ? [company, jobTitle].filter(Boolean).join(" · ")
+                : jobTitle}
+          </span>
         </div>
       </FlowHead>
 
@@ -236,7 +255,15 @@ export default async function ThreadPage({
           <em className={cx("t-st", statusChip[status])}>{t(`suivi.status.${status}`)}</em>
         </Link>
       )}
-      {conversation.blockedAt && <Notice>{t("connect.thread.youBlocked")}</Notice>}
+      {peer ? (
+        iBlocked ? (
+          <Notice>{t("reseau.thread.blocked", { name: company })}</Notice>
+        ) : (
+          !canWrite && <Notice>{t("reseau.thread.ended")}</Notice>
+        )
+      ) : (
+        conversation.blockedAt && <Notice>{t("connect.thread.youBlocked")}</Notice>
+      )}
 
       <ol className="t-fil" aria-label={t("inbox.thread")}>
         {conversation.messages.map((message, index) => {
@@ -532,7 +559,7 @@ export default async function ThreadPage({
               <b>{t("connect.report.cta")}</b>
             </span>
           </SheetButton>
-          {conversation.blockedAt ? (
+          {iBlocked ? (
             <form action={blockAction}>
               <input type="hidden" name="conversation" value={conversation.id} />
               <input type="hidden" name="block" value="0" />
@@ -562,7 +589,7 @@ export default async function ThreadPage({
         <TalentReportForm targetType="conversation" targetId={conversation.id} back={back} />
       </Sheet>
 
-      {!conversation.blockedAt && (
+      {!iBlocked && (
         <Sheet
           id="cv-bloquer"
           title={t("connect.block.confirm.title", { name: company })}
@@ -571,7 +598,9 @@ export default async function ThreadPage({
           <form action={blockAction} className="t-flux">
             <input type="hidden" name="conversation" value={conversation.id} />
             <input type="hidden" name="block" value="1" />
-            <p className="t-vide-t">{t("connect.block.confirm.body")}</p>
+            <p className="t-vide-t">
+              {peer ? t("reseau.block.body") : t("connect.block.confirm.body")}
+            </p>
             <button type="submit" className="t-bt t-p t-pl t-press">
               {t("connect.block.confirm.cta")}
             </button>
@@ -624,7 +653,7 @@ export default async function ThreadPage({
                   <div className="t-flux t-serre">
                     <p className="t-vide-t">{t(`connect.plus.${key}.empty`)}</p>
                     <Link
-                      href={key === "cv" ? "/app/career/cv" : "/app/career/documents"}
+                      href={key === "cv" ? "/app/career/cv" : "/app/career/cv?vue=lettres"}
                       className="t-bt t-sec t-pl t-press"
                     >
                       {t("inbox.plus.create")}
@@ -753,7 +782,7 @@ export default async function ThreadPage({
                 {documents.length === 0 ? (
                   <div className="t-flux t-serre">
                     <p className="t-vide-t">{t("candidature.requests.none")}</p>
-                    <Link href="/app/career/documents" className="t-bt t-sec t-pl t-press">
+                    <Link href="/app/career/cv?vue=lettres" className="t-bt t-sec t-pl t-press">
                       {t("inbox.plus.create")}
                     </Link>
                   </div>

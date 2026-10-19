@@ -1,174 +1,175 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { AiOrb } from "@/components/brand/ai-orb";
-import { Alert, Button, Checkbox, TextArea } from "@/components/ui";
-import { aiFeatures, aiReadiness } from "@/server/ai";
-import {
-  applyCvImportAction,
-  cancelCvImportAction,
-  readCvAction,
-} from "@/server/actions/cv-import";
+import { dynamic } from "@/i18n/dynamic";
+import { FlowHead } from "@/components/talent/flow-head";
+import { TalentIcon } from "@/components/talent/icon";
+import { Notice } from "@/components/talent/notice";
+import { ImportDrop, ImportRow } from "@/components/talent/cv/import-file";
+import { applyCvImportAction, readCvFileAction } from "@/server/actions/cv-import";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { CV_TEXT_MAX, parseImport } from "@/server/services/cv-import";
-import { AppPageHeader } from "@/components/app/page-header";
+import { CV_FILE_MAX_BYTES } from "@/server/services/cv-file";
+import { parseImport } from "@/server/services/cv-import";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("talent.profile");
-  return { title: t("importCv.text"), robots: { index: false } };
+  const t = await getTranslations("docs.import");
+  return { title: t("seo"), robots: { index: false } };
 }
 
+const errors = ["format", "size", "empty", "unreadable"] as const;
+
 /**
- * « Remplir à partir de mon CV » (partie 08 § 8.9 `cv_parse`): paste the CV, then validate each
- * item found. Nothing enters the profile without the talent's tick.
+ * Importer un CV (planche talent-4 § 6): a PDF or a Word file (or the PDF LinkedIn makes of a
+ * profile) is read on the server and never kept; what was found waits, group by group, for the
+ * talent's tick before entering the profile.
  */
 export default async function CvImportPage({ searchParams }: PageProps<"/app/profil/import">) {
   const query = await searchParams;
   const user = await requireUser("/app/profil/import");
   const t = await getTranslations();
-  const [pending, readiness] = await Promise.all([
-    db.aiSuggestion.findFirst({
-      where: { userId: user.id, feature: "cv_parse", status: "pending" },
-      orderBy: { createdAt: "desc" },
-    }),
-    aiReadiness(db, user.id, "cv_parse"),
-  ]);
-  const extraction = pending ? parseImport(pending.payload) : null;
-  const found = extraction
-    ? extraction.experiences.length + extraction.educations.length + extraction.skills.length
-    : 0;
+  const pending = await db.aiSuggestion.findFirst({
+    where: { userId: user.id, feature: "cv_parse", status: "pending" },
+    orderBy: { createdAt: "desc" },
+  });
+  const read = pending ? parseImport(pending.payload) : null;
+  const error = errors.find((code) => code === query.erreur);
+  const megabytes = Math.round(CV_FILE_MAX_BYTES / (1024 * 1024));
+  const preview = (items: string[]) =>
+    items.length > 2 ? `${items.slice(0, 2).join(", ")}…` : items.join(", ");
+  const groups = read
+    ? [
+        {
+          key: "experiences",
+          icon: "entreprise" as const,
+          tone: "t-c2",
+          title: t("docs.import.found.experiences", { count: read.experiences.length }),
+          line: preview(
+            read.experiences.map((item) => [item.title, item.company].filter(Boolean).join(", ")),
+          ),
+          count: read.experiences.length,
+        },
+        {
+          key: "skills",
+          icon: "cap" as const,
+          tone: "t-c1",
+          title: t("docs.import.found.skills", { count: read.skills.length }),
+          line: preview(read.skills),
+          count: read.skills.length,
+        },
+        {
+          key: "educations",
+          icon: "former" as const,
+          tone: "t-c3",
+          title: t("docs.import.found.educations", { count: read.educations.length }),
+          line: preview(
+            read.educations.map((item) => [item.degree, item.school].filter(Boolean).join(", ")),
+          ),
+          count: read.educations.length,
+        },
+      ].filter((group) => group.count > 0)
+    : [];
+  const undated = read?.experiences.filter((item) => !item.start).length ?? 0;
 
   return (
-    <div className="flex max-w-3xl flex-col gap-6">
-      <Link href="/app/profil" className="text-sm underline">
-        {t("talent.profile.title")}
-      </Link>
-      <AppPageHeader
-        title={t("talent.profile.importCv.text")}
-        subtitle={t("talent.profile.importCv.hint")}
+    <div className="t-flux t-od-bas">
+      <FlowHead
+        back="/app/career/cv"
+        backLabel={t("docs.back")}
+        title={t("docs.import.title")}
+        end={
+          <Link href="/app/career/cv" className="t-bi t-press" aria-label={t("offer.close")}>
+            <TalentIcon name="fermer" size="s" />
+          </Link>
+        }
       />
+      {error && (
+        <Notice tone="err">{dynamic(t)(`docs.import.error.${error}`, { max: megabytes })}</Notice>
+      )}
 
-      {!pending || !extraction ? (
-        <form action={readCvAction} className="flex flex-col gap-4 rounded-card bg-blanc p-6">
-          {query.erreur === "texte" && (
-            <Alert tone="error" title={t("talent.profile.import.tooShort")} />
-          )}
-          <TextArea
-            id="cv-import-text"
-            name="text"
-            label={t("talent.profile.import.paste.label")}
-            hint={t("talent.profile.import.paste.hint")}
-            rows={14}
-            minLength={30}
-            maxLength={CV_TEXT_MAX}
-            required
-          />
-          <p className="flex items-center gap-2 text-sm text-ardoise">
-            {readiness === "ready" ? (
-              <>
-                <AiOrb />
-                {t("ai.credits.cost.text", { count: aiFeatures.cv_parse.credits })}
-              </>
-            ) : (
-              t("ai.cvImport.noAi")
-            )}
-          </p>
-          <div>
-            <Button type="submit">{t("talent.profile.import.submit")}</Button>
-          </div>
-        </form>
-      ) : (
-        <form
-          action={applyCvImportAction}
-          className="flex flex-col gap-5 rounded-card bg-blanc p-6"
-        >
-          <input type="hidden" name="import" value={pending.id} />
-          <div className="flex flex-col gap-1">
-            <h2 className="flex items-center gap-2 text-h2">
-              {extraction.source === "ai" && <AiOrb />}
-              {t("ai.cvImport.title")}
-            </h2>
-            <p>{t("ai.cvImport.body")}</p>
-            <p className="text-sm text-ardoise">
-              {[
-                t("ai.cvImport.found", { count: found }),
-                extraction.source === "ai" ? t("ai.disclaimer.short") : t("ai.cvImport.noAi"),
-              ].join(" · ")}
-            </p>
-          </div>
-          {found === 0 && <Alert title={t("talent.profile.import.empty")} />}
-          {extraction.experiences.length > 0 && (
-            <fieldset className="flex flex-col gap-3">
-              <legend className="mb-2 font-semibold text-h3">
-                {t("talent.profile.experience.title")}
-              </legend>
-              {extraction.experiences.map((item, index) => (
-                <Checkbox
-                  key={index}
-                  id={`import-experience-${index}`}
-                  name="experience"
-                  value={String(index)}
-                  defaultChecked={Boolean(item.start)}
-                  disabled={!item.start}
-                  label={[
-                    item.title,
-                    item.company,
-                    [item.start, item.end].filter(Boolean).join(" – "),
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")}
-                  hint={item.start ? undefined : t("talent.profile.import.noStart")}
-                />
-              ))}
-            </fieldset>
-          )}
-          {extraction.educations.length > 0 && (
-            <fieldset className="flex flex-col gap-3">
-              <legend className="mb-2 font-semibold text-h3">
-                {t("talent.profile.education.title")}
-              </legend>
-              {extraction.educations.map((item, index) => (
-                <Checkbox
-                  key={index}
-                  id={`import-education-${index}`}
-                  name="education"
-                  value={String(index)}
-                  defaultChecked
-                  label={[item.degree, item.school, item.endYear ? String(item.endYear) : ""]
-                    .filter(Boolean)
-                    .join(" · ")}
-                />
-              ))}
-            </fieldset>
-          )}
-          {extraction.skills.length > 0 && (
-            <fieldset className="flex flex-col gap-3">
-              <legend className="mb-2 font-semibold text-h3">
-                {t("talent.profile.skills.title")}
-              </legend>
-              <div className="grid gap-3 sm:grid-cols-2">
-                {extraction.skills.map((skill, index) => (
-                  <Checkbox
-                    key={skill}
-                    id={`import-skill-${index}`}
-                    name="skill"
-                    value={String(index)}
+      <form action={readCvFileAction}>
+        <ImportDrop
+          id="import-fichier"
+          label={t("docs.import.choose")}
+          hint={t("docs.import.chooseHint", { max: megabytes })}
+          reading={t("docs.import.reading")}
+        />
+      </form>
+      <form action={readCvFileAction}>
+        <ImportRow id="import-linkedin">
+          <span className="t-cases t-ciel" aria-hidden>
+            <TalentIcon name="connexion" size="s" />
+          </span>
+          <span className="t-t">
+            <b>{t("docs.import.linkedin")}</b>
+            <span>{t("docs.import.linkedinHint")}</span>
+          </span>
+          <TalentIcon name="suivant" size="s" />
+        </ImportRow>
+      </form>
+
+      {read && (
+        <form id="import-verifier" action={applyCvImportAction} className="t-flux">
+          <input type="hidden" name="import" value={pending!.id} />
+          <h2 className="t-ck-t">
+            {read.file
+              ? t("docs.import.readIn", { name: read.file.name })
+              : t("docs.import.readTitle")}
+          </h2>
+          {groups.length === 0 ? (
+            <div className="t-verre t-carte t-vide">
+              <b>{t("docs.import.nothing.title")}</b>
+              <p>{t("docs.import.nothing.text")}</p>
+            </div>
+          ) : (
+            <div className="t-verre t-liste t-lignes">
+              {groups.map((group) => (
+                <label key={group.key} className="t-li">
+                  <span className={`t-cases ${group.tone}`} aria-hidden>
+                    <TalentIcon name={group.icon} size="s" />
+                  </span>
+                  <span className="t-t">
+                    <b>{group.title}</b>
+                    <span>{group.line}</span>
+                  </span>
+                  <input
+                    type="checkbox"
+                    role="switch"
+                    name="groupe"
+                    value={group.key}
                     defaultChecked
-                    label={skill}
+                    className="sr-only"
                   />
-                ))}
-              </div>
-              <p className="text-sm text-ardoise">{t("talent.profile.import.skillsHint")}</p>
-            </fieldset>
+                  <span aria-hidden className="t-sw" />
+                </label>
+              ))}
+            </div>
           )}
-          <div className="flex flex-wrap gap-3">
-            {found > 0 && <Button type="submit">{t("ai.cvImport.accept")}</Button>}
-            <Button type="submit" variant="tertiary" formAction={cancelCvImportAction}>
-              {t("talent.profile.import.cancel")}
-            </Button>
-          </div>
+          {undated > 0 && (
+            <p className="t-gar">
+              <TalentIcon name="aide" size="s" />
+              {t("docs.import.undated", { count: undated })}
+            </p>
+          )}
+          {read.source === "rules" && (
+            <p className="t-gar">
+              <TalentIcon name="aide" size="s" />
+              {t("docs.import.rulesOnly")}
+            </p>
+          )}
+          <p className="t-gar">
+            <TalentIcon name="cadenas" size="s" />
+            {t("docs.import.note")}
+          </p>
         </form>
+      )}
+
+      {read && groups.length > 0 && (
+        <div className="t-verre t-fort t-bas-f">
+          <button type="submit" form="import-verifier" className="t-bt t-p t-pl t-press">
+            {t("docs.import.submit")}
+          </button>
+        </div>
       )}
     </div>
   );

@@ -10,7 +10,7 @@ export const careerTabs = [
   { key: "home", href: "/app/career", icon: "career" },
   { key: "diagnostic", href: "/app/career/diagnostic", icon: "objectif" },
   { key: "cv", href: "/app/career/cv", icon: "doc" },
-  { key: "documents", href: "/app/career/documents", icon: "doc" },
+  { key: "documents", href: "/app/career/cv?vue=lettres", icon: "doc" },
   { key: "linkedin", href: "/app/career/linkedin", icon: "partager" },
   { key: "interviews", href: "/app/career/entretiens", icon: "mic" },
   { key: "plan", href: "/app/career/plan", icon: "calendrier" },

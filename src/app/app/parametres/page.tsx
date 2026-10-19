@@ -36,6 +36,7 @@ import { ownedOrganization } from "@/server/services/accounts";
 import { AppPageHeader } from "@/components/app/page-header";
 import { TabRail } from "@/components/motion/tab-rail";
 import { Icon } from "@/components/brand/icon";
+import { AppearanceSwitch } from "@/components/account/account-controls";
 import { pillClass } from "@/components/career/kit";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -301,6 +302,20 @@ async function AccountTab({ user, params }: { user: CurrentUser; params: Params 
           />
           <Button type="submit">{t("settings.save")}</Button>
         </form>
+        {/* Moved here from « Compte » (lot 6); lot 7 redraws this page. */}
+        <div className="mt-5 flex flex-wrap items-center gap-3 border-t border-brume pt-5">
+          <span className="font-medium">{t("accountPage.appearance.label")}</span>
+          <AppearanceSwitch
+            current={user.appearance}
+            labels={{
+              group: t("accountPage.appearance.label"),
+              auto: t("accountPage.appearance.auto"),
+              light: t("accountPage.appearance.light"),
+              dark: t("accountPage.appearance.dark"),
+              saved: t("accountPage.appearance.saved"),
+            }}
+          />
+        </div>
         <div className="mt-5 flex flex-col items-start gap-1.5 border-t border-brume pt-5">
           <ButtonLink
             href="/app/parametres?onglet=compte&arrivee=1&revoir=1"

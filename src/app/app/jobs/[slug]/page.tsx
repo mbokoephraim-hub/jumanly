@@ -524,7 +524,7 @@ export default async function TalentJobPage({
           </ul>
         )}
         <Link
-          href={cvs[0] ? `/app/career/cv/${cvs[0].id}#adapter` : "/app/career/cv"}
+          href={cvs[0] ? `/app/career/cv/${cvs[0].id}?adapter=${job.id}` : "/app/career/cv?creer=1"}
           className="t-bt t-p t-pl t-press"
         >
           <TalentIcon name="cv" size="s" />

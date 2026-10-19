@@ -99,12 +99,14 @@ export const talentTabPaths: string[] = talentTabs.map((tab) => tab.href);
  * aside there (offer detail and application, Learning Room, conversation, CV editor, Mon espace).
  */
 export function hidesTalentTabBar(pathname: string) {
-  const [, app, section, page, more] = pathname.split("/");
+  const [, app, section, page] = pathname.split("/");
   if (app !== "app" || !section) return false;
   if (section === "espace" || section === "bienvenue") return true;
+  // Compte and Connexions open from the avatar and draw their own head (planche talent-4 § 2).
+  if (section === "compte") return true;
   // Orbi opens as a conversation page: back arrow at the top, the composer in place of the bar.
   if (section === "orbi") return true;
-  // Mon profil has its own bar « Enregistré · Voir mon profil côté recruteur » (screen 25).
+  // Mon profil and its screens draw their own head (planche talent-4 § 3).
   if (section === "profil") return true;
   if (section === "jobs") return Boolean(page) && !["candidatures", "enregistrees"].includes(page);
   // Messages and notifications open from the head and draw their own (planche talent-2 § 5).
@@ -114,8 +116,14 @@ export function hidesTalentTabBar(pathname: string) {
   if (section === "learn") return Boolean(page);
   if (section === "career")
     return (
-      (page === "cv" && Boolean(more) && more !== "modeles") ||
-      (page === "entretiens" && Boolean(more))
+      // Lot 6b and 6c: the diagnostic, the plan, the practice, CV et documents, LinkedIn and the
+      // letters draw their own head (planche talent-4 § 5 and § 6).
+      page === "cv" ||
+      page === "linkedin" ||
+      page === "documents" ||
+      page === "entretiens" ||
+      page === "diagnostic" ||
+      page === "plan"
     );
   return false;
 }

@@ -14,6 +14,7 @@ import {
   saveGoal,
   stepInputSchema,
   toggleStep,
+  updateStep,
 } from "@/server/services/progress-plan";
 
 const PATH = "/app/career/plan";
@@ -60,6 +61,17 @@ export async function addStepAction(formData: FormData) {
 export async function toggleStepAction(formData: FormData) {
   const user = await planOwner();
   await toggleStep(db, user.id, String(formData.get("step") ?? ""));
+  done();
+}
+
+export async function updateStepAction(formData: FormData) {
+  const parsed = stepInputSchema.safeParse({
+    title: formData.get("title") ?? "",
+    due: formData.get("due") ?? "",
+  });
+  const user = await planOwner();
+  if (!parsed.success) done("erreur=1");
+  await updateStep(db, user.id, String(formData.get("step") ?? "").slice(0, 60), parsed.data);
   done();
 }
 

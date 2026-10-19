@@ -14,6 +14,7 @@ import {
   answerSchema,
   finishInterview,
   InterviewError,
+  interviewTypes,
   setupSchema,
   startInterview,
 } from "@/server/services/interview-sim";
@@ -30,18 +31,19 @@ const withQuery = (base: string, query: URLSearchParams) =>
 
 export async function startInterviewAction(formData: FormData) {
   const back = backOf(formData);
-  const parsed = setupSchema.safeParse(Object.fromEntries(formData));
+  // « Types de questions » (planche talent-4 § 5 bis) may tick several types: the questions of
+  // their banks alternate, the first one names the session.
+  const types = interviewTypes.filter((type) => formData.getAll("type").includes(type));
+  const parsed = setupSchema.safeParse({ ...Object.fromEntries(formData), type: types[0] });
   if (!parsed.success)
     redirect(
-      back
-        ? withQuery(back, new URLSearchParams({ erreur: "invalid" }))
-        : `${HOME}?erreur=invalid#preparer`,
+      back ? withQuery(back, new URLSearchParams({ erreur: "invalid" })) : `${HOME}?erreur=invalid`,
     );
   const user = await requireUser(HOME);
   const t = await getTranslations("career.interviews.bank");
   const numbers = ["1", "2", "3", "4", "5", "6", "7", "8"] as const;
-  const bank = numbers.map((number) =>
-    t(`${parsed.data.type}.${number}`, { jobTitle: parsed.data.jobTitle }),
+  const bank = numbers.flatMap((number) =>
+    types.map((type) => t(`${type}.${number}`, { jobTitle: parsed.data.jobTitle })),
   );
   let id: string;
   try {
@@ -50,7 +52,7 @@ export async function startInterviewAction(formData: FormData) {
     if (error instanceof InterviewError) {
       const query = new URLSearchParams({ erreur: error.code, mode: parsed.data.mode });
       if (error.resetsAt) query.set("renouvellement", error.resetsAt.toISOString());
-      redirect(back ? withQuery(back, query) : `${HOME}?${query}#preparer`);
+      redirect(back ? withQuery(back, query) : `${HOME}?${query}`);
     }
     throw error;
   }

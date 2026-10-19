@@ -128,3 +128,20 @@ export function CourseArt({ category, src }: { category: string; src?: string | 
     return <img src={src} alt="" aria-hidden loading="lazy" decoding="async" />;
   return <Svg markup={courses[artOf[category] ?? "cv"]} box="0 0 300 130" />;
 }
+
+/** Cover of « Mon profil » and the tiles of a project without a photo (build.py: PF_COV, REAL). */
+const profileArt = {
+  cover:
+    '<g fill="none" stroke="#0F3F37" stroke-opacity=".14" stroke-width="1.5"><circle cx="320" cy="20" r="40"/><circle cx="320" cy="20" r="80"/><circle cx="320" cy="20" r="120"/></g><circle cx="320" cy="20" r="12" fill="#fff" opacity=".7"/>',
+  board:
+    '<rect width="120" height="100" fill="#0F3F37"/><g fill="#A6F26B"><rect x="22" y="56" width="12" height="26" rx="2"/><rect x="40" y="40" width="12" height="42" rx="2"/><rect x="58" y="48" width="12" height="34" rx="2"/></g><rect x="76" y="28" width="12" height="54" rx="2" fill="#2FD3A6"/>',
+  pdf: '<rect width="120" height="100" fill="#C9F1E3"/><rect x="36" y="14" width="48" height="64" rx="5" fill="#fff"/><rect x="44" y="24" width="32" height="5" rx="2" fill="#0F3F37"/><g fill="#DCE5E1"><rect x="44" y="34" width="32" height="4" rx="2"/><rect x="44" y="42" width="24" height="4" rx="2"/></g>',
+} as const;
+
+export function ProfileCover() {
+  return <Svg markup={profileArt.cover} box="0 0 390 150" />;
+}
+
+export function ProjectArt({ kind }: { kind: "board" | "pdf" }) {
+  return <Svg markup={profileArt[kind]} box="0 0 120 100" />;
+}

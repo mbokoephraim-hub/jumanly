@@ -1,4 +1,5 @@
 import { expect, type Page } from "@playwright/test";
+import { strToU8, zipSync } from "fflate";
 import { codesSince, lastCode } from "./outbox";
 
 /** Demo accounts from prisma/seed/accounts.ts (local and preview only). */
@@ -139,18 +140,34 @@ export async function finishOnboarding(page: Page, place?: { country: string; ci
 }
 
 /**
- * A new CV from « Mes CV » (prompt 6): « Nouveau CV » on a computer, the sheet « Créer un CV » on a
- * phone. Returns its id once the editor is open.
+ * A new CV from « CV et documents » (lot 6c): « Nouveau CV » opens its sheet (Depuis mon profil ·
+ * Page vierge), on a phone and a computer. Returns its id once the editor is open.
  */
 export async function newCvFromList(page: Page) {
   await page.goto("/app/career/cv");
-  const desktop = page.getByRole("button", { name: "Nouveau CV", exact: true });
-  if (await desktop.isVisible()) {
-    await desktop.click();
-  } else {
-    await page.goto("/app/career/cv?creer=1");
-    await page.getByRole("button", { name: "Créer et ouvrir" }).click();
-  }
+  await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
+  await page.getByRole("dialog").getByRole("button", { name: "Créer et ouvrir" }).click();
   await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
   return new URL(page.url()).pathname.split("/").pop()!;
+}
+
+/**
+ * A fictional Word CV for « Importer un CV » (lot 6c): the smallest .docx the reader accepts, one
+ * paragraph per line.
+ */
+export function fictiveDocx(paragraphs: string[]) {
+  const body = paragraphs
+    .map((text) => `<w:p><w:r><w:t xml:space="preserve">${text}</w:t></w:r></w:p>`)
+    .join("");
+  const bytes = zipSync({
+    "[Content_Types].xml": strToU8("<Types/>"),
+    "word/document.xml": strToU8(
+      `<?xml version="1.0"?><w:document><w:body>${body}</w:body></w:document>`,
+    ),
+  });
+  return {
+    name: "cv-fictif.docx",
+    mimeType: "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+    buffer: Buffer.from(bytes),
+  };
 }

@@ -3002,6 +3002,465 @@ Conventions :
 | `attest.sheet.micro` | JUMANLY · ATTESTATION AUTHENTIQUE · {code} · VÉRIFIABLE EN LIGNE · LEARN. GROW. CONNECT. ·  |
 | `attest.sheet.seal` | ATTESTATION VALIDÉE · SCEAU D’ORIGINALITÉ · |
 
+### Refonte mobile · Faire le point, diagnostic, plan et entraînements (lot 6b)
+
+*Planche talent-4 § 5 et § 5 bis. « Faire le point » et le diagnostic sont calculés par des règles fixes : les mêmes informations donnent le même résultat, et chaque conseil a son « Pourquoi ? ». Le plan est proposé par Orbi, le talent le modifie. Les entraînements restent privés : retour sur 5 critères, sans note.*
+
+| Clé | Texte |
+|---|---|
+| `point.seo` | Faire le point |
+| `point.title` | Faire le point |
+| `point.back` | Retour |
+| `point.close` | Fermer |
+| `point.summary.none` | Faites votre diagnostic de carrière : en quelques minutes, vous saurez où vous en êtes et par quoi commencer. |
+| `point.summary.discovery` | Vous posez les bases de votre projet : quelques actions simples vous feront avancer vite. |
+| `point.summary.building` | Vous avez des bases solides : quelques chantiers ciblés vous rendront prêt à candidater. |
+| `point.summary.ready` | Votre profil est solide pour candidater : travaillez vos points faibles pour vous démarquer. |
+| `point.summary.competitive` | Votre profil est compétitif : visez les offres exigeantes. |
+| `point.summary.target` | Votre cible : {role}. |
+| `point.summary.targetCity` | Votre cible : {role}, à {city}. |
+| `point.strengths` | Vos atouts |
+| `point.strength.certificate` | {name} prouvé par une attestation |
+| `point.strength.result` | Une expérience décrite avec un résultat chiffré |
+| `point.strength.proven` | {count, plural, one {# compétence prouvée} other {# compétences prouvées}} sur votre profil |
+| `point.strength.dimension` | {name} : {score} sur 100 au diagnostic |
+| `point.strength.none` | Vos atouts apparaîtront quand votre profil sera rempli. |
+| `point.weaknesses` | À renforcer |
+| `point.weak.skill` | {skill} : demandé par {count, plural, one {# offre} other {# offres}} sur {total} |
+| `point.weak.noResult` | Aucune expérience décrite avec un résultat |
+| `point.weak.noExperience` | Aucune expérience sur votre profil |
+| `point.weak.dimension` | {name} : {score} sur 100 au diagnostic |
+| `point.weak.none` | Rien de pressant : continuez sur votre lancée. |
+| `point.next.title` | Prochaine action |
+| `point.next.course` | Formation « {course} », {minutes} min |
+| `point.next.diagnostic` | Faire mon diagnostic de carrière, 6 à 8 minutes |
+| `point.next.profile` | Décrire une expérience avec un résultat, 10 min |
+| `point.next.start` | Commencer |
+| `point.diagnostic` | Voir mon diagnostic |
+| `point.why.cta` | Pourquoi ces conseils ? |
+| `point.why.title` | Pourquoi ces conseils |
+| `point.why.intro` | Ces conseils sont calculés par des règles fixes, à partir de ce que vous avez déclaré. Les mêmes informations donnent toujours les mêmes conseils. |
+| `point.why.diagnostic` | Votre diagnostic du {date} : {score} sur 100. |
+| `point.why.noDiagnostic` | Pas encore de diagnostic : faites-le pour des conseils plus précis. |
+| `point.why.offers` | {count, plural, =0 {Aucune offre publiée comparée pour votre cible.} one {# offre publiée comparée pour votre cible.} other {# offres publiées comparées pour votre cible.}} |
+| `point.why.profile` | Votre profil : compétences et leurs preuves, expériences, attestations. |
+| `point.why.never` | Votre nom, votre âge, votre photo et votre origine n'entrent jamais dans ces conseils. |
+| `point.why.close` | Fermer |
+| `diag.seo` | Diagnostic de carrière |
+| `diag.title` | Diagnostic de carrière |
+| `diag.back` | Retour |
+| `diag.share` | Partager le bilan (PDF) |
+| `diag.headline.discovery` | Les bases de votre projet |
+| `diag.headline.building` | Un profil en construction |
+| `diag.headline.ready` | Prêt à candidater |
+| `diag.headline.competitive` | Compétitif sur vos offres |
+| `diag.rules` | Calculé sur vos réponses, les mêmes donnent le même résultat. |
+| `diag.score` | {score} sur 100 |
+| `diag.scores` | Vos six notes sur 100 |
+| `diag.date` | Fait le {date} |
+| `diag.why.cta` | Pourquoi ces notes ? |
+| `diag.why.title` | Pourquoi ces notes |
+| `diag.why.intro` | Chaque note sur 100 additionne des points fixes selon vos réponses. Voici le détail, dimension par dimension. |
+| `diag.why.close` | Fermer |
+| `diag.again` | Refaire |
+| `diag.plan` | Mon plan |
+| `diag.welcome.hooks` | Ce que vous obtenez |
+| `diag.flow.close` | Quitter le diagnostic |
+| `plan.seo` | Mon plan de progression |
+| `plan.title` | Mon plan de progression |
+| `plan.back` | Retour |
+| `plan.goal.kicker` | Objectif |
+| `plan.goal.empty` | Choisissez votre objectif |
+| `plan.goal.edit` | Modifier l'objectif |
+| `plan.goal.label` | Votre objectif |
+| `plan.goal.placeholder` | Par exemple : un premier poste dans la data |
+| `plan.progress` | {done} sur {total} étapes faites |
+| `plan.steps` | Les étapes |
+| `plan.kind.diagnostic` | Profil |
+| `plan.kind.course` | Formation |
+| `plan.kind.custom` | Action |
+| `plan.state.done` | faite |
+| `plan.state.current` | en cours |
+| `plan.state.late` | en retard |
+| `plan.due` | avant le {date} |
+| `plan.step.edit` | Modifier l'étape |
+| `plan.step.title` | Intitulé |
+| `plan.step.due` | À faire avant le (facultatif) |
+| `plan.step.save` | Enregistrer |
+| `plan.step.open` | Ouvrir |
+| `plan.step.markDone` | Marquer comme faite |
+| `plan.step.markTodo` | Remettre à faire |
+| `plan.step.remove` | Retirer cette étape |
+| `plan.add` | Ajouter une étape |
+| `plan.addTitle` | Nouvelle étape |
+| `plan.close` | Fermer |
+| `plan.note` | Orbi propose, vous choisissez : chaque étape se modifie ou se retire. |
+| `plan.empty.title` | Votre plan est vide |
+| `plan.empty.text` | Orbi peut le préparer à partir de votre dernier diagnostic. Vous gardez la main sur chaque étape. |
+| `plan.empty.fromDiagnostic` | Préparer mon plan |
+| `plan.empty.diagnostic` | Faire mon diagnostic |
+| `plan.locked.title` | Le plan de progression |
+| `plan.locked.text` | Disponible avec {plan}. Votre diagnostic et votre mini plan restent gratuits. |
+| `plan.locked.cta` | Voir les formules |
+| `plan.saved` | Plan enregistré. |
+| `plan.error` | Vérifiez ce que vous avez saisi. |
+| `plan.courses` | Pour progresser |
+| `plan.coursesWhy` | Les compétences qui manquent le plus souvent dans les offres qui vous correspondent. |
+| `plan.report` | Télécharger le rapport (PDF) |
+| `plan.reportText` | Votre plan, vos formations, vos entraînements et vos candidatures |
+| `entrain.seo` | S'entraîner aux entretiens |
+| `entrain.title` | S'entraîner aux entretiens |
+| `entrain.back` | Retour |
+| `entrain.quotas` | Vos simulations ce mois |
+| `entrain.quota.text` | Simulations écrites |
+| `entrain.quota.voice` | Simulations vocales |
+| `entrain.quota.used` | {used} sur {limit} ce mois |
+| `entrain.quota.short` | {used} sur {limit} |
+| `entrain.quota.unlimited` | Sans limite |
+| `entrain.quota.locked` | Dès {plan} |
+| `entrain.quota.reached` | Toutes utilisées : renouvelées le {date} |
+| `entrain.planned` | Entretien prévu |
+| `entrain.plannedTitle` | {company} · {job} |
+| `entrain.prepare` | Préparer cet entretien |
+| `entrain.free.title` | S'entraîner librement |
+| `entrain.free.offer` | Sur une offre |
+| `entrain.free.offerText` | Enregistrée ou envoyée |
+| `entrain.free.job` | Sur un métier |
+| `entrain.free.jobText` | Le métier de votre choix |
+| `entrain.free.classic` | Questions classiques |
+| `entrain.free.classicText` | Se présenter, motivation |
+| `entrain.free.voice` | À l'oral |
+| `entrain.free.voiceText` | Avec votre voix |
+| `entrain.recent` | Derniers entraînements |
+| `entrain.recentTitle` | {job} · {mode} |
+| `entrain.mode.text` | écrit |
+| `entrain.mode.voice` | oral |
+| `entrain.recentLine` | {date} · {count, plural, one {# question} other {# questions}} |
+| `entrain.feedbackReady` | retour prêt |
+| `entrain.inProgress` | en cours |
+| `entrain.empty` | Vos entraînements apparaîtront ici. Ils restent privés. |
+| `entrain.private` | Privé : le recruteur ne voit jamais vos entraînements. |
+| `entrain.gratuit` | Gratuit |
+| `entrain.tipLine` | Conseils · {minutes} min |
+| `entrain.allTips` | Toutes les fiches de conseils |
+| `entrain.locked.title` | Simulations avec Orbi dès {plan} |
+| `entrain.locked.text` | Écrites dès {text}, à l'oral dès {voice}. |
+| `entrain.applyFree` | Postuler et passer vos entretiens restent gratuits. |
+| `entrain.plans` | Voir les formules |
+| `entrain.error.consent` | Les simulations utilisent l'IA. Activez-la dans vos paramètres de confidentialité pour commencer. |
+| `entrain.error.entitlement` | Ce format de simulation n'est pas inclus dans votre formule. |
+| `entrain.error.quota` | Vous avez utilisé toutes les simulations de ce format ce mois-ci. |
+| `entrain.error.invalid` | Vérifiez le métier et les options choisies. |
+| `entrain.new.title` | Nouvel entraînement |
+| `entrain.new.close` | Fermer |
+| `entrain.new.job` | Métier |
+| `entrain.new.offer` | Offre (facultatif) |
+| `entrain.new.noOffer` | Aucune, seulement le métier |
+| `entrain.new.level` | Niveau du poste |
+| `entrain.new.levels.easy` | Junior |
+| `entrain.new.levels.standard` | Confirmé |
+| `entrain.new.levels.hard` | Senior |
+| `entrain.new.types` | Types de questions |
+| `entrain.new.type.motivation` | Motivation |
+| `entrain.new.type.technical` | Techniques |
+| `entrain.new.type.behavioral` | Mises en situation |
+| `entrain.new.type.hr` | Questions RH |
+| `entrain.new.format` | Format |
+| `entrain.new.length` | Durée |
+| `entrain.new.formatLocked` | Dès {plan} |
+| `entrain.fb.oralTitle` | Votre retour · oral |
+| `entrain.fb.oral` | À l'oral |
+| `entrain.fb.criteria` | Les 5 critères |
+| `entrain.fb.criteriaNote` | Un niveau par critère, jamais une note. |
+| `entrain.fb.review` | Revoir ma réponse {n} |
+| `entrain.fb.reviewTip` | Avec la réponse proposée par Orbi |
+| `entrain.fb.reviewPlain` | Votre réponse et le commentaire d'Orbi |
+| `entrain.fb.why` | Pourquoi ce retour ? |
+| `entrain.fb.whyTitle` | Pourquoi ce retour |
+| `entrain.fb.close` | Fermer |
+| `entrain.voice.kind` | {kind} · oral |
+| `entrain.voice.time` | {time} / 2:00 |
+| `entrain.voice.record` | Parler |
+| `entrain.voice.stop` | J'ai terminé |
+| `entrain.voice.clear` | Effacer et recommencer |
+| `entrain.voice.send` | Envoyer ma réponse |
+| `entrain.voice.transcript` | Votre réponse transcrite, à relire avant d'envoyer |
+| `entrain.voice.privacy` | Votre voix sert seulement à transcrire la réponse. Aucun enregistrement n'est gardé : l'audio n'est jamais envoyé. |
+
+### Refonte mobile · CV et documents
+
+*`/app/career/cv` (planche talent-4 § 6) : onglets CV, Lettres et LinkedIn, menu « … » de chaque document, « Nouveau CV », « Importer », « Nouvelle lettre ». Les lettres ne quittent jamais Jumanly sans que le talent les copie ou les télécharge.*
+
+| Clé | Texte |
+|---|---|
+| `docs.back` | Retour |
+| `docs.list.seo` | CV et documents |
+| `docs.list.title` | CV et documents |
+| `docs.list.tabs` | Mes CV, mes lettres, LinkedIn |
+| `docs.list.tab.cv` | CV |
+| `docs.list.tab.letters` | Lettres |
+| `docs.list.tab.linkedin` | LinkedIn |
+| `docs.list.cvLine` | {template} · modifié le {date} |
+| `docs.list.adapted` | Adapté à une offre · {date} |
+| `docs.list.primary` | Principal |
+| `docs.list.more` | Plus d'options pour « {title} » |
+| `docs.list.new` | Nouveau CV |
+| `docs.list.import` | Importer |
+| `docs.list.empty.title` | Pas encore de CV. |
+| `docs.list.empty.text` | Créez-le depuis votre profil ou importez celui que vous avez déjà. |
+| `docs.list.limit` | Vous pouvez avoir jusqu'à {max} CV. Supprimez-en un pour en créer un autre. |
+| `docs.list.cvDeleted` | CV supprimé. |
+| `docs.list.letterDeleted` | Document supprimé. |
+| `docs.list.primaryDone` | C'est votre CV principal : il est proposé en premier quand vous postulez. |
+| `docs.menu.open` | Ouvrir l'éditeur |
+| `docs.menu.openLetter` | Ouvrir |
+| `docs.menu.pdf` | Télécharger en PDF |
+| `docs.menu.primary` | En faire mon CV principal |
+| `docs.menu.primaryHint` | Proposé en premier quand vous postulez |
+| `docs.menu.template` | Choisir un modèle |
+| `docs.menu.duplicate` | Dupliquer |
+| `docs.menu.delete` | Supprimer |
+| `docs.menu.deleteHint` | Vos candidatures déjà envoyées gardent leur CV. |
+| `docs.pdf.preparing` | PDF… |
+| `docs.pdf.done` | CV téléchargé. |
+| `docs.pdf.error` | Le PDF n'a pas pu être préparé. Réessayez dans un instant. |
+| `docs.create.title` | Nouveau CV |
+| `docs.create.legend` | Partir de |
+| `docs.create.profile` | Depuis mon profil |
+| `docs.create.profileHint` | Expériences, études et compétences reprises |
+| `docs.create.blank` | Page vierge |
+| `docs.create.blankHint` | Seulement votre nom et votre e-mail |
+| `docs.create.name` | Nom du CV |
+| `docs.create.submit` | Créer et ouvrir |
+| `docs.letters.written` | Rédigée le {date} |
+| `docs.letters.line` | {type} · {date} |
+| `docs.letters.type.letter` | Lettre de motivation |
+| `docs.letters.type.bio` | Biographie |
+| `docs.letters.type.email` | E-mail de candidature |
+| `docs.letters.type.thankYou` | Message de remerciement |
+| `docs.letters.type.proofread` | Texte relu |
+| `docs.letters.linkedin.label` | LinkedIn |
+| `docs.letters.linkedin.text` | Orbi propose un titre, un résumé et 5 compétences à copier sur LinkedIn. |
+| `docs.letters.linkedin.cta` | Préparer mon LinkedIn |
+| `docs.letters.new` | Nouvelle lettre |
+| `docs.letters.inputError` | Vérifiez le texte : il est vide ou trop long. |
+| `docs.letters.create.title` | Nouvelle lettre |
+| `docs.letters.create.lead` | Orbi rédige à partir de votre profil et de l'offre. Vous relisez et modifiez avant tout envoi. |
+| `docs.letters.create.type` | Document |
+| `docs.letters.create.offer` | Pour l'offre |
+| `docs.letters.create.noOffer` | Sans offre précise |
+| `docs.letters.create.tone` | Ton |
+| `docs.letters.create.tones.formal` | Soutenu |
+| `docs.letters.create.tones.warm` | Chaleureux |
+| `docs.letters.create.tones.direct` | Direct |
+| `docs.letters.create.points` | À mettre en avant (facultatif) |
+| `docs.letters.create.note` | {count, plural, one {# crédit Orbi} other {# crédits Orbi}}. Orbi n'invente ni expérience ni chiffre. |
+| `docs.letters.create.submit` | Rédiger avec Orbi |
+| `docs.letters.proofread.open` | Faire relire un texte |
+| `docs.letters.proofread.title` | Faire relire un texte |
+| `docs.letters.proofread.lead` | Collez une lettre ou un e-mail : Orbi propose des corrections, vous gardez celles que vous voulez. |
+| `docs.letters.proofread.name` | Titre (facultatif) |
+| `docs.letters.proofread.text` | Votre texte |
+| `docs.letters.proofread.submit` | {count, plural, one {Relire · # crédit} other {Relire · # crédits}} |
+
+### Refonte mobile · Une lettre
+
+*`/app/career/documents/[id]` : une lettre ou un document de l'onglet Lettres, ses corrections à garder une à une, le texte à modifier, copier ou télécharger.*
+
+| Clé | Texte |
+|---|---|
+| `docs.letter.seo` | Lettre |
+| `docs.letter.more` | Plus d'options |
+| `docs.letter.created` | Orbi a rédigé ce texte avec votre profil. Relisez-le et modifiez-le avant de l'envoyer. |
+| `docs.letter.saved` | Enregistré. |
+| `docs.letter.error` | Vérifiez le titre et le texte. |
+| `docs.letter.corrections` | {count, plural, one {# correction proposée} other {# corrections proposées}} |
+| `docs.letter.before` | Avant : |
+| `docs.letter.after` | Après : |
+| `docs.letter.applyCorrections` | Appliquer les corrections cochées |
+| `docs.letter.name` | Titre |
+| `docs.letter.text` | Texte |
+| `docs.letter.note` | Rien n'est envoyé par Jumanly : vous copiez ou téléchargez ce texte quand il vous convient. |
+| `docs.letter.copy` | Copier |
+| `docs.letter.copied` | Texte copié. |
+| `docs.letter.save` | Enregistrer |
+
+### Refonte mobile · Préparer LinkedIn
+
+*`/app/career/linkedin` (droit `career.linkedin`) : titre, résumé et compétences proposés depuis le profil, à copier. Rien n'est publié.*
+
+| Clé | Texte |
+|---|---|
+| `docs.linkedin.seo` | Préparer LinkedIn |
+| `docs.linkedin.title` | Préparer LinkedIn |
+| `docs.linkedin.label` | LinkedIn |
+| `docs.linkedin.lead` | Orbi propose un titre, un résumé et 5 compétences à copier sur LinkedIn, à partir de votre profil. |
+| `docs.linkedin.generate` | {count, plural, one {Préparer · # crédit Orbi} other {Préparer · # crédits Orbi}} |
+| `docs.linkedin.regenerate` | {count, plural, one {Proposer à nouveau · # crédit} other {Proposer à nouveau · # crédits}} |
+| `docs.linkedin.headline` | Titre proposé |
+| `docs.linkedin.about` | Résumé proposé |
+| `docs.linkedin.skills` | {count, plural, one {# compétence à ajouter} other {# compétences à ajouter}} |
+| `docs.linkedin.proven` | ✓ : compétence prouvée sur Jumanly (formation ou évaluation). |
+| `docs.linkedin.copy` | Copier |
+| `docs.linkedin.copied` | Copié. Collez-le dans LinkedIn. |
+| `docs.linkedin.note` | Rien n'est publié sur LinkedIn : vous copiez ce que vous voulez. |
+
+### Refonte mobile · Importer un CV
+
+*`/app/profil/import` : un PDF ou un document Word, lu sur le serveur et jamais conservé ; ce qui est trouvé n'entre dans le profil qu'après l'accord du talent, groupe par groupe.*
+
+| Clé | Texte |
+|---|---|
+| `docs.import.seo` | Importer un CV |
+| `docs.import.title` | Importer un CV |
+| `docs.import.choose` | Choisir un fichier |
+| `docs.import.chooseHint` | PDF ou Word, {max} Mo au plus |
+| `docs.import.reading` | Lecture du fichier… |
+| `docs.import.linkedin` | Depuis LinkedIn |
+| `docs.import.linkedinHint` | Fichier PDF de votre profil |
+| `docs.import.readTitle` | Lu dans votre CV · à vérifier |
+| `docs.import.readIn` | Lu dans « {name} » · à vérifier |
+| `docs.import.found.experiences` | {count, plural, one {# expérience} other {# expériences}} |
+| `docs.import.found.skills` | {count, plural, one {# compétence} other {# compétences}} |
+| `docs.import.found.educations` | {count, plural, one {# diplôme} other {# diplômes}} |
+| `docs.import.undated` | {count, plural, one {Une expérience sans date de début n'est pas ajoutée : complétez-la dans votre profil.} other {# expériences sans date de début ne sont pas ajoutées : complétez-les dans votre profil.}} |
+| `docs.import.rulesOnly` | Sans l'aide de l'IA, seules les compétences sont reconnues. |
+| `docs.import.note` | Rien n'est ajouté sans votre accord. Le fichier n'est pas conservé. |
+| `docs.import.nothing.title` | Rien n'a été reconnu. |
+| `docs.import.nothing.text` | Essayez un autre fichier, ou remplissez votre profil vous-même. |
+| `docs.import.submit` | Ajouter à mon profil |
+| `docs.import.error.format` | Ce fichier n'est pas accepté. Choisissez un PDF ou un document Word (.docx). |
+| `docs.import.error.size` | Ce fichier dépasse {max} Mo. Choisissez un fichier plus léger. |
+| `docs.import.error.empty` | Ce fichier ne contient pas de texte lisible (un scan, par exemple). Essayez un autre fichier. |
+| `docs.import.error.unreadable` | Ce fichier n'a pas pu être lu. Essayez de l'enregistrer à nouveau en PDF. |
+
+### Refonte mobile · Studio CV
+
+*`/app/career/cv/[id]` et `/app/career/cv/modeles` : modèle (droit `career.cv.templates.access`), couleur, police, densité, sections à réordonner, « Améliorer », avant/après, « Adapter » à une offre ou à un texte collé (droit `career.cv.tailor`), PDF. L'IA propose, le talent décide.*
+
+| Clé | Texte |
+|---|---|
+| `docs.section.summary` | Résumé |
+| `docs.section.experience` | Expériences |
+| `docs.section.education` | Études |
+| `docs.section.skills` | Compétences |
+| `docs.section.languages` | Langues |
+| `docs.templates.seo` | Choisir un modèle |
+| `docs.templates.title` | Choisir un modèle |
+| `docs.templates.filters` | Familles de modèles |
+| `docs.templates.filter.tous` | Tous |
+| `docs.templates.filter.sobres` | Sobres |
+| `docs.templates.filter.colonne` | Colonne |
+| `docs.templates.filter.creatifs` | Créatifs |
+| `docs.templates.included` | Inclus |
+| `docs.templates.currentShort` | (modèle actuel) |
+| `docs.templates.use` | Utiliser « {name} » |
+| `docs.templates.current` | « {name} » est votre modèle |
+| `docs.templates.unlock` | Inclus dès {plan} · voir les formules |
+| `docs.templates.locked` | Ce modèle est inclus dès la formule {plan}. |
+| `docs.editor.seo` | Éditeur de CV |
+| `docs.editor.more` | Plus d'options |
+| `docs.editor.template` | Modèle {templateName} |
+| `docs.editor.savedOn` | Enregistré · {date} |
+| `docs.editor.preview` | Aperçu |
+| `docs.editor.demo` | Votre CV est encore vide : l'aperçu montre un exemple fictif. |
+| `docs.editor.changeTemplate` | Modèle |
+| `docs.editor.sections` | Sections · glisser pour réordonner |
+| `docs.editor.grip` | Déplacer « {section} » (flèches haut et bas) |
+| `docs.editor.moved` | « {section} » déplacée. |
+| `docs.editor.summaryLine` | {count, plural, one {# phrase} other {# phrases}} |
+| `docs.editor.toWrite` | À écrire |
+| `docs.editor.count` | {count, plural, =0 {Aucun élément} other {#}} |
+| `docs.editor.skillsLine` | {count, plural, =0 {Aucune, depuis le profil} other {#, depuis le profil}} |
+| `docs.editor.hiddenShort` | masquée |
+| `docs.editor.improve` | Améliorer |
+| `docs.editor.improveSummary` | {count, plural, one {Améliorer avec Orbi · # crédit} other {Améliorer avec Orbi · # crédits}} |
+| `docs.editor.summaryHint` | Deux ou trois phrases : votre métier, ce que vous savez faire, un résultat. |
+| `docs.editor.adapt` | Adapter |
+| `docs.editor.pdf` | PDF |
+| `docs.editor.save` | Enregistrer |
+| `docs.editor.saved` | Enregistré. |
+| `docs.editor.error` | Ce changement n'a pas pu être enregistré. Réessayez. |
+| `docs.editor.fromProfile` | CV mis à jour depuis votre profil. |
+| `docs.editor.templateApplied` | Modèle « {templateName} » appliqué. Votre contenu n'a pas changé. |
+| `docs.editor.changeApplied` | Changement appliqué. |
+| `docs.editor.changeRefused` | Votre texte reste tel quel. |
+| `docs.editor.orbiSame` | Orbi n'a rien de mieux à proposer pour l'instant. |
+| `docs.editor.orbiEmpty` | Écrivez d'abord quelques mots ou ajoutez une expérience : Orbi part de ce que vous avez écrit. |
+| `docs.editor.obsolete` | Ce texte a changé depuis la proposition d'Orbi : elle n'a pas été appliquée. |
+| `docs.editor.adapted` | Copie « {title} » créée pour {target}. Votre CV d'origine ne change pas. |
+| `docs.editor.changesLabel` | Orbi propose |
+| `docs.editor.changes` | {count, plural, one {# changement à revoir} other {# changements à revoir}} |
+| `docs.editor.rename` | Nom du CV |
+| `docs.editor.refresh` | Mettre à jour depuis mon profil |
+| `docs.editor.refreshHint` | Reprend vos expériences, études et compétences |
+| `docs.editor.present` | aujourd'hui |
+| `docs.editor.shown` | Sur le CV |
+| `docs.editor.shownOn` | Cette section est imprimée |
+| `docs.editor.shownOff` | Cette section est masquée |
+| `docs.editor.sectionEmpty` | Rien pour l'instant. Ajoutez-le dans votre profil. |
+| `docs.editor.editInProfile` | Modifier dans mon profil |
+| `docs.style.color` | Couleur |
+| `docs.style.colorAts` | Les quatre premières lignes sont les plus sûres pour les logiciels de recrutement. |
+| `docs.style.font` | Police |
+| `docs.style.fontChip` | Aa · {font} |
+| `docs.style.density` | Densité |
+| `docs.change.title.summary` | Améliorer le résumé |
+| `docs.change.title.headline` | Améliorer le titre |
+| `docs.change.title.bullet` | Améliorer une réalisation |
+| `docs.change.count` | {total, plural, other {Changement 1 sur #}} |
+| `docs.change.before` | Avant |
+| `docs.change.emptyBefore` | (vide) |
+| `docs.change.after` | Proposition d'Orbi |
+| `docs.change.yours` | Votre version |
+| `docs.change.note` | Rien n'est modifié sans votre accord. |
+| `docs.change.noteCredits` | Rien n'est modifié sans votre accord. {left, plural, =0 {Plus de crédit Orbi ce mois-ci.} one {# crédit Orbi restant.} other {# crédits Orbi restants.}} |
+| `docs.change.why` | Pourquoi ces changements ? |
+| `docs.change.whyMarked` | Les passages surlignés reprennent vos compétences et vos chiffres, déjà dans votre CV. |
+| `docs.change.whyFocus` | Mis en avant parce que l'offre le demande : {skills}. |
+| `docs.change.whyNothing` | Orbi n'ajoute aucune expérience, aucun diplôme, aucun chiffre. |
+| `docs.change.whyRefuse` | Si vous refusez, votre texte reste exactement tel quel. |
+| `docs.change.refuse` | Refuser |
+| `docs.change.edit` | Modifier |
+| `docs.change.accept` | Accepter |
+| `docs.change.cancel` | Annuler |
+| `docs.change.save` | Enregistrer |
+| `docs.tailor.offerTitle` | Adapter à une offre |
+| `docs.tailor.offerLegend` | L'offre visée |
+| `docs.tailor.listed` | {skills} : déjà dans votre CV |
+| `docs.tailor.written` | {skill} : à mettre en avant |
+| `docs.tailor.absent` | Mot-clé « {skill} » absent |
+| `docs.tailor.copyNote` | Orbi crée une copie « {name} ». Votre CV principal ne change pas. |
+| `docs.tailor.create` | Créer la copie adaptée |
+| `docs.tailor.noOffers` | Enregistrez une offre ou postulez pour pouvoir y adapter votre CV. |
+| `docs.tailor.toText` | Une annonce trouvée ailleurs ? Adapter à un texte |
+| `docs.tailor.textTitle` | Adapter à un texte |
+| `docs.tailor.textLead` | Une annonce trouvée ailleurs, un appel à candidatures, une bourse. |
+| `docs.tailor.kinds` | Ce que vous collez |
+| `docs.tailor.kind.annonce` | Annonce |
+| `docs.tailor.kind.appel` | Appel |
+| `docs.tailor.kind.bourse` | Bourse |
+| `docs.tailor.kind.fiche` | Fiche de poste |
+| `docs.tailor.placeholder.annonce` | Collez le texte de l'annonce… |
+| `docs.tailor.placeholder.appel` | Collez le texte de l'appel à candidatures… |
+| `docs.tailor.placeholder.bourse` | Collez le texte de la bourse… |
+| `docs.tailor.placeholder.fiche` | Collez la fiche de poste… |
+| `docs.tailor.textLabel` | Texte à lire |
+| `docs.tailor.counter` | {count} / {max} |
+| `docs.tailor.keywords` | Ce que le texte demande |
+| `docs.tailor.missing` | Absent de votre CV : |
+| `docs.tailor.textNote` | Lu comme une annonce, jamais comme une consigne. Orbi n'invente aucune expérience. |
+| `docs.tailor.copyName` | CV · {heading} |
+| `docs.tailor.tooShort` | Collez un texte d'au moins 30 caractères, 5 000 au plus. |
+| `docs.tailor.notFound` | Cette offre n'est plus disponible. |
+| `docs.ai.error.consent` | Orbi a besoin de votre accord pour utiliser l'IA. |
+| `docs.ai.error.entitlement` | Cette aide d'Orbi n'est pas comprise dans votre formule. |
+| `docs.ai.entitlementPlan` | Cette aide d'Orbi est incluse dès la formule {plan}. |
+| `docs.ai.error.quota` | Vos crédits Orbi de ce mois sont utilisés. Aucun crédit n'a été pris. |
+| `docs.ai.error.unavailable` | Orbi n'est pas disponible pour le moment. Aucun crédit n'a été pris : réessayez plus tard. |
+| `docs.ai.cta.consent` | Autoriser Orbi |
+| `docs.ai.cta.plans` | Voir les formules |
+
 ### `/app/orbi` · Orbi en plein écran
 
 *L'onglet central, en page de conversation (talent lot 4 § 9) : retour en haut, pas de barre du bas. Les quatre aides mènent aux fonctions existantes ; la conversation libre est gardée dans l'historique. Orbi propose, la personne décide.*
@@ -6716,6 +7175,307 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `tester.admin.open` | Ouvrir l'administration |
 | `tester.admin.missing` | Votre compte n'est pas encore administrateur. Ajoutez aussi votre adresse dans la variable ADMIN_BOOTSTRAP_EMAIL, puis reconnectez-vous. |
 | `account.menu.tester` | Mode testeur |
+
+### `/app/compte` · Compte (refonte mobile, lot 6)
+
+| Clé | Texte |
+|---|---|
+| `compte.seo` | Compte · Jumanly |
+| `compte.title` | Compte |
+| `compte.back` | Retour |
+| `compte.profile` | Voir mon profil · {percent} % |
+| `compte.group.mine` | Mes documents et mon réseau |
+| `compte.group.settings` | Abonnement et réglages |
+| `compte.group.spaces` | Mes autres espaces |
+| `compte.documents.title` | CV et documents |
+| `compte.documents.text` | {cvs, plural, =0 {Aucun CV} one {# CV} other {# CV}}, {letters, plural, =0 {aucune lettre} one {# lettre} other {# lettres}} |
+| `compte.attestations.title` | Attestations |
+| `compte.attestations.text` | {count, plural, =0 {Aucune pour l'instant} one {# obtenue} other {# obtenues}} |
+| `compte.practice.title` | S’entraîner aux entretiens |
+| `compte.practice.text` | {count, plural, =0 {Aucune simulation ce mois} one {# simulation ce mois} other {# simulations ce mois}} |
+| `compte.connections.title` | Connexions |
+| `compte.connections.text` | {count, plural, =0 {Aucune connexion} one {# personne} other {# personnes}} |
+| `compte.connections.requests` | {count, plural, =0 {Aucune connexion} one {# personne} other {# personnes}} · {received, plural, one {# demande} other {# demandes}} |
+| `compte.plan.title` | Abonnement |
+| `compte.plan.credits` | {count, plural, =0 {Aucun crédit Orbi} one {# crédit Orbi} other {# crédits Orbi}} |
+| `compte.plan.unlimited` | Crédits Orbi illimités |
+| `compte.settings.title` | Paramètres |
+| `compte.settings.text` | Sécurité, confidentialité, notifications |
+| `compte.help.title` | Aide |
+| `compte.help.text` | assistant@jumanly.io |
+| `compte.spaces.title` | Espace recruteur |
+| `compte.spaces.text` | Passer à mon organisation |
+| `compte.tester.title` | Mode testeur |
+| `compte.tester.text` | Changer de formule sans payer |
+| `compte.admin.title` | Administration |
+| `compte.admin.text` | Jumanly Admin |
+| `compte.logout` | Se déconnecter |
+
+### `/app/compte/connexions` · Connexions (refonte mobile, lot 6)
+
+| Clé | Texte |
+|---|---|
+| `reseau.seo` | Connexions · Jumanly |
+| `reseau.title` | Connexions |
+| `reseau.tabs` | Connexions et demandes |
+| `reseau.tab.mine` | Mes connexions |
+| `reseau.tab.requests` | Demandes |
+| `reseau.received` | Demandes reçues |
+| `reseau.sent` | Demandes envoyées |
+| `reseau.mine` | Mes connexions |
+| `reseau.mutual` | {count, plural, one {# en commun} other {# en commun}} |
+| `reseau.noTitle` | Talent Jumanly |
+| `reseau.accept` | Accepter |
+| `reseau.acceptName` | Accepter la demande de {name} |
+| `reseau.ignore` | Ignorer |
+| `reseau.ignoreName` | Ignorer la demande de {name} |
+| `reseau.withdraw` | Retirer |
+| `reseau.withdrawName` | Retirer ma demande à {name} |
+| `reseau.connect` | Se connecter |
+| `reseau.connectName` | Demander à {name} de se connecter |
+| `reseau.write` | Écrire à {name} |
+| `reseau.options` | {name} : écrire, retirer, bloquer ou signaler |
+| `reseau.rule` | On écrit seulement à une connexion acceptée. |
+| `reseau.noRequest` | Aucune demande en attente. |
+| `reseau.error` | Cette action n’est pas possible. La personne n’est peut-être plus disponible. |
+| `reseau.empty.title` | Pas encore de connexion |
+| `reseau.empty.text` | Retrouvez des personnes de votre domaine et échangez une fois la demande acceptée. |
+| `reseau.done.envoyee` | Demande envoyée. Vous pourrez écrire une fois qu’elle sera acceptée. |
+| `reseau.done.acceptee` | Connexion acceptée. Vous pouvez vous écrire. |
+| `reseau.done.ignoree` | Demande ignorée. La personne n’est pas prévenue. |
+| `reseau.done.retiree` | C’est fait. La conversation reste lisible, sans nouveaux messages. |
+| `reseau.done.bloquee` | Personne bloquée. Elle ne peut plus vous écrire ni vous demander. |
+| `reseau.done.deja` | Vous êtes déjà en lien avec cette personne. |
+| `reseau.search.open` | Chercher une personne |
+| `reseau.search.title` | Chercher une personne |
+| `reseau.search.label` | Nom ou métier |
+| `reseau.search.placeholder` | Nom ou métier |
+| `reseau.search.none` | Personne ne correspond à « {query} ». |
+| `reseau.search.privacy` | Seuls les profils visibles sous leur nom apparaissent ici. |
+| `reseau.person.write` | Écrire |
+| `reseau.person.remove` | Retirer la connexion |
+| `reseau.person.removeText` | La conversation reste lisible, sans nouveaux messages. |
+| `reseau.person.report` | Signaler cette personne |
+| `reseau.person.block` | Bloquer |
+| `reseau.person.blockText` | Plus de message ni de demande, dans les deux sens. |
+| `reseau.thread.subtitle` | Connexion |
+| `reseau.thread.blocked` | Vous avez bloqué {name} : vous ne pouvez plus vous écrire. |
+| `reseau.thread.ended` | Cette connexion a pris fin : la conversation reste lisible, sans nouveaux messages. |
+| `reseau.block.body` | Cette personne ne pourra plus vous écrire ni vous demander de vous connecter. |
+
+### `/app/profil` · Mon profil (refonte mobile, lot 6)
+
+| Clé | Texte |
+|---|---|
+| `profil.seo` | Mon profil · Jumanly |
+| `profil.back` | Retour |
+| `profil.edit` | Modifier le profil |
+| `profil.save` | Enregistrer |
+| `profil.error` | Ce n’est pas enregistré. Vérifiez les champs puis réessayez. |
+| `profil.aim` | Vise : {job} |
+| `profil.point` | Faire le point |
+| `profil.recruiterView` | Vu par un recruteur |
+| `profil.saved.default` | Enregistré. |
+| `profil.saved.photo` | Photo enregistrée. |
+| `profil.saved.partage` | Vos projets sont en ligne. Copiez le lien pour les partager. |
+| `profil.saved.prive` | Vos projets ne sont plus en ligne. |
+| `profil.saved.visibilite` | Visibilité enregistrée. |
+| `profil.completeness.title` | Profil à {percent} % |
+| `profil.completeness.ring` | {percent} % |
+| `profil.completeness.done` | Profil complet. Faites le point avec Orbi. |
+| `profil.completeness.next.identity` | Ajoutez un titre et votre ville pour progresser |
+| `profil.completeness.next.summary` | Ajoutez un résumé de quelques lignes pour progresser |
+| `profil.completeness.next.experience` | Ajoutez une expérience pour progresser |
+| `profil.completeness.next.education` | Ajoutez vos études pour progresser |
+| `profil.completeness.next.skills` | Ajoutez au moins 3 compétences pour progresser |
+| `profil.completeness.next.languages` | Ajoutez une langue pour progresser |
+| `profil.completeness.next.preferences` | Dites ce que vous cherchez pour progresser |
+| `profil.proof.certificate` | Attestation |
+| `profil.proof.project` | Projet |
+| `profil.proof.experience` | Expérience |
+| `profil.proof.link` | Lien |
+| `profil.proof.none` | Déclarée |
+| `profil.proof.named` | ({name}) |
+| `profil.skills.seo` | Compétences · Jumanly |
+| `profil.skills.title` | Compétences |
+| `profil.skills.empty` | Ajoutez les compétences que vous savez montrer. |
+| `profil.skills.add` | Ajouter une compétence |
+| `profil.skills.addNamed` | Ajouter {skill} |
+| `profil.skills.search` | Chercher une compétence |
+| `profil.skills.pick` | Compétence trouvée |
+| `profil.skills.none` | Aucune compétence ne correspond à « {query} ». Essayez un autre mot. |
+| `profil.skills.level` | Niveau |
+| `profil.skills.levels.beginner` | Débutant |
+| `profil.skills.levels.intermediate` | Intermédiaire |
+| `profil.skills.levels.advanced` | Avancé |
+| `profil.skills.levels.expert` | Expert |
+| `profil.skills.proof` | Preuve |
+| `profil.skills.attestation` | Attestation Jumanly |
+| `profil.skills.project` | Un projet |
+| `profil.skills.declared` | Déclarée seulement |
+| `profil.skills.declaredText` | Sans preuve |
+| `profil.skills.keepProof` | Garder la preuve déjà donnée |
+| `profil.skills.verified` | Compétence vérifiée par une attestation Jumanly : son niveau et sa preuve restent. |
+| `profil.skills.remove` | Retirer cette compétence |
+| `profil.skills.error.unknownSkill` | Choisissez une compétence de la liste. |
+| `profil.skills.error.max` | Vous avez atteint le nombre maximum de compétences. Retirez-en une d’abord. |
+| `profil.projects.seo` | Projet · Jumanly |
+| `profil.projects.title` | Projets |
+| `profil.projects.add` | Ajouter un projet |
+| `profil.projects.new` | Nouveau projet |
+| `profil.projects.edit` | Modifier le projet |
+| `profil.projects.private` | Vous seul |
+| `profil.projects.locked` | Montrez vos projets |
+| `profil.projects.lockedText` | Inclus dans les formules payantes. Voir les formules. |
+| `profil.projects.files` | Ajouter des photos ou un PDF |
+| `profil.projects.filesHelp` | Jusqu’à {max} fichiers, 4 Mo par envoi |
+| `profil.projects.kept` | Fichiers du projet |
+| `profil.projects.titleLabel` | Titre |
+| `profil.projects.titlePlaceholder` | Prévision des ventes d’une boutique |
+| `profil.projects.text` | Ce que vous avez fait |
+| `profil.projects.textPlaceholder` | Le problème, votre rôle, le résultat chiffré |
+| `profil.projects.skills` | Compétences utilisées |
+| `profil.projects.addSkill` | Ajouter une compétence |
+| `profil.projects.visible` | Visible par les recruteurs |
+| `profil.projects.visibleText` | Sinon, seulement vous |
+| `profil.projects.remove` | Supprimer ce projet |
+| `profil.projects.error.file` | Ces fichiers ne passent pas : photos ou PDF seulement, {max} fichiers et 4 Mo par envoi au plus. |
+| `profil.projects.error.limit` | Vous avez atteint le nombre maximum de projets. |
+| `profil.experience.seo` | Expérience · Jumanly |
+| `profil.experience.title` | Expériences |
+| `profil.experience.empty` | Décrivez un stage, un emploi ou une mission, avec son résultat. |
+| `profil.experience.add` | Ajouter une expérience |
+| `profil.experience.addCta` | Ajouter |
+| `profil.experience.new` | Nouvelle expérience |
+| `profil.experience.edit` | Modifier l’expérience |
+| `profil.experience.now` | aujourd’hui |
+| `profil.experience.job` | Poste |
+| `profil.experience.jobPlaceholder` | Stagiaire data |
+| `profil.experience.company` | Organisation |
+| `profil.experience.start` | Début |
+| `profil.experience.end` | Fin |
+| `profil.experience.current` | Poste actuel |
+| `profil.experience.result` | Résultat obtenu |
+| `profil.experience.resultPlaceholder` | Rapport mensuel automatisé : 2 jours gagnés par mois |
+| `profil.experience.resultHelp` | Un résultat par ligne, avec un chiffre si possible. |
+| `profil.experience.endBeforeStart` | La fin ne peut pas être avant le début. |
+| `profil.experience.remove` | Supprimer cette expérience |
+| `profil.education.title` | Études |
+| `profil.education.empty` | Ajoutez votre diplôme le plus récent. |
+| `profil.education.add` | Ajouter des études |
+| `profil.education.edit` | Modifier les études |
+| `profil.education.degree` | Diplôme ou formation |
+| `profil.education.degreePlaceholder` | Licence en économie |
+| `profil.education.school` | Établissement |
+| `profil.education.level` | Niveau |
+| `profil.education.start` | Année de début |
+| `profil.education.end` | Année de fin |
+| `profil.education.ongoing` | en cours |
+| `profil.education.remove` | Retirer ces études |
+| `profil.education.short.none` | Sans diplôme |
+| `profil.education.short.secondary` | Secondaire |
+| `profil.education.short.vocational` | Professionnelle |
+| `profil.education.short.bachelor` | Licence |
+| `profil.education.short.master` | Master |
+| `profil.education.short.doctorate` | Doctorat |
+| `profil.attestations.title` | Attestations et certificats |
+| `profil.attestations.empty` | Vos attestations Jumanly apparaissent ici quand vous les affichez sur votre profil. |
+| `profil.attestations.line` | Vérifiable · {code} |
+| `profil.attestations.manage` | Gérer mes attestations |
+| `profil.languages.title` | Langues |
+| `profil.languages.empty` | Ajoutez les langues que vous parlez. |
+| `profil.languages.add` | Ajouter une langue |
+| `profil.languages.language` | Langue |
+| `profil.languages.levelLabel` | Niveau |
+| `profil.languages.level.native` | Langue maternelle |
+| `profil.languages.level.fluent` | Courant |
+| `profil.languages.level.professional` | Professionnel |
+| `profil.languages.level.intermediate` | Intermédiaire |
+| `profil.languages.level.basic` | Notions |
+| `profil.languages.cefr` | Niveau européen (facultatif) |
+| `profil.languages.cefrNone` | Sans |
+| `profil.languages.save` | Ajouter |
+| `profil.languages.remove` | Retirer {language} |
+| `profil.search.seo` | Ce que je cherche · Jumanly |
+| `profil.search.title` | Ce que je cherche |
+| `profil.search.jobs` | Métiers visés |
+| `profil.search.places` | Où travailler |
+| `profil.search.contracts` | Contrat et mode |
+| `profil.search.available` | Disponibilité |
+| `profil.search.edit` | Modifier |
+| `profil.search.addJob` | Ajouter un métier |
+| `profil.search.addPlace` | Ajouter une ville |
+| `profil.search.salary` | Salaire souhaité |
+| `profil.search.salaryPlaceholder` | À partir de… $ par mois |
+| `profil.search.salaryHelp` | Visible seulement par vous et les recruteurs à qui vous postulez |
+| `profil.search.availableNow` | Disponible |
+| `profil.search.availableText` | Dès maintenant |
+| `profil.contract.cdi` | CDI |
+| `profil.contract.cdd` | CDD |
+| `profil.contract.internship` | Stage |
+| `profil.contract.freelance` | Freelance |
+| `profil.contract.apprenticeship` | Alternance |
+| `profil.contract.volunteer` | Volontariat |
+| `profil.contract.partTime` | Temps partiel |
+| `profil.remote.onsite` | Sur site |
+| `profil.remote.hybrid` | Hybride |
+| `profil.remote.remote` | À distance |
+| `profil.availability.open` | Disponible dès maintenant |
+| `profil.availability.listening` | À l’écoute |
+| `profil.availability.not_looking` | Pas en recherche |
+| `profil.share.open` | Partager mon profil |
+| `profil.share.title` | Partager mes projets |
+| `profil.share.text` | Une page publique montre votre nom, votre titre et vos projets visibles, rien d’autre. |
+| `profil.share.public` | Mettre mes projets en ligne |
+| `profil.share.publicText` | Toute personne qui a le lien peut les voir |
+| `profil.share.save` | Enregistrer |
+| `profil.share.copy` | Copier le lien |
+| `profil.share.copied` | Lien copié |
+| `profil.share.locked` | La page publique de vos projets fait partie des formules payantes. |
+| `profil.share.plans` | Voir les formules |
+| `profil.share.privacy` | Votre profil complet reste privé : un recruteur le voit seulement si vous postulez ou le rendez visible. |
+| `profil.head.seo` | Modifier le profil · Jumanly |
+| `profil.head.title` | Modifier le profil |
+| `profil.head.headline` | Titre |
+| `profil.head.headlinePlaceholder` | Analyste de données |
+| `profil.head.summary` | Résumé |
+| `profil.head.summaryPlaceholder` | Je transforme des données en décisions… |
+| `profil.head.summaryHelp` | Facultatif · {max} caractères au plus |
+| `profil.head.country` | Pays |
+| `profil.head.city` | Ville |
+| `profil.head.photo` | Photo de profil |
+| `profil.head.photoTake` | Prendre une photo |
+| `profil.head.photoChoose` | Choisir dans la galerie |
+| `profil.head.photoRemove` | Retirer la photo |
+| `profil.head.photoZoom` | Zoom |
+| `profil.head.photoEmpty` | Choisissez une photo, puis cadrez-la. |
+| `profil.head.photoDrag` | Glissez la photo ou utilisez les flèches pour la cadrer |
+| `profil.head.photoRule` | La photo n’entre jamais dans le score. Vous pouvez ne pas en mettre. |
+| `profil.head.photoSaved` | Photo enregistrée. |
+| `profil.head.photoRemoved` | Photo retirée. |
+| `profil.head.photoError.type` | Ce fichier n’est pas une photo (JPEG, PNG ou WebP). |
+| `profil.head.photoError.size` | Cette photo est trop lourde. Recadrez-la ou choisissez-en une autre. |
+| `profil.head.photoError.photo` | Choisissez une photo avant d’enregistrer. |
+| `profil.preview.seo` | Vu par un recruteur · Jumanly |
+| `profil.preview.title` | Vu par un recruteur |
+| `profil.preview.banner` | Aperçu : c’est ce que voit un recruteur à qui vous postulez. |
+| `profil.preview.headline` | Titre |
+| `profil.preview.skills` | Compétences |
+| `profil.preview.projects` | Projets |
+| `profil.preview.projectsValue` | {count, plural, =0 {Aucun projet public} one {# projet public} other {# projets publics}} |
+| `profil.preview.attestations` | Attestations |
+| `profil.preview.attestationsValue` | {count, plural, =0 {Aucune} one {#, vérifiable} other {#, vérifiables}} |
+| `profil.preview.cv` | CV |
+| `profil.preview.cvValue` | Celui envoyé avec la candidature |
+| `profil.preview.never` | Jamais utilisé pour le score |
+| `profil.preview.photoAge` | Photo, âge, genre |
+| `profil.preview.origin` | Nationalité, situation familiale |
+| `profil.preview.address` | Adresse précise |
+| `profil.preview.excluded` | exclus du matching |
+| `profil.preview.cityOnly` | ville seulement |
+| `profil.preview.rule.private` | Un recruteur voit votre profil seulement si vous postulez. |
+| `profil.preview.rule.recruiters` | Votre profil est visible par les recruteurs, et par ceux à qui vous postulez. |
+| `profil.preview.rule.anonymous` | Les recruteurs voient votre profil sans votre nom, sauf si vous postulez. |
 
 
 ---
