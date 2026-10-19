@@ -28,12 +28,21 @@ test("score expliqué, import de CV et révision humaine", async ({ page, browse
 
   // A Word CV → « Lu dans votre fichier · à vérifier » → profile (lot 6c: the file is read, never kept).
   await page.goto("/app/profil/import");
-  await page
-    .locator("#import-fichier")
-    .setInputFiles(
-      fictiveDocx(["Assistante administrative.", "Maîtrise de Microsoft Excel et de l'archivage."]),
-    );
-  await expect(page.getByText("Lu dans « cv-fictif.docx » · à vérifier")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Importer un CV", level: 1 })).toBeVisible();
+  // The field sends its form once hydrated: try again if the file was chosen too early.
+  await expect(async () => {
+    await page
+      .locator("#import-fichier")
+      .setInputFiles(
+        fictiveDocx([
+          "Assistante administrative.",
+          "Maîtrise de Microsoft Excel et de l'archivage.",
+        ]),
+      );
+    await expect(page.getByText("Lu dans « cv-fictif.docx » · à vérifier")).toBeVisible({
+      timeout: 5_000,
+    });
+  }).toPass({ timeout: 30_000 });
   await expect(page.getByRole("switch", { name: /compétence/ })).toBeChecked();
   await page.getByRole("button", { name: "Ajouter à mon profil" }).click();
   await expect(page).toHaveURL(/\/app\/profil\?import=/);

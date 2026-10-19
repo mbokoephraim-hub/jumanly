@@ -220,7 +220,7 @@ test.describe("modèles de CV : parcours", () => {
     await page.goto(`/app/career/cv/${id}`);
     await page.getByRole("button", { name: "Couleur" }).click();
     const swatch = page.getByRole("dialog", { name: "Couleur" }).getByRole("button").nth(1);
-    await page.waitForLoadState("networkidle");
+    await expect(swatch).toBeVisible();
     await swatch.evaluate((button: HTMLButtonElement) => {
       button.value = "#FFE066";
       button.form!.requestSubmit(button);

@@ -77,7 +77,9 @@ async function documentTemplate() {
       add(true, () => t("closing"));
       add(v.name, () => v.name);
     }
-    return { title: t(`title.${type}`, { jobTitle: v.jobTitle }), text: paragraphs.join("\n\n") };
+    // Without a job title, « Lettre · » loses its dangling separator.
+    const title = t(`title.${type}`, { jobTitle: v.jobTitle }).replace(/\s*·\s*$/, "");
+    return { title, text: paragraphs.join("\n\n") };
   };
 }
 

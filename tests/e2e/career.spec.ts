@@ -66,6 +66,7 @@ test("lettre, correction et LinkedIn à partir du profil", async ({ page, isMobi
   await expectAccessible(page);
 
   await page.goto("/app/career/cv?vue=lettres");
+  await page.getByRole("button", { name: "Nouvelle lettre" }).click();
   await page.getByRole("button", { name: "Faire relire un texte" }).click();
   const proofread = page.getByRole("dialog", { name: "Faire relire un texte" });
   await proofread.getByLabel("Votre texte").fill("bonjour,  je vous écris . merci");

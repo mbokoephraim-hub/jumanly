@@ -1,5 +1,5 @@
 import { execFileSync } from "node:child_process";
-import { mkdtempSync } from "node:fs";
+import { mkdtempSync, writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { join } from "node:path";
 import { expect, test } from "./fixtures";
@@ -95,21 +95,22 @@ test("télécharger mon CV sur téléphone : créer, aperçu, PDF", async ({ pag
   // The list: « … » then « Télécharger en PDF », the toast; the file says nothing of us.
   await page.goto("/app/career/cv");
   await page.getByRole("button", { name: "Plus d'options pour « CV Analyste »" }).click();
-  const download = page.waitForEvent("download");
+  // A phone saves the file itself: the check reads what the server sent to the button.
+  const response = page.waitForResponse((r) => r.url().includes("/export?format=pdf"));
   await page
     .getByRole("dialog", { name: "CV Analyste" })
-    .getByRole("button", { name: "Télécharger en PDF" })
+    .getByRole("link", { name: "Télécharger en PDF" })
     .click();
-  const file = await download;
-  expect(file.suggestedFilename()).toMatch(/^CV-Awa-Fictive.*\.pdf$/);
-  await expect(page.getByText("CV téléchargé.")).toBeVisible();
+  const pdf = await response;
+  expect(pdf.status()).toBe(200);
   const path = join(mkdtempSync(join(tmpdir(), "cv-mobile-")), "cv.pdf");
-  await file.saveAs(path);
+  writeFileSync(path, await pdf.body());
   // The contact e-mail of the fictional account is the only place the word may appear.
   const text = execFileSync("pdftotext", ["-layout", path, "-"]).toString();
   expect(text.replace(/\S+@\S+/g, "")).not.toMatch(/Jumanly/i);
 
   // Clean up through the « … » menu.
+  await page.goto("/app/career/cv");
   await page.getByRole("button", { name: "Plus d'options pour « CV Analyste »" }).click();
   await page
     .getByRole("dialog", { name: "CV Analyste" })
