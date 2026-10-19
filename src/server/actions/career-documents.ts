@@ -163,14 +163,16 @@ export async function tailorCvAction(formData: FormData) {
   const cvId = id(formData.get("cvId"));
   const user = await requireUser(`/app/career/cv/${cvId}`);
   const jobId = id(formData.get("jobId"));
-  if (!jobId) redirect(`/app/career/cv/${cvId}?adaptation=input`);
+  // On a computer the panel « Adapter à une offre » stays open on a refusal (planche studio-cv § 4).
+  const panel = formData.get("retour") === "offre" ? "&adapter=offre" : "";
+  if (!jobId) redirect(`/app/career/cv/${cvId}?adaptation=input${panel}`);
   const t = await getTranslations("career.cv.tailor");
   const result = await tailorCv(db, user.id, {
     cvId,
     jobId,
     title: (jobTitle) => t("name", { jobTitle }),
   });
-  if (!result.ok) redirect(`/app/career/cv/${cvId}?adaptation=${result.code}`);
+  if (!result.ok) redirect(`/app/career/cv/${cvId}?adaptation=${result.code}${panel}`);
   openCopy(result);
 }
 
@@ -187,14 +189,16 @@ export async function tailorCvTextAction(formData: FormData) {
   const cvId = id(formData.get("cvId"));
   const user = await requireUser(`/app/career/cv/${cvId}`);
   const parsed = tailorTextSchema.safeParse({ cvId, text: formData.get("text") });
-  if (!parsed.success) redirect(`/app/career/cv/${cvId}?adaptation=empty`);
+  // On a computer the panel « Adapter à un texte » stays open on a refusal (planche studio-cv § 5).
+  const panel = formData.get("retour") === "texte" ? "&adapter=texte" : "";
+  if (!parsed.success) redirect(`/app/career/cv/${cvId}?adaptation=empty${panel}`);
   const t = await getTranslations("docs.tailor");
   const result = await tailorCvToText(db, user.id, {
     cvId,
     text: parsed.data.text,
     title: (heading) => t("copyName", { heading }),
   });
-  if (!result.ok) redirect(`/app/career/cv/${cvId}?adaptation=${result.code}`);
+  if (!result.ok) redirect(`/app/career/cv/${cvId}?adaptation=${result.code}${panel}`);
   openCopy(result);
 }
 

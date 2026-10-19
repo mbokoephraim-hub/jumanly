@@ -12443,3 +12443,1184 @@ span.t-sw {
     gap: 12px;
   }
 }
+
+
+
+/* ══ Studio CV web : Mes CV, galerie des modèles, studio, LinkedIn (docs/refonte-web/studio-cv) ══
+ * Valeurs de docs/refonte-mobile/maquette/source/webcv.py (CSSCV) et web.py. Un seul code : l'arbre
+ * téléphone (.t-mob) disparaît dès 768 px, l'arbre web (.t-sc-*) n'existe qu'à partir de 768 px. */
+.t-sc-liste,
+.t-sc-galerie,
+.t-sc-studio {
+  display: none;
+}
+@media (min-width: 768px) {
+  .t-sc-liste,
+  .t-sc-galerie,
+  .t-sc-studio {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  /* Les pages du lot en colonnes prennent toute la zone de contenu (StudioFrame). */
+  html.t-sc-wide .t-cadre main.t-colonne {
+    max-width: none;
+  }
+  /* Le studio prend toute la fenêtre : pas de barre du haut, le rail même sur ordinateur. */
+  html.t-studio .t-cadre .t-tb {
+    display: none;
+  }
+  html.t-studio .t-zone {
+    padding-top: 14px;
+  }
+
+  /* En-tête de page (web.py .w-h) et titre de section (.sec-w) */
+  .t-sc-wh {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  .t-sc-wh .t-t {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-sc-wh h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .t-sc-wh p {
+    font-size: 14px;
+    color: var(--texte2);
+    margin-top: 6px;
+  }
+  .t-sc-wh .t-bt {
+    flex: none;
+  }
+  .t-sc-seg {
+    width: 360px;
+    max-width: 100%;
+  }
+  .t-sc-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .t-sc-sec {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .t-sc-sec h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .t-sc-sec > :is(a, button, span) {
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .t-sc-sec > span {
+    font-weight: 500;
+    color: var(--texte2);
+  }
+  .t-sc-sub {
+    font-size: 11.5px;
+    color: var(--texte2);
+  }
+  .t-sc-centre {
+    text-align: center;
+  }
+  .t-sc-neutre {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    font-size: 11.5px;
+    color: var(--texte2);
+  }
+
+  /* Page A4 rendue (aperçu réel) */
+  .t-sc-page {
+    position: relative;
+    min-width: 0;
+  }
+  .t-sc-page .cv-pages > .cv-page,
+  .t-sc-page .cv-page {
+    border-radius: 6px;
+    box-shadow:
+      0 30px 60px -30px rgba(15, 63, 55, 0.5),
+      0 0 0 1px rgba(15, 63, 55, 0.08);
+  }
+  /* Ce qu'Orbi change, surligné sur la page (.hl) */
+  .t-sc-page[data-hl~="summary"] [data-type="profil"],
+  .t-sc-page[data-hl~="experience"] [data-type="experience"],
+  .t-sc-page[data-hl~="headline"] .cv-titre {
+    position: relative;
+    border-radius: 6px;
+    background: rgba(166, 242, 107, 0.32);
+    box-shadow: 0 0 0 3px #7cd63f;
+  }
+  .t-sc-page[data-hl~="summary"] [data-type="profil"]::after,
+  .t-sc-page[data-hl~="experience"] [data-type="experience"]::after,
+  .t-sc-page[data-hl~="headline"] .cv-titre::after {
+    content: var(--t-sc-hl);
+    position: absolute;
+    right: -10px;
+    top: -18px;
+    font:
+      700 15px/1 Sora,
+      sans-serif;
+    letter-spacing: 0;
+    text-transform: none;
+    padding: 5px 12px;
+    border-radius: 999px;
+    background: #0f3f37;
+    color: #a6f26b;
+    white-space: nowrap;
+  }
+  /* Vignette : seule la première page, rognée */
+  .t-sc-mini .cv-page {
+    box-shadow: none;
+    border-radius: 0;
+  }
+
+  /* ── Mes CV (§ 1) ── */
+  .t-sc-g2r {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 16px;
+    align-items: start;
+  }
+  .t-sc-cvs {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .t-sc-cvk {
+    position: relative;
+    padding: 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: 24px;
+  }
+  .t-sc-apc {
+    position: relative;
+    aspect-ratio: 210 / 250;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 0 0 1px var(--trait);
+  }
+  .t-sc-apc > div {
+    pointer-events: none;
+  }
+  .t-sc-cover {
+    position: absolute;
+    inset: 0;
+    border-radius: 14px;
+  }
+  .t-sc-e {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: var(--lime);
+    color: #0f3f37;
+  }
+  .t-sc-e.t-a {
+    background: #0f3f37;
+    color: #a6f26b;
+  }
+  .t-sc-cvt {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .t-sc-cvt > div {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .t-sc-cvt b {
+    display: block;
+    font-size: 14px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .t-sc-cvt span {
+    font-size: 11.5px;
+    color: var(--texte2);
+  }
+  .t-sc-cvt .t-bi {
+    width: 34px;
+    height: 34px;
+  }
+  .t-sc-g2e {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .t-sc-cvn {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 24px;
+    border: 1.5px dashed rgba(15, 63, 55, 0.28);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-align: left;
+    color: var(--texte);
+    width: 100%;
+  }
+  .sombre .t-sc-cvn {
+    border-color: rgba(255, 255, 255, 0.25);
+  }
+  .t-sc-cvn .t-cases {
+    width: 52px;
+    height: 52px;
+    flex: none;
+    border-radius: 18px;
+    display: grid;
+    place-items: center;
+    background: var(--g-accent);
+    color: #0f3f37;
+  }
+  .t-sc-cvn.t-i .t-cases {
+    background: var(--g-accomp);
+  }
+  .sombre .t-sc-cvn.t-i .t-cases {
+    color: var(--texte);
+  }
+  .t-sc-cvn small {
+    display: block;
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--texte2);
+  }
+
+  /* Orbi pour vos CV (.oa) */
+  .t-sc-oa {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    border-radius: var(--r-carte);
+    background: var(--g-accomp);
+  }
+  .t-sc-oa-h {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .t-sc-oa-h h2 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .t-sc-oa-h p {
+    font-size: 12px;
+    color: var(--texte2);
+  }
+  .t-sc-oa form {
+    display: contents;
+  }
+  .t-sc-o {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    width: 100%;
+    padding: 12px;
+    border-radius: 18px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+    font-size: 13.5px;
+    font-weight: 600;
+    text-align: left;
+    color: var(--texte);
+  }
+  .t-sc-o .t-cases {
+    width: 38px;
+    height: 38px;
+    flex: none;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    background: var(--zone);
+  }
+  .t-sc-o .t-cases.t-sc-former {
+    background: var(--g-former);
+  }
+  .t-sc-o .t-cases.t-sc-oppo {
+    background: var(--g-oppo);
+  }
+  .t-sc-o .t-cases.t-sc-accomp {
+    background: var(--g-accomp);
+  }
+  .t-sc-o .t-t {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-sc-o small {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--texte2);
+  }
+  .t-sc-o-p {
+    box-shadow:
+      0 0 0 1.5px #a6f26b,
+      var(--verre);
+  }
+
+  /* Fenêtre « Importer » */
+  .t-sc-lus {
+    margin-top: 4px;
+  }
+  .t-sc-acts2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+
+  /* Lettres et LinkedIn (§ 6, § 7) */
+  .t-sc-lkd {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+  .t-sc-lettres {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .t-sc-lettres .t-cases.t-sc-former {
+    background: var(--g-former);
+  }
+  .t-sc-li {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .t-sc-f {
+    padding: 14px;
+    border-radius: 18px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .t-sc-fh {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .t-sc-fh h3 {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+  }
+  .t-sc-copier {
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    min-height: 32px;
+    padding: 0 10px;
+    border-radius: 999px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--texte);
+  }
+  .t-sc-copier:hover {
+    background: var(--zone);
+  }
+  .t-sc-f p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+
+  /* ── Galerie des modèles (§ 2) ── */
+  .t-sc-gal {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+  }
+  .t-sc-tpg {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .t-sc-tp {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--texte);
+  }
+  .t-sc-vg {
+    position: relative;
+    display: block;
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow:
+      0 0 0 1px var(--trait),
+      0 12px 24px -16px rgba(15, 63, 55, 0.4);
+  }
+  .t-sc-vg img {
+    width: 100%;
+    height: auto;
+    display: block;
+  }
+  .t-sc-tp.t-lk .t-sc-vg img {
+    filter: saturate(0.85);
+  }
+  .t-sc-tp.t-on .t-sc-vg {
+    box-shadow:
+      0 0 0 3px #a6f26b,
+      0 12px 24px -16px rgba(15, 63, 55, 0.4);
+  }
+  .t-sc-bd {
+    position: absolute;
+    left: 8px;
+    top: 8px;
+    display: inline-flex;
+    align-items: center;
+    gap: 4px;
+    font-size: 10px;
+    font-weight: 700;
+    padding: 4px 8px;
+    border-radius: 999px;
+    background: var(--lime);
+    color: #0f3f37;
+  }
+  .t-sc-bd.t-n {
+    background: #0f3f37;
+    color: #a6f26b;
+  }
+  .t-sc-ck {
+    position: absolute;
+    right: 8px;
+    top: 8px;
+    width: 26px;
+    height: 26px;
+    border-radius: 50%;
+    background: #0f3f37;
+    color: #a6f26b;
+    display: grid;
+    place-items: center;
+  }
+  .t-sc-tp small {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--texte2);
+    margin-top: -5px;
+  }
+  .t-sc-gd {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border-radius: var(--r-carte);
+  }
+  .t-sc-big {
+    border-radius: 14px;
+    overflow: hidden;
+    background: #fff;
+    box-shadow: 0 0 0 1px var(--trait);
+  }
+  .t-sc-big .cv-page {
+    box-shadow: none;
+    border-radius: 0;
+  }
+  .t-sc-gd h2 {
+    font-size: 18px;
+    font-weight: 600;
+  }
+  .t-sc-gd > p:not(.t-sc-neutre) {
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-sc-tg {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .t-sc-tg li {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 9px;
+    border-radius: 999px;
+    background: var(--zone);
+  }
+  .t-sc-tg li.t-v {
+    background: var(--lime-c);
+  }
+  .t-sc-use {
+    width: 100%;
+  }
+  /* Tablette : le détail devient une barre fixée en bas (sans l'aperçu). */
+  .t-sc-gd {
+    position: fixed;
+    z-index: 15;
+    left: calc(var(--t-nav-w) + var(--t-pad));
+    right: var(--t-pad);
+    bottom: 16px;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 16px;
+    row-gap: 4px;
+    align-items: center;
+    background: var(--plein);
+    box-shadow: var(--verre-fort);
+  }
+  .t-sc-gd > :is(.t-sc-big, .t-sc-tg, .t-sc-neutre) {
+    display: none;
+  }
+  .t-sc-gd > p {
+    grid-column: 1;
+  }
+  .t-sc-gd > :is(.t-sc-use, form) {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .t-sc-gd .t-sc-use {
+    width: auto;
+  }
+  .t-sc-galerie {
+    padding-bottom: 130px;
+  }
+
+  /* ── Studio (§ 3 à § 5) ── */
+  .t-sc-h {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 10px 12px;
+  }
+  .t-sc-ht {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-sc-ht h1 {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 18px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .t-sc-ht p {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    color: var(--texte2);
+  }
+  .t-sc-ht p i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #3da14f;
+  }
+  .t-sc-copie {
+    font-size: 11px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: #0f3f37;
+    color: #a6f26b;
+    flex: none;
+  }
+  .t-sc-tabs {
+    width: 240px;
+  }
+  .t-sc-h > .t-bt {
+    height: 44px;
+    font-size: 13.5px;
+    padding: 0 18px;
+    flex: none;
+  }
+  .t-sc-orbt {
+    display: none;
+  }
+  .t-sc-notes {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .t-sc-stu {
+    display: grid;
+    gap: 18px;
+    align-items: start;
+    grid-template-columns: 260px minmax(0, 1fr);
+    grid-template-areas: "l c" "r r";
+  }
+  .t-sc-l {
+    grid-area: l;
+  }
+  .t-sc-mid {
+    grid-area: c;
+    display: flex;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    min-width: 0;
+  }
+  .t-sc-mid > .t-sc-page {
+    width: 100%;
+  }
+  .t-sc-r {
+    grid-area: r;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    align-items: start;
+    min-width: 0;
+  }
+  .t-sc-l,
+  .t-sc-r > * {
+    min-width: 0;
+  }
+  /* Tablette, un panneau d'Orbi ouvert : la page et le panneau côte à côte. */
+  .t-sc-stu.t-sc-ouvert {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    grid-template-areas: "c r";
+  }
+  .t-sc-stu.t-sc-ouvert .t-sc-l {
+    display: none;
+  }
+  .t-sc-stu.t-sc-ouvert .t-sc-r {
+    display: flex;
+    flex-direction: column;
+  }
+  .t-sc-pnl {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    border-radius: var(--r-carte);
+  }
+  .t-sc-h4 {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+  .t-sc-h4 :is(a, button) {
+    letter-spacing: 0;
+    text-transform: none;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--texte);
+  }
+  .t-sc-pnl > .t-sc-sub {
+    margin-bottom: -6px;
+  }
+  .t-sc-pnl > .t-sc-sub-h {
+    margin: -8px 0 0;
+  }
+  .t-sc-mdl {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .t-sc-mdl img {
+    width: 54px;
+    height: auto;
+    border-radius: 8px;
+    box-shadow: 0 0 0 1px var(--trait);
+  }
+  .t-sc-mdl div {
+    flex: 1;
+  }
+  .t-sc-mdl b {
+    display: block;
+    font-size: 14px;
+  }
+  .t-sc-mdl span {
+    font-size: 11.5px;
+    color: var(--texte2);
+  }
+  .t-sc-sw8 {
+    display: grid;
+    grid-template-columns: repeat(8, 1fr);
+    gap: 6px;
+  }
+  .t-sc-sw8 button {
+    display: block;
+    border-radius: 50%;
+  }
+  .t-sc-sw8 i {
+    aspect-ratio: 1;
+    border-radius: 50%;
+    display: block;
+    box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.08);
+  }
+  .t-sc-sw8 [aria-pressed="true"] i {
+    box-shadow:
+      0 0 0 2px var(--fond),
+      0 0 0 4px var(--texte);
+  }
+  .t-sc-pol {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .t-sc-pol button {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    min-height: 40px;
+    padding: 8px 10px;
+    border-radius: 12px;
+    font-size: 14px;
+    color: var(--texte);
+    text-align: left;
+  }
+  .t-sc-pol [aria-pressed="true"] {
+    background: var(--zone);
+    font-weight: 600;
+  }
+  .t-sc-pol em {
+    font-style: normal;
+    font-size: 10.5px;
+    font-weight: 700;
+    padding: 3px 8px;
+    border-radius: 999px;
+    background: var(--lime-c);
+    font-family: Sora, sans-serif;
+  }
+  .t-sc-s3 > button {
+    font-size: 12.5px;
+  }
+  .t-sc-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13.5px;
+    font-weight: 600;
+  }
+  .t-sc-row small {
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--texte2);
+    text-align: right;
+  }
+  .t-sc-s2 {
+    width: 150px;
+  }
+  .t-sc-zoom {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    justify-content: center;
+    min-height: 30px;
+    font-size: 12px;
+    color: var(--texte2);
+  }
+  .t-sc-zoom span {
+    padding: 6px 10px;
+    border-radius: 999px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+    font-weight: 600;
+    color: var(--texte);
+  }
+  .t-sc-pgs {
+    display: flex;
+    gap: 10px;
+  }
+  .t-sc-pgs > div {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    align-items: center;
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+  .t-sc-vgn,
+  .t-sc-add {
+    position: relative;
+    display: block;
+    width: 100%;
+    aspect-ratio: 210 / 297;
+    border-radius: 6px;
+    overflow: hidden;
+  }
+  .t-sc-vgn {
+    background: #fff;
+    box-shadow: 0 0 0 1px var(--trait);
+  }
+  .t-sc-vgn .cv-page {
+    box-shadow: none;
+  }
+  /* La copie de la page (794 px, réduite en JS) ne compte pas dans la largeur du panneau. */
+  .t-sc-vgn > * {
+    position: absolute;
+    top: 0;
+    left: 0;
+  }
+  .t-sc-pgs > .t-on .t-sc-vgn {
+    box-shadow: 0 0 0 2px var(--texte);
+  }
+  .t-sc-add {
+    border: 1.5px dashed var(--trait);
+    display: grid;
+    place-items: center;
+    color: var(--texte2);
+  }
+  .t-sc-lk {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .t-sc-lk button {
+    width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 8px 10px;
+    border-radius: 12px;
+    background: var(--zone);
+    color: var(--texte);
+    text-align: left;
+  }
+  .t-sc-fmt {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    border: 0;
+    padding: 0;
+    margin: 0;
+  }
+  .t-sc-fmt label {
+    padding: 10px;
+    border-radius: 14px;
+    background: var(--zone);
+    font-size: 12px;
+    text-align: center;
+    line-height: 1.3;
+    cursor: pointer;
+  }
+  .t-sc-fmt label b {
+    display: block;
+    font-size: 13.5px;
+  }
+  .t-sc-fmt label.t-on {
+    background: var(--g-accent);
+    color: #0f3f37;
+  }
+  .t-sc-fmt label:has(:focus-visible) {
+    outline: 2px solid var(--texte);
+    outline-offset: 2px;
+  }
+  .t-sc-fn {
+    font-size: 12px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--zone);
+    color: var(--texte2);
+    overflow-wrap: anywhere;
+  }
+  .t-sc-r .t-sc-pnl > .t-bt {
+    width: 100%;
+  }
+  /* Sections (.secs) */
+  .t-sc-secs {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .t-sc-secs .t-li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 9px 6px;
+    border-radius: 12px;
+    font-size: 13.5px;
+    border: 0;
+  }
+  .t-sc-secs .t-li:has([aria-current]) {
+    background: var(--zone);
+  }
+  .t-sc-secs .t-t {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .t-sc-secs .t-t b {
+    font-weight: 600;
+  }
+  .t-sc-secs .t-t span {
+    font-size: 11.5px;
+    color: var(--texte2);
+  }
+  .t-sc-secs .t-sw {
+    transform: scale(0.8);
+  }
+  .t-sc-orb-b {
+    background: var(--g-accomp);
+    font-weight: 700;
+    padding: 5px 10px 5px 6px;
+  }
+  /* Panneau d'Orbi dans le studio (.op.cv) */
+  .t-sc-op {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    padding: 20px 22px;
+    border-radius: 28px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+    overflow: hidden;
+    min-width: 0;
+  }
+  .t-sc-op::before {
+    content: "";
+    position: absolute;
+    inset: 0 0 auto;
+    height: 240px;
+    background: radial-gradient(90% 80% at 80% 0%, rgba(166, 242, 107, 0.22), transparent 65%);
+    pointer-events: none;
+  }
+  .t-sc-op > * {
+    position: relative;
+  }
+  .t-sc-opt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .t-sc-opt .t-t {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-sc-opt h2 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .t-sc-opt p {
+    font-size: 12px;
+    color: var(--texte2);
+  }
+  .t-sc-opt .t-bi {
+    width: 38px;
+    height: 38px;
+    flex: none;
+  }
+  .t-sc-op .t-ck-t {
+    margin-bottom: -6px;
+  }
+  .t-sc-avap {
+    border-radius: 18px;
+    gap: 6px;
+    padding: 12px 14px;
+  }
+  .t-sc-avap h3,
+  .t-sc-avap label {
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+  }
+  .t-sc-avap.t-av-a {
+    background: var(--zone);
+  }
+  .t-sc-avap.t-av-a p {
+    text-decoration: none;
+    font-size: 13px;
+  }
+  .t-avap.t-ap.t-sc-avap {
+    background: var(--plein);
+    box-shadow: 0 0 0 1.5px #a6f26b;
+  }
+  .t-sc-avap.t-ap p {
+    font-size: 13px;
+  }
+  .t-sc-avap.t-ap mark {
+    background: var(--lime-c);
+    padding: 0 3px;
+  }
+  .t-sc-avap textarea {
+    width: 100%;
+    min-height: 130px;
+    padding: 10px 12px;
+    border-radius: 12px;
+    background: var(--zone);
+    font-size: 13px;
+    line-height: 1.5;
+    color: var(--texte);
+    resize: vertical;
+  }
+  .t-sc-op > .t-pq {
+    align-self: flex-start;
+  }
+  .t-sc-acts3 {
+    display: flex;
+    gap: 8px;
+  }
+  .t-sc-acts3 .t-bt {
+    flex: 1;
+    min-width: 0;
+    height: 46px;
+    font-size: 13.5px;
+    padding: 0 10px;
+  }
+  .t-sc-ecart {
+    padding: 12px 14px;
+    border-radius: 18px;
+  }
+  .t-sc-op .t-sc-form > .t-bt,
+  .t-sc-op > .t-flux > .t-bt {
+    height: 52px;
+  }
+  /* « Demander à Orbi » (.op-c) */
+  .t-sc-ask {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: 52px;
+    padding: 0 6px 0 16px;
+    border-radius: 999px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+    font-size: 13px;
+    color: var(--texte2);
+  }
+  .t-sc-ask input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    background: none;
+    border: 0;
+    font-size: 13px;
+    color: var(--texte);
+  }
+  .t-sc-ask input::placeholder {
+    color: var(--texte2);
+  }
+  .t-sc-ask:focus-within {
+    box-shadow:
+      0 0 0 2px var(--texte),
+      var(--verre);
+  }
+  .t-sc-ask input:focus-visible {
+    outline: 0;
+  }
+  .t-sc-ask .t-sc-env {
+    width: 40px;
+    height: 40px;
+    background: #0f3f37;
+    color: #a6f26b;
+  }
+}
+
+@media (min-width: 1200px) {
+  /* Le studio garde le rail de 84 px sur ordinateur (planche § 3). */
+  html.t-studio .t-cadre {
+    --t-nav-w: 84px;
+  }
+  html.t-studio .t-cadre .t-sb {
+    display: none;
+  }
+  html.t-studio .t-cadre .t-rl {
+    display: flex;
+  }
+  .t-sc-wh h1 {
+    font-size: 32px;
+  }
+  .t-sc-g2r {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 22px;
+  }
+  .t-sc-lkd {
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  }
+  .t-sc-gal {
+    grid-template-columns: minmax(0, 1fr) 340px;
+  }
+  .t-sc-gd {
+    position: sticky;
+    top: 14px;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    z-index: auto;
+    display: flex;
+    align-items: stretch;
+    background: var(--surface);
+    box-shadow: var(--verre);
+  }
+  .t-sc-gd > :is(.t-sc-big, .t-sc-tg, .t-sc-neutre) {
+    display: flex;
+  }
+  .t-sc-gd > .t-sc-big {
+    display: block;
+  }
+  .t-sc-gd .t-sc-use {
+    width: 100%;
+  }
+  .t-sc-galerie {
+    padding-bottom: 0;
+  }
+  .t-sc-orbt {
+    display: inline-flex;
+  }
+  .t-sc-stu,
+  .t-sc-stu.t-sc-ouvert {
+    grid-template-columns: 270px minmax(0, 1fr) 380px;
+    grid-template-areas: "l c r";
+  }
+  .t-sc-stu.t-sc-mef {
+    grid-template-columns: 300px minmax(0, 1fr) 260px;
+  }
+  .t-sc-stu.t-sc-ouvert .t-sc-l {
+    display: block;
+  }
+  .t-sc-r {
+    display: flex;
+    flex-direction: column;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-sc-tp,
+  .t-sc-cvk,
+  .t-sc-o {
+    transition: none;
+    animation: none;
+  }
+}

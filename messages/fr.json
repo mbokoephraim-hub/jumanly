@@ -4277,6 +4277,143 @@
         "consent": "Autoriser Orbi",
         "plans": "Voir les formules"
       }
+    },
+    "web": {
+      "list": {
+        "lead": "Vos CV, vos lettres et votre profil LinkedIn.",
+        "newHint": "Depuis mon profil",
+        "importHint": "PDF, Word ou LinkedIn",
+        "adaptedBadge": "Adapté",
+        "preview": "Aperçu de « {title} »"
+      },
+      "orbi": {
+        "title": "Orbi pour vos CV",
+        "credits": "{count, plural, =0 {0 crédit} one {# crédit} other {# crédits}} · rien n'est modifié sans votre accord",
+        "creditsUnlimited": "Rien n'est modifié sans votre accord",
+        "improve": "Améliorer mon CV",
+        "improveHint": "Phrase par phrase, avant et après",
+        "offer": "Adapter à une offre",
+        "offerHint": "Une offre de Jumanly",
+        "text": "Adapter à un texte",
+        "textHint": "Une annonce ou un appel collé",
+        "needCv": "Créez d'abord un CV : Orbi part de ce que vous avez écrit.",
+        "pending": "{count, plural, one {# proposition à revoir} other {# propositions à revoir}}",
+        "ask": "Demander à Orbi",
+        "send": "Envoyer à Orbi"
+      },
+      "import": {
+        "lead": "Orbi lit votre fichier et vous montre ce qu'il a compris. Rien n'est ajouté sans votre accord.",
+        "drop": "Déposer un fichier ou parcourir",
+        "dropHint": "PDF ou Word, {max} Mo au plus · ou le PDF de votre profil LinkedIn",
+        "cancel": "Annuler"
+      },
+      "templates": {
+        "lead": "{included, plural, one {# modèle inclus dans votre formule} other {# modèles inclus dans votre formule}}",
+        "leadMore": "{included, plural, one {# modèle inclus dans votre formule} other {# modèles inclus dans votre formule}} · {others, plural, one {# autre avec {plans}} other {# autres avec {plans}}}",
+        "back": "Retour au CV",
+        "filter": {
+          "tous": "Tous ({count})",
+          "inclus": "Inclus dans ma formule ({count})",
+          "photo": "Avec photo",
+          "une": "Une colonne",
+          "ats": "ATS excellente"
+        },
+        "layout": {
+          "one": "Une colonne",
+          "two": "Deux colonnes",
+          "side": "Barre latérale",
+          "frise": "Frise"
+        },
+        "photo": "Photo facultative",
+        "pages": "{min, plural, one {# page} other {# pages}}",
+        "pagesRange": "{min} à {max} pages",
+        "yourContent": "Aperçu avec votre contenu.",
+        "neutral": "Vos CV téléchargés ne portent ni logo ni mention Jumanly.",
+        "selected": "(sélectionné)"
+      },
+      "studio": {
+        "back": "Retour à mes CV",
+        "saved": "Enregistré · {when}",
+        "tabs": "Partie du studio",
+        "tab": {
+          "content": "Contenu",
+          "style": "Mise en forme"
+        },
+        "orbi": "Orbi",
+        "download": "Télécharger",
+        "copyBadge": "Copie adaptée",
+        "preview": "Votre CV, tel qu'il sera téléchargé",
+        "zoom": "{percent} %",
+        "pagesCount": "{count, plural, one {# page} other {# pages}} sur {max} au maximum",
+        "modelLine": "{access} · {ats}",
+        "change": "Changer",
+        "photo": "Photo",
+        "titles": "Titres",
+        "titlesFr": "FR",
+        "titlesEn": "EN",
+        "colorName": "Couleur {name}",
+        "pagesMax": "1 à {max} pages au maximum",
+        "breaksLead": "Choisissez la section qui commencera une nouvelle page.",
+        "pdf": "PDF",
+        "pdfHint": "Recommandé",
+        "word": "Word",
+        "wordHint": "Modifiable",
+        "formats": "Format du fichier",
+        "file": "{name} · {count, plural, one {# page} other {# pages}}",
+        "fileWord": "{name} · une colonne",
+        "neutral": "Sans logo ni mention Jumanly.",
+        "wordDone": "Version Word téléchargée.",
+        "sections": "Sections",
+        "sectionsHint": "Glisser pour réordonner · masquer sans supprimer",
+        "show": "Afficher « {section} » sur le CV",
+        "close": "Fermer"
+      },
+      "change": {
+        "improveSub": "{count, plural, one {# proposition à revoir} other {# propositions à revoir}}",
+        "copyTitle": "Copie adaptée",
+        "others": "{count, plural, one {# autre proposition} other {# autres propositions}}",
+        "toCheck": "{count, plural, one {# changement · à valider un par un} other {# changements · à valider un par un}}",
+        "section": {
+          "summary": "Résumé",
+          "headline": "Titre",
+          "bullet": "Expérience"
+        },
+        "line": "{section} : {text}",
+        "copyNote": "Copie « {title} » : votre CV d'origine est intact.",
+        "highlight": "Proposition",
+        "refuseAll": "Tout refuser",
+        "acceptAll": "Tout accepter",
+        "allApplied": "{count, plural, one {# changement appliqué.} other {# changements appliqués.}}",
+        "allRefused": "Votre texte reste tel quel : aucune proposition appliquée."
+      },
+      "tailor": {
+        "offerSub": "Une copie, l'original ne bouge pas",
+        "choose": "Choisir l'offre",
+        "changes": "Ce qu'Orbi changera",
+        "textSub": "Collez une annonce, un appel ou une fiche de poste",
+        "source": "D'où vient ce texte ?",
+        "found": "Ce qu'Orbi a repéré",
+        "cost": "{count, plural, one {# crédit Orbi} other {# crédits Orbi}} · {left, plural, =0 {plus de crédit ce mois-ci} one {# restant} other {# restants}}",
+        "costOnly": "{count, plural, one {# crédit Orbi} other {# crédits Orbi}}",
+        "kind": {
+          "annonce": "Annonce trouvée ailleurs",
+          "appel": "Appel à candidatures",
+          "bourse": "Bourse ou concours",
+          "fiche": "Fiche de poste"
+        }
+      },
+      "linkedin": {
+        "source": "Depuis votre profil",
+        "headline": "Titre",
+        "about": "Infos",
+        "skills": "Compétences"
+      },
+      "letters": {
+        "title": "Lettres",
+        "help": "Orbi peut aider",
+        "helpText": "Rédiger une lettre pour une offre ou un texte collé, à relire avant l'envoi.",
+        "empty": "Pas encore de lettre."
+      }
     }
   },
   "talentOrbi": {

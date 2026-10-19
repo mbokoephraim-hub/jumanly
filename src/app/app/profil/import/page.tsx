@@ -6,6 +6,7 @@ import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { ImportDrop, ImportRow } from "@/components/talent/cv/import-file";
+import { importGroups } from "@/components/talent/cv/import-groups";
 import { applyCvImportAction, readCvFileAction } from "@/server/actions/cv-import";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -35,40 +36,7 @@ export default async function CvImportPage({ searchParams }: PageProps<"/app/pro
   const read = pending ? parseImport(pending.payload) : null;
   const error = errors.find((code) => code === query.erreur);
   const megabytes = Math.round(CV_FILE_MAX_BYTES / (1024 * 1024));
-  const preview = (items: string[]) =>
-    items.length > 2 ? `${items.slice(0, 2).join(", ")}…` : items.join(", ");
-  const groups = read
-    ? [
-        {
-          key: "experiences",
-          icon: "entreprise" as const,
-          tone: "t-c2",
-          title: t("docs.import.found.experiences", { count: read.experiences.length }),
-          line: preview(
-            read.experiences.map((item) => [item.title, item.company].filter(Boolean).join(", ")),
-          ),
-          count: read.experiences.length,
-        },
-        {
-          key: "skills",
-          icon: "cap" as const,
-          tone: "t-c1",
-          title: t("docs.import.found.skills", { count: read.skills.length }),
-          line: preview(read.skills),
-          count: read.skills.length,
-        },
-        {
-          key: "educations",
-          icon: "former" as const,
-          tone: "t-c3",
-          title: t("docs.import.found.educations", { count: read.educations.length }),
-          line: preview(
-            read.educations.map((item) => [item.degree, item.school].filter(Boolean).join(", ")),
-          ),
-          count: read.educations.length,
-        },
-      ].filter((group) => group.count > 0)
-    : [];
+  const groups = read ? importGroups(read, await getTranslations("docs.import")) : [];
   const undated = read?.experiences.filter((item) => !item.start).length ?? 0;
 
   return (

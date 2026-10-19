@@ -3640,6 +3640,120 @@ Conventions :
 | `docs.ai.cta.consent` | Autoriser Orbi |
 | `docs.ai.cta.plans` | Voir les formules |
 
+### Refonte web · Studio CV
+
+*Ordinateur et tablette (planche `docs/refonte-web/studio-cv`) : Mes CV en aperçu réel avec « Orbi pour vos CV », fenêtre « Importer un CV », galerie des 15 modèles avec le détail à droite, studio en trois panneaux (sections ou mise en forme, page A4, Orbi ou pages et export), adapter à une offre ou à un texte collé, lettres et LinkedIn côte à côte. Orbi propose, le talent décide : rien n'est appliqué sans « Accepter ».*
+
+| Clé | Texte |
+|---|---|
+| `docs.web.list.lead` | Vos CV, vos lettres et votre profil LinkedIn. |
+| `docs.web.list.newHint` | Depuis mon profil |
+| `docs.web.list.importHint` | PDF, Word ou LinkedIn |
+| `docs.web.list.adaptedBadge` | Adapté |
+| `docs.web.list.preview` | Aperçu de « {title} » |
+| `docs.web.orbi.title` | Orbi pour vos CV |
+| `docs.web.orbi.credits` | {count, plural, =0 {0 crédit} one {# crédit} other {# crédits}} · rien n'est modifié sans votre accord |
+| `docs.web.orbi.creditsUnlimited` | Rien n'est modifié sans votre accord |
+| `docs.web.orbi.improve` | Améliorer mon CV |
+| `docs.web.orbi.improveHint` | Phrase par phrase, avant et après |
+| `docs.web.orbi.offer` | Adapter à une offre |
+| `docs.web.orbi.offerHint` | Une offre de Jumanly |
+| `docs.web.orbi.text` | Adapter à un texte |
+| `docs.web.orbi.textHint` | Une annonce ou un appel collé |
+| `docs.web.orbi.needCv` | Créez d'abord un CV : Orbi part de ce que vous avez écrit. |
+| `docs.web.orbi.pending` | {count, plural, one {# proposition à revoir} other {# propositions à revoir}} |
+| `docs.web.orbi.ask` | Demander à Orbi |
+| `docs.web.orbi.send` | Envoyer à Orbi |
+| `docs.web.import.lead` | Orbi lit votre fichier et vous montre ce qu'il a compris. Rien n'est ajouté sans votre accord. |
+| `docs.web.import.drop` | Déposer un fichier ou parcourir |
+| `docs.web.import.dropHint` | PDF ou Word, {max} Mo au plus · ou le PDF de votre profil LinkedIn |
+| `docs.web.import.cancel` | Annuler |
+| `docs.web.templates.lead` | {included, plural, one {# modèle inclus dans votre formule} other {# modèles inclus dans votre formule}} |
+| `docs.web.templates.leadMore` | {included, plural, one {# modèle inclus dans votre formule} other {# modèles inclus dans votre formule}} · {others, plural, one {# autre avec {plans}} other {# autres avec {plans}}} |
+| `docs.web.templates.back` | Retour au CV |
+| `docs.web.templates.filter.tous` | Tous ({count}) |
+| `docs.web.templates.filter.inclus` | Inclus dans ma formule ({count}) |
+| `docs.web.templates.filter.photo` | Avec photo |
+| `docs.web.templates.filter.une` | Une colonne |
+| `docs.web.templates.filter.ats` | ATS excellente |
+| `docs.web.templates.layout.one` | Une colonne |
+| `docs.web.templates.layout.two` | Deux colonnes |
+| `docs.web.templates.layout.side` | Barre latérale |
+| `docs.web.templates.layout.frise` | Frise |
+| `docs.web.templates.photo` | Photo facultative |
+| `docs.web.templates.pages` | {min, plural, one {# page} other {# pages}} |
+| `docs.web.templates.pagesRange` | {min} à {max} pages |
+| `docs.web.templates.yourContent` | Aperçu avec votre contenu. |
+| `docs.web.templates.neutral` | Vos CV téléchargés ne portent ni logo ni mention Jumanly. |
+| `docs.web.templates.selected` | (sélectionné) |
+| `docs.web.studio.back` | Retour à mes CV |
+| `docs.web.studio.saved` | Enregistré · {when} |
+| `docs.web.studio.tabs` | Partie du studio |
+| `docs.web.studio.tab.content` | Contenu |
+| `docs.web.studio.tab.style` | Mise en forme |
+| `docs.web.studio.orbi` | Orbi |
+| `docs.web.studio.download` | Télécharger |
+| `docs.web.studio.copyBadge` | Copie adaptée |
+| `docs.web.studio.preview` | Votre CV, tel qu'il sera téléchargé |
+| `docs.web.studio.zoom` | {percent} % |
+| `docs.web.studio.pagesCount` | {count, plural, one {# page} other {# pages}} sur {max} au maximum |
+| `docs.web.studio.modelLine` | {access} · {ats} |
+| `docs.web.studio.change` | Changer |
+| `docs.web.studio.photo` | Photo |
+| `docs.web.studio.titles` | Titres |
+| `docs.web.studio.titlesFr` | FR |
+| `docs.web.studio.titlesEn` | EN |
+| `docs.web.studio.colorName` | Couleur {name} |
+| `docs.web.studio.pagesMax` | 1 à {max} pages au maximum |
+| `docs.web.studio.breaksLead` | Choisissez la section qui commencera une nouvelle page. |
+| `docs.web.studio.pdf` | PDF |
+| `docs.web.studio.pdfHint` | Recommandé |
+| `docs.web.studio.word` | Word |
+| `docs.web.studio.wordHint` | Modifiable |
+| `docs.web.studio.formats` | Format du fichier |
+| `docs.web.studio.file` | {name} · {count, plural, one {# page} other {# pages}} |
+| `docs.web.studio.fileWord` | {name} · une colonne |
+| `docs.web.studio.neutral` | Sans logo ni mention Jumanly. |
+| `docs.web.studio.wordDone` | Version Word téléchargée. |
+| `docs.web.studio.sections` | Sections |
+| `docs.web.studio.sectionsHint` | Glisser pour réordonner · masquer sans supprimer |
+| `docs.web.studio.show` | Afficher « {section} » sur le CV |
+| `docs.web.studio.close` | Fermer |
+| `docs.web.change.improveSub` | {count, plural, one {# proposition à revoir} other {# propositions à revoir}} |
+| `docs.web.change.copyTitle` | Copie adaptée |
+| `docs.web.change.others` | {count, plural, one {# autre proposition} other {# autres propositions}} |
+| `docs.web.change.toCheck` | {count, plural, one {# changement · à valider un par un} other {# changements · à valider un par un}} |
+| `docs.web.change.section.summary` | Résumé |
+| `docs.web.change.section.headline` | Titre |
+| `docs.web.change.section.bullet` | Expérience |
+| `docs.web.change.line` | {section} : {text} |
+| `docs.web.change.copyNote` | Copie « {title} » : votre CV d'origine est intact. |
+| `docs.web.change.highlight` | Proposition |
+| `docs.web.change.refuseAll` | Tout refuser |
+| `docs.web.change.acceptAll` | Tout accepter |
+| `docs.web.change.allApplied` | {count, plural, one {# changement appliqué.} other {# changements appliqués.}} |
+| `docs.web.change.allRefused` | Votre texte reste tel quel : aucune proposition appliquée. |
+| `docs.web.tailor.offerSub` | Une copie, l'original ne bouge pas |
+| `docs.web.tailor.choose` | Choisir l'offre |
+| `docs.web.tailor.changes` | Ce qu'Orbi changera |
+| `docs.web.tailor.textSub` | Collez une annonce, un appel ou une fiche de poste |
+| `docs.web.tailor.source` | D'où vient ce texte ? |
+| `docs.web.tailor.found` | Ce qu'Orbi a repéré |
+| `docs.web.tailor.cost` | {count, plural, one {# crédit Orbi} other {# crédits Orbi}} · {left, plural, =0 {plus de crédit ce mois-ci} one {# restant} other {# restants}} |
+| `docs.web.tailor.costOnly` | {count, plural, one {# crédit Orbi} other {# crédits Orbi}} |
+| `docs.web.tailor.kind.annonce` | Annonce trouvée ailleurs |
+| `docs.web.tailor.kind.appel` | Appel à candidatures |
+| `docs.web.tailor.kind.bourse` | Bourse ou concours |
+| `docs.web.tailor.kind.fiche` | Fiche de poste |
+| `docs.web.linkedin.source` | Depuis votre profil |
+| `docs.web.linkedin.headline` | Titre |
+| `docs.web.linkedin.about` | Infos |
+| `docs.web.linkedin.skills` | Compétences |
+| `docs.web.letters.title` | Lettres |
+| `docs.web.letters.help` | Orbi peut aider |
+| `docs.web.letters.helpText` | Rédiger une lettre pour une offre ou un texte collé, à relire avant l'envoi. |
+| `docs.web.letters.empty` | Pas encore de lettre. |
+
 ### `/app/orbi` · Orbi en plein écran
 
 *L'onglet central, en page de conversation (talent lot 4 § 9) : retour en haut, pas de barre du bas. Les quatre aides mènent aux fonctions existantes ; la conversation libre est gardée dans l'historique. Orbi propose, la personne décide.*

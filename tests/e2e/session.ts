@@ -145,7 +145,11 @@ export async function finishOnboarding(page: Page, place?: { country: string; ci
  */
 export async function newCvFromList(page: Page) {
   await page.goto("/app/career/cv");
-  await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
+  // « Nouveau CV » on a phone, « Nouveau CV · Depuis mon profil » on a computer (studio CV web).
+  await page
+    .getByRole("button", { name: /^Nouveau CV/ })
+    .filter({ visible: true })
+    .click();
   await page.getByRole("dialog").getByRole("button", { name: "Créer et ouvrir" }).click();
   await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
   return new URL(page.url()).pathname.split("/").pop()!;

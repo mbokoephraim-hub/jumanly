@@ -59,6 +59,9 @@ function WebDialog({
     const node = dialog.current;
     if (!node || node.open) return;
     const fromAddress = openParam && new URL(window.location.href).searchParams.has(openParam);
+    // A window of a layout hidden at this width (computer only, phone only) never opens: a hidden
+    // modal would leave the whole page inert.
+    if (node.parentElement?.checkVisibility?.() === false) return;
     if (defaultOpen || fromAddress) node.showModal();
   }, [defaultOpen, openParam]);
   useEffect(() => {

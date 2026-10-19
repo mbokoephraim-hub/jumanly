@@ -83,11 +83,19 @@ test("lettre, correction et LinkedIn à partir du profil", async ({ page, isMobi
   await page.getByRole("link", { name: "Préparer mon LinkedIn" }).click();
   await expect(page).toHaveURL(/\/app\/career\/linkedin$/);
   await page.getByRole("button", { name: /^(Préparer|Proposer à nouveau)/ }).click();
-  await expect(page.getByRole("heading", { name: "Titre proposé", level: 2 })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Résumé proposé", level: 2 })).toBeVisible();
-  await expect(page.getByText("Rien n'est publié sur LinkedIn", { exact: false })).toBeVisible();
+  // On a computer (planche studio-cv § 7): Titre, Infos, Compétences, each one to copy.
+  const linkedin = page.getByRole("region", { name: "Préparer LinkedIn" });
+  for (const name of ["Titre", "Infos", "Compétences"]) {
+    await expect(linkedin.getByRole("heading", { name, level: 3 })).toBeVisible();
+  }
+  await expect(linkedin.getByRole("button", { name: "Copier" })).toHaveCount(3);
   await expect(
-    page.getByText("Jumanly n'est pas affilié à LinkedIn", { exact: false }),
+    page.getByText("Rien n'est publié sur LinkedIn", { exact: false }).filter({ visible: true }),
+  ).toBeVisible();
+  await expect(
+    page
+      .getByText("Jumanly n'est pas affilié à LinkedIn", { exact: false })
+      .filter({ visible: true }),
   ).toBeVisible();
   await expectAccessible(page);
 });

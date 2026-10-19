@@ -20,10 +20,13 @@ export type TailorOfferRow = {
 export function TailorOffer({
   offers,
   legend,
+  changes,
   children,
 }: {
   offers: TailorOfferRow[];
   legend: string;
+  /** Heading of the lines (« Ce qu'Orbi changera », web studio); without it, no heading. */
+  changes?: string;
   /** The submit button, after the note. */
   children: ReactNode;
 }) {
@@ -48,6 +51,7 @@ export function TailorOffer({
           </label>
         ))}
       </fieldset>
+      {offer.lines.length > 0 && changes && <p className="t-ck-t">{changes}</p>}
       {offer.lines.length > 0 && (
         <ul className="t-verre t-ecart" aria-live="polite">
           {offer.lines.map((line) => (
@@ -73,14 +77,20 @@ export function TailorOffer({
  */
 export function TailorText({
   cvId,
+  idPrefix = "",
   max,
   kinds,
   labels,
+  headings = false,
 }: {
   cvId: string;
+  /** Keeps the ids of the phone sheet and of the web panel apart. */
+  idPrefix?: string;
   max: number;
   kinds: { value: string; label: string; placeholder: string }[];
   labels: { kinds: string; text: string; count: string; present: string; missing: string };
+  /** Visible headings (« D'où vient ce texte ? », « Ce qu'Orbi a repéré »): the web studio. */
+  headings?: boolean;
 }) {
   const [kind, setKind] = useState(kinds[0]?.value ?? "");
   const [text, setText] = useState("");
@@ -106,8 +116,8 @@ export function TailorText({
   return (
     <>
       <fieldset>
-        <legend className="sr-only">{labels.kinds}</legend>
-        <div className="t-puces t-ligne">
+        <legend className={headings ? "t-ck-t" : "sr-only"}>{labels.kinds}</legend>
+        <div className={cx("t-puces", !headings && "t-ligne")}>
           {kinds.map((item) => (
             <label key={item.value} className="t-puce t-press">
               <input
@@ -123,11 +133,11 @@ export function TailorText({
         </div>
       </fieldset>
       <div className="t-ta">
-        <label htmlFor={`${cvId}-texte`} className="sr-only">
+        <label htmlFor={`${idPrefix}${cvId}-texte`} className="sr-only">
           {labels.text}
         </label>
         <textarea
-          id={`${cvId}-texte`}
+          id={`${idPrefix}${cvId}-texte`}
           name="text"
           required
           minLength={30}
@@ -141,6 +151,11 @@ export function TailorText({
           {labels.count.replace("{count}", text.length.toLocaleString("fr-FR"))}
         </span>
       </div>
+      {headings && (shown.present.length > 0 || shown.missing.length > 0) && (
+        <p className="t-ck-t" aria-hidden>
+          {labels.present}
+        </p>
+      )}
       {(shown.present.length > 0 || shown.missing.length > 0) && (
         <ul className="t-kw" aria-label={labels.present}>
           {shown.present.map((word) => (

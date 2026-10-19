@@ -16,10 +16,13 @@ export function SectionOrder({
   documentId,
   rows,
   labels,
+  className = "t-verre t-liste t-edl",
 }: {
   documentId: string;
   rows: SectionRow[];
   labels: { grip: string; moved: string; error: string };
+  /** The list's look: a glass card on a phone, rows of the « Sections » panel in the web studio. */
+  className?: string;
 }) {
   const [order, setOrder] = useState(() => rows.map((row) => row.id));
   const [dragging, setDragging] = useState<string | null>(null);
@@ -64,7 +67,7 @@ export function SectionOrder({
   };
 
   return (
-    <ul ref={list} className="t-verre t-liste t-edl">
+    <ul ref={list} className={className}>
       {order.map((id, index) => {
         const row = byId.get(id);
         if (!row) return null;
