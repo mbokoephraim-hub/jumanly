@@ -2,6 +2,17 @@
 
 19 octobre 2026. Validé par Ephraïm (lots 1 à 4). Ce brief remplace, pour la forme, les maquettes mobiles précédentes (`docs/ux-mobile-talent/`, `docs/maquettes/` partie talent). Les règles métier de `docs/specifications.md` et les règles d'or du `CLAUDE.md` restent la référence.
 
+## 0. Remplacement total de l'ancien design (décision d'Ephraïm, 19/10/2026)
+
+Le nouveau design **remplace entièrement** l'ancien sur mobile. Rien de l'ancienne interface talent ne doit rester visible ni coexister.
+
+- **À supprimer du code** : anciens composants, styles, barres de navigation (barre à 5 avec Pour moi au centre, menu latéral, bouton +, bouton flottant), en-têtes, cartes et variantes de thème qui ne figurent pas dans les planches. Pas de bascule « ancien / nouveau » ni de drapeau de fonctionnalité : on remplace, puis on supprime le code mort (vérifier avec une recherche des imports inutilisés).
+- **Pages fusionnées** : les anciennes routes ne gardent qu'une redirection permanente vers la nouvelle page (audit § 3 et § 5) ; leur ancien contenu est supprimé.
+- **Documents obsolètes pour l'espace talent** : `docs/ux-mobile-talent/`, `docs/refonte-career/`, `docs/learn-v2/`, les parties talent de `docs/PROMPTS-LANCEMENT-MOBILE-ET-IA.md`, `docs/maquettes/02-connexion-inscription/`, `03-espace-talent/` et la partie talent de `05-forfaits-paiement/`, et la scène mobile de `docs/refonte-connexion/`. Ne plus s'en servir ; en cas d'écart, ce brief l'emporte.
+- **Base de données** : on ne supprime **aucune donnée** d'utilisateur. Migrations Prisma additives seulement (par exemple la signature des attestations) ; un champ qui ne sert plus que l'ancien design (préférence de thème, indicateur d'écran vu…) est retiré par une migration nommée clairement, après vérification qu'aucune page ne le lit. Le seed de démonstration est remplacé par des données cohérentes avec les nouvelles planches (toujours manifestement fictives, local et previews seulement).
+- **Écrans larges** : en attendant leur maquette, l'espace talent sur ordinateur réutilise les mêmes composants dans une colonne centrée ; l'ancien design ne revient pas sur ordinateur.
+- **Contrôle final** : une capture de chaque route `/app/*` à 390 px montre uniquement le nouveau design ; liste des fichiers supprimés dans la PR.
+
 ## 1. Sources à ouvrir
 
 | Quoi | Où |
@@ -60,14 +71,14 @@ Les anciennes routes (`tableau-de-bord`, `espace`, `learn/explorer`, `jobs/candi
 
 ## 4. Ordre de travail (un lot = une PR)
 
-0. Diagnostic de l'existant face à ce brief et plan (aucun code).
+0. Diagnostic de l'existant face à ce brief et plan (aucun code), avec la liste de ce qui sera supprimé (§ 0).
 1. Fondations : jetons, surfaces en verre, icônes (`icones.py` → SVG), barre du bas, en-têtes, boutons, cartes, Orbi, mode sombre.
 2. Connexion, inscription, onboarding, pays et drapeaux, bienvenue (lot 4 § 1-2).
 3. Pour moi, Offres, détail d'offre (lot 1).
 4. Postuler, Suivi, entretien, messages, notifications (lot 2).
 5. Apprendre, salle de cours, quiz, attestations + PDF + vérification (lot 3 et attestation).
 6. Compte, profil, diagnostic, plan, simulations d'entretien (écrites `career.interview.text.monthly`, orales `career.interview.voice.monthly`, audio effacé après le retour), CV et documents, éditeur (lot 4 § 3-6).
-7. Abonnement, paiement Mobile Money, factures, paramètres, aide, Orbi historique (lot 4 § 7-9). Redirections des anciennes routes.
+7. Abonnement, paiement Mobile Money, factures, paramètres, aide, Orbi historique (lot 4 § 7-9). Redirections des anciennes routes, suppression du code mort et du reste de l'ancien design, contrôle final du § 0.
 
 ## 5. Définition de fini, pour chaque lot
 
