@@ -1,12 +1,22 @@
 "use server";
 
+import { refresh } from "next/cache";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { onApplicationCreated } from "@/server/application-events";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { applyToJob, toggleSavedJob, withdrawApplication } from "@/server/services/applications";
-import { applySteps, saveApplicationDraft } from "@/server/services/application-draft";
+import {
+  applySteps,
+  getApplicationDraft,
+  saveApplicationDraft,
+} from "@/server/services/application-draft";
+import {
+  ATTACHMENTS_MAX,
+  parseRefs,
+  type AttachmentRef,
+} from "@/server/services/application-attachments";
 import { countJobs, isJobOpen, parseJobFilters } from "@/server/services/jobs";
 import { reportError } from "@/server/observability";
 
@@ -14,10 +24,13 @@ const applySchema = z.object({
   job: z.string().min(1).max(200),
   cv: z.string().max(60).default(""),
   coverLetter: z.string().max(5000).default(""),
-  /** Staged form (prompt 4): the consent box of the review step must be ticked. */
+  /** Staged form (planche talent-2 § 1): the documents joined come from the saved draft. */
   staged: z.literal("1").optional(),
-  consent: z.literal("on").optional(),
 });
+
+/** The pages of « Postuler » (planche talent-2 § 1). */
+const applyHref = (slug: string, step?: string) =>
+  `/app/jobs/${slug}/postuler${step ? `?etape=${step}` : ""}`;
 
 /**
  * « Envoyer ma candidature ». Order (CLAUDE.md): validate → session → service. No entitlement and
@@ -29,31 +42,35 @@ export async function applyAction(formData: FormData) {
     cv: formData.get("cv") ?? "",
     coverLetter: formData.get("coverLetter") ?? "",
     staged: formData.get("staged") ?? undefined,
-    consent: formData.get("consent") ?? undefined,
   });
   if (!parsed.success) redirect("/app/jobs");
   const { job, cv, coverLetter } = parsed.data;
   const user = await requireUser(`/app/jobs/${job}`);
-  if (parsed.data.staged && !parsed.data.consent)
-    redirect(`/app/jobs/${job}?postuler=1&etape=verification`);
+  let attachments: AttachmentRef[] = [];
+  if (parsed.data.staged) {
+    const found = await db.job.findUnique({ where: { slug: job }, select: { id: true } });
+    const draft = found && (await getApplicationDraft(db, user.id, found.id));
+    attachments = parseRefs(draft?.attachments);
+  }
   const result = await applyToJob(db, {
     userId: user.id,
     jobSlug: job,
     cvDocumentId: cv || null,
     coverLetter,
+    attachments,
   });
   if (result.status === "notFound") redirect("/app/jobs");
   if (result.status === "applied") {
     await onApplicationCreated(result.applicationId).catch((error) => reportError(error));
+    redirect(`/app/jobs/${job}/postuler?envoyee=1`);
   }
-  const outcome = { applied: "envoyee", already: "deja", closed: "close" }[result.status];
-  redirect(`/app/jobs/${job}?candidature=${outcome}`);
+  redirect(`/app/jobs/${job}?candidature=${result.status === "already" ? "deja" : "close"}`);
 }
 
 export async function withdrawAction(formData: FormData) {
-  const user = await requireUser("/app/jobs/candidatures");
-  await withdrawApplication(db, user.id, String(formData.get("id") ?? ""));
-  redirect("/app/jobs/candidatures?onglet=terminees&ok=retiree");
+  const user = await requireUser("/app/suivi");
+  await withdrawApplication(db, user.id, String(formData.get("id") ?? "").slice(0, 60));
+  redirect("/app/suivi?vue=terminees&ok=retiree");
 }
 
 const safeBack = (value: FormDataEntryValue | null) => {
@@ -73,12 +90,17 @@ const stepSchema = z.object({
   next: z.enum([...applySteps, "quitter"]),
   cv: z.string().max(60).optional(),
   coverLetter: z.string().max(5000).optional(),
+  /** Present when the form carries the whole list of joined documents (« type:id »). */
+  attachments: z.literal("1").optional(),
+  attachment: z
+    .array(z.string().max(80))
+    .max(ATTACHMENTS_MAX * 2)
+    .default([]),
 });
 
 /**
- * One step of the staged application (docs/ux-mobile-talent, prompt 4): saves the draft on the
- * server, then goes to the next step, or back to the offer with « Quitter ». Free like applying:
- * no entitlement, no quota.
+ * One step of « Postuler » (planche talent-2 § 1): saves the draft on the server, then goes to the
+ * next step, or back to the offer with « Quitter ». Free like applying: no entitlement, no quota.
  */
 export async function saveApplicationStepAction(formData: FormData) {
   const parsed = stepSchema.safeParse({
@@ -87,16 +109,24 @@ export async function saveApplicationStepAction(formData: FormData) {
     next: formData.get("next"),
     cv: formData.get("cv") ?? undefined,
     coverLetter: formData.get("coverLetter") ?? undefined,
+    attachments: formData.get("attachments") ?? undefined,
+    attachment: formData.getAll("attachment"),
   });
   if (!parsed.success) redirect("/app/jobs");
   const { job: slug, step, next, cv, coverLetter } = parsed.data;
-  const user = await requireUser(`/app/jobs/${slug}?postuler=1`);
+  const user = await requireUser(applyHref(slug));
   const job = await db.job.findUnique({
     where: { slug },
     select: { id: true, status: true, closesAt: true },
   });
   if (!job) redirect("/app/jobs");
   if (!isJobOpen(job)) redirect(`/app/jobs/${slug}?candidature=close`);
+  const attachments = parsed.data.attachments
+    ? parsed.data.attachment.flatMap((value): AttachmentRef[] => {
+        const [type, id] = value.split(":");
+        return (type === "certificate" || type === "document") && id ? [{ type, id }] : [];
+      })
+    : undefined;
   await saveApplicationDraft(db, {
     userId: user.id,
     jobId: job.id,
@@ -108,13 +138,11 @@ export async function saveApplicationStepAction(formData: FormData) {
             ? { documentId: null, profileOnly: true }
             : { documentId: cv || null, profileOnly: false },
       }),
-    ...(step === "lettre" && coverLetter !== undefined && { coverLetter }),
+    ...(coverLetter !== undefined && { coverLetter }),
+    ...(attachments && { attachments }),
   });
-  redirect(
-    next === "quitter"
-      ? `/app/jobs/${slug}?brouillon=1`
-      : `/app/jobs/${slug}?postuler=1&etape=${next}`,
-  );
+  refresh();
+  redirect(next === "quitter" ? `/app/jobs/${slug}?brouillon=1` : applyHref(slug, next));
 }
 
 /**

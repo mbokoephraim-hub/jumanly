@@ -2841,6 +2841,346 @@
     },
     "close": "Fermer"
   },
+  "apply": {
+    "seo": "Postuler · {job}",
+    "title": "Postuler",
+    "back": "Étape précédente",
+    "backOffer": "Retour à l'offre",
+    "close": "Quitter et garder le brouillon",
+    "step": "Étape {current} sur {total}",
+    "saved": "Brouillon enregistré",
+    "optional": "Facultatif",
+    "continue": "Continuer",
+    "skip": "Passer",
+    "cv": {
+      "title": "Quel CV envoyer ?",
+      "adapted": "Adapté le {date}",
+      "updated": "Mis à jour le {date}",
+      "pages": "{count, plural, one {# page} other {# pages}}",
+      "primary": "CV principal",
+      "badge": "Adapté à l'offre",
+      "profile": "Mon profil Jumanly",
+      "profileLine": "Sans CV joint : le recruteur voit votre profil.",
+      "create": "Créer un CV depuis mon profil"
+    },
+    "docs": {
+      "title": "Ajouter une lettre ou des documents",
+      "letter": "Lettre de motivation",
+      "words": "{count, plural, one {# mot} other {# mots}}",
+      "edit": "Modifier la lettre",
+      "remove": "Retirer {name}",
+      "add": "Ajouter un document",
+      "certificateLine": "Obtenue le {date}",
+      "documentLine": "Enregistré le {date}",
+      "orbi": {
+        "label": "Orbi peut aider",
+        "text": "Rédiger une lettre pour cette offre, à relire avant l'envoi.",
+        "cta": "Rédiger avec Orbi",
+        "done": "Orbi a rédigé une lettre avec votre profil et l'offre. Relisez-la avant l'envoi.",
+        "error": {
+          "consent": "Orbi a besoin de votre accord pour utiliser l'IA.",
+          "entitlement": "La rédaction avec Orbi n'est pas comprise dans votre formule. Vous pouvez écrire votre lettre vous-même.",
+          "quota": "Vous avez utilisé tous vos crédits d'IA ce mois-ci. Vous pouvez écrire votre lettre vous-même.",
+          "unavailable": "Orbi n'est pas disponible pour le moment. Réessayez plus tard ou écrivez votre lettre vous-même."
+        },
+        "errorCta": {
+          "consent": "Activer l'IA",
+          "entitlement": "Voir les formules",
+          "quota": "Voir les formules"
+        }
+      }
+    },
+    "letter": {
+      "title": "Lettre de motivation",
+      "label": "Votre lettre",
+      "hint": "Le recruteur la lira avec votre CV.",
+      "save": "Enregistrer la lettre",
+      "remove": "Retirer la lettre",
+      "write": "Écrire une lettre",
+      "use": "Utiliser"
+    },
+    "add": {
+      "documents": "Attestations et documents",
+      "none": "Vos attestations Jumanly et vos documents enregistrés apparaîtront ici.",
+      "max": "Jusqu'à {max} documents.",
+      "join": "Joindre à ma candidature"
+    },
+    "review": {
+      "title": "Vérifier et envoyer",
+      "edit": "Modifier",
+      "see": "Voir",
+      "add": "Ajouter",
+      "cv": "CV « {title} »",
+      "docs": "{count, plural, =0 {Aucun document} one {# document} other {# documents}}",
+      "guard": "{company} verra ce dossier et votre profil. Chaque consultation vous est signalée."
+    },
+    "send": "Envoyer ma candidature",
+    "sending": "Envoi en cours…",
+    "failed": {
+      "title": "Candidature pas encore envoyée.",
+      "text": "La connexion a été coupée. Votre brouillon est gardé.",
+      "retry": "Réessayer",
+      "later": "Plus tard"
+    },
+    "sent": {
+      "title": "Candidature envoyée",
+      "text": "{company} a reçu votre dossier. Vous suivrez chaque étape dans Suivi.",
+      "track": "Suivre ma candidature",
+      "similar": "Offres similaires",
+      "back": "Retour aux offres"
+    }
+  },
+  "suivi": {
+    "seo": "Suivi de mes candidatures",
+    "title": "Suivi",
+    "tabs": "Candidatures en cours ou terminées",
+    "tab": {
+      "current": "En cours",
+      "finished": "Terminées"
+    },
+    "group": {
+      "toDo": "À faire",
+      "waiting": "En attente"
+    },
+    "status": {
+      "draft": "Brouillon",
+      "sent": "Envoyée",
+      "viewed": "En examen",
+      "test": "Test à passer",
+      "shortlisted": "Présélectionnée",
+      "interview": "Entretien",
+      "offer": "Offre reçue",
+      "hired": "Recrutée ou recruté",
+      "notSelected": "Non retenue",
+      "withdrawn": "Retirée",
+      "jobClosed": "Offre clôturée"
+    },
+    "action": {
+      "slot": "Choisir un créneau",
+      "slotBefore": "Choisir un créneau avant le {date}",
+      "document": "Envoyer : {name}",
+      "documentBefore": "Envoyer {name} avant le {date}",
+      "draft": "Terminer ma candidature"
+    },
+    "similar": {
+      "title": "Ce n'est pas la fin du parcours.",
+      "text": "{count, plural, one {# offre proche de celle-ci vous attend.} other {# offres proches de celle-ci vous attendent.}}",
+      "cta": "Voir les offres"
+    },
+    "empty": {
+      "title": "Aucune candidature en cours",
+      "text": "Quand vous postulez, chaque étape s'affiche ici. Postuler est toujours gratuit.",
+      "cta": "Voir les offres",
+      "finished": "Aucune candidature terminée pour l'instant."
+    },
+    "withdrawn": "Votre candidature est retirée. Le recruteur en est informé."
+  },
+  "candidature": {
+    "seo": "Ma candidature",
+    "title": "Candidature",
+    "back": "Retour au suivi",
+    "options": "Options de la candidature",
+    "seeOffer": "Voir l'offre",
+    "sentOn": "{company} · envoyée le {date}",
+    "invite": {
+      "label": "Invitation à un entretien",
+      "confirm": "Confirmer",
+      "other": "Autre date",
+      "zone": "Heures de {city}",
+      "waiting": "Vos créneaux sont envoyés. Le recruteur vous répond ici.",
+      "confirmedLabel": "Entretien confirmé",
+      "when": "{day} à {time}",
+      "calendar": "Ajouter à mon agenda"
+    },
+    "ok": {
+      "confirmed": "Entretien confirmé. Le recruteur est prévenu.",
+      "proposed": "Vos créneaux sont envoyés au recruteur.",
+      "declined": "Vous avez décliné l'entretien. Le recruteur est prévenu.",
+      "document": "Document envoyé au recruteur."
+    },
+    "error": {
+      "document": "Le document n'a pas pu être envoyé. Réessayez."
+    },
+    "prepare": {
+      "title": "Préparer cet entretien",
+      "line": "Briefing et entraînement avec Orbi"
+    },
+    "history": "Historique",
+    "step": {
+      "sent": "Envoyée",
+      "viewed": "En examen",
+      "viewedLine": "{date} · votre profil a été consulté",
+      "shortlisted": "Présélectionnée",
+      "test": "Test à passer",
+      "interview": "Étape entretien",
+      "offer": "Offre reçue",
+      "hired": "Recrutée ou recruté",
+      "notSelected": "Non retenue",
+      "withdrawn": "Retirée",
+      "moved": "Étape « {stage} »",
+      "interviewProposed": "Entretien proposé",
+      "interviewConfirmed": "Entretien confirmé"
+    },
+    "file": {
+      "title": "Dossier envoyé",
+      "frozen": "Version figée du {date}"
+    },
+    "messages": {
+      "title": "Messages",
+      "open": "Ouvrir la conversation",
+      "none": "Pas encore de message. Le recruteur vous écrira ici."
+    },
+    "requests": {
+      "title": "Demandé par le recruteur",
+      "due": "À envoyer avant le {date}",
+      "add": "Ajouter",
+      "choose": "Choisir un document",
+      "none": "Vous n'avez pas encore de document à envoyer. Ajoutez-le dans Mes documents, ou répondez dans la conversation.",
+      "send": "Envoyer ce document"
+    },
+    "withdraw": {
+      "cta": "Retirer ma candidature",
+      "title": "Retirer votre candidature ?",
+      "text": "{company} sera informé. Vous pourrez postuler à d'autres offres à tout moment.",
+      "confirm": "Oui, retirer ma candidature"
+    }
+  },
+  "practice": {
+    "seo": "S'entraîner à l'entretien",
+    "title": "S'entraîner",
+    "back": "Retour",
+    "close": "Fermer l'entraînement",
+    "interviewWith": "Entretien {company}",
+    "mode": {
+      "video": "visio",
+      "audio": "téléphone",
+      "onsite": "sur place"
+    },
+    "know": {
+      "title": "Ce qu'il faut savoir",
+      "company": "L'entreprise",
+      "checked": "Ce qu'ils vérifieront",
+      "weak": "Votre point faible",
+      "weakLine": "{skill} : préparez un exemple"
+    },
+    "jobTitle": "Le poste visé",
+    "kind": {
+      "title": "Type d'entraînement",
+      "length": "Durée",
+      "mode": "Écrit ou oral",
+      "quick": "Rapide",
+      "standard": "Standard",
+      "full": "Complet",
+      "minutes": "{count} min",
+      "text": "Écrit",
+      "voice": "Oral"
+    },
+    "private": "Privé : le recruteur ne voit jamais vos entraînements.",
+    "start": "Commencer",
+    "questionKind": "Question · {kind}",
+    "tip": {
+      "hr": "Parlez d'une expérience précise : la situation, ce que vous avez fait, le résultat.",
+      "technical": "Pensez à donner un résultat chiffré : qu'est-ce qui a changé grâce à votre travail ?",
+      "motivation": "Reliez votre parcours à ce poste : pourquoi cette entreprise, pourquoi maintenant.",
+      "behavioral": "Décrivez ce que vous avez fait vous-même, pas seulement l'équipe."
+    },
+    "skip": "Passer",
+    "answer": "Répondre",
+    "feedback": {
+      "good": "Bonne préparation",
+      "work": "Encore un peu de travail",
+      "line": "{kind} · {count, plural, one {# question} other {# questions}} · retour par critère, sans note",
+      "strengths": "Vos points forts",
+      "improve": "À travailler",
+      "details": "Voir le détail par critère et par question",
+      "again": "Recommencer",
+      "done": "Terminer"
+    }
+  },
+  "inbox": {
+    "seo": "Messages",
+    "title": "Messages",
+    "back": "Retour",
+    "search": "Rechercher une conversation",
+    "noResult": "Aucune conversation ne correspond à « {query} ».",
+    "requests": "Demandes de mise en relation",
+    "requestLine": "Vous décidez de répondre ou non",
+    "unread": "{count, plural, one {message non lu} other {messages non lus}}",
+    "yesterday": "Hier",
+    "today": "Aujourd'hui",
+    "item": {
+      "none": "Pas encore de message",
+      "invitation": "Invitation à un entretien",
+      "documentRequest": "Document demandé",
+      "slot": "Créneau proposé",
+      "decision": "Réponse à votre candidature",
+      "you": "Vous : {message}",
+      "attachment": "Pièce jointe"
+    },
+    "empty": {
+      "title": "Aucun message pour l'instant",
+      "text": "Quand un recruteur vous écrit, la conversation s'ouvre ici.",
+      "cta": "Voir les offres"
+    },
+    "privacy": "Vos conversations avec les recruteurs. Orbi n'y a pas accès.",
+    "options": "Options de la conversation",
+    "seeApplication": "Voir la candidature",
+    "thread": "Messages de la conversation",
+    "slots": {
+      "title": "Créneaux proposés",
+      "confirmed": "Entretien confirmé",
+      "reschedule": "Autres créneaux demandés",
+      "closed": "Entretien clos"
+    },
+    "request": {
+      "title": "Document demandé : {name}",
+      "due": "À envoyer avant le {date}",
+      "waiting": "En attente",
+      "sent": "Envoyé le {date}",
+      "answer": "Envoyer un document"
+    },
+    "file": {
+      "sent": "Envoyé · {time}",
+      "received": "Reçu · {time}"
+    },
+    "slot": {
+      "title": "Créneau proposé : {day} à {time}"
+    },
+    "composer": "Écrire un message",
+    "send": "Envoyer",
+    "plus": {
+      "open": "Joindre un CV, une lettre, un document, un créneau ou un lien",
+      "title": "Joindre",
+      "create": "Ouvrir mes documents"
+    }
+  },
+  "notifs": {
+    "group": {
+      "today": "Aujourd'hui",
+      "thisWeek": "Cette semaine",
+      "earlier": "Plus tôt"
+    },
+    "empty": {
+      "title": "Rien de nouveau"
+    },
+    "title": {
+      "interviewInvite": "Invitation à un entretien",
+      "interviewCanceled": "Entretien annulé",
+      "profileViewed": "Votre profil a été consulté",
+      "statusChange": "Étape « {stage} »",
+      "notSelected": "Candidature non retenue",
+      "jobUnavailable": "Offre plus disponible",
+      "certificateIssued": "Attestation obtenue",
+      "documentRequest": "Document demandé",
+      "newMessage": "Nouveau message",
+      "contactRequest": "Demande de mise en relation",
+      "diagnosticReady": "Votre diagnostic est prêt"
+    },
+    "line": {
+      "interviewInvite": "{company} · choisissez un créneau",
+      "diagnosticReady": "Niveau {stage}"
+    }
+  },
   "talentOrbi": {
     "metaTitle": "Orbi",
     "title": "Orbi",
@@ -11172,6 +11512,7 @@
       "licensesLow": "{count, plural, =0 {Plus aucune licence disponible} one {Il reste # licence disponible} other {Il reste # licences disponibles}} dans le lot « {batchName} ».",
       "diagnosticReady": "Votre diagnostic de carrière est prêt : niveau {stage}.",
       "diagnosticReminder": "Cela fait 30 jours depuis votre diagnostic de carrière. Refaites-le pour voir vos progrès.",
+      "profileViewed": "{company} a consulté votre profil pour « {jobTitle} »",
       "unread": "Non lue"
     }
   },

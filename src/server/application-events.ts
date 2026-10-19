@@ -78,7 +78,7 @@ export async function onStageChanged(
       userIds: [talent.id],
       type: "notSelected",
       payload: { jobTitle: application.job.title, company },
-      href: "/app/jobs/candidatures?onglet=terminees",
+      href: `/app/suivi/${applicationId}`,
     });
     await mailNotSelected(talent, {
       jobTitle: application.job.title,
@@ -93,7 +93,7 @@ export async function onStageChanged(
     userIds: [talent.id],
     type: "statusChange",
     payload: { jobTitle: application.job.title, company, stage: to.name },
-    href: "/app/jobs/candidatures",
+    href: `/app/suivi/${applicationId}`,
   });
   await mailStatusChange(talent, {
     jobTitle: application.job.title,

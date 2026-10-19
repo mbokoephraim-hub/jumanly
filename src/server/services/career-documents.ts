@@ -653,6 +653,7 @@ export async function tailorCv(
       profileId: source.profileId,
       kind: "cv",
       title: input.title(job.title).slice(0, 120),
+      adaptedForJobId: job.id,
       templateId: source.templateId,
       style: source.style ?? undefined,
       content: json(tailored),

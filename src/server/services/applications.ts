@@ -7,6 +7,7 @@
  */
 import { freezeApplicationMatch } from "@/server/matching/service";
 import type { Prisma, PrismaClient, StageKind } from "@/generated/prisma/client";
+import { snapshotAttachments, type AttachmentRef } from "./application-attachments";
 import { isJobOpen } from "./jobs";
 import { reportError } from "@/server/observability";
 
@@ -49,6 +50,7 @@ export async function applyToJob(
     jobSlug: string;
     cvDocumentId?: string | null;
     coverLetter?: string | null;
+    attachments?: AttachmentRef[];
   },
   now = new Date(),
 ): Promise<ApplyResult> {
@@ -70,6 +72,7 @@ export async function applyToJob(
         where: { id: input.cvDocumentId, profileId: profile.id, kind: "cv" },
       })
     : null;
+  const attachments = await snapshotAttachments(db, input.userId, input.attachments ?? []);
   const stages = await ensureStages(db, job.id);
   const first = stages.find((stage) => stage.kind === "new") ?? stages[0]!;
   try {
@@ -79,6 +82,7 @@ export async function applyToJob(
         profileId: profile.id,
         stageId: first.id,
         coverLetter: input.coverLetter?.trim() || null,
+        attachments: attachments as Prisma.InputJsonValue,
         cvSnapshot: cv
           ? {
               documentId: cv.id,

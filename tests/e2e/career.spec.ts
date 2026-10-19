@@ -25,12 +25,13 @@ test("simulation d'entretien écrite, de la préparation au retour", async ({ pa
     .fill(
       "Lors de mon stage, j'ai repris le suivi des réclamations clients et j'ai mis en place un tableau partagé, ce qui a permis de répondre plus vite.",
     );
-  await page.getByRole("button", { name: "Envoyer ma réponse" }).click();
+  await page.getByRole("button", { name: "Répondre", exact: true }).click();
   await expect(page.getByText("Question 2 sur 4")).toBeVisible();
   await expectAccessible(page);
   await page.getByRole("button", { name: "Terminer la séance" }).click();
   await expect(page.getByRole("heading", { name: "Votre retour" })).toBeVisible();
-  await expect(page.locator("#retour").getByText("Structure des réponses")).toBeVisible();
+  // The detail by criterion is folded under the strengths and the points to work on.
+  await expect(page.locator("#retour")).toContainText("Structure des réponses");
   await expect(
     page.locator("#retour").getByText(/il ne prédit pas le résultat d'un vrai entretien/),
   ).toBeVisible();
@@ -88,7 +89,7 @@ test("simulation orale : la réponse se tape si la dictée n'est pas disponible"
   await page
     .getByLabel("Votre réponse")
     .fill("J'ai analysé les ventes et présenté un tableau clair à l'équipe.");
-  await page.getByRole("button", { name: "Envoyer ma réponse" }).click();
+  await page.getByRole("button", { name: "Répondre", exact: true }).click();
   await expect(page.getByText("Question 2 sur 4")).toBeVisible();
 });
 

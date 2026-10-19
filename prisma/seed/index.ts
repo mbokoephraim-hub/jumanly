@@ -15,6 +15,7 @@ import { seedPartner } from "./partners";
 import { seedPlaces } from "./places";
 import { seedPlans } from "./plans";
 import { seedSkills } from "./skills";
+import { seedSuiviScenario } from "./suivi";
 import { seedUxScenario } from "./ux";
 
 async function main() {
@@ -31,6 +32,7 @@ async function main() {
       await seedPartner(db);
       await seedCareer(db);
       await seedUxScenario(db);
+      await seedSuiviScenario(db);
       await seedLearnDomains(db);
       await seedLearnPaths(db);
     } else console.log("Démo ignorée : APP_ENV n'est ni local ni preview.");

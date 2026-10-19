@@ -20,6 +20,7 @@ import { level, limit } from "@/server/entitlements";
 import { ensureStages } from "./applications";
 import { slugify } from "./accounts";
 import { findSkill } from "./profile";
+import { notify } from "./notifications";
 
 export type HireContext = { userId: string; organizationId: string; role: MembershipRole };
 
@@ -519,9 +520,21 @@ export async function recordView(
     },
   });
   if (!application.viewedAt) {
-    await db.application.update({
+    const updated = await db.application.update({
       where: { id: application.id },
       data: { viewedAt: now, events: { create: { actorId: ctx.userId, type: "viewed" } } },
+      select: {
+        job: { select: { title: true, organization: { select: { name: true } } } },
+        profile: { select: { userId: true } },
+      },
+    });
+    // « Chaque consultation vous est signalée » (planche talent-2 § 1): the first opening by the
+    // team is the one the talent hears about; every opening stays in the audit log.
+    await notify(db, {
+      userIds: [updated.profile.userId],
+      type: "profileViewed",
+      payload: { company: updated.job.organization.name, jobTitle: updated.job.title },
+      href: `/app/suivi/${application.id}`,
     });
   }
   return application;

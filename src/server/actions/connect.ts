@@ -54,6 +54,9 @@ export async function sendMessageAction(formData: FormData) {
 export async function answerDocumentAction(formData: FormData) {
   const conversationId = id(formData.get("conversation"));
   const { user, viewer } = await connectViewer(`/app/messages/${conversationId}`);
+  // From the page of the application (planche talent-2 § 3) the answer comes back there.
+  const back =
+    formData.get("from") === "suivi" ? `/app/suivi/${id(formData.get("application"))}` : null;
   try {
     const sent = await answerDocumentRequest(
       db,
@@ -65,7 +68,15 @@ export async function answerDocumentAction(formData: FormData) {
     await onMessageSent({ ...sent, senderName: user.name }).catch((error) => reportError(error));
   } catch (error) {
     if (!(error instanceof ConnectError)) throw error;
-    redirect(`/app/messages/${conversationId}?erreur=${error.code}`);
+    redirect(
+      back
+        ? `${back}?erreur=document#demandes`
+        : `/app/messages/${conversationId}?erreur=${error.code}`,
+    );
+  }
+  if (back) {
+    refresh();
+    redirect(`${back}?ok=document#demandes`);
   }
   redirect(`/app/messages/${conversationId}?ok=document#dernier`);
 }
@@ -138,9 +149,9 @@ export async function answerInterviewAction(formData: FormData) {
   const interviewId = id(formData.get("interview"));
   const raw = String(formData.get("answer"));
   const message = String(formData.get("message") ?? "");
-  // From Suivi (prompt 5, screens 20-22) the answer comes back to Suivi.
+  // From the page of the application (planche talent-2 § 3) the answer comes back there.
   const fromSuivi = formData.get("from") === "suivi";
-  const suiviPage = `/app/suivi/entretiens/${interviewId}`;
+  const suiviPage = `/app/suivi/${id(formData.get("application"))}`;
   try {
     await answerInterview(
       db,
@@ -158,7 +169,8 @@ export async function answerInterviewAction(formData: FormData) {
     );
   } catch (error) {
     if ((error as Error).name !== "HireError") throw error;
-    if (fromSuivi) redirect(`${suiviPage}?${raw === "propose" ? "proposer=1&" : ""}erreur=1`);
+    if (fromSuivi)
+      redirect(`${suiviPage}?${raw === "propose" ? "proposer=1&" : ""}erreur=entretien#entretien`);
     redirect(`/app/messages/${conversationId}?erreur=entretien#entretien-${interviewId}`);
   }
   if (raw === "accept") {
@@ -175,12 +187,13 @@ export async function answerInterviewAction(formData: FormData) {
         jobTitle: interview.application.job.title,
         date: interview.startsAt,
         timezone: interview.timezone,
-        href: conversationId ? `/app/messages/${conversationId}` : "/app/suivi?filtre=entretiens",
+        href: `/app/suivi/${interview.applicationId}`,
       });
   }
   if (fromSuivi) {
     const ok = raw === "accept" ? "confirme" : raw === "propose" ? "propose" : "decline";
-    redirect(`/app/suivi?filtre=entretiens&ok=${ok}&entretien=${interviewId}`);
+    refresh();
+    redirect(`${suiviPage}?ok=${ok}#entretien`);
   }
   refresh();
   redirect(`/app/messages/${conversationId}?ok=entretien#entretien-${interviewId}`);

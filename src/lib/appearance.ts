@@ -16,6 +16,10 @@ export const REDRAWN = [
   "/inscription",
   "/mot-de-passe-oublie",
   "/reinitialiser",
+  // Lot 4: Suivi, a candidature, messages and notifications.
+  "/app/suivi",
+  "/app/messages",
+  "/app/notifications",
 ];
 
 /**
@@ -26,6 +30,9 @@ export const REDRAWN_EXACT = [
   "^/app$",
   "^/app/jobs$",
   "^/app/jobs/(?!candidatures$|enregistrees$)[^/]+$",
+  // Lot 4: postuler, the practice briefing and session (the home of « Entretiens » is lot 6).
+  "^/app/jobs/(?!candidatures$|enregistrees$)[^/]+/postuler$",
+  "^/app/career/entretiens/[^/]+$",
 ];
 
 export function redrawn(pathname: string) {

@@ -49,6 +49,7 @@ export const notificationTypes = [
   "licensesLow",
   "diagnosticReady",
   "diagnosticReminder",
+  "profileViewed",
 ] as const;
 export type NotificationType = (typeof notificationTypes)[number];
 

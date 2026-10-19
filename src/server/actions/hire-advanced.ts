@@ -244,9 +244,7 @@ export async function scheduleInterviewAction(formData: FormData) {
     minutes: interview.durationMinutes,
     slots: interview.slots,
     timezone: interview.timezone,
-    href: interview.application.conversation
-      ? `/app/messages/${interview.application.conversation.id}`
-      : "/app/jobs/candidatures",
+    href: `/app/suivi/${interview.applicationId}`,
   });
   redirect(withParam(back, "ok", "entretien"));
 }

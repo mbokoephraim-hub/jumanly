@@ -238,7 +238,7 @@ export async function suspendOrganization(
           .map((application) => application.profile.userId),
         type: "jobUnavailable",
         payload: { job: job.title, org: organization.name },
-        href: "/app/jobs/candidatures",
+        href: "/app/suivi",
       });
     }
   }

@@ -266,9 +266,7 @@ export async function cancelInterview(
     userIds: [interview.application.profile.user.id],
     type: "interviewCanceled",
     payload: { company: interview.organization.name, jobTitle: interview.application.job.title },
-    href: interview.application.conversation
-      ? `/app/messages/${interview.application.conversation.id}`
-      : "/app/jobs/candidatures",
+    href: `/app/suivi/${interview.applicationId}`,
   });
 }
 
@@ -311,9 +309,7 @@ export async function rescheduleInterview(
     userIds: [interview.application.profile.user.id],
     type: "interviewInvite",
     payload: { company: interview.organization.name, jobTitle: interview.application.job.title },
-    href: interview.application.conversation
-      ? `/app/messages/${interview.application.conversation.id}`
-      : "/app/jobs/candidatures",
+    href: `/app/suivi/${interview.applicationId}`,
   });
 }
 

@@ -570,7 +570,7 @@ html.sombre body {
   font-weight: 600;
   box-shadow: var(--verre);
 }
-.t-seg span small {
+.t-seg :is(span, a) small {
   font-size: 11px;
   margin-left: 3px;
 }
@@ -3719,4 +3719,919 @@ label.t-ch:has(:focus-visible) {
   padding: 16px;
   border-radius: 24px;
   font-size: 14px;
+}
+
+/* ── Postuler, Suivi, candidature, entraînement, messages (planche talent-2, lot 4) ── */
+.sombre .t-pas i.t-ok {
+  background: var(--lime);
+}
+.t-cvc {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+  border-radius: 22px;
+}
+.t-cvc .t-mini {
+  width: 46px;
+  height: 60px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 0 0 1px var(--trait);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 7px 6px;
+  flex: none;
+}
+.t-cvc .t-mini i {
+  height: 4px;
+  border-radius: 2px;
+  background: #dce5e1;
+}
+.t-cvc .t-mini i:first-child {
+  background: #0f3f37;
+  width: 70%;
+}
+.t-cvc .t-t {
+  flex: 1;
+}
+.t-cvc .t-t b {
+  display: block;
+  font-size: 14px;
+}
+.t-cvc .t-t span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-cvc.t-on {
+  box-shadow:
+    0 0 0 2px var(--sapin),
+    var(--verre);
+}
+.sombre .t-cvc.t-on {
+  box-shadow:
+    0 0 0 2px var(--lime),
+    var(--verre);
+}
+.t-cvc .t-t .t-adp {
+  display: inline-block;
+  margin-top: 4px;
+  color: var(--texte);
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 8px;
+  border-radius: 999px;
+  background: var(--lime-c);
+}
+.t-pj {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 12px 14px;
+}
+.t-pj .t-cases {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: var(--g-accomp);
+  flex: none;
+}
+.t-pj .t-t {
+  flex: 1;
+}
+.t-pj .t-t b {
+  display: block;
+  font-size: 13.5px;
+}
+.t-pj .t-t span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-ajout {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 22px;
+  border: 1.5px dashed rgba(15, 63, 55, 0.28);
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--texte);
+}
+.sombre .t-ajout {
+  border-color: rgba(255, 255, 255, 0.25);
+}
+.t-suite {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  width: 100%;
+}
+.t-suite a {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 22px;
+  text-align: left;
+  font-size: 13px;
+  font-weight: 600;
+}
+.t-suite .t-cases {
+  width: 38px;
+  height: 38px;
+  border-radius: 13px;
+  display: grid;
+  place-items: center;
+}
+.t-grp-t {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texte2);
+}
+.t-grp-t b {
+  font-size: 11px;
+  padding: 2px 7px;
+  border-radius: 999px;
+  background: var(--zone);
+  color: var(--texte);
+}
+.t-cd {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px 16px;
+}
+.t-cd .t-haut {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.t-cd .t-haut .t-t {
+  flex: 1;
+  min-width: 0;
+}
+.t-cd .t-haut b {
+  display: block;
+  font-size: 14px;
+}
+.t-cd .t-haut .t-t span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-cd .t-haut .t-t {
+  display: flex;
+  flex-direction: column;
+}
+.t-cd .t-t .t-st {
+  display: inline-block;
+  align-self: flex-start;
+  margin-top: 6px;
+  font-style: normal;
+  color: var(--texte);
+}
+.t-cd .t-t .t-st.t-ret {
+  color: var(--texte2);
+}
+.t-cd .t-t .t-st.t-ent {
+  color: #0f3f37;
+}
+.t-st {
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 4px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.t-st.t-en {
+  background: var(--ciel-c);
+}
+.t-st.t-pre {
+  background: var(--menthe-c);
+}
+.t-st.t-ent {
+  background: var(--g-accent);
+  color: #0f3f37;
+}
+.t-st.t-env {
+  background: var(--zone);
+}
+.t-st.t-nr {
+  background: var(--corail-c);
+}
+.t-st.t-ret {
+  background: var(--zone);
+  color: var(--texte2);
+}
+.t-act {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: var(--ambre-c);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.t-act .t-ic {
+  width: 16px;
+  height: 16px;
+}
+.t-act span {
+  flex: 1;
+}
+.t-cd.t-min {
+  padding: 12px 16px;
+}
+.t-cd.t-min .t-haut b {
+  font-size: 13.5px;
+}
+.t-chrono {
+  display: flex;
+  flex-direction: column;
+}
+.t-chrono .t-e {
+  display: flex;
+  gap: 12px;
+  position: relative;
+  padding-bottom: 14px;
+}
+.t-chrono .t-e::before {
+  content: "";
+  position: absolute;
+  left: 11px;
+  top: 24px;
+  bottom: 0;
+  width: 2px;
+  background: var(--piste);
+}
+.t-chrono .t-e:last-child::before {
+  display: none;
+}
+.t-chrono .t-e i {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+  background: var(--plein);
+  box-shadow: inset 0 0 0 2px var(--piste);
+  z-index: 1;
+}
+.t-chrono .t-e.t-ok i {
+  background: var(--sapin);
+  color: var(--lime);
+  box-shadow: none;
+}
+.t-chrono .t-e.t-now i {
+  background: var(--g-accent);
+  box-shadow: none;
+  color: #0f3f37;
+}
+.t-chrono .t-e i .t-ic {
+  width: 12px;
+  height: 12px;
+}
+.t-chrono .t-e .t-t b {
+  display: block;
+  font-size: 13.5px;
+}
+.t-chrono .t-e .t-t span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-inv {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  background: var(--g-accomp);
+}
+.t-inv .t-k {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.t-inv h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+.t-creneaux {
+  display: flex;
+  gap: 8px;
+}
+.t-creneaux span {
+  flex: 1;
+  text-align: center;
+  padding: 10px 4px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  font-size: 12px;
+  line-height: 1.3;
+}
+.t-creneaux span b {
+  display: block;
+  font-size: 13.5px;
+}
+.t-creneaux span.t-on {
+  background: #0f3f37;
+  color: #fff;
+}
+.sombre .t-creneaux span {
+  background: rgba(255, 255, 255, 0.08);
+}
+.sombre .t-creneaux span.t-on {
+  background: var(--lime);
+  color: #0f3f37;
+}
+.t-inv .t-bts {
+  flex-wrap: nowrap;
+}
+.t-lignes .t-li {
+  min-height: 56px;
+}
+.t-lignes .t-li .t-t span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.t-brief {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+}
+.t-brief h4 {
+  font-size: 15px;
+  font-weight: 600;
+}
+.t-opts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.t-opts span {
+  padding: 12px 6px;
+  border-radius: 18px;
+  text-align: center;
+  font-size: 12px;
+  background: var(--zone);
+  line-height: 1.3;
+}
+.t-opts span b {
+  display: block;
+  font-size: 13.5px;
+}
+.t-opts span.t-on {
+  background: var(--g-accent);
+  color: #0f3f37;
+}
+.t-q {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.t-q small {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texte2);
+}
+.t-q b {
+  font-size: 16px;
+  line-height: 1.35;
+  font-weight: 600;
+}
+.t-rep {
+  min-height: 130px;
+  padding: 14px 16px;
+  border-radius: 22px;
+  font-size: 13.5px;
+  line-height: 1.5;
+}
+.t-rep .t-cur {
+  display: inline-block;
+  width: 2px;
+  height: 16px;
+  background: var(--texte);
+  vertical-align: -3px;
+}
+.t-fb-c {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+}
+.t-fb-c h4 {
+  font-size: 15px;
+  font-weight: 600;
+}
+.t-fb-c .t-pt {
+  display: flex;
+  gap: 10px;
+  font-size: 13px;
+}
+.t-fb-c .t-pt i {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  flex: none;
+  display: grid;
+  place-items: center;
+}
+.t-fb-c .t-pt.t-ok i {
+  background: var(--lime-c);
+}
+.t-fb-c .t-pt.t-ko i {
+  background: var(--ambre-c);
+}
+.t-fb-c .t-pt i .t-ic {
+  width: 12px;
+  height: 12px;
+}
+.t-rebond {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: var(--g-former);
+}
+.t-rebond b {
+  font-size: 13.5px;
+}
+.t-rebond span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-rebond .t-bt {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+.sombre .t-rebond span {
+  color: var(--texte2);
+}
+.t-hm {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 6px;
+}
+.t-nl {
+  min-width: 20px;
+  height: 20px;
+  border-radius: 10px;
+  background: var(--lime);
+  color: #0f3f37;
+  font-size: 11px;
+  font-weight: 700;
+  display: grid;
+  place-items: center;
+}
+.t-li.t-nv {
+  background: linear-gradient(90deg, rgba(166, 242, 107, 0.14), transparent 70%);
+}
+.t-jour {
+  align-self: center;
+  font-size: 11.5px;
+  font-weight: 600;
+  color: var(--texte2);
+  padding: 4px 12px;
+  border-radius: 999px;
+  background: var(--zone);
+}
+.t-b-r {
+  align-self: flex-start;
+  max-width: 82%;
+  background: var(--plein);
+  box-shadow: var(--verre);
+  border-radius: 24px 24px 24px 8px;
+  padding: 12px 16px;
+  font-size: 14px;
+}
+.t-b-cr {
+  padding: 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  max-width: 92%;
+}
+.t-b-cr .t-bt {
+  flex: none;
+}
+.t-b-cr .t-k {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 700;
+}
+.t-b-cr .t-creneaux span {
+  background: var(--zone);
+}
+.t-b-cr .t-creneaux span.t-on {
+  background: #0f3f37;
+  color: #fff;
+}
+.sombre .t-b-cr .t-creneaux span.t-on {
+  background: var(--lime);
+  color: #0f3f37;
+}
+.t-b-f {
+  align-self: flex-end;
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 20px;
+  background: var(--lime-c);
+  font-size: 12px;
+}
+.t-b-f b {
+  display: block;
+  font-size: 13px;
+}
+.t-b-f span {
+  color: var(--texte2);
+}
+/* Écrans de la planche talent-2 : une colonne, des cartes espacées comme la maquette. */
+.t-flux {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.t-flux.t-serre {
+  gap: 10px;
+}
+.t-flux:has(> .t-bas-f),
+.t-flux:has(.t-bas-f) {
+  padding-bottom: calc(110px + env(safe-area-inset-bottom));
+}
+.t-cases.t-accomp {
+  background: var(--g-accomp);
+}
+.t-cases.t-oppo {
+  background: var(--g-oppo);
+}
+.t-cases.t-former {
+  background: var(--g-former);
+}
+.t-lien-d {
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+  text-decoration-color: transparent;
+  min-height: 44px;
+  display: inline-flex;
+  align-items: center;
+}
+.t-lien-d:hover {
+  text-decoration-color: currentColor;
+}
+.t-vide-t {
+  font-size: 13px;
+  color: var(--texte2);
+}
+.t-gar b {
+  font-weight: 700;
+}
+/* Cartes à choisir : un vrai bouton radio, invisible, dans un label (CV, créneau, durée). */
+label.t-cvc,
+.t-creneaux label,
+.t-opts label {
+  position: relative;
+  cursor: pointer;
+}
+label.t-cvc input,
+.t-creneaux label input,
+.t-opts label input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+label.t-cvc:has(:checked) {
+  box-shadow:
+    0 0 0 2px var(--sapin),
+    var(--verre);
+}
+.sombre label.t-cvc:has(:checked) {
+  box-shadow:
+    0 0 0 2px var(--lime),
+    var(--verre);
+}
+label.t-cvc:has(:checked) .t-radio {
+  box-shadow: inset 0 0 0 7px var(--sapin);
+}
+.sombre label.t-cvc:has(:checked) .t-radio {
+  box-shadow: inset 0 0 0 7px var(--lime);
+}
+:is(label.t-cvc, .t-creneaux label, .t-opts label):has(:focus-visible) {
+  outline: 2px solid var(--texte);
+  outline-offset: 2px;
+}
+.t-creneaux label {
+  flex: 1;
+  text-align: center;
+  padding: 10px 4px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.75);
+  font-size: 12px;
+  line-height: 1.3;
+}
+.t-creneaux label b {
+  display: block;
+  font-size: 13.5px;
+}
+.t-creneaux label:has(:checked) {
+  background: #0f3f37;
+  color: #fff;
+}
+.sombre .t-creneaux label {
+  background: rgba(255, 255, 255, 0.08);
+}
+.sombre .t-creneaux label:has(:checked) {
+  background: var(--lime);
+  color: #0f3f37;
+}
+.t-b-cr .t-creneaux label {
+  background: var(--zone);
+}
+.t-opts label {
+  padding: 12px 6px;
+  border-radius: 18px;
+  text-align: center;
+  font-size: 12px;
+  background: var(--zone);
+  line-height: 1.3;
+}
+.t-opts label b {
+  display: block;
+  font-size: 13.5px;
+}
+.t-opts label:has(:checked) {
+  background: var(--g-accent);
+  color: #0f3f37;
+}
+.t-ajout {
+  width: 100%;
+  cursor: pointer;
+}
+.t-pj form {
+  display: contents;
+}
+.t-liste form.t-li {
+  margin: 0;
+}
+/* « Autre date » : les jours défilent, puis les heures en grille. */
+.t-jours {
+  display: flex;
+  gap: 8px;
+  overflow-x: auto;
+  margin: 0 -18px;
+  padding: 0 18px 4px;
+  scrollbar-width: none;
+}
+.t-jours button {
+  flex: none;
+  width: 56px;
+  height: 66px;
+  border-radius: 16px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: var(--zone);
+  line-height: 1.2;
+}
+.t-jours button small {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-jours button b {
+  font-size: 18px;
+}
+.t-jours button[aria-pressed="true"] {
+  background: #0f3f37;
+  color: #fff;
+}
+.t-jours button[aria-pressed="true"] small {
+  color: var(--lime);
+}
+.sombre .t-jours button[aria-pressed="true"] {
+  background: var(--lime);
+  color: #0f3f37;
+}
+.sombre .t-jours button[aria-pressed="true"] small {
+  color: #0f3f37;
+}
+.t-heures {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+}
+.t-heures button {
+  height: 46px;
+  border-radius: 16px;
+  background: var(--zone);
+  font-size: 14px;
+  font-weight: 600;
+}
+.t-heures button[aria-pressed="true"] {
+  background: var(--g-accent);
+  color: #0f3f37;
+}
+.t-heures button:disabled {
+  opacity: 0.45;
+}
+/* Une carte entière s'ouvre d'un toucher (.t-lien) ; ses propres boutons restent au-dessus. */
+.t-cd,
+.t-li,
+.t-pj {
+  position: relative;
+}
+.t-cd .t-act,
+.t-cd .t-rebond,
+.t-li > :is(a, button, form):not(.t-lien),
+.t-pj > :is(a, button, form):not(.t-lien) {
+  position: relative;
+  z-index: 1;
+}
+button.t-lien {
+  text-align: left;
+  font: inherit;
+  color: inherit;
+}
+.t-inv .t-h3 {
+  font-size: 16px;
+  font-weight: 600;
+}
+.t-inv .t-bts .t-bt {
+  flex: 1;
+}
+.t-inv .t-pas-t {
+  margin: 0;
+}
+.t-lg-e.t-lg-s {
+  width: 40px;
+  height: 40px;
+  font-size: 13px;
+}
+.t-texte-l {
+  white-space: pre-line;
+  font-size: 14px;
+  line-height: 1.55;
+}
+.t-chrono {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.t-brief .t-h4,
+.t-fb-c .t-h4 {
+  font-size: 15px;
+  font-weight: 600;
+}
+textarea.t-rep {
+  width: 100%;
+  resize: vertical;
+  color: var(--texte);
+  border: 0;
+}
+textarea.t-rep:focus-visible {
+  outline: 2px solid var(--texte);
+  outline-offset: 2px;
+}
+.t-detail summary {
+  font-weight: 600;
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+}
+.t-detail dd,
+.t-detail li p {
+  font-size: 13px;
+  color: var(--texte2);
+}
+.t-detail ol {
+  list-style: none;
+  padding: 0;
+  margin-top: 12px;
+}
+/* Une ligne de liste qui est un bouton de formulaire (marquer lu, débloquer). */
+.t-liste > form:not(.t-li) {
+  display: contents;
+}
+.t-liste > * + form > .t-li {
+  border-top: 1px solid var(--trait);
+}
+button.t-li {
+  width: 100%;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  background: none;
+}
+em.t-st {
+  font-style: normal;
+}
+/* Conversation (planche talent-2 § 5) : la tête, le fil, le compositeur posé en bas. */
+.t-tete-f .t-qui {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.t-tete-f .t-qui h1 {
+  font-size: 15px;
+  font-weight: 600;
+}
+.t-tete-f .t-qui span {
+  font-size: 12px;
+  color: var(--texte2);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.t-fil {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.t-msg {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+.t-msg.t-moi {
+  align-items: flex-end;
+}
+.t-msg .t-jour {
+  margin: 6px 0;
+}
+.t-msg > .t-b-cr,
+.t-msg > .t-flux {
+  width: 92%;
+}
+.t-heure {
+  font-size: 11px;
+  color: var(--texte2);
+  padding: 0 6px;
+}
+.t-b-r.t-cache {
+  color: var(--texte2);
+}
+.t-b-r.t-decision {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  max-width: 100%;
+}
+.t-b-f.t-recu {
+  align-self: flex-start;
+  background: var(--plein);
+  box-shadow: var(--verre);
+}
+.t-lien-d.t-url {
+  display: block;
+  margin-top: 6px;
+  word-break: break-all;
+}
+.t-b-cr .t-creneaux label:has(:checked) {
+  background: #0f3f37;
+  color: #fff;
+}
+.sombre .t-b-cr .t-creneaux label:has(:checked) {
+  background: var(--lime);
+  color: #0f3f37;
+}
+.t-bas-f.t-nu {
+  background: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  padding-top: 0;
+}
+.t-bas-f.t-nu .t-compo {
+  flex: 1;
+}
+.t-msg {
+  scroll-margin-bottom: 120px;
 }

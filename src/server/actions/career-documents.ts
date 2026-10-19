@@ -10,12 +10,14 @@ import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { saveApplicationDraft } from "@/server/services/application-draft";
 import {
   decideCorrections,
   deleteDocument,
   generateDocument,
   generateLinkedin,
   generateSchema,
+  getDocument,
   PROOFREAD_MAX,
   proofread,
   saveDocument,
@@ -154,4 +156,35 @@ export async function tailorCvAction(formData: FormData) {
   });
   if (!result.ok) redirect(`/app/career/cv/${cvId}?adaptation=${result.code}#adapter`);
   redirect(`/app/career/cv/${result.id}?adapte=${encodeURIComponent(result.jobTitle)}`);
+}
+
+/**
+ * « Rédiger avec Orbi » while applying (planche talent-2 § 1): a letter for this offer, written
+ * from the profile and the offer only, put in the draft for the talent to read and change before
+ * sending. The letter is also kept in « Lettres ». Credits and entitlement are checked by `runAi`;
+ * applying itself stays free.
+ */
+export async function applicationLetterAction(formData: FormData) {
+  const slug = z.string().min(1).max(200).safeParse(formData.get("job"));
+  if (!slug.success) redirect("/app/jobs");
+  const back = `/app/jobs/${slug.data}/postuler?etape=lettre`;
+  const user = await requireUser(back);
+  const job = await db.job.findUnique({ where: { slug: slug.data }, select: { id: true } });
+  if (!job) redirect("/app/jobs");
+  const result = await generateDocument(
+    db,
+    user.id,
+    generateSchema.parse({ type: "letter", jobId: job.id }),
+    await documentTemplate(),
+  );
+  if (!result.ok) redirect(`${back}&ia=${result.code}`);
+  const letter = await getDocument(db, user.id, result.id);
+  await saveApplicationDraft(db, {
+    userId: user.id,
+    jobId: job.id,
+    step: "lettre",
+    coverLetter: letter?.data.text ?? "",
+  });
+  refresh();
+  redirect(`${back}&lettre=orbi`);
 }

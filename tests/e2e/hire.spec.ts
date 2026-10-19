@@ -78,18 +78,16 @@ async function publishJob(page: Page, title: string) {
 async function applyTo(talent: Page, slug: string, title: string) {
   await talent.goto(`/app/jobs/${slug}`);
   await expect(talent.getByRole("heading", { level: 1 })).toHaveText(title);
-  await talent.goto(`/app/jobs/${slug}?postuler=1`);
-  await talent
-    .locator("label")
-    .filter({ hasText: "Mon profil Jumanly seul", visible: true })
-    .click();
+  // Postuler (planche talent-2 § 1): the CV proposed first, nothing to add, then sending.
+  await talent.goto(`/app/jobs/${slug}/postuler`);
   await talent.getByRole("button", { name: "Continuer" }).click();
   await expect(talent).toHaveURL(/etape=lettre/);
   await talent.getByRole("button", { name: "Continuer" }).click();
   await expect(talent).toHaveURL(/etape=verification/);
-  await talent.getByLabel(/consulte ma candidature/).check();
   await talent.getByRole("button", { name: "Envoyer ma candidature" }).click();
-  await expect(talent.getByRole("heading", { name: "Candidature envoyée !" })).toBeVisible();
+  await expect(talent.getByRole("heading", { name: "Candidature envoyée" })).toBeVisible({
+    timeout: 20_000,
+  });
 }
 
 // E4 definition of done: recruiter publishes → talent applies → recruiter moves the candidate →
@@ -170,15 +168,14 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await page.getByRole("button", { name: "Envoyer", exact: true }).click();
   await expect(page.getByRole("main")).toContainText("êtes-vous disponible mardi");
 
-  await talent.goto("/app/messages");
-  await talent.getByRole("link", { name: new RegExp(title) }).click();
+  await talent.goto(threadUrl);
   await expect(talent.getByRole("main")).toContainText("êtes-vous disponible mardi");
-  await talent.locator("#message-body").fill("Bonjour, oui, mardi me convient.");
+  await talent.locator("#cv-corps").fill("Bonjour, oui, mardi me convient.");
   await talent.getByRole("button", { name: "Envoyer", exact: true }).click();
   await expect(talent.getByRole("main")).toContainText("mardi me convient");
 
   // The talent never sees the team's notes; the status says « Entretien ».
-  await talent.goto("/app/jobs/candidatures");
+  await talent.goto("/app/suivi");
   const card = talent.locator("li").filter({ hasText: title }).first();
   await expect(card).toContainText("Entretien");
   await expect(talent.getByRole("main")).not.toContainText("tableaux croisés");
@@ -202,21 +199,20 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
 
   // The talent receives a decision card, never a bubble, with real ways to bounce back.
   await talent.goto(threadUrl);
-  const decision = talent.locator("article").filter({ hasText: "Candidature non retenue" });
+  const decision = talent.locator("li").filter({ hasText: "Candidature non retenue" });
   await expect(decision).toContainText("Bonjour Amani,");
   await expect(decision).toContainText("Nous avons retenu un autre profil.");
   await expect(decision).toContainText("Recrutement");
-  await expect(talent.getByRole("heading", { name: "Pour rebondir" })).toBeVisible();
-  await expect(talent.getByRole("link", { name: /S'entraîner/ })).toBeVisible();
+  await expect(decision).toContainText("Ce n'est pas la fin du parcours.");
 
-  await talent.goto("/app/jobs/candidatures?onglet=terminees");
+  await talent.goto("/app/suivi?vue=terminees");
   await expect(talent.locator("li").filter({ hasText: title }).first()).toContainText(
     "Non retenue",
   );
   await talent.goto("/app/notifications");
-  await expect(talent.getByRole("main")).toContainText(
-    `n'a pas retenu votre candidature à « ${title} »`,
-  );
+  await expect(
+    talent.getByRole("button", { name: /^Candidature non retenue/ }).first(),
+  ).toContainText(title);
   await talent.context().close();
 });
 
@@ -280,7 +276,7 @@ test("le recruteur accepte un candidat avec un modèle au ton choisi", async ({
   await expect(page.getByRole("main")).toContainText("Décision enregistrée.");
 
   await talent.goto(threadUrl);
-  const decision = talent.locator("article").filter({ hasText: "Candidature retenue" });
+  const decision = talent.locator("li").filter({ hasText: "Candidature retenue" });
   await expect(decision).toContainText("Votre candidature au poste de");
   await expect(decision).toContainText("Nous revenons vers vous pour fixer votre arrivée.");
   await talent.context().close();

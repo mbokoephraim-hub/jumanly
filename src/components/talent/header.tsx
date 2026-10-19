@@ -58,6 +58,17 @@ const searches: Record<string, { action: string; filters?: string }> = {
  * then the search with its filters. Any other page starts with « Retour » and its title; a page
  * can put its own title and tools there instead (PhoneTitle). Orbi has its own head.
  */
+/** Pages that draw their own head: the offer and the screens of planche talent-2. */
+export function ownHead(pathname: string) {
+  return [
+    /^\/app\/jobs\/(?!candidatures$|enregistrees$)[^/]+(\/postuler)?$/,
+    /^\/app\/suivi\/(?!entretiens$)[^/]+$/,
+    /^\/app\/career\/entretiens\/[^/]+$/,
+    /^\/app\/messages(\/[^/]+)?$/,
+    /^\/app\/notifications$/,
+  ].some((pattern) => pattern.test(pathname));
+}
+
 export function TalentHeader({
   labels,
   unread,
@@ -74,8 +85,9 @@ export function TalentHeader({
   const count = useUnread(unread);
   // Orbi and the first connection draw their own head.
   if (pathname === "/app/orbi" || pathname === "/app/bienvenue") return null;
-  // An offer opens on its banner, with its own buttons over it (planche talent-1 § 3).
-  if (/^\/app\/jobs\/(?!candidatures$|enregistrees$)[^/]+$/.test(pathname)) return null;
+  // An offer opens on its banner, with its own buttons over it (planche talent-1 § 3); the screens
+  // of planche talent-2 draw their own head (`FlowHead`).
+  if (ownHead(pathname)) return null;
   const tab = labels.tabs[pathname];
 
   if (!tab) {

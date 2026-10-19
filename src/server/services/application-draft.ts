@@ -4,6 +4,7 @@
  * loses nothing. Private to the talent; removed when the application is sent.
  */
 import type { PrismaClient } from "@/generated/prisma/client";
+import { ownRefs, type AttachmentRef } from "./application-attachments";
 
 /** Steps of the form, in order. « Questions » does not exist yet: offers carry no questions. */
 export const applySteps = ["cv", "lettre", "verification"] as const;
@@ -29,6 +30,7 @@ export async function saveApplicationDraft(
     step: ApplyStep;
     cv?: { documentId: string | null; profileOnly: boolean };
     coverLetter?: string;
+    attachments?: AttachmentRef[];
   },
 ) {
   let cv = input.cv;
@@ -39,8 +41,10 @@ export async function saveApplicationDraft(
     });
     if (!owned) cv = { documentId: null, profileOnly: false };
   }
+  const attachments = input.attachments && (await ownRefs(db, input.userId, input.attachments));
   const data = {
     step: input.step,
+    ...(attachments && { attachments }),
     ...(cv && { cvDocumentId: cv.documentId, profileOnly: cv.profileOnly }),
     ...(input.coverLetter !== undefined && { coverLetter: input.coverLetter.trim() }),
   };

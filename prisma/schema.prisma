@@ -1146,6 +1146,9 @@ model Document {
   /// Pages counted at the last export.
   pageCount  Int?
   isPrimary  Boolean       @default(false)
+  /// Offer a CV was adapted to (« Adapter mon CV à cette offre »): proposed first when applying.
+  /// A plain id, not a relation: the CV stays if the offer goes.
+  adaptedForJobId String?
   createdAt  DateTime      @default(now())
   updatedAt  DateTime      @updatedAt
 
@@ -1232,6 +1235,9 @@ model Application {
   coverLetter      String?
   /// Copy of the CV as sent (title, template, content): later edits do not change it.
   cvSnapshot       Json?
+  /// Documents joined to the application, copied as sent (refonte mobile lot 4): attestations
+  /// [{ type: "certificate", code, title, issuedAt }] and texts [{ type: "document", title, text }].
+  attachments      Json               @default("[]")
   source           ApplicationSource  @default(direct)
   /// Score and explanation shown when the talent applied (partie 08 § 8.10), frozen.
   matchScore       Int?
@@ -1284,6 +1290,8 @@ model ApplicationDraft {
   cvDocumentId String?
   profileOnly  Boolean  @default(false)
   coverLetter  String   @default("")
+  /// Documents joined at step 2 (refonte mobile lot 4): [{ type: "certificate" | "document", id }].
+  attachments  Json     @default("[]")
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
 
