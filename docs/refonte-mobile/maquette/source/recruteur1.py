@@ -282,9 +282,9 @@ ECR = [
  ('r2','2 · Mes offres','Filtres simples, une carte par offre, actions dans un menu, confirmation pour clôturer.',
   [ecrans((OFFRES,'Mes offres','Actives, brouillons, en pause, clôturées, expirées.'),(OFF_MENU,'Actions sur une offre','Candidatures, modifier, dupliquer, lien, pause, clôturer.'),(CLOT,'Clôturer','Confirmation, rien n’est envoyé sans relecture.'))]),
  ('r3','3 · Créer une offre','Quatre étapes courtes, brouillon enregistré à chaque saisie, Orbi facultatif.',
-  [ecrans((CR1,'1 · Le poste','Titre, domaine, lieu, mode, contrat, postes.'),(CR2,'2 · La description','Responsabilités, compétences indispensables ou souhaitées.'),(CR_ORB,'Rédiger avec Orbi','Appliquer, modifier ou refuser.'),(CR3,'3 · La candidature','Date limite, documents, questions de présélection.'),(CR4,'4 · Vérifier et publier','Aperçu, manques, vérification, quota.'),(QUOTA,'Limite atteinte','Clôturer une offre ou changer de formule.'),(PUBLIE,'Offre publiée','Lien, recherche de talents.'))]),
+  [ecrans((CR1,'1 · Le poste','Titre, domaine, lieu, mode, contrat, postes.'),(CR2,'2 · La description','Responsabilités, compétences indispensables ou souhaitées.'),(CR_ORB,'Rédiger avec Orbi','Appliquer, modifier ou refuser.'),(CR3,'3 · La candidature','Date limite, documents, questions, fiche PDF.'),(CR4,'4 · Vérifier et publier','Toute l’offre relue avant publication.'),(QUOTA,'Limite atteinte','Clôturer une offre ou changer de formule.'),(PUBLIE,'Offre publiée','Lien, recherche de talents.'),(PDF_V,'Fiche PDF, vue talent','Lue dans Jumanly, téléchargeable.'))]),
  ('r4','4 · Détail d’une offre','L’essentiel en haut, le reste replié, « Voir les candidatures » toujours en bas.',
-  [ecrans((OD_R,'Détail','Statut, chiffres, étapes.'),(OD_R2,'Sections ouvertes','Historique, performance, compétences.'))]),
+  [ecrans((OD_R,'Détail','Statut, chiffres, étapes.'),(OD_R2,'Sections ouvertes','Historique par type, performance, compétences.'))]),
  ('r5','5 · Mode sombre','',
   [ecrans((sombre(AT),'À traiter',''),(sombre(OFFRES),'Mes offres',''),(sombre(CR4),'Vérifier',''))]),
 ]
