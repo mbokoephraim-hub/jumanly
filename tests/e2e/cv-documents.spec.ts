@@ -81,8 +81,14 @@ test("studio CV : réglages, sections, avant/après, adapter à un texte, PDF", 
   // Sections in order: the grip moves a row with the keyboard, the order is kept.
   const grip = page.getByRole("button", { name: /^Déplacer « Expériences »/ });
   await grip.focus();
+  // The toast is shown at once; the reload waits for the saved order (server action).
+  const saved = page.waitForResponse(
+    (response) =>
+      response.request().method() === "POST" && !!response.request().headers()["next-action"],
+  );
   await page.keyboard.press("ArrowDown");
   await expect(page.getByText("« Expériences » déplacée.")).toBeVisible();
+  await saved;
   await page.reload();
   const order = await page
     .locator("[data-section]")
