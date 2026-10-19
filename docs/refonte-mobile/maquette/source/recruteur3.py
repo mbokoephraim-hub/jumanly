@@ -269,6 +269,6 @@ html = f'''<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name
 <header class="couv"><span class="k">{orbi(22)}Jumanly Hire · refonte mobile · étape 3</span><h1>Recruteur, lot 3 : échanger et gérer</h1>
 <p>19 octobre 2026. Orbi, messages, notifications, compte RH, organisation et vérification, équipe, abonnement, rapports, paramètres, premiers pas. Contenus fictifs.</p>
 <ul class="som">{som}</ul></header>{corps}<p class="fin">Jumanly · Learn. Grow. Connect.</p></body></html>'''
-exec(open(H + '/sans_tap.py').read()); html = sans_tap(html)
+exec(open(H + '/sans_tap.py').read()); html = sans_tap(html); html = epure(html)
 out = os.path.join(H, '..', 'refonte-mobile-recruteur-3.html')
 open(out, 'w').write(html); print(out, len(html))

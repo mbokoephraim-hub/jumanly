@@ -299,7 +299,7 @@ ECR = [
  ('q4','4 · Entretiens','Proposer jusqu’à 3 créneaux, voir l’invitation comme le candidat, suivre les réponses, préparer, évaluer.',
   [ecrans((PROG,'Proposer un entretien','Mode, durée, calendrier, disponibilités lues par Orbi.'),(PROG2,'Choisir les heures','Journée de l’équipe, créneaux, suggestion d’Orbi.'),(INV_AP,'Aperçu de l’invitation','Ce que reçoit le candidat.'),(AGENDA,'Entretiens','Semaine, statuts en couleur, préparation.'),(PREP_R,'Préparer','Questions liées à l’offre.'),(EVAL,'Évaluation','Grille de l’offre, avis, suite.'))]),
  ('q5','5 · Rechercher des talents','Seuls les profils rendus visibles. Chaque consultation est enregistrée. Le talent décide de répondre.',
-  [ecrans((TAL,'Rechercher','Score avec l’offre choisie.'),(TAL_F,'Filtres','Aucun critère personnel.'),(TPROF,'Profil d’un talent','Couverture, chiffres, analyse Orbi, preuves, projets.'),(CONTACT,'Proposer l’offre','Message personnalisé par Orbi, annonce jointe, quota.'),(VIVIERS,'Viviers','Talents gardés pour plus tard.'))]),
+  [ecrans((TAL,'Rechercher','4 talents par page, Consulter.'),(TAL_F,'Filtres','Aucun critère personnel.'),(TPROF,'Profil d’un talent','Analyse Orbi, preuves, projets, expérience et formation.'),(CONTACT,'Proposer l’offre','Message personnalisé par Orbi, annonce jointe, quota.'),(VIVIERS,'Viviers','Talents gardés pour plus tard.'))]),
  ('q6','6 · Mode sombre','',
   [ecrans((sombre(CANDS),'Candidatures',''),(sombre(DOS),'Dossier',''),(sombre(TAL),'Talents',''))]),
 ]
@@ -313,6 +313,6 @@ html = f'''<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name
 <header class="couv"><span class="k">{orbi(22)}Jumanly Hire · refonte mobile · étape 3</span><h1>Recruteur, lot 2 : trier, décider, rencontrer</h1>
 <p>19 octobre 2026. Candidatures par étape, dossier, score expliqué, analyse Orbi, décision, entretiens, recherche de talents, viviers. Contenus fictifs.</p>
 <ul class="som">{som}</ul></header>{corps}<p class="fin">Jumanly · Learn. Grow. Connect.</p></body></html>'''
-exec(open(H + '/sans_tap.py').read()); html = sans_tap(html)
+exec(open(H + '/sans_tap.py').read()); html = sans_tap(html); html = epure(html)
 out = os.path.join(H, '..', 'refonte-mobile-recruteur-2.html')
 open(out, 'w').write(html); print(out, len(html))

@@ -24,7 +24,7 @@ Même règle que pour le talent (brief talent § 0) : l'ancienne interface Hire 
 
 Chaque dossier contient la planche HTML, une capture par section (`*.png`) ; les générateurs `recruteur1.py`, `recruteur2.py`, `recruteur3.py` et les CSS sont dans `docs/refonte-mobile/maquette/source/` (valeurs exactes). La section « Comment on y arrive » de chaque planche donne les chemins de navigation.
 
-**Version 2 des planches (19/10, après retour d'Ephraïm « trop simple, trop de vide »)** : `r1plus.py`, `r2plus.py`, `r3plus.py` remplacent une partie des écrans et font foi. Points à reproduire : calendrier du mois et journée en créneaux pour proposer un entretien, ligne Orbi sur chaque écran de travail (suggestion avec bouton, jamais d'action sans accord), écrans pleine hauteur sans grands vides, profil talent et dossier en cartes riches (anneau de score, analyse en points forts et points à vérifier), abonnement avec échéances, rapports avec graphiques réels.
+**Version 2 des planches (19/10, après retour d'Ephraïm « trop simple, trop de vide »)** : `r1plus.py`, `r2plus.py`, `r3plus.py` remplacent une partie des écrans et font foi. Points à reproduire : calendrier du mois et journée en créneaux pour proposer un entretien, ligne Orbi sur chaque écran de travail (suggestion avec bouton, jamais d'action sans accord), écrans pleine hauteur sans grands vides, profil talent et dossier en cartes riches (anneau de score, analyse en points forts et points à vérifier), abonnement avec échéances, rapports avec graphiques réels. **Peu de bandeaux d'information** : on ne garde en bas d'écran que ceux qu'impose une règle (données exclues du score, filtres interdits, candidature gratuite, garde-fou d'Orbi, contact assistant@jumanly.io) ; les autres explications vont dans l'aide. Icônes toujours centrées dans leur cadre.
 
 ## 2. Décisions à appliquer
 
@@ -85,4 +85,4 @@ Chaque dossier contient la planche HTML, une capture par section (`*.png`) ; les
 - `pnpm lint`, `pnpm typecheck`, `pnpm test`, `pnpm test:db`, `pnpm build`, `pnpm messages:check` passent ; e2e des parcours A à E de l'audit.
 - Tests : isolation par `organizationId` sur chaque requête Hire ; une offre en pause ne compte pas dans le quota ; aucune action Orbi sans accord ; consigne cachée dans un CV ignorée.
 - Tous les textes dans `textes/textes-application.md` → `pnpm messages`.
-- `docs/journal.md` mis à jour ; tout écart au brief noté dans `docs/decisions/`.
+- `docs/journal.md` mis à jour ; tout écart au brief noté dans `docs/decisions/`. Liste paginée, **4 talents par page**, bouton « Consulter » sur chaque carte. Profil : parcours en deux blocs, « Expérience professionnelle » puis « Formation » (diplômes et formations, attestations Jumanly marquées) ; la consultation journalisée s'affiche en petite pastille sous le nom.

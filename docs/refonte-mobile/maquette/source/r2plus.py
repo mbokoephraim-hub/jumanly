@@ -166,6 +166,23 @@ def ring(p, cls=''):
     return f'<span class="ring" style="--p:{p}"><b>{p} %</b></span>'
 CK = ic("valider", "xs")
 
+# ---------- v2.2 (19/10) : icônes centrées, bandeaux épurés ----------
+CSSR += """
+.cases{display:grid!important;place-items:center}
+.cases .ic,.cases svg{margin:0!important}
+.modes a .cases{width:44px;height:44px;border-radius:14px}
+.tons span{display:inline-flex;align-items:center;gap:5px;white-space:nowrap}
+.tons span .ic{width:13px;height:13px}
+.tl .h .av{display:grid!important;place-items:center}
+.msg-o .k{display:flex;align-items:center;gap:8px}
+"""
+import re as _re2
+_GARDE = ('Jamais pris en compte', 'Pas de filtre sur l’âge', 'assistant@jumanly.io', 'Orbi n’ajoute ni salaire', 'postulent sur Jumanly, gratuitement')
+def epure(h):
+    def f(m):
+        return m.group(0) if any(k in m.group(0) for k in _GARDE) else ''
+    return _re2.sub(r'<div class="(?:gar|consult)"[^>]*>(?:(?!</div>).)*</div>', f, h, flags=_re2.S)
+
 # ---------- Entretien : 1. mode, durée, calendrier ----------
 PROG = phone(f'''{tete_f("Proposer un entretien", droite=None)}
 <div class="verre mini-c"><span class="av b">GM</span><div class="t"><b>Grâce M.</b><span>Analyste de données junior · Présélectionnée</span></div>{ring(86)}</div>
@@ -377,3 +394,48 @@ ORB_LOCK = phone(f'''{tete_f("Candidature", droite="plus-options")}
 <div class="r"><b>SQL</b><span class="pv dc">Déclarée</span></div><div class="r"><b>Power BI</b><span class="pv at">{ic("certificat","xs")}Attestation</span></div><div class="r"><b>Python</b><span class="pv mq">Non indiquée</span></div>
 <a class="pq">{ic("pourquoi","xs")}Pourquoi 74 % ? Toujours inclus</a></div>
 <div class="doc-p"><div class="d"><div class="pg"><i class="h"></i><i></i><i style="width:80%"></i><i></i></div><div class="t">{ic("cv","xs")}<div><b>CV</b>1 page · PDF</div></div></div><div class="d" style="display:grid;place-items:center;color:var(--texte2);font-size:11.5px;text-align:center;padding:10px">Pas de lettre<br>Facultative</div></div>''', avec_nav=False, cls='long', bas=BARRE_A)
+
+# ---------- v2.2 : talents 4 par page avec « Consulter », parcours en deux blocs ----------
+CSSR += """
+.tl .b2{display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px solid var(--trait)}
+.tl .b2 .m{flex:1}
+.tl .b2 .bt{height:34px;padding:0 16px;font-size:12.5px;background:#0F3F37;color:#fff;flex:none}
+.sombre .tl .b2 .bt{background:#A6F26B;color:#0F3F37}
+.tl{gap:10px!important}
+.pagin{display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 0}
+.pagin a{min-width:34px;height:34px;border-radius:12px;display:grid;place-items:center;font-size:13px;font-weight:600;background:var(--plein);box-shadow:var(--verre)}
+.pagin a.on{background:#0F3F37;color:#fff}.sombre .pagin a.on{background:#A6F26B;color:#0F3F37}
+.pagin span{color:var(--texte2);font-size:13px}
+.vu-chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--zone);color:var(--texte2)}
+.vu-chip .ic{width:12px;height:12px}
+.xp-h{display:flex;align-items:center;gap:8px;margin:2px 0 -2px}
+.xp-h .cases{width:28px;height:28px;border-radius:10px}
+.xp-h b{font-size:14px}
+.xp .e .cert{font-size:10.5px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--lime-c);color:#0F3F37;margin-left:6px;white-space:nowrap}
+.prj .p .im svg.vz{width:86%;height:70%}
+"""
+def tl(i, cls, nom, s_, tags, sc, scc=''):
+    tg = ''.join(f'<span class="tag">{x}</span>' for x in tags)
+    return f'<div class="verre tl"><div class="h"><span class="av {cls}">{i}</span><div class="t"><b>{nom}</b><span>{s_}</span></div><span class="sc-p"><b class="{scc}">{sc} %</b>avec l’offre</span></div><div class="b2"><div class="m">{tg}</div><a class="bt">Consulter</a></div></div>'
+TAL = phone(f'''{tete_r("Candidats")}
+{SEG_T}
+<div class="verre rech">{ic("recherche","s")}<span>Compétence, métier, ville</span><a class="f">{ic("filtres","s")}<b>3</b></a></div>
+<div class="filtres-h"><span class="puce on">SQL</span><span class="puce on">Kinshasa</span><span class="puce on">Junior</span></div>
+<span style="font-size:12px;color:var(--texte2)">38 profils visibles · comparés à « Analyste de données junior »</span>
+{tl("RB","","Ruth B.","Analyste BI · Kinshasa · disponible",["SQL","Power BI"],84)}
+{tl("DK","a","David K.","Data analyst · Kinshasa · en poste",["SQL","Python"],79,"m")}
+{tl("MT","","Merveille T.","Analyste junior · Kinshasa · disponible",["Excel","Power BI"],72,"m")}
+{tl("SL","a","Sarah L.","Diplômée statistiques · Kinshasa",["Excel","SQL"],66,"m")}
+<div class="pagin"><a>{ic("retour","xs")}</a><a class="on">1</a><a>2</a><a>3</a><span>…</span><a>10</a><a>{ic("suivant","xs")}</a></div>''', 'candidats', 'long')
+
+PRJ_VZ1 = '<svg class="vz" viewBox="0 0 120 60"><rect x="6" y="34" width="14" height="22" rx="3" fill="#0F3F37" opacity=".35"/><rect x="26" y="22" width="14" height="34" rx="3" fill="#0F3F37" opacity=".55"/><rect x="46" y="28" width="14" height="28" rx="3" fill="#0F3F37" opacity=".45"/><rect x="66" y="10" width="14" height="46" rx="3" fill="#0F3F37"/><path d="M90 46 L100 30 L108 36 L116 14" fill="none" stroke="#0F3F37" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+PRJ_VZ2 = '<svg class="vz" viewBox="0 0 120 60"><rect x="8" y="6" width="104" height="48" rx="6" fill="#fff" opacity=".7"/><g fill="#0F3F37"><rect x="14" y="12" width="92" height="6" rx="2" opacity=".85"/><rect x="14" y="23" width="40" height="4" rx="2" opacity=".35"/><rect x="60" y="23" width="46" height="4" rx="2" opacity=".35"/><rect x="14" y="32" width="40" height="4" rx="2" opacity=".35"/><rect x="60" y="32" width="46" height="4" rx="2" opacity=".35"/><rect x="14" y="41" width="40" height="4" rx="2" opacity=".35"/><rect x="60" y="41" width="30" height="4" rx="2" opacity=".35"/></g><circle cx="100" cy="44" r="8" fill="#2FD3A6"/><path d="M96 44 l3 3 l5 -6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>'
+TPROF = TPROF.replace(f'<div class="im" style="background:var(--g-former)">{ic("progression")}</div>', f'<div class="im" style="background:var(--g-former)">{PRJ_VZ1}</div>', 1)
+TPROF = TPROF.replace(f'<div class="im" style="background:var(--g-accomp)">{ic("document")}</div>', f'<div class="im" style="background:var(--g-accomp)">{PRJ_VZ2}</div>', 1)
+_old_parc = TPROF[TPROF.index('<div class="sec-t"><h2>Parcours</h2></div>'):TPROF.index('<div class="consult">')]
+TPROF = TPROF.replace(_old_parc, f'''<div class="xp-h"><span class="cases" style="background:var(--g-oppo)">{ic("entreprise","s")}</span><b>Expérience professionnelle</b></div>
+<div class="verre xp"><div class="e"><span class="lg-e amb">KC</span><div class="t"><b>Analyste BI · Kivu Conseil</b>2024 à aujourd’hui · Kinshasa</div></div><div class="e"><span class="lg-e sap">BT</span><div class="t"><b>Stagiaire données · Banque Tujenge</b>6 mois · 2023 · Kinshasa</div></div></div>
+<div class="xp-h"><span class="cases" style="background:var(--g-former)">{ic("former","s")}</span><b>Formation</b></div>
+<div class="verre xp"><div class="e"><span class="lg-e sap">UK</span><div class="t"><b>Licence en statistiques</b>Université de Kinshasa · 2023</div></div><div class="e"><span class="lg-e" style="background:var(--g-accent);color:#0F3F37">J</span><div class="t"><b>Power BI avancé<span class="cert">Attestation</span></b>Jumanly Learn · 2025</div></div></div>
+''', 1)
+TPROF = TPROF.replace('<span class="vis-b">', f'<span class="vu-chip">{ic("confidentialite","xs")}Consultation enregistrée</span><span class="vis-b" style="display:none">', 1)
