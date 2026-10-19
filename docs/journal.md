@@ -2,6 +2,19 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte mobile · lot 6a : Compte, Connexions, Mon profil (19 octobre 2026)
+
+- Compte (`/app/compte`) refait d'après la planche talent-4 § 2 : profil, documents et réseau,
+  abonnement et réglages, déconnexion. Connexions (`/app/compte/connexions`) : demandes reçues,
+  mes connexions, recherche, écrire, retirer, signaler, bloquer (table `Connection`, conversation
+  `peer`).
+- Mon profil (`/app/profil`) en sept sections dépliables, avec ses écrans : modifier (photo,
+  titre, résumé, pays, ville), expérience, compétence (avec preuve), ce que je cherche, projet
+  (fichiers), vu par un recruteur.
+- Supprimés : `src/components/profile/intro-form.tsx`, `src/components/profile/phone-overview.tsx`
+  (l'éditeur de photo passe dans `src/components/talent/profile/`).
+- Deux migrations additives ; aucune donnée retirée. Écarts : `docs/decisions/2026-10-19-refonte-mobile-lot-6a.md`.
+
 ## Refonte mobile · lot 6b : faire le point, diagnostic, plan, simulations d'entretien (19 octobre 2026)
 
 - Faire le point (`/app/profil/point`, planche talent-4 § 5) : atouts, points à renforcer et
