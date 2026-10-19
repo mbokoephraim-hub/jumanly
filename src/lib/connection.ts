@@ -51,3 +51,24 @@ export function slowNetwork() {
 export function slowConnection() {
   return dataSaverOn() || slowNetwork();
 }
+
+const TEXT_ONLY_KEY = "jm-lecture-texte";
+
+/** « Lire sans vidéo », chosen on this device (planche talent-3 § 9): lessons show their text. */
+export function textOnlyOn() {
+  try {
+    return localStorage.getItem(TEXT_ONLY_KEY) === "1";
+  } catch {
+    return false;
+  }
+}
+
+export function setTextOnly(on: boolean) {
+  try {
+    if (on) localStorage.setItem(TEXT_ONLY_KEY, "1");
+    else localStorage.removeItem(TEXT_ONLY_KEY);
+  } catch {
+    // Private browsing without storage: the choice lasts for this page only.
+  }
+  window.dispatchEvent(new Event(DATA_SAVER_EVENT));
+}

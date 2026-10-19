@@ -1,5 +1,5 @@
 import { expectAccessible } from "./a11y";
-import { expect, test, type Page } from "./fixtures";
+import { expect, test } from "./fixtures";
 import { demo, finishOnboarding, logIn, signUpFromPricing, testEmail } from "./session";
 
 // Mobile Talent v5, prompt 1 (docs/ux-mobile-talent): the button range, the visual cards and the
@@ -249,78 +249,31 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
   await expectAccessible(page);
 });
 
-// Prompt 4: Apprendre (screen 13): the course in progress first, then resume the lesson.
+// Refonte mobile, lot 5 (planche talent-3): resume the course in progress from Apprendre, then the
+// classroom: the tabs of the lesson, its files and the free Orbi help.
 test("reprendre une formation depuis Apprendre", async ({ page }) => {
   await logIn(page, "grace.ux@jumanly.test");
   await page.goto("/app/learn");
-  await expect(page.getByText("Votre prochaine leçon")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Exercices et certificats" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /^Mes attestations/ })).toBeVisible();
   await expectAccessible(page);
-  await page
-    .getByRole("link", { name: "Reprendre la leçon" })
-    .filter({ visible: true })
-    .first()
-    .click();
-  await expect(page).toHaveURL(/\/app\/learn\/[^/?]+\?lecon=/);
+  await page.getByRole("link", { name: "Reprendre" }).filter({ visible: true }).first().click();
+  await expect(page).toHaveURL(/\/app\/learn\/[^/?]+\/[^/?]+/);
   await expect(page.getByRole("heading", { level: 1 }).filter({ visible: true })).toBeVisible();
 });
 
-// Prompt 4 bis: the lesson v7 (screens 14, 67 to 69): tabs as cards, titled blocks, modules,
-// transcript and resources. Switching tab keeps the page (and the video) where it is.
-/** Opens a lesson from the Modules tab, unfolding its module when it is not the current one. */
-async function openLesson(page: Page, name: RegExp) {
-  const main = page.locator("main").filter({ visible: true });
-  await main.getByRole("tab", { name: "Modules" }).click();
-  const unit = main
-    .locator("details")
-    .filter({ has: page.getByRole("link", { name, includeHidden: true }) });
-  if (!(await unit.evaluate((element) => (element as HTMLDetailsElement).open)))
-    await unit.locator("summary").click();
-  await unit.getByRole("link", { name }).click();
-  await expect(page.getByRole("heading", { level: 1, name })).toBeVisible();
-}
-
-test("une leçon : résumé en blocs, modules, transcription et ressources", async ({ page }) => {
-  test.setTimeout(120_000);
+test("une leçon : onglets, notes et fichiers", async ({ page }) => {
   await logIn(page, "grace.ux@jumanly.test");
   await page.goto("/app/learn/ux-service-client-excellence");
-  const main = () => page.locator("main").filter({ visible: true });
-
-  // The video lesson's transcript, searchable.
-  await openLesson(page, /Écouter et reformuler/);
-  // Another lesson opens on its summary.
-  await expect(main().getByRole("tab", { name: "Résumé" })).toHaveAttribute(
-    "aria-selected",
-    "true",
-  );
-  await main().getByRole("tab", { name: "Transcription" }).click();
-  await expect(main().getByText("Ensuite, on reformule avec ses propres mots.")).toBeVisible();
-  await main().getByRole("searchbox", { name: "Chercher dans la leçon" }).fill("malentendu");
-  await expect(main().getByText("Ensuite, on reformule avec ses propres mots.")).toHaveCount(0);
-  await expect(main().getByText(/le malentendu est évité/)).toBeVisible();
+  const start = page.getByRole("button", { name: "Commencer la formation" });
+  if (await start.count()) await start.click();
+  else await page.locator("ol.t-modl a").first().click();
+  await expect(page).toHaveURL(/\/app\/learn\/ux-service-client-excellence\/[^/?]+/);
+  await expect(page.getByRole("tab", { name: "Leçon" })).toHaveAttribute("aria-selected", "true");
   await expectAccessible(page);
-
-  // The text lesson: titled blocks, then modules and resources.
-  await openLesson(page, /La méthode CALME/);
-  await expect(main().getByRole("heading", { name: "En bref" })).toBeVisible();
-  await expect(main().getByRole("heading", { name: "Ce que vous allez faire" })).toBeVisible();
-  await expect(main().getByText("Poser les bonnes questions")).toBeVisible();
-  await expect(main().getByRole("heading", { name: "À retenir" })).toBeVisible();
-  await expect(main().getByText("Exercice de la leçon")).toBeVisible();
-  await expectAccessible(page);
-
-  await main().getByRole("tab", { name: "Modules" }).click();
-  await expect(main().getByRole("link", { name: /La méthode CALME/ })).toHaveAttribute(
-    "aria-current",
-    "page",
-  );
-  await expect(main().getByText("Après le quiz final")).toBeVisible();
-  await main().getByRole("tab", { name: "Ressources" }).focus();
-  await page.keyboard.press("ArrowRight");
-  await expect(main().getByRole("tab", { name: "Notes" })).toHaveAttribute("aria-selected", "true");
-  await main().getByRole("tab", { name: "Ressources" }).click();
-  await expect(main().getByRole("heading", { name: "Pour aller plus loin" })).toBeVisible();
-  await expect(main().getByRole("link", { name: "Télécharger le support de cours" })).toBeVisible();
+  await page.getByRole("tab", { name: "Texte" }).click();
+  await expect(page.getByRole("tab", { name: "Texte" })).toHaveAttribute("aria-selected", "true");
+  await page.getByRole("tab", { name: "Fichiers" }).click();
+  await expect(
+    page.getByRole("tabpanel", { name: "Fichiers" }).getByText("Support en PDF"),
+  ).toBeVisible();
   await expectAccessible(page);
 });

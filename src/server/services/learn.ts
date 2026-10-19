@@ -6,6 +6,7 @@ import { randomInt } from "node:crypto";
 import { z } from "zod";
 import type { Prisma, PrismaClient, QuestionType } from "@/generated/prisma/client";
 import { can, level, type Subject } from "@/server/entitlements";
+import { signCertificate } from "./certificate-signature";
 import { catalogRank } from "./plans";
 import { ensureProfile, refreshCompleteness } from "./profile";
 
@@ -20,6 +21,7 @@ export async function catalogLevelOf(db: PrismaClient, userId: string) {
 }
 
 const courseInclude = {
+  domain: { select: { name: true } },
   skills: { include: { skill: { select: { name: true } } } },
   modules: {
     orderBy: { order: "asc" },
@@ -262,6 +264,35 @@ export async function submitQuiz(
 const CODE_ALPHABET = "ABCDEFGHJKLMNPQRSTUVWXYZ23456789";
 
 /** JMN-XXXX-XXXX, without letters and digits that look alike. */
+/**
+ * The correction of one question while the quiz goes (planche talent-3 § 7): right or wrong, the
+ * right options and the explanation. Nothing is recorded: the attempt is the whole quiz, sent at
+ * the end. A quiz with limited attempts corrects only in its result, so trying an answer here
+ * never spares an attempt.
+ */
+export async function checkQuizQuestion(
+  db: PrismaClient,
+  userId: string,
+  lessonId: string,
+  questionId: string,
+  given: string[],
+) {
+  await lessonContext(db, userId, lessonId);
+  const question = await db.question.findFirst({
+    where: { id: questionId, quiz: { lessonId } },
+    include: { quiz: { select: { maxAttempts: true } } },
+  });
+  if (!question) throw new LearnError("notFound");
+  if (question.quiz.maxAttempts > 0) return { reveal: false as const };
+  const [result] = scoreQuiz([question], { [question.id]: given.slice(0, 10) }).results;
+  return {
+    reveal: true as const,
+    correct: Boolean(result?.correct),
+    answer: question.type === "text" ? question.answer.slice(0, 1) : question.answer,
+    explanation: question.explanation,
+  };
+}
+
 export function certificateCode() {
   const part = () =>
     Array.from({ length: 4 }, () => CODE_ALPHABET[randomInt(CODE_ALPHABET.length)]).join("");
@@ -279,7 +310,7 @@ export async function maybeCertify(db: PrismaClient, enrollmentId: string, now =
     include: {
       certificate: true,
       user: { select: { name: true } },
-      course: { include: courseInclude },
+      course: { include: { ...courseInclude, domain: { select: { name: true } } } },
     },
   });
   const all = requiredLessons(enrollment.course).map((lesson) => lesson.id);
@@ -292,17 +323,37 @@ export async function maybeCertify(db: PrismaClient, enrollmentId: string, now =
     });
   }
   if (!enrollment.course.certificateEnabled || enrollment.certificate) return null;
+  // The score of the last quiz of the course (« évaluation finale »), at its best attempt.
+  const quizzes = lessonsOf(enrollment.course).flatMap((lesson) =>
+    lesson.quiz ? [lesson.quiz.id] : [],
+  );
+  const best = quizzes.length
+    ? await db.quizAttempt.findFirst({
+        where: { userId: enrollment.userId, quizId: quizzes[quizzes.length - 1]!, passed: true },
+        orderBy: { score: "desc" },
+        select: { score: true },
+      })
+    : null;
   let certificate = null;
   for (let attempt = 0; attempt < 5 && !certificate; attempt++) {
     try {
+      const fields = {
+        code: certificateCode(),
+        holderName: enrollment.user.name,
+        courseTitle: enrollment.course.title,
+        hours: Math.max(1, Math.round(enrollment.course.durationMinutes / 60)),
+        score: best?.score ?? null,
+        issuedAt: now,
+      };
       certificate = await db.certificate.create({
         data: {
           enrollmentId: enrollment.id,
-          code: certificateCode(),
-          holderName: enrollment.user.name,
-          courseTitle: enrollment.course.title,
-          hours: Math.max(1, Math.round(enrollment.course.durationMinutes / 60)),
-          issuedAt: now,
+          ...fields,
+          domain: enrollment.course.domain?.name ?? null,
+          modules: enrollment.course.modules.length,
+          skills: enrollment.course.skills.map(({ skill }) => skill.name),
+          ...signCertificate(fields),
+          signedAt: now,
         },
       });
     } catch (error) {

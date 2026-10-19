@@ -7,8 +7,8 @@ export const COURSES_PER_PAGE = 12;
 
 export const courseLevels = ["beginner", "intermediate", "advanced"] as const;
 export const courseSorts = ["recent", "popular", "duration"] as const;
-/** Duration filter (Learn v2, étape 1): under 2 h, 2 to 10 h, over 10 h. */
-export const durationFilters = ["court", "moyen", "long"] as const;
+/** Duration filter (Learn v2, étape 1): under 1 h (refonte mobile), under 2 h, 2 to 10 h, over 10 h. */
+export const durationFilters = ["heure", "court", "moyen", "long"] as const;
 export const editorialFilters = ["originals", "expert_series", "partner_programs"] as const;
 
 /** Catalog levels offered in the "Accès" filter: "free", or "included up to this level". */
@@ -73,7 +73,8 @@ export function courseWhere(filters: CourseFilters): Prisma.CourseWhereInput {
   if (filters.theme) where.category = filters.theme;
   if (filters.domaine) where.domain = { slug: filters.domaine };
   if (filters.langue) where.language = filters.langue;
-  if (filters.duree === "court") where.durationMinutes = { lt: 120 };
+  if (filters.duree === "heure") where.durationMinutes = { lt: 60 };
+  else if (filters.duree === "court") where.durationMinutes = { lt: 120 };
   else if (filters.duree === "moyen") where.durationMinutes = { gte: 120, lte: 600 };
   else if (filters.duree === "long") where.durationMinutes = { gt: 600 };
   if (filters.competence) where.skills = { some: { skill: { slug: filters.competence } } };

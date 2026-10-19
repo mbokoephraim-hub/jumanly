@@ -110,10 +110,8 @@ export function hidesTalentTabBar(pathname: string) {
   // Messages and notifications open from the head and draw their own (planche talent-2 § 5).
   if (section === "messages" || section === "notifications") return true;
   if (section === "suivi") return Boolean(page);
-  if (section === "learn") {
-    const lists = ["attestations", "coach", "evaluations", "explorer", "parcours"];
-    return Boolean(page) && !lists.includes(page);
-  }
+  // Every page of Apprendre under its home draws its own head (planche talent-3).
+  if (section === "learn") return Boolean(page);
   if (section === "career")
     return (
       (page === "cv" && Boolean(more) && more !== "modeles") ||

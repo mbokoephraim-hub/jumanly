@@ -271,14 +271,14 @@ export default async function EspacePage() {
 
       <Group title={t("groups.acquired")}>
         <Row
-          href="/app/learn/attestations"
+          href="/app/learn/mes-formations?vue=attestations"
           icon="certificat"
           tone="bg-lime"
           title={t("acquired.certificates")}
           line={t("acquired.certificatesLine", { count: certificates })}
         />
         <Row
-          href="/app/learn/evaluations"
+          href="/app/learn/mes-formations"
           icon="quiz"
           tone="bg-menthe-claire"
           title={t("acquired.evaluations")}

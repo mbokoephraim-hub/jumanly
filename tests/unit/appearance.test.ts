@@ -11,7 +11,9 @@ describe("apparence de l'espace talent (brief § 2.10)", () => {
     expect(redrawn("/app/jobs/analyste-fictif")).toBe(true);
     expect(redrawn("/app/jobs/candidatures")).toBe(false);
     expect(redrawn("/app/jobs/candidatures/abc")).toBe(false);
-    expect(redrawn("/app/learn")).toBe(false);
+    expect(redrawn("/app/learn")).toBe(true);
+    expect(redrawn("/app/learn/excel/lecon-1")).toBe(true);
+    expect(redrawn("/app/abonnement")).toBe(false);
     // Lot 4.
     expect(redrawn("/app/jobs/analyste-fictif/postuler")).toBe(true);
     expect(redrawn("/app/suivi")).toBe(true);
@@ -31,7 +33,7 @@ describe("apparence de l'espace talent (brief § 2.10)", () => {
       ["dark", true, "/app/jobs", true],
       ["dark", true, "/app/jobs/analyste-fictif", true],
       ["dark", true, "/app/jobs/candidatures", false],
-      ["dark", true, "/app/learn", false],
+      ["dark", true, "/app/abonnement", false],
     ] as const) {
       const classes = new Set<string>();
       const run = new Function("location", "window", "document", appearanceScript(appearance));

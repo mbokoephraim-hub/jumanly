@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { Character } from "@/components/brand";
 import { Icon } from "@/components/brand/icon";
+import { TalentIcon } from "@/components/talent/icon";
 import { CertificateLookup } from "@/components/learn/certificate-lookup";
 import { Eyebrow, Pattern, stagger, wrap } from "@/components/site/marketing";
 import { MotionRoot } from "@/components/site/motion";
@@ -17,7 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), description: t("seo.description"), robots: { index: false } };
 }
 
-/** Public verification of an attestation (mockup 01-15): valid, revoked or unknown. */
+/** Public verification of an attestation (planche talent-3): authentic, modified, revoked or unknown. */
 export default async function CertificateVerifyPage({ params }: PageProps<"/attestations/[code]">) {
   const t = await getTranslations("certificate.verify");
   const learn = await getTranslations("trainings.hero");
@@ -70,88 +71,91 @@ export default async function CertificateVerifyPage({ params }: PageProps<"/atte
   );
 }
 
+/**
+ * The answer of the check (planche talent-3, « Vérification publique »): authentic (the digital
+ * signature matches), modified, revoked or unknown, then the holder, the course, the result and
+ * the date, the number.
+ */
 async function Verification({ params }: { params: PageProps<"/attestations/[code]">["params"] }) {
   const { code } = await params;
-  const t = await getTranslations("certificate.verify");
-  const card = await getTranslations("learn.card");
+  const t = await getTranslations("attest.verify");
   const format = await getFormatter();
-  const certificate = await getCertificate(decodeURIComponent(code).toUpperCase());
-  const shell =
-    "flex flex-col gap-4 rounded-[28px] bg-blanc p-6 shadow-[0_24px_60px_rgba(15,63,55,0.12)] lg:rounded-[32px] lg:px-10 lg:py-9";
-  if (!certificate) {
+  const { check, certificate } = await getCertificate(decodeURIComponent(code).toUpperCase());
+  if (!certificate || check.state === "unknown")
     return (
-      <div className={shell} role="status">
-        <div className="flex items-start gap-4 rounded-[22px] px-4 py-4 ring-[1.5px] ring-brume ring-inset">
-          <span className="flex size-[52px] shrink-0 items-center justify-center rounded-full bg-creme">
-            <Icon name="recherche" className="size-6" />
+      <div className="t-flux t-serre" role="status">
+        <div className="t-verre t-v-ko t-v-inconnue">
+          <TalentIcon name="recherche" size="s" />
+          <span>
+            <b>{t("unknown.title")}</b> {t("unknown.text")}
           </span>
-          <div className="flex flex-col gap-0.5">
-            <h2 className="text-lg font-semibold">{t("notFound.title")}</h2>
-            <p className="text-sm leading-5">{t("notFound.body")}</p>
-          </div>
         </div>
       </div>
     );
-  }
-  const revoked = certificate.revokedAt !== null;
+  const date = format.dateTime(certificate.issuedAt, { dateStyle: "long", timeZone: "UTC" });
   const rows = [
     { label: t("holder"), value: certificate.holderName },
-    { label: t("course"), value: certificate.courseTitle },
-    { label: t("duration"), value: card("duration.text", { hours: certificate.hours }) },
     {
-      label: t("issued"),
-      value: format.dateTime(certificate.issuedAt, { dateStyle: "long", timeZone: "UTC" }),
+      label: t("course"),
+      value: t("courseLine", { course: certificate.courseTitle, hours: certificate.hours }),
     },
-    { label: t("code"), value: certificate.code, mono: true },
+    {
+      label: t("result"),
+      value:
+        certificate.score !== null ? t("resultLine", { score: certificate.score, date }) : date,
+    },
+    { label: t("number"), value: certificate.code },
   ];
+  const state = check.state;
   return (
-    <div className={shell} role="status">
-      <div
-        className={cx(
-          "flex items-center gap-4 rounded-[22px] px-[18px] py-4",
-          revoked ? "bg-down-fond" : "bg-[#E4FAD0]",
-        )}
-      >
-        <span
-          className={cx(
-            "jm-pop flex size-[52px] shrink-0 items-center justify-center rounded-full text-blanc",
-            revoked ? "bg-down-texte" : "bg-feuille-fonce",
-          )}
-        >
-          <Icon name={revoked ? "fermer" : "check"} className="size-6" />
-        </span>
-        <div className="flex flex-col gap-0.5">
-          <h2
-            className={cx("text-lg font-semibold", revoked ? "text-down-texte" : "text-up-texte")}
-          >
-            {revoked ? t("revoked.badge") : t("valid.badge")}
-          </h2>
-          <p className="text-sm leading-5">
-            {revoked ? t("revoked.body", { date: certificate.revokedAt! }) : t("valid.body")}
+    <div className="t-flux t-serre" role="status">
+      {state === "authentic" ? (
+        <div className="t-verre t-v-ok">
+          <span className="t-rond-ok" aria-hidden>
+            <TalentIcon name="valider" />
+          </span>
+          <h2>{t("authentic.title")}</h2>
+          <p>
+            {check.state === "authentic" && check.signature === "valid"
+              ? t("authentic.text")
+              : t("authentic.textUnsigned")}
           </p>
         </div>
-      </div>
-      <dl className="flex flex-col">
+      ) : (
+        <div className="t-verre t-v-ok t-v-alerte">
+          <span className="t-rond-ok" aria-hidden>
+            <TalentIcon name="fermer" />
+          </span>
+          <h2>{state === "revoked" ? t("revoked.title") : t("modified.title")}</h2>
+          <p>
+            {state === "revoked"
+              ? t("revoked.text", {
+                  date: format.dateTime(certificate.revokedAt!, {
+                    dateStyle: "long",
+                    timeZone: "UTC",
+                  }),
+                })
+              : t("modified.text")}
+          </p>
+        </div>
+      )}
+      <dl className="t-verre t-liste t-lignes">
         {rows.map((row) => (
-          <div
-            key={row.label}
-            className="flex flex-col gap-0.5 border-t border-brume py-3.5 sm:flex-row sm:items-center sm:justify-between sm:gap-4"
-          >
-            <dt className="text-sm text-ardoise">{row.label}</dt>
-            <dd
-              className={cx(
-                "text-base font-semibold sm:text-right",
-                row.mono && "font-mono tracking-[0.04em]",
-              )}
-            >
-              {row.value}
-            </dd>
+          <div key={row.label} className="t-li">
+            <div className="t-t flex-col-reverse">
+              <dd>
+                <b>{row.value}</b>
+              </dd>
+              <dt>
+                <span>{row.label}</span>
+              </dt>
+            </div>
           </div>
         ))}
       </dl>
-      <p className="flex items-start gap-2.5 rounded-[16px] bg-creme px-3.5 py-3 text-[13px] leading-[19px] text-ardoise">
-        <Icon name="lock" className="mt-px size-4 shrink-0" />
-        {t("privacy")}
+      <p className="t-v-ko">
+        <TalentIcon name="aide" size="s" />
+        <span>{t("warning")}</span>
       </p>
     </div>
   );

@@ -18,7 +18,11 @@ const items = [
   { key: "account.menu.profile", href: "/app/profil", icon: "profil" },
   { key: "account.menu.subscription", href: "/app/abonnement", icon: "portefeuille" },
   { key: "account.menu.quotas", href: "/app/abonnement", icon: "statistiques" },
-  { key: "account.menu.certificates", href: "/app/learn/attestations", icon: "certificat" },
+  {
+    key: "account.menu.certificates",
+    href: "/app/learn/mes-formations?vue=attestations",
+    icon: "certificat",
+  },
   { key: "account.menu.settings", href: "/app/parametres", icon: "reglages" },
   {
     key: "account.menu.howMatchingWorks",

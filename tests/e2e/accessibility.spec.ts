@@ -44,7 +44,7 @@ const sweeps: { name: string; email: string; paths: string[] }[] = [
     email: demo.talentPro,
     paths: [
       "/app/learn",
-      "/app/learn/attestations",
+      "/app/learn/mes-formations?vue=attestations",
       "/app/career/plan",
       "/app/career/entretiens",
       "/app/career/documents",

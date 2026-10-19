@@ -3181,6 +3181,380 @@
       "diagnosticReady": "Niveau {stage}"
     }
   },
+  "apprendre": {
+    "seo": "Apprendre",
+    "title": "Apprendre",
+    "mine": {
+      "label": "Mes formations et attestations",
+      "courses": "Formations",
+      "attestations": "Attestations",
+      "seo": "Mes formations",
+      "title": "Mes formations",
+      "back": "Retour à mes formations",
+      "tabs": "Mes formations",
+      "tab": {
+        "current": "En cours",
+        "finished": "Terminées",
+        "saved": "Enregistrées"
+      },
+      "left": "reste {time}",
+      "todo": "À faire",
+      "quiz": "Quiz · {title}",
+      "exercise": "Exercice · {title}",
+      "questions": "{count, plural, one {# question} other {# questions}}",
+      "whenever": "À rendre quand vous voulez",
+      "finishedOn": "Terminée le {date}",
+      "withAttestation": "attestation obtenue",
+      "none": {
+        "current": "Aucune formation en cours.",
+        "finished": "Aucune formation terminée pour l'instant.",
+        "saved": "Aucune formation enregistrée. Touchez le cœur d'une formation pour la garder ici."
+      }
+    },
+    "resume": "Reprendre",
+    "domains": "Par domaine",
+    "recommended": "Recommandées pour vous",
+    "all": "Tout voir",
+    "empty": {
+      "title": "Aucune formation pour l'instant.",
+      "text": "Cherchez une formation par métier, outil ou compétence.",
+      "cta": "Rechercher une formation"
+    },
+    "search": {
+      "seo": "Rechercher une formation",
+      "title": "Rechercher",
+      "back": "Retour à Apprendre",
+      "label": "Rechercher une formation",
+      "placeholder": "Métier, outil ou compétence",
+      "quick": "Filtres rapides",
+      "chip": {
+        "free": "Gratuit",
+        "beginner": "Débutant",
+        "hour": "Moins d'1 h"
+      },
+      "count": "{count, plural, =0 {Aucune formation} one {# formation} other {# formations}}",
+      "none": {
+        "title": "Aucune formation ne correspond.",
+        "text": "Essayez un autre mot ou retirez un filtre.",
+        "cta": "Voir toutes les formations"
+      },
+      "more": "Voir plus de formations",
+      "filtersCount": "{count, plural, one {Filtres, # actif} other {Filtres, # actifs}}",
+      "orbi": {
+        "label": "Orbi suggère",
+        "text": "Le parcours « {title} » réunit ces formations.",
+        "cta": "Voir le parcours"
+      },
+      "filters": {
+        "title": "Filtres",
+        "any": "Tous",
+        "access": "Accès",
+        "free": "Gratuites",
+        "included": "Incluses dans ma formule",
+        "level": "Niveau",
+        "duration": "Durée",
+        "domain": "Domaine",
+        "submit": "Voir les formations",
+        "reset": "Effacer les filtres"
+      },
+      "level": {
+        "beginner": "Débutant",
+        "intermediate": "Intermédiaire",
+        "advanced": "Avancé"
+      },
+      "duration": {
+        "heure": "Moins d'1 h",
+        "court": "Moins de 2 h",
+        "moyen": "2 à 10 h",
+        "long": "Plus de 10 h"
+      }
+    },
+    "course": {
+      "seo": "{title}",
+      "back": "Retour à la formation",
+      "backLearn": "Retour",
+      "share": "Partager la formation",
+      "shared": "Lien de la formation copié.",
+      "save": "Enregistrer la formation",
+      "unsave": "Retirer des formations enregistrées",
+      "total": "au total",
+      "modules": "{count, plural, one {module} other {modules}}",
+      "attestation": "attestation",
+      "yes": "Oui",
+      "no": "Non",
+      "know": "Vous saurez",
+      "program": "Programme de la formation",
+      "kind": {
+        "video": "vidéo",
+        "text": "texte",
+        "quiz": "quiz",
+        "exercise": "exercice",
+        "resource": "ressource"
+      },
+      "free": "Gratuit",
+      "moduleDone": "Module terminé",
+      "locked": "Inclus dans une formule supérieure",
+      "lock": {
+        "plan": "Suite incluse dès la formule {plan}",
+        "other": "Suite incluse dans une formule supérieure",
+        "free": "Le premier module reste gratuit."
+      },
+      "freeModule": "Module gratuit",
+      "plans": "Voir les formules",
+      "start": "Commencer la formation",
+      "resume": "Reprendre la formation",
+      "finished": "Formation terminée"
+    },
+    "done": {
+      "title": "Formation terminée",
+      "close": "Fermer",
+      "passedOn": "Réussie le {date}",
+      "score": "score au quiz final {score} %",
+      "attestation": "Voir l'attestation",
+      "added": "Ajouté à votre profil",
+      "skill": "<b>{skill}</b>, compétence vérifiée",
+      "visible": "Attestation visible par les recruteurs",
+      "next": "Et maintenant"
+    },
+    "lesson": {
+      "seo": "{title}",
+      "where": "Module {module} · Leçon {lesson} sur {total}",
+      "tabs": "Contenu de la leçon",
+      "tab": {
+        "lesson": "Leçon",
+        "text": "Texte",
+        "notes": "Notes",
+        "files": "Fichiers"
+      },
+      "previous": "Leçon précédente",
+      "next": "Leçon suivante",
+      "finish": "Terminer la formation",
+      "enrolled": "Vous suivez cette formation. Votre progression est enregistrée.",
+      "moduleDone": "Module {module} terminé. Bravo !",
+      "preview": "Module gratuit : votre progression n'est pas enregistrée.",
+      "noText": "Cette leçon n'a pas de texte.",
+      "transcript": "Transcription",
+      "textOnly": "Lecture sans vidéo : le texte de la leçon est dans l'onglet Texte.",
+      "jobLocked": "Exercice métier, inclus dans une formule supérieure",
+      "jobLockedText": "Il est facultatif : la formation se termine sans lui.",
+      "support": "Support en PDF",
+      "supportHint": "Toute la formation · hors connexion",
+      "download": "Télécharger",
+      "downloadNamed": "Télécharger {title}",
+      "notes": {
+        "label": "Nouvelle note",
+        "placeholder": "Ce que je veux retenir",
+        "save": "Enregistrer la note",
+        "saved": "Note enregistrée.",
+        "delete": "Supprimer la note",
+        "empty": "Vos notes ne sont visibles que par vous.",
+        "preview": "Commencez la formation pour prendre des notes."
+      },
+      "orbi": {
+        "title": "Expliquer cette notion",
+        "text": "Orbi répond avec un exemple",
+        "name": "Orbi",
+        "where": "Dans cette leçon · {course}",
+        "intro": "Posez votre question sur cette leçon. Je réponds à partir de la formation, avec un exemple.",
+        "you": "Vous",
+        "thinking": "Orbi réfléchit…",
+        "source": "D'après : {lessons}.",
+        "sourceCourse": "Passage de la formation : {lessons}.",
+        "another": "Un autre exemple",
+        "test": "Me tester",
+        "label": "Poser une question",
+        "placeholder": "Poser une question",
+        "send": "Envoyer",
+        "failed": "Orbi n'a pas pu répondre. Réessayez dans un instant.",
+        "explainAsk": "Expliquez-moi cette leçon.",
+        "anotherAsk": "Un autre exemple, s'il vous plaît.",
+        "testAsk": "Testez-moi sur cette leçon.",
+        "limit": {
+          "consent": "Orbi répond avec les passages de la formation, car l'aide de l'IA n'est pas activée.",
+          "entitlement": "Orbi répond avec les passages de la formation : l'explication par l'IA est incluse dans une formule supérieure.",
+          "quota": "Vos crédits Orbi du mois sont utilisés : voici les passages de la formation.",
+          "unavailable": "L'IA est indisponible pour l'instant : voici les passages de la formation."
+        },
+        "plans": "Voir les formules",
+        "consent": "Activer l'aide de l'IA"
+      },
+      "settings": {
+        "title": "Réglages de la leçon",
+        "chipAuto": "Auto",
+        "chipLow": "Économie · 240p",
+        "quality": "Qualité vidéo",
+        "qualityAuto": "Automatique selon la connexion",
+        "qualityLow": "La plus légère, pour économiser les données",
+        "valueAuto": "Auto",
+        "valueLow": "240p",
+        "saver": "Économiser les données",
+        "saverText": "Vidéo en 240p, images allégées",
+        "textOnly": "Lire sans vidéo",
+        "textOnlyText": "Texte et images de la leçon",
+        "position": "Votre position est enregistrée : vous reprenez là où vous vous êtes arrêté, même après une coupure."
+      }
+    },
+    "quiz": {
+      "title": "Quiz · Module {module}",
+      "empty": "Ce quiz n'a pas encore de questions.",
+      "step": "Question {current} sur {total}",
+      "attempts": "{count, plural, one {Il vous reste # essai.} other {Il vous reste # essais.}}",
+      "noAttempt": "Vous avez utilisé tous vos essais pour ce quiz.",
+      "right": "Bonne réponse",
+      "wrong": "Pas tout à fait",
+      "kept": "Réponse gardée. La correction viendra avec le résultat.",
+      "validate": "Valider ma réponse",
+      "next": "Question suivante",
+      "finish": "Voir mon résultat",
+      "offline": "Vous êtes hors connexion. Vos réponses sont gardées sur cet appareil : le résultat part dès le retour de la connexion.",
+      "textLabel": "Votre réponse",
+      "multiple": "Plusieurs réponses possibles.",
+      "expected": "Réponse attendue : « {answer} »",
+      "result": "Résultat du quiz",
+      "score": "{right}/{total}",
+      "scoreAria": "{right} bonnes réponses sur {total}",
+      "passed": "Module validé !",
+      "passedText": "Bravo, vous pouvez passer à la suite.",
+      "almost": "Presque !",
+      "need": "Il faut {need} bonnes réponses sur {total} pour valider ce module.",
+      "review": "À revoir",
+      "reviewLesson": "Leçon {number} · {title}",
+      "reread": "Revoir",
+      "retry": "Recommencer le quiz"
+    },
+    "exercise": {
+      "title": "Exercice",
+      "drop": "Déposer mon fichier",
+      "dropHint": "PDF ou photo, 4 Mo au plus",
+      "cv": "Ou choisir un de mes CV",
+      "cvUpdated": "Modifié le {date}",
+      "orbi": {
+        "label": "Orbi peut relire",
+        "text": "Il vous dit ce qui manque. Il ne fait pas l'exercice à votre place."
+      },
+      "send": "Rendre l'exercice",
+      "again": "Rendre une nouvelle version",
+      "sent": "Déjà rendu",
+      "sentLine": "{name}, le {date}",
+      "file": "Fichier",
+      "error": {
+        "taille": "Ce fichier dépasse 4 Mo. Choisissez un fichier plus léger.",
+        "vide": "Déposez un fichier ou choisissez un de vos CV.",
+        "format": "Ce fichier n'est pas accepté. Déposez un PDF ou une photo."
+      }
+    },
+    "path": {
+      "seo": "Parcours de formation",
+      "title": "Parcours",
+      "back": "Retour",
+      "share": "Partager le parcours",
+      "shared": "Lien du parcours copié.",
+      "followed": "Vous suivez ce parcours.",
+      "kicker": "{count, plural, one {Parcours · # formation} other {Parcours · # formations}}",
+      "total": "{duration} au total",
+      "attestation": "une attestation par formation",
+      "hours": "{hours} h",
+      "hoursMinutes": "{hours} h {minutes}",
+      "progress": "{done} formations terminées sur {total}",
+      "done": "Terminée",
+      "active": "{percent} % · reprendre",
+      "locked": "{duration} · incluse dans une formule supérieure",
+      "nextLocked": "La formation suivante est incluse dès la formule {plan}.",
+      "finished": "Parcours terminé · voir mes formations",
+      "continue": "Continuer le parcours",
+      "start": "Commencer le parcours"
+    }
+  },
+  "attest": {
+    "list": {
+      "title": "Mes attestations",
+      "line": "{count, plural, =0 {Aucune pour l'instant · vérifiables en ligne} one {# obtenue · vérifiable en ligne} other {# obtenues · vérifiables en ligne}}",
+      "passedOn": "Réussie le {date}",
+      "score": "{score} %",
+      "empty": {
+        "title": "Pas encore d'attestation.",
+        "text": "Terminez une formation pour recevoir une attestation signée, vérifiable en ligne.",
+        "cta": "Voir mes formations"
+      }
+    },
+    "detail": {
+      "seo": "Attestation",
+      "title": "Attestation",
+      "back": "Retour à mes attestations",
+      "more": "Plus d'options",
+      "alt": "Attestation « {course} » délivrée à {holder}",
+      "number": "N° {code}",
+      "issued": "Délivrée le {date} · signée par Jumanly",
+      "visible": "Visible sur mon profil",
+      "visibleOn": "Les recruteurs la voient",
+      "visibleOff": "Les recruteurs ne la voient pas",
+      "pdf": "PDF",
+      "share": "Partager",
+      "check": "Chacun peut vérifier cette attestation avec son numéro ou son code QR.",
+      "openCheck": "Voir la page de vérification",
+      "course": "Voir la formation"
+    },
+    "share": {
+      "title": "Partager mon attestation",
+      "linkedin": "LinkedIn",
+      "whatsapp": "WhatsApp",
+      "email": "E-mail",
+      "image": "Image",
+      "copy": "Copier",
+      "copied": "Lien copié.",
+      "privacy": "Le lien montre seulement votre nom, la formation et la date.",
+      "subject": "Mon attestation Jumanly : {course}",
+      "message": "J'ai réussi la formation « {course} » sur Jumanly. Vérifiez mon attestation : {url}"
+    },
+    "verify": {
+      "holder": "Titulaire",
+      "course": "Formation",
+      "courseLine": "{course} · {hours, plural, one {# h} other {# h}}",
+      "result": "Résultat et date",
+      "resultLine": "{score} % · {date}",
+      "number": "Numéro",
+      "authentic": {
+        "title": "Attestation authentique",
+        "text": "Délivrée par Jumanly. La signature numérique correspond.",
+        "textUnsigned": "Délivrée par Jumanly et enregistrée sous ce numéro."
+      },
+      "modified": {
+        "title": "Attestation modifiée",
+        "text": "Les informations enregistrées ne correspondent plus à la signature de Jumanly. Ne vous fiez pas à ce document."
+      },
+      "revoked": {
+        "title": "Attestation retirée",
+        "text": "Jumanly a retiré cette attestation le {date}. Elle n'est plus valable."
+      },
+      "unknown": {
+        "title": "Aucune attestation ne porte ce numéro.",
+        "text": "Vérifiez le numéro, au format JMN-XXXX-XXXX."
+      },
+      "warning": "Si le nom ou la date diffèrent du document reçu, celui-ci a été modifié."
+    },
+    "sheet": {
+      "number": "N° {code}",
+      "delivered": "Délivrée le {date}",
+      "title": "ATTESTATION",
+      "subtitle": "de réussite",
+      "intro": "Jumanly atteste que",
+      "body": {
+        "course": "a suivi et réussi la formation <b>« {course} »</b> ({details})",
+        "score": "avec un résultat de <b>{score} %</b> à l’évaluation finale.",
+        "skills": "Compétences validées :"
+      },
+      "hours": "{count, plural, one {# h} other {# h}}",
+      "modules": "{count, plural, one {# module} other {# modules}}",
+      "signer": "Direction pédagogique, Jumanly",
+      "signedOn": "Signé électroniquement le {date} à {time} UTC",
+      "fingerprint": "Empreinte {value}",
+      "verifyTitle": "Vérifier l’authenticité",
+      "verifyText": "Scannez le code ou rendez-vous sur",
+      "footer": "Une plateforme développée par The Growth Lab · Learn. Grow. Connect. · Ce document n’a de valeur que s’il est confirmé en ligne.",
+      "micro": "JUMANLY · ATTESTATION AUTHENTIQUE · {code} · VÉRIFIABLE EN LIGNE · LEARN. GROW. CONNECT. ·",
+      "seal": "ATTESTATION VALIDÉE · SCEAU D’ORIGINALITÉ ·"
+    }
+  },
   "talentOrbi": {
     "metaTitle": "Orbi",
     "title": "Orbi",

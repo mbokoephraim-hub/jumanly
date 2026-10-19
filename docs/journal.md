@@ -2,6 +2,40 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte mobile de l'espace talent · lot 5 : Apprendre, salle de cours, quiz, attestations (19 octobre 2026)
+
+- Apprendre (`/app/learn`, planche talent-3 § 1) : la recherche sous le titre, l'accès à « Mes
+  formations » et aux attestations, la formation à reprendre, les domaines, les formations
+  recommandées. Rechercher (`/app/learn/rechercher`) : filtres rapides, filtres en feuille
+  (accès, niveau, durée dont « Moins d'1 h », domaine) et le parcours qu'Orbi suggère.
+- Mes formations (`/app/learn/mes-formations`) : en cours, terminées, enregistrées, « À faire »
+  (quiz et exercices) ; `?vue=attestations` liste les attestations avec leur vignette.
+- Une formation (`/app/learn/[slug]`) : chiffres, « Vous saurez », modules, verrou d'une
+  formation au-dessus de la formule (nom de la formule lu en base, premier module gratuit), et
+  « Formation terminée » (`?vue=terminee`) avec les compétences ajoutées et une offre.
+- Salle de cours (`/app/learn/[slug]/[lecon]`) : vidéo avec la puce de qualité, onglets Leçon,
+  Texte, Notes, Fichiers, Orbi en feuille pour expliquer une notion, réglages de la leçon
+  (économie de données, lecture sans vidéo, support PDF). Quiz question par question, corrigé
+  aussitôt, réponses gardées sur l'appareil hors connexion, résultat « Presque ! » avec les
+  leçons à revoir. Exercice à rendre : fichier (PDF ou photo, 4 Mo) ou un de mes CV
+  (`ExerciseSubmission`, migration additive).
+- Attestation signée (Ed25519, `src/server/services/certificate-signature.ts`, migration
+  additive : signature, clé, score, domaine, modules, compétences, « Visible sur mon profil »).
+  Dessin d'après la planche attestation (`src/server/pdf/attestation-sheet.ts`) : vignette,
+  PDF A4 paysage et image (`/app/learn/attestations/[id]/[apercu|pdf|image]`). Détail et partage
+  (LinkedIn, WhatsApp, e-mail, image, lien). Vérification publique : authentique, modifiée,
+  retirée ou inconnue. Une attestation masquée n'apparaît plus dans la fiche candidat.
+- Parcours (`/app/learn/parcours/[parcours]`) redessiné. Redirigent : `/app/learn/explorer`,
+  `/app/learn/parcours`, `/app/learn/evaluations`, `/app/learn/attestations`, `/app/learn/coach`
+  (vers Orbi) et les anciennes adresses `?lecon=`.
+- Mode sombre pour tout Apprendre. Démo fictive de Grâce : `prisma/seed/apprendre.ts`.
+- Supprimés : `src/components/learn/lesson-tabs.tsx`, `lesson-notes.tsx`,
+  `lesson-transcript.tsx`, `quiz-panel.tsx`, `course-overview.tsx`, `coach-chat.tsx`,
+  `path-card.tsx`, `copy-link.tsx`, `src/app/app/learn/attestations/[id]/pdf/route.ts`
+  (remplacée par `[format]`). Le lecteur vidéo reste partagé avec le site public et l'admin.
+- Captures 390 px, clair et sombre : `/mnt/project-files/captures/refonte-mobile-lot-5/`.
+- Choix et écarts : `docs/decisions/2026-10-19-refonte-mobile-lot-5.md`.
+
 ## Refonte mobile de l'espace talent · lot 4 : Postuler, Suivi, messages, notifications (19 octobre 2026)
 
 - Postuler (`/app/jobs/[slug]/postuler`, planche talent-2 § 1) en trois étapes : CV, documents et

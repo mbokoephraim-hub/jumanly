@@ -135,7 +135,18 @@ export default async function CandidatePage({
   const wanted = new Set(job.skills.map((item) => item.skillId));
   const matched = profile.skills.filter((item) => wanted.has(item.skillId));
   const others = profile.skills.filter((item) => !wanted.has(item.skillId));
-  const certified = profile.skills.filter((item) => item.verified);
+  // Refonte mobile, lot 5: an attestation the talent hid from their profile shows nothing here.
+  const hidden = new Set(
+    (
+      await db.certificate.findMany({
+        where: { onProfile: false, enrollment: { userId: profile.userId } },
+        select: { code: true },
+      })
+    ).map((certificate) => `/attestations/${certificate.code}`),
+  );
+  const certified = profile.skills.filter(
+    (item) => item.verified && !(item.proofUrl && hidden.has(item.proofUrl)),
+  );
   const ordered = [...job.stages].sort((a, b) => a.order - b.order);
   const nextStage = ordered.find(
     (stage) =>
