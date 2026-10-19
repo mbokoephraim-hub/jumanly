@@ -51,8 +51,8 @@ export default async function CandidatePage({
 }: PageProps<"/app/hire/candidats/[applicationId]">) {
   const [{ applicationId }, query] = await Promise.all([params, searchParams]);
   // The refusal form moved to its exact preview (prompt 5); old links lead there.
-  if (query.decision === "refus")
-    redirect(`/app/hire/candidats/${applicationId}/message?modele=refus`);
+  if (query.decision === "refus" || query.decision === "acceptation")
+    redirect(`/app/hire/candidats/${applicationId}/message?modele=${query.decision}`);
   const { user, ctx } = await requireHire(
     `/app/hire/candidats/${applicationId}`,
     "readApplications",

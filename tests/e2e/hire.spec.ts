@@ -39,22 +39,8 @@ async function newPage(browser: Browser, baseURL: string | undefined, isMobile: 
   return context.newPage();
 }
 
-// E4 definition of done: recruiter publishes → talent applies → recruiter moves the candidate →
-// message → decision → the talent sees the status.
-test("un recruteur publie, un talent postule, échange puis reçoit une décision", async ({
-  page,
-  browser,
-  baseURL,
-  isMobile,
-}) => {
-  test.setTimeout(180_000);
-  const title = `Analyste de données junior ${Math.random()
-    .toString(36)
-    .replace(/[^a-z]/g, "")
-    .slice(0, 6)}`;
-  await signUpRecruiter(page, testEmail("rh"), "Cabinet fictif e2e");
-
-  // Publish a job.
+/** Publishes a job with the defaults the journeys need; returns its pipeline and its slug. */
+async function publishJob(page: Page, title: string) {
   await page.goto("/app/hire/offres/nouvelle");
   await page.locator("#job-title").fill(title);
   await page.locator("#job-city").fill("Abidjan");
@@ -87,10 +73,11 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
     .first()
     .getAttribute("href");
   const slug = publicHref!.split("/").pop()!;
+  return { pipelineUrl, slug };
+}
 
-  // The talent applies from the signed-in offer page.
-  const talent = await newPage(browser, baseURL, isMobile);
-  await logIn(talent, demo.talentFree);
+/** The talent applies with their Jumanly profile from the signed-in offer page. */
+async function applyTo(talent: Page, slug: string, title: string) {
   await talent.goto(`/app/jobs/${slug}`);
   await expect(talent.getByRole("heading", { level: 1 })).toHaveText(title);
   await talent.goto(`/app/jobs/${slug}?postuler=1`);
@@ -105,6 +92,29 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await talent.getByLabel(/consulte ma candidature/).check();
   await talent.getByRole("button", { name: "Envoyer ma candidature" }).click();
   await expect(talent.getByRole("heading", { name: "Candidature envoyée !" })).toBeVisible();
+}
+
+// E4 definition of done: recruiter publishes → talent applies → recruiter moves the candidate →
+// message → decision → the talent sees the status.
+test("un recruteur publie, un talent postule, échange puis reçoit une décision", async ({
+  page,
+  browser,
+  baseURL,
+  isMobile,
+}) => {
+  test.setTimeout(180_000);
+  const title = `Analyste de données junior ${Math.random()
+    .toString(36)
+    .replace(/[^a-z]/g, "")
+    .slice(0, 6)}`;
+  await signUpRecruiter(page, testEmail("rh"), "Cabinet fictif e2e");
+
+  const { pipelineUrl, slug } = await publishJob(page, title);
+
+  // The talent applies from the signed-in offer page.
+  const talent = await newPage(browser, baseURL, isMobile);
+  await logIn(talent, demo.talentFree);
+  await applyTo(talent, slug, title);
 
   // The recruiter sees a notification, opens the candidate and moves them to « Entretien ».
   await page.goto("/app/notifications");
@@ -185,6 +195,9 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   const preview = page.locator("article").filter({ hasText: "Candidature non retenue" });
   await expect(preview).toContainText("Bonjour Amani,");
   await expect(preview).toContainText(title);
+  // Prompt 5 bis: another tone in one click, still an exact preview.
+  await page.getByRole("link", { name: "Plus court" }).click();
+  await expect(preview).toContainText("Nous avons retenu un autre profil.");
   await page.locator("#decision-reason").selectOption("otherCandidate");
   await page.getByRole("button", { name: "Envoyer", exact: true }).click();
   await expect(page.getByRole("main")).toContainText("Décision enregistrée.");
@@ -193,6 +206,7 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await talent.goto(threadUrl);
   const decision = talent.locator("article").filter({ hasText: "Candidature non retenue" });
   await expect(decision).toContainText("Bonjour Amani,");
+  await expect(decision).toContainText("Nous avons retenu un autre profil.");
   await expect(decision).toContainText("Recrutement");
   await expect(talent.getByRole("heading", { name: "Pour rebondir" })).toBeVisible();
   await expect(talent.getByRole("link", { name: /S'entraîner/ })).toBeVisible();
@@ -205,6 +219,72 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await expect(talent.getByRole("main")).toContainText(
     `n'a pas retenu votre candidature à « ${title} »`,
   );
+  await talent.context().close();
+});
+
+// Prompt 5 bis (V7, screen 80): an acceptance written from a well-made model, in three tones, with
+// the values filled in by Jumanly highlighted; nothing leaves before the recruiter's click.
+test("le recruteur accepte un candidat avec un modèle au ton choisi", async ({
+  page,
+  browser,
+  baseURL,
+  isMobile,
+}) => {
+  test.setTimeout(180_000);
+  const title = `Comptable fictif ${Math.random()
+    .toString(36)
+    .replace(/[^a-z]/g, "")
+    .slice(0, 6)}`;
+  await signUpRecruiter(page, testEmail("rh-accept"), "Cabinet fictif acceptation");
+  const { pipelineUrl, slug } = await publishJob(page, title);
+  const talent = await newPage(browser, baseURL, isMobile);
+  await logIn(talent, demo.talentFree);
+  await applyTo(talent, slug, title);
+
+  await page.goto(pipelineUrl);
+  await page.getByRole("link", { name: "Amani Fictif" }).click();
+  await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
+  const candidateUrl = page.url().split("?")[0]!;
+  await page.getByRole("link", { name: "Envoyer un message" }).click();
+  await expect(page).toHaveURL(/\/app\/messages\//);
+  const threadUrl = page.url().split("#")[0]!;
+  await page.goto(`${candidateUrl}?decision=acceptation`);
+  await expect(page).toHaveURL(/\/message\?modele=acceptation/);
+  const main = page.locator("main").filter({ visible: true });
+  await expect(main.getByRole("heading", { level: 1, name: "Acceptation" })).toBeVisible();
+  const model = main.locator("section").filter({ hasText: "Acceptation · modèle proposé" });
+  await expect(model).toContainText("Bonne nouvelle : votre candidature au poste de");
+  await expect(model.locator("mark").filter({ hasText: "Amani" })).toBeVisible();
+  await expect(model.locator("mark").filter({ hasText: title })).toBeVisible();
+  await expect(main.getByRole("link", { name: "Chaleureux" })).toHaveAttribute(
+    "aria-current",
+    "true",
+  );
+  // Without the appointments right, no slot can be added; Orbi waits for its prompt.
+  await expect(main.getByRole("link", { name: "Ajouter un créneau" })).toHaveCount(0);
+  await expect(main.getByText("Personnaliser avec Orbi")).toBeVisible();
+
+  await main.getByRole("link", { name: "Formel" }).click();
+  await expect(main.locator("section").filter({ hasText: "modèle proposé" })).toContainText(
+    "Nous avons le plaisir de vous informer",
+  );
+  await main.getByRole("link", { name: "Court" }).click();
+  const short = main.locator("section").filter({ hasText: "modèle proposé" });
+  await expect(short).toContainText("Nous revenons vers vous pour fixer votre arrivée.");
+  await expect(short).not.toContainText("Nous avons le plaisir");
+
+  // « Aperçu »: exactly what the talent will receive.
+  await main.getByRole("link", { name: "Aperçu", exact: true }).click();
+  const preview = main.locator("article").filter({ hasText: "Candidature retenue" });
+  await expect(preview).toContainText("Nous revenons vers vous pour fixer votre arrivée.");
+  await expectAccessible(page);
+  await main.getByRole("button", { name: "Envoyer", exact: true }).click();
+  await expect(page.getByRole("main")).toContainText("Décision enregistrée.");
+
+  await talent.goto(threadUrl);
+  const decision = talent.locator("article").filter({ hasText: "Candidature retenue" });
+  await expect(decision).toContainText("Votre candidature au poste de");
+  await expect(decision).toContainText("Nous revenons vers vous pour fixer votre arrivée.");
   await talent.context().close();
 });
 

@@ -7786,6 +7786,25 @@
         "send": "Envoyer",
         "withoutMessage": "Enregistrer la décision sans message",
         "error": "Le message n'est pas parti. Vérifiez le texte et réessayez.",
+        "tones": "Ton du message",
+        "callError": "Les créneaux doivent être à venir. Rien n'est parti : vérifiez-les et renvoyez.",
+        "modelProposed": "{kind} · modèle proposé",
+        "modelOwn": "{kind} · modèle de l'organisation",
+        "modelEdited": "{kind} · texte modifié",
+        "addCall": "Ajouter un créneau",
+        "removeCall": "Retirer les créneaux",
+        "callTitle": "Appel pour fixer l'arrivée",
+        "callHint": "Un appel de {minutes} minutes, heure de {timezone}. Le candidat choisit un créneau juste sous votre message.",
+        "callSlot": "Créneau {number}",
+        "more": {
+          "chaleureux": "Plus chaleureux",
+          "formel": "Plus formel",
+          "court": "Plus court"
+        },
+        "orbi": "Personnaliser avec Orbi",
+        "filledAfterClick": "Les champs surlignés se remplissent seuls. Envoyé seulement après votre clic.",
+        "previewShort": "Aperçu",
+        "backToText": "Texte",
         "convocationHint": "Pour proposer des créneaux que le candidat confirme en un geste :",
         "schedule": "planifier l'entretien"
       },
@@ -7811,12 +7830,50 @@
         },
         "relance": {
           "body": "Bonjour {firstName},\\n\\nJe reviens vers vous au sujet de votre candidature au poste de {jobTitle}. Avez-vous pu lire mon dernier message ?\\n\\n{signer}, {company}"
+        }
+      },
+      "toneName": {
+        "organisation": "Notre modèle",
+        "chaleureux": "Chaleureux",
+        "formel": "Formel",
+        "court": "Court"
+      },
+      "tone": {
+        "chaleureux": {
+          "refus": {
+            "body": "Bonjour {firstName},\\n\\nMerci pour votre candidature au poste de {jobTitle} et pour le temps que vous nous avez accordé.\\n\\nNous avons retenu un profil plus proche des besoins immédiats de l'équipe. {strengthLine}\\n\\nAvec votre accord, nous gardons votre profil pour nos prochaines offres. Belle suite à vous.",
+            "strength": "Votre maîtrise de {strength} nous a marqués."
+          },
+          "acceptation": {
+            "body": "Bonjour {firstName},\\n\\nBonne nouvelle : votre candidature au poste de {jobTitle} est retenue. {strengthLine}\\n\\n{nextLine}\\n\\nBienvenue chez {company} !",
+            "strength": "Votre maîtrise de {strength} a convaincu l'équipe.",
+            "next": "Prochaine étape : un appel pour fixer votre date d'arrivée. Nous revenons vers vous dans cette conversation.",
+            "nextCall": "Prochaine étape : un appel pour fixer votre date d'arrivée. Choisissez un créneau ci-dessous."
+          }
         },
-        "acceptation": {
-          "body": "Bonjour {firstName},\\n\\nNous avons le plaisir de vous proposer le poste de {jobTitle}.\\n\\nProchaine étape : un échange sur votre arrivée. Nous revenons vers vous dans cette conversation."
+        "formel": {
+          "refus": {
+            "body": "Bonjour {firstName},\\n\\nNous vous remercions de l'intérêt que vous portez à {company} et de votre candidature au poste de {jobTitle}.\\n\\nAprès un examen attentif, nous ne sommes pas en mesure de donner une suite favorable à votre candidature. {strengthLine}\\n\\nNous vous souhaitons pleine réussite dans vos recherches.",
+            "strength": "Nous avons apprécié votre maîtrise de {strength}."
+          },
+          "acceptation": {
+            "body": "Bonjour {firstName},\\n\\nNous avons le plaisir de vous informer que votre candidature au poste de {jobTitle} a été retenue. {strengthLine}\\n\\n{nextLine}\\n\\nNous nous réjouissons de vous accueillir chez {company}.",
+            "strength": "Votre maîtrise de {strength} a particulièrement retenu notre attention.",
+            "next": "Nous vous proposerons prochainement un échange pour convenir de votre date d'arrivée.",
+            "nextCall": "Nous vous proposons un échange pour convenir de votre date d'arrivée : merci de choisir un créneau ci-dessous."
+          }
         },
-        "refus": {
-          "body": "Bonjour {firstName},\\n\\nMerci pour votre candidature au poste de {jobTitle} et pour le temps que vous y avez consacré. Nous avons retenu un autre profil pour ce poste.\\n\\nCette décision tient aux besoins précis du poste et ne remet pas en cause vos qualités. Nous gardons votre profil pour nos prochaines offres."
+        "court": {
+          "refus": {
+            "body": "Bonjour {firstName},\\n\\nMerci pour votre candidature au poste de {jobTitle}. Nous avons retenu un autre profil. {strengthLine}\\n\\nBelle suite à vous.",
+            "strength": "Votre maîtrise de {strength} reste un vrai atout."
+          },
+          "acceptation": {
+            "body": "Bonjour {firstName},\\n\\nVotre candidature au poste de {jobTitle} est retenue. {strengthLine}\\n\\n{nextLine}",
+            "strength": "Bravo pour votre maîtrise de {strength}.",
+            "next": "Nous revenons vers vous pour fixer votre arrivée.",
+            "nextCall": "Choisissez un créneau ci-dessous pour fixer votre arrivée."
+          }
         }
       },
       "page": {

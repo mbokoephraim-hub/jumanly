@@ -2261,6 +2261,31 @@ toutes dans `docs/specifications.md`.
 - Offres et détail d'une offre en Vert (écrans 65, 74).
 - Choix et écarts : `docs/decisions/2026-10-17-mobile-talent-bannieres.md`.
 
+## 2026-10-17 · Prompt 5 bis : modèles de refus et d'acceptation (écrans 55 et 80)
+
+- Refus et acceptation proposés en trois tons, Chaleureux, Formel et Court (`hire.templates.tone.*`
+  dans les textes), à côté du modèle de l'organisation ou de l'offre quand il existe (« Notre
+  modèle »). Rien ne part sans le clic du recruteur.
+- Champs remplis seuls et surlignés : prénom, poste, entreprise et point fort. Le point fort est la
+  compétence de l'offre entièrement couverte par le candidat, prise dans l'explication figée à la
+  candidature (`strongestSkill`), et seulement si l'organisation voit le matching ; sinon la phrase
+  disparaît.
+- Refus (écran 55) : aperçu exact, « Modifier le texte », bouton « Plus chaleureux / court / formel »
+  qui change de ton. Acceptation (écran 80) : carte du candidat, puces de ton, modèle surligné,
+  « Aperçu », « Ajouter un créneau » (avec le droit `connect.appointments`) : un appel de 30 minutes
+  proposé sous la décision, que le talent confirme comme un entretien. Un candidat retenu peut donc
+  recevoir une invitation ; un candidat refusé, jamais.
+- « Personnaliser avec Orbi » reste un emplacement inactif jusqu'au prompt 8.
+- Sur téléphone, la navigation Hire s'efface sur ces écrans pour ne plus couvrir la barre
+  d'actions (`PhoneBarFlag`).
+- Pas de migration.
+- Tests : unitaires (point fort, surlignage, tons), base (appel proposé après une embauche, refusé
+  après un refus), e2e acceptation en trois tons et refus « Plus court ».
+- Choix et écarts : `docs/decisions/2026-10-17-mobile-talent-modeles-decision.md`.
+- Au passage : dans Mes CV sur téléphone, la vignette d'un CV était un lien sans nom pour les
+  lecteurs d'écran (relevé par le test d'accessibilité dès qu'un talent a plusieurs CV). Elle
+  double maintenant le lien du titre sans être annoncée.
+
 ## 2026-10-17 · Refonte de l'expérience mobile, étape 1 : fondations
 
 - Après le début des tests, Ephraïm demande de simplifier : une expérience par objectif (talent : se former,
