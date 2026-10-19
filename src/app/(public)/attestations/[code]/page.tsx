@@ -142,13 +142,13 @@ async function Verification({ params }: { params: PageProps<"/attestations/[code
       <dl className="t-verre t-liste t-lignes">
         {rows.map((row) => (
           <div key={row.label} className="t-li">
-            <div className="t-t flex-col-reverse">
-              <dd>
-                <b>{row.value}</b>
-              </dd>
+            <div className="t-t">
               <dt>
                 <span>{row.label}</span>
               </dt>
+              <dd>
+                <b>{row.value}</b>
+              </dd>
             </div>
           </div>
         ))}

@@ -39,7 +39,7 @@ export default async function SuiviPage({ searchParams }: PageProps<"/app/suivi"
       ? `${item.company} · ${formatDayMonth(item.changedAt)}`
       : item.action
         ? item.company
-        : `${item.company} · ${format.relativeTime(item.changedAt)}`;
+        : `${item.company} · ${format.relativeTime(item.changedAt, { style: "short" })}`;
     const action = item.action;
     return (
       <li key={item.id} className="t-verre t-cd">

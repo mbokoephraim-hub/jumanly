@@ -3744,12 +3744,12 @@ label.t-ch:has(:focus-visible) {
   padding: 7px 6px;
   flex: none;
 }
-.t-cvc .t-mini i {
+.t-cvc span.t-mini i {
   height: 4px;
   border-radius: 2px;
   background: #dce5e1;
 }
-.t-cvc .t-mini i:first-child {
+.t-cvc span.t-mini i:first-child {
   background: #0f3f37;
   width: 70%;
 }
@@ -6466,7 +6466,8 @@ a.t-pj {
   position: relative;
   z-index: 1;
 }
-.t-mini {
+/* Vignette de CV (span) ; `.t-fo.t-mini` est la petite carte de formation. */
+span.t-mini {
   width: 44px;
   height: 58px;
   border-radius: 8px;
@@ -6478,16 +6479,16 @@ a.t-pj {
   padding: 7px 6px;
   flex: none;
 }
-.t-mini i {
+span.t-mini i {
   height: 4px;
   border-radius: 2px;
   background: #dce5e1;
 }
-.t-mini i:first-child {
+span.t-mini i:first-child {
   background: #0f3f37;
   width: 70%;
 }
-.t-mini.t-l i:first-child {
+span.t-mini.t-l i:first-child {
   background: #3da14f;
 }
 .t-doc .t-t {
@@ -7001,4 +7002,203 @@ label.t-corr {
     border-top-color: currentColor;
     opacity: 0.6;
   }
+}
+
+/* ---------- Revue des lots mobiles 1 à 6 (captures 390 px contre les planches) ---------- */
+/* Pour moi : l'entreprise et la ville tiennent sur une ligne, l'objectif aussi (planche talent-1 § 1). */
+.t-grp .t-ln .t-t span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.t-obj b {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Offres : titre, entreprise et ville sur une ligne ; puces jamais coupées ; le score suit les
+   puces (planche talent-1 § 2, `.of .bas`). */
+.t-of .t-t b {
+  display: block;
+}
+.t-of .t-t > span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.t-tag,
+.t-score,
+.t-new {
+  white-space: nowrap;
+}
+.t-of .t-bas {
+  flex-wrap: wrap;
+}
+.t-of .t-score {
+  margin-left: 0;
+}
+/* Détail d'une offre : les compétences demandées en puces sur plusieurs lignes, pas en colonne
+   (`.bloc-t ul` l'emportait sur `.cmp`). */
+.t-bloc-t ul.t-cmp {
+  flex-direction: row;
+  flex-wrap: wrap;
+  gap: 6px;
+  padding: 0;
+  list-style: none;
+  color: var(--texte);
+}
+/* Suivi : entreprise et date sur une ligne (planche talent-2 § 2). */
+.t-cd .t-t > span {
+  display: block;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+/* Lignes de liste : un titre dans un lien se coupe aussi par « … » ; l'heure ne se fait jamais
+   recouvrir (détail d'une candidature, Messages). */
+.t-li .t-t > .t-lien {
+  display: block;
+  min-width: 0;
+}
+.t-li .t-t > .t-lien > b {
+  display: block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.t-li .t-v {
+  flex: none;
+}
+.t-hm {
+  flex: none;
+}
+/* Conversation : le texte des bulles reste en couleur pleine, 14 px (planche talent-2 § 5, `.b-r`) ;
+   la règle `.t-texte-l` des lettres (texte secondaire) ne s'y applique pas. */
+:is(.t-b-r, .t-bulle-u) > .t-texte-l {
+  color: inherit;
+  font-size: 14px;
+  white-space: pre-line;
+}
+/* Apprendre : tuiles de domaine de même taille, comme la planche (talent-3 § 1, `.dom`), même
+   quand le nom du domaine tient sur trois lignes. */
+.t-domaines > li {
+  display: flex;
+  flex: none;
+}
+.t-dom {
+  width: 84px;
+  justify-content: flex-start;
+}
+/* Un bouton « plein » (`.t-pl`, flex: 1) placé dans une colonne ne s'écrase plus : il garde sa
+   hauteur de bouton (« Voir plus de formations », Notifications, Plan…). */
+.t-bt.t-pl {
+  min-height: 54px;
+}
+.t-bt.t-pl.t-m {
+  min-height: 46px;
+}
+.t-bt.t-pl.t-s {
+  min-height: 38px;
+}
+/* Détail d'une formation : le chiffre au-dessus, son libellé dessous (planche talent-3 § 2). Le
+   chiffre (dd) est déjà placé avant son libellé (dt) dans le code. */
+.t-chiffres div {
+  flex-direction: column;
+}
+/* Mes attestations : le titre de la formation en couleur pleine (planche talent-3 § 7). */
+.t-att-c .t-t > span:first-child {
+  color: var(--texte);
+  font-size: inherit;
+}
+.t-att-c .t-t b {
+  color: var(--texte);
+}
+.t-att-c .t-t > span:first-child > span {
+  display: block;
+}
+/* Interrupteur dessiné dans un <span> (attestation « Visible sur mon profil ») : sans bloc, il
+   n'avait ni largeur ni hauteur et disparaissait. */
+span.t-sw {
+  display: block;
+}
+/* Parcours : le rond numéroté garde ses couleurs (`.t-e span` le grisait ; planche talent-3 § 1). */
+.t-etapes-p .t-e .t-num {
+  color: var(--texte);
+}
+.t-etapes-p .t-e .t-num.t-ok {
+  color: var(--lime);
+}
+.t-etapes-p .t-e .t-num.t-en,
+.sombre .t-etapes-p .t-e .t-num.t-ok {
+  color: #0f3f37;
+}
+/* Connexions : une demande reçue garde le nom lisible, Accepter et Ignorer passent dessous
+   (planche talent-4 § 3 ; deux boutons à côté du nom le coupaient à 390 px). */
+.t-li.t-dem {
+  flex-wrap: wrap;
+  row-gap: 8px;
+  padding-top: 10px;
+  padding-bottom: 12px;
+}
+.t-dem-a {
+  flex-basis: 100%;
+  display: flex;
+  gap: 8px;
+  padding-left: 52px;
+}
+/* Mon profil, carte « Profil à … % » : le pourcentage centré dans l'anneau, le titre en couleur
+   pleine (talent4.py : `.compl .anneau b{display:grid}`). */
+.t-compl .t-anneau b {
+  display: grid;
+}
+.t-compl .t-anneau,
+.t-compl .t-t > b {
+  color: var(--texte);
+}
+/* Case à cocher native (diagnostic « Utiliser mon profil… », entraînements) : la règle des
+   cases dessinées la masquait ; elle reste visible quand aucune `.t-coche` ne la remplace. Le
+   titre garde la couleur pleine. */
+.t-coche-l:not(:has(.t-coche)) input {
+  position: static;
+  opacity: 1;
+}
+.t-coche-l b {
+  color: var(--texte);
+}
+/* Un lien au fil d'une phrase reste dans la ligne (cible exemptée, WCAG 2.5.8). */
+.t-gar .t-lien-d {
+  display: inline;
+  min-height: 0;
+}
+/* Cases à cocher dessinées (inscription, postuler, corrections) : la règle `.t-coche-l` du lot 6b
+   (carte du diagnostic) leur ajoutait une marge intérieure, grossissait le texte et grisait la
+   coche vide. Elle ne vaut plus que pour la carte (`.t-verre`). Planche talent-4 § 2. */
+.t-coche-l:not(.t-verre) {
+  padding: 0;
+  align-items: center;
+  font-size: 12px;
+}
+.t-coche-l:not(.t-verre) span {
+  color: inherit;
+}
+.t-coche-l .t-coche {
+  color: transparent;
+}
+.t-coche-l:has(:checked) .t-coche {
+  color: #a6f26b;
+}
+.sombre .t-coche-l:has(:checked) .t-coche {
+  color: #0f3f37;
+}
+/* Champ d'accès en focus : seul l'anneau du champ entier s'affiche ; le halo Lime global du
+   focus dessinait un second cadre carré autour de l'input (inscription, connexion). */
+.t-saisie input:focus-visible,
+.t-saisie select:focus-visible {
+  box-shadow: none;
+}
+/* Mon profil en sombre : l'icône des sections reste claire sur sa teinte sombre (planche
+   talent-4 § 10 ; en Sapin elle disparaissait). */
+.sombre .t-sect .t-sh .t-cases {
+  color: var(--texte);
 }

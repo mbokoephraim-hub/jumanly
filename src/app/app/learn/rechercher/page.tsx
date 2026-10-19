@@ -208,7 +208,7 @@ export default async function LearnSearchPage({
         <Link
           href={`${href({})}${href({}).includes("?") ? "&" : "?"}page=${(filters.page ?? 1) + 1}`}
           scroll={false}
-          className="t-bt t-sec t-pl t-press"
+          className="t-bt t-sec t-m t-press self-center"
         >
           {t("apprendre.search.more")}
         </Link>

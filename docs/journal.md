@@ -2,6 +2,44 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · revue des lots mobiles 1 à 6 (19 octobre 2026)
+
+Chaque écran talent des planches `talent-1` à `talent-4` (sections 1 à 6, 5 bis, 9 et 10, hors
+abonnement et paramètres) a été capturé à 390 px, clair et sombre, avec le bon compte de démo
+(`grace.ux@`, `talent.pro@` pour les écrans payants), puis comparé à la capture de la planche et à son
+générateur. Les corrections portent surtout sur des règles CSS de lots successifs qui se marchaient
+dessus ; elles sont réunies dans un bloc commenté en fin de `src/styles/talent.css`. Captures finales :
+`/mnt/project-files/captures/etape-1/revue-mobile/`. Écarts gardés : `docs/decisions/2026-10-19-refonte-etape-1-revue.md`.
+
+| Écran | Route | État |
+|---|---|---|
+| Connexion, mot de passe oublié | `/connexion`, `/mot-de-passe-oublie` | conforme (boutons Google et LinkedIn absents en local : fournisseurs non configurés) |
+| Inscription, création du compte | `/inscription`, `/inscription/compte` | corrigé : cases à cocher (taille, coche visible, texte Sapin), double cadre de focus des champs |
+| Pour moi | `/app` | corrigé : titres longs tronqués sur une ligne (lignes, objectifs), cartes « Recommandées » écrasées à 58 px |
+| Offres | `/app/jobs` | corrigé : titre et entreprise sur deux lignes, sous-titre tronqué, pastilles insécables, score à la suite des pastilles ; texte d'aide de la recherche repris de la planche |
+| Détail d'offre | `/app/jobs/[slug]` | corrigé : compétences en pastilles sur une ligne qui passe à la suivante |
+| Pourquoi ce score | `/app/jobs/[slug]?pourquoi=1` | conforme |
+| Postuler | `/app/jobs/[slug]/postuler` | conforme |
+| Suivi | `/app/suivi` | corrigé : sous-titres tronqués, date relative « il y a 3 j » (au lieu de « -3 j ») |
+| Détail de candidature | `/app/suivi/[id]` | corrigé : libellé « Ouvrir » (planche) pour la conversation |
+| Messages, conversation | `/app/messages`, `/app/messages/[id]` | corrigé : lignes tronquées, heure non écrasée, texte des bulles à la bonne taille et couleur |
+| Notifications | `/app/notifications` | conforme |
+| Apprendre | `/app/learn` | corrigé : tuiles de domaine à 84 px, cartes « Recommandées » à leur hauteur |
+| Rechercher une formation | `/app/learn/rechercher` | corrigé : bouton « Voir plus » secondaire centré |
+| Mes formations, attestations | `/app/learn/mes-formations` | corrigé : texte et interrupteur de partage visibles sur les cartes d'attestation |
+| Parcours | `/app/learn/parcours/[slug]` | corrigé : numéros d'étape lisibles (Sapin, Lime sur étape faite, clair et sombre) |
+| Formation | `/app/learn/[slug]` | corrigé : chiffres au-dessus de leur libellé, hauteur du bouton principal |
+| Leçon, quiz, exercice | `/app/learn/[slug]/[lecon]` | corrigé : bouton de fermeture × dans l'en-tête du quiz et de l'exercice |
+| Attestation (talent et publique) | `/app/learn/attestations/[code]`, `/attestations/[code]` | corrigé : libellé au-dessus de la valeur |
+| Compte | `/app/compte` | corrigé : taux de complétion calculé comme sur Pour moi et Mon profil (80 % au lieu de 70 %) |
+| Connexions | `/app/compte/connexions` | corrigé : boutons Accepter et Ignorer sous le nom (débordaient) |
+| Mon profil | `/app/profil` | corrigé : anneau de complétion centré et lisible, icônes de section visibles en sombre |
+| Modifier, aperçu, Faire le point, import | `/app/profil/*` | conforme |
+| Diagnostic, plan, entraînements | `/app/career/diagnostic`, `/plan`, `/entretiens*` | conforme |
+| CV et documents, lettres, modèles, studio CV | `/app/career/cv*` | conforme |
+| LinkedIn | `/app/career/linkedin` | conforme |
+| Orbi | `/app/orbi` | conforme |
+
 ## Refonte complète · étape 1 (Talent) : diagnostic (19 octobre 2026)
 
 Point de départ : `main` après le lot mobile 6 (PR #103). Ordre fixé par `docs/PLAN-REFONTE-EN-3-ETAPES.md`.

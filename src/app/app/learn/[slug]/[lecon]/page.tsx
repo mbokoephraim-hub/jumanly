@@ -114,6 +114,11 @@ export default async function LessonPage({
         back={coursePath}
         backLabel={t("apprendre.course.back")}
         title={t("apprendre.quiz.title", { module: current.module.order })}
+        end={
+          <Link href={coursePath} className="t-bi t-press" aria-label={t("apprendre.done.close")}>
+            <TalentIcon name="fermer" size="s" />
+          </Link>
+        }
       />
     );
     if (!quiz || quiz.questions.length === 0 || !follows)
@@ -311,6 +316,11 @@ export default async function LessonPage({
           back={coursePath}
           backLabel={t("apprendre.course.back")}
           title={t("apprendre.exercise.title")}
+          end={
+            <Link href={coursePath} className="t-bi t-press" aria-label={t("apprendre.done.close")}>
+              <TalentIcon name="fermer" size="s" />
+            </Link>
+          }
         />
         {problem && ["taille", "vide", "format"].includes(problem) && (
           <Notice tone="err">{d(`apprendre.exercise.error.${problem}`)}</Notice>
