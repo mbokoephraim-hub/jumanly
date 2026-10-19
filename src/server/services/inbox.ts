@@ -1,9 +1,9 @@
 /**
  * Messages of a talent (planche talent-2 § 5): each conversation with the company, the person who
- * writes from its side and the last message. Orbi never reads them.
+ * writes from its side and the last message; or the other talent of a connection. Orbi never reads them.
  */
 import type { PrismaClient } from "@/generated/prisma/client";
-import { listConversations } from "./connect";
+import { listConversations, peerOf } from "./connect";
 
 export async function talentInbox(db: PrismaClient, userId: string) {
   const conversations = await listConversations(db, { userId, hire: null });
@@ -45,15 +45,19 @@ export async function talentInbox(db: PrismaClient, userId: string) {
         : 0,
     ),
   );
-  return conversations.map((conversation, index) => ({
-    id: conversation.id,
-    company: conversation.organization?.name ?? "",
-    logo: conversation.organization?.logo ?? null,
-    person: writerOf.get(conversation.id) ?? null,
-    job: conversation.application?.job.title ?? conversation.contactRequest?.job?.title ?? null,
-    last: conversation.last,
-    unread: counts[index]!,
-  }));
+  return conversations.map((conversation, index) => {
+    // A conversation with a connection (lot 6) shows the other person, as a company would.
+    const peer = conversation.kind === "peer" ? peerOf(conversation, userId) : null;
+    return {
+      id: conversation.id,
+      company: peer?.name ?? conversation.organization?.name ?? "",
+      logo: peer ? peer.image : (conversation.organization?.logo ?? null),
+      person: peer ? null : (writerOf.get(conversation.id) ?? null),
+      job: conversation.application?.job.title ?? conversation.contactRequest?.job?.title ?? null,
+      last: conversation.last,
+      unread: counts[index]!,
+    };
+  });
 }
 
 export type InboxRow = Awaited<ReturnType<typeof talentInbox>>[number];

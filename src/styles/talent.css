@@ -5421,3 +5421,425 @@ em.t-st {
     transition: none;
   }
 }
+
+/* ---------- Lot 6a · Compte, Connexions, Mon profil (planche talent-4 § 2-3) ---------- */
+/* Rows of a list that are links or buttons inside <li>, <form> or a sheet. */
+.t-liste > :not(:first-child) > .t-li {
+  border-top: 1px solid var(--trait);
+}
+button.t-li,
+label.t-li {
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+}
+.t-li-l {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex: 1;
+  min-width: 0;
+  min-height: 60px;
+}
+.t-li .t-t b,
+.t-li .t-t span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.t-li > form {
+  flex: none;
+}
+.t-li.t-nu {
+  padding: 0;
+  border: 0;
+  min-height: 44px;
+}
+.t-bt.t-danger {
+  color: var(--corail);
+}
+.t-hub-id {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+}
+.t-hub-id .t-av {
+  width: 56px;
+  height: 56px;
+  font-size: 17px;
+  box-shadow: none;
+}
+.t-hub-id .t-t {
+  flex: 1;
+  min-width: 0;
+}
+.t-hub-id .t-t b {
+  display: block;
+  font-size: 16px;
+}
+.t-hub-id .t-t span {
+  font-size: 12.5px;
+  color: var(--texte2);
+}
+/* Mon profil : couverture, identité, sections repliables */
+.t-profil {
+  position: relative;
+}
+.t-pf-id h1 {
+  font-size: 21px;
+  letter-spacing: -0.02em;
+  margin-top: 4px;
+  font-weight: 600;
+}
+.sombre .t-pf-id .t-av {
+  color: var(--sapin);
+}
+.t-pf-act {
+  padding: 0 2px;
+}
+.t-compl .t-anneau {
+  width: 46px;
+  height: 46px;
+}
+.t-compl .t-anneau b {
+  width: 36px;
+  height: 36px;
+  font-size: 11px;
+}
+.t-sect {
+  padding: 4px 0;
+}
+.t-sect > summary {
+  list-style: none;
+  cursor: pointer;
+}
+.t-sect > summary::-webkit-details-marker {
+  display: none;
+}
+.t-sect > summary:focus-visible {
+  outline: 2px solid var(--texte);
+  outline-offset: -2px;
+  border-radius: var(--r-carte);
+}
+.t-sect .t-sh {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 16px;
+}
+.t-sect .t-sh .t-cases {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  flex: none;
+}
+.t-g-former {
+  background: var(--g-former);
+}
+.t-g-accomp {
+  background: var(--g-accomp);
+}
+.t-g-oppo {
+  background: var(--g-oppo);
+}
+.sombre .t-sect .t-sh .t-cases {
+  color: var(--sapin);
+}
+.t-sect .t-sh b {
+  flex: 1;
+  font-size: 14.5px;
+}
+.t-sect .t-sh small {
+  font-size: 12px;
+  color: var(--texte2);
+  font-weight: 500;
+  max-width: 45%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.t-sect .t-sh .t-chev {
+  width: 16px;
+  height: 16px;
+  transition: transform 0.25s var(--ease, ease);
+}
+.t-sect[open] .t-sh .t-chev {
+  transform: rotate(90deg);
+}
+.t-sect .t-sc {
+  padding: 0 16px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.t-sect[open] .t-sc {
+  animation: t-sect-in 0.28s var(--ease, ease) backwards;
+}
+@keyframes t-sect-in {
+  from {
+    opacity: 0;
+    transform: translateY(-4px);
+  }
+}
+.t-prv {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  font-size: 12.5px;
+  min-height: 32px;
+}
+.t-prv b {
+  font-size: 13.5px;
+  flex: 1;
+}
+.t-prv .t-pr {
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--lime-c);
+  color: var(--texte);
+}
+.t-prv .t-pr.t-n {
+  background: var(--zone);
+  color: var(--texte2);
+}
+.t-prv .t-pr .t-ic {
+  width: 12px;
+  height: 12px;
+}
+.t-bi.t-xs {
+  width: 32px;
+  height: 32px;
+}
+.t-projs {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.t-projs .t-re {
+  display: block;
+  height: auto;
+  aspect-ratio: 6 / 5;
+}
+.t-re img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.t-re .t-re-p {
+  position: absolute;
+  top: 7px;
+  left: 7px;
+  z-index: 1;
+  font-size: 10.5px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: var(--plein);
+  color: var(--texte);
+}
+.t-ajout.t-s {
+  padding: 10px;
+  font-size: 12.5px;
+  border-radius: 16px;
+}
+.t-ex {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  width: 100%;
+  text-align: left;
+  padding: 2px 0;
+}
+.t-ex b {
+  font-size: 13.5px;
+}
+.t-ex span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+/* Vu par un recruteur */
+.t-vu-rec {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 16px;
+  background: var(--ambre-c);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.t-vu-rec .t-ic {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.t-masque {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  margin: 0;
+}
+.t-masque.t-nu {
+  padding: 0;
+}
+.t-masque .t-l {
+  display: flex;
+  justify-content: space-between;
+  font-size: 12.5px;
+  gap: 10px;
+}
+.t-masque .t-l dt {
+  color: var(--texte2);
+  flex: none;
+}
+.t-masque .t-l dd {
+  margin: 0;
+  text-align: right;
+  font-weight: 600;
+  min-width: 0;
+}
+.t-masque .t-l s {
+  color: var(--texte2);
+  text-decoration: none;
+  font-style: italic;
+  font-weight: 400;
+}
+/* Formulaires du profil */
+.t-ph-ed {
+  position: relative;
+  align-self: center;
+}
+.t-ph-ed .t-bi {
+  position: absolute;
+  right: -6px;
+  bottom: -4px;
+}
+.t-av.t-av-l {
+  width: 84px;
+  height: 84px;
+  font-size: 24px;
+}
+.t-dates {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.t-champ textarea.t-zone {
+  display: block;
+  width: 100%;
+  min-height: 84px;
+  padding: 14px 16px;
+  resize: vertical;
+  font: inherit;
+  font-size: 14px;
+  line-height: 1.45;
+  color: var(--texte);
+  border: 0;
+}
+.t-champ textarea.t-zone::placeholder {
+  color: var(--texte2);
+}
+.t-champ textarea.t-zone:focus-visible {
+  outline: 2px solid var(--texte);
+  outline-offset: 2px;
+}
+.t-depot.t-s {
+  padding: 16px;
+}
+.t-choix-l .t-li:has(:checked) .t-radio {
+  box-shadow: inset 0 0 0 7px var(--sapin);
+}
+.sombre .t-choix-l .t-li:has(:checked) .t-radio {
+  box-shadow: inset 0 0 0 7px var(--lime);
+}
+.t-choix-l .t-li:has(:focus-visible) {
+  outline: 2px solid var(--texte);
+  outline-offset: -2px;
+}
+.t-choix-l .t-radio {
+  background: none;
+  box-shadow: inset 0 0 0 2px var(--trait);
+  flex: none;
+}
+/* Photo de profil */
+.t-ph-cadre {
+  position: relative;
+  height: clamp(240px, 64vw, 320px);
+  touch-action: none;
+  overflow: hidden;
+  border-radius: 22px;
+  background: linear-gradient(160deg, #6e7f4e, #5e7a70);
+  user-select: none;
+  outline: none;
+}
+.t-ph-cadre:focus-visible {
+  box-shadow: 0 0 0 3px var(--lime);
+}
+.t-ph-libre {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  max-width: none;
+}
+.t-ph-rond,
+.t-ph-cercle {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  aspect-ratio: 1;
+  height: 78%;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+.t-ph-rond {
+  object-fit: cover;
+}
+.t-ph-cercle {
+  pointer-events: none;
+  box-shadow:
+    0 0 0 9999px rgba(15, 45, 38, 0.45),
+    inset 0 0 0 3px #fff;
+}
+.t-ph-vide {
+  position: absolute;
+  inset: 50% 26% auto;
+  transform: translateY(-50%);
+  text-align: center;
+  font-size: 14px;
+  color: #fff;
+}
+.t-ph-zoom {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 0 4px;
+  color: var(--texte2);
+}
+.t-ph-zoom input {
+  flex: 1;
+  min-width: 0;
+  height: 44px;
+  accent-color: var(--sapin);
+}
+.t-ph-zoom input:disabled {
+  opacity: 0.4;
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-sect[open] .t-sc {
+    animation: none;
+  }
+  .t-sect .t-sh .t-chev {
+    transition: none;
+  }
+}

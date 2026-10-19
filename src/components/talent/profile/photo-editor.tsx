@@ -1,8 +1,7 @@
 "use client";
 
 import { useRef, useState, useTransition, type KeyboardEvent, type PointerEvent } from "react";
-import Link from "next/link";
-import { Icon } from "@/components/brand/icon";
+import { TalentIcon } from "@/components/talent/icon";
 import { track } from "@/lib/track";
 import { removePhotoAction, savePhotoAction } from "@/server/actions/profile";
 
@@ -14,9 +13,9 @@ const ZOOM_MAX = 3;
 type Picked = { url: string; width: number; height: number; diameter: number };
 
 /**
- * « Photo de profil » (screen 26): take or choose a photo, center it by dragging (or with the
- * arrows), zoom with the slider, then send a 512 px square JPEG. Without JavaScript the form still
- * sends the file picked, uncropped.
+ * The photo of « Modifier le profil » (planche talent-4), in its sheet: take or choose a photo,
+ * center it by dragging (or with the arrows), zoom with the slider, then send a 512 px square
+ * JPEG. Without JavaScript the form still sends the file picked, uncropped.
  */
 export function PhotoEditor({
   current,
@@ -32,7 +31,6 @@ export function PhotoEditor({
     remove: string;
     never: string;
     zoom: string;
-    cancel: string;
     save: string;
     empty: string;
     drag: string;
@@ -133,7 +131,7 @@ export function PhotoEditor({
   const shown = picked?.url ?? current;
 
   return (
-    <form action={savePhotoAction} onSubmit={save} className="flex flex-col gap-4">
+    <form action={savePhotoAction} onSubmit={save} className="t-flux">
       <div
         ref={stage}
         tabIndex={picked ? 0 : -1}
@@ -144,7 +142,7 @@ export function PhotoEditor({
         onPointerUp={() => (drag.current = null)}
         onPointerCancel={() => (drag.current = null)}
         onKeyDown={onKeyDown}
-        className="relative h-[clamp(240px,52vw,360px)] touch-none overflow-hidden rounded-[22px] bg-[linear-gradient(160deg,#6E7F4E,#5E7A70)] outline-none select-none focus-visible:ring-4 focus-visible:ring-lime"
+        className="t-ph-cadre"
       >
         {picked ? (
           // A local blob, never sent anywhere before « Enregistrer »: next/image has nothing to add.
@@ -154,7 +152,7 @@ export function PhotoEditor({
             src={picked.url}
             alt=""
             draggable={false}
-            className="absolute top-1/2 left-1/2 max-w-none"
+            className="t-ph-libre"
             style={{
               width: picked.width,
               height: picked.height,
@@ -164,27 +162,16 @@ export function PhotoEditor({
         ) : (
           shown && (
             // eslint-disable-next-line @next/next/no-img-element
-            <img
-              src={shown}
-              alt=""
-              className="absolute top-1/2 left-1/2 aspect-square h-[78%] -translate-1/2 rounded-full object-cover"
-            />
+            <img src={shown} alt="" className="t-ph-rond" />
           )
         )}
         {/* The circle: what the avatar will show; the rest is dimmed. */}
-        <div
-          aria-hidden
-          className="pointer-events-none absolute top-1/2 left-1/2 aspect-square h-[78%] -translate-1/2 rounded-full shadow-[0_0_0_9999px_rgb(15_45_38/0.45)] ring-[3px] ring-blanc"
-        />
-        {!shown && (
-          <p className="absolute inset-x-[26%] top-1/2 -translate-y-1/2 text-center text-[15px] leading-5 text-blanc">
-            {labels.empty}
-          </p>
-        )}
+        <div aria-hidden className="t-ph-cercle" />
+        {!shown && <p className="t-ph-vide">{labels.empty}</p>}
       </div>
 
-      <div className="flex items-center gap-3 px-1">
-        <Icon name="recherche" className="size-4 shrink-0 text-ardoise" />
+      <div className="t-ph-zoom">
+        <TalentIcon name="recherche" size="xs" />
         <input
           type="range"
           min={1}
@@ -198,76 +185,69 @@ export function PhotoEditor({
             setZoom(next);
             setOffset(clamp(offset.x, offset.y, next));
           }}
-          className="h-11 min-w-0 flex-1 accent-sapin disabled:opacity-40"
         />
-        <Icon name="plus" className="size-4 shrink-0 text-ardoise" />
+        <TalentIcon name="plus" size="xs" />
       </div>
 
-      <ul className="overflow-hidden rounded-[22px] bg-blanc shadow-douce">
-        <li>
-          <label className="flex h-16 cursor-pointer items-center gap-4 px-5 text-[17px] has-focus-visible:bg-sapin/5">
-            <Icon name="video" className="size-5 shrink-0" />
-            <span className="flex-1">{labels.take}</span>
-            <Icon name="chev-r" className="size-5 shrink-0 text-ardoise" />
-            <input
-              type="file"
-              name="photo"
-              accept="image/jpeg,image/png,image/webp"
-              capture="user"
-              className="sr-only"
-              onChange={(event) => pick(event.target.files?.[0])}
-            />
-          </label>
-        </li>
-        <li className="border-t border-brume">
-          <label className="flex h-16 cursor-pointer items-center gap-4 px-5 text-[17px] has-focus-visible:bg-sapin/5">
-            <Icon name="telecharger" className="size-5 shrink-0" />
-            <span className="flex-1">{labels.choose}</span>
-            <Icon name="chev-r" className="size-5 shrink-0 text-ardoise" />
-            <input
-              type="file"
-              name="photo"
-              accept="image/jpeg,image/png,image/webp"
-              className="sr-only"
-              onChange={(event) => pick(event.target.files?.[0])}
-            />
-          </label>
-        </li>
+      <div className="t-verre t-liste">
+        <label className="t-li t-press">
+          <span className="t-cases" aria-hidden>
+            <TalentIcon name="photo" size="s" />
+          </span>
+          <span className="t-t">
+            <b>{labels.take}</b>
+          </span>
+          <TalentIcon name="suivant" />
+          <input
+            type="file"
+            name="photo"
+            accept="image/jpeg,image/png,image/webp"
+            capture="user"
+            className="sr-only"
+            onChange={(event) => pick(event.target.files?.[0])}
+          />
+        </label>
+        <label className="t-li t-press">
+          <span className="t-cases" aria-hidden>
+            <TalentIcon name="telecharger" size="s" />
+          </span>
+          <span className="t-t">
+            <b>{labels.choose}</b>
+          </span>
+          <TalentIcon name="suivant" />
+          <input
+            type="file"
+            name="photo"
+            accept="image/jpeg,image/png,image/webp"
+            className="sr-only"
+            onChange={(event) => pick(event.target.files?.[0])}
+          />
+        </label>
         {hasPhoto && (
-          <li className="border-t border-brume">
-            <button
-              type="submit"
-              formAction={removePhotoAction}
-              formNoValidate
-              className="flex h-16 w-full items-center gap-4 px-5 text-left text-[17px] text-down-texte hover:bg-down-texte/5"
-            >
-              <Icon name="fermer" className="size-5 shrink-0" />
-              {labels.remove}
-            </button>
-          </li>
+          <button
+            type="submit"
+            formAction={removePhotoAction}
+            formNoValidate
+            className="t-li t-danger t-press"
+          >
+            <span className="t-cases" aria-hidden>
+              <TalentIcon name="supprimer" size="s" />
+            </span>
+            <span className="t-t">
+              <b>{labels.remove}</b>
+            </span>
+          </button>
         )}
-      </ul>
+      </div>
 
-      <p className="flex items-center gap-3 rounded-[16px] bg-lime-clair px-4 py-3 text-[15px]">
-        <Icon name="lock" className="size-4 shrink-0" />
-        {labels.never}
+      <p className="t-gar">
+        <TalentIcon name="confidentialite" size="s" />
+        <span>{labels.never}</span>
       </p>
 
-      <div className="sticky bottom-0 -mx-5 mt-2 flex gap-3 border-t border-brume bg-creme px-5 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))]">
-        <Link
-          href="/app/profil"
-          className="flex h-14 items-center justify-center rounded-pill bg-blanc px-6 text-[17px] font-semibold shadow-douce"
-        >
-          {labels.cancel}
-        </Link>
-        <button
-          type="submit"
-          disabled={pending}
-          className="flex h-14 min-w-0 flex-1 items-center justify-center rounded-pill bg-gradient-principal px-5 text-[17px] font-semibold text-blanc shadow-[var(--jm-ombre-principal)] hover:brightness-110 disabled:opacity-60"
-        >
-          {labels.save}
-        </button>
-      </div>
+      <button type="submit" disabled={pending} className="t-bt t-p t-pl t-press">
+        {labels.save}
+      </button>
     </form>
   );
 }

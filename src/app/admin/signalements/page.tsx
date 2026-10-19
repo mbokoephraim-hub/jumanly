@@ -34,7 +34,7 @@ import {
   urgentReasons,
 } from "@/server/services/moderation";
 
-const types = ["job", "message", "conversation"] as const;
+const types = ["job", "message", "conversation", "profile"] as const;
 type ReportType = (typeof types)[number];
 
 const tabs = { ouverts: "open", "en-cours": "inProgress", clotures: "closed" } as const;

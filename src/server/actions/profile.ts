@@ -10,34 +10,46 @@ import {
   educationSchema,
   experienceSchema,
   findSkill,
-  identitySchema,
+  headSchema,
   languageSchema,
   monthToDate,
   parseProfileLanguages,
-  preferencesSchema,
   PROFILE_SKILLS_MAX,
   refreshCompleteness,
+  searchSchema,
   skillSchema,
   splitList,
-  summarySchema,
   contractPreferences,
-  introSchema,
 } from "@/server/services/profile";
 import { PhotoError, removePhoto, savePhoto } from "@/server/services/profile-photo";
 
-/** Profile sections, also the anchors of /app/profil. */
+/**
+ * Mon profil (planche talent-4 § 3). Each form comes from a screen of `/app/profil` (a sub-page or
+ * a sheet) and goes back to the profile with its section open; an error goes back to the form.
+ */
+const PROFILE = "/app/profil";
+
+/** Sections of the profile, also their anchors. */
 type Section =
   | "identite"
-  | "resume"
-  | "experiences"
-  | "formations"
   | "competences"
+  | "projets"
+  | "experiences"
+  | "etudes"
   | "langues"
-  | "preferences"
+  | "recherche"
   | "visibilite";
 
-function back(section: Section, params: Record<string, string>): never {
-  redirect(`/app/profil?${new URLSearchParams({ section, ...params })}#${section}`);
+/** The screen the form was on: a page of the profile only. */
+function formPage(formData: FormData) {
+  const value = String(formData.get("retour") ?? "");
+  return /^\/app\/profil(\/[a-z]+)?$/.test(value) ? value : PROFILE;
+}
+
+function failed(formData: FormData, error: string, extra: Record<string, string> = {}): never {
+  const id = String(formData.get("id") ?? "");
+  const params = new URLSearchParams({ ...(id ? { id } : {}), ...extra, erreur: error });
+  redirect(`${formPage(formData)}?${params}`);
 }
 
 function firstError(error: z.ZodError) {
@@ -45,64 +57,47 @@ function firstError(error: z.ZodError) {
 }
 
 async function profileOf() {
-  const user = await requireUser("/app/profil");
+  const user = await requireUser(PROFILE);
   const profile = await ensureProfile(db, user.id);
   return { user, profile };
 }
 
 async function done(profileId: string, section: Section): Promise<never> {
   await refreshCompleteness(db, profileId);
-  back(section, { ok: "1" });
+  redirect(`${PROFILE}?ok=${section}#${section}`);
 }
 
 const fields = (formData: FormData) =>
   Object.fromEntries([...formData.entries()].map(([key, value]) => [key, String(value)]));
 
-export async function saveIdentity(formData: FormData) {
+/** « Modifier le profil »: title, summary, country and city. */
+export async function saveHeadAction(formData: FormData) {
   const { user, profile } = await profileOf();
-  const parsed = identitySchema.safeParse(fields(formData));
-  if (!parsed.success) back("identite", { erreur: firstError(parsed.error) });
+  const parsed = headSchema.safeParse(fields(formData));
+  if (!parsed.success) failed(formData, "invalid");
   const input = parsed.data;
   await db.$transaction([
     db.user.update({
       where: { id: user.id },
-      data: {
-        firstName: input.firstName,
-        lastName: input.lastName,
-        name: `${input.firstName} ${input.lastName}`,
-        country: input.country,
-        city: input.city,
-      },
+      data: { country: input.country, city: input.city },
     }),
     db.talentProfile.update({
       where: { id: profile.id },
-      data: { headline: input.headline || null },
+      data: { headline: input.headline || null, summary: input.summary || null },
     }),
   ]);
   await done(profile.id, "identite");
 }
 
-export async function saveSummary(formData: FormData) {
-  const { profile } = await profileOf();
-  const parsed = summarySchema.safeParse(fields(formData));
-  if (!parsed.success) back("resume", { erreur: "invalid" });
-  await db.talentProfile.update({
-    where: { id: profile.id },
-    data: { summary: parsed.data.summary || null },
-  });
-  await done(profile.id, "resume");
-}
-
 export async function saveExperience(formData: FormData) {
   const { profile } = await profileOf();
-  const parsed = experienceSchema.safeParse(fields(formData));
-  if (!parsed.success) back("experiences", { erreur: firstError(parsed.error) });
+  const raw = fields(formData);
+  const parsed = experienceSchema.safeParse({ type: "job", location: "", ...raw });
+  if (!parsed.success) failed(formData, firstError(parsed.error));
   const input = parsed.data;
   const data = {
     title: input.title,
     company: input.company,
-    type: input.type,
-    location: input.location || null,
     startDate: monthToDate(input.start),
     endDate: input.current || !input.end ? null : monthToDate(input.end),
     description: input.description,
@@ -111,7 +106,9 @@ export async function saveExperience(formData: FormData) {
   if (id) {
     await db.experience.updateMany({ where: { id, profileId: profile.id }, data });
   } else {
-    await db.experience.create({ data: { ...data, profileId: profile.id } });
+    await db.experience.create({
+      data: { ...data, type: input.type, location: input.location || null, profileId: profile.id },
+    });
   }
   await done(profile.id, "experiences");
 }
@@ -127,7 +124,7 @@ export async function deleteExperience(formData: FormData) {
 export async function saveEducation(formData: FormData) {
   const { profile } = await profileOf();
   const parsed = educationSchema.safeParse(fields(formData));
-  if (!parsed.success) back("formations", { erreur: firstError(parsed.error) });
+  if (!parsed.success) redirect(`${PROFILE}?erreur=${firstError(parsed.error)}#etudes`);
   const input = parsed.data;
   const data = {
     degree: input.degree,
@@ -143,7 +140,7 @@ export async function saveEducation(formData: FormData) {
   } else {
     await db.education.create({ data: { ...data, profileId: profile.id } });
   }
-  await done(profile.id, "formations");
+  await done(profile.id, "etudes");
 }
 
 export async function deleteEducation(formData: FormData) {
@@ -151,26 +148,43 @@ export async function deleteEducation(formData: FormData) {
   await db.education.deleteMany({
     where: { id: String(formData.get("id")), profileId: profile.id },
   });
-  await done(profile.id, "formations");
+  await done(profile.id, "etudes");
 }
 
-export async function addSkill(formData: FormData) {
-  const { profile } = await profileOf();
+/**
+ * « Compétences »: a skill of the reference list, its level and its proof. The proof is one of
+ * the person's attestations or projects (`proofRef`), or none (« Déclarée seulement »).
+ */
+export async function saveSkill(formData: FormData) {
+  const { user, profile } = await profileOf();
   const parsed = skillSchema.safeParse(fields(formData));
-  if (!parsed.success) back("competences", { erreur: "invalid" });
+  const q = String(formData.get("q") ?? "").slice(0, 80);
+  if (!parsed.success) failed(formData, "invalid", q ? { q } : {});
   const skill = await findSkill(db, parsed.data.skill);
-  if (!skill) back("competences", { erreur: "unknownSkill" });
+  if (!skill) failed(formData, "unknownSkill", q ? { q } : {});
   const existing = await db.profileSkill.findUnique({
     where: { profileId_skillId: { profileId: profile.id, skillId: skill.id } },
   });
-  if (existing && formData.get("mode") !== "update") back("competences", { erreur: "duplicate" });
   const count = await db.profileSkill.count({ where: { profileId: profile.id } });
-  if (!existing && count >= PROFILE_SKILLS_MAX) back("competences", { erreur: "max" });
-  const data = {
-    level: parsed.data.level,
-    proof: parsed.data.proof ?? null,
-    proofUrl: parsed.data.proofUrl || null,
-  };
+  if (!existing && count >= PROFILE_SKILLS_MAX) failed(formData, "max");
+  const [kind, ref] = String(formData.get("preuve") ?? "").split(":");
+  let proof: { proof: string | null; proofRef: string | null } = { proof: null, proofRef: null };
+  if (kind === "certificate" && ref) {
+    const certificate = await db.certificate.findFirst({
+      where: { id: ref, enrollment: { userId: user.id } },
+      select: { id: true },
+    });
+    if (certificate) proof = { proof: "certificate", proofRef: certificate.id };
+  } else if (kind === "project" && ref) {
+    const project = await db.document.findFirst({
+      where: { id: ref, profileId: profile.id, kind: "portfolio_item" },
+      select: { id: true },
+    });
+    if (project) proof = { proof: "project", proofRef: project.id };
+  } else if (kind === "keep" && existing) {
+    proof = { proof: existing.proof, proofRef: existing.proofRef };
+  }
+  const data = { level: parsed.data.level, ...proof, proofUrl: null };
   await db.profileSkill.upsert({
     where: { profileId_skillId: { profileId: profile.id, skillId: skill.id } },
     // A skill verified by a Jumanly certificate keeps its level and proof.
@@ -191,7 +205,7 @@ export async function removeSkill(formData: FormData) {
 export async function addLanguage(formData: FormData) {
   const { profile } = await profileOf();
   const parsed = languageSchema.safeParse(fields(formData));
-  if (!parsed.success) back("langues", { erreur: "invalid" });
+  if (!parsed.success) redirect(`${PROFILE}?erreur=invalid#langues`);
   const languages = parseProfileLanguages(profile.languages).filter(
     (language) => language.code !== parsed.data.code,
   );
@@ -214,11 +228,17 @@ export async function removeLanguage(formData: FormData) {
   await done(profile.id, "langues");
 }
 
-export async function savePreferences(formData: FormData) {
+/**
+ * « Ce que je cherche »: jobs and places (kept ones plus new ones), contract and work mode, the
+ * wished salary and whether the person is available now.
+ */
+export async function saveSearch(formData: FormData) {
   const { profile } = await profileOf();
-  const parsed = preferencesSchema.safeParse(fields(formData));
-  if (!parsed.success) back("preferences", { erreur: "invalid" });
+  const parsed = searchSchema.safeParse(fields(formData));
+  if (!parsed.success) failed(formData, "invalid");
   const input = parsed.data;
+  const list = (name: string, added: string) =>
+    splitList([...formData.getAll(name).map(String), added].join(","));
   const contracts = formData
     .getAll("contracts")
     .map(String)
@@ -234,75 +254,60 @@ export async function savePreferences(formData: FormData) {
   await db.talentProfile.update({
     where: { id: profile.id },
     data: {
-      availability: input.availability,
-      availableFrom: input.availableFrom ? new Date(`${input.availableFrom}T00:00:00Z`) : null,
-      notice: input.notice || null,
-      desiredJobTitles: splitList(input.desiredJobTitles),
-      desiredLocations: splitList(input.desiredLocations),
+      // « Disponible » on: open now; off: the person keeps listening without being available.
+      availability:
+        input.available === "on"
+          ? "open"
+          : profile.availability === "open"
+            ? "listening"
+            : profile.availability,
+      availableFrom: input.available === "on" ? null : profile.availableFrom,
+      desiredJobTitles: list("jobs", input.newJob),
+      desiredLocations: list("places", input.newPlace),
       desiredContracts: contracts,
       remotePreferences: remote,
-      relocation: input.relocation === "on",
       salaryMin: typeof input.salaryMin === "number" ? input.salaryMin : null,
-      salaryPeriod: input.salaryPeriod,
+      salaryPeriod: "month",
     },
   });
-  await done(profile.id, "preferences");
+  await done(profile.id, "recherche");
 }
 
 export async function saveVisibility(formData: FormData) {
   const { profile } = await profileOf();
   const visibility = String(formData.get("visibility"));
   if (!["private", "recruiters", "anonymous"].includes(visibility))
-    back("visibilite", { erreur: "invalid" });
+    redirect(`${PROFILE}?erreur=invalid`);
   await db.talentProfile.update({
     where: { id: profile.id },
     data: { visibility: visibility as "private" | "recruiters" | "anonymous" },
   });
-  back("visibilite", { ok: "1", visibilite: visibility });
-}
-
-export type IntroState = { status: "idle" | "saved" | "error"; savedAt?: number };
-
-/**
- * Title and bio of the phone profile (prompt 6, screen 25), saved without leaving the page: the
- * form reports « Enregistré » once the server has answered.
- */
-export async function saveIntroAction(_previous: IntroState, formData: FormData) {
-  const { profile } = await profileOf();
-  const parsed = introSchema.safeParse(fields(formData));
-  if (!parsed.success) return { status: "error" } satisfies IntroState;
-  await db.talentProfile.update({
-    where: { id: profile.id },
-    data: { headline: parsed.data.headline || null, summary: parsed.data.summary || null },
-  });
-  await refreshCompleteness(db, profile.id);
-  revalidatePath("/app/profil");
-  return { status: "saved", savedAt: Date.now() } satisfies IntroState;
+  redirect(`${PROFILE}?ok=visibilite`);
 }
 
 /**
- * The photo of screen 26: the square JPEG cropped in the browser or, without JavaScript, the file
- * picked by the camera or the gallery field (both are named `photo`, one of them is empty).
+ * The photo of « Modifier le profil »: the square JPEG cropped in the browser or, without
+ * JavaScript, the file picked by the camera or the gallery field (one of them is empty).
  */
 export async function savePhotoAction(formData: FormData) {
   const { user } = await profileOf();
   const file = formData
     .getAll("photo")
     .find((entry): entry is File => entry instanceof File && entry.size > 0);
-  if (!file) redirect("/app/profil?photo=1&erreur=photo");
+  if (!file) redirect("/app/profil/modifier?photo=1&erreur=photo");
   try {
     await savePhoto(db, user.id, new Uint8Array(await file.arrayBuffer()));
   } catch (error) {
-    if (error instanceof PhotoError) redirect(`/app/profil?photo=1&erreur=${error.code}`);
+    if (error instanceof PhotoError) redirect(`/app/profil/modifier?photo=1&erreur=${error.code}`);
     throw error;
   }
   revalidatePath("/app", "layout");
-  redirect("/app/profil?ok=photo");
+  redirect("/app/profil/modifier?ok=photo");
 }
 
 export async function removePhotoAction() {
   const { user } = await profileOf();
   await removePhoto(db, user.id);
   revalidatePath("/app", "layout");
-  redirect("/app/profil?ok=photo-retiree");
+  redirect("/app/profil/modifier?ok=photo-retiree");
 }

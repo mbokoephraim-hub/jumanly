@@ -10,41 +10,33 @@ import { signUpFromPricing, testEmail } from "./session";
 
 const photo = join(process.cwd(), "ressources/illustrations/png/jumanly-nadia-salut.png");
 
-test("compléter mon profil sur téléphone : titre, bio, photo, expérience", async ({
+test("compléter mon profil sur téléphone : titre, photo, expérience", async ({
   page,
   isMobile,
 }) => {
-  test.skip(!isMobile, "Parcours du téléphone (écrans 25 et 26).");
+  test.skip(!isMobile, "Parcours du téléphone (planche talent-4 § 3).");
   test.setTimeout(150_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("profil-mobile"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
+  // Mon profil draws its own head: no bottom menu.
   await page.goto("/app/profil");
-  const build = page.getByRole("region", { name: "Construire mon profil" });
-  await expect(build).toContainText("0 étape sur 6");
-  // The bottom menu steps aside for the bar « Enregistré · Voir mon profil côté recruteur ».
   await expect(page.getByRole("navigation", { name: "Navigation principale" })).toHaveCount(0);
-
-  // Title and bio are saved when the field is left; « Enregistré » comes from the server.
-  await page.locator("#phone-headline").fill("Analyste de données");
-  await page.locator("#phone-bio").click();
-  await expect(page.getByRole("status").filter({ hasText: "Enregistré" })).toBeVisible();
-  await page.locator("#phone-bio").fill("Analyste de données junior, j'aime les chiffres clairs.");
-  await expect(page.getByText(/^5\d \/ 1000$/)).toBeVisible();
-  await page.locator("#phone-headline").click();
-  await expect(page.getByRole("status").filter({ hasText: "Enregistrement…" })).toHaveCount(0);
-  await page.reload();
-  await expect(page.locator("#phone-headline")).toHaveValue("Analyste de données");
-  await expect(build).toContainText("2 étapes sur 6");
+  await page.getByRole("link", { name: "Modifier le profil" }).click();
+  await page.locator("#pf-headline").fill("Analyste de données");
+  await page.getByRole("button", { name: "Enregistrer", exact: true }).click();
+  await expect(page).toHaveURL(/ok=identite/);
+  await expect(page.locator(".t-pf-id")).toContainText("Analyste de données");
 
   // The photo: chosen, zoomed, cropped in the browser, then served from an unguessable address.
-  await page.getByRole("link", { name: "Changer la photo" }).first().click();
+  await page.goto("/app/profil/modifier");
+  await page.getByRole("button", { name: "Photo de profil" }).click();
   const sheet = page.getByRole("dialog", { name: "Photo de profil" });
-  await expect(sheet).toContainText("Jamais utilisée pour le matching.");
+  await expect(sheet).toContainText("La photo n’entre jamais dans le score.");
   await sheet.locator('input[type="file"]').nth(1).setInputFiles(photo);
-  await expect(sheet.getByRole("group", { name: /Faites glisser/ })).toBeVisible();
-  await sheet.getByLabel("Agrandir la photo").fill("1.5");
-  await sheet.getByRole("button", { name: "Enregistrer la photo" }).click();
+  await expect(sheet.getByRole("group", { name: /Glissez la photo/ })).toBeVisible();
+  await sheet.getByLabel("Zoom").fill("1.5");
+  await sheet.getByRole("button", { name: "Enregistrer" }).click();
   await expect(page).toHaveURL(/ok=photo$/);
   await expect(page.getByText("Photo enregistrée.")).toBeVisible();
   const src = await page.locator('main img[src^="/api/photo/"]').first().getAttribute("src");
@@ -52,27 +44,20 @@ test("compléter mon profil sur téléphone : titre, bio, photo, expérience", a
   expect(served.headers()["content-type"]).toBe("image/jpeg");
   expect(served.headers()["x-content-type-options"]).toBe("nosniff");
 
-  // One part at a time: Expériences opens alone, with the back arrow to the profile.
-  await page
-    .getByRole("navigation", { name: "Parties du profil" })
-    .getByRole("link", { name: /Expériences/ })
-    .click();
-  await expect(page).toHaveURL(/partie=experiences/);
-  const part = page.locator("#experiences");
-  await part.getByText("Ajouter une expérience").click();
-  await part.getByLabel("Intitulé du poste").fill("Analyste junior");
-  await part.getByLabel("Organisation").fill("Entreprise fictive");
-  await part.getByLabel("Date de début").fill("2024-01");
-  await part.locator('input[name="current"]').check();
-  await part.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(page).toHaveURL(/section=experiences/);
-  await expect(part.getByText("Analyste junior")).toBeVisible();
-  await page.getByRole("link", { name: "Retour à mon profil" }).click();
-  await expect(build).toContainText("4 étapes sur 6");
-  await expect(build.getByText("Expériences")).toHaveCSS("text-decoration-line", "line-through");
+  // Expériences: the section folds; « Ajouter une expérience » opens its screen.
+  await page.goto("/app/profil");
+  await page.locator("#experiences > summary").click();
+  await page.locator("#experiences").getByRole("link", { name: "Ajouter une expérience" }).click();
+  await page.getByLabel("Poste", { exact: true }).fill("Analyste junior");
+  await page.getByLabel("Organisation").fill("Entreprise fictive");
+  await page.getByLabel("Début").fill("2024-01");
+  await page.getByText("Poste actuel", { exact: true }).click();
+  await page.getByRole("button", { name: "Ajouter", exact: true }).click();
+  await expect(page).toHaveURL(/ok=experiences/);
+  await expect(page.locator("#experiences")).toContainText("Analyste junior");
 
   // Removing the photo goes back to the initials.
-  await page.goto("/app/profil?photo=1");
+  await page.goto("/app/profil/modifier?photo=1");
   await page.getByRole("button", { name: "Retirer la photo" }).click();
   await expect(page.getByText("Photo retirée.")).toBeVisible();
   expect((await page.request.get(src!)).status()).toBe(404);

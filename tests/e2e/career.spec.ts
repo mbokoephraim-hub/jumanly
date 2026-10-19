@@ -93,10 +93,15 @@ test("simulation orale : la réponse se tape si la dictée n'est pas disponible"
   await expect(page.getByText("Question 2 sur 4")).toBeVisible();
 });
 
-test("portfolio : verrou en Free, page publique sans compte", async ({ page, browser }) => {
+test("projets : verrou en Free, page publique sans compte", async ({ page, browser }) => {
   await logIn(page, demo.talentFree);
+  // The former portfolio page leads to the « Projets » of Mon profil.
   await page.goto("/app/career/portfolio");
-  await expect(page.getByText(/Forfait requis/).first()).toBeVisible();
+  await expect(page).toHaveURL(/\/app\/profil\?section=projets/);
+  await expect(page.locator("#projets")).toHaveAttribute("open", "");
+  await expect(
+    page.locator("#projets").getByRole("link", { name: /Montrez vos projets/ }),
+  ).toBeVisible();
 
   const context = await browser.newContext();
   const visitor = await context.newPage();
@@ -112,18 +117,30 @@ test("portfolio : verrou en Free, page publique sans compte", async ({ page, bro
   await context.close();
 });
 
-test("un talent Pro publie un projet dans son portfolio", async ({ page, isMobile }) => {
+test("un talent Pro ajoute un projet avec une photo", async ({ page, isMobile }) => {
   test.skip(isMobile, "Le portfolio de démonstration est partagé.");
   await logIn(page, demo.talentPro);
-  await page.goto("/app/career/portfolio");
-  const form = page.locator("#nouveau");
-  await form.getByLabel("Titre du projet").fill("Projet e2e (fictif)");
-  await form.getByLabel("Résultat").fill("Un résultat imaginaire.");
-  await form.getByRole("button", { name: "Enregistrer le projet" }).click();
-  await expect(page.getByText("Portfolio enregistré.")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Projet e2e (fictif)" })).toBeVisible();
-  await expect(page.getByText(/Présentation enrichie · Disponible avec/)).toBeVisible();
+  await page.goto("/app/profil/projet");
+  await page
+    .locator('input[name="files"]')
+    .setInputFiles("ressources/illustrations/png/jumanly-nadia-salut.png");
+  await page.getByLabel("Titre", { exact: true }).fill("Projet e2e (fictif)");
+  await page.getByLabel("Ce que vous avez fait").fill("Un résultat imaginaire.");
   await expectAccessible(page);
+  await page.getByRole("button", { name: "Enregistrer", exact: true }).click();
+  await expect(page).toHaveURL(/ok=projets/);
+  const tile = page
+    .locator("#projets")
+    .getByRole("link", { name: /Projet e2e \(fictif\)/ })
+    .first();
+  await expect(tile).toBeVisible();
+  const src = await tile.locator("img").getAttribute("src");
+  expect((await page.request.get(src!)).headers()["content-type"]).toBe("image/png");
+  // Removed again, with its file, so the next run starts clean.
+  await tile.click();
+  await page.getByRole("button", { name: "Supprimer ce projet" }).click();
+  await expect(page).toHaveURL(/ok=projets/);
+  expect((await page.request.get(src!)).status()).toBe(404);
 });
 
 // Career home v2 (docs/refonte-career/BRIEF-CAREER-V2.md § 9).

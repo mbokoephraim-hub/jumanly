@@ -21,12 +21,14 @@ import {
 } from "@/server/services/interview-sim";
 import {
   PortfolioError,
+  projectFileFor,
   projectSchema,
   publicPortfolio,
   savePortfolioSettings,
   saveProject,
 } from "@/server/services/portfolio";
 import { completeLesson, LearnError } from "@/server/services/learn";
+import { fakeStorage } from "@/server/storage";
 import { cleanup, db, newUser } from "./helpers";
 
 const users: string[] = [];
@@ -275,19 +277,26 @@ describe("documents, correction, LinkedIn et adaptation du CV (E10)", () => {
 describe("portfolio (E10, `career.portfolio.level`)", () => {
   const project = projectSchema.parse({
     title: "Projet fictif",
-    result: "Un résultat imaginaire",
-    skills: "Excel, Communication",
-    media: "https://exemple.test/image.png",
+    context: "Un résultat imaginaire",
+    skills: ["Excel", "Communication"],
+    visible: true,
   });
+  const storage = fakeStorage();
+  // The first bytes of a PNG: enough for the type check.
+  const png = { name: "capture.png", bytes: new Uint8Array([0x89, 0x50, 0x4e, 0x47, 1, 2, 3]) };
 
   it("sans portfolio dans le forfait : verrou", async () => {
     const user = await talent({ key: "career.portfolio.level", value: "none" });
-    await expect(saveProject(db, user.id, project)).rejects.toBeInstanceOf(PortfolioError);
+    await expect(saveProject(db, storage, user.id, project, [])).rejects.toBeInstanceOf(
+      PortfolioError,
+    );
   });
 
   it("la page publique n'existe que publiée, et le niveau standard garde la mise en page classique", async () => {
     const user = await talent({ key: "career.portfolio.level", value: "standard" });
-    await saveProject(db, user.id, project);
+    const id = await saveProject(db, storage, user.id, project, [png]);
+    // A hidden project stays out of the public page.
+    await saveProject(db, storage, user.id, { ...project, title: "Caché", visible: false }, []);
     const profile = await savePortfolioSettings(db, user.id, {
       intro: "Présentation",
       layout: "grid",
@@ -297,12 +306,22 @@ describe("portfolio (E10, `career.portfolio.level`)", () => {
     expect(profile.portfolioLayout).toBe("classic");
     const page = await publicPortfolio(db, profile.portfolioSlug!);
     expect(page?.projects.map((item) => item.title)).toEqual(["Projet fictif"]);
+    // Its file: for anyone while published, for its owner only once withdrawn.
+    expect(await projectFileFor(db, storage, null, id, 0)).toMatchObject({ name: "capture.png" });
     expect(page?.name).toBe("Test Fictif");
     expect(Object.keys(page ?? {}).sort()).toEqual(
       ["accent", "headline", "intro", "layout", "name", "projects"].sort(),
     );
     await savePortfolioSettings(db, user.id, { intro: "", layout: "classic", public: false });
     expect(await publicPortfolio(db, profile.portfolioSlug!)).toBeNull();
+    expect(await projectFileFor(db, storage, null, id, 0)).toBeNull();
+    expect(await projectFileFor(db, storage, user.id, id, 0)).not.toBeNull();
+    // A file that is not a photo or a PDF is refused.
+    await expect(
+      saveProject(db, storage, user.id, project, [
+        { name: "x.exe", bytes: new Uint8Array([1, 2]) },
+      ]),
+    ).rejects.toBeInstanceOf(PortfolioError);
   });
 });
 

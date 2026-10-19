@@ -22,6 +22,9 @@ export const REDRAWN = [
   "/app/notifications",
   // Lot 5: Apprendre, the classroom, quizzes and attestations.
   "/app/learn",
+  // Lot 6: Compte, Connexions, Mon profil and its screens.
+  "/app/compte",
+  "/app/profil",
 ];
 
 /**

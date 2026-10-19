@@ -8265,6 +8265,382 @@
       "missing": "Votre compte n'est pas encore administrateur. Ajoutez aussi votre adresse dans la variable ADMIN_BOOTSTRAP_EMAIL, puis reconnectez-vous."
     }
   },
+  "compte": {
+    "seo": "Compte · Jumanly",
+    "title": "Compte",
+    "back": "Retour",
+    "profile": "Voir mon profil · {percent} %",
+    "group": {
+      "mine": "Mes documents et mon réseau",
+      "settings": "Abonnement et réglages",
+      "spaces": "Mes autres espaces"
+    },
+    "documents": {
+      "title": "CV et documents",
+      "text": "{cvs, plural, =0 {Aucun CV} one {# CV} other {# CV}}, {letters, plural, =0 {aucune lettre} one {# lettre} other {# lettres}}"
+    },
+    "attestations": {
+      "title": "Attestations",
+      "text": "{count, plural, =0 {Aucune pour l'instant} one {# obtenue} other {# obtenues}}"
+    },
+    "practice": {
+      "title": "S’entraîner aux entretiens",
+      "text": "{count, plural, =0 {Aucune simulation ce mois} one {# simulation ce mois} other {# simulations ce mois}}"
+    },
+    "connections": {
+      "title": "Connexions",
+      "text": "{count, plural, =0 {Aucune connexion} one {# personne} other {# personnes}}",
+      "requests": "{count, plural, =0 {Aucune connexion} one {# personne} other {# personnes}} · {received, plural, one {# demande} other {# demandes}}"
+    },
+    "plan": {
+      "title": "Abonnement",
+      "credits": "{count, plural, =0 {Aucun crédit Orbi} one {# crédit Orbi} other {# crédits Orbi}}",
+      "unlimited": "Crédits Orbi illimités"
+    },
+    "settings": {
+      "title": "Paramètres",
+      "text": "Sécurité, confidentialité, notifications"
+    },
+    "help": {
+      "title": "Aide",
+      "text": "assistant@jumanly.io"
+    },
+    "spaces": {
+      "title": "Espace recruteur",
+      "text": "Passer à mon organisation"
+    },
+    "tester": {
+      "title": "Mode testeur",
+      "text": "Changer de formule sans payer"
+    },
+    "admin": {
+      "title": "Administration",
+      "text": "Jumanly Admin"
+    },
+    "logout": "Se déconnecter"
+  },
+  "reseau": {
+    "seo": "Connexions · Jumanly",
+    "title": "Connexions",
+    "tabs": "Connexions et demandes",
+    "tab": {
+      "mine": "Mes connexions",
+      "requests": "Demandes"
+    },
+    "received": "Demandes reçues",
+    "sent": "Demandes envoyées",
+    "mine": "Mes connexions",
+    "mutual": "{count, plural, one {# en commun} other {# en commun}}",
+    "noTitle": "Talent Jumanly",
+    "accept": "Accepter",
+    "acceptName": "Accepter la demande de {name}",
+    "ignore": "Ignorer",
+    "ignoreName": "Ignorer la demande de {name}",
+    "withdraw": "Retirer",
+    "withdrawName": "Retirer ma demande à {name}",
+    "connect": "Se connecter",
+    "connectName": "Demander à {name} de se connecter",
+    "write": "Écrire à {name}",
+    "options": "{name} : écrire, retirer, bloquer ou signaler",
+    "rule": "On écrit seulement à une connexion acceptée.",
+    "noRequest": "Aucune demande en attente.",
+    "error": "Cette action n’est pas possible. La personne n’est peut-être plus disponible.",
+    "empty": {
+      "title": "Pas encore de connexion",
+      "text": "Retrouvez des personnes de votre domaine et échangez une fois la demande acceptée."
+    },
+    "done": {
+      "envoyee": "Demande envoyée. Vous pourrez écrire une fois qu’elle sera acceptée.",
+      "acceptee": "Connexion acceptée. Vous pouvez vous écrire.",
+      "ignoree": "Demande ignorée. La personne n’est pas prévenue.",
+      "retiree": "C’est fait. La conversation reste lisible, sans nouveaux messages.",
+      "bloquee": "Personne bloquée. Elle ne peut plus vous écrire ni vous demander.",
+      "deja": "Vous êtes déjà en lien avec cette personne."
+    },
+    "search": {
+      "open": "Chercher une personne",
+      "title": "Chercher une personne",
+      "label": "Nom ou métier",
+      "placeholder": "Nom ou métier",
+      "none": "Personne ne correspond à « {query} ».",
+      "privacy": "Seuls les profils visibles sous leur nom apparaissent ici."
+    },
+    "person": {
+      "write": "Écrire",
+      "remove": "Retirer la connexion",
+      "removeText": "La conversation reste lisible, sans nouveaux messages.",
+      "report": "Signaler cette personne",
+      "block": "Bloquer",
+      "blockText": "Plus de message ni de demande, dans les deux sens."
+    },
+    "thread": {
+      "subtitle": "Connexion",
+      "blocked": "Vous avez bloqué {name} : vous ne pouvez plus vous écrire.",
+      "ended": "Cette connexion a pris fin : la conversation reste lisible, sans nouveaux messages."
+    },
+    "block": {
+      "body": "Cette personne ne pourra plus vous écrire ni vous demander de vous connecter."
+    }
+  },
+  "profil": {
+    "seo": "Mon profil · Jumanly",
+    "back": "Retour",
+    "edit": "Modifier le profil",
+    "save": "Enregistrer",
+    "error": "Ce n’est pas enregistré. Vérifiez les champs puis réessayez.",
+    "aim": "Vise : {job}",
+    "point": "Faire le point",
+    "recruiterView": "Vu par un recruteur",
+    "saved": {
+      "default": "Enregistré.",
+      "photo": "Photo enregistrée.",
+      "partage": "Vos projets sont en ligne. Copiez le lien pour les partager.",
+      "prive": "Vos projets ne sont plus en ligne.",
+      "visibilite": "Visibilité enregistrée."
+    },
+    "completeness": {
+      "title": "Profil à {percent} %",
+      "ring": "{percent} %",
+      "done": "Profil complet. Faites le point avec Orbi.",
+      "next": {
+        "identity": "Ajoutez un titre et votre ville pour progresser",
+        "summary": "Ajoutez un résumé de quelques lignes pour progresser",
+        "experience": "Ajoutez une expérience pour progresser",
+        "education": "Ajoutez vos études pour progresser",
+        "skills": "Ajoutez au moins 3 compétences pour progresser",
+        "languages": "Ajoutez une langue pour progresser",
+        "preferences": "Dites ce que vous cherchez pour progresser"
+      }
+    },
+    "proof": {
+      "certificate": "Attestation",
+      "project": "Projet",
+      "experience": "Expérience",
+      "link": "Lien",
+      "none": "Déclarée",
+      "named": "({name})"
+    },
+    "skills": {
+      "seo": "Compétences · Jumanly",
+      "title": "Compétences",
+      "empty": "Ajoutez les compétences que vous savez montrer.",
+      "add": "Ajouter une compétence",
+      "addNamed": "Ajouter {skill}",
+      "search": "Chercher une compétence",
+      "pick": "Compétence trouvée",
+      "none": "Aucune compétence ne correspond à « {query} ». Essayez un autre mot.",
+      "level": "Niveau",
+      "levels": {
+        "beginner": "Débutant",
+        "intermediate": "Intermédiaire",
+        "advanced": "Avancé",
+        "expert": "Expert"
+      },
+      "proof": "Preuve",
+      "attestation": "Attestation Jumanly",
+      "project": "Un projet",
+      "declared": "Déclarée seulement",
+      "declaredText": "Sans preuve",
+      "keepProof": "Garder la preuve déjà donnée",
+      "verified": "Compétence vérifiée par une attestation Jumanly : son niveau et sa preuve restent.",
+      "remove": "Retirer cette compétence",
+      "error": {
+        "unknownSkill": "Choisissez une compétence de la liste.",
+        "max": "Vous avez atteint le nombre maximum de compétences. Retirez-en une d’abord."
+      }
+    },
+    "projects": {
+      "seo": "Projet · Jumanly",
+      "title": "Projets",
+      "add": "Ajouter un projet",
+      "new": "Nouveau projet",
+      "edit": "Modifier le projet",
+      "private": "Vous seul",
+      "locked": "Montrez vos projets",
+      "lockedText": "Inclus dans les formules payantes. Voir les formules.",
+      "files": "Ajouter des photos ou un PDF",
+      "filesHelp": "Jusqu’à {max} fichiers, 4 Mo par envoi",
+      "kept": "Fichiers du projet",
+      "titleLabel": "Titre",
+      "titlePlaceholder": "Prévision des ventes d’une boutique",
+      "text": "Ce que vous avez fait",
+      "textPlaceholder": "Le problème, votre rôle, le résultat chiffré",
+      "skills": "Compétences utilisées",
+      "addSkill": "Ajouter une compétence",
+      "visible": "Visible par les recruteurs",
+      "visibleText": "Sinon, seulement vous",
+      "remove": "Supprimer ce projet",
+      "error": {
+        "file": "Ces fichiers ne passent pas : photos ou PDF seulement, {max} fichiers et 4 Mo par envoi au plus.",
+        "limit": "Vous avez atteint le nombre maximum de projets."
+      }
+    },
+    "experience": {
+      "seo": "Expérience · Jumanly",
+      "title": "Expériences",
+      "empty": "Décrivez un stage, un emploi ou une mission, avec son résultat.",
+      "add": "Ajouter une expérience",
+      "addCta": "Ajouter",
+      "new": "Nouvelle expérience",
+      "edit": "Modifier l’expérience",
+      "now": "aujourd’hui",
+      "job": "Poste",
+      "jobPlaceholder": "Stagiaire data",
+      "company": "Organisation",
+      "start": "Début",
+      "end": "Fin",
+      "current": "Poste actuel",
+      "result": "Résultat obtenu",
+      "resultPlaceholder": "Rapport mensuel automatisé : 2 jours gagnés par mois",
+      "resultHelp": "Un résultat par ligne, avec un chiffre si possible.",
+      "endBeforeStart": "La fin ne peut pas être avant le début.",
+      "remove": "Supprimer cette expérience"
+    },
+    "education": {
+      "title": "Études",
+      "empty": "Ajoutez votre diplôme le plus récent.",
+      "add": "Ajouter des études",
+      "edit": "Modifier les études",
+      "degree": "Diplôme ou formation",
+      "degreePlaceholder": "Licence en économie",
+      "school": "Établissement",
+      "level": "Niveau",
+      "start": "Année de début",
+      "end": "Année de fin",
+      "ongoing": "en cours",
+      "remove": "Retirer ces études",
+      "short": {
+        "none": "Sans diplôme",
+        "secondary": "Secondaire",
+        "vocational": "Professionnelle",
+        "bachelor": "Licence",
+        "master": "Master",
+        "doctorate": "Doctorat"
+      }
+    },
+    "attestations": {
+      "title": "Attestations et certificats",
+      "empty": "Vos attestations Jumanly apparaissent ici quand vous les affichez sur votre profil.",
+      "line": "Vérifiable · {code}",
+      "manage": "Gérer mes attestations"
+    },
+    "languages": {
+      "title": "Langues",
+      "empty": "Ajoutez les langues que vous parlez.",
+      "add": "Ajouter une langue",
+      "language": "Langue",
+      "levelLabel": "Niveau",
+      "level": {
+        "native": "Langue maternelle",
+        "fluent": "Courant",
+        "professional": "Professionnel",
+        "intermediate": "Intermédiaire",
+        "basic": "Notions"
+      },
+      "cefr": "Niveau européen (facultatif)",
+      "cefrNone": "Sans",
+      "save": "Ajouter",
+      "remove": "Retirer {language}"
+    },
+    "search": {
+      "seo": "Ce que je cherche · Jumanly",
+      "title": "Ce que je cherche",
+      "jobs": "Métiers visés",
+      "places": "Où travailler",
+      "contracts": "Contrat et mode",
+      "available": "Disponibilité",
+      "edit": "Modifier",
+      "addJob": "Ajouter un métier",
+      "addPlace": "Ajouter une ville",
+      "salary": "Salaire souhaité",
+      "salaryPlaceholder": "À partir de… $ par mois",
+      "salaryHelp": "Visible seulement par vous et les recruteurs à qui vous postulez",
+      "availableNow": "Disponible",
+      "availableText": "Dès maintenant"
+    },
+    "contract": {
+      "cdi": "CDI",
+      "cdd": "CDD",
+      "internship": "Stage",
+      "freelance": "Freelance",
+      "apprenticeship": "Alternance",
+      "volunteer": "Volontariat",
+      "partTime": "Temps partiel"
+    },
+    "remote": {
+      "onsite": "Sur site",
+      "hybrid": "Hybride",
+      "remote": "À distance"
+    },
+    "availability": {
+      "open": "Disponible dès maintenant",
+      "listening": "À l’écoute",
+      "not_looking": "Pas en recherche"
+    },
+    "share": {
+      "open": "Partager mon profil",
+      "title": "Partager mes projets",
+      "text": "Une page publique montre votre nom, votre titre et vos projets visibles, rien d’autre.",
+      "public": "Mettre mes projets en ligne",
+      "publicText": "Toute personne qui a le lien peut les voir",
+      "save": "Enregistrer",
+      "copy": "Copier le lien",
+      "copied": "Lien copié",
+      "locked": "La page publique de vos projets fait partie des formules payantes.",
+      "plans": "Voir les formules",
+      "privacy": "Votre profil complet reste privé : un recruteur le voit seulement si vous postulez ou le rendez visible."
+    },
+    "head": {
+      "seo": "Modifier le profil · Jumanly",
+      "title": "Modifier le profil",
+      "headline": "Titre",
+      "headlinePlaceholder": "Analyste de données",
+      "summary": "Résumé",
+      "summaryPlaceholder": "Je transforme des données en décisions…",
+      "summaryHelp": "Facultatif · {max} caractères au plus",
+      "country": "Pays",
+      "city": "Ville",
+      "photo": "Photo de profil",
+      "photoTake": "Prendre une photo",
+      "photoChoose": "Choisir dans la galerie",
+      "photoRemove": "Retirer la photo",
+      "photoZoom": "Zoom",
+      "photoEmpty": "Choisissez une photo, puis cadrez-la.",
+      "photoDrag": "Glissez la photo ou utilisez les flèches pour la cadrer",
+      "photoRule": "La photo n’entre jamais dans le score. Vous pouvez ne pas en mettre.",
+      "photoSaved": "Photo enregistrée.",
+      "photoRemoved": "Photo retirée.",
+      "photoError": {
+        "type": "Ce fichier n’est pas une photo (JPEG, PNG ou WebP).",
+        "size": "Cette photo est trop lourde. Recadrez-la ou choisissez-en une autre.",
+        "photo": "Choisissez une photo avant d’enregistrer."
+      }
+    },
+    "preview": {
+      "seo": "Vu par un recruteur · Jumanly",
+      "title": "Vu par un recruteur",
+      "banner": "Aperçu : c’est ce que voit un recruteur à qui vous postulez.",
+      "headline": "Titre",
+      "skills": "Compétences",
+      "projects": "Projets",
+      "projectsValue": "{count, plural, =0 {Aucun projet public} one {# projet public} other {# projets publics}}",
+      "attestations": "Attestations",
+      "attestationsValue": "{count, plural, =0 {Aucune} one {#, vérifiable} other {#, vérifiables}}",
+      "cv": "CV",
+      "cvValue": "Celui envoyé avec la candidature",
+      "never": "Jamais utilisé pour le score",
+      "photoAge": "Photo, âge, genre",
+      "origin": "Nationalité, situation familiale",
+      "address": "Adresse précise",
+      "excluded": "exclus du matching",
+      "cityOnly": "ville seulement",
+      "rule": {
+        "private": "Un recruteur voit votre profil seulement si vous postulez.",
+        "recruiters": "Votre profil est visible par les recruteurs, et par ceux à qui vous postulez.",
+        "anonymous": "Les recruteurs voient votre profil sans votre nom, sauf si vous postulez."
+      }
+    }
+  },
   "hire": {
     "nav": {
       "dashboard": "Accueil",

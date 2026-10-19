@@ -163,18 +163,13 @@ const requiredLine = (max: number) => z.string().trim().min(1, "required").max(m
 /** `<input type="month">` value: "2024-03". */
 const month = z.string().regex(/^\d{4}-(0[1-9]|1[0-2])$/, "required");
 
-export const identitySchema = z.object({
-  firstName: requiredLine(80),
-  lastName: requiredLine(80),
+/** « Modifier le profil » (planche talent-4): title, summary, country and city. */
+export const headSchema = z.object({
   headline: line(120),
+  summary: line(PROFILE_SUMMARY_MAX),
   country: z.string().trim().length(2, "required"),
   city: requiredLine(120),
 });
-
-export const summarySchema = z.object({ summary: line(PROFILE_SUMMARY_MAX) });
-
-/** Title and bio, edited together on the phone profile (prompt 6). */
-export const introSchema = z.object({ headline: line(120), summary: line(PROFILE_SUMMARY_MAX) });
 
 export const experienceSchema = z
   .object({
@@ -243,15 +238,12 @@ export const languageSchema = z.object({
   cefr: z.union([z.enum(cefrLevels), z.literal("")]).optional(),
 });
 
-export const preferencesSchema = z.object({
-  availability: z.enum(["open", "listening", "not_looking"]),
-  availableFrom: z.union([z.iso.date(), z.literal("")]).optional(),
-  notice: line(60),
-  desiredJobTitles: line(300),
-  desiredLocations: line(300),
-  relocation: z.literal("on").optional(),
+/** « Ce que je cherche » (planche talent-4): what the lists and switches do not carry. */
+export const searchSchema = z.object({
+  newJob: line(300).default(""),
+  newPlace: line(300).default(""),
+  available: z.literal("on").optional(),
   salaryMin: z.union([z.coerce.number().int().min(0).max(10_000_000), z.literal("")]).optional(),
-  salaryPeriod: z.enum(["month", "year"]),
 });
 
 /** "a, b , c" → ["a", "b", "c"], without duplicates or empty items. */

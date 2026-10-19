@@ -30,39 +30,27 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await finishOnboarding(page, { country: "Congo", city: "Kinshasa" });
   await expect(page).toHaveURL(new RegExp(`/app/jobs/${JOB}`));
 
-  // Profile: summary, an experience, three skills.
-  // On a phone each part opens alone (prompt 6); the computer shows them all, whatever the address.
-  await page.goto("/app/profil?partie=resume");
+  // Profile (planche talent-4 § 3): summary, an experience, three skills, each on its screen.
+  await page.goto("/app/profil/modifier");
   await page
-    .locator("#summary")
+    .locator("#pf-summary")
     .fill("Comptable rigoureuse, cinq ans de saisie et de rapprochements bancaires en PME.");
-  await page.locator("#resume").getByRole("button", { name: "Enregistrer" }).click();
-  await expect(page.locator("#resume")).toContainText("Profil enregistré");
+  await page.getByRole("button", { name: "Enregistrer", exact: true }).click();
+  await expect(page).toHaveURL(/\/app\/profil\?ok=identite/);
 
-  await page.goto("/app/profil?partie=experiences");
-  await page.waitForLoadState("networkidle");
-  const experiences = page.locator("#experiences").filter({ visible: true });
-  await experiences.locator("summary").filter({ hasText: "Ajouter" }).click();
-  await experiences.locator('input[name="title"]').fill("Assistante comptable");
-  await experiences.locator('input[name="company"]').fill("Entreprise fictive");
-  await experiences.locator('input[name="start"]').fill("2021-03");
-  await experiences.locator('input[name="current"]').check();
-  await experiences
-    .locator('textarea[name="description"]')
-    .fill("Saisie des factures\nRapprochements bancaires");
-  await experiences.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(experiences).toContainText("Assistante comptable");
+  await page.goto("/app/profil/experience");
+  await page.locator("#pf-exp-title").fill("Assistante comptable");
+  await page.locator("#pf-exp-company").fill("Entreprise fictive");
+  await page.locator("#pf-exp-start").fill("2021-03");
+  await page.getByText("Poste actuel", { exact: true }).click();
+  await page.locator("#pf-exp-result").fill("Saisie des factures\nRapprochements bancaires");
+  await page.getByRole("button", { name: "Ajouter", exact: true }).click();
+  await expect(page.locator("#experiences")).toContainText("Assistante comptable");
 
-  await page.goto("/app/profil?partie=competences");
-  // The disclosure is opened once the page is ready, or hydration closes it again.
-  await page.waitForLoadState("networkidle");
   for (const skill of ["Analyse de données", "Administration", "Achats"]) {
-    const skills = page.locator("#competences").filter({ visible: true });
-    const form = skills.locator("form").filter({ has: page.locator('input[name="skill"]') });
-    if (!(await form.isVisible())) await skills.locator("summary").last().click();
-    await form.locator('input[name="skill"]').fill(skill);
-    await form.getByRole("button", { name: "Ajouter" }).click();
-    await expect(skills).toContainText(skill);
+    await page.goto(`/app/profil/competence?q=${encodeURIComponent(skill)}`);
+    await page.getByRole("button", { name: /^Ajouter/ }).click();
+    await expect(page.locator("#competences")).toContainText(skill);
   }
 
   // CV from the profile, then its PDF.

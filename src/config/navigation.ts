@@ -102,9 +102,11 @@ export function hidesTalentTabBar(pathname: string) {
   const [, app, section, page, more] = pathname.split("/");
   if (app !== "app" || !section) return false;
   if (section === "espace" || section === "bienvenue") return true;
+  // Compte and Connexions open from the avatar and draw their own head (planche talent-4 § 2).
+  if (section === "compte") return true;
   // Orbi opens as a conversation page: back arrow at the top, the composer in place of the bar.
   if (section === "orbi") return true;
-  // Mon profil has its own bar « Enregistré · Voir mon profil côté recruteur » (screen 25).
+  // Mon profil and its screens draw their own head (planche talent-4 § 3).
   if (section === "profil") return true;
   if (section === "jobs") return Boolean(page) && !["candidatures", "enregistrees"].includes(page);
   // Messages and notifications open from the head and draw their own (planche talent-2 § 5).

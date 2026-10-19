@@ -6717,6 +6717,307 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `tester.admin.missing` | Votre compte n'est pas encore administrateur. Ajoutez aussi votre adresse dans la variable ADMIN_BOOTSTRAP_EMAIL, puis reconnectez-vous. |
 | `account.menu.tester` | Mode testeur |
 
+### `/app/compte` · Compte (refonte mobile, lot 6)
+
+| Clé | Texte |
+|---|---|
+| `compte.seo` | Compte · Jumanly |
+| `compte.title` | Compte |
+| `compte.back` | Retour |
+| `compte.profile` | Voir mon profil · {percent} % |
+| `compte.group.mine` | Mes documents et mon réseau |
+| `compte.group.settings` | Abonnement et réglages |
+| `compte.group.spaces` | Mes autres espaces |
+| `compte.documents.title` | CV et documents |
+| `compte.documents.text` | {cvs, plural, =0 {Aucun CV} one {# CV} other {# CV}}, {letters, plural, =0 {aucune lettre} one {# lettre} other {# lettres}} |
+| `compte.attestations.title` | Attestations |
+| `compte.attestations.text` | {count, plural, =0 {Aucune pour l'instant} one {# obtenue} other {# obtenues}} |
+| `compte.practice.title` | S’entraîner aux entretiens |
+| `compte.practice.text` | {count, plural, =0 {Aucune simulation ce mois} one {# simulation ce mois} other {# simulations ce mois}} |
+| `compte.connections.title` | Connexions |
+| `compte.connections.text` | {count, plural, =0 {Aucune connexion} one {# personne} other {# personnes}} |
+| `compte.connections.requests` | {count, plural, =0 {Aucune connexion} one {# personne} other {# personnes}} · {received, plural, one {# demande} other {# demandes}} |
+| `compte.plan.title` | Abonnement |
+| `compte.plan.credits` | {count, plural, =0 {Aucun crédit Orbi} one {# crédit Orbi} other {# crédits Orbi}} |
+| `compte.plan.unlimited` | Crédits Orbi illimités |
+| `compte.settings.title` | Paramètres |
+| `compte.settings.text` | Sécurité, confidentialité, notifications |
+| `compte.help.title` | Aide |
+| `compte.help.text` | assistant@jumanly.io |
+| `compte.spaces.title` | Espace recruteur |
+| `compte.spaces.text` | Passer à mon organisation |
+| `compte.tester.title` | Mode testeur |
+| `compte.tester.text` | Changer de formule sans payer |
+| `compte.admin.title` | Administration |
+| `compte.admin.text` | Jumanly Admin |
+| `compte.logout` | Se déconnecter |
+
+### `/app/compte/connexions` · Connexions (refonte mobile, lot 6)
+
+| Clé | Texte |
+|---|---|
+| `reseau.seo` | Connexions · Jumanly |
+| `reseau.title` | Connexions |
+| `reseau.tabs` | Connexions et demandes |
+| `reseau.tab.mine` | Mes connexions |
+| `reseau.tab.requests` | Demandes |
+| `reseau.received` | Demandes reçues |
+| `reseau.sent` | Demandes envoyées |
+| `reseau.mine` | Mes connexions |
+| `reseau.mutual` | {count, plural, one {# en commun} other {# en commun}} |
+| `reseau.noTitle` | Talent Jumanly |
+| `reseau.accept` | Accepter |
+| `reseau.acceptName` | Accepter la demande de {name} |
+| `reseau.ignore` | Ignorer |
+| `reseau.ignoreName` | Ignorer la demande de {name} |
+| `reseau.withdraw` | Retirer |
+| `reseau.withdrawName` | Retirer ma demande à {name} |
+| `reseau.connect` | Se connecter |
+| `reseau.connectName` | Demander à {name} de se connecter |
+| `reseau.write` | Écrire à {name} |
+| `reseau.options` | {name} : écrire, retirer, bloquer ou signaler |
+| `reseau.rule` | On écrit seulement à une connexion acceptée. |
+| `reseau.noRequest` | Aucune demande en attente. |
+| `reseau.error` | Cette action n’est pas possible. La personne n’est peut-être plus disponible. |
+| `reseau.empty.title` | Pas encore de connexion |
+| `reseau.empty.text` | Retrouvez des personnes de votre domaine et échangez une fois la demande acceptée. |
+| `reseau.done.envoyee` | Demande envoyée. Vous pourrez écrire une fois qu’elle sera acceptée. |
+| `reseau.done.acceptee` | Connexion acceptée. Vous pouvez vous écrire. |
+| `reseau.done.ignoree` | Demande ignorée. La personne n’est pas prévenue. |
+| `reseau.done.retiree` | C’est fait. La conversation reste lisible, sans nouveaux messages. |
+| `reseau.done.bloquee` | Personne bloquée. Elle ne peut plus vous écrire ni vous demander. |
+| `reseau.done.deja` | Vous êtes déjà en lien avec cette personne. |
+| `reseau.search.open` | Chercher une personne |
+| `reseau.search.title` | Chercher une personne |
+| `reseau.search.label` | Nom ou métier |
+| `reseau.search.placeholder` | Nom ou métier |
+| `reseau.search.none` | Personne ne correspond à « {query} ». |
+| `reseau.search.privacy` | Seuls les profils visibles sous leur nom apparaissent ici. |
+| `reseau.person.write` | Écrire |
+| `reseau.person.remove` | Retirer la connexion |
+| `reseau.person.removeText` | La conversation reste lisible, sans nouveaux messages. |
+| `reseau.person.report` | Signaler cette personne |
+| `reseau.person.block` | Bloquer |
+| `reseau.person.blockText` | Plus de message ni de demande, dans les deux sens. |
+| `reseau.thread.subtitle` | Connexion |
+| `reseau.thread.blocked` | Vous avez bloqué {name} : vous ne pouvez plus vous écrire. |
+| `reseau.thread.ended` | Cette connexion a pris fin : la conversation reste lisible, sans nouveaux messages. |
+| `reseau.block.body` | Cette personne ne pourra plus vous écrire ni vous demander de vous connecter. |
+
+### `/app/profil` · Mon profil (refonte mobile, lot 6)
+
+| Clé | Texte |
+|---|---|
+| `profil.seo` | Mon profil · Jumanly |
+| `profil.back` | Retour |
+| `profil.edit` | Modifier le profil |
+| `profil.save` | Enregistrer |
+| `profil.error` | Ce n’est pas enregistré. Vérifiez les champs puis réessayez. |
+| `profil.aim` | Vise : {job} |
+| `profil.point` | Faire le point |
+| `profil.recruiterView` | Vu par un recruteur |
+| `profil.saved.default` | Enregistré. |
+| `profil.saved.photo` | Photo enregistrée. |
+| `profil.saved.partage` | Vos projets sont en ligne. Copiez le lien pour les partager. |
+| `profil.saved.prive` | Vos projets ne sont plus en ligne. |
+| `profil.saved.visibilite` | Visibilité enregistrée. |
+| `profil.completeness.title` | Profil à {percent} % |
+| `profil.completeness.ring` | {percent} % |
+| `profil.completeness.done` | Profil complet. Faites le point avec Orbi. |
+| `profil.completeness.next.identity` | Ajoutez un titre et votre ville pour progresser |
+| `profil.completeness.next.summary` | Ajoutez un résumé de quelques lignes pour progresser |
+| `profil.completeness.next.experience` | Ajoutez une expérience pour progresser |
+| `profil.completeness.next.education` | Ajoutez vos études pour progresser |
+| `profil.completeness.next.skills` | Ajoutez au moins 3 compétences pour progresser |
+| `profil.completeness.next.languages` | Ajoutez une langue pour progresser |
+| `profil.completeness.next.preferences` | Dites ce que vous cherchez pour progresser |
+| `profil.proof.certificate` | Attestation |
+| `profil.proof.project` | Projet |
+| `profil.proof.experience` | Expérience |
+| `profil.proof.link` | Lien |
+| `profil.proof.none` | Déclarée |
+| `profil.proof.named` | ({name}) |
+| `profil.skills.seo` | Compétences · Jumanly |
+| `profil.skills.title` | Compétences |
+| `profil.skills.empty` | Ajoutez les compétences que vous savez montrer. |
+| `profil.skills.add` | Ajouter une compétence |
+| `profil.skills.addNamed` | Ajouter {skill} |
+| `profil.skills.search` | Chercher une compétence |
+| `profil.skills.pick` | Compétence trouvée |
+| `profil.skills.none` | Aucune compétence ne correspond à « {query} ». Essayez un autre mot. |
+| `profil.skills.level` | Niveau |
+| `profil.skills.levels.beginner` | Débutant |
+| `profil.skills.levels.intermediate` | Intermédiaire |
+| `profil.skills.levels.advanced` | Avancé |
+| `profil.skills.levels.expert` | Expert |
+| `profil.skills.proof` | Preuve |
+| `profil.skills.attestation` | Attestation Jumanly |
+| `profil.skills.project` | Un projet |
+| `profil.skills.declared` | Déclarée seulement |
+| `profil.skills.declaredText` | Sans preuve |
+| `profil.skills.keepProof` | Garder la preuve déjà donnée |
+| `profil.skills.verified` | Compétence vérifiée par une attestation Jumanly : son niveau et sa preuve restent. |
+| `profil.skills.remove` | Retirer cette compétence |
+| `profil.skills.error.unknownSkill` | Choisissez une compétence de la liste. |
+| `profil.skills.error.max` | Vous avez atteint le nombre maximum de compétences. Retirez-en une d’abord. |
+| `profil.projects.seo` | Projet · Jumanly |
+| `profil.projects.title` | Projets |
+| `profil.projects.add` | Ajouter un projet |
+| `profil.projects.new` | Nouveau projet |
+| `profil.projects.edit` | Modifier le projet |
+| `profil.projects.private` | Vous seul |
+| `profil.projects.locked` | Montrez vos projets |
+| `profil.projects.lockedText` | Inclus dans les formules payantes. Voir les formules. |
+| `profil.projects.files` | Ajouter des photos ou un PDF |
+| `profil.projects.filesHelp` | Jusqu’à {max} fichiers, 4 Mo par envoi |
+| `profil.projects.kept` | Fichiers du projet |
+| `profil.projects.titleLabel` | Titre |
+| `profil.projects.titlePlaceholder` | Prévision des ventes d’une boutique |
+| `profil.projects.text` | Ce que vous avez fait |
+| `profil.projects.textPlaceholder` | Le problème, votre rôle, le résultat chiffré |
+| `profil.projects.skills` | Compétences utilisées |
+| `profil.projects.addSkill` | Ajouter une compétence |
+| `profil.projects.visible` | Visible par les recruteurs |
+| `profil.projects.visibleText` | Sinon, seulement vous |
+| `profil.projects.remove` | Supprimer ce projet |
+| `profil.projects.error.file` | Ces fichiers ne passent pas : photos ou PDF seulement, {max} fichiers et 4 Mo par envoi au plus. |
+| `profil.projects.error.limit` | Vous avez atteint le nombre maximum de projets. |
+| `profil.experience.seo` | Expérience · Jumanly |
+| `profil.experience.title` | Expériences |
+| `profil.experience.empty` | Décrivez un stage, un emploi ou une mission, avec son résultat. |
+| `profil.experience.add` | Ajouter une expérience |
+| `profil.experience.addCta` | Ajouter |
+| `profil.experience.new` | Nouvelle expérience |
+| `profil.experience.edit` | Modifier l’expérience |
+| `profil.experience.now` | aujourd’hui |
+| `profil.experience.job` | Poste |
+| `profil.experience.jobPlaceholder` | Stagiaire data |
+| `profil.experience.company` | Organisation |
+| `profil.experience.start` | Début |
+| `profil.experience.end` | Fin |
+| `profil.experience.current` | Poste actuel |
+| `profil.experience.result` | Résultat obtenu |
+| `profil.experience.resultPlaceholder` | Rapport mensuel automatisé : 2 jours gagnés par mois |
+| `profil.experience.resultHelp` | Un résultat par ligne, avec un chiffre si possible. |
+| `profil.experience.endBeforeStart` | La fin ne peut pas être avant le début. |
+| `profil.experience.remove` | Supprimer cette expérience |
+| `profil.education.title` | Études |
+| `profil.education.empty` | Ajoutez votre diplôme le plus récent. |
+| `profil.education.add` | Ajouter des études |
+| `profil.education.edit` | Modifier les études |
+| `profil.education.degree` | Diplôme ou formation |
+| `profil.education.degreePlaceholder` | Licence en économie |
+| `profil.education.school` | Établissement |
+| `profil.education.level` | Niveau |
+| `profil.education.start` | Année de début |
+| `profil.education.end` | Année de fin |
+| `profil.education.ongoing` | en cours |
+| `profil.education.remove` | Retirer ces études |
+| `profil.education.short.none` | Sans diplôme |
+| `profil.education.short.secondary` | Secondaire |
+| `profil.education.short.vocational` | Professionnelle |
+| `profil.education.short.bachelor` | Licence |
+| `profil.education.short.master` | Master |
+| `profil.education.short.doctorate` | Doctorat |
+| `profil.attestations.title` | Attestations et certificats |
+| `profil.attestations.empty` | Vos attestations Jumanly apparaissent ici quand vous les affichez sur votre profil. |
+| `profil.attestations.line` | Vérifiable · {code} |
+| `profil.attestations.manage` | Gérer mes attestations |
+| `profil.languages.title` | Langues |
+| `profil.languages.empty` | Ajoutez les langues que vous parlez. |
+| `profil.languages.add` | Ajouter une langue |
+| `profil.languages.language` | Langue |
+| `profil.languages.levelLabel` | Niveau |
+| `profil.languages.level.native` | Langue maternelle |
+| `profil.languages.level.fluent` | Courant |
+| `profil.languages.level.professional` | Professionnel |
+| `profil.languages.level.intermediate` | Intermédiaire |
+| `profil.languages.level.basic` | Notions |
+| `profil.languages.cefr` | Niveau européen (facultatif) |
+| `profil.languages.cefrNone` | Sans |
+| `profil.languages.save` | Ajouter |
+| `profil.languages.remove` | Retirer {language} |
+| `profil.search.seo` | Ce que je cherche · Jumanly |
+| `profil.search.title` | Ce que je cherche |
+| `profil.search.jobs` | Métiers visés |
+| `profil.search.places` | Où travailler |
+| `profil.search.contracts` | Contrat et mode |
+| `profil.search.available` | Disponibilité |
+| `profil.search.edit` | Modifier |
+| `profil.search.addJob` | Ajouter un métier |
+| `profil.search.addPlace` | Ajouter une ville |
+| `profil.search.salary` | Salaire souhaité |
+| `profil.search.salaryPlaceholder` | À partir de… $ par mois |
+| `profil.search.salaryHelp` | Visible seulement par vous et les recruteurs à qui vous postulez |
+| `profil.search.availableNow` | Disponible |
+| `profil.search.availableText` | Dès maintenant |
+| `profil.contract.cdi` | CDI |
+| `profil.contract.cdd` | CDD |
+| `profil.contract.internship` | Stage |
+| `profil.contract.freelance` | Freelance |
+| `profil.contract.apprenticeship` | Alternance |
+| `profil.contract.volunteer` | Volontariat |
+| `profil.contract.partTime` | Temps partiel |
+| `profil.remote.onsite` | Sur site |
+| `profil.remote.hybrid` | Hybride |
+| `profil.remote.remote` | À distance |
+| `profil.availability.open` | Disponible dès maintenant |
+| `profil.availability.listening` | À l’écoute |
+| `profil.availability.not_looking` | Pas en recherche |
+| `profil.share.open` | Partager mon profil |
+| `profil.share.title` | Partager mes projets |
+| `profil.share.text` | Une page publique montre votre nom, votre titre et vos projets visibles, rien d’autre. |
+| `profil.share.public` | Mettre mes projets en ligne |
+| `profil.share.publicText` | Toute personne qui a le lien peut les voir |
+| `profil.share.save` | Enregistrer |
+| `profil.share.copy` | Copier le lien |
+| `profil.share.copied` | Lien copié |
+| `profil.share.locked` | La page publique de vos projets fait partie des formules payantes. |
+| `profil.share.plans` | Voir les formules |
+| `profil.share.privacy` | Votre profil complet reste privé : un recruteur le voit seulement si vous postulez ou le rendez visible. |
+| `profil.head.seo` | Modifier le profil · Jumanly |
+| `profil.head.title` | Modifier le profil |
+| `profil.head.headline` | Titre |
+| `profil.head.headlinePlaceholder` | Analyste de données |
+| `profil.head.summary` | Résumé |
+| `profil.head.summaryPlaceholder` | Je transforme des données en décisions… |
+| `profil.head.summaryHelp` | Facultatif · {max} caractères au plus |
+| `profil.head.country` | Pays |
+| `profil.head.city` | Ville |
+| `profil.head.photo` | Photo de profil |
+| `profil.head.photoTake` | Prendre une photo |
+| `profil.head.photoChoose` | Choisir dans la galerie |
+| `profil.head.photoRemove` | Retirer la photo |
+| `profil.head.photoZoom` | Zoom |
+| `profil.head.photoEmpty` | Choisissez une photo, puis cadrez-la. |
+| `profil.head.photoDrag` | Glissez la photo ou utilisez les flèches pour la cadrer |
+| `profil.head.photoRule` | La photo n’entre jamais dans le score. Vous pouvez ne pas en mettre. |
+| `profil.head.photoSaved` | Photo enregistrée. |
+| `profil.head.photoRemoved` | Photo retirée. |
+| `profil.head.photoError.type` | Ce fichier n’est pas une photo (JPEG, PNG ou WebP). |
+| `profil.head.photoError.size` | Cette photo est trop lourde. Recadrez-la ou choisissez-en une autre. |
+| `profil.head.photoError.photo` | Choisissez une photo avant d’enregistrer. |
+| `profil.preview.seo` | Vu par un recruteur · Jumanly |
+| `profil.preview.title` | Vu par un recruteur |
+| `profil.preview.banner` | Aperçu : c’est ce que voit un recruteur à qui vous postulez. |
+| `profil.preview.headline` | Titre |
+| `profil.preview.skills` | Compétences |
+| `profil.preview.projects` | Projets |
+| `profil.preview.projectsValue` | {count, plural, =0 {Aucun projet public} one {# projet public} other {# projets publics}} |
+| `profil.preview.attestations` | Attestations |
+| `profil.preview.attestationsValue` | {count, plural, =0 {Aucune} one {#, vérifiable} other {#, vérifiables}} |
+| `profil.preview.cv` | CV |
+| `profil.preview.cvValue` | Celui envoyé avec la candidature |
+| `profil.preview.never` | Jamais utilisé pour le score |
+| `profil.preview.photoAge` | Photo, âge, genre |
+| `profil.preview.origin` | Nationalité, situation familiale |
+| `profil.preview.address` | Adresse précise |
+| `profil.preview.excluded` | exclus du matching |
+| `profil.preview.cityOnly` | ville seulement |
+| `profil.preview.rule.private` | Un recruteur voit votre profil seulement si vous postulez. |
+| `profil.preview.rule.recruiters` | Votre profil est visible par les recruteurs, et par ceux à qui vous postulez. |
+| `profil.preview.rule.anonymous` | Les recruteurs voient votre profil sans votre nom, sauf si vous postulez. |
+
 
 ---
 

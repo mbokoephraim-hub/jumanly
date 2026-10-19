@@ -165,23 +165,14 @@ describe("documents : garde-fous contre l'invention", () => {
 });
 
 describe("portfolio", () => {
-  it("liens https uniquement, trois médias au plus", () => {
-    expect(projectSchema.safeParse({ title: "P", link: "http://exemple.test" }).success).toBe(
-      false,
-    );
+  it("un projet : titre requis, douze compétences au plus, fichiers gardés par leur clé", () => {
+    expect(projectSchema.safeParse({ title: "" }).success).toBe(false);
     expect(
-      projectSchema.safeParse({ title: "P", media: "https://a.test https://b.test" }).data?.media,
-    ).toEqual(["https://a.test", "https://b.test"]);
-    expect(
-      projectSchema.safeParse({
-        title: "P",
-        media: "https://a.test https://b.test https://c.test https://d.test",
-      }).success,
+      projectSchema.safeParse({ title: "P", skills: Array.from({ length: 13 }, (_, i) => `S${i}`) })
+        .success,
     ).toBe(false);
-    expect(projectSchema.parse({ title: "P", skills: "Excel, , Word" }).skills).toEqual([
-      "Excel",
-      "Word",
-    ]);
+    const project = projectSchema.parse({ title: "P", keep: ["projects/u/a"] });
+    expect(project).toMatchObject({ visible: false, skills: [], keep: ["projects/u/a"] });
   });
 
   it("adresse publique non devinable", () => {
