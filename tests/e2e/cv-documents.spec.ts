@@ -224,6 +224,8 @@ test("studio CV web : trois panneaux, mise en forme, Orbi propose, adapter à un
   await page.keyboard.press("ArrowDown");
   await saved;
   await page.reload();
+  // The page streams in after a reload: wait for the sections before reading their order.
+  await expect(studio.locator(".t-sc-secs [data-section]").first()).toBeVisible();
   const order = await studio
     .locator(".t-sc-secs [data-section]")
     .evaluateAll((items) => items.map((item) => (item as HTMLElement).dataset.section));
