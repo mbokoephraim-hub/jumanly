@@ -274,10 +274,13 @@ export function useUnread(initial: number, media?: string) {
     const timer = window.setInterval(load, POLL_MS);
     const onVisible = () => void load();
     document.addEventListener("visibilitychange", onVisible);
+    // Marked read from the panel under the bell: the count follows at once.
+    window.addEventListener("jm:notifications-lues", onVisible);
     return () => {
       window.clearTimeout(first);
       window.clearInterval(timer);
       document.removeEventListener("visibilitychange", onVisible);
+      window.removeEventListener("jm:notifications-lues", onVisible);
     };
   }, [media]);
   return count;

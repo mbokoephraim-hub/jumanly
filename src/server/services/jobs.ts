@@ -365,7 +365,7 @@ export async function similarJobs(
     },
     orderBy: jobOrderBy("recent"),
     take,
-    select: cardSelect,
+    select: publicCardSelect,
   });
 }
 

@@ -2,6 +2,31 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · web talent 2 (19 octobre 2026)
+
+Postuler, Suivi, S'entraîner, Messages et Notifications sur tablette et ordinateur (planche
+`docs/refonte-web/talent-2`, d1 à d5, valeurs de `web2.py`). Téléphone inchangé (390 px vérifié).
+
+- **Postuler** (`/app/jobs/[slug]/postuler`) : les trois étapes à gauche avec l'offre et « Candidater
+  est toujours gratuit », l'étape à droite ; CV en aperçu sur trois colonnes, lettre et pièces avec les
+  suggestions d'Orbi, vérification avec le CV en grand et ce que verra le recruteur. Confirmation en
+  fenêtre centrée au-dessus de l'offre (`ApplySentDialog`).
+- **Suivi** (`/app/suivi`, `?id=`) : liste et détail côte à côte sur ordinateur, sous-titre (nombre en
+  cours, actions à faire) ; détail partagé `components/talent/suivi/application-detail.tsx` (en-tête,
+  5 étapes, invitation sur une ligne, messages et historique côte à côte, rebond avec trois offres et
+  une formation pour une candidature non retenue). `/app/suivi/[id]` garde la page seule.
+- **S'entraîner** (`/app/career/entretiens/nouveau`, `[id]`) : briefing en deux colonnes avec « Avec
+  Orbi » ; simulation avec le temps restant et le plan des questions ; retour avec en-tête et actions,
+  5 critères en colonnes (niveau en mots, jauge sans chiffre), points forts et à travailler côte à côte.
+- **Messages** (`/app/messages`, `[id]`) : trois colonnes (liste, conversation, candidature liée et
+  fichiers échangés) ; la conversation la plus récente s'ouvre seule en web.
+- **Notifications** : panneau sous la cloche (8 dernières, groupées, « Tout marquer comme lu »,
+  « Toutes les notifications ») ; le compteur se remet à jour. Page `/app/notifications` inchangée.
+- Correctif du cadre W0 : `t-large` reconnu sous `.jm-page` (`cacheComponents`).
+- e2e adaptés : `messages-live` (la cloche est un bouton en web), `career` (titre de la question),
+  `mobile-talent` (confirmation en fenêtre sur ordinateur). Écarts :
+  `docs/decisions/2026-10-19-refonte-etape-1-web-t2.md`. Captures : `captures/etape-1/web-talent-2/`.
+
 ## Refonte étape 1 · web talent 4a (accès) (19 octobre 2026)
 
 Version tablette (768 à 1199 px) et ordinateur (≥ 1200 px) des écrans d'accès, planche

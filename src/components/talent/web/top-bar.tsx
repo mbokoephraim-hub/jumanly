@@ -6,6 +6,11 @@ import { useEffect, useRef, type ReactNode } from "react";
 import { plural, useUnread } from "../header";
 import { TalentIcon } from "../icon";
 import { openTalentCommand } from "./command";
+import {
+  NOTIFS_PANEL_ID,
+  NotificationsPanel,
+  type NotificationsPanelLabels,
+} from "./notifications-panel";
 import { fullScreen } from "./side-nav";
 
 /** Widths of the web frame: the top bar keeps the bell fresh there. */
@@ -20,12 +25,15 @@ export type TopBarLabels = {
   /** « Compte de {name} », the button of the avatar. */
   account: string;
   menu: string;
+  /** The panel of notifications under the bell (planche web talent-2 § 4). */
+  panel: NotificationsPanelLabels;
 };
 
 /**
  * Top bar of the web frame (planche web.py `_tb`): the search « Rechercher ou demander à Orbi »
- * with `Ctrl K` (it opens the search window), then the bell, the messages and the avatar, which
- * opens the account menu (planche talent-4 § 3). Not on Orbi's page nor the full-screen first
+ * with `Ctrl K` (it opens the search window), then the bell, which opens the notifications under
+ * it (planche web talent-2 § 4), the messages and the avatar, which opens the account menu
+ * (planche talent-4 § 3). Not on Orbi's page nor the full-screen first
  * steps; hidden on a phone, where each destination has its own head.
  */
 export function TalentTopBar({
@@ -50,6 +58,8 @@ export function TalentTopBar({
   useEffect(() => {
     const node = popover.current;
     if (node?.matches(":popover-open")) node.hidePopover();
+    const panel = document.getElementById(NOTIFS_PANEL_ID);
+    if (panel?.matches(":popover-open")) panel.hidePopover();
   }, [pathname]);
 
   if (pathname === "/app/orbi" || fullScreen(pathname)) return null;
@@ -69,14 +79,17 @@ export function TalentTopBar({
         </kbd>
       </button>
       <span className="t-sp" />
-      <Link
-        href="/app/notifications"
+      <button
+        type="button"
         aria-label={plural(labels.notifications, count)}
+        aria-haspopup="dialog"
+        popoverTarget={NOTIFS_PANEL_ID}
         className="t-bi t-press"
       >
         <TalentIcon name="notification" />
         {count > 0 && <i aria-hidden className="t-pastille" />}
-      </Link>
+      </button>
+      <NotificationsPanel labels={labels.panel} />
       <Link
         href="/app/messages"
         aria-label={plural(labels.messages, unreadMessages)}

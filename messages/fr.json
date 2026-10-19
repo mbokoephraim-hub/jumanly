@@ -2976,6 +2976,27 @@
       "track": "Suivre ma candidature",
       "similar": "Offres similaires",
       "back": "Retour aux offres"
+    },
+    "web": {
+      "steps": "Étapes de la candidature",
+      "step": {
+        "cv": "Le CV",
+        "cvLine": "Choisir le CV",
+        "lettre": "Documents",
+        "lettreLine": "Facultatif",
+        "verification": "Vérifier",
+        "verificationLine": "Et envoyer"
+      },
+      "free": "Postuler est toujours gratuit.",
+      "nothingSent": "Rien n'est envoyé avant l'étape 3.",
+      "tailor": "Adapter un CV à cette offre",
+      "tailorLine": "Orbi crée une copie, à relire",
+      "preview": "Aperçu",
+      "back": "Retour",
+      "cvLine": "PDF · {date}",
+      "profile": "Profil Jumanly",
+      "profileLine": "Compétences, expériences, réalisations",
+      "profileSee": "Voir"
     }
   },
   "suivi": {
@@ -3021,7 +3042,11 @@
       "cta": "Voir les offres",
       "finished": "Aucune candidature terminée pour l'instant."
     },
-    "withdrawn": "Votre candidature est retirée. Le recruteur en est informé."
+    "withdrawn": "Votre candidature est retirée. Le recruteur en est informé.",
+    "web": {
+      "subtitle": "{count, plural, one {# candidature en cours} other {# candidatures en cours}}{actions, plural, =0 {.} one {, # demande une action.} other {, # demandent une action.}}",
+      "choose": "Choisissez une candidature pour voir son détail."
+    }
   },
   "candidature": {
     "seo": "Ma candidature",
@@ -3091,6 +3116,19 @@
       "title": "Retirer votre candidature ?",
       "text": "{company} sera informé. Vous pourrez postuler à d'autres offres à tout moment.",
       "confirm": "Oui, retirer ma candidature"
+    },
+    "web": {
+      "steps": "Étapes de la candidature",
+      "step": {
+        "sent": "Envoyée",
+        "viewed": "En examen",
+        "shortlisted": "Présélectionnée",
+        "interview": "Entretien",
+        "decision": "Décision"
+      },
+      "decidedOn": "{company} · décision du {date}",
+      "bounce": "{count, plural, one {Votre profil a été étudié jusqu'au bout. # offre proche de celle-ci vous attend.} other {Votre profil a été étudié jusqu'au bout. # offres proches de celle-ci vous attendent.}}",
+      "bounceCourse": "Votre profil a été étudié jusqu'au bout. Une formation courte peut faire la différence pour la suite."
     }
   },
   "practice": {
@@ -3143,6 +3181,17 @@
       "details": "Voir le détail par critère et par question",
       "again": "Recommencer",
       "done": "Terminer"
+    },
+    "web": {
+      "subtitle": "Entretien du {date}",
+      "with": "Avec Orbi",
+      "withLine": "Une question à la fois",
+      "withText": "Questions tirées de l'offre et de votre CV. Un conseil après chaque réponse, un retour à la fin.",
+      "questions": "Questions",
+      "privateShort": "Privé, jamais partagé.",
+      "kind": "Entraînement {kind} · {mode}",
+      "left": "{count, plural, one {# min restante} other {# min restantes}}",
+      "feedbackLine": "Retour sur 5 critères, sans note. Rien n'est transmis au recruteur."
     }
   },
   "inbox": {
@@ -3200,6 +3249,14 @@
       "open": "Joindre un CV, une lettre, un document, un créneau ou un lien",
       "title": "Joindre",
       "create": "Ouvrir mes documents"
+    },
+    "web": {
+      "linked": "Candidature liée",
+      "files": "Fichiers échangés",
+      "noFiles": "Aucun fichier échangé pour l'instant.",
+      "choose": "Choisissez une conversation pour la lire.",
+      "context": "À propos de cette conversation",
+      "privacy": "Orbi n'a pas accès à vos conversations."
     }
   },
   "notifs": {
@@ -3227,6 +3284,12 @@
     "line": {
       "interviewInvite": "{company} · choisissez un créneau",
       "diagnosticReady": "Niveau {stage}"
+    },
+    "web": {
+      "title": "Notifications",
+      "all": "Toutes les notifications",
+      "loading": "Chargement des notifications…",
+      "error": "Les notifications n'ont pas pu s'afficher. Réessayez dans un instant."
     }
   },
   "apprendre": {

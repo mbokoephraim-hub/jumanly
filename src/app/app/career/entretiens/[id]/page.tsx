@@ -65,6 +65,22 @@ export default async function PracticeSessionPage({
   }`;
   const end = application ? `/app/suivi/${application.id}` : "/app/career/entretiens";
   const typeLabel = d(`career.interviews.setup.type.${session.type}`);
+  const kindLabel = d(`practice.kind.${durationText[session.durationMinutes] ?? "standard"}`);
+  const kindLine = t("practice.web.kind", {
+    kind: kindLabel,
+    mode: d(`practice.kind.${voice ? "voice" : "text"}`),
+  }).toLocaleLowerCase("fr");
+  const kindTitle = kindLine.charAt(0).toLocaleUpperCase("fr") + kindLine.slice(1);
+  const againEnd = (
+    <>
+      <Link href={again} className="t-bt t-sec t-m t-press">
+        {t("practice.feedback.again")}
+      </Link>
+      <Link href={end} className="t-bt t-p t-pl t-press">
+        {t("practice.feedback.done")}
+      </Link>
+    </>
+  );
 
   // ─── The feedback. ─────────────────────────────────────────────────────────────────────
   if (feedback) {
@@ -88,56 +104,58 @@ export default async function PracticeSessionPage({
       </div>
     );
     return (
-      <div id="retour" className="t-flux">
+      <div id="retour" className="t-flux t-large t-pq-w t-fbw">
         <FlowHead
           back={end}
           backLabel={t("practice.back")}
           title={voice ? t("entrain.fb.oralTitle") : t("career.interviews.feedback.title")}
         />
+        <p className="t-w-sous">{t("practice.feedback.line", { kind: kindLabel, count: total })}</p>
         <div className="t-verre t-sc-c">
           <OrbiMark size={48} />
           <div className="t-t">
             <b>{good ? t("practice.feedback.good") : t("practice.feedback.work")}</b>
-            <span>
-              {t("practice.feedback.line", {
-                kind: d(`practice.kind.${durationText[session.durationMinutes] ?? "standard"}`),
-                count: total,
-              })}
+            <span className="t-mob">
+              {t("practice.feedback.line", { kind: kindLabel, count: total })}
             </span>
+            <span className="t-w-seul">{t("practice.web.feedbackLine")}</span>
           </div>
+          <div className="t-w-seul t-fb-act">{againEnd}</div>
         </div>
-        {voice ? (
-          feedback.strengths.length + feedback.improvements.length > 0 && (
-            <section className="t-verre t-fb-c" aria-labelledby="pr-oral">
-              <h2 id="pr-oral" className="t-h4">
-                {t("entrain.fb.oral")}
-              </h2>
-              {feedback.strengths.map((item, index) => point(item, true, index))}
-              {feedback.improvements.map((item, index) => point(item, false, index))}
-            </section>
-          )
-        ) : (
-          <>
-            {feedback.strengths.length > 0 && (
-              <section className="t-verre t-fb-c" aria-labelledby="pr-forts">
-                <h2 id="pr-forts" className="t-h4">
-                  {t("practice.feedback.strengths")}
+        <div className="t-fb2">
+          {voice ? (
+            feedback.strengths.length + feedback.improvements.length > 0 && (
+              <section className="t-verre t-fb-c" aria-labelledby="pr-oral">
+                <h2 id="pr-oral" className="t-h4">
+                  {t("entrain.fb.oral")}
                 </h2>
                 {feedback.strengths.map((item, index) => point(item, true, index))}
-              </section>
-            )}
-            {feedback.improvements.length > 0 && (
-              <section className="t-verre t-fb-c" aria-labelledby="pr-travail">
-                <h2 id="pr-travail" className="t-h4">
-                  {t("practice.feedback.improve")}
-                </h2>
                 {feedback.improvements.map((item, index) => point(item, false, index))}
               </section>
-            )}
-          </>
-        )}
+            )
+          ) : (
+            <>
+              {feedback.strengths.length > 0 && (
+                <section className="t-verre t-fb-c" aria-labelledby="pr-forts">
+                  <h2 id="pr-forts" className="t-h4">
+                    {t("practice.feedback.strengths")}
+                  </h2>
+                  {feedback.strengths.map((item, index) => point(item, true, index))}
+                </section>
+              )}
+              {feedback.improvements.length > 0 && (
+                <section className="t-verre t-fb-c" aria-labelledby="pr-travail">
+                  <h2 id="pr-travail" className="t-h4">
+                    {t("practice.feedback.improve")}
+                  </h2>
+                  {feedback.improvements.map((item, index) => point(item, false, index))}
+                </section>
+              )}
+            </>
+          )}
+        </div>
         {feedback.criteria.length > 0 && (
-          <section className="t-verre t-fb-c" aria-labelledby="pr-criteres">
+          <section className="t-verre t-fb-c t-crit-s" aria-labelledby="pr-criteres">
             <h2 id="pr-criteres" className="t-h4">
               {t("entrain.fb.criteria")}
             </h2>
@@ -145,6 +163,9 @@ export default async function PracticeSessionPage({
               {feedback.criteria.map((criterion) => (
                 <div key={criterion.key}>
                   <dt>{t(`career.interviews.feedback.criteria.${criterion.key}`)}</dt>
+                  <span className={`t-w-seul t-j t-${criterion.level}`} aria-hidden>
+                    <i />
+                  </span>
                   <dd className={`t-${criterion.level}`}>
                     {t(`career.interviews.feedback.level.${criterion.level}`)}
                   </dd>
@@ -262,14 +283,7 @@ export default async function PracticeSessionPage({
             </p>
           </div>
         </Sheet>
-        <div className="t-verre t-fort t-bas-f">
-          <Link href={again} className="t-bt t-sec t-m t-press">
-            {t("practice.feedback.again")}
-          </Link>
-          <Link href={end} className="t-bt t-p t-pl t-press">
-            {t("practice.feedback.done")}
-          </Link>
-        </div>
+        <div className="t-verre t-fort t-bas-f t-mob">{againEnd}</div>
       </div>
     );
   }
@@ -277,8 +291,15 @@ export default async function PracticeSessionPage({
   // ─── One question at a time. ──────────────────────────────────────────────────────────
   const index = current >= 0 ? current : total - 1;
   const turn = session.turns[index];
+  const left = Math.max(
+    0,
+    Math.ceil(
+      (session.createdAt.getTime() + session.durationMinutes * 60_000 - new Date().getTime()) /
+        60_000,
+    ),
+  );
   return (
-    <div className="t-flux">
+    <div className="t-flux t-large t-pq-w t-sim">
       <FlowHead
         back={end}
         backLabel={t("practice.back")}
@@ -288,109 +309,152 @@ export default async function PracticeSessionPage({
             : t("career.interviews.session.allAnswered")
         }
         end={
-          <Link href={end} className="t-bi t-press" aria-label={t("practice.close")}>
-            <TalentIcon name="fermer" size="s" />
-          </Link>
+          <>
+            <span className="t-w-seul t-verre t-chrono-p">
+              <TalentIcon name="horloge" size="s" />
+              {t("practice.web.left", { count: left })}
+            </span>
+            <Link href={end} className="t-bi t-press" aria-label={t("practice.close")}>
+              <TalentIcon name="fermer" size="s" />
+            </Link>
+          </>
         }
       />
-      <div className="t-pas" aria-hidden>
-        {session.turns.map((item, position) => (
-          <i
-            key={position}
-            className={item.answer !== null || position === current ? "t-ok" : undefined}
-          />
-        ))}
-      </div>
-      {query.erreur === "vide" && (
-        <Notice tone="err">{t("career.interviews.session.answer.placeholder")}</Notice>
-      )}
-      {current >= 0 && turn ? (
-        <form id="reponse" action={answerInterviewAction} className="t-flux">
-          <input type="hidden" name="id" value={session.id} />
-          <div className="t-verre t-q">
-            <small>
-              {voice
-                ? t("entrain.voice.kind", { kind: typeLabel })
-                : t("practice.questionKind", { kind: typeLabel })}
-            </small>
-            <b>{turn.question}</b>
+      <p className="t-w-sous">{kindTitle}</p>
+      <div className="t-sim-l">
+        <div className="t-flux t-sim-p">
+          <div className="t-pas" aria-hidden>
+            {session.turns.map((item, position) => (
+              <i
+                key={position}
+                className={item.answer !== null || position === current ? "t-ok" : undefined}
+              />
+            ))}
           </div>
-          {voice ? (
-            <>
-              <VoiceAnswer
-                key={current}
-                id={`answer-${session.id}-${current}`}
-                question={turn.question}
-                labels={{
-                  transcript: t("entrain.voice.transcript"),
-                  placeholder: t("career.interviews.session.answer.placeholder"),
-                  listen: t("career.interviews.voice.listen"),
-                  record: t("entrain.voice.record"),
-                  stop: t("entrain.voice.stop"),
-                  clear: t("entrain.voice.clear"),
-                  send: t("entrain.voice.send"),
-                  time: t("entrain.voice.time", { time: "{time}" }),
-                  unsupported: t("career.interviews.voice.unsupported"),
-                  micDenied: t("career.interviews.voice.micDenied"),
-                }}
-              />
-              <p className="t-gar">
-                <TalentIcon name="cadenas" size="s" />
-                <span>{t("entrain.voice.privacy")}</span>
-              </p>
-              <button type="submit" name="skip" value="1" formNoValidate className="t-sig t-press">
-                {t("practice.skip")}
-              </button>
-            </>
-          ) : (
-            <>
-              <label htmlFor={`answer-${session.id}-${current}`} className="sr-only">
-                {t("career.interviews.session.answered")}
-              </label>
-              <textarea
-                key={current}
-                id={`answer-${session.id}-${current}`}
-                name="answer"
-                className="t-verre t-rep"
-                placeholder={t("career.interviews.session.answer.placeholder")}
-                maxLength={ANSWER_MAX}
-                rows={6}
-              />
-              <div className="t-bulle-o">
-                <OrbiMark size={32} />
-                <div className="t-verre t-corps">
-                  <span>{d(`practice.tip.${session.type}`)}</span>
-                </div>
-              </div>
-              <div className="t-verre t-fort t-bas-f">
-                <button
-                  type="submit"
-                  name="skip"
-                  value="1"
-                  formNoValidate
-                  className="t-bt t-sec t-m t-press"
-                >
-                  {t("practice.skip")}
-                </button>
-                <button type="submit" className="t-bt t-p t-pl t-press">
-                  {t("practice.answer")}
-                </button>
-              </div>
-            </>
+          {query.erreur === "vide" && (
+            <Notice tone="err">{t("career.interviews.session.answer.placeholder")}</Notice>
           )}
-        </form>
-      ) : (
-        <Notice tone="ok">{t("career.interviews.session.allAnswered")}</Notice>
-      )}
-      <form
-        action={finishInterviewAction}
-        className={current >= 0 ? undefined : "t-verre t-fort t-bas-f"}
-      >
-        <input type="hidden" name="id" value={session.id} />
-        <button type="submit" className={current >= 0 ? "t-sig t-press" : "t-bt t-a t-pl t-press"}>
-          {t("career.interviews.session.end.text")}
-        </button>
-      </form>
+          {current >= 0 && turn ? (
+            <form id="reponse" action={answerInterviewAction} className="t-flux">
+              <input type="hidden" name="id" value={session.id} />
+              <div className="t-verre t-q">
+                <small>
+                  {voice
+                    ? t("entrain.voice.kind", { kind: typeLabel })
+                    : t("practice.questionKind", { kind: typeLabel })}
+                </small>
+                <b>{turn.question}</b>
+              </div>
+              {voice ? (
+                <>
+                  <VoiceAnswer
+                    key={current}
+                    id={`answer-${session.id}-${current}`}
+                    question={turn.question}
+                    labels={{
+                      transcript: t("entrain.voice.transcript"),
+                      placeholder: t("career.interviews.session.answer.placeholder"),
+                      listen: t("career.interviews.voice.listen"),
+                      record: t("entrain.voice.record"),
+                      stop: t("entrain.voice.stop"),
+                      clear: t("entrain.voice.clear"),
+                      send: t("entrain.voice.send"),
+                      time: t("entrain.voice.time", { time: "{time}" }),
+                      unsupported: t("career.interviews.voice.unsupported"),
+                      micDenied: t("career.interviews.voice.micDenied"),
+                    }}
+                  />
+                  <p className="t-gar">
+                    <TalentIcon name="cadenas" size="s" />
+                    <span>{t("entrain.voice.privacy")}</span>
+                  </p>
+                  <button
+                    type="submit"
+                    name="skip"
+                    value="1"
+                    formNoValidate
+                    className="t-sig t-press"
+                  >
+                    {t("practice.skip")}
+                  </button>
+                </>
+              ) : (
+                <>
+                  <label htmlFor={`answer-${session.id}-${current}`} className="sr-only">
+                    {t("career.interviews.session.answered")}
+                  </label>
+                  <textarea
+                    key={current}
+                    id={`answer-${session.id}-${current}`}
+                    name="answer"
+                    className="t-verre t-rep"
+                    placeholder={t("career.interviews.session.answer.placeholder")}
+                    maxLength={ANSWER_MAX}
+                    rows={6}
+                  />
+                  <div className="t-bulle-o">
+                    <OrbiMark size={32} />
+                    <div className="t-verre t-corps">
+                      <span>{d(`practice.tip.${session.type}`)}</span>
+                    </div>
+                  </div>
+                  <div className="t-verre t-fort t-bas-f">
+                    <span className="t-post-note">
+                      <TalentIcon name="cadenas" size="xs" />
+                      {t("practice.web.privateShort")}
+                    </span>
+                    <button
+                      type="submit"
+                      name="skip"
+                      value="1"
+                      formNoValidate
+                      className="t-bt t-sec t-m t-press"
+                    >
+                      {t("practice.skip")}
+                    </button>
+                    <button type="submit" className="t-bt t-p t-pl t-press">
+                      {t("practice.answer")}
+                    </button>
+                  </div>
+                </>
+              )}
+            </form>
+          ) : (
+            <Notice tone="ok">{t("career.interviews.session.allAnswered")}</Notice>
+          )}
+          <form
+            action={finishInterviewAction}
+            className={current >= 0 ? undefined : "t-verre t-fort t-bas-f"}
+          >
+            <input type="hidden" name="id" value={session.id} />
+            <button
+              type="submit"
+              className={current >= 0 ? "t-sig t-press" : "t-bt t-a t-pl t-press"}
+            >
+              {t("career.interviews.session.end.text")}
+            </button>
+          </form>
+        </div>
+        <aside className="t-ordi t-sim-side" aria-labelledby="pr-questions">
+          <div className="t-verre t-sim-qs">
+            <h2 id="pr-questions">{t("practice.web.questions")}</h2>
+            <ol>
+              {session.turns.map((item, position) => (
+                <li
+                  key={position}
+                  className={cx(item.answer !== null && "t-ok", position === current && "t-on")}
+                  aria-current={position === current ? "step" : undefined}
+                >
+                  <i aria-hidden>
+                    {item.answer !== null ? <TalentIcon name="valider" size="xs" /> : position + 1}
+                  </i>
+                  <span>{item.question}</span>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }

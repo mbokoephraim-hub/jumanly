@@ -51,12 +51,25 @@ export async function sendMessageAction(formData: FormData) {
   redirect(`/app/messages/${conversationId}#dernier`);
 }
 
+/**
+ * Where an answer given on an application comes back: its own page (`from=suivi`), or Suivi with
+ * the application beside the list on a computer (`from=suivi-liste`, planche web talent-2 § 2).
+ */
+function suiviBack(formData: FormData) {
+  const application = id(formData.get("application"));
+  const from = formData.get("from");
+  if (from === "suivi") return { address: `/app/suivi/${application}`, join: "?", hash: "#" };
+  // Beside the list the sections carry the `su-` prefix (the page stays in the DOM when hidden).
+  if (from === "suivi-liste")
+    return { address: `/app/suivi?id=${application}`, join: "&", hash: "#su-" };
+  return null;
+}
+
 export async function answerDocumentAction(formData: FormData) {
   const conversationId = id(formData.get("conversation"));
   const { user, viewer } = await connectViewer(`/app/messages/${conversationId}`);
   // From the page of the application (planche talent-2 § 3) the answer comes back there.
-  const back =
-    formData.get("from") === "suivi" ? `/app/suivi/${id(formData.get("application"))}` : null;
+  const back = suiviBack(formData);
   try {
     const sent = await answerDocumentRequest(
       db,
@@ -70,13 +83,13 @@ export async function answerDocumentAction(formData: FormData) {
     if (!(error instanceof ConnectError)) throw error;
     redirect(
       back
-        ? `${back}?erreur=document#demandes`
+        ? `${back.address}${back.join}erreur=document${back.hash}demandes`
         : `/app/messages/${conversationId}?erreur=${error.code}`,
     );
   }
   if (back) {
     refresh();
-    redirect(`${back}?ok=document#demandes`);
+    redirect(`${back.address}${back.join}ok=document${back.hash}demandes`);
   }
   redirect(`/app/messages/${conversationId}?ok=document#dernier`);
 }
@@ -150,8 +163,7 @@ export async function answerInterviewAction(formData: FormData) {
   const raw = String(formData.get("answer"));
   const message = String(formData.get("message") ?? "");
   // From the page of the application (planche talent-2 § 3) the answer comes back there.
-  const fromSuivi = formData.get("from") === "suivi";
-  const suiviPage = `/app/suivi/${id(formData.get("application"))}`;
+  const suivi = suiviBack(formData);
   try {
     await answerInterview(
       db,
@@ -169,8 +181,10 @@ export async function answerInterviewAction(formData: FormData) {
     );
   } catch (error) {
     if ((error as Error).name !== "HireError") throw error;
-    if (fromSuivi)
-      redirect(`${suiviPage}?${raw === "propose" ? "proposer=1&" : ""}erreur=entretien#entretien`);
+    if (suivi)
+      redirect(
+        `${suivi.address}${suivi.join}${raw === "propose" ? "proposer=1&" : ""}erreur=entretien${suivi.hash}entretien`,
+      );
     redirect(`/app/messages/${conversationId}?erreur=entretien#entretien-${interviewId}`);
   }
   if (raw === "accept") {
@@ -190,10 +204,10 @@ export async function answerInterviewAction(formData: FormData) {
         href: `/app/suivi/${interview.applicationId}`,
       });
   }
-  if (fromSuivi) {
+  if (suivi) {
     const ok = raw === "accept" ? "confirme" : raw === "propose" ? "propose" : "decline";
     refresh();
-    redirect(`${suiviPage}?ok=${ok}#entretien`);
+    redirect(`${suivi.address}${suivi.join}ok=${ok}${suivi.hash}entretien`);
   }
   refresh();
   redirect(`/app/messages/${conversationId}?ok=entretien#entretien-${interviewId}`);

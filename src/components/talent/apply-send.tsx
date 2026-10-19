@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useTransition, type FormEvent } from "react";
+import { useState, useTransition, type FormEvent, type ReactNode } from "react";
 import Link from "next/link";
 import { applyAction } from "@/server/actions/jobs";
 import { TalentIcon } from "./icon";
@@ -19,10 +19,13 @@ const isRedirect = (error: unknown) =>
 export function ApplySend({
   hidden,
   laterHref,
+  before,
   labels,
 }: {
   hidden: Record<string, string>;
   laterHref: string;
+  /** Shown before « Envoyer » on a large screen (« Retour », planche web talent-2 § 1). */
+  before?: ReactNode;
   labels: {
     send: string;
     sending: string;
@@ -64,10 +67,12 @@ export function ApplySend({
         </p>
       )}
       <div className="t-verre t-fort t-bas-f">
-        {failed && (
+        {failed ? (
           <Link href={laterHref} className="t-bt t-sec t-m t-press">
             {labels.later}
           </Link>
+        ) : (
+          before
         )}
         <button type="submit" className="t-bt t-a t-pl t-press" aria-busy={sending}>
           <TalentIcon name="envoyer" size="s" />
