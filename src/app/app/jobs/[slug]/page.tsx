@@ -332,7 +332,7 @@ export default async function TalentJobPage({
       </div>
 
       {outcome === "deja" && notice(t("offer.notice.already"))}
-      {query.brouillon === "1" && draft && notice(t("offer.notice.kept"))}
+      {query.brouillon === "1" && draft && notice(t("talent.jobs.apply.flow.kept"))}
       {(outcome === "close" || !open) && notice(t("offer.bar.closed"), "err")}
       {query.signalement === "ok" && notice(t("report.success"), "ok")}
       {query.signalement === "deja" && notice(t("report.already"))}
@@ -643,6 +643,12 @@ export default async function TalentJobPage({
               <TalentIcon name="pourquoi" size="s" />
               {t("offer.why.guard")}
             </p>
+            <Link
+              href="/comment-fonctionne-le-matching"
+              className="text-center text-[12.5px] font-semibold underline underline-offset-2"
+            >
+              {t("match.why.talent.learnMore")}
+            </Link>
             {dispute && (
               <p className="t-gar">
                 <TalentIcon name="horloge" size="s" />

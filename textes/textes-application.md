@@ -2374,7 +2374,6 @@ Conventions :
 | `offer.bar.applied` | Suivre ma candidature |
 | `offer.bar.closed` | Cette offre n'accepte plus de candidatures. |
 | `offer.notice.already` | Vous avez déjà postulé à cette offre. |
-| `offer.notice.kept` | Votre brouillon de candidature est gardé. |
 | `offer.close` | Fermer |
 
 ### `/app/orbi` · Orbi en plein écran

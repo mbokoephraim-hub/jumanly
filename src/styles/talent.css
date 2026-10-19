@@ -3367,11 +3367,19 @@ fieldset.t-fs > legend {
 .t-barre-p {
   align-items: center;
 }
+/* Pastille en verre : la mention reste lisible quand elle passe sur les cartes. */
 .t-barre-p .t-gratuit {
   position: absolute;
-  top: -22px;
-  left: 0;
-  right: 0;
+  top: -26px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: max-content;
+  max-width: calc(100% - 32px);
+  padding: 2px 10px;
+  border-radius: 999px;
+  background: var(--surface);
+  -webkit-backdrop-filter: blur(18px) saturate(1.4);
+  backdrop-filter: blur(18px) saturate(1.4);
   text-align: center;
   font-size: 11.5px;
   color: var(--texte2);
@@ -3400,10 +3408,15 @@ fieldset.t-fs > legend {
   align-items: center;
   gap: 10px;
   border-radius: 0 0 22px 22px;
-  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.3, 1);
+  visibility: hidden;
+  transition:
+    transform 220ms cubic-bezier(0.2, 0.8, 0.3, 1),
+    visibility 0s 220ms;
 }
 .t-od-tete[data-visible] {
   transform: translate(-50%, 0);
+  visibility: visible;
+  transition: transform 220ms cubic-bezier(0.2, 0.8, 0.3, 1);
 }
 .t-od-tete p {
   flex: 1;

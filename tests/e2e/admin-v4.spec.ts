@@ -7,11 +7,8 @@ import { demo, logIn } from "./session";
 // Admin v4 column (below).
 test("espace talent : recherche de l'en-tête et compte derrière l'avatar", async ({ page }) => {
   await logIn(page, demo.talentPro);
-  await page.goto("/app");
-  const search = page.getByRole("search").locator('input[name="q"]');
-  await search.fill("CV");
-  await search.press("Enter");
-  await expect(page).toHaveURL(/\/app\/recherche\?q=CV/);
+  // Pour moi has no search since lot 3 (planche talent-1): the grouped results stay reachable.
+  await page.goto("/app/recherche?q=CV");
   const courses = page.getByRole("region", { name: /^Formations/ });
   await expect(courses.getByRole("link", { name: /Réussir son CV/ })).toBeVisible();
   // Screen 18: Tout / Offres / Formations; a group without result is left out.

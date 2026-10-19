@@ -45,6 +45,12 @@ export function SaveJobButton({
 }) {
   const router = useRouter();
   const [saved, setSaved] = useState(initial);
+  // Another « Enregistrer » of the same offer changed it: the page sends the new state.
+  const [known, setKnown] = useState(initial);
+  if (known !== initial) {
+    setKnown(initial);
+    setSaved(initial);
+  }
   const [pending, startTransition] = useTransition();
 
   const apply = (value: boolean, withToast: boolean) => {
