@@ -9,6 +9,7 @@ import { startInterviewAction } from "@/server/actions/career-interviews";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { interviewDurations } from "@/server/services/interview-sim";
+import { OrbiMark } from "@/components/talent/orbi-mark";
 import { NewPractice } from "./new-practice";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -104,7 +105,7 @@ export default async function PracticeBriefingPage({
     );
 
   return (
-    <form action={startInterviewAction} className="t-flux">
+    <form action={startInterviewAction} className="t-flux t-large t-pq-w t-brf">
       <FlowHead
         back={back}
         backLabel={t("practice.back")}
@@ -115,6 +116,18 @@ export default async function PracticeBriefingPage({
           </Link>
         }
       />
+      <p className="t-w-sous">
+        {interview?.startsAt
+          ? t("practice.web.subtitle", {
+              date: format.dateTime(interview.startsAt, {
+                weekday: "long",
+                day: "numeric",
+                month: "long",
+                timeZone: interview.timezone,
+              }),
+            })
+          : [job.title, company].filter(Boolean).join(" · ")}
+      </p>
       <input type="hidden" name="from" value={here} />
       <input type="hidden" name="type" value={checked.length > 0 ? "technical" : "hr"} />
       <input type="hidden" name="level" value="standard" />
@@ -134,129 +147,147 @@ export default async function PracticeBriefingPage({
         </p>
       )}
 
-      {job && company ? (
-        <>
-          <input type="hidden" name="jobTitle" value={job.title} />
-          <div className="t-verre t-cd t-min">
-            <div className="t-haut">
-              <Logo name={company} src={job.organization.logo} tone={toneOf(company)} />
-              <div className="t-t">
-                <b>{interview ? t("practice.interviewWith", { company }) : job.title}</b>
-                <span>
-                  {interview?.startsAt
-                    ? [
-                        format.dateTime(interview.startsAt, {
-                          weekday: "long",
-                          day: "numeric",
-                          month: "short",
-                          timeZone: interview.timezone,
-                        }),
-                        format.dateTime(interview.startsAt, {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                          timeZone: interview.timezone,
-                        }),
-                        d(`practice.mode.${interview.mode}`),
-                      ].join(" · ")
-                    : company}
-                </span>
-              </div>
-            </div>
-          </div>
-          <section aria-labelledby="pr-savoir" className="t-verre t-brief">
-            <h2 id="pr-savoir" className="t-h4">
-              {t("practice.know.title")}
+      <div className="t-brf-g">
+        <div className="t-flux t-brf-l">
+          {job && company ? (
+            <>
+              <input type="hidden" name="jobTitle" value={job.title} />
+              <section aria-labelledby="pr-savoir" className="t-verre t-brief">
+                <h2 id="pr-savoir" className="t-h4">
+                  {t("practice.know.title")}
+                </h2>
+                <div className="t-ck">
+                  <div className="t-l t-ok">
+                    <i aria-hidden>
+                      <TalentIcon name="valider" size="xs" />
+                    </i>
+                    <div className="t-t">
+                      <b>{t("practice.know.company")}</b>
+                      <span>
+                        {[job.organization.sector, job.organization.city ?? job.city, company]
+                          .filter(Boolean)
+                          .slice(0, 2)
+                          .join(", ")}
+                      </span>
+                    </div>
+                  </div>
+                  {checked.length > 0 && (
+                    <div className="t-l t-ok">
+                      <i aria-hidden>
+                        <TalentIcon name="valider" size="xs" />
+                      </i>
+                      <div className="t-t">
+                        <b>{t("practice.know.checked")}</b>
+                        <span>{checked.join(", ")}</span>
+                      </div>
+                    </div>
+                  )}
+                  {weak && (
+                    <div className="t-l t-ko">
+                      <i aria-hidden>
+                        <TalentIcon name="plus" size="xs" />
+                      </i>
+                      <div className="t-t">
+                        <b>{t("practice.know.weak")}</b>
+                        <span>{t("practice.know.weakLine", { skill: weak })}</span>
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </section>
+            </>
+          ) : null}
+
+          <section aria-labelledby="pr-type" className="t-verre t-brief">
+            <h2 id="pr-type" className="t-h4">
+              {t("practice.kind.title")}
             </h2>
-            <div className="t-ck">
-              <div className="t-l t-ok">
-                <i aria-hidden>
-                  <TalentIcon name="valider" size="xs" />
-                </i>
+            <fieldset className="t-fs">
+              <legend className="sr-only">{t("practice.kind.length")}</legend>
+              <div className="t-opts">
+                {interviewDurations.map((minutes) => (
+                  <label key={minutes} className="t-press">
+                    <input
+                      type="radio"
+                      name="durationMinutes"
+                      value={minutes}
+                      defaultChecked={minutes === 20}
+                    />
+                    <b>{d(`practice.kind.${durationText[minutes]}`)}</b>
+                    {t("practice.kind.minutes", { count: minutes })}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+            <fieldset className="t-fs">
+              <legend className="sr-only">{t("practice.kind.mode")}</legend>
+              <div className="t-puces">
+                {(["text", "voice"] as const).map((value) => (
+                  <label key={value} className="t-puce t-press">
+                    <input
+                      type="radio"
+                      name="mode"
+                      value={value}
+                      defaultChecked={value === mode}
+                      className="sr-only"
+                    />
+                    {d(`practice.kind.${value}`)}
+                  </label>
+                ))}
+              </div>
+            </fieldset>
+          </section>
+        </div>
+        <div className="t-flux t-brf-r">
+          {company && (
+            <div className="t-verre t-cd t-min t-brf-cd">
+              <div className="t-haut">
+                <Logo name={company} src={job.organization.logo} tone={toneOf(company)} />
                 <div className="t-t">
-                  <b>{t("practice.know.company")}</b>
+                  <b>{interview ? t("practice.interviewWith", { company }) : job.title}</b>
                   <span>
-                    {[job.organization.sector, job.organization.city ?? job.city, company]
-                      .filter(Boolean)
-                      .slice(0, 2)
-                      .join(", ")}
+                    {interview?.startsAt
+                      ? [
+                          format.dateTime(interview.startsAt, {
+                            weekday: "long",
+                            day: "numeric",
+                            month: "short",
+                            timeZone: interview.timezone,
+                          }),
+                          format.dateTime(interview.startsAt, {
+                            hour: "2-digit",
+                            minute: "2-digit",
+                            timeZone: interview.timezone,
+                          }),
+                          d(`practice.mode.${interview.mode}`),
+                        ].join(" · ")
+                      : company}
                   </span>
                 </div>
               </div>
-              {checked.length > 0 && (
-                <div className="t-l t-ok">
-                  <i aria-hidden>
-                    <TalentIcon name="valider" size="xs" />
-                  </i>
-                  <div className="t-t">
-                    <b>{t("practice.know.checked")}</b>
-                    <span>{checked.join(", ")}</span>
-                  </div>
-                </div>
-              )}
-              {weak && (
-                <div className="t-l t-ko">
-                  <i aria-hidden>
-                    <TalentIcon name="plus" size="xs" />
-                  </i>
-                  <div className="t-t">
-                    <b>{t("practice.know.weak")}</b>
-                    <span>{t("practice.know.weakLine", { skill: weak })}</span>
-                  </div>
-                </div>
-              )}
             </div>
-          </section>
-        </>
-      ) : null}
-
-      <section aria-labelledby="pr-type" className="t-verre t-brief">
-        <h2 id="pr-type" className="t-h4">
-          {t("practice.kind.title")}
-        </h2>
-        <fieldset className="t-fs">
-          <legend className="sr-only">{t("practice.kind.length")}</legend>
-          <div className="t-opts">
-            {interviewDurations.map((minutes) => (
-              <label key={minutes} className="t-press">
-                <input
-                  type="radio"
-                  name="durationMinutes"
-                  value={minutes}
-                  defaultChecked={minutes === 20}
-                />
-                <b>{d(`practice.kind.${durationText[minutes]}`)}</b>
-                {t("practice.kind.minutes", { count: minutes })}
-              </label>
-            ))}
+          )}
+          <div className="t-verre t-w-seul t-brf-os">
+            <div className="t-haut">
+              <OrbiMark size={40} />
+              <div className="t-t">
+                <b>{t("practice.web.with")}</b>
+                <span>{t("practice.web.withLine")}</span>
+              </div>
+            </div>
+            <p>{t("practice.web.withText")}</p>
           </div>
-        </fieldset>
-        <fieldset className="t-fs">
-          <legend className="sr-only">{t("practice.kind.mode")}</legend>
-          <div className="t-puces">
-            {(["text", "voice"] as const).map((value) => (
-              <label key={value} className="t-puce t-press">
-                <input
-                  type="radio"
-                  name="mode"
-                  value={value}
-                  defaultChecked={value === mode}
-                  className="sr-only"
-                />
-                {d(`practice.kind.${value}`)}
-              </label>
-            ))}
+          <div className="t-verre t-fort t-bas-f">
+            <button type="submit" className="t-bt t-a t-pl t-press">
+              <TalentIcon name="entretien" size="s" />
+              {t("practice.start")}
+            </button>
           </div>
-        </fieldset>
-      </section>
-      <p className="t-gar">
-        <TalentIcon name="cadenas" size="s" />
-        <span>{t("practice.private")}</span>
-      </p>
-      <div className="t-verre t-fort t-bas-f">
-        <button type="submit" className="t-bt t-a t-pl t-press">
-          <TalentIcon name="entretien" size="s" />
-          {t("practice.start")}
-        </button>
+          <p className="t-gar">
+            <TalentIcon name="cadenas" size="s" />
+            <span>{t("practice.private")}</span>
+          </p>
+        </div>
       </div>
     </form>
   );

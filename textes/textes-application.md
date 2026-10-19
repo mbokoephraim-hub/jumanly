@@ -2728,6 +2728,60 @@ Conventions :
 | `notifs.line.interviewInvite` | {company} · choisissez un créneau |
 | `notifs.line.diagnosticReady` | Niveau {stage} |
 
+### Refonte web · Postuler, Suivi, S'entraîner, Messages, Notifications (lot web talent 2)
+
+*Version ordinateur et tablette du lot 2 (docs/refonte-web/talent-2) : les étapes de la candidature à gauche, Suivi avec la liste et le détail côte à côte, l'entraînement avec le plan des questions, la messagerie en trois colonnes et les notifications sous la cloche. Mêmes fonctions qu'en mobile.*
+
+| Clé | Texte |
+|---|---|
+| `apply.web.steps` | Étapes de la candidature |
+| `apply.web.step.cv` | Le CV |
+| `apply.web.step.cvLine` | Choisir le CV |
+| `apply.web.step.lettre` | Documents |
+| `apply.web.step.lettreLine` | Facultatif |
+| `apply.web.step.verification` | Vérifier |
+| `apply.web.step.verificationLine` | Et envoyer |
+| `apply.web.free` | Postuler est toujours gratuit. |
+| `apply.web.nothingSent` | Rien n'est envoyé avant l'étape 3. |
+| `apply.web.tailor` | Adapter un CV à cette offre |
+| `apply.web.tailorLine` | Orbi crée une copie, à relire |
+| `apply.web.preview` | Aperçu |
+| `apply.web.back` | Retour |
+| `apply.web.cvLine` | PDF · {date} |
+| `apply.web.profile` | Profil Jumanly |
+| `apply.web.profileLine` | Compétences, expériences, réalisations |
+| `apply.web.profileSee` | Voir |
+| `suivi.web.subtitle` | {count, plural, one {# candidature en cours} other {# candidatures en cours}}{actions, plural, =0 {.} one {, # demande une action.} other {, # demandent une action.}} |
+| `suivi.web.choose` | Choisissez une candidature pour voir son détail. |
+| `candidature.web.steps` | Étapes de la candidature |
+| `candidature.web.step.sent` | Envoyée |
+| `candidature.web.step.viewed` | En examen |
+| `candidature.web.step.shortlisted` | Présélectionnée |
+| `candidature.web.step.interview` | Entretien |
+| `candidature.web.step.decision` | Décision |
+| `candidature.web.decidedOn` | {company} · décision du {date} |
+| `candidature.web.bounce` | {count, plural, one {Votre profil a été étudié jusqu'au bout. # offre proche de celle-ci vous attend.} other {Votre profil a été étudié jusqu'au bout. # offres proches de celle-ci vous attendent.}} |
+| `candidature.web.bounceCourse` | Votre profil a été étudié jusqu'au bout. Une formation courte peut faire la différence pour la suite. |
+| `practice.web.subtitle` | Entretien du {date} |
+| `practice.web.with` | Avec Orbi |
+| `practice.web.withLine` | Une question à la fois |
+| `practice.web.withText` | Questions tirées de l'offre et de votre CV. Un conseil après chaque réponse, un retour à la fin. |
+| `practice.web.questions` | Questions |
+| `practice.web.privateShort` | Privé, jamais partagé. |
+| `practice.web.kind` | Entraînement {kind} · {mode} |
+| `practice.web.left` | {count, plural, one {# min restante} other {# min restantes}} |
+| `practice.web.feedbackLine` | Retour sur 5 critères, sans note. Rien n'est transmis au recruteur. |
+| `inbox.web.linked` | Candidature liée |
+| `inbox.web.files` | Fichiers échangés |
+| `inbox.web.noFiles` | Aucun fichier échangé pour l'instant. |
+| `inbox.web.choose` | Choisissez une conversation pour la lire. |
+| `inbox.web.context` | À propos de cette conversation |
+| `inbox.web.privacy` | Orbi n'a pas accès à vos conversations. |
+| `notifs.web.title` | Notifications |
+| `notifs.web.all` | Toutes les notifications |
+| `notifs.web.loading` | Chargement des notifications… |
+| `notifs.web.error` | Les notifications n'ont pas pu s'afficher. Réessayez dans un instant. |
+
 ### Refonte mobile · Apprendre
 
 *Apprendre (docs/refonte-mobile/talent-3 § 1 et 2) : la formation à reprendre, mes formations et attestations, les domaines, les formations recommandées, la recherche avec ses filtres, et « Mes formations » (en cours, terminées, enregistrées, à faire).*

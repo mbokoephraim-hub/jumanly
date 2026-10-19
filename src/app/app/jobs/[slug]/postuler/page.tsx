@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -9,6 +10,7 @@ import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { OrbiMark } from "@/components/talent/orbi-mark";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
+import { ApplySentDialog } from "@/components/talent/web/apply-sent-dialog";
 import { dynamic } from "@/i18n/dynamic";
 import { formatDayMonth } from "@/lib/dates";
 import { applicationLetterAction } from "@/server/actions/career-documents";
@@ -28,6 +30,7 @@ import {
   getApplicationDraft,
   type ApplyStep,
 } from "@/server/services/application-draft";
+import OfferPage from "../page";
 
 export async function generateMetadata({
   params,
@@ -48,6 +51,10 @@ const aiErrors = ["consent", "entitlement", "quota", "unavailable"] as const;
  * then what the recruiter will see, in clear. The draft is saved on the server at each step and on
  * « Quitter ». Applying is always free: no plan, entitlement or quota is read here or in the
  * actions (golden rule n° 1). Only « Rédiger avec Orbi » uses credits, and it is optional.
+ *
+ * On a computer (planche web talent-2 § 1) the steps stay visible on the left with the offer; the
+ * step fills the right. A tablet shows the step alone, its blocks on two columns. The confirmation
+ * is a centred window over the offer.
  */
 export default async function ApplyPage({
   params,
@@ -95,13 +102,8 @@ export default async function ApplyPage({
   // ─── Confirmation: only once the server has recorded the application. ─────────────────
   if (application) {
     if (query.envoyee !== "1") redirect(`/app/suivi/${application.id}`);
-    return (
-      <div className="t-conf t-envoyee">
-        <span className="t-rond-ok" aria-hidden>
-          <TalentIcon name="valider" />
-        </span>
-        <h1 className="t-h2s">{t("apply.sent.title")}</h1>
-        <p>{t("apply.sent.text", { company })}</p>
+    const next = (
+      <>
         <div className="t-suite">
           <Link href={`/app/suivi/${application.id}`} className="t-verre t-press">
             <span className="t-cases t-accomp" aria-hidden>
@@ -119,7 +121,40 @@ export default async function ApplyPage({
         <Link href="/app/jobs" className="t-bt t-txt t-press">
           {t("apply.sent.back")}
         </Link>
-      </div>
+      </>
+    );
+    return (
+      <>
+        <div className="t-conf t-envoyee t-mob">
+          <span className="t-rond-ok" aria-hidden>
+            <TalentIcon name="valider" />
+          </span>
+          <h1 className="t-h2s">{t("apply.sent.title")}</h1>
+          <p>{t("apply.sent.text", { company })}</p>
+          {next}
+        </div>
+        {/* Tablet and computer: the offer stays behind the window, as a backdrop only. */}
+        <div className="t-large t-envoyee-w" inert aria-hidden>
+          <OfferPage params={params} searchParams={Promise.resolve({})} />
+        </div>
+        <ApplySentDialog
+          id="ap-envoyee"
+          title={t("apply.sent.title")}
+          closeLabel={t("offer.close")}
+          offerHref={base}
+        >
+          <div className="t-conf">
+            <span className="t-rond-ok" aria-hidden>
+              <TalentIcon name="valider" />
+            </span>
+            <p className="t-conf-t" aria-hidden>
+              {t("apply.sent.title")}
+            </p>
+            <p>{t("apply.sent.text", { company })}</p>
+            {next}
+          </div>
+        </ApplySentDialog>
+      </>
     );
   }
   if (!open) redirect(`${base}?candidature=close`);
@@ -154,7 +189,7 @@ export default async function ApplyPage({
     </>
   );
 
-  const head = (
+  const title = (
     <>
       <FlowHead
         back={back}
@@ -175,6 +210,11 @@ export default async function ApplyPage({
           </button>
         }
       />
+      <p className="t-w-sous">{[job.title, company].join(" · ")}</p>
+    </>
+  );
+  const progress = (
+    <>
       <div
         className="t-pas"
         role="img"
@@ -195,12 +235,84 @@ export default async function ApplyPage({
     </>
   );
 
+  // Computer: the steps on the left with the offer (planche web talent-2 § 1, `.w-stp`).
+  const stepsAside = (
+    <nav aria-label={t("apply.web.steps")} className="t-verre t-stp">
+      <div className="t-of-r">
+        <Logo name={company} src={job.organization.logo} tone={tone} />
+        <div>
+          <b>{job.title}</b>
+          <span>{[company, job.city].filter(Boolean).join(" · ")}</span>
+        </div>
+      </div>
+      <ol>
+        {applySteps.map((key, position) => {
+          const inner = (
+            <>
+              <i aria-hidden>
+                {position < index ? <TalentIcon name="valider" size="xs" /> : position + 1}
+              </i>
+              <span>
+                {d(`apply.web.step.${key}`)}
+                <small>{d(`apply.web.step.${key}Line`)}</small>
+              </span>
+            </>
+          );
+          return (
+            <li
+              key={key}
+              className={position < index ? "t-ok" : position === index ? "t-on" : undefined}
+            >
+              {position < index ? (
+                <Link href={stepHref(key)} className="t-press">
+                  {inner}
+                </Link>
+              ) : (
+                <span aria-current={position === index ? "step" : undefined}>{inner}</span>
+              )}
+            </li>
+          );
+        })}
+      </ol>
+      <p className="t-gr">{t("apply.web.free")}</p>
+    </nav>
+  );
+  // The first page of a CV, drawn (planche `.pg`): a large screen shows the CVs as pages.
+  const page = (
+    <span className="t-cv-ap" aria-hidden>
+      <span className="t-pg">
+        <i className="t-h" />
+        <i className="t-s" />
+        <i />
+        <i />
+        <i className="t-c" />
+        <i />
+        <i className="t-s" />
+        <i />
+        <i className="t-c" />
+        <i />
+      </span>
+    </span>
+  );
+  const layout = (content: ReactNode) => (
+    <div className="t-flux t-large t-post">
+      {title}
+      <div className="t-post-g">
+        {stepsAside}
+        <div className="t-flux t-pane">
+          {progress}
+          {content}
+        </div>
+      </div>
+    </div>
+  );
+
   // ─── Step 1 · the CV. ──────────────────────────────────────────────────────────────
   if (step === "cv") {
-    return (
-      <div className="t-flux">
-        {head}
-        <div className="t-verre t-cd t-min">
+    const tailored = cvs[0] ?? null;
+    return layout(
+      <>
+        <div className="t-verre t-cd t-min t-post-offre">
           <div className="t-haut">
             <Logo name={company} src={job.organization.logo} tone={tone} />
             <div className="t-t">
@@ -213,7 +325,7 @@ export default async function ApplyPage({
           {keep}
           <fieldset className="t-fs">
             <legend className="t-h2s">{t("apply.cv.title")}</legend>
-            <div className="t-flux t-serre">
+            <div className="t-flux t-serre t-cvg">
               {cvs.map((cv) => {
                 const adapted = cv.adaptedForJobId === jobRow.id;
                 const line = [
@@ -240,6 +352,7 @@ export default async function ApplyPage({
                       <i />
                       <i />
                     </span>
+                    {page}
                     <span className="t-t">
                       <b>{cv.title}</b>
                       <span>{line}</span>
@@ -257,6 +370,7 @@ export default async function ApplyPage({
                     <i />
                     <i />
                   </span>
+                  {page}
                   <span className="t-t">
                     <b>{t("apply.cv.profile")}</b>
                     <span>{t("apply.cv.profileLine")}</span>
@@ -266,17 +380,37 @@ export default async function ApplyPage({
               )}
             </div>
           </fieldset>
-          <Link href="/app/career/cv?creer=1" className="t-ajout t-press">
-            <TalentIcon name="plus" size="s" />
-            {t("apply.cv.create")}
-          </Link>
+          <div className="t-post-plus">
+            <Link href="/app/career/cv?creer=1" className="t-ajout t-press">
+              <TalentIcon name="plus" size="s" />
+              {t("apply.cv.create")}
+            </Link>
+            {tailored && (
+              <Link
+                href={`/app/career/cv/${tailored.id}?adapter=${jobRow.id}`}
+                className="t-verre t-prep t-press t-post-adapter"
+              >
+                <OrbiMark size={32} />
+                <span className="t-t">
+                  <b>{t("apply.web.tailor")}</b>
+                  <span>{t("apply.web.tailorLine")}</span>
+                </span>
+                <TalentIcon name="suivant" size="s" />
+              </Link>
+            )}
+          </div>
           <div className="t-verre t-fort t-bas-f">
+            <span className="t-post-note">
+              <TalentIcon name="cadenas" size="xs" />
+              {t("apply.web.nothingSent")}
+            </span>
             <button type="submit" name="next" value="lettre" className="t-bt t-p t-pl t-press">
               {t("apply.continue")}
+              <TalentIcon name="suivant" size="xs" className="t-post-fl" />
             </button>
           </div>
         </form>
-      </div>
+      </>,
     );
   }
 
@@ -289,9 +423,8 @@ export default async function ApplyPage({
         .map((ref) => (
           <input key={refValue(ref)} type="hidden" name="attachment" value={refValue(ref)} />
         ));
-    return (
-      <div className="t-flux">
-        {head}
+    return layout(
+      <>
         <h2 className="t-h2s">{t("apply.docs.title")}</h2>
         {query.lettre === "orbi" && <Notice tone="ok">{t("apply.docs.orbi.done")}</Notice>}
         {aiError && (
@@ -312,70 +445,85 @@ export default async function ApplyPage({
             </span>
           </p>
         )}
-        {letter && (
-          <div className="t-verre t-pj">
-            <span className="t-cases t-accomp" aria-hidden>
-              <TalentIcon name="document" size="s" />
-            </span>
-            <div className="t-t">
-              <b>{t("apply.docs.letter")}</b>
-              <span>
-                {t("apply.docs.words", { count: letter.split(/\s+/).filter(Boolean).length })}
-              </span>
-            </div>
-            <SheetButton target="ap-lettre" className="t-bi t-press" label={t("apply.docs.edit")}>
-              <TalentIcon name="modifier" size="s" />
-            </SheetButton>
-          </div>
-        )}
-        {joined.map((item) => (
-          <form key={refValue(item)} action={saveApplicationStepAction} className="t-verre t-pj">
-            {keep}
-            <input type="hidden" name="next" value="lettre" />
-            <input type="hidden" name="attachments" value="1" />
-            {remaining(refValue(item))}
-            <span
-              className={item.type === "certificate" ? "t-cases t-former" : "t-cases t-accomp"}
-              aria-hidden
-            >
-              <TalentIcon name={item.type === "certificate" ? "certificat" : "document"} size="s" />
-            </span>
-            <div className="t-t">
-              <b>{item.title}</b>
-              <span>
-                {item.type === "certificate"
-                  ? t("apply.docs.certificateLine", { date: formatDayMonth(item.date) })
-                  : t("apply.docs.documentLine", { date: formatDayMonth(item.date) })}
-              </span>
-            </div>
-            <button
-              type="submit"
-              className="t-bi t-press"
-              aria-label={t("apply.docs.remove", { name: item.title })}
-            >
-              <TalentIcon name="supprimer" size="s" />
-            </button>
-          </form>
-        ))}
-        <SheetButton target="ap-ajout" className="t-ajout t-press">
-          <TalentIcon name="plus" size="s" />
-          {t("apply.docs.add")}
-        </SheetButton>
-        {!letter && (
-          <div className="t-verre t-carte t-sugg">
-            <OrbiMark size={36} />
-            <div className="t-t">
-              <small>{t("apply.docs.orbi.label")}</small>
-              <b>{t("apply.docs.orbi.text")}</b>
-              <form action={applicationLetterAction}>
-                <input type="hidden" name="job" value={slug} />
-                <button type="submit" className="t-bt t-sec t-s t-press">
-                  {t("apply.docs.orbi.cta")}
+        <div className="t-post-2c">
+          <div className="t-flux t-post-col">
+            {letter && (
+              <div className="t-verre t-pj">
+                <span className="t-cases t-accomp" aria-hidden>
+                  <TalentIcon name="document" size="s" />
+                </span>
+                <div className="t-t">
+                  <b>{t("apply.docs.letter")}</b>
+                  <span>
+                    {t("apply.docs.words", { count: letter.split(/\s+/).filter(Boolean).length })}
+                  </span>
+                </div>
+                <SheetButton
+                  target="ap-lettre"
+                  className="t-bi t-press"
+                  label={t("apply.docs.edit")}
+                >
+                  <TalentIcon name="modifier" size="s" />
+                </SheetButton>
+              </div>
+            )}
+            {joined.map((item) => (
+              <form
+                key={refValue(item)}
+                action={saveApplicationStepAction}
+                className="t-verre t-pj"
+              >
+                {keep}
+                <input type="hidden" name="next" value="lettre" />
+                <input type="hidden" name="attachments" value="1" />
+                {remaining(refValue(item))}
+                <span
+                  className={item.type === "certificate" ? "t-cases t-former" : "t-cases t-accomp"}
+                  aria-hidden
+                >
+                  <TalentIcon
+                    name={item.type === "certificate" ? "certificat" : "document"}
+                    size="s"
+                  />
+                </span>
+                <div className="t-t">
+                  <b>{item.title}</b>
+                  <span>
+                    {item.type === "certificate"
+                      ? t("apply.docs.certificateLine", { date: formatDayMonth(item.date) })
+                      : t("apply.docs.documentLine", { date: formatDayMonth(item.date) })}
+                  </span>
+                </div>
+                <button
+                  type="submit"
+                  className="t-bi t-press"
+                  aria-label={t("apply.docs.remove", { name: item.title })}
+                >
+                  <TalentIcon name="supprimer" size="s" />
                 </button>
               </form>
-            </div>
+            ))}
+            <SheetButton target="ap-ajout" className="t-ajout t-press">
+              <TalentIcon name="plus" size="s" />
+              {t("apply.docs.add")}
+            </SheetButton>
           </div>
-        )}
+          {!letter && (
+            <div className="t-verre t-carte t-sugg">
+              <OrbiMark size={36} />
+              <div className="t-t">
+                <small>{t("apply.docs.orbi.label")}</small>
+                <b>{t("apply.docs.orbi.text")}</b>
+                <form action={applicationLetterAction}>
+                  <input type="hidden" name="job" value={slug} />
+                  <button type="submit" className="t-bt t-sec t-s t-press">
+                    {t("apply.docs.orbi.cta")}
+                  </button>
+                </form>
+              </div>
+            </div>
+          )}
+        </div>
 
         <form id={formId} action={saveApplicationStepAction}>
           {keep}
@@ -390,6 +538,7 @@ export default async function ApplyPage({
               className="t-bt t-p t-pl t-press"
             >
               {t("apply.continue")}
+              <TalentIcon name="suivant" size="xs" className="t-post-fl" />
             </button>
           </div>
         </form>
@@ -519,7 +668,7 @@ export default async function ApplyPage({
             </form>
           </div>
         </Sheet>
-      </div>
+      </>,
     );
   }
 
@@ -528,10 +677,33 @@ export default async function ApplyPage({
     ...(letter ? [t("apply.docs.letter")] : []),
     ...joined.map((item) => item.title),
   ];
-  return (
-    <div className="t-flux">
-      {head}
+  return layout(
+    <>
       <h2 className="t-h2s">{t("apply.review.title")}</h2>
+      {chosenCv && (
+        <div className="t-verre t-cv-big">
+          {page}
+          <div className="t-t">
+            <b>{t("apply.review.cv", { title: chosenCv.title })}</b>
+            <span>
+              {[
+                chosenCv.pageCount ? t("apply.cv.pages", { count: chosenCv.pageCount }) : null,
+                t("apply.web.cvLine", { date: formatDayMonth(chosenCv.updatedAt) }),
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+            </span>
+            <a
+              href={`/app/career/cv/${chosenCv.id}/pdf`}
+              target="_blank"
+              rel="noreferrer"
+              className="t-bt t-sec t-s t-press"
+            >
+              {t("apply.web.preview")}
+            </a>
+          </div>
+        </div>
+      )}
       <div className="t-verre t-liste t-recap">
         <div className="t-li">
           <span className="t-cases t-c2" aria-hidden>
@@ -545,7 +717,7 @@ export default async function ApplyPage({
             {t("apply.review.edit")}
           </Link>
         </div>
-        <div className="t-li">
+        <div className={chosenCv ? "t-li t-post-cvl" : "t-li"}>
           <span className="t-cases t-c2" aria-hidden>
             <TalentIcon name="cv" size="s" />
           </span>
@@ -580,6 +752,18 @@ export default async function ApplyPage({
             {documents.length > 0 ? t("apply.review.see") : t("apply.review.add")}
           </Link>
         </div>
+        <div className="t-li t-post-profil">
+          <span className="t-cases t-c3" aria-hidden>
+            <TalentIcon name="favori" size="s" />
+          </span>
+          <div className="t-t">
+            <b>{t("apply.web.profile")}</b>
+            <span>{t("apply.web.profileLine")}</span>
+          </div>
+          <Link href="/app/profil/apercu" className="t-v t-lien-d">
+            {t("apply.web.profileSee")}
+          </Link>
+        </div>
       </div>
       <p className="t-gar">
         <TalentIcon name="confidentialite" size="s" />
@@ -596,6 +780,11 @@ export default async function ApplyPage({
           staged: "1",
         }}
         laterHref={`${base}?brouillon=1`}
+        before={
+          <Link href={stepHref("lettre")} className="t-bt t-sec t-m t-press t-post-retour">
+            {t("apply.web.back")}
+          </Link>
+        }
         labels={{
           send: t("apply.send"),
           sending: t("apply.sending"),
@@ -605,6 +794,6 @@ export default async function ApplyPage({
           later: t("apply.failed.later"),
         }}
       />
-    </div>
+    </>,
   );
 }

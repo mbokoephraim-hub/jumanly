@@ -5,6 +5,8 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { Logo, toneOf } from "@/components/talent/art";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
+import { ApplicationDetail } from "@/components/talent/suivi/application-detail";
+import { AutoSelect, DetailOnly } from "@/components/talent/web/auto-select";
 import { cx } from "@/lib/cx";
 import { formatDayMonth } from "@/lib/dates";
 import { statusChip } from "@/lib/suivi-status";
@@ -22,6 +24,10 @@ export async function generateMetadata(): Promise<Metadata> {
 /**
  * Suivi (planche talent-2 § 2): the applications grouped by situation, what asks for an action
  * first. « Terminées » keeps the ended ones, a refusal with a concrete next step.
+ *
+ * On a computer (planche web talent-2 § 2) the list and the chosen application sit side by side:
+ * a card opens `/app/suivi?id=…` and the address follows the choice (Retour and shared links
+ * work). Phone and tablet open the application on its own page (`/app/suivi/[id]`).
  */
 export default async function SuiviPage({ searchParams }: PageProps<"/app/suivi">) {
   const user = await requireUser("/app/suivi");
@@ -33,6 +39,14 @@ export default async function SuiviPage({ searchParams }: PageProps<"/app/suivi"
   const board = await suiviBoard(db, user.id);
   const finishedView = query.vue === "terminees";
   const current = board.toDo.length + board.waiting.length;
+  const view = finishedView ? board.finished : [...board.toDo, ...board.waiting];
+  const asked = typeof query.id === "string" ? query.id.slice(0, 60) : null;
+  // The application beside the list: the one in the address. Without one, a computer opens the
+  // first of the view (AutoSelect); a phone keeps the list alone.
+  const selected = asked;
+  const first = view.find((item) => item.status !== "draft")?.id ?? null;
+  const listHref = (id: string) =>
+    `/app/suivi?${finishedView ? "vue=terminees&" : ""}id=${encodeURIComponent(id)}`;
 
   const card = (item: SuiviCard, ended = false) => {
     const line = ended
@@ -42,13 +56,28 @@ export default async function SuiviPage({ searchParams }: PageProps<"/app/suivi"
         : `${item.company} · ${format.relativeTime(item.changedAt, { style: "short" })}`;
     const action = item.action;
     return (
-      <li key={item.id} className="t-verre t-cd">
+      <li key={item.id} className={cx("t-verre t-cd", item.id === selected && "t-sel")}>
         <div className="t-haut">
           <Logo name={item.company} src={item.logo} tone={toneOf(item.company)} />
           <div className="t-t">
-            <Link href={item.href} className="t-lien">
-              <b>{item.title}</b>
-            </Link>
+            {item.status === "draft" ? (
+              <Link href={item.href} className="t-lien">
+                <b>{item.title}</b>
+              </Link>
+            ) : (
+              <>
+                <Link href={item.href} className="t-lien t-hors-ordi">
+                  <b>{item.title}</b>
+                </Link>
+                <Link
+                  href={listHref(item.id)}
+                  className="t-lien t-ordi"
+                  aria-current={item.id === selected ? "true" : undefined}
+                >
+                  <b>{item.title}</b>
+                </Link>
+              </>
+            )}
             <span>{line}</span>
             <em className={cx("t-st", statusChip[item.status])}>
               {t(`suivi.status.${item.status}`)}
@@ -107,10 +136,8 @@ export default async function SuiviPage({ searchParams }: PageProps<"/app/suivi"
       </section>
     );
 
-  return (
-    <div className="t-flux">
-      <h1 className="sr-only">{t("suivi.title")}</h1>
-      {query.ok === "retiree" && <Notice tone="ok">{t("suivi.withdrawn")}</Notice>}
+  const list = (
+    <div className="t-flux t-md-l">
       <nav aria-label={t("suivi.tabs")} className="t-seg">
         <Link
           href="/app/suivi"
@@ -149,6 +176,29 @@ export default async function SuiviPage({ searchParams }: PageProps<"/app/suivi"
           {group("suivi-attente", t("suivi.group.waiting"), board.waiting)}
         </>
       )}
+    </div>
+  );
+
+  return (
+    <div className={cx("t-flux t-large t-suivi", asked && "t-suivi-id")}>
+      <h1 className="sr-only">{t("suivi.title")}</h1>
+      {asked && <DetailOnly />}
+      {!finishedView && current > 0 && (
+        <p className="t-w-sous">
+          {t("suivi.web.subtitle", { count: current, actions: board.toDo.length })}
+        </p>
+      )}
+      {query.ok === "retiree" && <Notice tone="ok">{t("suivi.withdrawn")}</Notice>}
+      <div className="t-md">
+        {list}
+        <div className="t-md-d">
+          {selected ? (
+            <ApplicationDetail userId={user.id} id={selected} query={query} inList />
+          ) : (
+            <AutoSelect href={first ? listHref(first) : null} from="computer" />
+          )}
+        </div>
+      </div>
     </div>
   );
 }

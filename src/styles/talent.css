@@ -10000,3 +10000,1234 @@ span.t-sw {
     width: min(420px, 100%);
   }
 }
+
+/* ══ Lot web talent 2 · Postuler, Suivi, S'entraîner, Messages, Notifications ══
+ * Planche docs/refonte-web/talent-2 (valeurs de web2.py, CSSW2). Téléphone inchangé : les blocs
+ * propres au grand écran sont cachés sous 768 px, et l'inverse. `.t-ordi` : ordinateur seulement
+ * (≥ 1200 px, liste et détail côte à côte) ; `.t-hors-ordi` : téléphone et tablette. */
+.t-dt-h,
+.t-w-sous,
+.t-w-seul,
+.t-ca-rebond,
+.t-cartb-t {
+  display: none;
+}
+@media (max-width: 1199.98px) {
+  .t-ordi,
+  .t-md-d {
+    display: none !important;
+  }
+  /* Suivi ouvert sur une candidature (`?id=`) hors ordinateur : la candidature seule. */
+  .t-suivi-id > :is(.t-w-sous, .t-md) > .t-md-l,
+  .t-suivi-id > .t-w-sous {
+    display: none;
+  }
+  .t-suivi-id .t-md-d {
+    display: block !important;
+  }
+  html[data-detail-seul] .t-cadre .t-zone > header {
+    display: none;
+  }
+}
+@media (min-width: 1200px) {
+  .t-hors-ordi {
+    display: none !important;
+  }
+}
+
+/* Suivi : sous-titre, liste et détail (planche `.md`). */
+@media (min-width: 768px) {
+  .t-w-sous {
+    display: block;
+    margin-top: -8px;
+    font-size: 14px;
+    color: var(--texte2);
+  }
+  .t-suivi .t-md-l section:has(> #suivi-attente) > ul,
+  .t-suivi .t-md-l > ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+    gap: 16px;
+  }
+
+  /* Une candidature : la tête avec ses cinq étapes, les blocs sur deux colonnes. */
+  .t-ca > .t-tete-f,
+  .t-ca .t-ca-m {
+    display: none;
+  }
+  .t-dt-h {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+  }
+  .t-dt-h .t-hh {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+  }
+  .t-dt-h .t-hh > .t-lg-e {
+    width: 56px;
+    height: 56px;
+    font-size: 17px;
+    margin: 0;
+    box-shadow: none;
+  }
+  .t-dt-h .t-hh .t-t {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  .t-dt-h h2 {
+    font-size: 19px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    line-height: 1.25;
+  }
+  .t-dt-h h2 a {
+    color: inherit;
+  }
+  .t-dt-h h2 a:hover {
+    text-decoration: underline;
+  }
+  .t-dt-h .t-hh .t-t span {
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-dt-h .t-hh .t-st {
+    margin: 0;
+    align-self: center;
+  }
+  .t-etp {
+    display: grid;
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .t-etp li {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: var(--texte2);
+  }
+  .t-etp li i {
+    height: 6px;
+    border-radius: 3px;
+    background: var(--piste);
+  }
+  .t-etp li.t-ok,
+  .t-etp li.t-now {
+    color: var(--texte);
+  }
+  .t-etp li.t-ok i {
+    background: var(--sapin);
+  }
+  .sombre .t-etp li.t-ok i {
+    background: var(--lime);
+  }
+  .t-etp li.t-now i {
+    background: var(--g-accent);
+  }
+  .t-d2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .t-dcol {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .t-dcol:empty {
+    display: none;
+  }
+  /* Cartes à titre intérieur (planche `.cartb`) : Messages, Historique, Dossier envoyé. */
+  .t-ca .t-cartb {
+    background: var(--surface);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+    box-shadow: var(--verre);
+    border-radius: var(--r-carte);
+    padding: 16px;
+    gap: 12px;
+  }
+  .t-ca .t-cartb .t-sec-t h2,
+  .t-ca .t-cartb-t {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+  .t-ca .t-cartb .t-sec-t a {
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-ca .t-cartb > .t-liste {
+    box-shadow: none;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    padding: 0;
+    border-radius: 0;
+  }
+  .t-ca .t-ca-dem > .t-sec-t {
+    display: none;
+  }
+  .t-ca .t-ca-sig {
+    align-self: center;
+  }
+  /* Non retenue : la suite concrète (planche `termin`). */
+  .t-ca-rebond {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .t-ca-rebond > .t-rebond {
+    padding: 18px 20px;
+  }
+  .t-ca-rebond > .t-rebond b {
+    font-size: 16px;
+  }
+  .t-ca-offres {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  /* Cartes d'offres en grille (web.py : `.w-c .g3 .of`) : titre sur deux lignes, score à droite. */
+  .t-ca-offres .t-of .t-corps {
+    flex-direction: column;
+    gap: 6px;
+  }
+  .t-ca-offres .t-of .t-t {
+    padding-top: 0;
+    width: 100%;
+    min-width: 0;
+  }
+  .t-ca-offres .t-of .t-t b {
+    white-space: normal;
+    font-size: 15px;
+    min-height: 38px;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  .t-ca-offres .t-of .t-bas {
+    flex-wrap: wrap;
+    row-gap: 6px;
+  }
+  .t-ca-offres .t-of .t-bas .t-score {
+    margin-left: auto;
+    white-space: nowrap;
+  }
+  .t-ca-offres .t-of .t-lg-e {
+    width: 48px;
+    height: 48px;
+  }
+  .t-md-l .t-cd .t-haut .t-t {
+    min-width: 0;
+  }
+}
+@media (min-width: 1200px) {
+  .t-md {
+    display: grid;
+    grid-template-columns: 340px minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+  }
+  .t-md > *,
+  .t-md-l li {
+    min-width: 0;
+  }
+  .t-suivi .t-md-l section:has(> #suivi-attente) > ul,
+  .t-suivi .t-md-l > ul {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+  }
+  .t-suivi .t-md-l .t-cd.t-sel {
+    box-shadow:
+      0 0 0 2px var(--sapin),
+      var(--verre);
+  }
+  .sombre .t-suivi .t-md-l .t-cd.t-sel {
+    box-shadow:
+      0 0 0 2px var(--lime),
+      var(--verre);
+  }
+  /* L'invitation tient sur une rangée : créneaux à gauche, boutons à droite (planche `.md .inv`). */
+  .t-ca .t-inv form {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 16px;
+  }
+  .t-ca .t-inv form > .t-fs {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-ca .t-inv form > .t-pas-t {
+    order: 3;
+    width: 100%;
+  }
+  .t-ca .t-inv form > .t-bts {
+    flex: none;
+  }
+  .t-ca .t-inv form > .t-bts .t-bt.t-pl {
+    flex: none;
+  }
+}
+/* Téléphone : l'ordre de la planche mobile (tête, invitation, préparation, historique, dossier,
+ * messages, demandes, retrait), les colonnes du grand écran s'effacent. */
+@media (max-width: 767.98px) {
+  .t-ca .t-d2,
+  .t-ca .t-dcol {
+    display: contents;
+  }
+  .t-ca .t-ca-dos {
+    order: 1;
+  }
+  .t-ca .t-ca-msg {
+    order: 2;
+  }
+  .t-ca .t-ca-dem {
+    order: 3;
+  }
+  .t-ca .t-ca-sig {
+    order: 4;
+  }
+}
+
+/* Messages en trois colonnes (planche `.msg3`) : conversations, échange, candidature liée. */
+.t-w-titre,
+.t-msg-vide,
+.t-msg-cx {
+  display: none;
+}
+/* La page enveloppe la conversation : seule la conversation garde la place de son champ fixé. */
+.t-flux.t-msgs:has(.t-bas-f) {
+  padding-bottom: 0;
+}
+@media (max-width: 767.98px) {
+  .t-msg3 {
+    display: contents;
+  }
+  .t-msg3 > .t-conv ~ .t-msg-cx,
+  .t-msg3:has(> .t-conv) > .t-msg-ls {
+    display: none;
+  }
+}
+@media (min-width: 768px) {
+  .t-w-titre {
+    display: block;
+    font-size: 32px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .t-cadre .t-msgs,
+  .t-cadre .t-msgs:has(.t-bas-f) {
+    padding-bottom: 0;
+    gap: 18px;
+  }
+  /* La liste seule : son titre devient celui de la page (planche `.w-h`). */
+  .t-msgs > .t-tete-f {
+    min-height: 0;
+    padding-top: 0;
+  }
+  .t-msgs > .t-tete-f > :is(a, button) {
+    display: none;
+  }
+  .t-msgs > .t-tete-f h1 {
+    font-size: 32px;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .t-msg3 {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    height: max(520px, calc(100dvh - 200px));
+    border-radius: 28px;
+    overflow: hidden;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-msg3 > * {
+    min-width: 0;
+    min-height: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .t-msg3 > .t-msg-cx {
+    display: none;
+  }
+  .t-w-seul {
+    display: revert;
+  }
+  .t-msg-ls {
+    gap: 12px;
+    padding: 16px 12px;
+    border-right: 1px solid var(--trait);
+    overflow-y: auto;
+  }
+  .t-msg-ls .t-rech {
+    box-shadow: none;
+    background: var(--zone);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-msg-ls :is(.t-liste, .t-msg-lst) {
+    box-shadow: none;
+    background: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    padding: 0;
+    border-radius: 0;
+  }
+  .t-msg-ls .t-msg-lst {
+    flex: 1;
+  }
+  .t-msg-ls .t-liste .t-li {
+    padding: 10px;
+    border-radius: 18px;
+    border: 0;
+  }
+  .t-msg-ls .t-li.t-on {
+    background: var(--zone);
+  }
+  .t-msg-ls .t-li .t-lg-s {
+    width: 44px;
+    height: 44px;
+  }
+  .t-msg-ls .t-li .t-t > span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: block;
+  }
+  .t-msg-ls > .t-gar {
+    margin-top: auto;
+  }
+  /* Rien d'ouvert : une invitation à choisir (la plus récente s'ouvre d'elle-même). */
+  .t-msg-vide {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    padding: 24px;
+    background: var(--fond);
+    color: var(--texte2);
+    font-size: 14px;
+    text-align: center;
+  }
+  /* L'échange : la tête, le fil qui défile, le champ posé en bas. */
+  .t-msg3 > .t-conv {
+    gap: 0;
+    padding: 0;
+  }
+  .t-msg3 > .t-conv > .t-tete-f {
+    gap: 12px;
+    min-height: 0;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--trait);
+  }
+  .t-msg3 > .t-conv > .t-tete-f > a:first-child,
+  .t-msg3 > .t-conv > .t-tete-f > button:first-child {
+    display: none;
+  }
+  .t-msg3 > .t-conv > .t-tete-f .t-lg-s {
+    width: 44px;
+    height: 44px;
+  }
+  .t-msg3 > .t-conv > :is(.t-notice, [role="status"], .t-li) {
+    margin: 12px 18px 0;
+  }
+  .t-msg3 > .t-conv > .t-fil {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 18px 22px;
+    background: var(--fond);
+  }
+  .t-msg3 .t-fil .t-b-r {
+    background: var(--plein);
+  }
+  .t-msg3 .t-fil .t-msg > .t-b-cr,
+  .t-msg3 .t-fil .t-msg > .t-flux {
+    width: min(92%, 420px);
+  }
+  .t-cadre .t-msg3 .t-bas-f {
+    position: static;
+    left: auto;
+    width: auto;
+    max-width: none;
+    transform: none;
+    padding: 12px 16px;
+    border-radius: 0;
+    border-top: 1px solid var(--trait);
+  }
+  .t-msg3 .t-bas-f .t-compo {
+    height: 54px;
+    padding: 0 6px 0 10px;
+    background: var(--zone);
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-msg3 .t-bas-f .t-compo .t-bi:not(.t-env) {
+    background: none;
+  }
+  .t-msg3 .t-bas-f .t-compo .t-env {
+    background: #0f3f37;
+    color: #a6f26b;
+  }
+}
+@media (min-width: 1200px) {
+  .t-msg3:has(> .t-msg-cx) {
+    grid-template-columns: 300px minmax(0, 1fr) 260px;
+  }
+  .t-msg3 > .t-msg-cx {
+    display: flex;
+  }
+  .t-msg-cx {
+    gap: 14px;
+    padding: 18px;
+    border-left: 1px solid var(--trait);
+    overflow-y: auto;
+  }
+  .t-msg-h {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+  }
+  .t-msg-cx .t-cd {
+    box-shadow: none;
+    background: var(--zone);
+    border-radius: var(--r-carte);
+  }
+  .t-msg-cx .t-pj {
+    background: var(--zone);
+    border-radius: 18px;
+    color: var(--texte);
+  }
+  .t-msg-cx ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .t-msg-cx > .t-bt {
+    width: 100%;
+  }
+  /* The linked application has its column: no second link above the thread. */
+  .t-msg3:has(> .t-msg-cx) > .t-conv > a.t-li {
+    display: none;
+  }
+}
+
+/* Notifications sous la cloche (planche `.pop`) : une bulle ancrée sous la cloche, la page reste
+ * visible derrière un voile léger. */
+.t-pop {
+  position: fixed;
+  inset: 70px 51px auto auto;
+  margin: 0;
+  width: min(420px, calc(100vw - 32px));
+  max-height: calc(100dvh - 90px);
+  overflow: visible;
+  padding: 16px;
+  border: 0;
+  border-radius: 28px;
+  background: var(--plein);
+  color: var(--texte);
+  box-shadow:
+    0 40px 80px -30px rgba(0, 0, 0, 0.45),
+    0 0 0 1px var(--trait);
+  flex-direction: column;
+  gap: 12px;
+}
+.t-pop:popover-open {
+  display: flex;
+  animation: t-monte 220ms cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
+}
+.t-pop::backdrop {
+  background: rgba(11, 26, 31, 0.1);
+}
+.t-pop::before {
+  content: "";
+  position: absolute;
+  top: -7px;
+  right: 96px;
+  width: 14px;
+  height: 14px;
+  background: var(--plein);
+  transform: rotate(45deg);
+  border-radius: 3px;
+}
+.t-pop > section {
+  max-height: none;
+}
+.t-pop-hd {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+.t-pop-hd h2 {
+  font-size: 17px;
+  font-weight: 700;
+}
+.t-pop-hd button {
+  white-space: nowrap;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+  color: var(--texte2);
+  background: none;
+  border: 0;
+  padding: 6px 4px;
+  cursor: pointer;
+}
+.t-pop .t-liste {
+  box-shadow: none;
+  background: none;
+  padding: 0;
+}
+.t-pop .t-li .t-t > span {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.t-pop-tout {
+  text-align: center;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 10px;
+  border-radius: 16px;
+  background: var(--zone);
+  color: var(--texte);
+}
+.t-pop :is(button, a):focus-visible {
+  outline: 2px solid var(--texte);
+  outline-offset: 2px;
+}
+@media (min-width: 1200px) {
+  .t-pop {
+    inset: 76px 59px auto auto;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-pop:popover-open {
+    animation: none;
+  }
+}
+
+/* Postuler (planche `.w-post`) : les étapes à gauche avec l'offre, l'étape à droite. */
+.t-stp,
+.t-cv-ap,
+.t-cv-big,
+.t-post-adapter,
+.t-post-note,
+.t-post-retour,
+.t-post-profil,
+.t-post-fl,
+.t-envoyee-w {
+  display: none;
+}
+@media (max-width: 767.98px) {
+  .t-post-g,
+  .t-pane,
+  .t-post-plus,
+  .t-post-2c,
+  .t-post-col {
+    display: contents;
+  }
+}
+@media (min-width: 768px) {
+  /* Le titre de la page (planche `.w-h`) : « Postuler », l'offre dessous. */
+  .t-post > .t-tete-f,
+  .t-pq-w > .t-tete-f {
+    min-height: 0;
+    padding-top: 0;
+  }
+  /* Le retour est dans la barre latérale ; « Quitter » (garder le brouillon) reste à droite. */
+  .t-post > .t-tete-f > :first-child,
+  .t-pq-w > .t-tete-f > :first-child {
+    display: none;
+  }
+  .t-post > .t-tete-f h1,
+  .t-pq-w > .t-tete-f h1 {
+    font-size: 32px;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .t-cadre :is(.t-post, .t-pq-w),
+  .t-cadre .t-post .t-pane {
+    padding-bottom: 0;
+  }
+  .t-post .t-pane {
+    gap: 16px;
+    min-width: 0;
+  }
+  .t-post .t-pane > .t-pas-t {
+    margin-top: -10px;
+  }
+  .t-post .t-post-offre {
+    display: none;
+  }
+  /* Les CV en aperçu (planche `.cvg`, `.cvw`, `.pg`). */
+  .t-post .t-cvg {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .t-post .t-cvg .t-cvc {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 26px;
+  }
+  .t-post .t-cvg .t-cvc .t-mini {
+    display: none;
+  }
+  .t-cv-ap {
+    position: relative;
+    height: 200px;
+    border-radius: 16px;
+    background: var(--zone);
+    display: grid;
+    place-items: center;
+  }
+  .t-pg {
+    width: 120px;
+    height: 166px;
+    border-radius: 6px;
+    background: #fff;
+    box-shadow: 0 14px 28px -14px rgba(15, 63, 55, 0.45);
+    padding: 14px 12px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .t-pg i {
+    height: 5px;
+    border-radius: 3px;
+    background: #dce5e1;
+  }
+  .t-pg i.t-h {
+    height: 9px;
+    width: 62%;
+    background: #0f3f37;
+  }
+  .t-pg i.t-c {
+    width: 40%;
+    background: #a6f26b;
+    margin-top: 6px;
+  }
+  .t-pg i.t-s {
+    width: 80%;
+  }
+  .t-post .t-cvg .t-cvc .t-radio {
+    position: absolute;
+    right: 26px;
+    top: 26px;
+  }
+  .t-post .t-cvg .t-cvc .t-t b {
+    font-size: 14.5px;
+  }
+  .t-post .t-cvg .t-cvc .t-t span {
+    display: block;
+  }
+  .t-post .t-cvg .t-cvc .t-t .t-adp {
+    display: inline-block;
+    margin-top: 6px;
+  }
+  .t-post-plus,
+  .t-post-2c {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .t-post-col {
+    gap: 12px;
+    min-width: 0;
+  }
+  .t-post-adapter {
+    display: flex;
+    padding: 10px 14px;
+  }
+  /* Les actions sous l'étape (planche `.w-act`) : la barre fixée du téléphone se pose ici. */
+  .t-cadre :is(.t-post, .t-pq-w) .t-bas-f {
+    position: static;
+    left: auto;
+    width: auto;
+    max-width: none;
+    transform: none;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    justify-content: flex-end;
+    align-items: center;
+  }
+  :is(.t-post, .t-pq-w) .t-bas-f .t-bt,
+  :is(.t-post, .t-pq-w) .t-bas-f .t-bt.t-pl {
+    flex: none;
+    min-width: 180px;
+  }
+  .t-post-note {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    margin-right: auto;
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-post-retour,
+  .t-post-fl {
+    display: revert;
+  }
+  .t-post .t-bas-f .t-post-retour {
+    display: inline-flex;
+  }
+  /* Vérifier : le CV en grand, puis ce que verra le recruteur. */
+  .t-cv-big {
+    display: flex;
+    gap: 18px;
+    align-items: center;
+    padding: 18px;
+  }
+  .t-cv-big .t-cv-ap {
+    width: 180px;
+    flex: none;
+  }
+  .t-cv-big .t-t {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .t-cv-big .t-t b {
+    font-size: 16px;
+  }
+  .t-cv-big .t-t span {
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-cv-big .t-t .t-bt {
+    margin-top: 8px;
+    width: auto;
+    padding: 0 15px;
+  }
+  .t-post .t-recap .t-post-cvl {
+    display: none;
+  }
+  .t-post .t-recap .t-post-profil {
+    display: flex;
+  }
+  /* Confirmation : une fenêtre posée sur l'offre (planche `.conf-d`). */
+  .t-envoyee-w {
+    display: block;
+  }
+  .t-conf-d .t-conf {
+    gap: 14px;
+    padding-bottom: 0;
+    /* Le titre est lu, pas montré : la coche remonte sous « Fermer ». */
+    margin-top: -40px;
+  }
+  .t-conf-d .t-rond-ok {
+    width: 92px;
+    height: 92px;
+    box-shadow: var(--halo);
+  }
+  .t-conf-d .t-conf-t {
+    font-size: 20px;
+    font-weight: 600;
+    color: var(--texte);
+  }
+  .t-conf-d .t-conf > p:not(.t-conf-t) {
+    max-width: 380px;
+  }
+}
+@media (min-width: 1200px) {
+  .t-post-g {
+    display: grid;
+    grid-template-columns: 300px minmax(0, 1fr);
+    gap: 24px;
+    align-items: start;
+  }
+  .t-stp {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px;
+  }
+  .t-stp .t-of-r {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding-bottom: 14px;
+    margin-bottom: 6px;
+    border-bottom: 1px solid var(--trait);
+  }
+  .t-stp .t-of-r .t-lg-e {
+    margin: 0;
+    width: 40px;
+    height: 40px;
+    font-size: 12px;
+    box-shadow: none;
+  }
+  .t-stp .t-of-r b {
+    display: block;
+    font-size: 14px;
+  }
+  .t-stp .t-of-r span {
+    font-size: 12px;
+    color: var(--texte2);
+  }
+  .t-stp ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .t-stp li > :is(a, span) {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+    padding: 10px;
+    border-radius: 16px;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--texte2);
+  }
+  .t-stp li i {
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-style: normal;
+    font-size: 13px;
+    font-weight: 700;
+    background: var(--zone);
+    flex: none;
+  }
+  .t-stp li small {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 500;
+  }
+  .t-stp li.t-ok > a {
+    color: var(--texte);
+  }
+  .t-stp li.t-ok i {
+    background: var(--sapin);
+    color: var(--lime);
+  }
+  .t-stp li.t-on > span {
+    background: var(--plein);
+    color: var(--texte);
+    box-shadow: var(--verre);
+  }
+  .t-stp li.t-on i {
+    background: var(--g-accent);
+    color: #0f3f37;
+  }
+  .t-stp li > a:focus-visible {
+    outline: 2px solid var(--texte);
+    outline-offset: 2px;
+  }
+  .t-stp .t-gr {
+    margin-top: 10px;
+    font-size: 12px;
+    padding: 10px 12px;
+    border-radius: 14px;
+    background: var(--lime-c);
+    color: var(--texte);
+    font-weight: 600;
+  }
+}
+
+/* S'entraîner (planche `.sim-l`, `.w-os`, `.fbh`, `.crit5`) : briefing en deux colonnes,
+ * simulation avec le plan des questions à droite (ordinateur), retour sur 5 critères. */
+.t-fbw button.t-pj {
+  text-align: start;
+}
+.t-brf-os,
+.t-chrono-p,
+.t-crit5 .t-j,
+.t-fb-act {
+  display: none;
+}
+@media (max-width: 767.98px) {
+  .t-brf-g,
+  .t-brf-l,
+  .t-brf-r,
+  .t-sim-l,
+  .t-sim-p,
+  .t-fb2 {
+    display: contents;
+  }
+  /* Téléphone : l'offre avant « Ce qu'il faut savoir », comme avant. */
+  .t-brf-l > *,
+  .t-brf-r > * {
+    order: 2;
+  }
+  .t-brf-r > .t-brf-cd {
+    order: 1;
+  }
+}
+@media (min-width: 768px) {
+  .t-brf-g {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 340px);
+    gap: 22px;
+    align-items: start;
+  }
+  .t-brf .t-brf-l,
+  .t-brf .t-brf-r {
+    gap: 16px;
+  }
+  .t-brf .t-brief {
+    padding: 18px;
+  }
+  .t-brf .t-bas-f .t-bt.t-pl {
+    flex: 1;
+  }
+  .t-brf-os {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px;
+    background: var(--g-accomp);
+  }
+  .t-brf-os .t-haut {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .t-brf-os b {
+    display: block;
+    font-size: 15px;
+  }
+  .t-brf-os span,
+  .t-brf-os p {
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-brf-os p {
+    font-size: 13px;
+    line-height: 1.45;
+    color: var(--texte);
+  }
+  /* Simulation : la question au centre, le temps restant en pastille. */
+  .t-chrono-p {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .t-sim .t-sim-p {
+    gap: 16px;
+    min-width: 0;
+  }
+  .t-cadre .t-pq-w .t-flux {
+    padding-bottom: 0;
+  }
+  .t-sim .t-sim-p > form.t-flux {
+    gap: 16px;
+  }
+  .t-sim .t-q b {
+    font-size: 21px;
+  }
+  .t-sim textarea.t-rep {
+    min-height: 200px;
+    font-size: 15px;
+  }
+  .t-fb-act {
+    display: flex;
+    gap: 10px;
+  }
+  .t-fb-act .t-bt {
+    flex: none;
+    min-width: 150px;
+  }
+  /* Retour : en-tête, critères, points forts et à travailler côte à côte. */
+  .t-fbw > * {
+    order: 3;
+  }
+  .t-fbw > :is(.t-tete-f, .t-w-sous, .t-sc-c) {
+    order: 0;
+  }
+  .t-fbw > .t-crit-s {
+    order: 1;
+  }
+  .t-fbw > .t-fb2 {
+    order: 2;
+  }
+  .t-fbw .t-sc-c {
+    gap: 18px;
+    padding: 22px;
+  }
+  .t-fbw .t-sc-c .t-t b {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+  }
+  .t-fbw .t-sc-c .t-t span {
+    font-size: 13px;
+  }
+  .t-fb2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .t-fb2 > :only-child {
+    grid-column: 1 / -1;
+  }
+  .t-fbw .t-crit-s {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-fbw .t-crit-s > h2 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  /* Cinq critères à l'écrit avec le rythme, quatre sinon : une colonne chacun. */
+  .t-fbw .t-crit5 {
+    display: grid;
+    grid-auto-flow: column;
+    grid-auto-columns: minmax(0, 1fr);
+    gap: 10px;
+  }
+  .t-fbw .t-crit5 > div {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 8px;
+    padding: 12px;
+    border-radius: 18px;
+    background: var(--zone);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .t-fbw .t-crit5 dd {
+    align-self: flex-start;
+    padding: 0;
+    background: none;
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--texte2);
+  }
+  .t-crit5 .t-j {
+    display: block;
+    height: 6px;
+    border-radius: 3px;
+    background: var(--piste);
+    overflow: hidden;
+  }
+  .t-crit5 .t-j i {
+    display: block;
+    height: 100%;
+    width: 55%;
+    border-radius: 3px;
+    background: var(--g-accent);
+  }
+  .t-crit5 .t-j.t-solid i {
+    width: 85%;
+  }
+  .t-crit5 .t-j.t-toWork i {
+    width: 35%;
+  }
+}
+@media (min-width: 1200px) {
+  .t-sim-l {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 22px;
+    align-items: start;
+  }
+  .t-sim-qs {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .t-sim-qs h2 {
+    font-size: 14px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .t-sim-qs ol {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .t-sim-qs li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 13px;
+  }
+  .t-sim-qs li span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .t-sim-qs li i {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    font-style: normal;
+    font-size: 11px;
+    font-weight: 700;
+    background: var(--zone);
+    flex: none;
+  }
+  .t-sim-qs li.t-ok i {
+    background: var(--sapin);
+    color: var(--lime);
+  }
+  .t-sim-qs li.t-on {
+    font-weight: 700;
+  }
+  .t-sim-qs li.t-on i {
+    background: var(--g-accent);
+    color: #0f3f37;
+  }
+}

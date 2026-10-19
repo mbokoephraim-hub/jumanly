@@ -57,6 +57,8 @@ export function TalentShell({
   const t = useTranslations("talentShell");
   const tt = useTranslations("toast");
   const tOrbi = useTranslations("talentOrbi");
+  const tNotifs = useTranslations("notifs");
+  const tNotifications = useTranslations("notifications");
   const avatar = account.image ? (
     // eslint-disable-next-line @next/next/no-img-element -- a 44 px avatar, already small
     <img src={account.image} alt="" />
@@ -131,6 +133,15 @@ export function TalentShell({
             messages: plural("header.messages"),
             account: t("menu.open", { name: account.name }),
             menu: t("menu.label"),
+            panel: {
+              title: tNotifs("web.title"),
+              markAll: tNotifications("markAllRead"),
+              all: tNotifs("web.all"),
+              loading: tNotifs("web.loading"),
+              error: tNotifs("web.error"),
+              empty: tNotifs("empty.title"),
+              unread: tNotifications("item.unread"),
+            },
           }}
         />
         <div className="t-zone">
