@@ -346,6 +346,27 @@ export async function decideChangeAction(formData: FormData) {
   back(cv.id, { ok: decision === "applied" ? "change" : "refus" });
 }
 
+const allSchema = z.object({ decision: z.enum(["applied", "ignored"]) });
+
+/**
+ * « Tout accepter » or « Tout refuser » of the studio on a computer (planche studio-cv § 5): every
+ * pending change of this CV, one after the other, each checked like a single « Accepter » (a
+ * change about a text that moved since is not applied). Nothing is decided without this tap.
+ */
+export async function decideAllChangesAction(formData: FormData) {
+  const { user, profile } = await owner();
+  const cv = await ownedCv(profile.id, formData.get("id"));
+  const parsed = allSchema.safeParse({ decision: formData.get("decision") });
+  if (!parsed.success) back(cv.id, { vue: "ameliorer", erreur: "1" });
+  const { decision } = parsed.data;
+  let done = 0;
+  for (const change of await pendingSuggestions(db, user.id, cv.id)) {
+    if (await decideSuggestion(db, user.id, change.id, decision)) done += 1;
+  }
+  refresh();
+  back(cv.id, decision === "applied" ? { ok: "tout", nombre: String(done) } : { ok: "refus" });
+}
+
 /** The summary written by the talent (the « Résumé » row of the editor). */
 export async function updateCvSummary(formData: FormData) {
   const { profile } = await owner();

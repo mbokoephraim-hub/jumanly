@@ -34,7 +34,11 @@ export function Sheet({
 }) {
   const dialog = useRef<HTMLDialogElement>(null);
   useEffect(() => {
-    if (defaultOpen && !dialog.current?.open) dialog.current?.showModal();
+    const node = dialog.current;
+    // A sheet of the phone layout hidden on a computer (`.t-mob`) never opens there: a hidden modal
+    // would leave the whole page inert.
+    if (defaultOpen && node && !node.open && node.parentElement?.checkVisibility?.() !== false)
+      node.showModal();
   }, [defaultOpen]);
 
   const onClose = () => {

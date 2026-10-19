@@ -10,6 +10,17 @@ import { applyImport, CV_TEXT_MAX, importCvText, parseImport } from "@/server/se
 
 const PATH = "/app/profil/import";
 
+/**
+ * Where the import answers: its page, or the « Importer un CV » window of « CV et documents » on a
+ * computer (`retour=cv`, planche studio-cv § 1). Only these two places: never an address sent.
+ */
+function where(formData: FormData | undefined, params = "") {
+  const fromList = formData?.get("retour") === "cv";
+  const base = fromList ? "/app/career/cv?importer=1" : PATH;
+  if (!params) return base;
+  return `${base}${fromList ? "&" : "?"}${params}`;
+}
+
 /** Step 1: read the pasted CV (valider → session → service; credits are checked in src/server/ai). */
 export async function readCvAction(formData: FormData) {
   const text = z.string().trim().min(30).max(CV_TEXT_MAX).safeParse(formData.get("text"));
@@ -28,12 +39,12 @@ export async function readCvAction(formData: FormData) {
 export async function readCvFileAction(formData: FormData) {
   const user = await requireUser(PATH);
   const file = formData.get("file");
-  if (!(file instanceof File) || file.size === 0) redirect(`${PATH}?erreur=empty`);
+  if (!(file instanceof File) || file.size === 0) redirect(where(formData, "erreur=empty"));
   let read;
   try {
     read = await readCvFile(new Uint8Array(await file.arrayBuffer()));
   } catch (error) {
-    if (error instanceof CvFileError) redirect(`${PATH}?erreur=${error.code}`);
+    if (error instanceof CvFileError) redirect(where(formData, `erreur=${error.code}`));
     throw error;
   }
   await importCvText(db, user.id, read.text, {
@@ -43,7 +54,7 @@ export async function readCvFileAction(formData: FormData) {
     size: file.size,
   });
   refresh();
-  redirect(`${PATH}?etape=verification`);
+  redirect(where(formData, "etape=verification"));
 }
 
 type ImportGroup = "experiences" | "educations" | "skills";
@@ -60,7 +71,7 @@ export async function applyCvImportAction(formData: FormData) {
     where: { id, userId: user.id, feature: "cv_parse", status: "pending" },
   });
   const payload = pending ? parseImport(pending.payload) : null;
-  if (!payload) redirect(PATH);
+  if (!payload) redirect(where(formData));
   const all = (group: ImportGroup) =>
     chosen.has(group) ? payload[group].map((_, index) => index) : [];
   const added = await applyImport(db, user.id, id, {
@@ -69,16 +80,16 @@ export async function applyCvImportAction(formData: FormData) {
     skills: all("skills"),
   });
   refresh();
-  if (added === null) redirect(PATH);
+  if (added === null) redirect(where(formData));
   redirect(`/app/profil?import=${added}`);
 }
 
-export async function cancelCvImportAction() {
+export async function cancelCvImportAction(formData?: FormData) {
   const user = await requireUser(PATH);
   await db.aiSuggestion.updateMany({
     where: { userId: user.id, feature: "cv_parse", status: "pending" },
     data: { status: "ignored" },
   });
   refresh();
-  redirect(PATH);
+  redirect(formData?.get("retour") === "cv" ? "/app/career/cv" : PATH);
 }

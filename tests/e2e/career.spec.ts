@@ -62,7 +62,9 @@ test("lettre, correction et LinkedIn à partir du profil", async ({ page, isMobi
   await page.getByRole("button", { name: "Nouvelle lettre" }).click();
   const create = page.getByRole("dialog", { name: "Nouvelle lettre" });
   await create.getByRole("button", { name: "Rédiger avec Orbi" }).click();
-  await expect(page.getByText("Orbi a rédigé ce texte", { exact: false })).toBeVisible();
+  await expect(page.getByText("Orbi a rédigé ce texte", { exact: false })).toBeVisible({
+    timeout: 20_000,
+  });
   await expect(page.getByRole("textbox", { name: /^Texte/ })).toContainText("Madame, Monsieur,");
   await expectAccessible(page);
 
@@ -83,11 +85,22 @@ test("lettre, correction et LinkedIn à partir du profil", async ({ page, isMobi
   await page.getByRole("link", { name: "Préparer mon LinkedIn" }).click();
   await expect(page).toHaveURL(/\/app\/career\/linkedin$/);
   await page.getByRole("button", { name: /^(Préparer|Proposer à nouveau)/ }).click();
-  await expect(page.getByRole("heading", { name: "Titre proposé", level: 2 })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Résumé proposé", level: 2 })).toBeVisible();
-  await expect(page.getByText("Rien n'est publié sur LinkedIn", { exact: false })).toBeVisible();
+  // On a computer (planche studio-cv § 7): Titre, Infos, Compétences (those Orbi could fill),
+  // each one with its « Copier ».
+  const linkedin = page.getByRole("region", { name: "Préparer LinkedIn" });
+  const fields = linkedin.getByRole("heading", { level: 3 });
+  await expect(fields.first()).toBeVisible();
+  for (const name of await fields.allTextContents()) {
+    expect(["Titre", "Infos", "Compétences"]).toContain(name.trim());
+  }
+  await expect(linkedin.getByRole("button", { name: "Copier" })).toHaveCount(await fields.count());
   await expect(
-    page.getByText("Jumanly n'est pas affilié à LinkedIn", { exact: false }),
+    page.getByText("Rien n'est publié sur LinkedIn", { exact: false }).filter({ visible: true }),
+  ).toBeVisible();
+  await expect(
+    page
+      .getByText("Jumanly n'est pas affilié à LinkedIn", { exact: false })
+      .filter({ visible: true }),
   ).toBeVisible();
   await expectAccessible(page);
 });

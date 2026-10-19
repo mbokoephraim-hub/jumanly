@@ -1,8 +1,10 @@
 // @vitest-environment node
+import { strFromU8, unzipSync } from "fflate";
 import { renderToStaticMarkup } from "react-dom/server";
 import { describe, expect, it } from "vitest";
 import messages from "@/../messages/fr.json";
 import { cvExamples } from "@/features/cv/examples";
+import { cvDocx } from "@/features/cv/export/docx";
 import { documentFromCv, documentFromExample, type CvTextLabels } from "@/features/cv/render/build";
 import { CvDocument } from "@/features/cv/render/CvDocument";
 import { documentTexts } from "@/features/cv/render/model";
@@ -201,5 +203,45 @@ describe("document du CV (§ 5 et § 7)", () => {
       expect(html).not.toMatch(/jumanly/i);
       for (const brand of brandColors) expect(html.toUpperCase()).not.toContain(brand);
     }
+  });
+});
+
+describe("export Word (studio CV web)", () => {
+  it("produit un .docx valide, sur une colonne, avec tout le texte et sans mention Jumanly", () => {
+    const data = documentFromExample(cvExamples.junior, labels("fr"));
+    const files = unzipSync(cvDocx(data));
+    for (const path of [
+      "[Content_Types].xml",
+      "_rels/.rels",
+      "word/document.xml",
+      "word/styles.xml",
+      "docProps/core.xml",
+    ]) {
+      expect(files[path], path).toBeDefined();
+    }
+    const xml = strFromU8(files["word/document.xml"]!);
+    expect(xml).not.toMatch(/<w:cols w:num="[2-9]"/);
+    const visible = xml
+      .replace(/<[^>]+>/g, "")
+      .replace(/&quot;/g, '"')
+      .replace(/&lt;/g, "<")
+      .replace(/&gt;/g, ">")
+      .replace(/&amp;/g, "&");
+    for (const text of documentTexts(data)) expect(visible).toContain(text);
+    const all = Object.values(files)
+      .map((file) => strFromU8(file))
+      .join(" ");
+    expect(all.toLowerCase()).not.toContain("jumanly");
+  });
+
+  it("échappe le texte saisi", () => {
+    const data = documentFromExample(cvExamples.junior, labels("fr"));
+    const xml = strFromU8(
+      unzipSync(cvDocx({ ...data, firstName: "A & B", lastName: "<script>" }))[
+        "word/document.xml"
+      ]!,
+    );
+    expect(xml).toContain("A &amp; B &lt;script&gt;");
+    expect(xml).not.toContain("<script>");
   });
 });
