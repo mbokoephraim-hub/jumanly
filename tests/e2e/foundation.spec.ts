@@ -37,19 +37,24 @@ test("la bibliothèque de composants est complète et non indexée", async ({ pa
   await expect(page.getByRole("dialog")).toBeHidden();
 });
 
-test("l'espace connecté propose la navigation adaptée à l'écran", async ({ page }) => {
+test("l'espace connecté propose la navigation adaptée à l'écran", async ({ page, isMobile }) => {
   await logIn(page, demo.talentFree);
   await page.goto("/app");
   const navigation = page.getByRole("navigation", { name: "Navigation principale" });
   await expect(navigation.filter({ visible: true })).toHaveCount(1);
   const lienAccueil = navigation.filter({ visible: true }).getByRole("link", { name: "Pour moi" });
   await expect(lienAccueil).toHaveAttribute("aria-current", "page");
-  // Refonte mobile (docs/refonte-mobile) : la barre du bas, sur téléphone comme sur ordinateur,
-  // dans la colonne centrée.
   const boite = await navigation.filter({ visible: true }).boundingBox();
   const viewport = page.viewportSize();
-  expect(boite!.y).toBeGreaterThan(viewport!.height / 2);
-  expect(boite!.width).toBeLessThanOrEqual(560);
+  if (isMobile) {
+    // Téléphone (docs/refonte-mobile) : la barre du bas.
+    expect(boite!.y).toBeGreaterThan(viewport!.height / 2);
+    expect(boite!.width).toBeLessThanOrEqual(560);
+  } else {
+    // Ordinateur (docs/refonte-web, W0) : la barre latérale de 232 px, à gauche.
+    expect(boite!.x).toBeLessThan(232);
+    expect(boite!.y).toBeLessThan(viewport!.height / 2);
+  }
 });
 
 test("aucun numéro de téléphone n'apparaît", async ({ page }) => {

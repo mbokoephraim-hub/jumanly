@@ -1804,7 +1804,7 @@ html.sombre body {
   color: #0f3f37;
 }
 
-/* ── Coquille : l'écran du téléphone, colonne centrée sur ordinateur ── */
+/* ── Coquille : l'écran du téléphone (le cadre web est à la fin du fichier, bloc W0) ── */
 .t-app {
   position: relative;
   isolation: isolate;
@@ -1838,13 +1838,6 @@ html.sombre body {
   max-width: 560px;
   margin: 0 auto;
   padding: 0 16px;
-}
-/* Former contents, until their lot: their own width on a computer (they use viewport breakpoints). */
-@media (min-width: 768px) {
-  html.t-ancien main.t-colonne {
-    max-width: 1400px;
-    padding-inline: 24px;
-  }
 }
 .t-contenu {
   display: flex;
@@ -7201,4 +7194,1013 @@ span.t-sw {
    talent-4 § 10 ; en Sapin elle disparaissait). */
 .sombre .t-sect .t-sh .t-cases {
   color: var(--texte);
+}
+
+/* ══ Cadre web : tablette et ordinateur (docs/refonte-web, lot W0) ══
+ * Valeurs de docs/refonte-mobile/maquette/source/web.py (WCSS). Un seul code, trois largeurs :
+ * téléphone < 768 px (barre du bas, inchangé) ; tablette 768 à 1199 px (rail de 84 px) ;
+ * ordinateur ≥ 1200 px (barre latérale de 232 px). Barre du haut, zone de contenu, panneau Orbi
+ * (volet), fenêtres centrées, recherche Ctrl K et menu de l'avatar.
+ * Zone de contenu : les pages encore au format téléphone gardent une largeur lisible
+ * (--t-page-max) ; une page mise en colonnes par un lot web pose `t-large` sur sa racine. */
+.t-sb,
+.t-rl,
+.t-tb,
+.t-or-dec,
+.t-orw-h {
+  display: none;
+}
+.t-kbd {
+  font-family: inherit;
+  font-size: 10.5px;
+  font-weight: 600;
+  line-height: 1.3;
+  color: var(--texte2);
+  padding: 3px 7px;
+  border-radius: 7px;
+  background: var(--plein);
+  border: 0;
+}
+
+/* Fenêtre centrée et volet latéral : feuille du bas sur téléphone. */
+.t-fenetre,
+.t-volet {
+  position: fixed;
+  inset: auto 8px 8px;
+  margin: 0 auto;
+  width: auto;
+  max-width: 544px;
+  max-height: 86dvh;
+  border: 0;
+  border-radius: 34px;
+  padding: 18px;
+  display: none;
+  flex-direction: column;
+  gap: 14px;
+  background: var(--plein);
+  color: var(--texte);
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.t-fenetre[open],
+.t-volet[open] {
+  display: flex;
+  animation: t-monte 260ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+.t-fenetre::backdrop,
+.t-volet::backdrop {
+  background: rgba(11, 26, 31, 0.38);
+}
+.t-volet {
+  inset: 0;
+  max-width: none;
+  max-height: none;
+  height: 100dvh;
+  border-radius: 0;
+  background: var(--fond);
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+}
+.t-volet::before {
+  content: "";
+  position: absolute;
+  inset: 0 0 auto;
+  height: 240px;
+  background: radial-gradient(90% 80% at 80% 0%, rgba(166, 242, 107, 0.22), transparent 65%);
+  pointer-events: none;
+}
+.sombre .t-volet::before {
+  background: radial-gradient(90% 80% at 80% 0%, rgba(166, 242, 107, 0.1), transparent 65%);
+}
+.t-volet > * {
+  position: relative;
+}
+.t-dlg-tete {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+.t-dlg-tete h2 {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  line-height: 1.25;
+}
+.t-volet .t-dlg-tete h2 {
+  font-size: 16px;
+}
+.t-dlg-tete .t-ss {
+  font-size: 13px;
+  color: var(--texte2);
+  margin-top: 4px;
+}
+.t-dlg-tete .t-dlg-x {
+  width: 36px;
+  height: 36px;
+  box-shadow: none;
+  background: var(--zone);
+}
+.t-volet .t-dlg-tete .t-dlg-x {
+  width: 38px;
+  height: 38px;
+}
+@keyframes t-glisse {
+  from {
+    transform: translateX(40px);
+    opacity: 0;
+  }
+}
+
+/* Panneau Orbi (planche talent-1 § 4, .op) : tête, fil, champ en bas. */
+.t-op .t-op-tete {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.t-op .t-op-tete .t-t {
+  flex: 1;
+  min-width: 0;
+}
+.t-op .t-op-tete b {
+  font-size: 16px;
+}
+.t-op .t-op-tete .t-t > span {
+  font-size: 12px;
+}
+.t-op .t-op-tete .t-bi {
+  width: 38px;
+  height: 38px;
+}
+.t-op .t-or-dec {
+  display: inline;
+}
+.t-op .t-orbi-fil {
+  flex: 1;
+}
+.t-op-aides {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.t-op-aides a {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  min-height: 36px;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 8px 12px;
+  border-radius: 999px;
+  background: var(--plein);
+  box-shadow: var(--verre);
+}
+.t-op-aides a:focus-visible,
+.t-cmd-o:focus-visible,
+.t-amenu a:focus-visible,
+.t-am-dc:focus-visible,
+.t-sb a:focus-visible,
+.t-rl a:focus-visible,
+.t-tb-rch:focus-visible,
+.t-orw-l a:focus-visible,
+.t-orw-gar:focus-visible {
+  outline: 2px solid var(--texte);
+  outline-offset: 2px;
+}
+.t-orbi-compo-p {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: auto;
+  position: sticky;
+  bottom: 0;
+  padding-top: 8px;
+  background: linear-gradient(180deg, transparent, var(--fond) 30%);
+}
+.t-orbi-compo-p .t-compo {
+  height: 52px;
+  padding: 0 6px 0 10px;
+  font-size: 13px;
+  background: var(--plein);
+}
+.t-orbi-compo-p .t-compo .t-bi {
+  width: 40px;
+  height: 40px;
+}
+.t-orbi-compo-p .t-compo .t-env {
+  background: #0f3f37;
+  color: #a6f26b;
+}
+.t-op-attente {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  padding-top: 8px;
+  color: var(--texte2);
+  text-align: center;
+}
+.t-op-attente .t-bi {
+  align-self: flex-end;
+}
+
+/* Recherche Ctrl K : une fenêtre centrée, le champ en tête, les suggestions dessous. */
+.t-cmd {
+  padding: 10px;
+  gap: 4px;
+}
+.t-cmd-champ {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  height: 56px;
+  padding: 0 8px 0 14px;
+  border-bottom: 1px solid var(--trait);
+  color: var(--texte2);
+}
+.t-cmd-champ:focus-within {
+  box-shadow: inset 0 -2px 0 var(--texte);
+}
+.t-cmd-champ input:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+.t-cmd-champ input {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  border: 0;
+  outline: none;
+  background: none;
+  color: var(--texte);
+  font: inherit;
+  font-size: 16px;
+}
+.t-cmd-champ input::placeholder {
+  color: var(--texte2);
+  opacity: 1;
+}
+.t-cmd-champ .t-kbd {
+  background: var(--zone);
+  font-size: 11px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+.t-cmd-l {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  padding-top: 6px;
+}
+.t-cmd-o {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 52px;
+  padding: 8px 10px;
+  border-radius: 14px;
+  cursor: pointer;
+}
+.t-cmd-o.t-on {
+  background: var(--zone);
+  box-shadow: inset 0 0 0 1.5px var(--texte);
+}
+.t-cmd-o .t-cases {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: var(--zone);
+}
+.t-cmd-o.t-on .t-cases {
+  background: var(--plein);
+}
+.t-cmd-o .t-t {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.t-cmd-o .t-t b {
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.t-cmd-o .t-t span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-cmd-o > .t-ic:last-child {
+  color: var(--texte2);
+}
+.t-cmd-g {
+  padding: 10px 10px 4px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texte2);
+}
+.t-cmd-vide {
+  margin: 0;
+  padding: 4px 10px 8px;
+  font-size: 13px;
+  color: var(--texte2);
+}
+
+/* Menu de l'avatar (planche talent-4 § 3, .amenu) : un popover sous l'avatar. */
+.t-amenu {
+  position: fixed;
+  inset: 62px 24px auto auto;
+  margin: 0;
+  width: 320px;
+  max-height: calc(100dvh - 80px);
+  overflow-y: auto;
+  padding: 10px;
+  border: 0;
+  border-radius: 24px;
+  background: var(--plein);
+  color: var(--texte);
+  box-shadow:
+    0 40px 80px -30px rgba(0, 0, 0, 0.5),
+    0 0 0 1px var(--trait);
+  flex-direction: column;
+  gap: 2px;
+}
+.t-amenu:popover-open {
+  display: flex;
+}
+.t-amenu .t-hub-id {
+  padding: 10px;
+  border-radius: 16px;
+}
+.t-amenu .t-hub-id .t-av {
+  width: 44px;
+  height: 44px;
+  font-size: 14px;
+}
+.t-amenu .t-hub-id .t-t {
+  display: flex;
+  flex-direction: column;
+}
+.t-amenu .t-hub-id .t-t b {
+  font-size: 15px;
+}
+.t-amenu .t-hub-id > .t-ic {
+  color: var(--texte2);
+}
+.t-amenu ul {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.t-amenu ul a,
+.t-am-dc {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  width: 100%;
+  padding: 10px;
+  border: 0;
+  border-radius: 14px;
+  background: none;
+  font: inherit;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+.t-amenu ul a > span:not(.t-cases) {
+  flex: 1;
+}
+.t-amenu .t-cases {
+  width: 34px;
+  height: 34px;
+  border-radius: 11px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: var(--zone);
+}
+.t-amenu small {
+  font-size: 11.5px;
+  font-weight: 500;
+  color: var(--texte2);
+}
+.t-amenu ul a:hover,
+.t-am-dc:hover,
+.t-amenu .t-hub-id:hover {
+  background: var(--zone);
+}
+.t-am-sp {
+  height: 1px;
+  background: var(--trait);
+  margin: 4px 8px;
+}
+.t-am-dc {
+  color: var(--corail);
+}
+.t-am-dc .t-cases {
+  background: var(--corail-c);
+}
+
+/* Orbi en page : l'historique à gauche sur ordinateur (planche talent-4 § 9, .orw). Sur téléphone
+ * et tablette, les deux enveloppes s'effacent : la page garde l'espacement de la colonne. */
+.t-orw,
+.t-orw-c {
+  display: contents;
+}
+.t-orw-ht {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+}
+.t-orw-ht h2 {
+  font-size: 16px;
+  font-weight: 600;
+}
+.t-orw-ht .t-bt {
+  gap: 6px;
+}
+.t-orw-l {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+}
+.t-orw-l a {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px;
+  border-radius: 16px;
+  border-top: 1px solid var(--trait);
+}
+.t-orw-l li:first-child a {
+  border-top: 0;
+}
+.t-orw-l a.t-on {
+  background: var(--plein);
+  box-shadow: var(--verre);
+  border-color: transparent;
+}
+.t-orw-l a.t-on + *,
+.t-orw-l li:has(a.t-on) + li a {
+  border-top-color: transparent;
+}
+.t-orw-l .t-cases {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  flex: none;
+  background: var(--zone);
+}
+.t-orw-l .t-cases.t-c1 {
+  background: var(--g-former);
+}
+.t-orw-l .t-cases.t-c2 {
+  background: var(--g-accomp);
+}
+.t-orw-l .t-cases.t-c3 {
+  background: var(--g-oppo);
+}
+.t-orw-l .t-t {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+}
+.t-orw-l .t-t b {
+  font-size: 14px;
+  font-weight: 600;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.t-orw-l .t-t span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-orw-vide {
+  font-size: 13px;
+  color: var(--texte2);
+  padding: 4px 6px;
+}
+.t-orw-gar {
+  margin-top: auto;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--zone);
+  font-size: 12px;
+  color: var(--texte2);
+}
+
+@media (min-width: 768px) {
+  .t-cadre {
+    --t-nav-w: 84px;
+    --t-pad: 24px;
+    --t-page-max: 760px;
+  }
+  .t-cadre:not(:has(> .t-rl)) {
+    --t-nav-w: 0px;
+  }
+  .t-cadre::before {
+    height: 420px;
+    background:
+      radial-gradient(70% 90% at 90% 0%, rgba(166, 242, 107, 0.22), transparent 60%),
+      radial-gradient(50% 80% at 20% 0%, rgba(47, 211, 166, 0.12), transparent 65%);
+  }
+  .sombre .t-cadre::before {
+    background:
+      radial-gradient(70% 90% at 90% 0%, rgba(166, 242, 107, 0.1), transparent 60%),
+      radial-gradient(50% 80% at 20% 0%, rgba(47, 211, 166, 0.08), transparent 65%);
+  }
+  .t-main {
+    margin-left: var(--t-nav-w);
+    min-width: 0;
+  }
+  .t-zone {
+    padding: 12px var(--t-pad) 40px;
+  }
+  .t-cadre .t-colonne {
+    max-width: var(--t-page-max);
+    margin: 0;
+    padding: 0;
+  }
+  .t-cadre main.t-colonne:has(> .t-large),
+  html.t-ancien .t-cadre .t-colonne {
+    max-width: none;
+  }
+  .t-cadre .t-contenu {
+    padding-bottom: 24px;
+  }
+  .t-cadre .t-barre-bas,
+  .t-mob {
+    display: none;
+  }
+  /* Barres fixées en bas ou en haut d'une page au format téléphone : alignées sur la zone. */
+  .t-cadre :is(.t-bas-f, .t-orbi-compo-f, .t-od-tete) {
+    left: calc(var(--t-nav-w) + var(--t-pad));
+    width: min(var(--t-page-max), calc(100% - var(--t-nav-w) - 2 * var(--t-pad)));
+    transform: none;
+  }
+  .t-cadre .t-od-tete {
+    transform: translateY(-110%);
+  }
+  .t-cadre .t-od-tete[data-visible] {
+    transform: none;
+  }
+
+  /* Rail d'icônes (tablette). */
+  .t-rl {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    width: 84px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    padding: 14px 8px;
+    border-right: 1px solid var(--trait);
+    background: rgba(255, 255, 255, 0.35);
+    overflow-y: auto;
+  }
+  .sombre .t-rl {
+    background: rgba(255, 255, 255, 0.025);
+  }
+  .t-rl ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+  }
+  .t-rl-lg {
+    border-radius: 12px;
+    margin-bottom: 12px;
+  }
+  .t-rl-lg .t-j {
+    display: block;
+    width: 40px;
+    height: 40px;
+    border-radius: 12px;
+  }
+  .t-rl :is(.t-sb-it, .t-sb-orb) {
+    width: 68px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    padding: 9px 0;
+    border-radius: 16px;
+    font-size: 10.5px;
+    font-weight: 500;
+    color: var(--texte2);
+    text-align: center;
+  }
+  .t-rl .t-sb-it .t-ic {
+    width: 22px;
+    height: 22px;
+  }
+  .t-rl :is(.t-sb-it, .t-sb-orb).t-on {
+    background: var(--plein);
+    color: var(--texte);
+    font-weight: 700;
+    box-shadow: var(--verre);
+  }
+  .t-rl .t-sb-orb {
+    margin: 6px 0;
+  }
+  .t-rl .t-rond {
+    width: 52px;
+    height: 52px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background: var(--plein);
+    box-shadow:
+      0 0 0 4px var(--surface),
+      var(--halo);
+  }
+  .t-rl .t-sb-orb.t-on .t-rond {
+    box-shadow:
+      0 0 0 3px #a6f26b,
+      var(--halo);
+  }
+  .t-rl-av {
+    margin-top: auto;
+    width: 42px;
+    height: 42px;
+    font-size: 12px;
+    color: #0f3f37;
+  }
+
+  /* Barre du haut. */
+  .t-tb {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 24px 4px;
+  }
+  .t-tb-rch {
+    flex: 0 1 460px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    height: 46px;
+    padding: 0 8px 0 16px;
+    border: 0;
+    border-radius: 999px;
+    font: inherit;
+    font-size: 13.5px;
+    color: var(--texte2);
+    text-align: left;
+    cursor: text;
+  }
+  .t-tb-rch span {
+    flex: 1;
+  }
+  .t-tb-rch .t-kbd {
+    display: none;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 8px;
+    background: var(--zone);
+  }
+  .t-tb .t-sp {
+    flex: 1;
+  }
+  .t-tb .t-av {
+    border: 0;
+    padding: 0;
+    font-size: 13px;
+    color: #0f3f37;
+    cursor: pointer;
+  }
+  .t-tb .t-av:focus-visible {
+    outline: 2px solid var(--texte);
+    outline-offset: 3px;
+  }
+
+  /* Fenêtre centrée et volet sur grand écran (web.py .dlg et .op). */
+  .t-fenetre {
+    inset: 0;
+    margin: auto;
+    width: min(520px, calc(100% - 48px));
+    max-width: none;
+    height: fit-content;
+    max-height: calc(100dvh - 48px);
+    padding: 24px;
+    border-radius: 30px;
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.5);
+  }
+  .t-fenetre::backdrop {
+    background: rgba(11, 26, 31, 0.3);
+  }
+  .t-cmd {
+    width: min(600px, calc(100% - 48px));
+    margin-top: 12vh;
+    padding: 10px;
+  }
+  .t-volet {
+    inset: 0 0 0 auto;
+    width: min(440px, 100%);
+    padding: 20px 22px;
+    border-left: 1px solid var(--trait);
+    box-shadow: -30px 0 60px -30px rgba(15, 63, 55, 0.45);
+  }
+  .t-volet[open] {
+    animation-name: t-glisse;
+  }
+  .t-volet::backdrop {
+    background: rgba(11, 26, 31, 0.12);
+  }
+  .t-op::backdrop {
+    background: transparent;
+  }
+  /* Les feuilles du bas des pages deviennent des fenêtres centrées (brief web § 2.5). */
+  .t-sheet,
+  .t-sheet.t-auto {
+    inset: 0;
+    margin: auto;
+    width: min(520px, calc(100% - 48px));
+    max-width: none;
+    height: fit-content;
+    max-height: calc(100dvh - 48px);
+    padding: 24px;
+    border-radius: 30px;
+    box-shadow: 0 40px 80px -30px rgba(0, 0, 0, 0.5);
+  }
+  .t-sheet:not(.t-auto) {
+    height: min(640px, calc(100dvh - 48px));
+  }
+  .t-sheet .t-poignee {
+    display: none;
+  }
+  .t-sheet::backdrop {
+    background: rgba(11, 26, 31, 0.3);
+  }
+
+  /* Orbi en page : pas de barre du haut, pas de retour ; le champ suit la conversation. */
+  .t-orw-c {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-height: calc(100dvh - 76px);
+  }
+  .t-orw-c .t-orbi-fil {
+    flex: 1;
+  }
+  .t-or-retour {
+    display: none;
+  }
+  .t-orw-c .t-or-dec {
+    display: inline;
+  }
+  .t-cadre .t-orw-c .t-orbi-compo-f {
+    position: sticky;
+    left: auto;
+    width: auto;
+    bottom: 0;
+    padding: 14px 0 max(16px, env(safe-area-inset-bottom));
+  }
+}
+
+@media (min-width: 1200px) {
+  .t-cadre {
+    --t-nav-w: 232px;
+    --t-pad: 32px;
+  }
+  .t-rl {
+    display: none;
+  }
+  .t-cadre:not(:has(> .t-sb)) {
+    --t-nav-w: 0px;
+  }
+  .t-zone {
+    padding-top: 14px;
+    padding-bottom: 36px;
+  }
+  .t-cadre .t-tete:not(.t-sec) .t-h1 {
+    font-size: 32px;
+  }
+
+  /* Barre latérale (ordinateur). */
+  .t-sb {
+    position: fixed;
+    inset: 0 auto 0 0;
+    z-index: 20;
+    width: 232px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    padding: 20px 14px;
+    border-right: 1px solid var(--trait);
+    background: rgba(255, 255, 255, 0.35);
+    overflow-y: auto;
+  }
+  .sombre .t-sb {
+    background: rgba(255, 255, 255, 0.025);
+  }
+  .t-sb ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .t-sb-lg {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 2px 8px 16px;
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.03em;
+    color: var(--texte);
+    border-radius: 12px;
+  }
+  .t-sb-lg .t-j {
+    width: 30px;
+    height: 30px;
+    border-radius: 9px;
+  }
+  .t-sb-lg .t-mot::after {
+    content: ".";
+    color: #a6f26b;
+  }
+  .t-sb-it {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 44px;
+    padding: 0 12px;
+    border-radius: 14px;
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--texte2);
+  }
+  .t-sb-it > span:not(.sr-only) {
+    flex: 1;
+  }
+  .t-sb-it.t-on {
+    background: var(--plein);
+    color: var(--texte);
+    font-weight: 700;
+    box-shadow: var(--verre);
+  }
+  .t-sb-it b {
+    margin-left: auto;
+    font-size: 11px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 6px;
+    border-radius: 99px;
+    background: var(--corail);
+    color: #fff;
+    display: grid;
+    place-items: center;
+  }
+  .t-sb-orb {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 54px;
+    padding: 0 10px;
+    margin: 6px 0;
+    border-radius: 18px;
+    background: linear-gradient(120deg, #f2fce6, #ddf6ee);
+    font-weight: 700;
+    color: var(--texte);
+    box-shadow: 0 0 0 1px rgba(166, 242, 107, 0.6);
+  }
+  .sombre .t-sb-orb {
+    background: linear-gradient(120deg, rgba(166, 242, 107, 0.16), rgba(47, 211, 166, 0.08));
+  }
+  .t-sb-orb.t-on {
+    box-shadow:
+      0 0 0 2px #a6f26b,
+      var(--halo);
+  }
+  .t-sb-orb > span {
+    flex: 1;
+  }
+  .t-sb-sep {
+    height: 1px;
+    background: var(--trait);
+    margin: 10px 6px;
+    flex: none;
+  }
+  .t-sb-bas {
+    margin-top: auto;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .t-sb-moi {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px;
+    border-radius: 18px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-sb-moi .t-av {
+    width: 38px;
+    height: 38px;
+    font-size: 12px;
+    box-shadow: none;
+    color: #0f3f37;
+  }
+  .t-sb-moi .t-t {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+  }
+  .t-sb-moi .t-t b {
+    font-size: 13px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .t-sb-moi .t-t span {
+    font-size: 11px;
+    color: var(--texte2);
+  }
+  .t-sb-moi > .t-ic {
+    color: var(--texte2);
+  }
+
+  .t-tb {
+    padding: 16px 32px 6px;
+  }
+  .t-tb-rch .t-kbd {
+    display: inline-block;
+  }
+  .t-amenu {
+    inset: 70px 32px auto auto;
+  }
+  .t-volet {
+    width: min(420px, 100%);
+  }
+
+  /* Orbi en page : historique à gauche, conversation au centre. */
+  .t-orw {
+    display: grid;
+    grid-template-columns: 290px minmax(0, 1fr);
+    gap: 0;
+    max-width: 1100px;
+  }
+  .t-orw-h {
+    position: sticky;
+    top: 0;
+    align-self: start;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    height: calc(100dvh - 50px);
+    padding: 18px 22px 0 20px;
+    margin-right: 22px;
+    border-right: 1px solid var(--trait);
+  }
+  .t-orw-c {
+    padding-top: 18px;
+    max-width: 600px;
+  }
+  .t-orw-c .t-aides {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .t-orw-c .t-ai {
+    min-height: 120px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .t-fenetre[open],
+  .t-volet[open] {
+    animation: none;
+  }
 }

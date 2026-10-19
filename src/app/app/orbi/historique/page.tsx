@@ -1,28 +1,19 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { getFormatter, getTranslations } from "next-intl/server";
+import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
-import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
+import { TalentIcon } from "@/components/talent/icon";
+import { historyDate, topicLook } from "@/components/talent/orbi-history";
 import { requireUser } from "@/server/auth/session";
 import { clearOrbiHistoryAction, deleteOrbiConversationAction } from "@/server/actions/orbi";
 import { db } from "@/server/db";
 import { getActiveSpace } from "@/server/hire-context";
-import { listOrbiConversations, type OrbiTopic } from "@/server/services/orbi";
+import { listOrbiConversations } from "@/server/services/orbi";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talentOrbi.historyPage");
   return { title: t("metaTitle"), robots: { index: false } };
 }
-
-/** Icon and colour of a line, by subject (planche talent-4 § 9). */
-const topicLook: Record<OrbiTopic, { icon: TalentIconName; tone: string }> = {
-  cv: { icon: "cv", tone: "t-c2" },
-  interview: { icon: "entretien", tone: "t-c1" },
-  offer: { icon: "opportunites", tone: "t-c3" },
-  path: { icon: "cap", tone: "t-c2" },
-  learn: { icon: "lecon", tone: "t-c1" },
-  other: { icon: "orbi", tone: "t-c2" },
-};
 
 /**
  * « Historique Orbi » (talent lot 4 § 9): find an exchange again (search in titles and messages),
@@ -33,21 +24,10 @@ export default async function OrbiHistoryPage({ searchParams }: PageProps<"/app/
   const user = await requireUser("/app/orbi/historique");
   if (await getActiveSpace(user.id)) redirect("/app/hire");
   const t = await getTranslations("talentOrbi.historyPage");
-  const format = await getFormatter();
   const query = typeof params.q === "string" ? params.q.trim().slice(0, 100) : "";
   const confirming = params.effacer === "1";
   const rows = await listOrbiConversations(db, user.id, query);
-
-  const now = new Date();
-  const day = (date: Date) =>
-    format.dateTime(date, { year: "numeric", month: "numeric", day: "numeric" });
-  const yesterday = new Date(now.getTime() - 24 * 60 * 60 * 1000);
-  const when = (date: Date) =>
-    day(date) === day(now)
-      ? t("today")
-      : day(date) === day(yesterday)
-        ? t("yesterday")
-        : format.dateTime(date, { day: "numeric", month: "short" });
+  const when = await historyDate();
 
   return (
     <>
