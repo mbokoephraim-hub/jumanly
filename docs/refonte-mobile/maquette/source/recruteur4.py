@@ -143,7 +143,7 @@ ATS3 = phone(f'''{OFFRE_T}
  bas=f'<div class="verre fort bas-f"><a class="bt sec m">Sélectionner</a><a class="bt p pl">Liste des retenus</a></div>')
 
 ATS4 = phone(f'''{tete_f("Profil pour cette offre", droite="plus-options")}
-<div class="verre mini-c"><span class="av">AM</span><div class="t"><b>Amani M.</b><span>Analyste de données junior · reçue il y a 2 h</span></div>{ring(88)}</div>
+<div class="verre mini-c"><span class="av">AM</span><div class="t"><b>Amani M.</b><span>Reçue il y a 2 h · Kinshasa</span></div>{ring(88)}</div>
 <div class="pq-o"><div class="h">{orbi(30)}<div class="t"><b>Synthèse d’Orbi</b><span>Profil lu au regard de l’offre</span></div></div>
 <div class="pt"><i class="v">✓</i><span>Les 3 compétences requises, dont 2 prouvées par un projet.</span></div>
 <div class="pt"><i class="v">✓</i><span>Disponible maintenant, à Kinshasa, CDI accepté.</span></div>
@@ -181,6 +181,173 @@ RETENUS = phone(f'''{tete_f("Liste des retenus", droite="plus")}
 <div class="r"><span class="poig"><i></i><i></i><i></i></span><span class="av b">DK</span><div class="t"><b>David K.</b><span>79 % · disponibilité à vérifier</span></div><span class="etq-s ret">Retenu</span></div></div>
 <div class="orbi-l">{orbi(26)}<div class="t">19 autres candidatures restent ouvertes. Leur envoyer une réponse ?</div><a class="bt sec s">Préparer</a></div>''', avec_nav=False, cls='long',
  bas=f'<div class="verre fort bas-f"><a class="bt sec m">{ic("agenda","s")}Créneaux</a><a class="bt p pl">{ic("message","s")}Informer les 5</a></div>')
+
+# ---------- 1 bis. ATS v4.1 : rendu plus riche (retour d'Ephraïm du 19/10 « trop primaire ») ----------
+CSSR += '''
+.a2-c{position:relative;display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:22px;background:var(--plein);box-shadow:var(--verre);overflow:hidden}
+.a2-c:before{content:"";position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--a2c,#E2DCD2)}
+.a2-c.r1{--a2c:linear-gradient(#A6F26B,#2FD3A6)}.a2-c.r2{--a2c:#2FD3A6}.a2-c.r3{--a2c:#F2B33D}
+.a2-c .h{display:flex;gap:12px;align-items:center}
+.a2-c .avw{position:relative;flex:none}.a2-c .avw .av{width:50px;height:50px;font-size:14px;box-shadow:none;color:#0F3F37}
+.a2-c .md{position:absolute;right:-5px;bottom:-4px;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;font-size:11px;font-weight:800;background:#fff;color:#0F3F37;box-shadow:0 2px 6px rgba(15,63,55,.25)}
+.a2-c.r1 .md{background:#0F3F37;color:#A6F26B}.a2-c.r2 .md{background:#1E9C78;color:#fff}.a2-c.r3 .md{background:#F2B33D;color:#0F3F37}
+.a2-c .h .t{flex:1;min-width:0}.a2-c .h .t b{display:flex;gap:6px;align-items:center;font-size:15px}.a2-c .h .t span{display:block;font-size:11.5px;color:var(--texte2);margin-top:2px}
+.a2-sc{display:flex;flex-direction:column;align-items:center;flex:none}
+.a2-sc .rg{width:56px;height:56px;border-radius:50%;background:conic-gradient(from 200deg,#A6F26B,#2FD3A6 calc(var(--p)*1%),var(--piste) 0);display:grid;place-items:center}
+.a2-sc .rg b{width:44px;height:44px;border-radius:50%;background:var(--plein);display:grid;place-items:center;font-size:14px;font-weight:800}
+.a2-sc small{font-size:9.5px;letter-spacing:.06em;text-transform:uppercase;color:var(--texte2);margin-top:3px;font-weight:700}
+.a2-bars{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;padding:10px 12px;border-radius:14px;background:var(--zone)}
+.a2-bars div{display:flex;flex-direction:column;gap:5px;font-size:10.5px;color:var(--texte2);font-weight:600}
+.a2-bars i{display:flex;gap:3px}.a2-bars i u{flex:1;height:5px;border-radius:3px;background:var(--trait)}.a2-bars i u.on{background:#2FD3A6}.a2-bars i u.am{background:#F2B33D}
+.a2-f{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.a2-f em{font-style:normal;display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;padding:4px 9px;border-radius:99px;background:var(--lime-c)}
+.a2-f em:before{content:"";width:6px;height:6px;border-radius:50%;background:#3DB86B}
+.a2-f em.a{background:var(--ambre-c)}.a2-f em.a:before{background:#F2B33D}
+.a2-f .pq2{margin-left:auto;display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:700}.a2-f .pq2 .ic{width:13px;height:13px}
+.a2-c.sel{box-shadow:0 0 0 2px #0F3F37,var(--verre)}.sombre .a2-c.sel{box-shadow:0 0 0 2px #A6F26B}
+.a2-c .ck{width:28px;height:28px;border-radius:50%;flex:none;display:grid;place-items:center;box-shadow:inset 0 0 0 2px var(--trait)}
+.a2-c.sel .ck{background:#0F3F37;color:#A6F26B;box-shadow:none}.sombre .a2-c.sel .ck{background:#A6F26B;color:#0F3F37}.a2-c .ck .ic{width:15px;height:15px}
+.a2-c.mini{padding:12px 14px;gap:0}.a2-c.mini .avw .av{width:44px;height:44px;font-size:13px}
+.a2-hero{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:18px;border-radius:26px;background:radial-gradient(120% 90% at 100% 0%,#2A7A66 0%,#0F3F37 60%);color:#fff}
+.a2-hero .rings{position:absolute;right:-40px;top:-40px;width:180px;height:180px;opacity:.5}
+.a2-hero .r{display:flex;gap:12px;align-items:center;position:relative}
+.a2-hero .r .t{flex:1;font-size:12px;color:#CFE9DF;line-height:1.45}.a2-hero .r .t b{display:block;font-size:17px;color:#fff;margin-bottom:2px}
+.a2-docs{position:relative;width:62px;height:58px;flex:none}
+.a2-docs i{position:absolute;width:38px;height:48px;border-radius:7px;background:#fff;box-shadow:0 6px 14px -6px rgba(0,0,0,.4)}
+.a2-docs i:after{content:"";position:absolute;left:7px;right:7px;top:9px;height:22px;background:repeating-linear-gradient(#D7E3DF 0 3px,transparent 3px 7px)}
+.a2-docs i:nth-child(1){left:0;top:8px;transform:rotate(-12deg);opacity:.6}.a2-docs i:nth-child(2){left:12px;top:4px;transform:rotate(-4deg);opacity:.8}.a2-docs i:nth-child(3){left:24px;top:0;transform:rotate(6deg)}
+.a2-docs b{position:absolute;right:-4px;bottom:-2px;width:26px;height:26px;border-radius:50%;background:#A6F26B;color:#0F3F37;display:grid;place-items:center;font-size:11px;font-weight:800;box-shadow:0 0 0 3px #0F3F37}
+.a2-kp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;position:relative}
+.a2-kp div{padding:9px 10px;border-radius:14px;background:rgba(255,255,255,.08);font-size:10.5px;color:#CFE9DF}.a2-kp b{display:block;font-size:16px;color:#fff}
+.a2-hero .bt{background:#A6F26B;color:#0F3F37;height:48px!important;flex:none!important;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700;position:relative}
+.a2-dist{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:20px;background:var(--plein);box-shadow:var(--verre)}
+.a2-dist .h{display:flex;justify-content:space-between;font-size:12px;color:var(--texte2)}.a2-dist .h b{font-size:13.5px;color:var(--texte)}
+.a2-dist .bar{display:flex;height:12px;border-radius:8px;overflow:hidden;gap:3px}.a2-dist .bar i{display:block}
+.a2-dist .lg{display:flex;gap:12px;font-size:11px;color:var(--texte2)}.a2-dist .lg span{display:inline-flex;align-items:center;gap:5px}.a2-dist .lg span:before{content:"";width:8px;height:8px;border-radius:3px;background:var(--c)}
+.a2-prog{position:relative;overflow:hidden;display:flex;flex-direction:column;align-items:center;gap:12px;padding:22px 16px 18px;border-radius:26px;background:radial-gradient(110% 80% at 50% 0%,#2A7A66 0%,#0F3F37 65%);color:#fff;text-align:center}
+.a2-prog .big{position:relative;width:150px;height:150px;border-radius:50%;background:conic-gradient(from 0deg,#A6F26B,#2FD3A6 71%,rgba(255,255,255,.12) 0);display:grid;place-items:center;box-shadow:0 0 40px -6px rgba(166,242,107,.55)}
+.a2-prog .big:after{content:"";position:absolute;top:2px;left:calc(50% + 50px);width:12px;height:12px;border-radius:50%;background:#fff;box-shadow:0 0 12px #A6F26B}
+.a2-prog .big b{width:126px;height:126px;border-radius:50%;background:#0F3F37;display:grid;place-items:center;align-content:center;font-size:38px;line-height:1}
+.a2-prog .big b small{display:block;font-size:11.5px;color:#CFE9DF;font-weight:500;margin-top:4px}
+.a2-prog h3{margin:0;font-size:17px}.a2-prog p{margin:0;font-size:12px;color:#CFE9DF}
+.a2-step{display:flex;width:100%;gap:6px}
+.a2-step div{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:10.5px;color:#9CC9BC}
+.a2-step div i{width:100%;height:4px;border-radius:3px;background:rgba(255,255,255,.14)}
+.a2-step div.ok{color:#fff}.a2-step div.ok i{background:#A6F26B}.a2-step div.en{color:#fff;font-weight:700}.a2-step div.en i{background:linear-gradient(90deg,#2FD3A6 60%,rgba(255,255,255,.14) 0)}
+.a2-fl{display:flex;flex-direction:column;gap:8px}
+.a2-fl .r{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:18px;background:var(--plein);box-shadow:var(--verre)}
+.a2-fl .r .av{width:38px;height:38px;font-size:11.5px;box-shadow:none;color:#0F3F37}
+.a2-fl .r .t{flex:1;min-width:0}.a2-fl .r .t b{display:block;font-size:13px}.a2-fl .r .t span{font-size:11px;color:var(--texte2)}
+.a2-fl .r .mb{height:4px;border-radius:3px;background:var(--trait);margin-top:6px;overflow:hidden}.a2-fl .r .mb i{display:block;height:100%;background:linear-gradient(90deg,#A6F26B,#2FD3A6)}
+.a2-fl .pill{font-size:12px;font-weight:800;padding:5px 10px;border-radius:99px;background:var(--lime-c);color:#0F3F37}
+.a2-fl .pill.w{background:var(--zone);color:var(--texte2);font-weight:600}
+.a2-fl .r.en{box-shadow:0 0 0 1.5px #2FD3A6,var(--verre)}
+.a2-pod{display:grid;grid-template-columns:1fr 1.15fr 1fr;gap:8px;align-items:end;padding:0 2px}
+.a2-pod .p{display:flex;flex-direction:column;align-items:center;gap:6px;text-align:center}
+.a2-pod .p .av{width:50px;height:50px;font-size:14px;box-shadow:0 0 0 3px var(--plein),0 8px 18px -8px rgba(15,63,55,.5);color:#0F3F37}
+.a2-pod .p.c1 .av{width:62px;height:62px;font-size:16px}
+.a2-pod .p b{font-size:12.5px}.a2-pod .p small{font-size:10.5px;color:var(--texte2);margin-top:-4px}
+.a2-pod .st{width:100%;border-radius:16px 16px 6px 6px;display:flex;flex-direction:column;align-items:center;justify-content:flex-start;padding-top:10px;font-weight:800;font-size:18px;color:#0F3F37}
+.a2-pod .c1 .st{height:84px;background:linear-gradient(180deg,#C9F79A,#A6F26B)}.a2-pod .c2 .st{height:64px;background:linear-gradient(180deg,#BDF0DF,#7FDEC0)}.a2-pod .c3 .st{height:50px;background:linear-gradient(180deg,#FFE7AE,#F8CF73)}
+.a2-pod .st small{font-size:10px;font-weight:700;opacity:.7;margin:0;color:#0F3F37}
+.sombre .a2-pod .p .av{box-shadow:0 0 0 3px #10302B}
+.a2-crown{color:#A6F26B;margin-bottom:-4px}.a2-crown svg{width:22px;height:16px}
+.a2-reco{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:26px;background:linear-gradient(160deg,#F2FCE6 0%,#DDF6EE 60%,#E4EEF9 100%)}
+.sombre .a2-reco{background:linear-gradient(160deg,rgba(166,242,107,.16),rgba(47,211,166,.08) 60%,rgba(120,160,220,.08))}
+.a2-reco .h{display:flex;gap:10px;align-items:center}.a2-reco .h .t{flex:1}.a2-reco .h b{display:block;font-size:15px}.a2-reco .h span{font-size:11.5px;color:var(--texte2)}
+.a2-reco p{margin:0;font-size:12.5px;line-height:1.5}
+.a2-reco .acts{display:flex;gap:8px}
+.a2-tabs{display:flex;padding:4px;border-radius:16px;background:var(--zone);gap:4px}
+.a2-tabs a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:38px;border-radius:12px;font-size:12.5px;font-weight:600;color:var(--texte2)}
+.a2-tabs a small{font-size:10.5px;padding:1px 7px;border-radius:99px;background:var(--trait)}
+.a2-tabs a.on{background:var(--plein);color:var(--texte);box-shadow:0 4px 12px -6px rgba(15,63,55,.35)}.a2-tabs a.on small{background:#A6F26B;color:#0F3F37}
+.a2-selh{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:var(--plein);box-shadow:var(--verre)}
+.a2-selh .ck{width:24px;height:24px;border-radius:8px;background:#0F3F37;color:#A6F26B;display:grid;place-items:center}.a2-selh .ck .ic{width:13px;height:13px}
+.sombre .a2-selh .ck{background:#A6F26B;color:#0F3F37}
+.a2-selh .t{flex:1;font-size:12px;color:var(--texte2)}.a2-selh .t b{display:block;font-size:13.5px;color:var(--texte)}
+.a2-selh a{font-size:12px;font-weight:700;padding:7px 12px;border-radius:99px;background:var(--zone)}
+.a2-sb{position:absolute;left:12px;right:12px;bottom:24px;z-index:4;display:flex;flex-direction:column;gap:10px;padding:12px;border-radius:26px;background:rgba(15,63,55,.94);backdrop-filter:blur(14px);color:#fff;box-shadow:0 20px 40px -16px rgba(15,63,55,.6)}
+.a2-sb .h{display:flex;align-items:center;gap:10px}
+.a2-sb .avs{display:flex}.a2-sb .avs .av{width:30px;height:30px;font-size:9.5px;margin-left:-5px;box-shadow:0 0 0 2px #0F3F37;color:#0F3F37}.a2-sb .avs .av:first-child{margin-left:0}
+.a2-sb .h .t{flex:1;font-size:11.5px;color:#CFE9DF}.a2-sb .h .t b{display:block;font-size:14px;color:#fff}
+.a2-sb .h .x{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.1)}.a2-sb .h .x .ic{width:14px;height:14px}
+.a2-sb .acts{display:grid;grid-template-columns:1fr 1fr 1.3fr;gap:8px}
+.a2-sb .acts a{height:46px;border-radius:16px;display:flex;align-items:center;justify-content:center;gap:6px;font-size:12.5px;font-weight:700;background:rgba(255,255,255,.1);color:#fff}
+.a2-sb .acts a .ic{width:16px;height:16px}
+.a2-sb .acts a.p{background:#A6F26B;color:#0F3F37}
+.sombre .a2-sb{background:rgba(30,106,89,.95)}
+'''
+_CROWN = '<span class="a2-crown"><svg viewBox="0 0 22 16"><path d="M2 14 L4 4 L8 9 L11 2 L14 9 L18 4 L20 14 Z" fill="currentColor"/></svg></span>'
+_RINGS = '<svg class="rings" viewBox="0 0 180 180" fill="none" stroke="#A6F26B" stroke-opacity=".35"><circle cx="90" cy="90" r="30"/><circle cx="90" cy="90" r="55"/><circle cx="90" cy="90" r="80"/></svg>'
+
+def _bars(v):
+    out = ''
+    for lab, n, am in v:
+        u = ''.join(f'<u class="{("am" if am else "on") if k < n else ""}"></u>' for k in range(5))
+        out += f'<div>{lab}<i>{u}</i></div>'
+    return f'<div class="a2-bars">{out}</div>'
+
+def rc(no, i, cls, nom, s_, sc, fx, bars=None, sel=None, et=None, pq=True, mini=False):
+    f = ''.join(f'<em class="{"a" if x.startswith("!") else ""}">{x.lstrip("!")}</em>' for x in fx)
+    p = f'<a class="pq2">{ic("pourquoi","xs")}Pourquoi ?</a>' if pq else ''
+    e = f'<span class="etq-s {et[1]}">{et[0]}</span>' if et else ''
+    r = f' r{no}' if no <= 3 else ''
+    ck = '' if sel is None else f'<span class="ck">{CK if sel else ""}</span>'
+    b = _bars(bars) if bars else ''
+    return (f'<div class="a2-c{r}{" sel" if sel else ""}{" mini" if mini else ""}"><div class="h">{ck}<span class="avw"><span class="av {cls}">{i}</span><span class="md">{no}</span></span>'
+            f'<div class="t"><b>{nom}{e}</b><span>{s_}</span></div><span class="a2-sc"><span class="rg" style="--p:{sc}"><b>{sc}</b></span><small>sur 100</small></span></div>'
+            f'{b}{"" if mini else f"<div class=a2-f>{f}{p}</div>"}</div>')
+
+ATS1 = phone(f'''{OFFRE_T}
+<div class="a2-hero">{_RINGS}<div class="r"><span class="a2-docs"><i></i><i></i><i></i><b>24</b></span><div class="t"><b>Analyser les 24 CV</b>Orbi compare chaque dossier à l’offre et prépare un classement expliqué.</div></div>
+<div class="a2-kp"><div><b>24</b>crédits</div><div><b>99</b>disponibles</div><div><b>≈ 1 min</b>durée</div></div>
+<a class="bt pl">{orbi(22)}Lancer l’analyse</a></div>
+<div class="a2-dist"><div class="h"><b>Où en sont les 24 candidatures</b><span>aujourd’hui</span></div>
+<div class="bar"><i style="flex:9;background:#A6F26B"></i><i style="flex:7;background:#2FD3A6"></i><i style="flex:5;background:#F2B33D"></i><i style="flex:3;background:#9CC3EE"></i></div>
+<div class="lg"><span style="--c:#A6F26B">Reçues 9</span><span style="--c:#2FD3A6">Examen 7</span><span style="--c:#F2B33D">Présél. 5</span><span style="--c:#9CC3EE">Entretien 3</span></div></div>
+<div class="sec-t"><h2>Classées par score</h2><a>Trier</a></div>
+{rc(1,"AM","","Amani M.","1 an · Kinshasa · reçue il y a 2 h",88,["SQL","Power BI"],[("Compétences",5,0),("Expérience",3,0),("Preuves",4,0)])}
+{rc(2,"GM","b","Grâce M.","2 ans · Kinshasa",86,["SQL","Projet BI"],[("Compétences",4,0),("Expérience",4,0),("Preuves",4,0)],et=("Retenue","ret"))}
+{rc(3,"FN","a","Fatou N.","Diplômée · Kinshasa",81,["Power BI","!SQL à vérifier"],[("Compétences",4,0),("Expérience",2,1),("Preuves",4,0)])}
+{rc(4,"PK","b","Patrick K.","1 an · Lubumbashi",74,["Excel","!Mobilité"],[("Compétences",3,0),("Expérience",3,0),("Preuves",2,1)])}''', avec_nav=False, cls='long')
+
+ATS2 = phone(f'''{OFFRE_T}
+<div class="a2-prog"><span class="big"><b>17<small>sur 24 CV</small></b></span><h3>Orbi analyse les dossiers</h3><p>Environ 20 secondes. Vous pouvez quitter l’écran,<br>une notification arrive à la fin.</p>
+<div class="a2-step"><div class="ok"><i></i>Lecture</div><div class="ok"><i></i>Compétences</div><div class="en"><i></i>Preuves</div><div><i></i>Classement</div></div></div>
+<div class="sec-t"><h2>Dossier par dossier</h2><a>17 / 24</a></div>
+<div class="a2-fl">
+<div class="r"><span class="av">AM</span><div class="t"><b>Amani M.</b><span>CV, lettre, 2 réponses</span></div><span class="pill">88</span></div>
+<div class="r"><span class="av b">GM</span><div class="t"><b>Grâce M.</b><span>CV, projet Power BI</span></div><span class="pill">86</span></div>
+<div class="r en"><span class="av a">AN</span><div class="t"><b>Ange M.</b><span>Vérification des preuves…</span><div class="mb"><i style="width:62%"></i></div></div><span class="pill w">…</span></div>
+<div class="r" style="opacity:.6"><span class="av">PL</span><div class="t"><b>Prisca L.</b><span>En attente</span></div><span class="pill w">{ic("horloge","xs")}</span></div></div>
+<div class="orbi-l">{orbi(26)}<div class="t">Chaque dossier est lu comme une donnée. Nom, âge, genre et photo ne comptent jamais.</div></div>''', avec_nav=False, cls='long',
+ bas=f'<div class="verre fort bas-f"><a class="bt sec pl">Arrêter l’analyse</a></div>')
+
+ATS3 = phone(f'''{OFFRE_T}
+<div class="a2-reco"><div class="h">{orbi(34)}<div class="t"><b>Recommandation d’Orbi</b><span>24 CV analysés · 24 crédits utilisés</span></div></div>
+<div class="a2-pod">
+<div class="p c2"><span class="av b">GM</span><b>Grâce M.</b><small>2 ans</small><span class="st">2<small>86</small></span></div>
+<div class="p c1">{_CROWN}<span class="av">AM</span><b>Amani M.</b><small>1 an</small><span class="st">1<small>88</small></span></div>
+<div class="p c3"><span class="av a">FN</span><b>Fatou N.</b><small>Diplômée</small><span class="st">3<small>81</small></span></div></div>
+<p><b>5 dossiers à voir en priorité.</b> Ils ont SQL et Power BI, avec une preuve. Fatou et David : un point à vérifier en entretien.</p>
+<div class="acts"><a class="bt p s">Voir les 5</a><a class="bt sec s">{ic("pourquoi","xs")}Pourquoi ?</a></div></div>
+<div class="a2-tabs"><a class="on">Recommandés<small>5</small></a><a>À vérifier<small>7</small></a><a>Tous<small>24</small></a></div>
+{rc(4,"RB","","Ruth B.","Analyste BI · Kinshasa",80,["SQL","Attestation"],[("Compétences",4,0),("Expérience",3,0),("Preuves",5,0)])}
+{rc(5,"DK","b","David K.","Data analyst · Kinshasa",79,["SQL","!Disponibilité"],[("Compétences",4,0),("Expérience",4,0),("Preuves",3,1)])}''', avec_nav=False, cls='long',
+ bas=f'<div class="verre fort bas-f"><a class="bt sec m">Sélectionner</a><a class="bt p pl">Liste des retenus</a></div>')
+
+ATS_SEL = phone(f'''{OFFRE_T}
+<div class="a2-tabs"><a class="on">Recommandés<small>5</small></a><a>À vérifier<small>7</small></a><a>Tous<small>24</small></a></div>
+<div class="a2-selh"><span class="ck">{CK}</span><div class="t"><b>5 sur 5 sélectionnés</b>Recommandés par Orbi</div><a>Tout retirer</a></div>
+{rc(1,"AM","","Amani M.","1 an · Kinshasa",88,[],sel=True,mini=True)}
+{rc(2,"GM","b","Grâce M.","2 ans · Kinshasa",86,[],sel=True,mini=True)}
+{rc(3,"FN","a","Fatou N.","Diplômée · Kinshasa",81,[],sel=True,mini=True)}
+{rc(4,"RB","","Ruth B.","Analyste BI · Kinshasa",80,[],sel=True,mini=True)}
+{rc(5,"DK","b","David K.","Data analyst · Kinshasa",79,[],sel=True,mini=True)}
+{rc(6,"PK","b","Patrick K.","1 an · Lubumbashi",74,[],sel=False,mini=True)}
+<div style="height:40px"></div>''', avec_nav=False, cls='long',
+ bas=f'''<div class="a2-sb"><div class="h"><span class="avs"><span class="av">AM</span><span class="av b">GM</span><span class="av a">FN</span><span class="av">RB</span><span class="av b">DK</span></span><div class="t"><b>5 sélectionnés</b>sur 24 candidatures</div><span class="x">{ic("fermer","xs")}</span></div>
+<div class="acts"><a>{ic("message","s")}Écrire</a><a>{ic("agenda","s")}Entretien</a><a class="p">{ic("valider","s")}Retenir</a></div></div>''')
 
 # ---------- 2. Réponses groupées ----------
 ENV = phone(f'''{tete_f("Répondre aux candidats", droite=None)}
