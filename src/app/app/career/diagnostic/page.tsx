@@ -1,27 +1,20 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import type { ReactNode } from "react";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { Icon } from "@/components/brand/icon";
-import { AppPageHeader } from "@/components/app/page-header";
-import { DiagnosticFlow, type SkillSource } from "@/components/career/diagnostic-flow";
-import { AiBrand, AiPanel, ScoreRing, card, cardTitle, pillClass } from "@/components/career/kit";
-import type { ScanCard } from "@/components/motion/scan";
-import { Alert } from "@/components/ui";
-import { cx } from "@/lib/cx";
+import { DiagnosticFlow, type SkillSource } from "@/components/talent/diagnostic-flow";
+import { FlowHead } from "@/components/talent/flow-head";
+import { Notice } from "@/components/talent/notice";
+import { TalentIcon } from "@/components/talent/icon";
 import { dynamic } from "@/i18n/dynamic";
-import { formatDate } from "@/lib/dates";
 import { aiReadiness } from "@/server/ai";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { can, level, limit } from "@/server/entitlements";
+import { level } from "@/server/entitlements";
 import {
   parseDiagnosticResult,
   parseDiagnosticV2,
   parsePersonalized,
-  stepLinks,
-  upgradeOptions,
 } from "@/server/services/diagnostic";
 import { DIAGNOSTIC_GATE } from "@/server/services/diagnostic-ai";
 import {
@@ -30,111 +23,65 @@ import {
   screensFor,
   type Draft,
 } from "@/server/services/diagnostic-scoring";
-import {
-  demandedSkills,
-  diagnosticBadge,
-  diagnosticPrefill,
-  getDraft,
-} from "@/server/services/diagnostic-store";
-import {
-  cheapestPlanWhere,
-  levelOf,
-  listPublicPlans,
-  talentPlanFor,
-} from "@/server/services/plans";
-import { DiagnosticResultV2 } from "./result";
+import { demandedSkills, diagnosticPrefill, getDraft } from "@/server/services/diagnostic-store";
+import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
+import { DiagnosticResult } from "./result";
 import { DiagnosticWelcome } from "./welcome";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("career.diagnostic");
+  const t = await getTranslations("diag");
   return { title: { absolute: t("seo") }, robots: { index: false } };
 }
 
 /**
- * Career diagnostic (partie 07 § 4, docs/experience-animee § 5): the welcome screen, then one
- * question per screen (`?etape=`), the scan, and the result (`?bilan=`). Scores by the fixed rules
- * `diagnostic_scoring_v2` for everyone; the personalized level adds four questions and a summary
- * by Jumanly Intelligence. Without JavaScript the questions are one long form.
+ * Career diagnostic (planche talent-4 § 5): the last result (or `?bilan=`), the start screen
+ * (no result yet, or `?refaire=1`), then one question per screen (`?etape=`). Scores by the fixed
+ * rules `diagnostic_scoring_v2` for everyone; the personalized level adds a summary by Orbi.
+ * Without JavaScript the questions are one long form.
  */
 export default async function DiagnosticPage({
   searchParams,
 }: PageProps<"/app/career/diagnostic">) {
   const params = await searchParams;
   const user = await requireUser("/app/career/diagnostic");
-  const t = await getTranslations("career.diagnostic");
-  const tAi = await getTranslations("ai");
+  const t = await getTranslations();
   const history = await db.careerDiagnostic.findMany({
     where: { userId: user.id },
     orderBy: { createdAt: "desc" },
     take: 10,
-    select: {
-      id: true,
-      createdAt: true,
-      result: true,
-      level: true,
-      remindAt: true,
-      remindedAt: true,
-    },
+    select: { id: true, createdAt: true, result: true, level: true },
   });
   const wanted = typeof params.bilan === "string" ? params.bilan : undefined;
-  const current = wanted ? history.find((item) => item.id === wanted) : undefined;
+  const latest = history[0];
+  const current = wanted
+    ? history.find((item) => item.id === wanted)
+    : typeof params.etape !== "string" && !params.refaire
+      ? latest
+      : undefined;
 
   if (current) {
     const v2 = parseDiagnosticV2(current.result);
-    const legacy = parseDiagnosticResult(current.result);
     const personal = current.level === "personalized" ? parsePersonalized(current.result) : null;
-    const older = history[history.findIndex((item) => item.id === current.id) + 1];
-    const aside = (
-      <>
-        <History history={history} currentId={current.id} />
-        <p className="flex gap-2 text-xs leading-[17px] text-ardoise">
-          <Icon name="lock" className="mt-px size-4 shrink-0" />
-          {t("privacy")}
-        </p>
-      </>
-    );
-    return (
-      <>
-        <AppPageHeader eyebrow={t("eyebrow")} title={t("result.title")} />
-        <p className="flex flex-wrap items-center gap-3 text-[13px] text-ardoise">
-          <span
-            className={cx(
-              "flex items-center gap-1.5 rounded-pill px-3 py-1.5 text-xs font-semibold",
-              personal ? "bg-sapin text-neon" : "bg-gris-clair text-sapin",
-            )}
-          >
-            <Icon name="intelligence" className="size-3.5" />
-            {personal ? t("badge.personalized") : t("badge.simple")}
-          </span>
-          {t("result.date", { date: current.createdAt })}
-        </p>
-        {params.ia === "unavailable" && <Alert tone="warning" title={t("scan.fallback")} />}
-        {params.ia === "quota" && <Alert tone="warning" title={tAi("credits.reached.title")} />}
-        {params.ia === "consent" && <Alert title={tAi("consent.declined.state")} />}
-        {v2 ? (
-          <DiagnosticResultV2
-            id={current.id}
-            result={v2}
-            personal={personal}
-            previous={
-              older ? { date: older.createdAt, result: parseDiagnosticV2(older.result) } : null
-            }
-            reminder={current.remindAt}
-            reminded={current.remindedAt}
-            upgrades={v2 ? await upgradesFor(user.id) : []}
-            aside={aside}
-          />
-        ) : legacy ? (
-          <LegacyResult
-            result={legacy}
-            summary={personal?.summary ?? null}
-            personal={Boolean(personal)}
-            strengthTexts={personal?.strengthTexts ?? []}
-            aside={aside}
-          />
-        ) : null}
-      </>
-    );
+    const notice =
+      params.ia === "unavailable"
+        ? t("career.diagnostic.scan.fallback")
+        : params.ia === "quota"
+          ? t("ai.credits.reached.title")
+          : params.ia === "consent"
+            ? t("ai.consent.declined.state")
+            : null;
+    if (v2)
+      return (
+        <DiagnosticResult
+          id={current.id}
+          date={current.createdAt}
+          result={v2}
+          summary={personal?.summary ?? null}
+          notice={notice}
+        />
+      );
+    const legacy = parseDiagnosticResult(current.result);
+    if (legacy) return <LegacyResult result={legacy} />;
   }
 
   const subject = { type: "user" as const, id: user.id };
@@ -150,31 +97,21 @@ export default async function DiagnosticPage({
     : (cheapestPlanWhere(await listPublicPlans(db), ["talent"], (plan) =>
         DIAGNOSTIC_GATE.levels.includes(levelOf(plan, DIAGNOSTIC_GATE.key)),
       )?.name ?? null);
-  const [badgeFacts, draft] = await Promise.all([
-    diagnosticBadge(db, user.id),
-    getDraft(db, user.id),
-  ]);
-  const badge: ScanCard = {
-    initials: badgeFacts.initials,
-    firstName: badgeFacts.firstName,
-    targetJob: badgeFacts.targetJob ?? t("card.noTarget"),
-    city: badgeFacts.city,
-    skills: t("card.skills", { count: badgeFacts.skills }),
-    label: t("card.label"),
-  };
+  const draft = await getDraft(db, user.id);
   const alerts = (
     <>
       {personalized && readiness === "consent" && (
-        <Alert title={tAi("consent.declined.state")}>
-          <Link href="/app/parametres?onglet=confidentialite" className="font-medium underline">
-            {tAi("consent.declined.cta")}
+        <Notice tone="err">
+          {t("ai.consent.declined.state")}{" "}
+          <Link href="/app/parametres?onglet=confidentialite" className="t-lien-d">
+            {t("ai.consent.declined.cta")}
           </Link>
-        </Alert>
+        </Notice>
       )}
       {personalized && readiness === "quota" && (
-        <Alert tone="warning" title={tAi("credits.reached.title")} />
+        <Notice tone="err">{t("ai.credits.reached.title")}</Notice>
       )}
-      {params.erreur && <Alert tone="error" title={t("error")} />}
+      {params.erreur && <Notice tone="err">{t("career.diagnostic.error")}</Notice>}
     </>
   );
 
@@ -186,41 +123,14 @@ export default async function DiagnosticPage({
           withAi,
         )[draft.step]
       : undefined;
-    const latest = history[0];
     return (
       <>
-        <AppPageHeader
-          eyebrow={t("eyebrow")}
-          title={t("title")}
-          actions={
-            latest ? (
-              <Link
-                href={`/app/career/diagnostic?bilan=${latest.id}`}
-                className={pillClass("dark", "md")}
-              >
-                <Icon name="eye" className="size-4" />
-                {t("last.headerCta")}
-              </Link>
-            ) : null
-          }
-        />
-        {alerts}
-        {latest && (
-          <div
-            className={cx(
-              "grid grid-cols-1 items-start gap-5",
-              history.length > 1 && "xl:grid-cols-[minmax(0,1fr)_380px]",
-            )}
-          >
-            <LastResult history={history} />
-            <History history={history} currentId={latest.id} max={4} />
-          </div>
-        )}
         <DiagnosticWelcome
-          badge={badge}
+          alerts={alerts}
           withAi={withAi}
           again={Boolean(latest)}
           upsell={upsellPlan}
+          latestId={latest?.id ?? null}
           resume={
             draft
               ? resumeAt && resumeAt.dimension !== "more"
@@ -249,13 +159,27 @@ export default async function DiagnosticPage({
   const assessed = (initial.skillChecks ?? []).map((item) => item.skill);
   const tProfile = await getTranslations("talent.profile.education.level");
   const messages = await getMessages();
-  const diagnosticMessages = { career: { diagnostic: messages.career.diagnostic } };
+  const flowMessages = { career: { diagnostic: messages.career.diagnostic }, diag: messages.diag };
 
   return (
-    <>
-      <AppPageHeader eyebrow={t("eyebrow")} title={t("title")} />
+    <div className="t-flux">
+      <FlowHead
+        back="/app/career/diagnostic?refaire=1"
+        backLabel={t("diag.back")}
+        history={false}
+        title={t("diag.title")}
+        end={
+          <Link
+            href={latest ? "/app/career/diagnostic" : "/app/profil/point"}
+            className="t-bi t-press"
+            aria-label={t("diag.flow.close")}
+          >
+            <TalentIcon name="fermer" size="s" />
+          </Link>
+        }
+      />
       {alerts}
-      <NextIntlClientProvider messages={diagnosticMessages as unknown as typeof messages}>
+      <NextIntlClientProvider messages={flowMessages as unknown as typeof messages}>
         <DiagnosticFlow
           initial={initial}
           initialIndex={resume?.step ?? 0}
@@ -268,296 +192,61 @@ export default async function DiagnosticPage({
           prefilled={useProfile ? Object.keys(prefill.draft) : []}
           cvScore={prefill.cvScore}
           education={educationAnswers.map((code) => ({ value: code, label: tProfile(code) }))}
-          badge={badge}
         />
       </NextIntlClientProvider>
-    </>
-  );
-}
-
-/**
- * « Pour aller plus loin »: the paid options the talent does not have yet, each with the cheapest
- * plan that opens it (from the database, never a plan name in code, CLAUDE.md § 2).
- */
-async function upgradesFor(userId: string) {
-  const subject = { type: "user" as const, id: userId };
-  const plans = await listPublicPlans(db);
-  const missing = await Promise.all(
-    upgradeOptions.map(async (option) => {
-      const has =
-        "levels" in option
-          ? (option.levels as readonly string[]).includes(await level(db, subject, option.key))
-          : option.key.endsWith(".monthly")
-            ? (await limit(db, subject, option.key)) !== 0
-            : await can(db, subject, option.key);
-      const plan = has
-        ? ""
-        : talentPlanFor(plans, option.key, "levels" in option ? [...option.levels] : undefined);
-      return plan ? { code: option.code, icon: option.icon, plan } : null;
-    }),
-  );
-  return missing.filter((item) => item !== null);
-}
-
-/** Result of a diagnostic of the first version (three readiness levels), kept for the history. */
-async function LegacyResult({
-  result,
-  summary,
-  personal,
-  strengthTexts,
-  aside,
-}: {
-  result: NonNullable<ReturnType<typeof parseDiagnosticResult>>;
-  summary: string | null;
-  personal: boolean;
-  strengthTexts: string[];
-  aside: ReactNode;
-}) {
-  const t = await getTranslations("career.diagnostic");
-  const d = dynamic(t);
-  const levels = ["low", "medium", "high"] as const;
-  const reached = levels.indexOf(result.readiness);
-  const strengths =
-    strengthTexts.length > 0
-      ? strengthTexts
-      : result.strengths.length === 0
-        ? [t("rule.strength.none")]
-        : result.strengths.map((key) => d(`rule.strength.${key}`));
-  return (
-    <div className="grid grid-cols-1 gap-5 xl:grid-cols-[minmax(0,1fr)_380px]">
-      <div className="flex min-w-0 flex-col gap-5">
-        <Alert title={t("result.legacy")} />
-        <section aria-labelledby="readiness" className={cx(card, "flex flex-col gap-4")}>
-          <div className="flex flex-wrap items-center justify-between gap-2">
-            <h2 id="readiness" className={cardTitle}>
-              {t("result.readiness.text")}
-            </h2>
-            <span className="rounded-pill bg-lime-clair px-2.5 py-1 text-xs font-semibold">
-              {t(`result.readiness.${result.readiness}`)}
-            </span>
-          </div>
-          <ol className="grid grid-cols-3 gap-2">
-            {levels.map((code, index) => (
-              <li key={code} className="flex flex-col gap-2">
-                <span
-                  aria-hidden
-                  className={cx(
-                    "h-2 rounded-pill",
-                    index < reached
-                      ? "bg-lime"
-                      : index === reached
-                        ? "bg-feuille"
-                        : "bg-gris-clair",
-                  )}
-                />
-                <span
-                  aria-current={index === reached ? "step" : undefined}
-                  className={cx("text-xs", index === reached ? "font-semibold" : "text-ardoise")}
-                >
-                  {t(`result.readiness.${code}`)}
-                </span>
-              </li>
-            ))}
-          </ol>
-        </section>
-        <div className="grid grid-cols-1 gap-5 md:grid-cols-2">
-          <section aria-labelledby="strengths" className={cx(card, "flex flex-col gap-4")}>
-            <h2 id="strengths" className={cardTitle}>
-              {t("result.strengths")}
-            </h2>
-            <ul className="flex flex-col gap-3">
-              {strengths.map((text) => (
-                <li key={text} className="flex gap-3 text-[15px] leading-6">
-                  <Icon name="check" className="mt-1 size-4 shrink-0 text-feuille" />
-                  {text}
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section aria-labelledby="priorities" className={cx(card, "flex flex-col gap-4")}>
-            <h2 id="priorities" className={cardTitle}>
-              {t("result.priorities")}
-            </h2>
-            <ol className="flex flex-col gap-3">
-              {result.priorities.map((key) => (
-                <li key={key} className="text-[15px] leading-6 font-semibold">
-                  {d(`rule.priority.${key}`)}
-                </li>
-              ))}
-            </ol>
-          </section>
-        </div>
-        <section aria-labelledby="next-steps" className={cx(card, "flex flex-col gap-4")}>
-          <h2 id="next-steps" className={cardTitle}>
-            {t("result.nextSteps")}
-          </h2>
-          <ol className="flex flex-col gap-3">
-            {result.steps.map((step, index) => (
-              <li key={step} className="flex flex-wrap items-center gap-3">
-                <span className="flex size-8 shrink-0 items-center justify-center rounded-full bg-sapin text-sm font-semibold text-lime">
-                  {index + 1}
-                </span>
-                <span className="min-w-0 flex-1 text-[15px]">{t(`rule.step.${step}`)}</span>
-                <Link
-                  href={stepLinks[step]}
-                  className="text-[13px] font-semibold text-up-texte hover:underline"
-                >
-                  {t("rule.step.cta")}
-                </Link>
-              </li>
-            ))}
-          </ol>
-        </section>
-      </div>
-      <aside className="flex flex-col gap-5">
-        <AiPanel>
-          <AiBrand />
-          {summary && <p className="text-sm leading-6 whitespace-pre-line">{summary}</p>}
-          <p className="text-[13px] leading-5 text-blanc/85">
-            {personal ? t("result.personalized.note") : t("result.simple.note")}
-          </p>
-        </AiPanel>
-        <Link href="/app/career/diagnostic" className={pillClass("outline")}>
-          {t("restart")}
-        </Link>
-        {aside}
-      </aside>
     </div>
   );
 }
 
-/**
- * « Votre dernier bilan », first on the welcome screen for a returning talent: the score in large,
- * the stage reached, and the change since the previous diagnostic (real saved results only).
- */
-async function LastResult({
-  history,
+/** A result of the first version (three readiness levels), kept for the talent's history. */
+async function LegacyResult({
+  result,
 }: {
-  history: { id: string; createdAt: Date; level: string; result: unknown }[];
+  result: NonNullable<ReturnType<typeof parseDiagnosticResult>>;
 }) {
-  const t = await getTranslations("career.diagnostic");
+  const t = await getTranslations();
   const d = dynamic(t);
-  const [latest] = history;
-  if (!latest) return null;
-  const v2 = parseDiagnosticV2(latest.result as never);
-  const before = history
-    .slice(1)
-    .map((item) => ({ date: item.createdAt, v2: parseDiagnosticV2(item.result as never) }))
-    .find((item) => item.v2);
-  const delta = v2 && before?.v2 ? v2.score - before.v2.score : null;
-  const trend =
-    delta === null || !before
-      ? t("last.first")
-      : delta > 0
-        ? t("last.up", { points: delta, date: formatDate(before.date) })
-        : delta < 0
-          ? t("last.down", { points: delta, date: formatDate(before.date) })
-          : t("last.same", { date: formatDate(before.date) });
   return (
-    <section
-      aria-labelledby="last-result"
-      className="flex flex-col gap-5 rounded-[22px] border border-sapin/8 bg-blanc p-4 text-sapin sm:flex-row sm:items-center sm:p-5 lg:p-6"
-    >
-      {v2 && (
-        <span className="self-center">
-          <ScoreRing value={v2.score} label={String(v2.score)} size={128} />
-          <span className="sr-only">{t("last.score", { score: v2.score })}</span>
-        </span>
-      )}
-      <div className="flex min-w-0 flex-1 flex-col gap-3">
-        <div className="flex flex-col gap-1">
-          <p className="text-xs font-semibold tracking-wide text-feuille-fonce uppercase">
-            {t("last.title")}
-          </p>
-          <h2 id="last-result" className="text-[24px] leading-tight font-semibold tracking-tight">
-            {v2 ? d(`stage.${v2.stage}`) : t("result.title")}
-          </h2>
-          {v2 && <p className="text-sm text-ardoise">{d(`stage.${v2.stage}Text`)}</p>}
-        </div>
-        <p className="flex flex-wrap items-center gap-2 text-[13px]">
-          <span className="rounded-pill bg-creme px-2.5 py-1 font-semibold">
-            {t("last.date", { date: formatDate(latest.createdAt) })}
-          </span>
-          {v2 && (
-            <span
-              className={cx(
-                "flex items-center gap-1 rounded-pill px-2.5 py-1 font-semibold",
-                delta !== null && delta > 0 ? "bg-lime-clair" : "bg-creme",
-              )}
-            >
-              {delta !== null && delta !== 0 && (
-                <Icon name={delta > 0 ? "up" : "down"} className="size-3.5" />
-              )}
-              {trend}
-            </span>
-          )}
-        </p>
-        <div className="flex flex-wrap gap-2.5">
-          <Link
-            href={`/app/career/diagnostic?bilan=${latest.id}`}
-            className={pillClass("lime", "md")}
-          >
-            {t("last.open")}
-            <Icon name="chev-r" className="size-4" />
-          </Link>
-          <a href="#diagnostic-welcome" className={pillClass("outline", "md")}>
-            {t("restart")}
-          </a>
-        </div>
+    <div className="t-flux">
+      <FlowHead back="/app/profil/point" backLabel={t("diag.back")} title={t("diag.title")} />
+      <Notice>{t("career.diagnostic.result.legacy")}</Notice>
+      <section aria-labelledby="dg-anciens-atouts" className="t-verre t-fb-c">
+        <h2 id="dg-anciens-atouts" className="t-h4">
+          {t("career.diagnostic.result.strengths")}
+        </h2>
+        {(result.strengths.length > 0
+          ? result.strengths.map((key) => d(`career.diagnostic.rule.strength.${key}`))
+          : [t("career.diagnostic.rule.strength.none")]
+        ).map((text) => (
+          <div key={text} className="t-pt t-ok">
+            <i aria-hidden>
+              <TalentIcon name="valider" size="xs" />
+            </i>
+            <span>{text}</span>
+          </div>
+        ))}
+      </section>
+      <section aria-labelledby="dg-anciennes-priorites" className="t-verre t-fb-c">
+        <h2 id="dg-anciennes-priorites" className="t-h4">
+          {t("career.diagnostic.result.priorities")}
+        </h2>
+        {result.priorities.map((key) => (
+          <div key={key} className="t-pt t-ko">
+            <i aria-hidden>
+              <TalentIcon name="plus" size="xs" />
+            </i>
+            <span>{d(`career.diagnostic.rule.priority.${key}`)}</span>
+          </div>
+        ))}
+      </section>
+      <div className="t-verre t-fort t-bas-f">
+        <Link href="/app/career/diagnostic?refaire=1" className="t-bt t-sec t-m t-press">
+          {t("diag.again")}
+        </Link>
+        <Link href="/app/career/plan" className="t-bt t-p t-pl t-press">
+          {t("diag.plan")}
+        </Link>
       </div>
-    </section>
-  );
-}
-
-async function History({
-  history,
-  currentId,
-  max,
-}: {
-  history: { id: string; createdAt: Date; level: string; result: unknown }[];
-  currentId?: string;
-  /** Shows only the most recent ones (welcome screen). */
-  max?: number;
-}) {
-  const t = await getTranslations("career.diagnostic");
-  const d = dynamic(t);
-  const others = history.filter((item) => item.id !== currentId).slice(0, max);
-  if (others.length === 0) return null;
-  return (
-    <section aria-labelledby="history" className={cx(card, "flex flex-col gap-2")}>
-      <h2 id="history" className={cardTitle}>
-        {t("result.history")}
-      </h2>
-      <ul className="flex flex-col divide-y divide-brume">
-        {others.map((item) => {
-          const v2 = parseDiagnosticV2(item.result as never);
-          return (
-            <li key={item.id} className="flex items-center justify-between gap-3 py-3">
-              <Link
-                href={`/app/career/diagnostic?bilan=${item.id}`}
-                className="text-sm whitespace-nowrap underline-offset-4 hover:underline"
-              >
-                {formatDate(item.createdAt)}
-              </Link>
-              <span className="flex flex-wrap justify-end gap-1.5">
-                {v2 && (
-                  <span className="rounded-pill bg-lime-clair px-2.5 py-1 text-[11px] font-semibold">
-                    {d(`stage.${v2.stage}`)} · {v2.score}
-                  </span>
-                )}
-                <span
-                  className={cx(
-                    "rounded-pill px-2.5 py-1 text-[11px] font-semibold",
-                    item.level === "personalized" ? "bg-menthe-claire" : "bg-gris-clair",
-                  )}
-                >
-                  {item.level === "personalized" ? t("badge.personalized") : t("badge.simple")}
-                </span>
-              </span>
-            </li>
-          );
-        })}
-      </ul>
-    </section>
+    </div>
   );
 }

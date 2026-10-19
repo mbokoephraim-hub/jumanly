@@ -22,6 +22,11 @@ export const REDRAWN = [
   "/app/notifications",
   // Lot 5: Apprendre, the classroom, quizzes and attestations.
   "/app/learn",
+  // Lot 6b: faire le point, the diagnostic, the plan and the interview practice.
+  "/app/profil/point",
+  "/app/career/diagnostic",
+  "/app/career/plan",
+  "/app/career/entretiens",
 ];
 
 /**
@@ -32,9 +37,8 @@ export const REDRAWN_EXACT = [
   "^/app$",
   "^/app/jobs$",
   "^/app/jobs/(?!candidatures$|enregistrees$)[^/]+$",
-  // Lot 4: postuler, the practice briefing and session (the home of « Entretiens » is lot 6).
+  // Lot 4: postuler.
   "^/app/jobs/(?!candidatures$|enregistrees$)[^/]+/postuler$",
-  "^/app/career/entretiens/[^/]+$",
 ];
 
 export function redrawn(pathname: string) {

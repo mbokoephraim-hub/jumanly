@@ -2,6 +2,26 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte mobile · lot 6b : faire le point, diagnostic, plan, simulations d'entretien (19 octobre 2026)
+
+- Faire le point (`/app/profil/point`, planche talent-4 § 5) : atouts, points à renforcer et
+  prochaine action, calculés sans IA (`career-point.ts`, tests unitaires), avec « Pourquoi ces
+  conseils ? ».
+- Diagnostic (`/app/career/diagnostic`) redessiné : accueil, questions une à une, analyse, puis
+  le résultat (anneau, six notes, « Pourquoi ces notes ? », Refaire, Mon plan). Services
+  déterministes inchangés.
+- Plan (`/app/career/plan`) : objectif en feuille, étapes numérotées que l'on modifie, coche ou
+  retire (`updateStepAction`).
+- Entraînements (`/app/career/entretiens`, planche § 5 bis) : quotas écrit et oral, entretien
+  prévu, quatre façons de s'entraîner, dernières sessions ; nouveau formulaire (métier, niveau,
+  types, format, durée) ; simulation écrite avec conseil d'Orbi, simulation orale (micro,
+  transcription relue, aucun son gardé) ; retour sur cinq critères sans note ; version gratuite
+  avec conseils et « Voir les formules ».
+- Anciens composants supprimés : `career/diagnostic-flow`, `career/voice-answer`,
+  `motion/radar-live`, `motion/scan`, `motion/stage-track`, `motion/step-trail`.
+- Écarts : `docs/decisions/2026-10-19-refonte-mobile-lot-6b.md`. Specs e2e mises à jour (career,
+  talent, accessibility), non lancées ici (base partagée).
+
 ## Refonte mobile de l'espace talent · lot 5 : Apprendre, salle de cours, quiz, attestations (19 octobre 2026)
 
 - Apprendre (`/app/learn`, planche talent-3 § 1) : la recherche sous le titre, l'accès à « Mes

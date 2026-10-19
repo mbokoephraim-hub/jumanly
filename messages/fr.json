@@ -3555,6 +3555,242 @@
       "seal": "ATTESTATION VALIDÉE · SCEAU D’ORIGINALITÉ ·"
     }
   },
+  "point": {
+    "seo": "Faire le point",
+    "title": "Faire le point",
+    "back": "Retour",
+    "close": "Fermer",
+    "summary": {
+      "none": "Faites votre diagnostic de carrière : en quelques minutes, vous saurez où vous en êtes et par quoi commencer.",
+      "discovery": "Vous posez les bases de votre projet : quelques actions simples vous feront avancer vite.",
+      "building": "Vous avez des bases solides : quelques chantiers ciblés vous rendront prêt à candidater.",
+      "ready": "Votre profil est solide pour candidater : travaillez vos points faibles pour vous démarquer.",
+      "competitive": "Votre profil est compétitif : visez les offres exigeantes.",
+      "target": "Votre cible : {role}.",
+      "targetCity": "Votre cible : {role}, à {city}."
+    },
+    "strengths": "Vos atouts",
+    "strength": {
+      "certificate": "{name} prouvé par une attestation",
+      "result": "Une expérience décrite avec un résultat chiffré",
+      "proven": "{count, plural, one {# compétence prouvée} other {# compétences prouvées}} sur votre profil",
+      "dimension": "{name} : {score} sur 100 au diagnostic",
+      "none": "Vos atouts apparaîtront quand votre profil sera rempli."
+    },
+    "weaknesses": "À renforcer",
+    "weak": {
+      "skill": "{skill} : demandé par {count, plural, one {# offre} other {# offres}} sur {total}",
+      "noResult": "Aucune expérience décrite avec un résultat",
+      "noExperience": "Aucune expérience sur votre profil",
+      "dimension": "{name} : {score} sur 100 au diagnostic",
+      "none": "Rien de pressant : continuez sur votre lancée."
+    },
+    "next": {
+      "title": "Prochaine action",
+      "course": "Formation « {course} », {minutes} min",
+      "diagnostic": "Faire mon diagnostic de carrière, 6 à 8 minutes",
+      "profile": "Décrire une expérience avec un résultat, 10 min",
+      "start": "Commencer"
+    },
+    "diagnostic": "Voir mon diagnostic",
+    "why": {
+      "cta": "Pourquoi ces conseils ?",
+      "title": "Pourquoi ces conseils",
+      "intro": "Ces conseils sont calculés par des règles fixes, à partir de ce que vous avez déclaré. Les mêmes informations donnent toujours les mêmes conseils.",
+      "diagnostic": "Votre diagnostic du {date} : {score} sur 100.",
+      "noDiagnostic": "Pas encore de diagnostic : faites-le pour des conseils plus précis.",
+      "offers": "{count, plural, =0 {Aucune offre publiée comparée pour votre cible.} one {# offre publiée comparée pour votre cible.} other {# offres publiées comparées pour votre cible.}}",
+      "profile": "Votre profil : compétences et leurs preuves, expériences, attestations.",
+      "never": "Votre nom, votre âge, votre photo et votre origine n'entrent jamais dans ces conseils.",
+      "close": "Fermer"
+    }
+  },
+  "diag": {
+    "seo": "Diagnostic de carrière",
+    "title": "Diagnostic de carrière",
+    "back": "Retour",
+    "share": "Partager le bilan (PDF)",
+    "headline": {
+      "discovery": "Les bases de votre projet",
+      "building": "Un profil en construction",
+      "ready": "Prêt à candidater",
+      "competitive": "Compétitif sur vos offres"
+    },
+    "rules": "Calculé sur vos réponses, les mêmes donnent le même résultat.",
+    "score": "{score} sur 100",
+    "scores": "Vos six notes sur 100",
+    "date": "Fait le {date}",
+    "why": {
+      "cta": "Pourquoi ces notes ?",
+      "title": "Pourquoi ces notes",
+      "intro": "Chaque note sur 100 additionne des points fixes selon vos réponses. Voici le détail, dimension par dimension.",
+      "close": "Fermer"
+    },
+    "again": "Refaire",
+    "plan": "Mon plan",
+    "welcome": {
+      "hooks": "Ce que vous obtenez"
+    },
+    "flow": {
+      "close": "Quitter le diagnostic"
+    }
+  },
+  "plan": {
+    "seo": "Mon plan de progression",
+    "title": "Mon plan de progression",
+    "back": "Retour",
+    "goal": {
+      "kicker": "Objectif",
+      "empty": "Choisissez votre objectif",
+      "edit": "Modifier l'objectif",
+      "label": "Votre objectif",
+      "placeholder": "Par exemple : un premier poste dans la data"
+    },
+    "progress": "{done} sur {total} étapes faites",
+    "steps": "Les étapes",
+    "kind": {
+      "diagnostic": "Profil",
+      "course": "Formation",
+      "custom": "Action"
+    },
+    "state": {
+      "done": "faite",
+      "current": "en cours",
+      "late": "en retard"
+    },
+    "due": "avant le {date}",
+    "step": {
+      "edit": "Modifier l'étape",
+      "title": "Intitulé",
+      "due": "À faire avant le (facultatif)",
+      "save": "Enregistrer",
+      "open": "Ouvrir",
+      "markDone": "Marquer comme faite",
+      "markTodo": "Remettre à faire",
+      "remove": "Retirer cette étape"
+    },
+    "add": "Ajouter une étape",
+    "addTitle": "Nouvelle étape",
+    "close": "Fermer",
+    "note": "Orbi propose, vous choisissez : chaque étape se modifie ou se retire.",
+    "empty": {
+      "title": "Votre plan est vide",
+      "text": "Orbi peut le préparer à partir de votre dernier diagnostic. Vous gardez la main sur chaque étape.",
+      "fromDiagnostic": "Préparer mon plan",
+      "diagnostic": "Faire mon diagnostic"
+    },
+    "locked": {
+      "title": "Le plan de progression",
+      "text": "Disponible avec {plan}. Votre diagnostic et votre mini plan restent gratuits.",
+      "cta": "Voir les formules"
+    },
+    "saved": "Plan enregistré.",
+    "error": "Vérifiez ce que vous avez saisi.",
+    "courses": "Pour progresser",
+    "coursesWhy": "Les compétences qui manquent le plus souvent dans les offres qui vous correspondent.",
+    "report": "Télécharger le rapport (PDF)",
+    "reportText": "Votre plan, vos formations, vos entraînements et vos candidatures"
+  },
+  "entrain": {
+    "seo": "S'entraîner aux entretiens",
+    "title": "S'entraîner aux entretiens",
+    "back": "Retour",
+    "quotas": "Vos simulations ce mois",
+    "quota": {
+      "text": "Simulations écrites",
+      "voice": "Simulations vocales",
+      "used": "{used} sur {limit} ce mois",
+      "short": "{used} sur {limit}",
+      "unlimited": "Sans limite",
+      "locked": "Dès {plan}",
+      "reached": "Toutes utilisées : renouvelées le {date}"
+    },
+    "planned": "Entretien prévu",
+    "plannedTitle": "{company} · {job}",
+    "prepare": "Préparer cet entretien",
+    "free": {
+      "title": "S'entraîner librement",
+      "offer": "Sur une offre",
+      "offerText": "Enregistrée ou envoyée",
+      "job": "Sur un métier",
+      "jobText": "Le métier de votre choix",
+      "classic": "Questions classiques",
+      "classicText": "Se présenter, motivation",
+      "voice": "À l'oral",
+      "voiceText": "Avec votre voix"
+    },
+    "recent": "Derniers entraînements",
+    "recentTitle": "{job} · {mode}",
+    "mode": {
+      "text": "écrit",
+      "voice": "oral"
+    },
+    "recentLine": "{date} · {count, plural, one {# question} other {# questions}}",
+    "feedbackReady": "retour prêt",
+    "inProgress": "en cours",
+    "empty": "Vos entraînements apparaîtront ici. Ils restent privés.",
+    "private": "Privé : le recruteur ne voit jamais vos entraînements.",
+    "gratuit": "Gratuit",
+    "tipLine": "Conseils · {minutes} min",
+    "allTips": "Toutes les fiches de conseils",
+    "locked": {
+      "title": "Simulations avec Orbi dès {plan}",
+      "text": "Écrites dès {text}, à l'oral dès {voice}."
+    },
+    "applyFree": "Postuler et passer vos entretiens restent gratuits.",
+    "plans": "Voir les formules",
+    "error": {
+      "consent": "Les simulations utilisent l'IA. Activez-la dans vos paramètres de confidentialité pour commencer.",
+      "entitlement": "Ce format de simulation n'est pas inclus dans votre formule.",
+      "quota": "Vous avez utilisé toutes les simulations de ce format ce mois-ci.",
+      "invalid": "Vérifiez le métier et les options choisies."
+    },
+    "new": {
+      "title": "Nouvel entraînement",
+      "close": "Fermer",
+      "job": "Métier",
+      "offer": "Offre (facultatif)",
+      "noOffer": "Aucune, seulement le métier",
+      "level": "Niveau du poste",
+      "levels": {
+        "easy": "Junior",
+        "standard": "Confirmé",
+        "hard": "Senior"
+      },
+      "types": "Types de questions",
+      "type": {
+        "motivation": "Motivation",
+        "technical": "Techniques",
+        "behavioral": "Mises en situation",
+        "hr": "Questions RH"
+      },
+      "format": "Format",
+      "length": "Durée",
+      "formatLocked": "Dès {plan}"
+    },
+    "fb": {
+      "oralTitle": "Votre retour · oral",
+      "oral": "À l'oral",
+      "criteria": "Les 5 critères",
+      "criteriaNote": "Un niveau par critère, jamais une note.",
+      "review": "Revoir ma réponse {n}",
+      "reviewTip": "Avec la réponse proposée par Orbi",
+      "reviewPlain": "Votre réponse et le commentaire d'Orbi",
+      "why": "Pourquoi ce retour ?",
+      "whyTitle": "Pourquoi ce retour",
+      "close": "Fermer"
+    },
+    "voice": {
+      "kind": "{kind} · oral",
+      "time": "{time} / 2:00",
+      "record": "Parler",
+      "stop": "J'ai terminé",
+      "clear": "Effacer et recommencer",
+      "send": "Envoyer ma réponse",
+      "transcript": "Votre réponse transcrite, à relire avant d'envoyer",
+      "privacy": "Votre voix sert seulement à transcrire la réponse. Aucun enregistrement n'est gardé : l'audio n'est jamais envoyé."
+    }
+  },
   "talentOrbi": {
     "metaTitle": "Orbi",
     "title": "Orbi",

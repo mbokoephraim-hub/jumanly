@@ -397,13 +397,25 @@ export async function getInterview(db: PrismaClient, userId: string, id: string)
   };
 }
 
-export function listInterviews(db: PrismaClient, userId: string) {
-  return db.interviewSession.findMany({
+export async function listInterviews(db: PrismaClient, userId: string, take = 20) {
+  const sessions = await db.interviewSession.findMany({
     where: { userId },
     orderBy: { createdAt: "desc" },
-    take: 20,
-    select: { id: true, mode: true, type: true, jobTitle: true, status: true, createdAt: true },
+    take,
+    select: {
+      id: true,
+      mode: true,
+      type: true,
+      jobTitle: true,
+      status: true,
+      createdAt: true,
+      questions: true,
+    },
   });
+  return sessions.map(({ questions, ...session }) => ({
+    ...session,
+    questionCount: parseTurns(questions).length,
+  }));
 }
 
 export const answerSchema = z.object({

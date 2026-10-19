@@ -3002,6 +3002,191 @@ Conventions :
 | `attest.sheet.micro` | JUMANLY · ATTESTATION AUTHENTIQUE · {code} · VÉRIFIABLE EN LIGNE · LEARN. GROW. CONNECT. ·  |
 | `attest.sheet.seal` | ATTESTATION VALIDÉE · SCEAU D’ORIGINALITÉ · |
 
+### Refonte mobile · Faire le point, diagnostic, plan et entraînements (lot 6b)
+
+*Planche talent-4 § 5 et § 5 bis. « Faire le point » et le diagnostic sont calculés par des règles fixes : les mêmes informations donnent le même résultat, et chaque conseil a son « Pourquoi ? ». Le plan est proposé par Orbi, le talent le modifie. Les entraînements restent privés : retour sur 5 critères, sans note.*
+
+| Clé | Texte |
+|---|---|
+| `point.seo` | Faire le point |
+| `point.title` | Faire le point |
+| `point.back` | Retour |
+| `point.close` | Fermer |
+| `point.summary.none` | Faites votre diagnostic de carrière : en quelques minutes, vous saurez où vous en êtes et par quoi commencer. |
+| `point.summary.discovery` | Vous posez les bases de votre projet : quelques actions simples vous feront avancer vite. |
+| `point.summary.building` | Vous avez des bases solides : quelques chantiers ciblés vous rendront prêt à candidater. |
+| `point.summary.ready` | Votre profil est solide pour candidater : travaillez vos points faibles pour vous démarquer. |
+| `point.summary.competitive` | Votre profil est compétitif : visez les offres exigeantes. |
+| `point.summary.target` | Votre cible : {role}. |
+| `point.summary.targetCity` | Votre cible : {role}, à {city}. |
+| `point.strengths` | Vos atouts |
+| `point.strength.certificate` | {name} prouvé par une attestation |
+| `point.strength.result` | Une expérience décrite avec un résultat chiffré |
+| `point.strength.proven` | {count, plural, one {# compétence prouvée} other {# compétences prouvées}} sur votre profil |
+| `point.strength.dimension` | {name} : {score} sur 100 au diagnostic |
+| `point.strength.none` | Vos atouts apparaîtront quand votre profil sera rempli. |
+| `point.weaknesses` | À renforcer |
+| `point.weak.skill` | {skill} : demandé par {count, plural, one {# offre} other {# offres}} sur {total} |
+| `point.weak.noResult` | Aucune expérience décrite avec un résultat |
+| `point.weak.noExperience` | Aucune expérience sur votre profil |
+| `point.weak.dimension` | {name} : {score} sur 100 au diagnostic |
+| `point.weak.none` | Rien de pressant : continuez sur votre lancée. |
+| `point.next.title` | Prochaine action |
+| `point.next.course` | Formation « {course} », {minutes} min |
+| `point.next.diagnostic` | Faire mon diagnostic de carrière, 6 à 8 minutes |
+| `point.next.profile` | Décrire une expérience avec un résultat, 10 min |
+| `point.next.start` | Commencer |
+| `point.diagnostic` | Voir mon diagnostic |
+| `point.why.cta` | Pourquoi ces conseils ? |
+| `point.why.title` | Pourquoi ces conseils |
+| `point.why.intro` | Ces conseils sont calculés par des règles fixes, à partir de ce que vous avez déclaré. Les mêmes informations donnent toujours les mêmes conseils. |
+| `point.why.diagnostic` | Votre diagnostic du {date} : {score} sur 100. |
+| `point.why.noDiagnostic` | Pas encore de diagnostic : faites-le pour des conseils plus précis. |
+| `point.why.offers` | {count, plural, =0 {Aucune offre publiée comparée pour votre cible.} one {# offre publiée comparée pour votre cible.} other {# offres publiées comparées pour votre cible.}} |
+| `point.why.profile` | Votre profil : compétences et leurs preuves, expériences, attestations. |
+| `point.why.never` | Votre nom, votre âge, votre photo et votre origine n'entrent jamais dans ces conseils. |
+| `point.why.close` | Fermer |
+| `diag.seo` | Diagnostic de carrière |
+| `diag.title` | Diagnostic de carrière |
+| `diag.back` | Retour |
+| `diag.share` | Partager le bilan (PDF) |
+| `diag.headline.discovery` | Les bases de votre projet |
+| `diag.headline.building` | Un profil en construction |
+| `diag.headline.ready` | Prêt à candidater |
+| `diag.headline.competitive` | Compétitif sur vos offres |
+| `diag.rules` | Calculé sur vos réponses, les mêmes donnent le même résultat. |
+| `diag.score` | {score} sur 100 |
+| `diag.scores` | Vos six notes sur 100 |
+| `diag.date` | Fait le {date} |
+| `diag.why.cta` | Pourquoi ces notes ? |
+| `diag.why.title` | Pourquoi ces notes |
+| `diag.why.intro` | Chaque note sur 100 additionne des points fixes selon vos réponses. Voici le détail, dimension par dimension. |
+| `diag.why.close` | Fermer |
+| `diag.again` | Refaire |
+| `diag.plan` | Mon plan |
+| `diag.welcome.hooks` | Ce que vous obtenez |
+| `diag.flow.close` | Quitter le diagnostic |
+| `plan.seo` | Mon plan de progression |
+| `plan.title` | Mon plan de progression |
+| `plan.back` | Retour |
+| `plan.goal.kicker` | Objectif |
+| `plan.goal.empty` | Choisissez votre objectif |
+| `plan.goal.edit` | Modifier l'objectif |
+| `plan.goal.label` | Votre objectif |
+| `plan.goal.placeholder` | Par exemple : un premier poste dans la data |
+| `plan.progress` | {done} sur {total} étapes faites |
+| `plan.steps` | Les étapes |
+| `plan.kind.diagnostic` | Profil |
+| `plan.kind.course` | Formation |
+| `plan.kind.custom` | Action |
+| `plan.state.done` | faite |
+| `plan.state.current` | en cours |
+| `plan.state.late` | en retard |
+| `plan.due` | avant le {date} |
+| `plan.step.edit` | Modifier l'étape |
+| `plan.step.title` | Intitulé |
+| `plan.step.due` | À faire avant le (facultatif) |
+| `plan.step.save` | Enregistrer |
+| `plan.step.open` | Ouvrir |
+| `plan.step.markDone` | Marquer comme faite |
+| `plan.step.markTodo` | Remettre à faire |
+| `plan.step.remove` | Retirer cette étape |
+| `plan.add` | Ajouter une étape |
+| `plan.addTitle` | Nouvelle étape |
+| `plan.close` | Fermer |
+| `plan.note` | Orbi propose, vous choisissez : chaque étape se modifie ou se retire. |
+| `plan.empty.title` | Votre plan est vide |
+| `plan.empty.text` | Orbi peut le préparer à partir de votre dernier diagnostic. Vous gardez la main sur chaque étape. |
+| `plan.empty.fromDiagnostic` | Préparer mon plan |
+| `plan.empty.diagnostic` | Faire mon diagnostic |
+| `plan.locked.title` | Le plan de progression |
+| `plan.locked.text` | Disponible avec {plan}. Votre diagnostic et votre mini plan restent gratuits. |
+| `plan.locked.cta` | Voir les formules |
+| `plan.saved` | Plan enregistré. |
+| `plan.error` | Vérifiez ce que vous avez saisi. |
+| `plan.courses` | Pour progresser |
+| `plan.coursesWhy` | Les compétences qui manquent le plus souvent dans les offres qui vous correspondent. |
+| `plan.report` | Télécharger le rapport (PDF) |
+| `plan.reportText` | Votre plan, vos formations, vos entraînements et vos candidatures |
+| `entrain.seo` | S'entraîner aux entretiens |
+| `entrain.title` | S'entraîner aux entretiens |
+| `entrain.back` | Retour |
+| `entrain.quotas` | Vos simulations ce mois |
+| `entrain.quota.text` | Simulations écrites |
+| `entrain.quota.voice` | Simulations vocales |
+| `entrain.quota.used` | {used} sur {limit} ce mois |
+| `entrain.quota.short` | {used} sur {limit} |
+| `entrain.quota.unlimited` | Sans limite |
+| `entrain.quota.locked` | Dès {plan} |
+| `entrain.quota.reached` | Toutes utilisées : renouvelées le {date} |
+| `entrain.planned` | Entretien prévu |
+| `entrain.plannedTitle` | {company} · {job} |
+| `entrain.prepare` | Préparer cet entretien |
+| `entrain.free.title` | S'entraîner librement |
+| `entrain.free.offer` | Sur une offre |
+| `entrain.free.offerText` | Enregistrée ou envoyée |
+| `entrain.free.job` | Sur un métier |
+| `entrain.free.jobText` | Le métier de votre choix |
+| `entrain.free.classic` | Questions classiques |
+| `entrain.free.classicText` | Se présenter, motivation |
+| `entrain.free.voice` | À l'oral |
+| `entrain.free.voiceText` | Avec votre voix |
+| `entrain.recent` | Derniers entraînements |
+| `entrain.recentTitle` | {job} · {mode} |
+| `entrain.mode.text` | écrit |
+| `entrain.mode.voice` | oral |
+| `entrain.recentLine` | {date} · {count, plural, one {# question} other {# questions}} |
+| `entrain.feedbackReady` | retour prêt |
+| `entrain.inProgress` | en cours |
+| `entrain.empty` | Vos entraînements apparaîtront ici. Ils restent privés. |
+| `entrain.private` | Privé : le recruteur ne voit jamais vos entraînements. |
+| `entrain.gratuit` | Gratuit |
+| `entrain.tipLine` | Conseils · {minutes} min |
+| `entrain.allTips` | Toutes les fiches de conseils |
+| `entrain.locked.title` | Simulations avec Orbi dès {plan} |
+| `entrain.locked.text` | Écrites dès {text}, à l'oral dès {voice}. |
+| `entrain.applyFree` | Postuler et passer vos entretiens restent gratuits. |
+| `entrain.plans` | Voir les formules |
+| `entrain.error.consent` | Les simulations utilisent l'IA. Activez-la dans vos paramètres de confidentialité pour commencer. |
+| `entrain.error.entitlement` | Ce format de simulation n'est pas inclus dans votre formule. |
+| `entrain.error.quota` | Vous avez utilisé toutes les simulations de ce format ce mois-ci. |
+| `entrain.error.invalid` | Vérifiez le métier et les options choisies. |
+| `entrain.new.title` | Nouvel entraînement |
+| `entrain.new.close` | Fermer |
+| `entrain.new.job` | Métier |
+| `entrain.new.offer` | Offre (facultatif) |
+| `entrain.new.noOffer` | Aucune, seulement le métier |
+| `entrain.new.level` | Niveau du poste |
+| `entrain.new.levels.easy` | Junior |
+| `entrain.new.levels.standard` | Confirmé |
+| `entrain.new.levels.hard` | Senior |
+| `entrain.new.types` | Types de questions |
+| `entrain.new.type.motivation` | Motivation |
+| `entrain.new.type.technical` | Techniques |
+| `entrain.new.type.behavioral` | Mises en situation |
+| `entrain.new.type.hr` | Questions RH |
+| `entrain.new.format` | Format |
+| `entrain.new.length` | Durée |
+| `entrain.new.formatLocked` | Dès {plan} |
+| `entrain.fb.oralTitle` | Votre retour · oral |
+| `entrain.fb.oral` | À l'oral |
+| `entrain.fb.criteria` | Les 5 critères |
+| `entrain.fb.criteriaNote` | Un niveau par critère, jamais une note. |
+| `entrain.fb.review` | Revoir ma réponse {n} |
+| `entrain.fb.reviewTip` | Avec la réponse proposée par Orbi |
+| `entrain.fb.reviewPlain` | Votre réponse et le commentaire d'Orbi |
+| `entrain.fb.why` | Pourquoi ce retour ? |
+| `entrain.fb.whyTitle` | Pourquoi ce retour |
+| `entrain.fb.close` | Fermer |
+| `entrain.voice.kind` | {kind} · oral |
+| `entrain.voice.time` | {time} / 2:00 |
+| `entrain.voice.record` | Parler |
+| `entrain.voice.stop` | J'ai terminé |
+| `entrain.voice.clear` | Effacer et recommencer |
+| `entrain.voice.send` | Envoyer ma réponse |
+| `entrain.voice.transcript` | Votre réponse transcrite, à relire avant d'envoyer |
+| `entrain.voice.privacy` | Votre voix sert seulement à transcrire la réponse. Aucun enregistrement n'est gardé : l'audio n'est jamais envoyé. |
+
 ### `/app/orbi` · Orbi en plein écran
 
 *L'onglet central, en page de conversation (talent lot 4 § 9) : retour en haut, pas de barre du bas. Les quatre aides mènent aux fonctions existantes ; la conversation libre est gardée dans l'historique. Orbi propose, la personne décide.*

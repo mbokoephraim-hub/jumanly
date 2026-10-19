@@ -68,6 +68,9 @@ export function ownHead(pathname: string) {
     /^\/app\/notifications$/,
     // Lot 5: every page of Apprendre under its home.
     /^\/app\/learn\/.+/,
+    // Lot 6b: faire le point, the diagnostic, the plan and the practice (planche talent-4 § 5).
+    /^\/app\/profil\/point$/,
+    /^\/app\/career\/(diagnostic|plan|entretiens)(\/.*)?$/,
   ].some((pattern) => pattern.test(pathname));
 }
 

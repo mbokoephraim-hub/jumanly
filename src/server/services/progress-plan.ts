@@ -134,3 +134,22 @@ export function toggleStep(db: PrismaClient, userId: string, stepId: string) {
 export function deleteStep(db: PrismaClient, userId: string, stepId: string) {
   return editSteps(db, userId, (steps) => steps.filter((step) => step.id !== stepId));
 }
+
+/** « Modifier l'étape » (planche talent-4 § 5): the talent rewrites its title or its date. */
+export function updateStep(
+  db: PrismaClient,
+  userId: string,
+  stepId: string,
+  input: z.infer<typeof stepInputSchema>,
+) {
+  return editSteps(db, userId, (steps) =>
+    steps.map((step) =>
+      step.id === stepId ? { ...step, title: input.title, due: input.due || null } : step,
+    ),
+  );
+}
+
+/** The step in progress: the first one not done yet. */
+export function currentStepId(steps: PlanStep[]) {
+  return steps.find((step) => !step.done)?.id ?? null;
+}
