@@ -23,7 +23,11 @@ test("Compte : profil, abonnement, apparence gardée, déconnexion", async ({ pa
     "aria-pressed",
     "true",
   );
-  await appearance.getByRole("button", { name: "Sombre" }).click();
+  // The button lights up at once; the choice is saved by a server action that must finish
+  // before the page changes.
+  const saved = () =>
+    page.waitForResponse((response) => response.request().method() === "POST" && response.ok());
+  await Promise.all([saved(), appearance.getByRole("button", { name: "Sombre" }).click()]);
   await expect(appearance.getByRole("button", { name: "Sombre" })).toHaveAttribute(
     "aria-pressed",
     "true",
@@ -36,10 +40,10 @@ test("Compte : profil, abonnement, apparence gardée, déconnexion", async ({ pa
   await expect(page.locator("html")).toHaveClass(/sombre/);
   if (isMobile) await expectAccessible(page);
   await page.goto("/app/compte");
-  await page
-    .getByRole("group", { name: "Apparence" })
-    .getByRole("button", { name: "Clair" })
-    .click();
+  await Promise.all([
+    saved(),
+    page.getByRole("group", { name: "Apparence" }).getByRole("button", { name: "Clair" }).click(),
+  ]);
   await expect(
     page.getByRole("group", { name: "Apparence" }).getByRole("button", { name: "Clair" }),
   ).toHaveAttribute("aria-pressed", "true");
