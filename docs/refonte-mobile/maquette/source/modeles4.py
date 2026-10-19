@@ -143,3 +143,20 @@ def doc(titre, corps, css=''):
     return (f'<!doctype html><html lang="fr"><head><meta charset="utf-8"><title>{titre}</title>'
             '<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;600;700&display=swap" rel="stylesheet">'
             f'<style>body{{margin:0;background:#F2EDE5;display:flex;flex-direction:column;align-items:center;gap:24px;padding:24px}}@page{{size:A4;margin:0}}@media print{{body{{padding:0;gap:0;background:#fff}}.rp-p{{box-shadow:none}}}}{css}</style></head><body>{corps}</body></html>')
+
+def mail_fin_offre():
+    kp = ''.join(f'<td style="width:33%;padding:14px 8px;text-align:center;border-left:{"0" if k==0 else "1px solid #E5DED3"}"><div style="font-size:24px;font-weight:700;color:{SAPIN}">{v}</div><div style="font-size:12px;color:{TXT2}">{l}</div></td>' for k,(v,l) in enumerate([('24','candidatures'),('1 240','vues'),('3','entretiens')]))
+    def act(t, s, prim=False):
+        bg, c, s2 = (SAPIN, '#fff', '#CFE9DF') if prim else (CREME, SAPIN, TXT2)
+        return f'<a style="display:block;padding:14px 18px;border-radius:14px;background:{bg};color:{c};text-decoration:none;margin-bottom:8px"><b style="font-size:14.5px">{t}</b><span style="display:block;font-size:12.5px;color:{s2};margin-top:2px">{s}</span></a>'
+    corps = ('<p style="margin:0 0 14px">Bonjour Nadia,</p>'
+             '<p style="margin:0 0 14px">Votre offre <b>Analyste de données junior</b> se termine le <b>vendredi 31 octobre</b>, dans trois jours. Voici où elle en est.</p>'
+             f'<table style="width:100%;border-collapse:collapse;background:{CREME};border-radius:14px;margin:18px 0"><tr>{kp}</tr></table>'
+             '<p style="margin:0 0 12px"><b>Ce que vous pouvez faire maintenant</b></p>'
+             + act('Analyser et classer les 24 CV', 'Orbi prépare un classement expliqué. Rien n’est envoyé aux candidats.', True)
+             + act('Voir les statistiques', 'Vues, sources et étapes de recrutement.')
+             + act('Prolonger l’offre', '7, 14 ou 30 jours de plus, ou la date de votre choix.')
+             + act('Clôturer ou annuler', 'Les candidats sont prévenus par un message que vous relisez.') +
+             f'<p style="margin:18px 0 14px;color:{TXT2};font-size:13px">Sans action de votre part, l’offre se clôture le 31 octobre à 23:59 (heure de Kinshasa). Les candidatures reçues restent dans votre espace.</p>'
+             '<p style="margin:0 0 22px">Bon recrutement,<br><b>L’équipe Jumanly</b></p>')
+    return _cadre(_entete('Votre offre se termine dans 3 jours', 'Analyste de données junior · Baobab Fintech', 'Rappel de fin d’offre', '#FBE3B0', SAPIN), corps, 'vous avez publié une offre sur Jumanly. Rappels réglables dans votre compte')

@@ -415,6 +415,124 @@ ENT_MENU = phone(f'''{OFFRE_T}''', avec_nav=False,
 <a><span class="cases" style="background:var(--g-oppo)">{ic("modifier","s")}</span><span class="t">Modifier l’offre</span></a>
 <a><span class="cases" style="background:var(--g-accomp)">{ic("partager","s")}</span><span class="t">Partager le lien</span></a></div></div>''')
 
+# ---------- v4.3 : moment de l'analyse ATS + rappel de fin d'offre (demande d'Ephraïm du 19/10) ----------
+CSSR += '''
+.q-op{display:flex;flex-direction:column;gap:10px}
+.q-op a{display:flex;gap:12px;align-items:flex-start;padding:14px;border-radius:20px;background:var(--plein);box-shadow:var(--verre)}
+.q-op a.on{box-shadow:0 0 0 2px #0F3F37,var(--verre)}.sombre .q-op a.on{box-shadow:0 0 0 2px #A6F26B}
+.q-op .cases{width:42px;height:42px;border-radius:14px;flex:none}
+.q-op .t{flex:1}.q-op .t b{display:block;font-size:14px}.q-op .t span{display:block;font-size:12px;color:var(--texte2);margin-top:2px;line-height:1.4}
+.q-op .t em{font-style:normal;display:inline-block;margin-top:7px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:99px;background:var(--zone);color:var(--texte2)}
+.q-op .rd{width:22px;height:22px;border-radius:50%;flex:none;box-shadow:inset 0 0 0 2px var(--trait);margin-top:2px}
+.q-op a.on .rd{box-shadow:inset 0 0 0 7px #0F3F37}.sombre .q-op a.on .rd{box-shadow:inset 0 0 0 7px #A6F26B}
+.q-sw{display:flex;align-items:center;gap:12px;padding:12px 14px;border-radius:18px;background:var(--zone);font-size:12.5px}.q-sw .t{flex:1}.q-sw .t b{display:block;font-size:13px}
+.prg{display:flex;flex-direction:column;gap:12px;padding:16px;border-radius:24px;background:var(--plein);box-shadow:var(--verre)}
+.prg .h{display:flex;gap:12px;align-items:center}.prg .h .t{flex:1}.prg .h b{display:block;font-size:15px}.prg .h span{font-size:12px;color:var(--texte2)}
+.prg .cal{width:52px;height:56px;border-radius:16px;overflow:hidden;flex:none;background:#fff;box-shadow:0 6px 16px -8px rgba(15,63,55,.4);display:flex;flex-direction:column;text-align:center}
+.prg .cal i{font-style:normal;font-size:9.5px;font-weight:800;letter-spacing:.08em;background:#0F3F37;color:#A6F26B;padding:3px 0}.prg .cal b{font-size:22px;color:#0F3F37;line-height:1.5}
+.prg .tl2{display:flex;align-items:center;gap:0;padding:4px 2px}
+.prg .tl2 div{flex:1;display:flex;flex-direction:column;align-items:flex-start;gap:6px;font-size:10.5px;color:var(--texte2);position:relative}
+.prg .tl2 div:before{content:"";height:4px;width:100%;border-radius:3px;background:var(--trait)}
+.prg .tl2 div.ok:before{background:linear-gradient(90deg,#A6F26B,#2FD3A6)}.prg .tl2 div.ok{color:var(--texte);font-weight:600}
+.prg .rw{display:flex;gap:8px}
+.f-card{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:14px;padding:16px;border-radius:24px;background:var(--plein);box-shadow:0 0 0 1.5px rgba(242,179,61,.55),var(--verre)}
+.f-card .h{display:flex;gap:12px;align-items:center}
+.f-card .cd{width:48px;height:48px;border-radius:16px;flex:none;display:grid;place-items:center;align-content:center;background:linear-gradient(150deg,#FFF3D6,#F8CF73);color:#0F3F37;line-height:1}
+.f-card .cd b{font-size:19px}.f-card .cd small{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.f-card .h .t{flex:1}.f-card .h .t b{display:block;font-size:14.5px}.f-card .h .t span{font-size:12px;color:var(--texte2)}
+.f-card .h .when{font-size:11px;color:var(--texte2);align-self:flex-start}
+.f-kp{display:grid;grid-template-columns:repeat(3,1fr);border-radius:16px;background:var(--zone);padding:10px 4px}
+.f-kp div{text-align:center;font-size:10.5px;color:var(--texte2)}.f-kp div+div{border-left:1px solid var(--trait)}.f-kp b{display:block;font-size:17px;color:var(--texte)}
+.f-ac{display:flex;flex-direction:column;gap:8px}
+.f-ac a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:16px;background:var(--zone);font-size:13px;font-weight:600}
+.f-ac a .cases{width:34px;height:34px;border-radius:11px;flex:none}.f-ac a .t{flex:1}.f-ac a .t small{display:block;font-size:11px;font-weight:500;color:var(--texte2)}
+.f-ac a.p{background:#0F3F37;color:#fff}.f-ac a.p small{color:#CFE9DF}.f-ac a.p .cases{background:#A6F26B;color:#0F3F37}
+.sombre .f-ac a.p{background:#A6F26B;color:#0F3F37}.sombre .f-ac a.p small{color:#2E5A4E}.sombre .f-ac a.p .cases{background:#0F3F37;color:#A6F26B}
+.f-ac a>.ic:last-child{width:16px;height:16px;opacity:.6}
+.pr-ch{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pr-ch a{display:flex;flex-direction:column;align-items:center;gap:2px;padding:12px 6px;border-radius:18px;background:var(--plein);box-shadow:var(--verre);font-size:11px;color:var(--texte2)}
+.pr-ch a b{font-size:18px;color:var(--texte)}.pr-ch a.on{background:#0F3F37;color:#CFE9DF;box-shadow:none}.pr-ch a.on b{color:#fff}
+.sombre .pr-ch a.on{background:#A6F26B;color:#2E5A4E}.sombre .pr-ch a.on b{color:#0F3F37}
+.pr-av{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:18px;background:var(--zone);font-size:12.5px}
+.pr-av .d{flex:1;display:flex;align-items:center;gap:8px}.pr-av s{color:var(--texte2)}.pr-av b{font-size:14px}
+.cl-op{display:flex;flex-direction:column;gap:10px}
+.cl-op a{display:flex;gap:12px;padding:14px;border-radius:20px;background:var(--plein);box-shadow:var(--verre)}
+.cl-op a.on{box-shadow:0 0 0 2px #0F3F37,var(--verre)}.sombre .cl-op a.on{box-shadow:0 0 0 2px #A6F26B}
+.cl-op .cases{width:40px;height:40px;border-radius:13px;flex:none}.cl-op .t{flex:1}.cl-op .t b{display:block;font-size:14px}.cl-op .t span{display:block;font-size:12px;color:var(--texte2);line-height:1.45;margin-top:2px}
+.lock{background:radial-gradient(120% 70% at 50% 0%,#2A7A66 0%,#0F3F37 55%,#0A2B26 100%)!important;color:#fff}
+.lock .statut{color:#fff}
+.lk-h{display:flex;flex-direction:column;align-items:center;gap:2px;margin:18px 0 22px}.lk-h small{font-size:14px;color:#CFE9DF}.lk-h b{font-size:76px;font-weight:300;letter-spacing:-.03em;line-height:1}
+.lk-n{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:22px;background:rgba(255,255,255,.14);backdrop-filter:blur(16px);color:#fff}
+.lk-n .a{display:flex;align-items:center;gap:8px;font-size:11.5px;color:#CFE9DF}.lk-n .a .lkl{font-style:normal;flex:none;width:22px;height:22px;border-radius:7px;background:#A6F26B;color:#0F3F37;display:grid;place-items:center;font-weight:800;font-size:12px}.lk-n .a span{flex:1}
+.lk-n b{font-size:13.5px}.lk-n p{margin:0;font-size:12.5px;line-height:1.4;color:#E6F3EE}
+.lk-n .bts{display:flex;gap:6px;margin-top:4px}.lk-n .bts a{flex:1;text-align:center;font-size:12px;font-weight:700;padding:8px 0;border-radius:12px;background:rgba(255,255,255,.14)}
+.rap-l{display:flex;flex-direction:column}
+.rap-l .r{display:flex;align-items:center;gap:12px;padding:12px 14px;border-top:1px solid var(--trait)}.rap-l .r:first-child{border-top:0}
+.rap-l .j{white-space:nowrap;width:42px;height:42px;border-radius:14px;flex:none;display:grid;place-items:center;font-size:12.5px;font-weight:800;background:var(--zone)}
+.rap-l .j.a{background:linear-gradient(150deg,#FFF3D6,#F8CF73);color:#0F3F37}.rap-l .j.r{background:linear-gradient(150deg,#FDE3DC,#F4A28C);color:#0F3F37}.rap-l .j.v{background:var(--g-former);color:#0F3F37}
+.rap-l .t{flex:1}.rap-l .t b{display:block;font-size:13.5px}.rap-l .t span{font-size:11.5px;color:var(--texte2)}
+.rap-l .ch3{display:flex;gap:4px}.rap-l .ch3 i{font-style:normal;font-size:10px;font-weight:700;padding:3px 7px;border-radius:99px;background:var(--zone);color:var(--texte2)}
+'''
+_SH = '<div class="voile"></div><div class="sheet"><div class="poignee"></div>'
+
+ATS_QUAND = phone(f'''{OFFRE_T}''', avec_nav=False,
+ bas=f'''{_SH}<h3>Quand analyser les candidatures ?</h3><div class="q-op">
+<a class="on"><span class="cases" style="background:var(--g-former)">{orbi(22)}</span><span class="t"><b>Maintenant</b><span>Les 24 candidatures reçues à ce jour. Les suivantes pourront être analysées plus tard.</span><em>24 crédits</em></span><span class="rd"></span></a>
+<a><span class="cases" style="background:var(--g-oppo)">{ic("agenda","s")}</span><span class="t"><b>À la fin de l’offre</b><span>Une seule fois, le 31 octobre, sur toutes les candidatures. Vous êtes prévenu dès que c’est prêt.</span><em>1 crédit par CV, au lancement</em></span><span class="rd"></span></a></div>
+<div class="q-sw"><div class="t"><b>Ajouter les nouvelles au classement</b>Chaque CV reçu après l’analyse est lu à son arrivée.</div><span class="sw"></span></div>
+<a class="bt p pl">Lancer l’analyse</a></div>''')
+
+ATS_PROG = phone(f'''{OFFRE_T}
+<div class="prg"><div class="h"><span class="cal"><i>OCT.</i><b>31</b></span><div class="t"><b>Analyse programmée</b><span>À la clôture de l’offre, sur toutes les candidatures</span></div></div>
+<div class="tl2"><div class="ok">Publiée 2 oct.</div><div class="ok">Aujourd’hui</div><div>Rappel 28 oct.</div><div>Analyse 31 oct.</div></div>
+<div class="f-kp"><div><b>24</b>reçues</div><div><b>≈ 35</b>attendues</div><div><b>99</b>crédits dispo.</div></div>
+<div class="rw"><a class="bt sec s" style="flex:1">Modifier</a><a class="bt sec s" style="flex:1">Annuler</a><a class="bt p s" style="flex:1.3">Lancer maintenant</a></div></div>
+<div class="orbi-l">{orbi(26)}<div class="t">Les crédits ne sont utilisés qu’au lancement. S’il en manque le 31, je vous préviens avant.</div></div>
+<div class="sec-t"><h2>Candidatures reçues</h2><a>Voir les 24</a></div>
+{rc(1,"AM","","Amani M.","Reçue il y a 2 h",88,[],mini=True)}''', avec_nav=False, cls='long')
+
+FIN_NOTIF = phone(f'''{tete_f("Notifications", droite="reglages")}
+<span class="lab-c" style="margin-bottom:-4px">À traiter</span>
+<div class="f-card"><div class="h"><span class="cd"><b>3</b><small>jours</small></span><div class="t"><b>Votre offre se termine bientôt</b><span>Analyste de données junior · fin le 31 oct.</span></div><span class="when">08:00</span></div>
+<div class="f-kp"><div><b>24</b>candidatures</div><div><b>1 240</b>vues</div><div><b>3</b>entretiens</div></div>
+<div class="f-ac">
+<a class="p"><span class="cases">{orbi(20)}</span><span class="t">Analyser et classer<small>Les 24 CV, avant la fin</small></span>{ic("suivant","s")}</a>
+<a><span class="cases" style="background:var(--g-accomp)">{ic("progression","s")}</span><span class="t">Voir les statistiques<small>Vues, sources, étapes</small></span>{ic("suivant","s")}</a>
+<a><span class="cases" style="background:var(--g-former)">{ic("agenda","s")}</span><span class="t">Prolonger l’offre<small>Choisir une nouvelle date</small></span>{ic("suivant","s")}</a>
+<a><span class="cases" style="background:var(--zone)">{ic("fermer","s")}</span><span class="t">Clôturer ou annuler<small>Les candidats sont prévenus</small></span>{ic("suivant","s")}</a></div></div>
+<span class="lab-c" style="margin-bottom:-4px">Plus tôt</span>
+<div class="verre liste lignes">{nt("c2","candidats","4 nouvelles candidatures","Analyste de données junior","10:40")}{nt("c1","offre","Offre publiée","Comptable confirmé","Lun.")}</div>''', avec_nav=False, cls='long')
+
+FIN_PROL = phone(f'''{tete_f("Notifications", droite="reglages")}''', avec_nav=False,
+ bas=f'''{_SH}<h3>Prolonger l’offre</h3><span style="font-size:12.5px;color:var(--texte2);margin-top:-6px">Analyste de données junior</span>
+<div class="pr-ch"><a><b>+7</b>jours</a><a class="on"><b>+14</b>jours</a><a><b>+30</b>jours</a></div>
+<a class="li verre" style="padding:12px 14px;border-radius:18px">{ic("agenda","s")}<div class="t"><b>Autre date</b></div>{ic("suivant","s")}</a>
+<div class="pr-av"><div class="d"><s>31 oct.</s>{ic("suivant","xs")}<b>14 novembre 2026</b></div><span class="etq-s ret">Nouvelle fin</span></div>
+<div class="q-sw"><div class="t"><b>Programmer l’analyse au 14 nov.</b>L’analyse prévue suit la nouvelle date.</div><span class="sw on"></span></div>
+<a class="bt p pl">Prolonger jusqu’au 14 nov.</a></div>''')
+
+FIN_CLO = phone(f'''{tete_f("Notifications", droite="reglages")}''', avec_nav=False,
+ bas=f'''{_SH}<h3>Clôturer ou annuler</h3><div class="cl-op">
+<a class="on"><span class="cases" style="background:var(--g-former)">{ic("valider","s")}</span><span class="t"><b>Clôturer maintenant</b><span>Plus de nouvelles candidatures. Les 24 reçues restent à traiter, l’analyse reste possible.</span></span></a>
+<a><span class="cases" style="background:var(--zone)">{ic("fermer","s")}</span><span class="t"><b>Annuler le recrutement</b><span>Le poste n’est plus ouvert. Chaque candidat reçoit un message relu par vous.</span></span></a>
+<a><span class="cases" style="background:var(--g-accomp)">{ic("horloge","s")}</span><span class="t"><b>Laisser finir le 31 oct.</b><span>Rien ne change.</span></span></a></div>
+<a class="bt p pl">Clôturer l’offre</a></div>''')
+
+FIN_LOCK = phone(f'''<div class="lk-h"><small>Mardi 28 octobre</small><b>8:00</b></div>
+<div class="lk-n"><div class="a"><i class="lkl">J</i><span>JUMANLY HIRE</span>maintenant</div><b>Plus que 3 jours pour « Analyste de données junior »</b><p>24 candidatures, 1 240 vues. Analyser, prolonger ou clôturer ?</p><div class="bts"><a>Statistiques</a><a>Prolonger</a></div></div>
+<div class="lk-n"><div class="a"><i class="lkl">J</i><span>JUMANLY HIRE</span>31 oct.</div><b>Analyse terminée : 5 dossiers recommandés</b><p>Orbi a classé les 31 candidatures, avec le pourquoi.</p></div>
+<div class="lk-n" style="opacity:.75"><div class="a"><i class="lkl">J</i><span>JUMANLY HIRE</span>31 oct.</div><b>Votre offre est clôturée</b><p>Pensez à répondre aux candidats non retenus.</p></div>''', avec_nav=False, cls='lock')
+
+FIN_REG = phone(f'''{tete_f("Rappels de fin d’offre")}
+<div class="verre rap-l">
+<div class="r"><span class="j v">J-7</span><div class="t"><b>Une semaine avant</b><span>Point d’étape et statistiques</span></div><span class="sw"></span></div>
+<div class="r"><span class="j a">J-3</span><div class="t"><b>Trois jours avant</b><span>Analyser, prolonger ou clôturer</span></div><span class="sw on"></span></div>
+<div class="r"><span class="j r">J-1</span><div class="t"><b>La veille</b><span>Dernier rappel</span></div><span class="sw on"></span></div>
+<div class="r"><span class="j">Fin</span><div class="t"><b>Le jour de clôture</b><span>Bilan et réponses aux candidats</span></div><span class="sw on"></span></div></div>
+<span class="lab-c">Recevoir par</span>
+<div class="verre rap-l">
+<div class="r"><span class="cases" style="width:38px;height:38px;border-radius:12px;background:var(--g-former)">{ic("notification","s")}</span><div class="t"><b>Notification</b><span>Dans l’app et sur le téléphone</span></div><span class="sw on"></span></div>
+<div class="r"><span class="cases" style="width:38px;height:38px;border-radius:12px;background:var(--g-accomp)">{ic("message","s")}</span><div class="t"><b>E-mail</b><span>nadia.k@baobab-fintech.example</span></div><span class="sw on"></span></div></div>''', avec_nav=False, cls='long')
 # ---------- 2. Réponses groupées ----------
 ENV = phone(f'''{tete_f("Répondre aux candidats", droite=None)}
 <div class="ch2"><a class="on"><span class="cases" style="background:var(--g-accent)">{ic("valider","s")}</span><b>Retenus · 5</b>Invitation à l’entretien</a><a><span class="cases" style="background:var(--zone)">{ic("message","s")}</span><b>Non retenus · 19</b>Réponse respectueuse</a></div>
@@ -583,6 +701,9 @@ CHEMINS = [
  ('Demander de l’aide à Orbi dans une conversation', ['Conversation', 'Orbi dans la zone de saisie']),
  ('Voir tous les contacts', ['Candidats', 'Contacts']),
  ('Rejoindre son organisation', ['Inscription', 'Je recrute', 'Votre organisation', 'Demander à rejoindre']),
+ ('Choisir quand analyser', ['Lancer l’analyse', 'Maintenant ou À la fin de l’offre']),
+ ('Rappel de fin d’offre', ['Notification ou e-mail J-3', 'Analyser, Statistiques, Prolonger ou Clôturer']),
+ ('Régler les rappels', ['Notifications', 'Réglages', 'Rappels de fin d’offre']),
  ('Exporter un rapport', ['Compte', 'Rapports', 'Exporter en PDF']),
 ]
 def chemins():
@@ -591,6 +712,7 @@ def chemins():
 
 MAILS = f'''<div class="mail-g"><figure>{mail_retenu()}<figcaption><b>Candidature retenue</b> · invitation à l’entretien</figcaption></figure>
 <figure>{mail_refus()}<figcaption><b>Candidature non retenue</b> · réponse respectueuse</figcaption></figure>
+<figure>{mail_fin_offre()}<figcaption><b>Rappel de fin d’offre</b> · trois jours avant</figcaption></figure>
 <figure>{mail_admin()}<figcaption><b>Admin principale</b> · demande pour rejoindre l’organisation</figcaption></figure></div>'''
 RAPPORT_PDF = f'<div class="rp-g2"><div class="sc">{rapport_p1()}</div><div class="sc">{rapport_p2()}</div></div>'
 
@@ -600,6 +722,8 @@ ECR = [
   [ecrans((ENT_OFF,'Depuis Mes offres','Bouton Analyser (ATS) sur chaque offre.'),(ENT_CAND,'Depuis Candidats','Carte ATS au-dessus de la liste de l’offre.'),(ENT_AT,'Depuis À traiter','Orbi signale les candidatures à classer.'),(ENT_MENU,'Depuis une offre','Menu ⋯ de l’offre.'))]),
  ('x1','1 · ATS : analyser et classer','En un geste, Orbi lit tous les CV d’une offre, les classe par score et explique. Le recruteur choisit qui retenir.',
   [ecrans((ATS1,'Candidatures de l’offre','Classées par score, analyse en un geste.'),(ATS2,'Analyse en cours','Dossier par dossier.'),(ATS3,'Recommandation d’Orbi','5 dossiers prioritaires, avec leur pourquoi.'),(ATS4,'Profil pour cette offre','Critère par critère, avec la preuve.'),(ATS_SEL,'Sélection rapide','Cocher, puis retenir.'),(RETENUS,'Liste des retenus','Pour l’étape suivante.'))]),
+ ('x1b','1 bis · Quand lancer l’analyse','Maintenant, sur les candidatures déjà reçues, ou une seule fois à la fin de l’offre. Les crédits ne sont utilisés qu’au lancement.',
+  [ecrans((ATS_QUAND,'Choisir le moment','Maintenant ou à la fin de l’offre.'),(ATS_PROG,'Analyse programmée','Modifiable, annulable, ou lancée plus tôt.'))]),
  ('x2','2 · Répondre à tous','Retenus et non retenus, par message Jumanly et par e-mail. Toujours relu, annulable 10 minutes.',
   [ecrans((ENV,'Choisir et relire','Modèle, canal, phrase personnalisée.'),(ENV_OK,'Confirmer','19 réponses, annulation possible.'),(MSG_LONG,'Message « retenue »','Ce que reçoit la candidate.'),(MSG_REFUS,'Message « non retenu »','Respectueux, avec une suite.'))]),
  ('x3','3 · Modèles d’e-mail','Aux couleurs de Jumanly, sans numéro de téléphone. Le texte vient du modèle, relu avant l’envoi.', []),
@@ -609,6 +733,8 @@ ECR = [
   [ecrans((DEM_ENV,'Demande envoyée','Les étapes qui suivent.'),(TAL_REQ,'Côté talent','Ruth accepte ou refuse.'),(ACCEPTE,'Acceptée','La conversation s’ouvre.'),(CONTACTS,'Tous les contacts','Acceptés, en attente, refusés.'))]),
  ('x6','6 · Rejoindre une organisation existante','À l’inscription, l’organisation déjà présente s’affiche. L’admin principale décide.',
   [ecrans((ORG_TROUVE,'Organisation trouvée','Fiche, équipe, domaine reconnu.'),(JOIN_ATT,'Demande envoyée','En attente de l’admin.'),(ADM_NOTIF,'Côté admin','Rôle choisi, accepter ou refuser.'))]),
+ ('x6b','6 bis · Fin d’une offre : rappels','Avant la clôture, le recruteur est prévenu : analyser, voir les statistiques, prolonger ou clôturer.',
+  [ecrans((FIN_NOTIF,'Notification J-3','Chiffres et quatre actions.'),(FIN_PROL,'Prolonger','+7, +14, +30 jours ou une date.'),(FIN_CLO,'Clôturer ou annuler','Conséquences dites clairement.'),(FIN_LOCK,'Sur le téléphone','Rappel, analyse prête, clôture.'),(FIN_REG,'Réglage des rappels','J-7, J-3, J-1, jour de fin.'))]),
  ('x7','7 · Rapport PDF','Toujours exporté en PDF A4, aux couleurs de Jumanly. Chiffres réels, aucune donnée personnelle.',
   [ecrans((RAPPORT,'Rapports','Aperçu et export.'),(EXPORT,'Exporter','Période, offres, contenu.'))]),
  ('x8','8 · Mode sombre','',
@@ -634,4 +760,5 @@ os.makedirs(M, exist_ok=True)
 open(os.path.join(M, 'email-candidature-retenue.html'), 'w').write(doc('Candidature retenue', mail_retenu()))
 open(os.path.join(M, 'email-candidature-non-retenue.html'), 'w').write(doc('Candidature non retenue', mail_refus()))
 open(os.path.join(M, 'email-demande-rejoindre-organisation.html'), 'w').write(doc('Demande pour rejoindre', mail_admin()))
+open(os.path.join(M, 'email-rappel-fin-offre.html'), 'w').write(doc('Rappel de fin d’offre', mail_fin_offre()))
 open(os.path.join(M, 'rapport-recrutement.html'), 'w').write(doc('Rapport de recrutement', rapport_p1() + rapport_p2(), RCSS))
