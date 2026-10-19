@@ -46,6 +46,7 @@
     "hls.js": "1.6.15",
     "next": "16.4.0",
     "next-intl": "4.14.9",
+    "nodemailer": "10.1.2",
     "pdf-lib": "1.17.1",
     "pg": "^8.23.1",
     "puppeteer-core": "25.14.0",

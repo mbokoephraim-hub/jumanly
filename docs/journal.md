@@ -845,6 +845,13 @@ Studio formations avec modèles, éditeur par étapes, PDF à joindre, cinq PDF 
   échoue (un mot de passe divulgué reste refusé) et journalise l'incident ; toute autre erreur
   de l'inscription est journalisée. Note : `docs/decisions/2026-10-15-verification-mots-de-passe.md`.
 
+## Envoi des e-mails par une boîte mail (17 octobre 2026)
+
+- Le propriétaire trouve Resend trop lourd (compte, DNS). Ajout d'un adaptateur **SMTP**
+  (`nodemailer`) : `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASSWORD`. Ordre de choix : Resend,
+  puis SMTP, sinon factice. Solution recommandée pour démarrer : la boîte infojumanly@gmail.com
+  avec un mot de passe d'application (marche à suivre dans `docs/deploiement-vercel.md`).
+
 ## Envoi réel des e-mails (15 octobre 2026)
 
 - Le propriétaire ne recevait pas ses codes : `RESEND_API_KEY` n'était pas renseignée en
