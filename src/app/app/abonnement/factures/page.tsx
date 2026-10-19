@@ -1,14 +1,12 @@
 import type { Metadata } from "next";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { InvoiceRows } from "@/components/talent/billing/invoice-rows";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
-import { dynamic } from "@/i18n/dynamic";
-import { formatShortDate } from "@/lib/dates";
 import { interpolate, slot } from "@/lib/interpolate";
-import { formatUsd } from "@/lib/money";
 import { saveBillingDetailsAction } from "@/server/actions/billing";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -33,7 +31,6 @@ export default async function InvoicesPage({
   const user = await requireUser("/app/abonnement/factures");
   if (await inOrganizationSpace(user.id)) redirect("/app/abonnement");
   const t = await getTranslations();
-  const d = dynamic(t);
   const where = { subjectType: "user" as const, subjectId: user.id };
   const [invoices, details] = await Promise.all([
     db.invoice.findMany({
@@ -45,23 +42,21 @@ export default async function InvoicesPage({
       where: { subjectType_subjectId: { subjectType: "user", subjectId: user.id } },
     }),
   ]);
-  const month = new Intl.DateTimeFormat("fr-FR", { month: "long", timeZone: "UTC" });
-  const methodOf = (payment: { method: string; operator: string | null }) =>
-    payment.method === "mobile_money"
-      ? payment.operator && d.has(`checkout.mm.operators.${payment.operator}`)
-        ? d(`checkout.mm.operators.${payment.operator}`)
-        : t("paiement.mm")
-      : payment.method === "card"
-        ? t("paiement.method.card")
-        : payment.method === "cash"
-          ? t("paiement.method.cash")
-          : t("paiement.method.bankTransfer");
   const saved = params.facturation === "1";
   const failed = params.facturation === "erreur";
 
   return (
-    <div className="t-flux">
-      <FlowHead back="/app/abonnement" backLabel={t("factures.back")} title={t("factures.title")} />
+    <div className="t-flux t-w4 t-large">
+      <div className="t-w4-h">
+        <FlowHead
+          back="/app/abonnement"
+          backLabel={t("factures.back")}
+          title={t("factures.title")}
+        />
+        <p className="t-w4-web t-w4-sub">
+          {t("talentW4.invoices.subtitle", { count: invoices.length })}
+        </p>
+      </div>
       {saved && <Notice tone="ok">{t("factures.details.saved")}</Notice>}
       {failed && <Notice tone="err">{t("factures.details.error")}</Notice>}
 
@@ -71,40 +66,7 @@ export default async function InvoicesPage({
           <span>{t("factures.empty")}</span>
         </p>
       ) : (
-        <ul aria-label={t("factures.list")} className="t-verre t-liste t-lignes t-factures">
-          {invoices.map((invoice) => (
-            <li key={invoice.id}>
-              <a
-                href={`/app/abonnement/factures/${invoice.id}/pdf`}
-                download
-                className="t-li t-press"
-                aria-label={t("factures.download", { number: invoice.number })}
-              >
-                <span className="t-cases t-c2" aria-hidden>
-                  <TalentIcon name="document" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>
-                    {t("factures.item", {
-                      plan: invoice.planName,
-                      month: month.format(invoice.periodStart),
-                    })}
-                  </b>
-                  <span>
-                    {t("factures.line", {
-                      date: formatShortDate(invoice.issuedAt),
-                      method: methodOf(invoice.payment),
-                    })}
-                  </span>
-                </span>
-                <span className="t-v">
-                  {t("abonnement.amount", { amount: formatUsd(invoice.amountCents) })}
-                </span>
-                <TalentIcon name="telecharger" size="s" />
-              </a>
-            </li>
-          ))}
-        </ul>
+        <InvoiceRows invoices={invoices} table />
       )}
 
       <ul className="t-verre t-liste">

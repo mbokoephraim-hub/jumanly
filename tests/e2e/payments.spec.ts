@@ -7,7 +7,8 @@ import { demo, logIn, signUpFromPricing, testEmail } from "./session";
 // dial code (+243 by default) chosen apart.
 async function payWith(page: import("@playwright/test").Page, number: string) {
   await page.getByRole("radio", { name: /M-Pesa/ }).check();
-  await page.getByRole("button", { name: /^Payer/ }).click();
+  // On a tablet or a computer (planche web talent-4 § 7) the number is on the same screen.
+  if (page.viewportSize()!.width < 768) await page.getByRole("button", { name: /^Payer/ }).click();
   await page.getByLabel("Numéro Mobile Money").fill(number);
   await page.getByRole("button", { name: /^Payer/ }).click();
 }
@@ -76,10 +77,19 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
 
   // Upgrade: the unused time of Starter is deducted.
   await page.goto("/app/abonnement/payer?forfait=talent_pro");
-  await expect(page.getByText(/Déjà déduit : .* pour les jours restants de Starter/)).toBeVisible();
+  // On a computer (planche web talent-4 § 7) the deduction is a line of the « Récapitulatif ».
+  if (page.viewportSize()!.width < 768)
+    await expect(
+      page.getByText(/Déjà déduit : .* pour les jours restants de Starter/),
+    ).toBeVisible();
+  else await expect(page.getByRole("term").filter({ hasText: "Déjà déduit" })).toBeVisible();
   await page.goto("/app/abonnement");
   await expect(page.getByRole("main")).toContainText("Starter");
-  await expect(page.getByRole("link", { name: /Factures/ })).toContainText("1 · en PDF");
+  // On a computer (planche web talent-4 § 7) the last invoices are on the page itself.
+  if (page.viewportSize()!.width < 768)
+    await expect(page.getByRole("link", { name: /Factures/ })).toContainText("1 · en PDF");
+  else
+    await expect(page.getByRole("link", { name: /^Télécharger la facture JMN-/ })).toHaveCount(1);
   await expectAccessible(page);
 
   // The administrator records a manual refund.

@@ -46,9 +46,18 @@ function formPage(formData: FormData) {
   return /^\/app\/profil(\/[a-z]+)?$/.test(value) ? value : PROFILE;
 }
 
+/** The windows of the web profile (`/app/profil?fenetre=…`) a form can come back to. */
+const WINDOWS = ["modifier", "experience", "competence", "recherche"];
+
 function failed(formData: FormData, error: string, extra: Record<string, string> = {}): never {
   const id = String(formData.get("id") ?? "");
-  const params = new URLSearchParams({ ...(id ? { id } : {}), ...extra, erreur: error });
+  const fenetre = String(formData.get("fenetre") ?? "");
+  const params = new URLSearchParams({
+    ...(WINDOWS.includes(fenetre) ? { fenetre } : {}),
+    ...(id ? { id } : {}),
+    ...extra,
+    erreur: error,
+  });
   redirect(`${formPage(formData)}?${params}`);
 }
 

@@ -73,6 +73,7 @@ export default async function DiagnosticPage({
     if (v2)
       return (
         <DiagnosticResult
+          userId={user.id}
           id={current.id}
           date={current.createdAt}
           result={v2}

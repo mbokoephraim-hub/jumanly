@@ -99,7 +99,7 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
       if (payment.status === "pending") {
         const expiresAt = new Date(payment.createdAt.getTime() + PAYMENT_EXPIRY_MS);
         return (
-          <div className="t-flux t-conf">
+          <div className="t-flux t-conf t-w4-conf">
             <span className="t-rond-att" aria-hidden>
               <TalentIcon name="horloge" />
             </span>
@@ -175,7 +175,7 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
                     : "paiement.method.bankTransfer",
               );
         return (
-          <div className="t-flux t-conf">
+          <div className="t-flux t-conf t-w4-conf">
             <span className="t-rond-ok" aria-hidden>
               <TalentIcon name="valider" />
             </span>
@@ -209,7 +209,7 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
       }
       const failed = payment.status === "failed";
       return (
-        <div className="t-flux t-conf">
+        <div className="t-flux t-conf t-w4-conf">
           <span className="t-rond-ko" aria-hidden>
             <TalentIcon name={failed ? "fermer" : "horloge"} />
           </span>
@@ -242,7 +242,7 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
     const current = await liveSubscription(db, subject, now);
     if (current?.status === "trialing") {
       return (
-        <div className="t-flux t-conf">
+        <div className="t-flux t-conf t-w4-conf">
           <span className="t-rond-ok" aria-hidden>
             <TalentIcon name="valider" />
           </span>
@@ -280,6 +280,40 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
   }
 
   const current = quote.kind === "upgrade" ? await liveSubscription(db, subject, now) : null;
+  const periodValue = t("talentW4.pay.periodValue", {
+    start: formatDate(quote.periodStart),
+    end: formatDate(quote.periodEnd),
+  });
+  // The « Récapitulatif » at the right on a tablet or a computer (planche web talent-4 § 7).
+  const recap = (
+    <>
+      <h2 className="t-h4">{t("talentW4.pay.recap")}</h2>
+      <dl>
+        <div>
+          <dt>{t("talentW4.pay.plan")}</dt>
+          <dd>{t("paiement.summary", { plan: plan.name })}</dd>
+        </div>
+        <div>
+          <dt>{t("talentW4.pay.period")}</dt>
+          <dd>{periodValue}</dd>
+        </div>
+        <div>
+          <dt>{t("talentW4.pay.renewal")}</dt>
+          <dd>{t("talentW4.pay.renewalValue")}</dd>
+        </div>
+        {quote.creditCents > 0 && (
+          <div>
+            <dt>{t("talentW4.pay.credit")}</dt>
+            <dd>{amount(quote.creditCents)}</dd>
+          </div>
+        )}
+        <div className="t-w4-tot">
+          <dt>{t("talentW4.pay.total")}</dt>
+          <dd>{amount(quote.totalCents)}</dd>
+        </div>
+      </dl>
+    </>
+  );
   const summary = (
     <div className="t-verre t-recu">
       <div>
@@ -349,8 +383,11 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
   const error = (key: string) => d(`paiement.error.${key}`);
 
   return (
-    <div className="t-flux">
-      {head}
+    <div className="t-flux t-w4 t-large">
+      <div className="t-w4-h">
+        {head}
+        <p className="t-w4-web t-w4-sub">{t("paiement.summary", { plan: plan.name })}</p>
+      </div>
       {provider.id === "fake" && (
         <p className="t-gar">
           <TalentIcon name="aide" size="s" />
@@ -368,6 +405,7 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
         }))}
         country={user.country ?? "CD"}
         summary={summary}
+        recap={recap}
         labels={{
           mm: t("paiement.mm"),
           methods: t("paiement.methods.aria"),
@@ -381,6 +419,7 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
           number: t("paiement.number.label"),
           placeholder: t("paiement.number.placeholder"),
           help: t("paiement.number.help"),
+          receipt: t("talentW4.pay.receipt"),
           dial: {
             label: t("paiement.dial.label"),
             choose: t("paiement.dial.label"),

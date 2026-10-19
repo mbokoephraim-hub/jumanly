@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { HireSettings } from "@/components/account/hire-settings";
 import { FlowHead } from "@/components/talent/flow-head";
+import { SettingsNav } from "@/components/talent/settings-nav";
 import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import {
@@ -98,98 +99,108 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
   const appearance = t(`parametres.appearance.${user.appearance}`);
 
   return (
-    <div className="t-flux">
+    <div className="t-flux t-w4 t-large">
       <FlowHead back="/app/compte" backLabel={t("parametres.back")} title={t("parametres.title")} />
-      {one(params.ok) && <Notice tone="ok">{t("parametres.saved")}</Notice>}
-      {error && !deleting && <Notice tone="err">{t("parametres.error")}</Notice>}
+      <div className="t-w4-prm">
+        <SettingsNav on="affichage" />
+        <div className="t-w4-col">
+          {one(params.ok) && <Notice tone="ok">{t("parametres.saved")}</Notice>}
+          {error && !deleting && <Notice tone="err">{t("parametres.error")}</Notice>}
 
-      <ul aria-label={t("parametres.group.sections")} className="t-verre t-liste t-lignes">
-        <Row
-          href="/app/parametres/securite"
-          icon={cases("cadenas", "t-c2")}
-          title={t("parametres.security.title")}
-          text={t("parametres.security.text")}
-        />
-        <Row
-          href="/app/parametres/confidentialite"
-          icon={cases("confidentialite", "t-c1")}
-          title={t("parametres.privacy.title")}
-          text={t("parametres.privacy.text")}
-        />
-        <Row
-          href="/app/parametres/notifications"
-          icon={cases("notification", "t-c3")}
-          title={t("parametres.notifications.title")}
-          text={t("parametres.notifications.text")}
-        />
-      </ul>
-
-      <ul aria-label={t("parametres.group.device")} className="t-verre t-liste t-lignes">
-        <li>
-          <DataSaverRow
-            icon={cases("progression")}
-            title={t("parametres.dataSaver.title")}
-            text={t("parametres.dataSaver.text")}
-          />
-        </li>
-        <li>
-          <SheetButton target="parametres-apparence" className="t-li t-press">
-            {cases("orbi")}
-            <span className="t-t">
-              <b>{t("parametres.appearance.title")}</b>
-              <span>{t(`parametres.appearance.${user.appearance}Text`)}</span>
-            </span>
-            <span className="t-v">{appearance}</span>
-          </SheetButton>
-        </li>
-        <li>
-          <form action={updateDisplay}>
-            <SwitchRow
-              name="reduceMotion"
-              defaultChecked={user.reduceMotion}
-              icon={cases("horloge")}
-              title={t("parametres.motion.title")}
-              text={t("parametres.motion.text")}
+          <ul
+            aria-label={t("parametres.group.sections")}
+            className="t-verre t-liste t-lignes t-w4-tel"
+          >
+            <Row
+              href="/app/parametres/securite"
+              icon={cases("cadenas", "t-c2")}
+              title={t("parametres.security.title")}
+              text={t("parametres.security.text")}
             />
-            <noscript>
-              <button type="submit" className="t-bt t-txt t-s">
-                {t("parametres.save")}
-              </button>
-            </noscript>
-          </form>
-        </li>
-        <li className="t-li">
-          {cases("document")}
-          <span className="t-t">
-            <b>{t("parametres.language.title")}</b>
-            <span>{t("parametres.language.value")}</span>
-          </span>
-        </li>
-        <Row
-          href="/app/parametres?arrivee=1&revoir=1"
-          icon={cases("aujourdhui")}
-          title={t("parametres.intro.title")}
-          text={t("parametres.intro.text")}
-        />
-      </ul>
+            <Row
+              href="/app/parametres/confidentialite"
+              icon={cases("confidentialite", "t-c1")}
+              title={t("parametres.privacy.title")}
+              text={t("parametres.privacy.text")}
+            />
+            <Row
+              href="/app/parametres/notifications"
+              icon={cases("notification", "t-c3")}
+              title={t("parametres.notifications.title")}
+              text={t("parametres.notifications.text")}
+            />
+          </ul>
 
-      <ul aria-label={t("parametres.group.data")} className="t-verre t-liste t-lignes">
-        <Row
-          href="/app/parametres/export"
-          download
-          icon={cases("telecharger")}
-          title={t("parametres.export.title")}
-          text={t("parametres.export.text")}
-        />
-        <li>
-          <SheetButton target="parametres-supprimer" className="t-li t-danger t-press">
-            {cases("supprimer")}
-            <span className="t-t">
-              <b>{t("parametres.delete.title")}</b>
-            </span>
-          </SheetButton>
-        </li>
-      </ul>
+          <h2 className="t-w4-web t-w4-h3">{t("parametres.group.device")}</h2>
+          <ul aria-label={t("parametres.group.device")} className="t-verre t-liste t-lignes">
+            <li>
+              <DataSaverRow
+                icon={cases("progression")}
+                title={t("parametres.dataSaver.title")}
+                text={t("parametres.dataSaver.text")}
+              />
+            </li>
+            <li>
+              <SheetButton target="parametres-apparence" className="t-li t-press">
+                {cases("orbi")}
+                <span className="t-t">
+                  <b>{t("parametres.appearance.title")}</b>
+                  <span>{t(`parametres.appearance.${user.appearance}Text`)}</span>
+                </span>
+                <span className="t-v">{appearance}</span>
+              </SheetButton>
+            </li>
+            <li>
+              <form action={updateDisplay}>
+                <SwitchRow
+                  name="reduceMotion"
+                  defaultChecked={user.reduceMotion}
+                  icon={cases("horloge")}
+                  title={t("parametres.motion.title")}
+                  text={t("parametres.motion.text")}
+                />
+                <noscript>
+                  <button type="submit" className="t-bt t-txt t-s">
+                    {t("parametres.save")}
+                  </button>
+                </noscript>
+              </form>
+            </li>
+            <li className="t-li">
+              {cases("document")}
+              <span className="t-t">
+                <b>{t("parametres.language.title")}</b>
+                <span>{t("parametres.language.value")}</span>
+              </span>
+            </li>
+            <Row
+              href="/app/parametres?arrivee=1&revoir=1"
+              icon={cases("aujourdhui")}
+              title={t("parametres.intro.title")}
+              text={t("parametres.intro.text")}
+            />
+          </ul>
+
+          <h2 className="t-w4-web t-w4-h3">{t("parametres.group.data")}</h2>
+          <ul aria-label={t("parametres.group.data")} className="t-verre t-liste t-lignes">
+            <Row
+              href="/app/parametres/export"
+              download
+              icon={cases("telecharger")}
+              title={t("parametres.export.title")}
+              text={t("parametres.export.text")}
+            />
+            <li>
+              <SheetButton target="parametres-supprimer" className="t-li t-danger t-press">
+                {cases("supprimer")}
+                <span className="t-t">
+                  <b>{t("parametres.delete.title")}</b>
+                </span>
+              </SheetButton>
+            </li>
+          </ul>
+        </div>
+      </div>
 
       <Sheet
         id="parametres-apparence"

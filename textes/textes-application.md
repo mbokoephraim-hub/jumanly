@@ -4224,6 +4224,67 @@ Conventions :
 | `recherche.empty` | Rien ne correspond à « {query} ». |
 | `recherche.results` | {count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} » |
 
+### Espace talent · Web lot 4b (compte, profil, abonnement, paramètres, aide)
+
+*Mise en page ordinateur et tablette (docs/refonte-web/talent-4, sections 3 à 10) : textes qui n'existent que sur grand écran. Les autres textes viennent des pages mobiles.*
+
+| Clé | Texte |
+|---|---|
+| `talentW4.account.line` | {place} · compte talent |
+| `talentW4.account.lineAlone` | Compte talent |
+| `talentW4.account.profile` | Voir mon profil |
+| `talentW4.account.contact` | Une question : {email}. Aucun numéro de téléphone, réponse par e-mail. |
+| `talentW4.connections.count` | {count, plural, =0 {Aucune connexion} one {# connexion} other {# connexions}} · {received, plural, =0 {aucune demande} one {# demande} other {# demandes}} |
+| `talentW4.connections.search` | Rechercher une personne |
+| `talentW4.connections.message` | Message |
+| `talentW4.window.cancel` | Annuler |
+| `talentW4.window.close` | Fermer |
+| `talentW4.profile.edit` | Modifier |
+| `talentW4.profile.searchEmpty` | Dites ce que vous cherchez : métiers, lieux, contrat. |
+| `talentW4.profile.salary` | À partir de {amount} $ par mois |
+| `talentW4.profile.previewText` | Aperçu, rien n’est envoyé |
+| `talentW4.profile.pointText` | Bilan de votre profil |
+| `talentW4.profile.askOrbi` | Demander à Orbi |
+| `talentW4.diagnostic.subtitle` | Six notes sur 100 et le plan qui en découle |
+| `talentW4.diagnostic.share` | Partager |
+| `talentW4.diagnostic.again` | Refaire le diagnostic |
+| `talentW4.billing.extend` | Prolonger |
+| `talentW4.billing.change` | Changer de formule |
+| `talentW4.billing.of` | sur {limit} |
+| `talentW4.billing.applications` | Gratuites dans toutes les formules |
+| `talentW4.billing.methodDefault` | moyen du dernier paiement |
+| `talentW4.billing.invoicesAll` | Tout voir |
+| `talentW4.billing.invoicesNone` | Aucune facture pour l’instant. Chaque paiement en crée une, en PDF. |
+| `talentW4.invoices.subtitle` | {count, plural, =0 {Aucune facture} one {# facture} other {# factures}} · en PDF |
+| `talentW4.invoices.plan` | Formule |
+| `talentW4.invoices.date` | Date |
+| `talentW4.invoices.method` | Moyen |
+| `talentW4.invoices.amount` | Montant |
+| `talentW4.invoices.pdf` | PDF |
+| `talentW4.plans.subtitle` | Prépayées, sans engagement. Postuler reste gratuit dans toutes les formules. |
+| `talentW4.plans.base` | Formule de base |
+| `talentW4.plans.choose` | Choisir |
+| `talentW4.plans.all` | Dans toutes les formules |
+| `talentW4.plans.all1` | Postuler gratuitement |
+| `talentW4.plans.all2` | Suivi des candidatures |
+| `talentW4.plans.all3` | Attestations vérifiables |
+| `talentW4.plans.all4` | Données protégées |
+| `talentW4.plans.all5` | Aide par e-mail |
+| `talentW4.plans.note` | Mobile Money ou carte. Prépayé : à la fin de la période, retour à {plan} sans rien perdre. |
+| `talentW4.pay.recap` | Récapitulatif |
+| `talentW4.pay.plan` | Formule |
+| `talentW4.pay.period` | Période |
+| `talentW4.pay.periodValue` | {start} au {end} |
+| `talentW4.pay.renewal` | Renouvellement |
+| `talentW4.pay.renewalValue` | Non, prépayé |
+| `talentW4.pay.credit` | Déjà déduit |
+| `talentW4.pay.total` | Total |
+| `talentW4.pay.receipt` | Reçu envoyé par e-mail et dans Factures. |
+| `talentW4.settings.change` | Changer |
+| `talentW4.help.hero` | Comment pouvons-nous aider ? |
+| `talentW4.help.faq` | Questions fréquentes |
+| `talentW4.help.write` | Nous écrire |
+
 ### Navigation · Menu du compte
 
 *Accès au profil, à l'abonnement et aux réglages depuis l'avatar.*

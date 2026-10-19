@@ -4975,6 +4975,84 @@
     "empty": "Rien ne correspond à « {query} ».",
     "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} »"
   },
+  "talentW4": {
+    "account": {
+      "line": "{place} · compte talent",
+      "lineAlone": "Compte talent",
+      "profile": "Voir mon profil",
+      "contact": "Une question : {email}. Aucun numéro de téléphone, réponse par e-mail."
+    },
+    "connections": {
+      "count": "{count, plural, =0 {Aucune connexion} one {# connexion} other {# connexions}} · {received, plural, =0 {aucune demande} one {# demande} other {# demandes}}",
+      "search": "Rechercher une personne",
+      "message": "Message"
+    },
+    "window": {
+      "cancel": "Annuler",
+      "close": "Fermer"
+    },
+    "profile": {
+      "edit": "Modifier",
+      "searchEmpty": "Dites ce que vous cherchez : métiers, lieux, contrat.",
+      "salary": "À partir de {amount} $ par mois",
+      "previewText": "Aperçu, rien n’est envoyé",
+      "pointText": "Bilan de votre profil",
+      "askOrbi": "Demander à Orbi"
+    },
+    "diagnostic": {
+      "subtitle": "Six notes sur 100 et le plan qui en découle",
+      "share": "Partager",
+      "again": "Refaire le diagnostic"
+    },
+    "billing": {
+      "extend": "Prolonger",
+      "change": "Changer de formule",
+      "of": "sur {limit}",
+      "applications": "Gratuites dans toutes les formules",
+      "methodDefault": "moyen du dernier paiement",
+      "invoicesAll": "Tout voir",
+      "invoicesNone": "Aucune facture pour l’instant. Chaque paiement en crée une, en PDF."
+    },
+    "invoices": {
+      "subtitle": "{count, plural, =0 {Aucune facture} one {# facture} other {# factures}} · en PDF",
+      "plan": "Formule",
+      "date": "Date",
+      "method": "Moyen",
+      "amount": "Montant",
+      "pdf": "PDF"
+    },
+    "plans": {
+      "subtitle": "Prépayées, sans engagement. Postuler reste gratuit dans toutes les formules.",
+      "base": "Formule de base",
+      "choose": "Choisir",
+      "all": "Dans toutes les formules",
+      "all1": "Postuler gratuitement",
+      "all2": "Suivi des candidatures",
+      "all3": "Attestations vérifiables",
+      "all4": "Données protégées",
+      "all5": "Aide par e-mail",
+      "note": "Mobile Money ou carte. Prépayé : à la fin de la période, retour à {plan} sans rien perdre."
+    },
+    "pay": {
+      "recap": "Récapitulatif",
+      "plan": "Formule",
+      "period": "Période",
+      "periodValue": "{start} au {end}",
+      "renewal": "Renouvellement",
+      "renewalValue": "Non, prépayé",
+      "credit": "Déjà déduit",
+      "total": "Total",
+      "receipt": "Reçu envoyé par e-mail et dans Factures."
+    },
+    "settings": {
+      "change": "Changer"
+    },
+    "help": {
+      "hero": "Comment pouvons-nous aider ?",
+      "faq": "Questions fréquentes",
+      "write": "Nous écrire"
+    }
+  },
   "account": {
     "menu": {
       "aria": "Ouvrir le menu du compte",

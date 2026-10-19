@@ -13622,3 +13622,1103 @@ span.t-sw {
     animation: none;
   }
 }
+
+/* ══ Web talent 4b : compte, profil, abonnement, paramètres, aide (planche web talent-4 § 3 à 10) ══
+ * Valeurs de docs/refonte-mobile/maquette/source/web4.py (CSSW4) et web.py (.w-h, .g2, .g2e, .g2r).
+ * Un seul balisage pour les trois largeurs : les enveloppes `.t-w4-*` s'effacent sur téléphone
+ * (display: contents) ; `.t-w4-web` n'existe qu'à 768 px et plus, `.t-w4-tel` seulement en dessous. */
+@media (max-width: 767.98px) {
+  .t-w4-web {
+    display: none !important;
+  }
+  /* Mon profil : l'ordre des sections du téléphone (planche talent-4 § 3). */
+  .t-w4-o1 {
+    order: 1;
+  }
+  .t-w4-o2 {
+    order: 2;
+  }
+  .t-w4-o3 {
+    order: 3;
+  }
+  .t-w4-o4 {
+    order: 4;
+  }
+  .t-w4-o5 {
+    order: 5;
+  }
+  .t-w4-o6 {
+    order: 6;
+  }
+  .t-w4-o7 {
+    order: 7;
+  }
+  .t-w4-o8 {
+    order: 8;
+  }
+  .t-w4-g2,
+  .t-w4-g2e,
+  .t-w4-g2r,
+  .t-w4-col,
+  .t-w4-h,
+  .t-w4-pfh {
+    display: contents;
+  }
+}
+@media (min-width: 768px) {
+  .t-w4-tel {
+    display: none !important;
+  }
+  /* La page est dans le `.jm-page` du gabarit ; une page gardée cachée par Next (cacheComponents,
+   * `display: none`) n'élargit jamais celle qui est affichée. */
+  .t-cadre main.t-colonne:has(> .jm-page:not([style*="none"]) > .t-w4.t-large) {
+    max-width: none;
+  }
+  .t-w4.t-large {
+    max-width: 1160px;
+    gap: 16px;
+  }
+  /* Tête d'une page web (planche .w-h) : le titre à 32 px, sans « Retour » (la barre latérale
+   * et le menu de l'avatar y mènent). Les actions de fin du téléphone laissent place à celles du
+   * web. */
+  .t-w4 > .t-tete-f,
+  .t-w4 > .t-w4-h > .t-tete-f {
+    min-height: 0;
+    padding-top: 6px;
+  }
+  .t-w4 > .t-tete-f > :not(h1),
+  .t-w4 > .t-w4-h > .t-tete-f > :not(h1) {
+    display: none;
+  }
+  .t-w4 > .t-tete-f h1,
+  .t-w4 > .t-w4-h > .t-tete-f h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+  .t-w4-h {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    column-gap: 16px;
+    align-items: end;
+  }
+  .t-w4-h > * {
+    grid-column: 2;
+    grid-row: 1 / span 2;
+  }
+  .t-w4-h > .t-tete-f,
+  .t-w4-h > .t-w4-sub {
+    grid-column: 1;
+    grid-row: auto;
+    min-width: 0;
+  }
+  .t-w4-sub {
+    font-size: 14px;
+    color: var(--texte2);
+    margin-top: -2px;
+  }
+  .t-w4-h > .t-bt,
+  .t-w4-h > .t-seg {
+    flex: none;
+  }
+  .t-w4-h > .t-w4-rech {
+    width: 320px;
+    height: 48px;
+  }
+  .t-w4-g2,
+  .t-w4-g2e,
+  .t-w4-g2r {
+    display: grid;
+    gap: 16px;
+    align-items: start;
+  }
+  .t-w4-g2e {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .t-w4-g2,
+  .t-w4-g2r {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-w4-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .t-w4-sec {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    margin: 6px 2px -4px;
+  }
+  .t-w4-sec h2 {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+  }
+  .t-w4-sec a {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texte2);
+  }
+
+  /* Titre de section d'une page web (planche .sec-w). */
+  .t-w4 .t-w4-sech {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    text-transform: none;
+    color: var(--texte);
+    margin: 6px 2px 0;
+  }
+
+  /* Connexions (planche .pers-g, .pers) : des cartes de personnes, trois par ligne. */
+  .t-w4-pers.t-verre {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    overflow: visible;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-radius: 0;
+  }
+  .t-w4-pers > .t-li {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 20px 14px 16px;
+    border: 0;
+    border-radius: 26px;
+    background: var(--surface);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+    box-shadow: var(--verre);
+    text-align: center;
+  }
+  .t-w4-pers .t-li-l {
+    flex-direction: column;
+    gap: 8px;
+    min-height: 0;
+  }
+  .t-w4-pers .t-li-l .t-lg-e {
+    width: 64px;
+    height: 64px;
+    font-size: 18px;
+    border-radius: 50%;
+  }
+  .t-w4-pers .t-li-l .t-t {
+    width: 100%;
+    align-items: center;
+  }
+  .t-w4-pers .t-li-l .t-t b {
+    font-size: 14.5px;
+    max-width: 100%;
+  }
+  .t-w4-pers .t-li-l .t-t span {
+    min-height: 32px;
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+  }
+  .t-w4-pers > .t-li > .t-bi {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 40px;
+    border-radius: 999px;
+    gap: 6px;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .t-w4-pers > .t-li > .t-bi .t-ic {
+    width: 16px;
+    height: 16px;
+  }
+
+  /* Mon profil (planche .pfw, .projs3, .mini-l) : la tête dans une carte, deux colonnes. */
+  .t-w4-pfh {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: end;
+    column-gap: 18px;
+    padding: 0 24px 22px;
+    border-radius: 30px;
+    overflow: hidden;
+    background: var(--surface);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+    box-shadow: var(--verre);
+  }
+  .t-w4-pfh .t-pf-cov {
+    grid-column: 1 / -1;
+    margin: 0 -24px;
+    height: 150px;
+  }
+  .t-w4-pfh .t-pf-top {
+    top: 16px;
+    left: auto;
+    right: 16px;
+  }
+  .t-w4-pfh .t-pf-top > :first-child {
+    display: none;
+  }
+  .t-w4-pfh .t-pf-id {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    column-gap: 18px;
+    row-gap: 2px;
+    justify-items: start;
+    align-items: start;
+    text-align: left;
+    margin-top: -48px;
+  }
+  .t-w4-pfh .t-pf-id .t-av {
+    grid-row: 1 / span 3;
+    width: 112px;
+    height: 112px;
+    font-size: 32px;
+    color: #0f3f37;
+    box-shadow:
+      0 0 0 6px var(--plein),
+      0 14px 30px -12px rgba(15, 63, 55, 0.5);
+  }
+  .t-w4-pfh .t-pf-id h1 {
+    margin-top: 62px;
+    font-size: 26px;
+  }
+  .t-w4-pfh .t-pf-id p {
+    font-size: 13.5px;
+  }
+  .t-w4-pfh .t-pf-id .t-cap {
+    margin-top: 6px;
+  }
+  .t-w4-pfh .t-pf-act {
+    gap: 10px;
+    padding: 0;
+  }
+  .t-w4-pfh .t-pf-act .t-bt {
+    flex: none;
+  }
+  .t-w4-pfg > .t-w4-col > #attestations {
+    order: 1;
+  }
+  .t-w4-pfg > .t-w4-col > #etudes {
+    order: 2;
+  }
+  .t-w4-pfg > .t-w4-col > #langues {
+    order: 3;
+  }
+  .t-w4 .t-projs {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .t-w4 .t-projs .t-re {
+    aspect-ratio: auto;
+    height: 118px;
+  }
+  .t-w4-ex-d {
+    margin-top: 2px;
+    font-size: 12.5px !important;
+    color: var(--texte) !important;
+  }
+  .t-w4-cherche {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px;
+  }
+  .t-w4-cherche h2 {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .t-w4-cherche h2 a {
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--texte2);
+    min-height: 32px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .t-w4-cherche ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+  .t-w4-cherche .t-puce {
+    min-height: 32px;
+    padding: 5px 12px;
+    font-size: 12px;
+  }
+  .t-w4-cherche > span {
+    font-size: 12px;
+    color: var(--texte2);
+  }
+
+  /* Fenêtres du profil (planche .dlg.l) et volets (Vu par un recruteur, Faire le point). */
+  .t-fenetre.t-w4-dlg-l {
+    width: min(640px, calc(100% - 48px));
+  }
+  .t-w4-dlg .t-bts {
+    flex-wrap: nowrap;
+  }
+  .t-w4-dlg .t-bts .t-bt {
+    flex: none;
+  }
+  .t-w4-dlg .t-bts .t-bt.t-pl {
+    flex: 1;
+  }
+  .t-w4-duo {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    align-items: start;
+  }
+  .t-w4-duo.t-w4-duo-s {
+    align-items: stretch;
+  }
+  .t-w4-duo > .t-champ {
+    min-width: 0;
+  }
+  .t-w4-ph-l {
+    display: flex;
+    align-items: center;
+    gap: 18px;
+  }
+  .t-w4-ph-l .t-gar {
+    flex: 1;
+  }
+  .t-w4-ph.t-ph-ed {
+    align-self: auto;
+  }
+  .t-w4-ph .t-av.t-av-l {
+    width: 84px;
+    height: 84px;
+    font-size: 24px;
+  }
+  .t-w4-ph-h {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .t-w4-ph-h .t-t {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .t-w4-ph-h .t-t b {
+    font-size: 16px;
+  }
+  .t-w4-ph-h .t-t span {
+    font-size: 12px;
+    color: var(--texte2);
+  }
+  .t-w4-ambre {
+    width: 40px;
+    height: 40px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    flex: none;
+    background: var(--ambre-c);
+  }
+  .t-w4-demande.t-compo {
+    margin-top: auto;
+    height: 52px;
+    padding: 0 6px 0 16px;
+    font-size: 13px;
+    background: var(--plein);
+  }
+  .t-w4-demande.t-compo .t-bi {
+    flex: none;
+    width: 40px;
+    height: 40px;
+  }
+  .t-w4-demande.t-compo .t-env {
+    background: #0f3f37;
+    color: #a6f26b;
+  }
+
+  /* Une page web n'a pas de barre fixée en bas : pas de place à lui garder. */
+  .t-w4.t-flux:has(.t-bas-f.t-w4-tel) {
+    padding-bottom: 0;
+  }
+  /* Diagnostic et plan côte à côte (planche .diag-big, .dims). */
+  .t-w4 .t-diag-h {
+    gap: 20px;
+    padding: 22px;
+  }
+  .t-w4 .t-diag-h .t-anneau {
+    width: 96px;
+    height: 96px;
+  }
+  .t-w4 .t-diag-h .t-anneau b {
+    width: 78px;
+    height: 78px;
+    font-size: 24px;
+  }
+  .t-w4 .t-diag-h .t-t h2 {
+    font-size: 20px;
+  }
+  .t-w4 .t-diag-h .t-t span {
+    font-size: 13px;
+  }
+  .t-w4 .t-dims {
+    padding: 20px;
+  }
+  .t-w4 .t-dim {
+    grid-template-columns: 170px 1fr 30px;
+    font-size: 13.5px;
+  }
+  .t-w4-pqr {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .t-w4-pqr .t-bt {
+    flex: none;
+  }
+
+  /* Compte (planche .cpt-id, .cpt-g) */
+  .t-w4-id {
+    gap: 18px;
+    padding: 20px 22px;
+  }
+  .t-w4-id .t-av {
+    width: 72px;
+    height: 72px;
+    font-size: 22px;
+    color: #0f3f37;
+  }
+  .t-w4-id .t-t b {
+    font-size: 20px;
+  }
+  .t-w4-id .t-t span {
+    font-size: 13px;
+  }
+  .t-w4-id .t-anneau {
+    width: 62px;
+    height: 62px;
+  }
+  .t-w4-id .t-anneau b {
+    width: 50px;
+    height: 50px;
+    font-size: 13px;
+  }
+  .t-w4-id > .t-bt {
+    flex: none;
+  }
+  .t-w4-tuiles.t-verre {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    overflow: visible;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-radius: 0;
+  }
+  .t-w4-tuiles > li > .t-li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    height: 100%;
+    min-height: 150px;
+    padding: 18px;
+    border: 0;
+    border-radius: 26px;
+  }
+  .t-w4-tuiles > li > .t-li > .t-ic:last-child {
+    display: none;
+  }
+  .t-w4-tuiles .t-li .t-cases {
+    width: 44px;
+    height: 44px;
+    border-radius: 15px;
+    background: rgba(255, 255, 255, 0.7);
+    color: #0f3f37;
+  }
+  .sombre .t-w4-tuiles .t-li .t-cases {
+    background: rgba(255, 255, 255, 0.12);
+    color: var(--texte);
+  }
+  .t-w4-tuiles .t-li .t-t {
+    flex: none;
+    gap: 2px;
+  }
+  .t-w4-tuiles .t-li .t-t b {
+    font-size: 15.5px;
+    white-space: normal;
+  }
+  .t-w4-tuiles .t-li .t-t span {
+    font-size: 12.5px;
+    white-space: normal;
+  }
+  .t-w4-k1 > .t-li {
+    background: var(--g-former);
+  }
+  .t-w4-k2 > .t-li {
+    background: var(--g-accomp);
+  }
+  .t-w4-k3 > .t-li {
+    background: var(--g-oppo);
+  }
+  .t-w4-k4 > .t-li {
+    background: linear-gradient(150deg, #e8f1fb, #b9d5f2);
+  }
+  .sombre .t-w4-k4 > .t-li {
+    background: linear-gradient(150deg, rgba(120, 170, 230, 0.24), rgba(120, 170, 230, 0.08));
+  }
+}
+@media (min-width: 1200px) {
+  .t-w4 > .t-tete-f h1,
+  .t-w4 > .t-w4-h > .t-tete-f h1 {
+    font-size: 32px;
+  }
+  .t-w4-g2 {
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+    gap: 20px;
+  }
+  .t-w4-g2r {
+    grid-template-columns: minmax(0, 1fr) 360px;
+    gap: 22px;
+  }
+  .t-w4-tuiles.t-verre {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .t-w4-pers.t-verre {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .t-w4-cx {
+    grid-template-columns: minmax(0, 1fr) 400px;
+  }
+  .t-w4-inv > .t-w4-col:first-child {
+    grid-column: 2;
+    grid-row: 1;
+  }
+  .t-w4-inv > .t-w4-col:nth-child(2) {
+    grid-column: 1;
+    grid-row: 1;
+  }
+}
+
+/* ── Web talent 4b · abonnement, formules, paiement, factures (planche web talent-4 § 7, .abo-h,
+ * .q4, .f4, .recap, .tbl) ── */
+.t-formules .t-form > label {
+  display: contents;
+}
+@media (max-width: 767.98px) {
+  .t-w4-cache {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) {
+  .t-w4-cache {
+    visibility: hidden;
+  }
+  /* Abonnement : la formule en grand, ses deux boutons à droite. */
+  .t-w4-abo.t-fo-act {
+    gap: 20px;
+    padding: 24px;
+    border-radius: 30px;
+  }
+  .t-w4-abo .t-t small {
+    font-size: 11.5px;
+  }
+  .t-w4-abo .t-t b {
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    margin: 4px 0;
+  }
+  .t-w4-abo .t-t span {
+    font-size: 13px;
+  }
+  .t-w4-abo .t-bts {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .t-w4-abo .t-bts .t-bt {
+    flex: none;
+  }
+  /* Les quotas du mois : quatre cartes. */
+  .t-w4-q4.t-verre {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    border: 0;
+  }
+  .t-w4-q4 .t-quota {
+    gap: 10px;
+    padding: 16px;
+    border: 0;
+    border-radius: 24px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-w4-q4 .t-quota .t-cases {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    color: #0f3f37;
+  }
+  .t-w4-q4 .t-w4-k4 {
+    background: var(--g-accent);
+  }
+  .t-w4-q4 .t-w4-k1 {
+    background: var(--g-former);
+  }
+  .t-w4-q4 .t-w4-k2 {
+    background: var(--g-accomp);
+  }
+  .t-w4-q4 .t-w4-k3 {
+    background: var(--g-oppo);
+  }
+  .t-w4-q4 .t-quota .t-l {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 2px;
+  }
+  .t-w4-q4 .t-quota .t-l b {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--texte2);
+  }
+  .t-w4-q4 .t-quota .t-l span.t-w4-n {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--texte);
+  }
+  .t-w4-q4 .t-w4-n small {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--texte2);
+  }
+  .t-w4-qs {
+    font-size: 12px;
+    color: var(--texte2);
+  }
+  /* Formules : les quatre côte à côte, chacune avec son bouton. */
+  .t-w4-f4 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    align-items: stretch;
+  }
+  .t-w4-f4 > .t-formules {
+    display: contents;
+  }
+  .t-w4-f4 .t-form {
+    padding: 20px;
+    gap: 14px;
+  }
+  .t-w4-f4 .t-form .t-h {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .t-w4-f4 .t-form .t-h .t-prix {
+    font-size: 30px;
+    letter-spacing: -0.02em;
+  }
+  .t-w4-f4 .t-form .t-rec {
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .t-w4-f4 .t-form > .t-bt,
+  .t-w4-fa {
+    margin-top: auto;
+    display: flex;
+  }
+  .t-w4-fa .t-bt {
+    flex: 1;
+    height: auto;
+    min-height: 48px;
+    padding-block: 10px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
+  }
+  .t-w4-h > .t-w4-per {
+    width: 260px;
+  }
+  .t-w4-toutes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 18px;
+  }
+  .t-w4-toutes h2 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .t-w4-toutes ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .t-w4-toutes li {
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--lime-c);
+    color: #0f3f37;
+  }
+  /* Paiement : les moyens à gauche, le récapitulatif à droite. */
+  .t-w4-pay .t-w4-col {
+    gap: 12px;
+  }
+  .t-w4-recap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    border-radius: 26px;
+  }
+  .t-w4-recap h2 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .t-w4-recap dl {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+  }
+  .t-w4-recap dl > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13.5px;
+  }
+  .t-w4-recap dt {
+    color: var(--texte2);
+  }
+  .t-w4-recap dd {
+    margin: 0;
+    font-weight: 700;
+    text-align: right;
+  }
+  .t-w4-recap .t-w4-tot {
+    align-items: baseline;
+    padding-top: 12px;
+    border-top: 1px solid var(--trait);
+  }
+  .t-w4-recap .t-w4-tot dt {
+    color: var(--texte);
+  }
+  .t-w4-recap .t-w4-tot dd {
+    font-size: 28px;
+    letter-spacing: -0.02em;
+  }
+  .t-w4-recap .t-bt {
+    flex: none;
+  }
+  .t-w4-recu {
+    font-size: 12px;
+    color: var(--texte2);
+    text-align: center;
+  }
+  /* Attente, paiement reçu, échec : une fenêtre au centre (planche .dlg.c). */
+  .t-w4-conf.t-conf {
+    width: 100%;
+    max-width: 520px;
+    margin: 40px auto 0;
+    padding: 30px 32px;
+    border-radius: 30px;
+    background: var(--plein);
+    box-shadow:
+      0 40px 80px -30px rgba(0, 0, 0, 0.35),
+      0 0 0 1px var(--trait);
+  }
+  /* Factures : un tableau à cinq colonnes. */
+  .t-w4-tbl.t-verre {
+    padding: 6px 0;
+  }
+  .t-w4-tbl > li > .t-li,
+  .t-w4-tbl > .t-w4-tbl-h {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1.4fr) 1fr 1fr 90px 100px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 20px;
+    font-size: 13.5px;
+  }
+  .t-w4-tbl > .t-w4-tbl-h > :first-child {
+    grid-column: span 2;
+  }
+  .t-w4-tbl > .t-w4-tbl-h {
+    padding: 10px 20px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+  }
+  .t-w4-tbl .t-w4-c {
+    color: var(--texte2);
+  }
+  .t-w4-tbl .t-v {
+    font-weight: 700;
+  }
+  .t-w4-tbl .t-bt {
+    justify-self: end;
+    flex: none;
+  }
+}
+@media (min-width: 1200px) {
+  .t-w4-q4.t-verre,
+  .t-w4-f4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+
+/* ── Web talent 4b · paramètres à rubriques et aide (planche web talent-4 § 8, .prm, .snav, .dev,
+ * .aide-h, .aide-g) ── */
+@media (max-width: 767.98px) {
+  .t-w4-prm,
+  .t-w4-aide-h {
+    display: contents;
+  }
+}
+@media (min-width: 768px) {
+  .t-w4-prm {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+  .t-w4-h3 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-top: 4px;
+  }
+  /* Tablette : les rubriques en puces au-dessus du réglage. */
+  .t-w4-snav.t-verre {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    border: 0;
+  }
+  .t-w4-snav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--zone);
+    color: var(--texte);
+  }
+  .t-w4-snav a .t-cases {
+    display: none;
+  }
+  .t-w4-snav a.t-on {
+    background: var(--sapin);
+    color: #fff;
+  }
+  .sombre .t-w4-snav a.t-on {
+    background: var(--lime);
+    color: #0f3f37;
+  }
+  .t-w4-snav .t-w4-sp {
+    display: none;
+  }
+  .t-w4-snav a.t-w4-dg {
+    color: #c2410c;
+  }
+  .sombre .t-w4-snav a.t-w4-dg {
+    color: #fb923c;
+  }
+  /* Sécurité : les appareils connectés, deux par ligne. */
+  .t-w4-dev.t-verre {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    border: 0;
+  }
+  .t-w4-dev > .t-li {
+    padding: 14px 16px;
+    border: 0;
+    border-radius: 22px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  /* Confidentialité : qui a consulté mon profil, deux par ligne. */
+  .t-w4-cons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  /* Aide : la recherche en grand, les thèmes en cartes. */
+  .t-w4-aide-h {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 30px;
+    border-radius: 30px;
+    background: var(--g-accomp);
+    text-align: center;
+  }
+  .t-w4-aide-h h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #0f3f37;
+  }
+  .t-w4-aide-h .t-rech {
+    width: min(560px, 100%);
+    height: 54px;
+  }
+  .t-w4-aide-g.t-verre {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    border: 0;
+  }
+  .t-w4-aide-g > li > .t-li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    height: 100%;
+    padding: 18px;
+    border: 0;
+    border-radius: 24px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-w4-aide-g > li > .t-li > .t-ic:last-child {
+    display: none;
+  }
+  .t-w4-aide-g .t-cases {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+  }
+  .t-w4-aide-g .t-t b {
+    font-size: 14.5px;
+    white-space: normal;
+  }
+}
+@media (min-width: 1200px) {
+  .t-w4-prm {
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: 22px;
+  }
+  .t-w4-snav.t-verre {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 2px;
+    padding: 10px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-w4-snav a {
+    gap: 12px;
+    min-height: 0;
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    background: none;
+    color: var(--texte2);
+  }
+  .t-w4-snav a .t-cases {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--zone);
+  }
+  .t-w4-snav a.t-on,
+  .sombre .t-w4-snav a.t-on {
+    background: var(--zone);
+    color: var(--texte);
+  }
+  .t-w4-snav .t-w4-sp {
+    display: block;
+    height: 1px;
+    margin: 6px 10px;
+    background: var(--trait);
+  }
+  .t-w4-aide-g.t-verre {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  /* Une rubrique des paramètres : « Paramètres » en titre, la rubrique en sous-titre (planche .prm). */
+  .t-w4-ph1 {
+    padding-top: 6px;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+}
+@media (min-width: 1200px) {
+  .t-w4-ph1 {
+    font-size: 32px;
+  }
+}
+@media (min-width: 768px) {
+  .t-w4-prm .t-seg {
+    max-width: 360px;
+  }
+}
+/* Connexions : la recherche de la fenêtre « Chercher une personne » reste sur une ligne (la règle
+ * `.t-sheet form` met les formulaires des feuilles en colonne). */
+.t-sheet form.t-rech {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+/* Mode sombre : les puces « Dans toutes les formules » et les icônes des quotas restent lisibles. */
+.sombre .t-w4-toutes li {
+  background: rgba(166, 242, 107, 0.14);
+  color: var(--texte);
+}
+.sombre .t-w4-q4 .t-w4-k1,
+.sombre .t-w4-q4 .t-w4-k2,
+.sombre .t-w4-q4 .t-w4-k3 {
+  color: var(--texte);
+}

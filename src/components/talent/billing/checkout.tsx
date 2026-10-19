@@ -23,6 +23,7 @@ export function TalentCheckout({
   countries,
   country,
   summary,
+  recap,
   labels,
 }: {
   plan: string;
@@ -33,6 +34,8 @@ export function TalentCheckout({
   country: string;
   /** The receipt of the order (plan, period, amount), drawn by the page. */
   summary: ReactNode;
+  /** The « Récapitulatif » of a tablet or a computer (planche web talent-4 § 7), at the right. */
+  recap?: ReactNode;
   labels: {
     mm: string;
     methods: string;
@@ -46,6 +49,7 @@ export function TalentCheckout({
     number: string;
     placeholder: string;
     help: string;
+    receipt?: string;
     dial: CountrySheetLabels;
     errors: Record<string, string>;
   };
@@ -67,7 +71,66 @@ export function TalentCheckout({
     const code = state.errors?.[field];
     return code ? (labels.errors[code] ?? labels.errors.failed) : null;
   };
-  const numberStep = method === "mobile_money" && step === "number";
+  // On a tablet or a computer the services and the number are on one screen (planche web
+  // talent-4 § 7); on a phone, the number comes after the service.
+  const [wide, setWide] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia("(min-width: 768px)");
+    const update = () => setWide(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  const numberStep = method === "mobile_money" && step === "number" && !wide;
+  const together = wide && method === "mobile_money";
+
+  const numberField = (
+    <div className="t-champ">
+      <label className="t-lab-c" htmlFor="paiement-numero">
+        {labels.number}
+      </label>
+      <span
+        className={cx("t-verre t-saisie t-tel", error("number") && "t-err")}
+        aria-describedby="paiement-numero-aide"
+      >
+        <CountrySheet
+          dial
+          name="dial"
+          countries={countries}
+          initial={countries.some((item) => item.code === country) ? country : "CD"}
+          labels={labels.dial}
+        />
+        <input
+          id="paiement-numero"
+          name="number"
+          type="tel"
+          inputMode="tel"
+          autoComplete="tel-national"
+          required
+          autoFocus={!together}
+          defaultValue={values.number}
+          placeholder={labels.placeholder}
+          aria-invalid={Boolean(error("number"))}
+          aria-describedby="paiement-numero-aide"
+        />
+      </span>
+      {error("number") ? (
+        <span role="alert" className="t-aide-c t-erreur">
+          {error("number")}
+        </span>
+      ) : (
+        <span id="paiement-numero-aide" className="t-aide-c">
+          {labels.help}
+        </span>
+      )}
+    </div>
+  );
+  const gar = (
+    <p className="t-gar">
+      <TalentIcon name="message" size="s" />
+      <span>{method === "card" ? labels.noteCard : labels.note}</span>
+    </p>
+  );
 
   return (
     <form
@@ -75,7 +138,7 @@ export function TalentCheckout({
       noValidate
       className="t-flux"
       onSubmit={(event) => {
-        if (method === "mobile_money" && step === "method") {
+        if (method === "mobile_money" && step === "method" && !wide) {
           event.preventDefault();
           setStep("number");
         }
@@ -90,125 +153,109 @@ export function TalentCheckout({
       <input type="hidden" name="plan" value={plan} />
       <input type="hidden" name="context" value="billing" />
       <input type="hidden" name="method" value={method} />
-      {summary}
-
-      {numberStep && chosen ? (
-        <>
-          <input type="hidden" name="operator" value={chosen.code} />
-          <div className="t-verre t-pj">
-            <OperatorTile code={chosen.code} name={chosen.name} className="t-lf-m" />
-            <span className="t-t">
-              <b>{chosen.name}</b>
-              <button type="button" className="t-lien" onClick={() => setStep("method")}>
-                {labels.change}
-              </button>
-            </span>
-          </div>
-          <div className="t-champ">
-            <label className="t-lab-c" htmlFor="paiement-numero">
-              {labels.number}
-            </label>
-            <span
-              className={cx("t-verre t-saisie t-tel", error("number") && "t-err")}
-              aria-describedby="paiement-numero-aide"
-            >
-              <CountrySheet
-                dial
-                name="dial"
-                countries={countries}
-                initial={countries.some((item) => item.code === country) ? country : "CD"}
-                labels={labels.dial}
-              />
-              <input
-                id="paiement-numero"
-                name="number"
-                type="tel"
-                inputMode="tel"
-                autoComplete="tel-national"
-                required
-                autoFocus
-                defaultValue={values.number}
-                placeholder={labels.placeholder}
-                aria-invalid={Boolean(error("number"))}
-                aria-describedby="paiement-numero-aide"
-              />
-            </span>
-            {error("number") ? (
-              <span role="alert" className="t-aide-c t-erreur">
-                {error("number")}
-              </span>
-            ) : (
-              <span id="paiement-numero-aide" className="t-aide-c">
-                {labels.help}
-              </span>
-            )}
-          </div>
-        </>
-      ) : (
-        <>
-          {operators.length > 0 && (
+      <div className="t-w4-g2r t-w4-pay">
+        <div className="t-w4-col">
+          <div className="t-w4-tel t-flux">{summary}</div>
+          {numberStep && chosen ? (
             <>
-              <span className="t-ck-t" id="paiement-mm">
-                {labels.mm}
-              </span>
-              <div role="radiogroup" aria-labelledby="paiement-mm" className="t-verre t-liste t-mm">
-                {operators.map((item) => (
-                  <label key={item.code} className="t-li t-ch-li t-press">
+              <input type="hidden" name="operator" value={chosen.code} />
+              <div className="t-verre t-pj">
+                <OperatorTile code={chosen.code} name={chosen.name} className="t-lf-m" />
+                <span className="t-t">
+                  <b>{chosen.name}</b>
+                  <button type="button" className="t-lien" onClick={() => setStep("method")}>
+                    {labels.change}
+                  </button>
+                </span>
+              </div>
+              {numberField}
+            </>
+          ) : (
+            <>
+              {operators.length > 0 && (
+                <>
+                  <span className="t-ck-t" id="paiement-mm">
+                    {labels.mm}
+                  </span>
+                  <div
+                    role="radiogroup"
+                    aria-labelledby="paiement-mm"
+                    className="t-verre t-liste t-mm"
+                  >
+                    {operators.map((item) => (
+                      <label key={item.code} className="t-li t-ch-li t-press">
+                        <input
+                          type="radio"
+                          name="choix"
+                          checked={method === "mobile_money" && operator === item.code}
+                          onChange={() => {
+                            setMethod("mobile_money");
+                            setOperator(item.code);
+                          }}
+                          className="sr-only"
+                        />
+                        <OperatorTile code={item.code} name={item.name} />
+                        <span className="t-t">
+                          <b>{item.name}</b>
+                          {item.last && <span>{item.last}</span>}
+                        </span>
+                        <span aria-hidden className="t-radio" />
+                      </label>
+                    ))}
+                  </div>
+                  {error("operator") && (
+                    <span role="alert" className="t-aide-c t-erreur">
+                      {error("operator")}
+                    </span>
+                  )}
+                </>
+              )}
+              {cards && (
+                <div role="radiogroup" aria-label={labels.methods} className="t-verre t-liste t-mm">
+                  <label className="t-li t-ch-li t-press">
                     <input
                       type="radio"
                       name="choix"
-                      checked={method === "mobile_money" && operator === item.code}
-                      onChange={() => {
-                        setMethod("mobile_money");
-                        setOperator(item.code);
-                      }}
+                      checked={method === "card"}
+                      onChange={() => setMethod("card")}
                       className="sr-only"
                     />
-                    <OperatorTile code={item.code} name={item.name} />
+                    <span className="t-cases" aria-hidden>
+                      <TalentIcon name="portefeuille" size="s" />
+                    </span>
                     <span className="t-t">
-                      <b>{item.name}</b>
-                      {item.last && <span>{item.last}</span>}
+                      <b>{labels.card}</b>
+                      <span>{labels.cardText}</span>
                     </span>
                     <span aria-hidden className="t-radio" />
                   </label>
-                ))}
-              </div>
-              {error("operator") && (
-                <span role="alert" className="t-aide-c t-erreur">
-                  {error("operator")}
-                </span>
+                </div>
               )}
+              {!together && gar}
             </>
           )}
-          {cards && (
-            <div role="radiogroup" aria-label={labels.methods} className="t-verre t-liste t-mm">
-              <label className="t-li t-ch-li t-press">
-                <input
-                  type="radio"
-                  name="choix"
-                  checked={method === "card"}
-                  onChange={() => setMethod("card")}
-                  className="sr-only"
-                />
-                <span className="t-cases" aria-hidden>
-                  <TalentIcon name="portefeuille" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{labels.card}</b>
-                  <span>{labels.cardText}</span>
-                </span>
-                <span aria-hidden className="t-radio" />
-              </label>
-            </div>
+          {together && (
+            <>
+              <input type="hidden" name="operator" value={operator} />
+              {numberField}
+              {gar}
+            </>
           )}
-          <p className="t-gar">
-            <TalentIcon name="message" size="s" />
-            <span>{method === "card" ? labels.noteCard : labels.note}</span>
-          </p>
-        </>
-      )}
-
-      <div className="t-verre t-fort t-bas-f">
+        </div>
+        {recap && (
+          <div className="t-w4-col t-w4-web">
+            <div className="t-verre t-w4-recap">
+              {recap}
+              <button type="submit" disabled={pending} className="t-bt t-p t-m t-press">
+                <TalentIcon name="cadenas" size="s" />
+                {pending ? labels.paying : labels.pay}
+              </button>
+              {labels.receipt && <span className="t-w4-recu">{labels.receipt}</span>}
+            </div>
+          </div>
+        )}
+      </div>
+      <div className={cx("t-verre t-fort t-bas-f", recap && "t-w4-tel")}>
         <button type="submit" disabled={pending} className="t-bt t-p t-pl t-press">
           <TalentIcon name="cadenas" size="s" />
           {pending ? labels.paying : labels.pay}

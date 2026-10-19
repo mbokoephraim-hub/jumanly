@@ -5,7 +5,10 @@ import { demo, logIn } from "./session";
 // Talent space (docs/refonte-mobile, brief § 2.1 and § 5): the search of the destinations, the
 // grouped results and the account behind the avatar. The organization and admin spaces keep the
 // Admin v4 column (below).
-test("espace talent : recherche de l'en-tête et compte derrière l'avatar", async ({ page }) => {
+test("espace talent : recherche de l'en-tête et compte derrière l'avatar", async ({
+  page,
+  isMobile,
+}) => {
   await logIn(page, demo.talentPro);
   // Pour moi has no search since lot 3 (planche talent-1): the grouped results stay reachable.
   await page.goto("/app/recherche?q=CV");
@@ -21,11 +24,12 @@ test("espace talent : recherche de l'en-tête et compte derrière l'avatar", asy
   await expect(page.getByRole("region", { name: /^Offres/ })).toHaveCount(0);
   await expectAccessible(page);
 
-  // The profile (planche talent-4 § 3): sections that fold, Compétences open first.
+  // The profile (planche talent-4 § 3): sections that fold on the phone, Compétences open first;
+  // on a wide screen (web talent 4b) every section is open in two columns.
   await page.goto("/app/profil");
   await expect(page.locator("details.t-sect")).toHaveCount(7);
   await expect(page.locator("#competences")).toHaveAttribute("open", "");
-  await page.locator("#langues > summary").click();
+  if (isMobile) await page.locator("#langues > summary").click();
   await expect(page.locator("#langues")).toHaveAttribute("open", "");
 
   // The account opens from the avatar of a destination; Se déconnecter sits in Compte.

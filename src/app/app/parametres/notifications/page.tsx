@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { FlowHead } from "@/components/talent/flow-head";
+import { SettingsNav } from "@/components/talent/settings-nav";
 import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { SegmentRadios, SwitchRow } from "@/components/talent/settings-controls";
@@ -41,78 +42,91 @@ export default async function NotificationSettingsPage({
   const muted = new Set(user.notificationsMuted);
 
   return (
-    <div className="t-flux">
-      <FlowHead
-        back="/app/parametres"
-        backLabel={t("notifReglages.back")}
-        title={t("notifReglages.title")}
-        end={
-          <Link href="/app/parametres" className="t-bi t-press" aria-label={t("parametres.close")}>
-            <TalentIcon name="fermer" size="s" />
-          </Link>
-        }
-      />
-      {one(params.ok) && <Notice tone="ok">{t("parametres.saved")}</Notice>}
-      {one(params.erreur) && <Notice tone="err">{t("parametres.error")}</Notice>}
+    <div className="t-flux t-w4 t-large">
+      <div className="t-w4-tel">
+        <FlowHead
+          back="/app/parametres"
+          backLabel={t("notifReglages.back")}
+          title={t("notifReglages.title")}
+          end={
+            <Link
+              href="/app/parametres"
+              className="t-bi t-press"
+              aria-label={t("parametres.close")}
+            >
+              <TalentIcon name="fermer" size="s" />
+            </Link>
+          }
+        />
+      </div>
+      <h1 className="t-w4-web t-w4-ph1">{t("parametres.title")}</h1>
+      <div className="t-w4-prm">
+        <SettingsNav on="notifications" />
+        <div className="t-w4-col">
+          <h2 className="t-w4-web t-w4-h3">{t("notifReglages.title")}</h2>
+          {one(params.ok) && <Notice tone="ok">{t("parametres.saved")}</Notice>}
+          {one(params.erreur) && <Notice tone="err">{t("parametres.error")}</Notice>}
 
-      <form action={updateNotifications} className="t-flux">
-        <ul aria-label={t("notifReglages.list")} className="t-verre t-liste t-lignes">
-          {NOTIFICATION_CATEGORIES.map((category) => {
-            const [icon, tone] = icons[category];
-            return (
-              <li key={category}>
+          <form action={updateNotifications} className="t-flux">
+            <ul aria-label={t("notifReglages.list")} className="t-verre t-liste t-lignes">
+              {NOTIFICATION_CATEGORIES.map((category) => {
+                const [icon, tone] = icons[category];
+                return (
+                  <li key={category}>
+                    <SwitchRow
+                      name="category"
+                      value={category}
+                      defaultChecked={!muted.has(category)}
+                      icon={
+                        <span className={cx("t-cases", tone)} aria-hidden>
+                          <TalentIcon name={icon} size="s" />
+                        </span>
+                      }
+                      title={t(`notifReglages.${category}.title`)}
+                      text={t(`notifReglages.${category}.text`)}
+                    />
+                  </li>
+                );
+              })}
+              <li>
                 <SwitchRow
-                  name="category"
-                  value={category}
-                  defaultChecked={!muted.has(category)}
+                  name="newsletter"
+                  defaultChecked={user.newsletter}
                   icon={
-                    <span className={cx("t-cases", tone)} aria-hidden>
-                      <TalentIcon name={icon} size="s" />
+                    <span className="t-cases t-c3" aria-hidden>
+                      <TalentIcon name="notification" size="s" />
                     </span>
                   }
-                  title={t(`notifReglages.${category}.title`)}
-                  text={t(`notifReglages.${category}.text`)}
+                  title={t("notifReglages.newsletter.title")}
+                  text={t("notifReglages.newsletter.text")}
                 />
               </li>
-            );
-          })}
-          <li>
-            <SwitchRow
-              name="newsletter"
-              defaultChecked={user.newsletter}
-              icon={
-                <span className="t-cases t-c3" aria-hidden>
-                  <TalentIcon name="notification" size="s" />
-                </span>
-              }
-              title={t("notifReglages.newsletter.title")}
-              text={t("notifReglages.newsletter.text")}
-            />
-          </li>
-        </ul>
+            </ul>
 
-        <span className="t-ck-t" id="notif-canal">
-          {t("notifReglages.channel.title")}
-        </span>
-        <SegmentRadios
-          name="emails"
-          labelledBy="notif-canal"
-          current={user.notificationEmails ? "1" : "0"}
-          options={[
-            { value: "1", label: t("notifReglages.channel.both") },
-            { value: "0", label: t("notifReglages.channel.app") },
-          ]}
-        />
-        <p className="t-gar">
-          <TalentIcon name="confidentialite" size="s" />
-          <span>{t("notifReglages.channel.note")}</span>
-        </p>
-        <noscript>
-          <button type="submit" className="t-bt t-sec t-pl">
-            {t("parametres.save")}
-          </button>
-        </noscript>
-      </form>
+            <span className="t-ck-t" id="notif-canal">
+              {t("notifReglages.channel.title")}
+            </span>
+            <SegmentRadios
+              name="emails"
+              labelledBy="notif-canal"
+              current={user.notificationEmails ? "1" : "0"}
+              options={[
+                { value: "1", label: t("notifReglages.channel.both") },
+                { value: "0", label: t("notifReglages.channel.app") },
+              ]}
+            />
+            <p className="t-gar">
+              <TalentIcon name="confidentialite" size="s" />
+              <span>{t("notifReglages.channel.note")}</span>
+            </p>
+            <noscript>
+              <button type="submit" className="t-bt t-sec t-pl">
+                {t("parametres.save")}
+              </button>
+            </noscript>
+          </form>
+        </div>
+      </div>
     </div>
   );
 }
