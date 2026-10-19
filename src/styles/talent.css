@@ -8491,6 +8491,15 @@ span.t-sw {
   .sombre .t-oc .t-obj-g label::after {
     background: rgba(255, 255, 255, 0.06);
   }
+  /* Tablette : les objectifs en deux colonnes (T_OB1). */
+  @media (max-width: 1199.98px) {
+    .t-oc .t-obj-g {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+    .t-oc .t-obj-g label {
+      min-height: 170px;
+    }
+  }
   /* Lieu et contrat : pays et ville, contrat et mode côte à côte. */
   #bienvenue-lieux {
     display: grid;
