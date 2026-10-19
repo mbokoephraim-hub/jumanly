@@ -30,7 +30,7 @@ Chaque dossier contient le HTML de la planche (ouvrir dans un navigateur), `capt
 
 ## 2. Décisions à appliquer
 
-1. Barre du bas talent : **Pour moi · Offres · Orbi (rond central) · Apprendre · Suivi**. Plus de menu latéral, plus de bouton +. Le compte s'ouvre par l'**avatar** en haut à droite de chaque onglet.
+1. Barre du bas talent : **Pour moi · Offres · Orbi (rond central) · Apprendre · Suivi**. Plus de menu latéral, plus de bouton +. Le compte s'ouvre par l'**avatar** en haut à droite de chaque onglet. **Orbi s'ouvre en page de conversation** (demande d'Ephraïm du 19/10) : flèche retour en haut (retour à l'écran d'où l'on vient), pas de barre du bas, le champ « Écrire à Orbi » occupe sa place (+, micro, envoyer) ; les crédits s'affichent sous le nom d'Orbi.
 2. L'assistant s'appelle **Orbi** à l'écran (code : assistant). Il propose ; rien n'est modifié ni envoyé sans accord (Accepter / Modifier / Refuser). Tout score a un « Pourquoi ? ».
 3. Inscription : Google, LinkedIn ou e-mail + mot de passe → code à 6 chiffres → « Compte validé » → 4 questions (objectif, études et domaine, pays + ville + contrat + mode, formule) → **Free par défaut** → Pour moi avec « Bienvenue » et 3 premiers pas. Le pays n'est demandé qu'une fois.
 4. Connexion : Google, LinkedIn, e-mail + mot de passe, lien magique ; mot de passe oublié = code par e-mail → nouveau mot de passe → les autres sessions sont fermées.

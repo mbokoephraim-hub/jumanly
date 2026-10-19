@@ -225,7 +225,7 @@ OBR3 = phone(f'''{tete_f("", droite=None)}{pas(3,3)}<span class="pas-t">3 sur 3<
 exec(open(H + '/r3plus.py').read())
 
 CHEMINS = [
- ('Demander à Orbi', ['Orbi au centre de la barre', 'Une aide ou une question']),
+ ('Demander à Orbi', ['Orbi au centre de la barre', 'Page de conversation, flèche retour vers l’accueil']),
  ('Répondre à un candidat', ['Messages', 'Conversation', 'Brouillon d’Orbi ou modèle', 'Envoyer']),
  ('Voir les alertes', ['Cloche en haut', 'Notifications']),
  ('Ouvrir le compte', ['Avatar en haut', 'Compte']),
@@ -242,8 +242,8 @@ def chemins():
 
 ECR = [
  ('w0','0 · Comment on y arrive','Pour chaque écran, le chemin depuis la barre.', []),
- ('w1','1 · Orbi','Au centre de la barre, comme pour le talent. Il aide à rédiger, résumer, préparer. Il ne rejette personne.',
-  [ecrans((ORB_R,'Orbi','Quatre aides, crédits, historique.'),)]),
+ ('w1','1 · Orbi','Ouvert depuis le centre de la barre, en page de conversation : flèche retour en haut, plus de barre en bas. Il ne rejette personne.',
+  [ecrans((ORB_R,'Orbi','Page de conversation : retour en haut, pas de barre du bas.'),)]),
  ('w2','2 · Messages et notifications','Une conversation par candidat. Actions rapides, modèles et brouillon d’Orbi, toujours relus.',
   [ecrans((MSG_R,'Messages','Non lues, filtre par offre.'),(CONV_R,'Conversation','Lien vers le dossier, brouillon d’Orbi, actions rapides.'),(MODELES,'Modèles','Insérés, puis relus.'),(NOTIF_R,'Notifications','Candidatures, réponses, échéances.'))]),
  ('w3','3 · Compte RH et organisation','Par l’avatar, en haut de chaque onglet.',

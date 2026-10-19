@@ -366,3 +366,20 @@ NOTIF_R = phone(f'''{tete_f("Notifications", droite="reglages")}
 
 RAPPORT = RAPPORT.replace(f'<a class="bt sec pl">{ic("telecharger","s")}Exporter en CSV</a>', f'''<div class="verre pdf-x"><span class="th"><i></i><em></em><u></u><u></u><u style="width:60%"></u></span><div class="t"><b>Rapport d’octobre · PDF</b>2 pages A4 · aux couleurs de Jumanly</div></div>
 <a class="bt p pl">{ic("telecharger","s")}Exporter en PDF</a>''', 1)
+
+# ---------- v2.4 : Orbi en page de conversation (retour en haut, pas de barre du bas) ----------
+CSSR += """
+.orb-pg{display:flex;align-items:center;gap:10px}
+.orb-pg .or-tete{flex:1;display:flex;align-items:center;gap:10px}
+.orb-bas{position:absolute;left:0;right:0;bottom:0;z-index:4;padding:14px 16px 30px;background:linear-gradient(180deg,transparent,var(--fond) 38%)}
+.orb-bas .compo{height:60px}
+.orb-bas .compo .plus{background:var(--zone)}
+.orb-bas .aide-l{display:block;text-align:center;font-size:11px;color:var(--texte2);margin-top:8px}
+"""
+ORB_R = phone(f'''<div class="tete orb-pg">{bi("retour")}<div class="or-tete">{orbi(40)}<div class="t"><b>Orbi</b><span>99 crédits</span></div></div>{bi("horloge")}</div>
+<div class="aides"><div class="ai p1"><span class="cases">{ic("offre","s")}</span><b>Rédiger une offre</b></div><div class="ai p2"><span class="cases">{ic("candidats","s")}</span><b>Résumer des candidatures</b></div>
+<div class="ai p3"><span class="cases">{ic("entretien","s")}</span><b>Préparer un entretien</b></div><div class="ai p4"><span class="cases">{ic("message","s")}</span><b>Rédiger un message</b></div></div>
+<div class="bulle-u">Quelles candidatures regarder en premier pour l’offre Analyste ?</div>
+<div class="bulle-o">{orbi(32)}<div class="verre corps"><span>Les 4 nouvelles ont toutes les compétences requises. Amani M. et Fatou N. ont aussi un projet Power BI.</span><div class="acts"><a class="bt p s">Ouvrir les 4</a><a class="pq">{ic("pourquoi")}Pourquoi ?</a></div></div></div>''',
+    'orbi', avec_nav=False,
+    bas=f'<div class="orb-bas"><div class="verre fort compo"><a class="bi plus">{ic("plus","s")}</a><span>Écrire à Orbi</span><a class="bi">{ic("micro","s")}</a><a class="bi env">{ic("envoyer","s")}</a></div><span class="aide-l">Orbi propose, vous décidez. Il ne rejette personne.</span></div>')
