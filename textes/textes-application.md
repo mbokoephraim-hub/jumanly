@@ -2664,6 +2664,344 @@ Conventions :
 | `notifs.line.interviewInvite` | {company} · choisissez un créneau |
 | `notifs.line.diagnosticReady` | Niveau {stage} |
 
+### Refonte mobile · Apprendre
+
+*Apprendre (docs/refonte-mobile/talent-3 § 1 et 2) : la formation à reprendre, mes formations et attestations, les domaines, les formations recommandées, la recherche avec ses filtres, et « Mes formations » (en cours, terminées, enregistrées, à faire).*
+
+| Clé | Texte |
+|---|---|
+| `apprendre.seo` | Apprendre |
+| `apprendre.title` | Apprendre |
+| `apprendre.mine.label` | Mes formations et attestations |
+| `apprendre.mine.courses` | Formations |
+| `apprendre.mine.attestations` | Attestations |
+| `apprendre.resume` | Reprendre |
+| `apprendre.domains` | Par domaine |
+| `apprendre.recommended` | Recommandées pour vous |
+| `apprendre.all` | Tout voir |
+| `apprendre.empty.title` | Aucune formation pour l'instant. |
+| `apprendre.empty.text` | Cherchez une formation par métier, outil ou compétence. |
+| `apprendre.empty.cta` | Rechercher une formation |
+| `apprendre.search.seo` | Rechercher une formation |
+| `apprendre.search.title` | Rechercher |
+| `apprendre.search.back` | Retour à Apprendre |
+| `apprendre.search.label` | Rechercher une formation |
+| `apprendre.search.placeholder` | Métier, outil ou compétence |
+| `apprendre.search.quick` | Filtres rapides |
+| `apprendre.search.chip.free` | Gratuit |
+| `apprendre.search.chip.beginner` | Débutant |
+| `apprendre.search.chip.hour` | Moins d'1 h |
+| `apprendre.search.count` | {count, plural, =0 {Aucune formation} one {# formation} other {# formations}} |
+| `apprendre.search.none.title` | Aucune formation ne correspond. |
+| `apprendre.search.none.text` | Essayez un autre mot ou retirez un filtre. |
+| `apprendre.search.none.cta` | Voir toutes les formations |
+| `apprendre.search.more` | Voir plus de formations |
+| `apprendre.search.filtersCount` | {count, plural, one {Filtres, # actif} other {Filtres, # actifs}} |
+| `apprendre.search.orbi.label` | Orbi suggère |
+| `apprendre.search.orbi.text` | Le parcours « {title} » réunit ces formations. |
+| `apprendre.search.orbi.cta` | Voir le parcours |
+| `apprendre.search.filters.title` | Filtres |
+| `apprendre.search.filters.any` | Tous |
+| `apprendre.search.filters.access` | Accès |
+| `apprendre.search.filters.free` | Gratuites |
+| `apprendre.search.filters.included` | Incluses dans ma formule |
+| `apprendre.search.filters.level` | Niveau |
+| `apprendre.search.filters.duration` | Durée |
+| `apprendre.search.filters.domain` | Domaine |
+| `apprendre.search.filters.submit` | Voir les formations |
+| `apprendre.search.filters.reset` | Effacer les filtres |
+| `apprendre.search.level.beginner` | Débutant |
+| `apprendre.search.level.intermediate` | Intermédiaire |
+| `apprendre.search.level.advanced` | Avancé |
+| `apprendre.search.duration.heure` | Moins d'1 h |
+| `apprendre.search.duration.court` | Moins de 2 h |
+| `apprendre.search.duration.moyen` | 2 à 10 h |
+| `apprendre.search.duration.long` | Plus de 10 h |
+| `apprendre.mine.seo` | Mes formations |
+| `apprendre.mine.title` | Mes formations |
+| `apprendre.mine.back` | Retour à mes formations |
+| `apprendre.mine.tabs` | Mes formations |
+| `apprendre.mine.tab.current` | En cours |
+| `apprendre.mine.tab.finished` | Terminées |
+| `apprendre.mine.tab.saved` | Enregistrées |
+| `apprendre.mine.left` | reste {time} |
+| `apprendre.mine.todo` | À faire |
+| `apprendre.mine.quiz` | Quiz · {title} |
+| `apprendre.mine.exercise` | Exercice · {title} |
+| `apprendre.mine.questions` | {count, plural, one {# question} other {# questions}} |
+| `apprendre.mine.whenever` | À rendre quand vous voulez |
+| `apprendre.mine.finishedOn` | Terminée le {date} |
+| `apprendre.mine.withAttestation` | attestation obtenue |
+| `apprendre.mine.none.current` | Aucune formation en cours. |
+| `apprendre.mine.none.finished` | Aucune formation terminée pour l'instant. |
+| `apprendre.mine.none.saved` | Aucune formation enregistrée. Touchez le cœur d'une formation pour la garder ici. |
+
+### Refonte mobile · Une formation
+
+*Détail d'une formation (talent-3 § 3, 4 et 8) : chiffres, « Vous saurez », modules, verrou d'une formation d'une formule supérieure (le nom de la formule vient de la base), et l'écran « Formation terminée ».*
+
+| Clé | Texte |
+|---|---|
+| `apprendre.course.seo` | {title} |
+| `apprendre.course.back` | Retour à la formation |
+| `apprendre.course.backLearn` | Retour |
+| `apprendre.course.share` | Partager la formation |
+| `apprendre.course.shared` | Lien de la formation copié. |
+| `apprendre.course.save` | Enregistrer la formation |
+| `apprendre.course.unsave` | Retirer des formations enregistrées |
+| `apprendre.course.total` | au total |
+| `apprendre.course.modules` | {count, plural, one {module} other {modules}} |
+| `apprendre.course.attestation` | attestation |
+| `apprendre.course.yes` | Oui |
+| `apprendre.course.no` | Non |
+| `apprendre.course.know` | Vous saurez |
+| `apprendre.course.program` | Programme de la formation |
+| `apprendre.course.kind.video` | vidéo |
+| `apprendre.course.kind.text` | texte |
+| `apprendre.course.kind.quiz` | quiz |
+| `apprendre.course.kind.exercise` | exercice |
+| `apprendre.course.kind.resource` | ressource |
+| `apprendre.course.free` | Gratuit |
+| `apprendre.course.moduleDone` | Module terminé |
+| `apprendre.course.locked` | Inclus dans une formule supérieure |
+| `apprendre.course.lock.plan` | Suite incluse dès la formule {plan} |
+| `apprendre.course.lock.other` | Suite incluse dans une formule supérieure |
+| `apprendre.course.lock.free` | Le premier module reste gratuit. |
+| `apprendre.course.freeModule` | Module gratuit |
+| `apprendre.course.plans` | Voir les formules |
+| `apprendre.course.start` | Commencer la formation |
+| `apprendre.course.resume` | Reprendre la formation |
+| `apprendre.course.finished` | Formation terminée |
+| `apprendre.done.title` | Formation terminée |
+| `apprendre.done.close` | Fermer |
+| `apprendre.done.passedOn` | Réussie le {date} |
+| `apprendre.done.score` | score au quiz final {score} % |
+| `apprendre.done.attestation` | Voir l'attestation |
+| `apprendre.done.added` | Ajouté à votre profil |
+| `apprendre.done.skill` | <b>{skill}</b>, compétence vérifiée |
+| `apprendre.done.visible` | Attestation visible par les recruteurs |
+| `apprendre.done.next` | Et maintenant |
+
+### Refonte mobile · Salle de cours
+
+*La leçon (talent-3 § 5, 6 et 9) : vidéo, onglets, Orbi pour expliquer une notion (il ne donne jamais les réponses d'un quiz), réglages pour économiser les données.*
+
+| Clé | Texte |
+|---|---|
+| `apprendre.lesson.seo` | {title} |
+| `apprendre.lesson.where` | Module {module} · Leçon {lesson} sur {total} |
+| `apprendre.lesson.tabs` | Contenu de la leçon |
+| `apprendre.lesson.tab.lesson` | Leçon |
+| `apprendre.lesson.tab.text` | Texte |
+| `apprendre.lesson.tab.notes` | Notes |
+| `apprendre.lesson.tab.files` | Fichiers |
+| `apprendre.lesson.previous` | Leçon précédente |
+| `apprendre.lesson.next` | Leçon suivante |
+| `apprendre.lesson.finish` | Terminer la formation |
+| `apprendre.lesson.enrolled` | Vous suivez cette formation. Votre progression est enregistrée. |
+| `apprendre.lesson.moduleDone` | Module {module} terminé. Bravo ! |
+| `apprendre.lesson.preview` | Module gratuit : votre progression n'est pas enregistrée. |
+| `apprendre.lesson.noText` | Cette leçon n'a pas de texte. |
+| `apprendre.lesson.transcript` | Transcription |
+| `apprendre.lesson.textOnly` | Lecture sans vidéo : le texte de la leçon est dans l'onglet Texte. |
+| `apprendre.lesson.jobLocked` | Exercice métier, inclus dans une formule supérieure |
+| `apprendre.lesson.jobLockedText` | Il est facultatif : la formation se termine sans lui. |
+| `apprendre.lesson.support` | Support en PDF |
+| `apprendre.lesson.supportHint` | Toute la formation · hors connexion |
+| `apprendre.lesson.download` | Télécharger |
+| `apprendre.lesson.downloadNamed` | Télécharger {title} |
+| `apprendre.lesson.notes.label` | Nouvelle note |
+| `apprendre.lesson.notes.placeholder` | Ce que je veux retenir |
+| `apprendre.lesson.notes.save` | Enregistrer la note |
+| `apprendre.lesson.notes.saved` | Note enregistrée. |
+| `apprendre.lesson.notes.delete` | Supprimer la note |
+| `apprendre.lesson.notes.empty` | Vos notes ne sont visibles que par vous. |
+| `apprendre.lesson.notes.preview` | Commencez la formation pour prendre des notes. |
+| `apprendre.lesson.orbi.title` | Expliquer cette notion |
+| `apprendre.lesson.orbi.text` | Orbi répond avec un exemple |
+| `apprendre.lesson.orbi.name` | Orbi |
+| `apprendre.lesson.orbi.where` | Dans cette leçon · {course} |
+| `apprendre.lesson.orbi.intro` | Posez votre question sur cette leçon. Je réponds à partir de la formation, avec un exemple. |
+| `apprendre.lesson.orbi.you` | Vous |
+| `apprendre.lesson.orbi.thinking` | Orbi réfléchit… |
+| `apprendre.lesson.orbi.source` | D'après : {lessons}. |
+| `apprendre.lesson.orbi.sourceCourse` | Passage de la formation : {lessons}. |
+| `apprendre.lesson.orbi.another` | Un autre exemple |
+| `apprendre.lesson.orbi.test` | Me tester |
+| `apprendre.lesson.orbi.label` | Poser une question |
+| `apprendre.lesson.orbi.placeholder` | Poser une question |
+| `apprendre.lesson.orbi.send` | Envoyer |
+| `apprendre.lesson.orbi.failed` | Orbi n'a pas pu répondre. Réessayez dans un instant. |
+| `apprendre.lesson.orbi.explainAsk` | Expliquez-moi cette leçon. |
+| `apprendre.lesson.orbi.anotherAsk` | Un autre exemple, s'il vous plaît. |
+| `apprendre.lesson.orbi.testAsk` | Testez-moi sur cette leçon. |
+| `apprendre.lesson.orbi.limit.consent` | Orbi répond avec les passages de la formation, car l'aide de l'IA n'est pas activée. |
+| `apprendre.lesson.orbi.limit.entitlement` | Orbi répond avec les passages de la formation : l'explication par l'IA est incluse dans une formule supérieure. |
+| `apprendre.lesson.orbi.limit.quota` | Vos crédits Orbi du mois sont utilisés : voici les passages de la formation. |
+| `apprendre.lesson.orbi.limit.unavailable` | L'IA est indisponible pour l'instant : voici les passages de la formation. |
+| `apprendre.lesson.orbi.plans` | Voir les formules |
+| `apprendre.lesson.orbi.consent` | Activer l'aide de l'IA |
+| `apprendre.lesson.settings.title` | Réglages de la leçon |
+| `apprendre.lesson.settings.chipAuto` | Auto |
+| `apprendre.lesson.settings.chipLow` | Économie · 240p |
+| `apprendre.lesson.settings.quality` | Qualité vidéo |
+| `apprendre.lesson.settings.qualityAuto` | Automatique selon la connexion |
+| `apprendre.lesson.settings.qualityLow` | La plus légère, pour économiser les données |
+| `apprendre.lesson.settings.valueAuto` | Auto |
+| `apprendre.lesson.settings.valueLow` | 240p |
+| `apprendre.lesson.settings.saver` | Économiser les données |
+| `apprendre.lesson.settings.saverText` | Vidéo en 240p, images allégées |
+| `apprendre.lesson.settings.textOnly` | Lire sans vidéo |
+| `apprendre.lesson.settings.textOnlyText` | Texte et images de la leçon |
+| `apprendre.lesson.settings.position` | Votre position est enregistrée : vous reprenez là où vous vous êtes arrêté, même après une coupure. |
+
+### Refonte mobile · Quiz et exercice
+
+*Quiz question par question avec sa correction, résultat « Presque ! » et ce qu'il faut revoir ; exercice à rendre (fichier ou CV).*
+
+| Clé | Texte |
+|---|---|
+| `apprendre.quiz.title` | Quiz · Module {module} |
+| `apprendre.quiz.empty` | Ce quiz n'a pas encore de questions. |
+| `apprendre.quiz.step` | Question {current} sur {total} |
+| `apprendre.quiz.attempts` | {count, plural, one {Il vous reste # essai.} other {Il vous reste # essais.}} |
+| `apprendre.quiz.noAttempt` | Vous avez utilisé tous vos essais pour ce quiz. |
+| `apprendre.quiz.right` | Bonne réponse |
+| `apprendre.quiz.wrong` | Pas tout à fait |
+| `apprendre.quiz.kept` | Réponse gardée. La correction viendra avec le résultat. |
+| `apprendre.quiz.validate` | Valider ma réponse |
+| `apprendre.quiz.next` | Question suivante |
+| `apprendre.quiz.finish` | Voir mon résultat |
+| `apprendre.quiz.offline` | Vous êtes hors connexion. Vos réponses sont gardées sur cet appareil : le résultat part dès le retour de la connexion. |
+| `apprendre.quiz.textLabel` | Votre réponse |
+| `apprendre.quiz.multiple` | Plusieurs réponses possibles. |
+| `apprendre.quiz.expected` | Réponse attendue : « {answer} » |
+| `apprendre.quiz.result` | Résultat du quiz |
+| `apprendre.quiz.score` | {right}/{total} |
+| `apprendre.quiz.scoreAria` | {right} bonnes réponses sur {total} |
+| `apprendre.quiz.passed` | Module validé ! |
+| `apprendre.quiz.passedText` | Bravo, vous pouvez passer à la suite. |
+| `apprendre.quiz.almost` | Presque ! |
+| `apprendre.quiz.need` | Il faut {need} bonnes réponses sur {total} pour valider ce module. |
+| `apprendre.quiz.review` | À revoir |
+| `apprendre.quiz.reviewLesson` | Leçon {number} · {title} |
+| `apprendre.quiz.reread` | Revoir |
+| `apprendre.quiz.retry` | Recommencer le quiz |
+| `apprendre.exercise.title` | Exercice |
+| `apprendre.exercise.drop` | Déposer mon fichier |
+| `apprendre.exercise.dropHint` | PDF ou photo, 4 Mo au plus |
+| `apprendre.exercise.cv` | Ou choisir un de mes CV |
+| `apprendre.exercise.cvUpdated` | Modifié le {date} |
+| `apprendre.exercise.orbi.label` | Orbi peut relire |
+| `apprendre.exercise.orbi.text` | Il vous dit ce qui manque. Il ne fait pas l'exercice à votre place. |
+| `apprendre.exercise.send` | Rendre l'exercice |
+| `apprendre.exercise.again` | Rendre une nouvelle version |
+| `apprendre.exercise.sent` | Déjà rendu |
+| `apprendre.exercise.sentLine` | {name}, le {date} |
+| `apprendre.exercise.file` | Fichier |
+| `apprendre.exercise.error.taille` | Ce fichier dépasse 4 Mo. Choisissez un fichier plus léger. |
+| `apprendre.exercise.error.vide` | Déposez un fichier ou choisissez un de vos CV. |
+| `apprendre.exercise.error.format` | Ce fichier n'est pas accepté. Déposez un PDF ou une photo. |
+
+### Refonte mobile · Parcours
+
+*Un parcours de formation (talent-3) : ses formations dans l'ordre, chacune avec son état.*
+
+| Clé | Texte |
+|---|---|
+| `apprendre.path.seo` | Parcours de formation |
+| `apprendre.path.title` | Parcours |
+| `apprendre.path.back` | Retour |
+| `apprendre.path.share` | Partager le parcours |
+| `apprendre.path.shared` | Lien du parcours copié. |
+| `apprendre.path.followed` | Vous suivez ce parcours. |
+| `apprendre.path.kicker` | {count, plural, one {Parcours · # formation} other {Parcours · # formations}} |
+| `apprendre.path.total` | {duration} au total |
+| `apprendre.path.attestation` | une attestation par formation |
+| `apprendre.path.hours` | {hours} h |
+| `apprendre.path.hoursMinutes` | {hours} h {minutes} |
+| `apprendre.path.progress` | {done} formations terminées sur {total} |
+| `apprendre.path.done` | Terminée |
+| `apprendre.path.active` | {percent} % · reprendre |
+| `apprendre.path.locked` | {duration} · incluse dans une formule supérieure |
+| `apprendre.path.nextLocked` | La formation suivante est incluse dès la formule {plan}. |
+| `apprendre.path.finished` | Parcours terminé · voir mes formations |
+| `apprendre.path.continue` | Continuer le parcours |
+| `apprendre.path.start` | Commencer le parcours |
+
+### Refonte mobile · Attestations
+
+*Mes attestations, le détail d'une attestation, le partage, et la page publique de vérification (talent-3 et planche attestation). Le lien public montre seulement le nom, la formation, le résultat et la date.*
+
+| Clé | Texte |
+|---|---|
+| `attest.list.title` | Mes attestations |
+| `attest.list.line` | {count, plural, =0 {Aucune pour l'instant · vérifiables en ligne} one {# obtenue · vérifiable en ligne} other {# obtenues · vérifiables en ligne}} |
+| `attest.list.passedOn` | Réussie le {date} |
+| `attest.list.score` | {score} % |
+| `attest.list.empty.title` | Pas encore d'attestation. |
+| `attest.list.empty.text` | Terminez une formation pour recevoir une attestation signée, vérifiable en ligne. |
+| `attest.list.empty.cta` | Voir mes formations |
+| `attest.detail.seo` | Attestation |
+| `attest.detail.title` | Attestation |
+| `attest.detail.back` | Retour à mes attestations |
+| `attest.detail.more` | Plus d'options |
+| `attest.detail.alt` | Attestation « {course} » délivrée à {holder} |
+| `attest.detail.number` | N° {code} |
+| `attest.detail.issued` | Délivrée le {date} · signée par Jumanly |
+| `attest.detail.visible` | Visible sur mon profil |
+| `attest.detail.visibleOn` | Les recruteurs la voient |
+| `attest.detail.visibleOff` | Les recruteurs ne la voient pas |
+| `attest.detail.pdf` | PDF |
+| `attest.detail.share` | Partager |
+| `attest.detail.check` | Chacun peut vérifier cette attestation avec son numéro ou son code QR. |
+| `attest.detail.openCheck` | Voir la page de vérification |
+| `attest.detail.course` | Voir la formation |
+| `attest.share.title` | Partager mon attestation |
+| `attest.share.linkedin` | LinkedIn |
+| `attest.share.whatsapp` | WhatsApp |
+| `attest.share.email` | E-mail |
+| `attest.share.image` | Image |
+| `attest.share.copy` | Copier |
+| `attest.share.copied` | Lien copié. |
+| `attest.share.privacy` | Le lien montre seulement votre nom, la formation et la date. |
+| `attest.share.subject` | Mon attestation Jumanly : {course} |
+| `attest.share.message` | J'ai réussi la formation « {course} » sur Jumanly. Vérifiez mon attestation : {url} |
+| `attest.verify.holder` | Titulaire |
+| `attest.verify.course` | Formation |
+| `attest.verify.courseLine` | {course} · {hours, plural, one {# h} other {# h}} |
+| `attest.verify.result` | Résultat et date |
+| `attest.verify.resultLine` | {score} % · {date} |
+| `attest.verify.number` | Numéro |
+| `attest.verify.authentic.title` | Attestation authentique |
+| `attest.verify.authentic.text` | Délivrée par Jumanly. La signature numérique correspond. |
+| `attest.verify.authentic.textUnsigned` | Délivrée par Jumanly et enregistrée sous ce numéro. |
+| `attest.verify.modified.title` | Attestation modifiée |
+| `attest.verify.modified.text` | Les informations enregistrées ne correspondent plus à la signature de Jumanly. Ne vous fiez pas à ce document. |
+| `attest.verify.revoked.title` | Attestation retirée |
+| `attest.verify.revoked.text` | Jumanly a retiré cette attestation le {date}. Elle n'est plus valable. |
+| `attest.verify.unknown.title` | Aucune attestation ne porte ce numéro. |
+| `attest.verify.unknown.text` | Vérifiez le numéro, au format JMN-XXXX-XXXX. |
+| `attest.verify.warning` | Si le nom ou la date diffèrent du document reçu, celui-ci a été modifié. |
+| `attest.sheet.number` | N° {code} |
+| `attest.sheet.delivered` | Délivrée le {date} |
+| `attest.sheet.title` | ATTESTATION |
+| `attest.sheet.subtitle` | de réussite |
+| `attest.sheet.intro` | Jumanly atteste que |
+| `attest.sheet.body.course` | a suivi et réussi la formation <b>« {course} »</b> ({details}) |
+| `attest.sheet.body.score` | avec un résultat de <b>{score} %</b> à l’évaluation finale. |
+| `attest.sheet.body.skills` | Compétences validées : |
+| `attest.sheet.hours` | {count, plural, one {# h} other {# h}} |
+| `attest.sheet.modules` | {count, plural, one {# module} other {# modules}} |
+| `attest.sheet.signer` | Direction pédagogique, Jumanly |
+| `attest.sheet.signedOn` | Signé électroniquement le {date} à {time} UTC |
+| `attest.sheet.fingerprint` | Empreinte {value} |
+| `attest.sheet.verifyTitle` | Vérifier l’authenticité |
+| `attest.sheet.verifyText` | Scannez le code ou rendez-vous sur |
+| `attest.sheet.footer` | Une plateforme développée par The Growth Lab · Learn. Grow. Connect. · Ce document n’a de valeur que s’il est confirmé en ligne. |
+| `attest.sheet.micro` | JUMANLY · ATTESTATION AUTHENTIQUE · {code} · VÉRIFIABLE EN LIGNE · LEARN. GROW. CONNECT. ·  |
+| `attest.sheet.seal` | ATTESTATION VALIDÉE · SCEAU D’ORIGINALITÉ · |
+
 ### `/app/orbi` · Orbi en plein écran
 
 *L'onglet central, en page de conversation (talent lot 4 § 9) : retour en haut, pas de barre du bas. Les quatre aides mènent aux fonctions existantes ; la conversation libre est gardée dans l'historique. Orbi propose, la personne décide.*

@@ -20,7 +20,7 @@ export async function askCoachAction(
 ): Promise<CoachResult | { ok: false; error: "failed" }> {
   const parsed = coachInput.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "invalid" };
-  const user = await requireUser("/app/learn/coach");
+  const user = await requireUser("/app/orbi");
   const t = await getTranslations("learn.coach.answer");
   const keys = [
     "explain",

@@ -4,10 +4,10 @@
  */
 import { cacheLife, cacheTag } from "next/cache";
 import { db } from "@/server/db";
+import * as attestations from "@/server/services/attestations";
 import * as contents from "@/server/services/contents";
 import * as courses from "@/server/services/courses";
 import * as jobs from "@/server/services/jobs";
-import * as learn from "@/server/services/learn";
 import * as plans from "@/server/services/plans";
 import { publicCompany } from "@/server/services/verification";
 import { activeWeights } from "@/server/matching/service";
@@ -129,15 +129,30 @@ export async function getCompany(slug: string) {
   return company ? { ...company, now: new Date() } : null;
 }
 
-/** Public verification of an attestation: only what the verification page shows. */
+/**
+ * Public verification of an attestation (planche talent-3, « Vérification publique »): authentic
+ * when its signature matches, modified when it does not, revoked or unknown; only what the page
+ * shows.
+ */
 export async function getCertificate(code: string) {
   "use cache";
   cacheLife("minutes");
   cacheTag(`certificate:${code}`);
-  const certificate = await learn.verifyCertificate(db, code);
-  if (!certificate) return null;
-  const { holderName, courseTitle, hours, issuedAt, revokedAt } = certificate;
-  return { code: certificate.code, holderName, courseTitle, hours, issuedAt, revokedAt };
+  const { check, certificate } = await attestations.checkAttestation(db, code);
+  if (!certificate) return { check, certificate: null };
+  const { holderName, courseTitle, hours, issuedAt, revokedAt, score } = certificate;
+  return {
+    check,
+    certificate: {
+      code: certificate.code,
+      holderName,
+      courseTitle,
+      hours,
+      issuedAt,
+      revokedAt,
+      score,
+    },
+  };
 }
 
 /** Texts and banners edited in /admin/contenus (refreshed at once when the admin publishes). */

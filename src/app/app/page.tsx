@@ -110,7 +110,7 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
       .filter(Boolean)
       .join(" · ");
   const lessonHref = (lesson: NonNullable<typeof current>) =>
-    lesson.next ? `/app/learn/${lesson.slug}?lecon=${lesson.next.id}` : `/app/learn/${lesson.slug}`;
+    lesson.next ? `/app/learn/${lesson.slug}/${lesson.next.id}` : `/app/learn/${lesson.slug}`;
 
   const goal = (
     <div className="t-obj">
@@ -221,7 +221,12 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
   const quick: [string, TalentIconName, string, string][] = [
     ["/app/career/cv", "cv", "t-c2", t("forMe.quick.cv")],
     ["/app/jobs?vue=enregistrees", "favori", "t-c3", t("forMe.quick.saved")],
-    ["/app/learn/attestations", "certificat", "t-c1", t("forMe.quick.certificates")],
+    [
+      "/app/learn/mes-formations?vue=attestations",
+      "certificat",
+      "t-c1",
+      t("forMe.quick.certificates"),
+    ],
     ["/app/profil", "profil", "", t("forMe.quick.profile")],
   ];
 
@@ -285,7 +290,7 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
             <section aria-labelledby="pm-objectifs" className="flex flex-col gap-3.5">
               <div className="t-sec-t">
                 <h2 id="pm-objectifs">{t("forMe.learn.goals")}</h2>
-                <Link href="/app/learn/explorer">{t("forMe.learn.all")}</Link>
+                <Link href="/app/learn/rechercher">{t("forMe.learn.all")}</Link>
               </div>
               <ul className="t-defile t-glisse">
                 {courses

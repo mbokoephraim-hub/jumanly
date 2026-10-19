@@ -49,7 +49,7 @@ function titleOf(pathname: string, titles: Record<string, string>) {
 /** Pages whose search sits under the big title, and where it searches. */
 const searches: Record<string, { action: string; filters?: string }> = {
   "/app/jobs": { action: "/app/jobs", filters: "/app/jobs" },
-  "/app/learn": { action: "/app/learn" },
+  "/app/learn": { action: "/app/learn/rechercher", filters: "/app/learn/rechercher" },
 };
 
 /**
@@ -58,7 +58,7 @@ const searches: Record<string, { action: string; filters?: string }> = {
  * then the search with its filters. Any other page starts with « Retour » and its title; a page
  * can put its own title and tools there instead (PhoneTitle). Orbi has its own head.
  */
-/** Pages that draw their own head: the offer and the screens of planche talent-2. */
+/** Pages that draw their own head: the offer and the screens of planches talent-2 and talent-3. */
 export function ownHead(pathname: string) {
   return [
     /^\/app\/jobs\/(?!candidatures$|enregistrees$)[^/]+(\/postuler)?$/,
@@ -66,6 +66,8 @@ export function ownHead(pathname: string) {
     /^\/app\/career\/entretiens\/[^/]+$/,
     /^\/app\/messages(\/[^/]+)?$/,
     /^\/app\/notifications$/,
+    // Lot 5: every page of Apprendre under its home.
+    /^\/app\/learn\/.+/,
   ].some((pattern) => pattern.test(pathname));
 }
 

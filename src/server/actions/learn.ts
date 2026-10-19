@@ -6,8 +6,12 @@ import { certificateEmail } from "../../../emails/_components/learn-content";
 import { send } from "@/server/account-emails";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { setAttestationOnProfile } from "@/server/services/attestations";
+import { EXERCISE_MAX_BYTES, submitExercise } from "@/server/services/exercises";
+import { fileStorage } from "@/server/storage";
 import {
   addLessonNote,
+  checkQuizQuestion,
   completeLesson,
   deleteLessonNote,
   enroll,
@@ -24,6 +28,8 @@ import { reportError } from "@/server/observability";
 const value = (formData: FormData, key: string, max = 80) =>
   String(formData.get(key) ?? "").slice(0, max);
 const coursePath = (slug: string) => `/app/learn/${encodeURIComponent(slug)}`;
+const lessonPath = (slug: string, lessonId: string) =>
+  `${coursePath(slug)}/${encodeURIComponent(lessonId)}`;
 
 async function learnerGuard<T>(slug: string, work: () => Promise<T>): Promise<T> {
   try {
@@ -42,9 +48,7 @@ export async function enrollAction(formData: FormData) {
   if (result === "locked") redirect(`${coursePath(slug)}?erreur=locked`);
   const found = await getLearnerCourse(db, user.id, slug);
   const first = found ? lessonsOf(found.course)[0] : null;
-  redirect(
-    `${coursePath(slug)}?${new URLSearchParams({ ...(first ? { lecon: first.id } : {}), inscrit: "1" })}`,
-  );
+  redirect(first ? `${lessonPath(slug, first.id)}?inscrit=1` : coursePath(slug));
 }
 
 export async function toggleSavedCourseAction(formData: FormData) {
@@ -88,7 +92,7 @@ async function afterProgress(
       userIds: [user.id],
       type: "certificateIssued",
       payload: { courseTitle: certificate.courseTitle },
-      href: "/app/learn/attestations",
+      href: `/app/learn/attestations/${certificate.code}`,
     });
     const email = certificateEmail(user.firstName, {
       courseTitle: certificate.courseTitle,
@@ -96,14 +100,10 @@ async function afterProgress(
       certificateId: certificate.id,
     });
     await send(user.email, email.subject, email.props).catch((error) => reportError(error));
-    redirect(`${coursePath(slug)}?bravo=${certificate.id}`);
+    redirect(`${coursePath(slug)}?vue=terminee`);
   }
   const { next, celebrate } = await moduleStep(user.id, slug, lessonId);
-  redirect(
-    next
-      ? `${coursePath(slug)}?lecon=${next.id}${celebrate}`
-      : `${coursePath(slug)}?lecon=${lessonId}&termine=1`,
-  );
+  redirect(next ? `${lessonPath(slug, next.id)}${celebrate.replace("&", "?")}` : coursePath(slug));
 }
 
 export async function completeLessonAction(formData: FormData) {
@@ -127,7 +127,7 @@ export async function submitQuizAction(formData: FormData) {
   const result = await learnerGuard(slug, () => submitQuiz(db, user.id, lessonId, answers));
   if (result.certificate) await afterProgress(user, slug, lessonId, result.certificate);
   const celebrate = result.passed ? (await moduleStep(user.id, slug, lessonId)).celebrate : "";
-  redirect(`${coursePath(slug)}?lecon=${lessonId}&tentative=${result.attemptId}${celebrate}`);
+  redirect(`${lessonPath(slug, lessonId)}?tentative=${result.attemptId}${celebrate}`);
 }
 
 export async function addNoteAction(formData: FormData) {
@@ -138,7 +138,7 @@ export async function addNoteAction(formData: FormData) {
     addLessonNote(db, user.id, lessonId, String(formData.get("body") ?? "")),
   );
   refresh();
-  redirect(`${coursePath(slug)}?lecon=${lessonId}&note=1#notes`);
+  redirect(`${lessonPath(slug, lessonId)}?note=1#notes`);
 }
 
 export async function deleteNoteAction(formData: FormData) {
@@ -147,5 +147,67 @@ export async function deleteNoteAction(formData: FormData) {
   const user = await requireUser(coursePath(slug));
   await deleteLessonNote(db, user.id, value(formData, "note"));
   refresh();
-  redirect(`${coursePath(slug)}?lecon=${lessonId}#notes`);
+  redirect(`${lessonPath(slug, lessonId)}#notes`);
+}
+
+/** The correction of one quiz question while the quiz goes (nothing is recorded). */
+export async function checkQuizAnswerAction(input: {
+  lessonId: string;
+  questionId: string;
+  given: string[];
+}) {
+  const user = await requireUser("/app/learn");
+  if (
+    typeof input?.lessonId !== "string" ||
+    typeof input.questionId !== "string" ||
+    !Array.isArray(input.given)
+  )
+    return { ok: false as const };
+  try {
+    const result = await checkQuizQuestion(
+      db,
+      user.id,
+      input.lessonId.slice(0, 60),
+      input.questionId.slice(0, 60),
+      input.given.map((value) => String(value).slice(0, 300)),
+    );
+    return { ok: true as const, ...result };
+  } catch (error) {
+    if (error instanceof LearnError) return { ok: false as const };
+    throw error;
+  }
+}
+
+/** « Rendre l'exercice »: a file (PDF or photo, 5 Mo at most) or one of the learner's CVs. */
+export async function submitExerciseAction(formData: FormData) {
+  const slug = value(formData, "slug");
+  const lessonId = value(formData, "lesson");
+  const user = await requireUser(lessonPath(slug, lessonId));
+  const file = formData.get("fichier");
+  const documentId = value(formData, "cv");
+  const back = (code: string) => redirect(`${lessonPath(slug, lessonId)}?exercice=${code}`);
+  let input: Parameters<typeof submitExercise>[4];
+  if (file instanceof File && file.size > 0) {
+    if (file.size > EXERCISE_MAX_BYTES) back("taille");
+    input = { file: { name: file.name, bytes: new Uint8Array(await file.arrayBuffer()) } };
+  } else if (documentId) input = { documentId };
+  else return back("vide");
+  let certificate: Awaited<ReturnType<typeof submitExercise>>;
+  try {
+    certificate = await submitExercise(db, fileStorage(db), user.id, lessonId, input);
+  } catch (error) {
+    if (!(error instanceof LearnError)) throw error;
+    if (error.code === "invalid") back("format");
+    redirect(`${coursePath(slug)}?erreur=${error.code}`);
+  }
+  await afterProgress(user, slug, lessonId, certificate);
+}
+
+/** « Visible sur mon profil » of an attestation. */
+export async function attestationOnProfileAction(formData: FormData) {
+  const id = value(formData, "id");
+  const user = await requireUser("/app/learn/mes-formations?vue=attestations");
+  await setAttestationOnProfile(db, user.id, id, formData.get("visible") === "1");
+  refresh();
+  redirect(`/app/learn/attestations/${encodeURIComponent(value(formData, "code"))}`);
 }

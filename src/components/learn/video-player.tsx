@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useId, useRef, useState, useSyncExternalStore } from "react";
+import { useEffect, useId, useRef, useState, useSyncExternalStore, type ReactNode } from "react";
 import type Hls from "hls.js";
-import { slowConnection, subscribeDataSaver } from "@/lib/connection";
+import { slowConnection, subscribeDataSaver, textOnlyOn } from "@/lib/connection";
 import { speeds } from "./course-bits";
 
 export type VideoPlayerLabels = {
@@ -15,6 +15,8 @@ export type VideoPlayerLabels = {
   error: string;
   retry: string;
   lowBandwidth: string;
+  /** Talent space: shown in place of the video when « Lire sans vidéo » is on. */
+  textOnly?: string;
 };
 
 /** Learn v2, étape 3: where to resume, and where to send the position while the video plays. */
@@ -35,6 +37,12 @@ type Props = {
   title: string;
   labels: VideoPlayerLabels;
   resume?: VideoResume;
+  /**
+   * Talent space (planche talent-3 § 5): the video fills the dark band, the quality and speed
+   * live in the lesson settings (`chip` opens them) and « Lire sans vidéo » hides it.
+   */
+  variant?: "talent";
+  chip?: ReactNode;
 };
 
 /** Seconds between two saves while the video plays. */
@@ -44,10 +52,15 @@ const SAVE_EVERY = 15;
  * Lesson video (partie 02: adaptive HLS, manual quality choice). Native controls stay available
  * for the keyboard and screen readers; hls.js is only loaded when the browser has no HLS support.
  */
-export function VideoPlayer({ src, poster, lowMp4, title, labels, resume }: Props) {
+export function VideoPlayer({ src, poster, lowMp4, title, labels, resume, variant, chip }: Props) {
   const video = useRef<HTMLVideoElement>(null);
   const hls = useRef<Hls | null>(null);
   const slow = useSyncExternalStore(subscribeDataSaver, slowConnection, () => false);
+  const textOnly = useSyncExternalStore(
+    subscribeDataSaver,
+    () => variant === "talent" && textOnlyOn(),
+    () => false,
+  );
   const [choice, setChoice] = useState<"auto" | "low" | null>(null);
   const quality = choice ?? (slow ? "low" : "auto");
   const [failed, setFailed] = useState(false);
@@ -134,6 +147,67 @@ export function VideoPlayer({ src, poster, lowMp4, title, labels, resume }: Prop
     };
   }, [src, lowMp4, quality, attempt]);
 
+  const restart = () => {
+    if (video.current) video.current.currentTime = 0;
+    lastSent.current = -1;
+    setResumed(false);
+  };
+  const videoTag = (className: string) => (
+    <video
+      ref={video}
+      controls
+      playsInline
+      preload="metadata"
+      poster={poster}
+      aria-label={title}
+      className={className}
+      onError={() => setFailed(true)}
+      onLoadedMetadata={(event) => {
+        if (!resume?.at || applied.current) return;
+        applied.current = true;
+        const target = event.currentTarget;
+        if (!target.duration || resume.at < target.duration) target.currentTime = resume.at;
+      }}
+      onTimeUpdate={(event) => {
+        if (Math.abs(event.currentTarget.currentTime - lastSent.current) >= SAVE_EVERY) {
+          sendPosition();
+        }
+      }}
+      onPause={() => sendPosition()}
+      onEnded={() => sendPosition()}
+    />
+  );
+
+  if (variant === "talent")
+    return (
+      <>
+        {textOnly ? <p className="t-video-off">{labels.textOnly}</p> : videoTag("t-video-v")}
+        {chip}
+        {!textOnly &&
+          (resume && resumed ? (
+            <p role="status" className="t-video-n">
+              {resume.resumed}
+              <button type="button" onClick={restart}>
+                {resume.restart}
+              </button>
+            </p>
+          ) : failed ? (
+            <p role="alert" className="t-video-n">
+              {labels.error}
+              <button
+                type="button"
+                onClick={() => {
+                  setFailed(false);
+                  setAttempt((n) => n + 1);
+                }}
+              >
+                {labels.retry}
+              </button>
+            </p>
+          ) : null)}
+      </>
+    );
+
   return (
     <div className="flex flex-col gap-3">
       {resume && resumed && (
@@ -145,40 +219,14 @@ export function VideoPlayer({ src, poster, lowMp4, title, labels, resume }: Prop
           <button
             type="button"
             className="min-h-11 font-semibold text-lime underline underline-offset-2"
-            onClick={() => {
-              if (video.current) video.current.currentTime = 0;
-              lastSent.current = -1;
-              setResumed(false);
-            }}
+            onClick={restart}
           >
             {resume.restart}
           </button>
         </p>
       )}
       <div className="overflow-hidden rounded-[18px] bg-nuit ring-1 ring-blanc/10">
-        <video
-          ref={video}
-          controls
-          playsInline
-          preload="metadata"
-          poster={poster}
-          aria-label={title}
-          className="aspect-video w-full"
-          onError={() => setFailed(true)}
-          onLoadedMetadata={(event) => {
-            if (!resume?.at || applied.current) return;
-            applied.current = true;
-            const element = event.currentTarget;
-            if (!element.duration || resume.at < element.duration) element.currentTime = resume.at;
-          }}
-          onTimeUpdate={(event) => {
-            if (Math.abs(event.currentTarget.currentTime - lastSent.current) >= SAVE_EVERY) {
-              sendPosition();
-            }
-          }}
-          onPause={() => sendPosition()}
-          onEnded={() => sendPosition()}
-        />
+        {videoTag("aspect-video w-full")}
       </div>
       {slow && (
         <p className="rounded-xl bg-ambre-fond px-4 py-2.5 text-[13px] text-ambre-texte">

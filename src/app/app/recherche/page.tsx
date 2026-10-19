@@ -166,7 +166,7 @@ export default async function SearchPage({ searchParams }: PageProps<"/app/reche
               title={t("section.courses")}
               count={courses.total}
               more={{
-                href: `/app/learn/explorer?q=${encoded}`,
+                href: `/app/learn/rechercher?q=${encoded}`,
                 label: t("seeCourses", { query }),
               }}
             >

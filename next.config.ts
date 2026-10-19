@@ -17,6 +17,13 @@ const nextConfig: NextConfig = {
     "/app/jobs/candidatures/[id]/cv": ["./node_modules/@sparticuz/chromium/bin/**"],
     "/app/hire/candidats/[applicationId]/cv": ["./node_modules/@sparticuz/chromium/bin/**"],
     "/app/messages/[id]/document/[messageId]": ["./node_modules/@sparticuz/chromium/bin/**"],
+    // Attestation (refonte mobile, lot 5): Chromium for the PDF and the image, the font and the
+    // logo read by the drawing.
+    "/app/learn/attestations/[id]/[format]": [
+      "./node_modules/@sparticuz/chromium/bin/**",
+      "./node_modules/@fontsource-variable/sora/files/sora-latin-wght-normal.woff2",
+      "./public/marque/jumanly-logo-principal.svg",
+    ],
   },
   // En-têtes de sécurité (partie 10 § 10.5). HSTS et « upgrade-insecure-requests » seulement en
   // production : en local, le site est servi en http.

@@ -20,6 +20,8 @@ export const REDRAWN = [
   "/app/suivi",
   "/app/messages",
   "/app/notifications",
+  // Lot 5: Apprendre, the classroom, quizzes and attestations.
+  "/app/learn",
 ];
 
 /**

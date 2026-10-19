@@ -495,6 +495,7 @@ model Lesson {
   notes       LessonNote[]
   progress    LessonProgress[]
   documents   CourseDocument[]
+  submissions ExerciseSubmission[]
 
   @@unique([moduleId, order])
 }
@@ -624,6 +625,37 @@ model Certificate {
   hours        Int
   issuedAt     DateTime   @default(now())
   revokedAt    DateTime?
+  /// Refonte mobile, lot 5: copied at delivery for the PDF (null on attestations issued before).
+  domain       String?
+  modules      Int?
+  /// Best score of the course's quizzes (0 to 100), null when the course has none.
+  score        Int?
+  skills       String[]   @default([])
+  /// Ed25519 signature (base64) of the canonical payload (`certificate-signature.ts`), by the key
+  /// `keyId`. Signed on delivery, or on first display for an older attestation.
+  signature    String?
+  keyId        String?
+  signedAt     DateTime?
+  /// Shown on the talent's profile to recruiters (« Visible sur mon profil »).
+  onProfile    Boolean    @default(true)
+}
+
+/// Refonte mobile, lot 5: what a learner hands in for a lesson of kind `exercise` (a file or one
+/// of their CVs). Orbi may reread it; it never does the exercise for them.
+model ExerciseSubmission {
+  id         String    @id @default(cuid(2))
+  userId     String
+  user       User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  lessonId   String
+  lesson     Lesson    @relation(fields: [lessonId], references: [id], onDelete: Cascade)
+  /// A file in the private storage, or one of the learner's CVs.
+  storageKey String?   @unique
+  fileName   String?
+  size       Int?
+  documentId String?
+  createdAt  DateTime  @default(now())
+
+  @@index([userId, lessonId])
 }
 
 /// Private notes of a learner on a lesson.
@@ -749,6 +781,7 @@ model User {
   learningPaths       LearningPathFollow[]
   quizAttempts        QuizAttempt[]
   lessonNotes         LessonNote[]
+  exerciseSubmissions ExerciseSubmission[]
   lessonProgress      LessonProgress[]
   savedCourses        SavedCourse[]
   aiUsages            AiUsage[]
