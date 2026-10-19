@@ -3,22 +3,24 @@ import { expect, test } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { signUpFromPricing, testEmail } from "./session";
 
-/** docs/experience-animee § 4: bell and panel, live arrival with a toast, message of the day. */
+/**
+ * docs/experience-animee § 4, in the talent header of the refonte mobile: the bell (a link to the
+ * notifications, a Lime dot when one is unread), live arrival with a toast, message of the day.
+ */
 
-test("la cloche ouvre les dernières notifications, sonne à l'arrivée et marque tout comme lu", async ({
+test("la cloche signale l'arrivée d'une notification, puis tout se marque comme lu", async ({
   page,
 }) => {
   const email = testEmail("cloche");
   await signUpFromPricing(page, "Créer mon compte gratuit", email);
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
-  // On a phone the bell sits at the top of the tabs (screen 03), not on the goal screen.
   await page.getByRole("button", { name: "Plus tard" }).click();
   await expect(page).toHaveURL(/\/app$/);
-  const bell = page.locator("[data-bell]").filter({ visible: true });
-  await expect(bell).toHaveAccessibleName("Notifications · aucune non lue");
+  const bell = page.getByRole("link", { name: /^Notifications/ });
+  await expect(bell).toHaveAccessibleName("Notifications");
 
-  // Something happens while the person is on the platform: the bell rings and a toast says it.
-  await page.waitForTimeout(2000); // the bell has read the current state
+  // Something happens while the person is on the platform: the bell lights up and a toast says it.
+  await page.waitForTimeout(2500); // the bell has read the current state
   execFileSync("pnpm", [
     "exec",
     "tsx",
@@ -31,17 +33,23 @@ test("la cloche ouvre les dernières notifications, sonne à l'arrivée et marqu
   await page.evaluate(() => document.dispatchEvent(new Event("visibilitychange")));
   const toast = page.getByRole("status").filter({ hasText: "Nouveau message de Horizon Démo" });
   await expect(toast).toBeVisible();
-  await expect(bell).toHaveAccessibleName("Notifications · 1 non lue");
+  await expect(bell).toHaveAccessibleName("Notifications, 1 non lue");
 
   await bell.click();
-  const panel = page.getByRole("region", { name: "Dernières notifications" });
-  await expect(panel).toBeVisible();
-  await expect(panel.getByRole("link", { name: /Nouveau message de Horizon Démo/ })).toBeVisible();
+  await expect(page).toHaveURL(/\/app\/notifications$/);
+  // A link on a computer, a button that opens it on a phone.
+  await expect(
+    page
+      .getByRole("main")
+      .getByText(/Nouveau message de Horizon Démo/)
+      .filter({ visible: true }),
+  ).toBeVisible();
   await expectAccessible(page);
-  await panel.getByRole("button", { name: "Tout marquer comme lu" }).click();
-  await expect(bell).toHaveAccessibleName("Notifications · aucune non lue");
-  await page.keyboard.press("Escape");
-  await expect(panel).toBeHidden();
+  await page.getByRole("button", { name: "Tout marquer comme lu" }).click();
+  await page.goto("/app");
+  await expect(page.getByRole("link", { name: /^Notifications/ })).toHaveAccessibleName(
+    "Notifications",
+  );
 });
 
 test("le message du jour s'affiche à la première visite, puis plus de la journée", async ({

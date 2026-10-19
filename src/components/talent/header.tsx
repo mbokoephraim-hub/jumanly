@@ -1,10 +1,11 @@
 "use client";
 
-import { Suspense, useEffect, useState, type ReactNode } from "react";
+import { Suspense, useEffect, useRef, useState, type ReactNode } from "react";
 import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { TOP_BAR_SLOT_ID } from "@/lib/top-bar";
 import { cx } from "@/lib/cx";
+import { showToast } from "@/components/motion/toaster";
 import { BackButton, parentPath, useCountPages } from "./back-button";
 import { TalentIcon } from "./icon";
 
@@ -191,21 +192,43 @@ function useUnread(initial: number) {
     setKnown(initial);
     setCount(initial);
   }
+  // Newest notification already known: anything newer has just arrived (an important one says so
+  // in a toast, docs/experience-animee § 4).
+  const seen = useRef<string | null>(null);
   useEffect(() => {
     const load = async () => {
       if (document.visibilityState !== "visible") return;
       const response = await fetch("/api/notifications", { cache: "no-store" }).catch(() => null);
       if (!response?.ok) return;
-      const data = (await response.json()) as { unread: number };
+      const data = (await response.json()) as { unread: number; items: ArrivedItem[] };
+      if (seen.current !== null) {
+        const arrived = data.items.filter(
+          (item) => item.unread && item.important && item.createdAt > seen.current!,
+        );
+        for (const item of arrived.slice(0, 2))
+          showToast({ message: item.text, href: item.href ?? undefined, tone: "info" });
+      }
+      const newest = data.items[0]?.createdAt ?? "";
+      if (seen.current === null || newest > seen.current) seen.current = newest;
       setCount(data.unread);
     };
+    const first = window.setTimeout(load, 1500);
     const timer = window.setInterval(load, POLL_MS);
     const onVisible = () => void load();
     document.addEventListener("visibilitychange", onVisible);
     return () => {
+      window.clearTimeout(first);
       window.clearInterval(timer);
       document.removeEventListener("visibilitychange", onVisible);
     };
   }, []);
   return count;
 }
+
+type ArrivedItem = {
+  text: string;
+  href: string | null;
+  createdAt: string;
+  unread: boolean;
+  important: boolean;
+};
