@@ -14,7 +14,7 @@ WCSS = '''
 .web .chr .url{flex:0 1 420px;margin:0 auto;height:24px;border-radius:8px;background:var(--zone);display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:var(--texte2)}
 .web .chr .url .ic{width:12px;height:12px}
 .w-body{position:relative;display:grid;grid-template-columns:232px 1fr;min-height:762px}
-.tab .w-body{grid-template-columns:84px 1fr;min-height:1000px}
+.tab .w-body{grid-template-columns:84px 1fr;min-height:720px}
 .tab{width:820px;border-radius:40px;box-shadow:0 0 0 12px #1B1F1E,0 40px 80px -30px rgba(0,0,0,.45);margin:12px}
 .tab .chr{height:38px;display:flex;justify-content:space-between;align-items:center;padding:0 30px;font-size:13px;font-weight:600;position:relative;z-index:3}
 .tab .chr i{display:inline-block;width:5px;height:10px;border-radius:2px;background:currentColor;margin-left:3px}
