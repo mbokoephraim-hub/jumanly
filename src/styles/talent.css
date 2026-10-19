@@ -8201,6 +8201,9 @@ span.t-sw {
   .t-fenetre[open],
   .t-volet[open] {
     animation: none;
+  }
+}
+
 /* ── Web talent 4a · accès sur tablette et ordinateur (refonte-web talent-4 § 1, 2 et 10) ──
    Connexion, mot de passe oublié, inscription : sur tablette (768 à 1199 px) la colonne du
    téléphone, centrée à 460 px ; dès 1200 px, deux parties, le panneau de marque à gauche (`.vit`)
@@ -8751,6 +8754,9 @@ span.t-sw {
     width: 56px;
     height: 64px;
     font-size: 24px;
+  }
+  .t-frm .t-code6 + .t-aide {
+    text-align: left;
   }
 }
 
