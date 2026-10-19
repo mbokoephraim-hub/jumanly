@@ -11259,12 +11259,6 @@ span.t-sw {
     display: none !important;
   }
 
-  /* Page mise en colonnes : la page est enveloppée par `app/app/template.tsx` (.jm-page), et une
-   * page quittée reste cachée dans le DOM (display: none) : seule la page affichée compte. */
-  .t-cadre main.t-colonne:has(> .jm-page:not([style*="display: none"]) > .t-large) {
-    max-width: none;
-  }
-
   /* Mode concentré de la salle de cours : pas de barre du haut (le rail, voir ≥ 1200 px). */
   .t-cadre:not([data-cadre-plein]) .t-tb.t-concentre {
     display: none;
