@@ -266,7 +266,7 @@ export default async function ApplyPage({
               )}
             </div>
           </fieldset>
-          <Link href="/app/career/cv?nouveau=1" className="t-ajout t-press">
+          <Link href="/app/career/cv?creer=1" className="t-ajout t-press">
             <TalentIcon name="plus" size="s" />
             {t("apply.cv.create")}
           </Link>

@@ -114,7 +114,10 @@ export function hidesTalentTabBar(pathname: string) {
   if (section === "learn") return Boolean(page);
   if (section === "career")
     return (
-      (page === "cv" && Boolean(more) && more !== "modeles") ||
+      // Lot 6c: CV et documents, LinkedIn and the letters draw their own head (planche talent-4 § 6).
+      page === "cv" ||
+      page === "linkedin" ||
+      page === "documents" ||
       (page === "entretiens" && Boolean(more))
     );
   return false;

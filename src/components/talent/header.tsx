@@ -68,6 +68,9 @@ export function ownHead(pathname: string) {
     /^\/app\/notifications$/,
     // Lot 5: every page of Apprendre under its home.
     /^\/app\/learn\/.+/,
+    // Lot 6c: CV et documents, LinkedIn, the letters, the CV studio and the CV import.
+    /^\/app\/career\/(cv|linkedin|documents)(\/.*)?$/,
+    /^\/app\/profil\/import$/,
   ].some((pattern) => pattern.test(pathname));
 }
 

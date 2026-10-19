@@ -913,7 +913,7 @@ export async function HireThread({
                 (attachable.length === 0 ? (
                   <p className="text-[14px]">
                     <Link
-                      href={attachKind === "cv" ? "/app/career/cv" : "/app/career/documents"}
+                      href={attachKind === "cv" ? "/app/career/cv" : "/app/career/cv?vue=lettres"}
                       className="font-semibold underline"
                     >
                       {t(`plus.${attachKind}.empty`)}

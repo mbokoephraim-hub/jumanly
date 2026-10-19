@@ -103,6 +103,8 @@ export const suggestionKinds = [
   "headlineSkill",
   "summary",
   "dates",
+  // A rewording of the CV adapted to an offer or a pasted text (planche talent-4 § 6).
+  "tailor",
 ] as const;
 
 const targetSchema = z.object({
@@ -119,7 +121,12 @@ const suggestionSchema = z.object({
   after: z.string().nullable(),
   skill: z.string().nullable(),
 });
-export type CoachSuggestion = z.infer<typeof suggestionSchema>;
+/**
+ * What is stored: the model's suggestion, and the words it puts forward (the skills an offer asks
+ * for, shown under « Pourquoi ces changements ? »).
+ */
+const storedSuggestionSchema = suggestionSchema.extend({ focus: z.array(z.string()).optional() });
+export type CoachSuggestion = z.infer<typeof storedSuggestionSchema>;
 
 const coachOutput = z.object({ suggestions: z.array(suggestionSchema) });
 
@@ -150,18 +157,21 @@ function withText(content: CvContent, target: CoachSuggestion["target"], text: s
 }
 
 const digits = (text: string) => new Set(text.match(/\d+/g) ?? []);
+const maxLength = (suggestion: CoachSuggestion) =>
+  suggestion.target.section === "summary" ? 1000 : 600;
 
 /**
  * Guard against invention (« aucune invention d'expérience ») : the text replaced must be the
- * current one, no new figure may appear, and a skill named must already be in the CV.
+ * current one, no figure may appear that the CV does not already hold, and a skill named must
+ * already be in the CV.
  */
 export function acceptable(content: CvContent, suggestion: CoachSuggestion) {
   const current = textAt(content, suggestion.target);
   if (current === null || current.trim() !== suggestion.before.trim()) return false;
   if (suggestion.after !== null) {
-    if (!suggestion.after.trim() || suggestion.after.length > 600) return false;
-    const before = digits(suggestion.before);
-    if ([...digits(suggestion.after)].some((value) => !before.has(value))) return false;
+    if (!suggestion.after.trim() || suggestion.after.length > maxLength(suggestion)) return false;
+    const known = digits(`${suggestion.before} ${JSON.stringify(content)}`);
+    if ([...digits(suggestion.after)].some((value) => !known.has(value))) return false;
   }
   if (
     suggestion.skill &&
@@ -294,16 +304,20 @@ export async function runCvCoach(
 }
 
 export function parseSuggestion(value: Prisma.JsonValue): CoachSuggestion | null {
-  const parsed = suggestionSchema.safeParse(value);
+  const parsed = storedSuggestionSchema.safeParse(value);
   return parsed.success ? parsed.data : null;
 }
 
-/** « Appliquer » (only when the text proposed is still about the current text) or « Ignorer ». */
+/**
+ * « Accepter » (only when the text proposed is still about the current text), « Refuser », or
+ * « Modifier »: the talent's own wording (`edited`) replaces the proposal.
+ */
 export async function decideSuggestion(
   db: PrismaClient,
   userId: string,
   suggestionId: string,
   decision: "applied" | "ignored",
+  edited?: string,
 ) {
   const suggestion = await db.aiSuggestion.findFirst({
     where: { id: suggestionId, userId, feature: "cv_coach", status: "pending" },
@@ -316,19 +330,129 @@ export async function decideSuggestion(
           where: { id: suggestion.documentId, kind: "cv", profile: { userId } },
         })
       : null;
-    if (!payload || payload.after === null || !document) return null;
+    if (!payload || !document) return null;
     const content = parseCv(document.content);
-    if (!acceptable(content, payload)) return null;
+    const own = edited?.trim() ?? "";
+    // The talent's own words are theirs: only the place and the length are checked.
+    const check = own ? { ...payload, after: null } : payload;
+    const after = own || payload.after;
+    if (after === null || after.length > maxLength(payload) || !acceptable(content, check))
+      return null;
     await db.document.update({
       where: { id: document.id },
       data: {
-        content: withText(
-          content,
-          payload.target,
-          payload.after,
-        ) as unknown as Prisma.InputJsonValue,
+        content: withText(content, payload.target, after) as unknown as Prisma.InputJsonValue,
       },
     });
   }
   return db.aiSuggestion.update({ where: { id: suggestion.id }, data: { status: decision } });
+}
+
+// ─── « Améliorer le résumé » and the changes to review (planche talent-4 § 6) ─────────────
+
+const summaryOutput = z.object({ summary: z.string() });
+
+const SUMMARY_SYSTEM = [
+  "Tu es Orbi, l'assistant de Jumanly. Tu réécris le résumé d'un CV en français simple, en 2 ou 3 phrases, à la première personne.",
+  "Règles strictes :",
+  "- Utilise uniquement les faits du CV fourni : titre, expériences, compétences.",
+  "- N'invente jamais d'expérience, de diplôme, de compétence, d'entreprise ni de chiffre.",
+  "- N'utilise et ne mentionne jamais : âge, genre, photo, origine, religion, situation familiale, santé.",
+].join("\n");
+
+/** The summary by rules: the title and the first skills of the CV, then what was written. */
+export function summaryTemplate(content: CvContent) {
+  const skills = content.skills.slice(0, 2).map((skill) => skill.name);
+  const lead = [content.info.headline.trim(), skills.join(", ")].filter(Boolean).join(", ");
+  const last = content.experiences[0];
+  const rest =
+    content.summary.trim() || (last ? [last.title, last.company].filter(Boolean).join(", ") : "");
+  const parts = [lead, rest].map((part) => part.trim().replace(/[.\s]+$/, "")).filter(Boolean);
+  return parts.length > 0 ? `${parts.join(". ")}.` : "";
+}
+
+export type ImproveResult = "done" | "same" | "empty" | AiError["code"];
+
+/**
+ * « Améliorer » on the summary: Orbi proposes one rewording, checked like every suggestion, kept
+ * pending until the talent accepts, changes or refuses it. Credits are checked by `runAi`.
+ */
+export async function improveCvSummary(
+  db: PrismaClient,
+  userId: string,
+  documentId: string,
+): Promise<ImproveResult> {
+  const document = await db.document.findFirst({
+    where: { id: documentId, kind: "cv", profile: { userId } },
+  });
+  if (!document) return "empty";
+  const content = parseCv(document.content);
+  if (!content.summary.trim() && !content.info.headline.trim() && content.experiences.length === 0)
+    return "empty";
+  let proposed: string;
+  try {
+    const run = await runAi(db, {
+      userId,
+      feature: "cv_coach",
+      system: SUMMARY_SYSTEM,
+      prompt: [
+        "CV (JSON) :",
+        JSON.stringify({
+          headline: content.info.headline,
+          summary: content.summary,
+          experiences: content.experiences.map((item) => ({
+            title: item.title,
+            company: item.company,
+            bullets: item.bullets,
+          })),
+          skills: content.skills.map((skill) => skill.name),
+        }),
+      ].join("\n"),
+      schema: summaryOutput,
+      template: () => ({ summary: summaryTemplate(content) }),
+    });
+    proposed = run.output.summary.trim();
+  } catch (error) {
+    if (error instanceof AiError) return error.code;
+    throw error;
+  }
+  const proposal = (after: string): CoachSuggestion => ({
+    kind: "summary",
+    target: { section: "summary", experience: null, bullet: null },
+    before: content.summary,
+    after,
+    skill: null,
+  });
+  const candidates = [proposed, summaryTemplate(content)].filter(
+    (text) => text && text !== content.summary.trim(),
+  );
+  const suggestion = candidates.map(proposal).find((item) => acceptable(content, item));
+  if (!suggestion) return "same";
+  await db.$transaction([
+    db.aiSuggestion.deleteMany({
+      where: { userId, feature: "cv_coach", documentId, status: "pending" },
+    }),
+    db.aiSuggestion.create({
+      data: {
+        userId,
+        feature: "cv_coach",
+        documentId,
+        payload: suggestion as unknown as Prisma.InputJsonValue,
+      },
+    }),
+  ]);
+  return "done";
+}
+
+/** The changes Orbi proposed on a CV and not yet decided, in the order they were made. */
+export async function pendingSuggestions(db: PrismaClient, userId: string, documentId: string) {
+  const rows = await db.aiSuggestion.findMany({
+    where: { userId, feature: "cv_coach", documentId, status: "pending" },
+    orderBy: { createdAt: "asc" },
+  });
+  return rows.flatMap((row) => {
+    const payload = parseSuggestion(row.payload);
+    // Advice without a proposed text (former coach): nothing to accept here.
+    return payload && payload.after !== null ? [{ id: row.id, payload }] : [];
+  });
 }

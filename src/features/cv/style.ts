@@ -138,3 +138,21 @@ export function togglePageBreak(style: CvStyle, id: string): CvStyle {
   else breaks.add(id);
   return { ...style, pageBreaks: [...breaks] };
 }
+
+/**
+ * Puts the blocks in the order the talent dragged them to (« glisser pour réordonner »): `order`
+ * must hold each block present exactly once, otherwise the settings stay as they are.
+ */
+export function orderBlocks(
+  template: CvTemplate,
+  style: CvStyle,
+  present: readonly CvBlockType[],
+  order: readonly CvBlockType[],
+): CvStyle {
+  const current = blockLayout(template, style, present).map((block) => block.type);
+  const same =
+    order.length === current.length &&
+    new Set(order).size === order.length &&
+    order.every((type) => current.includes(type));
+  return same ? { ...style, sectionOrder: [...order] } : style;
+}

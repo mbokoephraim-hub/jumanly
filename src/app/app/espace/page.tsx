@@ -236,7 +236,7 @@ export default async function EspacePage() {
             tone="neon"
           />
           <VisualTile
-            href="/app/career/documents"
+            href="/app/career/cv?vue=lettres"
             title={t("tools.documents")}
             line={t("tools.documentsLine")}
             scene="documents"

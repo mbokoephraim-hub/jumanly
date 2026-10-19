@@ -67,6 +67,7 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
 
   // CV from the profile, then its PDF.
   const cvId = await newCvFromList(page);
+  await page.goto(`/app/career/cv/${cvId}?vue=apercu`);
   await expect(page.locator("article").first()).toContainText("Assistante comptable");
   const pdf = await page.request.get(`/app/career/cv/${cvId}/pdf`);
   expect(pdf.status()).toBe(200);

@@ -22,6 +22,10 @@ export const REDRAWN = [
   "/app/notifications",
   // Lot 5: Apprendre, the classroom, quizzes and attestations.
   "/app/learn",
+  // Lot 6c: CV et documents, LinkedIn, the letters and the CV studio.
+  "/app/career/cv",
+  "/app/career/linkedin",
+  "/app/career/documents",
 ];
 
 /**
@@ -35,6 +39,8 @@ export const REDRAWN_EXACT = [
   // Lot 4: postuler, the practice briefing and session (the home of « Entretiens » is lot 6).
   "^/app/jobs/(?!candidatures$|enregistrees$)[^/]+/postuler$",
   "^/app/career/entretiens/[^/]+$",
+  // Lot 6c: importer un CV (the rest of Mon profil is lot 6a).
+  "^/app/profil/import$",
 ];
 
 export function redrawn(pathname: string) {

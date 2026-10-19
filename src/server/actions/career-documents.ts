@@ -11,6 +11,7 @@ import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { saveApplicationDraft } from "@/server/services/application-draft";
+import { parseCv } from "@/server/services/cv";
 import {
   decideCorrections,
   deleteDocument,
@@ -23,12 +24,17 @@ import {
   saveDocument,
   saveSchema,
   tailorCv,
+  tailorCvToText,
+  tailorKeywords,
+  TAILOR_TEXT_MAX,
   type DocumentType,
   type Facts,
   type TemplateValues,
 } from "@/server/services/career-documents";
 
 const DOCUMENTS = "/app/career/documents";
+/** « Lettres » of « CV et documents » (planche talent-4 § 6): where letters are listed and made. */
+const LETTERS = "/app/career/cv?vue=lettres";
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
 
 /** The documents by rules, in the texts' words (used when the model is not available). */
@@ -77,10 +83,10 @@ async function documentTemplate() {
 
 export async function generateDocumentAction(formData: FormData) {
   const parsed = generateSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) redirect(`${DOCUMENTS}?erreur=input#nouveau`);
+  if (!parsed.success) redirect(`${LETTERS}&erreur=input`);
   const user = await requireUser(DOCUMENTS);
   const result = await generateDocument(db, user.id, parsed.data, await documentTemplate());
-  if (!result.ok) redirect(`${DOCUMENTS}?ia=${result.code}#nouveau`);
+  if (!result.ok) redirect(`${LETTERS}&ia=${result.code}`);
   redirect(`${DOCUMENTS}/${result.id}?ok=cree`);
 }
 
@@ -91,15 +97,15 @@ const proofreadSchema = z.object({
 
 export async function proofreadAction(formData: FormData) {
   const parsed = proofreadSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) redirect(`${DOCUMENTS}?erreur=input#correction`);
+  if (!parsed.success) redirect(`${LETTERS}&erreur=input`);
   const user = await requireUser(DOCUMENTS);
   const t = await getTranslations("career.documents.type");
   const result = await proofread(db, user.id, {
     title: parsed.data.title || t("proofread"),
     text: parsed.data.text,
   });
-  if (!result.ok) redirect(`${DOCUMENTS}?ia=${result.code}#correction`);
-  redirect(`${DOCUMENTS}/${result.id}#corrections`);
+  if (!result.ok) redirect(`${LETTERS}&ia=${result.code}`);
+  redirect(`${DOCUMENTS}/${result.id}`);
 }
 
 export async function saveDocumentAction(formData: FormData) {
@@ -124,7 +130,7 @@ export async function applyCorrectionsAction(formData: FormData) {
 export async function deleteDocumentAction(formData: FormData) {
   const user = await requireUser(DOCUMENTS);
   await deleteDocument(db, user.id, id(formData.get("id")));
-  redirect(`${DOCUMENTS}?ok=supprime`);
+  redirect(`${LETTERS}&ok=supprime`);
 }
 
 export async function generateLinkedinAction() {
@@ -143,19 +149,67 @@ export async function generateLinkedinAction() {
   redirect(`/app/career/linkedin${result.ok ? "" : `?ia=${result.code}`}`);
 }
 
+/** Where a new adapted copy opens: on its changes to review, or on the editor when there are none. */
+function openCopy(result: { id: string; jobTitle: string; suggestions: number }): never {
+  const params = new URLSearchParams({ adapte: result.jobTitle });
+  if (result.suggestions > 0) params.set("vue", "ameliorer");
+  redirect(`/app/career/cv/${result.id}?${params.toString()}`);
+}
+
+/** « Adapter à une offre » (`career.cv.tailor`, checked in `runAi`): a copy, the CV stays. */
 export async function tailorCvAction(formData: FormData) {
   const cvId = id(formData.get("cvId"));
   const user = await requireUser(`/app/career/cv/${cvId}`);
   const jobId = id(formData.get("jobId"));
-  if (!jobId) redirect(`/app/career/cv/${cvId}?adaptation=input#adapter`);
+  if (!jobId) redirect(`/app/career/cv/${cvId}?adaptation=input`);
   const t = await getTranslations("career.cv.tailor");
   const result = await tailorCv(db, user.id, {
     cvId,
     jobId,
     title: (jobTitle) => t("name", { jobTitle }),
   });
-  if (!result.ok) redirect(`/app/career/cv/${cvId}?adaptation=${result.code}#adapter`);
-  redirect(`/app/career/cv/${result.id}?adapte=${encodeURIComponent(result.jobTitle)}`);
+  if (!result.ok) redirect(`/app/career/cv/${cvId}?adaptation=${result.code}`);
+  openCopy(result);
+}
+
+const tailorTextSchema = z.object({
+  cvId: z.string().min(1).max(60),
+  text: z.string().trim().min(30).max(TAILOR_TEXT_MAX),
+});
+
+/**
+ * « Adapter à un texte » (`career.cv.tailor`): the pasted text is data, never an instruction; the
+ * copy waits for the talent's checks, change by change.
+ */
+export async function tailorCvTextAction(formData: FormData) {
+  const cvId = id(formData.get("cvId"));
+  const user = await requireUser(`/app/career/cv/${cvId}`);
+  const parsed = tailorTextSchema.safeParse({ cvId, text: formData.get("text") });
+  if (!parsed.success) redirect(`/app/career/cv/${cvId}?adaptation=empty`);
+  const t = await getTranslations("docs.tailor");
+  const result = await tailorCvToText(db, user.id, {
+    cvId,
+    text: parsed.data.text,
+    title: (heading) => t("copyName", { heading }),
+  });
+  if (!result.ok) redirect(`/app/career/cv/${cvId}?adaptation=${result.code}`);
+  openCopy(result);
+}
+
+/**
+ * The skills of a pasted text, found and missing in the CV, while the talent pastes it (no
+ * model, no credit): the chips of « Adapter à un texte ».
+ */
+export async function tailorKeywordsAction(cvId: string, text: string) {
+  const input = tailorTextSchema.safeParse({ cvId, text });
+  if (!input.success) return { present: [], missing: [] };
+  const user = await requireUser(`/app/career/cv/${cvId}`);
+  const cv = await db.document.findFirst({
+    where: { id: input.data.cvId, kind: "cv", profile: { userId: user.id } },
+    select: { content: true },
+  });
+  if (!cv) return { present: [], missing: [] };
+  return tailorKeywords(db, parseCv(cv.content), input.data.text);
 }
 
 /**
