@@ -2279,10 +2279,6 @@
       "tagline": "Learn. Grow. Connect."
     },
     "home": "Accueil",
-    "learn": "Learn",
-    "career": "Career",
-    "jobs": "Jobs",
-    "messages": "Messages",
     "notifications": "Notifications",
     "hire": {
       "text": "Hire",
@@ -2341,95 +2337,80 @@
       "aria": "Navigation principale",
       "more": "Plus"
     },
-    "tabs": {
-      "forMe": "Pour moi",
-      "offers": "Offres",
-      "learn": "Apprendre",
-      "suivi": "Suivi",
-      "badge": "{count, plural, one {# action à traiter} other {# actions à traiter}}",
-      "account": "Compte",
-      "accountAria": "Compte de {name}"
-    },
-    "topMenu": {
-      "open": "Mon espace",
-      "label": "Menu de mon espace",
-      "messages": "Messages",
-      "profile": "Mon profil",
-      "cvs": "Mes CV",
-      "dashboard": "Tableau de bord",
-      "settings": "Paramètres",
-      "all": "Tout Mon espace",
-      "unread": "{count, plural, one {# message non lu} other {# messages non lus}}",
-      "button": "Menu",
-      "orbi": {
-        "title": "Orbi",
-        "text": "Votre copilote",
-        "soon": "Bientôt disponible"
-      },
-      "applications": "Mes candidatures",
-      "interviews": "Simulations d'entretien",
-      "certificates": "Attestations"
-    },
-    "header": {
-      "create": "Créer",
-      "messages": "Messages",
-      "messagesUnread": "{count, plural, =0 {Messages} one {Messages, # conversation non lue} other {Messages, # conversations non lues}}"
-    },
-    "back": "Retour",
-    "orbiSearch": {
-      "placeholder": "Rechercher ou demander à Orbi",
-      "label": "Rechercher sur Jumanly ou demander à Orbi",
-      "filters": "Filtres",
-      "filtersCount": "{count, plural, one {Filtres, # actif} other {Filtres, # actifs}}",
-      "ask": {
-        "title": "Demander à Orbi",
-        "soon": "Orbi arrive bientôt sur Jumanly."
-      },
-      "kind": {
-        "job": "Offre",
-        "course": "Formation",
-        "message": "Message"
-      },
-      "none": "Aucun résultat pour l'instant.",
-      "seeAll": "Voir tous les résultats",
-      "results": "Suggestions"
-    },
-    "create": {
-      "title": "Créer",
-      "close": "Fermer",
-      "apply": "Envoyer une candidature",
-      "cv": "Créer un CV",
-      "letter": "Écrire une lettre",
-      "interview": "Simulation d'entretien",
-      "experience": "Ajouter une expérience",
-      "premium": "Passer à Premium"
-    },
-    "title": {
-      "career": "Career",
-      "messages": "Messages",
-      "notifications": "Notifications",
-      "profile": "Mon profil",
-      "subscription": "Abonnement",
-      "settings": "Paramètres",
-      "dashboard": "Tableau de bord",
-      "search": "Recherche"
-    },
     "skipToContent": "Aller au contenu principal",
     "section": {
       "aria": "Sous-rubriques de {section}",
       "dashboard": "Tableau de bord",
       "profile": "Mon profil",
       "subscription": "Abonnement",
-      "catalog": "Explorer",
-      "certificates": "Certifications",
-      "learnHome": "Mon espace",
       "learnPaths": "Mes parcours",
-      "learnEvaluations": "Exercices et évaluations",
-      "learnCoach": "Coach IA",
-      "offers": "Offres",
-      "applications": "Mes candidatures",
-      "saved": "Offres enregistrées",
       "account": "Mon espace"
+    }
+  },
+  "talentShell": {
+    "skip": "Aller au contenu principal",
+    "nav": {
+      "aria": "Navigation principale",
+      "forMe": "Pour moi",
+      "offers": "Offres",
+      "orbi": "Orbi",
+      "learn": "Apprendre",
+      "suivi": "Suivi",
+      "badge": "{count, plural, one {# action à traiter} other {# actions à traiter}}"
+    },
+    "header": {
+      "hello": "Bonjour, {name}",
+      "helloAnon": "Bonjour",
+      "notifications": "{count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}}",
+      "messages": "{count, plural, =0 {Messages} one {Messages, # conversation non lue} other {Messages, # conversations non lues}}",
+      "account": "Compte de {name}",
+      "back": "Retour"
+    },
+    "search": {
+      "label": "Rechercher",
+      "placeholder": "Rechercher une offre, une formation",
+      "placeholderOffers": "Rechercher une offre",
+      "placeholderLearn": "Rechercher une formation",
+      "filters": "Filtres"
+    },
+    "title": {
+      "career": "Carrière",
+      "messages": "Messages",
+      "notifications": "Notifications",
+      "profile": "Mon profil",
+      "subscription": "Abonnement",
+      "settings": "Paramètres",
+      "dashboard": "Tableau de bord",
+      "search": "Recherche",
+      "account": "Compte",
+      "space": "Mon espace"
+    },
+    "offline": {
+      "kept": "Hors connexion : votre saisie est gardée sur ce téléphone. Elle partira dès le retour du réseau.",
+      "sending": "Connexion revenue : votre saisie est envoyée.",
+      "restored": "Votre saisie non envoyée a été reprise."
+    }
+  },
+  "talentOrbi": {
+    "metaTitle": "Orbi",
+    "title": "Orbi",
+    "subtitle": "Votre accompagnement",
+    "credits": "{count, plural, =0 {0 crédit} one {# crédit} other {# crédits}}",
+    "creditsUnlimited": "Crédits illimités",
+    "creditsAria": "Crédits Orbi restants ce mois : {count}",
+    "aides": {
+      "label": "Ce qu'Orbi peut faire pour vous",
+      "cv": "Améliorer mon CV",
+      "interview": "Préparer un entretien",
+      "offer": "Analyser une offre",
+      "path": "Choisir ma voie"
+    },
+    "intro": "Orbi propose, vous décidez : rien n'est modifié ni envoyé sans votre accord. Choisissez une aide pour commencer.",
+    "composer": {
+      "placeholder": "Écrire à Orbi",
+      "soon": "La conversation avec Orbi arrive bientôt. En attendant, choisissez une aide ci-dessus.",
+      "dictate": "Dicter",
+      "send": "Envoyer"
     }
   },
   "account": {
@@ -2699,7 +2680,8 @@
       "subscription": "Abonnement",
       "account": "Compte et confidentialité",
       "preferences": "Préférences",
-      "help": "Aide"
+      "help": "Aide",
+      "spaces": "Mes espaces"
     },
     "plan": {
       "title": "Formule {plan}",
@@ -2719,16 +2701,20 @@
     "privacy": "Confidentialité et données",
     "visibility": "Visibilité du profil",
     "notifications": "Notifications",
-    "theme": {
-      "label": "Thème",
+    "appearance": {
+      "label": "Apparence",
+      "auto": "Auto",
       "light": "Clair",
-      "green": "Vert",
-      "saved": "Thème enregistré"
+      "dark": "Sombre",
+      "saved": "Apparence enregistrée"
     },
     "language": {
       "label": "Langue",
       "value": "Français"
     },
+    "spaces": "Mon espace et mes organisations",
+    "tester": "Mode testeur",
+    "admin": "Jumanly Admin",
     "helpLink": "Aide et commentaires",
     "invite": {
       "label": "Inviter un proche",
@@ -2737,17 +2723,6 @@
       "copied": "Lien copié"
     },
     "logout": "Se déconnecter"
-  },
-  "opening": {
-    "loading": "Ouverture de Jumanly",
-    "welcome": {
-      "title": "Learn. Grow. Connect.",
-      "text": "Vos offres, vos formations, votre suivi.",
-      "start": "Commencer",
-      "signIn": "J'ai déjà un compte",
-      "chipJobs": "Des offres pour vous",
-      "chipCertificate": "Attestation"
-    }
   },
   "talent": {
     "dashboard": {

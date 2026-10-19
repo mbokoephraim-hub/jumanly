@@ -2,28 +2,15 @@ import { expect, test } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { demo, logIn } from "./session";
 
-// Admin v4 (docs/admin-v4/PLAN.md), étapes 2 et 3: the column of icons, the horizontal menu, the
-// search of the top bar and the account at the foot of the column.
-test("espace connecté : menu horizontal, recherche et compte en bas de la colonne", async ({
-  page,
-  isMobile,
-}) => {
-  test.skip(isMobile, "La colonne et la barre du haut sont celles de l'ordinateur.");
+// Talent space (docs/refonte-mobile, brief § 2.1 and § 5): the search of the destinations, the
+// grouped results and the account behind the avatar. The organization and admin spaces keep the
+// Admin v4 column (below).
+test("espace talent : recherche de l'en-tête et compte derrière l'avatar", async ({ page }) => {
   await logIn(page, demo.talentPro);
-  await page.goto("/app/career");
-  const career = page.getByRole("navigation", { name: "Sous-rubriques de Career" });
-  await expect(career.getByRole("link", { name: "Accueil Career" })).toHaveAttribute(
-    "aria-current",
-    "page",
-  );
-  await career.getByRole("link", { name: "Mon CV" }).click();
-  await expect(page).toHaveURL(/\/app\/career\/cv$/);
-
-  // « / » puts the cursor in the search; the results are grouped by type.
-  await page.locator("body").press("/");
-  await expect(page.locator("#app-search")).toBeFocused();
-  await page.locator("#app-search").fill("CV");
-  await page.locator("#app-search").press("Enter");
+  await page.goto("/app");
+  const search = page.getByRole("search").locator('input[name="q"]');
+  await search.fill("CV");
+  await search.press("Enter");
   await expect(page).toHaveURL(/\/app\/recherche\?q=CV/);
   const courses = page.getByRole("region", { name: /^Formations/ });
   await expect(courses.getByRole("link", { name: /Réussir son CV/ })).toBeVisible();
@@ -37,17 +24,19 @@ test("espace connecté : menu horizontal, recherche et compte en bas de la colon
   await expect(page.getByRole("region", { name: /^Offres/ })).toHaveCount(0);
   await expectAccessible(page);
 
-  // The account sits at the foot of the column and opens its menu beside it.
   // The profile: the parts as horizontal tabs.
   await page.goto("/app/profil");
   const parts = page.getByRole("navigation", { name: "Parties du profil" });
   await expect(parts.getByRole("link")).toHaveCount(8);
   await parts.getByRole("link", { name: "Langues" }).click();
-  await expect(page).toHaveURL(/#langues$/);
+  // A computer scrolls to the part, a phone opens it alone.
+  await expect(page).toHaveURL(/(#langues|partie=langues)$/);
 
-  // The account sits at the foot of the column; its menu opens above the page.
-  await page.locator("aside summary[aria-label]").click();
-  await page.locator("aside details[open]").getByRole("button", { name: "Se déconnecter" }).click();
+  // The account opens from the avatar of a destination; Se déconnecter sits in Compte.
+  await page.goto("/app/learn");
+  await page.getByRole("link", { name: /^Compte de / }).click();
+  await expect(page).toHaveURL(/\/app\/compte$/);
+  await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
   await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
 });
 

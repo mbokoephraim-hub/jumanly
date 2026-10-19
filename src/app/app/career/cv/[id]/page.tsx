@@ -34,7 +34,7 @@ import {
   type CvPhoneView,
   type PhonePartChip,
 } from "@/components/career/cv/phone-editor";
-import { PhoneTitle } from "@/components/layout/phone-title";
+import { PhoneTitle } from "@/components/talent/page-title";
 import { Workbench } from "@/components/career/cv/workbench";
 import { card, pillClass } from "@/components/career/kit";
 import { Alert, Checkbox, Select, TextArea, TextField } from "@/components/ui";

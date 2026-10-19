@@ -9,7 +9,7 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
     short_name: t("common.brand"),
     description: t("home.seo.description"),
     lang: "fr",
-    start_url: "/ouverture",
+    start_url: "/app",
     scope: "/",
     display: "standalone",
     background_color: "#0F3F37",

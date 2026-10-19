@@ -5,6 +5,7 @@
  *   grammar (ressources/icones/interface) → src/components/brand/icon-paths.ts (drawn with
  *   currentColor, so one set covers the Sapin, white and duo styles).
  * - Characters, patterns, shapes, backgrounds → public/ (SVG only).
+ * - Talent icons of the mobile redesign: ressources/icones/talent → src/components/talent/icon-paths.ts.
  * - App icons (PWA manifest): ressources/logos/jumanly-favicon-{192,512}.png → public/marque/.
  * Each source SVG carries a provenance manifest (<metadata>, about 7 KB); it is removed from the
  * copies served to visitors, not from ressources/.
@@ -67,6 +68,21 @@ write(
     `export const iconPaths = {\n${icons.map(([name, body]) => `  ${JSON.stringify(name)}: ${JSON.stringify(body)},`).join("\n")}\n} as const;\n`,
 );
 
+// Talent space icons of the mobile redesign (docs/refonte-mobile, 1.8 px line): their own set, since
+// several names match the brand icons with another drawing.
+const TALENT_ICON = /<svg[^>]*>(?:<title>[^<]*<\/title>)?([\s\S]*?)<\/svg>/;
+const talentFolder = "ressources/icones/talent";
+const talentIcons = svgFiles(talentFolder).map((file) => {
+  const match = TALENT_ICON.exec(readFileSync(join(root, talentFolder, file), "utf8"));
+  if (!match) throw new Error(`Icône au format inattendu : ${talentFolder}/${file}`);
+  return [basename(file, ".svg"), match[1].trim()] as const;
+});
+write(
+  join(root, "src/components/talent/icon-paths.ts"),
+  `// Généré par scripts/build-brand-assets.ts depuis ${talentFolder}. Ne pas modifier.\n` +
+    `export const talentIconPaths = {\n${talentIcons.map(([name, body]) => `  ${JSON.stringify(name)}: ${JSON.stringify(body)},`).join("\n")}\n} as const;\n`,
+);
+
 // Images served as files.
 const folders: [string, string][] = [
   ["ressources/illustrations/svg", "public/illustrations"],
@@ -91,4 +107,6 @@ if (stale.length) {
   console.error(`✗ Ressources de marque à régénérer (pnpm brand) :\n  ${stale.join("\n  ")}`);
   process.exit(1);
 }
-console.log(`✓ Ressources de marque ${check ? "à jour" : "générées"} : ${icons.length} icônes.`);
+console.log(
+  `✓ Ressources de marque ${check ? "à jour" : "générées"} : ${icons.length} icônes, ${talentIcons.length} icônes talent.`,
+);

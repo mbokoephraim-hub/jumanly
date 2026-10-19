@@ -3,59 +3,49 @@
 import { useState, useTransition } from "react";
 import { Icon } from "@/components/brand/icon";
 import { showToast } from "@/components/motion/toaster";
-import { cx } from "@/lib/cx";
-import { updateTheme } from "@/server/actions/settings";
+import { updateAppearance } from "@/server/actions/settings";
 
-type Theme = "light" | "green";
+type Appearance = "auto" | "light" | "dark";
 
 /**
- * « Thème : Clair · Vert » (screens 61, 62): two submit buttons of one form. With JavaScript the
- * page changes at once, before the server keeps the choice; without it the form posts.
+ * « Apparence : Auto · Clair · Sombre » (brief § 2.10): three submit buttons of one form. With
+ * JavaScript the choice is kept in the background and the shell follows it; without it the form
+ * posts.
  */
-export function ThemeSwitch({
+export function AppearanceSwitch({
   current,
   labels,
 }: {
-  current: Theme;
-  labels: { group: string; light: string; green: string; saved: string };
+  current: Appearance;
+  labels: { group: string; auto: string; light: string; dark: string; saved: string };
 }) {
-  const [theme, setTheme] = useState<Theme>(current);
+  const [appearance, setAppearance] = useState<Appearance>(current);
   const [, startTransition] = useTransition();
-  const choose = (next: Theme) => {
-    setTheme(next);
-    document.documentElement.classList.toggle("jm-vert", next === "green");
-    document.querySelector(".jm-talent")?.classList.toggle("jm-vert", next === "green");
+  const choose = (next: Appearance) => {
+    setAppearance(next);
     const data = new FormData();
-    data.set("theme", next);
+    data.set("appearance", next);
     startTransition(async () => {
-      await updateTheme(data);
+      await updateAppearance(data);
       showToast({ message: labels.saved, tone: "success" });
     });
   };
   return (
-    <form
-      action={updateTheme}
-      role="group"
-      aria-label={labels.group}
-      className="jm-segment flex rounded-pill p-[3px]"
-    >
-      {(["light", "green"] as const).map((value) => (
+    <form action={updateAppearance} role="group" aria-label={labels.group} className="t-seg">
+      {(["auto", "light", "dark"] as const).map((value) => (
         <button
           key={value}
           type="submit"
-          name="theme"
+          name="appearance"
           value={value}
-          aria-pressed={theme === value}
+          aria-pressed={appearance === value}
           onClick={(event) => {
             event.preventDefault();
-            if (theme !== value) choose(value);
+            if (appearance !== value) choose(value);
           }}
-          className={cx(
-            "min-h-9 rounded-pill px-3.5 text-[13px]",
-            theme === value ? "jm-segment-on font-semibold" : "font-medium",
-          )}
+          className="t-press"
         >
-          {value === "light" ? labels.light : labels.green}
+          {labels[value]}
         </button>
       ))}
     </form>

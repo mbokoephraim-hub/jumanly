@@ -4,7 +4,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { BodyPortal } from "@/components/layout/body-portal";
-import { PhoneTitle } from "@/components/layout/phone-title";
+import { PhoneTitle } from "@/components/talent/page-title";
 import { PhoneOverview, phoneParts, type PhonePart } from "@/components/profile/phone-overview";
 import { PhotoEditor } from "@/components/profile/photo-editor";
 import { Pattern } from "@/components/site/marketing";

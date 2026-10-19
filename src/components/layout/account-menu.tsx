@@ -14,13 +14,6 @@ export type AccountSummary = {
   isTester?: boolean;
 };
 
-/** Talent space on a computer (prompt 2): the shortcuts of the phone's avatar menu come first. */
-const talentItems = [
-  { key: "appNav.topMenu.messages", href: "/app/messages", icon: "message" },
-  { key: "appNav.topMenu.cvs", href: "/app/career/cv", icon: "cv" },
-  { key: "appNav.topMenu.dashboard", href: "/app/tableau-de-bord", icon: "statistiques" },
-] as const satisfies readonly { key: string; href: string; icon: IconName }[];
-
 const items = [
   { key: "account.menu.profile", href: "/app/profil", icon: "profil" },
   { key: "account.menu.subscription", href: "/app/abonnement", icon: "portefeuille" },
@@ -42,11 +35,8 @@ const items = [
 export function AccountMenu({
   account,
   tone,
-  talent = false,
 }: {
   account: AccountSummary;
-  /** Personal space: adds the talent shortcuts and « Tout Mon espace ». */
-  talent?: boolean;
   /** "rail": the avatar at the foot of the column of icons, the menu opening beside it. */
   tone: "light" | "dark" | "rail";
 }) {
@@ -97,7 +87,7 @@ export function AccountMenu({
           </div>
         </div>
         <ul className="flex flex-col border-y border-brume py-1">
-          {[...(talent ? talentItems : []), ...items].map(({ key, href, icon }) => (
+          {items.map(({ key, href, icon }) => (
             <li key={key}>
               <Link href={href} className={item}>
                 <Icon name={icon} className="size-[18px]" />
@@ -122,12 +112,6 @@ export function AccountMenu({
             </li>
           )}
         </ul>
-        {talent && (
-          <Link href="/app/espace" className={cx(item, "mt-1 font-semibold text-feuille-fonce")}>
-            {t("appNav.topMenu.all")}
-            <Icon name="chev-r" className="ml-auto size-4" />
-          </Link>
-        )}
         <form action={signOut} className="pt-1">
           <button type="submit" className={cx(item, "w-full text-left text-down-texte")}>
             <Icon name="logout" className="size-[18px]" />

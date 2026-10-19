@@ -7,7 +7,7 @@ import { TOP_BAR_SLOT_ID } from "@/lib/top-bar";
 const subscribe = () => () => {};
 
 /**
- * Replaces the top bar of a phone while the page is shown (screens 24 and 51: back arrow and the
+ * Replaces the head of a talent page while the page is shown (screens 24 and 51: back arrow and the
  * name of the person). The content is marked active only while the page is mounted and visible,
  * so the default title and tools come back as soon as the page is left or kept hidden.
  */
@@ -28,7 +28,7 @@ export function TopBarOverride({ children }: { children: ReactNode }) {
     <div
       ref={ref}
       data-top-override
-      className="hidden min-w-0 flex-1 items-center gap-1 data-active:flex"
+      className="hidden min-w-0 flex-1 items-center gap-2 data-active:flex"
     >
       {children}
     </div>,

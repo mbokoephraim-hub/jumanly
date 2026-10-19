@@ -41,62 +41,30 @@ test("la gamme mobile (boutons, cartes, états) est présentée dans la biblioth
   await expectAccessible(page);
 });
 
-// Prompts 2 and 2 bis: five destinations with Pour moi in the middle, the top menu (screen 34),
-// Mon espace (screen 17) and Suivi.
-test("navigation Talent : cinq destinations, menu du haut, Mon espace et Suivi", async ({
+// Refonte mobile (docs/refonte-mobile, brief § 2.1): five destinations with Orbi in the middle,
+// the same bar on a phone and on a computer; Mon espace (screen 17) opens from Compte; Suivi.
+test("navigation Talent : cinq destinations, Orbi au milieu, Mon espace et Suivi", async ({
   page,
-  isMobile,
 }) => {
   await logIn(page, demo.talentPro);
   await page.goto("/app");
-  const navigation = page
-    .getByRole("navigation", { name: "Navigation principale" })
-    .filter({ visible: true });
-  for (const name of ["Pour moi", "Offres", "Apprendre", /^Suivi/, "Compte"])
-    await expect(navigation.getByRole("link", { name })).toBeVisible();
+  const navigation = page.getByRole("navigation", { name: "Navigation principale" });
+  const links = navigation.getByRole("link");
+  await expect(links).toHaveCount(5);
+  for (const [index, name] of ["Pour moi", "Offres", "Orbi", "Apprendre", "Suivi"].entries())
+    await expect(links.nth(index)).toHaveAccessibleName(new RegExp(`^${name}`));
   await expect(navigation.getByRole("link", { name: "Pour moi" })).toHaveAttribute(
     "aria-current",
     "page",
   );
-  // Career stays in the column of a computer; the phone reaches it from Mon espace.
-  await expect(navigation.getByRole("link", { name: "Career" })).toHaveCount(isMobile ? 0 : 1);
-
-  if (isMobile) {
-    // Pour moi sits in the middle of the bar, Compte at the end.
-    const links = navigation.getByRole("link");
-    await expect(links).toHaveCount(5);
-    for (const [index, name] of ["Offres", "Apprendre", "Pour moi", "Suivi", "Compte"].entries())
-      await expect(links.nth(index)).toHaveAccessibleName(new RegExp(`^${name}`));
-    // The Menu button (top left) opens the shortcuts; Escape closes it and gives the focus back.
-    const button = page.getByRole("button", { name: "Menu", exact: true });
-    await button.click();
-    const menu = page.getByRole("dialog", { name: "Menu de mon espace" });
-    await expect(menu).toBeVisible();
-    await expect(button).toHaveAttribute("aria-expanded", "true");
-    for (const name of ["Mes CV", "Tableau de bord", "Tout Mon espace"])
-      await expect(menu.getByRole("link", { name })).toBeVisible();
-    await expectAccessible(page);
-    await page.keyboard.press("Escape");
-    await expect(menu).toBeHidden();
-    await expect(button).toBeFocused();
-
-    // « + » opens the Créer sheet; Escape closes it.
-    await page.getByRole("button", { name: "Créer", exact: true }).click();
-    const sheet = page.getByRole("dialog", { name: "Créer" });
-    await expect(sheet.getByRole("link", { name: /candidature/i }).first()).toBeVisible();
-    await page.keyboard.press("Escape");
-    await expect(sheet).toBeHidden();
-
-    // Messages moved to the top of the screen.
-    await expect(
-      page.getByRole("link", { name: /^Messages/ }).filter({ visible: true }),
-    ).toHaveAttribute("href", "/app/messages");
-
-    await button.click();
-    await menu.getByRole("link", { name: "Tout Mon espace" }).click();
-  } else {
-    await page.goto("/app/espace");
-  }
+  // Notifications, messages and the account sit at the top of a destination.
+  await expect(page.getByRole("link", { name: /^Messages/ })).toHaveAttribute(
+    "href",
+    "/app/messages",
+  );
+  await page.getByRole("link", { name: /^Compte de / }).click();
+  await expect(page).toHaveURL(/\/app\/compte$/);
+  await page.getByRole("link", { name: /^Mon espace/ }).click();
 
   await expect(page).toHaveURL(/\/app\/espace$/);
   await expect(page.getByRole("heading", { level: 1, name: "Mon espace" })).toBeVisible();
@@ -106,9 +74,8 @@ test("navigation Talent : cinq destinations, menu du haut, Mon espace et Suivi",
     "href",
     "/app/tableau-de-bord",
   );
-  // Mon espace has no bottom bar on a phone.
-  if (isMobile)
-    await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
+  // Mon espace has no bottom bar.
+  await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
   await expectAccessible(page);
 
   // The dashboard keeps its content at its own address.
@@ -126,10 +93,9 @@ test("navigation Talent : cinq destinations, menu du haut, Mon espace et Suivi",
       .getByRole("link", { name: "Entretiens" }),
   ).toHaveAttribute("href", "/app/suivi?filtre=entretiens");
   await expect(
-    page
-      .getByRole("navigation", { name: "Navigation principale" })
-      .filter({ visible: true })
-      .getByRole("link", { name: /^Suivi/ }),
+    page.getByRole("navigation", { name: "Navigation principale" }).getByRole("link", {
+      name: /^Suivi/,
+    }),
   ).toHaveAttribute("aria-current", "page");
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
@@ -140,10 +106,7 @@ test("navigation Talent : cinq destinations, menu du haut, Mon espace et Suivi",
 
 // Prompts 3 and 3 bis: from the sign-up to « Pour moi », through the country (81), the goal (01)
 // and the places (82) screens, then the offers filtered by those places.
-test("inscription, pays, objectif, lieux puis Pour moi selon l'objectif", async ({
-  page,
-  isMobile,
-}) => {
+test("inscription, pays, objectif, lieux puis Pour moi selon l'objectif", async ({ page }) => {
   // Sign-up, then five screens each checked for accessibility.
   test.setTimeout(120_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("objectif"));
@@ -160,8 +123,7 @@ test("inscription, pays, objectif, lieux puis Pour moi selon l'objectif", async 
   await expect(central.getByRole("radio", { name: "RD Congo" })).toBeChecked();
   await expect(main.getByRole("group", { name: "Afrique de l'Ouest" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Plus tard" })).toBeVisible();
-  if (isMobile)
-    await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
+  await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
   await expectAccessible(page);
   await page.getByRole("searchbox", { name: "Rechercher un pays" }).fill("cote");
   await expect(page.getByRole("radio", { name: /^Côte d.Ivoire$/ })).toBeVisible();
@@ -290,8 +252,8 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
   // No skill yet: the list says it is a general selection.
   await expect(page.getByText(/Sélection générale, non personnalisée/)).toBeVisible();
   if (isMobile) {
-    // Phone: the search of the header (screen 18) searches the offers on this tab.
-    const search = page.getByRole("combobox", { name: /Rechercher/ });
+    // Phone: the search of the header (brief § 5) searches the offers on this tab.
+    const search = page.getByRole("search").getByRole("searchbox", { name: "Rechercher" });
     await search.fill("assistant administratif");
     await search.press("Enter");
     await expect(page).toHaveURL(/q=assistant/);

@@ -1,6 +1,7 @@
 import { isTester } from "@/server/services/tester";
 import { Suspense } from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { TalentShell } from "@/components/talent/shell";
 import { Skeleton } from "@/components/ui";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -14,7 +15,6 @@ import { unreadNotifications } from "@/server/services/notifications";
 import { hireMemberships, partnerMemberships } from "@/server/services/organization";
 import { introData } from "@/components/app/app-intro-data";
 import { introProfile } from "@/lib/app-intro";
-import { lockedTools } from "@/server/services/career-offer";
 import { unreadCount } from "@/server/services/connect";
 import { followUpActions } from "@/server/services/follow-up";
 
@@ -35,8 +35,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     update: {},
     create: { userId: user.id },
   });
-  const plan = await resolvePlan(db, { type: "user", id: user.id });
-  const t = await getTranslations("org.roles");
   const [hire, partners, space, partnerSpace, unread] = await Promise.all([
     hireMemberships(db, user.id),
     partnerMemberships(db, user.id),
@@ -44,14 +42,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     getPartnerSpace(user.id),
     unreadNotifications(db, user.id),
   ]);
-  // Personal space: badges of Suivi (actions to take) and of Messages (avatar menu).
-  const personal = !partnerSpace && !space;
-  const [followUp, unreadMessages] = personal
-    ? await Promise.all([
-        followUpActions(db, user.id).then((actions) => actions.total),
-        unreadCount(db, { userId: user.id }),
-      ])
-    : [0, 0];
   const intro = await introData({
     profile: introProfile(
       partnerSpace ? { partner: true } : space ? { type: space.organization.type } : null,
@@ -60,6 +50,31 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     image: user.image,
     seenAt: user.introSeenAt,
   });
+
+  // Personal space: the talent shell of the mobile redesign (docs/refonte-mobile).
+  if (!partnerSpace && !space) {
+    const [followUp, unreadMessages] = await Promise.all([
+      followUpActions(db, user.id).then((actions) => actions.total),
+      unreadCount(db, { userId: user.id }),
+    ]);
+    return (
+      <TalentShell
+        account={{ id: user.id, name: user.name, firstName: user.firstName, image: user.image }}
+        unread={unread}
+        unreadMessages={unreadMessages}
+        followUp={followUp}
+        appearance={user.appearance}
+        reduceMotion={user.reduceMotion}
+        intro={intro}
+      >
+        <ContentBanners audience="talents" />
+        {children}
+      </TalentShell>
+    );
+  }
+
+  const plan = await resolvePlan(db, { type: "user", id: user.id });
+  const t = await getTranslations("org.roles");
   const option = (membership: (typeof hire)[number]) => ({
     id: membership.organizationId,
     name: membership.organization.name,
@@ -74,10 +89,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       unread={unread}
       reduceMotion={user.reduceMotion}
       intro={intro}
-      lockedCareer={plan ? lockedTools(plan.values) : []}
-      followUp={followUp}
-      unreadMessages={unreadMessages}
-      theme={user.theme}
       account={{
         name: user.name,
         image: user.image,
@@ -86,7 +97,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         isTester: isTester(user),
       }}
     >
-      <ContentBanners audience={partnerSpace ? "partners" : space ? "recruiters" : "talents"} />
+      <ContentBanners audience={partnerSpace ? "partners" : "recruiters"} />
       {children}
     </AppShell>
   );

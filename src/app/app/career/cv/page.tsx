@@ -12,7 +12,7 @@ import {
   TemplatesBand,
   type CvRow,
 } from "@/components/career/cv/list";
-import { PhoneTitle } from "@/components/layout/phone-title";
+import { PhoneTitle } from "@/components/talent/page-title";
 import { CreateCvSheet, PhoneCvList } from "@/components/career/cv/phone-list";
 import { Alert } from "@/components/ui";
 import { cvFileName } from "@/features/cv/export/pdf";
