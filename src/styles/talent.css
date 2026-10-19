@@ -12444,8 +12444,6 @@ span.t-sw {
   }
 }
 
-
-
 /* ══ Studio CV web : Mes CV, galerie des modèles, studio, LinkedIn (docs/refonte-web/studio-cv) ══
  * Valeurs de docs/refonte-mobile/maquette/source/webcv.py (CSSCV) et web.py. Un seul code : l'arbre
  * téléphone (.t-mob) disparaît dès 768 px, l'arbre web (.t-sc-*) n'existe qu'à partir de 768 px. */
