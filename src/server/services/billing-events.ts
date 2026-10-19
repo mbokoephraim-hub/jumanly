@@ -16,7 +16,13 @@ import { issueInvoice } from "./invoices";
 import { notify } from "./notifications";
 import { reportError } from "@/server/observability";
 
-export type Recipient = { id: string; email: string; firstName: string | null };
+export type Recipient = {
+  id: string;
+  email: string;
+  firstName: string | null;
+  /** « Recevoir aussi par e-mail » (Paramètres › Notifications): reminders only. */
+  notificationEmails?: boolean;
+};
 
 /** Who hears about the billing of a subject: the user, or the organization's active owners. */
 export async function billingRecipients(
@@ -24,7 +30,7 @@ export async function billingRecipients(
   subjectType: SubjectType,
   subjectId: string,
 ): Promise<Recipient[]> {
-  const select = { id: true, email: true, firstName: true };
+  const select = { id: true, email: true, firstName: true, notificationEmails: true };
   if (subjectType === "user") {
     const user = await db.user.findUnique({ where: { id: subjectId }, select });
     return user ? [user] : [];

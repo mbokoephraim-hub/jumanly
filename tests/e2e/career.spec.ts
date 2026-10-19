@@ -8,8 +8,9 @@ test("simulation d'entretien écrite, de la préparation au retour", async ({ pa
   test.skip(isMobile, "Une simulation du mois par exécution suffit.");
   test.setTimeout(120_000);
   await logIn(page, demo.talentStarter);
-  await page.goto("/app/career");
-  await page.getByRole("link", { name: "Simulations d'entretien" }).last().click();
+  // Lot 7: the former Career home is gone; the practice opens from Compte.
+  await page.goto("/app/compte");
+  await page.getByRole("link", { name: /S.entraîner aux entretiens/ }).click();
   // Lot 6b (planche talent-4 § 5 bis): quotas, free practice, last sessions.
   await expect(
     page.getByRole("heading", { name: "S'entraîner aux entretiens", level: 1 }),
@@ -23,14 +24,14 @@ test("simulation d'entretien écrite, de la préparation au retour", async ({ pa
   await page.getByText("Rapide", { exact: true }).click();
   await page.getByRole("button", { name: "Commencer" }).click();
   await expect(page).toHaveURL(/\/app\/career\/entretiens\/[^/?#]+/);
-  await expect(page.getByText("Question 1 sur 4")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Question 1 sur 4" })).toBeVisible();
   await page
     .getByLabel("Votre réponse")
     .fill(
       "Lors de mon stage, j'ai repris le suivi des réclamations clients et j'ai mis en place un tableau partagé, ce qui a permis de répondre plus vite.",
     );
   await page.getByRole("button", { name: "Répondre", exact: true }).click();
-  await expect(page.getByText("Question 2 sur 4")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Question 2 sur 4" })).toBeVisible();
   await expectAccessible(page);
   await page.getByRole("button", { name: "Terminer la séance" }).click();
   await expect(page.getByRole("heading", { name: "Votre retour" })).toBeVisible();
@@ -104,7 +105,7 @@ test("simulation orale : la réponse se tape si la dictée n'est pas disponible"
   await page.getByLabel("Métier").fill("Analyste de données");
   await page.getByText("Rapide", { exact: true }).click();
   await page.getByRole("button", { name: "Commencer" }).click();
-  await expect(page.getByText("Question 1 sur 4")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Question 1 sur 4" })).toBeVisible();
   await expect(
     page.locator("#reponse").getByText("Aucun enregistrement n'est gardé", { exact: false }),
   ).toBeVisible();
@@ -112,7 +113,7 @@ test("simulation orale : la réponse se tape si la dictée n'est pas disponible"
     .getByLabel("Votre réponse transcrite, à relire avant d'envoyer")
     .fill("J'ai analysé les ventes et présenté un tableau clair à l'équipe.");
   await page.getByRole("button", { name: "Envoyer ma réponse" }).click();
-  await expect(page.getByText("Question 2 sur 4")).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Question 2 sur 4" })).toBeVisible();
 });
 
 test("projets : verrou en Free, page publique sans compte", async ({ page, browser }) => {
@@ -165,59 +166,16 @@ test("un talent Pro ajoute un projet avec une photo", async ({ page, isMobile })
   expect((await page.request.get(src!)).status()).toBe(404);
 });
 
-// Career home v2 (docs/refonte-career/BRIEF-CAREER-V2.md § 9).
-test("accueil Career : un talent Free voit ses verrous, les formules et le bandeau d'offre", async ({
-  page,
-}) => {
+// Lot 7: the former pages of the old design lead, for good, to their place in the redesign.
+test("les anciennes adresses mènent à leur place dans la refonte", async ({ page }) => {
   await logIn(page, demo.talentFree);
-  await page.goto("/app/career");
-  const hero = page.locator("#career-journey");
-  await expect(hero.getByText(/sur 4$/)).toBeVisible();
-  await expect(hero.locator('[aria-current="step"]')).toHaveCount(1);
-
-  const locked = page.locator("#career-apply .jm-ch-locked, #career-train .jm-ch-locked");
-  await expect(locked).toHaveCount(4);
-  for (const id of ["documents", "linkedin", "portfolio", "interviews"]) {
-    const card = page.locator(`#career-${id}`);
-    await expect(card.getByText(/^Avec .+ · [\d,]+ USD\/mois$/)).toBeVisible();
-    await expect(card.getByRole("link", { name: "Débloquer" })).toHaveAttribute(
-      "href",
-      "/app/abonnement",
-    );
+  for (const [from, to] of [
+    ["/app/career", /\/app\/career\/cv$/],
+    ["/app/career/conseils", /\/app\/learn$/],
+    ["/app/tableau-de-bord", /\/app$/],
+    ["/app/espace", /\/app\/compte$/],
+  ] as const) {
+    await page.goto(from);
+    await expect(page, from).toHaveURL(to);
   }
-  await expect(page.locator("#career-cv").getByText("Inclus", { exact: true })).toBeVisible();
-  // « Conseils de préparation » opens once a sheet is published in /admin/contenus (e2e
-  // admin-contents.spec publishes one, then restores the empty version): either state is right here.
-  await expect(
-    page.locator("#career-tips").getByText(/^(Bientôt disponible|Inclus)$/),
-  ).toBeVisible();
-
-  const band = page.locator("#career-upgrade");
-  await expect(
-    band.getByRole("heading", { name: /^Débloquez .+ pour candidater mieux$/ }),
-  ).toBeVisible();
-  await expect(band.getByText(/^[\d,]+ USD$/)).toBeVisible();
-  await expect(band.getByRole("link", { name: "Voir les formules" })).toHaveAttribute(
-    "href",
-    "/app/abonnement",
-  );
-  await expectAccessible(page);
-
-  const overflow = await page.evaluate(
-    () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
-  );
-  expect(overflow).toBeLessThanOrEqual(0);
-});
-
-test("accueil Career : un talent dont la formule ouvre tout ne voit ni verrou ni bandeau", async ({
-  page,
-}) => {
-  await logIn(page, demo.talentPro);
-  await page.goto("/app/career");
-  await expect(page.locator("#career-journey")).toBeVisible();
-  await expect(
-    page.locator("#career-portfolio").getByRole("link", { name: "Ouvrir" }),
-  ).toBeVisible();
-  await expect(page.locator(".jm-ch-locked")).toHaveCount(0);
-  await expect(page.locator("#career-upgrade")).toHaveCount(0);
 });

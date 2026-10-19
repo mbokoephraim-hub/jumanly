@@ -209,15 +209,8 @@ function appSections(t: ReturnType<typeof useTranslations<"appNav">>): Section[]
   return [
     section(
       t("section.account"),
+      ["/app/profil", "/app/notifications", "/app/abonnement", "/app/parametres"],
       [
-        "/app/tableau-de-bord",
-        "/app/profil",
-        "/app/notifications",
-        "/app/abonnement",
-        "/app/parametres",
-      ],
-      [
-        ["/app/tableau-de-bord", t("section.dashboard"), "statistiques"],
         ["/app/profil", t("section.profile"), "profil"],
         ["/app/notifications", t("notifications"), "notification"],
         ["/app/abonnement", t("section.subscription"), "portefeuille"],

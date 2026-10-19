@@ -92,7 +92,7 @@ export async function AvatarMenuContent({
           note={plan?.planName}
         />
         <Item href="/app/parametres" icon="reglages" label={t("settings.title")} />
-        <Item href="/contact" icon="aide" label={t("help.title")} />
+        <Item href="/app/compte/aide" icon="aide" label={t("help.title")} />
       </ul>
       <div aria-hidden className="t-am-sp" />
       <form action={signOut}>

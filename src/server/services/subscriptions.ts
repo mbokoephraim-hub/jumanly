@@ -133,6 +133,8 @@ export async function startCheckout(
     email: string;
     country: string;
     msisdn?: string;
+    /** Dialling code chosen with the number (« +243 »): the number is masked around it. */
+    dialCode?: string;
     operator?: string;
     returnUrl: string;
   },
@@ -174,7 +176,7 @@ export async function startCheckout(
       provider: provider.id,
       method: input.method,
       operator: input.operator,
-      msisdnMasked: input.msisdn ? maskNumber(input.msisdn) : null,
+      msisdnMasked: input.msisdn ? maskNumber(input.msisdn, input.dialCode) : null,
       amountCents: quote.totalCents,
       creditCents: quote.creditCents,
       kind: quote.kind,
@@ -188,9 +190,23 @@ export async function startCheckout(
   return { status: "started", paymentId: payment.id };
 }
 
-export function maskNumber(msisdn: string): string {
+/**
+ * The Mobile Money number as it may be shown again (never in full): with the dialling code
+ * chosen in the form, « +243 81 ••• 42 » (planche talent-4 § 7); without it, « ••••••1234 ».
+ */
+export function maskNumber(msisdn: string, dialCode?: string): string {
   const digits = msisdn.replace(/\D/g, "");
+  const dial = dialCode?.replace(/\D/g, "");
+  if (dial && digits.startsWith(dial) && digits.length - dial.length >= 6) {
+    const local = digits.slice(dial.length);
+    return `+${dial} ${local.slice(0, 2)} ••• ${local.slice(-2)}`;
+  }
   return `••••••${digits.slice(-4)}`;
+}
+
+/** The masked number without its dialling code: « +243 81 ••• 42 » → « 81 ••• 42 ». */
+export function localMask(masked: string): string {
+  return masked.replace(/^\+\d+\s/, "");
 }
 
 /**

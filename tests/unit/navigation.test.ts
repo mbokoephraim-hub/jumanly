@@ -48,8 +48,16 @@ describe("navigation Talent (docs/refonte-mobile, brief § 2.1)", () => {
       "/app/career/cv/modeles",
       "/app/career/linkedin",
       "/app/career/documents/abc",
-      "/app/espace",
       "/app/bienvenue",
+      // Lot 7: subscription, settings, help, search and the tester tool draw their own head.
+      "/app/abonnement",
+      "/app/abonnement/payer",
+      "/app/abonnement/factures",
+      "/app/parametres",
+      "/app/parametres/securite",
+      "/app/compte/aide",
+      "/app/recherche",
+      "/app/testeur",
       "/app/orbi",
       "/app/orbi/historique",
     ])
@@ -65,7 +73,6 @@ describe("navigation Talent (docs/refonte-mobile, brief § 2.1)", () => {
       "/app/learn",
       "/app/career",
       "/app/suivi",
-      "/app/tableau-de-bord",
     ])
       expect(hidesTalentTabBar(path), path).toBe(false);
   });

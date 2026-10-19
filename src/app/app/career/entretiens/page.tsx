@@ -68,37 +68,40 @@ export default async function InterviewsPage({
     </Notice>
   );
 
+  // The preparation sheets of /admin/contenus, free for everyone (partie 05): they open in place
+  // (lot 7: the former page /app/career/conseils is gone).
+  const tips = publishedTips(await getMessages(), await getContentOverrides());
+  const tipIcons: TalentIconName[] = ["lecon", "entretien", "document"];
+  const tipList = (
+    <div className="t-verre t-liste t-lignes">
+      {tips.map((tip, index) => (
+        <details key={tip.id} id={`conseil-${tip.id}`} className="t-conseil">
+          <summary className="t-li t-press">
+            <span className="t-cases t-c1">
+              <TalentIcon name={tipIcons[index] ?? "lecon"} size="s" />
+            </span>
+            <span className="t-t">
+              <b>{tip.title}</b>
+              <span>{t("entrain.tipLine", { minutes: tip.minutes })}</span>
+            </span>
+            <TalentIcon name="suivant" />
+          </summary>
+          {tip.body.split(/\n\s*\n/).map((paragraph, paragraphIndex) => (
+            <p key={paragraphIndex}>{paragraph}</p>
+          ))}
+        </details>
+      ))}
+    </div>
+  );
+
   // ─── Without simulations in the plan: the free tips. ─────────────────────────────────────
   if (text.limit === 0 && voice.limit === 0) {
-    const tips = publishedTips(await getMessages(), await getContentOverrides()).slice(0, 3);
-    const tipIcons: TalentIconName[] = ["lecon", "entretien", "document"];
     return (
       <div className="t-flux">
         {head}
         {errorNotice}
         <h2 className="t-ck-t">{t("entrain.gratuit")}</h2>
-        {tips.length === 0 ? (
-          <p className="t-vide-t">{t("career.tips.empty")}</p>
-        ) : (
-          <div className="t-verre t-liste t-lignes">
-            {tips.map((tip, index) => (
-              <Link
-                key={tip.id}
-                href={`/app/career/conseils#conseil-${tip.id}`}
-                className="t-li t-press"
-              >
-                <span className="t-cases t-c1">
-                  <TalentIcon name={tipIcons[index] ?? "lecon"} size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{tip.title}</b>
-                  <span>{t("entrain.tipLine", { minutes: tip.minutes })}</span>
-                </span>
-                <TalentIcon name="suivant" />
-              </Link>
-            ))}
-          </div>
-        )}
+        {tips.length === 0 ? <p className="t-vide-t">{t("career.tips.empty")}</p> : tipList}
         <div className="t-verrou">
           <TalentIcon name="cadenas" size="s" />
           <div className="t-t">
@@ -290,6 +293,14 @@ export default async function InterviewsPage({
           </div>
         )}
       </section>
+      {tips.length > 0 && (
+        <section aria-labelledby="entrain-conseils" className="t-flux">
+          <h2 id="entrain-conseils" className="t-ck-t">
+            {t("career.tips.title")}
+          </h2>
+          {tipList}
+        </section>
+      )}
       <p className="t-gar">
         <TalentIcon name="cadenas" size="s" />
         <span>{t("entrain.private")}</span>

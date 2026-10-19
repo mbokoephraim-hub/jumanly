@@ -36,6 +36,11 @@ const checkoutSchema = z.discriminatedUnion("method", [
     plan: z.string().min(1).max(60),
     context: z.enum(contexts),
     operator: z.string().min(1, "operatorRequired").max(30),
+    /** Dialling code of the number (talent payment screen); absent, the number carries it. */
+    dial: z
+      .string()
+      .regex(/^\+\d{1,4}$/, "numberInvalid")
+      .optional(),
     number: z
       .string()
       .trim()
@@ -78,7 +83,13 @@ export async function startPayment(
     payerId: user.id,
     email: user.email,
     country: user.country ?? "",
-    msisdn: input.method === "mobile_money" ? input.number : undefined,
+    msisdn:
+      input.method === "mobile_money"
+        ? input.dial
+          ? `${input.dial}${input.number.replace(/^\+/, "").replace(/^0/, "")}`
+          : input.number
+        : undefined,
+    dialCode: input.method === "mobile_money" ? input.dial : undefined,
     operator: input.method === "mobile_money" ? input.operator : undefined,
     returnUrl: absoluteUrl(checkoutPath(input.context, plan.code)),
   });

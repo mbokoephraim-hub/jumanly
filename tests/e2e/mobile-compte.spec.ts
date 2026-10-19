@@ -25,32 +25,39 @@ test("Compte : profil, documents, abonnement, apparence gardée, déconnexion", 
     "/app/abonnement",
   );
   await expect(settings.getByRole("link", { name: /Aide/ })).toContainText("assistant@jumanly.io");
+  await expect(settings.getByRole("link", { name: /Aide/ })).toHaveAttribute(
+    "href",
+    "/app/compte/aide",
+  );
   await expectAccessible(page);
 
-  // Apparence (brief § 2.10): the choice is kept; the redrawn pages take the dark mode.
-  await page.goto("/app/parametres");
-  const appearance = page.getByRole("group", { name: "Apparence" });
-  await expect(appearance.getByRole("button", { name: "Auto" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  // The button lights up at once; the choice is saved by a server action that must finish
-  // before the page changes.
+  // Apparence (brief § 2.10, planche talent-4 § 8): a sheet of Paramètres, Auto, Clair or Sombre;
+  // the choice is kept and every page of the space takes the dark mode (lot 7).
   const saved = () =>
     page.waitForResponse((response) => response.request().method() === "POST" && response.ok());
-  await Promise.all([saved(), appearance.getByRole("button", { name: "Sombre" }).click()]);
-  await page.reload();
-  await expect(
-    page.getByRole("group", { name: "Apparence" }).getByRole("button", { name: "Sombre" }),
-  ).toHaveAttribute("aria-pressed", "true");
-  await page.goto("/app/compte");
-  await expect(page.locator("html")).toHaveClass(/sombre/);
-  if (isMobile) await expectAccessible(page);
+  const choose = async (name: string) => {
+    await page.goto("/app/parametres");
+    await page.getByRole("button", { name: /^Apparence/ }).click();
+    const appearance = page.getByRole("form", { name: "Apparence" });
+    await Promise.all([
+      saved(),
+      appearance.getByRole("radio", { name: new RegExp(`^${name}`) }).check({ force: true }),
+    ]);
+  };
   await page.goto("/app/parametres");
-  await Promise.all([
-    saved(),
-    page.getByRole("group", { name: "Apparence" }).getByRole("button", { name: "Clair" }).click(),
-  ]);
+  await page.getByRole("button", { name: /^Apparence/ }).click();
+  await expect(
+    page.getByRole("form", { name: "Apparence" }).getByRole("radio", { name: /^Auto/ }),
+  ).toBeChecked();
+  await choose("Sombre");
+  await page.reload();
+  await expect(page.getByRole("button", { name: /^Apparence/ })).toContainText("Sombre");
+  for (const path of ["/app/compte", "/app/abonnement", "/app/parametres/securite"]) {
+    await page.goto(path);
+    await expect(page.locator("html"), path).toHaveClass(/sombre/);
+  }
+  if (isMobile) await expectAccessible(page);
+  await choose("Clair");
   await page.goto("/app/compte");
   await expect(page.locator("html")).not.toHaveClass(/sombre/);
 

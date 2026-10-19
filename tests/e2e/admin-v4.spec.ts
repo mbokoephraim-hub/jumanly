@@ -13,7 +13,7 @@ test("espace talent : recherche de l'en-tête et compte derrière l'avatar", asy
   await expect(courses.getByRole("link", { name: /Réussir son CV/ })).toBeVisible();
   // Screen 18: Tout / Offres / Formations; a group without result is left out.
   await page
-    .getByRole("navigation", { name: "Type de résultats" })
+    .getByRole("navigation", { name: "Que chercher" })
     .getByRole("link", { name: "Formations" })
     .click();
   await expect(page).toHaveURL(/vue=formations/);

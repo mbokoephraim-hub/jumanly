@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { OpenSpaceSwitcher } from "@/components/site/open-space-switcher";
 import {
@@ -7,10 +8,12 @@ import {
   SystemCode,
   SystemHero,
 } from "@/components/site/system-page";
+import { TalentIcon } from "@/components/talent/icon";
 import { ButtonLink } from "@/components/ui";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { hireMemberships, partnerMemberships } from "@/server/services/organization";
+import { inOrganizationSpace } from "@/server/talent-space";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("system.403");
@@ -39,6 +42,29 @@ export default async function AccessDeniedPage({ searchParams }: PageProps<"/app
         : canSwitch
           ? t("system.403.wrongSpace")
           : t("system.403.body");
+  // Personal space (lot 7): the talent components, readable in dark mode. The other spaces keep
+  // the system card of mockup 08-02 until their step.
+  if (!(await inOrganizationSpace(user.id))) {
+    return (
+      <div className="t-flux">
+        <div className="t-flux t-conf">
+          <span className="t-rond-ko" aria-hidden>
+            <TalentIcon name="cadenas" />
+          </span>
+          <h1 className="t-h2s">{t("system.403.title")}</h1>
+          <p>{body}</p>
+          {canSwitch && raison !== "suspendu" && (
+            <Link href="/app/compte" className="t-bt t-sec t-pl t-press">
+              {t("system.403.switchSpace")}
+            </Link>
+          )}
+          <Link href="/app" className="t-bt t-p t-pl t-press">
+            {t("system.403.cta")}
+          </Link>
+        </div>
+      </div>
+    );
+  }
   return (
     <AppSystemCard eyebrow={t("common.brand")} title={t("system.403.pageTitle")}>
       <SystemHero

@@ -2,6 +2,69 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · lot mobile 7 : abonnement, paiement, factures, paramètres, aide, fin de l'ancien design (19 octobre 2026)
+
+Planche talent-4 § 7, 8 et 10. Choix et écarts : `docs/decisions/2026-10-19-refonte-etape-1-lot-7.md`.
+
+**Écrans → routes** : Abonnement `/app/abonnement` ; Formules `/app/abonnement/formules` (nouvelle) ;
+Paiement, numéro avec indicatif, attente de validation, « Je n'ai rien reçu », paiement reçu, échec
+`/app/abonnement/payer` ; Factures `/app/abonnement/factures` (nouvelle, PDF par la route existante) ;
+Paramètres `/app/parametres` (apparence Auto/Clair/Sombre, réduire les animations, économie de données,
+langue, introduction, données, suppression en feuille) ; Sécurité `/app/parametres/securite`,
+Confidentialité `/app/parametres/confidentialite`, Notifications `/app/parametres/notifications`
+(nouvelles) ; Aide `/app/compte/aide` (nouvelle, contact par e-mail seulement) ; Rechercher
+`/app/recherche` et Mode testeur `/app/testeur` aux composants talent ; Accès refusé et invitation
+redessinés pour les talents ; historique Orbi vérifié contre la planche (inchangé).
+
+**Base** : migrations additives `country_dial_code_and_notification_settings` (`Country.dialCode`,
+`User.notificationsMuted`, `User.notificationEmails`) ; `remove_old_talent_theme` retire la colonne
+`User.theme` et l'énumération `UserTheme` de l'ancien design. Le seed des pays remplit les indicatifs.
+
+**Services** : `maskNumber` avec indicatif, `localMask` ; catégories de notifications
+(`notificationCategories`, `categoryOf`), `notify()` ne crée plus une notification d'une catégorie
+coupée ; rappels de fin de période par e-mail seulement si `notificationEmails`. Actions :
+`updateNotifications`, retour des actions de facturation vers une page talent (liste fermée).
+
+**Redirections permanentes** : `/app/tableau-de-bord` → `/app`, `/app/espace` → `/app/compte`,
+`/app/career` → `/app/career/cv`, `/app/career/conseils` → `/app/learn` (les fiches s'ouvrent dans
+« S'entraîner aux entretiens »).
+
+**Fichiers supprimés (vérifiés par recherche d'imports, Hire, partenaire, admin et site public
+compris)** :
+- `src/app/app/tableau-de-bord/page.tsx`, `src/app/app/espace/page.tsx`, `src/app/app/career/page.tsx`,
+  `src/app/app/career/conseils/page.tsx` (remplacés par des redirections de quelques lignes) ;
+- `src/components/career/home/art.tsx`, `sections.tsx`, `tool-card.tsx` (ancien accueil Career) ;
+- `src/components/motion/gauge.tsx`, `radar.tsx` ;
+- `src/components/app/daily-welcome.tsx`, `for-me.tsx`, `skills-input.tsx` ;
+- `src/components/account/account-controls.tsx` ;
+- dans `src/lib/appearance.ts` : `REDRAWN`, `REDRAWN_EXACT`, `redrawn()` et la classe `t-ancien`
+  (et sa règle dans `talent.css`) ;
+- textes morts : `career.home.*`, `talent.espace.*`, `talent.forMe.*`, `welcome.talent.skills.*`,
+  les clés de `talent.dashboard.*` plus utilisées, `talentShell.title.dashboard/space`,
+  `settings.seo`, `billing.seo`, `compte.spaces.title` (306 clés).
+- Déplacés en composants pour les espaces organisation (étapes 2 et 3) : ancienne page abonnement →
+  `src/components/billing/hire-billing.tsx`, paramètres → `src/components/account/hire-settings.tsx`,
+  recherche → `src/components/connect/hire-search.tsx`.
+- Gardés car encore importés par l'ancien cadre (AppShell) ou Hire : `account-menu`, `space-switcher`,
+  `recent-searches`, `slash-focus`, `nav-link-styles`, `tab-rail-client`, `subscription-section`,
+  `sponsored-card`, `checkout-form`, `checkout-panel`, `components/career/kit`.
+
+**Tests** : unitaires (masque avec indicatif, prestataire factice absent en production, catégories
+de notifications, apparence sans liste, navigation) ; e2e mis à jour vers le nouveau design
+(paiements, inscription avec forfait, paramètres, apparence, accessibilité, anciennes adresses,
+fiches conseil, recherche, mise en relation). Le test « message du jour » est retiré avec la
+fonctionnalité (le tableau de bord qui le portait n'existe plus).
+
+**Captures** : `/mnt/project-files/captures/etape-1/lot-7/` (390 px, clair et sombre).
+
+**Rebase sur le cadre web W0 (#105)** : la règle provisoire `html.t-ancien .t-cadre .t-colonne`
+est retirée (plus d'ancien design) ; le menu de l'avatar mène l'aide à `/app/compte/aide` (et non
+plus `/contact`) ; « Paramètres » (barre latérale) et « Abonnement » (menu) mènent déjà à
+`/app/parametres` et `/app/abonnement`. Contrôle à 1440 px de l'abonnement et des paramètres.
+
+**Reste à faire** : écrans ordinateur et tablette (lots web) ; les pages Hire, partenaire et
+administration d'entreprise gardent l'ancien design jusqu'aux étapes 2 et 3.
+
 ## Refonte étape 1 · W0 cadre web (19 octobre 2026)
 
 Cadre commun de l'espace talent sur tablette et ordinateur (`docs/refonte-web/BRIEF-WEB-CLAUDE-CODE.md`

@@ -47,19 +47,3 @@ test("la cloche signale l'arrivée d'une notification, puis tout se marque comme
     "Notifications",
   );
 });
-
-test("le message du jour s'affiche à la première visite, puis plus de la journée", async ({
-  page,
-}) => {
-  await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("bonjour"));
-  await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
-  // Pour moi follows the planche talent-1 (no message of the day); the dashboard keeps it.
-  await page.goto("/app/tableau-de-bord");
-  const welcome = page.getByRole("link", { name: /Votre profil est complet à|offres? correspond/ });
-  await expect(welcome).toBeVisible();
-  await page.getByRole("button", { name: "Fermer le message du jour" }).click();
-  await expect(welcome).toBeHidden();
-  await page.reload();
-  await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
-  await expect(welcome).toHaveCount(0);
-});

@@ -59,7 +59,15 @@ test("l'espace connecté propose la navigation adaptée à l'écran", async ({ p
 
 test("aucun numéro de téléphone n'apparaît", async ({ page }) => {
   await logIn(page, demo.talentFree);
-  for (const chemin of ["/", "/app", "/app/abonnement", "/app/parametres", "/dev/composants"]) {
+  for (const chemin of [
+    "/",
+    "/app",
+    "/app/abonnement",
+    "/app/abonnement/factures",
+    "/app/parametres",
+    "/app/compte/aide",
+    "/dev/composants",
+  ]) {
     await page.goto(chemin);
     await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
   }

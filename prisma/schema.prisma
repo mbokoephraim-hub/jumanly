@@ -17,11 +17,6 @@ datasource db {
 // Code never tests a plan code or name, only entitlement keys (CLAUDE.md § 2).
 
 /// Theme of the signed-in space: Clair (Crème, white cards) or Vert (Sapin to Nuit, glass cards).
-enum UserTheme {
-  light
-  green
-}
-
 /// Appearance of the talent space (docs/refonte-mobile, brief § 2.10): auto follows the phone.
 enum UserAppearance {
   auto
@@ -748,8 +743,6 @@ model User {
   newsletter          Boolean                   @default(false)
   /// « Réduire les animations » (docs/experience-animee § 0.4): no motion in the signed-in space.
   reduceMotion        Boolean                   @default(false)
-  /// Former theme (Clair or Vert) of the old talent design: no longer read, removed in lot 7.
-  theme               UserTheme                 @default(light)
   /// Clair, Sombre or Auto (follows the phone), docs/refonte-mobile brief § 2.10.
   appearance          UserAppearance            @default(auto)
   /// Full welcome intro seen (docs/refonte-connexion § 7): played once per account, on any device.
@@ -758,6 +751,12 @@ model User {
   /// Account deletion requested: effective at this date unless the user signs in again.
   deletionScheduledAt DateTime?
   twoFactorEnabled    Boolean                   @default(false)
+  /// Notification categories turned off in Paramètres › Notifications (applications, messages,
+  /// learning, billing): no in-app notification of that category is created for the person.
+  notificationsMuted  String[]                  @default([])
+  /// « Recevoir aussi par e-mail » (Paramètres › Notifications): reminders also sent by e-mail.
+  /// Receipts and security e-mails are always sent.
+  notificationEmails  Boolean                   @default(true)
   sessions            Session[]
   accounts            Account[]
   twoFactors          TwoFactor[]
@@ -2197,6 +2196,8 @@ enum LocalityKind {
 model Country {
   code       String      @id
   name       String
+  /// International dialling code (« +243 »), for the Mobile Money number of a payment.
+  dialCode   String?
   region     PlaceRegion
   localities Locality[]
 }

@@ -2,7 +2,7 @@ import { expect, test } from "./fixtures";
 import { demo, logIn } from "./session";
 
 // Admin v2, étape 8: a content editor writes a tip sheet « Conseils de préparation », talents read
-// it in Career, then « Restaurer » puts the former version back (the sheet disappears again).
+// it in « S'entraîner aux entretiens », then « Restaurer » puts the former version back (the sheet disappears again).
 test("une fiche conseil se publie, se lit dans Career, puis se restaure", async ({
   page,
   isMobile,
@@ -25,10 +25,13 @@ test("une fiche conseil se publie, se lit dans Career, puis se restaure", async 
   await editor.getByRole("button", { name: "Enregistrer la fiche" }).click();
   await expect(page.getByText("Modification enregistrée.")).toBeVisible();
 
-  // Talents read it in Career.
-  await page.goto("/app/career/conseils");
-  await expect(page.getByRole("heading", { name: title })).toBeVisible();
-  await expect(page.getByText("4 min de lecture")).toBeVisible();
+  // Talents read it in « S'entraîner aux entretiens » (lot 7: the sheets open in place there,
+  // the former page /app/career/conseils is gone).
+  await page.goto("/app/career/entretiens");
+  const sheet = page.locator("details.t-conseil").filter({ hasText: title });
+  await expect(sheet).toBeVisible();
+  await sheet.locator("summary").click();
+  await expect(sheet.getByText(/Écoutez d'abord la proposition/)).toBeVisible();
 
   // « Restaurer » brings back the version before: no sheet yet for this topic.
   await page.goto("/admin/contenus?onglet=conseils&fiche=salary");
@@ -37,6 +40,6 @@ test("une fiche conseil se publie, se lit dans Career, puis se restaure", async 
   await versions.getByLabel("Motif").first().fill("Recette : retour à l'état d'avant");
   await versions.getByRole("button", { name: "Restaurer cette version" }).first().click();
   await expect(page.getByText("Version restaurée.").first()).toBeVisible();
-  await page.goto("/app/career/conseils");
-  await expect(page.getByRole("heading", { name: title })).toHaveCount(0);
+  await page.goto("/app/career/entretiens");
+  await expect(page.getByText(title)).toHaveCount(0);
 });

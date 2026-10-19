@@ -101,7 +101,10 @@ export const talentTabPaths: string[] = talentTabs.map((tab) => tab.href);
 export function hidesTalentTabBar(pathname: string) {
   const [, app, section, page] = pathname.split("/");
   if (app !== "app" || !section) return false;
-  if (section === "espace" || section === "bienvenue") return true;
+  if (section === "bienvenue") return true;
+  // Lot 7: subscription, payment, settings, search and the tester tool draw their own head
+  // (planche talent-4 § 7 and § 8), without the bar.
+  if (["abonnement", "parametres", "recherche", "testeur"].includes(section)) return true;
   // Compte and Connexions open from the avatar and draw their own head (planche talent-4 § 2).
   if (section === "compte") return true;
   // Orbi opens as a conversation page: back arrow at the top, the composer in place of the bar.

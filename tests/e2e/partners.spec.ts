@@ -53,12 +53,14 @@ test("un bénéficiaire active sa licence avec un code", async ({ page, isMobile
   await expect(page).toHaveURL(/\/activer/);
   await page.getByRole("button", { name: "Activer ma licence" }).click();
   await expect(page).toHaveURL(/\/app\/abonnement\?licence=/);
-  await expect(page.getByText("Votre licence Pro est active")).toBeVisible();
+  await expect(
+    page.getByText(/Pro vous est offert par Fondation Démo \(partenaire fictif\)/),
+  ).toBeVisible();
   await expect(
     page.getByRole("heading", { name: "Licence offerte par Fondation Démo (partenaire fictif)" }),
   ).toBeVisible();
   await page.getByRole("button", { name: "J'accepte" }).click();
-  await expect(page.getByText("Votre réponse est enregistrée.")).toBeVisible();
+  await expect(page.getByText("Votre choix de partage est enregistré.")).toBeVisible();
 
   // The same code cannot be used twice.
   await page.goto("/activer?code=JMLY-DEMO-AAAA");

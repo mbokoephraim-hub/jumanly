@@ -11,19 +11,23 @@ for (const path of ["/", "/dev/composants", "/connexion", "/inscription", "/mot-
 }
 
 test("aucune erreur d'accessibilité WCAG 2.2 AA dans l'espace connecté", async ({ page }) => {
-  // Sixteen pages, each fully analysed: more than the default 30 s when tests run in parallel.
-  test.setTimeout(90_000);
+  // About twenty pages, each fully analysed: more than the default 30 s when tests run in parallel.
+  test.setTimeout(120_000);
   await logIn(page, demo.talentPro);
   for (const path of [
     "/app",
     "/app/abonnement",
     "/app/abonnement/payer?forfait=talent_premium",
-    "/app/parametres?onglet=compte",
-    "/app/parametres?onglet=securite",
-    "/app/parametres?onglet=confidentialite",
-    "/app/parametres?onglet=donnees",
+    "/app/abonnement/formules",
+    "/app/abonnement/factures",
+    "/app/parametres",
+    "/app/parametres/securite",
+    "/app/parametres/confidentialite",
+    "/app/parametres/notifications",
+    "/app/compte/aide",
+    "/app/compte/aide?theme=billing",
+    "/app/recherche?q=data",
     "/app/profil",
-    "/app/career",
     "/app/career/diagnostic",
     "/app/career/diagnostic?etape=1",
     "/app/career/diagnostic?refaire=1",
