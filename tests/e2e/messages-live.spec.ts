@@ -57,7 +57,8 @@ test("le message du jour s'affiche à la première visite, puis plus de la journ
 }) => {
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("bonjour"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
-  await page.goto("/app");
+  // Pour moi follows the planche talent-1 (no message of the day); the dashboard keeps it.
+  await page.goto("/app/tableau-de-bord");
   const welcome = page.getByRole("link", { name: /Votre profil est complet à|offres? correspond/ });
   await expect(welcome).toBeVisible();
   await page.getByRole("button", { name: "Fermer le message du jour" }).click();

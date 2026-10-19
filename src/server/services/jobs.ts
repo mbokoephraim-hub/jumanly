@@ -79,6 +79,8 @@ export const jobFiltersSchema = z.object({
   publie: optionalEnum(Object.keys(postedFilters) as [PostedFilter, ...PostedFilter[]]),
   /** "1": verified companies only. */
   verifiees: optionalEnum(["1"]),
+  /** Sector of the company (« Domaine » of the talent's filters). */
+  secteur: text,
   /** "1": the places the talent chose (screen 82), resolved by the page into `places`. */
   lieux: optionalEnum(["1"]),
   page: z.coerce.number().int().min(1).max(500).optional().catch(undefined),
@@ -133,6 +135,7 @@ export function jobWhere(filters: JobQuery, now: Date): Prisma.JobWhereInput {
     and.push({ publishedAt: { gte: since } });
   }
   if (filters.verifiees) and.push({ organization: { verifiedAt: { not: null } } });
+  if (filters.secteur) and.push({ organization: { sector: filters.secteur } });
   if (filters.places) {
     const { areas, remote } = filters.places;
     and.push({
@@ -215,30 +218,46 @@ export async function matchingJobIds(
   return rows.map((row) => row.id);
 }
 
+/** Open offers matching `filters` (the « Voir 24 offres » of the filter sheet). */
+export async function countJobs(db: PrismaClient, filters: JobQuery, now = new Date()) {
+  return db.job.count({ where: jobWhere(filters, now) });
+}
+
+/**
+ * Choices of the talent's filter sheet (planche talent-1 § 2): the sectors and the cities with
+ * the most open offers, so that every choice finds something.
+ */
+export async function offerFilterChoices(db: PrismaClient, now = new Date(), take = 4) {
+  const [cities, companies] = await Promise.all([
+    db.job.groupBy({
+      by: ["city"],
+      where: openJobWhere(now),
+      _count: { _all: true },
+      orderBy: { _count: { city: "desc" } },
+      take: 2,
+    }),
+    db.job.findMany({
+      where: { ...openJobWhere(now), organization: { sector: { not: null } } },
+      select: { organization: { select: { sector: true } } },
+    }),
+  ]);
+  const counts = new Map<string, number>();
+  for (const row of companies) {
+    const sector = row.organization.sector!;
+    counts.set(sector, (counts.get(sector) ?? 0) + 1);
+  }
+  const sectors = [...counts.entries()]
+    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "fr"))
+    .slice(0, take)
+    .map(([sector]) => sector);
+  return { sectors, cities: cities.map((row) => row.city).filter(Boolean) };
+}
+
 /** Cards of the given offers, in the given order. */
 export async function jobCards(db: PrismaClient, ids: string[]) {
   const rows = await db.job.findMany({ where: { id: { in: ids } }, select: publicCardSelect });
   const byId = new Map(rows.map((row) => [row.id, row]));
   return ids.flatMap((id) => byId.get(id) ?? []);
-}
-
-/** Companies with the most open offers (sidebar « Entreprises qui recrutent »). */
-export async function hiringCompanies(db: PrismaClient, take = 3, now = new Date()) {
-  const groups = await db.job.groupBy({
-    by: ["organizationId"],
-    where: openJobWhere(now),
-    _count: { _all: true },
-    orderBy: { _count: { organizationId: "desc" } },
-    take,
-  });
-  const orgs = await db.organization.findMany({
-    where: { id: { in: groups.map((group) => group.organizationId) } },
-    select: { id: true, name: true, slug: true, sector: true },
-  });
-  return groups.flatMap((group) => {
-    const org = orgs.find((item) => item.id === group.organizationId);
-    return org ? [{ ...org, openJobs: group._count._all }] : [];
-  });
 }
 
 export async function countOpenJobs(db: PrismaClient, now = new Date()) {

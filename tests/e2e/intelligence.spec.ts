@@ -41,20 +41,26 @@ test("score expliqué, import de CV et révision humaine", async ({ page, browse
   await expect(page.locator("#competences")).toContainText("Excel");
 
   // The score and its « Pourquoi ? », with what is missing.
+  // (planche talent-1 § 4: the reasons open in a sheet over the offer).
   await page.goto(`/app/jobs/${JOB}`);
-  const why = page.locator("#compatibilite");
-  await expect(why.getByRole("heading", { name: /Pourquoi \d+ % \?/ })).toBeVisible();
-  await expect(why).toContainText("Word");
-  await expect(
-    page.getByRole("link", { name: "Comment fonctionne le matching" }).first(),
-  ).toBeVisible();
+  await page.getByRole("button", { name: /^Pourquoi \d+ % \?/ }).click();
+  const why = page.getByRole("dialog", { name: /Pourquoi \d+ % \?/ });
+  await expect(why).toBeVisible();
+  await expect(why).toContainText("Compétences requises");
+  await expect(why.getByRole("link", { name: "Comment fonctionne le matching" })).toBeVisible();
+  await expect(page.locator(".t-cmp")).toContainText("Word");
 
   // Human review.
-  await page.locator("#revision summary").click();
-  await page.getByLabel("Une compétence que j'ai n'est pas prise en compte").check();
-  await page.locator("#dispute-details").fill("J'utilise Word tous les jours depuis trois ans.");
-  await page.getByRole("button", { name: "Demander une révision humaine" }).click();
-  await expect(page.locator("#revision")).toContainText("Votre demande est enregistrée");
+  await why.getByRole("button", { name: "Contester ce score" }).click();
+  const contest = page.getByRole("dialog", { name: "Signaler une erreur sur ce score" });
+  await contest.getByText("Une compétence que j'ai n'est pas prise en compte").click();
+  await contest
+    .getByLabel("Expliquez en quelques mots")
+    .fill("J'utilise Word tous les jours depuis trois ans.");
+  await contest.getByRole("button", { name: "Demander une révision humaine" }).click();
+  await expect(
+    page.getByRole("dialog", { name: "Signaler une erreur sur ce score" }),
+  ).toContainText("Votre demande est enregistrée");
 
   // An administrator confirms the score with an answer.
   const context = await browser.newContext({ baseURL });
@@ -69,8 +75,10 @@ test("score expliqué, import de CV et révision humaine", async ({ page, browse
   await expect(admin.getByText("Révision clôturée.", { exact: false })).toBeVisible();
   await context.close();
 
-  await page.goto(`/app/jobs/${JOB}`);
-  await expect(page.locator("#revision")).toContainText("Score confirmé après vérification");
+  await page.goto(`/app/jobs/${JOB}?pourquoi=1`);
+  await expect(page.getByRole("dialog", { name: /Pourquoi \d+ % \?/ })).toContainText(
+    "Score confirmé après vérification",
+  );
 });
 
 test("la page publique du matching et l'admin IA sont accessibles", async ({ page }) => {

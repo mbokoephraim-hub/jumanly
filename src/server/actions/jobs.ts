@@ -7,7 +7,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { applyToJob, toggleSavedJob, withdrawApplication } from "@/server/services/applications";
 import { applySteps, saveApplicationDraft } from "@/server/services/application-draft";
-import { isJobOpen } from "@/server/services/jobs";
+import { countJobs, isJobOpen, parseJobFilters } from "@/server/services/jobs";
 import { reportError } from "@/server/observability";
 
 const applySchema = z.object({
@@ -65,18 +65,6 @@ export async function toggleSaveAction(formData: FormData) {
   const user = await requireUser("/app/jobs");
   await toggleSavedJob(db, user.id, String(formData.get("job") ?? ""));
   redirect(safeBack(formData.get("back")));
-}
-
-export async function clearClosedSavedJobs() {
-  const user = await requireUser("/app/jobs/enregistrees");
-  const now = new Date();
-  await db.savedJob.deleteMany({
-    where: {
-      userId: user.id,
-      job: { OR: [{ status: { not: "published" } }, { closesAt: { lte: now } }] },
-    },
-  });
-  redirect("/app/jobs/enregistrees");
 }
 
 const stepSchema = z.object({
@@ -151,4 +139,18 @@ export async function setJobSavedAction(slug: string, saved: boolean): Promise<b
     });
   else await db.savedJob.deleteMany({ where: { userId: user.id, jobId: job.id } });
   return parsed.data.saved;
+}
+
+/**
+ * Live count of the filter sheet (« Voir 24 offres »): valider → session → service. The values
+ * are the query string the sheet will send; invalid ones are ignored, as in the search.
+ */
+export async function countOffersAction(values: Record<string, string>): Promise<number> {
+  await requireUser("/app/jobs");
+  const raw = Object.fromEntries(
+    Object.entries(values ?? {})
+      .filter(([key, value]) => typeof key === "string" && typeof value === "string")
+      .slice(0, 20),
+  );
+  return countJobs(db, parseJobFilters(raw));
 }

@@ -170,7 +170,6 @@ test("premiers pas : objectif, études, lieux puis formule gratuite", async ({ p
 test("trouver une offre et postuler : étapes, brouillon et coupure réseau", async ({
   page,
   context,
-  isMobile,
 }) => {
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("postuler"));
   await finishOnboarding(page);
@@ -181,22 +180,17 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
     "aria-current",
     "page",
   );
-  await expect(tabs.getByRole("link", { name: "Enregistrées · 0" })).toBeVisible();
+  await expect(tabs.getByRole("link", { name: "Enregistrées" })).toBeVisible();
   // No skill yet: the list says it is a general selection.
-  await expect(page.getByText(/Sélection générale, non personnalisée/)).toBeVisible();
-  if (isMobile) {
-    // Phone: the search of the header (brief § 5) searches the offers on this tab.
-    const search = page.getByRole("search").getByRole("searchbox", { name: "Rechercher" });
-    await search.fill("assistant administratif");
-    await search.press("Enter");
-    await expect(page).toHaveURL(/q=assistant/);
-  } else {
-    await page.locator("#job-keyword").fill("assistant administratif");
-    await page.getByRole("button", { name: "Rechercher" }).click();
-  }
+  await expect(page.getByText(/Sélection générale/)).toBeVisible();
+  // The search of the header (brief § 5) searches the offers on this tab.
+  const search = page.getByRole("search").getByRole("searchbox", { name: "Rechercher" });
+  await search.fill("assistant administratif");
+  await search.press("Enter");
+  await expect(page).toHaveURL(/q=assistant/);
   await page.getByRole("link", { name: "Assistant administratif (démo)" }).first().click();
   await expect(page).toHaveURL(/\/app\/jobs\/demo-assistant-administratif-kinshasa/);
-  await expect(page.locator("summary").filter({ hasText: "Description du poste" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Le poste" })).toBeVisible();
 
   // Save, then « Annuler » in the toast.
   const save = page
@@ -211,11 +205,7 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
   await expect(save).toHaveAttribute("aria-pressed", "false");
 
   // Step 1, then « Quitter »: the draft is kept and the offer offers to resume it.
-  await page
-    .getByRole("link", { name: "Postuler gratuitement" })
-    .filter({ visible: true })
-    .last()
-    .click();
+  await page.getByRole("link", { name: "Postuler", exact: true }).click();
   await expect(page.getByRole("heading", { level: 1, name: "Candidature" })).toBeVisible();
   await expect(page.getByRole("group", { name: "Quel CV envoyer ?" })).toBeVisible();
   await expectAccessible(page);
