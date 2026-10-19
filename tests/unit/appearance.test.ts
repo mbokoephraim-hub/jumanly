@@ -27,7 +27,8 @@ describe("apparence de l'espace talent (brief § 2.10)", () => {
     expect(redrawn("/app/career/diagnostic")).toBe(true);
     expect(redrawn("/app/career/plan")).toBe(true);
     expect(redrawn("/app/profil/point")).toBe(true);
-    expect(redrawn("/app/profil")).toBe(false);
+    expect(redrawn("/app/profil")).toBe(true);
+    expect(redrawn("/app/compte")).toBe(true);
     expect(redrawn("/app/career/cv")).toBe(false);
   });
 

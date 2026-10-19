@@ -40,6 +40,8 @@ describe("navigation Talent (docs/refonte-mobile, brief § 2.1)", () => {
       "/app/career/diagnostic",
       "/app/career/plan",
       "/app/profil/point",
+      "/app/compte",
+      "/app/compte/connexions",
       "/app/career/cv/abc",
       "/app/espace",
       "/app/bienvenue",
@@ -59,7 +61,6 @@ describe("navigation Talent (docs/refonte-mobile, brief § 2.1)", () => {
       "/app/career/cv",
       "/app/career/cv/modeles",
       "/app/suivi",
-      "/app/compte",
       "/app/tableau-de-bord",
     ])
       expect(hidesTalentTabBar(path), path).toBe(false);
