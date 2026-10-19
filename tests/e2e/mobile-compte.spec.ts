@@ -59,7 +59,8 @@ test("Compte : profil, documents, abonnement, apparence gardée, déconnexion", 
 });
 
 // Connexions (planche talent-4): a request is accepted, then the two talents write to each other.
-test("Connexions : accepter une demande puis écrire", async ({ page }) => {
+test("Connexions : accepter une demande puis écrire", async ({ page, isMobile }) => {
+  test.skip(isMobile, "Les connexions de démonstration sont partagées.");
   await logIn(page, "grace.ux@jumanly.test");
   await page.goto("/app/compte/connexions");
   await expect(page.getByRole("heading", { level: 1, name: "Connexions" })).toBeVisible();

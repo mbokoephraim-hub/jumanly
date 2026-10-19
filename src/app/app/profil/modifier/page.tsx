@@ -93,7 +93,7 @@ export default async function EditHeadPage({ searchParams }: PageProps<"/app/pro
         </div>
         <CountrySheet
           countries={countries.map(({ code, name }) => ({ code, name }))}
-          initial={user.country}
+          initial={user.country ?? "CD"}
           labels={{
             label: t("profil.head.country"),
             choose: t("access.onboarding.places.chooseCountry"),

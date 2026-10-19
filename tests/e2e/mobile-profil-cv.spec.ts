@@ -24,6 +24,7 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
   await expect(page.getByRole("navigation", { name: "Navigation principale" })).toHaveCount(0);
   await page.getByRole("link", { name: "Modifier le profil" }).click();
   await page.locator("#pf-headline").fill("Analyste de données");
+  await page.locator("#pf-city").fill("Kinshasa");
   await page.getByRole("button", { name: "Enregistrer", exact: true }).click();
   await expect(page).toHaveURL(/ok=identite/);
   await expect(page.locator(".t-pf-id")).toContainText("Analyste de données");
@@ -50,7 +51,7 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
   await page.locator("#experiences").getByRole("link", { name: "Ajouter une expérience" }).click();
   await page.getByLabel("Poste", { exact: true }).fill("Analyste junior");
   await page.getByLabel("Organisation").fill("Entreprise fictive");
-  await page.getByLabel("Début").fill("2024-01");
+  await page.locator("#pf-exp-start").fill("2024-01");
   await page.getByText("Poste actuel", { exact: true }).click();
   await page.getByRole("button", { name: "Ajouter", exact: true }).click();
   await expect(page).toHaveURL(/ok=experiences/);
