@@ -152,6 +152,13 @@ CSSA1 = '''
 .ad-grd .r .t span{display:block;font-size:12px;color:var(--texte2)}
 .ad-stars{display:flex;gap:6px}.ad-stars i{width:34px;height:34px;border-radius:11px;display:grid;place-items:center;background:var(--zone);font-style:normal;font-weight:700;font-size:13px}.ad-stars i.on{background:#0F3F37;color:#A6F26B}
 .sombre .ad-stars i.on{background:#A6F26B;color:#0F3F37}
+.sombre .cases[style*="--g-former"],.sombre .ad-av.b{background:linear-gradient(150deg,#ECFCD8,#C3F38E)!important;color:#0F3F37!important}
+.sombre .cases[style*="--g-accomp"],.sombre .ad-av.c{background:linear-gradient(150deg,#E2F8F0,#93E8CD)!important;color:#0F3F37!important}
+.sombre .cases[style*="--g-oppo"],.sombre .ad-av.d{background:linear-gradient(150deg,#FFF3D6,#F8CF73)!important;color:#0F3F37!important}
+.sombre .cases[style*="--g-accent"],.sombre .ad-av{color:#0F3F37!important}.sombre .cases[style*="--g-accent"] svg{stroke:#0F3F37}.sombre .ad-av.s{color:#A6F26B}.sombre .ad-av.s{background:#0F3F37;box-shadow:inset 0 0 0 1.5px #A6F26B}
+.sombre .ad-rk .c,.sombre .ad-tbl,.sombre .ad-pole{box-shadow:0 0 0 1px rgba(255,255,255,.06)}
+.sombre .ad-rk .c span,.sombre .ad-li .r .t span,.sombre .ad-tbl .r .g{color:#B8CBC6}
+.sombre .ad-pl{background:rgba(255,255,255,.10);color:#E6F3EE}.sombre .ad-pl.ap{background:#A6F26B;color:#0F3F37}
 [data-ob]{background:linear-gradient(150deg,#F2FCE6,#DDF6EE)!important}.sombre [data-ob]{background:linear-gradient(150deg,rgba(166,242,107,.16),rgba(47,211,166,.08))!important}
 .ad-lock{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:16px;background:var(--zone);font-size:12.5px;color:var(--texte2)}
 .ad-blur{filter:blur(6px);opacity:.6;pointer-events:none}
@@ -160,7 +167,7 @@ CSSA1 = '''
 
 # ---------- Données fictives ----------
 MBRS = [  # initiales, couleur, nom, e-mail, rôle (classe, libellé), pôle, offres, activité (classe, libellé)
- ('SI', 's', 'Sandrine Ilunga', 'Directrice RH · vous', ('ap', 'Admin principale'), 'Tous les pôles', 'Toutes', ('', 'En ligne')),
+ ('SI', 's', 'Sandrine Ilunga', 'Directrice RH · vous', ('ap', 'Admin principale'), 'Tous les pôles', '2 offres', ('', 'En ligne')),
  ('JM', 'b', 'Jonathan Mukendi', 'jonathan.m@mwinda-energies.example', ('ad', 'Admin'), 'Commercial', '3 offres', ('', 'Aujourd’hui')),
  ('AK', '', 'Aïcha Kasongo', 'aicha.k@mwinda-energies.example', ('rc', 'Recruteuse'), 'Tech et Data', '4 offres', ('', 'En ligne')),
  ('EN', 'c', 'Esther Nzuzi', 'esther.n@mwinda-energies.example', ('rc', 'Recruteuse'), 'Lubumbashi', '5 offres', ('', 'Aujourd’hui')),
@@ -217,12 +224,11 @@ def dash(t=False):
         return hero + kpis() + todo() + poles_mini()
     return hero + kpis() + f'<div class="ad-g"><div class="col">{todo()}{poles_mini()}</div><div class="col">{orbi_adm()}{activite()}</div></div>'
 
-SW = f'''<div class="ad-sw"><span class="cap">Mwinda Énergies</span>
-<div class="r on">{CS("reglages","accent")}<div class="t"><b>Administration</b><span>Équipe, rôles, pôles, crédits</span></div><span class="ck">{ic("valider","xs")}</span></div>
-<div class="r">{CS("offre","former")}<div class="t"><b>Recrutement</b><span>Vos offres et candidats, comme les recruteurs</span></div></div>
-<span class="cap">Personnel</span>
-<div class="r">{CS("profil","accomp")}<div class="t"><b>Espace talent</b><span>Votre profil, séparé de l’organisation</span></div></div>
-<div class="r">{CS("plus","oppo")}<div class="t"><b>Créer ou rejoindre une organisation</b><span>Un compte peut appartenir à plusieurs</span></div></div></div>'''
+SW = f'''<div class="ad-sw"><span class="cap">Mwinda Énergies · vos deux rôles</span>
+<div class="r on">{CS("reglages","accent")}<div class="t"><b>Administration</b><span>Équipe, rôles, pôles, offres, crédits</span></div><span class="ck">{ic("valider","xs")}</span></div>
+<div class="r">{CS("offre","former")}<div class="t"><b>Recrutement</b><span>Vos 2 offres et vos candidats, comme un recruteur</span></div></div>
+<span class="cap">Votre compte RH</span>
+<div class="r">{AV("SI","s",38)}<div class="t"><b>Sandrine Ilunga</b><span>Profil RH, signature, notifications, sécurité</span></div></div></div>'''
 W_SW = A(dash(), 'aujourdhui', '', over=SW)
 W_DASH = A(dash(), 'aujourdhui', '')
 T_DASH = AT(dash(True), 'aujourdhui')
@@ -420,38 +426,43 @@ W_CREQ = A(credits_a(), 'portefeuille', '/credits', over=dlg(DLG_CREQ, 540))
 DLG_RM = f'''<div style="display:flex;gap:12px;align-items:center">{AV("FL","e",52)}<div><h3 style="margin:0">Franck Lokwa quitte l’équipe ?</h3><span style="font-size:12.5px;color:var(--texte2)">Recruteur · Commercial · inactif depuis 34 jours</span></div></div>
 <div class="seg"><span>Suspendre</span><span class="on">Retirer de l’organisation</span></div>
 <span class="ad-lab">Ses offres et ses conversations passent à</span><div class="ad-opt"><div class="o on">{AV("PL","d",36)}<div class="t"><b>Pascal Lumbala</b><span>Même pôle · 2 offres, 9 candidatures, 4 conversations</span></div><span class="rd"></span></div></div>
-<div class="ad-chk"><div class="r"><i class="v">✓</i><span>Les dossiers, notes et décisions restent dans l’organisation</span></div><div class="r"><i class="v">✓</i><span>Son compte personnel et son profil talent lui restent</span></div><div class="r"><i class="v">✓</i><span>Un siège se libère : 11 sur 15</span></div></div>
+<div class="ad-chk"><div class="r"><i class="v">✓</i><span>Les dossiers, notes et décisions restent dans l’organisation</span></div><div class="r"><i class="v">✓</i><span>Son compte RH personnel lui reste, sans accès à l’organisation</span></div><div class="r"><i class="v">✓</i><span>Un siège se libère : 11 sur 15</span></div></div>
 <div class="gar">{ic("confidentialite","s")}Son accès est coupé tout de suite. Inscrit au journal, réversible en l’invitant à nouveau.</div>
 <div class="bts"><a class="bt sec m">Annuler</a><a class="bt p m pl">Retirer et confier à Pascal</a></div>'''
 W_RM = A(equipe_a('Franck Lokwa'), 'candidats', '/equipe/franck-lokwa', over=dlg(DLG_RM, 560))
 
 # ---------- 8. Côté membre de l'équipe ----------
-CMP = f'''<div class="ad-cmp"><div class="c">{CS("profil","accomp",48,16)}<h3>Recruteur autonome ou petit cabinet</h3><p>RH Free, Pro ou Premium. Il est son propre admin.</p>
+CMP = f'''<div class="ad-cmp"><div class="c">{CS("profil","accomp",48,16)}<h3>Recruteur autonome ou petit cabinet</h3><p>RH Free, Pro ou Premium. Son compte RH est aussi son organisation.</p>
 <ul><li><i>✓</i>Ouvre son espace seul, invite 1 à 2 collègues</li><li><i>✓</i>Publie et décide sans validation</li><li><i>✓</i>Gère ses crédits et son abonnement</li></ul></div>
 <div class="c e"><span class="cases" style="background:#A6F26B">{ic("entreprise","s")}</span><h3>Membre d’une organisation</h3><p>Company, Company Plus, Company Premium. L’admin pilote.</p>
-<ul><li><i>✓</i>Rejoint sur invitation ou demande, avec un rôle et un pôle</li><li><i>✓</i>Voit les offres qui lui sont confiées</li><li><i>✓</i>Utilise les crédits que l’admin lui alloue</li><li><i>✓</i>Garde son compte personnel s’il quitte l’organisation</li></ul></div></div>'''
+<ul><li><i>✓</i>Rejoint sur invitation ou demande, avec un rôle et un pôle</li><li><i>✓</i>Voit les offres qui lui sont confiées</li><li><i>✓</i>Utilise les crédits que l’admin lui alloue</li><li><i>✓</i>Garde son compte RH s’il quitte l’organisation</li></ul></div></div>'''
 
 MAIL_INV = f'''<div class="ad-mail"><div class="hd"><span class="rings"></span><div class="j">j<em>.</em></div><span class="k">INVITATION</span><h2>Rejoignez l’équipe de recrutement</h2><p>Mwinda Énergies · Pôle Tech et Data</p></div>
 <div class="bd"><p>Bonjour,</p><p><b>Sandrine Ilunga</b>, Directrice RH, vous invite à recruter avec Mwinda Énergies sur Jumanly.</p>
 <div class="card">{AV("ME","s",44)}<div><b>Recruteur · Pôle Tech et Data</b><span>1 offre confiée · Data analyst confirmé · 120 crédits Orbi par mois</span></div></div>
-<p>Si vous avez déjà un compte Jumanly, il reste à vous : l’organisation s’ajoute à côté de votre espace personnel.</p><span class="cta">Accepter l’invitation</span>
+<p>Votre compte RH est créé, ou relié s’il existe déjà. Il vous appartient et reste rattaché à Mwinda Énergies tant que vous êtes dans l’équipe.</p><span class="cta">Accepter l’invitation</span>
 <p style="font-size:12.5px;color:#5B6B68">Ce lien est valable 7 jours, jusqu’au 26 octobre.</p></div>
 <div class="ft"><b>Jumanly</b> · Learn. Grow. Connect.<br>Une question : assistant@jumanly.io · infojumanly@gmail.com<br>Une plateforme développée par The Growth Lab.</div></div>'''
 
 ACC_C = f'''<div class="ad-inv"><div style="display:flex;flex-direction:column;gap:14px"><span class="ad-pl ok" style="align-self:flex-start">Invitation de Sandrine Ilunga</span><h2>Rejoindre Mwinda Énergies</h2><p>Vous recruterez avec l’équipe, dans le rôle choisi par l’admin.</p>
 <div class="ad-li" style="background:var(--plein);box-shadow:var(--verre)"><div class="r">{CS("offre","accomp",32,11)}<div class="t"><b>Recruteur</b><span>Publier, décider, écrire aux candidats</span></div></div><div class="r">{CS("entreprise","accent",32,11)}<div class="t"><b>Pôle Tech et Data</b><span>Responsable : Aïcha Kasongo</span></div></div><div class="r">{CS("orbi","former",32,11)}<div class="t"><b>120 crédits Orbi par mois</b><span>Alloués par l’organisation</span></div></div></div>
-<div class="gar">{ic("confidentialite","s")}Votre profil talent reste privé : l’organisation ne le voit pas.</div></div>
+<div class="gar">{ic("confidentialite","s")}Votre compte RH reste le vôtre : si vous quittez l’équipe, vous le gardez.</div></div>
 <div class="verre" style="padding:22px;display:flex;flex-direction:column;gap:14px;align-items:center;text-align:center">{AV("GL","b",76)}<b style="font-size:17px">Grâce Lusamba</b><span style="font-size:12.5px;color:var(--texte2)">grace.l@mwinda-energies.example</span>
 <a class="bt p m" style="width:100%">Accepter et rejoindre</a><a class="bt sec m" style="width:100%">Refuser</a></div></div>'''
 W_ACCI = pub('/invitation/mwinda-energies', f'<div style="display:flex;flex-direction:column;height:100%"><div style="display:flex;align-items:center;gap:10px;padding:22px 40px"><span class="lg-e sap" style="width:34px;height:34px">J</span><b>jumanly</b></div>{ACC_C}</div>')
 
-def membre_home(pr="Aïcha", role="Recruteuse · Pôle Tech et Data", u=74, l=120, val="non"):
-    m = f'''<div class="ad-mem">{AV("ME","s",48)}<div class="t"><b>Mwinda Énergies · {role}</b><span>Offres confiées par Sandrine Ilunga · validation avant publication : {val}</span></div>
-<div class="q"><small>Crédits Orbi : {u} sur {l}</small><div class="ad-mt" style="width:100%"><span class="barre"><i class="{"w" if u / l > .9 else ""}" style="width:{round(u / l * 100)}%"></i></span></div><a style="font-size:12px;font-weight:600">Demander plus</a></div></div>'''
-    O = [('Data analyst confirmé', '24 candidatures · 6 nouvelles', 'Publiée'), ('Ingénieur réseau électrique', '38 candidatures · 2 entretiens', 'Publiée'), ('Développeur back-end', 'Brouillon', 'Brouillon'), ('Chef de projet SI', 'Confiée hier par Sandrine', 'À lancer')]
+ACT_M = f'''<div class="r">{AV("SI","s",28)}<span class="x">Sandrine vous a confié <b>Chef de projet SI</b></span><small>Hier</small></div><div class="r">{AV("DM","b",28)}<span class="x">Dieudonné a évalué Ruth B.</span><small>09:15</small></div><div class="r">{AV("GL","b",28)}<span class="x">Grâce a rejoint le pôle</span><small>Ven.</small></div>'''
+def membre_home(pr="Aïcha", role="Recruteuse · Pôle Tech et Data", u=74, l=120, val="non", O=None, act=None, sous=None, dem="Demander plus"):
+    m = f'''<div class="ad-mem">{AV("ME","s",48)}<div class="t"><b>Mwinda Énergies · {role}</b><span>{sous or "Offres confiées par Sandrine Ilunga · validation avant publication : " + val}</span></div>
+<div class="q"><small>Crédits Orbi : {u} sur {l}</small><div class="ad-mt" style="width:100%"><span class="barre"><i class="{"w" if u / l > .9 else ""}" style="width:{round(u / l * 100)}%"></i></span></div><a style="font-size:12px;font-weight:600">{dem}</a></div></div>'''
+    O = O or [('Data analyst confirmé', '24 candidatures · 6 nouvelles', 'Publiée'), ('Ingénieur réseau électrique', '38 candidatures · 2 entretiens', 'Publiée'), ('Développeur back-end', 'Brouillon', 'Brouillon'), ('Chef de projet SI', 'Confiée hier par Sandrine', 'À lancer')]
     o = ''.join(f'<div class="verre ad-pole"><div class="h">{CS("offre","former",42,14)}<div class="t"><b>{t}</b><span>{s}</span></div><span class="ad-pl {"ok" if st == "Publiée" else ("at" if st == "À lancer" else "")}">{st}</span></div></div>' for t, s, st in O)
-    return (wh(f'Bonjour {pr}', 'Lundi 19 octobre') + m + f'<div class="ad-g"><div class="col"><div class="ad-sec">Vos offres<a>4</a></div><div class="ad-g2">{o}</div></div>'
-            f'<div class="col"><div class="ad-sec">De l’équipe</div><div class="verre ad-act"><div class="r">{AV("SI","s",28)}<span class="x">Sandrine vous a confié <b>Chef de projet SI</b></span><small>Hier</small></div><div class="r">{AV("DM","b",28)}<span class="x">Dieudonné a évalué Ruth B.</span><small>09:15</small></div><div class="r">{AV("GL","b",28)}<span class="x">Grâce a rejoint le pôle</span><small>Ven.</small></div></div></div></div>')
+    return (wh(f'Bonjour {pr}', 'Lundi 19 octobre') + m + f'<div class="ad-g"><div class="col"><div class="ad-sec">Vos offres<a>{len(O)}</a></div><div class="ad-g2">{o}</div></div>'
+            f'<div class="col"><div class="ad-sec">De l’équipe</div><div class="verre ad-act">{act or ACT_M}</div></div></div>')
+W_ADREC = (R(membre_home('Sandrine', 'Admin principale · recrute aussi', 38, 150, O=[('Responsable des achats', '19 candidatures · 3 nouvelles', 'Publiée'), ('Juriste droit des affaires', '11 candidatures · 1 entretien', 'Publiée')], act=f'<div class="r">{AV("AK","",28)}<span class="x">Aïcha a publié <b>Data analyst confirmé</b></span><small>10:20</small></div><div class="r">{AV("DM","b",28)}<span class="x">Dieudonné a évalué un candidat de votre offre</span><small>09:15</small></div>', sous='Vos 2 offres · vous publiez sans validation · crédits pris sur ceux de l’organisation', dem='Crédits et quotas'), 'aujourdhui', '/hire')
+   .replace('Nadia Kabeya', 'Sandrine Ilunga').replace('Responsable recrutement', 'Admin principale').replace('>NK<', '>SI<').replace('Baobab Fintech', 'Mwinda Énergies').replace('>BF<', '>ME<')
+   .replace('Mwinda Énergies' + ic("suivant","xs") + '</div>', '<span class="t" style="flex:1;display:flex;flex-direction:column;line-height:1.2">Mwinda Énergies<small style="font-size:10.5px;font-weight:700;color:#1E8F6F">Recrutement</small></span>' + ic("suivant","xs") + '</div>', 1)
+   .replace('<div class="ad-g"><div class="col"><div class="ad-sec">Vos offres', f'<div class="ad-sg" style="background:linear-gradient(90deg,#0F3F37,#14594C);color:#fff"><b style="flex:1">Vous êtes dans votre espace recruteur</b><a class="bt a s" style="flex:none">{ic("reglages","s")}Revenir à l’administration</a></div><div class="ad-g"><div class="col"><div class="ad-sec">Vos offres', 1))
 W_MHOME = mbr(R(membre_home(), 'aujourdhui', '/hire'))
 
 DLG_SUB = f'''<div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center"><span style="width:72px;height:72px;border-radius:50%;background:var(--g-accent);display:grid;place-items:center;color:#0F3F37">{ic("envoyer")}</span><h3 style="margin:6px 0 0">Offre envoyée pour validation</h3><span style="font-size:13px;color:var(--texte2)">Commercial terrain B2B · Pôle Commercial</span></div>
@@ -494,7 +505,7 @@ def chemins_w():
         p = f' {ic("suivant","xs")} '.join(f'<span class="{"f" if i == len(et) - 1 else ""}">{e}</span>' for i, e in enumerate(et))
         return f'<div class="c"><b>{t}</b><div class="p">{p}</div></div>'
     return '<div class="ch0">' + ''.join(c(t, e) for t, e in [
-        ('Ouvrir l’administration', ['Nom de l’organisation en haut à gauche', 'Administration']), ('Revenir à ses propres offres', ['Nom de l’organisation', 'Recrutement']),
+        ('Ouvrir l’administration', ['Nom de l’organisation en haut à gauche', 'Administration']), ('Recruter soi-même', ['Nom de l’organisation', 'Recrutement']), ('Revenir à l’administration', ['Bandeau « espace recruteur »', 'Revenir à l’administration']),
         ('Inviter des personnes', ['Équipe', 'Inviter', 'E-mails, rôle, pôle, crédits']), ('Accepter une demande', ['Vue d’ensemble ou Équipe > Demandes', 'Choisir le rôle', 'Accepter']),
         ('Changer un rôle', ['Équipe', 'Membre', 'Changer le rôle']), ('Créer un rôle', ['Rôles et accès', 'Créer un rôle']),
         ('Créer un pôle', ['Pôles', 'Créer un pôle']), ('Valider une offre', ['Offres', 'À valider', 'Valider et publier']),
@@ -505,9 +516,9 @@ def chemins_w():
 def W(e, t, n=''): return wrow(wfig(e, '<span class="wtag">Ordinateur</span>' + t, n))
 def T(e, t, n=''): return wrow(wfig(e, '<span class="wtag t">Tablette</span>' + t, n))
 ECR = [
- ('w0', '0 · Comment on y arrive', 'L’administration est un espace de l’organisation, à côté de Recrutement. On passe de l’un à l’autre par le nom de l’organisation, en haut à gauche.', [chemins_w()]),
+ ('w0', '0 · Comment on y arrive', 'L’admin a un compte RH personnel, rattaché à l’entreprise, et deux rôles : Administration et Recrutement. Il passe de l’un à l’autre par le nom de l’organisation, en haut à gauche.', [chemins_w()]),
  ('w1', '1 · Vue d’ensemble', 'Ce que l’admin pilote d’un coup d’œil : sièges, offres, crédits, demandes à traiter, pôles et activité de l’équipe.',
-  [W(W_SW, 'Changer d’espace', 'Administration, Recrutement, espace talent.'), W(W_DASH, 'Vue d’ensemble', 'À traiter, pôles, constats d’Orbi, activité.'), T(T_DASH, 'Vue d’ensemble')]),
+  [W(W_SW, 'Changer de rôle', 'Administration ou Recrutement, avec le même compte RH.'), W(W_ADREC, 'L’admin recrute aussi', 'Ses propres offres, retour à l’administration en un geste.'), W(W_DASH, 'Vue d’ensemble', 'À traiter, pôles, constats d’Orbi, activité.'), T(T_DASH, 'Vue d’ensemble')]),
  ('w2', '2 · Équipe', 'Tous les membres, leur rôle, leur pôle, leurs offres et leur activité. Une fiche par personne.',
   [W(W_EQ, 'Liste de l’équipe', 'Filtres par rôle, invitations, demandes.'), W(W_MB, 'Fiche d’un membre', 'Offres, crédits, consultations, actions.'), T(T_EQ, 'Liste de l’équipe')]),
  ('w3', '3 · Inviter et accueillir', 'Plusieurs e-mails à la fois, avec rôle, pôle, offres et crédits. Les demandes sur le domaine vérifié s’acceptent en un geste.',
@@ -520,9 +531,9 @@ ECR = [
   [W(W_CRED, 'Crédits et quotas', 'Jauges, répartition, limites par membre.'), W(W_CREQ, 'Demande de crédits', 'Accorder ou refuser.')]),
  ('w7', '7 · Départ d’un membre', 'Suspendre ou retirer. Les offres et conversations passent à un collègue, les données restent, le siège se libère.', [W(W_RM, 'Retirer un membre', 'Tout est dit avant, et réversible.')]),
  ('w8', '8 · Côté membre de l’équipe', 'Le recruteur d’une organisation garde l’espace recruteur qu’il connaît. Il y voit son organisation, son rôle, ses offres confiées et ses crédits.',
-  [CMP, wrow(wfig(MAIL_INV, '<span class="wtag">E-mail</span>Invitation', 'Sans numéro de téléphone.')), W(W_ACCI, 'Accepter l’invitation', 'Le compte personnel reste séparé.'), W(W_MHOME, 'Accueil d’une recruteuse membre', 'Organisation, rôle, crédits alloués.'),
+  [CMP, wrow(wfig(MAIL_INV, '<span class="wtag">E-mail</span>Invitation', 'Sans numéro de téléphone.')), W(W_ACCI, 'Accepter l’invitation', 'Un compte RH personnel, rattaché à l’entreprise.'), W(W_MHOME, 'Accueil d’une recruteuse membre', 'Organisation, rôle, crédits alloués.'),
    W(W_MSUB, 'Recruteur avec validation', 'L’offre part chez l’admin.'), W(W_MCR, 'Crédits utilisés', 'Demander à l’admin.'), W(W_MGR, 'Manager', 'Évalue avec la grille, ne décide pas.'), W(W_LEC, 'Lecteur', 'Chiffres seulement, aucun nom.')]),
- ('w9', '9 · Mode sombre', 'Les mêmes écrans sur fond Nuit.', [W(wsombre(W_DASH), 'Vue d’ensemble'), W(wsombre(W_ROLES), 'Rôles et accès'), W(wsombre(W_MB), 'Fiche d’un membre')]),
+ ('w9', '9 · Mode sombre', 'Les mêmes écrans sur fond Nuit.', [W(wsombre(W_DASH), 'Vue d’ensemble'), W(wsombre(W_EQ), 'Équipe'), W(wsombre(W_ROLES), 'Rôles et accès'), W(wsombre(W_MB), 'Fiche d’un membre'), W(wsombre(W_ADREC), 'L’admin recrute aussi')]),
 ]
 _st = lambda x: x.replace("<style>", "").replace("</style>", "")
 page_w('admin-1', 'Jumanly for Companies · administration, ordinateur et tablette', 'Administrateur entreprise, lot 1 : piloter l’équipe',
