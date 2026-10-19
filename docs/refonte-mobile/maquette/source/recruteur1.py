@@ -251,6 +251,8 @@ OD_R2 = phone(f'''{tete_f("Offre", droite="plus-options")}
 
 CSSR += '.fab-p{position:absolute;right:18px;bottom:122px;z-index:6;height:50px;padding:0 20px;display:flex;align-items:center;gap:8px;border-radius:999px;font-weight:600;font-size:14px;box-shadow:0 14px 28px -12px rgba(15,63,55,.55)}\n'
 
+exec(open(H + '/r1plus.py').read())
+
 CHEMINS = [
  ('Voir ce qui m’attend', ['Ouverture', 'À traiter']),
  ('Changer d’organisation', ['Nom de l’organisation en haut', 'Choisir']),

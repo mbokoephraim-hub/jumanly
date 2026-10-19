@@ -222,6 +222,8 @@ OBR3 = phone(f'''{tete_f("", droite=None)}{pas(3,3)}<span class="pas-t">3 sur 3<
 <div class="li"><span class="cases c2">{ic("candidats","s")}</span><div class="t"><b>Inviter un collègue</b><span>Dès RH Pro</span></div>{ic("suivant")}</div></div>''', avec_nav=False,
  bas=f'<div class="verre fort bas-f"><a class="bt a pl">Commencer</a></div>')
 
+exec(open(H + '/r3plus.py').read())
+
 CHEMINS = [
  ('Demander à Orbi', ['Orbi au centre de la barre', 'Une aide ou une question']),
  ('Répondre à un candidat', ['Messages', 'Conversation', 'Brouillon d’Orbi ou modèle', 'Envoyer']),

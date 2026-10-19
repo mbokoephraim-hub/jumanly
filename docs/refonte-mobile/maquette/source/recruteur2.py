@@ -36,7 +36,7 @@ CSSR += '''
 .cmp .ok{color:#2E8540;font-weight:600}.cmp .no{color:#B7791F;font-weight:600}
 .note-p{padding:10px 12px;border-radius:14px;background:var(--ambre-c);font-size:12.5px;line-height:1.4}
 .note-p small{display:block;font-size:11px;color:var(--texte2);margin-top:4px}
-.rep{font-size:12.5px;display:flex;flex-direction:column;gap:3px}.rep b{font-size:12.5px}.rep span{color:var(--texte2)}
+.repq{font-size:12.5px;display:flex;flex-direction:column;gap:3px}.repq b{font-size:12.5px}.repq span{color:var(--texte2)}
 .etp-ch{display:flex;flex-direction:column;gap:0}
 .etp-ch .li{min-height:48px}
 .res3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
@@ -270,6 +270,8 @@ VIVIERS = phone(f'''{tete_f("Viviers", droite="plus")}
 <div class="verre vv"><span class="pile"><span class="av a">AN</span></span><div class="t"><b>Conformité</b><span>3 talents · 2 oct.</span></div>{ic("suivant","s")}</div>
 <div class="gar">{ic("confidentialite","s")}Un talent sort du vivier s’il masque son profil ou le demande.</div>''', 'candidats')
 
+exec(open(H + '/r2plus.py').read())
+
 CHEMINS = [
  ('Voir les candidatures d’une offre', ['Candidats', 'Candidatures', 'Choisir l’offre', 'Filtrer par étape']),
  ('Examiner un dossier', ['Candidats ou À traiter', 'Une candidature', 'Dossier']),
@@ -295,9 +297,9 @@ ECR = [
  ('q3','3 · Étapes et décision','Toujours un geste humain, avec confirmation. Le message au candidat se relit avant l’envoi.',
   [ecrans((ETAPE,'Changer d’étape','Ce que verra le candidat.'),(DECIS,'Décision finale','Retenue, non retenue, retrait ; modèle à relire.'),(DECIS_OK,'Décision enregistrée','Annulable 10 minutes.'))]),
  ('q4','4 · Entretiens','Proposer jusqu’à 3 créneaux, voir l’invitation comme le candidat, suivre les réponses, préparer, évaluer.',
-  [ecrans((PROG,'Proposer un entretien','Mode, durée, fuseau, créneaux, participants.'),(INV_AP,'Aperçu de l’invitation','Ce que reçoit le candidat.'),(AGENDA,'Entretiens','Confirmés, en attente, autre date demandée.'),(PREP_R,'Préparer','Questions liées à l’offre.'),(EVAL,'Évaluation','Grille de l’offre, avis, suite.'))]),
+  [ecrans((PROG,'Proposer un entretien','Mode, durée, calendrier, disponibilités lues par Orbi.'),(PROG2,'Choisir les heures','Journée de l’équipe, créneaux, suggestion d’Orbi.'),(INV_AP,'Aperçu de l’invitation','Ce que reçoit le candidat.'),(AGENDA,'Entretiens','Semaine, statuts en couleur, préparation.'),(PREP_R,'Préparer','Questions liées à l’offre.'),(EVAL,'Évaluation','Grille de l’offre, avis, suite.'))]),
  ('q5','5 · Rechercher des talents','Seuls les profils rendus visibles. Chaque consultation est enregistrée. Le talent décide de répondre.',
-  [ecrans((TAL,'Rechercher','Score avec l’offre choisie.'),(TAL_F,'Filtres','Aucun critère personnel.'),(TPROF,'Profil d’un talent','Preuves, vivier, proposer l’offre.'),(CONTACT,'Proposer l’offre','Message, Orbi, quota.'),(VIVIERS,'Viviers','Talents gardés pour plus tard.'))]),
+  [ecrans((TAL,'Rechercher','Score avec l’offre choisie.'),(TAL_F,'Filtres','Aucun critère personnel.'),(TPROF,'Profil d’un talent','Couverture, chiffres, analyse Orbi, preuves, projets.'),(CONTACT,'Proposer l’offre','Message personnalisé par Orbi, annonce jointe, quota.'),(VIVIERS,'Viviers','Talents gardés pour plus tard.'))]),
  ('q6','6 · Mode sombre','',
   [ecrans((sombre(CANDS),'Candidatures',''),(sombre(DOS),'Dossier',''),(sombre(TAL),'Talents',''))]),
 ]

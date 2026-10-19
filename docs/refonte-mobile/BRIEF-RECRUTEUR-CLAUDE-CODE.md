@@ -24,6 +24,8 @@ Même règle que pour le talent (brief talent § 0) : l'ancienne interface Hire 
 
 Chaque dossier contient la planche HTML, une capture par section (`*.png`) ; les générateurs `recruteur1.py`, `recruteur2.py`, `recruteur3.py` et les CSS sont dans `docs/refonte-mobile/maquette/source/` (valeurs exactes). La section « Comment on y arrive » de chaque planche donne les chemins de navigation.
 
+**Version 2 des planches (19/10, après retour d'Ephraïm « trop simple, trop de vide »)** : `r1plus.py`, `r2plus.py`, `r3plus.py` remplacent une partie des écrans et font foi. Points à reproduire : calendrier du mois et journée en créneaux pour proposer un entretien, ligne Orbi sur chaque écran de travail (suggestion avec bouton, jamais d'action sans accord), écrans pleine hauteur sans grands vides, profil talent et dossier en cartes riches (anneau de score, analyse en points forts et points à vérifier), abonnement avec échéances, rapports avec graphiques réels.
+
 ## 2. Décisions à appliquer
 
 1. Barre du bas recruteur : **À traiter · Offres · Orbi (rond central) · Candidats · Messages** (validé par Ephraïm le 19/10). Pas de bouton IA flottant, pas de bouton + global. En-tête : organisation active (appui = changer d'organisation ou passer à l'espace talent), titre, recherche, notifications, avatar → Compte RH. Barre masquée sur les écrans de travail (création, dossier, conversation, entretien).
