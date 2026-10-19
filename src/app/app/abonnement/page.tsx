@@ -378,6 +378,8 @@ export default async function SubscriptionPage({ searchParams }: PageProps<"/app
           key={item.id}
           id={`licence-${item.id}`}
           title={t("sponsored.card.title", { sponsorName: item.sponsorName })}
+          // Just activated: the sponsor's data question is asked at once.
+          defaultOpen={item.id === activated?.id}
           closeLabel={t("formules.close")}
         >
           <p className="t-vide-t">
