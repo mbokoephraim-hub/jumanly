@@ -54,10 +54,13 @@ test("recherche de talents et mise en relation acceptée", async ({
   await recruiter.getByRole("button", { name: "Envoyer la demande" }).click();
   await expect(recruiter.getByText("Demande envoyée. Vous serez prévenu")).toBeVisible();
 
-  await page.goto("/app/messages?filtre=demandes");
-  await expect(page.getByText(/Groupe Démo.*souhaite échanger avec vous/)).toBeVisible();
+  // Messages (planche talent-2 § 5): the request sits above the conversations, opened in a sheet.
+  await page.goto("/app/messages");
+  const request = page.getByRole("button", { name: /Groupe Démo.*souhaite échanger avec vous/ });
+  await expect(request.first()).toBeVisible();
   await expectAccessible(page);
-  await page.getByRole("button", { name: "Accepter et échanger" }).click();
+  await request.first().click();
+  await page.getByRole("dialog").getByRole("button", { name: "Accepter et échanger" }).click();
   await expect(page).toHaveURL(/\/app\/messages\/[^/?]+\?ok=relation/);
   await expect(page.getByText("Vous pouvez maintenant échanger avec")).toBeVisible();
   await recruiter.context().close();
@@ -89,19 +92,17 @@ test("un entretien est planifié puis confirmé par le talent", async ({
     .getByRole("link", { name: /Groupe Démo/ })
     .first()
     .click();
-  // Screen 24: the invitation is a pill in the conversation, answered on its own screen.
+  // Planche talent-2 § 5: the slots are chosen in the conversation itself.
   await talent.waitForURL(/\/app\/messages\/.+/);
-  const thread = talent.url();
   await talent
-    .getByRole("link", { name: /Entretien proposé · 1 créneau · Voir/ })
+    .locator('section[id^="entretien-"]')
     .last()
+    .getByRole("button", { name: "Confirmer" })
     .click();
-  await talent.getByRole("button", { name: "Confirmer ce créneau" }).click();
-  await expect(talent).toHaveURL(/ok=confirme/);
-  await talent.goto(thread);
-  await expect(
-    talent.getByRole("link", { name: /Entretien confirmé · .* · Voir/ }).last(),
-  ).toBeVisible();
+  await expect(talent).toHaveURL(/ok=entretien/);
+  await expect(talent.locator('section[id^="entretien-"]').last()).toContainText(
+    "Entretien confirmé",
+  );
   await talent.context().close();
 });
 
@@ -132,21 +133,25 @@ test("Suivi : confirmer un entretien, l'ajouter à l'agenda, puis proposer d'aut
 
   const talent = await newPage(browser, baseURL, isMobile);
   await logIn(talent, group.talent);
+  // Suivi (planche talent-2 § 2 and 3): the card asks to choose a slot, the application page answers.
   await talent.goto("/app/suivi");
-  const todo = talent.getByRole("region", { name: "À traiter" });
-  await expect(todo).toContainText("Entretien à confirmer");
+  const todo = talent.getByRole("region", { name: /^À faire/ });
+  await expect(todo).toContainText("Choisir un créneau");
   await expectAccessible(talent);
-  await todo.getByRole("link", { name: "Confirmer", exact: true }).first().click();
-  await expect(talent.getByRole("heading", { name: "Confirmer l'entretien" })).toBeVisible();
-  await expect(talent.getByText("Choisissez un des créneaux proposés")).toBeVisible();
+  await todo
+    .getByRole("link", { name: /Choisir un créneau/ })
+    .first()
+    .click();
+  await expect(talent).toHaveURL(/\/app\/suivi\/[^/?#]+/);
+  const detail = talent.url().split(/[?#]/)[0]!;
+  const invite = talent.locator("#entretien");
+  await expect(invite).toContainText("Invitation à un entretien");
   await expectAccessible(talent);
-  await talent.getByRole("button", { name: "Confirmer ce créneau" }).click();
+  await invite.getByRole("button", { name: "Confirmer" }).click();
   await expect(talent).toHaveURL(/ok=confirme/);
-  await expect(talent.getByText(/Présence confirmée\. Groupe Démo.* est prévenue\./)).toBeVisible();
-  const id = new URL(talent.url()).searchParams.get("entretien")!;
-  const confirmed = talent.locator(`#entretien-${id}`);
-  await expect(confirmed).toContainText("Confirmé");
-  const agenda = await confirmed
+  await expect(talent.getByText("Entretien confirmé. Le recruteur est prévenu.")).toBeVisible();
+  const agenda = await talent
+    .locator("#entretien")
     .getByRole("link", { name: "Ajouter à mon agenda" })
     .getAttribute("href");
   const ics = await talent.request.get(agenda!);
@@ -156,20 +161,23 @@ test("Suivi : confirmer un entretien, l'ajouter à l'agenda, puis proposer d'aut
 
   // A second invitation: none of the slots suits, the talent proposes two other times.
   await inviteTalent(page);
-  await talent.goto("/app/suivi?filtre=entretiens");
-  await talent.getByRole("link", { name: "Proposer un autre moment" }).first().click();
-  await expect(talent.getByRole("heading", { name: "Proposer un autre moment" })).toBeVisible();
-  const days = talent.locator("fieldset").first().getByRole("button");
+  await talent.goto(detail);
+  await talent.locator("#entretien").getByRole("button", { name: "Autre date" }).click();
+  const sheet = talent.getByRole("dialog", { name: "Proposer un autre moment" });
+  await expect(sheet).toBeVisible();
+  const days = sheet.locator("fieldset").first().getByRole("button");
   await days.nth(2).click();
-  await talent.getByRole("button", { name: "10 h 00", exact: true }).click();
-  await talent.getByRole("button", { name: "14 h 00", exact: true }).click();
-  await expect(talent.getByText("Vos propositions · 2 sur 3")).toBeVisible();
-  await talent.locator("#propose-message").fill("Je suis en examen jeudi, fictif.");
+  await sheet.getByRole("button", { name: "10 h 00", exact: true }).click();
+  await sheet.getByRole("button", { name: "14 h 00", exact: true }).click();
+  await expect(sheet.getByText("Vos propositions · 2 sur 3")).toBeVisible();
+  await sheet.locator("#ca-propose-message").fill("Je suis en examen jeudi, fictif.");
   await expectAccessible(talent);
-  await talent.getByRole("button", { name: "Envoyer mes propositions" }).click();
+  await sheet.getByRole("button", { name: "Envoyer mes propositions" }).click();
   await expect(talent).toHaveURL(/ok=propose/);
-  await expect(talent.getByText("Vos propositions sont envoyées.")).toBeVisible();
-  await expect(talent.getByRole("main")).toContainText("En attente du recruteur");
+  await expect(talent.getByText("Vos créneaux sont envoyés au recruteur.")).toBeVisible();
+  await expect(talent.locator("#entretien")).toContainText(
+    "Vos créneaux sont envoyés. Le recruteur vous répond ici.",
+  );
   await talent.context().close();
 });
 

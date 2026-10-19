@@ -2,6 +2,34 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte mobile de l'espace talent · lot 4 : Postuler, Suivi, messages, notifications (19 octobre 2026)
+
+- Postuler (`/app/jobs/[slug]/postuler`, planche talent-2 § 1) en trois étapes : CV, documents et
+  lettre, vérification ; brouillon gardé hors connexion, envoi relancé avec « Réessayer », écran
+  « Candidature envoyée ». Postuler reste gratuit, aucun droit ni quota n'est testé.
+- Les pièces jointes (attestations, documents) sont figées au moment de l'envoi
+  (`Application.attachments`, migration additive) ; un CV adapté à une offre garde son lien
+  (`CareerDocument.adaptedForJobId`, migration additive).
+- Suivi (`/app/suivi`) : « À faire », en cours, terminées ; une candidature (`/app/suivi/[id]`) :
+  étapes, entretien avec créneaux, demandes de documents, messages, retrait.
+- Préparer un entretien (`/app/career/entretiens/nouveau` et `[id]`) : brief de l'entretien,
+  type et mode d'entraînement.
+- Messages (`/app/messages`) et conversation (`/app/messages/[id]`) : recherche, demandes de mise
+  en relation en feuille, nombre de messages non lus, invitation avec créneaux à confirmer dans le
+  fil, demande de document, décision, envoi de CV, lettre, document, créneau ou lien par « + ».
+- Notifications (`/app/notifications`) : aujourd'hui, cette semaine, plus tôt ; nouvelle
+  notification « Votre profil a été consulté » (`profileViewed`).
+- Mode sombre activé pour ces pages (`src/lib/appearance.ts`). Démo fictive de Grâce :
+  `prisma/seed/suivi.ts`.
+- Supprimés : `src/components/jobs/apply-flow.tsx`, `send-application.tsx`,
+  `application-stats.tsx` ; `src/components/suivi/slot-picker.tsx` déplacé dans
+  `src/components/talent/`. Les anciennes pages Messages et Notifications ne servent plus qu'aux
+  équipes de recrutement et aux partenaires (`src/components/connect/hire-messages.tsx`,
+  `hire-thread.tsx`, `team-notifications.tsx`) ; leurs restes talent partent au lot 7.
+  `/app/jobs/candidatures` et `/app/suivi/entretiens/[id]` ne font plus que rediriger.
+- Captures 390 px, clair et sombre : `/mnt/project-files/captures/refonte-mobile-lot-4/`.
+- Choix et écarts : `docs/decisions/2026-10-19-refonte-mobile-lot-4.md`.
+
 ## Refonte mobile de l'espace talent · lot 3 : Pour moi, Offres, détail d'une offre (19 octobre 2026)
 
 - Pour moi (`src/app/app/page.tsx`) d'après la planche talent-1 § 1 : ligne « Objectif »,

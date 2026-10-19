@@ -1,10 +1,8 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound } from "next/navigation";
+import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { Icon, type IconName } from "@/components/brand/icon";
 import { salaryText } from "@/components/jobs/talent-kit";
-import { ApplyFlow } from "@/components/jobs/apply-flow";
 import { SaveJobButton } from "@/components/jobs/save-job-button";
 import { DISPUTE_REPLY_DAYS } from "@/lib/disputes";
 import { Banner, CourseArt, Logo, toneOf } from "@/components/talent/art";
@@ -15,7 +13,6 @@ import { OfferStickyHead, ShareButton } from "@/components/talent/offer-tools";
 import { WhyCriteria } from "@/components/talent/offer-why";
 import { OrbiMark } from "@/components/talent/orbi-mark";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
-import { ButtonLink } from "@/components/ui";
 import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { formatDate, formatDayMonth } from "@/lib/dates";
@@ -31,7 +28,7 @@ import {
   type MatchState,
 } from "@/server/matching/service";
 import { getJob } from "@/server/queries/public";
-import { applyStepOf, getApplicationDraft } from "@/server/services/application-draft";
+import { getApplicationDraft } from "@/server/services/application-draft";
 import { contractFilterOf, parseCriteria, remoteFilterOf } from "@/server/services/jobs";
 import { reportReasons } from "@/server/services/moderation";
 
@@ -67,7 +64,7 @@ function levelOf(years: number) {
  * the score and its « Pourquoi ? », « Préparer ma candidature » with Orbi, the course that closes
  * the gap, the check of the company. « Postuler » stays at the bottom, always visible. Applying is
  * free: no entitlement, no quota, no plan is checked here or in the action (golden rule n° 1), and
- * the knockout criteria are information, never a block. `?postuler=1` shows the application.
+ * the knockout criteria are information, never a block. « Postuler » opens `/postuler`.
  */
 export default async function TalentJobPage({
   params,
@@ -78,7 +75,7 @@ export default async function TalentJobPage({
   const user = await requireUser(`/app/jobs/${slug}`);
   const data = await getJob(slug);
   if (!data) notFound();
-  const { job, open, similar } = data;
+  const { job, open } = data;
   const t = await getTranslations();
   const d = dynamic(t);
   const profile = await db.talentProfile.findUnique({
@@ -111,100 +108,12 @@ export default async function TalentJobPage({
   const company = job.organization.name;
   const cvs = profile?.documents ?? [];
   const outcome = typeof query.candidature === "string" ? query.candidature : undefined;
-  const applying = query.postuler === "1" && open && !application;
 
-  // ─── After sending (screen 11): shown only once the server has recorded the application. ───
-  if (outcome === "envoyee" && application) {
-    const tf = await getTranslations("talent.jobs.apply.flow");
-    // `.ct` of screen 11: four next steps as tiles, the icon top left, a light disc top right.
-    const next: [string, IconName, string, string, string][] = [
-      ["/app/jobs/candidatures", "suivi", "bg-lime", tf("sent.track"), tf("sent.trackLine")],
-      [
-        "/app/career/entretiens",
-        "message",
-        "bg-[#BFEFDF]",
-        tf("sent.prepare"),
-        tf("sent.prepareLine"),
-      ],
-      ["/app/career/cv", "cv", "bg-neon", tf("sent.adapt"), tf("sent.adaptLine")],
-      [
-        "/app/jobs",
-        "jobs",
-        "bg-brume",
-        tf("sent.similar"),
-        tf("sent.similarLine", { count: similar.length }),
-      ],
-    ];
-    return (
-      <div className="mx-auto flex w-full max-w-[640px] flex-col gap-3.5 pt-[26px] pb-28 md:pb-6">
-        <span
-          aria-hidden
-          className="grid size-[84px] place-items-center self-center rounded-full bg-lime text-sapin shadow-[0_0_0_10px_rgb(166_242_107/0.25)]"
-        >
-          <Icon name="valider" className="size-9" />
-        </span>
-        <h1 className="text-center text-[26px] leading-tight font-bold tracking-[-0.02em]">
-          {t("talent.jobs.apply.success.title")}
-        </h1>
-        <p className="mb-1.5 text-center text-[13.5px] text-ardoise">
-          {tf("sent.received", { company, time: application.createdAt })}
-        </p>
-        <ul className="grid grid-cols-2 gap-2.5">
-          {next.map(([href, icon, tone, title, line]) => (
-            <li key={href} className="flex">
-              <Link
-                href={href}
-                className={cx(
-                  "jm-press relative flex min-h-[118px] w-full flex-col justify-end gap-[3px] overflow-hidden rounded-[22px] p-3.5 text-sapin after:absolute after:-top-6 after:-right-6 after:size-20 after:rounded-full after:bg-blanc/35 focus-visible:ring-4 focus-visible:ring-sapin/40 focus-visible:outline-none",
-                  tone,
-                )}
-              >
-                <Icon name={icon} className="absolute top-3 left-3 size-[26px]" />
-                <span className="text-[14px] font-bold">{title}</span>
-                <span className="text-[11.5px] opacity-72">{line}</span>
-              </Link>
-            </li>
-          ))}
-        </ul>
-        <div className="fixed inset-x-3 bottom-[max(12px,env(safe-area-inset-bottom))] z-30 flex items-center gap-3 rounded-[22px] bg-blanc p-3 shadow-float md:static md:mt-2 md:bg-transparent md:p-0 md:shadow-none">
-          <ButtonLink
-            href={`/app/jobs/${job.slug}`}
-            aria-label={tf("sent.back")}
-            variant="soft"
-            size="L"
-            className="w-12 px-0!"
-          >
-            <Icon name="retour" className="size-5" />
-          </ButtonLink>
-          <ButtonLink href="/app/jobs" variant="principal" size="L" arrow className="flex-1">
-            {tf("sent.explore")}
-          </ButtonLink>
-        </div>
-      </div>
-    );
-  }
-
-  // ─── The staged application (screens 09-12, redrawn in lot 4). ───────────────────────────
-  if (applying && jobRow) {
-    const draft = await getApplicationDraft(db, user.id, jobRow.id);
-    const step = applyStepOf(query.etape ?? draft?.step);
-    return (
-      <ApplyFlow
-        job={{ slug: job.slug, title: job.title }}
-        company={company}
-        step={step}
-        draft={draft}
-        cvs={cvs}
-        person={{
-          name: user.name,
-          image: user.image ?? undefined,
-          email: user.email,
-          headline: profile?.headline ?? null,
-          city: user.city ?? null,
-          skills: profile?.skills.map((entry) => entry.skill.name) ?? [],
-        }}
-      />
-    );
+  // The application has its own pages (planche talent-2 § 1); old addresses lead there.
+  if (outcome === "envoyee" && application) redirect(`/app/jobs/${slug}/postuler?envoyee=1`);
+  if (query.postuler === "1" && open && !application) {
+    const step = typeof query.etape === "string" ? `?etape=${encodeURIComponent(query.etape)}` : "";
+    redirect(`/app/jobs/${slug}/postuler${step}`);
   }
 
   // ─── The offer. ─────────────────────────────────────────────────────────────────────
@@ -520,11 +429,11 @@ export default async function TalentJobPage({
         <span className="t-gratuit">{t("offer.bar.free")}</span>
         {save("t-bi t-press")}
         {application ? (
-          <Link href="/app/jobs/candidatures" className="t-bt t-p t-press">
+          <Link href={`/app/suivi/${application.id}`} className="t-bt t-p t-press">
             {t("offer.bar.applied")}
           </Link>
         ) : open ? (
-          <Link href={`/app/jobs/${job.slug}?postuler=1`} className="t-bt t-a t-press">
+          <Link href={`/app/jobs/${job.slug}/postuler`} className="t-bt t-a t-press">
             <TalentIcon name="envoyer" size="s" />
             {draft ? t("offer.bar.resume") : t("offer.bar.apply")}
           </Link>

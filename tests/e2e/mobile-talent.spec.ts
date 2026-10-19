@@ -82,16 +82,18 @@ test("navigation Talent : cinq destinations, Orbi au milieu, Mon espace et Suivi
   await page.goto("/app/tableau-de-bord");
   await expect(page.getByRole("heading", { level: 1 }).filter({ visible: true })).toBeVisible();
 
-  // Suivi: what waits for an action, then the applications, messages and saved offers.
+  // Suivi (planche talent-2 § 2): in progress or finished, grouped by situation.
   await page.goto("/app/suivi");
-  await expect(page.getByRole("heading", { level: 1, name: "Suivi" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "À traiter" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 2, name: "Mes candidatures" })).toBeVisible();
-  await expect(
-    page
-      .getByRole("navigation", { name: "Filtrer le suivi" })
-      .getByRole("link", { name: "Entretiens" }),
-  ).toHaveAttribute("href", "/app/suivi?filtre=entretiens");
+  await expect(page.getByRole("heading", { level: 1, name: "Suivi" })).toBeAttached();
+  const views = page.getByRole("navigation", { name: "Candidatures en cours ou terminées" });
+  await expect(views.getByRole("link", { name: /^En cours/ })).toHaveAttribute(
+    "aria-current",
+    "page",
+  );
+  await expect(views.getByRole("link", { name: "Terminées" })).toHaveAttribute(
+    "href",
+    "/app/suivi?vue=terminees",
+  );
   await expect(
     page.getByRole("navigation", { name: "Navigation principale" }).getByRole("link", {
       name: /^Suivi/,
@@ -206,10 +208,10 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
 
   // Step 1, then « Quitter »: the draft is kept and the offer offers to resume it.
   await page.getByRole("link", { name: "Postuler", exact: true }).click();
-  await expect(page.getByRole("heading", { level: 1, name: "Candidature" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Postuler" })).toBeVisible();
   await expect(page.getByRole("group", { name: "Quel CV envoyer ?" })).toBeVisible();
   await expectAccessible(page);
-  await page.getByRole("button", { name: "Quitter" }).click();
+  await page.getByRole("button", { name: "Quitter et garder le brouillon" }).click();
   await expect(page).toHaveURL(/brouillon=1/);
   await expect(page.getByText(/Brouillon gardé/)).toBeVisible();
   await page
@@ -220,26 +222,27 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
 
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/etape=lettre/);
+  await page.getByRole("button", { name: "Ajouter un document" }).click();
+  await page.getByRole("button", { name: "Écrire une lettre" }).click();
   await page
     .locator("#apply-letter")
     .fill("Rigoureuse et organisée, je souhaite rejoindre votre équipe.");
+  await page.getByRole("button", { name: "Enregistrer la lettre" }).click();
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/etape=verification/);
-  await expect(page.getByText("Votre candidature est prête")).toBeVisible();
-  await expect(page.getByText(/Brouillon enregistré à/)).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Vérifier et envoyer" })).toBeVisible();
+  await expect(page.getByText(/Brouillon enregistré/)).toBeVisible();
   await expectAccessible(page);
-  await page.getByLabel(/consulte ma candidature/).check();
 
   // A cut connection: nothing is said to be sent, the draft is kept.
   await context.setOffline(true);
   await page.getByRole("button", { name: "Envoyer ma candidature" }).click();
-  await expect(page.getByText("Votre candidature n'est pas encore envoyée")).toBeVisible();
-  await expect(page.getByText("Brouillon non envoyé")).toBeVisible();
-  await expect(page.getByText("Candidature envoyée !")).toHaveCount(0);
+  await expect(page.getByText("Candidature pas encore envoyée.")).toBeVisible();
+  await expect(page.getByText("Candidature envoyée", { exact: true })).toHaveCount(0);
   await context.setOffline(false);
   await page.getByRole("button", { name: "Réessayer" }).click();
 
-  await expect(page.getByRole("heading", { name: "Candidature envoyée !" })).toBeVisible({
+  await expect(page.getByRole("heading", { name: "Candidature envoyée" })).toBeVisible({
     timeout: 20_000,
   });
   await expect(page.getByRole("link", { name: /^Suivre/ })).toBeVisible();

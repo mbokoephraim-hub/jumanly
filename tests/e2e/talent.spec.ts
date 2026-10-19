@@ -73,38 +73,33 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   expect(pdf.headers()["content-type"]).toBe("application/pdf");
   expect((await pdf.body()).subarray(0, 4).toString()).toBe("%PDF");
 
-  // Apply with that CV.
+  // Apply with that CV (planche talent-2 § 1): CV, letter or documents, review, then sending.
   await page.goto(`/app/jobs/${JOB}`);
   await page.getByRole("link", { name: "Postuler", exact: true }).click();
-  await expect(page).toHaveURL(/postuler=1/);
-  // Staged form (docs/ux-mobile-talent, prompt 4): CV, letter, review, then sending.
+  await expect(page).toHaveURL(/\/postuler/);
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/etape=lettre/);
+  await page.getByRole("button", { name: "Ajouter un document" }).click();
+  await page.getByRole("button", { name: "Écrire une lettre" }).click();
   await page.locator("#apply-letter").fill("Ce poste correspond à mon expérience en comptabilité.");
+  await page.getByRole("button", { name: "Enregistrer la lettre" }).click();
+  await expect(page.getByText("Lettre de motivation", { exact: true }).first()).toBeVisible();
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/etape=verification/);
-  await page.getByLabel(/consulte ma candidature/).check();
   await page.getByRole("button", { name: "Envoyer ma candidature" }).click();
-  await expect(page.getByRole("heading", { name: "Candidature envoyée !" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Candidature envoyée" })).toBeVisible({
+    timeout: 20_000,
+  });
 
-  // Follow it, read the CV that was sent, then withdraw.
-  await page.goto("/app/jobs/candidatures");
-  const card = page.locator("li").filter({ hasText: "Comptable" }).first();
-  await expect(card).toContainText("Envoyée");
-  // On a phone the less frequent actions sit behind « … ».
-  const more = card.locator('summary[aria-label="Plus d\'actions"]');
-  if (page.viewportSize()!.width < 1024) await more.click();
-  const sentHref = await card.getByRole("link", { name: "Voir le CV envoyé" }).getAttribute("href");
+  // Follow it in Suivi, read the CV that was sent, then withdraw.
+  await page.getByRole("link", { name: "Suivre ma candidature" }).click();
+  await expect(page).toHaveURL(/\/app\/suivi\/[^/?]+/);
+  await expect(page.getByRole("main")).toContainText("Envoyée");
+  const sentHref = await page.getByRole("link", { name: /^CV « / }).getAttribute("href");
   expect((await page.request.get(sentHref!)).status()).toBe(200);
-  await card
-    .locator("summary")
-    .filter({ hasText: "Retirer ma candidature", visible: true })
-    .click();
-  await card
-    .getByRole("button", { name: "Retirer", exact: true })
-    .filter({ visible: true })
-    .click();
-  await expect(page).toHaveURL(/onglet=terminees/);
+  await page.getByRole("button", { name: "Retirer ma candidature" }).click();
+  await page.getByRole("button", { name: "Oui, retirer ma candidature" }).click();
+  await expect(page).toHaveURL(/vue=terminees/);
   await expect(page.getByRole("main")).toContainText("Retirée");
 });
 

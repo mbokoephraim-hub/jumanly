@@ -29,7 +29,7 @@ test("aucune erreur d'accessibilité WCAG 2.2 AA dans l'espace connecté", async
     "/app/career/cv",
     "/app/jobs",
     "/app/jobs/demo-developpeur-web-douala",
-    "/app/jobs/candidatures",
+    "/app/suivi",
     "/app/jobs?vue=enregistrees",
   ]) {
     await page.goto(path);

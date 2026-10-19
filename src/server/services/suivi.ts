@@ -3,6 +3,13 @@
  * documents asked from them, from real data only, the most urgent first.
  */
 import type { PrismaClient } from "@/generated/prisma/client";
+import {
+  isClosedStatus,
+  talentEventTypes,
+  talentStatus,
+  type TalentApplicationStatus,
+} from "./applications";
+import { openJobWhere } from "./jobs";
 
 const interviewSelect = {
   id: true,
@@ -154,4 +161,252 @@ export function interviewCalendar(input: {
     "END:VCALENDAR",
     "",
   ].join("\r\n");
+}
+
+// ─── Suivi, redrawn (planche talent-2 § 2 and 3) ─────────────────────────────────────────
+
+/** What the talent has to do on an application, the most urgent first. */
+export type SuiviAction =
+  | { kind: "slot"; interviewId: string; before: Date | null }
+  | { kind: "document"; name: string; due: Date | null }
+  | { kind: "draft" };
+
+export type SuiviCard = {
+  id: string;
+  href: string;
+  title: string;
+  company: string;
+  logo: string | null;
+  status: TalentApplicationStatus | "draft";
+  /** Last change (en cours) or the end (terminées). */
+  changedAt: Date;
+  action: SuiviAction | null;
+  /** « Ce n'est pas la fin du parcours » (non retenue): open offers near this one. */
+  similar: { count: number; href: string } | null;
+};
+
+const pendingRequest = (payload: unknown) => {
+  const value = (payload ?? {}) as { name?: string; due?: string; submittedAt?: string };
+  return value.submittedAt
+    ? null
+    : { name: value.name ?? "", due: value.due ? new Date(value.due) : null };
+};
+
+/**
+ * The applications of Suivi, grouped by situation: « À faire » (a slot to choose, a document to
+ * send, a draft to finish), « En attente », and « Terminées ». Real statuses only.
+ */
+export async function suiviBoard(db: PrismaClient, userId: string, now = new Date()) {
+  const [applications, drafts] = await Promise.all([
+    db.application.findMany({
+      where: { profile: { userId } },
+      orderBy: { updatedAt: "desc" },
+      select: {
+        id: true,
+        status: true,
+        viewedAt: true,
+        createdAt: true,
+        updatedAt: true,
+        stage: { select: { kind: true } },
+        events: {
+          where: { type: { in: [...talentEventTypes] } },
+          orderBy: { createdAt: "desc" },
+          take: 1,
+          select: { createdAt: true },
+        },
+        job: {
+          select: {
+            id: true,
+            slug: true,
+            title: true,
+            status: true,
+            closesAt: true,
+            contractType: true,
+            country: true,
+            organization: { select: { name: true, logo: true, sector: true } },
+          },
+        },
+        interviews: {
+          where: { status: "pending" },
+          orderBy: { createdAt: "desc" },
+          select: { id: true, slots: true },
+        },
+        conversation: {
+          select: {
+            messages: {
+              where: { kind: "document_request", hiddenAt: null },
+              orderBy: { createdAt: "desc" },
+              select: { payload: true },
+            },
+          },
+        },
+      },
+    }),
+    db.applicationDraft.findMany({
+      where: {
+        userId,
+        job: { ...openJobWhere(now), applications: { none: { profile: { userId } } } },
+      },
+      orderBy: { updatedAt: "desc" },
+      select: {
+        updatedAt: true,
+        job: {
+          select: { slug: true, title: true, organization: { select: { name: true, logo: true } } },
+        },
+      },
+    }),
+  ]);
+
+  const cards = await Promise.all(
+    applications.map(async (application): Promise<SuiviCard> => {
+      const status = talentStatus(application, now);
+      const interview = application.interviews.find((item) =>
+        item.slots.some((slot) => slot > now),
+      );
+      const request = (application.conversation?.messages ?? [])
+        .map((message) => pendingRequest(message.payload))
+        .find(Boolean);
+      const closed = isClosedStatus(status);
+      const action: SuiviAction | null = closed
+        ? null
+        : interview
+          ? {
+              kind: "slot",
+              interviewId: interview.id,
+              before:
+                interview.slots.filter((slot) => slot > now).sort((a, b) => +a - +b)[0] ?? null,
+            }
+          : request
+            ? { kind: "document", ...request }
+            : null;
+      let similar: SuiviCard["similar"] = null;
+      if (status === "notSelected") {
+        const sector = application.job.organization.sector;
+        const count = await db.job.count({
+          where: {
+            AND: [
+              openJobWhere(now),
+              { id: { not: application.job.id } },
+              { applications: { none: { profile: { userId } } } },
+              sector
+                ? { organization: { sector } }
+                : {
+                    OR: [
+                      { contractType: application.job.contractType },
+                      { country: application.job.country },
+                    ],
+                  },
+            ],
+          },
+        });
+        if (count > 0)
+          similar = {
+            count,
+            href: sector ? `/app/jobs?secteur=${encodeURIComponent(sector)}` : "/app/jobs",
+          };
+      }
+      return {
+        id: application.id,
+        href: `/app/suivi/${application.id}`,
+        title: application.job.title,
+        company: application.job.organization.name,
+        logo: application.job.organization.logo,
+        status,
+        changedAt: application.events[0]?.createdAt ?? application.createdAt,
+        action,
+        similar,
+      };
+    }),
+  );
+  const draftCards: SuiviCard[] = drafts.map((draft) => ({
+    id: `brouillon-${draft.job.slug}`,
+    href: `/app/jobs/${draft.job.slug}/postuler`,
+    title: draft.job.title,
+    company: draft.job.organization.name,
+    logo: draft.job.organization.logo,
+    status: "draft",
+    changedAt: draft.updatedAt,
+    action: { kind: "draft" },
+    similar: null,
+  }));
+  const active = cards.filter((card) => card.status !== "draft" && !isClosedStatus(card.status));
+  const urgency = (card: SuiviCard) =>
+    card.action?.kind === "slot" ? 0 : card.action?.kind === "document" ? 1 : 2;
+  return {
+    toDo: [...active.filter((card) => card.action), ...draftCards].sort(
+      (a, b) => urgency(a) - urgency(b),
+    ),
+    waiting: active.filter((card) => !card.action),
+    finished: cards.filter((card) => card.status !== "draft" && isClosedStatus(card.status)),
+  };
+}
+
+/** One application of the talent, everything its page shows (planche talent-2 § 3). */
+export async function suiviApplication(db: PrismaClient, userId: string, id: string) {
+  const application = await db.application.findFirst({
+    where: { id, profile: { userId } },
+    select: {
+      id: true,
+      status: true,
+      viewedAt: true,
+      createdAt: true,
+      coverLetter: true,
+      cvSnapshot: true,
+      attachments: true,
+      stage: { select: { kind: true, name: true } },
+      events: {
+        where: { type: { in: [...talentEventTypes] } },
+        orderBy: { createdAt: "desc" },
+        select: { id: true, type: true, payload: true, createdAt: true },
+      },
+      job: {
+        select: {
+          slug: true,
+          title: true,
+          status: true,
+          closesAt: true,
+          organization: { select: { name: true, logo: true } },
+        },
+      },
+      interviews: {
+        where: { status: { in: ["pending", "reschedule", "confirmed"] } },
+        orderBy: { createdAt: "desc" },
+        select: interviewSelect,
+      },
+      conversation: {
+        select: {
+          id: true,
+          messages: {
+            where: { hiddenAt: null },
+            orderBy: { createdAt: "desc" },
+            select: {
+              id: true,
+              kind: true,
+              body: true,
+              payload: true,
+              createdAt: true,
+              senderId: true,
+            },
+          },
+        },
+      },
+    },
+  });
+  if (!application) return null;
+  const messages = application.conversation?.messages ?? [];
+  const last =
+    messages.find((message) => message.kind !== "system" && message.senderId !== userId) ?? null;
+  const sender = last?.senderId
+    ? await db.user.findUnique({ where: { id: last.senderId }, select: { name: true } })
+    : null;
+  return {
+    ...application,
+    talentStatus: talentStatus(application),
+    lastMessage: last && { ...last, senderName: sender?.name ?? null },
+    requests: messages.flatMap((message) => {
+      if (message.kind !== "document_request") return [];
+      const request = pendingRequest(message.payload);
+      return request ? [{ id: message.id, ...request }] : [];
+    }),
+  };
 }

@@ -1,16 +1,17 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { AppPageHeader } from "@/components/app/page-header";
-import { Icon, type IconName } from "@/components/brand/icon";
-import { pillClass } from "@/components/career/kit";
-import { TabRail } from "@/components/motion/tab-rail";
-import { Alert, EmptyState, segmentedItem, segmentedList } from "@/components/ui";
+import { TeamNotifications } from "@/components/connect/team-notifications";
+import { FlowHead } from "@/components/talent/flow-head";
+import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
+import { Notice } from "@/components/talent/notice";
+import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
-import { PhoneTitle } from "@/components/talent/page-title";
 import { markNotificationsReadAction } from "@/server/actions/connect";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { getActiveSpace } from "@/server/hire-context";
+import { getPartnerSpace } from "@/server/partner-context";
 import {
   listNotifications,
   notificationTypes,
@@ -23,320 +24,150 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-type Category = "applications" | "messages" | "learn" | "account";
-
-const categoryOf: Record<NotificationType, Category> = {
-  newApplication: "applications",
-  statusChange: "applications",
-  notSelected: "applications",
-  matchReviewed: "applications",
-  jobApproved: "applications",
-  jobRejected: "applications",
-  jobChangesRequested: "applications",
-  reportClosed: "account",
-  moderationWarning: "account",
-  contactRequest: "applications",
-  contactAccepted: "applications",
-  contactDeclined: "applications",
-  interviewInvite: "applications",
-  interviewTeam: "applications",
-  interviewConfirmed: "applications",
-  interviewReschedule: "applications",
-  interviewDeclined: "applications",
-  interviewCanceled: "applications",
-  newMessage: "messages",
-  documentRequest: "messages",
-  mention: "messages",
-  certificateIssued: "learn",
-  orgInvite: "account",
-  paymentSucceeded: "account",
-  paymentFailed: "account",
-  renewalDue: "account",
-  grace: "account",
-  downgraded: "account",
-  upgraded: "account",
-  renewed: "account",
-  orgVerified: "account",
-  orgVerificationRejected: "account",
-  orgVerificationInfo: "account",
-  orgSuspended: "account",
-  orgReactivated: "account",
-  jobUnavailable: "applications",
-  abnormalUsage: "account",
-  licenseActivated: "account",
-  licenseOnHold: "account",
-  licenseExpiring: "account",
-  licenseExpired: "account",
-  licensesLow: "account",
-  diagnosticReady: "learn",
-  diagnosticReminder: "learn",
+/** A short title and a line for what a talent receives (planche talent-2 § 5); the rest keeps its sentence. */
+const look: Partial<Record<NotificationType, { icon: TalentIconName; tone: string }>> = {
+  interviewInvite: { icon: "entretien", tone: "t-c2" },
+  interviewCanceled: { icon: "entretien", tone: "" },
+  profileViewed: { icon: "profil", tone: "t-c3" },
+  statusChange: { icon: "candidature", tone: "t-c3" },
+  notSelected: { icon: "candidature", tone: "" },
+  jobUnavailable: { icon: "offre", tone: "" },
+  certificateIssued: { icon: "certificat", tone: "t-c1" },
+  documentRequest: { icon: "document", tone: "" },
+  newMessage: { icon: "message", tone: "t-c2" },
+  contactRequest: { icon: "entreprise", tone: "t-c2" },
+  diagnosticReady: { icon: "progression", tone: "t-c1" },
 };
-
-const categoryStyle: Record<Category, { icon: IconName; tile: string }> = {
-  applications: { icon: "jobs", tile: "bg-lime-clair" },
-  messages: { icon: "message", tile: "bg-menthe-claire" },
-  learn: { icon: "certificat", tile: "bg-neon" },
-  account: { icon: "securite", tile: "bg-brume" },
-};
-
-const typeIcon: Partial<Record<NotificationType, IconName>> = {
-  interviewInvite: "calendrier",
-  documentRequest: "doc",
+const accountIcon: Partial<Record<NotificationType, TalentIconName>> = {
   paymentSucceeded: "portefeuille",
   paymentFailed: "portefeuille",
-  statusChange: "check",
-  diagnosticReady: "intelligence",
-  diagnosticReminder: "calendrier",
-};
-
-/** Types that ask for an answer: unread, they open the list under « Important » (screen 19). */
-const important = new Set<NotificationType>([
-  "interviewInvite",
-  "interviewTeam",
-  "interviewConfirmed",
-  "interviewReschedule",
-  "interviewDeclined",
-  "interviewCanceled",
-  "newMessage",
-  "documentRequest",
-  "mention",
-  "statusChange",
-  "notSelected",
-  "newApplication",
-  "contactRequest",
-  "contactAccepted",
-  "contactDeclined",
-  "jobRejected",
-  "jobChangesRequested",
-  "moderationWarning",
-  "paymentFailed",
-  "renewalDue",
-  "grace",
-  "downgraded",
-  "orgSuspended",
-  "licenseExpiring",
-  "licenseExpired",
-  "abnormalUsage",
-]);
-
-const tabIds = ["toutes", "non-lues", "candidatures", "messages", "formations", "compte"] as const;
-type Tab = (typeof tabIds)[number];
-const tabCategory: Partial<Record<Tab, Category>> = {
-  candidatures: "applications",
-  messages: "messages",
-  formations: "learn",
-  compte: "account",
+  renewalDue: "portefeuille",
+  grace: "portefeuille",
+  renewed: "portefeuille",
+  upgraded: "portefeuille",
+  downgraded: "portefeuille",
+  diagnosticReminder: "agenda",
 };
 
 const DAY = 86_400_000;
 
 /**
- * Notifications (textes `notifications.*`, mockup 03-22): grouped by day, filtered by kind; each
- * line opens its page and is marked read.
+ * Notifications (planche talent-2 § 5): grouped by day, the new ones lit; a tap opens the page
+ * and marks it read. A recruiting team or a partner keeps its own screen.
  */
 export default async function NotificationsPage({ searchParams }: PageProps<"/app/notifications">) {
   const params = await searchParams;
   const user = await requireUser("/app/notifications");
-  const t = await getTranslations("notifications");
+  const [space, partner] = await Promise.all([getActiveSpace(user.id), getPartnerSpace(user.id)]);
+  if (space || partner) return <TeamNotifications params={params} user={user} />;
+
+  const t = await getTranslations();
+  const d = dynamic(t);
   const format = await getFormatter();
   const now = new Date();
-  const tab: Tab = tabIds.includes(params.onglet as Tab) ? (params.onglet as Tab) : "toutes";
-  const all = (await listNotifications(db, user.id)).filter((item) =>
+  const notifications = (await listNotifications(db, user.id)).filter((item) =>
     (notificationTypes as readonly string[]).includes(item.type),
   );
-  const unreadCount = all.filter((item) => !item.readAt).length;
-  const notifications = all.filter((item) =>
-    tab === "non-lues"
-      ? !item.readAt
-      : tabCategory[tab]
-        ? categoryOf[item.type as NotificationType] === tabCategory[tab]
-        : true,
-  );
-  const tabs: { id: Tab; label: string }[] = [
-    { id: "toutes", label: t("tab.all") },
-    {
-      id: "non-lues",
-      label: unreadCount > 0 ? t("tab.unreadCount", { count: unreadCount }) : t("tab.unread"),
-    },
-    { id: "candidatures", label: t("tab.applications") },
-    { id: "messages", label: t("tab.messages") },
-    { id: "formations", label: t("tab.learn") },
-    { id: "compte", label: t("tab.account") },
-  ];
-
-  const startOfToday = new Date(now);
-  startOfToday.setHours(0, 0, 0, 0);
+  const unread = notifications.some((item) => !item.readAt);
+  const today = new Date(now);
+  today.setHours(0, 0, 0, 0);
   const groupOf = (date: Date) =>
-    date >= startOfToday
-      ? "today"
-      : date.getTime() >= startOfToday.getTime() - DAY
-        ? "yesterday"
-        : date.getTime() >= startOfToday.getTime() - 6 * DAY
-          ? "thisWeek"
-          : "earlier";
-  // « Toutes » is sorted by priority (screen 19): what asks for an answer, then what is for the
-  // person, then Jumanly's own news. The other tabs keep the days.
-  const priorityOf = (item: (typeof notifications)[number]) => {
-    const type = item.type as NotificationType;
-    if (!item.readAt && important.has(type)) return "important";
-    return categoryOf[type] === "account" ? "jumanly" : "forYou";
-  };
-  const groups =
-    tab === "toutes"
-      ? (["important", "forYou", "jumanly"] as const)
-          .map((key) => ({
-            key,
-            title: t(`priority.${key}`),
-            items: notifications.filter((item) => priorityOf(item) === key),
-          }))
-          .filter((group) => group.items.length > 0)
-      : (["today", "yesterday", "thisWeek", "earlier"] as const)
-          .map((key) => ({
-            key,
-            title: t(`group.${key}`),
-            items: notifications.filter((item) => groupOf(item.createdAt) === key),
-          }))
-          .filter((group) => group.items.length > 0);
+    date >= today ? "today" : date.getTime() >= today.getTime() - 6 * DAY ? "thisWeek" : "earlier";
+  const groups = (["today", "thisWeek", "earlier"] as const)
+    .map((key) => ({ key, items: notifications.filter((item) => groupOf(item.createdAt) === key) }))
+    .filter((group) => group.items.length > 0);
   const timeOf = (date: Date) => {
     const group = groupOf(date);
-    const time = format.dateTime(date, { hour: "2-digit", minute: "2-digit" });
-    if (group === "today") return time;
-    if (group === "yesterday") return t("time.yesterday", { time });
-    if (group === "thisWeek") {
-      const day = format.dateTime(date, { weekday: "long" });
-      return day.charAt(0).toUpperCase() + day.slice(1);
-    }
-    return format.dateTime(date, { dateStyle: "medium" });
+    if (group === "today") return format.dateTime(date, { hour: "2-digit", minute: "2-digit" });
+    if (group === "thisWeek") return format.dateTime(date, { weekday: "short" });
+    return format.dateTime(date, { day: "numeric", month: "short" });
   };
 
-  const markAll = unreadCount > 0 && (
-    <form action={markNotificationsReadAction}>
-      <button type="submit" className={pillClass("outline", "sm")}>
-        <Icon name="check" className="size-4" />
-        {t("markAllRead")}
-      </button>
-    </form>
-  );
-
   return (
-    <div className="flex flex-col gap-5 lg:gap-6">
-      <PhoneTitle back="/app" backLabel={t("back")} title={t("title")} />
-      <AppPageHeader title={t("title")} actions={markAll || undefined} className="max-md:hidden" />
-      {markAll && <div className="md:hidden">{markAll}</div>}
-      {params.ok === "lues" && <Alert tone="success" title={t("allRead")} />}
-      <div className="flex flex-wrap items-center justify-between gap-3 max-md:hidden">
-        <nav aria-label={t("tabs")} className="max-w-full min-w-0">
-          <TabRail name="notifications-tabs" className="bg-transparent! p-0!">
-            <div className={segmentedList}>
-              {tabs.map((item) => {
-                const active = item.id === tab;
+    <div className="t-flux">
+      <FlowHead
+        back="/app"
+        backLabel={t("notifications.back")}
+        title={t("notifications.title")}
+        end={
+          <Link
+            href="/app/parametres?onglet=confidentialite"
+            className="t-bi t-press"
+            aria-label={t("notifications.preferences")}
+          >
+            <TalentIcon name="reglages" size="s" />
+          </Link>
+        }
+      />
+      {params.ok === "lues" && <Notice tone="ok">{t("notifications.allRead")}</Notice>}
+      {groups.length === 0 ? (
+        <div className="t-verre t-carte t-vide">
+          <b>{t("notifs.empty.title")}</b>
+          <span>{t("notifications.empty.text")}</span>
+        </div>
+      ) : (
+        groups.map((group) => (
+          <section key={group.key} aria-labelledby={`nt-${group.key}`} className="t-flux t-serre">
+            <h2 id={`nt-${group.key}`} className="t-grp-t">
+              {t(`notifs.group.${group.key}`)}
+            </h2>
+            <div className="t-verre t-liste t-lignes">
+              {group.items.map((notification) => {
+                const type = notification.type as NotificationType;
+                const values = notificationValues(notification.payload);
+                const style = look[type];
+                const fresh = !notification.readAt;
+                const line = style
+                  ? type === "interviewInvite"
+                    ? t("notifs.line.interviewInvite", { company: values.company ?? "" })
+                    : type === "diagnosticReady"
+                      ? t("notifs.line.diagnosticReady", { stage: values.stage ?? "" })
+                      : [
+                          values.company ?? values.org ?? values.senderName,
+                          values.jobTitle ??
+                            values.job ??
+                            values.courseTitle ??
+                            values.documentName,
+                        ]
+                          .filter(Boolean)
+                          .join(" · ")
+                  : null;
                 return (
-                  <Link
-                    key={item.id}
-                    href={
-                      item.id === "toutes"
-                        ? "/app/notifications"
-                        : `/app/notifications?onglet=${item.id}`
-                    }
-                    aria-current={active ? "page" : undefined}
-                    className={segmentedItem(active)}
-                  >
-                    {item.label}
-                  </Link>
+                  <form key={notification.id} action={markNotificationsReadAction}>
+                    <input type="hidden" name="id" value={notification.id} />
+                    <input type="hidden" name="href" value={notification.href ?? ""} />
+                    <button type="submit" className={cx("t-li t-press", fresh && "t-nv")}>
+                      <span className={cx("t-cases", style?.tone)} aria-hidden>
+                        <TalentIcon
+                          name={style?.icon ?? accountIcon[type] ?? "notification"}
+                          size="s"
+                        />
+                      </span>
+                      <span className="t-t">
+                        <b>
+                          {style
+                            ? d(`notifs.title.${type}`, values)
+                            : t(`notifications.item.${type}`, values)}
+                        </b>
+                        {line && <span>{line}</span>}
+                        {fresh && <span className="sr-only">{t("notifications.item.unread")}</span>}
+                      </span>
+                      <span className="t-v">{timeOf(notification.createdAt)}</span>
+                    </button>
+                  </form>
                 );
               })}
             </div>
-          </TabRail>
-        </nav>
-        <Link
-          href="/app/parametres?onglet=confidentialite"
-          className="flex items-center gap-1.5 text-[13px] font-semibold text-feuille-fonce hover:underline max-lg:hidden"
-        >
-          <Icon name="reglages" className="size-4" />
-          {t("settings")}
-        </Link>
-      </div>
-
-      {groups.length === 0 ? (
-        <EmptyState title={tab === "non-lues" ? t("empty.unread") : t("empty.text")} />
-      ) : (
-        <div className="flex flex-col gap-5">
-          {groups.map((group) => (
-            <section
-              key={group.key}
-              aria-labelledby={`notifications-${group.key}`}
-              className="flex flex-col gap-2"
-            >
-              <h2
-                id={`notifications-${group.key}`}
-                className="px-1 text-[11px] font-semibold tracking-[0.09em] text-ardoise uppercase"
-              >
-                {group.title}
-              </h2>
-              <ul
-                className={cx(
-                  "flex flex-col overflow-hidden rounded-[24px] bg-blanc shadow-douce",
-                  group.key === "important" &&
-                    "bg-linear-to-br from-lime-clair/70 via-blanc to-blanc",
-                )}
-              >
-                {group.items.map((notification, index) => {
-                  const type = notification.type as NotificationType;
-                  const style = categoryStyle[categoryOf[type]];
-                  const unread = !notification.readAt;
-                  return (
-                    <li key={notification.id} className={cx(index > 0 && "border-t border-brume")}>
-                      <form action={markNotificationsReadAction}>
-                        <input type="hidden" name="id" value={notification.id} />
-                        <input type="hidden" name="href" value={notification.href ?? ""} />
-                        <button
-                          type="submit"
-                          className={cx(
-                            "relative flex w-full items-center gap-3.5 py-4 pr-4 pl-5 text-left hover:bg-creme/60 focus-visible:bg-creme lg:pr-5",
-                          )}
-                        >
-                          {unread && (
-                            <span className="absolute top-1/2 left-2 size-2 -translate-y-1/2 rounded-full bg-feuille">
-                              <span className="sr-only">{t("item.unread")}</span>
-                            </span>
-                          )}
-                          <span
-                            aria-hidden
-                            className={cx(
-                              "flex size-12 shrink-0 items-center justify-center rounded-[16px] text-sapin",
-                              unread ? style.tile : "bg-creme",
-                            )}
-                          >
-                            <Icon name={typeIcon[type] ?? style.icon} className="size-5" />
-                          </span>
-                          <span
-                            className={cx(
-                              "min-w-0 flex-1 text-[15px] leading-[21px] text-sapin",
-                              unread && "font-semibold",
-                            )}
-                          >
-                            {t(`item.${type}`, notificationValues(notification.payload))}
-                          </span>
-                          <span className="shrink-0 self-start text-[13px] text-ardoise">
-                            {timeOf(notification.createdAt)}
-                          </span>
-                        </button>
-                      </form>
-                    </li>
-                  );
-                })}
-              </ul>
-            </section>
-          ))}
-        </div>
+          </section>
+        ))
       )}
-      <Link
-        href="/app/parametres?onglet=confidentialite"
-        className="flex items-center justify-center gap-2 py-2 text-[15px] font-semibold text-feuille-fonce hover:underline md:hidden"
-      >
-        <Icon name="filtre" className="size-[18px]" />
-        {t("preferences")}
-      </Link>
+      {unread && (
+        <form action={markNotificationsReadAction}>
+          <button type="submit" className="t-bt t-sec t-pl t-press">
+            {t("notifications.markAllRead")}
+          </button>
+        </form>
+      )}
     </div>
   );
 }

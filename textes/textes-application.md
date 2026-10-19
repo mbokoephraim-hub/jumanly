@@ -2376,6 +2376,294 @@ Conventions :
 | `offer.notice.already` | Vous avez déjà postulé à cette offre. |
 | `offer.close` | Fermer |
 
+### Refonte mobile · Postuler
+
+*Postuler en 3 étapes (docs/refonte-mobile/talent-2 § 1) : le CV, une lettre ou des documents (facultatif), puis ce que verra le recruteur, en clair. Brouillon enregistré à chaque étape. Gratuit, toujours.*
+
+| Clé | Texte |
+|---|---|
+| `apply.seo` | Postuler · {job} |
+| `apply.title` | Postuler |
+| `apply.back` | Étape précédente |
+| `apply.backOffer` | Retour à l'offre |
+| `apply.close` | Quitter et garder le brouillon |
+| `apply.step` | Étape {current} sur {total} |
+| `apply.saved` | Brouillon enregistré |
+| `apply.optional` | Facultatif |
+| `apply.continue` | Continuer |
+| `apply.skip` | Passer |
+| `apply.cv.title` | Quel CV envoyer ? |
+| `apply.cv.adapted` | Adapté le {date} |
+| `apply.cv.updated` | Mis à jour le {date} |
+| `apply.cv.pages` | {count, plural, one {# page} other {# pages}} |
+| `apply.cv.primary` | CV principal |
+| `apply.cv.badge` | Adapté à l'offre |
+| `apply.cv.profile` | Mon profil Jumanly |
+| `apply.cv.profileLine` | Sans CV joint : le recruteur voit votre profil. |
+| `apply.cv.create` | Créer un CV depuis mon profil |
+| `apply.docs.title` | Ajouter une lettre ou des documents |
+| `apply.docs.letter` | Lettre de motivation |
+| `apply.docs.words` | {count, plural, one {# mot} other {# mots}} |
+| `apply.docs.edit` | Modifier la lettre |
+| `apply.docs.remove` | Retirer {name} |
+| `apply.docs.add` | Ajouter un document |
+| `apply.docs.certificateLine` | Obtenue le {date} |
+| `apply.docs.documentLine` | Enregistré le {date} |
+| `apply.docs.orbi.label` | Orbi peut aider |
+| `apply.docs.orbi.text` | Rédiger une lettre pour cette offre, à relire avant l'envoi. |
+| `apply.docs.orbi.cta` | Rédiger avec Orbi |
+| `apply.docs.orbi.done` | Orbi a rédigé une lettre avec votre profil et l'offre. Relisez-la avant l'envoi. |
+| `apply.docs.orbi.error.consent` | Orbi a besoin de votre accord pour utiliser l'IA. |
+| `apply.docs.orbi.error.entitlement` | La rédaction avec Orbi n'est pas comprise dans votre formule. Vous pouvez écrire votre lettre vous-même. |
+| `apply.docs.orbi.error.quota` | Vous avez utilisé tous vos crédits d'IA ce mois-ci. Vous pouvez écrire votre lettre vous-même. |
+| `apply.docs.orbi.error.unavailable` | Orbi n'est pas disponible pour le moment. Réessayez plus tard ou écrivez votre lettre vous-même. |
+| `apply.docs.orbi.errorCta.consent` | Activer l'IA |
+| `apply.docs.orbi.errorCta.entitlement` | Voir les formules |
+| `apply.docs.orbi.errorCta.quota` | Voir les formules |
+| `apply.letter.title` | Lettre de motivation |
+| `apply.letter.label` | Votre lettre |
+| `apply.letter.hint` | Le recruteur la lira avec votre CV. |
+| `apply.letter.save` | Enregistrer la lettre |
+| `apply.letter.remove` | Retirer la lettre |
+| `apply.letter.write` | Écrire une lettre |
+| `apply.letter.use` | Utiliser |
+| `apply.add.documents` | Attestations et documents |
+| `apply.add.none` | Vos attestations Jumanly et vos documents enregistrés apparaîtront ici. |
+| `apply.add.max` | Jusqu'à {max} documents. |
+| `apply.add.join` | Joindre à ma candidature |
+| `apply.review.title` | Vérifier et envoyer |
+| `apply.review.edit` | Modifier |
+| `apply.review.see` | Voir |
+| `apply.review.add` | Ajouter |
+| `apply.review.cv` | CV « {title} » |
+| `apply.review.docs` | {count, plural, =0 {Aucun document} one {# document} other {# documents}} |
+| `apply.review.guard` | {company} verra ce dossier et votre profil. Chaque consultation vous est signalée. |
+| `apply.send` | Envoyer ma candidature |
+| `apply.sending` | Envoi en cours… |
+| `apply.failed.title` | Candidature pas encore envoyée. |
+| `apply.failed.text` | La connexion a été coupée. Votre brouillon est gardé. |
+| `apply.failed.retry` | Réessayer |
+| `apply.failed.later` | Plus tard |
+| `apply.sent.title` | Candidature envoyée |
+| `apply.sent.text` | {company} a reçu votre dossier. Vous suivrez chaque étape dans Suivi. |
+| `apply.sent.track` | Suivre ma candidature |
+| `apply.sent.similar` | Offres similaires |
+| `apply.sent.back` | Retour aux offres |
+
+### Refonte mobile · Suivi
+
+*Suivi (docs/refonte-mobile/talent-2 § 2) : les candidatures groupées par situation, ce qui demande une action d'abord. « Terminées » garde les candidatures closes, avec une suite concrète après un refus.*
+
+| Clé | Texte |
+|---|---|
+| `suivi.seo` | Suivi de mes candidatures |
+| `suivi.title` | Suivi |
+| `suivi.tabs` | Candidatures en cours ou terminées |
+| `suivi.tab.current` | En cours |
+| `suivi.tab.finished` | Terminées |
+| `suivi.group.toDo` | À faire |
+| `suivi.group.waiting` | En attente |
+| `suivi.status.draft` | Brouillon |
+| `suivi.status.sent` | Envoyée |
+| `suivi.status.viewed` | En examen |
+| `suivi.status.test` | Test à passer |
+| `suivi.status.shortlisted` | Présélectionnée |
+| `suivi.status.interview` | Entretien |
+| `suivi.status.offer` | Offre reçue |
+| `suivi.status.hired` | Recrutée ou recruté |
+| `suivi.status.notSelected` | Non retenue |
+| `suivi.status.withdrawn` | Retirée |
+| `suivi.status.jobClosed` | Offre clôturée |
+| `suivi.action.slot` | Choisir un créneau |
+| `suivi.action.slotBefore` | Choisir un créneau avant le {date} |
+| `suivi.action.document` | Envoyer : {name} |
+| `suivi.action.documentBefore` | Envoyer {name} avant le {date} |
+| `suivi.action.draft` | Terminer ma candidature |
+| `suivi.similar.title` | Ce n'est pas la fin du parcours. |
+| `suivi.similar.text` | {count, plural, one {# offre proche de celle-ci vous attend.} other {# offres proches de celle-ci vous attendent.}} |
+| `suivi.similar.cta` | Voir les offres |
+| `suivi.empty.title` | Aucune candidature en cours |
+| `suivi.empty.text` | Quand vous postulez, chaque étape s'affiche ici. Postuler est toujours gratuit. |
+| `suivi.empty.cta` | Voir les offres |
+| `suivi.empty.finished` | Aucune candidature terminée pour l'instant. |
+| `suivi.withdrawn` | Votre candidature est retirée. Le recruteur en est informé. |
+
+### Refonte mobile · Une candidature
+
+*Détail d'une candidature (docs/refonte-mobile/talent-2 § 3) : l'invitation, la préparation, l'historique, le dossier envoyé, les messages et les documents demandés, sur un seul écran. Les notes de l'équipe de recrutement n'y figurent jamais.*
+
+| Clé | Texte |
+|---|---|
+| `candidature.seo` | Ma candidature |
+| `candidature.title` | Candidature |
+| `candidature.back` | Retour au suivi |
+| `candidature.options` | Options de la candidature |
+| `candidature.seeOffer` | Voir l'offre |
+| `candidature.sentOn` | {company} · envoyée le {date} |
+| `candidature.invite.label` | Invitation à un entretien |
+| `candidature.invite.confirm` | Confirmer |
+| `candidature.invite.other` | Autre date |
+| `candidature.invite.zone` | Heures de {city} |
+| `candidature.invite.waiting` | Vos créneaux sont envoyés. Le recruteur vous répond ici. |
+| `candidature.invite.confirmedLabel` | Entretien confirmé |
+| `candidature.invite.when` | {day} à {time} |
+| `candidature.invite.calendar` | Ajouter à mon agenda |
+| `candidature.ok.confirmed` | Entretien confirmé. Le recruteur est prévenu. |
+| `candidature.ok.proposed` | Vos créneaux sont envoyés au recruteur. |
+| `candidature.ok.declined` | Vous avez décliné l'entretien. Le recruteur est prévenu. |
+| `candidature.ok.document` | Document envoyé au recruteur. |
+| `candidature.error.document` | Le document n'a pas pu être envoyé. Réessayez. |
+| `candidature.prepare.title` | Préparer cet entretien |
+| `candidature.prepare.line` | Briefing et entraînement avec Orbi |
+| `candidature.history` | Historique |
+| `candidature.step.sent` | Envoyée |
+| `candidature.step.viewed` | En examen |
+| `candidature.step.viewedLine` | {date} · votre profil a été consulté |
+| `candidature.step.shortlisted` | Présélectionnée |
+| `candidature.step.test` | Test à passer |
+| `candidature.step.interview` | Étape entretien |
+| `candidature.step.offer` | Offre reçue |
+| `candidature.step.hired` | Recrutée ou recruté |
+| `candidature.step.notSelected` | Non retenue |
+| `candidature.step.withdrawn` | Retirée |
+| `candidature.step.moved` | Étape « {stage} » |
+| `candidature.step.interviewProposed` | Entretien proposé |
+| `candidature.step.interviewConfirmed` | Entretien confirmé |
+| `candidature.file.title` | Dossier envoyé |
+| `candidature.file.frozen` | Version figée du {date} |
+| `candidature.messages.title` | Messages |
+| `candidature.messages.open` | Ouvrir la conversation |
+| `candidature.messages.none` | Pas encore de message. Le recruteur vous écrira ici. |
+| `candidature.requests.title` | Demandé par le recruteur |
+| `candidature.requests.due` | À envoyer avant le {date} |
+| `candidature.requests.add` | Ajouter |
+| `candidature.requests.choose` | Choisir un document |
+| `candidature.requests.none` | Vous n'avez pas encore de document à envoyer. Ajoutez-le dans Mes documents, ou répondez dans la conversation. |
+| `candidature.requests.send` | Envoyer ce document |
+| `candidature.withdraw.cta` | Retirer ma candidature |
+| `candidature.withdraw.title` | Retirer votre candidature ? |
+| `candidature.withdraw.text` | {company} sera informé. Vous pourrez postuler à d'autres offres à tout moment. |
+| `candidature.withdraw.confirm` | Oui, retirer ma candidature |
+
+### Refonte mobile · S'entraîner
+
+*Entraînement à l'entretien (docs/refonte-mobile/talent-2 § 4) : ce qu'il faut savoir, tiré de l'offre et du profil seulement, puis une question à la fois avec un conseil d'Orbi, puis un retour par critère, sans note ni prédiction. Le recruteur ne voit jamais les entraînements.*
+
+| Clé | Texte |
+|---|---|
+| `practice.seo` | S'entraîner à l'entretien |
+| `practice.title` | S'entraîner |
+| `practice.back` | Retour |
+| `practice.close` | Fermer l'entraînement |
+| `practice.interviewWith` | Entretien {company} |
+| `practice.mode.video` | visio |
+| `practice.mode.audio` | téléphone |
+| `practice.mode.onsite` | sur place |
+| `practice.know.title` | Ce qu'il faut savoir |
+| `practice.know.company` | L'entreprise |
+| `practice.know.checked` | Ce qu'ils vérifieront |
+| `practice.know.weak` | Votre point faible |
+| `practice.know.weakLine` | {skill} : préparez un exemple |
+| `practice.jobTitle` | Le poste visé |
+| `practice.kind.title` | Type d'entraînement |
+| `practice.kind.length` | Durée |
+| `practice.kind.mode` | Écrit ou oral |
+| `practice.kind.quick` | Rapide |
+| `practice.kind.standard` | Standard |
+| `practice.kind.full` | Complet |
+| `practice.kind.minutes` | {count} min |
+| `practice.kind.text` | Écrit |
+| `practice.kind.voice` | Oral |
+| `practice.private` | Privé : le recruteur ne voit jamais vos entraînements. |
+| `practice.start` | Commencer |
+| `practice.questionKind` | Question · {kind} |
+| `practice.tip.hr` | Parlez d'une expérience précise : la situation, ce que vous avez fait, le résultat. |
+| `practice.tip.technical` | Pensez à donner un résultat chiffré : qu'est-ce qui a changé grâce à votre travail ? |
+| `practice.tip.motivation` | Reliez votre parcours à ce poste : pourquoi cette entreprise, pourquoi maintenant. |
+| `practice.tip.behavioral` | Décrivez ce que vous avez fait vous-même, pas seulement l'équipe. |
+| `practice.skip` | Passer |
+| `practice.answer` | Répondre |
+| `practice.feedback.good` | Bonne préparation |
+| `practice.feedback.work` | Encore un peu de travail |
+| `practice.feedback.line` | {kind} · {count, plural, one {# question} other {# questions}} · retour par critère, sans note |
+| `practice.feedback.strengths` | Vos points forts |
+| `practice.feedback.improve` | À travailler |
+| `practice.feedback.details` | Voir le détail par critère et par question |
+| `practice.feedback.again` | Recommencer |
+| `practice.feedback.done` | Terminer |
+
+### Refonte mobile · Messages
+
+*Messages (docs/refonte-mobile/talent-2 § 5) : les conversations avec les recruteurs, séparées d'Orbi. Orbi n'y a pas accès.*
+
+| Clé | Texte |
+|---|---|
+| `inbox.seo` | Messages |
+| `inbox.title` | Messages |
+| `inbox.back` | Retour |
+| `inbox.search` | Rechercher une conversation |
+| `inbox.noResult` | Aucune conversation ne correspond à « {query} ». |
+| `inbox.requests` | Demandes de mise en relation |
+| `inbox.requestLine` | Vous décidez de répondre ou non |
+| `inbox.unread` | {count, plural, one {message non lu} other {messages non lus}} |
+| `inbox.yesterday` | Hier |
+| `inbox.today` | Aujourd'hui |
+| `inbox.item.none` | Pas encore de message |
+| `inbox.item.invitation` | Invitation à un entretien |
+| `inbox.item.documentRequest` | Document demandé |
+| `inbox.item.slot` | Créneau proposé |
+| `inbox.item.decision` | Réponse à votre candidature |
+| `inbox.item.you` | Vous : {message} |
+| `inbox.item.attachment` | Pièce jointe |
+| `inbox.empty.title` | Aucun message pour l'instant |
+| `inbox.empty.text` | Quand un recruteur vous écrit, la conversation s'ouvre ici. |
+| `inbox.empty.cta` | Voir les offres |
+| `inbox.privacy` | Vos conversations avec les recruteurs. Orbi n'y a pas accès. |
+| `inbox.options` | Options de la conversation |
+| `inbox.seeApplication` | Voir la candidature |
+| `inbox.thread` | Messages de la conversation |
+| `inbox.slots.title` | Créneaux proposés |
+| `inbox.slots.confirmed` | Entretien confirmé |
+| `inbox.slots.reschedule` | Autres créneaux demandés |
+| `inbox.slots.closed` | Entretien clos |
+| `inbox.request.title` | Document demandé : {name} |
+| `inbox.request.due` | À envoyer avant le {date} |
+| `inbox.request.waiting` | En attente |
+| `inbox.request.sent` | Envoyé le {date} |
+| `inbox.request.answer` | Envoyer un document |
+| `inbox.file.sent` | Envoyé · {time} |
+| `inbox.file.received` | Reçu · {time} |
+| `inbox.slot.title` | Créneau proposé : {day} à {time} |
+| `inbox.composer` | Écrire un message |
+| `inbox.send` | Envoyer |
+| `inbox.plus.open` | Joindre un CV, une lettre, un document, un créneau ou un lien |
+| `inbox.plus.title` | Joindre |
+| `inbox.plus.create` | Ouvrir mes documents |
+
+### Refonte mobile · Notifications
+
+*Notifications (docs/refonte-mobile/talent-2 § 5) : groupées par jour, les nouvelles en surbrillance. Un titre court et une ligne pour ce que reçoit un talent ; les autres gardent leur phrase.*
+
+| Clé | Texte |
+|---|---|
+| `notifs.group.today` | Aujourd'hui |
+| `notifs.group.thisWeek` | Cette semaine |
+| `notifs.group.earlier` | Plus tôt |
+| `notifs.empty.title` | Rien de nouveau |
+| `notifs.title.interviewInvite` | Invitation à un entretien |
+| `notifs.title.interviewCanceled` | Entretien annulé |
+| `notifs.title.profileViewed` | Votre profil a été consulté |
+| `notifs.title.statusChange` | Étape « {stage} » |
+| `notifs.title.notSelected` | Candidature non retenue |
+| `notifs.title.jobUnavailable` | Offre plus disponible |
+| `notifs.title.certificateIssued` | Attestation obtenue |
+| `notifs.title.documentRequest` | Document demandé |
+| `notifs.title.newMessage` | Nouveau message |
+| `notifs.title.contactRequest` | Demande de mise en relation |
+| `notifs.title.diagnosticReady` | Votre diagnostic est prêt |
+| `notifs.line.interviewInvite` | {company} · choisissez un créneau |
+| `notifs.line.diagnosticReady` | Niveau {stage} |
+
 ### `/app/orbi` · Orbi en plein écran
 
 *L'onglet central, en page de conversation (talent lot 4 § 9) : retour en haut, pas de barre du bas. Les quatre aides mènent aux fonctions existantes ; la conversation libre est gardée dans l'historique. Orbi propose, la personne décide.*
@@ -9171,6 +9459,7 @@ Conventions :
 | `notifications.item.licensesLow` | {count, plural, =0 {Plus aucune licence disponible} one {Il reste # licence disponible} other {Il reste # licences disponibles}} dans le lot « {batchName} ». |
 | `notifications.item.diagnosticReady` | Votre diagnostic de carrière est prêt : niveau {stage}. |
 | `notifications.item.diagnosticReminder` | Cela fait 30 jours depuis votre diagnostic de carrière. Refaites-le pour voir vos progrès. |
+| `notifications.item.profileViewed` | {company} a consulté votre profil pour « {jobTitle} » |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)

@@ -12,6 +12,14 @@ describe("apparence de l'espace talent (brief § 2.10)", () => {
     expect(redrawn("/app/jobs/candidatures")).toBe(false);
     expect(redrawn("/app/jobs/candidatures/abc")).toBe(false);
     expect(redrawn("/app/learn")).toBe(false);
+    // Lot 4.
+    expect(redrawn("/app/jobs/analyste-fictif/postuler")).toBe(true);
+    expect(redrawn("/app/suivi")).toBe(true);
+    expect(redrawn("/app/suivi/abc")).toBe(true);
+    expect(redrawn("/app/messages/abc")).toBe(true);
+    expect(redrawn("/app/notifications")).toBe(true);
+    expect(redrawn("/app/career/entretiens/nouveau")).toBe(true);
+    expect(redrawn("/app/career/entretiens")).toBe(false);
   });
 
   it("pose la classe avant le premier affichage, selon le choix et le téléphone", () => {

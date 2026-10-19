@@ -107,13 +107,18 @@ export function hidesTalentTabBar(pathname: string) {
   // Mon profil has its own bar « Enregistré · Voir mon profil côté recruteur » (screen 25).
   if (section === "profil") return true;
   if (section === "jobs") return Boolean(page) && !["candidatures", "enregistrees"].includes(page);
-  if (section === "messages") return Boolean(page);
-  if (section === "suivi") return page === "entretiens" && Boolean(more);
+  // Messages and notifications open from the head and draw their own (planche talent-2 § 5).
+  if (section === "messages" || section === "notifications") return true;
+  if (section === "suivi") return Boolean(page);
   if (section === "learn") {
     const lists = ["attestations", "coach", "evaluations", "explorer", "parcours"];
     return Boolean(page) && !lists.includes(page);
   }
-  if (section === "career") return page === "cv" && Boolean(more) && more !== "modeles";
+  if (section === "career")
+    return (
+      (page === "cv" && Boolean(more) && more !== "modeles") ||
+      (page === "entretiens" && Boolean(more))
+    );
   return false;
 }
 

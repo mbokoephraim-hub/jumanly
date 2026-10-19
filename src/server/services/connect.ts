@@ -53,7 +53,7 @@ function accessWhere(viewer: Viewer): Prisma.ConversationWhereInput {
 }
 
 const listInclude = {
-  organization: { select: { name: true, verifiedAt: true } },
+  organization: { select: { name: true, verifiedAt: true, logo: true } },
   application: {
     select: {
       id: true,
