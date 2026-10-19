@@ -441,10 +441,10 @@ CSSR += '''
 .prg .rw{display:flex;gap:8px}
 .f-card{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:14px;padding:16px;border-radius:24px;background:var(--plein);box-shadow:0 0 0 1.5px rgba(242,179,61,.55),var(--verre)}
 .f-card .h{display:flex;gap:12px;align-items:center}
-.f-card .cd{width:48px;height:48px;border-radius:16px;flex:none;display:grid;place-items:center;align-content:center;background:linear-gradient(150deg,#FFF3D6,#F8CF73);color:#0F3F37;line-height:1}
-.f-card .cd b{font-size:19px}.f-card .cd small{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
-.f-card .h .t{flex:1}.f-card .h .t b{display:block;font-size:14.5px}.f-card .h .t span{font-size:12px;color:var(--texte2)}
-.f-card .h .when{font-size:11px;color:var(--texte2);align-self:flex-start}
+.f-card .cd{width:52px;height:52px;border-radius:16px;flex:none;display:grid;place-items:center;align-content:center;background:linear-gradient(150deg,#FFF3D6,#F8CF73);color:#0F3F37;line-height:1}
+.f-card .cd b{font-size:15px;font-weight:800;white-space:nowrap}.f-card .cd small{font-size:9px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.f-card .h .t{flex:1}.f-card .h .t b{display:block;font-size:15px;white-space:nowrap}.f-card .h .t span{font-size:12px;color:var(--texte2)}
+.f-card .h .t .when{display:block;font-size:11px;color:#9A6A12;margin-top:3px;font-weight:600}.sombre .f-card .h .t .when{color:#F8D68B}
 .f-kp{display:grid;grid-template-columns:repeat(3,1fr);border-radius:16px;background:var(--zone);padding:10px 4px}
 .f-kp div{text-align:center;font-size:10.5px;color:var(--texte2)}.f-kp div+div{border-left:1px solid var(--trait)}.f-kp b{display:block;font-size:17px;color:var(--texte)}
 .f-ac{display:flex;flex-direction:column;gap:8px}
@@ -497,7 +497,7 @@ ATS_PROG = phone(f'''{OFFRE_T}
 
 FIN_NOTIF = phone(f'''{tete_f("Notifications", droite="reglages")}
 <span class="lab-c" style="margin-bottom:-4px">À traiter</span>
-<div class="f-card"><div class="h"><span class="cd"><b>3</b><small>jours</small></span><div class="t"><b>Votre offre se termine bientôt</b><span>Analyste de données junior · fin le 31 oct.</span></div><span class="when">08:00</span></div>
+<div class="f-card"><div class="h"><span class="cd"><b>J-3</b></span><div class="t"><b>Fin de l’offre dans 3 jours</b><span>Analyste de données junior</span><span class="when">Clôture le 31 oct. · reçu à 08:00</span></div></div>
 <div class="f-kp"><div><b>24</b>candidatures</div><div><b>1 240</b>vues</div><div><b>3</b>entretiens</div></div>
 <div class="f-ac">
 <a class="p"><span class="cases">{orbi(20)}</span><span class="t">Analyser et classer<small>Les 24 CV, avant la fin</small></span>{ic("suivant","s")}</a>
