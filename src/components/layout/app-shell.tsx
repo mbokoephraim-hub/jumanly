@@ -6,31 +6,16 @@ import { NotificationBell, type BellLabels } from "@/components/app/notification
 import { Toaster } from "@/components/motion/toaster";
 import { AppIntroGate } from "@/components/app/app-intro-gate";
 import type { IntroData } from "@/components/app/app-intro";
-import {
-  hireNavigation,
-  partnerNavigation,
-  talentMenu,
-  talentNavigation,
-  talentTabPaths,
-} from "@/config/navigation";
+import { hireNavigation, partnerNavigation } from "@/config/navigation";
 import { Logo, Icon, type IconName } from "@/components/brand";
-import { careerTabs } from "@/components/career/kit";
 import type { Section } from "@/config/section-navigation";
-import { dynamic } from "@/i18n/dynamic";
 import { AppMotionRoot } from "@/components/motion/app-motion-root";
-import { initials as initialsOf } from "@/components/ui/avatar";
 import { AccountMenu, type AccountSummary } from "./account-menu";
 import { IconRail } from "./icon-rail";
 import { NavLink } from "./nav-link";
 import { SectionNav } from "./section-nav";
 import { TopSearch } from "./top-search";
 import { SpaceSwitcher, type SpaceOption } from "./space-switcher";
-import { TabBar } from "./tab-bar";
-import { TopMenu } from "./top-menu";
-import { CreateSheet, type CreateAction } from "./create-sheet";
-import { OrbiSearch } from "./orbi-search";
-import { PhoneHeader } from "./phone-header";
-import { ThemeRoot } from "./theme-root";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { cx } from "@/lib/cx";
 
@@ -43,9 +28,8 @@ import { cx } from "@/lib/cx";
  * Tablet (from 768 px): the same column and bar, the search behind an icon.
  * Phone: deep green header (search icon), Crème sheet with the sub-sections on top, floating
  * gradient pill.
- * Talent space (docs/ux-mobile-talent, prompt 2): on a phone, a 52 px top bar (logo or title of
- * the section, search, notifications, the avatar and its menu) and a bottom bar of four
- * destinations; on a computer, the same four destinations plus Career in the column of icons.
+ * Organization (Hire) and partner spaces only: the personal space has its own shell
+ * (src/components/talent/shell.tsx, docs/refonte-mobile).
  */
 export function AppShell({
   account,
@@ -54,22 +38,10 @@ export function AppShell({
   unread,
   reduceMotion = false,
   intro,
-  lockedCareer = [],
-  followUp = 0,
-  unreadMessages = 0,
-  theme = "light",
   children,
 }: {
-  /** Talent: Clair or Vert (Compte › Préférences, V6 § B7). */
-  theme?: "light" | "green";
-  /** Talent: real number of actions to take (badge of Suivi). */
-  followUp?: number;
-  /** Talent: conversations with an unread message (badge of Messages in the avatar menu). */
-  unreadMessages?: number;
   account: AccountSummary;
-  /** Career tools the plan keeps locked: a padlock in the Career menu. */
-  lockedCareer?: readonly string[];
-  /** Active organization space, or null for the personal space. */
+  /** Active organization or partner space. */
   space: (SpaceOption & { partner?: boolean }) | null;
   spaces: SpaceOption[];
   unread: number;
@@ -83,10 +55,8 @@ export function AppShell({
   const a11y = useTranslations("a11y");
   const tn = useTranslations("notifications");
   const tt = useTranslations("toast");
-  const tc = useTranslations("career");
-  const talent = !space;
-  const navigation = space?.partner ? partnerNavigation : space ? hireNavigation : talentNavigation;
-  const home = space?.partner ? "/app/partenaire" : space ? "/app/hire" : "/app";
+  const navigation = space?.partner ? partnerNavigation : hireNavigation;
+  const home = space?.partner ? "/app/partenaire" : "/app/hire";
   const pillLinks = navigation
     .filter((item) => item.pill !== false)
     .map(({ key, href, icon }) => (
@@ -95,12 +65,7 @@ export function AppShell({
       </li>
     ));
 
-  const sections = appSections({
-    t,
-    career: (key) => (key === "home" ? tc("nav.home") : dynamic(tc)(`home.${key}.title`)),
-    lockedCareer,
-    lockedLabel: tc("nav.locked"),
-  });
+  const sections = appSections(t);
 
   const bellLabels: BellLabels = {
     aria: {
@@ -136,13 +101,8 @@ export function AppShell({
   return (
     <div
       data-reduce-motion={reduceMotion ? "" : undefined}
-      className={cx(
-        "jm-admin-bg min-h-dvh text-sapin md:flex",
-        talent && "jm-talent",
-        talent && theme === "green" && "jm-vert",
-      )}
+      className="jm-admin-bg min-h-dvh text-sapin md:flex"
     >
-      {talent && <ThemeRoot theme={theme} />}
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={tt("region.aria")} closeLabel={tt("close")} />
       {intro && (
@@ -171,113 +131,27 @@ export function AppShell({
               icon={<Icon name="reglages" />}
               placement="rail"
             />
-            <AccountMenu account={account} tone="rail" talent={talent} />
+            <AccountMenu account={account} tone="rail" />
           </>
         }
       />
 
-      {talent ? (
-        <PhoneHeader
-          backLabel={t("back")}
-          titles={{
-            "/app": t("tabs.forMe"),
-            "/app/jobs": t("tabs.offers"),
-            "/app/learn": t("tabs.learn"),
-            "/app/suivi": t("tabs.suivi"),
-            "/app/compte": t("tabs.account"),
-            "/app/career": t("title.career"),
-            "/app/messages": t("title.messages"),
-            "/app/notifications": t("title.notifications"),
-            "/app/profil": t("title.profile"),
-            "/app/abonnement": t("title.subscription"),
-            "/app/parametres": t("title.settings"),
-            "/app/tableau-de-bord": t("title.dashboard"),
-            "/app/recherche": t("title.search"),
-            "/app/espace": t("topMenu.open"),
-          }}
-          menu={
-            <TopMenu
-              label={t("topMenu.label")}
-              openLabel={t("topMenu.button")}
-              align="left"
-              triggerClassName="jm-top-round jm-menu-button grid size-10 place-items-center rounded-full"
-              trigger={<Icon name="menu" className="size-[22px]" />}
-            >
-              <TalentMenu />
-            </TopMenu>
-          }
-          actions={
-            <>
-              <CreateSheet
-                label={t("header.create")}
-                title={t("create.title")}
-                closeLabel={t("create.close")}
-                actions={createActions(t)}
-              />
-              <Link
-                href="/app/messages"
-                aria-label={t("header.messagesUnread", { count: unreadMessages })}
-                className="jm-top-round relative grid size-10 shrink-0 place-items-center rounded-full"
-              >
-                <Icon name="message" className="size-5" />
-                {unreadMessages > 0 && (
-                  <span aria-hidden className="jm-top-badge">
-                    {unreadMessages > 9 ? "9+" : unreadMessages}
-                  </span>
-                )}
-              </Link>
-              <NotificationBell initialUnread={unread} tone="round" labels={bellLabels} />
-            </>
-          }
-          search={
-            <Suspense fallback={null}>
-              <OrbiSearch
-                labels={{
-                  label: t("orbiSearch.label"),
-                  placeholder: t("orbiSearch.placeholder"),
-                  filters: t("orbiSearch.filters"),
-                  filtersCount: {
-                    one: t("orbiSearch.filtersCount", { count: 1 }).replace("1", "#"),
-                    other: t("orbiSearch.filtersCount", { count: 2 }).replace("2", "#"),
-                  },
-                  askTitle: t("orbiSearch.ask.title"),
-                  askSoon: t("orbiSearch.ask.soon"),
-                  results: t("orbiSearch.results"),
-                  kind: { job: t("orbiSearch.kind.job"), course: t("orbiSearch.kind.course") },
-                  recent: t("search.recent.title"),
-                  seeAll: t("orbiSearch.seeAll"),
-                }}
-              />
-            </Suspense>
-          }
-        />
-      ) : (
-        <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc md:hidden">
-          <Link href={home} aria-label={a11y("logo")} className="shrink-0">
-            <Logo variant="negative" height={26} />
-          </Link>
-          <div className="flex min-w-0 items-center gap-1">
-            {searchLink("dark")}
-            <SpaceSwitcher current={space} spaces={spaces} tone="dark" />
-            {notifications("dark")}
-            <AccountMenu account={account} tone="dark" />
-          </div>
-        </header>
-      )}
+      <header className="flex h-16 items-center justify-between gap-3 px-4 text-blanc md:hidden">
+        <Link href={home} aria-label={a11y("logo")} className="shrink-0">
+          <Logo variant="negative" height={26} />
+        </Link>
+        <div className="flex min-w-0 items-center gap-1">
+          {searchLink("dark")}
+          <SpaceSwitcher current={space} spaces={spaces} tone="dark" />
+          {notifications("dark")}
+          <AccountMenu account={account} tone="dark" />
+        </div>
+      </header>
 
-      <div
-        className={cx(
-          "relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme md:min-h-0 md:flex-1 md:rounded-none md:bg-transparent",
-          talent && "max-md:rounded-none max-md:bg-transparent",
-        )}
-      >
+      <div className="relative isolate min-h-[calc(100dvh-4rem)] min-w-0 rounded-t-[28px] bg-creme md:min-h-0 md:flex-1 md:rounded-none md:bg-transparent">
         {/* The secondary menu, above the page: sub-sections left, tools right. */}
         <div className="jm-topbar sticky top-0 z-30 flex items-center gap-3 px-4 pt-3 sm:px-6 md:h-[68px] md:pt-0 lg:gap-5 lg:px-6 xl:px-[max(2rem,calc((100%-1400px)/2+2rem))]">
-          <SectionNav
-            sections={sections}
-            phoneHidden={talent ? talentTabPaths : undefined}
-            className="min-w-0 flex-1"
-          />
+          <SectionNav sections={sections} className="min-w-0 flex-1" />
           <div className="ml-auto hidden min-w-0 shrink-0 items-center justify-end gap-3 md:flex lg:w-[min(36%,460px)] lg:shrink 2xl:w-[min(42%,560px)]">
             {/* With an organization switcher, the wide search needs a wide screen: an icon below. */}
             <div
@@ -308,167 +182,21 @@ export function AppShell({
         </main>
       </div>
 
-      {talent ? (
-        <TabBar
-          label={t("mobile.aria")}
-          tabs={talentNavigation
-            .filter((item) => item.pill !== false)
-            .map(({ key, href, icon }) => ({ key, href, icon, label: t(key) }))}
-          center="tabs.forMe"
-          account={{
-            key: "tabs.account",
-            avatar: account.image ? (
-              // eslint-disable-next-line @next/next/no-img-element -- a 24 px avatar, already small
-              <img src={account.image} alt="" className="size-full object-cover" />
-            ) : (
-              <span
-                aria-hidden
-                className="grid size-full place-items-center bg-neon text-[9.5px] font-bold text-sapin"
-              >
-                {initialsOf(account.name)}
-              </span>
-            ),
-          }}
-          badge={{
-            key: "tabs.suivi",
-            count: followUp,
-            label: t("tabs.badge", { count: followUp }),
-          }}
-        />
-      ) : (
-        <nav
-          aria-label={t("mobile.aria")}
-          data-autohide
-          className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin bg-(image:--jm-degrade-rail-h) p-[7px] shadow-float md:hidden"
-        >
-          <ul data-nav-slide="pill" className="flex gap-1">
-            {pillLinks}
-          </ul>
-        </nav>
-      )}
+      <nav
+        aria-label={t("mobile.aria")}
+        data-autohide
+        className="fixed bottom-[max(26px,env(safe-area-inset-bottom))] left-1/2 z-20 -translate-x-1/2 rounded-pill bg-sapin bg-(image:--jm-degrade-rail-h) p-[7px] shadow-float md:hidden"
+      >
+        <ul data-nav-slide="pill" className="flex gap-1">
+          {pillLinks}
+        </ul>
+      </nav>
     </div>
   );
 }
 
-/**
- * The card of the Menu button (screen 34): Orbi first (its place, until the assistant arrives with
- * prompt 7), the shortcuts, then « Tout Mon espace ».
- */
-function TalentMenu() {
-  const t = useTranslations("appNav.topMenu");
-  return (
-    <>
-      <div
-        aria-disabled="true"
-        className="jm-ai-surface mb-1 flex min-h-[60px] items-center gap-3 rounded-[18px] px-3 text-blanc"
-      >
-        <span
-          aria-hidden
-          className="grid size-9 shrink-0 place-items-center rounded-full bg-lime text-sapin"
-        >
-          <Icon name="intelligence" className="size-[18px]" />
-        </span>
-        <span className="flex min-w-0 flex-1 flex-col">
-          <span className="text-[15px] font-semibold">{t("orbi.title")}</span>
-          <span className="truncate text-[13px] text-blanc/75">{t("orbi.soon")}</span>
-        </span>
-      </div>
-      <ul className="flex flex-col gap-0.5">
-        {talentMenu.map((item) => (
-          <li key={item.key}>
-            <Link
-              href={item.href}
-              className="jm-press flex min-h-12 items-center gap-3 rounded-[16px] px-2 py-1.5 text-[15px] hover:bg-creme active:bg-lime-clair"
-            >
-              <span
-                aria-hidden
-                className={cx(
-                  "grid size-9 shrink-0 place-items-center rounded-[11px] [&_svg]:size-[18px]",
-                  item.tone,
-                )}
-              >
-                <Icon name={item.icon} />
-              </span>
-              <span className="min-w-0 flex-1 truncate">{t(item.key)}</span>
-              <Icon name="chev-r" className="size-4 shrink-0 text-ardoise" />
-            </Link>
-          </li>
-        ))}
-      </ul>
-      <div className="mt-1 border-t border-brume px-2 pt-2 pb-1">
-        <Link
-          href="/app/espace"
-          className="flex min-h-11 items-center gap-1 text-[14px] font-semibold whitespace-nowrap text-feuille-fonce"
-        >
-          {t("all")}
-          <Icon name="chev-r" className="size-4" />
-        </Link>
-      </div>
-    </>
-  );
-}
-
-/** The tiles of « Créer » (screen 60): existing pages only, each with its own rules. */
-function createActions(t: ReturnType<typeof useTranslations<"appNav">>): CreateAction[] {
-  return [
-    {
-      key: "apply",
-      href: "/app/jobs",
-      icon: "send",
-      label: t("create.apply"),
-      tone: "bg-[#BFEFDF]",
-    },
-    {
-      key: "cv",
-      href: "/app/career/cv?creer=1",
-      icon: "cv",
-      label: t("create.cv"),
-      tone: "bg-brume",
-    },
-    {
-      key: "letter",
-      href: "/app/career/documents",
-      icon: "doc",
-      label: t("create.letter"),
-      tone: "bg-lime",
-    },
-    {
-      key: "interview",
-      href: "/app/career/entretiens",
-      icon: "message",
-      label: t("create.interview"),
-      tone: "bg-[#F6F3EE]",
-    },
-    {
-      key: "experience",
-      href: "/app/profil?partie=experiences",
-      icon: "jobs",
-      label: t("create.experience"),
-      tone: "bg-neon",
-    },
-    {
-      key: "premium",
-      href: "/app/abonnement",
-      icon: "etoile",
-      label: t("create.premium"),
-      tone: "bg-lime",
-      featured: true,
-    },
-  ];
-}
-
 /** Sub-sections of each section of the signed-in space (the secondary horizontal menu). */
-function appSections({
-  t,
-  career,
-  lockedCareer,
-  lockedLabel,
-}: {
-  t: ReturnType<typeof useTranslations<"appNav">>;
-  career: (key: (typeof careerTabs)[number]["key"]) => string;
-  lockedCareer: readonly string[];
-  lockedLabel: string;
-}): Section[] {
+function appSections(t: ReturnType<typeof useTranslations<"appNav">>): Section[] {
   const section = (
     name: string,
     match: string[],
@@ -494,38 +222,6 @@ function appSections({
         ["/app/notifications", t("notifications"), "notification"],
         ["/app/abonnement", t("section.subscription"), "portefeuille"],
         ["/app/parametres", t("settings"), "reglages"],
-      ],
-    ),
-    section(
-      t("learn"),
-      ["/app/learn"],
-      [
-        ["/app/learn", t("section.learnHome"), "accueil"],
-        ["/app/learn/explorer", t("section.catalog"), "recherche"],
-        ["/app/learn/parcours", t("section.learnPaths"), "learn"],
-        ["/app/learn/evaluations", t("section.learnEvaluations"), "quiz"],
-        ["/app/learn/coach", t("section.learnCoach"), "intelligence"],
-        ["/app/learn/attestations", t("section.certificates"), "certificat"],
-      ],
-    ),
-    {
-      ...section(t("career"), ["/app/career"], []),
-      links: careerTabs.map((tab) => ({
-        href: tab.href,
-        label: career(tab.key),
-        icon: tab.icon,
-        locked: lockedCareer.includes(tab.key),
-      })),
-      lockedLabel,
-    },
-    // Offres itself has no sub-sections any more (prompt 2): its pages below keep them.
-    section(
-      t("jobs"),
-      ["/app/jobs/candidatures", "/app/jobs/enregistrees"],
-      [
-        ["/app/jobs", t("section.offers"), "recherche"],
-        ["/app/jobs/candidatures", t("section.applications"), "send"],
-        ["/app/jobs/enregistrees", t("section.saved"), "favori"],
       ],
     ),
     section(

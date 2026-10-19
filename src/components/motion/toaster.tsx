@@ -37,7 +37,16 @@ const icons: Record<NonNullable<ToastInput["tone"]>, IconName> = {
  * from the top on phones, with a thin time bar that empties and stops while the pointer rests on
  * the toast. The live region is in the page from the start, so screen readers announce them.
  */
-export function Toaster({ label, closeLabel }: { label: string; closeLabel: string }) {
+export function Toaster({
+  label,
+  closeLabel,
+  placement = "top",
+}: {
+  label: string;
+  closeLabel: string;
+  /** Talent space: above the bottom bar, so a toast never covers the header (bell, account). */
+  placement?: "top" | "bottom";
+}) {
   const [toasts, setToasts] = useState<Shown[]>([]);
   const next = useRef(0);
 
@@ -57,7 +66,11 @@ export function Toaster({ label, closeLabel }: { label: string; closeLabel: stri
       role="region"
       aria-label={label}
       aria-live="polite"
-      className="pointer-events-none fixed inset-x-4 top-4 z-[60] flex flex-col items-center gap-2 lg:inset-x-auto lg:right-6 lg:items-end"
+      className={
+        placement === "bottom"
+          ? "pointer-events-none fixed inset-x-4 bottom-[calc(116px+env(safe-area-inset-bottom))] z-[60] mx-auto flex max-w-[528px] flex-col-reverse items-center gap-2"
+          : "pointer-events-none fixed inset-x-4 top-4 z-[60] flex flex-col items-center gap-2 lg:inset-x-auto lg:right-6 lg:items-end"
+      }
     >
       {toasts.map((toast) => (
         <ToastItem

@@ -38,32 +38,17 @@ test.describe("inscription avec forfait", () => {
 });
 
 test.describe("connexion", () => {
-  test("se connecter, se déconnecter, réinitialiser le mot de passe", async ({
-    page,
-    isMobile,
-  }) => {
+  test("se connecter, se déconnecter, réinitialiser le mot de passe", async ({ page }) => {
     const email = testEmail("reset");
     await signUpFromPricing(page, "Créer mon compte gratuit", email);
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
-    await page.goto("/app/parametres");
-    if (isMobile) {
-      // Phone: Se déconnecter sits at the bottom of Compte (screen 61).
-      await page
-        .getByRole("navigation", { name: "Navigation principale" })
-        .getByRole("link", { name: "Compte" })
-        .click();
-      await expect(page).toHaveURL(/\/app\/compte$/);
-      await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
-    } else {
-      await page.locator("summary[aria-label]").filter({ visible: true }).first().click();
-      // The sidebar has its own logout button too: use the one of the open account menu.
-      await page
-        .locator("details[open]")
-        .getByRole("button", { name: "Se déconnecter" })
-        .filter({ visible: true })
-        .click();
-    }
+    // Refonte mobile: the account opens from the avatar of a destination; Se déconnecter sits
+    // at the bottom of Compte, on a phone as on a computer.
+    await page.goto("/app/jobs");
+    await page.getByRole("link", { name: /^Compte de / }).click();
+    await expect(page).toHaveURL(/\/app\/compte$/);
+    await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
     await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
 
     await page.goto("/app");

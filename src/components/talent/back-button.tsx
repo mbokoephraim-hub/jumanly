@@ -3,8 +3,8 @@
 import { useEffect, useRef } from "react";
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { Icon } from "@/components/brand/icon";
 import { cx } from "@/lib/cx";
+import { TalentIcon } from "./icon";
 
 /** Pages shown in this tab since it opened: more than one means « back » stays in Jumanly. */
 let pagesSeen = 0;
@@ -21,8 +21,8 @@ export function useCountPages() {
 }
 
 /**
- * « Retour » at the head of every page that is not a destination (docs/ux-mobile-talent V6 § B4):
- * a 42 px white button that goes back to the screen before, never to the home by surprise. When
+ * « Retour » at the head of every page that is not a destination (planche Fondations § 5, page
+ * secondaire): a round glass button that goes back to the screen before, never to the home by surprise. When
  * the page was opened directly (no history in Jumanly), it goes to `fallback`, the parent page.
  * Without JavaScript it is a plain link to `fallback`.
  */
@@ -54,12 +54,9 @@ export function BackButton({
         event.preventDefault();
         router.back();
       }}
-      className={cx(
-        "jm-back grid size-[42px] shrink-0 place-items-center rounded-[15px]",
-        className,
-      )}
+      className={cx("t-bi", className)}
     >
-      <Icon name="retour" className="size-[22px]" />
+      <TalentIcon name="retour" />
     </Link>
   );
 }

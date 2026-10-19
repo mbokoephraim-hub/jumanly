@@ -22,6 +22,13 @@ enum UserTheme {
   green
 }
 
+/// Appearance of the talent space (docs/refonte-mobile, brief § 2.10): auto follows the phone.
+enum UserAppearance {
+  auto
+  light
+  dark
+}
+
 enum PlanFamily {
   talent
   rh
@@ -709,8 +716,10 @@ model User {
   newsletter          Boolean                   @default(false)
   /// « Réduire les animations » (docs/experience-animee § 0.4): no motion in the signed-in space.
   reduceMotion        Boolean                   @default(false)
-  /// Theme of the signed-in space (docs/ux-mobile-talent V6 § B7): light (Crème) or green.
+  /// Former theme (Clair or Vert) of the old talent design: no longer read, removed in lot 7.
   theme               UserTheme                 @default(light)
+  /// Clair, Sombre or Auto (follows the phone), docs/refonte-mobile brief § 2.10.
+  appearance          UserAppearance            @default(auto)
   /// Full welcome intro seen (docs/refonte-connexion § 7): played once per account, on any device.
   introSeenAt         DateTime?
   termsAcceptedAt     DateTime?

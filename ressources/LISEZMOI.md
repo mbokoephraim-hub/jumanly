@@ -8,6 +8,7 @@ Fichiers à copier dans le projet à l'étape E0 (`public/` pour les images, `sr
 | `logos/` | Logo horizontal, vertical, logotype, symbole (SVG) et favicons (PNG, SVG) | En-tête, pied de page, e-mails, favicon, PWA |
 | `icones/trait/` | 41 icônes de la marque, trait Sapin, 24 px, trait 2 px (`jm-<nom>.svg`) | Icônes par défaut de l'interface |
 | `icones/trait-blanc/` | Les mêmes en blanc | Sur fond Sapin ou Nuit (barre latérale) |
+| `icones/talent/` | 51 icônes de la refonte mobile de l'espace talent, trait 1,8 px (générées depuis `docs/refonte-mobile/maquette/source/icones.py`) | Composant `<TalentIcon name="…" />` de l'espace talent |
 | `icones/duo/` | Les mêmes avec pastille Lime | Mise en avant (cartes de modules, site public) |
 | `icones/jumanly-icones-sprite.svg`, `icones.json` | Sprite SVG unique et liste des icônes | Composant `<Icon name="…" />` |
 | `illustrations/svg/`, `illustrations/png/` | Les personnages un par un, fond transparent : Amani (la talent), Kofi (le jeune diplômé), Nadia (la recruteuse), M. Diallo (le dirigeant), Fatou (la formatrice), en 6 poses (`repos`, `salut`, `joie`, `montre`, `telephone`, `perplexe`), et Orbi (l'assistant IA) | Site public, états vides, écran de bienvenue, erreurs ; Orbi uniquement pour l'IA |

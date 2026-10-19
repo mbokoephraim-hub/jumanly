@@ -1,4 +1,5 @@
 import type { IconName } from "@/components/brand/icon";
+import type { TalentIconName } from "@/components/talent/icon";
 
 /** Public site links. `key` points to `nav.<key>` in the texts. */
 export const publicNavigation = [
@@ -45,15 +46,6 @@ export const legalNavigation = [
 
 export type AppNavigationKey =
   | "home"
-  | "tabs.forMe"
-  | "tabs.offers"
-  | "tabs.learn"
-  | "tabs.suivi"
-  | "tabs.account"
-  | "learn"
-  | "career"
-  | "jobs"
-  | "messages"
   | "hire.jobs"
   | "hire.talents"
   | "hire.pools"
@@ -74,38 +66,33 @@ type AppNavigationItem = {
 };
 
 /**
- * Talent space (docs/ux-mobile-talent, V6 § B2): five destinations in the bottom bar of a phone,
- * Pour moi in the middle; the same five plus Career in the column of icons of a computer. `key`
- * points to `appNav.<key>`.
+ * Bottom bar of the talent space (docs/refonte-mobile, brief § 2.1): Pour moi · Offres · Orbi
+ * (the round in the middle) · Apprendre · Suivi. The account opens from the avatar. `key` points to
+ * `talentShell.nav.<key>`.
  */
-export const talentNavigation: AppNavigationItem[] = [
-  { key: "tabs.offers", href: "/app/jobs", icon: "jobs" },
-  { key: "tabs.learn", href: "/app/learn", icon: "diplome" },
-  { key: "tabs.forMe", href: "/app", icon: "accueil" },
-  { key: "tabs.suivi", href: "/app/suivi", icon: "suivi" },
-  { key: "tabs.account", href: "/app/compte", icon: "profil" },
-  { key: "career", href: "/app/career", icon: "career", pill: false },
-];
+export const talentTabs = [
+  { key: "forMe", href: "/app", icon: "accueil" },
+  { key: "offers", href: "/app/jobs", icon: "opportunites" },
+  { key: "orbi", href: "/app/orbi", icon: "orbi" },
+  { key: "learn", href: "/app/learn", icon: "former" },
+  { key: "suivi", href: "/app/suivi", icon: "candidature" },
+] as const satisfies readonly { key: string; href: string; icon: TalentIconName }[];
 
-/** The destinations themselves: their page opens on the big title and the search (V7 § B1). */
-export const talentTabPaths = ["/app", "/app/jobs", "/app/learn", "/app/suivi", "/app/compte"];
+export type TalentTab = (typeof talentTabs)[number];
 
-/**
- * Shortcuts of the Menu button (screen 34, V6 § B3), in order, after Orbi. `key` points to
- * `appNav.topMenu.<key>`.
- */
-export const talentMenu = [
-  { key: "cvs", href: "/app/career/cv", icon: "cv", tone: "bg-lime" },
-  { key: "dashboard", href: "/app/tableau-de-bord", icon: "statistiques", tone: "bg-neon" },
-  { key: "applications", href: "/app/jobs/candidatures", icon: "jobs", tone: "bg-[#BFEFDF]" },
-  { key: "interviews", href: "/app/career/entretiens", icon: "message", tone: "bg-brume" },
-  {
-    key: "certificates",
-    href: "/app/learn/attestations",
-    icon: "certificat",
-    tone: "bg-[#F6F3EE]",
-  },
-] as const satisfies readonly { key: string; href: string; icon: IconName; tone: string }[];
+/** The tab a page belongs to: its own path, or the tab whose path contains it. */
+export function talentTabOf(pathname: string): TalentTab | null {
+  if (pathname === "/app") return talentTabs[0];
+  return (
+    talentTabs.find(
+      (tab) =>
+        tab.href !== "/app" && (pathname === tab.href || pathname.startsWith(`${tab.href}/`)),
+    ) ?? null
+  );
+}
+
+/** The destinations themselves: their page opens on the big title, the round buttons, the avatar. */
+export const talentTabPaths: string[] = talentTabs.map((tab) => tab.href);
 
 /**
  * Talent screens with their own fixed action bar at the bottom of a phone: the bottom bar steps

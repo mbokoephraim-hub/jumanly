@@ -3,7 +3,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations, getFormatter } from "next-intl/server";
 import { redirect } from "next/navigation";
-import { InviteButton, ThemeSwitch } from "@/components/account/account-controls";
+import { AppearanceSwitch, InviteButton } from "@/components/account/account-controls";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { initials } from "@/components/ui/avatar";
 import { dynamic } from "@/i18n/dynamic";
@@ -11,7 +11,8 @@ import { cx } from "@/lib/cx";
 import { siteUrl } from "@/lib/seo";
 import { AI_CREDITS_KEY } from "@/server/ai";
 import { signOut } from "@/server/actions/auth";
-import { requireUser } from "@/server/auth/session";
+import { ADMIN_ROLES, requireUser } from "@/server/auth/session";
+import { isTester } from "@/server/services/tester";
 import { db } from "@/server/db";
 import { resolvePlan, usage } from "@/server/entitlements";
 import { getActiveSpace } from "@/server/hire-context";
@@ -79,7 +80,7 @@ function LinkRow({
 /**
  * Compte (docs/ux-mobile-talent V6 § B6, screens 61 and 62): a page, not a menu. The profile card
  * with its pencil, « Protégez votre compte » while there is no password, the plan, Orbi's credits,
- * account and privacy, preferences (theme, language), help and invitation, sign out. Each row opens
+ * account and privacy, preferences (appearance, language), my spaces, help and invitation, sign out. Each row opens
  * the existing page; nothing here is invented.
  */
 export default async function AccountPage() {
@@ -254,14 +255,15 @@ export default async function AccountPage() {
         />
         <li className={cx(row, "border-t border-sapin/6")}>
           <Tile icon="reglages" tone="bg-[#BFEFDF]" />
-          <span className="min-w-0 flex-1 text-[15px] font-semibold">{t("theme.label")}</span>
-          <ThemeSwitch
-            current={user.theme}
+          <span className="min-w-0 flex-1 text-[15px] font-semibold">{t("appearance.label")}</span>
+          <AppearanceSwitch
+            current={user.appearance}
             labels={{
-              group: t("theme.label"),
-              light: t("theme.light"),
-              green: t("theme.green"),
-              saved: t("theme.saved"),
+              group: t("appearance.label"),
+              auto: t("appearance.auto"),
+              light: t("appearance.light"),
+              dark: t("appearance.dark"),
+              saved: t("appearance.saved"),
             }}
           />
         </li>
@@ -272,6 +274,21 @@ export default async function AccountPage() {
             {t("language.value")}
           </span>
         </li>
+      </Group>
+
+      <Group title={t("group.spaces")}>
+        <LinkRow href="/app/espace" icon="equipe" tone="bg-neon" label={t("spaces")} />
+        {isTester(user) && (
+          <LinkRow
+            href="/app/testeur"
+            icon="portefeuille"
+            tone="bg-[#BFEFDF]"
+            label={t("tester")}
+          />
+        )}
+        {(ADMIN_ROLES as readonly string[]).includes(user.platformRole) && (
+          <LinkRow href="/admin" icon="securite" tone="bg-brume" label={t("admin")} />
+        )}
       </Group>
 
       <Group title={t("group.help")}>

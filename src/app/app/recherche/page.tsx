@@ -3,7 +3,7 @@ import Link from "next/link";
 import type { ReactNode } from "react";
 import { getTranslations } from "next-intl/server";
 import { AppPageHeader } from "@/components/app/page-header";
-import { PhoneTitle } from "@/components/layout/phone-title";
+import { PhoneTitle } from "@/components/talent/page-title";
 import { RecentSearches } from "@/components/layout/recent-searches";
 import { cx } from "@/lib/cx";
 import { Icon, type IconName } from "@/components/brand/icon";

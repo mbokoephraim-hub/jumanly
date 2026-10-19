@@ -37,18 +37,19 @@ test("la bibliothèque de composants est complète et non indexée", async ({ pa
   await expect(page.getByRole("dialog")).toBeHidden();
 });
 
-test("l'espace connecté propose la navigation adaptée à l'écran", async ({ page, isMobile }) => {
+test("l'espace connecté propose la navigation adaptée à l'écran", async ({ page }) => {
   await logIn(page, demo.talentFree);
   await page.goto("/app");
   const navigation = page.getByRole("navigation", { name: "Navigation principale" });
   await expect(navigation.filter({ visible: true })).toHaveCount(1);
   const lienAccueil = navigation.filter({ visible: true }).getByRole("link", { name: "Pour moi" });
   await expect(lienAccueil).toHaveAttribute("aria-current", "page");
-  // Desktop : colonne d'icônes à gauche ; mobile : barre du bas à quatre destinations.
+  // Refonte mobile (docs/refonte-mobile) : la barre du bas, sur téléphone comme sur ordinateur,
+  // dans la colonne centrée.
   const boite = await navigation.filter({ visible: true }).boundingBox();
   const viewport = page.viewportSize();
-  if (isMobile) expect(boite!.y).toBeGreaterThan(viewport!.height / 2);
-  else expect(boite!.x).toBeLessThan(100);
+  expect(boite!.y).toBeGreaterThan(viewport!.height / 2);
+  expect(boite!.width).toBeLessThanOrEqual(560);
 });
 
 test("aucun numéro de téléphone n'apparaît", async ({ page }) => {

@@ -160,3 +160,13 @@
     display: none;
   }
 }
+
+/*
+ * A Hire screen with its own fixed action bar (decision preview): the pill navigation steps aside
+ * on a phone (PhoneBarFlag).
+ */
+@media (max-width: 767.98px) {
+  body[data-phone-bar] nav[data-autohide] {
+    display: none;
+  }
+}

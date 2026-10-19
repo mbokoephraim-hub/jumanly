@@ -2,6 +2,27 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte mobile de l'espace talent · lot 1 : fondations (19 octobre 2026)
+
+- Nouveau brief (`docs/refonte-mobile/`) : il remplace entièrement l'ancien design talent. Les
+  prompts 6 bis à 11 de l'ancien programme sont abandonnés.
+- Jetons, surface « verre », barre du bas, en-têtes, recherche, options, boutons, cartes, Orbi
+  et états repris de `fondations.css` dans `src/styles/talent.css`. Les 51 icônes de la refonte
+  passent par `pnpm brand`.
+- Nouvelle coquille talent (`src/components/talent/`) : barre du bas Pour moi · Offres · Orbi ·
+  Apprendre · Suivi, grand titre avec cloche, messages et avatar, recherche avec filtres, colonne
+  centrée sur ordinateur. Hire, partenaire et admin gardent leur coquille.
+- Orbi plein écran (`/app/orbi`) : crédits du mois et quatre aides vers les fonctions existantes.
+- Apparence Auto, Clair ou Sombre (page Compte), migration additive `20261019090000_user_appearance`.
+- Demandes d'Ephraïm : animations au toucher et au défilement, réponse immédiate des onglets,
+  sauvegarde des saisies hors connexion.
+- Supprimés : `src/components/layout/{tab-bar,create-sheet,top-menu,phone-header,orbi-search,top-title,theme-root}.tsx`,
+  `src/components/opening/opening.tsx`, `src/styles/talent-mobile.css` (thème Vert compris), le menu
+  talent de l'avatar, les textes `appNav` de l'ancienne navigation (67 clés) et `opening.*`.
+  Déplacés dans `src/components/talent/` : `back-button`, `top-bar-override`, `page-title`.
+- Captures 390 px clair et sombre : `/mnt/project-files/captures/refonte-mobile-lot-1/`.
+- Décision : `docs/decisions/2026-10-19-refonte-mobile-lot-1.md`.
+
 ## Mobile Talent et Jumanly AI · prompt 6 : profil, CV, recherche, notifications (17 octobre 2026)
 
 - Profil sur téléphone (écrans 25-26) : photo (prendre, choisir, recadrer, retirer), « Construire

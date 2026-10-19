@@ -184,17 +184,21 @@ export async function updateDisplay(formData: FormData) {
   back("compte", { ok: "1" });
 }
 
-const themeSchema = z.object({ theme: z.enum(["light", "green"]) });
+const appearanceSchema = z.object({ appearance: z.enum(["auto", "light", "dark"]) });
 
 /**
- * Thème Clair ou Vert (docs/ux-mobile-talent V6 § B7): kept on the account. The switch on Compte
- * changes the page at once; without JavaScript the form posts and the page comes back themed.
+ * Apparence Auto, Clair ou Sombre (docs/refonte-mobile, brief § 2.10): kept on the account. The
+ * switch on Compte changes the page at once; without JavaScript the form posts and the page comes
+ * back in the chosen appearance.
  */
-export async function updateTheme(formData: FormData) {
-  const parsed = themeSchema.safeParse(Object.fromEntries(formData));
+export async function updateAppearance(formData: FormData) {
+  const parsed = appearanceSchema.safeParse(Object.fromEntries(formData));
   const user = await requireUser("/app/compte");
   if (!parsed.success) return;
-  await db.user.update({ where: { id: user.id }, data: { theme: parsed.data.theme } });
-  // The shell (layout) carries the theme: it must render again, not only the page.
+  await db.user.update({
+    where: { id: user.id },
+    data: { appearance: parsed.data.appearance },
+  });
+  // The shell (layout) carries the appearance: it must render again, not only the page.
   refresh();
 }

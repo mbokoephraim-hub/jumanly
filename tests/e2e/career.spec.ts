@@ -161,7 +161,6 @@ test("accueil Career : un talent Free voit ses verrous, les formules et le bande
     "href",
     "/app/abonnement",
   );
-  await expect(page.locator("nav").getByText("(outil verrouillé)")).toHaveCount(4);
   await expectAccessible(page);
 
   const overflow = await page.evaluate(
@@ -181,5 +180,4 @@ test("accueil Career : un talent dont la formule ouvre tout ne voit ni verrou ni
   ).toBeVisible();
   await expect(page.locator(".jm-ch-locked")).toHaveCount(0);
   await expect(page.locator("#career-upgrade")).toHaveCount(0);
-  await expect(page.locator("nav").getByText("(outil verrouillé)")).toHaveCount(0);
 });

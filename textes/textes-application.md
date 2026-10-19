@@ -1865,10 +1865,6 @@ Conventions :
 | `appNav.brand.text` | Jumanly |
 | `appNav.brand.tagline` | Learn. Grow. Connect. |
 | `appNav.home` | Accueil |
-| `appNav.learn` | Learn |
-| `appNav.career` | Career |
-| `appNav.jobs` | Jobs |
-| `appNav.messages` | Messages |
 | `appNav.notifications` | Notifications |
 | `appNav.hire.text` | Hire |
 | `appNav.hire.jobs` | Offres |
@@ -1913,76 +1909,75 @@ Conventions :
 | `appNav.expand` | Déplier le menu |
 | `appNav.mobile.aria` | Navigation principale |
 | `appNav.mobile.more` | Plus |
-| `appNav.tabs.forMe` | Pour moi |
-| `appNav.tabs.offers` | Offres |
-| `appNav.tabs.learn` | Apprendre |
-| `appNav.tabs.suivi` | Suivi |
-| `appNav.tabs.badge` | {count, plural, one {# action à traiter} other {# actions à traiter}} |
-| `appNav.topMenu.open` | Mon espace |
-| `appNav.topMenu.label` | Menu de mon espace |
-| `appNav.topMenu.messages` | Messages |
-| `appNav.topMenu.profile` | Mon profil |
-| `appNav.topMenu.cvs` | Mes CV |
-| `appNav.topMenu.dashboard` | Tableau de bord |
-| `appNav.topMenu.settings` | Paramètres |
-| `appNav.topMenu.all` | Tout Mon espace |
-| `appNav.topMenu.unread` | {count, plural, one {# message non lu} other {# messages non lus}} |
-| `appNav.tabs.account` | Compte |
-| `appNav.tabs.accountAria` | Compte de {name} |
-| `appNav.topMenu.button` | Menu |
-| `appNav.topMenu.orbi.title` | Orbi |
-| `appNav.topMenu.orbi.text` | Votre copilote |
-| `appNav.topMenu.orbi.soon` | Bientôt disponible |
-| `appNav.topMenu.applications` | Mes candidatures |
-| `appNav.topMenu.interviews` | Simulations d'entretien |
-| `appNav.topMenu.certificates` | Attestations |
-| `appNav.header.create` | Créer |
-| `appNav.header.messages` | Messages |
-| `appNav.header.messagesUnread` | {count, plural, =0 {Messages} one {Messages, # conversation non lue} other {Messages, # conversations non lues}} |
-| `appNav.back` | Retour |
-| `appNav.orbiSearch.placeholder` | Rechercher ou demander à Orbi |
-| `appNav.orbiSearch.label` | Rechercher sur Jumanly ou demander à Orbi |
-| `appNav.orbiSearch.filters` | Filtres |
-| `appNav.orbiSearch.filtersCount` | {count, plural, one {Filtres, # actif} other {Filtres, # actifs}} |
-| `appNav.orbiSearch.ask.title` | Demander à Orbi |
-| `appNav.orbiSearch.ask.soon` | Orbi arrive bientôt sur Jumanly. |
-| `appNav.orbiSearch.kind.job` | Offre |
-| `appNav.orbiSearch.kind.course` | Formation |
-| `appNav.orbiSearch.kind.message` | Message |
-| `appNav.orbiSearch.none` | Aucun résultat pour l'instant. |
-| `appNav.orbiSearch.seeAll` | Voir tous les résultats |
-| `appNav.orbiSearch.results` | Suggestions |
-| `appNav.create.title` | Créer |
-| `appNav.create.close` | Fermer |
-| `appNav.create.apply` | Envoyer une candidature |
-| `appNav.create.cv` | Créer un CV |
-| `appNav.create.letter` | Écrire une lettre |
-| `appNav.create.interview` | Simulation d'entretien |
-| `appNav.create.experience` | Ajouter une expérience |
-| `appNav.create.premium` | Passer à Premium |
-| `appNav.title.career` | Career |
-| `appNav.title.messages` | Messages |
-| `appNav.title.notifications` | Notifications |
-| `appNav.title.profile` | Mon profil |
-| `appNav.title.subscription` | Abonnement |
-| `appNav.title.settings` | Paramètres |
-| `appNav.title.dashboard` | Tableau de bord |
-| `appNav.title.search` | Recherche |
 | `appNav.skipToContent` | Aller au contenu principal |
 | `appNav.section.aria` | Sous-rubriques de {section} |
 | `appNav.section.dashboard` | Tableau de bord |
 | `appNav.section.profile` | Mon profil |
 | `appNav.section.subscription` | Abonnement |
-| `appNav.section.catalog` | Explorer |
-| `appNav.section.certificates` | Certifications |
-| `appNav.section.learnHome` | Mon espace |
 | `appNav.section.learnPaths` | Mes parcours |
-| `appNav.section.learnEvaluations` | Exercices et évaluations |
-| `appNav.section.learnCoach` | Coach IA |
-| `appNav.section.offers` | Offres |
-| `appNav.section.applications` | Mes candidatures |
-| `appNav.section.saved` | Offres enregistrées |
 | `appNav.section.account` | Mon espace |
+
+### Espace talent · Fondations de la refonte mobile
+
+*Coquille de l'espace talent (docs/refonte-mobile, lot 1) : barre du bas Pour moi · Offres · Orbi · Apprendre · Suivi, en-têtes, recherche, sauvegarde hors connexion.*
+
+| Clé | Texte |
+|---|---|
+| `talentShell.skip` | Aller au contenu principal |
+| `talentShell.nav.aria` | Navigation principale |
+| `talentShell.nav.forMe` | Pour moi |
+| `talentShell.nav.offers` | Offres |
+| `talentShell.nav.orbi` | Orbi |
+| `talentShell.nav.learn` | Apprendre |
+| `talentShell.nav.suivi` | Suivi |
+| `talentShell.nav.badge` | {count, plural, one {# action à traiter} other {# actions à traiter}} |
+| `talentShell.header.hello` | Bonjour, {name} |
+| `talentShell.header.helloAnon` | Bonjour |
+| `talentShell.header.notifications` | {count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}} |
+| `talentShell.header.messages` | {count, plural, =0 {Messages} one {Messages, # conversation non lue} other {Messages, # conversations non lues}} |
+| `talentShell.header.account` | Compte de {name} |
+| `talentShell.header.back` | Retour |
+| `talentShell.search.label` | Rechercher |
+| `talentShell.search.placeholder` | Rechercher une offre, une formation |
+| `talentShell.search.placeholderOffers` | Rechercher une offre |
+| `talentShell.search.placeholderLearn` | Rechercher une formation |
+| `talentShell.search.filters` | Filtres |
+| `talentShell.title.career` | Carrière |
+| `talentShell.title.messages` | Messages |
+| `talentShell.title.notifications` | Notifications |
+| `talentShell.title.profile` | Mon profil |
+| `talentShell.title.subscription` | Abonnement |
+| `talentShell.title.settings` | Paramètres |
+| `talentShell.title.dashboard` | Tableau de bord |
+| `talentShell.title.search` | Recherche |
+| `talentShell.title.account` | Compte |
+| `talentShell.title.space` | Mon espace |
+| `talentShell.offline.kept` | Hors connexion : votre saisie est gardée sur ce téléphone. Elle partira dès le retour du réseau. |
+| `talentShell.offline.sending` | Connexion revenue : votre saisie est envoyée. |
+| `talentShell.offline.restored` | Votre saisie non envoyée a été reprise. |
+
+### `/app/orbi` · Orbi en plein écran
+
+*L'onglet central. Les quatre aides mènent aux fonctions existantes ; la conversation arrive au lot 7. Orbi propose, la personne décide.*
+
+| Clé | Texte |
+|---|---|
+| `talentOrbi.metaTitle` | Orbi |
+| `talentOrbi.title` | Orbi |
+| `talentOrbi.subtitle` | Votre accompagnement |
+| `talentOrbi.credits` | {count, plural, =0 {0 crédit} one {# crédit} other {# crédits}} |
+| `talentOrbi.creditsUnlimited` | Crédits illimités |
+| `talentOrbi.creditsAria` | Crédits Orbi restants ce mois : {count} |
+| `talentOrbi.aides.label` | Ce qu'Orbi peut faire pour vous |
+| `talentOrbi.aides.cv` | Améliorer mon CV |
+| `talentOrbi.aides.interview` | Préparer un entretien |
+| `talentOrbi.aides.offer` | Analyser une offre |
+| `talentOrbi.aides.path` | Choisir ma voie |
+| `talentOrbi.intro` | Orbi propose, vous décidez : rien n'est modifié ni envoyé sans votre accord. Choisissez une aide pour commencer. |
+| `talentOrbi.composer.placeholder` | Écrire à Orbi |
+| `talentOrbi.composer.soon` | La conversation avec Orbi arrive bientôt. En attendant, choisissez une aide ci-dessus. |
+| `talentOrbi.composer.dictate` | Dicter |
+| `talentOrbi.composer.send` | Envoyer |
 
 ### Navigation · Menu du compte
 
@@ -2140,7 +2135,7 @@ Conventions :
 
 ### `/app/compte` · Compte (écrans 61 et 62)
 
-*L'onglet Compte : la carte du profil, la sécurité, l'abonnement, Orbi, les réglages et les préférences, dont le thème Clair ou Vert.*
+*L'onglet Compte : la carte du profil, la sécurité, l'abonnement, Orbi, les réglages et les préférences, dont l'apparence Auto, Clair ou Sombre.*
 
 | Clé | Texte |
 |---|---|
@@ -2168,30 +2163,23 @@ Conventions :
 | `accountPage.privacy` | Confidentialité et données |
 | `accountPage.visibility` | Visibilité du profil |
 | `accountPage.notifications` | Notifications |
-| `accountPage.theme.label` | Thème |
-| `accountPage.theme.light` | Clair |
-| `accountPage.theme.green` | Vert |
-| `accountPage.theme.saved` | Thème enregistré |
+| `accountPage.appearance.label` | Apparence |
+| `accountPage.appearance.auto` | Auto |
+| `accountPage.appearance.light` | Clair |
+| `accountPage.appearance.dark` | Sombre |
+| `accountPage.appearance.saved` | Apparence enregistrée |
 | `accountPage.language.label` | Langue |
 | `accountPage.language.value` | Français |
+| `accountPage.group.spaces` | Mes espaces |
+| `accountPage.spaces` | Mon espace et mes organisations |
+| `accountPage.tester` | Mode testeur |
+| `accountPage.admin` | Jumanly Admin |
 | `accountPage.helpLink` | Aide et commentaires |
 | `accountPage.invite.label` | Inviter un proche |
 | `accountPage.invite.title` | Jumanly |
 | `accountPage.invite.text` | Je vous invite sur Jumanly pour se former, trouver des offres et suivre ses candidatures. |
 | `accountPage.invite.copied` | Lien copié |
 | `accountPage.logout` | Se déconnecter |
-
-### Ouverture de l'application (écrans 57 et 58)
-
-| Clé | Texte |
-|---|---|
-| `opening.loading` | Ouverture de Jumanly |
-| `opening.welcome.title` | Learn. Grow. Connect. |
-| `opening.welcome.text` | Vos offres, vos formations, votre suivi. |
-| `opening.welcome.start` | Commencer |
-| `opening.welcome.signIn` | J'ai déjà un compte |
-| `opening.welcome.chipJobs` | Des offres pour vous |
-| `opening.welcome.chipCertificate` | Attestation |
 
 ### `/app/tableau-de-bord` · Tableau de bord talent
 

@@ -7,7 +7,7 @@ import { pillClass } from "@/components/career/kit";
 import { TabRail } from "@/components/motion/tab-rail";
 import { Alert, EmptyState, segmentedItem, segmentedList } from "@/components/ui";
 import { cx } from "@/lib/cx";
-import { PhoneTitle } from "@/components/layout/phone-title";
+import { PhoneTitle } from "@/components/talent/page-title";
 import { markNotificationsReadAction } from "@/server/actions/connect";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";

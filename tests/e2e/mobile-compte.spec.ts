@@ -2,11 +2,8 @@ import { expectAccessible } from "./a11y";
 import { expect, test } from "./fixtures";
 import { signUpFromPricing, testEmail } from "./session";
 
-// Prompt 2 bis (V6 § B6-B8, screens 57, 58, 61, 62): Compte, the Vert theme and the opening.
-test("Compte : profil, abonnement, Orbi, thème Vert gardé, déconnexion", async ({
-  page,
-  isMobile,
-}) => {
+// Compte (screens 61, 62) and the appearance of the talent space (refonte mobile, brief § 2.10).
+test("Compte : profil, abonnement, apparence gardée, déconnexion", async ({ page, isMobile }) => {
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("compte"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
   await page.goto("/app/compte");
@@ -20,36 +17,43 @@ test("Compte : profil, abonnement, Orbi, thème Vert gardé, déconnexion", asyn
   ).toHaveAttribute("href", "/app/abonnement");
   await expectAccessible(page);
 
-  // Vert: the page changes at once and keeps the choice after a reload.
-  const theme = page.getByRole("group", { name: "Thème" });
-  await theme.getByRole("button", { name: "Vert" }).click();
-  await expect(theme.getByRole("button", { name: "Vert" })).toHaveAttribute("aria-pressed", "true");
-  await expect(page.locator("html")).toHaveClass(/jm-vert/);
-  await expect(page.getByText("Thème enregistré")).toBeVisible();
+  // Apparence (brief § 2.10): the choice is kept; the redrawn pages take the dark mode.
+  const appearance = page.getByRole("group", { name: "Apparence" });
+  await expect(appearance.getByRole("button", { name: "Auto" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
+  await appearance.getByRole("button", { name: "Sombre" }).click();
+  await expect(appearance.getByRole("button", { name: "Sombre" })).toHaveAttribute(
+    "aria-pressed",
+    "true",
+  );
   await page.reload();
-  await expect(page.locator(".jm-talent")).toHaveClass(/jm-vert/);
+  await expect(
+    page.getByRole("group", { name: "Apparence" }).getByRole("button", { name: "Sombre" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await page.goto("/app/orbi");
+  await expect(page.locator("html")).toHaveClass(/sombre/);
   if (isMobile) await expectAccessible(page);
-  await page.getByRole("group", { name: "Thème" }).getByRole("button", { name: "Clair" }).click();
-  await expect(page.locator("html")).not.toHaveClass(/jm-vert/);
+  await page.goto("/app/compte");
+  await page
+    .getByRole("group", { name: "Apparence" })
+    .getByRole("button", { name: "Clair" })
+    .click();
+  await expect(
+    page.getByRole("group", { name: "Apparence" }).getByRole("button", { name: "Clair" }),
+  ).toHaveAttribute("aria-pressed", "true");
+  await page.goto("/app/orbi");
+  await expect(page.locator("html")).not.toHaveClass(/sombre/);
+  await page.goto("/app/compte");
 
   await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
   await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
 });
 
-test("ouverture : logo, accueil la première fois, connexion ensuite", async ({ page }) => {
-  await page.goto("/ouverture");
-  await expect(page.getByRole("img", { name: "Jumanly" })).toBeVisible();
-  await expect(page.getByRole("heading", { level: 1, name: "Learn. Grow. Connect." })).toBeVisible({
-    timeout: 15_000,
-  });
-  await expect(page.getByRole("link", { name: "Commencer" })).toHaveAttribute(
-    "href",
-    "/inscription",
-  );
-  await expectAccessible(page);
-  await page.getByRole("link", { name: "J'ai déjà un compte" }).click();
-  await expect(page).toHaveURL(/\/connexion/);
-  // The welcome shows once: next time the phone goes straight to sign-in.
+// Refonte mobile: the former opening screen is gone; its address leads to the space (then to
+// the sign-in for a visitor).
+test("l'ancienne ouverture mène à l'espace", async ({ page }) => {
   await page.goto("/ouverture");
   await expect(page).toHaveURL(/\/connexion/, { timeout: 15_000 });
 });

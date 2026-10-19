@@ -22,7 +22,7 @@ import { cx } from "@/lib/cx";
 import { ConversationList } from "@/components/connect/conversation-list";
 import { InterviewCard } from "@/components/connect/interview-card";
 import { ReportForm } from "@/components/connect/report-form";
-import { PhoneTitle } from "@/components/layout/phone-title";
+import { PhoneTitle } from "@/components/talent/page-title";
 import {
   answerDocumentAction,
   blockAction,
@@ -333,7 +333,7 @@ export default async function ThreadPage({
           <details className="relative">
             <summary
               aria-label={t("thread.more")}
-              className="jm-top-round flex size-10 cursor-pointer list-none items-center justify-center rounded-full [&::-webkit-details-marker]:hidden"
+              className="t-bi cursor-pointer list-none [&::-webkit-details-marker]:hidden"
             >
               <Icon name="more" className="size-5" />
             </summary>
