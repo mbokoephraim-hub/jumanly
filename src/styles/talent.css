@@ -7661,6 +7661,50 @@ span.t-sw {
   border-top-color: transparent;
 }
 .t-orw-l .t-cases {
+
+/* ---------- Lot 7 · Abonnement, formules, paiement, factures, paramètres, aide, recherche (planche talent-4 § 7-8, CSS4 de talent4.py) ---------- */
+/* Abonnement : la formule active, les quotas, le renouvellement. */
+.t-fo-act {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  background: var(--g-accomp);
+}
+.t-fo-act .t-t {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.t-fo-act .t-t small {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.t-fo-act .t-t b {
+  display: block;
+  font-size: 18px;
+}
+.t-fo-act .t-t span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-renouv a,
+.t-renouv .t-lien {
+  font-weight: 600;
+  text-decoration: underline;
+}
+.t-annule-chg,
+.t-fin-formule {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+/* Opérateurs Mobile Money : leur couleur, la lettre en blanc (en sapin sur le jaune MTN). */
+.t-lf {
   width: 40px;
   height: 40px;
   border-radius: 14px;
@@ -7744,8 +7788,7 @@ span.t-sw {
     margin: 0;
     padding: 0;
   }
-  .t-cadre main.t-colonne:has(> .t-large),
-  html.t-ancien .t-cadre .t-colonne {
+  .t-cadre main.t-colonne:has(> .t-large) {
     max-width: none;
   }
   .t-cadre .t-contenu {
@@ -8203,4 +8246,441 @@ span.t-sw {
   .t-volet[open] {
     animation: none;
   }
+}
+
+  font-size: 13px;
+  font-weight: 700;
+  color: #fff;
+}
+.t-lf.t-lf-m {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+}
+.t-op-mpesa {
+  background: #e2231a;
+}
+.t-op-orange {
+  background: #c25200;
+}
+.t-op-airtel {
+  background: #c8102e;
+}
+.t-op-mtn {
+  background: #ffcc00;
+  color: var(--sapin);
+}
+.t-op-autre {
+  background: var(--sapin);
+}
+.t-mm {
+  display: flex;
+  flex-direction: column;
+}
+.t-ch-li {
+  cursor: pointer;
+}
+.t-ch-li:has(:checked) .t-radio {
+  background: var(--g-accent);
+  box-shadow:
+    inset 0 0 0 6px var(--plein),
+    0 0 0 2px var(--texte);
+}
+.t-ch-li:has(:focus-visible) {
+  box-shadow: inset 0 0 0 2px var(--texte);
+}
+/* Récapitulatif d'un paiement. */
+.t-recu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+}
+.t-recu > div {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.t-recu b {
+  font-size: 14px;
+}
+.t-recu span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-recu .t-m {
+  font-size: 20px;
+  font-weight: 600;
+  color: var(--texte);
+  white-space: nowrap;
+}
+.t-recu-l {
+  margin: 0;
+}
+.t-recu-l .t-li {
+  justify-content: space-between;
+  min-height: 52px;
+}
+.t-recu-l dt {
+  font-size: 13px;
+  color: var(--texte2);
+}
+.t-recu-l dd {
+  margin: 0;
+  font-size: 14px;
+  font-weight: 600;
+  text-align: right;
+  overflow-wrap: anywhere;
+}
+/* Numéro Mobile Money : l'indicatif (drapeau, +243) puis le numéro. */
+.t-tel {
+  gap: 12px;
+}
+.t-ind {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  flex: none;
+  height: 100%;
+  padding-right: 12px;
+  border-right: 1px solid var(--trait);
+  font: inherit;
+  font-weight: 600;
+  color: var(--texte);
+  background: none;
+}
+.t-ind .t-ic {
+  width: 12px;
+  height: 12px;
+  transform: rotate(90deg);
+}
+.t-ind svg:first-child {
+  width: 24px;
+  height: 16px;
+  border-radius: 3px;
+}
+.t-erreur {
+  color: #a3321f;
+}
+.sombre .t-erreur {
+  color: #ffb4a8;
+}
+/* Attente de la confirmation sur le téléphone. */
+.t-rond-att,
+.t-rond-ko {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  margin-top: 40px;
+}
+.t-rond-att {
+  background: var(--ambre-c);
+  color: var(--texte);
+}
+.t-rond-ko {
+  background: var(--corail-c);
+  color: var(--texte);
+}
+.t-rond-att .t-ic,
+.t-rond-ko .t-ic {
+  width: 40px;
+  height: 40px;
+}
+.t-attente {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 16px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.t-sp {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2.5px solid var(--trait);
+  border-top-color: var(--texte);
+  flex: none;
+  animation: t-tourne 0.9s linear infinite;
+}
+@keyframes t-tourne {
+  to {
+    transform: rotate(360deg);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-sp {
+    animation: none;
+    border-top-color: currentColor;
+    opacity: 0.6;
+  }
+}
+.t-rien .t-li {
+  min-height: 52px;
+  font-size: 13px;
+  line-height: 1.45;
+  padding-block: 10px;
+}
+/* Formules. */
+.t-formules {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.t-formules .t-form {
+  cursor: pointer;
+}
+.t-formules .t-form:has(:focus-visible) {
+  outline: 2px solid var(--texte);
+  outline-offset: 2px;
+}
+.t-form .t-rec {
+  align-self: flex-start;
+  font-size: 11px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  background: var(--g-accent);
+  color: var(--sapin);
+}
+.t-form .t-h .t-prix small {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--texte2);
+}
+.t-factures .t-li > .t-ic:last-child {
+  width: 18px;
+  height: 18px;
+}
+/* Paramètres : suppression du compte. */
+.t-danger-c {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px;
+  border-radius: 20px;
+  background: var(--corail-c);
+}
+.t-danger-c b {
+  font-size: 14px;
+}
+.t-danger-c p {
+  font-size: 12.5px;
+  line-height: 1.5;
+}
+.t-bt.t-dg {
+  background: #c2410c;
+  color: #fff;
+}
+.t-bt.t-dg[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: not-allowed;
+}
+.t-li.t-li-nu {
+  padding: 0;
+  border: 0;
+}
+/* Interrupteurs groupés en segment (canal des notifications). */
+.t-seg-r > label {
+  display: block;
+  cursor: pointer;
+}
+.t-seg-r > label > span {
+  display: block;
+  text-align: center;
+  padding: 10px 4px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--texte2);
+  white-space: nowrap;
+}
+.t-seg-r > label:has(:checked) > span {
+  background: var(--plein);
+  color: var(--texte);
+  font-weight: 600;
+  box-shadow: var(--verre);
+}
+.t-seg-r > label:has(:focus-visible) > span {
+  box-shadow: 0 0 0 2px var(--texte);
+}
+/* Confidentialité : qui a consulté mon profil. */
+.t-consults {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.t-consult {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  padding: 10px 14px;
+  border-radius: 20px;
+}
+.t-consult .t-lg-e {
+  width: 36px;
+  height: 36px;
+  font-size: 11px;
+}
+.t-consult .t-t {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.t-consult .t-t b {
+  font-size: 13px;
+}
+.t-consult .t-t span {
+  font-size: 11.5px;
+  color: var(--texte2);
+}
+.t-liens-bas {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px 18px;
+  font-size: 13px;
+  font-weight: 600;
+}
+.t-liens-bas a {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+/* Aide : questions dépliables et contact par e-mail. */
+.t-faq details {
+  display: block;
+  padding: 0;
+  min-height: 0;
+}
+.t-faq summary {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 56px;
+  padding: 10px 16px;
+  cursor: pointer;
+  list-style: none;
+  font-size: 14px;
+}
+.t-faq summary::-webkit-details-marker {
+  display: none;
+}
+.t-faq summary b {
+  flex: 1;
+  font-weight: 600;
+}
+.t-faq summary .t-ic {
+  flex: none;
+  color: var(--texte2);
+  transition: transform 0.2s;
+}
+.t-faq details[open] summary .t-ic {
+  transform: rotate(90deg);
+}
+.t-faq details p {
+  padding: 0 16px 14px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--texte2);
+  white-space: pre-line;
+}
+.t-contact {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 14px 16px;
+}
+.t-contact b {
+  font-size: 14px;
+}
+.t-contact span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-contact .t-bt {
+  align-self: flex-start;
+  margin-top: 4px;
+}
+/* Conseils d'entretien, dépliés sur place. */
+.t-conseil summary {
+  list-style: none;
+  cursor: pointer;
+}
+.t-conseil summary::-webkit-details-marker {
+  display: none;
+}
+.t-conseil[open] summary > .t-ic:last-child {
+  transform: rotate(90deg);
+}
+.t-conseil p {
+  padding: 0 16px 12px;
+  font-size: 13px;
+  line-height: 1.55;
+  color: var(--texte2);
+  white-space: pre-line;
+}
+.t-conseil + .t-conseil {
+  border-top: 1px solid var(--trait);
+}
+.t-conseil > .t-li {
+  border-top: 0;
+}
+/* Mode testeur. */
+.t-testeur > div p {
+  margin-top: 2px;
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-faq summary .t-ic,
+  .t-conseil summary > .t-ic {
+    transition: none;
+  }
+}
+.t-conf > p.t-attente {
+  max-width: none;
+  color: var(--texte);
+}
+.t-rien .t-t span {
+  white-space: normal;
+  overflow: visible;
+  color: var(--texte);
+  font-size: 13px;
+}
+.t-rien .t-li > .t-ic:first-child {
+  flex: none;
+  color: #3da14f;
+}
+.t-conf .t-bt.t-pl {
+  flex: none;
+  width: 100%;
+  height: 54px;
+}
+/* An e-mail address inside a sentence (the only contact of Jumanly). */
+.t-mail {
+  font-weight: 600;
+  color: var(--texte);
+  text-decoration: underline;
+  text-underline-offset: 2px;
+  overflow-wrap: anywhere;
+}
+/* Banners of /admin/contenus in the dark mode: the warning keeps a readable text. */
+.sombre [data-banner]:not(.bg-lime) {
+  background: var(--ambre-c);
+  color: var(--texte);
+}
+/* A full-width button stacked in a column keeps its height (flex: 1 would squash it). */
+.t-flux > .t-bt.t-pl,
+.t-flux > form > .t-bt.t-pl {
+  flex: none;
+  width: 100%;
+}
+.sombre .t-gar.t-err {
+  color: #ffb4a8;
 }

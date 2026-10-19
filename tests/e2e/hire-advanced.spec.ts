@@ -36,10 +36,12 @@ test("recherche de talents et mise en relation acceptée", async ({
     .replace(/[^a-z]/g, "")
     .slice(0, 8)}`;
   await signUpTalent(page, testEmail("visible"), city);
-  await page.goto("/app/parametres?onglet=confidentialite");
-  await page.getByLabel("Visible des recruteurs").check();
+  // Lot 7: « Qui voit mon profil » in Paramètres › Confidentialité, a sheet of three choices.
+  await page.goto("/app/parametres/confidentialite");
+  await page.getByRole("button", { name: /Qui voit mon profil/ }).click();
+  await page.getByRole("radio", { name: /Visible des recruteurs/ }).check({ force: true });
   await page.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(page.getByText("Modifications enregistrées.")).toBeVisible();
+  await expect(page.getByText("C'est enregistré.")).toBeVisible();
 
   const recruiter = await newPage(browser, baseURL, isMobile);
   await logIn(recruiter, group.owner);

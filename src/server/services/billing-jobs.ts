@@ -129,7 +129,8 @@ export async function runBillingJobs(
         payload: { plan: row.plan.name, date: formatDate(row.currentPeriodEnd) },
         href: "/app/abonnement",
       });
-      for (const user of recipients) {
+      // Reminders follow « Recevoir aussi par e-mail » (Paramètres › Notifications).
+      for (const user of recipients.filter((person) => person.notificationEmails !== false)) {
         await sendRenewalReminder(user, step, {
           plan: row.plan.name,
           date: row.currentPeriodEnd,

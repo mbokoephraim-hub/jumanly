@@ -157,7 +157,7 @@ export const stepLinks: Record<Step, string> = {
   profile: "/app/profil",
   cv: "/app/career/cv",
   skills: "/formations",
-  interview: "/app/career",
+  interview: "/app/career/entretiens",
   jobs: "/app/jobs",
   network: "/app/profil",
   role: "/app/career/diagnostic",

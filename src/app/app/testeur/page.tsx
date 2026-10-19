@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AppPageHeader } from "@/components/app/page-header";
-import { pillClass } from "@/components/career/kit";
-import { Alert } from "@/components/ui";
-import { cx } from "@/lib/cx";
+import { FlowHead } from "@/components/talent/flow-head";
+import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
+import { Notice } from "@/components/talent/notice";
 import { formatUsd } from "@/lib/money";
 import {
   chooseTesterPlan,
@@ -24,11 +24,19 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 type Plan = Awaited<ReturnType<typeof testerPlans>>[number];
+type Labels = {
+  current: string;
+  choose: string;
+  reset: string;
+  free: string;
+  onQuote: string;
+  price: (cents: number) => string;
+};
 
 /**
- * « Mode testeur » (docs/decisions/2026-10-16-compte-passe-partout.md): the accounts listed in
- * TESTER_EMAILS switch their talent plan and their test organization's plan without paying.
- * Anyone else gets a 404.
+ * « Mode testeur » (docs/decisions/2026-10-16-compte-passe-partout.md), redrawn soberly with the
+ * talent components (lot 7): the accounts listed in TESTER_EMAILS switch their talent plan and
+ * their test organization's plan without paying. Anyone else gets a 404 and never sees the link.
  */
 export default async function TesterPage({ searchParams }: PageProps<"/app/testeur">) {
   const params = await searchParams;
@@ -56,95 +64,86 @@ export default async function TesterPage({ searchParams }: PageProps<"/app/teste
   };
 
   return (
-    <div className="jm-page flex flex-col gap-5 lg:gap-6">
-      <AppPageHeader
-        eyebrow={t("tester.eyebrow")}
-        title={t("tester.title")}
-        subtitle={t("tester.subtitle")}
-      />
-      {savedPlan && <Alert tone="success" title={t("tester.saved", { plan: savedPlan.name })} />}
+    <div className="t-flux">
+      <FlowHead back="/app/compte" backLabel={t("tester.back")} title={t("tester.title")} />
+      {savedPlan && <Notice tone="ok">{t("tester.saved", { plan: savedPlan.name })}</Notice>}
       {(params.cree === "company" || params.cree === "partner") && (
-        <Alert tone="success" title={t("tester.created")} />
+        <Notice tone="ok">{t("tester.created")}</Notice>
       )}
-      {params.erreur && <Alert tone="error" title={t("tester.error")} />}
-      <Alert tone="info" title={t("tester.notice")} />
+      {params.erreur && <Notice tone="err">{t("tester.error")}</Notice>}
+      <p className="t-gar">
+        <TalentIcon name="cadenas" size="s" />
+        <span>{t("tester.notice")}</span>
+      </p>
 
       <Section id="talent" title={t("tester.talent.title")} text={t("tester.talent.text")}>
-        <PlanGrid
-          plans={of("talent")}
-          current={talentPlan?.planCode}
-          side="talent"
-          labels={labels}
-        />
-        <form action={openPersonalSpace}>
-          <button type="submit" className={pillClass("outline", "sm")}>
-            {t("tester.talent.open")}
-          </button>
-        </form>
+        <Plans plans={of("talent")} current={talentPlan?.planCode} side="talent" labels={labels} />
+        <Action action={openPersonalSpace} icon="profil" label={t("tester.talent.open")} />
       </Section>
 
       <Section id="organization" title={t("tester.org.title")} text={t("tester.org.text")}>
         {organization ? (
           <>
             {(["rh", "company"] as const).map((family) => (
-              <div key={family} className="flex flex-col gap-2">
-                <h3 className="text-sm font-semibold text-ardoise">
-                  {t(`tester.org.family.${family}`)}
-                </h3>
-                <PlanGrid
-                  plans={of(family)}
-                  current={orgPlan?.planCode}
-                  side="organization"
-                  labels={labels}
-                />
-              </div>
+              <Plans
+                key={family}
+                title={t(`tester.org.family.${family}`)}
+                plans={of(family)}
+                current={orgPlan?.planCode}
+                side="organization"
+                labels={labels}
+              />
             ))}
-            <form action={openTesterSpace}>
-              <input type="hidden" name="kind" value="company" />
-              <button type="submit" className={pillClass("outline", "sm")}>
-                {t("tester.org.open", { name: organization.name })}
-              </button>
-            </form>
+            <Action
+              action={openTesterSpace}
+              kind="company"
+              icon="entreprise"
+              label={t("tester.org.open", { name: organization.name })}
+            />
           </>
         ) : (
-          <CreateSpace kind="company" text={t("tester.org.empty")} cta={t("tester.org.create")} />
+          <>
+            <p className="t-aide-c">{t("tester.org.empty")}</p>
+            <Action
+              action={createTesterSpace}
+              kind="company"
+              icon="plus"
+              label={t("tester.org.create")}
+            />
+          </>
         )}
       </Section>
 
       <Section id="partner" title={t("tester.partner.title")} text={t("tester.partner.text")}>
         {partner ? (
-          <form action={openTesterSpace}>
-            <input type="hidden" name="kind" value="partner" />
-            <button type="submit" className={pillClass("outline", "sm")}>
-              {t("tester.partner.open", { name: partner.name })}
-            </button>
-          </form>
+          <Action
+            action={openTesterSpace}
+            kind="partner"
+            icon="entreprise"
+            label={t("tester.partner.open", { name: partner.name })}
+          />
         ) : (
-          <CreateSpace kind="partner" cta={t("tester.partner.create")} />
+          <Action
+            action={createTesterSpace}
+            kind="partner"
+            icon="plus"
+            label={t("tester.partner.create")}
+          />
         )}
       </Section>
 
       <Section id="admin" title={t("tester.admin.title")} text={t("tester.admin.text")}>
         {isAdmin ? (
-          <Link href="/admin" className={pillClass("dark", "sm", "self-start")}>
+          <Link href="/admin" className="t-bt t-sec t-pl t-press">
             {t("tester.admin.open")}
           </Link>
         ) : (
-          <p className="text-sm text-ardoise">{t("tester.admin.missing")}</p>
+          <p className="t-aide-c">{t("tester.admin.missing")}</p>
         )}
       </Section>
     </div>
   );
 }
-
-type Labels = {
-  current: string;
-  choose: string;
-  reset: string;
-  free: string;
-  onQuote: string;
-  price: (cents: number) => string;
-};
 
 function Section({
   id,
@@ -155,93 +154,92 @@ function Section({
   id: string;
   title: string;
   text: string;
-  children: React.ReactNode;
+  children: ReactNode;
 }) {
   return (
-    <section
-      id={id}
-      aria-labelledby={`testeur-${id}`}
-      className="flex scroll-mt-24 flex-col gap-4 rounded-[24px] border border-sapin/8 bg-blanc p-5 lg:p-6"
-    >
-      <div className="flex flex-col gap-1">
-        <h2 id={`testeur-${id}`} className="text-lg font-semibold">
+    <section id={id} aria-labelledby={`testeur-${id}`} className="t-flux t-testeur">
+      <div>
+        <h2 id={`testeur-${id}`} className="t-h2s">
           {title}
         </h2>
-        <p className="text-sm text-ardoise">{text}</p>
+        <p className="t-aide-c">{text}</p>
       </div>
       {children}
     </section>
   );
 }
 
-function PlanGrid({
+function Plans({
+  title,
   plans,
   current,
   side,
   labels,
 }: {
+  title?: string;
   plans: Plan[];
   current: string | undefined;
   side: "talent" | "organization";
   labels: Labels;
 }) {
   return (
-    <ul className="grid grid-cols-1 gap-3 sm:grid-cols-2 xl:grid-cols-4">
-      {plans.map((plan) => {
-        const active = plan.code === current;
-        return (
-          <li
-            key={plan.code}
-            className={cx(
-              "flex flex-col gap-3 rounded-[18px] border p-4",
-              active ? "border-sapin bg-creme" : "border-sapin/8",
-            )}
-          >
-            <div className="flex flex-col gap-0.5">
-              <span className="font-semibold">{plan.name}</span>
-              <span className="text-xs text-ardoise">
-                {plan.priceCents === null
-                  ? labels.onQuote
-                  : plan.priceCents === 0
-                    ? labels.free
-                    : labels.price(plan.priceCents)}
-              </span>
-              {active && (
-                <span className="text-xs font-semibold text-feuille-fonce">{labels.current}</span>
-              )}
-            </div>
-            <form action={chooseTesterPlan} className="mt-auto">
-              <input type="hidden" name="plan" value={plan.code} />
-              <input type="hidden" name="side" value={side} />
-              <button
-                type="submit"
-                className={pillClass(active ? "outline" : "lime", "sm", "w-full justify-center")}
-              >
-                {active ? labels.reset : labels.choose}
-              </button>
-            </form>
-          </li>
-        );
-      })}
-    </ul>
+    <>
+      {title && <span className="t-ck-t">{title}</span>}
+      <ul aria-label={title} className="t-verre t-liste t-lignes">
+        {plans.map((plan) => {
+          const active = plan.code === current;
+          return (
+            <li key={plan.code}>
+              <form action={chooseTesterPlan}>
+                <input type="hidden" name="plan" value={plan.code} />
+                <input type="hidden" name="side" value={side} />
+                <button
+                  type="submit"
+                  className="t-li t-press"
+                  aria-label={`${plan.name} · ${active ? labels.reset : labels.choose}`}
+                >
+                  <span className="t-t">
+                    <b>{plan.name}</b>
+                    <span>
+                      {plan.priceCents === null
+                        ? labels.onQuote
+                        : plan.priceCents === 0
+                          ? labels.free
+                          : labels.price(plan.priceCents)}
+                    </span>
+                  </span>
+                  {active ? (
+                    <span className="t-st t-pre">{labels.current}</span>
+                  ) : (
+                    <span className="t-v">{labels.choose}</span>
+                  )}
+                </button>
+              </form>
+            </li>
+          );
+        })}
+      </ul>
+    </>
   );
 }
 
-function CreateSpace({
+function Action({
+  action,
   kind,
-  text,
-  cta,
+  icon,
+  label,
 }: {
-  kind: "company" | "partner";
-  text?: string;
-  cta: string;
+  action: (formData: FormData) => Promise<void>;
+  kind?: "company" | "partner";
+  icon: TalentIconName;
+  label: string;
 }) {
   return (
-    <form action={createTesterSpace} className="flex flex-col items-start gap-2">
-      {text && <p className="text-sm">{text}</p>}
-      <input type="hidden" name="kind" value={kind} />
-      <button type="submit" className={pillClass("lime", "sm")}>
-        {cta}
+    <form action={action}>
+      {kind && <input type="hidden" name="kind" value={kind} />}
+      <button type="submit" className="t-bt t-sec t-pl t-press">
+        <TalentIcon name={icon} size="s" />
+        {label}
       </button>
     </form>
   );

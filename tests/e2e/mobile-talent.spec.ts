@@ -42,9 +42,9 @@ test("la gamme mobile (boutons, cartes, états) est présentée dans la biblioth
 });
 
 // Refonte mobile (docs/refonte-mobile, brief § 2.1): five destinations with Orbi in the middle,
-// the bottom bar on a phone, the sidebar on a computer (docs/refonte-web, W0); Mon espace (screen
-// 17) opens from Compte; Suivi.
-test("navigation Talent : cinq destinations, Orbi au milieu, Mon espace et Suivi", async ({
+// the bottom bar on a phone, the sidebar on a computer (docs/refonte-web, W0); Compte and its Aide;
+// Suivi.
+test("navigation Talent : cinq destinations, Orbi au milieu, Compte, Aide et Suivi", async ({
   page,
   isMobile,
 }) => {
@@ -67,22 +67,25 @@ test("navigation Talent : cinq destinations, Orbi au milieu, Mon espace et Suivi
   );
   await page.getByRole("link", { name: /^Compte de / }).click();
   await expect(page).toHaveURL(/\/app\/compte$/);
-  await page.goto("/app/espace");
-  await expect(page.getByRole("heading", { level: 1, name: "Mon espace" })).toBeVisible();
-  for (const group of ["Profil professionnel", "Outils carrière", "Acquis", "Mon compte"])
-    await expect(page.getByRole("region", { name: group })).toBeVisible();
-  await expect(page.getByRole("link", { name: /^Tableau de bord/ }).first()).toHaveAttribute(
+  // Lot 7: « Mon espace » and the dashboard of the old design are gone; Compte holds the account,
+  // its Aide is in the space, by e-mail only.
+  await expect(page.getByRole("main").getByRole("link", { name: /^Aide/ })).toHaveAttribute(
     "href",
-    "/app/tableau-de-bord",
+    "/app/compte/aide",
   );
-  // Mon espace has no bottom bar on a phone; the sidebar stays on a computer.
+  await page.goto("/app/espace");
+  await expect(page).toHaveURL(/\/app\/compte$/);
+  await page.goto("/app/compte/aide");
+  await expect(page.getByRole("heading", { level: 1, name: "Aide" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Écrire un e-mail" })).toHaveAttribute(
+    "href",
+    "mailto:assistant@jumanly.io",
+  );
+  await expect(page.locator('a[href^="tel:"]')).toHaveCount(0);
+  // Aide has no bottom bar on a phone; the sidebar stays on a computer.
   if (isMobile)
     await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
   await expectAccessible(page);
-
-  // The dashboard keeps its content at its own address.
-  await page.goto("/app/tableau-de-bord");
-  await expect(page.getByRole("heading", { level: 1 }).filter({ visible: true })).toBeVisible();
 
   // Suivi (planche talent-2 § 2): in progress or finished, grouped by situation.
   await page.goto("/app/suivi");

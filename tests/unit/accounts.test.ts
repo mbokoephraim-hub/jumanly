@@ -145,5 +145,28 @@ describe("paiement factice", () => {
   });
   it("masque le numéro", () => {
     expect(maskNumber("+243 990 001 234")).toBe("••••••1234");
+    // Lot 7: with its dial code, the number is shown « +243 81 ••• 42 », never in full.
+    expect(maskNumber("+243812345642", "+243")).toBe("+243 81 ••• 42");
+    expect(maskNumber("+24312", "+243")).toBe("••••••4312");
+  });
+  it("n'utilise jamais le paiement simulé en production", async () => {
+    const env = process.env.APP_ENV;
+    const global = globalThis as unknown as { paymentProvider?: unknown };
+    try {
+      for (const [value, fake] of [
+        ["production", false],
+        ["staging", false],
+        ["preview", true],
+      ] as const) {
+        process.env.APP_ENV = value;
+        delete global.paymentProvider;
+        const { paymentProvider } = await import("@/server/payments");
+        expect(paymentProvider() instanceof FakePaymentProvider, value).toBe(fake);
+      }
+    } finally {
+      if (env === undefined) delete process.env.APP_ENV;
+      else process.env.APP_ENV = env;
+      delete global.paymentProvider;
+    }
   });
 });

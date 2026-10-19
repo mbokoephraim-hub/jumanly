@@ -3,6 +3,7 @@
  * run again; nothing a person chose is ever deleted.
  */
 import type { SeedClient } from "./client";
+import { dialCodes } from "./dial-codes";
 import {
   centralAfrica,
   isoCountries,
@@ -26,10 +27,11 @@ export async function seedPlaces(db: SeedClient) {
   for (const code of isoCountries) {
     const name = nameOverrides[code] ?? names.of(code) ?? code;
     const region = regionOf(code);
+    const dialCode = dialCodes[code] ?? null;
     await db.country.upsert({
       where: { code },
-      update: { name, region },
-      create: { code, name, region },
+      update: { name, region, dialCode },
+      create: { code, name, region, dialCode },
     });
   }
   for (const [countryCode, places] of Object.entries(localities)) {

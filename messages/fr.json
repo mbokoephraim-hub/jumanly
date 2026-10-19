@@ -2029,14 +2029,6 @@
         "label": "Quel métier visez-vous ?",
         "placeholder": "Ex. : Assistant comptable"
       },
-      "skills": {
-        "title": "Quelles sont vos principales compétences ?",
-        "label": "Compétences",
-        "placeholder": "Ajoutez une compétence puis appuyez sur Entrée",
-        "help": "Ajoutez-en au moins trois. Elles servent à vous proposer des offres et des formations adaptées.",
-        "suggestions": "Suggestions",
-        "remove": "Retirer {skill}"
-      },
       "cv": {
         "title": "Et votre CV ?",
         "import": {
@@ -2623,10 +2615,8 @@
       "profile": "Mon profil",
       "subscription": "Abonnement",
       "settings": "Paramètres",
-      "dashboard": "Tableau de bord",
       "search": "Recherche",
       "account": "Compte",
-      "space": "Mon espace",
       "orbiHistory": "Historique Orbi"
     },
     "offline": {
@@ -4238,6 +4228,465 @@
       "guarantee": "Vous pouvez effacer un échange ou tout l'historique."
     }
   },
+  "abonnement": {
+    "seo": "Abonnement",
+    "title": "Abonnement",
+    "back": "Retour",
+    "current": {
+      "label": "Votre formule",
+      "paid": "{plan} · {price} $/mois",
+      "free": "{plan} · gratuit",
+      "paidUntil": "Payée jusqu'au {date}",
+      "trialUntil": "Essai gratuit jusqu'au {date}",
+      "sponsoredUntil": "Offerte par {sponsor} jusqu'au {date}",
+      "sponsored": "Offerte par une institution partenaire",
+      "canceledUntil": "Active jusqu'au {date}, sans renouvellement",
+      "pastDue": "Échéance passée : accès gardé jusqu'au {date}",
+      "freeText": "Sans échéance ni paiement",
+      "scheduled": "Puis {plan} à partir du {date}",
+      "scheduledCancel": "Annuler ce changement"
+    },
+    "amount": "{amount} $",
+    "quotas": {
+      "label": "Ce que vous utilisez ce mois-ci"
+    },
+    "quota": {
+      "credits": "Crédits Orbi",
+      "text": "Entretiens écrits",
+      "voice": "Entretiens vocaux",
+      "left": "{left} sur {limit}",
+      "unlimited": "Illimités",
+      "none": "Pas dans cette formule",
+      "aria": "{name} : {left} restants sur {limit}",
+      "applications": "Candidatures",
+      "applicationsValue": "Illimitées, gratuites"
+    },
+    "change": {
+      "title": "Changer de formule"
+    },
+    "method": {
+      "title": "Moyen de paiement",
+      "mobileMoney": "{operator} · {number}",
+      "card": "Carte bancaire",
+      "other": "Réglé par l'équipe Jumanly",
+      "none": "Mobile Money ou carte"
+    },
+    "invoices": {
+      "title": "Factures",
+      "text": "{count, plural, =0 {Aucune pour l'instant} one {# · en PDF} other {# · en PDF}}"
+    },
+    "organization": {
+      "title": "Abonnement de {org}",
+      "text": "Dans l'espace de l'organisation"
+    },
+    "note": "Prépayé, sans renouvellement forcé. Un rappel 7 jours puis 3 jours avant la fin.",
+    "notice": {
+      "resiliation": "C'est noté : votre formule s'arrête à la fin de la période payée. Vos données restent.",
+      "reactivation": "C'est noté : votre formule continue.",
+      "changement": "Le changement de formule se fera à la fin de la période déjà payée.",
+      "renew": "{plan} se termine le {date}. Renouvelez-la pour garder vos crédits.",
+      "renewCta": "Renouveler",
+      "backToFree": "Vous êtes revenu à {freePlan}. Votre profil, vos CV et vos candidatures sont gardés.",
+      "licence": "{plan} vous est offert par {sponsor} jusqu'au {date}.",
+      "licencePending": "Votre licence {plan} offerte par {sponsor} commencera après votre formule actuelle.",
+      "consent": "Votre choix de partage est enregistré."
+    }
+  },
+  "formules": {
+    "seo": "Formules",
+    "title": "Formules",
+    "back": "Retour",
+    "close": "Fermer",
+    "period": {
+      "aria": "Période de paiement",
+      "month": "Mensuel",
+      "year": "Annuel"
+    },
+    "perMonth": "/mois",
+    "perYear": "/an",
+    "recommended": "Recommandé",
+    "yours": "Votre formule",
+    "recommendedYours": "Recommandé · votre formule",
+    "credits": "{count} crédits Orbi",
+    "creditsUnlimited": "Crédits Orbi illimités",
+    "interviews": "{text, plural, one {# entretien écrit} other {# entretiens écrits}}",
+    "interviewsVoice": "{voice, plural, one {# vocal} other {# vocaux}}",
+    "list": {
+      "aria": "Formules proposées"
+    },
+    "cta": {
+      "upgrade": "Passer à {plan}",
+      "renew": "Renouveler {plan}",
+      "downgrade": "Passer à {plan} le {date}",
+      "current": "C'est votre formule"
+    },
+    "downgrade": {
+      "note": "{plan} prendra le relais le {date}, à la fin de la période déjà payée."
+    },
+    "free": {
+      "cta": "Revenir à {plan} à la fin de la période",
+      "text": "Votre formule s'arrête le {date}. Vos données restent."
+    },
+    "resume": {
+      "text": "Votre formule s'arrête le {date}, sans renouvellement.",
+      "cta": "Garder ma formule"
+    },
+    "applyFree": "Postuler reste gratuit dans toutes les formules.",
+    "empty": "Aucune formule n'est proposée pour l'instant."
+  },
+  "paiement": {
+    "seo": "Paiement",
+    "title": "Paiement",
+    "back": "Retour",
+    "close": "Fermer",
+    "summary": "{plan} · 1 mois",
+    "period": "du {start} au {end}",
+    "credit": "Déjà déduit : {credit} pour les jours restants de {plan}",
+    "mm": "Mobile Money",
+    "methods": {
+      "aria": "Moyen de paiement"
+    },
+    "card": {
+      "title": "Carte bancaire",
+      "text": "Visa, Mastercard"
+    },
+    "note": "Vous validez sur votre téléphone avec votre code Mobile Money.",
+    "noteCard": "Vous validez sur la page sécurisée de votre banque.",
+    "pay": "Payer {total}",
+    "paying": "Envoi de la demande…",
+    "change": "Changer",
+    "number": {
+      "label": "Numéro Mobile Money",
+      "placeholder": "81 234 56 78",
+      "help": "Utilisé seulement pour ce paiement, jamais affiché."
+    },
+    "dial": {
+      "label": "Indicatif",
+      "title": "Indicatif",
+      "search": "Pays ou indicatif",
+      "none": "Aucun pays ne correspond.",
+      "close": "Fermer"
+    },
+    "error": {
+      "operatorRequired": "Choisissez votre service Mobile Money.",
+      "numberRequired": "Indiquez votre numéro Mobile Money.",
+      "numberInvalid": "Ce numéro semble incomplet. Vérifiez-le.",
+      "duplicate": "Une demande de paiement est déjà en cours. Validez-la sur votre téléphone ou attendez quelques minutes.",
+      "failed": "Le paiement n'a pas pu démarrer. Réessayez dans un instant."
+    },
+    "fake": "Paiement simulé : aucun argent n'est prélevé (environnement de test).",
+    "waiting": {
+      "title": "Validez sur votre téléphone",
+      "text": "{operator} vous envoie une demande de {amount} au {number}. Entrez votre code secret pour confirmer.",
+      "textCard": "Terminez le paiement de {amount} sur la page de votre banque.",
+      "status": "En attente de la confirmation · {minutes}:{seconds}",
+      "statusShort": "En attente de la confirmation",
+      "nothing": "Je n'ai rien reçu"
+    },
+    "nothing": {
+      "title": "Rien reçu sur votre téléphone ?",
+      "network": "Vérifiez que le téléphone est allumé et capte le réseau.",
+      "number": "Vérifiez le numéro : {number}.",
+      "wait": "La demande peut prendre une minute. Sans réponse, elle s'annule seule au bout de 15 minutes ; vous pourrez alors recommencer.",
+      "check": "Vérifier maintenant",
+      "never": "Jumanly ne vous demande jamais votre code secret.",
+      "reference": "Référence de la demande : {reference}"
+    },
+    "success": {
+      "title": "Paiement reçu",
+      "text": "{plan} est actif jusqu'au {date}. Votre reçu est dans Factures et dans votre boîte e-mail.",
+      "amount": "Montant",
+      "amountValue": "{amount} · {method}",
+      "reference": "Référence",
+      "cta": "Découvrir {plan}"
+    },
+    "failed": {
+      "title": "Paiement non abouti",
+      "text": "Le paiement n'a pas été confirmé. Vous pouvez réessayer ou choisir un autre moyen."
+    },
+    "expired": {
+      "title": "Demande expirée",
+      "text": "La demande n'a pas été validée à temps. Vous pouvez recommencer."
+    },
+    "retry": "Réessayer",
+    "keep": "Garder ma formule actuelle",
+    "debited": "Débité sans que la formule s'active ? Écrivez à {email} avec la référence {reference}.",
+    "trial": {
+      "text": "Le paiement en ligne n'est pas encore ouvert : {plan} démarre en essai gratuit de {days} jours.",
+      "cta": "Commencer l'essai de {plan}",
+      "title": "Essai de {plan} commencé",
+      "done": "{plan} est actif jusqu'au {date}, sans paiement."
+    },
+    "applyFree": "Postuler reste gratuit dans toutes les formules.",
+    "unavailable": "Cette formule ne peut pas être payée en ligne.",
+    "method": {
+      "card": "carte",
+      "bankTransfer": "virement",
+      "cash": "espèces"
+    }
+  },
+  "factures": {
+    "seo": "Factures",
+    "title": "Factures",
+    "back": "Retour",
+    "list": "Vos factures",
+    "item": "{plan} · {month}",
+    "line": "{date} · {method}",
+    "download": "Télécharger la facture {number} en PDF",
+    "empty": "Aucune facture pour l'instant. Chaque paiement en crée une, en PDF.",
+    "contact": "Une question sur un paiement : {email}",
+    "details": {
+      "title": "Informations de facturation",
+      "empty": "Votre nom et votre adresse sur les factures",
+      "text": "Elles figurent sur vos prochaines factures ; celles déjà émises ne changent pas.",
+      "name": "Nom",
+      "address": "Adresse (facultatif)",
+      "email": "E-mail de facturation (facultatif)",
+      "save": "Enregistrer",
+      "saved": "Informations de facturation enregistrées.",
+      "error": "Vérifiez les informations de facturation."
+    },
+    "close": "Fermer"
+  },
+  "parametres": {
+    "seo": "Paramètres",
+    "title": "Paramètres",
+    "back": "Retour",
+    "close": "Fermer",
+    "save": "Enregistrer",
+    "saved": "C'est enregistré.",
+    "error": "Ce changement n'a pas pu être enregistré. Réessayez.",
+    "group": {
+      "sections": "Réglages du compte",
+      "device": "Appareil et affichage",
+      "data": "Mes données"
+    },
+    "security": {
+      "title": "Sécurité",
+      "text": "Mot de passe, double vérification, appareils"
+    },
+    "privacy": {
+      "title": "Confidentialité",
+      "text": "Visibilité, consultations, Orbi"
+    },
+    "notifications": {
+      "title": "Notifications",
+      "text": "Par catégorie"
+    },
+    "dataSaver": {
+      "title": "Économiser les données",
+      "text": "Images allégées, vidéo 240p"
+    },
+    "motion": {
+      "title": "Réduire les animations",
+      "text": "Aucun mouvement dans l'application"
+    },
+    "appearance": {
+      "title": "Apparence",
+      "auto": "Auto",
+      "light": "Clair",
+      "dark": "Sombre",
+      "autoText": "Automatique, comme le téléphone",
+      "lightText": "Toujours clair",
+      "darkText": "Toujours sombre",
+      "saved": "Apparence enregistrée"
+    },
+    "language": {
+      "title": "Langue",
+      "value": "Français"
+    },
+    "intro": {
+      "title": "Revoir l'introduction",
+      "text": "Le générique d'accueil de Jumanly"
+    },
+    "export": {
+      "title": "Télécharger mes données",
+      "text": "Un fichier avec les données de votre compte"
+    },
+    "delete": {
+      "title": "Supprimer mon compte",
+      "sheet": "Supprimer mon compte ?",
+      "what": "Ce qui sera effacé",
+      "text": "Profil, CV, documents, messages et candidatures, après {days} jours. Reconnectez-vous avant pour changer d'avis. Un abonnement en cours n'est pas remboursé.",
+      "export": "Télécharger mes données d'abord",
+      "exportHint": "Recommandé",
+      "type": "Tapez SUPPRIMER pour confirmer",
+      "word": "SUPPRIMER",
+      "password": "Votre mot de passe",
+      "cancel": "Annuler",
+      "confirm": "Supprimer",
+      "owner": "Vous êtes propriétaire de {org}. Confiez l'organisation à un autre membre avant de supprimer votre compte.",
+      "errorConfirm": "Tapez SUPPRIMER, en majuscules, pour confirmer.",
+      "errorPassword": "Mot de passe incorrect."
+    }
+  },
+  "securite": {
+    "seo": "Sécurité",
+    "title": "Sécurité",
+    "back": "Retour",
+    "close": "Fermer",
+    "email": {
+      "title": "Connexion par e-mail"
+    },
+    "password": {
+      "title": "Mot de passe",
+      "text": "Modifier le mot de passe",
+      "none": "Aucun : connexion par Google, LinkedIn ou lien",
+      "create": "Créer un mot de passe",
+      "sheet": "Nouveau mot de passe",
+      "current": "Mot de passe actuel",
+      "new": "Nouveau mot de passe",
+      "confirm": "Confirmer le nouveau mot de passe",
+      "hint": "{min} caractères au moins",
+      "save": "Enregistrer",
+      "changed": "Mot de passe modifié. Les autres appareils sont déconnectés.",
+      "wrong": "Mot de passe incorrect."
+    },
+    "twoFactor": {
+      "title": "Double vérification",
+      "text": "Un code par e-mail à chaque connexion",
+      "sheet": "Confirmez avec votre mot de passe",
+      "enable": "Activer la double vérification",
+      "disable": "Désactiver la double vérification",
+      "changed": "Double vérification mise à jour.",
+      "required": "La double vérification est obligatoire pour ouvrir l'administration.",
+      "noPassword": "Créez d'abord un mot de passe pour activer la double vérification."
+    },
+    "linked": {
+      "title": "Comptes liés",
+      "none": "Aucun : e-mail et mot de passe",
+      "google": "Google",
+      "linkedin": "LinkedIn",
+      "apple": "Apple"
+    },
+    "devices": {
+      "title": "Appareils connectés",
+      "current": "Cet appareil",
+      "active": "Actif",
+      "since": "Connecté le {date}",
+      "unknown": "Appareil",
+      "logout": "Déconnecter",
+      "logoutAria": "Déconnecter {device}",
+      "logoutAll": "Déconnecter les autres appareils",
+      "loggedOut": "Appareil déconnecté."
+    }
+  },
+  "confidentialite": {
+    "seo": "Confidentialité",
+    "title": "Confidentialité",
+    "back": "Retour",
+    "close": "Fermer",
+    "visibility": {
+      "title": "Qui voit mon profil"
+    },
+    "orbi": {
+      "title": "Utiliser Orbi",
+      "text": "Seulement pour m'aider, jamais pour décider"
+    },
+    "matching": {
+      "title": "Offres suggérées",
+      "text": "Calculées sans nom, âge, photo ni origine"
+    },
+    "contacts": {
+      "title": "Demandes de mise en relation",
+      "text": "Un recruteur peut me proposer un échange"
+    },
+    "projects": {
+      "title": "Projets publics",
+      "public": "{count, plural, =0 {Page publique, sans projet} one {# projet sur votre page publique} other {# projets sur votre page publique}}",
+      "private": "Page des projets privée"
+    },
+    "views": {
+      "title": "Qui a consulté mon profil",
+      "application": "Après votre candidature · {date}",
+      "visible": "Profil visible · {date}",
+      "empty": "Aucune consultation pour l'instant."
+    },
+    "note": "Chaque consultation par un recruteur est enregistrée ici.",
+    "matchingLink": "Comment les offres sont suggérées",
+    "policy": "Politique de confidentialité"
+  },
+  "notifReglages": {
+    "seo": "Notifications",
+    "title": "Notifications",
+    "back": "Retour",
+    "list": "Catégories",
+    "applications": {
+      "title": "Candidatures",
+      "text": "Statut, entretiens, documents demandés"
+    },
+    "messages": {
+      "title": "Messages",
+      "text": "Recruteurs, connexions"
+    },
+    "learning": {
+      "title": "Formations",
+      "text": "Attestations, diagnostic"
+    },
+    "billing": {
+      "title": "Abonnement",
+      "text": "Rappels de fin de période"
+    },
+    "newsletter": {
+      "title": "Nouvelles de Jumanly",
+      "text": "Une lettre de temps en temps"
+    },
+    "channel": {
+      "title": "Recevoir aussi par",
+      "both": "Appli + e-mail",
+      "app": "Appli seule",
+      "note": "Les reçus de paiement et les e-mails de sécurité sont toujours envoyés."
+    }
+  },
+  "aide": {
+    "seo": "Aide",
+    "title": "Aide",
+    "back": "Retour",
+    "search": "Rechercher dans l'aide",
+    "searchSubmit": "Rechercher",
+    "themes": "Thèmes",
+    "count": "{count, plural, one {# article} other {# articles}}",
+    "theme": {
+      "talents": "Postuler et suivre",
+      "learn": "Formations et attestations",
+      "billing": "Paiement et formules",
+      "privacy": "Données et confidentialité",
+      "ai": "Orbi et les suggestions",
+      "partners": "Licences offertes",
+      "general": "Jumanly en général"
+    },
+    "results": "Résultats pour « {query} »",
+    "noResult": "Aucun article ne correspond. Écrivez-nous, nous répondons par e-mail.",
+    "contact": {
+      "title": "Écrire à l'équipe",
+      "text": "{email} · réponse par e-mail",
+      "cta": "Écrire un e-mail"
+    }
+  },
+  "recherche": {
+    "seo": "Rechercher",
+    "title": "Rechercher",
+    "back": "Retour",
+    "label": "Rechercher dans Jumanly",
+    "placeholder": "Une offre, une formation, une conversation",
+    "submit": "Rechercher",
+    "clear": "Effacer",
+    "prompt": "Tapez un métier, une compétence, une entreprise ou un nom.",
+    "tabs": "Que chercher",
+    "tab": {
+      "all": "Tout",
+      "offers": "Offres",
+      "courses": "Formations"
+    },
+    "group": {
+      "offers": "Offres",
+      "courses": "Formations",
+      "conversations": "Conversations"
+    },
+    "seeAll": "Tout voir ({count})",
+    "empty": "Rien ne correspond à « {query} ».",
+    "results": "{count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} »"
+  },
   "account": {
     "menu": {
       "aria": "Ouvrir le menu du compte",
@@ -4551,90 +5000,7 @@
   },
   "talent": {
     "dashboard": {
-      "title": "Accueil",
-      "seo": "Accueil · Jumanly",
       "date": "{date, date, full}",
-      "greeting": {
-        "text": "Bonjour {firstName}, prêt pour la suite ?",
-        "neutral": "Bonjour {firstName}, on continue ?",
-        "morning": "Bonjour {firstName}",
-        "evening": "Bonsoir {firstName}",
-        "first": "Bienvenue sur Jumanly, {firstName}"
-      },
-      "welcome": {
-        "matches": "{count, plural, one {# offre correspond à votre profil.} other {# offres correspondent à votre profil.}}",
-        "course": "Reprenez « {courseTitle} » : {count, plural, one {il vous reste # leçon.} other {il vous reste # leçons.}}",
-        "profile": "Votre profil est complet à {percent} %. Quelques minutes suffisent pour le compléter.",
-        "close": "Fermer le message du jour"
-      },
-      "nextStep": {
-        "title": "Votre prochaine étape",
-        "completeProfile": "Complétez votre profil pour être mieux vu des recruteurs.",
-        "importCv": "Importez ou créez votre CV en quelques minutes.",
-        "diagnostic": "Faites votre diagnostic de carrière (10 minutes).",
-        "resumeCourse": "Reprenez « {courseTitle} » là où vous l'avez laissée.",
-        "apply": "{count, plural, one {# offre compatible vous attend.} other {# offres compatibles vous attendent.}}",
-        "interview": "Préparez votre entretien avec {company} du {date, date, medium}.",
-        "cta": "Commencer",
-        "hint": {
-          "interview": "Simulation d'entretien, fiche entreprise et questions fréquentes, au même endroit.",
-          "course": "Chaque leçon terminée compte pour votre attestation.",
-          "apply": "Chaque offre explique pourquoi elle vous correspond. Candidater reste gratuit.",
-          "profile": "Un profil complet aide les recruteurs à vous comprendre."
-        }
-      },
-      "kpi": {
-        "courses": {
-          "text": "Formations en cours",
-          "hint": "{count, plural, =0 {Aucune nouvelle ce mois} one {# nouvelle ce mois} other {# nouvelles ce mois}}"
-        },
-        "hours": {
-          "text": "Heures d'apprentissage",
-          "value": "{hours, number} h",
-          "hint": "contre {hours, number} h le mois dernier"
-        },
-        "applications": {
-          "text": "Candidatures envoyées",
-          "hint": "{count, plural, =0 {Aucun entretien planifié} one {# entretien planifié} other {# entretiens planifiés}}"
-        },
-        "profileStrength": {
-          "text": "Force du profil",
-          "value": "{percent} %",
-          "hint": "Prochaine action : {action}"
-        },
-        "delta": {
-          "up": "+{value}",
-          "points": "+{value} pts"
-        }
-      },
-      "journey": {
-        "title": "Votre parcours",
-        "subtitle": "Se former, enrichir son profil, candidater, être recruté.",
-        "next": "Votre prochaine étape : {step}",
-        "go": "Y aller",
-        "learn": {
-          "text": "Se former",
-          "status": "{count, plural, =0 {Aucune formation active} one {# formation active} other {# formations actives}}"
-        },
-        "profile": {
-          "text": "Enrichir son profil",
-          "status": "Profil complété à {percent} %"
-        },
-        "apply": {
-          "text": "Candidater",
-          "status": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}}"
-        },
-        "hired": {
-          "text": "Être recruté",
-          "status": "Objectif : {goal}"
-        }
-      },
-      "learningTime": {
-        "title": "Temps d'apprentissage",
-        "subtitle": "8 dernières semaines",
-        "weekLabel": "S{week}",
-        "aria": "Graphique du temps d'apprentissage par semaine"
-      },
       "ai": {
         "title": "Jumanly Intelligence",
         "matches": {
@@ -4642,160 +5008,12 @@
           "none": "Pas encore d'offre très compatible. Complétez vos compétences pour affiner les suggestions."
         },
         "why": "Pourquoi ?",
-        "reason": "{criteria} correspondent à ce que demande la première offre.",
-        "score": "{score} %",
-        "cta": "Voir les offres",
-        "dismiss": "Ignorer"
+        "cta": "Voir les offres"
       },
       "continue": {
-        "title": "Continuer à apprendre",
-        "seeAll": "Tout voir",
         "progress": "Progression",
         "lessons": "{done}/{total} leçons",
-        "resume": "Reprendre",
-        "empty": {
-          "text": "Vous n'avez pas encore commencé de formation.",
-          "cta": "Explorer le catalogue"
-        }
-      },
-      "applications": {
-        "title": "Candidatures en cours",
-        "seeAll": "Toutes mes candidatures",
-        "empty": {
-          "text": "Aucune candidature en cours. Les candidatures sont toujours gratuites.",
-          "cta": "Trouver une offre"
-        }
-      },
-      "upcoming": {
-        "title": "À venir",
-        "interview": {
-          "text": "Entretien · {company}",
-          "detail": "{time} · {mode} · {interviewer}"
-        },
-        "quiz": {
-          "text": "Quiz · {courseTitle}",
-          "detail": "À terminer avant le {date, date, medium}"
-        },
-        "document": "Document à déposer · {documentName}",
-        "empty": "Rien de prévu pour l'instant."
-      },
-      "quotas": {
-        "title": "Mes quotas",
-        "renewal": "Renouvellement le {date, date, long}",
-        "aiCredits": "Crédits IA",
-        "interviewText": "Simulations d'entretien écrites",
-        "interviewVoice": "Simulations d'entretien vocales",
-        "usage": "{used} sur {quota} utilisés",
-        "unlimited": "Illimité",
-        "notIncluded": "Non inclus dans votre forfait",
-        "seePlans": "Voir les forfaits"
-      },
-      "freeReminder": "Votre forfait Free vous permet de candidater sans limite et d'être recruté au même titre que tout le monde.",
-      "sponsoredBanner": "Votre accès {plan} est offert par {sponsorName} jusqu'au {date, date, long}.",
-      "pastDueBanner": {
-        "text": "Votre paiement est en attente. Votre forfait {plan} reste actif jusqu'au {date, date, long}.",
-        "cta": "Régler maintenant"
-      }
-    },
-    "forMe": {
-      "seo": "Pour moi · Jumanly",
-      "goal": {
-        "eyebrow": "Mon objectif",
-        "none": "Choisissez votre objectif",
-        "edit": "Modifier mon objectif",
-        "choose": "Choisir mon objectif"
-      },
-      "stats": {
-        "applications": "{count, plural, one {candidature} other {candidatures}}",
-        "interviews": "{count, plural, one {entretien} other {entretiens}}",
-        "courses": "{count, plural, one {formation en cours} other {formations en cours}}",
-        "certificates": "{count, plural, one {attestation} other {attestations}}",
-        "skills": "{count, plural, one {compétence à renforcer} other {compétences à renforcer}}",
-        "profile": "profil",
-        "percent": "{percent} %"
-      },
-      "jobs": {
-        "title": {
-          "job": "Opportunités pour vous",
-          "skills": "Offres liées à vos compétences",
-          "career": "Postes pour votre évolution"
-        },
-        "all": "Voir toutes les offres",
-        "general": "Sélection générale, non personnalisée.",
-        "complete": "Personnaliser",
-        "empty": "Aucune offre ouverte pour le moment."
-      },
-      "courses": {
-        "title": {
-          "job": "Formations recommandées",
-          "skills": "Formations recommandées",
-          "career": "Formations de spécialisation"
-        },
-        "explore": "Explorer",
-        "resume": "Reprendre",
-        "discover": "Découvrir",
-        "locked": "Non incluse dans votre formule",
-        "why": "Pourquoi ? Vos offres demandent : {skills}.",
-        "progress": "Progression : {percent} %"
-      },
-      "resume": {
-        "eyebrow": "Reprendre ma formation",
-        "left": "{count, plural, =0 {Toutes les leçons sont faites} one {# leçon restante} other {# leçons restantes}}",
-        "lesson": "Prochaine leçon : {lesson}",
-        "cta": "Reprendre"
-      },
-      "tools": {
-        "title": "Préparez votre candidature",
-        "locked": "Non inclus dans votre formule",
-        "cv": "Mon CV",
-        "cvLine": "Créer ou améliorer",
-        "profile": "Mon profil",
-        "profileLine": "Le rendre visible",
-        "interview": "Entretien",
-        "interviewLine": "S'entraîner",
-        "documents": "Documents",
-        "documentsLine": "Lettres et attestations"
-      },
-      "position": {
-        "title": "Me positionner",
-        "diagnostic": "Diagnostic carrière",
-        "diagnosticLine": "Faire le point sur votre parcours",
-        "linkedin": "Optimisation LinkedIn",
-        "linkedinLine": "Titre, résumé, compétences",
-        "portfolio": "Portfolio",
-        "portfolioLine": "Montrer vos réalisations"
-      },
-      "skills": {
-        "title": "Compétences à renforcer",
-        "search": "Chercher une formation en {name}",
-        "why": "Pourquoi ces compétences ?",
-        "whyText": "Elles sont demandées par les offres que vous avez enregistrées ou auxquelles vous avez postulé, et ne figurent pas encore sur votre profil.",
-        "offers": "{name} : {count, plural, one {demandée par # offre} other {demandée par # offres}}"
-      },
-      "progress": {
-        "title": "Progression et certificats",
-        "all": "Mes acquis",
-        "certificate": "Attestation · {title}",
-        "issued": "Obtenue le {date, date, long}",
-        "courses": "{inProgress, plural, one {# formation en cours} other {# formations en cours}}, {done, plural, one {# terminée} other {# terminées}}",
-        "coursesLine": "Voir mes formations"
-      },
-      "actions": {
-        "title": {
-          "job": "Mes prochaines actions",
-          "skills": "Mes prochaines actions",
-          "career": "Prochaines étapes"
-        },
-        "interview": "Confirmer votre entretien",
-        "interviewLine": "{company} · {date, date, long}",
-        "document": "Envoyer un document",
-        "draft": "Terminer votre candidature",
-        "draftLine": "{job} · {company} · brouillon enregistré",
-        "message": "Répondre au recruteur",
-        "messageLine": "Nouveau message",
-        "course": "Reprendre votre formation",
-        "profile": "Compléter votre profil",
-        "profileLine": "Profil complet à {percent} %"
+        "resume": "Reprendre"
       }
     },
     "suivi": {
@@ -4930,66 +5148,6 @@
           "message": "Un mot pour le recruteur (facultatif)",
           "send": "Envoyer mes propositions"
         }
-      }
-    },
-    "espace": {
-      "seo": "Mon espace · Jumanly",
-      "title": "Mon espace",
-      "back": "Retour",
-      "completeness": "Profil complété à {percent} %",
-      "complete": "Compléter",
-      "missing": "Il manque : {sections}.",
-      "spaces": "Changer d'espace",
-      "tiles": {
-        "dashboard": "Tableau de bord",
-        "dashboardLine": "Mon activité",
-        "subscription": "Abonnement",
-        "subscriptionLine": "Formule {plan}"
-      },
-      "groups": {
-        "profile": "Profil professionnel",
-        "tools": "Outils carrière",
-        "acquired": "Acquis",
-        "account": "Mon compte"
-      },
-      "rows": {
-        "edit": "Modifier mes informations",
-        "editLine": "Titre, résumé, coordonnées",
-        "skills": "Mes compétences",
-        "skillsLine": "{count, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}}",
-        "portfolio": "Mon portfolio",
-        "portfolioLine": "Vos réalisations",
-        "visibility": "Visibilité auprès des recruteurs",
-        "visibilityLine": "Qui peut voir mon profil"
-      },
-      "tools": {
-        "builder": "CV Builder",
-        "builderLine": "Créer un CV",
-        "cvs": "Mes CV",
-        "cvsLine": "{count, plural, =0 {Aucun CV} one {# CV} other {# CV}}",
-        "documents": "Lettres et documents",
-        "documentsLine": "Modèles et pièces",
-        "linkedin": "Optimisation LinkedIn",
-        "linkedinLine": "Titre, résumé",
-        "interviews": "Simulations d'entretien",
-        "interviewsLine": "À l'écrit ou à l'oral",
-        "career": "Tous les outils Career",
-        "careerLine": "Diagnostic, plan, conseils",
-        "locked": "Outil non inclus dans votre formule"
-      },
-      "acquired": {
-        "certificates": "Certificats et attestations",
-        "certificatesLine": "{count, plural, =0 {Aucune attestation} one {# attestation} other {# attestations}}",
-        "evaluations": "Compétences évaluées",
-        "evaluationsLine": "Résultats de vos évaluations"
-      },
-      "account": {
-        "billing": "Abonnement et facturation",
-        "notifications": "Notifications",
-        "settings": "Paramètres et confidentialité",
-        "matching": "Comment fonctionne le matching",
-        "license": "Activer un code de licence",
-        "help": "Assistance"
       }
     },
     "profile": {
@@ -6652,151 +6810,6 @@
     }
   },
   "career": {
-    "home": {
-      "eyebrow": "Career",
-      "title": "Votre identité professionnelle",
-      "subtitle": "Diagnostic, CV, documents, entretiens : tout ce qui prépare votre candidature.",
-      "diagnostic": {
-        "title": "Diagnostic de carrière",
-        "desc": "Faites le point sur vos atouts et vos priorités.",
-        "cta": {
-          "start": "Commencer le diagnostic",
-          "view": "Voir mon diagnostic"
-        },
-        "lastDone": "Dernier diagnostic : {date, date, medium}",
-        "none": "Pas encore de diagnostic",
-        "descV2": "Un bilan en 6 dimensions : clarté du projet, compétences, expérience, outils de candidature, entretiens et réseau. Chaque note est expliquée."
-      },
-      "cv": {
-        "title": "Mon CV",
-        "desc": "Éditez votre CV par sections et exportez-le en PDF.",
-        "cta": "Ouvrir mon CV",
-        "score": "Score du CV : {score}/100",
-        "none": "Pas encore de CV",
-        "descV2": "Éditez votre CV par sections, choisissez un modèle et exportez-le en PDF. Le score vous dit quoi améliorer en premier.",
-        "chip": {
-          "templates": "Modèles",
-          "pdf": "Export PDF",
-          "score": "Score expliqué"
-        }
-      },
-      "documents": {
-        "title": "Lettres et documents",
-        "desc": "Lettres de motivation, biographie, correction de textes.",
-        "count": "{count, plural, =0 {Aucun document} one {# document} other {# documents}}"
-      },
-      "linkedin": {
-        "title": "Préparation LinkedIn",
-        "desc": "Un titre, un résumé et des compétences prêts à copier.",
-        "last": "Propositions du {date, date, medium}",
-        "none": "Aucune proposition pour l'instant"
-      },
-      "interviews": {
-        "title": "Simulations d'entretien",
-        "desc": "Entraînez-vous à l'écrit puis à l'oral, avec un retour détaillé.",
-        "cta": "S'entraîner",
-        "question": "« Présentez-vous en deux minutes. »"
-      },
-      "plan": {
-        "title": "Plan de progression",
-        "desc": "Vos objectifs, vos étapes et les formations qui vous font avancer.",
-        "cta": "Ouvrir mon plan",
-        "steps": "{done}/{total} étapes",
-        "none": "Pas encore de plan",
-        "fromDiagnostic": "Créé à partir de votre diagnostic",
-        "create": "Créer mon plan"
-      },
-      "portfolio": {
-        "title": "Portfolio",
-        "desc": "Montrez vos projets sur une page à partager.",
-        "count": "{count, plural, =0 {Aucun projet} one {# projet} other {# projets}}",
-        "public": "page publique"
-      },
-      "seo": "Career · Jumanly",
-      "later": "Bientôt disponible",
-      "tips": {
-        "title": "Conseils de préparation",
-        "desc": "Des fiches pratiques pour préparer chaque étape d'un recrutement.",
-        "soon": "Arrive prochainement",
-        "ready": "{count, plural, one {# fiche à lire} other {# fiches à lire}}"
-      },
-      "lock": "Disponible avec {plan}",
-      "quota": "{used}/{quota} ce mois",
-      "stats": {
-        "cv": "Score du CV",
-        "cvUnit": "/100",
-        "plan": "Plan",
-        "planUnit": "étapes",
-        "interviews": "Simulations",
-        "interviewsUnit": "ce mois",
-        "ratio": "{value}/{max}",
-        "none": "—"
-      },
-      "open": "Ouvrir",
-      "ai": {
-        "title": "Entraînez-vous à l'oral avant votre entretien avec {organization}",
-        "body": "Une simulation vous fait répondre aux questions les plus fréquentes, puis vous donne un retour détaillé.",
-        "why": "Votre entretien a lieu le {date, date, long}.",
-        "left": "{count, plural, =0 {Vous avez utilisé vos simulations orales ce mois.} one {Il vous reste # simulation orale ce mois.} other {Il vous reste # simulations orales ce mois.}}",
-        "start": "Démarrer la simulation"
-      },
-      "heroTitle": "Votre identité professionnelle, étape par étape",
-      "heroTitleAccent": "professionnelle",
-      "heroLead": "Faites le point, construisez un CV solide, préparez vos candidatures et entraînez-vous. Jumanly vous indique toujours la prochaine étape.",
-      "journey": {
-        "title": "Votre parcours Career",
-        "count": "{done, plural, =0 {Aucune étape terminée sur 4} one {# étape terminée sur 4} other {# étapes terminées sur 4}}",
-        "step": {
-          "point": "Faire le point",
-          "cv": "Construire mon CV",
-          "apply": "Préparer mes candidatures",
-          "train": "M'entraîner"
-        },
-        "state": {
-          "done": "Terminée",
-          "current": "En cours",
-          "next": "À venir"
-        },
-        "continue": "Continuer",
-        "finished": "Parcours terminé"
-      },
-      "float": {
-        "cv": "Score du CV",
-        "cvSub": "{score}/100 · {band}",
-        "diagnostic": "Diagnostic fait",
-        "diagnosticSub": "le {date, date, medium}",
-        "next": "Prochaine étape"
-      },
-      "group": {
-        "point": {
-          "title": "Faire le point",
-          "lead": "Savoir où vous en êtes et où vous allez"
-        },
-        "apply": {
-          "title": "Préparer mes candidatures",
-          "lead": "Les documents que les recruteurs liront"
-        },
-        "train": {
-          "title": "M'entraîner",
-          "lead": "Arriver prêt le jour de l'entretien"
-        }
-      },
-      "badge": {
-        "included": "Inclus"
-      },
-      "locked": {
-        "with": "Avec {plan}",
-        "withPrice": "Avec {plan} · {price} USD/mois",
-        "cta": "Débloquer"
-      },
-      "upgrade": {
-        "eyebrow": "Formule {plan}",
-        "title": "{count, plural, one {Débloquez un outil pour candidater mieux} other {Débloquez # outils pour candidater mieux}}",
-        "price": "{price} USD",
-        "period": "par mois · Mobile Money ou carte",
-        "cta": "Voir les formules"
-      }
-    },
     "nav": {
       "home": "Accueil Career",
       "label": "Rubriques Career",
@@ -8815,6 +8828,7 @@
       "title": "Mode testeur · Jumanly"
     },
     "eyebrow": "Compte passe-partout",
+    "back": "Retour",
     "title": "Mode testeur",
     "subtitle": "Passez d'un forfait à l'autre sans paiement pour essayer chaque page vous-même.",
     "notice": "Ce mode ne s'affiche que pour votre compte. Choisir un forfait, même celui en cours, remet vos quotas à zéro. Chaque changement est inscrit au journal d'audit.",
@@ -8898,8 +8912,8 @@
       "text": "assistant@jumanly.io"
     },
     "spaces": {
-      "title": "Espace recruteur",
-      "text": "Passer à mon organisation"
+      "text": "Passer à l’espace recruteur",
+      "partner": "Passer à l’espace partenaire"
     },
     "tester": {
       "title": "Mode testeur",
@@ -10832,6 +10846,14 @@
     "invite": {
       "expiresIn": "Expire {time}",
       "title": "Inviter des membres",
+      "accept": {
+        "pageTitle": "Invitation",
+        "title": "Rejoindre {org} sur Jumanly",
+        "body": "{inviterName} vous invite à rejoindre {org} en tant que {role}. Votre compte personnel reste séparé de l'espace de l'organisation.",
+        "cta": "Accepter l'invitation",
+        "decline": "Refuser",
+        "expired": "Cette invitation a expiré. Demandez-en une nouvelle à {inviterName}."
+      },
       "emails": {
         "text": "Adresses e-mail",
         "placeholder": "Une ou plusieurs adresses, séparées par une virgule"
@@ -10851,13 +10873,6 @@
         "seats": "Pas assez de sièges disponibles pour {count, plural, one {# invitation} other {# invitations}}.",
         "role": "Ce rôle n'est pas inclus dans le forfait de votre organisation.",
         "otherEmail": "Cette invitation a été envoyée à une autre adresse e-mail. Connectez-vous avec le compte invité."
-      },
-      "accept": {
-        "title": "Rejoindre {org} sur Jumanly",
-        "body": "{inviterName} vous invite à rejoindre {org} en tant que {role}. Votre compte personnel reste séparé de l'espace de l'organisation.",
-        "cta": "Accepter l'invitation",
-        "decline": "Refuser",
-        "expired": "Cette invitation a expiré. Demandez-en une nouvelle à {inviterName}."
       },
       "accepted": "Bienvenue dans l'espace de {org}."
     },

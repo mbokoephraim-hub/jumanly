@@ -69,7 +69,7 @@ export function ownHead(pathname: string) {
     // Lot 5: every page of Apprendre under its home.
     /^\/app\/learn\/.+/,
     // Lot 6: Compte, Connexions, Mon profil and its screens.
-    /^\/app\/compte(\/connexions)?$/,
+    /^\/app\/compte(\/connexions|\/aide)?$/,
     /^\/app\/profil(\/(modifier|experience|competence|recherche|projet|apercu))?$/,
     // Lot 6b: faire le point, the diagnostic, the plan and the practice (planche talent-4 § 5).
     /^\/app\/profil\/point$/,
@@ -77,6 +77,10 @@ export function ownHead(pathname: string) {
     // Lot 6c: CV et documents, LinkedIn, the letters, the CV studio and the CV import.
     /^\/app\/career\/(cv|linkedin|documents)(\/.*)?$/,
     /^\/app\/profil\/import$/,
+    // Lot 7: subscription, plans, payment, invoices, settings, search and the tester tool.
+    /^\/app\/(abonnement|parametres)(\/.*)?$/,
+    /^\/app\/(recherche|testeur|acces-refuse)$/,
+    /^\/app\/invitation\/[^/]+$/,
   ].some((pattern) => pattern.test(pathname));
 }
 

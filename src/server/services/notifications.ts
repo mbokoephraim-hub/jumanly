@@ -64,6 +64,49 @@ export const importantNotificationTypes: readonly NotificationType[] = [
   "paymentFailed",
 ];
 
+/**
+ * Categories a person can turn off in Paramètres › Notifications (planche talent-4 § 8). A type
+ * outside every category (security, moderation, an organization's work) is always delivered.
+ */
+export const notificationCategories = {
+  applications: [
+    "statusChange",
+    "notSelected",
+    "documentRequest",
+    "interviewInvite",
+    "interviewConfirmed",
+    "interviewReschedule",
+    "interviewDeclined",
+    "interviewCanceled",
+    "jobUnavailable",
+    "matchReviewed",
+    "profileViewed",
+  ],
+  messages: ["newMessage", "mention", "contactRequest", "contactAccepted", "contactDeclined"],
+  learning: ["certificateIssued", "diagnosticReady", "diagnosticReminder"],
+  billing: [
+    "renewalDue",
+    "grace",
+    "downgraded",
+    "upgraded",
+    "renewed",
+    "licenseExpiring",
+    "licenseExpired",
+  ],
+} as const satisfies Record<string, readonly NotificationType[]>;
+export type NotificationCategory = keyof typeof notificationCategories;
+export const NOTIFICATION_CATEGORIES = Object.keys(
+  notificationCategories,
+) as NotificationCategory[];
+
+export function categoryOf(type: NotificationType): NotificationCategory | null {
+  return (
+    NOTIFICATION_CATEGORIES.find((category) =>
+      (notificationCategories[category] as readonly string[]).includes(type),
+    ) ?? null
+  );
+}
+
 /** Values of a notification's text, from its stored payload. */
 export function notificationValues(payload: unknown): Record<string, string> {
   return Object.fromEntries(
@@ -84,8 +127,20 @@ export async function notify(
   },
 ) {
   if (input.userIds.length === 0) return;
+  let userIds = [...new Set(input.userIds)];
+  // A category the person turned off (Paramètres › Notifications) creates nothing for them.
+  const category = categoryOf(input.type);
+  if (category) {
+    const muted = await db.user.findMany({
+      where: { id: { in: userIds }, notificationsMuted: { has: category } },
+      select: { id: true },
+    });
+    const off = new Set(muted.map((user) => user.id));
+    userIds = userIds.filter((id) => !off.has(id));
+    if (userIds.length === 0) return;
+  }
   await db.notification.createMany({
-    data: [...new Set(input.userIds)].map((userId) => ({
+    data: userIds.map((userId) => ({
       userId,
       type: input.type,
       payload: input.payload,

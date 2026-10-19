@@ -11,9 +11,26 @@ import { auth } from "@/server/auth";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { ownedOrganization } from "@/server/services/accounts";
+import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
+
+/**
+ * Where each part of the settings lives (planche talent-4 § 8): the list, then one page per
+ * section; the account deletion is a sheet of the list. An organization's member is sent from
+ * these pages to its own settings page (`?onglet=`), kept until its redesign.
+ */
+const sectionPaths: Record<string, string> = {
+  compte: "/app/parametres",
+  securite: "/app/parametres/securite",
+  confidentialite: "/app/parametres/confidentialite",
+  notifications: "/app/parametres/notifications",
+  donnees: "/app/parametres",
+};
 
 function back(tab: string, params: Record<string, string>): never {
-  redirect(`/app/parametres?${new URLSearchParams({ onglet: tab, ...params })}`);
+  const query = new URLSearchParams(tab === "donnees" ? { supprimer: "1", ...params } : params);
+  // The answer may come back to the same address: the page must render again.
+  refresh();
+  redirect(`${sectionPaths[tab] ?? "/app/parametres"}?${query}`);
 }
 
 const nameField = z
@@ -179,9 +196,34 @@ export async function updateDisplay(formData: FormData) {
     where: { id: user.id },
     data: { reduceMotion: formData.get("reduceMotion") === "on" },
   });
-  // The shell (layout) reads the preference: it must render again, not only the page.
-  refresh();
   back("compte", { ok: "1" });
+}
+
+const notificationsSchema = z.object({
+  categories: z.array(z.enum(NOTIFICATION_CATEGORIES as [string, ...string[]])),
+  emails: z.enum(["1", "0"]),
+  newsletter: z.literal("on").optional(),
+});
+
+/** Paramètres › Notifications: the categories kept on, the e-mail reminders, the news. */
+export async function updateNotifications(formData: FormData) {
+  const user = await requireUser("/app/parametres/notifications");
+  const parsed = notificationsSchema.safeParse({
+    categories: formData.getAll("category").map(String),
+    emails: formData.get("emails") ?? "1",
+    newsletter: formData.get("newsletter") ?? undefined,
+  });
+  if (!parsed.success) back("notifications", { erreur: "required" });
+  const kept = new Set(parsed.data.categories);
+  await db.user.update({
+    where: { id: user.id },
+    data: {
+      notificationsMuted: NOTIFICATION_CATEGORIES.filter((category) => !kept.has(category)),
+      notificationEmails: parsed.data.emails === "1",
+      newsletter: parsed.data.newsletter === "on",
+    },
+  });
+  back("notifications", { ok: "1" });
 }
 
 const appearanceSchema = z.object({ appearance: z.enum(["auto", "light", "dark"]) });

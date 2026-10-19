@@ -13,6 +13,15 @@ export async function listCountries(db: PrismaClient): Promise<CountryOption[]> 
   return orderCountries(rows);
 }
 
+/** Countries with their dialling code (« Indicatif » of a Mobile Money number), same order. */
+export async function listDialCountries(db: PrismaClient) {
+  const rows = await db.country.findMany({
+    where: { dialCode: { not: null } },
+    select: { code: true, name: true, region: true, dialCode: true },
+  });
+  return orderCountries(rows);
+}
+
 /** Cities and provinces of each country, largest first; countries without any are left out. */
 export async function listLocalities(db: PrismaClient): Promise<Record<string, LocalityOption[]>> {
   const rows = await db.locality.findMany({

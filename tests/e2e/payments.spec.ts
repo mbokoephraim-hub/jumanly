@@ -3,9 +3,12 @@ import { FAKE_SIGNATURE_HEADER, signFakeWebhook } from "../../src/server/payment
 import { expectAccessible } from "./a11y";
 import { demo, logIn, signUpFromPricing, testEmail } from "./session";
 
+// Lot 7 (planche talent-4 § 7): the service first, then the number on its own screen, with the
+// dial code (+243 by default) chosen apart.
 async function payWith(page: import("@playwright/test").Page, number: string) {
-  await page.getByRole("radio", { name: "M-Pesa" }).check();
-  await page.locator('input[name="number"]').fill(number);
+  await page.getByRole("radio", { name: /M-Pesa/ }).check();
+  await page.getByRole("button", { name: /^Payer/ }).click();
+  await page.getByLabel("Numéro Mobile Money").fill(number);
   await page.getByRole("button", { name: /^Payer/ }).click();
 }
 
@@ -24,18 +27,22 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
 
   // Refused payment: clear message, retry, keep Free.
   await page.goto("/app/abonnement/payer?forfait=talent_starter");
-  await payWith(page, "+243 810 000 000");
-  await expect(page.getByText("Le paiement n'a pas abouti")).toBeVisible();
-  await expect(
-    page.getByRole("link", { name: "Continuer avec la formule gratuite" }).first(),
-  ).toBeVisible();
+  await payWith(page, "810 000 000");
+  await expect(page.getByRole("heading", { name: "Paiement non abouti" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Réessayer" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Garder ma formule actuelle" })).toBeVisible();
 
   // Waiting on the phone, then the provider's signed webhook confirms; replayed, it does nothing.
   await page.goto("/app/abonnement/payer?forfait=talent_starter");
-  await payWith(page, "+243 810 002 222");
-  await expect(page.getByRole("heading", { name: /Confirmez le paiement/ })).toBeVisible();
-  const reference = await page.getByText(/^Référence : fake_/).textContent();
-  const providerRef = reference!.replace("Référence : ", "").trim();
+  await payWith(page, "810 002 222");
+  await expect(page.getByRole("heading", { name: "Validez sur votre téléphone" })).toBeVisible();
+  // The number is never shown in full.
+  await expect(page.getByRole("main")).toContainText("+243 81 ••• 22");
+  await expect(page.getByRole("main")).not.toContainText("810002222");
+  await page.getByRole("button", { name: "Je n'ai rien reçu" }).click();
+  const reference = await page.getByText(/^Référence de la demande : fake_/).textContent();
+  const providerRef = reference!.replace("Référence de la demande : ", "").trim();
+  await page.keyboard.press("Escape");
   const paymentId = new URL(page.url()).searchParams.get("paiement");
   const body = JSON.stringify({ id: `evt_${paymentId}`, providerRef, status: "succeeded" });
   const send = () =>
@@ -53,11 +60,15 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
     headers: { "content-type": "application/json", [FAKE_SIGNATURE_HEADER]: "00".repeat(32) },
   });
   expect(forged.status()).toBe(401);
-  await expect(page.getByText("Paiement confirmé")).toBeVisible({ timeout: 15_000 });
+  await expect(page.getByRole("heading", { name: "Paiement reçu" })).toBeVisible({
+    timeout: 15_000,
+  });
+  await expect(page.getByRole("main")).toContainText(/JMN-\d{4}-\d{6}/);
 
-  // The invoice, as a PDF.
+  // The invoice, as a PDF, in Factures.
+  await page.goto("/app/abonnement/factures");
   const invoiceHref = await page
-    .getByRole("link", { name: "Télécharger la facture" })
+    .getByRole("link", { name: /^Télécharger la facture JMN-/ })
     .getAttribute("href");
   const pdf = await page.request.get(invoiceHref!);
   expect(pdf.headers()["content-type"]).toBe("application/pdf");
@@ -65,10 +76,10 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
 
   // Upgrade: the unused time of Starter is deducted.
   await page.goto("/app/abonnement/payer?forfait=talent_pro");
-  await expect(page.getByText(/Crédit pour le temps restant sur Starter/)).toBeVisible();
+  await expect(page.getByText(/Déjà déduit : .* pour les jours restants de Starter/)).toBeVisible();
   await page.goto("/app/abonnement");
   await expect(page.getByRole("main")).toContainText("Starter");
-  await expect(page.getByRole("link", { name: /Télécharger la facture JMN-/ })).toHaveCount(1);
+  await expect(page.getByRole("link", { name: /Factures/ })).toContainText("1 · en PDF");
   await expectAccessible(page);
 
   // The administrator records a manual refund.

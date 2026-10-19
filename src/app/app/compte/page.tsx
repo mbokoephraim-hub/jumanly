@@ -9,6 +9,7 @@ import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
 import { cx } from "@/lib/cx";
 import { AI_CREDITS_KEY } from "@/server/ai";
 import { signOut } from "@/server/actions/auth";
+import { switchSpace } from "@/server/actions/hire";
 import { ADMIN_ROLES, requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { resolvePlan, usage } from "@/server/entitlements";
@@ -16,6 +17,7 @@ import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
 import { connectionCounts } from "@/server/services/connections";
 import { completeness, getFullProfile } from "@/server/services/profile";
+import { hireMemberships, partnerMemberships } from "@/server/services/organization";
 import { isTester } from "@/server/services/tester";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -82,7 +84,9 @@ export default async function AccountPage() {
       connectionCounts(db, user.id),
       resolvePlan(db, subject),
       usage(db, subject, AI_CREDITS_KEY),
-      db.membership.count({ where: { userId: user.id, status: "active" } }),
+      Promise.all([hireMemberships(db, user.id), partnerMemberships(db, user.id)]).then(
+        ([hire, partner]) => [...hire, ...partner],
+      ),
     ]);
   const creditsLine =
     credits.limit < 0
@@ -154,19 +158,32 @@ export default async function AccountPage() {
           title={t("settings.title")}
           text={t("settings.text")}
         />
-        <Row href="/contact" icon="aide" title={t("help.title")} text={t("help.text")} />
+        <Row href="/app/compte/aide" icon="aide" title={t("help.title")} text={t("help.text")} />
       </List>
 
-      {(spaces > 0 || isTester(user) || admin) && (
+      {(spaces.length > 0 || isTester(user) || admin) && (
         <List label={t("group.spaces")}>
-          {spaces > 0 && (
-            <Row
-              href="/app/espace"
-              icon="entreprise"
-              title={t("spaces.title")}
-              text={t("spaces.text")}
-            />
-          )}
+          {spaces.map((membership) => (
+            <li key={membership.organizationId}>
+              <form action={switchSpace}>
+                <input type="hidden" name="space" value={membership.organizationId} />
+                <button type="submit" className="t-li t-press">
+                  <span className="t-cases" aria-hidden>
+                    <TalentIcon name="entreprise" size="s" />
+                  </span>
+                  <span className="t-t">
+                    <b>{membership.organization.name}</b>
+                    <span>
+                      {membership.organization.type === "partner"
+                        ? t("spaces.partner")
+                        : t("spaces.text")}
+                    </span>
+                  </span>
+                  <TalentIcon name="suivant" />
+                </button>
+              </form>
+            </li>
+          ))}
           {isTester(user) && (
             <Row
               href="/app/testeur"

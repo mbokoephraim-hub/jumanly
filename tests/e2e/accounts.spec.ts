@@ -33,8 +33,8 @@ test.describe("inscription avec forfait", () => {
     await page.getByRole("link", { name: "Continuer" }).click();
     await expect(page).toHaveURL(/\/app\?bienvenue=1|\/app$/);
     await page.goto("/app/abonnement");
-    await expect(page.getByRole("main")).toContainText("Pro");
-    await expect(page.getByRole("main")).toContainText("Formule actuelleActivePro");
+    await expect(page.getByRole("main")).toContainText("Pro · 19,9 $/mois");
+    await expect(page.getByRole("main")).toContainText(/Payée jusqu'au/);
   });
 
   test("payer plus tard laisse le compte en Free", async ({ page }) => {
@@ -44,8 +44,10 @@ test.describe("inscription avec forfait", () => {
     await page.getByRole("button", { name: "Commencer gratuitement" }).click();
     await expect(page).toHaveURL(/\/app/);
     await page.goto("/app/abonnement");
-    await expect(page.getByRole("main")).toContainText("Free");
-    await expect(page.getByRole("link", { name: /Passer à Pro/ }).first()).toBeVisible();
+    await expect(page.getByRole("main")).toContainText("Free · gratuit");
+    await page.getByRole("link", { name: /Changer de formule/ }).click();
+    await expect(page).toHaveURL(/\/app\/abonnement\/formules/);
+    await expect(page.getByRole("link", { name: /Passer à/ }).first()).toBeVisible();
   });
 });
 
@@ -122,7 +124,8 @@ test.describe("administration des forfaits", () => {
       await expect(admin.getByText("Forfait mis à jour.")).toBeVisible();
 
       await logIn(talent, demo.talentFree, undefined, "/app/abonnement");
-      await expect(talent.getByRole("main")).toContainText("0 sur 4");
+      // Lot 7: what is left of the month (4 of 4, none used yet).
+      await expect(talent.getByRole("main")).toContainText("4 sur 4");
     } finally {
       await admin.goto("/admin/forfaits/talent_free");
       await admin.locator('input[name="e:career.interview.text.monthly"]').fill(before);
@@ -139,36 +142,33 @@ test.describe("paramètres", () => {
     await signUpFromPricing(page, "Créer mon compte gratuit", email);
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
-    await page.goto("/app/parametres?onglet=compte");
-    // The country is asked at the first connection, skipped here: it is chosen now.
-    await page.locator('select[name="country"]').selectOption("CD");
-    await page.locator('input[name="city"]').fill("Goma");
-    await page
-      .getByRole("region", { name: "Compte" })
-      .getByRole("button", { name: "Enregistrer" })
-      .click();
-    await expect(page.getByText("Modifications enregistrées.")).toBeVisible();
-    await expect(page.locator('input[name="city"]')).toHaveValue("Goma");
-
-    // Less motion: the signed-in space is marked, and the choice is kept.
-    const display = page.getByRole("region", { name: "Affichage" });
-    await display.getByLabel("Réduire les animations").check();
-    await display.getByRole("button", { name: "Enregistrer" }).click();
+    // Lot 7: Paramètres in sections (planche talent-4 § 8); each switch saves at once.
+    await page.goto("/app/parametres");
+    await page.getByRole("switch", { name: /Réduire les animations/ }).check({ force: true });
+    await expect(page.getByText("C'est enregistré.")).toBeVisible();
     await expect(page.locator("[data-reduce-motion]")).toHaveCount(1);
-    await expect(display.getByLabel("Réduire les animations")).toBeChecked();
+    await expect(page.getByRole("switch", { name: /Réduire les animations/ })).toBeChecked();
     await expect(page.locator("html")).not.toHaveAttribute("data-app-motion");
 
-    await page.goto("/app/parametres?onglet=confidentialite");
-    await page.getByLabel("Visible des recruteurs", { exact: true }).check();
+    await page.goto("/app/parametres/confidentialite");
+    await page.getByRole("button", { name: /Qui voit mon profil/ }).click();
+    await page.getByRole("radio", { name: /Visible des recruteurs/ }).check({ force: true });
     await page.getByRole("button", { name: "Enregistrer" }).click();
-    await expect(page.getByText("Modifications enregistrées.")).toBeVisible();
-    await expect(page.getByLabel("Visible des recruteurs", { exact: true })).toBeChecked();
+    await expect(page.getByText("C'est enregistré.")).toBeVisible();
+    await expect(page.getByRole("button", { name: /Qui voit mon profil/ })).toContainText(
+      "Visible des recruteurs",
+    );
+
+    // Notifications by category: a category cut is kept.
+    await page.goto("/app/parametres/notifications");
+    await page.getByRole("switch", { name: /Formations/ }).uncheck({ force: true });
+    await expect(page.getByText("C'est enregistré.")).toBeVisible();
+    await expect(page.getByRole("switch", { name: /Formations/ })).not.toBeChecked();
 
     const response = await page.request.get("/app/parametres/export");
     expect(response.status()).toBe(200);
     const data = await response.json();
     expect(data.account.email).toBe(email);
-    expect(data.account.city).toBe("Goma");
     expect(JSON.stringify(data)).not.toMatch(/password|token/i);
   });
 });

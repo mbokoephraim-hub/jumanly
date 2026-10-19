@@ -1606,12 +1606,6 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `welcome.talent.goal.freelance` | Trouver des missions |
 | `welcome.talent.targetJob.label` | Quel métier visez-vous ? |
 | `welcome.talent.targetJob.placeholder` | Ex. : Assistant comptable |
-| `welcome.talent.skills.title` | Quelles sont vos principales compétences ? |
-| `welcome.talent.skills.label` | Compétences |
-| `welcome.talent.skills.placeholder` | Ajoutez une compétence puis appuyez sur Entrée |
-| `welcome.talent.skills.help` | Ajoutez-en au moins trois. Elles servent à vous proposer des offres et des formations adaptées. |
-| `welcome.talent.skills.suggestions` | Suggestions |
-| `welcome.talent.skills.remove` | Retirer {skill} |
 | `welcome.talent.cv.title` | Et votre CV ? |
 | `welcome.talent.cv.import.text` | Importer mon CV |
 | `welcome.talent.cv.import.help` | PDF ou Word, {maxSize} Mo maximum. Nous préremplissons votre profil, vous vérifiez chaque information. |
@@ -2191,10 +2185,8 @@ Conventions :
 | `talentShell.title.profile` | Mon profil |
 | `talentShell.title.subscription` | Abonnement |
 | `talentShell.title.settings` | Paramètres |
-| `talentShell.title.dashboard` | Tableau de bord |
 | `talentShell.title.search` | Recherche |
 | `talentShell.title.account` | Compte |
-| `talentShell.title.space` | Mon espace |
 | `talentShell.offline.kept` | Hors connexion : votre saisie est gardée sur ce téléphone. Elle partira dès le retour du réseau. |
 | `talentShell.offline.sending` | Connexion revenue : votre saisie est envoyée. |
 | `talentShell.offline.restored` | Votre saisie non envoyée a été reprise. |
@@ -3591,6 +3583,387 @@ Conventions :
 | `talentOrbi.historyPage.guarantee` | Vous pouvez effacer un échange ou tout l'historique. |
 | `talentShell.title.orbiHistory` | Historique Orbi |
 
+### Refonte mobile · Abonnement (lot 7)
+
+*Planche talent-4 § 7 : la formule, les quotas du mois, changer de formule, le moyen de paiement, les factures. Prépayé : rien ne se renouvelle sans le talent. Postuler reste gratuit.*
+
+| Clé | Texte |
+|---|---|
+| `abonnement.seo` | Abonnement |
+| `abonnement.title` | Abonnement |
+| `abonnement.back` | Retour |
+| `abonnement.current.label` | Votre formule |
+| `abonnement.amount` | {amount} $ |
+| `abonnement.current.paid` | {plan} · {price} $/mois |
+| `abonnement.current.free` | {plan} · gratuit |
+| `abonnement.current.paidUntil` | Payée jusqu'au {date} |
+| `abonnement.current.trialUntil` | Essai gratuit jusqu'au {date} |
+| `abonnement.current.sponsoredUntil` | Offerte par {sponsor} jusqu'au {date} |
+| `abonnement.current.sponsored` | Offerte par une institution partenaire |
+| `abonnement.current.canceledUntil` | Active jusqu'au {date}, sans renouvellement |
+| `abonnement.current.pastDue` | Échéance passée : accès gardé jusqu'au {date} |
+| `abonnement.current.freeText` | Sans échéance ni paiement |
+| `abonnement.current.scheduled` | Puis {plan} à partir du {date} |
+| `abonnement.current.scheduledCancel` | Annuler ce changement |
+| `abonnement.quotas.label` | Ce que vous utilisez ce mois-ci |
+| `abonnement.quota.credits` | Crédits Orbi |
+| `abonnement.quota.text` | Entretiens écrits |
+| `abonnement.quota.voice` | Entretiens vocaux |
+| `abonnement.quota.left` | {left} sur {limit} |
+| `abonnement.quota.unlimited` | Illimités |
+| `abonnement.quota.none` | Pas dans cette formule |
+| `abonnement.quota.aria` | {name} : {left} restants sur {limit} |
+| `abonnement.quota.applications` | Candidatures |
+| `abonnement.quota.applicationsValue` | Illimitées, gratuites |
+| `abonnement.change.title` | Changer de formule |
+| `abonnement.method.title` | Moyen de paiement |
+| `abonnement.method.mobileMoney` | {operator} · {number} |
+| `abonnement.method.card` | Carte bancaire |
+| `abonnement.method.other` | Réglé par l'équipe Jumanly |
+| `abonnement.method.none` | Mobile Money ou carte |
+| `abonnement.invoices.title` | Factures |
+| `abonnement.invoices.text` | {count, plural, =0 {Aucune pour l'instant} one {# · en PDF} other {# · en PDF}} |
+| `abonnement.organization.title` | Abonnement de {org} |
+| `abonnement.organization.text` | Dans l'espace de l'organisation |
+| `abonnement.note` | Prépayé, sans renouvellement forcé. Un rappel 7 jours puis 3 jours avant la fin. |
+| `abonnement.notice.resiliation` | C'est noté : votre formule s'arrête à la fin de la période payée. Vos données restent. |
+| `abonnement.notice.reactivation` | C'est noté : votre formule continue. |
+| `abonnement.notice.changement` | Le changement de formule se fera à la fin de la période déjà payée. |
+| `abonnement.notice.renew` | {plan} se termine le {date}. Renouvelez-la pour garder vos crédits. |
+| `abonnement.notice.renewCta` | Renouveler |
+| `abonnement.notice.backToFree` | Vous êtes revenu à {freePlan}. Votre profil, vos CV et vos candidatures sont gardés. |
+| `abonnement.notice.licence` | {plan} vous est offert par {sponsor} jusqu'au {date}. |
+| `abonnement.notice.licencePending` | Votre licence {plan} offerte par {sponsor} commencera après votre formule actuelle. |
+| `abonnement.notice.consent` | Votre choix de partage est enregistré. |
+
+### Refonte mobile · Formules (lot 7)
+
+*Choisir une formule : les formules viennent de la base (nom, prix, droits), jamais des maquettes. Monter s'applique tout de suite ; descendre, à la fin de la période payée.*
+
+| Clé | Texte |
+|---|---|
+| `formules.seo` | Formules |
+| `formules.title` | Formules |
+| `formules.back` | Retour |
+| `formules.close` | Fermer |
+| `formules.period.aria` | Période de paiement |
+| `formules.period.month` | Mensuel |
+| `formules.period.year` | Annuel |
+| `formules.perMonth` | /mois |
+| `formules.perYear` | /an |
+| `formules.recommended` | Recommandé |
+| `formules.yours` | Votre formule |
+| `formules.recommendedYours` | Recommandé · votre formule |
+| `formules.credits` | {count} crédits Orbi |
+| `formules.creditsUnlimited` | Crédits Orbi illimités |
+| `formules.interviews` | {text, plural, one {# entretien écrit} other {# entretiens écrits}} |
+| `formules.interviewsVoice` | {voice, plural, one {# vocal} other {# vocaux}} |
+| `formules.list.aria` | Formules proposées |
+| `formules.cta.upgrade` | Passer à {plan} |
+| `formules.cta.renew` | Renouveler {plan} |
+| `formules.cta.downgrade` | Passer à {plan} le {date} |
+| `formules.cta.current` | C'est votre formule |
+| `formules.downgrade.note` | {plan} prendra le relais le {date}, à la fin de la période déjà payée. |
+| `formules.free.cta` | Revenir à {plan} à la fin de la période |
+| `formules.free.text` | Votre formule s'arrête le {date}. Vos données restent. |
+| `formules.resume.text` | Votre formule s'arrête le {date}, sans renouvellement. |
+| `formules.resume.cta` | Garder ma formule |
+| `formules.applyFree` | Postuler reste gratuit dans toutes les formules. |
+| `formules.empty` | Aucune formule n'est proposée pour l'instant. |
+
+### Refonte mobile · Paiement (lot 7)
+
+*Moyen de paiement, numéro Mobile Money avec l'indicatif, validation sur le téléphone, reçu. Le numéro n'est jamais réaffiché en entier ; aucun numéro Jumanly.*
+
+| Clé | Texte |
+|---|---|
+| `paiement.seo` | Paiement |
+| `paiement.title` | Paiement |
+| `paiement.back` | Retour |
+| `paiement.close` | Fermer |
+| `paiement.summary` | {plan} · 1 mois |
+| `paiement.period` | du {start} au {end} |
+| `paiement.credit` | Déjà déduit : {credit} pour les jours restants de {plan} |
+| `paiement.mm` | Mobile Money |
+| `paiement.methods.aria` | Moyen de paiement |
+| `paiement.card.title` | Carte bancaire |
+| `paiement.card.text` | Visa, Mastercard |
+| `paiement.note` | Vous validez sur votre téléphone avec votre code Mobile Money. |
+| `paiement.noteCard` | Vous validez sur la page sécurisée de votre banque. |
+| `paiement.pay` | Payer {total} |
+| `paiement.paying` | Envoi de la demande… |
+| `paiement.change` | Changer |
+| `paiement.number.label` | Numéro Mobile Money |
+| `paiement.number.placeholder` | 81 234 56 78 |
+| `paiement.number.help` | Utilisé seulement pour ce paiement, jamais affiché. |
+| `paiement.dial.label` | Indicatif |
+| `paiement.dial.title` | Indicatif |
+| `paiement.dial.search` | Pays ou indicatif |
+| `paiement.dial.none` | Aucun pays ne correspond. |
+| `paiement.dial.close` | Fermer |
+| `paiement.error.operatorRequired` | Choisissez votre service Mobile Money. |
+| `paiement.error.numberRequired` | Indiquez votre numéro Mobile Money. |
+| `paiement.error.numberInvalid` | Ce numéro semble incomplet. Vérifiez-le. |
+| `paiement.error.duplicate` | Une demande de paiement est déjà en cours. Validez-la sur votre téléphone ou attendez quelques minutes. |
+| `paiement.error.failed` | Le paiement n'a pas pu démarrer. Réessayez dans un instant. |
+| `paiement.fake` | Paiement simulé : aucun argent n'est prélevé (environnement de test). |
+| `paiement.waiting.title` | Validez sur votre téléphone |
+| `paiement.waiting.text` | {operator} vous envoie une demande de {amount} au {number}. Entrez votre code secret pour confirmer. |
+| `paiement.waiting.textCard` | Terminez le paiement de {amount} sur la page de votre banque. |
+| `paiement.waiting.status` | En attente de la confirmation · {minutes}:{seconds} |
+| `paiement.waiting.statusShort` | En attente de la confirmation |
+| `paiement.waiting.nothing` | Je n'ai rien reçu |
+| `paiement.nothing.title` | Rien reçu sur votre téléphone ? |
+| `paiement.nothing.network` | Vérifiez que le téléphone est allumé et capte le réseau. |
+| `paiement.nothing.number` | Vérifiez le numéro : {number}. |
+| `paiement.nothing.wait` | La demande peut prendre une minute. Sans réponse, elle s'annule seule au bout de 15 minutes ; vous pourrez alors recommencer. |
+| `paiement.nothing.check` | Vérifier maintenant |
+| `paiement.nothing.never` | Jumanly ne vous demande jamais votre code secret. |
+| `paiement.nothing.reference` | Référence de la demande : {reference} |
+| `paiement.success.title` | Paiement reçu |
+| `paiement.success.text` | {plan} est actif jusqu'au {date}. Votre reçu est dans Factures et dans votre boîte e-mail. |
+| `paiement.success.amount` | Montant |
+| `paiement.success.amountValue` | {amount} · {method} |
+| `paiement.success.reference` | Référence |
+| `paiement.success.cta` | Découvrir {plan} |
+| `paiement.failed.title` | Paiement non abouti |
+| `paiement.failed.text` | Le paiement n'a pas été confirmé. Vous pouvez réessayer ou choisir un autre moyen. |
+| `paiement.expired.title` | Demande expirée |
+| `paiement.expired.text` | La demande n'a pas été validée à temps. Vous pouvez recommencer. |
+| `paiement.retry` | Réessayer |
+| `paiement.keep` | Garder ma formule actuelle |
+| `paiement.debited` | Débité sans que la formule s'active ? Écrivez à {email} avec la référence {reference}. |
+| `paiement.trial.text` | Le paiement en ligne n'est pas encore ouvert : {plan} démarre en essai gratuit de {days} jours. |
+| `paiement.trial.cta` | Commencer l'essai de {plan} |
+| `paiement.trial.title` | Essai de {plan} commencé |
+| `paiement.trial.done` | {plan} est actif jusqu'au {date}, sans paiement. |
+| `paiement.applyFree` | Postuler reste gratuit dans toutes les formules. |
+| `paiement.unavailable` | Cette formule ne peut pas être payée en ligne. |
+| `paiement.method.card` | carte |
+| `paiement.method.bankTransfer` | virement |
+| `paiement.method.cash` | espèces |
+
+### Refonte mobile · Factures (lot 7)
+
+| Clé | Texte |
+|---|---|
+| `factures.seo` | Factures |
+| `factures.title` | Factures |
+| `factures.back` | Retour |
+| `factures.list` | Vos factures |
+| `factures.item` | {plan} · {month} |
+| `factures.line` | {date} · {method} |
+| `factures.download` | Télécharger la facture {number} en PDF |
+| `factures.empty` | Aucune facture pour l'instant. Chaque paiement en crée une, en PDF. |
+| `factures.contact` | Une question sur un paiement : {email} |
+| `factures.details.title` | Informations de facturation |
+| `factures.details.empty` | Votre nom et votre adresse sur les factures |
+| `factures.details.text` | Elles figurent sur vos prochaines factures ; celles déjà émises ne changent pas. |
+| `factures.details.name` | Nom |
+| `factures.details.address` | Adresse (facultatif) |
+| `factures.details.email` | E-mail de facturation (facultatif) |
+| `factures.details.save` | Enregistrer |
+| `factures.details.saved` | Informations de facturation enregistrées. |
+| `factures.details.error` | Vérifiez les informations de facturation. |
+| `factures.close` | Fermer |
+
+### Refonte mobile · Paramètres (lot 7)
+
+*Planche talent-4 § 8 : sécurité, confidentialité, notifications, données de l'appareil, apparence, langue, données et suppression du compte.*
+
+| Clé | Texte |
+|---|---|
+| `parametres.seo` | Paramètres |
+| `parametres.title` | Paramètres |
+| `parametres.back` | Retour |
+| `parametres.close` | Fermer |
+| `parametres.save` | Enregistrer |
+| `parametres.saved` | C'est enregistré. |
+| `parametres.error` | Ce changement n'a pas pu être enregistré. Réessayez. |
+| `parametres.group.sections` | Réglages du compte |
+| `parametres.group.device` | Appareil et affichage |
+| `parametres.group.data` | Mes données |
+| `parametres.security.title` | Sécurité |
+| `parametres.security.text` | Mot de passe, double vérification, appareils |
+| `parametres.privacy.title` | Confidentialité |
+| `parametres.privacy.text` | Visibilité, consultations, Orbi |
+| `parametres.notifications.title` | Notifications |
+| `parametres.notifications.text` | Par catégorie |
+| `parametres.dataSaver.title` | Économiser les données |
+| `parametres.dataSaver.text` | Images allégées, vidéo 240p |
+| `parametres.motion.title` | Réduire les animations |
+| `parametres.motion.text` | Aucun mouvement dans l'application |
+| `parametres.appearance.title` | Apparence |
+| `parametres.appearance.auto` | Auto |
+| `parametres.appearance.light` | Clair |
+| `parametres.appearance.dark` | Sombre |
+| `parametres.appearance.autoText` | Automatique, comme le téléphone |
+| `parametres.appearance.lightText` | Toujours clair |
+| `parametres.appearance.darkText` | Toujours sombre |
+| `parametres.appearance.saved` | Apparence enregistrée |
+| `parametres.language.title` | Langue |
+| `parametres.language.value` | Français |
+| `parametres.intro.title` | Revoir l'introduction |
+| `parametres.intro.text` | Le générique d'accueil de Jumanly |
+| `parametres.export.title` | Télécharger mes données |
+| `parametres.export.text` | Un fichier avec les données de votre compte |
+| `parametres.delete.title` | Supprimer mon compte |
+| `parametres.delete.sheet` | Supprimer mon compte ? |
+| `parametres.delete.what` | Ce qui sera effacé |
+| `parametres.delete.text` | Profil, CV, documents, messages et candidatures, après {days} jours. Reconnectez-vous avant pour changer d'avis. Un abonnement en cours n'est pas remboursé. |
+| `parametres.delete.export` | Télécharger mes données d'abord |
+| `parametres.delete.exportHint` | Recommandé |
+| `parametres.delete.type` | Tapez SUPPRIMER pour confirmer |
+| `parametres.delete.word` | SUPPRIMER |
+| `parametres.delete.password` | Votre mot de passe |
+| `parametres.delete.cancel` | Annuler |
+| `parametres.delete.confirm` | Supprimer |
+| `parametres.delete.owner` | Vous êtes propriétaire de {org}. Confiez l'organisation à un autre membre avant de supprimer votre compte. |
+| `parametres.delete.errorConfirm` | Tapez SUPPRIMER, en majuscules, pour confirmer. |
+| `parametres.delete.errorPassword` | Mot de passe incorrect. |
+
+### Refonte mobile · Sécurité (lot 7)
+
+| Clé | Texte |
+|---|---|
+| `securite.seo` | Sécurité |
+| `securite.title` | Sécurité |
+| `securite.back` | Retour |
+| `securite.close` | Fermer |
+| `securite.email.title` | Connexion par e-mail |
+| `securite.password.title` | Mot de passe |
+| `securite.password.text` | Modifier le mot de passe |
+| `securite.password.none` | Aucun : connexion par Google, LinkedIn ou lien |
+| `securite.password.create` | Créer un mot de passe |
+| `securite.password.sheet` | Nouveau mot de passe |
+| `securite.password.current` | Mot de passe actuel |
+| `securite.password.new` | Nouveau mot de passe |
+| `securite.password.confirm` | Confirmer le nouveau mot de passe |
+| `securite.password.hint` | {min} caractères au moins |
+| `securite.password.save` | Enregistrer |
+| `securite.password.changed` | Mot de passe modifié. Les autres appareils sont déconnectés. |
+| `securite.password.wrong` | Mot de passe incorrect. |
+| `securite.twoFactor.title` | Double vérification |
+| `securite.twoFactor.text` | Un code par e-mail à chaque connexion |
+| `securite.twoFactor.sheet` | Confirmez avec votre mot de passe |
+| `securite.twoFactor.enable` | Activer la double vérification |
+| `securite.twoFactor.disable` | Désactiver la double vérification |
+| `securite.twoFactor.changed` | Double vérification mise à jour. |
+| `securite.twoFactor.required` | La double vérification est obligatoire pour ouvrir l'administration. |
+| `securite.twoFactor.noPassword` | Créez d'abord un mot de passe pour activer la double vérification. |
+| `securite.linked.title` | Comptes liés |
+| `securite.linked.none` | Aucun : e-mail et mot de passe |
+| `securite.linked.google` | Google |
+| `securite.linked.linkedin` | LinkedIn |
+| `securite.linked.apple` | Apple |
+| `securite.devices.title` | Appareils connectés |
+| `securite.devices.current` | Cet appareil |
+| `securite.devices.active` | Actif |
+| `securite.devices.since` | Connecté le {date} |
+| `securite.devices.unknown` | Appareil |
+| `securite.devices.logout` | Déconnecter |
+| `securite.devices.logoutAria` | Déconnecter {device} |
+| `securite.devices.logoutAll` | Déconnecter les autres appareils |
+| `securite.devices.loggedOut` | Appareil déconnecté. |
+
+### Refonte mobile · Confidentialité (lot 7)
+
+| Clé | Texte |
+|---|---|
+| `confidentialite.seo` | Confidentialité |
+| `confidentialite.title` | Confidentialité |
+| `confidentialite.back` | Retour |
+| `confidentialite.close` | Fermer |
+| `confidentialite.visibility.title` | Qui voit mon profil |
+| `confidentialite.orbi.title` | Utiliser Orbi |
+| `confidentialite.orbi.text` | Seulement pour m'aider, jamais pour décider |
+| `confidentialite.matching.title` | Offres suggérées |
+| `confidentialite.matching.text` | Calculées sans nom, âge, photo ni origine |
+| `confidentialite.contacts.title` | Demandes de mise en relation |
+| `confidentialite.contacts.text` | Un recruteur peut me proposer un échange |
+| `confidentialite.projects.title` | Projets publics |
+| `confidentialite.projects.public` | {count, plural, =0 {Page publique, sans projet} one {# projet sur votre page publique} other {# projets sur votre page publique}} |
+| `confidentialite.projects.private` | Page des projets privée |
+| `confidentialite.views.title` | Qui a consulté mon profil |
+| `confidentialite.views.application` | Après votre candidature · {date} |
+| `confidentialite.views.visible` | Profil visible · {date} |
+| `confidentialite.views.empty` | Aucune consultation pour l'instant. |
+| `confidentialite.note` | Chaque consultation par un recruteur est enregistrée ici. |
+| `confidentialite.matchingLink` | Comment les offres sont suggérées |
+| `confidentialite.policy` | Politique de confidentialité |
+
+### Refonte mobile · Réglages des notifications (lot 7)
+
+| Clé | Texte |
+|---|---|
+| `notifReglages.seo` | Notifications |
+| `notifReglages.title` | Notifications |
+| `notifReglages.back` | Retour |
+| `notifReglages.list` | Catégories |
+| `notifReglages.applications.title` | Candidatures |
+| `notifReglages.applications.text` | Statut, entretiens, documents demandés |
+| `notifReglages.messages.title` | Messages |
+| `notifReglages.messages.text` | Recruteurs, connexions |
+| `notifReglages.learning.title` | Formations |
+| `notifReglages.learning.text` | Attestations, diagnostic |
+| `notifReglages.billing.title` | Abonnement |
+| `notifReglages.billing.text` | Rappels de fin de période |
+| `notifReglages.newsletter.title` | Nouvelles de Jumanly |
+| `notifReglages.newsletter.text` | Une lettre de temps en temps |
+| `notifReglages.channel.title` | Recevoir aussi par |
+| `notifReglages.channel.both` | Appli + e-mail |
+| `notifReglages.channel.app` | Appli seule |
+| `notifReglages.channel.note` | Les reçus de paiement et les e-mails de sécurité sont toujours envoyés. |
+
+### Refonte mobile · Aide (lot 7)
+
+*Planche talent-4 § 8 : les questions fréquentes par thème, et l'équipe par e-mail seulement. Aucun numéro de téléphone.*
+
+| Clé | Texte |
+|---|---|
+| `aide.seo` | Aide |
+| `aide.title` | Aide |
+| `aide.back` | Retour |
+| `aide.search` | Rechercher dans l'aide |
+| `aide.searchSubmit` | Rechercher |
+| `aide.themes` | Thèmes |
+| `aide.count` | {count, plural, one {# article} other {# articles}} |
+| `aide.theme.talents` | Postuler et suivre |
+| `aide.theme.learn` | Formations et attestations |
+| `aide.theme.billing` | Paiement et formules |
+| `aide.theme.privacy` | Données et confidentialité |
+| `aide.theme.ai` | Orbi et les suggestions |
+| `aide.theme.partners` | Licences offertes |
+| `aide.theme.general` | Jumanly en général |
+| `aide.results` | Résultats pour « {query} » |
+| `aide.noResult` | Aucun article ne correspond. Écrivez-nous, nous répondons par e-mail. |
+| `aide.contact.title` | Écrire à l'équipe |
+| `aide.contact.text` | {email} · réponse par e-mail |
+| `aide.contact.cta` | Écrire un e-mail |
+
+### Refonte mobile · Rechercher (lot 7)
+
+| Clé | Texte |
+|---|---|
+| `recherche.seo` | Rechercher |
+| `recherche.title` | Rechercher |
+| `recherche.back` | Retour |
+| `recherche.label` | Rechercher dans Jumanly |
+| `recherche.placeholder` | Une offre, une formation, une conversation |
+| `recherche.submit` | Rechercher |
+| `recherche.clear` | Effacer |
+| `recherche.prompt` | Tapez un métier, une compétence, une entreprise ou un nom. |
+| `recherche.tabs` | Que chercher |
+| `recherche.tab.all` | Tout |
+| `recherche.tab.offers` | Offres |
+| `recherche.tab.courses` | Formations |
+| `recherche.group.offers` | Offres |
+| `recherche.group.courses` | Formations |
+| `recherche.group.conversations` | Conversations |
+| `recherche.seeAll` | Tout voir ({count}) |
+| `recherche.empty` | Rien ne correspond à « {query} ». |
+| `recherche.results` | {count, plural, =0 {Aucun résultat} one {# résultat} other {# résultats}} pour « {query} » |
+
 ### Navigation · Menu du compte
 
 *Accès au profil, à l'abonnement et aux réglages depuis l'avatar.*
@@ -3799,97 +4172,15 @@ Conventions :
 
 | Clé | Texte |
 |---|---|
-| `talent.dashboard.title` | Accueil |
-| `talent.dashboard.seo` | Accueil · Jumanly |
 | `talent.dashboard.date` | {date, date, full} |
-| `talent.dashboard.greeting.text` | Bonjour {firstName}, prêt pour la suite ? |
-| `talent.dashboard.greeting.neutral` | Bonjour {firstName}, on continue ? |
-| `talent.dashboard.greeting.morning` | Bonjour {firstName} |
-| `talent.dashboard.greeting.evening` | Bonsoir {firstName} |
-| `talent.dashboard.greeting.first` | Bienvenue sur Jumanly, {firstName} |
-| `talent.dashboard.welcome.matches` | {count, plural, one {# offre correspond à votre profil.} other {# offres correspondent à votre profil.}} |
-| `talent.dashboard.welcome.course` | Reprenez « {courseTitle} » : {count, plural, one {il vous reste # leçon.} other {il vous reste # leçons.}} |
-| `talent.dashboard.welcome.profile` | Votre profil est complet à {percent} %. Quelques minutes suffisent pour le compléter. |
-| `talent.dashboard.welcome.close` | Fermer le message du jour |
-| `talent.dashboard.nextStep.title` | Votre prochaine étape |
-| `talent.dashboard.nextStep.completeProfile` | Complétez votre profil pour être mieux vu des recruteurs. |
-| `talent.dashboard.nextStep.importCv` | Importez ou créez votre CV en quelques minutes. |
-| `talent.dashboard.nextStep.diagnostic` | Faites votre diagnostic de carrière (10 minutes). |
-| `talent.dashboard.nextStep.resumeCourse` | Reprenez « {courseTitle} » là où vous l'avez laissée. |
-| `talent.dashboard.nextStep.apply` | {count, plural, one {# offre compatible vous attend.} other {# offres compatibles vous attendent.}} |
-| `talent.dashboard.nextStep.interview` | Préparez votre entretien avec {company} du {date, date, medium}. |
-| `talent.dashboard.nextStep.cta` | Commencer |
-| `talent.dashboard.nextStep.hint.interview` | Simulation d'entretien, fiche entreprise et questions fréquentes, au même endroit. |
-| `talent.dashboard.nextStep.hint.course` | Chaque leçon terminée compte pour votre attestation. |
-| `talent.dashboard.nextStep.hint.apply` | Chaque offre explique pourquoi elle vous correspond. Candidater reste gratuit. |
-| `talent.dashboard.nextStep.hint.profile` | Un profil complet aide les recruteurs à vous comprendre. |
-| `talent.dashboard.kpi.courses.text` | Formations en cours |
-| `talent.dashboard.kpi.courses.hint` | {count, plural, =0 {Aucune nouvelle ce mois} one {# nouvelle ce mois} other {# nouvelles ce mois}} |
-| `talent.dashboard.kpi.hours.text` | Heures d'apprentissage |
-| `talent.dashboard.kpi.hours.value` | {hours, number} h |
-| `talent.dashboard.kpi.hours.hint` | contre {hours, number} h le mois dernier |
-| `talent.dashboard.kpi.applications.text` | Candidatures envoyées |
-| `talent.dashboard.kpi.applications.hint` | {count, plural, =0 {Aucun entretien planifié} one {# entretien planifié} other {# entretiens planifiés}} |
-| `talent.dashboard.kpi.profileStrength.text` | Force du profil |
-| `talent.dashboard.kpi.profileStrength.value` | {percent} % |
-| `talent.dashboard.kpi.profileStrength.hint` | Prochaine action : {action} |
-| `talent.dashboard.kpi.delta.up` | +{value} |
-| `talent.dashboard.kpi.delta.points` | +{value} pts |
-| `talent.dashboard.journey.title` | Votre parcours |
-| `talent.dashboard.journey.subtitle` | Se former, enrichir son profil, candidater, être recruté. |
-| `talent.dashboard.journey.next` | Votre prochaine étape : {step} |
-| `talent.dashboard.journey.go` | Y aller |
-| `talent.dashboard.journey.learn.text` | Se former |
-| `talent.dashboard.journey.learn.status` | {count, plural, =0 {Aucune formation active} one {# formation active} other {# formations actives}} |
-| `talent.dashboard.journey.profile.text` | Enrichir son profil |
-| `talent.dashboard.journey.profile.status` | Profil complété à {percent} % |
-| `talent.dashboard.journey.apply.text` | Candidater |
-| `talent.dashboard.journey.apply.status` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} |
-| `talent.dashboard.journey.hired.text` | Être recruté |
-| `talent.dashboard.journey.hired.status` | Objectif : {goal} |
-| `talent.dashboard.learningTime.title` | Temps d'apprentissage |
-| `talent.dashboard.learningTime.subtitle` | 8 dernières semaines |
-| `talent.dashboard.learningTime.weekLabel` | S{week} |
-| `talent.dashboard.learningTime.aria` | Graphique du temps d'apprentissage par semaine |
 | `talent.dashboard.ai.title` | Jumanly Intelligence |
 | `talent.dashboard.ai.matches.text` | {count, plural, one {# offre correspond à votre profil à plus de {threshold} %.} other {# offres correspondent à votre profil à plus de {threshold} %.}} |
 | `talent.dashboard.ai.matches.none` | Pas encore d'offre très compatible. Complétez vos compétences pour affiner les suggestions. |
 | `talent.dashboard.ai.why` | Pourquoi ? |
-| `talent.dashboard.ai.reason` | {criteria} correspondent à ce que demande la première offre. |
-| `talent.dashboard.ai.score` | {score} % |
 | `talent.dashboard.ai.cta` | Voir les offres |
-| `talent.dashboard.ai.dismiss` | Ignorer |
-| `talent.dashboard.continue.title` | Continuer à apprendre |
-| `talent.dashboard.continue.seeAll` | Tout voir |
 | `talent.dashboard.continue.progress` | Progression |
 | `talent.dashboard.continue.lessons` | {done}/{total} leçons |
 | `talent.dashboard.continue.resume` | Reprendre |
-| `talent.dashboard.continue.empty.text` | Vous n'avez pas encore commencé de formation. |
-| `talent.dashboard.continue.empty.cta` | Explorer le catalogue |
-| `talent.dashboard.applications.title` | Candidatures en cours |
-| `talent.dashboard.applications.seeAll` | Toutes mes candidatures |
-| `talent.dashboard.applications.empty.text` | Aucune candidature en cours. Les candidatures sont toujours gratuites. |
-| `talent.dashboard.applications.empty.cta` | Trouver une offre |
-| `talent.dashboard.upcoming.title` | À venir |
-| `talent.dashboard.upcoming.interview.text` | Entretien · {company} |
-| `talent.dashboard.upcoming.interview.detail` | {time} · {mode} · {interviewer} |
-| `talent.dashboard.upcoming.quiz.text` | Quiz · {courseTitle} |
-| `talent.dashboard.upcoming.quiz.detail` | À terminer avant le {date, date, medium} |
-| `talent.dashboard.upcoming.document` | Document à déposer · {documentName} |
-| `talent.dashboard.upcoming.empty` | Rien de prévu pour l'instant. |
-| `talent.dashboard.quotas.title` | Mes quotas |
-| `talent.dashboard.quotas.renewal` | Renouvellement le {date, date, long} |
-| `talent.dashboard.quotas.aiCredits` | Crédits IA |
-| `talent.dashboard.quotas.interviewText` | Simulations d'entretien écrites |
-| `talent.dashboard.quotas.interviewVoice` | Simulations d'entretien vocales |
-| `talent.dashboard.quotas.usage` | {used} sur {quota} utilisés |
-| `talent.dashboard.quotas.unlimited` | Illimité |
-| `talent.dashboard.quotas.notIncluded` | Non inclus dans votre forfait |
-| `talent.dashboard.quotas.seePlans` | Voir les forfaits |
-| `talent.dashboard.freeReminder` | Votre forfait Free vous permet de candidater sans limite et d'être recruté au même titre que tout le monde. |
-| `talent.dashboard.sponsoredBanner` | Votre accès {plan} est offert par {sponsorName} jusqu'au {date, date, long}. |
-| `talent.dashboard.pastDueBanner.text` | Votre paiement est en attente. Votre forfait {plan} reste actif jusqu'au {date, date, long}. |
-| `talent.dashboard.pastDueBanner.cta` | Régler maintenant |
 
 ---
 
@@ -3899,79 +4190,6 @@ Conventions :
 
 | Clé | Texte |
 |---|---|
-| `talent.forMe.seo` | Pour moi · Jumanly |
-| `talent.forMe.goal.eyebrow` | Mon objectif |
-| `talent.forMe.goal.none` | Choisissez votre objectif |
-| `talent.forMe.goal.edit` | Modifier mon objectif |
-| `talent.forMe.goal.choose` | Choisir mon objectif |
-| `talent.forMe.stats.applications` | {count, plural, one {candidature} other {candidatures}} |
-| `talent.forMe.stats.interviews` | {count, plural, one {entretien} other {entretiens}} |
-| `talent.forMe.stats.courses` | {count, plural, one {formation en cours} other {formations en cours}} |
-| `talent.forMe.stats.certificates` | {count, plural, one {attestation} other {attestations}} |
-| `talent.forMe.stats.skills` | {count, plural, one {compétence à renforcer} other {compétences à renforcer}} |
-| `talent.forMe.stats.profile` | profil |
-| `talent.forMe.stats.percent` | {percent} % |
-| `talent.forMe.jobs.title.job` | Opportunités pour vous |
-| `talent.forMe.jobs.title.skills` | Offres liées à vos compétences |
-| `talent.forMe.jobs.title.career` | Postes pour votre évolution |
-| `talent.forMe.jobs.all` | Voir toutes les offres |
-| `talent.forMe.jobs.general` | Sélection générale, non personnalisée. |
-| `talent.forMe.jobs.complete` | Personnaliser |
-| `talent.forMe.jobs.empty` | Aucune offre ouverte pour le moment. |
-| `talent.forMe.courses.title.job` | Formations recommandées |
-| `talent.forMe.courses.title.skills` | Formations recommandées |
-| `talent.forMe.courses.title.career` | Formations de spécialisation |
-| `talent.forMe.courses.explore` | Explorer |
-| `talent.forMe.courses.resume` | Reprendre |
-| `talent.forMe.courses.discover` | Découvrir |
-| `talent.forMe.courses.locked` | Non incluse dans votre formule |
-| `talent.forMe.courses.why` | Pourquoi ? Vos offres demandent : {skills}. |
-| `talent.forMe.courses.progress` | Progression : {percent} % |
-| `talent.forMe.resume.eyebrow` | Reprendre ma formation |
-| `talent.forMe.resume.left` | {count, plural, =0 {Toutes les leçons sont faites} one {# leçon restante} other {# leçons restantes}} |
-| `talent.forMe.resume.lesson` | Prochaine leçon : {lesson} |
-| `talent.forMe.resume.cta` | Reprendre |
-| `talent.forMe.tools.title` | Préparez votre candidature |
-| `talent.forMe.tools.locked` | Non inclus dans votre formule |
-| `talent.forMe.tools.cv` | Mon CV |
-| `talent.forMe.tools.cvLine` | Créer ou améliorer |
-| `talent.forMe.tools.profile` | Mon profil |
-| `talent.forMe.tools.profileLine` | Le rendre visible |
-| `talent.forMe.tools.interview` | Entretien |
-| `talent.forMe.tools.interviewLine` | S'entraîner |
-| `talent.forMe.tools.documents` | Documents |
-| `talent.forMe.tools.documentsLine` | Lettres et attestations |
-| `talent.forMe.position.title` | Me positionner |
-| `talent.forMe.position.diagnostic` | Diagnostic carrière |
-| `talent.forMe.position.diagnosticLine` | Faire le point sur votre parcours |
-| `talent.forMe.position.linkedin` | Optimisation LinkedIn |
-| `talent.forMe.position.linkedinLine` | Titre, résumé, compétences |
-| `talent.forMe.position.portfolio` | Portfolio |
-| `talent.forMe.position.portfolioLine` | Montrer vos réalisations |
-| `talent.forMe.skills.title` | Compétences à renforcer |
-| `talent.forMe.skills.search` | Chercher une formation en {name} |
-| `talent.forMe.skills.why` | Pourquoi ces compétences ? |
-| `talent.forMe.skills.whyText` | Elles sont demandées par les offres que vous avez enregistrées ou auxquelles vous avez postulé, et ne figurent pas encore sur votre profil. |
-| `talent.forMe.skills.offers` | {name} : {count, plural, one {demandée par # offre} other {demandée par # offres}} |
-| `talent.forMe.progress.title` | Progression et certificats |
-| `talent.forMe.progress.all` | Mes acquis |
-| `talent.forMe.progress.certificate` | Attestation · {title} |
-| `talent.forMe.progress.issued` | Obtenue le {date, date, long} |
-| `talent.forMe.progress.courses` | {inProgress, plural, one {# formation en cours} other {# formations en cours}}, {done, plural, one {# terminée} other {# terminées}} |
-| `talent.forMe.progress.coursesLine` | Voir mes formations |
-| `talent.forMe.actions.title.job` | Mes prochaines actions |
-| `talent.forMe.actions.title.skills` | Mes prochaines actions |
-| `talent.forMe.actions.title.career` | Prochaines étapes |
-| `talent.forMe.actions.interview` | Confirmer votre entretien |
-| `talent.forMe.actions.interviewLine` | {company} · {date, date, long} |
-| `talent.forMe.actions.document` | Envoyer un document |
-| `talent.forMe.actions.draft` | Terminer votre candidature |
-| `talent.forMe.actions.draftLine` | {job} · {company} · brouillon enregistré |
-| `talent.forMe.actions.message` | Répondre au recruteur |
-| `talent.forMe.actions.messageLine` | Nouveau message |
-| `talent.forMe.actions.course` | Reprendre votre formation |
-| `talent.forMe.actions.profile` | Compléter votre profil |
-| `talent.forMe.actions.profileLine` | Profil complet à {percent} % |
 
 ### `/app/suivi` · Suivi
 
@@ -4082,52 +4300,6 @@ Conventions :
 
 | Clé | Texte |
 |---|---|
-| `talent.espace.seo` | Mon espace · Jumanly |
-| `talent.espace.title` | Mon espace |
-| `talent.espace.back` | Retour |
-| `talent.espace.completeness` | Profil complété à {percent} % |
-| `talent.espace.complete` | Compléter |
-| `talent.espace.missing` | Il manque : {sections}. |
-| `talent.espace.spaces` | Changer d'espace |
-| `talent.espace.tiles.dashboard` | Tableau de bord |
-| `talent.espace.tiles.dashboardLine` | Mon activité |
-| `talent.espace.tiles.subscription` | Abonnement |
-| `talent.espace.tiles.subscriptionLine` | Formule {plan} |
-| `talent.espace.groups.profile` | Profil professionnel |
-| `talent.espace.groups.tools` | Outils carrière |
-| `talent.espace.groups.acquired` | Acquis |
-| `talent.espace.groups.account` | Mon compte |
-| `talent.espace.rows.edit` | Modifier mes informations |
-| `talent.espace.rows.editLine` | Titre, résumé, coordonnées |
-| `talent.espace.rows.skills` | Mes compétences |
-| `talent.espace.rows.skillsLine` | {count, plural, =0 {Aucune compétence} one {# compétence} other {# compétences}} |
-| `talent.espace.rows.portfolio` | Mon portfolio |
-| `talent.espace.rows.portfolioLine` | Vos réalisations |
-| `talent.espace.rows.visibility` | Visibilité auprès des recruteurs |
-| `talent.espace.rows.visibilityLine` | Qui peut voir mon profil |
-| `talent.espace.tools.builder` | CV Builder |
-| `talent.espace.tools.builderLine` | Créer un CV |
-| `talent.espace.tools.cvs` | Mes CV |
-| `talent.espace.tools.cvsLine` | {count, plural, =0 {Aucun CV} one {# CV} other {# CV}} |
-| `talent.espace.tools.documents` | Lettres et documents |
-| `talent.espace.tools.documentsLine` | Modèles et pièces |
-| `talent.espace.tools.linkedin` | Optimisation LinkedIn |
-| `talent.espace.tools.linkedinLine` | Titre, résumé |
-| `talent.espace.tools.interviews` | Simulations d'entretien |
-| `talent.espace.tools.interviewsLine` | À l'écrit ou à l'oral |
-| `talent.espace.tools.career` | Tous les outils Career |
-| `talent.espace.tools.careerLine` | Diagnostic, plan, conseils |
-| `talent.espace.tools.locked` | Outil non inclus dans votre formule |
-| `talent.espace.acquired.certificates` | Certificats et attestations |
-| `talent.espace.acquired.certificatesLine` | {count, plural, =0 {Aucune attestation} one {# attestation} other {# attestations}} |
-| `talent.espace.acquired.evaluations` | Compétences évaluées |
-| `talent.espace.acquired.evaluationsLine` | Résultats de vos évaluations |
-| `talent.espace.account.billing` | Abonnement et facturation |
-| `talent.espace.account.notifications` | Notifications |
-| `talent.espace.account.settings` | Paramètres et confidentialité |
-| `talent.espace.account.matching` | Comment fonctionne le matching |
-| `talent.espace.account.license` | Activer un code de licence |
-| `talent.espace.account.help` | Assistance |
 
 ### `/app/profil` · Profil professionnel
 
@@ -5100,105 +5272,8 @@ Conventions :
 
 | Clé | Texte |
 |---|---|
-| `career.home.eyebrow` | Career |
-| `career.home.title` | Votre identité professionnelle |
-| `career.home.subtitle` | Diagnostic, CV, documents, entretiens : tout ce qui prépare votre candidature. |
-| `career.home.diagnostic.title` | Diagnostic de carrière |
-| `career.home.diagnostic.desc` | Faites le point sur vos atouts et vos priorités. |
-| `career.home.diagnostic.cta.start` | Commencer le diagnostic |
-| `career.home.diagnostic.cta.view` | Voir mon diagnostic |
-| `career.home.diagnostic.lastDone` | Dernier diagnostic : {date, date, medium} |
-| `career.home.cv.title` | Mon CV |
-| `career.home.cv.desc` | Éditez votre CV par sections et exportez-le en PDF. |
-| `career.home.cv.cta` | Ouvrir mon CV |
-| `career.home.cv.score` | Score du CV : {score}/100 |
-| `career.home.documents.title` | Lettres et documents |
-| `career.home.documents.desc` | Lettres de motivation, biographie, correction de textes. |
-| `career.home.linkedin.title` | Préparation LinkedIn |
-| `career.home.linkedin.desc` | Un titre, un résumé et des compétences prêts à copier. |
-| `career.home.interviews.title` | Simulations d'entretien |
-| `career.home.interviews.desc` | Entraînez-vous à l'écrit puis à l'oral, avec un retour détaillé. |
-| `career.home.plan.title` | Plan de progression |
-| `career.home.plan.desc` | Vos objectifs, vos étapes et les formations qui vous font avancer. |
-| `career.home.plan.cta` | Ouvrir mon plan |
-| `career.home.portfolio.title` | Portfolio |
-| `career.home.portfolio.desc` | Montrez vos projets sur une page à partager. |
-| `career.home.seo` | Career · Jumanly |
-| `career.home.later` | Bientôt disponible |
-| `career.home.tips.title` | Conseils de préparation |
-| `career.home.tips.desc` | Des fiches pratiques pour préparer chaque étape d'un recrutement. |
-| `career.home.lock` | Disponible avec {plan} |
-| `career.home.quota` | {used}/{quota} ce mois |
 | `career.nav.home` | Accueil Career |
 | `career.nav.label` | Rubriques Career |
-| `career.home.stats.cv` | Score du CV |
-| `career.home.stats.cvUnit` | /100 |
-| `career.home.stats.plan` | Plan |
-| `career.home.stats.planUnit` | étapes |
-| `career.home.stats.interviews` | Simulations |
-| `career.home.stats.interviewsUnit` | ce mois |
-| `career.home.stats.ratio` | {value}/{max} |
-| `career.home.stats.none` | — |
-| `career.home.open` | Ouvrir |
-| `career.home.diagnostic.none` | Pas encore de diagnostic |
-| `career.home.cv.none` | Pas encore de CV |
-| `career.home.documents.count` | {count, plural, =0 {Aucun document} one {# document} other {# documents}} |
-| `career.home.linkedin.last` | Propositions du {date, date, medium} |
-| `career.home.linkedin.none` | Aucune proposition pour l'instant |
-| `career.home.interviews.cta` | S'entraîner |
-| `career.home.plan.steps` | {done}/{total} étapes |
-| `career.home.plan.none` | Pas encore de plan |
-| `career.home.portfolio.count` | {count, plural, =0 {Aucun projet} one {# projet} other {# projets}} |
-| `career.home.portfolio.public` | page publique |
-| `career.home.ai.title` | Entraînez-vous à l'oral avant votre entretien avec {organization} |
-| `career.home.ai.body` | Une simulation vous fait répondre aux questions les plus fréquentes, puis vous donne un retour détaillé. |
-| `career.home.ai.why` | Votre entretien a lieu le {date, date, long}. |
-| `career.home.ai.left` | {count, plural, =0 {Vous avez utilisé vos simulations orales ce mois.} one {Il vous reste # simulation orale ce mois.} other {Il vous reste # simulations orales ce mois.}} |
-| `career.home.ai.start` | Démarrer la simulation |
-| `career.home.heroTitle` | Votre identité professionnelle, étape par étape |
-| `career.home.heroTitleAccent` | professionnelle |
-| `career.home.heroLead` | Faites le point, construisez un CV solide, préparez vos candidatures et entraînez-vous. Jumanly vous indique toujours la prochaine étape. |
-| `career.home.journey.title` | Votre parcours Career |
-| `career.home.journey.count` | {done, plural, =0 {Aucune étape terminée sur 4} one {# étape terminée sur 4} other {# étapes terminées sur 4}} |
-| `career.home.journey.step.point` | Faire le point |
-| `career.home.journey.step.cv` | Construire mon CV |
-| `career.home.journey.step.apply` | Préparer mes candidatures |
-| `career.home.journey.step.train` | M'entraîner |
-| `career.home.journey.state.done` | Terminée |
-| `career.home.journey.state.current` | En cours |
-| `career.home.journey.state.next` | À venir |
-| `career.home.journey.continue` | Continuer |
-| `career.home.journey.finished` | Parcours terminé |
-| `career.home.float.cv` | Score du CV |
-| `career.home.float.cvSub` | {score}/100 · {band} |
-| `career.home.float.diagnostic` | Diagnostic fait |
-| `career.home.float.diagnosticSub` | le {date, date, medium} |
-| `career.home.float.next` | Prochaine étape |
-| `career.home.group.point.title` | Faire le point |
-| `career.home.group.point.lead` | Savoir où vous en êtes et où vous allez |
-| `career.home.group.apply.title` | Préparer mes candidatures |
-| `career.home.group.apply.lead` | Les documents que les recruteurs liront |
-| `career.home.group.train.title` | M'entraîner |
-| `career.home.group.train.lead` | Arriver prêt le jour de l'entretien |
-| `career.home.badge.included` | Inclus |
-| `career.home.diagnostic.descV2` | Un bilan en 6 dimensions : clarté du projet, compétences, expérience, outils de candidature, entretiens et réseau. Chaque note est expliquée. |
-| `career.home.cv.descV2` | Éditez votre CV par sections, choisissez un modèle et exportez-le en PDF. Le score vous dit quoi améliorer en premier. |
-| `career.home.cv.chip.templates` | Modèles |
-| `career.home.cv.chip.pdf` | Export PDF |
-| `career.home.cv.chip.score` | Score expliqué |
-| `career.home.plan.fromDiagnostic` | Créé à partir de votre diagnostic |
-| `career.home.plan.create` | Créer mon plan |
-| `career.home.locked.with` | Avec {plan} |
-| `career.home.locked.withPrice` | Avec {plan} · {price} USD/mois |
-| `career.home.locked.cta` | Débloquer |
-| `career.home.tips.soon` | Arrive prochainement |
-| `career.home.tips.ready` | {count, plural, one {# fiche à lire} other {# fiches à lire}} |
-| `career.home.interviews.question` | « Présentez-vous en deux minutes. » |
-| `career.home.upgrade.eyebrow` | Formule {plan} |
-| `career.home.upgrade.title` | {count, plural, one {Débloquez un outil pour candidater mieux} other {Débloquez # outils pour candidater mieux}} |
-| `career.home.upgrade.price` | {price} USD |
-| `career.home.upgrade.period` | par mois · Mobile Money ou carte |
-| `career.home.upgrade.cta` | Voir les formules |
 | `career.nav.locked` | (outil verrouillé) |
 
 #### Conseils généraux (Free, contenu statique)
@@ -7191,6 +7266,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 |---|---|
 | `tester.seo.title` | Mode testeur · Jumanly |
 | `tester.eyebrow` | Compte passe-partout |
+| `tester.back` | Retour |
 | `tester.title` | Mode testeur |
 | `tester.subtitle` | Passez d'un forfait à l'autre sans paiement pour essayer chaque page vous-même. |
 | `tester.notice` | Ce mode ne s'affiche que pour votre compte. Choisir un forfait, même celui en cours, remet vos quotas à zéro. Chaque changement est inscrit au journal d'audit. |
@@ -7251,8 +7327,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `compte.settings.text` | Sécurité, confidentialité, notifications |
 | `compte.help.title` | Aide |
 | `compte.help.text` | assistant@jumanly.io |
-| `compte.spaces.title` | Espace recruteur |
-| `compte.spaces.text` | Passer à mon organisation |
+| `compte.spaces.text` | Passer à l’espace recruteur |
+| `compte.spaces.partner` | Passer à l’espace partenaire |
 | `compte.tester.title` | Mode testeur |
 | `compte.tester.text` | Changer de formule sans payer |
 | `compte.admin.title` | Administration |
@@ -8845,6 +8921,7 @@ Conventions :
 | `org.members.teamDone` | Équipe mise à jour. |
 | `org.members.transferDone` | Propriété transférée. |
 | `org.invite.title` | Inviter des membres |
+| `org.invite.accept.pageTitle` | Invitation |
 | `org.invite.emails.text` | Adresses e-mail |
 | `org.invite.emails.placeholder` | Une ou plusieurs adresses, séparées par une virgule |
 | `org.invite.role` | Rôle |
