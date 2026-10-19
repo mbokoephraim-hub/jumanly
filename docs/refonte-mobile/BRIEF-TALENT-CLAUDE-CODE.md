@@ -42,7 +42,7 @@ Chaque dossier contient le HTML de la planche (ouvrir dans un navigateur), `capt
 | Offres, filtres, détail, Pourquoi, préparer | `/app/jobs`, `/app/jobs/[slug]` |
 | Postuler 3 étapes + confirmation | `/app/jobs/[slug]/postuler` |
 | Suivi, détail candidature | `/app/suivi`, `/app/suivi/[id]` |
-| S'entraîner | `/app/career/entretiens/[id]` |
+| S'entraîner (accueil, nouvel entraînement, simulation écrite et orale, retours, version Free) — lot 2 § entraînement et lot 4 § 5 bis | `/app/career/entretiens`, `/app/career/entretiens/nouveau`, `/app/career/entretiens/[id]` |
 | Messages, conversation, notifications | `/app/messages`, `/app/messages/[id]`, `/app/notifications` |
 | Apprendre, rechercher, parcours, mes formations | `/app/learn`, `/app/learn/mes-formations` |
 | Détail formation, salle de cours, exercice, quiz | `/app/learn/[slug]`, `/app/learn/[slug]/[lecon]` |
@@ -66,7 +66,7 @@ Les anciennes routes (`tableau-de-bord`, `espace`, `learn/explorer`, `jobs/candi
 3. Pour moi, Offres, détail d'offre (lot 1).
 4. Postuler, Suivi, entretien, messages, notifications (lot 2).
 5. Apprendre, salle de cours, quiz, attestations + PDF + vérification (lot 3 et attestation).
-6. Compte, profil, diagnostic, plan, CV et documents, éditeur (lot 4 § 3-6).
+6. Compte, profil, diagnostic, plan, simulations d'entretien (écrites `career.interview.text.monthly`, orales `career.interview.voice.monthly`, audio effacé après le retour), CV et documents, éditeur (lot 4 § 3-6).
 7. Abonnement, paiement Mobile Money, factures, paramètres, aide, Orbi historique (lot 4 § 7-9). Redirections des anciennes routes.
 
 ## 5. Définition de fini, pour chaque lot

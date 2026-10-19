@@ -117,6 +117,17 @@ CSS4 = '''
 .compl .anneau b{display:grid}
 .bt.dg.off{opacity:.45}
 .conf .bt.pl{flex:none;height:54px}
+.ent-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.eg{display:flex;flex-direction:column;gap:6px;padding:12px;border-radius:22px;font-size:11.5px;color:var(--texte2)}.eg b{font-size:13.5px;color:var(--texte)}
+.eg .cases{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;background:rgba(255,255,255,.7);color:#0F3F37}.sombre .eg .cases{background:rgba(255,255,255,.12);color:var(--texte)}
+.eg.e1{background:var(--g-oppo)}.eg.e2{background:var(--g-accomp)}.eg.e3{background:var(--g-former)}.eg.e4{background:linear-gradient(150deg,#E8F1FB,#B9D5F2)}.sombre .eg.e4{background:linear-gradient(150deg,rgba(120,170,230,.24),rgba(120,170,230,.08))}
+.voc{display:flex;flex-direction:column;align-items:center;gap:10px;padding:10px 0}
+.onde{display:flex;align-items:center;gap:4px;height:56px}.onde i{width:5px;border-radius:3px;background:linear-gradient(#3DA14F,#2FD3A6)}
+.tps{font-size:13px;font-weight:600}.voc-t{font-size:13px;color:var(--texte2);text-align:center;font-style:italic;line-height:1.5;padding:0 6px}
+.voc-b{display:flex;align-items:center;justify-content:center;gap:28px}
+.mic{width:76px;height:76px;border-radius:50%;background:#0F3F37;color:#A6F26B;display:grid;place-items:center;box-shadow:0 0 0 10px rgba(166,242,107,.25),0 16px 30px -12px rgba(15,63,55,.6)}.mic .ic{width:30px;height:30px}
+.sombre .mic{background:var(--lime);color:#0F3F37}
+
 .fl{width:24px;height:16px;flex:none;border-radius:3px;display:inline-block;vertical-align:middle}
 .puce .fl{width:20px;height:14px}
 .py{min-height:50px!important}.py .fl{width:30px;height:20px}
@@ -204,6 +215,7 @@ COMPTE = phone(f'''{tete_f("Compte", droite=None)}
 <div class="verre liste lignes">
 <div class="li tap" data-n="3"><span class="cases c2">{ic("cv","s")}</span><div class="t"><b>CV et documents</b><span>3 CV, 2 lettres</span></div>{ic("suivant")}</div>
 <div class="li"><span class="cases c1">{ic("certificat","s")}</span><div class="t"><b>Attestations</b><span>3 obtenues</span></div>{ic("suivant")}</div>
+<div class="li"><span class="cases c1">{ic("entretien","s")}</span><div class="t"><b>S’entraîner aux entretiens</b><span>4 simulations ce mois</span></div>{ic("suivant")}</div>
 <div class="li"><span class="cases c3">{ic("connexion","s")}</span><div class="t"><b>Connexions</b><span>48 personnes</span></div>{ic("suivant")}</div></div>
 <div class="verre liste lignes">
 <div class="li tap" data-n="4"><span class="cases">{ic("portefeuille","s")}</span><div class="t"><b>Abonnement</b><span>Pro · 112 crédits Orbi</span></div>{ic("suivant")}</div>
@@ -672,6 +684,57 @@ AIDE = phone(f"""{tete_f("Aide", droite=None)}
 <div class="li"><span class="cases">{ic("confidentialite","s")}</span><div class="t"><b>Données et confidentialité</b><span>4 articles</span></div>{ic("suivant")}</div></div>
 <div class="verre contact"><b>Écrire à l’équipe</b><span>assistant@jumanly.io · réponse sous 2 jours ouvrés</span><a class="bt p s">{ic("message","xs")}Écrire un e-mail</a></div>""", avec_nav=False)
 
+# ---------- Simulations d'entretien ----------
+_t2 = open(H + '/talent2.py').read()
+exec(_t2[_t2.index('BRIEF = phone('):_t2.index('# 5 bis.')])   # briefing, simulation écrite, retour (lot 2)
+ENT_HUB = phone(f"""{tete_f("S’entraîner aux entretiens", droite=None)}
+<div class="verre quotas">
+<div class="quota"><div class="l"><b>Simulations écrites</b><span>4 sur 10 ce mois</span></div><span class="barre"><i style="width:40%"></i></span></div>
+<div class="quota"><div class="l"><b>Simulations vocales</b><span>1 sur 3 ce mois</span></div><span class="barre"><i style="width:33%"></i></span></div></div>
+<span class="ck-t">Entretien prévu</span>
+<div class="verre cd"><div class="haut"><span class="lg-e sap">BF</span><div class="t"><b>Baobab Fintech · Analyste data</b><span>Mardi 22 oct. · 10:00</span></div></div><a class="bt a s" style="align-self:flex-start">{ic("entretien","xs")}Préparer cet entretien</a></div>
+<span class="ck-t">S’entraîner librement</span>
+<div class="ent-g"><a class="eg e1"><span class="cases">{ic("opportunites","s")}</span><b>Sur une offre</b>Enregistrée ou envoyée</a><a class="eg e2"><span class="cases">{ic("cap","s")}</span><b>Sur un métier</b>Analyste de données</a><a class="eg e3"><span class="cases">{ic("message","s")}</span><b>Questions classiques</b>Se présenter, défauts</a><a class="eg e4"><span class="cases">{ic("micro","s")}</span><b>À l’oral</b>Avec votre voix</a></div>
+<span class="ck-t">Derniers entraînements</span>
+<div class="verre liste lignes">
+<div class="li"><span class="cases c1">{ic("entretien","s")}</span><div class="t"><b>Baobab Fintech · écrit</b><span>15 oct. · 8 questions · retour prêt</span></div>{ic("suivant")}</div>
+<div class="li"><span class="cases c2">{ic("micro","s")}</span><div class="t"><b>Analyste de données · oral</b><span>12 oct. · 6 questions</span></div>{ic("suivant")}</div></div>""", avec_nav=False, cls='long')
+
+ENT_CHOIX = phone(f"""{tete_f("Nouvel entraînement")}
+{champ('Métier','Analyste de données','', 'cap')}
+<span class="ck-t">Niveau du poste</span>
+<div class="seg"><span class="on">Junior</span><span>Confirmé</span><span>Senior</span></div>
+<span class="ck-t">Types de questions</span>
+<div class="puces"><span class="puce on">{OK()}Motivation</span><span class="puce on">{OK()}Techniques</span><span class="puce on">{OK()}Mises en situation</span><span class="puce">Salaire</span></div>
+<span class="ck-t">Format</span>
+<div class="opts"><span class="on"><b>Écrit</b>4 sur 10</span><span><b>Oral</b>1 sur 3</span><span><b>Mixte</b>oral</span></div>
+<div class="opts"><span><b>Rapide</b>10 min</span><span class="on"><b>Standard</b>20 min</span><span><b>Complet</b>30 min</span></div>""", avec_nav=False,
+ bas=f'<div class="verre fort bas-f"><a class="bt a pl">{ic("entretien","s")}Commencer</a></div>')
+
+VOCAL = phone(f"""{tete_f("Question 2 sur 6")}{pas(2,6)}
+<div class="verre q"><small>Mise en situation · oral</small><b>Votre responsable vous demande un chiffre pour demain, mais les données sont incomplètes. Que faites-vous ?</b></div>
+<div class="voc"><div class="onde">{''.join(f'<i style="height:{h}px"></i>' for h in [10,18,28,40,26,48,34,20,44,30,16,38,24,12,30,46,22,14])}</div><span class="tps">0:48 / 2:00</span>
+<span class="voc-t">« Je commencerais par dire clairement ce qui manque, puis je donnerais une estimation avec une marge… »</span></div>
+<div class="voc-b"><a class="bi">{ic("fermer","s")}</a><a class="mic">{ic("micro")}</a><a class="bi">{ic("valider","s")}</a></div>
+<div class="gar">{ic("cadenas","s")}Votre voix sert seulement à transcrire la réponse. L’audio est effacé après le retour.</div>""", avec_nav=False)
+
+FB_V = phone(f"""{tete_f("Votre retour · oral", droite=None)}
+<div class="verre sc-c">{orbi(48)}<div class="t"><b>Réponses claires, débit à ralentir</b><span>6 questions · retour sur 5 critères, sans note</span></div></div>
+<div class="verre fb-c"><h4>À l’oral</h4><div class="pt ok"><i>{ic("valider","xs")}</i>Structure : situation, action, résultat</div><div class="pt ko"><i>{ic("plus","xs")}</i>Débit rapide sur la question 4</div><div class="pt ko"><i>{ic("plus","xs")}</i>Trois « euh » par réponse en moyenne</div></div>
+<div class="verre pj"><span class="cases">{ic("lecon","s")}</span><div class="t"><b>Réécouter ma réponse 4</b><span>Avec la réponse proposée par Orbi</span></div>{ic("suivant","s")}</div>
+<a class="pq">{ic("pourquoi")}Pourquoi ce retour ?</a>""", avec_nav=False,
+ bas=f'<div class="verre fort bas-f"><a class="bt sec m">Recommencer</a><a class="bt p pl">Terminer</a></div>')
+
+ENT_FREE = phone(f"""{tete_f("S’entraîner aux entretiens", droite=None)}
+<span class="ck-t">Gratuit</span>
+<div class="verre liste lignes">
+<div class="li"><span class="cases c1">{ic("lecon","s")}</span><div class="t"><b>Les 10 questions les plus posées</b><span>Fiche et exemples de réponses</span></div>{ic("suivant")}</div>
+<div class="li"><span class="cases c1">{ic("entretien","s")}</span><div class="t"><b>Se présenter en 2 minutes</b><span>Formation gratuite · 6 min</span></div>{ic("suivant")}</div>
+<div class="li"><span class="cases c1">{ic("document","s")}</span><div class="t"><b>Préparer un entretien en visio</b><span>Conseils · 3 min</span></div>{ic("suivant")}</div></div>
+<div class="verrou">{ic("cadenas","s")}<div class="t"><b>Simulations avec Orbi dès Starter</b>Écrites dès Starter, à l’oral dès Pro.</div></div>
+<div class="gar">{ic("valider","s")}Postuler et passer vos entretiens restent gratuits.</div>""", avec_nav=False,
+ bas=f'<div class="verre fort bas-f"><a class="bt p pl">Voir les formules</a></div>')
+
 # ---------- Chemins ----------
 CHEMINS = [
  ('Se connecter', ['Ouverture de l’appli', 'Se connecter', 'Google, LinkedIn, mot de passe ou lien par e-mail']),
@@ -682,6 +745,7 @@ CHEMINS = [
  ('Compléter mon profil', ['Compte', 'Mon profil', 'Crayon, Ajouter une expérience, une compétence ou un projet']),
  ('Dire ce que je cherche', ['Mon profil', 'Ce que je cherche']),
  ('Faire le point', ['Mon profil', 'Faire le point', 'Diagnostic', 'Mon plan']),
+ ('S’entraîner à un entretien', ['Compte, onglet Orbi « Préparer un entretien » ou Suivi', 'S’entraîner', 'Écrit ou oral', 'Retour']),
  ('Gérer mes connexions', ['Compte', 'Connexions', 'Accepter une demande']),
  ('Créer ou importer un CV', ['Compte', 'CV et documents', 'Nouveau CV ou Importer', 'Éditeur']),
  ('Améliorer ou adapter', ['Éditeur', 'Améliorer', 'Accepter ou refuser', 'ou', 'Adapter']),
@@ -718,6 +782,8 @@ ECR = [
   [ecrans((PROF,'Mon profil','Faire le point, vu par un recruteur.'),(PROF2,'Sections','Ajouter un projet ; le reste replié.'),(EDIT_ID,'Modifier le profil','Photo facultative, titre, résumé, pays.'),(EXP_F,'Nouvelle expérience','Poste, dates, résultat.'),(COMP_F,'Compétence','Niveau et preuve.'),(PREFS,'Ce que je cherche','Métiers, villes avec drapeau, contrat, salaire.'),(PROJ,'Nouveau projet','Photos ou PDF, résultat, compétences.'),(APERCU,'Vu par un recruteur','Et ce qui n’entre jamais dans le score.'))]),
  ('b5','5 · Faire le point','Le bilan d’Orbi, le diagnostic calculé par des règles fixes, puis le plan.',
   [ecrans((POINT,'Faire le point','Atouts, à renforcer, prochaine action.'),(DIAG,'Diagnostic','Six notes sur 100, avec leur pourquoi.'),(PLAN,'Plan de progression','Étapes modifiables.'))]),
+ ('b5b','5 bis · Simulations d’entretien','Écrites dès Starter, orales dès Pro, avec quotas. Toujours privées : le recruteur ne les voit jamais. Retour sur 5 critères, sans note.',
+  [ecrans((ENT_HUB,'S’entraîner','Quotas, entretien prévu, sujets libres, historique.'),(ENT_CHOIX,'Nouvel entraînement','Métier, niveau, questions, écrit ou oral, durée.'),(BRIEF,'Préparer un entretien prévu','Ce qu’il faut savoir sur l’offre.'),(SIM,'Simulation écrite','Une question à la fois, Orbi relance.'),(VOCAL,'Simulation orale','Micro, transcription, 2 minutes par réponse.'),(FB,'Retour écrit','Points forts, à travailler, formation.'),(FB_V,'Retour oral','Débit, hésitations, réécoute.'),(ENT_FREE,'En formule Free','Conseils gratuits ; simulations dès Starter.'))]),
  ('b6','6 · CV et documents','Mes CV, mes lettres, LinkedIn. L’éditeur garde la main au talent.',
   [ecrans((DOCS,'Mes CV','Nouveau CV, importer.'),(LETTRES,'Lettres','Lettres et accès LinkedIn.'),(LINKEDIN,'Préparer LinkedIn','Titre, résumé, compétences à copier.'),(IMPORT,'Importer','Ce qui est lu, à cocher avant d’ajouter.'),(MODS,'Choisir un modèle','Les modèles inclus dans la formule.'),(EDIT,'Éditeur','Améliorer, adapter, PDF.'),(AVAP,'Avant, après','Accepter, modifier ou refuser.'),(ADAPT,'Adapter à une offre','Une copie, l’original ne change pas.'))]),
  ('b7','7 · Abonnement et paiement','Prépayé, sans surprise. Postuler reste gratuit dans toutes les formules.',
@@ -727,7 +793,7 @@ ECR = [
  ('b9','9 · Orbi en plein écran','L’onglet du centre et l’historique des échanges.',
   [ecrans((ORB_P,'Orbi','Historique.'),(ORB_H,'Historique','Retrouver ou effacer un échange.'))]),
  ('b10','10 · Mode sombre','',
-  [ecrans((sombre(CONNEX),'Se connecter',''),(sombre(PAYS),'Pays',''),(sombre(PROF),'Mon profil',''),(sombre(EDIT),'Éditeur',''),(sombre(PAYN),'Indicatif',''))]),
+  [ecrans((sombre(CONNEX),'Se connecter',''),(sombre(PAYS),'Pays',''),(sombre(PROF),'Mon profil',''),(sombre(EDIT),'Éditeur',''),(sombre(VOCAL),'Simulation orale',''),(sombre(PAYN),'Indicatif',''))]),
 ]
 EXTRA = {'b0': chemins()}
 som = ''.join(f'<li><a href="#{i}">{t.split(" · ")[1]}</a></li>' for i, t, _, _ in ECR)
