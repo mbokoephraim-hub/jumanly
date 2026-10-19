@@ -322,12 +322,12 @@ def cvr(i, cls, nom, off, msg, h, n=0, et=None, enl=False):
 
 MSG_R = phone(f'''{tete_r("Messages")}
 <div class="verre rech">{ic("recherche","s")}<span>Candidat, offre</span></div>
-<div class="filtres-h"><span class="puce on">Toutes</span><span class="puce">Non lues<small>3</small></span><span class="puce">Retenus</span><span class="puce">Contacts</span><span class="puce">Non retenus</span></div>
+<div class="filtres-h"><span class="puce on">Toutes</span><span class="puce">Non lues<small>3</small></span><span class="puce">Retenus</span><span class="puce">Propositions</span><span class="puce">Non retenus</span></div>
 <div class="orbi-l">{orbi(26)}<div class="t"><b>2 réponses</b> sont prêtes à relire, pour Patrick et Ruth.</div><a class="bt p s">Relire</a></div>
 <div class="verre cvs">
 {cvr("PK","b","Patrick K.","Analyste de données junior","Serait-il possible jeudi ?","09:30",1,("Retenu · entretien","ret"),True)}
 {cvr("GM","b","Grâce M.","Analyste de données junior","Merci, je confirme mardi à 10 h.","10:12",1,("Retenue · entretien","ret"))}
-{cvr("RB","","Ruth B.","Proposition · Analyste","Oui, l’offre m’intéresse.","Hier",1,("Contact accepté","ct"),True)}
+{cvr("RB","","Ruth B.","Proposition · Analyste","Oui, l’offre m’intéresse.","Hier",1,("Proposition acceptée","ct"),True)}
 {cvr("FN","a","Fatou N.","Analyste de données junior","Vous : Pouvez-vous envoyer votre diplôme ?","Dim.",0,("En examen","at"))}
 {cvr("JT","","Joël T.","Chargé de clientèle","Vous : Merci pour votre candidature…","Lun.",0,("Non retenu","nr"))}</div>
 <div class="orbi-l">{orbi(26)}<div class="t"><b>3 conversations</b> de candidats non retenus sont terminées depuis 30 jours. Les retirer de votre messagerie ?</div><a class="bt sec s">Voir</a></div>''', 'message', 'long')

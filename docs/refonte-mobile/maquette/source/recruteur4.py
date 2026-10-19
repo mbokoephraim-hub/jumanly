@@ -6,6 +6,10 @@ exec(open(H + '/recruteur3.py').read().split("\nCHEMINS = [")[0])
 exec(open(H + '/modeles4.py').read())
 
 CSSR += '''
+.sub-t{display:flex;padding:4px;border-radius:16px;background:var(--zone);gap:4px}
+.sub-t a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:38px;border-radius:12px;font-size:12.5px;font-weight:600;color:var(--texte2)}
+.sub-t a small{font-size:10.5px;padding:1px 7px;border-radius:99px;background:var(--trait)}
+.sub-t a.on{background:var(--plein);color:var(--texte);box-shadow:0 4px 12px -6px rgba(15,63,55,.35)}.sub-t a.on small{background:#A6F26B;color:#0F3F37}
 .ats-h{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:24px;background:linear-gradient(140deg,#0F3F37,#1C6B5A);color:#fff}
 .ats-h .r{display:flex;align-items:center;gap:12px}.ats-h .r .t{flex:1;font-size:12px;color:#CFE9DF}.ats-h .r .t b{display:block;font-size:16px;color:#fff}
 .ats-h .bt{background:#A6F26B;color:#0F3F37;height:46px!important;flex:none!important;display:flex;align-items:center;justify-content:center;font-weight:700}
@@ -613,11 +617,11 @@ CLEAN = phone(f'''{tete_r("Messages")}''', 'message',
 # ---------- 4. Contacts ----------
 DEM_ENV = phone(f'''{tete_f("Proposer l’offre", droite=None)}''', avec_nav=False,
  bas=f'''<div class="voile"></div><div class="sheet"><div class="poignee"></div>
-<div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:6px 0"><span class="rond-ok" style="width:64px;height:64px;border-radius:50%;background:var(--g-accent);display:grid;place-items:center;color:#0F3F37">{ic("envoyer")}</span><h3 style="margin:4px 0 0">Demande envoyée à Ruth</h3><span style="font-size:12.5px;color:var(--texte2)">Elle reçoit l’offre et votre message. Vous serez prévenue de sa réponse.</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:6px 0"><span class="rond-ok" style="width:64px;height:64px;border-radius:50%;background:var(--g-accent);display:grid;place-items:center;color:#0F3F37">{ic("envoyer")}</span><h3 style="margin:4px 0 0">Proposition envoyée à Ruth</h3><span style="font-size:12.5px;color:var(--texte2)">Elle reçoit l’offre et votre message. Vous serez prévenue de sa réponse.</span></div>
 <div class="verre tl-c"><div class="e ok"><span class="o">{CK}</span><div><b>Envoyée</b><span>Aujourd’hui 10:05</span></div></div><div class="e at"><span class="o">{ic("horloge","xs")}</span><div><b>Ruth décide</b><span>Accepter ou refuser, sous 14 jours</span></div></div><div class="e"><span class="o">{ic("message","xs")}</span><div><b>Conversation ouverte</b><span>Si elle accepte</span></div></div></div>
-<a class="bt p pl" style="flex:none;height:50px">Voir mes contacts</a></div>''')
+<a class="bt p pl" style="flex:none;height:50px">Voir mes propositions</a></div>''')
 
-TAL_REQ = phone(f'''{tete_f("Demande de contact", droite=None)}
+TAL_REQ = phone(f'''{tete_f("Proposition d’offre", droite=None)}
 <div class="req"><div class="h"><span class="lg-e sap">BF</span><div class="t"><b>Baobab Fintech</b>Nadia K. · Responsable recrutement · organisation vérifiée</div></div>
 <p>Bonjour Ruth, votre attestation SQL et votre tableau de bord Power BI correspondent à ce que nous cherchons. L’offre vous intéresse-t-elle ?</p>
 <div class="verre off-m" style="box-shadow:none;background:var(--zone)"><span class="im">{BAN["baobab"]}</span><div class="t"><b>Analyste de données junior</b><span>CDI · Hybride · Kinshasa</span></div></div>
@@ -631,11 +635,13 @@ TAL_REQ = TAL_REQ.replace('la recruteuse n’est pas prévenue d’un refus', 'u
 
 ACCEPTE = phone(f'''{tete_r("Messages")}''', 'message',
  bas=f'''<div class="voile"></div><div class="sheet"><div class="poignee"></div>
-<div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:6px 0"><span class="av enl" style="width:72px;height:72px;font-size:20px;color:#0F3F37">RB</span><h3 style="margin:6px 0 0">Ruth a accepté votre demande</h3><span style="font-size:12.5px;color:var(--texte2)">Analyste de données junior · il y a 2 min</span><span class="etq-s ct">Contact accepté</span></div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;padding:6px 0"><span class="av enl" style="width:72px;height:72px;font-size:20px;color:#0F3F37">RB</span><h3 style="margin:6px 0 0">Ruth a accepté votre proposition</h3><span style="font-size:12.5px;color:var(--texte2)">Analyste de données junior · il y a 2 min</span><span class="etq-s ct">Proposition acceptée</span></div>
 <div class="orbi-l">{orbi(26)}<div class="t">Je peux préparer un premier message ou l’inviter à postuler.</div></div>
 <div class="bts"><a class="bt sec m">Profil</a><a class="bt p m pl">{ic("message","s")}Écrire à Ruth</a></div></div>''')
 
-CONTACTS = phone(f'''{tete_r("Contacts")}
+CONTACTS = phone(f'''{tete_r("Candidats")}
+{SEG_T}
+<div class="sub-t"><a>Découvrir</a><a class="on">Mes propositions<small>18</small></a></div>
 <div class="verre rech">{ic("recherche","s")}<span>Nom, métier, offre</span></div>
 <div class="filtres-h"><span class="puce on">Tous<small>18</small></span><span class="puce">Acceptés<small>12</small></span><span class="puce">En attente<small>4</small></span><span class="puce">Refusés<small>2</small></span></div>
 <div class="verre ctc">
@@ -645,7 +651,7 @@ CONTACTS = phone(f'''{tete_r("Contacts")}
 <div class="r"><span class="av a">SL</span><div class="t"><b>Sarah L.<span class="etq-s at">En attente</span></b><span>Envoyée il y a 5 j · Analyste</span></div><a class="bt sec">Relancer</a></div>
 <div class="r"><span class="av b">CN</span><div class="t"><b>Christian N.<span class="etq-s ct">Accepté</span></b><span>Comptable · vu lun.</span></div><a class="bi">{ic("message","s")}</a></div>
 <div class="r"><span class="av">YK</span><div class="t"><b>Yannick K.<span class="etq-s nr">Refusé</span></b><span>Chargé de clientèle · 3 oct.</span></div></div></div>
-<div class="verre quota-g"><div class="h"><b>Demandes ce mois</b><span>6 sur 10</span></div><span class="barre"><i style="width:60%"></i></span></div>''', 'candidats', 'long')
+<div class="verre quota-g"><div class="h"><b>Propositions ce mois</b><span>6 sur 10</span></div><span class="barre"><i style="width:60%"></i></span></div>''', 'candidats', 'long')
 
 # ---------- 5. Rejoindre une organisation existante ----------
 ORG_TROUVE = phone(f'''{tete_f("", droite=None)}{pas(2,3)}<span class="pas-t">2 sur 3</span>
@@ -699,7 +705,7 @@ CHEMINS = [
  ('Ouvrir les modèles de messages', ['Conversation', '+ dans la zone de saisie', 'Modèles'], ),
  ('Menu d’une conversation', ['Conversation', '⋯ en haut à droite']),
  ('Demander de l’aide à Orbi dans une conversation', ['Conversation', 'Orbi dans la zone de saisie']),
- ('Voir tous les contacts', ['Candidats', 'Contacts']),
+ ('Voir mes propositions', ['Candidats', 'Rechercher des talents', 'Mes propositions']),
  ('Rejoindre son organisation', ['Inscription', 'Je recrute', 'Votre organisation', 'Demander à rejoindre']),
  ('Choisir quand analyser', ['Lancer l’analyse', 'Maintenant ou À la fin de l’offre']),
  ('Rappel de fin d’offre', ['Notification ou e-mail J-3', 'Analyser, Statistiques, Prolonger ou Clôturer']),
@@ -728,9 +734,9 @@ ECR = [
   [ecrans((ENV,'Choisir et relire','Modèle, canal, phrase personnalisée.'),(ENV_OK,'Confirmer','19 réponses, annulation possible.'),(MSG_LONG,'Message « retenue »','Ce que reçoit la candidate.'),(MSG_REFUS,'Message « non retenu »','Respectueux, avec une suite.'))]),
  ('x3','3 · Modèles d’e-mail','Aux couleurs de Jumanly, sans numéro de téléphone. Le texte vient du modèle, relu avant l’envoi.', []),
  ('x4','4 · Messagerie','Présence en ligne, accusés de lecture, badge d’étape, menu, modèles et aide d’Orbi.',
-  [ecrans((MSG_R,'Messages','Badges Retenu, Contact, Non retenu.'),(CONV_R,'Conversation','En ligne, lu, en train d’écrire.'),(CONV_MENU,'Menu ⋯','Dossier, modèles, épingler, retirer.'),(CONV_PLUS,'Bouton +','Modèles, créneaux, documents.'),(CONV_ORBI,'Orbi dans la conversation','Résumé, réponse, ton, traduction, relance.'),(CLEAN,'Alléger la messagerie','Proposé par Orbi, choisi par vous.'))]),
- ('x5','5 · Contacts','Demander, attendre, être accepté : tous les contacts au même endroit.',
-  [ecrans((DEM_ENV,'Demande envoyée','Les étapes qui suivent.'),(TAL_REQ,'Côté talent','Ruth accepte ou refuse.'),(ACCEPTE,'Acceptée','La conversation s’ouvre.'),(CONTACTS,'Tous les contacts','Acceptés, en attente, refusés.'))]),
+  [ecrans((MSG_R,'Messages','Badges Retenu, Proposition acceptée, Non retenu.'),(CONV_R,'Conversation','En ligne, lu, en train d’écrire.'),(CONV_MENU,'Menu ⋯','Dossier, modèles, épingler, retirer.'),(CONV_PLUS,'Bouton +','Modèles, créneaux, documents.'),(CONV_ORBI,'Orbi dans la conversation','Résumé, réponse, ton, traduction, relance.'),(CLEAN,'Alléger la messagerie','Proposé par Orbi, choisi par vous.'))]),
+ ('x5','5 · Propositions aux talents','Dans Candidats, onglet Rechercher des talents : découvrir un profil, lui proposer une offre, suivre sa réponse. La conversation s’ouvre dans Messages seulement s’il accepte.',
+  [ecrans((DEM_ENV,'Proposition envoyée','Les étapes qui suivent.'),(TAL_REQ,'Côté talent','Ruth accepte ou refuse.'),(ACCEPTE,'Acceptée','La conversation s’ouvre.'),(CONTACTS,'Mes propositions','Acceptées, en attente (à relancer), refusées.'))]),
  ('x6','6 · Rejoindre une organisation existante','À l’inscription, l’organisation déjà présente s’affiche. L’admin principale décide.',
   [ecrans((ORG_TROUVE,'Organisation trouvée','Fiche, équipe, domaine reconnu.'),(JOIN_ATT,'Demande envoyée','En attente de l’admin.'),(ADM_NOTIF,'Côté admin','Rôle choisi, accepter ou refuser.'))]),
  ('x6b','6 bis · Fin d’une offre : rappels','Avant la clôture, le recruteur est prévenu : analyser, voir les statistiques, prolonger ou clôturer.',
@@ -738,7 +744,7 @@ ECR = [
  ('x7','7 · Rapport PDF','Toujours exporté en PDF A4, aux couleurs de Jumanly. Chiffres réels, aucune donnée personnelle.',
   [ecrans((RAPPORT,'Rapports','Aperçu et export.'),(EXPORT,'Exporter','Période, offres, contenu.'))]),
  ('x8','8 · Mode sombre','',
-  [ecrans((sombre(ATS3),'Recommandation',''),(sombre(CONV_R),'Conversation',''),(sombre(CONTACTS),'Contacts',''))]),
+  [ecrans((sombre(ATS3),'Recommandation',''),(sombre(CONV_R),'Conversation',''),(sombre(CONTACTS),'Mes propositions',''))]),
 ]
 EXTRA = {'x0': chemins(), 'x3': MAILS, 'x7': RAPPORT_PDF}
 som = ''.join(f'<li><a href="#{i}">{t.split(" · ")[1]}</a></li>' for i, t, _, _ in ECR)

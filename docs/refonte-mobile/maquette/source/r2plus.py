@@ -402,6 +402,11 @@ CSSR += """
 .tl .b2 .bt{height:34px;padding:0 16px;font-size:12.5px;background:#0F3F37;color:#fff;flex:none}
 .sombre .tl .b2 .bt{background:#A6F26B;color:#0F3F37}
 .tl{gap:10px!important}
+.sub-t{display:flex;padding:4px;border-radius:16px;background:var(--zone);gap:4px}
+.sub-t a{flex:1;display:flex;align-items:center;justify-content:center;gap:6px;height:38px;border-radius:12px;font-size:12.5px;font-weight:600;color:var(--texte2)}
+.sub-t a small{font-size:10.5px;padding:1px 7px;border-radius:99px;background:var(--trait)}
+.sub-t a.on{background:var(--plein);color:var(--texte);box-shadow:0 4px 12px -6px rgba(15,63,55,.35)}.sub-t a.on small{background:#A6F26B;color:#0F3F37}
+
 .pagin{display:flex;align-items:center;justify-content:center;gap:6px;padding:4px 0}
 .pagin a{min-width:34px;height:34px;border-radius:12px;display:grid;place-items:center;font-size:13px;font-weight:600;background:var(--plein);box-shadow:var(--verre)}
 .pagin a.on{background:#0F3F37;color:#fff}.sombre .pagin a.on{background:#A6F26B;color:#0F3F37}
@@ -421,6 +426,7 @@ def tl(i, cls, nom, s_, tags, sc, scc=''):
     return f'<div class="verre tl"><div class="h"><span class="av {cls}">{i}</span><div class="t"><b>{nom}</b><span>{s_}</span></div><span class="sc-p"><b class="{scc}">{sc} %</b>avec l’offre</span></div><div class="b2"><div class="m">{tg}</div><a class="bt">Consulter</a></div></div>'
 TAL = phone(f'''{tete_r("Candidats")}
 {SEG_T}
+<div class="sub-t"><a class="on">Découvrir</a><a>Mes propositions<small>18</small></a></div>
 <div class="verre rech">{ic("recherche","s")}<span>Compétence, métier, ville</span><a class="f">{ic("filtres","s")}<b>3</b></a></div>
 <div class="filtres-h"><span class="puce on">SQL</span><span class="puce on">Kinshasa</span><span class="puce on">Junior</span></div>
 <span style="font-size:12px;color:var(--texte2)">38 profils visibles · comparés à « Analyste de données junior »</span>
