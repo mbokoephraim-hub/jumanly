@@ -124,6 +124,8 @@ La validation avant publication (point 5) et la limite de crédits par membre (p
 
 ## 5. Ordre de travail (un lot = une PR)
 
+L'ordre fait foi dans `docs/PLAN-REFONTE-EN-3-ETAPES.md` : le web talent se fait dans l'étape 1 avec le mobile talent, le web recruteur dans l'étape 2, l'administration dans l'étape 3. Ci-dessous, les lots web dans cet ordre.
+
 0. Diagnostic de l'existant face à ce brief (rendu grand écran actuel, `/app/organisation`, rôles en base) et plan, avec la liste de ce qui sera supprimé. Aucun code.
 1. **W0** cadre commun : points de rupture, barre latérale, rail tablette, barre du haut, recherche `Ctrl K`, panneau Orbi, fenêtres et volets, mode sombre.
 2. **Talent** : lots web talent 1, 2, Studio CV, 3 puis 4 (une PR chacun).

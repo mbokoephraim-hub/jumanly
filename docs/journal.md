@@ -2538,3 +2538,9 @@ toutes dans `docs/specifications.md`.
   isolation des échanges), e2e Free sur téléphone et ordinateur. Captures 390 px dans le dossier du projet
   `captures/orbi/`.
 
+
+## 2026-10-19 · Refonte complète en 3 étapes (décision d'Ephraïm)
+
+- Les maquettes finales s'appliquent intégralement à l'application ; l'ancien design (mobile et ordinateur) est effacé, jamais les données.
+- Ordre : 1. Talent (mobile + web) ; 2. Recruteur (mobile + web) ; 3. Entreprise et admin recruteur (web seulement). Une étape validée avant la suivante.
+- Instruction : `docs/PLAN-REFONTE-EN-3-ETAPES.md` (citée dans `CLAUDE.md`) ; prompt : `docs/PROMPT-LANCEMENT-REFONTE-COMPLETE.md`.
