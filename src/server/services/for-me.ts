@@ -37,6 +37,9 @@ export type ForMeCourse = {
   category: string;
   level: "beginner" | "intermediate" | "advanced";
   durationMinutes: number;
+  /** Number of modules and the cover chosen in the admin, for the course card. */
+  modules: number;
+  coverUrl: string | null;
   free: boolean;
   open: boolean;
   /** Progress in percent when the talent follows the course. */
@@ -53,6 +56,8 @@ const courseSelect = {
   level: true,
   durationMinutes: true,
   requiredLevel: true,
+  coverUrl: true,
+  _count: { select: { modules: true } },
 } as const;
 
 /**
@@ -81,6 +86,8 @@ export async function forMeCourses(
     course: { slug: string; title: string; category: string; level: ForMeCourse["level"] } & {
       durationMinutes: number;
       requiredLevel: string;
+      coverUrl: string | null;
+      _count: { modules: number };
     },
     progress: number | null,
   ): ForMeCourse => ({
@@ -89,6 +96,8 @@ export async function forMeCourses(
     category: course.category,
     level: course.level,
     durationMinutes: course.durationMinutes,
+    modules: course._count.modules,
+    coverUrl: course.coverUrl,
     free: course.requiredLevel === "free",
     open: opens(course.requiredLevel),
     progress,
@@ -128,38 +137,6 @@ export async function forMeCourses(
     });
   }
   return list.slice(0, options.take);
-}
-
-/**
- * Skills to strengthen (screen 05): asked by the offers the talent saved or applied to, and not on
- * the profile yet. Each comes with the number of those offers that ask for it (the « Pourquoi ? »).
- */
-export async function skillsToStrengthen(db: PrismaClient, userId: string, take = 6) {
-  const [saved, applied, profile] = await Promise.all([
-    db.savedJob.findMany({ where: { userId }, select: { jobId: true } }),
-    db.application.findMany({ where: { profile: { userId } }, select: { jobId: true } }),
-    db.talentProfile.findUnique({
-      where: { userId },
-      select: { skills: { select: { skillId: true } } },
-    }),
-  ]);
-  const jobIds = [...new Set([...saved, ...applied].map((row) => row.jobId))];
-  if (jobIds.length === 0) return [];
-  const owned = new Set(profile?.skills.map((row) => row.skillId) ?? []);
-  const rows = await db.jobSkill.findMany({
-    where: { jobId: { in: jobIds } },
-    select: { jobId: true, skill: { select: { id: true, name: true } } },
-  });
-  const counts = new Map<string, { id: string; name: string; offers: number }>();
-  for (const row of rows) {
-    if (owned.has(row.skill.id)) continue;
-    const entry = counts.get(row.skill.id) ?? { ...row.skill, offers: 0 };
-    entry.offers += 1;
-    counts.set(row.skill.id, entry);
-  }
-  return [...counts.values()]
-    .sort((a, b) => b.offers - a.offers || a.name.localeCompare(b.name, "fr"))
-    .slice(0, take);
 }
 
 export type NextAction =

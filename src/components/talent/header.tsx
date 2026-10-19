@@ -5,6 +5,7 @@ import Link from "next/link";
 import { usePathname, useSearchParams } from "next/navigation";
 import { TOP_BAR_SLOT_ID } from "@/lib/top-bar";
 import { cx } from "@/lib/cx";
+import { OFFER_FILTERS_ID, offerFilterKeys } from "@/lib/offer-filters";
 import { showToast } from "@/components/motion/toaster";
 import { BackButton, parentPath, useCountPages } from "./back-button";
 import { TalentIcon } from "./icon";
@@ -47,8 +48,7 @@ function titleOf(pathname: string, titles: Record<string, string>) {
 
 /** Pages whose search sits under the big title, and where it searches. */
 const searches: Record<string, { action: string; filters?: string }> = {
-  "/app": { action: "/app/recherche", filters: "/app/jobs?filtres=1" },
-  "/app/jobs": { action: "/app/jobs", filters: "/app/jobs?filtres=1" },
+  "/app/jobs": { action: "/app/jobs", filters: "/app/jobs" },
   "/app/learn": { action: "/app/learn" },
 };
 
@@ -74,6 +74,8 @@ export function TalentHeader({
   const count = useUnread(unread);
   // Orbi and the first connection draw their own head.
   if (pathname === "/app/orbi" || pathname === "/app/bienvenue") return null;
+  // An offer opens on its banner, with its own buttons over it (planche talent-1 § 3).
+  if (/^\/app\/jobs\/(?!candidatures$|enregistrees$)[^/]+$/.test(pathname)) return null;
   const tab = labels.tabs[pathname];
 
   if (!tab) {
@@ -136,7 +138,7 @@ export function TalentHeader({
 
 function SearchWithQuery(props: Parameters<typeof SearchBar>[0]) {
   const params = useSearchParams();
-  return <SearchBar {...props} query={params.get("q") ?? ""} />;
+  return <SearchBar {...props} query={params.get("q") ?? ""} params={params.toString()} />;
 }
 
 /** The search of a destination (planche Fondations § 5): a glass pill, the filters on the right. */
@@ -146,13 +148,19 @@ function SearchBar({
   labels,
   pathname,
   query = "",
+  params = "",
 }: {
   action: string;
   filters?: string;
   labels: HeaderLabels["search"];
   pathname: string;
   query?: string;
+  /** The current query string: the filters keep it, and count the filters already on. */
+  params?: string;
 }) {
+  const current = new URLSearchParams(params);
+  const active = offerFilterKeys.filter((key) => current.get(key)).length;
+  current.set("filtres", "1");
   const placeholder =
     pathname === "/app/jobs"
       ? labels.placeholderOffers
@@ -174,11 +182,21 @@ function SearchBar({
       />
       {filters && (
         <Link
-          href={query ? `${filters}&q=${encodeURIComponent(query)}` : filters}
-          aria-label={labels.filters}
+          href={`${filters}?${current.toString()}`}
+          aria-label={active > 0 ? `${labels.filters} · ${active}` : labels.filters}
+          aria-haspopup="dialog"
           className={cx("t-f t-press")}
+          onClick={(event) => {
+            // On Offres the sheet is already in the page: it opens at once.
+            const sheet = document.getElementById(OFFER_FILTERS_ID);
+            if (sheet instanceof HTMLDialogElement) {
+              event.preventDefault();
+              if (!sheet.open) sheet.showModal();
+            }
+          }}
         >
           <TalentIcon name="filtres" size="s" />
+          {active > 0 && <b aria-hidden>{active}</b>}
         </Link>
       )}
     </form>

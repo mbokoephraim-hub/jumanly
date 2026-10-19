@@ -2,6 +2,38 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte mobile de l'espace talent · lot 3 : Pour moi, Offres, détail d'une offre (19 octobre 2026)
+
+- Pour moi (`src/app/app/page.tsx`) d'après la planche talent-1 § 1 : ligne « Objectif »,
+  une seule prochaine étape avec l'anneau du profil, groupe « 3 opportunités pour vous » avec le
+  score et son « Pourquoi ? », formation en cours, accès rapide. Objectif « compétences » ou
+  « reconversion » : la formation à reprendre et « Pour vos objectifs » passent devant les offres.
+- Offres (`src/app/app/jobs/page.tsx`) : onglets Pour vous, Récentes, Enregistrées (l'ancienne
+  page `/app/jobs/enregistrees` redirige vers `?vue=enregistrees`), cartes avec bannière, logo,
+  contrat, mode de travail et score. Filtres en feuille (Domaine = secteur de l'entreprise, Lieu,
+  À distance, Contrat, Expérience, entreprises vérifiées) avec « Voir N offres » compté en direct ;
+  le bouton de filtres de la recherche affiche le nombre de filtres actifs. « Voir plus d'offres »
+  allonge la liste.
+- Détail d'une offre (`src/app/app/jobs/[slug]/page.tsx`) : bannière avec retour, partage et
+  enregistrer, tête qui reste en haut au défilement, carte de score, « Préparer ma candidature »
+  avec Orbi (ce qui correspond, ce qui manque, adapter le CV, rien n'est modifié sans accord),
+  missions, compétences demandées (déjà dans le profil ou manquantes), « Pour progresser » (la
+  formation qui comble l'écart), profil recherché, vérification, « Signaler cette offre », barre
+  « Postuler » toujours visible et toujours gratuite. « Pourquoi 86 % ? », la contestation et le
+  signalement s'ouvrent en feuilles au-dessus de l'offre (`?pourquoi=1` depuis une carte).
+- Mode sombre activé pour ces pages (`REDRAWN_EXACT` dans `src/lib/appearance.ts`).
+- Démo : trois offres fictives des planches (Baobab Fintech, Mwinda Énergie, Fleuve Banque) dans
+  `prisma/seed/ux.ts`.
+- Supprimés : `src/components/matching/dispute-panel.tsx`, `src/components/jobs/close-details.tsx`,
+  la page « Offres enregistrées » (remplacée par une redirection), `TalentJobCard`,
+  `FilterChipToggle`, `FilterMenu`, `CountLine`, `relativeLabel` de `talent-kit.tsx`, `TalentWhy`
+  et `CriterionList` de `talent-why.tsx`, `skillsToStrengthen`, `hiringCompanies`,
+  l'action `clearClosedSavedJobs`. Ne servent plus à Pour moi : `GoalCard`, `VisualTile`,
+  `DailyWelcome` et `components/app/for-me.tsx`, encore utilisés par des pages des lots 5 à 7 ;
+  supprimés avec elles.
+- Captures 390 px clair et sombre : `/mnt/project-files/captures/refonte-mobile-lot-3/`.
+- Décision : `docs/decisions/2026-10-19-refonte-mobile-lot-3.md`.
+
 ## Refonte mobile de l'espace talent · lot 2 : connexion, inscription, premiers pas (19 octobre 2026)
 
 - Écrans d'accès redessinés d'après la planche talent-4 (`src/app/(auth)/(acces)/`, composants

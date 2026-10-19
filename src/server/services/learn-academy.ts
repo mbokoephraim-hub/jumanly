@@ -167,6 +167,7 @@ export async function nextLessons(db: PrismaClient, userId: string) {
       category: enrollment.course.category,
       progress: enrollment.progress,
       remaining: required.filter((lesson) => !done.has(lesson.id)).length,
+      modules: enrollment.course.modules.length,
       next,
     };
   });

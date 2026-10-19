@@ -6,7 +6,12 @@ describe("apparence de l'espace talent (brief § 2.10)", () => {
     expect(redrawn("/app/orbi")).toBe(true);
     expect(redrawn("/app/orbi/historique")).toBe(true);
     expect(redrawn("/app/orbite")).toBe(false);
-    expect(redrawn("/app/jobs")).toBe(false);
+    expect(redrawn("/app/jobs")).toBe(true);
+    expect(redrawn("/app")).toBe(true);
+    expect(redrawn("/app/jobs/analyste-fictif")).toBe(true);
+    expect(redrawn("/app/jobs/candidatures")).toBe(false);
+    expect(redrawn("/app/jobs/candidatures/abc")).toBe(false);
+    expect(redrawn("/app/learn")).toBe(false);
   });
 
   it("pose la classe avant le premier affichage, selon le choix et le téléphone", () => {
@@ -15,7 +20,10 @@ describe("apparence de l'espace talent (brief § 2.10)", () => {
       ["light", true, "/app/orbi", false],
       ["auto", true, "/app/orbi", true],
       ["auto", false, "/app/orbi", false],
-      ["dark", true, "/app/jobs", false],
+      ["dark", true, "/app/jobs", true],
+      ["dark", true, "/app/jobs/analyste-fictif", true],
+      ["dark", true, "/app/jobs/candidatures", false],
+      ["dark", true, "/app/learn", false],
     ] as const) {
       const classes = new Set<string>();
       const run = new Function("location", "window", "document", appearanceScript(appearance));

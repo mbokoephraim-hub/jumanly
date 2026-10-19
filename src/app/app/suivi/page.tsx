@@ -447,7 +447,7 @@ export default async function SuiviPage({ searchParams }: PageProps<"/app/suivi"
           <Section id="suivi-liens" title={t("links.title")}>
             <List>
               <IconRow
-                href="/app/jobs/enregistrees"
+                href="/app/jobs?vue=enregistrees"
                 icon="favori"
                 title={t("links.saved")}
                 line={t("links.savedHint")}

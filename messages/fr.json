@@ -2634,6 +2634,213 @@
       "restored": "Votre saisie non envoyée a été reprise."
     }
   },
+  "forMe": {
+    "seo": "Pour moi · Jumanly",
+    "title": "Pour moi",
+    "goal": {
+      "label": "Objectif :",
+      "none": "à choisir",
+      "edit": "Modifier",
+      "editAria": "Modifier mon objectif"
+    },
+    "next": {
+      "eyebrow": "Prochaine étape",
+      "ring": "Profil complété à {percent} %",
+      "go": "Ouvrir la prochaine étape",
+      "profile": "Complétez votre profil",
+      "interview": "Préparez votre entretien",
+      "document": "Envoyez le document demandé",
+      "draft": "Terminez votre candidature",
+      "message": "Répondez au recruteur",
+      "course": "Reprenez votre formation",
+      "done": "Profil complet : regardez vos offres"
+    },
+    "offers": {
+      "title": "{count, plural, =0 {Aucune opportunité pour le moment} one {# opportunité pour vous} other {# opportunités pour vous}}",
+      "general": "{count, plural, one {# offre récente} other {# offres récentes}}",
+      "all": "Tout voir",
+      "empty": "Aucune offre ouverte pour le moment. Revenez bientôt.",
+      "score": "{score} %",
+      "scoreAria": "Compatibilité {score} %",
+      "line": "{company} · {city}"
+    },
+    "learn": {
+      "title": "Continuer à apprendre",
+      "link": "Apprendre",
+      "module": "Module {current} sur {total}",
+      "left": "{count, plural, one {# leçon restante} other {# leçons restantes}}",
+      "done": "Toutes les leçons sont faites",
+      "resume": "Reprendre",
+      "resumeAria": "Reprendre {title}",
+      "goals": "Pour vos objectifs",
+      "all": "Tout voir",
+      "modules": "{count, plural, one {# module} other {# modules}}",
+      "minutes": "{count} min",
+      "hours": "{count} h",
+      "progress": "Progression : {percent} %"
+    },
+    "quick": {
+      "title": "Accès rapide",
+      "cv": "Mes CV",
+      "saved": "Enregistrées",
+      "certificates": "Attestations",
+      "profile": "Profil"
+    },
+    "category": {
+      "digital": "Numérique",
+      "project": "Gestion de projet",
+      "soft": "Savoir-être",
+      "office": "Bureautique",
+      "finance": "Finance",
+      "data": "Data",
+      "sales": "Vente",
+      "language": "Langues",
+      "communication": "Communication"
+    }
+  },
+  "offers": {
+    "seo": "Offres · Jumanly",
+    "title": "Offres",
+    "tabs": "Vues des offres",
+    "tab": {
+      "forYou": "Pour vous",
+      "recent": "Récentes",
+      "saved": "Enregistrées"
+    },
+    "line": {
+      "forYou": "Classées selon votre profil. Toutes les offres restent visibles.",
+      "general": "Sélection générale : ajoutez vos compétences pour un classement selon votre profil.",
+      "generalCta": "Ajouter mes compétences",
+      "recent": "Les plus récentes d'abord.",
+      "search": "{count, plural, =0 {Aucune offre pour « {query} ».} one {# offre pour « {query} ».} other {# offres pour « {query} ».}}",
+      "optedOut": "Le score est désactivé dans vos paramètres : les offres sont dans l'ordre de publication."
+    },
+    "empty": {
+      "title": "Aucune offre ne correspond.",
+      "text": "Retirez un filtre ou cherchez un autre mot.",
+      "cta": "Effacer les filtres"
+    },
+    "saved": {
+      "empty": "Aucune offre enregistrée. Touchez le signet d'une offre pour la retrouver ici.",
+      "cta": "Voir les offres pour vous"
+    },
+    "more": "Voir plus d'offres",
+    "free": "Postuler est toujours gratuit.",
+    "card": {
+      "why": "Pourquoi {score} % ?",
+      "applied": "Candidature envoyée",
+      "new": "Nouveau"
+    },
+    "filters": {
+      "title": "Filtrer les offres",
+      "open": "Filtres",
+      "active": "{count, plural, one {# filtre actif} other {# filtres actifs}}",
+      "domain": "Domaine",
+      "place": "Lieu",
+      "remote": "À distance",
+      "contract": "Contrat",
+      "experience": "Expérience",
+      "contracts": {
+        "cdi": "CDI",
+        "cdd": "CDD",
+        "internship": "Stage",
+        "mission": "Freelance"
+      },
+      "levels": {
+        "none": "Sans expérience",
+        "junior": "Junior",
+        "mid": "Confirmé"
+      },
+      "verified": "Entreprises vérifiées seulement",
+      "clear": "Effacer",
+      "show": "{count, plural, =0 {Aucune offre} one {Voir # offre} other {Voir # offres}}",
+      "close": "Fermer les filtres"
+    }
+  },
+  "offer": {
+    "back": "Retour",
+    "share": "Partager l'offre",
+    "shared": "Lien de l'offre copié.",
+    "verified": "Vérifiée",
+    "seeCompany": "Voir l'entreprise {company}",
+    "deadline": "Avant le {date}",
+    "level": {
+      "none": "Sans expérience",
+      "junior": "Junior",
+      "mid": "Confirmé",
+      "senior": "Senior"
+    },
+    "score": {
+      "title": "Compatible avec votre profil",
+      "skills": "{met} compétences sur {total}",
+      "placeContract": "lieu et contrat",
+      "why": "Pourquoi ?",
+      "whyAria": "Pourquoi {score} % ?",
+      "ring": "Compatibilité {score} %",
+      "incomplete": "Ajoutez vos compétences pour voir votre compatibilité avec cette offre.",
+      "incompleteCta": "Ajouter mes compétences",
+      "optedOut": "Le score est désactivé dans vos paramètres.",
+      "optedOutCta": "Réactiver"
+    },
+    "prepare": {
+      "title": "Préparer ma candidature",
+      "line": "Ce qui correspond, ce qui manque",
+      "subtitle": "{job} · {company}",
+      "matches": "Ce qui correspond",
+      "missing": "À compléter",
+      "inCv": "Dans votre CV « {cv} »",
+      "inProfile": "Dans votre profil",
+      "prefs": "Vos préférences",
+      "absent": "Demandé, absent de votre profil",
+      "add": "Ajouter",
+      "addAria": "Ajouter {skill} à mon profil",
+      "none": "Aucune compétence demandée ne figure encore dans votre profil.",
+      "complete": "Tout ce que l'offre demande est déjà dans votre profil.",
+      "tailor": "Adapter mon CV à cette offre",
+      "createCv": "Créer mon CV",
+      "guard": "Rien n'est modifié ni envoyé sans votre accord."
+    },
+    "why": {
+      "title": "Pourquoi {score} % ?",
+      "text": "Calcul fixe, le même pour tous. Votre nom, âge, genre ou photo n'entrent jamais dans le score.",
+      "value": "{percent} %",
+      "guard": "Le recruteur décide. Ce score ne bloque jamais votre candidature.",
+      "contest": "Contester ce score"
+    },
+    "missions": "Missions",
+    "description": "Le poste",
+    "skills": "Compétences demandées",
+    "skillOwned": "{skill}, déjà dans votre profil",
+    "progress": {
+      "eyebrow": "Pour progresser",
+      "line": "{duration} · votre score passerait à {score} %"
+    },
+    "profile": "Profil recherché",
+    "benefits": "Avantages",
+    "process": "Étapes du recrutement",
+    "knockout": "Critères indiqués par le recruteur",
+    "knockoutHint": "Vous pouvez postuler même sans les remplir tous : c'est le recruteur qui décide.",
+    "salary": "Salaire",
+    "check": {
+      "verifiedTitle": "Entreprise vérifiée par Jumanly",
+      "verifiedText": "Existence et adresse e-mail professionnelle contrôlées le {date}. Jumanly ne vous demandera jamais d'argent pour postuler.",
+      "title": "Restez prudent",
+      "text": "Jumanly ne vous demandera jamais d'argent pour postuler. Signalez toute demande de paiement."
+    },
+    "report": "Signaler cette offre",
+    "bar": {
+      "free": "Postuler est toujours gratuit.",
+      "apply": "Postuler",
+      "resume": "Reprendre ma candidature",
+      "applied": "Suivre ma candidature",
+      "closed": "Cette offre n'accepte plus de candidatures."
+    },
+    "notice": {
+      "already": "Vous avez déjà postulé à cette offre.",
+      "kept": "Votre brouillon de candidature est gardé."
+    },
+    "close": "Fermer"
+  },
   "talentOrbi": {
     "metaTitle": "Orbi",
     "title": "Orbi",
