@@ -5,7 +5,7 @@ D = {
  'accueil': ('Accueil', '<path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/>'),
  'former': ('Se former', '<path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6"/><path d="M21.5 9v5"/>'),
  'opportunites': ('Opportunités', '<rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2"/>'),
- 'carriere': ('Carrière', '<path d="M4 20h4.5v-4.5H13V11h4.5V6.5H20"/><path d="M15.5 4H20v4.5"/>'),
+ 'carriere': ('Carrière', '<path d="M2.8 20.5 9.3 10l3.9 6 2.4-3.4 5.6 7.9z"/><path d="M9.3 10V3.3l4.6 1.8-4.6 1.8"/>'),
  'orbi': ('Orbi', '<circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2"/><circle cx="18" cy="6" r="1.4" fill="currentColor"/>'),
  'aujourdhui': ('Aujourd’hui', '<circle cx="12" cy="12" r="4"/><path d="M12 2.5v2M12 19.5v2M2.5 12h2M19.5 12h2M5.3 5.3l1.4 1.4M17.3 17.3l1.4 1.4M5.3 18.7l1.4-1.4M17.3 6.7l1.4-1.4"/>'),
  'offre': ('Offres', '<path d="M4 10v4h3l8.5 4.5v-13L7 10z"/><path d="M18.5 9.5a3.5 3.5 0 0 1 0 5"/><path d="M7 14l1.2 5h2.3"/>'),

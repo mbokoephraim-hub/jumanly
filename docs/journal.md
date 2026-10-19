@@ -2296,3 +2296,16 @@ toutes dans `docs/specifications.md`.
 - Planche des fondations (`docs/refonte-mobile/maquette/`) : 51 icônes, barres du bas avec Orbi au centre,
   en-têtes, recherche, options, boutons, cartes, Orbi sans dégradé, états, trois écrans d'aperçu.
 - À ne pas implémenter avant validation des étapes 2 à 4 (talent, recruteur, entreprise).
+
+## 2026-10-18 · Refonte mobile, fondations v2
+
+- Retours d'Ephraïm : identité de la barre de sa référence (pilule flottante, verre clair, rond central) appliquée
+  aux cartes, bandeaux et options ; nouvelle icône Carrière (sommet et drapeau) ; offres et formations avec
+  bannière, trois offres visibles par écran ; piliers en couleur (Lime, Menthe, Ambre) ; dégradés clairs
+  seulement ; Postuler avec l'icône sur la ligne du texte ; profil (le mien, vu par un autre) ; modes clair et
+  sombre (Nuit).
+
+## 2026-10-18 · Audit de l'espace Talent (cahier « Jumanly Talent MVP 1.0 »)
+
+- Audit sans développement : docs/audit-talent/AUDIT-TALENT.md. 16 fonctionnalités confrontées au code, doublons (tableau-de-bord, espace, explorer, jobs/candidatures, learn/coach, bouton +), navigation recommandée Pour moi · Offres · Orbi · Apprendre · Suivi, 20 pages au lieu de 44, 5 parcours, MVP / P2 / P3.
+- En attente des décisions d'Ephraïm (§ 8) avant tout prompt d'implémentation.
