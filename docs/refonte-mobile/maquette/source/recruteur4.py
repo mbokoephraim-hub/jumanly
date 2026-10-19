@@ -349,6 +349,72 @@ ATS_SEL = phone(f'''{OFFRE_T}
  bas=f'''<div class="a2-sb"><div class="h"><span class="avs"><span class="av">AM</span><span class="av b">GM</span><span class="av a">FN</span><span class="av">RB</span><span class="av b">DK</span></span><div class="t"><b>5 sélectionnés</b>sur 24 candidatures</div><span class="x">{ic("fermer","xs")}</span></div>
 <div class="acts"><a>{ic("message","s")}Écrire</a><a>{ic("agenda","s")}Entretien</a><a class="p">{ic("valider","s")}Retenir</a></div></div>''')
 
+# ---------- 0 bis. Accès à l'ATS (question d'Ephraïm du 19/10 : « comment arrive-t-on à l'analyse ? ») ----------
+CSSR += '''
+.e-ats{position:relative;overflow:hidden;display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:22px;background:radial-gradient(120% 100% at 100% 0%,#2A7A66 0%,#0F3F37 62%);color:#fff}
+.e-ats .rings{position:absolute;right:-50px;top:-50px;width:160px;height:160px;opacity:.45}
+.e-ats .r{display:flex;align-items:center;gap:12px;position:relative}.e-ats .r .t{flex:1;font-size:11.5px;color:#CFE9DF;line-height:1.4}.e-ats .r .t b{display:block;font-size:14.5px;color:#fff}
+.e-ats .tg{display:inline-flex;align-items:center;gap:5px;font-size:10px;font-weight:800;letter-spacing:.08em;text-transform:uppercase;color:#A6F26B}
+.e-ats .bt{position:relative;background:#A6F26B;color:#0F3F37;height:44px!important;flex:none!important;display:flex;align-items:center;justify-content:center;gap:8px;font-weight:700}
+.e-ats .ln{display:flex;gap:6px;position:relative}.e-ats .ln span{font-size:10.5px;padding:4px 9px;border-radius:99px;background:rgba(255,255,255,.1);color:#CFE9DF}
+.e-off{position:relative;display:flex;flex-direction:column;gap:12px;padding:14px 14px 14px 18px;border-radius:22px;background:var(--plein);box-shadow:var(--verre);overflow:hidden}
+.e-off:before{content:"";position:absolute;left:0;top:0;bottom:0;width:5px;background:var(--oc,#A6F26B)}
+.e-off .h{display:flex;gap:12px;align-items:center}.e-off .h .cases{width:42px;height:42px;border-radius:14px;background:var(--g-former);flex:none}
+.e-off .h .t{flex:1;min-width:0}.e-off .h .t b{display:block;font-size:14.5px}.e-off .h .t span{font-size:11.5px;color:var(--texte2)}
+.e-off .st{font-size:10.5px;font-weight:700;padding:4px 9px;border-radius:99px;background:var(--lime-c);color:#2E6B1F}
+.e-off .kp{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.e-off .kp div{padding:8px 10px;border-radius:12px;background:var(--zone);font-size:10.5px;color:var(--texte2)}.e-off .kp b{display:block;font-size:15px;color:var(--texte)}
+.e-off .ac{display:grid;grid-template-columns:1fr 1.25fr;gap:8px}
+.e-off .ac a{height:42px;border-radius:14px;display:flex;align-items:center;justify-content:center;gap:7px;font-size:12.5px;font-weight:700;background:var(--zone)}
+.e-off .ac a.o{background:#0F3F37;color:#fff}.sombre .e-off .ac a.o{background:#A6F26B;color:#0F3F37}
+.e-off .ac a .ic{width:15px;height:15px}
+.e-off .nv{position:absolute;right:12px;top:12px}
+.e-menu{display:flex;flex-direction:column}
+.e-menu a{display:flex;align-items:center;gap:12px;padding:12px 4px;border-top:1px solid var(--trait);font-size:13.5px;font-weight:600}.e-menu a:first-child{border-top:0}
+.e-menu a .cases{width:36px;height:36px;border-radius:12px;flex:none}.e-menu a .t{flex:1}.e-menu a .t small{display:block;font-size:11px;font-weight:500;color:var(--texte2)}
+.e-menu a.on{margin:4px -8px;padding:12px;border-radius:16px;border-top:0;background:linear-gradient(120deg,#F2FCE6,#DDF6EE)}
+.sombre .e-menu a.on{background:linear-gradient(120deg,rgba(166,242,107,.16),rgba(47,211,166,.08))}
+.e-menu a .new{font-size:10px;font-weight:800;padding:3px 8px;border-radius:99px;background:#0F3F37;color:#A6F26B}
+'''
+def e_ats(titre, sous, bt, puces=()):
+    p = ''.join(f'<span>{x}</span>' for x in puces)
+    return (f'<div class="e-ats">{_RINGS}<span class="tg">{orbi(16)}ATS · Orbi</span><div class="r"><span class="a2-docs" style="transform:scale(.8);margin:-6px -6px -6px -4px"><i></i><i></i><i></i><b>24</b></span><div class="t"><b>{titre}</b>{sous}</div></div>'
+            + (f'<div class="ln">{p}</div>' if p else '') + f'<a class="bt pl">{orbi(20)}{bt}</a></div>')
+
+def e_off(titre, meta, c, cand, nv, vues, oc='#A6F26B', icn='offre', bg='var(--g-former)'):
+    nvb = ''
+    return (f'<div class="e-off" style="--oc:{oc}">{nvb}<div class="h"><span class="cases" style="background:{bg}">{ic(icn,"s")}</span><div class="t"><b>{titre}</b><span>{meta}</span></div></div>'
+            f'<div class="kp"><div><b>{cand}</b>candidatures</div><div><b>{nv}</b>nouvelles</div><div><b>{vues}</b>vues</div></div>'
+            f'<div class="ac"><a>{ic("candidats","s")}Candidatures</a><a class="o">{orbi(18)}Analyser (ATS)</a></div></div>')
+
+ENT_OFF = phone(f'''{tete_r("Mes offres")}
+<div class="filtres-h"><span class="puce on">Actives<small>4</small></span><span class="puce">Brouillons<small>1</small></span><span class="puce">En pause<small>1</small></span></div>
+{e_off("Analyste de données junior","Kinshasa · CDI · jusqu’au 31 oct.","",24,9,"1 240")}
+{e_off("Chargé de clientèle","Kinshasa · CDI · jusqu’au 8 nov.","",11,3,"610",oc="#2FD3A6",bg="var(--g-accomp)")}
+{e_off("Comptable confirmé","Lubumbashi · CDD · jusqu’au 15 nov.","",7,0,"380",oc="#F2B33D",bg="var(--g-oppo)")}''', 'offre', 'long')
+
+ENT_CAND = phone(f'''{tete_r("Candidats")}
+{SEG_C}{OFFSEL}
+{e_ats("24 candidatures, 9 pas encore analysées","Orbi les lit, les compare à l’offre et les classe, avec le pourquoi.","Analyser et classer",("24 crédits","≈ 1 min","Jamais de rejet"))}
+<div class="sec-t"><h2>Dernière analyse : hier</h2><a>Voir le classement</a></div>
+{rc(1,"AM","","Amani M.","Reçue il y a 2 h",88,[],mini=True)}
+{rc(2,"GM","b","Grâce M.","Entretien mardi 22",86,[],mini=True)}''', 'candidats', 'long')
+
+ENT_AT = phone(f'''{tete_r("À traiter")}
+<span class="salut">Bonjour Nadia · mardi 19 octobre</span>
+{e_ats("9 nouvelles candidatures à classer","Pour « Analyste de données junior ». Je peux les analyser avec les 15 autres.","Lancer l’analyse")}
+<div class="sec-t"><h2>Analyses terminées</h2><a>Tout voir</a></div>
+<div class="verre liste lignes">{nt("c2","candidats","Chargé de clientèle · 11 CV","3 recommandés · hier 18:10","Voir")}{nt("c1","offre","Comptable confirmé · 7 CV","2 recommandés · lun.","Voir")}</div>
+<div class="sec-t"><h2>Aussi aujourd’hui</h2><a>Agenda</a></div>
+<div class="verre liste lignes">{nt("c3","entretien","Entretien avec Grâce M.","Mardi 22 · 10:00 · visio","Voir")}{nt("c2","message","3 messages non lus","Patrick K., Ruth B., Fatou N.","Lire")}</div>''', 'aujourdhui', 'long')
+
+ENT_MENU = phone(f'''{OFFRE_T}''', avec_nav=False,
+ bas=f'''<div class="voile"></div><div class="sheet"><div class="poignee"></div><h3>Analyste de données junior</h3><div class="e-menu">
+<a class="on"><span class="cases" style="background:#0F3F37;color:#A6F26B">{orbi(22)}</span><span class="t">Analyser les candidatures<small>ATS · classement et recommandation d’Orbi</small></span><span class="new">24 CV</span></a>
+<a><span class="cases" style="background:var(--g-accomp)">{ic("candidats","s")}</span><span class="t">Voir les candidatures<small>Par étape</small></span></a>
+<a><span class="cases" style="background:var(--g-former)">{ic("valider","s")}</span><span class="t">Liste des retenus<small>5 personnes</small></span></a>
+<a><span class="cases" style="background:var(--g-oppo)">{ic("modifier","s")}</span><span class="t">Modifier l’offre</span></a>
+<a><span class="cases" style="background:var(--g-accomp)">{ic("partager","s")}</span><span class="t">Partager le lien</span></a></div></div>''')
+
 # ---------- 2. Réponses groupées ----------
 ENV = phone(f'''{tete_f("Répondre aux candidats", droite=None)}
 <div class="ch2"><a class="on"><span class="cases" style="background:var(--g-accent)">{ic("valider","s")}</span><b>Retenus · 5</b>Invitation à l’entretien</a><a><span class="cases" style="background:var(--zone)">{ic("message","s")}</span><b>Non retenus · 19</b>Réponse respectueuse</a></div>
@@ -506,7 +572,10 @@ MSG_REFUS = MSG_REFUS.replace('Voir les offres proches</a></div></div>', 'Voir l
 
 # ---------- Chemins ----------
 CHEMINS = [
- ('Analyser tous les CV', ['Offres', 'Une offre', 'Candidatures', 'Lancer l’analyse']),
+ ('Analyser tous les CV (ATS), depuis Offres', ['Offres', 'Analyser (ATS) sur la carte de l’offre', 'Lancer l’analyse']),
+ ('Analyser tous les CV, depuis Candidats', ['Candidats', 'Choisir l’offre', 'Analyser et classer']),
+ ('Analyser tous les CV, depuis À traiter', ['À traiter', 'Carte Orbi « nouvelles candidatures à classer »', 'Lancer l’analyse']),
+ ('Analyser tous les CV, depuis une offre', ['Offres', 'Une offre', '⋯', 'Analyser les candidatures']),
  ('Créer la liste des retenus', ['Recommandation d’Orbi', 'Sélectionner', 'Retenir']),
  ('Répondre à tous', ['Liste des retenus', 'Informer les 5', 'Relire', 'Envoyer']),
  ('Ouvrir les modèles de messages', ['Conversation', '+ dans la zone de saisie', 'Modèles'], ),
@@ -527,6 +596,8 @@ RAPPORT_PDF = f'<div class="rp-g2"><div class="sc">{rapport_p1()}</div><div clas
 
 ECR = [
  ('x0','0 · Comment on y arrive','Pour chaque écran, le chemin depuis la barre.', []),
+ ('x0b','0 bis · Comment on arrive à l’ATS','Quatre entrées, toujours au même nom : « Analyser ». Rien ne se lance sans votre geste.',
+  [ecrans((ENT_OFF,'Depuis Mes offres','Bouton Analyser (ATS) sur chaque offre.'),(ENT_CAND,'Depuis Candidats','Carte ATS au-dessus de la liste de l’offre.'),(ENT_AT,'Depuis À traiter','Orbi signale les candidatures à classer.'),(ENT_MENU,'Depuis une offre','Menu ⋯ de l’offre.'))]),
  ('x1','1 · ATS : analyser et classer','En un geste, Orbi lit tous les CV d’une offre, les classe par score et explique. Le recruteur choisit qui retenir.',
   [ecrans((ATS1,'Candidatures de l’offre','Classées par score, analyse en un geste.'),(ATS2,'Analyse en cours','Dossier par dossier.'),(ATS3,'Recommandation d’Orbi','5 dossiers prioritaires, avec leur pourquoi.'),(ATS4,'Profil pour cette offre','Critère par critère, avec la preuve.'),(ATS_SEL,'Sélection rapide','Cocher, puis retenir.'),(RETENUS,'Liste des retenus','Pour l’étape suivante.'))]),
  ('x2','2 · Répondre à tous','Retenus et non retenus, par message Jumanly et par e-mail. Toujours relu, annulable 10 minutes.',
