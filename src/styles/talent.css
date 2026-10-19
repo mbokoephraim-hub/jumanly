@@ -5725,8 +5725,13 @@ label.t-li {
 }
 .t-dates {
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 10px;
+}
+/* A month field is wider than half a phone: it shrinks with its column. */
+.t-dates input {
+  min-width: 0;
+  width: 100%;
 }
 .t-champ textarea.t-zone {
   display: block;
@@ -7886,7 +7891,7 @@ span.t-sw {
     border-radius: 8px;
     background: var(--zone);
   }
-  .t-tb .t-sp {
+  .t-tb .t-tb-sp {
     flex: 1;
   }
   .t-tb .t-av {

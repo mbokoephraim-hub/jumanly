@@ -78,7 +78,7 @@ export function TalentTopBar({
           {labels.shortcut}
         </kbd>
       </button>
-      <span className="t-sp" />
+      <span className="t-tb-sp" />
       <button
         type="button"
         aria-label={plural(labels.notifications, count)}
