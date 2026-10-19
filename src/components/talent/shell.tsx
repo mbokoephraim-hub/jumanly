@@ -54,7 +54,7 @@ export function TalentShell({
       <script dangerouslySetInnerHTML={{ __html: appearanceScript(appearance) }} />
       <AppearanceRoot appearance={appearance} />
       <AppMotionRoot reduce={reduceMotion} />
-      <Toaster label={tt("region.aria")} closeLabel={tt("close")} />
+      <Toaster label={tt("region.aria")} closeLabel={tt("close")} placement="bottom" />
       <Suspense fallback={null}>
         <AppIntroGate data={intro} reduce={reduceMotion} />
       </Suspense>
