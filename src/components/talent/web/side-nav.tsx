@@ -29,6 +29,15 @@ export function fullScreen(pathname: string) {
   return pathname === "/app/bienvenue" || pathname.startsWith("/app/bienvenue/");
 }
 
+/**
+ * Classroom of a course (planche web talent-3 § 4-5): the lesson and the quiz open in « mode
+ * concentré », the sidebar shrinks to the rail and the top bar steps aside. The exercise and the
+ * result of a quiz, at the same address, put the frame back (`FullFrame`).
+ */
+export function classroom(pathname: string) {
+  return /^\/app\/learn\/(?!attestations\/|parcours\/)[^/]+\/[^/]+$/.test(pathname);
+}
+
 /** Lime tile with the Sapin « j » (ressources/logos, served by `pnpm brand`). */
 const TILE = "/marque/jumanly-symbole-lime.svg";
 
@@ -72,6 +81,7 @@ export function TalentSideNav({
   const pathname = usePathname();
   if (fullScreen(pathname)) return null;
   const current = talentTabOf(pathname)?.href ?? null;
+  const focus = classroom(pathname);
 
   const primary = (rail: boolean) =>
     talentTabs.map((tab) => {
@@ -119,7 +129,7 @@ export function TalentSideNav({
 
   return (
     <>
-      <aside className="t-sb">
+      <aside className={cx("t-sb", focus && "t-concentre")}>
         <Link href="/app" className="t-sb-lg" aria-label={labels.home}>
           {/* eslint-disable-next-line @next/next/no-img-element -- a 30 px brand tile */}
           <img src={TILE} alt="" className="t-j" />
@@ -180,7 +190,7 @@ export function TalentSideNav({
         </div>
       </aside>
 
-      <aside className="t-rl">
+      <aside className={cx("t-rl", focus && "t-concentre")}>
         <Link href="/app" className="t-rl-lg" aria-label={labels.home}>
           {/* eslint-disable-next-line @next/next/no-img-element -- a 40 px brand tile */}
           <img src={TILE} alt="" className="t-j" />

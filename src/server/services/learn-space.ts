@@ -82,6 +82,15 @@ export async function followedCourses(db: PrismaClient, userId: string) {
         1,
         Math.round(left.reduce((sum, lesson) => sum + lesson.durationSec, 0) / 60),
       ),
+      /** Minutes left in the module of the next lesson (« Reste 8 min dans ce module »). */
+      moduleMinutesLeft: Math.max(
+        1,
+        Math.round(
+          left
+            .filter((lesson) => lesson.module === next?.module)
+            .reduce((sum, lesson) => sum + lesson.durationSec, 0) / 60,
+        ),
+      ),
       /** Quizzes not passed yet and exercises not handed in, in the order of the course. */
       todo: lessons.filter(
         (lesson) => !done.has(lesson.id) && (lesson.kind === "quiz" || lesson.kind === "exercise"),
@@ -138,4 +147,31 @@ export async function pathForCourses(db: PrismaClient, slugs: string[]) {
   });
   const best = paths.sort((a, b) => b.courses.length - a.courses.length)[0];
   return best && best.courses.length >= 2 ? { slug: best.slug, title: best.title } : null;
+}
+
+/**
+ * The path Orbi suggests on the home of Apprendre (planche web talent-3 § 1): the published path
+ * that gathers most of these courses (the ones followed or recommended), not followed yet.
+ */
+export async function suggestedPath(db: PrismaClient, userId: string, slugs: string[]) {
+  if (slugs.length === 0) return null;
+  const paths = await db.learningPath.findMany({
+    where: {
+      status: "published",
+      followers: { none: { userId } },
+      courses: { some: { course: { slug: { in: slugs }, status: "published" } } },
+    },
+    select: {
+      slug: true,
+      title: true,
+      courses: {
+        where: { course: { status: "published" } },
+        select: { course: { select: { slug: true } } },
+      },
+    },
+  });
+  const score = (path: (typeof paths)[number]) =>
+    path.courses.filter((item) => slugs.includes(item.course.slug)).length;
+  const best = paths.sort((a, b) => score(b) - score(a))[0];
+  return best ? { slug: best.slug, title: best.title, count: best.courses.length } : null;
 }

@@ -11231,3 +11231,1215 @@ span.t-sw {
     color: #0f3f37;
   }
 }
+
+/* ══ Lot web talent 3 · Apprendre sur ordinateur et tablette (docs/refonte-web/talent-3) ══
+ * Valeurs de docs/refonte-mobile/maquette/source/web3.py (CSSW3) et web.py (WCSS). Un seul code :
+ * sous 768 px, les pages gardent la mise en page du téléphone ; au-delà, les colonnes de la
+ * planche. `.t-ap-web` n'existe qu'en grand écran, `.t-ap-mob` qu'au téléphone. Préfixe `t-aw-`. */
+@media (max-width: 767.98px) {
+  .t-ap-web {
+    display: none !important;
+  }
+  .t-aw-g,
+  .t-aw-main,
+  .t-aw-fd,
+  .t-aw-ql,
+  .t-aw-qz,
+  .t-aw-2,
+  .t-aw-col,
+  .t-aw-side {
+    display: contents;
+  }
+}
+
+@media (min-width: 768px) {
+  .t-ap-mob {
+    display: none !important;
+  }
+
+  /* Mode concentré de la salle de cours : pas de barre du haut (le rail, voir ≥ 1200 px). */
+  .t-cadre:not([data-cadre-plein]) .t-tb.t-concentre {
+    display: none;
+  }
+  .t-cadre:not([data-cadre-plein]):has(> .t-rl.t-concentre) .t-zone {
+    padding-top: 14px;
+  }
+
+  /* Tête d'une page (web.py `.w-h`) : le titre, sa ligne, un outil à droite. */
+  .t-aw {
+    gap: 16px;
+  }
+  .t-aw > .t-tete-f {
+    display: none;
+  }
+  .t-aw-h {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  .t-aw-h > .t-t {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-aw-h1 {
+    font-size: 28px;
+    letter-spacing: -0.03em;
+    font-weight: 600;
+    line-height: 1.1;
+  }
+  .t-aw-h > .t-t > p + p {
+    font-size: 14px;
+    color: var(--texte2);
+    margin-top: 6px;
+  }
+  .t-aw-h > .t-bi {
+    flex: none;
+  }
+  .t-aw-rch {
+    flex: none;
+    width: 380px;
+    height: 46px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 0 16px;
+    border-radius: 999px;
+    font-size: 13.5px;
+    color: var(--texte2);
+  }
+  .t-aw-rch:focus-within {
+    box-shadow:
+      0 0 0 2px var(--texte),
+      var(--verre);
+  }
+  .t-aw-rch input {
+    flex: 1;
+    min-width: 0;
+    height: 100%;
+    border: 0;
+    outline: none;
+    background: none;
+    color: var(--texte);
+    font: inherit;
+  }
+  .t-aw-rch input::placeholder {
+    color: var(--texte2);
+    opacity: 1;
+  }
+  .t-aw .t-sec-t {
+    margin: 6px 2px -4px;
+  }
+  .t-aw .t-sec-t h2 {
+    font-size: 18px;
+  }
+
+  /* Barre d'action d'une page au format téléphone : dans le fil de la page en grand écran. */
+  .t-cadre .t-aw .t-bas-f {
+    position: static;
+    width: auto;
+    transform: none;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    border-radius: 0;
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+  }
+  .t-aw.t-flux:has(.t-bas-f),
+  .t-aw .t-flux:has(.t-bas-f) {
+    padding-bottom: 0;
+  }
+
+  /* § 1 · Apprendre : tablette, « Reprendre » puis mes formations et À faire côte à côte. */
+  .t-aw-acc .t-aw-h > .t-t > p + p,
+  .t-aw-acc .t-aw-rch {
+    display: none;
+  }
+  .t-aw-g {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .t-aw-main {
+    display: contents;
+  }
+  .t-aw-acc .t-aw-side {
+    order: 1;
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .t-aw-acc .t-aw-dom {
+    order: 2;
+  }
+  .t-aw-acc .t-aw-rec {
+    order: 3;
+  }
+  .t-aw-acc .t-aw-os {
+    display: none;
+  }
+  .t-aw-rp {
+    display: grid;
+    grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr);
+    border-radius: 30px;
+  }
+  .t-aw-rp .t-ban {
+    height: auto;
+    min-height: 200px;
+  }
+  .t-aw-rp .t-ban .t-tg {
+    left: 16px;
+    top: 16px;
+    padding: 5px 11px;
+    background: rgba(255, 255, 255, 0.9);
+    color: #0f3f37;
+  }
+  .t-aw-rp .t-t {
+    padding: 24px;
+    gap: 10px;
+    justify-content: center;
+  }
+  .t-aw-rp .t-t small {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+  }
+  .t-aw-rp .t-t b {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .t-aw-rp .t-t > span {
+    font-size: 13px;
+  }
+  .t-aw-rp .t-t .t-bt {
+    align-self: flex-start;
+    color: var(--p-texte);
+    font-size: 15px;
+  }
+  .t-aw-dom .t-domaines {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  .t-aw-dom .t-domaines > li:nth-child(n + 5) {
+    display: none;
+  }
+  .t-aw-dom .t-dom {
+    width: auto;
+    flex: 1;
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-start;
+    gap: 12px;
+    padding: 14px 16px;
+    font-size: 14.5px;
+    text-align: left;
+  }
+  .t-dom-t small {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--texte2);
+  }
+  .t-aw-rec .t-defile {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin: 0;
+    padding: 0;
+    overflow: visible;
+  }
+  .t-aw-rec .t-defile > li:nth-child(n + 3) {
+    display: none;
+  }
+  .t-aw .t-fo.t-mini {
+    width: auto;
+  }
+  .t-aw .t-fo.t-mini .t-ban {
+    height: 132px;
+  }
+  .t-aw .t-fo.t-mini .t-t b {
+    font-size: 15px;
+  }
+  /* Mes formations, attestations et parcours (web3.py `.ac3`), À faire (`.af`), Orbi (`.w-os`). */
+  .t-aw-side {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .t-aw-ac {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .t-aw-ac a {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border-radius: 22px;
+    font-size: 14px;
+    font-weight: 600;
+  }
+  .t-aw-ac .t-cases {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+    display: grid;
+    place-items: center;
+    flex: none;
+  }
+  .t-aw-ac .t-t {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-aw-ac small {
+    display: block;
+    font-size: 11.5px;
+    font-weight: 500;
+    color: var(--texte2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .t-aw-ac b {
+    font-size: 11px;
+    padding: 2px 8px;
+    border-radius: 999px;
+    background: var(--lime-c);
+  }
+  .t-aw-ac a > .t-ic:last-child {
+    color: var(--texte2);
+  }
+  .t-aw-af {
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .t-aw-af h2 {
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 4px;
+  }
+  .t-aw-af .t-liste {
+    box-shadow: none;
+    background: none;
+    padding: 0;
+  }
+  .t-aw-af .t-li {
+    padding: 0;
+    border-top: 0;
+  }
+  .t-aw-af .t-li .t-t b {
+    font-size: 13.5px;
+  }
+  .t-aw-os {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    background: var(--g-accomp);
+  }
+  .t-aw-os .t-h {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .t-aw-os h2 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .t-aw-os .t-h span {
+    font-size: 12px;
+    color: var(--texte2);
+  }
+  .t-aw-os p {
+    font-size: 13px;
+    line-height: 1.5;
+  }
+  .t-aw-os a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 36px;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+}
+
+@media (min-width: 1200px) {
+  /* Mode concentré : la barre latérale se réduit au rail. */
+  .t-cadre:not([data-cadre-plein]):has(> .t-sb.t-concentre) {
+    --t-nav-w: 84px;
+  }
+  .t-cadre:not([data-cadre-plein]) > .t-sb.t-concentre {
+    display: none;
+  }
+  .t-cadre:not([data-cadre-plein]) > .t-rl.t-concentre {
+    display: flex;
+  }
+
+  .t-aw {
+    gap: 18px;
+  }
+  .t-aw-h1 {
+    font-size: 32px;
+  }
+  .t-aw-acc .t-aw-h > .t-t > p + p {
+    display: block;
+  }
+  .t-aw-acc .t-aw-rch {
+    display: flex;
+  }
+  .t-aw-acc .t-aw-g {
+    display: grid;
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+  .t-aw-acc .t-aw-main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .t-aw-acc .t-aw-side {
+    display: flex;
+    align-items: stretch;
+  }
+  .t-aw-acc .t-aw-os {
+    display: flex;
+  }
+  .t-aw-rp .t-ban {
+    min-height: 230px;
+  }
+  .t-aw-dom .t-domaines {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+  .t-aw-dom .t-dom {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .t-aw-rec .t-defile {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .t-aw-rec .t-defile > li:nth-child(3) {
+    display: flex;
+  }
+}
+
+/* § 2 · Rechercher (web3.py `.flt`) : les filtres à gauche, les formations en grille. */
+@media (min-width: 768px) {
+  .t-aw-col {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .t-aw-rs .t-aw-2 {
+    display: grid;
+    grid-template-columns: 240px minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+  }
+  .t-aw-flt {
+    padding: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .t-aw-flt-h {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+  }
+  .t-aw-flt-h h2 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .t-aw-flt-h a {
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--texte2);
+  }
+  .t-aw-lab {
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+    margin-bottom: 8px;
+  }
+  .t-aw-flt .t-puces {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    flex-wrap: wrap;
+  }
+  .t-aw-flt .t-puce {
+    white-space: normal;
+    min-height: 38px;
+    height: auto;
+    padding: 8px 15px;
+  }
+  .t-aw-sws {
+    display: flex;
+    flex-direction: column;
+  }
+  .t-aw-sw {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    min-height: 60px;
+    padding: 8px 16px;
+    font-size: 13px;
+    font-weight: 600;
+    border-top: 1px solid var(--trait);
+  }
+  .t-aw-sw .t-sw {
+    flex: none;
+  }
+  .t-aw-sw:focus-visible {
+    outline: 2px solid var(--texte);
+    outline-offset: -2px;
+    border-radius: 12px;
+  }
+  .t-aw-rs .t-rech {
+    height: 50px;
+  }
+  .t-aw-rs .t-rech .t-res-l {
+    flex: none;
+    font-size: 12.5px;
+    color: var(--texte2);
+    padding-right: 8px;
+  }
+  .t-aw-res {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .t-aw-res .t-cont {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0;
+    padding: 0;
+    overflow: hidden;
+    border-radius: var(--r-carte);
+  }
+  .t-aw-res .t-vign {
+    width: auto;
+    height: 132px;
+    border-radius: 0;
+  }
+  .t-aw-res .t-vign .t-tg {
+    position: absolute;
+    left: 12px;
+    top: 12px;
+    font-size: 11px;
+    font-weight: 700;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.88);
+    color: #0f3f37;
+  }
+  .t-aw-res .t-vign .t-dur {
+    position: absolute;
+    right: 12px;
+    bottom: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    padding: 4px 10px;
+    border-radius: 999px;
+    background: rgba(11, 26, 31, 0.55);
+    color: #fff;
+  }
+  .t-aw-res .t-cont .t-t {
+    padding: 12px 14px 14px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .t-aw-res .t-cont .t-t b {
+    font-size: 15px;
+    line-height: 1.25;
+  }
+}
+@media (min-width: 1200px) {
+  .t-aw-rs .t-aw-2 {
+    grid-template-columns: 280px minmax(0, 1fr);
+  }
+  .t-aw-res {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* § 2 · Parcours (web3.py `.pc`, `.sc2`) : les formations avec leur vignette, l'attestation à droite. */
+@media (min-width: 768px) {
+  .t-aw-pc .t-parc-h {
+    position: relative;
+    padding: 24px 26px;
+  }
+  .t-aw-pc .t-parc-h h2 {
+    font-size: 28px;
+  }
+  .t-aw-pc-act {
+    position: absolute;
+    right: 20px;
+    top: 20px;
+  }
+  .t-aw-pc .t-aw-2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 22px;
+    align-items: start;
+  }
+  .t-aw-pc .t-etapes-p .t-e .t-verre {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+  }
+  .t-aw-pc .t-etapes-p .t-e .t-vign {
+    width: 96px;
+    height: 64px;
+    border-radius: 14px;
+  }
+  .t-aw-pc .t-etapes-p .t-e .t-t {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-aw-pc .t-etapes-p .t-e .t-num {
+    margin-top: 22px;
+  }
+  .t-aw-pc .t-etapes-p .t-e::before {
+    top: 54px;
+  }
+  .t-aw-pc .t-etapes-p .t-e .t-bt {
+    flex: none;
+    position: relative;
+    z-index: 1;
+    color: var(--p-texte);
+    font-size: 13px;
+  }
+  .t-aw-sc {
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .t-aw-sc h2 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .t-aw-sc p {
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-aw-sc img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px var(--trait);
+    background: #fbf8f2;
+  }
+  .t-aw-sc .t-bt {
+    width: 100%;
+    flex: none;
+  }
+  .t-aw-pct {
+    font-size: 12px;
+    color: var(--texte2);
+    margin-top: -6px;
+  }
+}
+@media (min-width: 1200px) {
+  .t-aw-pc .t-aw-2 {
+    grid-template-columns: minmax(0, 1fr) 340px;
+  }
+}
+
+/* § 3 · Détail d'une formation (web3.py `.fdb`, `.fdh`, `.cl`, `.sc2`) : le programme à gauche,
+ * les chiffres, « Commencer » et l'attestation à droite. */
+@media (min-width: 768px) {
+  .t-aw-fo .t-fd-ban {
+    margin: 0;
+    height: 210px;
+    border-radius: 30px;
+  }
+  .t-aw-fo .t-od-top {
+    top: 16px;
+    left: 16px;
+    right: 16px;
+  }
+  .t-aw-fd {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 22px;
+    align-items: start;
+  }
+  .t-aw-fd .t-aw-main {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .t-aw-fo .t-fd-id {
+    gap: 6px;
+  }
+  .t-aw-fo .t-fd-id h1 {
+    font-size: 28px;
+    letter-spacing: -0.025em;
+  }
+  .t-aw-prog {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+  .t-aw-prog .t-sec-t > span {
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texte2);
+  }
+  .t-aw-fo .t-aw-side {
+    position: sticky;
+    top: 16px;
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    background: var(--surface);
+    -webkit-backdrop-filter: blur(18px) saturate(1.4);
+    backdrop-filter: blur(18px) saturate(1.4);
+    box-shadow: var(--verre);
+    border-radius: var(--r-carte);
+  }
+  .t-aw-fo .t-aw-side .t-chiffres {
+    padding: 4px 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-aw-fo .t-aw-side .t-bas-f {
+    flex-wrap: wrap;
+  }
+  .t-aw-fo .t-aw-side .t-bas-f .t-bt {
+    flex: 1 1 auto;
+  }
+  .t-aw-note {
+    margin-top: -4px;
+    font-size: 12px;
+    color: var(--texte2);
+    text-align: center;
+  }
+  .t-aw-att {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .t-aw-att h2 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .t-aw-att img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 12px;
+    box-shadow: 0 0 0 1px var(--trait);
+    background: #fbf8f2;
+  }
+  .t-aw-att p {
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+}
+@media (min-width: 1200px) {
+  .t-aw-fd {
+    grid-template-columns: minmax(0, 1fr) 330px;
+  }
+  .t-aw-fo .t-fd-id h1 {
+    font-size: 30px;
+  }
+}
+
+/* § 4 · Salle de cours (web3.py `.cl`, `.vd`, `.plan`, `.lnav`) : la vidéo en grand, le plan de la
+ * formation à droite (ordinateur) ; sur tablette, une colonne, Orbi et le support côte à côte. */
+@media (min-width: 768px) {
+  .t-aw-salle .t-aw-2 {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .t-aw-salle .t-video {
+    margin: 0;
+    border-radius: 26px;
+  }
+  .t-aw-salle .t-video .t-ret {
+    display: none;
+  }
+  .t-aw-salle .t-lec-t h1 {
+    font-size: 22px;
+  }
+  .t-aw-salle [role="tablist"] {
+    max-width: 420px;
+  }
+  .t-aw-salle .t-texte-l {
+    font-size: 14.5px;
+  }
+  .t-aw .t-bas-f.t-aw-lnav {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    justify-content: space-between;
+    max-width: none;
+  }
+  .t-aw-lnav .t-bt {
+    flex: none;
+    width: auto;
+    gap: 8px;
+  }
+  .t-aw-salle .t-aw-side {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    align-items: stretch;
+  }
+  .t-aw-salle .t-aw-plan {
+    display: none;
+  }
+  /* « Expliquer cette notion » : Orbi répond dans un volet à droite (web3.py PAN_L). */
+  .t-sheet.t-aw-volet,
+  .t-sheet.t-auto.t-aw-volet {
+    inset: 0 0 0 auto;
+    margin: 0;
+    width: min(440px, 100%);
+    height: 100dvh;
+    max-height: none;
+    border-radius: 0;
+    padding: 20px 22px;
+    background: var(--fond);
+    border-left: 1px solid var(--trait);
+    box-shadow: -30px 0 60px -30px rgba(15, 63, 55, 0.45);
+  }
+  .t-sheet.t-aw-volet[open] {
+    animation-name: t-glisse;
+  }
+  .t-sheet.t-aw-volet::backdrop {
+    background: rgba(11, 26, 31, 0.12);
+  }
+}
+.t-aw-plan {
+  padding: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.t-aw-plan h2 {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 6px;
+  font-size: 15px;
+  font-weight: 600;
+}
+.t-aw-plan h2 > span {
+  flex: none;
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--texte2);
+}
+.t-aw-plan .t-m {
+  margin: 8px 0 2px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texte2);
+}
+.t-aw-plan ol {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.t-aw-plan .t-l {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 8px;
+  border-radius: 12px;
+  font-size: 13px;
+}
+.t-aw-plan .t-l > i {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-style: normal;
+  font-size: 11px;
+  font-weight: 700;
+  background: var(--zone);
+}
+.t-aw-plan .t-l > i svg {
+  width: 12px;
+  height: 12px;
+}
+.t-aw-plan .t-l.t-ok > i {
+  background: var(--sapin);
+  color: var(--lime);
+}
+.sombre .t-aw-plan .t-l.t-ok > i {
+  background: var(--lime);
+  color: #0f3f37;
+}
+.t-aw-plan .t-l.t-on {
+  background: var(--zone);
+  font-weight: 700;
+}
+.t-aw-plan .t-l.t-on > i {
+  background: var(--g-accent);
+  color: #0f3f37;
+}
+.t-aw-plan .t-l > a,
+.t-aw-plan .t-l > span:not(.sr-only) {
+  flex: 1;
+  min-width: 0;
+}
+.t-aw-plan .t-l > a:hover {
+  text-decoration: underline;
+}
+.t-aw-plan .t-l small {
+  flex: none;
+  font-size: 11.5px;
+  color: var(--texte2);
+}
+@media (min-width: 1200px) {
+  .t-aw-salle .t-aw-2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 22px;
+    align-items: start;
+  }
+  .t-aw-salle .t-aw-side {
+    display: flex;
+    flex-direction: column;
+  }
+  .t-aw-salle .t-aw-plan {
+    display: flex;
+  }
+}
+@media (min-width: 768px) {
+  .t-aw-lnav .t-bt.t-p {
+    margin-left: auto;
+  }
+}
+.t-aw-plan h2 {
+  align-items: baseline;
+}
+.t-aw-plan h2 .t-lien-d {
+  min-height: 24px;
+}
+@media (min-width: 768px) {
+  .t-aw-h .t-aw-ss {
+    margin-top: 6px;
+    font-size: 14px;
+    color: var(--texte2);
+  }
+}
+
+/* § 5 · Quiz et résultat (web3.py `.ql`, `.qz`, web.py `.g2e`) : la question au centre, le plan des
+ * questions à droite ; le résultat sur deux lignes de deux colonnes. */
+@media (min-width: 768px) {
+  .t-aw-ql {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 22px;
+    align-items: start;
+  }
+  .t-aw-qz {
+    width: 100%;
+    max-width: 760px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+  }
+  .t-aw-qz .t-q b {
+    font-size: 21px;
+  }
+  .t-aw-qz .t-quiz-o {
+    gap: 10px;
+  }
+  .t-aw-qz .t-quiz-o .t-o {
+    padding: 18px 20px;
+    font-size: 15px;
+  }
+  .t-aw-qr .t-aw-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .t-aw-qr .t-aw-col > .t-bas-f {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-aw-qr .t-aw-col > .t-bas-f .t-bt {
+    flex: none;
+    width: auto;
+  }
+  .t-aw-rep {
+    display: flex;
+    min-width: 0;
+  }
+  .t-aw-rep > span:first-child {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .t-aw-rep > span + span {
+    flex: none;
+    white-space: pre;
+  }
+  .t-aw-qr2 {
+    margin-top: 0;
+  }
+  .t-aw-qr2 h2.t-ck-t {
+    font-size: inherit;
+  }
+  .t-cases.t-aw-ko {
+    background: #fbe3df;
+    color: #b4432f;
+  }
+  .sombre .t-cases.t-aw-ko {
+    background: rgba(240, 120, 98, 0.18);
+    color: #f5a594;
+  }
+}
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .t-aw-ql {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-aw-ql > .t-aw-plan {
+    display: none;
+  }
+}
+
+/* § 5 · Exercice (web3.py `exo`) : la consigne et Orbi à gauche, le dépôt à droite. Au téléphone,
+ * l'ordre reste celui de la planche mobile (dépôt, puis Orbi). */
+@media (max-width: 767.98px) {
+  .t-aw-ex .t-aw-ex-o {
+    order: 1;
+  }
+  .t-aw-ex .t-aw-ex-s {
+    order: 2;
+  }
+}
+@media (min-width: 768px) {
+  .t-aw-ex .t-aw-2 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .t-aw-ex .t-depot {
+    padding: 36px;
+  }
+  .t-aw-ex .t-aw-col > .t-bas-f {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+}
+
+/* § 6 · Formation terminée (web3.py `.fin`) : l'attestation en grand à gauche, ce qui est ajouté au
+ * profil et l'offre suivante à droite. */
+@media (min-width: 768px) {
+  .t-aw-fin .t-aw-2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+  }
+  .t-aw-fin .t-att {
+    padding: 28px;
+  }
+  .t-aw-fin .t-att h2 {
+    font-size: 22px;
+  }
+  .t-aw-fin-a {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 16px;
+    width: 100%;
+  }
+  .t-aw-fin-a img {
+    display: block;
+    width: 100%;
+    max-width: 520px;
+    height: auto;
+    margin-top: 6px;
+    border-radius: 12px;
+    box-shadow: 0 20px 40px -20px rgba(15, 63, 55, 0.5);
+    background: #fbf8f2;
+  }
+}
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .t-aw-fin .t-aw-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* § 7 · Mes attestations et une attestation (web3.py `.atg`, `.atd`). */
+@media (min-width: 768px) {
+  .t-aw-atg {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .t-aw-atg .t-att-c {
+    height: 100%;
+  }
+  .t-aw-atg .t-att-c .t-t {
+    flex: 1;
+    align-items: flex-start;
+  }
+  .t-aw-atd .t-aw-2 {
+    display: grid;
+    grid-template-columns: minmax(0, 1.5fr) minmax(0, 1fr);
+    gap: 22px;
+    align-items: start;
+  }
+  .t-aw-atd .t-aw-big {
+    padding: 14px;
+    border-radius: 26px;
+  }
+  .t-aw-atd .t-aw-big img {
+    border-radius: 12px;
+  }
+  .t-aw-atd .t-bts {
+    flex-wrap: nowrap;
+  }
+}
+@media (min-width: 1200px) {
+  .t-aw-atg {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .t-aw-atd .t-aw-2 {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}
+
+/* § 8 · Vérification publique d'une attestation (web3.py `.site`) : le logo et « Vérifier une
+ * attestation », puis une colonne de 760 px ; la liste et le dessin côte à côte en grand écran. */
+.t-vpub {
+  min-height: 100dvh;
+}
+.t-vpub-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: max(16px, env(safe-area-inset-top)) 16px 16px;
+}
+.t-vpub-l {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.03em;
+  color: var(--texte);
+}
+.t-vpub-l img {
+  border-radius: 10px;
+}
+.t-vpub-h .t-code {
+  display: inline-flex;
+  align-items: center;
+  min-height: 32px;
+  color: var(--texte);
+}
+.t-vpub-c {
+  max-width: 760px;
+  margin: 0 auto;
+  padding: 10px 16px 48px;
+}
+.t-vpub-vv {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+.t-vpub-vv img {
+  display: block;
+  width: 100%;
+  height: auto;
+  border-radius: 12px;
+  box-shadow: 0 0 0 1px var(--trait);
+  background: #fbf8f2;
+}
+.t-vpub-attente {
+  min-height: 180px;
+}
+@media (min-width: 768px) {
+  .t-vpub-h {
+    padding: 20px 40px;
+  }
+  .t-vpub-c {
+    padding: 10px 24px 48px;
+  }
+  .t-vpub-vv {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    align-items: start;
+  }
+}
+
+/* Mes formations (pas d'écran dans la planche web) : les onglets, puis les formations sur deux
+ * colonnes ; « À faire » et « Mes attestations » sur toute la largeur. */
+@media (min-width: 768px) {
+  .t-aw-mf .t-seg {
+    max-width: 520px;
+  }
+  .t-aw-mfl {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+}

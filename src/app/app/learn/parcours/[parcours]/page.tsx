@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
+import { CourseArt } from "@/components/talent/art";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
@@ -23,7 +24,9 @@ export async function generateMetadata(): Promise<Metadata> {
 /**
  * A learning path (planche talent-3, « Parcours de formation »): its title, the total time, the
  * progress, then its courses in order, each with its state. « Continuer le parcours » opens the
- * next course (enrolled when the plan opens it); a course above the plan stays locked.
+ * next course (enrolled when the plan opens it); a course above the plan stays locked. On a
+ * computer (planche web talent-3 § 2), each course has its picture, and the progress, the
+ * attestations and « Continuer le parcours » stay on the right.
  */
 export default async function LearnPathPage({
   params,
@@ -48,21 +51,44 @@ export default async function LearnPathPage({
   const nextPlan =
     next?.state === "locked" ? planForCatalogLevel(plans, next.requiredLevel)?.name : null;
 
+  const share = (
+    <ShareButton
+      url={`${siteUrl()}/app/learn/parcours/${path.slug}`}
+      title={path.title}
+      label={t("apprendre.path.share")}
+      copied={t("apprendre.path.shared")}
+      className="t-bi t-press"
+    />
+  );
+  const action = path.finished ? (
+    <Link href="/app/learn/mes-formations?vue=terminees" className="t-bt t-p t-pl t-press">
+      {t("apprendre.path.finished")}
+    </Link>
+  ) : next && next.state !== "locked" ? (
+    <form action={followPathAction} className="contents">
+      <input type="hidden" name="path" value={path.slug} />
+      <button type="submit" className="t-bt t-p t-pl t-press">
+        {path.followed || path.done > 0 || next.state === "active"
+          ? t("apprendre.path.continue")
+          : t("apprendre.path.start")}
+      </button>
+    </form>
+  ) : (
+    <Link href="/app/abonnement" className="t-bt t-p t-pl t-press">
+      {t("apprendre.course.plans")}
+    </Link>
+  );
+  const specimen =
+    path.courses.find((course) => course.slug === next?.slug && course.certificateEnabled) ??
+    path.courses.find((course) => course.certificateEnabled);
+
   return (
-    <div className="t-flux t-od-bas">
+    <div className="t-flux t-od-bas t-large t-aw t-aw-pc">
       <FlowHead
         back="/app/learn/rechercher"
         backLabel={t("apprendre.path.back")}
         title={t("apprendre.path.title")}
-        end={
-          <ShareButton
-            url={`${siteUrl()}/app/learn/parcours/${path.slug}`}
-            title={path.title}
-            label={t("apprendre.path.share")}
-            copied={t("apprendre.path.shared")}
-            className="t-bi t-press"
-          />
-        }
+        end={share}
       />
       {query.suivi === "1" && <Notice tone="ok">{t("apprendre.path.followed")}</Notice>}
       <section className="t-verre t-parc-h" aria-labelledby="pc-titre">
@@ -75,7 +101,7 @@ export default async function LearnPathPage({
           ].join(" · ")}
         </p>
         <span
-          className="t-barre"
+          className="t-barre t-ap-mob"
           role="progressbar"
           aria-label={t("apprendre.path.progress", { done: path.done, total: path.total })}
           aria-valuemin={0}
@@ -84,60 +110,86 @@ export default async function LearnPathPage({
         >
           <i style={{ width: `${path.percent}%` }} />
         </span>
+        <span className="t-aw-pc-act t-ap-web">{share}</span>
       </section>
       {path.summary && <p className="t-texte-l">{path.summary}</p>}
 
-      <ol className="t-etapes-p">
-        {path.courses.map((course, index) => {
-          const current = next?.slug === course.slug && course.state !== "done";
-          return (
-            <li key={course.slug} className="t-e">
-              <span
-                className={cx("t-num", course.state === "done" && "t-ok", current && "t-en")}
-                aria-hidden
-              >
-                {course.state === "done" ? <TalentIcon name="valider" size="xs" /> : index + 1}
-              </span>
-              <div className="t-verre">
-                <Link href={`/app/learn/${course.slug}`} className="t-lien">
-                  <b>{course.title}</b>
-                </Link>
-                <span>
-                  {course.state === "done"
-                    ? t("apprendre.path.done")
-                    : course.state === "active"
-                      ? t("apprendre.path.active", { percent: course.progress })
-                      : course.state === "locked"
-                        ? t("apprendre.path.locked", { duration: duration(course.durationMinutes) })
-                        : duration(course.durationMinutes)}
-                </span>
-              </div>
-            </li>
-          );
-        })}
-      </ol>
-      {nextPlan && <Notice>{t("apprendre.path.nextLocked", { plan: nextPlan })}</Notice>}
+      <div className="t-aw-2">
+        <div className="t-aw-col">
+          <ol className="t-etapes-p">
+            {path.courses.map((course, index) => {
+              const current = next?.slug === course.slug && course.state !== "done";
+              return (
+                <li key={course.slug} className="t-e">
+                  <span
+                    className={cx("t-num", course.state === "done" && "t-ok", current && "t-en")}
+                    aria-hidden
+                  >
+                    {course.state === "done" ? <TalentIcon name="valider" size="xs" /> : index + 1}
+                  </span>
+                  <div className="t-verre">
+                    <span className="t-vign t-ap-web">
+                      <CourseArt category={course.category} src={course.coverUrl} />
+                    </span>
+                    <div className="t-t">
+                      <Link href={`/app/learn/${course.slug}`} className="t-lien">
+                        <b>{course.title}</b>
+                      </Link>
+                      <span>
+                        {course.state === "done"
+                          ? t("apprendre.path.done")
+                          : course.state === "active"
+                            ? t("apprendre.path.active", { percent: course.progress })
+                            : course.state === "locked"
+                              ? t("apprendre.path.locked", {
+                                  duration: duration(course.durationMinutes),
+                                })
+                              : duration(course.durationMinutes)}
+                      </span>
+                    </div>
+                    {course.state === "active" && (
+                      <Link
+                        href={`/app/learn/${course.slug}`}
+                        className="t-bt t-p t-s t-press t-ap-web"
+                        aria-label={`${t("apprendre.web.path.resume")} · ${course.title}`}
+                      >
+                        {t("apprendre.web.path.resume")}
+                      </Link>
+                    )}
+                  </div>
+                </li>
+              );
+            })}
+          </ol>
+          {nextPlan && <Notice>{t("apprendre.path.nextLocked", { plan: nextPlan })}</Notice>}
+        </div>
 
-      <div className="t-verre t-fort t-bas-f">
-        {path.finished ? (
-          <Link href="/app/learn/mes-formations?vue=terminees" className="t-bt t-p t-pl t-press">
-            {t("apprendre.path.finished")}
-          </Link>
-        ) : next && next.state !== "locked" ? (
-          <form action={followPathAction} className="contents">
-            <input type="hidden" name="path" value={path.slug} />
-            <button type="submit" className="t-bt t-p t-pl t-press">
-              {path.followed || path.done > 0 || next.state === "active"
-                ? t("apprendre.path.continue")
-                : t("apprendre.path.start")}
-            </button>
-          </form>
-        ) : (
-          <Link href="/app/abonnement" className="t-bt t-p t-pl t-press">
-            {t("apprendre.course.plans")}
-          </Link>
-        )}
+        {/* Computer and tablet: the attestations of the path, the progress and « Continuer ». */}
+        <aside aria-labelledby="pc-att" className="t-verre t-aw-sc t-ap-web">
+          <h2 id="pc-att">{t("apprendre.web.path.side")}</h2>
+          {specimen && (
+            // eslint-disable-next-line @next/next/no-img-element -- drawn on the server, at the talent's name
+            <img
+              src={`/app/learn/${specimen.slug}/modele-attestation`}
+              alt={t("apprendre.web.specimen")}
+              width={1123}
+              height={794}
+              loading="lazy"
+              decoding="async"
+            />
+          )}
+          <p>{t("apprendre.web.path.sideText")}</p>
+          <span className="t-barre" aria-hidden>
+            <i style={{ width: `${path.percent}%` }} />
+          </span>
+          <span className="t-aw-pct">
+            {t("apprendre.web.path.percent", { percent: path.percent })}
+          </span>
+          {action}
+        </aside>
       </div>
+
+      <div className="t-verre t-fort t-bas-f t-ap-mob">{action}</div>
     </div>
   );
 }
