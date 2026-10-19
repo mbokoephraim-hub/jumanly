@@ -237,3 +237,51 @@ export async function nextActions(
     actions.push({ kind: "profile", href: "/app/profil", percent: context.percent });
   return actions.slice(0, take);
 }
+
+export type OrbiFocus = {
+  /** The skill asked for most often by the talent's most compatible offers and absent from the profile. */
+  skill: string;
+  /** In how many of those offers it is asked for. */
+  count: number;
+  /** A published course that teaches it, when there is one. */
+  course: { slug: string; title: string; durationMinutes: number } | null;
+};
+
+/**
+ * « Orbi vous suggère » (planche web talent-1 § 1): the required skill missing most often in the
+ * 20 most compatible open offers, and a course that teaches it. Computed from the deterministic
+ * matching, never invented; null when the matching cannot run or nothing is missing.
+ */
+export async function orbiFocus(
+  db: PrismaClient,
+  userId: string,
+  now = new Date(),
+): Promise<OrbiFocus | null> {
+  const top = await recommendedJobs(db, userId, 20, now);
+  const counts = new Map<string, { skill: string; count: number; courses: string[] }>();
+  for (const { explanation } of top) {
+    for (const missing of explanation.missingSkills) {
+      if (missing.importance !== "required") continue;
+      const entry = counts.get(missing.skillId) ?? {
+        skill: missing.skill,
+        count: 0,
+        courses: missing.courses,
+      };
+      entry.count += 1;
+      counts.set(missing.skillId, entry);
+    }
+  }
+  const best = [...counts.values()].sort(
+    (a, b) => b.count - a.count || a.skill.localeCompare(b.skill),
+  )[0];
+  if (!best) return null;
+  const course =
+    best.courses.length > 0
+      ? await db.course.findFirst({
+          where: { status: "published", slug: { in: best.courses } },
+          orderBy: { durationMinutes: "asc" },
+          select: { slug: true, title: true, durationMinutes: true },
+        })
+      : null;
+  return { skill: best.skill, count: best.count, course };
+}

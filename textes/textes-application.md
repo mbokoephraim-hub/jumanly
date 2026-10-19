@@ -2409,6 +2409,57 @@ Conventions :
 | `offer.notice.already` | Vous avez déjà postulé à cette offre. |
 | `offer.close` | Fermer |
 
+### Web talent 1 · Pour moi, offres et détail d'une offre (ordinateur et tablette)
+
+*Mise en page web du lot 1 (docs/refonte-web/talent-1) : la prochaine étape en bandeau, la colonne de droite (profil, suggestion d'Orbi, accès rapide), les filtres ouverts à gauche des offres, Postuler dans la colonne de droite de l'offre, Préparer ma candidature en panneau.*
+
+| Clé | Texte |
+|---|---|
+| `forMe.web.next.cta.profile` | Compléter |
+| `forMe.web.next.cta.interview` | Préparer |
+| `forMe.web.next.cta.document` | Envoyer |
+| `forMe.web.next.cta.draft` | Terminer |
+| `forMe.web.next.cta.message` | Répondre |
+| `forMe.web.next.cta.course` | Reprendre |
+| `forMe.web.next.cta.done` | Voir mes offres |
+| `forMe.web.next.text.profile` | Votre profil est complété à {percent} %. Plus il est complet, plus votre score est juste. |
+| `forMe.web.next.text.interview` | {company} vous propose des créneaux pour « {job} ». |
+| `forMe.web.next.text.document` | {company} attend le document « {name} ». |
+| `forMe.web.next.text.draft` | Votre candidature « {job} » chez {company} vous attend. |
+| `forMe.web.next.text.message` | {company} vous a écrit. |
+| `forMe.web.next.text.course` | « {title} » vous attend là où vous l'avez laissée. |
+| `forMe.web.next.text.done` | Votre profil est complet : les offres sont classées selon lui. |
+| `forMe.web.profile.title` | Votre profil |
+| `forMe.web.profile.line` | Visible par les recruteurs où vous postulez |
+| `forMe.web.profile.cv` | CV « {title} » |
+| `forMe.web.profile.cvNone` | Un CV |
+| `forMe.web.profile.background` | Expériences et formation |
+| `forMe.web.profile.skills` | {count, plural, one {# compétence} other {# compétences}} |
+| `forMe.web.profile.achievement` | Une réalisation |
+| `forMe.web.profile.add` | Ajouter |
+| `forMe.web.profile.addAria` | Ajouter : {item} |
+| `forMe.web.profile.done` | Fait : |
+| `forMe.web.profile.todo` | À compléter : |
+| `forMe.web.orbi.title` | Orbi vous suggère |
+| `forMe.web.orbi.course` | {skill} revient dans {count, plural, one {# offre faite} other {# offres faites}} pour vous. Une formation de {duration} suffit. |
+| `forMe.web.orbi.skill` | {skill} revient dans {count, plural, one {# offre faite} other {# offres faites}} pour vous. Ajoutez-la à votre profil si vous la maîtrisez. |
+| `forMe.web.orbi.none` | Orbi peut relire votre CV, préparer un entretien avec vous ou vous aider à choisir une offre. |
+| `forMe.web.orbi.interview` | Préparer un entretien |
+| `forMe.web.orbi.cv` | Améliorer mon CV |
+| `forMe.web.orbi.seeCourse` | Voir la formation |
+| `forMe.web.orbi.addSkill` | Ajouter la compétence |
+| `forMe.web.orbi.aria` | Suggestions d'Orbi |
+| `offers.web.count` | {count, plural, =0 {Aucune offre} one {# offre} other {# offres}} |
+| `offers.web.filters` | Filtres |
+| `offers.web.panel` | Filtres des offres |
+| `offers.web.remove` | Retirer le filtre {label} |
+| `offer.web.prepare.gap` | Pour combler l'écart |
+| `offer.web.prepare.ask` | Demander à Orbi |
+| `offer.web.prepare.askLabel` | Votre question à Orbi sur cette offre |
+| `offer.web.prepare.send` | Envoyer à Orbi |
+| `offer.web.prepare.question` | À propos de l'offre « {job} » chez {company} : {question} |
+| `offer.web.why.ok` | Compris |
+
 ### Refonte mobile · Postuler
 
 *Postuler en 3 étapes (docs/refonte-mobile/talent-2 § 1) : le CV, une lettre ou des documents (facultatif), puis ce que verra le recruteur, en clair. Brouillon enregistré à chaque étape. Gratuit, toujours.*

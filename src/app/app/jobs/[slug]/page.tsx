@@ -12,7 +12,8 @@ import { saveLabels } from "@/components/talent/offer-card";
 import { OfferStickyHead, ShareButton } from "@/components/talent/offer-tools";
 import { WhyCriteria } from "@/components/talent/offer-why";
 import { OrbiMark } from "@/components/talent/orbi-mark";
-import { Sheet, SheetButton } from "@/components/talent/sheet";
+import { CloseSheetButton, Sheet, SheetButton } from "@/components/talent/sheet";
+import { AskOrbiAbout } from "@/components/talent/web/ask-orbi";
 import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { formatDate, formatDayMonth } from "@/lib/dates";
@@ -184,8 +185,57 @@ export default async function TalentJobPage({
     </p>
   );
 
+  // The course that closes the gap (planche talent-1 § 3), also in Préparer ma candidature on the web.
+  const gapCard = (className: string) =>
+    firstGap && (
+      <article className={cx("t-verre t-mg", className)}>
+        <span className="t-vign">
+          <CourseArt category="digital" />
+        </span>
+        <div className="t-t">
+          <small>{t("offer.progress.eyebrow")}</small>
+          <Link href={`/app/learn/${firstGap.courses[0]!.slug}`} className="t-lien">
+            <b>{firstGap.courses[0]!.title}</b>
+          </Link>
+          <span>
+            {t("offer.progress.line", {
+              duration:
+                firstGap.courses[0]!.durationMinutes >= 60
+                  ? t("forMe.learn.hours", {
+                      count: Math.round(firstGap.courses[0]!.durationMinutes / 6) / 10,
+                    })
+                  : t("forMe.learn.minutes", { count: firstGap.courses[0]!.durationMinutes }),
+              score: firstGap.newScore,
+            })}
+          </span>
+        </div>
+        <TalentIcon name="suivant" size="s" />
+      </article>
+    );
+
+  // Postuler in the right column on a computer and a tablet (planche web talent-1 § 3): the same
+  // button as the phone's bottom bar, always free.
+  const applyButton = application ? (
+    <Link href={`/app/suivi/${application.id}`} className="t-bt t-p t-press">
+      {t("offer.bar.applied")}
+    </Link>
+  ) : open ? (
+    <Link href={`/app/jobs/${job.slug}/postuler`} className="t-bt t-a t-press">
+      <TalentIcon name="envoyer" size="s" />
+      {draft ? t("offer.bar.resume") : t("offer.bar.apply")}
+    </Link>
+  ) : (
+    <span className="t-bt t-off">{t("offer.bar.apply")}</span>
+  );
+  const applyWeb = (
+    <div className="t-odw-post">
+      {applyButton}
+      <span className="t-gratuit">{t("offer.bar.free")}</span>
+    </div>
+  );
+
   return (
-    <div className="t-od t-od-bas">
+    <div className="t-od t-od-bas t-odw t-large">
       <OfferStickyHead
         watch="od-ban"
         title={job.title}
@@ -246,200 +296,176 @@ export default async function TalentJobPage({
       {query.signalement === "ok" && notice(t("report.success"), "ok")}
       {query.signalement === "deja" && notice(t("report.already"))}
 
-      {ok && score !== null ? (
-        <section aria-label={t("offer.score.title")} className="t-verre t-sc-c">
-          <span
-            className="t-anneau"
-            role="img"
-            aria-label={t("offer.score.ring", { score })}
-            style={{ "--p": score } as React.CSSProperties}
-          >
-            <b aria-hidden>{t("forMe.offers.score", { score })}</b>
-          </span>
-          <div className="t-t">
-            <b>{t("offer.score.title")}</b>
-            {scoreLine && <span>{scoreLine}</span>}
-          </div>
-          <SheetButton
-            target="od-why"
-            label={t("offer.score.whyAria", { score })}
-            className="t-pq t-press"
-          >
-            <TalentIcon name="pourquoi" size="s" />
-            {t("offer.score.why")}
-          </SheetButton>
-        </section>
-      ) : (
-        <section className="t-verre t-vf">
-          <span className="t-cases" aria-hidden>
-            <TalentIcon name="pourquoi" size="s" />
-          </span>
-          <div className="t-t">
-            {match?.state === "optedOut" ? (
-              <span>
-                {t("offer.score.optedOut")}{" "}
-                <Link href="/app/parametres?onglet=confidentialite">
-                  {t("offer.score.optedOutCta")}
-                </Link>
+      <div className="t-odw-g">
+        <div className="t-odw-a">
+          {ok && score !== null ? (
+            <section aria-label={t("offer.score.title")} className="t-verre t-sc-c t-odo-1">
+              <span
+                className="t-anneau"
+                role="img"
+                aria-label={t("offer.score.ring", { score })}
+                style={{ "--p": score } as React.CSSProperties}
+              >
+                <b aria-hidden>{t("forMe.offers.score", { score })}</b>
               </span>
-            ) : (
-              <span>
-                {t("offer.score.incomplete")}{" "}
-                <Link href="/app/profil#competences">{t("offer.score.incompleteCta")}</Link>
+              <div className="t-t">
+                <b>{t("offer.score.title")}</b>
+                {scoreLine && <span>{scoreLine}</span>}
+              </div>
+              <SheetButton
+                target="od-why"
+                label={t("offer.score.whyAria", { score })}
+                className="t-pq t-press"
+              >
+                <TalentIcon name="pourquoi" size="s" />
+                {t("offer.score.why")}
+              </SheetButton>
+              {applyWeb}
+            </section>
+          ) : (
+            <section className="t-verre t-vf t-sc-c t-sc-vide t-odo-1">
+              <span className="t-cases" aria-hidden>
+                <TalentIcon name="pourquoi" size="s" />
               </span>
-            )}
-          </div>
-        </section>
-      )}
+              <div className="t-t">
+                {match?.state === "optedOut" ? (
+                  <span>
+                    {t("offer.score.optedOut")}{" "}
+                    <Link href="/app/parametres?onglet=confidentialite">
+                      {t("offer.score.optedOutCta")}
+                    </Link>
+                  </span>
+                ) : (
+                  <span>
+                    {t("offer.score.incomplete")}{" "}
+                    <Link href="/app/profil#competences">{t("offer.score.incompleteCta")}</Link>
+                  </span>
+                )}
+              </div>
+              {applyWeb}
+            </section>
+          )}
 
-      <SheetButton target="od-prep" className="t-verre t-prep t-press">
-        <OrbiMark size={40} />
-        <span className="t-t">
-          <b>{t("offer.prepare.title")}</b>
-          <span>{t("offer.prepare.line")}</span>
-        </span>
-        <TalentIcon name="suivant" size="s" />
-      </SheetButton>
-
-      {job.responsibilities.length > 0 && (
-        <section className="t-verre t-bloc-t">
-          <h2>{t("offer.missions")}</h2>
-          <ul>
-            {job.responsibilities.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-      <section className="t-verre t-bloc-t">
-        <h2>{t("offer.description")}</h2>
-        <p>{job.description}</p>
-      </section>
-      {job.skills.length > 0 && (
-        <section className="t-verre t-bloc-t">
-          <h2>{t("offer.skills")}</h2>
-          <ul className="t-cmp" style={{ listStyle: "none", padding: 0 }}>
-            {[...owned, ...job.skills.filter((skill) => !mySkills.has(skill.skillId))].map(
-              (skill) => (
-                <li key={skill.skillId} className="contents">
-                  {mySkills.has(skill.skillId) ? (
-                    <span aria-label={t("offer.skillOwned", { skill: skill.skill.name })}>
-                      <TalentIcon name="valider" size="xs" />
-                      {skill.skill.name}
-                    </span>
-                  ) : (
-                    <span className="t-m">{skill.skill.name}</span>
-                  )}
-                </li>
-              ),
-            )}
-          </ul>
-        </section>
-      )}
-      {firstGap && (
-        <article className="t-verre t-mg">
-          <span className="t-vign">
-            <CourseArt category="digital" />
-          </span>
-          <div className="t-t">
-            <small>{t("offer.progress.eyebrow")}</small>
-            <Link href={`/app/learn/${firstGap.courses[0]!.slug}`} className="t-lien">
-              <b>{firstGap.courses[0]!.title}</b>
-            </Link>
-            <span>
-              {t("offer.progress.line", {
-                duration:
-                  firstGap.courses[0]!.durationMinutes >= 60
-                    ? t("forMe.learn.hours", {
-                        count: Math.round(firstGap.courses[0]!.durationMinutes / 6) / 10,
-                      })
-                    : t("forMe.learn.minutes", { count: firstGap.courses[0]!.durationMinutes }),
-                score: firstGap.newScore,
-              })}
+          <SheetButton target="od-prep" className="t-verre t-prep t-press t-odo-2">
+            <OrbiMark size={40} />
+            <span className="t-t">
+              <b>{t("offer.prepare.title")}</b>
+              <span>{t("offer.prepare.line")}</span>
             </span>
-          </div>
-          <TalentIcon name="suivant" size="s" />
-        </article>
-      )}
-      {job.requirements.length > 0 && (
-        <section className="t-verre t-bloc-t">
-          <h2>{t("offer.profile")}</h2>
-          <ul>
-            {job.requirements.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-      {criteria.length > 0 && (
-        <section className="t-verre t-bloc-t">
-          <h2>{t("offer.knockout")}</h2>
-          <ul>
-            {criteria.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-          <p>{t("offer.knockoutHint")}</p>
-        </section>
-      )}
-      {job.benefits.length > 0 && (
-        <section className="t-verre t-bloc-t">
-          <h2>{t("offer.benefits")}</h2>
-          <ul>
-            {job.benefits.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        </section>
-      )}
-      {job.process.length > 0 && (
-        <section className="t-verre t-bloc-t">
-          <h2>{t("offer.process")}</h2>
-          <ol className="flex list-decimal flex-col gap-1 pl-[18px] text-[13px] text-[var(--texte2)]">
-            {job.process.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ol>
-        </section>
-      )}
-      <section className="t-verre t-vf">
-        <span className="t-cases" aria-hidden>
-          <TalentIcon name="confidentialite" size="s" />
-        </span>
-        <div className="t-t">
-          <b>
-            {job.organization.verifiedAt ? t("offer.check.verifiedTitle") : t("offer.check.title")}
-          </b>
-          <span>
-            {job.organization.verifiedAt
-              ? t("offer.check.verifiedText", { date: formatDate(job.organization.verifiedAt) })
-              : t("offer.check.text")}
-          </span>
+            <TalentIcon name="suivant" size="s" />
+          </SheetButton>
+          {gapCard("t-odo-6")}
         </div>
-      </section>
-      {jobRow && (
-        <SheetButton target="od-sig" className="t-sig t-press">
-          <TalentIcon name="aide" size="xs" />
-          {t("offer.report")}
-        </SheetButton>
-      )}
+        <div className="t-odw-m">
+          <div className="t-odw-2b">
+            {job.responsibilities.length > 0 && (
+              <section className="t-verre t-bloc-t t-odo-3">
+                <h2>{t("offer.missions")}</h2>
+                <ul>
+                  {job.responsibilities.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+            {job.requirements.length > 0 && (
+              <section className="t-verre t-bloc-t t-odo-7">
+                <h2>{t("offer.profile")}</h2>
+                <ul>
+                  {job.requirements.map((item) => (
+                    <li key={item}>{item}</li>
+                  ))}
+                </ul>
+              </section>
+            )}
+          </div>
+          <section className="t-verre t-bloc-t t-odo-4">
+            <h2>{t("offer.description")}</h2>
+            <p>{job.description}</p>
+          </section>
+          {job.skills.length > 0 && (
+            <section className="t-verre t-bloc-t t-odo-5">
+              <h2>{t("offer.skills")}</h2>
+              <ul className="t-cmp" style={{ listStyle: "none", padding: 0 }}>
+                {[...owned, ...job.skills.filter((skill) => !mySkills.has(skill.skillId))].map(
+                  (skill) => (
+                    <li key={skill.skillId} className="contents">
+                      {mySkills.has(skill.skillId) ? (
+                        <span aria-label={t("offer.skillOwned", { skill: skill.skill.name })}>
+                          <TalentIcon name="valider" size="xs" />
+                          {skill.skill.name}
+                        </span>
+                      ) : (
+                        <span className="t-m">{skill.skill.name}</span>
+                      )}
+                    </li>
+                  ),
+                )}
+              </ul>
+            </section>
+          )}
+          {criteria.length > 0 && (
+            <section className="t-verre t-bloc-t t-odo-8">
+              <h2>{t("offer.knockout")}</h2>
+              <ul>
+                {criteria.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+              <p>{t("offer.knockoutHint")}</p>
+            </section>
+          )}
+          {job.benefits.length > 0 && (
+            <section className="t-verre t-bloc-t t-odo-9">
+              <h2>{t("offer.benefits")}</h2>
+              <ul>
+                {job.benefits.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {job.process.length > 0 && (
+            <section className="t-verre t-bloc-t t-odo-10">
+              <h2>{t("offer.process")}</h2>
+              <ol className="flex list-decimal flex-col gap-1 pl-[18px] text-[13px] text-[var(--texte2)]">
+                {job.process.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ol>
+            </section>
+          )}
+          <section className="t-verre t-vf t-odo-11">
+            <span className="t-cases" aria-hidden>
+              <TalentIcon name="confidentialite" size="s" />
+            </span>
+            <div className="t-t">
+              <b>
+                {job.organization.verifiedAt
+                  ? t("offer.check.verifiedTitle")
+                  : t("offer.check.title")}
+              </b>
+              <span>
+                {job.organization.verifiedAt
+                  ? t("offer.check.verifiedText", { date: formatDate(job.organization.verifiedAt) })
+                  : t("offer.check.text")}
+              </span>
+            </div>
+          </section>
+          {jobRow && (
+            <SheetButton target="od-sig" className="t-sig t-press t-odo-12">
+              <TalentIcon name="aide" size="xs" />
+              {t("offer.report")}
+            </SheetButton>
+          )}
+        </div>
+      </div>
 
       {/* Postuler, always visible and always free. */}
       <div className="t-verre t-fort t-bas-f t-barre-p">
         <span className="t-gratuit">{t("offer.bar.free")}</span>
         {save("t-bi t-press")}
-        {application ? (
-          <Link href={`/app/suivi/${application.id}`} className="t-bt t-p t-press">
-            {t("offer.bar.applied")}
-          </Link>
-        ) : open ? (
-          <Link href={`/app/jobs/${job.slug}/postuler`} className="t-bt t-a t-press">
-            <TalentIcon name="envoyer" size="s" />
-            {draft ? t("offer.bar.resume") : t("offer.bar.apply")}
-          </Link>
-        ) : (
-          <span className="t-bt t-off">{t("offer.bar.apply")}</span>
-        )}
+        {applyButton}
       </div>
 
       {/* Préparer ma candidature: Orbi, over the offer. */}
@@ -447,6 +473,9 @@ export default async function TalentJobPage({
         id="od-prep"
         title={t("offer.prepare.title")}
         closeLabel={t("offer.close")}
+        className="t-sheet-volet"
+        openParam="preparer"
+        defaultOpen={query.preparer === "1"}
         head={
           <div className="t-or-tete">
             <OrbiMark size={40} />
@@ -523,17 +552,35 @@ export default async function TalentJobPage({
             )}
           </ul>
         )}
-        <Link
-          href={cvs[0] ? `/app/career/cv/${cvs[0].id}?adapter=${job.id}` : "/app/career/cv?creer=1"}
-          className="t-bt t-p t-pl t-press"
-        >
-          <TalentIcon name="cv" size="s" />
-          {cvs[0] ? t("offer.prepare.tailor") : t("offer.prepare.createCv")}
-        </Link>
-        <p className="t-gar">
-          <TalentIcon name="cadenas" size="s" />
-          {t("offer.prepare.guard")}
-        </p>
+        {firstGap && <span className="t-ck-t t-web">{t("offer.web.prepare.gap")}</span>}
+        {gapCard("t-web")}
+        <div className="t-odw-pb">
+          <Link
+            href={
+              cvs[0] ? `/app/career/cv/${cvs[0].id}?adapter=${job.id}` : "/app/career/cv?creer=1"
+            }
+            className="t-bt t-p t-pl t-press"
+          >
+            <TalentIcon name="cv" size="s" />
+            {cvs[0] ? t("offer.prepare.tailor") : t("offer.prepare.createCv")}
+          </Link>
+          <p className="t-gar">
+            <TalentIcon name="cadenas" size="s" />
+            {t("offer.prepare.guard")}
+          </p>
+          <AskOrbiAbout
+            context={t("offer.web.prepare.question", {
+              job: job.title,
+              company,
+              question: "{question}",
+            })}
+            labels={{
+              placeholder: t("offer.web.prepare.ask"),
+              label: t("offer.web.prepare.askLabel"),
+              send: t("offer.web.prepare.send"),
+            }}
+          />
+        </div>
       </Sheet>
 
       {ok && score !== null && (
@@ -581,11 +628,16 @@ export default async function TalentJobPage({
                 </span>
               </p>
             )}
-            {!disputePending && (
-              <SheetButton target="od-contest" className="t-bt t-sec t-pl t-press">
-                {t("offer.why.contest")}
-              </SheetButton>
-            )}
+            <div className="t-odw-acts">
+              {!disputePending && (
+                <SheetButton target="od-contest" className="t-bt t-sec t-pl t-press">
+                  {t("offer.why.contest")}
+                </SheetButton>
+              )}
+              <CloseSheetButton className="t-bt t-p t-pl t-press t-web">
+                {t("offer.web.why.ok")}
+              </CloseSheetButton>
+            </div>
           </Sheet>
 
           <Sheet

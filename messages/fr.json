@@ -2731,6 +2731,52 @@
       "sales": "Vente",
       "language": "Langues",
       "communication": "Communication"
+    },
+    "web": {
+      "next": {
+        "cta": {
+          "profile": "Compléter",
+          "interview": "Préparer",
+          "document": "Envoyer",
+          "draft": "Terminer",
+          "message": "Répondre",
+          "course": "Reprendre",
+          "done": "Voir mes offres"
+        },
+        "text": {
+          "profile": "Votre profil est complété à {percent} %. Plus il est complet, plus votre score est juste.",
+          "interview": "{company} vous propose des créneaux pour « {job} ».",
+          "document": "{company} attend le document « {name} ».",
+          "draft": "Votre candidature « {job} » chez {company} vous attend.",
+          "message": "{company} vous a écrit.",
+          "course": "« {title} » vous attend là où vous l'avez laissée.",
+          "done": "Votre profil est complet : les offres sont classées selon lui."
+        }
+      },
+      "profile": {
+        "title": "Votre profil",
+        "line": "Visible par les recruteurs où vous postulez",
+        "cv": "CV « {title} »",
+        "cvNone": "Un CV",
+        "background": "Expériences et formation",
+        "skills": "{count, plural, one {# compétence} other {# compétences}}",
+        "achievement": "Une réalisation",
+        "add": "Ajouter",
+        "addAria": "Ajouter : {item}",
+        "done": "Fait :",
+        "todo": "À compléter :"
+      },
+      "orbi": {
+        "title": "Orbi vous suggère",
+        "course": "{skill} revient dans {count, plural, one {# offre faite} other {# offres faites}} pour vous. Une formation de {duration} suffit.",
+        "skill": "{skill} revient dans {count, plural, one {# offre faite} other {# offres faites}} pour vous. Ajoutez-la à votre profil si vous la maîtrisez.",
+        "none": "Orbi peut relire votre CV, préparer un entretien avec vous ou vous aider à choisir une offre.",
+        "interview": "Préparer un entretien",
+        "cv": "Améliorer mon CV",
+        "seeCourse": "Voir la formation",
+        "addSkill": "Ajouter la compétence",
+        "aria": "Suggestions d'Orbi"
+      }
     }
   },
   "offers": {
@@ -2790,6 +2836,12 @@
       "clear": "Effacer",
       "show": "{count, plural, =0 {Aucune offre} one {Voir # offre} other {Voir # offres}}",
       "close": "Fermer les filtres"
+    },
+    "web": {
+      "count": "{count, plural, =0 {Aucune offre} one {# offre} other {# offres}}",
+      "filters": "Filtres",
+      "panel": "Filtres des offres",
+      "remove": "Retirer le filtre {label}"
     }
   },
   "offer": {
@@ -2873,7 +2925,19 @@
     "notice": {
       "already": "Vous avez déjà postulé à cette offre."
     },
-    "close": "Fermer"
+    "close": "Fermer",
+    "web": {
+      "prepare": {
+        "gap": "Pour combler l'écart",
+        "ask": "Demander à Orbi",
+        "askLabel": "Votre question à Orbi sur cette offre",
+        "send": "Envoyer à Orbi",
+        "question": "À propos de l'offre « {job} » chez {company} : {question}"
+      },
+      "why": {
+        "ok": "Compris"
+      }
+    }
   },
   "apply": {
     "seo": "Postuler · {job}",

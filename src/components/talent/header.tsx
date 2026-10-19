@@ -154,7 +154,7 @@ export function TalentHeader({
         </Link>
       </div>
       {search && (
-        <div className="t-rech-zone">
+        <div className={cx("t-rech-zone", pathname === "/app/jobs" && "t-rech-of")}>
           <Suspense fallback={<SearchBar {...search} labels={labels.search} pathname={pathname} />}>
             <SearchWithQuery {...search} labels={labels.search} pathname={pathname} />
           </Suspense>
@@ -169,8 +169,11 @@ function SearchWithQuery(props: Parameters<typeof SearchBar>[0]) {
   return <SearchBar {...props} query={params.get("q") ?? ""} params={params.toString()} />;
 }
 
-/** The search of a destination (planche Fondations § 5): a glass pill, the filters on the right. */
-function SearchBar({
+/**
+ * The search of a destination (planche Fondations § 5): a glass pill, the filters on the right.
+ * Offres also draws it at the head of its list on a computer (planche web talent-1 § 2).
+ */
+export function SearchBar({
   action,
   filters,
   labels,

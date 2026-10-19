@@ -2,6 +2,29 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · web talent 1 (19 octobre 2026)
+
+Pour moi, Offres et détail d'une offre sur tablette et ordinateur (`docs/refonte-web/talent-1`, captures
+w1 à w5 ; valeurs de `web1.py` et `web.py`). Mêmes routes, mêmes composants qu'en mobile ; les pages
+passent en colonnes (`t-large`) et le téléphone garde exactement son ordre (enveloppes en
+`display: contents`).
+
+- **Pour moi** (`/app`) : objectif « trouver un emploi » : prochaine étape en bandeau, offres en cartes
+  côte à côte, « Continuer à apprendre », et à droite « Votre profil », « Orbi vous suggère », accès
+  rapide. Objectif « développer mes compétences » : formation à reprendre et « Pour vos objectifs » en
+  grille, les offres et Orbi à droite. Tablette : contenu puis deux cartes côte à côte.
+- **Offres** (`/app/jobs`) : ordinateur, filtres ouverts à gauche (appliqués à chaque choix), recherche,
+  onglets et nombre d'offres, grille de 3 colonnes ; tablette, filtres actifs en puces qui se retirent,
+  grille de 2 colonnes, filtres en fenêtre.
+- **Offre** (`/app/jobs/[slug]`) : bannière arrondie, logo de 92 px, colonne de droite fixe (score,
+  « Pourquoi ? », Postuler toujours gratuit, Préparer ma candidature, formation pour progresser) ;
+  tablette, Postuler en tête à gauche. « Pourquoi 86 % ? » en fenêtre centrée avec « Compris » ;
+  « Préparer ma candidature » en panneau à droite avec « Pour combler l'écart » et « Demander à Orbi ».
+- Données réelles : bandeau selon la vraie prochaine étape, suggestion d'Orbi calculée par le matching
+  (`orbiFocus`), crédits restants.
+- E2e `tests/e2e/web-talent-1.spec.ts`. Écarts : `docs/decisions/2026-10-19-refonte-etape-1-web-t1.md`.
+  Captures : `captures/etape-1/web-talent-1/`.
+
 ## Refonte étape 1 · lot mobile 7 : abonnement, paiement, factures, paramètres, aide, fin de l'ancien design (19 octobre 2026)
 
 Planche talent-4 § 7, 8 et 10. Choix et écarts : `docs/decisions/2026-10-19-refonte-etape-1-lot-7.md`.
