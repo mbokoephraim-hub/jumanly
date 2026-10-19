@@ -114,6 +114,7 @@ export function TalentShell({
             "/app/recherche": t("title.search"),
             "/app/compte": t("title.account"),
             "/app/espace": t("title.space"),
+            "/app/orbi/historique": t("title.orbiHistory"),
             "/app/jobs": t("nav.offers"),
             "/app/learn": t("nav.learn"),
             "/app/suivi": t("nav.suivi"),

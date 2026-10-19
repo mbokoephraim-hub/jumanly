@@ -752,6 +752,7 @@ model User {
   lessonProgress      LessonProgress[]
   savedCourses        SavedCourse[]
   aiUsages            AiUsage[]
+  orbiConversations   OrbiConversation[]
   aiSuggestions       AiSuggestion[]
   matchDisputes       MatchDispute[]            @relation("DisputeAuthor")
   progressPlan        ProgressPlan?
@@ -1564,6 +1565,44 @@ model Embedding {
   updatedAt   DateTime               @updatedAt
 
   @@unique([subjectType, subjectId])
+}
+
+/// A conversation with Orbi, the talent's assistant (docs/refonte-mobile, talent lot 4 § 9). Kept
+/// until the person erases it, one exchange or the whole history.
+model OrbiConversation {
+  id        String        @id @default(cuid(2))
+  userId    String
+  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// The first question, shortened: the line of the history.
+  title     String
+  /// cv, interview, offer, path, learn, other: the icon of the history.
+  topic     String        @default("other")
+  messages  OrbiMessage[]
+  createdAt DateTime      @default(now())
+  updatedAt DateTime      @updatedAt
+
+  @@index([userId, updatedAt])
+}
+
+model OrbiMessage {
+  id             String           @id @default(cuid(2))
+  conversationId String
+  conversation   OrbiConversation @relation(fields: [conversationId], references: [id], onDelete: Cascade)
+  /// "user" or "orbi".
+  role           String
+  /// Paragraphs separated by a blank line.
+  text           String
+  /// Orbi only: proposed next steps, keys of a fixed list (`orbiActions`), never free links.
+  actions        String[]         @default([])
+  /// Orbi only: the « Pourquoi ? » of the answer.
+  why            String?
+  /// Orbi only: "ai" (the model wrote it) or "rules" (written without the model).
+  source         String?
+  /// Orbi only, without the model: consent, entitlement, quota or unavailable.
+  limit          String?
+  createdAt      DateTime         @default(now())
+
+  @@index([conversationId, createdAt])
 }
 
 /// Every call to a language model (partie 03): feature, model, tokens, estimated cost.

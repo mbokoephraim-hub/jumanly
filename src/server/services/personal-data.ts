@@ -8,50 +8,62 @@ import type { PrismaClient } from "@/generated/prisma/client";
 export async function personalData(db: PrismaClient, userId: string, now = new Date()) {
   const user = await db.user.findUnique({ where: { id: userId } });
   if (!user) return null;
-  const [profile, memberships, subscriptions, payments, sessions, enrollments] = await Promise.all([
-    db.talentProfile.findUnique({
-      where: { userId },
-      include: {
-        skills: { include: { skill: { select: { name: true } } } },
-        experiences: true,
-        educations: true,
-        documents: { select: { kind: true, title: true, content: true, createdAt: true } },
-        applications: {
-          select: {
-            createdAt: true,
-            status: true,
-            coverLetter: true,
-            job: { select: { title: true } },
+  const [profile, memberships, subscriptions, payments, sessions, enrollments, orbi] =
+    await Promise.all([
+      db.talentProfile.findUnique({
+        where: { userId },
+        include: {
+          skills: { include: { skill: { select: { name: true } } } },
+          experiences: true,
+          educations: true,
+          documents: { select: { kind: true, title: true, content: true, createdAt: true } },
+          applications: {
+            select: {
+              createdAt: true,
+              status: true,
+              coverLetter: true,
+              job: { select: { title: true } },
+            },
           },
         },
-      },
-    }),
-    db.membership.findMany({
-      where: { userId },
-      include: { organization: { select: { name: true, type: true } } },
-    }),
-    db.subscription.findMany({
-      where: { subjectType: "user", subjectId: userId },
-      include: { plan: { select: { name: true } } },
-    }),
-    db.payment.findMany({
-      where: { subjectType: "user", subjectId: userId },
-      omit: { idempotencyKey: true },
-    }),
-    db.session.findMany({
-      where: { userId },
-      select: { createdAt: true, expiresAt: true, userAgent: true, ipAddress: true },
-    }),
-    db.enrollment.findMany({
-      where: { userId },
-      select: {
-        startedAt: true,
-        completedAt: true,
-        course: { select: { title: true } },
-        certificate: { select: { code: true, issuedAt: true, revokedAt: true } },
-      },
-    }),
-  ]);
+      }),
+      db.membership.findMany({
+        where: { userId },
+        include: { organization: { select: { name: true, type: true } } },
+      }),
+      db.subscription.findMany({
+        where: { subjectType: "user", subjectId: userId },
+        include: { plan: { select: { name: true } } },
+      }),
+      db.payment.findMany({
+        where: { subjectType: "user", subjectId: userId },
+        omit: { idempotencyKey: true },
+      }),
+      db.session.findMany({
+        where: { userId },
+        select: { createdAt: true, expiresAt: true, userAgent: true, ipAddress: true },
+      }),
+      db.enrollment.findMany({
+        where: { userId },
+        select: {
+          startedAt: true,
+          completedAt: true,
+          course: { select: { title: true } },
+          certificate: { select: { code: true, issuedAt: true, revokedAt: true } },
+        },
+      }),
+      db.orbiConversation.findMany({
+        where: { userId },
+        select: {
+          title: true,
+          createdAt: true,
+          messages: {
+            select: { role: true, text: true, createdAt: true },
+            orderBy: { createdAt: "asc" },
+          },
+        },
+      }),
+    ]);
   return {
     exportedAt: now.toISOString(),
     account: {
@@ -72,6 +84,7 @@ export async function personalData(db: PrismaClient, userId: string, now = new D
     payments,
     sessions,
     enrollments,
+    orbi,
   };
 }
 

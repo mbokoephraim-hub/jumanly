@@ -2378,26 +2378,85 @@ Conventions :
 
 ### `/app/orbi` · Orbi en plein écran
 
-*L'onglet central. Les quatre aides mènent aux fonctions existantes ; la conversation arrive au lot 7. Orbi propose, la personne décide.*
+*L'onglet central, en page de conversation (talent lot 4 § 9) : retour en haut, pas de barre du bas. Les quatre aides mènent aux fonctions existantes ; la conversation libre est gardée dans l'historique. Orbi propose, la personne décide.*
 
 | Clé | Texte |
 |---|---|
 | `talentOrbi.metaTitle` | Orbi |
 | `talentOrbi.title` | Orbi |
-| `talentOrbi.subtitle` | Votre accompagnement |
 | `talentOrbi.credits` | {count, plural, =0 {0 crédit} one {# crédit} other {# crédits}} |
 | `talentOrbi.creditsUnlimited` | Crédits illimités |
 | `talentOrbi.creditsAria` | Crédits Orbi restants ce mois : {count} |
+| `talentOrbi.back` | Retour |
+| `talentOrbi.history` | Historique de mes échanges avec Orbi |
+| `talentOrbi.newChat` | Nouvel échange |
 | `talentOrbi.aides.label` | Ce qu'Orbi peut faire pour vous |
 | `talentOrbi.aides.cv` | Améliorer mon CV |
 | `talentOrbi.aides.interview` | Préparer un entretien |
 | `talentOrbi.aides.offer` | Analyser une offre |
 | `talentOrbi.aides.path` | Choisir ma voie |
-| `talentOrbi.intro` | Orbi propose, vous décidez : rien n'est modifié ni envoyé sans votre accord. Choisissez une aide pour commencer. |
+| `talentOrbi.intro` | Bonjour, je suis Orbi. Posez-moi une question sur votre CV, un entretien, une offre ou votre parcours. Je propose, vous décidez : rien n'est modifié ni envoyé sans votre accord. |
+| `talentOrbi.composer.label` | Votre message à Orbi |
 | `talentOrbi.composer.placeholder` | Écrire à Orbi |
-| `talentOrbi.composer.soon` | La conversation avec Orbi arrive bientôt. En attendant, choisissez une aide ci-dessus. |
 | `talentOrbi.composer.dictate` | Dicter |
+| `talentOrbi.composer.stopDictate` | Arrêter la dictée |
 | `talentOrbi.composer.send` | Envoyer |
+| `talentOrbi.composer.footer` | Orbi propose, vous décidez. |
+| `talentOrbi.chat.aria` | Conversation avec Orbi |
+| `talentOrbi.chat.you` | Vous : |
+| `talentOrbi.chat.orbi` | Orbi : |
+| `talentOrbi.chat.thinking` | Orbi réfléchit… |
+| `talentOrbi.why` | Pourquoi ? |
+| `talentOrbi.source.ai` | Réponse rédigée par l'IA d'Orbi à partir de votre profil. Relisez-la avant de vous en servir. |
+| `talentOrbi.source.rules` | Réponse préparée sans l'IA : elle vous mène vers l'outil adapté. |
+| `talentOrbi.limit.consent` | Vous n'avez pas autorisé Orbi à utiliser l'IA. Vous pouvez l'activer dans les paramètres de confidentialité. |
+| `talentOrbi.limit.entitlement` | Votre formule ne comprend pas les réponses de l'IA d'Orbi. |
+| `talentOrbi.limit.quota` | Vos crédits Orbi de ce mois sont utilisés. Aucun crédit n'a été pris pour cette réponse. |
+| `talentOrbi.limit.unavailable` | L'IA d'Orbi est momentanément indisponible. Aucun crédit n'a été pris pour cette réponse. |
+| `talentOrbi.limitLink.consent` | Autoriser Orbi |
+| `talentOrbi.limitLink.plans` | Voir les formules |
+| `talentOrbi.actions.cv` | Ouvrir mes CV |
+| `talentOrbi.actions.linkedin` | Préparer mon LinkedIn |
+| `talentOrbi.actions.interview` | M'entraîner à un entretien |
+| `talentOrbi.actions.jobs` | Voir les offres |
+| `talentOrbi.actions.diagnostic` | Faire le point |
+| `talentOrbi.actions.plan` | Voir mon plan |
+| `talentOrbi.actions.learn` | Voir les formations |
+| `talentOrbi.actions.profile` | Compléter mon profil |
+| `talentOrbi.error.invalid` | Écrivez au moins 2 caractères, et 1 000 au plus. |
+| `talentOrbi.error.notFound` | Cet échange a été effacé. Écrivez à nouveau pour en commencer un autre. |
+| `talentOrbi.error.failed` | Orbi n'a pas pu répondre. Réessayez dans un instant. |
+| `talentOrbi.rules.cv` | Pour votre CV, ouvrez Mes CV : Orbi y relit chaque section et propose des améliorations que vous acceptez ou non. |
+| `talentOrbi.rules.interview` | Pour préparer un entretien, entraînez-vous avec une simulation : une question à la fois, puis un retour sur vos réponses. |
+| `talentOrbi.rules.offer` | Pour une offre, ouvrez-la et touchez « Pourquoi ? » : vous voyez ce qui correspond à votre profil et ce qui manque. |
+| `talentOrbi.rules.path` | Pour choisir votre voie, faites le point : quelques questions, puis un bilan et un plan de progression que vous modifiez à votre guise. |
+| `talentOrbi.rules.learn` | Les formations sont dans Apprendre. Dans chaque leçon, le coach vous explique une notion ou vous propose un exercice. |
+| `talentOrbi.rules.other` | Je vous aide pour votre CV, vos entretiens, les offres et votre parcours. Pour commencer, faites le point sur votre carrière. |
+| `talentOrbi.rules.declined` | Je ne donne pas les réponses d'une évaluation. Je peux en revanche vous expliquer la notion dans la formation pour que vous trouviez seul. |
+| `talentOrbi.rules.whyRules` | Orbi a reconnu le sujet de votre question et vous propose l'outil qui y répond. |
+
+### `/app/orbi/historique` · Historique Orbi
+
+*Retrouver ou effacer un échange avec Orbi (talent lot 4 § 9).*
+
+| Clé | Texte |
+|---|---|
+| `talentOrbi.historyPage.metaTitle` | Historique Orbi |
+| `talentOrbi.historyPage.search.label` | Rechercher dans mes échanges |
+| `talentOrbi.historyPage.search.submit` | Rechercher |
+| `talentOrbi.historyPage.list` | Mes échanges avec Orbi |
+| `talentOrbi.historyPage.empty` | Aucun échange pour l'instant. Écrivez à Orbi pour commencer. |
+| `talentOrbi.historyPage.noResult` | Aucun échange ne correspond à « {query} ». |
+| `talentOrbi.historyPage.line` | {count, plural, one {# message} other {# messages}} · {date} |
+| `talentOrbi.historyPage.today` | aujourd'hui |
+| `talentOrbi.historyPage.yesterday` | hier |
+| `talentOrbi.historyPage.delete` | Effacer l'échange « {title} » |
+| `talentOrbi.historyPage.clear` | Effacer tout l'historique |
+| `talentOrbi.historyPage.clearConfirm` | Effacer tous vos échanges avec Orbi ? C'est définitif. |
+| `talentOrbi.historyPage.clearYes` | Tout effacer |
+| `talentOrbi.historyPage.cancel` | Annuler |
+| `talentOrbi.historyPage.guarantee` | Vous pouvez effacer un échange ou tout l'historique. |
+| `talentShell.title.orbiHistory` | Historique Orbi |
 
 ### Navigation · Menu du compte
 
@@ -11969,6 +12028,7 @@ Conventions :
 | `admin.ai.usage.feature.cvAnalysis` | Analyse de CV (recruteurs) |
 | `admin.ai.usage.feature.jobDraft` | Rédaction d'offres |
 | `admin.ai.usage.feature.learnCoach` | Coach IA des formations |
+| `admin.ai.usage.feature.orbiChat` | Conversation avec Orbi |
 | `admin.ai.usage.feature.cvParse` | Lecture de CV à l'import |
 | `admin.ai.usage.period` | 30 derniers jours |
 | `admin.ai.usage.col.feature` | Fonction |

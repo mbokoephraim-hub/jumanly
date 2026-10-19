@@ -2058,18 +2058,6 @@ html.sombre body {
 .t-ai {
   text-decoration: none;
 }
-.t-orbi-bas {
-  position: sticky;
-  bottom: calc(118px + env(safe-area-inset-bottom));
-  z-index: 2;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  margin-top: auto;
-}
-.t-orbi-bas .t-aide {
-  padding: 0 18px;
-}
 .t-or-tete .t-credits {
   color: var(--texte);
 }
@@ -3642,4 +3630,93 @@ label.t-ch:has(:focus-visible) {
 }
 .t-li input[role="switch"]:checked + .t-sw::after {
   left: 23px;
+}
+
+/* ── Orbi : conversation et historique (planche talent-4 § 9) ── */
+.t-orbi-fil {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.t-bulle-u {
+  white-space: pre-line;
+}
+.t-bulle-o .t-corps p {
+  margin: 0;
+}
+/* Le champ « Écrire à Orbi » prend la place de la barre du bas. */
+.t-orbi-compo-f {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 30;
+  width: 100%;
+  max-width: 560px;
+  transform: translateX(-50%);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: 14px 16px max(16px, env(safe-area-inset-bottom));
+  background: linear-gradient(180deg, transparent, var(--fond) 38%);
+}
+.t-orbi-compo-f .t-compo {
+  height: 60px;
+}
+.t-orbi-pied {
+  margin: 0;
+  text-align: center;
+  font-size: 11px;
+  color: var(--texte2);
+}
+.t-orbi-pq summary {
+  cursor: pointer;
+  list-style: none;
+}
+.t-orbi-pq summary::-webkit-details-marker {
+  display: none;
+}
+.t-orbi-pq[open] {
+  flex-basis: 100%;
+}
+.t-orbi-pq p {
+  margin: 6px 0 0;
+  font-size: 12.5px;
+  color: var(--texte2);
+}
+.t-orbi-hist {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.t-orbi-hist .t-li {
+  padding-right: 8px;
+}
+.t-orbi-ligne {
+  display: flex;
+  flex: 1;
+  min-width: 0;
+  align-items: center;
+  gap: 12px;
+  min-height: 64px;
+  color: inherit;
+  text-decoration: none;
+}
+.t-orbi-ligne .t-t b {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.t-orbi-hist .t-bi {
+  flex: none;
+  box-shadow: none;
+  background: transparent;
+  color: var(--texte2);
+}
+.t-orbi-conf {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  border-radius: 24px;
+  font-size: 14px;
 }
