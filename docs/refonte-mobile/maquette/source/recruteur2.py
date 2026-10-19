@@ -299,7 +299,7 @@ ECR = [
  ('q4','4 · Entretiens','Proposer jusqu’à 3 créneaux, voir l’invitation comme le candidat, suivre les réponses, préparer, évaluer.',
   [ecrans((PROG,'Proposer un entretien','Mode, durée, calendrier, disponibilités lues par Orbi.'),(PROG2,'Choisir les heures','Journée de l’équipe, créneaux, suggestion d’Orbi.'),(INV_AP,'Aperçu de l’invitation','Ce que reçoit le candidat.'),(AGENDA,'Entretiens','Semaine, statuts en couleur, préparation.'),(PREP_R,'Préparer','Questions liées à l’offre.'),(EVAL,'Évaluation','Grille de l’offre, avis, suite.'))]),
  ('q5','5 · Rechercher des talents','Seuls les profils rendus visibles. Chaque consultation est enregistrée. Le talent décide de répondre.',
-  [ecrans((TAL,'Rechercher','4 talents par page, Consulter.'),(TAL_F,'Filtres','Aucun critère personnel.'),(TPROF,'Profil d’un talent','Analyse Orbi, preuves, projets, expérience et formation.'),(CONTACT,'Proposer l’offre','Message personnalisé par Orbi, annonce jointe, quota.'),(VIVIERS,'Viviers','Talents gardés pour plus tard.'))]),
+  [ecrans((TAL,'Rechercher','Liste verticale continue, Consulter.'),(TAL_F,'Filtres','Aucun critère personnel.'),(TPROF,'Profil d’un talent','Analyse Orbi, preuves, projets, expérience et formation.'),(CONTACT,'Proposer l’offre','Message personnalisé par Orbi, annonce jointe, quota.'),(VIVIERS,'Viviers','Talents gardés pour plus tard.'))]),
  ('q6','6 · Mode sombre','',
   [ecrans((sombre(CANDS),'Candidatures',''),(sombre(DOS),'Dossier',''),(sombre(TAL),'Talents',''))]),
 ]

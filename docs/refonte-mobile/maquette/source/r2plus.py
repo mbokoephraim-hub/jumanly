@@ -395,7 +395,7 @@ ORB_LOCK = phone(f'''{tete_f("Candidature", droite="plus-options")}
 <a class="pq">{ic("pourquoi","xs")}Pourquoi 74 % ? Toujours inclus</a></div>
 <div class="doc-p"><div class="d"><div class="pg"><i class="h"></i><i></i><i style="width:80%"></i><i></i></div><div class="t">{ic("cv","xs")}<div><b>CV</b>1 page · PDF</div></div></div><div class="d" style="display:grid;place-items:center;color:var(--texte2);font-size:11.5px;text-align:center;padding:10px">Pas de lettre<br>Facultative</div></div>''', avec_nav=False, cls='long', bas=BARRE_A)
 
-# ---------- v2.2 : talents 4 par page avec « Consulter », parcours en deux blocs ----------
+# ---------- v2.2 : talents en liste verticale continue avec « Consulter », parcours en deux blocs ----------
 CSSR += """
 .tl .b2{display:flex;align-items:center;gap:6px;padding-top:8px;border-top:1px solid var(--trait)}
 .tl .b2 .m{flex:1}
@@ -406,6 +406,8 @@ CSSR += """
 .pagin a{min-width:34px;height:34px;border-radius:12px;display:grid;place-items:center;font-size:13px;font-weight:600;background:var(--plein);box-shadow:var(--verre)}
 .pagin a.on{background:#0F3F37;color:#fff}.sombre .pagin a.on{background:#A6F26B;color:#0F3F37}
 .pagin span{color:var(--texte2);font-size:13px}
+.suite{display:flex;align-items:center;justify-content:center;gap:8px;font-size:12px;color:var(--texte2);padding:6px 0 4px}
+.suite .spin{width:16px;height:16px;border-radius:50%;border:2px solid var(--trait);border-top-color:#2FD3A6}
 .vu-chip{display:inline-flex;align-items:center;gap:4px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--zone);color:var(--texte2)}
 .vu-chip .ic{width:12px;height:12px}
 .xp-h{display:flex;align-items:center;gap:8px;margin:2px 0 -2px}
@@ -426,7 +428,9 @@ TAL = phone(f'''{tete_r("Candidats")}
 {tl("DK","a","David K.","Data analyst · Kinshasa · en poste",["SQL","Python"],79,"m")}
 {tl("MT","","Merveille T.","Analyste junior · Kinshasa · disponible",["Excel","Power BI"],72,"m")}
 {tl("SL","a","Sarah L.","Diplômée statistiques · Kinshasa",["Excel","SQL"],66,"m")}
-<div class="pagin"><a>{ic("retour","xs")}</a><a class="on">1</a><a>2</a><a>3</a><span>…</span><a>10</a><a>{ic("suivant","xs")}</a></div>''', 'candidats', 'long')
+{tl("JM","","Jonas M.","Data analyst · Lubumbashi · disponible",["SQL","Tableau"],63,"m")}
+{tl("EN","a","Esther N.","Analyste reporting · Kinshasa · en poste",["Excel","Power BI"],61,"m")}
+<div class="suite"><span class="spin"></span>Chargement des profils suivants</div>''', 'candidats', 'long')
 
 PRJ_VZ1 = '<svg class="vz" viewBox="0 0 120 60"><rect x="6" y="34" width="14" height="22" rx="3" fill="#0F3F37" opacity=".35"/><rect x="26" y="22" width="14" height="34" rx="3" fill="#0F3F37" opacity=".55"/><rect x="46" y="28" width="14" height="28" rx="3" fill="#0F3F37" opacity=".45"/><rect x="66" y="10" width="14" height="46" rx="3" fill="#0F3F37"/><path d="M90 46 L100 30 L108 36 L116 14" fill="none" stroke="#0F3F37" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 PRJ_VZ2 = '<svg class="vz" viewBox="0 0 120 60"><rect x="8" y="6" width="104" height="48" rx="6" fill="#fff" opacity=".7"/><g fill="#0F3F37"><rect x="14" y="12" width="92" height="6" rx="2" opacity=".85"/><rect x="14" y="23" width="40" height="4" rx="2" opacity=".35"/><rect x="60" y="23" width="46" height="4" rx="2" opacity=".35"/><rect x="14" y="32" width="40" height="4" rx="2" opacity=".35"/><rect x="60" y="32" width="46" height="4" rx="2" opacity=".35"/><rect x="14" y="41" width="40" height="4" rx="2" opacity=".35"/><rect x="60" y="41" width="30" height="4" rx="2" opacity=".35"/></g><circle cx="100" cy="44" r="8" fill="#2FD3A6"/><path d="M96 44 l3 3 l5 -6" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/></svg>'
