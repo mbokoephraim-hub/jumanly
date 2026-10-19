@@ -21,8 +21,9 @@ Même règle que pour le talent (brief talent § 0) : l'ancienne interface Hire 
 | Lot 1 : À traiter, organisation active, mes offres, actions, clôture, création en 4 étapes avec Orbi, limite d'offres, offre publiée, détail d'une offre | `docs/refonte-mobile/recruteur-1/` |
 | Lot 2 : candidatures par étape, tri, dossier, score expliqué, analyse Orbi (et version RH Free), changer d'étape, décision finale, entretiens (proposer, aperçu, suivi, préparer, évaluer), recherche de talents, filtres, profil, proposer l'offre, viviers | `docs/refonte-mobile/recruteur-2/` |
 | Lot 3 : Orbi, messages, conversation avec brouillon Orbi et actions rapides, modèles, notifications, compte RH, profil RH, organisation, vérification, équipe, invitation, abonnement, formules RH, paiement, rapports, paramètres, premiers pas | `docs/refonte-mobile/recruteur-3/` |
+| Lot 4 : ATS avec Orbi (analyse en un clic, classement, recommandation, profil par offre), liste des retenus, réponses groupées (retenus et non retenus), modèles d'e-mail, messagerie (en ligne, lu, badges d'étape, menu, Orbi dans la conversation, rangement), contacts (demande, acceptation, liste), rejoindre une organisation existante, rapport PDF | `docs/refonte-mobile/recruteur-4/` et `docs/refonte-mobile/modeles-recruteur/` |
 
-Chaque dossier contient la planche HTML, une capture par section (`*.png`) ; les générateurs `recruteur1.py`, `recruteur2.py`, `recruteur3.py` et les CSS sont dans `docs/refonte-mobile/maquette/source/` (valeurs exactes). La section « Comment on y arrive » de chaque planche donne les chemins de navigation.
+Chaque dossier contient la planche HTML, une capture par section (`*.png`) ; les générateurs `recruteur1.py`, `recruteur2.py`, `recruteur3.py`, `recruteur4.py` (et `modeles4.py` pour les e-mails et le rapport) et les CSS sont dans `docs/refonte-mobile/maquette/source/` (valeurs exactes). La section « Comment on y arrive » de chaque planche donne les chemins de navigation.
 
 **Version 2 des planches (19/10, après retour d'Ephraïm « trop simple, trop de vide »)** : `r1plus.py`, `r2plus.py`, `r3plus.py` remplacent une partie des écrans et font foi. Points à reproduire : calendrier du mois et journée en créneaux pour proposer un entretien, ligne Orbi sur chaque écran de travail (suggestion avec bouton, jamais d'action sans accord), écrans pleine hauteur sans grands vides, profil talent et dossier en cartes riches (anneau de score, analyse en points forts et points à vérifier), abonnement avec échéances, rapports avec graphiques réels. **Peu de bandeaux d'information** : on ne garde en bas d'écran que ceux qu'impose une règle (données exclues du score, filtres interdits, candidature gratuite, garde-fou d'Orbi, contact assistant@jumanly.io) ; les autres explications vont dans l'aide. Icônes toujours centrées dans leur cadre.
 
@@ -42,8 +43,14 @@ Chaque dossier contient la planche HTML, une capture par section (`*.png`) ; les
 12. Recherche de talents : seulement les profils rendus visibles ; chaque consultation est journalisée (bandeau sur le profil) ; aucun filtre sur âge, genre, nationalité, photo ; « Proposer l'offre » = `ContactRequest` avec quota, le talent décide ; le contact n'est visible qu'après acceptation.
 13. Entretiens : 1 à 3 créneaux, visio / sur site / audio, fuseau, participants ; aperçu de ce que reçoit le candidat ; réponses et demandes d'autre date dans À traiter et dans l'écran Entretiens.
 14. Paiement : mêmes écrans que le talent (lot 4 talent), au nom de l'organisation ; factures au nom de l'organisation ; l'adaptateur simulé jamais actif en production.
-15. Aucun numéro de téléphone Jumanly ; contact `assistant@jumanly.io`. Rapports : chiffres réels, aucune donnée personnelle, export CSV.
-16. Les entreprises et personnes des maquettes sont fictives : ne rien reprendre en production.
+15. Aucun numéro de téléphone Jumanly ; contact `assistant@jumanly.io`. Rapports : chiffres réels, aucune donnée personnelle, **export toujours en PDF A4** aux couleurs de Jumanly (modèle `modeles-recruteur/rapport-recrutement.html` et `.pdf`, rendu côté serveur).
+16. **ATS (lot 4)** : « Lancer l'analyse » analyse tous les CV d'une offre avec le droit `hire.cv_analysis` et consomme `ai.credits.monthly` par CV (nombre affiché avant de lancer). Classement par score déterministe (partie 08), recommandation d'Orbi (profils à voir en priorité, avec Pourquoi), profil adapté à chaque offre (critère → preuve, points à vérifier, questions d'entretien). Orbi ne rejette personne : les profils non recommandés restent dans « Tous ».
+17. **Liste des retenus** : le recruteur coche des profils et crée la liste pour l'étape suivante ; elle sert aux réponses groupées et aux entretiens.
+18. **Réponses groupées** : sélection rapide des retenus et des non retenus, modèle long, canaux e-mail et message Jumanly, case « J'ai relu » obligatoire, confirmation avec le nombre, annulation possible 10 minutes. Modèles d'e-mail : `modeles-recruteur/email-candidature-retenue.html`, `email-candidature-non-retenue.html` (600 px, aux couleurs, pied avec les deux adresses, jamais de téléphone).
+19. **Messagerie** : présence « En ligne », accusés « Distribué » et « Lu » (désactivables par chacun dans ses paramètres), « écrit… » ; badges d'étape distincts (Retenu · entretien, Contact accepté, En examen, Non retenu) ; menu de la conversation (dossier, étape, modèles, Orbi, couper les notifications, retirer, signaler) ; « + » ouvre pièces jointes, créneaux, **modèles** ; Orbi dans la conversation (résumer, proposer une réponse, ton, traduire, rappel) sans jamais envoyer. Orbi peut proposer de **retirer de la messagerie** les conversations terminées des non retenus : cela masque côté recruteur seulement, le candidat garde ses messages, rien n'est supprimé en base.
+20. **Contacts** : « Proposer l'offre » envoie une demande ; le talent accepte ou refuse ; l'écran Contacts liste tout (acceptés, en attente avec Relancer, refusés), quota mensuel affiché.
+21. **Organisation existante à l'inscription** : si le nom ou le domaine de l'e-mail correspond à une organisation déjà sur Jumanly, sa fiche apparaît et l'utilisateur « demande à rejoindre » (pas de doublon). L'admin principale reçoit une notification dans l'app (choix du rôle, sièges restants, Accepter / Refuser) et l'e-mail `email-demande-rejoindre-organisation.html`. Sans réponse en 7 jours, la demande expire.
+22. Les entreprises et personnes des maquettes sont fictives : ne rien reprendre en production.
 
 ## 3. Écrans → routes
 
@@ -67,7 +74,11 @@ Chaque dossier contient la planche HTML, une capture par section (`*.png`) ; les
 | Compte RH, profil RH | `/app/hire/compte`, `/app/hire/compte/profil` |
 | Organisation, vérification, équipe, invitation | `/app/organisation`, `/app/organisation/verification`, `/app/organisation/equipe` |
 | Abonnement, formules RH, paiement, factures | `/app/abonnement` (+ sous-pages communes) |
-| Rapports | `/app/hire/rapports` |
+| Rapports, export PDF | `/app/hire/rapports` (PDF : `/app/hire/rapports/export`) |
+| ATS d'une offre, recommandation, profil par offre, retenus | `/app/hire/offres/[id]/ats`, `/app/hire/offres/[id]/retenus` |
+| Réponses groupées | `/app/hire/offres/[id]/reponses` |
+| Contacts | `/app/hire/contacts` |
+| Rejoindre une organisation (inscription), demande côté admin | `/app/hire/bienvenue` (étape organisation), `/app/notifications` |
 | Paramètres (notifications, deux étapes, journal des consultations, fuseau) | `/app/parametres` |
 
 ## 4. Ordre de travail (un lot = une PR)
@@ -78,6 +89,7 @@ Chaque dossier contient la planche HTML, une capture par section (`*.png`) ; les
 3. Candidats en liste par étape, dossier, notes modifiables, score et Pourquoi, changer d'étape, décision finale avec message relu, analyse Orbi `hire.cv_analysis` protégée contre l'injection (lot 2 § 1-3).
 4. Entretiens, préparation Orbi, évaluation ; recherche de talents, profil, proposer l'offre, viviers (lot 2 § 4-5).
 5. Messages avec actions rapides et brouillon Orbi, modèles, notifications, organisation, vérification, équipe, abonnement, rapports, paramètres (lot 3). Redirections, suppression du code mort, contrôle final du § 0.
+6. ATS Orbi, liste des retenus, réponses groupées et e-mails, messagerie enrichie, contacts, rejoindre une organisation, rapport PDF (lot 4).
 
 ## 5. Définition de fini, pour chaque lot
 

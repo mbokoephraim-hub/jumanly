@@ -26,7 +26,7 @@ Langue de l'interface : **français** (anglais prévu plus tard). Prix en **USD*
 | `docs/specifications.md`, partie 12 | Étapes E0 à E11, définition de fini, prompts |
 | `textes/textes-application.md` | Tous les textes de l'interface (clé → texte) |
 | `ressources/` | Jetons CSS, logos, icônes, personnages illustrés, motifs, fonds (voir `ressources/LISEZMOI.md`) |
-| `docs/refonte-mobile/` | **Espaces talent et recruteur (mobile) : seule référence depuis le 19/10/2026.** Briefs `BRIEF-TALENT-CLAUDE-CODE.md` (lots talent 1 à 4) et `BRIEF-RECRUTEUR-CLAUDE-CODE.md` (lots recruteur 1 à 3). Remplacent l’ancien design mobile, qui doit disparaître. |
+| `docs/refonte-mobile/` | **Espaces talent et recruteur (mobile) : seule référence depuis le 19/10/2026.** Briefs `BRIEF-TALENT-CLAUDE-CODE.md` (lots talent 1 à 4) et `BRIEF-RECRUTEUR-CLAUDE-CODE.md` (lots recruteur 1 à 4). Remplacent l’ancien design mobile, qui doit disparaître. |
 | `docs/maquettes/` | Maquettes de référence page par page (hors espace talent, voir ligne précédente) (PDF + HTML). Avant de coder ou de retoucher un écran, ouvrir le PDF et le HTML de sa route et reproduire fidèlement la mise en forme. |
 
 En cas de contradiction : `docs/specifications.md (partie 05)` l'emporte pour les forfaits, `docs/specifications.md (partie 08)` pour le matching, `textes/` pour la formulation. Les maquettes (écran 09 « formules » en particulier) ne font pas foi pour le contenu des forfaits.

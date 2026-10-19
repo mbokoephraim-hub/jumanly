@@ -276,3 +276,93 @@ PARAM_R = PARAM_R.replace('<span class="ck-t">Sécurité et confidentialité</sp
 OBR3 = OBR3.replace('<div class="contenu">', '<div class="contenu">' + CSS_RP, 1).replace('<div class="verre liste lignes">', f'''<div class="q3"><div class="verre"><b>1</b>siège</div><div class="verre"><b>1</b>offre active</div><div class="verre"><b>5</b>étapes de suivi</div></div>
 <div class="orbi-l">{orbi(26)}<div class="t"><b>Orbi</b> peut rédiger votre première offre à partir d’un intitulé. Vous relisez avant de publier.</div></div>
 <div class="verre liste lignes">''', 1)
+
+# ---------- v2.3 (19/10, retours d'Ephraïm) : messagerie vivante, badges d'étape, résumé du jour séparé, export PDF ----------
+CSSR += """
+.etq-s.ret{background:#0F3F37;color:#A6F26B}.sombre .etq-s.ret{background:#A6F26B;color:#0F3F37}
+.etq-s.nr{background:#EDE6DD;color:#7A5A4F}.sombre .etq-s.nr{background:rgba(255,255,255,.1);color:#D9C7BF}
+.etq-s.ct{background:#DCE8FB;color:#24467A}.sombre .etq-s.ct{background:rgba(157,184,232,.2);color:#C9DAF7}
+.av.enl{position:relative}.av.enl:after{content:"";position:absolute;right:0;bottom:0;width:12px;height:12px;border-radius:50%;background:#2FD3A6;box-shadow:0 0 0 2.5px var(--plein)}
+.cv-r .t b{flex-wrap:wrap}
+.lu{align-self:flex-end;display:flex;align-items:center;gap:4px;font-size:10.5px;color:var(--texte2);margin-top:-6px}
+.lu .tk{color:#2FA3D6;font-weight:800;letter-spacing:-3px;margin-right:3px}.lu .tk.g{color:var(--texte2)}
+.ecrit{align-self:flex-start;display:flex;align-items:center;gap:8px;font-size:11.5px;color:var(--texte2)}
+.ecrit i{display:inline-flex;gap:3px;padding:9px 12px;border-radius:16px;background:var(--plein);box-shadow:var(--verre)}
+.ecrit i b{width:6px;height:6px;border-radius:50%;background:#9AA6A1}
+.cv-top{display:flex;align-items:center;gap:10px}
+.cv-top .t{flex:1;min-width:0}.cv-top .t b{display:flex;align-items:center;gap:6px;font-size:15px}
+.cv-top .t span{font-size:11.5px}.cv-top .t span.on{color:#1E9C78;font-weight:600}
+.ctx2{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:18px;background:var(--plein);box-shadow:var(--verre);font-size:12px}
+.ctx2 .t{flex:1}.ctx2 .t b{display:block;font-size:12.5px}.ctx2 .t span{color:var(--texte2)}
+.ctx2 .stp4{display:flex;gap:3px;margin-top:5px}.ctx2 .stp4 i{width:22px;height:4px;border-radius:3px;background:var(--piste)}.ctx2 .stp4 i.on{background:#2FD3A6}
+.orb-ch{display:flex;gap:6px;overflow:hidden}
+.orb-ch span{display:inline-flex;align-items:center;gap:6px;height:32px;padding:0 12px;border-radius:999px;font-size:12px;font-weight:600;white-space:nowrap;background:linear-gradient(150deg,#F2FCE6,#DDF6EE)}
+.sombre .orb-ch span{background:rgba(166,242,107,.14)}
+.compo .plus{background:var(--zone)}
+.brief{display:flex;flex-direction:column;gap:0;padding:14px;border-radius:22px;background:linear-gradient(150deg,#F2FCE6,#DDF6EE)}
+.sombre .brief{background:linear-gradient(150deg,rgba(166,242,107,.16),rgba(47,211,166,.08))}
+.brief .h{display:flex;gap:10px;align-items:center;padding-bottom:10px}
+.brief .h .t{flex:1}.brief .h b{display:block;font-size:14px}.brief .h span{font-size:11.5px;color:var(--texte2)}
+.brief .msg{font-size:13px;line-height:1.45;padding:10px 12px;border-radius:16px 16px 16px 4px;background:var(--plein);margin-bottom:6px}
+.brief .pt{display:flex;gap:10px;align-items:center;padding:10px 2px;border-top:1px dashed rgba(15,63,55,.22);font-size:12.5px}
+.sombre .brief .pt{border-top-color:rgba(255,255,255,.14)}
+.brief .pt .n{width:28px;height:28px;border-radius:10px;flex:none;display:grid;place-items:center;font-weight:700;font-size:12.5px;color:#0F3F37}
+.brief .pt .t{flex:1}.brief .pt .t small{display:block;color:var(--texte2);font-size:11px}
+.brief .pt a{font-size:12px;font-weight:700;color:#0F3F37;white-space:nowrap}.sombre .brief .pt a{color:#A6F26B}
+.pdf-x{display:flex;gap:12px;align-items:center;padding:12px 14px}
+.pdf-x .th{width:44px;height:58px;border-radius:6px;flex:none;background:#fff;box-shadow:inset 0 0 0 1px #E5E0D7;overflow:hidden;display:flex;flex-direction:column}
+.pdf-x .th i{height:18px;background:#0F3F37}.pdf-x .th em{height:3px;margin:4px 5px 0;background:#A6F26B;border-radius:2px}.pdf-x .th u{height:3px;margin:3px 5px 0;background:#E2DCD2;border-radius:2px;text-decoration:none}
+.pdf-x .t{flex:1;font-size:11.5px;color:var(--texte2)}.pdf-x .t b{display:block;font-size:13px;color:var(--texte)}
+"""
+
+def cvr(i, cls, nom, off, msg, h, n=0, et=None, enl=False):
+    nb = f'<i>{n}</i>' if n else ''
+    e = f'<span class="etq-s {et[1]}">{et[0]}</span>' if et else ''
+    return f'<div class="cv-r"><span class="av {cls}{" enl" if enl else ""}">{i}</span><div class="t"><b>{nom}{e}</b><span class="o">{off}</span><span class="m{" mnl" if n else ""}">{msg}</span></div><div class="hm">{h}{nb}</div></div>'
+
+MSG_R = phone(f'''{tete_r("Messages")}
+<div class="verre rech">{ic("recherche","s")}<span>Candidat, offre</span></div>
+<div class="filtres-h"><span class="puce on">Toutes</span><span class="puce">Non lues<small>3</small></span><span class="puce">Retenus</span><span class="puce">Contacts</span><span class="puce">Non retenus</span></div>
+<div class="orbi-l">{orbi(26)}<div class="t"><b>2 réponses</b> sont prêtes à relire, pour Patrick et Ruth.</div><a class="bt p s">Relire</a></div>
+<div class="verre cvs">
+{cvr("PK","b","Patrick K.","Analyste de données junior","Serait-il possible jeudi ?","09:30",1,("Retenu · entretien","ret"),True)}
+{cvr("GM","b","Grâce M.","Analyste de données junior","Merci, je confirme mardi à 10 h.","10:12",1,("Retenue · entretien","ret"))}
+{cvr("RB","","Ruth B.","Proposition · Analyste","Oui, l’offre m’intéresse.","Hier",1,("Contact accepté","ct"),True)}
+{cvr("FN","a","Fatou N.","Analyste de données junior","Vous : Pouvez-vous envoyer votre diplôme ?","Dim.",0,("En examen","at"))}
+{cvr("JT","","Joël T.","Chargé de clientèle","Vous : Merci pour votre candidature…","Lun.",0,("Non retenu","nr"))}</div>
+<div class="orbi-l">{orbi(26)}<div class="t"><b>3 conversations</b> de candidats non retenus sont terminées depuis 30 jours. Les retirer de votre messagerie ?</div><a class="bt sec s">Voir</a></div>''', 'message', 'long')
+
+CONV_TETE = f'''<div class="cv-top">{bi("retour")}<span class="av b enl" style="width:42px;height:42px;font-size:12px;box-shadow:none;color:#0F3F37">PK</span><div class="t"><b>Patrick K.</b><div style="display:flex;gap:6px;align-items:center;margin-top:2px"><span class="on">● En ligne</span><span class="etq-s ret">Retenu · entretien</span></div></div>{bi("plus-options")}</div>
+<div class="ctx2"><span class="cases" style="width:36px;height:36px;border-radius:12px;background:var(--g-former)">{ic("offre","s")}</span><div class="t"><b>Analyste de données junior</b><span>Étape Entretien · dossier 52 %</span><div class="stp4"><i class="on"></i><i class="on"></i><i class="on"></i><i class="on"></i><i></i></div></div><a class="bt sec s">Dossier</a></div>'''
+CONV_CORPS = f'''<div class="jour">Hier</div>
+<div class="inv-mini"><span class="cases" style="width:36px;height:36px;border-radius:12px;background:var(--g-accomp)">{ic("agenda","s")}</span><div class="t"><b>Invitation envoyée</b>Mar. 22 oct. · 10:00 ou 14:30</div></div>
+<span class="lu"><span class="tk">✓✓</span>Lu · hier 16:20</span>
+<div class="jour">Aujourd’hui</div>
+<div class="b-l">Bonjour, merci pour l’invitation. Mardi je suis en examen toute la journée. Serait-il possible jeudi ?</div>
+<span class="b-h">Patrick · 09:30</span>
+<div class="b-m">Bonjour Patrick, pas de souci. Jeudi 24 à 11:00 vous convient-il ?</div>
+<span class="lu"><span class="tk">✓✓</span>Lu · 09:42</span>
+<div class="ecrit"><i><b></b><b></b><b></b></i>Patrick écrit…</div>'''
+CONV_BAS = f'''<div style="position:absolute;left:12px;right:12px;bottom:26px;z-index:4;display:flex;flex-direction:column;gap:8px">
+<div class="orb-ch"><span>{orbi(16)}Proposer une réponse</span><span>Résumer</span><span>Plus formel</span></div>
+<div class="verre fort compo"><a class="bi plus">{ic("plus","s")}</a><span>Écrire un message</span><a class="bi" style="background:none">{orbi(26)}</a><a class="bi env">{ic("envoyer","s")}</a></div></div>'''
+CONV_R = phone(CONV_TETE + CONV_CORPS, avec_nav=False, cls='long', bas=CONV_BAS)
+
+NOTIF_R = phone(f'''{tete_f("Notifications", droite="reglages")}
+<div class="brief"><div class="h">{orbi(30)}<div class="t"><b>Votre journée en bref</b><span>Orbi · ce matin à 08:00</span></div></div>
+<div class="msg">Bonjour Nadia, trois choses vous attendent aujourd’hui. Je n’ai rien envoyé ni modifié.</div>
+<div class="pt"><span class="n" style="background:#D9F6C4">4</span><div class="t">Nouvelles candidatures<small>Analyste de données junior</small></div><a>Voir</a></div>
+<div class="pt"><span class="n" style="background:#FBE3B0">1</span><div class="t">Demande d’autre date<small>Patrick K. propose jeudi</small></div><a>Répondre</a></div>
+<div class="pt"><span class="n" style="background:#C8F0E2">2</span><div class="t">Entretiens à évaluer<small>Grâce M., Joël T.</small></div><a>Évaluer</a></div></div>
+<div class="grp-t">Aujourd’hui</div>
+<div class="verre liste lignes">
+{nt('c3','candidature','4 nouvelles candidatures','Analyste de données junior','10:40',True)}
+{nt('c2','entretien','Grâce M. a confirmé','Mardi 22 oct. à 10:00 · visio','10:12',True)}
+{nt('','horloge','Patrick K. propose jeudi','Au lieu de mardi 22','09:30',True)}</div>
+<div class="grp-t">Cette semaine</div>
+<div class="verre liste lignes">
+{nt('c1','offre','Offre en validation','Responsable conformité','Lun.')}
+{nt('c3','message','Ruth B. a accepté','Vous pouvez lui écrire','Lun.')}</div>''', avec_nav=False, cls='long')
+
+RAPPORT = RAPPORT.replace(f'<a class="bt sec pl">{ic("telecharger","s")}Exporter en CSV</a>', f'''<div class="verre pdf-x"><span class="th"><i></i><em></em><u></u><u></u><u style="width:60%"></u></span><div class="t"><b>Rapport d’octobre · PDF</b>2 pages A4 · aux couleurs de Jumanly</div></div>
+<a class="bt p pl">{ic("telecharger","s")}Exporter en PDF</a>''', 1)
