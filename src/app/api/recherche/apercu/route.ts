@@ -4,7 +4,8 @@ import { getCurrentUser } from "@/server/auth/session";
 import { getCourseSearch, getJobSearch } from "@/server/queries/public";
 
 const querySchema = z.string().trim().min(2).max(100);
-const MAX = 3;
+/** Three under the phone's search bar; up to six in the `Ctrl K` window of the web frame (`n`). */
+const sizeSchema = z.coerce.number().int().min(1).max(6).catch(3);
 
 export type SearchPreviewItem = { kind: "job" | "course"; title: string; href: string };
 
@@ -14,7 +15,9 @@ export type SearchPreviewItem = { kind: "job" | "course"; title: string; href: s
  * full list is on /app/recherche.
  */
 export async function GET(request: Request) {
-  const parsed = querySchema.safeParse(new URL(request.url).searchParams.get("q") ?? "");
+  const params = new URL(request.url).searchParams;
+  const parsed = querySchema.safeParse(params.get("q") ?? "");
+  const MAX = sizeSchema.parse(params.get("n") ?? 3);
   if (!parsed.success) return NextResponse.json({ items: [] });
   if (!(await getCurrentUser())) return NextResponse.json({ items: [] }, { status: 401 });
   const [jobs, courses] = await Promise.all([

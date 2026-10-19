@@ -42,9 +42,11 @@ test("la gamme mobile (boutons, cartes, états) est présentée dans la biblioth
 });
 
 // Refonte mobile (docs/refonte-mobile, brief § 2.1): five destinations with Orbi in the middle,
-// the same bar on a phone and on a computer; Mon espace (screen 17) opens from Compte; Suivi.
+// the bottom bar on a phone, the sidebar on a computer (docs/refonte-web, W0); Mon espace (screen
+// 17) opens from Compte; Suivi.
 test("navigation Talent : cinq destinations, Orbi au milieu, Mon espace et Suivi", async ({
   page,
+  isMobile,
 }) => {
   await logIn(page, demo.talentPro);
   await page.goto("/app");
@@ -57,8 +59,9 @@ test("navigation Talent : cinq destinations, Orbi au milieu, Mon espace et Suivi
     "aria-current",
     "page",
   );
-  // Notifications, messages and the account sit at the top of a destination.
-  await expect(page.getByRole("link", { name: /^Messages/ })).toHaveAttribute(
+  // Notifications, messages and the account sit at the top of a destination (and in the
+  // sidebar on a computer).
+  await expect(page.getByRole("link", { name: /^Messages/ }).first()).toHaveAttribute(
     "href",
     "/app/messages",
   );
@@ -72,8 +75,9 @@ test("navigation Talent : cinq destinations, Orbi au milieu, Mon espace et Suivi
     "href",
     "/app/tableau-de-bord",
   );
-  // Mon espace has no bottom bar.
-  await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
+  // Mon espace has no bottom bar on a phone; the sidebar stays on a computer.
+  if (isMobile)
+    await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
   await expectAccessible(page);
 
   // The dashboard keeps its content at its own address.

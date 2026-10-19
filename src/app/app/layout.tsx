@@ -7,7 +7,9 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
 import { ADMIN_ROLES } from "@/server/auth/session";
-import { getTranslations } from "next-intl/server";
+import type { AbstractIntlMessages } from "next-intl";
+import { getMessages, getTranslations } from "next-intl/server";
+import { AvatarMenuContent } from "@/components/talent/web/avatar-menu";
 import { ContentBanners } from "@/components/site/content-banners";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
@@ -53,10 +55,17 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
 
   // Personal space: the talent shell of the mobile redesign (docs/refonte-mobile).
   if (!partnerSpace && !space) {
-    const [followUp, unreadMessages] = await Promise.all([
+    const [followUp, unreadMessages, messages] = await Promise.all([
       followUpActions(db, user.id).then((actions) => actions.total),
       unreadCount(db, { userId: user.id }),
+      getMessages(),
     ]);
+    // The conversation's texts only, for the Orbi panel of the web frame.
+    const orbiTexts = Object.fromEntries(
+      Object.entries(messages.talentOrbi).filter(
+        ([key]) => !["historyPage", "rules", "web"].includes(key),
+      ),
+    ) as AbstractIntlMessages;
     return (
       <TalentShell
         account={{ id: user.id, name: user.name, firstName: user.firstName, image: user.image }}
@@ -66,6 +75,12 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         appearance={user.appearance}
         reduceMotion={user.reduceMotion}
         intro={intro}
+        orbiTexts={orbiTexts}
+        menu={
+          <Suspense fallback={null}>
+            <AvatarMenuContent user={{ id: user.id, name: user.name, image: user.image ?? null }} />
+          </Suspense>
+        }
       >
         <ContentBanners audience="talents" />
         {children}

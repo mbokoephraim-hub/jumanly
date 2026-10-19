@@ -2,6 +2,28 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · W0 cadre web (19 octobre 2026)
+
+Cadre commun de l'espace talent sur tablette et ordinateur (`docs/refonte-web/BRIEF-WEB-CLAUDE-CODE.md`
+§ 0, § 2, § 3 ; planches `talent-1` § 0, § 4, § 5 et `talent-4` § 3, § 9 ; valeurs de `web.py`).
+
+- **Un seul code, trois largeurs** (`src/components/talent/shell.tsx`) : téléphone < 768 px inchangé
+  (barre du bas) ; tablette 768 à 1199 px : rail d'icônes de 84 px ; ordinateur ≥ 1200 px : barre
+  latérale de 232 px (logo, Pour moi · Offres · Orbi en carte avec `Ctrl K` · Apprendre · Suivi,
+  séparateur, Messages, Mes CV, Connexions avec pastilles, Paramètres et la carte de l'avatar).
+- **Barre du haut** : « Rechercher ou demander à Orbi » avec `Ctrl K`, cloche, messages, avatar qui ouvre
+  le **menu de l'avatar** (planche talent-4 § 3).
+- **Recherche `Ctrl K`** (fenêtre, sans route) : Orbi d'abord, puis offres et formations, puis tous les
+  résultats ; destinations quand rien n'est écrit. Combobox au clavier.
+- **Panneau Orbi** à droite par `?orbi=1` sur la route courante (puis `?orbi=<id>`), page complète
+  `/app/orbi` avec l'historique à gauche sur ordinateur.
+- **Composants génériques** `CenteredDialog` (fenêtre centrée) et `SidePanel` (volet latéral), feuilles
+  du bas sur téléphone ; les `.t-sheet` existantes deviennent des fenêtres centrées dès 768 px.
+- **Colonne centrée provisoire supprimée** : zone de contenu du cadre (pages au format téléphone à
+  760 px de large, `t-large` pour les pages mises en colonnes par les lots suivants).
+- Mode sombre du cadre ; e2e `tests/e2e/web-frame.spec.ts` ; tests adaptés : `foundation`, `orbi`,
+  `mobile-talent`. Écarts : `docs/decisions/2026-10-19-refonte-etape-1-w0.md`. Captures :
+  `captures/etape-1/w0/`.
 ## Refonte étape 1 · revue des lots mobiles 1 à 6 (19 octobre 2026)
 
 Chaque écran talent des planches `talent-1` à `talent-4` (sections 1 à 6, 5 bis, 9 et 10, hors

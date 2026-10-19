@@ -2199,6 +2199,47 @@ Conventions :
 | `talentShell.offline.sending` | Connexion revenue : votre saisie est envoyée. |
 | `talentShell.offline.restored` | Votre saisie non envoyée a été reprise. |
 
+### Espace talent · Cadre web (ordinateur et tablette, lot W0)
+
+*Cadre commun sur ordinateur et tablette (docs/refonte-web, brief § 2) : barre latérale (ordinateur) ou rail d'icônes (tablette), barre du haut avec la recherche `Ctrl K`, menu de l'avatar, panneau Orbi à droite (`?orbi=1`), fenêtres centrées et volets latéraux.*
+
+| Clé | Texte |
+|---|---|
+| `talentShell.web.brand` | jumanly |
+| `talentShell.web.home` | Jumanly, aller à Pour moi |
+| `talentShell.web.more` | Mes rubriques |
+| `talentShell.web.messages` | Messages |
+| `talentShell.web.cv` | Mes CV |
+| `talentShell.web.connections` | Connexions |
+| `talentShell.web.settings` | Paramètres |
+| `talentShell.web.accountKind` | Compte talent |
+| `talentShell.web.shortcut` | Ctrl K |
+| `talentShell.web.search` | Rechercher ou demander à Orbi |
+| `talentShell.command.title` | Rechercher ou demander à Orbi |
+| `talentShell.command.label` | Rechercher une offre, une formation, ou demander à Orbi |
+| `talentShell.command.esc` | Échap |
+| `talentShell.command.close` | Fermer la recherche |
+| `talentShell.command.suggestions` | Suggestions |
+| `talentShell.command.ask` | Demander à Orbi |
+| `talentShell.command.askQuery` | Demander à Orbi : « {query} » |
+| `talentShell.command.askHint` | Orbi propose, vous décidez. |
+| `talentShell.command.goTo` | Aller à |
+| `talentShell.command.results` | Offres et formations |
+| `talentShell.command.job` | Offre |
+| `talentShell.command.course` | Formation |
+| `talentShell.command.all` | Voir tous les résultats pour « {query} » |
+| `talentShell.command.none` | Aucune offre ni formation pour « {query} ». |
+| `talentShell.command.searching` | Recherche en cours… |
+| `talentShell.command.count` | {count, plural, =0 {Aucune suggestion} one {# suggestion} other {# suggestions}} |
+| `talentShell.menu.label` | Mon compte |
+| `talentShell.menu.open` | Compte de {name} |
+| `talentShell.menu.cvs` | {count, plural, =0 {Aucun CV} one {# CV} other {# CV}} |
+| `talentShell.orbiPanel.close` | Fermer Orbi |
+| `talentShell.orbiPanel.expand` | Ouvrir Orbi en grand, avec l'historique |
+| `talentShell.orbiPanel.loading` | Orbi arrive… |
+| `talentShell.orbiPanel.error` | Orbi n'a pas pu s'ouvrir. Réessayez dans un instant. |
+| `talentShell.dialog.close` | Fermer |
+
 ### Refonte mobile · Pour moi
 
 *Accueil de l'espace talent (docs/refonte-mobile/talent-1 § 1) : l'objectif, une seule prochaine étape, puis l'essentiel. Les formations passent devant pour l'objectif « Développer mes compétences ».*
@@ -3511,6 +3552,13 @@ Conventions :
 | `talentOrbi.error.invalid` | Écrivez au moins 2 caractères, et 1 000 au plus. |
 | `talentOrbi.error.notFound` | Cet échange a été effacé. Écrivez à nouveau pour en commencer un autre. |
 | `talentOrbi.error.failed` | Orbi n'a pas pu répondre. Réessayez dans un instant. |
+| `talentOrbi.decide` | propose, vous décidez |
+| `talentOrbi.web.title` | Historique |
+| `talentOrbi.web.new` | Nouveau |
+| `talentOrbi.web.search` | Rechercher dans mes échanges |
+| `talentOrbi.web.empty` | Vos échanges avec Orbi apparaîtront ici. |
+| `talentOrbi.web.guarantee` | Effacer un échange ou tout l'historique. |
+| `talentOrbi.web.all` | Voir tout l'historique |
 | `talentOrbi.rules.cv` | Pour votre CV, ouvrez Mes CV : Orbi y relit chaque section et propose des améliorations que vous acceptez ou non. |
 | `talentOrbi.rules.interview` | Pour préparer un entretien, entraînez-vous avec une simulation : une question à la fois, puis un retour sur vos réponses. |
 | `talentOrbi.rules.offer` | Pour une offre, ouvrez-la et touchez « Pourquoi ? » : vous voyez ce qui correspond à votre profil et ce qui manque. |

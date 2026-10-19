@@ -2633,6 +2633,50 @@
       "kept": "Hors connexion : votre saisie est gardée sur ce téléphone. Elle partira dès le retour du réseau.",
       "sending": "Connexion revenue : votre saisie est envoyée.",
       "restored": "Votre saisie non envoyée a été reprise."
+    },
+    "web": {
+      "brand": "jumanly",
+      "home": "Jumanly, aller à Pour moi",
+      "more": "Mes rubriques",
+      "messages": "Messages",
+      "cv": "Mes CV",
+      "connections": "Connexions",
+      "settings": "Paramètres",
+      "accountKind": "Compte talent",
+      "shortcut": "Ctrl K",
+      "search": "Rechercher ou demander à Orbi"
+    },
+    "command": {
+      "title": "Rechercher ou demander à Orbi",
+      "label": "Rechercher une offre, une formation, ou demander à Orbi",
+      "esc": "Échap",
+      "close": "Fermer la recherche",
+      "suggestions": "Suggestions",
+      "ask": "Demander à Orbi",
+      "askQuery": "Demander à Orbi : « {query} »",
+      "askHint": "Orbi propose, vous décidez.",
+      "goTo": "Aller à",
+      "results": "Offres et formations",
+      "job": "Offre",
+      "course": "Formation",
+      "all": "Voir tous les résultats pour « {query} »",
+      "none": "Aucune offre ni formation pour « {query} ».",
+      "searching": "Recherche en cours…",
+      "count": "{count, plural, =0 {Aucune suggestion} one {# suggestion} other {# suggestions}}"
+    },
+    "menu": {
+      "label": "Mon compte",
+      "open": "Compte de {name}",
+      "cvs": "{count, plural, =0 {Aucun CV} one {# CV} other {# CV}}"
+    },
+    "orbiPanel": {
+      "close": "Fermer Orbi",
+      "expand": "Ouvrir Orbi en grand, avec l'historique",
+      "loading": "Orbi arrive…",
+      "error": "Orbi n'a pas pu s'ouvrir. Réessayez dans un instant."
+    },
+    "dialog": {
+      "close": "Fermer"
     }
   },
   "forMe": {
@@ -4154,6 +4198,15 @@
       "invalid": "Écrivez au moins 2 caractères, et 1 000 au plus.",
       "notFound": "Cet échange a été effacé. Écrivez à nouveau pour en commencer un autre.",
       "failed": "Orbi n'a pas pu répondre. Réessayez dans un instant."
+    },
+    "decide": "propose, vous décidez",
+    "web": {
+      "title": "Historique",
+      "new": "Nouveau",
+      "search": "Rechercher dans mes échanges",
+      "empty": "Vos échanges avec Orbi apparaîtront ici.",
+      "guarantee": "Effacer un échange ou tout l'historique.",
+      "all": "Voir tout l'historique"
     },
     "rules": {
       "cv": "Pour votre CV, ouvrez Mes CV : Orbi y relit chaque section et propose des améliorations que vous acceptez ou non.",

@@ -4,12 +4,25 @@ import { signUpFromPricing, testEmail } from "./session";
 
 // Orbi en page de conversation et son historique (refonte mobile, talent lot 4 § 9). En Free,
 // sans crédit Orbi, la réponse vient des règles et mène vers l'outil adapté et les formules.
-test("Orbi : écrire, comprendre la réponse, retrouver puis effacer l'échange", async ({ page }) => {
+test("Orbi : écrire, comprendre la réponse, retrouver puis effacer l'échange", async ({
+  page,
+  isMobile,
+}) => {
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("orbi"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
   await page.goto("/app/orbi");
-  await expect(page.getByRole("navigation", { name: "Navigation principale" })).toHaveCount(0);
-  await expect(page.getByRole("link", { name: "Retour" })).toBeVisible();
+  if (isMobile) {
+    // Téléphone : une page de conversation, retour en haut, pas de barre du bas.
+    await expect(page.getByRole("navigation", { name: "Navigation principale" })).toHaveCount(0);
+    await expect(page.getByRole("link", { name: "Retour" })).toBeVisible();
+  } else {
+    // Ordinateur (cadre web W0) : la barre latérale reste, Orbi y est la page courante.
+    await expect(
+      page.getByRole("navigation", { name: "Navigation principale" }).getByRole("link", {
+        name: "Orbi",
+      }),
+    ).toHaveAttribute("aria-current", "page");
+  }
   await expect(page.getByText("0 crédit", { exact: true })).toBeVisible();
 
   await page

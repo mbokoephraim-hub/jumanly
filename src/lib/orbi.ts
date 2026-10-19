@@ -28,3 +28,11 @@ export type OrbiReply = {
   limit: OrbiLimit | null;
   createdAt: Date;
 };
+
+/** The four aids of Orbi (planche Fondations § 11), on its page and in its web panel. */
+export const orbiAides = [
+  { key: "cv", href: "/app/career/cv", icon: "cv" },
+  { key: "interview", href: "/app/career/entretiens", icon: "entretien" },
+  { key: "offer", href: "/app/jobs", icon: "opportunites" },
+  { key: "path", href: "/app/career/diagnostic", icon: "cap" },
+] as const;

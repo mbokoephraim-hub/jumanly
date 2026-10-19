@@ -6,9 +6,11 @@ import { useEffect, useRef, useState, useTransition, type ReactNode } from "reac
 import { voiceAdapter } from "@/lib/voice";
 import { askOrbiAction } from "@/server/actions/orbi";
 import { MESSAGE_MAX, orbiActions, type OrbiReply } from "@/lib/orbi";
+import { cx } from "@/lib/cx";
 import { BackButton } from "./back-button";
 import { TalentIcon } from "./icon";
 import { OrbiMark } from "./orbi-mark";
+import { closeDialog } from "./web/dialog";
 
 type Turn = OrbiReply | { id: string; role: "error"; text: string };
 
@@ -17,19 +19,32 @@ type Turn = OrbiReply | { id: string; role: "error"; text: string };
  * history; the four aids (`children`); the exchange; the composer in place of the bottom bar.
  * A new exchange starts without `?c=`; the first answer puts its id in the address, so a reload or
  * the history finds it again. Texts come from `talentOrbi` (NextIntlClientProvider).
+ *
+ * `variant="panel"`: the same conversation in the web frame's right panel (brief web § 2.4,
+ * `?orbi=1` on any page): Orbi's head with « Ouvrir en grand » and « Fermer », the composer at the
+ * bottom of the panel, and the exchange kept in `?orbi=<id>` of the current page (its context stays).
  */
 export function OrbiChat({
   conversationId: initialId,
   messages,
   credits: initialCredits,
+  variant = "page",
+  question,
+  panelLabels,
   children,
 }: {
   conversationId: string | null;
   messages: OrbiReply[];
   /** Credits left this month, null when unlimited. */
   credits: number | null;
+  variant?: "page" | "panel";
+  /** A question already written (`Ctrl K` « Demander à Orbi »): sent at once. */
+  question?: string;
+  /** Panel only: its two buttons. */
+  panelLabels?: { close: string; expand: string };
   children: ReactNode;
 }) {
+  const panel = variant === "panel";
   const t = useTranslations("talentOrbi");
   const [conversationId, setConversationId] = useState(initialId);
   const [turns, setTurns] = useState<Turn[]>(messages);
@@ -55,8 +70,19 @@ export function OrbiChat({
 
   const localId = () => `local-${(counter.current += 1)}`;
 
-  const send = () => {
-    const value = text.trim();
+  // The address that keeps the exchange: the page of Orbi, or `?orbi=` on the current page.
+  const keep = (id: string | null) => {
+    if (!panel) {
+      window.history.replaceState(window.history.state, "", id ? `/app/orbi?c=${id}` : "/app/orbi");
+      return;
+    }
+    const url = new URL(window.location.href);
+    url.searchParams.set("orbi", id ?? "1");
+    window.history.replaceState(window.history.state, "", url);
+  };
+
+  const send = (written?: string) => {
+    const value = (written ?? text).trim();
     if (pending) return;
     if (value.length < 2 || value.length > MESSAGE_MAX) {
       setTurns((list) => [...list, { id: localId(), role: "error", text: t("error.invalid") }]);
@@ -96,14 +122,19 @@ export function OrbiChat({
         setCredits((left) => (left === null ? null : Math.max(0, left - 1)));
       if (result.conversationId !== conversationId) {
         setConversationId(result.conversationId);
-        window.history.replaceState(
-          window.history.state,
-          "",
-          `/app/orbi?c=${result.conversationId}`,
-        );
+        keep(result.conversationId);
       }
     });
   };
+
+  // A question from `Ctrl K`: sent once, as if typed.
+  const asked = useRef(false);
+  useEffect(() => {
+    if (!question || asked.current) return;
+    asked.current = true;
+    send(question);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- once, on opening
+  }, [question]);
 
   const dictate = () => {
     if (listening) {
@@ -127,18 +158,44 @@ export function OrbiChat({
 
   return (
     <>
-      <div className="t-or-tete t-tete">
-        <BackButton fallback="/app" label={t("back")} />
+      <div className={cx("t-or-tete", panel ? "t-op-tete" : "t-tete")}>
+        {!panel && <BackButton fallback="/app" label={t("back")} className="t-or-retour" />}
         <OrbiMark size={40} state={pending ? "reflechit" : listening ? "ecoute" : "repos"} />
         <div className="t-t">
           <b>{t("title")}</b>
-          <span aria-label={credits === null ? undefined : t("creditsAria", { count: credits })}>
-            {credits === null ? t("creditsUnlimited") : t("credits", { count: credits })}
+          <span>
+            <span aria-label={credits === null ? undefined : t("creditsAria", { count: credits })}>
+              {credits === null ? t("creditsUnlimited") : t("credits", { count: credits })}
+            </span>
+            <span aria-hidden className="t-or-dec">
+              {" · "}
+              {t("decide")}
+            </span>
           </span>
         </div>
-        <Link href="/app/orbi/historique" className="t-bi" aria-label={t("history")}>
-          <TalentIcon name="horloge" />
-        </Link>
+        {panel && panelLabels ? (
+          <>
+            <Link
+              href={conversationId ? `/app/orbi?c=${conversationId}` : "/app/orbi"}
+              className="t-bi t-press"
+              aria-label={panelLabels.expand}
+            >
+              <TalentIcon name="horloge" size="s" />
+            </Link>
+            <button
+              type="button"
+              className="t-bi t-press"
+              aria-label={panelLabels.close}
+              onClick={(event) => closeDialog(event.currentTarget)}
+            >
+              <TalentIcon name="fermer" size="s" />
+            </button>
+          </>
+        ) : (
+          <Link href="/app/orbi/historique" className="t-bi" aria-label={t("history")}>
+            <TalentIcon name="horloge" />
+          </Link>
+        )}
       </div>
 
       {children}
@@ -183,7 +240,7 @@ export function OrbiChat({
       </section>
 
       <form
-        className="t-orbi-compo-f"
+        className={panel ? "t-orbi-compo-p" : "t-orbi-compo-f"}
         onSubmit={(event) => {
           event.preventDefault();
           send();
@@ -199,7 +256,7 @@ export function OrbiChat({
               if (pending) return;
               setTurns([]);
               setConversationId(null);
-              window.history.replaceState(window.history.state, "", "/app/orbi");
+              keep(null);
             }}
           >
             <TalentIcon name="plus" size="s" />

@@ -4,15 +4,19 @@ import { refresh } from "next/cache";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
+import { AI_CREDITS_KEY } from "@/server/ai";
 import { db } from "@/server/db";
+import { usage } from "@/server/entitlements";
 import { reportError } from "@/server/observability";
 import {
   askOrbi,
   clearOrbiHistory,
+  getOrbiConversation,
   deleteOrbiConversation,
   orbiInput,
   orbiTopics,
   type OrbiInput,
+  type OrbiReply,
   type OrbiResult,
 } from "@/server/services/orbi";
 
@@ -55,4 +59,30 @@ export async function clearOrbiHistoryAction() {
   const user = await requireUser("/app/orbi/historique");
   await clearOrbiHistory(db, user.id);
   refresh();
+}
+
+const panelInput = z.object({ id: z.string().trim().min(1).max(40).nullable() });
+
+/**
+ * What the Orbi panel of the web frame needs when it opens (`?orbi=1` or `?orbi=<id>` on any page,
+ * brief web § 2.4): the credits left this month (null when unlimited) and the exchange to reopen.
+ * Read only; an unknown or erased exchange opens a new one.
+ */
+export async function orbiPanelAction(raw: { id: string | null }): Promise<{
+  credits: number | null;
+  conversationId: string | null;
+  messages: OrbiReply[];
+}> {
+  const parsed = panelInput.safeParse(raw);
+  const user = await requireUser("/app");
+  const id = parsed.success ? parsed.data.id : null;
+  const [credits, conversation] = await Promise.all([
+    usage(db, { type: "user", id: user.id }, AI_CREDITS_KEY),
+    id ? getOrbiConversation(db, user.id, id) : null,
+  ]);
+  return {
+    credits: credits.limit < 0 ? null : Math.max(0, credits.limit - credits.used),
+    conversationId: conversation?.id ?? null,
+    messages: conversation?.messages ?? [],
+  };
 }

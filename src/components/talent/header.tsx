@@ -30,7 +30,7 @@ export type HeaderLabels = {
   titles: Record<string, string>;
 };
 
-function plural(forms: { zero: string; one: string; other: string }, count: number) {
+export function plural(forms: { zero: string; one: string; other: string }, count: number) {
   if (count === 0) return forms.zero;
   if (count === 1) return forms.one;
   return forms.other.replace("#", String(count));
@@ -93,7 +93,8 @@ export function TalentHeader({
 }) {
   useCountPages();
   const pathname = usePathname();
-  const count = useUnread(unread);
+  // On a computer or a tablet the bell is in the top bar of the frame, which keeps it fresh.
+  const count = useUnread(unread, PHONE);
   // Orbi and the first connection draw their own head.
   if (pathname === "/app/orbi" || pathname === "/app/bienvenue") return null;
   // An offer opens on its banner, with its own buttons over it (planche talent-1 § 3); the screens
@@ -127,7 +128,7 @@ export function TalentHeader({
         <Link
           href="/app/notifications"
           aria-label={plural(labels.notifications, count)}
-          className="t-bi"
+          className="t-bi t-mob"
         >
           <TalentIcon name="notification" />
           {count > 0 && <i aria-hidden className="t-pastille" />}
@@ -135,7 +136,7 @@ export function TalentHeader({
         <Link
           href="/app/messages"
           aria-label={plural(labels.messages, unreadMessages)}
-          className="t-bi"
+          className="t-bi t-mob"
         >
           <TalentIcon name="message" />
           {unreadMessages > 0 && (
@@ -144,7 +145,7 @@ export function TalentHeader({
             </b>
           )}
         </Link>
-        <Link href="/app/compte" aria-label={labels.account} className="t-av">
+        <Link href="/app/compte" aria-label={labels.account} className="t-av t-mob">
           {avatar}
         </Link>
       </div>
@@ -226,8 +227,15 @@ function SearchBar({
   );
 }
 
-/** Unread notifications, kept fresh while the page stays open (every minute, visible tab only). */
-function useUnread(initial: number) {
+/** Widths where the head of a page carries the bell (the web frame has its own top bar). */
+const PHONE = "(max-width: 767.98px)";
+
+/**
+ * Unread notifications, kept fresh while the page stays open (every minute, visible tab only).
+ * `media`: only while this media query matches, so the phone head and the web top bar never both
+ * ask (nor both show the toast of a new notification).
+ */
+export function useUnread(initial: number, media?: string) {
   const [count, setCount] = useState(initial);
   const [known, setKnown] = useState(initial);
   if (known !== initial) {
@@ -240,6 +248,7 @@ function useUnread(initial: number) {
   useEffect(() => {
     const load = async () => {
       if (document.visibilityState !== "visible") return;
+      if (media && !window.matchMedia(media).matches) return;
       const response = await fetch("/api/notifications", { cache: "no-store" }).catch(() => null);
       if (!response?.ok) return;
       const data = (await response.json()) as { unread: number; items: ArrivedItem[] };
@@ -263,7 +272,7 @@ function useUnread(initial: number) {
       window.clearInterval(timer);
       document.removeEventListener("visibilitychange", onVisible);
     };
-  }, []);
+  }, [media]);
   return count;
 }
 
