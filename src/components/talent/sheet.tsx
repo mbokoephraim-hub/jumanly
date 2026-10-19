@@ -113,3 +113,22 @@ export function SheetButton({
     </button>
   );
 }
+
+/** Closes the sheet that holds it (« Compris » of a window on a computer). */
+export function CloseSheetButton({
+  className,
+  children,
+}: {
+  className?: string;
+  children: ReactNode;
+}) {
+  return (
+    <button
+      type="button"
+      className={className}
+      onClick={(event) => event.currentTarget.closest("dialog")?.close()}
+    >
+      {children}
+    </button>
+  );
+}

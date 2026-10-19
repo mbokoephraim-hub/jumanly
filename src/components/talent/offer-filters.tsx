@@ -1,6 +1,8 @@
 "use client";
 
 import { useEffect, useRef, useState, useTransition } from "react";
+import Form from "next/form";
+import Link from "next/link";
 import { OFFER_FILTERS_ID } from "@/lib/offer-filters";
 import { countOffersAction } from "@/server/actions/jobs";
 import { TalentIcon } from "./icon";
@@ -76,34 +78,7 @@ export function OfferFilters({
     return () => window.clearTimeout(timer);
   }, [values, keep]);
 
-  const toggle = (key: string, value: string) =>
-    setValues((all) => {
-      const next = { ...all };
-      if (next[key] === value) delete next[key];
-      else next[key] = value;
-      return next;
-    });
-
-  const group = (key: string, legend: string, options: [string, string][]) =>
-    options.length === 0 ? null : (
-      <fieldset className="t-fs t-champ">
-        <legend className="t-lab-c">{legend}</legend>
-        <div className="t-puces">
-          {options.map(([value, label]) => (
-            <label key={value} className="t-puce t-press">
-              <input
-                type="checkbox"
-                name={key}
-                value={value}
-                checked={values[key] === value}
-                onChange={() => toggle(key, value)}
-              />
-              {label}
-            </label>
-          ))}
-        </div>
-      </fieldset>
-    );
+  const toggle = (key: string, value: string) => setValues((all) => toggled(all, key, value));
 
   const onClose = () => {
     const url = new URL(window.location.href);
@@ -139,66 +114,7 @@ export function OfferFilters({
         {Object.entries(keep).map(([key, value]) => (
           <input key={key} type="hidden" name={key} value={value} />
         ))}
-        {group(
-          "secteur",
-          labels.domain,
-          choices.sectors.map((sector) => [sector, sector]),
-        )}
-        <fieldset className="t-fs t-champ">
-          <legend className="t-lab-c">{labels.place}</legend>
-          <div className="t-puces">
-            {choices.cities.map((city) => (
-              <label key={city} className="t-puce t-press">
-                <input
-                  type="checkbox"
-                  name="ville"
-                  value={city}
-                  checked={values.ville === city}
-                  onChange={() => toggle("ville", city)}
-                />
-                {city}
-              </label>
-            ))}
-            <label className="t-puce t-press">
-              <input
-                type="checkbox"
-                name="teletravail"
-                value="full"
-                checked={values.teletravail === "full"}
-                onChange={() => toggle("teletravail", "full")}
-              />
-              {labels.remote}
-            </label>
-          </div>
-        </fieldset>
-        {group(
-          "contrat",
-          labels.contract,
-          (["cdi", "cdd", "internship", "mission"] as const).map((key) => [
-            key,
-            labels.contracts[key],
-          ]),
-        )}
-        {group(
-          "experience",
-          labels.experience,
-          (["none", "junior", "mid"] as const).map((key) => [key, labels.levels[key]]),
-        )}
-        <label className="t-li min-h-11 cursor-pointer border-0 p-0">
-          <span className="t-t">
-            <b>{labels.verified}</b>
-          </span>
-          <input
-            type="checkbox"
-            role="switch"
-            name="verifiees"
-            value="1"
-            checked={values.verifiees === "1"}
-            onChange={() => toggle("verifiees", "1")}
-            className="sr-only"
-          />
-          <span aria-hidden className="t-sw" />
-        </label>
+        <FilterFields values={values} toggle={toggle} choices={choices} labels={labels} />
         <div className="t-f-act">
           <button type="button" className="t-bt t-sec t-m t-press" onClick={() => setValues({})}>
             {labels.clear}
@@ -213,5 +129,175 @@ export function OfferFilters({
         </div>
       </form>
     </dialog>
+  );
+}
+
+type Toggle = (key: string, value: string) => void;
+
+function toggled(all: Values, key: string, value: string) {
+  const next = { ...all };
+  if (next[key] === value) delete next[key];
+  else next[key] = value;
+  return next;
+}
+
+/** Domaine, Lieu, Contrat, Expérience and verified companies: the sheet and the web panel. */
+function FilterFields({
+  values,
+  toggle,
+  choices,
+  labels,
+}: {
+  values: Values;
+  toggle: Toggle;
+  choices: { sectors: string[]; cities: string[] };
+  labels: OfferFiltersLabels;
+}) {
+  const group = (key: string, legend: string, options: [string, string][]) =>
+    options.length === 0 ? null : (
+      <fieldset className="t-fs t-champ">
+        <legend className="t-lab-c">{legend}</legend>
+        <div className="t-puces">
+          {options.map(([value, label]) => (
+            <label key={value} className="t-puce t-press">
+              <input
+                type="checkbox"
+                name={key}
+                value={value}
+                checked={values[key] === value}
+                onChange={() => toggle(key, value)}
+              />
+              {label}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+    );
+
+  return (
+    <>
+      {group(
+        "secteur",
+        labels.domain,
+        choices.sectors.map((sector) => [sector, sector]),
+      )}
+      <fieldset className="t-fs t-champ">
+        <legend className="t-lab-c">{labels.place}</legend>
+        <div className="t-puces">
+          {choices.cities.map((city) => (
+            <label key={city} className="t-puce t-press">
+              <input
+                type="checkbox"
+                name="ville"
+                value={city}
+                checked={values.ville === city}
+                onChange={() => toggle("ville", city)}
+              />
+              {city}
+            </label>
+          ))}
+          <label className="t-puce t-press">
+            <input
+              type="checkbox"
+              name="teletravail"
+              value="full"
+              checked={values.teletravail === "full"}
+              onChange={() => toggle("teletravail", "full")}
+            />
+            {labels.remote}
+          </label>
+        </div>
+      </fieldset>
+      {group(
+        "contrat",
+        labels.contract,
+        (["cdi", "cdd", "internship", "mission"] as const).map((key) => [
+          key,
+          labels.contracts[key],
+        ]),
+      )}
+      {group(
+        "experience",
+        labels.experience,
+        (["none", "junior", "mid"] as const).map((key) => [key, labels.levels[key]]),
+      )}
+      <label className="t-li min-h-11 cursor-pointer border-0 p-0">
+        <span className="t-t">
+          <b>{labels.verified}</b>
+        </span>
+        <input
+          type="checkbox"
+          role="switch"
+          name="verifiees"
+          value="1"
+          checked={values.verifiees === "1"}
+          onChange={() => toggle("verifiees", "1")}
+          className="sr-only"
+        />
+        <span aria-hidden className="t-sw" />
+      </label>
+    </>
+  );
+}
+
+/**
+ * The filters kept open on the left of Offres on a computer (planche web talent-1 § 2): the same
+ * choices as the sheet, applied as soon as one changes (the address follows, Retour works).
+ * « Effacer » removes them all. Without JavaScript, the submit button stays reachable.
+ */
+export function OfferFiltersPanel({
+  initial,
+  keep,
+  choices,
+  total,
+  clearHref,
+  labels,
+}: {
+  initial: Values;
+  keep: Values;
+  choices: { sectors: string[]; cities: string[] };
+  total: number;
+  clearHref: string;
+  labels: OfferFiltersLabels & { panel: string; heading: string };
+}) {
+  const form = useRef<HTMLFormElement>(null);
+  const [values, setValues] = useState<Values>(initial);
+  const first = useRef(true);
+  useEffect(() => {
+    if (first.current) {
+      first.current = false;
+      return;
+    }
+    form.current?.requestSubmit();
+  }, [values]);
+  return (
+    <Form
+      ref={form}
+      action="/app/jobs"
+      scroll={false}
+      aria-label={labels.panel}
+      className="t-verre t-ofw-fl"
+    >
+      <div className="t-ofw-fl-h">
+        <h2>{labels.heading}</h2>
+        {Object.keys(initial).length > 0 && (
+          <Link href={clearHref} scroll={false} className="t-press">
+            {labels.clear}
+          </Link>
+        )}
+      </div>
+      {Object.entries(keep).map(([key, value]) => (
+        <input key={key} type="hidden" name={key} value={value} />
+      ))}
+      <FilterFields
+        values={values}
+        toggle={(key, value) => setValues((all) => toggled(all, key, value))}
+        choices={choices}
+        labels={labels}
+      />
+      <button type="submit" className="t-bt t-sec t-m t-press sr-only focus:not-sr-only">
+        {plural(labels.show, total)}
+      </button>
+    </Form>
   );
 }
