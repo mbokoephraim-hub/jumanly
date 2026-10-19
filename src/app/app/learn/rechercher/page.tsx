@@ -32,6 +32,8 @@ const durations = ["heure", "court", "moyen", "long"] as const;
 /**
  * Rechercher une formation (planche talent-3 § 1): the search, quick filters, the courses found
  * and, when several of them make a path, Orbi suggests it. The other filters open in a sheet.
+ * On a computer or a tablet (planche web talent-3 § 2), the filters stay open on the left and the
+ * courses found are cards in a grid.
  */
 export default async function LearnSearchPage({
   searchParams,
@@ -57,6 +59,7 @@ export default async function LearnSearchPage({
         category: true,
         coverUrl: true,
         durationMinutes: true,
+        requiredLevel: true,
         domain: { select: { name: true } },
         _count: { select: { modules: true } },
       },
@@ -75,7 +78,9 @@ export default async function LearnSearchPage({
     const text = next.toString();
     return text ? `/app/learn/rechercher?${text}` : "/app/learn/rechercher";
   };
-  const active = (["acces", "niveau", "duree", "domaine"] as const).filter((key) => filters[key]);
+  const active = (["acces", "niveau", "duree", "domaine", "attestation"] as const).filter(
+    (key) => filters[key],
+  );
   const chips = [
     { key: "acces" as const, value: "free", label: t("apprendre.search.chip.free") },
     { key: "niveau" as const, value: "beginner", label: t("apprendre.search.chip.beginner") },
@@ -116,118 +121,230 @@ export default async function LearnSearchPage({
     </fieldset>
   );
 
+  /** A filter of the panel (computer and tablet): a chip that turns its value on or off at once. */
+  const toggle = (key: keyof CourseFilters, value: string, label: string) => {
+    const on = filters[key] === value;
+    return (
+      <li key={`${key}-${value}`}>
+        <Link
+          href={href({ [key]: on ? undefined : value })}
+          aria-current={on ? "true" : undefined}
+          className={cx("t-puce t-press", on && "t-on")}
+        >
+          {label}
+        </Link>
+      </li>
+    );
+  };
+  const switchRow = (key: "acces" | "attestation", value: string, label: string) => {
+    const on = filters[key] === value;
+    return (
+      <Link
+        href={href({ [key]: on ? undefined : value })}
+        aria-current={on ? "true" : undefined}
+        className="t-aw-sw t-press"
+      >
+        {label}
+        <span aria-hidden className={cx("t-sw", on && "t-on")} />
+      </Link>
+    );
+  };
+
   return (
-    <div className="t-flux">
+    <div className="t-flux t-large t-aw t-aw-rs">
       <FlowHead
         back="/app/learn"
         backLabel={t("apprendre.search.back")}
         title={t("apprendre.search.title")}
       />
-      <form action="/app/learn/rechercher" method="get" role="search" className="t-rech t-verre">
-        <TalentIcon name="recherche" size="s" />
-        <input
-          key={filters.q ?? ""}
-          name="q"
-          type="search"
-          defaultValue={filters.q ?? ""}
-          aria-label={t("apprendre.search.label")}
-          placeholder={t("apprendre.search.placeholder")}
-          enterKeyHint="search"
-          autoComplete="off"
-        />
-        {active.map((key) => (
-          <input key={key} type="hidden" name={key} value={filters[key]} />
-        ))}
-        <SheetButton
-          target="ap-filtres"
-          className="t-f t-press"
-          label={
-            active.length > 0
-              ? t("apprendre.search.filtersCount", { count: active.length })
-              : t("apprendre.search.filters.title")
-          }
-        >
-          <TalentIcon name="filtres" size="s" />
-          {active.length > 0 && <b aria-hidden>{active.length}</b>}
-        </SheetButton>
-      </form>
-
-      <nav aria-label={t("apprendre.search.quick")} className="t-filtres-l t-glisse">
-        {chips.map((chip) => {
-          const on = filters[chip.key] === chip.value;
-          return (
-            <Link
-              key={`${chip.key}-${chip.value}`}
-              href={href({ [chip.key]: on ? undefined : chip.value })}
-              aria-current={on ? "true" : undefined}
-              className={cx("t-puce t-press", on && "t-on")}
-            >
-              {chip.label}
-            </Link>
-          );
-        })}
-      </nav>
-
-      <p className="t-res-l" role="status">
-        {t("apprendre.search.count", { count: total })}
-      </p>
-
-      {courses.length === 0 ? (
-        <div className="t-verre t-carte t-vide">
-          <b>{t("apprendre.search.none.title")}</b>
-          <span>{t("apprendre.search.none.text")}</span>
-          <Link href="/app/learn/rechercher" className="t-bt t-sec t-s t-press">
-            {t("apprendre.search.none.cta")}
-          </Link>
+      <div className="t-aw-h t-ap-web">
+        <div className="t-t">
+          <h1 className="t-aw-h1">{t("apprendre.search.seo")}</h1>
         </div>
-      ) : (
-        <ul className="t-flux t-serre">
-          {courses.map((course) => (
-            <li key={course.slug} className="t-verre t-cont">
-              <span className="t-vign">
-                <CourseArt category={course.category} src={course.coverUrl} />
-              </span>
-              <span className="t-t">
-                <Link href={`/app/learn/${course.slug}`} className="t-lien">
-                  <b>{course.title}</b>
-                </Link>
-                <span>
-                  {[
-                    course.domain?.name ?? categoryOf(course.category),
-                    duration(course.durationMinutes),
-                    t("forMe.learn.modules", { count: course._count.modules }),
-                  ].join(" · ")}
-                </span>
-              </span>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {total > courses.length && (
-        <Link
-          href={`${href({})}${href({}).includes("?") ? "&" : "?"}page=${(filters.page ?? 1) + 1}`}
-          scroll={false}
-          className="t-bt t-sec t-m t-press self-center"
-        >
-          {t("apprendre.search.more")}
-        </Link>
-      )}
-
-      {path && (
-        <div className="t-verre t-carte t-sugg">
-          <OrbiMark size={36} />
-          <div className="t-t">
-            <small>{t("apprendre.search.orbi.label")}</small>
-            <b>{t("apprendre.search.orbi.text", { title: path.title })}</b>
+      </div>
+      <div className="t-aw-2">
+        {/* Computer and tablet: the filters always open on the left (planche web talent-3 § 2). */}
+        <aside aria-labelledby="rs-filtres" className="t-verre t-aw-flt t-ap-web">
+          <div className="t-aw-flt-h">
+            <h2 id="rs-filtres">{t("apprendre.search.filters.title")}</h2>
+            {active.length > 0 && (
+              <Link
+                href={
+                  filters.q
+                    ? `/app/learn/rechercher?q=${encodeURIComponent(filters.q)}`
+                    : "/app/learn/rechercher"
+                }
+              >
+                {t("apprendre.web.search.clear")}
+              </Link>
+            )}
+          </div>
+          {domains.length > 0 && (
             <div>
-              <Link href={`/app/learn/parcours/${path.slug}`} className="t-bt t-sec t-s t-press">
-                {t("apprendre.search.orbi.cta")}
+              <p className="t-aw-lab" id="rs-dom">
+                {t("apprendre.search.filters.domain")}
+              </p>
+              <ul aria-labelledby="rs-dom" className="t-puces">
+                {domains.map((domain) => toggle("domaine", domain.slug, domain.name))}
+              </ul>
+            </div>
+          )}
+          <div>
+            <p className="t-aw-lab" id="rs-niv">
+              {t("apprendre.search.filters.level")}
+            </p>
+            <ul aria-labelledby="rs-niv" className="t-puces">
+              {courseLevels.map((level) =>
+                toggle("niveau", level, d(`apprendre.search.level.${level}`)),
+              )}
+            </ul>
+          </div>
+          <div>
+            <p className="t-aw-lab" id="rs-dur">
+              {t("apprendre.search.filters.duration")}
+            </p>
+            <ul aria-labelledby="rs-dur" className="t-puces">
+              {durations.map((value) =>
+                toggle("duree", value, d(`apprendre.search.duration.${value}`)),
+              )}
+            </ul>
+          </div>
+          <div className="t-aw-sws">
+            {switchRow("acces", "free", t("apprendre.web.search.freeOnly"))}
+            {switchRow("attestation", "1", t("apprendre.web.search.withAttestation"))}
+          </div>
+        </aside>
+        <div className="t-aw-col">
+          <form
+            action="/app/learn/rechercher"
+            method="get"
+            role="search"
+            className="t-rech t-verre"
+          >
+            <TalentIcon name="recherche" size="s" />
+            <input
+              key={filters.q ?? ""}
+              name="q"
+              type="search"
+              defaultValue={filters.q ?? ""}
+              aria-label={t("apprendre.search.label")}
+              placeholder={t("apprendre.search.placeholder")}
+              enterKeyHint="search"
+              autoComplete="off"
+            />
+            {active.map((key) => (
+              <input key={key} type="hidden" name={key} value={filters[key]} />
+            ))}
+            <span className="t-res-l t-ap-web">
+              {t("apprendre.search.count", { count: total })}
+            </span>
+            <SheetButton
+              target="ap-filtres"
+              className="t-f t-press t-ap-mob"
+              label={
+                active.length > 0
+                  ? t("apprendre.search.filtersCount", { count: active.length })
+                  : t("apprendre.search.filters.title")
+              }
+            >
+              <TalentIcon name="filtres" size="s" />
+              {active.length > 0 && <b aria-hidden>{active.length}</b>}
+            </SheetButton>
+          </form>
+
+          <nav aria-label={t("apprendre.search.quick")} className="t-filtres-l t-glisse t-ap-mob">
+            {chips.map((chip) => {
+              const on = filters[chip.key] === chip.value;
+              return (
+                <Link
+                  key={`${chip.key}-${chip.value}`}
+                  href={href({ [chip.key]: on ? undefined : chip.value })}
+                  aria-current={on ? "true" : undefined}
+                  className={cx("t-puce t-press", on && "t-on")}
+                >
+                  {chip.label}
+                </Link>
+              );
+            })}
+          </nav>
+
+          <p className="t-res-l t-ap-mob" role="status">
+            {t("apprendre.search.count", { count: total })}
+          </p>
+
+          {courses.length === 0 ? (
+            <div className="t-verre t-carte t-vide">
+              <b>{t("apprendre.search.none.title")}</b>
+              <span>{t("apprendre.search.none.text")}</span>
+              <Link href="/app/learn/rechercher" className="t-bt t-sec t-s t-press">
+                {t("apprendre.search.none.cta")}
               </Link>
             </div>
-          </div>
+          ) : (
+            <ul className="t-flux t-serre t-aw-res">
+              {courses.map((course) => (
+                <li key={course.slug} className="t-verre t-cont">
+                  <span className="t-vign">
+                    <CourseArt category={course.category} src={course.coverUrl} />
+                    <span className="t-tg t-ap-web">
+                      {course.domain?.name ?? categoryOf(course.category)}
+                    </span>
+                    <span className="t-dur t-ap-web">{duration(course.durationMinutes)}</span>
+                  </span>
+                  <span className="t-t">
+                    <Link href={`/app/learn/${course.slug}`} className="t-lien">
+                      <b>{course.title}</b>
+                    </Link>
+                    <span className="t-ap-mob">
+                      {[
+                        course.domain?.name ?? categoryOf(course.category),
+                        duration(course.durationMinutes),
+                        t("forMe.learn.modules", { count: course._count.modules }),
+                      ].join(" · ")}
+                    </span>
+                    <span className="t-ap-web">
+                      {[
+                        t("forMe.learn.modules", { count: course._count.modules }),
+                        course.requiredLevel === "free"
+                          ? t("apprendre.web.free")
+                          : t("apprendre.web.firstFree"),
+                      ].join(" · ")}
+                    </span>
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {total > courses.length && (
+            <Link
+              href={`${href({})}${href({}).includes("?") ? "&" : "?"}page=${(filters.page ?? 1) + 1}`}
+              scroll={false}
+              className="t-bt t-sec t-m t-press self-center"
+            >
+              {t("apprendre.search.more")}
+            </Link>
+          )}
+
+          {path && (
+            <div className="t-verre t-carte t-sugg">
+              <OrbiMark size={36} />
+              <div className="t-t">
+                <small>{t("apprendre.search.orbi.label")}</small>
+                <b>{t("apprendre.search.orbi.text", { title: path.title })}</b>
+                <div>
+                  <Link
+                    href={`/app/learn/parcours/${path.slug}`}
+                    className="t-bt t-sec t-s t-press"
+                  >
+                    {t("apprendre.search.orbi.cta")}
+                  </Link>
+                </div>
+              </div>
+            </div>
+          )}
         </div>
-      )}
+      </div>
 
       <Sheet
         id="ap-filtres"

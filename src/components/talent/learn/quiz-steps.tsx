@@ -25,6 +25,10 @@ export type QuizStepsLabels = {
   textLabel: string;
   multiple: string;
   expected: string;
+  /** Computer and tablet: the outline of the questions beside the quiz. */
+  outline?: string;
+  outlinePosition?: string;
+  question?: string;
 };
 
 type Check =
@@ -142,161 +146,188 @@ export function QuizSteps({
   };
 
   return (
-    <>
-      <div
-        className="t-pas"
-        role="img"
-        aria-label={labels.stepAria.replace("{current}", String(index + 1))}
-      >
-        {questions.map((item, position) => (
-          <i key={item.id} className={position <= index ? "t-ok" : undefined} />
-        ))}
-      </div>
-      <div className="t-verre t-q" aria-live="polite">
-        <small>{labels.step.replace("{current}", String(index + 1))}</small>
-        <b id={`qz-${question.id}`}>{question.prompt}</b>
-        {question.type === "multiple" && !given && <small>{labels.multiple}</small>}
-      </div>
-
-      {question.type === "text" ? (
-        <form
-          className="t-flux t-serre"
-          onSubmit={(event) => {
-            event.preventDefault();
-            const value = String(new FormData(event.currentTarget).get("reponse") ?? "").trim();
-            if (value) answer([value]);
-          }}
+    <div className="t-aw-ql">
+      <div className="t-aw-qz">
+        <div
+          className="t-pas"
+          role="img"
+          aria-label={labels.stepAria.replace("{current}", String(index + 1))}
         >
-          <div className="t-champ">
-            <label htmlFor={`qz-r-${question.id}`}>{labels.textLabel}</label>
-            <input
-              key={question.id}
-              id={`qz-r-${question.id}`}
-              className="t-verre t-saisie"
-              name="reponse"
-              defaultValue={given?.[0] ?? ""}
-              readOnly={Boolean(given)}
-              autoComplete="off"
-              maxLength={300}
-            />
-          </div>
-          {!given && (
-            <button type="submit" className="t-bt t-sec t-pl t-press" disabled={pending}>
-              {labels.validate}
-            </button>
-          )}
-        </form>
-      ) : (
-        <div className="t-quiz-o" role="group" aria-labelledby={`qz-${question.id}`}>
-          {question.options.map((option, position) => {
-            const value = String(position);
-            const state = optionState(position);
-            const chosen = (given ?? draft).includes(value);
-            return (
-              <button
-                key={`${question.id}-${position}`}
-                type="button"
-                className={cx("t-o t-press", state)}
-                aria-pressed={chosen}
-                disabled={Boolean(given) || pending}
-                onClick={() =>
-                  question.type === "single"
-                    ? answer([value])
-                    : setDraft((list) =>
-                        list.includes(value)
-                          ? list.filter((item) => item !== value)
-                          : [...list, value],
-                      )
-                }
-              >
-                <i aria-hidden>
-                  {state === "t-ok" ? (
-                    <TalentIcon name="valider" size="xs" />
-                  ) : state === "t-ko" ? (
-                    <TalentIcon name="fermer" size="xs" />
-                  ) : (
-                    letters[position]
-                  )}
-                </i>
-                {option}
-              </button>
-            );
-          })}
-          {question.type === "multiple" && !given && (
-            <button
-              type="button"
-              className="t-bt t-sec t-pl t-press"
-              disabled={draft.length === 0 || pending}
-              onClick={() => answer(draft)}
-            >
-              {labels.validate}
-            </button>
-          )}
+          {questions.map((item, position) => (
+            <i key={item.id} className={position <= index ? "t-ok" : undefined} />
+          ))}
         </div>
-      )}
-
-      {check?.state === "corrected" && (
-        <div className={cx("t-expl", !check.correct && "t-ko")} role="status">
-          <b>{check.correct ? labels.right : labels.wrong}</b>
-          {question.type === "text" && !check.correct && check.answer[0] && (
-            <span>{labels.expected.replace("{answer}", check.answer[0])}</span>
-          )}
-          {check.explanation && <span>{check.explanation}</span>}
+        <div className="t-verre t-q" aria-live="polite">
+          <small>{labels.step.replace("{current}", String(index + 1))}</small>
+          <b id={`qz-${question.id}`}>{question.prompt}</b>
+          {question.type === "multiple" && !given && <small>{labels.multiple}</small>}
         </div>
-      )}
-      {check?.state === "kept" && (
-        <p className="t-gar" role="status">
-          <TalentIcon name="horloge" size="s" />
-          {labels.kept}
-        </p>
-      )}
 
-      {given && !online && last && (
-        <p className="t-gar t-err" role="status">
-          <TalentIcon name="hors-ligne" size="s" />
-          {labels.offline}
-        </p>
-      )}
-
-      <div className="t-verre t-fort t-bas-f">
-        {!last ? (
-          <button
-            type="button"
-            className="t-bt t-p t-pl t-press"
-            disabled={!given || pending}
-            onClick={goNext}
-          >
-            {labels.next}
-          </button>
-        ) : (
+        {question.type === "text" ? (
           <form
-            action={submitQuizAction}
-            className="contents"
-            onSubmit={() => {
-              try {
-                localStorage.removeItem(key);
-              } catch {
-                // Nothing kept.
-              }
+            className="t-flux t-serre"
+            onSubmit={(event) => {
+              event.preventDefault();
+              const value = String(new FormData(event.currentTarget).get("reponse") ?? "").trim();
+              if (value) answer([value]);
             }}
           >
-            <input type="hidden" name="slug" value={slug} />
-            <input type="hidden" name="lesson" value={lessonId} />
-            {Object.entries(answers).flatMap(([id, values]) =>
-              values.map((entry, position) => (
-                <input key={`${id}-${position}`} type="hidden" name={`q_${id}`} value={entry} />
-              )),
+            <div className="t-champ">
+              <label htmlFor={`qz-r-${question.id}`}>{labels.textLabel}</label>
+              <input
+                key={question.id}
+                id={`qz-r-${question.id}`}
+                className="t-verre t-saisie"
+                name="reponse"
+                defaultValue={given?.[0] ?? ""}
+                readOnly={Boolean(given)}
+                autoComplete="off"
+                maxLength={300}
+              />
+            </div>
+            {!given && (
+              <button type="submit" className="t-bt t-sec t-pl t-press" disabled={pending}>
+                {labels.validate}
+              </button>
             )}
-            <button
-              type="submit"
-              className="t-bt t-p t-pl t-press"
-              disabled={!given || pending || !online}
-            >
-              {labels.finish}
-            </button>
           </form>
+        ) : (
+          <div className="t-quiz-o" role="group" aria-labelledby={`qz-${question.id}`}>
+            {question.options.map((option, position) => {
+              const value = String(position);
+              const state = optionState(position);
+              const chosen = (given ?? draft).includes(value);
+              return (
+                <button
+                  key={`${question.id}-${position}`}
+                  type="button"
+                  className={cx("t-o t-press", state)}
+                  aria-pressed={chosen}
+                  disabled={Boolean(given) || pending}
+                  onClick={() =>
+                    question.type === "single"
+                      ? answer([value])
+                      : setDraft((list) =>
+                          list.includes(value)
+                            ? list.filter((item) => item !== value)
+                            : [...list, value],
+                        )
+                  }
+                >
+                  <i aria-hidden>
+                    {state === "t-ok" ? (
+                      <TalentIcon name="valider" size="xs" />
+                    ) : state === "t-ko" ? (
+                      <TalentIcon name="fermer" size="xs" />
+                    ) : (
+                      letters[position]
+                    )}
+                  </i>
+                  {option}
+                </button>
+              );
+            })}
+            {question.type === "multiple" && !given && (
+              <button
+                type="button"
+                className="t-bt t-sec t-pl t-press"
+                disabled={draft.length === 0 || pending}
+                onClick={() => answer(draft)}
+              >
+                {labels.validate}
+              </button>
+            )}
+          </div>
         )}
+
+        {check?.state === "corrected" && (
+          <div className={cx("t-expl", !check.correct && "t-ko")} role="status">
+            <b>{check.correct ? labels.right : labels.wrong}</b>
+            {question.type === "text" && !check.correct && check.answer[0] && (
+              <span>{labels.expected.replace("{answer}", check.answer[0])}</span>
+            )}
+            {check.explanation && <span>{check.explanation}</span>}
+          </div>
+        )}
+        {check?.state === "kept" && (
+          <p className="t-gar" role="status">
+            <TalentIcon name="horloge" size="s" />
+            {labels.kept}
+          </p>
+        )}
+
+        {given && !online && last && (
+          <p className="t-gar t-err" role="status">
+            <TalentIcon name="hors-ligne" size="s" />
+            {labels.offline}
+          </p>
+        )}
+
+        <div className="t-verre t-fort t-bas-f t-aw-lnav">
+          {!last ? (
+            <button
+              type="button"
+              className="t-bt t-p t-pl t-press"
+              disabled={!given || pending}
+              onClick={goNext}
+            >
+              {labels.next}
+              <TalentIcon name="suivant" size="xs" className="t-ap-web" />
+            </button>
+          ) : (
+            <form
+              action={submitQuizAction}
+              className="contents"
+              onSubmit={() => {
+                try {
+                  localStorage.removeItem(key);
+                } catch {
+                  // Nothing kept.
+                }
+              }}
+            >
+              <input type="hidden" name="slug" value={slug} />
+              <input type="hidden" name="lesson" value={lessonId} />
+              {Object.entries(answers).flatMap(([id, values]) =>
+                values.map((entry, position) => (
+                  <input key={`${id}-${position}`} type="hidden" name={`q_${id}`} value={entry} />
+                )),
+              )}
+              <button
+                type="submit"
+                className="t-bt t-p t-pl t-press"
+                disabled={!given || pending || !online}
+              >
+                {labels.finish}
+              </button>
+            </form>
+          )}
+        </div>
       </div>
-    </>
+      {labels.outline && (
+        <nav aria-labelledby={`qz-plan-${lessonId}`} className="t-verre t-aw-plan t-ap-web">
+          <h2 id={`qz-plan-${lessonId}`}>
+            {labels.outline}
+            {labels.outlinePosition && (
+              <span>{labels.outlinePosition.replace("{current}", String(index + 1))}</span>
+            )}
+          </h2>
+          <ol>
+            {questions.map((item, position) => {
+              const on = position === index;
+              const ok = !on && Boolean(answers[item.id]);
+              return (
+                <li key={item.id} className={cx("t-l", ok && "t-ok", on && "t-on")}>
+                  <i aria-hidden>{ok ? <TalentIcon name="valider" size="xs" /> : position + 1}</i>
+                  <span aria-current={on ? "step" : undefined}>
+                    {(labels.question ?? "{number}").replace("{number}", String(position + 1))}
+                  </span>
+                </li>
+              );
+            })}
+          </ol>
+        </nav>
+      )}
+    </div>
   );
 }

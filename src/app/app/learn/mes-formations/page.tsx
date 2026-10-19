@@ -4,6 +4,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { CourseArt } from "@/components/talent/art";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
+import { WebHead } from "@/components/talent/learn/web-head";
 import { cx } from "@/lib/cx";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
@@ -40,11 +41,15 @@ export default async function MyCoursesPage({
 
   if (view === "attestations")
     return (
-      <div className="t-flux">
+      <div className="t-flux t-large t-aw t-aw-ats">
         <FlowHead
           back="/app/learn/mes-formations"
           backLabel={t("apprendre.mine.back")}
           title={t("attest.list.title")}
+        />
+        <WebHead
+          title={t("attest.list.title")}
+          sub={t("attest.web.lead", { count: attestations.length })}
         />
         {attestations.length === 0 ? (
           <div className="t-verre t-carte t-vide">
@@ -55,7 +60,7 @@ export default async function MyCoursesPage({
             </Link>
           </div>
         ) : (
-          <ul className="t-flux t-serre">
+          <ul className="t-flux t-serre t-aw-atg">
             {attestations.map((attestation) => (
               <li key={attestation.id} className="t-verre t-att-c">
                 {/* eslint-disable-next-line @next/next/no-img-element -- drawn on the server, per attestation */}
@@ -109,12 +114,13 @@ export default async function MyCoursesPage({
   const minutes = (value: number) => t("forMe.learn.minutes", { count: value });
 
   return (
-    <div className="t-flux">
+    <div className="t-flux t-large t-aw t-aw-mf">
       <FlowHead
         back="/app/learn"
         backLabel={t("apprendre.search.back")}
         title={t("apprendre.mine.title")}
       />
+      <WebHead title={t("apprendre.mine.title")} />
       <nav aria-label={t("apprendre.mine.tabs")} className="t-seg">
         {tabs.map((tab) => (
           <Link
@@ -139,7 +145,7 @@ export default async function MyCoursesPage({
               </Link>
             </div>
           ) : (
-            <ul className="t-flux t-serre">
+            <ul className="t-flux t-serre t-aw-mfl">
               {current.map((course) => (
                 <li key={course.id} className="t-verre t-cont">
                   <span className="t-vign">
@@ -217,7 +223,7 @@ export default async function MyCoursesPage({
         (finished.length === 0 ? (
           <p className="t-vide-t">{t("apprendre.mine.none.finished")}</p>
         ) : (
-          <ul className="t-flux t-serre">
+          <ul className="t-flux t-serre t-aw-mfl">
             {finished.map((course) => (
               <li key={course.id} className="t-verre t-cont">
                 <span className="t-vign">
@@ -251,7 +257,7 @@ export default async function MyCoursesPage({
         (saved.length === 0 ? (
           <p className="t-vide-t">{t("apprendre.mine.none.saved")}</p>
         ) : (
-          <ul className="t-flux t-serre">
+          <ul className="t-flux t-serre t-aw-mfl">
             {saved.map((course) => (
               <li key={course.slug} className="t-verre t-cont">
                 <span className="t-vign">

@@ -2,6 +2,35 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · web talent 3 (19 octobre 2026)
+
+Apprendre sur tablette et ordinateur (planche `docs/refonte-web/talent-3`, valeurs de `web3.py`). Un seul
+code par écran : sous 768 px, la mise en page du téléphone ne change pas ; au-delà, les colonnes de la
+planche (`t-large`, classes `t-aw-*`, bloc « Lot web talent 3 » à la fin de `src/styles/talent.css`).
+
+- **Accueil Apprendre** : titre, recherche, Reprendre en grand, domaines, recommandées ; à droite Mes
+  formations, attestations, parcours, « À faire » et la suggestion d'Orbi (parcours non suivi le plus
+  proche des formations suivies, `suggestedPath`).
+- **Rechercher** : filtres toujours ouverts à gauche (domaine, niveau, durée, gratuites, avec
+  attestation, nouveau filtre `attestation=1`), formations en grille. **Parcours** : étapes à gauche,
+  carte « Attestations du parcours » à droite.
+- **Détail d'une formation** : programme à gauche ; chiffres, Commencer et l'attestation à droite
+  (aperçu de l'attestation, ou modèle au nom du talent `…/modele-attestation`, numéro JMN-XXXX-XXXX).
+  Premier module toujours ouvert, la suite selon les droits.
+- **Salle de cours** : vidéo en grand, plan de la formation à droite, « Expliquer cette notion » en volet
+  à droite, support PDF ; **mode concentré** (rail à la place de la barre latérale, pas de barre du
+  haut, `classroom()` dans `side-nav.tsx`).
+- **Quiz** avec le plan des questions ; **résultat** sur deux lignes (réponses une à une, Orbi, essais) ;
+  **exercice** en deux colonnes ; **formation terminée** avec l'attestation en grand ; **Mes
+  attestations** en grille ; **détail d'une attestation** en deux colonnes ; **Mes formations** en
+  deux colonnes.
+- **Vérification publique** `/attestations/[code]` : sortie du site marketing, groupe `(verification)`
+  au style de l'espace talent (clair ou sombre), liste et dessin côte à côte (`/attestations/[code]/apercu`,
+  attestations authentiques et signées seulement).
+- Fichiers supprimés : `src/app/(public)/attestations/[code]/page.tsx` (déplacé et réécrit dans
+  `(verification)`). Écarts : `docs/decisions/2026-10-19-refonte-etape-1-web-t3.md`. Captures :
+  `captures/etape-1/web-talent-3/`.
+
 ## Refonte étape 1 · web talent 2 (19 octobre 2026)
 
 Postuler, Suivi, S'entraîner, Messages et Notifications sur tablette et ordinateur (planche

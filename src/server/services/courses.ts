@@ -43,6 +43,8 @@ export const courseFiltersSchema = z.object({
     .optional()
     .catch(undefined),
   ligne: optionalEnum(editorialFilters),
+  /** « Avec attestation » (Apprendre, planche web talent-3 § 2). */
+  attestation: optionalEnum(["1"] as const),
   tri: optionalEnum(courseSorts),
   page: z.coerce.number().int().min(1).max(500).optional().catch(undefined),
 });
@@ -79,6 +81,7 @@ export function courseWhere(filters: CourseFilters): Prisma.CourseWhereInput {
   else if (filters.duree === "long") where.durationMinutes = { gt: 600 };
   if (filters.competence) where.skills = { some: { skill: { slug: filters.competence } } };
   if (filters.ligne) where.editorialLine = filters.ligne;
+  if (filters.attestation) where.certificateEnabled = true;
   if (filters.niveau) where.level = filters.niveau;
   if (filters.acces === "free") where.requiredLevel = "free";
   else if (filters.acces) {

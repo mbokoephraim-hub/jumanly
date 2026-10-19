@@ -6,8 +6,22 @@ import { fingerprint } from "@/server/services/certificate-signature";
 import { attestationSvg, escapeXml } from "./attestation-sheet";
 
 /** The drawing of an attestation, with the texts of `attest.sheet` (signed attestations only). */
+type Drawn = Pick<
+  Certificate,
+  | "code"
+  | "signedAt"
+  | "issuedAt"
+  | "domain"
+  | "hours"
+  | "modules"
+  | "courseTitle"
+  | "skills"
+  | "score"
+  | "holderName"
+> & { signature: string };
+
 export async function attestationDrawing(
-  certificate: Certificate & { signature: string },
+  certificate: Drawn,
   { light = false }: { light?: boolean } = {},
 ) {
   const t = await getTranslations("attest.sheet");
@@ -64,5 +78,34 @@ export async function attestationDrawing(
       seal: t("seal"),
     },
     { light },
+  );
+}
+
+/** Number shown on a specimen: the format of a real number, never a real one. */
+export const SPECIMEN_CODE = "JMN-XXXX-XXXX";
+
+/**
+ * A specimen of the attestation of a course, at the talent's name (planche web talent-3 § 2-3:
+ * « L'attestation » next to « Commencer »). Its number is the format only, so it verifies nothing.
+ */
+export function specimenDrawing(course: {
+  holderName: string;
+  courseTitle: string;
+  domain: string | null;
+  hours: number;
+  modules: number;
+  skills: string[];
+}) {
+  const now = new Date();
+  return attestationDrawing(
+    {
+      ...course,
+      code: SPECIMEN_CODE,
+      signature: `specimen:${course.courseTitle}`,
+      signedAt: now,
+      issuedAt: now,
+      score: null,
+    },
+    { light: true },
   );
 }

@@ -11,7 +11,7 @@ import {
   NotificationsPanel,
   type NotificationsPanelLabels,
 } from "./notifications-panel";
-import { fullScreen } from "./side-nav";
+import { classroom, fullScreen } from "./side-nav";
 
 /** Widths of the web frame: the top bar keeps the bell fresh there. */
 const WEB = "(min-width: 768px)";
@@ -64,7 +64,7 @@ export function TalentTopBar({
 
   if (pathname === "/app/orbi" || fullScreen(pathname)) return null;
   return (
-    <div className="t-tb">
+    <div className={classroom(pathname) ? "t-tb t-concentre" : "t-tb"}>
       <button
         type="button"
         className="t-verre t-tb-rch t-press"

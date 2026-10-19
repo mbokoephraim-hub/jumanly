@@ -3120,6 +3120,67 @@ Conventions :
 | `attest.sheet.micro` | JUMANLY · ATTESTATION AUTHENTIQUE · {code} · VÉRIFIABLE EN LIGNE · LEARN. GROW. CONNECT. ·  |
 | `attest.sheet.seal` | ATTESTATION VALIDÉE · SCEAU D’ORIGINALITÉ · |
 
+### Espace talent · Apprendre sur ordinateur et tablette (lot web talent 3)
+
+*Apprendre en colonnes (docs/refonte-web/talent-3) : reprendre en grand, mes formations, attestations et parcours, les quiz et exercices à faire, la suggestion d'Orbi ; filtres toujours ouverts ; parcours avec ses vignettes ; formation avec Commencer et l'attestation à droite ; salle de cours avec le plan à droite ; quiz avec ses questions à droite ; attestations en grille ; vérification publique. Le nom d'une formule n'est jamais écrit dans le code : il vient de la base.*
+
+| Clé | Texte |
+|---|---|
+| `apprendre.web.lead` | Formations courtes, gratuites pour la plupart, avec attestation vérifiable. |
+| `apprendre.web.resumeKicker` | {domain} · module {current} sur {total} |
+| `apprendre.web.left` | Reste {time} dans ce module |
+| `apprendre.web.continue` | Continuer |
+| `apprendre.web.domainCount` | {count, plural, =0 {Aucune formation} one {# formation} other {# formations}} |
+| `apprendre.web.free` | gratuit |
+| `apprendre.web.firstFree` | 1er gratuit |
+| `apprendre.web.side` | Mes formations, attestations et parcours |
+| `apprendre.web.mine.courses` | Mes formations |
+| `apprendre.web.mine.coursesLine` | {current, plural, =0 {Aucune en cours} one {# en cours} other {# en cours}}, {done, plural, =0 {aucune terminée} one {# terminée} other {# terminées}} |
+| `apprendre.web.mine.attestations` | Mes attestations |
+| `apprendre.web.mine.attestationsLine` | Vérifiables en ligne |
+| `apprendre.web.mine.paths` | Mes parcours |
+| `apprendre.web.mine.pathsNone` | Des formations dans l'ordre, pour un objectif |
+| `apprendre.web.orbi.label` | Orbi suggère |
+| `apprendre.web.orbi.sub` | D'après vos formations |
+| `apprendre.web.orbi.text` | Le parcours « {title} » réunit {count, plural, one {# formation} other {# formations}}, chacune avec son attestation. |
+| `apprendre.web.search.clear` | Effacer |
+| `apprendre.web.search.freeOnly` | Gratuites seulement |
+| `apprendre.web.search.withAttestation` | Avec attestation |
+| `apprendre.web.path.resume` | Reprendre |
+| `apprendre.web.path.side` | Attestations du parcours |
+| `apprendre.web.path.sideText` | Chaque formation réussie donne une attestation vérifiable, ajoutée à votre profil. |
+| `apprendre.web.path.percent` | {percent} % du parcours |
+| `apprendre.web.specimen` | Exemple d'attestation à votre nom |
+| `apprendre.web.course.program` | Programme |
+| `apprendre.web.course.modules` | {count, plural, one {# module} other {# modules}} |
+| `apprendre.web.course.noteFree` | Gratuite · à votre rythme · hors connexion possible |
+| `apprendre.web.course.note` | À votre rythme · hors connexion possible |
+| `apprendre.web.course.attestation` | L'attestation |
+| `apprendre.web.course.attestationText` | Vérifiable par un recruteur avec son numéro ou son code QR. |
+| `apprendre.web.lesson.plan` | Plan de la formation |
+| `apprendre.web.lesson.position` | {current} sur {total} |
+| `apprendre.web.lesson.module` | Module {number} · {title} |
+| `apprendre.web.lesson.done` | terminée |
+| `apprendre.web.lesson.current` | leçon en cours |
+| `apprendre.web.quiz.sub` | {module} · {need} bonnes réponses sur {total} pour valider |
+| `apprendre.web.quiz.questions` | Questions |
+| `apprendre.web.quiz.position` | {current} sur {total} |
+| `apprendre.web.quiz.question` | Question {number} |
+| `apprendre.web.quiz.answers` | Vos réponses |
+| `apprendre.web.quiz.toReview` | à revoir |
+| `apprendre.web.quiz.right` | bonne réponse |
+| `apprendre.web.quiz.orbi` | Orbi |
+| `apprendre.web.quiz.orbiLabel` | Orbi a repéré |
+| `apprendre.web.quiz.orbiText` | {wrong, plural, one {# réponse est à revoir.} other {# réponses sont à revoir.}} Relisez les leçons ci-dessus, puis recommencez le quiz. |
+| `apprendre.web.quiz.unlimited` | Sans limite |
+| `apprendre.web.quiz.unlimitedText` | Le quiz peut être repris autant de fois que nécessaire. |
+| `apprendre.web.quiz.limited` | Essais |
+| `apprendre.web.exercise.sub` | {course} · module {module} |
+| `attest.web.lead` | {count, plural, =0 {Aucune attestation pour l'instant} one {# attestation · vérifiable avec son numéro ou son code QR} other {# attestations · chacune vérifiable avec son numéro ou son code QR}} |
+| `attest.web.check` | Vérifier une attestation |
+| `attest.web.home` | Jumanly, accueil |
+| `attest.web.brand` | jumanly |
+
 ### Refonte mobile · Faire le point, diagnostic, plan et entraînements (lot 6b)
 
 *Planche talent-4 § 5 et § 5 bis. « Faire le point » et le diagnostic sont calculés par des règles fixes : les mêmes informations donnent le même résultat, et chaque conseil a son « Pourquoi ? ». Le plan est proposé par Orbi, le talent le modifie. Les entraînements restent privés : retour sur 5 critères, sans note.*

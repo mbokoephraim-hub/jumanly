@@ -6,6 +6,7 @@ import { CourseArt } from "@/components/talent/art";
 import { BackButton } from "@/components/talent/back-button";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
+import { WebHead } from "@/components/talent/learn/web-head";
 import { Notice } from "@/components/talent/notice";
 import { OfferCard } from "@/components/talent/offer-card";
 import { OfferStickyHead, ShareButton } from "@/components/talent/offer-tools";
@@ -40,7 +41,9 @@ const errors = ["locked", "notEnrolled", "attempts", "invalid", "notFound"];
  * will know and the modules, then « Commencer la formation ». A course above the talent's plan
  * shows its locked modules and « Voir les formules » (the plan is read from the rights, never
  * named in the code). Once finished, `?vue=terminee` shows the attestation and what was added to
- * the profile. Old player addresses (`?lecon=`) lead to the classroom.
+ * the profile. Old player addresses (`?lecon=`) lead to the classroom. On a computer or a tablet
+ * (planche web talent-3 § 3), the programme stays on the left; the figures, « Commencer » and the
+ * attestation (a specimen at the talent's name until it is earned) on the right.
  */
 export default async function LearnCoursePage({
   params,
@@ -102,81 +105,118 @@ export default async function LearnCoursePage({
     const skills = certificate?.skills.length
       ? certificate.skills
       : course.skills.map((item) => item.skill.name);
+    const closeDone = (
+      <Link href="/app/learn" className="t-bi t-press" aria-label={t("apprendre.done.close")}>
+        <TalentIcon name="fermer" size="s" />
+      </Link>
+    );
     return (
-      <div className="t-flux">
+      <div className="t-flux t-large t-aw t-aw-fin">
         <FlowHead
           back={`/app/learn/${course.slug}`}
           backLabel={t("apprendre.course.back")}
           title={t("apprendre.done.title")}
-          end={
-            <Link href="/app/learn" className="t-bi t-press" aria-label={t("apprendre.done.close")}>
-              <TalentIcon name="fermer" size="s" />
-            </Link>
-          }
+          end={closeDone}
         />
-        <section className="t-verre t-att" aria-labelledby="fd-fin">
-          <span className="t-med" aria-hidden>
-            <TalentIcon name="certificat" />
-          </span>
-          <h2 id="fd-fin">{course.title}</h2>
-          <p>
-            {[
-              t("apprendre.done.passedOn", {
-                date: format.dateTime(enrollment.completedAt, { day: "numeric", month: "long" }),
-              }),
-              certificate?.score != null
-                ? t("apprendre.done.score", { score: certificate.score })
-                : null,
-            ]
-              .filter(Boolean)
-              .join(" · ")}
-          </p>
-          {certificate && (
-            <div className="t-bts justify-center">
-              <Link
-                href={`/app/learn/attestations/${certificate.code}`}
-                className="t-bt t-sec t-s t-press"
-              >
-                <TalentIcon name="profil" size="xs" />
-                {t("apprendre.done.attestation")}
-              </Link>
-            </div>
-          )}
-        </section>
-        {(skills.length > 0 || certificate?.onProfile) && (
-          <>
-            <span className="t-ck-t">{t("apprendre.done.added")}</span>
-            <ul className="t-flux t-serre">
-              {skills.map((skill) => (
-                <li key={skill} className="t-ajoute">
-                  <TalentIcon name="valider" size="s" />
-                  <span>
-                    {t.rich("apprendre.done.skill", { skill, b: (chunk) => <b>{chunk}</b> })}
-                  </span>
-                </li>
-              ))}
-              {certificate?.onProfile && (
-                <li className="t-ajoute">
-                  <TalentIcon name="valider" size="s" />
-                  <span>{t("apprendre.done.visible")}</span>
-                </li>
-              )}
-            </ul>
-          </>
-        )}
-        {job && (
-          <>
-            <span className="t-ck-t">{t("apprendre.done.next")}</span>
-            <OfferCard
-              job={job}
-              match={explanation ? { state: "ok", explanation } : undefined}
-              saved={Boolean(savedJob)}
-              applied={Boolean(applied)}
-              back={`/app/learn/${course.slug}?vue=terminee`}
-              now={new Date()}
-            />
-          </>
-        )}
+        <WebHead title={t("apprendre.done.title")} />
+        <div className="t-aw-2">
+          <section className="t-verre t-att" aria-labelledby="fd-fin">
+            <span className="t-med" aria-hidden>
+              <TalentIcon name="certificat" />
+            </span>
+            <h2 id="fd-fin">{course.title}</h2>
+            <p>
+              {[
+                t("apprendre.done.passedOn", {
+                  date: format.dateTime(enrollment.completedAt, { day: "numeric", month: "long" }),
+                }),
+                certificate?.score != null
+                  ? t("apprendre.done.score", { score: certificate.score })
+                  : null,
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+            </p>
+            {certificate && (
+              <div className="t-bts t-ap-mob justify-center">
+                <Link
+                  href={`/app/learn/attestations/${certificate.code}`}
+                  className="t-bt t-sec t-s t-press"
+                >
+                  <TalentIcon name="profil" size="xs" />
+                  {t("apprendre.done.attestation")}
+                </Link>
+              </div>
+            )}
+            {certificate && (
+              <div className="t-aw-fin-a t-ap-web">
+                {/* eslint-disable-next-line @next/next/no-img-element -- drawn on the server, per attestation */}
+                <img
+                  src={`/app/learn/attestations/${certificate.id}/apercu`}
+                  alt={t("attest.detail.alt", {
+                    course: course.title,
+                    holder: certificate.holderName,
+                  })}
+                  width={1123}
+                  height={794}
+                  decoding="async"
+                />
+                <div className="t-bts justify-center">
+                  <a
+                    href={`/app/learn/attestations/${certificate.id}/pdf`}
+                    className="t-bt t-sec t-m t-press"
+                    download
+                  >
+                    <TalentIcon name="telecharger" size="s" />
+                    {t("attest.detail.pdf")}
+                  </a>
+                  <Link
+                    href={`/app/learn/attestations/${certificate.code}`}
+                    className="t-bt t-p t-m t-press"
+                  >
+                    {t("apprendre.done.attestation")}
+                  </Link>
+                </div>
+              </div>
+            )}
+          </section>
+          <div className="t-aw-col">
+            {(skills.length > 0 || certificate?.onProfile) && (
+              <>
+                <span className="t-ck-t">{t("apprendre.done.added")}</span>
+                <ul className="t-flux t-serre">
+                  {skills.map((skill) => (
+                    <li key={skill} className="t-ajoute">
+                      <TalentIcon name="valider" size="s" />
+                      <span>
+                        {t.rich("apprendre.done.skill", { skill, b: (chunk) => <b>{chunk}</b> })}
+                      </span>
+                    </li>
+                  ))}
+                  {certificate?.onProfile && (
+                    <li className="t-ajoute">
+                      <TalentIcon name="valider" size="s" />
+                      <span>{t("apprendre.done.visible")}</span>
+                    </li>
+                  )}
+                </ul>
+              </>
+            )}
+            {job && (
+              <>
+                <span className="t-ck-t">{t("apprendre.done.next")}</span>
+                <OfferCard
+                  job={job}
+                  match={explanation ? { state: "ok", explanation } : undefined}
+                  saved={Boolean(savedJob)}
+                  applied={Boolean(applied)}
+                  back={`/app/learn/${course.slug}?vue=terminee`}
+                  now={new Date()}
+                />
+              </>
+            )}
+          </div>
+        </div>
       </div>
     );
   }
@@ -219,8 +259,44 @@ export default async function LearnCoursePage({
     </form>
   );
 
+  const figures = (className: string) => (
+    <dl className={cx("t-verre t-chiffres", className)}>
+      <div>
+        <dd>
+          <b>{minutes(course.durationMinutes)}</b>
+        </dd>
+        <dt>{t("apprendre.course.total")}</dt>
+      </div>
+      <div>
+        <dd>
+          <b>{course.modules.length}</b>
+        </dd>
+        <dt>{t("apprendre.course.modules", { count: course.modules.length })}</dt>
+      </div>
+      <div>
+        <dd>
+          <b>{course.certificateEnabled ? t("apprendre.course.yes") : t("apprendre.course.no")}</b>
+        </dd>
+        <dt>{t("apprendre.course.attestation")}</dt>
+      </div>
+    </dl>
+  );
+  const lock = (
+    <div className="t-verrou">
+      <TalentIcon name="cadenas" size="s" />
+      <div className="t-t">
+        <b>
+          {requiredPlan
+            ? t("apprendre.course.lock.plan", { plan: requiredPlan.name })
+            : t("apprendre.course.lock.other")}
+        </b>
+        {previews.length > 0 && t("apprendre.course.lock.free")}
+      </div>
+    </div>
+  );
+
   return (
-    <div className="t-od t-od-bas">
+    <div className="t-od t-od-bas t-large t-aw t-aw-fo">
       <OfferStickyHead
         watch="fd-ban"
         title={course.title}
@@ -250,151 +326,174 @@ export default async function LearnCoursePage({
         </span>
       </div>
 
-      <div className="t-fd-id">
-        <span className="t-k">
-          {[course.domain?.name ?? null, d(`apprendre.search.level.${course.level}`)]
-            .filter(Boolean)
-            .join(" · ")}
-        </span>
-        <h1>{course.title}</h1>
-      </div>
-      {error && errors.includes(error) && <Notice tone="err">{d(`learn.error.${error}`)}</Notice>}
-      {param("enregistre") === "1" && <Notice tone="ok">{t("learn.save.success")}</Notice>}
-
-      <dl className="t-verre t-chiffres">
-        <div>
-          <dd>
-            <b>{minutes(course.durationMinutes)}</b>
-          </dd>
-          <dt>{t("apprendre.course.total")}</dt>
-        </div>
-        <div>
-          <dd>
-            <b>{course.modules.length}</b>
-          </dd>
-          <dt>{t("apprendre.course.modules", { count: course.modules.length })}</dt>
-        </div>
-        <div>
-          <dd>
-            <b>
-              {course.certificateEnabled ? t("apprendre.course.yes") : t("apprendre.course.no")}
-            </b>
-          </dd>
-          <dt>{t("apprendre.course.attestation")}</dt>
-        </div>
-      </dl>
-
-      {known.length > 0 && (
-        <section className="t-verre t-bloc-t" aria-labelledby="fd-saurez">
-          <h2 id="fd-saurez">{t("apprendre.course.know")}</h2>
-          <div className="t-cmp">
-            {known.map((item) => (
-              <span key={item}>{item}</span>
-            ))}
+      <div className="t-aw-fd">
+        <div className="t-aw-main">
+          <div className="t-fd-id">
+            <span className="t-k">
+              {[course.domain?.name ?? null, d(`apprendre.search.level.${course.level}`)]
+                .filter(Boolean)
+                .join(" · ")}
+            </span>
+            <h1>{course.title}</h1>
           </div>
-        </section>
-      )}
+          {error && errors.includes(error) && (
+            <Notice tone="err">{d(`learn.error.${error}`)}</Notice>
+          )}
+          {param("enregistre") === "1" && <Notice tone="ok">{t("learn.save.success")}</Notice>}
 
-      <section aria-label={t("apprendre.course.program")}>
-        <ol className="t-verre t-liste t-modl">
-          {course.modules.map((module) => {
-            const moduleMinutes = Math.round(
-              module.lessons.reduce((sum, lesson) => sum + lesson.durationSec, 0) / 60,
-            );
-            const complete =
-              enrollment !== null &&
-              module.lessons.every((lesson) => lesson.jobSpecific || done.has(lesson.id));
-            const free = !open && module.lessons.some((lesson) => lesson.isPreview);
-            const lockedModule = !open && !free;
-            const first =
-              module.lessons.find((lesson) => !done.has(lesson.id) && !lesson.jobSpecific) ??
-              module.lessons[0];
-            const href =
-              first && ((open && enrollment) || (free && first.isPreview))
-                ? lessonHref(first.id)
-                : null;
-            const meta = [
-              free ? t("apprendre.course.free") : null,
-              moduleMinutes > 0 ? minutes(moduleMinutes) : null,
-              open ? kinds(module) : null,
-            ]
-              .filter(Boolean)
-              .join(" · ");
-            return (
-              <li key={module.id} className="t-li">
-                <span
-                  className={cx("t-num", complete && "t-ok", module.id === currentModule && "t-en")}
-                  aria-hidden
-                >
-                  {complete ? <TalentIcon name="valider" size="xs" /> : module.order}
-                </span>
-                <span className="t-t">
-                  {href ? (
-                    <Link href={href} className="t-lien">
-                      <b>{module.title}</b>
-                    </Link>
-                  ) : (
-                    <b>{module.title}</b>
-                  )}
-                  {meta && <span>{meta}</span>}
-                  {complete && <span className="sr-only">{t("apprendre.course.moduleDone")}</span>}
-                </span>
-                {lockedModule && (
-                  <TalentIcon name="cadenas" size="s" label={t("apprendre.course.locked")} />
+          {figures("t-ap-mob")}
+
+          {known.length > 0 && (
+            <section className="t-verre t-bloc-t" aria-labelledby="fd-saurez">
+              <h2 id="fd-saurez">{t("apprendre.course.know")}</h2>
+              <div className="t-cmp">
+                {known.map((item) => (
+                  <span key={item}>{item}</span>
+                ))}
+              </div>
+            </section>
+          )}
+
+          <section aria-label={t("apprendre.course.program")} className="t-aw-prog">
+            <div className="t-sec-t t-ap-web">
+              <h2>{t("apprendre.web.course.program")}</h2>
+              <span>{t("apprendre.web.course.modules", { count: course.modules.length })}</span>
+            </div>
+            <ol className="t-verre t-liste t-modl">
+              {course.modules.map((module) => {
+                const moduleMinutes = Math.round(
+                  module.lessons.reduce((sum, lesson) => sum + lesson.durationSec, 0) / 60,
+                );
+                const complete =
+                  enrollment !== null &&
+                  module.lessons.every((lesson) => lesson.jobSpecific || done.has(lesson.id));
+                const free = !open && module.lessons.some((lesson) => lesson.isPreview);
+                const lockedModule = !open && !free;
+                const first =
+                  module.lessons.find((lesson) => !done.has(lesson.id) && !lesson.jobSpecific) ??
+                  module.lessons[0];
+                const href =
+                  first && ((open && enrollment) || (free && first.isPreview))
+                    ? lessonHref(first.id)
+                    : null;
+                const meta = [
+                  free ? t("apprendre.course.free") : null,
+                  moduleMinutes > 0 ? minutes(moduleMinutes) : null,
+                  open ? kinds(module) : null,
+                ]
+                  .filter(Boolean)
+                  .join(" · ");
+                return (
+                  <li key={module.id} className="t-li">
+                    <span
+                      className={cx(
+                        "t-num",
+                        complete && "t-ok",
+                        module.id === currentModule && "t-en",
+                      )}
+                      aria-hidden
+                    >
+                      {complete ? <TalentIcon name="valider" size="xs" /> : module.order}
+                    </span>
+                    <span className="t-t">
+                      {href ? (
+                        <Link href={href} className="t-lien">
+                          <b>{module.title}</b>
+                        </Link>
+                      ) : (
+                        <b>{module.title}</b>
+                      )}
+                      {meta && <span>{meta}</span>}
+                      {complete && (
+                        <span className="sr-only">{t("apprendre.course.moduleDone")}</span>
+                      )}
+                    </span>
+                    {lockedModule && (
+                      <TalentIcon name="cadenas" size="s" label={t("apprendre.course.locked")} />
+                    )}
+                  </li>
+                );
+              })}
+            </ol>
+          </section>
+        </div>
+
+        {/* Computer and tablet: the figures, « Commencer » and the attestation on the right. */}
+        <aside aria-label={t("apprendre.web.course.attestation")} className="t-aw-side">
+          {figures("t-ap-web")}
+          {/* After the programme on the phone (the aside is « display: contents » there). */}
+          {!open && lock}
+          <div className="t-verre t-fort t-bas-f">
+            {!open ? (
+              <>
+                {previews[0] && (
+                  <Link href={lessonHref(previews[0].id)} className="t-bt t-sec t-m t-press">
+                    {t("apprendre.course.freeModule")}
+                  </Link>
                 )}
-              </li>
-            );
-          })}
-        </ol>
-      </section>
-
-      {!open && (
-        <div className="t-verrou">
-          <TalentIcon name="cadenas" size="s" />
-          <div className="t-t">
-            <b>
-              {requiredPlan
-                ? t("apprendre.course.lock.plan", { plan: requiredPlan.name })
-                : t("apprendre.course.lock.other")}
-            </b>
-            {previews.length > 0 && t("apprendre.course.lock.free")}
-          </div>
-        </div>
-      )}
-
-      <div className="t-verre t-fort t-bas-f">
-        {!open ? (
-          <>
-            {previews[0] && (
-              <Link href={lessonHref(previews[0].id)} className="t-bt t-sec t-m t-press">
-                {t("apprendre.course.freeModule")}
+                <Link href="/app/abonnement" className="t-bt t-p t-pl t-press">
+                  {t("apprendre.course.plans")}
+                </Link>
+              </>
+            ) : !enrollment ? (
+              <form action={enrollAction} className="contents">
+                <input type="hidden" name="slug" value={course.slug} />
+                <button type="submit" className="t-bt t-a t-pl t-press">
+                  <TalentIcon name="lecon" size="s" />
+                  {t("apprendre.course.start")}
+                </button>
+              </form>
+            ) : enrollment.completedAt ? (
+              <Link
+                href={`/app/learn/${course.slug}?vue=terminee`}
+                className="t-bt t-a t-pl t-press"
+              >
+                <TalentIcon name="certificat" size="s" />
+                {t("apprendre.course.finished")}
               </Link>
+            ) : (
+              next && (
+                <Link href={lessonHref(next.id)} className="t-bt t-a t-pl t-press">
+                  <TalentIcon name="lecon" size="s" />
+                  {done.size > 0 ? t("apprendre.course.resume") : t("apprendre.course.start")}
+                </Link>
+              )
             )}
-            <Link href="/app/abonnement" className="t-bt t-p t-pl t-press">
-              {t("apprendre.course.plans")}
-            </Link>
-          </>
-        ) : !enrollment ? (
-          <form action={enrollAction} className="contents">
-            <input type="hidden" name="slug" value={course.slug} />
-            <button type="submit" className="t-bt t-a t-pl t-press">
-              <TalentIcon name="lecon" size="s" />
-              {t("apprendre.course.start")}
-            </button>
-          </form>
-        ) : enrollment.completedAt ? (
-          <Link href={`/app/learn/${course.slug}?vue=terminee`} className="t-bt t-a t-pl t-press">
-            <TalentIcon name="certificat" size="s" />
-            {t("apprendre.course.finished")}
-          </Link>
-        ) : (
-          next && (
-            <Link href={lessonHref(next.id)} className="t-bt t-a t-pl t-press">
-              <TalentIcon name="lecon" size="s" />
-              {done.size > 0 ? t("apprendre.course.resume") : t("apprendre.course.start")}
-            </Link>
-          )
-        )}
+          </div>
+          {open && (
+            <p className="t-aw-note t-ap-web">
+              {course.requiredLevel === "free"
+                ? t("apprendre.web.course.noteFree")
+                : t("apprendre.web.course.note")}
+            </p>
+          )}
+          {course.certificateEnabled && (
+            <div className="t-aw-att t-ap-web">
+              <h2>{t("apprendre.web.course.attestation")}</h2>
+              {/* eslint-disable-next-line @next/next/no-img-element -- drawn on the server, at the talent's name */}
+              <img
+                src={
+                  certificate
+                    ? `/app/learn/attestations/${certificate.id}/apercu`
+                    : `/app/learn/${course.slug}/modele-attestation`
+                }
+                alt={
+                  certificate
+                    ? t("attest.detail.alt", {
+                        course: course.title,
+                        holder: certificate.holderName,
+                      })
+                    : t("apprendre.web.specimen")
+                }
+                width={1123}
+                height={794}
+                loading="lazy"
+                decoding="async"
+              />
+              <p>{t("apprendre.web.course.attestationText")}</p>
+            </div>
+          )}
+        </aside>
       </div>
     </div>
   );

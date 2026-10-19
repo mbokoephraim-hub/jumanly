@@ -46,6 +46,9 @@ function titleOf(pathname: string, titles: Record<string, string>) {
   return best ? titles[best] : null;
 }
 
+/** Destinations that draw their own head on a computer or a tablet (title, lead, search). */
+const webHead = ["/app/learn"];
+
 /** Pages whose search sits under the big title, and where it searches. */
 const searches: Record<string, { action: string; filters?: string }> = {
   "/app/jobs": { action: "/app/jobs", filters: "/app/jobs" },
@@ -123,7 +126,8 @@ export function TalentHeader({
 
   const search = searches[pathname];
   return (
-    <header className="t-colonne">
+    // Apprendre draws its own head on a computer or a tablet (planche web talent-3 § 1).
+    <header className={cx("t-colonne", webHead.includes(pathname) && "t-mob")}>
       <div className="t-tete">
         {/* The page keeps its own heading for screen readers; this is its visible name. */}
         <p aria-hidden className="t-h1">

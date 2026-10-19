@@ -3574,6 +3574,74 @@
       "finished": "Parcours terminé · voir mes formations",
       "continue": "Continuer le parcours",
       "start": "Commencer le parcours"
+    },
+    "web": {
+      "lead": "Formations courtes, gratuites pour la plupart, avec attestation vérifiable.",
+      "resumeKicker": "{domain} · module {current} sur {total}",
+      "left": "Reste {time} dans ce module",
+      "continue": "Continuer",
+      "domainCount": "{count, plural, =0 {Aucune formation} one {# formation} other {# formations}}",
+      "free": "gratuit",
+      "firstFree": "1er gratuit",
+      "side": "Mes formations, attestations et parcours",
+      "mine": {
+        "courses": "Mes formations",
+        "coursesLine": "{current, plural, =0 {Aucune en cours} one {# en cours} other {# en cours}}, {done, plural, =0 {aucune terminée} one {# terminée} other {# terminées}}",
+        "attestations": "Mes attestations",
+        "attestationsLine": "Vérifiables en ligne",
+        "paths": "Mes parcours",
+        "pathsNone": "Des formations dans l'ordre, pour un objectif"
+      },
+      "orbi": {
+        "label": "Orbi suggère",
+        "sub": "D'après vos formations",
+        "text": "Le parcours « {title} » réunit {count, plural, one {# formation} other {# formations}}, chacune avec son attestation."
+      },
+      "search": {
+        "clear": "Effacer",
+        "freeOnly": "Gratuites seulement",
+        "withAttestation": "Avec attestation"
+      },
+      "path": {
+        "resume": "Reprendre",
+        "side": "Attestations du parcours",
+        "sideText": "Chaque formation réussie donne une attestation vérifiable, ajoutée à votre profil.",
+        "percent": "{percent} % du parcours"
+      },
+      "specimen": "Exemple d'attestation à votre nom",
+      "course": {
+        "program": "Programme",
+        "modules": "{count, plural, one {# module} other {# modules}}",
+        "noteFree": "Gratuite · à votre rythme · hors connexion possible",
+        "note": "À votre rythme · hors connexion possible",
+        "attestation": "L'attestation",
+        "attestationText": "Vérifiable par un recruteur avec son numéro ou son code QR."
+      },
+      "lesson": {
+        "plan": "Plan de la formation",
+        "position": "{current} sur {total}",
+        "module": "Module {number} · {title}",
+        "done": "terminée",
+        "current": "leçon en cours"
+      },
+      "quiz": {
+        "sub": "{module} · {need} bonnes réponses sur {total} pour valider",
+        "questions": "Questions",
+        "position": "{current} sur {total}",
+        "question": "Question {number}",
+        "answers": "Vos réponses",
+        "toReview": "à revoir",
+        "right": "bonne réponse",
+        "orbi": "Orbi",
+        "orbiLabel": "Orbi a repéré",
+        "orbiText": "{wrong, plural, one {# réponse est à revoir.} other {# réponses sont à revoir.}} Relisez les leçons ci-dessus, puis recommencez le quiz.",
+        "unlimited": "Sans limite",
+        "unlimitedText": "Le quiz peut être repris autant de fois que nécessaire.",
+        "limited": "Essais"
+      },
+      "exercise": {
+        "sub": "{course} · module {module}"
+      }
     }
   },
   "attest": {
@@ -3664,6 +3732,12 @@
       "footer": "Une plateforme développée par The Growth Lab · Learn. Grow. Connect. · Ce document n’a de valeur que s’il est confirmé en ligne.",
       "micro": "JUMANLY · ATTESTATION AUTHENTIQUE · {code} · VÉRIFIABLE EN LIGNE · LEARN. GROW. CONNECT. ·",
       "seal": "ATTESTATION VALIDÉE · SCEAU D’ORIGINALITÉ ·"
+    },
+    "web": {
+      "lead": "{count, plural, =0 {Aucune attestation pour l'instant} one {# attestation · vérifiable avec son numéro ou son code QR} other {# attestations · chacune vérifiable avec son numéro ou son code QR}}",
+      "check": "Vérifier une attestation",
+      "home": "Jumanly, accueil",
+      "brand": "jumanly"
     }
   },
   "point": {

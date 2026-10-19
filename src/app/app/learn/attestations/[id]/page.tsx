@@ -5,6 +5,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { CopyButton } from "@/components/talent/copy-button";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
+import { WebHead } from "@/components/talent/learn/web-head";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
 import { cx } from "@/lib/cx";
 import { siteUrl } from "@/lib/seo";
@@ -69,84 +70,96 @@ export default async function AttestationPage({
     { key: "image", href: `${files}/image`, icon: "telecharger" as const, external: false },
   ];
 
+  const options = (
+    <SheetButton target="at-options" className="t-bi t-press" label={t("attest.detail.more")}>
+      <TalentIcon name="plus-options" size="s" />
+    </SheetButton>
+  );
   return (
-    <div className="t-flux">
+    <div className="t-flux t-large t-aw t-aw-atd">
       <FlowHead
         back="/app/learn/mes-formations?vue=attestations"
         backLabel={t("attest.detail.back")}
         title={t("attest.detail.title")}
-        end={
-          <SheetButton target="at-options" className="t-bi t-press" label={t("attest.detail.more")}>
-            <TalentIcon name="plus-options" size="s" />
-          </SheetButton>
-        }
+        end={options}
       />
-      <div className="t-verre t-att-c">
-        {/* eslint-disable-next-line @next/next/no-img-element -- drawn on the server, per attestation */}
-        <img
-          src={`${files}/apercu`}
-          alt={t("attest.detail.alt", {
-            course: certificate.courseTitle,
-            holder: certificate.holderName,
-          })}
-          width={1123}
-          height={794}
-          decoding="async"
-        />
-      </div>
-      <div className="t-verre t-liste t-lignes">
-        <div className="t-li">
-          <span className="t-cases t-c2">
-            <TalentIcon name="certificat" size="s" />
-          </span>
-          <span className="t-t">
-            <b>{t("attest.detail.number", { code: certificate.code })}</b>
-            <span>
-              {t("attest.detail.issued", {
-                date: format.dateTime(issued, { day: "numeric", month: "short", year: "numeric" }),
-              })}
-            </span>
-          </span>
+      <WebHead title={t("attest.detail.title")} sub={certificate.courseTitle} end={options} />
+      <div className="t-aw-2">
+        <div className="t-verre t-att-c t-aw-big">
+          {/* eslint-disable-next-line @next/next/no-img-element -- drawn on the server, per attestation */}
+          <img
+            src={`${files}/apercu`}
+            alt={t("attest.detail.alt", {
+              course: certificate.courseTitle,
+              holder: certificate.holderName,
+            })}
+            width={1123}
+            height={794}
+            decoding="async"
+          />
         </div>
-        <form action={attestationOnProfileAction} className="t-li">
-          <input type="hidden" name="id" value={certificate.id} />
-          <input type="hidden" name="code" value={certificate.code} />
-          <span className="t-cases t-c1">
-            <TalentIcon name="profil" size="s" />
-          </span>
-          <span className="t-t" id="at-visible">
-            <b>{t("attest.detail.visible")}</b>
-            <span>
-              {certificate.onProfile ? t("attest.detail.visibleOn") : t("attest.detail.visibleOff")}
-            </span>
-          </span>
-          <button
-            type="submit"
-            name="visible"
-            value={certificate.onProfile ? "0" : "1"}
-            role="switch"
-            aria-checked={certificate.onProfile}
-            aria-labelledby="at-visible"
-            className="t-press"
-          >
-            <span aria-hidden className={cx("t-sw", certificate.onProfile && "t-on")} />
-          </button>
-        </form>
+        <div className="t-aw-col">
+          <div className="t-verre t-liste t-lignes">
+            <div className="t-li">
+              <span className="t-cases t-c2">
+                <TalentIcon name="certificat" size="s" />
+              </span>
+              <span className="t-t">
+                <b>{t("attest.detail.number", { code: certificate.code })}</b>
+                <span>
+                  {t("attest.detail.issued", {
+                    date: format.dateTime(issued, {
+                      day: "numeric",
+                      month: "short",
+                      year: "numeric",
+                    }),
+                  })}
+                </span>
+              </span>
+            </div>
+            <form action={attestationOnProfileAction} className="t-li">
+              <input type="hidden" name="id" value={certificate.id} />
+              <input type="hidden" name="code" value={certificate.code} />
+              <span className="t-cases t-c1">
+                <TalentIcon name="profil" size="s" />
+              </span>
+              <span className="t-t" id="at-visible">
+                <b>{t("attest.detail.visible")}</b>
+                <span>
+                  {certificate.onProfile
+                    ? t("attest.detail.visibleOn")
+                    : t("attest.detail.visibleOff")}
+                </span>
+              </span>
+              <button
+                type="submit"
+                name="visible"
+                value={certificate.onProfile ? "0" : "1"}
+                role="switch"
+                aria-checked={certificate.onProfile}
+                aria-labelledby="at-visible"
+                className="t-press"
+              >
+                <span aria-hidden className={cx("t-sw", certificate.onProfile && "t-on")} />
+              </button>
+            </form>
+          </div>
+          <div className="t-bts">
+            <a href={`${files}/pdf`} className="t-bt t-sec t-m t-pl t-press" download>
+              <TalentIcon name="telecharger" size="s" />
+              {t("attest.detail.pdf")}
+            </a>
+            <SheetButton target="at-partage" className="t-bt t-p t-m t-pl t-press">
+              <TalentIcon name="partager" size="s" />
+              {t("attest.detail.share")}
+            </SheetButton>
+          </div>
+          <p className="t-gar">
+            <TalentIcon name="confidentialite" size="s" />
+            {t("attest.detail.check")}
+          </p>
+        </div>
       </div>
-      <div className="t-bts">
-        <a href={`${files}/pdf`} className="t-bt t-sec t-m t-pl t-press" download>
-          <TalentIcon name="telecharger" size="s" />
-          {t("attest.detail.pdf")}
-        </a>
-        <SheetButton target="at-partage" className="t-bt t-p t-m t-pl t-press">
-          <TalentIcon name="partager" size="s" />
-          {t("attest.detail.share")}
-        </SheetButton>
-      </div>
-      <p className="t-gar">
-        <TalentIcon name="confidentialite" size="s" />
-        {t("attest.detail.check")}
-      </p>
 
       <Sheet id="at-partage" title={t("attest.share.title")} closeLabel={t("offer.close")}>
         <ul className="t-partage">

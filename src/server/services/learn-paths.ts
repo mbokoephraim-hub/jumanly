@@ -39,6 +39,8 @@ const pathCourseSelect = {
       durationMinutes: true,
       requiredLevel: true,
       certificateEnabled: true,
+      category: true,
+      coverUrl: true,
     },
   },
 } as const;
