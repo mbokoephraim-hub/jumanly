@@ -1,6 +1,6 @@
 import { expectAccessible } from "./a11y";
 import { expect, test, type Page } from "./fixtures";
-import { demo, logIn, signUpFromPricing, testEmail } from "./session";
+import { demo, finishOnboarding, logIn, signUpFromPricing, testEmail } from "./session";
 
 // Mobile Talent v5, prompt 1 (docs/ux-mobile-talent): the button range, the visual cards and the
 // interaction states are shown with all their states on the internal components page.
@@ -104,131 +104,65 @@ test("navigation Talent : cinq destinations, Orbi au milieu, Mon espace et Suivi
   await expectAccessible(page);
 });
 
-// Prompts 3 and 3 bis: from the sign-up to « Pour moi », through the country (81), the goal (01)
-// and the places (82) screens, then the offers filtered by those places.
-test("inscription, pays, objectif, lieux puis Pour moi selon l'objectif", async ({ page }) => {
-  // Sign-up, then five screens each checked for accessibility.
+// Refonte mobile, lot 2 (planche talent-4): « Compte validé », then the four questions of the first
+// connection (goal, studies, places, ready), each checked for accessibility, then « Pour moi ».
+test("premiers pas : objectif, études, lieux puis formule gratuite", async ({ page }) => {
   test.setTimeout(120_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("objectif"));
-  await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
-
-  // Screen 81: RD Congo first, the regions in order, a search.
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Dans quel pays vivez-vous ?" }),
-  ).toBeVisible();
-  await expect(page.getByText("Étape 1 sur 3")).toBeVisible();
-  const main = page.locator("main");
-  const central = main.getByRole("group", { name: "Afrique centrale" });
-  await expect(central.getByRole("radio").first()).toHaveAccessibleName("RD Congo");
-  await expect(central.getByRole("radio", { name: "RD Congo" })).toBeChecked();
-  await expect(main.getByRole("group", { name: "Afrique de l'Ouest" })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Plus tard" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 1, name: "Compte validé" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Navigation principale" })).toBeHidden();
   await expectAccessible(page);
-  await page.getByRole("searchbox", { name: "Rechercher un pays" }).fill("cote");
-  await expect(page.getByRole("radio", { name: /^Côte d.Ivoire$/ })).toBeVisible();
-  await expect(page.getByRole("radio", { name: "Angola" })).toBeHidden();
-  await page.getByRole("searchbox", { name: "Rechercher un pays" }).fill("");
-  await page.locator("label").filter({ hasText: "RD Congo", visible: true }).click();
-  await page.getByRole("button", { name: "Continuer" }).click();
+  await page.getByRole("link", { name: "C'est parti" }).click();
 
-  // Screen 01: the goal.
+  // 1 of 4: the goal.
   await expect(page).toHaveURL(/etape=objectif/);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Qu'est-ce qui vous amène sur Jumanly ?" }),
-  ).toBeVisible();
+  await expect(page.getByText("1 sur 4")).toBeVisible();
   await expectAccessible(page);
-  await page
-    .locator("label")
-    .filter({ hasText: "Trouver un emploi ou un stage", visible: true })
-    .click();
+  await page.locator("label").filter({ hasText: "Trouver mon premier emploi" }).click();
   await page.getByRole("button", { name: "Continuer" }).click();
 
-  // Screen 82: the country chosen is already there, with its cities and provinces.
+  // 2 of 4: the level and the field, found by a search.
+  await expect(page).toHaveURL(/etape=etudes/);
+  await expectAccessible(page);
+  await page.locator("label").filter({ hasText: "Licence" }).click();
+  await page.getByRole("searchbox", { name: "Rechercher un domaine" }).fill("droit");
+  await page.locator("label").filter({ hasText: "Droit" }).click();
+  await page.getByRole("button", { name: "Continuer" }).click();
+
+  // 3 of 4: the country in its sheet (RD Congo first, a search), the city, contracts, mode.
   await expect(page).toHaveURL(/etape=lieux/);
-  await expect(
-    page.getByRole("heading", { level: 1, name: "Où souhaitez-vous travailler ?" }),
-  ).toBeVisible();
-  const congo = page.getByRole("region", { name: "RD Congo" });
-  await expect(congo.getByText("Villes et provinces")).toBeVisible();
-  await expect(congo.getByRole("button", { name: "Tout le pays" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  await congo.getByRole("button", { name: "Kinshasa" }).click();
-  await expect(congo.getByRole("button", { name: "Kinshasa" })).toHaveAttribute(
-    "aria-pressed",
-    "true",
-  );
-  await expect(congo.getByRole("button", { name: "Tout le pays" })).toHaveAttribute(
-    "aria-pressed",
-    "false",
-  );
-  await page.getByRole("button", { name: "Ajouter un pays" }).click();
-  await page.getByRole("searchbox", { name: "Rechercher un pays" }).fill("congo");
-  await page.getByRole("button", { name: "Congo", exact: true }).click();
-  const brazza = page.getByRole("region", { name: "Congo", exact: true });
-  await expect(brazza.getByText("Villes", { exact: true })).toBeVisible();
-  await brazza.getByRole("button", { name: "Brazzaville" }).click();
-  await page.getByRole("switch", { name: "Télétravail accepté" }).click();
-  await expect(page.getByRole("switch", { name: "Télétravail accepté" })).toHaveAttribute(
-    "aria-checked",
-    "true",
-  );
   await expectAccessible(page);
-  await page.getByRole("button", { name: "Voir mes offres" }).click();
+  await page.getByRole("button", { name: /^Pays/ }).click();
+  const sheet = page.getByRole("dialog", { name: "Votre pays" });
+  await expect(sheet.getByRole("radio").first()).toHaveAccessibleName("RD Congo");
+  await expect(sheet.getByText("Afrique centrale")).toBeVisible();
+  await sheet.getByRole("searchbox").fill("cote");
+  await expect(sheet.getByRole("radio", { name: "Angola" })).toHaveCount(0);
+  await sheet.getByRole("radio", { name: /^Côte d.Ivoire$/ }).check();
+  await expect(sheet).toBeHidden();
+  await expect(page.getByRole("button", { name: /Côte d.Ivoire/ })).toBeVisible();
+  await page.getByLabel("Ville").fill("Abidjan");
+  await page.locator("label").filter({ hasText: "CDI" }).click();
+  await page.locator("label").filter({ hasText: "Hybride" }).click();
+  await page.getByRole("button", { name: "Continuer" }).click();
 
-  // The offers are filtered by those places, with a chip to remove the filter.
-  await expect(page).toHaveURL(/\/app\/jobs\?lieux=1/, { timeout: 20_000 });
-  await page.goto("/app/jobs?lieux=1&vue=recentes");
-  await expect(page.getByRole("link", { name: /Mes lieux de travail/ }).first()).toBeVisible();
-
-  // The choices are kept: back on screen 82, Kinshasa and Brazzaville are still picked.
-  await page.goto("/app/bienvenue?etape=lieux");
-  await expect(
-    page.getByRole("region", { name: "RD Congo" }).getByRole("button", { name: "Kinshasa" }),
-  ).toHaveAttribute("aria-pressed", "true");
-  await expect(
-    page
-      .getByRole("region", { name: "Congo", exact: true })
-      .getByRole("button", { name: "Brazzaville" }),
-  ).toHaveAttribute("aria-pressed", "true");
-  await page.getByRole("button", { name: "Préciser mes métiers et compétences" }).click();
-  await expect(page).toHaveURL(/etape=precisions/);
-  await page.getByLabel("Métiers recherchés").fill("Analyste de données");
+  // 4 of 4: the free plan, and what a paid one adds.
+  await expect(page).toHaveURL(/etape=pret/);
+  await expect(page.getByRole("heading", { name: "Votre espace est prêt" })).toBeVisible();
+  await expect(page.getByText("Postuler à toutes les offres")).toBeVisible();
   await expectAccessible(page);
-  await page.getByRole("button", { name: "Voir mes offres" }).click();
 
-  await expect(page).toHaveURL(/\/app$/, { timeout: 20_000 });
-  await expect(page.getByRole("heading", { name: "Trouver un emploi ou un stage" })).toBeVisible();
-  await expect(page.getByText("Mon objectif")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Opportunités pour vous" })).toBeVisible();
-  // No skill yet: the offers say they are a general selection.
-  await expect(page.getByText("Sélection générale, non personnalisée.")).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Préparez votre candidature" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /^Mon CV/ })).toHaveAttribute(
-    "href",
-    "/app/career/cv",
-  );
+  // The answers are kept when coming back to a step.
+  await page.goto("/app/bienvenue?etape=etudes");
+  await expect(page.getByRole("radio", { name: "Licence" })).toBeChecked();
+  await expect(page.getByRole("radio", { name: "Droit" })).toBeChecked();
+  await page.goto("/app/bienvenue?etape=pret");
+  await page.getByRole("button", { name: "Commencer gratuitement" }).click();
+  await expect(page).toHaveURL(/\/app(\?bienvenue=1)?$/, { timeout: 20_000 });
   const overflow = await page.evaluate(
     () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
   );
   expect(overflow).toBeLessThanOrEqual(0);
-  await expectAccessible(page);
-
-  // Changing the goal reorders the home: courses first.
-  await page.getByRole("link", { name: "Modifier mon objectif" }).click();
-  await expect(page).toHaveURL(/etape=objectif/);
-  await page
-    .locator("label")
-    .filter({ hasText: "Développer mes compétences", visible: true })
-    .click();
-  await page.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/\/app$/, { timeout: 20_000 });
-  await expect(page.getByRole("heading", { name: "Développer mes compétences" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Progression et certificats" })).toBeVisible();
-  await expect(page.getByRole("heading", { name: "Offres liées à vos compétences" })).toBeVisible();
-  await expectAccessible(page);
 });
 
 // Prompt 4: find an offer, save it (with « Annuler »), apply in steps with a kept draft, survive a
@@ -239,8 +173,7 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
   isMobile,
 }) => {
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("postuler"));
-  await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
-  await page.getByRole("button", { name: "Plus tard" }).click();
+  await finishOnboarding(page);
 
   await page.goto("/app/jobs");
   const tabs = page.getByRole("navigation", { name: "Vues des offres" });

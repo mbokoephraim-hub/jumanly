@@ -1,7 +1,6 @@
 import { expect, test, type Browser, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
-import { lastCode } from "./outbox";
-import { demo, logIn, testEmail } from "./session";
+import { demo, finishOnboarding, logIn, signUpWithEmail, testEmail } from "./session";
 
 /** Demo accounts of the fictional group (prisma/seed/group.ts). */
 const group = { owner: "groupe@jumanly.test", talent: "talent.visible@jumanly.test" };
@@ -18,23 +17,9 @@ async function newPage(browser: Browser, baseURL: string | undefined, isMobile: 
 /** A new talent living in a city no one else has, so that a search finds only them. */
 async function signUpTalent(page: Page, email: string, city: string) {
   await page.goto("/inscription?profil=talent");
-  await page.getByRole("button", { name: "Continuer" }).click();
-  // The entry screen leads to the plan step (docs/refonte-connexion § 5).
-  await expect(page).toHaveURL(/\/inscription\/forfait/);
-  await page.getByRole("button", { name: "Continuer" }).click();
-  await page.locator('input[name="firstName"]').fill("Neema");
-  await page.locator('input[name="lastName"]').fill("Fictive");
-  await page.locator('input[name="email"]').fill(email);
-  await page.locator('input[name="password"]').fill("kinshasa-2026");
-  await page.locator('select[name="country"]').selectOption("CD");
-  await page.locator('input[name="city"]').fill(city);
-  for (const name of ["terms", "ai", "age"]) await page.locator(`input[name="${name}"]`).check();
-  const since = Date.now();
-  await page.getByRole("button", { name: "Créer mon compte" }).click();
-  await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-  await page.locator('input[name="code"]').fill(await lastCode(email, since));
-  await page.getByRole("button", { name: "Vérifier" }).click();
-  await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+  await signUpWithEmail(page, email, "Neema Fictive");
+  // The country and the city are asked at the first connection (refonte mobile, lot 2).
+  await finishOnboarding(page, { country: "Congo", city });
 }
 
 // Parcours 6.5: a talent chooses to be visible, a recruiter finds them, asks to talk; the talent

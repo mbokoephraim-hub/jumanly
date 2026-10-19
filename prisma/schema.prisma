@@ -1015,6 +1015,10 @@ model TalentProfile {
   summary                String?
   /// Main goal chosen on the welcome screen (firstJob, newJob, reconversion…).
   goal                   String?
+  /// Level of studies chosen at the first connection (`access.onboarding.studies.level.*`).
+  studyLevel             String?
+  /// Field of studies chosen at the first connection (`access.onboarding.studies.field.*`).
+  studyField             String?
   targetJob              String?
   visibility             ProfileVisibility @default(private)
   availability           Availability      @default(open)

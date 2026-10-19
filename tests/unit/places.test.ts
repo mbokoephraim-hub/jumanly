@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { foldPlace, orderCountries, type CountryOption } from "@/lib/places";
+import { countrySections, foldPlace, orderCountries, type CountryOption } from "@/lib/places";
 import { jobWhere } from "@/server/services/jobs";
 import { centralAfrica, isoCountries, localities, westAfrica } from "../../prisma/seed/places-data";
 
@@ -61,5 +61,31 @@ describe("pays et lieux (V8 § B1, écrans 81 et 82)", () => {
         { remote: "remote" },
       ],
     });
+  });
+});
+
+describe("feuille « Votre pays » (refonte mobile, brief § 2 décision 5)", () => {
+  const all = [
+    { code: "ZA", name: "Afrique du Sud" },
+    { code: "AF", name: "Afghanistan" },
+    { code: "FR", name: "France" },
+    { code: "CG", name: "Congo" },
+    { code: "CD", name: "RD Congo" },
+    { code: "KE", name: "Kenya" },
+    { code: "RU", name: "Russie" },
+    { code: "BE", name: "Belgique" },
+  ];
+  it("met RD Congo en tête, puis l'Afrique par région, hors d'Afrique, puis A à Z", () => {
+    const sections = countrySections(all);
+    expect(sections.map((section) => section.key)).toEqual([
+      "first",
+      "central",
+      "westEast",
+      "outside",
+      "all",
+    ]);
+    expect(sections[0].countries.map((country) => country.code)).toEqual(["CD"]);
+    expect(sections[3].countries.map((country) => country.code)).toEqual(["FR", "BE", "RU"]);
+    expect(sections[4].countries.map((country) => country.code)).toEqual(["AF", "ZA"]);
   });
 });

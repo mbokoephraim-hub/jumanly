@@ -16,6 +16,7 @@ import {
   pendingSocialSignup,
   setupAccount,
   signupAccountSchema,
+  splitFullName,
   type AuthFieldError,
 } from "@/server/services/accounts";
 import { allowAttempt, clientIp } from "@/server/rate-limit";
@@ -63,7 +64,7 @@ const safeNext = (value: FormDataEntryValue | null) => {
   return text && isSafeInternalPath(text) ? text : undefined;
 };
 
-// ─── Sign-up, step 1: « Vous êtes » and the e-mail (entry screen) ───
+// ─── Sign-up: the profile carried by the provider buttons ───
 
 const entrySchema = z.object({
   profil: z.enum(["talent", "rh", "company"]).catch("talent"),
@@ -71,26 +72,14 @@ const entrySchema = z.object({
   forfait: z.string().max(60).optional().catch(undefined),
 });
 
-/**
- * « Continuer » of the « Créer un compte » tab: the profile goes to the plan step in the address;
- * the e-mail waits in the short sign-up cookie (never in an address, so never in a log) to fill
- * in the account step.
- */
-export async function startSignup(formData: FormData) {
-  const input = entrySchema.parse(Object.fromEntries(formData));
-  const next = safeNext(formData.get("next"));
-  await writeSignupFlow({ profile: input.profil, email: input.email || undefined, next });
-  const query = new URLSearchParams({ profil: input.profil });
-  if (input.forfait) query.set("forfait", input.forfait);
-  if (next) query.set("suite", next);
-  redirect(`/inscription/forfait?${query}`);
-}
-
 // ─── Sign-up, step 3: create the account ───────────────────────────
 
 export async function signUp(_: AuthFormState, formData: FormData): Promise<AuthFormState> {
   const kept = values(formData);
-  const parsed = signupAccountSchema.safeParse(Object.fromEntries(formData));
+  const raw: Record<string, FormDataEntryValue> = Object.fromEntries(formData);
+  // « Prénom et nom » in one field (refonte mobile, lot 2).
+  if (typeof raw.name === "string" && !raw.firstName) Object.assign(raw, splitFullName(raw.name));
+  const parsed = signupAccountSchema.safeParse(raw);
   if (!parsed.success) return { status: "invalid", errors: issues(parsed.error), values: kept };
   const input = parsed.data;
   const ip = await clientIp();
@@ -103,13 +92,13 @@ export async function signUp(_: AuthFormState, formData: FormData): Promise<Auth
     const result = await auth.api.signUpEmail({
       headers: await headers(),
       body: {
-        name: `${input.firstName} ${input.lastName}`,
+        name: `${input.firstName} ${input.lastName ?? ""}`.trim(),
         email: input.email,
         password: input.password,
         firstName: input.firstName,
-        lastName: input.lastName,
-        country: input.country,
-        city: input.city,
+        lastName: input.lastName || undefined,
+        country: input.country?.toUpperCase() || undefined,
+        city: input.city || undefined,
         newsletter: input.newsletter === "on",
         aiConsentAt: now,
         termsAcceptedAt: now,
@@ -198,9 +187,12 @@ export async function verifyEmail(_: AuthFormState, formData: FormData): Promise
       reportError(error, { message: "E-mail de bienvenue non envoyé" }),
     );
   }
-  const paid = flow.plan
-    ? await db.plan.findUnique({ where: { code: flow.plan }, select: { priceCents: true } })
-    : null;
+  // A talent pays a plan chosen on /tarifs after the first questions (« Votre espace est prêt »).
+  const org = flow.profile === "rh" || flow.profile === "company";
+  const paid =
+    org && flow.plan
+      ? await db.plan.findUnique({ where: { code: flow.plan }, select: { priceCents: true } })
+      : null;
   redirect(paid?.priceCents ? "/inscription/paiement" : withArrival("/app/bienvenue"));
 }
 
@@ -348,7 +340,11 @@ export async function signInWithProvider(provider: string, formData: FormData) {
     body: {
       provider: id,
       callbackURL: withArrival(next ?? "/app"),
-      newUserCallbackURL: `/inscription/forfait?${signupStep}`,
+      // A new talent goes on to the first questions; an organization still picks its plan.
+      newUserCallbackURL:
+        profile === "talent"
+          ? `/inscription/continuer?${signupStep}`
+          : `/inscription/forfait?${signupStep}`,
       errorCallbackURL: `/connexion?erreur=${id}`,
     },
   });
@@ -404,7 +400,11 @@ export async function completeSocialSignup(formData: FormData) {
         }
       : { kind: "talent", firstName: user.firstName ?? user.name, plan: current?.planName ?? "" },
   ).catch((error) => reportError(error, { message: "E-mail de bienvenue non envoyé" }));
-  redirect(plan?.priceCents ? "/inscription/paiement" : withArrival("/app/bienvenue"));
+  redirect(
+    plan?.priceCents && input.profil !== "talent"
+      ? "/inscription/paiement"
+      : withArrival("/app/bienvenue"),
+  );
 }
 
 export async function signOut() {
@@ -418,34 +418,8 @@ export async function signOut() {
 
 // ─── Password reset ────────────────────────────────────────────────
 
-export async function requestPasswordReset(
-  _: AuthFormState,
-  formData: FormData,
-): Promise<AuthFormState> {
-  const email = emailField.safeParse(formData.get("email"));
-  if (!email.success) {
-    return { status: "invalid", errors: { email: email.error.issues[0]?.message ?? "required" } };
-  }
-  if (!(await allowAttempt("passwordReset", email.data))) {
-    return { status: "sent", email: email.data };
-  }
-  try {
-    await auth.api.requestPasswordReset({
-      headers: await headers(),
-      body: { email: email.data, redirectTo: "/reinitialiser" },
-    });
-  } catch {
-    // Never reveal whether the address exists.
-  }
-  return { status: "sent", email: email.data };
-}
-
-const resetSchema = z
-  .object({ token: z.string().min(1), password: passwordField, confirm: z.string() })
-  .refine((data) => data.password === data.confirm, {
-    path: ["confirm"],
-    message: "passwordMismatch",
-  });
+/** A link of « Mot de passe oublié » sent before the codes (refonte mobile, lot 2) still works. */
+const resetSchema = z.object({ token: z.string().min(1), password: passwordField });
 
 export async function resetPassword(_: AuthFormState, formData: FormData): Promise<AuthFormState> {
   const parsed = resetSchema.safeParse(Object.fromEntries(formData));
@@ -463,6 +437,100 @@ export async function resetPassword(_: AuthFormState, formData: FormData): Promi
     return { status: "error", error: "resetLinkInvalid" };
   }
   return { status: "done" };
+}
+
+// ─── Password reset with a 6-digit code (refonte mobile, lot 2) ────
+
+/**
+ * « Envoyer le code »: the same answer whether or not the address has an account; the address
+ * waits in the short sign-up cookie (never in an address bar) for the next screen.
+ */
+export async function requestPasswordCode(
+  _: AuthFormState,
+  formData: FormData,
+): Promise<AuthFormState> {
+  const email = emailField.safeParse(formData.get("email"));
+  if (!email.success) {
+    return {
+      status: "invalid",
+      errors: { email: email.error.issues[0]?.message ?? "required" },
+      values: values(formData),
+    };
+  }
+  if (await allowAttempt("passwordReset", email.data)) {
+    try {
+      await auth.api.requestPasswordResetEmailOTP({
+        headers: await headers(),
+        body: { email: email.data },
+      });
+    } catch {
+      // Never reveal whether the address exists.
+    }
+  }
+  await writeSignupFlow({ resetEmail: email.data });
+  redirect("/reinitialiser");
+}
+
+export async function resendPasswordCode(_: AuthFormState): Promise<AuthFormState> {
+  const email = emailField.safeParse((await readSignupFlow()).resetEmail);
+  if (!email.success) redirect("/mot-de-passe-oublie");
+  if (!(await allowAttempt("sendCode", email.data))) {
+    return { status: "error", error: "resendTooSoon" };
+  }
+  try {
+    await auth.api.requestPasswordResetEmailOTP({
+      headers: await headers(),
+      body: { email: email.data },
+    });
+  } catch {
+    // Same answer as above.
+  }
+  return { status: "sent", email: email.data };
+}
+
+const resetCodeSchema = z.object({ code: codeSchema, password: passwordField });
+
+/**
+ * « Enregistrer »: checks the code, saves the new password and closes every other session
+ * (`revokeSessionsOnPasswordReset`), then signs the person in on this device.
+ */
+export async function resetPasswordWithCode(
+  _: AuthFormState,
+  formData: FormData,
+): Promise<AuthFormState> {
+  const email = emailField.safeParse((await readSignupFlow()).resetEmail);
+  if (!email.success) redirect("/mot-de-passe-oublie");
+  const parsed = resetCodeSchema.safeParse(Object.fromEntries(formData));
+  if (!parsed.success) return { status: "invalid", errors: issues(parsed.error) };
+  try {
+    await auth.api.resetPasswordEmailOTP({
+      headers: await headers(),
+      body: { email: email.data, otp: parsed.data.code, password: parsed.data.password },
+    });
+  } catch (error) {
+    const reason = code(error);
+    if (reason.includes("PASSWORD_COMPROMISED")) {
+      return { status: "invalid", errors: { password: "passwordCommon" } };
+    }
+    const message = reason.includes("EXPIRED")
+      ? "codeExpired"
+      : reason.includes("TOO_MANY")
+        ? "codeTooManyAttempts"
+        : "codeInvalid";
+    return { status: "invalid", errors: { code: message } };
+  }
+  // The address stays in the short cookie: the page around « Mot de passe modifié » needs it.
+  let signedIn = false;
+  try {
+    const result = await auth.api.signInEmail({
+      headers: await headers(),
+      body: { email: email.data, password: parsed.data.password, rememberMe: true },
+    });
+    signedIn = !("twoFactorRedirect" in result && result.twoFactorRedirect);
+  } catch {
+    // The password is saved: signing in from /connexion still works.
+  }
+  return { status: "done", values: { signedIn: signedIn ? "1" : "0" } };
 }
 
 /** Used by pages to send a signed-in visitor straight to their space. */

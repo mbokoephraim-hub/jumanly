@@ -6,25 +6,23 @@ import { demo, logIn, testEmail } from "./session";
 
 /** A new RH account with its organization (inscription, profil « Professionnel RH », Free). */
 async function signUpRecruiter(page: Page, email: string, orgName: string) {
+  // Recruiters go straight to the plan step (refonte mobile, lot 2).
   await page.goto("/inscription?profil=rh");
-  await page.getByRole("button", { name: "Continuer" }).click();
-  // The entry screen leads to the plan step (docs/refonte-connexion § 5).
   await expect(page).toHaveURL(/\/inscription\/forfait/);
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/\/inscription\/compte/);
-  await page.locator('input[name="firstName"]').fill("Chanelle");
-  await page.locator('input[name="lastName"]').fill("Fictive");
+  await page.locator('input[name="name"]').fill("Chanelle Fictive");
   await page.locator('input[name="email"]').fill(email);
   await page.locator('input[name="password"]').fill("kinshasa-2026");
   await page.locator('select[name="country"]').selectOption("CI");
   await page.locator('input[name="city"]').fill("Abidjan");
   await page.locator('input[name="orgName"]').fill(orgName);
-  for (const name of ["terms", "ai", "age"]) await page.locator(`input[name="${name}"]`).check();
+  await page.getByRole("checkbox", { name: /J'accepte les conditions/ }).check();
   const since = Date.now();
   await page.getByRole("button", { name: "Créer mon compte" }).click();
   await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-  await page.locator('input[name="code"]').fill(await lastCode(email, since));
-  await page.getByRole("button", { name: "Vérifier" }).click();
+  await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, since));
+  await page.getByRole("button", { name: "Valider" }).click();
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
   await page.getByRole("button", { name: "Aller au tableau de bord" }).click();
   await expect(page).toHaveURL(/\/app\/hire/);

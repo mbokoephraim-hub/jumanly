@@ -58,7 +58,7 @@ export async function logIn(page: Page, email: string, password = DEMO_PASSWORD,
       for (const code of fresh) {
         tried.add(code);
         await page.locator('input[name="code"]').fill(code);
-        await page.getByRole("button", { name: /Vérifier|Confirmer/ }).click();
+        await page.getByRole("button", { name: /Vérifier|Confirmer|Valider/ }).click();
         passed = await page
           .waitForURL((url) => !url.pathname.startsWith("/connexion"), { timeout: 8_000 })
           .then(() => true)
@@ -77,7 +77,10 @@ export function testEmail(prefix: string) {
 
 export const PASSWORD = "kinshasa-2026";
 
-/** Steps 1 to 4 of the sign-up (partie 06 § 6.1), from a plan chosen on /tarifs. */
+/**
+ * A talent's sign-up from a plan chosen on /tarifs (refonte mobile, lot 2): « Continuer avec mon
+ * e-mail », the account, then the 6-digit code. Ends on « Compte validé » (/app/bienvenue).
+ */
 export async function signUpFromPricing(page: Page, planButton: string, email: string) {
   await page.goto("/tarifs");
   // The link is followed by its address: on a phone the cookie banner may cover it.
@@ -86,23 +89,53 @@ export async function signUpFromPricing(page: Page, planButton: string, email: s
     .first()
     .getAttribute("href");
   await page.goto(href!);
+  await signUpWithEmail(page, email);
+}
+
+/** From « Créez votre compte » (/inscription, any `?suite=`) to « Compte validé ». */
+export async function signUpWithEmail(page: Page, email: string, name = "Awa Fictive") {
   await expect(page).toHaveURL(/\/inscription/);
-  await page.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/\/inscription\/forfait/);
-  await page.getByRole("button", { name: "Continuer" }).click();
+  await page.getByRole("link", { name: "Continuer avec mon e-mail" }).click();
   await expect(page).toHaveURL(/\/inscription\/compte/);
-  await page.locator('input[name="firstName"]').fill("Awa");
-  await page.locator('input[name="lastName"]').fill("Fictive");
-  await page.locator('input[name="email"]').fill(email);
-  await page.locator('input[name="password"]').fill(PASSWORD);
-  await page.locator('select[name="country"]').selectOption("CD");
-  await page.locator('input[name="city"]').fill("Kinshasa");
-  for (const name of ["terms", "ai", "age"]) await page.locator(`input[name="${name}"]`).check();
+  await page.getByLabel("Prénom et nom").fill(name);
+  await page.getByLabel("Adresse e-mail").fill(email);
+  await page.getByLabel("Mot de passe", { exact: true }).fill(PASSWORD);
+  await page.getByRole("checkbox", { name: /J'accepte les conditions/ }).check();
   const since = Date.now();
   await page.getByRole("button", { name: "Créer mon compte" }).click();
   await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-  await page.locator('input[name="code"]').fill(await lastCode(email, since));
-  await page.getByRole("button", { name: "Vérifier" }).click();
+  await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, since));
+  await page.getByRole("button", { name: "Valider" }).click();
+  await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+}
+
+/**
+ * The four questions of the first connection, answered as quickly as possible: « C'est parti »,
+ * the goal kept empty, the studies skipped, the places skipped unless given, then « Commencer
+ * gratuitement ».
+ */
+export async function finishOnboarding(page: Page, place?: { country: string; city: string }) {
+  await page.getByRole("link", { name: "C'est parti" }).click();
+  await expect(page).toHaveURL(/etape=objectif/);
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/etape=etudes/);
+  await page.getByRole("link", { name: "Passer" }).click();
+  await expect(page).toHaveURL(/etape=lieux/);
+  if (place) {
+    // « Pays » opens the sheet; the search keeps one country, then the city is typed.
+    await page.getByRole("button", { name: /^Pays/ }).click();
+    const sheet = page.getByRole("dialog", { name: "Votre pays" });
+    await sheet.getByRole("searchbox").fill(place.country);
+    await sheet.getByRole("radio").first().click();
+    await expect(sheet).toBeHidden();
+    await page.getByLabel("Ville").fill(place.city);
+    await page.getByRole("button", { name: "Continuer" }).click();
+  } else {
+    await page.getByRole("link", { name: "Passer" }).click();
+  }
+  await expect(page).toHaveURL(/etape=pret/);
+  await page.getByRole("button", { name: "Commencer gratuitement" }).click();
+  await expect(page).not.toHaveURL(/\/app\/bienvenue/);
 }
 
 /**

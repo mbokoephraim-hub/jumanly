@@ -2,6 +2,28 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte mobile de l'espace talent · lot 2 : connexion, inscription, premiers pas (19 octobre 2026)
+
+- Écrans d'accès redessinés d'après la planche talent-4 (`src/app/(auth)/(acces)/`, composants
+  `src/components/access/`) : connexion (lien magique, Google, LinkedIn, Apple), double
+  authentification, création de compte en un écran (« Prénom et nom », e-mail, mot de passe avec
+  barres de solidité et règles), code à 6 chiffres, mot de passe oublié **par code** puis
+  « Mot de passe modifié » (les anciens liens restent valables), apparence Auto/Clair/Sombre.
+- Premiers pas en 4 étapes (`/app/bienvenue?etape=`) : objectif, études (niveau et domaine,
+  migration additive `20261019120000_profile_studies`), lieux (pays dans une feuille avec drapeaux,
+  RD Congo d'abord, ville, contrats, mode de travail), puis « Votre espace est prêt » (formule
+  gratuite, ou paiement de la formule choisie). Carte « Bienvenue » et toast sur Pour moi les
+  14 premiers jours tant que le profil n'est pas à 80 % ou qu'il n'y a pas de CV.
+- Les recruteurs gardent l'étape forfait puis le formulaire avec organisation, pays et ville.
+- Correctif : les barres fixes du bas n'étaient plus fixes pendant/après l'animation d'entrée
+  (une animation de transform restée appliquée en faisait le repère) ; animation en `backwards`.
+- Supprimés : `src/components/auth/{entry-screen,auth-entry,auth-stage,forms,password-field,social-buttons}.tsx`,
+  `src/components/places/country-picker.tsx`, `src/lib/auth-entry.ts`, `tests/unit/auth-entry.test.ts`,
+  le bloc `.jm-ae` de `src/styles/motion.css`, les actions `startSignup` et `requestPasswordReset`,
+  `goalForFocus`. Tests de parcours adaptés (`signUpWithEmail`, `finishOnboarding`).
+- Captures 390 px clair et sombre : `/mnt/project-files/captures/refonte-mobile-lot-2/`.
+- Décision : `docs/decisions/2026-10-19-refonte-mobile-lot-2.md`.
+
 ## Refonte mobile de l'espace talent · lot 1 : fondations (19 octobre 2026)
 
 - Nouveau brief (`docs/refonte-mobile/`) : il remplace entièrement l'ancien design talent. Les

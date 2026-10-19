@@ -1,7 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { expect, test } from "./fixtures";
 import { expectAccessible } from "./a11y";
-import { signUpFromPricing, testEmail } from "./session";
+import { finishOnboarding, signUpFromPricing, testEmail } from "./session";
 
 /**
  * docs/experience-animee § 4, in the talent header of the refonte mobile: the bell (a link to the
@@ -14,8 +14,8 @@ test("la cloche signale l'arrivée d'une notification, puis tout se marque comme
   const email = testEmail("cloche");
   await signUpFromPricing(page, "Créer mon compte gratuit", email);
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
-  await page.getByRole("button", { name: "Plus tard" }).click();
-  await expect(page).toHaveURL(/\/app$/);
+  await finishOnboarding(page);
+  await expect(page).toHaveURL(/\/app(\?bienvenue=1)?$/);
   const bell = page.getByRole("link", { name: /^Notifications/ });
   await expect(bell).toHaveAccessibleName("Notifications");
 

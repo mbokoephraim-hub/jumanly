@@ -1,7 +1,20 @@
+import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
 import { expectAccessible } from "./a11y";
-import { lastLink } from "./outbox";
+import { lastCode } from "./outbox";
 import { demo, logIn, signUpFromPricing, testEmail } from "./session";
+
+/** « Compte validé » to « Votre espace est prêt », the questions skipped. */
+async function walkToReady(page: Page) {
+  await page.getByRole("link", { name: "C'est parti" }).click();
+  await expect(page).toHaveURL(/etape=objectif/);
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page).toHaveURL(/etape=etudes/);
+  await page.getByRole("link", { name: "Passer" }).click();
+  await expect(page).toHaveURL(/etape=lieux/);
+  await page.getByRole("link", { name: "Passer" }).click();
+  await expect(page).toHaveURL(/etape=pret/);
+}
 
 test.describe("inscription avec forfait", () => {
   test("Pro choisi sur /tarifs, payé (factice), arrive dans l'espace avec Pro actif", async ({
@@ -9,15 +22,16 @@ test.describe("inscription avec forfait", () => {
   }) => {
     const email = testEmail("pro");
     await signUpFromPricing(page, "Choisir Pro", email);
+    // The plan is paid after the first questions (refonte mobile, lot 2).
+    await walkToReady(page);
+    await page.getByRole("button", { name: "Continuer vers le paiement" }).click();
     await expect(page).toHaveURL(/\/inscription\/paiement/, { timeout: 20_000 });
     await page.getByRole("radio", { name: "M-Pesa" }).check();
     await page.locator('input[name="number"]').fill("+243 810 000 123");
     await page.getByRole("button", { name: /Payer/ }).click();
     await expect(page.getByText("Paiement confirmé")).toBeVisible({ timeout: 20_000 });
     await page.getByRole("link", { name: "Continuer" }).click();
-    await expect(page).toHaveURL(/\/app\/bienvenue/);
-    await page.getByRole("button", { name: "Plus tard" }).click();
-    await expect(page).toHaveURL(/\/app$/);
+    await expect(page).toHaveURL(/\/app\?bienvenue=1|\/app$/);
     await page.goto("/app/abonnement");
     await expect(page.getByRole("main")).toContainText("Pro");
     await expect(page.getByRole("main")).toContainText("Formule actuelleActivePro");
@@ -26,10 +40,8 @@ test.describe("inscription avec forfait", () => {
   test("payer plus tard laisse le compte en Free", async ({ page }) => {
     const email = testEmail("plus-tard");
     await signUpFromPricing(page, "Choisir Pro", email);
-    await expect(page).toHaveURL(/\/inscription\/paiement/, { timeout: 20_000 });
-    await page.getByRole("link", { name: "Commencer en Free et payer plus tard" }).click();
-    await expect(page).toHaveURL(/\/app\/bienvenue/);
-    await page.getByRole("button", { name: "Plus tard" }).click();
+    await walkToReady(page);
+    await page.getByRole("button", { name: "Commencer gratuitement" }).click();
     await expect(page).toHaveURL(/\/app/);
     await page.goto("/app/abonnement");
     await expect(page.getByRole("main")).toContainText("Free");
@@ -54,16 +66,20 @@ test.describe("connexion", () => {
     await page.goto("/app");
     await expect(page).toHaveURL(/\/connexion\?suite=/);
 
+    // Mot de passe oublié: a 6-digit code, the new password, then signed in at once.
     const since = Date.now();
     await page.goto("/mot-de-passe-oublie");
-    await page.locator('input[name="email"]').fill(email);
-    await page.getByRole("button", { name: /Envoyer/ }).click();
-    const link = await lastLink(email, "/reset-password/", since);
-    await page.goto(link.replace(/^https?:\/\/[^/]+/, ""));
+    await page.getByLabel("Adresse e-mail").fill(email);
+    await page.getByRole("button", { name: "Envoyer le code" }).click();
     await expect(page).toHaveURL(/\/reinitialiser/);
-    await page.locator('input[name="password"]').fill("nouveau-mot-2026");
-    await page.locator('input[name="confirm"]').fill("nouveau-mot-2026");
-    await page.getByRole("button", { name: /Enregistrer|Réinitialiser|Valider/ }).click();
+    await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, since));
+    await page.getByLabel("Nouveau mot de passe").fill("nouveau-mot-2026");
+    await page.getByRole("button", { name: "Enregistrer" }).click();
+    await expect(page.getByText("Mot de passe modifié")).toBeVisible();
+    await page.getByRole("link", { name: "Continuer" }).click();
+    await expect(page).toHaveURL(/\/app/);
+    // The old password no longer works; the new one does.
+    await page.context().clearCookies();
     await logIn(page, email, "nouveau-mot-2026");
     await expect(page).toHaveURL(/\/app/);
   });
@@ -124,6 +140,8 @@ test.describe("paramètres", () => {
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
     await page.goto("/app/parametres?onglet=compte");
+    // The country is asked at the first connection, skipped here: it is chosen now.
+    await page.locator('select[name="country"]').selectOption("CD");
     await page.locator('input[name="city"]').fill("Goma");
     await page
       .getByRole("region", { name: "Compte" })

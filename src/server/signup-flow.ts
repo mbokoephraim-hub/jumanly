@@ -16,6 +16,8 @@ const flowSchema = z.object({
   plan: z.string().max(60).optional().catch(undefined),
   next: z.string().max(300).refine(isSafeInternalPath).optional().catch(undefined),
   email: z.string().max(200).optional().catch(undefined),
+  /** Address of « Mot de passe oublié », until the new password is saved. */
+  resetEmail: z.string().max(200).optional().catch(undefined),
 });
 
 export type SignupFlow = z.infer<typeof flowSchema>;

@@ -72,7 +72,8 @@ export function TalentHeader({
   useCountPages();
   const pathname = usePathname();
   const count = useUnread(unread);
-  if (pathname === "/app/orbi") return null;
+  // Orbi and the first connection draw their own head.
+  if (pathname === "/app/orbi" || pathname === "/app/bienvenue") return null;
   const tab = labels.tabs[pathname];
 
   if (!tab) {
