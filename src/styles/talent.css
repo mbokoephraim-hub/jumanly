@@ -8176,7 +8176,6 @@ span.t-sw {
     display: grid;
     grid-template-columns: 290px minmax(0, 1fr);
     gap: 0;
-    max-width: 1100px;
   }
   .t-orw-h {
     position: sticky;
@@ -8190,9 +8189,15 @@ span.t-sw {
     margin-right: 22px;
     border-right: 1px solid var(--trait);
   }
+  /* Planche .orw .cv : la conversation prend la place, le fil et le champ restent à 760 px. */
   .t-orw-c {
-    padding-top: 18px;
-    max-width: 600px;
+    padding: 18px 40px 0;
+  }
+  .t-orw-c .t-orbi-fil,
+  .t-cadre .t-orw-c .t-orbi-compo-f {
+    width: 100%;
+    max-width: 760px;
+    margin-inline: auto;
   }
   .t-orw-c .t-aides {
     grid-template-columns: repeat(4, minmax(0, 1fr));
