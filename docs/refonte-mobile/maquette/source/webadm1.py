@@ -19,7 +19,7 @@ def _sb(actif, role):
             b = '<b>4</b>' if k == 'aujourdhui' else ('<b>2</b>' if k == 'offre' else '')
             h += f'<a class="it{" on" if k == actif else ""}">{ic(k, "s", k == actif)}{l}{b}</a>'
     sec = ''.join(f'<a class="it{" on" if k == actif else ""}">{ic(k, "s", k == actif)}{l}</a>' for k, l in
-                  [('portefeuille', 'Crédits et quotas'), ('progression', 'Rapports'), ('confidentialite', 'Sécurité')])
+                  SEC_ADM)
     return (f'<aside class="sb"><div class="lg"><span class="j">J</span>jumanly<em>.</em></div>{h}<div class="sep"></div>{sec}'
             f'<div class="bas"><a class="it">{ic("reglages","s")}Paramètres</a><div class="moi"><span class="av">SI</span><div class="t"><b>Sandrine Ilunga</b><span>Admin principale</span></div>{ic("suivant","xs")}</div></div></aside>')
 def _rl(actif, role):
@@ -40,6 +40,7 @@ def _tb(role, tab=False):
     return (f'<div class="tb"><div class="verre rch">{ic("recherche","s")}<span>Membre, pôle, offre, ou demander à Orbi</span>{k}</div><span class="sp"></span>'
             f'{bi("notification", "<span class=pastille></span>")}{bi("message", "<span class=cpt>2</span>")}<span class="av">SI</span></div>')
 
+SEC_ADM = [('portefeuille', 'Crédits et quotas'), ('progression', 'Rapports'), ('confidentialite', 'Sécurité')]
 A = lambda c, a, url, **k: web(c, a, 'adm', '/organisation' + url, **k)
 AT = lambda c, a, **k: tab(c, a, 'adm', **k)
 def mbr(h):   # recruteuse membre de l'équipe : même espace recruteur, au nom de Mwinda Énergies
@@ -155,7 +156,7 @@ CSSA1 = '''
 .sombre .cases[style*="--g-former"],.sombre .ad-av.b{background:linear-gradient(150deg,#ECFCD8,#C3F38E)!important;color:#0F3F37!important}
 .sombre .cases[style*="--g-accomp"],.sombre .ad-av.c{background:linear-gradient(150deg,#E2F8F0,#93E8CD)!important;color:#0F3F37!important}
 .sombre .cases[style*="--g-oppo"],.sombre .ad-av.d{background:linear-gradient(150deg,#FFF3D6,#F8CF73)!important;color:#0F3F37!important}
-.sombre .cases[style*="--g-accent"],.sombre .ad-av{color:#0F3F37!important}.sombre .cases[style*="--g-accent"] svg{stroke:#0F3F37}.sombre .ad-av.s{color:#A6F26B}.sombre .ad-av.s{background:#0F3F37;box-shadow:inset 0 0 0 1.5px #A6F26B}
+.sombre .cases[style*="--g-accent"],.sombre .ad-av{color:#0F3F37!important}.sombre .cases[style*="--g-accent"] svg{stroke:#0F3F37}.sombre .ad-av.s{color:#A6F26B!important}.sombre .ad-av.s{background:#0F3F37;box-shadow:inset 0 0 0 1.5px #A6F26B}
 .sombre .ad-rk .c,.sombre .ad-tbl,.sombre .ad-pole{box-shadow:0 0 0 1px rgba(255,255,255,.06)}
 .sombre .ad-rk .c span,.sombre .ad-li .r .t span,.sombre .ad-tbl .r .g{color:#B8CBC6}
 .sombre .ad-pl{background:rgba(255,255,255,.10);color:#E6F3EE}.sombre .ad-pl.ap{background:#A6F26B;color:#0F3F37}
