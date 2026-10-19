@@ -62,23 +62,35 @@ export const signupAccountSchema = z
   .object({
     profile: z.enum(["talent", "rh", "company"], { error: "required" }),
     firstName: name,
-    lastName: name,
+    // « Prénom et nom » is one field (refonte mobile, lot 2): a single word leaves it empty.
+    lastName: z.union([name, z.literal("")]).optional(),
     email: emailField,
     password: passwordField,
-    country: z.string().trim().min(2, "countryRequired").max(2, "countryRequired"),
-    city: z.string().trim().min(1, "cityRequired").max(120, "cityRequired"),
+    // A talent gives the country and the city at the first connection; an organization here.
+    country: z.string().trim().max(2, "countryRequired").optional(),
+    city: z.string().trim().max(120, "cityRequired").optional(),
     orgName: z.string().trim().max(160).optional(),
     orgRole: z.string().trim().max(120).optional(),
+    // One box for the conditions; its note covers the minimum age and the explained AI.
     terms: accepted("termsRequired"),
-    ai: accepted("aiConsentRequired"),
-    age: accepted("ageRequired"),
     newsletter: z.literal("on").optional(),
   })
   .superRefine((data, ctx) => {
-    if (data.profile !== "talent" && !data.orgName) {
+    if (data.profile === "talent") return;
+    if (!data.orgName) {
       ctx.addIssue({ code: "custom", path: ["orgName"], message: "orgNameRequired" });
     }
+    if (!data.country || data.country.length !== 2) {
+      ctx.addIssue({ code: "custom", path: ["country"], message: "countryRequired" });
+    }
+    if (!data.city) ctx.addIssue({ code: "custom", path: ["city"], message: "cityRequired" });
   });
+
+/** « Grâce Mbuyi Kanku » → first name « Grâce », last name « Mbuyi Kanku ». */
+export function splitFullName(full: string) {
+  const [firstName = "", ...rest] = full.trim().split(/\s+/);
+  return { firstName, lastName: rest.join(" ") };
+}
 
 export type SignupAccountInput = z.infer<typeof signupAccountSchema>;
 

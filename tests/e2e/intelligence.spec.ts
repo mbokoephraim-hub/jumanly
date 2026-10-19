@@ -1,7 +1,6 @@
 import { expect, test, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
-import { lastCode } from "./outbox";
-import { demo, logIn, testEmail } from "./session";
+import { demo, finishOnboarding, logIn, signUpWithEmail, testEmail } from "./session";
 
 const JOB = "demo-assistant-administratif-kinshasa";
 
@@ -12,23 +11,8 @@ async function signUpTalent(page: Page, email: string) {
     .first()
     .getAttribute("href");
   await page.goto(href!);
-  await page.getByRole("button", { name: "Continuer" }).click();
-  // The entry screen leads to the plan step (docs/refonte-connexion § 5).
-  await expect(page).toHaveURL(/\/inscription\/forfait/);
-  await page.getByRole("button", { name: "Continuer" }).click();
-  await page.locator('input[name="firstName"]').fill("Awa");
-  await page.locator('input[name="lastName"]').fill("Fictive");
-  await page.locator('input[name="email"]').fill(email);
-  await page.locator('input[name="password"]').fill("kinshasa-2026");
-  await page.locator('select[name="country"]').selectOption("CD");
-  await page.locator('input[name="city"]').fill("Kinshasa");
-  for (const name of ["terms", "ai", "age"]) await page.locator(`input[name="${name}"]`).check();
-  const since = Date.now();
-  await page.getByRole("button", { name: "Créer mon compte" }).click();
-  await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-  await page.locator('input[name="code"]').fill(await lastCode(email, since));
-  await page.getByRole("button", { name: "Vérifier" }).click();
-  await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+  await signUpWithEmail(page, email);
+  await finishOnboarding(page, { country: "Congo", city: "Kinshasa" });
 }
 
 // E6 definition of done: a score explained on the talent side, a skill imported from a pasted CV

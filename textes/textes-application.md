@@ -1358,8 +1358,8 @@ Rappel du paramètre `?suite=` : si le visiteur arrive depuis une action (postul
 | `reset.success.text` | Votre nouveau mot de passe est enregistré. Vous pouvez maintenant vous connecter. |
 | `reset.success.cta` | Se connecter |
 | `reset.invalid.title` | Ce lien n'est plus valable |
-| `reset.invalid.text` | Le lien a expiré ou a déjà été utilisé. Demandez-en un nouveau. |
-| `reset.invalid.cta` | Demander un nouveau lien |
+| `reset.invalid.text` | Le lien a expiré ou a déjà été utilisé. Demandez plutôt un code par e-mail. |
+| `reset.invalid.cta` | Recevoir un code |
 
 ---
 
@@ -1708,6 +1708,249 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `welcome.org.personal` | Vous avez aussi un espace personnel de talent. Passez de l'un à l'autre avec le sélecteur d'espace. |
 
 ---
+
+### Refonte mobile · Connexion, inscription et premiers pas
+
+*Écrans d'accès de la refonte mobile (docs/refonte-mobile, planche talent-4) : connexion, mot de passe oublié par code, inscription, code de vérification, « Compte validé », les 4 questions des premiers pas et la carte « Bienvenue » de Pour moi. Remplace l'écran d'entrée animé et les étapes de l'inscription talent.*
+
+#### Commun
+
+| Clé | Texte |
+|---|---|
+| `access.brand` | jumanly |
+| `access.home` | Retour à l'accueil |
+| `access.back` | Retour |
+| `access.or` | ou |
+| `access.provider.google` | Continuer avec Google |
+| `access.provider.linkedin` | Continuer avec LinkedIn |
+| `access.provider.apple` | Continuer avec Apple |
+| `access.field.email` | Adresse e-mail |
+| `access.field.emailPlaceholder` | vous@exemple.cd |
+| `access.field.password` | Mot de passe |
+| `access.field.passwordPlaceholder` | Votre mot de passe |
+| `access.password.show` | Afficher le mot de passe |
+| `access.password.hide` | Masquer le mot de passe |
+| `access.password.strength.weak` | Faible |
+| `access.password.strength.medium` | Moyen |
+| `access.password.strength.strong` | Solide |
+| `access.password.strength.veryStrong` | Très solide |
+| `access.password.strengthLabel` | Solidité du mot de passe : {level} |
+| `access.password.rule.length` | {min} caractères au moins |
+| `access.password.rule.digit` | Un chiffre |
+| `access.password.rule.symbol` | Un symbole |
+| `access.code.label` | Code à {digits} chiffres |
+| `access.code.notReceived` | Pas reçu ? |
+| `access.code.resend` | Renvoyer le code |
+| `access.code.resendIn` | dans {time} |
+| `access.code.resent` | Un nouveau code vous a été envoyé. |
+
+#### `/connexion` · Se connecter
+
+| Clé | Texte |
+|---|---|
+| `access.login.title` | Bon retour |
+| `access.login.subtitle` | Connectez-vous pour retrouver vos offres et vos formations. |
+| `access.login.forgot` | Mot de passe oublié ? |
+| `access.login.submit` | Se connecter |
+| `access.login.submitting` | Connexion… |
+| `access.login.magic` | Recevoir un lien de connexion par e-mail |
+| `access.login.magicSent` | Lien envoyé à {email}. Il est valable {minutes} minutes. |
+| `access.login.noAccount` | Pas encore de compte ? |
+| `access.login.signup` | Créer un compte |
+| `access.login.licence` | Activer une licence offerte par un partenaire |
+
+#### `/connexion/deux-etapes` · Connexion en deux étapes
+
+| Clé | Texte |
+|---|---|
+| `access.twoFactor.head` | Connexion en deux étapes |
+| `access.twoFactor.title` | Entrez le code |
+| `access.twoFactor.text` | Nous l'avons envoyé à votre adresse e-mail. Il est valable {minutes} minutes. |
+| `access.twoFactor.submit` | Valider |
+| `access.twoFactor.submitting` | Vérification… |
+
+#### `/mot-de-passe-oublie` · Mot de passe oublié
+
+| Clé | Texte |
+|---|---|
+| `access.forgot.head` | Mot de passe oublié |
+| `access.forgot.title` | Réinitialiser votre mot de passe |
+| `access.forgot.text` | Entrez l'adresse de votre compte. Nous vous envoyons un code à {digits} chiffres. |
+| `access.forgot.safe` | Pour votre sécurité, le message est le même que l'adresse existe ou non. |
+| `access.forgot.help` | Vous ne retrouvez plus votre adresse ? Écrivez à {email} |
+| `access.forgot.submit` | Envoyer le code |
+| `access.forgot.submitting` | Envoi… |
+
+#### `/reinitialiser` · Nouveau mot de passe
+
+| Clé | Texte |
+|---|---|
+| `access.reset.head` | Nouveau mot de passe |
+| `access.reset.title` | Code reçu par e-mail |
+| `access.reset.sent` | Envoyé à {email} · valable {minutes} minutes |
+| `access.reset.password` | Nouveau mot de passe |
+| `access.reset.submit` | Enregistrer |
+| `access.reset.submitting` | Enregistrement… |
+| `access.reset.doneTitle` | Mot de passe modifié |
+| `access.reset.doneText` | Vous êtes de nouveau dans votre espace. Les autres appareils ont été déconnectés par sécurité. |
+| `access.reset.doneLogin` | Votre nouveau mot de passe est enregistré. Les autres appareils ont été déconnectés par sécurité. |
+| `access.reset.continue` | Continuer |
+| `access.reset.login` | Se connecter |
+
+#### `/inscription` · Créer un compte
+
+| Clé | Texte |
+|---|---|
+| `access.signup.title` | Créez votre compte |
+| `access.signup.subtitle` | Gratuit. Postuler aux offres reste gratuit pour toujours. |
+| `access.signup.email` | Continuer avec mon e-mail |
+| `access.signup.legal` | En continuant, vous acceptez les {terms} et la {privacy}. |
+| `access.signup.terms` | conditions |
+| `access.signup.privacy` | politique de confidentialité |
+| `access.signup.hasAccount` | Déjà inscrit ? |
+| `access.signup.login` | Se connecter |
+| `access.signup.recruiter` | Vous recrutez ? |
+| `access.signup.recruiterLink` | Créer un compte recruteur |
+| `access.signup.plan` | Formule choisie : {plan}. Vous la réglez après les premières questions. |
+
+#### `/inscription/compte` · Créer un compte
+
+| Clé | Texte |
+|---|---|
+| `access.account.head` | Créer un compte |
+| `access.account.name` | Prénom et nom |
+| `access.account.namePlaceholder` | Prénom Nom |
+| `access.account.terms` | J'accepte les {terms} et la {privacy} |
+| `access.account.termsNote` | Vous confirmez avoir au moins {minAge} ans. Orbi vous fait des suggestions expliquées, aucune décision n'est prise automatiquement. |
+| `access.account.newsletter` | Recevoir des conseils et des offres par e-mail |
+| `access.account.submit` | Créer mon compte |
+| `access.account.submitting` | Création… |
+
+#### `/inscription/verification` · Vérifier l'e-mail
+
+| Clé | Texte |
+|---|---|
+| `access.verify.head` | Vérifier l'e-mail |
+| `access.verify.title` | Entrez le code |
+| `access.verify.text` | Nous l'avons envoyé à {email} |
+| `access.verify.notReceived` | Pas reçu ? Regardez dans les indésirables ou |
+| `access.verify.resend` | renvoyez le code |
+| `access.verify.change` | Modifier l'adresse |
+| `access.verify.submit` | Valider |
+| `access.verify.submitting` | Vérification… |
+
+#### `/app/bienvenue` · Compte validé et premiers pas
+
+| Clé | Texte |
+|---|---|
+| `access.validated.title` | Compte validé |
+| `access.validated.text` | Bienvenue sur Jumanly, {firstName}. Encore 4 questions pour vous proposer les bonnes offres et formations. |
+| `access.validated.goal` | Votre objectif |
+| `access.validated.goalTime` | 30 secondes |
+| `access.validated.studies` | Vos études et votre domaine |
+| `access.validated.studiesTime` | Facultatif |
+| `access.validated.places` | Où et comment travailler |
+| `access.validated.placesTime` | Pays, contrat |
+| `access.validated.start` | C'est parti |
+| `access.onboarding.step` | {step} sur {total} |
+| `access.onboarding.progress` | Étape {step} sur {total} |
+| `access.onboarding.continue` | Continuer |
+| `access.onboarding.skip` | Passer |
+| `access.onboarding.goal.title` | Qu'est-ce qui vous amène ? |
+| `access.onboarding.goal.text` | Jumanly adapte vos offres et formations à cet objectif. |
+| `access.onboarding.goal.firstJob` | Trouver mon premier emploi |
+| `access.onboarding.goal.firstJobLine` | Stage, premier CDD ou CDI |
+| `access.onboarding.goal.newJob` | Changer d'emploi |
+| `access.onboarding.goal.newJobLine` | Un poste qui me correspond mieux |
+| `access.onboarding.goal.skills` | Monter en compétences |
+| `access.onboarding.goal.skillsLine` | Apprendre et le prouver |
+| `access.onboarding.goal.reconversion` | Me reconvertir |
+| `access.onboarding.goal.reconversionLine` | Changer de métier |
+| `access.onboarding.studies.title` | Vos études et votre domaine |
+| `access.onboarding.studies.level.label` | Niveau d'études |
+| `access.onboarding.studies.level.secondary` | Secondaire |
+| `access.onboarding.studies.level.bac2` | Bac + 2 |
+| `access.onboarding.studies.level.licence` | Licence |
+| `access.onboarding.studies.level.master` | Master |
+| `access.onboarding.studies.level.other` | Autre |
+| `access.onboarding.studies.field.label` | Domaine |
+| `access.onboarding.studies.field.search` | Rechercher un domaine |
+| `access.onboarding.studies.field.none` | Aucun domaine ne correspond. |
+| `access.onboarding.studies.field.data` | Data et statistiques |
+| `access.onboarding.studies.field.finance` | Finance |
+| `access.onboarding.studies.field.marketing` | Marketing |
+| `access.onboarding.studies.field.it` | Informatique |
+| `access.onboarding.studies.field.energy` | Énergie |
+| `access.onboarding.studies.field.health` | Santé |
+| `access.onboarding.studies.field.agriculture` | Agriculture |
+| `access.onboarding.studies.field.architecture` | Architecture et BTP |
+| `access.onboarding.studies.field.arts` | Arts et design |
+| `access.onboarding.studies.field.commerce` | Commerce et vente |
+| `access.onboarding.studies.field.communication` | Communication et journalisme |
+| `access.onboarding.studies.field.law` | Droit |
+| `access.onboarding.studies.field.economics` | Économie |
+| `access.onboarding.studies.field.education` | Enseignement |
+| `access.onboarding.studies.field.engineering` | Ingénierie |
+| `access.onboarding.studies.field.environment` | Environnement |
+| `access.onboarding.studies.field.hospitality` | Hôtellerie et tourisme |
+| `access.onboarding.studies.field.hr` | Ressources humaines |
+| `access.onboarding.studies.field.languages` | Langues |
+| `access.onboarding.studies.field.logistics` | Logistique |
+| `access.onboarding.studies.field.management` | Gestion et management |
+| `access.onboarding.studies.field.mining` | Mines et pétrole |
+| `access.onboarding.studies.field.sciences` | Sciences |
+| `access.onboarding.studies.field.socialSciences` | Sciences sociales |
+| `access.onboarding.studies.field.telecoms` | Télécoms et réseaux |
+| `access.onboarding.studies.field.transport` | Transport |
+| `access.onboarding.places.title` | Où et comment travailler ? |
+| `access.onboarding.places.text` | Le pays n'est demandé qu'ici. Vous le changez dans votre profil. |
+| `access.onboarding.places.country` | Pays |
+| `access.onboarding.places.chooseCountry` | Choisir un pays |
+| `access.onboarding.places.city` | Ville |
+| `access.onboarding.places.cityPlaceholder` | Votre ville |
+| `access.onboarding.places.contract` | Type de contrat |
+| `access.onboarding.places.contracts.cdi` | CDI |
+| `access.onboarding.places.contracts.cdd` | CDD |
+| `access.onboarding.places.contracts.internship` | Stage |
+| `access.onboarding.places.contracts.freelance` | Freelance |
+| `access.onboarding.places.mode` | Mode de travail |
+| `access.onboarding.places.modes.onsite` | Sur site |
+| `access.onboarding.places.modes.hybrid` | Hybride |
+| `access.onboarding.places.modes.remote` | À distance |
+| `access.onboarding.ready.title` | Votre espace est prêt |
+| `access.onboarding.ready.text` | Vous commencez avec la formule gratuite. Vous pourrez en changer à tout moment. |
+| `access.onboarding.ready.textPaid` | Vous commencez avec la formule gratuite, puis vous réglez {plan} à l'étape suivante. |
+| `access.onboarding.ready.f1` | Postuler à toutes les offres |
+| `access.onboarding.ready.f2` | Profil et suivi des candidatures |
+| `access.onboarding.ready.f3` | Un modèle de CV, formations gratuites |
+| `access.onboarding.ready.more` | Pour aller plus loin |
+| `access.onboarding.ready.price` | {price} $ |
+| `access.onboarding.ready.moreText` | {plan} dès {price} $ par mois : Orbi, plus de modèles de CV et de formations. |
+| `access.onboarding.ready.moreCta` | Voir les formules |
+| `access.onboarding.ready.start` | Commencer gratuitement |
+| `access.onboarding.ready.pay` | Continuer vers le paiement |
+| `access.countries.title` | Votre pays |
+| `access.countries.search` | Rechercher un pays |
+| `access.countries.none` | Aucun pays ne correspond. |
+| `access.countries.close` | Fermer |
+| `access.countries.section.central` | Afrique centrale |
+| `access.countries.section.westEast` | Afrique de l'Ouest et de l'Est |
+| `access.countries.section.outside` | Hors d'Afrique |
+| `access.countries.section.all` | Tous les pays de A à Z |
+
+#### `/app` · Carte « Bienvenue » de Pour moi
+
+| Clé | Texte |
+|---|---|
+| `access.welcomeCard.kicker` | Bienvenue sur Jumanly |
+| `access.welcomeCard.title` | Votre espace est prêt. Voici par où commencer. |
+| `access.welcomeCard.profile` | Compléter mon profil |
+| `access.welcomeCard.profileValue` | {percent} % |
+| `access.welcomeCard.cv` | Importer ou créer mon CV |
+| `access.welcomeCard.cvValue` | 5 min |
+| `access.welcomeCard.offers` | {count, plural, =0 {Voir les offres} one {Voir mon offre} other {Voir mes # offres}} |
+| `access.welcomeCard.done` | Fait |
+| `access.welcomeCard.toast` | Compte créé · formule {plan} |
 
 ### `/activer` · Activation d'une licence Partners
 
@@ -8883,6 +9126,10 @@ Conventions :
 | `mail.resetPassword.p1` | Vous avez demandé à réinitialiser votre mot de passe. Touchez le bouton ci-dessous pour en choisir un nouveau. |
 | `mail.resetPassword.p2` | Ce lien est valable {minutes} minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail : votre mot de passe actuel reste valable. |
 | `mail.resetPassword.cta` | Choisir un nouveau mot de passe |
+| `mail.resetCode.subject` | Votre code pour changer de mot de passe : {code} |
+| `mail.resetCode.preheader` | Ce code est valable {minutes} minutes. |
+| `mail.resetCode.p1` | Vous avez demandé à changer votre mot de passe. Voici votre code : |
+| `mail.resetCode.p2` | Il est valable {minutes} minutes. Si vous n'êtes pas à l'origine de cette demande, ignorez cet e-mail : votre mot de passe actuel reste valable. |
 | `mail.passwordChanged.subject` | Votre mot de passe Jumanly a été modifié |
 | `mail.passwordChanged.preheader` | Si ce n'était pas vous, réagissez maintenant. |
 | `mail.passwordChanged.p1` | Le mot de passe de votre compte a été modifié le {date, date, long} à {time}. |

@@ -8,7 +8,7 @@ import {
   periodAround,
 } from "@/server/entitlements/periods";
 import { FakePaymentProvider } from "@/server/payments/fake";
-import { familiesForProfile, signupAccountSchema } from "@/server/services/accounts";
+import { familiesForProfile, signupAccountSchema, splitFullName } from "@/server/services/accounts";
 import { maskNumber } from "@/server/services/subscriptions";
 
 const day = 86_400_000;
@@ -44,12 +44,32 @@ describe("inscription", () => {
     const parsed = signupAccountSchema.parse(valid);
     expect(parsed.email).toBe("amani@exemple.com");
   });
-  it("exige les consentements", () => {
-    const result = signupAccountSchema.safeParse({ ...valid, terms: undefined, ai: undefined });
+  it("exige d'accepter les conditions", () => {
+    const result = signupAccountSchema.safeParse({ ...valid, terms: undefined });
     expect(result.success).toBe(false);
-    const messages = result.error?.issues.map((issue) => issue.message);
-    expect(messages).toContain("termsRequired");
-    expect(messages).toContain("aiConsentRequired");
+    expect(result.error?.issues.map((issue) => issue.message)).toContain("termsRequired");
+  });
+  it("demande le pays et la ville à une organisation, pas à un talent (refonte mobile)", () => {
+    const talent = signupAccountSchema.safeParse({ ...valid, country: undefined, city: undefined });
+    expect(talent.success).toBe(true);
+    const org = signupAccountSchema.safeParse({
+      ...valid,
+      profile: "rh",
+      orgName: "Cabinet fictif",
+      country: undefined,
+      city: undefined,
+    });
+    expect(org.error?.issues.map((issue) => issue.message)).toEqual([
+      "countryRequired",
+      "cityRequired",
+    ]);
+  });
+  it("sépare le prénom du nom saisis dans un seul champ", () => {
+    expect(splitFullName("  Grâce   Mbuyi Kanku ")).toEqual({
+      firstName: "Grâce",
+      lastName: "Mbuyi Kanku",
+    });
+    expect(splitFullName("Grâce")).toEqual({ firstName: "Grâce", lastName: "" });
   });
   it("exige le nom de l'organisation pour un recruteur", () => {
     const result = signupAccountSchema.safeParse({ ...valid, profile: "rh" });

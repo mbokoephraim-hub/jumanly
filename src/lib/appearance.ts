@@ -9,7 +9,14 @@ export const DARK_QUERY = "(prefers-color-scheme: dark)";
  * only they sit in the narrow column on a computer (the former contents keep their width, marked
  * `t-ancien` on <html>). The list grows with each lot; lot 7 removes it once every page is redrawn.
  */
-export const REDRAWN = ["/app/orbi"];
+export const REDRAWN = [
+  "/app/orbi",
+  "/app/bienvenue",
+  "/connexion",
+  "/inscription",
+  "/mot-de-passe-oublie",
+  "/reinitialiser",
+];
 
 export function redrawn(pathname: string) {
   return REDRAWN.some((path) => pathname === path || pathname.startsWith(`${path}/`));

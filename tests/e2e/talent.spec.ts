@@ -1,6 +1,12 @@
 import { expect, test, type Locator } from "./fixtures";
-import { lastCode } from "./outbox";
-import { demo, logIn, testEmail, newCvFromList } from "./session";
+import {
+  demo,
+  finishOnboarding,
+  logIn,
+  newCvFromList,
+  signUpWithEmail,
+  testEmail,
+} from "./session";
 
 const JOB = "demo-comptable-junior-abidjan";
 
@@ -19,25 +25,9 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
     .first()
     .getAttribute("href");
   await page.goto(href!);
-  await page.getByRole("button", { name: "Continuer" }).click();
-  // The entry screen leads to the plan step (docs/refonte-connexion § 5).
-  await expect(page).toHaveURL(/\/inscription\/forfait/);
-  await page.getByRole("button", { name: "Continuer" }).click();
-  await expect(page).toHaveURL(/\/inscription\/compte/);
-  await page.locator('input[name="firstName"]').fill("Awa");
-  await page.locator('input[name="lastName"]').fill("Fictive");
-  await page.locator('input[name="email"]').fill(email);
-  await page.locator('input[name="password"]').fill("kinshasa-2026");
-  await page.locator('select[name="country"]').selectOption("CD");
-  await page.locator('input[name="city"]').fill("Kinshasa");
-  for (const name of ["terms", "ai", "age"]) await page.locator(`input[name="${name}"]`).check();
-  const since = Date.now();
-  await page.getByRole("button", { name: "Créer mon compte" }).click();
-  await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
-  await page.locator('input[name="code"]').fill(await lastCode(email, since));
-  await page.getByRole("button", { name: "Vérifier" }).click();
-  await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
-  await page.getByRole("button", { name: "Plus tard" }).click();
+  // Sign-up, then the first questions; the offer comes back at the end.
+  await signUpWithEmail(page, email);
+  await finishOnboarding(page, { country: "Congo", city: "Kinshasa" });
   await expect(page).toHaveURL(new RegExp(`/app/jobs/${JOB}`));
 
   // Profile: summary, an experience, three skills.

@@ -37,12 +37,16 @@ export function homeFocus(goal: string | null | undefined): {
   }
 }
 
-/**
- * The goal stored when the talent picks a home on the goal screen (screen 01). A finer goal already
- * stored that falls into the same home is kept (« Me reconvertir » stays, for example).
- */
-export function goalForFocus(focus: HomeFocus, current: string | null | undefined): WelcomeGoal {
-  if (current && homeFocus(current).personalised && homeFocus(current).focus === focus)
-    return current as WelcomeGoal;
-  return focus === "job" ? "newJob" : focus === "skills" ? "skills" : "promotion";
-}
+/** The four goals of the first connection (planche talent-4 § 1, step 1 of 4). */
+export const onboardingGoals = [
+  "firstJob",
+  "newJob",
+  "skills",
+  "reconversion",
+] as const satisfies readonly WelcomeGoal[];
+
+/** Contracts offered at the first connection (planche: CDI, CDD, Stage, Freelance). */
+export const welcomeContracts = ["cdi", "cdd", "internship", "freelance"] as const;
+
+/** Work modes of the first connection (planche: Sur site, Hybride, À distance). */
+export const workModes = ["onsite", "hybrid", "remote"] as const;

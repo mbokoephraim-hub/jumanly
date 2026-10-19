@@ -20,6 +20,7 @@ import {
   RESET_MINUTES,
   sendMagicLink,
   sendPasswordChanged,
+  sendPasswordCode,
   sendResetPassword,
   sendVerificationCode,
 } from "@/server/account-emails";
@@ -162,6 +163,7 @@ export const auth = betterAuth({
       "/sign-up/email": { window: 60 * 60, max: 10 },
       "/request-password-reset": { window: 15 * 60, max: 5 },
       "/email-otp/send-verification-otp": { window: 60, max: 3 },
+      "/email-otp/request-password-reset": { window: 15 * 60, max: 5 },
       "/sign-in/magic-link": { window: 15 * 60, max: 5 },
     },
   },
@@ -173,7 +175,12 @@ export const auth = betterAuth({
       storeOTP: "hashed",
       sendVerificationOnSignUp: true,
       overrideDefaultEmailVerification: true,
-      sendVerificationOTP: async ({ email, otp }) => {
+      sendVerificationOTP: async ({ email, otp, type }) => {
+        // « Mot de passe oublié » sends its own code (refonte mobile, lot 2).
+        if (type === "forget-password") {
+          await sendPasswordCode(email, otp, await firstNameOf(email));
+          return;
+        }
         await sendVerificationCode(email, otp, await firstNameOf(email));
       },
     }),

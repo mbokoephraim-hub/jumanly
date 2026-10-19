@@ -38,6 +38,17 @@ export async function sendVerificationCode(to: string, code: string, firstName?:
   });
 }
 
+/** Code of « Mot de passe oublié » (refonte mobile, lot 2): typed on /reinitialiser. */
+export async function sendPasswordCode(to: string, code: string, firstName?: string | null) {
+  await send(to, t("mail.resetCode.subject", { code }), {
+    preview: t("mail.resetCode.preheader", { minutes: OTP_MINUTES }),
+    greeting: greeting(firstName),
+    paragraphs: [t("mail.resetCode.p1")],
+    code,
+    footnote: t("mail.resetCode.p2", { minutes: OTP_MINUTES }),
+  });
+}
+
 export async function sendMagicLink(to: string, url: string, firstName?: string | null) {
   await send(to, t("mail.magicLink.subject"), {
     preview: t("mail.magicLink.preheader", { minutes: LINK_MINUTES }),

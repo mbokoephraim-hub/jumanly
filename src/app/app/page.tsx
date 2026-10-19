@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
+import { WelcomeCard } from "@/components/access/welcome-card";
 import { DailyWelcome } from "@/components/app/daily-welcome";
 import {
   CourseRow,
@@ -43,6 +44,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /** Score from which an offer counts as « correspond à votre profil » (same as the dashboard). */
 const THRESHOLD = 70;
+const DAY_MS = 24 * 60 * 60 * 1000;
 
 const actionLook: Record<NextAction["kind"], { icon: IconName; tone: string }> = {
   interview: { icon: "calendrier", tone: "bg-lime" },
@@ -59,7 +61,7 @@ const actionLook: Record<NextAction["kind"], { icon: IconName; tone: string }> =
  * the next position. Real figures and real offers only; without a goal, a general selection that
  * says so. The former dashboard stays at /app/tableau-de-bord.
  */
-export default async function ForMePage() {
+export default async function ForMePage({ searchParams }: PageProps<"/app">) {
   const t = await getTranslations();
   const user = await requireUser("/app");
   // A recruiter in their organization space lands on Hire; « Personnel » in the switcher comes back here.
@@ -103,6 +105,12 @@ export default async function ForMePage() {
       }),
     ]);
   const current = lessons[0];
+  // « Bienvenue sur Jumanly » (refonte mobile, lot 2): a new account, until its first steps are done.
+  const justCreated = (await searchParams).bienvenue === "1";
+  const cvs = await db.document.count({ where: { profile: { userId: user.id }, kind: "cv" } });
+  const showWelcome =
+    justCreated ||
+    (now.getTime() - user.createdAt.getTime() < 14 * DAY_MS && (percent < 80 || cvs === 0));
   const actions = await nextActions(
     db,
     user.id,
@@ -291,6 +299,15 @@ export default async function ForMePage() {
             ? t("talent.dashboard.greeting.first", { firstName })
             : t("talent.dashboard.greeting.neutral", { firstName })}
         </h1>
+        {showWelcome && (
+          <WelcomeCard
+            percent={percent}
+            hasCv={cvs > 0}
+            offers={offers.jobs.length}
+            place={user.city ?? null}
+            toastPlan={justCreated ? (plan?.planName ?? undefined) : undefined}
+          />
+        )}
         {/* The message of the day stays on a phone too: once a day, closed in one touch. */}
         <DailyWelcome
           person={user.id}

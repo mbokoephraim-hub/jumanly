@@ -44,7 +44,9 @@ async function PaymentStep({
   const user = await requireUser("/inscription/paiement");
   const flow = await readSignupFlow();
   const plan = flow.plan ? await db.plan.findUnique({ where: { code: flow.plan } }) : null;
-  if (!plan?.priceCents) redirect("/app/bienvenue?arrivee=1");
+  // After the payment: a talent has already answered the first questions (lot 2 of the redesign).
+  const after = plan?.family === "talent" ? "/app?bienvenue=1" : "/app/bienvenue?arrivee=1";
+  if (!plan?.priceCents) redirect(after);
   const t = await getTranslations("signup.payment");
   const paymentId = typeof params.paiement === "string" ? params.paiement : undefined;
   return (
@@ -60,12 +62,12 @@ async function PaymentStep({
         context="signup"
         paymentId={paymentId}
         trial={params.essai === "1"}
-        continueHref="/app/bienvenue?arrivee=1"
-        freeHref="/app/bienvenue?arrivee=1"
+        continueHref={after}
+        freeHref={after}
       />
       {!paymentId && (
         <Link
-          href="/app/bienvenue?arrivee=1"
+          href={after}
           className="group flex flex-col gap-1 rounded-[20px] bg-blanc px-5 py-4 ring-[1.5px] ring-brume ring-inset hover:ring-sapin/40"
         >
           <span className="flex items-center gap-1.5 text-[15px] font-semibold">

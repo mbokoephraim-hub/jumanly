@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { goalForFocus, homeFocus } from "@/lib/welcome";
+import { homeFocus, onboardingGoals } from "@/lib/welcome";
 
 describe("objectif et accueil Pour moi (docs/ux-mobile-talent, prompt 3)", () => {
   it("range les six objectifs du profil dans trois accueils", () => {
@@ -16,11 +16,12 @@ describe("objectif et accueil Pour moi (docs/ux-mobile-talent, prompt 3)", () =>
     expect(homeFocus("inconnu")).toEqual({ focus: "job", personalised: false });
   });
 
-  it("garde un objectif plus fin du même accueil", () => {
-    expect(goalForFocus("skills", "reconversion")).toBe("reconversion");
-    expect(goalForFocus("job", "freelance")).toBe("freelance");
-    expect(goalForFocus("job", "promotion")).toBe("newJob");
-    expect(goalForFocus("career", null)).toBe("promotion");
-    expect(goalForFocus("skills", undefined)).toBe("skills");
+  it("propose aux premiers pas quatre objectifs qui ont chacun leur accueil", () => {
+    expect(onboardingGoals.map((goal) => homeFocus(goal).focus)).toEqual([
+      "job",
+      "job",
+      "skills",
+      "skills",
+    ]);
   });
 });

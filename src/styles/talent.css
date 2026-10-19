@@ -2073,3 +2073,859 @@ html.sombre body {
 .t-or-tete .t-credits {
   color: var(--texte);
 }
+
+/* ── Accès : connexion, inscription, premiers pas (planche talent-4 § 1 et connexion, lot 2) ── */
+.t-tete-f {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding-top: max(6px, env(safe-area-inset-top));
+  min-height: 50px;
+}
+.t-tete-f h1,
+.t-tete-f .t-h1 {
+  flex: 1;
+  min-width: 0;
+  font-size: 17px;
+  font-weight: 600;
+}
+.t-pas {
+  display: flex;
+  gap: 6px;
+}
+.t-pas i {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--piste);
+  transition: background-color 240ms ease;
+}
+.t-pas i.t-ok {
+  background: var(--sapin);
+}
+.sombre .t-pas i.t-ok {
+  background: var(--lime);
+}
+.t-pas-t {
+  font-size: 12px;
+  color: var(--texte2);
+  margin-top: -6px;
+}
+.t-h2s {
+  font-size: 20px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+/* Barre d'action fixée en bas de l'écran (planche : .bas-f). */
+.t-bas-f {
+  position: fixed;
+  left: 50%;
+  bottom: 0;
+  z-index: 30;
+  width: 100%;
+  max-width: 560px;
+  transform: translateX(-50%);
+  padding: 14px 16px max(30px, env(safe-area-inset-bottom));
+  display: flex;
+  gap: 10px;
+  border-radius: 28px 28px 0 0;
+}
+.t-bas-f .t-bt {
+  flex: 1;
+}
+.t-bas-f .t-bt.t-sec.t-m {
+  flex: none;
+  height: 54px;
+}
+.t-acces .t-contenu {
+  gap: 14px;
+  padding-bottom: calc(130px + env(safe-area-inset-bottom));
+}
+.t-acces .t-bt.t-pl {
+  flex: none;
+  width: 100%;
+  height: 54px;
+}
+.t-acces .t-bas-f .t-bt.t-pl {
+  flex: 1;
+  width: auto;
+}
+/* Écran de confirmation centré (planche : .conf). */
+.t-conf {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding-bottom: 40px;
+}
+.t-conf > p {
+  color: var(--texte2);
+  font-size: 13.5px;
+  max-width: 300px;
+}
+.t-conf .t-liste {
+  width: 100%;
+  margin: 4px 0;
+  text-align: left;
+}
+.t-rond-ok {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  background: var(--g-accent);
+  display: grid;
+  place-items: center;
+  box-shadow: var(--halo);
+  margin-top: 60px;
+  color: var(--sapin);
+}
+.t-rond-ok .t-ic {
+  width: 44px;
+  height: 44px;
+}
+.t-auth-h {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 26px 0 8px;
+}
+.t-auth-h .t-lgo {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 22px;
+  font-weight: 600;
+}
+.t-auth-h h1 {
+  font-size: 24px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.t-auth-h p {
+  font-size: 13.5px;
+  color: var(--texte2);
+  max-width: 290px;
+}
+.t-fourn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  height: 54px;
+  border-radius: 999px;
+  font-size: 14.5px;
+  font-weight: 600;
+  color: var(--texte);
+}
+.t-fourn .t-lf {
+  width: 22px;
+  height: 22px;
+  border-radius: 6px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: #fff;
+}
+.t-ou {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-ou::before,
+.t-ou::after {
+  content: "";
+  flex: 1;
+  height: 1px;
+  background: var(--trait);
+}
+.t-mention {
+  font-size: 11.5px;
+  color: var(--texte2);
+  text-align: center;
+  line-height: 1.5;
+}
+.t-mention a,
+.t-mention button {
+  color: var(--texte);
+  font-weight: 600;
+}
+.t-mention button:disabled {
+  color: var(--texte2);
+  font-weight: 500;
+}
+.t-ob-q {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+.t-ob-q h1,
+.t-ob-q h2 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.25;
+}
+.t-ob-q p {
+  font-size: 13px;
+  color: var(--texte2);
+}
+.t-obj-g {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.t-obj-g label {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 14px;
+  border-radius: 24px;
+  min-height: 128px;
+  font-size: 12px;
+  color: var(--texte2);
+  cursor: pointer;
+}
+.t-obj-g label b {
+  font-size: 14px;
+  color: var(--texte);
+  line-height: 1.25;
+}
+.t-obj-g label .t-cases {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  color: #0f3f37;
+}
+.t-obj-g .t-o1 {
+  background: var(--g-oppo);
+}
+.t-obj-g .t-o2 {
+  background: var(--g-accomp);
+}
+.t-obj-g .t-o3 {
+  background: var(--g-former);
+}
+.t-obj-g .t-o4 {
+  background: linear-gradient(150deg, #e8f1fb, #b9d5f2);
+}
+.t-obj-g label:has(:checked) {
+  box-shadow: 0 0 0 2.5px #0f3f37;
+}
+.t-obj-g label:has(:focus-visible) {
+  outline: 2px solid var(--texte);
+  outline-offset: 3px;
+}
+.sombre .t-obj-g .t-o4 {
+  background: linear-gradient(150deg, rgba(120, 170, 230, 0.24), rgba(120, 170, 230, 0.08));
+}
+.sombre .t-obj-g label .t-cases {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--texte);
+}
+.sombre .t-obj-g label:has(:checked) {
+  box-shadow: 0 0 0 2.5px var(--lime);
+}
+.t-lab-c {
+  font-size: 13px;
+  font-weight: 600;
+}
+.t-pret {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 10px;
+  padding: 8px 0 0;
+}
+.t-pret h1,
+.t-pret h2 {
+  font-size: 22px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+}
+.t-pret p {
+  font-size: 13px;
+  color: var(--texte2);
+  max-width: 300px;
+}
+.t-pret .t-rond-ok {
+  width: 72px;
+  height: 72px;
+  margin-top: 0;
+  box-shadow: none;
+}
+.t-pret .t-rond-ok .t-ic {
+  width: 24px;
+  height: 24px;
+}
+.t-form {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  border-radius: 26px;
+}
+.t-form .t-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.t-form .t-h b {
+  font-size: 16px;
+}
+.t-form .t-h .t-prix {
+  font-size: 20px;
+  font-weight: 600;
+}
+.t-form ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 12.5px;
+}
+.t-form ul li {
+  display: flex;
+  gap: 8px;
+  align-items: flex-start;
+}
+.t-form ul li .t-ic {
+  width: 16px;
+  height: 16px;
+  flex: none;
+  margin-top: 1px;
+  color: #3da14f;
+}
+.t-form.t-on {
+  box-shadow:
+    0 0 0 2.5px #0f3f37,
+    var(--verre);
+}
+.sombre .t-form.t-on {
+  box-shadow:
+    0 0 0 2.5px var(--lime),
+    var(--verre);
+}
+.t-form.t-fr {
+  background: linear-gradient(150deg, #f2fce6, #ddf6ee);
+}
+.sombre .t-form.t-fr {
+  background: linear-gradient(150deg, rgba(166, 242, 107, 0.16), rgba(47, 211, 166, 0.08));
+}
+/* Code à 6 chiffres : un vrai champ par-dessus six cases dessinées. */
+.t-code6 {
+  position: relative;
+  display: flex;
+  gap: 8px;
+  justify-content: center;
+}
+.t-code6 span {
+  width: 44px;
+  height: 54px;
+  border-radius: 16px;
+  background: var(--plein);
+  box-shadow: var(--verre);
+  display: grid;
+  place-items: center;
+  font-size: 20px;
+  font-weight: 600;
+}
+.t-code6 span.t-f {
+  box-shadow:
+    0 0 0 2px var(--texte),
+    var(--verre);
+}
+.t-code6.t-err span {
+  box-shadow:
+    0 0 0 2px var(--corail),
+    var(--verre);
+}
+.t-code6 input {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  opacity: 0.01;
+  color: transparent;
+  caret-color: transparent;
+  background: transparent;
+  border: 0;
+  outline: none;
+  cursor: text;
+}
+.t-force {
+  display: flex;
+  gap: 6px;
+  align-items: center;
+  margin-top: -4px;
+}
+.t-force i {
+  flex: 1;
+  height: 5px;
+  border-radius: 3px;
+  background: var(--piste);
+  transition: background-color 200ms ease;
+}
+.t-force i.t-ok {
+  background: #3da14f;
+}
+.t-force span {
+  font-size: 12px;
+  font-weight: 600;
+  margin-left: 6px;
+  min-width: 52px;
+}
+.t-regles-m {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.t-regles-m li {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  font-size: 11.5px;
+  padding: 4px 9px;
+  border-radius: 999px;
+  background: var(--zone);
+  color: var(--texte2);
+}
+.t-regles-m li.t-ok {
+  background: var(--lime-c);
+  color: var(--sapin);
+}
+.t-regles-m .t-ic {
+  width: 12px;
+  height: 12px;
+}
+.t-coche-l {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 44px;
+  font-size: 12px;
+  cursor: pointer;
+}
+.t-coche-l input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.t-coche {
+  width: 24px;
+  height: 24px;
+  border-radius: 8px;
+  box-shadow: inset 0 0 0 2px var(--trait);
+  display: grid;
+  place-items: center;
+  flex: none;
+  color: transparent;
+}
+.t-coche-l:has(:checked) .t-coche {
+  background: #0f3f37;
+  color: #a6f26b;
+  box-shadow: none;
+}
+.sombre .t-coche-l:has(:checked) .t-coche {
+  background: var(--lime);
+  color: #0f3f37;
+}
+.t-coche-l:has(:focus-visible) .t-coche {
+  outline: 2px solid var(--texte);
+  outline-offset: 2px;
+}
+.t-coche-l b {
+  font-size: 12px;
+}
+.t-env-r {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  background: var(--g-accomp);
+  display: grid;
+  place-items: center;
+  color: #0f3f37;
+}
+.t-env-r .t-ic {
+  width: 32px;
+  height: 32px;
+}
+.t-aide-c {
+  font-size: 11.5px;
+  color: var(--texte2);
+}
+.t-lab-l {
+  display: flex;
+  justify-content: space-between;
+}
+.t-lab-l a {
+  font-weight: 600;
+  font-size: 12.5px;
+  text-decoration: underline;
+}
+.t-lien-m {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  min-height: 44px;
+}
+.t-gar {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  font-size: 12px;
+  color: var(--texte2);
+  padding: 10px 12px;
+  border-radius: 16px;
+  background: var(--zone);
+}
+.t-gar .t-ic {
+  width: 16px;
+  height: 16px;
+  flex: none;
+}
+.t-gar.t-ok {
+  background: var(--lime-c);
+  color: var(--sapin);
+}
+.t-gar.t-err {
+  background: var(--corail-c);
+  color: #a3321f;
+}
+/* Champs réels des écrans d'accès. */
+.t-saisie input,
+.t-saisie select {
+  flex: 1;
+  min-width: 0;
+  height: 100%;
+  background: none;
+  border: 0;
+  outline: none;
+  color: var(--texte);
+  font: inherit;
+}
+.t-saisie input::placeholder {
+  color: var(--texte2);
+  opacity: 1;
+}
+.t-saisie:focus-within {
+  box-shadow:
+    0 0 0 2px var(--texte),
+    var(--verre);
+}
+/* The ring of the whole field shows the focus: no second ring around the input itself. */
+.t-saisie input:focus-visible,
+.t-saisie select:focus-visible {
+  outline: none;
+}
+.t-saisie > .t-ic {
+  flex: none;
+  margin-right: 10px;
+  color: var(--texte2);
+}
+.t-saisie .t-oeil {
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 40px;
+  height: 40px;
+  margin-right: -10px;
+  border-radius: 50%;
+  color: var(--texte2);
+}
+.t-saisie .t-oeil[aria-pressed="true"] {
+  color: var(--texte);
+}
+.t-saisie input[type="password"] {
+  letter-spacing: 0.18em;
+}
+.t-saisie input[type="password"]::placeholder {
+  letter-spacing: normal;
+}
+.t-ck-t {
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--texte2);
+}
+/* Feuille du bas (planche : .sheet), ouverte dans un <dialog>. */
+.t-sheet {
+  position: fixed;
+  inset: 120px 8px 8px;
+  margin: 0 auto;
+  width: auto;
+  max-width: 544px;
+  max-height: none;
+  border: 0;
+  border-radius: 34px;
+  padding: 10px 18px 18px;
+  display: none;
+  flex-direction: column;
+  gap: 12px;
+  background: var(--plein);
+  color: var(--texte);
+  overflow: hidden;
+}
+.t-sheet[open] {
+  display: flex;
+  animation: t-monte 260ms cubic-bezier(0.2, 0.9, 0.3, 1) both;
+}
+.t-sheet::backdrop {
+  background: rgba(11, 26, 31, 0.38);
+}
+.t-sheet h2 {
+  font-size: 18px;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+}
+@keyframes t-monte {
+  from {
+    transform: translateY(40px);
+    opacity: 0;
+  }
+}
+.t-pays-l {
+  display: flex;
+  flex-direction: column;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  margin: 0 -4px;
+  padding: 0 4px;
+}
+.t-pays-l .t-ck-t {
+  padding: 10px 2px 2px;
+}
+.t-pays-l .t-li {
+  min-height: 50px;
+  padding: 0 2px;
+  border-top: 1px solid var(--trait);
+  cursor: pointer;
+}
+.t-pays-l .t-li:has(:focus-visible) {
+  outline: 2px solid var(--texte);
+  outline-offset: -2px;
+  border-radius: 12px;
+}
+.t-pays-l .t-li input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+.t-pays-l .t-li .t-radio {
+  display: none;
+}
+.t-pays-l .t-li:has(:checked) .t-radio {
+  display: block;
+  box-shadow: inset 0 0 0 7px var(--sapin);
+}
+.sombre .t-pays-l .t-li:has(:checked) .t-radio {
+  box-shadow: inset 0 0 0 7px var(--lime);
+}
+.t-fl {
+  width: 24px;
+  height: 16px;
+  flex: none;
+  border-radius: 3px;
+  object-fit: cover;
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.12);
+}
+.t-pays-l .t-fl {
+  width: 30px;
+  height: 20px;
+}
+/* Carte « Bienvenue sur Jumanly » de Pour moi. */
+.t-bienv {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  padding: 16px;
+  background: linear-gradient(150deg, #f2fce6, #ddf6ee);
+}
+.sombre .t-bienv {
+  background: linear-gradient(150deg, rgba(166, 242, 107, 0.16), rgba(47, 211, 166, 0.08));
+}
+.t-bienv .t-k {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 11.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.t-bienv h2,
+.t-bienv h3 {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+}
+.t-bienv ol {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.t-pr-l {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  min-height: 48px;
+  border-radius: 16px;
+  background: rgba(255, 255, 255, 0.7);
+  font-size: 12px;
+  color: var(--texte2);
+}
+.sombre .t-pr-l {
+  background: rgba(255, 255, 255, 0.08);
+}
+.t-pr-l b {
+  flex: 1;
+  font-size: 13.5px;
+  color: var(--texte);
+}
+.t-pr-l .t-n1 {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  background: #0f3f37;
+  color: #a6f26b;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  flex: none;
+}
+.t-pr-l.t-fait .t-n1 {
+  background: var(--g-accent);
+  color: var(--sapin);
+}
+/* Entrée douce des écrans d'accès. « backwards » seulement : une animation de transform qui reste
+   appliquée fait de l'élément le repère des barres fixes (.t-bas-f) qu'il contient. Un formulaire
+   qui porte la barre n'est pas animé lui-même : ce sont ses champs qui entrent. */
+.t-acces .t-contenu > :not(:has(.t-bas-f)),
+.t-acces .t-contenu > :has(.t-bas-f) > :not(.t-bas-f) {
+  animation: t-entree-a 420ms cubic-bezier(0.2, 0.8, 0.3, 1) backwards;
+}
+.t-acces .t-contenu > :nth-child(2) {
+  animation-delay: 40ms;
+}
+.t-acces .t-contenu > :nth-child(3) {
+  animation-delay: 80ms;
+}
+.t-acces .t-contenu > :nth-child(4) {
+  animation-delay: 120ms;
+}
+.t-acces .t-contenu > :nth-child(n + 5) {
+  animation-delay: 160ms;
+}
+@keyframes t-entree-a {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+}
+.t-acces .t-rond-ok {
+  animation: t-pop 520ms cubic-bezier(0.3, 1.5, 0.5, 1) backwards;
+}
+@keyframes t-pop {
+  from {
+    transform: scale(0.6);
+    opacity: 0;
+  }
+}
+/* Options en vrais champs de formulaire : puces à cocher, segments à choix unique. */
+label.t-puce {
+  cursor: pointer;
+}
+label.t-puce input,
+.t-seg > label input {
+  position: absolute;
+  opacity: 0;
+  width: 1px;
+  height: 1px;
+}
+label.t-puce:has(:checked) {
+  background: var(--g-accent);
+  color: var(--sapin);
+  font-weight: 600;
+}
+label.t-puce:has(:focus-visible),
+.t-seg > label:has(:focus-visible) {
+  outline: 2px solid var(--texte);
+  outline-offset: 2px;
+}
+label.t-puce .t-ic {
+  display: none;
+}
+label.t-puce:has(:checked) .t-ic {
+  display: block;
+}
+.t-seg > label {
+  position: relative;
+  text-align: center;
+  padding: 10px 4px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--texte2);
+  white-space: nowrap;
+  cursor: pointer;
+}
+.t-seg > label:has(:checked) {
+  background: var(--plein);
+  color: var(--texte);
+  font-weight: 600;
+  box-shadow: var(--verre);
+}
+.t-rech.t-champ-r {
+  padding-right: 18px;
+}
+fieldset.t-fs {
+  border: 0;
+  margin: 0;
+  padding: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+fieldset.t-fs > legend {
+  padding: 0;
+  margin-bottom: 10px;
+}
+.sombre .t-regles-m li.t-ok,
+.sombre .t-gar.t-ok {
+  color: var(--texte);
+}
+/* Remplissage automatique du navigateur : le champ garde sa surface. */
+.t-saisie input:-webkit-autofill {
+  -webkit-box-shadow: 0 0 0 60px var(--plein) inset;
+  -webkit-text-fill-color: var(--texte);
+  caret-color: var(--texte);
+}
