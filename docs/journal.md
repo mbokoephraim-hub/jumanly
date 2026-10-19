@@ -57,6 +57,11 @@ fonctionnalité (le tableau de bord qui le portait n'existe plus).
 
 **Captures** : `/mnt/project-files/captures/etape-1/lot-7/` (390 px, clair et sombre).
 
+**Rebase sur le cadre web W0 (#105)** : la règle provisoire `html.t-ancien .t-cadre .t-colonne`
+est retirée (plus d'ancien design) ; le menu de l'avatar mène l'aide à `/app/compte/aide` (et non
+plus `/contact`) ; « Paramètres » (barre latérale) et « Abonnement » (menu) mènent déjà à
+`/app/parametres` et `/app/abonnement`. Contrôle à 1440 px de l'abonnement et des paramètres.
+
 **Reste à faire** : écrans ordinateur et tablette (lots web) ; les pages Hire, partenaire et
 administration d'entreprise gardent l'ancien design jusqu'aux étapes 2 et 3.
 

@@ -7661,50 +7661,6 @@ span.t-sw {
   border-top-color: transparent;
 }
 .t-orw-l .t-cases {
-
-/* ---------- Lot 7 · Abonnement, formules, paiement, factures, paramètres, aide, recherche (planche talent-4 § 7-8, CSS4 de talent4.py) ---------- */
-/* Abonnement : la formule active, les quotas, le renouvellement. */
-.t-fo-act {
-  display: flex;
-  gap: 12px;
-  align-items: center;
-  padding: 14px 16px;
-  background: var(--g-accomp);
-}
-.t-fo-act .t-t {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-width: 0;
-}
-.t-fo-act .t-t small {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.t-fo-act .t-t b {
-  display: block;
-  font-size: 18px;
-}
-.t-fo-act .t-t span {
-  font-size: 12px;
-  color: var(--texte2);
-}
-.t-renouv a,
-.t-renouv .t-lien {
-  font-weight: 600;
-  text-decoration: underline;
-}
-.t-annule-chg,
-.t-fin-formule {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 4px;
-}
-/* Opérateurs Mobile Money : leur couleur, la lettre en blanc (en sapin sur le jaune MTN). */
-.t-lf {
   width: 40px;
   height: 40px;
   border-radius: 14px;
@@ -8248,6 +8204,55 @@ span.t-sw {
   }
 }
 
+/* ---------- Lot 7 · Abonnement, formules, paiement, factures, paramètres, aide, recherche (planche talent-4 § 7-8, CSS4 de talent4.py) ---------- */
+/* Abonnement : la formule active, les quotas, le renouvellement. */
+.t-fo-act {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  padding: 14px 16px;
+  background: var(--g-accomp);
+}
+.t-fo-act .t-t {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+.t-fo-act .t-t small {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+}
+.t-fo-act .t-t b {
+  display: block;
+  font-size: 18px;
+}
+.t-fo-act .t-t span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-renouv a,
+.t-renouv .t-lien {
+  font-weight: 600;
+  text-decoration: underline;
+}
+.t-annule-chg,
+.t-fin-formule {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+}
+/* Opérateurs Mobile Money : leur couleur, la lettre en blanc (en sapin sur le jaune MTN). */
+.t-lf {
+  width: 40px;
+  height: 40px;
+  border-radius: 14px;
+  display: grid;
+  place-items: center;
+  flex: none;
   font-size: 13px;
   font-weight: 700;
   color: #fff;
