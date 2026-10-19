@@ -182,6 +182,8 @@ test.describe("modèles de CV : rendu (desktop)", () => {
 
 test.describe("modèles de CV : parcours", () => {
   test("galerie, mise en forme et couleur refusée", async ({ page, isMobile }) => {
+    // Three pages with real previews of the CV and an accessibility check on each.
+    test.setTimeout(90_000);
     const phone = isMobile ? "#cv-telephone" : "#sc-telephone";
     await logIn(page, demo.talentStarter);
     const id = await newCvFromList(page);

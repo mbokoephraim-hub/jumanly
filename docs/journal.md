@@ -2,6 +2,38 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · Studio CV web (19 octobre 2026)
+
+Planche `docs/refonte-web/studio-cv` (valeurs de `webcv.py` et `web.py`), à partir de 768 px ; le
+téléphone garde les écrans de la planche talent-4 § 6. Un seul code par écran : arbre téléphone
+`.t-mob`, arbre web `.t-sc-*`, feuilles et fenêtres partagées.
+
+| Écran de la planche | Route | Composant |
+|---|---|---|
+| § 1 Mes CV (cartes avec aperçu réel, Nouveau CV, Importer, Orbi pour vos CV) | `/app/career/cv` | `src/app/app/career/cv/page.tsx`, `studio/orbi-card.tsx` |
+| § 1 Importer un CV (fenêtre) | `/app/career/cv?importer=1` | même page, `CenteredDialog`, actions d'import avec `retour=cv` |
+| § 2 Galerie des 15 modèles (filtres, détail avec votre contenu) | `/app/career/cv/modeles?cv=` | `src/app/app/career/cv/modeles/page.tsx` |
+| § 3 Studio, mise en forme (modèle, couleurs, police, densité, photo, titres, pages, export PDF ou Word) | `/app/career/cv/[id]?vue=style` | `src/components/talent/cv/studio/studio.tsx`, `preview.tsx`, `/app/career/cv/[id]/word` |
+| § 4 Studio, contenu et Orbi (sections, avant/après, Pourquoi, Accepter, Modifier, Refuser) | `/app/career/cv/[id]`, `?vue=ameliorer` | `studio.tsx` |
+| § 4 et § 5 Adapter à une offre, à un texte collé | `?adapter=offre`, `?adapter=texte` | `studio.tsx`, `tailor.tsx` |
+| § 6 Lettres | `/app/career/cv?vue=lettres` | `src/app/app/career/cv/page.tsx`, `letter-menu.tsx` |
+| § 7 Préparer LinkedIn | `/app/career/linkedin` | `src/app/app/career/linkedin/page.tsx` |
+
+- Fonctions du téléphone et leur équivalent web : menu « … » d'un CV (feuille, fenêtre centrée dès
+  768 px) ; éditeur téléphone → studio en trois panneaux ; puces Couleur, Police, Densité → panneau
+  « Mise en forme » ; « Améliorer » et avant/après → panneau d'Orbi à droite avec surlignage sur la
+  page ; « Adapter » → panneaux offre et texte ; options du CV (renommer, coordonnées, principal,
+  rafraîchir, dupliquer, supprimer) → fenêtre « … » du studio ; import (page) → fenêtre sur Mes CV ;
+  galerie (familles, barre du bas) → filtres, grille de 4 colonnes et détail ; LinkedIn → cartes
+  Titre, Infos, Compétences avec « Copier » et colonne Lettres.
+- Ajouts : export Word (une colonne, sans mention Jumanly), « Tout accepter / Tout refuser »
+  (`decideAllChangesAction`), studio sans barre du haut et avec rail sur ordinateur.
+- Rien n'est appliqué sans accord ; droits par clés (`career.cv.tailor`, `career.cv.templates.access`,
+  `career.linkedin`).
+- Tests : e2e `cv-documents` (parcours web : liste, import, studio), `cv-templates`, `career`, aide
+  `newCvFromList` ; unitaires de l'export Word. Écarts : `docs/decisions/2026-10-19-refonte-etape-1-web-cv.md`.
+  Captures : `/mnt/project-files/captures/etape-1/web-studio-cv/`.
+
 ## Refonte étape 1 · web talent 3 (19 octobre 2026)
 
 Apprendre sur tablette et ordinateur (planche `docs/refonte-web/talent-3`, valeurs de `web3.py`). Un seul

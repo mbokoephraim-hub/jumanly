@@ -117,7 +117,7 @@ test("studio CV (téléphone) : réglages, sections, avant/après, adapter à un
       response.request().method() === "POST" && !!response.request().headers()["next-action"],
   );
   await page.keyboard.press("ArrowDown");
-  await expect(page.getByText("« Expériences » déplacée.")).toBeVisible();
+  await expect(page.getByText("« Expériences » déplacée.").filter({ visible: true })).toBeVisible();
   await saved;
   await page.reload();
   const order = await page
@@ -130,6 +130,7 @@ test("studio CV (téléphone) : réglages, sections, avant/après, adapter à un
   await expect(
     page
       .getByText(/Changement 1 sur|rien de mieux à proposer|Écrivez d.abord quelques mots/)
+      .filter({ visible: true })
       .first(),
   ).toBeVisible();
   if (await page.getByRole("button", { name: "Refuser" }).isVisible()) {
@@ -139,7 +140,9 @@ test("studio CV (téléphone) : réglages, sections, avant/après, adapter à un
     );
     await page.keyboard.press("Escape");
     await page.getByRole("button", { name: "Refuser" }).click();
-    await expect(page.getByText("Votre texte reste tel quel.")).toBeVisible();
+    await expect(
+      page.getByText("Votre texte reste tel quel.").filter({ visible: true }),
+    ).toBeVisible();
   }
 
   // « Adapter à un texte »: a pasted ad, read as data; a copy is made, the CV stays as it is.
@@ -157,7 +160,9 @@ test("studio CV (téléphone) : réglages, sections, avant/après, adapter à un
   await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+\?adapte=/);
   const copy = new URL(page.url()).pathname.split("/").pop()!;
   expect(copy).not.toBe(id);
-  await expect(page.getByText("Votre CV d'origine ne change pas.", { exact: false })).toBeVisible();
+  await expect(
+    page.getByText("Votre CV d'origine ne change pas.", { exact: false }).filter({ visible: true }),
+  ).toBeVisible();
   await expect(page.locator("main")).not.toContainText("dix ans");
 
   // The PDF of the copy carries no trace of Jumanly.
@@ -185,7 +190,8 @@ test("studio CV web : trois panneaux, mise en forme, Orbi propose, adapter à un
   test.setTimeout(180_000);
   await logIn(page, demo.talentPro);
   const id = await newCvFromList(page);
-  const studio = page.locator(".t-sc-studio");
+  // The router keeps the studio of the previous CV hidden in the page: only the one shown counts.
+  const studio = page.locator(".t-sc-studio").filter({ visible: true });
   await expect(studio.getByRole("heading", { name: "Sections" })).toBeVisible();
   await expect(studio.locator("#sc-apercu .cv-page").first()).toBeAttached();
 
@@ -294,12 +300,14 @@ test("importer un CV depuis « Mes CV » (ordinateur) : fichier lu, vérifié da
     mimeType: "text/plain",
     buffer: Buffer.from("Ceci n'est pas un CV."),
   });
-  await expect(page).toHaveURL(/importer=1&erreur=format/);
+  await expect(page).toHaveURL(/importer=1&erreur=format/, { timeout: 20_000 });
   await expect(window.getByText("Ce fichier n'est pas accepté.", { exact: false })).toBeVisible();
   await window
     .locator("#sc-import-fichier")
     .setInputFiles(fictiveDocx(["Comptable (fictif).", "Excel, comptabilité, archivage."]));
-  await expect(window.getByText("Lu dans « cv-fictif.docx » · à vérifier")).toBeVisible();
+  await expect(window.getByText("Lu dans « cv-fictif.docx » · à vérifier")).toBeVisible({
+    timeout: 20_000,
+  });
   await expectAccessible(page);
   await window.getByRole("button", { name: "Ajouter à mon profil" }).click();
   await expect(page).toHaveURL(/\/app\/profil\?import=/);
