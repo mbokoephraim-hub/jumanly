@@ -79,20 +79,23 @@ export default async function PrivacyPage({
 
   return (
     <div className="t-flux t-w4 t-large">
-      <FlowHead
-        back="/app/parametres"
-        backLabel={t("confidentialite.back")}
-        title={t("confidentialite.title")}
-        end={
-          <Link
-            href="/app/parametres"
-            className="t-bi t-press"
-            aria-label={t("confidentialite.close")}
-          >
-            <TalentIcon name="fermer" size="s" />
-          </Link>
-        }
-      />
+      <div className="t-w4-tel">
+        <FlowHead
+          back="/app/parametres"
+          backLabel={t("confidentialite.back")}
+          title={t("confidentialite.title")}
+          end={
+            <Link
+              href="/app/parametres"
+              className="t-bi t-press"
+              aria-label={t("confidentialite.close")}
+            >
+              <TalentIcon name="fermer" size="s" />
+            </Link>
+          }
+        />
+      </div>
+      <h1 className="t-w4-web t-w4-ph1">{t("parametres.title")}</h1>
       <div className="t-w4-prm">
         <SettingsNav on="confidentialite" />
         <div className="t-w4-col">

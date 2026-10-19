@@ -92,7 +92,10 @@ export async function PlanSummary({ userId }: { userId: string }) {
           {steps.map((step, index) => (
             <li key={step.id} className={cx("t-e", step.done && "t-fait")}>
               <span
-                className={cx("t-num", step.done ? "t-ok" : step.id === current ? "t-en" : undefined)}
+                className={cx(
+                  "t-num",
+                  step.done ? "t-ok" : step.id === current ? "t-en" : undefined,
+                )}
                 aria-hidden
               >
                 {step.done ? <TalentIcon name="valider" size="xs" /> : index + 1}

@@ -2,7 +2,11 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { PlanPicker, type FreeCard, type PlanChoice } from "@/components/talent/billing/plan-picker";
+import {
+  PlanPicker,
+  type FreeCard,
+  type PlanChoice,
+} from "@/components/talent/billing/plan-picker";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { dynamic, numbered } from "@/i18n/dynamic";
@@ -135,8 +139,7 @@ export default async function PlansPage({ searchParams }: PageProps<"/app/abonne
         per: period === "year" ? t("formules.perYear") : t("formules.perMonth"),
         badge: free.id === plan?.planId ? t("formules.yours") : null,
         lines: numbered(d, `${free.contentKey}.f`, {}).slice(0, 4),
-        label:
-          free.id === plan?.planId ? t("formules.cta.current") : t("talentW4.plans.base"),
+        label: free.id === plan?.planId ? t("formules.cta.current") : t("talentW4.plans.base"),
       }
     : undefined;
 

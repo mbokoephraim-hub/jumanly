@@ -43,16 +43,23 @@ export default async function NotificationSettingsPage({
 
   return (
     <div className="t-flux t-w4 t-large">
-      <FlowHead
-        back="/app/parametres"
-        backLabel={t("notifReglages.back")}
-        title={t("notifReglages.title")}
-        end={
-          <Link href="/app/parametres" className="t-bi t-press" aria-label={t("parametres.close")}>
-            <TalentIcon name="fermer" size="s" />
-          </Link>
-        }
-      />
+      <div className="t-w4-tel">
+        <FlowHead
+          back="/app/parametres"
+          backLabel={t("notifReglages.back")}
+          title={t("notifReglages.title")}
+          end={
+            <Link
+              href="/app/parametres"
+              className="t-bi t-press"
+              aria-label={t("parametres.close")}
+            >
+              <TalentIcon name="fermer" size="s" />
+            </Link>
+          }
+        />
+      </div>
+      <h1 className="t-w4-web t-w4-ph1">{t("parametres.title")}</h1>
       <div className="t-w4-prm">
         <SettingsNav on="notifications" />
         <div className="t-w4-col">

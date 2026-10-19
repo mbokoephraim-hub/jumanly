@@ -5043,6 +5043,14 @@
       "credit": "Déjà déduit",
       "total": "Total",
       "receipt": "Reçu envoyé par e-mail et dans Factures."
+    },
+    "settings": {
+      "change": "Changer"
+    },
+    "help": {
+      "hero": "Comment pouvons-nous aider ?",
+      "faq": "Questions fréquentes",
+      "write": "Nous écrire"
     }
   },
   "account": {

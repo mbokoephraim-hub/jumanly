@@ -2,6 +2,33 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · web talent 4b : compte, profil, abonnement, paramètres, aide (19 octobre 2026)
+
+Planche `docs/refonte-web/talent-4` § 3 à 10, ordinateur et tablette ; le téléphone est inchangé
+(non-régression à 390 px). Choix et écarts : `docs/decisions/2026-10-19-refonte-etape-1-web-t4b.md`.
+
+**Écran mobile → équivalent web** : Compte → hub en deux colonnes, carte d'identité avec anneau de
+complétude et tuiles de couleur (`/app/compte`) ; Connexions → cartes de personnes, demandes à droite,
+recherche dans la tête (`/app/compte/connexions`) ; Mon profil → deux colonnes, sections ouvertes
+(`/app/profil`) ; Modifier, Expérience, Compétence, Ce que je cherche, Projet → fenêtres centrées
+(`/app/profil?fenetre=…`, sous-pages gardées) ; Vu par un recruteur, Faire le point → volets à
+droite ; Diagnostic → résultat + « Mon plan de progression » à droite (`/app/career/diagnostic`) ;
+Plan → deux colonnes (`/app/career/plan`) ; Abonnement → formule en grand, quatre quotas, moyen de
+paiement et dernières factures (`/app/abonnement`) ; Formules → quatre cartes côte à côte
+(`/app/abonnement/formules`) ; Paiement → moyens et numéro à gauche, récapitulatif à droite, attente et
+reçu en carte centrée (`/app/abonnement/payer`) ; Factures → tableau à cinq colonnes
+(`/app/abonnement/factures`) ; Paramètres, Sécurité, Confidentialité, Notifications → rubriques à
+gauche (`/app/parametres/*`) ; Aide → grande recherche, thèmes en cartes, questions fréquentes et
+« Nous écrire » (`/app/compte/aide`). Menu de l'avatar, Orbi et son historique (W0) : vérifiés,
+inchangés.
+
+**Composants** : `src/components/talent/profile/screens.tsx` (écrans du profil en page ou en
+fenêtre), `panels.tsx` (Faire le point, Vu par un recruteur), `window.tsx` (liens larges, fermeture),
+`plan-summary.tsx` ; `src/components/talent/billing/invoice-rows.tsx` (factures, liste ou tableau) ;
+`src/components/talent/settings-nav.tsx` (rubriques). Textes : partie « Espace talent · Web lot 4b »
+de `textes/textes-application.md` (`talentW4.*`). Aucune migration ; aucun fichier supprimé (les
+sous-pages du profil deviennent des enveloppes des écrans partagés).
+
 ## Refonte étape 1 · Studio CV web (19 octobre 2026)
 
 Planche `docs/refonte-web/studio-cv` (valeurs de `webcv.py` et `web.py`), à partir de 768 px ; le

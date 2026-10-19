@@ -156,9 +156,15 @@ test("le diagnostic en six dimensions : une question par écran, le scan, puis l
   await expect(page.getByRole("dialog", { name: "Pourquoi ces notes" })).toBeVisible();
   await page.getByRole("button", { name: "Fermer" }).click();
 
-  // « Mon plan » and « Refaire » at the bottom.
-  await expect(main.getByRole("link", { name: "Mon plan" })).toBeVisible();
-  await main.getByRole("link", { name: "Refaire" }).click();
+  // « Mon plan » and « Refaire » at the bottom; on a computer (planche web talent-4 § 5), the plan
+  // beside the result and « Refaire le diagnostic » under it.
+  if (page.viewportSize()!.width < 768) {
+    await expect(main.getByRole("link", { name: "Mon plan" })).toBeVisible();
+    await main.getByRole("link", { name: "Refaire" }).click();
+  } else {
+    await expect(main.getByRole("heading", { name: "Mon plan de progression" })).toBeVisible();
+    await main.getByRole("link", { name: "Refaire le diagnostic" }).click();
+  }
   await expect(page.getByRole("heading", { name: "Refaites le point" })).toBeVisible();
 });
 

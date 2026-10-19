@@ -42,7 +42,7 @@ export async function InvoiceRows({
   return (
     <ul
       aria-label={t("factures.list")}
-      className={`t-verre t-liste t-lignes t-factures${table ? " t-w4-tbl" : ""}`}
+      className={`t-verre t-liste t-lignes t-factures${table ? "t-w4-tbl" : ""}`}
     >
       {table && (
         <li aria-hidden className="t-w4-web t-w4-tbl-h">

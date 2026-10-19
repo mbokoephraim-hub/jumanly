@@ -32,7 +32,15 @@ export type FreeCard = {
 };
 
 /** The button of a card, or of the bar at the bottom of a phone. */
-function Action({ choice, primary, full }: { choice: PlanChoice; primary: boolean; full: boolean }) {
+function Action({
+  choice,
+  primary,
+  full,
+}: {
+  choice: PlanChoice;
+  primary: boolean;
+  full: boolean;
+}) {
   const size = full ? "t-pl" : "t-m";
   if (choice.action.kind === "pay") {
     return (

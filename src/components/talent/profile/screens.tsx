@@ -128,7 +128,9 @@ async function Frame({
         {children}
         {after}
         <div className="t-bts">
-          <WindowClose className="t-bt t-sec t-m t-press">{t("talentW4.window.cancel")}</WindowClose>
+          <WindowClose className="t-bt t-sec t-m t-press">
+            {t("talentW4.window.cancel")}
+          </WindowClose>
           {button}
         </div>
       </CenteredDialog>

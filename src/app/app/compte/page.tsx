@@ -178,77 +178,82 @@ export default async function AccountPage() {
       </List>
 
       <div className="t-w4-g2e">
-      <div className="t-w4-col">
-      <List label={t("group.settings")}>
-        <Row
-          href="/app/abonnement"
-          icon="portefeuille"
-          title={t("plan.title")}
-          text={[plan?.planName, creditsLine].filter(Boolean).join(" · ")}
-        />
-        <Row
-          href="/app/parametres"
-          icon="reglages"
-          title={t("settings.title")}
-          text={t("settings.text")}
-        />
-        <Row href="/app/compte/aide" icon="aide" title={t("help.title")} text={t("help.text")} />
-      </List>
-
-      {(spaces.length > 0 || isTester(user) || admin) && (
-        <List label={t("group.spaces")}>
-          {spaces.map((membership) => (
-            <li key={membership.organizationId}>
-              <form action={switchSpace}>
-                <input type="hidden" name="space" value={membership.organizationId} />
-                <button type="submit" className="t-li t-press">
-                  <span className="t-cases" aria-hidden>
-                    <TalentIcon name="entreprise" size="s" />
-                  </span>
-                  <span className="t-t">
-                    <b>{membership.organization.name}</b>
-                    <span>
-                      {membership.organization.type === "partner"
-                        ? t("spaces.partner")
-                        : t("spaces.text")}
-                    </span>
-                  </span>
-                  <TalentIcon name="suivant" />
-                </button>
-              </form>
-            </li>
-          ))}
-          {isTester(user) && (
+        <div className="t-w4-col">
+          <List label={t("group.settings")}>
             <Row
-              href="/app/testeur"
+              href="/app/abonnement"
               icon="portefeuille"
-              title={t("tester.title")}
-              text={t("tester.text")}
+              title={t("plan.title")}
+              text={[plan?.planName, creditsLine].filter(Boolean).join(" · ")}
             />
-          )}
-          {admin && (
-            <Row href="/admin" icon="cadenas" title={t("admin.title")} text={t("admin.text")} />
-          )}
-        </List>
-      )}
-      </div>
+            <Row
+              href="/app/parametres"
+              icon="reglages"
+              title={t("settings.title")}
+              text={t("settings.text")}
+            />
+            <Row
+              href="/app/compte/aide"
+              icon="aide"
+              title={t("help.title")}
+              text={t("help.text")}
+            />
+          </List>
 
-      <div className="t-w4-col">
-      <form action={signOut} className="t-verre t-liste">
-        <button type="submit" className="t-li t-danger t-press">
-          <span className="t-cases" aria-hidden>
-            <TalentIcon name="deconnexion" size="s" />
-          </span>
-          <span className="t-t">
-            <b>{t("logout")}</b>
-          </span>
-        </button>
-      </form>
-      <p className="t-gar t-w4-web">
-        <TalentIcon name="message" size="s" />
-        <span>{tW("account.contact", { email: CONTACT_EMAIL })}</span>
-      </p>
-      </div>
+          {(spaces.length > 0 || isTester(user) || admin) && (
+            <List label={t("group.spaces")}>
+              {spaces.map((membership) => (
+                <li key={membership.organizationId}>
+                  <form action={switchSpace}>
+                    <input type="hidden" name="space" value={membership.organizationId} />
+                    <button type="submit" className="t-li t-press">
+                      <span className="t-cases" aria-hidden>
+                        <TalentIcon name="entreprise" size="s" />
+                      </span>
+                      <span className="t-t">
+                        <b>{membership.organization.name}</b>
+                        <span>
+                          {membership.organization.type === "partner"
+                            ? t("spaces.partner")
+                            : t("spaces.text")}
+                        </span>
+                      </span>
+                      <TalentIcon name="suivant" />
+                    </button>
+                  </form>
+                </li>
+              ))}
+              {isTester(user) && (
+                <Row
+                  href="/app/testeur"
+                  icon="portefeuille"
+                  title={t("tester.title")}
+                  text={t("tester.text")}
+                />
+              )}
+              {admin && (
+                <Row href="/admin" icon="cadenas" title={t("admin.title")} text={t("admin.text")} />
+              )}
+            </List>
+          )}
+        </div>
+
+        <div className="t-w4-col">
+          <form action={signOut} className="t-verre t-liste">
+            <button type="submit" className="t-li t-danger t-press">
+              <span className="t-cases" aria-hidden>
+                <TalentIcon name="deconnexion" size="s" />
+              </span>
+              <span className="t-t">
+                <b>{t("logout")}</b>
+              </span>
+            </button>
+          </form>
+          <p className="t-gar t-w4-web">
+            <TalentIcon name="message" size="s" />
+            <span>{tW("account.contact", { email: CONTACT_EMAIL })}</span>
+          </p>
+        </div>
       </div>
     </div>
   );

@@ -95,203 +95,206 @@ export default async function ProgressPlanPage({ searchParams }: PageProps<"/app
       {query.erreur && <Notice tone="err">{t("plan.error")}</Notice>}
 
       <div className="t-w4-g2e">
-      <div className="t-w4-col">
-      <SheetButton target="pl-objectif" className="t-parc-h t-press">
-        <span className="t-k">{t("plan.goal.kicker")}</span>
-        <span className="t-h2">{plan?.goal || t("plan.goal.empty")}</span>
-        {steps.length > 0 && (
-          <>
-            <span className="t-barre" aria-hidden>
-              <i style={{ width: `${Math.round((100 * done) / steps.length)}%` }} />
-            </span>
-            <span className="t-v">{t("plan.progress", { done, total: steps.length })}</span>
-          </>
-        )}
-      </SheetButton>
-      <Sheet id="pl-objectif" title={t("plan.goal.edit")} closeLabel={t("plan.close")}>
-        <form action={saveGoalAction}>
-          <div className="t-champ">
-            <label htmlFor="pl-goal">{t("plan.goal.label")}</label>
-            <input
-              id="pl-goal"
-              name="goal"
-              type="text"
-              className="t-saisie-d"
-              maxLength={160}
-              defaultValue={plan?.goal ?? ""}
-              placeholder={t("plan.goal.placeholder")}
-            />
-          </div>
-          <button type="submit" className="t-bt t-p t-pl t-press">
-            {t("plan.step.save")}
-          </button>
-        </form>
-      </Sheet>
-
-      {steps.length === 0 ? (
-        <div className="t-verre t-carte t-vide">
-          <b>{t("plan.empty.title")}</b>
-          <p>{t("plan.empty.text")}</p>
-          <form action={planFromDiagnosticAction}>
-            <button type="submit" className="t-bt t-p t-s t-press">
-              {t("plan.empty.fromDiagnostic")}
-            </button>
-          </form>
-          <Link href="/app/career/diagnostic" className="t-lien-d">
-            {t("plan.empty.diagnostic")}
-          </Link>
-        </div>
-      ) : (
-        <ol className="t-etapes-p" aria-label={t("plan.steps")}>
-          {steps.map((step, index) => {
-            const state = stepState(step);
-            const title = titleOf(step);
-            return (
-              <li key={step.id} className={cx("t-e", step.done && "t-fait")}>
-                <span
-                  className={cx(
-                    "t-num",
-                    step.done ? "t-ok" : step.id === current ? "t-en" : undefined,
-                  )}
-                  aria-hidden
-                >
-                  {step.done ? <TalentIcon name="valider" size="xs" /> : index + 1}
+        <div className="t-w4-col">
+          <SheetButton target="pl-objectif" className="t-parc-h t-press">
+            <span className="t-k">{t("plan.goal.kicker")}</span>
+            <span className="t-h2">{plan?.goal || t("plan.goal.empty")}</span>
+            {steps.length > 0 && (
+              <>
+                <span className="t-barre" aria-hidden>
+                  <i style={{ width: `${Math.round((100 * done) / steps.length)}%` }} />
                 </span>
-                <SheetButton target={`pl-e-${step.id}`} className="t-verre t-press">
-                  <b>{title}</b>
-                  <span>{lineOf(step)}</span>
-                </SheetButton>
-                <Sheet id={`pl-e-${step.id}`} title={title} closeLabel={t("plan.close")}>
-                  <form action={updateStepAction}>
-                    <input type="hidden" name="step" value={step.id} />
-                    <div className="t-champ">
-                      <label htmlFor={`pl-t-${step.id}`}>{t("plan.step.title")}</label>
-                      <input
-                        id={`pl-t-${step.id}`}
-                        name="title"
-                        type="text"
-                        className="t-saisie-d"
-                        required
-                        maxLength={160}
-                        defaultValue={title}
-                      />
-                    </div>
-                    <div className="t-champ">
-                      <label htmlFor={`pl-d-${step.id}`}>{t("plan.step.due")}</label>
-                      <input
-                        id={`pl-d-${step.id}`}
-                        name="due"
-                        type="date"
-                        className="t-saisie-d"
-                        defaultValue={step.due ?? ""}
-                      />
-                    </div>
-                    <button type="submit" className="t-bt t-p t-pl t-press">
-                      {t("plan.step.save")}
-                    </button>
-                  </form>
-                  <div className="t-plan-acts">
-                    {step.href && (
-                      <Link href={step.href} className="t-bt t-sec t-press">
-                        {t("plan.step.open")}
-                      </Link>
-                    )}
-                    <form action={toggleStepAction}>
-                      <input type="hidden" name="step" value={step.id} />
-                      <button type="submit" className="t-bt t-sec t-press">
-                        {state === "done" ? t("plan.step.markTodo") : t("plan.step.markDone")}
-                      </button>
-                    </form>
-                    <form action={deleteStepAction}>
-                      <input type="hidden" name="step" value={step.id} />
-                      <button type="submit" className="t-bt t-dg t-press">
-                        {t("plan.step.remove")}
-                      </button>
-                    </form>
-                  </div>
-                </Sheet>
-              </li>
-            );
-          })}
-        </ol>
-      )}
+                <span className="t-v">{t("plan.progress", { done, total: steps.length })}</span>
+              </>
+            )}
+          </SheetButton>
+          <Sheet id="pl-objectif" title={t("plan.goal.edit")} closeLabel={t("plan.close")}>
+            <form action={saveGoalAction}>
+              <div className="t-champ">
+                <label htmlFor="pl-goal">{t("plan.goal.label")}</label>
+                <input
+                  id="pl-goal"
+                  name="goal"
+                  type="text"
+                  className="t-saisie-d"
+                  maxLength={160}
+                  defaultValue={plan?.goal ?? ""}
+                  placeholder={t("plan.goal.placeholder")}
+                />
+              </div>
+              <button type="submit" className="t-bt t-p t-pl t-press">
+                {t("plan.step.save")}
+              </button>
+            </form>
+          </Sheet>
 
-      <SheetButton target="pl-ajout" className="t-ajout t-press">
-        <TalentIcon name="plus" size="s" />
-        {t("plan.add")}
-      </SheetButton>
-      <Sheet id="pl-ajout" title={t("plan.addTitle")} closeLabel={t("plan.close")}>
-        <form action={addStepAction}>
-          <div className="t-champ">
-            <label htmlFor="pl-nouvelle">{t("plan.step.title")}</label>
-            <input
-              id="pl-nouvelle"
-              name="title"
-              type="text"
-              className="t-saisie-d"
-              required
-              maxLength={160}
-            />
-          </div>
-          <div className="t-champ">
-            <label htmlFor="pl-nouvelle-d">{t("plan.step.due")}</label>
-            <input id="pl-nouvelle-d" name="due" type="date" className="t-saisie-d" />
-          </div>
-          <button type="submit" className="t-bt t-p t-pl t-press">
-            {t("plan.add")}
-          </button>
-        </form>
-      </Sheet>
-
-      <p className="t-gar">
-        <TalentIcon name="pourquoi" size="s" />
-        <span>{t("plan.note")}</span>
-      </p>
-      </div>
-
-      <div className="t-w4-col">
-
-      {courses.length > 0 && (
-        <section aria-labelledby="pl-formations" className="t-flux t-serre">
-          <h2 id="pl-formations" className="t-ck-t">
-            {t("plan.courses")}
-          </h2>
-          <div className="t-verre t-liste t-lignes">
-            {courses.map((course) => (
-              <Link key={course.slug} href={`/app/learn/${course.slug}`} className="t-li t-press">
-                <span className="t-cases t-c1">
-                  <TalentIcon name="former" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{course.title}</b>
-                  <span>{t("ai.recoCourses.reason.demand", { percent: course.percent })}</span>
-                </span>
-                <TalentIcon name="suivant" size="s" />
+          {steps.length === 0 ? (
+            <div className="t-verre t-carte t-vide">
+              <b>{t("plan.empty.title")}</b>
+              <p>{t("plan.empty.text")}</p>
+              <form action={planFromDiagnosticAction}>
+                <button type="submit" className="t-bt t-p t-s t-press">
+                  {t("plan.empty.fromDiagnostic")}
+                </button>
+              </form>
+              <Link href="/app/career/diagnostic" className="t-lien-d">
+                {t("plan.empty.diagnostic")}
               </Link>
-            ))}
-          </div>
-          <div className="t-bulle-o">
-            <OrbiMark size={32} />
-            <div className="t-verre t-corps">
-              <span>{t("plan.coursesWhy")}</span>
             </div>
-          </div>
-        </section>
-      )}
+          ) : (
+            <ol className="t-etapes-p" aria-label={t("plan.steps")}>
+              {steps.map((step, index) => {
+                const state = stepState(step);
+                const title = titleOf(step);
+                return (
+                  <li key={step.id} className={cx("t-e", step.done && "t-fait")}>
+                    <span
+                      className={cx(
+                        "t-num",
+                        step.done ? "t-ok" : step.id === current ? "t-en" : undefined,
+                      )}
+                      aria-hidden
+                    >
+                      {step.done ? <TalentIcon name="valider" size="xs" /> : index + 1}
+                    </span>
+                    <SheetButton target={`pl-e-${step.id}`} className="t-verre t-press">
+                      <b>{title}</b>
+                      <span>{lineOf(step)}</span>
+                    </SheetButton>
+                    <Sheet id={`pl-e-${step.id}`} title={title} closeLabel={t("plan.close")}>
+                      <form action={updateStepAction}>
+                        <input type="hidden" name="step" value={step.id} />
+                        <div className="t-champ">
+                          <label htmlFor={`pl-t-${step.id}`}>{t("plan.step.title")}</label>
+                          <input
+                            id={`pl-t-${step.id}`}
+                            name="title"
+                            type="text"
+                            className="t-saisie-d"
+                            required
+                            maxLength={160}
+                            defaultValue={title}
+                          />
+                        </div>
+                        <div className="t-champ">
+                          <label htmlFor={`pl-d-${step.id}`}>{t("plan.step.due")}</label>
+                          <input
+                            id={`pl-d-${step.id}`}
+                            name="due"
+                            type="date"
+                            className="t-saisie-d"
+                            defaultValue={step.due ?? ""}
+                          />
+                        </div>
+                        <button type="submit" className="t-bt t-p t-pl t-press">
+                          {t("plan.step.save")}
+                        </button>
+                      </form>
+                      <div className="t-plan-acts">
+                        {step.href && (
+                          <Link href={step.href} className="t-bt t-sec t-press">
+                            {t("plan.step.open")}
+                          </Link>
+                        )}
+                        <form action={toggleStepAction}>
+                          <input type="hidden" name="step" value={step.id} />
+                          <button type="submit" className="t-bt t-sec t-press">
+                            {state === "done" ? t("plan.step.markTodo") : t("plan.step.markDone")}
+                          </button>
+                        </form>
+                        <form action={deleteStepAction}>
+                          <input type="hidden" name="step" value={step.id} />
+                          <button type="submit" className="t-bt t-dg t-press">
+                            {t("plan.step.remove")}
+                          </button>
+                        </form>
+                      </div>
+                    </Sheet>
+                  </li>
+                );
+              })}
+            </ol>
+          )}
 
-      {detailed && (
-        <a href="/app/career/plan/rapport" className="t-verre t-pj t-press" download>
-          <span className="t-cases">
-            <TalentIcon name="telecharger" size="s" />
-          </span>
-          <span className="t-t">
-            <b>{t("plan.report")}</b>
-            <span>{t("plan.reportText")}</span>
-          </span>
-          <TalentIcon name="suivant" size="s" />
-        </a>
-      )}
-      </div>
+          <SheetButton target="pl-ajout" className="t-ajout t-press">
+            <TalentIcon name="plus" size="s" />
+            {t("plan.add")}
+          </SheetButton>
+          <Sheet id="pl-ajout" title={t("plan.addTitle")} closeLabel={t("plan.close")}>
+            <form action={addStepAction}>
+              <div className="t-champ">
+                <label htmlFor="pl-nouvelle">{t("plan.step.title")}</label>
+                <input
+                  id="pl-nouvelle"
+                  name="title"
+                  type="text"
+                  className="t-saisie-d"
+                  required
+                  maxLength={160}
+                />
+              </div>
+              <div className="t-champ">
+                <label htmlFor="pl-nouvelle-d">{t("plan.step.due")}</label>
+                <input id="pl-nouvelle-d" name="due" type="date" className="t-saisie-d" />
+              </div>
+              <button type="submit" className="t-bt t-p t-pl t-press">
+                {t("plan.add")}
+              </button>
+            </form>
+          </Sheet>
+
+          <p className="t-gar">
+            <TalentIcon name="pourquoi" size="s" />
+            <span>{t("plan.note")}</span>
+          </p>
+        </div>
+
+        <div className="t-w4-col">
+          {courses.length > 0 && (
+            <section aria-labelledby="pl-formations" className="t-flux t-serre">
+              <h2 id="pl-formations" className="t-ck-t">
+                {t("plan.courses")}
+              </h2>
+              <div className="t-verre t-liste t-lignes">
+                {courses.map((course) => (
+                  <Link
+                    key={course.slug}
+                    href={`/app/learn/${course.slug}`}
+                    className="t-li t-press"
+                  >
+                    <span className="t-cases t-c1">
+                      <TalentIcon name="former" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b>{course.title}</b>
+                      <span>{t("ai.recoCourses.reason.demand", { percent: course.percent })}</span>
+                    </span>
+                    <TalentIcon name="suivant" size="s" />
+                  </Link>
+                ))}
+              </div>
+              <div className="t-bulle-o">
+                <OrbiMark size={32} />
+                <div className="t-verre t-corps">
+                  <span>{t("plan.coursesWhy")}</span>
+                </div>
+              </div>
+            </section>
+          )}
+
+          {detailed && (
+            <a href="/app/career/plan/rapport" className="t-verre t-pj t-press" download>
+              <span className="t-cases">
+                <TalentIcon name="telecharger" size="s" />
+              </span>
+              <span className="t-t">
+                <b>{t("plan.report")}</b>
+                <span>{t("plan.reportText")}</span>
+              </span>
+              <TalentIcon name="suivant" size="s" />
+            </a>
+          )}
+        </div>
       </div>
     </div>
   );

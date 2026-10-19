@@ -210,55 +210,59 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
   return (
     <div className="t-flux t-profil t-w4 t-large">
       <div className="t-w4-pfh">
-      <div className="t-pf-cov">
-        <ProfileCover />
-      </div>
-      <div className="t-pf-top">
-        <BackButton fallback="/app/compte" label={t("profil.back")} className="t-press" />
-        <span className="flex gap-2">
-          <SheetButton target="pf-partager" className="t-bi t-press" label={t("profil.share.open")}>
-            <TalentIcon name="partager" size="s" />
-          </SheetButton>
-          <WideLink
-            href="/app/profil/modifier"
-            wide="/app/profil?fenetre=modifier"
-            className="t-bi t-press"
-            aria-label={t("profil.edit")}
-          >
-            <TalentIcon name="modifier" size="s" />
-          </WideLink>
-        </span>
-      </div>
-
-      <div className="t-pf-id">
-        <TalentAvatar name={user.name} image={user.image} />
-        <h1>{user.name}</h1>
-        {place && <p>{place}</p>}
-        {aim && (
-          <span className="t-cap">
-            <i aria-hidden />
-            {t("profil.aim", { job: aim })}
+        <div className="t-pf-cov">
+          <ProfileCover />
+        </div>
+        <div className="t-pf-top">
+          <BackButton fallback="/app/compte" label={t("profil.back")} className="t-press" />
+          <span className="flex gap-2">
+            <SheetButton
+              target="pf-partager"
+              className="t-bi t-press"
+              label={t("profil.share.open")}
+            >
+              <TalentIcon name="partager" size="s" />
+            </SheetButton>
+            <WideLink
+              href="/app/profil/modifier"
+              wide="/app/profil?fenetre=modifier"
+              className="t-bi t-press"
+              aria-label={t("profil.edit")}
+            >
+              <TalentIcon name="modifier" size="s" />
+            </WideLink>
           </span>
-        )}
-      </div>
-      <div className="t-pf-act">
-        <WideLink
-          href="/app/profil/point"
-          wide="/app/profil?fenetre=point"
-          className="t-bt t-p t-m t-pl t-press"
-        >
-          <OrbiMark size={20} />
-          {t("profil.point")}
-        </WideLink>
-        <WideLink
-          href="/app/profil/apercu"
-          wide="/app/profil?fenetre=apercu"
-          className="t-bt t-sec t-m t-press"
-        >
-          <TalentIcon name="profil" size="s" />
-          {t("profil.recruiterView")}
-        </WideLink>
-      </div>
+        </div>
+
+        <div className="t-pf-id">
+          <TalentAvatar name={user.name} image={user.image} />
+          <h1>{user.name}</h1>
+          {place && <p>{place}</p>}
+          {aim && (
+            <span className="t-cap">
+              <i aria-hidden />
+              {t("profil.aim", { job: aim })}
+            </span>
+          )}
+        </div>
+        <div className="t-pf-act">
+          <WideLink
+            href="/app/profil/point"
+            wide="/app/profil?fenetre=point"
+            className="t-bt t-p t-m t-pl t-press"
+          >
+            <OrbiMark size={20} />
+            {t("profil.point")}
+          </WideLink>
+          <WideLink
+            href="/app/profil/apercu"
+            wide="/app/profil?fenetre=apercu"
+            className="t-bt t-sec t-m t-press"
+          >
+            <TalentIcon name="profil" size="s" />
+            {t("profil.recruiterView")}
+          </WideLink>
+        </div>
       </div>
 
       {ok && (
@@ -271,327 +275,336 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
       {error && <Notice tone="err">{t("profil.error")}</Notice>}
 
       <div className="t-w4-g2 t-w4-pfg">
-      <div className="t-w4-col">
-
-      <Section
-        id="competences"
-        icon="cap"
-        tone="former"
-        title={t("profil.skills.title")}
-        aside={String(profile.skills.length)}
-        open={opened === "competences"}
-      >
-        {profile.skills.length === 0 && <p className="t-vide-t">{t("profil.skills.empty")}</p>}
-        {profile.skills.map((item) => {
-          const proof = proofOf(item);
-          return (
-            <WideLink
-              key={item.id}
-              href={`/app/profil/competence?id=${item.id}`}
-              wide={`/app/profil?fenetre=competence&id=${item.id}`}
-              className="t-prv t-press"
-            >
-              <b>{item.skill.name}</b>
-              <span className={cx("t-pr", proof === "none" && "t-n")}>
-                {proof === "certificate" && <TalentIcon name="certificat" size="xs" />}
-                {proof === "project" && <TalentIcon name="realisation" size="xs" />}
-                {td(`profil.proof.${proof}`)}
-                {item.proofRef && proofs.get(item.proofRef) && (
-                  <span className="sr-only">
-                    {t("profil.proof.named", { name: proofs.get(item.proofRef)! })}
-                  </span>
-                )}
-              </span>
-            </WideLink>
-          );
-        })}
-        <WideLink
-          href="/app/profil/competence"
-          wide="/app/profil?fenetre=competence"
-          className="t-ajout t-s t-press"
-        >
-          <TalentIcon name="plus" size="s" />
-          {t("profil.skills.add")}
-        </WideLink>
-      </Section>
-
-      <Section
-        id="projets"
-        icon="realisation"
-        tone="oppo"
-        title={t("profil.projects.title")}
-        aside={String(projects.length)}
-        open={opened === "projets"}
-      >
-        {projects.length > 0 && (
-          <div className="t-projs">
-            {projects.map((project) => {
-              const image = project.files.findIndex((file) => file.type.startsWith("image/"));
+        <div className="t-w4-col">
+          <Section
+            id="competences"
+            icon="cap"
+            tone="former"
+            title={t("profil.skills.title")}
+            aside={String(profile.skills.length)}
+            open={opened === "competences"}
+          >
+            {profile.skills.length === 0 && <p className="t-vide-t">{t("profil.skills.empty")}</p>}
+            {profile.skills.map((item) => {
+              const proof = proofOf(item);
               return (
                 <WideLink
-                  key={project.id}
-                  href={`/app/profil/projet?id=${project.id}`}
-                  wide={`/app/profil?fenetre=projet&id=${project.id}`}
-                  className="t-re t-press"
+                  key={item.id}
+                  href={`/app/profil/competence?id=${item.id}`}
+                  wide={`/app/profil?fenetre=competence&id=${item.id}`}
+                  className="t-prv t-press"
                 >
-                  {image >= 0 ? (
-                    // eslint-disable-next-line @next/next/no-img-element -- a private file, served by its route
-                    <img src={`/api/projets/${project.id}/${image}`} alt="" loading="lazy" />
-                  ) : (
-                    <ProjectArt kind={project.files.length > 0 ? "pdf" : "board"} />
-                  )}
-                  <b>{project.title}</b>
-                  {!project.visible && (
-                    <span className="t-re-p">{t("profil.projects.private")}</span>
-                  )}
+                  <b>{item.skill.name}</b>
+                  <span className={cx("t-pr", proof === "none" && "t-n")}>
+                    {proof === "certificate" && <TalentIcon name="certificat" size="xs" />}
+                    {proof === "project" && <TalentIcon name="realisation" size="xs" />}
+                    {td(`profil.proof.${proof}`)}
+                    {item.proofRef && proofs.get(item.proofRef) && (
+                      <span className="sr-only">
+                        {t("profil.proof.named", { name: proofs.get(item.proofRef)! })}
+                      </span>
+                    )}
+                  </span>
                 </WideLink>
               );
             })}
-          </div>
-        )}
-        {level === "none" ? (
-          <Link href="/app/abonnement" className="t-li t-press">
-            <span className="t-cases" aria-hidden>
-              <TalentIcon name="cadenas" size="s" />
+            <WideLink
+              href="/app/profil/competence"
+              wide="/app/profil?fenetre=competence"
+              className="t-ajout t-s t-press"
+            >
+              <TalentIcon name="plus" size="s" />
+              {t("profil.skills.add")}
+            </WideLink>
+          </Section>
+
+          <Section
+            id="projets"
+            icon="realisation"
+            tone="oppo"
+            title={t("profil.projects.title")}
+            aside={String(projects.length)}
+            open={opened === "projets"}
+          >
+            {projects.length > 0 && (
+              <div className="t-projs">
+                {projects.map((project) => {
+                  const image = project.files.findIndex((file) => file.type.startsWith("image/"));
+                  return (
+                    <WideLink
+                      key={project.id}
+                      href={`/app/profil/projet?id=${project.id}`}
+                      wide={`/app/profil?fenetre=projet&id=${project.id}`}
+                      className="t-re t-press"
+                    >
+                      {image >= 0 ? (
+                        // eslint-disable-next-line @next/next/no-img-element -- a private file, served by its route
+                        <img src={`/api/projets/${project.id}/${image}`} alt="" loading="lazy" />
+                      ) : (
+                        <ProjectArt kind={project.files.length > 0 ? "pdf" : "board"} />
+                      )}
+                      <b>{project.title}</b>
+                      {!project.visible && (
+                        <span className="t-re-p">{t("profil.projects.private")}</span>
+                      )}
+                    </WideLink>
+                  );
+                })}
+              </div>
+            )}
+            {level === "none" ? (
+              <Link href="/app/abonnement" className="t-li t-press">
+                <span className="t-cases" aria-hidden>
+                  <TalentIcon name="cadenas" size="s" />
+                </span>
+                <span className="t-t">
+                  <b>{t("profil.projects.locked")}</b>
+                  <span>{t("profil.projects.lockedText")}</span>
+                </span>
+                <TalentIcon name="suivant" />
+              </Link>
+            ) : (
+              <WideLink
+                href="/app/profil/projet"
+                wide="/app/profil?fenetre=projet"
+                className="t-ajout t-s t-press"
+              >
+                <TalentIcon name="plus" size="s" />
+                {t("profil.projects.add")}
+              </WideLink>
+            )}
+          </Section>
+
+          <Section
+            id="experiences"
+            icon="entreprise"
+            tone="accomp"
+            title={t("profil.experience.title")}
+            aside={String(profile.experiences.length)}
+            open={opened === "experiences"}
+          >
+            {profile.experiences.length === 0 && (
+              <p className="t-vide-t">{t("profil.experience.empty")}</p>
+            )}
+            {profile.experiences.map((experience) => (
+              <WideLink
+                key={experience.id}
+                href={`/app/profil/experience?id=${experience.id}`}
+                wide={`/app/profil?fenetre=experience&id=${experience.id}`}
+                className="t-ex t-press"
+              >
+                <b>{experience.title}</b>
+                <span>
+                  {[
+                    experience.company,
+                    `${monthYear(experience.startDate)} – ${
+                      experience.endDate
+                        ? monthYear(experience.endDate)
+                        : t("profil.experience.now")
+                    }`,
+                  ].join(" · ")}
+                </span>
+                {experience.description && (
+                  <span className="t-w4-web t-w4-ex-d">
+                    {experience.description.split("\n")[0]}
+                  </span>
+                )}
+              </WideLink>
+            ))}
+            <WideLink
+              href="/app/profil/experience"
+              wide="/app/profil?fenetre=experience"
+              className="t-ajout t-s t-press"
+            >
+              <TalentIcon name="plus" size="s" />
+              {t("profil.experience.add")}
+            </WideLink>
+          </Section>
+        </div>
+
+        <div className="t-w4-col">
+          <WideLink
+            href={next ? fillers[next]! : "/app/profil/point"}
+            wide={next ? (wideFillers[next] ?? fillers[next]!) : "/app/profil?fenetre=point"}
+            className="t-verre t-compl t-w4-o1 t-press"
+          >
+            <span
+              className="t-anneau"
+              style={{ "--p": percent } as React.CSSProperties}
+              aria-hidden
+            >
+              <b>{t("profil.completeness.ring", { percent })}</b>
             </span>
             <span className="t-t">
-              <b>{t("profil.projects.locked")}</b>
-              <span>{t("profil.projects.lockedText")}</span>
+              <b>{t("profil.completeness.title", { percent })}</b>
+              <span>
+                {next ? td(`profil.completeness.next.${next}`) : t("profil.completeness.done")}
+              </span>
             </span>
-            <TalentIcon name="suivant" />
-          </Link>
-        ) : (
-          <WideLink
-            href="/app/profil/projet"
-            wide="/app/profil?fenetre=projet"
-            className="t-ajout t-s t-press"
-          >
-            <TalentIcon name="plus" size="s" />
-            {t("profil.projects.add")}
+            <TalentIcon name="suivant" size="s" />
           </WideLink>
-        )}
-      </Section>
-
-      <Section
-        id="experiences"
-        icon="entreprise"
-        tone="accomp"
-        title={t("profil.experience.title")}
-        aside={String(profile.experiences.length)}
-        open={opened === "experiences"}
-      >
-        {profile.experiences.length === 0 && (
-          <p className="t-vide-t">{t("profil.experience.empty")}</p>
-        )}
-        {profile.experiences.map((experience) => (
-          <WideLink
-            key={experience.id}
-            href={`/app/profil/experience?id=${experience.id}`}
-            wide={`/app/profil?fenetre=experience&id=${experience.id}`}
-            className="t-ex t-press"
-          >
-            <b>{experience.title}</b>
-            <span>
-              {[
-                experience.company,
-                `${monthYear(experience.startDate)} – ${
-                  experience.endDate ? monthYear(experience.endDate) : t("profil.experience.now")
-                }`,
-              ].join(" · ")}
-            </span>
-            {experience.description && (
-              <span className="t-w4-web t-w4-ex-d">{experience.description.split("\n")[0]}</span>
+          <section aria-labelledby="pf-cherche" className="t-verre t-w4-cherche t-w4-web">
+            <h2 id="pf-cherche">
+              {t("profil.search.title")}
+              <WideLink href="/app/profil/recherche" wide="/app/profil?fenetre=recherche">
+                {t("talentW4.profile.edit")}
+              </WideLink>
+            </h2>
+            {chips.length > 0 ? (
+              <ul className="t-puces">
+                {chips.map((chip) => (
+                  <li key={chip} className="t-puce t-on">
+                    {chip}
+                  </li>
+                ))}
+              </ul>
+            ) : (
+              <p className="t-vide-t">{t("talentW4.profile.searchEmpty")}</p>
             )}
-          </WideLink>
-        ))}
-        <WideLink
-          href="/app/profil/experience"
-          wide="/app/profil?fenetre=experience"
-          className="t-ajout t-s t-press"
-        >
-          <TalentIcon name="plus" size="s" />
-          {t("profil.experience.add")}
-        </WideLink>
-      </Section>
+            <span>{searchMore}</span>
+          </section>
 
-      </div>
-
-      <div className="t-w4-col">
-        <WideLink
-          href={next ? fillers[next]! : "/app/profil/point"}
-          wide={next ? (wideFillers[next] ?? fillers[next]!) : "/app/profil?fenetre=point"}
-          className="t-verre t-compl t-w4-o1 t-press"
-        >
-          <span className="t-anneau" style={{ "--p": percent } as React.CSSProperties} aria-hidden>
-            <b>{t("profil.completeness.ring", { percent })}</b>
-          </span>
-          <span className="t-t">
-            <b>{t("profil.completeness.title", { percent })}</b>
-            <span>
-              {next ? td(`profil.completeness.next.${next}`) : t("profil.completeness.done")}
-            </span>
-          </span>
-          <TalentIcon name="suivant" size="s" />
-        </WideLink>
-        <section aria-labelledby="pf-cherche" className="t-verre t-w4-cherche t-w4-web">
-          <h2 id="pf-cherche">
-            {t("profil.search.title")}
-            <WideLink href="/app/profil/recherche" wide="/app/profil?fenetre=recherche">
-              {t("talentW4.profile.edit")}
-            </WideLink>
-          </h2>
-          {chips.length > 0 ? (
-            <ul className="t-puces">
-              {chips.map((chip) => (
-                <li key={chip} className="t-puce t-on">
-                  {chip}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p className="t-vide-t">{t("talentW4.profile.searchEmpty")}</p>
-          )}
-          <span>{searchMore}</span>
-        </section>
-
-      <Section
-        id="etudes"
-        icon="former"
-        tone="former"
-        title={t("profil.education.title")}
-        aside={
-          topEducation
-            ? td(`profil.education.short.${topEducation.level}`)
-            : String(profile.educations.length)
-        }
-        open={opened === "etudes"}
-      >
-        {profile.educations.length === 0 && (
-          <p className="t-vide-t">{t("profil.education.empty")}</p>
-        )}
-        {profile.educations.map((education) => (
-          <SheetButton
-            key={education.id}
-            target={`pf-etude-${education.id}`}
-            className="t-ex t-press"
+          <Section
+            id="etudes"
+            icon="former"
+            tone="former"
+            title={t("profil.education.title")}
+            aside={
+              topEducation
+                ? td(`profil.education.short.${topEducation.level}`)
+                : String(profile.educations.length)
+            }
+            open={opened === "etudes"}
           >
-            <b>{education.degree}</b>
-            <span>
-              {[
-                education.school,
-                education.endYear ?? (education.startYear ? t("profil.education.ongoing") : null),
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-            </span>
-          </SheetButton>
-        ))}
-        <SheetButton target="pf-etude-new" className="t-ajout t-s t-press">
-          <TalentIcon name="plus" size="s" />
-          {t("profil.education.add")}
-        </SheetButton>
-      </Section>
-
-      <Section
-        id="attestations"
-        icon="certificat"
-        tone="former"
-        title={t("profil.attestations.title")}
-        aside={String(shown.length)}
-        open={opened === "attestations"}
-      >
-        {shown.length === 0 && <p className="t-vide-t">{t("profil.attestations.empty")}</p>}
-        {shown.map((attestation) => (
-          <Link
-            key={attestation.id}
-            href={`/app/learn/attestations/${attestation.code}`}
-            className="t-ex t-press"
-          >
-            <b>{attestation.courseTitle}</b>
-            <span>{t("profil.attestations.line", { code: attestation.code })}</span>
-          </Link>
-        ))}
-        <Link href="/app/learn/mes-formations?vue=attestations" className="t-ajout t-s t-press">
-          {t("profil.attestations.manage")}
-        </Link>
-      </Section>
-
-      <Section
-        id="langues"
-        icon="document"
-        tone="accomp"
-        title={t("profil.languages.title")}
-        aside={String(languages.length)}
-        open={opened === "langues"}
-      >
-        {languages.length === 0 && <p className="t-vide-t">{t("profil.languages.empty")}</p>}
-        {languages.map((language) => (
-          <div key={language.code} className="t-prv">
-            <b>{languageName(language.code)}</b>
-            <span className="t-pr t-n">
-              {[td(`profil.languages.level.${language.level}`), language.cefr]
-                .filter(Boolean)
-                .join(" · ")}
-            </span>
-            <form action={removeLanguage}>
-              <input type="hidden" name="code" value={language.code} />
-              <button
-                type="submit"
-                className="t-bi t-xs t-press"
-                aria-label={t("profil.languages.remove", { language: languageName(language.code) })}
+            {profile.educations.length === 0 && (
+              <p className="t-vide-t">{t("profil.education.empty")}</p>
+            )}
+            {profile.educations.map((education) => (
+              <SheetButton
+                key={education.id}
+                target={`pf-etude-${education.id}`}
+                className="t-ex t-press"
               >
-                <TalentIcon name="fermer" size="xs" />
-              </button>
-            </form>
-          </div>
-        ))}
-        <SheetButton target="pf-langue" className="t-ajout t-s t-press">
-          <TalentIcon name="plus" size="s" />
-          {t("profil.languages.add")}
-        </SheetButton>
-      </Section>
+                <b>{education.degree}</b>
+                <span>
+                  {[
+                    education.school,
+                    education.endYear ??
+                      (education.startYear ? t("profil.education.ongoing") : null),
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </span>
+              </SheetButton>
+            ))}
+            <SheetButton target="pf-etude-new" className="t-ajout t-s t-press">
+              <TalentIcon name="plus" size="s" />
+              {t("profil.education.add")}
+            </SheetButton>
+          </Section>
 
-      <Section
-        id="recherche"
-        icon="cap"
-        tone="oppo"
-        title={t("profil.search.title")}
-        aside={searchLine || "—"}
-        open={opened === "recherche"}
-        className="t-w4-tel"
-      >
-        <dl className="t-masque t-nu">
-          <div className="t-l">
-            <dt>{t("profil.search.jobs")}</dt>
-            <dd>{profile.desiredJobTitles.join(", ") || "—"}</dd>
-          </div>
-          <div className="t-l">
-            <dt>{t("profil.search.places")}</dt>
-            <dd>
-              {profile.desiredLocations.join(", ") ||
-                (user.country ? countryName(user.country) : "—")}
-            </dd>
-          </div>
-          <div className="t-l">
-            <dt>{t("profil.search.contracts")}</dt>
-            <dd>
-              {[
-                ...profile.desiredContracts.map((value) => td(`profil.contract.${value}`)),
-                ...profile.remotePreferences.map((value) => td(`profil.remote.${value}`)),
-              ].join(", ") || "—"}
-            </dd>
-          </div>
-          <div className="t-l">
-            <dt>{t("profil.search.available")}</dt>
-            <dd>{td(`profil.availability.${profile.availability}`)}</dd>
-          </div>
-        </dl>
-        <Link href="/app/profil/recherche" className="t-ajout t-s t-press">
-          <TalentIcon name="modifier" size="s" />
-          {t("profil.search.edit")}
-        </Link>
-      </Section>
-      </div>
+          <Section
+            id="attestations"
+            icon="certificat"
+            tone="former"
+            title={t("profil.attestations.title")}
+            aside={String(shown.length)}
+            open={opened === "attestations"}
+          >
+            {shown.length === 0 && <p className="t-vide-t">{t("profil.attestations.empty")}</p>}
+            {shown.map((attestation) => (
+              <Link
+                key={attestation.id}
+                href={`/app/learn/attestations/${attestation.code}`}
+                className="t-ex t-press"
+              >
+                <b>{attestation.courseTitle}</b>
+                <span>{t("profil.attestations.line", { code: attestation.code })}</span>
+              </Link>
+            ))}
+            <Link href="/app/learn/mes-formations?vue=attestations" className="t-ajout t-s t-press">
+              {t("profil.attestations.manage")}
+            </Link>
+          </Section>
+
+          <Section
+            id="langues"
+            icon="document"
+            tone="accomp"
+            title={t("profil.languages.title")}
+            aside={String(languages.length)}
+            open={opened === "langues"}
+          >
+            {languages.length === 0 && <p className="t-vide-t">{t("profil.languages.empty")}</p>}
+            {languages.map((language) => (
+              <div key={language.code} className="t-prv">
+                <b>{languageName(language.code)}</b>
+                <span className="t-pr t-n">
+                  {[td(`profil.languages.level.${language.level}`), language.cefr]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </span>
+                <form action={removeLanguage}>
+                  <input type="hidden" name="code" value={language.code} />
+                  <button
+                    type="submit"
+                    className="t-bi t-xs t-press"
+                    aria-label={t("profil.languages.remove", {
+                      language: languageName(language.code),
+                    })}
+                  >
+                    <TalentIcon name="fermer" size="xs" />
+                  </button>
+                </form>
+              </div>
+            ))}
+            <SheetButton target="pf-langue" className="t-ajout t-s t-press">
+              <TalentIcon name="plus" size="s" />
+              {t("profil.languages.add")}
+            </SheetButton>
+          </Section>
+
+          <Section
+            id="recherche"
+            icon="cap"
+            tone="oppo"
+            title={t("profil.search.title")}
+            aside={searchLine || "—"}
+            open={opened === "recherche"}
+            className="t-w4-tel"
+          >
+            <dl className="t-masque t-nu">
+              <div className="t-l">
+                <dt>{t("profil.search.jobs")}</dt>
+                <dd>{profile.desiredJobTitles.join(", ") || "—"}</dd>
+              </div>
+              <div className="t-l">
+                <dt>{t("profil.search.places")}</dt>
+                <dd>
+                  {profile.desiredLocations.join(", ") ||
+                    (user.country ? countryName(user.country) : "—")}
+                </dd>
+              </div>
+              <div className="t-l">
+                <dt>{t("profil.search.contracts")}</dt>
+                <dd>
+                  {[
+                    ...profile.desiredContracts.map((value) => td(`profil.contract.${value}`)),
+                    ...profile.remotePreferences.map((value) => td(`profil.remote.${value}`)),
+                  ].join(", ") || "—"}
+                </dd>
+              </div>
+              <div className="t-l">
+                <dt>{t("profil.search.available")}</dt>
+                <dd>{td(`profil.availability.${profile.availability}`)}</dd>
+              </div>
+            </dl>
+            <Link href="/app/profil/recherche" className="t-ajout t-s t-press">
+              <TalentIcon name="modifier" size="s" />
+              {t("profil.search.edit")}
+            </Link>
+          </Section>
+        </div>
       </div>
       <OpenSectionsOnWide selector=".t-profil .t-sect" />
 

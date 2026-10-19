@@ -268,7 +268,9 @@ export default async function SubscriptionPage({ searchParams }: PageProps<"/app
               href={renewHref}
               className={cx("t-bt t-m t-press", status === "past_due" ? "t-p" : "t-sec")}
             >
-              {status === "past_due" ? t("abonnement.notice.renewCta") : t("talentW4.billing.extend")}
+              {status === "past_due"
+                ? t("abonnement.notice.renewCta")
+                : t("talentW4.billing.extend")}
             </Link>
           )}
           <Link href="/app/abonnement/formules" className="t-bt t-p t-m t-press">

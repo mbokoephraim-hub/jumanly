@@ -40,86 +40,89 @@ export async function DiagnosticResult({
   return (
     <div className="t-flux t-w4 t-large">
       <div className="t-w4-h">
-      <FlowHead
-        back="/app/profil/point"
-        backLabel={t("diag.back")}
-        title={t("diag.title")}
-        end={
-          <a
-            href={`/app/career/diagnostic/pdf?bilan=${id}`}
-            className="t-bi t-press"
-            aria-label={t("diag.share")}
-            download
-          >
-            <TalentIcon name="partager" size="s" />
-          </a>
-        }
-      />
-      <p className="t-w4-sub t-w4-web">{t("talentW4.diagnostic.subtitle")}</p>
-      <a
-        href={`/app/career/diagnostic/pdf?bilan=${id}`}
-        className="t-bt t-sec t-m t-press t-w4-web"
-        download
-      >
-        <TalentIcon name="partager" size="s" />
-        {t("talentW4.diagnostic.share")}
-      </a>
+        <FlowHead
+          back="/app/profil/point"
+          backLabel={t("diag.back")}
+          title={t("diag.title")}
+          end={
+            <a
+              href={`/app/career/diagnostic/pdf?bilan=${id}`}
+              className="t-bi t-press"
+              aria-label={t("diag.share")}
+              download
+            >
+              <TalentIcon name="partager" size="s" />
+            </a>
+          }
+        />
+        <p className="t-w4-sub t-w4-web">{t("talentW4.diagnostic.subtitle")}</p>
+        <a
+          href={`/app/career/diagnostic/pdf?bilan=${id}`}
+          className="t-bt t-sec t-m t-press t-w4-web"
+          download
+        >
+          <TalentIcon name="partager" size="s" />
+          {t("talentW4.diagnostic.share")}
+        </a>
       </div>
       <div className="t-w4-g2e">
-      <div className="t-w4-col">
-      {notice && <Notice tone="err">{notice}</Notice>}
-      <section aria-labelledby="dg-niveau" className="t-verre t-diag-h">
-        <span className="t-anneau" style={{ "--p": result.score } as CSSProperties}>
-          <b aria-hidden>{result.score}</b>
-        </span>
-        <div className="t-t">
-          <h2 id="dg-niveau">{d(`diag.headline.${result.stage}`)}</h2>
-          <span className="sr-only">{t("diag.score", { score: result.score })}</span>
-          <span>{t("diag.rules")}</span>
-          <span className="sr-only">
-            {t("diag.date", {
-              date: format.dateTime(date, { day: "numeric", month: "long", year: "numeric" }),
-            })}
-          </span>
-        </div>
-      </section>
-      {summary && (
-        <div className="t-bulle-o">
-          <OrbiMark size={32} />
-          <div className="t-verre t-corps">
-            <span>{summary}</span>
+        <div className="t-w4-col">
+          {notice && <Notice tone="err">{notice}</Notice>}
+          <section aria-labelledby="dg-niveau" className="t-verre t-diag-h">
+            <span className="t-anneau" style={{ "--p": result.score } as CSSProperties}>
+              <b aria-hidden>{result.score}</b>
+            </span>
+            <div className="t-t">
+              <h2 id="dg-niveau">{d(`diag.headline.${result.stage}`)}</h2>
+              <span className="sr-only">{t("diag.score", { score: result.score })}</span>
+              <span>{t("diag.rules")}</span>
+              <span className="sr-only">
+                {t("diag.date", {
+                  date: format.dateTime(date, { day: "numeric", month: "long", year: "numeric" }),
+                })}
+              </span>
+            </div>
+          </section>
+          {summary && (
+            <div className="t-bulle-o">
+              <OrbiMark size={32} />
+              <div className="t-verre t-corps">
+                <span>{summary}</span>
+              </div>
+            </div>
+          )}
+          <dl className="t-verre t-dims" aria-label={t("diag.scores")}>
+            {result.dimensions.map((item) => (
+              <div key={item.key} className="t-dim">
+                <dt>{name(item.key)}</dt>
+                <dd className="t-barre" aria-hidden>
+                  <i style={{ width: `${item.score}%` }} />
+                </dd>
+                <dd>
+                  <b>{item.score}</b>
+                </dd>
+              </div>
+            ))}
+          </dl>
+          <div className="t-w4-pqr">
+            <SheetButton target="dg-pourquoi" className="t-pq t-press">
+              <TalentIcon name="pourquoi" />
+              {t("diag.why.cta")}
+            </SheetButton>
+            <Link
+              href="/app/career/diagnostic?refaire=1"
+              className="t-bt t-sec t-m t-press t-w4-web"
+            >
+              {t("talentW4.diagnostic.again")}
+            </Link>
           </div>
         </div>
-      )}
-      <dl className="t-verre t-dims" aria-label={t("diag.scores")}>
-        {result.dimensions.map((item) => (
-          <div key={item.key} className="t-dim">
-            <dt>{name(item.key)}</dt>
-            <dd className="t-barre" aria-hidden>
-              <i style={{ width: `${item.score}%` }} />
-            </dd>
-            <dd>
-              <b>{item.score}</b>
-            </dd>
+        <section aria-labelledby="dg-plan" className="t-w4-col t-w4-web">
+          <div className="t-w4-sec">
+            <h2 id="dg-plan">{t("plan.title")}</h2>
           </div>
-        ))}
-      </dl>
-      <div className="t-w4-pqr">
-        <SheetButton target="dg-pourquoi" className="t-pq t-press">
-          <TalentIcon name="pourquoi" />
-          {t("diag.why.cta")}
-        </SheetButton>
-        <Link href="/app/career/diagnostic?refaire=1" className="t-bt t-sec t-m t-press t-w4-web">
-          {t("talentW4.diagnostic.again")}
-        </Link>
-      </div>
-      </div>
-      <section aria-labelledby="dg-plan" className="t-w4-col t-w4-web">
-        <div className="t-w4-sec">
-          <h2 id="dg-plan">{t("plan.title")}</h2>
-        </div>
-        <PlanSummary userId={userId} />
-      </section>
+          <PlanSummary userId={userId} />
+        </section>
       </div>
       <Sheet id="dg-pourquoi" title={t("diag.why.title")} closeLabel={t("diag.why.close")}>
         <div className="t-pq-d">

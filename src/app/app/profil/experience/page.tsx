@@ -11,6 +11,8 @@ export async function generateMetadata(): Promise<Metadata> {
  * The phone's page of this screen of « Mon profil » (planche talent-4 § 3). On a tablet or a
  * computer the same form opens in a window over the profile (`/app/profil?fenetre=experience`).
  */
-export default async function ExperiencePage({ searchParams }: PageProps<"/app/profil/experience">) {
+export default async function ExperiencePage({
+  searchParams,
+}: PageProps<"/app/profil/experience">) {
   return <ExperienceScreen mode="page" params={await searchParams} />;
 }

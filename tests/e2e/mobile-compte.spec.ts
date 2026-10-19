@@ -8,14 +8,15 @@ test("Compte : profil, documents, abonnement, apparence gardée, déconnexion", 
   page,
   isMobile,
 }) => {
+  // A sign-up, then about fifteen pages: more than the default 30 s on a busy machine.
+  test.setTimeout(90_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("compte"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
   await page.goto("/app/compte");
   await expect(page.getByRole("heading", { level: 1, name: "Compte" })).toBeVisible();
-  await expect(page.getByRole("link", { name: /Voir mon profil · \d+ %/ })).toHaveAttribute(
-    "href",
-    "/app/profil",
-  );
+  // Web (planche web talent-4 § 3): the ring and « Voir mon profil » in a button-like label.
+  const profile = isMobile ? /Voir mon profil · \d+ %/ : /Voir mon profil/;
+  await expect(page.getByRole("link", { name: profile })).toHaveAttribute("href", "/app/profil");
   const mine = page.getByRole("list", { name: "Mes documents et mon réseau" });
   for (const row of ["CV et documents", "Attestations", "S’entraîner aux entretiens", "Connexions"])
     await expect(mine.getByRole("link", { name: new RegExp(row) })).toBeVisible();
@@ -87,13 +88,14 @@ test("Connexions : accepter une demande puis écrire", async ({ page, isMobile }
     .getByRole("dialog", { name: "Daniel Ilunga" })
     .getByRole("button", { name: /Retirer la connexion/ })
     .click();
-  await expect(page.getByText(/La conversation reste lisible/).first()).toBeVisible();
+  // The notice of the page (the sheet says the same before): the removal is done.
+  await expect(page.getByText(/^C’est fait\. La conversation reste lisible/)).toBeVisible();
 
-  // The search finds a visible talent by name.
-  await page.getByRole("button", { name: "Chercher une personne" }).first().click();
-  const sheet = page.getByRole("dialog", { name: "Chercher une personne" });
-  await sheet.getByLabel("Nom ou métier").fill("Daniel");
-  await sheet.getByLabel("Nom ou métier").press("Enter");
+  // The search finds a visible talent by name: on a computer, from the field of the head
+  // (planche web talent-4 § 3), whose answer opens in the same window.
+  const head = page.getByRole("search").filter({ has: page.locator("#rs-q-web") });
+  await head.getByLabel("Nom ou métier").fill("Daniel");
+  await head.getByLabel("Nom ou métier").press("Enter");
   await expect(
     page.getByRole("dialog", { name: "Chercher une personne" }).getByRole("button", {
       name: "Demander à Daniel Ilunga de se connecter",

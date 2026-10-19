@@ -11,12 +11,7 @@ export type SettingsSection = "affichage" | "securite" | "confidentialite" | "no
  */
 export async function SettingsNav({ on }: { on: SettingsSection }) {
   const t = await getTranslations();
-  const item = (
-    section: SettingsSection,
-    href: string,
-    icon: TalentIconName,
-    label: string,
-  ) => (
+  const item = (section: SettingsSection, href: string, icon: TalentIconName, label: string) => (
     <Link
       href={href}
       aria-current={on === section ? "page" : undefined}

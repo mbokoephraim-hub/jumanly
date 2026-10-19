@@ -13663,7 +13663,8 @@ span.t-sw {
   .t-w4-g2e,
   .t-w4-g2r,
   .t-w4-col,
-  .t-w4-h {
+  .t-w4-h,
+  .t-w4-pfh {
     display: contents;
   }
 }
@@ -14354,6 +14355,12 @@ span.t-sw {
   }
   .t-w4-fa .t-bt {
     flex: 1;
+    height: auto;
+    min-height: 48px;
+    padding-block: 10px;
+    white-space: normal;
+    text-align: center;
+    line-height: 1.25;
   }
   .t-w4-h > .t-w4-per {
     width: 260px;
@@ -14491,4 +14498,230 @@ span.t-sw {
   .t-w4-f4 {
     grid-template-columns: repeat(4, minmax(0, 1fr));
   }
+}
+
+/* ── Web talent 4b · paramètres à rubriques et aide (planche web talent-4 § 8, .prm, .snav, .dev,
+ * .aide-h, .aide-g) ── */
+@media (max-width: 767.98px) {
+  .t-w4-prm,
+  .t-w4-aide-h {
+    display: contents;
+  }
+}
+@media (min-width: 768px) {
+  .t-w4-prm {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+  .t-w4-h3 {
+    font-size: 20px;
+    font-weight: 600;
+    letter-spacing: -0.01em;
+    margin-top: 4px;
+  }
+  /* Tablette : les rubriques en puces au-dessus du réglage. */
+  .t-w4-snav.t-verre {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    border: 0;
+  }
+  .t-w4-snav a {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 40px;
+    padding: 0 14px;
+    border-radius: 999px;
+    font-size: 13px;
+    font-weight: 600;
+    background: var(--zone);
+    color: var(--texte);
+  }
+  .t-w4-snav a .t-cases {
+    display: none;
+  }
+  .t-w4-snav a.t-on {
+    background: var(--sapin);
+    color: #fff;
+  }
+  .sombre .t-w4-snav a.t-on {
+    background: var(--lime);
+    color: #0f3f37;
+  }
+  .t-w4-snav .t-w4-sp {
+    display: none;
+  }
+  .t-w4-snav a.t-w4-dg {
+    color: #c2410c;
+  }
+  .sombre .t-w4-snav a.t-w4-dg {
+    color: #fb923c;
+  }
+  /* Sécurité : les appareils connectés, deux par ligne. */
+  .t-w4-dev.t-verre {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    border: 0;
+  }
+  .t-w4-dev > .t-li {
+    padding: 14px 16px;
+    border: 0;
+    border-radius: 22px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  /* Confidentialité : qui a consulté mon profil, deux par ligne. */
+  .t-w4-cons {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  /* Aide : la recherche en grand, les thèmes en cartes. */
+  .t-w4-aide-h {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 14px;
+    padding: 30px;
+    border-radius: 30px;
+    background: var(--g-accomp);
+    text-align: center;
+  }
+  .t-w4-aide-h h1 {
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    color: #0f3f37;
+  }
+  .t-w4-aide-h .t-rech {
+    width: min(560px, 100%);
+    height: 54px;
+  }
+  .t-w4-aide-g.t-verre {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    border: 0;
+  }
+  .t-w4-aide-g > li > .t-li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    height: 100%;
+    padding: 18px;
+    border: 0;
+    border-radius: 24px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-w4-aide-g > li > .t-li > .t-ic:last-child {
+    display: none;
+  }
+  .t-w4-aide-g .t-cases {
+    width: 42px;
+    height: 42px;
+    border-radius: 14px;
+  }
+  .t-w4-aide-g .t-t b {
+    font-size: 14.5px;
+    white-space: normal;
+  }
+}
+@media (min-width: 1200px) {
+  .t-w4-prm {
+    grid-template-columns: 270px minmax(0, 1fr);
+    gap: 22px;
+  }
+  .t-w4-snav.t-verre {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    gap: 2px;
+    padding: 10px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-w4-snav a {
+    gap: 12px;
+    min-height: 0;
+    padding: 10px 12px;
+    border-radius: 14px;
+    font-size: 13.5px;
+    background: none;
+    color: var(--texte2);
+  }
+  .t-w4-snav a .t-cases {
+    display: grid;
+    place-items: center;
+    width: 32px;
+    height: 32px;
+    border-radius: 10px;
+    background: var(--zone);
+  }
+  .t-w4-snav a.t-on,
+  .sombre .t-w4-snav a.t-on {
+    background: var(--zone);
+    color: var(--texte);
+  }
+  .t-w4-snav .t-w4-sp {
+    display: block;
+    height: 1px;
+    margin: 6px 10px;
+    background: var(--trait);
+  }
+  .t-w4-aide-g.t-verre {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  /* Une rubrique des paramètres : « Paramètres » en titre, la rubrique en sous-titre (planche .prm). */
+  .t-w4-ph1 {
+    padding-top: 6px;
+    font-size: 28px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+  }
+}
+@media (min-width: 1200px) {
+  .t-w4-ph1 {
+    font-size: 32px;
+  }
+}
+@media (min-width: 768px) {
+  .t-w4-prm .t-seg {
+    max-width: 360px;
+  }
+}
+/* Connexions : la recherche de la fenêtre « Chercher une personne » reste sur une ligne (la règle
+ * `.t-sheet form` met les formulaires des feuilles en colonne). */
+.t-sheet form.t-rech {
+  flex-direction: row;
+  align-items: center;
+  gap: 10px;
+}
+/* Mode sombre : les puces « Dans toutes les formules » et les icônes des quotas restent lisibles. */
+.sombre .t-w4-toutes li {
+  background: rgba(166, 242, 107, 0.14);
+  color: var(--texte);
+}
+.sombre .t-w4-q4 .t-w4-k1,
+.sombre .t-w4-q4 .t-w4-k2,
+.sombre .t-w4-q4 .t-w4-k3 {
+  color: var(--texte);
 }
