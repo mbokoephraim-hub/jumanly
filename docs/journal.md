@@ -2,6 +2,30 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · web talent 4a (accès) (19 octobre 2026)
+
+Version tablette (768 à 1199 px) et ordinateur (≥ 1200 px) des écrans d'accès, planche
+`docs/refonte-web/talent-4` § 1, 2 et 10 (générateur `web4.py`). Mêmes pages et composants que le
+mobile ; seule la disposition change. Captures 390, 1024 et 1440 px, clair et sombre :
+`/mnt/project-files/captures/etape-1/web-talent-4a/`. Écarts : `docs/decisions/2026-10-19-refonte-etape-1-web-t4a.md`.
+
+| Écran de la planche | Route | Rendu web |
+|---|---|---|
+| Se connecter (`W_CONNEX`, `T_CONNEX`, sombre) | `/connexion` | deux parties dès 1200 px (panneau de marque `AccessShowcase`, formulaire à droite) ; colonne de 460 px centrée sur tablette ; Google et LinkedIn côte à côte |
+| Mot de passe oublié (`W_MDP1`) | `/mot-de-passe-oublie` | lien « Retour à la connexion », bouton avant l'avertissement |
+| Code reçu, nouveau mot de passe (`W_MDP2`) | `/reinitialiser` | cases du code de 56 × 64 px alignées à gauche, barre d'action sous les champs |
+| Mot de passe modifié (`T_MDP3`) | `/reinitialiser` (état final) | confirmation sans lien de retour |
+| Créer un compte (`W_INS`) | `/inscription` | deux parties |
+| Avec mon e-mail (`W_INS2`) | `/inscription/compte` | titre « Créer un compte » et « Avec votre adresse e-mail. » visibles en web |
+| Code de vérification (`W_VERIF`) | `/inscription/verification` | deux parties, icône et titre à gauche |
+| Compte validé (`T_VALIDE`) | `/app/bienvenue` | plein écran, colonne de 500 px centrée |
+| Objectif, études, lieu et contrat, espace prêt (`W_OB1` à `W_OB4`, `T_OB1`) | `/app/bienvenue?etape=…` | plein écran au-dessus de l'espace : logo, progression, question sur 820 px, barre du bas pleine largeur ; objectifs en 4 cartes, études et lieu en 2 colonnes ; pays en fenêtre à 3 colonnes |
+| Bienvenue sur Pour moi (`W_BIENV`) | `/app` | les trois premiers pas côte à côte (la page Pour moi elle-même : lot web talent 1) |
+
+Nettoyage : textes morts de l'ancienne scène animée de connexion (`auth.stage.*`) retirés. Test e2e
+ajouté : connexion en deux parties sur ordinateur, formulaire seul sur téléphone, retour depuis « Mot de
+passe oublié ».
+
 ## Refonte étape 1 · web talent 1 (19 octobre 2026)
 
 Pour moi, Offres et détail d'une offre sur tablette et ordinateur (`docs/refonte-web/talent-1`, captures

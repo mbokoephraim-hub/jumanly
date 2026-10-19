@@ -14,6 +14,8 @@ export type CountrySheetLabels = {
   search: string;
   none: string;
   close: string;
+  /** « Tous de A à Z »: from the tablet on, jumps to the list of every country. */
+  az?: string;
   sections: Record<"central" | "westEast" | "outside" | "all", string>;
 };
 
@@ -123,7 +125,7 @@ export function CountrySheet({
   const sheet = (
     <dialog
       ref={dialog}
-      className="t-sheet"
+      className="t-sheet t-sheet-pays"
       aria-labelledby={`${id}-t`}
       onClick={(event) => {
         // A tap on the veil closes the sheet.
@@ -142,25 +144,42 @@ export function CountrySheet({
           <TalentIcon name="fermer" size="s" />
         </button>
       </div>
-      <label className="t-verre t-rech t-champ-r">
-        <TalentIcon name="recherche" size="s" />
-        <span className="sr-only">{labels.search}</span>
-        <input
-          type="search"
-          autoComplete="off"
-          value={query}
-          placeholder={labels.search}
-          onChange={(event) => setQuery(event.target.value)}
-        />
-      </label>
+      <div className="t-pays-r">
+        <label className="t-verre t-rech t-champ-r">
+          <TalentIcon name="recherche" size="s" />
+          <span className="sr-only">{labels.search}</span>
+          <input
+            type="search"
+            autoComplete="off"
+            value={query}
+            placeholder={labels.search}
+            onChange={(event) => setQuery(event.target.value)}
+          />
+        </label>
+        {labels.az && (
+          <button
+            type="button"
+            className="t-bt t-sec t-s t-press t-pays-az"
+            onClick={() =>
+              document
+                .getElementById(`${id}-all`)
+                ?.scrollIntoView({ block: "start", behavior: "smooth" })
+            }
+          >
+            {labels.az}
+          </button>
+        )}
+      </div>
       <div className="t-pays-l" role="radiogroup" aria-labelledby={`${id}-t`}>
         {sections.map((section) => {
           const shown = section.countries.filter(visible);
           if (shown.length === 0) return null;
           return (
-            <div key={section.key} className="contents">
+            <div key={section.key} className={cx("t-pays-s", `t-${section.key}`)}>
               {section.key !== "first" && (
-                <span className="t-ck-t">{labels.sections[section.key]}</span>
+                <span className="t-ck-t" id={section.key === "all" ? `${id}-all` : undefined}>
+                  {labels.sections[section.key]}
+                </span>
               )}
               {shown.map((country) => (
                 <label key={country.code} className="t-li">

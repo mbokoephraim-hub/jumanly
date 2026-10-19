@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { AccessTop, AccessBar } from "@/components/access/frame";
+import { AccessBar, AccessMark, AccessTop } from "@/components/access/frame";
 import { PlacesFields, StudiesFields } from "@/components/access/onboarding";
 import { Character } from "@/components/brand";
 import { Icon } from "@/components/brand/icon";
@@ -27,6 +27,38 @@ import { limit, resolvePlan } from "@/server/entitlements";
 import { ownedOrganization } from "@/server/services/accounts";
 import { listCountries, listLocalities } from "@/server/services/places";
 import { readSignupFlow } from "@/server/signup-flow";
+
+/**
+ * Full-screen frame of the first steps (refonte-web talent-4 § 2, `obw`): on a phone, the column
+ * of the talent space; from the tablet on, a page of its own above the space (no side bar), the
+ * logo and the progress at the top, the question centred, the buttons along the bottom.
+ */
+function OnboardingFrame({
+  brand,
+  homeLabel,
+  head,
+  children,
+  className,
+}: {
+  brand: string;
+  homeLabel: string;
+  head?: React.ReactNode;
+  children: React.ReactNode;
+  className?: string;
+}) {
+  return (
+    <div className={cx("t-acces t-obw", className)}>
+      <div className="t-obw-h">
+        <Link href="/app" aria-label={homeLabel} className="t-lgo">
+          <AccessMark size={30} />
+          <span aria-hidden>{brand}</span>
+        </Link>
+        {head}
+      </div>
+      <div className="t-oc">{children}</div>
+    </div>
+  );
+}
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("welcome.seo");
@@ -176,7 +208,7 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
       { key: "places", icon: "localisation", tone: "t-c2" },
     ];
     return (
-      <div className="t-acces t-conf">
+      <OnboardingFrame brand={ta("brand")} homeLabel={ta("home")} className="t-conf">
         <span className="t-rond-ok">
           <TalentIcon name="valider" />
         </span>
@@ -198,29 +230,44 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
         <Link href={stepHref[1]} className="t-bt t-p t-pl t-press w-full" autoFocus>
           {ta("validated.start")}
         </Link>
-      </div>
+      </OnboardingFrame>
     );
   }
 
-  const top = (
+  const back = seul === "1" ? "/app" : stepHref[step - 1];
+  const head = (
     <>
-      <AccessTop back={seul === "1" ? "/app" : stepHref[step - 1]} backLabel={ta("back")} />
-      <div
-        className="t-pas"
-        role="progressbar"
-        aria-valuemin={1}
-        aria-valuemax={TOTAL}
-        aria-valuenow={step}
-        aria-label={ta("onboarding.progress", { step, total: TOTAL })}
-      >
-        {Array.from({ length: TOTAL }, (_, index) => (
-          <i key={index} className={cx(index < step && "t-ok")} />
-        ))}
+      <AccessTop back={back} backLabel={ta("back")} />
+      <div className="t-prg">
+        <div
+          className="t-pas"
+          role="progressbar"
+          aria-valuemin={1}
+          aria-valuemax={TOTAL}
+          aria-valuenow={step}
+          aria-label={ta("onboarding.progress", { step, total: TOTAL })}
+        >
+          {Array.from({ length: TOTAL }, (_, index) => (
+            <i key={index} className={cx(index < step && "t-ok")} />
+          ))}
+        </div>
+        <span className="t-pas-t" aria-hidden>
+          {ta("onboarding.step", { step, total: TOTAL })}
+        </span>
       </div>
-      <span className="t-pas-t" aria-hidden>
-        {ta("onboarding.step", { step, total: TOTAL })}
-      </span>
     </>
+  );
+  const frame = (children: React.ReactNode) => (
+    <OnboardingFrame brand={ta("brand")} homeLabel={ta("home")} head={head}>
+      {children}
+    </OnboardingFrame>
+  );
+  // « Retour » moves into the bottom bar from the tablet on (the round button of the head is hidden).
+  const backButton = (
+    <Link href={back} className="t-bt t-sec t-m t-press t-obw-back">
+      <TalentIcon name="retour" size="s" />
+      {ta("back")}
+    </Link>
   );
   const continueButton = (
     <button type="submit" className="t-bt t-p t-pl t-press">
@@ -240,9 +287,8 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
       skills: { tone: "t-o3", icon: "former" },
       reconversion: { tone: "t-o4", icon: "cap" },
     } as const;
-    return (
-      <div className="t-acces flex flex-col gap-3.5">
-        {top}
+    return frame(
+      <>
         <form id="bienvenue-objectif" action={saveWelcomeGoal} className="flex flex-col gap-3.5">
           {seul === "1" && <input type="hidden" name="only" value="1" />}
           <fieldset className="t-fs">
@@ -271,51 +317,54 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
           </fieldset>
           <AccessBar>{continueButton}</AccessBar>
         </form>
-      </div>
+      </>,
     );
   }
 
   const messages = await getMessages();
 
   if (step === 2) {
-    return (
-      <div className="t-acces flex flex-col gap-3.5">
-        {top}
+    return frame(
+      <>
         <div className="t-ob-q">
           <h1>{ta("onboarding.studies.title")}</h1>
+          <p className="t-vu-large">{ta("onboarding.studies.text")}</p>
         </div>
         <form id="bienvenue-etudes" action={saveWelcomeStudies} className="flex flex-col gap-3.5">
-          <StudiesFields
-            levels={studyLevels.map((value) => ({
-              value,
-              label: ta(`onboarding.studies.level.${value}`),
-            }))}
-            fields={studyFields
-              .map((value) => ({ value, label: ta(`onboarding.studies.field.${value}`) }))
-              .sort((a, b) =>
-                (featuredStudyFields as readonly string[]).includes(a.value) ===
-                (featuredStudyFields as readonly string[]).includes(b.value)
-                  ? 0
-                  : (featuredStudyFields as readonly string[]).includes(a.value)
-                    ? -1
-                    : 1,
-              )}
-            featured={[...featuredStudyFields]}
-            initialLevel={profile?.studyLevel}
-            initialField={profile?.studyField}
-            labels={{
-              level: ta("onboarding.studies.level.label"),
-              field: ta("onboarding.studies.field.label"),
-              search: ta("onboarding.studies.field.search"),
-              none: ta("onboarding.studies.field.none"),
-            }}
-          />
+          <div className="t-ob-duo">
+            <StudiesFields
+              levels={studyLevels.map((value) => ({
+                value,
+                label: ta(`onboarding.studies.level.${value}`),
+              }))}
+              fields={studyFields
+                .map((value) => ({ value, label: ta(`onboarding.studies.field.${value}`) }))
+                .sort((a, b) =>
+                  (featuredStudyFields as readonly string[]).includes(a.value) ===
+                  (featuredStudyFields as readonly string[]).includes(b.value)
+                    ? 0
+                    : (featuredStudyFields as readonly string[]).includes(a.value)
+                      ? -1
+                      : 1,
+                )}
+              featured={[...featuredStudyFields]}
+              initialLevel={profile?.studyLevel}
+              initialField={profile?.studyField}
+              labels={{
+                level: ta("onboarding.studies.level.label"),
+                field: ta("onboarding.studies.field.label"),
+                search: ta("onboarding.studies.field.search"),
+                none: ta("onboarding.studies.field.none"),
+              }}
+            />
+          </div>
           <AccessBar>
+            {backButton}
             {skip(stepHref[3])}
             {continueButton}
           </AccessBar>
         </form>
-      </div>
+      </>,
     );
   }
 
@@ -328,9 +377,8 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
       ]),
     );
     const mode = profile?.remotePreferences.length === 1 ? profile.remotePreferences[0] : null;
-    return (
-      <div className="t-acces flex flex-col gap-3.5">
-        {top}
+    return frame(
+      <>
         <div className="t-ob-q">
           <h1>{ta("onboarding.places.title")}</h1>
           <p>{ta("onboarding.places.text")}</p>
@@ -360,6 +408,7 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
                   search: ta("countries.search"),
                   none: ta("countries.none"),
                   close: ta("countries.close"),
+                  az: ta("countries.az"),
                   sections: {
                     central: ta("countries.section.central"),
                     westEast: ta("countries.section.westEast"),
@@ -375,11 +424,12 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
             />
           </NextIntlClientProvider>
           <AccessBar>
+            {backButton}
             {skip(stepHref[4])}
             {continueButton}
           </AccessBar>
         </form>
-      </div>
+      </>,
     );
   }
 
@@ -401,9 +451,8 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
         })
       : null,
   ]);
-  return (
-    <div className="t-acces flex flex-col gap-3.5">
-      {top}
+  return frame(
+    <>
       <div className="t-pret">
         <span className="t-rond-ok">
           <TalentIcon name="valider" />
@@ -415,43 +464,48 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
             : ta("onboarding.ready.text")}
         </p>
       </div>
-      {free && (
-        <div className="t-form t-fr t-on">
-          <div className="t-h">
-            <b>{free.name}</b>
-            <span className="t-prix">{ta("onboarding.ready.price", { price: formatUsd(0) })}</span>
+      <div className="t-ob-duo t-form-r">
+        {free && (
+          <div className="t-form t-fr t-on">
+            <div className="t-h">
+              <b>{free.name}</b>
+              <span className="t-prix">
+                {ta("onboarding.ready.price", { price: formatUsd(0) })}
+              </span>
+            </div>
+            <ul>
+              {(["f1", "f2", "f3"] as const).map((key) => (
+                <li key={key}>
+                  <TalentIcon name="valider" size="xs" />
+                  {ta(`onboarding.ready.${key}`)}
+                </li>
+              ))}
+            </ul>
           </div>
-          <ul>
-            {(["f1", "f2", "f3"] as const).map((key) => (
-              <li key={key}>
-                <TalentIcon name="valider" size="xs" />
-                {ta(`onboarding.ready.${key}`)}
-              </li>
-            ))}
-          </ul>
-        </div>
-      )}
-      {upgrade && !chosen && (
-        <div className="t-verre t-carte t-sugg">
-          <OrbiMark size={36} />
-          <div className="t-t">
-            <small>{ta("onboarding.ready.more")}</small>
-            <b>
-              {ta("onboarding.ready.moreText", {
-                plan: upgrade.name,
-                price: formatUsd(upgrade.priceCents ?? 0),
-              })}
-            </b>
-            <div>
-              <Link href="/app/abonnement" className="t-bt t-sec t-s t-press">
-                {ta("onboarding.ready.moreCta")}
-              </Link>
+        )}
+        {upgrade && !chosen && (
+          <div className="t-verre t-carte t-sugg">
+            <OrbiMark size={36} />
+            <div className="t-t">
+              <small>{ta("onboarding.ready.more")}</small>
+              <b>
+                {ta("onboarding.ready.moreText", {
+                  plan: upgrade.name,
+                  price: formatUsd(upgrade.priceCents ?? 0),
+                })}
+              </b>
+              <div>
+                <Link href="/app/abonnement" className="t-bt t-sec t-s t-press">
+                  {ta("onboarding.ready.moreCta")}
+                </Link>
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </div>
       <form id="bienvenue-pret" action={chosen ? payWelcome : finishWelcome}>
         <AccessBar>
+          {backButton}
           {chosen && (
             <button type="submit" formAction={finishWelcome} className="t-bt t-sec t-m t-press">
               {ta("onboarding.ready.start")}
@@ -462,6 +516,6 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
           </button>
         </AccessBar>
       </form>
-    </div>
+    </>,
   );
 }

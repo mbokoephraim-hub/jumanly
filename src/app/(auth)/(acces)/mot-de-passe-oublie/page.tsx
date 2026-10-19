@@ -24,7 +24,12 @@ export default async function ForgotPage() {
   const t = await getTranslations("access");
   return (
     <>
-      <AccessTop back="/connexion" backLabel={t("back")} title={t("forgot.head")} />
+      <AccessTop
+        back="/connexion"
+        backLabel={t("back")}
+        backText={t("forgot.back")}
+        title={t("forgot.head")}
+      />
       <div className="t-ob-q">
         <h2>{t("forgot.title")}</h2>
         <p>{t("forgot.text", { digits: CODE_DIGITS })}</p>
