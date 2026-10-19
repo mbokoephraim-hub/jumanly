@@ -8647,7 +8647,7 @@ span.t-sw {
   max-width: none;
   color: var(--texte);
 }
-.t-rien .t-t span {
+.t-lignes.t-rien .t-li .t-t span {
   white-space: normal;
   overflow: visible;
   color: var(--texte);
