@@ -34,6 +34,9 @@ const eslintConfig = defineConfig([
     "test-results/**",
     // Reference CV templates delivered as is (standalone HTML, CSS and scripts, not app code).
     "docs/modeles-cv/**",
+    // Mockup boards and their generators (docs/refonte-mobile, …): reference files, not app code.
+    "docs/**/maquette/**",
+    "docs/**/source/**",
   ]),
 ]);
 
