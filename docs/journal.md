@@ -23,8 +23,9 @@ Postuler, Suivi, S'entraîner, Messages et Notifications sur tablette et ordinat
 - **Notifications** : panneau sous la cloche (8 dernières, groupées, « Tout marquer comme lu »,
   « Toutes les notifications ») ; le compteur se remet à jour. Page `/app/notifications` inchangée.
 - Correctif du cadre W0 : `t-large` reconnu sous `.jm-page` (`cacheComponents`).
-- e2e adaptés : `messages-live` (la cloche est un bouton en web), `career` (titre de la question),
-  `mobile-talent` (confirmation en fenêtre sur ordinateur). Écarts :
+- L'offre derrière la fenêtre de confirmation est inerte (un seul « Suivre ma candidature »).
+- e2e adaptés : `messages-live` (la cloche est un bouton en web), `career` (titre de la question).
+  Écarts :
   `docs/decisions/2026-10-19-refonte-etape-1-web-t2.md`. Captures : `captures/etape-1/web-talent-2/`.
 
 ## Refonte étape 1 · web talent 4a (accès) (19 octobre 2026)

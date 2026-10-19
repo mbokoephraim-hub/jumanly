@@ -133,8 +133,8 @@ export default async function ApplyPage({
           <p>{t("apply.sent.text", { company })}</p>
           {next}
         </div>
-        {/* Tablet and computer: the offer stays behind the window. */}
-        <div className="t-large t-envoyee-w">
+        {/* Tablet and computer: the offer stays behind the window, as a backdrop only. */}
+        <div className="t-large t-envoyee-w" inert aria-hidden>
           <OfferPage params={params} searchParams={Promise.resolve({})} />
         </div>
         <ApplySentDialog
