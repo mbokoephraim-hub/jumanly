@@ -19,6 +19,28 @@ test("connexion et inscription mènent l'une à l'autre, le recruteur vers son f
   await expect(page).toHaveURL(/\/inscription\/forfait\?profil=rh/);
 });
 
+// refonte-web talent-4 § 1: from 1200 px, the brand panel on the left of the form; alone below.
+test("connexion en deux parties sur ordinateur, formulaire seul sur téléphone", async ({
+  page,
+}, testInfo) => {
+  await page.goto("/connexion");
+  const promise = page.getByRole("heading", { name: "Se former, être vu, être recruté." });
+  if (testInfo.project.name === "desktop") {
+    await expect(promise).toBeVisible();
+    const panel = await promise.boundingBox();
+    const title = await page.getByRole("heading", { name: "Bon retour" }).boundingBox();
+    expect(panel!.x).toBeLessThan(title!.x);
+  } else {
+    await expect(promise).toBeHidden();
+  }
+  await page.getByRole("link", { name: "Mot de passe oublié ?" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Réinitialiser votre mot de passe" }),
+  ).toBeVisible();
+  await page.getByRole("link", { name: /Retour à la connexion/ }).click();
+  await expect(page).toHaveURL(/\/connexion$/);
+});
+
 /** Signs in through the e-mail form, without skipping the intro. */
 async function signInByEmail(page: Page, email: string, password: string) {
   await page.goto("/connexion");

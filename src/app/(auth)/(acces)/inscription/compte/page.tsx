@@ -55,6 +55,11 @@ async function AccountStep({
   return (
     <>
       <AccessTop back={back} backLabel={t("back")} title={t("account.head")} />
+      {/* From the tablet on, the name of the screen is shown as the question (refonte-web talent-4). */}
+      <div className="t-ob-q t-vu-large" aria-hidden>
+        <h2>{t("account.head")}</h2>
+        <p>{t("account.subtitle")}</p>
+      </div>
       <SignupForm
         profile={profile}
         plan={plan?.code}

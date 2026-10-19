@@ -8201,6 +8201,556 @@ span.t-sw {
   .t-fenetre[open],
   .t-volet[open] {
     animation: none;
+/* ── Web talent 4a · accès sur tablette et ordinateur (refonte-web talent-4 § 1, 2 et 10) ──
+   Connexion, mot de passe oublié, inscription : sur tablette (768 à 1199 px) la colonne du
+   téléphone, centrée à 460 px ; dès 1200 px, deux parties, le panneau de marque à gauche (`.vit`)
+   et le formulaire à droite (`.frm`). Premiers pas : plein écran au-dessus de l'espace (`.obw`). */
+.t-vit,
+.t-fourn-c,
+.t-tete-f-l,
+.t-obw-h > .t-lgo,
+.t-obw-back,
+.t-pays-az {
+  display: none;
+}
+@media (max-width: 767.98px) {
+  .t-vu-large {
+    display: none;
+  }
+}
+.t-duo-f {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.t-obw-h,
+.t-prg,
+.t-oc,
+.t-ob-duo,
+.t-pays-r {
+  display: contents;
+}
+.t-pays-s {
+  display: contents;
+}
+.t-obw {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+.t-obw.t-conf {
+  gap: 16px;
+}
+@media (min-width: 768px) {
+  /* Pages publiques : la barre d'action reprend sa place sous les champs. */
+  .t-frm .t-bas-f,
+  .t-frm .t-bas-f.t-verre {
+    position: static;
+    transform: none;
+    width: auto;
+    max-width: none;
+    padding: 0;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-acces .t-frm {
+    padding-bottom: 40px;
+  }
+  .t-acces .t-split > .t-frm {
+    max-width: 460px;
+    min-height: 100dvh;
+    justify-content: center;
+    padding-top: 40px;
+  }
+  .t-duo-f {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .t-duo-f .t-fourn {
+    height: 52px;
+  }
+  .t-duo-f .t-fourn-l {
+    display: none;
+  }
+  .t-duo-f .t-fourn-c {
+    display: inline;
+  }
+  /* « Retour » devient un lien texte ; le nom de l'écran reste pour les lecteurs d'écran. */
+  .t-acces .t-tete-f {
+    min-height: 0;
+    padding-top: 0;
+  }
+  .t-acces .t-tete-f h1 {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .t-acces .t-tete-f .t-bi {
+    width: auto;
+    height: 36px;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    background: none;
+    box-shadow: none;
+    font-size: 13px;
+    font-weight: 600;
+  }
+  .t-acces .t-tete-f .t-bi .t-ic {
+    width: 16px;
+    height: 16px;
+  }
+  .t-tete-f-l {
+    display: inline;
+  }
+  #mot-de-passe-oublie > .t-gar {
+    order: 1;
+  }
+  /* « Mot de passe modifié » : plus de retour vers le formulaire (planche T_MDP3). */
+  .t-frm:has(> .t-conf) > .t-tete-f {
+    display: none;
+  }
+  .t-conf .t-rond-ok {
+    margin-top: 0;
+  }
+  .t-conf > p {
+    max-width: 380px;
+  }
+
+  /* Pays : la feuille devient une fenêtre, les régions en trois colonnes (W_OB3, PAYS_POP). */
+  .t-sheet.t-sheet-pays {
+    inset: 0;
+    margin: auto;
+    width: min(780px, calc(100vw - 48px));
+    max-width: none;
+    height: min(640px, calc(100dvh - 48px));
+    padding: 18px;
+    border-radius: 26px;
+    box-shadow:
+      0 40px 80px -30px rgba(0, 0, 0, 0.5),
+      0 0 0 1px var(--trait);
+  }
+  .t-sheet-pays .t-poignee {
+    display: none;
+  }
+  .t-pays-r {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+  }
+  .t-pays-r .t-rech {
+    flex: 1;
+  }
+  .t-pays-az {
+    display: inline-flex;
+    flex: none;
+  }
+  .t-pays-l {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    align-content: start;
+    gap: 4px 18px;
+  }
+  .t-pays-s {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .t-pays-s.t-first,
+  .t-pays-s.t-all {
+    grid-column: 1 / -1;
+  }
+  .t-pays-s.t-all {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    column-gap: 18px;
+  }
+  .t-pays-s.t-all .t-ck-t {
+    grid-column: 1 / -1;
+  }
+  .t-pays-s:not(.t-first) .t-li {
+    min-height: 38px;
+  }
+  .t-pays-l .t-ck-t {
+    padding: 8px 2px 2px;
+  }
+
+  /* Premiers pas : plein écran, sans barre latérale ni barre du haut (`.obw`). */
+  .t-obw {
+    position: fixed;
+    inset: 0;
+    z-index: 40;
+    overflow-y: auto;
+    gap: 0;
+    background: var(--fond);
+    padding-bottom: 92px;
+  }
+  .t-obw.t-conf {
+    align-items: stretch;
+    text-align: left;
+    padding-bottom: 0;
+  }
+  .t-obw-h {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 420px) minmax(0, 1fr);
+    align-items: center;
+    gap: 16px;
+    padding: 22px 40px;
+  }
+  .t-obw-h > .t-lgo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 18px;
+    font-weight: 600;
+    justify-self: start;
+  }
+  .t-obw-h .t-tete-f {
+    display: none;
+  }
+  .t-prg {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    text-align: center;
+  }
+  .t-prg .t-pas-t {
+    margin: 0;
+  }
+  .t-oc {
+    flex: 1;
+    width: min(820px, calc(100% - 80px));
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 22px;
+    padding: 20px 0 60px;
+  }
+  .t-oc > form {
+    gap: 22px;
+  }
+  .t-oc .t-ob-q h1,
+  .t-oc .t-ob-q h2 {
+    font-size: 30px;
+  }
+  .t-oc .t-ob-q p {
+    font-size: 14px;
+  }
+  .t-ob-duo {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+  .t-ob-duo.t-form-r {
+    align-items: stretch;
+    gap: 16px;
+  }
+  .t-ob-duo.t-form-r > * {
+    height: 100%;
+  }
+  .t-ob-duo .t-sugg {
+    align-items: flex-start;
+  }
+  .t-oc .t-obj-g {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .t-oc .t-obj-g label {
+    position: relative;
+    overflow: hidden;
+    min-height: 240px;
+    padding: 18px;
+    font-size: 12.5px;
+  }
+  .t-oc .t-obj-g label b {
+    font-size: 16px;
+  }
+  .t-oc .t-obj-g label::after {
+    content: "";
+    position: absolute;
+    right: -40px;
+    bottom: -40px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.35);
+    pointer-events: none;
+  }
+  .sombre .t-oc .t-obj-g label::after {
+    background: rgba(255, 255, 255, 0.06);
+  }
+  /* Lieu et contrat : pays et ville, contrat et mode côte à côte. */
+  #bienvenue-lieux {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 22px 18px;
+    align-items: start;
+  }
+  #bienvenue-lieux > .t-bas-f {
+    grid-column: 1 / -1;
+  }
+  .t-oc .t-pret .t-rond-ok {
+    width: 72px;
+    height: 72px;
+  }
+  .t-oc .t-pret p {
+    max-width: 400px;
+    font-size: 14px;
+  }
+  /* « Compte validé » : la colonne de 500 px au centre. */
+  .t-obw.t-conf .t-oc {
+    width: min(500px, calc(100% - 80px));
+    align-items: center;
+    text-align: center;
+    gap: 16px;
+  }
+  .t-obw.t-conf .t-oc > p {
+    color: var(--texte2);
+    font-size: 13.5px;
+  }
+  .t-obw.t-conf .t-liste {
+    width: 100%;
+    text-align: left;
+  }
+  .t-obw.t-conf .t-rond-ok {
+    margin-top: 0;
+  }
+  .t-obw.t-conf .t-h2s {
+    font-size: 26px;
+  }
+  /* La barre du bas court sur toute la largeur, séparée par un trait (`.ob`). */
+  .t-obw .t-bas-f,
+  .t-obw .t-bas-f.t-verre {
+    left: 0;
+    right: 0;
+    width: auto;
+    max-width: none;
+    transform: none;
+    justify-content: flex-end;
+    padding: 18px 40px;
+    border-radius: 0;
+    border-top: 1px solid var(--trait);
+    background: var(--fond);
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-obw .t-bas-f .t-bt,
+  .t-obw .t-bas-f .t-bt.t-pl,
+  .t-obw .t-bas-f .t-bt.t-sec.t-m {
+    flex: none;
+    width: auto;
+    min-width: 180px;
+    height: 46px;
+    min-height: 46px;
+    font-size: 14px;
+  }
+  .t-obw-back {
+    display: inline-flex;
+    margin-right: auto;
+  }
+  /* Carte « Bienvenue » de Pour moi : les trois premiers pas côte à côte (W_BIENV). */
+  .t-bienv {
+    padding: 20px;
+  }
+  .t-bienv ol {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .t-bienv .t-pr-l {
+    height: 100%;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+}
+@media (min-width: 1200px) {
+  .t-split {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    min-height: 100dvh;
+  }
+  .t-acces .t-split > .t-frm {
+    max-width: none;
+    width: 100%;
+    margin: 0;
+    padding: 40px 90px;
+    justify-content: center;
+  }
+  .t-split > .t-frm > * {
+    width: 100%;
+    max-width: 520px;
+  }
+  .t-vit {
+    position: sticky;
+    top: 14px;
+    height: calc(100dvh - 28px);
+    min-height: 620px;
+    margin: 14px;
+    border-radius: 30px;
+    overflow: hidden;
+    isolation: isolate;
+    background: linear-gradient(160deg, #0f3f37 0%, #14574b 60%, #1e7a63 100%);
+    color: #fff;
+    padding: 40px;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .t-vit::before {
+    content: "";
+    position: absolute;
+    right: -120px;
+    top: -120px;
+    z-index: -1;
+    width: 420px;
+    height: 420px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(166, 242, 107, 0.35), transparent 65%);
+  }
+  .t-vit .t-lgo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 22px;
+    font-weight: 600;
+    align-self: flex-start;
+  }
+  .t-vit h2 {
+    margin-top: auto;
+    font-size: 38px;
+    font-weight: 600;
+    letter-spacing: -0.03em;
+    line-height: 1.1;
+    max-width: 520px;
+  }
+  .t-vit h2 em {
+    font-style: normal;
+    color: #a6f26b;
+  }
+  .t-vit p {
+    font-size: 14.5px;
+    color: rgba(255, 255, 255, 0.75);
+    max-width: 420px;
+  }
+  .t-vit .t-pls {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    max-width: 440px;
+  }
+  .t-vit .t-pls li {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 8px 14px;
+    border-radius: 999px;
+    background: rgba(255, 255, 255, 0.1);
+    box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.14);
+  }
+  .t-vit .t-pls .t-ic {
+    width: 14px;
+    height: 14px;
+    color: #a6f26b;
+  }
+  .t-vit .t-flot {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    padding: 14px 16px;
+    border-radius: 22px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #0f3f37;
+    box-shadow: 0 24px 40px -20px rgba(0, 0, 0, 0.5);
+    max-width: 400px;
+  }
+  .t-vit .t-flot .t-t {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-vit .t-flot b {
+    display: block;
+    font-size: 14px;
+  }
+  .t-vit .t-flot .t-t span {
+    font-size: 12px;
+    color: #5b6b68;
+  }
+  .t-vit .t-flot .t-lg-e {
+    box-shadow: 0 0 0 3px #fff;
+  }
+  .t-vit .t-flot .t-anneau {
+    width: 52px;
+    height: 52px;
+    background: conic-gradient(#3da14f 0, #2fd3a6 86%, #e3eae7 0);
+  }
+  .t-vit .t-flot .t-anneau b {
+    display: grid;
+    place-items: center;
+    width: 42px;
+    height: 42px;
+    font-size: 12px;
+    background: #fff;
+    color: #0f3f37;
+  }
+  .t-vit .t-flot.t-f2 {
+    margin-left: 60px;
+  }
+  /* Le formulaire à droite (`.frm`) : titres à gauche, logo dans le panneau. */
+  .t-frm .t-auth-h {
+    align-items: flex-start;
+    text-align: left;
+    padding: 0 0 6px;
+  }
+  .t-frm .t-auth-h .t-lgo {
+    display: none;
+  }
+  .t-frm .t-auth-h p {
+    max-width: none;
+  }
+  .t-frm .t-mention {
+    text-align: left;
+  }
+  .t-frm .t-ob-q h1,
+  .t-frm .t-ob-q h2 {
+    font-size: 28px;
+  }
+  .t-frm .t-pret,
+  .t-frm .t-conf {
+    align-items: flex-start;
+    text-align: left;
+  }
+  .t-frm .t-pret h1,
+  .t-frm .t-pret h2 {
+    font-size: 28px;
+  }
+  .t-frm .t-pret p {
+    max-width: none;
+  }
+  .t-frm .t-conf .t-h2s {
+    font-size: 26px;
+  }
+  .t-frm .t-code6 {
+    justify-content: flex-start;
+  }
+  .t-frm .t-code6 span {
+    width: 56px;
+    height: 64px;
+    font-size: 24px;
   }
 }
 

@@ -40,6 +40,7 @@ async function Login({ searchParams }: Pick<PageProps<"/connexion">, "searchPara
   const providers = enabledProviders().map((id) => ({
     id,
     label: t(`access.provider.${id}`),
+    short: t(`access.providerShort.${id}`),
   }));
   const notice = (tone: "ok" | "err", text: string) => (
     <p role="status" className={`t-gar t-${tone}`}>
@@ -65,7 +66,9 @@ async function Login({ searchParams }: Pick<PageProps<"/connexion">, "searchPara
         next={suite}
         providers={
           providers.length > 0 ? (
-            <ProviderButtons providers={providers} action={signInWithProvider} />
+            <div className="t-duo-f">
+              <ProviderButtons providers={providers} action={signInWithProvider} />
+            </div>
           ) : undefined
         }
       />

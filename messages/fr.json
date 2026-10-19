@@ -1545,78 +1545,6 @@
         "signup": "S'inscrire avec {provider}"
       }
     },
-    "stage": {
-      "rolesLabel": "Je suis",
-      "roles": {
-        "talent": "Talent",
-        "rh": "RH",
-        "company": "Entreprise"
-      },
-      "slogan": "Learn. Grow. <hl>Connect.</hl>",
-      "talent": {
-        "eyebrow": "Pour les talents",
-        "hook": "Prêt à <hl>booster votre employabilité</hl> ?",
-        "sub": "Formez-vous, renforcez votre CV et laissez les offres venir à vous.",
-        "line": "Connectez-vous pour reprendre votre parcours",
-        "cards": {
-          "1": {
-            "value": "82",
-            "title": "Force du profil",
-            "text": "82 % · en progression"
-          },
-          "2": {
-            "title": "Nouvelle offre pour vous",
-            "text": "Analyste de données junior",
-            "pill": "Compatibilité 87 %"
-          },
-          "3": {
-            "title": "Certificat obtenu",
-            "text": "Excel pour l'analyse"
-          }
-        }
-      },
-      "rh": {
-        "eyebrow": "Pour les professionnels RH",
-        "hook": "Prêt à recruter les <hl>bons profils</hl>, plus vite ?",
-        "sub": "Publiez, triez et échangez avec vos candidats au même endroit, avec une IA qui explique ses choix.",
-        "line": "Connectez-vous pour retrouver vos candidats",
-        "cards": {
-          "1": {
-            "title": "Profil recommandé",
-            "text": "Kofi A. · Data analyst",
-            "pill": "Pourquoi ?"
-          },
-          "2": {
-            "title": "Entretien planifié",
-            "text": "Jeudi · 10:00"
-          },
-          "3": {
-            "title": "Candidatures triées",
-            "text": "Pipeline à jour"
-          }
-        }
-      },
-      "company": {
-        "eyebrow": "Pour les entreprises",
-        "hook": "Prêt à bâtir <hl>l'équipe</hl> qui fera grandir votre entreprise ?",
-        "sub": "Un vivier de talents formés, un suivi de recrutement clair et toute votre équipe sur la même page.",
-        "line": "Connectez-vous pour piloter vos recrutements",
-        "cards": {
-          "1": {
-            "title": "Offre publiée",
-            "text": "Chargé(e) de clientèle"
-          },
-          "2": {
-            "title": "Votre équipe recrute",
-            "text": "Recruteurs invités"
-          },
-          "3": {
-            "title": "Vivier de talents",
-            "text": "Profils formés sur Jumanly"
-          }
-        }
-      }
-    },
     "error": {
       "required": "Ce champ est obligatoire.",
       "emailInvalid": "Saisissez une adresse e-mail valide, par exemple nom@exemple.com.",
@@ -2177,6 +2105,11 @@
       "linkedin": "Continuer avec LinkedIn",
       "apple": "Continuer avec Apple"
     },
+    "providerShort": {
+      "google": "Google",
+      "linkedin": "LinkedIn",
+      "apple": "Apple"
+    },
     "field": {
       "email": "Adresse e-mail",
       "emailPlaceholder": "vous@exemple.cd",
@@ -2206,6 +2139,19 @@
       "resendIn": "dans {time}",
       "resent": "Un nouveau code vous a été envoyé."
     },
+    "showcase": {
+      "title": "Se former, être vu, <em>être recruté.</em>",
+      "text": "Une seule plateforme pour apprendre, montrer ce que vous savez faire et postuler. Postuler reste gratuit pour toujours.",
+      "pill1": "Offres vérifiées",
+      "pill2": "Attestations vérifiables",
+      "pill3": "Orbi, votre assistant",
+      "jobInitials": "BF",
+      "jobTitle": "Analyste de données junior",
+      "jobPlace": "Baobab Fintech · Kinshasa",
+      "jobMatch": "86 %",
+      "orbi": "Orbi",
+      "orbiText": "« Il vous manque SQL avancé : 45 min suffisent. »"
+    },
     "login": {
       "title": "Bon retour",
       "subtitle": "Connectez-vous pour retrouver vos offres et vos formations.",
@@ -2227,6 +2173,7 @@
     },
     "forgot": {
       "head": "Mot de passe oublié",
+      "back": "Retour à la connexion",
       "title": "Réinitialiser votre mot de passe",
       "text": "Entrez l'adresse de votre compte. Nous vous envoyons un code à {digits} chiffres.",
       "safe": "Pour votre sécurité, le message est le même que l'adresse existe ou non.",
@@ -2262,6 +2209,7 @@
     },
     "account": {
       "head": "Créer un compte",
+      "subtitle": "Avec votre adresse e-mail.",
       "name": "Prénom et nom",
       "namePlaceholder": "Prénom Nom",
       "terms": "J'accepte les {terms} et la {privacy}",
@@ -2310,6 +2258,7 @@
       },
       "studies": {
         "title": "Vos études et votre domaine",
+        "text": "Facultatif. Cela affine les offres et les formations proposées.",
         "level": {
           "label": "Niveau d'études",
           "secondary": "Secondaire",
@@ -2389,6 +2338,7 @@
     "countries": {
       "title": "Votre pays",
       "search": "Rechercher un pays",
+      "az": "Tous de A à Z",
       "none": "Aucun pays ne correspond.",
       "close": "Fermer",
       "section": {

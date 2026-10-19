@@ -1230,51 +1230,6 @@ Rappel du paramètre `?suite=` : si le visiteur arrive depuis une action (postul
 | `auth.social.aria.continue` | Continuer avec {provider} |
 | `auth.social.aria.signup` | S'inscrire avec {provider} |
 
-#### Scène d'accueil de `/connexion` et `/inscription`
-
-*Décor animé à gauche du formulaire (docs/refonte-connexion/BRIEF-CONNEXION-V2.md). Les mots entre `<hl>` et `</hl>` s'affichent en dégradé. Les chiffres des cartes sont des illustrations de l'appli, identiques pour tout le monde, jamais des données d'un compte.*
-
-| Clé | Texte |
-|---|---|
-| `auth.stage.rolesLabel` | Je suis |
-| `auth.stage.roles.talent` | Talent |
-| `auth.stage.roles.rh` | RH |
-| `auth.stage.roles.company` | Entreprise |
-| `auth.stage.slogan` | Learn. Grow. <hl>Connect.</hl> |
-| `auth.stage.talent.eyebrow` | Pour les talents |
-| `auth.stage.talent.hook` | Prêt à <hl>booster votre employabilité</hl> ? |
-| `auth.stage.talent.sub` | Formez-vous, renforcez votre CV et laissez les offres venir à vous. |
-| `auth.stage.talent.line` | Connectez-vous pour reprendre votre parcours |
-| `auth.stage.talent.cards.1.value` | 82 |
-| `auth.stage.talent.cards.1.title` | Force du profil |
-| `auth.stage.talent.cards.1.text` | 82 % · en progression |
-| `auth.stage.talent.cards.2.title` | Nouvelle offre pour vous |
-| `auth.stage.talent.cards.2.text` | Analyste de données junior |
-| `auth.stage.talent.cards.2.pill` | Compatibilité 87 % |
-| `auth.stage.talent.cards.3.title` | Certificat obtenu |
-| `auth.stage.talent.cards.3.text` | Excel pour l'analyse |
-| `auth.stage.rh.eyebrow` | Pour les professionnels RH |
-| `auth.stage.rh.hook` | Prêt à recruter les <hl>bons profils</hl>, plus vite ? |
-| `auth.stage.rh.sub` | Publiez, triez et échangez avec vos candidats au même endroit, avec une IA qui explique ses choix. |
-| `auth.stage.rh.line` | Connectez-vous pour retrouver vos candidats |
-| `auth.stage.rh.cards.1.title` | Profil recommandé |
-| `auth.stage.rh.cards.1.text` | Kofi A. · Data analyst |
-| `auth.stage.rh.cards.1.pill` | Pourquoi ? |
-| `auth.stage.rh.cards.2.title` | Entretien planifié |
-| `auth.stage.rh.cards.2.text` | Jeudi · 10:00 |
-| `auth.stage.rh.cards.3.title` | Candidatures triées |
-| `auth.stage.rh.cards.3.text` | Pipeline à jour |
-| `auth.stage.company.eyebrow` | Pour les entreprises |
-| `auth.stage.company.hook` | Prêt à bâtir <hl>l'équipe</hl> qui fera grandir votre entreprise ? |
-| `auth.stage.company.sub` | Un vivier de talents formés, un suivi de recrutement clair et toute votre équipe sur la même page. |
-| `auth.stage.company.line` | Connectez-vous pour piloter vos recrutements |
-| `auth.stage.company.cards.1.title` | Offre publiée |
-| `auth.stage.company.cards.1.text` | Chargé(e) de clientèle |
-| `auth.stage.company.cards.2.title` | Votre équipe recrute |
-| `auth.stage.company.cards.2.text` | Recruteurs invités |
-| `auth.stage.company.cards.3.title` | Vivier de talents |
-| `auth.stage.company.cards.3.text` | Profils formés sur Jumanly |
-
 ---
 
 ### `/connexion` · Connexion
@@ -1718,6 +1673,9 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `access.provider.google` | Continuer avec Google |
 | `access.provider.linkedin` | Continuer avec LinkedIn |
 | `access.provider.apple` | Continuer avec Apple |
+| `access.providerShort.google` | Google |
+| `access.providerShort.linkedin` | LinkedIn |
+| `access.providerShort.apple` | Apple |
 | `access.field.email` | Adresse e-mail |
 | `access.field.emailPlaceholder` | vous@exemple.cd |
 | `access.field.password` | Mot de passe |
@@ -1737,6 +1695,24 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `access.code.resend` | Renvoyer le code |
 | `access.code.resendIn` | dans {time} |
 | `access.code.resent` | Un nouveau code vous a été envoyé. |
+
+#### Ordinateur · panneau de marque à gauche du formulaire
+
+*Version ordinateur (planche refonte-web talent-4 § 1 et 2) : la promesse à gauche, le formulaire à droite. Les deux cartes sont une illustration de l'appli, identique pour tout le monde, jamais les données d'un compte.*
+
+| Clé | Texte |
+|---|---|
+| `access.showcase.title` | Se former, être vu, <em>être recruté.</em> |
+| `access.showcase.text` | Une seule plateforme pour apprendre, montrer ce que vous savez faire et postuler. Postuler reste gratuit pour toujours. |
+| `access.showcase.pill1` | Offres vérifiées |
+| `access.showcase.pill2` | Attestations vérifiables |
+| `access.showcase.pill3` | Orbi, votre assistant |
+| `access.showcase.jobInitials` | BF |
+| `access.showcase.jobTitle` | Analyste de données junior |
+| `access.showcase.jobPlace` | Baobab Fintech · Kinshasa |
+| `access.showcase.jobMatch` | 86 % |
+| `access.showcase.orbi` | Orbi |
+| `access.showcase.orbiText` | « Il vous manque SQL avancé : 45 min suffisent. » |
 
 #### `/connexion` · Se connecter
 
@@ -1768,6 +1744,7 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | Clé | Texte |
 |---|---|
 | `access.forgot.head` | Mot de passe oublié |
+| `access.forgot.back` | Retour à la connexion |
 | `access.forgot.title` | Réinitialiser votre mot de passe |
 | `access.forgot.text` | Entrez l'adresse de votre compte. Nous vous envoyons un code à {digits} chiffres. |
 | `access.forgot.safe` | Pour votre sécurité, le message est le même que l'adresse existe ou non. |
@@ -1812,6 +1789,7 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | Clé | Texte |
 |---|---|
 | `access.account.head` | Créer un compte |
+| `access.account.subtitle` | Avec votre adresse e-mail. |
 | `access.account.name` | Prénom et nom |
 | `access.account.namePlaceholder` | Prénom Nom |
 | `access.account.terms` | J'accepte les {terms} et la {privacy} |
@@ -1861,6 +1839,7 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `access.onboarding.goal.reconversion` | Me reconvertir |
 | `access.onboarding.goal.reconversionLine` | Changer de métier |
 | `access.onboarding.studies.title` | Vos études et votre domaine |
+| `access.onboarding.studies.text` | Facultatif. Cela affine les offres et les formations proposées. |
 | `access.onboarding.studies.level.label` | Niveau d'études |
 | `access.onboarding.studies.level.secondary` | Secondaire |
 | `access.onboarding.studies.level.bac2` | Bac + 2 |
@@ -1925,6 +1904,7 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `access.onboarding.ready.pay` | Continuer vers le paiement |
 | `access.countries.title` | Votre pays |
 | `access.countries.search` | Rechercher un pays |
+| `access.countries.az` | Tous de A à Z |
 | `access.countries.none` | Aucun pays ne correspond. |
 | `access.countries.close` | Fermer |
 | `access.countries.section.central` | Afrique centrale |

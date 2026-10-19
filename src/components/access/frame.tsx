@@ -3,11 +3,24 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { TalentIcon } from "@/components/talent/icon";
 
-/** The mark of the planche (talent-4 `LOGO`): Sapin square, white j, Lime dot. */
-export function AccessMark({ size = 40 }: { size?: number }) {
+/**
+ * The mark of the planche (talent-4 `LOGO`): Sapin square, white j, Lime dot. « glass »: the square
+ * of the brand panel, white at 14 % on Sapin (refonte-web talent-4 `VIT`).
+ */
+export function AccessMark({
+  size = 40,
+  tone = "sapin",
+}: {
+  size?: number;
+  tone?: "sapin" | "glass";
+}) {
   return (
     <svg viewBox="0 0 120 120" width={size} height={size} aria-hidden focusable="false">
-      <rect width="120" height="120" rx="30" fill="#0F3F37" />
+      {tone === "glass" ? (
+        <rect width="120" height="120" rx="30" fill="#ffffff" fillOpacity=".14" />
+      ) : (
+        <rect width="120" height="120" rx="30" fill="#0F3F37" />
+      )}
       <g transform="translate(2.25 -4.35) scale(1.1)">
         <path
           d="M70 55 V70 A19 19 0 0 1 33.15 76.50"
@@ -46,23 +59,33 @@ export function AccessHead({
   );
 }
 
-/** Head of a step (planche `tete_f`): the round « Retour » button and the name of the screen. */
+/**
+ * Head of a step (planche `tete_f`): the round « Retour » button and the name of the screen. From
+ * the tablet on, the button becomes a text link (« Retour à la connexion », refonte-web talent-4)
+ * and the name is kept for screen readers only: the question below is the visible title.
+ */
 export function AccessTop({
   back,
   backLabel,
+  backText,
   title,
   end,
 }: {
   back?: string;
   backLabel: string;
+  /** Words of the link on a computer; `backLabel` by default. */
+  backText?: string;
   title?: string;
   end?: ReactNode;
 }) {
   return (
     <div className="t-tete-f">
       {back && (
-        <Link href={back} aria-label={backLabel} className="t-bi t-press">
+        <Link href={back} aria-label={backText ?? backLabel} className="t-bi t-press">
           <TalentIcon name="retour" size="s" />
+          <span className="t-tete-f-l" aria-hidden>
+            {backText ?? backLabel}
+          </span>
         </Link>
       )}
       {title ? <h1>{title}</h1> : <span className="flex-1" />}
@@ -81,7 +104,8 @@ export function ProviderButtons({
   providers,
   action,
 }: {
-  providers: AccessProvider[];
+  /** `short`: the provider's name alone, shown side by side from the tablet on (« Se connecter »). */
+  providers: (AccessProvider & { short?: string })[];
   action: (provider: string, formData: FormData) => Promise<void>;
 }) {
   return providers.map((provider) => (
@@ -99,7 +123,8 @@ export function ProviderButtons({
         height={22}
         className="size-[22px]"
       />
-      {provider.label}
+      <span className="t-fourn-l">{provider.label}</span>
+      {provider.short && <span className="t-fourn-c">{provider.short}</span>}
     </button>
   ));
 }
