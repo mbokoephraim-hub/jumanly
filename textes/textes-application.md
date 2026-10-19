@@ -2199,6 +2199,183 @@ Conventions :
 | `talentShell.offline.sending` | Connexion revenue : votre saisie est envoyée. |
 | `talentShell.offline.restored` | Votre saisie non envoyée a été reprise. |
 
+### Refonte mobile · Pour moi
+
+*Accueil de l'espace talent (docs/refonte-mobile/talent-1 § 1) : l'objectif, une seule prochaine étape, puis l'essentiel. Les formations passent devant pour l'objectif « Développer mes compétences ».*
+
+| Clé | Texte |
+|---|---|
+| `forMe.seo` | Pour moi · Jumanly |
+| `forMe.title` | Pour moi |
+| `forMe.goal.label` | Objectif : |
+| `forMe.goal.none` | à choisir |
+| `forMe.goal.edit` | Modifier |
+| `forMe.goal.editAria` | Modifier mon objectif |
+| `forMe.next.eyebrow` | Prochaine étape |
+| `forMe.next.ring` | Profil complété à {percent} % |
+| `forMe.next.go` | Ouvrir la prochaine étape |
+| `forMe.next.profile` | Complétez votre profil |
+| `forMe.next.interview` | Préparez votre entretien |
+| `forMe.next.document` | Envoyez le document demandé |
+| `forMe.next.draft` | Terminez votre candidature |
+| `forMe.next.message` | Répondez au recruteur |
+| `forMe.next.course` | Reprenez votre formation |
+| `forMe.next.done` | Profil complet : regardez vos offres |
+| `forMe.offers.title` | {count, plural, =0 {Aucune opportunité pour le moment} one {# opportunité pour vous} other {# opportunités pour vous}} |
+| `forMe.offers.general` | {count, plural, one {# offre récente} other {# offres récentes}} |
+| `forMe.offers.all` | Tout voir |
+| `forMe.offers.empty` | Aucune offre ouverte pour le moment. Revenez bientôt. |
+| `forMe.offers.score` | {score} % |
+| `forMe.offers.scoreAria` | Compatibilité {score} % |
+| `forMe.offers.line` | {company} · {city} |
+| `forMe.learn.title` | Continuer à apprendre |
+| `forMe.learn.link` | Apprendre |
+| `forMe.learn.module` | Module {current} sur {total} |
+| `forMe.learn.left` | {count, plural, one {# leçon restante} other {# leçons restantes}} |
+| `forMe.learn.done` | Toutes les leçons sont faites |
+| `forMe.learn.resume` | Reprendre |
+| `forMe.learn.resumeAria` | Reprendre {title} |
+| `forMe.learn.goals` | Pour vos objectifs |
+| `forMe.learn.all` | Tout voir |
+| `forMe.learn.modules` | {count, plural, one {# module} other {# modules}} |
+| `forMe.learn.minutes` | {count} min |
+| `forMe.learn.hours` | {count} h |
+| `forMe.learn.progress` | Progression : {percent} % |
+| `forMe.quick.title` | Accès rapide |
+| `forMe.quick.cv` | Mes CV |
+| `forMe.quick.saved` | Enregistrées |
+| `forMe.quick.certificates` | Attestations |
+| `forMe.quick.profile` | Profil |
+| `forMe.category.digital` | Numérique |
+| `forMe.category.project` | Gestion de projet |
+| `forMe.category.soft` | Savoir-être |
+| `forMe.category.office` | Bureautique |
+| `forMe.category.finance` | Finance |
+| `forMe.category.data` | Data |
+| `forMe.category.sales` | Vente |
+| `forMe.category.language` | Langues |
+| `forMe.category.communication` | Communication |
+
+### Refonte mobile · Offres
+
+*Liste des offres (docs/refonte-mobile/talent-1 § 2) : Pour vous, Récentes, Enregistrées. Les candidatures sont dans Suivi. Filtres en feuille.*
+
+| Clé | Texte |
+|---|---|
+| `offers.seo` | Offres · Jumanly |
+| `offers.title` | Offres |
+| `offers.tabs` | Vues des offres |
+| `offers.tab.forYou` | Pour vous |
+| `offers.tab.recent` | Récentes |
+| `offers.tab.saved` | Enregistrées |
+| `offers.line.forYou` | Classées selon votre profil. Toutes les offres restent visibles. |
+| `offers.line.general` | Sélection générale : ajoutez vos compétences pour un classement selon votre profil. |
+| `offers.line.generalCta` | Ajouter mes compétences |
+| `offers.line.recent` | Les plus récentes d'abord. |
+| `offers.line.search` | {count, plural, =0 {Aucune offre pour « {query} ».} one {# offre pour « {query} ».} other {# offres pour « {query} ».}} |
+| `offers.line.optedOut` | Le score est désactivé dans vos paramètres : les offres sont dans l'ordre de publication. |
+| `offers.empty.title` | Aucune offre ne correspond. |
+| `offers.empty.text` | Retirez un filtre ou cherchez un autre mot. |
+| `offers.empty.cta` | Effacer les filtres |
+| `offers.saved.empty` | Aucune offre enregistrée. Touchez le signet d'une offre pour la retrouver ici. |
+| `offers.saved.cta` | Voir les offres pour vous |
+| `offers.more` | Voir plus d'offres |
+| `offers.free` | Postuler est toujours gratuit. |
+| `offers.card.why` | Pourquoi {score} % ? |
+| `offers.card.applied` | Candidature envoyée |
+| `offers.card.new` | Nouveau |
+| `offers.filters.title` | Filtrer les offres |
+| `offers.filters.open` | Filtres |
+| `offers.filters.active` | {count, plural, one {# filtre actif} other {# filtres actifs}} |
+| `offers.filters.domain` | Domaine |
+| `offers.filters.place` | Lieu |
+| `offers.filters.remote` | À distance |
+| `offers.filters.contract` | Contrat |
+| `offers.filters.experience` | Expérience |
+| `offers.filters.contracts.cdi` | CDI |
+| `offers.filters.contracts.cdd` | CDD |
+| `offers.filters.contracts.internship` | Stage |
+| `offers.filters.contracts.mission` | Freelance |
+| `offers.filters.levels.none` | Sans expérience |
+| `offers.filters.levels.junior` | Junior |
+| `offers.filters.levels.mid` | Confirmé |
+| `offers.filters.verified` | Entreprises vérifiées seulement |
+| `offers.filters.clear` | Effacer |
+| `offers.filters.show` | {count, plural, =0 {Aucune offre} one {Voir # offre} other {Voir # offres}} |
+| `offers.filters.close` | Fermer les filtres |
+
+### Refonte mobile · Détail d'une offre
+
+*Détail d'une offre (docs/refonte-mobile/talent-1 § 3 et 4) : le score et son « Pourquoi ? », Préparer ma candidature avec Orbi, la formation qui comble l'écart, la vérification. Postuler reste en bas, toujours visible, et toujours gratuit.*
+
+| Clé | Texte |
+|---|---|
+| `offer.back` | Retour |
+| `offer.share` | Partager l'offre |
+| `offer.shared` | Lien de l'offre copié. |
+| `offer.verified` | Vérifiée |
+| `offer.seeCompany` | Voir l'entreprise {company} |
+| `offer.deadline` | Avant le {date} |
+| `offer.level.none` | Sans expérience |
+| `offer.level.junior` | Junior |
+| `offer.level.mid` | Confirmé |
+| `offer.level.senior` | Senior |
+| `offer.score.title` | Compatible avec votre profil |
+| `offer.score.skills` | {met} compétences sur {total} |
+| `offer.score.placeContract` | lieu et contrat |
+| `offer.score.why` | Pourquoi ? |
+| `offer.score.whyAria` | Pourquoi {score} % ? |
+| `offer.score.ring` | Compatibilité {score} % |
+| `offer.score.incomplete` | Ajoutez vos compétences pour voir votre compatibilité avec cette offre. |
+| `offer.score.incompleteCta` | Ajouter mes compétences |
+| `offer.score.optedOut` | Le score est désactivé dans vos paramètres. |
+| `offer.score.optedOutCta` | Réactiver |
+| `offer.prepare.title` | Préparer ma candidature |
+| `offer.prepare.line` | Ce qui correspond, ce qui manque |
+| `offer.prepare.subtitle` | {job} · {company} |
+| `offer.prepare.matches` | Ce qui correspond |
+| `offer.prepare.missing` | À compléter |
+| `offer.prepare.inCv` | Dans votre CV « {cv} » |
+| `offer.prepare.inProfile` | Dans votre profil |
+| `offer.prepare.prefs` | Vos préférences |
+| `offer.prepare.absent` | Demandé, absent de votre profil |
+| `offer.prepare.add` | Ajouter |
+| `offer.prepare.addAria` | Ajouter {skill} à mon profil |
+| `offer.prepare.none` | Aucune compétence demandée ne figure encore dans votre profil. |
+| `offer.prepare.complete` | Tout ce que l'offre demande est déjà dans votre profil. |
+| `offer.prepare.tailor` | Adapter mon CV à cette offre |
+| `offer.prepare.createCv` | Créer mon CV |
+| `offer.prepare.guard` | Rien n'est modifié ni envoyé sans votre accord. |
+| `offer.why.title` | Pourquoi {score} % ? |
+| `offer.why.text` | Calcul fixe, le même pour tous. Votre nom, âge, genre ou photo n'entrent jamais dans le score. |
+| `offer.why.value` | {percent} % |
+| `offer.why.guard` | Le recruteur décide. Ce score ne bloque jamais votre candidature. |
+| `offer.why.contest` | Contester ce score |
+| `offer.missions` | Missions |
+| `offer.description` | Le poste |
+| `offer.skills` | Compétences demandées |
+| `offer.skillOwned` | {skill}, déjà dans votre profil |
+| `offer.progress.eyebrow` | Pour progresser |
+| `offer.progress.line` | {duration} · votre score passerait à {score} % |
+| `offer.profile` | Profil recherché |
+| `offer.benefits` | Avantages |
+| `offer.process` | Étapes du recrutement |
+| `offer.knockout` | Critères indiqués par le recruteur |
+| `offer.knockoutHint` | Vous pouvez postuler même sans les remplir tous : c'est le recruteur qui décide. |
+| `offer.salary` | Salaire |
+| `offer.check.verifiedTitle` | Entreprise vérifiée par Jumanly |
+| `offer.check.verifiedText` | Existence et adresse e-mail professionnelle contrôlées le {date}. Jumanly ne vous demandera jamais d'argent pour postuler. |
+| `offer.check.title` | Restez prudent |
+| `offer.check.text` | Jumanly ne vous demandera jamais d'argent pour postuler. Signalez toute demande de paiement. |
+| `offer.report` | Signaler cette offre |
+| `offer.bar.free` | Postuler est toujours gratuit. |
+| `offer.bar.apply` | Postuler |
+| `offer.bar.resume` | Reprendre ma candidature |
+| `offer.bar.applied` | Suivre ma candidature |
+| `offer.bar.closed` | Cette offre n'accepte plus de candidatures. |
+| `offer.notice.already` | Vous avez déjà postulé à cette offre. |
+| `offer.close` | Fermer |
+
 ### `/app/orbi` · Orbi en plein écran
 
 *L'onglet central. Les quatre aides mènent aux fonctions existantes ; la conversation arrive au lot 7. Orbi propose, la personne décide.*

@@ -75,11 +75,7 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
 
   // Apply with that CV.
   await page.goto(`/app/jobs/${JOB}`);
-  await page
-    .getByRole("link", { name: "Postuler gratuitement" })
-    .filter({ visible: true })
-    .last()
-    .click();
+  await page.getByRole("link", { name: "Postuler", exact: true }).click();
   await expect(page).toHaveURL(/postuler=1/);
   // Staged form (docs/ux-mobile-talent, prompt 4): CV, letter, review, then sending.
   await page.getByRole("button", { name: "Continuer" }).click();

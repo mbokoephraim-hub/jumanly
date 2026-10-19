@@ -18,8 +18,21 @@ export const REDRAWN = [
   "/reinitialiser",
 ];
 
+/**
+ * Redrawn pages whose sub-pages are not all redrawn yet: the page itself (`$`), or its direct
+ * children except some (lot 3: an offer, but not « Mes candidatures » nor « Enregistrées »).
+ */
+export const REDRAWN_EXACT = [
+  "^/app$",
+  "^/app/jobs$",
+  "^/app/jobs/(?!candidatures$|enregistrees$)[^/]+$",
+];
+
 export function redrawn(pathname: string) {
-  return REDRAWN.some((path) => pathname === path || pathname.startsWith(`${path}/`));
+  return (
+    REDRAWN.some((path) => pathname === path || pathname.startsWith(`${path}/`)) ||
+    REDRAWN_EXACT.some((pattern) => new RegExp(pattern).test(pathname))
+  );
 }
 
 /**
@@ -27,5 +40,5 @@ export function redrawn(pathname: string) {
  * dark phone never flashes the light page (and a former page never jumps from the narrow column). Kept short: it runs on every full page load.
  */
 export function appearanceScript(appearance: Appearance) {
-  return `(function(){var a=${JSON.stringify(appearance)},r=${JSON.stringify(REDRAWN)},p=location.pathname;var ok=r.some(function(x){return p===x||p.indexOf(x+"/")===0});var d=ok&&(a==="dark"||(a==="auto"&&window.matchMedia("${DARK_QUERY}").matches));var c=document.documentElement.classList;c.toggle("sombre",d);c.toggle("t-ancien",!ok)})()`;
+  return `(function(){var a=${JSON.stringify(appearance)},r=${JSON.stringify(REDRAWN)},e=${JSON.stringify(REDRAWN_EXACT)},p=location.pathname;var ok=r.some(function(x){return p===x||p.indexOf(x+"/")===0})||e.some(function(x){return new RegExp(x).test(p)});var d=ok&&(a==="dark"||(a==="auto"&&window.matchMedia("${DARK_QUERY}").matches));var c=document.documentElement.classList;c.toggle("sombre",d);c.toggle("t-ancien",!ok)})()`;
 }

@@ -1,832 +1,235 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { Icon } from "@/components/brand/icon";
-import { ApplicationStats } from "@/components/jobs/application-stats";
-import { AppPageHeader } from "@/components/app/page-header";
-import { AiBrand, AiPanel, ScoreRing, pillClass } from "@/components/career/kit";
-import {
-  FilterChipToggle,
-  FilterMenu,
-  TalentJobCard,
-  chip,
-  relativeLabel,
-  type CardMatch,
-} from "@/components/jobs/talent-kit";
-import { CloseDetails } from "@/components/jobs/close-details";
-import { criterionText } from "@/components/matching/talent-why";
-import { TabRail } from "@/components/motion/tab-rail";
-import {
-  Checkbox,
-  CompanyLogo,
-  EmptyState,
-  Select,
-  segmentedItem,
-  segmentedList,
-} from "@/components/ui";
-import { TextField } from "@/components/ui/text-field";
+import { OfferCard, type OfferMatch } from "@/components/talent/offer-card";
+import { OfferFilters } from "@/components/talent/offer-filters";
 import { cx } from "@/lib/cx";
+import { offerFilterKeys } from "@/lib/offer-filters";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { matchesForUser } from "@/server/matching/service";
-import { getJobSearch } from "@/server/queries/public";
-import { isClosedStatus, listApplications, talentStatus } from "@/server/services/applications";
+import { listApplications } from "@/server/services/applications";
 import {
   JOBS_PER_PAGE,
-  compatibilityFilters,
-  contractFilters,
-  experienceFilters,
-  hiringCompanies,
+  countJobs,
+  isJobOpen,
   jobCards,
-  jobSorts,
   matchingJobIds,
-  jobPlacesFor,
+  offerFilterChoices,
   parseJobFilters,
-  postedFilters,
-  remoteFilters,
-  type ContractFilter,
-  type ExperienceFilter,
-  type PostedFilter,
-  type PublicJobSummary,
-  type RemoteFilter,
 } from "@/server/services/jobs";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("talent.jobs");
+  const t = await getTranslations("offers");
   return { title: { absolute: t("seo") }, robots: { index: false } };
 }
 
-/** « tous » and « recommandees » are older addresses, still served; the tabs show the first two. */
-const views = ["pour-vous", "recentes", "tous", "recommandees"] as const;
-type View = (typeof views)[number];
-
-/** Score from which an offer counts as « recommandée » (band « Compatible » and above). */
-const RECOMMENDED_MIN = 70;
+const tabs = ["pour-vous", "recentes", "enregistrees"] as const;
+type Tab = (typeof tabs)[number];
+const tabText = { "pour-vous": "forYou", recentes: "recent", enregistrees: "saved" } as const;
 
 /**
- * Jobs (partie 07 § 5, mockup 03-16, docs/ux-mobile-talent screen 06): the search with what only a
- * signed-in talent has: « Pour vous » ranks the offers by compatibility, with its « Pourquoi ? »;
- * without a score it says the selection is general. A low score never hides an offer from « Pour
- * vous » and never blocks applying, which stays free and unlimited.
+ * Offres (planche talent-1 § 2): « Pour vous » ranks every open offer by compatibility, with its
+ * « Pourquoi ? », and hides none; « Récentes » keeps the newest first; « Enregistrées » lists the
+ * saved ones. The applications are in Suivi. Filters open in a sheet. A low score never hides an
+ * offer and never blocks applying, which stays free and unlimited.
  */
-export default async function TalentJobsPage({ searchParams }: PageProps<"/app/jobs">) {
+export default async function OffersPage({ searchParams }: PageProps<"/app/jobs">) {
   const params = await searchParams;
   const user = await requireUser("/app/jobs");
   const t = await getTranslations();
-  const asked: View = views.includes(params.vue as View) ? (params.vue as View) : "pour-vous";
-  const view = asked === "tous" ? "pour-vous" : asked;
-  const compat = compatibilityFilters.find((value) => String(value) === params.compat);
-  const parsed = parseJobFilters(params);
-  // « Mes lieux » (screen 82): the countries, cities and remote work chosen at first connection.
-  const profilePlaces = await db.talentProfile.findUnique({
-    where: { userId: user.id },
-    select: { desiredCountries: true, desiredLocations: true, remotePreferences: true },
-  });
-  const places = profilePlaces ? await jobPlacesFor(db, profilePlaces) : null;
-  const withPlaces =
-    parsed.lieux && places ? { ...parsed, places } : { ...parsed, lieux: undefined };
-  const filters =
-    view === "recentes" ? { ...withPlaces, publie: withPlaces.publie ?? "7d" } : withPlaces;
-  const page = filters.page ?? 1;
+  const now = new Date();
+  // « tous » and « recommandees » are older addresses of « Pour vous ».
+  const tab: Tab = tabs.includes(params.vue as Tab) ? (params.vue as Tab) : "pour-vous";
+  const filters = parseJobFilters(params);
+  const shown = (filters.page ?? 1) * JOBS_PER_PAGE;
 
-  // « Pour vous » (or a minimum score) scores the matching offers, most recent first, and ranks
-  // them; « Récentes » keeps the database order and scores the page only.
-  const wantsRanking = view !== "recentes" || compat !== undefined;
-  const search = await getJobSearch(wantsRanking ? { ...filters, page: 1 } : filters);
-  let jobs: PublicJobSummary[] = search.jobs;
-  let total = search.total;
-  let matches = new Map<string, CardMatch>();
-  let ranked = false;
-  if (wantsRanking) {
-    const ids = await matchingJobIds(db, filters, search.now);
-    const all = await matchesForUser(db, user.id, ids);
-    const scored = ids.flatMap((id) => {
-      const match = all.get(id);
-      return match?.state === "ok" ? [{ id, score: match.explanation.score }] : [];
-    });
-    // No score at all (no skill yet, calculation off): the general selection, in database order.
-    ranked = scored.length > 0 || compat !== undefined || view === "recommandees";
-    if (ranked) {
-      const min = Math.max(compat ?? 0, view === "recommandees" ? RECOMMENDED_MIN : 0);
-      const kept = scored.filter((row) => row.score >= min).sort((a, b) => b.score - a.score);
-      // « Pour vous » never hides an offer: those without a score follow, in their order.
-      const rest =
-        min === 0 ? ids.filter((id) => !scored.some((row) => row.id === id)) : ([] as string[]);
-      const order = [...kept.map((row) => row.id), ...rest];
-      total = order.length;
-      const pageIds = order.slice((page - 1) * JOBS_PER_PAGE, page * JOBS_PER_PAGE);
-      jobs = await jobCards(db, pageIds);
-      matches = new Map(pageIds.map((id) => [id, all.get(id)]));
-    } else {
-      const plain = await getJobSearch(filters);
-      jobs = plain.jobs;
-      total = plain.total;
-      matches = new Map(jobs.map((job) => [job.id, all.get(job.id)]));
-    }
-  } else {
-    matches = await matchesForUser(
-      db,
-      user.id,
-      jobs.map((job) => job.id),
-    );
-  }
-  const general = view === "pour-vous" && !ranked;
-  const pageCount = Math.max(1, Math.ceil(total / JOBS_PER_PAGE));
-
-  const [applications, saved, companies] = await Promise.all([
+  const [applications, saved, choices] = await Promise.all([
     listApplications(db, user.id),
     db.savedJob.findMany({
       where: { userId: user.id },
-      select: { job: { select: { slug: true } } },
+      orderBy: { createdAt: "desc" },
+      select: { job: { select: { id: true, slug: true, status: true, closesAt: true } } },
     }),
-    hiringCompanies(db, 3, search.now),
+    offerFilterChoices(db, now),
   ]);
   const applied = new Set(applications.map((application) => application.job.slug));
-  const savedSlugs = new Set(saved.map((item) => item.job.slug));
-  const statuses = applications.map((application) => talentStatus(application));
+  const savedSlugs = new Set(saved.map((row) => row.job.slug));
 
-  // Links keep the current search and change one value; the page always goes back to 1.
+  // The offers of the tab, in their order, then their scores.
+  let order: string[];
+  let matches: Map<string, OfferMatch>;
+  let ranked = false;
+  if (tab === "enregistrees") {
+    // Open ones first, in the order they were saved.
+    const open = saved.filter((row) => isJobOpen(row.job, now));
+    const closed = saved.filter((row) => !isJobOpen(row.job, now));
+    order = [...open, ...closed].map((row) => row.job.id);
+    matches = await matchesForUser(db, user.id, order.slice(0, shown));
+  } else {
+    const ids = await matchingJobIds(db, filters, now);
+    matches = await matchesForUser(db, user.id, ids);
+    if (tab === "pour-vous") {
+      const scored = ids.flatMap((id) => {
+        const match = matches.get(id);
+        return match?.state === "ok" ? [{ id, score: match.explanation.score }] : [];
+      });
+      ranked = scored.length > 0;
+      // « Pour vous » never hides an offer: those without a score follow, newest first.
+      const rest = ids.filter((id) => !scored.some((row) => row.id === id));
+      order = [...scored.sort((a, b) => b.score - a.score).map((row) => row.id), ...rest];
+    } else {
+      order = ids;
+    }
+  }
+  const [jobs, total] = await Promise.all([
+    jobCards(db, order.slice(0, shown)),
+    countJobs(db, filters, now),
+  ]);
+  const firstState = jobs.map((job) => matches.get(job.id)?.state).find(Boolean);
+  const closedIds = new Set(
+    saved.filter((row) => !isJobOpen(row.job, now)).map((row) => row.job.id),
+  );
+
+  // Links keep the search and the filters, and change one value.
   const current: Record<string, string> = Object.fromEntries(
     Object.entries(params).flatMap(([key, value]) =>
-      typeof value === "string" && value !== "" && key !== "page" ? [[key, value]] : [],
+      typeof value === "string" && value !== "" && key !== "page" && key !== "filtres"
+        ? [[key, value]]
+        : [],
     ),
   );
-  const hrefWith = (changes: Record<string, string | undefined>, keepPage = false) => {
-    const next = { ...current, ...(keepPage ? { page: String(page) } : {}), ...changes };
+  const hrefWith = (changes: Record<string, string | undefined>) => {
     const query = new URLSearchParams(
-      Object.entries(next).flatMap(([key, value]) => (value ? [[key, value]] : [])),
+      Object.entries({ ...current, ...changes }).flatMap(([key, value]) =>
+        value ? [[key, value]] : [],
+      ),
     ).toString();
     return query ? `/app/jobs?${query}` : "/app/jobs";
   };
-  const back = hrefWith({}, true);
-  const resetHref = hrefWith({
-    lieux: undefined,
-    pays: undefined,
-    contrat: undefined,
-    teletravail: undefined,
-    experience: undefined,
-    salaire: undefined,
-    publie: undefined,
-    compat: undefined,
-    verifiees: undefined,
-  });
+  const back = hrefWith({ page: filters.page ? String(filters.page) : undefined });
+  const active = Object.fromEntries(
+    offerFilterKeys.flatMap((key) => (current[key] ? [[key, current[key]]] : [])),
+  );
+  // The filters search the open offers: « Enregistrées » goes back to « Pour vous ».
+  const keep: Record<string, string> = {
+    ...(current.q && { q: current.q }),
+    ...(tab === "recentes" && { vue: "recentes" }),
+  };
+  const clearHref = hrefWith(Object.fromEntries(offerFilterKeys.map((key) => [key, undefined])));
 
-  // Active filters, each with its own « × » (mockup: Lime clair chips), then « Réinitialiser ».
-  const active: { key: string; label: string }[] = [];
-  if (filters.lieux) active.push({ key: "lieux", label: t("talent.jobs.filter.places") });
-  if (filters.pays) active.push({ key: "pays", label: filters.pays });
-  if (filters.contrat)
-    active.push({ key: "contrat", label: t(`jobs.search.contract.${filters.contrat}`) });
-  if (filters.teletravail)
-    active.push({ key: "teletravail", label: t(`jobs.search.remote.${filters.teletravail}`) });
-  if (filters.experience)
-    active.push({
-      key: "experience",
-      label: t(`talent.jobs.filter.experience.${filters.experience}`),
-    });
-  if (filters.salaire)
-    active.push({ key: "salaire", label: t("talent.jobs.filter.salary.disclosed") });
-  if (parsed.publie)
-    active.push({ key: "publie", label: t(`talent.jobs.filter.posted.${parsed.publie}`) });
-  if (compat !== undefined)
-    active.push({
-      key: "compat",
-      label: `${t("talent.jobs.filter.compatibility.text")} : ${t("talent.jobs.filter.compatibility.value", { score: compat })}`,
-    });
-  if (filters.verifiees) active.push({ key: "verifiees", label: t("talent.jobs.filter.verified") });
-
-  const menu = <K extends string>(
-    key: string,
-    values: readonly K[],
-    label: (value: K) => string,
-  ) => [
-    {
-      label: t("talent.jobs.filter.any"),
-      href: hrefWith({ [key]: undefined }),
-      current: !current[key],
-    },
-    ...values.map((value) => ({
-      label: label(value),
-      href: hrefWith({ [key]: value }),
-      current: current[key] === value,
-    })),
-  ];
-
-  // The AI preview shows the best score of the page (mockup: selected card).
-  const best = jobs
-    .flatMap((job) => {
-      const match = matches.get(job.id);
-      return match?.state === "ok" ? [{ job, explanation: match.explanation }] : [];
-    })
-    .sort((a, b) => b.explanation.score - a.explanation.score)[0];
-  const firstState = jobs.map((job) => matches.get(job.id)).find(Boolean);
-
-  const sortLabel = t(`jobs.sort.${filters.tri ?? "recent"}`);
-  // Admin v4, étape 7: two clearly bounded boxes in one white search bar, the button inside it.
-  const field =
-    "flex min-w-0 flex-1 cursor-text items-center gap-3 rounded-[16px] bg-creme px-4 py-2.5 text-sapin ring-[1.5px] ring-transparent ring-inset transition-shadow hover:ring-sapin/30 focus-within:bg-blanc focus-within:shadow-[0_0_0_4px_rgb(166_242_107/0.55)] focus-within:ring-sapin [&_input]:w-full [&_input]:bg-transparent [&_input]:text-[15px] [&_input]:font-semibold [&_input]:outline-none [&_input]:placeholder:font-normal [&_input]:placeholder:text-ardoise";
+  const line =
+    filters.q && tab !== "enregistrees"
+      ? t("offers.line.search", { count: total, query: filters.q })
+      : firstState === "optedOut"
+        ? t("offers.line.optedOut")
+        : tab === "recentes"
+          ? t("offers.line.recent")
+          : tab === "pour-vous" && ranked
+            ? t("offers.line.forYou")
+            : null;
+  const show = (count: number) => t("offers.filters.show", { count });
 
   return (
-    <div className="flex flex-col gap-5">
-      {/* On a phone the shell shows « Offres » and the one search bar (V7 § B1). */}
-      <AppPageHeader
-        eyebrow={t("talent.jobs.search.eyebrow")}
-        title={t("talent.jobs.search.title", { count: total })}
-        className="max-md:sr-only"
-      />
-
-      <form
-        action="/app/jobs"
-        method="get"
-        role="search"
-        className="flex flex-col gap-2 rounded-[22px] bg-blanc p-2 shadow-[0_6px_20px_rgb(11_26_31/0.06)] ring-[1.5px] ring-sapin/15 ring-inset max-md:hidden lg:flex-row lg:items-stretch"
-      >
-        {view !== "pour-vous" && <input type="hidden" name="vue" value={view} />}
-        {filters.tri && <input type="hidden" name="tri" value={filters.tri} />}
-        <div className="flex flex-col gap-2 lg:flex-1 lg:flex-row">
-          <div className={field}>
-            <Icon name="recherche" className="size-[18px] shrink-0" />
-            <label className="flex min-w-0 flex-1 flex-col">
-              <span className="text-[11px] leading-[14px] font-semibold text-ardoise">
-                {t("talent.jobs.search.keyword.label")}
-              </span>
-              <input
-                id="job-keyword"
-                name="q"
-                type="search"
-                defaultValue={filters.q}
-                placeholder={t("talent.jobs.search.keyword.placeholder")}
-              />
-            </label>
-          </div>
-          <div className={cx(field, "lg:max-w-[420px]")}>
-            <Icon name="localisation" className="size-[18px] shrink-0" />
-            <label className="flex min-w-0 flex-1 flex-col">
-              <span className="text-[11px] leading-[14px] font-semibold text-ardoise">
-                {t("talent.jobs.search.location.label")}
-              </span>
-              <input
-                id="job-city"
-                name="ville"
-                defaultValue={filters.ville}
-                placeholder={t("talent.jobs.search.location.placeholder")}
-              />
-            </label>
-          </div>
-        </div>
-        <button
-          type="submit"
-          className="flex h-12 shrink-0 items-center justify-center gap-2 rounded-[16px] bg-sapin px-7 text-[15px] font-semibold text-blanc hover:bg-sapin/90 lg:h-auto"
-        >
-          <Icon name="recherche" className="size-[18px]" />
-          {t("talent.jobs.search.submit")}
-        </button>
-      </form>
-
-      <div className="flex flex-col gap-3">
-        <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
-          <nav
-            aria-label={t("talent.jobs.search.tabs")}
-            className={cx(segmentedList, "overflow-x-auto")}
-          >
-            {(["pour-vous", "recentes"] as const).map((key) => (
-              <Link
-                key={key}
-                href={hrefWith({ vue: key === "pour-vous" ? undefined : key })}
-                aria-current={
-                  view === key || (key === "pour-vous" && view === "recommandees")
-                    ? "page"
-                    : undefined
-                }
-                className={segmentedItem(
-                  view === key || (key === "pour-vous" && view === "recommandees"),
-                )}
-              >
-                {t(`talent.jobs.search.tab.${key === "pour-vous" ? "forYou" : "recent"}`)}
-              </Link>
-            ))}
-            <Link href="/app/jobs/enregistrees" className={segmentedItem(false)}>
-              {t("talent.jobs.search.tab.saved", { count: saved.length })}
-            </Link>
-          </nav>
-          {!ranked && (
-            <details className="relative">
-              <summary className="flex h-10 cursor-pointer list-none items-center gap-1.5 rounded-pill bg-blanc px-4 text-[13px] text-ardoise ring-[1.5px] ring-sapin/20 ring-inset hover:ring-sapin/45 [&::-webkit-details-marker]:hidden">
-                <Icon name="sort" className="size-3.5 lg:hidden" />
-                <span className="hidden lg:inline">{t("talent.jobs.sort.text")}</span>
-                <strong className="font-semibold text-sapin">{sortLabel}</strong>
-                <Icon name="chev-d" className="size-3.5" />
-              </summary>
-              <ul className="absolute top-12 right-0 z-30 flex min-w-48 flex-col gap-0.5 rounded-[18px] bg-blanc p-1.5 text-sm shadow-menu ring-1 ring-sapin/8">
-                {jobSorts.map((sort) => (
-                  <li key={sort}>
-                    <Link
-                      href={hrefWith({ tri: sort === "recent" ? undefined : sort })}
-                      aria-current={(filters.tri ?? "recent") === sort ? "true" : undefined}
-                      className="flex items-center justify-between gap-3 rounded-xl px-3 py-2 hover:bg-creme"
-                    >
-                      {t(`jobs.sort.${sort}`)}
-                      {(filters.tri ?? "recent") === sort && (
-                        <Icon name="check" className="size-4 text-feuille-fonce" />
-                      )}
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </details>
-          )}
-        </div>
-
-        <div className="group/filters relative flex flex-col gap-2.5">
-          <div className="flex items-center gap-2">
-            <FilterChipToggle
-              menu="all"
-              open={params.filtres === "1"}
-              active={active.length > 0}
-              icon={<Icon name="filtre" className="size-3.5" />}
-              label={
-                active.length > 0
-                  ? t("talent.jobs.filters.count", { count: active.length })
-                  : t("talent.jobs.filters.text")
-              }
-            >
-              {/* Every filter in one form: a sheet on a phone, a panel on a computer. */}
-              <form
-                action="/app/jobs"
-                method="get"
-                aria-label={t("talent.jobs.filters.text")}
-                className={cx(
-                  "fixed inset-0 z-50 flex flex-col gap-4 overflow-y-auto bg-creme p-5 lg:absolute lg:inset-auto lg:top-12 lg:left-0 lg:z-30 lg:max-h-none lg:w-[640px] lg:rounded-[24px] lg:bg-blanc lg:shadow-menu lg:ring-1 lg:ring-sapin/8",
-                )}
-              >
-                {filters.q && <input type="hidden" name="q" value={filters.q} />}
-                {view !== "pour-vous" && <input type="hidden" name="vue" value={view} />}
-                {filters.tri && <input type="hidden" name="tri" value={filters.tri} />}
-                <div className="flex items-center justify-between gap-3">
-                  <p className="text-lg font-semibold">{t("talent.jobs.filters.text")}</p>
-                  <CloseDetails label={t("talent.jobs.filters.close")}>
-                    <Icon name="fermer" className="size-4" />
-                  </CloseDetails>
-                </div>
-                <div className="grid gap-4 sm:grid-cols-2">
-                  {/* On a phone the search bar has no « Lieu » box (V7 § B1): the city is here. */}
-                  <TextField
-                    id="jf-city"
-                    name="ville"
-                    label={t("talent.jobs.search.location.label")}
-                    placeholder={t("talent.jobs.search.location.placeholder")}
-                    defaultValue={filters.ville ?? ""}
-                  />
-                  <Select
-                    id="jf-country"
-                    name="pays"
-                    label={t("talent.jobs.filter.country")}
-                    defaultValue={filters.pays ?? ""}
-                    options={[
-                      { value: "", label: t("jobs.search.country.placeholder") },
-                      ...search.countries.map((country) => ({ value: country, label: country })),
-                    ]}
-                  />
-                  <Select
-                    id="jf-contract"
-                    name="contrat"
-                    label={t("talent.jobs.filter.contract")}
-                    defaultValue={filters.contrat ?? ""}
-                    options={[
-                      { value: "", label: t("talent.jobs.filter.any") },
-                      ...(Object.keys(contractFilters) as ContractFilter[]).map((key) => ({
-                        value: key,
-                        label: t(`jobs.search.contract.${key}`),
-                      })),
-                    ]}
-                  />
-                  <Select
-                    id="jf-remote"
-                    name="teletravail"
-                    label={t("talent.jobs.filter.remote.text")}
-                    defaultValue={filters.teletravail ?? ""}
-                    options={[
-                      { value: "", label: t("talent.jobs.filter.any") },
-                      ...(Object.keys(remoteFilters) as RemoteFilter[]).map((key) => ({
-                        value: key,
-                        label: t(`jobs.search.remote.${key}`),
-                      })),
-                    ]}
-                  />
-                  <Select
-                    id="jf-experience"
-                    name="experience"
-                    label={t("talent.jobs.filter.experience.text")}
-                    defaultValue={filters.experience ?? ""}
-                    options={[
-                      { value: "", label: t("talent.jobs.filter.any") },
-                      ...(Object.keys(experienceFilters) as ExperienceFilter[]).map((key) => ({
-                        value: key,
-                        label: t(`talent.jobs.filter.experience.${key}`),
-                      })),
-                    ]}
-                  />
-                  <Select
-                    id="jf-posted"
-                    name="publie"
-                    label={t("talent.jobs.filter.posted.text")}
-                    defaultValue={parsed.publie ?? ""}
-                    options={[
-                      { value: "", label: t("talent.jobs.filter.any") },
-                      ...(Object.keys(postedFilters) as PostedFilter[]).map((key) => ({
-                        value: key,
-                        label: t(`talent.jobs.filter.posted.${key}`),
-                      })),
-                    ]}
-                  />
-                  <Select
-                    id="jf-compat"
-                    name="compat"
-                    label={t("talent.jobs.filter.compatibility.text")}
-                    defaultValue={compat !== undefined ? String(compat) : ""}
-                    options={[
-                      { value: "", label: t("talent.jobs.filter.any") },
-                      ...compatibilityFilters.map((value) => ({
-                        value: String(value),
-                        label: t("talent.jobs.filter.compatibility.value", { score: value }),
-                      })),
-                    ]}
-                  />
-                </div>
-                <div className="flex flex-col gap-2">
-                  {places && (
-                    <Checkbox
-                      id="jf-places"
-                      name="lieux"
-                      value="1"
-                      defaultChecked={Boolean(filters.lieux)}
-                      label={t("talent.jobs.filter.places")}
-                    />
-                  )}
-                  <Checkbox
-                    id="jf-salary"
-                    name="salaire"
-                    value="indique"
-                    defaultChecked={Boolean(filters.salaire)}
-                    label={t("talent.jobs.filter.salary.disclosed")}
-                  />
-                  <Checkbox
-                    id="jf-verified"
-                    name="verifiees"
-                    value="1"
-                    defaultChecked={Boolean(filters.verifiees)}
-                    label={t("talent.jobs.filter.verified")}
-                  />
-                </div>
-                <div className="mt-auto flex flex-wrap items-center gap-3 lg:mt-0">
-                  <button
-                    type="submit"
-                    className="h-12 flex-1 rounded-pill bg-sapin px-6 text-sm font-semibold text-blanc hover:bg-sapin/90 lg:flex-none"
-                  >
-                    {t("talent.jobs.filters.apply", { count: total })}
-                  </button>
-                  {active.length > 0 && (
-                    <Link
-                      href={resetHref}
-                      className="text-sm font-semibold text-feuille-fonce underline"
-                    >
-                      {t("talent.jobs.filters.reset")}
-                    </Link>
-                  )}
-                </div>
-              </form>
-            </FilterChipToggle>
-            <TabRail name="jobs-filters" className="min-w-0 flex-1 bg-transparent! p-0!">
-              <div className="flex w-max gap-2">
-                <FilterChipToggle
-                  menu="contrat"
-                  label={t("talent.jobs.filter.contract")}
-                  active={Boolean(filters.contrat)}
-                />
-                <FilterChipToggle
-                  menu="teletravail"
-                  label={t("talent.jobs.filter.remote.text")}
-                  active={Boolean(filters.teletravail)}
-                />
-                <FilterChipToggle
-                  menu="experience"
-                  label={t("talent.jobs.filter.experience.text")}
-                  active={Boolean(filters.experience)}
-                />
-                <FilterChipToggle
-                  menu="salaire"
-                  label={t("talent.jobs.filter.salary.text")}
-                  active={Boolean(filters.salaire)}
-                />
-                <FilterChipToggle
-                  menu="publie"
-                  label={t("talent.jobs.filter.posted.text")}
-                  active={Boolean(parsed.publie)}
-                />
-                <FilterChipToggle
-                  menu="compat"
-                  label={t("talent.jobs.filter.compatibility.text")}
-                  active={compat !== undefined}
-                />
-              </div>
-            </TabRail>
-          </div>
-          <FilterMenu
-            menu="contrat"
-            items={menu("contrat", Object.keys(contractFilters) as ContractFilter[], (value) =>
-              t(`jobs.search.contract.${value}`),
-            )}
-          />
-          <FilterMenu
-            menu="teletravail"
-            items={menu("teletravail", Object.keys(remoteFilters) as RemoteFilter[], (value) =>
-              t(`jobs.search.remote.${value}`),
-            )}
-          />
-          <FilterMenu
-            menu="experience"
-            items={menu(
-              "experience",
-              Object.keys(experienceFilters) as ExperienceFilter[],
-              (value) => t(`talent.jobs.filter.experience.${value}`),
-            )}
-          />
-          <FilterMenu
-            menu="salaire"
-            items={menu("salaire", ["indique"] as const, () =>
-              t("talent.jobs.filter.salary.disclosed"),
-            )}
-          />
-          <FilterMenu
-            menu="publie"
-            items={menu("publie", Object.keys(postedFilters) as PostedFilter[], (value) =>
-              t(`talent.jobs.filter.posted.${value}`),
-            )}
-          />
-          <FilterMenu
-            menu="compat"
-            items={menu("compat", compatibilityFilters.map(String), (value) =>
-              t("talent.jobs.filter.compatibility.value", { score: value }),
-            )}
-          />
-
-          {active.length > 0 && (
-            <ul className="flex flex-wrap items-center gap-2">
-              {active.map((item) => (
-                <li key={item.key}>
-                  <Link
-                    href={hrefWith({ [item.key]: undefined })}
-                    aria-label={t("talent.jobs.filters.remove", { label: item.label })}
-                    className={cx(chip, "bg-lime-clair text-sapin hover:bg-lime")}
-                  >
-                    {item.label}
-                    <Icon name="fermer" className="size-3" />
-                  </Link>
-                </li>
-              ))}
-              <li>
-                <Link
-                  href={resetHref}
-                  className="ml-1 text-xs font-semibold text-feuille-fonce hover:underline"
-                >
-                  {t("talent.jobs.filters.reset")}
-                </Link>
-              </li>
-            </ul>
-          )}
-        </div>
-      </div>
-
-      <div className="grid items-start gap-5 lg:grid-cols-[minmax(0,1fr)_340px]">
-        <div className="flex flex-col gap-3">
-          {general && firstState?.state !== "optedOut" ? (
-            <p className="flex flex-wrap items-center gap-x-3 gap-y-1 rounded-[18px] bg-lime-clair px-4 py-3 text-sm">
-              <span className="min-w-0 flex-1">{t("talent.jobs.search.general")}</span>
-              <Link
-                href="/app/profil#competences"
-                className="flex min-h-11 items-center font-semibold underline underline-offset-2"
-              >
-                {t("talent.jobs.search.personalise")}
-              </Link>
-            </p>
-          ) : (
-            firstState?.state === "incomplete" && (
-              <p className="rounded-[18px] bg-blanc px-4 py-3 text-sm text-ardoise">
-                {t("match.score.unavailable")}
-              </p>
-            )
-          )}
-          {firstState?.state === "optedOut" && (
-            <p className="rounded-[18px] bg-blanc px-4 py-3 text-sm text-ardoise">
-              {t("match.score.optedOut")}
-            </p>
-          )}
-          {jobs.length === 0 ? (
-            <EmptyState
-              title={t("talent.jobs.search.empty.title")}
-              description={t("talent.jobs.search.empty.body")}
-              action={
-                <Link href={resetHref} className={pillClass("dark", "md")}>
-                  {t("talent.jobs.search.empty.cta")}
-                </Link>
-              }
-            />
-          ) : (
-            <ul className="flex flex-col gap-3">
-              {jobs.map((job) => (
-                <li key={job.id}>
-                  <TalentJobCard
-                    job={job}
-                    now={search.now}
-                    match={matches.get(job.id)}
-                    applied={applied.has(job.slug)}
-                    saved={savedSlugs.has(job.slug)}
-                    back={back}
-                    selected={best?.job.id === job.id}
-                  />
-                </li>
-              ))}
-            </ul>
-          )}
-          {(page > 1 || page < pageCount) && (
-            <div className="mt-2 flex flex-wrap items-center justify-center gap-3">
-              {page > 1 && (
-                <Link
-                  href={hrefWith({ page: String(page - 1) })}
-                  className={pillClass("outline", "md", "h-12 px-6")}
-                >
-                  <Icon name="chev-l" className="size-4" />
-                  {t("talent.jobs.search.previous")}
-                </Link>
-              )}
-              {page < pageCount && (
-                <Link
-                  href={hrefWith({ page: String(page + 1) })}
-                  className={pillClass("outline", "md", "h-12 w-full px-6 lg:w-auto")}
-                >
-                  {t("talent.jobs.search.loadMore")}
-                  <Icon name="chev-d" className="size-4" />
-                </Link>
-              )}
-            </div>
-          )}
-          {jobs.length > 0 && (
-            <p className="text-center text-xs text-ardoise">
-              {t("talent.jobs.search.closedHidden")}
-            </p>
-          )}
-          <p className="flex items-center justify-center gap-2 text-xs text-ardoise lg:hidden">
-            <Icon name="check" className="size-3.5 text-feuille" />
-            {t("talent.jobs.sidebar.free")}
-          </p>
-        </div>
-
-        <aside className="flex flex-col gap-4">
-          {best && (
-            <AiPanel labelledBy="jobs-ai-title" className="hidden lg:flex">
-              <AiBrand />
-              <div className="flex items-center gap-4">
-                <ScoreRing
-                  value={best.explanation.score}
-                  label={t("ui.percent", { value: Math.round(best.explanation.score) })}
-                  size={84}
-                  dark
-                />
-                <div className="flex min-w-0 flex-col gap-0.5">
-                  <p
-                    id="jobs-ai-title"
-                    className="text-[11px] font-semibold tracking-[0.09em] text-neon uppercase"
-                  >
-                    {t("match.score.label")}
-                  </p>
-                  <p className="text-[15px] font-semibold">
-                    {t("match.score.valueWithBand", {
-                      score: Math.round(best.explanation.score),
-                      band: t(`match.band.${best.explanation.band}.text`),
-                    })}
-                  </p>
-                  <p className="text-xs text-blanc/70">
-                    {t("talent.jobs.aiPanel.job", {
-                      job: best.job.title,
-                      company: best.job.organization.name,
-                    })}
-                  </p>
-                </div>
-              </div>
-              <ul className="flex flex-col gap-2.5">
-                {(["skills_required", "experience", "languages"] as const)
-                  .flatMap((key) => best.explanation.criteria.filter((c) => c.key === key))
-                  .map((criterion) => {
-                    const value = Math.round(criterion.value * 100);
-                    return (
-                      <li key={criterion.key} className="flex flex-col gap-1.5 text-xs">
-                        <span className="flex justify-between gap-2">
-                          <span>{t(`match.criterion.${criterionText[criterion.key]}.text`)}</span>
-                          <span className="font-semibold">{t("ui.percent", { value })}</span>
-                        </span>
-                        <span
-                          aria-hidden
-                          className="h-1.5 overflow-hidden rounded-full bg-blanc/15"
-                        >
-                          <span
-                            className="block h-full rounded-full bg-lime"
-                            style={{ width: `${value}%` }}
-                          />
-                        </span>
-                      </li>
-                    );
-                  })}
-              </ul>
-              <p className="flex items-center gap-2 text-xs text-blanc/80">
-                <Icon name="eye" className="size-4 shrink-0 text-neon" />
-                <Link
-                  href={`/app/jobs/${best.job.slug}#compatibilite`}
-                  className="jm-tap font-semibold whitespace-nowrap text-neon hover:underline"
-                >
-                  {t("common.why")}
-                </Link>
-                {t("talent.jobs.aiPanel.updated", {
-                  time: relativeLabel(
-                    new Date(best.explanation.computedAt),
-                    search.now,
-                  ).toLowerCase(),
-                })}
-              </p>
-              <p className="text-xs text-blanc/75">{t("match.score.lowIsNotNo")}</p>
-            </AiPanel>
-          )}
-
-          <div className="flex flex-col gap-3">
-            <ApplicationStats
-              headingId="jobs-applications"
-              link
-              counts={{
-                sent: statuses.length,
-                viewed: statuses.filter(
-                  (status) => status !== "sent" && status !== "withdrawn" && status !== "jobClosed",
-                ).length,
-                interviews: statuses.filter((status) => status === "interview").length,
-                offers: statuses.filter((status) => status === "offer" || status === "hired")
-                  .length,
-              }}
-            />
-            {statuses.some((status) => !isClosedStatus(status)) && (
-              <Link href="/app/jobs/candidatures" className={pillClass("outline", "sm")}>
-                {t("talent.jobs.applications.title")}
-              </Link>
-            )}
-          </div>
-
+    <div className="flex flex-col gap-3.5">
+      <h1 className="sr-only">{t("offers.title")}</h1>
+      <nav aria-label={t("offers.tabs")} className="t-seg">
+        {tabs.map((key) => (
           <Link
-            href="/app/jobs/enregistrees"
-            className="flex items-center justify-between gap-3 rounded-[24px] bg-blanc p-5 text-[15px] font-semibold hover:bg-lime-clair"
+            key={key}
+            href={hrefWith({ vue: key === "pour-vous" ? undefined : key, page: undefined })}
+            aria-current={tab === key ? "page" : undefined}
+            className="t-press"
           >
-            <span className="flex items-center gap-2.5">
-              <Icon name="favori" className="size-[18px]" />
-              {t("talent.jobs.saved.title")}
-            </span>
-            <span className="text-ardoise">{savedSlugs.size}</span>
+            {t(`offers.tab.${tabText[key]}`)}
           </Link>
+        ))}
+      </nav>
+      {line && <p className="t-res-l">{line}</p>}
+      {tab === "pour-vous" && !ranked && firstState !== "optedOut" && jobs.length > 0 && (
+        <p className="t-res-l">
+          {t("offers.line.general")}{" "}
+          <Link href="/app/profil#competences">{t("offers.line.generalCta")}</Link>
+        </p>
+      )}
 
-          {companies.length > 0 && (
-            <section
-              aria-labelledby="jobs-companies"
-              className="flex flex-col gap-3 rounded-[24px] bg-blanc p-5"
-            >
-              <h2 id="jobs-companies" className="text-[15px] font-semibold">
-                {t("talent.jobs.sidebar.companies.text")}
-              </h2>
-              <ul className="flex flex-col gap-3">
-                {companies.map((company) => (
-                  <li key={company.id}>
-                    <Link
-                      href={`/entreprises/${company.slug}`}
-                      className="flex items-center gap-3 rounded-xl hover:bg-creme"
-                    >
-                      <CompanyLogo
-                        name={company.name}
-                        size="sm"
-                        className="size-9! rounded-[10px]! text-xs!"
-                      />
-                      <span className="flex min-w-0 flex-col">
-                        <span className="truncate text-[13px] font-semibold">{company.name}</span>
-                        <span className="text-[11px] text-ardoise">
-                          {company.sector
-                            ? t("talent.jobs.sidebar.companies.meta", {
-                                count: company.openJobs,
-                                sector: company.sector,
-                              })
-                            : t("talent.jobs.sidebar.companies.count", { count: company.openJobs })}
-                        </span>
-                      </span>
-                    </Link>
-                  </li>
-                ))}
-              </ul>
-            </section>
-          )}
-        </aside>
-      </div>
+      {jobs.length === 0 ? (
+        tab === "enregistrees" ? (
+          <div className="t-verre t-vide">
+            <p>{t("offers.saved.empty")}</p>
+            <Link href="/app/jobs" className="t-bt t-sec t-m t-press">
+              {t("offers.saved.cta")}
+            </Link>
+          </div>
+        ) : (
+          <div className="t-verre t-vide">
+            <b>{t("offers.empty.title")}</b>
+            <p>{t("offers.empty.text")}</p>
+            {Object.keys(active).length > 0 && (
+              <Link href={clearHref} className="t-bt t-sec t-m t-press">
+                {t("offers.empty.cta")}
+              </Link>
+            )}
+          </div>
+        )
+      ) : (
+        <ul className="flex flex-col gap-3.5">
+          {jobs.map((job) => (
+            <li key={job.id} className={cx(closedIds.has(job.id) && "opacity-70")}>
+              <OfferCard
+                job={job}
+                match={matches.get(job.id)}
+                saved={savedSlugs.has(job.slug)}
+                applied={applied.has(job.slug)}
+                back={back}
+                now={now}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+      {order.length > shown && (
+        <Link
+          href={hrefWith({ page: String((filters.page ?? 1) + 1) })}
+          scroll={false}
+          className="t-bt t-sec t-m t-press self-center"
+        >
+          {t("offers.more")}
+        </Link>
+      )}
+      <p className="t-res-l text-center">{t("offers.free")}</p>
+
+      <OfferFilters
+        key={JSON.stringify(active)}
+        initial={active}
+        keep={keep}
+        choices={choices}
+        total={total}
+        open={params.filtres === "1"}
+        labels={{
+          title: t("offers.filters.title"),
+          close: t("offers.filters.close"),
+          domain: t("offers.filters.domain"),
+          place: t("offers.filters.place"),
+          remote: t("offers.filters.remote"),
+          contract: t("offers.filters.contract"),
+          experience: t("offers.filters.experience"),
+          verified: t("offers.filters.verified"),
+          clear: t("offers.filters.clear"),
+          show: { zero: show(0), one: show(1), other: show(2).replace("2", "#") },
+          contracts: {
+            cdi: t("offers.filters.contracts.cdi"),
+            cdd: t("offers.filters.contracts.cdd"),
+            internship: t("offers.filters.contracts.internship"),
+            mission: t("offers.filters.contracts.mission"),
+          },
+          levels: {
+            none: t("offers.filters.levels.none"),
+            junior: t("offers.filters.levels.junior"),
+            mid: t("offers.filters.levels.mid"),
+          },
+        }}
+      />
     </div>
   );
 }
