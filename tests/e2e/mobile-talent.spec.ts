@@ -250,7 +250,8 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
   await expect(page.getByRole("heading", { name: "Candidature envoyée" })).toBeVisible({
     timeout: 20_000,
   });
-  await expect(page.getByRole("link", { name: /^Suivre/ })).toBeVisible();
+  // Web: the window over the offer (planche web talent-2 § 1); phone: the confirmation screen.
+  await expect(page.getByRole("link", { name: /^Suivre/ }).first()).toBeVisible();
   await expectAccessible(page);
 });
 
