@@ -353,4 +353,5 @@ html = f'''<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name
 <p>18 octobre 2026. Chemins de navigation, Apprendre, recherche, parcours, détail, salle de cours avec Orbi, exercice, quiz, attestation PDF sécurisée, partage et vérification. Contenus fictifs.</p>
 <ul class="som">{som}</ul></header>{corps}<p class="fin">Jumanly · Learn. Grow. Connect.</p></body></html>'''
 out = os.path.join(H, '..', 'refonte-mobile-talent-3.html')
+exec(open(H + '/sans_tap.py').read()); html = sans_tap(html)
 open(out, 'w').write(html); print(out, len(html))

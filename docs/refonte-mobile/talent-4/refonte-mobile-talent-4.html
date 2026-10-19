@@ -1,0 +1,969 @@
+<!doctype html><html lang="fr"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Refonte mobile · talent, lot 4</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Sora:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>/* Refonte mobile · fondations v2 (18/10/2026).
+   Identité « verre » d'après la référence d'Ephraïm : formes très arrondies, surface claire translucide,
+   filet lumineux en haut, ombre large et douce. Dégradés clairs seulement (jamais sombres). */
+:root{
+  --sapin:#0F3F37; --lime:#A6F26B; --creme:#F2EDE5; --nuit:#0B1A1F; --menthe:#2FD3A6; --ambre:#F2B33D; --corail:#E25C4B;
+  --lime-c:#EEFBDD; --menthe-c:#DDF6EE; --ambre-c:#FDF1D8; --corail-c:#FBE4E0; --ciel-c:#E3EEF9;
+  /* Thème clair */
+  --fond:#EEE8DE; --surface:rgba(255,255,255,.80); --plein:#FFFFFF; --zone:#F5F1EA; --piste:#E3DCD0;
+  --texte:#0F3F37; --texte2:#5B6B68; --trait:rgba(15,63,55,.08);
+  --verre:0 0 0 1px rgba(15,63,55,.05),0 18px 38px -20px rgba(15,63,55,.30),inset 0 1px 0 rgba(255,255,255,.95);
+  --verre-fort:0 0 0 1px rgba(15,63,55,.05),0 26px 50px -22px rgba(15,63,55,.38),inset 0 1px 0 #fff,inset 0 -1px 0 rgba(15,63,55,.04);
+  --p-fond:#0F3F37; --p-texte:#fff;
+  /* Dégradés clairs */
+  --g-accent:linear-gradient(135deg,#D4FA9E 0%,#A6F26B 48%,#5FE0B8 100%);
+  --g-former:linear-gradient(150deg,#ECFCD8 0%,#C3F38E 100%);
+  --g-accomp:linear-gradient(150deg,#E2F8F0 0%,#93E8CD 100%);
+  --g-oppo:linear-gradient(150deg,#FFF3D6 0%,#F8CF73 100%);
+  --g-profil:linear-gradient(135deg,#D4FA9E 0%,#9BE9CF 55%,#CDE7F7 100%);
+  --halo:0 12px 28px -6px rgba(47,211,166,.55);
+  --r-carte:26px; --r-ctrl:18px;
+}
+.sombre{
+  --fond:#0B1A1F; --surface:rgba(255,255,255,.065); --plein:#13282C; --zone:rgba(255,255,255,.06); --piste:rgba(255,255,255,.08);
+  --texte:#F2EDE5; --texte2:#9FB3AE; --trait:rgba(255,255,255,.08);
+  --verre:0 0 0 1px rgba(255,255,255,.07),0 20px 40px -22px rgba(0,0,0,.8),inset 0 1px 0 rgba(255,255,255,.09);
+  --verre-fort:0 0 0 1px rgba(255,255,255,.08),0 26px 50px -22px rgba(0,0,0,.85),inset 0 1px 0 rgba(255,255,255,.12);
+  --p-fond:#A6F26B; --p-texte:#0F3F37;
+  --g-former:linear-gradient(150deg,rgba(166,242,107,.22),rgba(166,242,107,.08));
+  --g-accomp:linear-gradient(150deg,rgba(47,211,166,.24),rgba(47,211,166,.08));
+  --g-oppo:linear-gradient(150deg,rgba(242,179,61,.26),rgba(242,179,61,.08));
+  --g-profil:linear-gradient(135deg,#1E5A3F 0%,#145049 55%,#173F55 100%);
+  --lime-c:rgba(166,242,107,.16); --menthe-c:rgba(47,211,166,.16); --ambre-c:rgba(242,179,61,.18); --ciel-c:rgba(120,170,230,.18); --corail-c:rgba(226,92,75,.2);
+  color:var(--texte);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#E6E0D5;color:var(--sapin);font-family:"Sora",system-ui,sans-serif;font-size:14px;line-height:1.45;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4,p{margin:0}
+a{color:inherit;text-decoration:none}
+.ic{width:24px;height:24px;flex:none;display:block}.ic.s{width:20px;height:20px}.ic.xs{width:16px;height:16px}.ic.l{width:28px;height:28px}
+.ic .pt{fill:var(--lime);stroke:var(--plein);stroke-width:1.6}
+
+/* Page */
+.couv{background:var(--sapin);color:var(--creme);padding:56px max(24px,calc((100% - 1260px)/2)) 40px}
+.couv .k{display:inline-flex;gap:8px;align-items:center;font-size:12.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--lime)}
+.couv h1{font-size:40px;letter-spacing:-.03em;margin:14px 0 10px;font-weight:600}
+.couv p{max-width:780px;opacity:.85;font-size:15px}
+.som{display:flex;flex-wrap:wrap;gap:8px;list-style:none;padding:0;margin:24px 0 0}
+.som a{display:block;padding:8px 14px;border-radius:999px;border:1px solid rgba(242,237,229,.25);font-size:13px}
+.nouv{display:inline-block;margin-left:6px;font-size:10px;font-weight:700;padding:2px 7px;border-radius:999px;background:var(--lime);color:var(--sapin);vertical-align:2px}
+.bloc{padding:52px max(24px,calc((100% - 1260px)/2)) 0}
+.bloc>header h2{font-size:26px;letter-spacing:-.02em;font-weight:600}
+.bloc>header p{color:#5B6B68;max-width:800px;margin-top:6px}
+.grille{display:flex;flex-wrap:wrap;gap:20px;margin-top:24px;align-items:flex-start}
+.pl{background:var(--fond);border-radius:30px;padding:20px;width:400px;display:flex;flex-direction:column;gap:14px;color:var(--texte)}
+.pl.l{width:100%}
+.pl>.lab{font-size:11.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--texte2)}
+.pl>.note{font-size:12.5px;color:var(--texte2)}
+.ecrans{display:flex;gap:18px;flex-wrap:wrap}
+.ecrans figure{margin:0}.ecrans figcaption{margin:14px 10px 0;font-size:13px}.ecrans figcaption span{color:#5B6B68}
+
+/* Surface « verre » : la brique commune (barre, cartes, bandeaux, options) */
+.verre{background:var(--surface);-webkit-backdrop-filter:blur(18px) saturate(1.4);backdrop-filter:blur(18px) saturate(1.4);box-shadow:var(--verre);border-radius:var(--r-carte)}
+.verre.fort{box-shadow:var(--verre-fort)}
+.anat{display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12.5px;color:var(--texte2)}
+.anat div{background:var(--plein);border-radius:18px;padding:12px 14px;box-shadow:var(--verre)}
+.anat b{display:block;color:var(--texte);font-size:13.5px;margin-bottom:2px}
+
+/* Icônes */
+.ic-g{display:grid;grid-template-columns:repeat(auto-fill,minmax(112px,1fr));gap:10px}
+.ic-t{background:var(--surface);border-radius:20px;padding:14px 8px 10px;display:flex;flex-direction:column;align-items:center;gap:8px;box-shadow:var(--verre)}
+.ic-t .duo{display:flex;gap:16px;color:var(--texte2)}.ic-t .duo .on{color:var(--texte)}
+.ic-t .ic{width:30px;height:30px}
+.ic-t span{font-size:11.5px;text-align:center;line-height:1.2}
+.ic-t.neuf{box-shadow:0 0 0 2px var(--lime),var(--verre)}
+.ic-tg{font-size:13px;font-weight:600;margin:18px 0 8px}
+.zoom-ic{display:flex;gap:16px;align-items:center}
+.zoom-ic .z{width:96px;height:96px;border-radius:28px;display:grid;place-items:center;background:var(--g-oppo);color:var(--sapin)}
+.zoom-ic .z .ic{width:56px;height:56px}
+.zoom-ic .z.n{background:var(--plein);color:var(--texte2)}
+
+/* Couleurs */
+.pal{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.pal div{border-radius:20px;overflow:hidden;background:var(--plein);box-shadow:var(--verre)}
+.pal i{display:block;height:64px}.pal b{display:block;padding:8px 12px 0;font-size:13px}.pal span{display:block;padding:0 12px 10px;font-size:11.5px;color:var(--texte2)}
+.regles{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:12px}
+.regles div{background:var(--plein);border-radius:20px;padding:14px 16px;box-shadow:var(--verre);font-size:13px;color:var(--texte2)}
+.regles b{display:block;color:var(--texte);font-size:14px;margin-bottom:4px}
+
+/* Téléphone */
+.phone{position:relative;width:390px;height:844px;border-radius:48px;background:var(--fond);color:var(--texte);overflow:hidden;box-shadow:0 0 0 10px #1B1F1E,0 30px 60px -20px rgba(0,0,0,.45);margin:10px}
+.phone::before{content:"";position:absolute;inset:0 0 auto;height:320px;background:radial-gradient(120% 80% at 85% 0%,rgba(166,242,107,.28),transparent 60%),radial-gradient(90% 70% at 0% 10%,rgba(47,211,166,.16),transparent 65%);pointer-events:none}
+.phone.sombre::before{background:radial-gradient(120% 80% at 85% 0%,rgba(166,242,107,.12),transparent 60%),radial-gradient(90% 70% at 0% 10%,rgba(47,211,166,.10),transparent 65%)}
+.statut{position:relative;height:46px;display:flex;justify-content:space-between;align-items:center;padding:0 30px;font-size:15px;font-weight:600}
+.statut i{display:inline-block;width:5px;height:11px;border-radius:2px;background:currentColor;margin-left:3px}
+.contenu{position:absolute;inset:46px 0 0;overflow:hidden;padding:0 16px 120px;display:flex;flex-direction:column;gap:14px}
+
+/* Barre du bas : pilule flottante en verre, rond central qui déborde */
+.nav-z{position:relative;padding:14px 12px 22px}
+.phone .nav-z{position:absolute;left:0;right:0;bottom:0;z-index:5}
+.nav{position:relative;height:74px;border-radius:40px;display:grid;grid-template-columns:repeat(5,1fr);align-items:center;background:var(--surface);-webkit-backdrop-filter:blur(22px) saturate(1.5);backdrop-filter:blur(22px) saturate(1.5);box-shadow:var(--verre-fort)}
+.nav a{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:11px;font-weight:500;color:var(--texte2)}
+.nav a.on{color:var(--texte);font-weight:700}
+.nav .centre{position:relative}
+.nav .centre .rond{width:66px;height:66px;border-radius:50%;display:grid;place-items:center;margin-top:-30px;background:var(--plein);box-shadow:0 0 0 5px var(--surface),var(--halo)}
+.nav .centre span{margin-top:2px}
+.nav .badge{position:relative}.nav .badge b{position:absolute;top:-4px;right:-9px;min-width:17px;height:17px;border-radius:9px;background:var(--corail);color:#fff;font-size:10px;display:grid;place-items:center;padding:0 4px}
+.home{position:absolute;bottom:8px;left:50%;width:134px;height:5px;border-radius:3px;background:var(--texte);transform:translateX(-50%);opacity:.9}
+.nav-fond{border-radius:28px;padding:20px 0 0;background:var(--fond);position:relative;overflow:hidden}
+.nav-fond::before{content:"";position:absolute;inset:0;background:radial-gradient(80% 90% at 80% 0%,rgba(166,242,107,.25),transparent 60%)}
+
+/* En-têtes */
+.tete{position:relative;display:flex;align-items:center;gap:8px;padding:8px 0 2px}
+.tete h1{flex:1;font-size:28px;letter-spacing:-.03em;font-weight:600;line-height:1.15}
+.tete.sec h1{font-size:18px;letter-spacing:-.01em}
+.tete.red{justify-content:center;padding:12px 16px;margin:0 -16px;border-radius:0 0 22px 22px}
+.tete.red h1{font-size:16px;text-align:center}
+.bi{width:44px;height:44px;border-radius:50%;background:var(--surface);display:grid;place-items:center;box-shadow:var(--verre);position:relative;flex:none;color:var(--texte)}
+.bi .pastille{position:absolute;top:9px;right:10px;width:9px;height:9px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 2px var(--plein)}
+.bi .cpt{position:absolute;top:-3px;right:-3px;min-width:19px;height:19px;padding:0 5px;border-radius:10px;background:var(--corail);color:#fff;font-size:10.5px;font-weight:700;display:grid;place-items:center;box-shadow:0 0 0 2px var(--fond)}
+.av{width:44px;height:44px;border-radius:50%;background:var(--g-accent);color:var(--sapin);display:grid;place-items:center;font-weight:700;font-size:14px;flex:none;box-shadow:0 0 0 2px var(--plein)}
+.av.m{background:var(--g-accomp)}.av.a{background:var(--g-oppo)}.av.c{background:linear-gradient(150deg,#E6F0FB,#9CC3EE)}
+.org{display:inline-flex;align-items:center;gap:8px;font-size:13px;font-weight:600;border-radius:999px;padding:5px 12px 5px 5px;align-self:flex-start}
+.org .lg{width:26px;height:26px;border-radius:50%;background:var(--sapin);color:var(--lime);font-size:9.5px;font-weight:700;display:grid;place-items:center}
+
+/* Recherche */
+.rech{display:flex;align-items:center;gap:10px;height:54px;border-radius:999px;padding:0 6px 0 18px;color:var(--texte2);font-size:14px}
+.rech>span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.rech .f{width:42px;height:42px;border-radius:50%;background:var(--zone);color:var(--texte);display:grid;place-items:center;position:relative}
+.rech .f b{position:absolute;top:-3px;right:-3px;width:18px;height:18px;border-radius:50%;background:var(--sapin);color:var(--lime);font-size:10.5px;display:grid;place-items:center}
+.rech.focus{box-shadow:0 0 0 2px var(--texte),var(--verre);color:var(--texte)}
+.rech .cur{display:inline-block;width:2px;height:18px;background:var(--texte);vertical-align:-3px;margin-left:1px}
+.rech .x{width:30px;height:30px;border-radius:50%;background:var(--zone);display:grid;place-items:center;color:var(--texte)}
+.panneau{padding:6px 0}
+.panneau h4{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--texte2);padding:10px 18px 4px}
+.p-l{display:flex;align-items:center;gap:12px;padding:10px 18px;font-size:14px}
+.p-l .ic{color:var(--texte2)}.p-l small{margin-left:auto;color:var(--texte2);font-size:12px}
+.p-l.orbi-l{border-top:1px solid var(--trait);margin-top:4px;padding-top:14px}
+.puces{display:flex;gap:8px;flex-wrap:wrap}
+.puce{display:inline-flex;align-items:center;gap:6px;height:38px;padding:0 15px;border-radius:999px;background:var(--surface);box-shadow:var(--verre);font-size:13px;font-weight:500;white-space:nowrap}
+.puce.on{background:var(--g-accent);color:var(--sapin);font-weight:600}
+.res-n{display:flex;justify-content:space-between;font-size:12.5px;color:var(--texte2)}
+
+/* Options */
+.liste{overflow:hidden}
+.li{display:flex;align-items:center;gap:12px;min-height:60px;padding:0 16px;border-top:1px solid var(--trait)}
+.li:first-child{border-top:0}
+.li .cases{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;flex:none;background:var(--zone)}
+.li .cases.c1{background:var(--g-former)}.li .cases.c2{background:var(--g-accomp)}.li .cases.c3{background:var(--g-oppo)}
+.sombre .li .cases[class*=" c"]{color:var(--texte)}
+.li .t{flex:1;display:flex;flex-direction:column;min-width:0}.li .t b{font-weight:600;font-size:14px}.li .t span{font-size:12px;color:var(--texte2)}
+.li .v{font-size:13px;color:var(--texte2)}.li>.ic:last-child{color:var(--texte2);width:18px;height:18px}
+.li.danger{color:var(--corail)}.li.danger .cases{background:var(--corail-c)}
+.sw{width:52px;height:32px;border-radius:16px;background:var(--piste);position:relative;flex:none;box-shadow:inset 0 1px 2px rgba(0,0,0,.08)}
+.sw::after{content:"";position:absolute;top:3px;left:3px;width:26px;height:26px;border-radius:50%;background:#fff;box-shadow:0 2px 6px rgba(0,0,0,.2)}
+.sw.on{background:var(--g-accent)}.sw.on::after{left:23px}
+.choix{display:flex;flex-direction:column;gap:8px}
+.ch{display:flex;align-items:center;gap:12px;padding:14px 16px}
+.ch .t{flex:1}.ch .t b{display:block;font-size:14px}.ch .t span{font-size:12px;color:var(--texte2)}
+.ch.on{box-shadow:0 0 0 2px var(--texte),var(--verre)}
+.radio{width:24px;height:24px;border-radius:50%;box-shadow:inset 0 0 0 2px var(--trait),inset 0 0 0 2px rgba(15,63,55,.2);flex:none}
+.ch.on .radio{background:var(--g-accent);box-shadow:inset 0 0 0 6px var(--plein),0 0 0 2px var(--texte)}
+.seg{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;background:var(--piste);border-radius:999px;padding:4px;gap:4px}
+.seg span{text-align:center;padding:10px 4px;border-radius:999px;font-size:13px;font-weight:500;color:var(--texte2);white-space:nowrap}
+.seg span.on{background:var(--plein);color:var(--texte);font-weight:600;box-shadow:var(--verre)}
+.seg span small{font-size:11px;margin-left:3px}
+.feuille{border-radius:32px;padding:10px 16px 16px;display:flex;flex-direction:column;gap:6px}
+.poignee{width:40px;height:5px;border-radius:3px;background:var(--piste);margin:0 auto 8px}
+.feuille h3{font-size:17px;font-weight:600;margin-bottom:4px}
+.feuille .li{padding:0 2px}
+.f-act{display:flex;gap:10px;margin-top:8px}
+.menu-c{width:240px;padding:6px;align-self:flex-end;border-radius:24px}
+.menu-c a{display:flex;align-items:center;gap:12px;padding:11px 12px;border-radius:16px;font-size:14px}
+.menu-c a.on{background:var(--zone)}.menu-c a.danger{color:var(--corail)}
+.etapes{display:flex;align-items:flex-start}
+.et{flex:1;display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11.5px;color:var(--texte2);position:relative;text-align:center}
+.et i{width:26px;height:26px;border-radius:50%;background:var(--plein);box-shadow:inset 0 0 0 2px var(--piste);display:grid;place-items:center;font-style:normal;font-size:11px;font-weight:700;z-index:1}
+.et::before{content:"";position:absolute;top:12px;right:50%;width:100%;height:2px;background:var(--piste)}
+.et:first-child::before{display:none}
+.et.ok i{background:var(--sapin);color:var(--lime);box-shadow:none}.et.ok::before,.et.en::before{background:var(--texte)}
+.et.en i{background:var(--g-accent);box-shadow:none;color:var(--sapin)}.et.en{color:var(--texte);font-weight:600}
+.champ{display:flex;flex-direction:column;gap:6px}
+.champ label{font-size:13px;font-weight:600}
+.saisie{height:54px;border-radius:var(--r-ctrl);display:flex;align-items:center;padding:0 16px;font-size:14px}
+.saisie.focus{box-shadow:0 0 0 2px var(--texte),var(--verre)}.saisie.err{box-shadow:0 0 0 2px var(--corail),var(--verre)}
+.aide{font-size:12px;color:var(--texte2)}.aide.err{color:#C24533}
+
+/* Boutons */
+.bt{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:54px;padding:0 24px;border-radius:999px;font-weight:600;font-size:15px;white-space:nowrap}
+.bt.m{height:46px;font-size:14px;padding:0 20px}.bt.s{height:38px;font-size:13px;padding:0 15px}
+.bt.pl{flex:1}
+.bt.p{background:var(--p-fond);color:var(--p-texte);box-shadow:0 10px 22px -12px rgba(15,63,55,.6)}
+.bt.a{background:var(--g-accent);color:var(--sapin);box-shadow:var(--halo),inset 0 1px 0 rgba(255,255,255,.6)}
+.bt.sec{background:var(--surface);color:var(--texte);box-shadow:var(--verre)}
+.bt.txt{height:auto;padding:0;color:var(--texte);background:none}
+.bt.d{background:var(--corail-c);color:#C24533}
+.bt.off{background:var(--piste);color:var(--texte2);box-shadow:none}
+.bts{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+/* Cartes */
+.carte{padding:16px;display:flex;flex-direction:column;gap:12px}
+.etape{gap:14px}
+.etape .k{display:flex;align-items:center;gap:8px;font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--texte2)}
+.etape .k i{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 3px var(--lime-c)}
+.etape .corps{display:flex;gap:14px;align-items:center}
+.etape h3{font-size:17px;line-height:1.25;letter-spacing:-.01em;font-weight:600}
+.etape p{font-size:13px;color:var(--texte2);margin-top:4px}
+.anneau{width:58px;height:58px;border-radius:50%;background:conic-gradient(#3DA14F 0,#2FD3A6 70%,var(--piste) 0);display:grid;place-items:center;flex:none}
+.anneau b{width:46px;height:46px;border-radius:50%;background:var(--plein);display:grid;place-items:center;font-size:13px}
+.piliers{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.pi{border-radius:24px;padding:12px;display:flex;flex-direction:column;gap:8px;color:var(--sapin);box-shadow:0 14px 28px -18px rgba(15,63,55,.4),inset 0 1px 0 rgba(255,255,255,.7)}
+.sombre .pi{color:var(--texte);box-shadow:var(--verre)}
+.pi.p1{background:var(--g-former)}.pi.p2{background:var(--g-accomp)}.pi.p3{background:var(--g-oppo)}
+.pi .cases{width:38px;height:38px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.65)}
+.sombre .pi .cases{background:rgba(255,255,255,.1)}
+.pi b{font-size:13px}.pi span{font-size:11.5px;line-height:1.3;opacity:.8}
+.pi .j{height:5px;border-radius:3px;background:rgba(15,63,55,.12);overflow:hidden}.pi .j i{display:block;height:100%;background:var(--sapin);border-radius:3px}
+.sombre .pi .j{background:rgba(255,255,255,.12)}.sombre .pi .j i{background:var(--lime)}
+.lg-e{width:46px;height:46px;border-radius:50%;display:grid;place-items:center;font-weight:700;font-size:13px;flex:none;box-shadow:0 0 0 3px var(--plein)}
+.lg-e.sap{background:var(--sapin);color:var(--lime)}.lg-e.mer{background:#1E4E79;color:#fff}.lg-e.amb{background:#F2B33D;color:var(--sapin)}.lg-e.kiv{background:#14745F;color:#fff}
+.tag{font-size:11.5px;font-weight:500;padding:4px 10px;border-radius:999px;background:var(--zone)}
+.score{display:inline-flex;align-items:center;gap:5px;font-size:12px;font-weight:700;padding:4px 10px;border-radius:999px;background:var(--lime-c);color:var(--texte)}
+.score .ic{width:13px;height:13px}
+/* Offre avec bannière */
+.of{overflow:hidden;padding:0;display:flex;flex-direction:column}
+.of .ban{position:relative;height:58px;overflow:hidden}
+.of .ban svg{position:absolute;inset:0;width:100%;height:100%}
+.of .ban .fav{position:absolute;right:10px;top:9px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.85);color:var(--sapin);display:grid;place-items:center}
+.of .corps{display:flex;gap:12px;padding:0 14px 12px;align-items:flex-start}
+.of .corps .lg-e{margin-top:-22px;position:relative}
+.of .t{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px;padding-top:7px}
+.of .t b{font-size:14.5px;line-height:1.25;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.of .t>span{font-size:12px;color:var(--texte2)}
+.of .bas{display:flex;align-items:center;gap:6px;margin-top:6px}
+/* Liste groupée de 3 offres (Accueil) */
+.grp .ln{display:flex;align-items:center;gap:12px;padding:10px 14px;border-top:1px solid var(--trait)}
+.grp .ln:first-of-type{border-top:0}
+.grp .ln .lg-e{width:40px;height:40px;font-size:12px;box-shadow:none}
+.grp .ln .t{flex:1;min-width:0}.grp .ln b{display:block;font-size:13.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.grp .ln span{font-size:11.5px;color:var(--texte2)}
+.grp .ban-g{position:relative;height:64px;overflow:hidden;border-radius:var(--r-carte) var(--r-carte) 0 0}
+.grp .ban-g svg{position:absolute;inset:0;width:100%;height:100%}
+.grp .ban-g b{position:absolute;left:16px;bottom:10px;font-size:15px;color:#fff}
+.grp .ban-g small{position:absolute;right:14px;bottom:12px;font-size:12px;font-weight:600;color:var(--sapin);background:rgba(255,255,255,.85);padding:3px 10px;border-radius:999px}
+/* Formation avec bannière */
+.fo{overflow:hidden;padding:0;display:flex;flex-direction:column}
+.fo .ban{position:relative;height:118px;overflow:hidden}
+.fo .ban svg{position:absolute;inset:0;width:100%;height:100%}
+.fo .ban .tg{position:absolute;left:12px;top:12px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.88);color:var(--sapin)}
+.fo .ban .dur{position:absolute;right:12px;bottom:10px;font-size:11px;font-weight:600;padding:4px 10px;border-radius:999px;background:rgba(11,26,31,.55);color:#fff}
+.fo .t{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px}
+.fo .t b{font-size:15px;line-height:1.25}
+.fo .t span{font-size:12px;color:var(--texte2)}
+.fo.mini{width:172px;flex:none}.fo.mini .ban{height:92px}.fo.mini .t b{font-size:13.5px}
+.defile{display:flex;gap:10px;margin:0 -16px;padding:4px 16px 8px;overflow:hidden}
+.reprise{display:flex;gap:12px;align-items:center}
+.reprise .t{flex:1}
+.barre{height:6px;border-radius:3px;background:var(--piste);overflow:hidden}.barre i{display:block;height:100%;background:linear-gradient(90deg,#3DA14F,#2FD3A6);border-radius:3px}
+.cand .haut{display:flex;gap:12px;align-items:center}.cand .haut .t{flex:1}.cand .haut b{display:block;font-size:14.5px}.cand .haut span{font-size:12px;color:var(--texte2)}
+.statut-p{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px}
+.st-ok{background:var(--lime-c)}
+.pers{flex-direction:row;align-items:center;gap:12px;padding:12px 14px}.pers .t{flex:1}.pers .t b{display:block;font-size:14px}.pers .t span{font-size:12px;color:var(--texte2)}
+/* Bandeau (style de la référence : carte en verre au-dessus de la barre) */
+.bandeau{display:flex;align-items:center;gap:14px;padding:16px 18px}
+.bandeau .ic-r{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:var(--g-accent);color:var(--sapin);flex:none}
+.bandeau .t{flex:1}.bandeau b{display:block;font-size:14px;line-height:1.3}.bandeau span{font-size:12px;color:var(--texte2)}
+.sec-t{display:flex;align-items:baseline;justify-content:space-between}.sec-t h2{font-size:17px;font-weight:600;letter-spacing:-.01em}.sec-t a{font-size:13px;font-weight:600;color:var(--texte2)}
+
+/* Profil */
+.pf-cov{position:relative;height:150px;margin:-46px -16px 0;background:var(--g-profil);overflow:hidden}
+.pf-cov svg{position:absolute;inset:0;width:100%;height:100%}
+.pf-top{position:absolute;top:52px;left:16px;right:16px;display:flex;justify-content:space-between;z-index:2}
+.pf-id{display:flex;flex-direction:column;align-items:center;text-align:center;gap:6px;margin-top:-58px;position:relative}
+.pf-id .av{width:96px;height:96px;font-size:28px;box-shadow:0 0 0 5px var(--fond),0 14px 30px -12px rgba(15,63,55,.5)}
+.pf-id h2{font-size:21px;letter-spacing:-.02em;margin-top:4px}
+.pf-id p{font-size:13px;color:var(--texte2)}
+.cap{display:inline-flex;align-items:center;gap:6px;font-size:12px;font-weight:600;padding:5px 12px;border-radius:999px;background:var(--surface);box-shadow:var(--verre)}
+.cap i{width:8px;height:8px;border-radius:50%;background:var(--lime);box-shadow:0 0 0 3px var(--lime-c)}
+.pf-act{display:flex;gap:8px;justify-content:center}
+.pf-stats{display:grid;grid-template-columns:repeat(3,1fr);padding:12px 6px;text-align:center}
+.pf-stats div{display:flex;flex-direction:column;font-size:11.5px;color:var(--texte2)}.pf-stats b{font-size:18px;color:var(--texte)}
+.pf-stats div+div{border-left:1px solid var(--trait)}
+.compl{display:flex;align-items:center;gap:12px;padding:12px 14px}
+.compl .t{flex:1}.compl b{display:block;font-size:13.5px}.compl span{font-size:12px;color:var(--texte2)}
+.reals{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}
+.re{border-radius:18px;overflow:hidden;position:relative;height:96px}
+.re svg{position:absolute;inset:0;width:100%;height:100%}
+.re b{position:absolute;left:8px;right:8px;bottom:7px;font-size:11px;line-height:1.2;color:#fff;text-shadow:0 1px 3px rgba(0,0,0,.4)}
+.re::after{content:"";position:absolute;inset:40% 0 0;background:linear-gradient(transparent,rgba(11,26,31,.6))}
+.re b{z-index:1}
+.comp{display:flex;flex-wrap:wrap;gap:6px}
+.comp span{font-size:12px;font-weight:500;padding:6px 11px;border-radius:999px;background:var(--zone)}
+.comp span.v{background:var(--lime-c)}
+.comp span.v::before{content:"✓ ";font-weight:700}
+.vis{display:flex;align-items:center;gap:10px;font-size:12px;color:var(--texte2);padding:10px 14px}
+.commun{display:flex;align-items:center;gap:10px;padding:10px 14px;font-size:12.5px}
+.commun .avs{display:flex}.commun .avs span{width:28px;height:28px;margin-left:-8px;font-size:10px;box-shadow:0 0 0 2px var(--plein)}
+.commun .avs span:first-child{margin-left:0}
+
+/* Orbi */
+.orbi-m .sat{transform-origin:24px 24px}
+.orbi-m.reflechit .sat{animation:tour 1.6s linear infinite}
+.orbi-m.ecoute .orb{animation:resp 1.4s ease-in-out infinite;transform-origin:24px 24px}
+@keyframes tour{to{transform:rotate(360deg)}}
+@keyframes resp{50%{transform:scale(1.12);stroke-opacity:.9}}
+@media (prefers-reduced-motion:reduce){.orbi-m .sat,.orbi-m .orb{animation:none!important}}
+.or-etats{display:flex;gap:22px;flex-wrap:wrap}
+.or-etats figure{margin:0;display:flex;flex-direction:column;align-items:center;gap:8px;font-size:12px;color:var(--texte2)}
+.or-etats figure b{color:var(--texte);font-size:13px}
+.or-etats .rond{width:84px;height:84px;border-radius:50%;display:grid;place-items:center;background:var(--plein);box-shadow:var(--halo),0 0 0 5px var(--surface)}
+.bulle-u{align-self:flex-end;max-width:80%;background:var(--p-fond);color:var(--p-texte);border-radius:24px 24px 8px 24px;padding:12px 16px;font-size:14px}
+.bulle-o{display:flex;gap:10px;align-items:flex-start}
+.bulle-o .corps{flex:1;border-radius:8px 24px 24px 24px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;font-size:14px;position:relative}
+.bulle-o .corps::before{content:"";position:absolute;left:0;top:14px;bottom:14px;width:3px;border-radius:2px;background:var(--g-accent)}
+.bulle-o ul{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.bulle-o .acts{display:flex;gap:8px;flex-wrap:wrap;align-items:center}
+.pq{display:inline-flex;align-items:center;gap:5px;font-size:12.5px;font-weight:600;color:var(--texte)}
+.pq .ic{width:15px;height:15px}
+.source{font-size:11.5px;color:var(--texte2)}
+.sugg{flex-direction:row;gap:12px;align-items:flex-start;padding:14px 16px}
+.sugg .t{flex:1;display:flex;flex-direction:column;gap:6px}.sugg .t small{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--texte2)}
+.sugg .t b{font-size:14px;line-height:1.35;font-weight:600}
+.sugg>.ic{color:var(--texte2)}
+.aides{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.ai{border-radius:24px;padding:12px;display:flex;flex-direction:column;gap:10px;color:var(--sapin);box-shadow:0 14px 28px -18px rgba(15,63,55,.4),inset 0 1px 0 rgba(255,255,255,.7)}
+.sombre .ai{color:var(--texte)}
+.ai.p1{background:var(--g-former)}.ai.p2{background:var(--g-accomp)}.ai.p3{background:var(--g-oppo)}.ai.p4{background:linear-gradient(150deg,#EAF2FC,#AFCDF0)}
+.sombre .ai.p4{background:linear-gradient(150deg,rgba(120,170,230,.24),rgba(120,170,230,.08))}
+.ai .cases{width:36px;height:36px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.65)}
+.sombre .ai .cases{background:rgba(255,255,255,.1)}
+.ai b{font-size:13px;line-height:1.3}
+.compo{display:flex;align-items:center;gap:8px;border-radius:999px;padding:6px 6px 6px 18px;height:58px;color:var(--texte2)}
+.compo span{flex:1}.compo .bi{width:46px;height:46px;box-shadow:none;background:var(--zone)}.compo .env{background:var(--g-accent);color:var(--sapin)}
+.or-tete{display:flex;align-items:center;gap:12px}
+.or-tete .t{flex:1}.or-tete b{display:block;font-size:17px}.or-tete span{font-size:12.5px;color:var(--texte2)}
+.credits{font-size:12px;font-weight:600;padding:7px 12px;border-radius:999px}
+.pense{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--texte2)}
+
+/* États */
+.sq{padding:14px;display:flex;gap:12px}
+.sq i{display:block;border-radius:10px;background:linear-gradient(90deg,var(--piste) 0,var(--zone) 50%,var(--piste) 100%);background-size:200% 100%;animation:sk 1.4s linear infinite}
+@keyframes sk{to{background-position:-200% 0}}
+.vide{display:flex;flex-direction:column;align-items:center;text-align:center;gap:8px;padding:22px 16px}
+.vide .rond{width:66px;height:66px;border-radius:50%;background:var(--g-former);color:var(--sapin);display:grid;place-items:center;margin-bottom:4px}
+.vide b{font-size:16px}.vide p{font-size:13px;color:var(--texte2);max-width:250px}
+.vide.err .rond{background:var(--corail-c);color:#C24533}
+.toast{display:flex;align-items:center;gap:12px;padding:12px 14px;font-size:13.5px;border-radius:999px}
+.toast .ok{width:30px;height:30px;border-radius:50%;background:var(--g-accent);color:var(--sapin);display:grid;place-items:center}
+.toast a{margin-left:auto;font-weight:700}
+.limite{display:flex;align-items:center;gap:10px;font-size:12.5px;color:var(--texte2);padding:10px 14px;border-radius:999px}
+.limite a{margin-left:auto;font-weight:600;color:var(--texte);white-space:nowrap}
+.fin{padding:60px 24px;text-align:center;color:#5B6B68;font-size:13px}
+.etape.compacte{padding:12px 14px}.etape.compacte .corps{gap:12px}.etape.compacte h3{font-size:15.5px;margin-top:3px}
+.etape.compacte .anneau{width:50px;height:50px}.etape.compacte .anneau b{width:40px;height:40px;font-size:11.5px}
+.etape.compacte .bt.s{width:42px;height:42px;padding:0}
+.pf-act{padding:0 2px}
+.av,.sombre .av{background:linear-gradient(135deg,#D4FA9E,#A6F26B 48%,#5FE0B8)}
+.av.m,.sombre .av.m{background:linear-gradient(150deg,#E2F8F0,#93E8CD)}
+.av.a,.sombre .av.a{background:linear-gradient(150deg,#FFF3D6,#F8CF73)}
+.av.c,.sombre .av.c{background:linear-gradient(150deg,#E6F0FB,#9CC3EE)}
+.sombre .pf-id .av{color:var(--sapin)}
+
+/* Logos d’entreprise : couleur de texte protégée */
+.phone .lg-e.sap,.pl .lg-e.sap{color:var(--lime)}.phone .lg-e.mer,.pl .lg-e.mer{color:#fff}.phone .lg-e.amb,.pl .lg-e.amb{color:#0F3F37}.phone .lg-e.kiv,.pl .lg-e.kiv{color:#fff}
+
+.phone.long{height:auto;min-height:844px}.phone.long .contenu{position:relative;inset:auto;margin-top:0}
+.voile{position:absolute;inset:0;background:rgba(11,26,31,.38);z-index:6}
+.sheet{position:absolute;left:8px;right:8px;bottom:8px;z-index:7;max-height:86%;overflow:hidden;border-radius:34px;padding:10px 18px 18px;display:flex;flex-direction:column;gap:12px;background:var(--plein)}
+.sheet h3{font-size:18px;font-weight:600;letter-spacing:-.01em}
+.sheet .ss{font-size:12.5px;color:var(--texte2);margin-top:-8px}
+.od-ban{margin:-46px -16px 0;height:168px;position:relative;overflow:hidden}
+.od-ban svg{width:100%;height:100%}
+.od-top{position:absolute;top:52px;left:16px;right:16px;display:flex;justify-content:space-between}
+.od-top .bi{background:rgba(255,255,255,.85)}
+.od-id{display:flex;flex-direction:column;gap:6px;margin-top:-40px;position:relative}
+.od-id .lg-e{width:62px;height:62px;font-size:19px;border:4px solid var(--fond)}
+.od-id h2{font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.od-id .ent{display:flex;align-items:center;gap:6px;font-size:13px;color:var(--texte2)}
+.verif{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--menthe-c);color:var(--texte)}
+.verif .ic{width:13px;height:13px}
+.tags{display:flex;flex-wrap:wrap;gap:6px}
+.sc-c{display:flex;align-items:center;gap:14px;padding:14px 16px}
+.sc-c .anneau{width:58px;height:58px}.sc-c .t{flex:1}.sc-c .t b{display:block;font-size:14.5px}.sc-c .t span{font-size:12px;color:var(--texte2)}
+.prep{display:flex;align-items:center;gap:12px;padding:14px 16px;background:var(--g-accomp)}
+.prep .t{flex:1}.prep .t b{display:block;font-size:14.5px}.prep .t span{font-size:12px;color:var(--texte2)}
+.sombre .prep .t span{color:var(--texte2)}
+.bloc-t{display:flex;flex-direction:column;gap:8px;padding:16px}
+.bloc-t h4{font-size:15px;font-weight:600}
+.bloc-t ul{margin:0;padding-left:18px;font-size:13px;color:var(--texte2);display:flex;flex-direction:column;gap:4px}
+.cmp{display:flex;flex-wrap:wrap;gap:6px}
+.cmp span{display:inline-flex;align-items:center;gap:4px;font-size:12px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--lime-c)}
+.cmp span.m{background:var(--ambre-c)}
+.cmp .ic{width:13px;height:13px}
+.mg{display:flex;gap:12px;align-items:center;padding:12px;background:var(--g-former)}
+.mg .vign{width:64px;height:64px;border-radius:16px;overflow:hidden;flex:none}.mg .vign svg{width:100%;height:100%}
+.mg .t{flex:1}.mg .t small{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--texte2)}.mg .t b{display:block;font-size:13.5px;line-height:1.3}.mg .t span{font-size:12px;color:var(--texte2)}
+.vf{display:flex;gap:12px;align-items:flex-start;padding:14px 16px}
+.vf .t b{display:block;font-size:13.5px}.vf .t span{font-size:12px;color:var(--texte2)}
+.sig{display:flex;align-items:center;gap:6px;justify-content:center;font-size:12.5px;color:var(--texte2);padding:2px 0 6px}
+.sig .ic{width:15px;height:15px}
+.barre-p{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:12px 16px 30px;display:flex;gap:10px;align-items:center;border-radius:28px 28px 0 0}
+.barre-p .bt.a{flex:1}
+.barre-p .gratuit{position:absolute;top:-22px;left:0;right:0;text-align:center;font-size:11.5px;color:var(--texte2)}
+.ck{display:flex;flex-direction:column;gap:2px}
+.ck .l{display:flex;gap:10px;align-items:flex-start;padding:8px 0;font-size:13px;border-top:1px solid var(--trait)}
+.ck .l:first-child{border-top:0}
+.ck .l i{width:22px;height:22px;border-radius:50%;display:grid;place-items:center;flex:none;font-style:normal}
+.ck .l.ok i{background:var(--lime-c)}.ck .l.ko i{background:var(--ambre-c)}
+.ck .l i .ic{width:13px;height:13px}
+.ck .l .t{flex:1}.ck .l .t b{display:block;font-weight:600}.ck .l .t span{font-size:12px;color:var(--texte2)}
+.ck .l .ac{font-size:12px;font-weight:700;white-space:nowrap;align-self:center;padding:5px 10px;border-radius:999px;background:var(--zone)}
+.ck-t{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--texte2)}
+.gar{display:flex;gap:8px;align-items:center;font-size:12px;color:var(--texte2);padding:10px 12px;border-radius:16px;background:var(--zone)}
+.gar .ic{width:16px;height:16px}
+.crit{display:flex;flex-direction:column;gap:10px}
+.crit .c{display:flex;flex-direction:column;gap:5px}
+.crit .c .h{display:flex;justify-content:space-between;font-size:13px}.crit .c .h b{font-weight:600}.crit .c .h span{color:var(--texte2);font-size:12px}
+.crit .c .j{height:7px;border-radius:4px;background:var(--piste);overflow:hidden}.crit .c .j i{display:block;height:100%;border-radius:4px;background:var(--g-accent)}
+.crit .c p{font-size:12px;color:var(--texte2)}
+.obj{display:flex;align-items:center;gap:8px;font-size:12.5px;color:var(--texte2)}
+.obj b{color:var(--texte);font-weight:600}.obj a{margin-left:auto;font-weight:600;color:var(--texte)}
+.cont{display:flex;gap:12px;align-items:center;padding:12px}
+.cont .vign{width:70px;height:56px;border-radius:14px;overflow:hidden;flex:none}.cont .vign svg{width:100%;height:100%}
+.cont .t{flex:1;min-width:0}.cont .t b{display:block;font-size:13.5px;line-height:1.3}.cont .t span{font-size:12px;color:var(--texte2)}
+.raccs{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.raccs a{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11.5px;font-weight:500;text-align:center;padding:12px 4px}
+.raccs .cases{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:var(--zone)}
+.raccs .c1{background:var(--g-former)}.raccs .c2{background:var(--g-accomp)}.raccs .c3{background:var(--g-oppo)}
+.chips-f{display:flex;gap:8px;overflow:hidden}
+.chips-f .puce{white-space:nowrap}
+.res-l{font-size:12.5px;color:var(--texte2)}
+.bt.pl{flex-direction:row;width:auto;padding:0 24px;border-radius:999px;gap:8px}.sheet>.bt.pl{width:100%;flex:none}.sombre .od-top .bi{background:rgba(255,255,255,.92);color:#0F3F37}.bt.m.pl{padding:0 20px}
+
+.tete-f{display:flex;align-items:center;gap:10px;padding:6px 0 0}.tete-f h1{flex:1;font-size:17px;font-weight:600}
+.pas{display:flex;gap:6px}.pas i{flex:1;height:5px;border-radius:3px;background:var(--piste)}.pas i.ok{background:var(--sapin)}.sombre .pas i.ok{background:var(--lime)}
+.pas-t{font-size:12px;color:var(--texte2);margin-top:-6px}
+.h2s{font-size:20px;font-weight:600;letter-spacing:-.02em;line-height:1.25}
+.cvc{display:flex;gap:12px;align-items:center;padding:12px 14px;border-radius:22px}
+.cvc .mini{width:46px;height:60px;border-radius:8px;background:#fff;box-shadow:0 0 0 1px var(--trait);display:flex;flex-direction:column;gap:4px;padding:7px 6px;flex:none}
+.cvc .mini i{height:4px;border-radius:2px;background:#DCE5E1}.cvc .mini i:first-child{background:#0F3F37;width:70%}
+.cvc .t{flex:1}.cvc .t b{display:block;font-size:14px}.cvc .t span{font-size:12px;color:var(--texte2)}
+.cvc.on{box-shadow:0 0 0 2px var(--sapin),var(--verre)}.sombre .cvc.on{box-shadow:0 0 0 2px var(--lime),var(--verre)}
+.cvc .t .adp{display:inline-block;margin-top:4px;color:var(--texte);font-size:11px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--lime-c)}
+.pj{display:flex;gap:12px;align-items:center;padding:12px 14px}
+.pj .cases{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:var(--g-accomp);flex:none}
+.pj .t{flex:1}.pj .t b{display:block;font-size:13.5px}.pj .t span{font-size:12px;color:var(--texte2)}
+.ajout{display:flex;align-items:center;justify-content:center;gap:8px;padding:14px;border-radius:22px;border:1.5px dashed rgba(15,63,55,.28);font-size:13.5px;font-weight:600;color:var(--texte)}.sombre .ajout{border-color:rgba(255,255,255,.25)}
+.recap .li{min-height:52px}
+.bas-f{position:absolute;left:0;right:0;bottom:0;z-index:5;padding:14px 16px 30px;display:flex;gap:10px;border-radius:28px 28px 0 0}
+.bas-f .bt{flex:1}
+.conf .contenu{align-items:center;text-align:center;justify-content:center;gap:16px}
+.conf .contenu{padding-bottom:40px}.conf .rond-ok{width:96px;height:96px;border-radius:50%;background:var(--g-accent);display:grid;place-items:center;box-shadow:var(--halo);margin-top:60px}
+.conf .rond-ok .ic{width:44px;height:44px;color:var(--sapin)}
+.conf p{color:var(--texte2);font-size:13.5px;max-width:300px}
+.suite{display:grid;grid-template-columns:1fr 1fr;gap:10px;width:100%}
+.suite a{display:flex;flex-direction:column;gap:8px;padding:14px;border-radius:22px;text-align:left;font-size:13px;font-weight:600}
+.suite .cases{width:38px;height:38px;border-radius:13px;display:grid;place-items:center}
+.grp-t{display:flex;align-items:center;gap:8px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--texte2)}
+.grp-t b{font-size:11px;padding:2px 7px;border-radius:999px;background:var(--zone);color:var(--texte)}
+.cd{display:flex;flex-direction:column;gap:10px;padding:14px 16px}
+.cd .haut{display:flex;gap:12px;align-items:center}.cd .haut .t{flex:1;min-width:0}.cd .haut b{display:block;font-size:14px}.cd .haut span{font-size:12px;color:var(--texte2)}
+.cd .haut .t{display:flex;flex-direction:column}.cd .t .st{display:inline-block;align-self:flex-start;margin-top:6px;font-style:normal;color:var(--texte)}.cd .t .st.ret{color:var(--texte2)}.cd .t .st.ent{color:#0F3F37}
+.st{font-size:11.5px;font-weight:700;padding:4px 10px;border-radius:999px;white-space:nowrap}
+.st.en{background:var(--ciel-c)}.st.pre{background:var(--menthe-c)}.st.ent{background:var(--g-accent);color:#0F3F37}.st.env{background:var(--zone)}.st.nr{background:var(--corail-c)}.st.ret{background:var(--zone);color:var(--texte2)}
+.act{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:16px;background:var(--ambre-c);font-size:12.5px;font-weight:600}
+.act .ic{width:16px;height:16px}.act span{flex:1}
+.cd.min{padding:12px 16px}.cd.min .haut b{font-size:13.5px}
+.chrono{display:flex;flex-direction:column}
+.chrono .e{display:flex;gap:12px;position:relative;padding-bottom:14px}
+.chrono .e::before{content:"";position:absolute;left:11px;top:24px;bottom:0;width:2px;background:var(--piste)}
+.chrono .e:last-child::before{display:none}
+.chrono .e i{width:24px;height:24px;border-radius:50%;flex:none;display:grid;place-items:center;background:var(--plein);box-shadow:inset 0 0 0 2px var(--piste);z-index:1}
+.chrono .e.ok i{background:var(--sapin);color:var(--lime);box-shadow:none}.chrono .e.now i{background:var(--g-accent);box-shadow:none;color:#0F3F37}
+.chrono .e i .ic{width:12px;height:12px}
+.chrono .e .t b{display:block;font-size:13.5px}.chrono .e .t span{font-size:12px;color:var(--texte2)}
+.inv{display:flex;flex-direction:column;gap:12px;padding:16px;background:var(--g-accomp)}
+.inv .k{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.inv h3{font-size:16px;font-weight:600}
+.creneaux{display:flex;gap:8px}.creneaux span{flex:1;text-align:center;padding:10px 4px;border-radius:16px;background:rgba(255,255,255,.75);font-size:12px;line-height:1.3}
+.creneaux span b{display:block;font-size:13.5px}.creneaux span.on{background:#0F3F37;color:#fff}
+.sombre .creneaux span{background:rgba(255,255,255,.08)}.sombre .creneaux span.on{background:var(--lime);color:#0F3F37}
+.inv .bts{flex-wrap:nowrap}
+.lignes .li{min-height:56px}.lignes .li .t span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brief{display:flex;flex-direction:column;gap:12px;padding:16px}
+.brief h4{font-size:15px;font-weight:600}
+.opts{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.opts span{padding:12px 6px;border-radius:18px;text-align:center;font-size:12px;background:var(--zone);line-height:1.3}
+.opts span b{display:block;font-size:13.5px}.opts span.on{background:var(--g-accent);color:#0F3F37}
+.q{padding:16px;display:flex;flex-direction:column;gap:8px}
+.q small{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--texte2)}
+.q b{font-size:16px;line-height:1.35;font-weight:600}
+.rep{min-height:130px;padding:14px 16px;border-radius:22px;font-size:13.5px;line-height:1.5}
+.rep .cur{display:inline-block;width:2px;height:16px;background:var(--texte);vertical-align:-3px}
+.fb-c{display:flex;flex-direction:column;gap:10px;padding:16px}
+.fb-c h4{font-size:15px;font-weight:600}
+.fb-c .pt{display:flex;gap:10px;font-size:13px}.fb-c .pt i{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center}
+.fb-c .pt.ok i{background:var(--lime-c)}.fb-c .pt.ko i{background:var(--ambre-c)}.fb-c .pt i .ic{width:12px;height:12px}
+.rebond{display:flex;flex-direction:column;gap:6px;padding:12px 14px;border-radius:18px;background:var(--g-former)}
+.rebond b{font-size:13.5px}.rebond span{font-size:12px;color:var(--texte2)}.rebond .bt{align-self:flex-start;margin-top:4px}
+.sombre .rebond span{color:var(--texte2)}
+.hm{display:flex;flex-direction:column;align-items:flex-end;gap:6px}.nl{min-width:20px;height:20px;border-radius:10px;background:var(--lime);color:#0F3F37;font-size:11px;font-weight:700;display:grid;place-items:center}
+.li.nv{background:linear-gradient(90deg,rgba(166,242,107,.14),transparent 70%)}
+.jour{align-self:center;font-size:11.5px;font-weight:600;color:var(--texte2);padding:4px 12px;border-radius:999px;background:var(--zone)}
+.b-r{align-self:flex-start;max-width:82%;background:var(--plein);box-shadow:var(--verre);border-radius:24px 24px 24px 8px;padding:12px 16px;font-size:14px}
+.b-cr{padding:14px;display:flex;flex-direction:column;gap:10px;max-width:92%}
+.b-cr .bt{flex:none}.b-cr .k{display:flex;align-items:center;gap:6px;font-size:12px;font-weight:700}
+.b-cr .creneaux span{background:var(--zone)}.b-cr .creneaux span.on{background:#0F3F37;color:#fff}.sombre .b-cr .creneaux span.on{background:var(--lime);color:#0F3F37}
+.b-f{align-self:flex-end;display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:20px;background:var(--lime-c);font-size:12px}
+.b-f b{display:block;font-size:13px}.b-f span{color:var(--texte2)}
+
+.domaines{display:flex;gap:8px;overflow:hidden}
+.dom{display:flex;flex-direction:column;align-items:center;gap:6px;min-width:76px;padding:12px 6px;border-radius:20px;font-size:11.5px;font-weight:600;text-align:center}
+.dom .cases{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.7)}
+.dom.d1{background:var(--g-former)}.dom.d2{background:var(--g-accomp)}.dom.d3{background:var(--g-oppo)}.dom.d4{background:linear-gradient(150deg,#E8F1FB,#B9D5F2)}
+.sombre .dom.d4{background:linear-gradient(150deg,rgba(120,170,230,.24),rgba(120,170,230,.08))}.sombre .dom .cases{background:rgba(255,255,255,.1)}
+.fd-ban{margin:-46px -16px 0;height:200px;position:relative;overflow:hidden}.fd-ban svg{width:100%;height:100%}
+.fd-id{display:flex;flex-direction:column;gap:8px}
+.fd-id .k{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--texte2)}
+.fd-id h2{font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.chiffres{display:grid;grid-template-columns:repeat(3,1fr);padding:12px 6px}
+.chiffres div{text-align:center;font-size:11.5px;color:var(--texte2)}.chiffres div b{display:block;font-size:15px;color:var(--texte)}
+.chiffres div+div{border-left:1px solid var(--trait)}
+.modl .li{min-height:58px}
+.modl .num{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;background:var(--zone);flex:none}
+.modl .num.ok{background:var(--sapin);color:var(--lime)}.modl .num.en{background:var(--g-accent);color:#0F3F37}
+.sombre .modl .num.ok{background:var(--lime);color:#0F3F37}
+.video{margin:-46px -16px 0;height:236px;position:relative;background:#0B1A1F;overflow:hidden}
+.video svg{width:100%;height:100%;opacity:.9}
+.video .play{position:absolute;left:50%;top:52%;transform:translate(-50%,-50%);width:64px;height:64px;border-radius:50%;background:rgba(255,255,255,.92);display:grid;place-items:center;color:#0F3F37}
+.video .bv{position:absolute;left:14px;right:14px;bottom:12px;display:flex;align-items:center;gap:10px;color:#fff;font-size:11.5px}
+.video .bv .pist{flex:1;height:4px;border-radius:2px;background:rgba(255,255,255,.3)}.video .bv .pist i{display:block;height:100%;width:38%;border-radius:2px;background:var(--lime)}
+.video .q{position:absolute;right:12px;top:58px;font-size:11px;font-weight:700;padding:4px 10px;border-radius:999px;background:rgba(255,255,255,.18);color:#fff}
+.video .ret{position:absolute;left:12px;top:52px}
+.phone .video .ret .bi{background:rgba(11,26,31,.45);color:#fff;box-shadow:0 0 0 1px rgba(255,255,255,.25)}
+.lec-t{display:flex;flex-direction:column;gap:4px}
+.lec-t small{font-size:11.5px;color:var(--texte2)}.lec-t h2{font-size:18px;font-weight:600;letter-spacing:-.01em;line-height:1.25}
+.texte-l{font-size:13.5px;line-height:1.55;color:var(--texte2)}
+.texte-l mark{background:var(--lime-c);color:var(--texte);padding:1px 3px;border-radius:4px}
+.nav-l{display:flex;gap:10px}
+.nav-l .bt{flex:1}
+.quiz-o{display:flex;flex-direction:column;gap:8px}
+.quiz-o .o{display:flex;gap:12px;align-items:center;padding:14px 16px;border-radius:20px;background:var(--plein);box-shadow:var(--verre);font-size:13.5px}
+.quiz-o .o i{width:26px;height:26px;border-radius:50%;flex:none;display:grid;place-items:center;font-style:normal;font-size:12px;font-weight:700;background:var(--zone)}
+.quiz-o .o.ok{box-shadow:0 0 0 2px #3DA14F,var(--verre)}.quiz-o .o.ok i{background:#3DA14F;color:#fff}
+.quiz-o .o.ko{box-shadow:0 0 0 2px var(--corail),var(--verre)}.quiz-o .o.ko i{background:var(--corail);color:#fff}
+.expl{padding:14px 16px;border-radius:20px;background:var(--lime-c);font-size:13px;display:flex;flex-direction:column;gap:4px}
+.expl b{font-size:13.5px}
+.att{display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 18px;text-align:center;background:linear-gradient(150deg,#F7FDEE,#DDF6EE)}
+.sombre .att{background:linear-gradient(150deg,rgba(166,242,107,.16),rgba(47,211,166,.08))}
+.att .med{width:72px;height:72px;border-radius:50%;display:grid;place-items:center;background:var(--g-accent);box-shadow:var(--halo);color:#0F3F37}
+.att .med .ic{width:34px;height:34px}
+.att h3{font-size:17px;font-weight:600}.att p{font-size:12.5px;color:var(--texte2)}
+.ajoute{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:18px;background:var(--plein);box-shadow:var(--verre);font-size:13px}
+.ajoute .ic{width:18px;height:18px;color:#3DA14F}
+.dl{display:flex;gap:12px;align-items:center;padding:12px 14px}
+.dl .t{flex:1}.dl .t b{display:block;font-size:13.5px}.dl .t span{font-size:12px;color:var(--texte2)}
+.verrou{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:18px;background:var(--ambre-c);font-size:12.5px}
+.verrou .t{flex:1}.verrou b{display:block;font-size:13px}
+.od-top .bi{box-shadow:0 6px 16px -4px rgba(15,63,55,.3)}
+.tap{position:relative;outline:2.5px solid #FF6B3D;outline-offset:3px}
+.tap::after{content:attr(data-n);position:absolute;top:-9px;right:-9px;z-index:3;min-width:22px;height:22px;padding:0 6px;border-radius:11px;background:#FF6B3D;color:#fff;font:700 12px/22px Sora,sans-serif;text-align:center;box-shadow:0 2px 6px rgba(0,0,0,.25)}
+.seg span.tap{outline-offset:0}.liste:has(.tap){overflow:visible}
+.acces{display:flex;gap:10px}.acces a{flex:1;display:flex;align-items:center;gap:8px;padding:12px 14px;border-radius:20px;font-size:13px;font-weight:600}
+.acces a b{margin-left:auto;font-size:11px;padding:2px 8px;border-radius:999px;background:var(--lime-c)}
+.legende{display:flex;gap:10px;align-items:center;font-size:13px;color:#5B6B68;margin-top:10px}
+.legende i{width:22px;height:22px;border-radius:11px;background:#FF6B3D;color:#fff;font:700 12px/22px Sora;text-align:center;font-style:normal}
+.legende,.chemins,.planche-att{width:100%}.chemins{display:grid;grid-template-columns:repeat(auto-fill,minmax(380px,1fr));gap:12px;margin-top:20px}
+.chemin{background:#fff;border-radius:22px;padding:16px 18px;display:flex;flex-direction:column;gap:10px}
+.chemin h4{font-size:14px;font-weight:600}
+.chemin .ch-et{display:flex;flex-wrap:wrap;align-items:center;gap:6px;font-size:12.5px}
+.chemin .ch-et span{padding:5px 10px;border-radius:999px;background:#F2EDE5}
+.chemin .ch-et span.n{background:#FF6B3D;color:#fff;font-weight:700;padding:5px 9px}
+.chemin .ch-et em{font-style:normal;color:#5B6B68}
+.filtres-l{display:flex;gap:8px;flex-wrap:nowrap;overflow:hidden}
+.acc{font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--lime-c)}.acc.st{background:var(--ambre-c)}
+.parc-h{display:flex;flex-direction:column;gap:8px;padding:18px;background:var(--g-former)}
+.parc-h .k{font-size:11.5px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.parc-h h2{font-size:21px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.parc-h p{font-size:12.5px;color:var(--texte2)}
+.etapes-p{display:flex;flex-direction:column}
+.etapes-p .e{display:flex;gap:12px;position:relative;padding-bottom:12px}
+.etapes-p .e::before{content:"";position:absolute;left:15px;top:32px;bottom:0;width:2px;background:var(--piste)}
+.etapes-p .e:last-child::before{display:none}
+.etapes-p .e .num{width:32px;height:32px;border-radius:50%;display:grid;place-items:center;font-size:12px;font-weight:700;background:var(--zone);flex:none;z-index:1}
+.etapes-p .e .num.ok{background:var(--sapin);color:var(--lime)}.etapes-p .e .num.en{background:var(--g-accent);color:#0F3F37}
+.sombre .etapes-p .e .num.ok{background:var(--lime);color:#0F3F37}
+.etapes-p .e .verre{flex:1;padding:12px 14px;border-radius:20px}
+.etapes-p .e b{display:block;font-size:13.5px}.etapes-p .e span{font-size:12px;color:var(--texte2)}
+.consigne{padding:16px;display:flex;flex-direction:column;gap:8px}
+.consigne h4{font-size:15px;font-weight:600}.consigne ol{margin:0;padding-left:18px;font-size:13px;color:var(--texte2);display:flex;flex-direction:column;gap:4px}
+.depot{display:flex;flex-direction:column;align-items:center;gap:6px;padding:20px;border-radius:22px;border:1.5px dashed rgba(15,63,55,.28);text-align:center;font-size:13px}
+.sombre .depot{border-color:rgba(255,255,255,.25)}
+.depot .cases{width:44px;height:44px;border-radius:15px;display:grid;place-items:center;background:var(--g-accomp)}
+.depot span{font-size:12px;color:var(--texte2)}
+.res-q{display:flex;flex-direction:column;align-items:center;gap:8px;padding:20px;text-align:center}
+.res-q .anneau{width:84px;height:84px}.res-q .anneau b{width:68px;height:68px;font-size:18px}
+.res-q h3{font-size:18px;font-weight:600}.res-q p{font-size:12.5px;color:var(--texte2)}
+.att-c{display:flex;flex-direction:column;gap:0;overflow:hidden;padding:0}
+.att-c img{display:block;width:100%;height:auto}
+.att-c .t{padding:12px 14px;display:flex;align-items:center;gap:10px}
+.att-c .t div{flex:1}.att-c .t b{display:block;font-size:13.5px}.att-c .t span{font-size:11.5px;color:var(--texte2)}
+.code{font-size:11.5px;font-weight:700;letter-spacing:.06em;padding:4px 10px;border-radius:999px;background:var(--zone)}
+.partage{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.partage a{display:flex;flex-direction:column;align-items:center;gap:6px;font-size:11.5px;font-weight:500;text-align:center}
+.partage .cases{width:52px;height:52px;border-radius:18px;display:grid;place-items:center;background:var(--zone)}
+.lien{display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:18px;background:var(--zone);font-size:12.5px}
+.lien span{flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.v-ok{display:flex;flex-direction:column;align-items:center;gap:10px;padding:22px 18px;text-align:center;background:linear-gradient(150deg,#F2FCE6,#DDF6EE)}
+.sombre .v-ok{background:linear-gradient(150deg,rgba(166,242,107,.16),rgba(47,211,166,.08))}
+.v-ok .rond-ok{width:64px;height:64px;border-radius:50%;background:var(--g-accent);display:grid;place-items:center;color:#0F3F37}
+.v-ok .rond-ok .ic{width:30px;height:30px}
+.v-ok h3{font-size:18px;font-weight:600}.v-ok p{font-size:12.5px;color:var(--texte2)}
+.v-ko{display:flex;gap:10px;align-items:center;padding:12px 14px;border-radius:18px;background:var(--corail-c);font-size:12.5px}
+.site-t{display:flex;align-items:center;justify-content:space-between;padding:8px 0}
+.site-t .lgo{display:flex;align-items:center;gap:8px;font-weight:600;font-size:17px}
+.planche-att{display:flex;flex-direction:column;gap:18px;margin-top:22px}
+.planche-att img{display:block;width:100%;max-width:1260px;border-radius:14px;box-shadow:0 20px 50px -24px rgba(15,63,55,.45)}
+.secu{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:12px}
+.secu div{background:#fff;border-radius:20px;padding:14px 16px;font-size:13px;color:#5B6B68}.secu b{display:block;color:#0F3F37;font-size:14px;margin-bottom:4px}
+.zooms{display:grid;grid-template-columns:1fr 1fr;gap:14px}.zooms img{width:100%;border-radius:12px}
+
+.res{display:flex;gap:10px;align-items:center}
+.res .ic{width:18px;height:18px}
+
+.auth .contenu{gap:14px}
+.auth-h{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:26px 0 8px}
+.auth-h .lgo{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:600}
+.auth-h h2{font-size:24px;font-weight:600;letter-spacing:-.02em;line-height:1.2}
+.auth-h p{font-size:13.5px;color:var(--texte2);max-width:290px}
+.fourn{display:flex;align-items:center;justify-content:center;gap:10px;height:54px;border-radius:999px;font-size:14.5px;font-weight:600}
+.fourn .lf{width:22px;height:22px;border-radius:6px;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff}
+.ou{display:flex;align-items:center;gap:12px;font-size:12px;color:var(--texte2)}.ou::before,.ou::after{content:"";flex:1;height:1px;background:var(--trait)}
+.mention{font-size:11.5px;color:var(--texte2);text-align:center;line-height:1.5}.mention a{color:var(--texte);font-weight:600}
+.ob-q{display:flex;flex-direction:column;gap:6px}.ob-q h2{font-size:22px;font-weight:600;letter-spacing:-.02em;line-height:1.25}.ob-q p{font-size:13px;color:var(--texte2)}
+.obj-g{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.obj-g div{display:flex;flex-direction:column;gap:10px;padding:14px;border-radius:24px;min-height:128px;font-size:12px;color:var(--texte2)}
+.obj-g div b{font-size:14px;color:var(--texte);line-height:1.25}
+.obj-g div .cases{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;background:rgba(255,255,255,.7);color:#0F3F37}
+.obj-g .o1{background:var(--g-oppo)}.obj-g .o2{background:var(--g-accomp)}.obj-g .o3{background:var(--g-former)}.obj-g .o4{background:linear-gradient(150deg,#E8F1FB,#B9D5F2)}
+.obj-g div.on{box-shadow:0 0 0 2.5px #0F3F37}
+.sombre .obj-g .o4{background:linear-gradient(150deg,rgba(120,170,230,.24),rgba(120,170,230,.08))}.sombre .obj-g div .cases{background:rgba(255,255,255,.12);color:var(--texte)}.sombre .obj-g div.on{box-shadow:0 0 0 2.5px var(--lime)}
+.lab-c{font-size:13px;font-weight:600}
+.pret{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:8px 0 0}
+.pret h2{font-size:22px;font-weight:600;letter-spacing:-.02em}.pret p{font-size:13px;color:var(--texte2);max-width:300px}
+.form{display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:26px}
+.form .h{display:flex;align-items:center;justify-content:space-between}.form .h b{font-size:16px}
+.form .h .prix{font-size:20px;font-weight:600}.form .h .prix small{font-size:12px;font-weight:500;color:var(--texte2)}
+.form ul{list-style:none;display:flex;flex-direction:column;gap:6px;font-size:12.5px}
+.form ul li{display:flex;gap:8px;align-items:flex-start}.form ul li .ic{width:16px;height:16px;flex:none;margin-top:1px;color:#3DA14F}
+.form.on{box-shadow:0 0 0 2.5px #0F3F37,var(--verre)}.sombre .form.on{box-shadow:0 0 0 2.5px var(--lime),var(--verre)}
+.form .rec{align-self:flex-start;font-size:11px;font-weight:700;padding:3px 9px;border-radius:999px;background:var(--g-accent);color:#0F3F37}
+.form.fr{background:linear-gradient(150deg,#F2FCE6,#DDF6EE)}.sombre .form.fr{background:linear-gradient(150deg,rgba(166,242,107,.16),rgba(47,211,166,.08))}
+.sect{padding:4px 0}
+.sect .sh{display:flex;align-items:center;gap:12px;padding:12px 16px}
+.sect .sh .cases{width:36px;height:36px;border-radius:12px;display:grid;place-items:center;flex:none}
+.sect .sh b{flex:1;font-size:14.5px}.sect .sh small{font-size:12px;color:var(--texte2);font-weight:500}
+.sect .sh .chev{transform:rotate(90deg);width:16px;height:16px}.sect.ferme .sh .chev{transform:none}
+.sect .sc{padding:0 16px 14px;display:flex;flex-direction:column;gap:10px}
+.prv{display:flex;gap:10px;align-items:center;font-size:12.5px}
+.prv b{font-size:13.5px;flex:1}.prv .pr{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:3px 9px;border-radius:999px;background:var(--lime-c);color:var(--texte)}
+.prv .pr.n{background:var(--zone);color:var(--texte2)}.prv .pr .ic{width:12px;height:12px}
+.projs{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.projs .re{height:auto}
+.ajout.s{padding:10px;font-size:12.5px;border-radius:16px}
+.vu-rec{display:flex;gap:10px;align-items:center;padding:10px 14px;border-radius:16px;background:var(--ambre-c);font-size:12.5px;font-weight:600}
+.vu-rec .ic{width:16px;height:16px}
+.masque{display:flex;flex-direction:column;gap:8px;padding:14px 16px}
+.masque .l{display:flex;justify-content:space-between;font-size:12.5px;gap:10px}.masque .l span{color:var(--texte2)}.masque .l b{text-align:right}
+.masque .l s{color:var(--texte2);text-decoration:none;font-style:italic}
+.depot.s{padding:16px}
+.point{display:flex;flex-direction:column;gap:10px;padding:16px}
+.point h4{font-size:15px;font-weight:600}
+.point .pt{display:flex;gap:10px;font-size:13px;align-items:flex-start}.point .pt i{width:22px;height:22px;border-radius:50%;flex:none;display:grid;place-items:center}
+.point .pt.ok i{background:var(--lime-c)}.point .pt.ko i{background:var(--ambre-c)}.point .pt i .ic{width:12px;height:12px}
+.doc{display:flex;gap:12px;align-items:center;padding:12px 14px}
+.doc .mini{width:44px;height:58px;border-radius:8px;background:#fff;box-shadow:0 0 0 1px var(--trait);display:flex;flex-direction:column;gap:4px;padding:7px 6px;flex:none}
+.doc .mini i{height:4px;border-radius:2px;background:#DCE5E1}.doc .mini i:first-child{background:#0F3F37;width:70%}
+.doc .mini.l i:first-child{background:#3DA14F}.doc .mini.k{background:#E8F1FB}.doc .mini.k i:first-child{background:#2B6CB0}
+.doc .t{flex:1;min-width:0}.doc .t b{display:block;font-size:14px}.doc .t span{font-size:12px;color:var(--texte2)}
+.doc .t .pp{display:inline-block;margin-top:4px;font-size:11px;font-weight:700;padding:2px 8px;border-radius:999px;background:var(--lime-c);color:var(--texte)}
+.tpls{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.tpl{display:flex;flex-direction:column;gap:6px;font-size:12.5px;font-weight:600}
+.tpl .pg{position:relative;aspect-ratio:.72;border-radius:14px;background:#fff;box-shadow:0 0 0 1px var(--trait),0 10px 20px -14px rgba(15,63,55,.4);padding:12px 10px;display:flex;flex-direction:column;gap:5px;overflow:hidden}
+.tpl .pg i{height:5px;border-radius:3px;background:#E1E8E5}.tpl .pg i.h{height:9px;width:60%;background:#0F3F37}.tpl .pg i.c{width:40%;background:#3DA14F}.tpl .pg i.k{width:82%}
+.tpl .pg.b{padding-left:30px}.tpl .pg.b::before{content:"";position:absolute;left:0;top:0;bottom:0;width:20px;background:#0F3F37}
+.tpl .pg.c2::before{content:"";position:absolute;left:0;right:0;top:0;height:34px;background:#E8F1FB}.tpl .pg.c2 i.h{margin-top:30px;background:#2B6CB0}
+.tpl .pg.d i.h{background:#7A3E1D}.tpl .pg.d i.c{background:#C98A2E}
+.tpl.on .pg{box-shadow:0 0 0 2.5px #0F3F37,0 10px 20px -14px rgba(15,63,55,.4)}.sombre .tpl.on .pg{box-shadow:0 0 0 2.5px var(--lime)}
+.tpl .bdg{position:absolute;top:8px;right:8px;font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:999px;background:var(--g-accent);color:#0F3F37;display:flex;gap:4px;align-items:center}
+.tpl .bdg .ic{width:11px;height:11px}.tpl .bdg.n{background:rgba(15,63,55,.85);color:#fff}
+.ed-ap{display:flex;gap:12px;align-items:center;padding:12px 14px}
+.ed-ap .pg{width:62px;aspect-ratio:.72;border-radius:8px;background:#fff;box-shadow:0 0 0 1px var(--trait);padding:7px 6px;display:flex;flex-direction:column;gap:3px;flex:none}
+.ed-ap .pg i{height:3px;border-radius:2px;background:#DCE5E1}.ed-ap .pg i.h{height:5px;width:60%;background:#0F3F37}
+.ed-ap .t{flex:1}.ed-ap .t b{display:block;font-size:14px}.ed-ap .t span{font-size:12px;color:var(--texte2)}
+.reg{display:flex;gap:8px;overflow:hidden}
+.reg span{display:flex;align-items:center;gap:6px;height:36px;padding:0 13px;border-radius:999px;background:var(--zone);font-size:12.5px;font-weight:500;white-space:nowrap}
+.reg span i{width:14px;height:14px;border-radius:50%;background:#0F3F37}
+.edl .li{min-height:54px}.edl .li .poig{width:14px;display:flex;flex-direction:column;gap:3px}.edl .li .poig i{height:2px;border-radius:1px;background:var(--texte2);opacity:.5}
+.edl .li .orb-b{display:flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:5px 9px;border-radius:999px;background:var(--lime-c);color:var(--texte)}
+.avap{display:flex;flex-direction:column;gap:8px;padding:14px 16px}
+.avap small{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--texte2)}
+.avap p{font-size:13.5px;line-height:1.5}
+.avap.av-a p{color:var(--texte2);text-decoration:line-through;text-decoration-color:rgba(255,107,61,.6)}
+.avap.ap{background:linear-gradient(150deg,#F2FCE6,#DDF6EE)}.sombre .avap.ap{background:linear-gradient(150deg,rgba(166,242,107,.16),rgba(47,211,166,.08))}
+.avap.ap p mark{background:rgba(166,242,107,.55);color:inherit;border-radius:4px;padding:0 2px}
+.sombre .avap.ap p mark{background:rgba(166,242,107,.28)}
+.ecart{display:flex;flex-direction:column;gap:8px;padding:14px 16px}
+.ecart .l{display:flex;gap:10px;font-size:12.5px;align-items:center}.ecart .l .ic{width:16px;height:16px;flex:none}
+.ecart .l.ok .ic{color:#3DA14F}.ecart .l.ko .ic{color:#D9822B}
+.hub-id{display:flex;gap:14px;align-items:center;padding:14px 16px}
+.hub-id .av{width:56px;height:56px;font-size:17px;box-shadow:none}
+.hub-id .t{flex:1}.hub-id .t b{display:block;font-size:16px}.hub-id .t span{font-size:12.5px;color:var(--texte2)}
+.fo-act{display:flex;gap:12px;align-items:center;padding:14px 16px;background:var(--g-accomp)}
+.fo-act .t{flex:1}.fo-act .t small{font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase}
+.fo-act .t b{display:block;font-size:18px}.fo-act .t span{font-size:12px;color:var(--texte2)}
+.quota{display:flex;flex-direction:column;gap:6px;padding:12px 16px;border-top:1px solid var(--trait)}
+.quota .l{display:flex;justify-content:space-between;font-size:13px}.quota .l span{color:var(--texte2);font-size:12px}
+.quotas{padding:4px 0}.quotas .quota:first-child{border-top:0}
+.mm{display:flex;flex-direction:column}
+.mm .li .lf{width:40px;height:40px;border-radius:14px;display:grid;place-items:center;font-size:12px;font-weight:700;color:#fff;flex:none}
+.recu{display:flex;justify-content:space-between;align-items:center;padding:14px 16px}
+.recu b{font-size:14px}.recu span{font-size:12px;color:var(--texte2)}.recu .m{font-size:20px;font-weight:600}
+.code6{display:flex;gap:8px;justify-content:center}.code6 span{width:44px;height:54px;border-radius:16px;background:var(--plein);box-shadow:var(--verre);display:grid;place-items:center;font-size:20px;font-weight:600}
+.code6 span.f{box-shadow:0 0 0 2px var(--texte),var(--verre)}
+.danger-c{display:flex;flex-direction:column;gap:8px;padding:14px 16px;background:var(--corail-c)}
+.danger-c b{font-size:14px}.danger-c p{font-size:12.5px;line-height:1.5}
+.bt.dg{background:#C2410C;color:#fff}
+.hist .li .t span{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.consult{display:flex;gap:10px;align-items:center;padding:10px 14px}
+.consult .lg-e{width:36px;height:36px;font-size:11px}
+.consult .t{flex:1}.consult .t b{display:block;font-size:13px}.consult .t span{font-size:11.5px;color:var(--texte2)}
+.auth .bt.pl{flex:none;width:100%;height:54px}
+.form ul,.point ul{padding:0;margin:0}
+.compl .anneau b{display:grid}
+.bt.dg.off{opacity:.45}
+</style></head><body>
+<header class="couv"><span class="k"><svg class="orbi-m repos " width="22" height="22" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg>Jumanly · refonte mobile · étape 2</span><h1>Talent, lot 4 : compte et profil</h1>
+<p>19 octobre 2026. Inscription, premiers pas, compte par l’avatar, profil, CV et documents, abonnement, paramètres, historique d’Orbi. Contenus fictifs.</p>
+<ul class="som"><li><a href="#b0">Comment on y arrive</a></li><li><a href="#b1">Inscription et premiers pas</a></li><li><a href="#b2">Compte</a></li><li><a href="#b3">Mon profil</a></li><li><a href="#b4">CV et documents</a></li><li><a href="#b5">Abonnement</a></li><li><a href="#b6">Paramètres</a></li><li><a href="#b7">Orbi en plein écran</a></li><li><a href="#b8">Mode sombre</a></li></ul></header><section class="bloc" id="b0"><header><h2>0 · Comment on y arrive</h2><p>Pour chaque écran, le chemin depuis la barre ou le compte.</p></header><div class="grille"><div class="chemins"><div class="chemin"><h4>S’inscrire</h4><div class="ch-et"><span>Continuer avec Google</span><em>→</em><span>Objectif</span><em>→</em><span>Études</span><em>→</em><span>Lieu</span><em>→</em><span>Free par défaut</span><em>→</em><span>Pour moi</span></div></div><div class="chemin"><h4>Ouvrir le compte</h4><div class="ch-et"><span>Toute page</span><em>→</em><span>Avatar</span><em>→</em><span>Compte</span></div></div><div class="chemin"><h4>Voir et compléter mon profil</h4><div class="ch-et"><span>Compte</span><em>→</em><span>Mon profil</span><em>→</em><span>Ajouter un projet</span></div></div><div class="chemin"><h4>Faire le point avec Orbi</h4><div class="ch-et"><span>Mon profil</span><em>→</em><span>Faire le point</span><em>→</em><span>Prochaine action</span></div></div><div class="chemin"><h4>Me voir comme un recruteur</h4><div class="ch-et"><span>Mon profil</span><em>→</em><span>Vu par un recruteur</span></div></div><div class="chemin"><h4>Créer un CV</h4><div class="ch-et"><span>Compte</span><em>→</em><span>CV et documents</span><em>→</em><span>Nouveau CV</span><em>→</em><span>un modèle</span><em>→</em><span>Éditeur</span></div></div><div class="chemin"><h4>Importer un CV</h4><div class="ch-et"><span>CV et documents</span><em>→</em><span>Importer</span><em>→</em><span>Vérifier</span><em>→</em><span>Profil</span></div></div><div class="chemin"><h4>Améliorer ou adapter</h4><div class="ch-et"><span>Éditeur</span><em>→</em><span>Améliorer</span><em>→</em><span>Accepter ou refuser</span><em>ou</em><span>Adapter</span></div></div><div class="chemin"><h4>Télécharger le CV</h4><div class="ch-et"><span>Éditeur</span><em>→</em><span>PDF</span></div></div><div class="chemin"><h4>Changer de formule</h4><div class="ch-et"><span>Compte</span><em>→</em><span>Abonnement</span><em>→</em><span>Changer</span><em>→</em><span>Premium</span><em>→</em><span>Mobile Money</span></div></div><div class="chemin"><h4>Régler mon compte</h4><div class="ch-et"><span>Compte</span><em>→</em><span>Paramètres</span><em>→</em><span>Sécurité</span><em>→</em><span>Confidentialité</span><em>→</em><span>Notifications</span></div></div><div class="chemin"><h4>Supprimer mon compte</h4><div class="ch-et"><span>Paramètres</span><em>→</em><span>Supprimer</span><em>→</em><span>Confirmer</span></div></div><div class="chemin"><h4>Revoir mes échanges</h4><div class="ch-et"><span>Onglet Orbi</span><em>→</em><span>Historique</span></div></div></div></div></section><section class="bloc" id="b1"><header><h2>1 · Inscription et premiers pas</h2><p>Trois façons d’entrer, quatre questions, le pays une seule fois. La formule vient à la fin, gratuite par défaut.</p></header><div class="grille"><div class="ecrans"><figure><div class="phone auth"><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="auth-h"><span class="lgo"><svg viewBox="0 0 120 120" width="40" height="40"><rect width="120" height="120" rx="30" fill="#0F3F37"/><g transform="translate(2.25 -4.35) scale(1.1)"><path d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#fff" stroke-width="17" stroke-linecap="round"/><circle cx="70" cy="31" r="11.5" fill="#A6F26B"/></g></svg>jumanly</span><h2>Créez votre compte</h2><p>Gratuit. Postuler aux offres reste gratuit pour toujours.</p></div>
+<a class="verre fourn"><span class="lf" style="background:#4285F4">G</span>Continuer avec Google</a>
+<a class="verre fourn"><span class="lf" style="background:#0A66C2">in</span>Continuer avec LinkedIn</a>
+<div class="ou">ou</div>
+<div class="champ"><label>Adresse e-mail</label><div class="verre saisie focus">grace.mbuyi@exemple.cd</div></div>
+<a class="bt p pl">Recevoir un code</a>
+<p class="mention">En continuant, vous acceptez les <a>conditions</a> et la <a>politique de confidentialité</a>. Déjà inscrit ? <a>Se connecter</a></p></div></div><figcaption><b>Créer un compte</b><br><span>Google, LinkedIn ou code par e-mail.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1></h1></div><div class="pas"><i class="ok"></i><i class=""></i><i class=""></i><i class=""></i></div><span class="pas-t">1 sur 4</span>
+<div class="ob-q"><h2>Qu’est-ce qui vous amène ?</h2><p>Jumanly adapte vos offres et formations à cet objectif.</p></div>
+<div class="obj-g">
+<div class="o1 on"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2"/></svg></span><b>Trouver mon premier emploi</b>Stage, premier CDD ou CDI</div>
+<div class="o2"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4.5" width="14" height="16.5" rx="2"/><path d="M9 3h6v3.5H9z"/><path d="m9 13.5 2 2 4-4.5"/></svg></span><b>Changer d’emploi</b>Un poste qui me correspond mieux</div>
+<div class="o3"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6"/><path d="M21.5 9v5"/></svg></span><b>Monter en compétences</b>Apprendre et le prouver</div>
+<div class="o4"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><b>Me reconvertir</b>Changer de métier</div></div></div><div class="verre fort bas-f"><a class="bt p pl">Continuer</a></div></div><figcaption><b>Objectif</b><br><span>Quatre objectifs en cartes.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1></h1></div><div class="pas"><i class="ok"></i><i class="ok"></i><i class=""></i><i class=""></i></div><span class="pas-t">2 sur 4</span>
+<div class="ob-q"><h2>Vos études et votre domaine</h2></div>
+<span class="lab-c">Niveau d’études</span>
+<div class="puces"><span class="puce">Secondaire</span><span class="puce">Bac + 2</span><span class="puce on">Licence</span><span class="puce">Master</span><span class="puce">Autre</span></div>
+<span class="lab-c">Domaine</span>
+<div class="verre rech"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/></svg><span>Rechercher un domaine</span></div>
+<div class="puces"><span class="puce on"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Data et statistiques</span><span class="puce">Finance</span><span class="puce">Marketing</span><span class="puce">Informatique</span><span class="puce">Énergie</span><span class="puce">Santé</span></div></div><div class="verre fort bas-f"><a class="bt sec m">Passer</a><a class="bt p pl">Continuer</a></div></div><figcaption><b>Études et domaine</b><br><span>Facultatif, on peut passer.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1></h1></div><div class="pas"><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class=""></i></div><span class="pas-t">3 sur 4</span>
+<div class="ob-q"><h2>Où et comment travailler ?</h2><p>Le pays n’est demandé qu’ici. Vous le changez dans votre profil.</p></div>
+<div class="champ"><label>Pays et ville</label><div class="verre saisie"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21s6.5-6 6.5-11.5a6.5 6.5 0 0 0-13 0C5.5 15 12 21 12 21z"/><circle cx="12" cy="9.5" r="2.3"/></svg>&nbsp;&nbsp;RD Congo · Kinshasa</div></div>
+<span class="lab-c">Type de contrat</span>
+<div class="puces"><span class="puce on">CDI</span><span class="puce on">CDD</span><span class="puce">Stage</span><span class="puce">Freelance</span></div>
+<span class="lab-c">Mode de travail</span>
+<div class="seg"><span>Sur site</span><span class="on">Hybride</span><span>À distance</span></div></div><div class="verre fort bas-f"><a class="bt sec m">Passer</a><a class="bt p pl">Continuer</a></div></div><figcaption><b>Lieu et contrat</b><br><span>Le pays n’est demandé qu’ici.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1></h1></div><div class="pas"><i class="ok"></i><i class="ok"></i><i class="ok"></i><i class="ok"></i></div><span class="pas-t">4 sur 4</span>
+<div class="pret"><span class="rond-ok" style="width:72px;height:72px;border-radius:50%;background:var(--g-accent);display:grid;place-items:center;color:#0F3F37"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></span><h2>Votre espace est prêt</h2><p>Vous commencez avec la formule gratuite. Vous pourrez en changer à tout moment.</p></div>
+<div class="form fr on"><div class="h"><b>Free</b><span class="prix">0 $</span></div>
+<ul><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Postuler à toutes les offres</li><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Profil et suivi des candidatures</li><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Un modèle de CV, formations gratuites</li></ul></div>
+<div class="verre carte sugg"><svg class="orbi-m repos " width="36" height="36" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg><div class="t"><small>Pour aller plus loin</small><b>Starter dès 4,9 $ par mois : Orbi, plus de modèles de CV et de formations.</b><div><a class="bt sec s">Voir les formules</a></div></div></div></div><div class="verre fort bas-f"><a class="bt a pl">Commencer gratuitement</a></div></div><figcaption><b>Espace prêt</b><br><span>Free par défaut, formules en option.</span></figcaption></figure></div></div></section><section class="bloc" id="b2"><header><h2>2 · Compte</h2><p>Il n’est plus dans la barre : on l’ouvre par l’avatar, en haut de chaque onglet.</p></header><div class="grille"><div class="ecrans"><figure><div class="phone long"><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete"><h1>Bonjour, Grâce</h1><a class="bi " aria-label="Notifications"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></svg><span class=pastille></span></a><a class="bi " aria-label="Messages"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9.5L5 20.5V17H6"/><path d="M4 6v11"/></svg><span class=cpt>2</span></a><span class="av">GM</span></div>
+<div class="obj"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg>Objectif : <b>Trouver un emploi</b><a>Modifier</a></div>
+<div class="verre carte etape compacte"><div class="corps"><span class="anneau"><b>70 %</b></span><div style="flex:1"><span class="k"><i></i>Prochaine étape</span><h3>Ajoutez 2 compétences</h3></div><a class="bt p s"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div></div>
+<div class="verre grp"><div class="ban-g"><svg viewBox="0 0 300 90" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="300" height="90" fill="#F8CF73"/><circle cx="260" cy="90" r="70" fill="#FFE7B0"/><g fill="none" stroke="#0F3F37" stroke-opacity=".18" stroke-width="2"><circle cx="40" cy="20" r="30"/><circle cx="40" cy="20" r="50"/></g></svg><b style="color:#0F3F37">3 opportunités pour vous</b><small>Tout voir</small></div><div class="ln"><span class="lg-e sap">BF</span><div class="t"><b>Analyste de données junior</b><span>Baobab Fintech · Kinshasa</span></div><span class="score">86 %</span></div><div class="ln"><span class="lg-e amb">ME</span><div class="t"><b>Analyste énergie solaire</b><span>Mwinda Énergie · Kinshasa</span></div><span class="score">79 %</span></div><div class="ln"><span class="lg-e mer">FB</span><div class="t"><b>Chargée d’études marketing</b><span>Fleuve Banque · Kinshasa</span></div><span class="score">72 %</span></div></div>
+<div class="sec-t"><h2>Continuer à apprendre</h2><a>Apprendre</a></div>
+<div class="verre cont"><span class="vign"><svg viewBox="0 0 300 130" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="300" height="130" fill="#D9F7B6"/><circle cx="250" cy="20" r="60" fill="#C3F38E"/><g transform="translate(108 18) rotate(-6)"><rect width="84" height="104" rx="8" fill="#fff"/><circle cx="20" cy="22" r="10" fill="#A6F26B"/><rect x="36" y="16" width="38" height="6" rx="3" fill="#0F3F37"/><rect x="36" y="26" width="26" height="4" rx="2" fill="#9AA9A5"/><g fill="#DCE5E1"><rect x="12" y="44" width="60" height="5" rx="2"/><rect x="12" y="54" width="48" height="5" rx="2"/><rect x="12" y="68" width="60" height="5" rx="2"/><rect x="12" y="78" width="40" height="5" rx="2"/></g></g></svg></span><div class="t"><b>Écrire un CV qui décroche un entretien</b><span>Module 2 sur 5 · reste 8 min</span><span class="barre" style="margin-top:6px"><i style="width:40%"></i></span></div><a class="bt p s"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></a></div>
+<div class="sec-t"><h2>Accès rapide</h2></div>
+<div class="verre raccs"><a><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8.5L19 7.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><circle cx="10.5" cy="10" r="2"/><path d="M7.5 15c.5-1.4 1.6-2 3-2s2.5.6 3 2M8 18h8"/></svg></span>Mes CV</a><a><span class="cases c3"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h11a1 1 0 0 1 1 1V21L12 16.8 5.5 21V4.5a1 1 0 0 1 1-1z"/></svg></span>Enregistrées</a><a><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="M9.2 13.2 8 21l4-2 4 2-1.2-7.8"/></svg></span>Attestations</a><a><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1.4-3.7 4.3-5.5 7.5-5.5s6.1 1.8 7.5 5.5"/></svg></span>Profil</a></div></div><div class="nav-z"><nav class="nav"><a class="on"><span class="badge"><svg class="ic  on" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/><circle class="pt" cx="19.6" cy="4.4" r="3.1"/></svg></span>Pour moi</a><a class=""><span class="badge"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2"/></svg></span>Offres</a><a class="centre"><span class="rond"><svg class="orbi-m repos " width="52" height="52" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg></span><span>Orbi</span></a><a class=""><span class="badge"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6"/><path d="M21.5 9v5"/></svg></span>Apprendre</a><a class=""><span class="badge"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4.5" width="14" height="16.5" rx="2"/><path d="M9 3h6v3.5H9z"/><path d="m9 13.5 2 2 4-4.5"/></svg></span>Suivi</a></nav><span class="home"></span></div></div><figcaption><b>Pour moi</b><br><span>L’avatar ouvre le compte.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Compte</h1></div>
+<div class="verre hub-id"><span class="av">GM</span><div class="t"><b>Grâce Mbuyi</b><span>Voir mon profil · 70 %</span></div><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="verre liste lignes">
+<div class="li"><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8.5L19 7.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><circle cx="10.5" cy="10" r="2"/><path d="M7.5 15c.5-1.4 1.6-2 3-2s2.5.6 3 2M8 18h8"/></svg></span><div class="t"><b>CV et documents</b><span>3 CV, 2 lettres</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="M9.2 13.2 8 21l4-2 4 2-1.2-7.8"/></svg></span><div class="t"><b>Attestations</b><span>3 obtenues</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases c3"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="12" r="3.5"/><circle cx="17" cy="12" r="3.5"/><path d="M10.5 12h3"/></svg></span><div class="t"><b>Connexions</b><span>48 personnes</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="verre liste lignes">
+<div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7.5h14a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10.5"/><circle cx="16" cy="13.8" r="1.3" fill="currentColor"/></svg></span><div class="t"><b>Abonnement</b><span>Pro · 112 crédits Orbi</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M12 2.8v2.4M12 18.8v2.4M2.8 12h2.4M18.8 12h2.4M5.5 5.5l1.7 1.7M16.8 16.8l1.7 1.7M5.5 18.5l1.7-1.7M16.8 7.2l1.7-1.7"/></svg></span><div class="t"><b>Paramètres</b><span>Sécurité, confidentialité, notifications</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-6l-4 3v-3H6a2 2 0 0 1-2-2z"/><path d="M10 9.2a2 2 0 1 1 2.6 1.9c-.4.2-.6.5-.6.9"/><circle cx="12" cy="14.3" r=".8" fill="currentColor"/></svg></span><div class="t"><b>Aide</b><span>assistant@jumanly.io</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="verre liste"><div class="li danger"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 4H6a1 1 0 0 0-1 1v14a1 1 0 0 0 1 1h8"/><path d="M10 12h10.5M17 8.5l3.5 3.5-3.5 3.5"/></svg></span><div class="t"><b>Se déconnecter</b></div></div></div></div></div><figcaption><b>Compte</b><br><span>Profil, CV et documents, Abonnement, Paramètres.</span></figcaption></figure></div></div></section><section class="bloc" id="b3"><header><h2>3 · Mon profil</h2><p>Sections repliables. Chaque compétence montre sa preuve. Le portfolio devient « Projets ».</p></header><div class="grille"><div class="ecrans"><figure><div class="phone long"><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="pf-cov"><svg viewBox="0 0 390 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="#0F3F37" stroke-opacity=".14" stroke-width="1.5"><circle cx="320" cy="20" r="40"/><circle cx="320" cy="20" r="80"/><circle cx="320" cy="20" r="120"/></g><circle cx="320" cy="20" r="12" fill="#fff" opacity=".7"/></svg></div><div class="pf-top"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><span style="display:flex;gap:8px"><a class="bi " aria-label="Partager"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11M7.5 8 12 3.5 16.5 8"/><path d="M5 13.5v5.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5.5"/></svg></a><a class="bi " aria-label="Modifier"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4.2L19 9.2 14.8 5 4 15.8z"/><path d="m13 6.8 4.2 4.2"/></svg></a></span></div>
+<div class="pf-id"><span class="av">GM</span><h2>Grâce Mbuyi</h2><p>Analyste de données · Kinshasa</p><span class="cap"><i></i>Vise : premier emploi en data</span></div>
+<div class="pf-act"><a class="bt p m pl"><svg class="orbi-m repos " width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg>Faire le point</a><a class="bt sec m"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1.4-3.7 4.3-5.5 7.5-5.5s6.1 1.8 7.5 5.5"/></svg>Vu par un recruteur</a></div>
+<div class="verre compl"><span class="anneau" style="width:46px;height:46px"><b style="width:36px;height:36px;font-size:11px">70 %</b></span><div class="t"><b>Profil à 70 %</b><span>Ajoutez un projet pour atteindre 80 %</span></div><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="verre sect"><div class="sh"><span class="cases former" style="background:var(--g-former)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><b>Compétences</b><small>6</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div><div class="sc"><div class="prv"><b>Power BI</b><span class="pr"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="M9.2 13.2 8 21l4-2 4 2-1.2-7.8"/></svg>Attestation</span></div><div class="prv"><b>SQL</b><span class="pr"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.5 5.3 5.8.7-4.3 3.9 1.1 5.7L12 16.3l-5.1 2.8 1.1-5.7-4.3-3.9 5.8-.7z"/></svg>Projet</span></div><div class="prv"><b>Python</b><span class="pr n">Déclarée</span></div></div></div>
+<div class="verre sect ferme"><div class="sh"><span class="cases oppo" style="background:var(--g-oppo)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.5 5.3 5.8.7-4.3 3.9 1.1 5.7L12 16.3l-5.1 2.8 1.1-5.7-4.3-3.9 5.8-.7z"/></svg></span><b>Projets</b><small>3</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="verre sect ferme"><div class="sh"><span class="cases accomp" style="background:var(--g-accomp)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14.5 9h4a1 1 0 0 1 1 1v11M3 21h18"/><path d="M8 8h3M8 12h3M8 16h3"/></svg></span><b>Expériences</b><small>2</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div></div></div><figcaption><b>Mon profil</b><br><span>Faire le point, Vu par un recruteur.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Mon profil</h1><a class="bi " aria-label="Modifier"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4.2L19 9.2 14.8 5 4 15.8z"/><path d="m13 6.8 4.2 4.2"/></svg></a></div>
+<div class="verre sect"><div class="sh"><span class="cases oppo" style="background:var(--g-oppo)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.5 5.3 5.8.7-4.3 3.9 1.1 5.7L12 16.3l-5.1 2.8 1.1-5.7-4.3-3.9 5.8-.7z"/></svg></span><b>Projets</b><small>3</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div><div class="sc"><div class="projs"><span class="re"><svg viewBox="0 0 120 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="120" height="100" fill="#0F3F37"/><g fill="#A6F26B"><rect x="22" y="56" width="12" height="26" rx="2"/><rect x="40" y="40" width="12" height="42" rx="2"/><rect x="58" y="48" width="12" height="34" rx="2"/></g><rect x="76" y="28" width="12" height="54" rx="2" fill="#2FD3A6"/></svg><b>Tableau de bord des agences</b></span><span class="re"><svg viewBox="0 0 120 100" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><rect width="120" height="100" fill="#C9F1E3"/><rect x="36" y="14" width="48" height="64" rx="5" fill="#fff"/><rect x="44" y="24" width="32" height="5" rx="2" fill="#0F3F37"/><g fill="#DCE5E1"><rect x="44" y="34" width="32" height="4" rx="2"/><rect x="44" y="42" width="24" height="4" rx="2"/></g></svg><b>Rapport épargne mobile</b></span></div><a class="ajout s"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Ajouter un projet</a></div></div>
+<div class="verre sect ferme"><div class="sh"><span class="cases accomp" style="background:var(--g-accomp)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14.5 9h4a1 1 0 0 1 1 1v11M3 21h18"/><path d="M8 8h3M8 12h3M8 16h3"/></svg></span><b>Expériences</b><small>2</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="verre sect ferme"><div class="sh"><span class="cases former" style="background:var(--g-former)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6"/><path d="M21.5 9v5"/></svg></span><b>Études</b><small>Licence</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="verre sect ferme"><div class="sh"><span class="cases former" style="background:var(--g-former)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="M9.2 13.2 8 21l4-2 4 2-1.2-7.8"/></svg></span><b>Attestations et certificats</b><small>3</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="verre sect ferme"><div class="sh"><span class="cases accomp" style="background:var(--g-accomp)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8.5L19 7.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M8.5 12.5h7M8.5 16h5"/></svg></span><b>Langues</b><small>2</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div></div></div><figcaption><b>Sections</b><br><span>Ajouter un projet ; le reste replié.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Nouveau projet</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="depot s"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="14" rx="2.5"/><circle cx="9" cy="10" r="2"/><path d="m21 16-5-5-9 8"/></svg></span><b>Ajouter des photos ou un PDF</b><span>Jusqu’à 6 fichiers</span></div>
+<div class="champ"><label>Titre</label><div class="verre saisie focus">Prévision des ventes d’une boutique</div></div>
+<div class="champ"><label>Ce que vous avez fait</label><div class="verre saisie" style="height:84px;align-items:flex-start;padding-top:14px;color:var(--texte2)">Le problème, votre rôle, le résultat chiffré</div></div>
+<span class="lab-c">Compétences utilisées</span>
+<div class="puces"><span class="puce on">Python</span><span class="puce on">Excel</span><span class="puce"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Ajouter</span></div>
+<div class="li" style="padding:0;border:0"><div class="t"><b>Visible par les recruteurs</b><span>Sinon, seulement vous</span></div><span class="sw on"></span></div></div><div class="verre fort bas-f"><a class="bt p pl">Enregistrer</a></div></div><figcaption><b>Nouveau projet</b><br><span>Photos ou PDF, résultat, compétences.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Vu par un recruteur</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="vu-rec"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1.4-3.7 4.3-5.5 7.5-5.5s6.1 1.8 7.5 5.5"/></svg>Aperçu : c’est ce que voit Baobab Fintech.</div>
+<div class="verre masque">
+<div class="l"><span>Titre</span><b>Analyste de données</b></div>
+<div class="l"><span>Compétences</span><b>Power BI ✓, SQL ✓, Python</b></div>
+<div class="l"><span>Projets</span><b>3 projets publics</b></div>
+<div class="l"><span>Attestations</span><b>3, vérifiables</b></div>
+<div class="l"><span>CV</span><b>Celui envoyé avec la candidature</b></div></div>
+<span class="ck-t">Jamais utilisé pour le score</span>
+<div class="verre masque">
+<div class="l"><span>Photo, âge, genre</span><s>exclus du matching</s></div>
+<div class="l"><span>Nationalité, situation familiale</span><s>exclus du matching</s></div>
+<div class="l"><span>Adresse précise</span><s>ville seulement</s></div></div>
+<div class="gar"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 19.5 6v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>Un recruteur voit votre profil seulement si vous postulez ou le rendez visible.</div></div></div><figcaption><b>Vu par un recruteur</b><br><span>Et ce qui n’entre jamais dans le score.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Faire le point</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="bulle-o"><svg class="orbi-m repos " width="32" height="32" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg><div class="verre corps"><span>Votre profil est solide pour des postes d’analyste junior à Kinshasa.</span></div></div>
+<div class="verre point"><h4>Vos atouts</h4>
+<div class="pt ok"><i><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i><span>Power BI prouvé par une attestation</span></div>
+<div class="pt ok"><i><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg></i><span>Un projet chiffré sur les agences</span></div></div>
+<div class="verre point"><h4>À renforcer</h4>
+<div class="pt ko"><i><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i><span>SQL avancé : demandé par 7 offres sur 10</span></div>
+<div class="pt ko"><i><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg></i><span>Aucune expérience décrite avec un résultat</span></div></div>
+<div class="rebond"><b>Prochaine action</b><span>Module « SQL : jointures », 30 min</span><a class="bt sec s">Commencer</a></div>
+<a class="pq"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r=".9" fill="currentColor"/></svg>Pourquoi ces conseils ?</a></div></div><figcaption><b>Faire le point</b><br><span>Atouts, à renforcer, prochaine action.</span></figcaption></figure></div></div></section><section class="bloc" id="b4"><header><h2>4 · CV et documents</h2><p>Mes CV, mes lettres, LinkedIn. L’éditeur garde la main au talent.</p></header><div class="grille"><div class="ecrans"><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>CV et documents</h1></div>
+<div class="seg"><span class="on">CV<small>3</small></span><span>Lettres<small>2</small></span><span>LinkedIn</span></div>
+<div class="verre doc"><span class="mini "><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Data · octobre</b><span>1 page · modifié le 12 oct.</span><span class="pp">Principal</span></div><a class="bi"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="18.5" cy="12" r="1.3" fill="currentColor"/></svg></a></div>
+<div class="verre doc"><span class="mini "><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Data · Baobab</b><span>Adapté à une offre · 18 oct.</span></div><a class="bi"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="18.5" cy="12" r="1.3" fill="currentColor"/></svg></a></div>
+<div class="verre doc"><span class="mini "><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Général</b><span>2 pages · 2 sept.</span></div><a class="bi"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="18.5" cy="12" r="1.3" fill="currentColor"/></svg></a></div>
+<div class="bts"><a class="bt p m pl"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nouveau CV</a><a class="bt sec m pl"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></svg>Importer</a></div></div></div><figcaption><b>Mes CV</b><br><span>Nouveau CV, Importer.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>CV et documents</h1></div>
+<div class="seg"><span>CV<small>3</small></span><span class="on">Lettres<small>2</small></span><span>LinkedIn</span></div>
+<div class="verre doc"><span class="mini l"><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Lettre · Baobab Fintech</b><span>Rédigée le 18 oct.</span></div><a class="bi"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="18.5" cy="12" r="1.3" fill="currentColor"/></svg></a></div>
+<div class="verre doc"><span class="mini l"><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Lettre · candidature spontanée</b><span>5 sept.</span></div><a class="bi"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="18.5" cy="12" r="1.3" fill="currentColor"/></svg></a></div>
+<div class="verre carte sugg"><svg class="orbi-m repos " width="36" height="36" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg><div class="t"><small>LinkedIn</small><b>Orbi propose un titre, un résumé et 5 compétences à copier sur LinkedIn.</b><div><a class="bt sec s">Préparer mon LinkedIn</a></div></div></div>
+<a class="ajout"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Nouvelle lettre</a></div></div><figcaption><b>Lettres et LinkedIn</b><br><span>Lettres, préparation LinkedIn.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Importer un CV</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="depot"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></svg></span><b>Choisir un fichier</b><span>PDF ou Word, 5 Mo au plus</span></div>
+<div class="verre pj"><span class="cases" style="background:linear-gradient(150deg,#E6F0FB,#9CC3EE)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="12" r="3.5"/><circle cx="17" cy="12" r="3.5"/><path d="M10.5 12h3"/></svg></span><div class="t"><b>Depuis LinkedIn</b><span>Fichier PDF de votre profil</span></div><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<span class="ck-t">Lu dans votre fichier · à vérifier</span>
+<div class="verre liste lignes">
+<div class="li"><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14.5 9h4a1 1 0 0 1 1 1v11M3 21h18"/><path d="M8 8h3M8 12h3M8 16h3"/></svg></span><div class="t"><b>2 expériences</b><span>Stagiaire data, Fleuve Banque…</span></div><span class="sw on"></span></div>
+<div class="li"><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><div class="t"><b>7 compétences</b><span>Excel, Power BI, SQL…</span></div><span class="sw on"></span></div>
+<div class="li"><span class="cases c3"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6"/><path d="M21.5 9v5"/></svg></span><div class="t"><b>1 diplôme</b><span>Licence, Université de Kinshasa</span></div><span class="sw on"></span></div></div></div><div class="verre fort bas-f"><a class="bt p pl">Ajouter à mon profil</a></div></div><figcaption><b>Importer</b><br><span>Ce qui est lu, à cocher avant d’ajouter.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Choisir un modèle</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="puces"><span class="puce on">Tous</span><span class="puce">Sobres</span><span class="puce">Colonne</span><span class="puce">Créatifs</span></div>
+<div class="tpls"><div class="tpl on"><span class="pg "><span class="bdg"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Inclus</span><i class="h"></i><i class="c"></i><i></i><i class="k"></i><i></i><i class="c"></i><i></i><i class="k"></i><i></i></span>Kinshasa</div><div class="tpl"><span class="pg b"><span class="bdg"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Inclus</span><i class="h"></i><i class="c"></i><i></i><i class="k"></i><i></i><i class="c"></i><i></i><i class="k"></i><i></i></span>Dakar</div><div class="tpl"><span class="pg c2"><span class="bdg"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Inclus</span><i class="h"></i><i class="c"></i><i></i><i class="k"></i><i></i><i class="c"></i><i></i><i class="k"></i><i></i></span>Abidjan</div><div class="tpl"><span class="pg d"><span class="bdg"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Inclus</span><i class="h"></i><i class="c"></i><i></i><i class="k"></i><i></i><i class="c"></i><i></i><i class="k"></i><i></i></span>Accra</div></div></div><div class="verre fort bas-f"><a class="bt p pl">Utiliser « Kinshasa »</a></div></div><figcaption><b>Choisir un modèle</b><br><span>Les modèles inclus dans la formule.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Data · octobre</h1><a class="bi " aria-label="Plus"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="18.5" cy="12" r="1.3" fill="currentColor"/></svg></a></div>
+<div class="verre ed-ap"><span class="pg"><i class="h"></i><i></i><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Modèle Kinshasa</b><span>1 page · enregistré</span></div><a class="bt sec s">Aperçu</a></div>
+<div class="reg"><span><i></i>Sapin</span><span>Aa · Sora</span><span>Compacte</span></div>
+<span class="ck-t">Sections · glisser pour réordonner</span>
+<div class="verre liste edl">
+<div class="li"><span class="poig"><i></i><i></i><i></i></span><div class="t"><b>Résumé</b><span>3 lignes</span></div><span class="orb-b"><svg class="orbi-m repos " width="16" height="16" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg>Améliorer</span></div>
+<div class="li"><span class="poig"><i></i><i></i><i></i></span><div class="t"><b>Expériences</b><span>2</span></div><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="poig"><i></i><i></i><i></i></span><div class="t"><b>Compétences</b><span>6, depuis le profil</span></div><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="poig"><i></i><i></i><i></i></span><div class="t"><b>Études</b><span>1</span></div><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div></div><div class="verre fort bas-f"><a class="bt sec m pl"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2"/></svg>Adapter</a><a class="bt p pl"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></svg>PDF</a></div></div><figcaption><b>Éditeur</b><br><span>Améliorer, Adapter, PDF.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Améliorer le résumé</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="verre avap av-a"><small>Avant</small><p>Je suis une personne motivée qui aime les chiffres et travailler en équipe.</p></div>
+<div class="verre avap ap"><small>Proposition d’Orbi</small><p>Analyste de données, <mark>Power BI et SQL</mark>. J’ai conçu un tableau de bord suivi par <mark>12 agences</mark> pour piloter l’épargne mobile.</p></div>
+<div class="gar"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>Rien n’est modifié sans votre accord. 1 crédit Orbi sur 112.</div>
+<a class="pq"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r=".9" fill="currentColor"/></svg>Pourquoi ces changements ?</a></div><div class="verre fort bas-f"><a class="bt sec m">Refuser</a><a class="bt sec m">Modifier</a><a class="bt p pl"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Accepter</a></div></div><figcaption><b>Avant, après</b><br><span>Accepter, modifier ou refuser.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Data · octobre</h1><a class="bi " aria-label="Plus"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="18.5" cy="12" r="1.3" fill="currentColor"/></svg></a></div>
+<div class="verre ed-ap"><span class="pg"><i class="h"></i><i></i><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Modèle Kinshasa</b><span>1 page · enregistré</span></div></div></div><div class="voile"></div><div class="sheet"><div class="poignee"></div><h3>Adapter à une offre</h3>
+<div class="verre cd min"><div class="haut"><span class="lg-e sap">BF</span><div class="t"><b>Analyste de données junior</b><span>Baobab Fintech · Kinshasa</span></div></div></div>
+<div class="verre ecart">
+<div class="l ok"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Power BI, Excel : déjà dans votre CV</div>
+<div class="l ko"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>SQL avancé : à mettre en avant</div>
+<div class="l ko"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 5v14M5 12h14"/></svg>Mot-clé « reporting » absent</div></div>
+<div class="gar"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8.5L19 7.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M8.5 12.5h7M8.5 16h5"/></svg>Orbi crée une copie « Data · Baobab ». Votre CV principal ne change pas.</div>
+<a class="bt p pl"><svg class="orbi-m repos " width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg>Créer la copie adaptée</a></div></div><figcaption><b>Adapter à une offre</b><br><span>Une copie, l’original ne change pas.</span></figcaption></figure></div></div></section><section class="bloc" id="b5"><header><h2>5 · Abonnement</h2><p>Prépayé, sans surprise. Postuler reste gratuit dans toutes les formules.</p></header><div class="grille"><div class="ecrans"><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Abonnement</h1></div>
+<div class="verre fo-act"><div class="t"><small>Votre formule</small><b>Pro · 19,9 $/mois</b><span>Payée jusqu’au 12 novembre</span></div></div>
+<div class="verre quotas">
+<div class="quota"><div class="l"><b>Crédits Orbi</b><span>112 sur 150</span></div><span class="barre"><i style="width:75%"></i></span></div>
+<div class="quota"><div class="l"><b>Entretiens écrits</b><span>4 sur 10</span></div><span class="barre"><i style="width:40%"></i></span></div>
+<div class="quota"><div class="l"><b>Entretiens vocaux</b><span>1 sur 3</span></div><span class="barre"><i style="width:33%"></i></span></div>
+<div class="quota"><div class="l"><b>Candidatures</b><span>Illimitées, gratuites</span></div></div></div>
+<div class="verre liste lignes">
+<div class="li"><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19.5v-6M11 19.5v-10M17 19.5v-14"/><path d="M3 21h18"/></svg></span><div class="t"><b>Changer de formule</b><span>Starter, Premium</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7.5h14a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10.5"/><circle cx="16" cy="13.8" r="1.3" fill="currentColor"/></svg></span><div class="t"><b>Moyen de paiement</b><span>M-Pesa · 81 ••• 42</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8.5L19 7.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M8.5 12.5h7M8.5 16h5"/></svg></span><div class="t"><b>Factures</b><span>3 · en PDF</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="gar"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Prépayé, sans renouvellement forcé. Un rappel 3 jours avant la fin.</div></div></div><figcaption><b>Abonnement</b><br><span>Changer de formule.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Formules</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="seg"><span class="on">Mensuel</span><span>Annuel</span></div>
+<div class="verre form"><div class="h"><b>Starter</b><span class="prix">4,9 $<small> /mois</small></span></div><ul><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>30 crédits Orbi, 3 entretiens</li><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Modèles de CV Starter, LinkedIn</li></ul></div>
+<div class="verre form"><span class="rec">Recommandé · votre formule</span><div class="h"><b>Pro</b><span class="prix">19,9 $<small> /mois</small></span></div><ul><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>150 crédits, entretiens vocaux</li><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Adapter son CV à chaque offre</li><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Tous les parcours standards</li></ul></div>
+<div class="verre form on"><div class="h"><b>Premium</b><span class="prix">49,9 $<small> /mois</small></span></div><ul><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>500 crédits, 10 entretiens vocaux</li><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Rapports détaillés de progression</li><li><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"/></svg>Aide prioritaire</li></ul></div></div><div class="verre fort bas-f"><a class="bt p pl">Passer à Premium</a></div></div><figcaption><b>Formules</b><br><span>Choisir Premium.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Paiement</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="verre recu"><div><b>Premium · 1 mois</b><br><span>du 19 oct. au 18 nov.</span></div><span class="m">49,9 $</span></div>
+<span class="ck-t">Mobile Money</span>
+<div class="verre liste mm">
+<div class="li"><span class="lf" style="background:#E2231A">M</span><div class="t"><b>M-Pesa</b><span>81 ••• 42</span></div><span class="radio" style="box-shadow:inset 0 0 0 7px var(--sapin)"></span></div>
+<div class="li"><span class="lf" style="background:#FF7900">O</span><div class="t"><b>Orange Money</b></div><span class="radio" style="background:none;box-shadow:inset 0 0 0 2px var(--trait)"></span></div>
+<div class="li"><span class="lf" style="background:#C8102E">A</span><div class="t"><b>Airtel Money</b></div><span class="radio" style="background:none;box-shadow:inset 0 0 0 2px var(--trait)"></span></div></div>
+<div class="verre liste"><div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7.5h14a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10.5"/><circle cx="16" cy="13.8" r="1.3" fill="currentColor"/></svg></span><div class="t"><b>Carte bancaire</b><span>Visa, Mastercard</span></div><span class="radio" style="background:none;box-shadow:inset 0 0 0 2px var(--trait)"></span></div></div>
+<div class="gar"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9.5L5 20.5V17H6"/><path d="M4 6v11"/></svg>Vous validez sur votre téléphone avec votre code Mobile Money.</div></div><div class="verre fort bas-f"><a class="bt p pl"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg>Payer 49,9 $</a></div></div><figcaption><b>Paiement</b><br><span>Mobile Money ou carte.</span></figcaption></figure></div></div></section><section class="bloc" id="b6"><header><h2>6 · Paramètres</h2><p>Sécurité, confidentialité, notifications, données.</p></header><div class="grille"><div class="ecrans"><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Paramètres</h1></div>
+<div class="verre liste lignes">
+<div class="li"><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></span><div class="t"><b>Sécurité</b><span>Code par e-mail, double vérification</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 19.5 6v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg></span><div class="t"><b>Confidentialité</b><span>Visibilité, consultations, Orbi</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases c3"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15z"/><path d="M10 20.5a2.2 2.2 0 0 0 4 0"/></svg></span><div class="t"><b>Notifications</b><span>Par catégorie</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="verre liste lignes">
+<div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19.5v-6M11 19.5v-10M17 19.5v-14"/><path d="M3 21h18"/></svg></span><div class="t"><b>Économiser les données</b><span>Images allégées, vidéo 240p</span></div><span class="sw on"></span></div>
+<div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2"/><circle cx="18" cy="6" r="1.4" fill="currentColor"/></svg></span><div class="t"><b>Apparence</b><span>Automatique</span></div><span class="v">Auto</span></div>
+<div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8.5L19 7.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M8.5 12.5h7M8.5 16h5"/></svg></span><div class="t"><b>Langue</b><span>Français</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="verre liste lignes">
+<div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></svg></span><div class="t"><b>Télécharger mes données</b><span>Fichier envoyé par e-mail</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li danger"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13"/></svg></span><div class="t"><b>Supprimer mon compte</b></div></div></div></div></div><figcaption><b>Paramètres</b><br><span>Sécurité, Confidentialité, Notifications, Supprimer.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Sécurité</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="verre liste lignes">
+<div class="li"><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9.5L5 20.5V17H6"/><path d="M4 6v11"/></svg></span><div class="t"><b>Connexion par code e-mail</b><span>grace.mbuyi@exemple.cd</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="10.5" width="14" height="10" rx="2.5"/><path d="M8 10.5V8a4 4 0 0 1 8 0v2.5"/></svg></span><div class="t"><b>Double vérification</b><span>Application d’authentification</span></div><span class="sw on"></span></div>
+<div class="li"><span class="cases c3"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="7" cy="12" r="3.5"/><circle cx="17" cy="12" r="3.5"/><path d="M10.5 12h3"/></svg></span><div class="t"><b>Comptes liés</b><span>Google, LinkedIn</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<span class="ck-t">Code de l’application</span>
+<div class="code6"><span>4</span><span>8</span><span>1</span><span class="f">2</span><span></span><span></span></div>
+<span class="ck-t">Appareils connectés</span>
+<div class="verre liste lignes">
+<div class="li"><div class="t"><b>Ce téléphone</b><span>Kinshasa · maintenant</span></div><span class="st pre">Actif</span></div>
+<div class="li"><div class="t"><b>Ordinateur · Chrome</b><span>Kinshasa · il y a 2 jours</span></div><span class="v">Déconnecter</span></div></div></div></div><figcaption><b>Sécurité</b><br><span>Double vérification, appareils.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Confidentialité</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="verre liste lignes">
+<div class="li"><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1.4-3.7 4.3-5.5 7.5-5.5s6.1 1.8 7.5 5.5"/></svg></span><div class="t"><b>Visible par les recruteurs</b><span>Même sans candidature</span></div><span class="sw on"></span></div>
+<div class="li"><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><circle cx="12" cy="12" r="3.2"/><circle cx="18" cy="6" r="1.4" fill="currentColor"/></svg></span><div class="t"><b>Utiliser Orbi</b><span>Seulement pour m’aider</span></div><span class="sw on"></span></div>
+<div class="li"><span class="cases c3"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.5 5.3 5.8.7-4.3 3.9 1.1 5.7L12 16.3l-5.1 2.8 1.1-5.7-4.3-3.9 5.8-.7z"/></svg></span><div class="t"><b>Projets publics</b><span>3 sur 3</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<span class="ck-t">Qui a consulté mon profil</span>
+<div class="verre consult"><span class="lg-e sap">BF</span><div class="t"><b>Baobab Fintech</b><span>Après votre candidature · hier</span></div></div>
+<div class="verre consult"><span class="lg-e amb">ME</span><div class="t"><b>Mwinda Énergie</b><span>Profil visible · 14 oct.</span></div></div>
+<div class="gar"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3 19.5 6v5.5c0 4.5-3.2 8-7.5 9.5-4.3-1.5-7.5-5-7.5-9.5V6z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg>Chaque consultation par un recruteur est enregistrée ici.</div></div></div><figcaption><b>Confidentialité</b><br><span>Visibilité, Orbi, consultations.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Notifications</h1><a class="bi " aria-label="Fermer"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"/></svg></a></div>
+<div class="verre liste lignes">
+<div class="li"><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4.5" width="14" height="16.5" rx="2"/><path d="M9 3h6v3.5H9z"/><path d="m9 13.5 2 2 4-4.5"/></svg></span><div class="t"><b>Candidatures</b><span>Statut, entretiens</span></div><span class="sw on"></span></div>
+<div class="li"><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6a2 2 0 0 1 2-2h12a2 2 0 0 1 2 2v9a2 2 0 0 1-2 2H9.5L5 20.5V17H6"/><path d="M4 6v11"/></svg></span><div class="t"><b>Messages</b><span>Recruteurs, connexions</span></div><span class="sw on"></span></div>
+<div class="li"><span class="cases c3"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2"/></svg></span><div class="t"><b>Offres pour moi</b><span>Une fois par jour</span></div><span class="sw on"></span></div>
+<div class="li"><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6"/><path d="M21.5 9v5"/></svg></span><div class="t"><b>Formations</b><span>Rappels de reprise</span></div><span class="sw"></span></div>
+<div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7.5h14a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10.5"/><circle cx="16" cy="13.8" r="1.3" fill="currentColor"/></svg></span><div class="t"><b>Abonnement</b><span>Rappels de fin de période</span></div><span class="sw on"></span></div></div>
+<span class="ck-t">Recevoir aussi par</span>
+<div class="seg"><span class="on">Appli + e-mail</span><span>Appli seule</span></div></div></div><figcaption><b>Notifications</b><br><span>Par catégorie.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Paramètres</h1></div></div><div class="voile"></div><div class="sheet"><div class="poignee"></div><h3>Supprimer mon compte ?</h3>
+<div class="danger-c"><b>Ce qui sera effacé</b><p>Profil, CV, documents, messages et candidatures en cours, après 30 jours. Les attestations restent vérifiables par leur numéro.</p></div>
+<div class="li" style="padding:0;border:0"><div class="t"><b>Télécharger mes données d’abord</b><span>Recommandé</span></div><span class="sw on"></span></div>
+<div class="champ"><label>Tapez SUPPRIMER pour confirmer</label><div class="verre saisie">SUPPR</div></div>
+<div class="bts"><a class="bt sec m">Annuler</a><a class="bt dg off m pl">Supprimer</a></div></div></div><figcaption><b>Supprimer</b><br><span>30 jours, données téléchargeables.</span></figcaption></figure></div></div></section><section class="bloc" id="b7"><header><h2>7 · Orbi en plein écran</h2><p>L’onglet du centre et l’historique des échanges.</p></header><div class="grille"><div class="ecrans"><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete"><div class="or-tete" style="flex:1"><svg class="orbi-m repos " width="44" height="44" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg><div class="t"><b>Orbi</b><span>Votre accompagnement</span></div></div><span class="verre credits">112 crédits</span><a class="bi" aria-label="Récent"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg></a></div>
+<div class="aides"><div class="ai p1"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8.5L19 7.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><circle cx="10.5" cy="10" r="2"/><path d="M7.5 15c.5-1.4 1.6-2 3-2s2.5.6 3 2M8 18h8"/></svg></span><b>Améliorer mon CV</b></div><div class="ai p2"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="12.5" height="12" rx="2.5"/><path d="m15.5 10.5 5.5-3v9l-5.5-3"/></svg></span><b>Préparer un entretien</b></div>
+<div class="ai p3"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2"/></svg></span><b>Analyser une offre</b></div><div class="ai p4"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><b>Choisir ma voie</b></div></div>
+<div class="bulle-u">Mon CV est-il prêt pour l’offre Baobab ?</div>
+<div class="bulle-o"><svg class="orbi-m repos " width="32" height="32" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg><div class="verre corps"><span>Presque. Il manque SQL avancé et une réalisation chiffrée.</span><div class="acts"><a class="bt p s">Corriger mon CV</a><a class="pq"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 11v5"/><circle cx="12" cy="7.8" r=".9" fill="currentColor"/></svg>Pourquoi ?</a></div></div></div></div><div style="position:absolute;left:16px;right:16px;bottom:118px;z-index:4"><div class="verre fort compo"><span>Écrire à Orbi</span><a class="bi"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21"/></svg></a><a class="bi env"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12 20 4l-6 16-2.8-6.6z"/><path d="m11.2 13.4 4-4"/></svg></a></div></div><div class="nav-z"><nav class="nav"><a class=""><span class="badge"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 10.5 12 4l8 6.5V19a1 1 0 0 1-1 1h-4.5v-5.5h-5V20H5a1 1 0 0 1-1-1z"/></svg></span>Pour moi</a><a class=""><span class="badge"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2"/></svg></span>Offres</a><a class="centre on"><span class="rond"><svg class="orbi-m reflechit " width="52" height="52" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg></span><span>Orbi</span></a><a class=""><span class="badge"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6"/><path d="M21.5 9v5"/></svg></span>Apprendre</a><a class=""><span class="badge"><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4.5" width="14" height="16.5" rx="2"/><path d="M9 3h6v3.5H9z"/><path d="m9 13.5 2 2 4-4.5"/></svg></span>Suivi</a></nav><span class="home"></span></div></div><figcaption><b>Orbi</b><br><span>Historique.</span></figcaption></figure><figure><div class="phone "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Historique Orbi</h1></div>
+<div class="verre rech"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"/><path d="m20 20-4.4-4.4"/></svg><span>Rechercher dans mes échanges</span></div>
+<div class="verre liste lignes hist">
+<div class="li"><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8.5L19 7.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><circle cx="10.5" cy="10" r="2"/><path d="M7.5 15c.5-1.4 1.6-2 3-2s2.5.6 3 2M8 18h8"/></svg></span><div class="t"><b>Résumé du CV Data</b><span>Proposition acceptée · aujourd’hui</span></div></div>
+<div class="li"><span class="cases c3"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2"/></svg></span><div class="t"><b>Offre Baobab Fintech</b><span>Pourquoi 86 % · hier</span></div></div>
+<div class="li"><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="6" width="12.5" height="12" rx="2.5"/><path d="m15.5 10.5 5.5-3v9l-5.5-3"/></svg></span><div class="t"><b>Entraînement à l’entretien</b><span>8 questions · 15 oct.</span></div></div>
+<div class="li"><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M10 8.7v6.6l5.5-3.3z"/></svg></span><div class="t"><b>La formule SI</b><span>Dans la leçon Excel · 14 oct.</span></div></div></div>
+<div class="gar"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 7h15M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13"/></svg>Vous pouvez effacer un échange ou tout l’historique.</div></div></div><figcaption><b>Historique</b><br><span>Retrouver ou effacer un échange.</span></figcaption></figure></div></div></section><section class="bloc" id="b8"><header><h2>8 · Mode sombre</h2><p></p></header><div class="grille"><div class="ecrans"><figure><div class="phone sombre "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1></h1></div><div class="pas"><i class="ok"></i><i class=""></i><i class=""></i><i class=""></i></div><span class="pas-t">1 sur 4</span>
+<div class="ob-q"><h2>Qu’est-ce qui vous amène ?</h2><p>Jumanly adapte vos offres et formations à cet objectif.</p></div>
+<div class="obj-g">
+<div class="o1 on"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2"/></svg></span><b>Trouver mon premier emploi</b>Stage, premier CDD ou CDI</div>
+<div class="o2"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="5" y="4.5" width="14" height="16.5" rx="2"/><path d="M9 3h6v3.5H9z"/><path d="m9 13.5 2 2 4-4.5"/></svg></span><b>Changer d’emploi</b>Un poste qui me correspond mieux</div>
+<div class="o3"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2.5 9 12 4.5 21.5 9 12 13.5z"/><path d="M6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6"/><path d="M21.5 9v5"/></svg></span><b>Monter en compétences</b>Apprendre et le prouver</div>
+<div class="o4"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><b>Me reconvertir</b>Changer de métier</div></div></div><div class="verre fort bas-f"><a class="bt p pl">Continuer</a></div></div><figcaption><b>Objectif</b><br><span></span></figcaption></figure><figure><div class="phone sombre long"><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="pf-cov"><svg viewBox="0 0 390 150" preserveAspectRatio="xMidYMid slice" aria-hidden="true"><g fill="none" stroke="#0F3F37" stroke-opacity=".14" stroke-width="1.5"><circle cx="320" cy="20" r="40"/><circle cx="320" cy="20" r="80"/><circle cx="320" cy="20" r="120"/></g><circle cx="320" cy="20" r="12" fill="#fff" opacity=".7"/></svg></div><div class="pf-top"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><span style="display:flex;gap:8px"><a class="bi " aria-label="Partager"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5v11M7.5 8 12 3.5 16.5 8"/><path d="M5 13.5v5.5a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1v-5.5"/></svg></a><a class="bi " aria-label="Modifier"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 20h4.2L19 9.2 14.8 5 4 15.8z"/><path d="m13 6.8 4.2 4.2"/></svg></a></span></div>
+<div class="pf-id"><span class="av">GM</span><h2>Grâce Mbuyi</h2><p>Analyste de données · Kinshasa</p><span class="cap"><i></i>Vise : premier emploi en data</span></div>
+<div class="pf-act"><a class="bt p m pl"><svg class="orbi-m repos " width="20" height="20" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg>Faire le point</a><a class="bt sec m"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8.5" r="4"/><path d="M4.5 20c1.4-3.7 4.3-5.5 7.5-5.5s6.1 1.8 7.5 5.5"/></svg>Vu par un recruteur</a></div>
+<div class="verre compl"><span class="anneau" style="width:46px;height:46px"><b style="width:36px;height:36px;font-size:11px">70 %</b></span><div class="t"><b>Profil à 70 %</b><span>Ajoutez un projet pour atteindre 80 %</span></div><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="verre sect"><div class="sh"><span class="cases former" style="background:var(--g-former)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="m15.5 8.5-2 5-5 2 2-5z"/></svg></span><b>Compétences</b><small>6</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div><div class="sc"><div class="prv"><b>Power BI</b><span class="pr"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="9" r="5"/><path d="M9.2 13.2 8 21l4-2 4 2-1.2-7.8"/></svg>Attestation</span></div><div class="prv"><b>SQL</b><span class="pr"><svg class="ic xs" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.5 5.3 5.8.7-4.3 3.9 1.1 5.7L12 16.3l-5.1 2.8 1.1-5.7-4.3-3.9 5.8-.7z"/></svg>Projet</span></div><div class="prv"><b>Python</b><span class="pr n">Déclarée</span></div></div></div>
+<div class="verre sect ferme"><div class="sh"><span class="cases oppo" style="background:var(--g-oppo)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3.5 2.5 5.3 5.8.7-4.3 3.9 1.1 5.7L12 16.3l-5.1 2.8 1.1-5.7-4.3-3.9 5.8-.7z"/></svg></span><b>Projets</b><small>3</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="verre sect ferme"><div class="sh"><span class="cases accomp" style="background:var(--g-accomp)"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4.5 21V5a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v16M14.5 9h4a1 1 0 0 1 1 1v11M3 21h18"/><path d="M8 8h3M8 12h3M8 16h3"/></svg></span><b>Expériences</b><small>2</small><svg class="ic chev s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div></div></div><figcaption><b>Mon profil</b><br><span></span></figcaption></figure><figure><div class="phone sombre "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Data · octobre</h1><a class="bi " aria-label="Plus"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="5.5" cy="12" r="1.3" fill="currentColor"/><circle cx="12" cy="12" r="1.3" fill="currentColor"/><circle cx="18.5" cy="12" r="1.3" fill="currentColor"/></svg></a></div>
+<div class="verre ed-ap"><span class="pg"><i class="h"></i><i></i><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Modèle Kinshasa</b><span>1 page · enregistré</span></div><a class="bt sec s">Aperçu</a></div>
+<div class="reg"><span><i></i>Sapin</span><span>Aa · Sora</span><span>Compacte</span></div>
+<span class="ck-t">Sections · glisser pour réordonner</span>
+<div class="verre liste edl">
+<div class="li"><span class="poig"><i></i><i></i><i></i></span><div class="t"><b>Résumé</b><span>3 lignes</span></div><span class="orb-b"><svg class="orbi-m repos " width="16" height="16" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#0F3F37"/><circle class="orb" cx="24" cy="24" r="13" fill="none" stroke="#A6F26B" stroke-opacity=".45" stroke-width="1.6"/><circle cx="24" cy="24" r="5" fill="#F2EDE5"/><g class="sat"><circle cx="33.2" cy="14.8" r="4.4" fill="#A6F26B"/></g></svg>Améliorer</span></div>
+<div class="li"><span class="poig"><i></i><i></i><i></i></span><div class="t"><b>Expériences</b><span>2</span></div><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="poig"><i></i><i></i><i></i></span><div class="t"><b>Compétences</b><span>6, depuis le profil</span></div><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="poig"><i></i><i></i><i></i></span><div class="t"><b>Études</b><span>1</span></div><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div></div><div class="verre fort bas-f"><a class="bt sec m pl"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="7" width="18" height="13" rx="2.5"/><path d="M9 7V5.5A1.5 1.5 0 0 1 10.5 4h3A1.5 1.5 0 0 1 15 5.5V7"/><path d="M3 12.5h18"/><path d="M12 11.5v2"/></svg>Adapter</a><a class="bt p pl"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4v11M7.5 10.5 12 15l4.5-4.5M5 20h14"/></svg>PDF</a></div></div><figcaption><b>Éditeur</b><br><span></span></figcaption></figure><figure><div class="phone sombre "><div class="statut"><span>9:41</span><span><i></i><i></i><i></i></span></div><div class="contenu"><div class="tete-f"><a class="bi " aria-label="Retour"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"/></svg></a><h1>Abonnement</h1></div>
+<div class="verre fo-act"><div class="t"><small>Votre formule</small><b>Pro · 19,9 $/mois</b><span>Payée jusqu’au 12 novembre</span></div></div>
+<div class="verre quotas">
+<div class="quota"><div class="l"><b>Crédits Orbi</b><span>112 sur 150</span></div><span class="barre"><i style="width:75%"></i></span></div>
+<div class="quota"><div class="l"><b>Entretiens écrits</b><span>4 sur 10</span></div><span class="barre"><i style="width:40%"></i></span></div>
+<div class="quota"><div class="l"><b>Entretiens vocaux</b><span>1 sur 3</span></div><span class="barre"><i style="width:33%"></i></span></div>
+<div class="quota"><div class="l"><b>Candidatures</b><span>Illimitées, gratuites</span></div></div></div>
+<div class="verre liste lignes">
+<div class="li"><span class="cases c2"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 19.5v-6M11 19.5v-10M17 19.5v-14"/><path d="M3 21h18"/></svg></span><div class="t"><b>Changer de formule</b><span>Starter, Premium</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases c1"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 7.5h14a2 2 0 0 1 2 2V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h10.5"/><circle cx="16" cy="13.8" r="1.3" fill="currentColor"/></svg></span><div class="t"><b>Moyen de paiement</b><span>M-Pesa · 81 ••• 42</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div>
+<div class="li"><span class="cases"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 3h8.5L19 7.5V20a1 1 0 0 1-1 1H6a1 1 0 0 1-1-1V4a1 1 0 0 1 1-1z"/><path d="M14 3v5h5M8.5 12.5h7M8.5 16h5"/></svg></span><div class="t"><b>Factures</b><span>3 · en PDF</span></div><svg class="ic " viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 5 7 7-7 7"/></svg></div></div>
+<div class="gar"><svg class="ic s" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="8.5"/><path d="M12 7.5V12l3 2"/></svg>Prépayé, sans renouvellement forcé. Un rappel 3 jours avant la fin.</div></div></div><figcaption><b>Abonnement</b><br><span></span></figcaption></figure></div></div></section><p class="fin">Jumanly · Learn. Grow. Connect.</p></body></html>
