@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { PlanPicker, type PlanChoice } from "@/components/talent/billing/plan-picker";
+import { PlanPicker, type FreeCard, type PlanChoice } from "@/components/talent/billing/plan-picker";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { dynamic, numbered } from "@/i18n/dynamic";
@@ -126,35 +126,51 @@ export default async function PlansPage({ searchParams }: PageProps<"/app/abonne
     (choice) => (plans.find((item) => item.code === choice.code)?.priceCents ?? 0) > currentPrice,
   );
   const selected = (asked ?? next ?? choices[0])?.code ?? "";
+  // The free plan beside the others on a tablet or a computer (planche web talent-4 § 7): its
+  // texts come from the plan, like the others.
+  const freeCard: FreeCard | undefined = free
+    ? {
+        name: free.name,
+        price: t("abonnement.amount", { amount: formatUsd(0) }),
+        per: period === "year" ? t("formules.perYear") : t("formules.perMonth"),
+        badge: free.id === plan?.planId ? t("formules.yours") : null,
+        lines: numbered(d, `${free.contentKey}.f`, {}).slice(0, 4),
+        label:
+          free.id === plan?.planId ? t("formules.cta.current") : t("talentW4.plans.base"),
+      }
+    : undefined;
 
   return (
-    <div className="t-flux">
-      <FlowHead
-        back="/app/abonnement"
-        backLabel={t("formules.back")}
-        title={t("formules.title")}
-        end={
-          <Link href="/app/abonnement" className="t-bi t-press" aria-label={t("formules.close")}>
-            <TalentIcon name="fermer" size="s" />
-          </Link>
-        }
-      />
-      {yearly && (
-        <nav aria-label={t("formules.period.aria")} className="t-seg">
-          <Link
-            href="/app/abonnement/formules"
-            aria-current={period === "month" ? "page" : undefined}
-          >
-            {t("formules.period.month")}
-          </Link>
-          <Link
-            href="/app/abonnement/formules?periode=annuel"
-            aria-current={period === "year" ? "page" : undefined}
-          >
-            {t("formules.period.year")}
-          </Link>
-        </nav>
-      )}
+    <div className="t-flux t-w4 t-large">
+      <div className="t-w4-h">
+        <FlowHead
+          back="/app/abonnement"
+          backLabel={t("formules.back")}
+          title={t("formules.title")}
+          end={
+            <Link href="/app/abonnement" className="t-bi t-press" aria-label={t("formules.close")}>
+              <TalentIcon name="fermer" size="s" />
+            </Link>
+          }
+        />
+        <p className="t-w4-web t-w4-sub">{t("talentW4.plans.subtitle")}</p>
+        {yearly && (
+          <nav aria-label={t("formules.period.aria")} className="t-seg t-w4-per">
+            <Link
+              href="/app/abonnement/formules"
+              aria-current={period === "month" ? "page" : undefined}
+            >
+              {t("formules.period.month")}
+            </Link>
+            <Link
+              href="/app/abonnement/formules?periode=annuel"
+              aria-current={period === "year" ? "page" : undefined}
+            >
+              {t("formules.period.year")}
+            </Link>
+          </nav>
+        )}
+      </div>
       {choices.length === 0 ? (
         <p className="t-gar">{t("formules.empty")}</p>
       ) : (
@@ -163,7 +179,22 @@ export default async function PlansPage({ searchParams }: PageProps<"/app/abonne
           initial={selected}
           label={t("formules.list.aria")}
           applyFree={t("formules.applyFree")}
+          free={freeCard}
         />
+      )}
+      <section aria-labelledby="formules-toutes" className="t-w4-web t-verre t-w4-toutes">
+        <h2 id="formules-toutes">{t("talentW4.plans.all")}</h2>
+        <ul>
+          {[1, 2, 3, 4, 5].map((n) => (
+            <li key={n}>{d(`talentW4.plans.all${n}`)}</li>
+          ))}
+        </ul>
+      </section>
+      {free && (
+        <p className="t-w4-web t-gar">
+          <TalentIcon name="portefeuille" size="s" />
+          <span>{t("talentW4.plans.note", { plan: free.name })}</span>
+        </p>
       )}
       {free && paid && !canceled && (
         <form action={cancelSubscription} className="t-fin-formule">

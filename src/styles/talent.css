@@ -14214,3 +14214,281 @@ span.t-sw {
     grid-row: 1;
   }
 }
+
+/* ── Web talent 4b · abonnement, formules, paiement, factures (planche web talent-4 § 7, .abo-h,
+ * .q4, .f4, .recap, .tbl) ── */
+.t-formules .t-form > label {
+  display: contents;
+}
+@media (max-width: 767.98px) {
+  .t-w4-cache {
+    display: none !important;
+  }
+}
+@media (min-width: 768px) {
+  .t-w4-cache {
+    visibility: hidden;
+  }
+  /* Abonnement : la formule en grand, ses deux boutons à droite. */
+  .t-w4-abo.t-fo-act {
+    gap: 20px;
+    padding: 24px;
+    border-radius: 30px;
+  }
+  .t-w4-abo .t-t small {
+    font-size: 11.5px;
+  }
+  .t-w4-abo .t-t b {
+    font-size: 28px;
+    letter-spacing: -0.02em;
+    margin: 4px 0;
+  }
+  .t-w4-abo .t-t span {
+    font-size: 13px;
+  }
+  .t-w4-abo .t-bts {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .t-w4-abo .t-bts .t-bt {
+    flex: none;
+  }
+  /* Les quotas du mois : quatre cartes. */
+  .t-w4-q4.t-verre {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    backdrop-filter: none;
+    border: 0;
+  }
+  .t-w4-q4 .t-quota {
+    gap: 10px;
+    padding: 16px;
+    border: 0;
+    border-radius: 24px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-w4-q4 .t-quota .t-cases {
+    width: 38px;
+    height: 38px;
+    border-radius: 13px;
+    display: grid;
+    place-items: center;
+    color: #0f3f37;
+  }
+  .t-w4-q4 .t-w4-k4 {
+    background: var(--g-accent);
+  }
+  .t-w4-q4 .t-w4-k1 {
+    background: var(--g-former);
+  }
+  .t-w4-q4 .t-w4-k2 {
+    background: var(--g-accomp);
+  }
+  .t-w4-q4 .t-w4-k3 {
+    background: var(--g-oppo);
+  }
+  .t-w4-q4 .t-quota .t-l {
+    flex-direction: column;
+    justify-content: flex-start;
+    gap: 2px;
+  }
+  .t-w4-q4 .t-quota .t-l b {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--texte2);
+  }
+  .t-w4-q4 .t-quota .t-l span.t-w4-n {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--texte);
+  }
+  .t-w4-q4 .t-w4-n small {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--texte2);
+  }
+  .t-w4-qs {
+    font-size: 12px;
+    color: var(--texte2);
+  }
+  /* Formules : les quatre côte à côte, chacune avec son bouton. */
+  .t-w4-f4 {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+    align-items: stretch;
+  }
+  .t-w4-f4 > .t-formules {
+    display: contents;
+  }
+  .t-w4-f4 .t-form {
+    padding: 20px;
+    gap: 14px;
+  }
+  .t-w4-f4 .t-form .t-h {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 6px;
+  }
+  .t-w4-f4 .t-form .t-h .t-prix {
+    font-size: 30px;
+    letter-spacing: -0.02em;
+  }
+  .t-w4-f4 .t-form .t-rec {
+    height: 22px;
+    display: inline-flex;
+    align-items: center;
+  }
+  .t-w4-f4 .t-form > .t-bt,
+  .t-w4-fa {
+    margin-top: auto;
+    display: flex;
+  }
+  .t-w4-fa .t-bt {
+    flex: 1;
+  }
+  .t-w4-h > .t-w4-per {
+    width: 260px;
+  }
+  .t-w4-toutes {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 18px;
+  }
+  .t-w4-toutes h2 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .t-w4-toutes ul {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .t-w4-toutes li {
+    font-size: 12.5px;
+    font-weight: 600;
+    padding: 8px 12px;
+    border-radius: 999px;
+    background: var(--lime-c);
+    color: #0f3f37;
+  }
+  /* Paiement : les moyens à gauche, le récapitulatif à droite. */
+  .t-w4-pay .t-w4-col {
+    gap: 12px;
+  }
+  .t-w4-recap {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 20px;
+    border-radius: 26px;
+  }
+  .t-w4-recap h2 {
+    font-size: 16px;
+    font-weight: 600;
+  }
+  .t-w4-recap dl {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin: 0;
+  }
+  .t-w4-recap dl > div {
+    display: flex;
+    justify-content: space-between;
+    gap: 12px;
+    font-size: 13.5px;
+  }
+  .t-w4-recap dt {
+    color: var(--texte2);
+  }
+  .t-w4-recap dd {
+    margin: 0;
+    font-weight: 700;
+    text-align: right;
+  }
+  .t-w4-recap .t-w4-tot {
+    align-items: baseline;
+    padding-top: 12px;
+    border-top: 1px solid var(--trait);
+  }
+  .t-w4-recap .t-w4-tot dt {
+    color: var(--texte);
+  }
+  .t-w4-recap .t-w4-tot dd {
+    font-size: 28px;
+    letter-spacing: -0.02em;
+  }
+  .t-w4-recap .t-bt {
+    flex: none;
+  }
+  .t-w4-recu {
+    font-size: 12px;
+    color: var(--texte2);
+    text-align: center;
+  }
+  /* Attente, paiement reçu, échec : une fenêtre au centre (planche .dlg.c). */
+  .t-w4-conf.t-conf {
+    width: 100%;
+    max-width: 520px;
+    margin: 40px auto 0;
+    padding: 30px 32px;
+    border-radius: 30px;
+    background: var(--plein);
+    box-shadow:
+      0 40px 80px -30px rgba(0, 0, 0, 0.35),
+      0 0 0 1px var(--trait);
+  }
+  /* Factures : un tableau à cinq colonnes. */
+  .t-w4-tbl.t-verre {
+    padding: 6px 0;
+  }
+  .t-w4-tbl > li > .t-li,
+  .t-w4-tbl > .t-w4-tbl-h {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1.4fr) 1fr 1fr 90px 100px;
+    gap: 12px;
+    align-items: center;
+    padding: 14px 20px;
+    font-size: 13.5px;
+  }
+  .t-w4-tbl > .t-w4-tbl-h > :first-child {
+    grid-column: span 2;
+  }
+  .t-w4-tbl > .t-w4-tbl-h {
+    padding: 10px 20px;
+    font-size: 11.5px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+  }
+  .t-w4-tbl .t-w4-c {
+    color: var(--texte2);
+  }
+  .t-w4-tbl .t-v {
+    font-weight: 700;
+  }
+  .t-w4-tbl .t-bt {
+    justify-self: end;
+    flex: none;
+  }
+}
+@media (min-width: 1200px) {
+  .t-w4-q4.t-verre,
+  .t-w4-f4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}

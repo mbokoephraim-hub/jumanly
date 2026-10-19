@@ -3,6 +3,7 @@ import { headers } from "next/headers";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { FlowHead } from "@/components/talent/flow-head";
+import { SettingsNav } from "@/components/talent/settings-nav";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
@@ -95,7 +96,7 @@ export default async function SecurityPage({
   );
 
   return (
-    <div className="t-flux">
+    <div className="t-flux t-w4 t-large">
       <FlowHead
         back="/app/parametres"
         backLabel={t("securite.back")}
@@ -106,127 +107,135 @@ export default async function SecurityPage({
           </Link>
         }
       />
-      {one(params.raison) === "deux-etapes" && (
-        <Notice tone="err">{t("securite.twoFactor.required")}</Notice>
-      )}
-      {ok === "password" && <Notice tone="ok">{t("securite.password.changed")}</Notice>}
-      {ok === "session" && <Notice tone="ok">{t("securite.devices.loggedOut")}</Notice>}
-      {ok === "2fa" && <Notice tone="ok">{t("securite.twoFactor.changed")}</Notice>}
-      {errorText && <Notice tone="err">{errorText}</Notice>}
-
-      <ul aria-label={t("securite.title")} className="t-verre t-liste t-lignes">
-        <li className="t-li">
-          <span className="t-cases t-c2" aria-hidden>
-            <TalentIcon name="message" size="s" />
-          </span>
-          <span className="t-t">
-            <b>{t("securite.email.title")}</b>
-            <span>{user.email}</span>
-          </span>
-        </li>
-        <li>
-          {hasPassword ? (
-            <SheetButton target="securite-mdp" className="t-li t-press">
-              <span className="t-cases" aria-hidden>
-                <TalentIcon name="modifier" size="s" />
-              </span>
-              <span className="t-t">
-                <b>{t("securite.password.title")}</b>
-                <span>{t("securite.password.text")}</span>
-              </span>
-              <TalentIcon name="suivant" />
-            </SheetButton>
-          ) : (
-            <Link href="/mot-de-passe-oublie" className="t-li t-press">
-              <span className="t-cases" aria-hidden>
-                <TalentIcon name="modifier" size="s" />
-              </span>
-              <span className="t-t">
-                <b>{t("securite.password.create")}</b>
-                <span>{t("securite.password.none")}</span>
-              </span>
-              <TalentIcon name="suivant" />
-            </Link>
+      <div className="t-w4-prm">
+        <SettingsNav on="securite" />
+        <div className="t-w4-col">
+          <h2 className="t-w4-web t-w4-h3">{t("securite.title")}</h2>
+          {one(params.raison) === "deux-etapes" && (
+            <Notice tone="err">{t("securite.twoFactor.required")}</Notice>
           )}
-        </li>
-        <li>
-          <SheetButton target="securite-2fa" className="t-li t-press">
-            <span className="t-cases t-c1" aria-hidden>
-              <TalentIcon name="cadenas" size="s" />
-            </span>
-            <span className="t-t">
-              <b>{t("securite.twoFactor.title")}</b>
-              <span>{t("securite.twoFactor.text")}</span>
-            </span>
-            <span
-              role="img"
-              aria-label={
-                user.twoFactorEnabled
-                  ? t("settings.security.2fa.on")
-                  : t("settings.security.2fa.off")
-              }
-              className={user.twoFactorEnabled ? "t-sw t-on" : "t-sw"}
-            />
-          </SheetButton>
-        </li>
-        <li className="t-li">
-          <span className="t-cases t-c3" aria-hidden>
-            <TalentIcon name="connexion" size="s" />
-          </span>
-          <span className="t-t">
-            <b>{t("securite.linked.title")}</b>
-            <span>
-              {linked.length > 0
-                ? linked.map((provider) => t(`securite.linked.${provider}`)).join(", ")
-                : t("securite.linked.none")}
-            </span>
-          </span>
-        </li>
-      </ul>
+          {ok === "password" && <Notice tone="ok">{t("securite.password.changed")}</Notice>}
+          {ok === "session" && <Notice tone="ok">{t("securite.devices.loggedOut")}</Notice>}
+          {ok === "2fa" && <Notice tone="ok">{t("securite.twoFactor.changed")}</Notice>}
+          {errorText && <Notice tone="err">{errorText}</Notice>}
 
-      <span className="t-ck-t" id="securite-appareils">
-        {t("securite.devices.title")}
-      </span>
-      <ul aria-labelledby="securite-appareils" className="t-verre t-liste t-lignes">
-        {ordered.map((session) => {
-          const isCurrent = session.token === current?.session.token;
-          const device = deviceName(session.userAgent) ?? t("securite.devices.unknown");
-          return (
-            <li key={session.id} className="t-li">
-              <span className="t-t">
-                <b>{isCurrent ? t("securite.devices.current") : device}</b>
-                <span>
-                  {isCurrent
-                    ? device
-                    : t("securite.devices.since", { date: formatShortDate(session.createdAt) })}
-                </span>
+          <ul aria-label={t("securite.title")} className="t-verre t-liste t-lignes">
+            <li className="t-li">
+              <span className="t-cases t-c2" aria-hidden>
+                <TalentIcon name="message" size="s" />
               </span>
-              {isCurrent ? (
-                <span className="t-st t-pre">{t("securite.devices.active")}</span>
+              <span className="t-t">
+                <b>{t("securite.email.title")}</b>
+                <span>{user.email}</span>
+              </span>
+            </li>
+            <li>
+              {hasPassword ? (
+                <SheetButton target="securite-mdp" className="t-li t-press">
+                  <span className="t-cases" aria-hidden>
+                    <TalentIcon name="modifier" size="s" />
+                  </span>
+                  <span className="t-t">
+                    <b>{t("securite.password.title")}</b>
+                    <span>{t("securite.password.text")}</span>
+                  </span>
+                  <TalentIcon name="suivant" className="t-w4-tel" />
+                  <span className="t-w4-web t-bt t-sec t-s" aria-hidden>
+                    {t("talentW4.settings.change")}
+                  </span>
+                </SheetButton>
               ) : (
-                <form action={revokeSession}>
-                  <input type="hidden" name="token" value={session.token} />
-                  <button
-                    type="submit"
-                    className="t-v t-lien t-press"
-                    aria-label={t("securite.devices.logoutAria", { device })}
-                  >
-                    {t("securite.devices.logout")}
-                  </button>
-                </form>
+                <Link href="/mot-de-passe-oublie" className="t-li t-press">
+                  <span className="t-cases" aria-hidden>
+                    <TalentIcon name="modifier" size="s" />
+                  </span>
+                  <span className="t-t">
+                    <b>{t("securite.password.create")}</b>
+                    <span>{t("securite.password.none")}</span>
+                  </span>
+                  <TalentIcon name="suivant" />
+                </Link>
               )}
             </li>
-          );
-        })}
-      </ul>
-      {sessions.length > 1 && (
-        <form action={revokeOtherSessions}>
-          <button type="submit" className="t-bt t-sec t-pl t-press">
-            {t("securite.devices.logoutAll")}
-          </button>
-        </form>
-      )}
+            <li>
+              <SheetButton target="securite-2fa" className="t-li t-press">
+                <span className="t-cases t-c1" aria-hidden>
+                  <TalentIcon name="cadenas" size="s" />
+                </span>
+                <span className="t-t">
+                  <b>{t("securite.twoFactor.title")}</b>
+                  <span>{t("securite.twoFactor.text")}</span>
+                </span>
+                <span
+                  role="img"
+                  aria-label={
+                    user.twoFactorEnabled
+                      ? t("settings.security.2fa.on")
+                      : t("settings.security.2fa.off")
+                  }
+                  className={user.twoFactorEnabled ? "t-sw t-on" : "t-sw"}
+                />
+              </SheetButton>
+            </li>
+            <li className="t-li">
+              <span className="t-cases t-c3" aria-hidden>
+                <TalentIcon name="connexion" size="s" />
+              </span>
+              <span className="t-t">
+                <b>{t("securite.linked.title")}</b>
+                <span>
+                  {linked.length > 0
+                    ? linked.map((provider) => t(`securite.linked.${provider}`)).join(", ")
+                    : t("securite.linked.none")}
+                </span>
+              </span>
+            </li>
+          </ul>
 
+          <span className="t-ck-t" id="securite-appareils">
+            {t("securite.devices.title")}
+          </span>
+          <ul aria-labelledby="securite-appareils" className="t-verre t-liste t-lignes t-w4-dev">
+            {ordered.map((session) => {
+              const isCurrent = session.token === current?.session.token;
+              const device = deviceName(session.userAgent) ?? t("securite.devices.unknown");
+              return (
+                <li key={session.id} className="t-li">
+                  <span className="t-t">
+                    <b>{isCurrent ? t("securite.devices.current") : device}</b>
+                    <span>
+                      {isCurrent
+                        ? device
+                        : t("securite.devices.since", { date: formatShortDate(session.createdAt) })}
+                    </span>
+                  </span>
+                  {isCurrent ? (
+                    <span className="t-st t-pre">{t("securite.devices.active")}</span>
+                  ) : (
+                    <form action={revokeSession}>
+                      <input type="hidden" name="token" value={session.token} />
+                      <button
+                        type="submit"
+                        className="t-v t-lien t-press"
+                        aria-label={t("securite.devices.logoutAria", { device })}
+                      >
+                        {t("securite.devices.logout")}
+                      </button>
+                    </form>
+                  )}
+                </li>
+              );
+            })}
+          </ul>
+          {sessions.length > 1 && (
+            <form action={revokeOtherSessions}>
+              <button type="submit" className="t-bt t-sec t-pl t-press">
+                {t("securite.devices.logoutAll")}
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
       {hasPassword && (
         <Sheet
           id="securite-mdp"

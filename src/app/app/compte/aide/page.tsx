@@ -61,30 +61,38 @@ export default async function HelpPage({ searchParams }: PageProps<"/app/compte/
       )
     : null;
   const shown = found ?? chosen?.items ?? null;
+  // The first questions of each theme, beside « Nous écrire » on a tablet or a computer (planche
+  // web talent-4 § 8).
+  const frequent = shown ? [] : groups.flatMap((group) => group.items.slice(0, 1)).slice(0, 5);
 
   return (
-    <div className="t-flux">
-      <FlowHead
-        back={chosen || query ? "/app/compte/aide" : "/app/compte"}
-        backLabel={t("aide.back")}
-        title={chosen && !query ? t(`aide.theme.${chosen.theme}`) : t("aide.title")}
-      />
-
-      <form action="/app/compte/aide" className="t-verre t-rech" role="search">
-        <TalentIcon name="recherche" size="s" />
-        <label htmlFor="aide-q" className="sr-only">
-          {t("aide.search")}
-        </label>
-        <input
-          id="aide-q"
-          name="q"
-          type="search"
-          defaultValue={query}
-          maxLength={80}
-          placeholder={t("aide.search")}
-          autoComplete="off"
+    <div className="t-flux t-w4 t-large">
+      <div className={shown ? "t-w4-h" : "t-w4-tel"}>
+        <FlowHead
+          back={chosen || query ? "/app/compte/aide" : "/app/compte"}
+          backLabel={t("aide.back")}
+          title={chosen && !query ? t(`aide.theme.${chosen.theme}`) : t("aide.title")}
         />
-      </form>
+      </div>
+
+      <div className={shown ? "t-w4-col" : "t-w4-aide-h"}>
+        {!shown && <h1 className="t-w4-web">{t("talentW4.help.hero")}</h1>}
+        <form action="/app/compte/aide" className="t-verre t-rech" role="search">
+          <TalentIcon name="recherche" size="s" />
+          <label htmlFor="aide-q" className="sr-only">
+            {t("aide.search")}
+          </label>
+          <input
+            id="aide-q"
+            name="q"
+            type="search"
+            defaultValue={query}
+            maxLength={80}
+            placeholder={t("aide.search")}
+            autoComplete="off"
+          />
+        </form>
+      </div>
 
       {shown ? (
         <>
@@ -106,7 +114,7 @@ export default async function HelpPage({ searchParams }: PageProps<"/app/compte/
           )}
         </>
       ) : (
-        <ul aria-label={t("aide.themes")} className="t-verre t-liste t-lignes">
+        <ul aria-label={t("aide.themes")} className="t-verre t-liste t-lignes t-w4-aide-g">
           {groups
             .filter((group) => group.items.length > 0)
             .map((group) => (
@@ -126,13 +134,38 @@ export default async function HelpPage({ searchParams }: PageProps<"/app/compte/
         </ul>
       )}
 
-      <div className="t-verre t-contact">
-        <b>{t("aide.contact.title")}</b>
-        <span>{t("aide.contact.text", { email: CONTACT_EMAIL })}</span>
-        <a href={`mailto:${CONTACT_EMAIL}`} className="t-bt t-p t-s t-press">
-          <TalentIcon name="message" size="xs" />
-          {t("aide.contact.cta")}
-        </a>
+      <div className={shown ? "t-w4-col" : "t-w4-g2"}>
+        {frequent.length > 0 && (
+          <section aria-labelledby="aide-frequentes" className="t-w4-col t-w4-web">
+            <h2 id="aide-frequentes" className="t-ck-t t-w4-sech">
+              {t("talentW4.help.faq")}
+            </h2>
+            <div className="t-verre t-liste t-lignes t-faq">
+              {frequent.map((item) => (
+                <details key={item.id} className="t-li">
+                  <summary>
+                    <b>{item.question}</b>
+                    <TalentIcon name="suivant" size="s" />
+                  </summary>
+                  <p>{item.answer}</p>
+                </details>
+              ))}
+            </div>
+          </section>
+        )}
+        <section aria-labelledby="aide-ecrire" className="t-w4-col">
+          <h2 id="aide-ecrire" className="t-ck-t t-w4-sech t-w4-web">
+            {t("talentW4.help.write")}
+          </h2>
+          <div className="t-verre t-contact">
+            <b>{t("aide.contact.title")}</b>
+            <span>{t("aide.contact.text", { email: CONTACT_EMAIL })}</span>
+            <a href={`mailto:${CONTACT_EMAIL}`} className="t-bt t-p t-s t-press">
+              <TalentIcon name="message" size="xs" />
+              {t("aide.contact.cta")}
+            </a>
+          </div>
+        </section>
       </div>
     </div>
   );

@@ -5003,6 +5003,46 @@
       "subtitle": "Six notes sur 100 et le plan qui en découle",
       "share": "Partager",
       "again": "Refaire le diagnostic"
+    },
+    "billing": {
+      "extend": "Prolonger",
+      "change": "Changer de formule",
+      "of": "sur {limit}",
+      "applications": "Gratuites dans toutes les formules",
+      "methodDefault": "moyen du dernier paiement",
+      "invoicesAll": "Tout voir",
+      "invoicesNone": "Aucune facture pour l’instant. Chaque paiement en crée une, en PDF."
+    },
+    "invoices": {
+      "subtitle": "{count, plural, =0 {Aucune facture} one {# facture} other {# factures}} · en PDF",
+      "plan": "Formule",
+      "date": "Date",
+      "method": "Moyen",
+      "amount": "Montant",
+      "pdf": "PDF"
+    },
+    "plans": {
+      "subtitle": "Prépayées, sans engagement. Postuler reste gratuit dans toutes les formules.",
+      "base": "Formule de base",
+      "choose": "Choisir",
+      "all": "Dans toutes les formules",
+      "all1": "Postuler gratuitement",
+      "all2": "Suivi des candidatures",
+      "all3": "Attestations vérifiables",
+      "all4": "Données protégées",
+      "all5": "Aide par e-mail",
+      "note": "Mobile Money ou carte. Prépayé : à la fin de la période, retour à {plan} sans rien perdre."
+    },
+    "pay": {
+      "recap": "Récapitulatif",
+      "plan": "Formule",
+      "period": "Période",
+      "periodValue": "{start} au {end}",
+      "renewal": "Renouvellement",
+      "renewalValue": "Non, prépayé",
+      "credit": "Déjà déduit",
+      "total": "Total",
+      "receipt": "Reçu envoyé par e-mail et dans Factures."
     }
   },
   "account": {

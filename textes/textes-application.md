@@ -4248,6 +4248,42 @@ Conventions :
 | `talentW4.diagnostic.subtitle` | Six notes sur 100 et le plan qui en découle |
 | `talentW4.diagnostic.share` | Partager |
 | `talentW4.diagnostic.again` | Refaire le diagnostic |
+| `talentW4.billing.extend` | Prolonger |
+| `talentW4.billing.change` | Changer de formule |
+| `talentW4.billing.of` | sur {limit} |
+| `talentW4.billing.applications` | Gratuites dans toutes les formules |
+| `talentW4.billing.methodDefault` | moyen du dernier paiement |
+| `talentW4.billing.invoicesAll` | Tout voir |
+| `talentW4.billing.invoicesNone` | Aucune facture pour l’instant. Chaque paiement en crée une, en PDF. |
+| `talentW4.invoices.subtitle` | {count, plural, =0 {Aucune facture} one {# facture} other {# factures}} · en PDF |
+| `talentW4.invoices.plan` | Formule |
+| `talentW4.invoices.date` | Date |
+| `talentW4.invoices.method` | Moyen |
+| `talentW4.invoices.amount` | Montant |
+| `talentW4.invoices.pdf` | PDF |
+| `talentW4.plans.subtitle` | Prépayées, sans engagement. Postuler reste gratuit dans toutes les formules. |
+| `talentW4.plans.base` | Formule de base |
+| `talentW4.plans.choose` | Choisir |
+| `talentW4.plans.all` | Dans toutes les formules |
+| `talentW4.plans.all1` | Postuler gratuitement |
+| `talentW4.plans.all2` | Suivi des candidatures |
+| `talentW4.plans.all3` | Attestations vérifiables |
+| `talentW4.plans.all4` | Données protégées |
+| `talentW4.plans.all5` | Aide par e-mail |
+| `talentW4.plans.note` | Mobile Money ou carte. Prépayé : à la fin de la période, retour à {plan} sans rien perdre. |
+| `talentW4.pay.recap` | Récapitulatif |
+| `talentW4.pay.plan` | Formule |
+| `talentW4.pay.period` | Période |
+| `talentW4.pay.periodValue` | {start} au {end} |
+| `talentW4.pay.renewal` | Renouvellement |
+| `talentW4.pay.renewalValue` | Non, prépayé |
+| `talentW4.pay.credit` | Déjà déduit |
+| `talentW4.pay.total` | Total |
+| `talentW4.pay.receipt` | Reçu envoyé par e-mail et dans Factures. |
+| `talentW4.settings.change` | Changer |
+| `talentW4.help.hero` | Comment pouvons-nous aider ? |
+| `talentW4.help.faq` | Questions fréquentes |
+| `talentW4.help.write` | Nous écrire |
 
 ### Navigation · Menu du compte
 
