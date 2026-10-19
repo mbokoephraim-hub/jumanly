@@ -95,7 +95,7 @@ def offc(t, org, lieu, tags, pub, lim, n, st, stc, nv=None):
     tg = ''.join(f'<span class="tag">{x}</span>' for x in tags)
     nn = f' · <b style="color:#2E8540">{nv} nouvelles</b>' if nv else ''
     return f'''<div class="verre off-c"><div class="h"><div class="t"><b>{t}</b><span>{org} · {lieu}</span></div><span class="stp {stc}">{st}</span><a class="bi">{ic("plus-options","s")}</a></div>
-<div class="m">{tg}</div><div class="b"><span>Publiée {pub}</span><span>Limite {lim}</span><span class="sp"></span><b>{n} candidatures</b></div>{('<div style="font-size:12px;margin-top:-2px">' + nn[3:] + '</div>') if nv else ''}</div>'''
+<div class="m">{tg}</div><div class="b"><span>{("Publiée " + pub) if pub != "—" else "Envoyée le 18 oct."}</span><span>{("Limite " + lim) if lim != "—" else "Réponse sous 24 h"}</span><span class="sp"></span><b>{n} candidatures</b></div>{('<div style="font-size:12px;margin-top:-2px">' + nn[3:] + '</div>') if nv else ''}</div>'''
 
 # ---------- 1. À traiter ----------
 AT = phone(f'''{tete_r("À traiter")}
