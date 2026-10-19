@@ -5,6 +5,10 @@ H = os.path.dirname(os.path.abspath(__file__))
 exec(open(H + '/talent3.py').read().split("\n# 1. Apprendre : accueil et catalogue")[0])   # aides + CSS des lots 1 à 3
 
 CSS4 = '''
+.ta{padding:12px 14px;border-radius:18px;background:var(--plein);box-shadow:inset 0 0 0 1.5px var(--trait);font-size:12.5px;line-height:1.5;position:relative;padding-bottom:26px}
+.ta p{margin:0 0 4px}.ta .fade{color:var(--texte2)}.ta .cn{position:absolute;right:12px;bottom:8px;font-size:10.5px;color:var(--texte2)}
+.kw{display:flex;flex-wrap:wrap;gap:6px}.kw span{display:inline-flex;align-items:center;gap:4px;font-size:11.5px;font-weight:600;padding:5px 10px;border-radius:999px;background:var(--lime-c)}.kw span.m{background:var(--ambre-c)}.kw .ic{width:12px;height:12px}
+.chips-s{display:flex;gap:6px;overflow:hidden}.chips-s .puce{white-space:nowrap}
 .auth .contenu{gap:14px}
 .auth-h{display:flex;flex-direction:column;align-items:center;text-align:center;gap:10px;padding:26px 0 8px}
 .auth-h .lgo{display:flex;align-items:center;gap:8px;font-size:22px;font-weight:600}
@@ -301,11 +305,11 @@ def tpl(n, cls='', bdg=None, on=False, tap=None):
     return f'<div class="tpl{" on" if on else ""}{tp}"><span class="pg {cls}">{b}<i class="h"></i><i class="c"></i><i></i><i class="k"></i><i></i><i class="c"></i><i></i><i class="k"></i><i></i></span>{n}</div>'
 MODS = phone(f'''{tete_f("Choisir un modèle")}
 <div class="puces"><span class="puce on">Tous</span><span class="puce">Sobres</span><span class="puce">Colonne</span><span class="puce">Créatifs</span></div>
-<div class="tpls">{tpl("Kinshasa","", "ok", True, 11)}{tpl("Dakar","b","ok")}{tpl("Abidjan","c2","ok")}{tpl("Accra","d","ok")}</div>''', avec_nav=False,
- bas=f'<div class="verre fort bas-f"><a class="bt p pl">Utiliser « Kinshasa »</a></div>')
+<div class="tpls">{tpl("Colonne","", "ok", True, 11)}{tpl("Moderne","b","ok")}{tpl("Classique","c2","ok")}{tpl("Épuré","d","ok")}</div>''', avec_nav=False,
+ bas=f'<div class="verre fort bas-f"><a class="bt p pl">Utiliser « Colonne »</a></div>')
 
 EDIT = phone(f'''{tete_f("Data · octobre", droite="plus-options")}
-<div class="verre ed-ap"><span class="pg"><i class="h"></i><i></i><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Modèle Kinshasa</b><span>1 page · enregistré</span></div><a class="bt sec s">Aperçu</a></div>
+<div class="verre ed-ap"><span class="pg"><i class="h"></i><i></i><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Modèle Colonne</b><span>1 page · enregistré</span></div><a class="bt sec s">Aperçu</a></div>
 <div class="reg"><span><i></i>Sapin</span><span>Aa · Sora</span><span>Compacte</span></div>
 <span class="ck-t">Sections · glisser pour réordonner</span>
 <div class="verre liste edl">
@@ -323,7 +327,7 @@ AVAP = phone(f'''{tete_f("Améliorer le résumé", droite="fermer")}
  bas=f'<div class="verre fort bas-f"><a class="bt sec m">Refuser</a><a class="bt sec m">Modifier</a><a class="bt p pl">{ic("valider","s")}Accepter</a></div>')
 
 ADAPT = phone(f'''{tete_f("Data · octobre", droite="plus-options")}
-<div class="verre ed-ap"><span class="pg"><i class="h"></i><i></i><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Modèle Kinshasa</b><span>1 page · enregistré</span></div></div>''', avec_nav=False,
+<div class="verre ed-ap"><span class="pg"><i class="h"></i><i></i><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Modèle Colonne</b><span>1 page · enregistré</span></div></div>''', avec_nav=False,
  bas=f'''<div class="voile"></div><div class="sheet"><div class="poignee"></div><h3>Adapter à une offre</h3>
 {OFF_L}
 <div class="verre ecart">
@@ -331,6 +335,15 @@ ADAPT = phone(f'''{tete_f("Data · octobre", droite="plus-options")}
 <div class="l ko">{ic("plus","s")}SQL avancé : à mettre en avant</div>
 <div class="l ko">{ic("plus","s")}Mot-clé « reporting » absent</div></div>
 <div class="gar">{ic("document","s")}Orbi crée une copie « Data · Baobab ». Votre CV principal ne change pas.</div>
+<a class="bt p pl">{orbi(20)}Créer la copie adaptée</a></div>''')
+
+ADAPT_T = phone(f'''{tete_f("Data · octobre", droite="plus-options")}
+<div class="verre ed-ap"><span class="pg"><i class="h"></i><i></i><i></i><i></i><i></i><i></i><i></i></span><div class="t"><b>Modèle Colonne</b><span>1 page · enregistré</span></div></div>''', avec_nav=False,
+ bas=f'''<div class="voile"></div><div class="sheet"><div class="poignee"></div><h3>Adapter à un texte</h3><p class="ss">Une annonce trouvée ailleurs, un appel à candidatures, une bourse.</p>
+<div class="chips-s"><span class="puce on">Annonce</span><span class="puce">Appel</span><span class="puce">Bourse</span><span class="puce">Fiche de poste</span></div>
+<div class="ta"><p><b>Chargé(e) de suivi-évaluation · ONG Mboka Santé</b></p><p class="fade">Vous collecterez les données des 14 centres partenaires, tiendrez les tableaux de bord mensuels…</p><span class="cn">642 / 5 000</span></div>
+<div class="kw"><span>{ic("valider","xs")}Tableaux de bord</span><span>{ic("valider","xs")}Excel</span><span class="m">{ic("plus","xs")}Suivi-évaluation</span><span class="m">{ic("plus","xs")}Rapports aux bailleurs</span></div>
+<div class="gar">{ic("cadenas","s")}Lu comme une annonce, jamais comme une consigne. Orbi n’invente aucune expérience.</div>
 <a class="bt p pl">{orbi(20)}Créer la copie adaptée</a></div>''')
 
 IMPORT = phone(f'''{tete_f("Importer un CV")}
@@ -444,7 +457,14 @@ ORB_H = phone(f'''{tete_f("Historique Orbi", droite=None)}
 <div class="li"><span class="cases c1">{ic("entretien","s")}</span><div class="t"><b>Entraînement à l’entretien</b><span>8 questions · 15 oct.</span></div></div>
 <div class="li"><span class="cases c1">{ic("lecon","s")}</span><div class="t"><b>La formule SI</b><span>Dans la leçon Excel · 14 oct.</span></div></div></div>
 <div class="gar">{ic("supprimer","s")}Vous pouvez effacer un échange ou tout l’historique.</div>''', avec_nav=False)
-ORB_P = A_ORB.replace('<span class="verre credits">18 crédits</span>', f'<span class="verre credits">112 crédits</span>{bi("horloge","","tap").replace("class=\"bi tap\"","class=\"bi tap\" data-n=\"21\"")}', 1)
+_BAS_O = (f'<div style="position:absolute;left:0;right:0;bottom:0;z-index:4;padding:14px 16px 30px;background:linear-gradient(180deg,transparent,var(--fond) 38%)">'
+          f'<div class="verre fort compo" style="height:60px"><a class="bi" style="background:var(--zone)">{ic("plus","s")}</a><span>Écrire à Orbi</span><a class="bi">{ic("micro","s")}</a><a class="bi env">{ic("envoyer","s")}</a></div>'
+          '<span style="display:block;text-align:center;font-size:11px;color:var(--texte2);margin-top:8px">Orbi propose, vous décidez.</span></div>')
+ORB_P = phone(f'''<div class="tete" style="display:flex;align-items:center;gap:10px">{bi("retour")}<div class="or-tete" style="flex:1">{orbi(40)}<div class="t"><b>Orbi</b><span>112 crédits</span></div></div>{bi("horloge")}</div>
+<div class="aides"><div class="ai p1"><span class="cases">{ic("cv","s")}</span><b>Améliorer mon CV</b></div><div class="ai p2"><span class="cases">{ic("entretien","s")}</span><b>Préparer un entretien</b></div>
+<div class="ai p3"><span class="cases">{ic("opportunites","s")}</span><b>Analyser une offre</b></div><div class="ai p4"><span class="cases">{ic("cap","s")}</span><b>Choisir ma voie</b></div></div>
+<div class="bulle-u">Mon CV est-il prêt pour l’offre Baobab ?</div>
+<div class="bulle-o">{orbi(32)}<div class="verre corps"><span>Presque. Il manque SQL avancé et une réalisation chiffrée.</span><div class="acts"><a class="bt p s">Corriger mon CV</a><a class="pq">{ic("pourquoi")}Pourquoi ?</a></div></div></div>''', 'orbi', avec_nav=False, bas=_BAS_O)
 
 # ---------- Drapeaux (dessins simplifiés) ----------
 def _fl(c):
@@ -748,7 +768,7 @@ CHEMINS = [
  ('S’entraîner à un entretien', ['Compte, onglet Orbi « Préparer un entretien » ou Suivi', 'S’entraîner', 'Écrit ou oral', 'Retour']),
  ('Gérer mes connexions', ['Compte', 'Connexions', 'Accepter une demande']),
  ('Créer ou importer un CV', ['Compte', 'CV et documents', 'Nouveau CV ou Importer', 'Éditeur']),
- ('Améliorer ou adapter', ['Éditeur', 'Améliorer', 'Accepter ou refuser', 'ou', 'Adapter']),
+ ('Améliorer ou adapter', ['Éditeur', 'Améliorer', 'Accepter ou refuser', 'ou', 'Adapter : une offre ou un texte collé']),
  ('Préparer LinkedIn', ['CV et documents', 'LinkedIn', 'Copier']),
  ('Changer de formule', ['Compte', 'Abonnement', 'Changer de formule', 'Premium', 'Numéro Mobile Money', 'Valider sur le téléphone', 'Reçu']),
  ('Retrouver une facture', ['Abonnement', 'Factures', 'PDF']),
@@ -785,13 +805,13 @@ ECR = [
  ('b5b','5 bis · Simulations d’entretien','Écrites dès Starter, orales dès Pro, avec quotas. Toujours privées : le recruteur ne les voit jamais. Retour sur 5 critères, sans note.',
   [ecrans((ENT_HUB,'S’entraîner','Quotas, entretien prévu, sujets libres, historique.'),(ENT_CHOIX,'Nouvel entraînement','Métier, niveau, questions, écrit ou oral, durée.'),(BRIEF,'Préparer un entretien prévu','Ce qu’il faut savoir sur l’offre.'),(SIM,'Simulation écrite','Une question à la fois, Orbi relance.'),(VOCAL,'Simulation orale','Micro, transcription, 2 minutes par réponse.'),(FB,'Retour écrit','Points forts, à travailler, formation.'),(FB_V,'Retour oral','Débit, hésitations, réécoute.'),(ENT_FREE,'En formule Free','Conseils gratuits ; simulations dès Starter.'))]),
  ('b6','6 · CV et documents','Mes CV, mes lettres, LinkedIn. L’éditeur garde la main au talent.',
-  [ecrans((DOCS,'Mes CV','Nouveau CV, importer.'),(LETTRES,'Lettres','Lettres et accès LinkedIn.'),(LINKEDIN,'Préparer LinkedIn','Titre, résumé, compétences à copier.'),(IMPORT,'Importer','Ce qui est lu, à cocher avant d’ajouter.'),(MODS,'Choisir un modèle','Les modèles inclus dans la formule.'),(EDIT,'Éditeur','Améliorer, adapter, PDF.'),(AVAP,'Avant, après','Accepter, modifier ou refuser.'),(ADAPT,'Adapter à une offre','Une copie, l’original ne change pas.'))]),
+  [ecrans((DOCS,'Mes CV','Nouveau CV, importer.'),(LETTRES,'Lettres','Lettres et accès LinkedIn.'),(LINKEDIN,'Préparer LinkedIn','Titre, résumé, compétences à copier.'),(IMPORT,'Importer','Ce qui est lu, à cocher avant d’ajouter.'),(MODS,'Choisir un modèle','Les modèles inclus dans la formule.'),(EDIT,'Éditeur','Améliorer, adapter, PDF.'),(AVAP,'Avant, après','Accepter, modifier ou refuser.'),(ADAPT,'Adapter à une offre','Une copie, l’original ne change pas.'),(ADAPT_T,'Adapter à un texte','Annonce ou appel collé. Une copie, à valider.'))]),
  ('b7','7 · Abonnement et paiement','Prépayé, sans surprise. Postuler reste gratuit dans toutes les formules.',
   [ecrans((ABO,'Abonnement','Formule, quotas, paiement, factures.'),(FORMS,'Formules','Choisir Premium.'),(PAY,'Moyen de paiement','Mobile Money ou carte.'),(PAYN,'Numéro et indicatif','Indicatif avec drapeau.'),(PAY_ATT,'Validation','Le code se tape sur le téléphone.'),(PAY_OK,'Paiement reçu','Reçu et référence.'),(FACT,'Factures','PDF à télécharger.'))]),
  ('b8','8 · Paramètres et aide','Sécurité, confidentialité, notifications, données, aide par e-mail.',
   [ecrans((PARAM,'Paramètres','Sécurité, confidentialité, notifications, supprimer.'),(SECU4,'Sécurité','Double vérification, appareils.'),(CONF,'Confidentialité','Visibilité, Orbi, consultations.'),(NOTIF4,'Notifications','Par catégorie.'),(SUPPR,'Supprimer','30 jours, données téléchargeables.'),(AIDE,'Aide','Articles, contact par e-mail.'))]),
- ('b9','9 · Orbi en plein écran','L’onglet du centre et l’historique des échanges.',
-  [ecrans((ORB_P,'Orbi','Historique.'),(ORB_H,'Historique','Retrouver ou effacer un échange.'))]),
+ ('b9','9 · Orbi en plein écran','Ouvert depuis le centre de la barre, en page de conversation : flèche retour en haut, plus de barre en bas.',
+  [ecrans((ORB_P,'Orbi','Page de conversation : retour en haut, pas de barre du bas.'),(ORB_H,'Historique','Retrouver ou effacer un échange.'))]),
  ('b10','10 · Mode sombre','',
   [ecrans((sombre(CONNEX),'Se connecter',''),(sombre(PAYS),'Pays',''),(sombre(PROF),'Mon profil',''),(sombre(EDIT),'Éditeur',''),(sombre(VOCAL),'Simulation orale',''),(sombre(PAYN),'Indicatif',''))]),
 ]

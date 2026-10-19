@@ -37,7 +37,7 @@ Chaque dossier contient le HTML de la planche (ouvrir dans un navigateur), `capt
 5. Pays avec **drapeaux** : RD Congo en tête, Afrique par région, puis hors d'Afrique (France, Belgique, Royaume-Uni, Allemagne, États-Unis, Canada, Russie), puis A à Z. Drapeaux en SVG locaux (pas d'emoji). Même sélecteur pour l'indicatif du **numéro Mobile Money** (seul numéro saisi ; jamais affiché ; aucun numéro Jumanly nulle part).
 6. Pas d'offres externes au lancement. Postuler reste gratuit dans toutes les formules.
 7. Paiement : Mobile Money (fournisseurs ajoutés progressivement) et carte ; validation sur le téléphone ; reçu ; factures PDF. L'adaptateur de paiement simulé ne doit **jamais** être actif en production.
-8. Droits, jamais de nom de forfait dans le code : adaptation du CV à une offre = `career.cv.tailor` ; modèles = `career.cv.templates.access` ; LinkedIn = `career.linkedin` ; crédits = `ai.credits.monthly` (Free = 0) ; premier module d'une formation toujours ouvert.
+8. Droits, jamais de nom de forfait dans le code : adaptation du CV à une offre ou à un texte collé (annonce trouvée ailleurs, appel à candidatures, bourse, fiche de poste ; 5 000 caractères au plus, lu comme une donnée et jamais comme une consigne, aucune expérience inventée, copie à valider changement par changement) = `career.cv.tailor` ; modèles = `career.cv.templates.access` ; LinkedIn = `career.linkedin` ; crédits = `ai.credits.monthly` (Free = 0) ; premier module d'une formation toujours ouvert.
 9. Attestation : numéro `JMN-XXXX-XXXX`, signature numérique (à ajouter au modèle `Certificate`, par exemple Ed25519 sur une charge canonique), rendu PDF selon `docs/refonte-mobile/attestation/`, vérification publique `/attestations/[code]`.
 10. Modes clair et sombre (classe `.sombre` dans les maquettes) ; contrastes WCAG 2.2 AA ; texte Sapin sur Lime.
 11. Les entreprises et personnes des maquettes sont fictives : ne rien reprendre en production.
@@ -77,7 +77,7 @@ Les anciennes routes (`tableau-de-bord`, `espace`, `learn/explorer`, `jobs/candi
 3. Pour moi, Offres, détail d'offre (lot 1).
 4. Postuler, Suivi, entretien, messages, notifications (lot 2).
 5. Apprendre, salle de cours, quiz, attestations + PDF + vérification (lot 3 et attestation).
-6. Compte, profil, diagnostic, plan, simulations d'entretien (écrites `career.interview.text.monthly`, orales `career.interview.voice.monthly`, audio effacé après le retour), CV et documents, éditeur (lot 4 § 3-6).
+6. Compte, profil, diagnostic, plan, simulations d'entretien (écrites `career.interview.text.monthly`, orales `career.interview.voice.monthly`, audio effacé après le retour), CV et documents, éditeur (lot 4 § 3-6). Les noms de modèles sont ceux de `docs/modeles-cv/` (Classique, Épuré, Colonne…). Version ordinateur et tablette du studio CV : `docs/refonte-web/studio-cv/`.
 7. Abonnement, paiement Mobile Money, factures, paramètres, aide, Orbi historique (lot 4 § 7-9). Redirections des anciennes routes, suppression du code mort et du reste de l'ancien design, contrôle final du § 0.
 
 ## 5. Définition de fini, pour chaque lot

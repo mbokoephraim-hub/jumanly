@@ -14,6 +14,7 @@ WCSS = '''
 .web .chr .url{flex:0 1 420px;margin:0 auto;height:24px;border-radius:8px;background:var(--zone);display:flex;align-items:center;justify-content:center;gap:6px;font-size:11.5px;color:var(--texte2)}
 .web .chr .url .ic{width:12px;height:12px}
 .w-body{position:relative;display:grid;grid-template-columns:232px 1fr;min-height:762px}
+.w-body.rl-w{grid-template-columns:84px 1fr}
 .tab .w-body{grid-template-columns:84px 1fr;min-height:720px}
 .tab{width:820px;border-radius:40px;box-shadow:0 0 0 12px #1B1F1E,0 40px 80px -30px rgba(0,0,0,.45);margin:12px}
 .tab .chr{height:38px;display:flex;justify-content:space-between;align-items:center;padding:0 30px;font-size:13px;font-weight:600;position:relative;z-index:3}
@@ -118,8 +119,9 @@ def _sb(actif, role):
             k, l = it
             b = '<b>3</b>' if (role == 'rh' and k == 'message') else ('<b>2</b>' if (role == 'talent' and k == 'candidature') else '')
             h += f'<a class="it{" on" if k == actif else ""}">{ic(k, "s", k == actif)}{l}{b}</a>'
-    sec = (f'<a class="it">{ic("message","s")}Messages<b>2</b></a><a class="it">{ic("connexion","s")}Connexions</a>' if role == 'talent'
-           else f'<a class="it">{ic("agenda","s")}Agenda</a><a class="it">{ic("progression","s")}Rapports</a>')
+    SEC = ([('message', 'Messages', '<b>2</b>'), ('cv', 'Mes CV', ''), ('connexion', 'Connexions', '')] if role == 'talent'
+           else [('agenda', 'Agenda', ''), ('progression', 'Rapports', '')])
+    sec = ''.join(f'<a class="it{" on" if k == actif else ""}">{ic(k, "s", k == actif)}{l}{b}</a>' for k, l, b in SEC)
     moi = (('GM', 'Grâce Mbuyi', 'Compte talent') if role == 'talent' else ('NK', 'Nadia Kabeya', 'Responsable recrutement'))
     return (f'<aside class="sb"><div class="lg"><span class="j">J</span>jumanly<em>.</em></div>{h}<div class="sep"></div>{sec}'
             f'<div class="bas"><a class="it">{ic("reglages","s")}Paramètres</a><div class="moi"><span class="av">{moi[0]}</span><div class="t"><b>{moi[1]}</b><span>{moi[2]}</span></div>{ic("suivant","xs")}</div></div></aside>')
@@ -142,9 +144,9 @@ def _tb(role, tab=False):
     return (f'<div class="tb"><div class="verre rch">{ic("recherche","s")}<span>{ph}</span>{k}</div><span class="sp"></span>'
             f'{bi("notification", "<span class=pastille></span>")}{bi("message", "<span class=cpt>2</span>")}<span class="av">{av}</span></div>')
 
-def web(contenu, actif='accueil', role='talent', url='/app', cls='', over='', tb=True):
+def web(contenu, actif='accueil', role='talent', url='/app', cls='', over='', tb=True, rail=False):
     return (f'<div class="web {cls}"><div class="chr"><span><i></i><i></i><i></i></span><span class="url">{ic("cadenas","xs")}jumanly.io{url}</span><span style="width:52px"></span></div>'
-            f'<div class="w-body">{_sb(actif, role)}<main class="w-main">{_tb(role) if tb else ""}<div class="w-c">{contenu}</div></main></div>{over}</div>')
+            f'<div class="w-body{" rl-w" if rail else ""}">{_rl(actif, role) if rail else _sb(actif, role)}<main class="w-main">{_tb(role) if tb else ""}<div class="w-c">{contenu}</div></main></div>{over}</div>')
 
 def tab(contenu, actif='accueil', role='talent', cls='', over='', tb=True):
     return (f'<div class="tabz"><div class="tab {cls}"><div class="chr"><span>9:41</span><span><i></i><i></i><i></i></span></div>'

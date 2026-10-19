@@ -119,7 +119,7 @@ def post1(t=False):
     cvs = cvw('Data · Baobab', 'Adapté le 18 oct. · 1 page', True, True) + cvw('Data · octobre', 'Mis à jour le 12 oct. · CV principal') + cvw('Général', 'Mis à jour le 2 sept.')
     return (wh('Postuler', 'Analyste de données junior · Baobab Fintech') +
             f'''<div class="w-post">{stp(1)}<div class="pane">{pas(1)}<span class="pas-t">Étape 1 sur 3 · Brouillon enregistré</span><h2 class="h2s">Quel CV envoyer ?</h2>
-<div class="cvg">{cvs}</div><a class="ajout">{ic("plus","s")}Créer un CV depuis mon profil</a>
+<div class="cvg">{cvs}</div><div class="g2e"><a class="ajout">{ic("plus","s")}Créer un CV depuis mon profil</a><a class="verre prep" style="padding:10px 14px">{orbi(32)}<span class="t"><b>Adapter un CV à cette offre</b><span>Orbi crée une copie, à relire</span></span>{ic("suivant","s")}</a></div>
 <div class="w-act"><span class="g">{ic("cadenas","xs")}Rien n’est envoyé avant l’étape 3.</span><a class="bt p">Continuer{ic("suivant","xs")}</a></div></div></div>''')
 
 def post2_t():
