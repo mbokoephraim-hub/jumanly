@@ -1,17 +1,10 @@
 "use client";
 
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
-import { Icon } from "@/components/brand/icon";
-import { card, pillClass } from "@/components/career/kit";
-import { LiveRadar } from "@/components/motion/radar-live";
-import { ScanScene, type ScanCard } from "@/components/motion/scan";
-import { StepTrail } from "@/components/motion/step-trail";
-import { showToast } from "@/components/motion/toaster";
-import { inputClasses } from "@/components/ui/field";
 import { dynamic } from "@/i18n/dynamic";
-import { cx } from "@/lib/cx";
 import { motionReduced } from "@/lib/motion";
 import {
   diagnosticFollowUpsAction,
@@ -23,17 +16,16 @@ import {
 } from "@/server/actions/diagnostic";
 import {
   answersSchema,
-  bandFor,
   choiceAnswers,
   dimensions,
   optionalQuestions,
-  scoreDimensions,
   screensFor,
   SKILLS_ASSESSED,
-  type Dimension,
   type Draft,
   type Screen,
 } from "@/server/services/diagnostic-scoring";
+import { TalentIcon } from "./icon";
+import { OrbiMark } from "./orbi-mark";
 
 export type SkillSource = { names: string[]; offers: number; scope: "role" | "all" | "own" };
 type Option = { value: string; label: string; hint?: string };
@@ -45,10 +37,10 @@ const split = (value: string | undefined) =>
     .filter(Boolean);
 
 /**
- * The career diagnostic, one question per screen (docs/experience-animee § 5.2): the trajectory
- * of the six dimensions on top, the radar drawing itself as the talent answers, each answer saved
- * so the talent can come back. Then the scan (§ 5.4), whose steps are checked as the real work
- * ends. Without JavaScript, every question is on one page and the form goes to the same rules.
+ * The career diagnostic, one question per screen, in the talent design (planche talent-4 § 5):
+ * the six dimensions as steps on top, each answer saved so the talent can come back, « Précédent »
+ * and « Suivant » at the bottom. Then the analysis, whose lines are checked as the real work ends.
+ * Without JavaScript, every question is on one page and the form goes to the same rules.
  */
 export function DiagnosticFlow({
   initial,
@@ -58,7 +50,6 @@ export function DiagnosticFlow({
   prefilled,
   cvScore,
   education,
-  badge,
 }: {
   initial: Draft;
   initialIndex: number;
@@ -67,14 +58,12 @@ export function DiagnosticFlow({
   prefilled: string[];
   cvScore: number | null;
   education: Option[];
-  badge: ScanCard;
 }) {
   const t = useTranslations("career.diagnostic");
   const d = dynamic(t);
   const [answers, setAnswers] = useState<Draft>(initial);
   const [skills, setSkills] = useState<SkillSource>(initialSkills);
   const [index, setIndex] = useState(initialIndex);
-  const [dir, setDir] = useState<"next" | "prev" | undefined>(undefined);
   const [invalid, setInvalid] = useState(false);
   const [busy, setBusy] = useState(false);
   const [saved, setSaved] = useState(0);
@@ -94,12 +83,11 @@ export function DiagnosticFlow({
   );
   const step =
     screen.dimension === "more" ? dimensions.length - 1 : dimensions.indexOf(screen.dimension);
-  const scores = scoreDimensions(answers);
 
   useEffect(() => {
     if (!moved.current) return;
     document.getElementById(`diag-q-${screen.id}`)?.focus({ preventScroll: true });
-    document.getElementById("diagnostic-flow")?.scrollIntoView({ block: "nearest" });
+    window.scrollTo({ top: 0, behavior: motionReduced() ? "auto" : "smooth" });
   }, [screen.id]);
 
   const set = (key: keyof Draft, value: unknown) =>
@@ -166,7 +154,7 @@ export function DiagnosticFlow({
     }
     setInvalid(false);
     if (at === screens.length - 1 && askFollowUps) {
-      // Jumanly Intelligence reads the answers, then asks its two follow-up questions.
+      // Orbi reads the answers, then asks its two follow-up questions.
       setBusy(true);
       let questions: string[] = [];
       try {
@@ -186,7 +174,6 @@ export function DiagnosticFlow({
         return;
       }
       moved.current = true;
-      setDir("next");
       setIndex(at + 1);
       void saveDiagnosticDraftAction(next, at + 1).then((ok) => ok && setSaved((n) => n + 1));
       return;
@@ -202,7 +189,6 @@ export function DiagnosticFlow({
       setBusy(false);
     }
     moved.current = true;
-    setDir("next");
     setIndex(at + 1);
     void saveDiagnosticDraftAction(answers, at + 1).then((ok) => ok && setSaved((n) => n + 1));
   }
@@ -211,7 +197,6 @@ export function DiagnosticFlow({
     if (at === 0) return;
     moved.current = true;
     setInvalid(false);
-    setDir("prev");
     setIndex(at - 1);
   }
 
@@ -220,11 +205,7 @@ export function DiagnosticFlow({
       <DiagnosticScan
         answers={answers}
         personalized={personalized}
-        badge={badge}
-        onBack={() => {
-          setPhase("questions");
-          setDir(undefined);
-        }}
+        onBack={() => setPhase("questions")}
       />
     );
 
@@ -235,23 +216,23 @@ export function DiagnosticFlow({
     if ("followUp" in item) {
       const value = answers.followUps?.[item.index]?.answer ?? "";
       return (
-        <div className="flex flex-col gap-2.5">
-          <p className="flex items-center gap-2 self-start rounded-pill bg-sapin px-3 py-1 text-xs font-semibold text-neon">
-            <Icon name="intelligence" className="size-3.5" />
+        <>
+          <span className="t-badge-o">
+            <OrbiMark size={16} />
             {t("followUp.badge", {
               current: item.index + 1,
               total: answers.followUps?.length ?? 0,
             })}
-          </p>
+          </span>
           <label
             id={`diag-q-${item.id}`}
             tabIndex={-1}
             htmlFor={`diag-${item.id}`}
-            className="text-[19px] leading-snug font-semibold outline-none lg:text-[21px]"
+            className="t-lgd"
           >
             {item.followUp}
           </label>
-          <p id={`diag-${item.id}-hint`} className="text-[13px] text-ardoise">
+          <p id={`diag-${item.id}-hint`} className="t-aide">
             {t("followUp.hint")}
           </p>
           <textarea
@@ -268,15 +249,15 @@ export function DiagnosticFlow({
                 ),
               }))
             }
-            className={cx(inputClasses, "py-3 text-[15px]")}
+            className="t-verre t-rep"
           />
-        </div>
+        </>
       );
     }
     if ("skill" in item) {
       const value = check(item.skill);
       return (
-        <div className="flex flex-col gap-6">
+        <>
           <input type="hidden" name={`skill-${item.index}`} value={item.skill} />
           <Choices
             legend={t("q.skillLevel.text", { skill: item.skill })}
@@ -299,13 +280,12 @@ export function DiagnosticFlow({
           />
           <Choices
             legend={t("q.skillProof.text")}
-            small
             name={`skillProof-${item.index}`}
             value={value?.proof || undefined}
             onChange={(proof) => setCheck(item.skill, { proof })}
             options={choices("skillProof")}
           />
-        </div>
+        </>
       );
     }
     const id = item.id;
@@ -336,17 +316,12 @@ export function DiagnosticFlow({
         "aria-describedby": hint ? `diag-${id}-hint` : undefined,
       };
       return (
-        <div className="flex flex-col gap-2.5">
-          <label
-            id={legendId}
-            tabIndex={-1}
-            htmlFor={`diag-${id}`}
-            className="text-[19px] leading-snug font-semibold outline-none lg:text-[21px]"
-          >
+        <>
+          <label id={legendId} tabIndex={-1} htmlFor={`diag-${id}`} className="t-lgd">
             {label}
           </label>
           {hint && (
-            <p id={`diag-${id}-hint`} className="text-[13px] text-ardoise">
+            <p id={`diag-${id}-hint`} className="t-aide">
               {hint}
             </p>
           )}
@@ -355,17 +330,14 @@ export function DiagnosticFlow({
               {...field}
               rows={5}
               onChange={(event) => set(id, event.target.value)}
-              className={cx(inputClasses, "py-3 text-[15px]")}
+              className="t-verre t-rep"
             />
           ) : (
-            <input
-              {...field}
-              type="text"
-              onChange={(event) => set(id, event.target.value)}
-              className={cx(inputClasses, "h-12 text-[15px]")}
-            />
+            <span className="t-verre t-saisie">
+              <input {...field} type="text" onChange={(event) => set(id, event.target.value)} />
+            </span>
           )}
-        </div>
+        </>
       );
     };
     switch (id) {
@@ -439,20 +411,17 @@ export function DiagnosticFlow({
       case "values": {
         const chosen = answers.values ?? [];
         return (
-          <fieldset className="flex flex-col gap-2.5">
-            <legend className="mb-3 text-[19px] leading-snug font-semibold lg:text-[21px]">
-              <span id={legendId} tabIndex={-1} className="outline-none">
+          <fieldset className="t-fs">
+            <legend>
+              <span id={legendId} tabIndex={-1}>
                 {t("q.values.text")}
               </span>
             </legend>
-            <div className="grid gap-2.5 sm:grid-cols-2">
+            <div className="t-choix">
               {choiceAnswers.values.map((code) => {
                 const on = chosen.includes(code);
                 return (
-                  <label
-                    key={code}
-                    className="jm-choice flex min-h-12 cursor-pointer items-center gap-3 rounded-[16px] border border-brume bg-blanc px-4 py-3 text-sm hover:bg-creme has-checked:border-sapin has-checked:bg-lime-clair has-disabled:cursor-not-allowed has-disabled:opacity-60"
-                  >
+                  <label key={code} className="t-verre t-ch t-press">
                     <input
                       type="checkbox"
                       name="values"
@@ -465,9 +434,13 @@ export function DiagnosticFlow({
                           on ? chosen.filter((item) => item !== code) : [...chosen, code],
                         )
                       }
-                      className="size-5 shrink-0 accent-sapin"
                     />
-                    {d(`q.values.${code}`)}
+                    <span className="t-t">
+                      <b>{d(`q.values.${code}`)}</b>
+                    </span>
+                    <span className="t-case" aria-hidden>
+                      <TalentIcon name="valider" size="xs" />
+                    </span>
                   </label>
                 );
               })}
@@ -482,150 +455,98 @@ export function DiagnosticFlow({
     }
   };
 
-  const radarAxes = scores.map((item) => ({
-    key: item.key,
-    label: d(`dimension.${item.key}.short`),
-    value: item.score,
-  }));
-  const radarText = radarAxes.map((axis) => `${axis.label} ${Math.round(axis.value)}`).join(", ");
   const last = at === screens.length - 1 && !askFollowUps;
 
   return (
-    <div className="grid grid-cols-1 items-start gap-5 xl:grid-cols-[minmax(0,1fr)_360px]">
+    <form
+      id="diagnostic-flow"
+      action={submitDiagnostic}
+      noValidate
+      onSubmit={(event) => {
+        event.preventDefault();
+        void forward();
+      }}
+      className="t-flux"
+    >
       <noscript
         dangerouslySetInnerHTML={{
           __html:
             "<style>#diagnostic-flow [data-screen]{display:flex!important}#diagnostic-flow [data-js]{display:none!important}#diagnostic-flow [data-nojs]{display:flex!important}</style>",
         }}
       />
-      <form
-        id="diagnostic-flow"
-        action={submitDiagnostic}
-        noValidate
-        onSubmit={(event) => {
-          event.preventDefault();
-          void forward();
-        }}
-        className={cx(card, "flex min-w-0 scroll-mt-24 flex-col gap-5 overflow-hidden")}
-      >
-        {personalized && <input type="hidden" name="personalized" value="1" />}
-        {answers.useProfile && <input type="hidden" name="useProfile" value="on" />}
-        <div data-js className="flex flex-col gap-2">
-          <StepTrail
-            steps={dimensions.map((key) => ({ key, label: d(`dimension.${key}.name`) }))}
-            current={step}
-            label={t("step.trail")}
-            doneLabel={t("step.done")}
-            currentLabel={t("step.current")}
-          />
-          <p className="flex flex-wrap items-center justify-between gap-2 text-xs">
-            <span className="font-semibold text-up-texte">
-              {t("step.label", {
-                current: step + 1,
-                total: dimensions.length,
-                name:
-                  screen.dimension === "more"
-                    ? t("part.more")
-                    : d(`dimension.${screen.dimension}.name`),
-              })}
-            </span>
-            <span className="text-ardoise">
-              {t("progress", { current: at + 1, total: screens.length })}
-            </span>
-          </p>
+      {personalized && <input type="hidden" name="personalized" value="1" />}
+      {answers.useProfile && <input type="hidden" name="useProfile" value="on" />}
+      <div data-js className="t-flux t-serre">
+        <div className="t-pas" aria-hidden>
+          {dimensions.map((key, position) => (
+            <i key={key} className={position <= step ? "t-ok" : undefined} />
+          ))}
         </div>
-
-        {[...all, ...screens.filter((item) => "followUp" in item)].map((item) => {
-          const shown = item.id === screen.id;
-          return (
-            <section
-              key={item.id}
-              data-screen
-              hidden={!shown}
-              data-dir={shown ? dir : undefined}
-              className="jm-q flex-col gap-4"
-              style={{ display: shown ? "flex" : undefined }}
-            >
-              {body(item)}
-            </section>
-          );
-        })}
-
-        <p
-          role="alert"
-          className={cx("text-sm font-medium text-corail-fonce", !invalid && "sr-only")}
-        >
-          {invalid ? t("required") : ""}
+        <p className="t-diag-et">
+          <b>
+            {t("step.label", {
+              current: step + 1,
+              total: dimensions.length,
+              name:
+                screen.dimension === "more"
+                  ? t("part.more")
+                  : d(`dimension.${screen.dimension}.name`),
+            })}
+          </b>
+          <span>{t("progress", { current: at + 1, total: screens.length })}</span>
         </p>
-        <div
-          data-js
-          className="flex flex-wrap items-center justify-between gap-3 border-t border-brume pt-4"
-        >
-          <button
-            type="button"
-            onClick={back}
-            disabled={at === 0}
-            className={pillClass("outline", "md", "disabled:invisible")}
+      </div>
+
+      {[...all, ...screens.filter((item) => "followUp" in item)].map((item) => {
+        const shown = item.id === screen.id;
+        return (
+          <section
+            key={item.id}
+            data-screen
+            hidden={!shown}
+            className="t-diag-q"
+            style={{ display: shown ? "flex" : undefined }}
           >
-            <Icon name="chev-l" className="size-4" />
+            {body(item)}
+          </section>
+        );
+      })}
+
+      <p role="alert" className={invalid ? "t-gar t-err" : "sr-only"}>
+        {invalid ? t("required") : ""}
+      </p>
+      <p aria-live="polite" className="t-vide-t">
+        {busy && at === screens.length - 1 && askFollowUps
+          ? t("followUp.loading")
+          : saved > 0
+            ? t("savedAt")
+            : ""}
+      </p>
+      <div data-js className="t-verre t-fort t-bas-f">
+        {at > 0 && (
+          <button type="button" onClick={back} className="t-bt t-sec t-m t-press">
             {t("previous")}
           </button>
-          <span aria-live="polite" className="text-xs text-ardoise max-sm:order-last max-sm:w-full">
-            {busy && at === screens.length - 1 && askFollowUps ? (
-              <span className="flex items-center gap-1.5">
-                <span aria-hidden className="jm-orb size-3 rounded-full" />
-                {t("followUp.loading")}
-              </span>
-            ) : saved > 0 ? (
-              <span key={saved} className="flex items-center gap-1.5">
-                <Icon name="check" className="size-3.5 text-feuille" />
-                {t("savedAt")}
-              </span>
-            ) : null}
-          </span>
-          <button
-            type="submit"
-            aria-busy={busy || undefined}
-            className={pillClass(last ? "lime" : "dark")}
-          >
-            {last ? t("analyze") : t("next")}
-            <Icon name="chev-r" className="size-4" />
-          </button>
-        </div>
-        <div data-nojs className="hidden flex-col gap-3 border-t border-brume pt-4">
-          <p className="text-sm text-ardoise">{t("welcome.noscript")}</p>
-          <button type="submit" className={pillClass("dark", "md", "self-start")}>
-            {t("finish")}
-          </button>
-        </div>
-      </form>
-
-      <aside data-js className="flex flex-col gap-4 self-start xl:sticky xl:top-6">
-        <section aria-labelledby="live-radar" className={cx(card, "flex flex-col gap-3")}>
-          <h2 id="live-radar" className="text-base font-semibold">
-            {t("radar.live")}
-          </h2>
-          <div className="mx-auto w-full max-w-[300px]">
-            <LiveRadar
-              id="live"
-              axes={radarAxes}
-              title={t("radar.live")}
-              description={radarText}
-              size={200}
-            />
-          </div>
-          <p className="text-xs leading-[17px] text-ardoise">{t("radar.liveHint")}</p>
-        </section>
-        <p className="flex gap-2 px-1 text-xs leading-[17px] text-ardoise">
-          <Icon name="lock" className="mt-px size-4 shrink-0" />
-          {t("privacy")}
-        </p>
-      </aside>
-    </div>
+        )}
+        <button
+          type="submit"
+          aria-busy={busy || undefined}
+          className={last ? "t-bt t-a t-pl t-press" : "t-bt t-p t-pl t-press"}
+        >
+          {last ? t("analyze") : t("next")}
+        </button>
+      </div>
+      <div data-nojs hidden className="t-flux">
+        <p className="t-vide-t">{t("welcome.noscript")}</p>
+        <button type="submit" className="t-bt t-p t-pl">
+          {t("finish")}
+        </button>
+      </div>
+    </form>
   );
 }
 
-/** One question with its answers as large cards (a radio button in each, a check that draws). */
+/** One question with its answers as glass cards (a real radio button in each). */
 function Choices({
   legend,
   legendId,
@@ -634,7 +555,6 @@ function Choices({
   value,
   onChange,
   options,
-  small = false,
 }: {
   legend: string;
   legendId?: string;
@@ -643,55 +563,30 @@ function Choices({
   value: string | undefined;
   onChange: (value: string) => void;
   options: Option[];
-  small?: boolean;
 }) {
   return (
-    <fieldset className="flex flex-col gap-2.5">
-      <legend
-        className={cx(
-          "mb-1 leading-snug font-semibold",
-          small ? "text-base" : "text-[19px] lg:text-[21px]",
-        )}
-      >
-        <span id={legendId} tabIndex={legendId ? -1 : undefined} className="outline-none">
+    <fieldset className="t-fs">
+      <legend>
+        <span id={legendId} tabIndex={legendId ? -1 : undefined}>
           {legend}
         </span>
       </legend>
-      {hint && <p className="mb-1 text-[13px] text-ardoise">{hint}</p>}
-      <div className={cx("grid gap-2.5", options.length > 3 && "sm:grid-cols-2")}>
+      {hint && <p className="t-aide">{hint}</p>}
+      <div className="t-choix">
         {options.map((option) => (
-          <label
-            key={option.value}
-            className="jm-choice flex min-h-13 cursor-pointer items-center gap-3 rounded-[16px] border border-brume bg-blanc px-4 py-3 text-[15px] hover:bg-creme has-checked:border-sapin has-checked:bg-lime-clair has-focus-visible:outline-3 has-focus-visible:outline-lime"
-          >
+          <label key={option.value} className="t-verre t-ch t-press">
             <input
               type="radio"
               name={name}
               value={option.value}
               checked={value === option.value}
               onChange={() => onChange(option.value)}
-              className="peer sr-only"
             />
-            <span
-              aria-hidden
-              className="flex size-6 shrink-0 items-center justify-center rounded-full border-2 border-brume bg-blanc peer-checked:border-sapin peer-checked:bg-sapin"
-            >
-              <svg viewBox="0 0 24 24" className="jm-choice-check size-4">
-                <path
-                  d="M5 12.5l4.5 4.5L19 7.5"
-                  pathLength={1}
-                  fill="none"
-                  stroke="var(--color-lime)"
-                  strokeWidth={3}
-                  strokeLinecap="round"
-                  strokeLinejoin="round"
-                />
-              </svg>
+            <span className="t-t">
+              <b>{option.label}</b>
+              {option.hint && <span>{option.hint}</span>}
             </span>
-            <span className="flex min-w-0 flex-col">
-              <span className="font-medium">{option.label}</span>
-              {option.hint && <span className="text-[13px] text-ardoise">{option.hint}</span>}
-            </span>
+            <span className="t-radio" aria-hidden />
           </label>
         ))}
       </div>
@@ -703,20 +598,17 @@ type ScanStep = "answers" | "profile" | "offers" | "dimensions" | "priorities";
 const hold = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
 
 /**
- * The analysis (docs/experience-animee § 5.4). Each line is checked when its work is really
- * done: answers checked here, profile read, offers counted on the server, the six dimensions
- * computed with the same rules as the server, then the diagnostic saved (and, for the
- * personalized level, written by Jumanly Intelligence, which falls back on the rules after 25 s).
+ * The analysis: each line is checked when its work is really done (answers checked here, profile
+ * read, offers counted on the server, the six dimensions, then the diagnostic saved, and for the
+ * personalized level written by Orbi, which falls back on the rules after 25 s). Then the result.
  */
 function DiagnosticScan({
   answers,
   personalized,
-  badge,
   onBack,
 }: {
   answers: Draft;
   personalized: boolean;
-  badge: ScanCard;
   onBack: () => void;
 }) {
   const t = useTranslations("career.diagnostic");
@@ -730,23 +622,16 @@ function DiagnosticScan({
   ];
   const [state, setState] = useState<Partial<Record<ScanStep, "run" | "done">>>({});
   const [offers, setOffers] = useState<{ count: number; scope: "role" | "all" } | null>(null);
-  const [lit, setLit] = useState<Partial<Record<Dimension, "low" | "mid" | "high">>>({});
-  const [result, setResult] = useState<{
-    href: string;
-    stage: string;
-    score: number;
-    fallback: boolean;
-  } | null>(null);
-  const [flipped, setFlipped] = useState(false);
+  const [result, setResult] = useState<{ href: string; fallback: boolean } | null>(null);
   const [failed, setFailed] = useState(false);
   const [attempt, setAttempt] = useState(0);
   const started = useRef(-1);
+  const router = useRouter();
 
   useEffect(() => {
     if (started.current === attempt) return;
     started.current = attempt;
-    const reduced = motionReduced();
-    const pause = reduced ? 0 : 650;
+    const pause = motionReduced() ? 0 : 500;
     const mark = (key: ScanStep, value: "run" | "done") =>
       setState((current) => ({ ...current, [key]: value }));
     async function step<T>(key: ScanStep, work: () => Promise<T>) {
@@ -761,28 +646,18 @@ function DiagnosticScan({
       if (parsed.data.useProfile) await step("profile", () => readDiagnosticProfileAction());
       const found = await step("offers", () => diagnosticSkillsAction(parsed.data.targetRole));
       setOffers({ count: found.offers, scope: found.scope });
-      await step("dimensions", async () => {
-        for (const item of scoreDimensions(parsed.data)) {
-          setLit((current) => ({ ...current, [item.key]: bandFor(item.score) }));
-          await hold(reduced ? 0 : 140);
-        }
-      });
+      await step("dimensions", async () => undefined);
       const saved = await step("priorities", () =>
         runDiagnosticAction({ answers: parsed.data, personalized }),
       );
       if (!saved.ok) throw new Error("not saved");
       const href = `/app/career/diagnostic?bilan=${saved.id}${saved.error ? `&ia=${saved.error}` : ""}`;
-      setResult({
-        href,
-        stage: d(`stage.${saved.stage}`),
-        score: saved.score,
-        fallback: personalized && saved.level === "simple",
-      });
-      showToast({ message: t("toast.ready"), tone: "success", href });
-      if (reduced) setFlipped(true);
-      else setTimeout(() => setFlipped(true), 250);
+      const fallback = personalized && saved.level === "simple";
+      setResult({ href, fallback });
+      // The result opens by itself; with Orbi's fallback, the talent reads the notice first.
+      if (!fallback) router.push(href);
     })().catch(() => setFailed(true));
-  }, [attempt, answers, personalized, d, t]);
+  }, [attempt, answers, personalized, router]);
 
   const label = (key: ScanStep) => {
     if (key === "offers" && offers)
@@ -792,127 +667,63 @@ function DiagnosticScan({
     if (key === "priorities" && personalized) return `${t("scan.priorities")} · ${t("scan.ai")}`;
     return d(`scan.${key}`);
   };
-  const pills = [
-    ...split(answers.topSkills),
-    ...(answers.skillChecks ?? []).map((item) => item.skill),
-  ].filter((value, index, list) => list.indexOf(value) === index);
 
   return (
-    <div className="grid grid-cols-1 items-start gap-5 lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]">
-      <ScanScene
-        card={badge}
-        nodesLabel={t("welcome.constellation")}
-        nodes={dimensions.map((key) => ({
-          key,
-          label: d(`dimension.${key}.short`),
-          band: lit[key] ?? null,
-        }))}
-        pills={pills}
-        scanning={!result && !failed}
-        flipped={flipped}
-        back={
-          result ? (
-            <>
-              <p className="text-[11px] font-semibold tracking-[0.1em] text-neon uppercase">
-                {t("scan.ready")}
-              </p>
-              <p className="text-lg leading-tight font-semibold">
-                {t("scan.level", { stage: result.stage })}
-              </p>
-              <p className="text-sm text-blanc/80">{t("result.score", { score: result.score })}</p>
-              <Link
-                href={result.href}
-                className={pillClass(
-                  "lime",
-                  "sm",
-                  "jm-ready-cta mt-1 self-start whitespace-nowrap max-sm:h-8 max-sm:px-3 max-sm:text-xs",
+    <div className="t-flux">
+      <div className="t-bulle-o">
+        <OrbiMark size={32} state={result || failed ? "repos" : "reflechit"} />
+        <div className="t-verre t-corps">
+          <span>{t("scan.title")}</span>
+        </div>
+      </div>
+      <ol aria-live="polite" className="t-verre t-carte t-scan">
+        {steps.map((key) => {
+          const value = state[key];
+          return (
+            <li key={key} className={value === "done" ? "t-ok" : value ? "t-en" : undefined}>
+              <span className={value === "done" ? "t-num t-ok" : "t-num"} aria-hidden>
+                {value === "done" && <TalentIcon name="valider" size="xs" />}
+              </span>
+              <span>
+                {label(key)}
+                {value && (
+                  <span className="sr-only">
+                    {" · "}
+                    {value === "done" ? t("scan.done") : t("scan.running")}
+                  </span>
                 )}
-              >
-                {t("scan.cta")}
-                <Icon name="chev-r" className="size-4" />
-              </Link>
-            </>
-          ) : undefined
-        }
-      />
-      <section aria-labelledby="scan-title" className={cx(card, "flex flex-col gap-4")}>
-        <h2 id="scan-title" className="text-lg font-semibold">
-          {t("scan.title")}
-        </h2>
-        <ol aria-live="polite" className="flex flex-col gap-3">
-          {steps.map((key) => {
-            const value = state[key];
-            const spoken = value
-              ? ` (${value === "done" ? t("scan.done") : t("scan.running")})`
-              : "";
-            return (
-              <li
-                key={key}
-                className={cx("flex items-center gap-3 text-[15px]", !value && "text-ardoise")}
-              >
-                <span
-                  aria-hidden
-                  className={cx(
-                    "flex size-7 shrink-0 items-center justify-center rounded-full",
-                    value === "done" ? "bg-lime" : "bg-gris-clair",
-                  )}
-                >
-                  {value === "done" ? (
-                    <svg viewBox="0 0 24 24" className="jm-scan-check size-4">
-                      <path
-                        d="M5 12.5l4.5 4.5L19 7.5"
-                        pathLength={1}
-                        strokeDasharray="1"
-                        fill="none"
-                        stroke="var(--color-sapin)"
-                        strokeWidth={3}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                      />
-                    </svg>
-                  ) : value === "run" ? (
-                    <span className="jm-orb size-3 rounded-full" />
-                  ) : null}
-                </span>
-                <span>
-                  {label(key)}
-                  {value && <span className="sr-only">{spoken}</span>}
-                </span>
-              </li>
-            );
-          })}
-        </ol>
-        {result?.fallback && (
-          <p className="rounded-[16px] bg-creme p-3 text-sm">{t("scan.fallback")}</p>
-        )}
-        {result && (
-          <p role="status" className="text-sm font-semibold text-feuille-fonce">
-            {t("scan.ready")}
-          </p>
-        )}
-        {failed && (
-          <div role="alert" className="flex flex-col gap-3 rounded-[16px] bg-creme p-3 text-sm">
-            <p>{t("scan.error")}</p>
-            <div className="flex flex-wrap gap-2">
-              <button
-                type="button"
-                className={pillClass("dark", "sm")}
-                onClick={() => {
-                  setFailed(false);
-                  setState({});
-                  setLit({});
-                  setAttempt((n) => n + 1);
-                }}
-              >
-                {t("scan.retry")}
-              </button>
-              <button type="button" className={pillClass("outline", "sm")} onClick={onBack}>
-                {t("previous")}
-              </button>
-            </div>
+              </span>
+            </li>
+          );
+        })}
+      </ol>
+      {result?.fallback && <p className="t-gar">{t("scan.fallback")}</p>}
+      {result && (
+        <Link href={result.href} className="t-bt t-a t-pl t-press">
+          {t("scan.cta")}
+        </Link>
+      )}
+      {failed && (
+        <div role="alert" className="t-verre t-carte">
+          <p>{t("scan.error")}</p>
+          <div className="t-bts">
+            <button
+              type="button"
+              className="t-bt t-p t-s t-press"
+              onClick={() => {
+                setFailed(false);
+                setState({});
+                setAttempt((n) => n + 1);
+              }}
+            >
+              {t("scan.retry")}
+            </button>
+            <button type="button" className="t-bt t-sec t-s t-press" onClick={onBack}>
+              {t("previous")}
+            </button>
           </div>
-        )}
-      </section>
+        </div>
+      )}
     </div>
   );
 }

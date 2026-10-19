@@ -117,7 +117,10 @@ export function hidesTalentTabBar(pathname: string) {
   if (section === "career")
     return (
       (page === "cv" && Boolean(more) && more !== "modeles") ||
-      (page === "entretiens" && Boolean(more))
+      // Lot 6b: the diagnostic, the plan and the practice draw their own head (planche talent-4 § 5).
+      page === "entretiens" ||
+      page === "diagnostic" ||
+      page === "plan"
     );
   return false;
 }

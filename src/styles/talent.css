@@ -5843,3 +5843,613 @@ label.t-li {
     transition: none;
   }
 }
+
+/* ---------- Lot 6b · Faire le point, diagnostic, plan, simulations d'entretien (planche talent-4 § 5 et § 5 bis) ---------- */
+/* Liens « Pourquoi ? » en bouton (ouvrent une feuille). */
+button.t-pq {
+  background: none;
+  border: 0;
+  padding: 0;
+  min-height: 44px;
+  cursor: pointer;
+  align-self: flex-start;
+  font: inherit;
+  font-size: 12.5px;
+  font-weight: 600;
+}
+a.t-pq {
+  min-height: 44px;
+  align-self: flex-start;
+}
+.t-pqs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
+  margin-top: -6px;
+}
+/* Faire le point : la bulle d'Orbi garde son trait Lime ; les lignes d'atouts. */
+.t-fb-c .t-pt {
+  align-items: flex-start;
+  line-height: 1.4;
+}
+.t-fb-c .t-pt i {
+  margin-top: -2px;
+}
+.t-rebond.t-point-n {
+  padding: 14px 16px;
+  border-radius: var(--r-carte);
+}
+.t-rebond .t-bt.t-sec.t-s {
+  background: var(--plein);
+}
+/* Feuille « Pourquoi » : lignes simples. */
+.t-pq-l {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.t-pq-l li {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+}
+.t-pq-l li .t-ic {
+  flex: none;
+  margin-top: 1px;
+  color: var(--texte2);
+}
+.t-pq-d {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  overflow-y: auto;
+  max-height: 60vh;
+}
+.t-pq-d section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+.t-pq-d h3 {
+  display: flex;
+  justify-content: space-between;
+  font-size: 14px;
+  font-weight: 600;
+}
+.t-pq-d ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.t-pq-d li {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 12.5px;
+  color: var(--texte2);
+}
+.t-pq-d li b {
+  color: var(--texte);
+  font-weight: 600;
+  white-space: nowrap;
+}
+/* Diagnostic : anneau et six barres. */
+.t-diag-h {
+  display: flex;
+  gap: 14px;
+  align-items: center;
+  padding: 14px 16px;
+}
+.t-diag-h .t-t {
+  flex: 1;
+}
+.t-diag-h .t-t b,
+.t-diag-h .t-t h2 {
+  display: block;
+  font-size: 15px;
+  font-weight: 600;
+}
+.t-diag-h .t-t span {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-dims {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 16px;
+  margin: 0;
+}
+.t-dim {
+  display: grid;
+  grid-template-columns: 130px 1fr 28px;
+  gap: 10px;
+  align-items: center;
+  font-size: 12.5px;
+}
+.t-dim dd {
+  margin: 0;
+}
+.t-dim b {
+  text-align: right;
+  font-size: 13px;
+}
+/* Diagnostic : questions une à une. */
+.t-diag-q {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.t-diag-q legend,
+.t-diag-q .t-lgd {
+  font-size: 17px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.01em;
+  outline: none;
+}
+.t-diag-q .t-aide {
+  margin-top: -4px;
+}
+.t-diag-q .t-saisie input {
+  font-size: 14px;
+}
+.t-diag-q textarea.t-rep {
+  width: 100%;
+  resize: vertical;
+  color: var(--texte);
+  font: inherit;
+  font-size: 13.5px;
+}
+.t-diag-q .t-ch {
+  padding: 12px 14px;
+}
+.t-diag-q .t-ch .t-t b {
+  font-weight: 500;
+}
+.t-diag-q label.t-ch:has(:checked) .t-t b {
+  font-weight: 600;
+}
+.t-diag-q label.t-ch:has(:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.t-case {
+  width: 22px;
+  height: 22px;
+  border-radius: 7px;
+  box-shadow: inset 0 0 0 2px var(--trait);
+  flex: none;
+  display: grid;
+  place-items: center;
+}
+label.t-ch:has(:checked) .t-case {
+  background: var(--sapin);
+  color: var(--lime);
+  box-shadow: none;
+}
+.sombre label.t-ch:has(:checked) .t-case {
+  background: var(--lime);
+  color: #0f3f37;
+}
+.t-case .t-ic {
+  width: 14px;
+  height: 14px;
+  opacity: 0;
+}
+label.t-ch:has(:checked) .t-case .t-ic {
+  opacity: 1;
+}
+.t-diag-et {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 12px;
+  color: var(--texte2);
+  margin-top: -6px;
+}
+.t-diag-et b {
+  color: var(--texte);
+  font-weight: 600;
+}
+.t-badge-o {
+  display: inline-flex;
+  align-self: flex-start;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  border-radius: 999px;
+  font-size: 11.5px;
+  font-weight: 700;
+  background: var(--lime-c);
+  color: var(--texte);
+}
+.t-scan {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.t-scan li {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  font-size: 13.5px;
+  color: var(--texte2);
+}
+.t-scan li.t-en,
+.t-scan li.t-ok {
+  color: var(--texte);
+}
+.t-scan .t-num {
+  width: 28px;
+  height: 28px;
+}
+.t-scan li.t-en .t-num::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--sapin);
+  animation: t-pulse 1.1s ease-in-out infinite;
+}
+.sombre .t-scan li.t-en .t-num::after {
+  background: var(--lime);
+}
+@keyframes t-pulse {
+  50% {
+    transform: scale(0.55);
+    opacity: 0.5;
+  }
+}
+/* Diagnostic : écran d'accueil. */
+.t-diag-a {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 18px;
+  border-radius: var(--r-carte);
+  background: var(--g-former);
+}
+.t-diag-a h2 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.t-diag-a p {
+  font-size: 13px;
+  color: var(--texte2);
+}
+.t-coche-l {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  padding: 14px 16px;
+  cursor: pointer;
+  font-size: 13px;
+}
+.t-coche-l input {
+  width: 22px;
+  height: 22px;
+  margin: 0;
+  flex: none;
+  accent-color: #0f3f37;
+}
+.sombre .t-coche-l input {
+  accent-color: #a6f26b;
+}
+.t-coche-l b {
+  display: block;
+  font-size: 14px;
+}
+.t-coche-l span {
+  color: var(--texte2);
+}
+/* Mon plan : l'objectif et les étapes se touchent pour se modifier. */
+button.t-parc-h {
+  border: 0;
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  width: 100%;
+}
+.t-parc-h .t-h2 {
+  font-size: 21px;
+  font-weight: 600;
+  letter-spacing: -0.02em;
+  line-height: 1.2;
+}
+.t-parc-h .t-barre {
+  margin-top: 4px;
+}
+.t-parc-h .t-v {
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-etapes-p {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+.t-etapes-p .t-e button.t-verre {
+  text-align: left;
+  font: inherit;
+  color: inherit;
+  cursor: pointer;
+  border: 0;
+  display: block;
+}
+.t-etapes-p .t-e.t-fait b {
+  color: var(--texte2);
+}
+.t-plan-acts {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+.t-plan-acts form {
+  display: contents;
+}
+.t-plan-acts .t-bt {
+  width: 100%;
+}
+.t-bt.t-dg {
+  background: var(--corail-c);
+  color: var(--texte);
+}
+.t-sheet input[type="date"].t-saisie-d,
+.t-sheet input[type="text"].t-saisie-d {
+  width: 100%;
+  height: 54px;
+  border-radius: 18px;
+  padding: 0 14px;
+  background: var(--surface);
+  box-shadow: var(--verre);
+  font-size: 14px;
+  color: var(--texte);
+  border: 0;
+}
+.t-sheet form {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+/* S'entraîner : quotas, sujets libres, historique. */
+.t-quotas {
+  padding: 4px 0;
+}
+.t-quota {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px 16px;
+  border-top: 1px solid var(--trait);
+}
+.t-quota:first-child {
+  border-top: 0;
+}
+.t-quota .t-l {
+  display: flex;
+  justify-content: space-between;
+  gap: 10px;
+  font-size: 13px;
+}
+.t-quota .t-l span {
+  color: var(--texte2);
+  font-size: 12px;
+}
+.t-ent-g {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+.t-eg {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 12px;
+  border-radius: 22px;
+  font-size: 11.5px;
+  color: var(--texte2);
+  min-height: 112px;
+}
+.t-eg b {
+  font-size: 13.5px;
+  color: var(--texte);
+  margin-top: auto;
+}
+.t-eg .t-cases {
+  width: 36px;
+  height: 36px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: rgba(255, 255, 255, 0.7);
+  color: #0f3f37;
+}
+.sombre .t-eg .t-cases {
+  background: rgba(255, 255, 255, 0.12);
+  color: var(--texte);
+}
+.t-eg.t-e1 {
+  background: var(--g-oppo);
+}
+.t-eg.t-e2 {
+  background: var(--g-accomp);
+}
+.t-eg.t-e3 {
+  background: var(--g-former);
+}
+.t-eg.t-e4 {
+  background: linear-gradient(150deg, #e8f1fb, #b9d5f2);
+}
+.sombre .t-eg.t-e4 {
+  background: linear-gradient(150deg, rgba(120, 170, 230, 0.24), rgba(120, 170, 230, 0.08));
+}
+.t-cd .t-bt.t-a.t-s {
+  align-self: flex-start;
+}
+/* Nouvel entraînement : un format verrouillé par la formule. */
+.t-opts label:has(:disabled) {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+.t-opts.t-deux {
+  grid-template-columns: repeat(2, 1fr);
+}
+.t-saisie select {
+  appearance: none;
+}
+/* Simulation orale : onde, minuteur, transcription, micro. */
+.t-voc {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 0;
+}
+.t-onde {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  height: 56px;
+}
+.t-onde i {
+  width: 5px;
+  border-radius: 3px;
+  background: linear-gradient(#3da14f, #2fd3a6);
+  opacity: 0.45;
+  transform-origin: center;
+}
+.t-onde.t-actif i {
+  opacity: 1;
+  animation: t-onde 0.9s ease-in-out infinite alternate;
+}
+.t-onde.t-actif i:nth-child(3n) {
+  animation-delay: -0.3s;
+}
+.t-onde.t-actif i:nth-child(3n + 1) {
+  animation-delay: -0.6s;
+}
+@keyframes t-onde {
+  to {
+    transform: scaleY(0.4);
+  }
+}
+.t-tps {
+  font-size: 13px;
+  font-weight: 600;
+  font-variant-numeric: tabular-nums;
+}
+.t-voc-t {
+  width: 100%;
+  min-height: 84px;
+  font-size: 13px;
+  color: var(--texte);
+  text-align: center;
+  font-style: italic;
+  line-height: 1.5;
+  padding: 12px 14px;
+  border-radius: 18px;
+  background: transparent;
+  border: 0;
+  resize: vertical;
+  font-family: inherit;
+}
+.t-voc-t:focus-visible {
+  outline: none;
+  box-shadow: 0 0 0 2px var(--texte);
+}
+.t-voc-b {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 28px;
+}
+.t-voc-b .t-bi:disabled {
+  opacity: 0.4;
+}
+.t-mic {
+  width: 76px;
+  height: 76px;
+  border-radius: 50%;
+  background: #0f3f37;
+  color: #a6f26b;
+  display: grid;
+  place-items: center;
+  border: 0;
+  cursor: pointer;
+  box-shadow:
+    0 0 0 10px rgba(166, 242, 107, 0.25),
+    0 16px 30px -12px rgba(15, 63, 55, 0.6);
+}
+.t-mic .t-ic {
+  width: 30px;
+  height: 30px;
+}
+.t-mic[aria-pressed="true"] {
+  box-shadow:
+    0 0 0 14px rgba(166, 242, 107, 0.35),
+    0 16px 30px -12px rgba(15, 63, 55, 0.6);
+}
+.sombre .t-mic {
+  background: var(--lime);
+  color: #0f3f37;
+}
+.t-mic:focus-visible {
+  outline: 2px solid var(--texte);
+  outline-offset: 14px;
+}
+/* Retour : les 5 critères, un niveau en mots. */
+.t-crit5 {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin: 0;
+}
+.t-crit5 div {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  font-size: 13px;
+}
+.t-crit5 dd {
+  margin: 0;
+  font-size: 11.5px;
+  font-weight: 700;
+  padding: 3px 9px;
+  border-radius: 999px;
+  white-space: nowrap;
+  background: var(--zone);
+}
+.t-crit5 dd.t-solid {
+  background: var(--lime-c);
+}
+.t-crit5 dd.t-toWork {
+  background: var(--ambre-c);
+}
+.t-crit5-n {
+  font-size: 12px;
+  color: var(--texte2);
+}
+a.t-pj {
+  color: inherit;
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-onde.t-actif i,
+  .t-scan li.t-en .t-num::after {
+    animation: none;
+  }
+}

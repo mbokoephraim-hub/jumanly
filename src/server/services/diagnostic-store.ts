@@ -26,6 +26,15 @@ const titleWords = (role: string) =>
  * real number of offers compared.
  */
 export async function demandedSkills(db: PrismaClient, role: string) {
+  const { counts, offers, scope } = await skillDemand(db, role);
+  return { skills: counts.slice(0, SKILLS_ASSESSED).map(([name]) => name), offers, scope };
+}
+
+/**
+ * Every skill asked for in those offers with the number of offers asking for it, most asked
+ * first (« Faire le point » : « SQL : demandé par 7 offres sur 10 »).
+ */
+export async function skillDemand(db: PrismaClient, role: string) {
   const words = titleWords(role);
   const select = { skills: { select: { skill: { select: { name: true } } } } };
   let scope: "role" | "all" = "role";
@@ -52,11 +61,10 @@ export async function demandedSkills(db: PrismaClient, role: string) {
   const counts = new Map<string, number>();
   for (const job of jobs)
     for (const { skill } of job.skills) counts.set(skill.name, (counts.get(skill.name) ?? 0) + 1);
-  const skills = [...counts.entries()]
-    .sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "fr"))
-    .slice(0, SKILLS_ASSESSED)
-    .map(([name]) => name);
-  return { skills, offers: jobs.length, scope };
+  const sorted = [...counts.entries()].sort(
+    (a, b) => b[1] - a[1] || a[0].localeCompare(b[0], "fr"),
+  );
+  return { counts: sorted, offers: jobs.length, scope };
 }
 
 /** What the badge of the welcome screen shows: only what the talent declared. */

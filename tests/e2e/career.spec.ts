@@ -10,14 +10,18 @@ test("simulation d'entretien écrite, de la préparation au retour", async ({ pa
   await logIn(page, demo.talentStarter);
   await page.goto("/app/career");
   await page.getByRole("link", { name: "Simulations d'entretien" }).last().click();
+  // Lot 6b (planche talent-4 § 5 bis): quotas, free practice, last sessions.
   await expect(
-    page.getByRole("heading", { name: "Simulations d'entretien", level: 1 }),
+    page.getByRole("heading", { name: "S'entraîner aux entretiens", level: 1 }),
   ).toBeVisible();
-  await expect(page.getByText(/simulations écrites ce mois/)).toBeVisible();
+  await expect(page.getByText("Simulations écrites")).toBeVisible();
   await expectAccessible(page);
 
-  await page.getByLabel("Poste visé").fill("Chargé de clientèle");
-  await page.getByRole("button", { name: "Démarrer la simulation" }).click();
+  await page.getByRole("link", { name: /Sur un métier/ }).click();
+  await expect(page.getByRole("heading", { name: "Nouvel entraînement", level: 1 })).toBeVisible();
+  await page.getByLabel("Métier").fill("Chargé de clientèle");
+  await page.getByText("Rapide", { exact: true }).click();
+  await page.getByRole("button", { name: "Commencer" }).click();
   await expect(page).toHaveURL(/\/app\/career\/entretiens\/[^/?#]+/);
   await expect(page.getByText("Question 1 sur 4")).toBeVisible();
   await page
@@ -30,11 +34,15 @@ test("simulation d'entretien écrite, de la préparation au retour", async ({ pa
   await expectAccessible(page);
   await page.getByRole("button", { name: "Terminer la séance" }).click();
   await expect(page.getByRole("heading", { name: "Votre retour" })).toBeVisible();
-  // The detail by criterion is folded under the strengths and the points to work on.
+  // The five criteria, a level in words; « Pourquoi ce retour ? » says how it was written.
   await expect(page.locator("#retour")).toContainText("Structure des réponses");
+  await page.getByRole("button", { name: "Pourquoi ce retour ?" }).click();
   await expect(
-    page.locator("#retour").getByText(/il ne prédit pas le résultat d'un vrai entretien/),
+    page
+      .getByRole("dialog", { name: "Pourquoi ce retour" })
+      .getByText(/il ne prédit pas le résultat d'un vrai entretien/),
   ).toBeVisible();
+  await page.getByRole("button", { name: "Fermer" }).click();
   await expect(page.locator("#retour")).not.toContainText("%");
   await expectAccessible(page);
 });
@@ -78,18 +86,20 @@ test("simulation orale : la réponse se tape si la dictée n'est pas disponible"
   test.skip(isMobile, "Une simulation du mois par exécution suffit.");
   test.setTimeout(120_000);
   await logIn(page, demo.talentPro);
+  // Lot 6b (planche talent-4 § 5 bis): « À l'oral » opens « Nouvel entraînement », format oral.
   await page.goto("/app/career/entretiens");
-  await page.getByLabel("À l'oral").check();
-  await page.getByLabel("Poste visé").fill("Analyste de données");
-  await page.getByRole("button", { name: "Démarrer la simulation" }).click();
+  await page.getByRole("link", { name: /À l'oral/ }).click();
+  await page.getByLabel("Métier").fill("Analyste de données");
+  await page.getByText("Rapide", { exact: true }).click();
+  await page.getByRole("button", { name: "Commencer" }).click();
   await expect(page.getByText("Question 1 sur 4")).toBeVisible();
   await expect(
-    page.locator("#reponse").getByText("Aucun enregistrement n'est conservé", { exact: false }),
+    page.locator("#reponse").getByText("Aucun enregistrement n'est gardé", { exact: false }),
   ).toBeVisible();
   await page
-    .getByLabel("Votre réponse")
+    .getByLabel("Votre réponse transcrite, à relire avant d'envoyer")
     .fill("J'ai analysé les ventes et présenté un tableau clair à l'équipe.");
-  await page.getByRole("button", { name: "Répondre", exact: true }).click();
+  await page.getByRole("button", { name: "Envoyer ma réponse" }).click();
   await expect(page.getByText("Question 2 sur 4")).toBeVisible();
 });
 

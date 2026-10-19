@@ -9,6 +9,7 @@ import { startInterviewAction } from "@/server/actions/career-interviews";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { interviewDurations } from "@/server/services/interview-sim";
+import { NewPractice } from "./new-practice";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("practice");
@@ -89,6 +90,19 @@ export default async function PracticeBriefingPage({
   const error = errors.find((code) => code === query.erreur);
   const mode = query.mode === "voice" ? "voice" : "text";
 
+  // Without an offer: « Nouvel entraînement » (planche talent-4 § 5 bis).
+  if (!job)
+    return (
+      <NewPractice
+        userId={user.id}
+        jobTitle={profile?.headline ?? ""}
+        mode={mode}
+        type={typeof query.type === "string" ? query.type : null}
+        fromOffer={query.source === "offre"}
+        error={error ?? null}
+      />
+    );
+
   return (
     <form action={startInterviewAction} className="t-flux">
       <FlowHead
@@ -110,7 +124,7 @@ export default async function PracticeBriefingPage({
         <p role="status" className="t-gar t-err">
           <TalentIcon name="aide" size="s" />
           <span>
-            {d(`career.interviews.error.${error}`)}{" "}
+            {t(`entrain.error.${error}`)}{" "}
             {(error === "entitlement" || error === "quota") && (
               <Link href="/app/abonnement" className="t-lien-d">
                 {t("apply.docs.orbi.errorCta.entitlement")}
@@ -193,22 +207,7 @@ export default async function PracticeBriefingPage({
             </div>
           </section>
         </>
-      ) : (
-        <div className="t-verre t-brief">
-          <div className="t-champ">
-            <label htmlFor="pr-poste">{t("practice.jobTitle")}</label>
-            <input
-              id="pr-poste"
-              name="jobTitle"
-              className="t-saisie"
-              required
-              minLength={2}
-              maxLength={120}
-              defaultValue={profile?.headline ?? ""}
-            />
-          </div>
-        </div>
-      )}
+      ) : null}
 
       <section aria-labelledby="pr-type" className="t-verre t-brief">
         <h2 id="pr-type" className="t-h4">

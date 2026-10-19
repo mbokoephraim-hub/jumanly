@@ -71,6 +71,9 @@ export function ownHead(pathname: string) {
     // Lot 6: Compte, Connexions, Mon profil and its screens.
     /^\/app\/compte(\/connexions)?$/,
     /^\/app\/profil(\/(modifier|experience|competence|recherche|projet|apercu))?$/,
+    // Lot 6b: faire le point, the diagnostic, the plan and the practice (planche talent-4 § 5).
+    /^\/app\/profil\/point$/,
+    /^\/app\/career\/(diagnostic|plan|entretiens)(\/.*)?$/,
   ].some((pattern) => pattern.test(pathname));
 }
 
