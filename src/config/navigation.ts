@@ -99,7 +99,7 @@ export const talentTabPaths: string[] = talentTabs.map((tab) => tab.href);
  * aside there (offer detail and application, Learning Room, conversation, CV editor, Mon espace).
  */
 export function hidesTalentTabBar(pathname: string) {
-  const [, app, section, page, more] = pathname.split("/");
+  const [, app, section, page] = pathname.split("/");
   if (app !== "app" || !section) return false;
   if (section === "espace" || section === "bienvenue") return true;
   // Compte and Connexions open from the avatar and draw their own head (planche talent-4 § 2).
