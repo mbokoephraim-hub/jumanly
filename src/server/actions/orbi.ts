@@ -7,9 +7,12 @@ import { requireUser } from "@/server/auth/session";
 import { AI_CREDITS_KEY } from "@/server/ai";
 import { db } from "@/server/db";
 import { usage } from "@/server/entitlements";
+import { getActiveSpace } from "@/server/hire-context";
 import { reportError } from "@/server/observability";
+import { recruiterPersona, recruiterTopics } from "@/server/services/recruiter-orbi";
 import {
   askOrbi,
+  askOrbiAs,
   clearOrbiHistory,
   getOrbiConversation,
   deleteOrbiConversation,
@@ -30,6 +33,23 @@ export async function askOrbiAction(
   const parsed = orbiInput.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "invalid" };
   const user = await requireUser("/app/orbi");
+  // In an organization's space, the recruiting assistant (recruteur lot 5): the organization's
+  // credits and history, the pages of the recruiter space.
+  const space = await getActiveSpace(user.id);
+  if (space) {
+    const tr = await getTranslations("rhOrbi.rules");
+    const ctx = { userId: user.id, organizationId: space.organizationId, role: space.role };
+    const texts = {
+      ...Object.fromEntries(recruiterTopics.map((topic) => [topic, tr(topic)])),
+      whyRules: tr("whyRules"),
+    } as Parameters<typeof recruiterPersona>[2];
+    try {
+      return await askOrbiAs(db, user.id, parsed.data, recruiterPersona(db, ctx, texts));
+    } catch (error) {
+      void reportError(error, { message: "Orbi recruteur" });
+      return { ok: false, error: "failed" };
+    }
+  }
   const t = await getTranslations("talentOrbi.rules");
   const texts = {
     ...Object.fromEntries(orbiTopics.map((topic) => [topic, t(topic)])),
@@ -57,7 +77,8 @@ export async function deleteOrbiConversationAction(formData: FormData) {
 /** « Effacer tout l'historique », after the confirmation. */
 export async function clearOrbiHistoryAction() {
   const user = await requireUser("/app/orbi/historique");
-  await clearOrbiHistory(db, user.id);
+  const space = await getActiveSpace(user.id);
+  await clearOrbiHistory(db, user.id, space?.organizationId ?? null);
   refresh();
 }
 

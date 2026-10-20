@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { HireMessages } from "@/components/connect/hire-messages";
+import { RecruiterInbox } from "@/components/recruiter/inbox";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { firstConversation, InboxList } from "@/components/talent/messages/inbox-list";
@@ -17,7 +17,7 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * Messages (planche talent-2 § 5): the conversations with the recruiters, the newest first, a
- * request to be put in touch above them. A recruiting team keeps its own screen.
+ * request to be put in touch above them. A recruiting team has the recruiter's Messages tab.
  *
  * On a tablet or a computer (planche web talent-2 § 4) the list is the left column of the
  * messaging and the newest conversation opens beside it (`/app/messages/[id]`).
@@ -25,7 +25,8 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function MessagesPage({ searchParams }: PageProps<"/app/messages">) {
   const params = await searchParams;
   const { viewer } = await connectViewer("/app/messages");
-  if (viewer.hire) return <HireMessages params={params} viewer={viewer} />;
+  // A recruiting team: the Messages tab of the recruiter space (recruteur lot 5, planche MSG_R).
+  if (viewer.hire) return <RecruiterInbox ctx={viewer.hire} params={params} />;
 
   const t = await getTranslations();
   const q = typeof params.q === "string" ? params.q.slice(0, 100) : "";

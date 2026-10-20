@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import type { ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { conversationLabels } from "@/components/connect/conversation-list";
+import { conversationLabels } from "@/components/connect/conversation-labels";
 import { HireSearch } from "@/components/connect/hire-search";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon, type TalentIconName } from "@/components/talent/icon";

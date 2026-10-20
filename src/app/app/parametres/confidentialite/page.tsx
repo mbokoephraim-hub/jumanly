@@ -14,7 +14,7 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { listProjects } from "@/server/services/portfolio";
 import { toHireSettings } from "@/server/settings-redirect";
-import { inOrganizationSpace } from "@/server/talent-space";
+import { inPartnerSpaceOnly } from "@/server/talent-space";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("confidentialite");
@@ -35,7 +35,7 @@ export default async function PrivacyPage({
 }: PageProps<"/app/parametres/confidentialite">) {
   const params = await searchParams;
   const user = await requireUser("/app/parametres/confidentialite");
-  if (await inOrganizationSpace(user.id)) toHireSettings("confidentialite", params);
+  if (await inPartnerSpaceOnly(user.id)) toHireSettings("confidentialite", params);
   const t = await getTranslations();
   const profile = await db.talentProfile.findUnique({
     where: { userId: user.id },

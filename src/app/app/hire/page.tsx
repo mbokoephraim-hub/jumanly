@@ -87,7 +87,7 @@ export default async function HireTodayPage() {
         ? []
         : [
             {
-              href: "/app/organisation?onglet=verification",
+              href: "/app/organisation/verification",
               icon: "entreprise" as const,
               tone: "t-c1",
               title: t("next.verify"),

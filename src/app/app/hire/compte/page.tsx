@@ -141,7 +141,7 @@ export default async function RecruiterAccountPage() {
           }
         />
         <Row
-          href="/app/organisation?onglet=membres"
+          href="/app/organisation/equipe"
           icon="candidats"
           tone="t-c1"
           title={t("team.title")}

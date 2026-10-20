@@ -9,3 +9,12 @@ export async function inOrganizationSpace(userId: string) {
   const [space, partner] = await Promise.all([getActiveSpace(userId), getPartnerSpace(userId)]);
   return Boolean(space || partner);
 }
+
+/**
+ * True in a partner space only: since the recruiter redesign (lot 5) a recruiting team uses the
+ * settings pages of the talent space (security, privacy, notifications); a partner keeps its own.
+ */
+export async function inPartnerSpaceOnly(userId: string) {
+  const [space, partner] = await Promise.all([getActiveSpace(userId), getPartnerSpace(userId)]);
+  return Boolean(partner && !space);
+}

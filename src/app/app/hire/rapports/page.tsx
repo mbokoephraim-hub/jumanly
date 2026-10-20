@@ -2,23 +2,14 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { Icon } from "@/components/brand/icon";
-import { AppPageHeader } from "@/components/app/page-header";
-import { pillClass } from "@/components/career/kit";
-import { Initials, Kpi, MenuChip, menuItem, stageTone } from "@/components/hire/kit";
-import { EmptyState, PlanLock, TextField, segmentedItem, segmentedList } from "@/components/ui";
+import { OrbiLine } from "@/components/recruiter/offers";
+import { FlowHead } from "@/components/talent/flow-head";
+import { TalentIcon } from "@/components/talent/icon";
 import { cx } from "@/lib/cx";
 import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
-import { reasonLabel } from "@/server/hire-report-export";
-import {
-  buildReport,
-  periodRange,
-  reportLevels,
-  reportPeriods,
-  reportRank,
-} from "@/server/services/hire-reports";
+import { buildReport, periodRange, reportRank } from "@/server/services/hire-reports";
 import { listPublicPlans, orgPlanFor } from "@/server/services/plans";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -26,53 +17,25 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("title"), robots: { index: false } };
 }
 
-const card = "flex min-w-0 flex-col gap-4 rounded-[24px] bg-blanc p-5 lg:p-6";
-const cardTitle = "text-[18px] leading-6 font-semibold tracking-[-0.01em]";
-const sectionTitle = "text-[22px] leading-7 font-semibold tracking-[-0.015em]";
-const th = "px-4 py-3 text-left text-[11px] font-semibold tracking-[0.12em] text-ardoise uppercase";
-const td = "px-4 py-3.5 text-[13.5px]";
-const sourceTone = ["stroke-sapin", "stroke-lime", "stroke-menthe-claire"] as const;
-const sourceDot = ["bg-sapin", "bg-lime", "bg-menthe-claire"] as const;
-const recommendationKey = {
-  strong_yes: "strongYes",
-  yes: "yes",
-  no: "no",
-  strong_no: "strongNo",
-} as const;
-
-/** One horizontal bar with its label and value (decisions, teams, departments). */
-function BarLine({ label, value, ratio }: { label: string; value: string; ratio: number }) {
-  return (
-    <li className="flex flex-col gap-1.5">
-      <p className="flex justify-between gap-3 text-[12.5px] leading-4">
-        <span className="min-w-0 truncate">{label}</span>
-        <span className="shrink-0 font-semibold">{value}</span>
-      </p>
-      <span aria-hidden className="block h-2 overflow-hidden rounded-pill bg-gris-clair">
-        <span
-          className="jm-gauge block h-full origin-left rounded-pill bg-ia"
-          style={{ transform: `scaleX(${Math.max(0, Math.min(1, ratio))})` }}
-        />
-      </span>
-    </li>
-  );
-}
+const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");
+const sourceColor = { direct: "#2fd3a6", invitation: "#a6f26b", talent_search: "#f5b83d" } as const;
 
 /**
- * Reports (E8, `reports.level`, `reports.export`), mockup 04-09: each level adds sections to the
- * previous one. Aggregates only; the levels above the plan are shown locked.
+ * Rapports (planche recruteur-3 `RAPPORT`, r3plus v2.3): the period (30 days, a quarter) or the
+ * view by offer; the four figures; where the applications stand, stage by stage; the applications
+ * by week; where they come from; an Orbi line read from the figures; then the PDF to export.
+ * Aggregates of the organization only (golden rule n° 6); each `reports.level` adds sections.
  */
 export default async function ReportsPage({ searchParams }: PageProps<"/app/hire/rapports">) {
   const query = await searchParams;
-  const { ctx, space } = await requireHire("/app/hire/rapports");
+  const { ctx } = await requireHire("/app/hire/rapports");
   if (ctx.role === "hiring_manager") notFound();
-  const t = await getTranslations();
-  const th_ = await getTranslations("hire");
+  const t = await getTranslations("hire.reports");
+  const tr = await getTranslations("rhReports");
   const format = await getFormatter();
-  const raw = Object.fromEntries(
-    Object.entries(query).map(([key, value]) => [key, typeof value === "string" ? value : ""]),
-  );
-  const range = periodRange(raw);
+  const byJob = one(query.vue) === "offres";
+  const periode = one(query.periode) === "90d" ? "90d" : "30d";
+  const range = periodRange({ periode });
   const subject = { type: "organization" as const, id: ctx.organizationId };
   const [report, exportable, plans] = await Promise.all([
     buildReport(db, ctx, range),
@@ -80,609 +43,307 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
     listPublicPlans(db),
   ]);
   const rank = reportRank(report.level);
-  const custom = raw.periode === "custom";
-  const day = (date: Date) => date.toISOString().slice(0, 10);
-  const periodQuery = new URLSearchParams(
-    custom
-      ? { periode: "custom", du: day(range.from), au: day(range.to) }
-      : { periode: range.period },
-  );
-  const locks = (
-    [
-      ["stats", "hire.reports.stats.locked"],
-      ["advanced", "hire.reports.advanced.locked"],
-      ["consolidated", "hire.reports.consolidated.locked"],
-      ["custom", "hire.reports.custom.locked"],
-    ] as const
-  ).filter(([value]) => reportRank(value) > rank);
+  const { basic, stats } = report;
+  const empty = basic.applications === 0;
+  const href = (changes: { periode?: string; vue?: string | null }) => {
+    const next = new URLSearchParams();
+    const p = changes.periode ?? periode;
+    if (p !== "30d") next.set("periode", p);
+    const vue = changes.vue === undefined ? (byJob ? "offres" : null) : changes.vue;
+    if (vue) next.set("vue", vue);
+    const text = next.toString();
+    return text ? `/app/hire/rapports?${text}` : "/app/hire/rapports";
+  };
   const decimal = (value: number) => format.number(value, { maximumFractionDigits: 1 });
-  const days = (value: number | null) =>
-    value === null ? t("hire.reports.none") : t("hire.reports.days", { days: decimal(value) });
-  const percent = (part: number, total: number) =>
-    total === 0 ? 0 : Math.round((part / total) * 100);
-  const empty = report.basic.applications === 0;
-
-  const exportLinks = exportable
-    ? (["csv", "pdf"] as const).map((kind) => ({
-        kind,
-        href: `/app/hire/rapports/export?${periodQuery}&format=${kind}`,
-        label: t(`hire.reports.export.${kind}`),
-      }))
+  const maxWeek = Math.max(1, ...basic.weekly);
+  const top = Math.max(1, stats?.funnel[0]?.count ?? 0);
+  const funnelRows = stats
+    ? [
+        { key: "received", count: stats.funnel[0]!.count },
+        { key: "screened", count: stats.funnel[1]!.count },
+        { key: "shortlisted", count: stats.funnel[2]!.count },
+        { key: "interview", count: stats.funnel[3]!.count },
+        { key: "hired", count: stats.funnel[5]!.count },
+      ]
     : [];
-
-  const periods = (
-    <nav
-      aria-label={t("hire.reports.period.text")}
-      className="-mx-4 flex items-center gap-2 overflow-x-auto px-4 lg:mx-0 lg:overflow-visible lg:px-0"
-    >
-      <span className="text-[13px] text-ardoise max-lg:hidden">
-        {t("hire.reports.period.text")}
-      </span>
-      <div className={cx(segmentedList, "shrink-0")}>
-        {reportPeriods.map((value) => {
-          const active = value === "custom" ? custom : !custom && range.period === value;
-          return (
-            <Link
-              key={value}
-              href={
-                value === "custom"
-                  ? `/app/hire/rapports?periode=custom#periode`
-                  : `/app/hire/rapports?periode=${value}`
-              }
-              aria-current={active ? "page" : undefined}
-              className={segmentedItem(active)}
-            >
-              {t(`hire.reports.period.${value}`)}
-            </Link>
-          );
-        })}
-      </div>
-    </nav>
-  );
+  // An Orbi line read from the figures, written without the model.
+  const last = basic.weekly[3]!;
+  const before = basic.weekly[2]!;
+  const insight = empty
+    ? null
+    : before > 0 && last >= before * 2
+      ? tr("insight.doubled", { job: stats?.byJob[0]?.title ?? "" })
+      : last > before
+        ? tr("insight.up", { count: last - before })
+        : stats && stats.responseTime !== null && stats.responseTime > 3
+          ? tr("insight.slow", { days: decimal(stats.responseTime) })
+          : tr("insight.steady", { count: basic.applications });
+  const sourcesTotal = stats ? stats.sources.reduce((sum, item) => sum + item.count, 0) : 0;
+  const month = format.dateTime(range.to, { month: "long" });
 
   return (
-    <div className="jm-page flex flex-col gap-4 lg:gap-5">
-      <AppPageHeader
-        eyebrow={t("hire.pipeline.eyebrow", { org: space.organization.name })}
-        title={t("hire.reports.title")}
-        actions={
-          exportable ? (
+    <div className="t-flux">
+      <FlowHead back="/app/hire/compte" backLabel={tr("back")} title={t("title")} />
+
+      <nav aria-label={t("period.text")} className="t-rx-onglets">
+        <Link
+          href={href({ periode: "30d", vue: null })}
+          aria-current={!byJob && periode === "30d" ? "page" : undefined}
+          className="t-puce t-press"
+        >
+          {tr("period.30d")}
+        </Link>
+        <Link
+          href={href({ periode: "90d", vue: null })}
+          aria-current={!byJob && periode === "90d" ? "page" : undefined}
+          className="t-puce t-press"
+        >
+          {tr("period.90d")}
+        </Link>
+        <Link
+          href={href({ vue: "offres" })}
+          aria-current={byJob ? "page" : undefined}
+          className="t-puce t-press"
+        >
+          {tr("byJob")}
+        </Link>
+      </nav>
+
+      <ul className="t-r5-st4" aria-label={tr("figures")}>
+        <li className="t-r5-s1">
+          <b>{basic.applications}</b>
+          {tr("figure.applications", { count: basic.applications })}
+        </li>
+        <li className="t-r5-s2">
+          {stats ? (
             <>
-              {exportLinks.map((link) => (
-                <a
-                  key={link.kind}
-                  href={link.href}
-                  className={pillClass(
-                    link.kind === "pdf" ? "lime" : "outline",
-                    "md",
-                    "max-lg:hidden",
-                  )}
-                >
-                  <Icon name="telecharger" className="size-4" />
-                  {link.label}
-                </a>
-              ))}
-              <MenuChip
-                group="report-export"
-                align="right"
-                className="lg:hidden"
-                summaryClassName={pillClass("lime", "sm")}
-                summary={
-                  <>
-                    <Icon name="telecharger" className="size-4" />
-                    {t("hire.reports.export.text")}
-                  </>
-                }
-              >
-                {exportLinks.map((link) => (
-                  <a key={link.kind} href={link.href} className={menuItem}>
-                    <Icon name="telecharger" />
-                    {link.label}
-                  </a>
-                ))}
-              </MenuChip>
+              <b>
+                {stats.responseTime === null
+                  ? "—"
+                  : t("days", { days: decimal(stats.responseTime) })}
+              </b>
+              {tr("figure.responseTime")}
             </>
           ) : (
-            <PlanLock compact plan={orgPlanFor(plans, "reports.export")} />
-          )
-        }
-      />
-
-      {periods}
-      {custom && (
-        <form
-          id="periode"
-          method="get"
-          className="flex flex-wrap items-end gap-3 rounded-[24px] bg-blanc p-4"
-        >
-          <input type="hidden" name="periode" value="custom" />
-          <TextField
-            id="report-from"
-            name="du"
-            type="date"
-            label={t("hire.reports.period.from")}
-            defaultValue={raw.du ? day(range.from) : ""}
-            required
-          />
-          <TextField
-            id="report-to"
-            name="au"
-            type="date"
-            label={t("hire.reports.period.to")}
-            defaultValue={raw.au ? day(range.to) : ""}
-            required
-          />
-          <button type="submit" className={pillClass("dark", "md")}>
-            {t("hire.reports.period.apply")}
-          </button>
-        </form>
-      )}
-
-      <section aria-labelledby="vue" className="flex flex-col gap-3">
-        <h2 id="vue" className={sectionTitle}>
-          {t("hire.reports.basic.title")}
-        </h2>
-        <div className="grid grid-cols-2 gap-3 lg:grid-cols-5 lg:gap-4">
-          <Kpi
-            label={t("hire.reports.basic.activeJobs")}
-            value={String(report.basic.activeJobs)}
-            number={report.basic.activeJobs}
-            icon="jobs"
-            disc="bg-lime-clair"
-          />
-          <Kpi
-            label={t("hire.reports.basic.applications")}
-            value={String(report.basic.applications)}
-            number={report.basic.applications}
-            icon="equipe"
-            disc="bg-ambre-fond"
-          />
-          <Kpi
-            label={t("hire.reports.basic.hires")}
-            value={String(report.basic.hires)}
-            number={report.basic.hires}
-            icon="check"
-            disc="bg-menthe-claire"
-          />
-          {report.stats && (
             <>
-              <Kpi
-                label={t("hire.reports.stats.timeToHire.text")}
-                value={
-                  report.stats.timeToHire === null
-                    ? "—"
-                    : t("hire.reports.stats.timeToHire.value", {
-                        days: decimal(report.stats.timeToHire),
-                      })
-                }
-                icon="horloge"
-              />
-              <Kpi
-                label={t("hire.reports.stats.responseTime")}
-                value={report.stats.responseTime === null ? "—" : days(report.stats.responseTime)}
-                icon="connect"
-                className="max-lg:hidden"
-              />
+              <b>{basic.activeJobs}</b>
+              {tr("figure.activeJobs", { count: basic.activeJobs })}
             </>
           )}
+        </li>
+        <li className="t-r5-s3">
+          <b>{basic.interviews}</b>
+          {tr("figure.interviews", { count: basic.interviews })}
+        </li>
+        <li className="t-r5-s4">
+          <b>{basic.hires}</b>
+          {tr("figure.hires", { count: basic.hires })}
+        </li>
+      </ul>
+
+      {empty && (
+        <div className="t-verre t-carte t-vide">
+          <b>{t("empty")}</b>
         </div>
-        {empty && <EmptyState title={t("hire.reports.empty")} />}
-      </section>
-
-      {report.stats && !empty && (
-        <section aria-labelledby="stats" className="flex flex-col gap-3">
-          <h2 id="stats" className={sectionTitle}>
-            {t("hire.reports.stats.title")}
-          </h2>
-          <div className="grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-[minmax(0,1.15fr)_minmax(0,1fr)]">
-            <div className={card}>
-              <div className="flex items-baseline justify-between gap-2">
-                <h3 className={cardTitle}>{t("hire.reports.stats.funnel")}</h3>
-                <span className="text-[12px] text-ardoise">
-                  {t("hire.reports.stats.conversion")}
-                </span>
-              </div>
-              <ul className="flex flex-col gap-2.5">
-                {report.stats.funnel.map((step, index) => {
-                  const rate = report.stats!.conversion[index]?.rate ?? null;
-                  const max = report.stats!.funnel[0]!.count || 1;
-                  return (
-                    <li
-                      key={step.kind}
-                      className="grid grid-cols-[84px_minmax(0,1fr)_52px] items-center gap-3 lg:grid-cols-[100px_minmax(0,1fr)_52px]"
-                    >
-                      <span className="truncate text-[13px]">
-                        {t(`hire.pipeline.stage.${step.kind}`)}
-                      </span>
-                      <span className="relative h-7 overflow-hidden rounded-[9px] bg-creme">
-                        <span
-                          aria-hidden
-                          className={cx(
-                            "jm-gauge absolute inset-y-0 left-0 w-full origin-left rounded-[9px]",
-                            stageTone[step.kind],
-                          )}
-                          style={{
-                            transform: `scaleX(${Math.max(0.03, step.count / max)})`,
-                          }}
-                        />
-                        <span className="relative flex h-full items-center px-2.5 text-[11.5px] font-semibold">
-                          {step.count}
-                        </span>
-                      </span>
-                      <span className="justify-self-end">
-                        {rate !== null && (
-                          <span className="inline-flex h-6 items-center rounded-pill bg-gris-clair px-2 text-[11px] font-semibold whitespace-nowrap">
-                            {t("hire.reports.rate", { rate })}
-                          </span>
-                        )}
-                      </span>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-            <div className={card}>
-              <h3 className={cardTitle}>{t("hire.reports.stats.sources")}</h3>
-              <div className="flex flex-col items-center gap-5 lg:flex-row lg:gap-6">
-                {(() => {
-                  const total = report.stats.sources.reduce((sum, item) => sum + item.count, 0);
-                  const radius = 52;
-                  const circumference = 2 * Math.PI * radius;
-                  let offset = 0;
-                  return (
-                    <span className="relative grid size-[150px] shrink-0 place-items-center">
-                      <svg
-                        viewBox="0 0 140 140"
-                        aria-hidden
-                        className="absolute inset-0 size-full -rotate-90"
-                      >
-                        <circle
-                          cx="70"
-                          cy="70"
-                          r={radius}
-                          fill="none"
-                          strokeWidth="20"
-                          className="stroke-gris-clair"
-                        />
-                        {report.stats.sources.map((item, index) => {
-                          const length = total ? (item.count / total) * circumference : 0;
-                          const element = (
-                            <circle
-                              key={item.source}
-                              cx="70"
-                              cy="70"
-                              r={radius}
-                              fill="none"
-                              strokeWidth="20"
-                              className={sourceTone[index]}
-                              strokeDasharray={`${length} ${circumference - length}`}
-                              strokeDashoffset={-offset}
-                            />
-                          );
-                          offset += length;
-                          return element;
-                        })}
-                      </svg>
-                      <span className="relative flex flex-col items-center">
-                        <span className="text-[24px] leading-7 font-semibold">{total}</span>
-                        <span className="text-[11px] text-ardoise">
-                          {t("hire.reports.stats.sourcesTotal", { count: total })}
-                        </span>
-                      </span>
-                    </span>
-                  );
-                })()}
-                <ul className="flex w-full flex-col gap-2.5">
-                  {report.stats.sources.map((item, index) => (
-                    <li key={item.source} className="flex items-center gap-2.5 text-[13px]">
-                      <span aria-hidden className={cx("size-2.5 rounded-full", sourceDot[index])} />
-                      <span className="flex-1">{t(`hire.reports.source.${item.source}`)}</span>
-                      <span className="font-semibold">
-                        {t("hire.reports.rate", {
-                          rate: percent(item.count, report.basic.applications),
-                        })}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div>
-          </div>
-          {report.stats.byJob.length > 0 && (
-            <>
-              <h3 className="mt-1 text-[16px] font-semibold">{t("hire.reports.stats.byJob")}</h3>
-              <div
-                tabIndex={0}
-                role="region"
-                aria-label={t("hire.reports.stats.byJob")}
-                className="overflow-x-auto rounded-[24px] bg-blanc"
-              >
-                <table className="w-full min-w-[480px]">
-                  <caption className="sr-only">{t("hire.reports.stats.byJob")}</caption>
-                  <thead className="border-b border-gris-clair">
-                    <tr>
-                      <th scope="col" className={th}>
-                        {t("hire.reports.col.job")}
-                      </th>
-                      <th scope="col" className={th}>
-                        {t("hire.reports.col.applications")}
-                      </th>
-                      <th scope="col" className={th}>
-                        {t("hire.reports.col.hires")}
-                      </th>
-                    </tr>
-                  </thead>
-                  <tbody className="divide-y divide-gris-clair">
-                    {report.stats.byJob.map((row, index) => (
-                      <tr key={index}>
-                        <th scope="row" className={cx(td, "text-left font-semibold")}>
-                          {row.title}
-                        </th>
-                        <td className={td}>{row.applications}</td>
-                        <td className={td}>{row.hires}</td>
-                      </tr>
-                    ))}
-                  </tbody>
-                </table>
-              </div>
-            </>
-          )}
-        </section>
       )}
 
-      {report.advanced && !empty && (
-        <section aria-labelledby="avance" className="flex flex-col gap-3">
-          <h2 id="avance" className={sectionTitle}>
-            {t("hire.reports.advanced.title")}
-          </h2>
-          <div
-            className={cx(
-              "grid grid-cols-[minmax(0,1fr)] gap-4",
-              report.advanced.byRecruiter.length > 0 &&
-                "lg:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]",
-            )}
-          >
-            {report.advanced.byRecruiter.length > 0 && (
-              <div className="flex min-w-0 flex-col gap-3 max-lg:order-last">
-                <h3 className="text-[16px] font-semibold">
-                  {t("hire.reports.advanced.byRecruiter")}
-                </h3>
-                <div
-                  tabIndex={0}
-                  role="region"
-                  aria-label={t("hire.reports.advanced.byRecruiter")}
-                  className="overflow-x-auto rounded-[24px] bg-blanc"
-                >
-                  <table className="w-full min-w-[460px]">
-                    <caption className="sr-only">{t("hire.reports.advanced.byRecruiter")}</caption>
-                    <thead className="border-b border-gris-clair">
-                      <tr>
-                        <th scope="col" className={th}>
-                          {t("hire.reports.col.recruiter")}
-                        </th>
-                        <th scope="col" className={th}>
-                          {t("hire.reports.col.moves")}
-                        </th>
-                        <th scope="col" className={th}>
-                          {t("hire.reports.col.decisions")}
-                        </th>
-                        <th scope="col" className={th}>
-                          {t("hire.reports.col.notes")}
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-gris-clair">
-                      {report.advanced.byRecruiter.map((row, index) => (
-                        <tr key={index}>
-                          <th scope="row" className={cx(td, "text-left font-semibold")}>
-                            <span className="flex items-center gap-2.5">
-                              <Initials name={row.name} size={28} />
-                              {row.name}
-                            </span>
-                          </th>
-                          <td className={td}>{row.moves}</td>
-                          <td className={td}>{row.decisions}</td>
-                          <td className={td}>{row.notes}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-              </div>
-            )}
-            <div className={card}>
-              <h3 className={cardTitle}>{t("hire.reports.advanced.decisions")}</h3>
-              {report.advanced.decisions.length === 0 ? (
-                <p className="text-[13px] text-ardoise">{t("hire.reports.none")}</p>
-              ) : (
-                <ul className="flex flex-col gap-3">
-                  {(() => {
-                    const total = report.advanced.decisions.reduce(
-                      (sum, item) => sum + item.count,
-                      0,
-                    );
-                    return report.advanced.decisions.map((item) => (
-                      <BarLine
-                        key={item.reason}
-                        label={reasonLabel(th_, item.reason)}
-                        value={t("hire.reports.rate", { rate: percent(item.count, total) })}
-                        ratio={item.count / total}
-                      />
-                    ));
-                  })()}
-                </ul>
-              )}
-            </div>
-          </div>
-          <div className="grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-2">
-            <div className={card}>
-              <h3 className={cardTitle}>{t("hire.reports.advanced.candidateExperience")}</h3>
-              <div className="flex items-center gap-5">
-                {(() => {
-                  const value = report.advanced.candidateExperience;
-                  const ring = 2 * Math.PI * 38;
-                  return (
-                    <span className="relative grid size-[92px] shrink-0 place-items-center">
-                      <svg
-                        viewBox="0 0 90 90"
-                        aria-hidden
-                        className="absolute inset-0 size-full -rotate-90"
-                      >
-                        <circle
-                          cx="45"
-                          cy="45"
-                          r="38"
-                          fill="none"
-                          strokeWidth="8"
-                          className="stroke-gris-clair"
-                        />
-                        <circle
-                          cx="45"
-                          cy="45"
-                          r="38"
-                          fill="none"
-                          strokeWidth="8"
-                          strokeLinecap="round"
-                          className="jm-ring stroke-feuille"
-                          strokeDasharray={ring}
-                          strokeDashoffset={ring * (1 - (value ?? 0) / 100)}
-                        />
-                      </svg>
-                      <span className="text-[19px] font-semibold">
-                        {value === null ? "—" : t("hire.reports.rate", { rate: value })}
-                      </span>
-                    </span>
-                  );
-                })()}
-                <p className="text-[13px] leading-[19px] text-ardoise">
-                  {t("hire.reports.advanced.candidateExperienceHint")}
-                </p>
-              </div>
-            </div>
-            <div className={card}>
-              <div className="flex items-baseline justify-between gap-2">
-                <h3 className={cardTitle}>{t("hire.reports.advanced.scorecards")}</h3>
-                <span className="text-[12px] text-ardoise">
-                  {t("hire.reports.scorecards.average")}
-                </span>
-              </div>
-              <p className="text-[13px]">
-                {t("hire.reports.scorecards.summary", {
-                  count: report.advanced.scorecards.count,
-                  average:
-                    report.advanced.scorecards.average === null
-                      ? "—"
-                      : decimal(report.advanced.scorecards.average),
-                })}
-              </p>
-              {report.advanced.scorecards.count > 0 && (
-                <ul
-                  aria-label={t("hire.reports.scorecards.recommendations")}
-                  className="flex flex-col gap-3"
-                >
-                  {report.advanced.scorecards.recommendations.map((item) => (
-                    <BarLine
-                      key={item.value}
-                      label={th_(`scorecard.recommendation.${recommendationKey[item.value]}`)}
-                      value={String(item.count)}
-                      ratio={item.count / report.advanced!.scorecards.count}
-                    />
-                  ))}
-                </ul>
-              )}
-            </div>
-          </div>
-        </section>
-      )}
-
-      {report.consolidated && !empty && (
-        <section aria-labelledby="consolide" className="flex flex-col gap-3">
-          <h2 id="consolide" className={sectionTitle}>
-            {t("hire.reports.consolidated.title")}
-          </h2>
-          <div className="grid grid-cols-[minmax(0,1fr)] gap-4 lg:grid-cols-2">
-            {(
-              [
-                ["byTeam", report.consolidated.byTeam, true],
-                ["byDepartment", report.consolidated.byDepartment, false],
-              ] as const
-            ).map(([key, rows, share]) => {
-              const total = rows.reduce((sum, row) => sum + row.applications, 0);
-              const max = Math.max(1, ...rows.map((row) => row.applications));
-              return (
-                <div key={key} className={card}>
-                  <div className="flex items-baseline justify-between gap-2">
-                    <h3 className={cardTitle}>{t(`hire.reports.consolidated.${key}`)}</h3>
-                    <span className="text-[12px] text-ardoise">
-                      {share
-                        ? t("hire.reports.consolidated.share")
-                        : t("hire.reports.col.applications")}
-                    </span>
-                  </div>
-                  {rows.length === 0 ? (
-                    <p className="text-[13px] text-ardoise">{t("hire.reports.none")}</p>
-                  ) : (
-                    <ul className="flex flex-col gap-3">
-                      {rows.map((row) => (
-                        <BarLine
-                          key={row.name}
-                          label={row.name}
-                          value={
-                            share
-                              ? t("hire.reports.rate", { rate: percent(row.applications, total) })
-                              : String(row.applications)
-                          }
-                          ratio={share ? row.applications / (total || 1) : row.applications / max}
-                        />
-                      ))}
-                    </ul>
-                  )}
-                </div>
-              );
-            })}
-          </div>
-        </section>
-      )}
-
-      {report.custom && !empty && (
-        <section aria-labelledby="personnalise" className="flex flex-col gap-3">
-          <h2 id="personnalise" className={sectionTitle}>
-            {t("hire.reports.custom.title")}
-          </h2>
-          <div className={card}>
-            <h3 className={cardTitle}>{t("hire.reports.custom.byEntity")}</h3>
-            {report.custom.byEntity.length === 0 ? (
-              <p className="text-[13px] text-ardoise">{t("hire.reports.none")}</p>
+      {byJob ? (
+        stats ? (
+          <section className="t-verre t-carte t-r5-rp" aria-labelledby="r5-rp-offres">
+            <h2 id="r5-rp-offres">{t("stats.byJob")}</h2>
+            {stats.byJob.length === 0 ? (
+              <p className="t-r5-vide-t">{t("empty")}</p>
             ) : (
-              <ul className="flex flex-col gap-3">
-                {(() => {
-                  const max = Math.max(1, ...report.custom.byEntity.map((row) => row.applications));
-                  return report.custom.byEntity.map((row) => (
-                    <BarLine
-                      key={row.name}
-                      label={row.name}
-                      value={String(row.applications)}
-                      ratio={row.applications / max}
-                    />
-                  ));
-                })()}
+              <ul className="t-r5-fr">
+                {stats.byJob.map((row) => (
+                  <li key={row.title}>
+                    <span className="t-r5-fr-l">{row.title}</span>
+                    <span className="t-r5-br" aria-hidden>
+                      <i style={{ width: `${Math.round((row.applications / top) * 100)}%` }} />
+                    </span>
+                    <b>
+                      {row.applications}
+                      <span className="sr-only">
+                        {tr("jobLine", { applications: row.applications, hires: row.hires })}
+                      </span>
+                    </b>
+                  </li>
+                ))}
               </ul>
             )}
-            <p className="text-[12.5px] leading-[18px] text-ardoise">
-              {t("hire.reports.custom.note")}
-            </p>
-          </div>
-        </section>
+          </section>
+        ) : null
+      ) : (
+        <>
+          {stats && !empty && (
+            <section className="t-verre t-carte t-r5-rp" aria-labelledby="r5-rp-etapes">
+              <h2 id="r5-rp-etapes">{tr("funnel")}</h2>
+              <ul className="t-r5-fr">
+                {funnelRows.map((row) => (
+                  <li key={row.key}>
+                    <span className="t-r5-fr-l">{tr(`stage.${row.key}` as "stage.received")}</span>
+                    <span className="t-r5-br" aria-hidden>
+                      <i style={{ width: `${Math.round((row.count / top) * 100)}%` }} />
+                    </span>
+                    <b>{row.count}</b>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          <section className="t-verre t-carte t-r5-rp" aria-labelledby="r5-rp-sem">
+            <div className="t-r5-rp-h">
+              <h2 id="r5-rp-sem">{tr("weekly")}</h2>
+              <span>{tr("weeklyLine")}</span>
+            </div>
+            <div
+              className="t-rx-sem"
+              role="img"
+              aria-label={tr("weeklyAria", {
+                s1: basic.weekly[0]!,
+                s2: basic.weekly[1]!,
+                s3: basic.weekly[2]!,
+                s4: basic.weekly[3]!,
+              })}
+            >
+              {basic.weekly.map((count, index) => (
+                <div key={index} className={cx(index === 3 && "t-on")}>
+                  <small>{count}</small>
+                  <i style={{ height: `${Math.round((count / maxWeek) * 70)}%` }} />
+                  {tr("week", { n: index + 1 })}
+                </div>
+              ))}
+            </div>
+          </section>
+
+          {stats && sourcesTotal > 0 && (
+            <section className="t-verre t-carte t-r5-rp" aria-labelledby="r5-rp-src">
+              <h2 id="r5-rp-src">{tr("sources")}</h2>
+              <span className="t-r5-stk" aria-hidden>
+                {stats.sources
+                  .filter((item) => item.count > 0)
+                  .map((item) => (
+                    <i
+                      key={item.source}
+                      style={{
+                        width: `${(item.count / sourcesTotal) * 100}%`,
+                        background: sourceColor[item.source],
+                      }}
+                    />
+                  ))}
+              </span>
+              <ul className="t-r5-src">
+                {stats.sources.map((item) => (
+                  <li key={item.source}>
+                    <i style={{ background: sourceColor[item.source] }} aria-hidden />
+                    <span>{tr(`source.${item.source}`)}</span>
+                    <b>{item.count}</b>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {insight && <OrbiLine>{insight}</OrbiLine>}
+
+          {report.advanced && report.advanced.byRecruiter.length > 0 && (
+            <section className="t-verre t-carte t-r5-rp" aria-labelledby="r5-rp-rec">
+              <h2 id="r5-rp-rec">{t("advanced.byRecruiter")}</h2>
+              <ul className="t-r5-src">
+                {report.advanced.byRecruiter.map((row) => (
+                  <li key={row.name}>
+                    <span>{row.name}</span>
+                    <b>
+                      {tr("recruiterLine", {
+                        moves: row.moves,
+                        decisions: row.decisions,
+                        notes: row.notes,
+                      })}
+                    </b>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+
+          {(
+            [
+              ["byTeam", report.consolidated?.byTeam, t("consolidated.byTeam")],
+              ["byDepartment", report.consolidated?.byDepartment, t("consolidated.byDepartment")],
+              ["byEntity", report.custom?.byEntity, t("custom.byEntity")],
+            ] as const
+          ).map(([key, rows, title]) =>
+            rows && rows.length > 0 ? (
+              <section key={key} className="t-verre t-carte t-r5-rp" aria-label={title}>
+                <h2>{title}</h2>
+                <ul className="t-r5-src">
+                  {rows.map((row) => (
+                    <li key={row.name}>
+                      <span>{row.name}</span>
+                      <b>{tr("jobLine", { applications: row.applications, hires: row.hires })}</b>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            ) : null,
+          )}
+        </>
       )}
 
-      {locks.map(([value, key]) => {
-        const plan = orgPlanFor(plans, "reports.level", reportLevels.slice(reportRank(value)));
-        return <PlanLock key={value} plan={plan} description={t(key, { plan })} />;
-      })}
-      <p className="flex items-start gap-2 text-[12px] leading-[17px] text-ardoise">
-        <Icon name="lock" className="mt-px size-3.5 shrink-0" />
-        {t("hire.reports.export.privacy")}
+      {rank < reportRank("stats") && (
+        <div className="t-verre t-carte">
+          <b>
+            {t("stats.locked", {
+              plan: orgPlanFor(plans, "reports.level", [
+                "stats",
+                "advanced",
+                "consolidated",
+                "custom",
+              ]),
+            })}
+          </b>
+          <Link href="/app/abonnement/formules" className="t-bt t-sec t-s t-press">
+            {tr("plans")}
+          </Link>
+        </div>
+      )}
+
+      <p className="t-gar">
+        <TalentIcon name="pourquoi" size="s" />
+        <span>{tr("rule")}</span>
       </p>
+
+      {exportable ? (
+        <>
+          <div className="t-verre t-r5-pdf">
+            <span className="t-r5-th" aria-hidden>
+              <i />
+              <em />
+              <u />
+              <u />
+              <u />
+            </span>
+            <span className="t-t">
+              <b>{tr("pdf.title", { month })}</b>
+              <span>{tr("pdf.line")}</span>
+            </span>
+          </div>
+          <a
+            href={`/app/hire/rapports/export?periode=${periode}`}
+            className="t-bt t-p t-pl t-press"
+            download
+          >
+            <TalentIcon name="telecharger" size="s" />
+            {tr("pdf.cta")}
+          </a>
+        </>
+      ) : (
+        <p className="t-gar">
+          <TalentIcon name="cadenas" size="s" />
+          <span>{t("export.locked", { plan: orgPlanFor(plans, "reports.export") })}</span>
+        </p>
+      )}
     </div>
   );
 }

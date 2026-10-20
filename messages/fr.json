@@ -9643,7 +9643,8 @@
     "title": {
       "today": "À traiter",
       "offers": "Mes offres",
-      "candidates": "Candidats"
+      "candidates": "Candidats",
+      "messages": "Messages"
     }
   },
   "hireAccount": {
@@ -10621,6 +10622,579 @@
       "undoError": "La décision n'a pas pu être annulée. Réessayez."
     },
     "retracted": "Message retiré par l'entreprise."
+  },
+  "rhOrbi": {
+    "title": "Orbi",
+    "aides": {
+      "label": "Ce qu'Orbi peut faire pour vous",
+      "offer": "Rédiger une offre",
+      "candidates": "Résumer des candidatures",
+      "interview": "Préparer un entretien",
+      "message": "Rédiger un message"
+    },
+    "chat": {
+      "intro": "Bonjour, je suis Orbi. Je vous aide à rédiger une offre, lire vos candidatures dans un bon ordre, préparer un entretien ou écrire un message. Je propose, vous décidez : je ne rejette personne et je n'envoie rien.",
+      "history": "Historique de vos échanges avec Orbi",
+      "creditsAria": "Crédits Orbi de l'organisation restants ce mois : {count}",
+      "composer": {
+        "footer": "Orbi propose, vous décidez. Il ne rejette personne."
+      },
+      "source": {
+        "ai": "Réponse rédigée par l'IA d'Orbi à partir des chiffres de vos offres. Relisez-la avant de vous en servir.",
+        "rules": "Réponse préparée sans l'IA : elle vous mène vers l'outil adapté."
+      },
+      "limit": {
+        "entitlement": "La formule de l'organisation ne comprend pas les réponses de l'IA d'Orbi.",
+        "quota": "Les crédits Orbi de l'organisation sont utilisés ce mois-ci. Aucun crédit n'a été pris pour cette réponse."
+      },
+      "actions": {
+        "newOffer": "Publier une offre",
+        "offers": "Voir mes offres",
+        "candidates": "Ouvrir les candidatures",
+        "interviews": "Voir les entretiens",
+        "messages": "Ouvrir les messages",
+        "templates": "Voir les modèles",
+        "reports": "Voir les rapports",
+        "team": "Voir l'équipe"
+      }
+    },
+    "rules": {
+      "offer": "Pour une offre, ouvrez « Publier une offre » : à l'étape 2, Orbi rédige ou améliore la description à partir de ce que vous avez écrit. Vous relisez avant d'appliquer.",
+      "candidates": "Ouvrez Candidats : les candidatures pas encore ouvertes sont signalées, et chaque dossier montre son score avec son « Pourquoi ? ». Orbi propose un ordre de lecture, il ne rejette personne.",
+      "interview": "Pour préparer un entretien, ouvrez Entretiens : vous y retrouvez les créneaux, les réponses des candidats et la grille d'évaluation de l'offre.",
+      "message": "Dans une conversation, Orbi propose une réponse que vous relisez et modifiez avant de l'envoyer. Les modèles de l'organisation s'insèrent de la même façon.",
+      "report": "Les rapports donnent les chiffres réels de vos offres : candidatures, délais, étapes. Aucune donnée personnelle des candidats.",
+      "other": "Je vous aide pour vos offres, vos candidatures, vos entretiens et vos messages. Pour commencer, ouvrez vos candidatures.",
+      "whyRules": "Orbi a reconnu le sujet de votre question et vous propose l'outil qui y répond."
+    }
+  },
+  "rhInbox": {
+    "title": "Messages",
+    "search": "Candidat, offre",
+    "filters": "Filtrer les conversations",
+    "filter": {
+      "toutes": "Toutes",
+      "nonLues": "Non lues",
+      "retenus": "Retenus",
+      "propositions": "Propositions",
+      "nonRetenus": "Non retenus"
+    },
+    "orbi": {
+      "open": "Relire",
+      "waiting": "{count, plural, one {<b># réponse</b> attendue de {names}.} other {<b># réponses</b> attendues, de {names} notamment.}} Orbi peut vous proposer un brouillon à relire.",
+      "and": "et"
+    },
+    "empty": {
+      "filtered": "Aucune conversation ne correspond.",
+      "title": "Aucune conversation pour l'instant",
+      "text": "Une conversation s'ouvre quand vous écrivez à un candidat depuis son dossier, ou quand un talent accepte votre proposition."
+    },
+    "list": "Conversations",
+    "badge": {
+      "interview": "Retenu · entretien",
+      "hired": "Recruté",
+      "review": "En examen",
+      "rejected": "Non retenu",
+      "withdrawn": "Candidature retirée",
+      "proposal": "Proposition acceptée"
+    },
+    "proposal": "Proposition · {job}",
+    "proposalNoJob": "Proposition de contact",
+    "mine": "Vous : {text}",
+    "noMessage": "Pas encore de message",
+    "unread": "{count, plural, one {# message non lu} other {# messages non lus}}",
+    "rule": "Seuls les membres de votre organisation voient ces conversations. Chaque candidat ne voit que la sienne.",
+    "yesterday": "Hier"
+  },
+  "rhThread": {
+    "back": "Messages",
+    "thread": "Conversation avec {name}",
+    "switch": {
+      "title": "Conversation",
+      "personal": "Cette conversation appartient à votre espace personnel.",
+      "org": "Cette conversation appartient à l'espace de {org}.",
+      "cta": "Changer d'espace"
+    },
+    "badge": {
+      "interview": "Retenu · entretien",
+      "hired": "Recruté",
+      "review": "En examen",
+      "rejected": "Non retenu",
+      "withdrawn": "Candidature retirée",
+      "proposal": "Proposition acceptée"
+    },
+    "menu": {
+      "open": "Options de la conversation",
+      "title": "Options",
+      "file": "Ouvrir le dossier",
+      "profile": "Voir le profil",
+      "decision": "Annoncer la décision",
+      "templates": "Gérer les modèles",
+      "orbi": "Demander à Orbi"
+    },
+    "context": {
+      "stage": "Étape {stage}",
+      "stageScore": "Étape {stage} · dossier {score} %",
+      "proposal": "Proposition acceptée par le talent",
+      "file": "Dossier",
+      "profile": "Profil"
+    },
+    "ok": {
+      "document": "Demande de document envoyée."
+    },
+    "error": {
+      "tooMany": "Trop de messages envoyés d'un coup. Réessayez dans {seconds} secondes.",
+      "document": "Indiquez le nom du document et une date limite.",
+      "send": "Le message n'a pas pu être envoyé. Réessayez."
+    },
+    "blocked": "Le candidat a bloqué cette conversation : vous ne pouvez plus lui écrire.",
+    "empty": "Aucun message pour l'instant. Écrivez le premier, ou insérez un modèle.",
+    "today": "Aujourd'hui",
+    "yesterday": "Hier",
+    "you": "Vous",
+    "team": "Votre équipe",
+    "meta": "{author} · {time}",
+    "retracted": "Message retiré",
+    "hidden": "Message masqué après un signalement",
+    "or": "ou",
+    "invite": {
+      "pending": "Invitation envoyée",
+      "confirmed": "Entretien confirmé",
+      "canceled": "Entretien annulé",
+      "declined": "Créneaux refusés",
+      "reschedule": "Autre date demandée",
+      "done": "Entretien terminé",
+      "no_show": "Candidat absent"
+    },
+    "document": {
+      "title": "Document demandé : {name}",
+      "received": "Reçu le {date, date, long}",
+      "due": "À envoyer avant le {date, date, long}",
+      "overdue": "Date limite dépassée",
+      "pending": "En attente"
+    },
+    "file": {
+      "open": "Ouvrir le document"
+    },
+    "slot": "Créneau proposé",
+    "decision": {
+      "hired": "Décision : recruté",
+      "rejected": "Décision : non retenu"
+    },
+    "readOnly": "Votre rôle permet de lire cette conversation, pas d'y répondre.",
+    "close": "Fermer",
+    "composer": {
+      "placeholder": "Écrire un message",
+      "send": "Envoyer",
+      "plus": "Créneaux, documents, modèles"
+    },
+    "orbi": {
+      "label": "Orbi dans la conversation",
+      "reply": "Proposer une réponse",
+      "summary": "Résumer",
+      "formal": "Plus formel",
+      "draft": "Brouillon d'Orbi, à relire avant d'envoyer",
+      "summaryTitle": "Résumé d'Orbi",
+      "edit": "Modifier",
+      "use": "Utiliser",
+      "close": "Fermer",
+      "thinking": "Orbi rédige…",
+      "noAi": "Brouillon préparé sans l'IA",
+      "credits": "{count, plural, =0 {Plus de crédit Orbi ce mois} one {# crédit Orbi restant} other {# crédits Orbi restants}}",
+      "creditsUnlimited": "Crédits Orbi illimités",
+      "error": {
+        "empty": "Il n'y a encore rien à résumer dans cette conversation.",
+        "formalEmpty": "Écrivez d'abord votre message : Orbi le reformulera sur un ton plus formel.",
+        "failed": "Orbi n'a pas pu rédiger de brouillon. Réessayez dans un instant."
+      },
+      "limit": {
+        "consent": "Brouillon préparé sans l'IA : vous n'avez pas activé l'aide de l'IA dans vos paramètres.",
+        "quota": "Brouillon préparé sans l'IA : les crédits Orbi de l'organisation sont utilisés ce mois-ci.",
+        "entitlement": "Brouillon préparé sans l'IA : la formule de l'organisation ne comprend pas l'IA d'Orbi.",
+        "unavailable": "Brouillon préparé sans l'IA : l'IA d'Orbi est indisponible pour le moment."
+      },
+      "template": {
+        "reply": "Bonjour {firstName},\\n\\nMerci pour votre message au sujet du poste de {job}. Je reviens vers vous très vite.\\n\\nCordialement",
+        "summary": "{count, plural, one {# message} other {# messages}} depuis le {first}. Dernier message de {last} : « {excerpt} »",
+        "greeting": "Bonjour {firstName},",
+        "closing": "Cordialement",
+        "you": "vous"
+      }
+    },
+    "plus": {
+      "title": "Ajouter à la conversation",
+      "slots": "Proposer des créneaux",
+      "slotsLine": "Le candidat choisit, l'entretien s'ajoute à l'agenda",
+      "document": "Demander un document",
+      "documentLine": "Diplôme, attestation, portfolio",
+      "templates": "Modèles de message",
+      "templatesLine": "Insérés dans le message, à relire avant d'envoyer"
+    },
+    "templates": {
+      "title": "Modèles",
+      "create": "Gérer les modèles",
+      "rule": "Un modèle s'insère dans votre message : rien ne part sans que vous l'envoyiez.",
+      "kind": {
+        "convocation": "Convocation à un entretien",
+        "document": "Demande de document",
+        "relance": "Relance",
+        "acceptation": "Acceptation",
+        "refus": "Refus"
+      },
+      "line": {
+        "own": "Modèle de votre organisation",
+        "convocation": "Texte de Jumanly, à adapter",
+        "document": "Texte de Jumanly, à adapter",
+        "relance": "Texte de Jumanly, à adapter",
+        "acceptation": "S'annonce depuis l'écran de décision",
+        "refus": "Écrit avec soin, depuis l'écran de décision"
+      }
+    },
+    "documentSheet": {
+      "title": "Demander un document",
+      "name": "Document demandé",
+      "namePlaceholder": "Diplôme de licence",
+      "due": "À envoyer avant le",
+      "note": "Message au candidat",
+      "forbidden": "Ne demandez jamais de photo, d'acte de naissance, de pièce d'identité ni d'information sur la santé ou la famille.",
+      "send": "Envoyer la demande"
+    }
+  },
+  "rhTemplates": {
+    "back": "Messages",
+    "own": "Vos modèles",
+    "jumanly": "Textes de Jumanly",
+    "default": {
+      "convocation": "Utilisé tant que vous n'avez pas le vôtre, avec les créneaux proposés",
+      "document": "Diplôme, attestation, portfolio",
+      "relance": "Quand un candidat n'a pas répondu",
+      "acceptation": "Annoncé depuis l'écran de décision",
+      "refus": "Respectueux, sans détail personnel"
+    },
+    "create": "Créer un modèle",
+    "rule": "Un modèle s'insère dans le message : vous le relisez avant l'envoi.",
+    "close": "Fermer"
+  },
+  "rhNotifications": {
+    "back": "À traiter",
+    "brief": {
+      "title": "Votre journée en bref",
+      "source": "Orbi · d'après vos offres, à l'instant",
+      "hello": "Bonjour {name}, {count, plural, one {une chose vous attend} other {# choses vous attendent}} aujourd'hui. Je n'ai rien envoyé ni modifié.",
+      "calm": "Bonjour {name}, rien n'attend de réponse pour l'instant. Je n'ai rien envoyé ni modifié.",
+      "point": {
+        "applications": "{count, plural, one {Nouvelle candidature} other {Nouvelles candidatures}}",
+        "invitations": "{count, plural, one {Invitation sans réponse ou autre date demandée} other {Invitations sans réponse ou autres dates demandées}}",
+        "scorecards": "{count, plural, one {Entretien à évaluer} other {Entretiens à évaluer}}",
+        "messages": "{count, plural, one {Conversation non lue} other {Conversations non lues}}"
+      },
+      "cta": {
+        "applications": "Voir",
+        "invitations": "Répondre",
+        "scorecards": "Évaluer",
+        "messages": "Lire"
+      }
+    }
+  },
+  "rhProfile": {
+    "seen": "Ce que voient les candidats",
+    "seenName": "{name} · {org}"
+  },
+  "rhOrg": {
+    "back": "Compte",
+    "edit": "Modifier la page de l'organisation",
+    "size": "{size} personnes",
+    "figures": "L'organisation en chiffres",
+    "figure": {
+      "jobs": "{count, plural, one {offre active} other {offres actives}}",
+      "applications": "{count, plural, one {candidature reçue} other {candidatures reçues}}",
+      "hired": "{count, plural, one {recruté} other {recrutés}}",
+      "members": "{count, plural, one {membre} other {membres}}"
+    },
+    "presentation": "Présentation",
+    "noDescription": "Pas encore de présentation. Les talents lisent ce texte sur chaque offre.",
+    "hint": {
+      "banner": {
+        "text": "Ajoutez une bannière, une photo de vos bureaux par exemple : vos offres et votre page sont plus faciles à reconnaître.",
+        "cta": "Ajouter"
+      },
+      "description": {
+        "text": "Présentez votre organisation en quelques lignes : les talents la découvrent sur chaque offre.",
+        "cta": "Écrire"
+      },
+      "verify": {
+        "text": "Une organisation vérifiée publie sans attente et affiche un badge sur ses offres.",
+        "cta": "Vérifier"
+      }
+    },
+    "manage": "Gérer l'organisation",
+    "team": "Équipe",
+    "seats": "{used, plural, one {# siège utilisé} other {# sièges utilisés}} sur {max}",
+    "seatsUnlimited": "{used, plural, one {# siège utilisé} other {# sièges utilisés}}",
+    "verification": "Vérification",
+    "structure": "Équipes, départements, entités",
+    "structureLine": "L'organisation de vos recrutements",
+    "asTalent": "Voir la page comme un talent",
+    "editBack": "Organisation"
+  },
+  "rhVerification": {
+    "back": "Organisation",
+    "title": "Vérifier l'organisation",
+    "progress": "{done}/{total}",
+    "head": {
+      "start": "Trois étapes pour être vérifiée",
+      "last": "Encore une étape",
+      "pending": "Jumanly examine votre demande",
+      "verified": "Organisation vérifiée"
+    },
+    "steps": "Étapes de la vérification",
+    "legal": {
+      "title": "Informations légales",
+      "todo": "Numéro d'immatriculation et votre mandat",
+      "done": "Envoyées"
+    },
+    "document": {
+      "title": "Document officiel",
+      "todo": "Registre du commerce ou statuts, en PDF ou en image",
+      "done": "{count, plural, one {# document envoyé} other {# documents envoyés}}"
+    },
+    "review": {
+      "title": "Examen par Jumanly",
+      "todo": "Après l'envoi de votre demande",
+      "pending": "Sous {days, plural, one {# jour ouvré} other {# jours ouvrés}}",
+      "done": "Vérifiée le {date, date, long}"
+    },
+    "plans": "Voir les formules",
+    "meanwhile": "En attendant, vos offres passent en validation avant publication.",
+    "question": "Une question : assistant@jumanly.io",
+    "checked": "Contrôlé par Jumanly"
+  },
+  "rhTeam": {
+    "title": "Équipe",
+    "back": "Organisation",
+    "invite": "Inviter dans l'équipe",
+    "inviteTitle": "Inviter dans l'équipe",
+    "close": "Fermer",
+    "invalid": "Vérifiez les informations et réessayez.",
+    "seats": "Sièges utilisés : {used} sur {max}",
+    "seatsUnlimited": "{used, plural, one {# siège utilisé} other {# sièges utilisés}}, sans limite",
+    "members": "Membres de l'équipe",
+    "you": "{name}, vous",
+    "invited": "Invitation envoyée par e-mail · {ago}",
+    "pending": "En attente",
+    "today": "aujourd'hui",
+    "days": "{count, plural, one {il y a # jour} other {il y a # jours}}",
+    "invitationLine": "Rôle proposé : {role}. L'invitation expire le {date, date, long}.",
+    "rights": {
+      "title": "Qui peut faire quoi",
+      "short": {
+        "org_admin": "Admin",
+        "recruiter": "Recr.",
+        "hiring_manager": "Resp.",
+        "viewer": "Lect."
+      },
+      "manage": "Publier, décider, écrire",
+      "evaluate": "Noter, évaluer",
+      "readApplications": "Lire les candidatures",
+      "administer": "Équipe, abonnement",
+      "yes": "Oui",
+      "no": "Non",
+      "owner": "Le propriétaire a tous les droits, dont la facturation. Un responsable du recrutement ne voit que les offres qui lui sont confiées."
+    },
+    "activity": {
+      "title": "Activité récente",
+      "you": "Vous",
+      "former": "Ancien membre",
+      "stage_changed": "{actor} {self, select, oui {avez fait} other {a fait}} avancer {name}",
+      "note": "{actor} {self, select, oui {avez noté} other {a noté}} {name}",
+      "decision": "{actor} {self, select, oui {avez annoncé} other {a annoncé}} sa décision à {name}",
+      "document_requested": "{actor} {self, select, oui {avez demandé} other {a demandé}} un document à {name}",
+      "message": "{actor} {self, select, oui {avez écrit} other {a écrit}} à {name}"
+    },
+    "emails": "E-mail",
+    "emailsHint": "Plusieurs adresses possibles, séparées par une virgule. Chaque personne reçoit un lien valable {days, plural, one {# jour} other {# jours}}.",
+    "saveRole": "Changer le rôle",
+    "full": {
+      "plan": "<b>Plus de siège libre.</b> Retirez un membre ou une invitation, ou passez à {plan} ({seats}).",
+      "seatsUnlimited": "sièges illimités",
+      "seatsCount": "{count, plural, one {# siège} other {# sièges}}",
+      "noPlan": "<b>Plus de siège libre.</b> Retirez un membre ou une invitation pour en libérer un.",
+      "see": "Voir {plan}",
+      "plans": "Voir les formules"
+    }
+  },
+  "rhReports": {
+    "back": "Compte",
+    "period": {
+      "30d": "30 jours",
+      "90d": "Trimestre"
+    },
+    "byJob": "Par offre",
+    "figures": "Les chiffres de la période",
+    "figure": {
+      "applications": "{count, plural, one {candidature reçue} other {candidatures reçues}}",
+      "responseTime": "délai moyen de première réponse",
+      "activeJobs": "{count, plural, one {offre active} other {offres actives}}",
+      "interviews": "{count, plural, one {entretien} other {entretiens}}",
+      "hires": "{count, plural, one {recrutement} other {recrutements}}"
+    },
+    "funnel": "Où en sont les candidatures",
+    "stage": {
+      "received": "Reçues",
+      "screened": "Examinées",
+      "shortlisted": "Présélectionnées",
+      "interview": "Entretien",
+      "hired": "Recrutées"
+    },
+    "weekly": "Candidatures par semaine",
+    "weeklyLine": "4 dernières semaines",
+    "weeklyAria": "Candidatures par semaine : {s1}, {s2}, {s3}, puis {s4} cette semaine.",
+    "week": "S{n}",
+    "sources": "D'où viennent-elles",
+    "source": {
+      "direct": "Offres Jumanly",
+      "invitation": "Invitation à postuler",
+      "talent_search": "Offre proposée à un talent"
+    },
+    "insight": {
+      "doubled": "Les candidatures ont doublé cette semaine. L'offre qui en reçoit le plus : {job}.",
+      "up": "{count, plural, one {# candidature de plus} other {# candidatures de plus}} que la semaine précédente.",
+      "slow": "Votre première réponse arrive en {days} jours en moyenne. Les candidats attendent moins quand vous ouvrez leur dossier dans les 3 jours.",
+      "steady": "{count, plural, one {# candidature} other {# candidatures}} sur la période. Partager le lien de vos offres en attire davantage."
+    },
+    "jobLine": "{applications, plural, one {# candidature} other {# candidatures}} · {hires, plural, one {# recrutement} other {# recrutements}}",
+    "recruiterLine": "{moves} étapes · {decisions} décisions · {notes} notes",
+    "plans": "Voir les formules",
+    "rule": "Chiffres réels de vos offres. Aucune donnée personnelle des candidats.",
+    "pdf": {
+      "title": "Rapport de {month} · PDF",
+      "line": "Format A4, aux couleurs de Jumanly",
+      "cta": "Exporter en PDF"
+    }
+  },
+  "rhBilling": {
+    "back": "Compte",
+    "hero": {
+      "price": "{price} $ par mois · {org}",
+      "free": "Gratuit · {org}",
+      "days": "{count, plural, one {jour} other {jours}}"
+    },
+    "quota": {
+      "seats": "Sièges",
+      "jobs": "Offres actives",
+      "credits": "Crédits Orbi",
+      "cv": "Analyse des CV par Orbi",
+      "scorecards": "Grilles d'évaluation",
+      "of": "{used} sur {max}",
+      "unlimited": "{used}, sans limite",
+      "aria": "{name} : {used} sur {max}"
+    },
+    "included": "Incluse",
+    "notIncluded": "Non incluse",
+    "see": "Voir",
+    "full": {
+      "seats": "Tous vos sièges sont pris. <b>{plan}</b> en ajoute pour inviter quelqu'un de plus.",
+      "jobs": "Toutes vos offres actives sont prises. <b>{plan}</b> permet d'en publier davantage."
+    },
+    "fullNoPlan": {
+      "seats": "Tous vos sièges sont pris. Retirez un membre ou une invitation pour en libérer un.",
+      "jobs": "Toutes vos offres actives sont prises. Clôturez ou mettez en pause une offre pour en publier une autre."
+    },
+    "dates": {
+      "title": "Échéances",
+      "paid": "Payé · {amount} $",
+      "reminder": "Rappel par e-mail",
+      "reminderLine": "{date}, {days} jours avant la fin",
+      "end": "Fin de la période",
+      "endFree": "{date} · retour à {plan} si rien n'est payé",
+      "endNext": "{date} · puis {plan}"
+    },
+    "extend": "Prolonger d'un mois",
+    "extendLine": "Mobile Money ou carte, payé d'avance",
+    "invoices": "Au nom de {org} · {count, plural, =0 {aucune pour l'instant} one {# en PDF} other {# en PDF}}",
+    "ownerOnly": "Seul le propriétaire de l'organisation change la formule et paie. Vous voyez ce qu'elle comprend.",
+    "ownerOnlyShort": "Réservé au propriétaire",
+    "prepaid": "Prépayé, sans prélèvement automatique. À la fin, retour à {plan} sans rien perdre : les offres en trop passent en pause.",
+    "plansBack": "Abonnement",
+    "plansTitle": "Formules RH",
+    "fits": "Avec {members, plural, one {# membre} other {# membres}} et {jobs, plural, =0 {aucune offre active} one {# offre active} other {# offres actives}}, <b>{plan}</b> vous suffit.",
+    "applyFree": "Pour les talents, candidater reste toujours gratuit.",
+    "unlimited": "Sans limite",
+    "freeAtEnd": "À la fin de la période payée",
+    "compare": {
+      "value": {
+        "seats": "{count, plural, one {# siège} other {# sièges}}",
+        "jobs": "{count, plural, one {# offre active} other {# offres actives}}",
+        "credits": "{count, plural, one {# crédit Orbi} other {# crédits Orbi}}"
+      },
+      "caption": "Comparer les formules",
+      "org_seats": "Sièges",
+      "jobs_active_max": "Offres actives",
+      "ai_credits_monthly": "Crédits Orbi",
+      "hire_cv_analysis": "Analyse des CV",
+      "hire_scorecards": "Grilles d'évaluation"
+    },
+    "companies": "Plus de sièges ou une page entreprise complète : Jumanly Companies, dès {price} $ par mois.",
+    "taxId": "Numéro d'identification fiscale (facultatif)",
+    "contract": "Sièges, offres et crédits selon contrat"
+  },
+  "rhSettings": {
+    "seo": "Paramètres",
+    "title": "Paramètres",
+    "back": "Retour à l'accueil Hire",
+    "saved": "C'est enregistré.",
+    "error": "Ce n'est pas passé. Réessayez dans un instant.",
+    "notifications": {
+      "group": "Notifications",
+      "title": "Choisir vos notifications",
+      "text": "Candidatures, réponses aux invitations, messages"
+    },
+    "appearance": {
+      "group": "Apparence"
+    },
+    "orbi": {
+      "group": "Orbi",
+      "analysis": "Analyse des dossiers",
+      "analysisText": "Seulement à votre demande, jamais de rejet automatique",
+      "brief": "Le point du jour",
+      "briefText": "Dans vos notifications, calculé à l'ouverture"
+    },
+    "security": {
+      "group": "Sécurité et confidentialité",
+      "twoFactor": "Validation en deux étapes",
+      "twoFactorOn": "Activée",
+      "twoFactorOff": "Recommandée pour les recruteurs",
+      "journal": "Journal des consultations",
+      "journalTeam": "Profils ouverts par l'équipe",
+      "journalOwn": "Profils que vous avez ouverts",
+      "privacy": "Confidentialité",
+      "privacyText": "Vos données et l'usage de l'IA",
+      "password": "Mot de passe et appareils",
+      "passwordText": "Connexion, appareils connectés"
+    },
+    "data": {
+      "group": "Vos données",
+      "export": "Télécharger mes données",
+      "exportText": "Un fichier avec tout ce que Jumanly garde sur vous"
+    },
+    "close": "Fermer"
+  },
+  "rhJournal": {
+    "seo": "Journal des consultations",
+    "title": "Journal des consultations",
+    "back": "Retour aux paramètres",
+    "introTeam": "Chaque profil ouvert par votre équipe est noté ici. Les talents savent que leur profil peut être consulté.",
+    "introOwn": "Chaque profil que vous ouvrez est noté ici. Les administrateurs de l'organisation voient le journal de toute l'équipe.",
+    "empty": "Aucun profil ouvert pour l'instant.",
+    "line": "{actor} · {date, date, short} à {date, time, short}",
+    "source": {
+      "application": "Depuis une candidature",
+      "search": "Depuis la recherche de talents"
+    },
+    "unknown": "Profil supprimé",
+    "formerMember": "Ancien membre",
+    "you": "Vous",
+    "rule": "Le journal garde les 90 derniers jours, 100 consultations au plus."
   },
   "hireInterviews": {
     "seo": "Entretiens",

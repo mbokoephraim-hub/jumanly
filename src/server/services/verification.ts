@@ -132,7 +132,7 @@ export async function decideVerification(
     userIds: organization.memberships.map((membership) => membership.userId),
     type: verified ? "orgVerified" : "orgVerificationRejected",
     payload: { org: organization.name },
-    href: "/app/organisation?onglet=verification",
+    href: "/app/organisation/verification",
   });
   return true;
 }

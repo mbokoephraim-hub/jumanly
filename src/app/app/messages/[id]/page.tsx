@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { HireThread } from "@/components/connect/hire-thread";
+import { RecruiterThread } from "@/components/recruiter/thread";
 import { Logo, toneOf } from "@/components/talent/art";
 import { FlowHead } from "@/components/talent/flow-head";
 import { InboxList } from "@/components/talent/messages/inbox-list";
@@ -81,7 +81,7 @@ export default async function ThreadPage({
 }: PageProps<"/app/messages/[id]">) {
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const context = await connectViewer(`/app/messages/${id}`);
-  if (context.viewer.hire) return <HireThread id={id} query={query} context={context} />;
+  if (context.viewer.hire) return <RecruiterThread id={id} query={query} context={context} />;
   const { user, space, viewer } = context;
   const t = await getTranslations();
   const format = await getFormatter();

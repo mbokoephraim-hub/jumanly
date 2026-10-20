@@ -42,6 +42,10 @@ export const aiFeatures = {
   // Recruiter lot 3 · Orbi's analysis of an application (`hire.cv_analysis`), paid by the
   // organization's credits.
   cv_analysis: { credits: 1, tier: "default" },
+  // Recruiter lot 5 · Orbi in the recruiter space and its drafts in a conversation, paid by the
+  // organization's credits. Nothing is sent: the recruiter reads and decides.
+  recruiter_orbi: { credits: 1, tier: "fast" },
+  message_draft: { credits: 1, tier: "fast" },
 } as const;
 export type AiFeature = keyof typeof aiFeatures;
 

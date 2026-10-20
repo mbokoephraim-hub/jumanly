@@ -14,14 +14,13 @@
  */
 import { z } from "zod";
 import type { PrismaClient } from "@/generated/prisma/client";
-import { aiReadiness, AiError, runAi } from "@/server/ai";
+import { aiReadiness, AiError, runAi, type AiFeature } from "@/server/ai";
 import type { AiProvider } from "@/server/ai/provider";
+import type { Subject } from "@/server/entitlements";
 import { MESSAGE_MAX, orbiActions, type OrbiAction, type OrbiReply } from "@/lib/orbi";
 import { asksForAnswers, keywords } from "./learn-coach";
 
 export { MESSAGE_MAX, orbiActions, type OrbiAction, type OrbiReply };
-
-const actionKeys = Object.keys(orbiActions) as [OrbiAction, ...OrbiAction[]];
 
 export const orbiTopics = ["cv", "interview", "offer", "path", "learn", "other"] as const;
 export type OrbiTopic = (typeof orbiTopics)[number];
@@ -104,12 +103,6 @@ Règles absolues :
 - Tu écris en français clair, en vouvoyant, avec des phrases courtes : 1 à 4 paragraphes courts, des exemples concrets de la vie professionnelle en Afrique francophone.
 Le champ « why » explique en une ou deux phrases sur quoi tu t'appuies (éléments du profil, question posée).`;
 
-const modelSchema = z.object({
-  answer: z.array(z.string().trim().min(1).max(900)).min(1).max(5),
-  actions: z.array(z.enum(actionKeys)).max(3),
-  why: z.string().trim().min(1).max(400),
-});
-
 /** The professional profile sent to the model: never a name, age, photo or address. */
 async function profileContext(db: PrismaClient, userId: string) {
   const profile = await db.talentProfile.findUnique({
@@ -191,12 +184,15 @@ type MessageRow = {
   createdAt: Date;
 };
 
-export function toReply(row: MessageRow): OrbiReply {
+export function toReply(
+  row: MessageRow,
+  allowed: Readonly<Record<string, string>> = orbiActions,
+): OrbiReply {
   return {
     id: row.id,
     role: row.role === "orbi" ? "orbi" : "user",
     text: row.text.split(/\n{2,}/),
-    actions: row.actions.filter((key): key is OrbiAction => key in orbiActions),
+    actions: row.actions.filter((key) => key in allowed),
     why: row.why,
     source: row.source === "ai" || row.source === "rules" ? row.source : null,
     limit:
@@ -204,6 +200,59 @@ export function toReply(row: MessageRow): OrbiReply {
         (code) => code === row.limit,
       ) ?? null,
     createdAt: row.createdAt,
+  };
+}
+
+/**
+ * Who Orbi speaks for: the talent's own assistant, or the recruiting assistant of an
+ * organization's space (recruteur lot 5, `src/server/services/recruiter-orbi.ts`). Each persona
+ * has its rules, the pages it may propose, its context and who pays the credits.
+ */
+export type OrbiPersona = {
+  feature: AiFeature;
+  system: string;
+  /** The tag around the context sent to the model (`profil`, `organisation`). */
+  contextTag: string;
+  context: () => Promise<string>;
+  actions: Readonly<Record<string, string>>;
+  detectTopic: (text: string) => string;
+  rules: (topic: string) => { answer: string[]; actions: string[]; why: string };
+  /** A question answered without the model whatever the plan (the answers of an evaluation). */
+  declined?: (text: string) => { answer: string[]; actions: string[]; why: string } | null;
+  /** Who pays the credits: the person by default. */
+  subject?: Subject;
+  /** What stops the model right now (consent, plan, credits), without spending anything. */
+  readiness: () => Promise<"ready" | AiError["code"]>;
+  /** The organization's space the exchange belongs to, null for the talent's own. */
+  organizationId: string | null;
+};
+
+const modelSchemaFor = (keys: string[]) =>
+  z.object({
+    answer: z.array(z.string().trim().min(1).max(900)).min(1).max(5),
+    actions: z
+      .array(z.string())
+      .max(3)
+      .transform((list) => list.filter((key) => keys.includes(key))),
+    why: z.string().trim().min(1).max(400),
+  });
+
+/** The talent's own Orbi (talent lot 4 § 9). */
+export function talentPersona(db: PrismaClient, userId: string, texts: OrbiTexts): OrbiPersona {
+  return {
+    feature: "orbi_chat",
+    system: SYSTEM,
+    contextTag: "profil",
+    context: () => profileContext(db, userId),
+    actions: orbiActions,
+    detectTopic,
+    rules: (topic) => rulesAnswer(topic as OrbiTopic, texts),
+    declined: (text) =>
+      asksForAnswers(text)
+        ? { answer: [texts.declined], actions: ["learn"], why: texts.whyRules }
+        : null,
+    readiness: () => aiReadiness(db, userId, "orbi_chat"),
+    organizationId: null,
   };
 }
 
@@ -218,18 +267,32 @@ export async function askOrbi(
   texts: OrbiTexts,
   options: { provider?: AiProvider } = {},
 ): Promise<OrbiResult> {
+  return askOrbiAs(db, userId, raw, talentPersona(db, userId, texts), options);
+}
+
+/** {@link askOrbi} for any persona: the talent's or an organization's. */
+export async function askOrbiAs(
+  db: PrismaClient,
+  userId: string,
+  raw: OrbiInput,
+  persona: OrbiPersona,
+  options: { provider?: AiProvider } = {},
+): Promise<OrbiResult> {
   const parsed = orbiInput.safeParse(raw);
   if (!parsed.success) return { ok: false, error: "invalid" };
   const { text, conversationId } = parsed.data;
+  const organizationId = persona.organizationId;
 
   const existing = conversationId
-    ? await db.orbiConversation.findFirst({ where: { id: conversationId, userId } })
+    ? await db.orbiConversation.findFirst({ where: { id: conversationId, userId, organizationId } })
     : null;
   if (conversationId && !existing) return { ok: false, error: "notFound" };
-  const topic = detectTopic(text);
+  const topic = persona.detectTopic(text);
   const conversation =
     existing ??
-    (await db.orbiConversation.create({ data: { userId, title: titleOf(text), topic } }));
+    (await db.orbiConversation.create({
+      data: { userId, title: titleOf(text), topic, organizationId },
+    }));
   const history = existing
     ? await db.orbiMessage.findMany({
         where: { conversationId: conversation.id },
@@ -242,15 +305,16 @@ export async function askOrbi(
     data: { conversationId: conversation.id, role: "user", text },
   });
 
-  const rules = rulesAnswer(topic, texts);
-  let answer: { answer: string[]; actions: OrbiAction[]; why: string };
+  const rules = persona.rules(topic);
+  let answer: { answer: string[]; actions: string[]; why: string };
   let source: "ai" | "rules" = "rules";
   let limit: AiError["code"] | null = null;
 
-  if (asksForAnswers(text)) {
-    answer = { answer: [texts.declined], actions: ["learn"], why: texts.whyRules };
+  const declined = persona.declined?.(text) ?? null;
+  if (declined) {
+    answer = declined;
   } else {
-    const ready = await aiReadiness(db, userId, "orbi_chat");
+    const ready = await persona.readiness();
     if (ready !== "ready") {
       answer = rules;
       limit = ready;
@@ -259,20 +323,22 @@ export async function askOrbi(
         .reverse()
         .map((row) => (row.role === "orbi" ? `Orbi : ${row.text}` : `Personne : ${row.text}`))
         .join("\n");
+      const tag = persona.contextTag;
       try {
         const run = await runAi(
           db,
           {
             userId,
-            feature: "orbi_chat",
-            system: SYSTEM,
-            prompt: `<profil>\n${await profileContext(db, userId)}\n</profil>\n\n${
+            feature: persona.feature,
+            system: persona.system,
+            prompt: `<${tag}>\n${await persona.context()}\n</${tag}>\n\n${
               past ? `Échanges précédents :\n${past}\n\n` : ""
             }<message>\n${text}\n</message>`,
-            schema: modelSchema,
+            schema: modelSchemaFor(Object.keys(persona.actions)),
             template: () => rules,
             maxTokens: 1200,
             timeoutMs: 25_000,
+            subject: persona.subject,
           },
           options,
         );
@@ -291,7 +357,7 @@ export async function askOrbi(
       conversationId: conversation.id,
       role: "orbi",
       text: answer.answer.join("\n\n"),
-      actions: [...new Set(answer.actions)],
+      actions: [...new Set(answer.actions)].filter((key) => key in persona.actions),
       why: answer.why,
       source,
       limit,
@@ -304,31 +370,48 @@ export async function askOrbi(
   return {
     ok: true,
     conversationId: conversation.id,
-    question: toReply(question),
-    answer: toReply(reply),
+    question: toReply(question, persona.actions),
+    answer: toReply(reply, persona.actions),
   };
 }
 
-/** One conversation of the person, in order, or null when it is not theirs. */
-export async function getOrbiConversation(db: PrismaClient, userId: string, id: string) {
+/**
+ * One conversation of the person, in order, or null when it is not theirs. `scope` is the
+ * organization's space it was held in (null: the talent's own), with the pages it may propose.
+ */
+export async function getOrbiConversation(
+  db: PrismaClient,
+  userId: string,
+  id: string,
+  scope: { organizationId: string | null; actions: Readonly<Record<string, string>> } = {
+    organizationId: null,
+    actions: orbiActions,
+  },
+) {
   const conversation = await db.orbiConversation.findFirst({
-    where: { id, userId },
+    where: { id, userId, organizationId: scope.organizationId },
     include: { messages: { orderBy: { createdAt: "asc" } } },
   });
   if (!conversation) return null;
   return {
     id: conversation.id,
     title: conversation.title,
-    messages: conversation.messages.map(toReply),
+    messages: conversation.messages.map((row) => toReply(row, scope.actions)),
   };
 }
 
 /** The history, newest first; `q` searches the titles and the messages. */
-export async function listOrbiConversations(db: PrismaClient, userId: string, q = "") {
+export async function listOrbiConversations(
+  db: PrismaClient,
+  userId: string,
+  q = "",
+  organizationId: string | null = null,
+) {
   const query = q.trim().slice(0, 100);
   const rows = await db.orbiConversation.findMany({
     where: {
       userId,
+      organizationId,
       ...(query
         ? {
             OR: [
@@ -365,8 +448,12 @@ export async function deleteOrbiConversation(db: PrismaClient, userId: string, i
   return count > 0;
 }
 
-/** Erases the whole history of the person. */
-export async function clearOrbiHistory(db: PrismaClient, userId: string) {
-  const { count } = await db.orbiConversation.deleteMany({ where: { userId } });
+/** Erases the whole history of the person, in one space (null: the talent's own exchanges). */
+export async function clearOrbiHistory(
+  db: PrismaClient,
+  userId: string,
+  organizationId: string | null = null,
+) {
+  const { count } = await db.orbiConversation.deleteMany({ where: { userId, organizationId } });
   return count;
 }

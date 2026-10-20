@@ -11,7 +11,7 @@ import { updateNotifications } from "@/server/actions/settings";
 import { requireUser } from "@/server/auth/session";
 import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
 import { toHireSettings } from "@/server/settings-redirect";
-import { inOrganizationSpace } from "@/server/talent-space";
+import { inPartnerSpaceOnly } from "@/server/talent-space";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("notifReglages");
@@ -37,7 +37,7 @@ export default async function NotificationSettingsPage({
 }: PageProps<"/app/parametres/notifications">) {
   const params = await searchParams;
   const user = await requireUser("/app/parametres/notifications");
-  if (await inOrganizationSpace(user.id)) toHireSettings("notifications", params);
+  if (await inPartnerSpaceOnly(user.id)) toHireSettings("notifications", params);
   const t = await getTranslations();
   const muted = new Set(user.notificationsMuted);
 

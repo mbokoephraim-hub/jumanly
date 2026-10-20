@@ -22,7 +22,8 @@ export type OrbiReply = {
   role: "user" | "orbi";
   /** Paragraphs. */
   text: string[];
-  actions: OrbiAction[];
+  /** Keys of the pages the persona may propose (`orbiActions`, `recruiterOrbiActions`). */
+  actions: string[];
   why: string | null;
   source: "ai" | "rules" | null;
   limit: OrbiLimit | null;

@@ -221,12 +221,12 @@ export async function RecruiterFirstSteps({
   const next: { href: string; icon: TalentIconName; tone: string; key: string }[] = [
     { href: "/app/hire/offres/nouvelle", icon: "offre", tone: "t-c1", key: "publish" },
     {
-      href: "/app/organisation?onglet=verification",
+      href: "/app/organisation/verification",
       icon: "confidentialite",
       tone: "t-c2",
       key: "verify",
     },
-    { href: "/app/organisation?onglet=membres", icon: "candidats", tone: "t-c3", key: "invite" },
+    { href: "/app/organisation/equipe", icon: "candidats", tone: "t-c3", key: "invite" },
   ];
   const shown = (value: number) => (value < 0 ? "∞" : String(value));
   return frame(

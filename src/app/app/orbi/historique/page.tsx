@@ -1,7 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
-import { redirect } from "next/navigation";
 import { TalentIcon } from "@/components/talent/icon";
 import { historyDate, topicLook } from "@/components/talent/orbi-history";
 import { requireUser } from "@/server/auth/session";
@@ -17,16 +16,18 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * « Historique Orbi » (talent lot 4 § 9): find an exchange again (search in titles and messages),
- * reopen it, erase it, or erase everything after a confirmation (`?effacer=1`).
+ * reopen it, erase it, or erase everything after a confirmation (`?effacer=1`). A recruiter finds
+ * the exchanges of the active organization's space.
  */
 export default async function OrbiHistoryPage({ searchParams }: PageProps<"/app/orbi/historique">) {
   const params = await searchParams;
   const user = await requireUser("/app/orbi/historique");
-  if (await getActiveSpace(user.id)) redirect("/app/hire");
+  // In an organization's space, the exchanges held there (recruteur lot 5), never the talent's own.
+  const space = await getActiveSpace(user.id);
   const t = await getTranslations("talentOrbi.historyPage");
   const query = typeof params.q === "string" ? params.q.trim().slice(0, 100) : "";
   const confirming = params.effacer === "1";
-  const rows = await listOrbiConversations(db, user.id, query);
+  const rows = await listOrbiConversations(db, user.id, query, space?.organizationId ?? null);
   const when = await historyDate();
 
   return (
