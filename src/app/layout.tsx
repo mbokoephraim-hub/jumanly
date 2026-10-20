@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { NavigationFeedback } from "@/components/motion/navigation-feedback";
 import { ServiceWorker } from "@/components/site/service-worker";
+import { installScript } from "@/lib/install-prompt";
 import { launchScript } from "@/lib/launch-splash";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
@@ -50,6 +51,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
       <body className="min-h-dvh">
         {/* Opening of the installed app: drawn before the first paint (src/lib/launch-splash.ts). */}
         <script dangerouslySetInnerHTML={{ __html: launchScript(common("brand")) }} />
+        {/* « Installer l'appli »: keeps the browser's offer before React mounts (src/lib/install-prompt.ts). */}
+        <script dangerouslySetInnerHTML={{ __html: installScript }} />
         <NextIntlClientProvider messages={texts}>
           <NavigationFeedback label={t("aria")} />
           {children}

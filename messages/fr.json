@@ -14561,6 +14561,29 @@
       "dataSaverOn": "Mode économie de données activé",
       "dataSaverHint": "Les vidéos se chargent en qualité réduite sur cet appareil."
     },
+    "install": {
+      "button": "Installer l'appli",
+      "text": "Sans passer par le Play Store",
+      "ios": {
+        "title": "Installer Jumanly sur votre iPhone",
+        "intro": "Safari n'a pas de bouton d'installation : trois gestes suffisent.",
+        "step1": {
+          "title": "Touchez « Partager »",
+          "text": "Le carré avec une flèche vers le haut, en bas de l'écran (en haut sur iPad)."
+        },
+        "step2": {
+          "title": "Choisissez « Sur l'écran d'accueil »",
+          "text": "Faites défiler la liste des actions si besoin."
+        },
+        "step3": {
+          "title": "Touchez « Ajouter »",
+          "text": "Jumanly s'ouvre ensuite depuis son icône, comme une application."
+        },
+        "steps": "Étapes d'installation",
+        "close": "Fermer",
+        "done": "Compris"
+      }
+    },
     "session": {
       "expired": {
         "title": "Votre session a expiré",
