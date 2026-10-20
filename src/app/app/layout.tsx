@@ -66,9 +66,13 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         ([key]) => !["historyPage", "rules", "web"].includes(key),
       ),
     ) as AbstractIntlMessages;
+    // Planche : « Bonjour, Grâce » and the initials on lime. The first word of the name when no
+    // first name was given; only a photo added in Jumanly, never the picture of a sign-in provider.
+    const firstName = user.firstName?.trim() || user.name.trim().split(/\s+/)[0] || null;
+    const photo = user.image?.startsWith("/api/photo/") ? user.image : null;
     return (
       <TalentShell
-        account={{ id: user.id, name: user.name, firstName: user.firstName, image: user.image }}
+        account={{ id: user.id, name: user.name, firstName, image: photo }}
         unread={unread}
         unreadMessages={unreadMessages}
         followUp={followUp}
@@ -78,7 +82,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         orbiTexts={orbiTexts}
         menu={
           <Suspense fallback={null}>
-            <AvatarMenuContent user={{ id: user.id, name: user.name, image: user.image ?? null }} />
+            <AvatarMenuContent user={{ id: user.id, name: user.name, image: photo }} />
           </Suspense>
         }
       >

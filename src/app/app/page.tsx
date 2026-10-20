@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
-import { WelcomeCard } from "@/components/access/welcome-card";
+import { WelcomeToast } from "@/components/access/welcome-toast";
 import { CourseArt, Logo, toneOf, Banner } from "@/components/talent/art";
 import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
 import { OfferCard } from "@/components/talent/offer-card";
@@ -106,11 +106,8 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
     ]),
   );
 
-  // « Bienvenue sur Jumanly » (lot 2): a new account, until its first steps are done.
+  // Right after the sign-up: the toast « Compte créé · formule Free » (planche talent-4 § 1).
   const justCreated = (await searchParams).bienvenue === "1";
-  const showWelcome =
-    justCreated ||
-    (now.getTime() - user.createdAt.getTime() < 14 * DAY_MS && (percent < 80 || cvs === 0));
 
   const categoryOf = (category: string) =>
     t.has(`forMe.category.${category}` as never) ? d(`forMe.category.${category}`) : category;
@@ -132,10 +129,8 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
   const lessonHref = (lesson: NonNullable<typeof current>) =>
     lesson.next ? `/app/learn/${lesson.slug}/${lesson.next.id}` : `/app/learn/${lesson.slug}`;
 
-  // A new account (planche talent-4 § 1): the « Bienvenue » card takes the place of the next
-  // step; on a phone it is followed by the offers as full cards, nothing else above them.
   const goal = (
-    <div className={showWelcome ? "t-obj t-web" : "t-obj"}>
+    <div className="t-obj">
       <TalentIcon name="cap" size="xs" />
       <span className="whitespace-nowrap">{t("forMe.goal.label")}</span>
       <b className="min-w-0">
@@ -202,6 +197,54 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
     </section>
   );
 
+  // The three pillars (planche Fondations § 11): Apprendre in Lime, Profil et CV in Menthe, Offres
+  // in Ambre, each with its real figure and a bar.
+  const modulesDone = current ? (current.next ? current.next.module - 1 : current.modules) : 0;
+  const pillars: [string, TalentIconName, string, string, string, number][] = [
+    [
+      "/app/learn",
+      "former",
+      "t-p1",
+      t("forMe.pillars.learn"),
+      current
+        ? t("forMe.pillars.learnValue", { done: modulesDone, total: current.modules })
+        : t("forMe.pillars.learnNone"),
+      current?.progress ?? 0,
+    ],
+    [
+      "/app/profil",
+      "carriere",
+      "t-p2",
+      t("forMe.pillars.profile"),
+      t("forMe.pillars.profileValue", { percent }),
+      percent,
+    ],
+    [
+      "/app/suivi",
+      "opportunites",
+      "t-p3",
+      t("forMe.pillars.offers"),
+      t("forMe.pillars.offersValue", { count: applied.length }),
+      Math.min(applied.length, 5) * 20,
+    ],
+  ];
+  const pillarsRow = (
+    <nav aria-label={t("forMe.pillars.aria")} className="t-piliers t-mob">
+      {pillars.map(([href, icon, tone, label, value, bar]) => (
+        <Link key={href} href={href} className={`t-pi ${tone} t-press`}>
+          <span className="t-cases" aria-hidden>
+            <TalentIcon name={icon} size="s" />
+          </span>
+          <b>{label}</b>
+          <span>{value}</span>
+          <span className="t-j" aria-hidden>
+            <i style={{ width: `${bar}%` }} />
+          </span>
+        </Link>
+      ))}
+    </nav>
+  );
+
   const offersTitle = offers.personalised
     ? t("forMe.offers.title", { count: cards.length })
     : t("forMe.offers.general", { count: cards.length });
@@ -256,10 +299,7 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
   const appliedIds = new Set(applied.map((row) => row.jobId));
   const explanations = new Map(offers.jobs.map((item) => [item.jobId, item.explanation]));
   const offersCards = cards.length > 0 && (
-    <section
-      aria-labelledby="pm-offres-w"
-      className={showWelcome ? "flex flex-col gap-3.5" : "t-web flex flex-col gap-3.5"}
-    >
+    <section aria-labelledby="pm-offres-w" className="t-web flex flex-col gap-3.5">
       <div className="t-sec-t">
         <h2 id="pm-offres-w">{offersTitle}</h2>
         <Link href="/app/jobs">{t("forMe.offers.all")}</Link>
@@ -284,7 +324,7 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
     </section>
   );
 
-  const generalLine = !showWelcome && !offers.personalised && cards.length > 0 && (
+  const generalLine = !offers.personalised && cards.length > 0 && (
     <p className="t-res-l">
       {t("offers.line.general")}{" "}
       <Link href="/app/profil#competences">{t("offers.line.generalCta")}</Link>
@@ -465,15 +505,7 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
   return (
     <div className="t-pmw t-large flex flex-col gap-3.5">
       <h1 className="sr-only">{t("forMe.title")}</h1>
-      {showWelcome && (
-        <WelcomeCard
-          percent={percent}
-          hasCv={cvs > 0}
-          offers={offers.jobs.length}
-          place={user.city ?? null}
-          toastPlan={justCreated ? (plan?.planName ?? undefined) : undefined}
-        />
-      )}
+      {justCreated && plan && <WelcomeToast message={t("access.welcomeCard.toast", { plan: plan.planName })} />}
       {showFinalize && (
         <div className="t-verre t-bandeau">
           <span className="t-ic-r" aria-hidden>
@@ -556,8 +588,9 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
       ) : (
         <div className="t-pmw-g">
           <div className="t-pmw-m">
-            {!showWelcome && nextStep}
-            {!showWelcome && offersGroup("t-mob")}
+            {nextStep}
+            {pillarsRow}
+            {offersGroup("t-mob")}
             {offersCards}
             {generalLine}
             {current && (

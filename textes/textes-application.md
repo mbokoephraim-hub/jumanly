@@ -1922,7 +1922,7 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `access.welcomeCard.profileValue` | {percent} % |
 | `access.welcomeCard.cv` | Importer ou créer mon CV |
 | `access.welcomeCard.cvValue` | 5 min |
-| `access.welcomeCard.offers` | {count, plural, =0 {Voir les offres} one {Voir l’offre} other {Voir mes # offres}} |
+| `access.welcomeCard.offers` | {count, plural, =0 {Voir les offres} one {Voir mon offre} other {Voir mes # offres}} |
 | `access.welcomeCard.done` | Fait |
 | `access.welcomeCard.toast` | Compte créé · formule {plan} |
 
@@ -2234,6 +2234,14 @@ Conventions :
 | `forMe.next.message` | Répondez au recruteur |
 | `forMe.next.course` | Reprenez votre formation |
 | `forMe.next.done` | Profil complet : regardez vos offres |
+| `forMe.pillars.aria` | Vos trois piliers |
+| `forMe.pillars.learn` | Apprendre |
+| `forMe.pillars.learnValue` | {done, plural, =0 {Aucun module commencé} other {# sur {total} modules}} |
+| `forMe.pillars.learnNone` | Choisir une formation |
+| `forMe.pillars.profile` | Profil et CV |
+| `forMe.pillars.profileValue` | Profil à {percent} % |
+| `forMe.pillars.offers` | Offres |
+| `forMe.pillars.offersValue` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} |
 | `forMe.offers.title` | {count, plural, =0 {Aucune opportunité pour le moment} one {# opportunité pour vous} other {# opportunités pour vous}} |
 | `forMe.offers.general` | {count, plural, one {# offre récente} other {# offres récentes}} |
 | `forMe.offers.all` | Tout voir |

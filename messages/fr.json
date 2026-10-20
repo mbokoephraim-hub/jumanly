@@ -2355,7 +2355,7 @@
       "profileValue": "{percent} %",
       "cv": "Importer ou créer mon CV",
       "cvValue": "5 min",
-      "offers": "{count, plural, =0 {Voir les offres} one {Voir l’offre} other {Voir mes # offres}}",
+      "offers": "{count, plural, =0 {Voir les offres} one {Voir mon offre} other {Voir mes # offres}}",
       "done": "Fait",
       "toast": "Compte créé · formule {plan}"
     }
