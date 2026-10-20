@@ -22,12 +22,30 @@ test("Jumanly s'installe comme une application", async ({ request }) => {
   const manifest = await (await request.get("/manifest.webmanifest")).json();
   expect(manifest.name).toBe("Jumanly");
   expect(manifest.display).toBe("standalone");
+  // The installed app opens on the animated logo, on a cream background (no black screen).
+  expect(manifest.start_url).toBe("/demarrage");
+  expect(manifest.background_color).toBe("#EEE8DE");
   expect(manifest.icons.map((icon: { sizes: string }) => icon.sizes)).toContain("512x512");
   for (const icon of manifest.icons as { src: string }[]) {
     expect((await request.get(icon.src)).status(), icon.src).toBe(200);
   }
   expect((await request.get("/sw.js")).status()).toBe(200);
   expect((await request.get("/hors-ligne")).status()).toBe(200);
+  expect((await request.get("/demarrage")).status()).toBe(200);
+});
+
+test("l'appli s'ouvre sur le logo animé, puis sur l'espace", async ({ browser }) => {
+  const context = await browser.newContext();
+  const page = await context.newPage();
+  await logIn(page, demo.talentPro);
+  await page.goto("/demarrage");
+  // Drawn before the page itself, and kept while the space loads underneath.
+  await expect(page.locator("#jm-lancement")).toBeVisible();
+  await expect(page).toHaveURL(/\/app$/);
+  await expect(page.locator("#jm-lancement")).toBeVisible();
+  await expect(page.locator("#jm-lancement")).toHaveCount(0, { timeout: 6000 });
+  await expect(page.locator("main")).toBeVisible();
+  await context.close();
 });
 
 test("les pages de formation décrivent la formation pour les moteurs (Course)", async ({
@@ -46,10 +64,8 @@ test("les pages de formation décrivent la formation pour les moteurs (Course)",
 });
 
 // Playwright cannot cut the network of a service worker, so the test reads what the worker kept:
-// the profile and the lesson opened, the offline page, and nothing else.
-test("le profil et une leçon déjà ouverte sont gardés pour la lecture hors ligne", async ({
-  browser,
-}) => {
+// the pages opened, the main pages of the space asked once per session, the offline page.
+test("les pages de l'espace sont gardées pour servir hors connexion", async ({ browser }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await logIn(page, demo.talentPro);
@@ -71,20 +87,34 @@ test("le profil et une leçon déjà ouverte sont gardés pour la lecture hors l
   const kept = () =>
     page
       .evaluate(async () => {
-        const pages = await caches.open("jm-v1-pages");
-        const files = await caches.open("jm-v1-static");
+        const pages = await caches.open("jm-v2-pages");
+        const files = await caches.open("jm-v2-static");
         return {
           pages: (await pages.keys()).map((request) => new URL(request.url).pathname),
           offline: Boolean(await files.match("/hors-ligne")),
+          launch: Boolean(await files.match("/demarrage")),
         };
       })
       .catch(() => null);
   await expect
-    .poll(async () => (await kept())?.pages.sort())
-    .toEqual(["/app/profil", lesson!.split("?")[0]!].sort());
+    .poll(async () => (await kept())?.pages ?? [], { timeout: 20_000 })
+    .toEqual(
+      expect.arrayContaining([
+        "/app/profil",
+        "/app/learn",
+        lesson!.split("?")[0]!,
+        "/app/notifications",
+        // Never opened in this test: asked by the space once per session.
+        "/app/jobs",
+        "/app/messages",
+      ]),
+    );
   await expect.poll(async () => (await kept())?.offline).toBe(true);
+  await expect.poll(async () => (await kept())?.launch).toBe(true);
 
-  // Signing out empties the kept pages: the next person on the device sees nothing.
+  // Signing out (session gone, then /connexion?deconnecte=1) empties the kept pages: the next
+  // person on the device sees nothing.
+  await context.clearCookies();
   await page.goto("/connexion?deconnecte=1");
   await expect.poll(async () => (await kept())?.pages).toEqual([]);
   await context.close();

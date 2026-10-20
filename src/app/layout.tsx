@@ -4,6 +4,7 @@ import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { NavigationFeedback } from "@/components/motion/navigation-feedback";
 import { ServiceWorker } from "@/components/site/service-worker";
+import { launchScript } from "@/lib/launch-splash";
 import { siteUrl } from "@/lib/seo";
 import "./globals.css";
 
@@ -33,6 +34,7 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   // Only the texts of the connection notices go to every page (the 500 page has its own file).
   const { system } = await getMessages();
   const t = await getTranslations("loading");
+  const common = await getTranslations("common");
   const texts = {
     system: {
       error: { retry: system.error.retry },
@@ -46,6 +48,8 @@ export default async function RootLayout({ children }: LayoutProps<"/">) {
   return (
     <html lang="fr" className={`${sora.variable} antialiased`}>
       <body className="min-h-dvh">
+        {/* Opening of the installed app: drawn before the first paint (src/lib/launch-splash.ts). */}
+        <script dangerouslySetInnerHTML={{ __html: launchScript(common("brand")) }} />
         <NextIntlClientProvider messages={texts}>
           <NavigationFeedback label={t("aria")} />
           {children}

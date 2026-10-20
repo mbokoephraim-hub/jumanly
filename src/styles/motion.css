@@ -479,6 +479,11 @@
     transform: translateY(16px);
   }
 }
+@keyframes jm-page-fade {
+  from {
+    opacity: 0.4;
+  }
+}
 @keyframes jm-uword {
   from {
     opacity: 0;
@@ -537,32 +542,12 @@
     will-change: transform;
   }
 
-  /* Entrée dans une page : les blocs arrivent l'un après l'autre (8 au plus). « backwards » et non
+  /* Entrée dans une page : un fondu très court, d'un seul bloc (20/10, demande d'Ephraïm : passer
+     d'un menu à l'autre doit être instantané, sans que l'écran se recompose). « backwards » et non
      « both » : une transformation gardée après l'entrée empêcherait les barres d'action fixes du
      téléphone de rester en bas de l'écran. */
   .jm-page > * {
-    animation: jm-page-in 0.28s var(--jm-elan) backwards;
-  }
-  .jm-page > :nth-child(2) {
-    animation-delay: 40ms;
-  }
-  .jm-page > :nth-child(3) {
-    animation-delay: 80ms;
-  }
-  .jm-page > :nth-child(4) {
-    animation-delay: 120ms;
-  }
-  .jm-page > :nth-child(5) {
-    animation-delay: 160ms;
-  }
-  .jm-page > :nth-child(6) {
-    animation-delay: 200ms;
-  }
-  .jm-page > :nth-child(7) {
-    animation-delay: 240ms;
-  }
-  .jm-page > :nth-child(8) {
-    animation-delay: 280ms;
+    animation: jm-page-fade 0.14s ease-out backwards;
   }
 
   /* Apparition au défilement, dans les deux sens (data-dir posé par <AppMotionRoot>). */
@@ -2018,5 +2003,122 @@ html[data-intro-landing] #content {
   html[data-intro-landing] #content {
     animation: none !important;
     transition: none !important;
+  }
+}
+
+/* ── Ouverture de l'appli (src/lib/launch-splash.ts) ──
+   Logo animé 3,5 s : le carré apparaît, le J se trace, le point lime tombe, le nom arrive, un halo
+   passe, puis tout s'efface. Fond crème du talent (nuit en sombre), au-dessus de tout. */
+#jm-lancement {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483647;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 18px;
+  background: #eee8de;
+  color: #0f3f37;
+  transition: opacity 0.3s ease;
+}
+#jm-lancement.jl-fin {
+  opacity: 0;
+  pointer-events: none;
+}
+#jm-lancement .jl-marque {
+  position: relative;
+  display: block;
+}
+#jm-lancement .jl-logo {
+  position: relative;
+  display: block;
+  width: 104px;
+  height: 104px;
+  animation: jl-carre 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.25) both;
+}
+#jm-lancement .jl-carre {
+  fill: #0f3f37;
+}
+#jm-lancement .jl-j {
+  fill: none;
+  stroke: #fff;
+  stroke-width: 17;
+  stroke-linecap: round;
+  stroke-dasharray: 100;
+  animation: jl-trace 0.7s 0.3s cubic-bezier(0.6, 0, 0.3, 1) both;
+}
+#jm-lancement .jl-point {
+  fill: #a6f26b;
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: jl-point 0.55s 0.95s cubic-bezier(0.3, 1.5, 0.5, 1) both;
+}
+#jm-lancement .jl-nom {
+  font-family: var(--font-sora), ui-sans-serif, system-ui, sans-serif;
+  font-size: 30px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  animation: jl-nom 0.6s 1.35s ease-out both;
+}
+#jm-lancement .jl-nom i {
+  font-style: normal;
+  color: #6fbf2f;
+}
+#jm-lancement .jl-halo {
+  position: absolute;
+  inset: 0;
+  border-radius: 26px;
+  box-shadow: 0 0 0 0 rgba(166, 242, 107, 0.55);
+  animation: jl-halo 1.1s 1.8s ease-out both;
+}
+@keyframes jl-carre {
+  from {
+    opacity: 0;
+    transform: scale(0.7);
+  }
+}
+@keyframes jl-trace {
+  from {
+    stroke-dashoffset: 100;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+@keyframes jl-point {
+  from {
+    opacity: 0;
+    transform: translateY(-46px);
+  }
+}
+@keyframes jl-nom {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+}
+@keyframes jl-halo {
+  to {
+    box-shadow: 0 0 0 34px rgba(166, 242, 107, 0);
+  }
+}
+@media (prefers-color-scheme: dark) {
+  #jm-lancement {
+    background: #0b1a1f;
+    color: #e9f3ec;
+  }
+  #jm-lancement .jl-carre {
+    fill: #143a35;
+  }
+  #jm-lancement .jl-nom i {
+    color: #a6f26b;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #jm-lancement *,
+  #jm-lancement {
+    animation: none !important;
+    transition: none;
   }
 }

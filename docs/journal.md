@@ -2917,6 +2917,23 @@ toutes dans `docs/specifications.md`.
 - Ordre : 1. Talent (mobile + web) ; 2. Recruteur (mobile + web) ; 3. Entreprise et admin recruteur (web seulement). Une étape validée avant la suivante.
 - Instruction : `docs/PLAN-REFONTE-EN-3-ETAPES.md` (citée dans `CLAUDE.md`) ; prompt : `docs/PROMPT-LANCEMENT-REFONTE-COMPLETE.md`.
 
+## 2026-10-20 · Ouverture, fluidité et hors connexion (demande d'Ephraïm)
+
+- Constat : l'appli installée s'ouvrait sur un écran noir (couleur de fond du manifeste Sapin foncé, puis rendu
+  serveur de `/app` après un démarrage à froid), chaque onglet montrait un squelette de chargement
+  (`src/app/app/loading.tsx`) et seuls le profil et les leçons restaient lisibles hors ligne.
+- Ouverture : `/demarrage` (page de départ du manifeste, fond crème) ; le logo animé (carré, J tracé, point lime,
+  nom, halo) est dessiné avant tout le reste par un petit script en ligne (`src/lib/launch-splash.ts`), dure
+  3,5 s (1,2 s si les animations sont réduites) et reste par-dessus pendant que l'espace se charge dessous.
+  Rejoué au premier lancement de chaque session de l'appli installée.
+- Menus : plus d'écran de chargement dans l'espace connecté (l'onglet s'allume au toucher, la page précédente
+  reste jusqu'à l'arrivée de la suivante, barre fine en haut) ; entrée d'une page réduite à un fondu de 0,14 s, sans décalage.
+- Hors connexion (`public/sw.js` v2) : chaque page de l'espace ouverte est gardée sur l'appareil (60 au plus) et
+  servie sans réseau ; les onglets principaux sont demandés une fois par session ; la page d'ouverture est servie
+  à l'instant ; paiement et testeur jamais gardés ; tout est effacé à la déconnexion. Bandeau : « Vous êtes hors
+  ligne. Vous voyez la dernière version enregistrée sur cet appareil. »
+- Choix : `docs/decisions/2026-10-20-ouverture-fluidite-hors-ligne.md`.
+
 ## 2026-10-20 · Étape 2 recruteur · diagnostic
 
 Diagnostic seul, aucun code modifié. Lu : `docs/PLAN-REFONTE-EN-3-ETAPES.md`, `docs/refonte-mobile/BRIEF-RECRUTEUR-CLAUDE-CODE.md`, `docs/refonte-web/BRIEF-WEB-CLAUDE-CODE.md` (W0 et recruteur 1 à 4), `docs/audit-hire/AUDIT-HIRE-MOBILE.md`, titres des planches `refonte-mobile/recruteur-1..4` (v2 `r1plus`, `r2plus`, `r3plus`), `modeles-recruteur/`, `refonte-web/recruteur-1..4`. Code lu sur l'état de `origin/main` (#113).
