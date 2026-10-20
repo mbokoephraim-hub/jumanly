@@ -2,8 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
-import { AppPageHeader } from "@/components/app/page-header";
-import { CheckoutPanel } from "@/components/billing/checkout-panel";
 import { CheckNow, PaymentWait, TalentCheckout } from "@/components/talent/billing/checkout";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
@@ -14,6 +12,7 @@ import { formatUsd } from "@/lib/money";
 import { startTrialAction } from "@/server/actions/checkout";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { billingSubject } from "@/server/services/accounts";
 import { paymentProvider } from "@/server/payments";
 import { listDialCountries } from "@/server/services/places";
 import {
@@ -24,7 +23,6 @@ import {
   quoteCheckout,
   TRIAL_DAYS,
 } from "@/server/services/subscriptions";
-import { inOrganizationSpace } from "@/server/talent-space";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("paiement");
@@ -48,28 +46,14 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
   const t = await getTranslations();
   const paymentId = typeof params.paiement === "string" ? params.paiement : undefined;
 
-  if (await inOrganizationSpace(user.id)) {
-    if (!plan) redirect("/app/abonnement");
-    return (
-      <div className="jm-page flex flex-col gap-5 lg:gap-6">
-        <AppPageHeader title={t("checkout.title")} />
-        <CheckoutPanel
-          user={user}
-          planCode={plan.code}
-          context="billing"
-          paymentId={paymentId}
-          trial={params.essai === "1"}
-          continueHref="/app/abonnement"
-          freeHref="/app/abonnement"
-        />
-      </div>
-    );
-  }
   if (!plan) redirect("/app/abonnement/formules");
 
   const d = dynamic(t);
   const now = new Date();
-  const subject = { type: "user" as const, id: user.id };
+  // The plan's family says who pays (recruteur lot 5): the person for a talent plan, the
+  // organization they own for an RH or Company plan. Without one, nothing to pay here.
+  const subject = await billingSubject(db, user.id, plan.family);
+  if (!subject) redirect("/app/abonnement");
   const amount = (cents: number) => t("abonnement.amount", { amount: formatUsd(cents) });
   const opName = (operator: string | null) =>
     operator && d.has(`checkout.mm.operators.${operator}`)
@@ -91,7 +75,7 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
   // The answer of the provider: waiting, received, refused or expired.
   if (paymentId) {
     const payment = await db.payment.findFirst({
-      where: { id: paymentId, subjectType: "user", subjectId: user.id },
+      where: { id: paymentId, subjectType: subject.type, subjectId: subject.id },
     });
     if (payment) {
       const operator = opName(payment.operator);
@@ -361,8 +345,8 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
     listDialCountries(db),
     db.payment.findMany({
       where: {
-        subjectType: "user",
-        subjectId: user.id,
+        subjectType: subject.type,
+        subjectId: subject.id,
         method: "mobile_money",
         status: "succeeded",
       },

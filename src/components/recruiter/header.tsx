@@ -26,6 +26,9 @@ export type RecruiterHeaderLabels = {
 function ownRecruiterHead(pathname: string) {
   return (
     /^\/app\/hire\/compte(\/.*)?$/.test(pathname) ||
+    // Lot 5: organization, team, verification, templates, reports (planches recruteur-3).
+    /^\/app\/organisation(\/.*)?$/.test(pathname) ||
+    /^\/app\/hire\/(modeles|rapports)$/.test(pathname) ||
     pathname === "/app/bienvenue" ||
     // Lot 2: the offer, its four steps and its job sheet (planches recruteur-1 CR, OD_R, PDF_V).
     /^\/app\/hire\/offres\/[^/]+(\/modifier|\/fiche)?$/.test(pathname) ||
@@ -53,8 +56,11 @@ export function RecruiterHeader({
   useCountPages();
   const pathname = usePathname();
   const count = useUnread(unread);
-  if (pathname === "/app/orbi" || ownHead(pathname) || ownRecruiterHead(pathname)) return null;
   const tab = labels.tabs[pathname];
+  // A destination of the bar keeps the head with the organization, even where the talent's page
+  // draws its own (Messages, recruteur lot 5).
+  if (!tab && (pathname === "/app/orbi" || ownHead(pathname) || ownRecruiterHead(pathname)))
+    return null;
 
   if (!tab) {
     return (

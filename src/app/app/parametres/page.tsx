@@ -20,7 +20,10 @@ import { scheduleDeletion, updateDisplay } from "@/server/actions/settings";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { ownedOrganization } from "@/server/services/accounts";
-import { inOrganizationSpace } from "@/server/talent-space";
+import { redirect } from "next/navigation";
+import { RecruiterSettings } from "@/components/recruiter/settings";
+import { getActiveSpace } from "@/server/hire-context";
+import { inPartnerSpaceOnly } from "@/server/talent-space";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("parametres");
@@ -85,7 +88,18 @@ const one = (value: string | string[] | undefined) =>
 export default async function SettingsPage({ searchParams }: PageProps<"/app/parametres">) {
   const params = await searchParams;
   const user = await requireUser("/app/parametres");
-  if (await inOrganizationSpace(user.id)) return <HireSettings params={params} />;
+  if (await inPartnerSpaceOnly(user.id)) return <HireSettings params={params} />;
+  // The former tabs (`?onglet=securite`, still used by some links) open their own page now.
+  const tab = one(params.onglet);
+  if (tab === "securite" || tab === "confidentialite" || tab === "notifications") {
+    const query = new URLSearchParams();
+    for (const [key, value] of Object.entries(params)) {
+      if (typeof value === "string" && key !== "onglet") query.set(key, value);
+    }
+    redirect(`/app/parametres/${tab}${query.size ? `?${query}` : ""}`);
+  }
+  const space = await getActiveSpace(user.id);
+  if (space) return <RecruiterSettings user={user} space={space} params={params} />;
   const t = await getTranslations();
   const [org, credential] = await Promise.all([
     ownedOrganization(db, user.id),

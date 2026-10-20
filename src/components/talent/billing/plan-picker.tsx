@@ -36,10 +36,12 @@ function Action({
   choice,
   primary,
   full,
+  family,
 }: {
   choice: PlanChoice;
   primary: boolean;
   full: boolean;
+  family: string;
 }) {
   const size = full ? "t-pl" : "t-m";
   if (choice.action.kind === "pay") {
@@ -55,7 +57,7 @@ function Action({
   if (choice.action.kind === "downgrade") {
     return (
       <form action={downgradeSubscription} className="contents">
-        <input type="hidden" name="family" value="talent" />
+        <input type="hidden" name="family" value={family} />
         <input type="hidden" name="plan" value={choice.code} />
         <input type="hidden" name="back" value="/app/abonnement" />
         <button type="submit" className={cx("t-bt t-press", primary ? "t-p" : "t-sec", size)}>
@@ -83,12 +85,15 @@ export function PlanPicker({
   label,
   applyFree,
   free,
+  family = "talent",
 }: {
   plans: PlanChoice[];
   initial: string;
   label: string;
   applyFree: string;
   free?: FreeCard;
+  /** The family the cheaper plan is scheduled for (an organization's plans: `rh`, `company`). */
+  family?: string;
 }) {
   const [selected, setSelected] = useState(initial);
   const choice = plans.find((plan) => plan.code === selected) ?? plans[0];
@@ -155,7 +160,12 @@ export function PlanPicker({
                 </ul>
               </label>
               <span className="t-w4-web t-w4-fa">
-                <Action choice={plan} primary={plan.code === choice.code} full={false} />
+                <Action
+                  choice={plan}
+                  primary={plan.code === choice.code}
+                  full={false}
+                  family={family}
+                />
               </span>
             </div>
           ))}
@@ -171,7 +181,7 @@ export function PlanPicker({
         </p>
       )}
       <div className="t-verre t-fort t-bas-f t-w4-tel">
-        <Action choice={choice} primary full />
+        <Action choice={choice} primary full family={family} />
       </div>
     </>
   );

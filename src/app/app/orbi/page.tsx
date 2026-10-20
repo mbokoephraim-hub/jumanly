@@ -2,7 +2,6 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { redirect } from "next/navigation";
 import { TalentIcon } from "@/components/talent/icon";
 import { orbiAides } from "@/lib/orbi";
 import { OrbiChat } from "@/components/talent/orbi-chat";
@@ -13,6 +12,7 @@ import { usage } from "@/server/entitlements";
 import { getActiveSpace } from "@/server/hire-context";
 import { getOrbiConversation, listOrbiConversations } from "@/server/services/orbi";
 import { OrbiHistoryAside } from "@/components/talent/orbi-history";
+import { RecruiterOrbi } from "@/components/recruiter/orbi";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talentOrbi");
@@ -31,7 +31,15 @@ const aides = orbiAides;
 export default async function OrbiPage({ searchParams }: PageProps<"/app/orbi">) {
   const params = await searchParams;
   const user = await requireUser("/app/orbi");
-  if (await getActiveSpace(user.id)) redirect("/app/hire");
+  // In an organization's space: the recruiting assistant (recruteur lot 5, planche `ORB_R`).
+  const space = await getActiveSpace(user.id);
+  if (space)
+    return (
+      <RecruiterOrbi
+        ctx={{ userId: user.id, organizationId: space.organizationId, role: space.role }}
+        conversationId={typeof params.c === "string" ? params.c.slice(0, 40) : null}
+      />
+    );
   const t = await getTranslations("talentOrbi");
   const messages = await getMessages();
   // The conversation's texts only: neither the history page nor the rules answers.

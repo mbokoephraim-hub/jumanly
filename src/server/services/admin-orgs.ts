@@ -177,7 +177,7 @@ export async function requestMoreInformation(
     userIds: organization.memberships.map((membership) => membership.userId),
     type: "orgVerificationInfo",
     payload: { org: organization.name },
-    href: "/app/organisation?onglet=verification",
+    href: "/app/organisation/verification",
   });
   return organization;
 }

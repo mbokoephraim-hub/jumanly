@@ -42,8 +42,23 @@ import {
 
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
 
+/**
+ * Where each part of the organization lives since the recruiter redesign (lot 5): the page and
+ * its form, the verification, the team, then the structure (teams, departments, entities).
+ */
+const pageOf: Record<string, string> = {
+  profil: "/app/organisation/modifier",
+  verification: "/app/organisation/verification",
+  membres: "/app/organisation/equipe",
+};
+
 function back(tab: string, params: Record<string, string> = {}): never {
-  redirect(`/app/organisation?${new URLSearchParams({ onglet: tab, ...params })}`);
+  const page = pageOf[tab];
+  if (page) {
+    const query = new URLSearchParams(params).toString();
+    redirect(query ? `${page}?${query}` : page);
+  }
+  redirect(`/app/organisation/structure?${new URLSearchParams({ onglet: tab, ...params })}`);
 }
 
 async function guarded(work: () => Promise<unknown>, tab: string) {
@@ -60,7 +75,8 @@ export async function updateOrganizationAction(formData: FormData) {
   const saved = await updateOrganizationProfile(db, ctx, Object.fromEntries(formData));
   // The public company page and the job pages show the profile.
   if (saved) updateTag("jobs");
-  back("profil", saved ? { ok: "1" } : { erreur: "invalid" });
+  if (saved) redirect("/app/organisation?ok=1");
+  back("profil", { erreur: "invalid" });
 }
 
 export async function inviteAction(formData: FormData) {

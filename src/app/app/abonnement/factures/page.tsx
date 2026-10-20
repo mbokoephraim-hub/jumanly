@@ -10,6 +10,8 @@ import { interpolate, slot } from "@/lib/interpolate";
 import { saveBillingDetailsAction } from "@/server/actions/billing";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { getActiveSpace } from "@/server/hire-context";
+import { ownedOrganization } from "@/server/services/accounts";
 import { inOrganizationSpace } from "@/server/talent-space";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -29,9 +31,17 @@ export default async function InvoicesPage({
 }: PageProps<"/app/abonnement/factures">) {
   const params = await searchParams;
   const user = await requireUser("/app/abonnement/factures");
-  if (await inOrganizationSpace(user.id)) redirect("/app/abonnement");
+  // In the recruiter space, the invoices of the organization, for its owner (recruteur lot 5):
+  // they are billed to it and only its owner opens them. A partner keeps its own page.
+  const space = await getActiveSpace(user.id);
+  const owned = space ? await ownedOrganization(db, user.id) : null;
+  const org = space && owned?.id === space.organizationId ? owned : null;
+  if (space ? !org : await inOrganizationSpace(user.id)) redirect("/app/abonnement");
   const t = await getTranslations();
-  const where = { subjectType: "user" as const, subjectId: user.id };
+  const subject = org
+    ? { type: "organization" as const, id: org.id }
+    : { type: "user" as const, id: user.id };
+  const where = { subjectType: subject.type, subjectId: subject.id };
   const [invoices, details] = await Promise.all([
     db.invoice.findMany({
       where,
@@ -39,7 +49,7 @@ export default async function InvoicesPage({
       include: { payment: { select: { method: true, operator: true } } },
     }),
     db.billingDetails.findUnique({
-      where: { subjectType_subjectId: { subjectType: "user", subjectId: user.id } },
+      where: { subjectType_subjectId: { subjectType: subject.type, subjectId: subject.id } },
     }),
   ]);
   const saved = params.facturation === "1";
@@ -104,7 +114,7 @@ export default async function InvoicesPage({
         defaultOpen={failed}
       >
         <form action={saveBillingDetailsAction} className="t-flux">
-          <input type="hidden" name="family" value="talent" />
+          <input type="hidden" name="family" value={org ? "rh" : "talent"} />
           <input type="hidden" name="back" value="/app/abonnement/factures" />
           <p className="t-vide-t">{t("factures.details.text")}</p>
           <div className="t-champ">
@@ -118,7 +128,7 @@ export default async function InvoicesPage({
                 required
                 maxLength={160}
                 autoComplete="name"
-                defaultValue={details?.name ?? user.name}
+                defaultValue={details?.name ?? org?.name ?? user.name}
               />
             </span>
           </div>
@@ -136,6 +146,21 @@ export default async function InvoicesPage({
               />
             </span>
           </div>
+          {org && (
+            <div className="t-champ">
+              <label className="t-lab-c" htmlFor="factures-nif">
+                {t("rhBilling.taxId")}
+              </label>
+              <span className="t-verre t-saisie">
+                <input
+                  id="factures-nif"
+                  name="taxId"
+                  maxLength={60}
+                  defaultValue={details?.taxId ?? ""}
+                />
+              </span>
+            </div>
+          )}
           <div className="t-champ">
             <label className="t-lab-c" htmlFor="factures-email">
               {t("factures.details.email")}

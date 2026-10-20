@@ -1682,18 +1682,22 @@ model Embedding {
 /// A conversation with Orbi, the talent's assistant (docs/refonte-mobile, talent lot 4 § 9). Kept
 /// until the person erases it, one exchange or the whole history.
 model OrbiConversation {
-  id        String        @id @default(cuid(2))
-  userId    String
-  user      User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id             String        @id @default(cuid(2))
+  userId         String
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
   /// The first question, shortened: the line of the history.
-  title     String
+  title          String
   /// cv, interview, offer, path, learn, other: the icon of the history.
-  topic     String        @default("other")
-  messages  OrbiMessage[]
-  createdAt DateTime      @default(now())
-  updatedAt DateTime      @updatedAt
+  topic          String        @default("other")
+  /// Recruiter lot 5: an exchange held from an organization's space (its credits, its history).
+  /// Null for the talent's own exchanges.
+  organizationId String?
+  messages       OrbiMessage[]
+  createdAt      DateTime      @default(now())
+  updatedAt      DateTime      @updatedAt
 
   @@index([userId, updatedAt])
+  @@index([userId, organizationId, updatedAt])
 }
 
 model OrbiMessage {

@@ -20,7 +20,7 @@ import { auth } from "@/server/auth";
 import { getSession, requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { toHireSettings } from "@/server/settings-redirect";
-import { inOrganizationSpace } from "@/server/talent-space";
+import { inPartnerSpaceOnly } from "@/server/talent-space";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("securite");
@@ -67,7 +67,7 @@ export default async function SecurityPage({
 }: PageProps<"/app/parametres/securite">) {
   const params = await searchParams;
   const user = await requireUser("/app/parametres/securite");
-  if (await inOrganizationSpace(user.id)) toHireSettings("securite", params);
+  if (await inPartnerSpaceOnly(user.id)) toHireSettings("securite", params);
   const t = await getTranslations();
   const d = dynamic(t);
   const [current, sessions, accounts] = await Promise.all([

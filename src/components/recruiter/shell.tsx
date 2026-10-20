@@ -85,6 +85,7 @@ export function RecruiterShell({
                 "/app/hire/offres": t("title.offers"),
                 "/app/hire/candidats": t("title.candidates"),
                 "/app/hire/talents": t("title.candidates"),
+                "/app/messages": t("title.messages"),
               },
             }}
           />

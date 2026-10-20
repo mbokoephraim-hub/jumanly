@@ -220,6 +220,8 @@ export function hidesRecruiterTabBar(pathname: string) {
   if (section === "messages") return Boolean(page);
   if (section !== "hire") return false;
   if (page === "compte") return true;
+  // Lot 5: the templates and the reports open from the account, with their own head.
+  if (page === "modeles" || page === "rapports") return true;
   // Lot 2: an offer, its four steps and its job sheet have their own bar at the bottom.
   if (page === "offres") return Boolean(sub);
   if (page === "candidats") return Boolean(sub);

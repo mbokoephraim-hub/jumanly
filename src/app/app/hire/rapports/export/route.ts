@@ -1,6 +1,5 @@
 import { NextResponse } from "next/server";
 import { getTranslations } from "next-intl/server";
-import { toCsv } from "@/lib/csv";
 import { getCurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
@@ -9,7 +8,10 @@ import { reportRows } from "@/server/hire-report-export";
 import { renderReportPdf } from "@/server/pdf/report-document";
 import { buildReport, periodRange } from "@/server/services/hire-reports";
 
-/** « Exporter » on the reports page (`reports.export`): CSV or PDF of the chosen period. */
+/**
+ * « Exporter en PDF » on the reports page (`reports.export`): the PDF of the chosen period. The CSV
+ * was dropped by the recruiter redesign (lot 5, decision of the owner): one readable document.
+ */
 export async function GET(request: Request) {
   const user = await getCurrentUser();
   if (!user) return new NextResponse(null, { status: 401 });
@@ -33,40 +35,26 @@ export async function GET(request: Request) {
       targetType: "organization",
       targetId: ctx.organizationId,
       organizationId: ctx.organizationId,
-      metadata: { format: params.format === "pdf" ? "pdf" : "csv", period: range.period },
+      metadata: { format: "pdf", period: range.period },
     },
   });
   const day = range.to.toISOString().slice(0, 10);
   const headers = { "Cache-Control": "private, no-store" };
-  if (params.format === "pdf") {
-    const t = await getTranslations("hire.reports");
-    const pdf = await renderReportPdf(
-      {
-        brand: (await getTranslations("common"))("brand"),
-        title: t("pdf.title", { org: space.organization.name }),
-        period: t("pdf.period", { from: range.from, to: range.to }),
-        footer: [t("pdf.generated", { date: new Date() }), t("export.privacy")].join(" · "),
-      },
-      rows,
-    );
-    return new NextResponse(new Uint8Array(pdf), {
-      headers: {
-        ...headers,
-        "Content-Type": "application/pdf",
-        "Content-Disposition": `attachment; filename="rapport-${day}.pdf"`,
-      },
-    });
-  }
-  const t = await getTranslations("hire.reports.col");
-  const csv = toCsv(
-    [t("section"), t("name"), t("value")],
-    rows.map((row) => [row.section, row.name, row.value]),
+  const t = await getTranslations("hire.reports");
+  const pdf = await renderReportPdf(
+    {
+      brand: (await getTranslations("common"))("brand"),
+      title: t("pdf.title", { org: space.organization.name }),
+      period: t("pdf.period", { from: range.from, to: range.to }),
+      footer: [t("pdf.generated", { date: new Date() }), t("export.privacy")].join(" · "),
+    },
+    rows,
   );
-  return new NextResponse(`﻿${csv}`, {
+  return new NextResponse(new Uint8Array(pdf), {
     headers: {
       ...headers,
-      "Content-Type": "text/csv; charset=utf-8",
-      "Content-Disposition": `attachment; filename="rapport-${day}.csv"`,
+      "Content-Type": "application/pdf",
+      "Content-Disposition": `attachment; filename="rapport-${day}.pdf"`,
     },
   });
 }

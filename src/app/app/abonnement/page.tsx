@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { HireBilling } from "@/components/billing/hire-billing";
+import { RecruiterBilling } from "@/components/recruiter/billing";
 import { InvoiceRows } from "@/components/talent/billing/invoice-rows";
 import { OperatorTile } from "@/components/talent/billing/operator";
 import { FlowHead } from "@/components/talent/flow-head";
@@ -24,6 +25,7 @@ import { effectiveStatus, GRACE_DAYS } from "@/server/entitlements/periods";
 import { ownedOrganization } from "@/server/services/accounts";
 import { myLicenses } from "@/server/services/partners";
 import { liveSubscription, localMask } from "@/server/services/subscriptions";
+import { getActiveSpace } from "@/server/hire-context";
 import { inOrganizationSpace } from "@/server/talent-space";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -98,6 +100,16 @@ const icon = (name: TalentIconName) => <TalentIcon name={name} size="s" />;
 export default async function SubscriptionPage({ searchParams }: PageProps<"/app/abonnement">) {
   const params: Params = await searchParams;
   const user = await requireUser("/app/abonnement");
+  // The recruiter space shows its organization's plan (recruteur lot 5); a partner keeps its page.
+  const space = await getActiveSpace(user.id);
+  if (space)
+    return (
+      <RecruiterBilling
+        ctx={{ userId: user.id, organizationId: space.organizationId, role: space.role }}
+        userId={user.id}
+        params={params}
+      />
+    );
   if (await inOrganizationSpace(user.id)) return <HireBilling params={params} />;
 
   const t = await getTranslations();

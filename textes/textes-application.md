@@ -8754,6 +8754,426 @@ Conventions :
 | `hireCandidates.done.undoError` | La décision n'a pas pu être annulée. Réessayez. |
 | `hireCandidates.retracted` | Message retiré par l'entreprise. |
 
+### Refonte recruteur · Échanger et gérer (lot 5)
+
+*Orbi recruteur, messages avec actions rapides et brouillon d'Orbi, modèles, notifications, profil RH, organisation, vérification, équipe et invitation, abonnement avec échéances, formules RH, paiement, rapports avec graphiques et export PDF, paramètres (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 5 ; planches recruteur-3 et r3plus).*
+
+| Clé | Texte |
+|---|---|
+| `rhOrbi.title` | Orbi |
+| `rhOrbi.aides.label` | Ce qu'Orbi peut faire pour vous |
+| `rhOrbi.aides.offer` | Rédiger une offre |
+| `rhOrbi.aides.candidates` | Résumer des candidatures |
+| `rhOrbi.aides.interview` | Préparer un entretien |
+| `rhOrbi.aides.message` | Rédiger un message |
+| `rhOrbi.chat.intro` | Bonjour, je suis Orbi. Je vous aide à rédiger une offre, lire vos candidatures dans un bon ordre, préparer un entretien ou écrire un message. Je propose, vous décidez : je ne rejette personne et je n'envoie rien. |
+| `rhOrbi.chat.history` | Historique de vos échanges avec Orbi |
+| `rhOrbi.chat.creditsAria` | Crédits Orbi de l'organisation restants ce mois : {count} |
+| `rhOrbi.chat.composer.footer` | Orbi propose, vous décidez. Il ne rejette personne. |
+| `rhOrbi.chat.source.ai` | Réponse rédigée par l'IA d'Orbi à partir des chiffres de vos offres. Relisez-la avant de vous en servir. |
+| `rhOrbi.chat.source.rules` | Réponse préparée sans l'IA : elle vous mène vers l'outil adapté. |
+| `rhOrbi.chat.limit.entitlement` | La formule de l'organisation ne comprend pas les réponses de l'IA d'Orbi. |
+| `rhOrbi.chat.limit.quota` | Les crédits Orbi de l'organisation sont utilisés ce mois-ci. Aucun crédit n'a été pris pour cette réponse. |
+| `rhOrbi.chat.actions.newOffer` | Publier une offre |
+| `rhOrbi.chat.actions.offers` | Voir mes offres |
+| `rhOrbi.chat.actions.candidates` | Ouvrir les candidatures |
+| `rhOrbi.chat.actions.interviews` | Voir les entretiens |
+| `rhOrbi.chat.actions.messages` | Ouvrir les messages |
+| `rhOrbi.chat.actions.templates` | Voir les modèles |
+| `rhOrbi.chat.actions.reports` | Voir les rapports |
+| `rhOrbi.chat.actions.team` | Voir l'équipe |
+| `rhOrbi.rules.offer` | Pour une offre, ouvrez « Publier une offre » : à l'étape 2, Orbi rédige ou améliore la description à partir de ce que vous avez écrit. Vous relisez avant d'appliquer. |
+| `rhOrbi.rules.candidates` | Ouvrez Candidats : les candidatures pas encore ouvertes sont signalées, et chaque dossier montre son score avec son « Pourquoi ? ». Orbi propose un ordre de lecture, il ne rejette personne. |
+| `rhOrbi.rules.interview` | Pour préparer un entretien, ouvrez Entretiens : vous y retrouvez les créneaux, les réponses des candidats et la grille d'évaluation de l'offre. |
+| `rhOrbi.rules.message` | Dans une conversation, Orbi propose une réponse que vous relisez et modifiez avant de l'envoyer. Les modèles de l'organisation s'insèrent de la même façon. |
+| `rhOrbi.rules.report` | Les rapports donnent les chiffres réels de vos offres : candidatures, délais, étapes. Aucune donnée personnelle des candidats. |
+| `rhOrbi.rules.other` | Je vous aide pour vos offres, vos candidatures, vos entretiens et vos messages. Pour commencer, ouvrez vos candidatures. |
+| `rhOrbi.rules.whyRules` | Orbi a reconnu le sujet de votre question et vous propose l'outil qui y répond. |
+| `hireShell.title.messages` | Messages |
+| `rhInbox.title` | Messages |
+| `rhInbox.search` | Candidat, offre |
+| `rhInbox.filters` | Filtrer les conversations |
+| `rhInbox.filter.toutes` | Toutes |
+| `rhInbox.filter.nonLues` | Non lues |
+| `rhInbox.filter.retenus` | Retenus |
+| `rhInbox.filter.propositions` | Propositions |
+| `rhInbox.filter.nonRetenus` | Non retenus |
+| `rhInbox.orbi.open` | Relire |
+| `rhInbox.orbi.waiting` | {count, plural, one {<b># réponse</b> attendue de {names}.} other {<b># réponses</b> attendues, de {names} notamment.}} Orbi peut vous proposer un brouillon à relire. |
+| `rhInbox.orbi.and` | et |
+| `rhInbox.empty.filtered` | Aucune conversation ne correspond. |
+| `rhInbox.empty.title` | Aucune conversation pour l'instant |
+| `rhInbox.empty.text` | Une conversation s'ouvre quand vous écrivez à un candidat depuis son dossier, ou quand un talent accepte votre proposition. |
+| `rhInbox.list` | Conversations |
+| `rhInbox.badge.interview` | Retenu · entretien |
+| `rhInbox.badge.hired` | Recruté |
+| `rhInbox.badge.review` | En examen |
+| `rhInbox.badge.rejected` | Non retenu |
+| `rhInbox.badge.withdrawn` | Candidature retirée |
+| `rhInbox.badge.proposal` | Proposition acceptée |
+| `rhInbox.proposal` | Proposition · {job} |
+| `rhInbox.proposalNoJob` | Proposition de contact |
+| `rhInbox.mine` | Vous : {text} |
+| `rhInbox.noMessage` | Pas encore de message |
+| `rhInbox.unread` | {count, plural, one {# message non lu} other {# messages non lus}} |
+| `rhInbox.rule` | Seuls les membres de votre organisation voient ces conversations. Chaque candidat ne voit que la sienne. |
+| `rhInbox.yesterday` | Hier |
+| `rhThread.back` | Messages |
+| `rhThread.thread` | Conversation avec {name} |
+| `rhThread.switch.title` | Conversation |
+| `rhThread.switch.personal` | Cette conversation appartient à votre espace personnel. |
+| `rhThread.switch.org` | Cette conversation appartient à l'espace de {org}. |
+| `rhThread.switch.cta` | Changer d'espace |
+| `rhThread.badge.interview` | Retenu · entretien |
+| `rhThread.badge.hired` | Recruté |
+| `rhThread.badge.review` | En examen |
+| `rhThread.badge.rejected` | Non retenu |
+| `rhThread.badge.withdrawn` | Candidature retirée |
+| `rhThread.badge.proposal` | Proposition acceptée |
+| `rhThread.menu.open` | Options de la conversation |
+| `rhThread.menu.title` | Options |
+| `rhThread.menu.file` | Ouvrir le dossier |
+| `rhThread.menu.profile` | Voir le profil |
+| `rhThread.menu.decision` | Annoncer la décision |
+| `rhThread.menu.templates` | Gérer les modèles |
+| `rhThread.menu.orbi` | Demander à Orbi |
+| `rhThread.context.stage` | Étape {stage} |
+| `rhThread.context.stageScore` | Étape {stage} · dossier {score} % |
+| `rhThread.context.proposal` | Proposition acceptée par le talent |
+| `rhThread.context.file` | Dossier |
+| `rhThread.context.profile` | Profil |
+| `rhThread.ok.document` | Demande de document envoyée. |
+| `rhThread.error.tooMany` | Trop de messages envoyés d'un coup. Réessayez dans {seconds} secondes. |
+| `rhThread.error.document` | Indiquez le nom du document et une date limite. |
+| `rhThread.error.send` | Le message n'a pas pu être envoyé. Réessayez. |
+| `rhThread.blocked` | Le candidat a bloqué cette conversation : vous ne pouvez plus lui écrire. |
+| `rhThread.empty` | Aucun message pour l'instant. Écrivez le premier, ou insérez un modèle. |
+| `rhThread.today` | Aujourd'hui |
+| `rhThread.yesterday` | Hier |
+| `rhThread.you` | Vous |
+| `rhThread.team` | Votre équipe |
+| `rhThread.meta` | {author} · {time} |
+| `rhThread.retracted` | Message retiré |
+| `rhThread.hidden` | Message masqué après un signalement |
+| `rhThread.or` | ou |
+| `rhThread.invite.pending` | Invitation envoyée |
+| `rhThread.invite.confirmed` | Entretien confirmé |
+| `rhThread.invite.canceled` | Entretien annulé |
+| `rhThread.invite.declined` | Créneaux refusés |
+| `rhThread.invite.reschedule` | Autre date demandée |
+| `rhThread.invite.done` | Entretien terminé |
+| `rhThread.invite.no_show` | Candidat absent |
+| `rhThread.document.title` | Document demandé : {name} |
+| `rhThread.document.received` | Reçu le {date, date, long} |
+| `rhThread.document.due` | À envoyer avant le {date, date, long} |
+| `rhThread.document.overdue` | Date limite dépassée |
+| `rhThread.document.pending` | En attente |
+| `rhThread.file.open` | Ouvrir le document |
+| `rhThread.slot` | Créneau proposé |
+| `rhThread.decision.hired` | Décision : recruté |
+| `rhThread.decision.rejected` | Décision : non retenu |
+| `rhThread.readOnly` | Votre rôle permet de lire cette conversation, pas d'y répondre. |
+| `rhThread.close` | Fermer |
+| `rhThread.composer.placeholder` | Écrire un message |
+| `rhThread.composer.send` | Envoyer |
+| `rhThread.composer.plus` | Créneaux, documents, modèles |
+| `rhThread.orbi.label` | Orbi dans la conversation |
+| `rhThread.orbi.reply` | Proposer une réponse |
+| `rhThread.orbi.summary` | Résumer |
+| `rhThread.orbi.formal` | Plus formel |
+| `rhThread.orbi.draft` | Brouillon d'Orbi, à relire avant d'envoyer |
+| `rhThread.orbi.summaryTitle` | Résumé d'Orbi |
+| `rhThread.orbi.edit` | Modifier |
+| `rhThread.orbi.use` | Utiliser |
+| `rhThread.orbi.close` | Fermer |
+| `rhThread.orbi.thinking` | Orbi rédige… |
+| `rhThread.orbi.noAi` | Brouillon préparé sans l'IA |
+| `rhThread.orbi.credits` | {count, plural, =0 {Plus de crédit Orbi ce mois} one {# crédit Orbi restant} other {# crédits Orbi restants}} |
+| `rhThread.orbi.creditsUnlimited` | Crédits Orbi illimités |
+| `rhThread.orbi.error.empty` | Il n'y a encore rien à résumer dans cette conversation. |
+| `rhThread.orbi.error.formalEmpty` | Écrivez d'abord votre message : Orbi le reformulera sur un ton plus formel. |
+| `rhThread.orbi.error.failed` | Orbi n'a pas pu rédiger de brouillon. Réessayez dans un instant. |
+| `rhThread.orbi.limit.consent` | Brouillon préparé sans l'IA : vous n'avez pas activé l'aide de l'IA dans vos paramètres. |
+| `rhThread.orbi.limit.quota` | Brouillon préparé sans l'IA : les crédits Orbi de l'organisation sont utilisés ce mois-ci. |
+| `rhThread.orbi.limit.entitlement` | Brouillon préparé sans l'IA : la formule de l'organisation ne comprend pas l'IA d'Orbi. |
+| `rhThread.orbi.limit.unavailable` | Brouillon préparé sans l'IA : l'IA d'Orbi est indisponible pour le moment. |
+| `rhThread.orbi.template.reply` | Bonjour {firstName},\n\nMerci pour votre message au sujet du poste de {job}. Je reviens vers vous très vite.\n\nCordialement |
+| `rhThread.orbi.template.summary` | {count, plural, one {# message} other {# messages}} depuis le {first}. Dernier message de {last} : « {excerpt} » |
+| `rhThread.orbi.template.greeting` | Bonjour {firstName}, |
+| `rhThread.orbi.template.closing` | Cordialement |
+| `rhThread.orbi.template.you` | vous |
+| `rhThread.plus.title` | Ajouter à la conversation |
+| `rhThread.plus.slots` | Proposer des créneaux |
+| `rhThread.plus.slotsLine` | Le candidat choisit, l'entretien s'ajoute à l'agenda |
+| `rhThread.plus.document` | Demander un document |
+| `rhThread.plus.documentLine` | Diplôme, attestation, portfolio |
+| `rhThread.plus.templates` | Modèles de message |
+| `rhThread.plus.templatesLine` | Insérés dans le message, à relire avant d'envoyer |
+| `rhThread.templates.title` | Modèles |
+| `rhThread.templates.create` | Gérer les modèles |
+| `rhThread.templates.rule` | Un modèle s'insère dans votre message : rien ne part sans que vous l'envoyiez. |
+| `rhThread.templates.kind.convocation` | Convocation à un entretien |
+| `rhThread.templates.kind.document` | Demande de document |
+| `rhThread.templates.kind.relance` | Relance |
+| `rhThread.templates.kind.acceptation` | Acceptation |
+| `rhThread.templates.kind.refus` | Refus |
+| `rhThread.templates.line.own` | Modèle de votre organisation |
+| `rhThread.templates.line.convocation` | Texte de Jumanly, à adapter |
+| `rhThread.templates.line.document` | Texte de Jumanly, à adapter |
+| `rhThread.templates.line.relance` | Texte de Jumanly, à adapter |
+| `rhThread.templates.line.acceptation` | S'annonce depuis l'écran de décision |
+| `rhThread.templates.line.refus` | Écrit avec soin, depuis l'écran de décision |
+| `rhThread.documentSheet.title` | Demander un document |
+| `rhThread.documentSheet.name` | Document demandé |
+| `rhThread.documentSheet.namePlaceholder` | Diplôme de licence |
+| `rhThread.documentSheet.due` | À envoyer avant le |
+| `rhThread.documentSheet.note` | Message au candidat |
+| `rhThread.documentSheet.forbidden` | Ne demandez jamais de photo, d'acte de naissance, de pièce d'identité ni d'information sur la santé ou la famille. |
+| `rhThread.documentSheet.send` | Envoyer la demande |
+| `rhTemplates.back` | Messages |
+| `rhTemplates.own` | Vos modèles |
+| `rhTemplates.jumanly` | Textes de Jumanly |
+| `rhTemplates.default.convocation` | Utilisé tant que vous n'avez pas le vôtre, avec les créneaux proposés |
+| `rhTemplates.default.document` | Diplôme, attestation, portfolio |
+| `rhTemplates.default.relance` | Quand un candidat n'a pas répondu |
+| `rhTemplates.default.acceptation` | Annoncé depuis l'écran de décision |
+| `rhTemplates.default.refus` | Respectueux, sans détail personnel |
+| `rhTemplates.create` | Créer un modèle |
+| `rhTemplates.rule` | Un modèle s'insère dans le message : vous le relisez avant l'envoi. |
+| `rhTemplates.close` | Fermer |
+| `rhNotifications.back` | À traiter |
+| `rhNotifications.brief.title` | Votre journée en bref |
+| `rhNotifications.brief.source` | Orbi · d'après vos offres, à l'instant |
+| `rhNotifications.brief.hello` | Bonjour {name}, {count, plural, one {une chose vous attend} other {# choses vous attendent}} aujourd'hui. Je n'ai rien envoyé ni modifié. |
+| `rhNotifications.brief.calm` | Bonjour {name}, rien n'attend de réponse pour l'instant. Je n'ai rien envoyé ni modifié. |
+| `rhNotifications.brief.point.applications` | {count, plural, one {Nouvelle candidature} other {Nouvelles candidatures}} |
+| `rhNotifications.brief.point.invitations` | {count, plural, one {Invitation sans réponse ou autre date demandée} other {Invitations sans réponse ou autres dates demandées}} |
+| `rhNotifications.brief.point.scorecards` | {count, plural, one {Entretien à évaluer} other {Entretiens à évaluer}} |
+| `rhNotifications.brief.point.messages` | {count, plural, one {Conversation non lue} other {Conversations non lues}} |
+| `rhNotifications.brief.cta.applications` | Voir |
+| `rhNotifications.brief.cta.invitations` | Répondre |
+| `rhNotifications.brief.cta.scorecards` | Évaluer |
+| `rhNotifications.brief.cta.messages` | Lire |
+| `rhProfile.seen` | Ce que voient les candidats |
+| `rhProfile.seenName` | {name} · {org} |
+| `rhOrg.back` | Compte |
+| `rhOrg.edit` | Modifier la page de l'organisation |
+| `rhOrg.size` | {size} personnes |
+| `rhOrg.figures` | L'organisation en chiffres |
+| `rhOrg.figure.jobs` | {count, plural, one {offre active} other {offres actives}} |
+| `rhOrg.figure.applications` | {count, plural, one {candidature reçue} other {candidatures reçues}} |
+| `rhOrg.figure.hired` | {count, plural, one {recruté} other {recrutés}} |
+| `rhOrg.figure.members` | {count, plural, one {membre} other {membres}} |
+| `rhOrg.presentation` | Présentation |
+| `rhOrg.noDescription` | Pas encore de présentation. Les talents lisent ce texte sur chaque offre. |
+| `rhOrg.hint.banner.text` | Ajoutez une bannière, une photo de vos bureaux par exemple : vos offres et votre page sont plus faciles à reconnaître. |
+| `rhOrg.hint.banner.cta` | Ajouter |
+| `rhOrg.hint.description.text` | Présentez votre organisation en quelques lignes : les talents la découvrent sur chaque offre. |
+| `rhOrg.hint.description.cta` | Écrire |
+| `rhOrg.hint.verify.text` | Une organisation vérifiée publie sans attente et affiche un badge sur ses offres. |
+| `rhOrg.hint.verify.cta` | Vérifier |
+| `rhOrg.manage` | Gérer l'organisation |
+| `rhOrg.team` | Équipe |
+| `rhOrg.seats` | {used, plural, one {# siège utilisé} other {# sièges utilisés}} sur {max} |
+| `rhOrg.seatsUnlimited` | {used, plural, one {# siège utilisé} other {# sièges utilisés}} |
+| `rhOrg.verification` | Vérification |
+| `rhOrg.structure` | Équipes, départements, entités |
+| `rhOrg.structureLine` | L'organisation de vos recrutements |
+| `rhOrg.asTalent` | Voir la page comme un talent |
+| `rhOrg.editBack` | Organisation |
+| `rhVerification.back` | Organisation |
+| `rhVerification.title` | Vérifier l'organisation |
+| `rhVerification.progress` | {done}/{total} |
+| `rhVerification.head.start` | Trois étapes pour être vérifiée |
+| `rhVerification.head.last` | Encore une étape |
+| `rhVerification.head.pending` | Jumanly examine votre demande |
+| `rhVerification.head.verified` | Organisation vérifiée |
+| `rhVerification.steps` | Étapes de la vérification |
+| `rhVerification.legal.title` | Informations légales |
+| `rhVerification.legal.todo` | Numéro d'immatriculation et votre mandat |
+| `rhVerification.legal.done` | Envoyées |
+| `rhVerification.document.title` | Document officiel |
+| `rhVerification.document.todo` | Registre du commerce ou statuts, en PDF ou en image |
+| `rhVerification.document.done` | {count, plural, one {# document envoyé} other {# documents envoyés}} |
+| `rhVerification.review.title` | Examen par Jumanly |
+| `rhVerification.review.todo` | Après l'envoi de votre demande |
+| `rhVerification.review.pending` | Sous {days, plural, one {# jour ouvré} other {# jours ouvrés}} |
+| `rhVerification.review.done` | Vérifiée le {date, date, long} |
+| `rhVerification.plans` | Voir les formules |
+| `rhVerification.meanwhile` | En attendant, vos offres passent en validation avant publication. |
+| `rhVerification.question` | Une question : assistant@jumanly.io |
+| `rhTeam.title` | Équipe |
+| `rhTeam.back` | Organisation |
+| `rhTeam.invite` | Inviter dans l'équipe |
+| `rhTeam.inviteTitle` | Inviter dans l'équipe |
+| `rhTeam.close` | Fermer |
+| `rhTeam.invalid` | Vérifiez les informations et réessayez. |
+| `rhTeam.seats` | Sièges utilisés : {used} sur {max} |
+| `rhTeam.seatsUnlimited` | {used, plural, one {# siège utilisé} other {# sièges utilisés}}, sans limite |
+| `rhTeam.members` | Membres de l'équipe |
+| `rhTeam.you` | {name}, vous |
+| `rhTeam.invited` | Invitation envoyée par e-mail · {ago} |
+| `rhTeam.pending` | En attente |
+| `rhTeam.today` | aujourd'hui |
+| `rhTeam.days` | {count, plural, one {il y a # jour} other {il y a # jours}} |
+| `rhTeam.invitationLine` | Rôle proposé : {role}. L'invitation expire le {date, date, long}. |
+| `rhTeam.rights.title` | Qui peut faire quoi |
+| `rhTeam.rights.short.org_admin` | Admin |
+| `rhTeam.rights.short.recruiter` | Recr. |
+| `rhTeam.rights.short.hiring_manager` | Resp. |
+| `rhTeam.rights.short.viewer` | Lect. |
+| `rhTeam.rights.manage` | Publier, décider, écrire |
+| `rhTeam.rights.evaluate` | Noter, évaluer |
+| `rhTeam.rights.readApplications` | Lire les candidatures |
+| `rhTeam.rights.administer` | Équipe, abonnement |
+| `rhTeam.rights.yes` | Oui |
+| `rhTeam.rights.no` | Non |
+| `rhTeam.rights.owner` | Le propriétaire a tous les droits, dont la facturation. Un responsable du recrutement ne voit que les offres qui lui sont confiées. |
+| `rhTeam.activity.title` | Activité récente |
+| `rhTeam.activity.you` | Vous |
+| `rhTeam.activity.former` | Ancien membre |
+| `rhTeam.activity.stage_changed` | {actor} {self, select, oui {avez fait} other {a fait}} avancer {name} |
+| `rhTeam.activity.note` | {actor} {self, select, oui {avez noté} other {a noté}} {name} |
+| `rhTeam.activity.decision` | {actor} {self, select, oui {avez annoncé} other {a annoncé}} sa décision à {name} |
+| `rhTeam.activity.document_requested` | {actor} {self, select, oui {avez demandé} other {a demandé}} un document à {name} |
+| `rhTeam.activity.message` | {actor} {self, select, oui {avez écrit} other {a écrit}} à {name} |
+| `rhTeam.emails` | E-mail |
+| `rhTeam.emailsHint` | Plusieurs adresses possibles, séparées par une virgule. Chaque personne reçoit un lien valable {days, plural, one {# jour} other {# jours}}. |
+| `rhTeam.saveRole` | Changer le rôle |
+| `rhTeam.full.plan` | <b>Plus de siège libre.</b> Retirez un membre ou une invitation, ou passez à {plan} ({seats}). |
+| `rhTeam.full.seatsUnlimited` | sièges illimités |
+| `rhTeam.full.seatsCount` | {count, plural, one {# siège} other {# sièges}} |
+| `rhTeam.full.noPlan` | <b>Plus de siège libre.</b> Retirez un membre ou une invitation pour en libérer un. |
+| `rhTeam.full.see` | Voir {plan} |
+| `rhTeam.full.plans` | Voir les formules |
+| `rhVerification.checked` | Contrôlé par Jumanly |
+| `rhReports.back` | Compte |
+| `rhReports.period.30d` | 30 jours |
+| `rhReports.period.90d` | Trimestre |
+| `rhReports.byJob` | Par offre |
+| `rhReports.figures` | Les chiffres de la période |
+| `rhReports.figure.applications` | {count, plural, one {candidature reçue} other {candidatures reçues}} |
+| `rhReports.figure.responseTime` | délai moyen de première réponse |
+| `rhReports.figure.activeJobs` | {count, plural, one {offre active} other {offres actives}} |
+| `rhReports.figure.interviews` | {count, plural, one {entretien} other {entretiens}} |
+| `rhReports.figure.hires` | {count, plural, one {recrutement} other {recrutements}} |
+| `rhReports.funnel` | Où en sont les candidatures |
+| `rhReports.stage.received` | Reçues |
+| `rhReports.stage.screened` | Examinées |
+| `rhReports.stage.shortlisted` | Présélectionnées |
+| `rhReports.stage.interview` | Entretien |
+| `rhReports.stage.hired` | Recrutées |
+| `rhReports.weekly` | Candidatures par semaine |
+| `rhReports.weeklyLine` | 4 dernières semaines |
+| `rhReports.weeklyAria` | Candidatures par semaine : {s1}, {s2}, {s3}, puis {s4} cette semaine. |
+| `rhReports.week` | S{n} |
+| `rhReports.sources` | D'où viennent-elles |
+| `rhReports.source.direct` | Offres Jumanly |
+| `rhReports.source.invitation` | Invitation à postuler |
+| `rhReports.source.talent_search` | Offre proposée à un talent |
+| `rhReports.insight.doubled` | Les candidatures ont doublé cette semaine. L'offre qui en reçoit le plus : {job}. |
+| `rhReports.insight.up` | {count, plural, one {# candidature de plus} other {# candidatures de plus}} que la semaine précédente. |
+| `rhReports.insight.slow` | Votre première réponse arrive en {days} jours en moyenne. Les candidats attendent moins quand vous ouvrez leur dossier dans les 3 jours. |
+| `rhReports.insight.steady` | {count, plural, one {# candidature} other {# candidatures}} sur la période. Partager le lien de vos offres en attire davantage. |
+| `rhReports.jobLine` | {applications, plural, one {# candidature} other {# candidatures}} · {hires, plural, one {# recrutement} other {# recrutements}} |
+| `rhReports.recruiterLine` | {moves} étapes · {decisions} décisions · {notes} notes |
+| `rhReports.plans` | Voir les formules |
+| `rhReports.rule` | Chiffres réels de vos offres. Aucune donnée personnelle des candidats. |
+| `rhReports.pdf.title` | Rapport de {month} · PDF |
+| `rhReports.pdf.line` | Format A4, aux couleurs de Jumanly |
+| `rhReports.pdf.cta` | Exporter en PDF |
+| `rhBilling.back` | Compte |
+| `rhBilling.hero.price` | {price} $ par mois · {org} |
+| `rhBilling.hero.free` | Gratuit · {org} |
+| `rhBilling.hero.days` | {count, plural, one {jour} other {jours}} |
+| `rhBilling.quota.seats` | Sièges |
+| `rhBilling.quota.jobs` | Offres actives |
+| `rhBilling.quota.credits` | Crédits Orbi |
+| `rhBilling.quota.cv` | Analyse des CV par Orbi |
+| `rhBilling.quota.scorecards` | Grilles d'évaluation |
+| `rhBilling.quota.of` | {used} sur {max} |
+| `rhBilling.quota.unlimited` | {used}, sans limite |
+| `rhBilling.quota.aria` | {name} : {used} sur {max} |
+| `rhBilling.included` | Incluse |
+| `rhBilling.notIncluded` | Non incluse |
+| `rhBilling.see` | Voir |
+| `rhBilling.full.seats` | Tous vos sièges sont pris. <b>{plan}</b> en ajoute pour inviter quelqu'un de plus. |
+| `rhBilling.full.jobs` | Toutes vos offres actives sont prises. <b>{plan}</b> permet d'en publier davantage. |
+| `rhBilling.fullNoPlan.seats` | Tous vos sièges sont pris. Retirez un membre ou une invitation pour en libérer un. |
+| `rhBilling.fullNoPlan.jobs` | Toutes vos offres actives sont prises. Clôturez ou mettez en pause une offre pour en publier une autre. |
+| `rhBilling.dates.title` | Échéances |
+| `rhBilling.dates.paid` | Payé · {amount} $ |
+| `rhBilling.dates.reminder` | Rappel par e-mail |
+| `rhBilling.dates.reminderLine` | {date}, {days} jours avant la fin |
+| `rhBilling.dates.end` | Fin de la période |
+| `rhBilling.dates.endFree` | {date} · retour à {plan} si rien n'est payé |
+| `rhBilling.dates.endNext` | {date} · puis {plan} |
+| `rhBilling.extend` | Prolonger d'un mois |
+| `rhBilling.extendLine` | Mobile Money ou carte, payé d'avance |
+| `rhBilling.invoices` | Au nom de {org} · {count, plural, =0 {aucune pour l'instant} one {# en PDF} other {# en PDF}} |
+| `rhBilling.ownerOnly` | Seul le propriétaire de l'organisation change la formule et paie. Vous voyez ce qu'elle comprend. |
+| `rhBilling.ownerOnlyShort` | Réservé au propriétaire |
+| `rhBilling.prepaid` | Prépayé, sans prélèvement automatique. À la fin, retour à {plan} sans rien perdre : les offres en trop passent en pause. |
+| `rhBilling.plansBack` | Abonnement |
+| `rhBilling.plansTitle` | Formules RH |
+| `rhBilling.fits` | Avec {members, plural, one {# membre} other {# membres}} et {jobs, plural, =0 {aucune offre active} one {# offre active} other {# offres actives}}, <b>{plan}</b> vous suffit. |
+| `rhBilling.applyFree` | Pour les talents, candidater reste toujours gratuit. |
+| `rhBilling.unlimited` | Sans limite |
+| `rhBilling.freeAtEnd` | À la fin de la période payée |
+| `rhBilling.compare.value.seats` | {count, plural, one {# siège} other {# sièges}} |
+| `rhBilling.compare.value.jobs` | {count, plural, one {# offre active} other {# offres actives}} |
+| `rhBilling.compare.value.credits` | {count, plural, one {# crédit Orbi} other {# crédits Orbi}} |
+| `rhBilling.compare.caption` | Comparer les formules |
+| `rhBilling.compare.org_seats` | Sièges |
+| `rhBilling.compare.jobs_active_max` | Offres actives |
+| `rhBilling.compare.ai_credits_monthly` | Crédits Orbi |
+| `rhBilling.compare.hire_cv_analysis` | Analyse des CV |
+| `rhBilling.compare.hire_scorecards` | Grilles d'évaluation |
+| `rhBilling.companies` | Plus de sièges ou une page entreprise complète : Jumanly Companies, dès {price} $ par mois. |
+| `rhBilling.taxId` | Numéro d'identification fiscale (facultatif) |
+| `rhSettings.seo` | Paramètres |
+| `rhSettings.title` | Paramètres |
+| `rhSettings.back` | Retour à l'accueil Hire |
+| `rhSettings.saved` | C'est enregistré. |
+| `rhSettings.error` | Ce n'est pas passé. Réessayez dans un instant. |
+| `rhSettings.notifications.group` | Notifications |
+| `rhSettings.notifications.title` | Choisir vos notifications |
+| `rhSettings.notifications.text` | Candidatures, réponses aux invitations, messages |
+| `rhSettings.appearance.group` | Apparence |
+| `rhSettings.orbi.group` | Orbi |
+| `rhSettings.orbi.analysis` | Analyse des dossiers |
+| `rhSettings.orbi.analysisText` | Seulement à votre demande, jamais de rejet automatique |
+| `rhSettings.orbi.brief` | Le point du jour |
+| `rhSettings.orbi.briefText` | Dans vos notifications, calculé à l'ouverture |
+| `rhSettings.security.group` | Sécurité et confidentialité |
+| `rhSettings.security.twoFactor` | Validation en deux étapes |
+| `rhSettings.security.twoFactorOn` | Activée |
+| `rhSettings.security.twoFactorOff` | Recommandée pour les recruteurs |
+| `rhSettings.security.journal` | Journal des consultations |
+| `rhSettings.security.journalTeam` | Profils ouverts par l'équipe |
+| `rhSettings.security.journalOwn` | Profils que vous avez ouverts |
+| `rhSettings.security.privacy` | Confidentialité |
+| `rhSettings.security.privacyText` | Vos données et l'usage de l'IA |
+| `rhSettings.security.password` | Mot de passe et appareils |
+| `rhSettings.security.passwordText` | Connexion, appareils connectés |
+| `rhSettings.data.group` | Vos données |
+| `rhSettings.data.export` | Télécharger mes données |
+| `rhSettings.data.exportText` | Un fichier avec tout ce que Jumanly garde sur vous |
+| `rhSettings.close` | Fermer |
+| `rhJournal.seo` | Journal des consultations |
+| `rhJournal.title` | Journal des consultations |
+| `rhJournal.back` | Retour aux paramètres |
+| `rhJournal.introTeam` | Chaque profil ouvert par votre équipe est noté ici. Les talents savent que leur profil peut être consulté. |
+| `rhJournal.introOwn` | Chaque profil que vous ouvrez est noté ici. Les administrateurs de l'organisation voient le journal de toute l'équipe. |
+| `rhJournal.empty` | Aucun profil ouvert pour l'instant. |
+| `rhJournal.line` | {actor} · {date, date, short} à {date, time, short} |
+| `rhJournal.source.application` | Depuis une candidature |
+| `rhJournal.source.search` | Depuis la recherche de talents |
+| `rhJournal.unknown` | Profil supprimé |
+| `rhJournal.formerMember` | Ancien membre |
+| `rhJournal.you` | Vous |
+| `rhJournal.rule` | Le journal garde les 90 derniers jours, 100 consultations au plus. |
+
 ### Navigation Hire
 
 *Menu de l'espace Organisation, visible quand le sélecteur d'espace est sur une organisation.*

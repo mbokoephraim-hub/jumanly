@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { getTranslations } from "next-intl/server";
-import { AppPageHeader } from "@/components/app/page-header";
-import { Alert, Button, Select, TextField } from "@/components/ui";
+import { FlowHead } from "@/components/talent/flow-head";
+import { TalentIcon } from "@/components/talent/icon";
+import { Notice } from "@/components/talent/notice";
+import { Sheet, SheetButton } from "@/components/talent/sheet";
+import { cx } from "@/lib/cx";
 import { deleteTemplateAction, saveTemplateAction } from "@/server/actions/hire-messages";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
@@ -10,6 +13,7 @@ import {
   listTemplates,
   TEMPLATE_BODY_MAX,
   templateKinds,
+  type TemplateKind,
 } from "@/server/services/message-templates";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -17,139 +21,188 @@ export async function generateMetadata(): Promise<Metadata> {
   return { title: t("page.title"), robots: { index: false } };
 }
 
-const field =
-  "w-full rounded-[18px] bg-blanc px-4 py-3.5 text-[15px] leading-relaxed ring-[1.5px] ring-brume ring-inset focus-visible:outline-2 focus-visible:outline-sapin";
+const look: Record<
+  TemplateKind,
+  { icon: "agenda" | "document" | "horloge" | "valider" | "message"; tone: string }
+> = {
+  convocation: { icon: "agenda", tone: "t-c2" },
+  document: { icon: "document", tone: "t-c1" },
+  relance: { icon: "horloge", tone: "" },
+  acceptation: { icon: "valider", tone: "t-c3" },
+  refus: { icon: "message", tone: "" },
+};
 
 /**
- * The organization's message templates (prompt 5): convocation, document request, follow-up,
- * acceptance, refusal. Only this organization's templates are listed and edited; without one,
- * Jumanly's default text is used.
+ * The organization's message templates (planche recruteur-3 `MODELES`): each type with the
+ * organization's own text or Jumanly's, a sheet to write or change one, and the rule: a template
+ * is inserted in the message, read, then sent by the recruiter. Only this organization's
+ * templates are listed and edited (golden rule n° 6).
  */
 export default async function TemplatesPage({ searchParams }: PageProps<"/app/hire/modeles">) {
   const query = await searchParams;
   const { ctx } = await requireHire("/app/hire/modeles", "readApplications");
   const t = await getTranslations("hire.templates");
+  const tr = await getTranslations("rhTemplates");
   const templates = await listTemplates(db, ctx);
   const manage = hirePermissions(ctx.role).manage;
-  const kindOptions = templateKinds.map((kind) => ({ value: kind, label: t(`kind.${kind}`) }));
+  const missing = templateKinds.filter((kind) => !templates.some((row) => row.kind === kind));
+
+  const fields = (id: string, current?: { kind: TemplateKind; title: string; body: string }) => (
+    <>
+      <div className="t-champ">
+        <label htmlFor={`${id}-kind`}>{t("page.kind")}</label>
+        <span className="t-verre t-saisie">
+          <select id={`${id}-kind`} name="kind" defaultValue={current?.kind ?? "convocation"}>
+            {templateKinds.map((kind) => (
+              <option key={kind} value={kind}>
+                {t(`kind.${kind}`)}
+              </option>
+            ))}
+          </select>
+        </span>
+      </div>
+      <div className="t-champ">
+        <label htmlFor={`${id}-title`}>{t("page.name")}</label>
+        <span className="t-verre t-saisie">
+          <input
+            id={`${id}-title`}
+            name="title"
+            required
+            minLength={2}
+            maxLength={80}
+            defaultValue={current?.title}
+          />
+        </span>
+      </div>
+      <div className="t-champ">
+        <label htmlFor={`${id}-body`}>{t("message.text")}</label>
+        <textarea
+          id={`${id}-body`}
+          name="body"
+          rows={8}
+          required
+          maxLength={TEMPLATE_BODY_MAX}
+          defaultValue={current?.body}
+          placeholder={t("page.bodyPlaceholder")}
+          className="t-verre t-zone"
+          aria-describedby={`${id}-h`}
+        />
+        <p id={`${id}-h`} className="t-aide">
+          {t("page.placeholders")}
+        </p>
+      </div>
+    </>
+  );
 
   return (
-    <div className="mx-auto flex w-full max-w-[760px] flex-col gap-5 pb-6">
-      <AppPageHeader title={t("page.title")} subtitle={t("page.subtitle")} />
-      {query.ok === "enregistre" && <Alert tone="success" title={t("page.saved")} />}
-      {query.ok === "supprime" && <Alert tone="success" title={t("page.deleted")} />}
-      {query.erreur === "1" && <Alert tone="error" title={t("page.error")} />}
-      <p className="rounded-[18px] bg-creme px-4 py-3 text-[13.5px]">{t("page.placeholders")}</p>
+    <div className="t-flux">
+      <FlowHead back="/app/messages" backLabel={tr("back")} title={t("page.title")} />
+      <p className="t-r5-sous">{t("page.subtitle")}</p>
+      {query.ok === "enregistre" && <Notice tone="ok">{t("page.saved")}</Notice>}
+      {query.ok === "supprime" && <Notice tone="ok">{t("page.deleted")}</Notice>}
+      {query.erreur === "1" && <Notice tone="err">{t("page.error")}</Notice>}
 
-      {templates.length === 0 ? (
-        <p className="rounded-[20px] bg-blanc p-4 text-[14px] text-ardoise">{t("page.empty")}</p>
-      ) : (
-        <ul className="flex flex-col gap-3">
-          {templates.map((template) => (
-            <li key={template.id} className="rounded-[22px] bg-blanc p-4">
-              <details>
-                <summary className="flex cursor-pointer list-none items-center justify-between gap-3 [&::-webkit-details-marker]:hidden">
-                  <span className="flex min-w-0 flex-col">
-                    <span className="truncate text-[15.5px] font-semibold">{template.title}</span>
-                    <span className="text-[13px] text-ardoise">{t(`kind.${template.kind}`)}</span>
+      {templates.length > 0 && (
+        <section aria-labelledby="r5-mod-org" className="t-flux t-serre">
+          <h2 id="r5-mod-org" className="t-ck-t">
+            {tr("own")}
+          </h2>
+          <ul className="t-verre t-liste t-lignes">
+            {templates.map((template) => (
+              <li key={template.id}>
+                <SheetButton target={`r5-mod-${template.id}`} className="t-li t-press">
+                  <span className={cx("t-cases", look[template.kind].tone)} aria-hidden>
+                    <TalentIcon name={look[template.kind].icon} size="s" />
                   </span>
-                  <span className="text-[13px] font-semibold text-feuille-fonce">
-                    {manage ? t("page.edit") : t("page.view")}
+                  <span className="t-t">
+                    <b>{template.title}</b>
+                    <span>{t(`kind.${template.kind}`)}</span>
                   </span>
-                </summary>
-                {manage ? (
-                  <div className="mt-4 flex flex-col gap-3">
-                    <form action={saveTemplateAction} className="flex flex-col gap-3">
-                      <input type="hidden" name="template" value={template.id} />
-                      <Select
-                        id={`template-kind-${template.id}`}
-                        name="kind"
-                        label={t("page.kind")}
-                        defaultValue={template.kind}
-                        options={kindOptions}
-                      />
-                      <TextField
-                        id={`template-title-${template.id}`}
-                        name="title"
-                        required
-                        minLength={2}
-                        maxLength={80}
-                        defaultValue={template.title}
-                        label={t("page.name")}
-                      />
-                      <label
-                        htmlFor={`template-body-${template.id}`}
-                        className="text-[13.5px] font-semibold"
-                      >
-                        {t("message.text")}
-                      </label>
-                      <textarea
-                        id={`template-body-${template.id}`}
-                        name="body"
-                        rows={8}
-                        required
-                        maxLength={TEMPLATE_BODY_MAX}
-                        defaultValue={template.body}
-                        className={field}
-                      />
-                      <Button type="submit" variant="principal" size="M" className="self-start">
-                        {t("page.save")}
-                      </Button>
-                    </form>
-                    <form action={deleteTemplateAction}>
-                      <input type="hidden" name="template" value={template.id} />
-                      <Button type="submit" variant="dangerOutline" size="S">
-                        {t("page.delete")}
-                      </Button>
-                    </form>
-                  </div>
-                ) : (
-                  <p className="mt-3 text-[14px] whitespace-pre-line">{template.body}</p>
-                )}
-              </details>
-            </li>
-          ))}
-        </ul>
+                  <TalentIcon name="suivant" />
+                </SheetButton>
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {missing.length > 0 && (
+        <section aria-labelledby="r5-mod-jm" className="t-flux t-serre">
+          <h2 id="r5-mod-jm" className="t-ck-t">
+            {tr("jumanly")}
+          </h2>
+          <ul className="t-verre t-liste t-lignes">
+            {missing.map((kind) => (
+              <li key={kind} className="t-li">
+                <span className={cx("t-cases", look[kind].tone)} aria-hidden>
+                  <TalentIcon name={look[kind].icon} size="s" />
+                </span>
+                <span className="t-t">
+                  <b>{t(`kind.${kind}`)}</b>
+                  <span>{tr(`default.${kind}`)}</span>
+                </span>
+              </li>
+            ))}
+          </ul>
+        </section>
       )}
 
       {manage && (
-        <section aria-labelledby="nouveau-modele" className="rounded-[22px] bg-blanc p-5">
-          <h2 id="nouveau-modele" className="mb-3 text-[18px] font-semibold">
-            {t("page.new")}
-          </h2>
-          <form action={saveTemplateAction} className="flex flex-col gap-3">
-            <Select
-              id="template-kind-new"
-              name="kind"
-              label={t("page.kind")}
-              defaultValue="convocation"
-              options={kindOptions}
-            />
-            <TextField
-              id="template-title-new"
-              name="title"
-              required
-              minLength={2}
-              maxLength={80}
-              label={t("page.name")}
-            />
-            <label htmlFor="template-body-new" className="text-[13.5px] font-semibold">
-              {t("message.text")}
-            </label>
-            <textarea
-              id="template-body-new"
-              name="body"
-              rows={8}
-              required
-              maxLength={TEMPLATE_BODY_MAX}
-              placeholder={t("page.bodyPlaceholder")}
-              className={field}
-            />
-            <Button type="submit" variant="principal" size="M" className="self-start">
+        <SheetButton target="r5-mod-nouveau" className="t-ajout t-press">
+          <TalentIcon name="plus" size="s" />
+          {tr("create")}
+        </SheetButton>
+      )}
+
+      <p className="t-gar">
+        <TalentIcon name="modifier" size="s" />
+        <span>{tr("rule")}</span>
+      </p>
+
+      {templates.map((template) => (
+        <Sheet
+          key={template.id}
+          id={`r5-mod-${template.id}`}
+          title={template.title}
+          closeLabel={tr("close")}
+        >
+          {manage ? (
+            <div className="t-flux">
+              <form action={saveTemplateAction} className="t-flux">
+                <input type="hidden" name="template" value={template.id} />
+                {fields(`r5-m-${template.id}`, template)}
+                <button type="submit" className="t-bt t-p t-m t-pl t-press">
+                  {t("page.save")}
+                </button>
+              </form>
+              <form action={deleteTemplateAction}>
+                <input type="hidden" name="template" value={template.id} />
+                <button type="submit" className="t-bt t-sec t-m t-pl t-press t-r5-danger">
+                  {t("page.delete")}
+                </button>
+              </form>
+            </div>
+          ) : (
+            <p className="t-texte-l t-r5-pre">{template.body}</p>
+          )}
+        </Sheet>
+      ))}
+
+      {manage && (
+        <Sheet
+          id="r5-mod-nouveau"
+          title={t("page.new")}
+          closeLabel={tr("close")}
+          openParam="nouveau"
+          defaultOpen={query.nouveau === "1"}
+        >
+          <form action={saveTemplateAction} className="t-flux">
+            {fields("r5-m-nouveau")}
+            <button type="submit" className="t-bt t-p t-m t-pl t-press">
               {t("page.create")}
-            </Button>
+            </button>
           </form>
-        </section>
+        </Sheet>
       )}
     </div>
   );

@@ -115,8 +115,14 @@ const documentSchema = z.object({
 export async function requestDocumentAction(formData: FormData) {
   const { user, ctx } = await requireHire("/app/hire", "manage");
   const applicationId = id(formData.get("application"));
+  // From a conversation (planche recruteur-3 `CONV_R`, « + ») the answer comes back there.
+  const fromConversation = formData.get("retour") === "conversation";
+  const back = (conversationId: string, query: string) =>
+    fromConversation
+      ? `/app/messages/${conversationId}?${query}#dernier`
+      : `/app/hire/candidats/${applicationId}?${query}${query.startsWith("erreur") ? "#document" : ""}`;
   const parsed = documentSchema.safeParse(Object.fromEntries(formData));
-  if (!parsed.success) redirect(`/app/hire/candidats/${applicationId}?erreur=document#document`);
+  if (!parsed.success) redirect(back(id(formData.get("conversation")), "erreur=document"));
   const application = await guarded(
     () =>
       db.application.findFirst({
@@ -137,7 +143,7 @@ export async function requestDocumentAction(formData: FormData) {
     senderName: user.name,
     documentRequest: { name: parsed.data.name, due },
   }).catch((error) => reportError(error));
-  redirect(`/app/hire/candidats/${applicationId}?ok=document`);
+  redirect(back(conversation.id, "ok=document"));
 }
 
 // ─── Help to write a job (lot 11) ─────────────────────────────────────────────

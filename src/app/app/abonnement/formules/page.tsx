@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "next/link";
+import { RecruiterPlans } from "@/components/recruiter/billing";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import {
@@ -19,6 +20,7 @@ import { db } from "@/server/db";
 import { parseLimit, resolvePlan } from "@/server/entitlements";
 import { effectiveStatus } from "@/server/entitlements/periods";
 import { liveSubscription } from "@/server/services/subscriptions";
+import { getActiveSpace } from "@/server/hire-context";
 import { inOrganizationSpace } from "@/server/talent-space";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -34,6 +36,15 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function PlansPage({ searchParams }: PageProps<"/app/abonnement/formules">) {
   const params = await searchParams;
   const user = await requireUser("/app/abonnement/formules");
+  const space = await getActiveSpace(user.id);
+  if (space)
+    return (
+      <RecruiterPlans
+        ctx={{ userId: user.id, organizationId: space.organizationId, role: space.role }}
+        userId={user.id}
+        params={params}
+      />
+    );
   if (await inOrganizationSpace(user.id)) redirect("/app/abonnement");
   const t = await getTranslations();
   const d = dynamic(t);

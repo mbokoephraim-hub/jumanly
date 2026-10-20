@@ -71,8 +71,15 @@ export async function buildReport(
   const inPeriod = { gte: range.from, lte: range.to };
   const organizationId = ctx.organizationId;
 
-  const [activeJobs, applications] = await Promise.all([
+  const [activeJobs, interviews, applications] = await Promise.all([
     db.job.count({ where: { organizationId, status: { in: ["published", "pending_review"] } } }),
+    db.interview.count({
+      where: {
+        organizationId,
+        status: { in: ["confirmed", "done"] },
+        OR: [{ startsAt: inPeriod }, { startsAt: null, updatedAt: inPeriod }],
+      },
+    }),
     db.application.findMany({
       where: { job: { organizationId }, createdAt: inPeriod },
       select: {
@@ -98,7 +105,16 @@ export async function buildReport(
     }),
   ]);
   const hires = applications.filter((item) => item.status === "hired").length;
-  const basic = { activeJobs, applications: applications.length, hires };
+  // The applications of the last four weeks of the period, oldest first (recruteur lot 5, the
+  // chart « Candidatures par semaine »).
+  const weekly = [3, 2, 1, 0].map((back) => {
+    const end = range.to.getTime() - back * 7 * DAY;
+    return applications.filter((item) => {
+      const at = item.createdAt.getTime();
+      return at > end - 7 * DAY && at <= end;
+    }).length;
+  });
+  const basic = { activeJobs, applications: applications.length, hires, interviews, weekly };
   if (rank < reportRank("stats"))
     return {
       level: reportsLevel,

@@ -31,6 +31,8 @@ export function OrbiChat({
   variant = "page",
   question,
   panelLabels,
+  hrefs = orbiActions,
+  home = "/app",
   children,
 }: {
   conversationId: string | null;
@@ -42,6 +44,10 @@ export function OrbiChat({
   question?: string;
   /** Panel only: its two buttons. */
   panelLabels?: { close: string; expand: string };
+  /** The pages an answer may propose, by key: the talent's, or the recruiter's (lot 5). */
+  hrefs?: Readonly<Record<string, string>>;
+  /** Where « Retour » leads without a previous page. */
+  home?: string;
   children: ReactNode;
 }) {
   const panel = variant === "panel";
@@ -159,7 +165,7 @@ export function OrbiChat({
   return (
     <>
       <div className={cx("t-or-tete", panel ? "t-op-tete" : "t-tete")}>
-        {!panel && <BackButton fallback="/app" label={t("back")} className="t-or-retour" />}
+        {!panel && <BackButton fallback={home} label={t("back")} className="t-or-retour" />}
         <OrbiMark size={40} state={pending ? "reflechit" : listening ? "ecoute" : "repos"} />
         <div className="t-t">
           <b>{t("title")}</b>
@@ -225,7 +231,7 @@ export function OrbiChat({
               {turn.text}
             </p>
           ) : (
-            <OrbiAnswer key={turn.id} answer={turn} />
+            <OrbiAnswer key={turn.id} answer={turn} hrefs={hrefs} />
           ),
         )}
         {pending && (
@@ -301,7 +307,13 @@ export function OrbiChat({
 
 const plansLimits = new Set(["entitlement", "quota"]);
 
-function OrbiAnswer({ answer }: { answer: OrbiReply }) {
+function OrbiAnswer({
+  answer,
+  hrefs,
+}: {
+  answer: OrbiReply;
+  hrefs: Readonly<Record<string, string>>;
+}) {
   const t = useTranslations("talentOrbi");
   return (
     <div className="t-bulle-o">
@@ -326,15 +338,17 @@ function OrbiAnswer({ answer }: { answer: OrbiReply }) {
           </p>
         )}
         <div className="t-acts">
-          {answer.actions.map((action, index) => (
-            <Link
-              key={action}
-              href={orbiActions[action]}
-              className={index === 0 ? "t-bt t-p t-s" : "t-bt t-sec t-s"}
-            >
-              {t(`actions.${action}`)}
-            </Link>
-          ))}
+          {answer.actions
+            .filter((action) => action in hrefs)
+            .map((action, index) => (
+              <Link
+                key={action}
+                href={hrefs[action]!}
+                className={index === 0 ? "t-bt t-p t-s" : "t-bt t-sec t-s"}
+              >
+                {t(`actions.${action}` as Parameters<typeof t>[0])}
+              </Link>
+            ))}
           {answer.why && (
             <details className="t-orbi-pq">
               <summary className="t-pq">
