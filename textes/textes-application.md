@@ -11639,7 +11639,7 @@ Conventions :
 
 | Clé | Texte |
 |---|---|
-| `system.offline.banner` | Vous êtes hors ligne. Certaines actions sont indisponibles. |
+| `system.offline.banner` | Vous êtes hors ligne. Vous voyez la dernière version enregistrée sur cet appareil. |
 | `system.offline.back` | Connexion rétablie. |
 | `system.offline.page.title` | Pas de connexion |
 | `system.offline.page.body` | Vérifiez votre connexion internet ou vos données mobiles, puis réessayez. |

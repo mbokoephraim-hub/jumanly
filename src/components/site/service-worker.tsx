@@ -17,6 +17,30 @@ const subscribe = (callback: () => void) => {
 const subscribeNever = () => () => undefined;
 
 const SLOW_SEEN_KEY = "jm-slow-seen";
+const WARM_KEY = "jm-garde";
+/** Main pages of the talent space, kept on the device once per session so they open offline. */
+const WARM_PATHS = [
+  "/app",
+  "/app/jobs",
+  "/app/learn",
+  "/app/suivi",
+  "/app/compte",
+  "/app/profil",
+  "/app/messages",
+  "/app/orbi",
+];
+
+/** Asks the worker to keep the main pages, once per session, from the signed-in space only. */
+async function warmOnce() {
+  try {
+    if (!window.location.pathname.startsWith("/app") || sessionStorage.getItem(WARM_KEY)) return;
+    sessionStorage.setItem(WARM_KEY, "1");
+    const registration = await navigator.serviceWorker.ready;
+    registration.active?.postMessage({ type: "warm", paths: WARM_PATHS });
+  } catch {
+    // Nothing kept: pages still open with the network.
+  }
+}
 
 function slowOnce() {
   try {
@@ -31,7 +55,8 @@ function slowOnce() {
 /**
  * Registers the service worker (public/sw.js) in production, and says how the connection is
  * (mockup 08-05): a Nuit banner while offline, with « Réessayer »; the « Connexion rétablie. »
- * toast when the network comes back; a one-time notice on a slow connection.
+ * toast when the network comes back; a one-time notice on a slow connection. Once per session it
+ * also has the main pages kept on the device, so the app opens offline like a messaging app.
  * In development the worker is not used, so pages always come from the server.
  */
 export function ServiceWorker({ enabled }: { enabled: boolean }) {
@@ -52,6 +77,9 @@ export function ServiceWorker({ enabled }: { enabled: boolean }) {
   useEffect(() => {
     if (!enabled || !("serviceWorker" in navigator)) return;
     navigator.serviceWorker.register("/sw.js", { scope: "/" }).catch(() => undefined);
+    // After the page is shown, so it never competes with what the person opened.
+    const timer = setTimeout(() => void warmOnce(), 2500);
+    return () => clearTimeout(timer);
   }, [enabled]);
 
   useEffect(() => {
