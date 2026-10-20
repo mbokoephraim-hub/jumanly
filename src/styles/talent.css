@@ -14733,6 +14733,128 @@ span.t-sw {
   color: var(--texte);
 }
 
+/* ─── Recruiter space (docs/refonte-mobile, recruteur lot 1) ─────────────────────────────── */
+/* Chip of the active organization over the big title (planche recruteur-1 `.org-l`). */
+.t-org-l {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 100%;
+  margin-top: max(8px, env(safe-area-inset-top));
+  margin-bottom: -6px;
+  padding: 5px 10px 5px 5px;
+  border-radius: 999px;
+  background: var(--plein);
+  box-shadow: var(--verre);
+  color: var(--texte);
+  font-size: 12.5px;
+  font-weight: 600;
+}
+.t-org-l > span:not(.t-lg-e) {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.t-org-l svg {
+  width: 12px;
+  height: 12px;
+  flex: none;
+  transform: rotate(90deg);
+}
+.t-org-l + .t-tete {
+  padding-top: 8px;
+}
+.t-lg-e.t-xs {
+  width: 22px;
+  height: 22px;
+  font-size: 9px;
+  box-shadow: none;
+}
+.t-lg-e.t-sm {
+  width: 40px;
+  height: 40px;
+  font-size: 12px;
+  box-shadow: none;
+}
+.t-lg-e img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+}
+/* « Organisation active »: one radio line per organization (planche recruteur-1 r1). */
+.t-orgs {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 12px;
+}
+.t-orgs .t-li[aria-current="true"] .t-radio {
+  border-color: var(--sapin);
+  background: radial-gradient(circle, var(--sapin) 0 5px, transparent 6px);
+}
+.sombre .t-orgs .t-li[aria-current="true"] .t-radio {
+  border-color: var(--lime);
+  background: radial-gradient(circle, var(--lime) 0 5px, transparent 6px);
+}
+.t-radio {
+  width: 20px;
+  height: 20px;
+  flex: none;
+  border-radius: 50%;
+  border: 2px solid var(--texte2);
+}
+/* « Vous commencez avec » : three tiles of the real limits (planche r3plus q3). */
+.t-q3 {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+}
+.t-q3 > div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 14px 8px;
+  border-radius: 20px;
+  text-align: center;
+  font-size: 12px;
+  color: var(--texte2);
+}
+.t-q3 b {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--texte);
+}
+.t-tag.t-amb {
+  background: var(--ambre-c);
+  color: var(--texte);
+}
+.t-tag.t-vert {
+  background: var(--lime-c);
+  color: var(--texte);
+}
+.t-orgs .t-li {
+  border-radius: 20px;
+  text-align: left;
+}
+/* Until the web lots of the recruiter space (docs/refonte-web), the Hire pages not redrawn yet
+   keep the width they were built for on a tablet or a computer; the redrawn screens (`.t-flux`)
+   stay in the phone column, centred. */
+@media (min-width: 768px) {
+  .t-rh .t-colonne {
+    max-width: 1240px;
+    padding: 0 24px;
+  }
+  .t-rh .t-contenu > .t-flux,
+  .t-rh .t-contenu > .t-acces {
+    width: 100%;
+    max-width: 560px;
+    margin-inline: auto;
+  }
+}
+
 /*
  * Entrée des pages (reprise du 20/10, « la fluidité de WhatsApp ») : la page suivante glisse de la
  * droite, de la gauche au retour ; entre pages du premier niveau, un fondu. Posé par

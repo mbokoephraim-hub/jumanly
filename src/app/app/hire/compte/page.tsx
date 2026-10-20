@@ -1,0 +1,241 @@
+import type { Metadata } from "next";
+import type { ReactNode } from "react";
+import Link from "next/link";
+import { getTranslations } from "next-intl/server";
+import { TalentAvatar } from "@/components/talent/avatar";
+import { FlowHead } from "@/components/talent/flow-head";
+import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
+import { cx } from "@/lib/cx";
+import { AI_CREDITS_KEY } from "@/server/ai";
+import { signOut } from "@/server/actions/auth";
+import { switchSpace } from "@/server/actions/hire";
+import { ADMIN_ROLES } from "@/server/auth/session";
+import { db } from "@/server/db";
+import { resolvePlan, usage } from "@/server/entitlements";
+import { requireHire } from "@/server/hire-context";
+import { hirePermissions } from "@/server/services/hire";
+import { seatUsage } from "@/server/services/organization";
+import { listPools } from "@/server/services/talent-search";
+import { isTester } from "@/server/services/tester";
+
+/** The only contact of Jumanly (CLAUDE.md § 8): by e-mail, never by phone. */
+const CONTACT_EMAIL = "assistant@jumanly.io";
+
+export async function generateMetadata(): Promise<Metadata> {
+  const t = await getTranslations("hireAccount");
+  return { title: t("seo"), robots: { index: false } };
+}
+
+function Row({
+  href,
+  icon,
+  tone,
+  title,
+  text,
+  badge,
+}: {
+  href: string;
+  icon: TalentIconName;
+  tone?: "t-c1" | "t-c2" | "t-c3";
+  title: string;
+  text?: string;
+  badge?: ReactNode;
+}) {
+  const inner = (
+    <>
+      <span className={cx("t-cases", tone)} aria-hidden>
+        <TalentIcon name={icon} size="s" />
+      </span>
+      <span className="t-t">
+        <b>{title}</b>
+        {text && <span>{text}</span>}
+      </span>
+      {badge}
+      <TalentIcon name="suivant" />
+    </>
+  );
+  return (
+    <li>
+      {href.startsWith("mailto:") ? (
+        <a href={href} className="t-li t-press">
+          {inner}
+        </a>
+      ) : (
+        <Link href={href} className="t-li t-press">
+          {inner}
+        </Link>
+      )}
+    </li>
+  );
+}
+
+const List = ({ label, children }: { label: string; children: ReactNode }) => (
+  <ul aria-label={label} className="t-verre t-liste t-lignes">
+    {children}
+  </ul>
+);
+
+/**
+ * Compte RH (planche recruteur-3 COMPTE_R), opened by the avatar of the recruiter space: the
+ * person and their job title, the organization and its team, the pools and the reports, then
+ * the subscription, the settings, help and the way back to the talent space.
+ */
+export default async function RecruiterAccountPage() {
+  const { user, space, ctx } = await requireHire("/app/hire/compte");
+  const t = await getTranslations("hireAccount");
+  const tTalent = await getTranslations("compte");
+  const subject = { type: "organization" as const, id: ctx.organizationId };
+  const permissions = hirePermissions(ctx.role);
+  const [membership, organization, seats, pools, plan, credits] = await Promise.all([
+    db.membership.findUnique({
+      where: { userId_organizationId: { userId: user.id, organizationId: ctx.organizationId } },
+      select: { jobTitle: true },
+    }),
+    db.organization.findUniqueOrThrow({
+      where: { id: ctx.organizationId },
+      select: { verificationStatus: true, verifiedAt: true },
+    }),
+    seatUsage(db, ctx.organizationId),
+    permissions.readApplications ? listPools(db, ctx) : Promise.resolve([]),
+    resolvePlan(db, subject),
+    usage(db, subject, AI_CREDITS_KEY),
+  ]);
+  const org = space.organization.name;
+  const verification = organization.verifiedAt
+    ? { key: "verified", tone: "t-vert" }
+    : organization.verificationStatus === "pending"
+      ? { key: "pending", tone: "t-amb" }
+      : { key: "toVerify", tone: "t-amb" };
+  const talents = pools.reduce((sum, pool) => sum + pool._count.entries, 0);
+  const planName = plan?.planName ?? "";
+  const admin = (ADMIN_ROLES as readonly string[]).includes(user.platformRole);
+
+  return (
+    <div className="t-flux">
+      <FlowHead back="/app/hire" backLabel={t("back")} title={t("title")} />
+
+      <Link href="/app/hire/compte/profil" className="t-verre t-hub-id t-press">
+        <TalentAvatar name={user.name} image={user.image} />
+        <span className="t-t">
+          <b>{user.name}</b>
+          <span>
+            {membership?.jobTitle
+              ? t("line", { jobTitle: membership.jobTitle, org })
+              : t("lineNoTitle", { org })}
+          </span>
+        </span>
+        <TalentIcon name="suivant" size="s" />
+      </Link>
+
+      <List label={t("group.org")}>
+        <Row
+          href="/app/organisation"
+          icon="entreprise"
+          tone="t-c2"
+          title={t("org.title")}
+          text={t("org.text")}
+          badge={
+            <span className={cx("t-tag", verification.tone)}>
+              {t(`org.${verification.key}` as "org.verified")}
+            </span>
+          }
+        />
+        <Row
+          href="/app/organisation?onglet=membres"
+          icon="candidats"
+          tone="t-c1"
+          title={t("team.title")}
+          text={
+            seats.max < 0
+              ? t("team.textUnlimited", { used: seats.used })
+              : t("team.text", { used: seats.used, limit: seats.max })
+          }
+        />
+        {permissions.readApplications && (
+          <Row
+            href="/app/hire/viviers"
+            icon="favori"
+            tone="t-c3"
+            title={t("pools.title")}
+            text={t("pools.text", { pools: pools.length, talents })}
+          />
+        )}
+        <Row
+          href="/app/hire/rapports"
+          icon="progression"
+          tone="t-c1"
+          title={t("reports.title")}
+          text={t("reports.text")}
+        />
+      </List>
+
+      <List label={t("group.settings")}>
+        <Row
+          href="/app/abonnement"
+          icon="portefeuille"
+          title={t("plan.title")}
+          text={
+            credits.limit < 0
+              ? t("plan.textUnlimited", { plan: planName })
+              : t("plan.text", {
+                  plan: planName,
+                  count: Math.max(0, credits.limit - credits.used),
+                })
+          }
+        />
+        <Row
+          href="/app/parametres"
+          icon="reglages"
+          title={t("settings.title")}
+          text={t("settings.text")}
+        />
+        <Row
+          href={`mailto:${CONTACT_EMAIL}`}
+          icon="aide"
+          title={t("help.title")}
+          text={CONTACT_EMAIL}
+        />
+        {isTester(user) && (
+          <Row
+            href="/app/testeur"
+            icon="portefeuille"
+            title={tTalent("tester.title")}
+            text={tTalent("tester.text")}
+          />
+        )}
+        {admin && (
+          <Row
+            href="/admin"
+            icon="cadenas"
+            title={tTalent("admin.title")}
+            text={tTalent("admin.text")}
+          />
+        )}
+      </List>
+
+      <form action={switchSpace} className="t-verre t-liste">
+        <input type="hidden" name="space" value="personal" />
+        <button type="submit" className="t-li t-press w-full text-left">
+          <span className="t-cases t-c3" aria-hidden>
+            <TalentIcon name="profil" size="s" />
+          </span>
+          <span className="t-t">
+            <b>{t("talent.title")}</b>
+          </span>
+          <TalentIcon name="suivant" />
+        </button>
+      </form>
+
+      <form action={signOut} className="t-verre t-liste">
+        <button type="submit" className="t-li t-danger t-press w-full text-left">
+          <span className="t-cases" aria-hidden>
+            <TalentIcon name="deconnexion" size="s" />
+          </span>
+          <span className="t-t">
+            <b>{t("signOut")}</b>
+          </span>
+        </button>
+      </form>
+    </div>
+  );
+}

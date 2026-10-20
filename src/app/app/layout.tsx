@@ -1,6 +1,7 @@
 import { isTester } from "@/server/services/tester";
 import { Suspense } from "react";
 import { AppShell } from "@/components/layout/app-shell";
+import { RecruiterShell } from "@/components/recruiter/shell";
 import { TalentShell } from "@/components/talent/shell";
 import { Skeleton } from "@/components/ui";
 import { requireUser } from "@/server/auth/session";
@@ -88,8 +89,60 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     );
   }
 
-  const plan = await resolvePlan(db, { type: "user", id: user.id });
   const t = await getTranslations("org.roles");
+
+  // Recruiter space: the shell of the mobile redesign (docs/refonte-mobile, brief recruteur).
+  if (space && !partnerSpace) {
+    const tShell = await getTranslations("hireShell.org");
+    const [unreadMessages, logos, plans] = await Promise.all([
+      unreadCount(db, {
+        userId: user.id,
+        hire: { userId: user.id, organizationId: space.organizationId, role: space.role },
+      }),
+      db.organization.findMany({
+        where: { id: { in: hire.map((membership) => membership.organizationId) } },
+        select: { id: true, logo: true },
+      }),
+      Promise.all(
+        hire.map((membership) =>
+          resolvePlan(db, { type: "organization", id: membership.organizationId }),
+        ),
+      ),
+    ]);
+    const logoOf = (id: string) => logos.find((org) => org.id === id)?.logo ?? null;
+    return (
+      <RecruiterShell
+        account={{ name: user.name, image: user.image }}
+        org={{
+          id: space.organizationId,
+          name: space.organization.name,
+          logo: logoOf(space.organizationId),
+        }}
+        orgs={hire.map((membership, index) => {
+          const role = t(`${membership.role}.text`);
+          const planName = plans[index]?.planName;
+          return {
+            id: membership.organizationId,
+            name: membership.organization.name,
+            logo: logoOf(membership.organizationId),
+            line: planName
+              ? tShell("line", { role, plan: planName })
+              : tShell("lineNoPlan", { role }),
+          };
+        })}
+        unread={unread}
+        unreadMessages={unreadMessages}
+        appearance={user.appearance}
+        reduceMotion={user.reduceMotion}
+        intro={intro}
+      >
+        <ContentBanners audience="recruiters" />
+        {children}
+      </RecruiterShell>
+    );
+  }
+
+  const plan = await resolvePlan(db, { type: "user", id: user.id });
   const option = (membership: (typeof hire)[number]) => ({
     id: membership.organizationId,
     name: membership.organization.name,
