@@ -26,7 +26,9 @@ test("espace recruteur : barre du bas, organisation active, Compte RH et profil 
   const sheet = page.getByRole("dialog", { name: "Organisation active" });
   await expect(sheet).toBeVisible();
   await expect(sheet.getByRole("button", { name: "Passer à mon espace talent" })).toBeVisible();
-  await sheet.getByRole("button", { name: "Fermer" }).click();
+  // Closed by its key: the sheet still slides in, its button is not yet still.
+  await page.keyboard.press("Escape");
+  await expect(sheet).toBeHidden();
 
   // The tab of Offres lights up on its page, and its head says « Mes offres ».
   await bar.getByRole("link", { name: /^Offres/ }).click();
