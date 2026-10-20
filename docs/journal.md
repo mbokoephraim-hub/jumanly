@@ -3325,7 +3325,7 @@ rapports partenaire et carrière).
 de `.t-saisie`). « Recommandés » affichait « aucun dossier » sous le podium. Le bouton
 « Analyser (ATS) » écrasait les dates de la carte d'offre.
 
-**Tests.** TESTS_LOT6
+**Tests.** Unitaires 352 (50 fichiers) ; en base 258 (35 fichiers) sur une base neuve ; e2e complets lancés par la CI.
 
 **Écarts.** Voir `docs/decisions/2026-10-20-recruteur-lot-6.md`.
 
