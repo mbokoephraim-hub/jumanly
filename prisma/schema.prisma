@@ -815,9 +815,9 @@ model User {
   showPresence        Boolean                   @default(true)
   /// « Accusés de lecture » (Paramètres): off, « Lu » is neither sent nor shown, both ways.
   readReceipts        Boolean                   @default(true)
-  /// End-of-offer reminders (Notifications › Réglages): ["d7", "d3", "d1", "d0"], J-3, J-1 and the
-  /// day itself by default.
-  endingReminders     String[]                  @default(["d3", "d1", "d0"])
+  /// End-of-offer reminders (Paramètres › Messagerie et rappels): any of ["d7", "d3", "d1", "d0"],
+  /// J-3 only by default (brief recruteur § 2.16 bis).
+  endingReminders     String[]                  @default(["d3"])
   joinRequests        OrgJoinRequest[]
   sessions            Session[]
   accounts            Account[]

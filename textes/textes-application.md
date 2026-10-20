@@ -8809,6 +8809,7 @@ Conventions :
 | `rhInbox.badge.interview` | Retenu · entretien |
 | `rhInbox.badge.hired` | Recruté |
 | `rhInbox.badge.review` | En examen |
+| `rhInbox.badge.retained` | Retenu |
 | `rhInbox.badge.rejected` | Non retenu |
 | `rhInbox.badge.withdrawn` | Candidature retirée |
 | `rhInbox.badge.proposal` | Proposition acceptée |
@@ -8828,6 +8829,7 @@ Conventions :
 | `rhThread.badge.interview` | Retenu · entretien |
 | `rhThread.badge.hired` | Recruté |
 | `rhThread.badge.review` | En examen |
+| `rhThread.badge.retained` | Retenu |
 | `rhThread.badge.rejected` | Non retenu |
 | `rhThread.badge.withdrawn` | Candidature retirée |
 | `rhThread.badge.proposal` | Proposition acceptée |
@@ -9686,7 +9688,7 @@ Conventions :
 
 ### Refonte recruteur · ATS, retenus et réponses groupées (lot 6)
 
-*Analyse de toutes les candidatures d'une offre par Orbi, classement expliqué, recommandation, profil pour l'offre, liste des retenus, réponses groupées relues avant l'envoi (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 6 ; planches recruteur-4 § 1 et 2). Orbi recommande, le recruteur décide : personne n'est écarté automatiquement.*
+*Analyse de toutes les candidatures d'une offre par Orbi, classement expliqué, recommandation, profil pour l'offre, liste des retenus, réponses groupées relues avant l'envoi, messagerie enrichie, rappels de fin d'offre, demandes pour rejoindre une organisation, relance des propositions et rapport PDF (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 6 ; planches recruteur-4 et modeles-recruteur). Orbi recommande, le recruteur décide : personne n'est écarté automatiquement.*
 
 | Clé | Texte |
 |---|---|
@@ -9905,6 +9907,206 @@ Conventions :
 | `hireAts.shortlist.others` | {count, plural, one {# autre personne attend une réponse. Je peux préparer un message respectueux : vous le relisez avant l'envoi.} other {# autres personnes attendent une réponse. Je peux préparer un message respectueux : vous le relisez avant l'envoi.}} |
 | `hireAts.shortlist.slots` | Créneaux |
 | `hireAts.shortlist.inform` | {count, plural, one {Informer la personne} other {Informer les #}} |
+| `rhThread6.online` | En ligne |
+| `rhThread6.receipt.delivered` | Distribué |
+| `rhThread6.receipt.read` | Lu |
+| `rhThread6.ok.pin` | Conversation épinglée en haut de la liste |
+| `rhThread6.ok.unpin` | Conversation désépinglée |
+| `rhThread6.ok.mute` | Notifications coupées pour cette conversation |
+| `rhThread6.ok.unmute` | Notifications réactivées |
+| `rhThread6.reported` | Signalement envoyé à l'équipe Jumanly |
+| `rhThread6.reportedAlready` | Vous avez déjà signalé cette conversation |
+| `rhThread6.menu.pin` | Épingler |
+| `rhThread6.menu.unpin` | Désépingler |
+| `rhThread6.menu.pinText` | En haut de la liste, pour toute l'équipe |
+| `rhThread6.menu.mute` | Couper les notifications |
+| `rhThread6.menu.unmute` | Réactiver les notifications |
+| `rhThread6.menu.muteText` | Pour vous seulement, les messages arrivent toujours |
+| `rhThread6.menu.hide` | Retirer de ma messagerie |
+| `rhThread6.menu.hideText` | Le candidat garde ses messages, rien n'est supprimé |
+| `rhThread6.menu.report` | Signaler |
+| `rhThread6.hide.title` | Retirer de ma messagerie ? |
+| `rhThread6.hide.text` | La conversation avec {name} disparaît de la liste de votre organisation. {name} garde tous ses messages et rien n'est supprimé. Elle revient si un nouveau message arrive. |
+| `rhThread6.hide.confirm` | Retirer |
+| `rhThread6.report.title` | Signaler la conversation |
+| `rhInbox6.online` | En ligne |
+| `rhInbox6.pinned` | Épinglée |
+| `rhInbox6.close` | Fermer |
+| `rhInbox6.hidden` | Conversation retirée de votre messagerie |
+| `rhInbox6.cleaned` | {count, plural, =0 {Aucune conversation retirée} one {# conversation retirée de votre messagerie} other {# conversations retirées de votre messagerie}} |
+| `rhInbox6.cleanup.line` | {count, plural, one {# conversation de candidat non retenu est terminée depuis plus de 30 jours. Je peux la retirer de votre messagerie : le candidat garde ses messages.} other {# conversations de candidats non retenus sont terminées depuis plus de 30 jours. Je peux les retirer de votre messagerie : les candidats gardent leurs messages.}} |
+| `rhInbox6.cleanup.see` | Voir |
+| `rhInbox6.cleanup.title` | Ranger la messagerie |
+| `rhInbox6.cleanup.text` | Ces conversations de candidats non retenus sont terminées depuis plus de 30 jours. Décochez celles à garder. |
+| `rhInbox6.cleanup.rule` | Retirer masque la conversation pour votre organisation seulement. Rien n'est supprimé ; elle revient si le candidat écrit. |
+| `rhInbox6.cleanup.confirm` | Retirer les conversations cochées |
+| `messagingSettings.seo` | Messagerie et rappels |
+| `messagingSettings.title` | Messagerie et rappels |
+| `messagingSettings.titleTalent` | Messagerie |
+| `messagingSettings.rowText` | En ligne, accusés de lecture, rappels de fin d'offre |
+| `messagingSettings.rowTextTalent` | En ligne et accusés de lecture |
+| `messagingSettings.back` | Retour aux paramètres |
+| `messagingSettings.saved` | Réglages enregistrés |
+| `messagingSettings.save` | Enregistrer |
+| `messagingSettings.messages.group` | Messagerie |
+| `messagingSettings.messages.presence` | Montrer quand je suis en ligne |
+| `messagingSettings.messages.presenceText` | Désactivé, vous ne voyez plus non plus qui est en ligne. |
+| `messagingSettings.messages.receipts` | Accusés de lecture |
+| `messagingSettings.messages.receiptsText` | « Lu » sous vos messages. Désactivé, vous ne voyez plus non plus celui des autres. |
+| `messagingSettings.reminders.group` | Rappels de fin d'offre |
+| `messagingSettings.reminders.d7` | J-7 · une semaine avant |
+| `messagingSettings.reminders.d3` | J-3 · trois jours avant |
+| `messagingSettings.reminders.d1` | J-1 · la veille |
+| `messagingSettings.reminders.d0` | Le jour de clôture |
+| `messagingSettings.reminders.default` | Activé par défaut |
+| `messagingSettings.reminders.note` | Dans l'app et par e-mail si vous recevez les e-mails de notification. Sans action de votre part, l'offre se clôture à la date prévue. |
+| `orgJoin.title` | Votre organisation est peut-être déjà sur Jumanly |
+| `orgJoin.byDomain` | Même domaine d'e-mail que vous |
+| `orgJoin.byName` | Même nom |
+| `orgJoin.members` | {count, plural, one {# membre} other {# membres}} |
+| `orgJoin.verified` | Vérifiée |
+| `orgJoin.ask` | Demander à rejoindre |
+| `orgJoin.rule` | Un administrateur de l'organisation accepte ou refuse votre demande. Il voit seulement votre nom et le domaine de votre e-mail. |
+| `orgJoin.sent` | Demande envoyée. Vous serez prévenu dès la réponse. |
+| `orgJoin.cancelled` | Demande annulée |
+| `orgJoin.error` | Cette organisation ne peut pas recevoir votre demande. |
+| `orgJoin.waiting` | {days, plural, one {En attente de réponse · expire dans # jour} other {En attente de réponse · expire dans # jours}} |
+| `orgJoin.accepted` | Votre demande est acceptée : vous faites partie de l'équipe. |
+| `orgJoin.declined` | Votre demande n'a pas été acceptée. Continuez avec votre organisation. |
+| `orgJoin.status.pending` | En attente |
+| `orgJoin.status.accepted` | Acceptée |
+| `orgJoin.status.declined` | Refusée |
+| `orgJoin.cancel` | Annuler la demande |
+| `orgJoin.open` | Ouvrir {org} |
+| `orgJoin.ownKept` | Votre propre organisation reste disponible : vous pouvez continuer à la configurer ci-dessous. |
+| `orgJoin.seatsAfter` | {used} sièges utilisés sur {max} |
+| `orgJoin.seatsUnlimited` | sièges illimités |
+| `orgJoin.admin.title` | {count, plural, one {Demande pour rejoindre votre organisation} other {# demandes pour rejoindre votre organisation}} |
+| `orgJoin.admin.byDomain` | Adresse professionnelle {domain} |
+| `orgJoin.admin.byName` | A trouvé l'organisation par son nom · {domain} |
+| `orgJoin.admin.pending` | À décider |
+| `orgJoin.admin.role` | Rôle |
+| `orgJoin.admin.roles.org_admin` | Administrateur |
+| `orgJoin.admin.roles.recruiter` | Recruteur |
+| `orgJoin.admin.roles.hiring_manager` | Responsable du recrutement |
+| `orgJoin.admin.roles.viewer` | Lecture seule |
+| `orgJoin.admin.seatsLeft` | {count, plural, one {Il reste # siège dans votre formule.} other {Il reste # sièges dans votre formule.}} |
+| `orgJoin.admin.seatsNone` | Plus aucun siège libre : libérez-en un ou changez de formule pour accepter. |
+| `orgJoin.admin.seatsUnlimited` | Sièges illimités dans votre formule. |
+| `orgJoin.admin.accept` | Accepter |
+| `orgJoin.admin.decline` | Refuser |
+| `orgJoin.admin.acceptedOk` | Demande acceptée : la personne fait partie de l'équipe. |
+| `orgJoin.admin.declinedOk` | Demande refusée. La personne est prévenue, sans détail. |
+| `orgJoin.admin.seats` | Plus aucun siège libre : la demande reste en attente. |
+| `orgJoin.admin.error` | Cette demande n'est plus en attente. |
+| `jobEnding.badge` | J-{days} |
+| `jobEnding.lastDay` | Fin |
+| `jobEnding.title` | {days, plural, =0 {Votre offre se termine aujourd'hui} one {Fin de l'offre demain} other {Fin de l'offre dans # jours}} |
+| `jobEnding.closes` | Clôture le {date} |
+| `jobEnding.applications` | {count, plural, one {candidature} other {candidatures}} |
+| `jobEnding.views` | {count, plural, one {vue} other {vues}} |
+| `jobEnding.interviews` | {count, plural, one {entretien} other {entretiens}} |
+| `jobEnding.analyse` | Analyser et classer |
+| `jobEnding.analyseText` | {count, plural, one {Le CV reçu, avant la fin} other {Les # CV, avant la fin}} |
+| `jobEnding.stats` | Voir les statistiques |
+| `jobEnding.statsText` | Vues, candidatures, étapes |
+| `jobEnding.prolong` | Prolonger l'offre |
+| `jobEnding.prolongText` | Choisir une nouvelle date |
+| `jobEnding.close` | Clôturer ou annuler |
+| `jobEnding.closeText` | Les candidats sont prévenus par un message relu par vous |
+| `jobEnding.closeSheet` | Fermer |
+| `jobEnding.prolongTitle` | Prolonger l'offre |
+| `jobEnding.plus` | +{days} jours |
+| `jobEnding.until` | Jusqu'au {date} |
+| `jobEnding.otherDate` | Autre date |
+| `jobEnding.atsFollows` | L'analyse programmée à la clôture suit la nouvelle date. |
+| `jobEnding.prolongConfirm` | Prolonger |
+| `jobEnding.closeTitle` | Clôturer ou annuler |
+| `jobEnding.closeNow` | Clôturer maintenant |
+| `jobEnding.closeNowText` | {count, plural, =0 {Plus de nouvelles candidatures.} one {Plus de nouvelles candidatures. La candidature reçue reste à traiter.} other {Plus de nouvelles candidatures. Les # reçues restent à traiter, l'analyse reste possible.}} |
+| `jobEnding.cancel` | Annuler le recrutement |
+| `jobEnding.cancelText` | Le poste n'est plus ouvert. Vous écrivez ensuite aux candidats, chaque message est relu par vous avant l'envoi. |
+| `jobEnding.letEnd` | Sans rien faire, l'offre se clôture le {date}. |
+| `jobEnding.closeConfirm` | Valider |
+| `jobEnding.ok.prolonged` | Offre prolongée. Les rappels suivront la nouvelle date. |
+| `jobEnding.ok.closed` | Offre clôturée. Les candidatures reçues restent à traiter. |
+| `jobEnding.error` | L'offre n'a pas pu être modifiée. Vérifiez la date choisie. |
+| `hireTalents6.remind` | Relancer |
+| `hireTalents6.remindAria` | Relancer {name} |
+| `hireTalents6.reminded` | Relancé |
+| `hireTalents6.remindedOk` | Relance envoyée. Le talent décide toujours. |
+| `hireReportPdf.kicker` | Rapport de recrutement |
+| `hireReportPdf.lead` | {from, date, long} au {to, date, long} · {count, plural, =0 {aucune offre active} one {# offre active} other {# offres actives}} · préparé pour l'équipe recrutement |
+| `hireReportPdf.essential` | L'essentiel |
+| `hireReportPdf.kpi.applications` | {count, plural, one {candidature reçue} other {candidatures reçues}} |
+| `hireReportPdf.kpi.delay` | délai moyen de première réponse |
+| `hireReportPdf.kpi.interviews` | {count, plural, one {entretien} other {entretiens}} |
+| `hireReportPdf.kpi.hires` | {count, plural, one {recrutement conclu} other {recrutements conclus}} |
+| `hireReportPdf.days` | {days} j |
+| `hireReportPdf.none` | — |
+| `hireReportPdf.funnel` | Où en sont les candidatures |
+| `hireReportPdf.stage.new` | Reçues |
+| `hireReportPdf.stage.screening` | Examinées |
+| `hireReportPdf.stage.test` | Tests |
+| `hireReportPdf.stage.interview` | Entretien |
+| `hireReportPdf.stage.offer` | Proposition |
+| `hireReportPdf.stage.hired` | Recrutées |
+| `hireReportPdf.weekly` | Candidatures par semaine |
+| `hireReportPdf.week` | S{n} |
+| `hireReportPdf.byJob` | Par offre |
+| `hireReportPdf.col.job` | Offre |
+| `hireReportPdf.col.status` | Statut |
+| `hireReportPdf.col.views` | Vues |
+| `hireReportPdf.col.applications` | Candidatures |
+| `hireReportPdf.col.interviews` | Entretiens |
+| `hireReportPdf.col.delay` | Délai |
+| `hireReportPdf.noJobs` | Aucune offre sur cette période. |
+| `hireReportPdf.status.draft` | Brouillon |
+| `hireReportPdf.status.pending_review` | En validation |
+| `hireReportPdf.status.published` | Publiée |
+| `hireReportPdf.status.paused` | En pause |
+| `hireReportPdf.status.closed` | Clôturée |
+| `hireReportPdf.status.rejected` | Refusée |
+| `hireReportPdf.status.changes_requested` | À corriger |
+| `hireReportPdf.status.archived` | Archivée |
+| `hireReportPdf.stage.rejected` | Non retenues |
+| `hireReportPdf.origin` | D'où viennent les candidatures |
+| `hireReportPdf.sources` | Sources |
+| `hireReportPdf.source.direct` | Offres Jumanly |
+| `hireReportPdf.source.invitation` | Invitation |
+| `hireReportPdf.source.talent_search` | Offre proposée |
+| `hireReportPdf.delays` | Délais de réponse |
+| `hireReportPdf.delay.fast` | Sous 48 h |
+| `hireReportPdf.delay.week` | 3 à 7 jours |
+| `hireReportPdf.delay.slow` | Plus de 7 jours |
+| `hireReportPdf.percent` | {value} % |
+| `hireReportPdf.decisions` | Entretiens et décisions |
+| `hireReportPdf.interviews` | {count, plural, one {entretien} other {entretiens}} |
+| `hireReportPdf.mode.video` | {count} en visio |
+| `hireReportPdf.mode.onsite` | {count} sur site |
+| `hireReportPdf.mode.audio` | {count} par téléphone ou audio |
+| `hireReportPdf.rating` | note moyenne des grilles |
+| `hireReportPdf.hired` | {count, plural, one {retenue} other {retenues}} |
+| `hireReportPdf.rejections` | {count, plural, one {réponse envoyée aux non retenus} other {réponses envoyées aux non retenus}} |
+| `hireReportPdf.orbi.title` | Orbi sur la période |
+| `hireReportPdf.orbi.analysed` | {count, plural, one {CV analysé} other {CV analysés}} |
+| `hireReportPdf.orbi.drafts` | {count, plural, one {message rédigé puis relu} other {messages rédigés puis relus}} |
+| `hireReportPdf.orbi.credits` | crédits utilisés sur {limit} ce mois-ci |
+| `hireReportPdf.orbi.creditsUnlimited` | crédits utilisés ce mois-ci |
+| `hireReportPdf.reading.title` | Lecture d'Orbi |
+| `hireReportPdf.reading.week` | La semaine la plus active est la semaine {n}, avec {count, plural, one {# candidature} other {# candidatures}}. |
+| `hireReportPdf.reading.source` | La plupart des candidatures viennent de : {source}. |
+| `hireReportPdf.reading.slow` | {value} % des premières réponses ont pris plus de 7 jours : répondre plus vite garde les candidats attentifs. |
+| `hireReportPdf.reading.empty` | Pas encore assez de candidatures sur cette période pour en tirer un constat. |
+| `hireReportPdf.reading.note` | Ces constats décrivent vos chiffres ; ils ne classent aucune personne. |
+| `hireReportPdf.footer` | · Rapport généré le {date, date, long} · chiffres réels, aucune donnée personnelle |
+| `hireReportPdf.footerBrand` | Jumanly Hire |
+| `hireReportPdf.page` | Page {page} sur {total} |
+| `hireReportPdf.mini` | {org} · {from, date, long} au {to, date, long} |
+| `hireReportPdf.logo.mark` | J |
+| `hireReportPdf.logo.name` | jumanly |
+| `hireReportPdf.detailRow` | {section} · {name} |
+| `hireReportPdf.details` | Détail des indicateurs |
 | `hireReplies.seo` | Répondre aux candidats |
 | `hireReplies.title` | Répondre aux candidats |
 | `hireReplies.back` | Retour aux retenus |

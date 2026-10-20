@@ -28,7 +28,7 @@ ADD COLUMN     "atsScheduledById" TEXT,
 ADD COLUMN     "endingReminders" JSONB NOT NULL DEFAULT '[]';
 
 -- AlterTable
-ALTER TABLE "user" ADD COLUMN     "endingReminders" TEXT[] DEFAULT ARRAY['d3', 'd1', 'd0']::TEXT[],
+ALTER TABLE "user" ADD COLUMN     "endingReminders" TEXT[] DEFAULT ARRAY['d3']::TEXT[],
 ADD COLUMN     "lastSeenAt" TIMESTAMP(3),
 ADD COLUMN     "readReceipts" BOOLEAN NOT NULL DEFAULT true,
 ADD COLUMN     "showPresence" BOOLEAN NOT NULL DEFAULT true;

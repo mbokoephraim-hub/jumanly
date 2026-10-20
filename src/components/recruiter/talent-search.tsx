@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
+import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { TalentIcon } from "@/components/talent/icon";
 import { OrbiMark } from "@/components/talent/orbi-mark";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
@@ -8,6 +9,7 @@ import { pickMessages } from "@/i18n/client-messages";
 import { cx } from "@/lib/cx";
 import { formatDayMonth } from "@/lib/dates";
 import { moreTalentsAction } from "@/server/actions/hire-talents";
+import { remindProposalAction } from "@/server/actions/hire-proposals";
 import { db } from "@/server/db";
 import { level } from "@/server/entitlements";
 import { allowAttempt } from "@/server/rate-limit";
@@ -521,6 +523,7 @@ export async function ProposalsView({
   segments: React.ReactNode;
 }) {
   const t = await getTranslations("hireTalents");
+  const t6 = await getTranslations("hireTalents6");
   const now = new Date();
   const [rows, quotas] = await Promise.all([
     orgProposals(db, ctx, now),
@@ -543,6 +546,7 @@ export async function ProposalsView({
       <h1 className="sr-only">{t("proposals.title")}</h1>
       {segments}
       <SubTabs current="propositions" count={rows.length} />
+      {one(query.relance) === "ok" && <ToastOnLoad message={t6("remindedOk")} />}
       <nav className="t-rx-onglets" aria-label={t("proposals.filters")}>
         <Link
           href="/app/hire/candidats?vue=propositions"
@@ -604,6 +608,21 @@ export async function ProposalsView({
                       .join(" · ")}
                   </span>
                 </Link>
+                {row.canRemind && (
+                  <form action={remindProposalAction}>
+                    <input type="hidden" name="request" value={row.id} />
+                    <button
+                      type="submit"
+                      className="t-bt t-sec t-s t-press"
+                      aria-label={t6("remindAria", { name })}
+                    >
+                      {t6("remind")}
+                    </button>
+                  </form>
+                )}
+                {row.remindedAt && row.status === "pending" && (
+                  <span className="t-r6-sous">{t6("reminded")}</span>
+                )}
                 {row.conversationId && (
                   <Link
                     href={`/app/messages/${row.conversationId}`}

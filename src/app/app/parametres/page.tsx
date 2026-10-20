@@ -143,6 +143,12 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
               title={t("parametres.notifications.title")}
               text={t("parametres.notifications.text")}
             />
+            <Row
+              href="/app/parametres/messagerie"
+              icon={cases("message", "t-c2")}
+              title={t("messagingSettings.titleTalent")}
+              text={t("messagingSettings.rowTextTalent")}
+            />
           </ul>
 
           <h2 className="t-w4-web t-w4-h3">{t("parametres.group.device")}</h2>

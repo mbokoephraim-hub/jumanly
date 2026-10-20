@@ -7,6 +7,8 @@ import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { notificationGroups } from "@/components/talent/notification-rows";
 import { RecruiterBrief } from "@/components/recruiter/brief";
+import { EndingOffers } from "@/components/recruiter/ending";
+import { JoinRequestsCard } from "@/components/recruiter/org-join";
 import { cx } from "@/lib/cx";
 import { markNotificationsReadAction } from "@/server/actions/connect";
 import { requireUser } from "@/server/auth/session";
@@ -61,6 +63,16 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
       />
       {params.ok === "lues" && <Notice tone="ok">{t("notifications.allRead")}</Notice>}
       {brief && <RecruiterBrief today={brief} firstName={user.firstName || user.name} />}
+      {/* Lot 6: join requests to answer, and the offers closing soon (planches REJ_ADM, FIN). */}
+      {ctx && (
+        <JoinRequestsCard
+          ctx={ctx}
+          answer={typeof params.demande === "string" ? params.demande : undefined}
+        />
+      )}
+      {ctx && (
+        <EndingOffers ctx={ctx} answer={typeof params.fin === "string" ? params.fin : undefined} />
+      )}
       {groups.length === 0 ? (
         <div className="t-verre t-carte t-vide">
           <b>{t("notifs.empty.title")}</b>

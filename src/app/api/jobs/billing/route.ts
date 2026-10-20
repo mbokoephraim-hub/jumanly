@@ -6,6 +6,7 @@ import { runBillingJobs } from "@/server/services/billing-jobs";
 import { runDiagnosticReminders } from "@/server/services/diagnostic-store";
 import { purgeScheduledDeletions } from "@/server/services/admin-users";
 import { deliverDueDecisionMails } from "@/server/application-events";
+import { runHireJobs } from "@/server/hire-jobs";
 
 function matches(given: Buffer, secret: string | undefined) {
   if (!secret) return false;
@@ -32,7 +33,15 @@ export async function POST(request: Request) {
   const deletedAccounts = await purgeScheduledDeletions(db);
   // Recruiter lot 3: decision e-mails, once their 10 minutes to undo are over.
   const decisionMails = await deliverDueDecisionMails();
-  return NextResponse.json({ ...report, diagnosticReminders, deletedAccounts, decisionMails });
+  // Recruiter lot 6: scheduled ATS analyses, end-of-offer reminders, expired join requests.
+  const hire = await runHireJobs();
+  return NextResponse.json({
+    ...report,
+    diagnosticReminders,
+    deletedAccounts,
+    decisionMails,
+    hire,
+  });
 }
 
 export const GET = POST;

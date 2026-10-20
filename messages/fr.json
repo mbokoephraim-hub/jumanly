@@ -10694,6 +10694,7 @@
       "interview": "Retenu · entretien",
       "hired": "Recruté",
       "review": "En examen",
+      "retained": "Retenu",
       "rejected": "Non retenu",
       "withdrawn": "Candidature retirée",
       "proposal": "Proposition acceptée"
@@ -10719,6 +10720,7 @@
       "interview": "Retenu · entretien",
       "hired": "Recruté",
       "review": "En examen",
+      "retained": "Retenu",
       "rejected": "Non retenu",
       "withdrawn": "Candidature retirée",
       "proposal": "Proposition acceptée"
@@ -12084,6 +12086,264 @@
       "slots": "Créneaux",
       "inform": "{count, plural, one {Informer la personne} other {Informer les #}}"
     }
+  },
+  "rhThread6": {
+    "online": "En ligne",
+    "receipt": {
+      "delivered": "Distribué",
+      "read": "Lu"
+    },
+    "ok": {
+      "pin": "Conversation épinglée en haut de la liste",
+      "unpin": "Conversation désépinglée",
+      "mute": "Notifications coupées pour cette conversation",
+      "unmute": "Notifications réactivées"
+    },
+    "reported": "Signalement envoyé à l'équipe Jumanly",
+    "reportedAlready": "Vous avez déjà signalé cette conversation",
+    "menu": {
+      "pin": "Épingler",
+      "unpin": "Désépingler",
+      "pinText": "En haut de la liste, pour toute l'équipe",
+      "mute": "Couper les notifications",
+      "unmute": "Réactiver les notifications",
+      "muteText": "Pour vous seulement, les messages arrivent toujours",
+      "hide": "Retirer de ma messagerie",
+      "hideText": "Le candidat garde ses messages, rien n'est supprimé",
+      "report": "Signaler"
+    },
+    "hide": {
+      "title": "Retirer de ma messagerie ?",
+      "text": "La conversation avec {name} disparaît de la liste de votre organisation. {name} garde tous ses messages et rien n'est supprimé. Elle revient si un nouveau message arrive.",
+      "confirm": "Retirer"
+    },
+    "report": {
+      "title": "Signaler la conversation"
+    }
+  },
+  "rhInbox6": {
+    "online": "En ligne",
+    "pinned": "Épinglée",
+    "close": "Fermer",
+    "hidden": "Conversation retirée de votre messagerie",
+    "cleaned": "{count, plural, =0 {Aucune conversation retirée} one {# conversation retirée de votre messagerie} other {# conversations retirées de votre messagerie}}",
+    "cleanup": {
+      "line": "{count, plural, one {# conversation de candidat non retenu est terminée depuis plus de 30 jours. Je peux la retirer de votre messagerie : le candidat garde ses messages.} other {# conversations de candidats non retenus sont terminées depuis plus de 30 jours. Je peux les retirer de votre messagerie : les candidats gardent leurs messages.}}",
+      "see": "Voir",
+      "title": "Ranger la messagerie",
+      "text": "Ces conversations de candidats non retenus sont terminées depuis plus de 30 jours. Décochez celles à garder.",
+      "rule": "Retirer masque la conversation pour votre organisation seulement. Rien n'est supprimé ; elle revient si le candidat écrit.",
+      "confirm": "Retirer les conversations cochées"
+    }
+  },
+  "messagingSettings": {
+    "seo": "Messagerie et rappels",
+    "title": "Messagerie et rappels",
+    "titleTalent": "Messagerie",
+    "rowText": "En ligne, accusés de lecture, rappels de fin d'offre",
+    "rowTextTalent": "En ligne et accusés de lecture",
+    "back": "Retour aux paramètres",
+    "saved": "Réglages enregistrés",
+    "save": "Enregistrer",
+    "messages": {
+      "group": "Messagerie",
+      "presence": "Montrer quand je suis en ligne",
+      "presenceText": "Désactivé, vous ne voyez plus non plus qui est en ligne.",
+      "receipts": "Accusés de lecture",
+      "receiptsText": "« Lu » sous vos messages. Désactivé, vous ne voyez plus non plus celui des autres."
+    },
+    "reminders": {
+      "group": "Rappels de fin d'offre",
+      "d7": "J-7 · une semaine avant",
+      "d3": "J-3 · trois jours avant",
+      "d1": "J-1 · la veille",
+      "d0": "Le jour de clôture",
+      "default": "Activé par défaut",
+      "note": "Dans l'app et par e-mail si vous recevez les e-mails de notification. Sans action de votre part, l'offre se clôture à la date prévue."
+    }
+  },
+  "orgJoin": {
+    "title": "Votre organisation est peut-être déjà sur Jumanly",
+    "byDomain": "Même domaine d'e-mail que vous",
+    "byName": "Même nom",
+    "members": "{count, plural, one {# membre} other {# membres}}",
+    "verified": "Vérifiée",
+    "ask": "Demander à rejoindre",
+    "rule": "Un administrateur de l'organisation accepte ou refuse votre demande. Il voit seulement votre nom et le domaine de votre e-mail.",
+    "sent": "Demande envoyée. Vous serez prévenu dès la réponse.",
+    "cancelled": "Demande annulée",
+    "error": "Cette organisation ne peut pas recevoir votre demande.",
+    "waiting": "{days, plural, one {En attente de réponse · expire dans # jour} other {En attente de réponse · expire dans # jours}}",
+    "accepted": "Votre demande est acceptée : vous faites partie de l'équipe.",
+    "declined": "Votre demande n'a pas été acceptée. Continuez avec votre organisation.",
+    "status": {
+      "pending": "En attente",
+      "accepted": "Acceptée",
+      "declined": "Refusée"
+    },
+    "cancel": "Annuler la demande",
+    "open": "Ouvrir {org}",
+    "ownKept": "Votre propre organisation reste disponible : vous pouvez continuer à la configurer ci-dessous.",
+    "seatsAfter": "{used} sièges utilisés sur {max}",
+    "seatsUnlimited": "sièges illimités",
+    "admin": {
+      "title": "{count, plural, one {Demande pour rejoindre votre organisation} other {# demandes pour rejoindre votre organisation}}",
+      "byDomain": "Adresse professionnelle {domain}",
+      "byName": "A trouvé l'organisation par son nom · {domain}",
+      "pending": "À décider",
+      "role": "Rôle",
+      "roles": {
+        "org_admin": "Administrateur",
+        "recruiter": "Recruteur",
+        "hiring_manager": "Responsable du recrutement",
+        "viewer": "Lecture seule"
+      },
+      "seatsLeft": "{count, plural, one {Il reste # siège dans votre formule.} other {Il reste # sièges dans votre formule.}}",
+      "seatsNone": "Plus aucun siège libre : libérez-en un ou changez de formule pour accepter.",
+      "seatsUnlimited": "Sièges illimités dans votre formule.",
+      "accept": "Accepter",
+      "decline": "Refuser",
+      "acceptedOk": "Demande acceptée : la personne fait partie de l'équipe.",
+      "declinedOk": "Demande refusée. La personne est prévenue, sans détail.",
+      "seats": "Plus aucun siège libre : la demande reste en attente.",
+      "error": "Cette demande n'est plus en attente."
+    }
+  },
+  "jobEnding": {
+    "badge": "J-{days}",
+    "lastDay": "Fin",
+    "title": "{days, plural, =0 {Votre offre se termine aujourd'hui} one {Fin de l'offre demain} other {Fin de l'offre dans # jours}}",
+    "closes": "Clôture le {date}",
+    "applications": "{count, plural, one {candidature} other {candidatures}}",
+    "views": "{count, plural, one {vue} other {vues}}",
+    "interviews": "{count, plural, one {entretien} other {entretiens}}",
+    "analyse": "Analyser et classer",
+    "analyseText": "{count, plural, one {Le CV reçu, avant la fin} other {Les # CV, avant la fin}}",
+    "stats": "Voir les statistiques",
+    "statsText": "Vues, candidatures, étapes",
+    "prolong": "Prolonger l'offre",
+    "prolongText": "Choisir une nouvelle date",
+    "close": "Clôturer ou annuler",
+    "closeText": "Les candidats sont prévenus par un message relu par vous",
+    "closeSheet": "Fermer",
+    "prolongTitle": "Prolonger l'offre",
+    "plus": "+{days} jours",
+    "until": "Jusqu'au {date}",
+    "otherDate": "Autre date",
+    "atsFollows": "L'analyse programmée à la clôture suit la nouvelle date.",
+    "prolongConfirm": "Prolonger",
+    "closeTitle": "Clôturer ou annuler",
+    "closeNow": "Clôturer maintenant",
+    "closeNowText": "{count, plural, =0 {Plus de nouvelles candidatures.} one {Plus de nouvelles candidatures. La candidature reçue reste à traiter.} other {Plus de nouvelles candidatures. Les # reçues restent à traiter, l'analyse reste possible.}}",
+    "cancel": "Annuler le recrutement",
+    "cancelText": "Le poste n'est plus ouvert. Vous écrivez ensuite aux candidats, chaque message est relu par vous avant l'envoi.",
+    "letEnd": "Sans rien faire, l'offre se clôture le {date}.",
+    "closeConfirm": "Valider",
+    "ok": {
+      "prolonged": "Offre prolongée. Les rappels suivront la nouvelle date.",
+      "closed": "Offre clôturée. Les candidatures reçues restent à traiter."
+    },
+    "error": "L'offre n'a pas pu être modifiée. Vérifiez la date choisie."
+  },
+  "hireTalents6": {
+    "remind": "Relancer",
+    "remindAria": "Relancer {name}",
+    "reminded": "Relancé",
+    "remindedOk": "Relance envoyée. Le talent décide toujours."
+  },
+  "hireReportPdf": {
+    "kicker": "Rapport de recrutement",
+    "lead": "{from, date, long} au {to, date, long} · {count, plural, =0 {aucune offre active} one {# offre active} other {# offres actives}} · préparé pour l'équipe recrutement",
+    "essential": "L'essentiel",
+    "kpi": {
+      "applications": "{count, plural, one {candidature reçue} other {candidatures reçues}}",
+      "delay": "délai moyen de première réponse",
+      "interviews": "{count, plural, one {entretien} other {entretiens}}",
+      "hires": "{count, plural, one {recrutement conclu} other {recrutements conclus}}"
+    },
+    "days": "{days} j",
+    "none": "—",
+    "funnel": "Où en sont les candidatures",
+    "stage": {
+      "new": "Reçues",
+      "screening": "Examinées",
+      "test": "Tests",
+      "interview": "Entretien",
+      "offer": "Proposition",
+      "hired": "Recrutées",
+      "rejected": "Non retenues"
+    },
+    "weekly": "Candidatures par semaine",
+    "week": "S{n}",
+    "byJob": "Par offre",
+    "col": {
+      "job": "Offre",
+      "status": "Statut",
+      "views": "Vues",
+      "applications": "Candidatures",
+      "interviews": "Entretiens",
+      "delay": "Délai"
+    },
+    "noJobs": "Aucune offre sur cette période.",
+    "status": {
+      "draft": "Brouillon",
+      "pending_review": "En validation",
+      "published": "Publiée",
+      "paused": "En pause",
+      "closed": "Clôturée",
+      "rejected": "Refusée",
+      "changes_requested": "À corriger",
+      "archived": "Archivée"
+    },
+    "origin": "D'où viennent les candidatures",
+    "sources": "Sources",
+    "source": {
+      "direct": "Offres Jumanly",
+      "invitation": "Invitation",
+      "talent_search": "Offre proposée"
+    },
+    "delays": "Délais de réponse",
+    "delay": {
+      "fast": "Sous 48 h",
+      "week": "3 à 7 jours",
+      "slow": "Plus de 7 jours"
+    },
+    "percent": "{value} %",
+    "decisions": "Entretiens et décisions",
+    "interviews": "{count, plural, one {entretien} other {entretiens}}",
+    "mode": {
+      "video": "{count} en visio",
+      "onsite": "{count} sur site",
+      "audio": "{count} par téléphone ou audio"
+    },
+    "rating": "note moyenne des grilles",
+    "hired": "{count, plural, one {retenue} other {retenues}}",
+    "rejections": "{count, plural, one {réponse envoyée aux non retenus} other {réponses envoyées aux non retenus}}",
+    "orbi": {
+      "title": "Orbi sur la période",
+      "analysed": "{count, plural, one {CV analysé} other {CV analysés}}",
+      "drafts": "{count, plural, one {message rédigé puis relu} other {messages rédigés puis relus}}",
+      "credits": "crédits utilisés sur {limit} ce mois-ci",
+      "creditsUnlimited": "crédits utilisés ce mois-ci"
+    },
+    "reading": {
+      "title": "Lecture d'Orbi",
+      "week": "La semaine la plus active est la semaine {n}, avec {count, plural, one {# candidature} other {# candidatures}}.",
+      "source": "La plupart des candidatures viennent de : {source}.",
+      "slow": "{value} % des premières réponses ont pris plus de 7 jours : répondre plus vite garde les candidats attentifs.",
+      "empty": "Pas encore assez de candidatures sur cette période pour en tirer un constat.",
+      "note": "Ces constats décrivent vos chiffres ; ils ne classent aucune personne."
+    },
+    "footer": "· Rapport généré le {date, date, long} · chiffres réels, aucune donnée personnelle",
+    "footerBrand": "Jumanly Hire",
+    "page": "Page {page} sur {total}",
+    "mini": "{org} · {from, date, long} au {to, date, long}",
+    "logo": {
+      "mark": "J",
+      "name": "jumanly"
+    },
+    "detailRow": "{section} · {name}",
+    "details": "Détail des indicateurs"
   },
   "hireReplies": {
     "seo": "Répondre aux candidats",

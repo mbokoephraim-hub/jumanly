@@ -17,6 +17,7 @@ import { db } from "@/server/db";
 import { limit, resolvePlan } from "@/server/entitlements";
 import { followedStageCount } from "@/server/services/applications";
 import { organizationSizes, recruitingFor } from "@/server/services/recruiter-account";
+import { JoinExisting } from "./org-join";
 
 const TOTAL = 3;
 
@@ -37,11 +38,16 @@ export async function RecruiterFirstSteps({
   email,
   step: wanted,
   error,
+  userId,
+  join,
 }: {
   org: Organization;
   email: string;
   step?: string;
   error: boolean;
+  /** Lot 6: « Demander à rejoindre » an organization already on Jumanly. */
+  userId?: string;
+  join?: string;
 }) {
   const t = await getTranslations("hireWelcome");
   const ta = await getTranslations("access");
@@ -139,6 +145,7 @@ export async function RecruiterFirstSteps({
           <p>{t("org.lead")}</p>
         </div>
         {error && <Notice tone="err">{t("org.error")}</Notice>}
+        {userId && <JoinExisting userId={userId} email={email} orgName={org.name} answer={join} />}
         <form
           id="rh-bienvenue-organisation"
           action={saveFirstStepsOrganizationAction}

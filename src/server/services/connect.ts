@@ -188,6 +188,17 @@ export async function sendMessage(
       recipients = (await hiringTeam(db, conversation.organizationId)).map((member) => member.id);
     }
   }
+  // « Couper les notifications » (recruteur lot 6): the message arrives, the person is not told.
+  if (recipients.length > 0) {
+    const muted = await db.conversationParticipant.findMany({
+      where: { conversationId, userId: { in: recipients }, mutedAt: { not: null } },
+      select: { userId: true },
+    });
+    if (muted.length > 0) {
+      const off = new Set(muted.map((row) => row.userId));
+      recipients = recipients.filter((id) => !off.has(id));
+    }
+  }
   if (conversation.application && message.kind !== "system") {
     await db.applicationEvent.create({
       data: {
