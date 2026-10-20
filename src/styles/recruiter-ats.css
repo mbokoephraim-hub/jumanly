@@ -1788,3 +1788,8 @@ label.t-r6-c:has(input:focus-visible) {
   color: var(--texte);
   font: inherit;
 }
+
+/* Under a fixed bottom bar, what is scrolled into view or focused stays above it (WCAG 2.4.11). */
+html:has(.t-barre-bas) {
+  scroll-padding-bottom: 120px;
+}
