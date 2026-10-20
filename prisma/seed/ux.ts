@@ -1608,8 +1608,8 @@ async function seedRecruiterLot6(db: SeedClient) {
     update: {},
     create: {
       email: "rejoindre.ux@jumanly.test",
-      name: "Grâce Démo",
-      firstName: "Grâce",
+      name: "Josué Démo",
+      firstName: "Josué",
       lastName: "Démo",
       emailVerified: true,
       country: "CD",

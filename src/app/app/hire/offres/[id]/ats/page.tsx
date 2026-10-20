@@ -617,7 +617,10 @@ export default async function AtsPage({
       <ViewTabs base={base} view={view} board={board} />
       <div id="ats-liste" className="t-flux t-serre">
         {listed.length === 0 ? (
-          <p className="t-verre t-rc-rien">{t(`list.empty.${view}`)}</p>
+          // The recommended files already stand on the podium above: no « none » under them.
+          view === "recommandes" && podium.length > 0 ? null : (
+            <p className="t-verre t-rc-rien">{t(`list.empty.${view}`)}</p>
+          )
         ) : (
           <ul className="t-r6-liste">
             {listed.map((row) => (

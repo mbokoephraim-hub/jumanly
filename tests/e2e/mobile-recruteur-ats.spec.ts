@@ -94,7 +94,7 @@ test("ATS : analyse par Orbi, profil pour l'offre, retenus, réponse groupée re
   await expect(when).toContainText("Maintenant");
   await when.getByRole("button", { name: "Lancer l'analyse" }).click();
   // The board follows the run, then shows the ranking with its rule.
-  await expect(main(page).getByRole("tablist", { name: "Vues des candidatures" })).toBeVisible({
+  await expect(main(page).getByRole("navigation", { name: "Vues des candidatures" })).toBeVisible({
     timeout: 60_000,
   });
   await page.goto(`/app/hire/offres/${jobId}/ats?vue=tous`);
@@ -182,7 +182,7 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   await page.goto("/app/notifications?fin=1");
   const notes = main(page);
   const request = notes.locator("#demandes");
-  await expect(request).toContainText("Grâce Démo");
+  await expect(request).toContainText("Josué Démo");
   await expect(request.getByRole("button", { name: "Accepter" })).toBeVisible();
   await expect(request.getByRole("combobox", { name: "Rôle" })).toBeVisible();
   const ending = notes.locator(".t-r6-fin").filter({ hasText: "Chargé de clientèle (démo)" });
@@ -198,7 +198,7 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   await page.goto("/app/parametres/messagerie");
   const settings = main(page);
   await expect(settings.getByRole("heading", { level: 1 })).toContainText("Messagerie et rappels");
-  await expect(settings.getByRole("checkbox", { name: /J-3/ })).toBeChecked();
+  await expect(settings.getByRole("switch", { name: /J-3/ })).toBeChecked();
   await expectAccessible(page);
   await noOverflow(page, "messagerie et rappels");
 
@@ -234,7 +234,20 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   }
   await expect(proposals.getByText("Relancé", { exact: true }).first()).toBeVisible();
   await noOverflow(page, "propositions");
+});
 
+test("rapport de recrutement en PDF A4", async ({ page }) => {
+  const email = testEmail("rx-rapport");
+  execFileSync("pnpm", [
+    "exec",
+    "tsx",
+    "tests/e2e/make-recruiter.ts",
+    email,
+    `Entreprise fictive ${suffix()}`,
+    "verified",
+    "reports.export",
+  ]);
+  await logIn(page, email, undefined, "/app/hire");
   // The PDF report: A4, Jumanly's colours, aggregates only.
   const response = await page.request.get("/app/hire/rapports/export?periode=30j");
   expect(response.status()).toBe(200);

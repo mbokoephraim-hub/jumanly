@@ -51,6 +51,7 @@ export async function GET(request: Request) {
     t("reports.stats.sources"),
     t("reports.stats.byJob"),
     t("reports.advanced.byRecruiter"),
+    t("reports.advanced.scorecards"),
   ];
   const pdf = await renderRecruitingReport({
     org: space.organization.name,

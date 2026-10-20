@@ -184,7 +184,7 @@ type Props = {
 };
 
 const pct = (value: number, max: number) =>
-  `${max > 0 ? Math.max(2, Math.round((value / max) * 100)) : 0}%`;
+  `${max > 0 && value > 0 ? Math.max(2, Math.round((value / max) * 100)) : 0}%`;
 
 export async function renderRecruitingReport(props: Props) {
   const t = await getTranslations("hireReportPdf");

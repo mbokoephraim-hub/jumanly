@@ -1442,6 +1442,7 @@ label.t-r6-c:has(input:focus-visible) {
 }
 .t-r6-env {
   display: block;
+  height: auto;
   padding: 0;
   border-radius: 18px;
 }
@@ -1618,6 +1619,14 @@ label.t-r6-c:has(input:focus-visible) {
 .t-r6-atsb {
   gap: 4px;
   padding-inline: 12px;
+}
+/* With « Analyser (ATS) », the dates take their own line above the two buttons. */
+.t-rx-off .t-b:has(.t-r6-atsb) {
+  flex-wrap: wrap;
+  row-gap: 10px;
+}
+.t-rx-off .t-b:has(.t-r6-atsb) > .t-dt {
+  flex-basis: 100%;
 }
 
 /* Messagerie vivante (planches MSG_R, CONV_R) : en ligne, lu, épinglée. */
