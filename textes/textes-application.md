@@ -9176,6 +9176,7 @@ Conventions :
 | `rhJournal.formerMember` | Ancien membre |
 | `rhJournal.you` | Vous |
 | `rhJournal.rule` | Le journal garde les 90 derniers jours, 100 consultations au plus. |
+| `rhBilling.contract` | Sièges, offres et crédits selon contrat |
 
 ### Refonte recruteur · Entretiens, talents et viviers (lot 4)
 

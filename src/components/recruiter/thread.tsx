@@ -582,6 +582,7 @@ export async function RecruiterThread({
             company: values.company,
             signer: user.name,
           }).replaceAll("\\n", "\n")}
+          openTemplates={one("modeles") === "1"}
         />
       ) : (
         !conversation.blockedAt && <p className="t-gar">{t("readOnly")}</p>

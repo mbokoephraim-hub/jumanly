@@ -16,7 +16,14 @@ import {
   resumeSubscription,
 } from "@/server/actions/billing";
 import { db } from "@/server/db";
-import { can, parseLimit, resolvePlan, usage, type Subject } from "@/server/entitlements";
+import {
+  can,
+  freePlan as freePlanOf,
+  parseLimit,
+  resolvePlan,
+  usage,
+  type Subject,
+} from "@/server/entitlements";
 import { effectiveStatus, GRACE_DAYS } from "@/server/entitlements/periods";
 import { ownedOrganization } from "@/server/services/accounts";
 import { activeJobCount, type HireContext } from "@/server/services/hire";
@@ -121,7 +128,8 @@ export async function RecruiterBilling({
       )
     : 30;
   const family = plans.find((item) => item.id === plan.planId)?.family ?? "rh";
-  const freePlan = plans.find((item) => item.family === family && (item.priceCents ?? 0) === 0);
+  // The plan the organization falls back to at the end (RH Free), never a plan « selon contrat ».
+  const freePlan = await freePlanOf(db, { type: "organization", id: ctx.organizationId });
   const opName = (code: string | null) =>
     code && d.has(`checkout.mm.operators.${code}`) ? d(`checkout.mm.operators.${code}`) : "";
   const date = (value: Date) => format.dateTime(value, { day: "numeric", month: "long" });
@@ -529,13 +537,26 @@ export async function RecruiterPlans({
     return {
       code: item.code,
       name: item.name,
-      price: t("abonnement.amount", { amount: formatUsd(price) }),
-      per: t("formules.perMonth"),
+      // A plan « selon contrat » (no price, limits under contract) says so instead of « 0 $ ».
+      price:
+        item.priceCents === null
+          ? t("pricing.card.quote")
+          : t("abonnement.amount", { amount: formatUsd(price) }),
+      per: item.priceCents === null ? "" : t("formules.perMonth"),
       badge: isCurrent ? t("formules.yours") : item.recommended ? t("formules.recommended") : null,
       lines: [
-        [limitText(seats, "org.seats"), limitText(jobs, "jobs.active.max")].join(", "),
-        credits !== 0 ? limitText(credits, AI_CREDITS_KEY) : null,
-        ...numbered(d, `${item.contentKey}.f`, {}).slice(0, 1),
+        values["org.seats"] === "contract"
+          ? tr("contract")
+          : [limitText(seats, "org.seats"), limitText(jobs, "jobs.active.max")].join(", "),
+        credits !== 0 && values[AI_CREDITS_KEY] !== "contract"
+          ? limitText(credits, AI_CREDITS_KEY)
+          : null,
+        // f1 and f2 repeat the seats and the offers above: the first feature after them.
+        ...numbered(d, `${item.contentKey}.f`, {
+          price: formatUsd(price),
+          seats: seats ?? 0,
+          jobs: jobs ?? 0,
+        }).slice(2, 3),
       ].filter((line): line is string => Boolean(line)),
       current: isCurrent,
       action,

@@ -3249,3 +3249,47 @@ remplacé par « Examiner », créneau d'appel et vivier depuis le dossier au lo
 page Message dans l'ancien style).
 
 **Captures.** `captures/refonte-recruteur-lot-3/` du dossier du projet, 390 px, clair et sombre.
+
+## 2026-10-20 · Étape 2, recruteur lot 5
+
+**Fait.** Échanger et gérer (brief recruteur § 4, point 5 ; planches recruteur-3 et `r3plus.py`).
+Orbi recruteur sur la page de conversation commune, historique rangé par organisation, crédits de
+l'organisation, jamais de nom de candidat envoyé au modèle. Messages (`/app/messages`) avec
+recherche, filtres et badges d'étape ; conversation avec carte de contexte, chips d'Orbi
+« Proposer une réponse », « Résumer », « Plus formel » (brouillon relu puis « Utiliser » : rien ne
+part sans le recruteur), « + » (créneaux, document, modèles) et menu ⋯. Modèles
+(`/app/hire/modeles`). Notifications avec « Votre journée en bref ». Profil RH avec « Ce que voient
+les candidats ». Organisation (`/app/organisation` et `/modifier`, `/verification`, `/equipe`,
+`/structure`) avec chiffres réels, tableau des droits et invitation en feuille. Abonnement avec
+jours restants, quotas et échéances, formules RH avec tableau comparatif par clés de droits,
+paiement et factures au nom de l'organisation (seul le propriétaire paie). Rapports avec
+entonnoir, candidatures par semaine, sources et export PDF seulement. Paramètres recruteur avec
+journal des consultations (`/app/parametres/consultations`).
+
+**Données.** Migration additive `20261020210000_recruteur_lot_5_orbi_organisation`
+(`OrbiConversation.organizationId` et son index). Aucune donnée effacée.
+
+**Ancien design supprimé.** `src/components/connect/hire-messages.tsx`, `hire-thread.tsx`,
+`contact-requests.tsx`, `interview-card.tsx`, `report-form.tsx` ; `conversation-list.tsx` devient
+`conversation-labels.ts` ; `VerificationTab` ; `sendTemplateMessageAction` ; l'écran « Message » du
+dossier mène à la conversation (`?modeles=1`). Les anciennes adresses (`/app/organisation?onglet=`,
+`/app/parametres?onglet=`, `/app/hire/bienvenue`) redirigent.
+
+**Corrections trouvées en route.** Formule « selon contrat » affichée « 0 $ » et « 0 siège » ; la
+formule de repli affichée était Company Premium au lieu de RH Free (prix nul confondu avec
+« sur devis ») ; textes clairs illisibles sur les tuiles teintées en mode sombre.
+
+**Tests.** Unitaires 343, en base 246, e2e 375 réussis et 33 ignorés (inchangés), rejoués sur une base neuve. En base `tests/db/recruiter-lot5.test.ts` (brouillons : décisions, contacts, sommes et
+consignes écartés, marqueurs que le candidat ne peut pas fermer, prénom jamais envoyé, crédit de
+l'organisation, rien d'envoyé, isolation des organisations, lecteur sans brouillon ; messagerie
+isolée ; Orbi rangé par organisation ; candidatures par semaine). E2e
+`tests/e2e/mobile-recruteur-gerer.spec.ts` (conversation, brouillon, modèles, liste ; organisation,
+équipe, invitation et équipe pleine ; abonnement, formules, rapports PDF, paramètres, journal,
+anciennes adresses ; aucun débordement à 390 et 412 px). E2e existants mis à jour pour les
+nouvelles adresses.
+
+**Écarts.** Voir `docs/decisions/2026-10-20-recruteur-lot-5.md` (présence, accusés de lecture,
+traduction, résumé du matin, langues d'échange, fuseau et signature non construits ; export CSV
+retiré).
+
+**Captures.** `captures/refonte-recruteur-lot-5/` du dossier du projet, 390 px, clair et sombre.
