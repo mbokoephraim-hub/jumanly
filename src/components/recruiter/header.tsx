@@ -1,0 +1,94 @@
+"use client";
+
+import type { ReactNode } from "react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { TOP_BAR_SLOT_ID } from "@/lib/top-bar";
+import { BackButton, parentPath, useCountPages } from "@/components/talent/back-button";
+import { ownHead, plural, useUnread } from "@/components/talent/header";
+import { TalentIcon } from "@/components/talent/icon";
+import { SheetButton } from "@/components/talent/sheet";
+
+export const ORG_SHEET_ID = "rh-organisations";
+
+export type RecruiterHeaderLabels = {
+  notifications: { zero: string; one: string; other: string };
+  account: string;
+  back: string;
+  search: string;
+  /** « Organisation active : … Changer », the name of the chip for screen readers. */
+  org: string;
+  /** Big title of each destination, by path. */
+  tabs: Record<string, string>;
+};
+
+/** Recruiter pages that draw their own head, on top of the shared ones of the talent space. */
+function ownRecruiterHead(pathname: string) {
+  return /^\/app\/hire\/compte(\/.*)?$/.test(pathname) || pathname === "/app/bienvenue";
+}
+
+/**
+ * Head of the recruiter space (planche recruteur-1 `tete_r`): the chip of the active organization
+ * (a tap opens « Organisation active »), then the big title, the search, the notifications (Lime
+ * dot) and the avatar that opens Compte RH. Any other page starts with « Retour ».
+ */
+export function RecruiterHeader({
+  labels,
+  unread,
+  avatar,
+  org,
+}: {
+  labels: RecruiterHeaderLabels;
+  unread: number;
+  avatar: ReactNode;
+  org: { name: string; mark: ReactNode };
+}) {
+  useCountPages();
+  const pathname = usePathname();
+  const count = useUnread(unread);
+  if (pathname === "/app/orbi" || ownHead(pathname) || ownRecruiterHead(pathname)) return null;
+  const tab = labels.tabs[pathname];
+
+  if (!tab) {
+    return (
+      <header className="t-colonne">
+        <div className="t-tete t-sec group/top">
+          <div id={TOP_BAR_SLOT_ID} className="contents" />
+          <div className="flex min-w-0 flex-1 items-center gap-2 group-has-[[data-top-override][data-active]]/top:hidden">
+            <BackButton fallback={parentPath(pathname)} label={labels.back} />
+          </div>
+        </div>
+      </header>
+    );
+  }
+
+  return (
+    <header className="t-colonne">
+      <SheetButton target={ORG_SHEET_ID} label={labels.org} className="t-org-l t-press">
+        {org.mark}
+        <span>{org.name}</span>
+        <TalentIcon name="suivant" size="xs" />
+      </SheetButton>
+      <div className="t-tete">
+        {/* The page keeps its own heading for screen readers; this is its visible name. */}
+        <p aria-hidden className="t-h1">
+          {tab}
+        </p>
+        <Link href="/app/recherche" aria-label={labels.search} className="t-bi">
+          <TalentIcon name="recherche" />
+        </Link>
+        <Link
+          href="/app/notifications"
+          aria-label={plural(labels.notifications, count)}
+          className="t-bi"
+        >
+          <TalentIcon name="notification" />
+          {count > 0 && <i aria-hidden className="t-pastille" />}
+        </Link>
+        <Link href="/app/hire/compte" aria-label={labels.account} className="t-av">
+          {avatar}
+        </Link>
+      </div>
+    </header>
+  );
+}

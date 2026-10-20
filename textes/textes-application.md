@@ -7938,6 +7938,117 @@ Conventions :
 
 ---
 
+### Refonte recruteur · Cadre mobile (lot 1)
+
+*Coquille de l'espace recruteur (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 1) : organisation active, barre du bas À traiter · Offres · Orbi · Candidats · Messages, Compte RH, premiers pas.*
+
+| Clé | Texte |
+|---|---|
+| `hireShell.skip` | Aller au contenu principal |
+| `hireShell.nav.aria` | Navigation de l'espace recruteur |
+| `hireShell.nav.today` | À traiter |
+| `hireShell.nav.offers` | Offres |
+| `hireShell.nav.orbi` | Orbi |
+| `hireShell.nav.candidates` | Candidats |
+| `hireShell.nav.messages` | Messages |
+| `hireShell.nav.messagesBadge` | {count, plural, one {# conversation non lue} other {# conversations non lues}} |
+| `hireShell.header.search` | Rechercher |
+| `hireShell.header.notifications` | {count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}} |
+| `hireShell.header.account` | Compte de {name} |
+| `hireShell.header.back` | Retour |
+| `hireShell.org.open` | Organisation active : {org}. Changer |
+| `hireShell.org.title` | Organisation active |
+| `hireShell.org.close` | Fermer |
+| `hireShell.org.line` | {role} · {plan} |
+| `hireShell.org.lineNoPlan` | {role} |
+| `hireShell.org.current` | Organisation active |
+| `hireShell.org.talent` | Passer à mon espace talent |
+| `hireShell.title.today` | À traiter |
+| `hireShell.title.offers` | Mes offres |
+| `hireShell.title.candidates` | Candidats |
+| `hireAccount.seo` | Compte RH |
+| `hireAccount.title` | Compte |
+| `hireAccount.back` | Retour |
+| `hireAccount.line` | {jobTitle} · {org} |
+| `hireAccount.lineNoTitle` | {org} |
+| `hireAccount.group.org` | Organisation et équipe |
+| `hireAccount.group.settings` | Abonnement et réglages |
+| `hireAccount.org.title` | Organisation |
+| `hireAccount.org.text` | Page, vérification |
+| `hireAccount.org.toVerify` | À vérifier |
+| `hireAccount.org.pending` | En cours |
+| `hireAccount.org.verified` | Vérifiée |
+| `hireAccount.team.title` | Équipe |
+| `hireAccount.team.text` | {used, plural, one {# siège} other {# sièges}} sur {limit} |
+| `hireAccount.team.textUnlimited` | {used, plural, one {# siège occupé} other {# sièges occupés}} |
+| `hireAccount.pools.title` | Viviers |
+| `hireAccount.pools.text` | {pools, plural, =0 {Aucun vivier} one {# vivier} other {# viviers}}, {talents, plural, =0 {aucun talent} one {# talent} other {# talents}} |
+| `hireAccount.reports.title` | Rapports |
+| `hireAccount.reports.text` | Offres et candidatures |
+| `hireAccount.plan.title` | Abonnement |
+| `hireAccount.plan.text` | {plan} · {count, plural, =0 {aucun crédit Orbi} one {# crédit Orbi} other {# crédits Orbi}} |
+| `hireAccount.plan.textUnlimited` | {plan} · crédits Orbi illimités |
+| `hireAccount.settings.title` | Paramètres |
+| `hireAccount.settings.text` | Notifications, sécurité, confidentialité |
+| `hireAccount.help.title` | Aide |
+| `hireAccount.talent.title` | Passer à mon espace talent |
+| `hireAccount.signOut` | Se déconnecter |
+| `hireProfile.seo` | Mon profil RH |
+| `hireProfile.title` | Mon profil RH |
+| `hireProfile.back` | Retour |
+| `hireProfile.photo` | Photo, facultative |
+| `hireProfile.name` | Nom affiché |
+| `hireProfile.jobTitle` | Fonction |
+| `hireProfile.email` | E-mail professionnel |
+| `hireProfile.emailHint` | Utilisé pour vérifier l'organisation |
+| `hireProfile.guard` | Les candidats voient votre nom, votre fonction et votre organisation. |
+| `hireProfile.save` | Enregistrer |
+| `hireProfile.saved` | Profil enregistré. |
+| `hireProfile.error.name` | Indiquez le nom affiché (2 caractères au moins). |
+| `hireWelcome.seo` | Premiers pas recruteur |
+| `hireWelcome.step` | {step} sur 3 |
+| `hireWelcome.back` | Retour |
+| `hireWelcome.continue` | Continuer |
+| `hireWelcome.for.title` | Vous recrutez pour… |
+| `hireWelcome.for.lead` | Jumanly prépare votre espace en conséquence. |
+| `hireWelcome.for.company` | Mon entreprise |
+| `hireWelcome.for.companyText` | PME, grand groupe, ONG |
+| `hireWelcome.for.consultant` | Un cabinet RH |
+| `hireWelcome.for.consultantText` | Pour plusieurs clients |
+| `hireWelcome.for.independent` | En indépendant |
+| `hireWelcome.for.independentText` | Consultant ou chasseur |
+| `hireWelcome.for.education` | Une école |
+| `hireWelcome.for.educationText` | Stages et premiers emplois |
+| `hireWelcome.org.title` | Votre organisation |
+| `hireWelcome.org.lead` | Elle apparaîtra sur vos offres. |
+| `hireWelcome.org.name` | Nom |
+| `hireWelcome.org.country` | Pays |
+| `hireWelcome.org.countryNone` | Choisir un pays |
+| `hireWelcome.org.sector` | Secteur |
+| `hireWelcome.org.size` | Taille |
+| `hireWelcome.org.sizeNone` | Choisir |
+| `hireWelcome.org.sizes.s1` | 1 à 10 personnes |
+| `hireWelcome.org.sizes.s2` | 11 à 50 personnes |
+| `hireWelcome.org.sizes.s3` | 51 à 200 personnes |
+| `hireWelcome.org.sizes.s4` | 201 à 1 000 personnes |
+| `hireWelcome.org.sizes.s5` | Plus de 1 000 personnes |
+| `hireWelcome.org.sectorPlaceholder` | Par exemple : banque, santé, BTP |
+| `hireWelcome.org.domain` | Votre e-mail {domain} sera utilisé pour la vérification. |
+| `hireWelcome.org.error` | Indiquez le nom de l'organisation (2 caractères au moins). |
+| `hireWelcome.ready.title` | Votre espace recruteur est prêt |
+| `hireWelcome.ready.lead` | Vous commencez avec {plan}. |
+| `hireWelcome.ready.seats` | {count, plural, one {siège} other {sièges}} |
+| `hireWelcome.ready.jobs` | {count, plural, one {offre active} other {offres actives}} |
+| `hireWelcome.ready.stages` | étapes de suivi |
+| `hireWelcome.ready.orbi` | Orbi peut rédiger votre première offre à partir d'un intitulé. Vous relisez avant de publier. |
+| `hireWelcome.ready.publish` | Publier une première offre |
+| `hireWelcome.ready.publishText` | 4 étapes, Orbi peut vous aider |
+| `hireWelcome.ready.verify` | Faire vérifier l'organisation |
+| `hireWelcome.ready.verifyText` | Publication sans attente |
+| `hireWelcome.ready.invite` | Inviter un collègue |
+| `hireWelcome.ready.inviteText` | Selon votre formule |
+| `hireWelcome.ready.start` | Commencer |
+
 ### Navigation Hire
 
 *Menu de l'espace Organisation, visible quand le sélecteur d'espace est sur une organisation.*

@@ -9613,6 +9613,154 @@
       }
     }
   },
+  "hireShell": {
+    "skip": "Aller au contenu principal",
+    "nav": {
+      "aria": "Navigation de l'espace recruteur",
+      "today": "À traiter",
+      "offers": "Offres",
+      "orbi": "Orbi",
+      "candidates": "Candidats",
+      "messages": "Messages",
+      "messagesBadge": "{count, plural, one {# conversation non lue} other {# conversations non lues}}"
+    },
+    "header": {
+      "search": "Rechercher",
+      "notifications": "{count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}}",
+      "account": "Compte de {name}",
+      "back": "Retour"
+    },
+    "org": {
+      "open": "Organisation active : {org}. Changer",
+      "title": "Organisation active",
+      "close": "Fermer",
+      "line": "{role} · {plan}",
+      "lineNoPlan": "{role}",
+      "current": "Organisation active",
+      "talent": "Passer à mon espace talent"
+    },
+    "title": {
+      "today": "À traiter",
+      "offers": "Mes offres",
+      "candidates": "Candidats"
+    }
+  },
+  "hireAccount": {
+    "seo": "Compte RH",
+    "title": "Compte",
+    "back": "Retour",
+    "line": "{jobTitle} · {org}",
+    "lineNoTitle": "{org}",
+    "group": {
+      "org": "Organisation et équipe",
+      "settings": "Abonnement et réglages"
+    },
+    "org": {
+      "title": "Organisation",
+      "text": "Page, vérification",
+      "toVerify": "À vérifier",
+      "pending": "En cours",
+      "verified": "Vérifiée"
+    },
+    "team": {
+      "title": "Équipe",
+      "text": "{used, plural, one {# siège} other {# sièges}} sur {limit}",
+      "textUnlimited": "{used, plural, one {# siège occupé} other {# sièges occupés}}"
+    },
+    "pools": {
+      "title": "Viviers",
+      "text": "{pools, plural, =0 {Aucun vivier} one {# vivier} other {# viviers}}, {talents, plural, =0 {aucun talent} one {# talent} other {# talents}}"
+    },
+    "reports": {
+      "title": "Rapports",
+      "text": "Offres et candidatures"
+    },
+    "plan": {
+      "title": "Abonnement",
+      "text": "{plan} · {count, plural, =0 {aucun crédit Orbi} one {# crédit Orbi} other {# crédits Orbi}}",
+      "textUnlimited": "{plan} · crédits Orbi illimités"
+    },
+    "settings": {
+      "title": "Paramètres",
+      "text": "Notifications, sécurité, confidentialité"
+    },
+    "help": {
+      "title": "Aide"
+    },
+    "talent": {
+      "title": "Passer à mon espace talent"
+    },
+    "signOut": "Se déconnecter"
+  },
+  "hireProfile": {
+    "seo": "Mon profil RH",
+    "title": "Mon profil RH",
+    "back": "Retour",
+    "photo": "Photo, facultative",
+    "name": "Nom affiché",
+    "jobTitle": "Fonction",
+    "email": "E-mail professionnel",
+    "emailHint": "Utilisé pour vérifier l'organisation",
+    "guard": "Les candidats voient votre nom, votre fonction et votre organisation.",
+    "save": "Enregistrer",
+    "saved": "Profil enregistré.",
+    "error": {
+      "name": "Indiquez le nom affiché (2 caractères au moins)."
+    }
+  },
+  "hireWelcome": {
+    "seo": "Premiers pas recruteur",
+    "step": "{step} sur 3",
+    "back": "Retour",
+    "continue": "Continuer",
+    "for": {
+      "title": "Vous recrutez pour…",
+      "lead": "Jumanly prépare votre espace en conséquence.",
+      "company": "Mon entreprise",
+      "companyText": "PME, grand groupe, ONG",
+      "consultant": "Un cabinet RH",
+      "consultantText": "Pour plusieurs clients",
+      "independent": "En indépendant",
+      "independentText": "Consultant ou chasseur",
+      "education": "Une école",
+      "educationText": "Stages et premiers emplois"
+    },
+    "org": {
+      "title": "Votre organisation",
+      "lead": "Elle apparaîtra sur vos offres.",
+      "name": "Nom",
+      "country": "Pays",
+      "countryNone": "Choisir un pays",
+      "sector": "Secteur",
+      "size": "Taille",
+      "sizeNone": "Choisir",
+      "sizes": {
+        "s1": "1 à 10 personnes",
+        "s2": "11 à 50 personnes",
+        "s3": "51 à 200 personnes",
+        "s4": "201 à 1 000 personnes",
+        "s5": "Plus de 1 000 personnes"
+      },
+      "sectorPlaceholder": "Par exemple : banque, santé, BTP",
+      "domain": "Votre e-mail {domain} sera utilisé pour la vérification.",
+      "error": "Indiquez le nom de l'organisation (2 caractères au moins)."
+    },
+    "ready": {
+      "title": "Votre espace recruteur est prêt",
+      "lead": "Vous commencez avec {plan}.",
+      "seats": "{count, plural, one {siège} other {sièges}}",
+      "jobs": "{count, plural, one {offre active} other {offres actives}}",
+      "stages": "étapes de suivi",
+      "orbi": "Orbi peut rédiger votre première offre à partir d'un intitulé. Vous relisez avant de publier.",
+      "publish": "Publier une première offre",
+      "publishText": "4 étapes, Orbi peut vous aider",
+      "verify": "Faire vérifier l'organisation",
+      "verifyText": "Publication sans attente",
+      "invite": "Inviter un collègue",
+      "inviteText": "Selon votre formule",
+      "start": "Commencer"
+    }
+  },
   "hire": {
     "nav": {
       "dashboard": "Accueil",

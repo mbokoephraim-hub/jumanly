@@ -24,7 +24,17 @@ async function signUpRecruiter(page: Page, email: string, orgName: string) {
   await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, since));
   await page.getByRole("button", { name: "Valider" }).click();
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
-  await page.getByRole("button", { name: "Aller au tableau de bord" }).click();
+  // First steps of a recruiter (planche recruteur-3 OBR1 to OBR3).
+  await expect(page.getByRole("heading", { name: "Vous recrutez pour…" })).toBeVisible();
+  await page.getByText("Mon entreprise").click();
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(page.getByRole("heading", { name: "Votre organisation" })).toBeVisible();
+  await page.locator("#rh-ob-size").selectOption("11-50");
+  await page.getByRole("button", { name: "Continuer" }).click();
+  await expect(
+    page.getByRole("heading", { name: "Votre espace recruteur est prêt" }),
+  ).toBeVisible();
+  await page.getByRole("button", { name: "Commencer" }).click();
   await expect(page).toHaveURL(/\/app\/hire/);
 }
 

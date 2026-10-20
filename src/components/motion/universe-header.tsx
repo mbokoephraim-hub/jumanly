@@ -73,7 +73,9 @@ export function UniverseHeader({
           {subtitle && <div className="text-[13.5px] leading-5 text-ardoise">{subtitle}</div>}
         </div>
       </div>
-      {actions && <div className="flex flex-wrap items-center gap-2">{actions}</div>}
+      {actions && (
+        <div className="flex max-w-full min-w-0 flex-wrap items-center gap-2">{actions}</div>
+      )}
     </header>
   );
 }

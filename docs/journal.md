@@ -3092,6 +3092,12 @@ Questions pour Ephraïm :
 - Vérifié : 3 touchers rapides sur une offre = 1 seule page demandée ; 3 touchers sur « Enregistrer l'offre » =
   1 seul envoi, bouton marqué à 0,08 s puis libéré à la réponse.
 
+## 2026-10-20 · Étape 2, recruteur lot 1 : cadre mobile
+
+- L'espace recruteur passe au nouveau cadre (`src/components/recruiter/`) : barre du bas À traiter · Offres · Orbi · Candidats · Messages, en-tête avec la pastille de l'organisation active (feuille « Organisation active », retour à l'espace talent), recherche, cloche, avatar. Le partenaire garde l'ancien cadre.
+- Nouveaux écrans : Compte RH (`/app/hire/compte`), Mon profil RH (`/app/hire/compte/profil`, nom affiché et fonction), premiers pas du recruteur en 3 écrans sur `/app/bienvenue` avec les vraies limites de la formule.
+- Écarts et suites (Orbi recruteur, cadre web, pages Hire à refaire) : `docs/decisions/2026-10-20-recruteur-lot-1.md`. Captures : `/mnt/project-files/captures/refonte-recruteur-lot-1/`.
+
 ## 2026-10-20 · Installer l'appli sans Play Store
 
 - Demande d'Ephraïm : pouvoir installer Jumanly sur un téléphone sans passer par le Play Store. Le site était
