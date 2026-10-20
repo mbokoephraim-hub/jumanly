@@ -310,6 +310,7 @@ export const statusKey = {
   closed: "closed",
   rejected: "rejected",
   changes_requested: "changesRequested",
+  paused: "paused",
   archived: "closed",
 } as const satisfies Record<JobStatus, string>;
 
@@ -320,6 +321,7 @@ export const jobStatusTone = {
   draft: "bg-brume text-sapin",
   rejected: "bg-down-fond text-down-texte",
   changes_requested: "bg-ambre-fond text-ambre-texte",
+  paused: "bg-ambre-fond text-ambre-texte",
   closed: "bg-transparent text-sapin ring-[1.2px] ring-sapin ring-inset",
   archived: "bg-transparent text-sapin ring-[1.2px] ring-sapin ring-inset",
 } as const;

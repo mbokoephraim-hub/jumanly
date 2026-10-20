@@ -1,6 +1,7 @@
 import { execFileSync } from "node:child_process";
 import { expect, test, type Browser } from "./fixtures";
 import { expectAccessible } from "./a11y";
+import { fillOffer, publishFilledOffer } from "./offer-flow";
 import { demo, logIn } from "./session";
 
 async function newPage(browser: Browser, baseURL: string | undefined, isMobile: boolean) {
@@ -30,24 +31,18 @@ test("une offre signalée : correction demandée, renvoyée, puis refusée avec 
   test.setTimeout(180_000);
   const title = `Assistant administratif fictif ${suffix()}`;
   await logIn(page, "rh@jumanly.test");
-  await page.goto("/app/hire/offres/nouvelle");
-  await page.locator("#job-title").fill(title);
-  await page.locator("#job-city").fill("Kinshasa");
-  await page.locator("#job-country").fill("Congo-Kinshasa");
-  const next = page.getByRole("button", { name: "Continuer" });
-  await next.click();
-  await page
-    .locator("#job-description-text")
-    .fill("Poste fictif. Frais de dossier de 20 USD à payer avant l'entretien.");
-  await page.locator("#job-responsibilities").fill("Classer les dossiers\nAccueillir le public");
-  await next.click();
-  await page.locator("#job-requiredSkills").fill("Bureautique");
-  await next.click();
-  await next.click();
-  await next.click();
-  await page.getByLabel(/Je certifie que cette offre/).check();
-  await page.getByRole("button", { name: "Publier l'offre" }).click();
-  await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/?]+\?publiee=verification/);
+  await fillOffer(page, {
+    title,
+    city: "Kinshasa",
+    country: "Congo-Kinshasa",
+    description: "Poste fictif. Frais de dossier de 20 USD à payer avant l'entretien.",
+    responsibilities: ["Classer les dossiers", "Accueillir le public"],
+    skill: "Bureautique",
+  });
+  // Orbi's review points at the payment asked of candidates before anything is sent.
+  await publishFilledOffer(page, "Envoyer en validation");
+  await expect(page).toHaveURL(/\?publiee=verification/);
+  await expect(page.getByRole("main")).toContainText("Offre envoyée en validation");
   const jobUrl = page.url().split("?")[0]!;
 
   // The moderator reads the automatic check and its « Pourquoi ? », then asks for a correction.
@@ -77,7 +72,11 @@ test("une offre signalée : correction demandée, renvoyée, puis refusée avec 
   await page.goto(jobUrl);
   await expect(page.getByText("La modération demande une correction")).toBeVisible();
   await expect(page.getByText("Retirer toute demande de paiement aux candidats")).toBeVisible();
-  await page.getByRole("button", { name: "Publier l'offre" }).first().click();
+  await page
+    .getByRole("button", { name: "Publier l'offre" })
+    .filter({ visible: true })
+    .first()
+    .click();
   await expect(page).toHaveURL(/publiee=verification/);
 
   // Back in the queue, with its history; a refusal needs a reason.

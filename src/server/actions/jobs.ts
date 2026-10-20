@@ -1,6 +1,11 @@
 "use server";
 
 import { refresh } from "next/cache";
+import {
+  screeningAnswersFor,
+  screeningAnswersOf,
+  screeningQuestionsOf,
+} from "@/server/services/screening";
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { onApplicationCreated } from "@/server/application-events";
@@ -47,10 +52,14 @@ export async function applyAction(formData: FormData) {
   const { job, cv, coverLetter } = parsed.data;
   const user = await requireUser(`/app/jobs/${job}`);
   let attachments: AttachmentRef[] = [];
+  let answers: Record<string, string> = {};
   if (parsed.data.staged) {
     const found = await db.job.findUnique({ where: { slug: job }, select: { id: true } });
     const draft = found && (await getApplicationDraft(db, user.id, found.id));
     attachments = parseRefs(draft?.attachments);
+    answers = Object.fromEntries(
+      screeningAnswersOf(draft?.screeningAnswers).map((item) => [item.id, item.answer]),
+    );
   }
   const result = await applyToJob(db, {
     userId: user.id,
@@ -58,6 +67,7 @@ export async function applyAction(formData: FormData) {
     cvDocumentId: cv || null,
     coverLetter,
     attachments,
+    answers,
   });
   if (result.status === "notFound") redirect("/app/jobs");
   if (result.status === "applied") {
@@ -117,10 +127,22 @@ export async function saveApplicationStepAction(formData: FormData) {
   const user = await requireUser(applyHref(slug));
   const job = await db.job.findUnique({
     where: { slug },
-    select: { id: true, status: true, closesAt: true },
+    select: { id: true, status: true, closesAt: true, screeningQuestions: true },
   });
   if (!job) redirect("/app/jobs");
   if (!isJobOpen(job)) redirect(`/app/jobs/${slug}?candidature=close`);
+  // The recruiter's questions, all optional (golden rule n° 1): what is answered is kept.
+  const screeningAnswers =
+    formData.get("answers") === "1"
+      ? screeningAnswersFor(
+          screeningQuestionsOf(job.screeningQuestions),
+          Object.fromEntries(
+            [...formData.entries()]
+              .filter(([key]) => key.startsWith("answer-"))
+              .map(([key, value]) => [key.slice(7), String(value)]),
+          ),
+        )
+      : undefined;
   const attachments = parsed.data.attachments
     ? parsed.data.attachment.flatMap((value): AttachmentRef[] => {
         const [type, id] = value.split(":");
@@ -140,6 +162,7 @@ export async function saveApplicationStepAction(formData: FormData) {
       }),
     ...(coverLetter !== undefined && { coverLetter }),
     ...(attachments && { attachments }),
+    ...(screeningAnswers && { screeningAnswers }),
   });
   refresh();
   redirect(next === "quitter" ? `/app/jobs/${slug}?brouillon=1` : applyHref(slug, next));

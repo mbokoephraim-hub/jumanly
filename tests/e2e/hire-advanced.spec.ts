@@ -256,7 +256,16 @@ test("les écrans Hire avancés sont accessibles", async ({ page }) => {
     await expectAccessible(page);
   }
   await page.goto("/app/hire/offres");
-  await page.getByRole("link", { name: "Analyste de données (poste fictif)" }).first().click();
+  await page
+    .getByRole("link", { name: "Analyste de données (poste fictif)" })
+    .filter({ visible: true })
+    .first()
+    .click();
+  await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/?]+$/);
+  await expectAccessible(page);
+  // The assignment and the grid stay with the candidates of the offer until lot 3.
+  await page.getByRole("link", { name: /^Voir (les|la) .*candidature/ }).click();
+  await expect(page).toHaveURL(/\/app\/hire\/candidats\?offre=/);
   await expect(page.locator("#attribution")).toBeVisible();
   await expect(page.locator("#grille")).toBeVisible();
   await expectAccessible(page);

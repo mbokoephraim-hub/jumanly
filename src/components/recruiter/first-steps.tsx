@@ -15,7 +15,7 @@ import {
 } from "@/server/actions/recruiter-account";
 import { db } from "@/server/db";
 import { limit, resolvePlan } from "@/server/entitlements";
-import { defaultStages } from "@/server/services/applications";
+import { followedStageCount } from "@/server/services/applications";
 import { organizationSizes, recruitingFor } from "@/server/services/recruiter-account";
 
 const TOTAL = 3;
@@ -217,7 +217,7 @@ export async function RecruiterFirstSteps({
     limit(db, subject, "org.seats"),
     limit(db, subject, "jobs.active.max"),
   ]);
-  const stages = defaultStages.filter((stage) => stage.kind !== "rejected").length;
+  const stages = followedStageCount;
   const next: { href: string; icon: TalentIconName; tone: string; key: string }[] = [
     { href: "/app/hire/offres/nouvelle", icon: "offre", tone: "t-c1", key: "publish" },
     {

@@ -65,10 +65,14 @@ async function member(
   return { userId: user.id, organizationId, role };
 }
 
+/** A verified organization: its offers publish at once (brief recruteur § 2.11). */
 async function org() {
   const organization = await newOrganization("recruiter");
   orgs.push(organization.id);
-  return organization;
+  return db.organization.update({
+    where: { id: organization.id },
+    data: { verifiedAt: new Date() },
+  });
 }
 
 const form = (title = "Comptable fictif") => ({

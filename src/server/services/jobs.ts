@@ -324,7 +324,8 @@ export async function latestJobs(db: PrismaClient, take = 3, now = new Date()) {
 /** A published or closed job (closed jobs keep their page, with a notice). Drafts and archives are hidden. */
 export async function getPublicJob(db: PrismaClient, slug: string) {
   return db.job.findFirst({
-    where: { slug, status: { in: ["published", "closed"] } },
+    // A paused job keeps its page, closed to new applications (brief recruteur § 2.4).
+    where: { slug, status: { in: ["published", "closed", "paused"] } },
     include: {
       organization: {
         select: {

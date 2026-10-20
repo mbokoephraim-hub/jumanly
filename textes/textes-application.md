@@ -8049,6 +8049,453 @@ Conventions :
 | `hireWelcome.ready.inviteText` | Selon votre formule |
 | `hireWelcome.ready.start` | Commencer |
 
+### Refonte recruteur · Traiter et publier (lot 2)
+
+*À traiter, Mes offres, création d'une offre en 4 étapes avec Orbi, documents demandés, questions de présélection et fiche de poste PDF, limite d'offres actives, offre publiée, détail d'une offre (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 2 ; planches recruteur-1 r1 à r4).*
+
+| Clé | Texte |
+|---|---|
+| `hireToday.seo` | À traiter |
+| `hireToday.title` | À traiter |
+| `hireToday.hello` | Bonjour {name} · {date} |
+| `hireToday.helloNoName` | {date} |
+| `hireToday.orbi.name` | Orbi |
+| `hireToday.orbi.unseen` | {count, plural, one {# nouvelle candidature attend votre examen.} other {# nouvelles candidatures attendent votre examen.}} |
+| `hireToday.orbi.interview` | {name} passe en entretien {day}. |
+| `hireToday.orbi.invitations` | {count, plural, one {# invitation attend la réponse du candidat.} other {# invitations attendent la réponse des candidats.}} |
+| `hireToday.orbi.see` | Voir |
+| `hireToday.orbi.line` | <b>Orbi</b> : {text} |
+| `hireToday.publish` | Publier une offre |
+| `hireToday.counts.aria` | Ce qui vous attend |
+| `hireToday.counts.unseen` | {count, plural, one {dossier à examiner} other {dossiers à examiner}} |
+| `hireToday.counts.invitations` | {count, plural, one {invitation sans réponse} other {invitations sans réponse}} |
+| `hireToday.counts.scorecards` | {count, plural, one {évaluation à compléter} other {évaluations à compléter}} |
+| `hireToday.counts.unread` | {count, plural, one {message non lu} other {messages non lus}} |
+| `hireToday.new.title` | Nouvelles candidatures |
+| `hireToday.new.all` | Tout voir |
+| `hireToday.new.badge` | Nouveau |
+| `hireToday.new.line` | {job} · {when} |
+| `hireToday.new.examine` | Examiner |
+| `hireToday.new.examineAria` | Examiner la candidature de {name} |
+| `hireToday.interviews.title` | Entretiens à venir |
+| `hireToday.interviews.agenda` | Agenda |
+| `hireToday.interviews.line` | {job} · {time}, {mode} |
+| `hireToday.interviews.mode.video` | visio |
+| `hireToday.interviews.mode.onsite` | sur site |
+| `hireToday.interviews.mode.audio` | audio |
+| `hireToday.interviews.status.confirmed` | Confirmé |
+| `hireToday.interviews.status.pending` | En attente de réponse |
+| `hireToday.interviews.status.reschedule` | Autre date demandée |
+| `hireToday.interviews.open` | Entretien avec {name}, {date} |
+| `hireToday.offers.title` | Offres actives |
+| `hireToday.offers.all` | Mes offres |
+| `hireToday.empty.title` | Rien à traiter pour l'instant |
+| `hireToday.empty.text` | Les nouvelles candidatures et les réponses aux invitations arriveront ici. |
+| `hireToday.week.aria` | Votre semaine |
+| `hireToday.week.applications` | {count, plural, one {candidature cette semaine} other {candidatures cette semaine}} |
+| `hireToday.week.interviews` | {count, plural, one {entretien fait} other {entretiens faits}} |
+| `hireToday.week.decisions` | {count, plural, one {décision prise} other {décisions prises}} |
+| `hireToday.empty.orbiJob` | Orbi peut vous montrer les talents visibles proches de « {job} ». Vous décidez de les contacter. |
+| `hireToday.empty.orbiNoJob` | Orbi peut rédiger votre prochaine offre à partir d'un intitulé. Vous relisez avant de publier. |
+| `hireToday.next.title` | Pour avancer |
+| `hireToday.next.publish` | Publier une offre |
+| `hireToday.next.publishText` | {count, plural, one {# offre active} other {# offres actives}} sur {max} |
+| `hireToday.next.publishUnlimited` | {count, plural, =0 {Aucune offre active} one {# offre active} other {# offres actives}} |
+| `hireToday.next.search` | Rechercher des talents |
+| `hireToday.next.searchText` | Profils visibles par les recruteurs |
+| `hireToday.next.verify` | Faire vérifier l'organisation |
+| `hireToday.next.verifyText` | Badge « Vérifiée » sur vos offres |
+| `hireOffers.status.published` | Publiée |
+| `hireOffers.status.pending_review` | En validation |
+| `hireOffers.status.draft` | Brouillon |
+| `hireOffers.status.rejected` | Refusée |
+| `hireOffers.status.changes_requested` | Correction demandée |
+| `hireOffers.status.paused` | En pause |
+| `hireOffers.status.closed` | Clôturée |
+| `hireOffers.status.archived` | Archivée |
+| `hireOffers.status.expired` | Expirée |
+| `hireOffers.contract.cdi` | CDI |
+| `hireOffers.contract.cdd` | CDD |
+| `hireOffers.contract.stage` | Stage |
+| `hireOffers.contract.alternance` | Alternance |
+| `hireOffers.contract.mission` | Mission |
+| `hireOffers.contract.freelance` | Freelance |
+| `hireOffers.contract.volontariat` | Volontariat |
+| `hireOffers.remote.onsite` | Sur site |
+| `hireOffers.remote.hybrid` | Hybride |
+| `hireOffers.remote.remote` | À distance |
+| `hireOffers.card.place` | {org} · {city} |
+| `hireOffers.card.menu` | Actions sur l'offre {title} |
+| `hireOffers.card.figures` | Chiffres de l'offre |
+| `hireOffers.card.applications` | {count, plural, one {candidature} other {candidatures}} |
+| `hireOffers.card.unseen` | {count, plural, one {nouvelle} other {nouvelles}} |
+| `hireOffers.card.views` | {count, plural, one {vue} other {vues}} |
+| `hireOffers.card.interviews` | {count, plural, one {entretien} other {entretiens}} |
+| `hireOffers.card.published` | Publiée le {date} |
+| `hireOffers.card.deadline` | Limite {date} |
+| `hireOffers.card.noDeadline` | Sans date limite |
+| `hireOffers.card.expired` | Expirée le {date} |
+| `hireOffers.card.candidates` | Candidatures |
+| `hireOffers.card.candidatesAria` | Candidatures de l'offre {title} |
+| `hireOffers.card.reviewTitle` | Vérification par Jumanly |
+| `hireOffers.card.reviewSent` | Envoyée le {date} |
+| `hireOffers.card.reviewNext` | Vous êtes prévenu dès la réponse. |
+| `hireOffers.card.draft` | Modifiée le {date} |
+| `hireOffers.card.continue` | Continuer |
+| `hireOffers.card.continueAria` | Continuer le brouillon {title} |
+| `hireOffers.card.paused` | En pause depuis le {date} |
+| `hireOffers.card.resume` | Reprendre |
+| `hireOffers.card.resumeAria` | Reprendre l'offre {title} |
+| `hireOffers.card.closed` | Clôturée · candidatures conservées |
+| `hireOffers.card.billing` | Remise en brouillon à la fin de l'abonnement |
+| `hireOffers.card.changes` | La modération demande une correction |
+| `hireOffers.card.rejected` | Refusée par la modération |
+| `hireOffers.card.open` | Voir l'offre {title} |
+| `hireOffers.list.seo` | Mes offres |
+| `hireOffers.list.title` | Mes offres |
+| `hireOffers.list.search` | Rechercher une offre |
+| `hireOffers.list.searchSubmit` | Rechercher |
+| `hireOffers.list.filters` | Filtres |
+| `hireOffers.list.filtersCount` | {count, plural, =0 {Filtres} one {Filtres, # actif} other {Filtres, # actifs}} |
+| `hireOffers.list.filtersApply` | Afficher les offres |
+| `hireOffers.list.filtersReset` | Effacer |
+| `hireOffers.list.filterAll` | Tous |
+| `hireOffers.list.filterOwner` | Responsable |
+| `hireOffers.list.filterTeam` | Équipe |
+| `hireOffers.list.filterDepartment` | Département |
+| `hireOffers.list.filterEntity` | Entité |
+| `hireOffers.list.create` | Créer une offre |
+| `hireOffers.list.tabs` | Statut des offres |
+| `hireOffers.list.tab.actives` | Actives |
+| `hireOffers.list.tab.brouillons` | Brouillons |
+| `hireOffers.list.tab.pause` | En pause |
+| `hireOffers.list.tab.cloturees` | Clôturées |
+| `hireOffers.list.tab.expirees` | Expirées |
+| `hireOffers.list.empty.actives` | Aucune offre active. Publiez une offre : elle apparaîtra ici avec ses chiffres. |
+| `hireOffers.list.empty.brouillons` | Aucun brouillon. Une offre commencée et non publiée s'enregistre ici. |
+| `hireOffers.list.empty.pause` | Aucune offre en pause. Une offre en pause est masquée des talents et garde ses candidatures. |
+| `hireOffers.list.empty.cloturees` | Aucune offre clôturée. |
+| `hireOffers.list.empty.expirees` | Aucune offre expirée. Une offre dont la date limite est passée s'affiche ici. |
+| `hireOffers.list.emptySearch` | Aucune offre ne contient « {query} ». |
+| `hireOffers.list.ok.brouillon` | Brouillon enregistré. |
+| `hireOffers.list.ok.pause` | Offre mise en pause. Ses candidatures restent. |
+| `hireOffers.list.ok.reprise` | Offre reprise : elle est de nouveau visible. |
+| `hireOffers.list.ok.fermee` | Offre clôturée. Ses dossiers restent consultables. |
+| `hireOffers.list.ok.supprimee` | Brouillon supprimé. |
+| `hireOffers.list.limit` | Limite d'offres actives atteinte : clôturez ou mettez en pause une offre pour en reprendre une autre. |
+| `hireOffers.menu.applications` | Voir les candidatures |
+| `hireOffers.menu.applicationsText` | {count} · {unseen, plural, =0 {aucune nouvelle} one {# nouvelle} other {# nouvelles}} |
+| `hireOffers.menu.view` | Voir l'offre |
+| `hireOffers.menu.edit` | Modifier |
+| `hireOffers.menu.continue` | Continuer le brouillon |
+| `hireOffers.menu.duplicate` | Dupliquer |
+| `hireOffers.menu.duplicateText` | Crée un brouillon |
+| `hireOffers.menu.copy` | Copier le lien de l'annonce |
+| `hireOffers.menu.copied` | Lien copié. |
+| `hireOffers.menu.pause` | Mettre en pause |
+| `hireOffers.menu.pauseText` | Masquée, les candidatures restent |
+| `hireOffers.menu.resume` | Reprendre |
+| `hireOffers.menu.resumeText` | Visible de nouveau, dans la limite d'offres actives |
+| `hireOffers.menu.republish` | Republier |
+| `hireOffers.menu.republishText` | Dans la limite d'offres actives |
+| `hireOffers.menu.close` | Clôturer |
+| `hireOffers.menu.closeText` | Avec confirmation |
+| `hireOffers.menu.delete` | Supprimer le brouillon |
+| `hireOffers.menu.deleteText` | Avec confirmation |
+| `hireOffers.menu.closeSheet` | Fermer |
+| `hireOffers.close.title` | Clôturer cette offre ? |
+| `hireOffers.close.text` | L'offre ne recevra plus de candidatures. {count, plural, =0 {Aucun dossier n'est perdu.} one {Le dossier reste consultable.} other {Les # dossiers restent consultables.}} Les candidats encore en cours seront prévenus seulement quand vous déciderez pour chacun. |
+| `hireOffers.close.cancel` | Annuler |
+| `hireOffers.close.confirm` | Clôturer |
+| `hireOffers.delete.title` | Supprimer ce brouillon ? |
+| `hireOffers.delete.text` | Le brouillon « {title} » sera supprimé. Cette action est définitive. |
+| `hireOffers.delete.confirm` | Supprimer |
+| `hireOffers.form.seoNew` | Nouvelle offre |
+| `hireOffers.form.seoEdit` | Modifier l'offre |
+| `hireOffers.form.titleNew` | Nouvelle offre |
+| `hireOffers.form.titleEdit` | Modifier l'offre |
+| `hireOffers.form.quit` | Quitter et garder le brouillon |
+| `hireOffers.form.quitLive` | Quitter |
+| `hireOffers.form.back` | Retour |
+| `hireOffers.form.progress` | Étape {step} sur 4 |
+| `hireOffers.form.saved` | Brouillon enregistré |
+| `hireOffers.form.live` | Offre en ligne : chaque étape enregistrée la met à jour |
+| `hireOffers.form.later` | Plus tard |
+| `hireOffers.form.continue` | Continuer |
+| `hireOffers.form.check` | Vérifier |
+| `hireOffers.form.step.poste` | Le poste |
+| `hireOffers.form.step.description` | La description |
+| `hireOffers.form.step.candidature` | La candidature |
+| `hireOffers.form.step.verifier` | Vérifier et publier |
+| `hireOffers.form.error.required` | Complétez les champs demandés. |
+| `hireOffers.form.error.salaryRange` | Le salaire maximum doit être supérieur au minimum. |
+| `hireOffers.form.error.tooMany` | Trop d'éléments : gardez l'essentiel. |
+| `hireOffers.form.error.forbidden` | Un critère ou une question porte sur une donnée protégée (âge, genre, origine, religion, santé, situation familiale, photo…). Retirez-le. |
+| `hireOffers.form.error.unknownSkills` | Compétences inconnues du référentiel : {skills}. Choisissez-les dans la liste proposée. |
+| `hireOffers.form.error.description` | Ajoutez la présentation du poste avant de publier. |
+| `hireOffers.form.error.skills` | Ajoutez au moins une compétence indispensable avant de publier. |
+| `hireOffers.form.error.invalid` | Cette étape n'a pas pu être enregistrée. Vérifiez les champs. |
+| `hireOffers.form.title` | Intitulé du poste |
+| `hireOffers.form.titlePlaceholder` | Par exemple : Analyste de données junior |
+| `hireOffers.form.domain` | Domaine |
+| `hireOffers.form.domainNone` | Choisir |
+| `hireOffers.form.experience` | Expérience |
+| `hireOffers.form.experienceBand` | {years, select, 0 {0 à 2 ans} 2 {2 à 5 ans} 5 {5 à 10 ans} 10 {10 ans et plus} other {# ans et plus}} |
+| `hireOffers.form.city` | Ville |
+| `hireOffers.form.country` | Pays |
+| `hireOffers.form.remote` | Mode de travail |
+| `hireOffers.form.contract` | Contrat |
+| `hireOffers.form.openings` | Nombre de postes |
+| `hireOffers.form.openingsLess` | Un poste de moins |
+| `hireOffers.form.openingsMore` | Un poste de plus |
+| `hireOffers.form.openingsMinusSign` | − |
+| `hireOffers.form.openingsPlusSign` | + |
+| `hireOffers.form.salary` | Salaire mensuel, facultatif |
+| `hireOffers.form.salaryMin` | De, en dollars |
+| `hireOffers.form.salaryMax` | À, en dollars |
+| `hireOffers.form.orbiNext` | À l'étape 2, Orbi peut proposer la description à partir de l'intitulé. |
+| `hireOffers.form.orbiWrite` | Rédiger avec Orbi |
+| `hireOffers.form.orbiWriteText` | À partir du titre et de quelques mots |
+| `hireOffers.form.orbiImprove` | Rendre les responsabilités plus claires |
+| `hireOffers.form.presentation` | Présentation du poste |
+| `hireOffers.form.presentationPlaceholder` | Ce que fait la personne, avec qui, pour quoi. |
+| `hireOffers.form.responsibilities` | Responsabilités |
+| `hireOffers.form.responsibilityNew` | Nouvelle responsabilité |
+| `hireOffers.form.responsibilityAdd` | Ajouter |
+| `hireOffers.form.responsibilityRemove` | Retirer « {item} » |
+| `hireOffers.form.responsibilityUp` | Monter « {item} » |
+| `hireOffers.form.skills` | Compétences |
+| `hireOffers.form.skillRequired` | indispensable |
+| `hireOffers.form.skillPreferred` | souhaitée |
+| `hireOffers.form.skillChip` | {skill} · {importance} |
+| `hireOffers.form.skillToggle` | {skill}, {importance}. Appuyer pour changer |
+| `hireOffers.form.skillRemove` | Retirer {skill} |
+| `hireOffers.form.skillNew` | Ajouter une compétence |
+| `hireOffers.form.skillAdd` | Ajouter |
+| `hireOffers.form.skillHint` | Appuyez sur une compétence pour la rendre indispensable ou souhaitée. |
+| `hireOffers.form.requirements` | Profil recherché, facultatif |
+| `hireOffers.form.requirementsHint` | Une ligne par élément : diplôme, langue, permis… |
+| `hireOffers.form.benefits` | Avantages, facultatif |
+| `hireOffers.form.benefitsHint` | Seulement ce que l'organisation offre vraiment. Orbi n'en propose jamais. |
+| `hireOffers.form.deadline` | Date limite |
+| `hireOffers.form.deadlineHint` | Facultative. Sans date, l'offre reste ouverte jusqu'à sa clôture. |
+| `hireOffers.form.documents` | Documents demandés |
+| `hireOffers.form.documentsHint` | Demandés aux candidats, jamais obligatoires pour postuler. |
+| `hireOffers.form.document.cv` | CV |
+| `hireOffers.form.document.letter` | Lettre |
+| `hireOffers.form.document.diploma` | Diplôme |
+| `hireOffers.form.document.portfolio` | Portfolio |
+| `hireOffers.form.questions` | Questions de présélection |
+| `hireOffers.form.questionKind.yesno` | Oui / non |
+| `hireOffers.form.questionKind.text` | Réponse libre |
+| `hireOffers.form.questionLine` | {kind} · ne bloque pas la candidature |
+| `hireOffers.form.questionAdd` | Ajouter une question |
+| `hireOffers.form.questionText` | Question |
+| `hireOffers.form.questionTextPlaceholder` | Par exemple : Êtes-vous disponible avant le 1er décembre ? |
+| `hireOffers.form.questionKindLabel` | Réponse attendue |
+| `hireOffers.form.questionSave` | Enregistrer la question |
+| `hireOffers.form.questionCancel` | Annuler |
+| `hireOffers.form.questionEdit` | Modifier la question « {question} » |
+| `hireOffers.form.questionRemove` | Retirer la question |
+| `hireOffers.form.questionMax` | {count} questions au plus. |
+| `hireOffers.form.questionShort` | Écrivez une question de 5 caractères au moins. |
+| `hireOffers.form.orbiQuestion` | Question proposée : « {question} » |
+| `hireOffers.form.orbiQuestionText` | Avez-vous déjà utilisé {skill} ? |
+| `hireOffers.form.orbiQuestionAdd` | Ajouter |
+| `hireOffers.form.sheet` | Fiche de poste en PDF, facultative |
+| `hireOffers.form.sheetChoose` | Choisir un PDF |
+| `hireOffers.form.sheetHint` | PDF de 4 Mo au plus. Jumanly le vérifie avant de le garder. Les champs de l'offre restent la référence pour la recherche. |
+| `hireOffers.form.sheetUpload` | Envoyer la fiche |
+| `hireOffers.form.sheetLine` | {pages, plural, one {# page} other {# pages}} · {size} · vérifiée |
+| `hireOffers.form.sheetRead` | Lire |
+| `hireOffers.form.sheetReadAria` | Lire la fiche {name} |
+| `hireOffers.form.sheetRemove` | Retirer |
+| `hireOffers.form.sheetRemoveAria` | Retirer la fiche {name} |
+| `hireOffers.form.sheetError.type` | Ce fichier n'est pas un PDF. |
+| `hireOffers.form.sheetError.size` | La fiche dépasse 4 Mo. |
+| `hireOffers.form.sheetError.active` | Cette fiche contient du contenu actif (script, lancement d'application, fichier joint) : elle n'a pas été gardée. |
+| `hireOffers.form.sheetError.encrypted` | Cette fiche est protégée par un mot de passe : elle n'a pas pu être lue. |
+| `hireOffers.form.sheetError.unreadable` | Cette fiche n'a pas pu être lue. |
+| `hireOffers.form.sheetOk` | Fiche vérifiée et ajoutée. |
+| `hireOffers.form.sheetRemoved` | Fiche retirée. |
+| `hireOffers.form.sheetOrbi` | Orbi peut lire la fiche et proposer les responsabilités qui manquent à l'offre. Vous relisez avant d'appliquer. |
+| `hireOffers.form.sheetOrbiSee` | Voir |
+| `hireOffers.form.missionsAdded` | {count, plural, =0 {Aucune responsabilité ajoutée.} one {# responsabilité ajoutée à l'offre.} other {# responsabilités ajoutées à l'offre.}} |
+| `hireOffers.form.instructions` | Instructions pour les candidats |
+| `hireOffers.form.instructionsPlaceholder` | Facultatif |
+| `hireOffers.form.knockout` | Critères éliminatoires, facultatifs |
+| `hireOffers.form.knockoutHint` | Signalés sur chaque dossier, jamais filtrants. Une ligne par critère. |
+| `hireOffers.form.free` | Les candidats postulent sur Jumanly, gratuitement. |
+| `hireOffers.form.reviewOk` | Orbi a relu l'offre : aucun critère discriminant repéré. |
+| `hireOffers.form.reviewFlags` | Orbi signale des mots à revoir. L'offre passera par la validation de Jumanly. |
+| `hireOffers.form.previewMeta` | {org} · {place} · {openings, plural, one {# poste} other {# postes}} |
+| `hireOffers.form.previewFull` | Toute l'offre, telle que les talents la liront |
+| `hireOffers.form.preview.description` | Description |
+| `hireOffers.form.preview.responsibilities` | Responsabilités |
+| `hireOffers.form.preview.criteria` | Critères |
+| `hireOffers.form.preview.requirements` | Profil recherché |
+| `hireOffers.form.preview.benefits` | Avantages |
+| `hireOffers.form.preview.documents` | Documents demandés |
+| `hireOffers.form.preview.questions` | {count, plural, one {Question} other {Questions}} |
+| `hireOffers.form.preview.instructions` | Instructions |
+| `hireOffers.form.preview.sheet` | Fiche de poste |
+| `hireOffers.form.preview.salary` | Salaire |
+| `hireOffers.form.preview.salaryRange` | {min} à {max} par mois |
+| `hireOffers.form.preview.salaryFrom` | À partir de {min} par mois |
+| `hireOffers.form.preview.salaryTo` | Jusqu'à {max} par mois |
+| `hireOffers.form.preview.preferred` | {skill} · souhaitée |
+| `hireOffers.form.preview.empty` | Rien d'indiqué. |
+| `hireOffers.form.salaryMissing` | Salaire non indiqué. |
+| `hireOffers.form.salaryMissingText` | Facultatif, mais les offres avec salaire reçoivent plus de candidatures. |
+| `hireOffers.form.verified` | Organisation vérifiée : publication immédiate |
+| `hireOffers.form.unverified` | Organisation non vérifiée : l'offre passe « En validation » avant d'être visible. |
+| `hireOffers.form.quota` | Offres actives : {count} sur {max} |
+| `hireOffers.form.quotaAfter` | Après publication : {count} sur {max} |
+| `hireOffers.form.quotaUnlimited` | Offres actives : {count} |
+| `hireOffers.form.missing` | Avant de publier |
+| `hireOffers.form.missingFix` | Compléter |
+| `hireOffers.form.moderation` | La modération demande une correction |
+| `hireOffers.form.moderationRejected` | Offre refusée par la modération |
+| `hireOffers.form.draft` | Brouillon |
+| `hireOffers.form.publish` | Publier |
+| `hireOffers.form.submit` | Envoyer en validation |
+| `hireOffers.form.save` | Enregistrer |
+| `hireOffers.limit.title` | Limite d'offres actives atteinte |
+| `hireOffers.limit.count` | {count, plural, one {# offre active} other {# offres actives}} sur {max} |
+| `hireOffers.limit.plan` | Formule {plan} |
+| `hireOffers.limit.free` | Les offres en pause ne comptent pas. |
+| `hireOffers.limit.close` | Clôturer ou mettre en pause une offre |
+| `hireOffers.limit.closeText` | Puis publier celle-ci |
+| `hireOffers.limit.upgrade` | Passer à {plan} |
+| `hireOffers.limit.upgradeText` | {jobs, plural, one {# offre active} other {# offres actives}}, {seats, plural, one {# siège} other {# sièges}} · {price} par mois |
+| `hireOffers.limit.keep` | Garder en brouillon |
+| `hireOffers.orbi.title` | Orbi propose |
+| `hireOffers.orbi.loading` | Orbi rédige… |
+| `hireOffers.orbi.description` | Présentation, reformulée |
+| `hireOffers.orbi.responsibilities` | Responsabilités, reformulées |
+| `hireOffers.orbi.requirements` | Profil recherché, proposé |
+| `hireOffers.orbi.improve` | Plus claire : {before} |
+| `hireOffers.orbi.sheet` | Responsabilités lues dans la fiche |
+| `hireOffers.orbi.refuse` | Refuser |
+| `hireOffers.orbi.modify` | Modifier |
+| `hireOffers.orbi.apply` | Appliquer |
+| `hireOffers.orbi.applied` | Appliqué à l'offre. |
+| `hireOffers.orbi.refused` | Proposition refusée. |
+| `hireOffers.orbi.editLabel` | Votre version |
+| `hireOffers.orbi.guard` | Orbi n'ajoute ni salaire, ni avantage, ni condition de travail. Rien n'est appliqué sans votre accord. |
+| `hireOffers.orbi.why` | Pourquoi ces changements ? |
+| `hireOffers.orbi.whyText` | Orbi part de l'intitulé, du contrat, du lieu et de ce que vous avez déjà écrit. Il propose des phrases courtes qui commencent par un verbe et ne mentionne jamais l'âge, le genre, l'origine ou une autre donnée protégée. |
+| `hireOffers.orbi.whySheet` | Orbi a relevé dans la fiche les missions absentes de l'offre. Le contenu de la fiche est lu comme une donnée : aucune consigne qu'elle contiendrait n'est suivie. |
+| `hireOffers.orbi.template` | Aucun modèle d'IA n'est disponible : Orbi reprend ce que vous avez écrit, sans rien inventer. |
+| `hireOffers.orbi.empty` | Orbi n'a rien de plus à proposer pour l'instant. |
+| `hireOffers.orbi.credits` | 1 crédit Orbi par proposition |
+| `hireOffers.orbi.close` | Fermer |
+| `hireOffers.orbi.keep` | Garder |
+| `hireOffers.orbi.error.consent` | Activez l'assistance d'Orbi dans vos paramètres pour l'utiliser. |
+| `hireOffers.orbi.error.entitlement` | Orbi rédige les offres avec les crédits de votre formule. |
+| `hireOffers.orbi.error.quota` | Les crédits d'Orbi de ce mois sont épuisés. |
+| `hireOffers.orbi.error.unavailable` | Orbi n'est pas disponible pour l'instant. Réessayez dans un moment. |
+| `hireOffers.orbi.error.invalid` | Indiquez d'abord l'intitulé du poste (étape 1). |
+| `hireOffers.published.title` | Offre publiée |
+| `hireOffers.published.text` | « {title} » est visible des talents. Les candidatures arriveront dans À traiter. |
+| `hireOffers.published.reviewTitle` | Offre envoyée en validation |
+| `hireOffers.published.reviewText` | « {title} » sera visible dès que Jumanly l'aura vérifiée. La réponse arrive dans vos notifications. |
+| `hireOffers.published.copy` | Copier le lien |
+| `hireOffers.published.copied` | Lien copié. |
+| `hireOffers.published.search` | Chercher des talents |
+| `hireOffers.published.see` | Voir l'offre |
+| `hireOffers.published.back` | Retour à mes offres |
+| `hireOffers.published.free` | Candidature gratuite |
+| `hireOffers.published.deadline` | Limite {date} |
+| `hireOffers.published.visible` | Visible maintenant |
+| `hireOffers.published.visibleText` | Dans les offres et la recherche |
+| `hireOffers.published.reviewing` | Vérification par Jumanly |
+| `hireOffers.published.reviewingText` | Avant d'être visible des talents |
+| `hireOffers.published.first` | Premières candidatures |
+| `hireOffers.published.firstText` | Dans À traiter, avec leur score |
+| `hireOffers.detail.seo` | Offre |
+| `hireOffers.detail.title` | Offre |
+| `hireOffers.detail.back` | Retour |
+| `hireOffers.detail.menu` | Actions sur l'offre |
+| `hireOffers.detail.since` | depuis le {date} |
+| `hireOffers.detail.deadline` | limite {date} |
+| `hireOffers.detail.noDeadline` | sans date limite |
+| `hireOffers.detail.edit` | Modifier |
+| `hireOffers.detail.link` | Lien |
+| `hireOffers.detail.pause` | Pause |
+| `hireOffers.detail.resume` | Reprendre |
+| `hireOffers.detail.figures` | Chiffres de l'offre |
+| `hireOffers.detail.stages` | Étapes |
+| `hireOffers.detail.stageCount` | {stage} : {count} |
+| `hireOffers.detail.description` | Description et responsabilités |
+| `hireOffers.detail.candidature` | Candidature |
+| `hireOffers.detail.candidatureAside` | {documents, plural, =0 {} one {# document} other {# documents}}{both, select, yes { · } other {}}{questions, plural, =0 {} one {# question} other {# questions}} |
+| `hireOffers.detail.skills` | Compétences recherchées |
+| `hireOffers.detail.sheet` | Fiche de poste PDF |
+| `hireOffers.detail.sheetAside` | {pages, plural, one {# page} other {# pages}} |
+| `hireOffers.detail.history` | Historique |
+| `hireOffers.detail.historyEmpty` | Rien encore. |
+| `hireOffers.detail.performance` | Performance |
+| `hireOffers.detail.performanceAside` | vues, candidatures |
+| `hireOffers.detail.views` | {count, plural, one {vue} other {vues}} |
+| `hireOffers.detail.applied` | ont postulé |
+| `hireOffers.detail.response` | délai moyen de réponse |
+| `hireOffers.detail.days` | {days} j |
+| `hireOffers.detail.none` | — |
+| `hireOffers.detail.chart` | Vues des 7 derniers jours : {list} |
+| `hireOffers.detail.chartNote` | Vues par jour. Chiffres réels de l'offre, sans estimation. |
+| `hireOffers.detail.candidates` | {count, plural, =0 {Voir les candidatures} one {Voir la candidature} other {Voir les # candidatures}} |
+| `hireOffers.detail.orbiSalary` | Les offres avec un salaire reçoivent plus de candidatures. Ajouter une fourchette ? |
+| `hireOffers.detail.orbiSalaryAction` | Modifier |
+| `hireOffers.detail.orbiReview` | Votre offre est en validation. Orbi a relu le texte : vous pouvez encore le modifier. |
+| `hireOffers.detail.republish` | Publier l'offre |
+| `hireOffers.detail.ok.enregistree` | Offre enregistrée. |
+| `hireOffers.detail.ok.pause` | Offre mise en pause. Ses candidatures restent. |
+| `hireOffers.detail.ok.reprise` | Offre reprise : elle est de nouveau visible. |
+| `hireOffers.detail.limit` | Limite d'offres actives atteinte : clôturez ou mettez en pause une autre offre pour reprendre celle-ci. |
+| `hireOffers.history.type.message` | Message |
+| `hireOffers.history.type.candidature` | Candidature |
+| `hireOffers.history.type.modification` | Modification |
+| `hireOffers.history.type.publication` | Publication |
+| `hireOffers.history.team` | L'équipe |
+| `hireOffers.history.published` | {actor} a publié l'offre |
+| `hireOffers.history.sentForReview` | {actor} a envoyé l'offre en validation |
+| `hireOffers.history.approved` | Offre publiée après vérification |
+| `hireOffers.history.resumed` | {actor} a repris l'offre |
+| `hireOffers.history.paused` | {actor} a mis l'offre en pause |
+| `hireOffers.history.closed` | {actor} a clôturé l'offre |
+| `hireOffers.history.deadline` | {actor} a fixé la date limite au {date} |
+| `hireOffers.history.deadlineRemoved` | {actor} a retiré la date limite |
+| `hireOffers.history.skills` | {actor} a ajouté {count, plural, one {la compétence} other {les compétences}} {skills} |
+| `hireOffers.history.edited` | {actor} a modifié l'offre |
+| `hireOffers.history.applied` | {name} a postulé |
+| `hireOffers.history.message` | {actor} a écrit à {name} |
+| `hireOffers.history.quote` | « {text} » |
+| `hireOffers.sheet.seo` | Fiche de poste |
+| `hireOffers.sheet.title` | Fiche de poste |
+| `hireOffers.sheet.download` | Télécharger le PDF |
+| `hireOffers.sheet.pdf` | PDF |
+| `hireOffers.sheet.page` | Page {page} sur {total} |
+| `hireOffers.sheet.prev` | Page précédente |
+| `hireOffers.sheet.next` | Page suivante |
+| `hireOffers.sheet.noText` | Le texte de cette page n'a pas pu être lu. Téléchargez le PDF pour la voir. |
+| `hireOffers.sheet.note` | Texte de la fiche, lu dans Jumanly. La mise en page exacte est dans le PDF. |
+| `hireOffers.sheet.apply` | Postuler |
+| `hireOffers.questions.title` | Questions du recruteur |
+| `hireOffers.questions.optional` | Facultatif · ne bloque pas votre candidature |
+| `hireOffers.questions.yes` | Oui |
+| `hireOffers.questions.no` | Non |
+| `hireOffers.questions.answer` | Votre réponse |
+| `hireOffers.questions.documents` | Le recruteur demande : {list}. Envoyez ce que vous avez : rien n'est obligatoire pour postuler. |
+| `hireOffers.questions.recruiterTitle` | Réponses aux questions |
+| `hireOffers.questions.noAnswer` | Sans réponse |
+| `hireOffers.questions.sentTitle` | Vos réponses |
+| `hireOffers.offer.sheet` | Fiche de poste |
+| `hireOffers.offer.sheetLine` | PDF · {pages, plural, one {# page} other {# pages}} |
+| `hireOffers.offer.sheetRead` | Lire |
+| `hireOffers.offer.documents` | Documents demandés |
+| `hireOffers.offer.questions` | {count, plural, one {# question du recruteur, facultative} other {# questions du recruteur, facultatives}} |
+
 ### Navigation Hire
 
 *Menu de l'espace Organisation, visible quand le sélecteur d'espace est sur une organisation.*
