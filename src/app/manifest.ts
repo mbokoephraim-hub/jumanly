@@ -9,11 +9,13 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
     short_name: t("common.brand"),
     description: t("home.seo.description"),
     lang: "fr",
-    start_url: "/app",
+    // Opens on the animated logo, then the space (src/lib/launch-splash.ts).
+    start_url: "/demarrage",
     scope: "/",
     display: "standalone",
-    background_color: "#0F3F37",
-    theme_color: "#0F3F37",
+    // The cream of the talent space: no dark screen while the app starts.
+    background_color: "#EEE8DE",
+    theme_color: "#EEE8DE",
     icons: [
       { src: "/icon.svg", sizes: "any", type: "image/svg+xml" },
       { src: "/marque/jumanly-favicon-192.png", sizes: "192x192", type: "image/png" },

@@ -9,7 +9,12 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // Justificatifs de vérification (Admin v2, étape 4) : 4 Mo par envoi, sous la limite de 4,5 Mo
   // d'une requête sur Vercel.
-  experimental: { serverActions: { bodySizeLimit: "4.2mb" } },
+  experimental: {
+    serverActions: { bodySizeLimit: "4.2mb" },
+    // Fluidité (Ephraïm, 20/10) : une page déjà ouverte se rouvre à l'instant pendant 3 minutes,
+    // sans nouvel aller-retour ; une action (enregistrer, postuler…) la rafraîchit aussitôt.
+    staleTimes: { dynamic: 180, static: 300 },
+  },
   // Export PDF des CV par Chromium (docs/modeles-cv § 6.3) : ces paquets restent hors du bundle.
   serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium", "playwright-core"],
   outputFileTracingIncludes: {

@@ -13878,7 +13878,7 @@
       "timezone": "heure de {city}"
     },
     "offline": {
-      "banner": "Vous êtes hors ligne. Certaines actions sont indisponibles.",
+      "banner": "Vous êtes hors ligne. Vous voyez la dernière version enregistrée sur cet appareil.",
       "back": "Connexion rétablie.",
       "page": {
         "title": "Pas de connexion",
