@@ -99,8 +99,9 @@ export const KNOCKOUT_MAX = 5;
 export const REQUIRED_SKILLS_MAX = 10;
 
 /** Data that must never be a selection criterion (golden rule n° 4, partie 10 § 10.7). */
+// Word edges written with letters of any script: `\b` does not see « âge » as a word.
 const protectedTerms =
-  /\b(âge|age|ans? maximum|ans? minimum|homme|femme|genre|sexe|religion|religieu\w*|musulman\w*|chrétien\w*|catholique\w*|origine|ethni\w*|nationalit\w*|marié\w*|célibataire|enfants?|enceinte|grossesse|santé|handicap\w*|photo)\b/iu;
+  /(?<![\p{L}\p{N}_])(âge|age|ans? maximum|ans? minimum|homme|femme|genre|sexe|religion|religieu\p{L}*|musulman\p{L}*|chrétien\p{L}*|catholique\p{L}*|origine|ethni\p{L}*|nationalit\p{L}*|marié\p{L}*|célibataire|enfants?|enceinte|grossesse|santé|handicap\p{L}*|photo)(?![\p{L}\p{N}_])/iu;
 const paymentTerms =
   /\b(frais de (dossier|candidature|formation|inscription)|payer|paiement|versement|caution|mobile money|m-?pesa|orange money|airtel money)\b/iu;
 const outsideContact = /(whats\s?app|telegram|\+?\d[\d .-]{8,}\d)/iu;
@@ -284,8 +285,11 @@ export async function getOrgJob(db: PrismaClient, ctx: HireContext, jobId: strin
   return job;
 }
 
-/** Statuses that hold a place in `jobs.active.max`. */
-const activeStatuses = ["published", "pending_review"] as const;
+/**
+ * Statuses that hold a place in `jobs.active.max`. A paused job (`paused`) does not (brief
+ * recruteur § 2.4), nor a job the end of a plan put back in draft (`pausedByBillingAt`).
+ */
+export const activeStatuses = ["published", "pending_review"] as const;
 
 export async function activeJobCount(db: PrismaClient, organizationId: string) {
   return db.job.count({ where: { organizationId, status: { in: [...activeStatuses] } } });
@@ -330,6 +334,8 @@ export async function publishJob(
   if (activeStatuses.includes(job.status as (typeof activeStatuses)[number])) {
     return { status: job.status as "published" | "pending_review", jobId: job.id };
   }
+  if (job.status === "paused") return resumeJob(db, ctx, job.id);
+  if (!job.description.trim()) return { status: "incomplete", missing: "description" };
   if (!job.skills.some((skill) => skill.importance === "required"))
     return { status: "incomplete", missing: "skills" };
   const max = await limit(db, { type: "organization", id: ctx.organizationId }, "jobs.active.max");
@@ -338,7 +344,10 @@ export async function publishJob(
   const flags = moderationFlags(job);
   // A job sent back for correction returns to a moderator, flagged or not (Admin v2, étape 7).
   const resubmitted = job.status === "changes_requested";
-  const status = flags.length > 0 || resubmitted ? "pending_review" : "published";
+  // Brief recruteur § 2.11: the jobs of an organization Jumanly has not verified yet go through
+  // « En validation » first; a verified organization publishes at once.
+  const verified = await isOrgVerified(db, ctx.organizationId);
+  const status = flags.length > 0 || resubmitted || !verified ? "pending_review" : "published";
   const stages = await ensureStages(db, job.id);
   await db.job.update({
     where: { id: job.id },
@@ -361,8 +370,52 @@ export async function publishJob(
 export async function closeJob(db: PrismaClient, ctx: HireContext, jobId: string) {
   assert(hirePermissions(ctx.role).manage);
   const job = await getOrgJob(db, ctx, jobId);
-  await db.job.update({ where: { id: job.id }, data: { status: "closed" } });
+  await db.job.update({ where: { id: job.id }, data: { status: "closed", pausedAt: null } });
   await audit(db, ctx, "job.close", job.id);
+}
+
+/** Verified by Jumanly: the badge's source (`verifiedAt`), its offers publish without review. */
+export async function isOrgVerified(db: PrismaClient, organizationId: string) {
+  const org = await db.organization.findUnique({
+    where: { id: organizationId },
+    select: { verifiedAt: true },
+  });
+  return Boolean(org?.verifiedAt);
+}
+
+/**
+ * « Mettre en pause » (brief recruteur § 2.4): a live job leaves the results and stops receiving
+ * applications; the applications stay. It no longer holds a place in `jobs.active.max`.
+ */
+export async function pauseJob(
+  db: PrismaClient,
+  ctx: HireContext,
+  jobId: string,
+  now = new Date(),
+) {
+  assert(hirePermissions(ctx.role).manage);
+  const job = await getOrgJob(db, ctx, jobId);
+  if (job.status !== "published") throw new HireError("invalid");
+  await db.job.update({ where: { id: job.id }, data: { status: "paused", pausedAt: now } });
+  await audit(db, ctx, "job.pause", job.id);
+  return job;
+}
+
+/** « Reprendre » a paused job: live again, within `jobs.active.max`. */
+export async function resumeJob(
+  db: PrismaClient,
+  ctx: HireContext,
+  jobId: string,
+): Promise<{ status: "published"; jobId: string } | { status: "limit"; max: number }> {
+  assert(hirePermissions(ctx.role).manage);
+  const job = await getOrgJob(db, ctx, jobId);
+  if (job.status !== "paused") throw new HireError("invalid");
+  const max = await limit(db, { type: "organization", id: ctx.organizationId }, "jobs.active.max");
+  if (max >= 0 && (await activeJobCount(db, ctx.organizationId)) >= max)
+    return { status: "limit", max };
+  await db.job.update({ where: { id: job.id }, data: { status: "published", pausedAt: null } });
+  await audit(db, ctx, "job.resume", job.id);
+  return { status: "published", jobId: job.id };
 }
 
 /** « Dupliquer » (mockup 04-02): the same job as a new draft, without candidates nor pipeline. */
@@ -393,6 +446,15 @@ export async function duplicateJob(db: PrismaClient, ctx: HireContext, jobId: st
       knockoutCriteria: job.knockoutCriteria ?? [],
       rejectionTemplate: job.rejectionTemplate,
       scorecardTemplate: job.scorecardTemplate ?? [],
+      openings: job.openings,
+      domain: job.domain,
+      requestedDocuments: job.requestedDocuments,
+      screeningQuestions: job.screeningQuestions ?? [],
+      jobSheetKey: job.jobSheetKey,
+      jobSheetName: job.jobSheetName,
+      jobSheetSize: job.jobSheetSize,
+      jobSheetPages: job.jobSheetPages,
+      jobSheetText: job.jobSheetText ?? undefined,
       assignedToId: job.assignedToId,
       teamId: job.teamId,
       departmentId: job.departmentId,

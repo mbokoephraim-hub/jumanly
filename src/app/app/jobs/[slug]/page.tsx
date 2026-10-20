@@ -1,4 +1,7 @@
 import type { Metadata } from "next";
+import { PdfRow } from "@/components/recruiter/offers";
+import { ViewBeacon } from "@/components/jobs/view-beacon";
+import { screeningQuestionsOf } from "@/server/services/hire-offers";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -134,6 +137,7 @@ export default async function TalentJobPage({
       : Promise.resolve(null),
   ]);
   const tone = toneOf(company);
+  const questionCount = screeningQuestionsOf(job.screeningQuestions).length;
   const score = ok ? Math.round(ok.score) : null;
   const criteria = parseCriteria(job.knockoutCriteria);
   const mySkills = new Set(profile?.skills.map((skill) => skill.skillId));
@@ -236,6 +240,7 @@ export default async function TalentJobPage({
 
   return (
     <div className="t-od t-od-bas t-odw t-large">
+      <ViewBeacon slug={job.slug} />
       <OfferStickyHead
         watch="od-ban"
         title={job.title}
@@ -433,6 +438,39 @@ export default async function TalentJobPage({
                   <li key={item}>{item}</li>
                 ))}
               </ol>
+            </section>
+          )}
+          {(job.requestedDocuments.length > 0 || questionCount > 0 || job.jobSheetName) && (
+            <section className="t-verre t-bloc-t t-odo-10">
+              <h2>{t("hireOffers.detail.candidature")}</h2>
+              {job.requestedDocuments.length > 0 && (
+                <p>
+                  {t("hireOffers.questions.documents", {
+                    list: job.requestedDocuments
+                      .map((kind) => t(`hireOffers.form.document.${kind as "cv"}`))
+                      .join(", "),
+                  })}
+                </p>
+              )}
+              {questionCount > 0 && (
+                <p>{t("hireOffers.offer.questions", { count: questionCount })}</p>
+              )}
+              {job.jobSheetName && (
+                <PdfRow
+                  bare
+                  name={job.jobSheetName}
+                  badge={t("hireOffers.sheet.pdf")}
+                  line={t("hireOffers.offer.sheetLine", { pages: job.jobSheetPages ?? 1 })}
+                >
+                  <Link
+                    href={`/app/jobs/${slug}/fiche`}
+                    className="t-bt t-sec t-s t-press"
+                    aria-label={t("hireOffers.form.sheetReadAria", { name: job.jobSheetName })}
+                  >
+                    {t("hireOffers.offer.sheetRead")}
+                  </Link>
+                </PdfRow>
+              )}
             </section>
           )}
           <section className="t-verre t-vf t-odo-11">

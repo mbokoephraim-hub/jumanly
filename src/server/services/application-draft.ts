@@ -4,6 +4,7 @@
  * loses nothing. Private to the talent; removed when the application is sent.
  */
 import type { PrismaClient } from "@/generated/prisma/client";
+import type { ScreeningAnswer } from "./screening";
 import { ownRefs, type AttachmentRef } from "./application-attachments";
 
 /** Steps of the form, in order. « Questions » does not exist yet: offers carry no questions. */
@@ -31,6 +32,8 @@ export async function saveApplicationDraft(
     cv?: { documentId: string | null; profileOnly: boolean };
     coverLetter?: string;
     attachments?: AttachmentRef[];
+    /** The answers to the recruiter's questions (`screeningAnswersFor`), all optional. */
+    screeningAnswers?: ScreeningAnswer[];
   },
 ) {
   let cv = input.cv;
@@ -47,6 +50,7 @@ export async function saveApplicationDraft(
     ...(attachments && { attachments }),
     ...(cv && { cvDocumentId: cv.documentId, profileOnly: cv.profileOnly }),
     ...(input.coverLetter !== undefined && { coverLetter: input.coverLetter.trim() }),
+    ...(input.screeningAnswers && { screeningAnswers: input.screeningAnswers }),
   };
   return db.applicationDraft.upsert({
     where: { userId_jobId: { userId: input.userId, jobId: input.jobId } },

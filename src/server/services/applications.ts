@@ -6,20 +6,32 @@
  * treated like every other.
  */
 import { freezeApplicationMatch } from "@/server/matching/service";
+import { screeningAnswersFor, screeningQuestionsOf } from "./screening";
 import type { Prisma, PrismaClient, StageKind } from "@/generated/prisma/client";
 import { snapshotAttachments, type AttachmentRef } from "./application-attachments";
 import { isJobOpen } from "./jobs";
 import { reportError } from "@/server/observability";
 
-/** Stages every job starts with; the recruiter edits them in Hire (E4). */
+/**
+ * Stages every new job starts with (brief recruteur § 2.6): Reçue, En examen, Présélectionnée,
+ * Entretien, Décision finale, then the two outcomes of the decision. The kinds keep what the talent
+ * sees honest: « En examen » reads as « Consultée », « Décision finale » still as « Entretien »
+ * (never « Offre reçue »). The recruiter renames them per job; existing jobs keep theirs.
+ */
 export const defaultStages: { kind: StageKind; name: string }[] = [
-  { kind: "new", name: "Nouvelles candidatures" },
-  { kind: "screening", name: "Présélection" },
+  { kind: "new", name: "Reçue" },
+  { kind: "new", name: "En examen" },
+  { kind: "screening", name: "Présélectionnée" },
   { kind: "interview", name: "Entretien" },
-  { kind: "offer", name: "Proposition" },
-  { kind: "hired", name: "Recruté" },
-  { kind: "rejected", name: "Non retenu" },
+  { kind: "interview", name: "Décision finale" },
+  { kind: "hired", name: "Retenue" },
+  { kind: "rejected", name: "Non retenue" },
 ];
+
+/** The steps a recruiter follows (without the two outcomes): five with the default model. */
+export const followedStageCount = defaultStages.filter(
+  (stage) => stage.kind !== "hired" && stage.kind !== "rejected",
+).length;
 
 export async function ensureStages(db: PrismaClient | Prisma.TransactionClient, jobId: string) {
   const count = await db.pipelineStage.count({ where: { jobId } });
@@ -51,6 +63,8 @@ export async function applyToJob(
     cvDocumentId?: string | null;
     coverLetter?: string | null;
     attachments?: AttachmentRef[];
+    /** Answers to the screening questions, by question id; none is required. */
+    answers?: Record<string, string>;
   },
   now = new Date(),
 ): Promise<ApplyResult> {
@@ -83,6 +97,10 @@ export async function applyToJob(
         stageId: first.id,
         coverLetter: input.coverLetter?.trim() || null,
         attachments: attachments as Prisma.InputJsonValue,
+        screeningAnswers: screeningAnswersFor(
+          screeningQuestionsOf(job.screeningQuestions),
+          input.answers ?? {},
+        ),
         cvSnapshot: cv
           ? {
               documentId: cv.id,

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { screeningAnswersOf, screeningQuestionsOf } from "@/server/services/screening";
 import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
@@ -59,6 +60,7 @@ export default async function CandidatePage({
   );
   const t = await getTranslations("hire");
   const tp = await getTranslations("talent.profile");
+  const tq = await getTranslations("hireOffers.questions");
   const format = await getFormatter();
   const application = await recordView(db, ctx, applicationId).catch((error) => {
     if (error instanceof HireError) notFound();
@@ -494,7 +496,27 @@ export default async function CandidatePage({
             ) : (
               <p className="text-[13px] text-ardoise">{t("application.letter.none")}</p>
             )}
-            <p className="text-[13px] text-ardoise">{t("application.answers.empty")}</p>
+            <h3 className={lab}>{tq("recruiterTitle")}</h3>
+            {screeningAnswersOf(application.screeningAnswers).length === 0 ? (
+              <p className="text-[13px] text-ardoise">
+                {screeningQuestionsOf(job.screeningQuestions).length > 0
+                  ? tq("noAnswer")
+                  : t("application.answers.empty")}
+              </p>
+            ) : (
+              <dl className="flex flex-col gap-2">
+                {screeningAnswersOf(application.screeningAnswers).map((item) => (
+                  <div key={item.id} className="flex flex-col gap-0.5">
+                    <dt className="text-[13px] font-semibold">{item.question}</dt>
+                    <dd className="text-[14px] whitespace-pre-line">
+                      {item.kind === "yesno"
+                        ? tq(item.answer === "yes" ? "yes" : "no")
+                        : item.answer}
+                    </dd>
+                  </div>
+                ))}
+              </dl>
+            )}
           </section>
 
           <div className="grid items-start gap-4 lg:grid-cols-2 lg:gap-5">

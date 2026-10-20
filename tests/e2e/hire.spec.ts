@@ -1,6 +1,8 @@
+import { execFileSync } from "node:child_process";
 import sharp from "sharp";
 import { expect, test, type Browser, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
+import { fillOffer, publishFilledOffer, slugOf } from "./offer-flow";
 import { lastCode } from "./outbox";
 import { demo, logIn, testEmail } from "./session";
 
@@ -36,6 +38,8 @@ async function signUpRecruiter(page: Page, email: string, orgName: string) {
   ).toBeVisible();
   await page.getByRole("button", { name: "Commencer" }).click();
   await expect(page).toHaveURL(/\/app\/hire/);
+  // Verified by Jumanly (as an administrator would do it): its offers publish at once (§ 2.11).
+  execFileSync("pnpm", ["exec", "tsx", "tests/e2e/verify-org.ts", email]);
 }
 
 async function newPage(browser: Browser, baseURL: string | undefined, isMobile: boolean) {
@@ -47,41 +51,20 @@ async function newPage(browser: Browser, baseURL: string | undefined, isMobile: 
   return context.newPage();
 }
 
-/** Publishes a job with the defaults the journeys need; returns its pipeline and its slug. */
+/** Publishes a job with the defaults the journeys need; returns its candidates board and slug. */
 async function publishJob(page: Page, title: string) {
-  await page.goto("/app/hire/offres/nouvelle");
-  await page.locator("#job-title").fill(title);
-  await page.locator("#job-city").fill("Abidjan");
-  await page.locator("#job-country").fill("Côte d'Ivoire");
-  await page.locator("#job-salaryMin").fill("400");
-  await page.locator("#job-salaryMax").fill("700");
-  const next = page.getByRole("button", { name: "Continuer" });
-  await next.click();
-  await page
-    .locator("#job-description-text")
-    .fill(
+  await fillOffer(page, {
+    title,
+    salary: ["400", "700"],
+    description:
       "Poste fictif de test : analyser des données de ventes et préparer des tableaux de bord.",
-    );
-  await page
-    .locator("#job-responsibilities")
-    .fill("Préparer les rapports mensuels\nNettoyer les données");
-  await next.click();
-  await page.locator("#job-requiredSkills").fill("Analyse de données");
-  // Criteria and process keep their defaults; publishing asks for the certification.
-  await next.click();
-  await next.click();
-  await next.click();
-  await page.getByLabel(/Je certifie que cette offre/).check();
-  await page.getByRole("button", { name: "Publier l'offre" }).click();
-  await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/?]+\?publiee=1/);
-  await expect(page.getByRole("main")).toContainText("Votre offre est en ligne !");
-  const pipelineUrl = page.url().split("?")[0]!;
-  const publicHref = await page
-    .getByRole("link", { name: "Aperçu de votre offre" })
-    .first()
-    .getAttribute("href");
-  const slug = publicHref!.split("/").pop()!;
-  return { pipelineUrl, slug };
+    responsibilities: ["Préparer les rapports mensuels", "Nettoyer les données"],
+    skill: "Analyse de données",
+  });
+  const { jobId } = await publishFilledOffer(page, "Publier");
+  await expect(page.getByRole("main")).toContainText("Offre publiée");
+  const slug = await slugOf(page);
+  return { pipelineUrl: `/app/hire/candidats?offre=${jobId}`, slug };
 }
 
 /** The talent applies with their Jumanly profile from the signed-in offer page. */
@@ -133,7 +116,7 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
     const card = page.locator("#pipeline-board li").filter({ hasText: "Amani Fictif" });
     const column = (name: RegExp) =>
       page.locator("#pipeline-board section").filter({ has: page.getByRole("heading", { name }) });
-    const target = column(/^Présélection/);
+    const target = column(/^Présélectionnée/);
     await card.scrollIntoViewIfNeeded();
     const from = (await card.boundingBox())!;
     const to = (await target.boundingBox())!;
@@ -143,11 +126,11 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
     await page.mouse.move(to.x + to.width / 2, from.y + 30, { steps: 8 });
     await expect(target).toHaveAttribute("data-drop-over", "");
     await page.mouse.up();
-    const toast = page.getByRole("status").filter({ hasText: "est passé en « Présélection »" });
+    const toast = page.getByRole("status").filter({ hasText: "est passé en « Présélectionnée »" });
     await expect(toast).toBeVisible();
     await expect(target).toContainText("Amani Fictif");
     await toast.getByRole("button", { name: "Annuler" }).click();
-    await expect(column(/^Nouvelles/)).toContainText("Amani Fictif");
+    await expect(column(/^Reçue/)).toContainText("Amani Fictif");
   }
   await page.getByRole("link", { name: "Amani Fictif" }).click();
   await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
@@ -299,17 +282,23 @@ test("une organisation ne voit jamais les offres ni les candidats d'une autre", 
   isMobile,
 }) => {
   await logIn(page, "entreprise@jumanly.test");
-  await page.goto("/app/hire/offres?onglet=toutes");
+  await page.goto("/app/hire/offres");
   const href = await page
     .locator('main a[href^="/app/hire/offres/"]')
-    .filter({ hasNotText: /Nouvelle|Créer/ })
+    .filter({ visible: true })
+    .filter({ hasNotText: /Nouvelle|Créer|Publier/ })
     .first()
     .getAttribute("href");
-  const jobId = href!.split("/")[4]!;
+  const jobId = href!.split("/")[4]!.split("?")[0]!;
 
   const other = await newPage(browser, baseURL, isMobile);
   await logIn(other, "rh@jumanly.test");
-  for (const path of [`/app/hire/offres/${jobId}`, `/app/hire/offres/${jobId}/modifier`]) {
+  for (const path of [
+    `/app/hire/offres/${jobId}`,
+    `/app/hire/offres/${jobId}/modifier`,
+    `/app/hire/offres/${jobId}/fiche`,
+    `/app/hire/candidats?offre=${jobId}`,
+  ]) {
     // Streamed pages keep a 200 status: what matters is that nothing of the job is shown.
     await other.goto(path);
     await expect(other.getByRole("heading", { level: 1 }), path).toHaveText(
@@ -391,10 +380,15 @@ test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ p
   await expect(main.getByRole("img", { name: "Logo de Marque fictive e2e" })).toBeVisible();
 
   // The job editor shows the same identity and the card as talents will see it.
-  await page.goto("/app/hire/offres/nouvelle");
+  // « Vérifier et publier » previews the offer with the banner (brief recruteur § 2.10).
+  await fillOffer(page, {
+    title: "Chargé de clientèle fictif",
+    description: "Poste fictif de test : accueillir et conseiller la clientèle.",
+    responsibilities: ["Accueillir la clientèle"],
+    skill: "Bureautique",
+  });
   const editor = page.locator("main").filter({ visible: true });
-  // On a phone the preview shows at the last step; the banner is already in it.
-  await expect(editor.locator(`img[src="${src}"]`).first()).toBeAttached();
+  await expect(editor.locator(`img[src="${src}"]`).first()).toBeVisible();
 
   await page.goto("/app/organisation");
   await main.getByRole("button", { name: "Bannière" }).click();

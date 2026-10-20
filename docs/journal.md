@@ -3120,3 +3120,33 @@ Questions pour Ephraïm :
 - À savoir : le test « Connexions : accepter une demande puis écrire » (`mobile-compte.spec.ts`) consomme la
   demande de démonstration ; un deuxième passage sur la même base échoue tant que `pnpm db:seed` n'est pas relancé.
 - Le site public n'a pas de mode sombre : ses captures « sombre » sont identiques aux claires.
+
+## 2026-10-20 · Étape 2, recruteur lot 2
+
+**Fait.** À traiter (`/app/hire`) et son état vide, Mes offres (`/app/hire/offres`, bandes de
+couleur, quatre chiffres par carte, menu ⋯ avec pause, reprise et clôture), la publication d'une
+offre en 4 étapes avec Orbi (Appliquer, Modifier, Refuser ; ni salaire ni avantages inventés),
+documents demandés et questions de présélection qui ne bloquent jamais une candidature, fiche de
+poste PDF facultative contrôlée (type, taille, contenu actif), écran de limite `jobs.active.max`,
+« En validation » pour une organisation pas encore vérifiée, écran publié et détail d'une offre
+avec un historique typé (Message, Candidature, Modification, Publication). Une offre en pause ne
+compte plus dans `jobs.active.max`. Étapes par défaut : Reçue, En examen, Présélectionnée,
+Entretien, Décision finale.
+
+**Données.** Migration additive `20261020120000_recruteur_lot_2_offres_pause_questions_fiche`.
+Aucune donnée effacée.
+
+**Ancien design.** Assistant d'offre et formulaire supprimés ; l'ancien tableau d'une offre
+attend le lot 3 sur `/app/hire/candidats?offre=`.
+
+**Tests.** Unitaires (`tests/unit/hire-offers.test.ts`) et en base (`tests/db/hire-offers.test.ts`) :
+pause hors quota, isolation des organisations, questions jamais bloquantes, fiche PDF. Parcours
+e2e `tests/e2e/mobile-recruteur-offres.spec.ts`, avec la vérification qu'aucun écran ne déborde à
+390 et 412 px même avec des textes longs. Les parcours e2e Hire et modération suivent le nouveau
+formulaire (`tests/e2e/offer-flow.ts`).
+
+**Écarts.** `docs/decisions/2026-10-20-recruteur-lot-2.md` (fiche à 4 Mo, pas d'antivirus,
+message aux non retenus au lot 4, lecture texte de la fiche, tableau provisoire, domaine, étapes
+de la démo).
+
+**Captures.** `captures/refonte-recruteur-lot-2/` du dossier du projet, 390 px, clair et sombre.

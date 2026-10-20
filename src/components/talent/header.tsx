@@ -64,7 +64,7 @@ const searches: Record<string, { action: string; filters?: string }> = {
 /** Pages that draw their own head: the offer and the screens of planches talent-2 and talent-3. */
 export function ownHead(pathname: string) {
   return [
-    /^\/app\/jobs\/(?!candidatures$|enregistrees$)[^/]+(\/postuler)?$/,
+    /^\/app\/jobs\/(?!candidatures$|enregistrees$)[^/]+(\/postuler|\/fiche)?$/,
     /^\/app\/suivi\/(?!entretiens$)[^/]+$/,
     /^\/app\/career\/entretiens\/[^/]+$/,
     /^\/app\/messages(\/[^/]+)?$/,

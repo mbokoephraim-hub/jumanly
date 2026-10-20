@@ -16,6 +16,7 @@ import { formatDayMonth } from "@/lib/dates";
 import { applicationLetterAction } from "@/server/actions/career-documents";
 import { saveApplicationStepAction } from "@/server/actions/jobs";
 import { requireUser } from "@/server/auth/session";
+import { screeningAnswersOf, screeningQuestionsOf } from "@/server/services/screening";
 import { db } from "@/server/db";
 import { getJob } from "@/server/queries/public";
 import {
@@ -169,6 +170,10 @@ export default async function ApplyPage({
     ? null
     : (cvs.find((cv) => cv.id === draft?.cvDocumentId) ?? cvs[0] ?? null);
   const letter = draft?.coverLetter ?? "";
+  const questions = screeningQuestionsOf(job.screeningQuestions);
+  const answers = new Map(
+    screeningAnswersOf(draft?.screeningAnswers).map((item) => [item.id, item.answer]),
+  );
   const refs = parseRefs(draft?.attachments);
   const [items, letters] =
     step === "cv"
@@ -525,8 +530,72 @@ export default async function ApplyPage({
           )}
         </div>
 
-        <form id={formId} action={saveApplicationStepAction}>
+        <form id={formId} action={saveApplicationStepAction} className="t-flux">
           {keep}
+          {(questions.length > 0 || job.requestedDocuments.length > 0) && (
+            <fieldset className="t-flux t-serre">
+              <legend className="t-h2s">{t("hireOffers.questions.title")}</legend>
+              {job.requestedDocuments.length > 0 && (
+                <p className="t-aide">
+                  {t("hireOffers.questions.documents", {
+                    list: job.requestedDocuments
+                      .map((kind) => t(`hireOffers.form.document.${kind as "cv"}`))
+                      .join(", "),
+                  })}
+                </p>
+              )}
+              {questions.length > 0 && (
+                <>
+                  <input type="hidden" name="answers" value="1" />
+                  <p className="t-aide">{t("hireOffers.questions.optional")}</p>
+                  <div className="t-verre">
+                    {questions.map((question) => {
+                      const saved = answers.get(question.id) ?? "";
+                      const id = `apply-q-${question.id}`;
+                      return (
+                        <div key={question.id} className="t-rx-rep">
+                          {question.kind === "yesno" ? (
+                            <fieldset className="t-flux t-serre">
+                              <legend>
+                                <p>{question.text}</p>
+                              </legend>
+                              <div className="t-seg">
+                                {(["yes", "no"] as const).map((value) => (
+                                  <label key={value}>
+                                    <input
+                                      type="radio"
+                                      name={`answer-${question.id}`}
+                                      value={value}
+                                      defaultChecked={saved === value}
+                                    />
+                                    {t(`hireOffers.questions.${value}`)}
+                                  </label>
+                                ))}
+                              </div>
+                            </fieldset>
+                          ) : (
+                            <>
+                              <label htmlFor={id}>
+                                <p>{question.text}</p>
+                              </label>
+                              <textarea
+                                id={id}
+                                name={`answer-${question.id}`}
+                                maxLength={1000}
+                                rows={3}
+                                defaultValue={saved}
+                                placeholder={t("hireOffers.questions.answer")}
+                              />
+                            </>
+                          )}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </>
+              )}
+            </fieldset>
+          )}
           <div className="t-verre t-fort t-bas-f">
             <Link href={stepHref("verification")} className="t-bt t-sec t-m t-press">
               {t("apply.skip")}

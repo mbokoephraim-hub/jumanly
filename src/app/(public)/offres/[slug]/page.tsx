@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { ViewBeacon } from "@/components/jobs/view-beacon";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getTranslations } from "next-intl/server";
@@ -132,6 +133,7 @@ export default async function JobPage({ params }: PageProps<"/offres/[slug]">) {
 
   return (
     <>
+      <ViewBeacon slug={job.slug} />
       {open && (
         <script
           type="application/ld+json"

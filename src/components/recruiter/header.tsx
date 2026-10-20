@@ -24,7 +24,12 @@ export type RecruiterHeaderLabels = {
 
 /** Recruiter pages that draw their own head, on top of the shared ones of the talent space. */
 function ownRecruiterHead(pathname: string) {
-  return /^\/app\/hire\/compte(\/.*)?$/.test(pathname) || pathname === "/app/bienvenue";
+  return (
+    /^\/app\/hire\/compte(\/.*)?$/.test(pathname) ||
+    pathname === "/app/bienvenue" ||
+    // Lot 2: the offer, its four steps and its job sheet (planches recruteur-1 CR, OD_R, PDF_V).
+    /^\/app\/hire\/offres\/[^/]+(\/modifier|\/fiche)?$/.test(pathname)
+  );
 }
 
 /**

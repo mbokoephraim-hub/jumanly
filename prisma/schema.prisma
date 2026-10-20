@@ -218,6 +218,9 @@ enum JobStatus {
   rejected
   /// Sent back by moderation with the points to correct; resubmitted, it goes back to review.
   changes_requested
+  /// Put on hold by the recruiter (brief recruteur § 2.4): hidden from results, applications kept,
+  /// can be resumed; never counted in `jobs.active.max`.
+  paused
 }
 
 enum SkillImportance {
@@ -226,70 +229,101 @@ enum SkillImportance {
 }
 
 model Job {
-  id                String             @id @default(cuid(2))
-  organizationId    String
-  organization      Organization       @relation(fields: [organizationId], references: [id])
-  title             String
-  slug              String             @unique
-  description       String
+  id                      String             @id @default(cuid(2))
+  organizationId          String
+  organization            Organization       @relation(fields: [organizationId], references: [id])
+  title                   String
+  slug                    String             @unique
+  description             String
   /// One item per line.
-  responsibilities  String[]
-  requirements      String[]
-  benefits          String[]
-  process           String[]
-  contractType      ContractType
-  city              String
-  country           String
-  remote            RemoteMode
+  responsibilities        String[]
+  requirements            String[]
+  benefits                String[]
+  process                 String[]
+  contractType            ContractType
+  city                    String
+  country                 String
+  remote                  RemoteMode
   /// USD cents per month; optional.
-  salaryMin         Int?
-  salaryMax         Int?
-  currency          String             @default("USD")
-  experienceMin     Int                @default(0)
-  educationLevelMin String?
+  salaryMin               Int?
+  salaryMax               Int?
+  currency                String             @default("USD")
+  experienceMin           Int                @default(0)
+  educationLevelMin       String?
   /// [{ code: "fr", level: "C1" }]
-  languagesRequired Json               @default("[]")
+  languagesRequired       Json               @default("[]")
   /// Explicit criteria set by the recruiter: ["Permis B", …]
-  knockoutCriteria  Json               @default("[]")
-  status            JobStatus          @default(draft)
-  publishedAt       DateTime?
+  knockoutCriteria        Json               @default("[]")
+  status                  JobStatus          @default(draft)
+  publishedAt             DateTime?
   /// Set when the end of a paid plan put this offer back in draft (partie 09 § 9.2); restored
   /// automatically when the organization pays again, within its limit.
-  pausedByBillingAt DateTime?
-  closesAt          DateTime?
-  createdById       String?
-  createdBy         User?              @relation("JobCreator", fields: [createdById], references: [id], onDelete: SetNull)
+  pausedByBillingAt       DateTime?
+  /// When the recruiter paused the job (status `paused`).
+  pausedAt                DateTime?
+  closesAt                DateTime?
+  /// Number of positions to fill (planche recruteur-1 CR1).
+  openings                Int                @default(1)
+  /// Field of the job, a key of `studyFields` (src/lib/studies.ts).
+  domain                  String?
+  /// Documents asked to candidates (cv, letter, diploma, portfolio): asked, never required to apply.
+  requestedDocuments      String[]           @default([])
+  /// Screening questions [{ id, text, kind: "yesno" | "text" }]: never block an application.
+  screeningQuestions      Json               @default("[]")
+  /// What candidates should know before applying (optional, step 3 of the job form).
+  applicationInstructions String?
+  /// Optional job sheet in PDF (checked: type, size, no active content), in the file storage.
+  jobSheetKey             String?
+  jobSheetName            String?
+  jobSheetSize            Int?
+  jobSheetPages           Int?
+  /// Text of each page of the job sheet, for the reader and Orbi (data, never instructions).
+  jobSheetText            Json?
+  createdById             String?
+  createdBy               User?              @relation("JobCreator", fields: [createdById], references: [id], onDelete: SetNull)
   /// Recruiter in charge (« attribution des offres », partie 05 § 2.3).
-  assignedToId      String?
-  assignedTo        User?              @relation("JobAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
-  teamId            String?
-  team              Team?              @relation("JobTeam", fields: [teamId], references: [id], onDelete: SetNull)
-  departmentId      String?
-  department        Team?              @relation("JobDepartment", fields: [departmentId], references: [id], onDelete: SetNull)
-  entityId          String?
-  entity            OrgEntity?         @relation(fields: [entityId], references: [id], onDelete: SetNull)
+  assignedToId            String?
+  assignedTo              User?              @relation("JobAssignee", fields: [assignedToId], references: [id], onDelete: SetNull)
+  teamId                  String?
+  team                    Team?              @relation("JobTeam", fields: [teamId], references: [id], onDelete: SetNull)
+  departmentId            String?
+  department              Team?              @relation("JobDepartment", fields: [departmentId], references: [id], onDelete: SetNull)
+  entityId                String?
+  entity                  OrgEntity?         @relation(fields: [entityId], references: [id], onDelete: SetNull)
   /// Scorecard template: [{ name, description }] (`hire.scorecards`).
-  scorecardTemplate Json               @default("[]")
+  scorecardTemplate       Json               @default("[]")
   /// Members given access to this job only (hiring managers, per-job permissions).
-  assignments       JobAssignment[]
-  contactRequests   ContactRequest[]
+  assignments             JobAssignment[]
+  contactRequests         ContactRequest[]
   /// Message sent by default when a candidate is not selected; editable each time.
-  rejectionTemplate String?
+  rejectionTemplate       String?
   /// Automatic check results (`admin.jobs.autoFlag.*`) and the moderator's reason.
-  moderationFlags   String[]
-  moderationReason  String?
+  moderationFlags         String[]
+  moderationReason        String?
   /// Points to correct ticked by the moderator (`admin.jobs.fix.*`), with `changes_requested`.
-  moderationChecks  String[]           @default([])
-  skills            JobSkill[]
-  stages            PipelineStage[]
-  applications      Application[]
-  savedBy           SavedJob[]
-  applicationDrafts ApplicationDraft[]
-  matchResults      MatchResult[]
-  createdAt         DateTime           @default(now())
-  updatedAt         DateTime           @updatedAt
+  moderationChecks        String[]           @default([])
+  skills                  JobSkill[]
+  stages                  PipelineStage[]
+  applications            Application[]
+  savedBy                 SavedJob[]
+  applicationDrafts       ApplicationDraft[]
+  matchResults            MatchResult[]
+  viewDays                JobViewDay[]
+  createdAt               DateTime           @default(now())
+  updatedAt               DateTime           @updatedAt
 
   @@index([status, publishedAt])
+}
+
+/// Views of a job's page, one row per day (UTC): the real figures of « Mes offres » and
+/// « Performance » (planche recruteur-1 r2, r4). No person is recorded.
+model JobViewDay {
+  jobId String
+  job   Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  day   DateTime @db.Date
+  count Int      @default(0)
+
+  @@id([jobId, day])
 }
 
 model JobSkill {
@@ -1272,6 +1306,8 @@ model Application {
   /// Documents joined to the application, copied as sent (refonte mobile lot 4): attestations
   /// [{ type: "certificate", code, title, issuedAt }] and texts [{ type: "document", title, text }].
   attachments      Json               @default("[]")
+  /// Answers to the job's screening questions [{ id, question, answer }], all optional.
+  screeningAnswers Json               @default("[]")
   source           ApplicationSource  @default(direct)
   /// Score and explanation shown when the talent applied (partie 08 § 8.10), frozen.
   matchScore       Int?
@@ -1314,20 +1350,22 @@ model SavedJob {
 /// Application in progress (docs/ux-mobile-talent, prompt 4): saved at each step of the staged
 /// form, removed when the application is sent. Never seen by the organization.
 model ApplicationDraft {
-  userId       String
-  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
-  jobId        String
-  job          Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
+  userId           String
+  user             User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  jobId            String
+  job              Job      @relation(fields: [jobId], references: [id], onDelete: Cascade)
   /// Last step reached: cv | lettre | verification.
-  step         String   @default("cv")
+  step             String   @default("cv")
   /// Chosen CV; null with `profileOnly` = « Mon profil Jumanly seul », null alone = not chosen yet.
-  cvDocumentId String?
-  profileOnly  Boolean  @default(false)
-  coverLetter  String   @default("")
+  cvDocumentId     String?
+  profileOnly      Boolean  @default(false)
+  coverLetter      String   @default("")
   /// Documents joined at step 2 (refonte mobile lot 4): [{ type: "certificate" | "document", id }].
-  attachments  Json     @default("[]")
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
+  attachments      Json     @default("[]")
+  /// Answers to the screening questions, optional (refonte recruteur lot 2).
+  screeningAnswers Json     @default("[]")
+  createdAt        DateTime @default(now())
+  updatedAt        DateTime @updatedAt
 
   @@id([userId, jobId])
   @@index([jobId])

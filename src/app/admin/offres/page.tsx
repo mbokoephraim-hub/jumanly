@@ -502,7 +502,7 @@ export default async function AdminJobs({ searchParams }: PageProps<"/admin/offr
 
               <div className="flex flex-col gap-2 rounded-[16px] bg-creme p-4 text-[13px] leading-5">
                 <h3 className={adminLabel}>{t("excerpt")}</h3>
-                <p>
+                <p className="[overflow-wrap:anywhere]">
                   {excerpt(selected).map((part, index) =>
                     part.marked ? (
                       <mark
