@@ -3075,3 +3075,19 @@ Questions pour Ephraïm :
 3. Espace partenaire : il utilise aussi l'ancien cadre. Le garde-t-on tel quel jusqu'à une maquette partenaire ?
 4. « En ligne », « écrit… » et notifications sur le téléphone demandent un service de temps réel et des notifications push (clés à créer, rien n'existe). Acceptez-vous une première version avec mise à jour toutes les quelques secondes et la notification sur le téléphone plus tard ?
 5. Fiche de poste PDF « analysée avant publication » : suffit-il de vérifier le type, la taille et l'absence de contenu actif, ou faut-il un antivirus externe (service payant) ?
+
+## 2026-10-20 · Réponse au toucher et transitions (demande d'Ephraïm)
+
+- Constat mesuré (téléphone ralenti 6×, réseau lent) : en touchant une offre, rien ne bougeait pendant près de 2 s,
+  ni barre ni marque, et un deuxième toucher relançait la page. La barre fine de `NavigationFeedback` ne partait
+  jamais pour les liens de Next.js (ils annulent eux-mêmes le clic, que la barre prenait pour « rien à charger »).
+  Les boutons d'envoi des écrans talent n'avaient pas d'état « en cours » et pouvaient envoyer deux fois.
+  Le hors connexion, lui, fonctionne sur la version en ligne (onglets et réouverture à froid servis sans réseau).
+- `src/components/motion/navigation-feedback.tsx` réécrit : le lien touché est marqué en moins de 0,1 s, la barre
+  part à 0,12 s et s'arrête quand la nouvelle page est là ; toucher à nouveau le même lien pendant ce temps ne fait
+  rien ; un formulaire envoyé marque son bouton (atténué, plus de deuxième envoi) jusqu'à la réponse. Les débuts
+  et fins sont lus sur `fetch` (en-têtes `RSC` et `Next-Action`).
+- Transitions façon messagerie (espaces talent et recruteur) : la page suivante glisse de la droite (0,24 s), de
+  la gauche au retour ; entre onglets, un fondu. Rien ne bouge avec « Réduire les animations ».
+- Vérifié : 3 touchers rapides sur une offre = 1 seule page demandée ; 3 touchers sur « Enregistrer l'offre » =
+  1 seul envoi, bouton marqué à 0,08 s puis libéré à la réponse.
