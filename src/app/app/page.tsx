@@ -132,8 +132,10 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
   const lessonHref = (lesson: NonNullable<typeof current>) =>
     lesson.next ? `/app/learn/${lesson.slug}/${lesson.next.id}` : `/app/learn/${lesson.slug}`;
 
+  // A new account (planche talent-4 § 1): the « Bienvenue » card takes the place of the next
+  // step; on a phone it is followed by the offers as full cards, nothing else above them.
   const goal = (
-    <div className="t-obj">
+    <div className={showWelcome ? "t-obj t-web" : "t-obj"}>
       <TalentIcon name="cap" size="xs" />
       <span className="whitespace-nowrap">{t("forMe.goal.label")}</span>
       <b className="min-w-0">
@@ -254,7 +256,10 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
   const appliedIds = new Set(applied.map((row) => row.jobId));
   const explanations = new Map(offers.jobs.map((item) => [item.jobId, item.explanation]));
   const offersCards = cards.length > 0 && (
-    <section aria-labelledby="pm-offres-w" className="t-web flex flex-col gap-3.5">
+    <section
+      aria-labelledby="pm-offres-w"
+      className={showWelcome ? "flex flex-col gap-3.5" : "t-web flex flex-col gap-3.5"}
+    >
       <div className="t-sec-t">
         <h2 id="pm-offres-w">{offersTitle}</h2>
         <Link href="/app/jobs">{t("forMe.offers.all")}</Link>
@@ -279,7 +284,7 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
     </section>
   );
 
-  const generalLine = !offers.personalised && cards.length > 0 && (
+  const generalLine = !showWelcome && !offers.personalised && cards.length > 0 && (
     <p className="t-res-l">
       {t("offers.line.general")}{" "}
       <Link href="/app/profil#competences">{t("offers.line.generalCta")}</Link>
@@ -551,8 +556,8 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
       ) : (
         <div className="t-pmw-g">
           <div className="t-pmw-m">
-            {nextStep}
-            {offersGroup("t-mob")}
+            {!showWelcome && nextStep}
+            {!showWelcome && offersGroup("t-mob")}
             {offersCards}
             {generalLine}
             {current && (

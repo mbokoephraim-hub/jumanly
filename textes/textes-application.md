@@ -1922,7 +1922,7 @@ Note d'intégration : le formulaire de paiement intégré réutilise les écrans
 | `access.welcomeCard.profileValue` | {percent} % |
 | `access.welcomeCard.cv` | Importer ou créer mon CV |
 | `access.welcomeCard.cvValue` | 5 min |
-| `access.welcomeCard.offers` | {count, plural, =0 {Voir les offres} one {Voir mon offre} other {Voir mes # offres}} |
+| `access.welcomeCard.offers` | {count, plural, =0 {Voir les offres} one {Voir l’offre} other {Voir mes # offres}} |
 | `access.welcomeCard.done` | Fait |
 | `access.welcomeCard.toast` | Compte créé · formule {plan} |
 
