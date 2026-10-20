@@ -217,7 +217,7 @@ export default async function CandidateMessagePage({
           <p className="text-[13px] text-ardoise">
             {t("message.convocationHint")}{" "}
             <Link
-              href={`/app/hire/entretiens?candidature=${application.id}#planifier`}
+              href={`/app/hire/candidats/${application.id}/entretien`}
               className="font-semibold underline"
             >
               {t("message.schedule")}

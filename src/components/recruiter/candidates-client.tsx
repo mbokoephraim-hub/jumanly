@@ -160,12 +160,19 @@ export function DecisionMessage({
   firstName,
   title,
   edited,
+  fieldId = "decision-message",
+  editLabel,
+  editText,
 }: {
   body: string;
   segments: { text: string; filled: boolean }[][];
   firstName: string;
   title: string;
   edited: string;
+  /** Another screen's message (an interview, a proposal): its own field and words. */
+  fieldId?: string;
+  editLabel?: string;
+  editText?: string;
 }) {
   const t = useTranslations("hireCandidates.decision");
   const [editing, setEditing] = useState(false);
@@ -179,11 +186,11 @@ export function DecisionMessage({
       </span>
       {editing ? (
         <>
-          <label htmlFor="decision-message" className="sr-only">
-            {t("editLabel", { firstName })}
+          <label htmlFor={fieldId} className="sr-only">
+            {editLabel ?? t("editLabel", { firstName })}
           </label>
           <textarea
-            id="decision-message"
+            id={fieldId}
             name="message"
             rows={9}
             maxLength={4000}
@@ -220,7 +227,7 @@ export function DecisionMessage({
           onClick={() => setEditing(true)}
         >
           <TalentIcon name="modifier" size="xs" />
-          {t("edit")}
+          {editText ?? t("edit")}
         </button>
       )}
     </div>

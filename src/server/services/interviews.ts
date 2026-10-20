@@ -162,7 +162,7 @@ export async function scheduleInterview(
     userIds: participants,
     type: "interviewTeam",
     payload: { candidateName: application.profile.user.name, jobTitle: application.job.title },
-    href: "/app/hire/entretiens",
+    href: `/app/hire/entretiens/${interview.id}`,
   });
   return { status: "sent", interviewId: interview.id };
 }
@@ -367,7 +367,7 @@ export async function answerInterview(
       userIds: teamOf(interview),
       type: "interviewConfirmed",
       payload,
-      href: "/app/hire/entretiens",
+      href: `/app/hire/entretiens/${interview.id}`,
     });
     return;
   }
@@ -388,7 +388,7 @@ export async function answerInterview(
       userIds: teamOf(interview),
       type: "interviewReschedule",
       payload,
-      href: "/app/hire/entretiens",
+      href: `/app/hire/entretiens/${interview.id}`,
     });
     return;
   }
@@ -399,7 +399,7 @@ export async function answerInterview(
     userIds: teamOf(interview),
     type: "interviewDeclined",
     payload,
-    href: "/app/hire/entretiens",
+    href: `/app/hire/entretiens/${interview.id}`,
   });
 }
 

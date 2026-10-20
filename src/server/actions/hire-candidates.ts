@@ -28,6 +28,7 @@ import {
   laterStage,
   undoDecision,
 } from "@/server/services/hire-candidates";
+import { SLOTS_MAX } from "@/server/services/interviews";
 import { TEMPLATE_BODY_MAX } from "@/server/services/message-templates";
 
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
@@ -164,6 +165,17 @@ export async function decideAction(formData: FormData) {
     redirect(`${page}?issue=${input.outcome}&erreur=message`);
   const poolId =
     input.vivier === "on" && input.pool && (await canShortlist(db, ctx)) ? input.pool : null;
+  // Retained: the call to fix the arrival date, when the member chose its times (lot 4).
+  const callSlots =
+    input.outcome === "hired" && formData.get("appel") === "on"
+      ? formData
+          .getAll("slot")
+          .map((value) => String(value).slice(0, 20))
+          .filter(Boolean)
+          .slice(0, SLOTS_MAX)
+      : [];
+  if (formData.get("appel") === "on" && input.outcome === "hired" && callSlots.length === 0)
+    redirect(`${page}?issue=hired&appel=1&erreur=appel`);
   await guarded(
     () =>
       decide(db, ctx, applicationId, {
@@ -173,8 +185,11 @@ export async function decideAction(formData: FormData) {
         poolId,
         company: space.organization.name,
         signer: user.name,
+        call: callSlots.length
+          ? { slots: callSlots, timezone: String(formData.get("timezone") ?? "").slice(0, 60) }
+          : null,
       }),
-    `${page}?erreur=1`,
+    callSlots.length ? `${page}?issue=hired&appel=1&erreur=appel` : `${page}?erreur=1`,
   );
   flushMails();
   redirect(`${page}?enregistree=1`);

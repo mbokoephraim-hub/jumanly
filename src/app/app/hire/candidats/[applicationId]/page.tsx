@@ -3,7 +3,6 @@ import Link from "next/link";
 import { notFound, redirect } from "next/navigation";
 import { after } from "next/server";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { ScorecardPanel } from "@/components/hire/scorecard-panel";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import {
   CandidateAvatar,
@@ -11,6 +10,7 @@ import {
   ScoreRing,
   StageTrack,
 } from "@/components/recruiter/candidates";
+import { PoolSheet } from "@/components/recruiter/pool-sheet";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
@@ -45,7 +45,7 @@ import {
   skillProofs,
   type AnalysisPoint,
 } from "@/server/services/cv-analysis";
-import { scorecardCriteria, scorecardView, visibleNotes } from "@/server/services/evaluation";
+import { nextStepOf, RATING_MAX, scorecardView, visibleNotes } from "@/server/services/evaluation";
 import { HireError, hirePermissions, recordView } from "@/server/services/hire";
 import { decisionStageOf } from "@/server/services/hire-candidates";
 import { parseCriteria } from "@/server/services/jobs";
@@ -57,6 +57,7 @@ import {
   orgPlanFor,
 } from "@/server/services/plans";
 import { screeningAnswersOf, screeningQuestionsOf } from "@/server/services/screening";
+import { poolChoices } from "@/server/services/talent-search";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireCandidates.file");
@@ -92,6 +93,7 @@ export default async function CandidateFilePage({
   );
   const t = await getTranslations("hireCandidates");
   const th = await getTranslations("hire");
+  const ti = await getTranslations("hireInterviews");
   const ui = await getTranslations("ui");
   const tq = await getTranslations("hireOffers.questions");
   const format = await getFormatter();
@@ -129,7 +131,7 @@ export default async function CandidateFilePage({
     creditsLeft(db, ctx),
     visibleNotes(db, ctx, application.events),
   ]);
-  const [match, scoreView, dispute, actors, hiddenProofs] = await Promise.all([
+  const [match, scoreView, dispute, actors, hiddenProofs, pools] = await Promise.all([
     matchingLevel === "none"
       ? null
       : applicationMatches(db, [application], now).then((map) => map.get(application.id) ?? null),
@@ -161,6 +163,7 @@ export default async function CandidateFilePage({
       where: { onProfile: false, enrollment: { userId: profile.userId } },
       select: { code: true },
     }),
+    permissions.manage ? poolChoices(db, ctx, application.profileId) : null,
   ]);
   const names = new Map(actors.map((actor) => [actor.id, actor.name]));
   const memberName = (id: string | null) => (id ? (names.get(id) ?? "") : "");
@@ -309,7 +312,9 @@ export default async function CandidateFilePage({
                       ? th("pools.addedDone")
                       : ok === "decision"
                         ? th("reject.done")
-                        : null;
+                        : ok === "evaluation"
+                          ? t("ok.evaluation")
+                          : null;
 
   return (
     <div className="t-flux t-rc-dos">
@@ -753,24 +758,56 @@ export default async function CandidateFilePage({
         )}
       </FileSection>
 
-      {/* ─── Evaluation (its screens come with the interviews, lot 4) ─── */}
+      {/* ─── Evaluation (recruteur lot 4: its own screen, planche r2plus EVAL) ─── */}
       <FileSection
         id="evaluation"
         icon={<TalentIcon name="valider" size="s" />}
         tone="former"
         title={t("evaluation.title")}
         aside={scoreView ? String(scoreView.count) : undefined}
-        open={ok === "evaluation" || query.erreur === "invalid"}
+        open={ok === "evaluation"}
       >
-        <ScorecardPanel
-          applicationId={application.id}
-          criteria={scorecardCriteria(job)}
-          view={scoreView}
-          canEvaluate={permissions.evaluate}
-          lockedPlan={scorecards ? null : orgPlanFor(plans, "hire.scorecards")}
-          ok={ok === "evaluation"}
-          error={query.erreur === "invalid" && ok === undefined}
-        />
+        {!scorecards ? (
+          <p className="t-rc-note">
+            {t("evaluation.locked", { plan: orgPlanFor(plans, "hire.scorecards") })}
+          </p>
+        ) : (
+          <div className="t-ri-evr">
+            {scoreView?.mine ? (
+              <p>
+                {t.rich("evaluation.mine", {
+                  b: (chunks) => <b>{chunks}</b>,
+                  suite: ti(`evaluation.suite.${nextStepOf(scoreView.mine.recommendation)}`),
+                })}
+              </p>
+            ) : (
+              <p>{t("evaluation.notYet")}</p>
+            )}
+            {scoreView && !scoreView.hidden && scoreView.average !== null && (
+              <p>
+                {t("evaluation.team", {
+                  count: scoreView.count,
+                  average: scoreView.average,
+                  max: RATING_MAX,
+                })}
+              </p>
+            )}
+            {scoreView && scoreView.hidden && scoreView.count > 0 && (
+              <p className="t-rc-note">{t("evaluation.hidden", { count: scoreView.count })}</p>
+            )}
+            {scoreView && scoreView.pending.length > 0 && (
+              <p className="t-rc-note">
+                {t("evaluation.pending", { names: scoreView.pending.join(", ") })}
+              </p>
+            )}
+            {permissions.evaluate && (
+              <Link href={`${base}/evaluation`} className="t-bt t-sec t-s t-press">
+                <TalentIcon name="valider" size="xs" />
+                {scoreView?.mine ? t("evaluation.edit") : t("evaluation.open")}
+              </Link>
+            )}
+          </div>
+        )}
       </FileSection>
 
       {/* ─── The bar of actions ─── */}
@@ -789,7 +826,7 @@ export default async function CandidateFilePage({
         )}
         {live && application.status === "active" && appointments && (
           <Link
-            href={`/app/hire/entretiens?candidature=${application.id}#planifier`}
+            href={`/app/hire/candidats/${application.id}/entretien`}
             aria-label={t("bar.interview")}
             className="t-bi t-press"
           >
@@ -1018,6 +1055,16 @@ export default async function CandidateFilePage({
               </span>
             </a>
           )}
+          {permissions.manage && (
+            <SheetButton target="rc-vivier" className="t-li t-press">
+              <span className="t-cases t-c3" aria-hidden>
+                <TalentIcon name="favori" size="s" />
+              </span>
+              <span className="t-t">
+                <b>{t("menu.pool")}</b>
+              </span>
+            </SheetButton>
+          )}
           {live && (
             <Link href={`${base}/decision`} className="t-li t-press">
               <span className="t-cases t-c2" aria-hidden>
@@ -1031,6 +1078,16 @@ export default async function CandidateFilePage({
           )}
         </div>
       </Sheet>
+
+      {permissions.manage && (
+        <PoolSheet
+          id="rc-vivier"
+          profileId={application.profileId}
+          back={base}
+          pools={pools}
+          lockedPlan={orgPlanFor(plans, "hire.shortlist")}
+        />
+      )}
 
       {permissions.manage && application.status !== "withdrawn" && (
         <Sheet

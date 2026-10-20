@@ -76,8 +76,28 @@ export const searchLanguages = ["fr", "en", "sw", "ln", "pt", "ar", "es"] as con
 
 export const educationFilters = Object.keys(educationRanks) as EducationLevel[];
 
+/** « Expérience » of the filters (planche r2plus TAL_F): years of experience, never the age. */
+export const experienceLevels = ["sans", "junior", "confirme"] as const;
+export type ExperienceLevel = (typeof experienceLevels)[number];
+export function experienceLevelOf(years: number): ExperienceLevel {
+  return years < 1 ? "sans" : years <= 3 ? "junior" : "confirme";
+}
+
+/** Several skills travel as one value (« SQL,Power BI »); each must be in the profile. */
+export const skillList = (value: string) =>
+  [
+    ...new Set(
+      value
+        .split(",")
+        .map((item) => item.replace(/\s+/g, " ").trim().slice(0, 60))
+        .filter(Boolean),
+    ),
+  ].slice(0, 5);
+
 export const searchSchema = z.object({
   q: z.string().trim().max(100).default(""),
+  skills: z.string().max(320).default(""),
+  level: optionalEnum(experienceLevels),
   location: z.string().trim().max(80).default(""),
   job: z.string().max(40).default(""),
   // Deep filters (`hire.talent_search` « deep »).
@@ -94,6 +114,7 @@ export type SearchInput = z.infer<typeof searchSchema>;
 
 export const deepFilters = [
   "experience",
+  "level",
   "remote",
   "contract",
   "language",
@@ -104,6 +125,7 @@ export const deepFilters = [
 
 export type TalentResult = {
   profileId: string;
+  availability: "open" | "listening" | "not_looking";
   anonymous: boolean;
   name: string | null;
   headline: string;
@@ -134,6 +156,7 @@ const searchSelect = {
   id: true,
   headline: true,
   visibility: true,
+  availability: true,
   matchingEnabled: true,
   userId: true,
   user: { select: { name: true, city: true } },
@@ -172,6 +195,10 @@ export function searchFilters(input: SearchInput, deep: boolean): Prisma.TalentP
       ],
     });
   }
+  for (const skill of skillList(input.skills))
+    and.push({
+      skills: { some: { skill: { name: { equals: skill, mode: "insensitive" as const } } } },
+    });
   if (input.location) {
     const contains = { contains: input.location, mode: "insensitive" as const };
     and.push({
@@ -207,7 +234,8 @@ export async function searchTalents(
   const searchLevel = await level(db, subject, "hire.talent_search");
   if (searchLevel === "none") return { status: "locked" };
   const input = searchSchema.parse(raw);
-  if (!input.q && !input.location && !input.job) return { status: "empty" };
+  if (!input.q && !input.location && !input.job && !skillList(input.skills).length)
+    return { status: "empty" };
   const deep = searchLevel === "deep";
   // One search of the quota per distinct query and quota period: the next pages and a reload of
   // the same query are not charged again, whatever the address says.
@@ -257,6 +285,7 @@ export async function searchTalents(
   const filtered = rows.filter(
     (row) =>
       (!deep || input.experience === "" || yearsOf(row.experiences, now) >= input.experience) &&
+      (!deep || !input.level || experienceLevelOf(yearsOf(row.experiences, now)) === input.level) &&
       (minRank === 0 ||
         row.educations.some((item) => (educationRanks[item.level] ?? 0) >= minRank)),
   );
@@ -290,6 +319,7 @@ export async function searchTalents(
     }
     results.push({
       profileId: row.id,
+      availability: row.availability,
       anonymous: row.visibility === "anonymous" && !known,
       name: row.visibility === "anonymous" && !known ? null : row.user.name,
       headline: row.headline ?? "",
@@ -383,10 +413,20 @@ const fullProfileSelect = {
   desiredContracts: true,
   remotePreferences: true,
   languages: true,
-  user: { select: { id: true, name: true, city: true, country: true } },
+  userId: true,
+  matchingEnabled: true,
+  user: { select: { id: true, name: true, firstName: true, city: true, country: true } },
   skills: {
     orderBy: { level: "desc" },
-    select: { level: true, verified: true, skill: { select: { name: true } } },
+    select: {
+      skillId: true,
+      level: true,
+      verified: true,
+      proof: true,
+      source: true,
+      proofUrl: true,
+      skill: { select: { name: true } },
+    },
   },
   experiences: {
     orderBy: [{ endDate: { sort: "desc", nulls: "first" } }, { startDate: "desc" }],
@@ -630,7 +670,7 @@ export async function respondContactRequest(
         userIds: [request.requesterId],
         type: "contactDeclined",
         payload: {},
-        href: "/app/hire/talents",
+        href: "/app/hire/candidats?vue=propositions",
       });
     }
     return { status: answer === "block" ? "blocked" : "declined" };
@@ -886,4 +926,172 @@ export async function deletePool(db: PrismaClient, ctx: HireContext, poolId: str
   if (pool.ownerId !== ctx.userId && !hirePermissions(ctx.role).administer)
     throw new HireError("forbidden");
   await db.talentPool.delete({ where: { id: pool.id } });
+}
+
+// ─── Recruiter redesign, lot 4: proposals and pools at a glance ─────────────────
+
+/**
+ * The pools a member may add a talent to (sheet « Ajouter à un vivier »), with whether the talent
+ * is already in each; null when pools are not in the organization's plan.
+ */
+export async function poolChoices(db: PrismaClient, ctx: HireContext, profileId: string) {
+  if (!hirePermissions(ctx.role).manage) throw new HireError("forbidden");
+  if (!(await poolsEnabled(db, ctx.organizationId))) return null;
+  const pools = await db.talentPool.findMany({
+    where: await poolsWhere(db, ctx),
+    orderBy: { updatedAt: "desc" },
+    take: 30,
+    select: {
+      id: true,
+      name: true,
+      _count: { select: { entries: { where: entryVisible(ctx.organizationId) } } },
+      entries: { where: { profileId }, select: { profileId: true } },
+    },
+  });
+  return pools.map((pool) => ({
+    id: pool.id,
+    name: pool.name,
+    count: pool._count.entries,
+    has: pool.entries.length > 0,
+  }));
+}
+
+export const proposalFilters = ["acceptees", "attente", "refusees"] as const;
+export type ProposalFilter = (typeof proposalFilters)[number];
+
+/**
+ * « Mes propositions » (planche r2plus PROPS): the offers proposed to talents by the organization,
+ * newest first, with their answer. A pending proposal past its date reads as expired; an anonymous
+ * talent keeps a hidden name until they accept.
+ */
+export async function orgProposals(db: PrismaClient, ctx: HireContext, now = new Date()) {
+  if (!hirePermissions(ctx.role).manage) throw new HireError("forbidden");
+  const rows = await db.contactRequest.findMany({
+    where: { organizationId: ctx.organizationId },
+    orderBy: { createdAt: "desc" },
+    take: 100,
+    select: {
+      id: true,
+      status: true,
+      expiresAt: true,
+      createdAt: true,
+      respondedAt: true,
+      conversationId: true,
+      job: { select: { title: true } },
+      profile: {
+        select: { id: true, visibility: true, headline: true, user: { select: { name: true } } },
+      },
+    },
+  });
+  return rows.map((row) => {
+    const status =
+      row.status === "pending" && row.expiresAt <= now ? ("expired" as const) : row.status;
+    const anonymous = row.profile.visibility === "anonymous" && status !== "accepted";
+    return {
+      id: row.id,
+      profileId: row.profile.id,
+      status,
+      name: anonymous ? null : row.profile.user.name,
+      headline: row.profile.headline ?? "",
+      jobTitle: row.job?.title ?? null,
+      createdAt: row.createdAt,
+      respondedAt: row.respondedAt,
+      conversationId: status === "accepted" ? row.conversationId : null,
+    };
+  });
+}
+
+/** Which filter of « Mes propositions » a status belongs to (expired counts as refused). */
+export function proposalFilterOf(status: string): ProposalFilter {
+  return status === "accepted" ? "acceptees" : status === "pending" ? "attente" : "refusees";
+}
+
+/**
+ * « Viviers » (planche r2plus VIVIERS): each pool with up to four talents, how many are available,
+ * and, for the newest published offer, how many talents of a pool have one of its required skills
+ * (Orbi's line: a suggestion to look, never an action).
+ */
+export async function poolsOverview(db: PrismaClient, ctx: HireContext) {
+  if (!hirePermissions(ctx.role).readApplications) throw new HireError("forbidden");
+  const pools = await db.talentPool.findMany({
+    where: await poolsWhere(db, ctx),
+    orderBy: { updatedAt: "desc" },
+    select: {
+      id: true,
+      name: true,
+      updatedAt: true,
+      visibility: true,
+      entries: {
+        where: entryVisible(ctx.organizationId),
+        orderBy: { createdAt: "desc" },
+        select: {
+          profileId: true,
+          profile: {
+            select: {
+              visibility: true,
+              availability: true,
+              user: { select: { name: true } },
+              skills: { select: { skillId: true } },
+              applications: {
+                where: { job: { organizationId: ctx.organizationId } },
+                select: { id: true },
+                take: 1,
+              },
+              contactRequests: {
+                where: { organizationId: ctx.organizationId, status: "accepted" },
+                select: { id: true },
+                take: 1,
+              },
+            },
+          },
+        },
+      },
+    },
+  });
+  const offer = await db.job.findFirst({
+    where: { organizationId: ctx.organizationId, status: "published" },
+    orderBy: { publishedAt: "desc" },
+    select: {
+      id: true,
+      title: true,
+      skills: { where: { importance: "required" }, select: { skillId: true } },
+    },
+  });
+  const wanted = new Set(offer?.skills.map((item) => item.skillId) ?? []);
+  const shaped = pools.map((pool) => {
+    const people = pool.entries.map((entry) => {
+      const known =
+        entry.profile.applications.length > 0 || entry.profile.contactRequests.length > 0;
+      const anonymous = entry.profile.visibility === "anonymous" && !known;
+      return {
+        profileId: entry.profileId,
+        name: anonymous ? null : entry.profile.user.name,
+        available: entry.profile.availability === "open",
+        fits: entry.profile.skills.some((item) => wanted.has(item.skillId)),
+      };
+    });
+    return {
+      id: pool.id,
+      name: pool.name,
+      updatedAt: pool.updatedAt,
+      count: people.length,
+      available: people.filter((person) => person.available).length,
+      people: people.slice(0, 4),
+      fits: people.filter((person) => person.fits).length,
+    };
+  });
+  const best = offer && wanted.size > 0 ? [...shaped].sort((a, b) => b.fits - a.fits)[0] : null;
+  return {
+    pools: shaped,
+    suggestion:
+      best && best.fits > 0 && offer
+        ? {
+            poolId: best.id,
+            poolName: best.name,
+            count: best.fits,
+            offerId: offer.id,
+            offerTitle: offer.title,
+          }
+        : null,
+  };
 }

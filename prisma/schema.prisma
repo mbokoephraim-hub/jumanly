@@ -1960,6 +1960,8 @@ enum ScorecardRecommendation {
   yes
   no
   strong_no
+  /// « Hésitation » (recruteur lot 4, planche r2plus EVAL).
+  maybe
 }
 
 /// One evaluation per reviewer and application (`hire.scorecards`).
@@ -2117,6 +2119,9 @@ model Interview {
   message         String?
   /// Members of the team who take part (collaborative interviews).
   participantIds  String[]
+  /// Questions the team added to prepare it (recruteur lot 4): [{ id, text, authorId }]. Orbi's
+  /// proposals are computed from the offer and the file, never stored.
+  questions       Json            @default("[]")
   status          InterviewStatus @default(pending)
   cancelReason    String?
   createdAt       DateTime        @default(now())

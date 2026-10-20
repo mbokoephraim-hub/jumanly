@@ -36,6 +36,7 @@ const categoryOf: Record<NotificationType, Category> = {
   interviewReschedule: "applications",
   interviewDeclined: "applications",
   interviewCanceled: "applications",
+  interviewAccepted: "applications",
   newMessage: "messages",
   documentRequest: "messages",
   mention: "messages",
