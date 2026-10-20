@@ -1026,7 +1026,7 @@ export default async function CandidateFilePage({
             </span>
           </Link>
           {permissions.manage && (
-            <Link href={`${base}/message`} className="t-li t-press">
+            <Link href={`/app/messages/${conversation.id}?modeles=1`} className="t-li t-press">
               <span className="t-cases t-c2" aria-hidden>
                 <TalentIcon name="message" size="s" />
               </span>

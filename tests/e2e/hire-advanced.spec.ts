@@ -219,15 +219,15 @@ test("vérification de l'entreprise et page publique", async ({
   test.skip(isMobile, "Modifie l'organisation de démonstration : une seule exécution.");
   test.setTimeout(180_000);
   await logIn(page, group.owner);
-  await page.goto("/app/organisation?onglet=verification");
+  await page.goto("/app/organisation/verification");
   await expectAccessible(page);
   const submit = page.getByRole("button", { name: /Envoyer la demande|Compléter la demande/ });
   const sent = await submit.isVisible();
   if (sent) {
-    await page.locator("#verify-registration").fill("RCCM-FICTIF-E2E");
-    await page.locator("#verify-mandate").fill("Directrice des ressources humaines (fictive)");
+    await page.locator("#r5-ver-registration").fill("RCCM-FICTIF-E2E");
+    await page.locator("#r5-ver-mandate").fill("Directrice des ressources humaines (fictive)");
     // A supporting document (Admin v2, étape 4): a tiny fictional PDF.
-    await page.locator("#verify-documents").setInputFiles({
+    await page.locator("#r5-ver-documents").setInputFiles({
       name: "registre-fictif.pdf",
       mimeType: "application/pdf",
       buffer: Buffer.from("%PDF-1.4\n% Justificatif fictif\n%%EOF\n"),
@@ -235,7 +235,7 @@ test("vérification de l'entreprise et page publique", async ({
     await submit.click();
     await expect(page.getByText(/Demande envoyée\. Nous revenons vers vous/)).toBeVisible();
   }
-  if (await page.getByText("Vérification en cours").isVisible()) {
+  if (await page.getByText("Vérification en cours").first().isVisible()) {
     const admin = await newPage(browser, baseURL, isMobile);
     await logIn(admin, demo.admin);
     await admin.goto("/admin/organisations?onglet=en-attente");
@@ -273,8 +273,8 @@ test("les écrans Hire avancés sont accessibles", async ({ page }) => {
     "/app/hire/entretiens?vue=mois",
     "/app/hire/entretiens?vue=evaluer",
     "/app/hire/rapports",
-    "/app/organisation?onglet=equipes",
-    "/app/organisation?onglet=entites",
+    "/app/organisation/structure?onglet=equipes",
+    "/app/organisation/structure?onglet=entites",
   ]) {
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1 })).toBeVisible();

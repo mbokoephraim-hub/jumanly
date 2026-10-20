@@ -83,6 +83,7 @@ export function ThreadComposer({
   slotsHref,
   labels,
   documentNote,
+  openTemplates = false,
 }: {
   conversationId: string;
   applicationId: string | null;
@@ -91,6 +92,8 @@ export function ThreadComposer({
   slotsHref: string | null;
   labels: Labels;
   documentNote: string;
+  /** `?modeles=1` (the file's menu « Modèles de message »): the templates open at once. */
+  openTemplates?: boolean;
 }) {
   const field = useRef<HTMLTextAreaElement>(null);
   const [text, setText] = useState("");
@@ -293,7 +296,13 @@ export function ThreadComposer({
         </ul>
       </Sheet>
 
-      <Sheet id="r5-modeles" title={labels.templatesTitle} closeLabel={labels.sheetClose}>
+      <Sheet
+        id="r5-modeles"
+        title={labels.templatesTitle}
+        closeLabel={labels.sheetClose}
+        openParam="modeles"
+        defaultOpen={openTemplates}
+      >
         <ul className="t-verre t-liste t-lignes">
           {templates.map((template) => {
             const inside = (

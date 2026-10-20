@@ -6,7 +6,7 @@ import { PhoneTitle } from "@/components/talent/page-title";
 import { RecentSearches } from "@/components/layout/recent-searches";
 import { cx } from "@/lib/cx";
 import { Icon, type IconName } from "@/components/brand/icon";
-import { conversationLabels } from "@/components/connect/conversation-list";
+import { conversationLabels } from "@/components/connect/conversation-labels";
 import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
 import { getCourseSearch, getJobSearch } from "@/server/queries/public";

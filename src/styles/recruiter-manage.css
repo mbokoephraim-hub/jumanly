@@ -189,7 +189,7 @@
 }
 .sombre .t-r5-ctx .t-cases,
 .sombre .t-r5-inv .t-cases {
-  color: var(--sapin);
+  color: var(--texte);
 }
 .t-r5-ctx .t-t {
   flex: 1;
@@ -1164,8 +1164,12 @@ summary.t-r5-danger {
 }
 .t-r5-cmp thead th {
   padding: 4px 2px;
-  font-size: 10.5px;
-  letter-spacing: 0.04em;
+  font-size: 10px;
+  letter-spacing: 0.02em;
+  /* A plan's name breaks between its words, never inside one (« COMPA NY »). */
+  overflow-wrap: normal;
+  word-break: normal;
+  hyphens: none;
   text-transform: uppercase;
   text-align: center;
   color: var(--texte2);
@@ -1190,4 +1194,10 @@ summary.t-r5-danger {
 }
 .sombre .t-r5-cmp .t-on {
   color: var(--lime);
+}
+
+/* Dark mode: the tinted tiles are translucent there, their text takes the page's text color. */
+.sombre .t-r5-st4 li,
+.sombre .t-r5-pres .t-cases {
+  color: var(--texte);
 }

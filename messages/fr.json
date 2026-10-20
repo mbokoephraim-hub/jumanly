@@ -11135,7 +11135,8 @@
       "hire_scorecards": "Grilles d'évaluation"
     },
     "companies": "Plus de sièges ou une page entreprise complète : Jumanly Companies, dès {price} $ par mois.",
-    "taxId": "Numéro d'identification fiscale (facultatif)"
+    "taxId": "Numéro d'identification fiscale (facultatif)",
+    "contract": "Sièges, offres et crédits selon contrat"
   },
   "rhSettings": {
     "seo": "Paramètres",

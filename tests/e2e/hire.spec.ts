@@ -137,9 +137,7 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await page.getByRole("link", { name: "Envoyer un message" }).click();
   await expect(page).toHaveURL(/\/app\/messages\//);
   const threadUrl = page.url().split("#")[0]!;
-  await page
-    .locator("#message-body")
-    .fill("Bonjour, êtes-vous disponible mardi pour un entretien ?");
+  await page.locator("#r5-corps").fill("Bonjour, êtes-vous disponible mardi pour un entretien ?");
   await page.getByRole("button", { name: "Envoyer", exact: true }).click();
   await expect(page.getByRole("main")).toContainText("êtes-vous disponible mardi");
 
@@ -303,7 +301,7 @@ test("les écrans Hire et Connect sont accessibles", async ({ page }) => {
     "/app/hire",
     "/app/hire/offres",
     "/app/hire/offres/nouvelle",
-    "/app/organisation?onglet=membres",
+    "/app/organisation/equipe",
     "/app/messages",
     "/app/notifications",
   ]) {
@@ -327,7 +325,7 @@ test("l'admin consulte la modération des offres et les signalements", async ({ 
 test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ page }) => {
   test.setTimeout(120_000);
   await signUpRecruiter(page, testEmail("marque"), "Marque fictive e2e");
-  await page.goto("/app/organisation");
+  await page.goto("/app/organisation/modifier");
   const main = page.locator("main").filter({ visible: true });
   const picture = await sharp({
     create: { width: 1200, height: 600, channels: 3, background: "#1FA98A" },
@@ -369,7 +367,7 @@ test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ p
   const editor = page.locator("main").filter({ visible: true });
   await expect(editor.locator(`img[src="${src}"]`).first()).toBeVisible();
 
-  await page.goto("/app/organisation");
+  await page.goto("/app/organisation/modifier");
   await main.getByRole("button", { name: "Bannière" }).click();
   await page.getByRole("button", { name: "Retirer la bannière" }).click();
   await expect(main.locator('img[src^="/medias/orgs/"][src*="/banner-"]')).toHaveCount(0);
