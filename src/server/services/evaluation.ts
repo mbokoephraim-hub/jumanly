@@ -20,7 +20,18 @@ export const recommendations = [
   "yes",
   "no",
   "strong_no",
+  "maybe",
 ] as const satisfies readonly ScorecardRecommendation[];
+
+/** « Suite proposée » of the evaluation (planche r2plus EVAL), in the order of the planche. */
+export const nextSteps = ["no", "yes", "maybe"] as const;
+export type NextStep = (typeof nextSteps)[number];
+/** The older, stronger recommendations read as the closest « Suite proposée ». */
+export const nextStepOf = (value: string): NextStep =>
+  value === "strong_yes" || value === "yes" ? "yes" : value === "maybe" ? "maybe" : "no";
+
+/** Each criterion is rated from 1 to 4 (planche r2plus EVAL). */
+export const RATING_MAX = 4;
 
 export type ScorecardCriterion = { name: string; description: string };
 
@@ -78,7 +89,7 @@ const scorecardSchema = z.object({
     .array(
       z.object({
         name: z.string().min(1).max(80),
-        rating: z.coerce.number().int().min(1).max(5),
+        rating: z.coerce.number().int().min(1).max(RATING_MAX),
         comment: z.string().trim().max(500).default(""),
       }),
     )
@@ -125,6 +136,7 @@ export type ScorecardView = {
     recommendation: string;
     average: number;
     comment: string | null;
+    ratings: { name: string; rating: number; comment: string }[];
   }[];
   hidden: boolean;
   average: number | null;
@@ -179,6 +191,7 @@ export async function scorecardView(
             recommendation: card.recommendation,
             average: Math.round(averageOf(ratingsOf(card.ratings)) * 10) / 10,
             comment: card.comment,
+            ratings: ratingsOf(card.ratings),
           })),
     hidden,
     average:

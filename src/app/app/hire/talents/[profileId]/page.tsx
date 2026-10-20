@@ -2,290 +2,557 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
-import { Alert, Badge, Button, ButtonLink, Select, TextArea, TextField } from "@/components/ui";
-import { addToPoolAction, contactRequestAction } from "@/server/actions/hire-advanced";
+import { ToastOnLoad } from "@/components/motion/toast-on-load";
+import { avatarTone, initialsOf, ScoreRing } from "@/components/recruiter/candidates";
+import { PoolSheet } from "@/components/recruiter/pool-sheet";
+import { FlowHead } from "@/components/talent/flow-head";
+import { TalentIcon } from "@/components/talent/icon";
+import { WhyCriteria } from "@/components/talent/offer-why";
+import { OrbiMark } from "@/components/talent/orbi-mark";
+import { Sheet, SheetButton } from "@/components/talent/sheet";
+import { cx } from "@/lib/cx";
 import { db } from "@/server/db";
+import { level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
+import { matchesForUser } from "@/server/matching/service";
+import type { MatchExplanation } from "@/server/matching/types";
+import { skillProofs } from "@/server/services/cv-analysis";
 import { hirePermissions } from "@/server/services/hire";
+import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
+import { listProjects } from "@/server/services/portfolio";
 import {
-  CONTACT_COOLDOWN_DAYS,
-  CONTACT_MESSAGE_MIN,
-  listPools,
-  poolsEnabled,
-  searchQuotas,
+  CONTACT_EXPIRY_DAYS,
+  desiredContracts,
+  poolChoices,
   viewTalentProfile,
 } from "@/server/services/talent-search";
-import { AppPageHeader } from "@/components/app/page-header";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("hire.talents");
-  return { title: t("result.view"), robots: { index: false } };
+  const t = await getTranslations("hireTalents.profile");
+  return { title: t("seo"), robots: { index: false } };
 }
 
 const one = (value: string | string[] | undefined) => (typeof value === "string" ? value : "");
+const DAY = 86_400_000;
 
 /**
- * A profile found in the talent pool. A summary until the talent applies or accepts a contact
- * request; an anonymous talent's name stays hidden until then. Every opening is logged.
+ * A talent's profile seen by a recruiter (brief recruteur § 4 item 4, planche r2plus TPROF): what
+ * the talent made visible, compared with one of the offers, with Orbi's points and the proof of
+ * each skill. A summary until the talent applies or accepts a proposal; an anonymous talent's name
+ * stays hidden until then. Every opening is logged (« Consultation enregistrée »).
  */
 export default async function TalentProfilePage({
   params,
   searchParams,
 }: PageProps<"/app/hire/talents/[profileId]">) {
   const [{ profileId }, query] = await Promise.all([params, searchParams]);
-  const { ctx } = await requireHire(`/app/hire/talents/${profileId}`, "readApplications");
-  const t = await getTranslations();
+  const page = `/app/hire/talents/${profileId}`;
+  const { ctx } = await requireHire(page, "readApplications");
+  const t = await getTranslations("hireTalents.profile");
+  const tc = await getTranslations("hireCandidates");
+  const ui = await getTranslations("ui");
+  const tp = await getTranslations("talent.profile");
   const format = await getFormatter();
-  const view = await viewTalentProfile(db, ctx, profileId);
+  const now = new Date();
+  const back = "/app/hire/candidats?vue=talents";
+  const view = await viewTalentProfile(db, ctx, profileId, now);
   if (view.status === "notFound") notFound();
   if (view.status === "blocked") {
     return (
-      <div className="flex flex-col gap-6">
-        <Link href="/app/hire/talents" className="text-sm underline">
-          {t("hire.talents.profile.back")}
-        </Link>
-        <Alert tone="warning" title={t("hire.talents.blocked")} />
+      <div className="t-flux">
+        <FlowHead back={back} backLabel={t("back")} title={t("seo")} />
+        <p className="t-gar t-err" role="alert">
+          <TalentIcon name="cadenas" size="s" />
+          <span>{t("blocked")}</span>
+        </p>
       </div>
     );
   }
   const { profile } = view;
   const manage = hirePermissions(ctx.role).manage;
-  const [quotas, pools, canPool, jobs] = await Promise.all([
-    searchQuotas(db, ctx.organizationId),
-    listPools(db, ctx),
-    poolsEnabled(db, ctx.organizationId),
-    db.job.findMany({
-      where: { organizationId: ctx.organizationId, status: "published" },
-      orderBy: { publishedAt: "desc" },
-      take: 50,
-      select: { id: true, title: true },
-    }),
-  ]);
-  const remaining =
-    quotas.contacts.limit < 0
-      ? "∞"
-      : String(Math.max(0, quotas.contacts.limit - quotas.contacts.used));
+  const subject = { type: "organization" as const, id: ctx.organizationId };
+  const asked = one(query.offre);
+  const [offers, matchingLevel, projects, certificates, hiddenProofs, pools, plans] =
+    await Promise.all([
+      db.job.findMany({
+        where: { organizationId: ctx.organizationId, status: "published" },
+        orderBy: { publishedAt: "desc" },
+        take: 30,
+        select: {
+          id: true,
+          title: true,
+          skills: {
+            select: { skillId: true, importance: true, skill: { select: { name: true } } },
+          },
+        },
+      }),
+      level(db, subject, "hire.matching.level") as Promise<"none" | "suggestions" | "explainable">,
+      listProjects(db, profile.id),
+      db.certificate.findMany({
+        where: { onProfile: true, revokedAt: null, enrollment: { userId: profile.userId } },
+        orderBy: { issuedAt: "desc" },
+        select: { code: true, courseTitle: true, issuedAt: true },
+      }),
+      // An attestation the talent hid from their profile proves nothing here.
+      db.certificate.findMany({
+        where: { onProfile: false, enrollment: { userId: profile.userId } },
+        select: { code: true },
+      }),
+      manage ? poolChoices(db, ctx, profile.id) : Promise.resolve(null),
+      listPublicPlans(db),
+    ]);
+  const offer = offers.find((item) => item.id === asked) ?? offers[0] ?? null;
+  let explanation: MatchExplanation | null = null;
+  if (offer && matchingLevel !== "none" && profile.matchingEnabled) {
+    const match = (await matchesForUser(db, profile.userId, [offer.id], now)).get(offer.id);
+    if (match?.state === "ok") explanation = match.explanation;
+  }
+  const hidden = new Set(hiddenProofs.map((item) => `/attestations/${item.code}`));
+  const skills = profile.skills.map((item) => ({
+    ...item,
+    verified: item.verified && !(item.proofUrl && hidden.has(item.proofUrl)),
+  }));
+  const proofs = offer ? skillProofs({ job: offer, profile: { skills } }) : [];
+  const ordered = [...proofs].sort((a, b) => Number(b.required) - Number(a.required));
+  const weak = (proof: string) => proof === "missing" || proof === "declared";
+  const points = [
+    ...ordered
+      .filter((item) => !weak(item.proof))
+      .slice(0, 2)
+      .map((item) => ({ ok: true, text: t(`point.${item.proof}`, { skill: item.name }) })),
+    ...ordered
+      .filter((item) => weak(item.proof))
+      .slice(0, 1)
+      .map((item) => ({ ok: false, text: t(`point.${item.proof}`, { skill: item.name }) })),
+  ];
+
   const title = view.anonymous
-    ? t("hire.talents.result.anonymous", { headline: profile.headline ?? "" })
+    ? t("anonymous", { headline: profile.headline || t("noHeadline") })
     : profile.user.name;
+  const firstName = view.anonymous
+    ? t("anonymousShort")
+    : profile.user.firstName || profile.user.name.split(/\s+/)[0]!;
+  const months = profile.experiences.reduce(
+    (sum, item) =>
+      sum +
+      Math.max(0, ((item.endDate ?? now).getTime() - item.startDate.getTime()) / (30.44 * DAY)),
+    0,
+  );
+  const years = Math.floor(months / 12);
+  const proven = skills.filter((item) => item.verified || item.proof).length;
+  // Projects the talent marked visible; none for an anonymous talent (they may say who it is).
+  const shownProjects = view.anonymous ? [] : projects.filter((project) => project.visible);
+  const contracts = profile.desiredContracts
+    .filter((value) => (desiredContracts as readonly string[]).includes(value))
+    .slice(0, 2) as (typeof desiredContracts)[number][];
+  const conversation = view.contact?.conversationId ?? null;
+  const pending = view.contact?.status === "pending";
+  const poolPlan = cheapestPlanWhere(
+    plans,
+    ["rh", "company"],
+    (plan) => plan.entitlements["hire.shortlist"] === "true",
+  );
+  const explainPlan = cheapestPlanWhere(
+    plans,
+    ["rh", "company"],
+    (plan) => levelOf(plan, "hire.matching.level") === "explainable",
+  );
+  const monthYear = (date: Date) => format.dateTime(date, { month: "short", year: "numeric" });
+
+  const ok = one(query.ok);
+  const toast =
+    ok === "proposee"
+      ? t("ok.proposee", { days: CONTACT_EXPIRY_DAYS })
+      : ok === "vivier"
+        ? t("ok.vivier")
+        : null;
   const erreur = one(query.erreur);
-  const errorText: Record<string, string> = {
-    invalid: t("hire.contact.error.invalid", { min: CONTACT_MESSAGE_MIN }),
-    pending: t("hire.contact.error.pending"),
-    connected: t("hire.contact.error.connected"),
-    locked: t("hire.contact.error.locked"),
-    notFound: t("hire.contact.error.notFound"),
-    blocked: t("hire.contact.blocked"),
-    cooldown: t("hire.contact.declined.note", { days: CONTACT_COOLDOWN_DAYS }),
-    quota: t("hire.talents.quota.reached.contact", { date: quotas.contacts.resetsAt }),
-    forbidden: t("hire.pools.error.forbidden"),
-  };
-  const contactStatus = view.contact?.status;
-  const canRequest =
-    manage && !view.full && contactStatus !== "pending" && contactStatus !== "accepted";
-  const back = `/app/hire/talents/${profile.id}`;
+  const errorText =
+    one(query.vivier) === "invalide"
+      ? t("error.pool")
+      : erreur === "forbidden"
+        ? t("error.forbidden")
+        : erreur
+          ? t("error.other")
+          : null;
 
   return (
-    <div className="flex flex-col gap-6">
-      <Link href="/app/hire/talents" className="text-sm underline">
-        {t("hire.talents.profile.back")}
-      </Link>
-      <AppPageHeader
-        title={title}
-        subtitle={
-          <>
-            {!view.anonymous && profile.headline && <p className="text-lg">{profile.headline}</p>}
-            <p>{[profile.user.city, profile.user.country].filter(Boolean).join(", ")}</p>
-          </>
+    <div className="t-flux t-ri-prof">
+      {toast && <ToastOnLoad message={toast} tone="success" />}
+      <div className="t-ri-cover" aria-hidden />
+      <FlowHead
+        back={back}
+        backLabel={t("back")}
+        end={
+          manage ? (
+            <SheetButton target="ri-plus" label={t("more")} className="t-bi t-press">
+              <TalentIcon name="plus-options" size="s" />
+            </SheetButton>
+          ) : undefined
         }
-      />
-      {query.ok === "contact" && <Alert tone="success" title={t("hire.contact.sent")} />}
-      {query.ok === "vivier" && <Alert tone="success" title={t("hire.pools.addedDone")} />}
-      {erreur && errorText[erreur] && <Alert tone="error" title={errorText[erreur]} />}
-      <p className="text-sm text-ardoise">
+      >
+        <span aria-hidden />
+      </FlowHead>
+
+      <section className="t-ri-id" aria-labelledby="ri-nom">
+        <span className={cx("t-rc-av t-l", avatarTone(profile.id))} aria-hidden>
+          {view.anonymous ? "?" : initialsOf(profile.user.name)}
+        </span>
+        <h1 id="ri-nom">{title}</h1>
+        <p>
+          {[view.anonymous ? null : profile.headline, profile.user.city]
+            .filter(Boolean)
+            .join(" · ")}
+        </p>
+        <ul className="t-ri-puces">
+          {profile.availability !== "not_looking" && (
+            <li className="t-ok">
+              {t(profile.availability === "open" ? "available" : "listening")}
+            </li>
+          )}
+          {contracts.map((contract) => (
+            <li key={contract}>{tp(`preferences.contract.${contract}`)}</li>
+          ))}
+          <li className="t-log">
+            <TalentIcon name="confidentialite" size="xs" />
+            {t("logged")}
+          </li>
+        </ul>
+      </section>
+
+      {errorText && (
+        <p className="t-gar t-err" role="alert">
+          <TalentIcon name="pourquoi" size="s" />
+          <span>{errorText}</span>
+        </p>
+      )}
+
+      <ul className="t-ri-stats" aria-label={t("stats")}>
+        <li>
+          <b>{years}</b>
+          <span>{t("stat.years", { count: years })}</span>
+        </li>
+        <li>
+          <b>{proven}</b>
+          <span>{t("stat.proven", { count: proven })}</span>
+        </li>
+        <li>
+          <b>{shownProjects.length}</b>
+          <span>{t("stat.projects", { count: shownProjects.length })}</span>
+        </li>
+        <li>
+          <b>{certificates.length}</b>
+          <span>{t("stat.certificates", { count: certificates.length })}</span>
+        </li>
+      </ul>
+
+      <p className="t-rc-note">
         {view.full
           ? view.applied
-            ? t("hire.talents.profile.applied")
-            : t("hire.talents.profile.full")
+            ? t("note.applied")
+            : t("note.full")
           : view.anonymous
-            ? t("hire.talents.profile.anonymousNote")
-            : t("hire.talents.profile.limited")}
+            ? t("note.anonymous")
+            : t("note.limited")}
       </p>
 
-      <div className="grid gap-4 lg:grid-cols-[minmax(0,1.5fr)_minmax(0,1fr)]">
-        <div className="flex flex-col gap-4">
-          {profile.summary && (
-            <section className="rounded-card bg-blanc p-6">
-              <p className="whitespace-pre-line">{profile.summary}</p>
-            </section>
+      {offer && (
+        <section aria-labelledby="ri-orbi" className="t-rc-orbi t-ri-orbi">
+          <div className="t-h">
+            <OrbiMark size={30} />
+            <div className="t-t">
+              <b id="ri-orbi">{t("orbi.title")}</b>
+              <span>
+                {t("orbi.sub", { title: offer.title })}{" "}
+                {offers.length > 1 && (
+                  <SheetButton target="ri-offre" className="t-ri-lien t-press">
+                    {t("orbi.change")}
+                  </SheetButton>
+                )}
+              </span>
+            </div>
+            {explanation && (
+              <ScoreRing
+                score={explanation.score}
+                size="s"
+                text={ui("percent", { value: explanation.score })}
+                label={t("orbi.scoreAria", { score: explanation.score })}
+              />
+            )}
+          </div>
+          {points.length > 0 ? (
+            <ul className="t-rc-pts">
+              {points.map((point, index) => (
+                <li key={index}>
+                  <i aria-hidden className={point.ok ? "t-v" : "t-a"}>
+                    {point.ok ? "✓" : "!"}
+                  </i>
+                  <span>{point.text}</span>
+                </li>
+              ))}
+            </ul>
+          ) : (
+            <p>{t("orbi.noSkills")}</p>
           )}
-          <section
-            aria-labelledby="t-skills"
-            className="flex flex-col gap-3 rounded-card bg-blanc p-6"
-          >
-            <h2 id="t-skills" className="text-h2">
-              {t("hire.talents.profile.skills")}
-            </h2>
-            <ul className="flex flex-wrap gap-2">
-              {profile.skills.map((item) => (
-                <li key={item.skill.name}>
-                  <Badge tone={item.verified ? "success" : "jobs"}>
-                    {item.verified
-                      ? [item.skill.name, t("hire.talents.profile.verified")].join(" · ")
-                      : item.skill.name}
-                  </Badge>
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section
-            aria-labelledby="t-exp"
-            className="flex flex-col gap-3 rounded-card bg-blanc p-6"
-          >
-            <h2 id="t-exp" className="text-h2">
-              {t("hire.talents.profile.experience")}
-            </h2>
-            <ul className="flex flex-col gap-3">
-              {profile.experiences.map((experience) => (
-                <li key={experience.id} className="flex flex-col gap-1">
-                  <p className="font-semibold">
-                    {[experience.title, experience.company].filter(Boolean).join(" · ")}
-                  </p>
-                  <p className="text-sm text-ardoise">
-                    {[
-                      format.dateTime(experience.startDate, { month: "short", year: "numeric" }),
-                      experience.endDate
-                        ? format.dateTime(experience.endDate, { month: "short", year: "numeric" })
-                        : "…",
-                    ].join(" – ")}
-                  </p>
-                  {experience.description && (
-                    <p className="text-sm whitespace-pre-line">{experience.description}</p>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </section>
-          <section
-            aria-labelledby="t-edu"
-            className="flex flex-col gap-3 rounded-card bg-blanc p-6"
-          >
-            <h2 id="t-edu" className="text-h2">
-              {t("hire.talents.profile.education")}
-            </h2>
-            <ul className="flex flex-col gap-2">
-              {profile.educations.map((education) => (
-                <li key={education.id}>
-                  <p className="font-semibold">
-                    {view.full
-                      ? [education.degree, education.school].join(" · ")
-                      : t(`talent.profile.education.level.${education.level}`)}
-                  </p>
-                  {education.endYear && (
-                    <p className="text-sm text-ardoise">{String(education.endYear)}</p>
-                  )}
-                </li>
-              ))}
-            </ul>
-          </section>
-        </div>
+          {explanation ? (
+            <div className="t-rc-liens">
+              <SheetButton target="ri-pourquoi" className="t-pq t-press">
+                <TalentIcon name="pourquoi" size="xs" />
+                {t("orbi.why")}
+              </SheetButton>
+            </div>
+          ) : (
+            <p className="t-rc-note">
+              {!profile.matchingEnabled
+                ? t("orbi.optedOut")
+                : matchingLevel === "none"
+                  ? t("orbi.noScore")
+                  : t("orbi.incomplete")}
+            </p>
+          )}
+        </section>
+      )}
 
-        <div className="flex flex-col gap-4">
-          <section
-            id="contact"
-            aria-labelledby="t-contact"
-            className="flex flex-col gap-3 rounded-card bg-blanc p-6"
-          >
-            <h2 id="t-contact" className="text-h2">
-              {t("hire.contact.title")}
-            </h2>
-            {contactStatus && (
-              <p>
-                <Badge tone={contactStatus === "accepted" ? "success" : "neutral"}>
-                  {t(
-                    `hire.contact.status.${contactStatus as "pending" | "accepted" | "declined" | "expired"}`,
-                  )}
-                </Badge>
-              </p>
-            )}
-            {view.contact?.conversationId && (
-              <ButtonLink
-                href={`/app/messages/${view.contact.conversationId}`}
-                variant="secondary"
-                size="sm"
-                className="self-start"
-              >
-                {t("hire.talents.profile.openConversation")}
-              </ButtonLink>
-            )}
-            {canRequest && (
-              <form action={contactRequestAction} className="flex flex-col gap-4">
-                <input type="hidden" name="profile" value={profile.id} />
-                <p className="text-sm text-ardoise">{t("hire.contact.subtitle")}</p>
-                <Select
-                  id="contact-job"
-                  name="job"
-                  label={t("hire.contact.job.text")}
-                  placeholder={t("hire.contact.job.none")}
-                  defaultValue={one(query.offre)}
-                  options={jobs.map((job) => ({ value: job.id, label: job.title }))}
-                />
-                <TextArea
-                  id="contact-message"
-                  name="message"
-                  required
-                  minLength={CONTACT_MESSAGE_MIN}
-                  maxLength={2000}
-                  rows={6}
-                  label={t("hire.contact.message.text")}
-                  placeholder={t("hire.contact.message.placeholder")}
-                  hint={t("hire.contact.message.min", { min: CONTACT_MESSAGE_MIN })}
-                />
-                <p className="text-sm">{t("hire.contact.cost", { remaining })}</p>
-                <p className="text-sm font-medium">{t("hire.contact.noPayment")}</p>
-                <Button type="submit" className="self-start">
-                  {t("hire.contact.send")}
-                </Button>
-              </form>
-            )}
-          </section>
+      {proofs.length > 0 && (
+        <section aria-labelledby="ri-cpt" className="t-verre t-rc-cpt">
+          <div className="t-hh">
+            <h2 id="ri-cpt">{t("skills.title")}</h2>
+            <span>
+              {tc("skills.count", {
+                met: proofs.filter((item) => item.proof !== "missing").length,
+                total: proofs.length,
+              })}
+            </span>
+          </div>
+          <ul>
+            {proofs.map((item) => (
+              <li key={item.skillId}>
+                <b>{item.required ? item.name : tc("skills.preferred", { skill: item.name })}</b>
+                <span className={cx("t-pv", `t-${item.proof}`)}>
+                  {item.proof === "certificate" && <TalentIcon name="certificat" size="xs" />}
+                  {item.proof === "project" && <TalentIcon name="realisation" size="xs" />}
+                  {tc(`skills.proof.${item.proof}`)}
+                </span>
+                {item.level > 0 && (
+                  <span
+                    className="t-lv"
+                    role="img"
+                    aria-label={tc("skills.level", { level: Math.min(4, item.level) })}
+                  >
+                    {[1, 2, 3, 4].map((step) => (
+                      <i key={step} className={step <= item.level ? "t-on" : undefined} />
+                    ))}
+                  </span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
 
-          {manage && canPool && (
-            <section
-              aria-labelledby="t-pool"
-              className="flex flex-col gap-3 rounded-card bg-blanc p-6"
+      {skills.length > 0 && (
+        <section aria-labelledby="ri-toutes" className="t-ri-bloc">
+          <h2 id="ri-toutes">{t("skills.all")}</h2>
+          <ul className="t-ri-tags">
+            {skills.map((item) => (
+              <li key={item.skillId} className={cx("t-ri-tag", item.verified && "t-v")}>
+                {item.verified && <TalentIcon name="certificat" size="xs" />}
+                {item.skill.name}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {view.full && profile.summary && (
+        <section aria-labelledby="ri-resume" className="t-ri-bloc">
+          <h2 id="ri-resume">{t("summary")}</h2>
+          <p className="t-verre t-ri-texte">{profile.summary}</p>
+        </section>
+      )}
+
+      {shownProjects.length > 0 && (
+        <section aria-labelledby="ri-projets" className="t-ri-bloc">
+          <h2 id="ri-projets">{t("projects")}</h2>
+          <ul className="t-ri-projets">
+            {shownProjects.slice(0, 8).map((project) => (
+              <li key={project.id} className="t-verre">
+                <span className="t-cases t-g-accomp" aria-hidden>
+                  <TalentIcon name="realisation" size="s" />
+                </span>
+                <b>{project.title}</b>
+                {view.full && project.context && <p>{project.context}</p>}
+                {project.skills.length > 0 && (
+                  <span className="t-m">{project.skills.slice(0, 3).join(" · ")}</span>
+                )}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {profile.experiences.length > 0 && (
+        <section aria-labelledby="ri-exp" className="t-ri-bloc">
+          <h2 id="ri-exp">{t("experience")}</h2>
+          <ul className="t-verre t-ri-chrono">
+            {profile.experiences.map((item) => (
+              <li key={item.id}>
+                <b>{[item.title, item.company].filter(Boolean).join(" · ")}</b>
+                <span>
+                  {[
+                    monthYear(item.startDate),
+                    item.endDate ? monthYear(item.endDate) : t("now"),
+                  ].join(" – ")}
+                </span>
+                {item.description && <p>{item.description}</p>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {(profile.educations.length > 0 || certificates.length > 0) && (
+        <section aria-labelledby="ri-form" className="t-ri-bloc">
+          <h2 id="ri-form">{t("education")}</h2>
+          <ul className="t-verre t-ri-chrono">
+            {certificates.map((item) => (
+              <li key={item.code}>
+                <b>
+                  {item.courseTitle}
+                  <span className="t-ri-jm">{t("jumanly")}</span>
+                </b>
+                <span>{monthYear(item.issuedAt)}</span>
+              </li>
+            ))}
+            {profile.educations.map((item) => (
+              <li key={item.id}>
+                <b>
+                  {view.full
+                    ? [item.degree, item.school].filter(Boolean).join(" · ")
+                    : tp(`education.level.${item.level}`)}
+                </b>
+                {item.endYear && <span>{String(item.endYear)}</span>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      )}
+
+      {manage && (
+        <nav aria-label={t("actions")} className="t-verre t-fort t-bas-f t-ri-bas">
+          <SheetButton target="ri-vivier" className="t-bt t-sec t-m t-press">
+            <TalentIcon name="favori" size="s" />
+            {t("pool")}
+          </SheetButton>
+          {conversation ? (
+            <Link href={`/app/messages/${conversation}`} className="t-bt t-p t-m t-pl t-press">
+              <TalentIcon name="message" size="s" />
+              {t("write", { firstName })}
+            </Link>
+          ) : view.applied ? (
+            <Link href="/app/hire/candidats" className="t-bt t-p t-m t-pl t-press">
+              {t("seeApplication")}
+            </Link>
+          ) : pending ? (
+            <span className="t-bt t-p t-m t-pl t-off" aria-disabled="true">
+              {t("pending")}
+            </span>
+          ) : (
+            <Link
+              href={`${page}/proposer${offer ? `?offre=${offer.id}` : ""}`}
+              className="t-bt t-p t-m t-pl t-press"
             >
-              <h2 id="t-pool" className="text-h2">
-                {t("hire.talents.result.addToPool")}
-              </h2>
-              {pools.length === 0 ? (
-                <p className="text-sm text-ardoise">{t("hire.application.pool.none")}</p>
-              ) : (
-                <form action={addToPoolAction} className="flex flex-col gap-3">
-                  <input type="hidden" name="profile" value={profile.id} />
-                  <input type="hidden" name="back" value={back} />
-                  <Select
-                    id="talent-pool"
-                    name="pool"
-                    required
-                    label={t("hire.pools.choose")}
-                    options={pools.map((pool) => ({ value: pool.id, label: pool.name }))}
-                  />
-                  <TextField
-                    id="talent-pool-note"
-                    name="note"
-                    maxLength={300}
-                    label={t("hire.pools.note")}
-                  />
-                  <Button type="submit" variant="tertiary" size="sm" className="self-start">
-                    {t("hire.pools.add")}
-                  </Button>
-                </form>
-              )}
-            </section>
+              <TalentIcon name="envoyer" size="s" />
+              {t("propose")}
+            </Link>
           )}
-        </div>
-      </div>
+        </nav>
+      )}
+
+      {manage && (
+        <PoolSheet
+          id="ri-vivier"
+          profileId={profile.id}
+          back={page}
+          pools={pools}
+          lockedPlan={poolPlan?.name ?? null}
+        />
+      )}
+
+      {manage && (
+        <Sheet id="ri-plus" title={t("moreTitle")} closeLabel={t("close")}>
+          <ul className="t-rc-offres">
+            <li>
+              <Link href="/app/hire/candidats?vue=propositions" className="t-press">
+                <span className="t-t">
+                  <b>{t("proposals")}</b>
+                </span>
+              </Link>
+            </li>
+            <li>
+              <Link href="/app/hire/viviers" className="t-press">
+                <span className="t-t">
+                  <b>{t("pools")}</b>
+                </span>
+              </Link>
+            </li>
+          </ul>
+          <p className="t-gar">
+            <TalentIcon name="confidentialite" size="s" />
+            <span>{t("guard")}</span>
+          </p>
+        </Sheet>
+      )}
+
+      {offers.length > 1 && (
+        <Sheet id="ri-offre" title={t("orbi.changeTitle")} closeLabel={t("close")}>
+          <ul className="t-rc-offres">
+            {offers.map((item) => (
+              <li key={item.id}>
+                <Link
+                  href={`${page}?offre=${item.id}`}
+                  aria-current={item.id === offer?.id ? "page" : undefined}
+                  className="t-press"
+                >
+                  <span className="t-t">
+                    <b>{item.title}</b>
+                  </span>
+                </Link>
+              </li>
+            ))}
+          </ul>
+        </Sheet>
+      )}
+
+      {explanation && (
+        <Sheet
+          id="ri-pourquoi"
+          title={tc("why.title", { score: explanation.score })}
+          closeLabel={t("close")}
+        >
+          <WhyCriteria
+            recruiter
+            explanation={
+              matchingLevel === "explainable"
+                ? explanation
+                : {
+                    ...explanation,
+                    criteria: explanation.criteria
+                      .filter((item) => item.status === "met" || item.status === "partial")
+                      .sort((a, b) => b.weight * b.value - a.weight * a.value)
+                      .slice(0, 3),
+                  }
+            }
+          />
+          {matchingLevel !== "explainable" && explainPlan && (
+            <p className="t-rc-note">{tc("why.more", { plan: explainPlan.name })}</p>
+          )}
+          <p className="t-gar">
+            <TalentIcon name="confidentialite" size="s" />
+            <span>{tc("why.excluded")}</span>
+          </p>
+        </Sheet>
+      )}
     </div>
   );
 }

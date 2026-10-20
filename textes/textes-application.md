@@ -2716,6 +2716,7 @@ Conventions :
 | `notifs.empty.title` | Rien de nouveau |
 | `notifs.title.interviewInvite` | Invitation à un entretien |
 | `notifs.title.interviewCanceled` | Entretien annulé |
+| `notifs.title.interviewAccepted` | Entretien confirmé |
 | `notifs.title.profileViewed` | Votre profil a été consulté |
 | `notifs.title.statusChange` | Étape « {stage} » |
 | `notifs.title.notSelected` | Candidature non retenue |
@@ -8754,6 +8755,516 @@ Conventions :
 | `hireCandidates.done.undoError` | La décision n'a pas pu être annulée. Réessayez. |
 | `hireCandidates.retracted` | Message retiré par l'entreprise. |
 
+### Refonte recruteur · Entretiens, talents et viviers (lot 4)
+
+*Proposer un entretien (calendrier du mois, heures de la journée, aperçu de l'invitation), agenda Semaine / Mois / À évaluer, préparation avec les questions d'Orbi, évaluation sur 4, recherche de talents avec filtres autorisés, profil d'un talent, « Proposer l'offre », Mes propositions, viviers, appel d'arrivée avec l'acceptation (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 4 ; planches r2plus PROG, PROG2, INV_AP, AGENDA, PREP_R, EVAL, TAL, TAL_F, TPROF, CONTACT, VIVIERS, PROPS).*
+
+| Clé | Texte |
+|---|---|
+| `hireInterviews.seo` | Entretiens |
+| `hireInterviews.plan.title` | Proposer un entretien |
+| `hireInterviews.plan.titleReschedule` | Proposer d'autres créneaux |
+| `hireInterviews.plan.back` | Retour au dossier |
+| `hireInterviews.plan.scoreAria` | Correspondance avec l'offre : {score} % |
+| `hireInterviews.plan.lockedTitle` | Entretiens non inclus |
+| `hireInterviews.plan.locked` | Proposer des entretiens dans Jumanly fait partie du forfait {plan}. |
+| `hireInterviews.plan.lockedNoPlan` | Proposer des entretiens dans Jumanly n'est pas inclus dans votre forfait. |
+| `hireInterviews.plan.seePlans` | Voir les forfaits |
+| `hireInterviews.plan.error.past` | Un des créneaux est déjà passé. Choisissez des heures à venir. |
+| `hireInterviews.plan.error.invalid` | Vérifiez les créneaux, le lien ou l'adresse avant d'envoyer. |
+| `hireInterviews.plan.error.other` | L'invitation n'a pas pu être envoyée. Réessayez. |
+| `hireInterviews.plan.rescheduleKeep` | Même entretien : {mode}, {duration}. |
+| `hireInterviews.plan.modeLegend` | Format |
+| `hireInterviews.plan.mode.video` | Visio |
+| `hireInterviews.plan.mode.onsite` | Sur site |
+| `hireInterviews.plan.mode.audio` | Audio |
+| `hireInterviews.plan.durationLegend` | Durée |
+| `hireInterviews.plan.durationChip.30` | 30 min |
+| `hireInterviews.plan.durationChip.45` | 45 min |
+| `hireInterviews.plan.durationChip.60` | 1 h |
+| `hireInterviews.plan.durationChip.90` | 1 h 30 |
+| `hireInterviews.plan.duration` | {minutes, select, 30 {30 min} 45 {45 min} 60 {1 h} 90 {1 h 30} other {{minutes} min}} |
+| `hireInterviews.plan.slotShort` | {day} à {time} |
+| `hireInterviews.plan.slotLong` | {day} à {time} |
+| `hireInterviews.plan.recapNone` | Choisissez un jour |
+| `hireInterviews.plan.recapDay` | {day} · {times} |
+| `hireInterviews.plan.orbiMornings` | {count, plural, one {Vous êtes libre} other {<b>{names}</b> sont libres}} le matin : <b>{days}</b> · d'après les entretiens déjà prévus dans Jumanly. |
+| `hireInterviews.plan.you` | Vous |
+| `hireInterviews.plan.participants` | Participants |
+| `hireInterviews.plan.invite` | Inviter |
+| `hireInterviews.plan.pickDay` | Choisissez un jour |
+| `hireInterviews.plan.pickHours` | Choisissez les heures |
+| `hireInterviews.plan.pickDayText` | Touchez un jour du calendrier pour voir les heures libres. |
+| `hireInterviews.plan.hours` | Heures |
+| `hireInterviews.plan.teamTitle` | Qui participe ? |
+| `hireInterviews.plan.close` | Fermer |
+| `hireInterviews.plan.meName` | {name} (vous) |
+| `hireInterviews.plan.teamNote` | Les membres invités reçoivent l'entretien dans leur agenda Jumanly. |
+| `hireInterviews.plan.calendar` | Calendrier |
+| `hireInterviews.plan.week` | Semaine |
+| `hireInterviews.plan.orbiSuggest` | {alone, select, yes {Vous êtes libre} other {L'équipe est libre}} <b>{slot}</b>. Ajouter un {rank, plural, =1 {1er} other {#e}} choix ? |
+| `hireInterviews.plan.add` | Ajouter |
+| `hireInterviews.plan.zone` | Heures affichées pour le fuseau {zone} |
+| `hireInterviews.plan.address` | Adresse |
+| `hireInterviews.plan.addressPlaceholder` | Rue, bâtiment, étage |
+| `hireInterviews.plan.link` | Lien de la visio (facultatif) |
+| `hireInterviews.plan.linkAudio` | Lien de l'appel (facultatif) |
+| `hireInterviews.plan.linkHint` | Vous pourrez l'ajouter plus tard. {firstName} le recevra avant l'entretien. |
+| `hireInterviews.plan.count` | {count} {count, plural, one {créneau} other {créneaux}} sur {max} |
+| `hireInterviews.plan.preview` | Aperçu |
+| `hireInterviews.plan.previewTitle` | Aperçu de l'invitation |
+| `hireInterviews.plan.previewFor` | Ce que {firstName} verra |
+| `hireInterviews.plan.previewAria` | Aperçu de l'invitation reçue par le talent |
+| `hireInterviews.plan.previewKicker` | Invitation à un entretien |
+| `hireInterviews.plan.verified` | Vérifiée |
+| `hireInterviews.plan.rowOnsite` | Sur site · {duration} · {address} |
+| `hireInterviews.plan.rowRemote` | {mode} · {duration} |
+| `hireInterviews.plan.rowWith` | Avec {names} |
+| `hireInterviews.plan.previewConfirm` | Confirmer |
+| `hireInterviews.plan.previewOther` | Autre date |
+| `hireInterviews.plan.rescheduleNote` | {firstName} reçoit les nouveaux créneaux ; les anciens ne sont plus proposés. |
+| `hireInterviews.plan.ownMessage` | Votre message |
+| `hireInterviews.plan.messageLabel` | Message à {firstName} |
+| `hireInterviews.plan.prepared` | Préparé par Orbi, à relire |
+| `hireInterviews.plan.edited` | Modifié par vous |
+| `hireInterviews.plan.edit` | Modifier |
+| `hireInterviews.plan.tones` | Ton du message |
+| `hireInterviews.plan.tone.chaleureux` | Chaleureux |
+| `hireInterviews.plan.tone.court` | Plus court |
+| `hireInterviews.plan.tone.formel` | Formel |
+| `hireInterviews.plan.tone.moi` | Écrire moi-même |
+| `hireInterviews.plan.checkNotify` | {firstName} est prévenu dans Jumanly et par e-mail |
+| `hireInterviews.plan.checkAgenda` | Une fois le créneau confirmé, chacun peut l'ajouter à son agenda (.ics) |
+| `hireInterviews.plan.checkTeam` | {count, plural, =0 {Vous seul participez} one {# membre de l'équipe est invité} other {# membres de l'équipe sont invités}} |
+| `hireInterviews.plan.modify` | Modifier |
+| `hireInterviews.plan.sendReschedule` | Envoyer les créneaux |
+| `hireInterviews.plan.send` | Envoyer l'invitation |
+| `hireInterviews.plan.teamDay` | Journée de l'équipe |
+| `hireInterviews.plan.halves` | Demi-heures de la journée |
+| `hireInterviews.plan.halfAria` | Choisir {time} |
+| `hireInterviews.plan.busy` | {count, plural, one {{names} occupé} other {{names} occupés}} |
+| `hireInterviews.plan.busyTentative` | Proposé à un candidat |
+| `hireInterviews.plan.slotRank` | Choix {rank} · {time} |
+| `hireInterviews.plan.slotMeta` | {duration} · {mode} |
+| `hireInterviews.plan.remove` | Retirer {time} |
+| `hireInterviews.calendar.previous` | Mois précédent |
+| `hireInterviews.calendar.next` | Mois suivant |
+| `hireInterviews.calendar.letter.l` | L |
+| `hireInterviews.calendar.letter.ma` | M |
+| `hireInterviews.calendar.letter.me` | M |
+| `hireInterviews.calendar.letter.j` | J |
+| `hireInterviews.calendar.letter.v` | V |
+| `hireInterviews.calendar.letter.s` | S |
+| `hireInterviews.calendar.letter.d` | D |
+| `hireInterviews.calendar.weekday.l` | lundi |
+| `hireInterviews.calendar.weekday.ma` | mardi |
+| `hireInterviews.calendar.weekday.me` | mercredi |
+| `hireInterviews.calendar.weekday.j` | jeudi |
+| `hireInterviews.calendar.weekday.v` | vendredi |
+| `hireInterviews.calendar.weekday.s` | samedi |
+| `hireInterviews.calendar.weekday.d` | dimanche |
+| `hireInterviews.calendar.free` | Équipe libre |
+| `hireInterviews.calendar.few` | Peu de place |
+| `hireInterviews.calendar.chosen` | Choisi |
+| `hireInterviews.invite.chaleureux` | Bonjour {firstName},\n\nMerci pour votre candidature au poste de {jobTitle}. {strengthLine}\n\nNous aimerions vous rencontrer : choisissez le créneau qui vous convient parmi ceux proposés, ou proposez-en un autre.\n\nÀ très vite,\n{signer}, {company} |
+| `hireInterviews.invite.court` | Bonjour {firstName},\n\nVotre candidature au poste de {jobTitle} nous intéresse. {strengthLine}\n\nChoisissez un créneau pour un entretien.\n\n{signer}, {company} |
+| `hireInterviews.invite.formel` | Bonjour {firstName},\n\nNous avons bien étudié votre candidature au poste de {jobTitle}. {strengthLine}\n\nNous souhaitons vous proposer un entretien. Merci de confirmer l'un des créneaux ci-dessous ou de nous en proposer un autre.\n\nCordialement,\n{signer}, {company} |
+| `hireInterviews.invite.strength.chaleureux` | Votre maîtrise de {strength} a retenu notre attention. |
+| `hireInterviews.invite.strength.court` | Votre maîtrise de {strength} compte pour ce poste. |
+| `hireInterviews.invite.strength.formel` | Votre maîtrise de {strength} correspond aux attentes du poste. |
+| `hireInterviews.agenda.title` | Entretiens |
+| `hireInterviews.agenda.back` | Retour à l'accueil |
+| `hireInterviews.agenda.new` | Proposer un entretien |
+| `hireInterviews.agenda.newTitle` | Proposer un entretien à… |
+| `hireInterviews.agenda.newEmpty` | Aucune candidature en cours. Les entretiens se proposent depuis le dossier d'un candidat. |
+| `hireInterviews.agenda.views` | Vues de l'agenda |
+| `hireInterviews.agenda.week` | Semaine |
+| `hireInterviews.agenda.month` | Mois |
+| `hireInterviews.agenda.evaluate` | À évaluer · {count} |
+| `hireInterviews.agenda.whose` | Entretiens affichés |
+| `hireInterviews.agenda.mine` | Les miens |
+| `hireInterviews.agenda.team` | L'équipe |
+| `hireInterviews.agenda.orbi` | Préparez l'entretien de <b>{name}</b> ({when}) : Orbi propose des questions à partir de son dossier. |
+| `hireInterviews.agenda.open` | Ouvrir |
+| `hireInterviews.agenda.previousWeek` | Semaine précédente |
+| `hireInterviews.agenda.nextWeek` | Semaine suivante |
+| `hireInterviews.agenda.weekOf` | Du {from} au {to} |
+| `hireInterviews.agenda.weekDays` | Jours de la semaine |
+| `hireInterviews.agenda.dayCount` | {day} : {count, plural, =0 {aucun entretien} one {# entretien} other {# entretiens}} |
+| `hireInterviews.agenda.waiting` | En attente de réponse · {count} |
+| `hireInterviews.agenda.slotsSent` | {count, plural, one {# créneau proposé} other {# créneaux proposés}} |
+| `hireInterviews.agenda.proposedBack` | {count, plural, one {# autre date proposée} other {# autres dates proposées}} |
+| `hireInterviews.agenda.emptyWeek` | Aucun entretien cette semaine |
+| `hireInterviews.agenda.emptyText` | Proposez un entretien depuis le dossier d'un candidat ou avec « + ». |
+| `hireInterviews.agenda.emptyTextReader` | Les entretiens où vous êtes invité apparaissent ici. |
+| `hireInterviews.agenda.today` | Aujourd'hui · {day} |
+| `hireInterviews.agenda.emptyDay` | Aucun entretien ce jour-là. |
+| `hireInterviews.agenda.evaluateEmpty` | Rien à évaluer |
+| `hireInterviews.agenda.evaluateEmptyText` | Après chaque entretien, votre évaluation est demandée ici. |
+| `hireInterviews.agenda.evaluateCta` | Évaluer |
+| `hireInterviews.agenda.evaluateAria` | Évaluer l'entretien de {name} |
+| `hireInterviews.agenda.status.confirmed` | Confirmé |
+| `hireInterviews.agenda.status.pending` | Sans réponse |
+| `hireInterviews.agenda.status.reschedule` | Autre date |
+| `hireInterviews.agenda.status.done` | Terminé |
+| `hireInterviews.agenda.status.noShow` | Absent |
+| `hireInterviews.agenda.status.canceled` | Annulé |
+| `hireInterviews.agenda.status.declined` | Décliné |
+| `hireInterviews.prep.title` | Préparer l'entretien |
+| `hireInterviews.prep.back` | Retour aux entretiens |
+| `hireInterviews.prep.more` | Suivi de l'entretien |
+| `hireInterviews.prep.moreTitle` | Suivi de l'entretien |
+| `hireInterviews.prep.ok.sent` | Invitation envoyée. {firstName} choisit un créneau. |
+| `hireInterviews.prep.ok.confirmed` | Entretien confirmé. Le candidat est prévenu. |
+| `hireInterviews.prep.ok.rescheduled` | Nouveaux créneaux envoyés à {firstName}. |
+| `hireInterviews.prep.ok.canceled` | Entretien annulé. {firstName} est prévenu. |
+| `hireInterviews.prep.ok.done` | Entretien marqué comme terminé. |
+| `hireInterviews.prep.ok.noShow` | Absence enregistrée. |
+| `hireInterviews.prep.ok.question` | Question ajoutée. |
+| `hireInterviews.prep.ok.questionRemoved` | Question retirée. |
+| `hireInterviews.prep.question.protected` | Cette question touche à la vie privée (âge, famille, santé, religion, origine…). Elle ne peut pas être posée. |
+| `hireInterviews.prep.question.invalid` | Écrivez une question d'au moins 5 caractères. |
+| `hireInterviews.prep.question.full` | {max} questions au plus par entretien. |
+| `hireInterviews.prep.error` | L'action n'a pas abouti. Réessayez. |
+| `hireInterviews.prep.when` | Date |
+| `hireInterviews.prep.with` | Avec |
+| `hireInterviews.prep.status.pending` | {firstName} n'a pas encore choisi de créneau. |
+| `hireInterviews.prep.status.reschedule` | {firstName} propose d'autres dates. |
+| `hireInterviews.prep.status.confirmed` | {day} à {time} |
+| `hireInterviews.prep.status.declined` | {firstName} a décliné l'entretien. |
+| `hireInterviews.prep.status.canceled` | Entretien annulé. |
+| `hireInterviews.prep.status.done` | Entretien terminé. |
+| `hireInterviews.prep.status.noShow` | {firstName} n'est pas venu. |
+| `hireInterviews.prep.slots` | Créneaux proposés |
+| `hireInterviews.prep.slotAt` | {day} à {time} |
+| `hireInterviews.prep.proposed` | Dates proposées par {firstName} |
+| `hireInterviews.prep.accept` | Accepter |
+| `hireInterviews.prep.newTimes` | Proposer d'autres créneaux |
+| `hireInterviews.prep.checkTitle` | Ce qu'il faut vérifier |
+| `hireInterviews.prep.checkSub` | D'après le dossier et les compétences de l'offre. |
+| `hireInterviews.prep.checkNone` | L'offre ne liste pas de compétences : préparez vos propres questions. |
+| `hireInterviews.prep.allProven` | Chaque compétence est prouvée : vérifiez la profondeur plutôt que la présence. |
+| `hireInterviews.prep.point.certificate` | {skill} : prouvé par une attestation |
+| `hireInterviews.prep.point.project` | {skill} : montré dans un projet |
+| `hireInterviews.prep.point.experience` | {skill} : pratiqué en poste |
+| `hireInterviews.prep.point.declared` | {skill} : déclaré sans preuve |
+| `hireInterviews.prep.point.missing` | {skill} : absent du profil |
+| `hireInterviews.prep.questions` | Questions proposées |
+| `hireInterviews.prep.add` | Ajouter |
+| `hireInterviews.prep.ask.certificate` | Racontez une situation où vous avez utilisé {skill} après votre formation. |
+| `hireInterviews.prep.ask.project` | Présentez le projet où vous avez utilisé {skill} : votre rôle et le résultat. |
+| `hireInterviews.prep.ask.experience` | Dans votre dernier poste, que faisiez-vous avec {skill} au quotidien ? |
+| `hireInterviews.prep.ask.declared` | Pouvez-vous montrer un exemple concret de travail avec {skill} ? |
+| `hireInterviews.prep.ask.missing` | Comment aborderiez-vous une tâche qui demande {skill} ? |
+| `hireInterviews.prep.required` | indispensable |
+| `hireInterviews.prep.preferred` | souhaitée |
+| `hireInterviews.prep.toCheck` | à vérifier |
+| `hireInterviews.prep.by` | Ajoutée par {name} |
+| `hireInterviews.prep.formerMember` | un ancien membre |
+| `hireInterviews.prep.remove` | Retirer la question « {question} » |
+| `hireInterviews.prep.guard` | Les questions portent sur le poste et les compétences, jamais sur la vie privée. |
+| `hireInterviews.prep.actions` | Actions de l'entretien |
+| `hireInterviews.prep.share` | Partager |
+| `hireInterviews.prep.evaluate` | Ouvrir l'évaluation |
+| `hireInterviews.prep.file` | Voir le dossier |
+| `hireInterviews.prep.shareTitle` | Partager la préparation |
+| `hireInterviews.prep.shareText` | Les membres de l'équipe qui ont accès à l'offre ouvrent cette préparation avec le lien. |
+| `hireInterviews.prep.copy` | Copier le lien |
+| `hireInterviews.prep.copied` | Lien copié. |
+| `hireInterviews.prep.writeCandidate` | Écrire à {firstName} |
+| `hireInterviews.prep.addTitle` | Ajouter une question |
+| `hireInterviews.prep.addLabel` | Votre question |
+| `hireInterviews.prep.addPlaceholder` | Ex. Comment priorisez-vous vos demandes ? |
+| `hireInterviews.prep.addNote` | Visible par l'équipe qui prépare l'entretien, pas par le candidat. |
+| `hireInterviews.prep.addSubmit` | Ajouter la question |
+| `hireInterviews.prep.markDone` | Marquer comme terminé |
+| `hireInterviews.prep.markNoShow` | {firstName} n'est pas venu |
+| `hireInterviews.prep.cancelReason` | Message à {firstName} (facultatif) |
+| `hireInterviews.prep.cancel` | Annuler l'entretien |
+| `hireInterviews.evaluation.title` | Évaluer l'entretien |
+| `hireInterviews.evaluation.back` | Retour |
+| `hireInterviews.evaluation.interviewOn` | Entretien du {date} |
+| `hireInterviews.evaluation.lockedTitle` | Évaluations non incluses |
+| `hireInterviews.evaluation.locked` | Les grilles d'évaluation font partie du forfait {plan}. |
+| `hireInterviews.evaluation.lockedNoPlan` | Les grilles d'évaluation ne sont pas incluses dans votre forfait. |
+| `hireInterviews.evaluation.seePlans` | Voir les forfaits |
+| `hireInterviews.evaluation.roleTitle` | Évaluation réservée |
+| `hireInterviews.evaluation.role` | Votre rôle dans l'organisation ne permet pas d'évaluer les candidats. |
+| `hireInterviews.evaluation.general` | Impression générale |
+| `hireInterviews.evaluation.criteria` | Critères de l'offre |
+| `hireInterviews.evaluation.rating.1` | 1 sur 4, insuffisant |
+| `hireInterviews.evaluation.rating.2` | 2 sur 4, partiel |
+| `hireInterviews.evaluation.rating.3` | 3 sur 4, bon |
+| `hireInterviews.evaluation.rating.4` | 4 sur 4, excellent |
+| `hireInterviews.evaluation.opinion` | Votre avis |
+| `hireInterviews.evaluation.opinionPlaceholder` | Ce que vous avez observé pendant l'entretien |
+| `hireInterviews.evaluation.next` | Suite proposée |
+| `hireInterviews.evaluation.suite.no` | Ne pas poursuivre |
+| `hireInterviews.evaluation.suite.yes` | Poursuivre |
+| `hireInterviews.evaluation.suite.maybe` | Hésitation |
+| `hireInterviews.evaluation.draft` | Brouillon |
+| `hireInterviews.evaluation.draftSaved` | Brouillon gardé sur cet appareil. |
+| `hireInterviews.evaluation.draftFailed` | Le brouillon n'a pas pu être gardé sur cet appareil. |
+| `hireInterviews.evaluation.save` | Enregistrer |
+| `hireInterviews.evaluation.compare` | Comparer |
+| `hireInterviews.evaluation.orbi.hidden` | Les évaluations de l'équipe s'affichent après l'envoi de la vôtre, pour que chacun donne son avis librement. |
+| `hireInterviews.evaluation.orbi.alone` | Vous êtes le premier à évaluer ce candidat. |
+| `hireInterviews.evaluation.orbi.compare` | {yes, plural, =0 {Aucun collègue ne propose} one {<b># collègue sur {count}</b> propose} other {<b># collègues sur {count}</b> proposent}} de poursuivre. |
+| `hireInterviews.evaluation.teamTitle` | Évaluations de l'équipe |
+| `hireInterviews.evaluation.close` | Fermer |
+| `hireInterviews.evaluation.average` | Moyenne {value} sur {max} |
+| `hireInterviews.evaluation.guard` | La suite proposée ne déplace pas le candidat : la décision reste celle de l'équipe. |
+| `hireInterviews.evaluation.error.invalid` | Notez chaque critère et choisissez une suite. |
+| `hireInterviews.evaluation.error.other` | L'évaluation n'a pas pu être enregistrée. Réessayez. |
+| `hireTalents.seo` | Rechercher des talents |
+| `hireTalents.title` | Rechercher des talents |
+| `hireTalents.tabs.aria` | Vues de la recherche de talents |
+| `hireTalents.tabs.discover` | Découvrir |
+| `hireTalents.tabs.proposals` | Mes propositions |
+| `hireTalents.locked.title` | Recherche de talents non incluse |
+| `hireTalents.locked.text` | Chercher parmi les profils rendus visibles fait partie du forfait {plan}. |
+| `hireTalents.locked.noPlan` | La recherche de talents n'est pas incluse dans votre forfait. |
+| `hireTalents.locked.cta` | Voir les forfaits |
+| `hireTalents.search.label` | Rechercher un talent |
+| `hireTalents.search.placeholder` | Compétence, métier, ville |
+| `hireTalents.count.withOffer` | {count, plural, =0 {Aucun profil visible} one {# profil visible} other {# profils visibles}} · comparés à <b>« {title} »</b> |
+| `hireTalents.count.plain` | {count, plural, =0 {Aucun profil visible} one {# profil visible} other {# profils visibles}} |
+| `hireTalents.offer.change` | Changer |
+| `hireTalents.offer.title` | Comparer avec une offre |
+| `hireTalents.offer.close` | Fermer |
+| `hireTalents.offer.none` | Sans offre (pas de score) |
+| `hireTalents.quota` | Les recherches du mois sont utilisées. Elles reviennent le {date}. |
+| `hireTalents.rateLimited` | Trop de recherches en peu de temps. Réessayez dans quelques minutes. |
+| `hireTalents.empty.title` | Que cherchez-vous ? |
+| `hireTalents.empty.text` | Saisissez une compétence, un métier ou une ville, ou choisissez une offre pour comparer les profils. |
+| `hireTalents.none.title` | Aucun profil visible ne correspond |
+| `hireTalents.none.text` | Seuls les talents qui ont rendu leur profil visible apparaissent. Élargissez la recherche. |
+| `hireTalents.availability.open` | Disponible |
+| `hireTalents.availability.listening` | À l'écoute |
+| `hireTalents.availability.notLooking` | Pas en recherche |
+| `hireTalents.filters.open` | Filtres |
+| `hireTalents.filters.openActive` | Filtres · {count} actifs |
+| `hireTalents.filters.active` | Filtres actifs |
+| `hireTalents.filters.remove` | Retirer le filtre {filter} |
+| `hireTalents.filters.title` | Filtres |
+| `hireTalents.filters.close` | Fermer |
+| `hireTalents.filters.skills` | Compétences |
+| `hireTalents.filters.addSkill` | Ajouter une compétence |
+| `hireTalents.filters.place` | Lieu |
+| `hireTalents.filters.anywhere` | Partout |
+| `hireTalents.filters.remote` | À distance |
+| `hireTalents.filters.experience` | Expérience |
+| `hireTalents.filters.level.sans` | Sans expérience |
+| `hireTalents.filters.level.junior` | Junior |
+| `hireTalents.filters.level.confirme` | Confirmé |
+| `hireTalents.filters.availabilityTitle` | Disponibilité |
+| `hireTalents.filters.availability.open` | Disponible |
+| `hireTalents.filters.availability.listening` | À l'écoute |
+| `hireTalents.filters.deepLocked` | Expérience, disponibilité et travail à distance : avec le forfait {plan}. |
+| `hireTalents.filters.guard` | Pas de filtre sur l'âge, le genre, la nationalité ou la photo. Seuls les profils rendus visibles apparaissent. |
+| `hireTalents.filters.quota` | {used} recherches utilisées sur {max} ce mois-ci. |
+| `hireTalents.filters.clear` | Effacer |
+| `hireTalents.filters.submit` | Voir les profils |
+| `hireTalents.list.anonymous` | Profil anonyme · {headline} |
+| `hireTalents.list.noHeadline` | Talent |
+| `hireTalents.list.percent` | {value} % |
+| `hireTalents.list.withOffer` | avec l'offre |
+| `hireTalents.list.scoreAria` | Correspondance avec l'offre : {score} % |
+| `hireTalents.list.openAria` | Consulter le profil de {name} |
+| `hireTalents.list.open` | Consulter |
+| `hireTalents.list.loading` | Chargement des profils suivants |
+| `hireTalents.list.retry` | Réessayer |
+| `hireTalents.list.end` | Fin de la liste. Affinez la recherche pour voir d'autres profils. |
+| `hireTalents.proposals.title` | Mes propositions |
+| `hireTalents.proposals.filters` | Filtrer les propositions |
+| `hireTalents.proposals.all` | Toutes |
+| `hireTalents.proposals.filter.acceptees` | Acceptées |
+| `hireTalents.proposals.filter.attente` | En attente |
+| `hireTalents.proposals.filter.refusees` | Refusées |
+| `hireTalents.proposals.empty` | Aucune proposition |
+| `hireTalents.proposals.emptyText` | Proposez une offre depuis le profil d'un talent : il choisit d'y répondre ou non. |
+| `hireTalents.proposals.sentAgo` | {days, plural, =0 {Envoyée aujourd'hui} one {Envoyée il y a # jour} other {Envoyée il y a # jours}} |
+| `hireTalents.proposals.status.accepted` | Acceptée |
+| `hireTalents.proposals.status.pending` | En attente |
+| `hireTalents.proposals.status.declined` | Refusée |
+| `hireTalents.proposals.status.expired` | Expirée |
+| `hireTalents.proposals.write` | Écrire à {name} |
+| `hireTalents.proposals.quota` | Propositions ce mois |
+| `hireTalents.proposals.quotaValue` | {used} sur {max} |
+| `hireTalents.profile.seo` | Profil du talent |
+| `hireTalents.profile.back` | Retour à la recherche |
+| `hireTalents.profile.blocked` | Beaucoup de profils ont été ouverts en peu de temps. La consultation reprend dans une heure ; votre administrateur est prévenu. |
+| `hireTalents.profile.anonymous` | Profil anonyme · {headline} |
+| `hireTalents.profile.noHeadline` | Talent |
+| `hireTalents.profile.anonymousShort` | ce talent |
+| `hireTalents.profile.point.certificate` | {skill} prouvé par une attestation |
+| `hireTalents.profile.point.project` | {skill} montré dans un projet |
+| `hireTalents.profile.point.experience` | {skill} pratiqué en poste |
+| `hireTalents.profile.point.declared` | {skill} déclaré sans preuve : à vérifier |
+| `hireTalents.profile.point.missing` | {skill} absent du profil : à vérifier |
+| `hireTalents.profile.more` | Plus d'options |
+| `hireTalents.profile.moreTitle` | Options |
+| `hireTalents.profile.close` | Fermer |
+| `hireTalents.profile.available` | Disponible |
+| `hireTalents.profile.listening` | À l'écoute |
+| `hireTalents.profile.logged` | Consultation enregistrée |
+| `hireTalents.profile.stats` | En bref |
+| `hireTalents.profile.stat.years` | {count, plural, one {an d'expérience} other {ans d'expérience}} |
+| `hireTalents.profile.stat.proven` | {count, plural, one {compétence prouvée} other {compétences prouvées}} |
+| `hireTalents.profile.stat.projects` | {count, plural, one {projet} other {projets}} |
+| `hireTalents.profile.stat.certificates` | {count, plural, one {attestation} other {attestations}} |
+| `hireTalents.profile.note.applied` | Ce talent a candidaté chez vous : vous voyez son profil complet. |
+| `hireTalents.profile.note.full` | Ce talent a accepté votre proposition : vous voyez son profil complet. |
+| `hireTalents.profile.note.anonymous` | Profil anonyme : le nom, les employeurs et les projets restent cachés tant que le talent n'a pas accepté une proposition. |
+| `hireTalents.profile.note.limited` | Résumé du profil : les employeurs et les descriptions apparaissent si le talent candidate ou accepte une proposition. |
+| `hireTalents.profile.orbi.title` | Ce qu'Orbi relève |
+| `hireTalents.profile.orbi.sub` | Comparé à « {title} ». |
+| `hireTalents.profile.orbi.change` | Changer |
+| `hireTalents.profile.orbi.changeTitle` | Comparer avec une offre |
+| `hireTalents.profile.orbi.scoreAria` | Correspondance avec l'offre : {score} % |
+| `hireTalents.profile.orbi.noSkills` | L'offre ne liste pas de compétences à comparer. |
+| `hireTalents.profile.orbi.why` | Voir le détail du score |
+| `hireTalents.profile.orbi.optedOut` | Ce talent a désactivé le calcul de correspondance : pas de score. |
+| `hireTalents.profile.orbi.noScore` | Le score de correspondance n'est pas inclus dans votre forfait. |
+| `hireTalents.profile.orbi.incomplete` | Profil trop incomplet pour calculer un score. |
+| `hireTalents.profile.skills.title` | Compétences de l'offre |
+| `hireTalents.profile.skills.all` | Toutes ses compétences |
+| `hireTalents.profile.summary` | Présentation |
+| `hireTalents.profile.projects` | Projets |
+| `hireTalents.profile.experience` | Expérience professionnelle |
+| `hireTalents.profile.now` | aujourd'hui |
+| `hireTalents.profile.education` | Formation |
+| `hireTalents.profile.jumanly` | Attestation Jumanly |
+| `hireTalents.profile.actions` | Actions sur ce profil |
+| `hireTalents.profile.pool` | Vivier |
+| `hireTalents.profile.write` | Écrire à {firstName} |
+| `hireTalents.profile.seeApplication` | Voir sa candidature |
+| `hireTalents.profile.pending` | Proposition envoyée |
+| `hireTalents.profile.propose` | Proposer l'offre |
+| `hireTalents.profile.proposals` | Mes propositions |
+| `hireTalents.profile.pools` | Mes viviers |
+| `hireTalents.profile.guard` | Le talent décide seul de répondre. Il ne voit pas que vous avez consulté son profil, mais la consultation est enregistrée. |
+| `hireTalents.profile.ok.proposee` | Proposition envoyée. Le talent a {days} jours pour répondre. |
+| `hireTalents.profile.ok.vivier` | Ajouté au vivier. |
+| `hireTalents.profile.error.pool` | Donnez un nom d'au moins 2 caractères au vivier. |
+| `hireTalents.profile.error.forbidden` | Cette action n'est pas incluse dans votre forfait ou votre rôle. |
+| `hireTalents.profile.error.other` | L'action n'a pas abouti. Réessayez. |
+| `hirePools.sheet.title` | Ajouter à un vivier |
+| `hirePools.sheet.close` | Fermer |
+| `hirePools.sheet.lockedTitle` | Viviers non inclus |
+| `hirePools.sheet.locked` | Les viviers de talents font partie du forfait {plan}. |
+| `hirePools.sheet.lockedNoPlan` | Les viviers de talents ne sont pas inclus dans votre forfait. |
+| `hirePools.sheet.seePlans` | Voir les forfaits |
+| `hirePools.sheet.already` | Déjà dans « {name} » |
+| `hirePools.sheet.addTo` | Ajouter à « {name} » |
+| `hirePools.sheet.count` | {count, plural, =0 {Aucun talent} one {# talent} other {# talents}} |
+| `hirePools.sheet.newLabel` | Ou un nouveau vivier |
+| `hirePools.sheet.firstLabel` | Nommez votre premier vivier |
+| `hirePools.sheet.placeholder` | Ex. Data junior |
+| `hirePools.sheet.create` | Créer et ajouter |
+| `hirePools.sheet.private` | Le talent n'est pas prévenu. Un nouveau vivier n'est visible que par vous. |
+| `hireTalents.propose.title` | Proposer l'offre |
+| `hireTalents.propose.back` | Retour au profil |
+| `hireTalents.propose.anonymous` | Profil anonyme · {headline} |
+| `hireTalents.propose.noHeadline` | Talent |
+| `hireTalents.propose.anonymousShort` | ce talent |
+| `hireTalents.propose.scoreAria` | Correspondance avec l'offre : {score} % |
+| `hireTalents.propose.offer` | Offre proposée |
+| `hireTalents.propose.noOffer` | Aucune offre publiée : un simple message |
+| `hireTalents.propose.noOfferTitle` | nos prochains postes |
+| `hireTalents.propose.change` | Changer |
+| `hireTalents.propose.changeTitle` | Choisir l'offre |
+| `hireTalents.propose.close` | Fermer |
+| `hireTalents.propose.prepared` | Personnalisé par Orbi, à relire |
+| `hireTalents.propose.edited` | Modifié par vous |
+| `hireTalents.propose.edit` | Modifier |
+| `hireTalents.propose.messageLabel` | Votre message |
+| `hireTalents.propose.tones` | Ton du message |
+| `hireTalents.propose.tone.chaleureux` | Chaleureux |
+| `hireTalents.propose.tone.court` | Plus court |
+| `hireTalents.propose.tone.formel` | Formel |
+| `hireTalents.propose.message.chaleureux` | Bonjour{named, select, yes { {firstName}} other {}},\n\nVotre profil a retenu notre attention pour le poste de {jobTitle} chez {company}. {strengthLine}\n\nSi l'offre vous intéresse, acceptez cette proposition : nous pourrons échanger ici.\n\nBelle journée,\n{signer} |
+| `hireTalents.propose.message.court` | Bonjour{named, select, yes { {firstName}} other {}},\n\nLe poste de {jobTitle} chez {company} pourrait vous intéresser. {strengthLine}\n\n{signer} |
+| `hireTalents.propose.message.formel` | Bonjour{named, select, yes { {firstName}} other {}},\n\nNous recrutons pour le poste de {jobTitle} chez {company} et votre profil correspond à nos attentes. {strengthLine}\n\nSi vous le souhaitez, acceptez cette proposition afin que nous puissions vous présenter le poste.\n\nCordialement,\n{signer} |
+| `hireTalents.propose.strength.chaleureux` | Votre maîtrise de {strength} nous a marqués. |
+| `hireTalents.propose.strength.court` | Votre maîtrise de {strength} compte pour ce poste. |
+| `hireTalents.propose.strength.formel` | Votre maîtrise de {strength} correspond au poste. |
+| `hireTalents.propose.attach` | Joindre l'annonce |
+| `hireTalents.propose.attachText` | Le talent voit l'offre complète avec votre message. |
+| `hireTalents.propose.quota` | Propositions ce mois |
+| `hireTalents.propose.quotaValue` | {used} sur {max} |
+| `hireTalents.propose.guard` | Le talent décide seul de répondre ; sans réponse sous {days} jours, la proposition expire. Ses coordonnées ne sont partagées que s'il accepte. |
+| `hireTalents.propose.cancel` | Annuler |
+| `hireTalents.propose.send` | Envoyer à {firstName} |
+| `hireTalents.propose.sendAnonymous` | Envoyer la proposition |
+| `hireTalents.propose.error.quota` | Les propositions du mois sont utilisées. Elles reviennent le {date}. |
+| `hireTalents.propose.error.cooldown` | Ce talent a refusé une proposition récemment. Attendez {days} jours avant de lui en refaire une. |
+| `hireTalents.propose.error.blocked` | Ce talent ne reçoit pas de proposition de votre entreprise. |
+| `hireTalents.propose.error.invalid` | Le message doit faire au moins {min} caractères. |
+| `hireTalents.propose.error.locked` | La recherche de talents n'est pas incluse dans votre forfait. |
+| `hireTalents.propose.error.other` | La proposition n'a pas pu être envoyée. Réessayez. |
+| `hirePools.title` | Mes viviers |
+| `hirePools.back` | Retour à la recherche |
+| `hirePools.backPools` | Retour aux viviers |
+| `hirePools.create` | Créer un vivier |
+| `hirePools.createTitle` | Créer un vivier |
+| `hirePools.createSubmit` | Créer le vivier |
+| `hirePools.name` | Nom du vivier |
+| `hirePools.description` | Description (facultatif) |
+| `hirePools.visibility` | Qui le voit ? |
+| `hirePools.visibilityOption.private` | Moi seul |
+| `hirePools.visibilityOption.team` | Mon équipe |
+| `hirePools.visibilityOption.org` | Toute l'organisation |
+| `hirePools.invalid` | Donnez un nom d'au moins 2 caractères au vivier. |
+| `hirePools.notTold` | Les talents d'un vivier ne sont pas prévenus. Seuls ceux encore visibles ou qui ont candidaté chez vous y apparaissent. |
+| `hirePools.orbi` | <b>{count, plural, one {# talent} other {# talents}}</b> de « {pool} » {count, plural, one {correspond} other {correspondent}} à « {offer} ». |
+| `hirePools.orbiSee` | Voir |
+| `hirePools.line` | {count, plural, =0 {Aucun talent} one {# talent} other {# talents}} · mis à jour {updated} |
+| `hirePools.more` | +{count} |
+| `hirePools.available` | {count, plural, =0 {aucun disponible} one {# disponible} other {# disponibles}} |
+| `hirePools.empty.title` | Aucun vivier |
+| `hirePools.empty.text` | Gardez des talents pour plus tard : depuis la recherche, un profil ou un dossier, « Ajouter à un vivier ». |
+| `hirePools.error` | L'action n'a pas abouti. Réessayez. |
+| `hirePools.forbidden` | Seul le créateur du vivier ou un administrateur peut le supprimer. |
+| `hirePools.ok.deleted` | Vivier supprimé. |
+| `hirePools.ok.created` | Vivier créé. |
+| `hirePools.ok.removed` | Talent retiré du vivier. |
+| `hirePools.ok.renamed` | Vivier renommé. |
+| `hirePools.ok.added` | Ajouté au vivier. |
+| `hirePools.menu` | Options du vivier |
+| `hirePools.menuTitle` | Vivier |
+| `hirePools.owner` | Créé par {name} |
+| `hirePools.anonymous` | Profil anonyme · {headline} |
+| `hirePools.noHeadline` | Talent |
+| `hirePools.origin.applied` | A candidaté |
+| `hirePools.origin.contact` | Proposition acceptée |
+| `hirePools.origin.search` | Recherche |
+| `hirePools.added` | ajouté le {date} |
+| `hirePools.remove` | Retirer {name} du vivier |
+| `hirePools.rename` | Renommer |
+| `hirePools.renameSubmit` | Enregistrer le nom |
+| `hirePools.deleteText` | Supprimer le vivier ne supprime aucun profil ; les talents ne sont pas prévenus. |
+| `hirePools.delete` | Supprimer le vivier |
+| `hirePools.emptyPool.title` | Ce vivier est vide |
+| `hirePools.emptyPool.text` | Ajoutez des talents depuis la recherche, leur profil ou un dossier de candidature. |
+| `hirePools.emptyPool.cta` | Rechercher des talents |
+| `hireCandidates.evaluation.locked` | Les grilles d'évaluation font partie du forfait {plan}. |
+| `hireCandidates.evaluation.mine` | Votre évaluation : <b>{suite}</b>. |
+| `hireCandidates.evaluation.notYet` | Vous n'avez pas encore évalué ce candidat. |
+| `hireCandidates.evaluation.team` | {count, plural, one {# évaluation} other {# évaluations}} · moyenne {average} sur {max} |
+| `hireCandidates.evaluation.hidden` | {count, plural, one {# collègue a évalué.} other {# collègues ont évalué.}} Leurs avis s'affichent après l'envoi du vôtre. |
+| `hireCandidates.evaluation.pending` | Pas encore évalué par : {names} |
+| `hireCandidates.evaluation.open` | Évaluer |
+| `hireCandidates.evaluation.edit` | Modifier mon évaluation |
+| `hireCandidates.ok.evaluation` | Évaluation enregistrée. |
+| `hireCandidates.menu.pool` | Ajouter à un vivier |
+| `hireCandidates.decision.call` | Proposer un appel d'arrivée |
+| `hireCandidates.decision.callText` | Un appel de {minutes} min pour fixer la date d'arrivée : le talent choisit un créneau. |
+| `hireCandidates.decision.callSlot` | Créneau {rank} |
+| `hireCandidates.decision.callNote` | Heures du fuseau {zone}. Le premier créneau est obligatoire. |
+| `hireCandidates.decision.callError` | Vérifiez les créneaux de l'appel : ils doivent être à venir. |
+
+
 ### Navigation Hire
 
 *Menu de l'espace Organisation, visible quand le sélecteur d'espace est sur une organisation.*
@@ -11808,6 +12319,7 @@ Conventions :
 | `notifications.item.interviewReschedule` | {candidateName} propose d'autres créneaux pour {jobTitle}. |
 | `notifications.item.interviewDeclined` | {candidateName} a décliné l'entretien pour {jobTitle}. |
 | `notifications.item.interviewCanceled` | {company} a annulé l'entretien pour {jobTitle}. |
+| `notifications.item.interviewAccepted` | {company} confirme l'entretien pour {jobTitle} au moment que vous avez proposé. |
 | `notifications.item.orgVerified` | {org} est maintenant une entreprise vérifiée. |
 | `notifications.item.orgVerificationRejected` | La vérification de {org} n'a pas été acceptée. Consultez le motif. |
 | `notifications.item.orgVerificationInfo` | Jumanly a besoin d'un complément pour vérifier {org}. |

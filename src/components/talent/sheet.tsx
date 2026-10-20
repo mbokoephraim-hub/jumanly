@@ -57,7 +57,10 @@ export function Sheet({
       aria-labelledby={`${id}-t`}
       onClose={onClose}
       onClick={(event) => {
-        if (event.target === event.currentTarget) event.currentTarget.close();
+        // A link of the sheet leads elsewhere: the sheet closes, or the screen kept behind the next
+        // one would leave it modal and the new screen inert.
+        const link = event.target instanceof Element ? event.target.closest("a[href]") : null;
+        if (event.target === event.currentTarget || link) event.currentTarget.close();
       }}
     >
       <div className="t-poignee" aria-hidden />

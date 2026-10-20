@@ -45,16 +45,18 @@ test("recherche de talents et mise en relation acceptée", async ({
 
   const recruiter = await newPage(browser, baseURL, isMobile);
   await logIn(recruiter, group.owner);
-  await recruiter.goto(`/app/hire/talents?location=${city}`);
-  await expect(recruiter.getByRole("heading", { name: /1 talent/ })).toBeVisible();
+  // Lot 4 (planches r2plus TAL, TPROF, CONTACT): the search lives in « Candidats › Talents ».
+  await recruiter.goto(`/app/hire/candidats?vue=talents&lieu=${city}&offre=aucune`);
+  const results = recruiter.locator("main").filter({ visible: true });
+  await expect(results).toContainText("1 profil visible");
   await expectAccessible(recruiter);
-  await recruiter.getByRole("link", { name: "Voir le profil" }).first().click();
+  await results.getByRole("link", { name: /Consulter le profil de Neema/ }).click();
   await expect(recruiter.getByRole("heading", { level: 1 })).toContainText("Neema");
-  await recruiter
-    .locator("#contact-message")
-    .fill("Bonjour Neema, un poste fictif d'analyste pourrait vous intéresser.");
-  await recruiter.getByRole("button", { name: "Envoyer la demande" }).click();
-  await expect(recruiter.getByText("Demande envoyée. Vous serez prévenu")).toBeVisible();
+  await recruiter.getByRole("link", { name: "Proposer l'offre" }).click();
+  await expect(recruiter).toHaveURL(/\/proposer/);
+  await expectAccessible(recruiter);
+  await recruiter.getByRole("button", { name: "Envoyer à Neema" }).click();
+  await expect(recruiter.getByText("Proposition envoyée. Le talent a")).toBeVisible();
 
   // Messages (planche talent-2 § 5): the request sits above the conversations, opened in a sheet.
   await page.goto("/app/messages");
@@ -78,14 +80,7 @@ test("un entretien est planifié puis confirmé par le talent", async ({
   test.skip(isMobile, "Partage la candidature de démonstration : une seule exécution.");
   test.setTimeout(180_000);
   await logIn(page, group.owner);
-  await page.goto("/app/hire/entretiens?candidature=nouveau#planifier");
-  await expectAccessible(page);
-  await page.locator("#interview-application").selectOption({ index: 1 });
-  const slot = new Date(Date.now() + 4 * 86_400_000).toISOString().slice(0, 11) + "10:00";
-  await page.locator("#new-slot-0").fill(slot);
-  await page.locator("#interview-link").fill("https://visio.example/e2e-fictif");
-  await page.getByRole("button", { name: "Envoyer l'invitation" }).click();
-  await expect(page.getByText("Invitation envoyée.")).toBeVisible();
+  await inviteTalent(page, 1, true);
 
   const talent = await newPage(browser, baseURL, isMobile);
   await logIn(talent, group.talent);
@@ -111,16 +106,44 @@ test("un entretien est planifié puis confirmé par le talent", async ({
   await talent.context().close();
 });
 
-/** The recruiter of the fictional group invites the visible talent to an interview with two slots. */
-async function inviteTalent(page: Page) {
-  await page.goto("/app/hire/entretiens?candidature=nouveau#planifier");
-  await page.locator("#interview-application").selectOption({ index: 1 });
-  const day = (days: number) => new Date(Date.now() + days * 86_400_000).toISOString().slice(0, 11);
-  await page.locator("#new-slot-0").fill(`${day(4)}10:00`);
-  await page.locator("#new-slot-1").fill(`${day(5)}15:00`);
-  await page.locator("#interview-link").fill("https://visio.example/e2e-suivi");
-  await page.getByRole("button", { name: "Envoyer l'invitation" }).click();
-  await expect(page.getByText("Invitation envoyée.")).toBeVisible();
+/**
+ * The recruiter of the fictional group invites the visible talent (Vicky Fictive) to an interview
+ * (lot 4, planche r2plus ENT): the month calendar, the day's slots chosen with Orbi's suggestion,
+ * the preview, then the invitation.
+ */
+async function inviteTalent(page: Page, slots = 2, check = false) {
+  await page.goto("/app/hire/entretiens?candidature=nouveau");
+  const sheet = page.getByRole("dialog", { name: "Proposer un entretien à…" });
+  if (check) await expectAccessible(page);
+  await sheet
+    .getByRole("link", { name: /Vicky Fictive/ })
+    .first()
+    .click();
+  await planInterview(page, slots, check);
+}
+
+/** In the planner: a day, `slots` suggested times, the preview, then « Envoyer l'invitation ». */
+async function planInterview(page: Page, slots: number, check = false) {
+  await expect(page).toHaveURL(/\/entretien(\?|$)/);
+  const planner = page.locator("main").filter({ visible: true });
+  await planner.locator('[role="grid"] button:enabled').first().click();
+  await expect(planner.getByRole("button", { name: "Heures", exact: true })).toBeEnabled();
+  if (check) await expectAccessible(page);
+  await planner.getByRole("button", { name: "Heures", exact: true }).click();
+  await expect(page).toHaveURL(/etape=heures/);
+  for (let index = 0; index < slots; index++) {
+    await planner.locator(".t-rx-orbi").getByRole("button", { name: "Ajouter" }).click();
+    await expect(planner).toContainText(`${index + 1} créneau`);
+  }
+  if (check) await expectAccessible(page);
+  await planner.getByRole("button", { name: "Aperçu", exact: true }).click();
+  await expect(
+    planner.getByRole("region", { name: "Aperçu de l'invitation reçue par le talent" }),
+  ).toBeVisible();
+  if (check) await expectAccessible(page);
+  await planner.getByRole("button", { name: "Envoyer l'invitation" }).click();
+  await expect(page).toHaveURL(/\/app\/hire\/entretiens\/[^/?]+\?ok=envoye/);
+  await expect(page.getByText(/Invitation envoyée\./).first()).toBeVisible();
 }
 
 // Prompt 5 (screens 15, 20-22): the talent answers from Suivi. A slot is confirmed only after the
@@ -247,6 +270,8 @@ test("les écrans Hire avancés sont accessibles", async ({ page }) => {
     "/app/hire",
     "/app/hire/viviers",
     "/app/hire/entretiens",
+    "/app/hire/entretiens?vue=mois",
+    "/app/hire/entretiens?vue=evaluer",
     "/app/hire/rapports",
     "/app/organisation?onglet=equipes",
     "/app/organisation?onglet=entites",
@@ -271,23 +296,30 @@ test("les écrans Hire avancés sont accessibles", async ({ page }) => {
   await expectAccessible(page);
 });
 
-// Mockup 04-07: a pool is created from the side panel, then renamed and deleted in place.
+// Lot 4 (planche r2plus VIVIERS): a pool is created from « Mes viviers », then renamed and
+// deleted from its menu.
 test("créer, renommer et supprimer un vivier", async ({ page }) => {
   test.setTimeout(120_000);
   const name = `Vivier e2e ${Math.random().toString(36).slice(2, 7)}`;
   await logIn(page, group.owner);
   await page.goto("/app/hire/viviers");
-  await page.getByRole("link", { name: "Nouveau vivier" }).click();
-  await page.locator("#pool-name").fill(name);
-  await page.getByRole("button", { name: "Créer le vivier" }).click();
-  await expect(page.locator("#vivier-title")).toHaveText(name);
+  await page.getByRole("button", { name: "Créer un vivier" }).first().click();
+  const create = page.getByRole("dialog", { name: "Créer un vivier" });
+  await create.locator("#ri-v-nom").fill(name);
+  await create.getByRole("button", { name: "Créer le vivier" }).click();
+  await expect(page).toHaveURL(/\/app\/hire\/viviers\/[^/?]+\?ok=cree/);
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(name);
   await expect(page.getByText("Vivier créé.").first()).toBeVisible();
-  await page.locator("summary", { hasText: "Renommer" }).click();
-  await page.locator("#pool-rename").fill(`${name} bis`);
-  await page.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(page.locator("#vivier-title")).toHaveText(`${name} bis`);
-  await page.locator("summary", { hasText: "Supprimer le vivier" }).click();
-  await page.getByRole("button", { name: "Supprimer le vivier" }).click();
+  await page.getByRole("button", { name: "Options du vivier" }).click();
+  const menu = page.getByRole("dialog", { name: "Vivier" });
+  await menu.locator("#ri-v-renommer").fill(`${name} bis`);
+  await menu.getByRole("button", { name: "Enregistrer le nom" }).click();
+  await expect(page.getByRole("heading", { level: 1 })).toHaveText(`${name} bis`);
+  await page.getByRole("button", { name: "Options du vivier" }).click();
+  await page
+    .getByRole("dialog", { name: "Vivier" })
+    .getByRole("button", { name: "Supprimer le vivier" })
+    .click();
   await expect(page.getByText("Vivier supprimé.").first()).toBeVisible();
   await expect(page.getByRole("heading", { name: `${name} bis` })).toHaveCount(0);
 });

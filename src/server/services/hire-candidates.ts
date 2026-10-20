@@ -23,6 +23,13 @@ import {
   rejectReasons,
   type HireContext,
 } from "./hire";
+import {
+  ARRIVAL_CALL_MINUTES,
+  scheduleInterview,
+  slotToDate,
+  SLOTS_MAX,
+  validTimeZone,
+} from "./interviews";
 import { notify } from "./notifications";
 import { screeningAnswersOf, screeningQuestionsOf } from "./screening";
 import { addToPool } from "./talent-search";
@@ -233,6 +240,8 @@ type DecisionPayload = {
   /** The e-mail to the talent leaves when the 10 minutes are over (`deliverDueDecisionMails`). */
   mail: "pending" | "sent" | "cancelled" | "none";
   undone?: boolean;
+  /** The call proposed with an acceptance to fix the arrival date (recruteur lot 4). */
+  callInterviewId?: string | null;
 };
 
 const payloadOf = (value: Prisma.JsonValue) =>
@@ -257,6 +266,8 @@ export async function decide(
     poolId?: string | null;
     company: string;
     signer: string;
+    /** Retained: one to three times for a call to fix the arrival date, chosen by the member. */
+    call?: { slots: string[]; timezone: string } | null;
   },
   now = new Date(),
 ) {
@@ -264,6 +275,17 @@ export async function decide(
   const application = await getOrgApplication(db, ctx, applicationId);
   if (application.status === "withdrawn" || decided(application.stage.kind))
     throw new HireError("invalid");
+  const call =
+    input.outcome === "hired" && input.call && input.call.slots.filter(Boolean).length > 0
+      ? input.call
+      : null;
+  // The times are checked before anything changes: a past or unreadable time stops the decision.
+  if (call) {
+    if (!validTimeZone(call.timezone)) throw new HireError("invalid");
+    const dates = call.slots.filter(Boolean).map((slot) => slotToDate(slot, call.timezone));
+    if (dates.length > SLOTS_MAX || dates.some((date) => !date || date <= now))
+      throw new HireError("invalid");
+  }
   const target =
     input.outcome === "withdrawn"
       ? application.stage
@@ -318,6 +340,7 @@ export async function decide(
     mail: input.outcome === "withdrawn" ? "none" : "pending",
     // Written as false (not left out): a JSON path that is missing never matches a filter.
     undone: false,
+    callInterviewId: null,
   };
   const event = await db.applicationEvent.create({
     data: {
@@ -347,6 +370,33 @@ export async function decide(
           : { jobTitle: application.job.title, company, stage: target.name },
       href: `/app/suivi/${application.id}`,
     });
+  }
+  if (call) {
+    const scheduled = await scheduleInterview(
+      db,
+      ctx,
+      {
+        application: application.id,
+        mode: "audio",
+        duration: ARRIVAL_CALL_MINUTES,
+        slots: call.slots.filter(Boolean),
+        timezone: call.timezone,
+        message: "",
+      },
+      now,
+    );
+    if (scheduled.status === "sent")
+      await db.applicationEvent.update({
+        where: { id: event.id },
+        data: {
+          payload: {
+            ...payload,
+            by: "team",
+            messageSent: Boolean(messageId),
+            callInterviewId: scheduled.interviewId,
+          },
+        },
+      });
   }
   return { eventId: event.id, messageSent: Boolean(messageId), poolName };
 }
@@ -443,6 +493,27 @@ export async function undoDecision(
         createdAt: { gte: event.createdAt },
       },
     });
+    if (payload.callInterviewId) {
+      // The call proposed with the acceptance goes with it: cancelled, its card withdrawn.
+      await tx.interview.updateMany({
+        where: { id: payload.callInterviewId, organizationId: ctx.organizationId },
+        data: { status: "canceled" },
+      });
+      await tx.message.updateMany({
+        where: {
+          kind: "invitation",
+          payload: { path: ["interviewId"], equals: payload.callInterviewId },
+        },
+        data: { hiddenAt: now },
+      });
+      await tx.notification.deleteMany({
+        where: {
+          userId: application.profile.user.id,
+          type: "interviewInvite",
+          createdAt: { gte: event.createdAt },
+        },
+      });
+    }
     if (payload.poolAddedId)
       await tx.talentPoolEntry.deleteMany({
         where: { poolId: payload.poolAddedId, profileId: application.profileId },

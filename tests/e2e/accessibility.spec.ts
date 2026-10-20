@@ -74,7 +74,7 @@ const sweeps: { name: string; email: string; paths: string[] }[] = [
       "/app/hire",
       "/app/hire/offres",
       "/app/hire/offres/nouvelle",
-      "/app/hire/talents",
+      "/app/hire/candidats?vue=talents",
       "/app/hire/viviers",
       "/app/hire/entretiens",
       "/app/hire/rapports",

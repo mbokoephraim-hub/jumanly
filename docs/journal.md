@@ -3151,6 +3151,61 @@ de la démo).
 
 **Captures.** `captures/refonte-recruteur-lot-2/` du dossier du projet, 390 px, clair et sombre.
 
+## 2026-10-20 · Étape 2, recruteur lot 4
+
+**Fait.** Entretiens : proposer un entretien depuis le dossier
+(`/app/hire/candidats/[id]/entretien`) avec format, durée, participants, calendrier du mois,
+journée en demi-heures et suggestion d'Orbi, puis aperçu de l'invitation et message relu avant
+l'envoi ; agenda (`/app/hire/entretiens`) en semaine, mois et « À évaluer », filtre Les miens /
+L'équipe, « + » vers les candidatures en cours ; préparation (`/app/hire/entretiens/[id]`) avec
+les points et questions d'Orbi tirés des compétences de l'offre, questions de l'équipe (refusées
+si elles touchent à la vie privée), partage du lien et suivi (reprogrammer, terminé, absent,
+annuler) ; évaluation (`/app/hire/candidats/[id]/evaluation`) de 1 à 4 par critère, avis, suite
+proposée (avec « Hésitation »), brouillon sur l'appareil, avis de l'équipe après le sien.
+Talents : recherche dans « Candidats › Talents » (`?vue=talents`) avec les seuls filtres permis,
+comparaison avec une offre, « Mes propositions » (`?vue=propositions`), profil d'un talent
+(`/app/hire/talents/[id]`, consultation journalisée), « Proposer l'offre »
+(`/app/hire/talents/[id]/proposer`) et viviers (`/app/hire/viviers`, `/app/hire/viviers/[id]`).
+Restes du lot 3 : appel d'arrivée dans le message d'acceptation (droit `connect.appointments`,
+annulé avec la décision) et « Ajouter à un vivier » depuis le dossier. Le lot 5 (messages,
+notifications, organisation, équipe, abonnement, rapports) n'est pas construit ; ses liens
+restent valides.
+
+**Données.** Migration `20261020200000_recruteur_lot_4_entretiens_questions_hesitation` :
+colonne `Interview.questions` (questions de l'équipe pour préparer un entretien, `[]` par défaut) et recommandation `maybe`
+(« Hésitation »). Aucune donnée effacée. Le seed ajoute trois talents fictifs visibles sans
+candidature (`ruth.ux`, `kevin.ux`, `sarah.ux`), quatre entretiens, un vivier « Data junior
+(démo) » et deux propositions pour Baobab Fintech (fictive).
+
+**Ancien design supprimé.** Fichier `src/components/hire/scorecard-panel.tsx`. Écrans réécrits
+(ancien contenu effacé) : `src/app/app/hire/entretiens/page.tsx`,
+`src/app/app/hire/talents/page.tsx` (redirection vers `?vue=talents`),
+`src/app/app/hire/talents/[profileId]/page.tsx`, `src/app/app/hire/viviers/page.tsx`,
+`src/app/app/hire/viviers/[id]/page.tsx`. Fonctions : `QuotaLine`, `statusKey`
+(`src/components/hire/kit.tsx`), `contactRequestAction` (`src/server/actions/hire-advanced.ts`).
+Les liens des notifications d'entretien mènent à la préparation.
+
+**Corrections trouvées par les tests.** Une feuille se ferme désormais quand on touche un de ses
+liens : l'écran gardé derrière le suivant laissait la feuille modale et rendait le nouvel écran
+inerte. Les demi-heures de la journée font 26 px de haut (cible tactile de 24 px au moins). Le
+message d'acceptation se met à jour quand on ajoute l'appel d'arrivée. La suggestion d'Orbi écrit « 2e choix » (et non « #e »). Dans l'administration, les liens des membres de la fiche d'une organisation atteignent 24 px de haut (contrôle d'accessibilité de `admin-pass.spec.ts`, révélé quand la première organisation de la liste a deux membres).
+
+**Tests.** Unitaires `tests/unit/interview-calendar.test.ts` (fuseaux, grille du mois,
+occupation, matinées libres, suggestion, questions proposées, niveaux d'expérience, barre
+d'onglets) ; en base `tests/db/hire-interviews.test.ts` (isolation et droits du planificateur,
+créneau proposé par le talent, questions protégées, évaluations, recherche par compétences et
+niveau, propositions et viviers par organisation, appel annulé avec la décision). Parcours e2e
+`tests/e2e/mobile-recruteur-entretiens.spec.ts` (entretien de bout en bout, talents et viviers,
+appel d'arrivée, aucun débordement à 390 et 412 px) ; `hire-advanced.spec.ts` et
+`accessibility.spec.ts` suivent les nouveaux écrans.
+
+**Écarts.** `docs/decisions/2026-10-20-recruteur-lot-4.md` (occupation lue dans Jumanly seulement,
+notes de 1 à 4, évaluation par candidature, brouillon local, pas de rappel la veille, recherche
+comparée par défaut à l'offre la plus récente, « Relancer » non construit, seconde consultation
+journalisée par « Proposer l'offre », anciennes clés de texte gardées).
+
+**Captures.** `captures/refonte-recruteur-lot-4/` du dossier du projet, 390 px, clair et sombre.
+
 ## 2026-10-20 · Étape 2, recruteur lot 3
 
 **Fait.** Candidats d'une offre par étape (`/app/hire/candidats`), avec choix de l'offre, tri et

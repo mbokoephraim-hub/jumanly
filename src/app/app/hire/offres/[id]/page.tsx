@@ -209,7 +209,7 @@ export default async function OfferPage({
               {t("published.copy")}
             </CopyRow>
           )}
-          <Link href="/app/hire/talents" className="t-verre t-press">
+          <Link href="/app/hire/candidats?vue=talents" className="t-verre t-press">
             <span className="t-cases" style={{ background: "var(--g-oppo)" }} aria-hidden>
               <TalentIcon name="recherche" size="s" />
             </span>
