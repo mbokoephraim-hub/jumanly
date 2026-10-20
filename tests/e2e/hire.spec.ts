@@ -30,7 +30,9 @@ async function signUpRecruiter(page: Page, email: string, orgName: string) {
   await expect(page.getByRole("heading", { name: "Vous recrutez pour…" })).toBeVisible();
   await page.getByText("Mon entreprise").click();
   await page.getByRole("button", { name: "Continuer" }).click();
-  await expect(page.getByRole("heading", { name: "Votre organisation" })).toBeVisible();
+  await expect(
+    page.getByRole("heading", { name: "Votre organisation", exact: true }),
+  ).toBeVisible();
   await page.locator("#rh-ob-size").selectOption("11-50");
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(
