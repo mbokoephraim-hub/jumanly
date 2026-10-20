@@ -36,6 +36,11 @@
   pointer-events: none;
   cursor: progress;
 }
+/* The button pressed shows it works, at once (its spinner, when it has one, comes with it). */
+:is(button, input[type="submit"])[data-sending] {
+  opacity: 0.72;
+  transition: opacity 120ms ease;
+}
 
 .jm-nav-progress {
   position: fixed;
