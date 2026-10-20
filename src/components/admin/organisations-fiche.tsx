@@ -324,7 +324,7 @@ export async function OrgCard({
               >
                 <Link
                   href={`/admin/utilisateurs?fiche=${member.user.id}`}
-                  className="min-w-0 flex-1 truncate font-medium underline-offset-2 hover:underline"
+                  className="block min-h-6 min-w-0 flex-1 truncate py-[3.5px] font-medium underline-offset-2 hover:underline"
                 >
                   {member.user.name}
                 </Link>

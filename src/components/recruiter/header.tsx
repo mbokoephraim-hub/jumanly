@@ -33,7 +33,11 @@ function ownRecruiterHead(pathname: string) {
     // Lot 2: the offer, its four steps and its job sheet (planches recruteur-1 CR, OD_R, PDF_V).
     /^\/app\/hire\/offres\/[^/]+(\/modifier|\/fiche)?$/.test(pathname) ||
     // Lot 3: a candidate's file and its final decision (planches recruteur-2 DOS, DECIS).
-    /^\/app\/hire\/candidats\/[^/]+(\/decision)?$/.test(pathname)
+    /^\/app\/hire\/candidats\/[^/]+(\/decision|\/entretien|\/evaluation)?$/.test(pathname) ||
+    // Lot 4: the agenda, an interview, a talent's profile and its proposal, the pools.
+    /^\/app\/hire\/entretiens(\/[^/]+)?$/.test(pathname) ||
+    /^\/app\/hire\/talents\/[^/]+(\/proposer)?$/.test(pathname) ||
+    /^\/app\/hire\/viviers(\/[^/]+)?$/.test(pathname)
   );
 }
 

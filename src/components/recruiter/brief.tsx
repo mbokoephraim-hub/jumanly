@@ -35,7 +35,7 @@ export async function RecruiterBrief({
       key: "scorecards" as const,
       count: today.counts.scorecards,
       line: null,
-      href: "/app/hire/entretiens",
+      href: "/app/hire/entretiens?vue=evaluer",
       tone: "t-r5-n3",
     },
     {

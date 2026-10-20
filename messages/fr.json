@@ -3271,6 +3271,7 @@
     "title": {
       "interviewInvite": "Invitation à un entretien",
       "interviewCanceled": "Entretien annulé",
+      "interviewAccepted": "Entretien confirmé",
       "profileViewed": "Votre profil a été consulté",
       "statusChange": "Étape « {stage} »",
       "notSelected": "Candidature non retenue",
@@ -10505,7 +10506,15 @@
       "export": "Exporter l'historique"
     },
     "evaluation": {
-      "title": "Évaluation"
+      "title": "Évaluation",
+      "locked": "Les grilles d'évaluation font partie du forfait {plan}.",
+      "mine": "Votre évaluation : <b>{suite}</b>.",
+      "notYet": "Vous n'avez pas encore évalué ce candidat.",
+      "team": "{count, plural, one {# évaluation} other {# évaluations}} · moyenne {average} sur {max}",
+      "hidden": "{count, plural, one {# collègue a évalué.} other {# collègues ont évalué.}} Leurs avis s'affichent après l'envoi du vôtre.",
+      "pending": "Pas encore évalué par : {names}",
+      "open": "Évaluer",
+      "edit": "Modifier mon évaluation"
     },
     "bar": {
       "aria": "Actions sur la candidature",
@@ -10521,7 +10530,8 @@
       "document": "Demander un document",
       "cv": "Télécharger le CV",
       "decision": "Décision finale",
-      "close": "Fermer"
+      "close": "Fermer",
+      "pool": "Ajouter à un vivier"
     },
     "move": {
       "title": "Déplacer {name}",
@@ -10540,7 +10550,8 @@
       "noteOrbi": "Analyse ajoutée à vos notes. Vous pouvez la modifier.",
       "signale": "Merci : l'erreur est notée avec l'analyse.",
       "annulee": "Décision annulée : la candidature est revenue à son étape.",
-      "plusTard": "La candidature attend en « {stage} »."
+      "plusTard": "La candidature attend en « {stage} ».",
+      "evaluation": "Évaluation enregistrée."
     },
     "error": {
       "etape": "L'étape n'a pas pu être changée. Réessayez."
@@ -10582,7 +10593,12 @@
       "evaluations": "Évaluations de l'équipe",
       "evaluationAria": "{name} : {score} sur 5",
       "error": "La décision n'a pas pu être enregistrée. Réessayez.",
-      "errorMessage": "Le message au candidat est vide : écrivez-le ou choisissez un ton."
+      "errorMessage": "Le message au candidat est vide : écrivez-le ou choisissez un ton.",
+      "call": "Proposer un appel d'arrivée",
+      "callText": "Un appel de {minutes} min pour fixer la date d'arrivée : le talent choisit un créneau.",
+      "callSlot": "Créneau {rank}",
+      "callNote": "Heures du fuseau {zone}. Le premier créneau est obligatoire.",
+      "callError": "Vérifiez les créneaux de l'appel : ils doivent être à venir."
     },
     "done": {
       "title": "Décision enregistrée",
@@ -11178,6 +11194,613 @@
     "formerMember": "Ancien membre",
     "you": "Vous",
     "rule": "Le journal garde les 90 derniers jours, 100 consultations au plus."
+  },
+  "hireInterviews": {
+    "seo": "Entretiens",
+    "plan": {
+      "title": "Proposer un entretien",
+      "titleReschedule": "Proposer d'autres créneaux",
+      "back": "Retour au dossier",
+      "scoreAria": "Correspondance avec l'offre : {score} %",
+      "lockedTitle": "Entretiens non inclus",
+      "locked": "Proposer des entretiens dans Jumanly fait partie du forfait {plan}.",
+      "lockedNoPlan": "Proposer des entretiens dans Jumanly n'est pas inclus dans votre forfait.",
+      "seePlans": "Voir les forfaits",
+      "error": {
+        "past": "Un des créneaux est déjà passé. Choisissez des heures à venir.",
+        "invalid": "Vérifiez les créneaux, le lien ou l'adresse avant d'envoyer.",
+        "other": "L'invitation n'a pas pu être envoyée. Réessayez."
+      },
+      "rescheduleKeep": "Même entretien : {mode}, {duration}.",
+      "modeLegend": "Format",
+      "mode": {
+        "video": "Visio",
+        "onsite": "Sur site",
+        "audio": "Audio"
+      },
+      "durationLegend": "Durée",
+      "durationChip": {
+        "30": "30 min",
+        "45": "45 min",
+        "60": "1 h",
+        "90": "1 h 30"
+      },
+      "duration": "{minutes, select, 30 {30 min} 45 {45 min} 60 {1 h} 90 {1 h 30} other {{minutes} min}}",
+      "slotShort": "{day} à {time}",
+      "slotLong": "{day} à {time}",
+      "recapNone": "Choisissez un jour",
+      "recapDay": "{day} · {times}",
+      "orbiMornings": "{count, plural, one {Vous êtes libre} other {<b>{names}</b> sont libres}} le matin : <b>{days}</b> · d'après les entretiens déjà prévus dans Jumanly.",
+      "you": "Vous",
+      "participants": "Participants",
+      "invite": "Inviter",
+      "pickDay": "Choisissez un jour",
+      "pickHours": "Choisissez les heures",
+      "pickDayText": "Touchez un jour du calendrier pour voir les heures libres.",
+      "hours": "Heures",
+      "teamTitle": "Qui participe ?",
+      "close": "Fermer",
+      "meName": "{name} (vous)",
+      "teamNote": "Les membres invités reçoivent l'entretien dans leur agenda Jumanly.",
+      "calendar": "Calendrier",
+      "week": "Semaine",
+      "orbiSuggest": "{alone, select, yes {Vous êtes libre} other {L'équipe est libre}} <b>{slot}</b>. Ajouter un {rank, plural, =1 {1er} other {#e}} choix ?",
+      "add": "Ajouter",
+      "zone": "Heures affichées pour le fuseau {zone}",
+      "address": "Adresse",
+      "addressPlaceholder": "Rue, bâtiment, étage",
+      "link": "Lien de la visio (facultatif)",
+      "linkAudio": "Lien de l'appel (facultatif)",
+      "linkHint": "Vous pourrez l'ajouter plus tard. {firstName} le recevra avant l'entretien.",
+      "count": "{count} {count, plural, one {créneau} other {créneaux}} sur {max}",
+      "preview": "Aperçu",
+      "previewTitle": "Aperçu de l'invitation",
+      "previewFor": "Ce que {firstName} verra",
+      "previewAria": "Aperçu de l'invitation reçue par le talent",
+      "previewKicker": "Invitation à un entretien",
+      "verified": "Vérifiée",
+      "rowOnsite": "Sur site · {duration} · {address}",
+      "rowRemote": "{mode} · {duration}",
+      "rowWith": "Avec {names}",
+      "previewConfirm": "Confirmer",
+      "previewOther": "Autre date",
+      "rescheduleNote": "{firstName} reçoit les nouveaux créneaux ; les anciens ne sont plus proposés.",
+      "ownMessage": "Votre message",
+      "messageLabel": "Message à {firstName}",
+      "prepared": "Préparé par Orbi, à relire",
+      "edited": "Modifié par vous",
+      "edit": "Modifier",
+      "tones": "Ton du message",
+      "tone": {
+        "chaleureux": "Chaleureux",
+        "court": "Plus court",
+        "formel": "Formel",
+        "moi": "Écrire moi-même"
+      },
+      "checkNotify": "{firstName} est prévenu dans Jumanly et par e-mail",
+      "checkAgenda": "Une fois le créneau confirmé, chacun peut l'ajouter à son agenda (.ics)",
+      "checkTeam": "{count, plural, =0 {Vous seul participez} one {# membre de l'équipe est invité} other {# membres de l'équipe sont invités}}",
+      "modify": "Modifier",
+      "sendReschedule": "Envoyer les créneaux",
+      "send": "Envoyer l'invitation",
+      "teamDay": "Journée de l'équipe",
+      "halves": "Demi-heures de la journée",
+      "halfAria": "Choisir {time}",
+      "busy": "{count, plural, one {{names} occupé} other {{names} occupés}}",
+      "busyTentative": "Proposé à un candidat",
+      "slotRank": "Choix {rank} · {time}",
+      "slotMeta": "{duration} · {mode}",
+      "remove": "Retirer {time}"
+    },
+    "calendar": {
+      "previous": "Mois précédent",
+      "next": "Mois suivant",
+      "letter": {
+        "l": "L",
+        "ma": "M",
+        "me": "M",
+        "j": "J",
+        "v": "V",
+        "s": "S",
+        "d": "D"
+      },
+      "weekday": {
+        "l": "lundi",
+        "ma": "mardi",
+        "me": "mercredi",
+        "j": "jeudi",
+        "v": "vendredi",
+        "s": "samedi",
+        "d": "dimanche"
+      },
+      "free": "Équipe libre",
+      "few": "Peu de place",
+      "chosen": "Choisi"
+    },
+    "invite": {
+      "chaleureux": "Bonjour {firstName},\\n\\nMerci pour votre candidature au poste de {jobTitle}. {strengthLine}\\n\\nNous aimerions vous rencontrer : choisissez le créneau qui vous convient parmi ceux proposés, ou proposez-en un autre.\\n\\nÀ très vite,\\n{signer}, {company}",
+      "court": "Bonjour {firstName},\\n\\nVotre candidature au poste de {jobTitle} nous intéresse. {strengthLine}\\n\\nChoisissez un créneau pour un entretien.\\n\\n{signer}, {company}",
+      "formel": "Bonjour {firstName},\\n\\nNous avons bien étudié votre candidature au poste de {jobTitle}. {strengthLine}\\n\\nNous souhaitons vous proposer un entretien. Merci de confirmer l'un des créneaux ci-dessous ou de nous en proposer un autre.\\n\\nCordialement,\\n{signer}, {company}",
+      "strength": {
+        "chaleureux": "Votre maîtrise de {strength} a retenu notre attention.",
+        "court": "Votre maîtrise de {strength} compte pour ce poste.",
+        "formel": "Votre maîtrise de {strength} correspond aux attentes du poste."
+      }
+    },
+    "agenda": {
+      "title": "Entretiens",
+      "back": "Retour à l'accueil",
+      "new": "Proposer un entretien",
+      "newTitle": "Proposer un entretien à…",
+      "newEmpty": "Aucune candidature en cours. Les entretiens se proposent depuis le dossier d'un candidat.",
+      "views": "Vues de l'agenda",
+      "week": "Semaine",
+      "month": "Mois",
+      "evaluate": "À évaluer · {count}",
+      "whose": "Entretiens affichés",
+      "mine": "Les miens",
+      "team": "L'équipe",
+      "orbi": "Préparez l'entretien de <b>{name}</b> ({when}) : Orbi propose des questions à partir de son dossier.",
+      "open": "Ouvrir",
+      "previousWeek": "Semaine précédente",
+      "nextWeek": "Semaine suivante",
+      "weekOf": "Du {from} au {to}",
+      "weekDays": "Jours de la semaine",
+      "dayCount": "{day} : {count, plural, =0 {aucun entretien} one {# entretien} other {# entretiens}}",
+      "waiting": "En attente de réponse · {count}",
+      "slotsSent": "{count, plural, one {# créneau proposé} other {# créneaux proposés}}",
+      "proposedBack": "{count, plural, one {# autre date proposée} other {# autres dates proposées}}",
+      "emptyWeek": "Aucun entretien cette semaine",
+      "emptyText": "Proposez un entretien depuis le dossier d'un candidat ou avec « + ».",
+      "emptyTextReader": "Les entretiens où vous êtes invité apparaissent ici.",
+      "today": "Aujourd'hui · {day}",
+      "emptyDay": "Aucun entretien ce jour-là.",
+      "evaluateEmpty": "Rien à évaluer",
+      "evaluateEmptyText": "Après chaque entretien, votre évaluation est demandée ici.",
+      "evaluateCta": "Évaluer",
+      "evaluateAria": "Évaluer l'entretien de {name}",
+      "status": {
+        "confirmed": "Confirmé",
+        "pending": "Sans réponse",
+        "reschedule": "Autre date",
+        "done": "Terminé",
+        "noShow": "Absent",
+        "canceled": "Annulé",
+        "declined": "Décliné"
+      }
+    },
+    "prep": {
+      "title": "Préparer l'entretien",
+      "back": "Retour aux entretiens",
+      "more": "Suivi de l'entretien",
+      "moreTitle": "Suivi de l'entretien",
+      "ok": {
+        "sent": "Invitation envoyée. {firstName} choisit un créneau.",
+        "confirmed": "Entretien confirmé. Le candidat est prévenu.",
+        "rescheduled": "Nouveaux créneaux envoyés à {firstName}.",
+        "canceled": "Entretien annulé. {firstName} est prévenu.",
+        "done": "Entretien marqué comme terminé.",
+        "noShow": "Absence enregistrée.",
+        "question": "Question ajoutée.",
+        "questionRemoved": "Question retirée."
+      },
+      "question": {
+        "protected": "Cette question touche à la vie privée (âge, famille, santé, religion, origine…). Elle ne peut pas être posée.",
+        "invalid": "Écrivez une question d'au moins 5 caractères.",
+        "full": "{max} questions au plus par entretien."
+      },
+      "error": "L'action n'a pas abouti. Réessayez.",
+      "when": "Date",
+      "with": "Avec",
+      "status": {
+        "pending": "{firstName} n'a pas encore choisi de créneau.",
+        "reschedule": "{firstName} propose d'autres dates.",
+        "confirmed": "{day} à {time}",
+        "declined": "{firstName} a décliné l'entretien.",
+        "canceled": "Entretien annulé.",
+        "done": "Entretien terminé.",
+        "noShow": "{firstName} n'est pas venu."
+      },
+      "slots": "Créneaux proposés",
+      "slotAt": "{day} à {time}",
+      "proposed": "Dates proposées par {firstName}",
+      "accept": "Accepter",
+      "newTimes": "Proposer d'autres créneaux",
+      "checkTitle": "Ce qu'il faut vérifier",
+      "checkSub": "D'après le dossier et les compétences de l'offre.",
+      "checkNone": "L'offre ne liste pas de compétences : préparez vos propres questions.",
+      "allProven": "Chaque compétence est prouvée : vérifiez la profondeur plutôt que la présence.",
+      "point": {
+        "certificate": "{skill} : prouvé par une attestation",
+        "project": "{skill} : montré dans un projet",
+        "experience": "{skill} : pratiqué en poste",
+        "declared": "{skill} : déclaré sans preuve",
+        "missing": "{skill} : absent du profil"
+      },
+      "questions": "Questions proposées",
+      "add": "Ajouter",
+      "ask": {
+        "certificate": "Racontez une situation où vous avez utilisé {skill} après votre formation.",
+        "project": "Présentez le projet où vous avez utilisé {skill} : votre rôle et le résultat.",
+        "experience": "Dans votre dernier poste, que faisiez-vous avec {skill} au quotidien ?",
+        "declared": "Pouvez-vous montrer un exemple concret de travail avec {skill} ?",
+        "missing": "Comment aborderiez-vous une tâche qui demande {skill} ?"
+      },
+      "required": "indispensable",
+      "preferred": "souhaitée",
+      "toCheck": "à vérifier",
+      "by": "Ajoutée par {name}",
+      "formerMember": "un ancien membre",
+      "remove": "Retirer la question « {question} »",
+      "guard": "Les questions portent sur le poste et les compétences, jamais sur la vie privée.",
+      "actions": "Actions de l'entretien",
+      "share": "Partager",
+      "evaluate": "Ouvrir l'évaluation",
+      "file": "Voir le dossier",
+      "shareTitle": "Partager la préparation",
+      "shareText": "Les membres de l'équipe qui ont accès à l'offre ouvrent cette préparation avec le lien.",
+      "copy": "Copier le lien",
+      "copied": "Lien copié.",
+      "writeCandidate": "Écrire à {firstName}",
+      "addTitle": "Ajouter une question",
+      "addLabel": "Votre question",
+      "addPlaceholder": "Ex. Comment priorisez-vous vos demandes ?",
+      "addNote": "Visible par l'équipe qui prépare l'entretien, pas par le candidat.",
+      "addSubmit": "Ajouter la question",
+      "markDone": "Marquer comme terminé",
+      "markNoShow": "{firstName} n'est pas venu",
+      "cancelReason": "Message à {firstName} (facultatif)",
+      "cancel": "Annuler l'entretien"
+    },
+    "evaluation": {
+      "title": "Évaluer l'entretien",
+      "back": "Retour",
+      "interviewOn": "Entretien du {date}",
+      "lockedTitle": "Évaluations non incluses",
+      "locked": "Les grilles d'évaluation font partie du forfait {plan}.",
+      "lockedNoPlan": "Les grilles d'évaluation ne sont pas incluses dans votre forfait.",
+      "seePlans": "Voir les forfaits",
+      "roleTitle": "Évaluation réservée",
+      "role": "Votre rôle dans l'organisation ne permet pas d'évaluer les candidats.",
+      "general": "Impression générale",
+      "criteria": "Critères de l'offre",
+      "rating": {
+        "1": "1 sur 4, insuffisant",
+        "2": "2 sur 4, partiel",
+        "3": "3 sur 4, bon",
+        "4": "4 sur 4, excellent"
+      },
+      "opinion": "Votre avis",
+      "opinionPlaceholder": "Ce que vous avez observé pendant l'entretien",
+      "next": "Suite proposée",
+      "suite": {
+        "no": "Ne pas poursuivre",
+        "yes": "Poursuivre",
+        "maybe": "Hésitation"
+      },
+      "draft": "Brouillon",
+      "draftSaved": "Brouillon gardé sur cet appareil.",
+      "draftFailed": "Le brouillon n'a pas pu être gardé sur cet appareil.",
+      "save": "Enregistrer",
+      "compare": "Comparer",
+      "orbi": {
+        "hidden": "Les évaluations de l'équipe s'affichent après l'envoi de la vôtre, pour que chacun donne son avis librement.",
+        "alone": "Vous êtes le premier à évaluer ce candidat.",
+        "compare": "{yes, plural, =0 {Aucun collègue ne propose} one {<b># collègue sur {count}</b> propose} other {<b># collègues sur {count}</b> proposent}} de poursuivre."
+      },
+      "teamTitle": "Évaluations de l'équipe",
+      "close": "Fermer",
+      "average": "Moyenne {value} sur {max}",
+      "guard": "La suite proposée ne déplace pas le candidat : la décision reste celle de l'équipe.",
+      "error": {
+        "invalid": "Notez chaque critère et choisissez une suite.",
+        "other": "L'évaluation n'a pas pu être enregistrée. Réessayez."
+      }
+    }
+  },
+  "hireTalents": {
+    "seo": "Rechercher des talents",
+    "title": "Rechercher des talents",
+    "tabs": {
+      "aria": "Vues de la recherche de talents",
+      "discover": "Découvrir",
+      "proposals": "Mes propositions"
+    },
+    "locked": {
+      "title": "Recherche de talents non incluse",
+      "text": "Chercher parmi les profils rendus visibles fait partie du forfait {plan}.",
+      "noPlan": "La recherche de talents n'est pas incluse dans votre forfait.",
+      "cta": "Voir les forfaits"
+    },
+    "search": {
+      "label": "Rechercher un talent",
+      "placeholder": "Compétence, métier, ville"
+    },
+    "count": {
+      "withOffer": "{count, plural, =0 {Aucun profil visible} one {# profil visible} other {# profils visibles}} · comparés à <b>« {title} »</b>",
+      "plain": "{count, plural, =0 {Aucun profil visible} one {# profil visible} other {# profils visibles}}"
+    },
+    "offer": {
+      "change": "Changer",
+      "title": "Comparer avec une offre",
+      "close": "Fermer",
+      "none": "Sans offre (pas de score)"
+    },
+    "quota": "Les recherches du mois sont utilisées. Elles reviennent le {date}.",
+    "rateLimited": "Trop de recherches en peu de temps. Réessayez dans quelques minutes.",
+    "empty": {
+      "title": "Que cherchez-vous ?",
+      "text": "Saisissez une compétence, un métier ou une ville, ou choisissez une offre pour comparer les profils."
+    },
+    "none": {
+      "title": "Aucun profil visible ne correspond",
+      "text": "Seuls les talents qui ont rendu leur profil visible apparaissent. Élargissez la recherche."
+    },
+    "availability": {
+      "open": "Disponible",
+      "listening": "À l'écoute",
+      "notLooking": "Pas en recherche"
+    },
+    "filters": {
+      "open": "Filtres",
+      "openActive": "Filtres · {count} actifs",
+      "active": "Filtres actifs",
+      "remove": "Retirer le filtre {filter}",
+      "title": "Filtres",
+      "close": "Fermer",
+      "skills": "Compétences",
+      "addSkill": "Ajouter une compétence",
+      "place": "Lieu",
+      "anywhere": "Partout",
+      "remote": "À distance",
+      "experience": "Expérience",
+      "level": {
+        "sans": "Sans expérience",
+        "junior": "Junior",
+        "confirme": "Confirmé"
+      },
+      "availabilityTitle": "Disponibilité",
+      "availability": {
+        "open": "Disponible",
+        "listening": "À l'écoute"
+      },
+      "deepLocked": "Expérience, disponibilité et travail à distance : avec le forfait {plan}.",
+      "guard": "Pas de filtre sur l'âge, le genre, la nationalité ou la photo. Seuls les profils rendus visibles apparaissent.",
+      "quota": "{used} recherches utilisées sur {max} ce mois-ci.",
+      "clear": "Effacer",
+      "submit": "Voir les profils"
+    },
+    "list": {
+      "anonymous": "Profil anonyme · {headline}",
+      "noHeadline": "Talent",
+      "percent": "{value} %",
+      "withOffer": "avec l'offre",
+      "scoreAria": "Correspondance avec l'offre : {score} %",
+      "openAria": "Consulter le profil de {name}",
+      "open": "Consulter",
+      "loading": "Chargement des profils suivants",
+      "retry": "Réessayer",
+      "end": "Fin de la liste. Affinez la recherche pour voir d'autres profils."
+    },
+    "proposals": {
+      "title": "Mes propositions",
+      "filters": "Filtrer les propositions",
+      "all": "Toutes",
+      "filter": {
+        "acceptees": "Acceptées",
+        "attente": "En attente",
+        "refusees": "Refusées"
+      },
+      "empty": "Aucune proposition",
+      "emptyText": "Proposez une offre depuis le profil d'un talent : il choisit d'y répondre ou non.",
+      "sentAgo": "{days, plural, =0 {Envoyée aujourd'hui} one {Envoyée il y a # jour} other {Envoyée il y a # jours}}",
+      "status": {
+        "accepted": "Acceptée",
+        "pending": "En attente",
+        "declined": "Refusée",
+        "expired": "Expirée"
+      },
+      "write": "Écrire à {name}",
+      "quota": "Propositions ce mois",
+      "quotaValue": "{used} sur {max}"
+    },
+    "profile": {
+      "seo": "Profil du talent",
+      "back": "Retour à la recherche",
+      "blocked": "Beaucoup de profils ont été ouverts en peu de temps. La consultation reprend dans une heure ; votre administrateur est prévenu.",
+      "anonymous": "Profil anonyme · {headline}",
+      "noHeadline": "Talent",
+      "anonymousShort": "ce talent",
+      "point": {
+        "certificate": "{skill} prouvé par une attestation",
+        "project": "{skill} montré dans un projet",
+        "experience": "{skill} pratiqué en poste",
+        "declared": "{skill} déclaré sans preuve : à vérifier",
+        "missing": "{skill} absent du profil : à vérifier"
+      },
+      "more": "Plus d'options",
+      "moreTitle": "Options",
+      "close": "Fermer",
+      "available": "Disponible",
+      "listening": "À l'écoute",
+      "logged": "Consultation enregistrée",
+      "stats": "En bref",
+      "stat": {
+        "years": "{count, plural, one {an d'expérience} other {ans d'expérience}}",
+        "proven": "{count, plural, one {compétence prouvée} other {compétences prouvées}}",
+        "projects": "{count, plural, one {projet} other {projets}}",
+        "certificates": "{count, plural, one {attestation} other {attestations}}"
+      },
+      "note": {
+        "applied": "Ce talent a candidaté chez vous : vous voyez son profil complet.",
+        "full": "Ce talent a accepté votre proposition : vous voyez son profil complet.",
+        "anonymous": "Profil anonyme : le nom, les employeurs et les projets restent cachés tant que le talent n'a pas accepté une proposition.",
+        "limited": "Résumé du profil : les employeurs et les descriptions apparaissent si le talent candidate ou accepte une proposition."
+      },
+      "orbi": {
+        "title": "Ce qu'Orbi relève",
+        "sub": "Comparé à « {title} ».",
+        "change": "Changer",
+        "changeTitle": "Comparer avec une offre",
+        "scoreAria": "Correspondance avec l'offre : {score} %",
+        "noSkills": "L'offre ne liste pas de compétences à comparer.",
+        "why": "Voir le détail du score",
+        "optedOut": "Ce talent a désactivé le calcul de correspondance : pas de score.",
+        "noScore": "Le score de correspondance n'est pas inclus dans votre forfait.",
+        "incomplete": "Profil trop incomplet pour calculer un score."
+      },
+      "skills": {
+        "title": "Compétences de l'offre",
+        "all": "Toutes ses compétences"
+      },
+      "summary": "Présentation",
+      "projects": "Projets",
+      "experience": "Expérience professionnelle",
+      "now": "aujourd'hui",
+      "education": "Formation",
+      "jumanly": "Attestation Jumanly",
+      "actions": "Actions sur ce profil",
+      "pool": "Vivier",
+      "write": "Écrire à {firstName}",
+      "seeApplication": "Voir sa candidature",
+      "pending": "Proposition envoyée",
+      "propose": "Proposer l'offre",
+      "proposals": "Mes propositions",
+      "pools": "Mes viviers",
+      "guard": "Le talent décide seul de répondre. Il ne voit pas que vous avez consulté son profil, mais la consultation est enregistrée.",
+      "ok": {
+        "proposee": "Proposition envoyée. Le talent a {days} jours pour répondre.",
+        "vivier": "Ajouté au vivier."
+      },
+      "error": {
+        "pool": "Donnez un nom d'au moins 2 caractères au vivier.",
+        "forbidden": "Cette action n'est pas incluse dans votre forfait ou votre rôle.",
+        "other": "L'action n'a pas abouti. Réessayez."
+      }
+    },
+    "propose": {
+      "title": "Proposer l'offre",
+      "back": "Retour au profil",
+      "anonymous": "Profil anonyme · {headline}",
+      "noHeadline": "Talent",
+      "anonymousShort": "ce talent",
+      "scoreAria": "Correspondance avec l'offre : {score} %",
+      "offer": "Offre proposée",
+      "noOffer": "Aucune offre publiée : un simple message",
+      "noOfferTitle": "nos prochains postes",
+      "change": "Changer",
+      "changeTitle": "Choisir l'offre",
+      "close": "Fermer",
+      "prepared": "Personnalisé par Orbi, à relire",
+      "edited": "Modifié par vous",
+      "edit": "Modifier",
+      "messageLabel": "Votre message",
+      "tones": "Ton du message",
+      "tone": {
+        "chaleureux": "Chaleureux",
+        "court": "Plus court",
+        "formel": "Formel"
+      },
+      "message": {
+        "chaleureux": "Bonjour{named, select, yes { {firstName}} other {}},\\n\\nVotre profil a retenu notre attention pour le poste de {jobTitle} chez {company}. {strengthLine}\\n\\nSi l'offre vous intéresse, acceptez cette proposition : nous pourrons échanger ici.\\n\\nBelle journée,\\n{signer}",
+        "court": "Bonjour{named, select, yes { {firstName}} other {}},\\n\\nLe poste de {jobTitle} chez {company} pourrait vous intéresser. {strengthLine}\\n\\n{signer}",
+        "formel": "Bonjour{named, select, yes { {firstName}} other {}},\\n\\nNous recrutons pour le poste de {jobTitle} chez {company} et votre profil correspond à nos attentes. {strengthLine}\\n\\nSi vous le souhaitez, acceptez cette proposition afin que nous puissions vous présenter le poste.\\n\\nCordialement,\\n{signer}"
+      },
+      "strength": {
+        "chaleureux": "Votre maîtrise de {strength} nous a marqués.",
+        "court": "Votre maîtrise de {strength} compte pour ce poste.",
+        "formel": "Votre maîtrise de {strength} correspond au poste."
+      },
+      "attach": "Joindre l'annonce",
+      "attachText": "Le talent voit l'offre complète avec votre message.",
+      "quota": "Propositions ce mois",
+      "quotaValue": "{used} sur {max}",
+      "guard": "Le talent décide seul de répondre ; sans réponse sous {days} jours, la proposition expire. Ses coordonnées ne sont partagées que s'il accepte.",
+      "cancel": "Annuler",
+      "send": "Envoyer à {firstName}",
+      "sendAnonymous": "Envoyer la proposition",
+      "error": {
+        "quota": "Les propositions du mois sont utilisées. Elles reviennent le {date}.",
+        "cooldown": "Ce talent a refusé une proposition récemment. Attendez {days} jours avant de lui en refaire une.",
+        "blocked": "Ce talent ne reçoit pas de proposition de votre entreprise.",
+        "invalid": "Le message doit faire au moins {min} caractères.",
+        "locked": "La recherche de talents n'est pas incluse dans votre forfait.",
+        "other": "La proposition n'a pas pu être envoyée. Réessayez."
+      }
+    }
+  },
+  "hirePools": {
+    "sheet": {
+      "title": "Ajouter à un vivier",
+      "close": "Fermer",
+      "lockedTitle": "Viviers non inclus",
+      "locked": "Les viviers de talents font partie du forfait {plan}.",
+      "lockedNoPlan": "Les viviers de talents ne sont pas inclus dans votre forfait.",
+      "seePlans": "Voir les forfaits",
+      "already": "Déjà dans « {name} »",
+      "addTo": "Ajouter à « {name} »",
+      "count": "{count, plural, =0 {Aucun talent} one {# talent} other {# talents}}",
+      "newLabel": "Ou un nouveau vivier",
+      "firstLabel": "Nommez votre premier vivier",
+      "placeholder": "Ex. Data junior",
+      "create": "Créer et ajouter",
+      "private": "Le talent n'est pas prévenu. Un nouveau vivier n'est visible que par vous."
+    },
+    "title": "Mes viviers",
+    "back": "Retour à la recherche",
+    "backPools": "Retour aux viviers",
+    "create": "Créer un vivier",
+    "createTitle": "Créer un vivier",
+    "createSubmit": "Créer le vivier",
+    "name": "Nom du vivier",
+    "description": "Description (facultatif)",
+    "visibility": "Qui le voit ?",
+    "visibilityOption": {
+      "private": "Moi seul",
+      "team": "Mon équipe",
+      "org": "Toute l'organisation"
+    },
+    "invalid": "Donnez un nom d'au moins 2 caractères au vivier.",
+    "notTold": "Les talents d'un vivier ne sont pas prévenus. Seuls ceux encore visibles ou qui ont candidaté chez vous y apparaissent.",
+    "orbi": "<b>{count, plural, one {# talent} other {# talents}}</b> de « {pool} » {count, plural, one {correspond} other {correspondent}} à « {offer} ».",
+    "orbiSee": "Voir",
+    "line": "{count, plural, =0 {Aucun talent} one {# talent} other {# talents}} · mis à jour {updated}",
+    "more": "+{count}",
+    "available": "{count, plural, =0 {aucun disponible} one {# disponible} other {# disponibles}}",
+    "empty": {
+      "title": "Aucun vivier",
+      "text": "Gardez des talents pour plus tard : depuis la recherche, un profil ou un dossier, « Ajouter à un vivier »."
+    },
+    "error": "L'action n'a pas abouti. Réessayez.",
+    "forbidden": "Seul le créateur du vivier ou un administrateur peut le supprimer.",
+    "ok": {
+      "deleted": "Vivier supprimé.",
+      "created": "Vivier créé.",
+      "removed": "Talent retiré du vivier.",
+      "renamed": "Vivier renommé.",
+      "added": "Ajouté au vivier."
+    },
+    "menu": "Options du vivier",
+    "menuTitle": "Vivier",
+    "owner": "Créé par {name}",
+    "anonymous": "Profil anonyme · {headline}",
+    "noHeadline": "Talent",
+    "origin": {
+      "applied": "A candidaté",
+      "contact": "Proposition acceptée",
+      "search": "Recherche"
+    },
+    "added": "ajouté le {date}",
+    "remove": "Retirer {name} du vivier",
+    "rename": "Renommer",
+    "renameSubmit": "Enregistrer le nom",
+    "deleteText": "Supprimer le vivier ne supprime aucun profil ; les talents ne sont pas prévenus.",
+    "delete": "Supprimer le vivier",
+    "emptyPool": {
+      "title": "Ce vivier est vide",
+      "text": "Ajoutez des talents depuis la recherche, leur profil ou un dossier de candidature.",
+      "cta": "Rechercher des talents"
+    }
   },
   "hire": {
     "nav": {
@@ -14790,6 +15413,7 @@
       "interviewReschedule": "{candidateName} propose d'autres créneaux pour {jobTitle}.",
       "interviewDeclined": "{candidateName} a décliné l'entretien pour {jobTitle}.",
       "interviewCanceled": "{company} a annulé l'entretien pour {jobTitle}.",
+      "interviewAccepted": "{company} confirme l'entretien pour {jobTitle} au moment que vous avez proposé.",
       "orgVerified": "{org} est maintenant une entreprise vérifiée.",
       "orgVerificationRejected": "La vérification de {org} n'a pas été acceptée. Consultez le motif.",
       "orgVerificationInfo": "Jumanly a besoin d'un complément pour vérifier {org}.",

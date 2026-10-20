@@ -2,7 +2,6 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { Icon, type IconName } from "@/components/brand/icon";
 import { CountUp } from "@/components/motion/count-up";
-import type { JobStatus } from "@/generated/prisma/client";
 import { cx } from "@/lib/cx";
 
 /**
@@ -255,64 +254,6 @@ export function DayTile({
     </span>
   );
 }
-
-/**
- * Consumption of a quota (mockup 04-01): label with its icon, « 412 sur 1000 » and a thin bar,
- * Sapin, then Ambre from 80 % and Corail at 100 %. `text` replaces the figures (« Selon contrat »).
- */
-export function QuotaLine({
-  icon,
-  label,
-  used,
-  max,
-  value,
-  text,
-}: {
-  icon: IconName;
-  label: string;
-  used: number;
-  max: number;
-  value: string;
-  text?: string;
-}) {
-  const ratio = max > 0 ? Math.min(100, (used / max) * 100) : 0;
-  return (
-    <div className="flex flex-col gap-1.5">
-      <p className="flex items-center justify-between gap-3 text-[12px] leading-[17px] lg:text-[13px]">
-        <span className="flex min-w-0 items-center gap-1.5">
-          <Icon name={icon} className="size-3.5 shrink-0" />
-          {label}
-        </span>
-        <span className={cx("shrink-0 font-semibold", text && "font-medium text-ardoise")}>
-          {text ?? value}
-        </span>
-      </p>
-      {!text && (
-        <span aria-hidden className="block h-[7px] overflow-hidden rounded-pill bg-gris-clair">
-          <span
-            className={cx(
-              "jm-gauge block h-full origin-left rounded-pill",
-              ratio >= 100 ? "bg-corail" : ratio >= 80 ? "bg-ambre" : "bg-sapin",
-            )}
-            style={{ transform: `scaleX(${ratio / 100})` }}
-          />
-        </span>
-      )}
-    </div>
-  );
-}
-
-/** Text key of each job status in `hire.jobs.status.*`. */
-export const statusKey = {
-  draft: "draft",
-  pending_review: "pendingReview",
-  published: "published",
-  closed: "closed",
-  rejected: "rejected",
-  changes_requested: "changesRequested",
-  paused: "paused",
-  archived: "closed",
-} as const satisfies Record<JobStatus, string>;
 
 /** Status of a job (mockup 04-02), from `hire.jobs.status.*`. */
 export const jobStatusTone = {

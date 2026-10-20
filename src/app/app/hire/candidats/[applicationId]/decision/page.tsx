@@ -10,7 +10,8 @@ import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { pickMessages } from "@/i18n/client-messages";
 import { cx } from "@/lib/cx";
-import { formatDayMonth } from "@/lib/dates";
+import { defaultTimeZone, formatDayMonth } from "@/lib/dates";
+import { zoneLabel } from "@/lib/interview-calendar";
 import {
   decideAction,
   laterDecisionAction,
@@ -20,7 +21,7 @@ import { db } from "@/server/db";
 import { can, level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
 import { applicationMatches } from "@/server/matching/service";
-import { scorecardView } from "@/server/services/evaluation";
+import { RATING_MAX, scorecardView } from "@/server/services/evaluation";
 import { getOrgApplication, HireError, rejectReasons } from "@/server/services/hire";
 import {
   DECISION_UNDO_MS,
@@ -40,6 +41,7 @@ import {
   tidyText,
   type TemplateTone,
 } from "@/server/services/message-templates";
+import { ARRIVAL_CALL_MINUTES, SLOTS_MAX } from "@/server/services/interviews";
 import { listPools } from "@/server/services/talent-search";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -222,7 +224,7 @@ export default async function DecisionPage({
 
   // ─── The choice and the message ───────────────────────────────────────────────────
   const outcome = decisionOutcomes.find((value) => value === one(query.issue)) ?? null;
-  const [matching, scorecards, shortlist, interview] = await Promise.all([
+  const [matching, scorecards, shortlist, interview, appointments] = await Promise.all([
     level(db, subject, "hire.matching.level"),
     can(db, subject, "hire.scorecards"),
     can(db, subject, "hire.shortlist"),
@@ -235,7 +237,11 @@ export default async function DecisionPage({
       orderBy: { startsAt: "desc" },
       select: { startsAt: true },
     }),
+    can(db, subject, "connect.appointments"),
   ]);
+  // « Proposer un appel » with the acceptance (lot 3 leftover): times to fix the arrival date.
+  const call = outcome === "hired" && appointments && one(query.appel) === "1";
+  const timeZone = defaultTimeZone();
   const [match, view, pools] = await Promise.all([
     matching === "none"
       ? null
@@ -275,7 +281,10 @@ export default async function DecisionPage({
             strengthLine: strength
               ? th(`templates.tone.${chosen}.${kind}.strength`, { strength })
               : "",
-            nextLine: kind === "acceptation" ? th(`templates.tone.${chosen}.acceptation.next`) : "",
+            nextLine:
+              kind === "acceptation"
+                ? th(`templates.tone.${chosen}.acceptation.${call ? "nextCall" : "next"}`)
+                : "",
           }).replaceAll("\\n", "\n"),
         );
   const body = !outcome
@@ -291,6 +300,7 @@ export default async function DecisionPage({
     const state: Record<string, string | null | undefined> = {
       issue: outcome,
       ton: asked ?? (one(query.ton) === "jumanly" ? "jumanly" : null),
+      appel: call ? "1" : null,
       ...changes,
     };
     for (const [key, value] of Object.entries(state)) if (value) next.set(key, value);
@@ -350,6 +360,7 @@ export default async function DecisionPage({
       <FlowHead back={fileHref} backLabel={t("decision.back")} title={t("decision.title")} />
       {error === "1" && <Notice tone="err">{t("decision.error")}</Notice>}
       {error === "message" && <Notice tone="err">{t("decision.errorMessage")}</Notice>}
+      {error === "appel" && <Notice tone="err">{t("decision.callError")}</Notice>}
 
       <section className="t-verre t-rc-dec-h" aria-label={person.name}>
         <div className="t-rc-mini">
@@ -394,7 +405,7 @@ export default async function DecisionPage({
                     score: Math.round(item.average * 10) / 10,
                   })}
                 >
-                  {[1, 2, 3, 4, 5].map((step) => (
+                  {Array.from({ length: RATING_MAX }, (_, index) => index + 1).map((step) => (
                     <i key={step} className={step <= rounded ? "t-on" : undefined} />
                   ))}
                 </span>
@@ -440,7 +451,7 @@ export default async function DecisionPage({
             )}
             <NextIntlClientProvider messages={pickMessages(messages, ["hireCandidates"])}>
               <DecisionMessage
-                key={`${outcome}-${tone}`}
+                key={`${outcome}-${tone}-${call ? "appel" : "seul"}`}
                 body={body}
                 segments={segments}
                 firstName={firstName}
@@ -477,6 +488,51 @@ export default async function DecisionPage({
                   </select>
                 </div>
                 <small>{th("reject.reason.hint")}</small>
+              </div>
+            )}
+
+            {outcome === "hired" && appointments && (
+              <div className="t-verre t-liste t-lignes t-ri-appel">
+                <Link
+                  href={link({ appel: call ? null : "1" })}
+                  role="switch"
+                  aria-checked={call}
+                  className="t-li t-press"
+                  scroll={false}
+                  replace
+                >
+                  <span className="t-cases t-c1" aria-hidden>
+                    <TalentIcon name="entretien" size="s" />
+                  </span>
+                  <span className="t-t">
+                    <b>{t("decision.call")}</b>
+                    <span>{t("decision.callText", { minutes: ARRIVAL_CALL_MINUTES })}</span>
+                  </span>
+                  <span aria-hidden className={cx("t-sw", call && "t-on")} />
+                </Link>
+                {call && (
+                  <div className="t-li t-ri-appel-c">
+                    <input type="hidden" name="appel" value="on" />
+                    <input type="hidden" name="timezone" value={timeZone} />
+                    {Array.from({ length: SLOTS_MAX }, (_, index) => (
+                      <div key={index} className="t-champ">
+                        <label htmlFor={`rc-appel-${index}`}>
+                          {t("decision.callSlot", { rank: index + 1 })}
+                        </label>
+                        <div className="t-verre t-saisie">
+                          <input
+                            id={`rc-appel-${index}`}
+                            type="datetime-local"
+                            name="slot"
+                            required={index === 0}
+                            step={900}
+                          />
+                        </div>
+                      </div>
+                    ))}
+                    <small>{t("decision.callNote", { zone: zoneLabel(timeZone, now) })}</small>
+                  </div>
+                )}
               </div>
             )}
 

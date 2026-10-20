@@ -225,5 +225,7 @@ export function hidesRecruiterTabBar(pathname: string) {
   // Lot 2: an offer, its four steps and its job sheet have their own bar at the bottom.
   if (page === "offres") return Boolean(sub);
   if (page === "candidats") return Boolean(sub);
+  // Lot 4: an interview and a talent's profile have their own bar at the bottom.
+  if (page === "entretiens" || page === "talents") return Boolean(sub);
   return false;
 }

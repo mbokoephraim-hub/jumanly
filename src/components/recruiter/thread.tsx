@@ -349,8 +349,8 @@ export async function RecruiterThread({
           } else if (message.kind === "system") {
             body = <p className="t-r5-sys">{message.body}</p>;
           } else if (message.kind === "invitation") {
-            body = (
-              <div className="t-r5-inv">
+            const inside = (
+              <>
                 <span className="t-cases t-c2" aria-hidden>
                   <TalentIcon name="agenda" size="s" />
                 </span>
@@ -366,7 +366,14 @@ export async function RecruiterThread({
                         : message.body}
                   </span>
                 </span>
-              </div>
+              </>
+            );
+            body = interview ? (
+              <Link className="t-r5-inv t-press" href={`/app/hire/entretiens/${interview.id}`}>
+                {inside}
+              </Link>
+            ) : (
+              <div className="t-r5-inv">{inside}</div>
             );
           } else if (message.kind === "document_request") {
             const late = !payload.submittedAt && payload.due && new Date(payload.due) < now;
@@ -465,9 +472,7 @@ export async function RecruiterThread({
           max={MESSAGE_MAX}
           templates={composerTemplates}
           slotsHref={
-            application && !decided
-              ? `/app/hire/entretiens?candidature=${application.id}#planifier`
-              : null
+            application && !decided ? `/app/hire/candidats/${application.id}/entretien` : null
           }
           labels={{
             placeholder: t("composer.placeholder"),

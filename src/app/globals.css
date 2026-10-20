@@ -8,6 +8,7 @@
 @import "../styles/recruiter.css";
 @import "../styles/recruiter-candidates.css";
 @import "../styles/recruiter-manage.css";
+@import "../styles/recruiter-interviews.css";
 
 /*
  * Police servie par l'application, et teintes de texte foncées pour l'accessibilité :

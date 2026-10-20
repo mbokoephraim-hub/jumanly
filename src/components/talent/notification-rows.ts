@@ -14,6 +14,7 @@ import {
 const look: Partial<Record<NotificationType, { icon: TalentIconName; tone: string }>> = {
   interviewInvite: { icon: "entretien", tone: "t-c2" },
   interviewCanceled: { icon: "entretien", tone: "" },
+  interviewAccepted: { icon: "entretien", tone: "t-c2" },
   profileViewed: { icon: "profil", tone: "t-c3" },
   statusChange: { icon: "candidature", tone: "t-c3" },
   notSelected: { icon: "candidature", tone: "" },

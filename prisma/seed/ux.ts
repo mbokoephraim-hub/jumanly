@@ -467,6 +467,68 @@ const talents: Talent[] = [
     courses: [],
     visibility: "private",
   },
+  // Visible talents who did not apply, for « Rechercher des talents », a talent's profile and the
+  // pools of the recruiter redesign (lot 4, planches r2plus TAL, TPROF, VIVIERS). All fictional.
+  {
+    email: "ruth.ux@jumanly.test",
+    firstName: "Ruth",
+    city: "Kinshasa",
+    headline: "Analyste BI",
+    summary: "Tableaux de bord Power BI pour un réseau d'agences imaginaire. (démo)",
+    goal: "newJob",
+    desired: ["Analyste de données"],
+    skills: [
+      ["power-bi", 4],
+      ["sql", 3],
+      ["excel", 4],
+      ["tableaux-de-bord", 3],
+    ],
+    experience: { title: "Analyste BI (fictif)", company: "Réseau fictif", years: 2 },
+    education: { degree: "Licence en informatique de gestion (fictive)", level: "bachelor" },
+    applications: [],
+    courses: [],
+    visibility: "recruiters",
+  },
+  {
+    email: "kevin.ux@jumanly.test",
+    firstName: "Kevin",
+    city: "Lubumbashi",
+    headline: "Data analyst junior",
+    summary: "Projets Python et SQL réalisés pendant une formation imaginaire. (démo)",
+    goal: "firstJob",
+    desired: ["Analyste de données"],
+    skills: [
+      ["python", 3],
+      ["sql", 3],
+      ["excel", 2],
+    ],
+    education: { degree: "Licence en mathématiques (fictive)", level: "bachelor" },
+    applications: [],
+    courses: [],
+    visibility: "anonymous",
+  },
+  {
+    email: "sarah.ux@jumanly.test",
+    firstName: "Sarah",
+    city: "Kinshasa",
+    headline: "Contrôleuse de gestion",
+    summary: "Budgets et reporting Excel dans une entreprise imaginaire. (démo)",
+    goal: "newJob",
+    desired: ["Analyste de données", "Contrôleuse de gestion"],
+    skills: [
+      ["excel", 4],
+      ["power-bi", 2],
+    ],
+    experience: {
+      title: "Contrôleuse de gestion (fictif)",
+      company: "Entreprise fictive",
+      years: 5,
+    },
+    education: { degree: "Master en finance (fictif)", level: "master" },
+    applications: [],
+    courses: [],
+    visibility: "recruiters",
+  },
   {
     email: "esperance.ux@jumanly.test",
     firstName: "Espérance",
@@ -1288,7 +1350,142 @@ export async function seedUxScenario(db: SeedClient) {
     }
   }
 
+  await seedRecruiterLot4(db);
+
   console.log(
     `✓ Scénario UX : ${talents.length} talents, ${companies.length} entreprises et recruteurs, ${companies.length} offres, ${courses.length} formations, ${partners.length} partenaires (*.ux@jumanly.test)`,
   );
+}
+
+/**
+ * Recruiter redesign, lot 4 (planches r2plus AGENDA, PREP_R, EVAL, VIVIERS, PROPS): interviews of
+ * Baobab Fintech in every state, a pool, and offers proposed to visible talents. Fictional, and
+ * rebuilt on each run.
+ */
+async function seedRecruiterLot4(db: SeedClient) {
+  const org = await db.organization.findUnique({
+    where: { slug: "ux-baobab-fintech-fictive" },
+    select: { id: true },
+  });
+  const job = await db.job.findUnique({
+    where: { slug: "ux-analyste-donnees-junior-kinshasa" },
+    select: { id: true },
+  });
+  const recruiter = await db.user.findUnique({
+    where: { email: "recruteur6.ux@jumanly.test" },
+    select: { id: true },
+  });
+  if (!org || !job || !recruiter) return;
+  const profileOf = async (email: string) =>
+    (
+      await db.talentProfile.findFirst({
+        where: { user: { email } },
+        select: { id: true },
+      })
+    )?.id ?? null;
+  const applicationOf = async (email: string) =>
+    (
+      await db.application.findFirst({
+        where: { jobId: job.id, profile: { user: { email } } },
+        select: { id: true },
+      })
+    )?.id ?? null;
+  // A time of day (UTC) in `days` days.
+  const at = (days: number, hour: number) => {
+    const date = new Date(Date.now() + days * day);
+    date.setUTCHours(hour, 0, 0, 0);
+    return date;
+  };
+
+  await db.interview.deleteMany({ where: { organizationId: org.id } });
+  const interviews: {
+    email: string;
+    status: "confirmed" | "pending" | "reschedule";
+    slots: Date[];
+    startsAt: Date | null;
+    proposed?: Date[];
+  }[] = [
+    { email: "amani.ux@jumanly.test", status: "confirmed", slots: [at(2, 9)], startsAt: at(2, 9) },
+    {
+      email: "joel.ux@jumanly.test",
+      status: "pending",
+      slots: [at(3, 10), at(4, 14)],
+      startsAt: null,
+    },
+    {
+      email: "fatou.ux@jumanly.test",
+      status: "reschedule",
+      slots: [at(3, 15)],
+      startsAt: null,
+      proposed: [at(5, 11)],
+    },
+    {
+      email: "patrick.ux@jumanly.test",
+      status: "confirmed",
+      slots: [at(-1, 10)],
+      startsAt: at(-1, 10),
+    },
+  ];
+  for (const item of interviews) {
+    const applicationId = await applicationOf(item.email);
+    if (!applicationId) continue;
+    await db.interview.create({
+      data: {
+        organizationId: org.id,
+        applicationId,
+        organizerId: recruiter.id,
+        mode: "video",
+        durationMinutes: 45,
+        slots: item.slots,
+        proposedSlots: item.proposed ?? [],
+        startsAt: item.startsAt,
+        timezone: "UTC",
+        status: item.status,
+        message: "Invitation fictive, pour la démonstration.",
+        questions: [],
+      },
+    });
+  }
+
+  await db.talentPool.deleteMany({ where: { organizationId: org.id } });
+  const pool = await db.talentPool.create({
+    data: {
+      organizationId: org.id,
+      name: "Data junior (démo)",
+      description: "Profils data à recontacter. Vivier fictif.",
+      visibility: "private",
+      ownerId: recruiter.id,
+    },
+  });
+  for (const email of ["ruth.ux@jumanly.test", "kevin.ux@jumanly.test", "amani.ux@jumanly.test"]) {
+    const profileId = await profileOf(email);
+    if (profileId)
+      await db.talentPoolEntry.create({
+        data: { poolId: pool.id, profileId, addedById: recruiter.id, note: null },
+      });
+  }
+
+  await db.contactRequest.deleteMany({ where: { organizationId: org.id } });
+  const proposals: { email: string; status: "pending" | "declined"; days: number }[] = [
+    { email: "kevin.ux@jumanly.test", status: "pending", days: 2 },
+    { email: "sarah.ux@jumanly.test", status: "declined", days: 40 },
+  ];
+  for (const item of proposals) {
+    const profileId = await profileOf(item.email);
+    if (!profileId) continue;
+    const createdAt = ago(item.days);
+    await db.contactRequest.create({
+      data: {
+        organizationId: org.id,
+        requesterId: recruiter.id,
+        profileId,
+        jobId: job.id,
+        message: "Proposition fictive, pour la démonstration : le poste pourrait vous intéresser.",
+        status: item.status,
+        createdAt,
+        expiresAt: new Date(createdAt.getTime() + 14 * day),
+        respondedAt: item.status === "declined" ? ago(item.days - 1) : null,
+      },
+    });
+  }
 }

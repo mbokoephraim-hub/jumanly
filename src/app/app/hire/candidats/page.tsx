@@ -7,6 +7,7 @@ import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import { CandidateAvatar } from "@/components/recruiter/candidates";
 import { SortSheet } from "@/components/recruiter/candidates-client";
 import { OrbiLine, statusOf } from "@/components/recruiter/offers";
+import { ProposalsView, TalentSearchView } from "@/components/recruiter/talent-search";
 import { TalentIcon } from "@/components/talent/icon";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
 import { pickMessages } from "@/i18n/client-messages";
@@ -33,8 +34,8 @@ const DAY = 86_400_000;
  * Candidats › Candidatures (brief recruteur § 4 item 3, planches recruteur-2 § 1 and r2plus): the
  * offer chosen, its stages with their counts, the applications sorted by correspondence (or date,
  * or stage), « Nouveau » on those not opened yet. « Trier » hides, never rejects: the page says how
- * many are hidden and shows them again in one tap. « Rechercher des talents » stays on its page
- * until lot 4.
+ * many are hidden and shows them again in one tap. « Rechercher des talents » (`?vue=talents`, managers
+ * only) and its « Mes propositions » (`?vue=propositions`) are drawn by talent-search.tsx (lot 4).
  */
 export default async function CandidatesPage({ searchParams }: PageProps<"/app/hire/candidats">) {
   const query = await searchParams;
@@ -44,6 +45,31 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
   const ui = await getTranslations("ui");
   const format = await getFormatter();
   const now = new Date();
+  const permissions = hirePermissions(ctx.role);
+  const view =
+    permissions.manage && (query.vue === "talents" || query.vue === "propositions")
+      ? query.vue
+      : null;
+
+  const segments = (
+    <nav className="t-seg" aria-label={t("seg.aria")}>
+      <Link href="/app/hire/candidats" aria-current={view ? undefined : "page"} className="t-press">
+        {t("seg.applications")}
+      </Link>
+      {permissions.manage && (
+        <Link
+          href="/app/hire/candidats?vue=talents"
+          aria-current={view ? "page" : undefined}
+          className="t-press"
+        >
+          {t("seg.talents")}
+        </Link>
+      )}
+    </nav>
+  );
+  if (view === "talents") return <TalentSearchView ctx={ctx} query={query} segments={segments} />;
+  if (view === "propositions") return <ProposalsView ctx={ctx} query={query} segments={segments} />;
+
   const params = {
     offre: one(query.offre),
     etape: one(query.etape),
@@ -56,18 +82,6 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
     throw error;
   });
   after(() => deliverDueDecisionMails().catch((error) => reportError(error)));
-  const permissions = hirePermissions(ctx.role);
-
-  const segments = (
-    <nav className="t-seg" aria-label={t("seg.aria")}>
-      <Link href="/app/hire/candidats" aria-current="page" className="t-press">
-        {t("seg.applications")}
-      </Link>
-      <Link href="/app/hire/talents" className="t-press">
-        {t("seg.talents")}
-      </Link>
-    </nav>
-  );
 
   if (!list.job) {
     return (
@@ -176,7 +190,7 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
             <b>{t("empty.title")}</b>
             <span>{t(`empty.${emptyKey}`)}</span>
           </div>
-          <Link href="/app/hire/talents" className="t-verre t-rc-sugg t-press">
+          <Link href="/app/hire/candidats?vue=talents" className="t-verre t-rc-sugg t-press">
             <TalentIcon name="recherche" size="s" />
             <span className="t-t">
               <b>{t("empty.search")}</b>

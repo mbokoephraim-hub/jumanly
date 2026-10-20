@@ -77,7 +77,7 @@ export default async function HireTodayPage() {
           ]
         : []),
       {
-        href: "/app/hire/talents",
+        href: "/app/hire/candidats?vue=talents",
         icon: "recherche",
         tone: "t-c2",
         title: t("next.search"),
@@ -123,7 +123,7 @@ export default async function HireTodayPage() {
         {active[0] ? (
           <OrbiLine
             action={
-              <Link href="/app/hire/talents" className="t-bt t-sec t-s t-press">
+              <Link href="/app/hire/candidats?vue=talents" className="t-bt t-sec t-s t-press">
                 {t("orbi.see")}
               </Link>
             }
@@ -207,7 +207,7 @@ export default async function HireTodayPage() {
   const tiles = [
     { key: "unseen", count: today.counts.unseen, href: "/app/hire/candidats" },
     { key: "invitations", count: today.counts.invitations, href: "/app/hire/entretiens" },
-    { key: "scorecards", count: today.counts.scorecards, href: "/app/hire/entretiens" },
+    { key: "scorecards", count: today.counts.scorecards, href: "/app/hire/entretiens?vue=evaluer" },
     { key: "unread", count: today.counts.unread, href: "/app/messages" },
   ] as const;
 
@@ -301,7 +301,7 @@ export default async function HireTodayPage() {
             return (
               <Link
                 key={interview.id}
-                href="/app/hire/entretiens"
+                href={`/app/hire/entretiens/${interview.id}`}
                 className="t-verre t-rx-ent t-press"
                 aria-label={t("interviews.open", {
                   name: person,
