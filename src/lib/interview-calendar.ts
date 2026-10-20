@@ -199,8 +199,9 @@ export function zoneLabel(timeZone: string, at = new Date()) {
     new Intl.DateTimeFormat("en-US", { timeZone, timeZoneName: "shortOffset" })
       .formatToParts(at)
       .find((part) => part.type === "timeZoneName")?.value ?? "UTC";
-  const utc = offset.replace("GMT", "UTC");
-  return city === "UTC" ? utc : `${city} (${utc === "UTC" ? "UTC" : utc})`;
+  // Some ICU versions write the zero offset "GMT+0" instead of "GMT".
+  const utc = offset.replace("GMT", "UTC").replace(/^UTC[+-]0(:00)?$/, "UTC");
+  return city === "UTC" ? utc : `${city} (${utc})`;
 }
 
 const capital = (text: string) => text.charAt(0).toLocaleUpperCase("fr") + text.slice(1);
