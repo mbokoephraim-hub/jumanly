@@ -112,7 +112,9 @@ test("les pages de l'espace sont gardées pour servir hors connexion", async ({ 
   await expect.poll(async () => (await kept())?.offline).toBe(true);
   await expect.poll(async () => (await kept())?.launch).toBe(true);
 
-  // Signing out empties the kept pages: the next person on the device sees nothing.
+  // Signing out (session gone, then /connexion?deconnecte=1) empties the kept pages: the next
+  // person on the device sees nothing.
+  await context.clearCookies();
   await page.goto("/connexion?deconnecte=1");
   await expect.poll(async () => (await kept())?.pages).toEqual([]);
   await context.close();

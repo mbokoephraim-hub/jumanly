@@ -25,6 +25,8 @@ const OFFLINE_ASSETS = [
 ];
 
 const SPACE = /^\/app(\/|$)/;
+// Bumped on sign-out: a warm-up still running then keeps nothing more.
+let session = 0;
 const NEVER_KEPT = [/^\/app\/abonnement\/payer/, /^\/app\/testeur/];
 
 self.addEventListener("install", (event) => {
@@ -126,15 +128,17 @@ async function builtFile(request) {
 
 /** The main pages of the space, asked once per session so they open offline. */
 async function warm(paths) {
+  const started = session;
   for (const path of paths) {
+    if (session !== started) return;
     const url = new URL(path, self.location.origin);
     if (!kept(url)) continue;
     const request = new Request(url, { credentials: "include", headers: { Accept: "text/html" } });
     try {
       const response = await fetch(request);
+      // Signed out meanwhile: stop, keep nothing.
+      if (session !== started || response.redirected) return;
       await keep(request, response);
-      // Signed out meanwhile: stop.
-      if (response.redirected) return;
     } catch {
       return;
     }
@@ -152,7 +156,10 @@ self.addEventListener("fetch", (event) => {
   const url = new URL(request.url);
   if (url.origin !== self.location.origin) return;
   // Sign-out ends on /connexion?deconnecte=1, as a page or as an in-app navigation.
-  if (url.searchParams.has("deconnecte")) event.waitUntil(caches.delete(PAGES));
+  if (url.searchParams.has("deconnecte")) {
+    session += 1;
+    event.waitUntil(caches.delete(PAGES));
+  }
   if (request.mode === "navigate") {
     if (url.pathname === LAUNCH_URL) event.respondWith(launch(request, event));
     else event.respondWith(page(request));
