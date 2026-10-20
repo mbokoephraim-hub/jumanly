@@ -2933,3 +2933,145 @@ toutes dans `docs/specifications.md`.
   à l'instant ; paiement et testeur jamais gardés ; tout est effacé à la déconnexion. Bandeau : « Vous êtes hors
   ligne. Vous voyez la dernière version enregistrée sur cet appareil. »
 - Choix : `docs/decisions/2026-10-20-ouverture-fluidite-hors-ligne.md`.
+
+## 2026-10-20 · Étape 2 recruteur · diagnostic
+
+Diagnostic seul, aucun code modifié. Lu : `docs/PLAN-REFONTE-EN-3-ETAPES.md`, `docs/refonte-mobile/BRIEF-RECRUTEUR-CLAUDE-CODE.md`, `docs/refonte-web/BRIEF-WEB-CLAUDE-CODE.md` (W0 et recruteur 1 à 4), `docs/audit-hire/AUDIT-HIRE-MOBILE.md`, titres des planches `refonte-mobile/recruteur-1..4` (v2 `r1plus`, `r2plus`, `r3plus`), `modeles-recruteur/`, `refonte-web/recruteur-1..4`. Code lu sur l'état de `origin/main` (#113).
+
+### 1. Ce qui existe aujourd'hui
+
+**Cadre.** `src/app/app/layout.tsx` donne le `TalentShell` (nouveau design) à l'espace personnel, et l'ancien `AppShell` (`src/components/layout/app-shell.tsx`) au recruteur **et au partenaire**. L'`AppShell` a une colonne d'icônes à gauche, un menu de sous-rubriques en haut, un en-tête vert foncé et une pilule flottante sur téléphone (Accueil · Offres · Talents · Messages · Organisation, d'après `hireNavigation` dans `src/config/navigation.ts`). Les viviers, entretiens, rapports et modèles ne sont pas dans la barre : on y va par des raccourcis du tableau de bord (`hireShortcuts`). Le style vient de `src/styles/admin.css` (`jm-admin-bg`, `jm-topbar`) et des kits de l'ancien design (`components/hire/kit.tsx`, `career/kit.tsx`, `jobs/talent-kit.tsx`). Orbi n'existe pas pour le recruteur : `/app/orbi` et `/app/orbi/historique` le renvoient vers `/app/hire`.
+
+| Route | État |
+|---|---|
+| `/app/hire` | ancien design (tableau de bord : actions, chiffres, quotas, raccourcis) |
+| `/app/hire/bienvenue` | absent (pas de premiers pas recruteur) |
+| `/app/hire/compte`, `/app/hire/compte/profil` | absent (`/app/compte` renvoie le recruteur vers `/app/hire`) |
+| `/app/hire/offres` | ancien design (tableau sur ordinateur, cartes sur téléphone) |
+| `/app/hire/offres/nouvelle`, `/[id]/modifier` | ancien design (`job-form.tsx` + `job-wizard.tsx`, rédaction IA déjà branchée) |
+| `/app/hire/offres/[id]` | ancien design : c'est le **pipeline en colonnes** (`pipeline-board.tsx`) + réglages, pas le détail de la planche |
+| `/app/hire/offres/[id]/ats`, `/retenus`, `/reponses` | absent |
+| `/app/hire/candidats` (liste par étape) | absent (seul `/[applicationId]` existe) |
+| `/app/hire/candidats/[applicationId]` | ancien design (dossier complet, notes modifiables, grille, Pourquoi) |
+| `/app/hire/candidats/[applicationId]/message` | ancien design |
+| `/app/hire/candidats/[applicationId]/entretien` | absent (on planifie depuis `/app/hire/entretiens`) |
+| `/app/hire/entretiens` | ancien design (agenda semaine, jour, mois, 1333 lignes) |
+| `/app/hire/entretiens/[id]` | absent |
+| `/app/hire/talents`, `/talents/[profileId]` | ancien design (cible : `/app/hire/candidats?vue=talents`) |
+| `/app/hire/viviers` (+ `/[id]` qui redirige déjà) | ancien design |
+| `/app/hire/modeles` | ancien design |
+| `/app/hire/rapports` (+ `/export` CSV ou PDF) | ancien design |
+| `/app/messages`, `/app/messages/[id]` | ancien design pour le recruteur (`connect/hire-messages.tsx`, `hire-thread.tsx`), nouveau pour le talent |
+| `/app/notifications` | ancien design pour le recruteur (`connect/team-notifications.tsx`) |
+| `/app/abonnement` | ancien design pour le recruteur (`billing/hire-billing.tsx`) ; `formules`, `factures` renvoient vers `/app/abonnement` ; `payer` partiel |
+| `/app/parametres` (+ `notifications`, `securite`) | ancien design pour le recruteur (`account/hire-settings.tsx`, 669 lignes) |
+| `/app/recherche` | ancien design pour le recruteur (`connect/hire-search.tsx`) |
+| `/app/organisation` | ancien design (une page de 937 lignes à onglets) ; `/verification`, `/equipe` absents |
+
+### 2. Écrans des planches → route cible → état
+
+**Lot mobile 1 · cadre** (planches recruteur-1 § 1 « organisation active », recruteur-3 § 3 et § 7)
+- Barre À traiter · Offres · Orbi · Candidats · Messages, en-tête avec organisation active → tout `/app/hire/*` → à créer (l'`AppShell` est à remplacer).
+- Compte RH, Mon profil RH → `/app/hire/compte`, `/compte/profil` → à créer.
+- Premiers pas : vous recrutez pour…, votre organisation, espace prêt → `/app/hire/bienvenue` → à créer.
+
+**Lot mobile 2 · traiter et publier** (recruteur-1 § 1 à 4, v2 `r1plus`)
+- À traiter, rien à traiter → `/app/hire` → à refaire (garder les données de `hireDashboard`).
+- Mes offres (couleur par offre, chiffres), actions, clôturer, filtre En pause et Expirées → `/app/hire/offres` → à refaire.
+- Création en 4 étapes, Rédiger avec Orbi, limite atteinte, offre publiée, fiche PDF vue talent → `/offres/nouvelle`, `/[id]/modifier` → à refaire ; documents, questions et fiche PDF à créer.
+- Détail d'une offre, historique par type → `/app/hire/offres/[id]` → à refaire (le pipeline part vers Candidats).
+
+**Lot mobile 3 · candidatures** (recruteur-2 § 0 bis à 3, v2 `r2plus` « dossier enrichi », « décision finale »)
+- Candidatures par offre et par étape, trier et filtrer, vide → `/app/hire/candidats` → à créer.
+- Dossier, sections, Pourquoi 88 %, analyse Orbi, version RH Free → `/candidats/[applicationId]` → à refaire ; analyse Orbi à créer.
+- Changer d'étape, décision finale (3 issues, message relu, annulation 10 min), décision enregistrée → feuilles du dossier → à refaire ; annulation à créer.
+
+**Lot mobile 4 · entretiens et talents** (recruteur-2 § 4 et 5, v2 calendrier, créneaux, agenda, talents en liste continue)
+- Proposer un entretien (mode, calendrier du mois, journée en créneaux), aperçu → `/candidats/[applicationId]/entretien` → à créer (le moteur `Interview` existe).
+- Entretiens (agenda), préparer avec Orbi, évaluation → `/app/hire/entretiens`, `/entretiens/[id]` → à refaire et à créer ; questions Orbi à créer.
+- Rechercher, filtres, profil d'un talent, proposer l'offre → `/app/hire/candidats?vue=talents`, `/app/hire/talents/[profileId]` → à refaire.
+- Viviers → `/app/hire/viviers` → à refaire.
+
+**Lot mobile 5 · communs** (recruteur-3 § 1 à 6, v2 `r3plus`)
+- Orbi en page de conversation, historique → `/app/orbi`, `/app/orbi/historique` ouverts au recruteur → à créer (réutiliser `talent/orbi-chat.tsx`).
+- Messages, conversation avec brouillon Orbi et actions rapides, modèles, notifications avec résumé du jour → `/app/messages`, `/[id]`, `/app/hire/modeles`, `/app/notifications` → à refaire.
+- Organisation, vérification, équipe, inviter → `/app/organisation`, `/verification`, `/equipe` → à refaire et à créer (voir question 1).
+- Abonnement avec échéances, formules RH, paiement → `/app/abonnement` (+ `formules`, `payer`, `factures`) → à refaire en réutilisant les écrans talent.
+- Rapports avec graphiques, paramètres (journal des consultations, fuseau) → `/app/hire/rapports`, `/app/parametres` → à refaire.
+
+**Lot mobile 6 · ATS et suite** (recruteur-4 § 0 bis à 8, `modeles-recruteur/`)
+- Quatre accès « Analyser », candidatures de l'offre, analyse en cours, recommandation, profil pour cette offre → `/app/hire/offres/[id]/ats` → à créer.
+- Quand lancer l'analyse, analyse programmée → `/ats` → à créer.
+- Sélection rapide, liste des retenus → `/offres/[id]/retenus` → à créer.
+- Répondre à tous, confirmer, messages retenu et non retenu → `/offres/[id]/reponses` + 4 modèles d'e-mail → à créer.
+- Messagerie enrichie (en ligne, lu, badges, menu ⋯, bouton +, Orbi, alléger) → `/app/messages/[id]` → à créer.
+- Propositions : envoyée, acceptée, Mes propositions → `/app/hire/candidats?vue=propositions` → à créer (`ContactRequest` existe).
+- Rejoindre une organisation existante, demande envoyée, côté admin → `/app/hire/bienvenue`, `/app/notifications` → à créer.
+- Fin d'offre J-3, prolonger, clôturer ou annuler, réglage des rappels → À traiter, `/app/notifications`, `/app/parametres/notifications` → à créer.
+- Rapport PDF A4 → `/app/hire/rapports/export` → à refaire sur le modèle `rapport-recrutement.html`.
+
+**Web (1024 et 1440 px)** : le cadre W0 talent existe (`src/components/talent/web/side-nav.tsx`, `top-bar.tsx`, `orbi-panel.tsx`, `command.tsx`, `dialog.tsx`) ; il faut sa version recruteur (organisation sous le nom, entrées + Agenda, Talents, Rapports).
+- Web 1 : À traiter en 2 colonnes, menu d'organisation, offres en grille, création avec aperçu à droite, détail → à créer.
+- Web 2 : candidats liste + dossier côte à côte (`?id=`), dossier en 2 colonnes, étapes et décision, agenda en semaine (`/entretiens?vue=semaine`), talents avec filtres à gauche, propositions en tableau → à créer.
+- Web 3 : Orbi avec historique, messagerie 3 colonnes, notifications, compte, organisation, vérification, équipe en tableau, abonnement, rapports, paramètres, premiers pas → à créer.
+- Web 4 : arriver à l'ATS, ATS, quand lancer, répondre à tous, messagerie, propositions, rejoindre, fin d'offre, notifications de l'ordinateur, rapport PDF → à créer.
+
+### 3. Données et règles à ajouter (migrations additives)
+
+| Besoin (point du brief recruteur § 2) | Dans `prisma/schema.prisma` aujourd'hui |
+|---|---|
+| Statut `paused` (4) | absent : `enum JobStatus` n'a que draft, pending_review, published, closed, archived, rejected, changes_requested ; `pausedByBillingAt` existe. `activeJobCount` (`src/server/services/hire.ts`) compte published et pending_review, donc une pause hors quota est simple. |
+| Documents demandés, questions de présélection, réponses (5) | absent : seul `Job.knockoutCriteria` existe ; `Application.attachments` existe côté talent. Ajouter les questions sur `Job` et les réponses sur `Application`. |
+| Fiche de poste PDF (5) | absent sur `Job` ; `StoredFile` et le stockage existent. Aucun contrôle de fichier (antivirus) trouvé dans `src/`. |
+| Étapes par défaut Reçue, En examen, Présélectionnée, Entretien, Décision finale (6) | modèle `PipelineStage` gardé ; liste actuelle `defaultStages` dans `src/server/services/applications.ts` (6 étapes, noms écrits en dur) à changer pour les nouvelles offres seulement. Retrait du candidat : `ApplicationStatus.withdrawn` existe. Annulation 10 min : absente. |
+| Couleur et historique typé d'une offre (7) | pas de journal des événements d'une offre ; couleur calculable sans base. |
+| Notes privées modifiables (8) | **fait** : `editNote`, `deleteNote` dans `src/server/services/evaluation.ts`, réservés à l'auteur. |
+| Analyse Orbi `hire.cv_analysis` (9, 16) | droit dans `prisma/seed/plans.ts` (Free non, Pro et plus oui) ; **aucun service** ne l'utilise. Résultat d'analyse à stocker (rien d'adapté : `AiSuggestion` est lié au talent). Analyse programmée, tâche `ats.scheduled` : absentes. |
+| Grilles `hire.scorecards`, sièges `org.seats`, offres `jobs.active.max`, crédits `ai.credits.monthly` (9, 10) | présents dans `prisma/seed/plans.ts` avec les valeurs de la partie 05 (Pro : 2, 5, 100 ; Premium : 3, 15, 300). `Scorecard` existe. |
+| Entretiens 1 à 3 créneaux, mode, fuseau, participants (13) | **fait** : `Interview` (slots, proposedSlots, timezone, participantIds, statuts). Questions de préparation Orbi : absentes. |
+| Liste des retenus (17) | absente (pas de modèle de sélection par offre ; `TalentPool` ne convient pas tel quel). |
+| Réponses groupées, « J'ai relu », annulation 10 min (18) | absent ; `MessageTemplate` existe (5 types : convocation, document, relance, acceptation, refus). |
+| Messagerie : lu, en ligne, « écrit… », rangement (19) | partiel : `ConversationParticipant.lastReadAt` existe. Présence, réglage « accusés de lecture », masquage côté recruteur : absents. Aucun temps réel (ni WebSocket ni EventSource dans `src/`). |
+| Propositions aux talents (20) | **fait** : `ContactRequest` (pending, accepted, declined, expired, jobId, quota `hire.contact_requests.monthly`). Relancer : absent. |
+| Rejoindre une organisation existante (21) | absent : seule `Invitation` (de l'organisation vers une personne) existe ; aucune recherche par domaine dans `src/server/services/organization.ts` ni `accounts.ts`. Modèle de demande + expiration 7 jours à créer. |
+| Rappels de fin d'offre (16 bis) | absent : pas de tâche `jobs.ending_reminders` (seul `pnpm jobs:billing` existe), pas de fuseau sur `Organization`, pas de notifications sur le téléphone (aucun abonnement push en base). |
+| Seed démo Baobab Fintech, Nadia K. (§ 0) | partiel : `prisma/seed/ux.ts` a déjà « Baobab Fintech (entreprise fictive) » et une recruteuse Nadia ; à refaire d'après les planches. |
+
+### 4. Ancien design à supprimer
+
+À supprimer (servent seulement au recruteur) :
+- `src/components/hire/pipeline-board.tsx` (seulement `/app/hire/offres/[id]`), `job-wizard.tsx`, `job-form.tsx`, `job-form-shell.tsx`, `job-steps.ts`, `job-settings.tsx`, `job-status.tsx`, `moderation-changes.tsx` (refaits dans le nouveau style).
+- `src/components/connect/hire-messages.tsx`, `hire-thread.tsx`, `contact-requests.tsx`, `interview-card.tsx`, `report-form.tsx`, `team-notifications.tsx`, `hire-search.tsx`.
+- `src/components/billing/hire-billing.tsx`, `src/components/account/hire-settings.tsx`.
+- `src/components/layout/space-switcher.tsx`, `account-menu.tsx`, `phone-bar-flag.tsx` (utilisés seulement par `AppShell` et l'ancien écran message).
+- `hireNavigation` et `hireShortcuts` dans `src/config/navigation.ts`, la section Hire de `appSections` dans `app-shell.tsx`.
+- Pages : le contenu de chaque `page.tsx` sous `src/app/app/hire/` est réécrit.
+
+Redirections : `/app/hire/talents` → `/app/hire/candidats?vue=talents` ; `/app/hire/viviers/[id]` → `/app/hire/viviers` (déjà) ; `/app/hire/candidats/[applicationId]/message` → la conversation `/app/messages/[id]` ; liens `href: "/app/hire/entretiens"` de `src/server/services/interviews.ts` à revoir.
+
+À **garder** (servent aussi à d'autres espaces) :
+- `AppShell` : il sert aussi à l'**espace partenaire** (`/app/partenaire`). On le retire du recruteur seulement (voir question 3).
+- `layout/icon-rail.tsx`, `nav-link.tsx`, `section-nav.tsx`, `top-search.tsx` et `src/styles/admin.css` : utilisés par l'administration Jumanly (`src/app/admin/layout.tsx`).
+- `components/hire/kit.tsx` : `Initials`, `OrgMark`, `initialsOf` servent à l'admin (`components/admin/kit.tsx`, `app/admin/offres`) et au partenaire ; à garder ou à déplacer.
+- `components/app/page-header.tsx`, `header-action.tsx` : partenaire, admin, invitation.
+- `components/jobs/talent-kit.tsx` (page offre talent), `components/career/kit.tsx` (partenaire), `conversationLabels` de `connect/conversation-list.tsx` (recherche talent).
+- `components/hire/brand-identity.tsx`, `brand-image-editor.tsx`, `org/structure-tabs.tsx` : page organisation, refaite à l'étape 3 ; garder jusque-là ce que le recruteur RH n'utilise pas.
+
+### 5. Plan des PR
+
+1. **Lot R1 · cadre recruteur** : barre et en-tête mobile, organisation active, Compte RH, premiers pas ; `layout.tsx` donne au recruteur le nouveau cadre ; ouverture d'Orbi au recruteur.
+2. **Lot R2 · traiter et publier** : À traiter, Mes offres, migration `paused`, création en 4 étapes avec documents, questions et fiche PDF (migration), Orbi, quota, validation, détail.
+3. **Lot R3 · candidatures** : liste par étape, dossier, notes, Pourquoi, changer d'étape, décision finale relue avec annulation, service d'analyse `hire.cv_analysis` protégé contre les consignes cachées.
+4. **Lot R4 · entretiens et talents** : proposer (calendrier et créneaux), agenda, préparer, évaluer ; talents en liste continue, profil, proposer l'offre, viviers.
+5. **Lot R5 · communs** : messages et modèles, notifications, organisation, vérification, équipe, abonnement, rapports, paramètres ; redirections et suppression des fichiers du § 4.
+6. **Lot R6 · ATS et suite** : ATS (maintenant ou à la fin, tâche `ats.scheduled`), retenus, réponses groupées et e-mails, messagerie enrichie, propositions, rejoindre une organisation, rappels de fin d'offre, rapport PDF.
+7. **Web R1 à R4** (une PR chacun) : cadre web recruteur (barre latérale, rail tablette, panneau Orbi), puis les écrans des planches web 1 à 4 avec les mêmes composants ; suppression de la colonne centrée provisoire.
+
+Étape 1 validée par Ephraïm le 20/10 à 03:59. Risques : le lot R6 demande du temps réel et des tâches de fond nouvelles ; `pipeline-board.tsx` disparaît avant que le web 2 existe (colonne centrée en attendant).
+
+Questions pour Ephraïm :
+1. Organisation, vérification et équipe du recruteur RH : le brief mobile les met sous `/app/organisation/*`, mais l'étape 3 rend `/app/organisation/*` « à ouvrir sur un ordinateur » sous 768 px. Je propose `/app/hire/compte/organisation` et `/app/hire/compte/equipe` pour le recruteur, et laisser `/app/organisation` à l'administration. D'accord ?
+2. Export du rapport : le brief dit « toujours en PDF », mais le droit `reports.export` est désactivé pour RH Free, Pro et Premium (`prisma/seed/plans.ts`). Les formules RH peuvent-elles exporter, et retire-t-on le CSV ?
+3. Espace partenaire : il utilise aussi l'ancien cadre. Le garde-t-on tel quel jusqu'à une maquette partenaire ?
+4. « En ligne », « écrit… » et notifications sur le téléphone demandent un service de temps réel et des notifications push (clés à créer, rien n'existe). Acceptez-vous une première version avec mise à jour toutes les quelques secondes et la notification sur le téléphone plus tard ?
+5. Fiche de poste PDF « analysée avant publication » : suffit-il de vérifier le type, la taille et l'absence de contenu actif, ou faut-il un antivirus externe (service payant) ?

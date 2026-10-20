@@ -90,10 +90,13 @@ test("un entretien est planifié puis confirmé par le talent", async ({
   const talent = await newPage(browser, baseURL, isMobile);
   await logIn(talent, group.talent);
   await talent.goto("/app/messages");
-  await talent
+  // The list refreshes while the page settles (the row can be replaced under the pointer): the
+  // conversation is opened from its address.
+  const conversation = await talent
     .getByRole("link", { name: /Groupe Démo/ })
     .first()
-    .click();
+    .getAttribute("href");
+  await talent.goto(conversation!);
   // Planche talent-2 § 5: the slots are chosen in the conversation itself.
   await talent.waitForURL(/\/app\/messages\/.+/);
   await talent
