@@ -10657,7 +10657,7 @@
       "slotLong": "{day} à {time}",
       "recapNone": "Choisissez un jour",
       "recapDay": "{day} · {times}",
-      "orbiMornings": "{count, plural, one {Vous êtes libre} other {<b>{names}</b> sont libres}} le matin : <b>{days}</b>. D'après les entretiens déjà prévus dans Jumanly.",
+      "orbiMornings": "{count, plural, one {Vous êtes libre} other {<b>{names}</b> sont libres}} le matin : <b>{days}</b> · d'après les entretiens déjà prévus dans Jumanly.",
       "you": "Vous",
       "participants": "Participants",
       "invite": "Inviter",

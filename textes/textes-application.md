@@ -8788,7 +8788,7 @@ Conventions :
 | `hireInterviews.plan.slotLong` | {day} à {time} |
 | `hireInterviews.plan.recapNone` | Choisissez un jour |
 | `hireInterviews.plan.recapDay` | {day} · {times} |
-| `hireInterviews.plan.orbiMornings` | {count, plural, one {Vous êtes libre} other {<b>{names}</b> sont libres}} le matin : <b>{days}</b>. D'après les entretiens déjà prévus dans Jumanly. |
+| `hireInterviews.plan.orbiMornings` | {count, plural, one {Vous êtes libre} other {<b>{names}</b> sont libres}} le matin : <b>{days}</b> · d'après les entretiens déjà prévus dans Jumanly. |
 | `hireInterviews.plan.you` | Vous |
 | `hireInterviews.plan.participants` | Participants |
 | `hireInterviews.plan.invite` | Inviter |
