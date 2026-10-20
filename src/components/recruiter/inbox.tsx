@@ -12,6 +12,10 @@ import {
   type InboxFilter,
 } from "@/server/services/recruiter-inbox";
 import { OrbiLine } from "./offers";
+import { ToastOnLoad } from "@/components/motion/toast-on-load";
+import { Sheet, SheetButton } from "@/components/talent/sheet";
+import { cleanupConversationsAction } from "@/server/actions/hire-messaging";
+import { cleanupCandidates } from "@/server/services/hire-messaging";
 
 const DAY = 86_400_000;
 
@@ -20,6 +24,7 @@ export const badgeTone: Record<InboxBadge, string> = {
   interview: "t-r5-ret",
   hired: "t-r5-ret",
   review: "t-r5-at",
+  retained: "t-r5-ret",
   rejected: "t-r5-nr",
   withdrawn: "t-r5-nr",
   proposal: "t-r5-ct",
@@ -68,8 +73,9 @@ export async function RecruiterInbox({
     ? (one("filtre") as InboxFilter)
     : "toutes";
   const q = one("q").slice(0, 100);
-  const { rows, unread, waiting } = await listRecruiterInbox(db, ctx, { filter, q });
   const now = new Date();
+  const { rows, unread, waiting } = await listRecruiterInbox(db, ctx, { filter, q });
+  const format = await getFormatter();
   const times = await Promise.all(rows.map((row) => shortTime(row.at, now)));
   const href = (value: InboxFilter) => {
     const next = new URLSearchParams();
@@ -79,6 +85,10 @@ export async function RecruiterInbox({
     return query ? `/app/messages?${query}` : "/app/messages";
   };
   const names = waiting.slice(0, 2).map((row) => row.firstName);
+  // Lot 6: Orbi proposes to remove the finished conversations of the non retained (planche NETT).
+  const t6 = await getTranslations("rhInbox6");
+  const cleanup = filter === "toutes" && !q ? await cleanupCandidates(db, ctx, now) : [];
+  const cleaned = one("ok") === "nettoyage" ? Number(one("n")) || 0 : null;
 
   return (
     <div className="t-flux">
@@ -127,6 +137,20 @@ export async function RecruiterInbox({
         </OrbiLine>
       )}
 
+      {one("ok") === "retiree" && <ToastOnLoad message={t6("hidden")} />}
+      {cleaned !== null && <ToastOnLoad message={t6("cleaned", { count: cleaned })} />}
+      {cleanup.length > 0 && (
+        <OrbiLine
+          action={
+            <SheetButton target="r6-nettoyage" className="t-bt t-sec t-s t-press">
+              {t6("cleanup.see")}
+            </SheetButton>
+          }
+        >
+          {t6("cleanup.line", { count: cleanup.length })}
+        </OrbiLine>
+      )}
+
       {rows.length === 0 ? (
         <div className="t-verre t-carte t-vide">
           <b>{q || filter !== "toutes" ? t("empty.filtered") : t("empty.title")}</b>
@@ -142,6 +166,9 @@ export async function RecruiterInbox({
                 </span>
                 <span className="t-t">
                   <b>
+                    {row.online && (
+                      <span className="t-r6-dot" role="img" aria-label={t6("online")} />
+                    )}
                     <span className="t-r5-nom">{row.name}</span>
                     <span className={cx("t-r5-etq", badgeTone[row.badge])}>
                       {t(`badge.${row.badge}`)}
@@ -163,7 +190,14 @@ export async function RecruiterInbox({
                   </span>
                 </span>
                 <span className="t-r5-hm">
-                  <span>{times[index]}</span>
+                  <span>
+                    {row.pinned && (
+                      <span className="t-r6-pin" role="img" aria-label={t6("pinned")}>
+                        <TalentIcon name="favori" size="xs" />
+                      </span>
+                    )}
+                    {times[index]}
+                  </span>
                   {row.unread > 0 && (
                     <i>
                       <span aria-hidden>{row.unread > 9 ? "9+" : row.unread}</span>
@@ -181,6 +215,41 @@ export async function RecruiterInbox({
         <TalentIcon name="confidentialite" size="s" />
         <span>{t("rule")}</span>
       </p>
+
+      {cleanup.length > 0 && (
+        <Sheet id="r6-nettoyage" title={t6("cleanup.title")} closeLabel={t6("close")}>
+          <form action={cleanupConversationsAction} className="t-flux">
+            <p className="t-r6-sous">{t6("cleanup.text")}</p>
+            <ul className="t-verre t-r6-ret-l">
+              {cleanup.map((item, index) => (
+                <li key={item.id}>
+                  <label className="t-r6-relu t-press">
+                    <input type="checkbox" name="ids" value={item.id} defaultChecked />
+                    <span className={cx("t-rc-av", avatarTone(index))} aria-hidden>
+                      {initials(item.name)}
+                    </span>
+                    <span className="t-t">
+                      <b>{item.name}</b>
+                      <span>
+                        {[item.job, format.dateTime(item.at, { day: "numeric", month: "short" })]
+                          .filter(Boolean)
+                          .join(" · ")}
+                      </span>
+                    </span>
+                  </label>
+                </li>
+              ))}
+            </ul>
+            <p className="t-gar">
+              <TalentIcon name="confidentialite" size="s" />
+              <span>{t6("cleanup.rule")}</span>
+            </p>
+            <button type="submit" className="t-bt t-p t-pl t-press">
+              {t6("cleanup.confirm")}
+            </button>
+          </form>
+        </Sheet>
+      )}
     </div>
   );
 }

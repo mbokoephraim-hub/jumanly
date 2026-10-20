@@ -51,6 +51,13 @@ export const notificationTypes = [
   "diagnosticReady",
   "diagnosticReminder",
   "profileViewed",
+  // Recruiter lot 6: the ATS, joining an organization, the end of an offer.
+  "atsReady",
+  "atsNotRun",
+  "orgJoinRequest",
+  "orgJoinAccepted",
+  "orgJoinDeclined",
+  "jobEnding",
 ] as const;
 export type NotificationType = (typeof notificationTypes)[number];
 

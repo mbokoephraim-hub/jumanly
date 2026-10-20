@@ -6,6 +6,14 @@
  */
 import type { PrismaClient, StageKind } from "@/generated/prisma/client";
 import { hirePermissions, type HireContext } from "./hire";
+import { isOnline } from "./hire-messaging";
+
+const personSelect = {
+  name: true,
+  firstName: true,
+  lastSeenAt: true,
+  showPresence: true,
+} as const;
 
 export const inboxFilters = [
   "toutes",
@@ -17,10 +25,16 @@ export const inboxFilters = [
 export type InboxFilter = (typeof inboxFilters)[number];
 
 /** The badge of a conversation (`rhInbox.badge.*`). */
-export type InboxBadge = "interview" | "hired" | "review" | "rejected" | "withdrawn" | "proposal";
+export type InboxBadge =
+  "interview" | "hired" | "review" | "retained" | "rejected" | "withdrawn" | "proposal";
 
 export function badgeOf(
-  application: { status: string; stage: { kind: StageKind } } | null,
+  application: {
+    status: string;
+    stage: { kind: StageKind };
+    /** Lot 6: in the list of the retained of its offer. */
+    shortlistedAt?: Date | null;
+  } | null,
 ): InboxBadge {
   if (!application) return "proposal";
   if (application.status === "hired") return "hired";
@@ -28,13 +42,14 @@ export function badgeOf(
   if (application.status === "withdrawn") return "withdrawn";
   if (application.stage.kind === "interview" || application.stage.kind === "offer")
     return "interview";
+  if (application.shortlistedAt) return "retained";
   return "review";
 }
 
 const matches: Record<InboxFilter, (row: { badge: InboxBadge; unread: number }) => boolean> = {
   toutes: () => true,
   "non-lues": (row) => row.unread > 0,
-  retenus: (row) => row.badge === "interview" || row.badge === "hired",
+  retenus: (row) => row.badge === "interview" || row.badge === "hired" || row.badge === "retained",
   propositions: (row) => row.badge === "proposal",
   "non-retenus": (row) => row.badge === "rejected" || row.badge === "withdrawn",
 };
@@ -53,6 +68,8 @@ export async function listRecruiterInbox(
     where: {
       organizationId: ctx.organizationId,
       kind: { not: "peer" },
+      // Lot 6: « Retirer de ma messagerie » hides it on the organization's side only.
+      orgHiddenAt: null,
       ...(query
         ? {
             OR: [
@@ -72,26 +89,29 @@ export async function listRecruiterInbox(
           }
         : {}),
     },
-    orderBy: { lastMessageAt: "desc" },
+    // Lot 6: the pinned conversations first.
+    orderBy: [{ orgPinnedAt: { sort: "desc", nulls: "last" } }, { lastMessageAt: "desc" }],
     take: 100,
     select: {
       id: true,
       talentUserId: true,
       lastMessageAt: true,
       blockedAt: true,
+      orgPinnedAt: true,
       application: {
         select: {
           id: true,
           status: true,
+          shortlistedAt: true,
           stage: { select: { kind: true, name: true } },
           job: { select: { title: true } },
-          profile: { select: { user: { select: { name: true, firstName: true } } } },
+          profile: { select: { user: { select: personSelect } } },
         },
       },
       contactRequest: {
         select: {
           job: { select: { title: true } },
-          profile: { select: { id: true, user: { select: { name: true, firstName: true } } } },
+          profile: { select: { id: true, user: { select: personSelect } } },
         },
       },
       participants: { where: { userId: ctx.userId }, select: { lastReadAt: true } },
@@ -103,6 +123,11 @@ export async function listRecruiterInbox(
       },
     },
   });
+  const viewer = await db.user.findUnique({
+    where: { id: ctx.userId },
+    select: { showPresence: true },
+  });
+  const now = new Date();
   const rows = conversations.map((conversation) => {
     const readAt = conversation.participants[0]?.lastReadAt ?? null;
     const last = conversation.messages[0] ?? null;
@@ -127,6 +152,8 @@ export async function listRecruiterInbox(
       waiting: last !== null && last.senderId === conversation.talentUserId,
       unread,
       at: last?.createdAt ?? conversation.lastMessageAt,
+      pinned: conversation.orgPinnedAt !== null,
+      online: isOnline(person, viewer ?? { showPresence: false }, now),
     };
   });
   const filtered = rows.filter(matches[options.filter ?? "toutes"]);

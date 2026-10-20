@@ -5,6 +5,7 @@ import { RecruiterShell } from "@/components/recruiter/shell";
 import { TalentShell } from "@/components/talent/shell";
 import { Skeleton } from "@/components/ui";
 import { requireUser } from "@/server/auth/session";
+import { touchPresence } from "@/server/services/hire-messaging";
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
 import { ADMIN_ROLES } from "@/server/auth/session";
@@ -44,6 +45,8 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     getActiveSpace(user.id),
     getPartnerSpace(user.id),
     unreadNotifications(db, user.id),
+    // Recruteur lot 6: « En ligne » in the messaging (at most one write a minute).
+    touchPresence(db, user.id),
   ]);
   const intro = await introData({
     profile: introProfile(

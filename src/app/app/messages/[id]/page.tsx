@@ -26,6 +26,7 @@ import {
 } from "@/server/actions/connect";
 import { switchSpace } from "@/server/actions/hire";
 import { db } from "@/server/db";
+import { touchPresence } from "@/server/services/hire-messaging";
 import { connectViewer } from "@/server/hire-context";
 import { authLimits } from "@/server/rate-limit";
 import { talentStatus } from "@/server/services/applications";
@@ -119,6 +120,7 @@ export default async function ThreadPage({
   void space;
 
   await markRead(db, viewer, conversation.id);
+  await touchPresence(db, viewer.userId);
   const now = new Date();
   const back = `/app/messages/${conversation.id}`;
   // A conversation with a connection (lot 6): the other talent stands where the company would.

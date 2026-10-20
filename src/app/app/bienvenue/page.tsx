@@ -42,7 +42,7 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
   const org = await ownedOrganization(db, user.id);
   const firstName = user.firstName ?? user.name;
 
-  const { etape, seul, erreur } = await searchParams;
+  const { etape, seul, erreur, rejoindre } = await searchParams;
   // The owner of a new organization: the recruiter's first steps (planche recruteur-3 OBR).
   if (org)
     return (
@@ -51,6 +51,8 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
         email={user.email}
         step={typeof etape === "string" ? etape : undefined}
         error={typeof erreur === "string"}
+        userId={user.id}
+        join={typeof rejoindre === "string" ? rejoindre : undefined}
       />
     );
 

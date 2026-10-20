@@ -164,7 +164,11 @@ export async function sendMessage(
       createdAt: now,
     },
   });
-  await db.conversation.update({ where: { id: conversationId }, data: { lastMessageAt: now } });
+  await db.conversation.update({
+    where: { id: conversationId },
+    // A conversation the organization removed from its list comes back with a new message.
+    data: { lastMessageAt: now, orgHiddenAt: null },
+  });
   await markRead(db, viewer, conversationId, now);
   let recipients: string[];
   if (conversation.kind === "peer") {
@@ -182,6 +186,17 @@ export async function sendMessage(
     // Nobody from the organization has written yet: the hiring team is told.
     if (recipients.length === 0 && conversation.organizationId) {
       recipients = (await hiringTeam(db, conversation.organizationId)).map((member) => member.id);
+    }
+  }
+  // « Couper les notifications » (recruteur lot 6): the message arrives, the person is not told.
+  if (recipients.length > 0) {
+    const muted = await db.conversationParticipant.findMany({
+      where: { conversationId, userId: { in: recipients }, mutedAt: { not: null } },
+      select: { userId: true },
+    });
+    if (muted.length > 0) {
+      const off = new Set(muted.map((row) => row.userId));
+      recipients = recipients.filter((id) => !off.has(id));
     }
   }
   if (conversation.application && message.kind !== "system") {

@@ -1351,6 +1351,7 @@ export async function seedUxScenario(db: SeedClient) {
   }
 
   await seedRecruiterLot4(db);
+  await seedRecruiterLot6(db);
 
   console.log(
     `✓ Scénario UX : ${talents.length} talents, ${companies.length} entreprises et recruteurs, ${companies.length} offres, ${courses.length} formations, ${partners.length} partenaires (*.ux@jumanly.test)`,
@@ -1488,4 +1489,152 @@ async function seedRecruiterLot4(db: SeedClient) {
       },
     });
   }
+}
+
+/**
+ * Recruiter redesign, lot 6 (planches recruteur-4): the applications of « Analyste de données
+ * junior (démo) » read by Orbi, two of them retained, a second offer closing in three days (the
+ * end-of-offer reminder), a request to join Baobab Fintech waiting for its administrator, and the
+ * finished conversation of a non retained candidate for Orbi's clean-up. Fictional, rebuilt on
+ * each run.
+ */
+async function seedRecruiterLot6(db: SeedClient) {
+  const org = await db.organization.findUnique({
+    where: { slug: "ux-baobab-fintech-fictive" },
+    select: { id: true },
+  });
+  const job = await db.job.findUnique({
+    where: { slug: "ux-analyste-donnees-junior-kinshasa" },
+  });
+  const recruiter = await db.user.findUnique({
+    where: { email: "recruteur6.ux@jumanly.test" },
+    select: { id: true },
+  });
+  if (!org || !job || !recruiter) return;
+
+  // Orbi's reading of each file, written as the analysis would store it (fictional points).
+  const applications = await db.application.findMany({
+    where: { jobId: job.id, status: "active" },
+    orderBy: { createdAt: "asc" },
+    select: { id: true },
+  });
+  await db.applicationEvent.deleteMany({
+    where: { application: { jobId: job.id }, type: "orbi_analysis" },
+  });
+  await db.application.updateMany({
+    where: { jobId: job.id },
+    data: { shortlistedAt: null, shortlistedById: null },
+  });
+  for (const [index, application] of applications.entries()) {
+    await db.applicationEvent.create({
+      data: {
+        applicationId: application.id,
+        actorId: recruiter.id,
+        type: "orbi_analysis",
+        createdAt: ago(1),
+        payload: {
+          source: "ai",
+          strengths: [
+            { text: "Tableaux de bord Power BI décrits dans une expérience (démo)." },
+            { text: "Requêtes SQL citées dans un projet du dossier (démo)." },
+          ],
+          toVerify: [{ text: "Python déclaré sans preuve : à vérifier en entretien (démo)." }],
+        },
+      },
+    });
+    if (index < 2)
+      await db.application.update({
+        where: { id: application.id },
+        data: { shortlistedAt: ago(0.5), shortlistedById: recruiter.id },
+      });
+  }
+  const finishedAt = ago(1);
+  await db.job.update({
+    where: { id: job.id },
+    data: {
+      atsRanAt: finishedAt,
+      atsRun: {
+        startedAt: new Date(finishedAt.getTime() - 120_000).toISOString(),
+        by: recruiter.id,
+        ids: applications.map((item) => item.id),
+        stoppedAt: null,
+        finishedAt: finishedAt.toISOString(),
+        failed: null,
+      },
+    },
+  });
+
+  // A second offer that closes in three days: the J-3 reminder in Notifications.
+  const closesAt = new Date(Date.now() + 3 * day);
+  const ending = await db.job.upsert({
+    where: { slug: "ux-charge-clientele-kinshasa-fin" },
+    update: { status: "published", closesAt, endingReminders: [] },
+    create: {
+      slug: "ux-charge-clientele-kinshasa-fin",
+      organizationId: org.id,
+      createdById: recruiter.id,
+      title: "Chargé de clientèle (démo)",
+      description: `Vous accompagnez les clients d'une fintech imaginaire. ${NOTICE}`,
+      responsibilities: ["Répondre aux clients", "Suivre les demandes"],
+      requirements: ["Bac + 2", "Français courant"],
+      benefits: ["Avantages fictifs, pour la démonstration"],
+      process: ["Étude de la candidature", "Entretien"],
+      contractType: "cdi",
+      city: job.city,
+      country: job.country,
+      remote: "onsite",
+      experienceMin: 0,
+      languagesRequired: [{ code: "fr", level: "B2" }],
+      knockoutCriteria: [],
+      status: "published",
+      publishedAt: ago(25),
+      closesAt,
+    },
+  });
+  if ((await db.pipelineStage.count({ where: { jobId: ending.id } })) === 0) {
+    const stages = await db.pipelineStage.findMany({
+      where: { jobId: job.id },
+      orderBy: { order: "asc" },
+      select: { name: true, kind: true, order: true },
+    });
+    await db.pipelineStage.createMany({
+      data: stages.map((stage) => ({ ...stage, jobId: ending.id })),
+    });
+  }
+
+  // Someone of the same (fictional) company asks to join instead of creating a duplicate.
+  const joiner = await db.user.upsert({
+    where: { email: "rejoindre.ux@jumanly.test" },
+    update: {},
+    create: {
+      email: "rejoindre.ux@jumanly.test",
+      name: "Josué Démo",
+      firstName: "Josué",
+      lastName: "Démo",
+      emailVerified: true,
+      country: "CD",
+      city: "Kinshasa",
+    },
+  });
+  await db.orgJoinRequest.deleteMany({ where: { userId: joiner.id } });
+  await db.orgJoinRequest.create({
+    data: {
+      organizationId: org.id,
+      userId: joiner.id,
+      matchedBy: "name",
+      createdAt: ago(0.2),
+      expiresAt: new Date(Date.now() + 6.8 * day),
+    },
+  });
+
+  // A non retained candidate whose conversation has been quiet for six weeks.
+  const rejected = await db.application.findFirst({
+    where: { job: { organizationId: org.id }, status: "rejected", conversation: { isNot: null } },
+    select: { conversation: { select: { id: true } } },
+  });
+  if (rejected?.conversation)
+    await db.conversation.update({
+      where: { id: rejected.conversation.id },
+      data: { lastMessageAt: ago(42), orgHiddenAt: null },
+    });
 }

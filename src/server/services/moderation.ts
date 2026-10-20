@@ -106,6 +106,13 @@ export async function createReport(
             OR: [
               { talentUserId: reporterId },
               { kind: "peer", participants: { some: { userId: reporterId } } },
+              // Recruteur lot 6: a member of the organization of the conversation.
+              {
+                kind: { not: "peer" },
+                organization: {
+                  memberships: { some: { userId: reporterId, status: "active" } },
+                },
+              },
             ],
           },
         })

@@ -5,7 +5,8 @@ import { db } from "@/server/db";
 import { can } from "@/server/entitlements";
 import { getActiveSpace } from "@/server/hire-context";
 import { reportRows } from "@/server/hire-report-export";
-import { renderReportPdf } from "@/server/pdf/report-document";
+import { renderRecruitingReport } from "@/server/pdf/recruiting-report";
+import { reportPdfData } from "@/server/services/hire-report-pdf";
 import { buildReport, periodRange } from "@/server/services/hire-reports";
 
 /**
@@ -40,16 +41,26 @@ export async function GET(request: Request) {
   });
   const day = range.to.toISOString().slice(0, 10);
   const headers = { "Cache-Control": "private, no-store" };
-  const t = await getTranslations("hire.reports");
-  const pdf = await renderReportPdf(
-    {
-      brand: (await getTranslations("common"))("brand"),
-      title: t("pdf.title", { org: space.organization.name }),
-      period: t("pdf.period", { from: range.from, to: range.to }),
-      footer: [t("pdf.generated", { date: new Date() }), t("export.privacy")].join(" · "),
-    },
-    rows,
-  );
+  // The designed A4 report (recruteur lot 6, modèle rapport-recrutement): the sections already
+  // drawn as charts and tables leave the detail list, and so do the members' names (« aucune
+  // donnée personnelle »).
+  const t = await getTranslations("hire");
+  const drawn = [
+    t("reports.basic.title"),
+    t("reports.stats.funnel"),
+    t("reports.stats.sources"),
+    t("reports.stats.byJob"),
+    t("reports.advanced.byRecruiter"),
+    t("reports.advanced.scorecards"),
+  ];
+  const pdf = await renderRecruitingReport({
+    org: space.organization.name,
+    range,
+    report,
+    extra: await reportPdfData(db, ctx, range),
+    rows: rows.filter((row) => !drawn.includes(row.section)),
+    now: new Date(),
+  });
   return new NextResponse(new Uint8Array(pdf), {
     headers: {
       ...headers,

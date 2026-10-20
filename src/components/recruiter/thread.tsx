@@ -26,6 +26,10 @@ import { badgeOf } from "@/server/services/recruiter-inbox";
 import { organizationCreditsLeft } from "@/server/services/recruiter-orbi";
 import { badgeTone } from "./inbox";
 import { ThreadComposer, type ComposerTemplate } from "./thread-composer";
+import { ToastOnLoad } from "@/components/motion/toast-on-load";
+import { TalentReportForm } from "@/components/talent/report-form";
+import { conversationMenuAction } from "@/server/actions/hire-messaging";
+import { isOnline, receiptOf } from "@/server/services/hire-messaging";
 
 type Payload = {
   name?: string;
@@ -78,6 +82,7 @@ export async function RecruiterThread({
   context: Awaited<ReturnType<typeof connectViewer>>;
 }) {
   const t = await getTranslations("rhThread");
+  const t6 = await getTranslations("rhThread6");
   const tt = await getTranslations("hire.templates");
   const format = await getFormatter();
   const ctx = viewer.hire!;
@@ -144,7 +149,7 @@ export async function RecruiterThread({
     return message.kind === "invitation" && interviewId ? [interviewId] : [];
   });
   const subject = { type: "organization" as const, id: ctx.organizationId };
-  const [senderRows, interviewRows, linked, matching, templates, credits, talent] =
+  const [senderRows, interviewRows, linked, matching, templates, credits, talent, me, seats] =
     await Promise.all([
       db.user.findMany({ where: { id: { in: senderIds } }, select: { id: true, name: true } }),
       interviewsForConversation(db, interviewIds),
@@ -155,6 +160,7 @@ export async function RecruiterThread({
             select: {
               status: true,
               matchScore: true,
+              shortlistedAt: true,
               profile: { select: { matchingEnabled: true } },
               stage: { select: { kind: true, name: true, order: true } },
               job: {
@@ -174,9 +180,45 @@ export async function RecruiterThread({
       canWrite ? organizationCreditsLeft(db, ctx.organizationId) : Promise.resolve(null),
       db.user.findUnique({
         where: { id: conversation.talentUserId },
-        select: { firstName: true, name: true },
+        select: {
+          firstName: true,
+          name: true,
+          lastSeenAt: true,
+          showPresence: true,
+          readReceipts: true,
+        },
+      }),
+      // Lot 6: presence and receipts are reciprocal; the mute is this member's own.
+      db.user.findUnique({
+        where: { id: user.id },
+        select: { showPresence: true, readReceipts: true },
+      }),
+      db.conversationParticipant.findMany({
+        where: {
+          conversationId: conversation.id,
+          userId: { in: [conversation.talentUserId, user.id] },
+        },
+        select: { userId: true, lastReadAt: true, mutedAt: true },
       }),
     ]);
+  const mine = { showPresence: me?.showPresence ?? true, readReceipts: me?.readReceipts ?? true };
+  const online = isOnline(talent, mine, now);
+  const talentSeat = seats.find((row) => row.userId === conversation.talentUserId);
+  const muted = Boolean(seats.find((row) => row.userId === user.id)?.mutedAt);
+  const pinned = conversation.orgPinnedAt !== null;
+  const lastOwn = [...conversation.messages]
+    .reverse()
+    .find(
+      (message) =>
+        message.senderId !== conversation.talentUserId && message.senderId && !message.hiddenAt,
+    );
+  const receipt = receiptOf(
+    lastOwn ?? null,
+    talent
+      ? { readReceipts: talent.readReceipts, lastReadAt: talentSeat?.lastReadAt ?? null }
+      : null,
+    mine,
+  );
   const senders = new Map(senderRows.map((row) => [row.id, row.name]));
   const interviews = new Map(interviewRows.map((row) => [row.id, row]));
   const badge = badgeOf(linked);
@@ -270,6 +312,7 @@ export async function RecruiterThread({
         <div className="t-t">
           <h1>{name}</h1>
           <span className={cx("t-r5-etq", badgeTone[badge])}>{t(`badge.${badge}`)}</span>
+          {online && <span className="t-r6-online">{t6("online")}</span>}
         </div>
         <SheetButton target="r5-conv-menu" className="t-bi t-press" label={t("menu.open")}>
           <TalentIcon name="plus-options" size="s" />
@@ -307,6 +350,11 @@ export async function RecruiterThread({
       )}
 
       {one("ok") === "document" && <Notice tone="ok">{t("ok.document")}</Notice>}
+      {["pin", "unpin", "mute", "unmute"].includes(one("ok")) && (
+        <ToastOnLoad message={t6(`ok.${one("ok") as "pin"}`)} />
+      )}
+      {one("signalement") === "ok" && <ToastOnLoad message={t6("reported")} />}
+      {one("signalement") === "deja" && <ToastOnLoad message={t6("reportedAlready")} />}
       {one("erreur") === "trop" ? (
         <Notice tone="err">{t("error.tooMany", { seconds: authLimits.message.window })}</Notice>
       ) : one("erreur") === "document" ? (
@@ -459,6 +507,12 @@ export async function RecruiterThread({
                 {author
                   ? t("meta", { author, time: time(message.createdAt) })
                   : time(message.createdAt)}
+                {message.id === lastOwn?.id && receipt && (
+                  <span className={cx("t-r6-lu", receipt === "read" && "t-on")}>
+                    {" · "}
+                    {t6(`receipt.${receipt}`)}
+                  </span>
+                )}
               </small>
             </li>
           );
@@ -584,7 +638,80 @@ export async function RecruiterThread({
               <TalentIcon name="suivant" />
             </Link>
           </li>
+          {/* Lot 6 (planche CONV_MENU): pin for the team, mute for oneself, remove, report. */}
+          <li>
+            <form action={conversationMenuAction}>
+              <input type="hidden" name="conversation" value={conversation.id} />
+              <input type="hidden" name="action" value={pinned ? "unpin" : "pin"} />
+              <button type="submit" className="t-li t-press">
+                <span className="t-cases t-c1" aria-hidden>
+                  <TalentIcon name="favori" size="s" />
+                </span>
+                <span className="t-t">
+                  <b>{pinned ? t6("menu.unpin") : t6("menu.pin")}</b>
+                  <span>{t6("menu.pinText")}</span>
+                </span>
+              </button>
+            </form>
+          </li>
+          <li>
+            <form action={conversationMenuAction}>
+              <input type="hidden" name="conversation" value={conversation.id} />
+              <input type="hidden" name="action" value={muted ? "unmute" : "mute"} />
+              <button type="submit" className="t-li t-press">
+                <span className="t-cases" aria-hidden>
+                  <TalentIcon name="notification" size="s" />
+                </span>
+                <span className="t-t">
+                  <b>{muted ? t6("menu.unmute") : t6("menu.mute")}</b>
+                  <span>{t6("menu.muteText")}</span>
+                </span>
+              </button>
+            </form>
+          </li>
+          {permissions.manage && (
+            <li>
+              <SheetButton target="r6-conv-retirer" className="t-li t-press">
+                <span className="t-cases" aria-hidden>
+                  <TalentIcon name="fermer" size="s" />
+                </span>
+                <span className="t-t">
+                  <b>{t6("menu.hide")}</b>
+                  <span>{t6("menu.hideText")}</span>
+                </span>
+              </SheetButton>
+            </li>
+          )}
+          <li>
+            <SheetButton target="r6-conv-signaler" className="t-li t-press">
+              <span className="t-cases" aria-hidden>
+                <TalentIcon name="aide" size="s" />
+              </span>
+              <span className="t-t">
+                <b>{t6("menu.report")}</b>
+              </span>
+            </SheetButton>
+          </li>
         </ul>
+      </Sheet>
+      {permissions.manage && (
+        <Sheet id="r6-conv-retirer" title={t6("hide.title")} closeLabel={t("close")}>
+          <form action={conversationMenuAction} className="t-flux">
+            <input type="hidden" name="conversation" value={conversation.id} />
+            <input type="hidden" name="action" value="hide" />
+            <p>{t6("hide.text", { name: firstName })}</p>
+            <button type="submit" className="t-bt t-p t-pl t-press">
+              {t6("hide.confirm")}
+            </button>
+          </form>
+        </Sheet>
+      )}
+      <Sheet id="r6-conv-signaler" title={t6("report.title")} closeLabel={t("close")}>
+        <TalentReportForm
+          targetType="conversation"
+          targetId={conversation.id}
+          back={`/app/messages/${conversation.id}`}
+        />
       </Sheet>
     </div>
   );

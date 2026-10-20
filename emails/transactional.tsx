@@ -19,7 +19,21 @@ export type TransactionalEmailProps = {
   essential?: boolean;
   /** Filled in when sending: the address shown in the footer. */
   recipient?: string;
+  /**
+   * Head of the recruitment e-mails (recruteur lot 6, docs/refonte-mobile/modeles-recruteur): a
+   * badge, a big title and a line, above the greeting.
+   */
+  banner?: { badge: string; title: string; sub: string; tone: "lime" | "creme" | "ambre" };
+  /** Three figures in a row (end of an offer: applications, views, interviews). */
+  figures?: { value: string; label: string }[];
+  /** Numbered steps after the card (« Les prochaines étapes »), in a cream box when `boxed`. */
+  steps?: { title?: string; boxed?: boolean; items: { title: string; text: string }[] };
+  /** Paragraphs after the button (the sign-off of a recruiter's letter). */
+  closing?: string[];
 };
+
+const stepTones = [colors.lime, "#C8F0E2", "#FBE3B0"];
+const badgeTones = { lime: colors.lime, creme: "#E8E2D8", ambre: "#FBE3B0" };
 
 const paragraph = { fontSize: 15, lineHeight: "24px", color: colors.sapin, margin: "0 0 16px" };
 const small = { ...paragraph, fontSize: 12, lineHeight: "17px" };
@@ -50,6 +64,10 @@ export default function TransactionalEmail({
   hero,
   essential = true,
   recipient,
+  banner,
+  figures,
+  steps,
+  closing,
 }: TransactionalEmailProps) {
   const blocks = paragraphs.map((item, index) =>
     typeof item === "string" ? (
@@ -64,6 +82,33 @@ export default function TransactionalEmail({
   );
   return (
     <EmailLayout preview={preview} recipient={recipient} essential={essential} hero={hero}>
+      {banner && (
+        <Section style={{ margin: "0 0 18px" }}>
+          <Text
+            style={{
+              display: "inline-block",
+              margin: "0 0 12px",
+              padding: "5px 11px",
+              borderRadius: 99,
+              backgroundColor: badgeTones[banner.tone],
+              color: colors.sapin,
+              fontSize: 11,
+              lineHeight: "14px",
+              fontWeight: 700,
+              letterSpacing: 1,
+              textTransform: "uppercase",
+            }}
+          >
+            {banner.badge}
+          </Text>
+          <Text style={{ margin: "0 0 6px", fontSize: 24, lineHeight: "30px", fontWeight: 700 }}>
+            {banner.title}
+          </Text>
+          <Text style={{ margin: 0, fontSize: 14, lineHeight: "20px", color: colors.ardoise }}>
+            {banner.sub}
+          </Text>
+        </Section>
+      )}
       <Text style={paragraph}>{greeting}</Text>
       {blocks[0]}
       {card && (
@@ -105,7 +150,82 @@ export default function TransactionalEmail({
           </Row>
         </Section>
       )}
+      {figures && figures.length > 0 && (
+        <Section style={{ backgroundColor: colors.creme, borderRadius: 16, margin: "0 0 16px" }}>
+          <Row>
+            {figures.map((item, index) => (
+              <Column
+                key={index}
+                align="center"
+                style={{
+                  padding: "14px 8px",
+                  borderLeft: index === 0 ? undefined : `1px solid ${colors.brume}`,
+                }}
+              >
+                <Text style={{ margin: 0, fontSize: 22, lineHeight: "28px", fontWeight: 700 }}>
+                  {item.value}
+                </Text>
+                <Text
+                  style={{ margin: 0, fontSize: 12, lineHeight: "16px", color: colors.ardoise }}
+                >
+                  {item.label}
+                </Text>
+              </Column>
+            ))}
+          </Row>
+        </Section>
+      )}
       {blocks.slice(1)}
+      {steps && steps.items.length > 0 && (
+        <Section
+          style={
+            steps.boxed
+              ? {
+                  backgroundColor: colors.creme,
+                  borderRadius: 16,
+                  padding: "14px 18px",
+                  margin: "0 0 16px",
+                }
+              : { margin: "0 0 16px" }
+          }
+        >
+          {steps.title && (
+            <Text style={{ ...paragraph, margin: "0 0 8px", fontWeight: 700 }}>{steps.title}</Text>
+          )}
+          {steps.items.map((item, index) => (
+            <Row key={index} style={{ margin: "8px 0" }}>
+              <Column style={{ width: 38, verticalAlign: "top" }}>
+                <Text
+                  style={{
+                    margin: 0,
+                    width: 26,
+                    height: 26,
+                    lineHeight: "26px",
+                    borderRadius: 13,
+                    backgroundColor: stepTones[index % 3],
+                    color: colors.sapin,
+                    fontSize: 12,
+                    fontWeight: 700,
+                    textAlign: "center",
+                  }}
+                >
+                  {index + 1}
+                </Text>
+              </Column>
+              <Column>
+                <Text style={{ margin: 0, fontSize: 14, lineHeight: "20px", fontWeight: 700 }}>
+                  {item.title}
+                </Text>
+                <Text
+                  style={{ margin: 0, fontSize: 13, lineHeight: "19px", color: colors.ardoise }}
+                >
+                  {item.text}
+                </Text>
+              </Column>
+            </Row>
+          ))}
+        </Section>
+      )}
       {code && (
         <Text
           style={{
@@ -140,6 +260,11 @@ export default function TransactionalEmail({
           <Text style={muted}>{t("mail.common.buttonFallback", { url: cta.href })}</Text>
         </>
       )}
+      {closing?.map((item, index) => (
+        <Text key={`c${index}`} style={paragraph}>
+          {item}
+        </Text>
+      ))}
       {footnote && <Text style={{ ...muted, fontSize: 13, lineHeight: "20px" }}>{footnote}</Text>}
     </EmailLayout>
   );

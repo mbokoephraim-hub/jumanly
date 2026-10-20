@@ -89,6 +89,13 @@ export async function RecruiterSettings({
           title={t("rhSettings.notifications.title")}
           text={t("rhSettings.notifications.text")}
         />
+        {/* Lot 6: presence, read receipts and end-of-offer reminders. */}
+        <Row
+          href="/app/parametres/messagerie"
+          icon={cases("message", "t-c2")}
+          title={t("messagingSettings.title")}
+          text={t("messagingSettings.rowText")}
+        />
       </ul>
 
       <h2 className="t-ck-t">{t("rhSettings.appearance.group")}</h2>

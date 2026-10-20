@@ -3293,3 +3293,41 @@ traduction, résumé du matin, langues d'échange, fuseau et signature non const
 retiré).
 
 **Captures.** `captures/refonte-recruteur-lot-5/` du dossier du projet, 390 px, clair et sombre.
+
+## 2026-10-20 · Étape 2, recruteur lot 6
+
+**Fait.** Dernier lot mobile du recruteur (brief recruteur § 4, point 6, décisions § 2.16 à 2.21 ;
+planches recruteur-4 et modeles-recruteur). ATS avec Orbi (`/app/hire/offres/[id]/ats`) : analyse
+maintenant ou à la clôture, nouvelles candidatures ajoutées au classement, suivi avec « Arrêter »,
+recommandation d'Orbi avec son « Pourquoi ? » (règle fixe, personne n'est rejeté), onglets
+Recommandés / À vérifier / Tous, sélection ; profil pour l'offre (`/ats/[applicationId]`) ;
+liste des retenus (`/retenus`) ; réponses groupées (`/reponses`) relues personne par personne,
+confirmées, puis annulables 10 minutes ; quatre modèles d'e-mails. Messagerie : en ligne, lu,
+épingler, couper les notifications, retirer, signaler, nettoyage proposé par Orbi, réglages
+`/app/parametres/messagerie`. Rappels et carte de fin d'offre (prolonger, clôturer ou annuler).
+« Relancer » une proposition. Rejoindre une organisation existante (demande, réponse de
+l'administrateur avec rôle et sièges, expiration). Rapport PDF A4 aux couleurs de Jumanly.
+Entrées vers l'ATS depuis À traiter, Candidatures, Mes offres et la fin d'offre.
+
+**Données.** Migration additive `20261020220000_recruteur_lot_6_ats_retenus_messagerie_rejoindre`
+(analyse de l'offre et programmation, retenus, conversation épinglée ou retirée, notifications
+coupées, présence et accusés de lecture, relance, rappels de fin d'offre, `OrgJoinRequest`).
+Aucune donnée effacée. Le seed ajoute pour Baobab Fintech (fictive) les dossiers lus par Orbi,
+deux retenus, une offre « Chargé de clientèle (démo) » qui se termine dans 3 jours et une
+demande pour rejoindre de « Josué Démo ».
+
+**Ancien design supprimé.** Aucun fichier : le lot ajoute des écrans neufs et complète ceux du
+lot 5 ; l'ancien rendu PDF du rapport recruteur n'est plus utilisé par Hire (il sert encore aux
+rapports partenaire et carrière).
+
+**Corrections trouvées en route.** Le client Prisma généré gardait l'ancien défaut des rappels
+(J-3, J-1 et jour J) : régénéré. La zone de texte de la réponse groupée débordait (hauteur fixe
+de `.t-saisie`). « Recommandés » affichait « aucun dossier » sous le podium. Le bouton
+« Analyser (ATS) » écrasait les dates de la carte d'offre.
+
+**Tests.** Unitaires 352 (50 fichiers) ; en base 258 (35 fichiers) sur une base neuve ; e2e complets lancés par la CI.
+
+**Écarts.** Voir `docs/decisions/2026-10-20-recruteur-lot-6.md`.
+
+**Captures.** `captures/refonte-recruteur-lot-6/` du dossier du projet, 390 px, clair et sombre,
+et les deux pages du rapport PDF.

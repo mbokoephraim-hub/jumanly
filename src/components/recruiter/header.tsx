@@ -37,7 +37,9 @@ function ownRecruiterHead(pathname: string) {
     // Lot 4: the agenda, an interview, a talent's profile and its proposal, the pools.
     /^\/app\/hire\/entretiens(\/[^/]+)?$/.test(pathname) ||
     /^\/app\/hire\/talents\/[^/]+(\/proposer)?$/.test(pathname) ||
-    /^\/app\/hire\/viviers(\/[^/]+)?$/.test(pathname)
+    /^\/app\/hire\/viviers(\/[^/]+)?$/.test(pathname) ||
+    // Lot 6: the ATS of an offer, a profile for the offer, the retained, the grouped replies.
+    /^\/app\/hire\/offres\/[^/]+\/(ats(\/[^/]+)?|retenus|reponses)$/.test(pathname)
   );
 }
 

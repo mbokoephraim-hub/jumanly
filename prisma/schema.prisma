@@ -142,6 +142,7 @@ model Organization {
   licenseBatches          LicenseBatch[]
   /// Supporting documents of the verification request (Admin v2, étape 4).
   documents               OrganizationDocument[]
+  joinRequests            OrgJoinRequest[]
   /// Suspended by a Jumanly administrator: jobs hidden, Hire closed to its members.
   suspendedAt             DateTime?
   suspensionReason        String?
@@ -302,6 +303,21 @@ model Job {
   moderationReason        String?
   /// Points to correct ticked by the moderator (`admin.jobs.fix.*`), with `changes_requested`.
   moderationChecks        String[]           @default([])
+  /// ATS (recruteur lot 6): Orbi analyses every application once, at the closing date
+  /// (`ats.scheduled`); the credits are only used then. The member who asked it, for the consent.
+  atsAtClose              Boolean            @default(false)
+  atsScheduledById        String?
+  /// « Ajouter les nouvelles au classement »: each application received after an analysis is read
+  /// when it arrives (one credit each).
+  atsAutoAdd              Boolean            @default(false)
+  /// Last time Orbi analysed the applications of this job (now or at the closing date).
+  atsRanAt                DateTime?
+  /// The analysis running now: { startedAt, by, ids, stoppedAt?, finishedAt?, failed? } (one at a
+  /// time per job). The page follows it; the member can leave and is told at the end.
+  atsRun                  Json?
+  /// End-of-offer reminders already sent (`jobs.ending_reminders`): ["d7", "d3", "d1", "d0"]
+  /// with the closing date they were for, so that a new date sends them again.
+  endingReminders         Json               @default("[]")
   skills                  JobSkill[]
   stages                  PipelineStage[]
   applications            Application[]
@@ -791,6 +807,18 @@ model User {
   /// « Recevoir aussi par e-mail » (Paramètres › Notifications): reminders also sent by e-mail.
   /// Receipts and security e-mails are always sent.
   notificationEmails  Boolean                   @default(true)
+  /// Last page seen in the signed-in space, for « En ligne » (recruteur lot 6). Never shown when
+  /// `showPresence` is off.
+  lastSeenAt          DateTime?
+  /// « Montrer quand je suis en ligne » (Paramètres): off, nobody sees it, and the person does not
+  /// see the others either.
+  showPresence        Boolean                   @default(true)
+  /// « Accusés de lecture » (Paramètres): off, « Lu » is neither sent nor shown, both ways.
+  readReceipts        Boolean                   @default(true)
+  /// End-of-offer reminders (Paramètres › Messagerie et rappels): any of ["d7", "d3", "d1", "d0"],
+  /// J-3 only by default (brief recruteur § 2.16 bis).
+  endingReminders     String[]                  @default(["d3"])
+  joinRequests        OrgJoinRequest[]
   sessions            Session[]
   accounts            Account[]
   twoFactors          TwoFactor[]
@@ -1313,6 +1341,9 @@ model Application {
   matchScore       Int?
   matchExplanation Json?
   viewedAt         DateTime?
+  /// « Liste des retenus » (recruteur lot 6): kept for the next stage by a member, never by Orbi.
+  shortlistedAt    DateTime?
+  shortlistedById  String?
   events           ApplicationEvent[]
   conversation     Conversation?
   scorecards       Scorecard[]
@@ -1544,6 +1575,11 @@ model Conversation {
   connection     Connection?               @relation(fields: [connectionId], references: [id], onDelete: Cascade)
   /// Set when the talent blocks the organization: no more messages from it.
   blockedAt      DateTime?
+  /// « Retirer de ma messagerie » (recruteur lot 6): hidden on the organization's side only, until
+  /// a new message arrives. The talent keeps every message; nothing is deleted.
+  orgHiddenAt    DateTime?
+  /// « Épingler la conversation »: shown first in the organization's list.
+  orgPinnedAt    DateTime?
   participants   ConversationParticipant[]
   messages       Message[]
   lastMessageAt  DateTime                  @default(now())
@@ -1560,6 +1596,8 @@ model ConversationParticipant {
   userId         String
   user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
   lastReadAt     DateTime?
+  /// « Couper les notifications » of this conversation, for this person only.
+  mutedAt        DateTime?
 
   @@unique([conversationId, userId])
 }
@@ -2043,12 +2081,45 @@ model ContactRequest {
   status         ContactRequestStatus @default(pending)
   expiresAt      DateTime
   respondedAt    DateTime?
+  /// « Relancer » in « Mes propositions » (recruteur lot 6): once, while it waits.
+  remindedAt     DateTime?
   conversationId String?              @unique
   conversation   Conversation?        @relation(fields: [conversationId], references: [id], onDelete: SetNull)
   createdAt      DateTime             @default(now())
 
   @@index([profileId, status])
   @@index([organizationId, createdAt])
+}
+
+enum JoinRequestStatus {
+  pending
+  accepted
+  declined
+  expired
+  cancelled
+}
+
+/// « Demander à rejoindre » (recruteur lot 6, planche recruteur-4 § 6): a person who signs up finds
+/// their organization already on Jumanly. Its owner or an administrator accepts (choosing the role)
+/// or declines; without an answer within 7 days the request expires. Nobody enters without consent.
+model OrgJoinRequest {
+  id             String            @id @default(cuid(2))
+  organizationId String
+  organization   Organization      @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  userId         String
+  user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// Why the organization was proposed: same e-mail domain, or same name.
+  matchedBy      String
+  status         JoinRequestStatus @default(pending)
+  /// Role given on acceptance.
+  role           MembershipRole?
+  expiresAt      DateTime
+  respondedAt    DateTime?
+  respondedById  String?
+  createdAt      DateTime          @default(now())
+
+  @@index([organizationId, status])
+  @@index([userId, status])
 }
 
 /// « Ne plus recevoir de demandes de {company} ».

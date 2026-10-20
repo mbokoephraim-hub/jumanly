@@ -976,6 +976,7 @@ export async function orgProposals(db: PrismaClient, ctx: HireContext, now = new
       expiresAt: true,
       createdAt: true,
       respondedAt: true,
+      remindedAt: true,
       conversationId: true,
       job: { select: { title: true } },
       profile: {
@@ -997,8 +998,51 @@ export async function orgProposals(db: PrismaClient, ctx: HireContext, now = new
       createdAt: row.createdAt,
       respondedAt: row.respondedAt,
       conversationId: status === "accepted" ? row.conversationId : null,
+      /** Lot 6: « Relancer » once, while the proposal waits. */
+      canRemind: status === "pending" && row.remindedAt === null,
+      remindedAt: row.remindedAt,
     };
   });
+}
+
+/**
+ * « Relancer » a proposal still waiting (brief recruteur § 2.20): once only, the talent is told
+ * again in the app. The talent still decides; nothing else changes.
+ */
+export async function remindProposal(
+  db: PrismaClient,
+  ctx: HireContext,
+  requestId: string,
+  now = new Date(),
+) {
+  if (!hirePermissions(ctx.role).manage) throw new HireError("forbidden");
+  const request = await db.contactRequest.findFirst({
+    where: {
+      id: requestId,
+      organizationId: ctx.organizationId,
+      status: "pending",
+      remindedAt: null,
+      expiresAt: { gt: now },
+    },
+    select: {
+      id: true,
+      organization: { select: { name: true } },
+      profile: { select: { userId: true } },
+    },
+  });
+  if (!request) return false;
+  const claimed = await db.contactRequest.updateMany({
+    where: { id: request.id, remindedAt: null },
+    data: { remindedAt: now },
+  });
+  if (claimed.count === 0) return false;
+  await notify(db, {
+    userIds: [request.profile.userId],
+    type: "contactRequest",
+    payload: { company: request.organization.name },
+    href: "/app/messages?filtre=demandes",
+  });
+  return true;
 }
 
 /** Which filter of « Mes propositions » a status belongs to (expired counts as refused). */
