@@ -26,9 +26,10 @@ import {
   signatureLight,
   stagger,
 } from "@/components/site/marketing";
+import { InstallApp } from "@/components/site/install-app";
 import { CountUp, MotionRoot } from "@/components/site/motion";
 import { PublicCourseCard, PublicJobCard } from "@/components/site/public-cards";
-import { ButtonLink } from "@/components/ui";
+import { ButtonLink, buttonClasses } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
 import { withoutPlaceholders } from "@/lib/placeholders";
@@ -59,6 +60,7 @@ const chevron = <Icon name="chev-r" />;
 
 export default async function HomePage() {
   const t = await getTranslations();
+  const tInstall = await getTranslations("system.install");
   const [plans, courses, latest, messages, overrides] = await Promise.all([
     getPublicPlans(),
     getFeaturedCourses(),
@@ -235,6 +237,23 @@ export default async function HomePage() {
                 </li>
               ))}
             </ul>
+            <InstallApp
+              id="jm-installer-accueil"
+              buttonClassName={cx(buttonClasses({ variant: "inverse", size: "md" }), "h-auto py-2")}
+              dialogClassName={installDialog}
+              trigger={
+                <>
+                  <Icon name="telecharger" className="text-lime" />
+                  <span className="flex flex-col items-start text-left">
+                    {t("system.install.button")}
+                    <span className="text-xs font-medium text-blanc/75">
+                      {t("system.install.text")}
+                    </span>
+                  </span>
+                </>
+              }
+              steps={<InstallSteps t={tInstall} id="jm-installer-accueil" />}
+            />
           </div>
           <HeroVisual
             alt={t("home.hero.imageAlt")}
@@ -710,6 +729,70 @@ export default async function HomePage() {
         }
       />
     </>
+  );
+}
+
+const installDialog =
+  "mx-auto mt-auto mb-0 w-full max-w-none rounded-t-[28px] bg-blanc p-6 pb-8 text-sapin shadow-float backdrop:bg-nuit/55 sm:mb-auto sm:max-w-md sm:rounded-[28px]";
+
+/** The three steps of Safari on iPhone (« Installer l'appli »), in the dialog of the hero. */
+function InstallSteps({
+  t,
+  id,
+}: {
+  t: Awaited<ReturnType<typeof getTranslations<"system.install">>>;
+  id: string;
+}) {
+  const steps = [
+    { key: "step1", icon: "partager" },
+    { key: "step2", icon: "ajouter" },
+    { key: "step3", icon: "valider" },
+  ] as const;
+  return (
+    <div className="flex flex-col gap-5">
+      <div className="flex items-start justify-between gap-3">
+        <h2 id={`${id}-t`} className="text-xl leading-7 font-semibold tracking-[-0.01em]">
+          {t("ios.title")}
+        </h2>
+        <form method="dialog">
+          <button
+            type="submit"
+            aria-label={t("ios.close")}
+            className="-mt-1 -mr-2 flex size-11 items-center justify-center rounded-full text-sapin hover:bg-sapin/6"
+          >
+            <Icon name="fermer" />
+          </button>
+        </form>
+      </div>
+      <p className="text-sm leading-5 text-ardoise">{t("ios.intro")}</p>
+      <ol aria-label={t("ios.steps")} className="flex flex-col gap-4">
+        {steps.map(({ key, icon }, index) => (
+          <li key={key} className="flex items-start gap-3">
+            <span
+              aria-hidden
+              className="flex size-9 shrink-0 items-center justify-center rounded-full bg-lime text-sm font-bold text-sapin"
+            >
+              {index + 1}
+            </span>
+            <span className="flex min-w-0 flex-1 flex-col gap-0.5 pt-1">
+              <b className="flex items-center gap-2 text-[15px] leading-5 font-semibold">
+                {t(`ios.${key}.title`)}
+                <Icon name={icon} className="size-[18px] shrink-0 text-sapin/70" />
+              </b>
+              <span className="text-sm leading-5 text-ardoise">{t(`ios.${key}.text`)}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+      <form method="dialog">
+        <button
+          type="submit"
+          className={buttonClasses({ variant: "secondary", size: "lg", fullWidth: true })}
+        >
+          {t("ios.done")}
+        </button>
+      </form>
+    </div>
   );
 }
 

@@ -4,6 +4,7 @@ import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { TalentAvatar } from "@/components/talent/avatar";
+import { InstallApp } from "@/components/site/install-app";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
 import { cx } from "@/lib/cx";
@@ -74,6 +75,49 @@ const List = ({
   </ul>
 );
 
+/** The three steps of Safari on iPhone, in a sheet of the talent space (« Installer l'appli »). */
+function InstallSteps({
+  t,
+  id,
+}: {
+  t: Awaited<ReturnType<typeof getTranslations<"system.install">>>;
+  id: string;
+}) {
+  return (
+    <>
+      <div className="t-poignee" aria-hidden />
+      <div className="flex items-start justify-between gap-3">
+        <h2 id={`${id}-t`}>{t("ios.title")}</h2>
+        <form method="dialog">
+          <button type="submit" className="t-bi t-press" aria-label={t("ios.close")}>
+            <TalentIcon name="fermer" size="s" />
+          </button>
+        </form>
+      </div>
+      <p className="t-ss">{t("ios.intro")}</p>
+      <ol aria-label={t("ios.steps")} className="t-verre t-liste">
+        {(["step1", "step2", "step3"] as const).map((key, index) => (
+          <li key={key} className="t-li" style={{ paddingBlock: 12 }}>
+            <span className="t-num t-ok" aria-hidden>
+              {index + 1}
+            </span>
+            <span className="t-t">
+              {/* The steps are read in full: no ellipsis as in the other rows. */}
+              <b style={{ whiteSpace: "normal" }}>{t(`ios.${key}.title`)}</b>
+              <span style={{ whiteSpace: "normal" }}>{t(`ios.${key}.text`)}</span>
+            </span>
+          </li>
+        ))}
+      </ol>
+      <form method="dialog">
+        <button type="submit" className="t-bt t-p t-pl t-press">
+          {t("ios.done")}
+        </button>
+      </form>
+    </>
+  );
+}
+
 /**
  * Compte (planche talent-4 § 2, web : planche web talent-4 § 3), opened by the avatar: the person
  * and their profile, what they keep (CV, attestations, practice, connections), then the
@@ -88,6 +132,7 @@ export default async function AccountPage() {
   const t = await getTranslations("compte");
   const tW = await getTranslations("talentW4");
   const tProfile = await getTranslations("profil");
+  const tInstall = await getTranslations("system.install");
   const subject = { type: "user" as const, id: user.id };
   const monthStart = new Date();
   monthStart.setUTCDate(1);
@@ -197,6 +242,25 @@ export default async function AccountPage() {
               icon="aide"
               title={t("help.title")}
               text={t("help.text")}
+            />
+            <InstallApp
+              id="t-installer-compte"
+              as="li"
+              buttonClassName="t-li t-press"
+              dialogClassName="t-sheet t-auto"
+              trigger={
+                <>
+                  <span className="t-cases t-c1" aria-hidden>
+                    <TalentIcon name="telecharger" size="s" />
+                  </span>
+                  <span className="t-t">
+                    <b>{tInstall("button")}</b>
+                    <span>{tInstall("text")}</span>
+                  </span>
+                  <TalentIcon name="suivant" />
+                </>
+              }
+              steps={<InstallSteps t={tInstall} id="t-installer-compte" />}
             />
           </List>
 

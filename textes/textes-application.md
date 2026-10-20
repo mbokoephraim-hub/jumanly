@@ -12468,6 +12468,26 @@ Conventions :
 | `system.offline.dataSaverOn` | Mode économie de données activé |
 | `system.offline.dataSaverHint` | Les vidéos se chargent en qualité réduite sur cet appareil. |
 
+### Installer l'appli
+
+*Jumanly s'installe sur le téléphone depuis le navigateur, sans Play Store. Le bouton n'apparaît que si le navigateur sait installer l'appli (Android, Chrome, Edge) ou sur iPhone et iPad, où il ouvre les trois gestes de Safari. Il disparaît une fois l'appli installée. Affiché sur l'accueil public et dans Compte.*
+
+| Clé | Texte |
+|---|---|
+| `system.install.button` | Installer l'appli |
+| `system.install.text` | Sans passer par le Play Store |
+| `system.install.ios.title` | Installer Jumanly sur votre iPhone |
+| `system.install.ios.intro` | Safari n'a pas de bouton d'installation : trois gestes suffisent. |
+| `system.install.ios.step1.title` | Touchez « Partager » |
+| `system.install.ios.step1.text` | Le carré avec une flèche vers le haut, en bas de l'écran (en haut sur iPad). |
+| `system.install.ios.step2.title` | Choisissez « Sur l'écran d'accueil » |
+| `system.install.ios.step2.text` | Faites défiler la liste des actions si besoin. |
+| `system.install.ios.step3.title` | Touchez « Ajouter » |
+| `system.install.ios.step3.text` | Jumanly s'ouvre ensuite depuis son icône, comme une application. |
+| `system.install.ios.steps` | Étapes d'installation |
+| `system.install.ios.close` | Fermer |
+| `system.install.ios.done` | Compris |
+
 ### Session expirée et authentification
 
 | Clé | Texte |
