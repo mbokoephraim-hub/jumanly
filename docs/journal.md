@@ -3091,3 +3091,26 @@ Questions pour Ephraïm :
   la gauche au retour ; entre onglets, un fondu. Rien ne bouge avec « Réduire les animations ».
 - Vérifié : 3 touchers rapides sur une offre = 1 seule page demandée ; 3 touchers sur « Enregistrer l'offre » =
   1 seul envoi, bouton marqué à 0,08 s puis libéré à la réponse.
+
+## 2026-10-20 · Installer l'appli sans Play Store
+
+- Demande d'Ephraïm : pouvoir installer Jumanly sur un téléphone sans passer par le Play Store. Le site était
+  déjà une PWA (manifeste, `public/sw.js`, ouverture sur `/demarrage`), mais rien ne proposait l'installation.
+- Bouton « Installer l'appli » (`src/components/site/install-app.tsx`, composant client minuscule : le libellé
+  et les étapes sont rendus par le serveur). Android, Chrome et Edge : le bouton ouvre l'installation du
+  navigateur (`beforeinstallprompt`). iPhone et iPad : il ouvre un `<dialog>` avec les trois gestes de Safari
+  (Partager → « Sur l'écran d'accueil » → Ajouter). Masqué quand l'appli est déjà installée
+  (`display-mode: standalone`, `navigator.standalone`, `appinstalled`) ou quand le navigateur ne sait pas
+  l'installer.
+- L'offre du navigateur peut arriver avant React : un petit script en tête de chaque page la garde sur
+  `window` (`src/lib/install-prompt.ts`, appelé dans `src/app/layout.tsx`).
+- Placé dans le héros de l'accueil public (pilule claire sur fond sombre, sous les réassurances) et dans
+  Compte, groupe « Abonnement et réglages », comme une ligne de plus (styles `t-`, feuille `t-sheet`).
+- Textes : partie 08, section « Installer l'appli » (`system.install.*`).
+- Tests : `tests/e2e/installer-appli.spec.ts` (iPhone simulé : dialogue de l'accueil et de Compte, Échap et
+  retour du focus, axe ; appli installée : pas de bouton ; Chrome : offre captée avant React, `prompt()`
+  appelé, bouton retiré ; navigateur sans installation : pas de bouton).
+- Captures 390 px, clair et sombre : `captures/installer-appli/` du dossier du projet.
+- À savoir : le test « Connexions : accepter une demande puis écrire » (`mobile-compte.spec.ts`) consomme la
+  demande de démonstration ; un deuxième passage sur la même base échoue tant que `pnpm db:seed` n'est pas relancé.
+- Le site public n'a pas de mode sombre : ses captures « sombre » sont identiques aux claires.
