@@ -91,14 +91,28 @@ export async function OfferCard({
   const review = job.status === "pending_review";
   const draft = ["draft", "rejected", "changes_requested"].includes(job.status);
   const figures = !review && !draft;
+  const ta = await getTranslations("hireAts.entry");
   const candidates = readApplications && (
-    <Link
-      href={`/app/hire/candidats?offre=${job.id}`}
-      className="t-bt t-press"
-      aria-label={t("card.candidatesAria", { title: job.title })}
-    >
-      {t("card.candidates")}
-    </Link>
+    <>
+      {/* Lot 6: the ATS of the offer, opened by the member (nothing starts by itself). */}
+      {job.figures.applications > 0 && (
+        <Link
+          href={`/app/hire/offres/${job.id}/ats`}
+          className="t-bt t-sec t-press t-r6-atsb"
+          aria-label={ta("offerCtaAria", { title: job.title })}
+        >
+          <TalentIcon name="orbi" size="xs" />
+          {ta("offerCta")}
+        </Link>
+      )}
+      <Link
+        href={`/app/hire/candidats?offre=${job.id}`}
+        className="t-bt t-press"
+        aria-label={t("card.candidatesAria", { title: job.title })}
+      >
+        {t("card.candidates")}
+      </Link>
+    </>
   );
   return (
     <article
@@ -281,6 +295,7 @@ export async function OfferSheets({
   withView?: boolean;
 }) {
   const t = await getTranslations("hireOffers");
+  const ta = await getTranslations("hireAts.entry");
   const draft = ["draft", "rejected", "changes_requested"].includes(job.status);
   const live = ["published", "paused", "closed"].includes(job.status);
   const closable = ["published", "paused", "pending_review"].includes(job.status);
@@ -290,6 +305,13 @@ export async function OfferSheets({
     <>
       <Sheet id={`menu-${job.id}`} title={job.title} closeLabel={t("menu.closeSheet")}>
         <ul className="t-verre t-liste t-lignes t-rx-menu">
+          {readApplications && live && job.figures.applications > 0 && (
+            <li>
+              <Link href={`/app/hire/offres/${job.id}/ats`} className="t-li t-press">
+                <MenuRow icon="orbi" tone="t-c1" title={ta("menu")} text={ta("menuText")} />
+              </Link>
+            </li>
+          )}
           {readApplications && !draft && (
             <li>
               <Link href={`/app/hire/candidats?offre=${job.id}`} className="t-li t-press">

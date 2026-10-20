@@ -6,7 +6,9 @@ import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
 import { CandidateAvatar } from "@/components/recruiter/candidates";
 import { SortSheet } from "@/components/recruiter/candidates-client";
+import { AtsEntry } from "@/components/recruiter/ats";
 import { OrbiLine, statusOf } from "@/components/recruiter/offers";
+import { atsToday } from "@/server/services/hire-ats";
 import { ProposalsView, TalentSearchView } from "@/components/recruiter/talent-search";
 import { TalentIcon } from "@/components/talent/icon";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
@@ -106,6 +108,16 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
 
   const messages = await getMessages();
   const job = list.job;
+  // Lot 6: the ATS card of the chosen offer (planche 0 bis `e_ats`), only once there are files.
+  const ta = await getTranslations("hireAts.entry");
+  const today = list.rows.length > 0 ? await atsToday(db, ctx, now) : { pending: [], done: [] };
+  const atsPending = today.pending.find((item) => item.id === job.id);
+  const atsDone = today.done.find((item) => item.id === job.id);
+  const ats = atsPending
+    ? { pending: atsPending }
+    : atsDone
+      ? { pending: null, done: atsDone }
+      : null;
   const base = (changes: Record<string, string | null>) => {
     const next = new URLSearchParams({ offre: job.id });
     const current: Record<string, string | null | undefined> = {
@@ -168,6 +180,16 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
         </span>
         <TalentIcon name="suivant" size="s" className="t-rc-bas" />
       </SheetButton>
+
+      {ats && (
+        <AtsEntry
+          title={ats.pending ? ta("offerTitle", { count: ats.pending.pending }) : ta("doneTitle")}
+          text={ats.pending ? ta("offerText") : ta("doneText", { count: ats.done!.total })}
+          cta={ats.pending ? ta("offerCta") : ta("doneCta")}
+          href={`/app/hire/offres/${job.id}/ats`}
+          count={ats.pending ? ats.pending.pending : ats.done!.total}
+        />
+      )}
 
       {firstUnseen && (
         <OrbiLine

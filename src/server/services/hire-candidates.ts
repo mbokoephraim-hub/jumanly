@@ -240,6 +240,8 @@ type DecisionPayload = {
   /** The e-mail to the talent leaves when the 10 minutes are over (`deliverDueDecisionMails`). */
   mail: "pending" | "sent" | "cancelled" | "none";
   undone?: boolean;
+  /** A grouped reply (recruteur lot 6): the decisions sent together, undone together. */
+  batchId?: string | null;
   /** The call proposed with an acceptance to fix the arrival date (recruteur lot 4). */
   callInterviewId?: string | null;
 };
@@ -268,6 +270,10 @@ export async function decide(
     signer: string;
     /** Retained: one to three times for a call to fix the arrival date, chosen by the member. */
     call?: { slots: string[]; timezone: string } | null;
+    /** false: no e-mail, the message in the conversation only (grouped replies, lot 6). */
+    mail?: boolean;
+    /** The grouped reply this decision belongs to (lot 6). */
+    batchId?: string;
   },
   now = new Date(),
 ) {
@@ -337,10 +343,11 @@ export async function decide(
     messageId,
     poolAddedId,
     poolName,
-    mail: input.outcome === "withdrawn" ? "none" : "pending",
+    mail: input.outcome === "withdrawn" || input.mail === false ? "none" : "pending",
     // Written as false (not left out): a JSON path that is missing never matches a filter.
     undone: false,
     callInterviewId: null,
+    ...(input.batchId ? { batchId: input.batchId } : {}),
   };
   const event = await db.applicationEvent.create({
     data: {
@@ -552,6 +559,8 @@ export async function claimDueDecisionMails(db: PrismaClient, now = new Date()) 
     toKind: StageKind;
     to: string;
     message: string;
+    /** Sent with a grouped reply (lot 6): the e-mail « Candidature non retenue ». */
+    grouped: boolean;
   }[] = [];
   for (const event of due) {
     const payload = payloadOf(event.payload);
@@ -573,6 +582,7 @@ export async function claimDueDecisionMails(db: PrismaClient, now = new Date()) 
       toKind: payload.toKind ?? "rejected",
       to: payload.to ?? "",
       message,
+      grouped: Boolean(payload.batchId),
     });
   }
   return claimed;

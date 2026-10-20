@@ -6,13 +6,16 @@ import "server-only";
 import { db } from "@/server/db";
 import { ensureApplicationConversation } from "@/server/services/connect";
 import { claimDueDecisionMails } from "@/server/services/hire-candidates";
+import { claimDueGroupMails } from "@/server/services/hire-group-replies";
 import { hiringTeam, notify } from "@/server/services/notifications";
 import {
   mailApplicationSent,
   mailDocumentRequest,
   mailNewApplication,
   mailNewMessage,
+  mailNotRetained,
   mailNotSelected,
+  mailShortlisted,
   mailStatusChange,
 } from "./hire-emails";
 
@@ -24,6 +27,7 @@ async function applicationDetails(applicationId: string) {
         select: {
           id: true,
           title: true,
+          city: true,
           organizationId: true,
           organization: { select: { name: true } },
         },
@@ -114,7 +118,13 @@ export async function deliverDueDecisionMails(now = new Date()) {
     const application = await applicationDetails(item.applicationId);
     const talent = application.profile.user;
     const company = application.job.organization.name;
-    if (item.toKind === "rejected")
+    if (item.toKind === "rejected" && item.grouped)
+      await mailNotRetained(talent, {
+        jobTitle: application.job.title,
+        company,
+        message: item.message,
+      });
+    else if (item.toKind === "rejected")
       await mailNotSelected(talent, {
         jobTitle: application.job.title,
         company,
@@ -128,7 +138,20 @@ export async function deliverDueDecisionMails(now = new Date()) {
         kind: item.toKind,
       });
   }
-  return due.length;
+  // Grouped replies to the retained (recruteur lot 6): the letter read by the member, by e-mail.
+  const grouped = await claimDueGroupMails(db, now);
+  for (const item of grouped) {
+    const application = await applicationDetails(item.applicationId);
+    const conversation = await ensureApplicationConversation(db, item.applicationId);
+    await mailShortlisted(application.profile.user, {
+      jobTitle: application.job.title,
+      company: application.job.organization.name,
+      place: [application.job.organization.name, application.job.city].filter(Boolean).join(" · "),
+      message: item.message,
+      href: `/app/messages/${conversation.id}`,
+    });
+  }
+  return due.length + grouped.length;
 }
 
 /** A message was sent: each recipient is told who wrote, never what. */

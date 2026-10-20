@@ -64,6 +64,12 @@ const categoryOf: Record<NotificationType, Category> = {
   diagnosticReady: "learn",
   diagnosticReminder: "learn",
   profileViewed: "applications",
+  atsReady: "applications",
+  atsNotRun: "applications",
+  orgJoinRequest: "account",
+  orgJoinAccepted: "account",
+  orgJoinDeclined: "account",
+  jobEnding: "applications",
 };
 
 const categoryStyle: Record<Category, { icon: IconName; tile: string }> = {

@@ -20,6 +20,12 @@ import {
   statusChangeEmail,
   type HireEmail,
 } from "../../emails/_components/hire-content";
+import {
+  endingEmail,
+  joinRequestEmail,
+  notRetainedEmail,
+  shortlistedEmail,
+} from "../../emails/_components/recruiter-content";
 import { send } from "./account-emails";
 
 type Person = { email: string; firstName?: string | null };
@@ -83,3 +89,17 @@ export const mailModeration = (to: Person, input: Parameters<typeof moderationEm
 
 export const mailOrgNotice = (to: Person, input: Parameters<typeof orgNoticeEmail>[1]) =>
   deliver(to.email, orgNoticeEmail(to.firstName, input));
+
+// ─── Recruteur lot 6 (docs/refonte-mobile/modeles-recruteur) ─────────────────────────────
+
+export const mailShortlisted = (to: Person, input: Parameters<typeof shortlistedEmail>[1]) =>
+  deliver(to.email, shortlistedEmail(to.firstName, input));
+
+export const mailNotRetained = (to: Person, input: Parameters<typeof notRetainedEmail>[1]) =>
+  deliver(to.email, notRetainedEmail(to.firstName, input));
+
+export const mailJoinRequest = (to: Person, input: Parameters<typeof joinRequestEmail>[1]) =>
+  deliver(to.email, joinRequestEmail(to.firstName, input));
+
+export const mailEnding = (to: Person, input: Parameters<typeof endingEmail>[1]) =>
+  deliver(to.email, endingEmail(to.firstName, input));

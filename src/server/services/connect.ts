@@ -164,7 +164,11 @@ export async function sendMessage(
       createdAt: now,
     },
   });
-  await db.conversation.update({ where: { id: conversationId }, data: { lastMessageAt: now } });
+  await db.conversation.update({
+    where: { id: conversationId },
+    // A conversation the organization removed from its list comes back with a new message.
+    data: { lastMessageAt: now, orgHiddenAt: null },
+  });
   await markRead(db, viewer, conversationId, now);
   let recipients: string[];
   if (conversation.kind === "peer") {

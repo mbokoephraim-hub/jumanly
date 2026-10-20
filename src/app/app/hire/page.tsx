@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getFormatter, getTranslations } from "next-intl/server";
+import { AtsEntry } from "@/components/recruiter/ats";
 import { OfferCard, OfferSheets, OrbiLine } from "@/components/recruiter/offers";
 import { TalentAvatar } from "@/components/talent/avatar";
 import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
@@ -11,6 +12,7 @@ import { requireHire } from "@/server/hire-context";
 import { hirePermissions, isOrgVerified } from "@/server/services/hire";
 import { activeCount, listOffers } from "@/server/services/hire-offers";
 import { hireToday } from "@/server/services/hire-today";
+import { atsToday } from "@/server/services/hire-ats";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireToday");
@@ -204,6 +206,10 @@ export default async function HireTodayPage() {
     : today.upcoming.length
       ? "/app/hire/entretiens"
       : null;
+  // Lot 6: the offers whose applications Orbi has not read yet (planche 0 bis `ENT_AT`).
+  const ta = await getTranslations("hireAts.entry");
+  const ats = await atsToday(db, ctx, now);
+  const atsFirst = ats.pending[0];
   const tiles = [
     { key: "unseen", count: today.counts.unseen, href: "/app/hire/candidats" },
     { key: "invitations", count: today.counts.invitations, href: "/app/hire/entretiens" },
@@ -233,6 +239,16 @@ export default async function HireTodayPage() {
           <TalentIcon name="plus" size="s" />
           {t("publish")}
         </Link>
+      )}
+      {atsFirst && (
+        <AtsEntry
+          title={ta("todayTitle", { count: atsFirst.pending })}
+          text={ta("todayText", { title: atsFirst.title })}
+          cta={ta("todayCta")}
+          href={`/app/hire/offres/${atsFirst.id}/ats`}
+          count={atsFirst.pending}
+          chips={ats.pending.slice(1, 3).map((item) => item.title)}
+        />
       )}
       <ul className="t-rx-ag" aria-label={t("counts.aria")}>
         {tiles.map((tile) => (

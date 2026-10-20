@@ -9684,6 +9684,296 @@ Conventions :
 | `hireCandidates.decision.callNote` | Heures du fuseau {zone}. Le premier créneau est obligatoire. |
 | `hireCandidates.decision.callError` | Vérifiez les créneaux de l'appel : ils doivent être à venir. |
 
+### Refonte recruteur · ATS, retenus et réponses groupées (lot 6)
+
+*Analyse de toutes les candidatures d'une offre par Orbi, classement expliqué, recommandation, profil pour l'offre, liste des retenus, réponses groupées relues avant l'envoi (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 6 ; planches recruteur-4 § 1 et 2). Orbi recommande, le recruteur décide : personne n'est écarté automatiquement.*
+
+| Clé | Texte |
+|---|---|
+| `hireAts.seo` | Candidatures analysées |
+| `hireAts.back` | Retour à l'offre |
+| `hireAts.menu` | Plus d'actions sur l'offre |
+| `hireAts.close` | Fermer |
+| `hireAts.line.years` | {count, plural, one {# an d'expérience} other {# ans d'expérience}} |
+| `hireAts.line.starter` | Premier emploi |
+| `hireAts.line.received` | Reçue {when} |
+| `hireAts.progress.of` | sur {count} |
+| `hireAts.progress.title` | Orbi lit les candidatures |
+| `hireAts.progress.text` | Environ {seconds} secondes restantes. Vous pouvez quitter cet écran : vous serez prévenu à la fin. |
+| `hireAts.progress.steps` | Étapes de l'analyse |
+| `hireAts.progress.step.read` | Lecture des CV |
+| `hireAts.progress.step.skills` | Compétences de l'offre |
+| `hireAts.progress.step.proofs` | Preuves et attestations |
+| `hireAts.progress.step.rank` | Classement |
+| `hireAts.progress.files` | Dossiers |
+| `hireAts.progress.count` | {done} sur {total} |
+| `hireAts.progress.read` | Lu |
+| `hireAts.progress.reading` | En cours |
+| `hireAts.progress.waiting` | En attente |
+| `hireAts.progress.orbi` | Je lis chaque dossier face aux critères de l'offre. Je ne retiens ni le nom, ni l'âge, ni la photo, ni l'origine. Je ne rejette personne. |
+| `hireAts.progress.stop` | Arrêter l'analyse |
+| `hireAts.lock.title` | L'analyse de tous les CV fait partie d'une formule RH |
+| `hireAts.lock.plan` | Disponible avec {plan}, avec {credits} crédits Orbi par mois. |
+| `hireAts.lock.noPlan` | Disponible avec une formule RH qui comprend des crédits Orbi. |
+| `hireAts.lock.see` | Voir les formules |
+| `hireAts.lock.consent` | Pour qu'Orbi lise les candidatures, activez l'usage de l'IA dans vos paramètres. |
+| `hireAts.lock.consentLink` | Paramètres de confidentialité |
+| `hireAts.when.title` | Quand analyser ? |
+| `hireAts.when.now` | Maintenant |
+| `hireAts.when.nowText` | {count, plural, one {Le dossier reçu est lu tout de suite.} other {Les # dossiers reçus sont lus tout de suite.}} |
+| `hireAts.when.credits` | {count, plural, one {# crédit Orbi} other {# crédits Orbi}} |
+| `hireAts.when.end` | À la clôture de l'offre |
+| `hireAts.when.endText` | Le {date}, Orbi lit toutes les candidatures reçues d'ici là. |
+| `hireAts.when.endCredits` | Crédits comptés le jour de l'analyse |
+| `hireAts.when.autoAdd` | Analyser aussi les nouvelles candidatures |
+| `hireAts.when.autoAddText` | Après la première analyse, chaque nouvelle candidature est lue à son arrivée, tant qu'il reste des crédits. |
+| `hireAts.when.short` | Il faut {credits} crédits et il en reste {left} ce mois. Orbi lira les premiers dossiers reçus. |
+| `hireAts.when.launch` | Lancer l'analyse |
+| `hireAts.error.running` | Une analyse est déjà en cours pour cette offre. |
+| `hireAts.error.nothing` | Toutes les candidatures actives sont déjà analysées. |
+| `hireAts.error.credits` | Il faut {credits} crédits Orbi et il en reste {left} ce mois. |
+| `hireAts.error.quota` | Les crédits Orbi de l'organisation sont épuisés pour ce mois. |
+| `hireAts.error.consent` | Activez l'usage de l'IA dans vos paramètres pour lancer l'analyse. |
+| `hireAts.error.entitlement` | Votre formule ne comprend pas l'analyse des CV par Orbi. |
+| `hireAts.error.date` | Ajoutez une date de clôture à l'offre pour programmer l'analyse. |
+| `hireAts.ok.programmee` | Analyse programmée à la clôture de l'offre |
+| `hireAts.ok.annulee` | Analyse programmée annulée |
+| `hireAts.ok.arretee` | Analyse arrêtée. Les dossiers déjà lus gardent leur analyse. |
+| `hireAts.schedule.title` | Analyse programmée |
+| `hireAts.schedule.text` | Orbi lira toutes les candidatures à la clôture. Vous serez prévenu dès que le classement sera prêt. |
+| `hireAts.schedule.timeline` | Calendrier de l'offre |
+| `hireAts.schedule.published` | Publiée le {date} |
+| `hireAts.schedule.today` | Aujourd'hui : candidatures ouvertes |
+| `hireAts.schedule.analysis` | Clôture et analyse le {date} |
+| `hireAts.schedule.received` | Reçues |
+| `hireAts.schedule.pending` | À analyser |
+| `hireAts.schedule.creditsLeft` | Crédits restants |
+| `hireAts.schedule.edit` | Modifier |
+| `hireAts.schedule.cancel` | Annuler |
+| `hireAts.schedule.now` | Lancer maintenant |
+| `hireAts.hero.title` | {count, plural, one {Analyser le CV avec Orbi} other {Analyser les # CV avec Orbi}} |
+| `hireAts.hero.more` | {count, plural, one {Analyser la nouvelle candidature} other {Analyser les # nouvelles candidatures}} |
+| `hireAts.hero.text` | Orbi lit chaque dossier face à l'offre, explique son classement et vous recommande les dossiers à voir en premier. Vous décidez. |
+| `hireAts.hero.credits` | {count, plural, one {# crédit} other {# crédits}} |
+| `hireAts.hero.available` | Disponibles ce mois |
+| `hireAts.hero.minutes` | ≈ {count} min |
+| `hireAts.hero.duration` | Durée |
+| `hireAts.hero.launch` | Analyser |
+| `hireAts.dist.title` | {count, plural, one {# candidature active} other {# candidatures actives}} |
+| `hireAts.dist.today` | Répartition par étape aujourd'hui |
+| `hireAts.dist.stage` | {stage} : {count} |
+| `hireAts.select.count` | {count, plural, =0 {Aucun dossier choisi} one {# dossier choisi} other {# dossiers choisis}} |
+| `hireAts.select.of` | sur {count} |
+| `hireAts.select.clear` | Tout désélectionner |
+| `hireAts.select.all` | Tout sélectionner |
+| `hireAts.select.write` | Écrire |
+| `hireAts.select.interview` | Entretien |
+| `hireAts.select.keep` | Retenir |
+| `hireAts.select.close` | Quitter la sélection |
+| `hireAts.select.source.recommandes` | Dossiers recommandés par Orbi |
+| `hireAts.select.source.verifier` | Dossiers à vérifier |
+| `hireAts.select.source.tous` | Toutes les candidatures |
+| `hireAts.empty.title` | Pas encore de candidature |
+| `hireAts.empty.text` | Les candidatures reçues pour cette offre apparaîtront ici, classées par score. |
+| `hireAts.list.byScore` | Classées par score |
+| `hireAts.list.byDate` | Classées par date de réception |
+| `hireAts.list.sort` | Trier |
+| `hireAts.list.empty.recommandes` | Aucun dossier ne remplit encore toutes les conditions de la recommandation. Tous restent dans « Tous ». |
+| `hireAts.list.empty.verifier` | Aucun dossier à vérifier. |
+| `hireAts.list.empty.tous` | Aucune candidature pour cette vue. |
+| `hireAts.runFailed.consent` | L'analyse s'est arrêtée : l'usage de l'IA n'est plus activé. |
+| `hireAts.runFailed.entitlement` | L'analyse s'est arrêtée : la formule ne comprend plus l'analyse par Orbi. |
+| `hireAts.runFailed.quota` | L'analyse s'est arrêtée : les crédits Orbi du mois sont épuisés. Les dossiers déjà lus gardent leur analyse. |
+| `hireAts.runFailed.unavailable` | L'analyse s'est arrêtée : Orbi est momentanément indisponible. Relancez-la plus tard. |
+| `hireAts.reco.title` | Recommandation d'Orbi |
+| `hireAts.reco.sub` | {count, plural, one {# dossier lu} other {# dossiers lus}} · {credits, plural, one {# crédit utilisé} other {# crédits utilisés}} |
+| `hireAts.reco.priority` | {count, plural, one {# dossier à voir en premier.} other {# dossiers à voir en premier.}} |
+| `hireAts.reco.shared` | {count, plural, one {Point commun : {skills}, prouvé dans le dossier.} other {Points communs : {skills}, prouvés dans les dossiers.}} |
+| `hireAts.reco.sharedNone` | Chacun remplit les compétences requises de l'offre. |
+| `hireAts.reco.check` | {count, plural, one {À vérifier en entretien pour {names}.} other {À vérifier en entretien pour {names}.}} |
+| `hireAts.reco.see` | {count, plural, one {Voir le dossier} other {Voir les # dossiers}} |
+| `hireAts.reco.why` | Pourquoi ? |
+| `hireAts.reco.none` | Aucun dossier ne remplit encore toutes les conditions de la recommandation. Regardez « À vérifier » et « Tous » : personne n'est écarté. |
+| `hireAts.reco.podium` | Les trois premiers dossiers |
+| `hireAts.reco.placeScore` | {rank}e · {score} % |
+| `hireAts.reco.place` | {rank}e |
+| `hireAts.bar.select` | Sélectionner |
+| `hireAts.bar.shortlist` | Liste des retenus |
+| `hireAts.why.title` | Comment Orbi recommande |
+| `hireAts.why.lead` | Une règle fixe, la même pour tous les dossiers. Un dossier est recommandé si : |
+| `hireAts.why.rule1` | il a été lu par Orbi et la candidature est active ; |
+| `hireAts.why.rule2` | son score de compatibilité est d'au moins {floor} % ; |
+| `hireAts.why.rule2NoScore` | il montre chaque compétence requise de l'offre ; |
+| `hireAts.why.rule3` | aucune compétence requise ne manque. Au plus {max} dossiers, les meilleurs scores d'abord. |
+| `hireAts.why.rule4` | Les autres dossiers restent dans « À vérifier » ou « Tous ». Personne n'est rejeté : vous décidez. |
+| `hireAts.why.excluded` | Ni le nom, ni le genre, ni l'âge, ni la photo, ni la nationalité, ni l'origine, ni l'adresse ne comptent dans le score. |
+| `hireAts.tabs.aria` | Vues des candidatures |
+| `hireAts.tabs.recommandes` | Recommandés |
+| `hireAts.tabs.verifier` | À vérifier |
+| `hireAts.tabs.tous` | Tous |
+| `hireAts.entry.aria` | Analyse des candidatures par Orbi |
+| `hireAts.entry.tag` | ATS · Orbi |
+| `hireAts.entry.offerTitle` | {count, plural, one {Analyser la candidature} other {Analyser les # candidatures}} |
+| `hireAts.entry.offerText` | Orbi les classe par score, explique chaque place et vous dit lesquelles voir en premier. |
+| `hireAts.entry.offerCta` | Analyser (ATS) |
+| `hireAts.entry.offerCtaAria` | Analyser les candidatures de « {title} » avec Orbi |
+| `hireAts.entry.doneTitle` | Classement prêt |
+| `hireAts.entry.doneText` | {count, plural, one {# dossier lu par Orbi, avec son pourquoi.} other {# dossiers lus par Orbi, chacun avec son pourquoi.}} |
+| `hireAts.entry.doneCta` | Voir le classement |
+| `hireAts.entry.todayTitle` | {count, plural, one {# candidature à analyser} other {# candidatures à analyser}} |
+| `hireAts.entry.todayText` | {title} : Orbi peut les lire et vous dire lesquelles voir en premier. |
+| `hireAts.entry.todayCta` | Analyser |
+| `hireAts.entry.menu` | Analyser les candidatures |
+| `hireAts.entry.menuText` | Classement par Orbi, avec le pourquoi |
+| `hireAts.card.rank` | {rank}e |
+| `hireAts.card.shortlisted` | Retenu·e |
+| `hireAts.card.status.withdrawn` | Retirée |
+| `hireAts.card.status.rejected` | Non retenue |
+| `hireAts.card.status.hired` | Recrutée |
+| `hireAts.card.outOf` | /100 |
+| `hireAts.card.scoreAria` | Score de compatibilité : {score} sur 100 |
+| `hireAts.card.noScore` | Pas de score |
+| `hireAts.card.bars.skills` | Compétences |
+| `hireAts.card.bars.experience` | Expérience |
+| `hireAts.card.bars.proofs` | Preuves |
+| `hireAts.card.bars.aria` | Compétences {skills} %, expérience {experience} %, preuves {proofs} % |
+| `hireAts.card.toCheck` | {skill} à vérifier |
+| `hireAts.card.why` | Pourquoi ? |
+| `hireAts.card.whyAria` | : le classement de {name} |
+| `hireAts.profile.seo` | Profil pour cette offre |
+| `hireAts.profile.title` | Profil pour cette offre |
+| `hireAts.profile.back` | Retour au classement |
+| `hireAts.profile.received` | Reçue le {date} |
+| `hireAts.profile.synthesis` | Synthèse d'Orbi |
+| `hireAts.profile.synthesisSub` | Le dossier lu face à l'offre. Vous décidez. |
+| `hireAts.profile.strength` | Point fort : |
+| `hireAts.profile.toVerify` | À vérifier : |
+| `hireAts.profile.notYet` | Orbi n'a pas encore lu ce dossier. |
+| `hireAts.profile.run` | Analyser ce dossier (1 crédit) |
+| `hireAts.profile.lock.consent` | Activez l'usage de l'IA dans vos paramètres pour qu'Orbi lise ce dossier. |
+| `hireAts.profile.lock.entitlement` | L'analyse par Orbi fait partie d'une formule RH. |
+| `hireAts.profile.lock.quota` | Les crédits Orbi de l'organisation sont épuisés pour ce mois. |
+| `hireAts.profile.lock.unavailable` | Orbi est momentanément indisponible. Réessayez plus tard. |
+| `hireAts.profile.lock.ready` | Orbi peut lire ce dossier. |
+| `hireAts.profile.ok.shortlisted` | Ajouté·e aux retenus |
+| `hireAts.profile.ok.analysed` | Dossier analysé par Orbi |
+| `hireAts.profile.table.caption` | Critères de l'offre et ce que montre le dossier |
+| `hireAts.profile.table.criterion` | Critère |
+| `hireAts.profile.table.shows` | Le dossier montre |
+| `hireAts.profile.table.state` | État |
+| `hireAts.profile.table.ok` | Correspond |
+| `hireAts.profile.table.check` | À vérifier |
+| `hireAts.profile.table.availability` | Disponibilité |
+| `hireAts.profile.table.documents` | Documents |
+| `hireAts.profile.table.doc.cv` | CV |
+| `hireAts.profile.table.doc.letter` | lettre de motivation |
+| `hireAts.profile.table.value.certificate` | Attestation Jumanly |
+| `hireAts.profile.table.value.project` | Projet |
+| `hireAts.profile.table.value.experience` | Expérience |
+| `hireAts.profile.table.value.declared` | Déclarée, sans preuve |
+| `hireAts.profile.table.value.missing` | Pas dans le dossier |
+| `hireAts.profile.table.value.availability.open` | Disponible |
+| `hireAts.profile.table.value.availability.listening` | À l'écoute |
+| `hireAts.profile.table.value.availability.not_looking` | Pas en recherche |
+| `hireAts.profile.table.value.noDocuments` | Aucun document joint |
+| `hireAts.profile.table.value.documents` | Documents joints |
+| `hireAts.profile.questions` | Questions à poser en entretien |
+| `hireAts.profile.excluded` | Le nom, le genre, l'âge, la photo, la nationalité, l'origine et l'adresse ne comptent pas. Votre consultation est enregistrée. |
+| `hireAts.profile.file` | Dossier |
+| `hireAts.profile.keep` | Ajouter aux retenus |
+| `hireAts.profile.remove` | Retirer des retenus |
+| `hireAts.shortlist.seo` | Liste des retenus |
+| `hireAts.shortlist.title` | Liste des retenus |
+| `hireAts.shortlist.back` | Retour au classement |
+| `hireAts.shortlist.add` | Ajouter des dossiers |
+| `hireAts.shortlist.added` | {count, plural, one {# dossier ajouté aux retenus} other {# dossiers ajoutés aux retenus}} |
+| `hireAts.shortlist.removed` | Retiré·e des retenus |
+| `hireAts.shortlist.for` | {count, plural, one {# personne pour l'étape « {stage} »} other {# personnes pour l'étape « {stage} »}} |
+| `hireAts.shortlist.count` | {count, plural, =0 {Personne pour l'instant} one {# personne} other {# personnes}} |
+| `hireAts.shortlist.empty.title` | Personne n'est encore retenu |
+| `hireAts.shortlist.empty.text` | Choisissez les dossiers à garder pour la suite. Orbi n'ajoute personne à cette liste : vous seul. |
+| `hireAts.shortlist.empty.cta` | Voir la recommandation |
+| `hireAts.shortlist.aria` | Personnes retenues |
+| `hireAts.shortlist.byYou` | Retenu·e par vous |
+| `hireAts.shortlist.by` | Retenu·e par {name} |
+| `hireAts.shortlist.team` | l'équipe |
+| `hireAts.shortlist.score` | {score} % |
+| `hireAts.shortlist.toCheck` | {skill} à vérifier |
+| `hireAts.shortlist.badge` | Retenu·e |
+| `hireAts.shortlist.remove` | Retirer {name} des retenus |
+| `hireAts.shortlist.prepare` | Préparer |
+| `hireAts.shortlist.others` | {count, plural, one {# autre personne attend une réponse. Je peux préparer un message respectueux : vous le relisez avant l'envoi.} other {# autres personnes attendent une réponse. Je peux préparer un message respectueux : vous le relisez avant l'envoi.}} |
+| `hireAts.shortlist.slots` | Créneaux |
+| `hireAts.shortlist.inform` | {count, plural, one {Informer la personne} other {Informer les #}} |
+| `hireReplies.seo` | Répondre aux candidats |
+| `hireReplies.title` | Répondre aux candidats |
+| `hireReplies.back` | Retour aux retenus |
+| `hireReplies.groups` | Groupes de candidats |
+| `hireReplies.group.retained` | Retenus |
+| `hireReplies.group.others` | Non retenus |
+| `hireReplies.group.count` | {count, plural, =0 {Personne} one {# personne} other {# personnes}} |
+| `hireReplies.error.reviewed` | Cochez « J'ai relu » avant d'envoyer. |
+| `hireReplies.error.empty` | Le message est trop court. |
+| `hireReplies.error.nobody` | Personne à informer dans ce groupe. |
+| `hireReplies.empty.title` | Personne à informer |
+| `hireReplies.empty.retained` | Ajoutez d'abord des dossiers à la liste des retenus. |
+| `hireReplies.empty.others` | Toutes les candidatures actives sont dans la liste des retenus. |
+| `hireReplies.empty.cta` | Voir le classement |
+| `hireReplies.form.channels` | Envoyer par |
+| `hireReplies.form.message` | Message Jumanly |
+| `hireReplies.form.messageLocked` | Message Jumanly, toujours envoyé |
+| `hireReplies.form.email` | E-mail |
+| `hireReplies.form.templateRetained` | Modèle « Candidature retenue » |
+| `hireReplies.form.templateOthers` | Modèle « Candidature non retenue » |
+| `hireReplies.form.variables` | '{prenom}' et '{point_fort}' sont remplacés pour chaque personne, '{poste}' et '{entreprise}' par l'offre. |
+| `hireReplies.form.orbiRetained` | Orbi ajoute une phrase par personne, tirée de son dossier (une attestation, un projet, une expérience). Vous voyez chaque message avant l'envoi. |
+| `hireReplies.form.orbiOthers` | Un message respectueux, le même pour tous, avec une phrase tirée du dossier de chacun. Rien ne part avant votre accord. |
+| `hireReplies.form.recipients` | {count, plural, one {Voir la personne} other {Voir les # personnes}} |
+| `hireReplies.form.reviewed` | {count, plural, one {J'ai relu le message} other {J'ai relu les # messages}} |
+| `hireReplies.form.needReviewed` | Relisez le modèle et les aperçus, puis cochez « J'ai relu ». |
+| `hireReplies.form.previews` | Aperçus |
+| `hireReplies.form.send` | {count, plural, one {Envoyer à # personne} other {Envoyer à #}} |
+| `hireReplies.confirm.title` | {count, plural, one {Envoyer # réponse ?} other {Envoyer # réponses ?}} |
+| `hireReplies.confirm.groupRetained` | Retenus · {count} |
+| `hireReplies.confirm.groupOthers` | Non retenus · {count} |
+| `hireReplies.confirm.channels` | Message Jumanly |
+| `hireReplies.confirm.channelsEmail` | Message Jumanly et e-mail |
+| `hireReplies.confirm.undo` | Annulation possible 10 minutes |
+| `hireReplies.confirm.undoText` | Aucun e-mail ne part avant |
+| `hireReplies.confirm.reviewed` | {count, plural, one {J'ai relu le modèle et la personne concernée} other {J'ai relu le modèle et la liste des # personnes}} |
+| `hireReplies.confirm.back` | Revoir |
+| `hireReplies.confirm.send` | Envoyer |
+| `hireReplies.preview.title` | Aperçu du message |
+| `hireReplies.preview.for` | Ce que {name} reçoit dans Jumanly |
+| `hireReplies.preview.badgeRetained` | Retenu·e |
+| `hireReplies.preview.badgeOthers` | Non retenu·e |
+| `hireReplies.preview.ctaRetained` | Choisir un créneau |
+| `hireReplies.preview.ctaOthers` | Voir les offres proches |
+| `hireReplies.preview.reply` | Répondre |
+| `hireReplies.preview.alsoEmail` | Aussi par e-mail |
+| `hireReplies.preview.subjectRetained` | Objet : votre candidature au poste {job} chez {company} |
+| `hireReplies.preview.subjectOthers` | Objet : votre candidature au poste {job} |
+| `hireReplies.preview.previous` | Précédent |
+| `hireReplies.preview.next` | Suivant |
+| `hireReplies.preview.close` | Fermer |
+| `hireReplies.sent.title` | {count, plural, one {# réponse envoyée} other {# réponses envoyées}} |
+| `hireReplies.sent.textRetained` | {count, plural, one {La personne retenue a reçu l'invitation dans sa messagerie. L'e-mail part dans 10 minutes.} other {Les # personnes retenues ont reçu l'invitation dans leur messagerie. Les e-mails partent dans 10 minutes.}} |
+| `hireReplies.sent.textRejected` | {count, plural, one {La personne a reçu votre réponse. L'e-mail part dans 10 minutes.} other {Les # personnes ont reçu votre réponse. Les e-mails partent dans 10 minutes.}} |
+| `hireReplies.sent.undoneTitle` | Envoi annulé |
+| `hireReplies.sent.undoneText` | Les messages ont été retirés et aucun e-mail n'est parti. |
+| `hireReplies.sent.expired` | Les 10 minutes sont passées : l'envoi ne peut plus être annulé. |
+| `hireReplies.sent.undoTitle` | Une erreur ? |
+| `hireReplies.sent.undoLeft` | {minutes, plural, one {Encore # minute pour annuler} other {Encore # minutes pour annuler}} |
+| `hireReplies.sent.undo` | Annuler l'envoi |
+| `hireReplies.sent.ats` | Classement |
+| `hireReplies.sent.messages` | Messages |
+| `hireReplies.strength.certificate` | votre attestation en {skill} |
+| `hireReplies.strength.project` | votre projet en {skill} |
+| `hireReplies.strength.experience` | votre expérience en {skill} |
+| `hireReplies.strength.generic` | votre parcours |
+| `hireReplies.default.retained` | Bonjour '{prenom}',\n\nMerci pour votre candidature au poste '{poste}'. Nous avons lu votre dossier avec attention, et '{point_fort}' a particulièrement retenu notre attention.\n\nNous avons le plaisir de vous inviter à un entretien. Nous vous proposons des créneaux dans cette conversation : choisissez celui qui vous convient, ou répondez ici si aucun ne convient.\n\nÀ très bientôt,\n{signer}, '{entreprise}' |
+| `hireReplies.default.others` | Bonjour '{prenom}',\n\nMerci pour l'intérêt que vous portez à '{entreprise}' et pour le temps consacré à votre candidature au poste '{poste}'. Nous avons apprécié '{point_fort}'.\n\nAprès avoir étudié l'ensemble des dossiers, notre équipe a retenu d'autres profils pour la suite de ce recrutement. Cette décision ne remet pas en cause la qualité de votre parcours.\n\nVotre profil reste visible des recruteurs et d'autres offres vous attendent sur Jumanly.\n\nAvec nos remerciements et tous nos vœux de réussite,\n{signer}, '{entreprise}' |
+
 ### Navigation Hire
 
 *Menu de l'espace Organisation, visible quand le sélecteur d'espace est sur une organisation.*
@@ -12754,6 +13044,12 @@ Conventions :
 | `notifications.item.diagnosticReady` | Votre diagnostic de carrière est prêt : niveau {stage}. |
 | `notifications.item.diagnosticReminder` | Cela fait 30 jours depuis votre diagnostic de carrière. Refaites-le pour voir vos progrès. |
 | `notifications.item.profileViewed` | {company} a consulté votre profil pour « {jobTitle} » |
+| `notifications.item.atsReady` | {count, plural, one {Orbi a lu la candidature de « {jobTitle} » : le classement est prêt.} other {Orbi a lu les # candidatures de « {jobTitle} » : le classement est prêt.}} |
+| `notifications.item.atsNotRun` | L'analyse programmée de « {jobTitle} » n'a pas démarré : crédits Orbi ou droit manquant. Relancez-la depuis l'offre. |
+| `notifications.item.orgJoinRequest` | {name} demande à rejoindre {org}. |
+| `notifications.item.orgJoinAccepted` | Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe ! |
+| `notifications.item.orgJoinDeclined` | Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation. |
+| `notifications.item.jobEnding` | {days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}} |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)
@@ -13283,6 +13579,80 @@ Conventions :
 
 
 ---
+
+### E-mails · Recruteur lot 6 (retenue, non retenue, demande pour rejoindre, fin d'offre)
+
+*Planches docs/refonte-mobile/modeles-recruteur. La lettre d'une réponse groupée est le texte relu par le recruteur ; ces textes l'entourent. Aucun numéro de téléphone.*
+
+| Clé | Texte |
+|---|---|
+| `mail.rh6.shortlisted.subject` | Votre candidature au poste {jobTitle} chez {company} : vous êtes retenu·e pour la suite |
+| `mail.rh6.shortlisted.preheader` | {company} vous invite à la prochaine étape. Réponse dans votre messagerie Jumanly. |
+| `mail.rh6.shortlisted.badge` | Candidature retenue |
+| `mail.rh6.shortlisted.title` | Bonne nouvelle : vous passez à l'étape suivante |
+| `mail.rh6.shortlisted.sub` | {jobTitle} · {company} |
+| `mail.rh6.shortlisted.p1` | {company} a retenu votre candidature au poste {jobTitle} pour la suite du recrutement. |
+| `mail.rh6.shortlisted.stepsTitle` | La suite |
+| `mail.rh6.shortlisted.step1.title` | Lisez le message |
+| `mail.rh6.shortlisted.step1.text` | Il vous attend dans votre messagerie Jumanly. |
+| `mail.rh6.shortlisted.step2.title` | Choisissez un créneau |
+| `mail.rh6.shortlisted.step2.text` | Ou répondez si aucun ne vous convient. |
+| `mail.rh6.shortlisted.step3.title` | Préparez l'entretien |
+| `mail.rh6.shortlisted.step3.text` | Relisez l'offre et vos projets : on vous posera des questions dessus. |
+| `mail.rh6.shortlisted.cta` | Ouvrir la conversation |
+| `mail.rh6.shortlisted.note` | Vous recevez cet e-mail parce que vous avez candidaté sur Jumanly. Candidater reste toujours gratuit. |
+| `mail.rh6.notRetained.subject` | Votre candidature au poste {jobTitle} |
+| `mail.rh6.notRetained.preheader` | La réponse de {company}, et la suite pour vous sur Jumanly. |
+| `mail.rh6.notRetained.badge` | Réponse à votre candidature |
+| `mail.rh6.notRetained.title` | Merci pour votre candidature |
+| `mail.rh6.notRetained.sub` | {jobTitle} · {company} |
+| `mail.rh6.notRetained.p1` | {company} a retenu d'autres profils pour la suite de ce recrutement. Cette décision ne remet pas en cause la qualité de votre parcours. |
+| `mail.rh6.notRetained.stepsTitle` | Pour la suite |
+| `mail.rh6.notRetained.step1.title` | Votre profil reste visible |
+| `mail.rh6.notRetained.step1.text` | Les recruteurs peuvent toujours vous proposer une offre. |
+| `mail.rh6.notRetained.step2.title` | D'autres offres vous attendent |
+| `mail.rh6.notRetained.step2.text` | Candidater est toujours gratuit. |
+| `mail.rh6.notRetained.step3.title` | Renforcez votre dossier |
+| `mail.rh6.notRetained.step3.text` | Une attestation ou un projet rend une compétence visible. |
+| `mail.rh6.notRetained.cta` | Voir les offres |
+| `mail.rh6.notRetained.note` | Cette réponse a été relue et envoyée par une personne de l'équipe de recrutement. Aucune candidature n'est écartée automatiquement sur Jumanly. |
+| `mail.rh6.join.subject` | {name} demande à rejoindre {org} sur Jumanly |
+| `mail.rh6.join.preheader` | Acceptez ou refusez la demande, et choisissez son rôle. |
+| `mail.rh6.join.badge` | Demande en attente |
+| `mail.rh6.join.title` | {name} souhaite rejoindre {org} |
+| `mail.rh6.join.sub` | Vous administrez l'organisation : vous décidez. |
+| `mail.rh6.join.p1` | {name} vient de créer un compte recruteur et a trouvé votre organisation. Rien ne change tant que vous n'avez pas accepté. |
+| `mail.rh6.join.domain` | Adresse e-mail professionnelle du même domaine que l'organisation |
+| `mail.rh6.join.name` | Trouvée par le nom de l'organisation |
+| `mail.rh6.join.stepsTitle` | Ce que vous pouvez faire |
+| `mail.rh6.join.step1.title` | Choisir son rôle |
+| `mail.rh6.join.step1.text` | Recruteur, évaluateur ou administrateur. |
+| `mail.rh6.join.step2.title` | Vérifier les places |
+| `mail.rh6.join.step2.text` | Après acceptation : {seatsAfter}. |
+| `mail.rh6.join.step3.title` | Ou refuser |
+| `mail.rh6.join.step3.text` | La personne est prévenue, sans détail. La demande expire au bout de 7 jours. |
+| `mail.rh6.join.cta` | Voir la demande |
+| `mail.rh6.join.note` | Vous recevez cet e-mail parce que vous administrez cette organisation sur Jumanly. |
+| `mail.rh6.ending.subject` | {days, plural, =0 {Votre offre {jobTitle} se termine aujourd'hui} one {Votre offre {jobTitle} se termine demain} other {Votre offre {jobTitle} se termine dans # jours}} |
+| `mail.rh6.ending.preheader` | Prolongez-la, analysez les candidatures ou clôturez-la. |
+| `mail.rh6.ending.badge` | {days, plural, =0 {Dernier jour} one {J-1} other {J-#}} |
+| `mail.rh6.ending.title` | {jobTitle} se termine le {date, date, long} |
+| `mail.rh6.ending.sub` | Faites le point avant la clôture. |
+| `mail.rh6.ending.p1` | Votre offre ne reçoit plus de candidature après la date de clôture. Voici où elle en est. |
+| `mail.rh6.ending.applications` | {count, plural, one {candidature} other {candidatures}} |
+| `mail.rh6.ending.views` | {count, plural, one {vue} other {vues}} |
+| `mail.rh6.ending.interviews` | {count, plural, one {entretien} other {entretiens}} |
+| `mail.rh6.ending.stepsTitle` | Ce que vous pouvez faire |
+| `mail.rh6.ending.step1.title` | Analyser les candidatures |
+| `mail.rh6.ending.step1.text` | Orbi les classe, avec le pourquoi. Vous décidez. |
+| `mail.rh6.ending.step2.title` | Prolonger l'offre |
+| `mail.rh6.ending.step2.text` | De 7, 14 ou 30 jours, ou jusqu'à la date de votre choix. |
+| `mail.rh6.ending.step3.title` | La laisser se clôturer |
+| `mail.rh6.ending.step3.text` | Les candidatures reçues restent consultables. |
+| `mail.rh6.ending.step4.title` | Répondre aux candidats |
+| `mail.rh6.ending.step4.text` | Chaque message est relu par vous avant l'envoi. |
+| `mail.rh6.ending.cta` | Voir l'offre |
+| `mail.rh6.ending.note` | Vous choisissez quand recevoir ces rappels dans les paramètres de notification. |
 
 ## Partie 08 · Textes système
 
@@ -16250,6 +16620,7 @@ Textes ajoutés à l'étape E0 : composants de base, textes alternatifs des pers
 | `foundation.samplePlan` | Free |
 | `foundation.sampleJobTitle` | Analyste de données junior |
 | `foundation.sampleCompany` | Cabinet Exemple |
+| `foundation.samplePlace` | Kinshasa · CDI · Hybride |
 | `foundation.sampleStage` | Entretien |
 | `foundation.sampleDocument` | Copie du diplôme |
 | `foundation.sampleRole` | Recruteur |
