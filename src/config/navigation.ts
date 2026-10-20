@@ -153,3 +153,74 @@ export const partnerNavigation: AppNavigationItem[] = [
   { key: "partnerLicenses", href: "/app/partenaire/licences", icon: "certificat" },
   { key: "partnerReports", href: "/app/partenaire/rapports", icon: "statistiques" },
 ];
+
+/**
+ * Bottom bar of the recruiter space (docs/refonte-mobile, brief recruteur § 1): À traiter ·
+ * Offres · Orbi (the round in the middle) · Candidats · Messages. The account opens from the
+ * avatar, the active organization from the chip of the head. `key` points to
+ * `hireShell.nav.<key>`; `also` lists the other paths a tab covers.
+ */
+export const recruiterTabs = [
+  { key: "today", href: "/app/hire", icon: "aujourdhui", also: [] },
+  { key: "offers", href: "/app/hire/offres", icon: "offre", also: [] },
+  { key: "orbi", href: "/app/orbi", icon: "orbi", also: [] },
+  {
+    key: "candidates",
+    href: "/app/hire/talents",
+    icon: "candidats",
+    also: ["/app/hire/candidats", "/app/hire/viviers", "/app/hire/entretiens"],
+  },
+  { key: "messages", href: "/app/messages", icon: "message", also: [] },
+] as const satisfies readonly {
+  key: string;
+  href: string;
+  icon: TalentIconName;
+  also: readonly string[];
+}[];
+
+export type RecruiterTab = (typeof recruiterTabs)[number];
+
+const inside = (pathname: string, path: string) =>
+  pathname === path || pathname.startsWith(`${path}/`);
+
+/** The tab a recruiter page belongs to: À traiter only for its own page. */
+export function recruiterTabOf(pathname: string): RecruiterTab | null {
+  if (pathname === "/app/hire") return recruiterTabs[0];
+  return (
+    recruiterTabs.find(
+      (tab) =>
+        tab.href !== "/app/hire" && [tab.href, ...tab.also].some((path) => inside(pathname, path)),
+    ) ?? null
+  );
+}
+
+/**
+ * Recruiter screens without the bottom bar (brief recruteur § 1): the work screens (a new or
+ * edited offer, a candidate's file, a conversation), the screens opened from the head (account,
+ * notifications, search) and Orbi, which opens as a conversation page.
+ */
+export function hidesRecruiterTabBar(pathname: string) {
+  const [, app, section, page, sub] = pathname.split("/");
+  if (app !== "app" || !section) return false;
+  if (
+    [
+      "bienvenue",
+      "abonnement",
+      "parametres",
+      "recherche",
+      "testeur",
+      "notifications",
+      "orbi",
+      "organisation",
+      "compte",
+      "profil",
+    ].includes(section)
+  )
+    return true;
+  if (section === "messages") return Boolean(page);
+  if (section !== "hire") return false;
+  if (page === "compte") return true;
+  if (page === "offres") return sub === "nouvelle" || pathname.endsWith("/modifier");
+  if (page === "candidats") return Boolean(sub);
+  return false;
+}

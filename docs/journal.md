@@ -2933,3 +2933,9 @@ toutes dans `docs/specifications.md`.
   à l'instant ; paiement et testeur jamais gardés ; tout est effacé à la déconnexion. Bandeau : « Vous êtes hors
   ligne. Vous voyez la dernière version enregistrée sur cet appareil. »
 - Choix : `docs/decisions/2026-10-20-ouverture-fluidite-hors-ligne.md`.
+
+## 2026-10-20 · Étape 2, recruteur lot 1 : cadre mobile
+
+- L'espace recruteur passe au nouveau cadre (`src/components/recruiter/`) : barre du bas À traiter · Offres · Orbi · Candidats · Messages, en-tête avec la pastille de l'organisation active (feuille « Organisation active », retour à l'espace talent), recherche, cloche, avatar. Le partenaire garde l'ancien cadre.
+- Nouveaux écrans : Compte RH (`/app/hire/compte`), Mon profil RH (`/app/hire/compte/profil`, nom affiché et fonction), premiers pas du recruteur en 3 écrans sur `/app/bienvenue` avec les vraies limites de la formule.
+- Écarts et suites (Orbi recruteur, cadre web, pages Hire à refaire) : `docs/decisions/2026-10-20-recruteur-lot-1.md`. Captures : `/mnt/project-files/captures/refonte-recruteur-lot-1/`.

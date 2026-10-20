@@ -2,13 +2,12 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { NextIntlClientProvider } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
-import { AccessBar, AccessMark, AccessTop } from "@/components/access/frame";
+import { AccessBar, AccessTop } from "@/components/access/frame";
+import { OnboardingFrame } from "@/components/access/onboarding-frame";
+import { RecruiterFirstSteps } from "@/components/recruiter/first-steps";
 import { PlacesFields, StudiesFields } from "@/components/access/onboarding";
-import { Character } from "@/components/brand";
-import { Icon } from "@/components/brand/icon";
 import { OrbiMark } from "@/components/talent/orbi-mark";
 import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
-import { Alert, Button } from "@/components/ui";
 import { cx } from "@/lib/cx";
 import { formatUsd } from "@/lib/money";
 import { pickMessages } from "@/i18n/client-messages";
@@ -23,42 +22,9 @@ import {
   saveWelcomeStudies,
 } from "@/server/actions/welcome";
 import { db } from "@/server/db";
-import { limit, resolvePlan } from "@/server/entitlements";
 import { ownedOrganization } from "@/server/services/accounts";
 import { listCountries, listLocalities } from "@/server/services/places";
 import { readSignupFlow } from "@/server/signup-flow";
-
-/**
- * Full-screen frame of the first steps (refonte-web talent-4 § 2, `obw`): on a phone, the column
- * of the talent space; from the tablet on, a page of its own above the space (no side bar), the
- * logo and the progress at the top, the question centred, the buttons along the bottom.
- */
-function OnboardingFrame({
-  brand,
-  homeLabel,
-  head,
-  children,
-  className,
-}: {
-  brand: string;
-  homeLabel: string;
-  head?: React.ReactNode;
-  children: React.ReactNode;
-  className?: string;
-}) {
-  return (
-    <div className={cx("t-acces t-obw", className)}>
-      <div className="t-obw-h">
-        <Link href="/app" aria-label={homeLabel} className="t-lgo">
-          <AccessMark size={30} />
-          <span aria-hidden>{brand}</span>
-        </Link>
-        {head}
-      </div>
-      <div className="t-oc">{children}</div>
-    </div>
-  );
-}
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("welcome.seo");
@@ -66,121 +32,29 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Step 6 · first steps. The owner of a new organization gets its checklist; a talent gets « Compte
+ * Step 6 · first steps. The owner of a new organization gets the recruiter's three steps; a talent gets « Compte
  * validé » then four questions (planche talent-4 § 1): the goal, the studies, where and how to
  * work (the country is asked only here), and « Votre espace est prêt » with the free plan.
  */
 export default async function WelcomePage({ searchParams }: PageProps<"/app/bienvenue">) {
   const user = await requireUser("/app/bienvenue");
-  const t = await getTranslations("welcome");
   const flow = await readSignupFlow();
   const org = await ownedOrganization(db, user.id);
   const firstName = user.firstName ?? user.name;
 
-  const resume = flow.next && (
-    <Alert
-      title={t("resume.text")}
-      action={
-        <form action={finishWelcome}>
-          <Button type="submit" size="sm">
-            {t("resume.cta", { target: flow.next })}
-          </Button>
-        </form>
-      }
-    />
-  );
-
-  if (org) {
-    const subject = { type: "organization" as const, id: org.id };
-    const plan = await resolvePlan(db, subject);
-    const seats = await limit(db, subject, "org.seats");
-    const jobs = await limit(db, subject, "jobs.active.max");
-    const steps = ["profile", "job", "invite", "verify"] as const;
+  const { etape, seul, erreur } = await searchParams;
+  // The owner of a new organization: the recruiter's first steps (planche recruteur-3 OBR).
+  if (org)
     return (
-      <div className="flex max-w-[960px] flex-col gap-6">
-        <header className="flex items-start gap-6">
-          <span className="jm-slide-in hidden shrink-0 md:block">
-            <Character name="nadia" pose="salut" height={160} />
-          </span>
-          <div className="flex flex-col gap-3">
-            <span
-              aria-hidden
-              className="flex size-11 shrink-0 items-center justify-center rounded-[14px] bg-sapin text-lime lg:size-12"
-            >
-              <svg viewBox="0 0 24 24" className="size-7" fill="none">
-                <path
-                  d="M15 9.5v6a4.5 4.5 0 0 1-9 0"
-                  pathLength={1}
-                  className="jm-letter"
-                  stroke="currentColor"
-                  strokeWidth={3.2}
-                  strokeLinecap="round"
-                />
-                <circle
-                  cx="15"
-                  cy="4"
-                  r="0.01"
-                  className="jm-letter-dot"
-                  stroke="currentColor"
-                  strokeWidth={3.2}
-                  strokeLinecap="round"
-                />
-              </svg>
-            </span>
-            <h1 className="text-[30px] leading-[1.1] font-bold tracking-tight lg:text-[40px]">
-              {t("org.title", { firstName })}
-            </h1>
-            <p className="text-[15px] text-ardoise lg:text-base">
-              {t("org.subtitle", { orgName: org.name })}
-            </p>
-            <p className="flex items-center gap-1.5 self-start rounded-pill bg-sapin px-3 py-1.5 text-xs font-semibold text-lime">
-              <Icon name="etoile" className="size-3.5" />
-              {t("org.plan", { plan: plan?.planName ?? "", seats, jobs })}
-            </p>
-          </div>
-        </header>
-        {resume}
-        <section className="flex flex-col gap-4 rounded-[24px] bg-blanc p-5 lg:p-6">
-          <h2 className="text-lg font-bold">{t("org.steps.title")}</h2>
-          <ol className="flex flex-col gap-3">
-            {steps.map((step, index) => (
-              <li key={step} className="flex items-start gap-3.5">
-                <span
-                  aria-hidden
-                  className={cx(
-                    "flex size-7 shrink-0 items-center justify-center rounded-full text-xs font-semibold",
-                    index === 0 ? "bg-lime text-sapin" : "bg-sapin text-lime",
-                  )}
-                >
-                  {index + 1}
-                </span>
-                <span className="flex flex-col">
-                  <span className="font-semibold">{t(`org.steps.${step}.text`)}</span>
-                  <span className="text-sm text-ardoise">
-                    {t(`org.steps.${step}.help`, { seats })}
-                  </span>
-                </span>
-              </li>
-            ))}
-          </ol>
-        </section>
-        <p className="flex items-start gap-3 rounded-[18px] bg-[#E4FAD0] px-4 py-3.5 text-[13px] leading-[19px]">
-          <Icon name="check" className="mt-px size-4 shrink-0 text-feuille-fonce" />
-          {t("org.principle")}
-        </p>
-        <p className="text-sm text-ardoise">{t("org.privacy")}</p>
-        <p className="text-sm text-ardoise">{t("org.personal")}</p>
-        <form action={finishWelcome}>
-          <Button type="submit" size="lg" iconAfter={<Icon name="chev-r" className="size-5" />}>
-            {t("org.cta.dashboard")}
-          </Button>
-        </form>
-      </div>
+      <RecruiterFirstSteps
+        org={org}
+        email={user.email}
+        step={typeof etape === "string" ? etape : undefined}
+        error={typeof erreur === "string"}
+      />
     );
-  }
 
   const profile = await db.talentProfile.findUnique({ where: { userId: user.id } });
-  const { etape, seul } = await searchParams;
   const ta = await getTranslations("access");
   const step =
     etape === "objectif"
