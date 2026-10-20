@@ -29,7 +29,6 @@ import {
   laterStage,
   stillToDecide,
   undoableDecision,
-  type DecisionOutcome,
 } from "@/server/services/hire-candidates";
 import {
   decisionParagraphs,
@@ -469,7 +468,7 @@ export default async function DecisionPage({
                 <label htmlFor="rc-motif">{th("reject.reason.text")}</label>
                 <div className="t-verre t-saisie">
                   <select id="rc-motif" name="reason" defaultValue="">
-                    <option value="">{th("reject.reason.text")}</option>
+                    <option value="">{t("decision.reasonNone")}</option>
                     {rejectReasons.map((reason) => (
                       <option key={reason} value={reason}>
                         {th(`reject.reason.${reason}`)}

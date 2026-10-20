@@ -3150,3 +3150,47 @@ message aux non retenus au lot 4, lecture texte de la fiche, tableau provisoire,
 de la démo).
 
 **Captures.** `captures/refonte-recruteur-lot-2/` du dossier du projet, 390 px, clair et sombre.
+
+## 2026-10-20 · Étape 2, recruteur lot 3
+
+**Fait.** Candidats d'une offre par étape (`/app/hire/candidats`), avec choix de l'offre, tri et
+filtres qui masquent sans rejeter ; dossier d'un candidat (`/app/hire/candidats/[id]`) avec score
+en anneau et « Pourquoi X % ? », frise des étapes, documents, compétences et preuves, réponses,
+notes modifiables, historique et « Changer d'étape » ; analyse d'Orbi `hire.cv_analysis`
+(points forts, points à vérifier, ajout aux notes), protégée contre les consignes cachées dans un
+CV, une lettre ou un document ; décision finale (`/app/hire/candidats/[id]/decision`) avec un
+message que le recruteur relit et modifie avant l'envoi, tons, motif facultatif, vivier, « Plus
+tard », puis écran « Décision enregistrée » avec annulation pendant 10 minutes. Version RH Free :
+cadenas sur le score et sur l'analyse, avec la formule la moins chère qui les ouvre. L'onglet
+Candidats du cadre mène à la nouvelle liste ; entretiens, recherche de talents et viviers (lot 4)
+restent joignables.
+
+**Données.** Aucune migration. Le seed ajoute quatre candidatures fictives (`*.ux@jumanly.test`)
+sur l'offre d'analyste junior de la démo. Aucune donnée effacée.
+
+**Ancien design supprimé.** Fichiers : `src/components/hire/pipeline-board.tsx`,
+`src/components/matching/recruiter-why.tsx`. Fonctions : `getPipeline`, `candidateSelect`
+(`src/server/services/hire.ts`), `moveApplicationAction`, `moveCardAction`, `back`,
+`decisionHref` (`src/server/actions/hire.ts`), `sendDecisionAction`, `decisionSchema`
+(`src/server/actions/hire-messages.ts`), et la branche « décision » de la page Message. Attribution
+et grille d'une offre passent sur le détail de l'offre.
+
+**Correction trouvée par les tests.** Un filtre Prisma sur un chemin JSON absent ne correspond
+jamais, même sous `NOT` : l'annulation d'une décision ne trouvait pas sa ligne. La charge utile
+écrit désormais `undone: false`.
+
+**Tests.** Unitaires `tests/unit/cv-analysis.test.ts` (balises neutralisées, texte piégé gardé
+entre les balises, points qui décident ou obéissent écartés, analyse sans modèle) ; en base
+`tests/db/hire-candidates.test.ts` (isolation des organisations, filtres qui masquent sans
+rejeter, droit et consentement avant toute analyse, fournisseur « obéissant » à une injection dont la sortie
+est écartée, décision, annulation, e-mail différé). Parcours e2e
+`tests/e2e/mobile-recruteur-candidats.spec.ts` (parcours complet, version RH Free, aucun
+débordement à 390 et 412 px) ; `hire.spec.ts` et `hire-advanced.spec.ts` suivent les nouveaux
+écrans.
+
+**Écarts.** `docs/decisions/2026-10-20-recruteur-lot-3.md` (annulation à 10 minutes et e-mail
+différé, retrait, « Plus tard », pas d'issue par défaut, RH Free sans score, « Analyser tout »
+remplacé par « Examiner », créneau d'appel et vivier depuis le dossier au lot 4, évaluation et
+page Message dans l'ancien style).
+
+**Captures.** `captures/refonte-recruteur-lot-3/` du dossier du projet, 390 px, clair et sombre.

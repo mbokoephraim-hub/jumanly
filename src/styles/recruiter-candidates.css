@@ -1165,7 +1165,7 @@
   opacity: 0.85;
 }
 .t-rc-res .t-hired {
-  background: var(--g-former);
+  background: linear-gradient(150deg, #f2fce6, #c8f59e);
 }
 .t-rc-res .t-rejected {
   background: linear-gradient(150deg, #fdeae6, #f5b3a8);
@@ -1368,4 +1368,23 @@
 .t-rc-fait-bts .t-bt {
   flex: 1;
   height: 50px;
+}
+
+/* Mode sombre : les initiales restent lisibles (planche : .av en Sapin sur une teinte claire). */
+.sombre .t-rc-av {
+  background: #c8f59e;
+}
+.sombre .t-rc-av.t-a {
+  background: #bfe6f5;
+}
+.sombre .t-rc-av.t-b {
+  background: #f8dfa0;
+}
+.t-rc-etp .t-li.t-act {
+  background: var(--zone);
+}
+.t-rc-liens {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 18px;
 }

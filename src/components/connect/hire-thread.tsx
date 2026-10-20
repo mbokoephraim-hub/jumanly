@@ -95,7 +95,7 @@ export async function HireThread({
 }) {
   const t = await getTranslations("connect");
   const tr = await getTranslations("report");
-  const tc = await getTranslations("hireCandidates");
+  const tcand = await getTranslations("hireCandidates");
   const format = await getFormatter();
 
   let conversation;
@@ -544,7 +544,7 @@ export async function HireThread({
                         >
                           {message.hiddenAt ? (
                             <p className="italic">
-                              {payload.retracted ? tc("retracted") : tr("hidden")}
+                              {payload.retracted ? tcand("retracted") : tr("hidden")}
                             </p>
                           ) : message.kind === "file" ? (
                             <FileCard

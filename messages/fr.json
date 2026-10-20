@@ -10574,6 +10574,7 @@
       "poolChoose": "Ajouter à un vivier",
       "poolText": "Pour une prochaine offre",
       "poolSelect": "Vivier",
+      "reasonNone": "Aucun motif précisé",
       "guard": "Rien n'est automatique : vous confirmez, et vous pouvez annuler pendant 10 minutes.",
       "later": "Plus tard",
       "confirm": "Confirmer et envoyer",

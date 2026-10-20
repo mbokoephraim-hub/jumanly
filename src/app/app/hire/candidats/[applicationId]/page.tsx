@@ -185,7 +185,7 @@ export default async function CandidateFilePage({
       sum + Math.max(0, ((item.endDate ?? now).getTime() - item.startDate.getTime()) / MONTH),
     0,
   );
-  const years = Math.floor(months / 12);
+  const years = Math.floor((months + 0.5) / 12);
   const line = [
     profile.headline,
     profile.experiences.length ? t("file.years", { count: years }) : null,
@@ -401,10 +401,6 @@ export default async function CandidateFilePage({
                     </li>
                   ))}
                 </ul>
-                <SheetButton target="rc-analyse" className="t-pq t-press">
-                  <TalentIcon name="orbi" size="xs" />
-                  {t("orbiCard.open")}
-                </SheetButton>
               </>
             ) : orbiState === "ready" ? (
               <>
@@ -429,11 +425,21 @@ export default async function CandidateFilePage({
             )}
           </>
         )}
-        {score !== null && (
-          <SheetButton target="rc-pourquoi" className="t-pq t-press">
-            <TalentIcon name="pourquoi" size="xs" />
-            {t("why.link", { score })}
-          </SheetButton>
+        {(score !== null || orbiState === "analysis") && (
+          <div className="t-rc-liens">
+            {orbiState === "analysis" && (
+              <SheetButton target="rc-analyse" className="t-pq t-press">
+                <TalentIcon name="orbi" size="xs" />
+                {t("orbiCard.open")}
+              </SheetButton>
+            )}
+            {score !== null && (
+              <SheetButton target="rc-pourquoi" className="t-pq t-press">
+                <TalentIcon name="pourquoi" size="xs" />
+                {t("why.link", { score })}
+              </SheetButton>
+            )}
+          </div>
         )}
         {match === "disabled" && <p className="t-rc-note">{t("why.disabled")}</p>}
         {matchingLevel === "none" && matchingPlan(["suggestions", "explainable"]) && (
@@ -808,6 +814,7 @@ export default async function CandidateFilePage({
         >
           <p className="t-ss">{t("why.sub")}</p>
           <WhyCriteria
+            recruiter
             explanation={
               matchingLevel === "explainable"
                 ? explanation
@@ -840,6 +847,7 @@ export default async function CandidateFilePage({
         <Sheet
           id="rc-analyse"
           openParam="analyse"
+          defaultOpen={one(query.analyse) === "1"}
           title={t("analysis.title")}
           closeLabel={t("analysis.close")}
         >

@@ -60,6 +60,8 @@ type Payload = {
   timezone?: string;
   note?: string;
   outcome?: "rejected" | "hired";
+  /** A decision the recruiter undid within the 10 minutes (lot 3 recruteur). */
+  retracted?: boolean;
   company?: string;
   jobTitle?: string;
   signer?: string;
@@ -357,7 +359,7 @@ export default async function ThreadPage({
               if (message.hiddenAt) {
                 body = (
                   <div className="t-b-r t-cache">
-                    <i>{t("report.hidden")}</i>
+                    <i>{t(payload.retracted ? "hireCandidates.retracted" : "report.hidden")}</i>
                   </div>
                 );
               } else if (message.kind === "invitation" && interview) {

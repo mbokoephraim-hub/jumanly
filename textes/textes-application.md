@@ -8725,6 +8725,7 @@ Conventions :
 | `hireCandidates.decision.poolChoose` | Ajouter à un vivier |
 | `hireCandidates.decision.poolText` | Pour une prochaine offre |
 | `hireCandidates.decision.poolSelect` | Vivier |
+| `hireCandidates.decision.reasonNone` | Aucun motif précisé |
 | `hireCandidates.decision.guard` | Rien n'est automatique : vous confirmez, et vous pouvez annuler pendant 10 minutes. |
 | `hireCandidates.decision.later` | Plus tard |
 | `hireCandidates.decision.confirm` | Confirmer et envoyer |

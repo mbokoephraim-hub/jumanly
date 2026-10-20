@@ -316,6 +316,8 @@ export async function decide(
     poolAddedId,
     poolName,
     mail: input.outcome === "withdrawn" ? "none" : "pending",
+    // Written as false (not left out): a JSON path that is missing never matches a filter.
+    undone: false,
   };
   const event = await db.applicationEvent.create({
     data: {
@@ -395,7 +397,14 @@ export async function undoDecision(
   await db.$transaction(async (tx) => {
     // Claimed once: two « Annuler » at the same time undo only one decision.
     const claimed = await tx.applicationEvent.updateMany({
-      where: { id: event.id, NOT: { payload: { path: ["undone"], equals: true } } },
+      // Claimed once, and never once its e-mail has left (the end of the 10 minutes).
+      where: {
+        id: event.id,
+        AND: [
+          { payload: { path: ["undone"], equals: false } },
+          { NOT: { payload: { path: ["mail"], equals: "sent" } } },
+        ],
+      },
       data: {
         payload: {
           ...(event.payload as Prisma.JsonObject),
