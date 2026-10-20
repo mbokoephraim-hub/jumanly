@@ -3,28 +3,18 @@
 import { redirect } from "next/navigation";
 import { updateTag } from "next/cache";
 import { z } from "zod";
-import { onMessageSent, onStageChanged } from "@/server/application-events";
+import { onMessageSent } from "@/server/application-events";
 import { db } from "@/server/db";
 import { requireHire, setActiveSpace } from "@/server/hire-context";
 import { requireUser } from "@/server/auth/session";
 import { ensureApplicationConversation, sendMessage } from "@/server/services/connect";
 import { addTeamNote } from "@/server/services/evaluation";
-import {
-  closeJob,
-  deleteDraft,
-  duplicateJob,
-  HireError,
-  moveApplication,
-  publishJob,
-} from "@/server/services/hire";
+import { closeJob, deleteDraft, duplicateJob, HireError, publishJob } from "@/server/services/hire";
 import { hireMemberships, partnerMemberships } from "@/server/services/organization";
 import { reportError } from "@/server/observability";
 import { writeJob, type JobWriterInput, type JobWriterResult } from "@/server/services/job-writer";
 
 const id = (value: FormDataEntryValue | null) => String(value ?? "").slice(0, 60);
-
-const decisionHref = (applicationId: string, kind: "rejected" | "hired") =>
-  `/app/hire/candidats/${applicationId}/message?modele=${kind === "rejected" ? "refus" : "acceptation"}`;
 
 /** Public job pages are cached: a change in Hire refreshes them. */
 function refreshPublicJobs(slug?: string) {
@@ -104,77 +94,7 @@ export async function deleteDraftAction(formData: FormData) {
   redirect("/app/hire/offres?onglet=brouillons&ok=supprimee");
 }
 
-// ─── Pipeline ─────────────────────────────────────────────────────────────────
-
-/** Where to come back after an action on a candidate: the pipeline or the application page. */
-function back(formData: FormData, applicationId: string, params = "") {
-  const from = String(formData.get("back") ?? "");
-  if (!from.startsWith("/app/hire/") || from.startsWith("//")) {
-    const base = `/app/hire/candidats/${applicationId}`;
-    redirect(params ? `${base}?${params}` : base);
-  }
-  // The candidates of an offer keep their `offre` (`/app/hire/candidats?offre=`), nothing else.
-  const [path, search = ""] = from.split("#")[0]!.split("?");
-  const offer = new URLSearchParams(search).get("offre");
-  const next = new URLSearchParams(offer ? { offre: offer.slice(0, 60) } : {});
-  for (const [key, value] of new URLSearchParams(params)) next.set(key, value);
-  const text = next.toString();
-  redirect(text ? `${path}?${text}` : path!);
-}
-
-export async function moveApplicationAction(formData: FormData) {
-  const { ctx } = await requireHire("/app/hire", "manage");
-  const applicationId = id(formData.get("application"));
-  const stageId = id(formData.get("stage"));
-  const stage = await db.pipelineStage.findUnique({
-    where: { id: stageId },
-    select: { kind: true },
-  });
-  // A decision always goes through its preview (prompt 5): the message leaves only on a click.
-  if (stage?.kind === "rejected" || stage?.kind === "hired")
-    redirect(decisionHref(applicationId, stage.kind));
-  const moved = await guarded(
-    () => moveApplication(db, ctx, applicationId, stageId),
-    "/app/hire/offres",
-  );
-  if (moved) await onStageChanged(applicationId, moved.to).catch((error) => reportError(error));
-  back(formData, applicationId, moved ? `ok=deplacee` : "");
-}
-
-export type MoveCardResult =
-  | { status: "moved"; stage: string }
-  | { status: "unchanged" }
-  | { status: "decision"; href: string }
-  | { status: "error" };
-
-/**
- * Drag and drop in the pipeline (mockup 04-04): the same move as `moveApplicationAction`, answered
- * without a redirect so the card stays where it was dropped. « Non retenu » and « Embauché » open
- * the decision preview: a decision is never made by a drop alone.
- */
-export async function moveCardAction(input: {
-  applicationId: string;
-  stageId: string;
-}): Promise<MoveCardResult> {
-  const { ctx } = await requireHire("/app/hire", "manage");
-  const applicationId = String(input.applicationId).slice(0, 60);
-  const stageId = String(input.stageId).slice(0, 60);
-  const stage = await db.pipelineStage.findUnique({
-    where: { id: stageId },
-    select: { kind: true },
-  });
-  if (stage?.kind === "rejected" || stage?.kind === "hired")
-    return { status: "decision", href: decisionHref(applicationId, stage.kind) };
-  try {
-    const moved = await moveApplication(db, ctx, applicationId, stageId);
-    if (!moved) return { status: "unchanged" };
-    await onStageChanged(applicationId, moved.to).catch((error) => reportError(error));
-    return { status: "moved", stage: moved.to.name };
-  } catch (error) {
-    if (error instanceof HireError) return { status: "error" };
-    throw error;
-  }
-}
+// ─── Candidate file ───────────────────────────────────────────────────────────
 
 export async function addNoteAction(formData: FormData) {
   const { ctx } = await requireHire("/app/hire", "evaluate");

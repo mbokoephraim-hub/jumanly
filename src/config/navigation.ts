@@ -166,9 +166,9 @@ export const recruiterTabs = [
   { key: "orbi", href: "/app/orbi", icon: "orbi", also: [] },
   {
     key: "candidates",
-    href: "/app/hire/talents",
+    href: "/app/hire/candidats",
     icon: "candidats",
-    also: ["/app/hire/candidats", "/app/hire/viviers", "/app/hire/entretiens"],
+    also: ["/app/hire/talents", "/app/hire/viviers", "/app/hire/entretiens"],
   },
   { key: "messages", href: "/app/messages", icon: "message", also: [] },
 ] as const satisfies readonly {

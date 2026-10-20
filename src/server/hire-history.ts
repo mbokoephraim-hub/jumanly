@@ -47,7 +47,14 @@ export function describeEvent(
     case "message":
       return t("history.event.message", { memberName: name });
     case "withdrawn":
-      return t("history.event.withdrawn");
+      // Recruiter lot 3: the team records that the candidate withdrew (« Retrait »).
+      return text(event.payload, "by") === "team"
+        ? t("history.event.withdrawnByTeam", { memberName: name })
+        : t("history.event.withdrawn");
+    case "orbi_analysis":
+      return t("history.event.orbiAnalysis", { memberName: name });
+    case "decision_undone":
+      return t("history.event.decisionUndone", { memberName: name, to: text(event.payload, "to") });
     case "rated":
       return t("history.event.rated", { memberName: name });
     case "interview_scheduled":

@@ -497,27 +497,6 @@ export async function listOrgJobs(db: PrismaClient, ctx: HireContext) {
 
 // ─── Pipeline and applications ──────────────────────────────────────────────────
 
-const candidateSelect = {
-  id: true,
-  headline: true,
-  matchingEnabled: true,
-  user: {
-    select: { id: true, name: true, firstName: true, lastName: true, city: true, country: true },
-  },
-} satisfies Prisma.TalentProfileSelect;
-
-export async function getPipeline(db: PrismaClient, ctx: HireContext, jobId: string) {
-  assert(hirePermissions(ctx.role).readApplications);
-  const job = await getOrgJob(db, ctx, jobId);
-  const stages = await ensureStages(db, job.id);
-  const applications = await db.application.findMany({
-    where: { jobId: job.id },
-    orderBy: { createdAt: "asc" },
-    include: { profile: { select: candidateSelect } },
-  });
-  return { job, stages, applications };
-}
-
 /** An application to a job of the active organization, or HireError("notFound"). */
 export async function getOrgApplication(db: PrismaClient, ctx: HireContext, applicationId: string) {
   assert(hirePermissions(ctx.role).readApplications);

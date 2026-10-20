@@ -5,6 +5,7 @@ import { paymentProvider } from "@/server/payments";
 import { runBillingJobs } from "@/server/services/billing-jobs";
 import { runDiagnosticReminders } from "@/server/services/diagnostic-store";
 import { purgeScheduledDeletions } from "@/server/services/admin-users";
+import { deliverDueDecisionMails } from "@/server/application-events";
 
 function matches(given: Buffer, secret: string | undefined) {
   if (!secret) return false;
@@ -29,7 +30,9 @@ export async function POST(request: Request) {
   const diagnosticReminders = await runDiagnosticReminders(db);
   // Account deletions asked from Paramètres, once their 30 days of grace are over (partie 10).
   const deletedAccounts = await purgeScheduledDeletions(db);
-  return NextResponse.json({ ...report, diagnosticReminders, deletedAccounts });
+  // Recruiter lot 3: decision e-mails, once their 10 minutes to undo are over.
+  const decisionMails = await deliverDueDecisionMails();
+  return NextResponse.json({ ...report, diagnosticReminders, deletedAccounts, decisionMails });
 }
 
 export const GET = POST;

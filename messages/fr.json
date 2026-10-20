@@ -10283,6 +10283,328 @@
       "questions": "{count, plural, one {# question du recruteur, facultative} other {# questions du recruteur, facultatives}}"
     }
   },
+  "hireCandidates": {
+    "seo": "Candidats",
+    "title": "Candidats",
+    "seg": {
+      "aria": "Vues de l'onglet Candidats",
+      "applications": "Candidatures",
+      "talents": "Rechercher des talents"
+    },
+    "offer": {
+      "label": "Offre",
+      "aria": "Offre affichée : {title}. Changer d'offre",
+      "choose": "Choisir une offre",
+      "count": "{count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}}",
+      "unseen": "{count, plural, one {# nouvelle} other {# nouvelles}}",
+      "close": "Fermer"
+    },
+    "orbi": {
+      "unseen": "{count, plural, one {<b># candidature</b> pas encore examinée.} other {<b># candidatures</b> pas encore examinées.}}",
+      "examine": "Examiner"
+    },
+    "stages": {
+      "aria": "Filtrer par étape",
+      "all": "Toutes",
+      "count": "{stage} : {count, plural, one {# candidature} other {# candidatures}}"
+    },
+    "sorted": {
+      "correspondance": "Triées par correspondance",
+      "date": "Triées par date",
+      "etape": "Triées par étape"
+    },
+    "sort": {
+      "open": "Trier",
+      "openActive": "Trier · {count}",
+      "title": "Trier et filtrer",
+      "by": "Trier par",
+      "option": {
+        "correspondance": "Correspondance",
+        "date": "Date",
+        "etape": "Étape"
+      },
+      "score": "Correspondance",
+      "floor": {
+        "0": "Toutes",
+        "70": "70 % et plus",
+        "85": "85 % et plus"
+      },
+      "file": "Dossier",
+      "filter": {
+        "complet": "Dossier complet",
+        "lettre": "Avec lettre",
+        "nonlues": "Non lues"
+      },
+      "clear": "Effacer",
+      "see": "{count, plural, =0 {Aucune candidature} one {Voir # candidature} other {Voir # candidatures}}",
+      "close": "Fermer"
+    },
+    "hidden": "{count, plural, one {# candidature masquée par vos filtres.} other {# candidatures masquées par vos filtres.}} Masquer n'est pas rejeter.",
+    "showAll": "Tout afficher",
+    "none": "Aucune candidature ne correspond à ces filtres.",
+    "row": {
+      "new": "Nouveau",
+      "cv": "CV",
+      "letter": "lettre",
+      "certificate": "attestation",
+      "profile": "Profil Jumanly",
+      "score": "corresp.",
+      "scoreAria": "{score} % de correspondance",
+      "withdrawn": "Retirée"
+    },
+    "empty": {
+      "title": "Pas encore de candidature",
+      "pending_review": "L'offre est en validation. Les candidatures arriveront dès sa publication.",
+      "published": "Les candidatures arrivent ici dès qu'un talent postule, gratuitement.",
+      "paused": "L'offre est en pause : elle ne reçoit pas de candidature pour l'instant.",
+      "closed": "L'offre est clôturée : elle ne reçoit plus de candidature.",
+      "search": "Rechercher des talents",
+      "searchText": "Inviter des profils visibles à postuler"
+    },
+    "noOffer": {
+      "title": "Pas encore d'offre",
+      "text": "Publiez une offre : ses candidatures arriveront ici, par étape.",
+      "cta": "Publier une offre"
+    },
+    "file": {
+      "seo": "Candidature",
+      "title": "Candidature",
+      "back": "Retour aux candidats",
+      "menu": "Plus d'actions sur la candidature",
+      "years": "{count, plural, =0 {moins d'un an} one {# an} other {# ans}}",
+      "new": "Nouveau",
+      "applied": "a postulé {when}",
+      "withdrawn": "Retirée",
+      "track": "Étapes de la candidature",
+      "trackNow": "étape actuelle",
+      "trackDone": "étape passée",
+      "trackDecision": "Décision",
+      "scoreAria": "Correspondance : {score} %"
+    },
+    "orbiCard": {
+      "title": "Résumé par Orbi",
+      "sub": "Tiré du dossier seulement · Orbi ne décide pas",
+      "intro": "Orbi lit le dossier et en tire des points forts et des points à vérifier en entretien. 1 crédit Orbi.",
+      "run": "Résumer avec Orbi",
+      "open": "Voir l'analyse",
+      "consent": "Pour qu'Orbi lise un dossier, activez l'aide de l'IA dans vos paramètres.",
+      "consentLink": "Paramètres",
+      "quota": "Votre organisation n'a plus de crédit Orbi ce mois-ci. Le dossier reste complet.",
+      "unavailable": "Orbi n'a pas pu répondre. Aucun crédit n'a été utilisé : réessayez dans un instant.",
+      "lockedTitle": "Résumé et analyse par Orbi",
+      "locked": "Disponibles dès {plan}, avec {credits} crédits Orbi par mois.",
+      "lockedNoPlan": "Disponibles avec une formule plus complète.",
+      "see": "Voir {plan}",
+      "seePlans": "Voir les formules"
+    },
+    "why": {
+      "link": "Pourquoi {score} % ?",
+      "title": "Pourquoi {score} % ?",
+      "sub": "Calcul fixe, le même pour tous les candidats de l'offre.",
+      "excluded": "Jamais pris en compte : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise.",
+      "more": "Le détail de chaque critère est disponible dès {plan}.",
+      "disputed": "Le candidat a demandé une révision humaine de ce score.",
+      "disabled": "Le candidat a désactivé le calcul de correspondance : ce dossier n'a pas de score.",
+      "locked": "Score de correspondance et son « Pourquoi ? » : dès {plan}.",
+      "skills": "{met} sur {total}",
+      "experience": "{years, plural, =0 {Moins d'un an} one {# an} other {# ans}} pour {min, plural, =0 {aucun minimum} one {# an demandé} other {# ans demandés}}",
+      "status": {
+        "met": "Correspond",
+        "partial": "En partie",
+        "unmet": "Ne correspond pas",
+        "unknown": "Non renseigné"
+      },
+      "close": "Fermer"
+    },
+    "analysis": {
+      "title": "Analyse du dossier",
+      "strengths": "Points forts",
+      "toVerify": "À vérifier en entretien",
+      "none": "Rien à signaler de ce côté.",
+      "guard": "Orbi lit le dossier comme une donnée : les consignes écrites dans un CV sont ignorées.",
+      "credits": "{left, plural, one {1 crédit Orbi utilisé, # restant.} other {1 crédit Orbi utilisé, # restants.}}",
+      "template": "Calculé à partir du dossier, sans modèle d'IA.",
+      "report": "Signaler une erreur",
+      "toNote": "Ajouter aux notes",
+      "close": "Fermer",
+      "point": {
+        "skillCertified": "{skill} : prouvé par une attestation Jumanly.",
+        "skillProject": "{skill} : prouvé par un projet.",
+        "skillExperience": "{skill} : appuyé sur une expérience.",
+        "experience": "{years, plural, one {# an} other {# ans}} d'expérience pour {min, plural, one {# an demandé} other {# ans demandés}}.",
+        "skillDeclared": "{skill} : déclaré, sans preuve.",
+        "skillMissing": "{skill} : absent du profil.",
+        "knockout": "À vérifier : {label}.",
+        "question": "Sans réponse : « {question} »"
+      }
+    },
+    "skills": {
+      "title": "Compétences de l'offre",
+      "count": "{met} sur {total}",
+      "preferred": "{skill} · souhaitée",
+      "proof": {
+        "certificate": "Attestation",
+        "project": "Projet",
+        "experience": "Expérience",
+        "declared": "Déclarée",
+        "missing": "Non indiquée"
+      },
+      "level": "Niveau {level} sur 4",
+      "none": "L'offre ne liste pas de compétence."
+    },
+    "docs": {
+      "aria": "Documents envoyés",
+      "cv": "CV",
+      "cvLine": "PDF · {date}",
+      "cvAria": "Télécharger le CV de {name} en PDF",
+      "noCv": "Pas de CV",
+      "noCvText": "Profil Jumanly",
+      "letter": "Lettre",
+      "letterLine": "{count, plural, one {# mot} other {# mots}}",
+      "letterAria": "Lire la lettre de {name}",
+      "letterTitle": "Lettre de {name}",
+      "noLetter": "Pas de lettre",
+      "optional": "Facultative",
+      "joined": "Documents joints",
+      "certificate": "Attestation Jumanly · {date}",
+      "text": "Texte joint",
+      "read": "Lire",
+      "close": "Fermer"
+    },
+    "answers": {
+      "title": "Réponses aux questions",
+      "none": "Cette offre ne pose pas de question.",
+      "noAnswer": "Sans réponse"
+    },
+    "knockout": {
+      "title": "Critères à vérifier",
+      "note": "Signalés à l'équipe, jamais éliminatoires."
+    },
+    "notes": {
+      "title": "Notes privées",
+      "add": "Ajouter une note",
+      "submit": "Ajouter la note",
+      "label": "Nouvelle note",
+      "placeholder": "Ce que l'équipe doit savoir. @Prénom prévient un collègue.",
+      "mine": "{name} · {date} · modifiable",
+      "other": "{name} · {date}",
+      "edited": "modifiée",
+      "edit": "Modifier",
+      "editLabel": "Modifier la note",
+      "save": "Enregistrer",
+      "delete": "Supprimer",
+      "deleteConfirm": "Supprimer cette note ? Elle disparaît pour toute l'équipe.",
+      "deleteSubmit": "Supprimer la note",
+      "private": "Visibles par l'équipe seulement, jamais par le candidat.",
+      "solo": "Vous seul voyez vos notes. Notes partagées et mentions : dès {plan}.",
+      "empty": "Pas encore de note."
+    },
+    "history": {
+      "title": "Historique",
+      "export": "Exporter l'historique"
+    },
+    "evaluation": {
+      "title": "Évaluation"
+    },
+    "bar": {
+      "aria": "Actions sur la candidature",
+      "move": "Changer d'étape",
+      "interview": "Proposer un entretien",
+      "message": "Envoyer un message",
+      "decided": "Décision : {stage}"
+    },
+    "menu": {
+      "title": "Actions",
+      "offer": "Voir l'offre",
+      "template": "Écrire avec un modèle",
+      "document": "Demander un document",
+      "cv": "Télécharger le CV",
+      "decision": "Décision finale",
+      "close": "Fermer"
+    },
+    "move": {
+      "title": "Déplacer {name}",
+      "legend": "Nouvelle étape",
+      "current": "actuelle",
+      "interview": "Proposer des créneaux ensuite",
+      "decision": "Décision finale",
+      "decisionText": "Retenue, non retenue ou retrait",
+      "note": "{firstName} verra la nouvelle étape dans son suivi. Aucun message n'est envoyé.",
+      "cancel": "Annuler",
+      "submit": "Déplacer"
+    },
+    "ok": {
+      "deplacee": "Étape changée : le candidat la voit dans son suivi.",
+      "note": "Note enregistrée.",
+      "noteOrbi": "Analyse ajoutée à vos notes. Vous pouvez la modifier.",
+      "signale": "Merci : l'erreur est notée avec l'analyse.",
+      "annulee": "Décision annulée : la candidature est revenue à son étape.",
+      "plusTard": "La candidature attend en « {stage} »."
+    },
+    "error": {
+      "etape": "L'étape n'a pas pu être changée. Réessayez."
+    },
+    "decision": {
+      "seo": "Décision finale",
+      "title": "Décision finale",
+      "back": "Retour au dossier",
+      "interviewOn": "entretien le {date}",
+      "result": "Résultat",
+      "outcome": {
+        "hired": "Retenue",
+        "hiredText": "Offre d'emploi",
+        "rejected": "Non retenue",
+        "rejectedText": "Message respectueux",
+        "withdrawn": "Retrait",
+        "withdrawnText": "Le candidat se retire"
+      },
+      "choose": "Choisissez un résultat : Orbi prépare le message, vous le relisez avant l'envoi.",
+      "prepared": "Orbi a préparé le message, à relire",
+      "edited": "Votre message, à relire",
+      "tones": "Ton du message",
+      "edit": "Modifier le message",
+      "editLabel": "Message à {firstName}",
+      "withdrawnOptional": "Facultatif : un mot pour accuser réception de son retrait. Laissez vide pour ne rien envoyer.",
+      "withdrawnMessage": {
+        "chaleureux": "Bonjour {firstName},\\n\\nMerci de nous avoir prévenus que vous retirez votre candidature au poste de {jobTitle}. Nous respectons votre choix.\\n\\nNos portes restent ouvertes pour une prochaine offre. Belle suite à vous !",
+        "formel": "Bonjour {firstName},\\n\\nNous prenons acte du retrait de votre candidature au poste de {jobTitle} et vous remercions de nous en avoir informés.\\n\\nNous vous souhaitons pleine réussite dans vos projets.",
+        "court": "Bonjour {firstName},\\n\\nC'est noté : votre candidature au poste de {jobTitle} est retirée. Merci de nous avoir prévenus."
+      },
+      "pool": "Ajouter au vivier « {name} »",
+      "poolChoose": "Ajouter à un vivier",
+      "poolText": "Pour une prochaine offre",
+      "poolSelect": "Vivier",
+      "guard": "Rien n'est automatique : vous confirmez, et vous pouvez annuler pendant 10 minutes.",
+      "later": "Plus tard",
+      "confirm": "Confirmer et envoyer",
+      "evaluations": "Évaluations de l'équipe",
+      "evaluationAria": "{name} : {score} sur 5",
+      "error": "La décision n'a pas pu être enregistrée. Réessayez.",
+      "errorMessage": "Le message au candidat est vide : écrivez-le ou choisissez un ton."
+    },
+    "done": {
+      "title": "Décision enregistrée",
+      "text": "{name} passe en « {stage} ».",
+      "textWithdrawn": "Le retrait de {name} est enregistré.",
+      "message": "Message envoyé à {firstName}, après votre relecture",
+      "noMessage": "Aucun message envoyé",
+      "pool": "Ajouté au vivier « {name} »",
+      "history": "Historique de la candidature mis à jour",
+      "mail": "E-mail à {firstName} envoyé à la fin du délai d'annulation",
+      "left": "Annulable encore {time}",
+      "time": "{minutes} min {seconds} s",
+      "over": "Délai d'annulation passé",
+      "next": "Encore à décider pour cette offre",
+      "interviewed": "Entretien passé le {date}",
+      "evaluated": "{count, plural, one {# évaluation} other {# évaluations}}",
+      "undo": "Annuler",
+      "nextCandidate": "Candidature suivante",
+      "back": "Retour aux candidats",
+      "expired": "Le délai de 10 minutes est passé : la décision ne peut plus être annulée.",
+      "undoError": "La décision n'a pas pu être annulée. Réessayez."
+    },
+    "retracted": "Message retiré par l'entreprise."
+  },
   "hire": {
     "nav": {
       "dashboard": "Accueil",
@@ -11296,6 +11618,9 @@
         "scoreDisputed": "Le candidat a demandé une révision humaine du score",
         "scoreReviewed": "Score revu par {memberName}",
         "withdrawn": "Le candidat a retiré sa candidature",
+        "withdrawnByTeam": "{memberName} a enregistré le retrait du candidat",
+        "orbiAnalysis": "Orbi a résumé le dossier à la demande de {memberName}",
+        "decisionUndone": "{memberName} a annulé la décision · retour en « {to} »",
         "message": "Message de {memberName}"
       },
       "timestamp": "{date, date, medium} à {time}",

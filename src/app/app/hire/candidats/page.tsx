@@ -1,665 +1,313 @@
 import type { Metadata } from "next";
 import Link from "next/link";
-import { notFound, redirect } from "next/navigation";
+import { notFound } from "next/navigation";
+import { after } from "next/server";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
-import { Icon } from "@/components/brand/icon";
-import { AppPageHeader } from "@/components/app/page-header";
-import { CopyButton } from "@/components/career/copy-button";
-import { pillClass } from "@/components/career/kit";
-import { JobSettings } from "@/components/hire/job-settings";
-import {
-  Initials,
-  Kpi,
-  MenuChip,
-  OrgMark,
-  jobStatusTone,
-  menuItem,
-  moreButton,
-  stageTone,
-  statusKey,
-  type StageTone,
-} from "@/components/hire/kit";
-import { PipelineBoard, type BoardCard } from "@/components/hire/pipeline-board";
-import { tag } from "@/components/jobs/talent-kit";
-import { ScoreButton, WhyPopover } from "@/components/matching/why-popover";
-import { TabRail } from "@/components/motion/tab-rail";
-import { ToastOnLoad } from "@/components/motion/toast-on-load";
-import { Alert } from "@/components/ui";
+import { CandidateAvatar } from "@/components/recruiter/candidates";
+import { SortSheet } from "@/components/recruiter/candidates-client";
+import { OrbiLine, statusOf } from "@/components/recruiter/offers";
+import { TalentIcon } from "@/components/talent/icon";
+import { Sheet, SheetButton } from "@/components/talent/sheet";
+import { pickMessages } from "@/i18n/client-messages";
 import { cx } from "@/lib/cx";
-import { siteUrl } from "@/lib/seo";
-import { moveApplicationAction } from "@/server/actions/hire";
+import { formatDayMonth } from "@/lib/dates";
+import { deliverDueDecisionMails } from "@/server/application-events";
 import { db } from "@/server/db";
-import { level } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
-import type { MatchExplanation } from "@/server/matching/types";
-import { applicationMatches } from "@/server/matching/service";
-import {
-  getPipeline,
-  HireError,
-  hirePermissions,
-  listOrgJobs,
-  pipelineDetails,
-  RESPONSE_GOAL_DAYS,
-} from "@/server/services/hire";
-import { cheapestPlanWhere, levelOf, listPublicPlans } from "@/server/services/plans";
+import { reportError } from "@/server/observability";
+import { HireError, hirePermissions } from "@/server/services/hire";
+import { candidateList, type CandidateRow } from "@/server/services/hire-candidates";
 
 export async function generateMetadata(): Promise<Metadata> {
-  const t = await getTranslations("hire.pipeline");
-  return { title: t("title"), robots: { index: false } };
+  const t = await getTranslations("hireCandidates");
+  return { title: t("seo"), robots: { index: false } };
 }
 
 const one = (value: string | string[] | undefined) =>
-  typeof value === "string" ? value : undefined;
+  typeof value === "string" ? value : Array.isArray(value) ? value.join(",") : undefined;
+
+const DAY = 86_400_000;
 
 /**
- * Candidates of an offer, `/app/hire/candidats?offre=` (until the recruiter lot 3 redraws the
- * candidates): the pipeline of the job that the offer page used to hold, moved here unchanged.
- * Pipeline of a job (partie 07 § 4, mockup 04-04): the job's figures, one column per stage with
- * drag and drop, the score on the AI gradient with its « Pourquoi ? ». Each card also moves with
- * a small form (keyboard, no JavaScript); « Non retenu » opens the decision form. With
- * `hire.matching.level` the cards show the score frozen at application and can be sorted or
- * narrowed by compatibility; nobody is ever hidden or rejected by the score alone (§ 8.6).
+ * Candidats › Candidatures (brief recruteur § 4 item 3, planches recruteur-2 § 1 and r2plus): the
+ * offer chosen, its stages with their counts, the applications sorted by correspondence (or date,
+ * or stage), « Nouveau » on those not opened yet. « Trier » hides, never rejects: the page says how
+ * many are hidden and shows them again in one tap. « Rechercher des talents » stays on its page
+ * until lot 4.
  */
-export default async function PipelinePage({ searchParams }: PageProps<"/app/hire/candidats">) {
+export default async function CandidatesPage({ searchParams }: PageProps<"/app/hire/candidats">) {
   const query = await searchParams;
-  const id = one(query.offre);
-  if (!id) redirect("/app/hire/offres");
-  const { space, ctx } = await requireHire(`/app/hire/candidats?offre=${id}`, "readApplications");
-  const t = await getTranslations("hire");
-  const all = await getTranslations();
+  const { ctx } = await requireHire("/app/hire/candidats", "readApplications");
+  const t = await getTranslations("hireCandidates");
+  const to = await getTranslations("hireOffers");
+  const ui = await getTranslations("ui");
   const format = await getFormatter();
-  const { job, stages, applications } = await getPipeline(db, ctx, id).catch((error) => {
+  const now = new Date();
+  const params = {
+    offre: one(query.offre),
+    etape: one(query.etape),
+    tri: one(query.tri),
+    min: one(query.min),
+    dossier: one(query.dossier),
+  };
+  const list = await candidateList(db, ctx, params, now).catch((error) => {
     if (error instanceof HireError) notFound();
     throw error;
   });
+  after(() => deliverDueDecisionMails().catch((error) => reportError(error)));
   const permissions = hirePermissions(ctx.role);
-  const subject = { type: "organization" as const, id: ctx.organizationId };
-  const [matchingLevel, details, jobs, plans] = await Promise.all([
-    level(db, subject, "hire.matching.level"),
-    pipelineDetails(db, ctx, job, applications),
-    listOrgJobs(db, ctx),
-    listPublicPlans(db),
-  ]);
-  const withMatching = matchingLevel !== "none";
-  const explainable = matchingLevel === "explainable";
-  const matches = withMatching
-    ? await applicationMatches(db, applications)
-    : new Map<string, never>();
-  const scoreOf = (applicationId: string) => {
-    const match = matches.get(applicationId);
-    return match && match !== "disabled" ? match : null;
-  };
-  // Average of the scores shown on the cards (computed here, not the stored snapshot).
-  const shownScores = applications
-    .map((application) => scoreOf(application.id)?.score)
-    .filter((value): value is number => value !== undefined)
-    .sort((a, b) => b - a);
-  const meanOf = (values: number[]) =>
-    values.length
-      ? Math.round(values.reduce((sum, value) => sum + value, 0) / values.length)
-      : null;
-  const compatibility = {
-    average: meanOf(shownScores),
-    top: meanOf(shownScores.slice(0, 10)),
-  };
-  const byScore = withMatching && query.tri === "score";
-  const narrowed = withMatching && query.compat === "haut";
-  const list = byScore
-    ? [...applications].sort((a, b) => (scoreOf(b.id)?.score ?? -1) - (scoreOf(a.id)?.score ?? -1))
-    : [...applications].reverse();
-  // The compatibility filter only narrows the view; the other candidates stay in the pipeline.
-  const visible = narrowed
-    ? list.filter((application) => {
-        const band = scoreOf(application.id)?.band;
-        return band === "veryHigh" || band === "high";
-      })
-    : list;
-  const matchingPlan = withMatching
-    ? null
-    : (cheapestPlanWhere(plans, ["rh", "company"], (plan) =>
-        ["suggestions", "explainable"].includes(levelOf(plan, "hire.matching.level")),
-      )?.name ?? null);
-  const explainPlan = explainable
-    ? null
-    : (cheapestPlanWhere(
-        plans,
-        ["rh", "company"],
-        (plan) => levelOf(plan, "hire.matching.level") === "explainable",
-      )?.name ?? null);
-  const base = `/app/hire/candidats`;
-  const hrefWith = (changes: Record<string, string | null>) => {
-    const next = new URLSearchParams({ offre: job.id });
-    for (const key of ["tri", "compat", "vue", "etape"]) {
-      const value = one(query[key]);
-      if (value) next.set(key, value);
-    }
-    for (const [key, value] of Object.entries(changes)) {
-      if (value === null) next.delete(key);
-      else next.set(key, value);
-    }
-    const text = next.toString();
-    return text ? `${base}?${text}` : base;
-  };
-  const back = hrefWith({});
-  const listView = query.vue === "liste";
-  const columns = stages.map((stage) => ({
-    id: stage.id,
-    name: stage.name,
-    tone: stageTone[stage.kind as StageTone] ?? "bg-brume",
-    folded: stage.kind === "hired" || stage.kind === "rejected",
-  }));
-  const countOf = (stageId: string) =>
-    visible.filter((application) => application.stageId === stageId).length;
-  const wantedStage = one(query.etape);
-  const mobileStage =
-    stages.find((stage) => stage.id === wantedStage)?.id ??
-    stages.find((stage) => countOf(stage.id) > 0 && stage.kind !== "rejected")?.id ??
-    stages[0]!.id;
-  const publicUrl = `${siteUrl()}/offres/${job.slug}`;
-  const messages = await getMessages();
-  const days = (value: number) =>
-    format.number(value, { maximumFractionDigits: 1, minimumFractionDigits: 0 });
 
-  const whyPanel = (applicationId: string, name: string, match: MatchExplanation) => (
-    <WhyPopover
-      id={applicationId}
-      name={name}
-      match={match}
-      explainable={explainable}
-      explainPlan={explainPlan}
-      link={{
-        href: `/app/hire/candidats/${applicationId}#score-title`,
-        label: t("pipeline.action.view"),
-      }}
-    />
+  const segments = (
+    <nav className="t-seg" aria-label={t("seg.aria")}>
+      <Link href="/app/hire/candidats" aria-current="page" className="t-press">
+        {t("seg.applications")}
+      </Link>
+      <Link href="/app/hire/talents" className="t-press">
+        {t("seg.talents")}
+      </Link>
+    </nav>
   );
 
-  const cards: BoardCard[] = visible.map((application) => {
-    const person = application.profile.user;
-    const extra = details.cards.get(application.id)!;
-    const match = scoreOf(application.id);
-    const stage = stages.find((item) => item.id === application.stageId)!;
-    const others = stages.filter((item) => item.id !== stage.id);
-    const unseen = !application.viewedAt && application.status === "active";
-    const moving = permissions.manage && application.status !== "withdrawn";
-    const profileHref = `/app/hire/candidats/${application.id}`;
-    const body = (
-      <div className="flex flex-col gap-2.5">
-        <div className="flex items-start gap-2.5">
-          <Initials name={person.name} size={34} />
-          <div className="flex min-w-0 flex-1 flex-col">
-            <Link
-              href={profileHref}
-              className="truncate text-[13.5px] leading-[18px] font-semibold hover:underline"
-            >
-              {person.name}
-            </Link>
-            {person.city && (
-              <span className="truncate text-[11.5px] leading-4 text-ardoise">{person.city}</span>
-            )}
-          </div>
-          {match && (
-            <div className="flex flex-col items-end gap-1 lg:hidden">
-              <ScoreButton
-                id={application.id}
-                score={all("ui.percent", { value: match.score })}
-                aria={t("pipeline.card.score.aria", {
-                  score: match.score,
-                  band: all(`match.band.${match.band}.text`),
-                })}
-              />
-              <span className="flex items-center gap-1 text-[11px] font-medium text-sapin">
-                <Icon name="eye" className="size-3.5" />
-                {all("ai.card.why")}
-              </span>
-            </div>
-          )}
-          {moving && (
-            <MenuChip
-              group={`card-${job.id}`}
-              align="right"
-              label={t("pipeline.card.menu")}
-              summary={<Icon name="more" className="size-4" />}
-              summaryClassName={cx(moreButton, "size-7 ring-0 max-lg:hidden")}
-            >
-              <Link href={profileHref} className={menuItem}>
-                <Icon name="profil" />
-                {t("pipeline.action.view")}
-              </Link>
-              <p className="px-3 pt-2 text-[11px] font-semibold tracking-[0.08em] text-ardoise uppercase">
-                {t("pipeline.action.moveTo")}
-              </p>
-              {others.map((item) => (
-                <form key={item.id} action={moveApplicationAction}>
-                  <input type="hidden" name="application" value={application.id} />
-                  <input type="hidden" name="back" value={back} />
-                  <input type="hidden" name="stage" value={item.id} />
-                  <button type="submit" className={menuItem}>
-                    <span
-                      aria-hidden
-                      className={cx("size-2 rounded-full", stageTone[item.kind as StageTone])}
-                    />
-                    {item.name}
-                  </button>
-                </form>
-              ))}
-            </MenuChip>
-          )}
-        </div>
-        {(extra.skills.length > 0 || match) && (
-          <div className="flex flex-wrap items-center gap-1.5">
-            {extra.skills.map((skill) => (
-              <span
-                key={skill}
-                className="rounded-pill bg-gris-clair px-2.5 py-1 text-[11px] leading-[14px] font-semibold"
-              >
-                {skill}
-              </span>
-            ))}
-            {match && (
-              <span className="ml-auto max-lg:hidden">
-                <ScoreButton
-                  id={application.id}
-                  score={all("ui.percent", { value: match.score })}
-                  aria={t("pipeline.card.score.aria", {
-                    score: match.score,
-                    band: all(`match.band.${match.band}.text`),
-                  })}
-                />
-              </span>
-            )}
-          </div>
-        )}
-        {extra.certified && (
-          <p className="flex items-center gap-1.5 text-[11.5px] font-medium text-feuille-fonce">
-            <Icon name="certificat" className="size-3.5" />
-            {t("pipeline.card.certificate")}
-          </p>
-        )}
-        {application.status === "withdrawn" && (
-          <span className={cx(tag, "self-start bg-gris-clair")}>
-            {t("pipeline.card.withdrawn")}
+  if (!list.job) {
+    return (
+      <div className="t-flux">
+        <h1 className="sr-only">{t("title")}</h1>
+        {segments}
+        <div className="t-verre t-rc-vide">
+          <span className="t-rc-rond" aria-hidden>
+            <TalentIcon name="offre" />
           </span>
-        )}
-        <div className="flex items-center justify-between gap-2 text-[11px] leading-4 whitespace-nowrap text-ardoise">
-          {extra.rating ? (
-            <span
-              className="text-[12px] tracking-[0.1em] text-feuille-fonce"
-              role="img"
-              aria-label={t("pipeline.card.rating.aria", { rating: extra.rating })}
-            >
-              {"★".repeat(extra.rating)}
-              <span className="text-brume">{"★".repeat(5 - extra.rating)}</span>
-            </span>
-          ) : (
-            <span>{t("pipeline.card.notRated")}</span>
-          )}
-          {extra.interviewAt ? (
-            <span className="flex items-center gap-1">
-              <Icon name="calendrier" className="size-3.5" />
-              {format.dateTime(extra.interviewAt, { dateStyle: "short", timeStyle: "short" })}
-            </span>
-          ) : extra.notes > 0 ? (
-            <span className="flex items-center gap-1">
-              <Icon name="message" className="size-3.5" />
-              {t("pipeline.card.comments", { count: extra.notes })}
-            </span>
-          ) : (
-            <span className="flex items-center gap-1">
-              {unseen && (
-                <span className="rounded-pill bg-lime px-1.5 py-px text-[10px] font-bold text-sapin">
-                  {t("jobs.row.new", { count: 1 })}
-                </span>
-              )}
-              <Icon name="horloge" className="size-3.5" />
-              {format.relativeTime(application.createdAt)}
-            </span>
-          )}
-        </div>
-        {/* Phones: the actions of the mockup under each card. */}
-        <div className="flex items-center gap-2 lg:hidden">
-          {moving && (
-            <Link
-              href={`/app/hire/entretiens?candidature=${application.id}#planifier`}
-              className={pillClass("dark", "sm", "flex-1")}
-            >
-              <Icon name="calendrier" className="size-4" />
-              {t("pipeline.action.schedule")}
+          <b>{t("noOffer.title")}</b>
+          <span>{t("noOffer.text")}</span>
+          {permissions.manage && (
+            <Link href="/app/hire/offres/nouvelle" className="t-bt t-p t-s t-press">
+              {t("noOffer.cta")}
             </Link>
           )}
-          <Link href={profileHref} className={pillClass("outline", "sm", "flex-1")}>
-            {t("pipeline.action.view")}
-          </Link>
-          {moving && (
-            <MenuChip
-              group={`card-m-${job.id}`}
-              align="right"
-              label={t("pipeline.card.menu")}
-              summary={<Icon name="more" className="size-4" />}
-              summaryClassName={cx(moreButton, "size-9")}
-            >
-              <p className="px-3 pt-2 text-[11px] font-semibold tracking-[0.08em] text-ardoise uppercase">
-                {t("pipeline.action.moveTo")}
-              </p>
-              {others.map((item) => (
-                <form key={item.id} action={moveApplicationAction}>
-                  <input type="hidden" name="application" value={application.id} />
-                  <input type="hidden" name="back" value={back} />
-                  <input type="hidden" name="stage" value={item.id} />
-                  <button type="submit" className={menuItem}>
-                    <span
-                      aria-hidden
-                      className={cx("size-2 rounded-full", stageTone[item.kind as StageTone])}
-                    />
-                    {item.name}
-                  </button>
-                </form>
-              ))}
-            </MenuChip>
-          )}
         </div>
-        {match && whyPanel(application.id, person.name, match)}
       </div>
     );
-    return {
-      id: application.id,
-      stageId: application.stageId,
-      name: person.name,
-      movable: moving,
-      body,
-    };
-  });
+  }
 
-  const chip =
-    "inline-flex h-10 items-center gap-2 rounded-pill bg-blanc px-4 text-[13px] font-semibold ring-[1.5px] ring-brume ring-inset hover:bg-creme";
-  const chipOn =
-    "inline-flex h-10 items-center gap-2 rounded-pill bg-sapin px-4 text-[13px] font-semibold text-blanc";
+  const messages = await getMessages();
+  const job = list.job;
+  const base = (changes: Record<string, string | null>) => {
+    const next = new URLSearchParams({ offre: job.id });
+    const current: Record<string, string | null | undefined> = {
+      etape: list.stage?.id,
+      tri: params.tri,
+      min: params.min,
+      dossier: params.dossier,
+      ...changes,
+    };
+    for (const [key, value] of Object.entries(current)) if (value) next.set(key, value);
+    return `/app/hire/candidats?${next}`;
+  };
+  const clearHref = base({ tri: null, min: null, dossier: null });
+  const active = (list.floor ? 1 : 0) + (list.filters?.length ?? 0);
+  const unseen = list.rows.filter((row) => row.unseen);
+  const firstUnseen = [...unseen].sort((a, b) => a.createdAt.getTime() - b.createdAt.getTime())[0];
+  const shownStages = list.stages.filter(
+    (stage) => !(stage.kind === "hired" || stage.kind === "rejected") || stage.count > 0,
+  );
+  const inStage = list.stage
+    ? list.rows.filter((row) => row.stage.id === list.stage!.id)
+    : list.rows;
+  const status = statusOf(job, now);
+  const when = (date: Date) =>
+    now.getTime() - date.getTime() < 2 * DAY
+      ? format.relativeTime(date, now)
+      : formatDayMonth(date);
+  const docsOf = (row: CandidateRow) => {
+    const docs = [
+      row.cv ? t("row.cv") : null,
+      row.letter ? t("row.letter") : null,
+      row.certificate ? t("row.certificate") : null,
+    ].filter(Boolean);
+    return docs.length ? docs.join(", ") : t("row.profile");
+  };
+  const scoreTone = (score: number) => (score >= 85 ? undefined : score >= 70 ? "t-m" : "t-f");
+  const emptyKey =
+    job.status === "pending_review"
+      ? "pending_review"
+      : job.status === "paused"
+        ? "paused"
+        : job.status === "closed" || status.key === "expired"
+          ? "closed"
+          : "published";
 
   return (
-    <div className="jm-page flex flex-col gap-4 lg:gap-5">
-      {query.ok === "deplacee" && <ToastOnLoad message={t("pipeline.moved.notified")} />}
-      <AppPageHeader
-        eyebrow={t("pipeline.eyebrow", { org: space.organization.name })}
-        title={t("pipeline.title")}
-        actions={
-          permissions.manage ? (
-            <Link href="/app/hire/offres/nouvelle" className={pillClass("lime", "md")}>
-              <Icon name="plus" className="size-4" />
-              {t("pipeline.newJob")}
+    <div className="t-flux">
+      <h1 className="sr-only">{t("title")}</h1>
+      {segments}
+
+      <SheetButton
+        target="rc-offres"
+        label={t("offer.aria", { title: job.title })}
+        className="t-verre t-rc-off t-press"
+      >
+        <TalentIcon name="offre" size="s" />
+        <span className="t-t">
+          <small>{t("offer.label")}</small>
+          <b>{job.title}</b>
+        </span>
+        <TalentIcon name="suivant" size="s" className="t-rc-bas" />
+      </SheetButton>
+
+      {firstUnseen && (
+        <OrbiLine
+          action={
+            <Link href={`/app/hire/candidats/${firstUnseen.id}`} className="t-bt t-p t-s t-press">
+              {t("orbi.examine")}
             </Link>
-          ) : undefined
-        }
-      />
-
-      {!permissions.manage && <Alert title={t("pipeline.permission.readOnly")} />}
-
-      <section
-        aria-label={t("dashboard.kpi.applications.text")}
-        className="grid gap-4 max-lg:hidden lg:grid-cols-4"
-      >
-        <Kpi
-          label={t("dashboard.kpi.applications.text")}
-          value={String(applications.length)}
-          number={applications.length}
-          icon="equipe"
-          disc="bg-lime-clair"
-        >
-          <span className={cx(tag, "bg-lime-clair")}>
-            {t("dashboard.kpi.applications.delta", { count: details.thisWeek })}
-          </span>
-        </Kpi>
-        <Kpi
-          label={t("dashboard.kpi.responseTime.text")}
-          value={
-            details.responseDays === null
-              ? t("dashboard.kpi.none")
-              : t("dashboard.kpi.responseTime.value", { days: days(details.responseDays) })
           }
-          icon="horloge"
-          disc="bg-neon/50"
         >
-          <span className={cx(tag, "bg-gris-clair")}>
-            {t("dashboard.kpi.responseTime.goal", { days: RESPONSE_GOAL_DAYS })}
-          </span>
-        </Kpi>
-        <Kpi
-          label={t("dashboard.kpi.interviews.text")}
-          value={String(details.interviews)}
-          number={details.interviews}
-          icon="calendrier"
-          disc="bg-menthe-claire"
-        >
-          <span className={cx(tag, "bg-gris-clair")}>
-            {t("dashboard.kpi.interviews.week", { count: details.interviewsThisWeek })}
-          </span>
-        </Kpi>
-        <Kpi
-          label={t("dashboard.kpi.avgCompatibility.text")}
-          value={
-            withMatching && compatibility.average !== null
-              ? all("ui.percent", { value: compatibility.average })
-              : t("dashboard.kpi.none")
-          }
-          icon="intelligence"
-          ai
-        >
-          {withMatching && compatibility.top !== null ? (
-            <span className={cx(tag, "bg-gris-clair")}>
-              {t("dashboard.kpi.avgCompatibility.top", { score: compatibility.top })}
-            </span>
-          ) : matchingPlan ? (
-            <span className="text-[11px] text-ardoise">
-              {t("pipeline.matching.locked", { plan: matchingPlan })}
-            </span>
-          ) : null}
-        </Kpi>
-      </section>
+          {t.rich("orbi.unseen", { count: unseen.length, b: (chunks) => <b>{chunks}</b> })}
+        </OrbiLine>
+      )}
 
-      <section
-        aria-labelledby="pipeline-job"
-        className="flex flex-col gap-3 lg:flex-row lg:items-center lg:gap-3"
-      >
-        <div className="flex min-w-0 items-center gap-3 rounded-[22px] bg-blanc py-2.5 pr-2.5 pl-3 lg:rounded-pill">
-          <OrgMark name={space.organization.name} size={34} />
-          <div className="flex min-w-0 flex-1 flex-col">
-            <h2 id="pipeline-job" className="truncate text-[15px] leading-5 font-semibold">
-              {job.title}
-            </h2>
-            <span className="text-[11.5px] text-ardoise lg:hidden">
-              {t("pipeline.summary", {
-                count: applications.length,
-                days: details.responseDays === null ? "—" : days(details.responseDays),
-              })}
+      {list.rows.length === 0 ? (
+        <>
+          <div className="t-verre t-rc-vide">
+            <span className="t-rc-rond" aria-hidden>
+              <TalentIcon name="candidats" />
             </span>
+            <b>{t("empty.title")}</b>
+            <span>{t(`empty.${emptyKey}`)}</span>
           </div>
-          <span className={cx(tag, jobStatusTone[job.status])}>
-            {t(`jobs.status.${statusKey[job.status]}`)}
-          </span>
-          <MenuChip
-            group="pipeline-job"
-            align="right"
-            label={t("pipeline.jobSelect")}
-            summary={
-              <>
-                <span className="max-lg:hidden">{t("pipeline.jobSelect")}</span>
-                <Icon name="chev-d" className="size-4" />
-              </>
-            }
-            summaryClassName="flex h-9 items-center gap-1.5 rounded-pill px-2.5 text-[12px] text-ardoise hover:bg-creme"
-          >
-            {jobs
-              .filter((item) => item.status !== "draft")
-              .slice(0, 12)
-              .map((item) => (
-                <Link
-                  key={item.id}
-                  href={`/app/hire/candidats?offre=${item.id}`}
-                  aria-current={item.id === job.id ? "page" : undefined}
-                  className={cx(menuItem, "aria-[current=page]:font-semibold")}
-                >
-                  <span className="min-w-0 flex-1 truncate">{item.title}</span>
-                  <span className="text-[11px] text-ardoise">{item._count.applications}</span>
-                </Link>
-              ))}
-          </MenuChip>
-        </div>
-        <div className="flex flex-wrap items-center gap-2 max-lg:hidden">
-          <Link
-            href={hrefWith({ vue: null })}
-            aria-current={listView ? undefined : "page"}
-            className={listView ? chip : chipOn}
-          >
-            <Icon name="grid" className="size-4" />
-            {t("pipeline.view.board")}
+          <Link href="/app/hire/talents" className="t-verre t-rc-sugg t-press">
+            <TalentIcon name="recherche" size="s" />
+            <span className="t-t">
+              <b>{t("empty.search")}</b>
+              <span>{t("empty.searchText")}</span>
+            </span>
+            <TalentIcon name="suivant" size="s" />
           </Link>
-          <Link
-            href={hrefWith({ vue: "liste" })}
-            aria-current={listView ? "page" : undefined}
-            className={listView ? chipOn : chip}
-          >
-            {t("pipeline.view.list")}
-          </Link>
-          {withMatching && (
-            <MenuChip
-              group="pipeline-filter"
-              summaryClassName={chip}
-              summary={
-                <>
-                  <Icon name="filtre" className="size-4" />
-                  {[t("pipeline.filters"), narrowed ? "1" : null].filter(Boolean).join(" · ")}
-                </>
-              }
+        </>
+      ) : (
+        <>
+          <nav className="t-rx-onglets" aria-label={t("stages.aria")}>
+            <Link
+              href={base({ etape: null })}
+              aria-current={list.stage ? undefined : "page"}
+              className="t-puce t-press"
             >
-              <Link
-                href={hrefWith({ compat: "haut" })}
-                aria-current={narrowed ? "true" : undefined}
-                className={menuItem}
-              >
-                {narrowed && <Icon name="check" />}
-                {[
-                  t("pipeline.filter.score.text"),
-                  [all("match.band.veryHigh.text"), all("match.band.high.text")].join(" · "),
-                ].join(" : ")}
-              </Link>
-              <Link href={hrefWith({ compat: null })} className={menuItem}>
-                {t("pipeline.filter.reset")}
-              </Link>
-            </MenuChip>
-          )}
-        </div>
-        <span className="flex-1 max-lg:hidden" />
-        {permissions.manage && job.status !== "closed" && job.status !== "archived" && (
-          <Link href={`/app/hire/offres/${job.id}`} className={pillClass("outline", "md")}>
-            {all("hireOffers.menu.view")}
-          </Link>
-        )}
-      </section>
-
-      {applications.length > 0 && (
-        <TabRail name={`pipeline-${job.id}`} className="lg:hidden">
-          <div className="flex w-max gap-2">
-            {stages.map((stage) => (
+              {t("stages.all")}
+              <small>{list.rows.length}</small>
+            </Link>
+            {shownStages.map((stage) => (
               <Link
                 key={stage.id}
-                href={hrefWith({ etape: stage.id })}
-                data-drop-stage={stage.id}
-                aria-current={stage.id === mobileStage ? "page" : undefined}
-                className={cx(
-                  "flex h-11 shrink-0 items-center gap-2 rounded-pill px-4 text-[14px] font-semibold transition-colors data-[drop-over]:bg-lime data-[drop-over]:text-sapin",
-                  stage.id === mobileStage
-                    ? "bg-sapin text-blanc"
-                    : "bg-blanc text-sapin ring-[1.5px] ring-brume ring-inset",
-                )}
+                href={base({ etape: stage.id })}
+                aria-current={list.stage?.id === stage.id ? "page" : undefined}
+                aria-label={t("stages.count", { stage: stage.name, count: stage.count })}
+                className="t-puce t-press"
               >
                 {stage.name}
-                <span className={stage.id === mobileStage ? "text-lime" : "text-ardoise"}>
-                  {countOf(stage.id)}
-                </span>
+                <small>{stage.count}</small>
               </Link>
             ))}
+          </nav>
+
+          <div className="t-rc-tri-h">
+            <h2>{t(`sorted.${list.sort ?? "date"}`)}</h2>
+            <SheetButton target="rc-tri" className="t-rc-trier t-press">
+              <TalentIcon name="filtres" size="xs" />
+              {active ? t("sort.openActive", { count: active }) : t("sort.open")}
+            </SheetButton>
           </div>
-        </TabRail>
-      )}
 
-      {applications.length > 0 && (withMatching || matchingPlan) && (
-        <div className="flex flex-col gap-2 rounded-[18px] bg-blanc px-4 py-3 lg:flex-row lg:items-center lg:gap-4 lg:rounded-pill lg:px-5">
-          <p className="flex flex-1 items-start gap-2 text-[12.5px] leading-[18px] lg:items-center lg:text-[13px]">
-            <Icon name="eye" className="mt-px size-4 shrink-0" />
-            {withMatching
-              ? t("pipeline.aiNotice")
-              : t("pipeline.matching.locked", { plan: matchingPlan! })}
-          </p>
-          {narrowed && (
-            <Link
-              href={hrefWith({ compat: null })}
-              className="inline-flex items-center gap-2 self-start rounded-pill px-3 py-1.5 text-[12px] font-semibold ring-[1.5px] ring-brume ring-inset hover:bg-creme"
-            >
-              {[
-                t("pipeline.filter.score.text"),
-                [all("match.band.veryHigh.text"), all("match.band.high.text")].join(" · "),
-              ].join(" : ")}
-              <Icon name="fermer" className="size-3.5" />
-              <span className="sr-only">{t("pipeline.filter.reset")}</span>
-            </Link>
+          {list.hidden > 0 && (
+            <p className="t-rc-masque">
+              <span>{t("hidden", { count: list.hidden })}</span>
+              <Link href={clearHref}>{t("showAll")}</Link>
+            </p>
           )}
-          {withMatching && (
-            <Link
-              href={hrefWith({ tri: byScore ? null : "score" })}
-              className="inline-flex items-center gap-1.5 self-start text-[12px] font-medium text-ardoise hover:text-sapin"
-            >
-              <Icon name="sort" className="size-3.5" />
-              {byScore ? t("pipeline.stage.sortByDate") : t("pipeline.stage.sortByScore")}
-            </Link>
-          )}
-        </div>
-      )}
 
-      {applications.length === 0 ? (
-        <section className="flex flex-col items-center gap-3 rounded-[24px] bg-blanc px-6 py-10 text-center">
-          <span className="grid size-14 place-items-center rounded-full bg-lime-clair">
-            <Icon name="equipe" className="size-6" />
-          </span>
-          <p className="max-w-md text-[14px]">{t("pipeline.empty.text")}</p>
-          {job.status === "published" && (
-            <CopyButton
-              value={publicUrl}
-              label={t("pipeline.empty.cta")}
-              copiedLabel={all("toast.linkCopied")}
-              className={pillClass("lime", "sm")}
+          {list.visible.length === 0 ? (
+            <p className="t-verre t-rc-rien">{t("none")}</p>
+          ) : (
+            <ul className="t-rc-liste">
+              {list.visible.map((row) => (
+                <li key={row.id}>
+                  <Link href={`/app/hire/candidats/${row.id}`} className="t-verre t-rc-cl t-press">
+                    <CandidateAvatar id={row.id} name={row.name} />
+                    <span className="t-t">
+                      <b>
+                        <span className="t-rc-nom">{row.name}</span>
+                        {row.unseen && <span className="t-rx-nv">{t("row.new")}</span>}
+                      </b>
+                      <span className="t-l">{[when(row.createdAt), docsOf(row)].join(" · ")}</span>
+                      <span className={cx("t-rc-etq", row.status === "withdrawn" && "t-ret")}>
+                        {row.status === "withdrawn" ? t("row.withdrawn") : row.stage.name}
+                      </span>
+                    </span>
+                    {row.score !== null && (
+                      <span className={cx("t-rc-sc", scoreTone(row.score))}>
+                        <b aria-hidden>{ui("percent", { value: row.score })}</b>
+                        <span aria-hidden>{t("row.score")}</span>
+                        <span className="sr-only">{t("row.scoreAria", { score: row.score })}</span>
+                      </span>
+                    )}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <NextIntlClientProvider messages={pickMessages(messages, ["hireCandidates"])}>
+            <SortSheet
+              id="rc-tri"
+              offre={job.id}
+              etape={list.stage?.id ?? null}
+              rows={inStage.map((row) => ({
+                score: row.score,
+                complete: row.complete,
+                letter: row.letter,
+                unseen: row.unseen,
+              }))}
+              sort={list.sort ?? "date"}
+              floor={list.floor ?? 0}
+              filters={list.filters ?? []}
+              withScores={list.matchingLevel !== "none"}
+              clearHref={clearHref}
             />
-          )}
-        </section>
-      ) : visible.length === 0 ? (
-        <p className="rounded-[18px] bg-blanc px-5 py-6 text-center text-[13px] text-ardoise">
-          {t("pipeline.filter.none")}
-        </p>
-      ) : listView ? (
-        <ul className="flex flex-col gap-2.5">
-          {cards.map((card) => (
-            <li key={card.id} className="rounded-[18px] bg-blanc p-3.5 lg:px-5">
-              <p className="mb-2 text-[11px] font-semibold tracking-[0.08em] text-ardoise uppercase">
-                {stages.find((stage) => stage.id === card.stageId)?.name}
-              </p>
-              {card.body}
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <NextIntlClientProvider messages={{ hire: { pipeline: messages.hire.pipeline } }}>
-          <PipelineBoard
-            columns={columns}
-            cards={cards}
-            canMove={permissions.manage}
-            mobileStage={mobileStage}
-          />
-        </NextIntlClientProvider>
+          </NextIntlClientProvider>
+        </>
       )}
 
-      {permissions.manage && (
-        <JobSettings ctx={ctx} job={job} ok={one(query.ok)} error={one(query.erreur)} />
-      )}
-      <p className="text-[12px] text-ardoise">{t("dashboard.fairness")}</p>
+      <Sheet id="rc-offres" title={t("offer.choose")} closeLabel={t("offer.close")}>
+        <ul className="t-rc-offres">
+          {list.offers.map((offer) => {
+            const state = statusOf(offer, now);
+            return (
+              <li key={offer.id}>
+                <Link
+                  href={`/app/hire/candidats?offre=${offer.id}`}
+                  aria-current={offer.id === job.id ? "page" : undefined}
+                  className="t-press"
+                >
+                  <span className="t-t">
+                    <b>{offer.title}</b>
+                    <span>
+                      {[
+                        t("offer.count", { count: offer._count.applications }),
+                        offer.applications.length
+                          ? t("offer.unseen", { count: offer.applications.length })
+                          : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
+                  </span>
+                  <span className={cx("t-rx-stp", state.tone)}>{to(`status.${state.key}`)}</span>
+                </Link>
+              </li>
+            );
+          })}
+        </ul>
+      </Sheet>
     </div>
   );
 }

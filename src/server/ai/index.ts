@@ -39,6 +39,9 @@ export const aiFeatures = {
   learn_coach: { credits: 1, tier: "fast" },
   // Talent lot 4 § 9 · the free conversation with Orbi, one credit per answer.
   orbi_chat: { credits: 1, tier: "fast" },
+  // Recruiter lot 3 · Orbi's analysis of an application (`hire.cv_analysis`), paid by the
+  // organization's credits.
+  cv_analysis: { credits: 1, tier: "default" },
 } as const;
 export type AiFeature = keyof typeof aiFeatures;
 

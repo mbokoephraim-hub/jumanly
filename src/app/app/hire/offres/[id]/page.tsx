@@ -3,6 +3,7 @@ import type { ReactNode } from "react";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
+import { JobSettings } from "@/components/hire/job-settings";
 import { ModerationChanges } from "@/components/hire/moderation-changes";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { CopyRow } from "@/components/recruiter/copy-row";
@@ -580,6 +581,11 @@ export default async function OfferPage({
         </div>
         <p className="t-rx-note">{t("detail.chartNote")}</p>
       </Section>
+
+      {/* Who follows the offer and its evaluation grid (moved from the old pipeline, lot 3). */}
+      {permissions.manage && !draft && (
+        <JobSettings ctx={ctx} job={job} ok={one(query.ok)} error={one(query.erreur)} />
+      )}
 
       {permissions.readApplications && !draft && (
         <div className="t-verre t-fort t-bas-f">

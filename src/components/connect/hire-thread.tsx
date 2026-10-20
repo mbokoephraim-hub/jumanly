@@ -69,6 +69,8 @@ type Payload = {
   company?: string;
   jobTitle?: string;
   signer?: string;
+  /** A decision undone within its 10 minutes (recruteur lot 3). */
+  retracted?: boolean;
 };
 
 const plusChoices = ["creneau", "cv", "lettre", "document", "lien"] as const;
@@ -93,6 +95,7 @@ export async function HireThread({
 }) {
   const t = await getTranslations("connect");
   const tr = await getTranslations("report");
+  const tc = await getTranslations("hireCandidates");
   const format = await getFormatter();
 
   let conversation;
@@ -540,7 +543,9 @@ export async function HireThread({
                           )}
                         >
                           {message.hiddenAt ? (
-                            <p className="italic">{tr("hidden")}</p>
+                            <p className="italic">
+                              {payload.retracted ? tc("retracted") : tr("hidden")}
+                            </p>
                           ) : message.kind === "file" ? (
                             <FileCard
                               name={payload.document?.title ?? message.body}

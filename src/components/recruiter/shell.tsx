@@ -83,6 +83,7 @@ export function RecruiterShell({
               tabs: {
                 "/app/hire": t("title.today"),
                 "/app/hire/offres": t("title.offers"),
+                "/app/hire/candidats": t("title.candidates"),
                 "/app/hire/talents": t("title.candidates"),
               },
             }}

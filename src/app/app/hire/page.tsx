@@ -205,7 +205,7 @@ export default async function HireTodayPage() {
       ? "/app/hire/entretiens"
       : null;
   const tiles = [
-    { key: "unseen", count: today.counts.unseen, href: "/app/hire/talents" },
+    { key: "unseen", count: today.counts.unseen, href: "/app/hire/candidats" },
     { key: "invitations", count: today.counts.invitations, href: "/app/hire/entretiens" },
     { key: "scorecards", count: today.counts.scorecards, href: "/app/hire/entretiens" },
     { key: "unread", count: today.counts.unread, href: "/app/messages" },
@@ -249,7 +249,7 @@ export default async function HireTodayPage() {
         <section aria-labelledby="rx-today-new" className="t-flux t-serre">
           <div className="t-sec-t">
             <h2 id="rx-today-new">{t("new.title")}</h2>
-            <Link href="/app/hire/talents">{t("new.all")}</Link>
+            <Link href="/app/hire/candidats">{t("new.all")}</Link>
           </div>
           {today.unseen.map((application) => {
             const person = application.profile.user;

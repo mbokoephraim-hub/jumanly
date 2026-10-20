@@ -59,7 +59,7 @@ async function guarded<T>(work: () => Promise<T>, fallback: string): Promise<T> 
 export async function assignJobAction(formData: FormData) {
   const { ctx } = await requireHire("/app/hire/offres", "manage");
   const jobId = id(formData.get("job"));
-  const page = `/app/hire/candidats?offre=${jobId}#attribution`;
+  const page = `/app/hire/offres/${jobId}#attribution`;
   await guarded(
     () =>
       assignJob(db, ctx, jobId, {
@@ -77,7 +77,7 @@ export async function assignJobAction(formData: FormData) {
 export async function saveScorecardTemplateAction(formData: FormData) {
   const { ctx } = await requireHire("/app/hire/offres", "manage");
   const jobId = id(formData.get("job"));
-  const page = `/app/hire/candidats?offre=${jobId}#grille`;
+  const page = `/app/hire/offres/${jobId}#grille`;
   await guarded(
     () => saveScorecardTemplate(db, ctx, jobId, text(formData.get("criteria"), 3000)),
     page,
