@@ -2,6 +2,51 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Refonte étape 1 · rapport de fin d'étape : interface talent (19 octobre 2026)
+
+**Fait.** L'espace talent ne montre plus que le nouveau design, sur téléphone (390 px), tablette
+(1024 px) et ordinateur (1440 px), en clair et en sombre. Lots fusionnés dans l'ordre du plan :
+
+| PR | Lot |
+|---|---|
+| #104 | Revue des lots mobiles 1 à 6 contre la dernière version des planches |
+| #105 | W0 · cadre web commun (barre latérale, rail tablette, barre du haut, panneau Orbi, fenêtres) |
+| #106 | Lot mobile 7 · abonnement, Mobile Money, factures, paramètres, aide, redirections, code mort supprimé |
+| #107 | Web talent 1 · Pour moi, Offres, détail d'une offre |
+| #108 | Web talent 4a · connexion, mot de passe oublié, inscription, premiers pas |
+| #109 | Web talent 2 · Postuler, Suivi, S'entraîner, Messages, Notifications |
+| #110 | Web talent 3 · Apprendre, salle de cours, quiz, attestations |
+| #111 | Studio CV web · Mes CV, galerie des modèles, studio en trois panneaux, LinkedIn |
+| #112 | Web talent 4b · compte, profil en deux colonnes, abonnement, paramètres, aide |
+
+**Contrôle final.** Captures de toutes les routes talent (`/app/*` hors `/app/hire`,
+`/app/organisation`, `/app/partenaire`), des écrans d'accès et des premiers pas, aux trois
+largeurs, en clair et en sombre : `captures/etape-1/` du dossier du projet (une image par route,
+largeur et thème, plus des planches-contacts). Trois écarts trouvés et corrigés dans la PR de fin
+d'étape : un trait parasite dans la barre du haut (la classe de l'espaceur avait été reprise par
+l'indicateur d'attente du paiement), les deux mois de « Nouvelle expérience » qui débordaient à
+390 px, et la conversation de la page Orbi trop étroite et collée à gauche sur ordinateur.
+
+**Données.** Aucune donnée effacée : migrations additives seulement (`Country.dialCode`,
+`User.notificationsMuted`, `User.notificationEmails`, lots mobiles 1 à 6).
+
+**Écarts gardés.** Un fichier par lot dans `docs/decisions/2026-10-19-refonte-etape-1-*.md`
+(revue, w0, lot-7, web-t1, web-t2, web-t3, web-t4a, web-t4b, web-cv).
+
+**Questions pour Ephraïm.**
+
+1. Écran de connexion sur ordinateur : la carte d'illustration « Analyste de données junior ·
+   Baobab Fintech · 86 % » (fictive, masquée aux lecteurs d'écran) reprend la planche. À retirer
+   si elle vous paraît contraire à la règle « aucune donnée inventée en production » ?
+2. `/app/testeur` reste accessible en production aux seules adresses de `TESTER_EMAILS`
+   (invisible pour tout autre compte). Est-ce bien ce que vous voulez ?
+3. « Télécharger mes données » télécharge le fichier directement, alors que la planche dit « envoyé
+   par e-mail ». On garde le téléchargement direct ?
+4. Orange Money : orange assombri (#C25200) pour que la lettre blanche soit lisible (règle
+   d'accessibilité). D'accord ?
+
+**Reste.** Rien pour l'étape 1. L'étape 2 (recruteur, mobile puis web) attend votre validation.
+
 ## Refonte étape 1 · web talent 4b : compte, profil, abonnement, paramètres, aide (19 octobre 2026)
 
 Planche `docs/refonte-web/talent-4` § 3 à 10, ordinateur et tablette ; le téléphone est inchangé
