@@ -8496,6 +8496,264 @@ Conventions :
 | `hireOffers.offer.documents` | Documents demandés |
 | `hireOffers.offer.questions` | {count, plural, one {# question du recruteur, facultative} other {# questions du recruteur, facultatives}} |
 
+### Refonte recruteur · Candidats et décision (lot 3)
+
+*Candidatures d'une offre par étape avec tri et filtres, dossier d'une candidature, notes privées, score et son « Pourquoi ? », analyse Orbi (`hire.cv_analysis`), changer d'étape, décision finale avec un message relu avant l'envoi, annulable 10 minutes (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 3 ; planches recruteur-2 § 1 à 3 et r2plus).*
+
+| Clé | Texte |
+|---|---|
+| `hireCandidates.seo` | Candidats |
+| `hireCandidates.title` | Candidats |
+| `hireCandidates.seg.aria` | Vues de l'onglet Candidats |
+| `hireCandidates.seg.applications` | Candidatures |
+| `hireCandidates.seg.talents` | Rechercher des talents |
+| `hireCandidates.offer.label` | Offre |
+| `hireCandidates.offer.aria` | Offre affichée : {title}. Changer d'offre |
+| `hireCandidates.offer.choose` | Choisir une offre |
+| `hireCandidates.offer.count` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} |
+| `hireCandidates.offer.unseen` | {count, plural, one {# nouvelle} other {# nouvelles}} |
+| `hireCandidates.offer.close` | Fermer |
+| `hireCandidates.orbi.unseen` | {count, plural, one {<b># candidature</b> pas encore examinée.} other {<b># candidatures</b> pas encore examinées.}} |
+| `hireCandidates.orbi.examine` | Examiner |
+| `hireCandidates.stages.aria` | Filtrer par étape |
+| `hireCandidates.stages.all` | Toutes |
+| `hireCandidates.stages.count` | {stage} : {count, plural, one {# candidature} other {# candidatures}} |
+| `hireCandidates.sorted.correspondance` | Triées par correspondance |
+| `hireCandidates.sorted.date` | Triées par date |
+| `hireCandidates.sorted.etape` | Triées par étape |
+| `hireCandidates.sort.open` | Trier |
+| `hireCandidates.sort.openActive` | Trier · {count} |
+| `hireCandidates.sort.title` | Trier et filtrer |
+| `hireCandidates.sort.by` | Trier par |
+| `hireCandidates.sort.option.correspondance` | Correspondance |
+| `hireCandidates.sort.option.date` | Date |
+| `hireCandidates.sort.option.etape` | Étape |
+| `hireCandidates.sort.score` | Correspondance |
+| `hireCandidates.sort.floor.85` | 85 % et plus |
+| `hireCandidates.sort.floor.70` | 70 % et plus |
+| `hireCandidates.sort.floor.0` | Toutes |
+| `hireCandidates.sort.file` | Dossier |
+| `hireCandidates.sort.filter.complet` | Dossier complet |
+| `hireCandidates.sort.filter.lettre` | Avec lettre |
+| `hireCandidates.sort.filter.nonlues` | Non lues |
+| `hireCandidates.sort.clear` | Effacer |
+| `hireCandidates.sort.see` | {count, plural, =0 {Aucune candidature} one {Voir # candidature} other {Voir # candidatures}} |
+| `hireCandidates.sort.close` | Fermer |
+| `hireCandidates.hidden` | {count, plural, one {# candidature masquée par vos filtres.} other {# candidatures masquées par vos filtres.}} Masquer n'est pas rejeter. |
+| `hireCandidates.showAll` | Tout afficher |
+| `hireCandidates.none` | Aucune candidature ne correspond à ces filtres. |
+| `hireCandidates.row.new` | Nouveau |
+| `hireCandidates.row.cv` | CV |
+| `hireCandidates.row.letter` | lettre |
+| `hireCandidates.row.certificate` | attestation |
+| `hireCandidates.row.profile` | Profil Jumanly |
+| `hireCandidates.row.score` | corresp. |
+| `hireCandidates.row.scoreAria` | {score} % de correspondance |
+| `hireCandidates.row.withdrawn` | Retirée |
+| `hireCandidates.empty.title` | Pas encore de candidature |
+| `hireCandidates.empty.pending_review` | L'offre est en validation. Les candidatures arriveront dès sa publication. |
+| `hireCandidates.empty.published` | Les candidatures arrivent ici dès qu'un talent postule, gratuitement. |
+| `hireCandidates.empty.paused` | L'offre est en pause : elle ne reçoit pas de candidature pour l'instant. |
+| `hireCandidates.empty.closed` | L'offre est clôturée : elle ne reçoit plus de candidature. |
+| `hireCandidates.empty.search` | Rechercher des talents |
+| `hireCandidates.empty.searchText` | Inviter des profils visibles à postuler |
+| `hireCandidates.noOffer.title` | Pas encore d'offre |
+| `hireCandidates.noOffer.text` | Publiez une offre : ses candidatures arriveront ici, par étape. |
+| `hireCandidates.noOffer.cta` | Publier une offre |
+| `hireCandidates.file.seo` | Candidature |
+| `hireCandidates.file.title` | Candidature |
+| `hireCandidates.file.back` | Retour aux candidats |
+| `hireCandidates.file.menu` | Plus d'actions sur la candidature |
+| `hireCandidates.file.years` | {count, plural, =0 {moins d'un an} one {# an} other {# ans}} |
+| `hireCandidates.file.new` | Nouveau |
+| `hireCandidates.file.applied` | a postulé {when} |
+| `hireCandidates.file.withdrawn` | Retirée |
+| `hireCandidates.file.track` | Étapes de la candidature |
+| `hireCandidates.file.trackNow` | étape actuelle |
+| `hireCandidates.file.trackDone` | étape passée |
+| `hireCandidates.file.trackDecision` | Décision |
+| `hireCandidates.file.scoreAria` | Correspondance : {score} % |
+| `hireCandidates.orbiCard.title` | Résumé par Orbi |
+| `hireCandidates.orbiCard.sub` | Tiré du dossier seulement · Orbi ne décide pas |
+| `hireCandidates.orbiCard.intro` | Orbi lit le dossier et en tire des points forts et des points à vérifier en entretien. 1 crédit Orbi. |
+| `hireCandidates.orbiCard.run` | Résumer avec Orbi |
+| `hireCandidates.orbiCard.open` | Voir l'analyse |
+| `hireCandidates.orbiCard.consent` | Pour qu'Orbi lise un dossier, activez l'aide de l'IA dans vos paramètres. |
+| `hireCandidates.orbiCard.consentLink` | Paramètres |
+| `hireCandidates.orbiCard.quota` | Votre organisation n'a plus de crédit Orbi ce mois-ci. Le dossier reste complet. |
+| `hireCandidates.orbiCard.unavailable` | Orbi n'a pas pu répondre. Aucun crédit n'a été utilisé : réessayez dans un instant. |
+| `hireCandidates.orbiCard.lockedTitle` | Résumé et analyse par Orbi |
+| `hireCandidates.orbiCard.locked` | Disponibles dès {plan}, avec {credits} crédits Orbi par mois. |
+| `hireCandidates.orbiCard.lockedNoPlan` | Disponibles avec une formule plus complète. |
+| `hireCandidates.orbiCard.see` | Voir {plan} |
+| `hireCandidates.orbiCard.seePlans` | Voir les formules |
+| `hireCandidates.why.link` | Pourquoi {score} % ? |
+| `hireCandidates.why.title` | Pourquoi {score} % ? |
+| `hireCandidates.why.sub` | Calcul fixe, le même pour tous les candidats de l'offre. |
+| `hireCandidates.why.excluded` | Jamais pris en compte : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise. |
+| `hireCandidates.why.more` | Le détail de chaque critère est disponible dès {plan}. |
+| `hireCandidates.why.disputed` | Le candidat a demandé une révision humaine de ce score. |
+| `hireCandidates.why.disabled` | Le candidat a désactivé le calcul de correspondance : ce dossier n'a pas de score. |
+| `hireCandidates.why.locked` | Score de correspondance et son « Pourquoi ? » : dès {plan}. |
+| `hireCandidates.why.skills` | {met} sur {total} |
+| `hireCandidates.why.experience` | {years, plural, =0 {Moins d'un an} one {# an} other {# ans}} pour {min, plural, =0 {aucun minimum} one {# an demandé} other {# ans demandés}} |
+| `hireCandidates.why.status.met` | Correspond |
+| `hireCandidates.why.status.partial` | En partie |
+| `hireCandidates.why.status.unmet` | Ne correspond pas |
+| `hireCandidates.why.status.unknown` | Non renseigné |
+| `hireCandidates.why.close` | Fermer |
+| `hireCandidates.analysis.title` | Analyse du dossier |
+| `hireCandidates.analysis.strengths` | Points forts |
+| `hireCandidates.analysis.toVerify` | À vérifier en entretien |
+| `hireCandidates.analysis.none` | Rien à signaler de ce côté. |
+| `hireCandidates.analysis.guard` | Orbi lit le dossier comme une donnée : les consignes écrites dans un CV sont ignorées. |
+| `hireCandidates.analysis.credits` | {left, plural, one {1 crédit Orbi utilisé, # restant.} other {1 crédit Orbi utilisé, # restants.}} |
+| `hireCandidates.analysis.template` | Calculé à partir du dossier, sans modèle d'IA. |
+| `hireCandidates.analysis.report` | Signaler une erreur |
+| `hireCandidates.analysis.toNote` | Ajouter aux notes |
+| `hireCandidates.analysis.close` | Fermer |
+| `hireCandidates.analysis.point.skillCertified` | {skill} : prouvé par une attestation Jumanly. |
+| `hireCandidates.analysis.point.skillProject` | {skill} : prouvé par un projet. |
+| `hireCandidates.analysis.point.skillExperience` | {skill} : appuyé sur une expérience. |
+| `hireCandidates.analysis.point.experience` | {years, plural, one {# an} other {# ans}} d'expérience pour {min, plural, one {# an demandé} other {# ans demandés}}. |
+| `hireCandidates.analysis.point.skillDeclared` | {skill} : déclaré, sans preuve. |
+| `hireCandidates.analysis.point.skillMissing` | {skill} : absent du profil. |
+| `hireCandidates.analysis.point.knockout` | À vérifier : {label}. |
+| `hireCandidates.analysis.point.question` | Sans réponse : « {question} » |
+| `hireCandidates.skills.title` | Compétences de l'offre |
+| `hireCandidates.skills.count` | {met} sur {total} |
+| `hireCandidates.skills.preferred` | {skill} · souhaitée |
+| `hireCandidates.skills.proof.certificate` | Attestation |
+| `hireCandidates.skills.proof.project` | Projet |
+| `hireCandidates.skills.proof.experience` | Expérience |
+| `hireCandidates.skills.proof.declared` | Déclarée |
+| `hireCandidates.skills.proof.missing` | Non indiquée |
+| `hireCandidates.skills.level` | Niveau {level} sur 4 |
+| `hireCandidates.skills.none` | L'offre ne liste pas de compétence. |
+| `hireCandidates.docs.aria` | Documents envoyés |
+| `hireCandidates.docs.cv` | CV |
+| `hireCandidates.docs.cvLine` | PDF · {date} |
+| `hireCandidates.docs.cvAria` | Télécharger le CV de {name} en PDF |
+| `hireCandidates.docs.noCv` | Pas de CV |
+| `hireCandidates.docs.noCvText` | Profil Jumanly |
+| `hireCandidates.docs.letter` | Lettre |
+| `hireCandidates.docs.letterLine` | {count, plural, one {# mot} other {# mots}} |
+| `hireCandidates.docs.letterAria` | Lire la lettre de {name} |
+| `hireCandidates.docs.letterTitle` | Lettre de {name} |
+| `hireCandidates.docs.noLetter` | Pas de lettre |
+| `hireCandidates.docs.optional` | Facultative |
+| `hireCandidates.docs.joined` | Documents joints |
+| `hireCandidates.docs.certificate` | Attestation Jumanly · {date} |
+| `hireCandidates.docs.text` | Texte joint |
+| `hireCandidates.docs.read` | Lire |
+| `hireCandidates.docs.close` | Fermer |
+| `hireCandidates.answers.title` | Réponses aux questions |
+| `hireCandidates.answers.none` | Cette offre ne pose pas de question. |
+| `hireCandidates.answers.noAnswer` | Sans réponse |
+| `hireCandidates.knockout.title` | Critères à vérifier |
+| `hireCandidates.knockout.note` | Signalés à l'équipe, jamais éliminatoires. |
+| `hireCandidates.notes.title` | Notes privées |
+| `hireCandidates.notes.add` | Ajouter une note |
+| `hireCandidates.notes.submit` | Ajouter la note |
+| `hireCandidates.notes.label` | Nouvelle note |
+| `hireCandidates.notes.placeholder` | Ce que l'équipe doit savoir. @Prénom prévient un collègue. |
+| `hireCandidates.notes.mine` | {name} · {date} · modifiable |
+| `hireCandidates.notes.other` | {name} · {date} |
+| `hireCandidates.notes.edited` | modifiée |
+| `hireCandidates.notes.edit` | Modifier |
+| `hireCandidates.notes.editLabel` | Modifier la note |
+| `hireCandidates.notes.save` | Enregistrer |
+| `hireCandidates.notes.delete` | Supprimer |
+| `hireCandidates.notes.deleteConfirm` | Supprimer cette note ? Elle disparaît pour toute l'équipe. |
+| `hireCandidates.notes.deleteSubmit` | Supprimer la note |
+| `hireCandidates.notes.private` | Visibles par l'équipe seulement, jamais par le candidat. |
+| `hireCandidates.notes.solo` | Vous seul voyez vos notes. Notes partagées et mentions : dès {plan}. |
+| `hireCandidates.notes.empty` | Pas encore de note. |
+| `hireCandidates.history.title` | Historique |
+| `hireCandidates.history.export` | Exporter l'historique |
+| `hireCandidates.evaluation.title` | Évaluation |
+| `hireCandidates.bar.aria` | Actions sur la candidature |
+| `hireCandidates.bar.move` | Changer d'étape |
+| `hireCandidates.bar.interview` | Proposer un entretien |
+| `hireCandidates.bar.message` | Envoyer un message |
+| `hireCandidates.bar.decided` | Décision : {stage} |
+| `hireCandidates.menu.title` | Actions |
+| `hireCandidates.menu.offer` | Voir l'offre |
+| `hireCandidates.menu.template` | Écrire avec un modèle |
+| `hireCandidates.menu.document` | Demander un document |
+| `hireCandidates.menu.cv` | Télécharger le CV |
+| `hireCandidates.menu.decision` | Décision finale |
+| `hireCandidates.menu.close` | Fermer |
+| `hireCandidates.move.title` | Déplacer {name} |
+| `hireCandidates.move.legend` | Nouvelle étape |
+| `hireCandidates.move.current` | actuelle |
+| `hireCandidates.move.interview` | Proposer des créneaux ensuite |
+| `hireCandidates.move.decision` | Décision finale |
+| `hireCandidates.move.decisionText` | Retenue, non retenue ou retrait |
+| `hireCandidates.move.note` | {firstName} verra la nouvelle étape dans son suivi. Aucun message n'est envoyé. |
+| `hireCandidates.move.cancel` | Annuler |
+| `hireCandidates.move.submit` | Déplacer |
+| `hireCandidates.ok.deplacee` | Étape changée : le candidat la voit dans son suivi. |
+| `hireCandidates.ok.note` | Note enregistrée. |
+| `hireCandidates.ok.noteOrbi` | Analyse ajoutée à vos notes. Vous pouvez la modifier. |
+| `hireCandidates.ok.signale` | Merci : l'erreur est notée avec l'analyse. |
+| `hireCandidates.ok.annulee` | Décision annulée : la candidature est revenue à son étape. |
+| `hireCandidates.ok.plusTard` | La candidature attend en « {stage} ». |
+| `hireCandidates.error.etape` | L'étape n'a pas pu être changée. Réessayez. |
+| `hireCandidates.decision.seo` | Décision finale |
+| `hireCandidates.decision.title` | Décision finale |
+| `hireCandidates.decision.back` | Retour au dossier |
+| `hireCandidates.decision.interviewOn` | entretien le {date} |
+| `hireCandidates.decision.result` | Résultat |
+| `hireCandidates.decision.outcome.hired` | Retenue |
+| `hireCandidates.decision.outcome.hiredText` | Offre d'emploi |
+| `hireCandidates.decision.outcome.rejected` | Non retenue |
+| `hireCandidates.decision.outcome.rejectedText` | Message respectueux |
+| `hireCandidates.decision.outcome.withdrawn` | Retrait |
+| `hireCandidates.decision.outcome.withdrawnText` | Le candidat se retire |
+| `hireCandidates.decision.choose` | Choisissez un résultat : Orbi prépare le message, vous le relisez avant l'envoi. |
+| `hireCandidates.decision.prepared` | Orbi a préparé le message, à relire |
+| `hireCandidates.decision.edited` | Votre message, à relire |
+| `hireCandidates.decision.tones` | Ton du message |
+| `hireCandidates.decision.edit` | Modifier le message |
+| `hireCandidates.decision.editLabel` | Message à {firstName} |
+| `hireCandidates.decision.withdrawnOptional` | Facultatif : un mot pour accuser réception de son retrait. Laissez vide pour ne rien envoyer. |
+| `hireCandidates.decision.withdrawnMessage.chaleureux` | Bonjour {firstName},\n\nMerci de nous avoir prévenus que vous retirez votre candidature au poste de {jobTitle}. Nous respectons votre choix.\n\nNos portes restent ouvertes pour une prochaine offre. Belle suite à vous ! |
+| `hireCandidates.decision.withdrawnMessage.formel` | Bonjour {firstName},\n\nNous prenons acte du retrait de votre candidature au poste de {jobTitle} et vous remercions de nous en avoir informés.\n\nNous vous souhaitons pleine réussite dans vos projets. |
+| `hireCandidates.decision.withdrawnMessage.court` | Bonjour {firstName},\n\nC'est noté : votre candidature au poste de {jobTitle} est retirée. Merci de nous avoir prévenus. |
+| `hireCandidates.decision.pool` | Ajouter au vivier « {name} » |
+| `hireCandidates.decision.poolChoose` | Ajouter à un vivier |
+| `hireCandidates.decision.poolText` | Pour une prochaine offre |
+| `hireCandidates.decision.poolSelect` | Vivier |
+| `hireCandidates.decision.reasonNone` | Aucun motif précisé |
+| `hireCandidates.decision.guard` | Rien n'est automatique : vous confirmez, et vous pouvez annuler pendant 10 minutes. |
+| `hireCandidates.decision.later` | Plus tard |
+| `hireCandidates.decision.confirm` | Confirmer et envoyer |
+| `hireCandidates.decision.evaluations` | Évaluations de l'équipe |
+| `hireCandidates.decision.evaluationAria` | {name} : {score} sur 5 |
+| `hireCandidates.decision.error` | La décision n'a pas pu être enregistrée. Réessayez. |
+| `hireCandidates.decision.errorMessage` | Le message au candidat est vide : écrivez-le ou choisissez un ton. |
+| `hireCandidates.done.title` | Décision enregistrée |
+| `hireCandidates.done.text` | {name} passe en « {stage} ». |
+| `hireCandidates.done.textWithdrawn` | Le retrait de {name} est enregistré. |
+| `hireCandidates.done.message` | Message envoyé à {firstName}, après votre relecture |
+| `hireCandidates.done.noMessage` | Aucun message envoyé |
+| `hireCandidates.done.pool` | Ajouté au vivier « {name} » |
+| `hireCandidates.done.history` | Historique de la candidature mis à jour |
+| `hireCandidates.done.mail` | E-mail à {firstName} envoyé à la fin du délai d'annulation |
+| `hireCandidates.done.left` | Annulable encore {time} |
+| `hireCandidates.done.time` | {minutes} min {seconds} s |
+| `hireCandidates.done.over` | Délai d'annulation passé |
+| `hireCandidates.done.next` | Encore à décider pour cette offre |
+| `hireCandidates.done.interviewed` | Entretien passé le {date} |
+| `hireCandidates.done.evaluated` | {count, plural, one {# évaluation} other {# évaluations}} |
+| `hireCandidates.done.undo` | Annuler |
+| `hireCandidates.done.nextCandidate` | Candidature suivante |
+| `hireCandidates.done.back` | Retour aux candidats |
+| `hireCandidates.done.expired` | Le délai de 10 minutes est passé : la décision ne peut plus être annulée. |
+| `hireCandidates.done.undoError` | La décision n'a pas pu être annulée. Réessayez. |
+| `hireCandidates.retracted` | Message retiré par l'entreprise. |
+
 ### Navigation Hire
 
 *Menu de l'espace Organisation, visible quand le sélecteur d'espace est sur une organisation.*
@@ -9307,6 +9565,9 @@ Conventions :
 | `hire.history.event.scoreDisputed` | Le candidat a demandé une révision humaine du score |
 | `hire.history.event.scoreReviewed` | Score revu par {memberName} |
 | `hire.history.event.withdrawn` | Le candidat a retiré sa candidature |
+| `hire.history.event.withdrawnByTeam` | {memberName} a enregistré le retrait du candidat |
+| `hire.history.event.orbiAnalysis` | Orbi a résumé le dossier à la demande de {memberName} |
+| `hire.history.event.decisionUndone` | {memberName} a annulé la décision · retour en « {to} » |
 | `hire.history.event.message` | Message de {memberName} |
 | `hire.history.timestamp` | {date, date, medium} à {time} |
 | `hire.history.export` | Exporter l'historique |

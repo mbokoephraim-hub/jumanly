@@ -5,6 +5,7 @@
 import "server-only";
 import { db } from "@/server/db";
 import { ensureApplicationConversation } from "@/server/services/connect";
+import { claimDueDecisionMails } from "@/server/services/hire-candidates";
 import { hiringTeam, notify } from "@/server/services/notifications";
 import {
   mailApplicationSent,
@@ -101,6 +102,33 @@ export async function onStageChanged(
     stage: to.name,
     kind: to.kind,
   });
+}
+
+/**
+ * The e-mails of the final decisions whose 10 minutes to undo are over (recruiter lot 3): called by
+ * the scheduled tasks (`/api/jobs/billing`) and after the Hire pages, so they leave soon after.
+ */
+export async function deliverDueDecisionMails(now = new Date()) {
+  const due = await claimDueDecisionMails(db, now);
+  for (const item of due) {
+    const application = await applicationDetails(item.applicationId);
+    const talent = application.profile.user;
+    const company = application.job.organization.name;
+    if (item.toKind === "rejected")
+      await mailNotSelected(talent, {
+        jobTitle: application.job.title,
+        company,
+        message: item.message,
+      });
+    else
+      await mailStatusChange(talent, {
+        jobTitle: application.job.title,
+        company,
+        stage: item.to,
+        kind: item.toKind,
+      });
+  }
+  return due.length;
 }
 
 /** A message was sent: each recipient is told who wrote, never what. */

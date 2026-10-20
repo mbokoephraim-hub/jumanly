@@ -15,7 +15,6 @@ import {
   closeJob,
   getOrgApplication,
   getOrgJob,
-  getPipeline,
   HireError,
   hireDashboard,
   listOrgJobs,
@@ -42,6 +41,7 @@ import {
   reportNotes,
   requestJobChanges,
 } from "@/server/services/moderation";
+import { candidateList } from "@/server/services/hire-candidates";
 import { cleanup, db, newOrganization, newUser } from "./helpers";
 
 const users: string[] = [];
@@ -143,7 +143,7 @@ describe("isolation entre organisations (règle d'or n° 6)", () => {
     await notFound(saveJob(db, a, form("Détournée"), jobB));
     await notFound(publishJob(db, a, jobB));
     await notFound(closeJob(db, a, jobB));
-    await notFound(getPipeline(db, a, jobB));
+    await notFound(candidateList(db, a, { offre: jobB }));
     expect((await listOrgJobs(db, a)).map((job) => job.id)).not.toContain(jobB);
     expect((await hireDashboard(db, a)).applications).toBe(0);
     expect((await db.job.findUniqueOrThrow({ where: { id: jobB } })).title).toBe(

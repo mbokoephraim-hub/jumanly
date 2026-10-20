@@ -263,11 +263,11 @@ test("les écrans Hire avancés sont accessibles", async ({ page }) => {
     .click();
   await expect(page).toHaveURL(/\/app\/hire\/offres\/[^/?]+$/);
   await expectAccessible(page);
-  // The assignment and the grid stay with the candidates of the offer until lot 3.
-  await page.getByRole("link", { name: /^Voir (les|la) .*candidature/ }).click();
-  await expect(page).toHaveURL(/\/app\/hire\/candidats\?offre=/);
+  // Lot 3: the assignment and the grid live on the offer, the candidates have their own screen.
   await expect(page.locator("#attribution")).toBeVisible();
   await expect(page.locator("#grille")).toBeVisible();
+  await page.getByRole("link", { name: /^Voir (les|la) .*candidature/ }).click();
+  await expect(page).toHaveURL(/\/app\/hire\/candidats\?offre=/);
   await expectAccessible(page);
 });
 

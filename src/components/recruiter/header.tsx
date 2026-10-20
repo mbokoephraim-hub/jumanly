@@ -28,7 +28,9 @@ function ownRecruiterHead(pathname: string) {
     /^\/app\/hire\/compte(\/.*)?$/.test(pathname) ||
     pathname === "/app/bienvenue" ||
     // Lot 2: the offer, its four steps and its job sheet (planches recruteur-1 CR, OD_R, PDF_V).
-    /^\/app\/hire\/offres\/[^/]+(\/modifier|\/fiche)?$/.test(pathname)
+    /^\/app\/hire\/offres\/[^/]+(\/modifier|\/fiche)?$/.test(pathname) ||
+    // Lot 3: a candidate's file and its final decision (planches recruteur-2 DOS, DECIS).
+    /^\/app\/hire\/candidats\/[^/]+(\/decision)?$/.test(pathname)
   );
 }
 

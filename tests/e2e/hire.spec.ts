@@ -110,43 +110,25 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await expect(page.getByRole("main")).toContainText(
     `Nouvelle candidature de Amani Fictif pour « ${title} »`,
   );
+  // Lot 3: the candidates of the offer, then the file; « Changer d'étape » moves to « Entretien ».
   await page.goto(pipelineUrl);
-  if (!isMobile) {
-    // Drag and drop: the card follows the mouse, the column lights up, « Annuler » puts it back.
-    const card = page.locator("#pipeline-board li").filter({ hasText: "Amani Fictif" });
-    const column = (name: RegExp) =>
-      page.locator("#pipeline-board section").filter({ has: page.getByRole("heading", { name }) });
-    const target = column(/^Présélectionnée/);
-    await card.scrollIntoViewIfNeeded();
-    const from = (await card.boundingBox())!;
-    const to = (await target.boundingBox())!;
-    await page.mouse.move(from.x + 30, from.y + 12);
-    await page.mouse.down();
-    await page.mouse.move(from.x + 60, from.y + 30, { steps: 4 });
-    await page.mouse.move(to.x + to.width / 2, from.y + 30, { steps: 8 });
-    await expect(target).toHaveAttribute("data-drop-over", "");
-    await page.mouse.up();
-    const toast = page.getByRole("status").filter({ hasText: "est passé en « Présélectionnée »" });
-    await expect(toast).toBeVisible();
-    await expect(target).toContainText("Amani Fictif");
-    await toast.getByRole("button", { name: "Annuler" }).click();
-    await expect(column(/^Reçue/)).toContainText("Amani Fictif");
-  }
-  await page.getByRole("link", { name: "Amani Fictif" }).click();
+  await page
+    .getByRole("main")
+    .getByRole("link", { name: /Amani Fictif/ })
+    .click();
   await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
-  const candidateUrl = page.url();
-  await page.locator("#move-stage").selectOption({ label: "Entretien" });
-  await page.getByRole("button", { name: "Déplacer", exact: true }).click();
-  await expect(page.getByRole("main")).toContainText(
-    "Le candidat a été informé du changement d'étape.",
-  );
-  await expect(page.locator("section").filter({ has: page.locator("#historique") })).toContainText(
-    "vers « Entretien »",
-  );
+  const candidateUrl = page.url().split("?")[0]!;
+  await page.getByRole("button", { name: "Changer d'étape" }).click();
+  const move = page.locator("#rc-etape");
+  await move.locator("label").filter({ hasText: "Entretien" }).click();
+  await move.getByRole("button", { name: "Déplacer", exact: true }).click();
+  await expect(page).toHaveURL(/ok=deplacee/);
+  await expect(page.locator("#historique")).toContainText("vers « Entretien »");
 
   // A note stays inside the team.
+  await page.locator("#notes > summary").click();
   await page
-    .locator("textarea[name=body]")
+    .locator("#rc-note")
     .fill("Bonne maîtrise des tableaux croisés, à confirmer en entretien.");
   await page.getByRole("button", { name: "Ajouter la note" }).click();
   await expect(page.locator("#notes")).toContainText("Bonne maîtrise des tableaux croisés");
@@ -176,19 +158,18 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   // Decision, with a human message.
   await page.goto(threadUrl);
   await expect(page.getByRole("main")).toContainText("mardi me convient");
-  // The refusal is shown exactly as the talent will receive it, and leaves on a click (prompt 5).
-  await page.goto(`${candidateUrl}?decision=refus#decision`);
-  await expect(page).toHaveURL(/\/message\?modele=refus/);
-  await expect(page.getByText("Aperçu de ce que reçoit Amani")).toBeVisible();
-  const preview = page.locator("article").filter({ hasText: "Candidature non retenue" });
-  await expect(preview).toContainText("Bonjour Amani,");
-  await expect(preview).toContainText(title);
-  // Prompt 5 bis: another tone in one click, still an exact preview.
-  await page.getByRole("link", { name: "Plus court" }).click();
-  await expect(preview).toContainText("Nous avons retenu un autre profil.");
-  await page.locator("#decision-reason").selectOption("otherCandidate");
-  await page.getByRole("button", { name: "Envoyer", exact: true }).click();
-  await expect(page.getByRole("main")).toContainText("Décision enregistrée.");
+  // Lot 3: « Décision finale », the message read before it leaves, then 10 minutes to undo.
+  await page.goto(`${candidateUrl}?decision=refus`);
+  await expect(page).toHaveURL(/\/decision\?issue=rejected/);
+  const message = page.locator(".t-rc-msg");
+  await expect(message.locator("mark").filter({ hasText: "Amani" })).toBeVisible();
+  await expect(message).toContainText(title);
+  await page.getByRole("link", { name: "Court", exact: true }).click();
+  await expect(message).toContainText("Nous avons retenu un autre profil.");
+  await page.locator("#rc-motif").selectOption("otherCandidate");
+  await page.getByRole("button", { name: "Confirmer et envoyer" }).click();
+  await expect(page.getByRole("heading", { name: "Décision enregistrée" })).toBeVisible();
+  await expect(page.getByRole("main")).toContainText("Annulable encore");
 
   // The talent receives a decision card, never a bubble, with real ways to bounce back.
   await talent.goto(threadUrl);
@@ -229,17 +210,22 @@ test("le recruteur accepte un candidat avec un modèle au ton choisi", async ({
   await applyTo(talent, slug, title);
 
   await page.goto(pipelineUrl);
-  await page.getByRole("link", { name: "Amani Fictif" }).click();
+  await page
+    .getByRole("main")
+    .getByRole("link", { name: /Amani Fictif/ })
+    .click();
   await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
   const candidateUrl = page.url().split("?")[0]!;
   await page.getByRole("link", { name: "Envoyer un message" }).click();
   await expect(page).toHaveURL(/\/app\/messages\//);
   const threadUrl = page.url().split("#")[0]!;
-  await page.goto(`${candidateUrl}?decision=acceptation`);
-  await expect(page).toHaveURL(/\/message\?modele=acceptation/);
-  const main = page.locator("main").filter({ visible: true });
-  await expect(main.getByRole("heading", { level: 1, name: "Acceptation" })).toBeVisible();
-  const model = main.locator("section").filter({ hasText: "Acceptation · modèle proposé" });
+  // Lot 3: no result is chosen in advance; « Retenue » prepares the message, highlighted.
+  await page.goto(`${candidateUrl}/decision`);
+  const main = page.getByRole("main");
+  await expect(main.getByRole("heading", { level: 1, name: "Décision finale" })).toBeVisible();
+  await expect(main.getByRole("button", { name: "Confirmer et envoyer" })).toHaveCount(0);
+  await main.getByRole("link", { name: /^Retenue/ }).click();
+  const model = main.locator(".t-rc-msg");
   await expect(model).toContainText("Bonne nouvelle : votre candidature au poste de");
   await expect(model.locator("mark").filter({ hasText: "Amani" })).toBeVisible();
   await expect(model.locator("mark").filter({ hasText: title })).toBeVisible();
@@ -247,31 +233,24 @@ test("le recruteur accepte un candidat avec un modèle au ton choisi", async ({
     "aria-current",
     "true",
   );
-  // Without the appointments right, no slot can be added; Orbi waits for its prompt.
-  await expect(main.getByRole("link", { name: "Ajouter un créneau" })).toHaveCount(0);
-  await expect(main.getByText("Personnaliser avec Orbi")).toBeVisible();
-
   await main.getByRole("link", { name: "Formel" }).click();
-  await expect(main.locator("section").filter({ hasText: "modèle proposé" })).toContainText(
-    "Nous avons le plaisir de vous informer",
-  );
+  await expect(model).toContainText("Nous avons le plaisir de vous informer");
   await main.getByRole("link", { name: "Court" }).click();
-  const short = main.locator("section").filter({ hasText: "modèle proposé" });
-  await expect(short).toContainText("Nous revenons vers vous pour fixer votre arrivée.");
-  await expect(short).not.toContainText("Nous avons le plaisir");
-
-  // « Aperçu »: exactly what the talent will receive.
-  await main.getByRole("link", { name: "Aperçu", exact: true }).click();
-  const preview = main.locator("article").filter({ hasText: "Candidature retenue" });
-  await expect(preview).toContainText("Nous revenons vers vous pour fixer votre arrivée.");
+  await expect(model).toContainText("Nous revenons vers vous pour fixer votre arrivée.");
+  await expect(model).not.toContainText("Nous avons le plaisir");
+  // « Modifier le message »: the text sent is the one read.
+  await model.getByRole("button", { name: "Modifier le message" }).click();
+  const field = model.locator("textarea[name=message]");
+  await field.fill(`${await field.inputValue()}\n\nÀ très vite dans l'équipe.`);
   await expectAccessible(page);
-  await main.getByRole("button", { name: "Envoyer", exact: true }).click();
-  await expect(page.getByRole("main")).toContainText("Décision enregistrée.");
+  await main.getByRole("button", { name: "Confirmer et envoyer" }).click();
+  await expect(page.getByRole("heading", { name: "Décision enregistrée" })).toBeVisible();
 
   await talent.goto(threadUrl);
   const decision = talent.locator("li").filter({ hasText: "Candidature retenue" });
   await expect(decision).toContainText("Votre candidature au poste de");
   await expect(decision).toContainText("Nous revenons vers vous pour fixer votre arrivée.");
+  await expect(decision).toContainText("À très vite dans l'équipe.");
   await talent.context().close();
 });
 
