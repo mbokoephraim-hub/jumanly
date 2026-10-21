@@ -552,10 +552,7 @@ export function PhoneOnboarding({ data }: { data: OnboardingData }) {
           <div className="nb-entre" key="e6">
             <h1 className="nb-h1">{t("profile.skills.title")}</h1>
             <p className="nb-sous">{t("profile.skills.text")}</p>
-            <Link
-              href="/app/profil/import"
-              className="nb-orbi-carte"
-            >
+            <Link href="/app/profil/import" className="nb-orbi-carte">
               <OrbiDisc size={32} />
               <span>
                 <b>{t("profile.skills.import")}</b>

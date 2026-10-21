@@ -20,7 +20,8 @@ export async function rememberSignupEmail(
 ): Promise<AuthFormState> {
   const email = emailField.safeParse(formData.get("email"));
   const typed = String(formData.get("email") ?? "").slice(0, 200);
-  if (!email.success) return { status: "invalid", errors: { email: "email" }, values: { email: typed } };
+  if (!email.success)
+    return { status: "invalid", errors: { email: "email" }, values: { email: typed } };
   const nextValue = String(formData.get("next") ?? "");
   const next = nextValue && isSafeInternalPath(nextValue) ? nextValue : undefined;
   const forfait = String(formData.get("forfait") ?? "").slice(0, 60);
@@ -51,7 +52,10 @@ function nameFromEmail(email: string, fallback: string) {
  * and a provisional name taken from it; « En continuant, vous acceptez » stands for the consent.
  * Then the 6-digit code, as on a computer.
  */
-export async function phoneSignUp(state: AuthFormState, formData: FormData): Promise<AuthFormState> {
+export async function phoneSignUp(
+  state: AuthFormState,
+  formData: FormData,
+): Promise<AuthFormState> {
   const flow = await readSignupFlow();
   if (!flow.email) redirect("/inscription");
   const t = await getTranslations("phoneAccueil");
