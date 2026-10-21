@@ -52,7 +52,7 @@ export default async function OrganizationStructurePage({
   };
 
   return (
-    <div className="t-flux">
+    <div className="t-flux t-w4 t-large">
       <FlowHead back="/app/organisation" backLabel={tr("editBack")} title={tr("structure")} />
       <nav aria-label={tr("structure")} className="t-rx-onglets">
         {tabs.map((item) => (

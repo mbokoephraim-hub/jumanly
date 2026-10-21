@@ -437,6 +437,8 @@ export async function listOrbiConversations(
     topic: (orbiTopics as readonly string[]).includes(row.topic)
       ? (row.topic as OrbiTopic)
       : "other",
+    /** The stored subject, the recruiter's included (offer, candidates, message, report…). */
+    subject: row.topic,
     updatedAt: row.updatedAt,
     messages: row._count.messages,
   }));

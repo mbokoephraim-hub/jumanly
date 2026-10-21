@@ -51,6 +51,7 @@ export async function RecruiterFirstSteps({
 }) {
   const t = await getTranslations("hireWelcome");
   const ta = await getTranslations("access");
+  const tw = await getTranslations("hireWeb3.welcome");
   const step = wanted === "organisation" ? 2 : wanted === "pret" ? 3 : 1;
   const hrefs = [
     "/app/bienvenue",
@@ -82,7 +83,7 @@ export async function RecruiterFirstSteps({
     </>
   );
   const frame = (children: React.ReactNode) => (
-    <OnboardingFrame brand={ta("brand")} homeLabel={ta("home")} head={head}>
+    <OnboardingFrame brand={ta("brand")} homeLabel={ta("home")} head={head} tag={tw("tag")}>
       {children}
     </OnboardingFrame>
   );
@@ -107,6 +108,14 @@ export async function RecruiterFirstSteps({
         action={saveRecruitingForAction}
         className="flex flex-col gap-3.5"
       >
+        {/* Ordinateur et tablette (planche web recruteur-3 § 8) : l'accueil de Jumanly Hire. */}
+        <div className="t-rw3-wel t-rw-web">
+          <OrbiMark size={44} />
+          <span className="t-t">
+            <b>{tw("title")}</b>
+            <span>{tw("text")}</span>
+          </span>
+        </div>
         <fieldset className="t-fs">
           <legend className="t-ob-q">
             <h1>{t("for.title")}</h1>

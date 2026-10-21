@@ -101,7 +101,9 @@ test("conversation : brouillon d'Orbi relu puis envoyé, modèles, liste des mes
   // The head names the candidate, the context card the offer.
   const screen = main(page);
   await expect(screen.getByRole("heading", { level: 1 })).toContainText("Jean-Pierre");
-  await expect(screen.getByText(title).first()).toBeVisible();
+  // The offer is also in the list beside the conversation on a computer (web lot 3), which a
+  // phone leaves out: the one on screen.
+  await expect(screen.getByText(title).filter({ visible: true }).first()).toBeVisible();
   await noOverflow(page, "conversation");
 
   // Orbi drafts a reply: it lands in the composer only when the recruiter taps « Utiliser ».
@@ -180,6 +182,8 @@ test("organisation : page, modification, vérification, équipe et invitation", 
   await expect(
     main(page)
       .getByText(/Invitation envoyée par e-mail/)
+      // The table of the computer and the list of the phone: the one on screen.
+      .filter({ visible: true })
       .first(),
   ).toBeVisible();
   await expect(main(page).getByText(/Sièges utilisés : 2 sur|2 sièges utilisés/)).toBeVisible();

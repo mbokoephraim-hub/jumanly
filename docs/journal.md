@@ -2,6 +2,51 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Étape 2, recruteur web lot 3 : Orbi, messages, compte, organisation, abonnement, paramètres (21 octobre 2026)
+
+Planche `docs/refonte-web/recruteur-3` (w0 à w9), ordinateur (1440 px) et tablette (1024 px),
+clair et sombre ; le téléphone (390 px) est identique au pixel près (comparaison avant/après de
+24 écrans, clair et sombre). Choix et écarts : `docs/decisions/2026-10-21-recruteur-web-lot-3.md`.
+
+**Mise en place.** Une feuille `src/styles/recruiter-web-3.css`, mêmes règles que le lot 2 : sous
+768 px les enveloppes s'effacent, ce qui n'existe que sur ordinateur est masqué (`t-rw-web`,
+`t-w4-web`), l'inverse au-delà (`t-w4-tel`). Les pages du compte reprennent la mise en page web du
+talent (`t-w4` : titre à 32 px, tuiles, deux colonnes, rubriques des paramètres).
+
+**Écran mobile → équivalent web** :
+
+| Téléphone (lot mobile) | Ordinateur et tablette |
+|---|---|
+| Orbi (page) et son historique | Page avec l'historique à gauche (≥ 1200 px), aides et conversation ; panneau Orbi à droite depuis tout écran (`?orbi=1`, `Ctrl K` « Demander à Orbi ») |
+| Messages (liste, filtres, ligne d'Orbi) | Trois colonnes : liste, conversation (la première s'ouvre seule), candidature ; règle de la messagerie en pastille dans la tête |
+| Conversation (tête, carte de l'offre, fil, réponses d'Orbi, modèles, « … ») | Colonne du milieu ; la candidature (étapes, CV, entretien, « Ouvrir le dossier ») dans la colonne de droite à partir de 1200 px, la carte de l'offre au-dessus du fil sur tablette |
+| Modèles de message | Page au titre web ; feuille en fenêtre centrée |
+| Notifications avec « Votre journée en bref » | Résumé du jour en haut du panneau de la cloche ; page : résumé, demandes et fins d'offre à gauche, liste à droite |
+| Compte RH (avatar) | Menu du compte sous l'avatar ; page Compte : identité avec « Espace talent » et « Mon profil RH », six tuiles, Aide et Se déconnecter |
+| Mon profil RH | Formulaire en carte (nom et fonction côte à côte), « Ce que voient les candidats » à droite, boutons dans la carte |
+| Organisation | Carte en bandeau avec « Voir la page comme un talent » et « Modifier », quatre chiffres, présentation à gauche, Orbi et gestion à droite |
+| Vérifier l'organisation | Anneau en carte, trois étapes en cartes, documents et formulaire à gauche, « En attendant » à droite |
+| Équipe, Inviter (feuille), un membre (feuille) | Tableau Membre · Offres · Rôle · Gérer, « Inviter » dans la tête ; droits et activité côte à côte ; feuilles en fenêtres |
+| Abonnement | Bandeau de la formule avec « Prolonger » et « Changer de formule », quatre cartes de quotas, Échéances et « Paiement et factures » côte à côte |
+| Formules RH | Trois formules côte à côte, comparaison en dessous |
+| Paiement, Factures | Écrans web du talent (moyens à gauche, récapitulatif à droite ; tableau) |
+| Rapports | Tête avec « Exporter en PDF », quatre chiffres, cartes sur deux colonnes |
+| Paramètres, Journal des consultations, Messagerie et rappels, Sécurité, Confidentialité, Notifications | Rubriques à gauche (Notifications, Messagerie, Apparence et Orbi · Sécurité, Journal, Confidentialité · Mes données) ; journal en tableau Membre · Profil consulté · Contexte · Quand |
+| Premiers pas (3 étapes) | Plein écran, « Hire » à côté du logo, accueil en bandeau à l'étape 1 |
+
+**Tests.** e2e `tests/e2e/web-recruteur-3.spec.ts` (menu du compte, organisation, compte en
+tuiles, profil RH sans barre du bas, équipe en tableau et fenêtre d'invitation, abonnement,
+formules, rapports, rubriques des paramètres et journal ; messagerie en trois colonnes à 1440 et
+1024 px, résumé sous la cloche, page et panneau Orbi). `web-recruteur-1.spec.ts` : « Demander à
+Orbi » ouvre désormais le panneau.
+
+**Captures.** `captures/refonte-recruteur-web-3/` du dossier du projet : 24 écrans à 1440, 1024
+et 390 px, clair et sombre.
+
+**Reste.** Étape 3 (administration de l'entreprise, web seulement). Sites et photos des bureaux,
+fuseau horaire et signature des messages : pas de données ni de réglage aujourd'hui (voir la note
+de décision).
+
 ## Étape 2, recruteur web lot 2 : candidats, dossier, décision, entretiens, talents (21 octobre 2026)
 
 Planche `docs/refonte-web/recruteur-2` (w0 à w6), ordinateur (1440 px) et tablette (1024 px),

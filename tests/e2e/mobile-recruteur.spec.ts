@@ -47,15 +47,16 @@ test("espace recruteur : barre du bas, organisation active, Compte RH et profil 
   const org = page.getByRole("list", { name: "Organisation et équipe" });
   for (const row of ["Organisation", "Équipe", "Rapports"])
     await expect(org.getByRole("link", { name: new RegExp(row) })).toBeVisible();
-  const settings = page.getByRole("list", { name: "Abonnement et réglages" });
-  await expect(settings.getByRole("link", { name: /Aide/ })).toHaveAttribute(
+  // Aide: in « Abonnement et réglages » on a phone, beside the tiles on a computer (web lot 3).
+  const settings = page.locator("main").filter({ visible: true });
+  await expect(settings.getByRole("link", { name: /^Aide/ })).toHaveAttribute(
     "href",
     "mailto:assistant@jumanly.io",
   );
   await expectAccessible(page);
 
   // « Mon profil RH »: the job title is kept for this organization.
-  await page.locator('a[href="/app/hire/compte/profil"]').click();
+  await page.locator('a[href="/app/hire/compte/profil"]').filter({ visible: true }).click();
   await expect(page).toHaveURL(/\/app\/hire\/compte\/profil$/);
   await page.getByLabel("Fonction").fill(isMobile ? "Chargée de recrutement" : "Responsable RH");
   await page.getByRole("button", { name: "Enregistrer" }).click();

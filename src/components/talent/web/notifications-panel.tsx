@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useRef, useState, type ReactNode } from "react";
 import type { NotificationGroup } from "@/components/talent/notification-rows";
 import { cx } from "@/lib/cx";
 import {
@@ -34,7 +34,14 @@ type State =
  * page and marks it read; « Tout marquer comme lu » stays in the panel; « Toutes les
  * notifications » opens `/app/notifications`. Loaded each time it opens, never before.
  */
-export function NotificationsPanel({ labels }: { labels: NotificationsPanelLabels }) {
+export function NotificationsPanel({
+  labels,
+  top,
+}: {
+  labels: NotificationsPanelLabels;
+  /** Shown first, above the list (the recruiter's « Votre journée en bref »). */
+  top?: ReactNode;
+}) {
   const panel = useRef<HTMLDivElement>(null);
   const [state, setState] = useState<State>({ kind: "idle" });
 
@@ -68,7 +75,12 @@ export function NotificationsPanel({ labels }: { labels: NotificationsPanelLabel
       role="dialog"
       aria-labelledby={`${NOTIFS_PANEL_ID}-t`}
       className="t-pop"
+      onClick={(event) => {
+        // A link of the brief leads to its page: the panel closes behind it.
+        if ((event.target as Element).closest(".t-r5-brief a")) close();
+      }}
     >
+      {top}
       <div className="t-pop-hd">
         <h2 id={`${NOTIFS_PANEL_ID}-t`}>{labels.title}</h2>
         {state.kind === "ready" && state.unread && (

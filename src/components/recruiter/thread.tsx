@@ -24,7 +24,8 @@ import {
 } from "@/server/services/message-templates";
 import { badgeOf } from "@/server/services/recruiter-inbox";
 import { organizationCreditsLeft } from "@/server/services/recruiter-orbi";
-import { badgeTone } from "./inbox";
+import { badgeTone, MessagesHead, RecruiterInboxList } from "./inbox";
+import { ThreadAside } from "./thread-aside";
 import { ThreadComposer, type ComposerTemplate } from "./thread-composer";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { TalentReportForm } from "@/components/talent/report-form";
@@ -301,418 +302,458 @@ export async function RecruiterThread({
   const stages = linked?.job.stages ?? [];
 
   return (
-    <div className="t-flux t-r5-conv">
-      <div className="t-r5-ch">
-        <Link href="/app/messages" aria-label={t("back")} className="t-bi t-press">
-          <TalentIcon name="retour" size="s" />
-        </Link>
-        <span className="t-rc-av t-b" aria-hidden>
-          {initials(name)}
-        </span>
-        <div className="t-t">
-          <h1>{name}</h1>
-          <span className={cx("t-r5-etq", badgeTone[badge])}>{t(`badge.${badge}`)}</span>
-          {online && <span className="t-r6-online">{t6("online")}</span>}
+    <div className="t-flux t-large t-rw3-msgs t-rw3-th">
+      <MessagesHead />
+      <div className="t-msg3 t-rw3-m3">
+        {/* On a computer or a tablet: the list on the left, this conversation lit (planche web
+            recruteur-3 § 2). Not rendered visible on a phone, where the list is its own page. */}
+        <div className="t-flux t-msg-ls t-rw3-ls t-rw-web">
+          <RecruiterInboxList ctx={ctx} params={{}} selected={conversation.id} />
         </div>
-        <SheetButton target="r5-conv-menu" className="t-bi t-press" label={t("menu.open")}>
-          <TalentIcon name="plus-options" size="s" />
-        </SheetButton>
-      </div>
-
-      {jobTitle && (
-        <div className="t-r5-ctx">
-          <span className="t-cases t-c3" aria-hidden>
-            <TalentIcon name="offre" size="s" />
-          </span>
-          <div className="t-t">
-            <b>{jobTitle}</b>
-            <span>
-              {linked
-                ? score !== null
-                  ? t("context.stageScore", { stage: linked.stage.name, score })
-                  : t("context.stage", { stage: linked.stage.name })
-                : t("context.proposal")}
+        <div className="t-flux t-r5-conv">
+          <div className="t-r5-ch">
+            <Link href="/app/messages" aria-label={t("back")} className="t-bi t-press">
+              <TalentIcon name="retour" size="s" />
+            </Link>
+            <span className="t-rc-av t-b" aria-hidden>
+              {initials(name)}
             </span>
-            {linked && stages.length > 1 && (
-              <span className="t-r5-stp" aria-hidden>
-                {stages.map((stage) => (
-                  <i key={stage.id} className={cx(stage.order <= linked.stage.order && "t-on")} />
-                ))}
-              </span>
-            )}
-          </div>
-          {dossier && (
-            <Link href={dossier} className="t-bt t-sec t-s t-press">
-              {application ? t("context.file") : t("context.profile")}
-            </Link>
-          )}
-        </div>
-      )}
-
-      {one("ok") === "document" && <Notice tone="ok">{t("ok.document")}</Notice>}
-      {["pin", "unpin", "mute", "unmute"].includes(one("ok")) && (
-        <ToastOnLoad message={t6(`ok.${one("ok") as "pin"}`)} />
-      )}
-      {one("signalement") === "ok" && <ToastOnLoad message={t6("reported")} />}
-      {one("signalement") === "deja" && <ToastOnLoad message={t6("reportedAlready")} />}
-      {one("erreur") === "trop" ? (
-        <Notice tone="err">{t("error.tooMany", { seconds: authLimits.message.window })}</Notice>
-      ) : one("erreur") === "document" ? (
-        <Notice tone="err">{t("error.document")}</Notice>
-      ) : (
-        one("erreur") && <Notice tone="err">{t("error.send")}</Notice>
-      )}
-      {conversation.blockedAt && <Notice tone="err">{t("blocked")}</Notice>}
-
-      <ol className="t-fil t-r5-fil" aria-label={t("thread", { name })}>
-        {conversation.messages.length === 0 && <li className="t-r5-vide">{t("empty")}</li>}
-        {conversation.messages.map((message, index) => {
-          const payload = (message.payload ?? {}) as Payload;
-          const fromTalent = message.senderId === conversation.talentUserId;
-          const author = fromTalent
-            ? firstName
-            : message.senderId === user.id
-              ? null
-              : (senders.get(message.senderId ?? "") ?? t("team"));
-          const previous = conversation.messages[index - 1];
-          const newDay = !previous || dayLabel(previous.createdAt) !== dayLabel(message.createdAt);
-          const interview =
-            message.kind === "invitation" ? interviews.get(payload.interviewId ?? "") : undefined;
-          const when = (date: Date, zone?: string) =>
-            format.dateTime(date, {
-              weekday: "short",
-              day: "numeric",
-              month: "short",
-              hour: "2-digit",
-              minute: "2-digit",
-              ...(zone ? { timeZone: zone } : {}),
-            });
-          let body;
-          if (message.hiddenAt) {
-            body = (
-              <div className="t-b-r t-cache">
-                <i>{payload.retracted ? t("retracted") : t("hidden")}</i>
-              </div>
-            );
-          } else if (message.kind === "system") {
-            body = <p className="t-r5-sys">{message.body}</p>;
-          } else if (message.kind === "invitation") {
-            const inside = (
-              <>
-                <span className="t-cases t-c2" aria-hidden>
-                  <TalentIcon name="agenda" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{t(`invite.${interview?.status ?? "pending"}`)}</b>
-                  <span>
-                    {interview?.startsAt
-                      ? when(interview.startsAt, interview.timezone)
-                      : interview && interview.slots.length > 0
-                        ? interview.slots
-                            .map((slot) => when(slot, interview.timezone))
-                            .join(` ${t("or")} `)
-                        : message.body}
-                  </span>
-                </span>
-              </>
-            );
-            body = interview ? (
-              <Link className="t-r5-inv t-press" href={`/app/hire/entretiens/${interview.id}`}>
-                {inside}
-              </Link>
-            ) : (
-              <div className="t-r5-inv">{inside}</div>
-            );
-          } else if (message.kind === "document_request") {
-            const late = !payload.submittedAt && payload.due && new Date(payload.due) < now;
-            body = (
-              <div className="t-r5-inv">
-                <span className="t-cases t-c1" aria-hidden>
-                  <TalentIcon name="document" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{t("document.title", { name: payload.name ?? "" })}</b>
-                  <span>
-                    {payload.submittedAt
-                      ? t("document.received", { date: new Date(payload.submittedAt) })
-                      : late
-                        ? t("document.overdue")
-                        : payload.due
-                          ? t("document.due", { date: new Date(payload.due) })
-                          : t("document.pending")}
-                  </span>
-                </span>
-              </div>
-            );
-          } else if (message.kind === "file") {
-            body = (
-              <a
-                href={`/app/messages/${conversation.id}/document/${message.id}`}
-                className={cx("t-b-f t-press", fromTalent && "t-recu")}
-              >
-                <TalentIcon name="document" size="s" />
-                <span>
-                  <b>{payload.document?.title ?? message.body}</b>
-                  <span>{t("file.open")}</span>
-                </span>
-              </a>
-            );
-          } else if (message.kind === "slot" && payload.startsAt) {
-            body = (
-              <div className={cx("t-b-f", fromTalent && "t-recu")}>
-                <TalentIcon name="agenda" size="s" />
-                <span>
-                  <b>{t("slot")}</b>
-                  <span>{when(new Date(payload.startsAt), payload.timezone ?? "UTC")}</span>
-                </span>
-              </div>
-            );
-          } else if (message.kind === "decision") {
-            body = (
-              <div className="t-b-r t-decision">
-                <b>{payload.outcome === "hired" ? t("decision.hired") : t("decision.rejected")}</b>
-                {decisionParagraphs(message.body).map((paragraph, at) => (
-                  <p key={at} className="t-texte-l">
-                    {paragraph}
-                  </p>
-                ))}
-              </div>
-            );
-          } else {
-            body = (
-              <div className={fromTalent ? "t-b-r" : "t-bulle-u"}>
-                <p className="t-texte-l">{message.body}</p>
-                {payload.link && (
-                  <a
-                    href={payload.link}
-                    rel="noopener noreferrer nofollow ugc"
-                    target="_blank"
-                    className="t-lien-d t-url"
-                  >
-                    {payload.link}
-                  </a>
-                )}
-              </div>
-            );
-          }
-          return (
-            <li
-              key={message.id}
-              id={message.id === lastId ? "dernier" : undefined}
-              className={cx("t-msg", fromTalent ? "t-eux" : "t-moi")}
-            >
-              {newDay && <span className="t-jour">{dayLabel(message.createdAt)}</span>}
-              {body}
-              <small className="t-heure">
-                {author
-                  ? t("meta", { author, time: time(message.createdAt) })
-                  : time(message.createdAt)}
-                {message.id === lastOwn?.id && receipt && (
-                  <span className={cx("t-r6-lu", receipt === "read" && "t-on")}>
-                    {" · "}
-                    {t6(`receipt.${receipt}`)}
-                  </span>
-                )}
-              </small>
-            </li>
-          );
-        })}
-      </ol>
-
-      {canWrite ? (
-        <ThreadComposer
-          conversationId={conversation.id}
-          applicationId={application?.id ?? null}
-          max={MESSAGE_MAX}
-          templates={composerTemplates}
-          slotsHref={
-            application && !decided ? `/app/hire/candidats/${application.id}/entretien` : null
-          }
-          labels={{
-            placeholder: t("composer.placeholder"),
-            send: t("composer.send"),
-            plus: t("composer.plus"),
-            orbi: t("orbi.reply"),
-            chips: {
-              reply: t("orbi.reply"),
-              summary: t("orbi.summary"),
-              formal: t("orbi.formal"),
-            },
-            chipsLabel: t("orbi.label"),
-            draft: t("orbi.draft"),
-            summaryTitle: t("orbi.summaryTitle"),
-            edit: t("orbi.edit"),
-            use: t("orbi.use"),
-            close: t("orbi.close"),
-            thinking: t("orbi.thinking"),
-            template: t("orbi.noAi"),
-            credits:
-              credits === null ? t("orbi.creditsUnlimited") : t("orbi.credits", { count: credits }),
-            errors: {
-              empty: t("orbi.error.empty"),
-              formalEmpty: t("orbi.error.formalEmpty"),
-              failed: t("orbi.error.failed"),
-              consent: t("orbi.limit.consent"),
-              quota: t("orbi.limit.quota"),
-              entitlement: t("orbi.limit.entitlement"),
-              unavailable: t("orbi.limit.unavailable"),
-            },
-            plusTitle: t("plus.title"),
-            plusSlots: t("plus.slots"),
-            plusSlotsLine: t("plus.slotsLine"),
-            plusDocument: t("plus.document"),
-            plusDocumentLine: t("plus.documentLine"),
-            plusTemplates: t("plus.templates"),
-            plusTemplatesLine: t("plus.templatesLine"),
-            templatesTitle: t("templates.title"),
-            templatesCreate: t("templates.create"),
-            templatesRule: t("templates.rule"),
-            documentTitle: t("documentSheet.title"),
-            documentName: t("documentSheet.name"),
-            documentNamePlaceholder: t("documentSheet.namePlaceholder"),
-            documentDue: t("documentSheet.due"),
-            documentNote: t("documentSheet.note"),
-            documentForbidden: t("documentSheet.forbidden"),
-            documentSend: t("documentSheet.send"),
-            sheetClose: t("close"),
-          }}
-          documentNote={tt("default.document.body", {
-            firstName,
-            jobTitle,
-            company: values.company,
-            signer: user.name,
-          }).replaceAll("\\n", "\n")}
-          openTemplates={one("modeles") === "1"}
-        />
-      ) : (
-        !conversation.blockedAt && <p className="t-gar">{t("readOnly")}</p>
-      )}
-
-      <Sheet id="r5-conv-menu" title={t("menu.title")} closeLabel={t("close")}>
-        <ul className="t-verre t-liste t-lignes">
-          {dossier && (
-            <li>
-              <Link href={dossier} className="t-li t-press">
-                <span className="t-cases t-c3" aria-hidden>
-                  <TalentIcon name="candidats" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{application ? t("menu.file") : t("menu.profile")}</b>
-                </span>
-                <TalentIcon name="suivant" />
-              </Link>
-            </li>
-          )}
-          {application && permissions.manage && !decided && (
-            <li>
-              <Link href={`${dossier}/decision`} className="t-li t-press">
-                <span className="t-cases t-c1" aria-hidden>
-                  <TalentIcon name="valider" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{t("menu.decision")}</b>
-                </span>
-                <TalentIcon name="suivant" />
-              </Link>
-            </li>
-          )}
-          <li>
-            <Link href="/app/hire/modeles" className="t-li t-press">
-              <span className="t-cases t-c2" aria-hidden>
-                <TalentIcon name="message" size="s" />
-              </span>
-              <span className="t-t">
-                <b>{t("menu.templates")}</b>
-              </span>
-              <TalentIcon name="suivant" />
-            </Link>
-          </li>
-          <li>
-            <Link href="/app/orbi" className="t-li t-press">
-              <span className="t-cases" aria-hidden>
-                <TalentIcon name="orbi" size="s" />
-              </span>
-              <span className="t-t">
-                <b>{t("menu.orbi")}</b>
-              </span>
-              <TalentIcon name="suivant" />
-            </Link>
-          </li>
-          {/* Lot 6 (planche CONV_MENU): pin for the team, mute for oneself, remove, report. */}
-          <li>
-            <form action={conversationMenuAction}>
-              <input type="hidden" name="conversation" value={conversation.id} />
-              <input type="hidden" name="action" value={pinned ? "unpin" : "pin"} />
-              <button type="submit" className="t-li t-press">
-                <span className="t-cases t-c1" aria-hidden>
-                  <TalentIcon name="favori" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{pinned ? t6("menu.unpin") : t6("menu.pin")}</b>
-                  <span>{t6("menu.pinText")}</span>
-                </span>
-              </button>
-            </form>
-          </li>
-          <li>
-            <form action={conversationMenuAction}>
-              <input type="hidden" name="conversation" value={conversation.id} />
-              <input type="hidden" name="action" value={muted ? "unmute" : "mute"} />
-              <button type="submit" className="t-li t-press">
-                <span className="t-cases" aria-hidden>
-                  <TalentIcon name="notification" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{muted ? t6("menu.unmute") : t6("menu.mute")}</b>
-                  <span>{t6("menu.muteText")}</span>
-                </span>
-              </button>
-            </form>
-          </li>
-          {permissions.manage && (
-            <li>
-              <SheetButton target="r6-conv-retirer" className="t-li t-press">
-                <span className="t-cases" aria-hidden>
-                  <TalentIcon name="fermer" size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{t6("menu.hide")}</b>
-                  <span>{t6("menu.hideText")}</span>
-                </span>
-              </SheetButton>
-            </li>
-          )}
-          <li>
-            <SheetButton target="r6-conv-signaler" className="t-li t-press">
-              <span className="t-cases" aria-hidden>
-                <TalentIcon name="aide" size="s" />
-              </span>
-              <span className="t-t">
-                <b>{t6("menu.report")}</b>
-              </span>
+            <div className="t-t">
+              <h1>{name}</h1>
+              <span className={cx("t-r5-etq", badgeTone[badge])}>{t(`badge.${badge}`)}</span>
+              {online && <span className="t-r6-online">{t6("online")}</span>}
+            </div>
+            <SheetButton target="r5-conv-menu" className="t-bi t-press" label={t("menu.open")}>
+              <TalentIcon name="plus-options" size="s" />
             </SheetButton>
-          </li>
-        </ul>
-      </Sheet>
-      {permissions.manage && (
-        <Sheet id="r6-conv-retirer" title={t6("hide.title")} closeLabel={t("close")}>
-          <form action={conversationMenuAction} className="t-flux">
-            <input type="hidden" name="conversation" value={conversation.id} />
-            <input type="hidden" name="action" value="hide" />
-            <p>{t6("hide.text", { name: firstName })}</p>
-            <button type="submit" className="t-bt t-p t-pl t-press">
-              {t6("hide.confirm")}
-            </button>
-          </form>
-        </Sheet>
-      )}
-      <Sheet id="r6-conv-signaler" title={t6("report.title")} closeLabel={t("close")}>
-        <TalentReportForm
-          targetType="conversation"
-          targetId={conversation.id}
-          back={`/app/messages/${conversation.id}`}
-        />
-      </Sheet>
+          </div>
+
+          {jobTitle && (
+            <div className="t-r5-ctx">
+              <span className="t-cases t-c3" aria-hidden>
+                <TalentIcon name="offre" size="s" />
+              </span>
+              <div className="t-t">
+                <b>{jobTitle}</b>
+                <span>
+                  {linked
+                    ? score !== null
+                      ? t("context.stageScore", { stage: linked.stage.name, score })
+                      : t("context.stage", { stage: linked.stage.name })
+                    : t("context.proposal")}
+                </span>
+                {linked && stages.length > 1 && (
+                  <span className="t-r5-stp" aria-hidden>
+                    {stages.map((stage) => (
+                      <i
+                        key={stage.id}
+                        className={cx(stage.order <= linked.stage.order && "t-on")}
+                      />
+                    ))}
+                  </span>
+                )}
+              </div>
+              {dossier && (
+                <Link href={dossier} className="t-bt t-sec t-s t-press">
+                  {application ? t("context.file") : t("context.profile")}
+                </Link>
+              )}
+            </div>
+          )}
+
+          {one("ok") === "document" && <Notice tone="ok">{t("ok.document")}</Notice>}
+          {["pin", "unpin", "mute", "unmute"].includes(one("ok")) && (
+            <ToastOnLoad message={t6(`ok.${one("ok") as "pin"}`)} />
+          )}
+          {one("signalement") === "ok" && <ToastOnLoad message={t6("reported")} />}
+          {one("signalement") === "deja" && <ToastOnLoad message={t6("reportedAlready")} />}
+          {one("erreur") === "trop" ? (
+            <Notice tone="err">{t("error.tooMany", { seconds: authLimits.message.window })}</Notice>
+          ) : one("erreur") === "document" ? (
+            <Notice tone="err">{t("error.document")}</Notice>
+          ) : (
+            one("erreur") && <Notice tone="err">{t("error.send")}</Notice>
+          )}
+          {conversation.blockedAt && <Notice tone="err">{t("blocked")}</Notice>}
+
+          <ol className="t-fil t-r5-fil" aria-label={t("thread", { name })}>
+            {conversation.messages.length === 0 && <li className="t-r5-vide">{t("empty")}</li>}
+            {conversation.messages.map((message, index) => {
+              const payload = (message.payload ?? {}) as Payload;
+              const fromTalent = message.senderId === conversation.talentUserId;
+              const author = fromTalent
+                ? firstName
+                : message.senderId === user.id
+                  ? null
+                  : (senders.get(message.senderId ?? "") ?? t("team"));
+              const previous = conversation.messages[index - 1];
+              const newDay =
+                !previous || dayLabel(previous.createdAt) !== dayLabel(message.createdAt);
+              const interview =
+                message.kind === "invitation"
+                  ? interviews.get(payload.interviewId ?? "")
+                  : undefined;
+              const when = (date: Date, zone?: string) =>
+                format.dateTime(date, {
+                  weekday: "short",
+                  day: "numeric",
+                  month: "short",
+                  hour: "2-digit",
+                  minute: "2-digit",
+                  ...(zone ? { timeZone: zone } : {}),
+                });
+              let body;
+              if (message.hiddenAt) {
+                body = (
+                  <div className="t-b-r t-cache">
+                    <i>{payload.retracted ? t("retracted") : t("hidden")}</i>
+                  </div>
+                );
+              } else if (message.kind === "system") {
+                body = <p className="t-r5-sys">{message.body}</p>;
+              } else if (message.kind === "invitation") {
+                const inside = (
+                  <>
+                    <span className="t-cases t-c2" aria-hidden>
+                      <TalentIcon name="agenda" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b>{t(`invite.${interview?.status ?? "pending"}`)}</b>
+                      <span>
+                        {interview?.startsAt
+                          ? when(interview.startsAt, interview.timezone)
+                          : interview && interview.slots.length > 0
+                            ? interview.slots
+                                .map((slot) => when(slot, interview.timezone))
+                                .join(` ${t("or")} `)
+                            : message.body}
+                      </span>
+                    </span>
+                  </>
+                );
+                body = interview ? (
+                  <Link className="t-r5-inv t-press" href={`/app/hire/entretiens/${interview.id}`}>
+                    {inside}
+                  </Link>
+                ) : (
+                  <div className="t-r5-inv">{inside}</div>
+                );
+              } else if (message.kind === "document_request") {
+                const late = !payload.submittedAt && payload.due && new Date(payload.due) < now;
+                body = (
+                  <div className="t-r5-inv">
+                    <span className="t-cases t-c1" aria-hidden>
+                      <TalentIcon name="document" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b>{t("document.title", { name: payload.name ?? "" })}</b>
+                      <span>
+                        {payload.submittedAt
+                          ? t("document.received", { date: new Date(payload.submittedAt) })
+                          : late
+                            ? t("document.overdue")
+                            : payload.due
+                              ? t("document.due", { date: new Date(payload.due) })
+                              : t("document.pending")}
+                      </span>
+                    </span>
+                  </div>
+                );
+              } else if (message.kind === "file") {
+                body = (
+                  <a
+                    href={`/app/messages/${conversation.id}/document/${message.id}`}
+                    className={cx("t-b-f t-press", fromTalent && "t-recu")}
+                  >
+                    <TalentIcon name="document" size="s" />
+                    <span>
+                      <b>{payload.document?.title ?? message.body}</b>
+                      <span>{t("file.open")}</span>
+                    </span>
+                  </a>
+                );
+              } else if (message.kind === "slot" && payload.startsAt) {
+                body = (
+                  <div className={cx("t-b-f", fromTalent && "t-recu")}>
+                    <TalentIcon name="agenda" size="s" />
+                    <span>
+                      <b>{t("slot")}</b>
+                      <span>{when(new Date(payload.startsAt), payload.timezone ?? "UTC")}</span>
+                    </span>
+                  </div>
+                );
+              } else if (message.kind === "decision") {
+                body = (
+                  <div className="t-b-r t-decision">
+                    <b>
+                      {payload.outcome === "hired" ? t("decision.hired") : t("decision.rejected")}
+                    </b>
+                    {decisionParagraphs(message.body).map((paragraph, at) => (
+                      <p key={at} className="t-texte-l">
+                        {paragraph}
+                      </p>
+                    ))}
+                  </div>
+                );
+              } else {
+                body = (
+                  <div className={fromTalent ? "t-b-r" : "t-bulle-u"}>
+                    <p className="t-texte-l">{message.body}</p>
+                    {payload.link && (
+                      <a
+                        href={payload.link}
+                        rel="noopener noreferrer nofollow ugc"
+                        target="_blank"
+                        className="t-lien-d t-url"
+                      >
+                        {payload.link}
+                      </a>
+                    )}
+                  </div>
+                );
+              }
+              return (
+                <li
+                  key={message.id}
+                  id={message.id === lastId ? "dernier" : undefined}
+                  className={cx("t-msg", fromTalent ? "t-eux" : "t-moi")}
+                >
+                  {newDay && <span className="t-jour">{dayLabel(message.createdAt)}</span>}
+                  {body}
+                  <small className="t-heure">
+                    {author
+                      ? t("meta", { author, time: time(message.createdAt) })
+                      : time(message.createdAt)}
+                    {message.id === lastOwn?.id && receipt && (
+                      <span className={cx("t-r6-lu", receipt === "read" && "t-on")}>
+                        {" · "}
+                        {t6(`receipt.${receipt}`)}
+                      </span>
+                    )}
+                  </small>
+                </li>
+              );
+            })}
+          </ol>
+
+          {canWrite ? (
+            <ThreadComposer
+              conversationId={conversation.id}
+              applicationId={application?.id ?? null}
+              max={MESSAGE_MAX}
+              templates={composerTemplates}
+              slotsHref={
+                application && !decided ? `/app/hire/candidats/${application.id}/entretien` : null
+              }
+              labels={{
+                placeholder: t("composer.placeholder"),
+                send: t("composer.send"),
+                plus: t("composer.plus"),
+                orbi: t("orbi.reply"),
+                chips: {
+                  reply: t("orbi.reply"),
+                  summary: t("orbi.summary"),
+                  formal: t("orbi.formal"),
+                },
+                chipsLabel: t("orbi.label"),
+                draft: t("orbi.draft"),
+                summaryTitle: t("orbi.summaryTitle"),
+                edit: t("orbi.edit"),
+                use: t("orbi.use"),
+                close: t("orbi.close"),
+                thinking: t("orbi.thinking"),
+                template: t("orbi.noAi"),
+                credits:
+                  credits === null
+                    ? t("orbi.creditsUnlimited")
+                    : t("orbi.credits", { count: credits }),
+                errors: {
+                  empty: t("orbi.error.empty"),
+                  formalEmpty: t("orbi.error.formalEmpty"),
+                  failed: t("orbi.error.failed"),
+                  consent: t("orbi.limit.consent"),
+                  quota: t("orbi.limit.quota"),
+                  entitlement: t("orbi.limit.entitlement"),
+                  unavailable: t("orbi.limit.unavailable"),
+                },
+                plusTitle: t("plus.title"),
+                plusSlots: t("plus.slots"),
+                plusSlotsLine: t("plus.slotsLine"),
+                plusDocument: t("plus.document"),
+                plusDocumentLine: t("plus.documentLine"),
+                plusTemplates: t("plus.templates"),
+                plusTemplatesLine: t("plus.templatesLine"),
+                templatesTitle: t("templates.title"),
+                templatesCreate: t("templates.create"),
+                templatesRule: t("templates.rule"),
+                documentTitle: t("documentSheet.title"),
+                documentName: t("documentSheet.name"),
+                documentNamePlaceholder: t("documentSheet.namePlaceholder"),
+                documentDue: t("documentSheet.due"),
+                documentNote: t("documentSheet.note"),
+                documentForbidden: t("documentSheet.forbidden"),
+                documentSend: t("documentSheet.send"),
+                sheetClose: t("close"),
+              }}
+              documentNote={tt("default.document.body", {
+                firstName,
+                jobTitle,
+                company: values.company,
+                signer: user.name,
+              }).replaceAll("\\n", "\n")}
+              openTemplates={one("modeles") === "1"}
+            />
+          ) : (
+            !conversation.blockedAt && <p className="t-gar">{t("readOnly")}</p>
+          )}
+
+          <Sheet id="r5-conv-menu" title={t("menu.title")} closeLabel={t("close")}>
+            <ul className="t-verre t-liste t-lignes">
+              {dossier && (
+                <li>
+                  <Link href={dossier} className="t-li t-press">
+                    <span className="t-cases t-c3" aria-hidden>
+                      <TalentIcon name="candidats" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b>{application ? t("menu.file") : t("menu.profile")}</b>
+                    </span>
+                    <TalentIcon name="suivant" />
+                  </Link>
+                </li>
+              )}
+              {application && permissions.manage && !decided && (
+                <li>
+                  <Link href={`${dossier}/decision`} className="t-li t-press">
+                    <span className="t-cases t-c1" aria-hidden>
+                      <TalentIcon name="valider" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b>{t("menu.decision")}</b>
+                    </span>
+                    <TalentIcon name="suivant" />
+                  </Link>
+                </li>
+              )}
+              <li>
+                <Link href="/app/hire/modeles" className="t-li t-press">
+                  <span className="t-cases t-c2" aria-hidden>
+                    <TalentIcon name="message" size="s" />
+                  </span>
+                  <span className="t-t">
+                    <b>{t("menu.templates")}</b>
+                  </span>
+                  <TalentIcon name="suivant" />
+                </Link>
+              </li>
+              <li>
+                <Link href="/app/orbi" className="t-li t-press">
+                  <span className="t-cases" aria-hidden>
+                    <TalentIcon name="orbi" size="s" />
+                  </span>
+                  <span className="t-t">
+                    <b>{t("menu.orbi")}</b>
+                  </span>
+                  <TalentIcon name="suivant" />
+                </Link>
+              </li>
+              {/* Lot 6 (planche CONV_MENU): pin for the team, mute for oneself, remove, report. */}
+              <li>
+                <form action={conversationMenuAction}>
+                  <input type="hidden" name="conversation" value={conversation.id} />
+                  <input type="hidden" name="action" value={pinned ? "unpin" : "pin"} />
+                  <button type="submit" className="t-li t-press">
+                    <span className="t-cases t-c1" aria-hidden>
+                      <TalentIcon name="favori" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b>{pinned ? t6("menu.unpin") : t6("menu.pin")}</b>
+                      <span>{t6("menu.pinText")}</span>
+                    </span>
+                  </button>
+                </form>
+              </li>
+              <li>
+                <form action={conversationMenuAction}>
+                  <input type="hidden" name="conversation" value={conversation.id} />
+                  <input type="hidden" name="action" value={muted ? "unmute" : "mute"} />
+                  <button type="submit" className="t-li t-press">
+                    <span className="t-cases" aria-hidden>
+                      <TalentIcon name="notification" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b>{muted ? t6("menu.unmute") : t6("menu.mute")}</b>
+                      <span>{t6("menu.muteText")}</span>
+                    </span>
+                  </button>
+                </form>
+              </li>
+              {permissions.manage && (
+                <li>
+                  <SheetButton target="r6-conv-retirer" className="t-li t-press">
+                    <span className="t-cases" aria-hidden>
+                      <TalentIcon name="fermer" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b>{t6("menu.hide")}</b>
+                      <span>{t6("menu.hideText")}</span>
+                    </span>
+                  </SheetButton>
+                </li>
+              )}
+              <li>
+                <SheetButton target="r6-conv-signaler" className="t-li t-press">
+                  <span className="t-cases" aria-hidden>
+                    <TalentIcon name="aide" size="s" />
+                  </span>
+                  <span className="t-t">
+                    <b>{t6("menu.report")}</b>
+                  </span>
+                </SheetButton>
+              </li>
+            </ul>
+          </Sheet>
+          {permissions.manage && (
+            <Sheet id="r6-conv-retirer" title={t6("hide.title")} closeLabel={t("close")}>
+              <form action={conversationMenuAction} className="t-flux">
+                <input type="hidden" name="conversation" value={conversation.id} />
+                <input type="hidden" name="action" value="hide" />
+                <p>{t6("hide.text", { name: firstName })}</p>
+                <button type="submit" className="t-bt t-p t-pl t-press">
+                  {t6("hide.confirm")}
+                </button>
+              </form>
+            </Sheet>
+          )}
+          <Sheet id="r6-conv-signaler" title={t6("report.title")} closeLabel={t("close")}>
+            <TalentReportForm
+              targetType="conversation"
+              targetId={conversation.id}
+              back={`/app/messages/${conversation.id}`}
+            />
+          </Sheet>
+        </div>
+        {jobTitle && (
+          <ThreadAside
+            ctx={ctx}
+            applicationId={application?.id ?? null}
+            jobTitle={jobTitle}
+            firstName={firstName}
+            dossier={dossier}
+            isApplication={Boolean(application)}
+            stage={
+              linked
+                ? {
+                    name: linked.stage.name,
+                    order: linked.stage.order,
+                    orders: stages.map((stage) => stage.order),
+                  }
+                : null
+            }
+            score={score}
+          />
+        )}
+      </div>
     </div>
   );
 }

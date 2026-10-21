@@ -43,6 +43,7 @@ export function TalentTopBar({
   unreadMessages,
   avatar,
   menu,
+  brief,
   accountHref,
 }: {
   labels: TopBarLabels;
@@ -51,8 +52,10 @@ export function TalentTopBar({
   avatar: ReactNode;
   /** The content of the account menu (server, streamed). */
   menu?: ReactNode;
-  /** Instead of the menu, the avatar leads to this page (the recruiter's Compte RH). */
+  /** Instead of the menu, the avatar leads to this page. */
   accountHref?: string;
+  /** Above the notifications under the bell: Orbi's brief of the day (recruiter, web lot 3). */
+  brief?: ReactNode;
 }) {
   const pathname = usePathname();
   const count = useUnread(unread, WEB);
@@ -94,7 +97,7 @@ export function TalentTopBar({
         <TalentIcon name="notification" />
         {count > 0 && <i aria-hidden className="t-pastille" />}
       </button>
-      <NotificationsPanel labels={labels.panel} />
+      <NotificationsPanel labels={labels.panel} top={brief} />
       <Link
         href="/app/messages"
         aria-label={plural(labels.messages, unreadMessages)}

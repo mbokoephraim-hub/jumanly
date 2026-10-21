@@ -95,7 +95,7 @@ export default async function TemplatesPage({ searchParams }: PageProps<"/app/hi
   );
 
   return (
-    <div className="t-flux">
+    <div className="t-flux t-w4 t-large t-rw3-mod">
       <FlowHead back="/app/messages" backLabel={tr("back")} title={t("page.title")} />
       <p className="t-r5-sous">{t("page.subtitle")}</p>
       {query.ok === "enregistre" && <Notice tone="ok">{t("page.saved")}</Notice>}

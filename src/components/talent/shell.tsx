@@ -14,6 +14,7 @@ import { TalentHeader } from "./header";
 import { OfflineDrafts } from "./offline-drafts";
 import { TalentCommand } from "./web/command";
 import { OrbiPanel } from "./web/orbi-panel";
+import { orbiAides } from "@/lib/orbi";
 import { TalentSideNav } from "./web/side-nav";
 import { TalentTopBar } from "./web/top-bar";
 
@@ -213,11 +214,8 @@ export function TalentShell({
             loading: t("orbiPanel.loading"),
             error: t("orbiPanel.error"),
             aides: tOrbi("aides.label"),
-            cv: tOrbi("aides.cv"),
-            interview: tOrbi("aides.interview"),
-            offer: tOrbi("aides.offer"),
-            path: tOrbi("aides.path"),
           }}
+          aides={orbiAides.map((aide) => ({ ...aide, label: tOrbi(`aides.${aide.key}`) }))}
         />
       </Suspense>
       <TalentCommand

@@ -65,7 +65,6 @@ export function TalentCommand({
   destinations,
   preview = "/api/recherche/apercu?n=6&q=",
   results = "/app/recherche?q=",
-  ask,
   kinds,
 }: {
   labels: CommandLabels;
@@ -75,8 +74,6 @@ export function TalentCommand({
   preview?: string;
   /** Address of all the results, the words added at the end; null when the space has no such page. */
   results?: string | null;
-  /** « Demander à Orbi » opens this page with the words at the end, instead of the panel. */
-  ask?: string;
   /** Name of each kind of result (recruiter: offer, candidate); the talent's by default. */
   kinds?: Partial<Record<PreviewItem["kind"], string>>;
 }) {
@@ -171,9 +168,7 @@ export function TalentCommand({
 
   const choose = (option: Option) => {
     dialog.current?.close();
-    if (option.kind === "ask" && ask)
-      router.push(words.length >= 2 ? `${ask}${encodeURIComponent(words)}` : ask.split("?")[0]!);
-    else if (option.kind === "ask") openOrbiPanel(words.length >= 2 ? words : undefined);
+    if (option.kind === "ask") openOrbiPanel(words.length >= 2 ? words : undefined);
     else router.push(option.href);
   };
 

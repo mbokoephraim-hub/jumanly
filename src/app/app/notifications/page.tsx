@@ -46,75 +46,100 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
   ]);
 
   return (
-    <div className="t-flux t-notifs">
-      <FlowHead
-        back={ctx ? "/app/hire" : "/app"}
-        backLabel={ctx ? t("rhNotifications.back") : t("notifications.back")}
-        title={t("notifications.title")}
-        end={
-          <Link
-            href={ctx ? "/app/parametres#notifications" : "/app/parametres?onglet=confidentialite"}
-            className="t-bi t-press"
-            aria-label={t("notifications.preferences")}
-          >
-            <TalentIcon name="reglages" size="s" />
-          </Link>
-        }
-      />
-      {params.ok === "lues" && <Notice tone="ok">{t("notifications.allRead")}</Notice>}
-      {brief && <RecruiterBrief today={brief} firstName={user.firstName || user.name} />}
-      {/* Lot 6: join requests to answer, and the offers closing soon (planches REJ_ADM, FIN). */}
-      {ctx && (
-        <JoinRequestsCard
-          ctx={ctx}
-          answer={typeof params.demande === "string" ? params.demande : undefined}
+    <div className={cx("t-flux t-notifs", ctx && "t-w4 t-large t-rw3-notifs")}>
+      <div className={ctx ? "t-w4-h" : "t-rw3-nw"}>
+        <FlowHead
+          back={ctx ? "/app/hire" : "/app"}
+          backLabel={ctx ? t("rhNotifications.back") : t("notifications.back")}
+          title={t("notifications.title")}
+          end={
+            <Link
+              href={
+                ctx ? "/app/parametres#notifications" : "/app/parametres?onglet=confidentialite"
+              }
+              className="t-bi t-press"
+              aria-label={t("notifications.preferences")}
+            >
+              <TalentIcon name="reglages" size="s" />
+            </Link>
+          }
         />
-      )}
-      {ctx && (
-        <EndingOffers ctx={ctx} answer={typeof params.fin === "string" ? params.fin : undefined} />
-      )}
-      {groups.length === 0 ? (
-        <div className="t-verre t-carte t-vide">
-          <b>{t("notifs.empty.title")}</b>
-          <span>{t("notifications.empty.text")}</span>
+        {ctx && (
+          <Link href="/app/parametres/notifications" className="t-bt t-sec t-m t-press t-w4-web">
+            <TalentIcon name="reglages" size="s" />
+            {t("notifications.preferences")}
+          </Link>
+        )}
+      </div>
+      {params.ok === "lues" && <Notice tone="ok">{t("notifications.allRead")}</Notice>}
+      {/* Ordinateur et tablette, espace recruteur (planche web recruteur-3 § 2) : le résumé du jour
+          et ce qui attend une réponse à gauche, les notifications à droite. */}
+      <div className={ctx ? "t-w4-g2 t-rw3-ntg" : "t-rw3-nw"}>
+        <div className={ctx ? "t-w4-col" : "t-rw3-nw"}>
+          {brief && <RecruiterBrief today={brief} firstName={user.firstName || user.name} />}
+          {/* Lot 6: join requests to answer, and the offers closing soon (planches REJ_ADM, FIN). */}
+          {ctx && (
+            <JoinRequestsCard
+              ctx={ctx}
+              answer={typeof params.demande === "string" ? params.demande : undefined}
+            />
+          )}
+          {ctx && (
+            <EndingOffers
+              ctx={ctx}
+              answer={typeof params.fin === "string" ? params.fin : undefined}
+            />
+          )}
         </div>
-      ) : (
-        groups.map((group) => (
-          <section key={group.key} aria-labelledby={`nt-${group.key}`} className="t-flux t-serre">
-            <h2 id={`nt-${group.key}`} className="t-grp-t">
-              {group.title}
-            </h2>
-            <div className="t-verre t-liste t-lignes">
-              {group.items.map((item) => (
-                <form key={item.id} action={markNotificationsReadAction}>
-                  <input type="hidden" name="id" value={item.id} />
-                  <input type="hidden" name="href" value={item.href} />
-                  <button type="submit" className={cx("t-li t-press", item.unread && "t-nv")}>
-                    <span className={cx("t-cases", item.tone)} aria-hidden>
-                      <TalentIcon name={item.icon} size="s" />
-                    </span>
-                    <span className="t-t">
-                      <b>{item.title}</b>
-                      {item.line && <span>{item.line}</span>}
-                      {item.unread && (
-                        <span className="sr-only">{t("notifications.item.unread")}</span>
-                      )}
-                    </span>
-                    <span className="t-v">{item.time}</span>
-                  </button>
-                </form>
-              ))}
+        <div className={ctx ? "t-w4-col" : "t-rw3-nw"}>
+          {groups.length === 0 ? (
+            <div className="t-verre t-carte t-vide">
+              <b>{t("notifs.empty.title")}</b>
+              <span>{t("notifications.empty.text")}</span>
             </div>
-          </section>
-        ))
-      )}
-      {unread && (
-        <form action={markNotificationsReadAction}>
-          <button type="submit" className="t-bt t-sec t-pl t-press">
-            {t("notifications.markAllRead")}
-          </button>
-        </form>
-      )}
+          ) : (
+            groups.map((group) => (
+              <section
+                key={group.key}
+                aria-labelledby={`nt-${group.key}`}
+                className="t-flux t-serre"
+              >
+                <h2 id={`nt-${group.key}`} className="t-grp-t">
+                  {group.title}
+                </h2>
+                <div className="t-verre t-liste t-lignes">
+                  {group.items.map((item) => (
+                    <form key={item.id} action={markNotificationsReadAction}>
+                      <input type="hidden" name="id" value={item.id} />
+                      <input type="hidden" name="href" value={item.href} />
+                      <button type="submit" className={cx("t-li t-press", item.unread && "t-nv")}>
+                        <span className={cx("t-cases", item.tone)} aria-hidden>
+                          <TalentIcon name={item.icon} size="s" />
+                        </span>
+                        <span className="t-t">
+                          <b>{item.title}</b>
+                          {item.line && <span>{item.line}</span>}
+                          {item.unread && (
+                            <span className="sr-only">{t("notifications.item.unread")}</span>
+                          )}
+                        </span>
+                        <span className="t-v">{item.time}</span>
+                      </button>
+                    </form>
+                  ))}
+                </div>
+              </section>
+            ))
+          )}
+          {unread && (
+            <form action={markNotificationsReadAction}>
+              <button type="submit" className="t-bt t-sec t-pl t-press">
+                {t("notifications.markAllRead")}
+              </button>
+            </form>
+          )}
+        </div>
+      </div>
     </div>
   );
 }

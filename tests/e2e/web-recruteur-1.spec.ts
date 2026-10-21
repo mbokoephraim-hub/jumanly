@@ -134,14 +134,15 @@ test("web recruteur 1 : cadre, À traiter, offres en grille, création avec aper
   await search.getByRole("option", { name: new RegExp(`^${title}`) }).click();
   await expect(page).toHaveURL(new RegExp(`${detail.split("/").pop()}$`));
 
-  // « Demander à Orbi » ouvre Orbi avec la question, envoyée comme si elle avait été écrite.
+  // « Demander à Orbi » ouvre le panneau Orbi à droite (lot web 3), la question envoyée comme si
+  // elle avait été écrite ; la page reste celle de l'offre.
   await page.keyboard.press("Control+k");
   await field.fill("Comment rédiger une offre claire ?");
   await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/\/app\/orbi\?/);
-  await expect(
-    page.locator("main").filter({ visible: true }).getByText("Comment rédiger une offre claire ?"),
-  ).toBeVisible();
+  await expect(page).toHaveURL(/orbi=1/);
+  await expect(page).toHaveURL(new RegExp(`${detail.split("/").pop()}`));
+  const panel = page.locator(".t-op").filter({ visible: true });
+  await expect(panel.getByText("Comment rédiger une offre claire ?")).toBeVisible();
 });
 
 test("web recruteur 1 : sur téléphone, la barre du bas reste et le cadre web n'apparaît pas", async ({

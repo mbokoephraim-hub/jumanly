@@ -10288,6 +10288,68 @@ Conventions :
 | `hireWeb.pools.sub` | Talents gardés pour plus tard |
 | `hireWeb.pools.crumb` | Viviers |
 
+### Refonte web recruteur · lot 3 (ordinateur et tablette)
+
+*Espace recruteur sur ordinateur et tablette (docs/refonte-web, planche recruteur-3) : Orbi en panneau et en page avec l'historique, messagerie en trois colonnes, notifications avec le résumé du jour, menu du compte, compte, organisation, vérification, équipe, abonnement, formules, rapports, paramètres, premiers pas. Les textes du téléphone restent ceux des lots mobiles.*
+
+| Clé | Texte |
+|---|---|
+| `hireShell.web3.menu` | Menu du compte de {name} |
+| `hireWeb3.menu.seats` | {used} sur {limit} |
+| `hireWeb3.account.line` | {line} · {role} |
+| `hireWeb3.account.talent` | Espace talent |
+| `hireWeb3.account.profile` | Mon profil RH |
+| `hireWeb3.account.org` | Page vue par les talents |
+| `hireWeb3.account.reports` | {count, plural, =0 {Aucune candidature en 30 jours} one {# candidature en 30 jours} other {# candidatures en 30 jours}} |
+| `hireWeb3.account.settings` | Notifications, sécurité, Orbi |
+| `hireWeb3.account.help` | {email} · réponse par e-mail |
+| `hireWeb3.billing.of` | sur {max} |
+| `hireWeb3.billing.sub` | {name} : {value} |
+| `hireWeb3.billing.payment` | Paiement et factures |
+| `hireWeb3.profile.cancel` | Annuler |
+| `hireWeb3.verification.meanwhile` | En attendant |
+| `hireWeb3.team.invite` | Inviter |
+| `hireWeb3.team.member` | Membre |
+| `hireWeb3.team.offers` | Offres |
+| `hireWeb3.team.role` | Rôle |
+| `hireWeb3.team.actions` | Actions |
+| `hireWeb3.team.offersCount` | {count, plural, =0 {Aucune offre} one {# offre} other {# offres}} |
+| `hireWeb3.team.manage` | Gérer |
+| `hireWeb3.team.manageOf` | Gérer {name} |
+| `hireWeb3.reports.sub30` | {org} · 30 derniers jours |
+| `hireWeb3.reports.sub90` | {org} · 90 derniers jours |
+| `hireWeb3.reports.export` | Exporter en PDF |
+| `hireWeb3.settings.display` | Apparence et Orbi |
+| `hireWeb3.journal.member` | Membre |
+| `hireWeb3.journal.profile` | Profil consulté |
+| `hireWeb3.journal.context` | Contexte |
+| `hireWeb3.journal.when` | Quand |
+| `hireWeb3.plans.sub` | Prépayé, sans renouvellement forcé. Les candidatures restent gratuites dans toutes les formules. |
+| `hireWeb3.welcome.tag` | Hire |
+| `hireWeb3.welcome.title` | Bienvenue dans Jumanly Hire |
+| `hireWeb3.welcome.text` | Publiez, triez et rencontrez les bons talents. Orbi vous aide, vous décidez. |
+| `hireWeb3.org.edit` | Modifier |
+| `hireWeb3.org.sub` | Votre page, vue par les talents sur chaque offre |
+| `hireWeb3.messages.choose` | Choisissez une conversation pour la lire. |
+| `hireWeb3.messages.rule` | Seulement avec les candidats et les talents qui ont accepté le contact |
+| `hireWeb3.thread.aria` | Candidature liée à la conversation |
+| `hireWeb3.thread.application` | Candidature |
+| `hireWeb3.thread.proposal` | Proposition |
+| `hireWeb3.thread.score` | Dossier à {score} % |
+| `hireWeb3.thread.stage` | Étape {index} sur {total} · <b>{stage}</b> |
+| `hireWeb3.thread.documents` | Documents |
+| `hireWeb3.thread.cv` | CV |
+| `hireWeb3.thread.cvLine` | Envoyé avec la candidature, le {date} |
+| `hireWeb3.thread.noCv` | Pas de CV : le profil Jumanly tient lieu de dossier. |
+| `hireWeb3.thread.interview` | Entretien |
+| `hireWeb3.thread.itv.pending` | Proposé · {time} |
+| `hireWeb3.thread.itv.confirmed` | Confirmé · {time} |
+| `hireWeb3.thread.itv.reschedule` | Autre date · {time} |
+| `hireWeb3.thread.itvWaiting` | En attente de {name} |
+| `hireWeb3.thread.itvAsked` | Proposée par {name} |
+| `hireWeb3.thread.open` | Ouvrir le dossier |
+| `hireWeb3.thread.profile` | Voir le profil |
+
 ### Navigation Hire
 
 *Menu de l'espace Organisation, visible quand le sélecteur d'espace est sur une organisation.*
