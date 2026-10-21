@@ -9614,6 +9614,73 @@
       }
     }
   },
+  "phone": {
+    "nav": {
+      "aria": "Navigation principale",
+      "fil": "Fil",
+      "explorer": "Explorer",
+      "carriere": "Carrière",
+      "formation": "Formation",
+      "messages": "Messages"
+    },
+    "back": "Retour",
+    "close": "Fermer",
+    "cancel": "Annuler",
+    "toasts": "Messages de confirmation",
+    "search": {
+      "back": "Fermer la recherche",
+      "clear": "Effacer",
+      "empty": "Aucun résultat pour « {query} »."
+    },
+    "orbi": {
+      "open": "Ouvrir Orbi, l'assistant",
+      "hello": "Bonjour {name}",
+      "helloAnon": "Bonjour",
+      "title": "Orbi",
+      "placeholder": "Écrire à Orbi…",
+      "input": "Écrire à Orbi",
+      "send": "Envoyer",
+      "decide": "Orbi propose, vous décidez.",
+      "fil": {
+        "bubble": "Résumer les nouveautés du jour ?",
+        "from": "Orbi · depuis le Fil",
+        "q1": "Résumer les nouveautés du jour",
+        "q2": "Quelles entreprises recrutent cette semaine ?",
+        "q3": "Qui suivre dans mon domaine ?",
+        "q4": "Écrire une publication sur mon attestation"
+      },
+      "explorer": {
+        "bubble": "Trouver une offre pour mon Cap ?",
+        "from": "Orbi · depuis Explorer",
+        "q1": "Trouver une offre pour mon Cap",
+        "q2": "Quelles offres me correspondent le mieux ?",
+        "q3": "Qui recrute près de chez moi ?",
+        "q4": "Des CDI dans mon domaine ?"
+      },
+      "carriere": {
+        "from": "Votre carrière",
+        "q1": "Que manque-t-il à mon profil ?",
+        "q2": "Quel CV envoyer pour ma prochaine candidature ?",
+        "q3": "Préparer mon prochain entretien",
+        "q4": "Quelle formation suivre pour mon Cap ?"
+      },
+      "formation": {
+        "bubble": "Réviser pour mon prochain entretien ?",
+        "from": "Orbi · depuis Formation",
+        "q1": "Pourquoi ce cours pour mon Cap ?",
+        "q2": "Réviser pour mon prochain entretien",
+        "q3": "Fais-moi réviser une notion",
+        "q4": "Combien de temps pour finir mon cours ?"
+      },
+      "messages": {
+        "from": "Vos messages",
+        "q1": "Résumer mes non-lus",
+        "q2": "À qui répondre d'abord ?",
+        "q3": "Écrire à un recruteur",
+        "q4": "Relire un message avant de l'envoyer"
+      }
+    }
+  },
   "hireShell": {
     "skip": "Aller au contenu principal",
     "nav": {

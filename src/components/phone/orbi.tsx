@@ -1,0 +1,226 @@
+"use client";
+
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { useEffect, useRef, useState, useTransition } from "react";
+import { askOrbiAction } from "@/server/actions/orbi";
+import { orbiActions, type OrbiReply } from "@/lib/orbi";
+import { rootTab, type PhoneTab } from "@/lib/phone-tabs";
+import { OrbiDisc, PhoneIcon } from "./icon";
+import { PhoneSheet } from "./sheet";
+
+export type OrbiTabTexts = {
+  /** The question the bubble beside the disc offers (none on some tabs). */
+  bubble?: string;
+  /** « Orbi · depuis le Fil ». */
+  from: string;
+  /** The four questions of the sheet. */
+  questions: string[];
+};
+
+export type OrbiTexts = {
+  open: string;
+  hello: string;
+  title: string;
+  close: string;
+  back: string;
+  placeholder: string;
+  input: string;
+  send: string;
+  thinking: string;
+  decide: string;
+  failed: string;
+  invalid: string;
+  limits: Record<NonNullable<OrbiReply["limit"]>, string>;
+  limitLinks: { consent: string; plans: string };
+  actions: Record<string, string>;
+  tabs: Record<PhoneTab, OrbiTabTexts>;
+};
+
+type Answer = { question: string; reply: OrbiReply | null; error: string | null };
+
+/**
+ * Orbi everywhere (brief § 3, planche Identité): the mint disc at the bottom right of each tab,
+ * with a bubble that offers a question suited to the tab. A touch opens the sheet: four suggested
+ * questions and « Écrire à Orbi ». The answer comes from Orbi (consent, right and credits checked
+ * on the server); Orbi proposes pages, the person decides.
+ */
+export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
+  const pathname = usePathname();
+  const tab = rootTab(pathname);
+  const [open, setOpen] = useState(false);
+  const [answer, setAnswer] = useState<Answer | null>(null);
+  const [text, setText] = useState("");
+  const [pending, start] = useTransition();
+  const conversation = useRef<string | undefined>(undefined);
+  const [shownTab, setShownTab] = useState<PhoneTab>(tab ?? "fil");
+
+  // The sheet speaks for the tab it was opened from.
+  useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
+    if (tab) setShownTab(tab);
+  }, [tab]);
+  const current = texts.tabs[shownTab];
+
+  const ask = (question: string) => {
+    const clean = question.trim();
+    if (clean.length < 2) {
+      setAnswer({ question: clean, reply: null, error: texts.invalid });
+      return;
+    }
+    setAnswer({ question: clean, reply: null, error: null });
+    setText("");
+    start(async () => {
+      const result = await askOrbiAction({ text: clean, conversationId: conversation.current });
+      if (!result.ok) {
+        setAnswer({ question: clean, reply: null, error: texts.failed });
+        return;
+      }
+      conversation.current = result.conversationId;
+      setAnswer({ question: clean, reply: result.answer, error: null });
+    });
+  };
+
+  const openWith = (question?: string) => {
+    setOpen(true);
+    if (question) ask(question);
+  };
+
+  return (
+    <>
+      <div className="nb-orbi-fab" hidden={tab === null}>
+        {current.bubble ? (
+          <button type="button" className="nb-orbi-bulle" onClick={() => openWith(current.bubble)}>
+            {current.bubble}
+          </button>
+        ) : null}
+        <button
+          type="button"
+          className="nb-orbi-disque"
+          data-orbi=""
+          aria-label={texts.open}
+          aria-haspopup="dialog"
+          onClick={() => openWith()}
+        >
+          <OrbiDisc />
+        </button>
+      </div>
+      <PhoneSheet
+        open={open}
+        onClose={() => setOpen(false)}
+        label={texts.title}
+        closeLabel={texts.close}
+      >
+        <div className="nb-orbi-tete">
+          {answer ? (
+            <button
+              type="button"
+              className="nb-retour"
+              aria-label={texts.back}
+              data-retour=""
+              onClick={() => setAnswer(null)}
+            >
+              <PhoneIcon name="retour" size={20} stroke={2} />
+            </button>
+          ) : null}
+          <OrbiDisc size={42} />
+          <span className="nb-orbi-titre">
+            <b>{answer ? texts.title : texts.hello}</b>
+            <span className="nb-meta">{current.from}</span>
+          </span>
+          <button
+            type="button"
+            className="nb-rond nb-fermer"
+            aria-label={texts.close}
+            onClick={() => setOpen(false)}
+          >
+            <PhoneIcon name="fermer" size={20} />
+          </button>
+        </div>
+        {answer ? (
+          <div className="nb-orbi-rep" aria-live="polite">
+            <p className="nb-meta">{answer.question}</p>
+            {answer.error ? (
+              <p className="nb-orbi-texte">{answer.error}</p>
+            ) : answer.reply ? (
+              <>
+                <div className="nb-orbi-texte">
+                  {answer.reply.text.map((paragraph, index) => (
+                    <p key={index}>{paragraph}</p>
+                  ))}
+                </div>
+                {answer.reply.limit ? (
+                  <p className="nb-meta nb-orbi-limite">
+                    {texts.limits[answer.reply.limit]}{" "}
+                    <Link
+                      href={
+                        answer.reply.limit === "consent"
+                          ? "/app/parametres/confidentialite"
+                          : "/app/abonnement"
+                      }
+                      onClick={() => setOpen(false)}
+                    >
+                      {answer.reply.limit === "consent"
+                        ? texts.limitLinks.consent
+                        : texts.limitLinks.plans}
+                    </Link>
+                  </p>
+                ) : null}
+                {answer.reply.actions.length > 0 ? (
+                  <div className="nb-orbi-liste">
+                    {answer.reply.actions
+                      .filter((key): key is keyof typeof orbiActions => key in orbiActions)
+                      .map((key) => (
+                        <Link
+                          key={key}
+                          href={orbiActions[key]}
+                          className="nb-orbi-lien"
+                          onClick={() => setOpen(false)}
+                        >
+                          <span>{texts.actions[key] ?? key}</span>
+                          <PhoneIcon name="chevron" size={18} />
+                        </Link>
+                      ))}
+                  </div>
+                ) : null}
+                <p className="nb-meta nb-orbi-decide">{texts.decide}</p>
+              </>
+            ) : (
+              <p className="nb-pense" role="status" aria-label={texts.thinking}>
+                <i />
+                <i />
+                <i />
+              </p>
+            )}
+          </div>
+        ) : (
+          <div className="nb-orbi-liste nb-orbi-q">
+            {current.questions.map((question) => (
+              <button key={question} type="button" className="nb-q" onClick={() => ask(question)}>
+                {question}
+              </button>
+            ))}
+          </div>
+        )}
+        <form
+          className="nb-champ nb-orbi-champ"
+          onSubmit={(event) => {
+            event.preventDefault();
+            ask(text);
+          }}
+        >
+          <input
+            value={text}
+            onChange={(event) => setText(event.target.value)}
+            aria-label={texts.input}
+            placeholder={texts.placeholder}
+            maxLength={1000}
+          />
+          <button type="submit" className="nb-env" disabled={pending}>
+            {texts.send}
+          </button>
+        </form>
+      </PhoneSheet>
+    </>
+  );
+}

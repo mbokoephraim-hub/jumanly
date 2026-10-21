@@ -17,6 +17,7 @@ import { OrbiPanel } from "./web/orbi-panel";
 import { orbiAides } from "@/lib/orbi";
 import { TalentSideNav } from "./web/side-nav";
 import { TalentTopBar } from "./web/top-bar";
+import { ViewSync } from "@/components/phone/view-sync";
 
 /**
  * Talent space, one code for three widths (docs/refonte-mobile, lot 1; docs/refonte-web, W0).
@@ -76,6 +77,7 @@ export function TalentShell({
       {/* Before the first paint: a dark phone never flashes the light page. */}
       <script dangerouslySetInnerHTML={{ __html: appearanceScript(appearance) }} />
       <AppearanceRoot appearance={appearance} />
+      <ViewSync view="wide" />
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={tt("region.aria")} closeLabel={tt("close")} placement="bottom" />
       <Suspense fallback={null}>
