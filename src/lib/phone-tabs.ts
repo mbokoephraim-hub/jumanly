@@ -42,3 +42,10 @@ export function rootTab(pathname: string): PhoneTab | null {
   const path = pathname.replace(/\/$/, "") || "/";
   return PHONE_TABS.find((tab) => TAB_ROOTS[tab] === path) ?? null;
 }
+
+/** Pages opened from a tab that keep the bottom bar and Orbi (planches Entreprise, Personne). */
+const BAR_PAGES = ["/app/entreprises/", "/app/personnes/"];
+
+export function keepsBar(pathname: string) {
+  return BAR_PAGES.some((prefix) => pathname.startsWith(prefix));
+}

@@ -67,8 +67,12 @@ test.describe("connexion", () => {
 
     // Refonte mobile: the account opens from the avatar of a destination; Se déconnecter sits
     // at the bottom of Compte, on a phone as on a computer.
-    await page.goto("/app/jobs");
-    await page.getByRole("link", { name: /^Compte de / }).click();
+    // On a phone (Modèle B), Explorer has no avatar link to the account: Compte opens directly.
+    if (isMobile) await page.goto("/app/compte");
+    else {
+      await page.goto("/app/jobs");
+      await page.getByRole("link", { name: /^Compte de / }).click();
+    }
     await expect(page).toHaveURL(/\/app\/compte$/);
     await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
     await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);

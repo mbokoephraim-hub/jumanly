@@ -35,6 +35,11 @@ import { getJob } from "@/server/queries/public";
 import { getApplicationDraft } from "@/server/services/application-draft";
 import { contractFilterOf, parseCriteria, remoteFilterOf } from "@/server/services/jobs";
 import { reportReasons } from "@/server/services/moderation";
+import { companyTone, explorerWords } from "@/components/phone/explorer/data";
+import { PhoneOffer, type PhoneOfferView } from "@/components/phone/explorer/offer";
+import { ExplorerTexts } from "@/components/phone/explorer/server";
+import { initialsOf, shortName } from "@/components/phone/fil/data";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata({
   params,
@@ -90,7 +95,14 @@ export default async function TalentJobPage({
       documents: {
         where: { kind: "cv" },
         orderBy: [{ isPrimary: "desc" }, { updatedAt: "desc" }],
-        select: { id: true, title: true, isPrimary: true, updatedAt: true },
+        select: {
+          id: true,
+          title: true,
+          isPrimary: true,
+          updatedAt: true,
+          templateId: true,
+          adaptedForJobId: true,
+        },
       },
       headline: true,
     },
@@ -148,6 +160,137 @@ export default async function TalentJobPage({
   const missing = job.skills.filter(
     (skill) => !mySkills.has(skill.skillId) && skill.importance === "required",
   );
+
+  // On a phone: the offer of Explorer (Modèle B, lot B4, planche Offres-detail).
+  // `?pourquoi=1` (the link « Voir le détail du score ») keeps the full score and its review, and
+  // the answer to a review (`?revision=`) comes back to it.
+  const fullScore = query.pourquoi === "1" || typeof query.revision === "string";
+  if (!fullScore && (await isPhone())) {
+    const now = new Date();
+    const words = await explorerWords(now);
+    const tx = words.t;
+    const location = ok?.criteria.find((criterion) => criterion.key === "location");
+    const names = (list: string[]) =>
+      list.length <= 1
+        ? (list[0] ?? "")
+        : tx("offer.and", { first: list.slice(0, -1).join(", "), last: list[list.length - 1]! });
+    const course = firstGap?.courses[0];
+    const minutes = course?.durationMinutes ?? 0;
+    const duration =
+      minutes >= 60
+        ? minutes % 60 === 0
+          ? tx("offer.duration.hoursOnly", { hours: Math.floor(minutes / 60) })
+          : tx("offer.duration.hours", {
+              hours: Math.floor(minutes / 60),
+              minutes: String(minutes % 60).padStart(2, "0"),
+            })
+        : tx("offer.duration.minutes", { count: minutes });
+    const shortCompany = shortName(company);
+    const ago = words.ago(job.publishedAt);
+    const why = ok
+      ? [
+          ...(owned.length > 0
+            ? [
+                {
+                  ok: true,
+                  text: tx("offer.whyOwned", {
+                    skills: names(owned.slice(0, 3).map((skill) => skill.skill.name)),
+                  }),
+                },
+              ]
+            : []),
+          ...(location?.status === "met"
+            ? [
+                {
+                  ok: true,
+                  text:
+                    job.remote === "remote"
+                      ? tx("offer.whyRemote")
+                      : tx("offer.whyCity", { city: job.city }),
+                },
+              ]
+            : []),
+          ...missing.slice(0, 2).map((skill) => ({
+            ok: false,
+            text: tx("offer.whyMissing", { skill: skill.skill.name }),
+          })),
+        ]
+      : [];
+    if (ok && why.length === 0) why.push({ ok: true, text: tx("offer.whyNoGap") });
+    const level = levelOf(job.experienceMin);
+    const view: PhoneOfferView = {
+      slug: job.slug,
+      title: job.title,
+      company: shortCompany,
+      companyHref: `/app/entreprises/${job.organization.slug}`,
+      companyLine: [
+        job.organization.sector,
+        job.organization.size ? tx("company.sizeValue", { size: job.organization.size }) : null,
+      ]
+        .filter(Boolean)
+        .join(" · "),
+      initials: initialsOf(shortCompany),
+      tone: companyTone(shortCompany),
+      logo: job.organization.logo,
+      line: job.organization.verifiedAt
+        ? tx("offer.verifiedAgo", { ago })
+        : tx("offer.ago", { ago }),
+      chips: [
+        job.city,
+        words.kind(job),
+        tx(`offer.level.${level}`),
+        ...(job.salaryMin !== null || job.salaryMax !== null ? [tx("offer.salary")] : []),
+      ],
+      match: ok
+        ? {
+            state: "ok",
+            score: Math.round(ok.score),
+            why,
+            gap: course
+              ? {
+                  href: `/app/learn/${course.slug}`,
+                  text: tx("offer.gap", { course: course.title, duration }),
+                }
+              : null,
+          }
+        : match?.state === "optedOut"
+          ? { state: "optedOut" }
+          : { state: "incomplete" },
+      missions: job.responsibilities,
+      expect: job.requirements,
+      about: job.description || null,
+      benefits: job.benefits,
+      saved: Boolean(saved),
+      applicationId: application?.id ?? null,
+      open,
+      questions: questionCount,
+      cvs: [...cvs]
+        .sort(
+          (a, b) =>
+            Number(b.adaptedForJobId === jobRow?.id) - Number(a.adaptedForJobId === jobRow?.id),
+        )
+        .map((cv) => ({
+          id: cv.id,
+          title: cv.title,
+          adapted: cv.adaptedForJobId === jobRow?.id,
+          line: tx("apply.cvLine", {
+            template: t.has(
+              `career.cv.template.name.${cv.templateId}` as "career.cv.template.name.classique",
+            )
+              ? t(`career.cv.template.name.${cv.templateId}` as "career.cv.template.name.classique")
+              : cv.templateId,
+            when: words.ago(cv.updatedAt),
+          }),
+        })),
+      adaptHref: jobRow ? `/app/career/cv/{cv}?adapter=${jobRow.id}` : null,
+    };
+    return (
+      <ExplorerTexts>
+        <ViewBeacon slug={job.slug} />
+        <PhoneOffer offer={view} />
+      </ExplorerTexts>
+    );
+  }
   const required = ok?.criteria.find((criterion) => criterion.key === "skills_required");
   const evidence = required?.evidence ?? [];
   const placeAndContract = ["location", "contract"].every(

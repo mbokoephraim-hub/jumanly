@@ -8,7 +8,7 @@ import { orbiFactAction, type OrbiFactAnswer } from "@/server/actions/feed";
 import { FilAvatar } from "./fil/avatar";
 import { ORBI_EVENT, type OrbiFact } from "./orbi-bus";
 import { orbiActions, type OrbiReply } from "@/lib/orbi";
-import { rootTab, type PhoneTab } from "@/lib/phone-tabs";
+import { keepsBar, rootTab, tabOf, type PhoneTab } from "@/lib/phone-tabs";
 import { OrbiDisc, PhoneIcon } from "./icon";
 import { PhoneSheet } from "./sheet";
 
@@ -59,7 +59,10 @@ const FIL_FACTS: OrbiFact[] = ["digest", "entreprises", "suivre", "ecrire"];
  */
 export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
   const pathname = usePathname();
-  const tab = rootTab(pathname);
+  const root = rootTab(pathname);
+  // The pages of a company or a person keep Orbi, without the bubble (planches Entreprise, Personne).
+  const above = root === null && keepsBar(pathname);
+  const tab = root ?? (above ? tabOf(pathname) : null);
   const [open, setOpen] = useState(false);
   const [answer, setAnswer] = useState<Answer | null>(null);
   const [text, setText] = useState("");
@@ -130,8 +133,8 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
 
   return (
     <>
-      <div className="nb-orbi-fab" hidden={tab === null}>
-        {current.bubble ? (
+      <div className="nb-orbi-fab" hidden={tab === null} data-dessus={above ? "" : undefined}>
+        {current.bubble && !above ? (
           <button type="button" className="nb-orbi-bulle" onClick={() => openWith(current.bubble)}>
             {current.bubble}
           </button>

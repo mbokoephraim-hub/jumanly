@@ -188,50 +188,76 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("postuler"));
   await finishOnboarding(page);
 
-  await page.goto("/app/jobs");
-  const tabs = page.getByRole("navigation", { name: "Vues des offres" });
-  await expect(tabs.getByRole("link", { name: "Pour vous" })).toHaveAttribute(
-    "aria-current",
-    "page",
-  );
-  await expect(tabs.getByRole("link", { name: "Enregistrées" })).toBeVisible();
-  // No skill yet: the list says it is a general selection. (On a phone, the first profile of
-  // Modèle B already asks for three skills.)
-  if (!isMobile) await expect(page.getByText(/Sélection générale/)).toBeVisible();
-  // The search of the header (brief § 5) searches the offers on this tab.
-  const search = page.getByRole("search").getByRole("searchbox", { name: "Rechercher" });
-  await search.fill("assistant administratif");
-  await search.press("Enter");
-  await expect(page).toHaveURL(/q=assistant/);
-  await page.getByRole("link", { name: "Assistant administratif (démo)" }).first().click();
-  await expect(page).toHaveURL(/\/app\/jobs\/demo-assistant-administratif-kinshasa/);
-  await expect(page.getByRole("heading", { name: "Le poste" })).toBeVisible();
+  if (isMobile) {
+    // Modèle B (lot B4): Explorer's search, the offer's « Enregistrer », then the steps of Postuler.
+    await page.goto("/app/jobs");
+    const field = page.getByRole("searchbox", { name: /Rechercher une offre/ });
+    await field.click();
+    await field.fill("assistant administratif");
+    await page
+      .getByRole("link", { name: /Assistant administratif \(démo\)/ })
+      .first()
+      .click();
+    await expect(page).toHaveURL(/\/app\/jobs\/demo-assistant-administratif-kinshasa/);
+    const save = page.getByRole("button", { name: /^Enregistr/ });
+    await expect(save).toHaveAttribute("aria-pressed", "false");
+    await save.click();
+    await expect(page.getByText("Offre enregistrée.")).toBeVisible();
+    await expect(save).toHaveAttribute("aria-pressed", "true");
+    await save.click();
+    await expect(save).toHaveAttribute("aria-pressed", "false");
+    await page.goto("/app/jobs/demo-assistant-administratif-kinshasa/postuler");
+  } else {
+    await page.goto("/app/jobs");
+    const tabs = page.getByRole("navigation", { name: "Vues des offres" });
+    await expect(tabs.getByRole("link", { name: "Pour vous" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await expect(tabs.getByRole("link", { name: "Enregistrées" })).toBeVisible();
+    // No skill yet: the list says it is a general selection. (On a phone, the first profile of
+    // Modèle B already asks for three skills.)
+    if (!isMobile) await expect(page.getByText(/Sélection générale/)).toBeVisible();
+    // The search of the header (brief § 5) searches the offers on this tab.
+    const search = page.getByRole("search").getByRole("searchbox", { name: "Rechercher" });
+    await search.fill("assistant administratif");
+    await search.press("Enter");
+    await expect(page).toHaveURL(/q=assistant/);
+    await page.getByRole("link", { name: "Assistant administratif (démo)" }).first().click();
+    await expect(page).toHaveURL(/\/app\/jobs\/demo-assistant-administratif-kinshasa/);
+    await expect(page.getByRole("heading", { name: "Le poste" })).toBeVisible();
 
-  // Save, then « Annuler » in the toast.
-  const save = page
-    .locator('form:has(input[name="job"]) button[aria-pressed]')
-    .filter({ visible: true })
-    .first();
-  await expect(save).toHaveAttribute("aria-pressed", "false");
-  await save.click();
-  await expect(page.getByText("Offre enregistrée.")).toBeVisible();
-  await expect(save).toHaveAttribute("aria-pressed", "true");
-  await page.getByRole("button", { name: "Annuler" }).click();
-  await expect(save).toHaveAttribute("aria-pressed", "false");
+    // Save, then « Annuler » in the toast.
+    const save = page
+      .locator('form:has(input[name="job"]) button[aria-pressed]')
+      .filter({ visible: true })
+      .first();
+    await expect(save).toHaveAttribute("aria-pressed", "false");
+    await save.click();
+    await expect(page.getByText("Offre enregistrée.")).toBeVisible();
+    await expect(save).toHaveAttribute("aria-pressed", "true");
+    await page.getByRole("button", { name: "Annuler" }).click();
+    await expect(save).toHaveAttribute("aria-pressed", "false");
 
-  // Step 1, then « Quitter »: the draft is kept and the offer offers to resume it.
-  await page.getByRole("link", { name: "Postuler", exact: true }).click();
+    // Step 1, then « Quitter »: the draft is kept and the offer offers to resume it.
+    await page.getByRole("link", { name: "Postuler", exact: true }).click();
+  }
   await expect(page.getByRole("heading", { level: 1, name: "Postuler" })).toBeVisible();
   await expect(page.getByRole("group", { name: "Quel CV envoyer ?" })).toBeVisible();
   await expectAccessible(page);
   await page.getByRole("button", { name: "Quitter et garder le brouillon" }).click();
   await expect(page).toHaveURL(/brouillon=1/);
-  await expect(page.getByText(/Brouillon gardé/)).toBeVisible();
-  await page
-    .getByRole("link", { name: "Reprendre ma candidature" })
-    .filter({ visible: true })
-    .last()
-    .click();
+  if (isMobile) {
+    // The offer of Modèle B applies in one sheet; the stepped form keeps its draft.
+    await page.goto("/app/jobs/demo-assistant-administratif-kinshasa/postuler");
+  } else {
+    await expect(page.getByText(/Brouillon gardé/)).toBeVisible();
+    await page
+      .getByRole("link", { name: "Reprendre ma candidature" })
+      .filter({ visible: true })
+      .last()
+      .click();
+  }
 
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/etape=lettre/);

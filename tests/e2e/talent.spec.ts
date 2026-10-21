@@ -14,6 +14,7 @@ const JOB = "demo-comptable-junior-abidjan";
 // and follows the application. Applying is never blocked by a plan or a quota.
 test("un talent Free postule depuis une offre publique, suit puis retire sa candidature", async ({
   page,
+  isMobile,
 }) => {
   test.setTimeout(120_000);
   const email = testEmail("talent");
@@ -64,7 +65,9 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
 
   // Apply with that CV (planche talent-2 § 1): CV, letter or documents, review, then sending.
   await page.goto(`/app/jobs/${JOB}`);
-  await page.getByRole("link", { name: "Postuler", exact: true }).click();
+  // On a phone (Modèle B), « Postuler » opens a sheet; the steps with a letter keep their page.
+  if (isMobile) await page.goto(`/app/jobs/${JOB}/postuler`);
+  else await page.getByRole("link", { name: "Postuler", exact: true }).click();
   await expect(page).toHaveURL(/\/postuler/);
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/etape=lettre/);

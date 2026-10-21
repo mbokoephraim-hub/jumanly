@@ -50,6 +50,57 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Modèle B · B4 : Explorer, une offre, une entreprise, une personne (21 octobre 2026)
+
+Planches Offres, Entreprise et Personne (`docs/modele-b/captures/INDEX.md`, rangées 07 à 10).
+Écarts et choix : `docs/decisions/2026-10-21-modele-b-b4.md`.
+
+**Fait.**
+- Onglet Explorer (`src/components/phone/explorer/`), gardé monté et lu pendant le logo : avatar,
+  enregistrées, recherche en deux temps (où chercher, puis résultats dès la première lettre, récentes
+  et populaires, « Annuler »), puces Tout · Offres · Entreprises · Personnes, « Offres pour vous » avec
+  le score, « Entreprises qui recrutent » par secteur, « Nouvelles cette semaine », « Personnes à
+  connaître » (profils visibles seulement, connexions en commun d'abord), chaque « Tout voir » vers sa
+  liste (`/app/explorer/[liste]`).
+- Offres enregistrées au téléphone (`/app/jobs/enregistrees`).
+- Une offre au téléphone : entreprise, puces, « Pourquoi, selon Orbi » avec l'écart et le cours qui
+  le comble, missions, attentes, avantages, lien vers l'entreprise, « Postuler est gratuit,
+  toujours. », barre « Enregistrer · Postuler » et feuille Postuler (CV, profil, un mot, envoi).
+- Page d'une entreprise : bannière, Suivre / Abonné, chiffres, onglets Publications, À propos,
+  Offres, Membres (recherche).
+- Page d'une personne : Se connecter / Envoyée / Accepter / Message, À propos (compétences,
+  expérience, formation), Publications, Réalisations, menu (partager, signaler).
+- Services `src/server/services/explore.ts`, actions `src/server/actions/explore.ts`. Aucune
+  migration ; la démo donne un domaine aux offres fictives.
+
+**Captures → maquettes** (`captures/etape-1/`, 390 × 844) :
+
+| Capture | Maquette |
+|---|---|
+| `b4-explorer.png`, `b4-explorer-bas.png` | 042 Offres, 043 Offres-secteur |
+| `b4-offre.png`, `b4-offre-bas.png` | 044 Offres-detail |
+| `b4-postuler.png` | 045 Offres-postuler |
+| `b4-recherche.png` | 046 Offres-recherche |
+| `b4-recherche-resultats.png` | 047 Offres-recherche-texte |
+| `b4-tout-voir-offres.png` | 048 Offres-tout (049 entreprises : même gabarit) |
+| `b4-personnes.png` | 050 Offres-personnes |
+| `b4-enregistrees.png` | 051 Offres-enregistrees |
+| `b4-entreprise.png`, `b4-entreprise-membres.png` | 053 Entreprise, 056 Entreprise-membres (054, 055 : onglets) |
+| `b4-personne.png`, `b4-personne-realisations.png` | 057 Personne, 058 Personne-real (059 à 072 : même gabarit) |
+
+052 Offres-orbi : la feuille d'Orbi du lot B1, ouverte depuis Explorer.
+
+**Supprimé du téléphone.** L'ancienne liste `/app/jobs` (onglets « Pour vous · Enregistrées ·
+Candidatures »), l'ancienne fiche d'offre et les pages minimales d'entreprise et de personne du lot
+B3. L'ordinateur garde ses pages.
+
+**Tests.** `tests/db/explore.test.ts` (personnes visibles seulement, connexions en commun d'abord,
+profil privé, recherche, Suivre) ; `tests/e2e/modele-b-explorer.spec.ts` (chaque bouton d'Explorer
+ouvre quelque chose, une offre jusqu'à l'entreprise, une personne, Explorer reste monté à l'aller et
+au retour). Suivent le téléphone : `accounts`, `intelligence`, `talent`, `hire`, `mobile-talent`.
+En local, deux tests en base (`career`, `entitlements`) échouent sur une matrice de forfaits
+modifiée par d'anciens essais ; ils passent sur une base neuve (CI).
+
 ## Modèle B · B3 : le Fil au téléphone (21 octobre 2026)
 
 Planche Fil (`docs/modele-b/captures/INDEX.md`, rangées 05 et 06). Écarts et choix :

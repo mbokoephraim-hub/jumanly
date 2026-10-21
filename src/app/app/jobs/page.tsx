@@ -8,6 +8,7 @@ import { TalentIcon } from "@/components/talent/icon";
 import { cx } from "@/lib/cx";
 import { offerFilterKeys } from "@/lib/offer-filters";
 import { requireUser } from "@/server/auth/session";
+import { isPhone } from "@/server/view";
 import { db } from "@/server/db";
 import { matchesForUser } from "@/server/matching/service";
 import { listApplications } from "@/server/services/applications";
@@ -39,6 +40,8 @@ const tabText = { "pour-vous": "forYou", recentes: "recent", enregistrees: "save
 export default async function OffersPage({ searchParams }: PageProps<"/app/jobs">) {
   const params = await searchParams;
   const user = await requireUser("/app/jobs");
+  // On a phone Explorer is the tab kept mounted by the layout (Modèle B, lot B4): nothing here.
+  if (await isPhone()) return null;
   const t = await getTranslations();
   const now = new Date();
   // « tous » and « recommandees » are older addresses of « Pour vous ».
