@@ -20,6 +20,7 @@ async function walkToReady(page: Page) {
 test.describe("inscription avec forfait", () => {
   test("Pro choisi sur /tarifs, payé (factice), arrive dans l'espace avec Pro actif", async ({
     page,
+    isMobile,
   }) => {
     const email = testEmail("pro");
     await signUpFromPricing(page, "Choisir Pro", email);
@@ -36,11 +37,17 @@ test.describe("inscription avec forfait", () => {
     await page.getByRole("link", { name: "Continuer" }).click();
     await expect(page).toHaveURL(/\/app\?bienvenue=1|\/app$/);
     await page.goto("/app/abonnement");
-    await expect(page.getByRole("main")).toContainText("Pro · 19,9 $/mois");
-    await expect(page.getByRole("main")).toContainText(/Payée jusqu'au/);
+    if (isMobile) {
+      // Modèle B (lot B5): « Ma formule » marks the current plan.
+      await expect(page.getByText("Vous êtes en Pro.", { exact: false })).toBeVisible();
+      await expect(page.getByRole("region", { name: "Pro" })).toContainText("Votre formule");
+    } else {
+      await expect(page.getByRole("main")).toContainText("Pro · 19,9 $/mois");
+      await expect(page.getByRole("main")).toContainText(/Payée jusqu'au/);
+    }
   });
 
-  test("payer plus tard laisse le compte en Free", async ({ page }) => {
+  test("payer plus tard laisse le compte en Free", async ({ page, isMobile }) => {
     const email = testEmail("plus-tard");
     await signUpFromPricing(page, "Choisir Pro", email);
     await walkToReady(page);
@@ -49,6 +56,13 @@ test.describe("inscription avec forfait", () => {
       .click();
     await expect(page).toHaveURL(/\/app/);
     await page.goto("/app/abonnement");
+    if (isMobile) {
+      // Modèle B (lot B5): the plans are on « Ma formule » itself.
+      await expect(page.getByText("Vous êtes en Free.", { exact: false })).toBeVisible();
+      await expect(page.getByRole("region", { name: "Free" })).toContainText("Votre formule");
+      await expect(page.getByRole("link", { name: "Choisir Pro" })).toBeVisible();
+      return;
+    }
     await expect(page.getByRole("main")).toContainText("Free · gratuit");
     await page.getByRole("link", { name: /Changer de formule/ }).click();
     await expect(page).toHaveURL(/\/app\/abonnement\/formules/);
@@ -150,34 +164,57 @@ test.describe("administration des forfaits", () => {
 });
 
 test.describe("paramètres", () => {
-  test("modifier son compte, sa confidentialité et télécharger ses données", async ({ page }) => {
+  test("modifier son compte, sa confidentialité et télécharger ses données", async ({
+    page,
+    isMobile,
+  }) => {
     const email = testEmail("parametres");
     await signUpFromPricing(page, "Créer mon compte gratuit", email);
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
-    // Lot 7: Paramètres in sections (planche talent-4 § 8); each switch saves at once.
-    await page.goto("/app/parametres");
-    // A touch on the row (its label), like a person: the switch itself is visually hidden.
-    await page.getByText("Réduire les animations", { exact: true }).click();
-    await expect(page.getByText("C'est enregistré.")).toBeVisible();
-    await expect(page.locator("[data-reduce-motion]")).toHaveCount(1);
-    await expect(page.getByRole("switch", { name: /Réduire les animations/ })).toBeChecked();
-    await expect(page.locator("html")).not.toHaveAttribute("data-app-motion");
+    if (isMobile) {
+      // Modèle B (lot B5): dark only, no animation setting; each choice saves at once.
+      await page.goto("/app/parametres/confidentialite");
+      await page.getByRole("radio", { name: /^Les recruteurs/ }).click();
+      await expect(page.getByText("C’est enregistré.")).toBeVisible();
+      await page.reload();
+      await expect(page.getByRole("radio", { name: /^Les recruteurs/ })).toHaveAttribute(
+        "aria-checked",
+        "true",
+      );
+      await page.goto("/app/parametres/notifications");
+      await page.getByRole("switch", { name: "Formation" }).click();
+      await expect(page.getByText("C’est enregistré.")).toBeVisible();
+      await page.reload();
+      await expect(page.getByRole("switch", { name: "Formation" })).toHaveAttribute(
+        "aria-checked",
+        "false",
+      );
+    } else {
+      // Lot 7: Paramètres in sections (planche talent-4 § 8); each switch saves at once.
+      await page.goto("/app/parametres");
+      // A touch on the row (its label), like a person: the switch itself is visually hidden.
+      await page.getByText("Réduire les animations", { exact: true }).click();
+      await expect(page.getByText("C'est enregistré.")).toBeVisible();
+      await expect(page.locator("[data-reduce-motion]")).toHaveCount(1);
+      await expect(page.getByRole("switch", { name: /Réduire les animations/ })).toBeChecked();
+      await expect(page.locator("html")).not.toHaveAttribute("data-app-motion");
 
-    await page.goto("/app/parametres/confidentialite");
-    await page.getByRole("button", { name: /Qui voit mon profil/ }).click();
-    await page.getByRole("radio", { name: /Visible des recruteurs/ }).check({ force: true });
-    await page.getByRole("button", { name: "Enregistrer" }).click();
-    await expect(page.getByText("C'est enregistré.")).toBeVisible();
-    await expect(page.getByRole("button", { name: /Qui voit mon profil/ })).toContainText(
-      "Visible des recruteurs",
-    );
+      await page.goto("/app/parametres/confidentialite");
+      await page.getByRole("button", { name: /Qui voit mon profil/ }).click();
+      await page.getByRole("radio", { name: /Visible des recruteurs/ }).check({ force: true });
+      await page.getByRole("button", { name: "Enregistrer" }).click();
+      await expect(page.getByText("C'est enregistré.")).toBeVisible();
+      await expect(page.getByRole("button", { name: /Qui voit mon profil/ })).toContainText(
+        "Visible des recruteurs",
+      );
 
-    // Notifications by category: a category cut is kept.
-    await page.goto("/app/parametres/notifications");
-    await page.getByRole("switch", { name: /Formations/ }).uncheck({ force: true });
-    await expect(page.getByText("C'est enregistré.")).toBeVisible();
-    await expect(page.getByRole("switch", { name: /Formations/ })).not.toBeChecked();
+      // Notifications by category: a category cut is kept.
+      await page.goto("/app/parametres/notifications");
+      await page.getByRole("switch", { name: /Formations/ }).uncheck({ force: true });
+      await expect(page.getByText("C'est enregistré.")).toBeVisible();
+      await expect(page.getByRole("switch", { name: /Formations/ })).not.toBeChecked();
+    }
 
     const response = await page.request.get("/app/parametres/export");
     expect(response.status()).toBe(200);
