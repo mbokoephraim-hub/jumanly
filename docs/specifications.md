@@ -631,6 +631,7 @@ Une institution (banque, université, fondation, entreprise, agence de coopérat
 | `career.tools.extended` (outils supplémentaires de gestion de carrière et de candidature) | — | — | ✓ | ✓ |
 | `career.interview.text.monthly` | 0 | 3 P | 10 P | 25 P |
 | `career.interview.voice.monthly` | 0 | 0 | 3 P | 10 P |
+| `career.interview.trial.monthly` (simulation d'essai de 5 min quand la formule n'inclut pas le mode ; ajoutée au lot B6, à confirmer) | 1 | 1 | 0 | 0 |
 | `learn.catalog.level` | `free` | `fundamentals` | `standard` | `advanced` |
 | `learn.exercises.job_specific` | — | — | ✓ | ✓ |
 | `learn.resources.specialized` | — | — | — | ✓ |

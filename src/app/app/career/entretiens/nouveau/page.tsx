@@ -11,6 +11,9 @@ import { db } from "@/server/db";
 import { interviewDurations } from "@/server/services/interview-sim";
 import { OrbiMark } from "@/components/talent/orbi-mark";
 import { NewPractice } from "./new-practice";
+import { isPhone } from "@/server/view";
+import { PhonePracticeSetup } from "@/components/phone/interview/setup";
+import { InterviewTexts, setupView } from "@/components/phone/interview/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("practice");
@@ -31,6 +34,13 @@ export default async function PracticeBriefingPage({
 }: PageProps<"/app/career/entretiens/nouveau">) {
   const query = await searchParams;
   const user = await requireUser("/app/career/entretiens/nouveau");
+  // On the phone (Modèle B, lot B6): the settings, Orbi's preparation and the trial.
+  if (await isPhone())
+    return (
+      <InterviewTexts>
+        <PhonePracticeSetup view={await setupView(user.id, query)} />
+      </InterviewTexts>
+    );
   const t = await getTranslations();
   const d = dynamic(t);
   const format = await getFormatter();

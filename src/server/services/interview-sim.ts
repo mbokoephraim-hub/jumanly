@@ -9,6 +9,22 @@ import { z } from "zod";
 import type { InterviewSimMode, Prisma, PrismaClient } from "@/generated/prisma/client";
 import { AiError, aiReadiness, runAi } from "@/server/ai";
 import { consume, QuotaExceededError, release, usage, type Subject } from "@/server/entitlements";
+import {
+  isAdvancedFocus,
+  phoneDurations,
+  phoneFocuses,
+  phoneQuestionCount,
+  TRIAL_MINUTES,
+} from "@/lib/interview-options";
+
+export {
+  advancedFocuses,
+  isAdvancedFocus,
+  phoneDurations,
+  phoneFocuses,
+  TRIAL_MINUTES,
+  type PhoneFocus,
+} from "@/lib/interview-options";
 
 export const interviewModes = ["text", "voice"] as const satisfies readonly InterviewSimMode[];
 export const interviewTypes = ["hr", "technical", "motivation", "behavioral"] as const;
@@ -19,8 +35,13 @@ export const ANSWER_MAX = 4000;
 export type InterviewType = (typeof interviewTypes)[number];
 
 export const quotaKey = (mode: InterviewSimMode) => `career.interview.${mode}.monthly`;
+/**
+ * The trial session (brief Modèle B § 5, not confirmed by the owner, set in the admin): a 5-minute
+ * session, written or spoken, for whoever's plan does not include the mode.
+ */
+export const TRIAL_KEY = "career.interview.trial.monthly";
 
-/** Questions in a session: about one every two and a half minutes. */
+/** Questions in a session: 3, 6 or 9 for 5, 10 or 15 minutes; then one every 2.5 minutes. */
 export const questionCount = (minutes: number) => Math.max(3, Math.round(minutes / 2.5));
 
 export class InterviewError extends Error {
@@ -34,11 +55,11 @@ export class InterviewError extends Error {
 
 export const setupSchema = z.object({
   mode: z.enum(interviewModes),
-  type: z.enum(interviewTypes),
+  type: z.enum([...interviewTypes, ...phoneFocuses]),
   level: z.enum(interviewLevels),
   durationMinutes: z.coerce
     .number()
-    .refine((value) => (interviewDurations as readonly number[]).includes(value)),
+    .refine((value) => ([...interviewDurations, ...phoneDurations] as number[]).includes(value)),
   jobTitle: z.string().trim().min(2).max(120),
   jobId: z
     .string()
@@ -54,6 +75,10 @@ const turnSchema = z.object({
   question: z.string(),
   answer: z.string().nullable(),
   durationSec: z.number().int().nullable(),
+  /** « Un indice » of the phone (lot B6): what to say, in a sentence. */
+  hint: z.string().nullable().optional(),
+  /** « Orbi relance » (lot B6): the follow-up question asked after the answer. */
+  followUp: z.string().nullable().optional(),
 });
 export type InterviewTurn = z.infer<typeof turnSchema>;
 
@@ -300,8 +325,42 @@ export async function interviewQuota(db: PrismaClient, userId: string, mode: Int
   return usage(db, { type: "user", id: userId }, quotaKey(mode));
 }
 
+/** Which allowance a session uses: its mode's monthly quota, or the trial (lot B6). */
+export async function interviewAllowance(
+  db: PrismaClient,
+  userId: string,
+  mode: InterviewSimMode,
+  now = new Date(),
+) {
+  const subject: Subject = { type: "user", id: userId };
+  const [own, trial] = await Promise.all([
+    usage(db, subject, quotaKey(mode), now),
+    usage(db, subject, TRIAL_KEY, now),
+  ]);
+  return {
+    /** The plan includes the mode (its quota is above zero). */
+    included: own.limit !== 0,
+    own,
+    trial,
+    trialLeft: own.limit === 0 && (trial.limit < 0 || trial.used < trial.limit),
+  };
+}
+
+/** Options of a session started on the phone (lot B6). */
+export type StartOptions = {
+  /** One hint per question of the bank, same order. */
+  hints?: string[];
+  /** A short summary of the profile for the model (titles and places only). */
+  profile?: string;
+  /** Questions to ask again as they are (« Refaire les questions faibles »). */
+  replay?: { question: string; hint: string | null }[];
+  /** A session of the phone: three questions every 5 minutes. */
+  phone?: boolean;
+};
+
 /**
- * Starts a session: consent, then the monthly quota of the mode (one unit), then the questions.
+ * Starts a session: consent, then the monthly quota of the mode (one unit) or, when the plan does
+ * not include the mode, the trial (5 minutes, not an advanced focus), then the questions.
  * `bank` is the question bank of the type, already in French (from the texts).
  */
 export async function startInterview(
@@ -310,21 +369,29 @@ export async function startInterview(
   input: InterviewSetup,
   bank: string[],
   now = new Date(),
+  options: StartOptions = {},
 ) {
   const subject: Subject = { type: "user", id: userId };
   const readiness = await aiReadiness(db, userId, "interview_questions");
   if (readiness === "consent") throw new InterviewError("consent");
-  const current = await usage(db, subject, quotaKey(input.mode), now);
-  if (current.limit === 0) throw new InterviewError("entitlement");
+  const allowance = await interviewAllowance(db, userId, input.mode, now);
+  let key = quotaKey(input.mode);
+  if (!allowance.included) {
+    const trialFits = input.durationMinutes === TRIAL_MINUTES && !isAdvancedFocus(input.type);
+    if (!trialFits || allowance.trial.limit === 0) throw new InterviewError("entitlement");
+    key = TRIAL_KEY;
+  }
   try {
-    await consume(db, subject, quotaKey(input.mode), 1, now);
+    await consume(db, subject, key, 1, now);
   } catch (error) {
     if (error instanceof QuotaExceededError) throw new InterviewError("quota", error.resetsAt);
     throw error;
   }
 
   try {
-    const count = questionCount(input.durationMinutes);
+    const count =
+      options.replay?.length ||
+      (options.phone ? phoneQuestionCount : questionCount)(input.durationMinutes);
     const job = input.jobId
       ? await db.job.findFirst({
           where: { id: input.jobId, status: { in: ["published", "closed"] } },
@@ -339,34 +406,49 @@ export async function startInterview(
       questions: Array.from({ length: count }, (_, index) => bank[index % bank.length]),
     });
     let questions = fromBank().questions;
-    try {
-      const run = await runAi(db, {
-        userId,
-        feature: "interview_questions",
-        system: QUESTIONS_SYSTEM,
-        prompt: [
-          `Poste : ${input.jobTitle}`,
-          `Type d'entretien : ${input.type}`,
-          `Exigence : ${input.level}`,
-          `Nombre de questions : ${count}`,
-          job
-            ? `Offre : ${job.title}. Compétences : ${job.skills.map((item) => item.skill.name).join(", ")}. ${job.description.slice(0, 1500)}`
-            : "",
-          "Questions de référence (exemples) :",
-          JSON.stringify(bank.slice(0, 6)),
-        ].join("\n"),
-        schema: questionsOutput,
-        template: fromBank,
-        maxTokens: 2000,
-      });
-      if (acceptableQuestions(run.output.questions, count)) questions = run.output.questions;
-    } catch (error) {
-      if (!(error instanceof AiError)) throw error;
+    let hints: (string | null)[] = questions.map(
+      (_, index) => options.hints?.[index % (options.hints?.length || 1)] ?? null,
+    );
+    if (options.replay) {
+      questions = options.replay.map((item) => item.question);
+      hints = options.replay.map((item) => item.hint);
+    } else {
+      try {
+        const run = await runAi(db, {
+          userId,
+          feature: "interview_questions",
+          system: QUESTIONS_SYSTEM,
+          prompt: [
+            `Poste : ${input.jobTitle}`,
+            `Type d'entretien : ${input.type}`,
+            `Exigence : ${input.level}`,
+            `Nombre de questions : ${count}`,
+            job
+              ? `Offre : ${job.title}. Compétences : ${job.skills.map((item) => item.skill.name).join(", ")}. ${job.description.slice(0, 1500)}`
+              : "",
+            options.profile ? `Parcours de la personne : ${options.profile.slice(0, 800)}` : "",
+            "Questions de référence (exemples) :",
+            JSON.stringify(bank.slice(0, 6)),
+          ].join("\n"),
+          schema: questionsOutput,
+          template: fromBank,
+          maxTokens: 2000,
+        });
+        if (acceptableQuestions(run.output.questions, count)) {
+          // The bank's hints belong to the bank's questions: a model question gets none of them.
+          if (run.output.questions.some((question, index) => question !== questions[index]))
+            hints = hints.map(() => null);
+          questions = run.output.questions;
+        }
+      } catch (error) {
+        if (!(error instanceof AiError)) throw error;
+      }
     }
-    const turns: InterviewTurn[] = questions.map((question) => ({
+    const turns: InterviewTurn[] = questions.map((question, index) => ({
       question,
       answer: null,
       durationSec: null,
+      hint: hints[index] ?? null,
     }));
     return await db.interviewSession.create({
       data: {
@@ -382,9 +464,34 @@ export async function startInterview(
       },
     });
   } catch (error) {
-    await release(db, subject, quotaKey(input.mode), 1, now);
+    await release(db, subject, key, 1, now);
     throw error;
   }
+}
+
+/**
+ * « Annuler » or « Modifier les réglages » before the first answer (lot B6): the session is
+ * removed and its unit given back. A session with an answer stays (never delete what was said).
+ */
+export async function discardInterview(
+  db: PrismaClient,
+  userId: string,
+  id: string,
+  now = new Date(),
+) {
+  const session = await getInterview(db, userId, id);
+  if (!session || session.status !== "active") return false;
+  if (session.turns.some((turn) => turn.answer !== null)) return false;
+  const allowance = await interviewAllowance(db, userId, session.mode, now);
+  await db.interviewSession.delete({ where: { id } });
+  await release(
+    db,
+    { type: "user", id: userId },
+    allowance.included ? quotaKey(session.mode) : TRIAL_KEY,
+    1,
+    now,
+  );
+  return true;
 }
 
 export async function getInterview(db: PrismaClient, userId: string, id: string) {
@@ -421,6 +528,8 @@ export async function listInterviews(db: PrismaClient, userId: string, take = 20
 export const answerSchema = z.object({
   answer: z.string().trim().min(1).max(ANSWER_MAX),
   durationSec: z.coerce.number().int().min(0).max(3600).optional().catch(undefined),
+  /** The follow-up question Orbi asked, its answer being part of `answer` (lot B6). */
+  followUp: z.string().trim().max(300).optional(),
 });
 
 /** Records the answer to the current question (the first one without an answer). */
@@ -440,6 +549,7 @@ export async function answerQuestion(
           ...turn,
           answer: input.answer,
           durationSec: session.mode === "voice" ? (input.durationSec ?? null) : null,
+          followUp: input.followUp || turn.followUp || null,
         }
       : turn,
   );
