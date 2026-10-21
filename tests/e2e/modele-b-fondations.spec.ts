@@ -49,7 +49,7 @@ test.describe("Modèle B · fondations au téléphone", () => {
     // No empty click: each tab opens its screen.
     for (const [name, path] of [
       ["Explorer", "/app/jobs"],
-      ["Carrière", "/app/career"],
+      ["Carrière", "/app/career/cv"],
       ["Formation", "/app/learn"],
       ["Messages", "/app/messages"],
       ["Fil", "/app"],

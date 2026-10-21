@@ -8,7 +8,7 @@ export type PhoneTab = (typeof PHONE_TABS)[number];
 export const TAB_ROOTS: Record<PhoneTab, string> = {
   fil: "/app",
   explorer: "/app/jobs",
-  carriere: "/app/career",
+  carriere: "/app/career/cv",
   formation: "/app/learn",
   messages: "/app/messages",
 };
