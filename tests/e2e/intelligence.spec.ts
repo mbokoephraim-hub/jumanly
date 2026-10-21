@@ -17,14 +17,21 @@ async function signUpTalent(page: Page, email: string) {
 
 // E6 definition of done: a score explained on the talent side, a skill imported from a pasted CV
 // changes it, the talent asks for a human review and an administrator answers it.
-test("score expliqué, import de CV et révision humaine", async ({ page, browser, baseURL }) => {
+test("score expliqué, import de CV et révision humaine", async ({
+  page,
+  browser,
+  baseURL,
+  isMobile,
+}) => {
   test.setTimeout(180_000);
   const email = testEmail("matching");
   await signUpTalent(page, email);
 
-  // Without skills, no score: the talent is invited to add them.
+  // Without skills, no score: the talent is invited to add them. (On a phone, the first profile
+  // of Modèle B already asks for three skills.)
   await page.goto(`/app/jobs/${JOB}`);
-  await expect(page.getByRole("link", { name: "Ajouter mes compétences" }).first()).toBeVisible();
+  if (!isMobile)
+    await expect(page.getByRole("link", { name: "Ajouter mes compétences" }).first()).toBeVisible();
 
   // A Word CV → « Lu dans votre fichier · à vérifier » → profile (lot 6c: the file is read, never kept).
   await page.goto("/app/profil/import");

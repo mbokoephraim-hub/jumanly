@@ -1116,6 +1116,9 @@ model TalentProfile {
   studyLevel             String?
   /// Field of studies chosen at the first connection (`access.onboarding.studies.field.*`).
   studyField             String?
+  /// Situation chosen on the phone (Modèle B, profile step 4): student, graduate, seeking,
+  /// employed or switching (`phoneAccueil.profile.situation.*`).
+  situation              String?
   targetJob              String?
   visibility             ProfileVisibility @default(private)
   availability           Availability      @default(open)

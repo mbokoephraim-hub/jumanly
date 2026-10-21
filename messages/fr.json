@@ -9681,6 +9681,325 @@
       }
     }
   },
+  "phoneAccueil": {
+    "opening": {
+      "aria": "Jumanly, Learn. Grow. Connect.",
+      "learn": "Learn.",
+      "grow": "Grow.",
+      "connect": "Connect.",
+      "by": "Une plateforme développée par The Growth Lab"
+    },
+    "back": "Retour",
+    "close": "Fermer",
+    "welcome": {
+      "seo": "Bienvenue sur Jumanly",
+      "next": "Écran suivant",
+      "dot": "Écran {n} : {word}",
+      "signup": "Créer un compte",
+      "login": "Se connecter",
+      "s1": {
+        "word": "Learn",
+        "title": "Apprenez ce que les employeurs cherchent",
+        "text": "Des cours courts, gratuits pour commencer, et une attestation à la fin."
+      },
+      "s2": {
+        "word": "Grow",
+        "title": "Un profil qui progresse avec vous",
+        "text": "Orbi vous dit quoi améliorer, et pourquoi."
+      },
+      "s3": {
+        "word": "Connect",
+        "title": "Postulez et rencontrez les recruteurs",
+        "text": "Des offres qui vous correspondent. Candidater reste gratuit."
+      },
+      "card": {
+        "course": "Power BI : les bases",
+        "courseMark": "BI",
+        "companyMark": "BF",
+        "fromMark": "NK",
+        "lesson": "Leçon 3 sur 8 · 1 h 10",
+        "level": "Débutant",
+        "free": "Gratuit",
+        "certificate": "SQL pour l'analyse",
+        "obtained": "Attestation obtenue",
+        "name": "Grâce Mbuyi",
+        "cap": "Cap · Analyste de données",
+        "complete": "Profil complété à 70 %",
+        "tip": "Ajoutez une réalisation : votre profil gagne 12 points.",
+        "job": "Analyste de données junior",
+        "company": "Baobab Fintech · KINSHASA",
+        "contract": "CDI",
+        "mode": "Hybride",
+        "match": "86 % pour vous",
+        "from": "Nadia Kalala · Baobab Fintech",
+        "message": "Votre profil nous intéresse. Êtes-vous disponible jeudi ?"
+      }
+    },
+    "signup": {
+      "title": "Créer votre compte",
+      "subtitle": "Gratuit. Trois minutes suffisent.",
+      "or": "ou avec votre e-mail",
+      "email": "Adresse e-mail",
+      "emailPlaceholder": "prenom.nom@gmail.com",
+      "emailError": "Entrez une adresse e-mail valide, par exemple grace.mbuyi@gmail.com.",
+      "continue": "Continuer",
+      "hasAccount": "Déjà inscrite ou inscrit ?",
+      "login": "Se connecter",
+      "legal": "En continuant, vous acceptez les {terms} et la {privacy}.",
+      "terms": "Conditions",
+      "privacy": "Politique de confidentialité",
+      "recruiter": "Vous recrutez ?",
+      "recruiterLink": "Créer un compte recruteur"
+    },
+    "legal": {
+      "subtitle": "L'essentiel en trois points",
+      "terms": {
+        "title": "Conditions d'utilisation",
+        "p1": "Créer un compte et candidater est gratuit.",
+        "p2": "Un compte par personne, avec votre vrai nom.",
+        "p3": "Les formules payantes se paient par Mobile Money, sans engagement."
+      },
+      "privacy": {
+        "title": "Politique de confidentialité",
+        "p1": "Un recruteur voit votre profil seulement si vous postulez ou le rendez visible.",
+        "p2": "Votre nom, votre âge, votre photo et votre origine ne comptent jamais dans le calcul des offres.",
+        "p3": "Vous pouvez télécharger ou supprimer vos données à tout moment."
+      },
+      "questions": "Questions : {email}",
+      "full": "Lire le texte complet",
+      "ok": "J'ai compris"
+    },
+    "password": {
+      "title": "Choisissez un mot de passe",
+      "subtitle": "Pour vous reconnecter avec {email}.",
+      "label": "Mot de passe",
+      "show": "Afficher",
+      "hide": "Masquer",
+      "ruleLength": "{min} caractères au moins",
+      "ruleLetter": "Une lettre",
+      "ruleDigit": "Un chiffre",
+      "error": "Votre mot de passe doit cocher les trois règles.",
+      "suggest": "Utiliser un mot de passe fort suggéré",
+      "suggested": "Mot de passe suggéré : notez-le ou laissez le téléphone l'enregistrer.",
+      "submit": "Créer mon compte",
+      "submitting": "Création…"
+    },
+    "code": {
+      "title": "Vérifiez votre boîte mail",
+      "subtitle": "Nous avons envoyé un code à 6 chiffres à {email}.",
+      "label": "Code à 6 chiffres",
+      "error": "Le code contient 6 chiffres.",
+      "submit": "Vérifier",
+      "submitting": "Vérification…",
+      "resend": "Renvoyer le code",
+      "resendIn": "Renvoyer dans {time}",
+      "resent": "Nouveau code envoyé.",
+      "change": "Changer d'adresse",
+      "help": "Pas reçu ? Regardez dans les spams. Le code reste valable {minutes} minutes."
+    },
+    "login": {
+      "title": "Bon retour",
+      "subtitle": "Connectez-vous pour retrouver votre Fil.",
+      "or": "ou",
+      "email": "Adresse e-mail",
+      "password": "Mot de passe",
+      "error": "Entrez votre e-mail et votre mot de passe.",
+      "submit": "Se connecter",
+      "submitting": "Connexion…",
+      "forgot": "Mot de passe oublié ?",
+      "signup": "Créer un compte",
+      "licence": "J'ai un code d'accès"
+    },
+    "forgot": {
+      "title": "Mot de passe oublié",
+      "subtitle": "Nous vous envoyons un code à {digits} chiffres pour en choisir un nouveau.",
+      "error": "Entrez l'adresse de votre compte.",
+      "submit": "Envoyer le code",
+      "submitting": "Envoi…",
+      "help": "Un souci ? Écrivez à {email}."
+    },
+    "profile": {
+      "seo": "Votre profil en six étapes",
+      "step": "Étape {n} sur 6",
+      "previous": "Étape précédente",
+      "skip": "Passer",
+      "next": "Continuer",
+      "finish": "Terminer",
+      "saving": "Enregistrement…",
+      "name": {
+        "title": "Comment vous appelez-vous ?",
+        "text": "C'est le nom que verront les recruteurs.",
+        "from": "Repris de votre compte {provider}. Vous pouvez le corriger.",
+        "provider": {
+          "google": "Google",
+          "apple": "Apple",
+          "linkedin": "LinkedIn"
+        },
+        "first": "Prénom",
+        "firstPlaceholder": "Grâce",
+        "last": "Nom",
+        "lastPlaceholder": "Mbuyi",
+        "fallback": "Membre",
+        "error": "Indiquez votre prénom et votre nom."
+      },
+      "photo": {
+        "title": "Ajoutez une photo",
+        "text": "Un visage net, un fond simple. Les recruteurs vous reconnaissent plus vite.",
+        "add": "Ajouter",
+        "addAria": "Ajouter une photo",
+        "changeAria": "Changer la photo",
+        "pick": "Prendre ou choisir une photo",
+        "saved": "Photo enregistrée. Elle n'entre jamais dans le calcul des offres.",
+        "change": "Changer",
+        "remove": "Retirer",
+        "sheet": "Votre photo",
+        "camera": "Prendre une photo",
+        "cameraHint": "Avec l'appareil photo, de face",
+        "gallery": "Choisir dans la galerie",
+        "galleryHint": "Une photo récente et nette",
+        "cancel": "Annuler",
+        "errorType": "Choisissez une photo JPEG, PNG ou WebP.",
+        "errorSize": "Cette photo est trop lourde. Essayez-en une autre.",
+        "alt": "Votre photo"
+      },
+      "place": {
+        "title": "Où habitez-vous ?",
+        "text": "Nous vous montrons d'abord les offres près de chez vous.",
+        "country": "Pays",
+        "city": "Ville",
+        "otherCity": "Autre ville",
+        "cityInput": "Votre ville",
+        "cityPlaceholder": "Nom de votre ville",
+        "move": "Je peux déménager",
+        "moveHint": "Voir aussi les offres dans d'autres villes",
+        "error": "Choisissez votre ville.",
+        "sheet": "Votre pays",
+        "search": "Rechercher un pays",
+        "none": "Aucun pays pour « {query} ».",
+        "zone": {
+          "first": "Votre pays",
+          "central": "Afrique centrale",
+          "westEast": "Afrique de l'Ouest et de l'Est",
+          "outside": "Hors d'Afrique",
+          "all": "Tous les pays"
+        }
+      },
+      "situation": {
+        "title": "Où en êtes-vous ?",
+        "text": "Jumanly adapte les offres et les cours à votre situation.",
+        "error": "Choisissez ce qui vous ressemble le plus.",
+        "student": {
+          "title": "Étudiant ou étudiante",
+          "text": "Je cherche un stage"
+        },
+        "graduate": {
+          "title": "Jeune diplômé ou diplômée",
+          "text": "Je cherche mon premier emploi"
+        },
+        "seeking": {
+          "title": "En recherche d'emploi",
+          "text": "J'ai déjà travaillé"
+        },
+        "employed": {
+          "title": "En poste",
+          "text": "Je regarde les opportunités"
+        },
+        "switching": {
+          "title": "En reconversion",
+          "text": "Je change de métier"
+        }
+      },
+      "cap": {
+        "title": "Quel métier visez-vous ?",
+        "text": "C'est votre Cap. Vous pourrez le changer à tout moment.",
+        "yours": "Votre Cap",
+        "change": "Changer",
+        "search": "Rechercher un métier",
+        "suggestions": "Suggestions pour votre situation",
+        "pick": "Choisir",
+        "keep": "Garder « {query} »",
+        "unsure": "Je ne sais pas encore",
+        "unsureHint": "Orbi vous propose des métiers en deux questions",
+        "contracts": "Type de contrat recherché",
+        "error": "Choisissez un métier, ou laissez Orbi vous aider.",
+        "jobs": "Analyste de données;Assistant ou assistante RH;Chargé ou chargée de clientèle;Comptable;Community manager;Commercial ou commerciale;Développeur ou développeuse web;Développeur ou développeuse mobile;Gestionnaire de projet;Analyste crédit;Logisticien ou logisticienne;Juriste d'entreprise;Designer graphique;Enseignant ou enseignante",
+        "suggest": {
+          "student": "Analyste de données;Community manager;Assistant ou assistante RH",
+          "graduate": "Analyste de données;Chargé ou chargée de clientèle;Comptable",
+          "seeking": "Commercial ou commerciale;Gestionnaire de projet;Logisticien ou logisticienne",
+          "employed": "Gestionnaire de projet;Analyste crédit;Développeur ou développeuse web",
+          "switching": "Développeur ou développeuse web;Community manager;Designer graphique"
+        },
+        "contract": {
+          "cdi": "CDI",
+          "cdd": "CDD",
+          "internship": "Stage",
+          "freelance": "Freelance",
+          "partTime": "Temps partiel"
+        }
+      },
+      "orbi": {
+        "title": "Trouvons votre Cap",
+        "from": "Orbi · pendant l'inscription",
+        "question": "Qu'est-ce que vous aimez le plus faire ?",
+        "back": "Revenir aux questions",
+        "numbers": "Les chiffres et l'analyse",
+        "people": "Aider et convaincre les gens",
+        "create": "Créer et communiquer",
+        "numbersJobs": "Analyste de données;Comptable;Analyste crédit",
+        "peopleJobs": "Chargé ou chargée de clientèle;Assistant ou assistante RH;Commercial ou commerciale",
+        "createJobs": "Community manager;Designer graphique;Développeur ou développeuse web",
+        "numbersAnswer": "Vous aimez comprendre ce que disent les chiffres. Ces métiers se préparent avec les cours gratuits de Formation.",
+        "peopleAnswer": "Vous êtes à l'aise avec les autres. Ces métiers demandent de l'écoute et de bons échanges.",
+        "createAnswer": "Vous aimez créer. Ces métiers se montrent bien avec des réalisations dans votre portfolio.",
+        "decide": "Orbi propose, vous décidez."
+      },
+      "skills": {
+        "title": "Vos compétences",
+        "text": "Choisissez-en au moins 3. Elles servent à calculer vos offres « pour vous ».",
+        "import": "Importer depuis mon CV",
+        "importHint": "Orbi lit votre CV et coche pour vous",
+        "search": "Rechercher une compétence",
+        "searchPlaceholder": "Rechercher ou ajouter",
+        "count": "{count, plural, =0 {0 choisie} one {# choisie} other {# choisies}}",
+        "none": "Aucune compétence pour « {query} ».",
+        "error": "Choisissez au moins 3 compétences."
+      }
+    },
+    "notifications": {
+      "seo": "Notifications",
+      "title": "Ne ratez aucune offre pour vous",
+      "text": "Une notification quand une offre vous correspond ou qu'un recruteur vous répond. Rien d'autre.",
+      "example1": "Nouvelle offre à 86 % pour vous : Analyste de données junior chez Baobab Fintech",
+      "example2": "Nadia Kalala a vu votre candidature",
+      "now": "maintenant",
+      "yesterday": "hier",
+      "enable": "Activer les notifications",
+      "later": "Plus tard",
+      "denied": "Les notifications sont bloquées sur ce téléphone. Vous pourrez les activer dans les réglages."
+    },
+    "ready": {
+      "seo": "Profil prêt",
+      "complete": "Profil complété à {pct} %",
+      "title": "Bienvenue, {name}",
+      "titleAnon": "Bienvenue",
+      "orbi": "J'ai déjà repéré des offres pour votre Cap à {city}.",
+      "orbiNoCity": "J'ai déjà repéré des offres pour votre Cap.",
+      "orbiLink": "Les voir",
+      "start": "Pour bien démarrer",
+      "profile": "Compléter mon profil",
+      "profileHint": "Expérience, formation, langues",
+      "course": "Commencer un cours gratuit",
+      "courseHint": "Des cours courts, une attestation à la fin",
+      "offers": "Voir les offres pour moi",
+      "offersHint": "Classées selon votre Cap",
+      "edit": "Modifier mes réponses",
+      "notifOn": "Vous serez prévenu ou prévenue des offres pour vous",
+      "notifOff": "Notifications désactivées · à changer dans Carrière › Paramètres",
+      "enter": "Entrer dans Jumanly",
+      "plan": "Finaliser ma formule"
+    }
+  },
   "hireShell": {
     "skip": "Aller au contenu principal",
     "nav": {

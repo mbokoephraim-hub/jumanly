@@ -115,7 +115,11 @@ test("navigation Talent : cinq destinations, Orbi au milieu, Compte, Aide et Sui
 
 // Refonte mobile, lot 2 (planche talent-4): « Compte validé », then the four questions of the first
 // connection (goal, studies, places, ready), each checked for accessibility, then « Pour moi ».
-test("premiers pas : objectif, études, lieux puis formule gratuite", async ({ page }) => {
+test("premiers pas : objectif, études, lieux puis formule gratuite", async ({ page, isMobile }) => {
+  test.skip(
+    isMobile,
+    "Au téléphone : le profil en six étapes du Modèle B (modele-b-accueil.spec.ts).",
+  );
   test.setTimeout(120_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("objectif"));
   await expect(page.getByRole("heading", { level: 1, name: "Compte validé" })).toBeVisible();
@@ -179,6 +183,7 @@ test("premiers pas : objectif, études, lieux puis formule gratuite", async ({ p
 test("trouver une offre et postuler : étapes, brouillon et coupure réseau", async ({
   page,
   context,
+  isMobile,
 }) => {
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("postuler"));
   await finishOnboarding(page);
@@ -190,8 +195,9 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
     "page",
   );
   await expect(tabs.getByRole("link", { name: "Enregistrées" })).toBeVisible();
-  // No skill yet: the list says it is a general selection.
-  await expect(page.getByText(/Sélection générale/)).toBeVisible();
+  // No skill yet: the list says it is a general selection. (On a phone, the first profile of
+  // Modèle B already asks for three skills.)
+  if (!isMobile) await expect(page.getByText(/Sélection générale/)).toBeVisible();
   // The search of the header (brief § 5) searches the offers on this tab.
   const search = page.getByRole("search").getByRole("searchbox", { name: "Rechercher" });
   await search.fill("assistant administratif");

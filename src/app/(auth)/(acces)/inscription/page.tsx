@@ -12,6 +12,9 @@ import { signInWithProvider } from "@/server/actions/auth";
 import { enabledProviders } from "@/server/auth";
 import { getSession } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { readSignupFlow } from "@/server/signup-flow";
+import { isPhone } from "@/server/view";
+import { PhoneSignupPage } from "@/components/phone/accueil/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("signup.profile.seo");
@@ -44,6 +47,15 @@ async function SignupEntry({ searchParams }: Pick<PageProps<"/inscription">, "se
         select: { code: true, name: true },
       })
     : null;
+  if (await isPhone()) {
+    return (
+      <PhoneSignupPage
+        plan={plan ?? undefined}
+        next={params.suite}
+        defaultEmail={(await readSignupFlow()).email}
+      />
+    );
+  }
   const providers = enabledProviders().map((id) => ({ id, label: t(`provider.${id}`) }));
   const step = { profil: "talent", forfait: plan?.code, suite: params.suite };
   return (

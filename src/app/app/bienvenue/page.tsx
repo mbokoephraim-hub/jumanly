@@ -25,6 +25,15 @@ import { db } from "@/server/db";
 import { ownedOrganization } from "@/server/services/accounts";
 import { listCountries, listLocalities } from "@/server/services/places";
 import { readSignupFlow } from "@/server/signup-flow";
+import { isPhone } from "@/server/view";
+import { PhoneOnboarding } from "@/components/phone/accueil/onboarding";
+import {
+  phoneContracts,
+  phoneFirstSkills,
+  phoneSituations,
+  type PhoneContract,
+  type PhoneSituation,
+} from "@/lib/phone-onboarding";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("welcome.seo");
@@ -56,8 +65,81 @@ export default async function WelcomePage({ searchParams }: PageProps<"/app/bien
       />
     );
 
-  const profile = await db.talentProfile.findUnique({ where: { userId: user.id } });
+  const profile = await db.talentProfile.findUnique({
+    where: { userId: user.id },
+    include: { skills: { include: { skill: { select: { name: true } } } } },
+  });
   const ta = await getTranslations("access");
+
+  // On a phone: Modèle B, the six steps of the profile, then « Profil prêt » (docs/modele-b).
+  if (await isPhone()) {
+    const [countries, localities, skills, asked, social, chosen] = await Promise.all([
+      listCountries(db),
+      listLocalities(db),
+      db.skill.findMany({ select: { name: true }, orderBy: { name: "asc" } }),
+      db.skill.findMany({
+        select: { name: true },
+        orderBy: { jobs: { _count: "desc" } },
+        take: 24,
+      }),
+      db.account.findFirst({
+        where: { userId: user.id, providerId: { in: ["google", "apple", "linkedin"] } },
+        select: { providerId: true },
+      }),
+      flow.plan
+        ? db.plan.findFirst({
+            where: { code: flow.plan, family: "talent", priceCents: { gt: 0 } },
+            select: { id: true },
+          })
+        : null,
+    ]);
+    const names = new Set(skills.map((skill) => skill.name));
+    const first = [
+      ...new Set([
+        ...phoneFirstSkills.filter((name) => names.has(name)),
+        ...asked.map((skill) => skill.name),
+      ]),
+    ].slice(0, 12);
+    const messages = await getMessages();
+    const tp = await getTranslations("phoneAccueil.profile.name.provider");
+    const situation = (phoneSituations as readonly string[]).includes(profile?.situation ?? "")
+      ? (profile?.situation as PhoneSituation)
+      : null;
+    return (
+      <NextIntlClientProvider messages={pickMessages(messages, ["phoneAccueil", "common"])}>
+        <PhoneOnboarding
+          data={{
+            firstName: user.firstName ?? "",
+            lastName: user.lastName ?? "",
+            provider: social ? tp(social.providerId as "google" | "apple" | "linkedin") : null,
+            image: user.image ?? null,
+            country: user.country ?? "CD",
+            city: user.city ?? "",
+            relocation: profile?.relocation ?? false,
+            situation,
+            cap: profile?.targetJob ?? "",
+            contracts: (profile?.desiredContracts ?? []).filter((item): item is PhoneContract =>
+              (phoneContracts as readonly string[]).includes(item),
+            ),
+            skills: profile?.skills.map((row) => row.skill.name) ?? [],
+            countries: countries.map(({ code, name }) => ({ code, name })),
+            cities: Object.fromEntries(
+              Object.entries(localities).map(([code, rows]) => [
+                code,
+                rows
+                  .filter((row) => row.kind === "city")
+                  .slice(0, 6)
+                  .map((row) => row.name),
+              ]),
+            ),
+            allSkills: skills.map((skill) => skill.name),
+            firstSkills: first,
+            plan: Boolean(chosen),
+          }}
+        />
+      </NextIntlClientProvider>
+    );
+  }
   const step =
     etape === "objectif"
       ? 1

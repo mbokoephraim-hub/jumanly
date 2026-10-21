@@ -5,7 +5,9 @@ import { DEMO_PASSWORD, PASSWORD, demo, signUpFromPricing, testEmail } from "./s
 
 test("connexion et inscription mènent l'une à l'autre, le recruteur vers son forfait", async ({
   page,
+  isMobile,
 }) => {
+  test.skip(isMobile, "Au téléphone : l'accueil du Modèle B (modele-b-accueil.spec.ts).");
   await page.goto("/connexion");
   await expect(page.getByRole("heading", { name: "Bon retour" })).toBeVisible();
   await page.getByRole("link", { name: "Créer un compte" }).click();
@@ -23,6 +25,10 @@ test("connexion et inscription mènent l'une à l'autre, le recruteur vers son f
 test("connexion en deux parties sur ordinateur, formulaire seul sur téléphone", async ({
   page,
 }, testInfo) => {
+  test.skip(
+    testInfo.project.name === "mobile",
+    "Au téléphone : l'accueil du Modèle B (modele-b-accueil.spec.ts).",
+  );
   await page.goto("/connexion");
   const promise = page.getByRole("heading", { name: "Se former, être vu, être recruté." });
   if (testInfo.project.name === "desktop") {

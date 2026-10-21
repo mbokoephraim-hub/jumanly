@@ -2,10 +2,11 @@ import type { Page } from "@playwright/test";
 import { expect, test } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { lastCode } from "./outbox";
-import { demo, logIn, signUpFromPricing, testEmail } from "./session";
+import { demo, logIn, onPhone, phoneProfile, signUpFromPricing, testEmail } from "./session";
 
 /** « Compte validé » to « Votre espace est prêt », the questions skipped. */
 async function walkToReady(page: Page) {
+  if (await onPhone(page)) return phoneProfile(page);
   await page.getByRole("link", { name: "C'est parti" }).click();
   await expect(page).toHaveURL(/etape=objectif/);
   await page.getByRole("button", { name: "Continuer" }).click();
@@ -24,7 +25,9 @@ test.describe("inscription avec forfait", () => {
     await signUpFromPricing(page, "Choisir Pro", email);
     // The plan is paid after the first questions (refonte mobile, lot 2).
     await walkToReady(page);
-    await page.getByRole("button", { name: "Continuer vers le paiement" }).click();
+    await page
+      .getByRole("button", { name: /^(Continuer vers le paiement|Finaliser ma formule)$/ })
+      .click();
     await expect(page).toHaveURL(/\/inscription\/paiement/, { timeout: 20_000 });
     await page.getByRole("radio", { name: "M-Pesa" }).check();
     await page.locator('input[name="number"]').fill("+243 810 000 123");
@@ -41,7 +44,9 @@ test.describe("inscription avec forfait", () => {
     const email = testEmail("plus-tard");
     await signUpFromPricing(page, "Choisir Pro", email);
     await walkToReady(page);
-    await page.getByRole("button", { name: "Commencer gratuitement" }).click();
+    await page
+      .getByRole("button", { name: /^(Commencer gratuitement|Entrer dans Jumanly)$/ })
+      .click();
     await expect(page).toHaveURL(/\/app/);
     await page.goto("/app/abonnement");
     await expect(page.getByRole("main")).toContainText("Free · gratuit");
@@ -52,7 +57,10 @@ test.describe("inscription avec forfait", () => {
 });
 
 test.describe("connexion", () => {
-  test("se connecter, se déconnecter, réinitialiser le mot de passe", async ({ page }) => {
+  test("se connecter, se déconnecter, réinitialiser le mot de passe", async ({
+    page,
+    isMobile,
+  }) => {
     const email = testEmail("reset");
     await signUpFromPricing(page, "Créer mon compte gratuit", email);
     await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
@@ -65,8 +73,9 @@ test.describe("connexion", () => {
     await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
     await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
 
+    // Signed out, the space opens on « Bienvenue » on a phone (Modèle B), on sign-in elsewhere.
     await page.goto("/app");
-    await expect(page).toHaveURL(/\/connexion\?suite=/);
+    await expect(page).toHaveURL(isMobile ? /\/decouvrir$/ : /\/connexion\?suite=/);
 
     // Mot de passe oublié: a 6-digit code, the new password, then signed in at once.
     const since = Date.now();
@@ -144,7 +153,8 @@ test.describe("paramètres", () => {
 
     // Lot 7: Paramètres in sections (planche talent-4 § 8); each switch saves at once.
     await page.goto("/app/parametres");
-    await page.getByRole("switch", { name: /Réduire les animations/ }).check({ force: true });
+    // A touch on the row (its label), like a person: the switch itself is visually hidden.
+    await page.getByText("Réduire les animations", { exact: true }).click();
     await expect(page.getByText("C'est enregistré.")).toBeVisible();
     await expect(page.locator("[data-reduce-motion]")).toHaveCount(1);
     await expect(page.getByRole("switch", { name: /Réduire les animations/ })).toBeChecked();

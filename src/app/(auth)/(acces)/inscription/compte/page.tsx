@@ -10,6 +10,8 @@ import { readSignupParams, stepHref } from "@/lib/signup-params";
 import { getSession } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { readSignupFlow } from "@/server/signup-flow";
+import { isPhone } from "@/server/view";
+import { PhonePasswordPage } from "@/components/phone/accueil/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("signup.account");
@@ -48,6 +50,12 @@ async function AccountStep({
         select: { code: true },
       })
     : null;
+  // On a phone (Modèle B), a talent gives the e-mail first, then the password here.
+  if (profile === "talent" && (await isPhone())) {
+    const { email } = await readSignupFlow();
+    if (!email) redirect(stepHref("/inscription", { forfait: plan?.code, suite: params.suite }));
+    return <PhonePasswordPage email={email} plan={plan?.code} next={params.suite} />;
+  }
   const back =
     profile === "talent"
       ? stepHref("/inscription", { forfait: plan?.code, suite: params.suite })

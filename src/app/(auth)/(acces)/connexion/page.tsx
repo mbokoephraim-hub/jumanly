@@ -12,6 +12,8 @@ import { readSignupParams } from "@/lib/signup-params";
 import { signInWithProvider } from "@/server/actions/auth";
 import { enabledProviders } from "@/server/auth";
 import { getSession } from "@/server/auth/session";
+import { isPhone } from "@/server/view";
+import { PhoneLoginPage } from "@/components/phone/accueil/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("login.seo");
@@ -49,6 +51,18 @@ async function Login({ searchParams }: Pick<PageProps<"/connexion">, "searchPara
     </p>
   );
   const failed = ["google", "apple", "linkedin"].find((id) => params.erreur === id);
+  if (await isPhone()) {
+    const notices: { tone: "ok" | "err"; text: string }[] = [];
+    if (params.deconnecte) notices.push({ tone: "ok", text: t("auth.success.logout") });
+    if (params.suppression)
+      notices.push({
+        tone: "err",
+        text: t("login.deletionScheduled", { days: DELETION_GRACE_DAYS }),
+      });
+    if (failed) notices.push({ tone: "err", text: t(`auth.error.${failed as "google"}Failed`) });
+    if (suite) notices.push({ tone: "ok", text: t("auth.resume.generic") });
+    return <PhoneLoginPage next={suite} notices={notices} />;
+  }
   return (
     <>
       <AccessHead

@@ -50,6 +50,47 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Modèle B · B2 : accueil, inscription et premier profil au téléphone (21 octobre 2026)
+
+Planche Accueil (`docs/modele-b/captures/INDEX.md`, rangées 02 et 03). Écarts et choix :
+`docs/decisions/2026-10-21-modele-b-b2.md`.
+
+**Fait.**
+- `/decouvrir` (nouveau) : ouverture longue (3,9 s) la première fois sur ce téléphone, courte (1,7 s)
+  ensuite, puis « Bienvenue » en trois écrans (Learn, Grow, Connect), « Créer un compte » et
+  « Se connecter ». « Bienvenue » est déjà dessiné sous l'ouverture : jamais d'écran vide. `/app` sans
+  session, au téléphone, y mène. L'appli installée montre le logo seul au téléphone.
+- Connexion, inscription (e-mail, mot de passe avec règles cochées en direct, code à 6 cases), mot de
+  passe oublié et nouveau mot de passe : branches téléphone des routes existantes
+  (`src/components/phone/accueil/`), mêmes services que le web.
+- Premier profil `/app/bienvenue` au téléphone (`onboarding.tsx`) : nom, photo (réduite sur le
+  téléphone), pays et ville, situation, Cap (suggestions, recherche, ou Orbi en une question),
+  contrats, compétences du référentiel (au moins 3), notifications, « Profil prêt » avec la
+  complétude réelle. Chaque étape s'enregistre en avançant (`src/server/actions/phone-onboarding.ts`).
+- Migration additive `20261021151550_talent_profile_situation` (`TalentProfile.situation`).
+
+**Captures → maquettes** (`captures/etape-1/`, 390 × 844) :
+
+| Capture | Maquette |
+|---|---|
+| `b2-ouverture.png`, `b2-ouverture-courte.png` | 005, 006 |
+| `b2-bienvenue-1/2/3.png` | 007, 008, 009 |
+| `b2-inscription.png`, `b2-conditions.png` | 010, 012 |
+| `b2-motdepasse.png`, `b2-code.png` | 014, 013 |
+| `b2-connexion.png`, `b2-oubli.png` | 015, 016 |
+| `b2-profil-nom.png` … `b2-profil-competences.png` | 017 à 025 |
+| `b2-notifications.png`, `b2-pret.png` | 027, 029 |
+
+Non reproduits : 011 (écran du fournisseur Google), 026 (fichiers de démonstration), 028 (fenêtre
+système du téléphone).
+
+**Tests.** `tests/e2e/modele-b-accueil.spec.ts` (ouvertures longue puis courte sans écran vide, chaque
+bouton de l'accueil ouvre quelque chose avec un retour clair, inscription complète et six étapes,
+connexion). Les aides `signUpWithEmail` et `finishOnboarding` suivent le parcours du téléphone ; les
+tests de l'ancien parcours au téléphone sont réservés à l'ordinateur.
+
+**Fichiers supprimés.** Aucun (l'ancien parcours sert encore l'ordinateur et la tablette).
+
 ## Modèle B · B1 : fondations de l'espace talent au téléphone (21 octobre 2026)
 
 Brief `docs/modele-b/BRIEF-MODELE-B-CLAUDE-CODE.md` § 2 et § 3, planches Identité, Orbi-options,
