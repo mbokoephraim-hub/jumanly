@@ -41,7 +41,14 @@ export type PostView = {
   mine: boolean;
   canReply: boolean;
   closedNote: string | null;
-  firstReply: { name: string; initials: string; image: string | null; tone: number; org: boolean; body: string } | null;
+  firstReply: {
+    name: string;
+    initials: string;
+    image: string | null;
+    tone: number;
+    org: boolean;
+    body: string;
+  } | null;
 };
 
 export type ReplyView = {
@@ -103,7 +110,8 @@ export async function feedWords(viewerId: string, now = new Date()) {
   };
   const stamp = (date: Date) => {
     if (date >= startOfDay) return t("stamp.today", { time: time(date) });
-    if (date.getTime() >= startOfDay.getTime() - DAY) return t("stamp.yesterday", { time: time(date) });
+    if (date.getTime() >= startOfDay.getTime() - DAY)
+      return t("stamp.yesterday", { time: time(date) });
     if (date.getTime() >= startOfDay.getTime() - 6 * DAY) {
       const day = format.dateTime(date, { weekday: "long" });
       return t("stamp.week", { day: day.charAt(0).toUpperCase() + day.slice(1), time: time(date) });
@@ -118,7 +126,11 @@ export async function feedWords(viewerId: string, now = new Date()) {
     const org = value.kind === "org";
     const name = org ? shortName(value.name) : value.name;
     const line = org
-      ? [value.sector, value.city, value.offers > 0 ? t("orbi.companyLine", { count: value.offers }) : null]
+      ? [
+          value.sector,
+          value.city,
+          value.offers > 0 ? t("orbi.companyLine", { count: value.offers }) : null,
+        ]
           .filter(Boolean)
           .join(" · ")
       : value.title && value.company
@@ -151,7 +163,9 @@ export async function feedWords(viewerId: string, now = new Date()) {
     const view = author(item.author);
     const tag = tags[item.type];
     const contract = (value: string) =>
-      t.has(`contract.${value}` as "contract.cdi") ? t(`contract.${value}` as "contract.cdi") : value;
+      t.has(`contract.${value}` as "contract.cdi")
+        ? t(`contract.${value}` as "contract.cdi")
+        : value;
     const remote = (value: string) =>
       t.has(`remote.${value}` as "remote.hybrid") ? t(`remote.${value}` as "remote.hybrid") : value;
     return {
@@ -180,14 +194,21 @@ export async function feedWords(viewerId: string, now = new Date()) {
         : null,
       attachment: item.attachment
         ? {
-            mark: item.attachment.type === "certificate" ? initialsOf(item.attachment.title).slice(0, 3) : "PF",
+            mark:
+              item.attachment.type === "certificate"
+                ? initialsOf(item.attachment.title).slice(0, 3)
+                : "PF",
             title: item.attachment.title,
             detail: item.attachment.detail,
             tone: item.attachment.type,
           }
         : null,
       quoted: item.quoted
-        ? { href: `/app/fil/${item.quoted.id}`, name: shortName(item.quoted.name), body: item.quoted.body }
+        ? {
+            href: `/app/fil/${item.quoted.id}`,
+            name: shortName(item.quoted.name),
+            body: item.quoted.body,
+          }
         : null,
       event: item.event ? { participants: item.event.participants, going: item.event.going } : null,
       likes: item.likes,
@@ -200,13 +221,20 @@ export async function feedWords(viewerId: string, now = new Date()) {
       canReply: item.canReply,
       closedNote: item.canReply
         ? null
-        : t(item.replyPolicy === "connections" ? "detail.closed.connections" : "detail.closed.nobody", {
-            name: view.name.split(" ")[0] ?? view.name,
-          }),
+        : t(
+            item.replyPolicy === "connections"
+              ? "detail.closed.connections"
+              : "detail.closed.nobody",
+            {
+              name: view.name.split(" ")[0] ?? view.name,
+            },
+          ),
       firstReply: item.firstReply
         ? {
             name: item.firstReply.org ? shortName(item.firstReply.name) : item.firstReply.name,
-            initials: initialsOf(item.firstReply.org ? shortName(item.firstReply.name) : item.firstReply.name),
+            initials: initialsOf(
+              item.firstReply.org ? shortName(item.firstReply.name) : item.firstReply.name,
+            ),
             image: item.firstReply.image,
             tone: toneOf(
               item.firstReply.org ? shortName(item.firstReply.name) : item.firstReply.name,

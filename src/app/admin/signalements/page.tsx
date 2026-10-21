@@ -485,9 +485,7 @@ async function ReportDetail({
             </p>
             <p className="text-[12.5px] leading-[18px] whitespace-pre-line">{post.body}</p>
             {post.imageUrl && <p className="text-[11px] text-ardoise">{t("detail.postImage")}</p>}
-            {post.hiddenAt && (
-              <span className="text-[11px] font-medium">{t("detail.hidden")}</span>
-            )}
+            {post.hiddenAt && <span className="text-[11px] font-medium">{t("detail.hidden")}</span>}
           </div>
         )}
         {job && (

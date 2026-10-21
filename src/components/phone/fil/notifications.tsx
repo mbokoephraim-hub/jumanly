@@ -101,7 +101,11 @@ export function PhoneNotifications({ rows }: { rows: NotifRow[] }) {
               <form key={row.id} action={markNotificationsReadAction}>
                 <input type="hidden" name="id" value={row.id} />
                 <input type="hidden" name="href" value={row.href} />
-                <button type="submit" className="nb-fil-notif" data-nouveau={isUnread ? "" : undefined}>
+                <button
+                  type="submit"
+                  className="nb-fil-notif"
+                  data-nouveau={isUnread ? "" : undefined}
+                >
                   {row.avatar === "orbi" ? (
                     <OrbiDisc size={44} />
                   ) : row.avatar ? (

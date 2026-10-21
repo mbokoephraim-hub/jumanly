@@ -119,7 +119,13 @@ export function PostSheets({
               showToast({ message: t(result.value ? "toast.saved" : "toast.unsaved") });
             }),
         },
-        { key: "link", icon: "lien", title: t("menu.link"), sub: t("menu.linkSub"), run: () => copy() },
+        {
+          key: "link",
+          icon: "lien",
+          title: t("menu.link"),
+          sub: t("menu.linkSub"),
+          run: () => copy(),
+        },
         {
           key: "hide",
           icon: "cacher",
@@ -225,7 +231,9 @@ export function PostSheets({
             )}
             <h2>{t("report.title")}</h2>
           </div>
-          <p className="nb-meta nb-fil-feuille-t">{t("report.anonymous", { name: post.author.name })}</p>
+          <p className="nb-meta nb-fil-feuille-t">
+            {t("report.anonymous", { name: post.author.name })}
+          </p>
           {REASONS.map((reason) => (
             <button
               key={reason}
@@ -248,7 +256,11 @@ export function PostSheets({
               <small>{post.reposted ? t("reshare.undoSub") : t("reshare.doSub")}</small>
             </span>
           </button>
-          <Link href={`/app/fil/publier?citer=${post.id}`} className="nb-opt nb-fil-opt" onClick={onClose}>
+          <Link
+            href={`/app/fil/publier?citer=${post.id}`}
+            className="nb-opt nb-fil-opt"
+            onClick={onClose}
+          >
             <PhoneIcon name="citer" size={22} />
             <span>
               {t("reshare.quote")}
@@ -278,10 +290,18 @@ export function PostSheets({
             </button>
             <h2>{t("send.title")}</h2>
           </div>
-          {targets.length === 0 ? <p className="nb-meta nb-fil-feuille-t">{t("send.none")}</p> : null}
+          {targets.length === 0 ? (
+            <p className="nb-meta nb-fil-feuille-t">{t("send.none")}</p>
+          ) : null}
           {targets.map((target) => (
             <div key={target.conversationId} className="nb-opt nb-fil-opt nb-fil-envoi">
-              <FilAvatar initials={target.initials} image={target.image} tone={target.tone} org={false} size={44} />
+              <FilAvatar
+                initials={target.initials}
+                image={target.image}
+                tone={target.tone}
+                org={false}
+                size={44}
+              />
               <span>
                 {target.name}
                 <small>{target.line}</small>

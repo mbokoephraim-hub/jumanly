@@ -57,7 +57,11 @@ export async function sendTargetViews(userId: string): Promise<SendTarget[]> {
  * The Fil tab, kept mounted under the pages (brief § 3): its three lists, the bell, Orbi's card
  * and the connections of « Envoyer à » are all read at once, while the logo shows.
  */
-export async function FilTab({ user }: { user: { id: string; name: string; image: string | null } }) {
+export async function FilTab({
+  user,
+}: {
+  user: { id: string; name: string; image: string | null };
+}) {
   const now = new Date();
   const words = await feedWords(user.id, now);
   const [pourvous, abonnements, entreprises, unread, fresh, targets] = await Promise.all([
@@ -104,7 +108,13 @@ export async function notificationRows(userId: string, now = new Date()): Promis
   return all.map((item) => {
     const values = notificationValues(item.payload);
     const text = d(`notifications.item.${item.type}`, values);
-    const candidate = [values.name, values.company, values.org, values.senderName, values.inviterName]
+    const candidate = [
+      values.name,
+      values.company,
+      values.org,
+      values.senderName,
+      values.inviterName,
+    ]
       .filter(Boolean)
       .find((name) => text.startsWith(name));
     const who = candidate ? shortName(candidate) : null;

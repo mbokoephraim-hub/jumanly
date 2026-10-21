@@ -32,7 +32,13 @@ export function PostMedia({ post, big = false }: { post: PostView; big?: boolean
   return (
     <>
       {post.image ? (
-        <img className="nb-fil-img" data-grand={big ? "" : undefined} src={post.image.src} alt={post.image.alt} loading="lazy" />
+        <img
+          className="nb-fil-img"
+          data-grand={big ? "" : undefined}
+          src={post.image.src}
+          alt={post.image.alt}
+          loading="lazy"
+        />
       ) : null}
       {post.job ? (
         <Link href={post.job.href} className="nb-fil-offre">
@@ -157,7 +163,12 @@ export function PostCard({
   const href = from ? `${post.href}?de=${from}` : post.href;
   return (
     <article className="nb-fil-post" aria-labelledby={`p-${post.id}`}>
-      <Link href={post.author.href} className="nb-fil-gauche" aria-label={t("profile")} tabIndex={-1}>
+      <Link
+        href={post.author.href}
+        className="nb-fil-gauche"
+        aria-label={t("profile")}
+        tabIndex={-1}
+      >
         <FilAvatar {...post.author} />
       </Link>
       <div className="nb-fil-droite">

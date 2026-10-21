@@ -278,7 +278,12 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
         ) : (
           <div className="nb-orbi-liste nb-orbi-q">
             {current.questions.map((question) => (
-              <button key={question} type="button" className="nb-q" onClick={() => choose(question)}>
+              <button
+                key={question}
+                type="button"
+                className="nb-q"
+                onClick={() => choose(question)}
+              >
                 {question}
               </button>
             ))}

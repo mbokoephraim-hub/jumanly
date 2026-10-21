@@ -114,7 +114,12 @@ export type FeedAuthor = {
   offers: number;
 };
 
-export type FeedAttachment = { type: "work" | "certificate"; id: string; title: string; detail: string };
+export type FeedAttachment = {
+  type: "work" | "certificate";
+  id: string;
+  title: string;
+  detail: string;
+};
 
 export type FeedItem = {
   id: string;
@@ -170,10 +175,7 @@ function authorOf(row: PostRow): FeedAuthor {
     name: row.author?.name ?? "",
     image: row.author?.image ?? null,
     title:
-      profile?.experiences[0]?.title ||
-      profile?.headline ||
-      profile?.desiredJobTitles[0] ||
-      null,
+      profile?.experiences[0]?.title || profile?.headline || profile?.desiredJobTitles[0] || null,
     company: profile?.experiences[0]?.company ?? null,
     sector: null,
     city: null,
@@ -232,12 +234,18 @@ async function toItems(
     ...new Set(rows.flatMap((row) => (row.job?.status === "published" ? [row.job.id] : []))),
   ];
   const [likes, reposts, saves, going, firsts, matches] = await Promise.all([
-    db.feedLike.findMany({ where: { userId: viewerId, postId: { in: ids } }, select: { postId: true } }),
+    db.feedLike.findMany({
+      where: { userId: viewerId, postId: { in: ids } },
+      select: { postId: true },
+    }),
     db.feedRepost.findMany({
       where: { userId: viewerId, postId: { in: ids } },
       select: { postId: true },
     }),
-    db.feedSave.findMany({ where: { userId: viewerId, postId: { in: ids } }, select: { postId: true } }),
+    db.feedSave.findMany({
+      where: { userId: viewerId, postId: { in: ids } },
+      select: { postId: true },
+    }),
     db.feedEventParticipant.findMany({
       where: { userId: viewerId, postId: { in: ids } },
       select: { postId: true },
@@ -398,17 +406,15 @@ export async function getPost(db: PrismaClient, viewerId: string, id: string, no
   });
   return {
     post: item,
-    replies: replies.map(
-      (reply): FeedReply => ({
-        id: reply.id,
-        author: authorOf(reply),
-        body: reply.body,
-        createdAt: reply.createdAt,
-        likes: reply._count.likes,
-        liked: liked.some((like) => like.postId === reply.id),
-        mine: reply.authorId === viewerId && !reply.organizationId,
-      }),
-    ),
+    replies: replies.map((reply): FeedReply => ({
+      id: reply.id,
+      author: authorOf(reply),
+      body: reply.body,
+      createdAt: reply.createdAt,
+      likes: reply._count.likes,
+      liked: liked.some((like) => like.postId === reply.id),
+      mine: reply.authorId === viewerId && !reply.organizationId,
+    })),
   };
 }
 
@@ -444,10 +450,9 @@ export const newPostSchema = z
     replyPolicy: z.enum(["everyone", "connections", "nobody"]).default("everyone"),
     image: z.string().trim().max(60).optional(),
   })
-  .refine(
-    (input) => input.body.length > 0 || input.attachment || input.quotedId || input.image,
-    { message: "empty" },
-  );
+  .refine((input) => input.body.length > 0 || input.attachment || input.quotedId || input.image, {
+    message: "empty",
+  });
 export type NewPost = z.input<typeof newPostSchema>;
 
 /** The career pieces a person may join to a post: their projects and their attestations. */
@@ -571,7 +576,12 @@ export async function saveFeedImage(db: PrismaClient, userId: string, bytes: Uin
 export async function feedImageByToken(db: PrismaClient, token: string) {
   return db.feedImage.findUnique({
     where: { token },
-    select: { bytes: true, contentType: true, createdAt: true, post: { select: { hiddenAt: true } } },
+    select: {
+      bytes: true,
+      contentType: true,
+      createdAt: true,
+      post: { select: { hiddenAt: true } },
+    },
   });
 }
 
@@ -584,11 +594,7 @@ export const replySchema = z.object({
  * Answers a post. The author is told; so is anyone named in the answer (« @Prénom Nom »)
  * among the people who took part in the conversation.
  */
-export async function replyTo(
-  db: PrismaClient,
-  userId: string,
-  raw: z.input<typeof replySchema>,
-) {
+export async function replyTo(db: PrismaClient, userId: string, raw: z.input<typeof replySchema>) {
   const parsed = replySchema.safeParse(raw);
   if (!parsed.success) throw new FeedError("invalid");
   const post = await visiblePost(db, userId, parsed.data.post);
@@ -610,7 +616,9 @@ export async function replyTo(
   });
   const named = others
     .flatMap((row) => (row.author ? [row.author] : []))
-    .filter((person) => person.id !== post.authorId && parsed.data.body.includes(`@${person.name}`));
+    .filter(
+      (person) => person.id !== post.authorId && parsed.data.body.includes(`@${person.name}`),
+    );
   if (named.length > 0)
     await notify(db, {
       userIds: named.map((person) => person.id),
@@ -634,7 +642,12 @@ export async function toggleLike(db: PrismaClient, userId: string, postId: strin
     // One notification per person and post, however often the heart is touched.
     const href = `/app/fil/${post.parentId ?? post.id}`;
     const already = await db.notification.findFirst({
-      where: { userId: post.authorId, type: "feedLike", href, payload: { path: ["by"], equals: userId } },
+      where: {
+        userId: post.authorId,
+        type: "feedLike",
+        href,
+        payload: { path: ["by"], equals: userId },
+      },
       select: { id: true },
     });
     if (!already)
@@ -751,7 +764,10 @@ export async function sendTargets(db: PrismaClient, userId: string) {
         name: other.name,
         image: other.image,
         title:
-          profile?.experiences[0]?.title || profile?.headline || profile?.desiredJobTitles[0] || null,
+          profile?.experiences[0]?.title ||
+          profile?.headline ||
+          profile?.desiredJobTitles[0] ||
+          null,
         company: profile?.experiences[0]?.company ?? null,
       };
     });
@@ -818,10 +834,21 @@ export async function freshMatches(db: PrismaClient, userId: string, now = new D
     },
     orderBy: { publishedAt: "desc" },
     take: 40,
-    select: { id: true, slug: true, title: true, city: true, organization: { select: { name: true } } },
+    select: {
+      id: true,
+      slug: true,
+      title: true,
+      city: true,
+      organization: { select: { name: true } },
+    },
   });
   if (jobs.length === 0) return [];
-  const matches = await matchesForUser(db, userId, jobs.map((job) => job.id), now);
+  const matches = await matchesForUser(
+    db,
+    userId,
+    jobs.map((job) => job.id),
+    now,
+  );
   return jobs
     .flatMap((job) => {
       const match = matches.get(job.id);
@@ -932,7 +959,8 @@ export async function personAuthor(db: PrismaClient, viewerId: string, userId: s
     id: user.id,
     name: user.name,
     image: user.image,
-    title: profile?.experiences[0]?.title || profile?.headline || profile?.desiredJobTitles[0] || null,
+    title:
+      profile?.experiences[0]?.title || profile?.headline || profile?.desiredJobTitles[0] || null,
     company: profile?.experiences[0]?.company ?? null,
     sector: null,
     city: null,

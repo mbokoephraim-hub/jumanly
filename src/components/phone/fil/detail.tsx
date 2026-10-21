@@ -174,7 +174,14 @@ export function PostDetail({
                 send();
               }}
             >
-              <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={34} />
+              <FilAvatar
+                initials={me.initials}
+                image={me.image}
+                tone={0}
+                org={false}
+                me
+                size={34}
+              />
               <input
                 ref={field}
                 value={text}

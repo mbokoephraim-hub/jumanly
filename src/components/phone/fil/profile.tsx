@@ -45,7 +45,11 @@ export function FilProfile({
         </span>
       </div>
       {message ? (
-        <Link href={`/app/messages/${message}`} className="nb-bouton nb-fil-message" data-contour="">
+        <Link
+          href={`/app/messages/${message}`}
+          className="nb-bouton nb-fil-message"
+          data-contour=""
+        >
           <PhoneIcon name="messages" size={20} />
           {t("profileMessage")}
         </Link>
@@ -74,7 +78,11 @@ export function FilProfile({
         {posts
           .filter((post) => !gone.includes(post.id))
           .map((post) => (
-            <PostCard key={post.id} post={post} onSheet={(target, sheet) => setOpen({ post: target, sheet })} />
+            <PostCard
+              key={post.id}
+              post={post}
+              onSheet={(target, sheet) => setOpen({ post: target, sheet })}
+            />
           ))}
       </section>
       <PostSheets

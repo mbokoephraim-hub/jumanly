@@ -445,13 +445,13 @@ export async function reportAuthor(
               })
             )?.authorId
           : report.targetType === "job"
-          ? (
-              await db.job.findUnique({
-                where: { id: report.targetId },
-                select: { createdById: true },
-              })
-            )?.createdById
-          : null;
+            ? (
+                await db.job.findUnique({
+                  where: { id: report.targetId },
+                  select: { createdById: true },
+                })
+              )?.createdById
+            : null;
   return id
     ? db.user.findUnique({
         where: { id },

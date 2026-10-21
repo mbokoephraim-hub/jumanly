@@ -38,10 +38,7 @@ export type FeedResult<T = boolean> = { ok: true; value: T } | { ok: false; erro
 const PAGE = "/app";
 const postId = z.string().trim().min(1).max(60);
 
-async function run<T>(
-  work: (userId: string) => Promise<T>,
-  again = true,
-): Promise<FeedResult<T>> {
+async function run<T>(work: (userId: string) => Promise<T>, again = true): Promise<FeedResult<T>> {
   const parsedUser = await requireUser(PAGE);
   try {
     const value = await work(parsedUser.id);
@@ -230,7 +227,10 @@ export async function orbiFactAction(raw: string): Promise<OrbiFactAnswer | null
           title: item.job?.title ?? item.author.name,
           sub: item.job
             ? item.job.score
-              ? t("orbi.jobLine", { org: item.author.name, score: item.job.score.replace(/\D+$/, "").trim() })
+              ? t("orbi.jobLine", {
+                  org: item.author.name,
+                  score: item.job.score.replace(/\D+$/, "").trim(),
+                })
               : item.author.name
             : [item.tag?.text, item.author.line].filter(Boolean).join(" · "),
           initials: item.author.initials,
@@ -292,9 +292,7 @@ export async function orbiFactAction(raw: string): Promise<OrbiFactAnswer | null
     }
     case "ecrire": {
       const certificate = await latestCertificate(db, user.id);
-      const draft = certificate
-        ? t("publish.draft", { course: certificate.courseTitle })
-        : "";
+      const draft = certificate ? t("publish.draft", { course: certificate.courseTitle }) : "";
       return {
         question: tp("q4"),
         text: t("orbi.write", { course: certificate ? "yes" : "none", draft }),
