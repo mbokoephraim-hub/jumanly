@@ -8,6 +8,7 @@ import { appearanceScript } from "@/lib/appearance";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { orbiActions } from "@/lib/orbi";
 import { PHONE_TABS, type PhoneTab } from "@/lib/phone-tabs";
+import { PhoneLegacyHead } from "./legacy-head";
 import { PhoneNav } from "./nav";
 import { Opening } from "./opening";
 import { openingScript } from "./opening-script";
@@ -22,11 +23,16 @@ import { ViewSync } from "./view-sync";
  */
 export async function PhoneShell({
   account,
+  unread,
+  unreadMessages,
   reduceMotion,
   tabs,
   children,
 }: {
-  account: { id: string; name: string; firstName: string | null };
+  account: { id: string; name: string; firstName: string | null; image: string | null };
+  /** Unread notifications and conversations, for the head of the pages not redrawn yet. */
+  unread: number;
+  unreadMessages: number;
   reduceMotion: boolean;
   /** The tabs already drawn for the phone, kept mounted (each lot adds its own). */
   tabs: Partial<Record<PhoneTab, ReactNode>>;
@@ -73,7 +79,11 @@ export async function PhoneShell({
     tabs: Object.fromEntries(PHONE_TABS.map((tab) => [tab, tabTexts(tab)])) as OrbiTexts["tabs"],
   };
   return (
-    <div className="nb-app" data-reduit={reduceMotion ? "" : undefined}>
+    <div
+      className="nb-app"
+      data-reduit={reduceMotion ? "" : undefined}
+      data-reduce-motion={reduceMotion ? "" : undefined}
+    >
       {/* Before the first paint: the logo alone, and the dark class for the pages not redrawn yet. */}
       <script dangerouslySetInnerHTML={{ __html: openingScript(tBrand("brand")) }} />
       <script dangerouslySetInnerHTML={{ __html: appearanceScript("dark") }} />
@@ -95,6 +105,7 @@ export async function PhoneShell({
         {/* Pages not redrawn yet (lots B2 to B8) keep their previous dark look in this frame;
             a Modèle B page (`.nb-page`) takes the whole screen. Removed in B9. */}
         <div className="t-app nb-ancien">
+          <PhoneLegacyHead account={account} unread={unread} unreadMessages={unreadMessages} />
           <div className="t-colonne t-contenu">{children}</div>
         </div>
       </PhoneStack>

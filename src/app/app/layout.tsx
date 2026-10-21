@@ -70,7 +70,14 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     if (await isPhone()) {
       return (
         <PhoneShell
-          account={{ id: user.id, name: user.name, firstName: user.firstName }}
+          account={{
+            id: user.id,
+            name: user.name,
+            firstName: user.firstName,
+            image: user.image ?? null,
+          }}
+          unread={unread}
+          unreadMessages={await unreadCount(db, { userId: user.id })}
           reduceMotion={user.reduceMotion}
           tabs={{}}
         >

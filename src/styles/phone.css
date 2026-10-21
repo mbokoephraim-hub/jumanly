@@ -935,10 +935,13 @@ html[data-nb-reduit]::view-transition-old(nb-pile) {
 
 /* Pages pas encore redessinées (B2 à B8) : elles gardent leur mise en page sombre dans la pile.
    Une page du Modèle B (`.nb-page`) prend tout l'écran. Retiré en B9. */
-.nb-ancien > .t-colonne {
+.nb-ancien > .t-colonne:first-child {
   padding-top: var(--nb-haut);
 }
-.nb-pile[data-racine] .nb-ancien > .t-colonne {
+.nb-ancien:has(.nb-page) > header {
+  display: none;
+}
+.nb-pile[data-racine] .nb-ancien > .t-colonne:last-child {
   padding-bottom: 24px;
 }
 .nb-ancien:has(.nb-page) {

@@ -176,15 +176,14 @@ export function PhoneStack({
         );
       })}
       <ViewTransition name="nb-pile">
-        <div
+        <main
           id="content"
           className="nb-couche nb-pile"
-          role={pileEmpty ? undefined : "main"}
           data-racine={root ? "" : undefined}
           data-vide={pileEmpty ? "" : undefined}
         >
           {children}
-        </div>
+        </main>
       </ViewTransition>
     </>
   );
