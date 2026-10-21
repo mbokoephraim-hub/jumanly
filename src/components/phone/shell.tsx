@@ -92,7 +92,11 @@ export async function PhoneShell({
       />
       <PhoneStack tabs={tabs} reduce={reduceMotion}>
         <div id={OFFLINE_SLOT_ID} role="status" className="empty:hidden" />
-        {children}
+        {/* Pages not redrawn yet (lots B2 to B8) keep their previous dark look in this frame;
+            a Modèle B page (`.nb-page`) takes the whole screen. Removed in B9. */}
+        <div className="t-app nb-ancien">
+          <div className="t-colonne t-contenu">{children}</div>
+        </div>
       </PhoneStack>
       <PhoneNav
         aria={t("nav.aria")}

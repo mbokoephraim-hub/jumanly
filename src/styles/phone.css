@@ -933,9 +933,25 @@ html[data-nb-reduit]::view-transition-old(nb-pile) {
   color: inherit;
 }
 
-/* Pages pas encore redessinées (B2 à B8) : elles gardent leur mise en page, en sombre, dans la pile. */
-.nb-pile > .jm-page {
-  padding: var(--nb-haut) 16px 24px;
+/* Pages pas encore redessinées (B2 à B8) : elles gardent leur mise en page sombre dans la pile.
+   Une page du Modèle B (`.nb-page`) prend tout l'écran. Retiré en B9. */
+.nb-ancien > .t-colonne {
+  padding-top: var(--nb-haut);
+}
+.nb-pile[data-racine] .nb-ancien > .t-colonne {
+  padding-bottom: 24px;
+}
+.nb-ancien:has(.nb-page) {
+  background: none;
+  min-height: 0;
+}
+.nb-ancien:has(.nb-page)::before {
+  display: none;
+}
+.nb-ancien:has(.nb-page) > .t-colonne {
+  max-width: none;
+  padding: 0;
+  gap: 0;
 }
 .nb-vide {
   text-align: center;

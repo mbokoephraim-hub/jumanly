@@ -167,6 +167,7 @@ export function PhoneStack({
             data-etat={state}
             data-entree={state === "actif" && entering ? entering : undefined}
             data-sortie={state === "dessous" ? leaving?.dir : undefined}
+            role={state === "actif" && pileEmpty ? "main" : undefined}
             aria-hidden={state === "actif" && pileEmpty ? undefined : true}
             inert={state !== "actif" || !pileEmpty}
           >
@@ -178,6 +179,7 @@ export function PhoneStack({
         <div
           id="content"
           className="nb-couche nb-pile"
+          role={pileEmpty ? undefined : "main"}
           data-racine={root ? "" : undefined}
           data-vide={pileEmpty ? "" : undefined}
         >
