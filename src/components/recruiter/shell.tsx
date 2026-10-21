@@ -1,4 +1,5 @@
 import { Suspense, type ReactNode } from "react";
+import { DesktopNotifier } from "./desktop-notifications";
 import { useTranslations } from "next-intl";
 import { AppIntroGate } from "@/components/app/app-intro-gate";
 import type { IntroData } from "@/components/app/app-intro";
@@ -80,6 +81,7 @@ export function RecruiterShell({
       <script dangerouslySetInnerHTML={{ __html: appearanceScript(appearance) }} />
       <AppearanceRoot appearance={appearance} />
       <AppMotionRoot reduce={reduceMotion} />
+      <DesktopNotifier title={t("web.desktopTitle")} />
       <Toaster label={tt("region.aria")} closeLabel={tt("close")} placement="bottom" />
       <Suspense fallback={null}>
         <AppIntroGate data={intro} reduce={reduceMotion} />

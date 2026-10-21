@@ -3,6 +3,11 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { OrbiLine } from "@/components/recruiter/offers";
+import {
+  ReportExportButton,
+  ReportExportCardButton,
+  ReportExportDialog,
+} from "@/components/recruiter/report-export";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { cx } from "@/lib/cx";
@@ -89,17 +94,9 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
         <p className="t-w4-web t-w4-sub">
           {tw(periode === "90d" ? "sub90" : "sub30", { org: space.organization.name })}
         </p>
-        {exportable && (
-          <a
-            href={`/app/hire/rapports/export?periode=${periode}`}
-            className="t-bt t-sec t-m t-press t-w4-web"
-            download
-          >
-            <TalentIcon name="telecharger" size="s" />
-            {tw("export")}
-          </a>
-        )}
+        {exportable && <ReportExportButton />}
       </div>
+      {exportable && <ReportExportDialog periode={periode} activeJobs={basic.activeJobs} />}
 
       <nav aria-label={t("period.text")} className="t-rx-onglets">
         <Link
@@ -344,6 +341,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
               <b>{tr("pdf.title", { month })}</b>
               <span>{tr("pdf.line")}</span>
             </span>
+            <ReportExportCardButton />
           </div>
           <a
             href={`/app/hire/rapports/export?periode=${periode}`}

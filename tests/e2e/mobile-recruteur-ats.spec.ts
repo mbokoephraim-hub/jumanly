@@ -132,7 +132,8 @@ test("ATS : analyse par Orbi, profil pour l'offre, retenus, réponse groupée re
   const preview = page.getByRole("dialog", { name: "Aperçu du message" });
   await expect(preview).toContainText("Jean-Pierre");
   await preview.getByRole("button", { name: "Fermer" }).first().click();
-  await replies.getByText("J'ai relu le message").click();
+  // The box exists for the phone and for the computer: the one on screen.
+  await replies.getByText("J'ai relu le message").filter({ visible: true }).click();
   await replies.getByRole("button", { name: "Envoyer à 1 personne" }).click();
   const confirm = page.getByRole("dialog", { name: "Envoyer 1 réponse ?" });
   await expect(confirm.getByRole("button", { name: "Envoyer", exact: true })).toBeDisabled();
@@ -228,13 +229,21 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   const remind = proposals.getByRole("button", { name: /^Relancer / });
   if (await remind.count()) {
     await remind.first().click();
-    await expect(
-      page.getByText("Relance envoyée. Le talent décide toujours.").first(),
-    ).toBeVisible();
+    // `relance=ok` when this click reminded, `relance=non` when the other project was first.
+    await expect(page).toHaveURL(/relance=(ok|non)/);
+    if (page.url().includes("relance=ok"))
+      await expect(
+        page.getByText("Relance envoyée. Le talent décide toujours.").first(),
+      ).toBeVisible();
   }
-  // Both projects may remind the same proposal at once: read the saved state afresh.
-  await page.reload();
-  await expect(proposals.getByText("Relancé", { exact: true }).first()).toBeVisible();
+  // Both projects may remind the same proposal at once: read the saved state afresh, until the
+  // other project's reminder (if it won the race) has landed too.
+  await expect(async () => {
+    await page.reload();
+    await expect(proposals.getByText("Relancé", { exact: true }).first()).toBeVisible({
+      timeout: 3_000,
+    });
+  }).toPass({ timeout: 30_000 });
   await noOverflow(page, "propositions");
 });
 

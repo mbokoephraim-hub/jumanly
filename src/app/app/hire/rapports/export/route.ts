@@ -60,12 +60,15 @@ export async function GET(request: Request) {
     extra: await reportPdfData(db, ctx, range),
     rows: rows.filter((row) => !drawn.includes(row.section)),
     now: new Date(),
+    // The export window of the web (lot 4) can leave out the detail by offer or Orbi's reading.
+    sections: { byJob: params.offres !== "0", reading: params.lecture !== "0" },
   });
   return new NextResponse(new Uint8Array(pdf), {
     headers: {
       ...headers,
       "Content-Type": "application/pdf",
-      "Content-Disposition": `attachment; filename="rapport-${day}.pdf"`,
+      // « Aperçu » of the export window opens the same PDF in a new tab instead of saving it.
+      "Content-Disposition": `${params.apercu === "1" ? "inline" : "attachment"}; filename="rapport-${day}.pdf"`,
     },
   });
 }

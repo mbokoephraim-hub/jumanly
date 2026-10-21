@@ -181,6 +181,8 @@ type Props = {
   extra: ReportPdfData;
   rows: ReportRow[];
   now: Date;
+  /** What the member kept in the export window (web recruiter lot 4); everything by default. */
+  sections?: { byJob: boolean; reading: boolean };
 };
 
 const pct = (value: number, max: number) =>
@@ -190,6 +192,7 @@ export async function renderRecruitingReport(props: Props) {
   const t = await getTranslations("hireReportPdf");
   const f = await getFormatter();
   const { report, extra, range } = props;
+  const sections = props.sections ?? { byJob: true, reading: true };
   const basic = report.basic;
   const stats = report.stats;
   const n = (value: number) => f.number(value);
@@ -309,36 +312,40 @@ export async function renderRecruitingReport(props: Props) {
               </View>
             </View>
           </View>
-          <Text style={s.title}>{t("byJob")}</Text>
-          <View style={s.th}>
-            <Text style={s.cJob}>{t("col.job")}</Text>
-            <Text style={s.cSt}>{t("col.status")}</Text>
-            <Text style={s.cNh}>{t("col.views")}</Text>
-            <Text style={s.cNh}>{t("col.applications")}</Text>
-            <Text style={s.cNh}>{t("col.interviews")}</Text>
-            <Text style={s.cNh}>{t("col.delay")}</Text>
-          </View>
-          {extra.offers.length === 0 && (
-            <View style={s.tr}>
-              <Text style={s.muted}>{t("noJobs")}</Text>
-            </View>
-          )}
-          {extra.offers.map((offer, index) => {
-            const live = offer.status !== "pending_review" && offer.status !== "draft";
-            return (
-              <View key={index} style={s.tr} wrap={false}>
-                <View style={s.cJob}>
-                  <View style={[s.dot, { backgroundColor: dots[index % dots.length] }]} />
-                  <Text>{offer.title}</Text>
-                </View>
-                <Text style={s.cSt}>{t(`status.${offer.status}`)}</Text>
-                <Text style={s.cN}>{live ? n(offer.views) : t("none")}</Text>
-                <Text style={s.cN}>{live ? n(offer.applications) : t("none")}</Text>
-                <Text style={s.cN}>{live ? n(offer.interviews) : t("none")}</Text>
-                <Text style={s.cN}>{live ? days(offer.delay) : t("none")}</Text>
+          {sections.byJob && (
+            <>
+              <Text style={s.title}>{t("byJob")}</Text>
+              <View style={s.th}>
+                <Text style={s.cJob}>{t("col.job")}</Text>
+                <Text style={s.cSt}>{t("col.status")}</Text>
+                <Text style={s.cNh}>{t("col.views")}</Text>
+                <Text style={s.cNh}>{t("col.applications")}</Text>
+                <Text style={s.cNh}>{t("col.interviews")}</Text>
+                <Text style={s.cNh}>{t("col.delay")}</Text>
               </View>
-            );
-          })}
+              {extra.offers.length === 0 && (
+                <View style={s.tr}>
+                  <Text style={s.muted}>{t("noJobs")}</Text>
+                </View>
+              )}
+              {extra.offers.map((offer, index) => {
+                const live = offer.status !== "pending_review" && offer.status !== "draft";
+                return (
+                  <View key={index} style={s.tr} wrap={false}>
+                    <View style={s.cJob}>
+                      <View style={[s.dot, { backgroundColor: dots[index % dots.length] }]} />
+                      <Text>{offer.title}</Text>
+                    </View>
+                    <Text style={s.cSt}>{t(`status.${offer.status}`)}</Text>
+                    <Text style={s.cN}>{live ? n(offer.views) : t("none")}</Text>
+                    <Text style={s.cN}>{live ? n(offer.applications) : t("none")}</Text>
+                    <Text style={s.cN}>{live ? n(offer.interviews) : t("none")}</Text>
+                    <Text style={s.cN}>{live ? days(offer.delay) : t("none")}</Text>
+                  </View>
+                );
+              })}
+            </>
+          )}
         </View>
         {footer}
       </Page>
@@ -442,13 +449,17 @@ export async function renderRecruitingReport(props: Props) {
               </Text>
             </View>
           </View>
-          <Text style={s.title}>{t("reading.title")}</Text>
-          <View style={s.note} wrap={false}>
-            <View style={s.orbi}>
-              <View style={s.orbiIn} />
-            </View>
-            <Text style={s.noteT}>{[...reading, t("reading.note")].join(" ")}</Text>
-          </View>
+          {sections.reading && (
+            <>
+              <Text style={s.title}>{t("reading.title")}</Text>
+              <View style={s.note} wrap={false}>
+                <View style={s.orbi}>
+                  <View style={s.orbiIn} />
+                </View>
+                <Text style={s.noteT}>{[...reading, t("reading.note")].join(" ")}</Text>
+              </View>
+            </>
+          )}
           {props.rows.length > 0 && (
             <>
               <Text style={s.title} break={false}>

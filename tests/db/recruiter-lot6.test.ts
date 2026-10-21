@@ -21,6 +21,7 @@ import {
   unshortlist,
 } from "@/server/services/hire-ats";
 import { sendGroupReply, undoGroupReply } from "@/server/services/hire-group-replies";
+import { groupReplyEmailPreview } from "@/server/services/hire-reply-preview";
 import {
   cleanupCandidates,
   conversationAction,
@@ -235,6 +236,42 @@ describe("retenus et réponses groupées", () => {
     const again = await sendGroupReply(db, owner, jobId, reply("non-retenus"));
     if (!again.ok) throw new Error(again.error);
     expect(await undoGroupReply(db, owner, jobId, again.batchId, late)).toBe("expired");
+    expect(await unshortlist(db, owner, jobId, kept.applicationId)).toBe(true);
+  });
+});
+
+describe("web lot 4 : aperçu de l'e-mail d'une réponse groupée", () => {
+  it("rend l'e-mail tel qu'il part, sans rien envoyer, pour l'organisation de l'offre seulement", async () => {
+    const owner = await company();
+    const stranger = await company();
+    const jobId = await publishedJob(owner);
+    const kept = await applicant(jobId);
+    expect(await shortlist(db, owner, jobId, [kept.applicationId])).toBe(1);
+    const input = {
+      jobId,
+      group: "retenus" as const,
+      ids: [],
+      applicationId: kept.applicationId,
+      // The greeting is the e-mail's own: the letter starts after it, as when it is sent.
+      body: "Bonjour {prenom},\n\nMerci pour votre candidature au poste {poste}.",
+      company: "Organisation test",
+      strengthText: () => "",
+    };
+    const preview = await groupReplyEmailPreview(db, owner, input);
+    expect(preview.html).toContain("Bonjour Fictif,");
+    expect(preview.html).toContain("Merci pour votre candidature au poste Analyste fictif.");
+    expect(preview.subject.length).toBeGreaterThan(0);
+    // The talent's address is not in the preview, and nothing has left.
+    const person = await db.user.findUniqueOrThrow({ where: { id: kept.userId } });
+    expect(preview.html).not.toContain(person.email);
+    expect(
+      await db.message.count({ where: { conversation: { applicationId: kept.applicationId } } }),
+    ).toBe(0);
+    // Another organization cannot read it; a person outside the group is not previewed.
+    await expect(groupReplyEmailPreview(db, stranger, input)).rejects.toBeInstanceOf(HireError);
+    await expect(
+      groupReplyEmailPreview(db, owner, { ...input, group: "non-retenus" }),
+    ).rejects.toBeInstanceOf(HireError);
     expect(await unshortlist(db, owner, jobId, kept.applicationId)).toBe(true);
   });
 });

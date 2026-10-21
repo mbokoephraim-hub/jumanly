@@ -6,7 +6,9 @@ import { SettingsNav } from "@/components/talent/settings-nav";
 import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { SegmentRadios, SwitchRow } from "@/components/talent/settings-controls";
+import { DesktopNotificationsSetting } from "@/components/recruiter/desktop-notifications";
 import { cx } from "@/lib/cx";
+import { getActiveSpace } from "@/server/hire-context";
 import { updateNotifications } from "@/server/actions/settings";
 import { requireUser } from "@/server/auth/session";
 import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
@@ -37,6 +39,7 @@ export default async function NotificationSettingsPage({
 }: PageProps<"/app/parametres/notifications">) {
   const params = await searchParams;
   const user = await requireUser("/app/parametres/notifications");
+  const space = await getActiveSpace(user.id);
   if (await inPartnerSpaceOnly(user.id)) toHireSettings("notifications", params);
   const t = await getTranslations();
   const muted = new Set(user.notificationsMuted);
@@ -125,6 +128,24 @@ export default async function NotificationSettingsPage({
               </button>
             </noscript>
           </form>
+          {/* Web recruiter lot 4: the computer's notifications, asked for here and only here. */}
+          {space && (
+            <ul
+              aria-label={t("hireWeb.desktop.group")}
+              className="t-verre t-liste t-lignes t-rw-web t-rw-desk"
+            >
+              <li>
+                <DesktopNotificationsSetting
+                  labels={{
+                    title: t("hireWeb.desktop.title"),
+                    text: t("hireWeb.desktop.text"),
+                    blocked: t("hireWeb.desktop.blocked"),
+                    unsupported: t("hireWeb.desktop.unsupported"),
+                  }}
+                />
+              </li>
+            </ul>
+          )}
         </div>
       </div>
     </div>

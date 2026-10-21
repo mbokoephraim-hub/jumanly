@@ -216,7 +216,7 @@ export function ThreadComposer({
 
       <form action={sendMessageAction} className="t-r5-form" onSubmit={() => setDraft(null)}>
         <div className="t-verre t-fort t-compo">
-          <SheetButton target="r5-plus" className="t-bi t-press" label={labels.plus}>
+          <SheetButton target="r5-plus" className="t-bi t-press" label={labels.plus} anchor>
             <TalentIcon name="plus" size="s" />
           </SheetButton>
           <input type="hidden" name="conversation" value={conversationId} />
@@ -251,7 +251,12 @@ export function ThreadComposer({
         </div>
       </form>
 
-      <Sheet id="r5-plus" title={labels.plusTitle} closeLabel={labels.sheetClose}>
+      <Sheet
+        id="r5-plus"
+        title={labels.plusTitle}
+        closeLabel={labels.sheetClose}
+        className="t-rx-ancre t-rw-plus"
+      >
         <ul className="t-verre t-liste t-lignes">
           {slotsHref && (
             <li>

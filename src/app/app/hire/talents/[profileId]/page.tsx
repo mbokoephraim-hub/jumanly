@@ -130,6 +130,7 @@ export default async function TalentProfilePage({
   const title = view.anonymous
     ? t("anonymous", { headline: profile.headline || t("noHeadline") })
     : profile.user.name;
+  const tpw = await getTranslations("hireWeb.proposals");
   const firstName = view.anonymous
     ? t("anonymousShort")
     : profile.user.firstName || profile.user.name.split(/\s+/)[0]!;
@@ -211,6 +212,54 @@ export default async function TalentProfilePage({
   return (
     <div className="t-flux t-ri-prof t-rw-tprof">
       {toast && <ToastOnLoad message={toast} tone="success" />}
+      {/* Web recruiter lot 4 (planche « Proposition envoyée »): what follows, on a computer. */}
+      {ok === "proposee" && (
+        <div className="t-rw-web">
+          <Sheet
+            id="rw4-envoyee"
+            title={tpw("sent.title", { name: firstName })}
+            closeLabel={tpw("sent.close")}
+            className="t-rw-ok4"
+            defaultOpen
+            head={
+              <div className="t-rw-ok4-h" aria-hidden>
+                <span className="t-rw-ok4-ic">
+                  <TalentIcon name="envoyer" />
+                </span>
+                <b>{tpw("sent.title", { name: firstName })}</b>
+              </div>
+            }
+          >
+            <div className="t-flux t-serre t-rw-ok4-c">
+              <p className="t-rw-ok4-s">{tpw("sent.text", { name: firstName })}</p>
+              <ol className="t-rw-ok4-st">
+                <li className="t-ok">
+                  <b>{tpw("sent.step1")}</b>
+                  <span>
+                    {tpw("sent.step1Text", {
+                      time: format.dateTime(now, { hour: "2-digit", minute: "2-digit" }),
+                    })}
+                  </span>
+                </li>
+                <li className="t-en">
+                  <b>{tpw("sent.step2", { name: firstName })}</b>
+                  <span>{tpw("sent.step2Text", { days: CONTACT_EXPIRY_DAYS })}</span>
+                </li>
+                <li>
+                  <b>{tpw("sent.step3")}</b>
+                  <span>{tpw("sent.step3Text")}</span>
+                </li>
+              </ol>
+              <Link
+                href="/app/hire/candidats?vue=propositions"
+                className="t-bt t-p t-pl t-press t-rw-dk"
+              >
+                {tpw("sent.cta")}
+              </Link>
+            </div>
+          </Sheet>
+        </div>
+      )}
       <Link href={back} className="t-rw-crumb t-rw-web">
         <TalentIcon name="suivant" size="xs" />
         {tw("crumb")}

@@ -702,7 +702,8 @@ export async function respondContactRequest(
     userIds: [request.requesterId],
     type: "contactAccepted",
     payload: {},
-    href: `/app/messages/${conversation.id}`,
+    // `acceptee=1`: on a computer, the conversation opens on the news (web recruiter lot 4).
+    href: `/app/messages/${conversation.id}?acceptee=1`,
   });
   return { status: "accepted", conversationId: conversation.id };
 }
