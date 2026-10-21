@@ -16,7 +16,8 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * « Nouvelle publication » (Modèle B, lot B3). `?citer=<id>`: « Citer » a post;
- * `?brouillon=attestation`: Orbi's draft about the last attestation, ready to publish.
+ * `?brouillon=attestation`: Orbi's draft about the last attestation, ready to publish;
+ * `?realisation=<id>`: « Partager dans le Fil » of a project of Carrière (lot B5).
  */
 export default async function FilComposePage({ searchParams }: PageProps<"/app/fil/publier">) {
   const query = await searchParams;
@@ -64,6 +65,7 @@ export default async function FilComposePage({ searchParams }: PageProps<"/app/f
         }
         back="/app"
         startWithDraft={query.brouillon === "attestation"}
+        startWork={typeof query.realisation === "string" ? query.realisation : null}
       />
     </FilTexts>
   );

@@ -32,6 +32,7 @@ import {
 } from "@/server/actions/cv-import";
 import { aiFeatures, AI_CREDITS_KEY } from "@/server/ai";
 import { requireUser } from "@/server/auth/session";
+import { isPhone } from "@/server/view";
 import { db } from "@/server/db";
 import { usage } from "@/server/entitlements";
 import {
@@ -78,6 +79,8 @@ export default async function CvAndDocumentsPage({ searchParams }: PageProps<"/a
   const params = await searchParams;
   const view: View = views.includes(params.vue as View) ? (params.vue as View) : "cv";
   const user = await requireUser("/app/career/cv");
+  // On a phone, the Carrière tab (Modèle B, lot B5) is drawn by the layout and kept mounted.
+  if (await isPhone()) return null;
   const t = await getTranslations();
   const d = dynamic(t);
   const format = await getFormatter();

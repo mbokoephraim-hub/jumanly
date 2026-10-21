@@ -1117,7 +1117,7 @@ function Ready({
               </button>
             </form>
           ) : null}
-          <Link href="/app/profil" className="nb-ligne-lien">
+          <Link href="/app/career/cv" className="nb-ligne-lien">
             <span>
               <b>{t("ready.profile")}</b>
               <span className="nb-meta">{t("ready.profileHint")}</span>

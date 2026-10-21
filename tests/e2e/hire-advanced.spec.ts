@@ -39,10 +39,16 @@ test("recherche de talents et mise en relation acceptée", async ({
   await signUpTalent(page, testEmail("visible"), city);
   // Lot 7: « Qui voit mon profil » in Paramètres › Confidentialité, a sheet of three choices.
   await page.goto("/app/parametres/confidentialite");
-  await page.getByRole("button", { name: /Qui voit mon profil/ }).click();
-  await page.getByRole("radio", { name: /Visible des recruteurs/ }).check({ force: true });
-  await page.getByRole("button", { name: "Enregistrer" }).click();
-  await expect(page.getByText("C'est enregistré.")).toBeVisible();
+  if (isMobile) {
+    // Modèle B (lot B5): three choices saved at once.
+    await page.getByRole("radio", { name: /^Les recruteurs/ }).click();
+    await expect(page.getByText("C’est enregistré.")).toBeVisible();
+  } else {
+    await page.getByRole("button", { name: /Qui voit mon profil/ }).click();
+    await page.getByRole("radio", { name: /Visible des recruteurs/ }).check({ force: true });
+    await page.getByRole("button", { name: "Enregistrer" }).click();
+    await expect(page.getByText("C'est enregistré.")).toBeVisible();
+  }
 
   const recruiter = await newPage(browser, baseURL, isMobile);
   await logIn(recruiter, group.owner);

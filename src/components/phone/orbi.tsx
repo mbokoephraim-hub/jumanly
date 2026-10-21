@@ -6,7 +6,7 @@ import { useEffect, useRef, useState, useTransition } from "react";
 import { askOrbiAction } from "@/server/actions/orbi";
 import { orbiFactAction, type OrbiFactAnswer } from "@/server/actions/feed";
 import { FilAvatar } from "./fil/avatar";
-import { ORBI_EVENT, type OrbiFact } from "./orbi-bus";
+import { ORBI_ASK_EVENT, ORBI_EVENT, type OrbiFact } from "./orbi-bus";
 import { orbiActions, type OrbiReply } from "@/lib/orbi";
 import { keepsBar, rootTab, tabOf, type PhoneTab } from "@/lib/phone-tabs";
 import { OrbiDisc, PhoneIcon } from "./icon";
@@ -127,8 +127,16 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
       const fact = (event as CustomEvent<OrbiFact>).detail;
       askFact(fact, "");
     };
+    const listenQuestion = (event: Event) => {
+      setOpen(true);
+      ask((event as CustomEvent<string>).detail);
+    };
     window.addEventListener(ORBI_EVENT, listen);
-    return () => window.removeEventListener(ORBI_EVENT, listen);
+    window.addEventListener(ORBI_ASK_EVENT, listenQuestion);
+    return () => {
+      window.removeEventListener(ORBI_EVENT, listen);
+      window.removeEventListener(ORBI_ASK_EVENT, listenQuestion);
+    };
   });
 
   return (

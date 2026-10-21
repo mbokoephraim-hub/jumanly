@@ -25,9 +25,11 @@ test("Orbi : écrire, comprendre la réponse, retrouver puis effacer l'échange"
   }
   await expect(page.getByText("0 crédit", { exact: true })).toBeVisible();
 
-  await page
-    .getByRole("textbox", { name: "Votre message à Orbi" })
-    .fill("Comment préparer mon entretien ?");
+  // The tabs of the phone load underneath: write once the page answers (hydrated).
+  await page.waitForLoadState("networkidle");
+  const box = page.getByRole("textbox", { name: "Votre message à Orbi" });
+  await box.fill("Comment préparer mon entretien ?");
+  await expect(box).toHaveValue("Comment préparer mon entretien ?");
   await page.getByRole("button", { name: "Envoyer" }).click();
   const chat = page.getByRole("region", { name: "Conversation avec Orbi" });
   await expect(chat.getByText("Comment préparer mon entretien ?")).toBeVisible();

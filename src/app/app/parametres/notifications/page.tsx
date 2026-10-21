@@ -14,6 +14,8 @@ import { requireUser } from "@/server/auth/session";
 import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
 import { toHireSettings } from "@/server/settings-redirect";
 import { inPartnerSpaceOnly } from "@/server/talent-space";
+import { PhoneNotificationsScreen } from "@/components/phone/career/settings-server";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("notifReglages");
@@ -41,6 +43,7 @@ export default async function NotificationSettingsPage({
   const user = await requireUser("/app/parametres/notifications");
   const space = await getActiveSpace(user.id);
   if (await inPartnerSpaceOnly(user.id)) toHireSettings("notifications", params);
+  if (!space && (await isPhone())) return <PhoneNotificationsScreen user={user} />;
   const t = await getTranslations();
   const muted = new Set(user.notificationsMuted);
 

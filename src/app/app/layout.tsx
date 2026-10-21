@@ -4,6 +4,7 @@ import { AppShell } from "@/components/layout/app-shell";
 import { RecruiterShell } from "@/components/recruiter/shell";
 import { PhoneShell } from "@/components/phone/shell";
 import { FilTab } from "@/components/phone/fil/server";
+import { CareerTab } from "@/components/phone/career/server";
 import { ExplorerTab } from "@/components/phone/explorer/server";
 import { TalentShell } from "@/components/talent/shell";
 import { isPhone } from "@/server/view";
@@ -90,6 +91,11 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
             explorer: (
               <Suspense fallback={null}>
                 <ExplorerTab user={{ id: user.id, name: user.name, image: user.image ?? null }} />
+              </Suspense>
+            ),
+            carriere: (
+              <Suspense fallback={null}>
+                <CareerTab user={{ id: user.id }} />
               </Suspense>
             ),
           }}

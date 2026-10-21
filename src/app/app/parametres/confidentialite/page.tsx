@@ -15,6 +15,9 @@ import { db } from "@/server/db";
 import { listProjects } from "@/server/services/portfolio";
 import { toHireSettings } from "@/server/settings-redirect";
 import { inPartnerSpaceOnly } from "@/server/talent-space";
+import { PhonePrivacyScreen } from "@/components/phone/career/settings-server";
+import { getActiveSpace } from "@/server/hire-context";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("confidentialite");
@@ -36,6 +39,8 @@ export default async function PrivacyPage({
   const params = await searchParams;
   const user = await requireUser("/app/parametres/confidentialite");
   if (await inPartnerSpaceOnly(user.id)) toHireSettings("confidentialite", params);
+  if ((await isPhone()) && !(await getActiveSpace(user.id)))
+    return <PhonePrivacyScreen user={user} />;
   const t = await getTranslations();
   const profile = await db.talentProfile.findUnique({
     where: { userId: user.id },

@@ -23,6 +23,8 @@ import {
   quoteCheckout,
   TRIAL_DAYS,
 } from "@/server/services/subscriptions";
+import { PhonePayScreen } from "@/components/phone/career/settings-server";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("paiement");
@@ -54,6 +56,11 @@ export default async function PayPage({ searchParams }: PageProps<"/app/abonneme
   // organization they own for an RH or Company plan. Without one, nothing to pay here.
   const subject = await billingSubject(db, user.id, plan.family);
   if (!subject) redirect("/app/abonnement");
+  // The phone (Modèle B, planches Carrière-paiement): a talent paying for themself.
+  if (subject.type === "user" && params.essai !== "1" && (await isPhone())) {
+    const screen = await PhonePayScreen({ userId: user.id, plan, paymentId });
+    if (screen) return screen;
+  }
   const amount = (cents: number) => t("abonnement.amount", { amount: formatUsd(cents) });
   const opName = (operator: string | null) =>
     operator && d.has(`checkout.mm.operators.${operator}`)

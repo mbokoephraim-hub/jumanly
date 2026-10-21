@@ -86,6 +86,20 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   // Follow it in Suivi, read the CV that was sent, then withdraw.
   await page.getByRole("link", { name: "Suivre ma candidature" }).click();
   await expect(page).toHaveURL(/\/app\/suivi\/[^/?]+/);
+  if (isMobile) {
+    // The phone's page of an application (Modèle B, lot B5): « CV envoyé », then « Retirer ».
+    const screen = page.locator(".nb-ca-candidature");
+    await expect(screen.getByText("Candidature envoyée")).toBeVisible();
+    const sentHref = await screen.getByRole("link", { name: /^CV envoyé/ }).getAttribute("href");
+    expect((await page.request.get(sentHref!)).status()).toBe(200);
+    await screen.getByRole("button", { name: "Retirer ma candidature" }).click();
+    await page
+      .getByRole("dialog", { name: "Retirer votre candidature ?" })
+      .getByRole("button", { name: "Retirer", exact: true })
+      .click();
+    await expect(page).toHaveURL(/\/app\/career\/cv/);
+    return;
+  }
   await expect(page.getByRole("main")).toContainText("Envoyée");
   const sentHref = await page.getByRole("link", { name: /^CV « / }).getAttribute("href");
   expect((await page.request.get(sentHref!)).status()).toBe(200);

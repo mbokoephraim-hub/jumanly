@@ -8689,6 +8689,518 @@ Conventions :
 | `phoneExplorer.person.cancel` | Annuler |
 | `phoneExplorer.person.photo` | Photo de {name} |
 
+### Modèle B · Carrière au téléphone
+
+*Lot B5 (docs/modele-b, rangées 11 à 15, planche `Carriere.dc.html`) : l'onglet Carrière (profil, CV, portfolio, progression, candidatures), sa recherche, partager le profil, modifier le profil, paramètres, formule et paiement, CV, réalisations et candidatures.*
+
+| Clé | Texte |
+|---|---|
+| `phoneCareer.seo` | Carrière |
+| `phoneCareer.eyebrow` | Carrière |
+| `phoneCareer.search` | Rechercher dans Carrière |
+| `phoneCareer.settings` | Paramètres |
+| `phoneCareer.share` | Partager |
+| `phoneCareer.edit` | Modifier |
+| `phoneCareer.photo` | Photo de profil de {name} |
+| `phoneCareer.handle` | @{handle} |
+| `phoneCareer.cap` | Cap · {job} |
+| `phoneCareer.noCap` | Choisir mon Cap |
+| `phoneCareer.availability.open` | Disponible tout de suite |
+| `phoneCareer.availability.listening` | À l’écoute |
+| `phoneCareer.availability.not_looking` | Pas en recherche |
+| `phoneCareer.complete` | Profil complété |
+| `phoneCareer.completeValue` | {percent} % |
+| `phoneCareer.tabs` | Rubriques de Carrière |
+| `phoneCareer.tab.profil` | Profil |
+| `phoneCareer.tab.cv` | CV |
+| `phoneCareer.tab.portfolio` | Portfolio |
+| `phoneCareer.tab.progression` | Progression |
+| `phoneCareer.tab.candidatures` | Candidatures |
+| `phoneCareer.suggestion` | {count, plural, one {Ajoutez {skill} à vos compétences : une offre ouverte le demande.} other {Ajoutez {skill} à vos compétences : # offres ouvertes le demandent.}} |
+| `phoneCareer.suggestionAdd` | Ajouter |
+| `phoneCareer.suggestionAdded` | {skill} est ajouté à vos compétences. |
+| `phoneCareer.about` | À propos |
+| `phoneCareer.aboutEmpty` | Présentez-vous en quelques lignes : ce que vous savez faire et ce que vous cherchez. |
+| `phoneCareer.modify` | Modifier |
+| `phoneCareer.add` | Ajouter |
+| `phoneCareer.skills` | Compétences |
+| `phoneCareer.skillsEmpty` | Ajoutez au moins trois compétences. |
+| `phoneCareer.experience` | Expérience |
+| `phoneCareer.experienceEmpty` | Stage, emploi, bénévolat : tout compte. |
+| `phoneCareer.education` | Formation |
+| `phoneCareer.educationEmpty` | Diplôme, formation ou attestation. |
+| `phoneCareer.attestation` | Attestation Jumanly · {date} |
+| `phoneCareer.languages` | Langues et lieux |
+| `phoneCareer.languagesEmpty` | Vos langues et les villes où vous voulez travailler. |
+| `phoneCareer.when.range` | {start} – {end} |
+| `phoneCareer.when.since` | Depuis {start} |
+| `phoneCareer.when.place` | {when} · {place} |
+| `phoneCareer.when.today` | aujourd’hui |
+| `phoneCareer.when.yesterday` | hier |
+| `phoneCareer.when.on` | le {date} |
+| `phoneCareer.cv.new` | Nouveau CV |
+| `phoneCareer.cv.newText` | Modèle, import ou Orbi |
+| `phoneCareer.cv.updated` | Modifié {when} |
+| `phoneCareer.cv.uses` | {count, plural, one {Utilisé une fois} other {Utilisé # fois}} |
+| `phoneCareer.cv.primary` | Par défaut |
+| `phoneCareer.cv.more` | Actions de « {title} » |
+| `phoneCareer.cv.adapt` | Adapter « {cv} » à l’offre de {company} ? |
+| `phoneCareer.cv.adaptButton` | Adapter |
+| `phoneCareer.cv.fromTemplate` | Partir d’un modèle |
+| `phoneCareer.cv.fromTemplateText` | Choisissez la mise en page, on remplit avec votre profil |
+| `phoneCareer.cv.import` | Importer un CV |
+| `phoneCareer.cv.importText` | PDF ou Word, Orbi le lit pour vous |
+| `phoneCareer.cv.orbi` | Laisser Orbi le préparer |
+| `phoneCareer.cv.orbiText` | À partir de votre profil et de votre Cap |
+| `phoneCareer.cv.menu.edit` | Modifier |
+| `phoneCareer.cv.menu.export` | Exporter en PDF ou Word |
+| `phoneCareer.cv.menu.adapt` | Adapter à une offre |
+| `phoneCareer.cv.menu.duplicate` | Dupliquer |
+| `phoneCareer.cv.menu.primary` | Utiliser par défaut |
+| `phoneCareer.cv.menu.delete` | Supprimer |
+| `phoneCareer.portfolio.featured` | Mise en avant |
+| `phoneCareer.portfolio.line` | {tool} · {count, plural, =0 {sans photo} one {une photo} other {# photos}} |
+| `phoneCareer.portfolio.lineNoTool` | {count, plural, =0 {Sans photo} one {Une photo} other {# photos}} |
+| `phoneCareer.portfolio.add` | Ajouter |
+| `phoneCareer.portfolio.addText` | photo, PDF ou lien |
+| `phoneCareer.progression.stageLabel` | Votre stade |
+| `phoneCareer.progression.stage.discovery` | Découverte |
+| `phoneCareer.progression.stage.building` | Construction |
+| `phoneCareer.progression.stage.ready` | Prêt |
+| `phoneCareer.progression.stage.competitive` | Compétitif |
+| `phoneCareer.progression.next` | {count, plural, =0 {Vous êtes au plus haut stade.} one {Encore une étape pour passer « {stage} ».} other {Encore # étapes pour passer « {stage} ».}} |
+| `phoneCareer.progression.noStage` | À découvrir |
+| `phoneCareer.progression.noStageText` | Faites le point en quelques minutes : Orbi vous dit où vous en êtes et quoi faire ensuite. |
+| `phoneCareer.progression.diagnostic` | Faire le point |
+| `phoneCareer.progression.top` | Vous êtes au plus haut stade. Gardez votre profil à jour. |
+| `phoneCareer.progression.courses` | cours suivis |
+| `phoneCareer.progression.coursesValue` | {done}/{all} |
+| `phoneCareer.progression.profile` | profil |
+| `phoneCareer.progression.applications` | candidatures |
+| `phoneCareer.progression.steps` | Prochaines étapes |
+| `phoneCareer.progression.open` | Ouvrir › |
+| `phoneCareer.progression.step.skill` | Ajouter {skill} |
+| `phoneCareer.progression.step.project` | Publier une réalisation |
+| `phoneCareer.progression.step.interview` | Préparer l’entretien du {date} |
+| `phoneCareer.progression.step.cv` | Créer mon premier CV |
+| `phoneCareer.progression.step.about` | Écrire mon « À propos » |
+| `phoneCareer.progression.step.experience` | Ajouter une expérience |
+| `phoneCareer.progression.step.education` | Ajouter une formation |
+| `phoneCareer.progression.step.languages` | Ajouter mes langues |
+| `phoneCareer.progression.step.apply` | Postuler à une offre |
+| `phoneCareer.progression.step.course` | Suivre un cours |
+| `phoneCareer.applications.sent` | {company} · envoyée le {date} |
+| `phoneCareer.applications.status.sent` | Envoyée |
+| `phoneCareer.applications.status.viewed` | Vue |
+| `phoneCareer.applications.status.shortlisted` | Présélection |
+| `phoneCareer.applications.status.test` | Test |
+| `phoneCareer.applications.status.interview` | Entretien |
+| `phoneCareer.applications.status.offer` | Proposition |
+| `phoneCareer.applications.status.hired` | Embauche |
+| `phoneCareer.applications.status.notSelected` | Non retenue |
+| `phoneCareer.applications.status.withdrawn` | Retirée |
+| `phoneCareer.applications.status.jobClosed` | Offre fermée |
+| `phoneCareer.applications.interview` | Entretien {date} |
+| `phoneCareer.applications.viewed` | Le recruteur a ouvert votre candidature {when} |
+| `phoneCareer.applications.waiting` | En attente de lecture |
+| `phoneCareer.applications.empty` | Aucune candidature pour l’instant. Postuler est gratuit, toujours. |
+| `phoneCareer.applications.explore` | Voir les offres |
+| `phoneCareer.applications.steps` | {count, plural, one {Étape # sur 4} other {Étape # sur 4}} |
+| `phoneCareer.searchHint` | Tapez une lettre : vos compétences, expériences, CV, réalisations, candidatures et réglages s’affichent. |
+| `phoneCareer.searchIn` | Chercher dans |
+| `phoneCareer.searchScope.tout` | Tout |
+| `phoneCareer.searchScope.profil` | Profil |
+| `phoneCareer.searchScope.cv` | CV |
+| `phoneCareer.searchScope.portfolio` | Portfolio |
+| `phoneCareer.searchScope.candidatures` | Candidatures |
+| `phoneCareer.searchScope.parametres` | Paramètres |
+| `phoneCareer.shortcuts` | Raccourcis |
+| `phoneCareer.shortcut.edit` | Modifier mon profil |
+| `phoneCareer.shortcut.cv` | Créer un CV |
+| `phoneCareer.shortcut.interview` | Préparer mon entretien |
+| `phoneCareer.shortcut.plan` | Ma formule |
+| `phoneCareer.shortcut.privacy` | Confidentialité |
+| `phoneCareer.shortcutWhere.profil` | Profil › |
+| `phoneCareer.shortcutWhere.cv` | CV › |
+| `phoneCareer.shortcutWhere.candidatures` | Candidatures › |
+| `phoneCareer.shortcutWhere.plan` | {plan} › |
+| `phoneCareer.shortcutWhere.parametres` | Paramètres › |
+| `phoneCareer.recent` | Recherches récentes |
+| `phoneCareer.searchField` | Compétence, CV, candidature… |
+| `phoneCareer.searchLabel` | Rechercher dans Carrière |
+| `phoneCareer.cancel` | Annuler |
+| `phoneCareer.clear` | Effacer |
+| `phoneCareer.noResult` | Rien ne correspond à « {query} ». |
+| `phoneCareer.kind.skill` | Compétence |
+| `phoneCareer.kind.about` | Profil |
+| `phoneCareer.kind.experience` | Expérience |
+| `phoneCareer.kind.experienceWhen` | Expérience · {when} |
+| `phoneCareer.kind.education` | Formation |
+| `phoneCareer.kind.educationWhere` | Formation · {school} |
+| `phoneCareer.kind.attestation` | Attestation Jumanly |
+| `phoneCareer.kind.language` | Langue |
+| `phoneCareer.kind.cv` | CV |
+| `phoneCareer.kind.project` | Réalisation |
+| `phoneCareer.kind.application` | Candidature · {company} |
+| `phoneCareer.kind.setting` | Paramètres |
+| `phoneCareer.setting.account` | Compte et mot de passe |
+| `phoneCareer.setting.plan` | Ma formule |
+| `phoneCareer.setting.privacy` | Confidentialité |
+| `phoneCareer.setting.notifications` | Notifications |
+| `phoneCareer.setting.help` | Aide et contact |
+| `phoneCareer.shareTitle` | Partager mon profil |
+| `phoneCareer.shareCopy` | Copier le lien |
+| `phoneCareer.shareCopied` | Lien copié |
+| `phoneCareer.shareWhatsapp` | WhatsApp |
+| `phoneCareer.shareLinkedin` | LinkedIn |
+| `phoneCareer.shareFacebook` | Facebook |
+| `phoneCareer.shareEmail` | E-mail |
+| `phoneCareer.shareEmailSubject` | Le profil de {name} sur Jumanly |
+| `phoneCareer.shareText` | Mon profil sur Jumanly : {url} |
+| `phoneCareer.shareQr` | Afficher mon code QR |
+| `phoneCareer.shareQrText` | À scanner lors d’un salon de l’emploi |
+| `phoneCareer.shareQrAlt` | Code QR du profil de {name} |
+| `phoneCareer.sharePdf` | Télécharger mon profil en PDF |
+| `phoneCareer.sharePrivate` | Votre profil est visible par vos connexions et les recruteurs à qui vous écrivez. Réglez-le dans Confidentialité. |
+| `phoneCareer.close` | Fermer |
+| `phoneCareer.back` | Retour |
+| `phoneCareer.remote` | À distance |
+| `phoneCareer.form.cancel` | Annuler |
+| `phoneCareer.form.save` | Enregistrer |
+| `phoneCareer.form.close` | Fermer |
+| `phoneCareer.form.delete` | Supprimer |
+| `phoneCareer.form.deleted` | C’est supprimé. |
+| `phoneCareer.form.error` | Ça n’a pas marché. Réessayez dans un instant. |
+| `phoneCareer.form.errors.invalid` | Vérifiez les champs en rouge. |
+| `phoneCareer.form.errors.required` | Ce champ est obligatoire. |
+| `phoneCareer.form.errors.name` | Écrivez votre nom avec des lettres seulement. |
+| `phoneCareer.form.errors.endBeforeStart` | La fin doit venir après le début. |
+| `phoneCareer.form.errors.title` | Indiquez le poste. |
+| `phoneCareer.form.errors.company` | Indiquez l’entreprise. |
+| `phoneCareer.form.errors.start` | Indiquez le début. |
+| `phoneCareer.form.errors.end` | Indiquez la fin, ou cochez « J’y travaille encore ». |
+| `phoneCareer.form.errors.degree` | Indiquez le diplôme. |
+| `phoneCareer.form.errors.school` | Indiquez l’école ou l’organisme. |
+| `phoneCareer.form.errors.startYear` | Écrivez une année, par exemple 2022. |
+| `phoneCareer.form.errors.endYear` | Écrivez une année, par exemple 2026. |
+| `phoneCareer.form.errors.missing` | Cet élément n’existe plus. |
+| `phoneCareer.form.headTitle` | Modifier le profil |
+| `phoneCareer.form.headSaved` | Profil mis à jour. |
+| `phoneCareer.form.photoChange` | Changer la photo |
+| `phoneCareer.form.photoTitle` | Photo de profil |
+| `phoneCareer.form.photoCamera` | Prendre une photo |
+| `phoneCareer.form.photoGallery` | Choisir dans la galerie |
+| `phoneCareer.form.photoRemove` | Retirer |
+| `phoneCareer.form.photoSaved` | Photo mise à jour. |
+| `phoneCareer.form.photoRemoved` | Photo retirée. |
+| `phoneCareer.form.photoError` | Cette photo n’a pas pu être enregistrée. Essayez une image JPEG ou PNG de moins de 5 Mo. |
+| `phoneCareer.form.name` | Nom affiché |
+| `phoneCareer.form.handle` | Nom d’utilisateur |
+| `phoneCareer.form.headline` | Titre |
+| `phoneCareer.form.headlinePlaceholder` | Ex. : Analyste de données junior |
+| `phoneCareer.form.city` | Ville |
+| `phoneCareer.form.bio` | Bio |
+| `phoneCareer.form.bioOrbi` | Orbi peut raccourcir et corriger votre bio. |
+| `phoneCareer.form.improve` | Améliorer |
+| `phoneCareer.form.availability` | Disponibilité |
+| `phoneCareer.form.availabilityOption.open` | Disponible tout de suite |
+| `phoneCareer.form.availabilityOption.listening` | En poste, à l’écoute |
+| `phoneCareer.form.availabilityOption.not_looking` | Pas en recherche |
+| `phoneCareer.form.accountSettings` | Paramètres du compte |
+| `phoneCareer.form.aboutTitle` | À propos |
+| `phoneCareer.form.aboutLabel` | Votre texte |
+| `phoneCareer.form.aboutSaved` | Votre texte est enregistré. |
+| `phoneCareer.form.count` | {count} / {max} |
+| `phoneCareer.form.aboutOrbi` | Orbi réécrit votre texte pour les recruteurs. |
+| `phoneCareer.form.aboutOrbiFor` | Orbi réécrit pour les recruteurs : {target}. |
+| `phoneCareer.form.rewrite` | Réécrire |
+| `phoneCareer.form.orbiWorking` | Orbi écrit… |
+| `phoneCareer.form.orbiNote` | Orbi n’a gardé que vos propres faits. Rien n’est enregistré tant que vous ne touchez pas « Enregistrer ». |
+| `phoneCareer.form.orbiUse` | Utiliser |
+| `phoneCareer.form.orbiKeep` | Garder le mien |
+| `phoneCareer.form.orbiError.empty` | Écrivez d’abord quelques mots : Orbi part de votre texte. |
+| `phoneCareer.form.orbiError.same` | Orbi n’a rien à changer : votre texte est déjà clair. |
+| `phoneCareer.form.orbiError.consent` | Activez Orbi dans vos paramètres pour lui demander de l’aide. |
+| `phoneCareer.form.orbiError.entitlement` | Votre formule ne comprend pas encore cette aide d’Orbi. |
+| `phoneCareer.form.orbiError.quota` | Vos crédits Orbi du mois sont utilisés. Ils reviennent le mois prochain. |
+| `phoneCareer.form.orbiError.unavailable` | Orbi n’est pas disponible pour l’instant. Réessayez dans un moment. |
+| `phoneCareer.form.experienceEdit` | Modifier l’expérience |
+| `phoneCareer.form.experienceNew` | Nouvelle expérience |
+| `phoneCareer.form.experienceSaved` | Expérience mise à jour. |
+| `phoneCareer.form.experienceAdded` | Expérience ajoutée. |
+| `phoneCareer.form.job` | Poste |
+| `phoneCareer.form.jobPlaceholder` | Ex. : Analyste de données |
+| `phoneCareer.form.company` | Entreprise |
+| `phoneCareer.form.companyPlaceholder` | Nom de l’entreprise |
+| `phoneCareer.form.place` | Lieu |
+| `phoneCareer.form.placePlaceholder` | Ville, pays |
+| `phoneCareer.form.type` | Type |
+| `phoneCareer.form.experienceType.internship` | Stage |
+| `phoneCareer.form.experienceType.job` | Emploi |
+| `phoneCareer.form.experienceType.freelance` | Freelance |
+| `phoneCareer.form.experienceType.volunteer` | Bénévolat |
+| `phoneCareer.form.experienceType.entrepreneur` | Entrepreneur |
+| `phoneCareer.form.start` | Début |
+| `phoneCareer.form.end` | Fin |
+| `phoneCareer.form.current` | J’y travaille encore |
+| `phoneCareer.form.done` | Ce que vous avez fait |
+| `phoneCareer.form.experienceOrbi` | Orbi corrige les fautes et met vos résultats en valeur. |
+| `phoneCareer.form.experienceOrbiNew` | Décrivez en vrac, Orbi met en forme. |
+| `phoneCareer.form.experienceDelete` | Supprimer cette expérience |
+| `phoneCareer.form.experienceDeleteQuestion` | Supprimer cette expérience ? |
+| `phoneCareer.form.experienceDeleteDetail` | Elle disparaît de votre profil. Vos CV déjà enregistrés ne changent pas. |
+| `phoneCareer.form.educationEdit` | Modifier la formation |
+| `phoneCareer.form.educationNew` | Nouvelle formation |
+| `phoneCareer.form.educationSaved` | Formation mise à jour. |
+| `phoneCareer.form.educationAdded` | Formation ajoutée. |
+| `phoneCareer.form.degree` | Diplôme ou attestation |
+| `phoneCareer.form.degreePlaceholder` | Ex. : Licence en statistiques |
+| `phoneCareer.form.school` | École ou organisme |
+| `phoneCareer.form.schoolPlaceholder` | Ex. : Université de Kinshasa |
+| `phoneCareer.form.level` | Niveau |
+| `phoneCareer.form.educationLevel.secondary` | Secondaire |
+| `phoneCareer.form.educationLevel.vocational` | Professionnel |
+| `phoneCareer.form.educationLevel.bachelor` | Licence |
+| `phoneCareer.form.educationLevel.master` | Master |
+| `phoneCareer.form.educationLevel.doctorate` | Doctorat |
+| `phoneCareer.form.educationLevel.none` | Autre |
+| `phoneCareer.form.year` | Année |
+| `phoneCareer.form.inProgress` | En cours |
+| `phoneCareer.form.detail` | Mention ou détail |
+| `phoneCareer.form.optional` | Facultatif |
+| `phoneCareer.form.educationOrbi` | Vos attestations Jumanly s’ajoutent seules, avec leur lien de vérification. |
+| `phoneCareer.form.educationDelete` | Supprimer cette formation |
+| `phoneCareer.form.educationDeleteQuestion` | Supprimer cette formation ? |
+| `phoneCareer.form.educationDeleteDetail` | Elle disparaît de votre profil. Vos CV déjà enregistrés ne changent pas. |
+| `phoneCareer.sheets.close` | Fermer |
+| `phoneCareer.sheets.error` | Ça n’a pas marché. Réessayez dans un instant. |
+| `phoneCareer.sheets.add` | Ajouter |
+| `phoneCareer.sheets.save` | Enregistrer |
+| `phoneCareer.sheets.skillsTitle` | Ajouter des compétences |
+| `phoneCareer.sheets.skillsSearch` | Chercher une compétence |
+| `phoneCareer.sheets.skillsSuggested` | Suggérées par Orbi, d’après les offres ouvertes |
+| `phoneCareer.sheets.skillsFound` | Dans la liste des compétences |
+| `phoneCareer.sheets.skillsNone` | Aucune compétence trouvée. Essayez un autre mot. |
+| `phoneCareer.sheets.skillsAdd` | {count, plural, =0 {Ajouter} other {Ajouter (#)}} |
+| `phoneCareer.sheets.skillsAdded` | {count, plural, one {# compétence ajoutée} other {# compétences ajoutées}}. |
+| `phoneCareer.sheets.skillsMax` | Vous avez atteint le nombre maximum de compétences. |
+| `phoneCareer.sheets.languagesTitle` | Langues et lieux |
+| `phoneCareer.sheets.languages` | Langues |
+| `phoneCareer.sheets.places` | Où je veux travailler |
+| `phoneCareer.sheets.placeAdd` | Ajouter une ville |
+| `phoneCareer.sheets.languagesSaved` | Langues et lieux enregistrés. |
+| `phoneCareer.reglages.back` | Retour |
+| `phoneCareer.reglages.close` | Fermer |
+| `phoneCareer.reglages.cancel` | Annuler |
+| `phoneCareer.reglages.title` | Paramètres |
+| `phoneCareer.reglages.editProfile` | Modifier le profil |
+| `phoneCareer.reglages.account` | Compte |
+| `phoneCareer.reglages.namePhoto` | Nom et photo |
+| `phoneCareer.reglages.email` | E-mail |
+| `phoneCareer.reglages.password` | Mot de passe et sécurité |
+| `phoneCareer.reglages.subscription` | Abonnement |
+| `phoneCareer.reglages.plan` | Ma formule |
+| `phoneCareer.reglages.noPlan` | Gratuite |
+| `phoneCareer.reglages.privacyGroup` | Vie privée |
+| `phoneCareer.reglages.privacy` | Confidentialité |
+| `phoneCareer.reglages.notifications` | Notifications |
+| `phoneCareer.reglages.application` | Application |
+| `phoneCareer.reglages.language` | Langue |
+| `phoneCareer.reglages.french` | Français |
+| `phoneCareer.reglages.help` | Aide et contact |
+| `phoneCareer.reglages.signOut` | Se déconnecter |
+| `phoneCareer.reglages.signOutQuestion` | Se déconnecter ? |
+| `phoneCareer.reglages.signOutText` | Vous pourrez vous reconnecter avec votre e-mail ou votre compte Google. |
+| `phoneCareer.reglages.saved` | C’est enregistré. |
+| `phoneCareer.reglages.error` | Ça n’a pas marché. Réessayez dans un instant. |
+| `phoneCareer.reglages.whoSees` | Qui voit mon profil |
+| `phoneCareer.reglages.visibility.recruiters` | Les recruteurs |
+| `phoneCareer.reglages.visibility.recruitersText` | Votre profil complet, avec votre nom |
+| `phoneCareer.reglages.visibility.anonymous` | Anonyme |
+| `phoneCareer.reglages.visibility.anonymousText` | Sans votre nom ni votre photo, jusqu’à ce que vous acceptiez une mise en relation |
+| `phoneCareer.reglages.visibility.private` | Moi seulement |
+| `phoneCareer.reglages.visibility.privateText` | Profil masqué, candidatures toujours possibles |
+| `phoneCareer.reglages.options` | Options |
+| `phoneCareer.reglages.matching` | Calcul de compatibilité |
+| `phoneCareer.reglages.matchingText` | Le score avec chaque offre, toujours avec son « Pourquoi ? » |
+| `phoneCareer.reglages.contactRequests` | Accepter les demandes de mise en relation |
+| `phoneCareer.reglages.ai` | Aide d’Orbi |
+| `phoneCareer.reglages.aiText` | Orbi lit votre profil pour vous proposer de l’aide. Vous décidez toujours. |
+| `phoneCareer.reglages.newsletter` | Les nouvelles de Jumanly par e-mail |
+| `phoneCareer.reglages.data` | Mes données |
+| `phoneCareer.reglages.download` | Télécharger mes données |
+| `phoneCareer.reglages.views` | Qui a consulté mon profil |
+| `phoneCareer.reglages.deleteAccount` | Supprimer mon compte |
+| `phoneCareer.reglages.onPhone` | Sur le téléphone |
+| `phoneCareer.reglages.byEmail` | Par e-mail |
+| `phoneCareer.reglages.category.applications` | Mes candidatures |
+| `phoneCareer.reglages.category.applicationsText` | Réponses, entretiens, offres qui changent |
+| `phoneCareer.reglages.category.messages` | Messages et réseau |
+| `phoneCareer.reglages.category.messagesText` | Messages, demandes de connexion, réponses dans le Fil |
+| `phoneCareer.reglages.category.learning` | Formation |
+| `phoneCareer.reglages.category.learningText` | Attestations et bilans de carrière |
+| `phoneCareer.reglages.category.billing` | Abonnement |
+| `phoneCareer.reglages.category.billingText` | Renouvellement et paiements |
+| `phoneCareer.reglages.emails` | Rappels par e-mail |
+| `phoneCareer.reglages.emailsText` | Un e-mail quand une notification importante attend |
+| `phoneCareer.reglages.faq` | Questions fréquentes |
+| `phoneCareer.reglages.writeTeam` | Écrire à l’équipe |
+| `phoneCareer.reglages.answerByEmail` | Réponse par e-mail |
+| `phoneCareer.billing.title` | Ma formule |
+| `phoneCareer.billing.intro` | Vous êtes en {plan}. Paiement par Mobile Money, sans engagement. |
+| `phoneCareer.billing.current` | Votre formule |
+| `phoneCareer.billing.choose` | Choisir {plan} |
+| `phoneCareer.billing.free` | Gratuit |
+| `phoneCareer.billing.perMonth` | {amount} / mois |
+| `phoneCareer.billing.applyFree` | Candidater reste toujours gratuit, quelle que soit votre formule. |
+| `phoneCareer.billing.payTitle` | Paiement |
+| `phoneCareer.billing.chosen` | Formule choisie |
+| `phoneCareer.billing.payWith` | Payer avec |
+| `phoneCareer.billing.number` | Numéro Mobile Money |
+| `phoneCareer.billing.numberPlaceholder` | Ex. : +243 … |
+| `phoneCareer.billing.numberHelp` | Vous recevez une demande de validation sur ce téléphone. Jumanly ne garde que la fin du numéro. |
+| `phoneCareer.billing.pay` | Payer {total} |
+| `phoneCareer.billing.paying` | Envoi de la demande… |
+| `phoneCareer.billing.fake` | Paiement de démonstration : aucun argent n’est débité. |
+| `phoneCareer.billing.errors.operatorRequired` | Choisissez votre service Mobile Money. |
+| `phoneCareer.billing.errors.numberRequired` | Écrivez votre numéro Mobile Money. |
+| `phoneCareer.billing.errors.numberInvalid` | Ce numéro ne semble pas complet. Vérifiez l’indicatif et les chiffres. |
+| `phoneCareer.billing.errors.duplicate` | Un paiement est déjà en cours pour cette formule. Attendez sa réponse. |
+| `phoneCareer.billing.errors.failed` | Le paiement n’a pas pu partir. Réessayez dans un instant. |
+| `phoneCareer.billing.validateTitle` | Validez sur votre téléphone |
+| `phoneCareer.billing.validateText` | Un message {operator} vous demande de confirmer {amount} avec votre code secret. |
+| `phoneCareer.billing.validated` | J’ai validé |
+| `phoneCareer.billing.howTo` | Comment valider ? |
+| `phoneCareer.billing.close` | Fermer |
+| `phoneCareer.billing.welcome` | Bienvenue en {plan} |
+| `phoneCareer.billing.welcomeText` | Votre reçu est envoyé par e-mail. Votre formule court jusqu’au {date}. |
+| `phoneCareer.billing.backCareer` | Retour à Carrière |
+| `phoneCareer.cv.menu.deleteQuestion` | Supprimer « {title} » ? |
+| `phoneCareer.cv.menu.deleteText` | Ce CV disparaît. Les candidatures déjà envoyées gardent leur copie. |
+| `phoneCareer.cvEdit.back` | CV |
+| `phoneCareer.cvEdit.export` | Exporter |
+| `phoneCareer.cvEdit.close` | Fermer |
+| `phoneCareer.cvEdit.preview` | Voir l’aperçu en grand (modèle {template}) |
+| `phoneCareer.cvEdit.color` | Couleur |
+| `phoneCareer.cvEdit.sections` | Sections |
+| `phoneCareer.cvEdit.template` | Modèle |
+| `phoneCareer.cvEdit.adapt` | Adapter à une offre |
+| `phoneCareer.cvEdit.exportTitle` | Exporter « {title} » |
+| `phoneCareer.cvEdit.format` | Format |
+| `phoneCareer.cvEdit.formats.pdf` | PDF |
+| `phoneCareer.cvEdit.formats.word` | Word |
+| `phoneCareer.cvEdit.exportNote` | Le fichier ne porte aucun logo Jumanly. |
+| `phoneCareer.cvEdit.download` | Télécharger |
+| `phoneCareer.cvEdit.adaptTitle` | Adapter mon CV |
+| `phoneCareer.cvEdit.adaptWhich` | Pour quelle offre ? |
+| `phoneCareer.cvEdit.adaptNone` | Enregistrez ou postulez à une offre : elle apparaîtra ici. |
+| `phoneCareer.cvEdit.adaptFind` | Voir les offres |
+| `phoneCareer.cvEdit.adaptGap` | {company} · {count, plural, one {# point à mettre en avant} other {# points à mettre en avant}} |
+| `phoneCareer.cvEdit.adaptNote` | Orbi crée une copie adaptée : votre CV reste tel quel. Vous validez chaque changement, et Orbi n’ajoute jamais une compétence que vous n’avez pas. |
+| `phoneCareer.cvEdit.adaptCreate` | Créer le CV adapté |
+| `phoneCareer.cvEdit.templatesTitle` | Choisir un modèle |
+| `phoneCareer.cvEdit.templatesStep` | Étape 1 sur 2 · Votre CV téléchargé ne porte aucun logo Jumanly. |
+| `phoneCareer.cvEdit.templatesChange` | Le contenu de votre CV ne change pas, seule la mise en page change. |
+| `phoneCareer.cvEdit.templateLocked` | {name}, compris dans la formule {plan} |
+| `phoneCareer.cvImport.title` | Importer un CV |
+| `phoneCareer.cvImport.choose` | PDF ou Word, {max} Mo au plus |
+| `phoneCareer.cvImport.chooseText` | Orbi lit le fichier et remplit votre profil. Rien n’est publié sans votre accord. |
+| `phoneCareer.cvImport.reading` | Orbi lit {name}… |
+| `phoneCareer.cvImport.readingText` | Expériences, formation, compétences, langues |
+| `phoneCareer.cvImport.found` | Voici ce que nous avons trouvé |
+| `phoneCareer.cvImport.foundText` | Décochez ce que vous ne voulez pas reprendre. |
+| `phoneCareer.cvImport.apply` | Ajouter à mon profil et créer le CV |
+| `phoneCareer.project.seo` | Réalisation |
+| `phoneCareer.project.back` | Portfolio |
+| `phoneCareer.project.edit` | Modifier |
+| `phoneCareer.project.close` | Fermer |
+| `phoneCareer.project.cancel` | Annuler |
+| `phoneCareer.project.count` | {n} / {all} |
+| `phoneCareer.project.photoAlt` | Photo {n} de « {title} » |
+| `phoneCareer.project.photoCount` | {count, plural, one {une photo} other {# photos}} |
+| `phoneCareer.project.feature` | Mettre en avant sur mon profil |
+| `phoneCareer.project.featuredOn` | Réalisation mise en avant |
+| `phoneCareer.project.featuredOff` | Réalisation retirée de la mise en avant |
+| `phoneCareer.project.share` | Partager dans le Fil |
+| `phoneCareer.project.delete` | Supprimer |
+| `phoneCareer.project.deleteQuestion` | Supprimer cette réalisation ? |
+| `phoneCareer.project.deleteText` | Elle est retirée de votre portfolio et du Fil. |
+| `phoneCareer.project.deleted` | Réalisation supprimée |
+| `phoneCareer.project.error` | Cela n’a pas marché. Réessayez dans un instant. |
+| `phoneCareer.project.newTitle` | Nouvelle réalisation |
+| `phoneCareer.project.editTitle` | Modifier la réalisation |
+| `phoneCareer.project.photos` | Photos ({max} au plus) |
+| `phoneCareer.project.photoAdd` | Ajouter |
+| `phoneCareer.project.photoRemove` | Retirer la photo {n} |
+| `phoneCareer.project.photoError` | Cette photo n’a pas pu être lue. Essayez-en une autre. |
+| `phoneCareer.project.photosHint` | Vérifiez qu’aucun numéro ni code personnel n’apparaît sur vos photos avant d’enregistrer. |
+| `phoneCareer.project.title` | Titre |
+| `phoneCareer.project.titlePlaceholder` | Ex. : Tableau de bord des ventes |
+| `phoneCareer.project.description` | Description |
+| `phoneCareer.project.orbi` | Orbi rédige la description à partir de votre titre et de vos notes. |
+| `phoneCareer.project.orbiButton` | Rédiger |
+| `phoneCareer.project.link` | Lien (facultatif) |
+| `phoneCareer.project.alsoFil` | Publier aussi dans le Fil |
+| `phoneCareer.project.added` | Réalisation ajoutée |
+| `phoneCareer.project.saved` | Réalisation enregistrée |
+| `phoneCareer.project.errors.title` | Donnez un titre à votre réalisation. |
+| `phoneCareer.project.errors.link` | Ce lien n’est pas valide. Il commence par https://. |
+| `phoneCareer.project.errors.entitlement` | Votre formule ne comprend pas le portfolio. |
+| `phoneCareer.project.errors.limit` | Vous avez atteint le nombre maximum de réalisations. |
+| `phoneCareer.project.errors.file` | Ces photos sont trop lourdes ou illisibles. Essayez-en d’autres. |
+| `phoneCareer.project.errors.notFound` | Cette réalisation n’existe plus. |
+| `phoneCareer.application.back` | Retour |
+| `phoneCareer.application.title` | Candidature |
+| `phoneCareer.application.close` | Fermer |
+| `phoneCareer.application.cancel` | Annuler |
+| `phoneCareer.application.offer` | Voir l’offre |
+| `phoneCareer.application.where` | Où en est-elle |
+| `phoneCareer.application.hour` | {m, select, 00 {{h} h} other {{h} h {m}}} |
+| `phoneCareer.application.step.sent` | Candidature envoyée |
+| `phoneCareer.application.step.viewed` | Vue par {company} |
+| `phoneCareer.application.step.notViewed` | Pas encore ouverte |
+| `phoneCareer.application.step.viewedSeen` | Votre candidature a été lue |
+| `phoneCareer.application.step.interview` | Entretien |
+| `phoneCareer.application.step.interviewOn` | {day}, {hour} |
+| `phoneCareer.application.step.interviewLater` | Si votre profil est retenu |
+| `phoneCareer.application.step.noInterview` | Sans entretien |
+| `phoneCareer.application.step.decision` | Décision |
+| `phoneCareer.application.decision.after` | Après l’entretien |
+| `phoneCareer.application.decision.hired` | Bonne nouvelle : votre candidature est retenue |
+| `phoneCareer.application.decision.notSelected` | Candidature non retenue cette fois |
+| `phoneCareer.application.decision.withdrawn` | Vous avez retiré votre candidature |
+| `phoneCareer.application.decision.jobClosed` | L’offre est fermée |
+| `phoneCareer.application.interview` | Entretien |
+| `phoneCareer.application.interviewWhen` | {day} · {hour} |
+| `phoneCareer.application.with` | avec {name} |
+| `phoneCareer.application.join` | Rejoindre l’entretien |
+| `phoneCareer.application.calendar` | Ajouter à l’agenda |
+| `phoneCareer.application.prepare` | Préparer avec Orbi |
+| `phoneCareer.application.practice` | S’entraîner avec Orbi |
+| `phoneCareer.application.practiceKinds` | Écrit ou oral |
+| `phoneCareer.application.cv` | CV envoyé |
+| `phoneCareer.application.writeTo` | Écrire à {name} |
+| `phoneCareer.application.writeTeam` | Écrire à l’équipe de recrutement |
+| `phoneCareer.application.draftInterview` | {name, select, none {Bonjour} other {Bonjour {name}}}, merci pour l’invitation. Je confirme ma présence {day} à {hour}. Bonne journée, {me} |
+| `phoneCareer.application.draftNews` | {name, select, none {Bonjour} other {Bonjour {name}}}, le poste {title} m’intéresse toujours. Avez-vous des nouvelles de ma candidature ? Bonne journée, {me} |
+| `phoneCareer.application.draftNote` | Brouillon proposé par Orbi, modifiable. |
+| `phoneCareer.application.send` | Envoyer |
+| `phoneCareer.application.sent` | Message envoyé |
+| `phoneCareer.application.orbi` | Orbi |
+| `phoneCareer.application.orbiTitle` | Préparer l’entretien |
+| `phoneCareer.application.askPeople` | Quelles questions me posera {name} ? |
+| `phoneCareer.application.askTeam` | Quelles questions l’équipe de recrutement va-t-elle poser ? |
+| `phoneCareer.application.askCompany` | Que dire sur {company} ? |
+| `phoneCareer.application.context` | candidature au poste {title} chez {company} |
+| `phoneCareer.application.orbiPlaceholder` | Écrire à Orbi… |
+| `phoneCareer.application.orbiSend` | Demander à Orbi |
+| `phoneCareer.application.withdraw` | Retirer ma candidature |
+| `phoneCareer.application.withdrawQuestion` | Retirer votre candidature ? |
+| `phoneCareer.application.withdrawText` | {company} sera prévenu. Vous pourrez postuler à d’autres offres à tout moment. |
+| `phoneCareer.application.withdrawConfirm` | Retirer |
+| `phoneCareer.application.withdrawn` | Candidature retirée |
+| `phoneCareer.application.error` | Cela n’a pas marché. Réessayez dans un instant. |
+
 ### Refonte recruteur · Cadre mobile (lot 1)
 
 *Coquille de l'espace recruteur (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 1) : organisation active, barre du bas À traiter · Offres · Orbi · Candidats · Messages, Compte RH, premiers pas.*

@@ -19,7 +19,9 @@ import {
   startInterview,
   type InterviewSetup,
 } from "@/server/services/interview-sim";
+import { projectCover, rewriteTemplate } from "@/server/services/career-phone";
 import {
+  parseProject,
   PortfolioError,
   projectFileFor,
   projectSchema,
@@ -375,5 +377,58 @@ describe("exercices métier (`learn.exercises.job_specific`)", () => {
     });
     expect(proEnrollment.progress).toBe(0);
     expect(proEnrollment.completedLessons).toEqual([exercise.id]);
+  });
+});
+
+describe("Carrière au téléphone (Modèle B, lot B5)", () => {
+  const storage = fakeStorage();
+  const png = { name: "photo.png", bytes: new Uint8Array([0x89, 0x50, 0x4e, 0x47, 1, 2, 3]) };
+
+  it("une réalisation garde son lien quand le formulaire ne l'envoie pas, et la couverture est sa première photo", async () => {
+    const user = await talent({ key: "career.portfolio.level", value: "standard" });
+    const input = projectSchema.parse({
+      title: "Réalisation fictive",
+      context: "Un tableau imaginaire",
+      link: "https://exemple.test/tableau",
+    });
+    const id = await saveProject(db, storage, user.id, input, [png]);
+    const read = async () => {
+      const document = await db.document.findUniqueOrThrow({
+        where: { id },
+        select: { id: true, title: true, content: true },
+      });
+      return parseProject(document)!;
+    };
+    expect((await read()).link).toBe("https://exemple.test/tableau");
+    expect(projectCover(await read())).toBe(`/api/projets/${id}/0`);
+    // The older form (« Mon profil » on a computer) sends no link: it stays.
+    const kept = (await read()).files.map((file) => file.key);
+    await saveProject(
+      db,
+      storage,
+      user.id,
+      projectSchema.parse({ title: "Renommée", keep: kept }),
+      [],
+      id,
+    );
+    expect((await read()).link).toBe("https://exemple.test/tableau");
+    // An empty field removes it.
+    await saveProject(
+      db,
+      storage,
+      user.id,
+      projectSchema.parse({ title: "Renommée", link: "" }),
+      [],
+      id,
+    );
+    expect((await read()).link).toBeNull();
+    expect(projectCover(await read())).toBeNull();
+    expect(projectSchema.safeParse({ title: "x", link: "pas un lien" }).success).toBe(false);
+  });
+
+  it("Orbi sans modèle rédige une réalisation avec les mots de la personne", () => {
+    expect(rewriteTemplate("project", "tableau de bord des ventes. alertes de stock")).toBe(
+      "Tableau de bord des ventes. Alertes de stock.",
+    );
   });
 });

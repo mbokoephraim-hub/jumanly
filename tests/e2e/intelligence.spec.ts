@@ -46,14 +46,25 @@ test("score expliqué, import de CV et révision humaine", async ({
           "Maîtrise de Microsoft Excel et de l'archivage.",
         ]),
       );
-    await expect(page.getByText("Lu dans « cv-fictif.docx » · à vérifier")).toBeVisible({
-      timeout: 5_000,
-    });
+    // Modèle B (lot B5): on a phone, « Voici ce que nous avons trouvé ».
+    await expect(
+      page.getByText(
+        isMobile ? "Voici ce que nous avons trouvé" : "Lu dans « cv-fictif.docx » · à vérifier",
+      ),
+    ).toBeVisible({ timeout: 5_000 });
   }).toPass({ timeout: 30_000 });
-  await expect(page.getByRole("switch", { name: /compétence/ })).toBeChecked();
-  await page.getByRole("button", { name: "Ajouter à mon profil" }).click();
-  await expect(page).toHaveURL(/\/app\/profil\?import=/);
-  await expect(page.locator("#competences")).toContainText("Excel");
+  if (isMobile) {
+    await expect(page.getByRole("checkbox", { name: /compétences/ })).toBeChecked();
+    await page.getByRole("button", { name: "Ajouter à mon profil et créer le CV" }).click();
+    await page.waitForURL((url) => !url.pathname.startsWith("/app/profil/import"));
+    await page.goto("/app/career/cv");
+    await expect(page.locator(".nb-ca").first()).toContainText("Excel");
+  } else {
+    await expect(page.getByRole("switch", { name: /compétence/ })).toBeChecked();
+    await page.getByRole("button", { name: "Ajouter à mon profil" }).click();
+    await expect(page).toHaveURL(/\/app\/profil\?import=/);
+    await expect(page.locator("#competences")).toContainText("Excel");
+  }
 
   // The score and its « Pourquoi ? », with what is missing.
   // (planche talent-1 § 4: the reasons open in a sheet over the offer).

@@ -20,6 +20,7 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
   browser,
   baseURL,
   request,
+  isMobile,
 }) => {
   test.setTimeout(180_000);
   const email = testEmail("paiement");
@@ -36,6 +37,13 @@ test("échec, réessai, paiement par webhook rejoué, facture et remboursement",
   // Waiting on the phone, then the provider's signed webhook confirms; replayed, it does nothing.
   await page.goto("/app/abonnement/payer?forfait=talent_starter");
   await payWith(page, "810 002 222");
+  if (isMobile) {
+    // Modèle B (lot B5): the waiting screen of the phone; the webhook, the invoice and the refund
+    // are the same rules, checked on the computer.
+    await expect(page.getByRole("heading", { name: "Paiement", level: 1 })).toBeVisible();
+    await expect(page.getByRole("button", { name: "Comment valider ?" })).toBeVisible();
+    return;
+  }
   await expect(page.getByRole("heading", { name: "Validez sur votre téléphone" })).toBeVisible();
   // The number is never shown in full.
   await expect(page.getByRole("main")).toContainText("+243 81 ••• 22");

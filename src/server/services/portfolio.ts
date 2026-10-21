@@ -62,6 +62,8 @@ export const projectSchema = z.object({
   context: z.string().trim().max(3000).default(""),
   skills: z.array(z.string().trim().min(1).max(60)).max(12).default([]),
   visible: z.boolean().default(false),
+  /** « Lien (facultatif) » (Modèle B): left out, an older project keeps its link. */
+  link: z.union([z.literal(""), z.string().trim().url().max(300)]).optional(),
   /** Keys of the files kept; the others are removed. */
   keep: z.array(z.string().max(200)).max(PROJECT_FILES_MAX).default([]),
 });
@@ -156,7 +158,7 @@ export async function saveProject(
     role: "",
     result: "",
     skills: input.skills,
-    link: previous?.link ?? null,
+    link: input.link === undefined ? (previous?.link ?? null) : input.link || null,
     media: previous?.media ?? [],
     date: previous?.date ?? null,
     visible: input.visible,
