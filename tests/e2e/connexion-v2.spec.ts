@@ -52,6 +52,10 @@ async function signInByEmail(page: Page, email: string, password: string) {
 
 test.describe("générique d'entrée", () => {
   test.skip(!!process.env.E2E_REDUCED_MOTION, "le générique ne se joue pas en animations réduites");
+  test.skip(
+    ({ isMobile }) => isMobile,
+    "Modèle B au téléphone : le logo seul à l'ouverture (brief § 3)",
+  );
 
   test("complet une seule fois par compte, puis court ; « Passer » rend la main à l'espace", async ({
     page,
@@ -96,6 +100,10 @@ test.describe("générique d'entrée", () => {
 
 test.describe("générique en animations réduites", () => {
   test.use({ reducedMotion: "reduce" });
+  test.skip(
+    ({ isMobile }) => isMobile,
+    "Modèle B au téléphone : le logo seul à l'ouverture (brief § 3)",
+  );
 
   test("aucun générique, le message d'accueil à la place", async ({ page }) => {
     await signInByEmail(page, demo.talentFree, DEMO_PASSWORD);

@@ -45,6 +45,18 @@ test("Compte : profil, documents, abonnement, apparence gardée, déconnexion", 
       appearance.getByRole("radio", { name: new RegExp(`^${name}`) }).check({ force: true }),
     ]);
   };
+  // Modèle B (docs/modele-b): the talent space on a phone is dark only.
+  if (isMobile) {
+    for (const path of ["/app/compte", "/app/abonnement", "/app/parametres/securite"]) {
+      await page.goto(path);
+      await expect(page.locator("html"), path).toHaveClass(/sombre/);
+    }
+    await expectAccessible(page);
+    await page.goto("/app/compte");
+    await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
+    await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
+    return;
+  }
   await page.goto("/app/parametres");
   await page.getByRole("button", { name: /^Apparence/ }).click();
   await expect(
@@ -57,7 +69,6 @@ test("Compte : profil, documents, abonnement, apparence gardée, déconnexion", 
     await page.goto(path);
     await expect(page.locator("html"), path).toHaveClass(/sombre/);
   }
-  if (isMobile) await expectAccessible(page);
   await choose("Clair");
   await page.goto("/app/compte");
   await expect(page.locator("html")).not.toHaveClass(/sombre/);

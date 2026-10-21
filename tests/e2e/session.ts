@@ -22,6 +22,13 @@ const introHandled = new WeakSet<Page>();
 export async function skipIntro(page: Page) {
   if (introHandled.has(page)) return;
   introHandled.add(page);
+  // Modèle B (phone): the logo alone shows 1.2 s at the first page of a session, over the page.
+  // Tests about something else start once it has played; modele-b-fondations.spec plays it.
+  await page.addInitScript(() => {
+    try {
+      sessionStorage.setItem("jm-ouvert", "1");
+    } catch {}
+  });
   await page.addLocatorHandler(
     page.getByRole("button", { name: "Passer l'intro" }),
     // By keyboard: a click would leave the pointer top right, where toasts show (and pause).

@@ -2,7 +2,9 @@ import { isTester } from "@/server/services/tester";
 import { Suspense } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { RecruiterShell } from "@/components/recruiter/shell";
+import { PhoneShell } from "@/components/phone/shell";
 import { TalentShell } from "@/components/talent/shell";
+import { isPhone } from "@/server/view";
 import { Skeleton } from "@/components/ui";
 import { requireUser } from "@/server/auth/session";
 import { touchPresence } from "@/server/services/hire-messaging";
@@ -64,6 +66,26 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
 
   // Personal space: the talent shell of the mobile redesign (docs/refonte-mobile).
   if (!partnerSpace && !space) {
+    // On a phone: Modèle B (docs/modele-b), dark, five tabs kept mounted.
+    if (await isPhone()) {
+      return (
+        <PhoneShell
+          account={{
+            id: user.id,
+            name: user.name,
+            firstName: user.firstName,
+            image: user.image ?? null,
+          }}
+          unread={unread}
+          unreadMessages={await unreadCount(db, { userId: user.id })}
+          reduceMotion={user.reduceMotion}
+          tabs={{}}
+        >
+          <ContentBanners audience="talents" />
+          {children}
+        </PhoneShell>
+      );
+    }
     const [followUp, unreadMessages, messages] = await Promise.all([
       followUpActions(db, user.id).then((actions) => actions.total),
       unreadCount(db, { userId: user.id }),

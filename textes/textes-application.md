@@ -7923,6 +7923,61 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `profil.preview.rule.recruiters` | Votre profil est visible par les recruteurs, et par ceux à qui vous postulez. |
 | `profil.preview.rule.anonymous` | Les recruteurs voient votre profil sans votre nom, sauf si vous postulez. |
 
+### Modèle B · Fondations de l'espace talent au téléphone
+
+*Coque du Modèle B (docs/modele-b, lot B1) : barre du bas en icônes seules, Orbi flottant et sa feuille, recherche en deux temps, retours.*
+
+| Clé | Texte |
+|---|---|
+| `phone.nav.aria` | Navigation principale |
+| `phone.nav.fil` | Fil |
+| `phone.nav.explorer` | Explorer |
+| `phone.nav.carriere` | Carrière |
+| `phone.nav.formation` | Formation |
+| `phone.nav.messages` | Messages |
+| `phone.back` | Retour |
+| `phone.close` | Fermer |
+| `phone.cancel` | Annuler |
+| `phone.toasts` | Messages de confirmation |
+| `phone.search.back` | Fermer la recherche |
+| `phone.search.clear` | Effacer |
+| `phone.search.empty` | Aucun résultat pour « {query} ». |
+| `phone.orbi.open` | Ouvrir Orbi, l'assistant |
+| `phone.orbi.hello` | Bonjour {name} |
+| `phone.orbi.helloAnon` | Bonjour |
+| `phone.orbi.title` | Orbi |
+| `phone.orbi.placeholder` | Écrire à Orbi… |
+| `phone.orbi.input` | Écrire à Orbi |
+| `phone.orbi.send` | Envoyer |
+| `phone.orbi.decide` | Orbi propose, vous décidez. |
+| `phone.orbi.fil.bubble` | Résumer les nouveautés du jour ? |
+| `phone.orbi.fil.from` | Orbi · depuis le Fil |
+| `phone.orbi.fil.q1` | Résumer les nouveautés du jour |
+| `phone.orbi.fil.q2` | Quelles entreprises recrutent cette semaine ? |
+| `phone.orbi.fil.q3` | Qui suivre dans mon domaine ? |
+| `phone.orbi.fil.q4` | Écrire une publication sur mon attestation |
+| `phone.orbi.explorer.bubble` | Trouver une offre pour mon Cap ? |
+| `phone.orbi.explorer.from` | Orbi · depuis Explorer |
+| `phone.orbi.explorer.q1` | Trouver une offre pour mon Cap |
+| `phone.orbi.explorer.q2` | Quelles offres me correspondent le mieux ? |
+| `phone.orbi.explorer.q3` | Qui recrute près de chez moi ? |
+| `phone.orbi.explorer.q4` | Des CDI dans mon domaine ? |
+| `phone.orbi.carriere.from` | Votre carrière |
+| `phone.orbi.carriere.q1` | Que manque-t-il à mon profil ? |
+| `phone.orbi.carriere.q2` | Quel CV envoyer pour ma prochaine candidature ? |
+| `phone.orbi.carriere.q3` | Préparer mon prochain entretien |
+| `phone.orbi.carriere.q4` | Quelle formation suivre pour mon Cap ? |
+| `phone.orbi.formation.bubble` | Réviser pour mon prochain entretien ? |
+| `phone.orbi.formation.from` | Orbi · depuis Formation |
+| `phone.orbi.formation.q1` | Pourquoi ce cours pour mon Cap ? |
+| `phone.orbi.formation.q2` | Réviser pour mon prochain entretien |
+| `phone.orbi.formation.q3` | Fais-moi réviser une notion |
+| `phone.orbi.formation.q4` | Combien de temps pour finir mon cours ? |
+| `phone.orbi.messages.from` | Vos messages |
+| `phone.orbi.messages.q1` | Résumer mes non-lus |
+| `phone.orbi.messages.q2` | À qui répondre d'abord ? |
+| `phone.orbi.messages.q3` | Écrire à un recruteur |
+| `phone.orbi.messages.q4` | Relire un message avant de l'envoyer |
 
 ---
 

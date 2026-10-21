@@ -1,0 +1,977 @@
+/* Modèle B · espace talent au téléphone (docs/modele-b, brief § 2 et § 3).
+   Uniquement en sombre. Classes `nb-` ; valeurs reprises des fichiers .dc.html de la maquette. */
+
+.nb-app {
+  --nb-nuit: #0b1a1f;
+  --nb-noir: #070f12;
+  --nb-surface: #13282c;
+  --nb-haute: #1b3338;
+  --nb-carte: #11262a;
+  --nb-creme: #f2ede5;
+  --nb-texte: #ece7df;
+  --nb-brume: #8fa39e;
+  --nb-gris: #b9cbc6;
+  --nb-lime: #a6f26b;
+  --nb-menthe: #2fd3a6;
+  --nb-menthe-claire: #5fe0b8;
+  --nb-ambre: #f4c463;
+  --nb-corail: #f08a7c;
+  --nb-filet: rgba(255, 255, 255, 0.07);
+  --nb-filet-fort: rgba(255, 255, 255, 0.12);
+  --nb-courbe: cubic-bezier(0.2, 0.8, 0.2, 1);
+  --nb-haut: calc(14px + env(safe-area-inset-top));
+  --nb-bas: max(22px, env(safe-area-inset-bottom));
+  --nb-nav: calc(62px + var(--nb-bas));
+  font-family: var(--font-sora), "Sora", system-ui, sans-serif;
+  color: var(--nb-creme);
+  background: var(--nb-nuit);
+  -webkit-font-smoothing: antialiased;
+  min-height: 100dvh;
+  color-scheme: dark;
+}
+html:has(.nb-app),
+html:has(.nb-app) body {
+  background: #0b1a1f;
+  overscroll-behavior: none;
+}
+.nb-app *,
+.nb-app *::before,
+.nb-app *::after {
+  box-sizing: border-box;
+}
+.nb-app :where(h1, h2, h3, p) {
+  margin: 0;
+}
+.nb-app :where(button) {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  text-align: left;
+}
+.nb-app :where(a) {
+  color: inherit;
+  text-decoration: none;
+}
+.nb-app :focus-visible {
+  outline: 2px solid var(--nb-lime);
+  outline-offset: 2px;
+}
+
+/* ─── Couches : 5 onglets gardés, la pile des pages, le cliché de l'écran quitté ─── */
+.nb-couche {
+  position: fixed;
+  inset: 0;
+  overflow-x: hidden;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  background: var(--nb-nuit);
+  scrollbar-width: none;
+  -webkit-overflow-scrolling: touch;
+}
+.nb-couche::-webkit-scrollbar {
+  display: none;
+}
+.nb-onglet {
+  z-index: 1;
+  padding-bottom: calc(var(--nb-nav) + 90px);
+}
+.nb-onglet[data-etat="cache"] {
+  visibility: hidden;
+}
+.nb-onglet[data-etat="actif"] {
+  z-index: 2;
+}
+.nb-onglet[data-etat="dessous"] {
+  z-index: 1;
+}
+.nb-onglet[data-explorer] {
+  background: var(--nb-noir);
+}
+.nb-pile {
+  z-index: 10;
+}
+.nb-pile[data-racine] {
+  z-index: 3;
+  padding-bottom: calc(var(--nb-nav) + 90px);
+}
+.nb-pile[data-vide] {
+  display: none;
+}
+/* Les 6 transitions (brief § 3, generateurs/transitions_lib.py). L'écran quitté reste dessous
+   (cliché ou onglet) jusqu'à ce que le nouveau soit opaque. `backwards` : une barre fixe dans la page
+   ne reste pas prise dans une transformation une fois l'entrée finie. */
+@keyframes nbApproche {
+  from {
+    opacity: 0.4;
+    transform: scale(0.975);
+  }
+}
+@keyframes nbCarte {
+  from {
+    opacity: 0.5;
+    transform: scale(0.92);
+  }
+}
+@keyframes nbRetourEntre {
+  from {
+    transform: translateX(-22px);
+  }
+}
+@keyframes nbRetourPart {
+  to {
+    transform: translateX(100%);
+  }
+}
+@keyframes nbOrbi {
+  from {
+    clip-path: circle(22px at var(--nb-x, 50%) var(--nb-y, 50%));
+  }
+  to {
+    clip-path: circle(150% at var(--nb-x, 50%) var(--nb-y, 50%));
+  }
+}
+@keyframes nbOngletD {
+  from {
+    opacity: 0;
+    transform: translateX(22px);
+  }
+}
+@keyframes nbOngletG {
+  from {
+    opacity: 0;
+    transform: translateX(-22px);
+  }
+}
+@keyframes nbRecule {
+  to {
+    transform: translateX(var(--nb-recul, -14px));
+  }
+}
+@keyframes nbVoile {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes nbMonte {
+  from {
+    transform: translateY(56px);
+    opacity: 0.6;
+  }
+}
+@keyframes nbFondu {
+  from {
+    opacity: 0;
+  }
+}
+@keyframes nbFonduSort {
+  to {
+    opacity: 0;
+  }
+}
+/* Changement de page : la pile est une View Transition (React <ViewTransition name="nb-pile">).
+   Le navigateur garde l'image de l'écran quitté tant que le nouveau n'est pas posé ; le geste qui a
+   lancé le changement (`html[data-nb-geste]`, phone/stack.tsx) choisit le mouvement. Sans geste
+   (une page mise à jour sur place), rien ne bouge. */
+html:has(.nb-app)::view-transition-old(root),
+html:has(.nb-app)::view-transition-new(root) {
+  animation: none;
+}
+::view-transition-group(nb-pile) {
+  animation-duration: 0.34s;
+  animation-timing-function: cubic-bezier(0.2, 0.8, 0.2, 1);
+}
+::view-transition-old(nb-pile),
+::view-transition-new(nb-pile) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html[data-nb-geste="approche"]::view-transition-new(nb-pile) {
+  transform-origin: var(--nb-x, 50%) var(--nb-y, 50%);
+  animation: nbApproche 0.34s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+html[data-nb-geste="carte"]::view-transition-new(nb-pile) {
+  transform-origin: var(--nb-x, 50%) var(--nb-y, 50%);
+  animation: nbCarte 0.38s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+html[data-nb-geste="orbi"]::view-transition-new(nb-pile) {
+  animation: nbOrbi 0.4s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+html[data-nb-geste="retour"]::view-transition-new(nb-pile) {
+  animation: nbRetourEntre 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+html[data-nb-geste="retour"]::view-transition-old(nb-pile) {
+  z-index: 1;
+  animation: nbRetourPart 0.3s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+html[data-nb-geste="onglet-d"]::view-transition-new(nb-pile) {
+  animation: nbOngletD 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+html[data-nb-geste="onglet-g"]::view-transition-new(nb-pile) {
+  animation: nbOngletG 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+html[data-nb-geste="onglet-d"]::view-transition-old(nb-pile) {
+  animation: nbRecule 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+html[data-nb-geste="onglet-g"]::view-transition-old(nb-pile) {
+  --nb-recul: 14px;
+  animation: nbRecule 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+}
+.nb-onglet[data-entree="d"] {
+  animation: nbOngletD 0.32s var(--nb-courbe) backwards;
+}
+.nb-onglet[data-entree="g"] {
+  animation: nbOngletG 0.32s var(--nb-courbe) backwards;
+}
+.nb-onglet[data-etat="dessous"][data-sortie] {
+  animation: nbRecule 0.32s var(--nb-courbe) forwards;
+}
+.nb-onglet[data-sortie="g"] {
+  --nb-recul: 14px;
+}
+html[data-nb-reduit]::view-transition-new(nb-pile),
+html[data-nb-reduit]::view-transition-old(nb-pile) {
+  animation: nbFondu 0.16s ease-out both;
+}
+html[data-nb-reduit]::view-transition-old(nb-pile) {
+  animation-name: nbFonduSort;
+}
+.nb-app[data-reduit] .nb-onglet[data-entree] {
+  animation: nbFondu 0.16s ease-out backwards;
+}
+.nb-app[data-reduit] .nb-onglet[data-sortie] {
+  animation: nbFonduSort 0.16s ease-out forwards;
+}
+@media (prefers-reduced-motion: reduce) {
+  html[data-nb-geste]::view-transition-new(nb-pile) {
+    animation: nbFondu 0.16s ease-out both;
+  }
+  html[data-nb-geste]::view-transition-old(nb-pile) {
+    animation: nbFonduSort 0.16s ease-out both;
+  }
+  .nb-app .nb-onglet[data-entree] {
+    animation: nbFondu 0.16s ease-out backwards;
+  }
+  .nb-app .nb-onglet[data-sortie] {
+    animation: nbFonduSort 0.16s ease-out forwards;
+  }
+}
+
+/* ─── Ouverture : le logo seul, 1,2 s, puis fondu sur le Fil déjà affiché ─── */
+#nb-ouverture {
+  position: fixed;
+  inset: 0;
+  z-index: 2147483000;
+  background: #0b1a1f;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+#nb-ouverture .nb-logo {
+  display: flex;
+  align-items: center;
+  gap: 18px;
+}
+#nb-ouverture.nb-part {
+  animation: nbOuvPart 0.42s ease-out forwards;
+  pointer-events: none;
+}
+@keyframes nbOuvPart {
+  to {
+    opacity: 0;
+    transform: scale(1.03);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  #nb-ouverture.nb-part {
+    animation-duration: 0.16s;
+  }
+}
+
+/* ─── Barre du bas : icônes seules, point lime sous l'onglet actif ─── */
+.nb-nav {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 6;
+  height: var(--nb-nav);
+  padding: 8px 6px var(--nb-bas);
+  background: rgba(11, 26, 31, 0.86);
+  backdrop-filter: blur(18px);
+  -webkit-backdrop-filter: blur(18px);
+  border-top: 1px solid var(--nb-filet);
+  display: grid;
+  grid-template-columns: repeat(5, minmax(0, 1fr));
+}
+.nb-nav[hidden] {
+  display: none;
+}
+.nb-nav a {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 5px;
+  color: var(--nb-brume);
+  position: relative;
+  -webkit-tap-highlight-color: transparent;
+}
+.nb-nav a[aria-current="page"] {
+  color: var(--nb-lime);
+}
+.nb-nav svg {
+  transition: transform 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+.nb-nav a:active svg {
+  transform: scale(0.88);
+}
+.nb-nav .nb-pt {
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--nb-lime);
+  opacity: 0;
+  transform: scale(0);
+  transition:
+    opacity 0.2s,
+    transform 0.25s;
+}
+.nb-nav a[aria-current="page"] .nb-pt {
+  opacity: 1;
+  transform: none;
+}
+.nb-nav .nb-pastille {
+  position: absolute;
+  top: 4px;
+  left: calc(50% + 6px);
+  min-width: 17px;
+  height: 17px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+  font-size: 10.5px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Orbi flottant : disque menthe, bulle de question ─── */
+.nb-orbi-fab {
+  position: fixed;
+  right: 20px;
+  bottom: calc(var(--nb-nav) + 16px);
+  z-index: 5;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.nb-orbi-fab[hidden] {
+  display: none;
+}
+.nb-orbi-bulle {
+  max-width: 200px;
+  background: var(--nb-haute);
+  border-radius: 18px 18px 6px 18px;
+  padding: 9px 12px;
+  font-size: 12.5px;
+  font-weight: 600;
+  line-height: 1.35;
+  box-shadow: 0 14px 30px -12px rgba(0, 0, 0, 0.8);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  color: var(--nb-creme);
+}
+.nb-orbi-disque {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  flex: none;
+  box-shadow:
+    0 0 0 6px rgba(47, 211, 166, 0.2),
+    0 14px 30px -8px rgba(47, 211, 166, 0.55);
+  transition: transform 0.2s;
+}
+.nb-orbi-disque:active {
+  transform: scale(0.94);
+}
+.nb-orbi-disque svg {
+  display: block;
+}
+
+/* ─── En-têtes ─── */
+.nb-tete {
+  padding: var(--nb-haut) 20px 0;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  min-height: calc(var(--nb-haut) + 44px);
+}
+.nb-tete h1 {
+  flex: 1;
+  font-size: 28px;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+}
+.nb-barre {
+  padding: var(--nb-haut) 12px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  min-height: calc(var(--nb-haut) + 52px);
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  background: var(--nb-nuit);
+}
+.nb-barre h1 {
+  flex: 1;
+  min-width: 0;
+  font-size: 17px;
+  font-weight: 700;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.nb-retour {
+  height: 44px;
+  min-width: 44px;
+  padding: 0 8px;
+  font-size: 15px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  color: var(--nb-creme);
+}
+.nb-rond {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  color: var(--nb-creme);
+  flex: none;
+}
+.nb-compteur {
+  position: absolute;
+  top: 6px;
+  right: 4px;
+  min-width: 18px;
+  height: 18px;
+  padding: 0 5px;
+  border-radius: 9px;
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+  font-size: 11px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* ─── Éléments communs (planche Identité) ─── */
+.nb-av {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 13px;
+  flex: none;
+  overflow: hidden;
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-av img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nb-av[data-org] {
+  border-radius: 12px;
+  background: #0f3f37;
+  color: var(--nb-lime);
+}
+.nb-tg {
+  font-size: 10.5px;
+  font-weight: 700;
+  padding: 3px 7px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.nb-tg[data-ton="entreprise"] {
+  background: rgba(166, 242, 107, 0.14);
+  color: var(--nb-lime);
+}
+.nb-tg[data-ton="poste"],
+.nb-tg[data-ton="menthe"] {
+  background: rgba(47, 211, 166, 0.16);
+  color: var(--nb-menthe-claire);
+}
+.nb-tg[data-ton="realisation"] {
+  background: rgba(242, 179, 61, 0.16);
+  color: var(--nb-ambre);
+}
+.nb-tg[data-ton="alerte"] {
+  background: rgba(240, 138, 124, 0.16);
+  color: var(--nb-corail);
+}
+.nb-bouton {
+  height: 50px;
+  padding: 0 24px;
+  border-radius: 999px;
+  font-size: 15px;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+  text-align: center;
+}
+.nb-bouton[data-plein] {
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-bouton[data-contour] {
+  background: none;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+}
+.nb-bouton[data-large] {
+  width: 100%;
+}
+.nb-bouton:disabled,
+.nb-bouton[aria-disabled="true"] {
+  opacity: 0.45;
+  cursor: default;
+}
+.nb-chip {
+  height: 36px;
+  padding: 0 14px;
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  white-space: nowrap;
+  display: inline-flex;
+  align-items: center;
+  flex: none;
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: var(--nb-creme);
+}
+.nb-chip[aria-pressed="true"],
+.nb-chip[aria-selected="true"] {
+  background: var(--nb-creme);
+  color: var(--nb-nuit);
+  border-color: var(--nb-creme);
+}
+.nb-sec {
+  font-size: 13px;
+  color: var(--nb-brume);
+  padding: 18px 20px 4px;
+}
+.nb-meta {
+  font-size: 13px;
+  color: var(--nb-brume);
+}
+.nb-ligne {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 20px;
+  border-bottom: 1px solid var(--nb-filet);
+  color: var(--nb-creme);
+  min-height: 56px;
+}
+.nb-ligne b {
+  display: block;
+  font-size: 14px;
+}
+.nb-ligne small {
+  display: block;
+  font-size: 12.5px;
+  color: var(--nb-brume);
+  margin-top: 2px;
+}
+.nb-onglets {
+  display: grid;
+  grid-auto-columns: minmax(0, 1fr);
+  grid-auto-flow: column;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.nb-onglets [role="tab"] {
+  height: 46px;
+  text-align: center;
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--nb-brume);
+  position: relative;
+}
+.nb-onglets [role="tab"][aria-selected="true"] {
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+.nb-onglets [role="tab"][aria-selected="true"]::after {
+  content: "";
+  position: absolute;
+  left: 30%;
+  right: 30%;
+  bottom: -1px;
+  height: 3px;
+  border-radius: 2px;
+  background: var(--nb-lime);
+}
+
+/* ─── Feuilles (voile en fondu, feuille qui monte) ─── */
+.nb-feuille-dlg {
+  position: fixed;
+  inset: 0;
+  width: 100%;
+  max-width: none;
+  height: 100%;
+  max-height: none;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--nb-creme);
+  overflow: hidden;
+}
+.nb-feuille-dlg::backdrop {
+  background: transparent;
+}
+.nb-feuille-dlg[open] {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+}
+.nb-voile {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  background: rgba(0, 0, 0, 0.55);
+  animation: nbVoile 0.26s ease-out;
+}
+@media (prefers-reduced-motion: reduce) {
+  .nb-voile,
+  .nb-feuille {
+    animation-duration: 0.12s;
+  }
+}
+.nb-feuille {
+  position: relative;
+  background: var(--nb-surface);
+  border-radius: 30px 30px 0 0;
+  padding: 10px 20px max(28px, env(safe-area-inset-bottom));
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+  max-height: 92dvh;
+  overflow-y: auto;
+  animation: nbMonte 0.34s var(--nb-courbe);
+  font-family: var(--font-sora), "Sora", system-ui, sans-serif;
+}
+.nb-poignee {
+  display: block;
+  width: 40px;
+  height: 5px;
+  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 auto 14px;
+}
+.nb-feuille h2 {
+  font-size: 17px;
+  font-weight: 700;
+}
+.nb-opt {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  min-height: 54px;
+  padding: 8px 4px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--nb-creme);
+}
+.nb-opt small {
+  display: block;
+  font-size: 12.5px;
+  font-weight: 400;
+  color: var(--nb-brume);
+  margin-top: 2px;
+}
+.nb-opt[data-alerte] {
+  color: var(--nb-corail);
+}
+.nb-annuler {
+  width: 100%;
+  height: 50px;
+  margin-top: 12px;
+  border-radius: 999px;
+  background: var(--nb-haute);
+  text-align: center;
+  font-size: 15px;
+  font-weight: 700;
+  color: var(--nb-creme);
+}
+.nb-champ {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 52px;
+  border-radius: 26px;
+  background: var(--nb-nuit);
+  padding: 0 6px 0 18px;
+  border: 1px solid rgba(47, 211, 166, 0.45);
+  min-width: 0;
+}
+.nb-champ input,
+.nb-champ textarea {
+  flex: 1 1 0;
+  width: 0;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--nb-creme);
+}
+.nb-champ input::placeholder {
+  color: var(--nb-brume);
+}
+.nb-env {
+  height: 40px;
+  padding: 0 16px;
+  border-radius: 20px;
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+  font-size: 13px;
+  font-weight: 700;
+  display: flex;
+  align-items: center;
+  flex: none;
+}
+.nb-env:disabled {
+  opacity: 0.5;
+}
+.nb-q {
+  width: 100%;
+  padding: 14px 16px;
+  border-radius: 16px;
+  background: var(--nb-haute);
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nb-creme);
+  text-align: left;
+}
+.nb-q[data-plein] {
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+  text-align: center;
+}
+.nb-orbi-tete {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.nb-orbi-titre {
+  flex: 1;
+  min-width: 0;
+}
+.nb-orbi-titre b {
+  display: block;
+  font-size: 17px;
+}
+.nb-orbi-titre .nb-meta {
+  font-size: 12.5px;
+}
+.nb-fermer {
+  width: 40px;
+  height: 40px;
+  color: var(--nb-brume);
+}
+.nb-orbi-rep {
+  margin-top: 16px;
+}
+.nb-orbi-texte {
+  font-size: 15px;
+  line-height: 1.5;
+  margin-top: 8px;
+}
+.nb-orbi-limite {
+  margin-top: 10px;
+}
+.nb-orbi-limite a {
+  color: var(--nb-lime);
+  font-weight: 600;
+}
+.nb-orbi-liste {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 14px;
+}
+.nb-orbi-q {
+  margin-top: 16px;
+}
+.nb-orbi-decide {
+  margin-top: 12px;
+  font-size: 12px;
+}
+.nb-orbi-champ {
+  margin-top: 14px;
+}
+.nb-orbi-rep p + p {
+  margin-top: 8px;
+}
+.nb-orbi-lien {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  border-radius: 16px;
+  background: var(--nb-haute);
+  color: var(--nb-creme);
+  font-size: 14px;
+  font-weight: 600;
+}
+.nb-orbi-lien span {
+  flex: 1;
+}
+.nb-pense {
+  display: inline-flex;
+  gap: 5px;
+  padding: 6px 0;
+}
+.nb-pense i {
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--nb-menthe);
+  animation: nbPense 1s ease-in-out infinite;
+}
+.nb-pense i:nth-child(2) {
+  animation-delay: 0.15s;
+}
+.nb-pense i:nth-child(3) {
+  animation-delay: 0.3s;
+}
+@keyframes nbPense {
+  50% {
+    opacity: 0.3;
+    transform: translateY(-3px);
+  }
+}
+
+/* ─── Recherche en deux temps ─── */
+.nb-recherche {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  height: 46px;
+  border-radius: 999px;
+  background: var(--nb-surface);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  padding: 0 16px;
+  color: var(--nb-brume);
+}
+.nb-recherche input {
+  flex: 1;
+  min-width: 0;
+  border: 0;
+  outline: 0;
+  background: none;
+  font: inherit;
+  font-size: 14px;
+  color: var(--nb-creme);
+}
+.nb-recherche input::placeholder {
+  color: var(--nb-brume);
+}
+.nb-recherche-ecran {
+  position: fixed;
+  inset: 0;
+  z-index: 20;
+  background: var(--nb-nuit);
+  overflow-y: auto;
+  animation: nbApproche 0.34s var(--nb-courbe) backwards;
+}
+.nb-recherche-tete {
+  padding: var(--nb-haut) 12px 10px 8px;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  position: sticky;
+  top: 0;
+  background: var(--nb-nuit);
+  z-index: 2;
+}
+.nb-recherche-tete .nb-recherche {
+  flex: 1;
+}
+
+/* ─── Toasts : en haut, crème ─── */
+.nb-app .jm-toast {
+  background: var(--nb-creme);
+  color: var(--nb-nuit);
+  font-weight: 600;
+  box-shadow: 0 16px 30px -10px rgba(0, 0, 0, 0.7);
+}
+.nb-app .jm-toast :where(span, a) {
+  color: inherit;
+}
+
+/* Pages pas encore redessinées (B2 à B8) : elles gardent leur mise en page sombre dans la pile.
+   Une page du Modèle B (`.nb-page`) prend tout l'écran. Retiré en B9. */
+.nb-ancien > .t-colonne:first-child {
+  padding-top: var(--nb-haut);
+}
+.nb-ancien:has(.nb-page) > header {
+  display: none;
+}
+.nb-pile[data-racine] .nb-ancien > .t-colonne:last-child {
+  padding-bottom: 24px;
+}
+.nb-ancien:has(.nb-page) {
+  background: none;
+  min-height: 0;
+}
+.nb-ancien:has(.nb-page)::before {
+  display: none;
+}
+.nb-ancien:has(.nb-page) > .t-colonne {
+  max-width: none;
+  padding: 0;
+  gap: 0;
+}
+.nb-vide {
+  text-align: center;
+  font-size: 14px;
+  color: var(--nb-brume);
+  padding: 40px 20px;
+}
+.nb-ligne-texte {
+  flex: 1;
+  min-width: 0;
+}
+.nb-recherche > span {
+  flex: 1;
+  min-width: 0;
+  font-size: 14px;
+  text-align: left;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}

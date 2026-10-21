@@ -42,12 +42,15 @@ test("l'espace connecté propose la navigation adaptée à l'écran", async ({ p
   await page.goto("/app");
   const navigation = page.getByRole("navigation", { name: "Navigation principale" });
   await expect(navigation.filter({ visible: true })).toHaveCount(1);
-  const lienAccueil = navigation.filter({ visible: true }).getByRole("link", { name: "Pour moi" });
+  // Téléphone : Modèle B (docs/modele-b), le premier onglet est le Fil.
+  const lienAccueil = navigation
+    .filter({ visible: true })
+    .getByRole("link", { name: isMobile ? "Fil" : "Pour moi", exact: true });
   await expect(lienAccueil).toHaveAttribute("aria-current", "page");
   const boite = await navigation.filter({ visible: true }).boundingBox();
   const viewport = page.viewportSize();
   if (isMobile) {
-    // Téléphone (docs/refonte-mobile) : la barre du bas.
+    // Téléphone (docs/modele-b) : la barre du bas.
     expect(boite!.y).toBeGreaterThan(viewport!.height / 2);
     expect(boite!.width).toBeLessThanOrEqual(560);
   } else {
