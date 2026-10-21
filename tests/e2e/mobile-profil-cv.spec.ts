@@ -66,56 +66,39 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
 });
 
 test("télécharger mon CV sur téléphone : créer, aperçu, PDF", async ({ page, isMobile }) => {
-  test.skip(!isMobile, "Parcours du téléphone (planche talent-4 § 6).");
+  test.skip(!isMobile, "Parcours du téléphone (Modèle B, lot B5).");
   test.setTimeout(150_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("cv-mobile"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
 
-  // « Nouveau CV »: from the profile, named, then opened (lot 6c).
+  // « Nouveau CV » in Carrière → « Choisir un modèle »: a CV from the profile, opened.
   await page.goto("/app/career/cv");
-  await expect(page.getByRole("navigation", { name: "Navigation principale" })).toHaveCount(0);
-  await page.getByRole("button", { name: "Nouveau CV", exact: true }).click();
-  const sheet = page.getByRole("dialog", { name: "Nouveau CV" });
-  await expect(sheet.getByRole("radio", { name: /Depuis mon profil/ })).toBeChecked();
-  await sheet.getByLabel("Nom du CV").fill("CV Analyste");
-  await sheet.getByRole("button", { name: "Créer et ouvrir" }).click();
+  const career = page.locator(".nb-ca").first();
+  await career.getByRole("tab", { name: "CV", exact: true }).click();
+  await page.goto("/app/career/cv/modeles?nouveau=1");
+  await page.locator(".nb-ca-modeles form button").first().click();
   await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
   const id = new URL(page.url()).pathname.split("/").pop()!;
+  const title = (await page.locator(".nb-ca-editeur h1").textContent())!.trim();
+  expect(title).not.toBe("");
 
-  // The studio: its title, the sections, the bottom bar « Adapter » and « PDF ».
-  await expect(page.getByRole("heading", { name: "CV Analyste", level: 1 })).toBeVisible();
-  await expect(
-    page.getByRole("heading", { name: "Sections · glisser pour réordonner" }),
-  ).toBeVisible();
-  await expect(page.getByRole("button", { name: "Adapter", exact: true })).toBeInViewport();
-  await page.getByRole("link", { name: "Aperçu" }).click();
-  await expect(page).toHaveURL(/vue=apercu/);
-  await expect(page.locator(".cv-pages > .cv-page").first()).toBeVisible();
-
-  // The list: « … » then « Télécharger en PDF », the toast; the file says nothing of us.
+  // The CV's menu in the tab: « Exporter en PDF ou Word », then « Télécharger ».
   await page.goto("/app/career/cv");
-  await page.getByRole("button", { name: "Plus d'options pour « CV Analyste »" }).click();
-  // A phone saves the file itself: the check reads what the server sent to the button.
-  const response = page.waitForResponse((r) => r.url().includes("/export?format=pdf"));
-  await page
-    .getByRole("dialog", { name: "CV Analyste" })
-    .getByRole("link", { name: "Télécharger en PDF" })
+  await career.getByRole("tab", { name: "CV", exact: true }).click();
+  await career
+    .getByRole("button", { name: `Actions de « ${title} »` })
+    .first()
     .click();
-  const pdf = await response;
+  await page.getByRole("button", { name: "Exporter en PDF ou Word" }).click();
+  const sheet = page.getByRole("dialog", { name: `Exporter « ${title} »` });
+  await expect(sheet.getByRole("radio", { name: "PDF" })).toHaveAttribute("aria-checked", "true");
+  const href = await sheet.getByRole("link", { name: "Télécharger" }).getAttribute("href");
+  expect(href).toBe(`/app/career/cv/${id}/pdf`);
+  const pdf = await page.request.get(href!);
   expect(pdf.status()).toBe(200);
   const path = join(mkdtempSync(join(tmpdir(), "cv-mobile-")), "cv.pdf");
-  writeFileSync(path, await (await page.request.post(pdf.url())).body());
+  writeFileSync(path, await pdf.body());
   // The contact e-mail of the fictional account is the only place the word may appear.
   const text = execFileSync("pdftotext", ["-layout", path, "-"]).toString();
   expect(text.replace(/\S+@\S+/g, "")).not.toMatch(/Jumanly/i);
-
-  // Clean up through the « … » menu.
-  await page.goto("/app/career/cv");
-  await page.getByRole("button", { name: "Plus d'options pour « CV Analyste »" }).click();
-  await page
-    .getByRole("dialog", { name: "CV Analyste" })
-    .getByRole("button", { name: "Supprimer" })
-    .click();
-  await expect(page).toHaveURL(/ok=supprime/);
-  expect(id).toBeTruthy();
 });

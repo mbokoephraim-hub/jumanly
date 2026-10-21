@@ -496,10 +496,11 @@ export async function featureCareerProjectAction(id: string, on: boolean): Promi
   });
   const project = document ? parseProject(document) : null;
   if (!document || !project) return fail("notFound");
-  const { id: _id, title: _title, ...content } = project;
   await db.document.update({
     where: { id: document.id },
-    data: { content: { ...content, visible: on === true } },
+    data: {
+      content: { ...(document.content as Prisma.JsonObject), visible: on === true },
+    },
   });
   refresh();
   return { ok: true };

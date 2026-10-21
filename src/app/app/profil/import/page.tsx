@@ -89,7 +89,7 @@ export default async function CvImportPage({ searchParams }: PageProps<"/app/pro
               </div>
             </form>
           ) : (
-            <CvImportPick max={megabytes} />
+            <CvImportPick key={error ?? "choisir"} max={megabytes} />
           )}
         </SettingsFrame>
       </CareerTexts>

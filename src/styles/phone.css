@@ -5404,6 +5404,7 @@ input:checked + .nb-ca-radio::after {
 }
 .nb-ca-op-i[data-ton="1"] {
   background: #e67e22;
+  color: var(--nb-nuit);
 }
 .nb-ca-op-i[data-ton="2"] {
   background: #b03a2e;

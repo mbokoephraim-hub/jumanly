@@ -50,6 +50,46 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Modèle B · B5 : Carrière au téléphone (21 octobre 2026)
+
+Planches Carrière (`docs/modele-b/captures/INDEX.md`, rangées 11 à 15). Écarts et choix :
+`docs/decisions/2026-10-21-modele-b-b5.md`.
+
+**Fait.**
+- Onglet Carrière gardé monté (`src/components/phone/career/`) : en-tête (bannière, photo, Cap,
+  disponibilité, profil complété), Partager, Modifier, recherche, paramètres ; rubriques Profil · CV ·
+  Portfolio · Progression · Candidatures ; `?onglet=` rouvre une rubrique.
+- Profil : formulaires « Modifier le profil » (photo : appareil, galerie, retirer), « À propos »,
+  expérience, formation, avec Orbi qui réécrit ou corrige (rien n'est gardé sans « Utiliser » puis
+  « Enregistrer ») ; feuilles « Ajouter des compétences » et « Langues et lieux ».
+- Paramètres, confidentialité, notifications, aide (e-mail seulement), déconnexion confirmée ; « Ma
+  formule » et paiement Mobile Money (attente, validation, réussite ou échec).
+- CV : nouveau (modèle, import, Orbi), modèles, éditeur avec aperçu et couleurs, menu d'un CV
+  (modifier, exporter PDF ou Word, adapter à une offre, dupliquer, par défaut, supprimer), import.
+- Portfolio : détail d'une réalisation (photos, mise en avant, partager dans le Fil, supprimer),
+  ajout et modification (3 photos réduites sur le téléphone, Orbi rédige, lien).
+- Candidature : où elle en est, l'entretien (agenda, préparer avec Orbi), s'entraîner, CV envoyé,
+  écrire au recruteur (brouillon d'Orbi modifiable), retrait confirmé.
+- Actions `src/server/actions/career-phone.ts`, services `src/server/services/career-phone.ts`.
+  Aucune migration (le lien d'une réalisation vit dans son contenu JSON).
+
+**Captures → maquettes** (`captures/etape-1/`, 390 × 844) : `b5-073` à `b5-113`, un fichier par
+planche, au numéro de la maquette (073 Carrière à 113 Carrière-cand-retirer). Planches sans capture
+propre : 092 et 093 (attente et fin du paiement, mêmes gabarits que 091), 101 (menu d'un CV, dans
+`tests/e2e/modele-b-carriere.spec.ts`), 104 et 105 (lecture et résultat de l'import).
+
+**Remplacé au téléphone.** L'ancienne page Paramètres et ses sous-pages, l'ancien « Mon
+abonnement » et son paiement, l'ancien éditeur et les anciens modèles de CV, l'ancien détail d'une
+candidature (sauf invitation ou document à envoyer), l'ancienne page d'import. Les liens du
+téléphone (Accueil, Fil) mènent aux nouveaux écrans. **Reste pour B9** : l'ancien `/app/profil` et
+ses sous-pages, encore joignables par une ancienne adresse ; l'ordinateur garde ses pages.
+
+**Tests.** `tests/e2e/modele-b-carriere.spec.ts` (chaque bouton de Carrière ouvre quelque chose,
+l'onglet reste monté au retour des paramètres, une réalisation de bout en bout, une candidature,
+le brouillon d'Orbi) ; `tests/db/career.test.ts` (lien d'une réalisation, couverture, Orbi sans
+modèle). En local, `simulations d'entretien › sans simulation` échoue sur une matrice de forfaits
+modifiée par d'anciens essais ; il passe sur une base neuve (CI).
+
 ## Modèle B · B4 : Explorer, une offre, une entreprise, une personne (21 octobre 2026)
 
 Planches Offres, Entreprise et Personne (`docs/modele-b/captures/INDEX.md`, rangées 07 à 10).

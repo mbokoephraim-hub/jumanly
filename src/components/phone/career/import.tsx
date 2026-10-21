@@ -30,6 +30,7 @@ export function CvImportPick({ max }: { max: number }) {
         <b>{t("choose", { max })}</b>
         <span className="nb-meta">{t("chooseText")}</span>
         <input
+          id="import-fichier"
           type="file"
           name="file"
           accept=".pdf,.doc,.docx,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,application/msword"

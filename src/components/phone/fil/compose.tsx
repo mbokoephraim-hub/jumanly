@@ -276,7 +276,7 @@ export function PhoneCompose({
               {pick === "work" ? t("publish.noWork") : t("publish.noCertificate")}
             </p>
             <Link
-              href={pick === "work" ? "/app/profil/projet" : "/app/learn"}
+              href={pick === "work" ? "/app/career/portfolio/nouvelle" : "/app/learn"}
               className="nb-fil-ouvrir"
               onClick={() => setPick(null)}
             >

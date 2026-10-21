@@ -182,6 +182,10 @@ test.describe("modèles de CV : rendu (desktop)", () => {
 
 test.describe("modèles de CV : parcours", () => {
   test("galerie, mise en forme et couleur refusée", async ({ page, isMobile }) => {
+    test.skip(
+      isMobile,
+      "Le téléphone a les écrans du Modèle B (modele-b-carriere.spec.ts) ; ces règles restent vérifiées sur ordinateur.",
+    );
     // Three pages with real previews of the CV and an accessibility check on each.
     test.setTimeout(90_000);
     const phone = isMobile ? "#cv-telephone" : "#sc-telephone";
@@ -267,7 +271,12 @@ test.describe("modèles de CV : parcours", () => {
 
   test("un compte Free ne peut ni appliquer ni exporter un modèle réservé, même par l'API", async ({
     page,
+    isMobile,
   }) => {
+    test.skip(
+      isMobile,
+      "Le téléphone a les écrans du Modèle B (modele-b-carriere.spec.ts) ; ces règles restent vérifiées sur ordinateur.",
+    );
     await logIn(page, demo.talentFree);
     const id = await newCvFromList(page);
 
@@ -299,7 +308,12 @@ test.describe("modèles de CV : parcours", () => {
 
   test("le PDF exporté est neutre : ni Jumanly, ni logo, ni couleur de la marque", async ({
     page,
+    isMobile,
   }) => {
+    test.skip(
+      isMobile,
+      "Le téléphone a les écrans du Modèle B (modele-b-carriere.spec.ts) ; ces règles restent vérifiées sur ordinateur.",
+    );
     test.setTimeout(90_000);
     await logIn(page, demo.talentPro);
     const id = await newCvFromList(page);

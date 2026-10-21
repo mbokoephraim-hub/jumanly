@@ -217,9 +217,17 @@ export async function finishOnboarding(page: Page, place?: { country: string; ci
 
 /**
  * A new CV from « CV et documents » (lot 6c): « Nouveau CV » opens its sheet (Depuis mon profil ·
- * Page vierge), on a phone and a computer. Returns its id once the editor is open.
+ * Page vierge) on a computer; the phone picks a template (Modèle B). Returns its id once the
+ * editor is open.
  */
 export async function newCvFromList(page: Page) {
+  // On the phone (Modèle B, lot B5): « Nouveau CV » → « Choisir un modèle », the first one open.
+  if ((page.viewportSize()?.width ?? 1280) < 768) {
+    await page.goto("/app/career/cv/modeles?nouveau=1");
+    await page.locator(".nb-ca-modeles form button").first().click();
+    await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
+    return new URL(page.url()).pathname.split("/").pop()!;
+  }
   await page.goto("/app/career/cv");
   // « Nouveau CV » on a phone, « Nouveau CV · Depuis mon profil » on a computer (studio CV web).
   await page
