@@ -24,6 +24,8 @@ import { redirect } from "next/navigation";
 import { RecruiterSettings } from "@/components/recruiter/settings";
 import { getActiveSpace } from "@/server/hire-context";
 import { inPartnerSpaceOnly } from "@/server/talent-space";
+import { PhoneSettingsScreen } from "@/components/phone/career/settings-server";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("parametres");
@@ -100,6 +102,9 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
   }
   const space = await getActiveSpace(user.id);
   if (space) return <RecruiterSettings user={user} space={space} params={params} />;
+  // The phone (Modèle B, planche Carrière-parametres); deleting the account keeps its own sheet.
+  if ((await isPhone()) && one(params.supprimer) !== "1")
+    return <PhoneSettingsScreen user={user} />;
   const t = await getTranslations();
   const [org, credential] = await Promise.all([
     ownedOrganization(db, user.id),

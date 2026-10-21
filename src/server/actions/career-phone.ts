@@ -15,6 +15,7 @@ import {
   PROFILE_SUMMARY_MAX,
   refreshCompleteness,
 } from "@/server/services/profile";
+import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
 import { PhotoError, removePhoto, savePhoto } from "@/server/services/profile-photo";
 
 /**
@@ -308,4 +309,70 @@ export async function searchCareerSkillsAction(query: string) {
     orderBy: { name: "asc" },
     take: 8,
   });
+}
+
+const privacyInput = z.object({
+  visibility: z.enum(["private", "recruiters", "anonymous"]),
+  matching: z.boolean(),
+  contactRequests: z.boolean(),
+  ai: z.boolean(),
+  newsletter: z.boolean(),
+});
+
+/**
+ * « Confidentialité » on the phone (planche Carrière-confid): each switch saves at once. Applying
+ * stays possible whatever is chosen (CLAUDE.md, règle 1).
+ */
+export async function saveCareerPrivacyAction(raw: z.input<typeof privacyInput>): Promise<Result> {
+  const parsed = privacyInput.safeParse(raw);
+  if (!parsed.success) return fail("invalid");
+  const { user, profile } = await mine();
+  const input = parsed.data;
+  const consent = await db.user.findUniqueOrThrow({
+    where: { id: user.id },
+    select: { aiConsentAt: true },
+  });
+  await db.$transaction([
+    db.user.update({
+      where: { id: user.id },
+      data: {
+        aiConsentAt: input.ai ? (consent.aiConsentAt ?? new Date()) : null,
+        newsletter: input.newsletter,
+      },
+    }),
+    db.talentProfile.update({
+      where: { id: profile.id },
+      data: {
+        visibility: input.visibility,
+        matchingEnabled: input.matching,
+        acceptsContactRequests: input.contactRequests,
+      },
+    }),
+  ]);
+  refresh();
+  return { ok: true };
+}
+
+const notificationsInput = z.object({
+  categories: z.array(z.enum(NOTIFICATION_CATEGORIES as [string, ...string[]])),
+  emails: z.boolean(),
+});
+
+/** « Notifications » on the phone (planche Carrière-notif): the categories kept, the e-mails. */
+export async function saveCareerNotificationsAction(
+  raw: z.input<typeof notificationsInput>,
+): Promise<Result> {
+  const parsed = notificationsInput.safeParse(raw);
+  if (!parsed.success) return fail("invalid");
+  const { user } = await mine();
+  const kept = new Set(parsed.data.categories);
+  await db.user.update({
+    where: { id: user.id },
+    data: {
+      notificationsMuted: NOTIFICATION_CATEGORIES.filter((category) => !kept.has(category)),
+      notificationEmails: parsed.data.emails,
+    },
+  });
+  refresh();
+  return { ok: true };
 }

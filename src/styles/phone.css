@@ -5312,3 +5312,224 @@ textarea.nb-ca-in[data-haut] {
   overflow: hidden;
   text-overflow: ellipsis;
 }
+
+/* ─── Carrière : paramètres, formule et paiement (lot B5) ─── */
+.nb-ca-form-barre[data-retour-texte] .nb-retour svg {
+  display: block;
+}
+.nb-ca-gr {
+  padding: 24px 20px 6px;
+  font-size: 13px;
+  color: var(--nb-brume);
+}
+.nb-ca-it[data-ligne] {
+  width: 100%;
+  margin: 0;
+  border-top: 0;
+  text-align: left;
+}
+.nb-ca-it > span:first-child,
+.nb-ca-it > span:nth-child(2):not(:last-child) {
+  flex: 1;
+  min-width: 0;
+}
+.nb-ca-it small {
+  display: block;
+}
+.nb-ca-it > small {
+  margin-left: auto;
+  font-size: 14px;
+  color: var(--nb-brume);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 60%;
+}
+.nb-ca-it > small em {
+  font-style: normal;
+  color: var(--nb-lime);
+}
+.nb-ca-moi {
+  padding: 18px 16px;
+}
+.nb-ca-moi b {
+  display: block;
+  font-size: 16px;
+}
+.nb-ca-sortir,
+.nb-ca-sortir span {
+  color: var(--nb-corail);
+}
+.nb-ca-radio {
+  width: 22px;
+  height: 22px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(255, 255, 255, 0.35);
+  flex: none;
+  margin-left: auto;
+  display: grid;
+  place-items: center;
+}
+[aria-checked="true"] > .nb-ca-radio,
+input:checked + .nb-ca-radio {
+  border-color: var(--nb-lime);
+}
+[aria-checked="true"] > .nb-ca-radio::after,
+input:checked + .nb-ca-radio::after {
+  content: "";
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background: var(--nb-lime);
+}
+.nb-ca-op input {
+  position: absolute;
+  opacity: 0;
+  pointer-events: none;
+}
+.nb-ca-op:has(input:focus-visible) {
+  outline: 2px solid var(--nb-menthe);
+  outline-offset: -2px;
+}
+.nb-ca-op-i {
+  width: 36px;
+  height: 36px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  font-size: 12px;
+  font-weight: 700;
+  color: var(--nb-creme);
+  background: #c0392b;
+  flex: none;
+}
+.nb-ca-op-i[data-ton="1"] {
+  background: #e67e22;
+}
+.nb-ca-op-i[data-ton="2"] {
+  background: #b03a2e;
+}
+.nb-ca-faq summary {
+  list-style: none;
+  cursor: pointer;
+}
+.nb-ca-faq summary::-webkit-details-marker {
+  display: none;
+}
+.nb-ca-faq summary svg {
+  color: var(--nb-brume);
+  transition: transform 0.2s;
+}
+.nb-ca-faq[open] summary svg {
+  transform: rotate(45deg);
+}
+.nb-ca-faq > p {
+  padding: 4px 20px 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  color: var(--nb-gris);
+}
+.nb-ca-mail b {
+  display: block;
+  color: var(--nb-creme);
+}
+.nb-ca-intro {
+  padding: 14px 20px 0;
+  font-size: 14px;
+}
+.nb-ca-aide {
+  margin-top: 8px;
+}
+.nb-ca-formules {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  padding: 14px 20px 0;
+}
+.nb-ca-formule {
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--nb-surface);
+  border: 1px solid var(--nb-filet);
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+.nb-ca-formule[data-actuelle] {
+  border: 1.5px solid var(--nb-lime);
+}
+.nb-ca-formule > div {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+.nb-ca-formule b {
+  font-size: 17px;
+}
+.nb-ca-prix {
+  font-size: 15px;
+  font-weight: 700;
+}
+.nb-ca-commande {
+  margin: 16px 20px 0;
+  padding: 16px;
+  border-radius: 18px;
+  background: var(--nb-surface);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 12px;
+}
+.nb-ca-commande > span {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nb-ca-commande b {
+  font-size: 18px;
+}
+.nb-ca-attente,
+.nb-ca-fin {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 16px;
+  padding: 48px 24px;
+}
+.nb-ca-fin {
+  min-height: 100dvh;
+  justify-content: center;
+}
+.nb-ca-fin h1 {
+  font-size: 22px;
+  font-weight: 700;
+}
+.nb-ca-fin .nb-bouton {
+  align-self: stretch;
+}
+.nb-ca-rond-att,
+.nb-ca-rond-ok {
+  width: 72px;
+  height: 72px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--nb-surface);
+  color: var(--nb-ambre);
+}
+.nb-ca-rond-ok {
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-ca-rond-ok[data-echec] {
+  background: var(--nb-corail);
+}
+.nb-ca-it > .nb-ca-op-i,
+.nb-ca-moi > span:first-child {
+  flex: none;
+}
+.nb-ca-commande > b {
+  white-space: nowrap;
+}

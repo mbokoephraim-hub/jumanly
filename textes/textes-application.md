@@ -8989,6 +8989,92 @@ Conventions :
 | `phoneCareer.sheets.places` | Où je veux travailler |
 | `phoneCareer.sheets.placeAdd` | Ajouter une ville |
 | `phoneCareer.sheets.languagesSaved` | Langues et lieux enregistrés. |
+| `phoneCareer.reglages.back` | Retour |
+| `phoneCareer.reglages.close` | Fermer |
+| `phoneCareer.reglages.cancel` | Annuler |
+| `phoneCareer.reglages.title` | Paramètres |
+| `phoneCareer.reglages.editProfile` | Modifier le profil |
+| `phoneCareer.reglages.account` | Compte |
+| `phoneCareer.reglages.namePhoto` | Nom et photo |
+| `phoneCareer.reglages.email` | E-mail |
+| `phoneCareer.reglages.password` | Mot de passe et sécurité |
+| `phoneCareer.reglages.subscription` | Abonnement |
+| `phoneCareer.reglages.plan` | Ma formule |
+| `phoneCareer.reglages.noPlan` | Gratuite |
+| `phoneCareer.reglages.privacyGroup` | Vie privée |
+| `phoneCareer.reglages.privacy` | Confidentialité |
+| `phoneCareer.reglages.notifications` | Notifications |
+| `phoneCareer.reglages.application` | Application |
+| `phoneCareer.reglages.language` | Langue |
+| `phoneCareer.reglages.french` | Français |
+| `phoneCareer.reglages.help` | Aide et contact |
+| `phoneCareer.reglages.signOut` | Se déconnecter |
+| `phoneCareer.reglages.signOutQuestion` | Se déconnecter ? |
+| `phoneCareer.reglages.signOutText` | Vous pourrez vous reconnecter avec votre e-mail ou votre compte Google. |
+| `phoneCareer.reglages.saved` | C’est enregistré. |
+| `phoneCareer.reglages.error` | Ça n’a pas marché. Réessayez dans un instant. |
+| `phoneCareer.reglages.whoSees` | Qui voit mon profil |
+| `phoneCareer.reglages.visibility.recruiters` | Les recruteurs |
+| `phoneCareer.reglages.visibility.recruitersText` | Votre profil complet, avec votre nom |
+| `phoneCareer.reglages.visibility.anonymous` | Anonyme |
+| `phoneCareer.reglages.visibility.anonymousText` | Sans votre nom ni votre photo, jusqu’à ce que vous acceptiez une mise en relation |
+| `phoneCareer.reglages.visibility.private` | Moi seulement |
+| `phoneCareer.reglages.visibility.privateText` | Profil masqué, candidatures toujours possibles |
+| `phoneCareer.reglages.options` | Options |
+| `phoneCareer.reglages.matching` | Calcul de compatibilité |
+| `phoneCareer.reglages.matchingText` | Le score avec chaque offre, toujours avec son « Pourquoi ? » |
+| `phoneCareer.reglages.contactRequests` | Accepter les demandes de mise en relation |
+| `phoneCareer.reglages.ai` | Aide d’Orbi |
+| `phoneCareer.reglages.aiText` | Orbi lit votre profil pour vous proposer de l’aide. Vous décidez toujours. |
+| `phoneCareer.reglages.newsletter` | Les nouvelles de Jumanly par e-mail |
+| `phoneCareer.reglages.data` | Mes données |
+| `phoneCareer.reglages.download` | Télécharger mes données |
+| `phoneCareer.reglages.views` | Qui a consulté mon profil |
+| `phoneCareer.reglages.deleteAccount` | Supprimer mon compte |
+| `phoneCareer.reglages.onPhone` | Sur le téléphone |
+| `phoneCareer.reglages.byEmail` | Par e-mail |
+| `phoneCareer.reglages.category.applications` | Mes candidatures |
+| `phoneCareer.reglages.category.applicationsText` | Réponses, entretiens, offres qui changent |
+| `phoneCareer.reglages.category.messages` | Messages et réseau |
+| `phoneCareer.reglages.category.messagesText` | Messages, demandes de connexion, réponses dans le Fil |
+| `phoneCareer.reglages.category.learning` | Formation |
+| `phoneCareer.reglages.category.learningText` | Attestations et bilans de carrière |
+| `phoneCareer.reglages.category.billing` | Abonnement |
+| `phoneCareer.reglages.category.billingText` | Renouvellement et paiements |
+| `phoneCareer.reglages.emails` | Rappels par e-mail |
+| `phoneCareer.reglages.emailsText` | Un e-mail quand une notification importante attend |
+| `phoneCareer.reglages.faq` | Questions fréquentes |
+| `phoneCareer.reglages.writeTeam` | Écrire à l’équipe |
+| `phoneCareer.reglages.answerByEmail` | Réponse par e-mail |
+| `phoneCareer.billing.title` | Ma formule |
+| `phoneCareer.billing.intro` | Vous êtes en {plan}. Paiement par Mobile Money, sans engagement. |
+| `phoneCareer.billing.current` | Votre formule |
+| `phoneCareer.billing.choose` | Choisir {plan} |
+| `phoneCareer.billing.free` | Gratuit |
+| `phoneCareer.billing.perMonth` | {amount} / mois |
+| `phoneCareer.billing.applyFree` | Candidater reste toujours gratuit, quelle que soit votre formule. |
+| `phoneCareer.billing.payTitle` | Paiement |
+| `phoneCareer.billing.chosen` | Formule choisie |
+| `phoneCareer.billing.payWith` | Payer avec |
+| `phoneCareer.billing.number` | Numéro Mobile Money |
+| `phoneCareer.billing.numberPlaceholder` | Ex. : +243 … |
+| `phoneCareer.billing.numberHelp` | Vous recevez une demande de validation sur ce téléphone. Jumanly ne garde que la fin du numéro. |
+| `phoneCareer.billing.pay` | Payer {total} |
+| `phoneCareer.billing.paying` | Envoi de la demande… |
+| `phoneCareer.billing.fake` | Paiement de démonstration : aucun argent n’est débité. |
+| `phoneCareer.billing.errors.operatorRequired` | Choisissez votre service Mobile Money. |
+| `phoneCareer.billing.errors.numberRequired` | Écrivez votre numéro Mobile Money. |
+| `phoneCareer.billing.errors.numberInvalid` | Ce numéro ne semble pas complet. Vérifiez l’indicatif et les chiffres. |
+| `phoneCareer.billing.errors.duplicate` | Un paiement est déjà en cours pour cette formule. Attendez sa réponse. |
+| `phoneCareer.billing.errors.failed` | Le paiement n’a pas pu partir. Réessayez dans un instant. |
+| `phoneCareer.billing.validateTitle` | Validez sur votre téléphone |
+| `phoneCareer.billing.validateText` | Un message {operator} vous demande de confirmer {amount} avec votre code secret. |
+| `phoneCareer.billing.validated` | J’ai validé |
+| `phoneCareer.billing.howTo` | Comment valider ? |
+| `phoneCareer.billing.close` | Fermer |
+| `phoneCareer.billing.welcome` | Bienvenue en {plan} |
+| `phoneCareer.billing.welcomeText` | Votre reçu est envoyé par e-mail. Votre formule court jusqu’au {date}. |
+| `phoneCareer.billing.backCareer` | Retour à Carrière |
 
 ### Refonte recruteur · Cadre mobile (lot 1)
 
