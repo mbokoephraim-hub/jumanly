@@ -180,6 +180,26 @@ export const recruiterTabs = [
 
 export type RecruiterTab = (typeof recruiterTabs)[number];
 
+/**
+ * Entries under the separator of the recruiter's sidebar (brief web § 2.3, planche web.py `SEC`
+ * rh): the agenda, the search of talents and the reports. `match`: the pages that light them up.
+ */
+export const recruiterSecondary = [
+  { key: "agenda", href: "/app/hire/entretiens", match: "/app/hire/entretiens", icon: "agenda" },
+  {
+    key: "talents",
+    href: "/app/hire/candidats?vue=talents",
+    match: "/app/hire/talents",
+    icon: "recherche",
+  },
+  { key: "reports", href: "/app/hire/rapports", match: "/app/hire/rapports", icon: "progression" },
+] as const satisfies readonly {
+  key: string;
+  href: string;
+  match: string;
+  icon: TalentIconName;
+}[];
+
 const inside = (pathname: string, path: string) =>
   pathname === path || pathname.startsWith(`${path}/`);
 

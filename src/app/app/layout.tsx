@@ -115,7 +115,11 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
     const logoOf = (id: string) => logos.find((org) => org.id === id)?.logo ?? null;
     return (
       <RecruiterShell
-        account={{ name: user.name, image: user.image }}
+        account={{
+          name: user.name,
+          image: user.image,
+          line: space.jobTitle?.trim() || t(`${space.role}.text`),
+        }}
         org={{
           id: space.organizationId,
           name: space.organization.name,

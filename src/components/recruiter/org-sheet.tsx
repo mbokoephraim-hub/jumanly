@@ -15,7 +15,8 @@ export type OrgChoice = {
 /**
  * « Organisation active » (planche recruteur-1 r1), opened by the chip of the head: one line per
  * organization the person recruits for, the active one marked, then the way back to the talent
- * space. Choosing goes through `switchSpace`, which checks the membership again.
+ * space. Choosing goes through `switchSpace`, which checks the membership again. On a computer or a
+ * tablet it opens under the name in the sidebar, with the reminder that organizations are apart.
  */
 export function OrgSheet({
   orgs,
@@ -24,10 +25,11 @@ export function OrgSheet({
 }: {
   orgs: OrgChoice[];
   activeId: string;
-  labels: { title: string; close: string; current: string; talent: string };
+  labels: { title: string; close: string; current: string; talent: string; note: string };
 }) {
   return (
-    <Sheet id={ORG_SHEET_ID} title={labels.title} closeLabel={labels.close}>
+    // On a computer or a tablet, a menu under the name of the organization (planche web recruteur-1).
+    <Sheet id={ORG_SHEET_ID} title={labels.title} closeLabel={labels.close} className="t-rx-orgs">
       <ul className="t-orgs">
         {orgs.map((org) => {
           const active = org.id === activeId;
@@ -67,6 +69,10 @@ export function OrgSheet({
           </form>
         </li>
       </ul>
+      <p className="t-gar t-web">
+        <TalentIcon name="confidentialite" size="s" />
+        <span>{labels.note}</span>
+      </p>
     </Sheet>
   );
 }

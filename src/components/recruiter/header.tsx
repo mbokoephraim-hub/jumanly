@@ -5,9 +5,10 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { TOP_BAR_SLOT_ID } from "@/lib/top-bar";
 import { BackButton, parentPath, useCountPages } from "@/components/talent/back-button";
-import { ownHead, plural, useUnread } from "@/components/talent/header";
+import { ownHead, PHONE, plural, useUnread } from "@/components/talent/header";
 import { TalentIcon } from "@/components/talent/icon";
 import { SheetButton } from "@/components/talent/sheet";
+import { cx } from "@/lib/cx";
 
 export const ORG_SHEET_ID = "rh-organisations";
 
@@ -21,6 +22,9 @@ export type RecruiterHeaderLabels = {
   /** Big title of each destination, by path. */
   tabs: Record<string, string>;
 };
+
+/** Destinations whose page draws its own head on a computer or a tablet (planche web recruteur-1). */
+const webHead = ["/app/hire", "/app/hire/offres"];
 
 /** Recruiter pages that draw their own head, on top of the shared ones of the talent space. */
 function ownRecruiterHead(pathname: string) {
@@ -61,7 +65,8 @@ export function RecruiterHeader({
 }) {
   useCountPages();
   const pathname = usePathname();
-  const count = useUnread(unread);
+  // On a computer or a tablet the bell is in the top bar of the frame, which keeps it fresh.
+  const count = useUnread(unread, PHONE);
   const tab = labels.tabs[pathname];
   // A destination of the bar keeps the head with the organization, even where the talent's page
   // draws its own (Messages, recruteur lot 5).
@@ -82,8 +87,10 @@ export function RecruiterHeader({
   }
 
   return (
-    <header className="t-colonne">
-      <SheetButton target={ORG_SHEET_ID} label={labels.org} className="t-org-l t-press">
+    // On a computer or a tablet the organization is in the sidebar, the bell and the avatar in the
+    // top bar; the destinations of planche web recruteur-1 draw their own head.
+    <header className={cx("t-colonne", webHead.includes(pathname) && "t-mob")}>
+      <SheetButton target={ORG_SHEET_ID} label={labels.org} className="t-org-l t-press t-mob">
         {org.mark}
         <span>{org.name}</span>
         <TalentIcon name="suivant" size="xs" />
@@ -93,18 +100,18 @@ export function RecruiterHeader({
         <p aria-hidden className="t-h1">
           {tab}
         </p>
-        <Link href="/app/recherche" aria-label={labels.search} className="t-bi">
+        <Link href="/app/recherche" aria-label={labels.search} className="t-bi t-mob">
           <TalentIcon name="recherche" />
         </Link>
         <Link
           href="/app/notifications"
           aria-label={plural(labels.notifications, count)}
-          className="t-bi"
+          className="t-bi t-mob"
         >
           <TalentIcon name="notification" />
           {count > 0 && <i aria-hidden className="t-pastille" />}
         </Link>
-        <Link href="/app/hire/compte" aria-label={labels.account} className="t-av">
+        <Link href="/app/hire/compte" aria-label={labels.account} className="t-av t-mob">
           {avatar}
         </Link>
       </div>

@@ -1,0 +1,762 @@
+/*
+ * Espace recruteur sur ordinateur et tablette · lot web recruteur 1 (docs/refonte-web, planche
+ * recruteur-1, générateur webr1.py et cadres web.py). Le cadre est celui du talent (`t-cadre`, lot
+ * W0, talent.css) : barre latérale de 232 px dès 1200 px, rail de 84 px de 768 à 1199 px, barre du
+ * haut ; ici seulement ce qui est propre au recruteur. Sous 768 px, rien ne change : les
+ * enveloppes web (`t-rw-*`) s'effacent (`display: contents`) et l'ordre du téléphone est gardé.
+ */
+
+/* ── Enveloppes : transparentes sur téléphone ── */
+@media (max-width: 767.98px) {
+  .t-rw-g,
+  .t-rw-c,
+  .t-rw-x,
+  .t-rw-h,
+  .t-rw-h > .t-t,
+  .t-rw-flt,
+  .t-rw-frm,
+  .t-rw-pub,
+  .t-rw-pub > div {
+    display: contents;
+  }
+}
+
+@media (min-width: 768px) {
+  /* Ce que la barre latérale et la barre du haut remplacent (organisation, cloche, avatar). */
+  .t-cadre .t-mob {
+    display: none;
+  }
+
+  /* Organisation active : la puce sous le logo et son menu (planche .sb .org, .org-pop). */
+  .t-rl-org {
+    display: grid;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    margin: -4px 0 8px;
+    padding: 0;
+    border: 0;
+    border-radius: 50%;
+    background: var(--plein);
+    box-shadow: var(--verre);
+    cursor: pointer;
+  }
+  .t-rl-org .t-lg-e {
+    width: 32px;
+    height: 32px;
+    font-size: 11px;
+    box-shadow: none;
+  }
+  .t-sheet.t-rx-orgs {
+    inset: 100px auto auto 14px;
+    margin: 0;
+    width: 340px;
+    max-width: calc(100vw - 28px);
+    height: fit-content;
+    padding: 14px;
+    gap: 10px;
+    border-radius: 24px;
+    box-shadow:
+      0 40px 80px -30px rgba(0, 0, 0, 0.5),
+      0 0 0 1px var(--trait);
+  }
+  .t-sheet.t-rx-orgs::backdrop {
+    background: transparent;
+  }
+  .t-sheet.t-rx-orgs h2 {
+    font-size: 15px;
+    padding: 2px 4px;
+  }
+  .t-rx-orgs .t-orgs {
+    margin-top: 6px;
+  }
+  .t-rx-orgs .t-gar {
+    margin-top: 10px;
+  }
+
+  /* Menu « … » d'une offre : sous le bouton qui l'ouvre (planche .mn-o). */
+  .t-sheet.t-rx-ancre {
+    inset: var(--t-ancre-y, 120px) auto auto var(--t-ancre-x, 50%);
+    margin: 0;
+    width: 300px;
+    height: fit-content;
+    max-height: calc(100dvh - 32px);
+    padding: 8px;
+    border-radius: 22px;
+    box-shadow:
+      0 40px 80px -30px rgba(0, 0, 0, 0.5),
+      0 0 0 1px var(--trait);
+  }
+  .t-sheet.t-rx-ancre::backdrop {
+    background: transparent;
+  }
+  .t-sheet.t-rx-ancre > div:has(> h2) {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+  }
+  .t-sheet.t-rx-ancre .t-rx-menu {
+    margin: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .t-sheet.t-rx-ancre .t-li {
+    min-height: 52px;
+  }
+}
+
+@media (min-width: 1200px) {
+  .t-sb-org {
+    align-self: flex-start;
+    max-width: 100%;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 42px;
+    padding: 8px 10px;
+    margin: 0 0 10px;
+    border: 0;
+    border-radius: 14px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+    color: var(--texte);
+    font: inherit;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-align: left;
+    cursor: pointer;
+  }
+  .t-sb-org > span:not(.t-lg-e) {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .t-sb-org .t-lg-e {
+    width: 26px;
+    height: 26px;
+    font-size: 10px;
+    box-shadow: none;
+    flex: none;
+  }
+  .t-sb-org > svg {
+    flex: none;
+    width: 14px;
+    height: 14px;
+    color: var(--texte2);
+  }
+  .t-sb-org:focus-visible,
+  .t-rl-org:focus-visible {
+    outline: 2px solid var(--texte);
+    outline-offset: 2px;
+  }
+}
+
+/* ── Tête des pages web (planche web.py `.w-h`) ── */
+@media (min-width: 768px) {
+  .t-rw-h {
+    display: flex;
+    align-items: flex-end;
+    gap: 16px;
+  }
+  .t-rw-h > .t-t {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-rw-h :is(.t-rw-h1, h1) {
+    font-size: 28px;
+    font-weight: 600;
+    line-height: 1.1;
+    letter-spacing: -0.03em;
+    color: var(--texte);
+  }
+  .t-rw-h .t-t > p:not(.t-rw-h1) {
+    margin-top: 6px;
+    font-size: 14px;
+    color: var(--texte2);
+  }
+  .t-rw-h > .t-bt {
+    flex: none;
+  }
+
+  /* Deux colonnes (planche `.g2`) et grille de cartes (`.g2e`). */
+  .t-rw-g {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+  .t-rw-c {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+  }
+  .t-rw-grille {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+
+  /* À traiter (planche web recruteur-1 § 1). */
+  .t-rw-today .t-rx-orbi {
+    padding: 14px 16px;
+    font-size: 13.5px;
+  }
+  .t-rw-today .t-rx-ag {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .t-rw-today .t-rx-ag > * {
+    min-height: 84px;
+    padding: 16px 18px;
+    gap: 14px;
+  }
+  .t-rw-today .t-rx-ag b {
+    font-size: 30px;
+  }
+  .t-rw-today .t-rx-ag span {
+    font-size: 13px;
+  }
+  .t-rw-today .t-rx-cand {
+    padding: 14px 16px;
+  }
+  /* Tablette : les nouvelles candidatures sur deux colonnes (planche `cand4`). */
+  .t-rw-today section[aria-labelledby="rx-today-new"] {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .t-rw-today section[aria-labelledby="rx-today-new"] > .t-sec-t {
+    grid-column: 1 / -1;
+  }
+  .t-rw-today .t-rx-vide {
+    padding: 40px;
+  }
+  .t-rw-today .t-q3 b {
+    font-size: 24px;
+  }
+  .t-rw-sem {
+    display: none;
+  }
+}
+
+@media (min-width: 1200px) {
+  .t-rw-h :is(.t-rw-h1, h1) {
+    font-size: 32px;
+  }
+  .t-rw-g {
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+    gap: 20px;
+  }
+  .t-rw-g.t-un {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-rw-today section[aria-labelledby="rx-today-new"] {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  /* Candidatures cette semaine (planche `.sem.sem-w`). */
+  .t-rw-sem {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    padding: 16px 18px;
+    border-radius: 24px;
+  }
+  .t-rw-sem .t-h {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 10px;
+  }
+  .t-rw-sem h2 {
+    font-size: 13.5px;
+    font-weight: 700;
+  }
+  .t-rw-sem .t-h span {
+    font-size: 11.5px;
+    color: var(--texte2);
+  }
+  .t-rw-sem .t-rx-sem {
+    height: 120px;
+  }
+}
+
+/* Mes offres (planche web recruteur-1 § 2) : recherche et filtres sur une ligne. */
+@media (min-width: 768px) {
+  .t-rw-flt {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .t-rw-flt > .t-rech {
+    flex: 0 1 380px;
+    min-width: 220px;
+    height: 46px;
+  }
+  .t-rw-flt > .t-rx-onglets {
+    flex: 1;
+    min-width: 0;
+  }
+}
+@media (max-width: 1199.98px) and (min-width: 768px) {
+  .t-rw-flt {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .t-rw-flt > .t-rech {
+    flex: none;
+  }
+}
+
+/* ── Créer une offre (planche web recruteur-1 § 3, `.wz`) ── */
+@media (min-width: 768px) {
+  .t-rw-wz > .t-tete-f {
+    display: none;
+  }
+  /* La barre d'action reprend sa place dans la carte : plus de marge pour elle en bas. */
+  .t-rw-wz.t-flux,
+  .t-rw-wz .t-flux {
+    padding-bottom: 0;
+  }
+  .t-rw-wz > .t-rw-h > .t-bi {
+    flex: none;
+  }
+  /* Les 4 étapes en tête (`.w-stp`). */
+  .t-rw-stp {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 12px;
+    border-radius: 26px;
+  }
+  .t-rw-stp .t-rw-of {
+    display: none;
+  }
+  .t-rw-stp ol {
+    flex: 1;
+    display: flex;
+    gap: 6px;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    min-width: 0;
+  }
+  .t-rw-stp li {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: 18px;
+    font-size: 13.5px;
+    font-weight: 600;
+    color: var(--texte2);
+    white-space: nowrap;
+  }
+  .t-rw-stp li > div {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .t-rw-stp li i {
+    width: 30px;
+    height: 30px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    background: var(--zone);
+    font-style: normal;
+    font-size: 13px;
+    font-weight: 700;
+  }
+  .t-rw-stp li small {
+    display: none;
+    font-size: 11px;
+    font-weight: 500;
+  }
+  .t-rw-stp li.t-ok {
+    color: var(--texte);
+  }
+  .t-rw-stp li.t-ok i {
+    background: var(--sapin);
+    color: var(--lime);
+  }
+  .sombre .t-rw-stp li.t-ok i {
+    background: var(--lime);
+    color: #0f3f37;
+  }
+  .t-rw-stp li.t-ok i svg {
+    width: 14px;
+    height: 14px;
+  }
+  .t-rw-stp li.t-on {
+    background: var(--plein);
+    color: var(--texte);
+    box-shadow: var(--verre);
+  }
+  .t-rw-stp li.t-on i {
+    background: var(--g-accent);
+    color: #0f3f37;
+  }
+
+  /* Le formulaire dans sa carte (`.frm-w`), les boutons en bas à droite. */
+  .t-rw-frm {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+    padding: 22px;
+    border-radius: 28px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-rw-frm > h2 {
+    font-size: 22px;
+    font-weight: 600;
+    letter-spacing: -0.02em;
+    line-height: 1.2;
+  }
+  .t-rw-frm .t-bas-f,
+  .t-rw-frm .t-bas-f.t-verre,
+  .t-cadre .t-rw-frm .t-bas-f {
+    position: static;
+    left: auto;
+    transform: none;
+    width: auto;
+    max-width: none;
+    margin-top: 6px;
+    padding: 0;
+    justify-content: flex-end;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-rw-frm .t-bas-f .t-bt {
+    flex: none;
+    min-width: 140px;
+  }
+  .t-rw-frm .t-rx-all,
+  .t-rw-frm .t-rx-apercu {
+    box-shadow: none;
+    background: var(--zone);
+  }
+  .t-rw-frm .t-rx-orbi {
+    padding: 14px 16px;
+    font-size: 13.5px;
+  }
+
+  /* Aperçu de l'annonce (`.ap-l`). */
+  .t-rw-ap {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 24px;
+  }
+  .t-rw-ap .t-k {
+    padding: 14px 16px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+  }
+  .t-rw-ap .t-ban {
+    position: relative;
+    height: 92px;
+    background:
+      radial-gradient(60% 120% at 85% 20%, rgba(166, 242, 107, 0.55), transparent 60%),
+      linear-gradient(130deg, #0f3f37, #1c6b5a);
+  }
+  .t-rw-ap .t-ban > img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .t-rw-ap .t-ban .t-lg-e {
+    position: absolute;
+    left: 16px;
+    bottom: -20px;
+    width: 48px;
+    height: 48px;
+    font-size: 14px;
+    overflow: hidden;
+    box-shadow: 0 0 0 3px var(--plein);
+  }
+  .t-rw-ap .t-ban .t-lg-e img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  .t-rw-ap .t-c {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 28px 16px 16px;
+  }
+  .t-rw-ap .t-c b {
+    font-size: 16px;
+    line-height: 1.25;
+  }
+  .t-rw-ap .t-c > span {
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-rw-ap .t-c ul {
+    margin: 0;
+    padding-left: 16px;
+    list-style: disc;
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+    font-size: 12.5px;
+  }
+  .t-rw-ap .t-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+  .t-rw-ap .t-vide-l {
+    display: block;
+    height: 8px;
+    border-radius: 4px;
+    background: var(--zone);
+  }
+}
+
+@media (min-width: 1200px) {
+  .t-rw-wz > .t-rw-g {
+    grid-template-columns: minmax(0, 1fr) 320px;
+  }
+  .t-rw-stp .t-rw-of {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0 16px 0 6px;
+    margin-right: 4px;
+    border-right: 1px solid var(--trait);
+  }
+  .t-rw-stp .t-rw-of b {
+    display: block;
+    font-size: 14px;
+    white-space: nowrap;
+  }
+  .t-rw-stp .t-rw-of span {
+    font-size: 12px;
+    color: var(--texte2);
+    white-space: nowrap;
+  }
+  .t-rw-stp li small {
+    display: block;
+  }
+}
+
+/* « Rédiger avec Orbi » : le panneau à droite, le formulaire lisible à côté (planche `.op`). */
+@media (min-width: 768px) {
+  .t-sheet.t-rx-op,
+  .t-sheet.t-auto.t-rx-op {
+    inset: 0 0 0 auto;
+    margin: 0;
+    width: min(420px, 100%);
+    height: 100dvh;
+    max-height: none;
+    padding: 20px 22px;
+    border-radius: 0;
+    border-left: 1px solid var(--trait);
+    background: var(--fond);
+    box-shadow: -30px 0 60px -30px rgba(15, 63, 55, 0.45);
+  }
+  .t-sheet.t-rx-op[open] {
+    animation: t-glisse 260ms cubic-bezier(0.2, 0.9, 0.3, 1) backwards;
+  }
+  .t-sheet.t-rx-op::backdrop {
+    background: rgba(11, 26, 31, 0.12);
+  }
+  .t-sheet.t-rx-op h2 {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-sheet.t-rx-op[open] {
+    animation: none;
+  }
+}
+
+/* ── Détail d'une offre (planche web recruteur-1 § 4, `.odw`) ── */
+@media (max-width: 767.98px) {
+  /* L'ordre du lot mobile : Orbi, étapes, description, candidature, compétences, fiche,
+     historique, performance, suivi de l'offre. */
+  .t-rw-o1 {
+    order: 1;
+  }
+  .t-rw-o2 {
+    order: 2;
+  }
+  .t-rw-o3 {
+    order: 3;
+  }
+  .t-rw-o4 {
+    order: 4;
+  }
+  .t-rw-o5 {
+    order: 5;
+  }
+  .t-rw-o6 {
+    order: 6;
+  }
+  .t-rw-o7 {
+    order: 7;
+  }
+  .t-rw-o8 {
+    order: 8;
+  }
+  .t-rw-o9 {
+    order: 9;
+  }
+}
+@media (min-width: 768px) {
+  .t-rw-od > .t-tete-f {
+    display: none;
+  }
+  .t-rw-od .t-rx-odh {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 18px;
+    padding: 22px 24px 22px 30px;
+    border-radius: 30px;
+  }
+  .t-rw-od .t-rx-odh::before {
+    width: 8px;
+  }
+  .t-rw-ico {
+    width: 56px;
+    height: 56px;
+    flex: none;
+    display: grid;
+    place-items: center;
+    border-radius: 18px;
+    background: var(--oc, #a6f26b);
+    color: #0f3f37;
+  }
+  .t-rw-odt {
+    flex: 1;
+    min-width: 260px;
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .t-rw-od .t-rx-odh h2 {
+    font-size: 26px;
+  }
+  .t-rw-od .t-rx-odh .t-mt {
+    font-size: 13px;
+  }
+  .t-rw-od .t-rx-odh .t-bts {
+    align-items: center;
+  }
+  /* Les actions en ronds (Modifier, lien, pause, …), leur nom reste lu. */
+  .t-rw-od .t-rx-odh .t-bts .t-bt.t-s {
+    width: 44px;
+    height: 44px;
+    padding: 0;
+    justify-content: center;
+    border-radius: 50%;
+  }
+  .t-rw-od .t-rx-odh .t-bts .t-bt.t-s .t-lib {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip-path: inset(50%);
+    white-space: nowrap;
+  }
+  .t-rw-od .t-rx-odh .t-bts .t-rw-voir {
+    flex: none;
+  }
+  .t-rw-od > .t-rx-chf {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    padding: 18px 8px;
+    border-radius: 24px;
+  }
+  .t-rw-od > .t-rx-chf b {
+    font-size: 26px;
+  }
+  .t-rw-od > .t-rx-chf > div {
+    font-size: 12.5px;
+  }
+  .t-rw-odg {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .t-rw-od .t-rx-sem {
+    height: 120px;
+  }
+}
+@media (max-width: 1199.98px) and (min-width: 768px) {
+  .t-rw-od .t-rx-odh .t-bts {
+    width: 100%;
+  }
+}
+
+/* ── Offre publiée (planche web recruteur-1 § 3, `.pub-ok`) ── */
+.t-rx-publie p.t-rw-o3 {
+  color: var(--texte2);
+  font-size: 13.5px;
+  max-width: 300px;
+}
+@media (min-width: 768px) {
+  .t-rw-pub {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 22px;
+    align-items: center;
+    width: 100%;
+    padding: 30px;
+    border-radius: 30px;
+    background: linear-gradient(140deg, #f2fce6, #ddf6ee);
+    text-align: left;
+  }
+  .sombre .t-rw-pub {
+    background: linear-gradient(140deg, rgba(166, 242, 107, 0.14), rgba(47, 211, 166, 0.06));
+  }
+  .t-rw-pub > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    min-width: 0;
+  }
+  .t-rw-pub > div:last-child {
+    gap: 16px;
+  }
+  .t-rw-pub .t-rond-ok {
+    width: 88px;
+    height: 88px;
+  }
+  .t-rw-pub h1 {
+    font-size: 30px;
+    letter-spacing: -0.02em;
+  }
+  .t-rx-publie p.t-rw-o3 {
+    font-size: 14px;
+    max-width: none;
+  }
+  .t-rw-pub .t-suite {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .t-rw-pub .t-bt.t-pl {
+    width: auto;
+    min-width: 200px;
+  }
+}

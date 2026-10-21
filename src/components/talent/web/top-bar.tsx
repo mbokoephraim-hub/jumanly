@@ -11,6 +11,7 @@ import {
   NotificationsPanel,
   type NotificationsPanelLabels,
 } from "./notifications-panel";
+import { recruiterFullScreen } from "@/components/recruiter/side-nav";
 import { classroom, fullScreen } from "./side-nav";
 
 /** Widths of the web frame: the top bar keeps the bell fresh there. */
@@ -42,13 +43,16 @@ export function TalentTopBar({
   unreadMessages,
   avatar,
   menu,
+  accountHref,
 }: {
   labels: TopBarLabels;
   unread: number;
   unreadMessages: number;
   avatar: ReactNode;
   /** The content of the account menu (server, streamed). */
-  menu: ReactNode;
+  menu?: ReactNode;
+  /** Instead of the menu, the avatar leads to this page (the recruiter's Compte RH). */
+  accountHref?: string;
 }) {
   const pathname = usePathname();
   const count = useUnread(unread, WEB);
@@ -62,7 +66,8 @@ export function TalentTopBar({
     if (panel?.matches(":popover-open")) panel.hidePopover();
   }, [pathname]);
 
-  if (pathname === "/app/orbi" || fullScreen(pathname)) return null;
+  if (pathname === "/app/orbi" || fullScreen(pathname) || recruiterFullScreen(pathname))
+    return null;
   return (
     <div className={classroom(pathname) ? "t-tb t-concentre" : "t-tb"}>
       <button
@@ -102,28 +107,36 @@ export function TalentTopBar({
           </b>
         )}
       </Link>
-      <button
-        type="button"
-        className="t-av t-press"
-        aria-label={labels.account}
-        popoverTarget={MENU_ID}
-      >
-        {avatar}
-      </button>
-      <div
-        ref={popover}
-        id={MENU_ID}
-        popover="auto"
-        role="dialog"
-        aria-label={labels.menu}
-        className="t-amenu"
-        onClick={(event) => {
-          // A choice in the menu closes it (the page changes under the frame).
-          if ((event.target as Element).closest("a")) popover.current?.hidePopover();
-        }}
-      >
-        {menu}
-      </div>
+      {accountHref ? (
+        <Link href={accountHref} className="t-av t-press" aria-label={labels.account}>
+          {avatar}
+        </Link>
+      ) : (
+        <button
+          type="button"
+          className="t-av t-press"
+          aria-label={labels.account}
+          popoverTarget={MENU_ID}
+        >
+          {avatar}
+        </button>
+      )}
+      {!accountHref && (
+        <div
+          ref={popover}
+          id={MENU_ID}
+          popover="auto"
+          role="dialog"
+          aria-label={labels.menu}
+          className="t-amenu"
+          onClick={(event) => {
+            // A choice in the menu closes it (the page changes under the frame).
+            if ((event.target as Element).closest("a")) popover.current?.hidePopover();
+          }}
+        >
+          {menu}
+        </div>
+      )}
     </div>
   );
 }

@@ -706,7 +706,10 @@ export function OrbiWriter({
   );
 }
 
-/** The sheet of Orbi's proposals, opened from a button of the form. */
+/**
+ * The sheet of Orbi's proposals, opened from a button of the form; on a computer or a tablet, the
+ * panel on the right, the form readable beside it (planche web recruteur-1 § 3 « Rédiger avec Orbi »).
+ */
 function OrbiDialog({
   id,
   title,
@@ -723,7 +726,7 @@ function OrbiDialog({
     <dialog
       ref={ref}
       id={id}
-      className="t-sheet t-auto"
+      className="t-sheet t-auto t-rx-op"
       aria-labelledby={`${id}-t`}
       onClick={(event) => {
         if (event.target === event.currentTarget) event.currentTarget.close();

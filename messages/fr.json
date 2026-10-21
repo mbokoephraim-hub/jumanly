@@ -9638,13 +9638,34 @@
       "line": "{role} · {plan}",
       "lineNoPlan": "{role}",
       "current": "Organisation active",
-      "talent": "Passer à mon espace talent"
+      "talent": "Passer à mon espace talent",
+      "note": "Chaque organisation ne voit que ses offres, ses candidats et ses messages."
     },
     "title": {
       "today": "À traiter",
       "offers": "Mes offres",
       "candidates": "Candidats",
       "messages": "Messages"
+    },
+    "web": {
+      "brand": "jumanly",
+      "home": "Jumanly, aller à À traiter",
+      "more": "Organiser",
+      "agenda": "Agenda",
+      "talents": "Talents",
+      "reports": "Rapports",
+      "settings": "Paramètres",
+      "shortcut": "Ctrl K",
+      "search": "Candidat, offre, ou demander à Orbi",
+      "messages": "{count, plural, =0 {Messages} one {Messages, # conversation non lue} other {Messages, # conversations non lues}}"
+    },
+    "command": {
+      "title": "Rechercher ou demander à Orbi",
+      "label": "Rechercher un candidat, une offre, ou demander à Orbi",
+      "results": "Candidats et offres",
+      "offer": "Offre",
+      "candidate": "Candidat",
+      "none": "Aucun candidat ni aucune offre pour « {query} »."
     }
   },
   "hireAccount": {
@@ -12432,6 +12453,47 @@
     "default": {
       "retained": "Bonjour '{prenom}',\\n\\nMerci pour votre candidature au poste '{poste}'. Nous avons lu votre dossier avec attention, et '{point_fort}' a particulièrement retenu notre attention.\\n\\nNous avons le plaisir de vous inviter à un entretien. Nous vous proposons des créneaux dans cette conversation : choisissez celui qui vous convient, ou répondez ici si aucun ne convient.\\n\\nÀ très bientôt,\\n{signer}, '{entreprise}'",
       "others": "Bonjour '{prenom}',\\n\\nMerci pour l'intérêt que vous portez à '{entreprise}' et pour le temps consacré à votre candidature au poste '{poste}'. Nous avons apprécié '{point_fort}'.\\n\\nAprès avoir étudié l'ensemble des dossiers, notre équipe a retenu d'autres profils pour la suite de ce recrutement. Cette décision ne remet pas en cause la qualité de votre parcours.\\n\\nVotre profil reste visible des recruteurs et d'autres offres vous attendent sur Jumanly.\\n\\nAvec nos remerciements et tous nos vœux de réussite,\\n{signer}, '{entreprise}'"
+    }
+  },
+  "hireWeb": {
+    "today": {
+      "hello": "Bonjour {name}",
+      "helloNoName": "Bonjour",
+      "line": "{date} · {org}",
+      "week": {
+        "title": "Candidatures cette semaine",
+        "total": "{count, plural, =0 {Aucune pour l'instant} one {# au total} other {# au total}}",
+        "aria": "Candidatures reçues cette semaine, jour par jour : {list}",
+        "day": "{day} {count}"
+      }
+    },
+    "offers": {
+      "active": "{count, plural, =0 {Aucune offre active sur {max}} one {# offre active sur {max}} other {# offres actives sur {max}}}",
+      "activeUnlimited": "{count, plural, =0 {Aucune offre active} one {# offre active} other {# offres actives}}",
+      "plan": "{line} · formule {plan}"
+    },
+    "flow": {
+      "title": "Créer une offre",
+      "steps": "Étapes de l'offre",
+      "step": {
+        "poste": "Le poste",
+        "description": "La description",
+        "candidature": "La candidature",
+        "verifier": "Vérifier"
+      },
+      "hint": {
+        "poste": "Titre, lieu, contrat",
+        "description": "Missions, compétences",
+        "candidature": "Date, documents, questions",
+        "verifier": "Et publier"
+      },
+      "done": "faite",
+      "current": "en cours",
+      "preview": {
+        "title": "Aperçu de l'annonce",
+        "deadline": "Limite {date}",
+        "noDeadline": "Sans date limite"
+      }
     }
   },
   "hire": {

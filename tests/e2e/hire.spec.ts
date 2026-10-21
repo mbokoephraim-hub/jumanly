@@ -367,7 +367,8 @@ test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ p
     skill: "Bureautique",
   });
   const editor = page.locator("main").filter({ visible: true });
-  await expect(editor.locator(`img[src="${src}"]`).first()).toBeVisible();
+  // On a phone the card of step 4, on a computer the « Aperçu de l'annonce » beside the form.
+  await expect(editor.locator(`img[src="${src}"]`).filter({ visible: true }).first()).toBeVisible();
 
   await page.goto("/app/organisation/modifier");
   await main.getByRole("button", { name: "Bannière" }).click();

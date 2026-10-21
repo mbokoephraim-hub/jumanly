@@ -38,6 +38,9 @@ export default async function OrbiPage({ searchParams }: PageProps<"/app/orbi">)
       <RecruiterOrbi
         ctx={{ userId: user.id, organizationId: space.organizationId, role: space.role }}
         conversationId={typeof params.c === "string" ? params.c.slice(0, 40) : null}
+        question={
+          typeof params.q === "string" ? params.q.trim().slice(0, 500) || undefined : undefined
+        }
       />
     );
   const t = await getTranslations("talentOrbi");

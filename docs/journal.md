@@ -2,6 +2,47 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Étape 2, recruteur web lot 1 : cadre, À traiter, offres, création, détail (21 octobre 2026)
+
+Planche `docs/refonte-web/recruteur-1`, ordinateur (1440 px) et tablette (1024 px), clair et
+sombre ; le téléphone (390 px) est inchangé, à trois défauts corrigés près. Choix et écarts :
+`docs/decisions/2026-10-21-recruteur-web-lot-1.md`.
+
+**Cadre.** Le cadre web du talent sert au recruteur : barre latérale (organisation active avec son
+menu sous le nom, À traiter · Offres · Orbi · Candidats · Messages, puis Agenda · Talents ·
+Rapports, Paramètres, carte du compte), rail sur tablette, barre du haut avec `Ctrl K` (candidats
+et offres de l'organisation, « Demander à Orbi »). La barre du bas disparaît dès 768 px.
+
+**Écran mobile → équivalent web** :
+
+| Téléphone (lot mobile) | Ordinateur et tablette |
+|---|---|
+| Tête : puce de l'organisation, recherche, cloche, avatar | Barre latérale (organisation sous le nom) et barre du haut (`Ctrl K`, cloche, messages, avatar) |
+| Feuille « Organisation active » | Menu sous le nom (rond sous le logo sur tablette), même contenu + règle d'isolation |
+| Barre du bas | Barre latérale / rail |
+| À traiter (Orbi, Publier, ATS, quatre tuiles, nouvelles candidatures, entretiens, offres actives) | Bonjour en titre + Publier à droite ; 2 colonnes ; « Candidatures cette semaine » ; offres en grille |
+| À traiter vide (cette semaine, Orbi, Pour avancer) | 2 colonnes |
+| Mes offres (recherche, onglets, cartes) | Titre + « N offres actives sur M · formule », filtres sur une ligne, grille |
+| Menu « … » d'une offre, Clôturer, Supprimer | Menu ancré sous son bouton ; confirmations en fenêtre centrée |
+| Publier une offre, étapes 1 à 4, barre d'action | Étapes en tête, formulaire en carte, aperçu de l'annonce à droite, actions dans la carte |
+| Rédiger avec Orbi (feuille) | Panneau à droite |
+| Limite d'offres atteinte (feuille) | Fenêtre centrée |
+| Offre publiée | Carte en deux colonnes |
+| Détail d'une offre (Orbi, étapes, description, candidature, compétences, fiche, historique, performance, suivi, barre du bas) | Tête avec boutons ronds et « Voir les N candidatures », chiffres sur 4 colonnes, 2 colonnes ; Attribution et Modèle de grille dessous |
+
+**Tests.** Unitaires `tests/unit/hire-web.test.ts` (semaine) ; en base, isolation de `Ctrl K` et
+de la semaine par organisation (`tests/db/hire-offers.test.ts`) ; e2e
+`tests/e2e/web-recruteur-1.spec.ts` (cadre, organisation, création avec aperçu, détail, menu
+ancré, `Ctrl K`, Orbi ; téléphone : barre du bas gardée). `hire.spec.ts` et
+`mobile-recruteur.spec.ts` suivent la navigation de l'ordinateur (barre latérale gardée sur
+Compte, aperçu de l'annonce à droite).
+
+**Captures.** `captures/refonte-recruteur-web-1/` du dossier du projet : 15 écrans à 1440, 1024
+et 390 px, clair et sombre.
+
+**Reste.** Panneau Orbi depuis tout écran (lot web recruteur 3) ; Attribution et Modèle de grille
+au nouveau design (lot web recruteur 4).
+
 ## Refonte étape 1 · rapport de fin d'étape : interface talent (19 octobre 2026)
 
 **Fait.** L'espace talent ne montre plus que le nouveau design, sur téléphone (390 px), tablette

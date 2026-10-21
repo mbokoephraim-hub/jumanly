@@ -22,7 +22,8 @@ import {
   removeJobSheet,
   saveJobStep,
 } from "@/server/services/hire-offers";
-import { hireToday } from "@/server/services/hire-today";
+import { hireSearchPreview } from "@/server/services/hire-search";
+import { applicationsThisWeek, hireToday } from "@/server/services/hire-today";
 import { cleanup, db, newOrganization, newUser } from "./helpers";
 
 const users: string[] = [];
@@ -295,6 +296,26 @@ describe("isolation des organisations (règle d'or n° 6)", () => {
     await applyToJob(db, { userId: await talent(), jobSlug: await slugOf(jobB) });
     expect((await hireToday(db, a)).counts.unseen).toBe(0);
     expect((await hireToday(db, b)).counts.unseen).toBe(1);
+  });
+
+  it("Ctrl K et la semaine ne montrent que les offres et candidats de l'organisation", async () => {
+    const a = await recruiter();
+    const b = await recruiter();
+    const jobB = await published(b, "Offre cherchée Zéphyr");
+    await applyToJob(db, { userId: await talent(), jobSlug: await slugOf(jobB) });
+    expect(await hireSearchPreview(db, a, "Zéphyr")).toEqual([]);
+    expect(await hireSearchPreview(db, a, "Test Fictif")).toEqual([]);
+    expect((await applicationsThisWeek(db, a)).total).toBe(0);
+    const found = await hireSearchPreview(db, b, "zéphyr");
+    expect(found).toEqual([
+      { kind: "offer", title: "Offre cherchée Zéphyr", href: `/app/hire/offres/${jobB}` },
+    ]);
+    const people = await hireSearchPreview(db, b, "Test Fictif");
+    expect(people.map((item) => item.kind)).toEqual(["candidate"]);
+    const week = await applicationsThisWeek(db, b);
+    expect(week.total).toBe(1);
+    expect(week.days).toHaveLength(7);
+    expect(week.days.reduce((sum, day) => sum + day.count, 0)).toBe(1);
   });
 });
 

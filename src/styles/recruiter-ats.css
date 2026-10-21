@@ -1793,7 +1793,3 @@ label.t-r6-c:has(input:focus-visible) {
 html:has(.t-barre-bas) {
   scroll-padding-bottom: 120px;
 }
-/* The recruiter keeps its bottom bar on wide screens (until the web lots): the last row of a page stays reachable above it. */
-.t-rh:has(.t-barre-bas) main.t-contenu {
-  padding-bottom: calc(120px + env(safe-area-inset-bottom));
-}

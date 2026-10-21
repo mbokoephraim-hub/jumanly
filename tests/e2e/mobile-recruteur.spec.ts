@@ -35,11 +35,15 @@ test("espace recruteur : barre du bas, organisation active, Compte RH et profil 
   await expect(page).toHaveURL(/\/app\/hire\/offres$/);
   await expect(bar.getByRole("link", { name: /^Offres/ })).toHaveAttribute("aria-current", "page");
 
-  // Compte RH, from the avatar.
-  await page.getByRole("link", { name: /^Compte de / }).click();
+  // Compte RH, from the avatar (on a computer, the card at the foot of the sidebar or the avatar
+  // of the top bar).
+  const account = page.getByRole("link", { name: /^Compte de / });
+  await account.filter({ visible: true }).first().click();
   await expect(page).toHaveURL(/\/app\/hire\/compte$/);
   await expect(page.getByRole("heading", { level: 1, name: "Compte" })).toBeVisible();
-  await expect(bar).toHaveCount(0);
+  if (isMobile) await expect(bar).toHaveCount(0);
+  // On a computer the sidebar stays, its account card lit (docs/refonte-web, recruteur-1).
+  else await expect(account.first()).toHaveAttribute("aria-current", "page");
   const org = page.getByRole("list", { name: "Organisation et équipe" });
   for (const row of ["Organisation", "Équipe", "Rapports"])
     await expect(org.getByRole("link", { name: new RegExp(row) })).toBeVisible();
