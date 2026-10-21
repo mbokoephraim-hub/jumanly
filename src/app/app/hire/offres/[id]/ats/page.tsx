@@ -5,6 +5,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { AtsCard, AtsDocs, AtsPodium, AtsRings } from "@/components/recruiter/ats";
 import { AtsFollow, AtsSelection } from "@/components/recruiter/ats-client";
+import { OfferHead, OfferTabs } from "@/components/recruiter/ats-web";
 import { avatarTone, initialsOf } from "@/components/recruiter/candidates";
 import { OfferSheets, OrbiLine } from "@/components/recruiter/offers";
 import { FlowHead } from "@/components/talent/flow-head";
@@ -66,6 +67,7 @@ export default async function AtsPage({
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const { ctx } = await requireHire(`/app/hire/offres/${id}/ats`, "readApplications");
   const t = await getTranslations("hireAts");
+  const tw = await getTranslations("hireWeb.ats");
   const format = await getFormatter();
   const now = new Date();
   const board = await atsBoard(db, ctx, id, now).catch((error) => {
@@ -112,6 +114,25 @@ export default async function AtsPage({
       }
     />
   );
+  // On a computer or a tablet (planche web recruteur-4 § 2): the offer in the head, its actions on
+  // the right, then its four parts. The head of the phone (`t-tete-f`) steps aside.
+  const webHead = (actions?: React.ReactNode) => (
+    <>
+      <OfferHead job={job} actions={actions} />
+      <OfferTabs
+        jobId={job.id}
+        current="ats"
+        applications={total}
+        shortlisted={board.shortlisted.filter((row) => row.status === "active").length}
+      />
+    </>
+  );
+  const guard = (
+    <p className="t-gar t-rw-web">
+      <TalentIcon name="confidentialite" size="s" />
+      <span>{tw("guard")}</span>
+    </p>
+  );
   const sheets = (
     <OfferSheets
       job={{ ...job, figures }}
@@ -133,77 +154,99 @@ export default async function AtsPage({
     const step = ratio < 0.25 ? 0 : ratio < 0.5 ? 1 : ratio < 1 ? 2 : 3;
     const left = Math.max(5, (ids.length - done.length) * 3);
     return (
-      <div className="t-flux t-r6">
+      <div className="t-flux t-r6 t-large t-rw-a4">
         {head}
+        {webHead(
+          <form action={stopAtsAction}>
+            <input type="hidden" name="job" value={job.id} />
+            <button type="submit" className="t-bt t-sec t-m t-press">
+              {t("progress.stop")}
+            </button>
+          </form>,
+        )}
         <AtsFollow />
-        <section className="t-r6-prog" aria-live="polite" aria-labelledby="ats-prog-t">
-          <span className="t-big" style={{ "--p": Math.round(ratio * 100) } as React.CSSProperties}>
-            <b>
-              {done.length}
-              <small>{t("progress.of", { count: ids.length })}</small>
-            </b>
-          </span>
-          <h2 id="ats-prog-t">{t("progress.title")}</h2>
-          <p>{t("progress.text", { seconds: left })}</p>
-          <ol className="t-r6-step" aria-label={t("progress.steps")}>
-            {(["read", "skills", "proofs", "rank"] as const).map((key, index) => (
-              <li
-                key={key}
-                className={cx(index < step && "t-ok", index === step && "t-en")}
-                aria-current={index === step ? "step" : undefined}
+        <div className="t-rw-aw">
+          <div className="t-rw-ac">
+            <section className="t-r6-prog" aria-live="polite" aria-labelledby="ats-prog-t">
+              <span
+                className="t-big"
+                style={{ "--p": Math.round(ratio * 100) } as React.CSSProperties}
               >
-                <i aria-hidden />
-                {t(`progress.step.${key}`)}
-              </li>
-            ))}
-          </ol>
-        </section>
-        <div className="t-sec-t">
-          <h2>{t("progress.files")}</h2>
-          <span>{t("progress.count", { done: done.length, total: ids.length })}</span>
-        </div>
-        <ul className="t-r6-fl">
-          {rows.slice(0, 8).map((row) => {
-            const isDone = row.analysis !== null;
-            const isCurrent = row.id === current?.id;
-            return (
-              <li
-                key={row.id}
-                className={cx(isCurrent && "t-en", !isDone && !isCurrent && "t-att")}
-              >
-                <span className={cx("t-rc-av", avatarTone(row.id))} aria-hidden>
-                  {initialsOf(row.name)}
-                </span>
-                <div className="t-t">
-                  <b>{row.name}</b>
-                  <span>
-                    {isDone
-                      ? t("progress.read")
-                      : isCurrent
-                        ? t("progress.reading")
-                        : t("progress.waiting")}
-                  </span>
-                  {isCurrent && (
-                    <span className="t-mb" aria-hidden>
-                      <i />
+                <b>
+                  {done.length}
+                  <small>{t("progress.of", { count: ids.length })}</small>
+                </b>
+              </span>
+              <h2 id="ats-prog-t">{t("progress.title")}</h2>
+              <p>{t("progress.text", { seconds: left })}</p>
+              <ol className="t-r6-step" aria-label={t("progress.steps")}>
+                {(["read", "skills", "proofs", "rank"] as const).map((key, index) => (
+                  <li
+                    key={key}
+                    className={cx(index < step && "t-ok", index === step && "t-en")}
+                    aria-current={index === step ? "step" : undefined}
+                  >
+                    <i aria-hidden />
+                    {t(`progress.step.${key}`)}
+                  </li>
+                ))}
+              </ol>
+            </section>
+            <div className="t-rw-w">
+              <OrbiLine>{t("progress.orbi")}</OrbiLine>
+            </div>
+          </div>
+          <div className="t-rw-ac">
+            <div className="t-sec-t">
+              <h2>{t("progress.files")}</h2>
+              <span>{t("progress.count", { done: done.length, total: ids.length })}</span>
+            </div>
+            <ul className="t-r6-fl">
+              {rows.slice(0, 8).map((row) => {
+                const isDone = row.analysis !== null;
+                const isCurrent = row.id === current?.id;
+                return (
+                  <li
+                    key={row.id}
+                    className={cx(isCurrent && "t-en", !isDone && !isCurrent && "t-att")}
+                  >
+                    <span className={cx("t-rc-av", avatarTone(row.id))} aria-hidden>
+                      {initialsOf(row.name)}
                     </span>
-                  )}
-                </div>
-                <span className={cx("t-pill", !isDone && "t-w")}>
-                  {isDone && row.score !== null ? (
-                    row.score
-                  ) : isDone ? (
-                    <TalentIcon name="valider" size="xs" />
-                  ) : (
-                    <TalentIcon name="horloge" size="xs" />
-                  )}
-                </span>
-              </li>
-            );
-          })}
-        </ul>
-        <OrbiLine>{t("progress.orbi")}</OrbiLine>
-        <form action={stopAtsAction} className="t-verre t-fort t-bas-f">
+                    <div className="t-t">
+                      <b>{row.name}</b>
+                      <span>
+                        {isDone
+                          ? t("progress.read")
+                          : isCurrent
+                            ? t("progress.reading")
+                            : t("progress.waiting")}
+                      </span>
+                      {isCurrent && (
+                        <span className="t-mb" aria-hidden>
+                          <i />
+                        </span>
+                      )}
+                    </div>
+                    <span className={cx("t-pill", !isDone && "t-w")}>
+                      {isDone && row.score !== null ? (
+                        row.score
+                      ) : isDone ? (
+                        <TalentIcon name="valider" size="xs" />
+                      ) : (
+                        <TalentIcon name="horloge" size="xs" />
+                      )}
+                    </span>
+                  </li>
+                );
+              })}
+            </ul>
+          </div>
+        </div>
+        <div className="t-rw-m">
+          <OrbiLine>{t("progress.orbi")}</OrbiLine>
+        </div>
+        <form action={stopAtsAction} className="t-verre t-fort t-bas-f t-rw-tel">
           <input type="hidden" name="job" value={job.id} />
           <button type="submit" className="t-bt t-sec t-pl t-press">
             {t("progress.stop")}
@@ -468,8 +511,9 @@ export default async function AtsPage({
       one(query.ids)?.split(",") ??
       (view === "recommandes" ? board.recommended.map((row) => row.id) : []);
     return (
-      <div className="t-flux t-r6">
+      <div className="t-flux t-r6 t-large t-rw-a4 t-rw-asel">
         {head}
+        {webHead()}
         <ViewTabs base={base} view={view} board={board} selecting />
         <AtsSelection
           rows={list.map((row) => ({
@@ -513,42 +557,60 @@ export default async function AtsPage({
   // ─── Before any analysis: hero, distribution, ranking by score (planche v4.1 ATS1) ─────
   if (board.analysed === 0) {
     return (
-      <div className="t-flux t-r6">
+      <div className="t-flux t-r6 t-large t-rw-a4">
         {head}
+        {webHead()}
         {okToast}
         {errorNotice}
-        {lock}
-        {schedule ?? hero}
-        {distribution}
-        {total === 0 ? (
-          <div className="t-verre t-rc-vide">
-            <span className="t-rc-rond" aria-hidden>
-              <TalentIcon name="candidats" />
-            </span>
-            <b>{t("empty.title")}</b>
-            <span>{t("empty.text")}</span>
+        <div className="t-rw-aw">
+          <div className="t-rw-ac">
+            {lock}
+            {schedule ?? hero}
+            {distribution}
+            {schedule ? (
+              <div className="t-rw-w">
+                <OrbiLine>
+                  {tw("creditsNote", {
+                    date: job.closesAt ? formatDayMonth(job.closesAt) : "",
+                  })}
+                </OrbiLine>
+              </div>
+            ) : (
+              guard
+            )}
           </div>
-        ) : (
-          <>
-            <div className="t-sec-t">
-              <h2>{board.withScores ? t("list.byScore") : t("list.byDate")}</h2>
-              <Link href={`/app/hire/candidats?offre=${job.id}`}>{t("list.sort")}</Link>
-            </div>
-            <ul className="t-r6-liste">
-              {board.rows.map((row, index) => (
-                <li key={row.id}>
-                  <AtsCard
-                    row={row}
-                    rank={index + 1}
-                    href={fileHref(row)}
-                    whyHref={fileHref(row)}
-                    line={lineOf(row)}
-                  />
-                </li>
-              ))}
-            </ul>
-          </>
-        )}
+          <div className="t-rw-ac">
+            {total === 0 ? (
+              <div className="t-verre t-rc-vide">
+                <span className="t-rc-rond" aria-hidden>
+                  <TalentIcon name="candidats" />
+                </span>
+                <b>{t("empty.title")}</b>
+                <span>{t("empty.text")}</span>
+              </div>
+            ) : (
+              <>
+                <div className="t-sec-t">
+                  <h2>{board.withScores ? t("list.byScore") : t("list.byDate")}</h2>
+                  <Link href={`/app/hire/candidats?offre=${job.id}`}>{t("list.sort")}</Link>
+                </div>
+                <ul className="t-r6-liste">
+                  {board.rows.map((row, index) => (
+                    <li key={row.id}>
+                      <AtsCard
+                        row={row}
+                        rank={index + 1}
+                        href={fileHref(row)}
+                        whyHref={fileHref(row)}
+                        line={lineOf(row)}
+                      />
+                    </li>
+                  ))}
+                </ul>
+              </>
+            )}
+          </div>
+        </div>
         {launchSheet}
         {sheets}
       </div>
@@ -563,8 +625,24 @@ export default async function AtsPage({
   const usedCredits = board.analysed * CREDITS_PER_FILE;
   const names = board.recommendedToCheck.map((row) => row.name.split(/\s+/)[0]!);
   return (
-    <div className="t-flux t-r6">
+    <div className="t-flux t-r6 t-large t-rw-a4 t-rw-afin">
       {head}
+      {webHead(
+        permissions.manage ? (
+          <>
+            <Link href={`${base}?vue=${view}&selection=1`} className="t-bt t-sec t-m t-press">
+              {t("bar.select")}
+            </Link>
+            <Link
+              href={`/app/hire/offres/${job.id}/retenus`}
+              className="t-bt t-p t-m t-press t-rw-dk"
+            >
+              <TalentIcon name="valider" size="s" />
+              {t("bar.shortlist")}
+            </Link>
+          </>
+        ) : null,
+      )}
       {okToast}
       {errorNotice}
       {board.run?.failed && <Notice tone="err">{t(`runFailed.${board.run.failed}`)}</Notice>}
@@ -598,6 +676,7 @@ export default async function AtsPage({
                 <TalentIcon name="pourquoi" size="xs" />
                 {t("reco.why")}
               </SheetButton>
+              <span className="t-rw-web t-rw-dec">{tw("decide")}</span>
             </div>
           </>
         ) : (
@@ -638,7 +717,7 @@ export default async function AtsPage({
         )}
       </div>
       {permissions.manage && (
-        <div className="t-verre t-fort t-bas-f">
+        <div className="t-verre t-fort t-bas-f t-rw-tel">
           <Link href={`${base}?vue=${view}&selection=1`} className="t-bt t-sec t-m t-press">
             {t("bar.select")}
           </Link>

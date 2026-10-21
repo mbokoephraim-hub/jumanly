@@ -10177,6 +10177,100 @@ Conventions :
 | `hireReplies.default.retained` | Bonjour '{prenom}',\n\nMerci pour votre candidature au poste '{poste}'. Nous avons lu votre dossier avec attention, et '{point_fort}' a particulièrement retenu notre attention.\n\nNous avons le plaisir de vous inviter à un entretien. Nous vous proposons des créneaux dans cette conversation : choisissez celui qui vous convient, ou répondez ici si aucun ne convient.\n\nÀ très bientôt,\n{signer}, '{entreprise}' |
 | `hireReplies.default.others` | Bonjour '{prenom}',\n\nMerci pour l'intérêt que vous portez à '{entreprise}' et pour le temps consacré à votre candidature au poste '{poste}'. Nous avons apprécié '{point_fort}'.\n\nAprès avoir étudié l'ensemble des dossiers, notre équipe a retenu d'autres profils pour la suite de ce recrutement. Cette décision ne remet pas en cause la qualité de votre parcours.\n\nVotre profil reste visible des recruteurs et d'autres offres vous attendent sur Jumanly.\n\nAvec nos remerciements et tous nos vœux de réussite,\n{signer}, '{entreprise}' |
 
+### Refonte web recruteur · lot 4 (ordinateur et tablette)
+
+*Espace recruteur sur ordinateur et tablette (docs/refonte-web, planche recruteur-4) : ATS d'une offre en colonnes (liste et classement), sélection et retenus, quand lancer l'analyse, répondre à tous avec l'aperçu Jumanly et e-mail, messagerie enrichie, propositions aux talents, rejoindre une organisation, fin d'offre, notifications de l'ordinateur, rapport PDF. Les textes du téléphone restent ceux des lots mobiles.*
+
+| Clé | Texte |
+|---|---|
+| `hireWeb.ats.menu` | Plus d'actions sur l'offre |
+| `hireWeb.ats.until` | jusqu'au {date} |
+| `hireWeb.ats.noDeadline` | sans date limite |
+| `hireWeb.ats.tabsAria` | Rubriques de l'offre |
+| `hireWeb.ats.tab.candidatures` | Candidatures |
+| `hireWeb.ats.tab.ats` | Analyse (ATS) |
+| `hireWeb.ats.tab.retenus` | Retenus |
+| `hireWeb.ats.tab.stats` | Statistiques |
+| `hireWeb.ats.guard` | Chaque dossier est lu comme une donnée. Nom, âge, genre et photo ne comptent jamais. |
+| `hireWeb.ats.decide` | Orbi recommande, vous décidez. Personne n'est rejeté. |
+| `hireWeb.ats.creditsNote` | Les crédits ne sont utilisés qu'au lancement. S'il en manque le {date}, vous êtes prévenu avant. |
+| `hireWeb.ats.shortlist.title` | Liste des retenus |
+| `hireWeb.ats.shortlist.titleStage` | Liste des retenus · étape {stage} |
+| `hireWeb.ats.shortlist.add` | Ajouter |
+| `hireWeb.ats.shortlist.nextTitle` | Ensuite |
+| `hireWeb.ats.shortlist.nextText` | Proposer des créneaux {count, plural, one {à la personne retenue} other {aux # personnes retenues}}, puis évaluer chaque entretien avec la grille de l'offre. |
+| `hireWeb.ats.shortlist.note` | Retenir n'envoie rien : vous informez les personnes quand vous êtes prêt. |
+| `hireWeb.ats.profile.file` | Ouvrir le dossier complet |
+| `hireWeb.ats.profile.write` | Écrire à {name} |
+| `hireWeb.replies.sub` | {job} · par message Jumanly |
+| `hireWeb.replies.subEmail` | {job} · par message Jumanly et par e-mail |
+| `hireWeb.replies.previewHead` | Aperçu · {index} sur {count} |
+| `hireWeb.replies.peopleAria` | Personnes du groupe : choisir l'aperçu |
+| `hireWeb.replies.more` | +{count} |
+| `hireWeb.replies.seeEmail` | Voir le message et l'e-mail |
+| `hireWeb.replies.cancel` | Annuler |
+| `hireWeb.replies.windowTitle` | Aperçu du message |
+| `hireWeb.replies.windowSub` | Ce que {name} reçoit dans Jumanly |
+| `hireWeb.replies.windowSubEmail` | Ce que {name} reçoit, dans Jumanly et par e-mail |
+| `hireWeb.replies.inJumanly` | Dans Jumanly |
+| `hireWeb.replies.byEmail` | Par e-mail |
+| `hireWeb.replies.emailLoading` | Préparation de l'e-mail… |
+| `hireWeb.replies.emailError` | L'aperçu de l'e-mail n'a pas pu être préparé. Le message Jumanly reste exact ; réessayez dans un instant. |
+| `hireWeb.replies.emailFrame` | E-mail que {name} reçoit |
+| `hireWeb.ats.menuShortlist` | Liste des retenus |
+| `hireWeb.ats.menuShortlistText` | Les dossiers gardés pour l'étape suivante |
+| `hireWeb.ats.atsLineLead` | Analyser (ATS) : |
+| `hireWeb.ats.atsLine` | Orbi lit tous les CV d'une offre et les classe, avec le pourquoi. Rien ne se lance sans votre geste. |
+| `hireWeb.proposals.sent.title` | Proposition envoyée à {name} |
+| `hireWeb.proposals.sent.text` | {name} reçoit l'offre et votre message. Vous serez prévenu de sa réponse. |
+| `hireWeb.proposals.sent.step1` | Envoyée |
+| `hireWeb.proposals.sent.step1Text` | Aujourd'hui {time} |
+| `hireWeb.proposals.sent.step2` | {name} décide |
+| `hireWeb.proposals.sent.step2Text` | Accepter ou refuser, sous {days} jours |
+| `hireWeb.proposals.sent.step3` | Conversation ouverte |
+| `hireWeb.proposals.sent.step3Text` | Seulement si la proposition est acceptée |
+| `hireWeb.proposals.sent.cta` | Voir mes propositions |
+| `hireWeb.proposals.sent.close` | Fermer |
+| `hireWeb.proposals.accepted.title` | {name} a accepté votre proposition |
+| `hireWeb.proposals.accepted.orbi` | Je peux préparer un premier message ou l'inviter à postuler : vous relisez avant l'envoi. |
+| `hireWeb.proposals.accepted.profile` | Profil |
+| `hireWeb.proposals.accepted.write` | Écrire à {name} |
+| `hireWeb.join.stepsAria` | Étapes de la demande |
+| `hireWeb.join.step1` | Demande envoyée |
+| `hireWeb.join.step1Text` | Les administrateurs de {org} ont reçu une notification et un e-mail. |
+| `hireWeb.join.step2` | L'admin choisit votre rôle |
+| `hireWeb.join.step2Text` | Recruteur, admin ou lecteur · la demande reste ouverte {days, plural, one {# jour} other {# jours}} |
+| `hireWeb.join.step3` | Accès aux offres |
+| `hireWeb.join.step3Text` | Selon votre rôle, dès que la demande est acceptée |
+| `hireShell.web.desktopTitle` | Jumanly Hire |
+| `hireWeb.desktop.group` | Sur cet ordinateur |
+| `hireWeb.desktop.title` | Notifications de l'ordinateur |
+| `hireWeb.desktop.text` | Rappels de fin d'offre, analyse prête, offre clôturée : affichés par votre navigateur, même dans un autre onglet. |
+| `hireWeb.desktop.blocked` | Bloquées par le navigateur. Autorisez Jumanly dans les réglages du site, puis revenez ici. |
+| `hireWeb.desktop.unsupported` | Ce navigateur n'affiche pas de notifications. |
+| `hireWeb.export.title` | Exporter le rapport en PDF |
+| `hireWeb.export.close` | Fermer |
+| `hireWeb.export.period` | Période |
+| `hireWeb.export.p30` | 30 jours |
+| `hireWeb.export.p90` | Trimestre |
+| `hireWeb.export.p12` | 12 mois |
+| `hireWeb.export.custom` | Personnalisée |
+| `hireWeb.export.from` | Du |
+| `hireWeb.export.to` | Au |
+| `hireWeb.export.jobs` | Offres |
+| `hireWeb.export.jobsAll` | Toutes · {count} |
+| `hireWeb.export.content` | Contenu |
+| `hireWeb.export.key` | Chiffres clés et étapes |
+| `hireWeb.export.keyText` | Toujours dans le rapport |
+| `hireWeb.export.byJob` | Détail par offre |
+| `hireWeb.export.byJobText` | Vues, candidatures et délais de chaque offre |
+| `hireWeb.export.reading` | Lecture d’Orbi |
+| `hireWeb.export.readingText` | Constats sur vos chiffres |
+| `hireWeb.export.preview` | Aperçu |
+| `hireWeb.export.download` | Télécharger le PDF |
+| `hireWeb.export.note` | Chiffres réels de vos offres. Aucune donnée personnelle des candidats. |
+| `hireWeb.export.open` | Exporter |
+
 ### Refonte web recruteur · lot 1 (ordinateur et tablette)
 
 *Espace recruteur sur ordinateur et tablette (docs/refonte-web, planche recruteur-1) : barre latérale avec l'organisation active et son menu sous le nom, barre du haut avec la recherche `Ctrl K`, À traiter en deux colonnes, offres en grille, création avec les étapes en tête et l'aperçu à droite, détail d'une offre en deux colonnes. Les textes du téléphone restent ceux des lots mobiles.*

@@ -222,12 +222,14 @@ test("vérification de l'entreprise et page publique", async ({
   await expectAccessible(page);
   const submit = page.getByRole("button", { name: /Envoyer la demande|Compléter la demande/ });
   const sent = await submit.isVisible();
+  // A name of its own: a database replayed without a reset keeps the documents of earlier runs.
+  const documentName = `registre-fictif-${Date.now().toString(36)}`;
   if (sent) {
     await page.locator("#r5-ver-registration").fill("RCCM-FICTIF-E2E");
     await page.locator("#r5-ver-mandate").fill("Directrice des ressources humaines (fictive)");
     // A supporting document (Admin v2, étape 4): a tiny fictional PDF.
     await page.locator("#r5-ver-documents").setInputFiles({
-      name: "registre-fictif.pdf",
+      name: `${documentName}.pdf`,
       mimeType: "application/pdf",
       buffer: Buffer.from("%PDF-1.4\n% Justificatif fictif\n%%EOF\n"),
     });
@@ -242,7 +244,9 @@ test("vérification de l'entreprise et page publique", async ({
     await admin.getByRole("link", { name: "Groupe Démo (groupe fictif)" }).click();
     if (sent)
       await expect(
-        admin.locator("#organisations-fiche").getByRole("link", { name: /Ouvrir registre-fictif/ }),
+        admin
+          .locator("#organisations-fiche")
+          .getByRole("link", { name: new RegExp(`Ouvrir ${documentName}`) }),
       ).toBeVisible();
     await admin.getByRole("button", { name: "Approuver la vérification" }).click();
     await expect(admin.getByText("Groupe Démo (groupe fictif) est vérifiée.")).toBeVisible();

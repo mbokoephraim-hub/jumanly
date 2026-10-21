@@ -5,7 +5,8 @@ import { initials } from "@/components/ui/avatar";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
-import { Sheet, SheetButton } from "@/components/talent/sheet";
+import { CloseSheetButton, Sheet, SheetButton } from "@/components/talent/sheet";
+import { OrbiMark } from "@/components/talent/orbi-mark";
 import { cx } from "@/lib/cx";
 import { switchSpace } from "@/server/actions/hire";
 import { db } from "@/server/db";
@@ -73,6 +74,8 @@ const templateTone: Record<TemplateKind, string> = {
  * and the composer with « + » (slots, a document, the templates). Orbi only drafts: the recruiter
  * reads, changes and sends.
  */
+const firstOf = (name: string) => name.split(/\s+/)[0] ?? name;
+
 export async function RecruiterThread({
   id,
   query,
@@ -84,6 +87,7 @@ export async function RecruiterThread({
 }) {
   const t = await getTranslations("rhThread");
   const t6 = await getTranslations("rhThread6");
+  const tw = await getTranslations("hireWeb.proposals");
   const tt = await getTranslations("hire.templates");
   const format = await getFormatter();
   const ctx = viewer.hire!;
@@ -323,7 +327,12 @@ export async function RecruiterThread({
               <span className={cx("t-r5-etq", badgeTone[badge])}>{t(`badge.${badge}`)}</span>
               {online && <span className="t-r6-online">{t6("online")}</span>}
             </div>
-            <SheetButton target="r5-conv-menu" className="t-bi t-press" label={t("menu.open")}>
+            <SheetButton
+              target="r5-conv-menu"
+              className="t-bi t-press"
+              label={t("menu.open")}
+              anchor
+            >
               <TalentIcon name="plus-options" size="s" />
             </SheetButton>
           </div>
@@ -607,7 +616,61 @@ export async function RecruiterThread({
             !conversation.blockedAt && <p className="t-gar">{t("readOnly")}</p>
           )}
 
-          <Sheet id="r5-conv-menu" title={t("menu.title")} closeLabel={t("close")}>
+          {/* Web recruiter lot 4 (planche « Proposition acceptée »): the talent said yes; on a
+              computer, the conversation opens on that news. Nothing is sent by itself. */}
+          {contact && query.acceptee === "1" && (
+            <div className="t-rw-web">
+              <Sheet
+                id="rw4-acceptee"
+                title={tw("accepted.title", { name: firstOf(name) })}
+                closeLabel={t("close")}
+                className="t-rw-ok4"
+                defaultOpen
+                head={
+                  <div className="t-rw-ok4-h" aria-hidden>
+                    <span className="t-rw-ok4-ic">{initials(name)}</span>
+                    <b>{tw("accepted.title", { name: firstOf(name) })}</b>
+                  </div>
+                }
+              >
+                <div className="t-flux t-serre t-rw-ok4-c">
+                  <p className="t-rw-ok4-s">
+                    {[jobTitle, format.relativeTime(conversation.createdAt, now)]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </p>
+                  <span className="t-rw-ok4-b">{t("badge.proposal")}</span>
+                  <div className="t-rx-orbi">
+                    <OrbiMark size={26} />
+                    <p className="t-t">{tw("accepted.orbi")}</p>
+                  </div>
+                  <div className="t-rx-feuille-bts">
+                    {contact.profile.id && (
+                      <Link
+                        href={`/app/hire/talents/${contact.profile.id}`}
+                        className="t-bt t-sec t-m t-press"
+                      >
+                        {tw("accepted.profile")}
+                      </Link>
+                    )}
+                    {canWrite && (
+                      <CloseSheetButton className="t-bt t-p t-m t-press t-rw-dk">
+                        <TalentIcon name="message" size="s" />
+                        {tw("accepted.write", { name: firstOf(name) })}
+                      </CloseSheetButton>
+                    )}
+                  </div>
+                </div>
+              </Sheet>
+            </div>
+          )}
+
+          <Sheet
+            id="r5-conv-menu"
+            title={t("menu.title")}
+            closeLabel={t("close")}
+            className="t-rx-ancre t-rw-cm"
+          >
             <ul className="t-verre t-liste t-lignes">
               {dossier && (
                 <li>

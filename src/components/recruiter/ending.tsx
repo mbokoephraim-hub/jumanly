@@ -128,6 +128,7 @@ export async function EndingOffers({ ctx, answer }: { ctx: HireContext; answer?:
                 id={`fin-prol-${offer.id}`}
                 title={t("prolongTitle")}
                 closeLabel={t("closeSheet")}
+                className="t-rw-fin"
               >
                 <form action={prolongJobAction} className="t-flux">
                   <input type="hidden" name="job" value={offer.id} />
@@ -182,6 +183,7 @@ export async function EndingOffers({ ctx, answer }: { ctx: HireContext; answer?:
                 id={`fin-clo-${offer.id}`}
                 title={t("closeTitle")}
                 closeLabel={t("closeSheet")}
+                className="t-rw-fin"
               >
                 <form action={closeEndingJobAction} className="t-flux">
                   <input type="hidden" name="job" value={offer.id} />

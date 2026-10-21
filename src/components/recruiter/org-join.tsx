@@ -27,6 +27,7 @@ export async function JoinExisting({
   answer?: string;
 }) {
   const t = await getTranslations("orgJoin");
+  const tw = await getTranslations("hireWeb.join");
   const now = new Date();
   const current = await myJoinRequest(db, userId, now);
   const notices = (
@@ -40,8 +41,24 @@ export async function JoinExisting({
     const org = current.organization;
     const days = Math.max(1, Math.ceil((current.expiresAt.getTime() - now.getTime()) / 86_400_000));
     return (
-      <section className="t-flux t-serre" aria-labelledby="rej-t">
+      <section className="t-flux t-serre t-rw-rej" aria-labelledby="rej-t">
         {notices}
+        {current.status === "pending" && (
+          <ol className="t-verre t-rw-web t-rw-rejst" aria-label={tw("stepsAria")}>
+            <li className="t-ok">
+              <b>{tw("step1")}</b>
+              <span>{tw("step1Text", { org: org.name })}</span>
+            </li>
+            <li className="t-en">
+              <b>{tw("step2")}</b>
+              <span>{tw("step2Text", { days })}</span>
+            </li>
+            <li>
+              <b>{tw("step3")}</b>
+              <span>{tw("step3Text")}</span>
+            </li>
+          </ol>
+        )}
         <div className="t-verre t-r6-org">
           <span className="t-r6-lg" aria-hidden>
             {initialsOf(org.name)}
@@ -92,7 +109,7 @@ export async function JoinExisting({
   const candidates = await joinCandidates(db, { userId, email, orgName });
   if (candidates.length === 0) return answer ? notices : null;
   return (
-    <section className="t-flux t-serre" aria-labelledby="rej-t">
+    <section className="t-flux t-serre t-rw-rej" aria-labelledby="rej-t">
       {notices}
       <h2 id="rej-t" className="t-lab-c">
         {t("title")}

@@ -297,6 +297,7 @@ export async function OfferSheets({
 }) {
   const t = await getTranslations("hireOffers");
   const ta = await getTranslations("hireAts.entry");
+  const tw = await getTranslations("hireWeb.ats");
   const draft = ["draft", "rejected", "changes_requested"].includes(job.status);
   const live = ["published", "paused", "closed"].includes(job.status);
   const closable = ["published", "paused", "pending_review"].includes(job.status);
@@ -315,6 +316,19 @@ export async function OfferSheets({
             <li>
               <Link href={`/app/hire/offres/${job.id}/ats`} className="t-li t-press">
                 <MenuRow icon="orbi" tone="t-c1" title={ta("menu")} text={ta("menuText")} />
+              </Link>
+            </li>
+          )}
+          {/* Web recruiter lot 4: the retained of the offer, one click from its menu. */}
+          {readApplications && live && job.figures.applications > 0 && (
+            <li className="t-rw-web">
+              <Link href={`/app/hire/offres/${job.id}/retenus`} className="t-li t-press">
+                <MenuRow
+                  icon="valider"
+                  tone="t-c2"
+                  title={tw("menuShortlist")}
+                  text={tw("menuShortlistText")}
+                />
               </Link>
             </li>
           )}

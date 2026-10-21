@@ -2,6 +2,68 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Étape 2, recruteur web lot 4 : ATS, retenus, réponses, propositions, fin d'offre, rapport (21 octobre 2026)
+
+Planche `docs/refonte-web/recruteur-4` (w1 à w11), ordinateur (1440 px) et tablette (1024 px),
+clair et sombre ; le téléphone (390 px) est inchangé (comparaison avant/après de 12 écrans, clair
+et sombre : seules diffèrent les données de démonstration modifiées entre les prises).
+Choix et écarts : `docs/decisions/2026-10-21-recruteur-web-lot-4.md`.
+
+**Mise en place.** Une feuille `src/styles/recruiter-web-4.css`, mêmes règles que les lots 2 et 3
+(`t-rw-web`, `t-rw-tel`, `t-rw-w`, `t-rw-m`, enveloppes en `display: contents` sous 768 px).
+`src/components/recruiter/ats-web.tsx` porte la tête de l'offre (`OfferHead`), ses quatre
+rubriques (`OfferTabs`) et les titres de section. Nouveau service
+`hire-reply-preview.tsx` (l'e-mail d'une réponse groupée rendu tel qu'il part) et sa route
+`/api/hire/reponses/apercu` ; `report-export.tsx` (fenêtre d'export) ; `desktop-notifications.tsx`
+(notifications du navigateur).
+
+**Écran mobile → équivalent web** :
+
+| Téléphone (lot mobile) | Ordinateur et tablette |
+|---|---|
+| Offres : « Analyser (ATS) » sur la carte, « … » | « Analyser (ATS) » foncé à côté de « Candidatures », ligne d'Orbi sous la grille ; « Liste des retenus » dans le « … » |
+| ATS : lancement, « Quand analyser ? », analyse programmée | Tête de l'offre et quatre rubriques ; lancement, répartition et règle à gauche, candidatures reçues à droite ; fenêtre centrée |
+| ATS : analyse en cours | Progression à gauche, dossier par dossier à droite |
+| ATS : recommandation, « Pourquoi ? », Recommandés · À vérifier · Tous | Recommandation à gauche (podium), liste à droite ; « Orbi recommande, vous décidez » à côté des boutons |
+| ATS : sélection rapide, barre « Retenir » | Cases sur les cartes, barre de sélection en ligne (plus de barre du bas) |
+| Profil pour cette offre | Synthèse et tableau des critères à gauche ; « Ajouter aux retenus », « Ouvrir le dossier complet », « Écrire à … », questions d'entretien à droite |
+| Liste des retenus | Liste à gauche (titre avec l'étape, « Ajouter »), « Ensuite » et ligne d'Orbi à droite ; « Créneaux » et « Informer les N » dans la tête |
+| Répondre aux candidats (groupe, canaux, modèle, aperçus, relu, envoi, annulation 10 min) | Modèle à gauche, aperçu personne par personne à droite (pastilles, Suivant) ; « Voir le message et l'e-mail » : fenêtre avec l'e-mail réel ; Annuler · Envoyer sous l'aperçu |
+| Modèles d'e-mail (retenu, non retenu) | Montrés dans la fenêtre d'aperçu, rendus par le gabarit d'envoi |
+| Conversation : « … » et « + » | Menus ancrés sous leur bouton (le reste de la messagerie : lot 3) |
+| Proposer l'offre → confirmation | Fenêtre « Proposition envoyée » avec les trois étapes |
+| Proposition acceptée (notification) | Fenêtre « … a accepté votre proposition » à l'ouverture de la conversation |
+| Mes propositions, Relancer | Tableau du lot 2 (Relancer, Relancé) |
+| Premiers pas : organisation trouvée, demande envoyée | Fiche en bandeau avec logo, trois étapes de la demande |
+| Fin d'offre : prolonger, clôturer | Fenêtres de 640 px, durées en tuiles |
+| Rapport PDF | Fenêtre « Exporter le rapport en PDF » (période, offres, contenu, Aperçu, Télécharger) ; le PDF peut sauter le détail par offre et la lecture d'Orbi |
+| Rappels de fin d'offre (paramètres) | Réglage « Notifications de l'ordinateur » en plus, demandé au clic seulement |
+| Détail de l'offre : Attribution, Modèle de grille | Cartes de la planche (ordinateur seulement) |
+
+**Recouvrement avec le lot 3.** Messagerie (seulement les menus ancrés), notifications (seulement
+les fenêtres de fin d'offre), rapports (seulement la fenêtre d'export et les sections du PDF),
+premiers pas (seulement la fiche et les étapes de la demande), paramètres (seulement le réglage
+des notifications de l'ordinateur). Le reste de ces écrans est celui du lot 3, inchangé.
+
+**Tests.** e2e `tests/e2e/web-recruteur-4.spec.ts` : ATS (tête, rubriques, menu ancré, lancement,
+classement), profil pour l'offre sans barre du bas, retenus, réponse groupée avec l'e-mail réel et
+la route d'aperçu fermée aux autres organisations ; proposition envoyée puis acceptée, menus de la
+conversation ; export du rapport (période, contenu, PDF), notifications de l'ordinateur, demande
+pour rejoindre puis annulée ; aucun défilement horizontal à 1440, 1024 et 768 px.
+`mobile-recruteur-ats.spec.ts` : la case « J'ai relu » existe pour les deux mises en page (celle
+à l'écran) ; « Relancer » tolère la course entre les deux projets (relecture jusqu'à l'état
+enregistré). `hire-advanced.spec.ts` : le justificatif de vérification porte un nom propre à
+chaque passage (une base rejouée sans remise à zéro gardait celui d'avant). Base :
+`tests/db/recruiter-lot6.test.ts` vérifie l'aperçu de l'e-mail (rendu tel qu'il part, rien
+d'envoyé, adresse absente, refusé à une autre organisation).
+
+**Captures.** `captures/refonte-recruteur-web-4/` du dossier du projet : 24 écrans et fenêtres
+du lot à 1440 et 1024 px (et 390 px pour les écrans), clair et sombre.
+
+**Reste.** « Offres · Choisir » dans l'export (pas de filtre par offre dans le rapport) ; l'écran
+talent « Proposition reçue » ; le bloc Attribution sur téléphone en mode sombre. Étape 3
+(administration de l'entreprise, web seulement).
+
 ## Étape 2, recruteur web lot 3 : Orbi, messages, compte, organisation, abonnement, paramètres (21 octobre 2026)
 
 Planche `docs/refonte-web/recruteur-3` (w0 à w9), ordinateur (1440 px) et tablette (1024 px),

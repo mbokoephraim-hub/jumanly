@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
-import { OfferCard, OfferSheets } from "@/components/recruiter/offers";
+import { OfferCard, OfferSheets, OrbiLine } from "@/components/recruiter/offers";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
@@ -31,6 +31,7 @@ export default async function HireOffersPage({ searchParams }: PageProps<"/app/h
   const { ctx, space } = await requireHire("/app/hire/offres");
   const t = await getTranslations("hireOffers");
   const tw = await getTranslations("hireWeb.offers");
+  const tats = await getTranslations("hireWeb.ats");
   const now = new Date();
   const subject = { type: "organization" as const, id: ctx.organizationId };
   const permissions = hirePermissions(ctx.role);
@@ -202,6 +203,14 @@ export default async function HireOffersPage({ searchParams }: PageProps<"/app/h
               back={back}
             />
           ))}
+        </div>
+      )}
+      {/* Web recruiter lot 4 (planche « Arriver à l'ATS »): what « Analyser (ATS) » does. */}
+      {permissions.readApplications && shown.some((job) => job.figures.applications > 0) && (
+        <div className="t-rw-web t-rw-atsl">
+          <OrbiLine>
+            <b>{tats("atsLineLead")}</b> {tats("atsLine")}
+          </OrbiLine>
         </div>
       )}
       {shown.map((job) => (

@@ -40,6 +40,7 @@ export default async function GroupRepliesPage({
   const [{ id }, query] = await Promise.all([params, searchParams]);
   const { ctx, space, user } = await requireHire(`/app/hire/offres/${id}/reponses`, "manage");
   const t = await getTranslations("hireReplies");
+  const tw = await getTranslations("hireWeb.replies");
   const ts = await getTranslations("hireReplies.strength");
   const groupParam = one(query.groupe);
   const group: ReplyGroup = replyGroups.find((item) => item === groupParam) ?? "retenus";
@@ -118,11 +119,8 @@ export default async function GroupRepliesPage({
   }).replaceAll("\\n", "\n");
   const n = (key: string) => t(key as "form.send", { count: people.length });
 
-  return (
-    <div className="t-flux t-r6">
-      <FlowHead back={back} backLabel={t("back")} title={t("title")} />
-      <p className="t-r6-sous">{job.title}</p>
-
+  const lead = (
+    <>
       {retained && others && (
         <nav className="t-r6-grp" aria-label={t("groups")}>
           {(
@@ -153,18 +151,32 @@ export default async function GroupRepliesPage({
           {t(`error.${error === "reviewed" || error === "empty" ? error : "nobody"}`)}
         </Notice>
       )}
+    </>
+  );
+
+  return (
+    <div className="t-flux t-r6 t-large t-rw-a4 t-rw-rep">
+      <FlowHead back={back} backLabel={t("back")} title={t("title")} />
+      <p className="t-r6-sous">{job.title}</p>
 
       {people.length === 0 ? (
-        <div className="t-verre t-rc-vide">
-          <span className="t-rc-rond" aria-hidden>
-            <TalentIcon name="message" />
-          </span>
-          <b>{t("empty.title")}</b>
-          <span>{t(rejecting ? "empty.others" : "empty.retained")}</span>
-          <Link href={`/app/hire/offres/${job.id}/ats`} className="t-bt t-p t-s t-press">
-            {t("empty.cta")}
-          </Link>
-        </div>
+        <>
+          <div className="t-rw-web t-rw-rh">
+            <h1>{t("title")}</h1>
+            <p>{job.title}</p>
+          </div>
+          {lead}
+          <div className="t-verre t-rc-vide">
+            <span className="t-rc-rond" aria-hidden>
+              <TalentIcon name="message" />
+            </span>
+            <b>{t("empty.title")}</b>
+            <span>{t(rejecting ? "empty.others" : "empty.retained")}</span>
+            <Link href={`/app/hire/offres/${job.id}/ats`} className="t-bt t-p t-s t-press">
+              {t("empty.cta")}
+            </Link>
+          </div>
+        </>
       ) : (
         <GroupReplyForm
           action={sendGroupReplyAction}
@@ -220,6 +232,26 @@ export default async function GroupRepliesPage({
             close: t("preview.close"),
             needReviewed: t("form.needReviewed"),
             recipients: n("form.recipients"),
+          }}
+          lead={lead}
+          web={{
+            title: t("title"),
+            sub: tw("sub", { job: job.title }),
+            subEmail: tw("subEmail", { job: job.title }),
+            previewHead: tw("previewHead", { index: "{index}", count: "{count}" }),
+            peopleAria: tw("peopleAria"),
+            more: tw("more", { count: "{count}" }),
+            seeEmail: tw("seeEmail"),
+            cancel: tw("cancel"),
+            cancelHref: back,
+            windowTitle: tw("windowTitle"),
+            windowSub: tw("windowSub", { name: "{name}" }),
+            windowSubEmail: tw("windowSubEmail", { name: "{name}" }),
+            inJumanly: tw("inJumanly"),
+            byEmail: tw("byEmail"),
+            emailLoading: tw("emailLoading"),
+            emailError: tw("emailError"),
+            emailFrame: tw("emailFrame", { name: "{name}" }),
           }}
         />
       )}

@@ -9648,6 +9648,7 @@
       "messages": "Messages"
     },
     "web": {
+      "desktopTitle": "Jumanly Hire",
       "brand": "jumanly",
       "home": "Jumanly, aller à À traiter",
       "more": "Organiser",
@@ -12464,6 +12465,120 @@
     }
   },
   "hireWeb": {
+    "ats": {
+      "menu": "Plus d'actions sur l'offre",
+      "until": "jusqu'au {date}",
+      "noDeadline": "sans date limite",
+      "tabsAria": "Rubriques de l'offre",
+      "tab": {
+        "candidatures": "Candidatures",
+        "ats": "Analyse (ATS)",
+        "retenus": "Retenus",
+        "stats": "Statistiques"
+      },
+      "guard": "Chaque dossier est lu comme une donnée. Nom, âge, genre et photo ne comptent jamais.",
+      "decide": "Orbi recommande, vous décidez. Personne n'est rejeté.",
+      "creditsNote": "Les crédits ne sont utilisés qu'au lancement. S'il en manque le {date}, vous êtes prévenu avant.",
+      "shortlist": {
+        "title": "Liste des retenus",
+        "titleStage": "Liste des retenus · étape {stage}",
+        "add": "Ajouter",
+        "nextTitle": "Ensuite",
+        "nextText": "Proposer des créneaux {count, plural, one {à la personne retenue} other {aux # personnes retenues}}, puis évaluer chaque entretien avec la grille de l'offre.",
+        "note": "Retenir n'envoie rien : vous informez les personnes quand vous êtes prêt."
+      },
+      "profile": {
+        "file": "Ouvrir le dossier complet",
+        "write": "Écrire à {name}"
+      },
+      "menuShortlist": "Liste des retenus",
+      "menuShortlistText": "Les dossiers gardés pour l'étape suivante",
+      "atsLineLead": "Analyser (ATS) :",
+      "atsLine": "Orbi lit tous les CV d'une offre et les classe, avec le pourquoi. Rien ne se lance sans votre geste."
+    },
+    "replies": {
+      "sub": "{job} · par message Jumanly",
+      "subEmail": "{job} · par message Jumanly et par e-mail",
+      "previewHead": "Aperçu · {index} sur {count}",
+      "peopleAria": "Personnes du groupe : choisir l'aperçu",
+      "more": "+{count}",
+      "seeEmail": "Voir le message et l'e-mail",
+      "cancel": "Annuler",
+      "windowTitle": "Aperçu du message",
+      "windowSub": "Ce que {name} reçoit dans Jumanly",
+      "windowSubEmail": "Ce que {name} reçoit, dans Jumanly et par e-mail",
+      "inJumanly": "Dans Jumanly",
+      "byEmail": "Par e-mail",
+      "emailLoading": "Préparation de l'e-mail…",
+      "emailError": "L'aperçu de l'e-mail n'a pas pu être préparé. Le message Jumanly reste exact ; réessayez dans un instant.",
+      "emailFrame": "E-mail que {name} reçoit"
+    },
+    "proposals": {
+      "sent": {
+        "title": "Proposition envoyée à {name}",
+        "text": "{name} reçoit l'offre et votre message. Vous serez prévenu de sa réponse.",
+        "step1": "Envoyée",
+        "step1Text": "Aujourd'hui {time}",
+        "step2": "{name} décide",
+        "step2Text": "Accepter ou refuser, sous {days} jours",
+        "step3": "Conversation ouverte",
+        "step3Text": "Seulement si la proposition est acceptée",
+        "cta": "Voir mes propositions",
+        "close": "Fermer"
+      },
+      "accepted": {
+        "title": "{name} a accepté votre proposition",
+        "orbi": "Je peux préparer un premier message ou l'inviter à postuler : vous relisez avant l'envoi.",
+        "profile": "Profil",
+        "write": "Écrire à {name}"
+      },
+      "sub": "Rechercher des talents · vos propositions d'offre",
+      "talent": "Talent",
+      "offer": "Offre proposée",
+      "answer": "Réponse",
+      "write": "Écrire",
+      "info": "<b>Acceptée</b> : la conversation s'ouvre dans Messages. <b>Refusée</b> : sans détail, rien à faire."
+    },
+    "join": {
+      "stepsAria": "Étapes de la demande",
+      "step1": "Demande envoyée",
+      "step1Text": "Les administrateurs de {org} ont reçu une notification et un e-mail.",
+      "step2": "L'admin choisit votre rôle",
+      "step2Text": "Recruteur, admin ou lecteur · la demande reste ouverte {days, plural, one {# jour} other {# jours}}",
+      "step3": "Accès aux offres",
+      "step3Text": "Selon votre rôle, dès que la demande est acceptée"
+    },
+    "desktop": {
+      "group": "Sur cet ordinateur",
+      "title": "Notifications de l'ordinateur",
+      "text": "Rappels de fin d'offre, analyse prête, offre clôturée : affichés par votre navigateur, même dans un autre onglet.",
+      "blocked": "Bloquées par le navigateur. Autorisez Jumanly dans les réglages du site, puis revenez ici.",
+      "unsupported": "Ce navigateur n'affiche pas de notifications."
+    },
+    "export": {
+      "title": "Exporter le rapport en PDF",
+      "close": "Fermer",
+      "period": "Période",
+      "p30": "30 jours",
+      "p90": "Trimestre",
+      "p12": "12 mois",
+      "custom": "Personnalisée",
+      "from": "Du",
+      "to": "Au",
+      "jobs": "Offres",
+      "jobsAll": "Toutes · {count}",
+      "content": "Contenu",
+      "key": "Chiffres clés et étapes",
+      "keyText": "Toujours dans le rapport",
+      "byJob": "Détail par offre",
+      "byJobText": "Vues, candidatures et délais de chaque offre",
+      "reading": "Lecture d’Orbi",
+      "readingText": "Constats sur vos chiffres",
+      "preview": "Aperçu",
+      "download": "Télécharger le PDF",
+      "note": "Chiffres réels de vos offres. Aucune donnée personnelle des candidats.",
+      "open": "Exporter"
+    },
     "today": {
       "hello": "Bonjour {name}",
       "helloNoName": "Bonjour",
@@ -12557,14 +12672,6 @@
       "filters": "Filtrer les talents",
       "compare": "Comparer à l'offre",
       "pools": "Viviers"
-    },
-    "proposals": {
-      "sub": "Rechercher des talents · vos propositions d'offre",
-      "talent": "Talent",
-      "offer": "Offre proposée",
-      "answer": "Réponse",
-      "write": "Écrire",
-      "info": "<b>Acceptée</b> : la conversation s'ouvre dans Messages. <b>Refusée</b> : sans détail, rien à faire."
     },
     "profile": {
       "crumb": "Rechercher des talents"
