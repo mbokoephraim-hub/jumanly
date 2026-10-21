@@ -7,6 +7,8 @@ import { VerifyForm } from "@/components/access/forms";
 import { TalentIcon } from "@/components/talent/icon";
 import { pageMetadata } from "@/lib/seo";
 import { readSignupFlow } from "@/server/signup-flow";
+import { isPhone } from "@/server/view";
+import { PhoneCodePage } from "@/components/phone/accueil/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("signup.verify");
@@ -30,6 +32,9 @@ export default function VerifyPage() {
 async function VerifyStep() {
   const flow = await readSignupFlow();
   if (!flow.email) redirect("/inscription");
+  // Modèle B is the talent's phone: a recruiter keeps the code page of their own journey.
+  if ((flow.profile ?? "talent") === "talent" && (await isPhone()))
+    return <PhoneCodePage email={flow.email} />;
   const t = await getTranslations("access");
   return (
     <>

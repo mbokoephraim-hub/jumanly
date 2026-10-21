@@ -116,7 +116,8 @@ test("Connexions : accepter une demande puis écrire", async ({ page, isMobile }
 
 // Refonte mobile: the former opening screen is gone; its address leads to the space (then to
 // the sign-in for a visitor).
-test("l'ancienne ouverture mène à l'espace", async ({ page }) => {
+test("l'ancienne ouverture mène à l'espace", async ({ page, isMobile }) => {
   await page.goto("/ouverture");
-  await expect(page).toHaveURL(/\/connexion/, { timeout: 15_000 });
+  // On a phone, a visitor lands on « Bienvenue » (Modèle B).
+  await expect(page).toHaveURL(isMobile ? /\/decouvrir/ : /\/connexion/, { timeout: 15_000 });
 });

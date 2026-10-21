@@ -35,7 +35,7 @@ import { CheckLine, CodeInput, PasswordInput, TextInput, formatWait } from "./fi
 const idle: AuthFormState = { status: "idle" };
 
 /** Text of an error code from `auth.error.*`, with the values the texts expect. */
-function useErrorText() {
+export function useErrorText() {
   const t = dynamic(useTranslations());
   return (code?: string) => {
     if (!code) return undefined;
@@ -67,7 +67,7 @@ function Notice({ tone, children }: { tone: "ok" | "err"; children: ReactNode })
 }
 
 /** Seconds left before a new code can be asked for; restarts after each sending. */
-function useCountdown(sent: object | undefined, seconds = 60) {
+export function useCountdown(sent: object | undefined, seconds = 60) {
   const [previous, setPrevious] = useState(sent);
   const [left, setLeft] = useState(sent ? seconds : 0);
   if (sent !== previous) {

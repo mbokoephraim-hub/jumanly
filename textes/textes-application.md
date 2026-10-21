@@ -7979,6 +7979,264 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phone.orbi.messages.q3` | Écrire à un recruteur |
 | `phone.orbi.messages.q4` | Relire un message avant de l'envoyer |
 
+### Modèle B · Accueil, inscription et premier profil au téléphone
+
+*Lot B2 (docs/modele-b, rangées 02 et 03, planche `Accueil.dc.html`) : ouverture, bienvenue en trois écrans, inscription par e-mail (mot de passe puis code), connexion, mot de passe oublié, profil en six étapes, notifications, profil prêt. Les règles du mot de passe suivent la partie 10 de la spécification.*
+
+| Clé | Texte |
+|---|---|
+| `phoneAccueil.opening.aria` | Jumanly, Learn. Grow. Connect. |
+| `phoneAccueil.opening.learn` | Learn. |
+| `phoneAccueil.opening.grow` | Grow. |
+| `phoneAccueil.opening.connect` | Connect. |
+| `phoneAccueil.opening.by` | Une plateforme développée par The Growth Lab |
+| `phoneAccueil.back` | Retour |
+| `phoneAccueil.close` | Fermer |
+| `phoneAccueil.welcome.seo` | Bienvenue sur Jumanly |
+| `phoneAccueil.welcome.next` | Écran suivant |
+| `phoneAccueil.welcome.dot` | Écran {n} : {word} |
+| `phoneAccueil.welcome.signup` | Créer un compte |
+| `phoneAccueil.welcome.login` | Se connecter |
+| `phoneAccueil.welcome.s1.word` | Learn |
+| `phoneAccueil.welcome.s1.title` | Apprenez ce que les employeurs cherchent |
+| `phoneAccueil.welcome.s1.text` | Des cours courts, gratuits pour commencer, et une attestation à la fin. |
+| `phoneAccueil.welcome.s2.word` | Grow |
+| `phoneAccueil.welcome.s2.title` | Un profil qui progresse avec vous |
+| `phoneAccueil.welcome.s2.text` | Orbi vous dit quoi améliorer, et pourquoi. |
+| `phoneAccueil.welcome.s3.word` | Connect |
+| `phoneAccueil.welcome.s3.title` | Postulez et rencontrez les recruteurs |
+| `phoneAccueil.welcome.s3.text` | Des offres qui vous correspondent. Candidater reste gratuit. |
+| `phoneAccueil.welcome.card.course` | Power BI : les bases |
+| `phoneAccueil.welcome.card.courseMark` | BI |
+| `phoneAccueil.welcome.card.companyMark` | BF |
+| `phoneAccueil.welcome.card.fromMark` | NK |
+| `phoneAccueil.welcome.card.lesson` | Leçon 3 sur 8 · 1 h 10 |
+| `phoneAccueil.welcome.card.level` | Débutant |
+| `phoneAccueil.welcome.card.free` | Gratuit |
+| `phoneAccueil.welcome.card.certificate` | SQL pour l'analyse |
+| `phoneAccueil.welcome.card.obtained` | Attestation obtenue |
+| `phoneAccueil.welcome.card.name` | Grâce Mbuyi |
+| `phoneAccueil.welcome.card.cap` | Cap · Analyste de données |
+| `phoneAccueil.welcome.card.complete` | Profil complété à 70 % |
+| `phoneAccueil.welcome.card.tip` | Ajoutez une réalisation : votre profil gagne 12 points. |
+| `phoneAccueil.welcome.card.job` | Analyste de données junior |
+| `phoneAccueil.welcome.card.company` | Baobab Fintech · KINSHASA |
+| `phoneAccueil.welcome.card.contract` | CDI |
+| `phoneAccueil.welcome.card.mode` | Hybride |
+| `phoneAccueil.welcome.card.match` | 86 % pour vous |
+| `phoneAccueil.welcome.card.from` | Nadia Kalala · Baobab Fintech |
+| `phoneAccueil.welcome.card.message` | Votre profil nous intéresse. Êtes-vous disponible jeudi ? |
+| `phoneAccueil.signup.title` | Créer votre compte |
+| `phoneAccueil.signup.subtitle` | Gratuit. Trois minutes suffisent. |
+| `phoneAccueil.signup.or` | ou avec votre e-mail |
+| `phoneAccueil.signup.email` | Adresse e-mail |
+| `phoneAccueil.signup.emailPlaceholder` | prenom.nom@gmail.com |
+| `phoneAccueil.signup.emailError` | Entrez une adresse e-mail valide, par exemple grace.mbuyi@gmail.com. |
+| `phoneAccueil.signup.continue` | Continuer |
+| `phoneAccueil.signup.hasAccount` | Déjà inscrite ou inscrit ? |
+| `phoneAccueil.signup.login` | Se connecter |
+| `phoneAccueil.signup.legal` | En continuant, vous acceptez les {terms} et la {privacy}. |
+| `phoneAccueil.signup.terms` | Conditions |
+| `phoneAccueil.signup.privacy` | Politique de confidentialité |
+| `phoneAccueil.signup.recruiter` | Vous recrutez ? |
+| `phoneAccueil.signup.recruiterLink` | Créer un compte recruteur |
+| `phoneAccueil.legal.subtitle` | L'essentiel en trois points |
+| `phoneAccueil.legal.terms.title` | Conditions d'utilisation |
+| `phoneAccueil.legal.terms.p1` | Créer un compte et candidater est gratuit. |
+| `phoneAccueil.legal.terms.p2` | Un compte par personne, avec votre vrai nom. |
+| `phoneAccueil.legal.terms.p3` | Les formules payantes se paient par Mobile Money, sans engagement. |
+| `phoneAccueil.legal.privacy.title` | Politique de confidentialité |
+| `phoneAccueil.legal.privacy.p1` | Un recruteur voit votre profil seulement si vous postulez ou le rendez visible. |
+| `phoneAccueil.legal.privacy.p2` | Votre nom, votre âge, votre photo et votre origine ne comptent jamais dans le calcul des offres. |
+| `phoneAccueil.legal.privacy.p3` | Vous pouvez télécharger ou supprimer vos données à tout moment. |
+| `phoneAccueil.legal.questions` | Questions : {email} |
+| `phoneAccueil.legal.full` | Lire le texte complet |
+| `phoneAccueil.legal.ok` | J'ai compris |
+| `phoneAccueil.password.title` | Choisissez un mot de passe |
+| `phoneAccueil.password.subtitle` | Pour vous reconnecter avec {email}. |
+| `phoneAccueil.password.label` | Mot de passe |
+| `phoneAccueil.password.show` | Afficher |
+| `phoneAccueil.password.hide` | Masquer |
+| `phoneAccueil.password.ruleLength` | {min} caractères au moins |
+| `phoneAccueil.password.ruleLetter` | Une lettre |
+| `phoneAccueil.password.ruleDigit` | Un chiffre |
+| `phoneAccueil.password.error` | Votre mot de passe doit cocher les trois règles. |
+| `phoneAccueil.password.suggest` | Utiliser un mot de passe fort suggéré |
+| `phoneAccueil.password.suggested` | Mot de passe suggéré : notez-le ou laissez le téléphone l'enregistrer. |
+| `phoneAccueil.password.submit` | Créer mon compte |
+| `phoneAccueil.password.submitting` | Création… |
+| `phoneAccueil.code.title` | Vérifiez votre boîte mail |
+| `phoneAccueil.code.subtitle` | Nous avons envoyé un code à 6 chiffres à {email}. |
+| `phoneAccueil.code.label` | Code à 6 chiffres |
+| `phoneAccueil.code.error` | Le code contient 6 chiffres. |
+| `phoneAccueil.code.submit` | Vérifier |
+| `phoneAccueil.code.submitting` | Vérification… |
+| `phoneAccueil.code.resend` | Renvoyer le code |
+| `phoneAccueil.code.resendIn` | Renvoyer dans {time} |
+| `phoneAccueil.code.resent` | Nouveau code envoyé. |
+| `phoneAccueil.code.change` | Changer d'adresse |
+| `phoneAccueil.code.help` | Pas reçu ? Regardez dans les spams. Le code reste valable {minutes} minutes. |
+| `phoneAccueil.login.title` | Bon retour |
+| `phoneAccueil.login.subtitle` | Connectez-vous pour retrouver votre Fil. |
+| `phoneAccueil.login.or` | ou |
+| `phoneAccueil.login.email` | Adresse e-mail |
+| `phoneAccueil.login.password` | Mot de passe |
+| `phoneAccueil.login.error` | Entrez votre e-mail et votre mot de passe. |
+| `phoneAccueil.login.submit` | Se connecter |
+| `phoneAccueil.login.submitting` | Connexion… |
+| `phoneAccueil.login.forgot` | Mot de passe oublié ? |
+| `phoneAccueil.login.signup` | Créer un compte |
+| `phoneAccueil.login.licence` | J'ai un code d'accès |
+| `phoneAccueil.forgot.title` | Mot de passe oublié |
+| `phoneAccueil.forgot.subtitle` | Nous vous envoyons un code à {digits} chiffres pour en choisir un nouveau. |
+| `phoneAccueil.forgot.error` | Entrez l'adresse de votre compte. |
+| `phoneAccueil.forgot.submit` | Envoyer le code |
+| `phoneAccueil.forgot.submitting` | Envoi… |
+| `phoneAccueil.forgot.help` | Un souci ? Écrivez à {email}. |
+| `phoneAccueil.profile.seo` | Votre profil en six étapes |
+| `phoneAccueil.profile.step` | Étape {n} sur 6 |
+| `phoneAccueil.profile.previous` | Étape précédente |
+| `phoneAccueil.profile.skip` | Passer |
+| `phoneAccueil.profile.next` | Continuer |
+| `phoneAccueil.profile.finish` | Terminer |
+| `phoneAccueil.profile.saving` | Enregistrement… |
+| `phoneAccueil.profile.name.title` | Comment vous appelez-vous ? |
+| `phoneAccueil.profile.name.text` | C'est le nom que verront les recruteurs. |
+| `phoneAccueil.profile.name.from` | Repris de votre compte {provider}. Vous pouvez le corriger. |
+| `phoneAccueil.profile.name.provider.google` | Google |
+| `phoneAccueil.profile.name.provider.apple` | Apple |
+| `phoneAccueil.profile.name.provider.linkedin` | LinkedIn |
+| `phoneAccueil.profile.name.first` | Prénom |
+| `phoneAccueil.profile.name.firstPlaceholder` | Grâce |
+| `phoneAccueil.profile.name.last` | Nom |
+| `phoneAccueil.profile.name.lastPlaceholder` | Mbuyi |
+| `phoneAccueil.profile.name.fallback` | Membre |
+| `phoneAccueil.profile.name.error` | Indiquez votre prénom et votre nom. |
+| `phoneAccueil.profile.photo.title` | Ajoutez une photo |
+| `phoneAccueil.profile.photo.text` | Un visage net, un fond simple. Les recruteurs vous reconnaissent plus vite. |
+| `phoneAccueil.profile.photo.add` | Ajouter |
+| `phoneAccueil.profile.photo.addAria` | Ajouter une photo |
+| `phoneAccueil.profile.photo.changeAria` | Changer la photo |
+| `phoneAccueil.profile.photo.pick` | Prendre ou choisir une photo |
+| `phoneAccueil.profile.photo.saved` | Photo enregistrée. Elle n'entre jamais dans le calcul des offres. |
+| `phoneAccueil.profile.photo.change` | Changer |
+| `phoneAccueil.profile.photo.remove` | Retirer |
+| `phoneAccueil.profile.photo.sheet` | Votre photo |
+| `phoneAccueil.profile.photo.camera` | Prendre une photo |
+| `phoneAccueil.profile.photo.cameraHint` | Avec l'appareil photo, de face |
+| `phoneAccueil.profile.photo.gallery` | Choisir dans la galerie |
+| `phoneAccueil.profile.photo.galleryHint` | Une photo récente et nette |
+| `phoneAccueil.profile.photo.cancel` | Annuler |
+| `phoneAccueil.profile.photo.errorType` | Choisissez une photo JPEG, PNG ou WebP. |
+| `phoneAccueil.profile.photo.errorSize` | Cette photo est trop lourde. Essayez-en une autre. |
+| `phoneAccueil.profile.photo.alt` | Votre photo |
+| `phoneAccueil.profile.place.title` | Où habitez-vous ? |
+| `phoneAccueil.profile.place.text` | Nous vous montrons d'abord les offres près de chez vous. |
+| `phoneAccueil.profile.place.country` | Pays |
+| `phoneAccueil.profile.place.city` | Ville |
+| `phoneAccueil.profile.place.otherCity` | Autre ville |
+| `phoneAccueil.profile.place.cityInput` | Votre ville |
+| `phoneAccueil.profile.place.cityPlaceholder` | Nom de votre ville |
+| `phoneAccueil.profile.place.move` | Je peux déménager |
+| `phoneAccueil.profile.place.moveHint` | Voir aussi les offres dans d'autres villes |
+| `phoneAccueil.profile.place.error` | Choisissez votre ville. |
+| `phoneAccueil.profile.place.sheet` | Votre pays |
+| `phoneAccueil.profile.place.search` | Rechercher un pays |
+| `phoneAccueil.profile.place.none` | Aucun pays pour « {query} ». |
+| `phoneAccueil.profile.place.zone.first` | Votre pays |
+| `phoneAccueil.profile.place.zone.central` | Afrique centrale |
+| `phoneAccueil.profile.place.zone.westEast` | Afrique de l'Ouest et de l'Est |
+| `phoneAccueil.profile.place.zone.outside` | Hors d'Afrique |
+| `phoneAccueil.profile.place.zone.all` | Tous les pays |
+| `phoneAccueil.profile.situation.title` | Où en êtes-vous ? |
+| `phoneAccueil.profile.situation.text` | Jumanly adapte les offres et les cours à votre situation. |
+| `phoneAccueil.profile.situation.error` | Choisissez ce qui vous ressemble le plus. |
+| `phoneAccueil.profile.situation.student.title` | Étudiant ou étudiante |
+| `phoneAccueil.profile.situation.student.text` | Je cherche un stage |
+| `phoneAccueil.profile.situation.graduate.title` | Jeune diplômé ou diplômée |
+| `phoneAccueil.profile.situation.graduate.text` | Je cherche mon premier emploi |
+| `phoneAccueil.profile.situation.seeking.title` | En recherche d'emploi |
+| `phoneAccueil.profile.situation.seeking.text` | J'ai déjà travaillé |
+| `phoneAccueil.profile.situation.employed.title` | En poste |
+| `phoneAccueil.profile.situation.employed.text` | Je regarde les opportunités |
+| `phoneAccueil.profile.situation.switching.title` | En reconversion |
+| `phoneAccueil.profile.situation.switching.text` | Je change de métier |
+| `phoneAccueil.profile.cap.title` | Quel métier visez-vous ? |
+| `phoneAccueil.profile.cap.text` | C'est votre Cap. Vous pourrez le changer à tout moment. |
+| `phoneAccueil.profile.cap.yours` | Votre Cap |
+| `phoneAccueil.profile.cap.change` | Changer |
+| `phoneAccueil.profile.cap.search` | Rechercher un métier |
+| `phoneAccueil.profile.cap.suggestions` | Suggestions pour votre situation |
+| `phoneAccueil.profile.cap.pick` | Choisir |
+| `phoneAccueil.profile.cap.keep` | Garder « {query} » |
+| `phoneAccueil.profile.cap.unsure` | Je ne sais pas encore |
+| `phoneAccueil.profile.cap.unsureHint` | Orbi vous propose des métiers en deux questions |
+| `phoneAccueil.profile.cap.contracts` | Type de contrat recherché |
+| `phoneAccueil.profile.cap.error` | Choisissez un métier, ou laissez Orbi vous aider. |
+| `phoneAccueil.profile.cap.jobs` | Analyste de données;Assistant ou assistante RH;Chargé ou chargée de clientèle;Comptable;Community manager;Commercial ou commerciale;Développeur ou développeuse web;Développeur ou développeuse mobile;Gestionnaire de projet;Analyste crédit;Logisticien ou logisticienne;Juriste d'entreprise;Designer graphique;Enseignant ou enseignante |
+| `phoneAccueil.profile.cap.suggest.student` | Analyste de données;Community manager;Assistant ou assistante RH |
+| `phoneAccueil.profile.cap.suggest.graduate` | Analyste de données;Chargé ou chargée de clientèle;Comptable |
+| `phoneAccueil.profile.cap.suggest.seeking` | Commercial ou commerciale;Gestionnaire de projet;Logisticien ou logisticienne |
+| `phoneAccueil.profile.cap.suggest.employed` | Gestionnaire de projet;Analyste crédit;Développeur ou développeuse web |
+| `phoneAccueil.profile.cap.suggest.switching` | Développeur ou développeuse web;Community manager;Designer graphique |
+| `phoneAccueil.profile.cap.contract.cdi` | CDI |
+| `phoneAccueil.profile.cap.contract.cdd` | CDD |
+| `phoneAccueil.profile.cap.contract.internship` | Stage |
+| `phoneAccueil.profile.cap.contract.freelance` | Freelance |
+| `phoneAccueil.profile.cap.contract.partTime` | Temps partiel |
+| `phoneAccueil.profile.orbi.title` | Trouvons votre Cap |
+| `phoneAccueil.profile.orbi.from` | Orbi · pendant l'inscription |
+| `phoneAccueil.profile.orbi.question` | Qu'est-ce que vous aimez le plus faire ? |
+| `phoneAccueil.profile.orbi.back` | Revenir aux questions |
+| `phoneAccueil.profile.orbi.numbers` | Les chiffres et l'analyse |
+| `phoneAccueil.profile.orbi.people` | Aider et convaincre les gens |
+| `phoneAccueil.profile.orbi.create` | Créer et communiquer |
+| `phoneAccueil.profile.orbi.numbersJobs` | Analyste de données;Comptable;Analyste crédit |
+| `phoneAccueil.profile.orbi.peopleJobs` | Chargé ou chargée de clientèle;Assistant ou assistante RH;Commercial ou commerciale |
+| `phoneAccueil.profile.orbi.createJobs` | Community manager;Designer graphique;Développeur ou développeuse web |
+| `phoneAccueil.profile.orbi.numbersAnswer` | Vous aimez comprendre ce que disent les chiffres. Ces métiers se préparent avec les cours gratuits de Formation. |
+| `phoneAccueil.profile.orbi.peopleAnswer` | Vous êtes à l'aise avec les autres. Ces métiers demandent de l'écoute et de bons échanges. |
+| `phoneAccueil.profile.orbi.createAnswer` | Vous aimez créer. Ces métiers se montrent bien avec des réalisations dans votre portfolio. |
+| `phoneAccueil.profile.orbi.decide` | Orbi propose, vous décidez. |
+| `phoneAccueil.profile.skills.title` | Vos compétences |
+| `phoneAccueil.profile.skills.text` | Choisissez-en au moins 3. Elles servent à calculer vos offres « pour vous ». |
+| `phoneAccueil.profile.skills.import` | Importer depuis mon CV |
+| `phoneAccueil.profile.skills.importHint` | Orbi lit votre CV et coche pour vous |
+| `phoneAccueil.profile.skills.search` | Rechercher une compétence |
+| `phoneAccueil.profile.skills.searchPlaceholder` | Rechercher ou ajouter |
+| `phoneAccueil.profile.skills.count` | {count, plural, =0 {0 choisie} one {# choisie} other {# choisies}} |
+| `phoneAccueil.profile.skills.none` | Aucune compétence pour « {query} ». |
+| `phoneAccueil.profile.skills.error` | Choisissez au moins 3 compétences. |
+| `phoneAccueil.notifications.seo` | Notifications |
+| `phoneAccueil.notifications.title` | Ne ratez aucune offre pour vous |
+| `phoneAccueil.notifications.text` | Une notification quand une offre vous correspond ou qu'un recruteur vous répond. Rien d'autre. |
+| `phoneAccueil.notifications.example1` | Nouvelle offre à 86 % pour vous : Analyste de données junior chez Baobab Fintech |
+| `phoneAccueil.notifications.example2` | Nadia Kalala a vu votre candidature |
+| `phoneAccueil.notifications.now` | maintenant |
+| `phoneAccueil.notifications.yesterday` | hier |
+| `phoneAccueil.notifications.enable` | Activer les notifications |
+| `phoneAccueil.notifications.later` | Plus tard |
+| `phoneAccueil.notifications.denied` | Les notifications sont bloquées sur ce téléphone. Vous pourrez les activer dans les réglages. |
+| `phoneAccueil.ready.seo` | Profil prêt |
+| `phoneAccueil.ready.complete` | Profil complété à {pct} % |
+| `phoneAccueil.ready.title` | Bienvenue, {name} |
+| `phoneAccueil.ready.titleAnon` | Bienvenue |
+| `phoneAccueil.ready.orbi` | J'ai déjà repéré des offres pour votre Cap à {city}. |
+| `phoneAccueil.ready.orbiNoCity` | J'ai déjà repéré des offres pour votre Cap. |
+| `phoneAccueil.ready.orbiLink` | Les voir |
+| `phoneAccueil.ready.start` | Pour bien démarrer |
+| `phoneAccueil.ready.profile` | Compléter mon profil |
+| `phoneAccueil.ready.profileHint` | Expérience, formation, langues |
+| `phoneAccueil.ready.course` | Commencer un cours gratuit |
+| `phoneAccueil.ready.courseHint` | Des cours courts, une attestation à la fin |
+| `phoneAccueil.ready.offers` | Voir les offres pour moi |
+| `phoneAccueil.ready.offersHint` | Classées selon votre Cap |
+| `phoneAccueil.ready.edit` | Modifier mes réponses |
+| `phoneAccueil.ready.notifOn` | Vous serez prévenu ou prévenue des offres pour vous |
+| `phoneAccueil.ready.notifOff` | Notifications désactivées · à changer dans Carrière › Paramètres |
+| `phoneAccueil.ready.enter` | Entrer dans Jumanly |
+| `phoneAccueil.ready.plan` | Finaliser ma formule |
+
 ---
 
 ## Partie 04 · Espace recruteur et entreprise

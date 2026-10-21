@@ -9,6 +9,8 @@ import { pageMetadata } from "@/lib/seo";
 import { db } from "@/server/db";
 import { resetLinkEmail } from "@/server/services/accounts";
 import { readSignupFlow } from "@/server/signup-flow";
+import { isPhone } from "@/server/view";
+import { PhoneResetPage } from "@/components/phone/accueil/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("reset");
@@ -65,6 +67,7 @@ async function Reset({ searchParams }: Pick<PageProps<"/reinitialiser">, "search
   }
   const { resetEmail } = await readSignupFlow();
   if (!resetEmail) redirect("/mot-de-passe-oublie");
+  if (await isPhone()) return <PhoneResetPage email={resetEmail} />;
   return (
     <>
       {top}

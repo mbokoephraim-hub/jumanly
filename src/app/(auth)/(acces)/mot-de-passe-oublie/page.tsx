@@ -6,6 +6,8 @@ import { ForgotForm } from "@/components/access/forms";
 import { interpolate, slot } from "@/lib/interpolate";
 import { CODE_DIGITS } from "@/lib/password";
 import { pageMetadata } from "@/lib/seo";
+import { isPhone } from "@/server/view";
+import { PhoneForgotPage } from "@/components/phone/accueil/pages";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("forgot.seo");
@@ -21,6 +23,7 @@ const SUPPORT = "assistant@jumanly.io";
 
 /** « Mot de passe oublié » (planche talent-4): the address, then a 6-digit code by e-mail. */
 export default async function ForgotPage() {
+  if (await isPhone()) return <PhoneForgotPage />;
   const t = await getTranslations("access");
   return (
     <>

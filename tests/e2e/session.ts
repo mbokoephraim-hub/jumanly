@@ -100,9 +100,72 @@ export async function signUpFromPricing(page: Page, planButton: string, email: s
   await signUpWithEmail(page, email);
 }
 
+/** The phone pages of Modèle B (sign-in, sign-up, first profile) instead of the web ones. */
+export async function onPhone(page: Page) {
+  return (await page.locator(".nb-app").count()) > 0;
+}
+
+const phoneNames = new WeakMap<Page, string>();
+
+/**
+ * The six steps of the profile on a phone (Modèle B), up to « Profil prêt »: the name, no photo,
+ * the place (the first city offered unless given), the first situation, the first Cap suggested,
+ * three skills, notifications later.
+ */
+export async function phoneProfile(page: Page, place?: { country: string; city: string }) {
+  const next = page.getByRole("button", { name: /^(Continuer|Terminer)$/ });
+  const [first = "Awa", last = "Fictive"] = (phoneNames.get(page) ?? "Awa Fictive").split(" ");
+  await page.getByLabel("Prénom").fill(first);
+  await page.getByLabel("Nom", { exact: true }).fill(last);
+  await next.click();
+  await page.getByRole("button", { name: "Passer" }).click();
+  if (place) {
+    await page.getByRole("button", { name: /^Pays/ }).click();
+    const sheet = page.getByRole("dialog", { name: "Votre pays" });
+    await sheet.getByRole("textbox").fill(place.country);
+    await sheet.getByRole("button", { name: place.country }).first().click();
+    await expect(sheet.locator(".nb-feuille")).toHaveCount(0);
+    await page.getByRole("button", { name: "Autre ville" }).click();
+    await page.getByLabel("Votre ville").fill(place.city);
+  } else {
+    await page.locator(".nb-chip-c:not([data-pointille])").first().click();
+  }
+  await next.click();
+  await page.getByRole("radio").first().click();
+  await next.click();
+  await page
+    .getByRole("button", { name: /Choisir$/ })
+    .first()
+    .click();
+  await next.click();
+  const chips = page.locator(".nb-chip-c[data-lime]");
+  for (let index = 0; index < 3; index++) await chips.nth(index).click();
+  await next.click();
+  await page.getByRole("button", { name: "Plus tard" }).click();
+  await expect(page.getByRole("button", { name: "Entrer dans Jumanly" })).toBeVisible();
+}
+
 /** From « Créez votre compte » (/inscription, any `?suite=`) to « Compte validé ». */
 export async function signUpWithEmail(page: Page, email: string, name = "Awa Fictive") {
   await expect(page).toHaveURL(/\/inscription/);
+  if (await onPhone(page)) {
+    // The tests of the intro play it on the computer; on a phone, Modèle B has the logo alone.
+    await skipIntro(page);
+    // Modèle B (planche Accueil): the e-mail, the password, then the code. The name comes at the
+    // first step of the profile.
+    await page.getByLabel("Adresse e-mail").fill(email);
+    await page.getByRole("button", { name: "Continuer", exact: true }).click();
+    await expect(page).toHaveURL(/\/inscription\/compte/);
+    await page.getByLabel("Mot de passe", { exact: true }).fill(PASSWORD);
+    const sent = Date.now();
+    await page.getByRole("button", { name: "Créer mon compte" }).click();
+    await expect(page).toHaveURL(/\/inscription\/verification/, { timeout: 20_000 });
+    await page.getByLabel("Code à 6 chiffres").fill(await lastCode(email, sent));
+    await page.getByRole("button", { name: "Vérifier" }).click();
+    await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+    phoneNames.set(page, name);
+    return;
+  }
   await page.getByRole("link", { name: "Continuer avec mon e-mail" }).click();
   await expect(page).toHaveURL(/\/inscription\/compte/);
   await page.getByLabel("Prénom et nom").fill(name);
@@ -123,6 +186,12 @@ export async function signUpWithEmail(page: Page, email: string, name = "Awa Fic
  * gratuitement ».
  */
 export async function finishOnboarding(page: Page, place?: { country: string; city: string }) {
+  if (await onPhone(page)) {
+    await phoneProfile(page, place);
+    await page.getByRole("button", { name: "Entrer dans Jumanly" }).click();
+    await expect(page).not.toHaveURL(/\/app\/bienvenue/);
+    return;
+  }
   await page.getByRole("link", { name: "C'est parti" }).click();
   await expect(page).toHaveURL(/etape=objectif/);
   await page.getByRole("button", { name: "Continuer" }).click();

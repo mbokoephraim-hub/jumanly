@@ -34,16 +34,29 @@ test("Jumanly s'installe comme une application", async ({ request }) => {
   expect((await request.get("/demarrage")).status()).toBe(200);
 });
 
-test("l'appli s'ouvre sur le logo animé, puis sur l'espace", async ({ browser }) => {
+test("l'appli s'ouvre sur le logo animé, puis sur l'espace", async ({ browser, isMobile }) => {
   const context = await browser.newContext();
   const page = await context.newPage();
   await logIn(page, demo.talentPro);
+  // An app that opens is a new session: on a phone (Modèle B), the logo alone of the talent space.
+  await page.addInitScript(() => {
+    if (location.pathname === "/demarrage") sessionStorage.clear();
+  });
+  const id = isMobile ? "nb-ouverture" : "jm-lancement";
+  // Drawn before the page itself: recorded the moment it is added, however short it stays.
+  await page.addInitScript((splash) => {
+    new MutationObserver(() => {
+      if (document.getElementById(splash))
+        (window as unknown as { __splash: boolean }).__splash = true;
+    }).observe(document, { childList: true, subtree: true });
+  }, id);
   await page.goto("/demarrage");
-  // Drawn before the page itself, and kept while the space loads underneath.
-  await expect(page.locator("#jm-lancement")).toBeVisible();
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { __splash?: boolean }).__splash))
+    .toBe(true);
   await expect(page).toHaveURL(/\/app$/);
-  await expect(page.locator("#jm-lancement")).toBeVisible();
-  await expect(page.locator("#jm-lancement")).toHaveCount(0, { timeout: 6000 });
+  // Kept while the space loads underneath, then gone.
+  await expect(page.locator(`#${id}`)).toHaveCount(0, { timeout: 6000 });
   await expect(page.locator("main")).toBeVisible();
   await context.close();
 });
