@@ -2,20 +2,27 @@
 
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { PHONE_TABS, TAB_ROOTS, rootTab, tabOf, type PhoneTab } from "@/lib/phone-tabs";
+import { PHONE_TABS, TAB_ROOTS, keepsBar, rootTab, tabOf, type PhoneTab } from "@/lib/phone-tabs";
 import { PhoneIcon } from "./icon";
 
 /**
  * The bottom bar (brief § 3): five icons without names, Fil · Explorer · Carrière · Formation ·
  * Messages, a lime dot under the active one. Shown on the first screen of each tab; a page opened
- * from a tab covers it. Touching the tab already shown brings its list back to the top.
+ * from a tab covers it, except the pages of a company or a person, which keep it above them.
+ * Touching the tab already shown brings its list back to the top.
  */
 export function PhoneNav({ labels, aria }: { labels: Record<PhoneTab, string>; aria: string }) {
   const pathname = usePathname();
   const root = rootTab(pathname);
   const current = tabOf(pathname);
+  const above = root === null && keepsBar(pathname);
   return (
-    <nav className="nb-nav" aria-label={aria} hidden={root === null}>
+    <nav
+      className="nb-nav"
+      aria-label={aria}
+      hidden={root === null && !above}
+      data-dessus={above ? "" : undefined}
+    >
       {PHONE_TABS.map((tab) => {
         const active = tab === current;
         return (

@@ -28,6 +28,8 @@ type Company = {
   job: {
     slug: string;
     title: string;
+    /** Field of the offer (`studyFields`): the chips of Explorer (Modèle B, lot B4). */
+    domain: string;
     contractType: ContractType;
     remote: RemoteMode;
     salary?: [number, number];
@@ -52,6 +54,7 @@ const companies: Company[] = [
     job: {
       slug: "ux-conseiller-clientele-kinshasa",
       title: "Conseiller clientèle bilingue (démo)",
+      domain: "commerce",
       contractType: "cdi",
       remote: "hybrid",
       salary: [45000, 65000],
@@ -82,6 +85,7 @@ const companies: Company[] = [
     job: {
       slug: "ux-analyste-credit-abidjan",
       title: "Analyste crédit junior (démo)",
+      domain: "finance",
       contractType: "cdi",
       remote: "onsite",
       salary: [70000, 90000],
@@ -112,6 +116,7 @@ const companies: Company[] = [
     job: {
       slug: "ux-assistant-logistique-goma",
       title: "Assistant logistique (démo)",
+      domain: "logistics",
       contractType: "cdd",
       remote: "onsite",
       experienceMin: 0,
@@ -140,6 +145,7 @@ const companies: Company[] = [
     job: {
       slug: "ux-chargee-communication-dakar",
       title: "Chargé de communication digitale (démo)",
+      domain: "marketing",
       contractType: "cdi",
       remote: "hybrid",
       salary: [60000, 80000],
@@ -170,6 +176,7 @@ const companies: Company[] = [
     job: {
       slug: "ux-assistant-administratif-cotonou",
       title: "Assistant administratif et accueil (démo)",
+      domain: "management",
       contractType: "stage",
       remote: "onsite",
       experienceMin: 0,
@@ -200,6 +207,7 @@ const companies: Company[] = [
     job: {
       slug: "ux-analyste-donnees-junior-kinshasa",
       title: "Analyste de données junior (démo)",
+      domain: "data",
       contractType: "cdi",
       remote: "hybrid",
       experienceMin: 1,
@@ -234,6 +242,7 @@ const companies: Company[] = [
     job: {
       slug: "ux-analyste-energie-solaire-kinshasa",
       title: "Analyste énergie solaire (démo)",
+      domain: "energy",
       contractType: "cdi",
       remote: "onsite",
       experienceMin: 1,
@@ -264,6 +273,7 @@ const companies: Company[] = [
     job: {
       slug: "ux-chargee-etudes-marketing-kinshasa",
       title: "Chargée d'études marketing (démo)",
+      domain: "marketing",
       contractType: "cdi",
       remote: "hybrid",
       experienceMin: 2,
@@ -1048,6 +1058,7 @@ export async function seedUxScenario(db: SeedClient) {
     const data = {
       organizationId: org.id,
       title: job.title,
+      domain: job.domain,
       description: `${job.summary} ${NOTICE}`,
       responsibilities: job.responsibilities,
       requirements: job.requirements,

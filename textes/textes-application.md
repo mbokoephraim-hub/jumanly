@@ -8450,6 +8450,245 @@ Conventions :
 
 ---
 
+### Modèle B · Explorer au téléphone
+
+*Lot B4 (docs/modele-b, rangées 07 à 10, planches `Offres.dc.html`, `Entreprise.dc.html`, `Personne.dc.html`) : Explorer (offres pour vous, entreprises qui recrutent, nouvelles offres, personnes à connaître), recherche en deux temps, « Tout voir », offres enregistrées, détail d'une offre, Postuler, page d'une entreprise et d'une personne.*
+
+| Clé | Texte |
+|---|---|
+| `phoneExplorer.seo` | Explorer |
+| `phoneExplorer.title` | Explorer |
+| `phoneExplorer.account` | Votre carrière |
+| `phoneExplorer.savedBadge` | {count, plural, =0 {Offres enregistrées} one {Offres enregistrées, # offre} other {Offres enregistrées, # offres}} |
+| `phoneExplorer.savedBadgeMany` | 99+ |
+| `phoneExplorer.search.label` | Rechercher une offre, une entreprise ou une personne |
+| `phoneExplorer.search.placeholder` | Offres, entreprises, personnes |
+| `phoneExplorer.search.clear` | Effacer |
+| `phoneExplorer.search.cancel` | Annuler |
+| `phoneExplorer.search.in` | Rechercher dans |
+| `phoneExplorer.search.scope.tout` | Tout |
+| `phoneExplorer.search.scope.offres` | Offres |
+| `phoneExplorer.search.scope.entreprises` | Entreprises |
+| `phoneExplorer.search.scope.personnes` | Personnes |
+| `phoneExplorer.search.scope.villes` | Villes |
+| `phoneExplorer.search.cities` | Villes |
+| `phoneExplorer.search.cityOffers` | {count, plural, one {# offre ›} other {# offres ›}} |
+| `phoneExplorer.search.recent` | Recherches récentes |
+| `phoneExplorer.search.recentRemove` | Retirer « {query} » des recherches récentes |
+| `phoneExplorer.search.popular` | Populaires à {city} |
+| `phoneExplorer.search.popularAll` | Populaires sur Jumanly |
+| `phoneExplorer.search.hint` | Tapez une lettre : les offres, entreprises et personnes s’affichent tout de suite. |
+| `phoneExplorer.search.offers` | Offres · {count} |
+| `phoneExplorer.search.companies` | Entreprises · {count} |
+| `phoneExplorer.search.people` | Personnes · {count} |
+| `phoneExplorer.search.citiesFound` | Villes · {count} |
+| `phoneExplorer.search.offerLine` | {company} · {city} |
+| `phoneExplorer.search.empty` | Aucun résultat pour « {query} ». |
+| `phoneExplorer.search.see` | Voir › |
+| `phoneExplorer.search.today` | aujourd’hui |
+| `phoneExplorer.search.yesterday` | hier |
+| `phoneExplorer.cat.aria` | Afficher |
+| `phoneExplorer.cat.tout` | Tout |
+| `phoneExplorer.cat.offres` | Offres |
+| `phoneExplorer.cat.entreprises` | Entreprises |
+| `phoneExplorer.cat.personnes` | Personnes |
+| `phoneExplorer.chips.domains` | Domaines |
+| `phoneExplorer.chips.sectors` | Secteurs |
+| `phoneExplorer.chips.all` | Tout |
+| `phoneExplorer.forYou` | Offres pour vous |
+| `phoneExplorer.hiring` | Entreprises qui recrutent |
+| `phoneExplorer.fresh` | Nouvelles cette semaine |
+| `phoneExplorer.people` | Personnes à connaître |
+| `phoneExplorer.seeAll` | Tout voir |
+| `phoneExplorer.seeAllOf` | Tout voir : {section} |
+| `phoneExplorer.noOffers` | Aucune offre ouverte dans ce domaine pour l’instant. |
+| `phoneExplorer.noCompanies` | Aucune entreprise de ce secteur ne recrute pour l’instant. |
+| `phoneExplorer.noFresh` | Aucune nouvelle offre cette semaine dans ce secteur. |
+| `phoneExplorer.noPeople` | Personne à vous proposer pour l’instant. Les profils visibles apparaîtront ici. |
+| `phoneExplorer.verified` | Entreprise vérifiée |
+| `phoneExplorer.score` | {score} % |
+| `phoneExplorer.companyLine` | {sector} · {count, plural, one {# offre} other {# offres}} |
+| `phoneExplorer.companyLineNoSector` | {count, plural, one {# offre} other {# offres}} |
+| `phoneExplorer.companyCard` | Voir la page de {name} |
+| `phoneExplorer.offerKind` | {contract} · {remote} |
+| `phoneExplorer.reason.mutual` | {count, plural, one {# connexion en commun} other {# connexions en commun}} |
+| `phoneExplorer.reason.field` | Même domaine que vous |
+| `phoneExplorer.reason.city` | À {city}, comme vous |
+| `phoneExplorer.reason.joined` | A rejoint Jumanly {when} |
+| `phoneExplorer.reason.joinedOn` | A rejoint Jumanly le {date} |
+| `phoneExplorer.person.line` | {title} · {company} |
+| `phoneExplorer.connect` | Se connecter |
+| `phoneExplorer.sent` | Envoyée |
+| `phoneExplorer.connected` | Connecté |
+| `phoneExplorer.message` | Message |
+| `phoneExplorer.connectError` | La demande n’est pas partie. Réessayez dans un instant. |
+| `phoneExplorer.connectSent` | Demande envoyée à {name}. |
+| `phoneExplorer.connectAccepted` | Vous êtes maintenant connectés avec {name}. |
+| `phoneExplorer.list.back` | Explorer |
+| `phoneExplorer.list.offres.title` | Offres pour vous |
+| `phoneExplorer.list.offres.sub` | Classées selon votre profil |
+| `phoneExplorer.list.offres.subGeneral` | Les plus récentes d’abord : ajoutez vos compétences pour un classement selon votre profil. |
+| `phoneExplorer.list.nouvelles.title` | Nouvelles cette semaine |
+| `phoneExplorer.list.nouvelles.sub` | Publiées ces sept derniers jours |
+| `phoneExplorer.list.entreprises.title` | Entreprises qui recrutent |
+| `phoneExplorer.list.entreprises.sub` | {count, plural, one {# entreprise vérifiée} other {# entreprises vérifiées}} |
+| `phoneExplorer.list.entreprises.subAll` | {count, plural, one {# entreprise recrute} other {# entreprises recrutent}} |
+| `phoneExplorer.list.personnes.title` | Personnes à connaître |
+| `phoneExplorer.list.personnes.sub` | Selon votre domaine et votre ville |
+| `phoneExplorer.list.offerLine` | {company} · {city} · {kind} |
+| `phoneExplorer.list.companyLine` | {line} · {count, plural, one {# offre} other {# offres}} |
+| `phoneExplorer.saved.title` | Offres enregistrées |
+| `phoneExplorer.saved.sub` | {count, plural, one {# offre gardée} other {# offres gardées}} |
+| `phoneExplorer.saved.closed` | Fermée |
+| `phoneExplorer.saved.empty` | Aucune offre enregistrée |
+| `phoneExplorer.saved.emptyText` | Touchez « Enregistrer » sur une offre pour la garder ici. |
+| `phoneExplorer.saved.emptyCta` | Explorer les offres |
+| `phoneExplorer.offer.back` | Explorer |
+| `phoneExplorer.offer.share` | Partager |
+| `phoneExplorer.offer.shared` | Lien de l’offre copié. |
+| `phoneExplorer.offer.verifiedAgo` | Entreprise vérifiée · {ago} |
+| `phoneExplorer.offer.ago` | Publiée {ago} |
+| `phoneExplorer.offer.salary` | Salaire affiché |
+| `phoneExplorer.offer.level.none` | Sans expérience |
+| `phoneExplorer.offer.level.junior` | Moins de 2 ans |
+| `phoneExplorer.offer.level.mid` | 2 à 5 ans |
+| `phoneExplorer.offer.level.senior` | Plus de 5 ans |
+| `phoneExplorer.offer.forYou` | {score} % pour vous |
+| `phoneExplorer.offer.why` | Pourquoi, selon Orbi |
+| `phoneExplorer.offer.whyOwned` | {skills} déjà sur votre profil |
+| `phoneExplorer.offer.whyCity` | {city}, la ville que vous visez |
+| `phoneExplorer.offer.whyRemote` | Télétravail possible, comme vous le souhaitez |
+| `phoneExplorer.offer.whyMissing` | {skill} demandé, pas encore acquis |
+| `phoneExplorer.offer.whyNoGap` | Toutes les compétences demandées sont sur votre profil |
+| `phoneExplorer.offer.and` | {first} et {last} |
+| `phoneExplorer.offer.duration.minutes` | {count} min |
+| `phoneExplorer.offer.duration.hours` | {hours} h {minutes} |
+| `phoneExplorer.offer.duration.hoursOnly` | {hours} h |
+| `phoneExplorer.offer.gap` | Combler l’écart : cours {course}, {duration} › |
+| `phoneExplorer.offer.whyFull` | Voir le détail du score |
+| `phoneExplorer.offer.noScore` | Pas encore de score pour vous |
+| `phoneExplorer.offer.noScoreText` | Ajoutez vos compétences dans Carrière : Orbi vous dira ce qui correspond. |
+| `phoneExplorer.offer.noScoreLink` | Compléter mon profil › |
+| `phoneExplorer.offer.optedOut` | Vous avez désactivé le calcul de compatibilité. |
+| `phoneExplorer.offer.missions` | Vos missions |
+| `phoneExplorer.offer.expect` | Ce qu’on attend |
+| `phoneExplorer.offer.about` | L’offre |
+| `phoneExplorer.offer.benefits` | Ce qu’on offre |
+| `phoneExplorer.offer.companyPage` | Voir la page › |
+| `phoneExplorer.offer.save` | Enregistrer |
+| `phoneExplorer.offer.saved` | Enregistrée |
+| `phoneExplorer.offer.savedToast` | Offre enregistrée. |
+| `phoneExplorer.offer.unsavedToast` | Offre retirée des enregistrées. |
+| `phoneExplorer.offer.saveError` | L’offre n’a pas pu être enregistrée. Réessayez. |
+| `phoneExplorer.offer.apply` | Postuler |
+| `phoneExplorer.offer.applied` | Candidature envoyée |
+| `phoneExplorer.offer.appliedOpen` | Voir ma candidature |
+| `phoneExplorer.offer.closed` | Offre fermée |
+| `phoneExplorer.offer.free` | Postuler est gratuit, toujours. |
+| `phoneExplorer.apply.title` | Postuler chez {company} |
+| `phoneExplorer.apply.cv` | Votre CV |
+| `phoneExplorer.apply.noCv` | Vous n’avez pas encore de CV. Créez-en un dans Carrière, ou envoyez votre profil tel quel. |
+| `phoneExplorer.apply.noCvLink` | Créer un CV › |
+| `phoneExplorer.apply.profileOnly` | Mon profil Jumanly |
+| `phoneExplorer.apply.profileOnlyLine` | Sans CV joint |
+| `phoneExplorer.apply.cvLine` | Modèle {template} · {when} |
+| `phoneExplorer.apply.adapt` | Orbi adapte ce CV à l’offre |
+| `phoneExplorer.apply.adapted` | Adapté à cette offre |
+| `phoneExplorer.apply.note` | Un mot au recruteur |
+| `phoneExplorer.apply.notePlaceholder` | Facultatif |
+| `phoneExplorer.apply.send` | Envoyer ma candidature |
+| `phoneExplorer.apply.sending` | Envoi… |
+| `phoneExplorer.apply.questions` | Cette offre pose {count, plural, one {une question} other {# questions}} : vous y répondez à l’étape suivante. |
+| `phoneExplorer.apply.questionsCta` | Continuer |
+| `phoneExplorer.apply.error` | La candidature n’est pas partie. Réessayez dans un instant. |
+| `phoneExplorer.apply.closedError` | Cette offre vient de fermer. |
+| `phoneExplorer.apply.done` | Candidature envoyée |
+| `phoneExplorer.apply.doneText` | Suivez-la dans Carrière › Candidatures. |
+| `phoneExplorer.apply.doneSee` | Voir mes candidatures |
+| `phoneExplorer.apply.doneBack` | Retour à l’offre |
+| `phoneExplorer.apply.close` | Fermer |
+| `phoneExplorer.company.back` | Retour |
+| `phoneExplorer.company.more` | Plus d’options |
+| `phoneExplorer.company.banner` | Bannière de {name} |
+| `phoneExplorer.company.handle` | @{slug} |
+| `phoneExplorer.company.follow` | Suivre |
+| `phoneExplorer.company.following` | Abonné |
+| `phoneExplorer.company.followError` | L’abonnement n’a pas pu être enregistré. Réessayez. |
+| `phoneExplorer.company.message` | Écrire à {name} |
+| `phoneExplorer.company.messageNote` | Écrivez à l’entreprise en postulant à une de ses offres : le recruteur vous répond dans Messages. |
+| `phoneExplorer.company.employees` | {size} employés |
+| `phoneExplorer.company.followers` | {count, plural, one {# abonné} other {# abonnés}} |
+| `phoneExplorer.company.offers` | {count, plural, one {# offre} other {# offres}} |
+| `phoneExplorer.company.tabs` | Sections de la page |
+| `phoneExplorer.company.tab.publications` | Publications |
+| `phoneExplorer.company.tab.apropos` | À propos |
+| `phoneExplorer.company.tab.offres` | Offres · {count} |
+| `phoneExplorer.company.tab.membres` | Membres |
+| `phoneExplorer.company.about` | À propos |
+| `phoneExplorer.company.noAbout` | {name} n’a pas encore écrit sa présentation. |
+| `phoneExplorer.company.brief` | En bref |
+| `phoneExplorer.company.size` | Taille |
+| `phoneExplorer.company.sizeValue` | {size} employés |
+| `phoneExplorer.company.sector` | Secteur |
+| `phoneExplorer.company.seat` | Siège |
+| `phoneExplorer.company.since` | Sur Jumanly depuis |
+| `phoneExplorer.company.website` | Site web |
+| `phoneExplorer.company.offerLine` | {city} · {kind} |
+| `phoneExplorer.company.noPosts` | {name} n’a encore rien publié. |
+| `phoneExplorer.company.noOffers` | Aucune offre ouverte chez {name} pour l’instant. |
+| `phoneExplorer.company.membersSearch` | Rechercher un membre |
+| `phoneExplorer.company.membersCount` | {count, plural, =0 {Aucun membre visible} one {# membre sur Jumanly} other {# membres sur Jumanly}} |
+| `phoneExplorer.company.memberConnected` | Connecté avec vous |
+| `phoneExplorer.company.noMember` | Aucun membre ne correspond à « {query} ». |
+| `phoneExplorer.company.menu` | Page de {name} |
+| `phoneExplorer.company.menuShare` | Partager la page |
+| `phoneExplorer.company.shared` | Lien de la page copié. |
+| `phoneExplorer.person.back` | Retour |
+| `phoneExplorer.person.more` | Plus d’options |
+| `phoneExplorer.person.handle` | @{handle} |
+| `phoneExplorer.person.verified` | Adresse vérifiée |
+| `phoneExplorer.person.at` | {title} chez <org>{company}</org> |
+| `phoneExplorer.person.connections` | {count, plural, one {# connexion} other {# connexions}} |
+| `phoneExplorer.person.common` | {count} en commun |
+| `phoneExplorer.person.noteConnected` | Vous êtes connectés : la messagerie est ouverte. |
+| `phoneExplorer.person.noteSent` | Demande envoyée : la messagerie s’ouvre quand {name} accepte. |
+| `phoneExplorer.person.noteNone` | Connectez-vous pour vous écrire. |
+| `phoneExplorer.person.noteReceived` | {name} vous a demandé de vous connecter. |
+| `phoneExplorer.person.accept` | Accepter |
+| `phoneExplorer.person.message` | Écrire à {name} |
+| `phoneExplorer.person.tabs` | Sections du profil |
+| `phoneExplorer.person.tab.publications` | Publications |
+| `phoneExplorer.person.tab.apropos` | À propos |
+| `phoneExplorer.person.tab.realisations` | Réalisations · {count} |
+| `phoneExplorer.person.about` | À propos |
+| `phoneExplorer.person.noAbout` | {name} n’a pas encore écrit sa présentation. |
+| `phoneExplorer.person.skills` | Compétences |
+| `phoneExplorer.person.experience` | Expérience |
+| `phoneExplorer.person.education` | Formation |
+| `phoneExplorer.person.role` | {title}, {place} |
+| `phoneExplorer.person.whenPlace` | {when} · {place} |
+| `phoneExplorer.person.since` | Depuis {year} |
+| `phoneExplorer.person.years` | {start} – {end} |
+| `phoneExplorer.person.noPosts` | {name} n’a encore rien publié. |
+| `phoneExplorer.person.noWorks` | {name} n’a pas encore montré de réalisation. |
+| `phoneExplorer.person.work` | {tool} · {count, plural, =0 {sans photo} one {# photo} other {# photos}} |
+| `phoneExplorer.person.workNoTool` | {count, plural, =0 {Projet} one {# photo} other {# photos}} |
+| `phoneExplorer.person.menu` | Profil de {name} |
+| `phoneExplorer.person.menuShare` | Partager le profil |
+| `phoneExplorer.person.menuReport` | Signaler le profil |
+| `phoneExplorer.person.shared` | Lien du profil copié. |
+| `phoneExplorer.person.report` | Signaler le profil de {name} |
+| `phoneExplorer.person.reportNote` | {name} ne saura pas que c’est vous. L’équipe de modération regarde chaque signalement. |
+| `phoneExplorer.person.reason.harassment` | Harcèlement ou propos blessants |
+| `phoneExplorer.person.reason.impersonation` | Se fait passer pour quelqu’un d’autre |
+| `phoneExplorer.person.reason.spam` | Indésirable ou publicité |
+| `phoneExplorer.person.reason.inappropriate` | Contenu inapproprié |
+| `phoneExplorer.person.reason.other` | Autre raison |
+| `phoneExplorer.person.reported` | Merci, le signalement est envoyé. |
+| `phoneExplorer.person.reportError` | Le signalement n’est pas parti. Réessayez. |
+| `phoneExplorer.person.cancel` | Annuler |
+| `phoneExplorer.person.photo` | Photo de {name} |
+
 ### Refonte recruteur · Cadre mobile (lot 1)
 
 *Coquille de l'espace recruteur (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 1) : organisation active, barre du bas À traiter · Offres · Orbi · Candidats · Messages, Compte RH, premiers pas.*

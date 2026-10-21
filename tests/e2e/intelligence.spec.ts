@@ -57,8 +57,15 @@ test("score expliqué, import de CV et révision humaine", async ({
 
   // The score and its « Pourquoi ? », with what is missing.
   // (planche talent-1 § 4: the reasons open in a sheet over the offer).
-  await page.goto(`/app/jobs/${JOB}`);
-  await page.getByRole("button", { name: /^Pourquoi \d+ % \?/ }).click();
+  // On a phone (Modèle B), the offer's Orbi card links to the full score (`?pourquoi=1`).
+  if (isMobile) {
+    await page.goto(`/app/jobs/${JOB}`);
+    await page.getByRole("link", { name: "Voir le détail du score" }).click();
+    await expect(page).toHaveURL(/pourquoi=1/);
+  } else {
+    await page.goto(`/app/jobs/${JOB}`);
+    await page.getByRole("button", { name: /^Pourquoi \d+ % \?/ }).click();
+  }
   const why = page.getByRole("dialog", { name: /Pourquoi \d+ % \?/ });
   await expect(why).toBeVisible();
   await expect(why).toContainText("Compétences requises");
