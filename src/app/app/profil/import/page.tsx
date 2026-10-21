@@ -13,6 +13,12 @@ import { db } from "@/server/db";
 import { CV_FILE_MAX_BYTES } from "@/server/services/cv-file";
 import { parseImport } from "@/server/services/cv-import";
 
+import { CvImportPick } from "@/components/phone/career/import";
+import { CareerTexts } from "@/components/phone/career/server";
+import { SettingsFrame } from "@/components/phone/career/settings";
+import { applyCareerImportAction } from "@/server/actions/career-phone";
+import { isPhone } from "@/server/view";
+
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("docs.import");
   return { title: t("seo"), robots: { index: false } };
@@ -38,6 +44,56 @@ export default async function CvImportPage({ searchParams }: PageProps<"/app/pro
   const megabytes = Math.round(CV_FILE_MAX_BYTES / (1024 * 1024));
   const groups = read ? importGroups(read, await getTranslations("docs.import")) : [];
   const undated = read?.experiences.filter((item) => !item.start).length ?? 0;
+
+  // The phone (Modèle B, planches Carrière-cv-import to -cv-import-ok).
+  if (await isPhone())
+    return (
+      <CareerTexts>
+        <SettingsFrame title={t("phoneCareer.cvImport.title")} back="/app/career/cv">
+          {error ? (
+            <p className="nb-ca-erreur nb-ca-intro" role="alert">
+              {dynamic(t)(`docs.import.error.${error}`, { max: megabytes })}
+            </p>
+          ) : null}
+          {read ? (
+            <form action={applyCareerImportAction}>
+              <input type="hidden" name="import" value={pending!.id} />
+              <p className="nb-ca-gr">
+                <b>{t("phoneCareer.cvImport.found")}</b>
+                <br />
+                {t("phoneCareer.cvImport.foundText")}
+              </p>
+              {groups.length === 0 ? (
+                <p className="nb-meta nb-ca-intro">{t("docs.import.nothing.text")}</p>
+              ) : (
+                groups.map((group) => (
+                  <label key={group.key} className="nb-ca-it nb-ca-coche" data-ligne="">
+                    <input type="checkbox" name="groupe" value={group.key} defaultChecked />
+                    <span>
+                      {group.title}
+                      <small className="nb-meta">{group.line}</small>
+                    </span>
+                  </label>
+                ))
+              )}
+              {undated > 0 ? (
+                <p className="nb-meta nb-ca-intro">
+                  {t("docs.import.undated", { count: undated })}
+                </p>
+              ) : null}
+              <p className="nb-meta nb-ca-intro">{t("docs.import.note")}</p>
+              <div className="nb-ca-suppr nb-ca-bas">
+                <button type="submit" className="nb-bouton" data-large="" data-plein="">
+                  {t("phoneCareer.cvImport.apply")}
+                </button>
+              </div>
+            </form>
+          ) : (
+            <CvImportPick max={megabytes} />
+          )}
+        </SettingsFrame>
+      </CareerTexts>
+    );
 
   return (
     <div className="t-flux t-od-bas">

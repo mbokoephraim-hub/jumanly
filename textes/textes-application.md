@@ -9075,6 +9075,41 @@ Conventions :
 | `phoneCareer.billing.welcome` | Bienvenue en {plan} |
 | `phoneCareer.billing.welcomeText` | Votre reçu est envoyé par e-mail. Votre formule court jusqu’au {date}. |
 | `phoneCareer.billing.backCareer` | Retour à Carrière |
+| `phoneCareer.cv.menu.deleteQuestion` | Supprimer « {title} » ? |
+| `phoneCareer.cv.menu.deleteText` | Ce CV disparaît. Les candidatures déjà envoyées gardent leur copie. |
+| `phoneCareer.cvEdit.back` | CV |
+| `phoneCareer.cvEdit.export` | Exporter |
+| `phoneCareer.cvEdit.close` | Fermer |
+| `phoneCareer.cvEdit.preview` | Voir l’aperçu en grand (modèle {template}) |
+| `phoneCareer.cvEdit.color` | Couleur |
+| `phoneCareer.cvEdit.sections` | Sections |
+| `phoneCareer.cvEdit.template` | Modèle |
+| `phoneCareer.cvEdit.adapt` | Adapter à une offre |
+| `phoneCareer.cvEdit.exportTitle` | Exporter « {title} » |
+| `phoneCareer.cvEdit.format` | Format |
+| `phoneCareer.cvEdit.formats.pdf` | PDF |
+| `phoneCareer.cvEdit.formats.word` | Word |
+| `phoneCareer.cvEdit.exportNote` | Le fichier ne porte aucun logo Jumanly. |
+| `phoneCareer.cvEdit.download` | Télécharger |
+| `phoneCareer.cvEdit.adaptTitle` | Adapter mon CV |
+| `phoneCareer.cvEdit.adaptWhich` | Pour quelle offre ? |
+| `phoneCareer.cvEdit.adaptNone` | Enregistrez ou postulez à une offre : elle apparaîtra ici. |
+| `phoneCareer.cvEdit.adaptFind` | Voir les offres |
+| `phoneCareer.cvEdit.adaptGap` | {company} · {count, plural, one {# point à mettre en avant} other {# points à mettre en avant}} |
+| `phoneCareer.cvEdit.adaptNote` | Orbi crée une copie adaptée : votre CV reste tel quel. Vous validez chaque changement, et Orbi n’ajoute jamais une compétence que vous n’avez pas. |
+| `phoneCareer.cvEdit.adaptCreate` | Créer le CV adapté |
+| `phoneCareer.cvEdit.templatesTitle` | Choisir un modèle |
+| `phoneCareer.cvEdit.templatesStep` | Étape 1 sur 2 · Votre CV téléchargé ne porte aucun logo Jumanly. |
+| `phoneCareer.cvEdit.templatesChange` | Le contenu de votre CV ne change pas, seule la mise en page change. |
+| `phoneCareer.cvEdit.templateLocked` | {name}, compris dans la formule {plan} |
+| `phoneCareer.cvImport.title` | Importer un CV |
+| `phoneCareer.cvImport.choose` | PDF ou Word, {max} Mo au plus |
+| `phoneCareer.cvImport.chooseText` | Orbi lit le fichier et remplit votre profil. Rien n’est publié sans votre accord. |
+| `phoneCareer.cvImport.reading` | Orbi lit {name}… |
+| `phoneCareer.cvImport.readingText` | Expériences, formation, compétences, langues |
+| `phoneCareer.cvImport.found` | Voici ce que nous avons trouvé |
+| `phoneCareer.cvImport.foundText` | Décochez ce que vous ne voulez pas reprendre. |
+| `phoneCareer.cvImport.apply` | Ajouter à mon profil et créer le CV |
 
 ### Refonte recruteur · Cadre mobile (lot 1)
 

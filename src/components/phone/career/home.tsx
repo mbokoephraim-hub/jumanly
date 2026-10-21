@@ -2,15 +2,17 @@
 
 import Link from "next/link";
 import { useTranslations } from "next-intl";
-import { useRouter, useSearchParams } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useState, useTransition } from "react";
 import { showToast } from "@/components/motion/toaster";
-import { addSuggestedSkillsAction } from "@/server/actions/career-phone";
+import { addSuggestedSkillsAction, newCareerCvAction } from "@/server/actions/career-phone";
+import { deleteCv, duplicateCv, setPrimaryCv } from "@/server/actions/cv";
 import { CompanyMark } from "../explorer/cards";
 import { FilAvatar } from "../fil/avatar";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
 import type { CareerEntry, CareerView } from "./data";
+import { CvExportButton } from "./cv-export";
 import { CareerSearch } from "./search";
 import { ShareSheet } from "./share";
 import { LanguagesSheet, SkillsSheet } from "./sheets";
@@ -31,11 +33,15 @@ export function PhoneCareer({ view }: { view: CareerView }) {
   const [searching, setSearching] = useState(false);
   const [sheet, setSheet] = useState<Sheet | null>(null);
   const params = useSearchParams();
+  const pathname = usePathname();
   const router = useRouter();
 
   // « Ajouter des compétences », « Langues et lieux », « Nouveau CV » asked from another screen
   // (Progression's next steps, the search): `?ajouter=` opens the sheet over the profile.
-  const asked = params.get("ajouter") ?? (params.get("nouveau") === "1" ? "cv" : null);
+  const asked =
+    pathname !== "/app/career/cv"
+      ? null
+      : (params.get("ajouter") ?? (params.get("nouveau") === "1" ? "cv" : null));
   useEffect(() => {
     if (asked !== "competences" && asked !== "langues" && asked !== "cv") return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
@@ -197,18 +203,21 @@ export function PhoneCareer({ view }: { view: CareerView }) {
         closeLabel={t("close")}
       >
         <b className="nb-ex-feuille-t">{t("cv.new")}</b>
-        <Link href="/app/career/cv/modeles" className="nb-opt nb-ca-opt">
+        <Link href="/app/career/cv/modeles?nouveau=1" className="nb-opt nb-ca-opt">
           <b>{t("cv.fromTemplate")}</b>
           <small>{t("cv.fromTemplateText")}</small>
         </Link>
-        <Link href="/app/career/cv/importer" className="nb-opt nb-ca-opt">
+        <Link href="/app/profil/import" className="nb-opt nb-ca-opt">
           <b>{t("cv.import")}</b>
           <small>{t("cv.importText")}</small>
         </Link>
-        <Link href="/app/career/cv/modeles?orbi=1" className="nb-opt nb-ca-opt" data-orbi="">
-          <b>{t("cv.orbi")}</b>
-          <small>{t("cv.orbiText")}</small>
-        </Link>
+        <form action={newCareerCvAction}>
+          <input type="hidden" name="orbi" value="1" />
+          <button type="submit" className="nb-opt nb-ca-opt" data-orbi="">
+            <b>{t("cv.orbi")}</b>
+            <small>{t("cv.orbiText")}</small>
+          </button>
+        </form>
       </PhoneSheet>
       <CvMenu cv={cvMenu} onClose={() => setCvMenu(null)} />
       <SkillsSheet
@@ -451,36 +460,76 @@ function CvPanel({
 
 function CvMenu({ cv, onClose }: { cv: CareerView["cvs"][number] | null; onClose: () => void }) {
   const t = useTranslations("phoneCareer");
+  const [confirm, setConfirm] = useState(false);
+  const close = () => {
+    setConfirm(false);
+    onClose();
+  };
   return (
     <PhoneSheet
       open={cv !== null}
-      onClose={onClose}
+      onClose={close}
       label={cv?.title ?? t("cv.new")}
       closeLabel={t("close")}
     >
-      {cv ? (
+      {cv && confirm ? (
+        <>
+          <b className="nb-ex-feuille-t">{t("cv.menu.deleteQuestion", { title: cv.title })}</b>
+          <p className="nb-meta nb-ca-feuille-d">{t("cv.menu.deleteText")}</p>
+          <form action={deleteCv} className="nb-ca-feuille-b">
+            <input type="hidden" name="id" value={cv.id} />
+            <button type="submit" className="nb-bouton" data-large="" data-plein-rouge="">
+              {t("cv.menu.delete")}
+            </button>
+            <button
+              type="button"
+              className="nb-bouton"
+              data-large=""
+              data-contour=""
+              onClick={() => setConfirm(false)}
+            >
+              {t("cancel")}
+            </button>
+          </form>
+        </>
+      ) : cv ? (
         <>
           <b className="nb-ex-feuille-t">{cv.title}</b>
           <Link href={cv.href} className="nb-opt nb-fil-opt">
             {t("cv.menu.edit")}
           </Link>
-          <Link href={`${cv.href}?exporter=1`} className="nb-opt nb-fil-opt">
-            {t("cv.menu.export")}
-          </Link>
-          <Link href={`/app/career/cv/${cv.id}/adapter`} className="nb-opt nb-fil-opt">
+          <CvExportButton
+            id={cv.id}
+            title={cv.title}
+            label={t("cv.menu.export")}
+            className="nb-opt nb-fil-opt"
+          />
+          <Link href={`${cv.href}?adapter=`} className="nb-opt nb-fil-opt">
             {t("cv.menu.adapt")}
           </Link>
-          <Link href={`${cv.href}?action=dupliquer`} className="nb-opt nb-fil-opt">
-            {t("cv.menu.duplicate")}
-          </Link>
+          <form action={duplicateCv}>
+            <input type="hidden" name="id" value={cv.id} />
+            <button type="submit" className="nb-opt nb-fil-opt">
+              {t("cv.menu.duplicate")}
+            </button>
+          </form>
           {!cv.primary ? (
-            <Link href={`${cv.href}?action=defaut`} className="nb-opt nb-fil-opt">
-              {t("cv.menu.primary")}
-            </Link>
+            <form action={setPrimaryCv}>
+              <input type="hidden" name="id" value={cv.id} />
+              <input type="hidden" name="retour" value="liste" />
+              <button type="submit" className="nb-opt nb-fil-opt">
+                {t("cv.menu.primary")}
+              </button>
+            </form>
           ) : null}
-          <Link href={`${cv.href}?action=supprimer`} className="nb-opt nb-fil-opt" data-danger="">
+          <button
+            type="button"
+            className="nb-opt nb-fil-opt"
+            data-danger=""
+            onClick={() => setConfirm(true)}
+          >
             {t("cv.menu.delete")}
-          </Link>
+          </button>
         </>
       ) : null}
     </PhoneSheet>

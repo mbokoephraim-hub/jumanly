@@ -10588,7 +10588,9 @@
         "adapt": "Adapter à une offre",
         "duplicate": "Dupliquer",
         "primary": "Utiliser par défaut",
-        "delete": "Supprimer"
+        "delete": "Supprimer",
+        "deleteQuestion": "Supprimer « {title} » ?",
+        "deleteText": "Ce CV disparaît. Les candidatures déjà envoyées gardent leur copie."
       }
     },
     "portfolio": {
@@ -10953,6 +10955,45 @@
       "welcome": "Bienvenue en {plan}",
       "welcomeText": "Votre reçu est envoyé par e-mail. Votre formule court jusqu’au {date}.",
       "backCareer": "Retour à Carrière"
+    },
+    "cvEdit": {
+      "back": "CV",
+      "export": "Exporter",
+      "close": "Fermer",
+      "preview": "Voir l’aperçu en grand (modèle {template})",
+      "color": "Couleur",
+      "sections": "Sections",
+      "template": "Modèle",
+      "adapt": "Adapter à une offre",
+      "exportTitle": "Exporter « {title} »",
+      "format": "Format",
+      "formats": {
+        "pdf": "PDF",
+        "word": "Word"
+      },
+      "exportNote": "Le fichier ne porte aucun logo Jumanly.",
+      "download": "Télécharger",
+      "adaptTitle": "Adapter mon CV",
+      "adaptWhich": "Pour quelle offre ?",
+      "adaptNone": "Enregistrez ou postulez à une offre : elle apparaîtra ici.",
+      "adaptFind": "Voir les offres",
+      "adaptGap": "{company} · {count, plural, one {# point à mettre en avant} other {# points à mettre en avant}}",
+      "adaptNote": "Orbi crée une copie adaptée : votre CV reste tel quel. Vous validez chaque changement, et Orbi n’ajoute jamais une compétence que vous n’avez pas.",
+      "adaptCreate": "Créer le CV adapté",
+      "templatesTitle": "Choisir un modèle",
+      "templatesStep": "Étape 1 sur 2 · Votre CV téléchargé ne porte aucun logo Jumanly.",
+      "templatesChange": "Le contenu de votre CV ne change pas, seule la mise en page change.",
+      "templateLocked": "{name}, compris dans la formule {plan}"
+    },
+    "cvImport": {
+      "title": "Importer un CV",
+      "choose": "PDF ou Word, {max} Mo au plus",
+      "chooseText": "Orbi lit le fichier et remplit votre profil. Rien n’est publié sans votre accord.",
+      "reading": "Orbi lit {name}…",
+      "readingText": "Expériences, formation, compétences, langues",
+      "found": "Voici ce que nous avons trouvé",
+      "foundText": "Décochez ce que vous ne voulez pas reprendre.",
+      "apply": "Ajouter à mon profil et créer le CV"
     }
   },
   "hireShell": {

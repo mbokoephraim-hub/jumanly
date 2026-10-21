@@ -1,14 +1,21 @@
 "use server";
 
 import { refresh, revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
+import { getTranslations } from "next-intl/server";
 import { z } from "zod";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { DEFAULT_TEMPLATE_ID } from "@/features/cv/templates/registry";
 import { rewriteCareerText } from "@/server/services/career-phone";
+import { applyTemplate, cvFromProfile, MAX_CVS } from "@/server/services/cv";
+import { improveCvSummary } from "@/server/services/cv-coach";
+import { applyImport, parseImport } from "@/server/services/cv-import";
 import {
   educationSchema,
   ensureProfile,
   experienceSchema,
+  getFullProfile,
   monthToDate,
   parseProfileLanguages,
   PROFILE_SKILLS_MAX,
@@ -375,4 +382,57 @@ export async function saveCareerNotificationsAction(
   });
   refresh();
   return { ok: true };
+}
+
+/**
+ * « Nouveau CV » on the phone (planches Carrière-cv-nouveau, -cv-modele): a CV filled from the
+ * profile, in the template chosen (when the person's plan includes it), or prepared by Orbi (its
+ * summary proposed, to accept or not).
+ */
+export async function newCareerCvAction(formData: FormData) {
+  const template = String(formData.get("template") ?? "").slice(0, 40);
+  const orbi = formData.get("orbi") === "1";
+  const { user, profile } = await mine();
+  const count = await db.document.count({ where: { profileId: profile.id, kind: "cv" } });
+  if (count >= MAX_CVS) redirect("/app/career/cv?erreur=limite");
+  const t = await getTranslations("career.cv");
+  const content = cvFromProfile(await getFullProfile(db, user.id));
+  const cv = await db.document.create({
+    data: {
+      profileId: profile.id,
+      kind: "cv",
+      title: count === 0 ? t("default") : `${t("default")} ${count + 1}`,
+      templateId: DEFAULT_TEMPLATE_ID,
+      isPrimary: count === 0,
+      content,
+    },
+  });
+  if (template) await applyTemplate(db, user.id, cv.id, template);
+  refresh();
+  if (orbi && (await improveCvSummary(db, user.id, cv.id)) === "done")
+    redirect(`/app/career/cv/${cv.id}?vue=ameliorer`);
+  redirect(`/app/career/cv/${cv.id}`);
+}
+
+/**
+ * « Ajouter à mon profil et créer le CV » (planche Carrière-cv-import-ok): only the groups left
+ * ticked enter the profile, then a CV is made from it.
+ */
+export async function applyCareerImportAction(formData: FormData) {
+  const { user } = await mine();
+  const id = String(formData.get("import") ?? "").slice(0, 60);
+  const chosen = new Set(formData.getAll("groupe").map(String));
+  const pending = await db.aiSuggestion.findFirst({
+    where: { id, userId: user.id, feature: "cv_parse", status: "pending" },
+  });
+  const payload = pending ? parseImport(pending.payload) : null;
+  if (!payload) redirect("/app/profil/import");
+  const all = (group: "experiences" | "educations" | "skills") =>
+    chosen.has(group) ? payload[group].map((_, index) => index) : [];
+  await applyImport(db, user.id, id, {
+    experiences: all("experiences"),
+    educations: all("educations"),
+    skills: all("skills"),
+  });
+  await newCareerCvAction(new FormData());
 }
