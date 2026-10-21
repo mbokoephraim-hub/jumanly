@@ -32,7 +32,9 @@ export default function VerifyPage() {
 async function VerifyStep() {
   const flow = await readSignupFlow();
   if (!flow.email) redirect("/inscription");
-  if (await isPhone()) return <PhoneCodePage email={flow.email} />;
+  // Modèle B is the talent's phone: a recruiter keeps the code page of their own journey.
+  if ((flow.profile ?? "talent") === "talent" && (await isPhone()))
+    return <PhoneCodePage email={flow.email} />;
   const t = await getTranslations("access");
   return (
     <>

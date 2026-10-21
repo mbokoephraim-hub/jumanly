@@ -16,6 +16,9 @@ test("la cloche signale l'arrivée d'une notification, puis tout se marque comme
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
   await finishOnboarding(page);
   await expect(page).toHaveURL(/\/app(\?bienvenue=1)?$/);
+  // On a phone between lots B2 and B3, the space opens on the head of the previous design only
+  // once loaded again (the Fil of B3 brings its own bell).
+  if (page.viewportSize()!.width < 768) await page.goto("/app");
   // Web (planche web talent-2 § 4): the bell opens a panel; phone: a link to the page.
   const web = (page.viewportSize()?.width ?? 0) >= 768;
   const bell = page.getByRole(web ? "button" : "link", { name: /^Notifications/ });

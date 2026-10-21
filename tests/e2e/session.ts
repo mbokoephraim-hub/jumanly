@@ -147,9 +147,10 @@ export async function phoneProfile(page: Page, place?: { country: string; city: 
 
 /** From « Créez votre compte » (/inscription, any `?suite=`) to « Compte validé ». */
 export async function signUpWithEmail(page: Page, email: string, name = "Awa Fictive") {
-  await skipIntro(page);
   await expect(page).toHaveURL(/\/inscription/);
   if (await onPhone(page)) {
+    // The tests of the intro play it on the computer; on a phone, Modèle B has the logo alone.
+    await skipIntro(page);
     // Modèle B (planche Accueil): the e-mail, the password, then the code. The name comes at the
     // first step of the profile.
     await page.getByLabel("Adresse e-mail").fill(email);
