@@ -325,7 +325,19 @@ test("web recruteur 4 : exporter le rapport, notifications de l'ordinateur, dema
   await noOverflow(page, "rapports");
 
   // Notifications of the computer: asked only when the member turns them on, in the settings.
-  await page.context().grantPermissions(["notifications"]);
+  // The CI's headless browser has no usable Notification API (the switch would stay disabled):
+  // a stand-in behaves as a browser where the member has allowed them.
+  await page.addInitScript(() => {
+    class GrantedNotification {
+      static permission = "granted";
+      static requestPermission = async () => "granted";
+    }
+    Object.defineProperty(window, "Notification", {
+      value: GrantedNotification,
+      configurable: true,
+      writable: true,
+    });
+  });
   await page.goto("/app/parametres/notifications");
   const desk = main(page).getByRole("switch", { name: /Notifications de l'ordinateur/ });
   await expect(desk).not.toBeChecked();
