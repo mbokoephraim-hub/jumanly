@@ -1,0 +1,720 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jumanly Modèle B · Fil sombre</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050D10}
+a{color:#A6F26B;text-decoration:none}
+.fd,.fd *{box-sizing:border-box}
+.fd{font-family:"Sora",system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.fd h1,.fd h2,.fd p{margin:0}
+.fd button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.fd .scroll{scrollbar-width:none}.fd .scroll::-webkit-scrollbar{display:none}
+.fd .post{display:flex;gap:12px;padding:16px 20px 12px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fd .col{display:flex;flex-direction:column;align-items:center;flex:none;width:40px}
+.fd .av{width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px;flex:none}
+.fd .fil{flex:1;width:2px;background:rgba(255,255,255,.12);margin-top:6px;border-radius:1px}
+.fd .corps{flex:1;min-width:0}
+.fd .nom{display:flex;align-items:center;gap:6px;font-size:14px}
+.fd .lnom{color:#F2EDE5;min-width:0;overflow:hidden}
+.fd .nom b{font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;display:block}
+.fd .h{color:#8FA39E;font-size:13px;white-space:nowrap}
+.fd .tg{font-size:10.5px;font-weight:700;padding:3px 7px;border-radius:999px;white-space:nowrap}
+.fd .txt{font-size:15px;line-height:1.48;margin-top:3px;color:#ECE7DF}
+.fd .media{display:block;width:100%;border-radius:16px;margin-top:10px;border:1px solid rgba(255,255,255,.08);object-fit:cover}
+.fd .acts{display:flex;gap:22px;margin-top:10px;color:#8FA39E;font-size:13px}
+.fd .acts button{display:inline-flex;align-items:center;gap:6px;min-height:36px}
+.fd .plus{color:#8FA39E;font-size:18px;line-height:1;letter-spacing:1px;min-width:36px;min-height:32px;text-align:center}
+.fd .offre{width:100%;margin-top:10px;border-radius:16px;border:1px solid rgba(255,255,255,.12);padding:12px;display:flex;align-items:center;gap:12px;background:#11262A;color:#F2EDE5}
+.fd .pct{font-size:12.5px;font-weight:700;padding:6px 10px;border-radius:999px;background:#A6F26B;color:#0B1A1F;white-space:nowrap}
+.fd .pill{height:38px;padding:0 16px;border-radius:999px;font-size:13px;font-weight:700;display:inline-flex;align-items:center}
+.fd .sugg{width:100%;display:flex;align-items:center;gap:12px;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);background:linear-gradient(90deg,rgba(47,211,166,.12),rgba(47,211,166,0))}
+.fd .sous{display:flex;align-items:center;gap:10px;margin-top:12px;padding-top:10px;border-top:1px solid rgba(255,255,255,.06);color:#ECE7DF}
+.fd .voir{margin-top:6px;font-size:13px;font-weight:600;color:#8FA39E;min-height:32px}
+.fd .masque{display:flex;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid rgba(255,255,255,.07);font-size:13px;color:#8FA39E}
+.fd .masque span{flex:1}.fd .masque button{font-weight:700;color:#A6F26B;min-height:36px}
+.fd .pj{margin-top:10px;border-radius:16px;border:1px solid rgba(255,255,255,.12);padding:12px;display:flex;align-items:center;gap:12px;background:#11262A}
+.fd .pjic{width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;flex:none}
+.fd .cite{margin-top:10px;border-radius:16px;border:1px solid rgba(255,255,255,.12);padding:12px;display:flex;flex-direction:column;gap:4px;font-size:13.5px;color:#B9CBC6}
+.fd .cite b{color:#F2EDE5;font-size:13px}
+.fd .barre{padding:50px 12px 8px;display:flex;align-items:center;border-bottom:1px solid rgba(255,255,255,.08);min-height:102px}
+.fd .retour{height:44px;padding:0 8px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:4px}
+.fd .nav{position:absolute;left:0;right:0;bottom:0;height:84px;padding:8px 6px 22px;background:rgba(11,26,31,.86);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));z-index:4}
+.fd .nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.fd .nav .pt{width:5px;height:5px;border-radius:50%;background:#A6F26B}
+.fd .chip{height:36px;padding:0 14px;border-radius:999px;font-size:13px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;flex:none}
+.fd .nt{width:100%;display:flex;align-items:flex-start;gap:12px;padding:14px 20px;color:#F2EDE5}
+.fd .sec{font-size:13px;color:#8FA39E;padding:18px 20px 4px}
+.fd .voile{position:absolute;inset:0;width:100%;background:rgba(0,0,0,.55)}
+.fd .feuille{position:absolute;left:0;right:0;bottom:0;background:#13282C;border-radius:30px 30px 0 0;padding:10px 20px 28px;border-top:1px solid rgba(255,255,255,.08)}
+.fd .poignee{display:block;width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.2);margin:0 auto 14px}
+.fd .opt{width:100%;display:flex;align-items:center;gap:14px;min-height:54px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px;font-weight:600;color:#F2EDE5}
+.fd .opt small{display:block;font-size:12.5px;font-weight:400;color:#8FA39E;margin-top:2px}
+.fd .annuler{width:100%;height:50px;margin-top:12px;border-radius:999px;background:#1B3338;text-align:center;font-size:15px;font-weight:700}
+.fd .champ{display:flex;align-items:center;gap:10px;min-height:52px;border-radius:26px;background:#0B1A1F;padding:0 6px 0 18px;border:1px solid rgba(47,211,166,.45);min-width:0}
+.fd .champ input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:14px;color:#F2EDE5}
+.fd .env{height:40px;padding:0 16px;border-radius:20px;background:#A6F26B;color:#0B1A1F;font-size:13px;font-weight:700;display:flex;align-items:center;flex:none}
+.fd .q{width:100%;padding:14px 16px;border-radius:16px;background:#1B3338;font-size:14px;font-weight:600}
+/* mvt-jumanly 2 */
+:root{--mvt-o:.4;--mvt-s:.975;--mvt-tx:0px;--mvt-r:150%;--mvt-x:50%;--mvt-y:50%}
+[data-ecran]{animation:mvtEcran .34s cubic-bezier(.2,.8,.2,1) both;transform-origin:var(--mvt-x) var(--mvt-y)}
+.voile,.shb{animation:mvtVoile .26s ease-out both}
+.voile+div,.shb+div,.voile+.feuille,.shb+.shp,[style*="z-index: 10"]>button:first-child+div{animation:mvtMonte .34s cubic-bezier(.2,.8,.2,1) both}
+@keyframes mvtEcran{from{opacity:var(--mvt-o);transform:translateX(var(--mvt-tx)) scale(var(--mvt-s));clip-path:circle(var(--mvt-r) at var(--mvt-x) var(--mvt-y))}to{opacity:1;transform:none;clip-path:circle(150% at var(--mvt-x) var(--mvt-y))}}
+@keyframes mvtVoile{from{opacity:0}to{opacity:1}}
+@keyframes mvtMonte{from{transform:translateY(56px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){[data-ecran],.voile,.shb,.voile+div,.shb+div{animation:none!important}}
+/* fin mvt */
+</style>
+</helmet>
+<div class="fd" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F; border-radius: 44px;">
+
+<!-- ============ FIL ============ -->
+<sc-if value="{{vFil}}" hint-placeholder-val="{{ true }}">
+<div data-ecran="" class="scroll" style="position: absolute; inset: 0; overflow-y: auto; padding-bottom: 170px;">
+<header style="padding: 54px 20px 0; display: flex; align-items: center; gap: 8px;">
+<h1 style="flex: 1; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">Fil</h1>
+<button onClick="{{ouvrirNotifs}}" aria-label="{{bellLabel}}" style="width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; position: relative; color: #F2EDE5;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.5 1.5h-15zM10 20.5a2.2 2.2 0 0 0 4 0"></path></svg><span style="position: absolute; top: 6px; right: 4px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #A6F26B; color: #0B1A1F; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; opacity: {{bellOp}};">{{nNonLu}}</span></button>
+<a href="Carriere.dc.html" aria-label="Ma carrière"><span class="av" style="width: 36px; height: 36px; background: #A6F26B; color: #0B1A1F;">GM</span></a>
+</header>
+
+<div role="tablist" aria-label="Choisir le fil" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 12px; border-bottom: 1px solid rgba(255,255,255,.08);">
+<sc-for list="{{onglets}}" as="o" hint-placeholder-count="3">
+<button role="tab" aria-selected="{{o.sel}}" onClick="{{o.pick}}" style="height: 46px; text-align: center; font-size: 14px; font-weight: {{o.fw}}; color: {{o.col}}; position: relative;">{{o.t}}<span style="position: absolute; left: 30%; right: 30%; bottom: -1px; height: 3px; border-radius: 2px; background: #A6F26B; opacity: {{o.on}};"></span></button>
+</sc-for>
+</div>
+
+<button onClick="{{ouvrirPublier}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,.07);">
+<span class="av" style="background: #A6F26B; color: #0B1A1F;">GM</span>
+<span style="flex: 1;"><b style="display: block; font-size: 14px;">Grâce Mbuyi</b><span style="font-size: 14px; color: #8FA39E;">Quoi de neuf ?</span></span>
+<span style="height: 36px; padding: 0 16px; border-radius: 999px; background: #1B3338; color: #F2EDE5; font-size: 13px; font-weight: 600; display: flex; align-items: center;">Publier</span>
+</button>
+
+<sc-if value="{{pmoi.vis}}" hint-placeholder-val="{{ true }}">
+<article class="post">
+<div class="col"><a href="Carriere.dc.html" aria-label="Voir le profil"><span class="av" style="width: 40px; height: 40px; border-radius: 50%; background: #A6F26B; color: #0B1A1F;">GM</span></a></div>
+<div class="corps">
+<div class="nom"><a href="Carriere.dc.html" class="lnom"><b>Grâce Mbuyi</b></a><span class="tg" style="background: rgba(47,211,166,.16); color: #5FE0B8;">Vous</span><span class="h">à l’instant</span><span style="flex: 1;"></span><button class="plus" onClick="{{pmoi.menu}}" aria-label="Plus d’options">···</button></div>
+<button onClick="{{pmoi.rep}}" style="display: block; width: 100%;"><p class="txt">{{moiT}}</p></button>
+<sc-if value="{{moiPhoto}}" hint-placeholder-val="{{ false }}"><img class="media" src="/_blob/7a8185bb3611a612aa729be91409f78e" alt="Photo jointe par Grâce" style="aspect-ratio: 16 / 9;"></sc-if>
+<sc-if value="{{moiPj}}" hint-placeholder-val="{{ false }}"><div class="pj"><span class="pjic" style="background: {{moiC.pjC}}; color: {{moiC.pjLc}};">{{moiC.pjI}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 14px;">{{moiC.pjT}}</b><span style="font-size: 12.5px; color: #8FA39E;">{{moiC.pjD}}</span></span></div></sc-if>
+<sc-if value="{{moiCite}}" hint-placeholder-val="{{ false }}"><div class="cite"><b>{{citeN}}</b><span>{{citeT}}</span></div></sc-if>
+<div class="acts"><button onClick="{{pmoi.jt}}" aria-label="J’aime" style="color: {{pmoi.jc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="{{pmoi.jf}}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>{{pmoi.jn}}</button><button onClick="{{pmoi.rep}}" aria-label="Répondre"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>{{pmoi.nr}}</button><button onClick="{{pmoi.rp}}" aria-label="Republier" style="color: {{pmoi.rc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V9a2 2 0 0 1 2-2h12l-3-3M20 13v2a2 2 0 0 1-2 2H6l3 3"></path></svg>{{pmoi.nrp}}</button></div>
+</div>
+</article>
+</sc-if>
+<sc-if value="{{pmoi.mask}}" hint-placeholder-val="{{ false }}">
+<div class="masque"><span>Publication masquée. Vous en verrez moins comme celle-ci.</span><button onClick="{{pmoi.afficher}}">Annuler</button></div>
+</sc-if>
+<sc-if value="{{pbf.vis}}" hint-placeholder-val="{{ true }}">
+<article class="post">
+<div class="col"><a href="Entreprise.dc.html" aria-label="Voir le profil"><span class="av" style="width: 40px; height: 40px; border-radius: 12px; background: #0F3F37; color: #A6F26B;">BF</span></a></div>
+<div class="corps">
+<div class="nom"><a href="Entreprise.dc.html" class="lnom"><b>Baobab Fintech</b></a><span class="tg" style="background: rgba(166,242,107,.14); color: #A6F26B;">Entreprise</span><span class="h">2 h</span><span style="flex: 1;"></span><button class="plus" onClick="{{pbf.menu}}" aria-label="Plus d’options">···</button></div>
+<button onClick="{{pbf.rep}}" style="display: block; width: 100%;"><p class="txt">On recrute trois analystes data à Kinshasa. Candidature en 5 minutes.</p></button>
+<a href="Offres-detail.dc.html" class="offre"><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 14px;">Analyste de données junior</b><span style="font-size: 12.5px; color: #8FA39E;">Kinshasa · CDI · hybride</span></span><span class="pct">86 % pour vous</span></a>
+<div class="acts"><button onClick="{{pbf.jt}}" aria-label="J’aime" style="color: {{pbf.jc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="{{pbf.jf}}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>{{pbf.jn}}</button><button onClick="{{pbf.rep}}" aria-label="Répondre"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>{{pbf.nr}}</button><button onClick="{{pbf.rp}}" aria-label="Republier" style="color: {{pbf.rc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V9a2 2 0 0 1 2-2h12l-3-3M20 13v2a2 2 0 0 1-2 2H6l3 3"></path></svg>{{pbf.nrp}}</button></div>
+</div>
+</article>
+</sc-if>
+<sc-if value="{{pbf.mask}}" hint-placeholder-val="{{ false }}">
+<div class="masque"><span>Publication masquée. Vous en verrez moins comme celle-ci.</span><button onClick="{{pbf.afficher}}">Annuler</button></div>
+</sc-if>
+<sc-if value="{{pak.vis}}" hint-placeholder-val="{{ true }}">
+<article class="post">
+<div class="col"><a href="Personne-amani.dc.html" aria-label="Voir le profil"><span class="av" style="width: 40px; height: 40px; border-radius: 50%; background: #FDF1D8; color: #8A5A00;">AK</span></a></div>
+<div class="corps">
+<div class="nom"><a href="Personne-amani.dc.html" class="lnom"><b>Amani Kasongo</b></a><span class="h">3 h</span><span style="flex: 1;"></span><button class="plus" onClick="{{pak.menu}}" aria-label="Plus d’options">···</button></div>
+<button onClick="{{pak.rep}}" style="display: block; width: 100%;"><p class="txt">Badge « Bâtisseuse de communauté » obtenu ! Merci à toutes les personnes qui ont répondu à mes questions sur Jumanly.</p><img class="media" src="/_blob/be4ce048ced74d9250b992c526b97346" alt="Amani sourit, téléphone en main, la notification du badge s’affiche" style="aspect-ratio: 1199 / 845;"></button>
+<div class="acts"><button onClick="{{pak.jt}}" aria-label="J’aime" style="color: {{pak.jc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="{{pak.jf}}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>{{pak.jn}}</button><button onClick="{{pak.rep}}" aria-label="Répondre"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>{{pak.nr}}</button><button onClick="{{pak.rp}}" aria-label="Republier" style="color: {{pak.rc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V9a2 2 0 0 1 2-2h12l-3-3M20 13v2a2 2 0 0 1-2 2H6l3 3"></path></svg>{{pak.nrp}}</button></div>
+</div>
+</article>
+</sc-if>
+<sc-if value="{{pak.mask}}" hint-placeholder-val="{{ false }}">
+<div class="masque"><span>Publication masquée. Vous en verrez moins comme celle-ci.</span><button onClick="{{pak.afficher}}">Annuler</button></div>
+</sc-if>
+<sc-if value="{{sTout}}" hint-placeholder-val="{{ true }}">
+<button onClick="{{orbiOffres}}" class="sugg"><svg width="40" height="40" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="flex: 1;"><b style="display: block; font-size: 14px; color: #5FE0B8;">Orbi</b><span style="font-size: 14px;">3 offres publiées ce matin vous correspondent.</span></span></button>
+</sc-if>
+<sc-if value="{{ppi.vis}}" hint-placeholder-val="{{ true }}">
+<article class="post">
+<div class="col"><a href="Personne.dc.html" aria-label="Voir le profil"><span class="av" style="width: 40px; height: 40px; border-radius: 50%; background: #E3EEF9; color: #1E4E79;">PI</span></a><span class="fil"></span></div>
+<div class="corps">
+<div class="nom"><a href="Personne.dc.html" class="lnom"><b>Patrick Ilunga</b></a><span class="tg" style="background: rgba(47,211,166,.16); color: #5FE0B8;">Nouveau poste</span><span class="h">5 h</span><span style="flex: 1;"></span><button class="plus" onClick="{{ppi.menu}}" aria-label="Plus d’options">···</button></div>
+<button onClick="{{ppi.rep}}" style="display: block; width: 100%;"><p class="txt">Premier jour chez Fleuve Banque comme analyste crédit. Offre trouvée sur Jumanly il y a trois semaines.</p><img class="media" src="/_blob/d159cc907efe9558da98ea05e4859c51" alt="Patrick éclate de rire, assis à une table" style="aspect-ratio: 4 / 5; max-height: 360px;"></button>
+<div class="acts"><button onClick="{{ppi.jt}}" aria-label="J’aime" style="color: {{ppi.jc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="{{ppi.jf}}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>{{ppi.jn}}</button><button onClick="{{ppi.rep}}" aria-label="Répondre"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>{{ppi.nr}}</button><button onClick="{{ppi.rp}}" aria-label="Republier" style="color: {{ppi.rc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V9a2 2 0 0 1 2-2h12l-3-3M20 13v2a2 2 0 0 1-2 2H6l3 3"></path></svg>{{ppi.nrp}}</button></div>
+<div class="sous"><span class="av" style="width: 28px; height: 28px; font-size: 10px; border-radius: 9px; background: #CFE4F7; color: #1E4E79;">FB</span><span style="flex: 1; min-width: 0; font-size: 13.5px;"><b>Fleuve Banque</b> Bienvenue dans l’équipe, Patrick !</span></div>
+<button onClick="{{ppi.rep}}" class="voir">Voir les {{ppi.nr}} réponses</button>
+</div>
+</article>
+</sc-if>
+<sc-if value="{{ppi.mask}}" hint-placeholder-val="{{ false }}">
+<div class="masque"><span>Publication masquée. Vous en verrez moins comme celle-ci.</span><button onClick="{{ppi.afficher}}">Annuler</button></div>
+</sc-if>
+<sc-if value="{{psm.vis}}" hint-placeholder-val="{{ true }}">
+<article class="post">
+<div class="col"><a href="Personne-sarah.dc.html" aria-label="Voir le profil"><span class="av" style="width: 40px; height: 40px; border-radius: 50%; background: #FBE4E0; color: #9A3524;">SM</span></a></div>
+<div class="corps">
+<div class="nom"><a href="Personne-sarah.dc.html" class="lnom"><b>Sarah Mbala</b></a><span class="tg" style="background: rgba(242,179,61,.16); color: #F4C463;">Réalisation</span><span class="h">8 h</span><span style="flex: 1;"></span><button class="plus" onClick="{{psm.menu}}" aria-label="Plus d’options">···</button></div>
+<button onClick="{{psm.rep}}" style="display: block; width: 100%;"><p class="txt">Ma bannière pour une marque de courses en ligne, projet d’école. Vos avis m’intéressent !</p><img class="media" src="/_blob/c98cbb9a256f1018c3f5694dd11b02d5" alt="Bannière de réseau social avec un personnage illustré qui porte un sac de courses" style="aspect-ratio: 773 / 515;"></button>
+<div class="acts"><button onClick="{{psm.jt}}" aria-label="J’aime" style="color: {{psm.jc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="{{psm.jf}}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>{{psm.jn}}</button><button onClick="{{psm.rep}}" aria-label="Répondre"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>{{psm.nr}}</button><button onClick="{{psm.rp}}" aria-label="Republier" style="color: {{psm.rc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V9a2 2 0 0 1 2-2h12l-3-3M20 13v2a2 2 0 0 1-2 2H6l3 3"></path></svg>{{psm.nrp}}</button></div>
+</div>
+</article>
+</sc-if>
+<sc-if value="{{psm.mask}}" hint-placeholder-val="{{ false }}">
+<div class="masque"><span>Publication masquée. Vous en verrez moins comme celle-ci.</span><button onClick="{{psm.afficher}}">Annuler</button></div>
+</sc-if>
+<sc-if value="{{pme.vis}}" hint-placeholder-val="{{ true }}">
+<article class="post">
+<div class="col"><span class="av" style="width: 40px; height: 40px; border-radius: 12px; background: #FFE1A1; color: #8A5A00;">ME</span></div>
+<div class="corps">
+<div class="nom"><span class="lnom"><b>Mwinda Énergie</b></span><span class="tg" style="background: rgba(166,242,107,.14); color: #A6F26B;">Entreprise</span><span class="h">hier</span><span style="flex: 1;"></span><button class="plus" onClick="{{pme.menu}}" aria-label="Plus d’options">···</button></div>
+<button onClick="{{pme.rep}}" style="display: block; width: 100%;"><p class="txt">Portes ouvertes mardi 28 octobre, 10 h, à Gombe. Venez rencontrer l’équipe solaire et déposer votre CV sur place.</p></button>
+<div style="display: flex; gap: 8px; margin-top: 10px;"><button onClick="{{participer}}" class="pill" style="background: {{partBg}}; color: {{partCol}};">{{partT}}</button><span class="pill" style="border: 1px solid rgba(255,255,255,.14); color: #B9CBC6; font-weight: 500;">{{partN}} participants</span></div>
+<div class="acts"><button onClick="{{pme.jt}}" aria-label="J’aime" style="color: {{pme.jc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="{{pme.jf}}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>{{pme.jn}}</button><button onClick="{{pme.rep}}" aria-label="Répondre"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>{{pme.nr}}</button><button onClick="{{pme.rp}}" aria-label="Republier" style="color: {{pme.rc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V9a2 2 0 0 1 2-2h12l-3-3M20 13v2a2 2 0 0 1-2 2H6l3 3"></path></svg>{{pme.nrp}}</button></div>
+</div>
+</article>
+</sc-if>
+<sc-if value="{{pme.mask}}" hint-placeholder-val="{{ false }}">
+<div class="masque"><span>Publication masquée. Vous en verrez moins comme celle-ci.</span><button onClick="{{pme.afficher}}">Annuler</button></div>
+</sc-if>
+<sc-if value="{{pjk.vis}}" hint-placeholder-val="{{ true }}">
+<article class="post">
+<div class="col"><a href="Personne-joel.dc.html" aria-label="Voir le profil"><span class="av" style="width: 40px; height: 40px; border-radius: 50%; background: #DDF6EE; color: #14745F;">JK</span></a></div>
+<div class="corps">
+<div class="nom"><a href="Personne-joel.dc.html" class="lnom"><b>Joël Kabeya</b></a><span class="h">1 j</span><span style="flex: 1;"></span><button class="plus" onClick="{{pjk.menu}}" aria-label="Plus d’options">···</button></div>
+<button onClick="{{pjk.rep}}" style="display: block; width: 100%;"><p class="txt">Ma campagne pour Baobab Fintech : 275 nouveaux abonnés en une semaine. Je cherche un poste de community manager à Kinshasa.</p><img class="media" src="/_blob/f6752c76c7b089d8d92e5aae07109df8" alt="Visuel de campagne : une jeune femme court dans la rue, bulle « Request To Follow »" style="aspect-ratio: 1200 / 630;"></button>
+<div class="acts"><button onClick="{{pjk.jt}}" aria-label="J’aime" style="color: {{pjk.jc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="{{pjk.jf}}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>{{pjk.jn}}</button><button onClick="{{pjk.rep}}" aria-label="Répondre"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>{{pjk.nr}}</button><button onClick="{{pjk.rp}}" aria-label="Republier" style="color: {{pjk.rc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V9a2 2 0 0 1 2-2h12l-3-3M20 13v2a2 2 0 0 1-2 2H6l3 3"></path></svg>{{pjk.nrp}}</button></div>
+</div>
+</article>
+</sc-if>
+<sc-if value="{{pjk.mask}}" hint-placeholder-val="{{ false }}">
+<div class="masque"><span>Publication masquée. Vous en verrez moins comme celle-ci.</span><button onClick="{{pjk.afficher}}">Annuler</button></div>
+</sc-if>
+
+<sc-if value="{{finFil}}" hint-placeholder-val="{{ true }}"><p style="text-align: center; font-size: 13px; color: #8FA39E; padding: 26px 20px;">Vous êtes à jour. Revenez plus tard ou <a href="Offres.dc.html">explorez les offres</a>.</p></sc-if>
+</div>
+</sc-if>
+
+<!-- ============ DÉTAIL D’UNE PUBLICATION ============ -->
+<sc-if value="{{vDetail}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barre"><button onClick="{{retour}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg>{{retourT}}</button><b style="flex: 1; text-align: center; font-size: 15px;">Publication</b><button class="plus" onClick="{{d.menu}}" aria-label="Plus d’options" style="width: 64px;">···</button></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding-bottom: 20px;">
+<article style="padding: 16px 20px; border-bottom: 1px solid rgba(255,255,255,.07);">
+<div style="display: flex; align-items: center; gap: 12px;"><span class="av" style="background: {{d.c}}; color: {{d.lc}}; border-radius: {{d.rad}};">{{d.lg}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{d.n}}</b><span class="h">{{d.sous}}</span></span>
+<sc-if value="{{d.aProfil}}" hint-placeholder-val="{{ true }}"><a href="{{d.profil}}" class="chip" style="height: 34px; border: 1px solid rgba(255,255,255,.16); color: #F2EDE5;">Profil</a></sc-if></div>
+<p class="txt" style="font-size: 16px; margin-top: 12px;">{{d.t}}</p>
+<sc-if value="{{d.iA}}" hint-placeholder-val="{{ false }}"><img class="media" src="/_blob/be4ce048ced74d9250b992c526b97346" alt="Amani sourit, téléphone en main, la notification du badge s’affiche" style="aspect-ratio: 1199 / 845; max-height: 300px;"></sc-if>
+<sc-if value="{{d.iP}}" hint-placeholder-val="{{ true }}"><img class="media" src="/_blob/d159cc907efe9558da98ea05e4859c51" alt="Patrick éclate de rire, assis à une table" style="aspect-ratio: 4 / 5; max-height: 300px;"></sc-if>
+<sc-if value="{{d.iS}}" hint-placeholder-val="{{ false }}"><img class="media" src="/_blob/c98cbb9a256f1018c3f5694dd11b02d5" alt="Bannière de réseau social avec un personnage illustré qui porte un sac de courses" style="aspect-ratio: 773 / 515; max-height: 300px;"></sc-if>
+<sc-if value="{{d.iJ}}" hint-placeholder-val="{{ false }}"><img class="media" src="/_blob/f6752c76c7b089d8d92e5aae07109df8" alt="Visuel de campagne : une jeune femme court dans la rue, bulle « Request To Follow »" style="aspect-ratio: 1200 / 630; max-height: 300px;"></sc-if>
+<sc-if value="{{d.iMoi}}" hint-placeholder-val="{{ false }}"><img class="media" src="/_blob/7a8185bb3611a612aa729be91409f78e" alt="Photo jointe par Grâce" style="aspect-ratio: 16 / 9;"></sc-if>
+<sc-if value="{{d.offre}}" hint-placeholder-val="{{ false }}"><a href="Offres-detail.dc.html" class="offre"><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 14px;">Analyste de données junior</b><span style="font-size: 12.5px; color: #8FA39E;">Kinshasa · CDI · hybride</span></span><span class="pct">86 % pour vous</span></a></sc-if>
+<sc-if value="{{d.event}}" hint-placeholder-val="{{ false }}"><div style="display: flex; gap: 8px; margin-top: 10px;"><button onClick="{{participer}}" class="pill" style="background: {{partBg}}; color: {{partCol}};">{{partT}}</button><span class="pill" style="border: 1px solid rgba(255,255,255,.14); color: #B9CBC6; font-weight: 500;">{{partN}} participants</span></div></sc-if>
+<sc-if value="{{d.aPj}}" hint-placeholder-val="{{ false }}"><div class="pj"><span class="pjic" style="background: {{moiC.pjC}}; color: {{moiC.pjLc}};">{{moiC.pjI}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 14px;">{{moiC.pjT}}</b><span style="font-size: 12.5px; color: #8FA39E;">{{moiC.pjD}}</span></span></div></sc-if>
+<p class="h" style="margin-top: 10px;">{{d.h}}</p>
+<div class="acts" style="border-top: 1px solid rgba(255,255,255,.07); margin-top: 10px; padding-top: 4px;">
+<button onClick="{{d.jt}}" aria-label="J’aime" style="color: {{d.jc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="{{d.jf}}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>{{d.jn}}</button>
+<span style="display: inline-flex; align-items: center; gap: 6px; min-height: 36px;"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>{{d.nr}}</span>
+<button onClick="{{d.rp}}" aria-label="Republier" style="color: {{d.rc}};"><svg width="19" height="19" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V9a2 2 0 0 1 2-2h12l-3-3M20 13v2a2 2 0 0 1-2 2H6l3 3"></path></svg>{{d.nrp}}</button>
+</div>
+</article>
+<sc-for list="{{reps}}" as="r" hint-placeholder-count="4">
+<article class="post">
+<div class="col"><span class="av" style="width: 34px; height: 34px; font-size: 11px; border-radius: {{r.rad}}; background: {{r.c}}; color: {{r.lc}};">{{r.lg}}</span></div>
+<div class="corps">
+<div class="nom"><b>{{r.n}}</b><span class="h">{{r.h}}</span></div>
+<p class="txt" style="font-size: 14.5px;">{{r.t}}</p>
+<div class="acts" style="margin-top: 4px;"><button onClick="{{r.jt}}" aria-label="J’aime la réponse" style="color: {{r.jc}}; min-height: 30px;"><svg width="17" height="17" viewBox="0 0 24 24" fill="{{r.jf}}" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20s-7-4.4-7-10a4 4 0 0 1 7-2.6A4 4 0 0 1 19 10c0 5.6-7 10-7 10z"></path></svg>{{r.jn}}</button><button onClick="{{r.rep}}" style="min-height: 30px;">Répondre</button></div>
+</div>
+</article>
+</sc-for>
+</div>
+<div style="padding: 8px 20px 26px; border-top: 1px solid rgba(255,255,255,.06);">
+<sc-if value="{{aRepA}}" hint-placeholder-val="{{ false }}"><div style="display: flex; align-items: center; gap: 8px; font-size: 12.5px; color: #8FA39E; padding: 0 4px 8px;"><span style="flex: 1;">Réponse à {{repA}}</span><button onClick="{{annulerRepA}}" aria-label="Annuler la réponse ciblée" style="min-height: 28px; min-width: 28px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div></sc-if>
+<label class="champ" style="border-color: rgba(255,255,255,.1); background: #13282C; padding-left: 8px;">
+<span class="av" style="width: 34px; height: 34px; font-size: 11px; background: #A6F26B; color: #0B1A1F;">GM</span>
+<input value="{{saisie}}" onChange="{{ecrire}}" aria-label="Votre réponse" placeholder="{{placeRep}}">
+<button onClick="{{envoyer}}" class="env">Envoyer</button>
+</label>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ NOUVELLE PUBLICATION ============ -->
+<sc-if value="{{vPublier}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column; background: #0B1A1F;">
+<header class="barre" style="justify-content: space-between;">
+<button onClick="{{annulerPub}}" style="height: 44px; padding: 0 8px; font-size: 15px; color: #B9CBC6;">Annuler</button>
+<b style="font-size: 15px;">Nouvelle publication</b>
+<span style="width: 74px;"></span>
+</header>
+<div class="scroll" style="flex: 1; overflow-y: auto;">
+<div style="display: flex; gap: 12px; padding: 16px 20px;">
+<div class="col"><span class="av" style="background: #A6F26B; color: #0B1A1F;">GM</span><span class="fil" style="min-height: 120px;"></span></div>
+<div class="corps">
+<b style="font-size: 14px;">Grâce Mbuyi</b>
+<textarea value="{{brouillon}}" onChange="{{ecrirePub}}" aria-label="Votre publication" placeholder="Quoi de neuf ?" style="display: block; width: 100%; min-height: 110px; margin-top: 4px; border: 0; outline: 0; resize: none; background: none; font: inherit; font-size: 16px; line-height: 1.45; color: #F2EDE5;"></textarea>
+<sc-if value="{{pubPhoto}}" hint-placeholder-val="{{ false }}"><div style="position: relative;"><img class="media" src="/_blob/7a8185bb3611a612aa729be91409f78e" alt="Photo jointe par Grâce" style="aspect-ratio: 16 / 9;"><button onClick="{{retirerPj}}" aria-label="Retirer la pièce jointe" style="position: absolute; top: 18px; right: 8px; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,.6); display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div></sc-if>
+<sc-if value="{{pubPj}}" hint-placeholder-val="{{ false }}"><div style="position: relative;"><div class="pj"><span class="pjic" style="background: {{moiC.pjC}}; color: {{moiC.pjLc}};">{{moiC.pjI}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 14px;">{{moiC.pjT}}</b><span style="font-size: 12.5px; color: #8FA39E;">{{moiC.pjD}}</span></span></div><button onClick="{{retirerPj}}" aria-label="Retirer la pièce jointe" style="position: absolute; top: 18px; right: 8px; width: 32px; height: 32px; border-radius: 50%; background: rgba(0,0,0,.4); display: flex; align-items: center; justify-content: center;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div></sc-if>
+<sc-if value="{{pubCite}}" hint-placeholder-val="{{ false }}"><div class="cite"><b>{{citeN}}</b><span>{{citeT}}</span></div></sc-if>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 12px;">
+<sc-for list="{{pjChoix}}" as="c" hint-placeholder-count="3"><button onClick="{{c.pick}}" class="chip" style="border: 1px solid {{c.bd}}; background: {{c.bg}}; color: {{c.col}};">{{c.t}}</button></sc-for>
+</div>
+</div>
+</div>
+<sc-if value="{{aEssai}}" hint-placeholder-val="{{ true }}">
+<div style="margin: 4px 20px 0; padding: 14px; border-radius: 18px; background: rgba(47,211,166,.08); border: 1px solid rgba(47,211,166,.25); display: flex; gap: 12px; align-items: center;">
+<svg width="34" height="34" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg>
+<span style="flex: 1; font-size: 13.5px;">Orbi peut écrire un brouillon à partir de votre attestation SQL.</span>
+<button onClick="{{essayer}}" style="font-size: 13px; font-weight: 700; color: #5FE0B8; min-height: 36px;">Essayer</button>
+</div>
+</sc-if>
+</div>
+<div style="padding: 12px 20px 30px; display: flex; align-items: center; gap: 12px; border-top: 1px solid rgba(255,255,255,.08);">
+<button onClick="{{changerAudience}}" style="flex: 1; font-size: 13px; color: #B9CBC6; min-height: 44px;">{{audience}} ›</button>
+<button onClick="{{publier}}" style="height: 44px; padding: 0 22px; border-radius: 999px; background: #A6F26B; color: #0B1A1F; font-size: 14px; font-weight: 700; opacity: {{pubOp}};">Publier</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ NOTIFICATIONS ============ -->
+<sc-if value="{{vNotifs}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barre"><button onClick="{{retourFil}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg>Fil</button><b style="flex: 1; text-align: center; font-size: 15px;">Notifications</b><a href="Carriere-notif.dc.html" aria-label="Réglages des notifications" style="width: 64px; height: 44px; display: flex; align-items: center; justify-content: flex-end; padding-right: 8px; color: #F2EDE5;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 8.5a3.5 3.5 0 1 0 0 7 3.5 3.5 0 0 0 0-7zM19.4 13.5l1.6 1.2-2 3.4-1.9-.7a7 7 0 0 1-1.7 1l-.3 2h-4l-.3-2a7 7 0 0 1-1.7-1l-1.9.7-2-3.4 1.6-1.2a7 7 0 0 1 0-2L3.2 10.3l2-3.4 1.9.7a7 7 0 0 1 1.7-1l.3-2h4l.3 2a7 7 0 0 1 1.7 1l1.9-.7 2 3.4-1.6 1.2a7 7 0 0 1 0 2z"></path></svg></a></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding-bottom: 30px;">
+<div class="scroll" style="display: flex; gap: 8px; padding: 14px 20px 4px; overflow-x: auto;">
+<sc-for list="{{nChips}}" as="c" hint-placeholder-count="4"><button onClick="{{c.pick}}" class="chip" style="background: {{c.bg}}; color: {{c.col}}; border: 1px solid {{c.bd}};">{{c.t}}</button></sc-for>
+</div>
+<div style="display: flex; align-items: center; padding: 8px 20px 0;"><span style="flex: 1; font-size: 13px; color: #8FA39E;">{{resteT}}</span><button onClick="{{toutLu}}" style="font-size: 13px; font-weight: 700; color: #A6F26B; min-height: 36px; opacity: {{toutLuOp}};">Tout marquer comme lu</button></div>
+<sc-for list="{{groupes}}" as="g" hint-placeholder-count="2">
+<p class="sec">{{g.t}}</p>
+<sc-for list="{{g.items}}" as="n" hint-placeholder-count="4">
+<sc-if value="{{n.lien}}" hint-placeholder-val="{{ true }}"><a href="{{n.href}}" class="nt" style="background: {{n.bg}};"><span class="av" style="border-radius: {{n.rad}}; background: {{n.c}}; color: {{n.lc}};">{{n.lg}}</span><span style="flex: 1; min-width: 0; font-size: 14px; line-height: 1.4;"><b>{{n.qui}}</b> {{n.quoi}}<span style="display: block; font-size: 12.5px; color: #8FA39E; margin-top: 3px;">{{n.h}}</span></span><span style="width: 8px; height: 8px; border-radius: 50%; background: #A6F26B; margin-top: 6px; flex: none; opacity: {{n.dot}};"></span></a></sc-if>
+<sc-if value="{{n.btn}}" hint-placeholder-val="{{ false }}"><button onClick="{{n.go}}" class="nt" style="background: {{n.bg}};"><span class="av" style="border-radius: {{n.rad}}; background: {{n.c}}; color: {{n.lc}};">{{n.lg}}</span><span style="flex: 1; min-width: 0; font-size: 14px; line-height: 1.4;"><b>{{n.qui}}</b> {{n.quoi}}<span style="display: block; font-size: 12.5px; color: #8FA39E; margin-top: 3px;">{{n.h}}</span></span><span style="width: 8px; height: 8px; border-radius: 50%; background: #A6F26B; margin-top: 6px; flex: none; opacity: {{n.dot}};"></span></button></sc-if>
+</sc-for>
+</sc-for>
+<sc-if value="{{nVide}}" hint-placeholder-val="{{ false }}"><p style="text-align: center; font-size: 14px; color: #8FA39E; padding: 40px 20px;">Rien dans cette catégorie pour l’instant.</p></sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ ORBI FLOTTANT ============ -->
+<sc-if value="{{fab}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; right: 20px; bottom: 100px; display: flex; align-items: center; gap: 8px; z-index: 5;">
+<button onClick="{{orbiResume}}" style="max-width: 200px; background: #1B3338; border-radius: 18px 18px 6px 18px; padding: 9px 12px; font-size: 12.5px; font-weight: 600; line-height: 1.35; box-shadow: 0 14px 30px -12px rgba(0,0,0,.8); border: 1px solid rgba(255,255,255,.08);">Résumer les nouveautés du jour ?</button>
+<button onClick="{{ouvrirOrbi}}" aria-label="Ouvrir Orbi, l’assistant" style="width: 58px; height: 58px; border-radius: 50%; flex: none; box-shadow: 0 0 0 6px rgba(47,211,166,.2),0 14px 30px -8px rgba(47,211,166,.55);"><svg width="58" height="58" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg></button>
+</div>
+</sc-if>
+
+<!-- ============ BARRE DU BAS ============ -->
+<sc-if value="{{vFil}}" hint-placeholder-val="{{ true }}">
+<sc-if value="{{avecNav}}" hint-placeholder-val="{{ true }}"><nav aria-label="Navigation principale" class="nav">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="5">
+<a href="{{n.href}}" aria-label="{{n.t}}" style="color: {{n.c}};"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{{n.sw}}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.d}}"></path></svg><span class="pt" style="opacity: {{n.dot}};"></span></a>
+</sc-for>
+</nav></sc-if>
+</sc-if>
+
+<!-- ============ FEUILLE ··· ============ -->
+<sc-if value="{{fMenu}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<p style="font-size: 13px; color: #8FA39E; padding: 0 4px 6px;">Publication de {{d.n}}</p>
+<sc-if value="{{d.aProfil}}" hint-placeholder-val="{{ true }}"><a href="{{d.profil}}" class="opt"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM4.5 20a7.5 7.5 0 0 1 15 0"></path></svg><span>Voir le profil<small>{{d.n}}</small></span></a></sc-if>
+<sc-for list="{{menu}}" as="m" hint-placeholder-count="4"><button onClick="{{m.go}}" class="opt" style="color: {{m.col}};"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{m.d}}"></path></svg><span>{{m.t}}<small>{{m.s}}</small></span></button></sc-for>
+<button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ FEUILLE SIGNALER ============ -->
+<sc-if value="{{fSignaler}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 4px; margin-bottom: 6px;"><button onClick="{{retourMenu}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></button><b style="font-size: 17px;">Signaler la publication</b></div>
+<p style="font-size: 13px; color: #8FA39E; padding: 0 4px 8px;">{{d.n}} ne saura pas que c’est vous.</p>
+<sc-for list="{{raisons}}" as="m" hint-placeholder-count="5"><button onClick="{{m.go}}" class="opt">{{m.t}}</button></sc-for>
+<button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ FEUILLE REPUBLIER ============ -->
+<sc-if value="{{fRepub}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<button onClick="{{republier}}" class="opt"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 11V9a2 2 0 0 1 2-2h12l-3-3M20 13v2a2 2 0 0 1-2 2H6l3 3"></path></svg><span>{{repubT}}<small>{{repubS}}</small></span></button>
+<button onClick="{{citer}}" class="opt"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 5h14v10H9l-4 4z"></path></svg><span>Citer<small>Ajouter votre avis au-dessus</small></span></button>
+<button onClick="{{envoyerMsg}}" class="opt"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg><span>Envoyer à une connexion<small>Dans Messages</small></span></button>
+<button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ FEUILLE ENVOYER À UNE CONNEXION ============ -->
+<sc-if value="{{fEnvoi}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 4px; margin-bottom: 6px;"><button onClick="{{retourRepub}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></button><b style="font-size: 17px;">Envoyer à</b></div>
+<sc-for list="{{contacts}}" as="m" hint-placeholder-count="4"><button onClick="{{m.go}}" class="opt"><span class="av" style="width: 38px; height: 38px; background: {{m.c}}; color: {{m.lc}};">{{m.lg}}</span><span style="flex: 1;">{{m.n}}<small>{{m.r}}</small></span><span style="font-size: 13px; color: #A6F26B;">Envoyer</span></button></sc-for>
+<a href="Messages.dc.html" class="opt" style="justify-content: center; color: #A6F26B; border: 0;">Ouvrir Messages</a>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ FEUILLE ORBI ============ -->
+<sc-if value="{{orbi}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermerOrbi}}" aria-label="Fermer Orbi" class="voile"></button>
+<div class="feuille" style="padding-bottom: 28px;"><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 12px;">
+<sc-if value="{{aRep}}" hint-placeholder-val="{{ false }}"><button onClick="{{autresQ}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></button></sc-if>
+<svg width="42" height="42" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg>
+<span style="flex: 1;"><b style="display: block; font-size: 17px;">{{orbiTitre}}</b><span style="font-size: 12.5px; color: #8FA39E;">Orbi · depuis le Fil</span></span>
+<button onClick="{{fermerOrbi}}" aria-label="Fermer" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #8FA39E;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+<sc-if value="{{sansRep}}" hint-placeholder-val="{{ true }}">
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;">
+<sc-for list="{{questions}}" as="q" hint-placeholder-count="4"><button onClick="{{q.go}}" class="q">{{q.t}}</button></sc-for>
+</div>
+</sc-if>
+<sc-if value="{{aRep}}" hint-placeholder-val="{{ false }}">
+<div style="margin-top: 16px;">
+<p style="font-size: 13px; color: #8FA39E;">{{ra.q}}</p>
+<p style="font-size: 15px; line-height: 1.5; margin-top: 8px;">{{ra.t}}</p>
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;">
+<sc-for list="{{ra.items}}" as="i" hint-placeholder-count="3"><a href="{{i.href}}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #1B3338; color: #F2EDE5;"><span class="av" style="width: 34px; height: 34px; font-size: 11px; border-radius: 10px; background: {{i.c}}; color: {{i.lc}};">{{i.lg}}</span><span style="flex: 1; min-width: 0; font-size: 14px; font-weight: 600;">{{i.t}}<span style="display: block; font-size: 12.5px; font-weight: 400; color: #8FA39E;">{{i.s}}</span></span><span style="color: #8FA39E;">›</span></a></sc-for>
+<sc-if value="{{ra.aAct}}" hint-placeholder-val="{{ false }}"><button onClick="{{ra.act}}" class="q" style="background: #A6F26B; color: #0B1A1F; text-align: center;">{{ra.actT}}</button></sc-if>
+</div>
+</div>
+</sc-if>
+<label class="champ" style="margin-top: 14px;">
+<input value="{{oq}}" onChange="{{ecrireOrbi}}" aria-label="Écrire à Orbi" placeholder="Écrire à Orbi…">
+<button onClick="{{envoyerOrbi}}" class="env">Envoyer</button>
+</label>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{aToast}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="position: absolute; left: 20px; right: 20px; top: 54px; z-index: 30; padding: 14px 16px; border-radius: 16px; background: #F2EDE5; color: #0B1A1F; font-size: 14px; font-weight: 600; box-shadow: 0 16px 30px -10px rgba(0,0,0,.7); display: flex; align-items: center; gap: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14745F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>{{toast}}</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"vue":{"editor":"enum","options":["fil","detail","publier","notifs"],"default":"fil"},"post":{"editor":"enum","options":["pbf","pak","ppi","psm","pme","pjk"],"default":"ppi"},"feuille":{"editor":"enum","options":["aucune","menu","signaler","repub","envoi"],"default":"aucune"},"orbi":{"editor":"boolean","default":false},"orbiRep":{"editor":"enum","options":["aucune","resume","offres","ent","suivre","ecrire"],"default":"aucune"},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && !window.__mvtJ) {
+      window.__mvtJ = 1;
+      const R = document.documentElement.style;
+      const pose = (o, s, tx, r) => { R.setProperty('--mvt-o', o); R.setProperty('--mvt-s', s); R.setProperty('--mvt-tx', tx); R.setProperty('--mvt-r', r); };
+      document.addEventListener('pointerdown', (e) => {
+        const b = e.target && e.target.closest && e.target.closest('button, a, [role="button"]');
+        if (!b) return;
+        const ec = b.closest('[data-ecran]') || document.body;
+        const z = ec.getBoundingClientRect(), k = b.getBoundingClientRect();
+        R.setProperty('--mvt-x', Math.round(e.clientX - z.left) + 'px');
+        R.setProperty('--mvt-y', Math.round(e.clientY - z.top) + 'px');
+        const lab = (b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '').slice(0, 40);
+        if (b.querySelector('path[d^="M15 5 8 12"]') || /^\s*retour/i.test(lab)) pose('.6', '1', '-22px', '150%');
+        else if (b.querySelector('circle[fill="#2FD3A6"]') || /orbi/i.test(b.getAttribute('aria-label') || '')) pose('1', '1', '0px', '22px');
+        else if (k.height >= 64 && k.width >= 160) pose('.5', '.92', '0px', '150%');
+        else pose('.4', '.975', '0px', '150%');
+        clearTimeout(window.__mvtT);
+        window.__mvtT = setTimeout(() => { pose('.4', '.975', '0px', '150%'); }, 700);
+      }, true);
+    }
+    const st = this.state || {};
+    const p = this.props || {};
+    const has = (k) => Object.prototype.hasOwnProperty.call(st, k);
+    const S = (o) => this.setState(o);
+    const flash = (t) => { S({ toast: t }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: null }), 2300); };
+
+    const vue = st.vue ?? p.vue ?? 'fil';
+    const de = st.de ?? 'fil';
+    const post = st.post ?? p.post ?? 'ppi';
+    const fRaw = has('feuille') ? st.feuille : (p.feuille || 'aucune');
+    const feuille = fRaw && fRaw !== 'aucune' ? fRaw : null;
+    const orbi = st.orbi ?? p.orbi ?? false;
+    const oRaw = has('oRep') ? st.oRep : (p.orbiRep || 'aucune');
+    const oRep = oRaw && oRaw !== 'aucune' ? oRaw : null;
+    const ong = st.ong ?? 'tout';
+    const aime = st.aime || {};
+    const repub = st.repub || {};
+    const cache = st.cache || {};
+    const enreg = st.enreg || {};
+    const mes = st.mes || {};
+    const aimeR = st.aimeR || {};
+    const lu = st.lu || {};
+    const moi = st.moi || null;
+
+    // Une seule fiche par personne ou entreprise, partagée avec les autres pages
+    const AV = {
+      gm: { n: 'Grâce Mbuyi', lg: 'GM', c: '#A6F26B', lc: '#0B1A1F', rad: '50%', r: 'Analyste de données junior', profil: 'Carriere.dc.html' },
+      bf: { n: 'Baobab Fintech', lg: 'BF', c: '#0F3F37', lc: '#A6F26B', rad: '12px', r: 'Fintech · Kinshasa · 8 offres', profil: 'Entreprise.dc.html' },
+      ak: { n: 'Amani Kasongo', lg: 'AK', c: '#FDF1D8', lc: '#8A5A00', rad: '50%', r: 'Étudiante en gestion · Lubumbashi', profil: 'Personne-amani.dc.html' },
+      pi: { n: 'Patrick Ilunga', lg: 'PI', c: '#E3EEF9', lc: '#1E4E79', rad: '50%', r: 'Analyste crédit · Fleuve Banque', profil: 'Personne.dc.html' },
+      fb: { n: 'Fleuve Banque', lg: 'FB', c: '#CFE4F7', lc: '#1E4E79', rad: '10px', r: 'Banque · Kinshasa · 3 offres' },
+      sm: { n: 'Sarah Mbala', lg: 'SM', c: '#FBE4E0', lc: '#9A3524', rad: '50%', r: 'Étudiante en design graphique · Kinshasa', profil: 'Personne-sarah.dc.html' },
+      me: { n: 'Mwinda Énergie', lg: 'ME', c: '#FFE1A1', lc: '#8A5A00', rad: '12px', r: 'Énergie solaire · Kinshasa · 3 offres' },
+      jk: { n: 'Joël Kabeya', lg: 'JK', c: '#DDF6EE', lc: '#14745F', rad: '50%', r: 'Community manager · Kinshasa', profil: 'Personne-joel.dc.html' },
+      nk: { n: 'Nadia Kalala', lg: 'NK', c: '#0F3F37', lc: '#A6F26B', rad: '50%', r: 'Recruteuse · Baobab Fintech', profil: 'Personne-nadia.dc.html' },
+      ek: { n: 'Esther Kabila', lg: 'EK', c: '#14745F', lc: '#C9F1E3', rad: '50%', r: 'Chargée RH · Baobab Fintech', profil: 'Personne-esther.dc.html' },
+      ob: { n: 'Orbi', lg: '✦', c: '#2FD3A6', lc: '#0B1A1F', rad: '50%', r: '' }
+    };
+    const R = (a, h, t, j) => ({ a, h, t, j });
+    const POSTS = {
+      pbf: { a: 'bf', tab: 'ent', t: 'On recrute trois analystes data à Kinshasa. Candidature en 5 minutes.', h: 'Aujourd’hui à 9 h 14', j: 142, r: 18, rp: 9, offre: true,
+        reps: [R('jk', '1 h', 'Le poste est ouvert aux débutants ?', 3), R('bf', '1 h', 'Oui : deux ans d’expérience au plus, les stages comptent.', 9), R('ak', '40 min', 'Partagé à ma promo !', 2)] },
+      pak: { a: 'ak', tab: 'tal', t: 'Badge « Bâtisseuse de communauté » obtenu ! Merci à toutes les personnes qui ont répondu à mes questions sur Jumanly.', h: 'Aujourd’hui à 8 h 40', j: 318, r: 24, rp: 4, img: 'A',
+        reps: [R('sm', '2 h', 'Bravo Amani, c’est mérité !', 5), R('jk', '2 h', 'Tu réponds toujours en premier, normal.', 3)] },
+      ppi: { a: 'pi', tab: 'tal', t: 'Premier jour chez Fleuve Banque comme analyste crédit. Offre trouvée sur Jumanly il y a trois semaines.', h: 'Aujourd’hui à 8 h 02', j: 207, r: 12, rp: 6, img: 'P',
+        reps: [R('fb', '4 h', 'Bienvenue dans l’équipe, Patrick !', 48), R('jk', '4 h', 'Bravo frère, tu le mérites. Tu as postulé comment ?', 12), R('pi', '3 h', 'Profil complété à 100 %, puis Orbi m’a aidé à adapter mon CV à l’offre.', 21), R('pi', '1 h', '@Grâce Mbuyi regarde l’offre de Baobab Fintech, elle est faite pour toi.', 4), R('ak', '2 h', 'Ça motive ! Félicitations.', 6)] },
+      psm: { a: 'sm', tab: 'tal', t: 'Ma bannière pour une marque de courses en ligne, projet d’école. Vos avis m’intéressent !', h: 'Aujourd’hui à 5 h 30', j: 64, r: 7, rp: 2, img: 'S',
+        reps: [R('jk', '6 h', 'Les couleurs sont bien choisies. Le texte pourrait être plus gros.', 4), R('ak', '5 h', 'J’adore le personnage !', 2)] },
+      pme: { a: 'me', tab: 'ent', t: 'Portes ouvertes mardi 28 octobre, 10 h, à Gombe. Venez rencontrer l’équipe solaire et déposer votre CV sur place.', h: 'Hier à 16 h 20', j: 39, r: 5, rp: 3, event: true,
+        reps: [R('pi', 'hier', 'Je viens avec deux amis de promo.', 3), R('me', 'hier', 'Avec plaisir, l’entrée est libre.', 6)] },
+      pjk: { a: 'jk', tab: 'tal', t: 'Ma campagne pour Baobab Fintech : 275 nouveaux abonnés en une semaine. Je cherche un poste de community manager à Kinshasa.', h: 'Lundi à 18 h 05', j: 95, r: 11, rp: 3, img: 'J',
+        reps: [R('sm', '1 j', '275 en une semaine, chapeau !', 7), R('pi', '1 j', 'Je te recommande à l’équipe communication de Fleuve Banque.', 9)] }
+    };
+    const PJ = {
+      photo: { t: 'Photo', pjI: '', pjC: '#11262A', pjLc: '#F2EDE5', pjT: '', pjD: '' },
+      real: { t: 'Réalisation', pjI: 'PF', pjC: '#2A2140', pjLc: '#E4D7FF', pjT: 'Tableau de bord des ventes', pjD: 'Réalisation · Portfolio' },
+      att: { t: 'Attestation', pjI: 'SQL', pjC: 'rgba(166,242,107,.16)', pjLc: '#A6F26B', pjT: 'Attestation SQL pour l’analyse', pjD: 'Formation Jumanly · 18 oct. 2026' }
+    };
+    if (moi) {
+      POSTS.pmoi = { a: 'gm', tab: 'tal', t: moi.t, h: 'À l’instant', j: 0, r: 0, rp: 0, img: moi.pj === 'photo' ? 'M' : null, pj: moi.pj && moi.pj !== 'photo' ? moi.pj : null, cite: moi.cite || null, mien: true, reps: [] };
+    }
+
+    const ouvrirDetail = (k, from) => () => S({ vue: 'detail', post: k, de: from || vue, repA: null, saisie: '', feuille: null });
+    const ouvrirFeuille = (k, f) => () => S({ post: k, feuille: f });
+
+    const P = {};
+    Object.keys(POSTS).forEach((k) => {
+      const o = POSTS[k];
+      const on = !!aime[k];
+      const rp = !!repub[k];
+      const nMes = (mes[k] || []).length;
+      const okTab = ong === 'tout' || (ong === 'ent' ? o.tab === 'ent' : o.tab !== 'ent');
+      P[k] = {
+        jn: String(o.j + (on ? 1 : 0)), jf: on ? '#A6F26B' : 'none', jc: on ? '#A6F26B' : '#8FA39E',
+        jt: () => S({ aime: { ...aime, [k]: !on } }),
+        nr: String(o.r + nMes), rep: ouvrirDetail(k, 'fil'),
+        nrp: String(o.rp + (rp ? 1 : 0)), rc: rp ? '#A6F26B' : '#8FA39E', rp: ouvrirFeuille(k, 'repub'),
+        menu: ouvrirFeuille(k, 'menu'),
+        vis: okTab && !cache[k], mask: okTab && !!cache[k],
+        afficher: () => S({ cache: { ...cache, [k]: false } })
+      };
+    });
+    const vide = { jn: '0', jf: 'none', jc: '#8FA39E', jt: () => {}, nr: '0', rep: () => {}, nrp: '0', rc: '#8FA39E', rp: () => {}, menu: () => {}, vis: false, mask: false, afficher: () => {} };
+    const pmoi = P.pmoi || vide;
+
+    const O = [['tout', 'Pour vous'], ['suivis', 'Abonnements'], ['ent', 'Entreprises']];
+    const onglets = O.map(([k, t]) => ({ t, sel: k === ong ? 'true' : 'false', pick: () => S({ ong: k }), fw: k === ong ? '700' : '500', col: k === ong ? '#F2EDE5' : '#8FA39E', on: k === ong ? '1' : '0' }));
+
+    // Détail de la publication ouverte
+    const cur = POSTS[post] ? post : 'ppi';
+    const o = POSTS[cur];
+    const a = AV[o.a];
+    const pc = P[cur];
+    const d = {
+      n: a.n, lg: a.lg, c: a.c, lc: a.lc, rad: a.rad, sous: a.r, t: o.t, h: o.h,
+      aProfil: !!a.profil && !o.mien, profil: a.profil || 'Carriere.dc.html',
+      iA: o.img === 'A', iP: o.img === 'P', iS: o.img === 'S', iJ: o.img === 'J', iMoi: o.img === 'M',
+      offre: !!o.offre, event: !!o.event, aPj: !!o.pj,
+      jn: pc.jn, jf: pc.jf, jc: pc.jc, jt: pc.jt, nr: pc.nr + (pc.nr === '1' ? ' réponse' : ' réponses'), nrp: pc.nrp, rc: pc.rc, rp: pc.rp, menu: pc.menu
+    };
+    const repA = st.repA || null;
+    const allReps = o.reps.concat(mes[cur] || []);
+    const reps = allReps.map((x, i) => {
+      const av = AV[x.a];
+      const key = cur + i;
+      const on = !!aimeR[key];
+      return { n: av.n, lg: av.lg, c: av.c, lc: av.lc, rad: av.rad === '12px' ? '10px' : av.rad, h: x.h, t: x.t,
+        jn: String(x.j + (on ? 1 : 0)), jf: on ? '#A6F26B' : 'none', jc: on ? '#A6F26B' : '#8FA39E',
+        jt: () => S({ aimeR: { ...aimeR, [key]: !on } }),
+        rep: () => S({ repA: av.n, saisie: '@' + av.n + ' ' }) };
+    });
+    const saisie = st.saisie || '';
+    const envoyer = () => {
+      const t = saisie.trim();
+      if (!t || t === '@' + repA) { flash('Écrivez d’abord votre réponse.'); return; }
+      S({ mes: { ...mes, [cur]: (mes[cur] || []).concat([R('gm', 'à l’instant', t, 0)]) }, saisie: '', repA: null });
+      flash('Réponse publiée');
+    };
+
+    // Pièce jointe de ma publication (ou du brouillon)
+    const pjK = vue === 'publier' ? st.pj : (moi && moi.pj);
+    const pjo = PJ[pjK] || PJ.real;
+    const moiC = { pjI: pjo.pjI, pjC: pjo.pjC, pjLc: pjo.pjLc, pjT: pjo.pjT, pjD: pjo.pjD };
+    const citeK = vue === 'publier' ? st.cite : (moi && moi.cite);
+    const citeP = citeK && POSTS[citeK];
+
+    // Feuille ···
+    const ICM = {
+      enreg: 'M7 4h10v16l-5-3.5L7 20z', lien: 'M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1',
+      cacher: 'M3 3l18 18M10.6 6.1A9 9 0 0 1 21 12a14 14 0 0 1-2.4 3.2M6.6 6.6A14 14 0 0 0 3 12a9 9 0 0 0 12.4 5.4',
+      signal: 'M5 21V4h11l-1.5 4L16 12H5', suppr: 'M5 7h14M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3'
+    };
+    const fermer = () => S({ feuille: null });
+    const menu = o.mien ? [
+      { t: 'Copier le lien', s: 'Pour la partager ailleurs', d: ICM.lien, col: '#F2EDE5', go: () => { fermer(); flash('Lien copié'); } },
+      { t: 'Supprimer la publication', s: 'Elle disparaît du Fil', d: ICM.suppr, col: '#FF8A7A', go: () => { S({ moi: null, feuille: null, vue: 'fil' }); flash('Publication supprimée'); } }
+    ] : [
+      { t: enreg[cur] ? 'Retirer des enregistrements' : 'Enregistrer', s: 'À retrouver dans Carrière', d: ICM.enreg, col: '#F2EDE5', go: () => { S({ enreg: { ...enreg, [cur]: !enreg[cur] }, feuille: null }); flash(enreg[cur] ? 'Retirée des enregistrements' : 'Publication enregistrée'); } },
+      { t: 'Copier le lien', s: 'Pour la partager ailleurs', d: ICM.lien, col: '#F2EDE5', go: () => { fermer(); flash('Lien copié'); } },
+      { t: 'Ne plus voir ce type de publication', s: 'Le Fil s’adapte à vos choix', d: ICM.cacher, col: '#F2EDE5', go: () => { S({ cache: { ...cache, [cur]: true }, feuille: null, vue: 'fil' }); flash('C’est noté. Vous en verrez moins.'); } },
+      { t: 'Signaler', s: 'Contenu faux, abusif ou arnaque', d: ICM.signal, col: '#FF8A7A', go: () => S({ feuille: 'signaler' }) }
+    ];
+    const raisons = ['Fausse offre ou arnaque', 'Propos blessants', 'Fausse information', 'Contenu inapproprié', 'Autre raison']
+      .map((t) => ({ t, go: () => { fermer(); flash('Merci. Notre équipe vérifie sous 24 h.'); } }));
+
+    // Feuille republier
+    const estRep = !!repub[cur];
+    const republier = () => { S({ repub: { ...repub, [cur]: !estRep }, feuille: null }); flash(estRep ? 'Republication annulée' : 'Republiée sur votre profil'); };
+    const citer = () => S({ feuille: null, vue: 'publier', de: vue, cite: cur, pj: null, brouillon: '' });
+    const contacts = ['pi', 'jk', 'sm', 'ak'].filter((k) => k !== o.a).slice(0, 3).map((k) => {
+      const m = AV[k];
+      return { n: m.n, r: m.r, lg: m.lg, c: m.c, lc: m.lc, go: () => { fermer(); flash('Envoyée à ' + m.n.split(' ')[0]); } };
+    });
+
+    // Publier
+    const brouillon = st.brouillon || '';
+    const pj = st.pj || null;
+    const pjChoix = ['photo', 'real', 'att'].map((k) => ({ t: PJ[k].t, bd: pj === k ? '#A6F26B' : 'rgba(255,255,255,.16)', bg: pj === k ? 'rgba(166,242,107,.12)' : 'transparent', col: pj === k ? '#A6F26B' : '#F2EDE5', pick: () => S({ pj: pj === k ? null : k }) }));
+    const AUD = ['Tout le monde peut répondre', 'Mes connexions peuvent répondre', 'Personne ne peut répondre'];
+    const aud = st.aud || 0;
+    const peutPub = !!brouillon.trim() || !!pj || !!st.cite;
+    const publier = () => {
+      if (!peutPub) { flash('Écrivez quelque chose ou ajoutez une pièce jointe.'); return; }
+      S({ moi: { t: brouillon.trim() || (st.cite ? 'À lire :' : 'Nouvelle pièce ajoutée à mon profil.'), pj, cite: st.cite || null }, vue: 'fil', ong: 'tout', brouillon: '', pj: null, cite: null });
+      flash('Publication partagée');
+    };
+
+    // Notifications
+    const NO = [
+      { k: 'n1', g: 'auj', cat: 'cand', a: 'nk', quoi: 'a consulté votre candidature « Analyste de données junior ».', h: 'Il y a 10 min', href: 'Carriere-candidature.dc.html' },
+      { k: 'n2', g: 'auj', cat: 'offres', a: 'bf', quoi: 'publie une offre qui vous correspond à 86 %.', h: 'Il y a 2 h', href: 'Offres-detail.dc.html' },
+      { k: 'n3', g: 'auj', cat: 'reseau', a: 'ek', quoi: 'veut se connecter avec vous.', h: 'Il y a 3 h', href: 'Messages-demandes.dc.html' },
+      { k: 'n4', g: 'auj', cat: 'reseau', a: 'pi', quoi: 'vous a mentionnée dans une réponse.', h: 'Il y a 1 h', post: 'ppi', luDef: true },
+      { k: 'n5', g: 'sem', cat: 'offres', a: 'me', quoi: 'vous rappelle ses portes ouvertes du mardi 28 octobre.', h: 'Hier', post: 'pme', luDef: true },
+      { k: 'n6', g: 'sem', cat: 'cand', a: 'ob', qui: 'Orbi', quoi: ': votre CV peut gagner 12 points avec deux chiffres de plus.', h: 'Lundi', href: 'Carriere-cv.dc.html', luDef: true },
+      { k: 'n7', g: 'sem', cat: 'reseau', a: 'jk', quoi: 'a aimé votre attestation SQL.', h: '18 oct.', href: 'Carriere-progression.dc.html', luDef: true }
+    ];
+    const estLu = (x) => !!lu[x.k] || !!x.luDef || !!st.toutLu;
+    const nNonLu = NO.filter((x) => !estLu(x)).length;
+    const nf = st.nf || 'tout';
+    const NC = [['tout', 'Tout'], ['cand', 'Candidatures'], ['offres', 'Offres'], ['reseau', 'Réseau']];
+    const nChips = NC.map(([k, t]) => ({ t, pick: () => S({ nf: k }), bg: nf === k ? '#F2EDE5' : 'transparent', col: nf === k ? '#0B1A1F' : '#F2EDE5', bd: nf === k ? '#F2EDE5' : 'rgba(255,255,255,.16)' }));
+    const item = (x) => {
+      const av = AV[x.a];
+      const l = estLu(x);
+      return { lien: !!x.href, btn: !x.href, href: x.href || 'Fil.dc.html', qui: x.qui || av.n, quoi: x.quoi, h: x.h, lg: av.lg, c: av.c, lc: av.lc, rad: av.rad,
+        dot: l ? '0' : '1', bg: l ? 'transparent' : 'rgba(166,242,107,.05)',
+        go: () => S({ lu: { ...lu, [x.k]: true }, vue: 'detail', post: x.post, de: 'notifs', repA: null, saisie: '' }) };
+    };
+    const filt = NO.filter((x) => nf === 'tout' || x.cat === nf);
+    const groupes = [['auj', 'Aujourd’hui'], ['sem', 'Cette semaine']]
+      .map(([g, t]) => ({ t, items: filt.filter((x) => x.g === g).map(item) }))
+      .filter((g) => g.items.length);
+
+    // Orbi
+    const OR = {
+      resume: { q: 'Résumer les nouveautés du jour', t: 'Trois choses aujourd’hui : Baobab Fintech recrute trois analystes data, Patrick a commencé chez Fleuve Banque, et Mwinda Énergie ouvre ses portes mardi.',
+        items: [['bf', 'Analyste de données junior', 'Baobab Fintech · 86 % pour vous', 'Offres-detail.dc.html'], ['pi', 'Patrick Ilunga', 'Nouveau poste · Fleuve Banque', 'Personne.dc.html']] },
+      offres: { q: '3 offres publiées ce matin', t: 'Classées selon votre profil : la première demande SQL et Excel, que vous avez déjà validés.',
+        items: [['bf', 'Analyste de données junior', 'Baobab Fintech · Kinshasa · 86 %', 'Offres-detail.dc.html'], ['fb', 'Assistant marketing digital', 'Fleuve Banque · Kinshasa · 77 %', 'Offres.dc.html'], ['me', 'Analyste énergie solaire', 'Mwinda Énergie · Kinshasa · 79 %', 'Offres.dc.html']] },
+      ent: { q: 'Quelles entreprises recrutent cette semaine ?', t: 'Trois entreprises de votre domaine recrutent en ce moment à Kinshasa.',
+        items: [['bf', 'Baobab Fintech', '8 offres en cours', 'Entreprise.dc.html'], ['fb', 'Fleuve Banque', '3 offres en cours', 'Offres.dc.html'], ['me', 'Mwinda Énergie', '3 offres en cours', 'Offres.dc.html']] },
+      suivre: { q: 'Qui suivre dans mon domaine ?', t: 'Ces personnes publient souvent sur la data et la finance.',
+        items: [['pi', 'Patrick Ilunga', 'Analyste crédit · Fleuve Banque', 'Personne.dc.html'], ['bf', 'Baobab Fintech', 'Fintech · 8 offres', 'Entreprise.dc.html']] },
+      ecrire: { q: 'Écrire une publication sur mon attestation', t: 'Voici un brouillon : « Je viens d’obtenir mon attestation SQL sur Jumanly. Prochaine étape : un tableau de bord pour une PME de Kinshasa. »', items: [], act: 'ecrire', actT: 'Ouvrir le brouillon' },
+      libre: { q: st.oqEnv || '', t: 'Voici ce que j’ai trouvé dans le Fil et dans Explorer.', items: [['bf', 'Baobab Fintech', '8 offres en cours', 'Entreprise.dc.html'], ['pi', 'Patrick Ilunga', 'Analyste crédit · Fleuve Banque', 'Personne.dc.html']] }
+    };
+    const BROUILLON = 'Je viens d’obtenir mon attestation SQL sur Jumanly. Prochaine étape : un tableau de bord pour une PME de Kinshasa.';
+    const ouvrirBrouillon = () => S({ orbi: false, oRep: null, vue: 'publier', de: 'fil', brouillon: BROUILLON, pj: 'att', cite: null });
+    const rr = oRep && OR[oRep];
+    const ra = rr ? {
+      q: rr.q, t: rr.t,
+      items: rr.items.map(([k, t, s, href]) => ({ t, s, href, lg: AV[k].lg, c: AV[k].c, lc: AV[k].lc })),
+      aAct: !!rr.act, actT: rr.actT || '', act: ouvrirBrouillon
+    } : { q: '', t: '', items: [], aAct: false, actT: '', act: () => {} };
+    const oq = st.oq || '';
+    const questions = ['resume', 'ent', 'suivre', 'ecrire'].map((k) => ({ t: OR[k].q, go: () => S({ oRep: k }) }));
+
+    const ICO = {
+      fil: 'M4 6h16M4 12h16M4 18h10',
+      explorer: 'M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM15.5 8.5l-2 5-5 2 2-5z',
+      carriere: 'M3.5 8.5a1.5 1.5 0 0 1 1.5-1.5h14a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5zM8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3.5 12.5h17M12 11.5v2',
+      formation: 'M2.5 9 12 4.5 21.5 9 12 13.5zM6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6',
+      messages: 'M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z'
+    };
+    const HREF = { fil: 'Fil.dc.html', explorer: 'Offres.dc.html', carriere: 'Carriere.dc.html', formation: 'Formation.dc.html', messages: 'Messages.dc.html' };
+    const nav = [['fil', 'Fil'], ['explorer', 'Explorer'], ['carriere', 'Carrière'], ['formation', 'Formation'], ['messages', 'Messages']]
+      .map(([k, t]) => ({ t, d: ICO[k], href: HREF[k], c: k === 'fil' ? '#A6F26B' : '#8FA39E', sw: k === 'fil' ? '2.1' : '1.7', dot: k === 'fil' ? '1' : '0' }));
+
+    const retour = () => S({ vue: de === 'notifs' ? 'notifs' : 'fil', feuille: null });
+
+    return {
+
+      avecNav: !(this.props && (this.props.coque === true || this.props.coque === 'true')),
+      vFil: vue === 'fil', vDetail: vue === 'detail', vPublier: vue === 'publier', vNotifs: vue === 'notifs',
+      onglets, nav,
+      sTout: ong === 'tout', finFil: true,
+      pmoi, pbf: P.pbf, pak: P.pak, ppi: P.ppi, psm: P.psm, pme: P.pme, pjk: P.pjk,
+      moiT: moi ? moi.t : '', moiPhoto: !!moi && moi.pj === 'photo', moiPj: !!moi && !!moi.pj && moi.pj !== 'photo', moiCite: !!moi && !!moi.cite, moiC,
+      citeN: citeP ? AV[citeP.a].n : '', citeT: citeP ? citeP.t : '',
+      participer: () => { const v = !st.part; S({ part: v }); flash(v ? 'Inscrite. Rappel la veille dans vos notifications.' : 'Participation annulée'); },
+      partT: st.part ? 'Inscrite ✓' : 'Je participe', partBg: st.part ? 'rgba(166,242,107,.16)' : '#F2EDE5', partCol: st.part ? '#A6F26B' : '#0B1A1F', partN: String(86 + (st.part ? 1 : 0)),
+      // détail
+      d, reps, retour, retourT: de === 'notifs' ? 'Notifications' : 'Fil',
+      saisie, ecrire: (e) => S({ saisie: e && e.target ? e.target.value : '' }), envoyer,
+      placeRep: repA ? 'Répondre à ' + repA + '…' : 'Répondre à ' + a.n.split(' ')[0] + '…',
+      aRepA: !!repA, repA: repA || '', annulerRepA: () => S({ repA: null, saisie: '' }),
+      // publier
+      ouvrirPublier: () => S({ vue: 'publier', de: 'fil', cite: null, pj: null, brouillon: '' }),
+      annulerPub: () => S({ vue: st.de === 'detail' ? 'detail' : 'fil', brouillon: '', pj: null, cite: null }),
+      brouillon, ecrirePub: (e) => S({ brouillon: e && e.target ? e.target.value : '' }),
+      pjChoix, pubPhoto: pj === 'photo', pubPj: !!pj && pj !== 'photo', pubCite: !!citeP,
+      retirerPj: () => S({ pj: null }),
+      aEssai: !brouillon && !st.cite, essayer: () => S({ brouillon: BROUILLON, pj: 'att' }),
+      audience: AUD[aud], changerAudience: () => S({ aud: (aud + 1) % 3 }),
+      publier, pubOp: peutPub ? '1' : '.45',
+      // notifications
+      ouvrirNotifs: () => S({ vue: 'notifs' }), retourFil: () => S({ vue: 'fil' }),
+      bellLabel: nNonLu ? 'Notifications, ' + nNonLu + ' nouvelles' : 'Notifications', nNonLu: String(nNonLu), bellOp: nNonLu ? '1' : '0',
+      nChips, groupes, nVide: groupes.length === 0,
+      resteT: nNonLu ? nNonLu + ' non lues' : 'Tout est lu', toutLu: () => { S({ toutLu: true }); if (nNonLu) flash('Tout est marqué comme lu'); }, toutLuOp: nNonLu ? '1' : '.4',
+      // feuilles
+      fMenu: feuille === 'menu', fSignaler: feuille === 'signaler', fRepub: feuille === 'repub', fEnvoi: feuille === 'envoi',
+      fermer, menu, raisons, retourMenu: () => S({ feuille: 'menu' }), retourRepub: () => S({ feuille: 'repub' }),
+      repubT: estRep ? 'Annuler la republication' : 'Republier', repubS: estRep ? 'Elle quitte votre profil' : 'Sur votre profil, sans commentaire',
+      republier, citer, envoyerMsg: () => S({ feuille: 'envoi' }), contacts,
+      // Orbi
+      orbi, fab: !orbi && vue === 'fil' && !feuille,
+      ouvrirOrbi: () => S({ orbi: true, oRep: null }), orbiResume: () => S({ orbi: true, oRep: 'resume' }), orbiOffres: () => S({ orbi: true, oRep: 'offres' }),
+      fermerOrbi: () => S({ orbi: false, oRep: null }), autresQ: () => S({ oRep: null }),
+      orbiTitre: rr ? 'Orbi' : 'Bonjour Grâce', aRep: !!rr, sansRep: !rr, ra, questions,
+      oq, ecrireOrbi: (e) => S({ oq: e && e.target ? e.target.value : '' }),
+      envoyerOrbi: () => { if (!oq.trim()) { flash('Écrivez votre question à Orbi.'); return; } S({ oRep: 'libre', oqEnv: oq.trim(), oq: '' }); },
+      aToast: !!st.toast, toast: st.toast || ''
+    };
+  }
+}
+
+</script>
+</body>
+</html>

@@ -1,0 +1,1992 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-10-21T08:40:00Z"
+ },
+ "title": "Jumanly Modèle B",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [],
+ "boards": {
+  "Fil.dc.html": {
+   "x": 0,
+   "y": 5732,
+   "w": 390,
+   "h": 844,
+   "title": "V2 · Fil sombre (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Fil-detail.dc.html": {
+   "x": 470,
+   "y": 5732,
+   "w": 390,
+   "h": 844,
+   "title": "V2 · Publication et réponses",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Fil-publier.dc.html": {
+   "x": 940,
+   "y": 5732,
+   "w": 390,
+   "h": 844,
+   "title": "V2 · Nouvelle publication",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Fil-orbi.dc.html": {
+   "x": 1410,
+   "y": 5732,
+   "w": 390,
+   "h": 844,
+   "title": "V2 · Orbi ouvert depuis le Fil",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Identite.dc.html": {
+   "x": 0,
+   "y": 0,
+   "w": 1280,
+   "h": 1480,
+   "title": "Identité sombre de l’app",
+   "radius": 32
+  },
+  "Offres.dc.html": {
+   "x": 0,
+   "y": 8260,
+   "w": 390,
+   "h": 844,
+   "title": "V3 · Explorer (modèle de ta capture, cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Offres-secteur.dc.html": {
+   "x": 470,
+   "y": 8260,
+   "w": 390,
+   "h": 844,
+   "title": "V3 · Explorer filtré : Data + Énergie",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Offres-detail.dc.html": {
+   "x": 940,
+   "y": 8260,
+   "w": 390,
+   "h": 844,
+   "title": "V3 · Détail d’une offre (lien vers l’entreprise)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Offres-postuler.dc.html": {
+   "x": 1410,
+   "y": 8260,
+   "w": 390,
+   "h": 844,
+   "title": "V3 · Postuler",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entreprise.dc.html": {
+   "x": 0,
+   "y": 10788,
+   "w": 390,
+   "h": 844,
+   "title": "Entreprise · À propos (cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entreprise-pub.dc.html": {
+   "x": 470,
+   "y": 10788,
+   "w": 390,
+   "h": 844,
+   "title": "Entreprise · Publications",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entreprise-offres.dc.html": {
+   "x": 940,
+   "y": 10788,
+   "w": 390,
+   "h": 844,
+   "title": "Entreprise · Offres en cours",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entreprise-membres.dc.html": {
+   "x": 1410,
+   "y": 10788,
+   "w": 390,
+   "h": 844,
+   "title": "Entreprise · Membres",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne.dc.html": {
+   "x": 1880,
+   "y": 10788,
+   "w": 390,
+   "h": 844,
+   "title": "Personne · À propos (cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-real.dc.html": {
+   "x": 2350,
+   "y": 10788,
+   "w": 390,
+   "h": 844,
+   "title": "Personne · Réalisations de Patrick",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Orbi-options.dc.html": {
+   "x": 1360,
+   "y": 0,
+   "w": 1100,
+   "h": 560,
+   "title": "Orbi · couleur et icône (A appliquée)",
+   "radius": 32
+  },
+  "Carriere.dc.html": {
+   "x": 0,
+   "y": 13316,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Profil (cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cv.dc.html": {
+   "x": 470,
+   "y": 13316,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · CV",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-portfolio.dc.html": {
+   "x": 940,
+   "y": 13316,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Portfolio",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-progression.dc.html": {
+   "x": 1410,
+   "y": 13316,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Progression",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-candidatures.dc.html": {
+   "x": 1880,
+   "y": 13316,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Candidatures",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-partager.dc.html": {
+   "x": 0,
+   "y": 14580,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Partager le profil (lien, WhatsApp, QR, PDF)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-modifier.dc.html": {
+   "x": 470,
+   "y": 14580,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Modifier le profil : nom, photo, bannière, bio",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-photo.dc.html": {
+   "x": 940,
+   "y": 14580,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Changer la photo ou la bannière",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-apropos.dc.html": {
+   "x": 1410,
+   "y": 14580,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · À propos : réécrire avec Orbi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-exp.dc.html": {
+   "x": 1880,
+   "y": 14580,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Modifier une expérience + Orbi corrige",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-exp-new.dc.html": {
+   "x": 2350,
+   "y": 14580,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Ajouter une expérience",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-formation.dc.html": {
+   "x": 2820,
+   "y": 14580,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Modifier une formation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-comp.dc.html": {
+   "x": 3290,
+   "y": 14580,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Ajouter des compétences (suggestions Orbi)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-langues.dc.html": {
+   "x": 3760,
+   "y": 14580,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Langues et lieux",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-parametres.dc.html": {
+   "x": 0,
+   "y": 15844,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Paramètres du compte",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-abonnement.dc.html": {
+   "x": 470,
+   "y": 15844,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Ma formule : Free, Starter, Pro, Premium",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-paiement.dc.html": {
+   "x": 940,
+   "y": 15844,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Paiement Mobile Money",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-paiement-valider.dc.html": {
+   "x": 1410,
+   "y": 15844,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Validation sur le téléphone",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-paiement-ok.dc.html": {
+   "x": 1880,
+   "y": 15844,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Paiement réussi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-confid.dc.html": {
+   "x": 2350,
+   "y": 15844,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Confidentialité",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-notif.dc.html": {
+   "x": 2820,
+   "y": 15844,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Notifications",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-aide.dc.html": {
+   "x": 3290,
+   "y": 15844,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Aide et contact (e-mail seulement)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-deco.dc.html": {
+   "x": 3760,
+   "y": 15844,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Se déconnecter : confirmation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cv-nouveau.dc.html": {
+   "x": 0,
+   "y": 17108,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Nouveau CV : modèle, import ou Orbi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cv-modele.dc.html": {
+   "x": 470,
+   "y": 17108,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Étape 1 : choisir un modèle",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cv-editeur.dc.html": {
+   "x": 940,
+   "y": 17108,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Étape 2 : éditeur avec aperçu + vérif Orbi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cv-actions.dc.html": {
+   "x": 1410,
+   "y": 17108,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Actions d’un CV (···)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cv-export.dc.html": {
+   "x": 1880,
+   "y": 17108,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Exporter en PDF ou Word",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cv-import.dc.html": {
+   "x": 2350,
+   "y": 17108,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Importer : choisir le fichier",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cv-import-lecture.dc.html": {
+   "x": 2820,
+   "y": 17108,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Importer : Orbi lit le CV",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cv-import-ok.dc.html": {
+   "x": 3290,
+   "y": 17108,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Importer : ce qui a été trouvé",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cv-adapter.dc.html": {
+   "x": 3760,
+   "y": 17108,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Adapter un CV à une offre",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-real.dc.html": {
+   "x": 0,
+   "y": 18372,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Détail d’une réalisation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-real-ajout.dc.html": {
+   "x": 470,
+   "y": 18372,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Ajouter une réalisation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-real-suppr.dc.html": {
+   "x": 940,
+   "y": 18372,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Supprimer : confirmation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-candidature.dc.html": {
+   "x": 1410,
+   "y": 18372,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Détail d’une candidature",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cand-orbi.dc.html": {
+   "x": 1880,
+   "y": 18372,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Préparer l’entretien avec Orbi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cand-ecrire.dc.html": {
+   "x": 2350,
+   "y": 18372,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Écrire à la recruteuse",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-cand-retirer.dc.html": {
+   "x": 2820,
+   "y": 18372,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Retirer la candidature",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages.dc.html": {
+   "x": 0,
+   "y": 22164,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Liste · Connexions (cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-recruteurs.dc.html": {
+   "x": 470,
+   "y": 22164,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Onglet Recruteurs",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-entreprises.dc.html": {
+   "x": 940,
+   "y": 22164,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Onglet Entreprises",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-recherche.dc.html": {
+   "x": 4230,
+   "y": 22164,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Une lettre tapée : noms et messages",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-nouveau.dc.html": {
+   "x": 1410,
+   "y": 22164,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Nouveau message : connexions seulement",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-demandes.dc.html": {
+   "x": 1880,
+   "y": 22164,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Demandes de connexion",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-orbi-liste.dc.html": {
+   "x": 2350,
+   "y": 22164,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Orbi résume les non-lus",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-discussion.dc.html": {
+   "x": 0,
+   "y": 23428,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Discussion avec Patrick",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-menu.dc.html": {
+   "x": 470,
+   "y": 23428,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Menu ··· de la discussion",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-infos.dc.html": {
+   "x": 940,
+   "y": 23428,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Infos : nom, en ligne, vérifié",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-medias.dc.html": {
+   "x": 1410,
+   "y": 23428,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Médias, liens et documents",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-rech-conv.dc.html": {
+   "x": 1880,
+   "y": 23428,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Rechercher dans la discussion",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-ephem.dc.html": {
+   "x": 2350,
+   "y": 23428,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Messages éphémères",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-plus.dc.html": {
+   "x": 2820,
+   "y": 23428,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Plus : bloquer, effacer, exporter, raccourci",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-bloquer.dc.html": {
+   "x": 3290,
+   "y": 23428,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Bloquer : confirmation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-export.dc.html": {
+   "x": 3760,
+   "y": 23428,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Exporter la discussion",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-nadia.dc.html": {
+   "x": 0,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Discussion avec une recruteuse",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-orbi.dc.html": {
+   "x": 470,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Orbi aide à rédiger",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-vocal.dc.html": {
+   "x": 940,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Note vocale en cours",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-camera.dc.html": {
+   "x": 1410,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Appareil photo",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-joindre.dc.html": {
+   "x": 1880,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Épingle : pièces jointes et photos",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-photos-hd.dc.html": {
+   "x": 2350,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · 2 photos choisies, envoi HD",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-sans-acces.dc.html": {
+   "x": 2820,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Photos pas encore autorisées",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-docs.dc.html": {
+   "x": 3290,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Documents",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-cv.dc.html": {
+   "x": 3760,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · CV",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-lettre.dc.html": {
+   "x": 4230,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Lettre de motivation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-contact.dc.html": {
+   "x": 4700,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Contact",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-agenda.dc.html": {
+   "x": 5170,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Agenda : proposer un rendez-vous",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-org.dc.html": {
+   "x": 5640,
+   "y": 24692,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Organisation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-baobab.dc.html": {
+   "x": 2820,
+   "y": 22164,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Discussion avec une entreprise",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-recherche-options.dc.html": {
+   "x": 3290,
+   "y": 22164,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Rechercher : les options",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-recherche-photos.dc.html": {
+   "x": 3760,
+   "y": 22164,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Rechercher par type : photos",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Offres-recherche.dc.html": {
+   "x": 1880,
+   "y": 8260,
+   "w": 390,
+   "h": 844,
+   "title": "Explorer · Rechercher : les options",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Offres-recherche-texte.dc.html": {
+   "x": 2350,
+   "y": 8260,
+   "w": 390,
+   "h": 844,
+   "title": "Explorer · Une lettre tapée : offres, entreprises, personnes",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-recherche.dc.html": {
+   "x": 2350,
+   "y": 13316,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Rechercher : options et raccourcis",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Carriere-recherche-texte.dc.html": {
+   "x": 2820,
+   "y": 13316,
+   "w": 390,
+   "h": 844,
+   "title": "Carrière · Une lettre tapée : tout le profil",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation.dc.html": {
+   "x": 0,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Pour vous (cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-mes-cours.dc.html": {
+   "x": 470,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Mes cours",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-attestations.dc.html": {
+   "x": 940,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Attestations",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-cours.dc.html": {
+   "x": 1410,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Cours Power BI",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-lecon.dc.html": {
+   "x": 1880,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Leçon 3 : vidéo et question",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-quiz.dc.html": {
+   "x": 2350,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Réponse corrigée",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-fini.dc.html": {
+   "x": 2820,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Cours terminé, attestation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-attestation.dc.html": {
+   "x": 3290,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Attestation SQL",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-premium.dc.html": {
+   "x": 3760,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Cours inclus dans Pro",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-menu.dc.html": {
+   "x": 4230,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Menu du cours",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-orbi.dc.html": {
+   "x": 4700,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Orbi : pourquoi Power BI",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-recherche.dc.html": {
+   "x": 5170,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Rechercher : les options",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Formation-recherche-texte.dc.html": {
+   "x": 5640,
+   "y": 20900,
+   "w": 390,
+   "h": 844,
+   "title": "Formation · Une lettre tapée",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Fil-notifs.dc.html": {
+   "x": 0,
+   "y": 6996,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Notifications (cloche)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Fil-detail-baobab.dc.html": {
+   "x": 470,
+   "y": 6996,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Publication de Baobab et réponses",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Fil-menu.dc.html": {
+   "x": 940,
+   "y": 6996,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Menu ··· d’une publication",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Fil-signaler.dc.html": {
+   "x": 1410,
+   "y": 6996,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Signaler une publication",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Fil-repub.dc.html": {
+   "x": 1880,
+   "y": 6996,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Republier, citer, envoyer",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Fil-envoi.dc.html": {
+   "x": 2350,
+   "y": 6996,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Envoyer à une connexion",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Fil-orbi-reponse.dc.html": {
+   "x": 2820,
+   "y": 6996,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Orbi résume les nouveautés",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Offres-tout.dc.html": {
+   "x": 0,
+   "y": 9524,
+   "w": 390,
+   "h": 844,
+   "title": "Explorer · Tout voir : offres pour vous",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Offres-entreprises.dc.html": {
+   "x": 470,
+   "y": 9524,
+   "w": 390,
+   "h": 844,
+   "title": "Explorer · Tout voir : entreprises",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Offres-personnes.dc.html": {
+   "x": 940,
+   "y": 9524,
+   "w": 390,
+   "h": 844,
+   "title": "Explorer · Tout voir : personnes",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Offres-enregistrees.dc.html": {
+   "x": 1410,
+   "y": 9524,
+   "w": 390,
+   "h": 844,
+   "title": "Explorer · Offres enregistrées",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Offres-orbi.dc.html": {
+   "x": 1880,
+   "y": 9524,
+   "w": 390,
+   "h": 844,
+   "title": "Explorer · Orbi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-joel.dc.html": {
+   "x": 0,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Joël Kabeya",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-nadia.dc.html": {
+   "x": 470,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Nadia Kalala",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-ruth.dc.html": {
+   "x": 940,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Ruth Nsimba",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-didier.dc.html": {
+   "x": 1410,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Didier Lukusa",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-sarah.dc.html": {
+   "x": 1880,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Sarah Mbala",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-amani.dc.html": {
+   "x": 2350,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Amani Kasongo",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-merveille.dc.html": {
+   "x": 2820,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Merveille Tshala",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-aline.dc.html": {
+   "x": 3290,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Aline Tshibanda",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-esther.dc.html": {
+   "x": 3760,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Esther Kabila",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-junior.dc.html": {
+   "x": 4230,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Junior Mukendi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-ruth-mavungu.dc.html": {
+   "x": 4700,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Ruth Mavungu",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-sarah-ngoy.dc.html": {
+   "x": 5170,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Sarah Ngoy",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-moussa.dc.html": {
+   "x": 5640,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Moussa Kanté",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Personne-clarisse.dc.html": {
+   "x": 6110,
+   "y": 12052,
+   "w": 390,
+   "h": 844,
+   "title": "Profil · Clarisse Mbala",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-joel.dc.html": {
+   "x": 0,
+   "y": 25956,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Discussion avec Joël",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-ruth.dc.html": {
+   "x": 470,
+   "y": 25956,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Discussion avec Ruth",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-sarah.dc.html": {
+   "x": 940,
+   "y": 25956,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Discussion avec Sarah",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-moussa.dc.html": {
+   "x": 1410,
+   "y": 25956,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Discussion avec Moussa",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Messages-clarisse.dc.html": {
+   "x": 1880,
+   "y": 25956,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Discussion avec Clarisse",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil.dc.html": {
+   "x": 0,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Ouverture · parcours complet (cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-ouverture.dc.html": {
+   "x": 470,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Ouverture · Logo animé (en boucle)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-ouverture-courte.dc.html": {
+   "x": 940,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Ouverture courte · les fois suivantes",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-bienvenue.dc.html": {
+   "x": 1410,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Bienvenue · Learn",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-bienvenue-2.dc.html": {
+   "x": 1880,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Bienvenue · Grow",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-bienvenue-3.dc.html": {
+   "x": 2350,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Bienvenue · Connect",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-inscription.dc.html": {
+   "x": 2820,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · Créer un compte",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-google.dc.html": {
+   "x": 3290,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · Choisir un compte Google",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-conditions.dc.html": {
+   "x": 3760,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · Conditions en bref",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-code.dc.html": {
+   "x": 4230,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · Code reçu par e-mail",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-motdepasse.dc.html": {
+   "x": 4700,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · Mot de passe",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-connexion.dc.html": {
+   "x": 5170,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Se connecter",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-oubli.dc.html": {
+   "x": 5640,
+   "y": 1940,
+   "w": 390,
+   "h": 844,
+   "title": "Mot de passe oublié · lien envoyé",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-profil-nom.dc.html": {
+   "x": 0,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 1/6 · Votre nom",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-profil-photo.dc.html": {
+   "x": 470,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 2/6 · Photo vérifiée par Orbi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-profil-ville.dc.html": {
+   "x": 940,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 3/6 · Pays et ville",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-profil-pays.dc.html": {
+   "x": 1410,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 3/6 · Liste des pays",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-profil-situation.dc.html": {
+   "x": 1880,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 4/6 · Votre situation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-profil-cap.dc.html": {
+   "x": 2350,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 5/6 · Rechercher un métier",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-profil-cap-choisi.dc.html": {
+   "x": 2820,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 5/6 · Cap choisi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-profil-orbi.dc.html": {
+   "x": 3290,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 5/6 · Orbi propose des métiers",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-profil-competences.dc.html": {
+   "x": 3760,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 6/6 · Compétences",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-profil-cv.dc.html": {
+   "x": 4230,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 6/6 · Orbi lit le CV",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-notifications.dc.html": {
+   "x": 4700,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Notifications · Activer",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-autorisation.dc.html": {
+   "x": 5170,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Notifications · Autorisation du téléphone",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Accueil-pret.dc.html": {
+   "x": 5640,
+   "y": 3204,
+   "w": 390,
+   "h": 844,
+   "title": "Profil prêt · Entrer dans Jumanly",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien.dc.html": {
+   "x": 0,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Réglages (cliquable, compte Free)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-ecrit.dc.html": {
+   "x": 470,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Par écrit, ouvert depuis Orbi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-oral-orbi.dc.html": {
+   "x": 940,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · À l’oral, ouvert depuis Orbi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-formation.dc.html": {
+   "x": 1410,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Ouvert depuis Formation",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-pro.dc.html": {
+   "x": 1880,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Réglages en Pro : 10 min, expériences",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-formule.dc.html": {
+   "x": 2350,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Ce qui demande Pro",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-telechargement.dc.html": {
+   "x": 2820,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Orbi télécharge les questions",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-pret.dc.html": {
+   "x": 3290,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Questions prêtes",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-micro.dc.html": {
+   "x": 3760,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Test du micro",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-orbi-parle.dc.html": {
+   "x": 4230,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien vocal · Orbi pose la question",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-a-vous.dc.html": {
+   "x": 4700,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien vocal · À vous, Orbi écoute",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-relance.dc.html": {
+   "x": 5170,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien vocal · Orbi relance",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-indice.dc.html": {
+   "x": 5640,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien vocal · Indice",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-pause.dc.html": {
+   "x": 6110,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien vocal · En pause",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-arreter.dc.html": {
+   "x": 6580,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien vocal · Arrêter ?",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-ecrit-question.dc.html": {
+   "x": 7050,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien écrit · Une question",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-analyse.dc.html": {
+   "x": 7520,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Orbi analyse",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-bilan.dc.html": {
+   "x": 7990,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Bilan",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-reponse.dc.html": {
+   "x": 8460,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Détail d’une réponse",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Entretien-historique.dc.html": {
+   "x": 8930,
+   "y": 19636,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien · Mes simulations",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Application.dc.html": {
+   "x": 0,
+   "y": 4468,
+   "w": 390,
+   "h": 844,
+   "title": "Application · ouverture qui précharge tout, puis 5 onglets sans chargement (cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Transitions.dc.html": {
+   "x": 2540,
+   "y": 0,
+   "w": 1640,
+   "h": 1520,
+   "title": "Transitions et préchargement · planche animée"
+  }
+ },
+ "order": [
+  "Identite.dc.html",
+  "Orbi-options.dc.html",
+  "Transitions.dc.html",
+  "Accueil.dc.html",
+  "Accueil-ouverture.dc.html",
+  "Accueil-ouverture-courte.dc.html",
+  "Accueil-bienvenue.dc.html",
+  "Accueil-bienvenue-2.dc.html",
+  "Accueil-bienvenue-3.dc.html",
+  "Accueil-inscription.dc.html",
+  "Accueil-google.dc.html",
+  "Accueil-conditions.dc.html",
+  "Accueil-code.dc.html",
+  "Accueil-motdepasse.dc.html",
+  "Accueil-connexion.dc.html",
+  "Accueil-oubli.dc.html",
+  "Accueil-profil-nom.dc.html",
+  "Accueil-profil-photo.dc.html",
+  "Accueil-profil-ville.dc.html",
+  "Accueil-profil-pays.dc.html",
+  "Accueil-profil-situation.dc.html",
+  "Accueil-profil-cap.dc.html",
+  "Accueil-profil-cap-choisi.dc.html",
+  "Accueil-profil-orbi.dc.html",
+  "Accueil-profil-competences.dc.html",
+  "Accueil-profil-cv.dc.html",
+  "Accueil-notifications.dc.html",
+  "Accueil-autorisation.dc.html",
+  "Accueil-pret.dc.html",
+  "Application.dc.html",
+  "Fil.dc.html",
+  "Fil-detail.dc.html",
+  "Fil-publier.dc.html",
+  "Fil-orbi.dc.html",
+  "Fil-notifs.dc.html",
+  "Fil-detail-baobab.dc.html",
+  "Fil-menu.dc.html",
+  "Fil-signaler.dc.html",
+  "Fil-repub.dc.html",
+  "Fil-envoi.dc.html",
+  "Fil-orbi-reponse.dc.html",
+  "Offres.dc.html",
+  "Offres-secteur.dc.html",
+  "Offres-detail.dc.html",
+  "Offres-postuler.dc.html",
+  "Offres-recherche.dc.html",
+  "Offres-recherche-texte.dc.html",
+  "Offres-tout.dc.html",
+  "Offres-entreprises.dc.html",
+  "Offres-personnes.dc.html",
+  "Offres-enregistrees.dc.html",
+  "Offres-orbi.dc.html",
+  "Entreprise.dc.html",
+  "Entreprise-pub.dc.html",
+  "Entreprise-offres.dc.html",
+  "Entreprise-membres.dc.html",
+  "Personne.dc.html",
+  "Personne-real.dc.html",
+  "Personne-joel.dc.html",
+  "Personne-nadia.dc.html",
+  "Personne-ruth.dc.html",
+  "Personne-didier.dc.html",
+  "Personne-sarah.dc.html",
+  "Personne-amani.dc.html",
+  "Personne-merveille.dc.html",
+  "Personne-aline.dc.html",
+  "Personne-esther.dc.html",
+  "Personne-junior.dc.html",
+  "Personne-ruth-mavungu.dc.html",
+  "Personne-sarah-ngoy.dc.html",
+  "Personne-moussa.dc.html",
+  "Personne-clarisse.dc.html",
+  "Carriere.dc.html",
+  "Carriere-cv.dc.html",
+  "Carriere-portfolio.dc.html",
+  "Carriere-progression.dc.html",
+  "Carriere-candidatures.dc.html",
+  "Carriere-recherche.dc.html",
+  "Carriere-recherche-texte.dc.html",
+  "Carriere-partager.dc.html",
+  "Carriere-modifier.dc.html",
+  "Carriere-photo.dc.html",
+  "Carriere-apropos.dc.html",
+  "Carriere-exp.dc.html",
+  "Carriere-exp-new.dc.html",
+  "Carriere-formation.dc.html",
+  "Carriere-comp.dc.html",
+  "Carriere-langues.dc.html",
+  "Carriere-parametres.dc.html",
+  "Carriere-abonnement.dc.html",
+  "Carriere-paiement.dc.html",
+  "Carriere-paiement-valider.dc.html",
+  "Carriere-paiement-ok.dc.html",
+  "Carriere-confid.dc.html",
+  "Carriere-notif.dc.html",
+  "Carriere-aide.dc.html",
+  "Carriere-deco.dc.html",
+  "Carriere-cv-nouveau.dc.html",
+  "Carriere-cv-modele.dc.html",
+  "Carriere-cv-editeur.dc.html",
+  "Carriere-cv-actions.dc.html",
+  "Carriere-cv-export.dc.html",
+  "Carriere-cv-import.dc.html",
+  "Carriere-cv-import-lecture.dc.html",
+  "Carriere-cv-import-ok.dc.html",
+  "Carriere-cv-adapter.dc.html",
+  "Carriere-real.dc.html",
+  "Carriere-real-ajout.dc.html",
+  "Carriere-real-suppr.dc.html",
+  "Carriere-candidature.dc.html",
+  "Carriere-cand-orbi.dc.html",
+  "Carriere-cand-ecrire.dc.html",
+  "Carriere-cand-retirer.dc.html",
+  "Entretien.dc.html",
+  "Entretien-ecrit.dc.html",
+  "Entretien-oral-orbi.dc.html",
+  "Entretien-formation.dc.html",
+  "Entretien-pro.dc.html",
+  "Entretien-formule.dc.html",
+  "Entretien-telechargement.dc.html",
+  "Entretien-pret.dc.html",
+  "Entretien-micro.dc.html",
+  "Entretien-orbi-parle.dc.html",
+  "Entretien-a-vous.dc.html",
+  "Entretien-relance.dc.html",
+  "Entretien-indice.dc.html",
+  "Entretien-pause.dc.html",
+  "Entretien-arreter.dc.html",
+  "Entretien-ecrit-question.dc.html",
+  "Entretien-analyse.dc.html",
+  "Entretien-bilan.dc.html",
+  "Entretien-reponse.dc.html",
+  "Entretien-historique.dc.html",
+  "Formation.dc.html",
+  "Formation-mes-cours.dc.html",
+  "Formation-attestations.dc.html",
+  "Formation-cours.dc.html",
+  "Formation-lecon.dc.html",
+  "Formation-quiz.dc.html",
+  "Formation-fini.dc.html",
+  "Formation-attestation.dc.html",
+  "Formation-premium.dc.html",
+  "Formation-menu.dc.html",
+  "Formation-orbi.dc.html",
+  "Formation-recherche.dc.html",
+  "Formation-recherche-texte.dc.html",
+  "Messages.dc.html",
+  "Messages-recruteurs.dc.html",
+  "Messages-entreprises.dc.html",
+  "Messages-nouveau.dc.html",
+  "Messages-demandes.dc.html",
+  "Messages-orbi-liste.dc.html",
+  "Messages-baobab.dc.html",
+  "Messages-recherche-options.dc.html",
+  "Messages-recherche-photos.dc.html",
+  "Messages-recherche.dc.html",
+  "Messages-discussion.dc.html",
+  "Messages-menu.dc.html",
+  "Messages-infos.dc.html",
+  "Messages-medias.dc.html",
+  "Messages-rech-conv.dc.html",
+  "Messages-ephem.dc.html",
+  "Messages-plus.dc.html",
+  "Messages-bloquer.dc.html",
+  "Messages-export.dc.html",
+  "Messages-nadia.dc.html",
+  "Messages-orbi.dc.html",
+  "Messages-vocal.dc.html",
+  "Messages-camera.dc.html",
+  "Messages-joindre.dc.html",
+  "Messages-photos-hd.dc.html",
+  "Messages-sans-acces.dc.html",
+  "Messages-docs.dc.html",
+  "Messages-cv.dc.html",
+  "Messages-lettre.dc.html",
+  "Messages-contact.dc.html",
+  "Messages-agenda.dc.html",
+  "Messages-org.dc.html",
+  "Messages-joel.dc.html",
+  "Messages-ruth.dc.html",
+  "Messages-sarah.dc.html",
+  "Messages-moussa.dc.html",
+  "Messages-clarisse.dc.html"
+ ],
+ "notes": {
+  "s01": {
+   "x": 0,
+   "y": -300,
+   "text": "01 · Identité, Orbi et mouvement",
+   "kind": "title1",
+   "maxW": 4180
+  },
+  "s02": {
+   "x": 0,
+   "y": 1640,
+   "text": "02 · Ouverture de l’app, logo animé, inscription et connexion",
+   "kind": "title1",
+   "maxW": 6030
+  },
+  "s03": {
+   "x": 0,
+   "y": 2904,
+   "text": "03 · Détails du profil en 6 étapes, notifications, profil prêt",
+   "kind": "title1",
+   "maxW": 6030
+  },
+  "s04": {
+   "x": 0,
+   "y": 4168,
+   "text": "04 · L’application : ouverture qui précharge tout, puis 5 onglets sans écran noir",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "s05": {
+   "x": 0,
+   "y": 5432,
+   "text": "05 · Fil d’actualité sombre, façon Threads",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "s06": {
+   "x": 0,
+   "y": 6696,
+   "text": "06 · Fil : notifications, ···, signaler, republier, Orbi",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "s07": {
+   "x": 0,
+   "y": 7960,
+   "text": "07 · Explorer : offres, entreprises, personnes, recherche",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "s08": {
+   "x": 0,
+   "y": 9224,
+   "text": "08 · Explorer : tout voir, enregistrées, Orbi",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "s09": {
+   "x": 0,
+   "y": 10488,
+   "text": "09 · Profil entreprise et profil d’une personne",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "s10": {
+   "x": 0,
+   "y": 11752,
+   "text": "10 · Une page de profil par personne (mêmes métiers partout)",
+   "kind": "title1",
+   "maxW": 6500
+  },
+  "s11": {
+   "x": 0,
+   "y": 13016,
+   "text": "11 · Carrière : profil, CV, portfolio, progression, candidatures, recherche",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "s12": {
+   "x": 0,
+   "y": 14280,
+   "text": "12 · Carrière · profil : partager, modifier, IA",
+   "kind": "title1",
+   "maxW": 4150
+  },
+  "s13": {
+   "x": 0,
+   "y": 15544,
+   "text": "13 · Paramètres, abonnement Mobile Money, confidentialité",
+   "kind": "title1",
+   "maxW": 4150
+  },
+  "s14": {
+   "x": 0,
+   "y": 16808,
+   "text": "14 · CV : construire, importer, exporter, adapter",
+   "kind": "title1",
+   "maxW": 4150
+  },
+  "s15": {
+   "x": 0,
+   "y": 18072,
+   "text": "15 · Portfolio et candidatures",
+   "kind": "title1",
+   "maxW": 3210
+  },
+  "s16": {
+   "x": 0,
+   "y": 19336,
+   "text": "16 · Simulation d’entretien avec Orbi : par écrit ou à l’oral, 5, 10 ou 15 min",
+   "kind": "title1",
+   "maxW": 9320
+  },
+  "s17": {
+   "x": 0,
+   "y": 20600,
+   "text": "17 · Formation : cours, leçons, attestations, recherche, Orbi",
+   "kind": "title1",
+   "maxW": 6030
+  },
+  "s18": {
+   "x": 0,
+   "y": 21864,
+   "text": "18 · Messages : liste, demandes, recherche",
+   "kind": "title1",
+   "maxW": 4620
+  },
+  "s19": {
+   "x": 0,
+   "y": 23128,
+   "text": "19 · Discussion : en-tête, ···, médias, silencieux, éphémères",
+   "kind": "title1",
+   "maxW": 4150
+  },
+  "s20": {
+   "x": 0,
+   "y": 24392,
+   "text": "20 · Écrire : Orbi, vocal, photo, épingle",
+   "kind": "title1",
+   "maxW": 6030
+  },
+  "s21": {
+   "x": 0,
+   "y": 25656,
+   "text": "21 · Messages : une discussion par connexion, liée à son profil",
+   "kind": "title1",
+   "maxW": 3210
+  }
+ },
+ "designSystems": []
+}

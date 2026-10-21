@@ -1,0 +1,549 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jumanly Modèle B · Explorer les offres</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050D10}
+a{color:#A6F26B;text-decoration:none}a:hover{color:#C8F99E}
+.fd,.fd *{box-sizing:border-box}
+.fd{font-family:"Sora",system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.fd h1,.fd h2,.fd h3,.fd p,.fd ul{margin:0}
+.fd button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.fd .scroll{scrollbar-width:none}.fd .scroll::-webkit-scrollbar{display:none}
+.fd .hrow{display:flex;gap:10px;overflow-x:auto;padding:0 20px 4px;scroll-snap-type:x mandatory;scroll-padding-inline:20px;scrollbar-width:none}
+.fd .hrow::after{content:"";flex:0 0 10px}
+.fd .hrow::-webkit-scrollbar{display:none}
+.fd .hrow>*{flex:none;scroll-snap-align:start}
+.fd .sec{display:flex;align-items:baseline;justify-content:space-between;padding:0 20px;margin:24px 0 10px}
+.fd .sec h2{font-size:17px;font-weight:700;letter-spacing:-.01em}
+.fd .sec span{font-size:13px;color:#8FA39E}
+.fd .lg{border-radius:12px;display:flex;align-items:center;justify-content:center;font-weight:700;flex:none}
+.fd .of{background:#13282C;border:1px solid rgba(255,255,255,.07);border-radius:20px;padding:14px;display:flex;flex-direction:column}
+.fd .meta{font-size:12.5px;color:#8FA39E}
+.fd .sc{font-size:12px;font-weight:700;padding:5px 9px;border-radius:999px;background:#A6F26B;color:#0B1A1F;white-space:nowrap}
+.fd .pi{height:34px;padding:0 13px;border-radius:999px;border:1px solid rgba(255,255,255,.14);font-size:13px;font-weight:600;display:inline-flex;align-items:center;white-space:nowrap}
+.fd .bloc{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fd .bloc h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.fd .li{display:flex;gap:10px;font-size:14.5px;line-height:1.45;color:#ECE7DF;padding:4px 0}
+.fd .li i{width:6px;height:6px;border-radius:50%;background:#A6F26B;margin-top:8px;flex:none}
+/* mvt-jumanly 2 */
+:root{--mvt-o:.4;--mvt-s:.975;--mvt-tx:0px;--mvt-r:150%;--mvt-x:50%;--mvt-y:50%}
+[data-ecran]{animation:mvtEcran .34s cubic-bezier(.2,.8,.2,1) both;transform-origin:var(--mvt-x) var(--mvt-y)}
+.voile,.shb{animation:mvtVoile .26s ease-out both}
+.voile+div,.shb+div,.voile+.feuille,.shb+.shp,[style*="z-index: 10"]>button:first-child+div{animation:mvtMonte .34s cubic-bezier(.2,.8,.2,1) both}
+@keyframes mvtEcran{from{opacity:var(--mvt-o);transform:translateX(var(--mvt-tx)) scale(var(--mvt-s));clip-path:circle(var(--mvt-r) at var(--mvt-x) var(--mvt-y))}to{opacity:1;transform:none;clip-path:circle(150% at var(--mvt-x) var(--mvt-y))}}
+@keyframes mvtVoile{from{opacity:0}to{opacity:1}}
+@keyframes mvtMonte{from{transform:translateY(56px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){[data-ecran],.voile,.shb,.voile+div,.shb+div{animation:none!important}}
+/* fin mvt */
+</style>
+</helmet>
+<div class="fd" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F; border-radius: 44px;">
+
+<!-- ============ LISTE ============ -->
+<sc-if value="{{vListe}}" hint-placeholder-val="{{ true }}">
+<div data-ecran="" class="scroll" style="position: absolute; inset: 0; overflow-y: auto; padding-bottom: 170px; background: #0B1A1F;">
+<header style="padding: 50px 20px 0; display: grid; grid-template-columns: 44px 1fr 44px; align-items: center;">
+<a href="Carriere.dc.html" aria-label="Ma carrière" style="width: 40px; height: 40px; border-radius: 50%; background: #A6F26B; color: #0B1A1F; display: flex; align-items: center; justify-content: center; font-weight: 700; font-size: 13px;">GM</a>
+<h1 style="text-align: center; font-size: 19px; font-weight: 600;">Explorer</h1>
+<button onClick="{{ouvrirEnreg}}" aria-label="Offres enregistrées" style="position: relative; width: 44px; height: 44px; display: flex; align-items: center; justify-content: flex-end;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#F2EDE5" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h11a1 1 0 0 1 1 1V21L12 16.8 5.5 21V4.5a1 1 0 0 1 1-1z"></path></svg><span style="position: absolute; top: 4px; right: -6px; min-width: 18px; height: 18px; padding: 0 5px; border-radius: 9px; background: #A6F26B; color: #0B1A1F; font-size: 11px; font-weight: 700; display: flex; align-items: center; justify-content: center; opacity: {{nEnrOp}};">{{nEnr}}</span></button>
+</header>
+<div style="padding: 14px 20px 0; display: flex; align-items: center; gap: 10px;">
+<label style="flex: 1; min-width: 0; height: 50px; border-radius: 25px; background: #1A2629; display: flex; align-items: center; gap: 12px; padding: 0 16px;">
+<svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB3AE" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4.4-4.4"></path></svg>
+<input aria-label="Rechercher une offre, une entreprise ou une personne" placeholder="Offres, entreprises, personnes" value="{{eq}}" onChange="{{chercher}}" onFocus="{{focusRech}}" style="flex: 1 1 0; width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 16px; color: #F2EDE5; min-width: 0;">
+<sc-if value="{{aEq}}" hint-placeholder-val="{{ false }}"><button onClick="{{viderEq}}" aria-label="Effacer" style="width: 30px; height: 30px; display: flex; align-items: center; justify-content: center; color: #9FB3AE; font-size: 18px;">×</button></sc-if>
+</label>
+<sc-if value="{{aRech}}" hint-placeholder-val="{{ false }}"><button onClick="{{annulerRech}}" style="height: 44px; font-size: 14px; font-weight: 600; color: #A6F26B; flex: none;">Annuler</button></sc-if>
+</div>
+
+<sc-if value="{{aRech}}" hint-placeholder-val="{{ false }}">
+<div style="padding: 0 20px;">
+<p class="meta" style="font-size: 13px; padding: 18px 0 10px;">Rechercher dans</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{eTypes}}" as="f" hint-placeholder-count="5"><button onClick="{{f.pick}}" style="height: 38px; padding: 0 15px; border-radius: 19px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}}; font-size: 13.5px; font-weight: 600; white-space: nowrap;">{{f.t}}</button></sc-for></div>
+<sc-if value="{{eVide}}" hint-placeholder-val="{{ true }}">
+<div>
+<sc-if value="{{eVilles}}" hint-placeholder-val="{{ false }}"><div><p class="meta" style="font-size: 13px; padding: 22px 0 4px;">Villes</p><sc-for list="{{villes}}" as="r" hint-placeholder-count="4"><button onClick="{{r.pick}}" style="width: 100%; display: flex; align-items: center; justify-content: space-between; padding: 14px 0; border-bottom: 1px solid rgba(255,255,255,.07); font-size: 15px;"><span>{{r.t}}</span><span class="meta" style="font-size: 13px;">{{r.n}} offres ›</span></button></sc-for></div></sc-if>
+<sc-if value="{{eSansVilles}}" hint-placeholder-val="{{ true }}">
+<div>
+<p class="meta" style="font-size: 13px; padding: 22px 0 4px;">Recherches récentes</p>
+<sc-for list="{{recents}}" as="r" hint-placeholder-count="3"><button onClick="{{r.pick}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 0; font-size: 15px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 4.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zM12 8v4l3 2"></path></svg><span style="flex: 1;">{{r.t}}</span><span class="meta" style="font-size: 13px;">{{r.d}}</span></button></sc-for>
+<p class="meta" style="font-size: 13px; padding: 18px 0 10px;">Populaires à Kinshasa</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{populaires}}" as="r" hint-placeholder-count="5"><button onClick="{{r.pick}}" style="height: 36px; padding: 0 14px; border-radius: 18px; background: #1A2629; font-size: 13.5px; white-space: nowrap;">{{r.t}}</button></sc-for></div>
+<p class="meta" style="font-size: 13px; line-height: 1.5; padding: 22px 0;">Tapez une lettre : les offres, entreprises et personnes s’affichent tout de suite.</p>
+</div>
+</sc-if>
+</div>
+</sc-if>
+<sc-if value="{{ePlein}}" hint-placeholder-val="{{ false }}">
+<div>
+<sc-if value="{{rOff}}" hint-placeholder-val="{{ true }}"><div><p class="meta" style="font-size: 13px; padding: 22px 0 6px;">Offres · {{nOff}}</p>
+<sc-for list="{{resOff}}" as="o" hint-placeholder-count="3"><button onClick="{{o.ouvrir}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.07);"><span class="lg" style="width: 44px; height: 44px; font-size: 13px; background: {{o.c}}; color: {{o.lc}};">{{o.lg}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{o.t}}</b><span class="meta" style="font-size: 13px;">{{o.e}} · {{o.v}}</span></span><span class="sc" style="background: {{o.sbg}}; color: {{o.scol}};">{{o.s}} %</span></button></sc-for></div></sc-if>
+<sc-if value="{{rEnt}}" hint-placeholder-val="{{ true }}"><div><p class="meta" style="font-size: 13px; padding: 22px 0 6px;">Entreprises · {{nEnt}}</p>
+<sc-for list="{{resEnt}}" as="o" hint-placeholder-count="2"><sc-if value="{{o.page}}" hint-placeholder-val="{{ true }}"><a href="Entreprise.dc.html" style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.07); color: #F2EDE5;"><span class="lg" style="width: 44px; height: 44px; font-size: 13px; background: {{o.c}}; color: {{o.lc}};">{{o.lg}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px; font-weight: 600;">{{o.e}}</b><span class="meta" style="font-size: 13px;">{{o.n}} offres en cours</span></span><span class="meta" style="font-size: 13px;">Voir ›</span></a></sc-if><sc-if value="{{o.pasPage}}" hint-placeholder-val="{{ false }}"><button onClick="{{o.ouvrir}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.07); color: #F2EDE5;"><span class="lg" style="width: 44px; height: 44px; font-size: 13px; background: {{o.c}}; color: {{o.lc}};">{{o.lg}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px; font-weight: 600;">{{o.e}}</b><span class="meta" style="font-size: 13px;">{{o.n}} offres en cours</span></span><span class="meta" style="font-size: 13px;">Voir ›</span></button></sc-if></sc-for></div></sc-if>
+<sc-if value="{{rPers}}" hint-placeholder-val="{{ true }}"><div><p class="meta" style="font-size: 13px; padding: 22px 0 6px;">Personnes · {{nPers}}</p>
+<sc-for list="{{resPers}}" as="m" hint-placeholder-count="2"><a href="{{m.href}}" style="display: flex; align-items: center; gap: 12px; padding: 12px 0; border-bottom: 1px solid rgba(255,255,255,.07); color: #F2EDE5;"><span style="width: 44px; height: 44px; border-radius: 50%; background: {{m.c}}; color: {{m.lc}}; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none;">{{m.lg}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px; font-weight: 600;">{{m.n}}</b><span class="meta" style="font-size: 13px;">{{m.r}}</span></span></a></sc-for></div></sc-if>
+<sc-if value="{{rRien}}" hint-placeholder-val="{{ false }}"><p class="meta" style="font-size: 14px; padding: 28px 0; text-align: center;">Aucun résultat pour « {{eq}} ».</p></sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{sansRech}}" hint-placeholder-val="{{ true }}">
+<div>
+
+<div class="hrow" style="gap: 8px; padding-top: 14px;">
+<sc-for list="{{chipsC}}" as="f" hint-placeholder-count="4">
+<button onClick="{{f.pick}}" style="height: 38px; padding: 0 16px; border-radius: 19px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}}; font-size: 14px; font-weight: 600; white-space: nowrap;">{{f.t}}</button>
+</sc-for>
+</div>
+
+<sc-if value="{{showO}}" hint-placeholder-val="{{ true }}">
+<div>
+<!-- Offres par domaine -->
+<div class="sec" style="margin-top: 28px;"><h2 style="font-size: 19px; font-weight: 600;">Offres pour vous</h2><button onClick="{{tv_pour}}" style="font-size: 14px; font-weight: 600; color: #F2EDE5; min-height: 36px;">Tout voir</button></div>
+<div class="hrow" style="gap: 8px; padding-bottom: 16px;">
+<sc-for list="{{chipsD}}" as="f" hint-placeholder-count="5">
+<button onClick="{{f.pick}}" style="height: 40px; padding: 0 18px; border-radius: 20px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}}; font-size: 14px; font-weight: 500; white-space: nowrap;">{{f.t}}</button>
+</sc-for>
+</div>
+<div class="hrow" style="gap: 14px;">
+<sc-for list="{{listeD}}" as="o" hint-placeholder-count="3">
+<button onClick="{{o.ouvrir}}" style="width: 272px; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); background: #0B1A1F; display: block;">
+<div style="height: 126px; position: relative; background: {{o.cov}}; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+<svg viewBox="0 0 272 126" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><g fill="none" stroke="#FFFFFF" stroke-opacity=".22" stroke-width="22"><circle cx="20" cy="63" r="62"></circle><circle cx="252" cy="63" r="62"></circle></g></svg>
+<span style="position: relative; width: 92px; height: 92px; border-radius: 26px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 700; color: {{o.cov}}; letter-spacing: -0.02em;">{{o.lg}}</span>
+</div>
+<div style="padding: 14px 16px 16px;">
+<b style="display: block; font-size: 17px; font-weight: 600; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{o.t}}</b>
+<span style="display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 13px; color: #B9CBC6;">{{o.e}}<svg width="15" height="15" viewBox="0 0 24 24" aria-label="Entreprise vérifiée" role="img"><circle cx="12" cy="12" r="10" fill="#A6F26B"></circle><path d="m7.5 12.5 3 3 6-6.5" fill="none" stroke="#0B1A1F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+<span style="display: block; margin-top: 2px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #8FA39E;">{{o.v}}</span>
+<span style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;">
+<span style="font-size: 12.5px; padding: 5px 9px; border-radius: 7px; background: #1A2629; color: #C9D6D2;">{{o.k}}</span>
+<span style="font-size: 12.5px; padding: 5px 9px; border-radius: 7px; background: #1A2629; color: #C9D6D2;">{{o.h}}</span>
+<span style="font-size: 12.5px; font-weight: 700; padding: 5px 9px; border-radius: 7px; background: {{o.sbg}}; color: {{o.scol}};">{{o.s}} %</span>
+</span>
+</div>
+</button>
+</sc-for>
+</div>
+
+</div>
+</sc-if>
+<sc-if value="{{showE}}" hint-placeholder-val="{{ true }}">
+<div>
+<!-- Entreprises qui recrutent : grandes images -->
+<div class="sec" style="margin-top: 34px;"><h2 style="font-size: 19px; font-weight: 600;">Entreprises qui recrutent</h2><button onClick="{{tv_ent}}" style="font-size: 14px; font-weight: 600; color: #F2EDE5; min-height: 36px;">Tout voir</button></div>
+<div class="hrow" style="gap: 8px; padding-bottom: 16px;">
+<sc-for list="{{chipsS}}" as="f" hint-placeholder-count="5">
+<button onClick="{{f.pick}}" style="height: 40px; padding: 0 18px; border-radius: 20px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}}; font-size: 14px; font-weight: 500; white-space: nowrap;">{{f.t}}</button>
+</sc-for>
+</div>
+<div class="hrow" style="gap: 12px;">
+<a href="Entreprise.dc.html" aria-label="Voir la page de Baobab Fintech" style="display: block; color: #F2EDE5; width: 176px; height: 236px; border-radius: 18px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,.12);">
+<img src="/_blob/f6752c76c7b089d8d92e5aae07109df8" alt="Campagne de Baobab Fintech" style="position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; object-position: 30% 50%;">
+<span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 45%, rgba(0,0,0,.82) 100%);"></span>
+<span style="position: absolute; left: 12px; right: 12px; bottom: 12px;"><b style="display: block; font-size: 16px;">Baobab Fintech</b><span style="font-size: 12.5px; color: #D5DEDB;">Fintech · 8 offres</span></span>
+</a>
+<button onClick="{{ent_fb}}" aria-label="Voir les offres de Fleuve Banque" style="display: block; width: 176px; height: 236px; border-radius: 18px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,.12); background: #1E4E79;"><svg viewBox="0 0 176 236" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><g fill="none" stroke="#FFFFFF" stroke-opacity=".2" stroke-width="20"><circle cx="0" cy="60" r="70"></circle><circle cx="176" cy="150" r="70"></circle></g></svg><span style="position: absolute; left: 50%; top: 70px; transform: translateX(-50%); width: 72px; height: 72px; border-radius: 22px; background: #FFFFFF; color: #1E4E79; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center;">FB</span><span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.7) 100%);"></span><span style="position: absolute; left: 12px; right: 12px; bottom: 12px; text-align: left;"><b style="display: block; font-size: 16px;">Fleuve Banque</b><span style="font-size: 12.5px; color: #D5DEDB;">Banque · 3 offres</span></span></button>
+<button onClick="{{ent_kt}}" aria-label="Voir les offres de Kivu Tech" style="display: block; width: 176px; height: 236px; border-radius: 18px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,.12); background: #14745F;"><svg viewBox="0 0 176 236" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><g fill="none" stroke="#FFFFFF" stroke-opacity=".2" stroke-width="20"><circle cx="0" cy="60" r="70"></circle><circle cx="176" cy="150" r="70"></circle></g></svg><span style="position: absolute; left: 50%; top: 70px; transform: translateX(-50%); width: 72px; height: 72px; border-radius: 22px; background: #FFFFFF; color: #14745F; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center;">KT</span><span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.7) 100%);"></span><span style="position: absolute; left: 12px; right: 12px; bottom: 12px; text-align: left;"><b style="display: block; font-size: 16px;">Kivu Tech</b><span style="font-size: 12.5px; color: #D5DEDB;">Tech · 3 offres</span></span></button>
+<button onClick="{{ent_me}}" aria-label="Voir les offres de Mwinda Énergie" style="display: block; width: 176px; height: 236px; border-radius: 18px; overflow: hidden; position: relative; border: 1px solid rgba(255,255,255,.12); background: #D9941E;"><svg viewBox="0 0 176 236" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><g fill="none" stroke="#FFFFFF" stroke-opacity=".2" stroke-width="20"><circle cx="0" cy="60" r="70"></circle><circle cx="176" cy="150" r="70"></circle></g></svg><span style="position: absolute; left: 50%; top: 70px; transform: translateX(-50%); width: 72px; height: 72px; border-radius: 22px; background: #FFFFFF; color: #D9941E; font-size: 24px; font-weight: 700; display: flex; align-items: center; justify-content: center;">ME</span><span style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0) 55%, rgba(0,0,0,.7) 100%);"></span><span style="position: absolute; left: 12px; right: 12px; bottom: 12px; text-align: left;"><b style="display: block; font-size: 16px;">Mwinda Énergie</b><span style="font-size: 12.5px; color: #D5DEDB;">Énergie · 3 offres</span></span></button>
+</div>
+
+</div>
+</sc-if>
+<sc-if value="{{showO}}" hint-placeholder-val="{{ true }}">
+<div>
+<!-- Offres par secteur -->
+<div class="sec" style="margin-top: 34px;"><h2 style="font-size: 19px; font-weight: 600;">{{titreS}}</h2><button onClick="{{tv_nouv}}" style="font-size: 14px; font-weight: 600; color: #F2EDE5; min-height: 36px;">Tout voir</button></div>
+<div class="hrow" style="gap: 14px;">
+<sc-for list="{{listeS}}" as="o" hint-placeholder-count="3">
+<button onClick="{{o.ouvrir}}" style="width: 272px; border-radius: 18px; overflow: hidden; border: 1px solid rgba(255,255,255,.16); background: #0B1A1F; display: block;">
+<div style="height: 126px; position: relative; background: {{o.cov}}; overflow: hidden; display: flex; align-items: center; justify-content: center;">
+<svg viewBox="0 0 272 126" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><g fill="none" stroke="#FFFFFF" stroke-opacity=".22" stroke-width="22"><circle cx="20" cy="63" r="62"></circle><circle cx="252" cy="63" r="62"></circle></g></svg>
+<span style="position: relative; width: 92px; height: 92px; border-radius: 26px; background: #FFFFFF; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 700; color: {{o.cov}}; letter-spacing: -0.02em;">{{o.lg}}</span>
+</div>
+<div style="padding: 14px 16px 16px;">
+<b style="display: block; font-size: 17px; font-weight: 600; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{o.t}}</b>
+<span style="display: flex; align-items: center; gap: 6px; margin-top: 4px; font-size: 13px; color: #B9CBC6;">{{o.e}}<svg width="15" height="15" viewBox="0 0 24 24" aria-label="Entreprise vérifiée" role="img"><circle cx="12" cy="12" r="10" fill="#A6F26B"></circle><path d="m7.5 12.5 3 3 6-6.5" fill="none" stroke="#0B1A1F" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"></path></svg></span>
+<span style="display: block; margin-top: 2px; font-size: 12px; letter-spacing: .06em; text-transform: uppercase; color: #8FA39E;">{{o.v}}</span>
+<span style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;">
+<span style="font-size: 12.5px; padding: 5px 9px; border-radius: 7px; background: #1A2629; color: #C9D6D2;">{{o.k}}</span>
+<span style="font-size: 12.5px; padding: 5px 9px; border-radius: 7px; background: #1A2629; color: #C9D6D2;">{{o.h}}</span>
+<span style="font-size: 12.5px; font-weight: 700; padding: 5px 9px; border-radius: 7px; background: {{o.sbg}}; color: {{o.scol}};">{{o.s}} %</span>
+</span>
+</div>
+</button>
+</sc-for>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{showP}}" hint-placeholder-val="{{ true }}">
+<div>
+<div class="sec" style="margin-top: 34px;"><h2 style="font-size: 19px; font-weight: 600;">Personnes à connaître</h2><button onClick="{{tv_pers}}" style="font-size: 14px; font-weight: 600; color: #F2EDE5; min-height: 36px;">Tout voir</button></div>
+<sc-for list="{{personnes}}" as="m" hint-placeholder-count="5">
+<div style="display: flex; align-items: center; gap: 14px; padding: 12px 20px;">
+<a href="{{m.href}}" style="display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; color: #F2EDE5;">
+<span style="width: 60px; height: 60px; border-radius: 50%; padding: 2px; background: {{m.ring}}; flex: none;"><span style="width: 100%; height: 100%; border-radius: 50%; background: {{m.c}}; color: {{m.lc}}; font-size: 18px; font-weight: 700; display: flex; align-items: center; justify-content: center; box-shadow: 0 0 0 2px #0B1A1F;">{{m.lg}}</span></span>
+<span style="min-width: 0;"><b style="display: block; font-size: 16px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{m.n}}</b><span style="display: block; font-size: 13.5px; color: #B9CBC6; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{m.r}}</span><span style="display: block; font-size: 13px; color: #8FA39E;">{{m.x}}</span></span>
+</a>
+<button onClick="{{m.pick}}" style="height: 44px; padding: 0 16px; border-radius: 22px; font-size: 14px; font-weight: 700; flex: none; background: {{m.bg}}; color: {{m.col}}; border: 1px solid {{m.bd}};">{{m.bt}}</button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<!-- ============ DÉTAIL ============ -->
+<sc-if value="{{vDetail}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header style="padding: 50px 12px 8px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,.08);">
+<button onClick="{{retour}}" style="height: 44px; padding: 0 8px 0 4px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 4px;" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg>{{retourT}}</button>
+<span style="flex: 1;"></span>
+<button onClick="{{partager}}" style="height: 44px; padding: 0 8px; font-size: 13.5px; font-weight: 600; color: #B9CBC6;">{{partageT}}</button>
+</header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding-bottom: 110px;">
+<div class="bloc" style="padding-top: 20px;">
+<div style="display: flex; align-items: center; gap: 12px;">
+<span class="lg" style="width: 56px; height: 56px; border-radius: 16px; font-size: 17px; background: {{od.c}}; color: {{od.lc}};">{{od.lg}}</span>
+<span style="flex: 1;"><b style="display: block; font-size: 15px;">{{od.e}}</b><span class="meta">Entreprise vérifiée · {{od.h}}</span></span>
+</div>
+<h1 style="font-size: 24px; line-height: 1.25; letter-spacing: -0.02em; margin-top: 16px;">{{od.t}}</h1>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;">
+<span class="pi">{{od.v}}</span><span class="pi">{{od.k}}</span><span class="pi">Bac + 3</span><span class="pi">Salaire affiché</span>
+</div>
+</div>
+
+<div class="bloc">
+<div style="border-radius: 20px; padding: 16px; background: linear-gradient(160deg, #123B38 0%, #13282C 100%); border: 1px solid rgba(47,211,166,.3);">
+<div style="display: flex; align-items: center; gap: 12px;">
+<svg width="40" height="40" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg>
+<span style="flex: 1;"><b style="display: block; font-size: 22px; color: #5FE0B8; letter-spacing: -0.02em;">{{od.s}} % pour vous</b><span class="meta">Pourquoi, selon Orbi</span></span>
+</div>
+<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 14px;">
+<span style="display: flex; gap: 10px; font-size: 14px;"><b style="color: #A6F26B; width: 16px;">✓</b>SQL et Excel déjà sur votre profil</span>
+<span style="display: flex; gap: 10px; font-size: 14px;"><b style="color: #A6F26B; width: 16px;">✓</b>Kinshasa, la ville que vous visez</span>
+<span style="display: flex; gap: 10px; font-size: 14px; color: #F4C463;"><b style="width: 16px;">!</b>Power BI demandé, pas encore acquis</span>
+</div>
+<a href="Formation-cours.dc.html" style="display: inline-flex; margin-top: 14px; font-size: 13.5px; font-weight: 700;">Combler l’écart : cours Power BI, 1 h 10 ›</a>
+</div>
+</div>
+
+<div class="bloc">
+<h3>Vos missions</h3>
+<div class="li"><i></i>Préparer les tableaux de bord mensuels des ventes</div>
+<div class="li"><i></i>Nettoyer et croiser les données clients</div>
+<div class="li"><i></i>Présenter les résultats à l’équipe produit</div>
+</div>
+<div class="bloc">
+<h3>Ce qu’on attend</h3>
+<div class="li"><i></i>Licence en statistiques, économie ou informatique</div>
+<div class="li"><i></i>SQL, Excel ; Power BI apprécié</div>
+<div class="li"><i></i>Français courant, anglais lu</div>
+</div>
+<sc-if value="{{odBaobab}}" hint-placeholder-val="{{ true }}"><a href="Entreprise.dc.html" class="bloc" style="display: flex; align-items: center; gap: 12px; color: #F2EDE5; border-bottom: 1px solid rgba(255,255,255,.07);">
+<span class="lg" style="width: 44px; height: 44px; background: {{od.c}}; color: {{od.lc}};">{{od.lg}}</span>
+<span style="flex: 1;"><b style="display: block; font-size: 14px;">{{od.e}}</b><span class="meta">{{od.sect}}</span></span>
+<span style="font-size: 13.5px; font-weight: 600; color: #A6F26B;">Voir la page ›</span>
+</a></sc-if><sc-if value="{{odAutre}}" hint-placeholder-val="{{ false }}"><button onClick="{{odVoirEnt}}" class="bloc" style="width: 100%; display: flex; align-items: center; gap: 12px; color: #F2EDE5; border-bottom: 1px solid rgba(255,255,255,.07);">
+<span class="lg" style="width: 44px; height: 44px; background: {{od.c}}; color: {{od.lc}};">{{od.lg}}</span>
+<span style="flex: 1;"><b style="display: block; font-size: 14px;">{{od.e}}</b><span class="meta">{{od.sect}}</span></span>
+<span style="font-size: 13.5px; font-weight: 600; color: #A6F26B;">Ses offres ›</span>
+</button></sc-if>
+</div>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; padding: 12px 20px 28px; background: rgba(11,26,31,.92); backdrop-filter: blur(16px); -webkit-backdrop-filter: blur(16px); border-top: 1px solid rgba(255,255,255,.08); display: flex; gap: 10px;">
+<button onClick="{{enregistrer}}" style="height: 52px; padding: 0 20px; border-radius: 26px; border: 1px solid rgba(255,255,255,.18); font-size: 14px; font-weight: 600; color: {{enr.col}};">{{enr.t}}</button>
+<button onClick="{{postuler}}" style="flex: 1; height: 52px; border-radius: 26px; background: #A6F26B; color: #0B1A1F; font-size: 15px; font-weight: 700; text-align: center;">Postuler</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ POSTULER ============ -->
+<sc-if value="{{vPostuler}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermerPostuler}}" aria-label="Fermer" style="position: absolute; inset: 0; width: 100%; background: rgba(0,0,0,.6);"></button>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; background: #13282C; border-radius: 30px 30px 0 0; padding: 10px 20px 28px; border-top: 1px solid rgba(255,255,255,.08);">
+<span style="display: block; width: 40px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.2); margin: 0 auto 16px;"></span>
+<sc-if value="{{pasEnvoye}}" hint-placeholder-val="{{ true }}">
+<div>
+<b style="display: block; font-size: 19px; letter-spacing: -0.01em;">Postuler chez {{od.e}}</b>
+<span class="meta">{{od.t}}</span>
+<p style="font-size: 13px; font-weight: 700; color: #8FA39E; margin-top: 18px; text-transform: uppercase; letter-spacing: .05em;">Votre CV</p>
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 8px;">
+<sc-for list="{{cvs}}" as="cv" hint-placeholder-count="2">
+<button onClick="{{cv.pick}}" style="display: flex; align-items: center; gap: 12px; padding: 14px; border-radius: 16px; background: #1B3338; border: 1.5px solid {{cv.bd}};">
+<span style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid {{cv.bd}}; display: flex; align-items: center; justify-content: center; flex: none;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #A6F26B; opacity: {{cv.on}};"></span></span>
+<span style="flex: 1;"><b style="display: block; font-size: 14px;">{{cv.t}}</b><span class="meta">{{cv.n}}</span></span>
+</button>
+</sc-for>
+</div>
+<sc-if value="{{pasAdapte}}" hint-placeholder-val="{{ true }}"><button onClick="{{adapter}}" style="width: 100%; margin-top: 10px; padding: 12px 14px; border-radius: 16px; border: 1px dashed rgba(47,211,166,.5); font-size: 13.5px; color: #5FE0B8; font-weight: 600;">Orbi adapte ce CV à l’offre</button></sc-if><sc-if value="{{adapte}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 10px; padding: 12px 14px; border-radius: 16px; background: rgba(47,211,166,.1); border: 1px solid rgba(47,211,166,.35); font-size: 13.5px; line-height: 1.45;"><b style="color: #5FE0B8;">CV adapté par Orbi</b><span style="display: block; color: #ECE7DF; margin-top: 4px;">SQL et Excel passent en haut, votre projet de tableau de bord est mis en avant, Power BI est noté « en cours ».</span><span style="display: flex; gap: 16px; margin-top: 8px;"><a href="Carriere-cv-adapter.dc.html" style="font-weight: 700; min-height: 32px; display: inline-flex; align-items: center;">Voir les changements</a><button onClick="{{annulerAdapte}}" style="font-weight: 600; color: #B9CBC6; min-height: 32px;">Annuler</button></span></div></sc-if>
+<label style="display: block; margin-top: 14px;"><span style="display: block; font-size: 13px; font-weight: 700; color: #8FA39E; text-transform: uppercase; letter-spacing: .05em;">Un mot au recruteur</span>
+<textarea placeholder="Facultatif" style="display: block; width: 100%; height: 72px; margin-top: 8px; border-radius: 16px; background: #0B1A1F; border: 1px solid rgba(255,255,255,.1); padding: 12px 14px; font: inherit; font-size: 14px; color: #F2EDE5; resize: none; outline: 0;"></textarea></label>
+<button onClick="{{envoyer}}" style="width: 100%; height: 52px; margin-top: 16px; border-radius: 26px; background: #A6F26B; color: #0B1A1F; font-size: 15px; font-weight: 700; text-align: center;">Envoyer ma candidature</button>
+</div>
+</sc-if>
+<sc-if value="{{envoye}}" hint-placeholder-val="{{ false }}">
+<div style="text-align: center; padding: 10px 6px 4px;">
+<span style="display: flex; width: 72px; height: 72px; margin: 0 auto; border-radius: 50%; background: #A6F26B; color: #0B1A1F; align-items: center; justify-content: center;"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
+<b style="display: block; font-size: 21px; margin-top: 16px;">Candidature envoyée</b>
+<p class="meta" style="font-size: 14px; margin-top: 6px;">Suivez-la dans Carrière › Candidatures.</p>
+<a href="Carriere-candidatures.dc.html" style="display: flex; align-items: center; justify-content: center; width: 100%; height: 52px; margin-top: 20px; border-radius: 26px; background: #A6F26B; color: #0B1A1F; font-size: 15px; font-weight: 700;">Voir mes candidatures</a>
+<button onClick="{{fermerPostuler}}" style="width: 100%; height: 52px; margin-top: 10px; border-radius: 26px; background: #1B3338; font-size: 15px; font-weight: 700; text-align: center;">Retour à l’offre</button>
+</div>
+</sc-if>
+</div>
+</div>
+</sc-if>
+
+
+<!-- ============ TOUT VOIR / ENREGISTRÉES ============ -->
+<sc-if value="{{vTout}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column; background: #0B1A1F;">
+<header style="padding: 50px 12px 8px; display: flex; align-items: center; border-bottom: 1px solid rgba(255,255,255,.08);">
+<button onClick="{{retourListe}}" style="height: 44px; padding: 0 8px 0 4px; font-size: 15px; font-weight: 600; display: flex; align-items: center; gap: 4px;" aria-label="Retour à Explorer"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg>Explorer</button>
+<b style="flex: 1; text-align: center; font-size: 15px; margin-right: 92px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{tvTitre}}</b>
+</header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding-bottom: 40px;">
+<p class="meta" style="font-size: 13px; padding: 16px 20px 4px;">{{tvSous}}</p>
+<sc-for list="{{tvOff}}" as="o" hint-placeholder-count="4"><button onClick="{{o.ouvrir}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,.07);"><span class="lg" style="width: 46px; height: 46px; font-size: 13px; background: {{o.c}}; color: {{o.lc}};">{{o.lg}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px; font-weight: 600; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{o.t}}</b><span class="meta" style="font-size: 13px;">{{o.e}} · {{o.v}} · {{o.k}}</span></span><span class="sc" style="background: {{o.sbg}}; color: {{o.scol}};">{{o.s}} %</span></button></sc-for>
+<sc-for list="{{tvEnt}}" as="o" hint-placeholder-count="0"><button onClick="{{o.ouvrir}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 14px 20px; border-bottom: 1px solid rgba(255,255,255,.07);"><span class="lg" style="width: 46px; height: 46px; font-size: 13px; background: {{o.c}}; color: {{o.lc}};">{{o.lg}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px; font-weight: 600;">{{o.e}}</b><span class="meta" style="font-size: 13px;">{{o.sect}}</span></span><span class="meta" style="font-size: 13px;">{{o.voir}}</span></button></sc-for>
+<sc-for list="{{tvPers}}" as="m" hint-placeholder-count="0"><div style="display: flex; align-items: center; gap: 12px; padding: 12px 20px; border-bottom: 1px solid rgba(255,255,255,.07);"><a href="{{m.href}}" style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; color: #F2EDE5;"><span style="width: 46px; height: 46px; border-radius: 50%; background: {{m.c}}; color: {{m.lc}}; font-size: 14px; font-weight: 700; display: flex; align-items: center; justify-content: center; flex: none;">{{m.lg}}</span><span style="min-width: 0;"><b style="display: block; font-size: 15px; font-weight: 600;">{{m.n}}</b><span class="meta" style="display: block; font-size: 13px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{m.r}}</span></span></a><button onClick="{{m.pick}}" style="height: 40px; padding: 0 14px; border-radius: 20px; font-size: 13px; font-weight: 700; flex: none; background: {{m.bg}}; color: {{m.col}}; border: 1px solid {{m.bd}};">{{m.bt}}</button></div></sc-for>
+<sc-if value="{{tvLien}}" hint-placeholder-val="{{ false }}"><a href="Entreprise-offres.dc.html" style="display: flex; justify-content: center; padding: 18px 20px; font-size: 14px; font-weight: 700;">Voir les 8 offres sur la page de Baobab Fintech ›</a></sc-if>
+<sc-if value="{{tvVide}}" hint-placeholder-val="{{ false }}"><div style="text-align: center; padding: 60px 30px;"><b style="display: block; font-size: 17px;">Aucune offre enregistrée</b><p class="meta" style="font-size: 14px; margin-top: 8px;">Touchez « Enregistrer » sur une offre pour la garder ici.</p><button onClick="{{retourListe}}" style="height: 48px; padding: 0 22px; margin-top: 18px; border-radius: 24px; background: #A6F26B; color: #0B1A1F; font-size: 14px; font-weight: 700;">Explorer les offres</button></div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ FEUILLE ORBI ============ -->
+<sc-if value="{{orbi}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermerOrbi}}" aria-label="Fermer Orbi" style="position: absolute; inset: 0; width: 100%; background: rgba(0,0,0,.55);"></button>
+<div style="position: absolute; left: 0; right: 0; bottom: 0; background: #13282C; border-radius: 30px 30px 0 0; padding: 10px 20px 28px; border-top: 1px solid rgba(255,255,255,.08);">
+<span style="display: block; width: 40px; height: 5px; border-radius: 3px; background: rgba(255,255,255,.2); margin: 0 auto 14px;"></span>
+<div style="display: flex; align-items: center; gap: 12px;">
+<sc-if value="{{oaRep}}" hint-placeholder-val="{{ false }}"><button onClick="{{autresQ}}" aria-label="Autres questions" style="height: 40px; width: 32px; display: flex; align-items: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></button></sc-if>
+<svg width="42" height="42" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg>
+<span style="flex: 1;"><b style="display: block; font-size: 17px;">{{oaTitre}}</b><span style="font-size: 12.5px; color: #8FA39E;">Orbi · depuis Explorer</span></span>
+<button onClick="{{fermerOrbi}}" aria-label="Fermer" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #8FA39E;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button>
+</div>
+<sc-if value="{{oaSans}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;"><sc-for list="{{oQuestions}}" as="q" hint-placeholder-count="4"><button onClick="{{q.go}}" style="padding: 14px 16px; border-radius: 16px; background: #1B3338; font-size: 14px; font-weight: 600;">{{q.t}}</button></sc-for></div></sc-if>
+<sc-if value="{{oaRep}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 16px;"><p class="meta" style="font-size: 13px;">{{oa.q}}</p><p style="font-size: 15px; line-height: 1.5; margin-top: 8px;">{{oa.t}}</p>
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 14px;"><sc-for list="{{oa.items}}" as="o" hint-placeholder-count="3"><button onClick="{{o.ouvrirO}}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #1B3338;"><span class="lg" style="width: 36px; height: 36px; font-size: 12px; background: {{o.c}}; color: {{o.lc}};">{{o.lg}}</span><span style="flex: 1; min-width: 0; font-size: 14px; font-weight: 600;">{{o.t}}<span class="meta" style="display: block; font-weight: 400;">{{o.e}} · {{o.v}}</span></span><span class="sc" style="background: {{o.sbg}}; color: {{o.scol}};">{{o.s}} %</span></button></sc-for></div></div></sc-if>
+<label style="margin-top: 14px; min-height: 52px; border-radius: 26px; background: #0B1A1F; display: flex; align-items: center; gap: 10px; padding: 0 6px 0 18px; border: 1px solid rgba(47,211,166,.45); min-width: 0;">
+<input value="{{oq}}" onChange="{{ecrireOrbi}}" aria-label="Écrire à Orbi" placeholder="Écrire à Orbi…" style="flex: 1 1 0; width: 0; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 14px; color: #F2EDE5;">
+<button onClick="{{envoyerOrbi}}" style="height: 40px; padding: 0 16px; border-radius: 20px; background: #A6F26B; color: #0B1A1F; font-size: 13px; font-weight: 700; flex: none;">Envoyer</button>
+</label>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ ORBI FLOTTANT ============ -->
+<sc-if value="{{fab}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; right: 20px; bottom: 100px; display: flex; align-items: center; gap: 8px; z-index: 5;">
+<button onClick="{{orbiStage}}" style="max-width: 200px; background: #1B3338; border-radius: 18px 18px 6px 18px; padding: 9px 12px; font-size: 12.5px; font-weight: 600; line-height: 1.35; box-shadow: 0 14px 30px -12px rgba(0,0,0,.8); border: 1px solid rgba(255,255,255,.08);">Trouver un stage data à Kinshasa ?</button>
+<button onClick="{{ouvrirOrbi}}" aria-label="Ouvrir Orbi, l’assistant" style="width: 58px; height: 58px; border-radius: 50%; flex: none; box-shadow: 0 0 0 6px rgba(47,211,166,.2),0 14px 30px -8px rgba(47,211,166,.55);">
+<svg width="58" height="58" viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg>
+</button>
+</div>
+
+<sc-if value="{{avecNav}}" hint-placeholder-val="{{ true }}"><nav aria-label="Navigation principale" style="position: absolute; left: 0; right: 0; bottom: 0; height: 84px; padding: 8px 6px 22px; background: rgba(11,26,31,.86); backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px); border-top: 1px solid rgba(255,255,255,.07); display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); z-index: 4;">
+<sc-for list="{{nav}}" as="n" hint-placeholder-count="5">
+<a href="{{n.href}}" aria-label="{{n.t}}" style="display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 5px; color: {{n.c}};">
+<svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="{{n.sw}}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{n.d}}"></path></svg>
+<span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: {{n.dot}};"></span>
+</a>
+</sc-for>
+</nav></sc-if>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"vue":{"editor":"enum","options":["liste","detail","postuler","tout","enreg"],"default":"liste"},"cat":{"editor":"enum","options":["tout","offres","ent","pers"],"default":"tout"},"chd":{"editor":"enum","options":["tout","data","fin","mkt","nrj"],"default":"tout"},"chs":{"editor":"enum","options":["tout","banque","nrj","sante","tech"],"default":"tout"},"tout":{"editor":"enum","options":["pour","ent","nouv","pers"],"default":"pour"},"orbi":{"editor":"boolean","default":false},"recherche":{"editor":"enum","options":["","options","texte"],"default":""},"$preview":{"width":390,"height":844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && !window.__mvtJ) {
+      window.__mvtJ = 1;
+      const R = document.documentElement.style;
+      const pose = (o, s, tx, r) => { R.setProperty('--mvt-o', o); R.setProperty('--mvt-s', s); R.setProperty('--mvt-tx', tx); R.setProperty('--mvt-r', r); };
+      document.addEventListener('pointerdown', (e) => {
+        const b = e.target && e.target.closest && e.target.closest('button, a, [role="button"]');
+        if (!b) return;
+        const ec = b.closest('[data-ecran]') || document.body;
+        const z = ec.getBoundingClientRect(), k = b.getBoundingClientRect();
+        R.setProperty('--mvt-x', Math.round(e.clientX - z.left) + 'px');
+        R.setProperty('--mvt-y', Math.round(e.clientY - z.top) + 'px');
+        const lab = (b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '').slice(0, 40);
+        if (b.querySelector('path[d^="M15 5 8 12"]') || /^\s*retour/i.test(lab)) pose('.6', '1', '-22px', '150%');
+        else if (b.querySelector('circle[fill="#2FD3A6"]') || /orbi/i.test(b.getAttribute('aria-label') || '')) pose('1', '1', '0px', '22px');
+        else if (k.height >= 64 && k.width >= 160) pose('.5', '.92', '0px', '150%');
+        else pose('.4', '.975', '0px', '150%');
+        clearTimeout(window.__mvtT);
+        window.__mvtT = setTimeout(() => { pose('.4', '.975', '0px', '150%'); }, 700);
+      }, true);
+    }
+    const st = this.state || {};
+    const p = this.props || {};
+    const vue = st.vue ?? p.vue ?? 'liste';
+    const sel = st.sel ?? 'bf1';
+    const cvSel = st.cv ?? 'data';
+    const envoye = !!st.envoye;
+    const enr = st.enrS || { bf2: true, me1: true };
+    const de = st.de || 'liste';
+
+    const O = {
+      bf1:{t:'Analyste de données junior',e:'Baobab Fintech',lg:'BF',v:'Kinshasa',k:'CDI · hybride',s:86,c:'#0F3F37',lc:'#A6F26B',h:'il y a 2 j',pq:'SQL, Excel et Kinshasa correspondent'},
+      bf2:{t:'Data analyst stagiaire',e:'Baobab Fintech',lg:'BF',v:'Kinshasa',k:'Stage 6 mois',s:81,c:'#0F3F37',lc:'#A6F26B',h:'il y a 4 h',pq:'Votre Cap : data analyst'},
+      bf3:{t:'Chargé de clientèle',e:'Baobab Fintech',lg:'BF',v:'Matadi',k:'CDI',s:61,c:'#0F3F37',lc:'#A6F26B',h:'il y a 6 j',pq:''},
+      me1:{t:'Analyste énergie solaire',e:'Mwinda Énergie',lg:'ME',v:'Kinshasa',k:'CDI',s:79,c:'#FFE1A1',lc:'#8A5A00',h:'hier',pq:'Excel et analyse de coûts'},
+      me2:{t:'Contrôleur de gestion junior',e:'Mwinda Énergie',lg:'ME',v:'Kinshasa',k:'CDI',s:66,c:'#FFE1A1',lc:'#8A5A00',h:'il y a 3 j',pq:''},
+      me3:{t:'Technicien solaire',e:'Mwinda Énergie',lg:'ME',v:'Kolwezi',k:'CDI',s:58,c:'#FFE1A1',lc:'#8A5A00',h:'il y a 1 sem.',pq:''},
+      fb1:{t:'Chargée d’études marketing',e:'Fleuve Banque',lg:'FB',v:'Kinshasa',k:'CDI',s:72,c:'#CFE4F7',lc:'#1E4E79',h:'il y a 5 j',pq:'Enquêtes et Excel'},
+      fb2:{t:'Assistant comptable',e:'Fleuve Banque',lg:'FB',v:'Kinshasa',k:'CDI',s:70,c:'#CFE4F7',lc:'#1E4E79',h:'il y a 2 j',pq:''},
+      fb3:{t:'Assistant marketing digital',e:'Fleuve Banque',lg:'FB',v:'Kinshasa',k:'Stage',s:77,c:'#CFE4F7',lc:'#1E4E79',h:'aujourd’hui',pq:''},
+      kt1:{t:'Développeuse web junior',e:'Kivu Tech',lg:'KT',v:'Goma',k:'Stage',s:68,c:'#C9F1E3',lc:'#14745F',h:'il y a 3 j',pq:''},
+      kt2:{t:'Community manager',e:'Kivu Tech',lg:'KT',v:'Goma',k:'Freelance',s:74,c:'#C9F1E3',lc:'#14745F',h:'hier',pq:''},
+      kt3:{t:'Testeur QA junior',e:'Kivu Tech',lg:'KT',v:'Goma',k:'CDI',s:71,c:'#C9F1E3',lc:'#14745F',h:'il y a 4 j',pq:''},
+      ls1:{t:'Support informatique',e:'Lisanga Santé',lg:'LS',v:'Lubumbashi',k:'CDD',s:64,c:'#FBE4E0',lc:'#9A3524',h:'il y a 2 j',pq:''},
+      ls2:{t:'Chargée de communication',e:'Lisanga Santé',lg:'LS',v:'Kinshasa',k:'CDI',s:69,c:'#FBE4E0',lc:'#9A3524',h:'il y a 5 j',pq:''},
+      ls3:{t:'Assistante administrative',e:'Lisanga Santé',lg:'LS',v:'Kinshasa',k:'CDD',s:63,c:'#FBE4E0',lc:'#9A3524',h:'hier',pq:''}
+    };
+    const prep = (k) => {
+      const o = O[k];
+      const fort = o.s >= 75;
+      return {
+      ...o, ouvrir: () => this.setState({ sel: k, vue: 'detail', de: vue === 'detail' || vue === 'postuler' ? de : vue, orbi: false }), ouvrirO: () => this.setState({ sel: k, vue: 'detail', de: vue, orbi: false }), sbg: fort ? '#A6F26B' : '#1B3338', scol: fort ? '#0B1A1F' : '#F2EDE5' };
+    };
+    const COV = { BF: '#0F3F37', ME: '#D9941E', FB: '#1E4E79', KT: '#14745F', LS: '#B8432F' };
+    const chd = st.chd ?? p.chd ?? 'tout';
+    const chs = st.chs ?? p.chs ?? 'tout';
+    const D = { tout: ['bf1', 'me1', 'fb1', 'bf2'], data: ['bf1', 'bf2', 'kt1', 'kt3'], fin: ['fb2', 'me2', 'bf3'], mkt: ['fb3', 'kt2', 'ls2', 'fb1'], nrj: ['me1', 'me3'] };
+    const S = { tout: ['kt3', 'fb3', 'ls2', 'me2'], banque: ['fb2', 'fb3', 'bf3'], nrj: ['me1', 'me2', 'me3'], sante: ['ls2', 'ls1', 'ls3'], tech: ['kt1', 'kt3', 'kt2'] };
+    const TS = { tout: 'Nouvelles cette semaine', banque: 'Banque et fintech', nrj: 'Énergie', sante: 'Santé', tech: 'Tech et télécoms' };
+    const chip = (k, t, cur, key) => { const a = k === cur; return { t, pick: () => this.setState({ [key]: k }), bg: a ? '#F2EDE5' : 'transparent', col: a ? '#0B1A1F' : '#F2EDE5', bd: a ? '#F2EDE5' : 'rgba(255,255,255,.28)' }; };
+    const chipsD = [['tout', 'Tout'], ['data', 'Data et numérique'], ['fin', 'Finance'], ['mkt', 'Marketing'], ['nrj', 'Ingénierie']].map(([k, t]) => chip(k, t, chd, 'chd'));
+    const chipsS = [['tout', 'Tout'], ['banque', 'Banque'], ['nrj', 'Énergie'], ['sante', 'Santé'], ['tech', 'Tech']].map(([k, t]) => chip(k, t, chs, 'chs'));
+    const cat = st.cat ?? p.cat ?? 'tout';
+    const chipsC = [['tout', 'Tout'], ['offres', 'Offres'], ['ent', 'Entreprises'], ['pers', 'Personnes']].map(([k, t]) => chip(k, t, cat, 'cat'));
+    const dem = st.dem || {};
+    const PHREF = { pi: 'Personne.dc.html', nk: 'Personne-nadia.dc.html', rn: 'Personne-ruth.dc.html', sm: 'Personne-sarah.dc.html', jk: 'Personne-joel.dc.html' };
+    const personnes = [
+      { id: 'pi', n: 'Patrick Ilunga', r: 'Analyste crédit · Fleuve Banque', x: '6 connexions en commun', lg: 'PI', c: '#E3EEF9', lc: '#1E4E79', ring: '#A6F26B' },
+      { id: 'nk', n: 'Nadia Kalala', r: 'Recruteuse · Baobab Fintech', x: 'Recrute en data', lg: 'NK', c: '#FDF1D8', lc: '#8A5A00', ring: '#A6F26B' },
+      { id: 'rn', n: 'Ruth Nsimba', r: 'Data analyst · Kinshasa', x: 'A rejoint Jumanly il y a 2 h', lg: 'RN', c: '#DDF6EE', lc: '#14745F', ring: 'transparent' },
+      { id: 'sm', n: 'Sarah Mbala', r: 'Graphiste, cherche un stage', x: 'UNIKIN, comme vous', lg: 'SM', c: '#FBE4E0', lc: '#9A3524', ring: 'transparent' },
+      { id: 'jk', n: 'Joël Kabeya', r: 'Community manager', x: 'A rejoint Jumanly hier', lg: 'JK', c: '#1A2629', lc: '#A6F26B', ring: 'transparent' }
+    ].map((m) => { const a = !!dem[m.id]; return { ...m, href: PHREF[m.id], bt: a ? 'Envoyée' : 'Se connecter', bg: a ? 'transparent' : '#A6F26B', col: a ? '#9FB3AE' : '#0B1A1F', bd: a ? 'rgba(255,255,255,.2)' : '#A6F26B', pick: () => this.setState({ dem: { ...dem, [m.id]: !a } }) }; });
+    const prep2 = (k) => ({ ...prep(k), cov: COV[O[k].lg] });
+    const ICO = {
+      fil: 'M4 6h16M4 12h16M4 18h10',
+      explorer: 'M12 3.5a8.5 8.5 0 1 0 0 17 8.5 8.5 0 0 0 0-17zM15.5 8.5l-2 5-5 2 2-5z',
+      progression: 'M3.5 8.5a1.5 1.5 0 0 1 1.5-1.5h14a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5zM8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3.5 12.5h17M12 11.5v2',
+      formation: 'M2.5 9 12 4.5 21.5 9 12 13.5zM6.5 11.2v4.6c0 1.4 2.5 3 5.5 3s5.5-1.6 5.5-3v-4.6',
+      messages: 'M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z'
+    };
+    const HREF = { fil: 'Fil.dc.html', explorer: 'Offres.dc.html', progression: 'Carriere.dc.html', formation: 'Formation.dc.html', messages: 'Messages.dc.html' };
+    const nav = [['fil', 'Fil'], ['explorer', 'Explorer'], ['progression', 'Carrière'], ['formation', 'Formation'], ['messages', 'Messages']]
+      .map(([k, t]) => ({ t, d: ICO[k], href: HREF[k], c: k === 'explorer' ? '#A6F26B' : '#8FA39E', sw: k === 'explorer' ? '2.1' : '1.7', fw: k === 'explorer' ? '700' : '500', dot: k === 'explorer' ? '1' : '0' }));
+    const CV = [['data', 'CV Data', 'Modèle Moderne · modifié hier'], ['gen', 'CV Général', 'Modèle Colonne · 3 oct.']];
+    const cvs = CV.map(([k, t, n]) => ({ t, n, pick: () => this.setState({ cv: k }), bd: k === cvSel ? '#A6F26B' : 'rgba(255,255,255,.12)', on: k === cvSel ? '1' : '0' }));
+
+    const aRech = st.rech ?? (p.recherche === 'options' || p.recherche === 'texte');
+    const eq = st.eq ?? (p.recherche === 'texte' ? 'ba' : '');
+    const eql = eq.trim().toLowerCase();
+    const et = st.et ?? 'tout';
+    const eTypes = [['tout', 'Tout'], ['offres', 'Offres'], ['ent', 'Entreprises'], ['pers', 'Personnes'], ['villes', 'Villes']].map(([k, t]) => chip(k, t, et, 'et'));
+    const keys = Object.keys(O);
+    const hit = (x) => x.toLowerCase().includes(eql);
+    const resOff = eql && (et === 'tout' || et === 'offres' || et === 'villes') ? keys.filter((k) => hit(O[k].t) || hit(O[k].e) || hit(O[k].v) || hit(O[k].k)).map(prep).slice(0, 6) : [];
+    const ENTS = {};
+    keys.forEach((k) => { const o = O[k]; ENTS[o.e] = ENTS[o.e] || { e: o.e, lg: o.lg, c: o.c, lc: o.lc, n: o.e === 'Baobab Fintech' ? 5 : 0 }; ENTS[o.e].n++; });
+    const resEnt = eql && (et === 'tout' || et === 'ent') ? Object.values(ENTS).filter((x) => hit(x.e)).map((x) => ({ ...x, page: x.e === 'Baobab Fintech', pasPage: x.e !== 'Baobab Fintech', ouvrir: () => this.setState({ vue: 'tout', tv: 'entOff', entF: x.e, rech: false }) })) : [];
+    const resPers = eql && (et === 'tout' || et === 'pers') ? personnes.filter((m) => hit(m.n) || hit(m.r)) : [];
+    const VIL = {};
+    keys.forEach((k) => { VIL[O[k].v] = (VIL[O[k].v] || 0) + 1; });
+    const villes = Object.keys(VIL).map((t) => ({ t, n: String(VIL[t]), pick: () => this.setState({ eq: t, et: 'offres' }) }));
+    const setQ = (t) => () => this.setState({ eq: t, rech: true });
+    // Tout voir, enregistrées, entreprises, Orbi
+    const SECT = { 'Baobab Fintech': 'Fintech · Kinshasa · 8 offres', 'Fleuve Banque': 'Banque · Kinshasa · 3 offres', 'Mwinda Énergie': 'Énergie solaire · Kinshasa · 3 offres', 'Kivu Tech': 'Tech · Goma · 3 offres', 'Lisanga Santé': 'Santé · Kinshasa · 3 offres' };
+    Object.keys(O).forEach((k) => { O[k].sect = SECT[O[k].e]; });
+    const tvK = st.tv ?? p.tout ?? 'pour';
+    const entF = st.entF || null;
+    const voirEnt = (e) => () => this.setState({ vue: 'tout', tv: 'entOff', entF: e, orbi: false });
+    const ENTL = Object.keys(SECT).map((e) => { const k = keys.find((x) => O[x].e === e); return { e, sect: SECT[e], lg: O[k].lg, c: O[k].c, lc: O[k].lc, voir: 'Voir ›', ouvrir: voirEnt(e) }; });
+    const nouv = ['fb3', 'bf2', 'kt2', 'ls3', 'me1', 'kt1'];
+    const enrK = keys.filter((k) => enr[k]);
+    let tvTitre = '', tvSous = '', tvOff = [], tvEnt = [], tvPers = [];
+    if (vue === 'enreg') { tvTitre = 'Offres enregistrées'; tvSous = enrK.length ? enrK.length + (enrK.length > 1 ? ' offres gardées' : ' offre gardée') : ''; tvOff = enrK.map(prep); }
+    else if (tvK === 'pour') { tvTitre = 'Offres pour vous'; tvSous = 'Classées selon votre profil'; tvOff = keys.slice().sort((a, b) => O[b].s - O[a].s).map(prep); }
+    else if (tvK === 'nouv') { tvTitre = 'Nouvelles cette semaine'; tvSous = nouv.length + ' offres publiées depuis lundi'; tvOff = nouv.map(prep); }
+    else if (tvK === 'ent') { tvTitre = 'Entreprises qui recrutent'; tvSous = ENTL.length + ' entreprises vérifiées'; tvEnt = ENTL; }
+    else if (tvK === 'pers') { tvTitre = 'Personnes à connaître'; tvSous = 'Selon votre domaine et votre ville'; tvPers = personnes; }
+    else if (tvK === 'entOff') { tvTitre = entF; tvSous = SECT[entF]; tvOff = keys.filter((k) => O[k].e === entF).map(prep); }
+    const tv = (k) => () => this.setState({ vue: 'tout', tv: k });
+    const oRep = st.oRep ?? null;
+    const OQ = {
+      stage: { q: 'Trouver un stage data à Kinshasa', t: 'Un stage correspond à votre profil à Kinshasa, et deux postes juniors acceptent les débutants.', o: ['bf2', 'bf1', 'kt1'] },
+      top: { q: 'Quelles offres me correspondent le mieux ?', t: 'Ces trois offres demandent ce que vous savez déjà faire : SQL, Excel et analyse.', o: ['bf1', 'bf2', 'me1'] },
+      goma: { q: 'Qui recrute à Goma ?', t: 'Kivu Tech recrute trois profils à Goma en ce moment.', o: ['kt2', 'kt3', 'kt1'] },
+      cdi: { q: 'Des CDI en finance ?', t: 'Trois CDI en finance à Kinshasa, dont un à Fleuve Banque où travaille Patrick.', o: ['fb2', 'me2', 'bf3'] }
+    };
+    const oc = oRep && OQ[oRep];
+    const oq = st.oq || '';
+    const EXTRA = {
+      tv_pour: tv('pour'), tv_ent: tv('ent'), tv_nouv: tv('nouv'), tv_pers: tv('pers'),
+      ent_fb: voirEnt('Fleuve Banque'), ent_kt: voirEnt('Kivu Tech'), ent_me: voirEnt('Mwinda Énergie'),
+      vTout: vue === 'tout' || vue === 'enreg', tvTitre, tvSous, tvOff, tvEnt, tvPers,
+      tvLien: vue === 'tout' && tvK === 'entOff' && entF === 'Baobab Fintech', tvVide: vue === 'enreg' && !enrK.length,
+      retourListe: () => this.setState({ vue: 'liste' }),
+      ouvrirEnreg: () => this.setState({ vue: 'enreg' }), nEnr: String(enrK.length), nEnrOp: enrK.length ? '1' : '0',
+      odBaobab: O[sel].e === 'Baobab Fintech', odAutre: O[sel].e !== 'Baobab Fintech', odVoirEnt: voirEnt(O[sel].e),
+      adapte: !!st.adapte, pasAdapte: !st.adapte, adapter: () => this.setState({ adapte: true }), annulerAdapte: () => this.setState({ adapte: false }),
+      orbi: st.orbi ?? p.orbi ?? false, fab: vue === 'liste' && !aRech && !(st.orbi ?? p.orbi),
+      ouvrirOrbi: () => this.setState({ orbi: true, oRep: null }), orbiStage: () => this.setState({ orbi: true, oRep: 'stage' }),
+      fermerOrbi: () => this.setState({ orbi: false, oRep: null }), autresQ: () => this.setState({ oRep: null }),
+      oaRep: !!oc, oaSans: !oc, oaTitre: oc ? 'Orbi' : 'Bonjour Grâce',
+      oa: oc ? { q: oc.q, t: oc.t, items: oc.o.map(prep) } : { q: '', t: '', items: [] },
+      oQuestions: ['stage', 'top', 'goma', 'cdi'].map((k) => ({ t: OQ[k].q, go: () => this.setState({ oRep: k }) })),
+      oq, ecrireOrbi: (e) => this.setState({ oq: e && e.target ? e.target.value : '' }),
+      envoyerOrbi: () => { const t = oq.trim(); if (!t) return this.setState({ oRep: 'top' }); this.setState({ orbi: false, oRep: null, oq: '', rech: true, eq: t, et: 'tout' }); }
+    };
+
+    return {
+
+      avecNav: !(this.props && (this.props.coque === true || this.props.coque === 'true')),
+      aRech, sansRech: !aRech, eq, aEq: !!eql, eTypes, eVide: !eql, ePlein: !!eql, eVilles: et === 'villes', eSansVilles: et !== 'villes', villes,
+      chercher: (e) => this.setState({ eq: e && e.target ? e.target.value : '', rech: true }), focusRech: () => { if (!aRech) this.setState({ rech: true }); },
+      viderEq: () => this.setState({ eq: '' }), annulerRech: () => this.setState({ rech: false, eq: '', et: 'tout' }),
+      recents: [['Stage data', 'hier'], ['Baobab Fintech', 'lun.'], ['Goma', '12 oct.']].map(([t, d]) => ({ t, d, pick: setQ(t) })),
+      populaires: ['Stage', 'Data', 'Banque', 'Marketing', 'CDI'].map((t) => ({ t, pick: setQ(t) })),
+      resOff, resEnt, resPers, nOff: String(resOff.length), nEnt: String(resEnt.length), nPers: String(resPers.length), rOff: resOff.length > 0, rEnt: resEnt.length > 0, rPers: resPers.length > 0, rRien: !!eql && !resOff.length && !resEnt.length && !resPers.length,
+      partager: () => this.setState({ partage: true }), partageT: st.partage ? 'Lien copié' : 'Partager',
+      vListe: vue === 'liste', vDetail: vue === 'detail' || vue === 'postuler', vPostuler: vue === 'postuler',
+      chipsC, personnes, showO: cat === 'tout' || cat === 'offres', showE: cat === 'tout' || cat === 'ent', showP: cat === 'tout' || cat === 'pers',
+      nav, cvs, chipsD, chipsS, listeD: D[chd].map(prep2), listeS: S[chs].map(prep2), titreS: TS[chs],
+      od: O[sel],
+      retour: () => this.setState({ vue: de }), retourT: de === 'tout' ? 'Retour' : (de === 'enreg' ? 'Enregistrées' : 'Explorer'),
+      postuler: () => this.setState({ vue: 'postuler', envoye: false }),
+      fermerPostuler: () => this.setState({ vue: 'detail' }),
+      envoyer: () => this.setState({ envoye: true }),
+      envoye, pasEnvoye: !envoye,
+      enregistrer: () => this.setState({ enrS: { ...enr, [sel]: !enr[sel] } }),
+      enr: enr[sel] ? { t: 'Enregistrée', col: '#A6F26B' } : { t: 'Enregistrer', col: '#F2EDE5' },
+      ...EXTRA
+    };
+  }
+}
+</script>
+</body>
+</html>

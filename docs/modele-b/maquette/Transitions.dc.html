@@ -1,0 +1,98 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jumanly · Transitions</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+.tr,.tr *{box-sizing:border-box}
+.tr p{margin:0}
+.tr .cel{display:flex;gap:22px;align-items:flex-start}
+.tr .tel{position:relative;width:200px;height:433px;border-radius:26px;overflow:hidden;background:#0B1A1F;border:1px solid rgba(255,255,255,.12);flex:none}
+.tr .ecr{position:absolute;inset:0;background:#0B1A1F;padding:26px 14px 0;display:flex;flex-direction:column}
+.tr .ecr i,.tr .feuille-f i{display:block;font-style:normal}
+.tr .t{height:12px;border-radius:6px;background:#F2EDE5;margin-bottom:12px}
+.tr .rech{height:26px;border-radius:13px;background:#1A2629;margin-bottom:12px}
+.tr .carte{border-radius:12px;margin:10px 0 8px}
+.tr .l{height:7px;border-radius:4px;background:rgba(242,237,229,.3);margin-top:6px}
+.tr .av{width:30px;height:30px;border-radius:50%;background:#A6F26B;flex:none}
+.tr .bt{height:28px;border-radius:14px;background:#A6F26B;margin-top:auto;margin-bottom:24px}
+.tr .nav{position:absolute;left:0;right:0;bottom:0;height:40px;background:rgba(11,26,31,.92);border-top:1px solid rgba(255,255,255,.07);display:flex;justify-content:space-around;align-items:center}
+.tr .nav i{width:12px;height:12px;border-radius:4px;background:#8FA39E}
+.tr .nav i:first-child{background:#A6F26B}
+.tr .nav-fixe{z-index:3}
+.tr .nav-fixe i:first-child{animation:navA 3.4s infinite}
+.tr .pt-onglet{animation:navB 3.4s infinite}
+.tr .q{height:26px;border-radius:10px;background:#1B3338;margin-top:8px}
+.tr .poi{width:30px;height:4px;border-radius:2px;background:rgba(255,255,255,.25);margin:0 auto 10px}
+.tr .champ{height:28px;border-radius:14px;border:1px solid rgba(47,211,166,.5);margin-top:auto;margin-bottom:22px}
+.tr .txt{padding-top:6px;max-width:250px}
+.tr .nom{font-size:21px;font-weight:700;color:#F2EDE5}
+.tr .quand{font-size:14.5px;line-height:1.5;color:#B9CBC6;margin-top:10px}
+.tr .meta{font-size:13px;color:#8FA39E;margin-top:12px}
+.tr .pc{background:#13282C;border-radius:20px;padding:26px 26px 24px;border:1px solid rgba(255,255,255,.06)}
+.tr .pc .n{font-size:13px;font-weight:700;color:#A6F26B;letter-spacing:.04em}
+.tr .pc .ti{font-size:18px;font-weight:700;color:#F2EDE5;margin-top:10px}
+.tr .pc .tx{font-size:14px;line-height:1.55;color:#B9CBC6;margin-top:8px}
+.tr .etat{font-size:13px;font-weight:700;margin-top:8px}
+/* 1. Approche */
+.tr .b-approche{animation:approche 3.4s infinite}
+@keyframes approche{0%,35%{opacity:0;transform:scale(.975)}36%{opacity:.4;transform:scale(.975)}46%,92%{opacity:1;transform:none}100%{opacity:0}}
+/* 2. Onglet */
+.tr .b-onglet{animation:ongletB 3.4s infinite}
+.tr .a-onglet{animation:ongletA 3.4s infinite}
+@keyframes ongletB{0%,35%{opacity:0;transform:translateX(22px)}45%,92%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes ongletA{0%,35%{transform:none}45%,92%{transform:translateX(-14px)}100%{transform:none}}
+@keyframes navA{0%,38%{background:#A6F26B}42%,95%{background:#8FA39E}100%{background:#A6F26B}}
+@keyframes navB{0%,38%{background:#8FA39E}42%,95%{background:#A6F26B}100%{background:#8FA39E}}
+/* 3. Feuille */
+.tr .voile-f{position:absolute;inset:0;background:rgba(0,0,0,.6);animation:voileF 3.4s infinite}
+.tr .feuille-f{position:absolute;left:0;right:0;bottom:0;height:190px;background:#13282C;border-radius:20px 20px 0 0;padding:8px 14px;animation:feuilleF 3.4s infinite}
+@keyframes voileF{0%,35%{opacity:0}45%,92%{opacity:1}100%{opacity:0}}
+@keyframes feuilleF{0%,35%{transform:translateY(100%)}46%,92%{transform:none}100%{transform:translateY(100%)}}
+/* 4. Carte */
+.tr .b-carte{animation:carteO 3.4s infinite}
+@keyframes carteO{0%,35%{clip-path:inset(118px 14px 222px 14px round 12px);opacity:0}36%{clip-path:inset(118px 14px 222px 14px round 12px);opacity:1}48%,92%{clip-path:inset(0 0 0 0 round 0);opacity:1}100%{clip-path:inset(0 0 0 0);opacity:0}}
+/* 5. Retour */
+.tr .b-retour{animation:retourB 3.4s infinite;box-shadow:-12px 0 24px rgba(0,0,0,.5)}
+.tr .a-retour{animation:retourA 3.4s infinite}
+@keyframes retourB{0%,35%{transform:none}47%,100%{transform:translateX(105%)}}
+@keyframes retourA{0%,35%{transform:translateX(-30%);filter:brightness(.6)}47%,100%{transform:none;filter:none}}
+/* 6. Orbi */
+.tr .disque-o{position:absolute;right:14px;bottom:52px;width:34px;height:34px;border-radius:50%;background:#2FD3A6;animation:disque 3.4s infinite}
+.tr .b-orbi{background:#13282C;animation:orbiO 3.4s infinite}
+@keyframes disque{0%,35%{opacity:1;transform:none}42%,100%{opacity:0;transform:scale(1.6)}}
+@keyframes orbiO{0%,35%{clip-path:circle(17px at 169px 364px)}50%,92%{clip-path:circle(140% at 169px 364px)}100%{clip-path:circle(17px at 169px 364px)}}
+@media (prefers-reduced-motion: reduce){.tr *{animation-duration:0s!important}}
+</style>
+</helmet>
+<div class="tr" style="width: 1640px; height: 1520px; padding: 64px 72px; background: #0B1A1F; font-family: Sora, system-ui, sans-serif; color: #F2EDE5; display: flex; flex-direction: column; gap: 40px;">
+<div style="display: flex; justify-content: space-between; align-items: flex-end; gap: 40px;">
+<div><p style="font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #A6F26B;">Mouvement</p>
+<h1 style="margin: 10px 0 0; font-size: 44px; font-weight: 700; letter-spacing: -0.02em;">Transitions Jumanly</h1></div>
+<p style="max-width: 720px; font-size: 16px; line-height: 1.6; color: #B9CBC6;"><b style="color: #F2EDE5;">Règle : l’écran d’avant reste affiché jusqu’à ce que le nouveau le recouvre.</b> Jamais de fond vide, jamais de noir. De 250 à 400 ms, courbe douce, seulement des glissements, des zooms légers et des fondus. Si le téléphone demande moins d’animations : un fondu court.</p>
+</div>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 56px 40px;">
+<div class="cel"><div class="tel"><span class="ecr"><i class="t" style="width: 46%;"></i><i class="rech"></i><i class="carte" style="height: 92px; background: #B07A12;"></i><i class="l" style="width: 70%;"></i><i class="l" style="width: 45%;"></i><i class="carte" style="height: 74px; background: #0F3F37;"></i><i class="l" style="width: 62%;"></i><span class="nav"><i></i><i></i><i></i><i></i><i></i></span></span><span class="ecr b-approche"><i class="t" style="width: 36%;"></i><span style="display: flex; gap: 8px; margin-top: 10px;"><i class="av"></i><span style="flex: 1;"><i class="l" style="width: 80%; margin-top: 4px;"></i><i class="l" style="width: 50%;"></i></span></span><i class="carte" style="height: 110px; background: #1E4E79;"></i><i class="l" style="width: 76%;"></i><i class="l" style="width: 58%;"></i><i class="l" style="width: 66%;"></i><span class="nav"><i></i><i></i><i></i><i></i><i></i></span></span></div><div class="txt"><p class="nom">Approche</p><p class="quand">Changer d’écran dans une page : ouvrir une offre, un cours, une discussion.</p><p class="meta">340 ms · douce</p><p class="etat" style="color: #A6F26B;">Appliquée partout</p></div></div>
+<div class="cel"><div class="tel"><span class="ecr a-onglet"><i class="t" style="width: 46%;"></i><i class="rech"></i><i class="carte" style="height: 92px; background: #B07A12;"></i><i class="l" style="width: 70%;"></i><i class="l" style="width: 45%;"></i><i class="carte" style="height: 74px; background: #0F3F37;"></i><i class="l" style="width: 62%;"></i></span><span class="ecr b-onglet"><i class="t" style="width: 52%;"></i><i class="carte" style="height: 150px; background: #0F3F37;"></i><i class="l" style="width: 84%;"></i><i class="l" style="width: 70%;"></i><i class="l" style="width: 40%;"></i><i class="bt"></i></span><span class="nav nav-fixe"><i></i><i class="pt-onglet"></i><i></i><i></i><i></i></span></div><div class="txt"><p class="nom">Passage d’onglet</p><p class="quand">Barre du bas : le nouvel onglet se pose sur l’ancien, qui glisse à peine dessous.</p><p class="meta">320 ms · douce</p><p class="etat" style="color: #A6F26B;">Appliquée dans Application</p></div></div>
+<div class="cel"><div class="tel"><span class="ecr"><i class="t" style="width: 46%;"></i><i class="rech"></i><i class="carte" style="height: 92px; background: #B07A12;"></i><i class="l" style="width: 70%;"></i><i class="l" style="width: 45%;"></i><i class="carte" style="height: 74px; background: #0F3F37;"></i><i class="l" style="width: 62%;"></i><span class="nav"><i></i><i></i><i></i><i></i><i></i></span></span><span class="voile-f"></span><span class="feuille-f"><i class="poi"></i><i class="l" style="width: 60%;"></i><i class="q"></i><i class="q"></i><i class="q"></i></span></div><div class="txt"><p class="nom">Feuille</p><p class="quand">Menus, Orbi, choix : le fond s’assombrit, la feuille monte du bas.</p><p class="meta">340 ms · douce</p><p class="etat" style="color: #A6F26B;">Appliquée partout</p></div></div>
+<div class="cel"><div class="tel"><span class="ecr"><i class="t" style="width: 46%;"></i><i class="rech"></i><i class="carte" style="height: 92px; background: #B07A12;"></i><i class="l" style="width: 70%;"></i><i class="l" style="width: 45%;"></i><i class="carte" style="height: 74px; background: #0F3F37;"></i><i class="l" style="width: 62%;"></i><span class="nav"><i></i><i></i><i></i><i></i><i></i></span></span><span class="ecr b-carte"><i class="t" style="width: 52%;"></i><i class="carte" style="height: 150px; background: #0F3F37;"></i><i class="l" style="width: 84%;"></i><i class="l" style="width: 70%;"></i><i class="l" style="width: 40%;"></i><i class="bt"></i></span></div><div class="txt"><p class="nom">Ouverture de carte</p><p class="quand">Une carte d’offre ou de cours s’agrandit jusqu’à devenir la page.</p><p class="meta">380 ms · douce</p><p class="etat" style="color: #A6F26B;">Appliquée partout</p></div></div>
+<div class="cel"><div class="tel"><span class="ecr a-retour"><i class="t" style="width: 46%;"></i><i class="rech"></i><i class="carte" style="height: 92px; background: #B07A12;"></i><i class="l" style="width: 70%;"></i><i class="l" style="width: 45%;"></i><i class="carte" style="height: 74px; background: #0F3F37;"></i><i class="l" style="width: 62%;"></i><span class="nav"><i></i><i></i><i></i><i></i><i></i></span></span><span class="ecr b-retour"><i class="t" style="width: 36%;"></i><span style="display: flex; gap: 8px; margin-top: 10px;"><i class="av"></i><span style="flex: 1;"><i class="l" style="width: 80%; margin-top: 4px;"></i><i class="l" style="width: 50%;"></i></span></span><i class="carte" style="height: 110px; background: #1E4E79;"></i><i class="l" style="width: 76%;"></i><i class="l" style="width: 58%;"></i><i class="l" style="width: 66%;"></i></span></div><div class="txt"><p class="nom">Retour</p><p class="quand">Revenir en arrière : la page part vers la droite, la précédente est déjà dessous.</p><p class="meta">300 ms · douce</p><p class="etat" style="color: #A6F26B;">Appliquée partout</p></div></div>
+<div class="cel"><div class="tel"><span class="ecr"><i class="t" style="width: 46%;"></i><i class="rech"></i><i class="carte" style="height: 92px; background: #B07A12;"></i><i class="l" style="width: 70%;"></i><i class="l" style="width: 45%;"></i><i class="carte" style="height: 74px; background: #0F3F37;"></i><i class="l" style="width: 62%;"></i><span class="nav"><i></i><i></i><i></i><i></i><i></i></span></span><span class="ecr b-orbi"><i class="t" style="width: 40%;"></i><i class="q" style="margin-top: 16px;"></i><i class="q"></i><i class="q"></i><i class="champ"></i></span><span class="disque-o"></span></div><div class="txt"><p class="nom">Orbi s’ouvre</p><p class="quand">Le disque d’Orbi grandit jusqu’à devenir le panneau de conversation.</p><p class="meta">400 ms · rebond léger</p><p class="etat" style="color: #A6F26B;">Appliquée partout</p></div></div>
+</div>
+<div><p style="font-size: 13px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #A6F26B;">Préchargement</p><h2 style="margin: 8px 0 22px; font-size: 30px; font-weight: 700;">Aucun chargement visible entre les pages</h2><div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 20px;"><div class="pc"><p class="n">À l’ouverture · 1,2 s</p><p class="ti">Tout se charge pendant le logo</p><p class="tx">Seul le logo s’affiche, sans barre ni texte. Derrière, les 5 onglets et leurs images se chargent ; le logo s’efface sur le Fil déjà prêt.</p></div><div class="pc"><p class="n">Pendant l’usage</p><p class="ti">Les onglets restent en mémoire</p><p class="tx">Changer d’onglet ne recharge rien : la page est déjà là, à l’endroit où on l’a laissée.</p></div><div class="pc"><p class="n">En arrière-plan</p><p class="ti">Les pages suivantes sont prêtes</p><p class="tx">Dès qu’une offre, un cours ou un profil apparaît à l’écran, sa page et ses images se chargent en silence.</p></div><div class="pc"><p class="n">Mise à jour</p><p class="ti">Jamais de roue qui tourne</p><p class="tx">On montre le dernier contenu connu ; le nouveau le remplace doucement. Sans réseau, les pages déjà vues restent ouvertes.</p></div></div></div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"$preview":{"width":1640,"height":1520}}'>
+class Component extends DCLogic {
+  renderVals() { return {}; }
+}
+</script>
+</body>
+</html>
