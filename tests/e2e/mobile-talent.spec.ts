@@ -48,6 +48,8 @@ test("navigation Talent : cinq destinations, Orbi au milieu, Compte, Aide et Sui
   page,
   isMobile,
 }) => {
+  // On a phone, the bar of Modèle B (Fil, Explorer, Carrière, Formation, Messages): modele-b-*.spec.
+  test.skip(isMobile, "Modèle B au téléphone : barre testée par modele-b-fondations.spec.ts");
   await logIn(page, demo.talentPro);
   await page.goto("/app");
   const navigation = page.getByRole("navigation", { name: "Navigation principale" });

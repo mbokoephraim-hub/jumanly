@@ -50,6 +50,42 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Modèle B · B1 : fondations de l'espace talent au téléphone (21 octobre 2026)
+
+Brief `docs/modele-b/BRIEF-MODELE-B-CLAUDE-CODE.md` § 2 et § 3, planches Identité, Orbi-options,
+Transitions et Application. Choix techniques : `docs/decisions/2026-10-21-modele-b-b1.md`.
+
+**Fait.**
+- Coque du téléphone `PhoneShell` (`src/components/phone/`), sombre seulement, choisie côté serveur
+  (`src/server/view.ts` : navigateur de téléphone, ou cookie `jm_vue` posé par `ViewSync` sous 768 px).
+  L'ordinateur et la tablette gardent `TalentShell`, inchangé.
+- Barre du bas en icônes seules, Fil · Explorer · Carrière · Formation · Messages (`nav.tsx`,
+  `src/lib/phone-tabs.ts`), point lime sous l'onglet actif ; toucher l'onglet affiché remonte en haut.
+- Les cinq onglets restent montés (`stack.tsx`) : changer d'onglet ne recharge rien. Les autres pages
+  s'ouvrent dans une pile au-dessus, avec « Retour » (`back.tsx`).
+- Transitions par View Transitions (approche, carte, retour, Orbi, onglet gauche et droite), l'écran
+  quitté reste dessous jusqu'à ce que le nouveau le couvre : jamais d'écran noir. Animations réduites :
+  fondu court.
+- Ouverture : le logo seul 1,2 s une fois par session (`opening-script.ts`, `opening.tsx`) pendant que
+  les cinq onglets se chargent derrière ; jamais de roue d'attente.
+- Orbi flottant sur chaque onglet, avec sa question du moment, et sa feuille (quatre questions par
+  onglet, réponse par le service d'Orbi existant : consentement, droit et crédits vérifiés).
+- Feuilles (`sheet.tsx`, `<dialog>`), recherche en deux temps (`search.tsx`), icônes de la planche
+  Identité (`icon.tsx`), feuille de style `src/styles/phone.css` (classes `nb-`).
+- Pages pas encore redessinées (lots B2 à B8) : affichées dans le cadre sombre provisoire `nb-ancien`
+  avec l'ancien en-tête (titre, Retour, notifications, compte, recherche), pour que rien ne devienne
+  inaccessible entre deux lots. Retiré en B9.
+
+**Captures → maquettes** (`captures/etape-1/`, 390 × 844) : `b1-fil.png` → 004 et 030 (Application,
+coque et barre), `b1-orbi.png` → 002 Orbi-options, `b1-explorer.png`, `b1-carriere.png`,
+`b1-formation.png`, `b1-messages.png` → la coque sur chaque onglet (contenu redessiné aux lots B3 à B8).
+
+**Tests.** `tests/e2e/modele-b-fondations.spec.ts` (ouverture, cinq onglets, aucun clic vide, transitions
+terminées, Orbi, sombre, pas de défilement horizontal). Tests du téléphone adaptés : le générique
+d'entrée et l'ancienne barre ne s'affichent plus au téléphone ; `skipIntro` saute le logo de 1,2 s.
+
+**Reste.** Le contenu de chaque onglet (B3 à B8) ; suppression de l'ancien design talent au téléphone (B9).
+
 ## Étape 2, recruteur web lot 4 : ATS, retenus, réponses, propositions, fin d'offre, rapport (21 octobre 2026)
 
 Planche `docs/refonte-web/recruteur-4` (w1 à w11), ordinateur (1440 px) et tablette (1024 px),

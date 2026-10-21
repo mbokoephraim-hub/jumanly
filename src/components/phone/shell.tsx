@@ -8,6 +8,7 @@ import { appearanceScript } from "@/lib/appearance";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { orbiActions } from "@/lib/orbi";
 import { PHONE_TABS, type PhoneTab } from "@/lib/phone-tabs";
+import type { HeaderLabels } from "@/components/talent/header";
 import { PhoneLegacyHead } from "./legacy-head";
 import { PhoneNav } from "./nav";
 import { Opening } from "./opening";
@@ -78,6 +79,46 @@ export async function PhoneShell({
     ),
     tabs: Object.fromEntries(PHONE_TABS.map((tab) => [tab, tabTexts(tab)])) as OrbiTexts["tabs"],
   };
+  const plural = (key: "header.notifications" | "header.messages") => ({
+    zero: tShell(key, { count: 0 }),
+    one: tShell(key, { count: 1 }),
+    other: tShell(key, { count: 2 }).replace("2", "#"),
+  });
+  const legacyLabels: HeaderLabels = {
+    notifications: plural("header.notifications"),
+    messages: plural("header.messages"),
+    account: tShell("header.account", { name: account.name }),
+    back: tShell("header.back"),
+    search: {
+      label: tShell("search.label"),
+      placeholder: tShell("search.placeholder"),
+      placeholderOffers: tShell("search.placeholderOffers"),
+      placeholderLearn: tShell("search.placeholderLearn"),
+      filters: tShell("search.filters"),
+    },
+    tabs: {
+      "/app": account.firstName
+        ? tShell("header.hello", { name: account.firstName })
+        : tShell("header.helloAnon"),
+      "/app/jobs": tShell("nav.offers"),
+      "/app/learn": tShell("nav.learn"),
+      "/app/suivi": tShell("nav.suivi"),
+    },
+    titles: {
+      "/app/career": tShell("title.career"),
+      "/app/messages": tShell("title.messages"),
+      "/app/notifications": tShell("title.notifications"),
+      "/app/profil": tShell("title.profile"),
+      "/app/abonnement": tShell("title.subscription"),
+      "/app/parametres": tShell("title.settings"),
+      "/app/recherche": tShell("title.search"),
+      "/app/compte": tShell("title.account"),
+      "/app/orbi/historique": tShell("title.orbiHistory"),
+      "/app/jobs": tShell("nav.offers"),
+      "/app/learn": tShell("nav.learn"),
+      "/app/suivi": tShell("nav.suivi"),
+    },
+  };
   return (
     <div
       className="nb-app"
@@ -105,7 +146,12 @@ export async function PhoneShell({
         {/* Pages not redrawn yet (lots B2 to B8) keep their previous dark look in this frame;
             a Modèle B page (`.nb-page`) takes the whole screen. Removed in B9. */}
         <div className="t-app nb-ancien">
-          <PhoneLegacyHead account={account} unread={unread} unreadMessages={unreadMessages} />
+          <PhoneLegacyHead
+            account={account}
+            unread={unread}
+            unreadMessages={unreadMessages}
+            labels={legacyLabels}
+          />
           <div className="t-colonne t-contenu">{children}</div>
         </div>
       </PhoneStack>

@@ -6,6 +6,8 @@ export async function expectAccessible(page: Page) {
   // Motion is decorative (src/styles/motion.css): check the resting state, not elements caught
   // halfway through a fade, whose blended colors would fail the contrast rule at random.
   await page.emulateMedia({ reducedMotion: "reduce" });
+  // After a page change, the title of the new page streams in just after its content.
+  await expect(page).toHaveTitle(/\S/);
   const results = await new AxeBuilder({ page })
     .withTags(["wcag2a", "wcag2aa", "wcag21a", "wcag21aa", "wcag22aa"])
     .analyze();

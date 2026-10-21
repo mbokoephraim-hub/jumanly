@@ -27,9 +27,10 @@ test.describe("Modèle B · fondations au téléphone", () => {
     });
 
     await logIn(page, demo.talentPro);
+    // A new session of the app: the logo alone shows at the opening, then leaves on its own.
+    await page.addInitScript(() => sessionStorage.removeItem("jm-ouvert"));
     await page.goto("/app");
-
-    // The logo alone shows at the opening, then leaves on its own.
+    await expect(page.locator("#nb-ouverture")).toBeVisible();
     await expect(page.locator("#nb-ouverture")).toHaveCount(0, { timeout: 5000 });
 
     // Five tabs, icons only (their names are for screen readers), the active one marked.
