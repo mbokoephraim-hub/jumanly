@@ -62,6 +62,7 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
     redirect(`/app/hire/candidats/${encodeURIComponent(candidature)}/entretien`);
   const { ctx } = await requireHire("/app/hire/entretiens", "readApplications");
   const t = await getTranslations("hireInterviews");
+  const tw = await getTranslations("hireWeb.agenda");
   const format = await getFormatter();
   const now = new Date();
   const timeZone = defaultTimeZone();
@@ -203,8 +204,151 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
     );
   };
 
+  // ─── Web (lot 2): the week in hours, with the requests and the evaluations beside it ──
+  const weekKeys = Array.from({ length: 7 }, (_, index) => addDays(monday, index));
+  const inWeek = (date: Date) => {
+    const key = at(date).key;
+    return key >= monday && key <= addDays(monday, 6);
+  };
+  const timed = [
+    ...placed.map((item) => ({ item, start: item.startsAt! })),
+    ...waiting.flatMap((item) => {
+      const start = (item.status === "reschedule" ? item.proposedSlots : item.slots).find(inWeek);
+      return start ? [{ item, start }] : [];
+    }),
+  ];
+  const evaluated = new Set(toEvaluate.map((item) => item.id));
+  const firstHour = Math.min(9, ...timed.map(({ start }) => Math.floor(at(start).minutes / 60)));
+  const lastHour = Math.max(
+    18,
+    ...timed.map(({ item, start }) =>
+      Math.min(24, Math.ceil((at(start).minutes + item.durationMinutes) / 60)),
+    ),
+  );
+  const hours = Array.from({ length: lastHour - firstHour }, (_, index) => firstHour + index);
+  const HOUR_PX = 56;
+  const weekGrid = (
+    <section aria-label={t("agenda.weekDays")} className="t-verre t-rw-agw t-rw-web">
+      <div className="t-rw-agh" aria-hidden>
+        <span />
+        {weekKeys.map((key, index) => (
+          <span key={key} className={cx(key === today && "t-auj", index > 4 && "t-we")}>
+            <small>{labels[key]?.letter}</small>
+            <b>{labels[key]?.day}</b>
+          </span>
+        ))}
+      </div>
+      <div className="t-rw-agb" style={{ height: hours.length * HOUR_PX }}>
+        <ol className="t-rw-agt" aria-hidden>
+          {hours.map((hour) => (
+            <li key={hour}>{clock(hour * 60)}</li>
+          ))}
+        </ol>
+        {weekKeys.map((key, index) => {
+          const items = timed.filter(({ start }) => at(start).key === key);
+          return (
+            <div key={key} className={cx("t-rw-agj", index > 4 && "t-we")}>
+              <h3 className="sr-only">
+                {t("agenda.dayCount", { day: labels[key]?.long ?? key, count: items.length })}
+              </h3>
+              {items.length > 0 && (
+                <ul>
+                  {items.map(({ item, start }) => {
+                    const name = item.application.profile.user.name;
+                    const minutes = at(start).minutes - firstHour * 60;
+                    const status =
+                      item.status === "done" && evaluated.has(item.id)
+                        ? tw("toEvaluate")
+                        : tag(item.status);
+                    return (
+                      <li
+                        key={item.id}
+                        style={{
+                          top: (minutes / 60) * HOUR_PX,
+                          height: Math.max(40, (item.durationMinutes / 60) * HOUR_PX - 4),
+                        }}
+                      >
+                        <Link
+                          href={`/app/hire/entretiens/${item.id}`}
+                          aria-label={tw("eventAria", {
+                            name,
+                            when: `${labels[key]?.long ?? key} · ${time(start)}`,
+                            status,
+                          })}
+                          className={cx("t-rw-ev t-press", look[item.status])}
+                        >
+                          <b>{name}</b>
+                          <span>
+                            {item.status === "confirmed"
+                              ? `${time(start)} · ${t(`plan.mode.${item.mode}`)}`
+                              : status}
+                          </span>
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </section>
+  );
+  const waitingSection = view !== "evaluer" && waiting.length > 0 && (
+    <section aria-labelledby="ri-attente" className="t-ri-groupe">
+      <h2 id="ri-attente">{t("agenda.waiting", { count: waiting.length })}</h2>
+      <ul>
+        {waiting.map((item) => {
+          const name = item.application.profile.user.name;
+          const slots = item.status === "reschedule" ? item.proposedSlots : item.slots;
+          return (
+            <li key={item.id} className="t-ri-ag">
+              <Link
+                href={`/app/hire/entretiens/${item.id}`}
+                className={cx("t-verre t-ri-ent t-press", look[item.status])}
+              >
+                <span className={cx("t-rc-av", avatarTone(item.application.id))} aria-hidden>
+                  {initialsOf(name)}
+                </span>
+                <span className="t-t">
+                  <b>
+                    <span className="t-rc-nom">{name}</span>
+                    <span className={cx("t-ri-etq", look[item.status])}>{tag(item.status)}</span>
+                  </b>
+                  <span>{item.application.job.title}</span>
+                  <span className="t-m">
+                    {item.status === "reschedule"
+                      ? t("agenda.proposedBack", { count: slots.length })
+                      : t("agenda.slotsSent", { count: slots.length })}
+                    {slots[0] ? ` · ${when(slots[0])}` : ""}
+                  </span>
+                </span>
+              </Link>
+            </li>
+          );
+        })}
+      </ul>
+    </section>
+  );
+  const orbiLine = view !== "evaluer" && nextOwn && (
+    <OrbiLine
+      action={
+        <Link href={`/app/hire/entretiens/${nextOwn.id}`} className="t-bt t-sec t-s t-press">
+          {t("agenda.open")}
+        </Link>
+      }
+    >
+      {t.rich("agenda.orbi", {
+        b: (chunks) => <b>{chunks}</b>,
+        name: nextOwn.application.profile.user.name,
+        when: `${when(nextOwn.startsAt!)} · ${time(nextOwn.startsAt!)}`,
+      })}
+    </OrbiLine>
+  );
+
   return (
-    <div className="t-flux t-ri-agenda">
+    <div className="t-flux t-ri-agenda t-rw-agp">
       <FlowHead
         back="/app/hire"
         backLabel={t("agenda.back")}
@@ -218,90 +362,104 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
         }
       />
 
-      <nav className="t-seg" aria-label={t("agenda.views")}>
-        <Link
-          href={href({ vue: null, mois: null })}
-          aria-current={view === "semaine" ? "page" : undefined}
-          className="t-press"
-        >
-          {t("agenda.week")}
-        </Link>
-        <Link
-          href={href({ vue: "mois", semaine: null })}
-          aria-current={view === "mois" ? "page" : undefined}
-          className="t-press"
-        >
-          {t("agenda.month")}
-        </Link>
-        <Link
-          href={href({ vue: "evaluer", semaine: null, mois: null })}
-          aria-current={view === "evaluer" ? "page" : undefined}
-          className="t-press"
-        >
-          {t("agenda.evaluate", { count: toEvaluate.length })}
-        </Link>
-      </nav>
-
-      {collaboration && view !== "evaluer" && (
-        <nav className="t-rx-onglets" aria-label={t("agenda.whose")}>
+      <div className="t-rw-h">
+        <div className="t-t t-rw-web">
+          <h1>{t("agenda.title")}</h1>
+          <p>
+            {view === "semaine"
+              ? t("agenda.weekOf", {
+                  from: labels[monday]?.short ?? monday,
+                  to: labels[addDays(monday, 6)]?.short ?? "",
+                })
+              : view === "mois"
+                ? monthLabels(`${month}-01`, 1)[0]!.label
+                : t("agenda.evaluate", { count: toEvaluate.length })}
+          </p>
+        </div>
+        <nav className="t-seg" aria-label={t("agenda.views")}>
           <Link
-            href={href({ filtre: null })}
-            aria-current={team ? undefined : "page"}
-            className="t-puce t-press"
+            href={href({ vue: null, mois: null })}
+            aria-current={view === "semaine" ? "page" : undefined}
+            className="t-press"
           >
-            {t("agenda.mine")}
+            {t("agenda.week")}
           </Link>
           <Link
-            href={href({ filtre: "equipe" })}
-            aria-current={team ? "page" : undefined}
-            className="t-puce t-press"
+            href={href({ vue: "mois", semaine: null })}
+            aria-current={view === "mois" ? "page" : undefined}
+            className="t-press"
           >
-            {t("agenda.team")}
+            {t("agenda.month")}
+          </Link>
+          <Link
+            href={href({ vue: "evaluer", semaine: null, mois: null })}
+            aria-current={view === "evaluer" ? "page" : undefined}
+            className="t-press"
+          >
+            {t("agenda.evaluate", { count: toEvaluate.length })}
           </Link>
         </nav>
-      )}
+      </div>
 
-      {view !== "evaluer" && nextOwn && (
-        <OrbiLine
-          action={
-            <Link href={`/app/hire/entretiens/${nextOwn.id}`} className="t-bt t-sec t-s t-press">
-              {t("agenda.open")}
+      <div className="t-rw-tlb">
+        {collaboration && view !== "evaluer" && (
+          <nav className="t-rx-onglets" aria-label={t("agenda.whose")}>
+            <Link
+              href={href({ filtre: null })}
+              aria-current={team ? undefined : "page"}
+              className="t-puce t-press"
+            >
+              {t("agenda.mine")}
             </Link>
-          }
-        >
-          {t.rich("agenda.orbi", {
-            b: (chunks) => <b>{chunks}</b>,
-            name: nextOwn.application.profile.user.name,
-            when: `${when(nextOwn.startsAt!)} · ${time(nextOwn.startsAt!)}`,
-          })}
-        </OrbiLine>
-      )}
+            <Link
+              href={href({ filtre: "equipe" })}
+              aria-current={team ? "page" : undefined}
+              className="t-puce t-press"
+            >
+              {t("agenda.team")}
+            </Link>
+          </nav>
+        )}
+
+        {orbiLine && <div className="t-rw-m">{orbiLine}</div>}
+
+        {view === "semaine" && (
+          <>
+            <div className="t-ri-semh">
+              <Link
+                href={href({ semaine: addDays(monday, -7) })}
+                aria-label={t("agenda.previousWeek")}
+                className="t-bi t-press t-ri-prec"
+              >
+                <TalentIcon name="suivant" size="xs" />
+              </Link>
+              <b>
+                {t("agenda.weekOf", {
+                  from: labels[monday]?.short ?? monday,
+                  to: labels[addDays(monday, 6)]?.short ?? "",
+                })}
+              </b>
+              <Link
+                href={href({ semaine: addDays(monday, 7) })}
+                aria-label={t("agenda.nextWeek")}
+                className="t-bi t-press"
+              >
+                <TalentIcon name="suivant" size="xs" />
+              </Link>
+            </div>
+          </>
+        )}
+        {manage && (
+          <SheetButton target="ri-nouveau" className="t-bt t-p t-s t-press t-rw-web">
+            <TalentIcon name="plus" size="xs" />
+            {t("agenda.new")}
+          </SheetButton>
+        )}
+      </div>
 
       {view === "semaine" && (
         <>
-          <div className="t-ri-semh">
-            <Link
-              href={href({ semaine: addDays(monday, -7) })}
-              aria-label={t("agenda.previousWeek")}
-              className="t-bi t-press t-ri-prec"
-            >
-              <TalentIcon name="suivant" size="xs" />
-            </Link>
-            <b>
-              {t("agenda.weekOf", {
-                from: labels[monday]?.short ?? monday,
-                to: labels[addDays(monday, 6)]?.short ?? "",
-              })}
-            </b>
-            <Link
-              href={href({ semaine: addDays(monday, 7) })}
-              aria-label={t("agenda.nextWeek")}
-              className="t-bi t-press"
-            >
-              <TalentIcon name="suivant" size="xs" />
-            </Link>
-          </div>
-          <ol className="t-ri-sem" aria-label={t("agenda.weekDays")}>
+          <ol className="t-ri-sem t-rw-tel" aria-label={t("agenda.weekDays")}>
             {Array.from({ length: 7 }, (_, index) => addDays(monday, index)).map((key) => {
               const count = byDay.get(key)?.length ?? 0;
               return (
@@ -319,71 +477,89 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
         </>
       )}
 
-      {view !== "evaluer" && waiting.length > 0 && (
-        <section aria-labelledby="ri-attente" className="t-ri-groupe">
-          <h2 id="ri-attente">{t("agenda.waiting", { count: waiting.length })}</h2>
-          <ul>
-            {waiting.map((item) => {
-              const name = item.application.profile.user.name;
-              const slots = item.status === "reschedule" ? item.proposedSlots : item.slots;
-              return (
-                <li key={item.id} className="t-ri-ag">
-                  <Link
-                    href={`/app/hire/entretiens/${item.id}`}
-                    className={cx("t-verre t-ri-ent t-press", look[item.status])}
-                  >
-                    <span className={cx("t-rc-av", avatarTone(item.application.id))} aria-hidden>
-                      {initialsOf(name)}
-                    </span>
-                    <span className="t-t">
-                      <b>
-                        <span className="t-rc-nom">{name}</span>
-                        <span className={cx("t-ri-etq", look[item.status])}>
-                          {tag(item.status)}
+      {view !== "semaine" && waitingSection}
+
+      {view === "semaine" && (
+        <div className="t-rw-g t-rw-agg">
+          {/* Beside the week (first in the page on a phone): requests, evaluations, Orbi. */}
+          <div className="t-rw-c t-rw-aga">
+            {waitingSection}
+            {toEvaluate.length > 0 && (
+              <section aria-labelledby="rw-a-evaluer" className="t-ri-groupe t-rw-web">
+                <h2 id="rw-a-evaluer">{tw("toEvaluate")}</h2>
+                <ul className="t-verre t-rw-aev">
+                  {toEvaluate.slice(0, 4).map((item) => {
+                    const name = item.application.profile.user.name;
+                    return (
+                      <li key={item.id}>
+                        <span
+                          className={cx("t-rc-av", avatarTone(item.application.id))}
+                          aria-hidden
+                        >
+                          {initialsOf(name)}
                         </span>
-                      </b>
-                      <span>{item.application.job.title}</span>
-                      <span className="t-m">
-                        {item.status === "reschedule"
-                          ? t("agenda.proposedBack", { count: slots.length })
-                          : t("agenda.slotsSent", { count: slots.length })}
-                        {slots[0] ? ` · ${when(slots[0])}` : ""}
-                      </span>
-                    </span>
+                        <span className="t-t">
+                          <b className="t-rc-nom">{name}</b>
+                          <span>
+                            {item.startsAt
+                              ? `${when(item.startsAt)} · ${time(item.startsAt)}`
+                              : item.application.job.title}
+                          </span>
+                        </span>
+                        <Link
+                          href={`/app/hire/candidats/${item.application.id}/evaluation`}
+                          className="t-bt t-p t-s t-press"
+                          aria-label={t("agenda.evaluateAria", { name })}
+                        >
+                          {t("agenda.evaluateCta")}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+                {toEvaluate.length > 4 && (
+                  <Link href={href({ vue: "evaluer", semaine: null })} className="t-pq t-press">
+                    {tw("seeAll")}
                   </Link>
-                </li>
-              );
-            })}
-          </ul>
-        </section>
+                )}
+              </section>
+            )}
+            {orbiLine && <div className="t-rw-w">{orbiLine}</div>}
+          </div>
+          <div className="t-rw-c t-rw-agl">
+            {weekGrid}
+            {byDay.size === 0 ? (
+              <div className="t-verre t-rc-vide t-rw-tel">
+                <span className="t-rc-rond" aria-hidden>
+                  <TalentIcon name="agenda" />
+                </span>
+                <b>{t("agenda.emptyWeek")}</b>
+                <span>{manage ? t("agenda.emptyText") : t("agenda.emptyTextReader")}</span>
+              </div>
+            ) : (
+              [...byDay.entries()]
+                .sort(([a], [b]) => a.localeCompare(b))
+                .map(([key, items]) => (
+                  <section
+                    key={key}
+                    aria-labelledby={`ri-j-${key}`}
+                    className="t-ri-groupe t-rw-tel"
+                  >
+                    <h2 id={`ri-j-${key}`}>
+                      {key === today
+                        ? t("agenda.today", { day: labels[key]?.long ?? key })
+                        : labels[key]?.long}
+                    </h2>
+                    <ul>{items.map((item) => card(item, true))}</ul>
+                  </section>
+                ))
+            )}
+          </div>
+        </div>
       )}
 
-      {view === "semaine" &&
-        (byDay.size === 0 ? (
-          <div className="t-verre t-rc-vide">
-            <span className="t-rc-rond" aria-hidden>
-              <TalentIcon name="agenda" />
-            </span>
-            <b>{t("agenda.emptyWeek")}</b>
-            <span>{manage ? t("agenda.emptyText") : t("agenda.emptyTextReader")}</span>
-          </div>
-        ) : (
-          [...byDay.entries()]
-            .sort(([a], [b]) => a.localeCompare(b))
-            .map(([key, items]) => (
-              <section key={key} aria-labelledby={`ri-j-${key}`} className="t-ri-groupe">
-                <h2 id={`ri-j-${key}`}>
-                  {key === today
-                    ? t("agenda.today", { day: labels[key]?.long ?? key })
-                    : labels[key]?.long}
-                </h2>
-                <ul>{items.map((item) => card(item, true))}</ul>
-              </section>
-            ))
-        ))}
-
       {view === "mois" && (
-        <>
+        <div className="t-rw-g t-rw-agm">
           <div className="t-verre t-ri-calm t-ri-mois">
             <div className="t-mh">
               <Link
@@ -462,7 +638,7 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
               )}
             </section>
           )}
-        </>
+        </div>
       )}
 
       {view === "evaluer" &&
@@ -475,7 +651,7 @@ export default async function InterviewsPage({ searchParams }: PageProps<"/app/h
             <span>{t("agenda.evaluateEmptyText")}</span>
           </div>
         ) : (
-          <ul className="t-ri-groupe">
+          <ul className="t-ri-groupe t-rw-grille">
             {toEvaluate.map((item) => {
               const name = item.application.profile.user.name;
               return (

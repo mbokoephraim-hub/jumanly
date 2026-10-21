@@ -4,7 +4,10 @@ import { notFound } from "next/navigation";
 import { after } from "next/server";
 import { NextIntlClientProvider } from "next-intl";
 import { getFormatter, getMessages, getTranslations } from "next-intl/server";
+import { ToastOnLoad } from "@/components/motion/toast-on-load";
+import { CandidatePane } from "@/components/recruiter/candidate-pane";
 import { CandidateAvatar } from "@/components/recruiter/candidates";
+import { CandidatesWide } from "@/components/recruiter/candidates-wide";
 import { SortSheet } from "@/components/recruiter/candidates-client";
 import { AtsEntry } from "@/components/recruiter/ats";
 import { OrbiLine, statusOf } from "@/components/recruiter/offers";
@@ -43,6 +46,7 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
   const query = await searchParams;
   const { ctx } = await requireHire("/app/hire/candidats", "readApplications");
   const t = await getTranslations("hireCandidates");
+  const tw = await getTranslations("hireWeb.candidates");
   const to = await getTranslations("hireOffers");
   const ui = await getTranslations("ui");
   const format = await getFormatter();
@@ -88,8 +92,12 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
   if (!list.job) {
     return (
       <div className="t-flux">
-        <h1 className="sr-only">{t("title")}</h1>
-        {segments}
+        <div className="t-rw-h">
+          <div className="t-t">
+            <h1 className="t-rw-sr">{t("title")}</h1>
+          </div>
+          {segments}
+        </div>
         <div className="t-verre t-rc-vide">
           <span className="t-rc-rond" aria-hidden>
             <TalentIcon name="offre" />
@@ -163,48 +171,101 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
           ? "closed"
           : "published";
 
-  return (
-    <div className="t-flux">
-      <h1 className="sr-only">{t("title")}</h1>
-      {segments}
+  // Web (lot 2): the file opened beside the list, one of this offer's applications only.
+  const selected = list.rows.find((row) => row.id === one(query.id))?.id ?? null;
+  const atsHref = `/app/hire/offres/${job.id}/ats`;
+  const sortLabel = active ? t("sort.openActive", { count: active }) : t("sort.open");
 
-      <SheetButton
-        target="rc-offres"
-        label={t("offer.aria", { title: job.title })}
-        className="t-verre t-rc-off t-press"
-      >
-        <TalentIcon name="offre" size="s" />
-        <span className="t-t">
-          <small>{t("offer.label")}</small>
-          <b>{job.title}</b>
-        </span>
-        <TalentIcon name="suivant" size="s" className="t-rc-bas" />
-      </SheetButton>
+  return (
+    <div className="t-flux t-rw-cands">
+      {one(query.ok) === "deplacee" && <ToastOnLoad message={t("ok.deplacee")} tone="success" />}
+      <div className="t-rw-h">
+        <div className="t-t">
+          <h1 className="t-rw-sr">{t("title")}</h1>
+          <p className="t-rw-web">{tw("sub", { offer: job.title, count: list.rows.length })}</p>
+        </div>
+        {segments}
+      </div>
+
+      <div className="t-rw-tlb">
+        <SheetButton
+          target="rc-offres"
+          label={t("offer.aria", { title: job.title })}
+          className="t-verre t-rc-off t-press"
+        >
+          <TalentIcon name="offre" size="s" />
+          <span className="t-t">
+            <small>{t("offer.label")}</small>
+            <b>{job.title}</b>
+          </span>
+          <TalentIcon name="suivant" size="s" className="t-rc-bas" />
+        </SheetButton>
+        {list.rows.length > 0 && (
+          <SheetButton target="rc-tri" anchor className="t-bt t-sec t-s t-press t-rw-web">
+            <TalentIcon name="filtres" size="xs" />
+            {active ? tw("sortFilterActive", { count: active }) : tw("sortFilter")}
+          </SheetButton>
+        )}
+      </div>
 
       {ats && (
-        <AtsEntry
-          title={ats.pending ? ta("offerTitle", { count: ats.pending.pending }) : ta("doneTitle")}
-          text={ats.pending ? ta("offerText") : ta("doneText", { count: ats.done!.total })}
-          cta={ats.pending ? ta("offerCta") : ta("doneCta")}
-          href={`/app/hire/offres/${job.id}/ats`}
-          count={ats.pending ? ats.pending.pending : ats.done!.total}
-        />
+        <div className="t-rw-m">
+          <AtsEntry
+            title={ats.pending ? ta("offerTitle", { count: ats.pending.pending }) : ta("doneTitle")}
+            text={ats.pending ? ta("offerText") : ta("doneText", { count: ats.done!.total })}
+            cta={ats.pending ? ta("offerCta") : ta("doneCta")}
+            href={`/app/hire/offres/${job.id}/ats`}
+            count={ats.pending ? ats.pending.pending : ats.done!.total}
+          />
+        </div>
       )}
 
       {firstUnseen && (
-        <OrbiLine
-          action={
-            <Link href={`/app/hire/candidats/${firstUnseen.id}`} className="t-bt t-p t-s t-press">
-              {t("orbi.examine")}
-            </Link>
-          }
-        >
-          {t.rich("orbi.unseen", { count: unseen.length, b: (chunks) => <b>{chunks}</b> })}
-        </OrbiLine>
+        <div className={ats ? "t-rw-m" : "t-rw-x"}>
+          <OrbiLine
+            action={
+              <Link href={`/app/hire/candidats/${firstUnseen.id}`} className="t-bt t-p t-s t-press">
+                {t("orbi.examine")}
+              </Link>
+            }
+          >
+            {t.rich("orbi.unseen", { count: unseen.length, b: (chunks) => <b>{chunks}</b> })}
+          </OrbiLine>
+        </div>
+      )}
+
+      {/* Web: Orbi's ATS in one line (planche `.ats` `.orb-l`), « Examiner » kept beside it. */}
+      {ats && (
+        <div className="t-rw-w">
+          <OrbiLine
+            action={
+              <span className="t-rw-acts">
+                {firstUnseen && (
+                  <Link
+                    href={`/app/hire/candidats/${firstUnseen.id}`}
+                    className="t-bt t-sec t-s t-press"
+                  >
+                    {t("orbi.examine")}
+                  </Link>
+                )}
+                <Link href={atsHref} className="t-bt t-p t-s t-press">
+                  {ats.pending ? tw("analyze") : ta("doneCta")}
+                </Link>
+              </span>
+            }
+          >
+            {ats.pending
+              ? tw.rich("atsLine", {
+                  count: ats.pending.pending,
+                  b: (chunks) => <b>{chunks}</b>,
+                })
+              : tw("atsDone")}
+          </OrbiLine>
+        </div>
       )}
 
       {list.rows.length === 0 ? (
-        <>
+        <div className="t-rw-g t-rw-vg">
           <div className="t-verre t-rc-vide">
             <span className="t-rc-rond" aria-hidden>
               <TalentIcon name="candidats" />
@@ -212,15 +273,37 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
             <b>{t("empty.title")}</b>
             <span>{t(`empty.${emptyKey}`)}</span>
           </div>
-          <Link href="/app/hire/candidats?vue=talents" className="t-verre t-rc-sugg t-press">
-            <TalentIcon name="recherche" size="s" />
-            <span className="t-t">
-              <b>{t("empty.search")}</b>
-              <span>{t("empty.searchText")}</span>
-            </span>
-            <TalentIcon name="suivant" size="s" />
-          </Link>
-        </>
+          <div className="t-rw-c">
+            <h2 className="t-rw-web t-rw-k">{tw("waiting")}</h2>
+            <Link href="/app/hire/candidats?vue=talents" className="t-verre t-rc-sugg t-press">
+              <TalentIcon name="recherche" size="s" />
+              <span className="t-t">
+                <b>{t("empty.search")}</b>
+                <span>{t("empty.searchText")}</span>
+              </span>
+              <TalentIcon name="suivant" size="s" />
+            </Link>
+            <Link href="/app/hire/viviers" className="t-verre t-rc-sugg t-press t-rw-web">
+              <TalentIcon name="favori" size="s" />
+              <span className="t-t">
+                <b>{tw("pools")}</b>
+                <span>{tw("poolsText")}</span>
+              </span>
+              <TalentIcon name="suivant" size="s" />
+            </Link>
+            <Link
+              href={`/app/hire/offres/${job.id}`}
+              className="t-verre t-rc-sugg t-press t-rw-web"
+            >
+              <TalentIcon name="offre" size="s" />
+              <span className="t-t">
+                <b>{tw("offer")}</b>
+                <span>{tw("offerText")}</span>
+              </span>
+              <TalentIcon name="suivant" size="s" />
+            </Link>
+          </div>
+        </div>
       ) : (
         <>
           <nav className="t-rx-onglets" aria-label={t("stages.aria")}>
@@ -246,51 +329,78 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
             ))}
           </nav>
 
-          <div className="t-rc-tri-h">
-            <h2>{t(`sorted.${list.sort ?? "date"}`)}</h2>
-            <SheetButton target="rc-tri" className="t-rc-trier t-press">
-              <TalentIcon name="filtres" size="xs" />
-              {active ? t("sort.openActive", { count: active }) : t("sort.open")}
-            </SheetButton>
+          <div className="t-rw-ats">
+            <CandidatesWide selected={selected}>
+              <div className="t-rc-tri-h">
+                <h2>
+                  {t(`sorted.${list.sort ?? "date"}`)}
+                  <span className="t-rw-web"> · {tw("sortedNote")}</span>
+                </h2>
+                <SheetButton target="rc-tri" className="t-rc-trier t-press t-rw-tel">
+                  <TalentIcon name="filtres" size="xs" />
+                  {sortLabel}
+                </SheetButton>
+              </div>
+
+              {list.hidden > 0 && (
+                <p className="t-rc-masque">
+                  <span>{t("hidden", { count: list.hidden })}</span>
+                  <Link href={clearHref}>{t("showAll")}</Link>
+                </p>
+              )}
+
+              {list.visible.length === 0 ? (
+                <p className="t-verre t-rc-rien">{t("none")}</p>
+              ) : (
+                <ul className="t-rc-liste">
+                  {list.visible.map((row) => (
+                    <li key={row.id}>
+                      <Link
+                        href={`/app/hire/candidats/${row.id}`}
+                        data-rc-id={row.id}
+                        aria-current={row.id === selected ? "true" : undefined}
+                        className="t-verre t-rc-cl t-press"
+                      >
+                        <CandidateAvatar id={row.id} name={row.name} />
+                        <span className="t-t">
+                          <b>
+                            <span className="t-rc-nom">{row.name}</span>
+                            {row.unseen && <span className="t-rx-nv">{t("row.new")}</span>}
+                          </b>
+                          <span className="t-l">
+                            {[when(row.createdAt), docsOf(row)].join(" · ")}
+                          </span>
+                          <span className={cx("t-rc-etq", row.status === "withdrawn" && "t-ret")}>
+                            {row.status === "withdrawn" ? t("row.withdrawn") : row.stage.name}
+                          </span>
+                        </span>
+                        {row.score !== null && (
+                          <span className={cx("t-rc-sc", scoreTone(row.score))}>
+                            <b aria-hidden>{ui("percent", { value: row.score })}</b>
+                            <span aria-hidden>{t("row.score")}</span>
+                            <span className="sr-only">
+                              {t("row.scoreAria", { score: row.score })}
+                            </span>
+                          </span>
+                        )}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+              )}
+            </CandidatesWide>
+            {selected ? (
+              <CandidatePane ctx={ctx} applicationId={selected} />
+            ) : (
+              <div className="t-verre t-rw-pick">
+                <span className="t-rc-rond" aria-hidden>
+                  <TalentIcon name="candidats" />
+                </span>
+                <b>{tw("pickTitle")}</b>
+                <span>{tw("pickText")}</span>
+              </div>
+            )}
           </div>
-
-          {list.hidden > 0 && (
-            <p className="t-rc-masque">
-              <span>{t("hidden", { count: list.hidden })}</span>
-              <Link href={clearHref}>{t("showAll")}</Link>
-            </p>
-          )}
-
-          {list.visible.length === 0 ? (
-            <p className="t-verre t-rc-rien">{t("none")}</p>
-          ) : (
-            <ul className="t-rc-liste">
-              {list.visible.map((row) => (
-                <li key={row.id}>
-                  <Link href={`/app/hire/candidats/${row.id}`} className="t-verre t-rc-cl t-press">
-                    <CandidateAvatar id={row.id} name={row.name} />
-                    <span className="t-t">
-                      <b>
-                        <span className="t-rc-nom">{row.name}</span>
-                        {row.unseen && <span className="t-rx-nv">{t("row.new")}</span>}
-                      </b>
-                      <span className="t-l">{[when(row.createdAt), docsOf(row)].join(" · ")}</span>
-                      <span className={cx("t-rc-etq", row.status === "withdrawn" && "t-ret")}>
-                        {row.status === "withdrawn" ? t("row.withdrawn") : row.stage.name}
-                      </span>
-                    </span>
-                    {row.score !== null && (
-                      <span className={cx("t-rc-sc", scoreTone(row.score))}>
-                        <b aria-hidden>{ui("percent", { value: row.score })}</b>
-                        <span aria-hidden>{t("row.score")}</span>
-                        <span className="sr-only">{t("row.scoreAria", { score: row.score })}</span>
-                      </span>
-                    )}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          )}
 
           <NextIntlClientProvider messages={pickMessages(messages, ["hireCandidates"])}>
             <SortSheet
@@ -308,6 +418,7 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
               filters={list.filters ?? []}
               withScores={list.matchingLevel !== "none"}
               clearHref={clearHref}
+              className="t-rw-pop"
             />
           </NextIntlClientProvider>
         </>

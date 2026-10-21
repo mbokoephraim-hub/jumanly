@@ -3,6 +3,7 @@ import { expectAccessible } from "./a11y";
 import { expect, test, type Page } from "./fixtures";
 import { fillOffer, publishFilledOffer, slugOf } from "./offer-flow";
 import { logIn, testEmail } from "./session";
+import { openCandidateFile } from "./hire-wide";
 
 // Recruiter space, lot 5 (docs/refonte-mobile, brief recruteur § 4 item 5, planches recruteur-3
 // and r3plus): the conversation with Orbi's draft and the templates (nothing leaves without the
@@ -86,10 +87,7 @@ test("conversation : brouillon d'Orbi relu puis envoyé, modèles, liste des mes
 
   // The file's menu « Modèles de message » opens the conversation with its templates.
   await page.goto(`/app/hire/candidats?offre=${detail.split("/").pop()}`);
-  await main(page)
-    .getByRole("link", { name: /Jean-Pierre Démo/ })
-    .click();
-  await expect(page).toHaveURL(/\/app\/hire\/candidats\/[^/?]+$/);
+  await openCandidateFile(page, /Jean-Pierre Démo/);
   const file = new URL(page.url()).pathname;
   await page.goto(`${file}/message`);
   await expect(page).toHaveURL(/\/app\/messages\/[^/?]+\?modeles=1/);

@@ -1,6 +1,7 @@
 import { expect, test, type Browser, type Page } from "./fixtures";
 import { expectAccessible } from "./a11y";
 import { demo, finishOnboarding, logIn, signUpWithEmail, testEmail } from "./session";
+import { plannerToHours } from "./hire-wide";
 
 /** Demo accounts of the fictional group (prisma/seed/group.ts). */
 const group = { owner: "groupe@jumanly.test", talent: "talent.visible@jumanly.test" };
@@ -127,10 +128,8 @@ async function planInterview(page: Page, slots: number, check = false) {
   await expect(page).toHaveURL(/\/entretien(\?|$)/);
   const planner = page.locator("main").filter({ visible: true });
   await planner.locator('[role="grid"] button:enabled').first().click();
-  await expect(planner.getByRole("button", { name: "Heures", exact: true })).toBeEnabled();
   if (check) await expectAccessible(page);
-  await planner.getByRole("button", { name: "Heures", exact: true }).click();
-  await expect(page).toHaveURL(/etape=heures/);
+  await plannerToHours(page);
   for (let index = 0; index < slots; index++) {
     await planner.locator(".t-rx-orbi").getByRole("button", { name: "Ajouter" }).click();
     await expect(planner).toContainText(`${index + 1} créneau`);

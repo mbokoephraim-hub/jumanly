@@ -41,19 +41,39 @@ export default async function PoolsPage({ searchParams }: PageProps<"/app/hire/v
   const now = new Date();
   const manage = hirePermissions(ctx.role).manage;
   const enabled = await poolsEnabled(db, ctx.organizationId);
+  const tw = await getTranslations("hireWeb.pools");
   const head = (
-    <FlowHead
-      back="/app/hire/candidats?vue=talents"
-      backLabel={t("back")}
-      title={t("title")}
-      end={
-        enabled && manage ? (
-          <SheetButton target="ri-creer" label={t("create")} className="t-bi t-press">
+    <>
+      <FlowHead
+        back="/app/hire/candidats?vue=talents"
+        backLabel={t("back")}
+        title={t("title")}
+        end={
+          enabled && manage ? (
+            <SheetButton target="ri-creer" label={t("create")} className="t-bi t-press">
+              <TalentIcon name="plus" size="s" />
+            </SheetButton>
+          ) : undefined
+        }
+      />
+      {/* Web: the title, what a pool is for and « Créer un vivier » (planche `.w-h`). */}
+      <div className="t-rw-h t-rw-web">
+        <div className="t-t">
+          <Link href="/app/hire/candidats?vue=talents" className="t-rw-crumb">
+            <TalentIcon name="suivant" size="xs" />
+            {t("back")}
+          </Link>
+          <h1>{t("title")}</h1>
+          <p>{tw("sub")}</p>
+        </div>
+        {enabled && manage && (
+          <SheetButton target="ri-creer" className="t-bt t-p t-m t-press">
             <TalentIcon name="plus" size="s" />
+            {t("create")}
           </SheetButton>
-        ) : undefined
-      }
-    />
+        )}
+      </div>
+    </>
   );
   if (!enabled) {
     const plan = cheapestPlanWhere(
@@ -62,7 +82,7 @@ export default async function PoolsPage({ searchParams }: PageProps<"/app/hire/v
       (item) => item.entitlements["hire.shortlist"] === "true",
     );
     return (
-      <div className="t-flux">
+      <div className="t-flux t-rw-viv">
         {head}
         <div className="t-rc-orbi">
           <div className="t-rc-lock">
@@ -91,7 +111,7 @@ export default async function PoolsPage({ searchParams }: PageProps<"/app/hire/v
   const toast = ok === "supprime" ? t("ok.deleted") : null;
 
   return (
-    <div className="t-flux t-ri-viviers">
+    <div className="t-flux t-ri-viviers t-rw-viv">
       {toast && <ToastOnLoad message={toast} tone="success" />}
       {head}
       {one(query.erreur) && (
@@ -175,7 +195,7 @@ export default async function PoolsPage({ searchParams }: PageProps<"/app/hire/v
       )}
 
       {manage && (
-        <SheetButton target="ri-creer" className="t-bt t-sec t-m t-press t-ri-creer">
+        <SheetButton target="ri-creer" className="t-bt t-sec t-m t-press t-ri-creer t-rw-tel">
           <TalentIcon name="plus" size="s" />
           {t("create")}
         </SheetButton>

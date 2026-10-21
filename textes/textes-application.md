@@ -10226,6 +10226,68 @@ Conventions :
 | `hireWeb.flow.preview.deadline` | Limite {date} |
 | `hireWeb.flow.preview.noDeadline` | Sans date limite |
 
+### Refonte web recruteur · lot 2 (ordinateur et tablette)
+
+*Espace recruteur sur ordinateur et tablette (docs/refonte-web, planche recruteur-2) : candidats avec la liste et le dossier côte à côte, dossier en deux colonnes, étapes et décision, agenda en semaine, recherche de talents avec les filtres à gauche, propositions en tableau. Les textes du téléphone restent ceux des lots mobiles.*
+
+| Clé | Texte |
+|---|---|
+| `hireWeb.candidates.sub` | {offer} · {count, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} |
+| `hireWeb.candidates.sortFilter` | Trier et filtrer |
+| `hireWeb.candidates.sortFilterActive` | Trier et filtrer · {count} |
+| `hireWeb.candidates.sortedNote` | un filtre ne rejette personne |
+| `hireWeb.candidates.atsLine` | {count, plural, one {<b># candidature</b> pas encore analysée.} other {<b># candidatures</b> pas encore analysées.}} Orbi peut les classer : vous gardez la décision. |
+| `hireWeb.candidates.atsDone` | Le classement d'Orbi est prêt, avec le pourquoi de chaque place : vous gardez la décision. |
+| `hireWeb.candidates.analyze` | Analyser |
+| `hireWeb.candidates.pickTitle` | Choisissez une candidature |
+| `hireWeb.candidates.pickText` | Son dossier s'ouvre ici, sans quitter la liste. L'ouverture est enregistrée dans l'historique. |
+| `hireWeb.candidates.waiting` | En attendant |
+| `hireWeb.candidates.pools` | Ouvrir vos viviers |
+| `hireWeb.candidates.poolsText` | Les talents gardés pour plus tard |
+| `hireWeb.candidates.offer` | Revoir l'offre |
+| `hireWeb.candidates.offerText` | Description, étapes et diffusion |
+| `hireWeb.pane.aria` | Dossier de {name} |
+| `hireWeb.pane.interview` | Entretien |
+| `hireWeb.pane.write` | Écrire |
+| `hireWeb.pane.open` | Ouvrir le dossier complet de {name} |
+| `hireWeb.pane.close` | Fermer le dossier |
+| `hireWeb.pane.noAnalysis` | Orbi n'a pas encore résumé ce dossier. Le résumé se demande depuis le dossier complet. |
+| `hireWeb.file.crumb` | Candidatures · {offer} |
+| `hireWeb.file.actions` | Actions |
+| `hireWeb.file.more` | Plus d'actions |
+| `hireWeb.file.pager` | Candidature {index} sur {total} |
+| `hireWeb.file.pagerAria` | Parcourir les candidatures de l'offre |
+| `hireWeb.file.prev` | Candidature précédente |
+| `hireWeb.file.next` | Candidature suivante |
+| `hireWeb.file.ask` | Demander à Orbi |
+| `hireWeb.file.askLabel` | Votre question à Orbi |
+| `hireWeb.file.askSend` | Envoyer la question |
+| `hireWeb.decision.message` | Message au candidat |
+| `hireWeb.decision.received` | Ce que {firstName} a reçu |
+| `hireWeb.decision.receivedFrom` | {company} · {job} |
+| `hireWeb.decision.pool` | Vivier mis à jour |
+| `hireWeb.decision.poolOpen` | Ouvrir le vivier « {name} » |
+| `hireWeb.decision.poolCount` | {count, plural, =0 {Aucun talent} one {# talent} other {# talents}} |
+| `hireWeb.agenda.toEvaluate` | À évaluer |
+| `hireWeb.agenda.eventAria` | {name}, {when}, {status} |
+| `hireWeb.agenda.seeAll` | Tout voir |
+| `hireInterviews.planWeb.sub` | Jusqu'à {max} créneaux, {firstName} choisit |
+| `hireInterviews.planWeb.dayTeam` | {day} · équipe |
+| `hireInterviews.planWeb.previewSub` | Ce que {firstName} reçoit, avant l'envoi |
+| `hireWeb.talents.sub` | Rechercher des talents · profils rendus visibles |
+| `hireWeb.talents.filters` | Filtrer les talents |
+| `hireWeb.talents.compare` | Comparer à l'offre |
+| `hireWeb.talents.pools` | Viviers |
+| `hireWeb.proposals.sub` | Rechercher des talents · vos propositions d'offre |
+| `hireWeb.proposals.talent` | Talent |
+| `hireWeb.proposals.offer` | Offre proposée |
+| `hireWeb.proposals.answer` | Réponse |
+| `hireWeb.proposals.write` | Écrire |
+| `hireWeb.proposals.info` | <b>Acceptée</b> : la conversation s'ouvre dans Messages. <b>Refusée</b> : sans détail, rien à faire. |
+| `hireWeb.profile.crumb` | Rechercher des talents |
+| `hireWeb.pools.sub` | Talents gardés pour plus tard |
+| `hireWeb.pools.crumb` | Viviers |
+
 ### Navigation Hire
 
 *Menu de l'espace Organisation, visible quand le sélecteur d'espace est sur une organisation.*

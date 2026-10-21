@@ -3,6 +3,7 @@ import { expectAccessible } from "./a11y";
 import { expect, test, type Browser, type Page } from "./fixtures";
 import { fillOffer, publishFilledOffer, slugOf } from "./offer-flow";
 import { logIn, testEmail } from "./session";
+import { openCandidateFile, plannerToHours, widePlanner } from "./hire-wide";
 
 // Recruiter space, lot 4 (docs/refonte-mobile, brief recruteur § 4 item 4, planches r2plus ENT,
 // AGENDA, PREP_R, EVAL, TAL, TPROF, CONTACT, VIVIERS): an interview proposed on the calendar,
@@ -75,10 +76,7 @@ async function offerWithApplicant(
     timeout: 20_000,
   });
   await page.goto(`/app/hire/candidats?offre=${detail.split("/").pop()}`);
-  await main(page)
-    .getByRole("link", { name: /Jean-Pierre Démo/ })
-    .click();
-  await expect(page).toHaveURL(/\/app\/hire\/candidats\/[^/?]+$/);
+  await openCandidateFile(page, /Jean-Pierre Démo/);
   const file = page.url().split("?")[0]!;
   return { jobId: detail.split("/").pop()!, title, talent, file };
 }
@@ -117,13 +115,13 @@ test("entretien : calendrier, aperçu, confirmation du talent, préparation, év
   await expect(page).toHaveURL(/\/entretien$/);
   const planner = main(page);
   await expect(planner.getByRole("heading", { name: "Proposer un entretien" })).toBeVisible();
-  await expect(planner.getByRole("button", { name: "Heures", exact: true })).toBeDisabled();
+  // On a phone « Heures » waits for a day; on a computer the first open day is already chosen.
+  if (!widePlanner(page))
+    await expect(planner.getByRole("button", { name: "Heures", exact: true })).toBeDisabled();
   await expectAccessible(page);
   await noOverflow(page, "calendrier");
   await planner.locator('[role="grid"] button:enabled').first().click();
-  await expect(planner.getByRole("button", { name: "Heures", exact: true })).toBeEnabled();
-  await planner.getByRole("button", { name: "Heures", exact: true }).click();
-  await expect(page).toHaveURL(/etape=heures/);
+  await plannerToHours(page);
   // Orbi suggests the next free slot; the recruiter adds it, then a second one.
   await planner.locator(".t-rx-orbi").getByRole("button", { name: "Ajouter" }).click();
   await expect(planner).toContainText("1 créneau sur 3");
@@ -181,7 +179,8 @@ test("entretien : calendrier, aperçu, confirmation du talent, préparation, év
   await pick.getByRole("link", { name: /Jean-Pierre Démo/ }).click();
   await expect(page).toHaveURL(/\/entretien$/);
   await main(page).locator('[role="grid"] button:enabled').first().click();
-  await expect(main(page).getByRole("button", { name: "Heures", exact: true })).toBeEnabled();
+  if (!widePlanner(page))
+    await expect(main(page).getByRole("button", { name: "Heures", exact: true })).toBeEnabled();
 
   // The preparation: Orbi's points and questions, the team's own questions.
   await page.goto(prep);
@@ -249,7 +248,9 @@ test("entretien : calendrier, aperçu, confirmation du talent, préparation, év
   await expect(page).toHaveURL(/ok=evaluation/);
   expect(page.url().split("?")[0]).toBe(file);
   await expect(main(page)).toContainText("Votre évaluation : Hésitation.");
-  await expect(main(page).locator('[aria-current="step"]')).toContainText("Reçue");
+  await expect(main(page).locator('[aria-current="step"]').filter({ visible: true })).toContainText(
+    "Reçue",
+  );
   await page.goto("/app/hire/entretiens?vue=evaluer");
   await noOverflow(page, "à évaluer");
 });

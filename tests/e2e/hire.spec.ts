@@ -5,6 +5,7 @@ import { expectAccessible } from "./a11y";
 import { fillOffer, publishFilledOffer, slugOf } from "./offer-flow";
 import { lastCode } from "./outbox";
 import { demo, logIn, testEmail } from "./session";
+import { openCandidateFile } from "./hire-wide";
 
 /** A new RH account with its organization (inscription, profil « Professionnel RH », Free). */
 async function signUpRecruiter(page: Page, email: string, orgName: string) {
@@ -114,11 +115,7 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   );
   // Lot 3: the candidates of the offer, then the file; « Changer d'étape » moves to « Entretien ».
   await page.goto(pipelineUrl);
-  await page
-    .getByRole("main")
-    .getByRole("link", { name: /Amani Fictif/ })
-    .click();
-  await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
+  await openCandidateFile(page, /Amani Fictif/);
   const candidateUrl = page.url().split("?")[0]!;
   await page.getByRole("button", { name: "Changer d'étape" }).click();
   const move = page.locator("#rc-etape");
@@ -128,7 +125,12 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await expect(page.locator("#historique")).toContainText("vers « Entretien »");
 
   // A note stays inside the team.
-  await page.locator("#notes > summary").click();
+  // On a computer the file's sections are open from the start (web recruteur 2).
+  await expect(async () => {
+    if (!(await page.locator("#rc-note").isVisible()))
+      await page.locator("#notes > summary").click();
+    await expect(page.locator("#rc-note")).toBeVisible({ timeout: 1_000 });
+  }).toPass({ timeout: 15_000 });
   await page
     .locator("#rc-note")
     .fill("Bonne maîtrise des tableaux croisés, à confirmer en entretien.");
@@ -210,11 +212,7 @@ test("le recruteur accepte un candidat avec un modèle au ton choisi", async ({
   await applyTo(talent, slug, title);
 
   await page.goto(pipelineUrl);
-  await page
-    .getByRole("main")
-    .getByRole("link", { name: /Amani Fictif/ })
-    .click();
-  await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
+  await openCandidateFile(page, /Amani Fictif/);
   const candidateUrl = page.url().split("?")[0]!;
   await page.getByRole("link", { name: "Envoyer un message" }).click();
   await expect(page).toHaveURL(/\/app\/messages\//);

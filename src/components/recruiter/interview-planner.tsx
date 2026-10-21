@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useMemo, useState, type CSSProperties } from "react";
+import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useTranslations } from "next-intl";
 import { BackButton } from "@/components/talent/back-button";
@@ -47,6 +48,8 @@ const modeTone: Record<PlannerMode, string> = {
 export const PLANNER_DURATIONS = [30, 45, 60, 90] as const;
 const HOUR_PX = 52;
 const MAX = 3;
+/** On a computer or a tablet the day and its hours are one screen (web recruteur lot 2). */
+const WIDE = "(min-width: 768px)";
 
 /**
  * « Proposer un entretien » (planches r2plus PROG, PROG2 and INV_AP): the mode, the duration and a
@@ -117,6 +120,7 @@ export function InterviewPlanner({
   error: string | null;
 }) {
   const t = useTranslations("hireInterviews.plan");
+  const tw = useTranslations("hireInterviews.planWeb");
   const params = useSearchParams();
   const asked = params.get("etape");
   const step: Step = steps.find((value) => value === asked) ?? "jour";
@@ -136,6 +140,26 @@ export function InterviewPlanner({
     if (step !== "jour" && !day) go("jour", true);
     // eslint-disable-next-line react-hooks/exhaustive-deps -- only on the first render
   }, []);
+
+  // On a computer or a tablet (planche web recruteur-2 § 4): the hours sit beside the calendar,
+  // so a day is open from the start and « heures » is the same screen as « jour ».
+  useEffect(() => {
+    if (!window.matchMedia(WIDE).matches) return;
+    const frame = window.requestAnimationFrame(() => {
+      if (!day) {
+        const first = Array.from({ length: 21 }, (_, index) => addDays(today, index)).find(
+          (key) => Boolean(days[key]) && weekdayOf(key) < 5,
+        );
+        if (first) {
+          setDay(first);
+          setMonth(first.slice(0, 7));
+        }
+      }
+      if (step === "heures") go("jour", true);
+    });
+    return () => window.cancelAnimationFrame(frame);
+    // eslint-disable-next-line react-hooks/exhaustive-deps -- when the step changes only
+  }, [step]);
 
   function go(next: Step, replace = false) {
     const url = new URL(window.location.href);
@@ -224,6 +248,100 @@ export function InterviewPlanner({
     </div>
   );
 
+  /** The head of the page on a computer (planche `.w-h`); the phone keeps its round « Retour ». */
+  const webHead = (title: string, sub: string) => (
+    <div className="t-rw-h t-rw-web">
+      <div className="t-t">
+        <Link href={back} className="t-rw-crumb">
+          <TalentIcon name="suivant" size="xs" />
+          {t("back")}
+        </Link>
+        <h1>{title}</h1>
+        <p>{sub}</p>
+      </div>
+    </div>
+  );
+
+  const morningsLine = (
+    <div className="t-rx-orbi">
+      <OrbiMark size={26} />
+      <p className="t-t">
+        {t.rich("orbiMornings", {
+          b: (chunks) => <b>{chunks}</b>,
+          names: teamNames.length > 1 ? list(teamNames) : t("you"),
+          count: teamNames.length,
+          days: list(mornings.map((key) => days[key]?.short ?? key)),
+        })}
+      </p>
+    </div>
+  );
+  const suggestionLine = suggestion && (
+    <div className="t-rx-orbi">
+      <OrbiMark size={26} />
+      <p className="t-t">
+        {t.rich("orbiSuggest", {
+          b: (chunks) => <b>{chunks}</b>,
+          rank: slots.length + 1,
+          slot: t("slotLong", {
+            day: days[suggestion.slice(0, 10)]?.long ?? "",
+            time: clock(minutesOfSlot(suggestion)),
+          }),
+          alone: team.length === 1 ? "yes" : "no",
+        })}
+      </p>
+      <button
+        type="button"
+        className="t-bt t-sec t-s t-press"
+        onClick={() => {
+          setDay(suggestion.slice(0, 10));
+          toggleSlot(suggestion);
+        }}
+      >
+        {t("add")}
+      </button>
+    </div>
+  );
+  const checks = (
+    <div className="t-verre t-ri-chk">
+      <p>
+        <span className="t-o" aria-hidden>
+          <TalentIcon name="valider" size="xs" />
+        </span>
+        {t("zone", { zone })}
+      </p>
+      {mode === "onsite" ? (
+        <div className="t-champ">
+          <label htmlFor="ri-adresse">{t("address")}</label>
+          <div className="t-verre t-saisie">
+            <input
+              id="ri-adresse"
+              value={address}
+              maxLength={300}
+              onChange={(event) => setAddress(event.target.value)}
+              placeholder={t("addressPlaceholder")}
+            />
+          </div>
+        </div>
+      ) : (
+        <div className="t-champ">
+          <label htmlFor="ri-lien">{t(mode === "audio" ? "linkAudio" : "link")}</label>
+          <div className="t-verre t-saisie">
+            <input
+              id="ri-lien"
+              type="url"
+              inputMode="url"
+              value={link}
+              maxLength={300}
+              onChange={(event) => setLink(event.target.value)}
+              placeholder="https://"
+            />
+          </div>
+          <small>{t("linkHint", { firstName: candidate.firstName })}</small>
+        </div>
+      )}
+    </div>
+  );
+
   const mini = (
     <section className="t-verre t-ri-mini" aria-label={candidate.name}>
       <CandidateAvatar id={candidate.id} name={candidate.name} />
@@ -243,7 +361,7 @@ export function InterviewPlanner({
   );
 
   return (
-    <form action={action} className="t-flux t-ri-plan">
+    <form action={action} className="t-flux t-ri-plan t-rw-plan">
       {/* What leaves with « Envoyer l'invitation », whatever the step shown. */}
       <input type="hidden" name="application" value={applicationId} />
       {reschedule && <input type="hidden" name="interview" value={reschedule.interviewId} />}
@@ -264,126 +382,162 @@ export function InterviewPlanner({
       {step === "jour" && (
         <>
           {head(reschedule ? t("titleReschedule") : t("title"), null)}
+          {webHead(
+            reschedule ? t("titleReschedule") : t("title"),
+            tw("sub", { max: MAX, firstName: candidate.firstName }),
+          )}
           {error && (
             <p role="alert" className="t-gar t-err">
               <TalentIcon name="horloge" size="s" />
               <span>{error}</span>
             </p>
           )}
-          {mini}
+          <div className="t-rw-g t-rw-plg">
+            <div className="t-rw-c">
+              {mini}
 
-          {reschedule ? (
-            <p className="t-verre t-ri-garde">
-              <span className={cx("t-cases", modeTone[mode])} aria-hidden>
-                <TalentIcon name={modeIcon[mode]} size="s" />
-              </span>
-              <span>{t("rescheduleKeep", { mode: modeName, duration: durationName })}</span>
-            </p>
-          ) : (
-            <>
-              <fieldset className="t-ri-modes">
-                <legend className="sr-only">{t("modeLegend")}</legend>
-                {(["video", "onsite", "audio"] as const).map((value) => (
-                  <label key={value} className={cx("t-press", mode === value && "t-on")}>
-                    <input
-                      type="radio"
-                      name="mode-choice"
-                      value={value}
-                      checked={mode === value}
-                      onChange={() => setMode(value)}
-                      className="sr-only"
-                    />
-                    <span className={cx("t-cases", modeTone[value])} aria-hidden>
-                      <TalentIcon name={modeIcon[value]} size="s" />
-                    </span>
-                    {t(`mode.${value}`)}
-                  </label>
-                ))}
-              </fieldset>
-              <fieldset className="t-ri-durees">
-                <legend className="sr-only">{t("durationLegend")}</legend>
-                {PLANNER_DURATIONS.map((value) => (
-                  <label key={value} className={cx("t-press", duration === value && "t-on")}>
-                    <input
-                      type="radio"
-                      name="duration-choice"
-                      value={value}
-                      checked={duration === value}
-                      onChange={() => {
-                        setDuration(value);
-                        setSlots([]);
-                      }}
-                      className="sr-only"
-                    />
-                    {t(`durationChip.${value}`)}
-                  </label>
-                ))}
-              </fieldset>
-            </>
-          )}
-
-          <MonthCalendar
-            month={month}
-            months={months}
-            onMonth={setMonth}
-            selected={day}
-            today={today}
-            isOpen={inRange}
-            loadOf={(key) => (weekdayOf(key) > 4 || !inRange(key) ? null : dayLoad(blocksOf(key)))}
-            chosen={chosenDays}
-            label={(key) => days[key]?.long ?? key}
-            onPick={(key) => setDay(key)}
-          />
-
-          {mornings.length > 0 && (
-            <div className="t-rx-orbi">
-              <OrbiMark size={26} />
-              <p className="t-t">
-                {t.rich("orbiMornings", {
-                  b: (chunks) => <b>{chunks}</b>,
-                  names: teamNames.length > 1 ? list(teamNames) : t("you"),
-                  count: teamNames.length,
-                  days: list(mornings.map((key) => days[key]?.short ?? key)),
-                })}
-              </p>
-            </div>
-          )}
-
-          <div className="t-verre t-liste t-lignes">
-            <div className="t-li t-ri-equipe">
-              <span className="t-ri-pile" aria-hidden>
-                {team.map((id) => (
-                  <span key={id} className="t-rc-av">
-                    {members.find((member) => member.id === id)?.initials}
+              {reschedule ? (
+                <p className="t-verre t-ri-garde">
+                  <span className={cx("t-cases", modeTone[mode])} aria-hidden>
+                    <TalentIcon name={modeIcon[mode]} size="s" />
                   </span>
-                ))}
-              </span>
-              <span className="t-t">
-                <b>{t("participants")}</b>
-                <span>{list(team.map((id) => members.find((m) => m.id === id)?.name ?? ""))}</span>
-              </span>
-              {collaboration && members.length > 1 && (
-                <SheetButton target="ri-equipe" className="t-bt t-sec t-s t-press">
-                  <TalentIcon name="plus" size="xs" />
-                  {t("invite")}
-                </SheetButton>
+                  <span>{t("rescheduleKeep", { mode: modeName, duration: durationName })}</span>
+                </p>
+              ) : (
+                <>
+                  <fieldset className="t-ri-modes">
+                    <legend className="sr-only">{t("modeLegend")}</legend>
+                    {(["video", "onsite", "audio"] as const).map((value) => (
+                      <label key={value} className={cx("t-press", mode === value && "t-on")}>
+                        <input
+                          type="radio"
+                          name="mode-choice"
+                          value={value}
+                          checked={mode === value}
+                          onChange={() => setMode(value)}
+                          className="sr-only"
+                        />
+                        <span className={cx("t-cases", modeTone[value])} aria-hidden>
+                          <TalentIcon name={modeIcon[value]} size="s" />
+                        </span>
+                        {t(`mode.${value}`)}
+                      </label>
+                    ))}
+                  </fieldset>
+                  <fieldset className="t-ri-durees">
+                    <legend className="sr-only">{t("durationLegend")}</legend>
+                    {PLANNER_DURATIONS.map((value) => (
+                      <label key={value} className={cx("t-press", duration === value && "t-on")}>
+                        <input
+                          type="radio"
+                          name="duration-choice"
+                          value={value}
+                          checked={duration === value}
+                          onChange={() => {
+                            setDuration(value);
+                            setSlots([]);
+                          }}
+                          className="sr-only"
+                        />
+                        {t(`durationChip.${value}`)}
+                      </label>
+                    ))}
+                  </fieldset>
+                </>
               )}
-            </div>
-          </div>
 
-          <div className="t-verre t-fort t-ri-recap">
-            <span className="t-t">
-              <b>{day ? days[day]?.long : t("pickDay")}</b>
-              {day ? t("pickHours") : t("pickDayText")}
-            </span>
-            <button
-              type="button"
-              className={cx("t-bt t-p t-press", !day && "t-off")}
-              disabled={!day}
-              onClick={() => go("heures")}
-            >
-              {t("hours")}
-            </button>
+              <MonthCalendar
+                month={month}
+                months={months}
+                onMonth={setMonth}
+                selected={day}
+                today={today}
+                isOpen={inRange}
+                loadOf={(key) =>
+                  weekdayOf(key) > 4 || !inRange(key) ? null : dayLoad(blocksOf(key))
+                }
+                chosen={chosenDays}
+                label={(key) => days[key]?.long ?? key}
+                onPick={(key) => setDay(key)}
+              />
+
+              {mornings.length > 0 && <div className="t-rw-m">{morningsLine}</div>}
+
+              <div className="t-verre t-liste t-lignes">
+                <div className="t-li t-ri-equipe">
+                  <span className="t-ri-pile" aria-hidden>
+                    {team.map((id) => (
+                      <span key={id} className="t-rc-av">
+                        {members.find((member) => member.id === id)?.initials}
+                      </span>
+                    ))}
+                  </span>
+                  <span className="t-t">
+                    <b>{t("participants")}</b>
+                    <span>
+                      {list(team.map((id) => members.find((m) => m.id === id)?.name ?? ""))}
+                    </span>
+                  </span>
+                  {collaboration && members.length > 1 && (
+                    <SheetButton target="ri-equipe" className="t-bt t-sec t-s t-press">
+                      <TalentIcon name="plus" size="xs" />
+                      {t("invite")}
+                    </SheetButton>
+                  )}
+                </div>
+              </div>
+
+              <div className="t-verre t-fort t-ri-recap t-rw-tel">
+                <span className="t-t">
+                  <b>{day ? days[day]?.long : t("pickDay")}</b>
+                  {day ? t("pickHours") : t("pickDayText")}
+                </span>
+                <button
+                  type="button"
+                  className={cx("t-bt t-p t-press", !day && "t-off")}
+                  disabled={!day}
+                  onClick={() => go("heures")}
+                >
+                  {t("hours")}
+                </button>
+              </div>
+            </div>
+
+            {/* Web: the hours of the chosen day beside the calendar (planche `.prog-w`). */}
+            <div className="t-rw-c t-rw-web">
+              {mornings.length > 0 && morningsLine}
+              {day && (
+                <DayGrid
+                  day={day}
+                  title={days[day]?.long ?? day}
+                  blocks={blocksOf(day)}
+                  members={members}
+                  team={team}
+                  slots={slots.filter((slot) => slot.startsWith(day))}
+                  all={slots}
+                  duration={duration}
+                  nowMinutes={day === today ? nowMinutes : -1}
+                  modeName={modeName}
+                  onToggle={toggleSlot}
+                />
+              )}
+              {suggestionLine}
+              {checks}
+              <div className="t-verre t-fort t-ri-recap">
+                <span className="t-t" aria-live="polite">
+                  <b>{t("count", { count: slots.length, max: MAX })}</b>
+                  {recap}
+                </span>
+                <button
+                  type="button"
+                  className={cx("t-bt t-p t-press", !ready && "t-off")}
+                  disabled={!ready}
+                  onClick={() => go("apercu")}
+                >
+                  {t("preview")}
+                </button>
+              </div>
+            </div>
           </div>
 
           {collaboration && (
@@ -473,71 +627,9 @@ export function InterviewPlanner({
             onToggle={toggleSlot}
           />
 
-          {suggestion && (
-            <div className="t-rx-orbi">
-              <OrbiMark size={26} />
-              <p className="t-t">
-                {t.rich("orbiSuggest", {
-                  b: (chunks) => <b>{chunks}</b>,
-                  rank: slots.length + 1,
-                  slot: t("slotLong", {
-                    day: days[suggestion.slice(0, 10)]?.long ?? "",
-                    time: clock(minutesOfSlot(suggestion)),
-                  }),
-                  alone: team.length === 1 ? "yes" : "no",
-                })}
-              </p>
-              <button
-                type="button"
-                className="t-bt t-sec t-s t-press"
-                onClick={() => {
-                  setDay(suggestion.slice(0, 10));
-                  toggleSlot(suggestion);
-                }}
-              >
-                {t("add")}
-              </button>
-            </div>
-          )}
+          {suggestionLine}
 
-          <div className="t-verre t-ri-chk">
-            <p>
-              <span className="t-o" aria-hidden>
-                <TalentIcon name="valider" size="xs" />
-              </span>
-              {t("zone", { zone })}
-            </p>
-            {mode === "onsite" ? (
-              <div className="t-champ">
-                <label htmlFor="ri-adresse">{t("address")}</label>
-                <div className="t-verre t-saisie">
-                  <input
-                    id="ri-adresse"
-                    value={address}
-                    maxLength={300}
-                    onChange={(event) => setAddress(event.target.value)}
-                    placeholder={t("addressPlaceholder")}
-                  />
-                </div>
-              </div>
-            ) : (
-              <div className="t-champ">
-                <label htmlFor="ri-lien">{t(mode === "audio" ? "linkAudio" : "link")}</label>
-                <div className="t-verre t-saisie">
-                  <input
-                    id="ri-lien"
-                    type="url"
-                    inputMode="url"
-                    value={link}
-                    maxLength={300}
-                    onChange={(event) => setLink(event.target.value)}
-                    placeholder="https://"
-                  />
-                </div>
-                <small>{t("linkHint", { firstName: candidate.firstName })}</small>
-              </div>
-            )}
-          </div>
+          {checks}
 
           <div className="t-verre t-fort t-ri-recap">
             <span className="t-t" aria-live="polite">
@@ -559,155 +651,161 @@ export function InterviewPlanner({
       {step === "apercu" && day && (
         <>
           {head(t("previewTitle"), "heures")}
-          <h2 className="t-ck-t">{t("previewFor", { firstName: candidate.firstName })}</h2>
-          <section className="t-verre t-ri-inv" aria-label={t("previewAria")}>
-            <div className="t-ban" aria-hidden>
-              <svg viewBox="0 0 390 64" preserveAspectRatio="none">
-                <g fill="none" stroke="rgba(166,242,107,.35)">
-                  <circle cx="330" cy="6" r="34" />
-                  <circle cx="330" cy="6" r="60" />
-                </g>
-                <circle cx="330" cy="6" r="7" fill="#A6F26B" />
-              </svg>
-              <span className="t-lg-e t-sap">{org.initials}</span>
-            </div>
-            <div className="t-c">
-              <span className="t-k">{t("previewKicker")}</span>
-              <h3>{jobTitle}</h3>
-              <span className="t-ent">
-                {org.name}
-                {org.verified && (
-                  <span className="t-verif">
-                    <TalentIcon name="valider" size="xs" />
-                    {t("verified")}
+          {webHead(t("previewTitle"), tw("previewSub", { firstName: candidate.firstName }))}
+          <div className="t-rw-g t-rw-apg">
+            <div className="t-rw-c">
+              <h2 className="t-ck-t">{t("previewFor", { firstName: candidate.firstName })}</h2>
+              <section className="t-verre t-ri-inv" aria-label={t("previewAria")}>
+                <div className="t-ban" aria-hidden>
+                  <svg viewBox="0 0 390 64" preserveAspectRatio="none">
+                    <g fill="none" stroke="rgba(166,242,107,.35)">
+                      <circle cx="330" cy="6" r="34" />
+                      <circle cx="330" cy="6" r="60" />
+                    </g>
+                    <circle cx="330" cy="6" r="7" fill="#A6F26B" />
+                  </svg>
+                  <span className="t-lg-e t-sap">{org.initials}</span>
+                </div>
+                <div className="t-c">
+                  <span className="t-k">{t("previewKicker")}</span>
+                  <h3>{jobTitle}</h3>
+                  <span className="t-ent">
+                    {org.name}
+                    {org.verified && (
+                      <span className="t-verif">
+                        <TalentIcon name="valider" size="xs" />
+                        {t("verified")}
+                      </span>
+                    )}
                   </span>
-                )}
-              </span>
-              <ul className="t-rows">
-                <li>
-                  <TalentIcon name={modeIcon[mode]} size="s" />
-                  {mode === "onsite"
-                    ? t("rowOnsite", { duration: durationName, address: address.trim() })
-                    : t("rowRemote", { mode: modeName, duration: durationName })}
-                </li>
-                <li>
-                  <TalentIcon name="candidats" size="s" />
-                  {t("rowWith", {
-                    names: list(team.map((id) => members.find((m) => m.id === id)?.name ?? "")),
-                  })}
-                </li>
-              </ul>
-              <ul className="t-dts">
-                {slots.map((slot, index) => {
-                  const key = slot.slice(0, 10);
-                  return (
-                    <li key={slot} className={index === 0 ? "t-on" : undefined}>
-                      <span className="t-cal-t" aria-hidden>
-                        <i>{days[key]?.weekday}</i>
-                        <b>{days[key]?.day}</b>
-                      </span>
-                      <span className="t-t">
-                        <b>{clock(minutesOfSlot(slot))}</b>
-                        {days[key]?.month}
-                      </span>
-                      <span className="sr-only">{slotText(slot)}</span>
+                  <ul className="t-rows">
+                    <li>
+                      <TalentIcon name={modeIcon[mode]} size="s" />
+                      {mode === "onsite"
+                        ? t("rowOnsite", { duration: durationName, address: address.trim() })
+                        : t("rowRemote", { mode: modeName, duration: durationName })}
                     </li>
-                  );
-                })}
-              </ul>
-              <div className="t-faux" aria-hidden>
-                <span className="t-bt t-p t-m">{t("previewConfirm")}</span>
-                <span className="t-bt t-sec t-m">{t("previewOther")}</span>
+                    <li>
+                      <TalentIcon name="candidats" size="s" />
+                      {t("rowWith", {
+                        names: list(team.map((id) => members.find((m) => m.id === id)?.name ?? "")),
+                      })}
+                    </li>
+                  </ul>
+                  <ul className="t-dts">
+                    {slots.map((slot, index) => {
+                      const key = slot.slice(0, 10);
+                      return (
+                        <li key={slot} className={index === 0 ? "t-on" : undefined}>
+                          <span className="t-cal-t" aria-hidden>
+                            <i>{days[key]?.weekday}</i>
+                            <b>{days[key]?.day}</b>
+                          </span>
+                          <span className="t-t">
+                            <b>{clock(minutesOfSlot(slot))}</b>
+                            {days[key]?.month}
+                          </span>
+                          <span className="sr-only">{slotText(slot)}</span>
+                        </li>
+                      );
+                    })}
+                  </ul>
+                  <div className="t-faux" aria-hidden>
+                    <span className="t-bt t-p t-m">{t("previewConfirm")}</span>
+                    <span className="t-bt t-sec t-m">{t("previewOther")}</span>
+                  </div>
+                </div>
+              </section>
+            </div>
+            <div className="t-rw-c">
+              {reschedule ? (
+                <p className="t-gar">
+                  <TalentIcon name="notification" size="s" />
+                  <span>{t("rescheduleNote", { firstName: candidate.firstName })}</span>
+                </p>
+              ) : (
+                <>
+                  {tone === "moi" ? (
+                    <div className="t-rc-msg">
+                      <span className="t-k">
+                        <TalentIcon name="modifier" size="s" />
+                        {t("ownMessage")}
+                      </span>
+                      <label htmlFor="ri-message" className="sr-only">
+                        {t("messageLabel", { firstName: candidate.firstName })}
+                      </label>
+                      <textarea
+                        id="ri-message"
+                        name="message"
+                        rows={6}
+                        maxLength={2000}
+                        className="t-rc-msg-ta"
+                      />
+                    </div>
+                  ) : (
+                    <DecisionMessage
+                      key={tone}
+                      body={tones[tone].body}
+                      segments={tones[tone].segments}
+                      firstName={candidate.firstName}
+                      title={t("prepared")}
+                      edited={t("edited")}
+                      fieldId="ri-message"
+                      editLabel={t("messageLabel", { firstName: candidate.firstName })}
+                      editText={t("edit")}
+                    />
+                  )}
+                  <ul className="t-rc-tons t-ri-tons" aria-label={t("tones")}>
+                    {(["chaleureux", "court", "formel", "moi"] as const).map((chip) => (
+                      <li key={chip}>
+                        <button
+                          type="button"
+                          aria-pressed={chip === tone}
+                          onClick={() => setTone(chip)}
+                          className="t-press"
+                        >
+                          {chip === "moi" && <TalentIcon name="modifier" size="xs" />}
+                          {t(`tone.${chip}`)}
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
+                </>
+              )}
+
+              <div className="t-verre t-ri-chk">
+                <p>
+                  <span className="t-o" aria-hidden>
+                    <TalentIcon name="valider" size="xs" />
+                  </span>
+                  {t("checkNotify", { firstName: candidate.firstName })}
+                </p>
+                <p>
+                  <span className="t-o" aria-hidden>
+                    <TalentIcon name="valider" size="xs" />
+                  </span>
+                  {t("checkAgenda")}
+                </p>
+                {team.length > 1 && (
+                  <p>
+                    <span className="t-o" aria-hidden>
+                      <TalentIcon name="valider" size="xs" />
+                    </span>
+                    {t("checkTeam", { count: team.length - 1 })}
+                  </p>
+                )}
+              </div>
+
+              <div className="t-verre t-fort t-bas-f t-rw-st">
+                <button type="button" className="t-bt t-sec t-m t-press" onClick={() => go("jour")}>
+                  {t("modify")}
+                </button>
+                <button type="submit" className="t-bt t-p t-pl t-press">
+                  <TalentIcon name="envoyer" size="s" />
+                  {reschedule ? t("sendReschedule") : t("send")}
+                </button>
               </div>
             </div>
-          </section>
-
-          {reschedule ? (
-            <p className="t-gar">
-              <TalentIcon name="notification" size="s" />
-              <span>{t("rescheduleNote", { firstName: candidate.firstName })}</span>
-            </p>
-          ) : (
-            <>
-              {tone === "moi" ? (
-                <div className="t-rc-msg">
-                  <span className="t-k">
-                    <TalentIcon name="modifier" size="s" />
-                    {t("ownMessage")}
-                  </span>
-                  <label htmlFor="ri-message" className="sr-only">
-                    {t("messageLabel", { firstName: candidate.firstName })}
-                  </label>
-                  <textarea
-                    id="ri-message"
-                    name="message"
-                    rows={6}
-                    maxLength={2000}
-                    className="t-rc-msg-ta"
-                  />
-                </div>
-              ) : (
-                <DecisionMessage
-                  key={tone}
-                  body={tones[tone].body}
-                  segments={tones[tone].segments}
-                  firstName={candidate.firstName}
-                  title={t("prepared")}
-                  edited={t("edited")}
-                  fieldId="ri-message"
-                  editLabel={t("messageLabel", { firstName: candidate.firstName })}
-                  editText={t("edit")}
-                />
-              )}
-              <ul className="t-rc-tons t-ri-tons" aria-label={t("tones")}>
-                {(["chaleureux", "court", "formel", "moi"] as const).map((chip) => (
-                  <li key={chip}>
-                    <button
-                      type="button"
-                      aria-pressed={chip === tone}
-                      onClick={() => setTone(chip)}
-                      className="t-press"
-                    >
-                      {chip === "moi" && <TalentIcon name="modifier" size="xs" />}
-                      {t(`tone.${chip}`)}
-                    </button>
-                  </li>
-                ))}
-              </ul>
-            </>
-          )}
-
-          <div className="t-verre t-ri-chk">
-            <p>
-              <span className="t-o" aria-hidden>
-                <TalentIcon name="valider" size="xs" />
-              </span>
-              {t("checkNotify", { firstName: candidate.firstName })}
-            </p>
-            <p>
-              <span className="t-o" aria-hidden>
-                <TalentIcon name="valider" size="xs" />
-              </span>
-              {t("checkAgenda")}
-            </p>
-            {team.length > 1 && (
-              <p>
-                <span className="t-o" aria-hidden>
-                  <TalentIcon name="valider" size="xs" />
-                </span>
-                {t("checkTeam", { count: team.length - 1 })}
-              </p>
-            )}
-          </div>
-
-          <div className="t-verre t-fort t-bas-f">
-            <button type="button" className="t-bt t-sec t-m t-press" onClick={() => go("jour")}>
-              {t("modify")}
-            </button>
-            <button type="submit" className="t-bt t-p t-pl t-press">
-              <TalentIcon name="envoyer" size="s" />
-              {reschedule ? t("sendReschedule") : t("send")}
-            </button>
           </div>
         </>
       )}
@@ -827,6 +925,7 @@ export function MonthCalendar({
  */
 function DayGrid({
   day,
+  title,
   blocks,
   members,
   team,
@@ -838,6 +937,8 @@ function DayGrid({
   onToggle,
 }: {
   day: string;
+  /** On a computer: the day it shows, the team's free time beside the calendar. */
+  title?: string;
   blocks: BusyBlock[];
   members: PlannerMember[];
   team: string[];
@@ -849,6 +950,7 @@ function DayGrid({
   onToggle: (slot: string) => void;
 }) {
   const t = useTranslations("hireInterviews.plan");
+  const tw = useTranslations("hireInterviews.planWeb");
   const top = (minutes: number) => ((minutes - DAY_START) / 60) * HOUR_PX;
   const hours = Array.from(
     { length: (DAY_END - DAY_START) / 60 + 1 },
@@ -864,9 +966,11 @@ function DayGrid({
   });
   const firstName = (id: string) => members.find((member) => member.id === id)?.firstName ?? "";
   return (
-    <section className="t-verre t-ri-jour" aria-labelledby="ri-dispo">
+    <section className="t-verre t-ri-jour" aria-labelledby={title ? "ri-dispo-w" : "ri-dispo"}>
       <div className="t-h">
-        <b id="ri-dispo">{t("teamDay")}</b>
+        <b id={title ? "ri-dispo-w" : "ri-dispo"}>
+          {title ? tw("dayTeam", { day: title }) : t("teamDay")}
+        </b>
         <span className="t-ri-pile" aria-hidden>
           {team.map((id) => (
             <span key={id} className="t-rc-av">

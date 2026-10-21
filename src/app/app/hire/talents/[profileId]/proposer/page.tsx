@@ -133,8 +133,18 @@ export default async function ProposeOfferPage({
               : t("error.other");
 
   return (
-    <div className="t-flux t-ri-prop">
+    <div className="t-flux t-ri-prop t-rw-prop">
       <FlowHead back={profilePage} backLabel={t("back")} title={t("title")} />
+      {/* Web: a centred card over the profile (planche `.dlg`), the same form. */}
+      <div className="t-rw-h t-rw-web">
+        <div className="t-t">
+          <Link href={profilePage} className="t-rw-crumb">
+            <TalentIcon name="suivant" size="xs" />
+            {t("back")}
+          </Link>
+          <h1>{t("title")}</h1>
+        </div>
+      </div>
 
       <div className="t-verre t-ri-mini">
         <span className={cx("t-rc-av", avatarTone(profile.id))} aria-hidden>
@@ -254,7 +264,7 @@ export default async function ProposeOfferPage({
           <span>{t("guard", { days: CONTACT_EXPIRY_DAYS })}</span>
         </p>
 
-        <div className="t-verre t-fort t-bas-f t-ri-bas">
+        <div className="t-verre t-fort t-bas-f t-ri-bas t-rw-st">
           <Link href={profilePage} className="t-bt t-sec t-m t-press">
             {t("cancel")}
           </Link>

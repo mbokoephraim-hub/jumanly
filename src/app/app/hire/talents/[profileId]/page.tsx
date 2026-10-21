@@ -52,6 +52,7 @@ export default async function TalentProfilePage({
   const tc = await getTranslations("hireCandidates");
   const ui = await getTranslations("ui");
   const tp = await getTranslations("talent.profile");
+  const tw = await getTranslations("hireWeb.profile");
   const format = await getFormatter();
   const now = new Date();
   const back = "/app/hire/candidats?vue=talents";
@@ -176,49 +177,95 @@ export default async function TalentProfilePage({
           ? t("error.other")
           : null;
 
+  const actions = manage ? (
+    <>
+      <SheetButton target="ri-vivier" className="t-bt t-sec t-m t-press">
+        <TalentIcon name="favori" size="s" />
+        {t("pool")}
+      </SheetButton>
+      {conversation ? (
+        <Link href={`/app/messages/${conversation}`} className="t-bt t-p t-m t-pl t-press">
+          <TalentIcon name="message" size="s" />
+          {t("write", { firstName })}
+        </Link>
+      ) : view.applied ? (
+        <Link href="/app/hire/candidats" className="t-bt t-p t-m t-pl t-press">
+          {t("seeApplication")}
+        </Link>
+      ) : pending ? (
+        <span className="t-bt t-p t-m t-pl t-off" aria-disabled="true">
+          {t("pending")}
+        </span>
+      ) : (
+        <Link
+          href={`${page}/proposer${offer ? `?offre=${offer.id}` : ""}`}
+          className="t-bt t-p t-m t-pl t-press"
+        >
+          <TalentIcon name="envoyer" size="s" />
+          {t("propose")}
+        </Link>
+      )}
+    </>
+  ) : null;
+
   return (
-    <div className="t-flux t-ri-prof">
+    <div className="t-flux t-ri-prof t-rw-tprof">
       {toast && <ToastOnLoad message={toast} tone="success" />}
-      <div className="t-ri-cover" aria-hidden />
-      <FlowHead
-        back={back}
-        backLabel={t("back")}
-        end={
-          manage ? (
+      <Link href={back} className="t-rw-crumb t-rw-web">
+        <TalentIcon name="suivant" size="xs" />
+        {tw("crumb")}
+      </Link>
+      {/* Web: the cover, who, and the actions in one card (planche `.tpw`). */}
+      <div className="t-verre t-rw-tpw">
+        <div className="t-ri-cover" aria-hidden />
+        <FlowHead
+          back={back}
+          backLabel={t("back")}
+          end={
+            manage ? (
+              <SheetButton target="ri-plus" label={t("more")} className="t-bi t-press">
+                <TalentIcon name="plus-options" size="s" />
+              </SheetButton>
+            ) : undefined
+          }
+        >
+          <span aria-hidden />
+        </FlowHead>
+
+        <section className="t-ri-id" aria-labelledby="ri-nom">
+          <span className={cx("t-rc-av t-l", avatarTone(profile.id))} aria-hidden>
+            {view.anonymous ? "?" : initialsOf(profile.user.name)}
+          </span>
+          <h1 id="ri-nom">{title}</h1>
+          <p>
+            {[view.anonymous ? null : profile.headline, profile.user.city]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+          <ul className="t-ri-puces">
+            {profile.availability !== "not_looking" && (
+              <li className="t-ok">
+                {t(profile.availability === "open" ? "available" : "listening")}
+              </li>
+            )}
+            {contracts.map((contract) => (
+              <li key={contract}>{tp(`preferences.contract.${contract}`)}</li>
+            ))}
+            <li className="t-log">
+              <TalentIcon name="confidentialite" size="xs" />
+              {t("logged")}
+            </li>
+          </ul>
+        </section>
+        {manage && (
+          <nav aria-label={t("actions")} className="t-rw-acts t-rw-web">
+            {actions}
             <SheetButton target="ri-plus" label={t("more")} className="t-bi t-press">
               <TalentIcon name="plus-options" size="s" />
             </SheetButton>
-          ) : undefined
-        }
-      >
-        <span aria-hidden />
-      </FlowHead>
-
-      <section className="t-ri-id" aria-labelledby="ri-nom">
-        <span className={cx("t-rc-av t-l", avatarTone(profile.id))} aria-hidden>
-          {view.anonymous ? "?" : initialsOf(profile.user.name)}
-        </span>
-        <h1 id="ri-nom">{title}</h1>
-        <p>
-          {[view.anonymous ? null : profile.headline, profile.user.city]
-            .filter(Boolean)
-            .join(" · ")}
-        </p>
-        <ul className="t-ri-puces">
-          {profile.availability !== "not_looking" && (
-            <li className="t-ok">
-              {t(profile.availability === "open" ? "available" : "listening")}
-            </li>
-          )}
-          {contracts.map((contract) => (
-            <li key={contract}>{tp(`preferences.contract.${contract}`)}</li>
-          ))}
-          <li className="t-log">
-            <TalentIcon name="confidentialite" size="xs" />
-            {t("logged")}
-          </li>
-        </ul>
-      </section>
+          </nav>
+        )}
+      </div>
 
       {errorText && (
         <p className="t-gar t-err" role="alert">
@@ -227,245 +274,221 @@ export default async function TalentProfilePage({
         </p>
       )}
 
-      <ul className="t-ri-stats" aria-label={t("stats")}>
-        <li>
-          <b>{years}</b>
-          <span>{t("stat.years", { count: years })}</span>
-        </li>
-        <li>
-          <b>{proven}</b>
-          <span>{t("stat.proven", { count: proven })}</span>
-        </li>
-        <li>
-          <b>{shownProjects.length}</b>
-          <span>{t("stat.projects", { count: shownProjects.length })}</span>
-        </li>
-        <li>
-          <b>{certificates.length}</b>
-          <span>{t("stat.certificates", { count: certificates.length })}</span>
-        </li>
-      </ul>
-
-      <p className="t-rc-note">
-        {view.full
-          ? view.applied
-            ? t("note.applied")
-            : t("note.full")
-          : view.anonymous
-            ? t("note.anonymous")
-            : t("note.limited")}
-      </p>
-
-      {offer && (
-        <section aria-labelledby="ri-orbi" className="t-rc-orbi t-ri-orbi">
-          <div className="t-h">
-            <OrbiMark size={30} />
-            <div className="t-t">
-              <b id="ri-orbi">{t("orbi.title")}</b>
-              <span>
-                {t("orbi.sub", { title: offer.title })}{" "}
-                {offers.length > 1 && (
-                  <SheetButton target="ri-offre" className="t-ri-lien t-press">
-                    {t("orbi.change")}
-                  </SheetButton>
-                )}
-              </span>
-            </div>
-            {explanation && (
-              <ScoreRing
-                score={explanation.score}
-                size="s"
-                text={ui("percent", { value: explanation.score })}
-                label={t("orbi.scoreAria", { score: explanation.score })}
-              />
-            )}
-          </div>
-          {points.length > 0 ? (
-            <ul className="t-rc-pts">
-              {points.map((point, index) => (
-                <li key={index}>
-                  <i aria-hidden className={point.ok ? "t-v" : "t-a"}>
-                    {point.ok ? "✓" : "!"}
-                  </i>
-                  <span>{point.text}</span>
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <p>{t("orbi.noSkills")}</p>
-          )}
-          {explanation ? (
-            <div className="t-rc-liens">
-              <SheetButton target="ri-pourquoi" className="t-pq t-press">
-                <TalentIcon name="pourquoi" size="xs" />
-                {t("orbi.why")}
-              </SheetButton>
-            </div>
-          ) : (
-            <p className="t-rc-note">
-              {!profile.matchingEnabled
-                ? t("orbi.optedOut")
-                : matchingLevel === "none"
-                  ? t("orbi.noScore")
-                  : t("orbi.incomplete")}
-            </p>
-          )}
-        </section>
-      )}
-
-      {proofs.length > 0 && (
-        <section aria-labelledby="ri-cpt" className="t-verre t-rc-cpt">
-          <div className="t-hh">
-            <h2 id="ri-cpt">{t("skills.title")}</h2>
-            <span>
-              {tc("skills.count", {
-                met: proofs.filter((item) => item.proof !== "missing").length,
-                total: proofs.length,
-              })}
-            </span>
-          </div>
-          <ul>
-            {proofs.map((item) => (
-              <li key={item.skillId}>
-                <b>{item.required ? item.name : tc("skills.preferred", { skill: item.name })}</b>
-                <span className={cx("t-pv", `t-${item.proof}`)}>
-                  {item.proof === "certificate" && <TalentIcon name="certificat" size="xs" />}
-                  {item.proof === "project" && <TalentIcon name="realisation" size="xs" />}
-                  {tc(`skills.proof.${item.proof}`)}
-                </span>
-                {item.level > 0 && (
-                  <span
-                    className="t-lv"
-                    role="img"
-                    aria-label={tc("skills.level", { level: Math.min(4, item.level) })}
-                  >
-                    {[1, 2, 3, 4].map((step) => (
-                      <i key={step} className={step <= item.level ? "t-on" : undefined} />
-                    ))}
+      <div className="t-rw-g t-rw-tp">
+        <div className="t-rw-c">
+          {offer && (
+            <section aria-labelledby="ri-orbi" className="t-rc-orbi t-ri-orbi t-rw-o3">
+              <div className="t-h">
+                <OrbiMark size={30} />
+                <div className="t-t">
+                  <b id="ri-orbi">{t("orbi.title")}</b>
+                  <span>
+                    {t("orbi.sub", { title: offer.title })}{" "}
+                    {offers.length > 1 && (
+                      <SheetButton target="ri-offre" className="t-ri-lien t-press">
+                        {t("orbi.change")}
+                      </SheetButton>
+                    )}
                   </span>
+                </div>
+                {explanation && (
+                  <ScoreRing
+                    score={explanation.score}
+                    size="s"
+                    text={ui("percent", { value: explanation.score })}
+                    label={t("orbi.scoreAria", { score: explanation.score })}
+                  />
                 )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {skills.length > 0 && (
-        <section aria-labelledby="ri-toutes" className="t-ri-bloc">
-          <h2 id="ri-toutes">{t("skills.all")}</h2>
-          <ul className="t-ri-tags">
-            {skills.map((item) => (
-              <li key={item.skillId} className={cx("t-ri-tag", item.verified && "t-v")}>
-                {item.verified && <TalentIcon name="certificat" size="xs" />}
-                {item.skill.name}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {view.full && profile.summary && (
-        <section aria-labelledby="ri-resume" className="t-ri-bloc">
-          <h2 id="ri-resume">{t("summary")}</h2>
-          <p className="t-verre t-ri-texte">{profile.summary}</p>
-        </section>
-      )}
-
-      {shownProjects.length > 0 && (
-        <section aria-labelledby="ri-projets" className="t-ri-bloc">
-          <h2 id="ri-projets">{t("projects")}</h2>
-          <ul className="t-ri-projets">
-            {shownProjects.slice(0, 8).map((project) => (
-              <li key={project.id} className="t-verre">
-                <span className="t-cases t-g-accomp" aria-hidden>
-                  <TalentIcon name="realisation" size="s" />
-                </span>
-                <b>{project.title}</b>
-                {view.full && project.context && <p>{project.context}</p>}
-                {project.skills.length > 0 && (
-                  <span className="t-m">{project.skills.slice(0, 3).join(" · ")}</span>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
-
-      {profile.experiences.length > 0 && (
-        <section aria-labelledby="ri-exp" className="t-ri-bloc">
-          <h2 id="ri-exp">{t("experience")}</h2>
-          <ul className="t-verre t-ri-chrono">
-            {profile.experiences.map((item) => (
-              <li key={item.id}>
-                <b>{[item.title, item.company].filter(Boolean).join(" · ")}</b>
+              </div>
+              {points.length > 0 ? (
+                <ul className="t-rc-pts">
+                  {points.map((point, index) => (
+                    <li key={index}>
+                      <i aria-hidden className={point.ok ? "t-v" : "t-a"}>
+                        {point.ok ? "✓" : "!"}
+                      </i>
+                      <span>{point.text}</span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p>{t("orbi.noSkills")}</p>
+              )}
+              {explanation ? (
+                <div className="t-rc-liens">
+                  <SheetButton target="ri-pourquoi" className="t-pq t-press">
+                    <TalentIcon name="pourquoi" size="xs" />
+                    {t("orbi.why")}
+                  </SheetButton>
+                </div>
+              ) : (
+                <p className="t-rc-note">
+                  {!profile.matchingEnabled
+                    ? t("orbi.optedOut")
+                    : matchingLevel === "none"
+                      ? t("orbi.noScore")
+                      : t("orbi.incomplete")}
+                </p>
+              )}
+            </section>
+          )}
+          {proofs.length > 0 && (
+            <section aria-labelledby="ri-cpt" className="t-verre t-rc-cpt t-rw-o4">
+              <div className="t-hh">
+                <h2 id="ri-cpt">{t("skills.title")}</h2>
                 <span>
-                  {[
-                    monthYear(item.startDate),
-                    item.endDate ? monthYear(item.endDate) : t("now"),
-                  ].join(" – ")}
+                  {tc("skills.count", {
+                    met: proofs.filter((item) => item.proof !== "missing").length,
+                    total: proofs.length,
+                  })}
                 </span>
-                {item.description && <p>{item.description}</p>}
-              </li>
-            ))}
+              </div>
+              <ul>
+                {proofs.map((item) => (
+                  <li key={item.skillId}>
+                    <b>
+                      {item.required ? item.name : tc("skills.preferred", { skill: item.name })}
+                    </b>
+                    <span className={cx("t-pv", `t-${item.proof}`)}>
+                      {item.proof === "certificate" && <TalentIcon name="certificat" size="xs" />}
+                      {item.proof === "project" && <TalentIcon name="realisation" size="xs" />}
+                      {tc(`skills.proof.${item.proof}`)}
+                    </span>
+                    {item.level > 0 && (
+                      <span
+                        className="t-lv"
+                        role="img"
+                        aria-label={tc("skills.level", { level: Math.min(4, item.level) })}
+                      >
+                        {[1, 2, 3, 4].map((step) => (
+                          <i key={step} className={step <= item.level ? "t-on" : undefined} />
+                        ))}
+                      </span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {skills.length > 0 && (
+            <section aria-labelledby="ri-toutes" className="t-ri-bloc t-rw-o5">
+              <h2 id="ri-toutes">{t("skills.all")}</h2>
+              <ul className="t-ri-tags">
+                {skills.map((item) => (
+                  <li key={item.skillId} className={cx("t-ri-tag", item.verified && "t-v")}>
+                    {item.verified && <TalentIcon name="certificat" size="xs" />}
+                    {item.skill.name}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {view.full && profile.summary && (
+            <section aria-labelledby="ri-resume" className="t-ri-bloc t-rw-o6">
+              <h2 id="ri-resume">{t("summary")}</h2>
+              <p className="t-verre t-ri-texte">{profile.summary}</p>
+            </section>
+          )}
+          {shownProjects.length > 0 && (
+            <section aria-labelledby="ri-projets" className="t-ri-bloc t-rw-o7">
+              <h2 id="ri-projets">{t("projects")}</h2>
+              <ul className="t-ri-projets">
+                {shownProjects.slice(0, 8).map((project) => (
+                  <li key={project.id} className="t-verre">
+                    <span className="t-cases t-g-accomp" aria-hidden>
+                      <TalentIcon name="realisation" size="s" />
+                    </span>
+                    <b>{project.title}</b>
+                    {view.full && project.context && <p>{project.context}</p>}
+                    {project.skills.length > 0 && (
+                      <span className="t-m">{project.skills.slice(0, 3).join(" · ")}</span>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+        </div>
+        <div className="t-rw-c">
+          <ul className="t-ri-stats t-rw-o1" aria-label={t("stats")}>
+            <li>
+              <b>{years}</b>
+              <span>{t("stat.years", { count: years })}</span>
+            </li>
+            <li>
+              <b>{proven}</b>
+              <span>{t("stat.proven", { count: proven })}</span>
+            </li>
+            <li>
+              <b>{shownProjects.length}</b>
+              <span>{t("stat.projects", { count: shownProjects.length })}</span>
+            </li>
+            <li>
+              <b>{certificates.length}</b>
+              <span>{t("stat.certificates", { count: certificates.length })}</span>
+            </li>
           </ul>
-        </section>
-      )}
 
-      {(profile.educations.length > 0 || certificates.length > 0) && (
-        <section aria-labelledby="ri-form" className="t-ri-bloc">
-          <h2 id="ri-form">{t("education")}</h2>
-          <ul className="t-verre t-ri-chrono">
-            {certificates.map((item) => (
-              <li key={item.code}>
-                <b>
-                  {item.courseTitle}
-                  <span className="t-ri-jm">{t("jumanly")}</span>
-                </b>
-                <span>{monthYear(item.issuedAt)}</span>
-              </li>
-            ))}
-            {profile.educations.map((item) => (
-              <li key={item.id}>
-                <b>
-                  {view.full
-                    ? [item.degree, item.school].filter(Boolean).join(" · ")
-                    : tp(`education.level.${item.level}`)}
-                </b>
-                {item.endYear && <span>{String(item.endYear)}</span>}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+          {profile.experiences.length > 0 && (
+            <section aria-labelledby="ri-exp" className="t-ri-bloc t-rw-o8">
+              <h2 id="ri-exp">{t("experience")}</h2>
+              <ul className="t-verre t-ri-chrono">
+                {profile.experiences.map((item) => (
+                  <li key={item.id}>
+                    <b>{[item.title, item.company].filter(Boolean).join(" · ")}</b>
+                    <span>
+                      {[
+                        monthYear(item.startDate),
+                        item.endDate ? monthYear(item.endDate) : t("now"),
+                      ].join(" – ")}
+                    </span>
+                    {item.description && <p>{item.description}</p>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          {(profile.educations.length > 0 || certificates.length > 0) && (
+            <section aria-labelledby="ri-form" className="t-ri-bloc t-rw-o9">
+              <h2 id="ri-form">{t("education")}</h2>
+              <ul className="t-verre t-ri-chrono">
+                {certificates.map((item) => (
+                  <li key={item.code}>
+                    <b>
+                      {item.courseTitle}
+                      <span className="t-ri-jm">{t("jumanly")}</span>
+                    </b>
+                    <span>{monthYear(item.issuedAt)}</span>
+                  </li>
+                ))}
+                {profile.educations.map((item) => (
+                  <li key={item.id}>
+                    <b>
+                      {view.full
+                        ? [item.degree, item.school].filter(Boolean).join(" · ")
+                        : tp(`education.level.${item.level}`)}
+                    </b>
+                    {item.endYear && <span>{String(item.endYear)}</span>}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
+          <p className="t-rc-note t-rw-o2">
+            {view.full
+              ? view.applied
+                ? t("note.applied")
+                : t("note.full")
+              : view.anonymous
+                ? t("note.anonymous")
+                : t("note.limited")}
+          </p>
+        </div>
+      </div>
 
       {manage && (
-        <nav aria-label={t("actions")} className="t-verre t-fort t-bas-f t-ri-bas">
-          <SheetButton target="ri-vivier" className="t-bt t-sec t-m t-press">
-            <TalentIcon name="favori" size="s" />
-            {t("pool")}
-          </SheetButton>
-          {conversation ? (
-            <Link href={`/app/messages/${conversation}`} className="t-bt t-p t-m t-pl t-press">
-              <TalentIcon name="message" size="s" />
-              {t("write", { firstName })}
-            </Link>
-          ) : view.applied ? (
-            <Link href="/app/hire/candidats" className="t-bt t-p t-m t-pl t-press">
-              {t("seeApplication")}
-            </Link>
-          ) : pending ? (
-            <span className="t-bt t-p t-m t-pl t-off" aria-disabled="true">
-              {t("pending")}
-            </span>
-          ) : (
-            <Link
-              href={`${page}/proposer${offer ? `?offre=${offer.id}` : ""}`}
-              className="t-bt t-p t-m t-pl t-press"
-            >
-              <TalentIcon name="envoyer" size="s" />
-              {t("propose")}
-            </Link>
-          )}
+        <nav aria-label={t("actions")} className="t-verre t-fort t-bas-f t-ri-bas t-rw-tel">
+          {actions}
         </nav>
       )}
 

@@ -55,7 +55,7 @@ export default async function PoolPage({
   const erreur = one(query.erreur);
 
   return (
-    <div className="t-flux t-ri-vivier">
+    <div className="t-flux t-ri-vivier t-rw-vivd">
       {toasts[ok] && <ToastOnLoad message={toasts[ok]} tone="success" />}
       <FlowHead
         back="/app/hire/viviers"
@@ -69,6 +69,20 @@ export default async function PoolPage({
           ) : undefined
         }
       />
+      <div className="t-rw-h t-rw-web">
+        <div className="t-t">
+          <Link href="/app/hire/viviers" className="t-rw-crumb">
+            <TalentIcon name="suivant" size="xs" />
+            {t("backPools")}
+          </Link>
+          <h1>{pool.name}</h1>
+        </div>
+        {permissions.manage && (
+          <SheetButton target="ri-v-menu" label={t("menu")} className="t-bi t-press">
+            <TalentIcon name="plus-options" size="s" />
+          </SheetButton>
+        )}
+      </div>
       <p className="t-rc-note">
         {[
           t(`visibilityOption.${pool.visibility}`),
