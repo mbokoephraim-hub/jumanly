@@ -134,6 +134,7 @@ export async function OfferCard({
           target={`menu-${job.id}`}
           label={t("card.menu", { title: job.title })}
           className="t-bi t-press"
+          anchor
         >
           <TalentIcon name="plus-options" size="s" />
         </SheetButton>
@@ -303,7 +304,12 @@ export async function OfferSheets({
   const editable = manage && job.status !== "closed" && job.status !== "archived";
   return (
     <>
-      <Sheet id={`menu-${job.id}`} title={job.title} closeLabel={t("menu.closeSheet")}>
+      <Sheet
+        id={`menu-${job.id}`}
+        title={job.title}
+        closeLabel={t("menu.closeSheet")}
+        className="t-rx-ancre"
+      >
         <ul className="t-verre t-liste t-lignes t-rx-menu">
           {readApplications && live && job.figures.applications > 0 && (
             <li>

@@ -2,7 +2,6 @@
 
 import { useRouter } from "next/navigation";
 import { useEffect, useId, useRef, useState } from "react";
-import type { SearchPreviewItem } from "@/app/api/recherche/apercu/route";
 import { cx } from "@/lib/cx";
 import { TalentIcon, type TalentIconName } from "../icon";
 import { OrbiMark } from "../orbi-mark";
@@ -39,6 +38,16 @@ export type CommandLabels = {
   count: { zero: string; one: string; other: string };
 };
 
+/** One result of a preview: an offer or a course (talent), an offer or a candidate (recruiter). */
+type PreviewItem = { kind: "job" | "course" | "offer" | "candidate"; title: string; href: string };
+
+const kindIcon: Record<PreviewItem["kind"], TalentIconName> = {
+  job: "opportunites",
+  course: "former",
+  offer: "offre",
+  candidate: "candidats",
+};
+
 type Option =
   | { kind: "ask"; id: string }
   | { kind: "go"; id: string; href: string; label: string; icon: TalentIconName; hint?: string };
@@ -54,17 +63,29 @@ const fill = (text: string, query: string) => text.replace("{query}", query);
 export function TalentCommand({
   labels,
   destinations,
+  preview = "/api/recherche/apercu?n=6&q=",
+  results = "/app/recherche?q=",
+  ask,
+  kinds,
 }: {
   labels: CommandLabels;
   /** « Aller à » when nothing is written: the entries of the sidebar. */
   destinations: { href: string; label: string; icon: TalentIconName }[];
+  /** Address of the preview, the words added at the end. */
+  preview?: string;
+  /** Address of all the results, the words added at the end; null when the space has no such page. */
+  results?: string | null;
+  /** « Demander à Orbi » opens this page with the words at the end, instead of the panel. */
+  ask?: string;
+  /** Name of each kind of result (recruiter: offer, candidate); the talent's by default. */
+  kinds?: Partial<Record<PreviewItem["kind"], string>>;
 }) {
   const router = useRouter();
   const dialog = useRef<HTMLDialogElement>(null);
   const input = useRef<HTMLInputElement>(null);
   const list = useId();
   const [query, setQuery] = useState("");
-  const [items, setItems] = useState<SearchPreviewItem[]>([]);
+  const [items, setItems] = useState<PreviewItem[]>([]);
   const [searching, setSearching] = useState(false);
   const [active, setActive] = useState(0);
 
@@ -106,13 +127,11 @@ export function TalentCommand({
     setSearching(true);
     const controller = new AbortController();
     const timer = window.setTimeout(async () => {
-      const response = await fetch(`/api/recherche/apercu?n=6&q=${encodeURIComponent(words)}`, {
+      const response = await fetch(`${preview}${encodeURIComponent(words)}`, {
         signal: controller.signal,
         cache: "no-store",
       }).catch(() => null);
-      const data = response?.ok
-        ? ((await response.json()) as { items: SearchPreviewItem[] })
-        : null;
+      const data = response?.ok ? ((await response.json()) as { items: PreviewItem[] }) : null;
       if (controller.signal.aborted) return;
       setItems(data?.items ?? []);
       setSearching(false);
@@ -121,7 +140,7 @@ export function TalentCommand({
       controller.abort();
       window.clearTimeout(timer);
     };
-  }, [words]);
+  }, [words, preview]);
 
   const options: Option[] = [{ kind: "ask", id: `${list}-orbi` }];
   if (words.length >= 2) {
@@ -131,17 +150,18 @@ export function TalentCommand({
         id: `${list}-r${index}`,
         href: item.href,
         label: item.title,
-        icon: item.kind === "job" ? "opportunites" : "former",
-        hint: item.kind === "job" ? labels.job : labels.course,
+        icon: kindIcon[item.kind],
+        hint: kinds?.[item.kind] ?? (item.kind === "job" ? labels.job : labels.course),
       }),
     );
-    options.push({
-      kind: "go",
-      id: `${list}-tout`,
-      href: `/app/recherche?q=${encodeURIComponent(words)}`,
-      label: fill(labels.all, words),
-      icon: "recherche",
-    });
+    if (results !== null)
+      options.push({
+        kind: "go",
+        id: `${list}-tout`,
+        href: `${results}${encodeURIComponent(words)}`,
+        label: fill(labels.all, words),
+        icon: "recherche",
+      });
   } else {
     destinations.forEach((destination, index) =>
       options.push({ kind: "go", id: `${list}-d${index}`, ...destination }),
@@ -151,7 +171,9 @@ export function TalentCommand({
 
   const choose = (option: Option) => {
     dialog.current?.close();
-    if (option.kind === "ask") openOrbiPanel(words.length >= 2 ? words : undefined);
+    if (option.kind === "ask" && ask)
+      router.push(words.length >= 2 ? `${ask}${encodeURIComponent(words)}` : ask.split("?")[0]!);
+    else if (option.kind === "ask") openOrbiPanel(words.length >= 2 ? words : undefined);
     else router.push(option.href);
   };
 

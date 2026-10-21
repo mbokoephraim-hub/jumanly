@@ -239,7 +239,7 @@ export function SearchBar({
 }
 
 /** Widths where the head of a page carries the bell (the web frame has its own top bar). */
-const PHONE = "(max-width: 767.98px)";
+export const PHONE = "(max-width: 767.98px)";
 
 /**
  * Unread notifications, kept fresh while the page stays open (every minute, visible tab only).

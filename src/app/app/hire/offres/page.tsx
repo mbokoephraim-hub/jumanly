@@ -7,10 +7,10 @@ import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
 import { db } from "@/server/db";
-import { can } from "@/server/entitlements";
+import { can, limit, resolvePlan } from "@/server/entitlements";
 import { requireHire } from "@/server/hire-context";
 import { hirePermissions } from "@/server/services/hire";
-import { listOffers, offerTabs, type OfferTab } from "@/server/services/hire-offers";
+import { activeCount, listOffers, offerTabs, type OfferTab } from "@/server/services/hire-offers";
 import { orgStructure } from "@/server/services/org-structure";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -30,13 +30,16 @@ export default async function HireOffersPage({ searchParams }: PageProps<"/app/h
   const params = await searchParams;
   const { ctx, space } = await requireHire("/app/hire/offres");
   const t = await getTranslations("hireOffers");
+  const tw = await getTranslations("hireWeb.offers");
   const now = new Date();
   const subject = { type: "organization" as const, id: ctx.organizationId };
   const permissions = hirePermissions(ctx.role);
-  const [offers, teams, entities] = await Promise.all([
+  const [offers, teams, entities, max, plan] = await Promise.all([
     listOffers(db, ctx, now),
     can(db, subject, "org.teams"),
     can(db, subject, "org.entities"),
+    limit(db, subject, "jobs.active.max"),
+    resolvePlan(db, subject),
   ]);
   const structure = teams ? await orgStructure(db, ctx.organizationId) : null;
   const param = (key: string) => (typeof params[key] === "string" ? (params[key] as string) : "");
@@ -103,70 +106,91 @@ export default async function HireOffersPage({ searchParams }: PageProps<"/app/h
   const ok = OK_TOASTS.find((value) => value === param("ok"));
   const limited = param("limite") || param("erreur") === "limite";
 
+  // On a computer or a tablet (planche web recruteur-1 § 2): the title, the active offers against
+  // the limit of the plan, and « Créer une offre » on the right.
+  const count = activeCount(offers);
+  const line =
+    max < 0 ? tw("activeUnlimited", { count }) : tw("active", { count, max: String(max) });
+
   return (
-    <div className="t-flux">
-      <h1 className="sr-only">{t("list.title")}</h1>
+    <div className="t-flux t-large t-rw-offres">
+      <div className="t-rw-h">
+        <div className="t-t">
+          <h1 className="max-md:sr-only">{t("list.title")}</h1>
+          <p className="t-web">
+            {plan?.planName ? tw("plan", { line, plan: plan.planName }) : line}
+          </p>
+        </div>
+        {permissions.manage && (
+          <Link href="/app/hire/offres/nouvelle" className="t-bt t-a t-m t-press t-web">
+            <TalentIcon name="plus" size="s" />
+            {t("list.create")}
+          </Link>
+        )}
+      </div>
       {ok && <ToastOnLoad message={t(`list.ok.${ok}`)} tone="success" />}
       {limited && <Notice tone="err">{t("list.limit")}</Notice>}
 
-      <form method="get" role="search" className="t-rech t-verre">
-        {tab !== "actives" && <input type="hidden" name="onglet" value={tab} />}
-        {FILTERS.map((key) =>
-          param(key) ? <input key={key} type="hidden" name={key} value={param(key)} /> : null,
-        )}
-        <TalentIcon name="recherche" size="s" />
-        <input
-          id="rx-offres-q"
-          name="q"
-          type="search"
-          defaultValue={query}
-          aria-label={t("list.search")}
-          placeholder={t("list.search")}
-          enterKeyHint="search"
-          className="min-w-0 flex-1 bg-transparent text-[14px] text-(--texte) outline-none"
-        />
-        {filters.length > 0 && (
-          <SheetButton
-            target="rx-offres-filtres"
-            className="t-f t-press"
-            label={t("list.filtersCount", { count: activeFilters })}
-          >
-            <TalentIcon name="filtres" size="s" />
-            {activeFilters > 0 && <b aria-hidden>{activeFilters}</b>}
-          </SheetButton>
-        )}
-      </form>
-
-      {permissions.manage && (
-        <Link href="/app/hire/offres/nouvelle" className="t-bt t-a t-rx-pub t-press">
-          <TalentIcon name="plus" size="s" />
-          {t("list.create")}
-        </Link>
-      )}
-
-      <nav aria-label={t("list.tabs")} className="t-rx-onglets">
-        {offerTabs.map((id) => {
-          const count = inTab(id).length;
-          return (
-            <Link
-              key={id}
-              href={hrefWith({ onglet: id === "actives" ? "" : id })}
-              aria-current={id === tab ? "page" : undefined}
-              className="t-puce t-press"
+      <div className="t-rw-flt">
+        <form method="get" role="search" className="t-rech t-verre">
+          {tab !== "actives" && <input type="hidden" name="onglet" value={tab} />}
+          {FILTERS.map((key) =>
+            param(key) ? <input key={key} type="hidden" name={key} value={param(key)} /> : null,
+          )}
+          <TalentIcon name="recherche" size="s" />
+          <input
+            id="rx-offres-q"
+            name="q"
+            type="search"
+            defaultValue={query}
+            aria-label={t("list.search")}
+            placeholder={t("list.search")}
+            enterKeyHint="search"
+            className="min-w-0 flex-1 bg-transparent text-[14px] text-(--texte) outline-none"
+          />
+          {filters.length > 0 && (
+            <SheetButton
+              target="rx-offres-filtres"
+              className="t-f t-press"
+              label={t("list.filtersCount", { count: activeFilters })}
             >
-              {t(`list.tab.${id}`)}
-              {count > 0 && <small>{count}</small>}
-            </Link>
-          );
-        })}
-      </nav>
+              <TalentIcon name="filtres" size="s" />
+              {activeFilters > 0 && <b aria-hidden>{activeFilters}</b>}
+            </SheetButton>
+          )}
+        </form>
+
+        {permissions.manage && (
+          <Link href="/app/hire/offres/nouvelle" className="t-bt t-a t-rx-pub t-press t-mob">
+            <TalentIcon name="plus" size="s" />
+            {t("list.create")}
+          </Link>
+        )}
+
+        <nav aria-label={t("list.tabs")} className="t-rx-onglets">
+          {offerTabs.map((id) => {
+            const count = inTab(id).length;
+            return (
+              <Link
+                key={id}
+                href={hrefWith({ onglet: id === "actives" ? "" : id })}
+                aria-current={id === tab ? "page" : undefined}
+                className="t-puce t-press"
+              >
+                {t(`list.tab.${id}`)}
+                {count > 0 && <small>{count}</small>}
+              </Link>
+            );
+          })}
+        </nav>
+      </div>
 
       {shown.length === 0 ? (
         <p className="t-verre t-rx-vide">
           <span>{query ? t("list.emptySearch", { query }) : t(`list.empty.${tab}`)}</span>
         </p>
       ) : (
-        <div className="t-flux t-serre">
+        <div className="t-flux t-serre t-rw-grille">
           {shown.map((job) => (
             <OfferCard
               key={job.id}

@@ -8,17 +8,21 @@ import { initials } from "@/components/ui/avatar";
 import { AppearanceRoot } from "@/components/talent/appearance";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { appearanceScript, type Appearance } from "@/lib/appearance";
+import { TalentCommand } from "@/components/talent/web/command";
+import { TalentTopBar } from "@/components/talent/web/top-bar";
 import { RecruiterBottomBar } from "./bottom-bar";
 import { RecruiterHeader } from "./header";
 import { OrgMark } from "./org-mark";
 import { OrgSheet, type OrgChoice } from "./org-sheet";
+import { RecruiterSideNav } from "./side-nav";
 
 /**
- * Recruiter space (docs/refonte-mobile, brief recruteur lot 1): the head with the active
- * organization and the big title, the page, the floating bar À traiter · Offres · Orbi ·
- * Candidats · Messages. Same surfaces, icons and light or dark mode as the talent space. The
- * frame of a computer or a tablet comes with the web lots (docs/refonte-web): until then the
- * phone column is drawn at every width.
+ * Recruiter space, one code for three widths (docs/refonte-mobile, brief recruteur lot 1;
+ * docs/refonte-web, recruteur lot 1). Phone (< 768 px): the head with the active organization and
+ * the big title, the page, the floating bar À traiter · Offres · Orbi · Candidats · Messages.
+ * Tablet (768 to 1199 px): the 84 px rail and the top bar. Computer (≥ 1200 px): the 232 px
+ * sidebar with the organization and its menu under the name, and the top bar. The frame is the
+ * talent's (`t-cadre`, lot W0): same surfaces, icons, `Ctrl K` and light or dark mode.
  */
 export function RecruiterShell({
   account,
@@ -31,7 +35,7 @@ export function RecruiterShell({
   intro,
   children,
 }: {
-  account: { name: string; image: string | null };
+  account: { name: string; image: string | null; line: string };
   org: { id: string; name: string; logo: string | null };
   orgs: OrgChoice[];
   unread: number;
@@ -43,6 +47,14 @@ export function RecruiterShell({
 }) {
   const t = useTranslations("hireShell");
   const tt = useTranslations("toast");
+  const tc = useTranslations("talentShell.command");
+  const tNotifs = useTranslations("notifs");
+  const tNotifications = useTranslations("notifications");
+  const notifications = {
+    zero: t("header.notifications", { count: 0 }),
+    one: t("header.notifications", { count: 1 }),
+    other: t("header.notifications", { count: 2 }).replace("2", "#"),
+  };
   const avatar = account.image ? (
     // eslint-disable-next-line @next/next/no-img-element -- a 44 px avatar, already small
     <img src={account.image} alt="" />
@@ -50,7 +62,7 @@ export function RecruiterShell({
     <span aria-hidden>{initials(account.name)}</span>
   );
   return (
-    <div data-reduce-motion={reduceMotion ? "" : undefined} className="t-app t-rh">
+    <div data-reduce-motion={reduceMotion ? "" : undefined} className="t-app t-rh t-cadre">
       <script dangerouslySetInnerHTML={{ __html: appearanceScript(appearance) }} />
       <AppearanceRoot appearance={appearance} />
       <AppMotionRoot reduce={reduceMotion} />
@@ -64,18 +76,67 @@ export function RecruiterShell({
       >
         {t("skip")}
       </a>
+      <RecruiterSideNav
+        name={account.name}
+        line={account.line}
+        avatar={avatar}
+        unreadMessages={unreadMessages}
+        org={{ name: org.name, mark: <OrgMark name={org.name} logo={org.logo} /> }}
+        labels={{
+          aria: t("nav.aria"),
+          more: t("web.more"),
+          home: t("web.home"),
+          brand: t("web.brand"),
+          today: t("nav.today"),
+          offers: t("nav.offers"),
+          orbi: t("nav.orbi"),
+          candidates: t("nav.candidates"),
+          messages: t("nav.messages"),
+          messagesAria: t("web.messages", { count: unreadMessages }),
+          agenda: t("web.agenda"),
+          talents: t("web.talents"),
+          reports: t("web.reports"),
+          settings: t("web.settings"),
+          account: t("header.account", { name: account.name }),
+          shortcut: t("web.shortcut"),
+          org: t("org.open", { org: org.name }),
+        }}
+      />
       <div className="t-main">
+        <TalentTopBar
+          unread={unread}
+          unreadMessages={unreadMessages}
+          avatar={avatar}
+          accountHref="/app/hire/compte"
+          labels={{
+            search: t("web.search"),
+            shortcut: t("web.shortcut"),
+            notifications: notifications,
+            messages: {
+              zero: t("web.messages", { count: 0 }),
+              one: t("web.messages", { count: 1 }),
+              other: t("web.messages", { count: 2 }).replace("2", "#"),
+            },
+            account: t("header.account", { name: account.name }),
+            menu: t("header.account", { name: account.name }),
+            panel: {
+              title: tNotifs("web.title"),
+              markAll: tNotifications("markAllRead"),
+              all: tNotifs("web.all"),
+              loading: tNotifs("web.loading"),
+              error: tNotifs("web.error"),
+              empty: tNotifs("empty.title"),
+              unread: tNotifications("item.unread"),
+            },
+          }}
+        />
         <div className="t-zone">
           <RecruiterHeader
             unread={unread}
             avatar={avatar}
             org={{ name: org.name, mark: <OrgMark name={org.name} logo={org.logo} /> }}
             labels={{
-              notifications: {
-                zero: t("header.notifications", { count: 0 }),
-                one: t("header.notifications", { count: 1 }),
-                other: t("header.notifications", { count: 2 }).replace("2", "#"),
-              },
+              notifications,
               account: t("header.account", { name: account.name }),
               back: t("header.back"),
               search: t("header.search"),
@@ -107,6 +168,45 @@ export function RecruiterShell({
           messages: t("nav.messages"),
         }}
       />
+      <TalentCommand
+        preview="/api/hire/recherche/apercu?q="
+        results={null}
+        ask="/app/orbi?q="
+        kinds={{ offer: t("command.offer"), candidate: t("command.candidate") }}
+        labels={{
+          title: t("command.title"),
+          label: t("command.label"),
+          placeholder: t("web.search"),
+          esc: tc("esc"),
+          close: tc("close"),
+          suggestions: tc("suggestions"),
+          ask: tc("ask"),
+          askQuery: tc("askQuery", { query: "{query}" }),
+          askHint: tc("askHint"),
+          goTo: tc("goTo"),
+          results: t("command.results"),
+          job: t("command.offer"),
+          course: t("command.candidate"),
+          all: tc("all", { query: "{query}" }),
+          none: t("command.none", { query: "{query}" }),
+          searching: tc("searching"),
+          count: {
+            zero: tc("count", { count: 0 }),
+            one: tc("count", { count: 1 }),
+            other: tc("count", { count: 2 }).replace("2", "#"),
+          },
+        }}
+        destinations={[
+          { href: "/app/hire", label: t("nav.today"), icon: "aujourdhui" },
+          { href: "/app/hire/offres", label: t("nav.offers"), icon: "offre" },
+          { href: "/app/hire/candidats", label: t("nav.candidates"), icon: "candidats" },
+          { href: "/app/messages", label: t("nav.messages"), icon: "message" },
+          { href: "/app/hire/entretiens", label: t("web.agenda"), icon: "agenda" },
+          { href: "/app/hire/candidats?vue=talents", label: t("web.talents"), icon: "recherche" },
+          { href: "/app/hire/rapports", label: t("web.reports"), icon: "progression" },
+          { href: "/app/parametres", label: t("web.settings"), icon: "reglages" },
+        ]}
+      />
       <OrgSheet
         orgs={orgs}
         activeId={org.id}
@@ -115,6 +215,7 @@ export function RecruiterShell({
           close: t("org.close"),
           current: t("org.current"),
           talent: t("org.talent"),
+          note: t("org.note"),
         }}
       />
     </div>

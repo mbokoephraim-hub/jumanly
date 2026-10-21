@@ -7,6 +7,7 @@ import { JobSettings } from "@/components/hire/job-settings";
 import { ModerationChanges } from "@/components/hire/moderation-changes";
 import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { CopyRow } from "@/components/recruiter/copy-row";
+import { OpenOnWide } from "@/components/recruiter/open-on-wide";
 import {
   fileSize,
   OfferSheets,
@@ -55,6 +56,7 @@ function Section({
   title,
   aside,
   open,
+  className,
   children,
 }: {
   icon: TalentIconName;
@@ -62,10 +64,11 @@ function Section({
   title: string;
   aside?: string;
   open?: boolean;
+  className?: string;
   children: ReactNode;
 }) {
   return (
-    <details className="t-verre t-sect" open={open}>
+    <details className={cx("t-verre t-sect", className)} open={open}>
       <summary className="t-sh">
         <span className={cx("t-cases", `t-g-${tone}`)} aria-hidden>
           <TalentIcon name={icon} size="s" />
@@ -134,94 +137,102 @@ export default async function OfferPage({
       .slice(0, 2)
       .toUpperCase();
     return (
-      <div className="t-flux t-conf t-rx-publie">
-        <span className="t-rond-ok">
-          <TalentIcon name={review ? "horloge" : "valider"} />
-        </span>
-        <h1 className="t-h2s">{review ? t("published.reviewTitle") : t("published.title")}</h1>
-        <p>
-          {review
-            ? t("published.reviewText", { title: job.title })
-            : t("published.text", { title: job.title })}
-        </p>
-        <div className="t-verre t-rx-ap w-full">
-          <div className="t-cv">
-            <span aria-hidden>
-              {organization.logo ? (
-                // eslint-disable-next-line @next/next/no-img-element -- a 40 px logo
-                <img src={organization.logo} alt="" />
-              ) : (
-                initials
+      <div className="t-flux t-conf t-rx-publie t-large">
+        <div className="t-rw-pub">
+          <div>
+            <span className="t-rond-ok t-rw-o1">
+              <TalentIcon name={review ? "horloge" : "valider"} />
+            </span>
+            <h1 className="t-h2s t-rw-o2">
+              {review ? t("published.reviewTitle") : t("published.title")}
+            </h1>
+            <p className="t-rw-o3">
+              {review
+                ? t("published.reviewText", { title: job.title })
+                : t("published.text", { title: job.title })}
+            </p>
+            <div className="t-suite t-rw-o6 w-full">
+              {!review && (
+                <CopyRow
+                  value={publicJobUrl(job.slug)}
+                  copied={t("published.copied")}
+                  className="t-verre t-press"
+                >
+                  <span className="t-cases" style={{ background: "var(--g-accomp)" }} aria-hidden>
+                    <TalentIcon name="partager" size="s" />
+                  </span>
+                  {t("published.copy")}
+                </CopyRow>
               )}
-            </span>
+              <Link href="/app/hire/candidats?vue=talents" className="t-verre t-press">
+                <span className="t-cases" style={{ background: "var(--g-oppo)" }} aria-hidden>
+                  <TalentIcon name="recherche" size="s" />
+                </span>
+                {t("published.search")}
+              </Link>
+            </div>
+            <Link href={base} className="t-bt t-p t-pl t-press t-rw-o7 w-full">
+              {t("published.see")}
+            </Link>
+            <Link href="/app/hire/offres" className="t-bt t-txt t-press t-rw-o8">
+              {t("published.back")}
+            </Link>
           </div>
-          <div className="t-t">
-            <b>{job.title}</b>
-            {place}
-            <span>
-              {[
-                job.closesAt
-                  ? t("published.deadline", { date: formatDayMonth(job.closesAt) })
-                  : null,
-                t("published.free"),
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-            </span>
-          </div>
-        </div>
-        <div className="t-verre t-rx-tl w-full">
-          {review ? (
-            <div className="t-at">
-              <i />
-              <div>
-                <b>{t("published.reviewing")}</b>
-                <span>{t("published.reviewingText")}</span>
+          <div>
+            <div className="t-verre t-rx-ap t-rw-o4 w-full">
+              <div className="t-cv">
+                <span aria-hidden>
+                  {organization.logo ? (
+                    // eslint-disable-next-line @next/next/no-img-element -- a 40 px logo
+                    <img src={organization.logo} alt="" />
+                  ) : (
+                    initials
+                  )}
+                </span>
+              </div>
+              <div className="t-t">
+                <b>{job.title}</b>
+                {place}
+                <span>
+                  {[
+                    job.closesAt
+                      ? t("published.deadline", { date: formatDayMonth(job.closesAt) })
+                      : null,
+                    t("published.free"),
+                  ]
+                    .filter(Boolean)
+                    .join(" · ")}
+                </span>
               </div>
             </div>
-          ) : (
-            <div className="t-ok">
-              <i />
-              <div>
-                <b>{t("published.visible")}</b>
-                <span>{t("published.visibleText")}</span>
+            <div className="t-verre t-rx-tl t-rw-o5 w-full">
+              {review ? (
+                <div className="t-at">
+                  <i />
+                  <div>
+                    <b>{t("published.reviewing")}</b>
+                    <span>{t("published.reviewingText")}</span>
+                  </div>
+                </div>
+              ) : (
+                <div className="t-ok">
+                  <i />
+                  <div>
+                    <b>{t("published.visible")}</b>
+                    <span>{t("published.visibleText")}</span>
+                  </div>
+                </div>
+              )}
+              <div className={review ? undefined : "t-at"}>
+                <i />
+                <div>
+                  <b>{t("published.first")}</b>
+                  <span>{t("published.firstText")}</span>
+                </div>
               </div>
-            </div>
-          )}
-          <div className={review ? undefined : "t-at"}>
-            <i />
-            <div>
-              <b>{t("published.first")}</b>
-              <span>{t("published.firstText")}</span>
             </div>
           </div>
         </div>
-        <div className="t-suite w-full">
-          {!review && (
-            <CopyRow
-              value={publicJobUrl(job.slug)}
-              copied={t("published.copied")}
-              className="t-verre t-press"
-            >
-              <span className="t-cases" style={{ background: "var(--g-accomp)" }} aria-hidden>
-                <TalentIcon name="partager" size="s" />
-              </span>
-              {t("published.copy")}
-            </CopyRow>
-          )}
-          <Link href="/app/hire/candidats?vue=talents" className="t-verre t-press">
-            <span className="t-cases" style={{ background: "var(--g-oppo)" }} aria-hidden>
-              <TalentIcon name="recherche" size="s" />
-            </span>
-            {t("published.search")}
-          </Link>
-        </div>
-        <Link href={base} className="t-bt t-p t-pl t-press w-full">
-          {t("published.see")}
-        </Link>
-        <Link href="/app/hire/offres" className="t-bt t-txt t-press">
-          {t("published.back")}
-        </Link>
       </div>
     );
   }
@@ -240,9 +251,14 @@ export default async function OfferPage({
       ? t("detail.none")
       : format.number(value, { style: "percent", maximumFractionDigits: 1 });
 
+  // On a computer or a tablet (planche web recruteur-1 § 4): the essentials and « Voir les
+  // candidatures » in the head, four figures, then the stages and the content on the left, the
+  // performance and the history on the right. On a phone, the order of the mobile lot (`t-rw-oN`).
+  const candidatesHref = `/app/hire/candidats?offre=${job.id}`;
   return (
-    <div className="t-flux">
+    <div className="t-flux t-large t-rw-od">
       {ok && <ToastOnLoad message={t(`detail.ok.${ok as "pause"}`)} tone="success" />}
+      <h1 className="t-web sr-only">{t("detail.title")}</h1>
       <FlowHead
         back="/app/hire/offres"
         backLabel={t("detail.back")}
@@ -265,26 +281,33 @@ export default async function OfferPage({
       )}
 
       <section aria-labelledby="rx-od-t" className={cx("t-verre t-rx-odh", `t-${color}`)}>
-        <div className="t-k">
-          <span className={cx("t-rx-stp", status.tone)}>{t(`status.${status.key}`)}</span>
-          <span className="t-mt">
-            {[
-              job.publishedAt ? t("detail.since", { date: formatDayMonth(job.publishedAt) }) : null,
-              job.closesAt
-                ? t("detail.deadline", { date: formatDayMonth(job.closesAt) })
-                : t("detail.noDeadline"),
-            ]
-              .filter(Boolean)
-              .join(" · ")}
-          </span>
+        <span className="t-rw-ico t-web" aria-hidden>
+          <TalentIcon name="offre" />
+        </span>
+        <div className="t-rw-x t-rw-odt">
+          <div className="t-k">
+            <span className={cx("t-rx-stp", status.tone)}>{t(`status.${status.key}`)}</span>
+            <span className="t-mt">
+              {[
+                job.publishedAt
+                  ? t("detail.since", { date: formatDayMonth(job.publishedAt) })
+                  : null,
+                job.closesAt
+                  ? t("detail.deadline", { date: formatDayMonth(job.closesAt) })
+                  : t("detail.noDeadline"),
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+            </span>
+          </div>
+          <h2 id="rx-od-t">{job.title}</h2>
+          <span className="t-mt">{place}</span>
         </div>
-        <h2 id="rx-od-t">{job.title}</h2>
-        <span className="t-mt">{place}</span>
         <div className="t-bts">
           {editable && (
             <Link href={`${base}/modifier`} className="t-bt t-sec t-s t-press">
               <TalentIcon name="modifier" size="xs" />
-              {t("detail.edit")}
+              <span className="t-lib">{t("detail.edit")}</span>
             </Link>
           )}
           {["published", "paused", "closed"].includes(job.status) && (
@@ -294,7 +317,7 @@ export default async function OfferPage({
               className="t-bt t-sec t-s t-press"
             >
               <TalentIcon name="partager" size="xs" />
-              {t("detail.link")}
+              <span className="t-lib">{t("detail.link")}</span>
             </CopyRow>
           )}
           {permissions.manage && job.status === "published" && (
@@ -303,7 +326,7 @@ export default async function OfferPage({
               <input type="hidden" name="back" value={base} />
               <button type="submit" className="t-bt t-sec t-s t-press">
                 <TalentIcon name="horloge" size="xs" />
-                {t("detail.pause")}
+                <span className="t-lib">{t("detail.pause")}</span>
               </button>
             </form>
           )}
@@ -313,7 +336,7 @@ export default async function OfferPage({
               <input type="hidden" name="back" value={base} />
               <button type="submit" className="t-bt t-sec t-s t-press">
                 <TalentIcon name="valider" size="xs" />
-                {t("detail.resume")}
+                <span className="t-lib">{t("detail.resume")}</span>
               </button>
             </form>
           )}
@@ -323,9 +346,23 @@ export default async function OfferPage({
               <input type="hidden" name="intent" value="publish" />
               <button type="submit" className="t-bt t-p t-s t-press">
                 <TalentIcon name="envoyer" size="xs" />
-                {t("detail.republish")}
+                <span className="t-lib">{t("detail.republish")}</span>
               </button>
             </form>
+          )}
+          <SheetButton
+            target={`menu-${job.id}`}
+            label={t("detail.menu")}
+            className="t-bt t-sec t-s t-press t-web"
+            anchor
+          >
+            <TalentIcon name="plus-options" size="xs" />
+          </SheetButton>
+          {permissions.readApplications && !draft && (
+            <Link href={candidatesHref} className="t-bt t-p t-m t-press t-web t-rw-voir">
+              <TalentIcon name="candidats" size="s" />
+              {t("detail.candidates", { count: figures.applications })}
+            </Link>
           )}
         </div>
       </section>
@@ -346,255 +383,293 @@ export default async function OfferPage({
             </dd>
           </div>
         ))}
+        <div className="t-web">
+          <dt className="sr-only">{t("card.views", { count: figures.views })}</dt>
+          <dd>
+            <b>{format.number(figures.views)}</b>
+            <span aria-hidden>{t("card.views", { count: figures.views })}</span>
+          </dd>
+        </div>
       </dl>
 
-      {job.status === "pending_review" ? (
-        <OrbiLine>{t("detail.orbiReview")}</OrbiLine>
-      ) : (
-        !salary &&
-        editable && (
-          <OrbiLine
-            action={
-              <Link href={`${base}/modifier?etape=1`} className="t-bt t-sec t-s t-press">
-                {t("detail.orbiSalaryAction")}
-              </Link>
-            }
-          >
-            {t("detail.orbiSalary")}
-          </OrbiLine>
-        )
-      )}
-
-      {stages.length > 0 && (
-        <Section icon="candidats" tone="accomp" title={t("detail.stages")} open>
-          <ul className="t-rx-etp">
-            {stages.map((stage) => (
-              <li key={stage.id}>
-                <div>
-                  <span className="sr-only">
-                    {t("detail.stageCount", { stage: stage.name, count: stage.count })}
-                  </span>
-                  <span aria-hidden>{stage.name}</span>
-                  <span className="t-br" aria-hidden>
-                    <i style={{ width: `${Math.round((stage.count / maxStage) * 100)}%` }} />
-                  </span>
-                  <b aria-hidden>{stage.count}</b>
-                </div>
-              </li>
-            ))}
-          </ul>
-        </Section>
-      )}
-
-      <Section icon="document" tone="former" title={t("detail.description")}>
-        {job.description ? (
-          <p className="text-[13px] whitespace-pre-line">{job.description}</p>
-        ) : (
-          <p className="t-aide">{t("form.preview.empty")}</p>
-        )}
-        {job.responsibilities.length > 0 && (
-          <ul className="list-disc pl-5 text-[13px]">
-            {job.responsibilities.map((item) => (
-              <li key={item}>{item}</li>
-            ))}
-          </ul>
-        )}
-      </Section>
-
-      <Section
-        icon="candidature"
-        tone="accomp"
-        title={t("detail.candidature")}
-        aside={t("detail.candidatureAside", {
-          documents: job.requestedDocuments.length,
-          questions: questions.length,
-          both: job.requestedDocuments.length > 0 && questions.length > 0 ? "yes" : "no",
-        })}
-      >
-        {job.requestedDocuments.length > 0 && (
-          <div className="t-rx-chx">
-            {job.requestedDocuments.map((kind) => (
-              <span key={kind}>{t(`form.document.${kind as "cv"}`)}</span>
-            ))}
-          </div>
-        )}
-        {questions.length > 0 && (
-          <ul className="t-rx-qs">
-            {questions.map((question) => (
-              <li key={question.id} className="t-rx-q">
-                <span className="t-t">
-                  {question.text}
-                  <small>
-                    {t("form.questionLine", { kind: t(`form.questionKind.${question.kind}`) })}
-                  </small>
-                </span>
-              </li>
-            ))}
-          </ul>
-        )}
-        {job.applicationInstructions && (
-          <p className="text-[13px]">{job.applicationInstructions}</p>
-        )}
-        <p className="t-gar">
-          <TalentIcon name="valider" size="s" />
-          <span>{t("form.free")}</span>
-        </p>
-      </Section>
-
-      <Section icon="cap" tone="oppo" title={t("detail.skills")} aside={String(job.skills.length)}>
-        <div className="t-comp">
-          {required.map((item) => (
-            <span key={item.skillId} className="t-v">
-              {item.skill.name}
-            </span>
-          ))}
-          {preferred.map((item) => (
-            <span key={item.skillId}>{item.skill.name}</span>
-          ))}
-        </div>
-      </Section>
-
-      {job.jobSheetName && (
-        <Section
-          icon="document"
-          tone="accomp"
-          title={t("detail.sheet")}
-          aside={t("detail.sheetAside", { pages: job.jobSheetPages ?? 1 })}
-        >
-          <PdfRow
-            bare
-            name={job.jobSheetName}
-            badge={t("sheet.pdf")}
-            line={t("form.sheetLine", {
-              pages: job.jobSheetPages ?? 1,
-              size: fileSize(job.jobSheetSize ?? 0, tl),
-            })}
-          >
-            <Link
-              href={`${base}/fiche`}
-              className="t-bt t-sec t-s t-press"
-              aria-label={t("form.sheetReadAria", { name: job.jobSheetName })}
+      <div className="t-rw-g t-rw-odg">
+        <div className="t-rw-c">
+          {stages.length > 0 && (
+            <Section
+              icon="candidats"
+              tone="accomp"
+              title={t("detail.stages")}
+              open
+              className="t-rw-o2"
             >
-              {t("form.sheetRead")}
-            </Link>
-          </PdfRow>
-        </Section>
-      )}
+              <ul className="t-rx-etp">
+                {stages.map((stage) => (
+                  <li key={stage.id}>
+                    <div>
+                      <span className="sr-only">
+                        {t("detail.stageCount", { stage: stage.name, count: stage.count })}
+                      </span>
+                      <span aria-hidden>{stage.name}</span>
+                      <span className="t-br" aria-hidden>
+                        <i style={{ width: `${Math.round((stage.count / maxStage) * 100)}%` }} />
+                      </span>
+                      <b aria-hidden>{stage.count}</b>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </Section>
+          )}
 
-      <Section
-        icon="horloge"
-        tone="accomp"
-        title={t("detail.history")}
-        aside={String(history.length)}
-      >
-        {history.length === 0 ? (
-          <p className="t-aide">{t("detail.historyEmpty")}</p>
-        ) : (
-          <ol className="t-rx-hist">
-            {history.map((event, index) => {
-              const values: Record<string, string | number> = {
-                ...event.values,
-                actor: event.values.actor || t("history.team"),
-              };
-              if (event.values.date) values.date = formatDayMonth(new Date(event.values.date));
-              if (event.values.count) values.count = Number(event.values.count);
-              return (
-                <li key={`${event.at.getTime()}-${index}`}>
-                  <span className={cx("t-k", `t-${event.type}`)} aria-hidden>
-                    <TalentIcon name={historyIcon[event.type]} size="s" />
-                  </span>
-                  <div className="t-t">
-                    {t(`history.${event.key}` as "history.published", values as never)}
-                    <small>
-                      {format.dateTime(event.at, {
-                        day: "numeric",
-                        month: "short",
-                        hour: "2-digit",
-                        minute: "2-digit",
-                      })}
-                    </small>
-                    {event.text && (
-                      <div className="t-rx-bul">{t("history.quote", { text: event.text })}</div>
-                    )}
-                  </div>
-                  <span className={cx("t-rx-ty", `t-${event.type}`)}>
-                    {t(`history.type.${event.type}`)}
-                  </span>
-                </li>
-              );
+          <Section
+            icon="document"
+            tone="former"
+            title={t("detail.description")}
+            className="t-rw-o3"
+          >
+            {job.description ? (
+              <p className="text-[13px] whitespace-pre-line">{job.description}</p>
+            ) : (
+              <p className="t-aide">{t("form.preview.empty")}</p>
+            )}
+            {job.responsibilities.length > 0 && (
+              <ul className="list-disc pl-5 text-[13px]">
+                {job.responsibilities.map((item) => (
+                  <li key={item}>{item}</li>
+                ))}
+              </ul>
+            )}
+          </Section>
+
+          <Section
+            icon="candidature"
+            tone="accomp"
+            title={t("detail.candidature")}
+            className="t-rw-o4"
+            aside={t("detail.candidatureAside", {
+              documents: job.requestedDocuments.length,
+              questions: questions.length,
+              both: job.requestedDocuments.length > 0 && questions.length > 0 ? "yes" : "no",
             })}
-          </ol>
-        )}
-      </Section>
+          >
+            {job.requestedDocuments.length > 0 && (
+              <div className="t-rx-chx">
+                {job.requestedDocuments.map((kind) => (
+                  <span key={kind}>{t(`form.document.${kind as "cv"}`)}</span>
+                ))}
+              </div>
+            )}
+            {questions.length > 0 && (
+              <ul className="t-rx-qs">
+                {questions.map((question) => (
+                  <li key={question.id} className="t-rx-q">
+                    <span className="t-t">
+                      {question.text}
+                      <small>
+                        {t("form.questionLine", { kind: t(`form.questionKind.${question.kind}`) })}
+                      </small>
+                    </span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {job.applicationInstructions && (
+              <p className="text-[13px]">{job.applicationInstructions}</p>
+            )}
+            <p className="t-gar">
+              <TalentIcon name="valider" size="s" />
+              <span>{t("form.free")}</span>
+            </p>
+          </Section>
 
-      <Section
-        icon="progression"
-        tone="former"
-        title={t("detail.performance")}
-        aside={t("detail.performanceAside")}
-      >
-        <dl className="t-rx-chf t-nu">
-          <div>
-            <dt className="sr-only">{t("detail.views", { count: performance.views })}</dt>
-            <dd>
-              <b>{format.number(performance.views)}</b>
-              <span aria-hidden>{t("detail.views", { count: performance.views })}</span>
-            </dd>
-          </div>
-          <div>
-            <dt className="sr-only">{t("detail.applied")}</dt>
-            <dd>
-              <b>{percent(performance.applied)}</b>
-              <span aria-hidden>{t("detail.applied")}</span>
-            </dd>
-          </div>
-          <div>
-            <dt className="sr-only">{t("detail.response")}</dt>
-            <dd>
-              <b>
-                {performance.responseDays === null
-                  ? t("detail.none")
-                  : t("detail.days", { days: format.number(performance.responseDays) })}
-              </b>
-              <span aria-hidden>{t("detail.response")}</span>
-            </dd>
-          </div>
-        </dl>
-        <div
-          className="t-rx-sem"
-          role="img"
-          aria-label={t("detail.chart", {
-            list: performance.week
-              .map(
-                (item) =>
-                  `${format.dateTime(item.day, { weekday: "long", timeZone: "UTC" })} ${item.count}`,
-              )
-              .join(", "),
-          })}
-        >
-          {performance.week.map((item, index) => (
-            <div key={item.day.toISOString()} className={cx(index === 6 && "t-on")}>
-              <i style={{ height: `${Math.max(4, Math.round((item.count / weekMax) * 100))}%` }} />
-              {format.dateTime(item.day, { weekday: "narrow", timeZone: "UTC" })}
+          <Section
+            icon="cap"
+            tone="oppo"
+            title={t("detail.skills")}
+            aside={String(job.skills.length)}
+            className="t-rw-o5"
+          >
+            <div className="t-comp">
+              {required.map((item) => (
+                <span key={item.skillId} className="t-v">
+                  {item.skill.name}
+                </span>
+              ))}
+              {preferred.map((item) => (
+                <span key={item.skillId}>{item.skill.name}</span>
+              ))}
             </div>
-          ))}
+          </Section>
+
+          {job.jobSheetName && (
+            <Section
+              icon="document"
+              tone="accomp"
+              title={t("detail.sheet")}
+              className="t-rw-o6"
+              aside={t("detail.sheetAside", { pages: job.jobSheetPages ?? 1 })}
+            >
+              <PdfRow
+                bare
+                name={job.jobSheetName}
+                badge={t("sheet.pdf")}
+                line={t("form.sheetLine", {
+                  pages: job.jobSheetPages ?? 1,
+                  size: fileSize(job.jobSheetSize ?? 0, tl),
+                })}
+              >
+                <Link
+                  href={`${base}/fiche`}
+                  className="t-bt t-sec t-s t-press"
+                  aria-label={t("form.sheetReadAria", { name: job.jobSheetName })}
+                >
+                  {t("form.sheetRead")}
+                </Link>
+              </PdfRow>
+            </Section>
+          )}
         </div>
-        <p className="t-rx-note">{t("detail.chartNote")}</p>
-      </Section>
+        <div className="t-rw-c">
+          <Section
+            icon="progression"
+            tone="former"
+            title={t("detail.performance")}
+            aside={t("detail.performanceAside")}
+            className="t-rw-o8"
+          >
+            <dl className="t-rx-chf t-nu">
+              <div>
+                <dt className="sr-only">{t("detail.views", { count: performance.views })}</dt>
+                <dd>
+                  <b>{format.number(performance.views)}</b>
+                  <span aria-hidden>{t("detail.views", { count: performance.views })}</span>
+                </dd>
+              </div>
+              <div>
+                <dt className="sr-only">{t("detail.applied")}</dt>
+                <dd>
+                  <b>{percent(performance.applied)}</b>
+                  <span aria-hidden>{t("detail.applied")}</span>
+                </dd>
+              </div>
+              <div>
+                <dt className="sr-only">{t("detail.response")}</dt>
+                <dd>
+                  <b>
+                    {performance.responseDays === null
+                      ? t("detail.none")
+                      : t("detail.days", { days: format.number(performance.responseDays) })}
+                  </b>
+                  <span aria-hidden>{t("detail.response")}</span>
+                </dd>
+              </div>
+            </dl>
+            <div
+              className="t-rx-sem"
+              role="img"
+              aria-label={t("detail.chart", {
+                list: performance.week
+                  .map(
+                    (item) =>
+                      `${format.dateTime(item.day, { weekday: "long", timeZone: "UTC" })} ${item.count}`,
+                  )
+                  .join(", "),
+              })}
+            >
+              {performance.week.map((item, index) => (
+                <div key={item.day.toISOString()} className={cx(index === 6 && "t-on")}>
+                  <i
+                    style={{ height: `${Math.max(4, Math.round((item.count / weekMax) * 100))}%` }}
+                  />
+                  {format.dateTime(item.day, { weekday: "narrow", timeZone: "UTC" })}
+                </div>
+              ))}
+            </div>
+            <p className="t-rx-note">{t("detail.chartNote")}</p>
+          </Section>
+          <Section
+            icon="horloge"
+            tone="accomp"
+            title={t("detail.history")}
+            aside={String(history.length)}
+            className="t-rw-o7"
+          >
+            {history.length === 0 ? (
+              <p className="t-aide">{t("detail.historyEmpty")}</p>
+            ) : (
+              <ol className="t-rx-hist">
+                {history.map((event, index) => {
+                  const values: Record<string, string | number> = {
+                    ...event.values,
+                    actor: event.values.actor || t("history.team"),
+                  };
+                  if (event.values.date) values.date = formatDayMonth(new Date(event.values.date));
+                  if (event.values.count) values.count = Number(event.values.count);
+                  return (
+                    <li key={`${event.at.getTime()}-${index}`}>
+                      <span className={cx("t-k", `t-${event.type}`)} aria-hidden>
+                        <TalentIcon name={historyIcon[event.type]} size="s" />
+                      </span>
+                      <div className="t-t">
+                        {t(`history.${event.key}` as "history.published", values as never)}
+                        <small>
+                          {format.dateTime(event.at, {
+                            day: "numeric",
+                            month: "short",
+                            hour: "2-digit",
+                            minute: "2-digit",
+                          })}
+                        </small>
+                        {event.text && (
+                          <div className="t-rx-bul">{t("history.quote", { text: event.text })}</div>
+                        )}
+                      </div>
+                      <span className={cx("t-rx-ty", `t-${event.type}`)}>
+                        {t(`history.type.${event.type}`)}
+                      </span>
+                    </li>
+                  );
+                })}
+              </ol>
+            )}
+          </Section>
+          <div className="t-rw-o1 empty:hidden">
+            {job.status === "pending_review" ? (
+              <OrbiLine>{t("detail.orbiReview")}</OrbiLine>
+            ) : (
+              !salary &&
+              editable && (
+                <OrbiLine
+                  action={
+                    <Link href={`${base}/modifier?etape=1`} className="t-bt t-sec t-s t-press">
+                      {t("detail.orbiSalaryAction")}
+                    </Link>
+                  }
+                >
+                  {t("detail.orbiSalary")}
+                </OrbiLine>
+              )
+            )}
+          </div>
+        </div>
+      </div>
 
       {/* Who follows the offer and its evaluation grid (moved from the old pipeline, lot 3). */}
       {permissions.manage && !draft && (
-        <JobSettings ctx={ctx} job={job} ok={one(query.ok)} error={one(query.erreur)} />
+        <div className="t-rw-o9">
+          <JobSettings ctx={ctx} job={job} ok={one(query.ok)} error={one(query.erreur)} />
+        </div>
       )}
 
       {permissions.readApplications && !draft && (
-        <div className="t-verre t-fort t-bas-f">
-          <Link href={`/app/hire/candidats?offre=${job.id}`} className="t-bt t-p t-pl t-press">
+        <div className="t-verre t-fort t-bas-f t-mob">
+          <Link href={candidatesHref} className="t-bt t-p t-pl t-press">
             <TalentIcon name="candidats" size="s" />
             {t("detail.candidates", { count: figures.applications })}
           </Link>
         </div>
       )}
+      <OpenOnWide selector=".t-rw-od details.t-sect" />
       <OfferSheets
         job={{ ...job, figures }}
         back={base}

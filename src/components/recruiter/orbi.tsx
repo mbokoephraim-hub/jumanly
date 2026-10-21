@@ -36,9 +36,12 @@ function merge(base: Texts, over: Texts): Texts {
 export async function RecruiterOrbi({
   ctx,
   conversationId,
+  question,
 }: {
   ctx: HireContext;
   conversationId: string | null;
+  /** « Demander à Orbi » from `Ctrl K` on a computer (`?q=`): sent at once, as if typed. */
+  question?: string;
 }) {
   const t = await getTranslations("rhOrbi");
   const messages = await getMessages();
@@ -70,6 +73,7 @@ export async function RecruiterOrbi({
           credits={credits}
           hrefs={recruiterOrbiActions}
           home="/app/hire"
+          question={conversation ? undefined : question}
         >
           <nav aria-label={t("aides.label")}>
             <ul className="t-aides">

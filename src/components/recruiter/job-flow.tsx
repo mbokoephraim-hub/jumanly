@@ -47,7 +47,9 @@ import {
   SheetOrbi,
   SkillsEditor,
 } from "./job-flow-client";
+import { ListingPreview } from "./listing-preview";
 import { fileSize, OrbiLine, PdfRow } from "./offers";
+import { OrgMark } from "./org-mark";
 
 type Job = Awaited<ReturnType<typeof getOrgJob>>;
 export type FlowQuery = Record<string, string | undefined>;
@@ -78,6 +80,7 @@ export async function JobFlow({
   query: FlowQuery;
 }) {
   const t = await getTranslations("hireOffers");
+  const tw = await getTranslations("hireWeb.flow");
   const tg = await getTranslations();
   const messages = await getMessages();
   const index = jobSteps.indexOf(step);
@@ -128,8 +131,52 @@ export async function JobFlow({
       <TalentIcon name="fermer" size="s" />
     </Link>
   );
+  // On a computer or a tablet (planche web recruteur-1 § 3): the title of the page, the four steps
+  // in a bar at the top, the form in a card on the left and the listing's preview on the right.
+  // A draft never published is still being created (« Créer une offre », « Nouvelle offre »).
+  const creating = !job || (job.status === "draft" && !job.publishedAt);
+  const webHead = (
+    <div className="t-rw-h t-web">
+      <div className="t-t">
+        <h1>{creating ? tw("title") : t("form.titleEdit")}</h1>
+      </div>
+      {job && (step === "verifier" ? null : quit)}
+    </div>
+  );
+  const webSteps = (
+    <div className="t-verre t-rw-stp t-web">
+      <div className="t-rw-of">
+        <OrgMark name={org.name} logo={org.logo} size="sm" />
+        <div>
+          <b>{creating ? t("form.titleNew") : t("form.titleEdit")}</b>
+          <span>{job && live ? t("form.live") : t("form.saved")}</span>
+        </div>
+      </div>
+      <ol aria-label={tw("steps")}>
+        {jobSteps.map((item, at) => {
+          const done = at < index;
+          return (
+            <li
+              key={item}
+              className={cx(done && "t-ok", at === index && "t-on")}
+              aria-current={at === index ? "step" : undefined}
+            >
+              <i aria-hidden>{done ? <TalentIcon name="valider" size="xs" /> : at + 1}</i>
+              <div>
+                {tw(`step.${item}`)}
+                <small>{tw(`hint.${item}`)}</small>
+                {done && <span className="sr-only">{tw("done")}</span>}
+              </div>
+            </li>
+          );
+        })}
+      </ol>
+    </div>
+  );
   const head = (
     <>
+      {webHead}
+      {webSteps}
       <FlowHead
         back={back}
         backLabel={t("form.back")}
@@ -150,7 +197,7 @@ export async function JobFlow({
         }
       />
       <div
-        className="t-pas"
+        className="t-pas t-mob"
         role="progressbar"
         aria-valuemin={1}
         aria-valuemax={4}
@@ -161,11 +208,11 @@ export async function JobFlow({
           <i key={item} className={cx(at <= index && "t-ok")} />
         ))}
       </div>
-      <p className="t-pas-t">
+      <p className="t-pas-t t-mob">
         {t("form.progress", { step: index + 1 })}
         {job && ` · ${live ? t("form.live") : t("form.saved")}`}
       </p>
-      <h2 className="t-h2s">{t(`form.step.${step}`)}</h2>
+      <h2 className="t-h2s t-mob">{t(`form.step.${step}`)}</h2>
       {toast && <ToastOnLoad message={toast} tone="success" />}
       {error && <Notice tone="err">{error}</Notice>}
     </>
@@ -204,11 +251,49 @@ export async function JobFlow({
       </button>
     </div>
   );
-  const wrap = (children: ReactNode) => (
+  const required0 = job?.skills.filter((item) => item.importance === "required") ?? [];
+  const preferred0 = job?.skills.filter((item) => item.importance === "preferred") ?? [];
+  const preview = (
+    <ListingPreview
+      formId={formId}
+      org={org}
+      saved={{
+        title: job?.title ?? "",
+        city: job?.city ?? "",
+        contractType: job?.contractType ?? "cdi",
+        remote: job?.remote ?? "onsite",
+        responsibilities: job?.responsibilities ?? [],
+        required: required0.map((item) => item.skill.name),
+        preferred: preferred0.map((item) => item.skill.name),
+        closesAt: day(job?.closesAt ?? null),
+        documents: job?.requestedDocuments ?? [],
+      }}
+      labels={{
+        title: tw("preview.title"),
+        free: t("form.free"),
+        contract: Object.fromEntries(contractTypes.map((key) => [key, t(`contract.${key}`)])),
+        remote: Object.fromEntries(remoteModes.map((key) => [key, t(`remote.${key}`)])),
+        documents: Object.fromEntries(
+          requestedDocumentKinds.map((key) => [key, t(`form.document.${key}`)]),
+        ),
+        preferred: t("form.preview.preferred", { skill: "{skill}" }),
+        deadline: tw("preview.deadline", { date: "{date}" }),
+        noDeadline: tw("preview.noDeadline"),
+      }}
+    />
+  );
+  /** `side`: what stands on the right on a computer (the preview by default). */
+  const wrap = (children: ReactNode, side: ReactNode = <div className="t-web">{preview}</div>) => (
     <NextIntlClientProvider messages={pickMessages(messages, ["hireOffers"])}>
-      <div className="t-flux">
+      <div className="t-flux t-large t-rw-wz">
         {head}
-        {children}
+        <div className="t-rw-g">
+          <div className="t-rw-frm">
+            <h2 className="t-web">{t(`form.step.${step}`)}</h2>
+            {children}
+          </div>
+          <div className="t-rw-c">{side}</div>
+        </div>
       </div>
     </NextIntlClientProvider>
   );
@@ -670,6 +755,55 @@ export async function JobFlow({
     </div>
   );
 
+  const checks = (
+    <>
+      {missing.length > 0 && (
+        <div className="t-rx-manq" role="status">
+          <TalentIcon name="aide" size="s" />
+          <span className="flex-1">
+            <b>{t("form.missing")}</b> {missing.map((key) => errorText[key]).join(" ")}
+          </span>
+          <Link href={stepHref(2)} className="t-bt t-sec t-s t-press">
+            {t("form.missingFix")}
+          </Link>
+        </div>
+      )}
+      {!salary && (
+        <div className="t-rx-manq">
+          <TalentIcon name="aide" size="s" />
+          <span>
+            <b>{t("form.salaryMissing")}</b> {t("form.salaryMissingText")}
+          </span>
+        </div>
+      )}
+      {verified ? (
+        <div className="t-rx-okl">
+          <TalentIcon name="valider" size="s" />
+          {t("form.verified")}
+        </div>
+      ) : (
+        <div className="t-rx-manq">
+          <TalentIcon name="horloge" size="s" />
+          {t("form.unverified")}
+        </div>
+      )}
+      <div className="t-verre t-rx-quota">
+        <TalentIcon name="offre" size="s" />
+        <div className="t-t">
+          {max < 0 ? (
+            <b>{t("form.quotaUnlimited", { count: active })}</b>
+          ) : (
+            <>
+              <b>{t("form.quota", { count: active, max })}</b>
+              {!holdsPlace && !reached && t("form.quotaAfter", { count: after, max })}
+            </>
+          )}
+        </div>
+      </div>
+      <div className="t-web t-rw-c">{preview}</div>
+    </>
+  );
+
   return wrap(
     <>
       {current.status === "changes_requested" && <ModerationChanges job={current} />}
@@ -679,7 +813,7 @@ export async function JobFlow({
         </Notice>
       )}
       <OrbiLine>{flags.length === 0 ? t("form.reviewOk") : t("form.reviewFlags")}</OrbiLine>
-      <div className="t-verre t-rx-apercu">
+      <div className="t-verre t-rx-apercu t-mob">
         <span className="t-rx-ban" aria-hidden>
           {org.banner && (
             // eslint-disable-next-line @next/next/no-img-element -- the organization's banner, already sized
@@ -794,50 +928,8 @@ export async function JobFlow({
             </PdfRow>,
           )}
       </div>
-      {missing.length > 0 && (
-        <div className="t-rx-manq" role="status">
-          <TalentIcon name="aide" size="s" />
-          <span className="flex-1">
-            <b>{t("form.missing")}</b> {missing.map((key) => errorText[key]).join(" ")}
-          </span>
-          <Link href={stepHref(2)} className="t-bt t-sec t-s t-press">
-            {t("form.missingFix")}
-          </Link>
-        </div>
-      )}
-      {!salary && (
-        <div className="t-rx-manq">
-          <TalentIcon name="aide" size="s" />
-          <span>
-            <b>{t("form.salaryMissing")}</b> {t("form.salaryMissingText")}
-          </span>
-        </div>
-      )}
-      {verified ? (
-        <div className="t-rx-okl">
-          <TalentIcon name="valider" size="s" />
-          {t("form.verified")}
-        </div>
-      ) : (
-        <div className="t-rx-manq">
-          <TalentIcon name="horloge" size="s" />
-          {t("form.unverified")}
-        </div>
-      )}
-      <div className="t-verre t-rx-quota">
-        <TalentIcon name="offre" size="s" />
-        <div className="t-t">
-          {max < 0 ? (
-            <b>{t("form.quotaUnlimited", { count: active })}</b>
-          ) : (
-            <>
-              <b>{t("form.quota", { count: active, max })}</b>
-              {!holdsPlace && !reached && t("form.quotaAfter", { count: after, max })}
-            </>
-          )}
-        </div>
-      </div>
-      <form id={formId} action={publishOfferAction}>
+      {/* Last on a phone, as before the web layout (its bar is fixed at the bottom). */}
+      <form id={formId} action={publishOfferAction} className="t-rw-o9">
         <input type="hidden" name="id" value={current.id} />
         <div className="t-verre t-fort t-bas-f">
           {editing ? (
@@ -927,5 +1019,6 @@ export async function JobFlow({
         </Link>
       </Sheet>
     </>,
+    checks,
   );
 }

@@ -117,3 +117,40 @@ export async function hireToday(db: PrismaClient, ctx: HireContext, now = new Da
 }
 
 export type HireToday = Awaited<ReturnType<typeof hireToday>>;
+
+/**
+ * The seven days of the current week, Monday first, at midnight UTC (planche web recruteur-1
+ * `SEM`): the days come from the date, never written by hand.
+ */
+export function weekOf(now: Date): Date[] {
+  const start = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+  start.setUTCDate(start.getUTCDate() - ((start.getUTCDay() + 6) % 7));
+  return Array.from({ length: 7 }, (_, index) => new Date(start.getTime() + index * DAY));
+}
+
+/** How many of `dates` fall on each of `days` (each a midnight UTC). */
+export function countByDay(dates: Date[], days: Date[]) {
+  return days.map((day) => ({
+    day,
+    count: dates.filter((date) => date >= day && date.getTime() < day.getTime() + DAY).length,
+  }));
+}
+
+/**
+ * « Candidatures cette semaine » of À traiter on a computer: the applications received each day of
+ * the current week, on the offers the member may see (`jobScope`). A viewer gets the same totals
+ * as the reports, no name.
+ */
+export async function applicationsThisWeek(db: PrismaClient, ctx: HireContext, now = new Date()) {
+  const days = weekOf(now);
+  const scope = await jobScope(db, ctx);
+  const received = await db.application.findMany({
+    where: { job: scope, createdAt: { gte: days[0], lt: new Date(days[0]!.getTime() + 7 * DAY) } },
+    select: { createdAt: true },
+  });
+  const list = countByDay(
+    received.map((item) => item.createdAt),
+    days,
+  );
+  return { days: list, total: received.length };
+}

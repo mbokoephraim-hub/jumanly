@@ -411,8 +411,14 @@
   font-size: 12px;
   color: var(--texte2);
 }
+/* Un simple espace : sans le cercle de chargement que `.t-sp` dessine ailleurs (talent.css). */
 .t-rx-off .t-b .t-sp {
   flex: 1;
+  width: auto;
+  height: auto;
+  border: 0;
+  border-radius: 0;
+  animation: none;
 }
 .t-rx-off .t-b .t-bt,
 .t-rx-off .t-b button {
@@ -956,6 +962,19 @@
 .t-rx-publie .t-suite > * {
   color: inherit;
 }
+/* « Copier le lien » is a button: the same tile as its neighbour link (talent `.t-suite a`). */
+.t-rx-publie .t-suite > button {
+  display: flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 8px;
+  padding: 14px;
+  border-radius: 22px;
+  text-align: left;
+  font: inherit;
+  font-size: 13px;
+  font-weight: 600;
+}
 /* Détail d'une offre (planche `OD_R`). */
 .t-rx-odh {
   position: relative;
@@ -1424,4 +1443,18 @@
 .t-rx-off .t-b .t-bt,
 .t-rx-off .t-b form {
   flex: none;
+}
+
+/* « Cette semaine » of an empty À traiter: the tiles are list items (the talent's `.t-q3 > div`),
+   number above the words as on planche recruteur-1 `.q3`. */
+.t-q3 > li {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 8px;
+  border-radius: 18px;
+  text-align: center;
+  font-size: 11.5px;
+  color: var(--texte2);
 }

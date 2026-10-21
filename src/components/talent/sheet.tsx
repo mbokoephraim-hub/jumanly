@@ -5,6 +5,16 @@ import { cx } from "@/lib/cx";
 import { TalentIcon } from "./icon";
 
 /**
+ * Whether the place of a sheet is shown. A wrapper of the web layout that steps aside on a phone
+ * (`display: contents`, `t-rw-*`) has no box of its own: its own parent decides.
+ */
+function shown(node: HTMLElement) {
+  let parent = node.parentElement;
+  while (parent && getComputedStyle(parent).display === "contents") parent = parent.parentElement;
+  return parent?.checkVisibility?.() !== false;
+}
+
+/**
  * Bottom sheet of the talent space (planche talent-1 : .sheet), in a <dialog>: it rises over the
  * page without changing it, a tap on the veil or « Fermer » closes it. `openParam` opens it when
  * the address carries that parameter (a link from a card, the answer of a form), and removes the
@@ -37,8 +47,7 @@ export function Sheet({
     const node = dialog.current;
     // A sheet of the phone layout hidden on a computer (`.t-mob`) never opens there: a hidden modal
     // would leave the whole page inert.
-    if (defaultOpen && node && !node.open && node.parentElement?.checkVisibility?.() !== false)
-      node.showModal();
+    if (defaultOpen && node && !node.open && shown(node)) node.showModal();
   }, [defaultOpen]);
 
   const onClose = () => {
@@ -91,16 +100,38 @@ export function Sheet({
   );
 }
 
+/** Wide screens, where a menu opens under its button instead of rising from the bottom. */
+const WIDE = "(min-width: 768px)";
+
+/**
+ * Places an open menu under (or above) the button that opened it, kept inside the window: the
+ * `--t-ancre-x` and `--t-ancre-y` of `.t-rx-ancre` (planche web recruteur-1 `.mn-o`).
+ */
+function anchorTo(sheet: HTMLElement, button: HTMLElement) {
+  if (!window.matchMedia(WIDE).matches) return;
+  const box = button.getBoundingClientRect();
+  const width = sheet.offsetWidth;
+  const height = sheet.offsetHeight;
+  const x = Math.min(Math.max(16, box.right - width), window.innerWidth - width - 16);
+  const below = box.bottom + 6;
+  const y = below + height <= window.innerHeight - 16 ? below : Math.max(16, box.top - height - 6);
+  sheet.style.setProperty("--t-ancre-x", `${Math.round(x)}px`);
+  sheet.style.setProperty("--t-ancre-y", `${Math.round(y)}px`);
+}
+
 /** Opens the sheet `target`; inside another sheet, that one closes first. */
 export function SheetButton({
   target,
   className,
   label,
+  anchor = false,
   children,
 }: {
   target: string;
   className?: string;
   label?: string;
+  /** On a computer or a tablet, the sheet opens as a menu under this button. */
+  anchor?: boolean;
   children: ReactNode;
 }) {
   return (
@@ -113,7 +144,10 @@ export function SheetButton({
       onClick={(event) => {
         event.currentTarget.closest("dialog")?.close();
         const sheet = document.getElementById(target);
-        if (sheet instanceof HTMLDialogElement && !sheet.open) sheet.showModal();
+        if (sheet instanceof HTMLDialogElement && !sheet.open) {
+          sheet.showModal();
+          if (anchor) anchorTo(sheet, event.currentTarget);
+        }
       }}
     >
       {children}

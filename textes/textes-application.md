@@ -10177,6 +10177,55 @@ Conventions :
 | `hireReplies.default.retained` | Bonjour '{prenom}',\n\nMerci pour votre candidature au poste '{poste}'. Nous avons lu votre dossier avec attention, et '{point_fort}' a particulièrement retenu notre attention.\n\nNous avons le plaisir de vous inviter à un entretien. Nous vous proposons des créneaux dans cette conversation : choisissez celui qui vous convient, ou répondez ici si aucun ne convient.\n\nÀ très bientôt,\n{signer}, '{entreprise}' |
 | `hireReplies.default.others` | Bonjour '{prenom}',\n\nMerci pour l'intérêt que vous portez à '{entreprise}' et pour le temps consacré à votre candidature au poste '{poste}'. Nous avons apprécié '{point_fort}'.\n\nAprès avoir étudié l'ensemble des dossiers, notre équipe a retenu d'autres profils pour la suite de ce recrutement. Cette décision ne remet pas en cause la qualité de votre parcours.\n\nVotre profil reste visible des recruteurs et d'autres offres vous attendent sur Jumanly.\n\nAvec nos remerciements et tous nos vœux de réussite,\n{signer}, '{entreprise}' |
 
+### Refonte web recruteur · lot 1 (ordinateur et tablette)
+
+*Espace recruteur sur ordinateur et tablette (docs/refonte-web, planche recruteur-1) : barre latérale avec l'organisation active et son menu sous le nom, barre du haut avec la recherche `Ctrl K`, À traiter en deux colonnes, offres en grille, création avec les étapes en tête et l'aperçu à droite, détail d'une offre en deux colonnes. Les textes du téléphone restent ceux des lots mobiles.*
+
+| Clé | Texte |
+|---|---|
+| `hireShell.web.brand` | jumanly |
+| `hireShell.web.home` | Jumanly, aller à À traiter |
+| `hireShell.web.more` | Organiser |
+| `hireShell.web.agenda` | Agenda |
+| `hireShell.web.talents` | Talents |
+| `hireShell.web.reports` | Rapports |
+| `hireShell.web.settings` | Paramètres |
+| `hireShell.web.shortcut` | Ctrl K |
+| `hireShell.web.search` | Candidat, offre, ou demander à Orbi |
+| `hireShell.web.messages` | {count, plural, =0 {Messages} one {Messages, # conversation non lue} other {Messages, # conversations non lues}} |
+| `hireShell.org.note` | Chaque organisation ne voit que ses offres, ses candidats et ses messages. |
+| `hireShell.command.title` | Rechercher ou demander à Orbi |
+| `hireShell.command.label` | Rechercher un candidat, une offre, ou demander à Orbi |
+| `hireShell.command.results` | Candidats et offres |
+| `hireShell.command.offer` | Offre |
+| `hireShell.command.candidate` | Candidat |
+| `hireShell.command.none` | Aucun candidat ni aucune offre pour « {query} ». |
+| `hireWeb.today.hello` | Bonjour {name} |
+| `hireWeb.today.helloNoName` | Bonjour |
+| `hireWeb.today.line` | {date} · {org} |
+| `hireWeb.today.week.title` | Candidatures cette semaine |
+| `hireWeb.today.week.total` | {count, plural, =0 {Aucune pour l'instant} one {# au total} other {# au total}} |
+| `hireWeb.today.week.aria` | Candidatures reçues cette semaine, jour par jour : {list} |
+| `hireWeb.today.week.day` | {day} {count} |
+| `hireWeb.offers.active` | {count, plural, =0 {Aucune offre active sur {max}} one {# offre active sur {max}} other {# offres actives sur {max}}} |
+| `hireWeb.offers.activeUnlimited` | {count, plural, =0 {Aucune offre active} one {# offre active} other {# offres actives}} |
+| `hireWeb.offers.plan` | {line} · formule {plan} |
+| `hireWeb.flow.title` | Créer une offre |
+| `hireWeb.flow.steps` | Étapes de l'offre |
+| `hireWeb.flow.step.poste` | Le poste |
+| `hireWeb.flow.step.description` | La description |
+| `hireWeb.flow.step.candidature` | La candidature |
+| `hireWeb.flow.step.verifier` | Vérifier |
+| `hireWeb.flow.hint.poste` | Titre, lieu, contrat |
+| `hireWeb.flow.hint.description` | Missions, compétences |
+| `hireWeb.flow.hint.candidature` | Date, documents, questions |
+| `hireWeb.flow.hint.verifier` | Et publier |
+| `hireWeb.flow.done` | faite |
+| `hireWeb.flow.current` | en cours |
+| `hireWeb.flow.preview.title` | Aperçu de l'annonce |
+| `hireWeb.flow.preview.deadline` | Limite {date} |
+| `hireWeb.flow.preview.noDeadline` | Sans date limite |
+
 ### Navigation Hire
 
 *Menu de l'espace Organisation, visible quand le sélecteur d'espace est sur une organisation.*
