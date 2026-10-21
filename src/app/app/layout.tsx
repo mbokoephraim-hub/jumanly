@@ -12,6 +12,11 @@ import { ADMIN_ROLES } from "@/server/auth/session";
 import type { AbstractIntlMessages } from "next-intl";
 import { getMessages, getTranslations } from "next-intl/server";
 import { AvatarMenuContent } from "@/components/talent/web/avatar-menu";
+import { RecruiterAvatarMenu } from "@/components/recruiter/avatar-menu";
+import { RecruiterBrief } from "@/components/recruiter/brief";
+import { recruiterChatTexts } from "@/components/recruiter/orbi";
+import { hireToday } from "@/server/services/hire-today";
+import type { HireContext } from "@/server/services/hire";
 import { ContentBanners } from "@/components/site/content-banners";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
@@ -97,7 +102,8 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
   // Recruiter space: the shell of the mobile redesign (docs/refonte-mobile, brief recruteur).
   if (space && !partnerSpace) {
     const tShell = await getTranslations("hireShell.org");
-    const [unreadMessages, logos, plans] = await Promise.all([
+    const ctx = { userId: user.id, organizationId: space.organizationId, role: space.role };
+    const [unreadMessages, logos, plans, messages] = await Promise.all([
       unreadCount(db, {
         userId: user.id,
         hire: { userId: user.id, organizationId: space.organizationId, role: space.role },
@@ -111,6 +117,7 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
           resolvePlan(db, { type: "organization", id: membership.organizationId }),
         ),
       ),
+      getMessages(),
     ]);
     const logoOf = (id: string) => logos.find((org) => org.id === id)?.logo ?? null;
     return (
@@ -142,6 +149,21 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
         appearance={user.appearance}
         reduceMotion={user.reduceMotion}
         intro={intro}
+        orbiTexts={recruiterChatTexts(messages) as AbstractIntlMessages}
+        menu={
+          <Suspense fallback={null}>
+            <RecruiterAvatarMenu
+              ctx={ctx}
+              user={{ name: user.name, image: user.image ?? null }}
+              roleLabel={t(`${space.role}.text`)}
+            />
+          </Suspense>
+        }
+        brief={
+          <Suspense fallback={null}>
+            <BellBrief ctx={ctx} firstName={user.firstName || user.name} />
+          </Suspense>
+        }
       >
         <ContentBanners audience="recruiters" />
         {children}
@@ -176,4 +198,10 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
       {children}
     </AppShell>
   );
+}
+
+/** « Votre journée en bref » above the notifications under the bell (web recruteur lot 3). */
+async function BellBrief({ ctx, firstName }: { ctx: HireContext; firstName: string }) {
+  const today = await hireToday(db, ctx);
+  return <RecruiterBrief today={today} firstName={firstName} id="r5-brief-pop" />;
 }

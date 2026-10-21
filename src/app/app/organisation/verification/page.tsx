@@ -42,6 +42,7 @@ export default async function OrganizationVerificationPage({
   const params = await searchParams;
   const { ctx } = await requireHire("/app/organisation/verification");
   const t = await getTranslations("org.verification");
+  const tw = await getTranslations("hireWeb3.verification");
   const tr = await getTranslations("rhVerification");
   const admin = hirePermissions(ctx.role).administer;
   const subject = { type: "organization" as const, id: ctx.organizationId };
@@ -49,6 +50,7 @@ export default async function OrganizationVerificationPage({
     db.organization.findUniqueOrThrow({
       where: { id: ctx.organizationId },
       select: {
+        name: true,
         verificationStatus: true,
         verifiedAt: true,
         verificationReason: true,
@@ -112,8 +114,11 @@ export default async function OrganizationVerificationPage({
   };
 
   return (
-    <div className="t-flux">
-      <FlowHead back="/app/organisation" backLabel={tr("back")} title={tr("title")} />
+    <div className="t-flux t-w4 t-large t-rw3-ver">
+      <div className="t-w4-h">
+        <FlowHead back="/app/organisation" backLabel={tr("back")} title={tr("title")} />
+        <p className="t-w4-web t-w4-sub">{organization.name}</p>
+      </div>
       {one(params.ok) === "1" && (
         <Notice tone="ok">{t("submitted", { days: VERIFICATION_DAYS })}</Notice>
       )}
@@ -152,7 +157,7 @@ export default async function OrganizationVerificationPage({
         </Notice>
       )}
 
-      <ol className="t-verre t-liste t-lignes" aria-label={tr("steps")}>
+      <ol className="t-verre t-liste t-lignes t-rw3-steps" aria-label={tr("steps")}>
         {steps.map((step) => (
           <li key={step.key} className="t-li">
             <span className={cx("t-cases", step.done ? "t-c3" : "t-c2")} aria-hidden>
@@ -169,151 +174,159 @@ export default async function OrganizationVerificationPage({
         ))}
       </ol>
 
-      {organization.documents.length > 0 && (
-        <section aria-labelledby="r5-ver-docs" className="t-flux t-serre">
-          <h2 id="r5-ver-docs" className="t-ck-t">
-            {t("documents.title")}
-          </h2>
-          <ul className="t-verre t-liste t-lignes">
-            {organization.documents.map((document) => (
-              <li key={document.id} className="t-li">
-                <span className="t-cases" aria-hidden>
-                  <TalentIcon name="document" size="s" />
-                </span>
-                <span className="t-t">
-                  <b className="t-r5-coupe">{document.name}</b>
-                  <span>
-                    {t("documents.meta", {
-                      size: fileSize(document.size),
-                      date: document.createdAt,
-                    })}
-                  </span>
-                </span>
-                {admin && !verified && status !== "pending" && (
-                  <form action={removeVerificationDocumentAction}>
-                    <input type="hidden" name="id" value={document.id} />
-                    <button
-                      type="submit"
-                      className="t-bi t-press"
-                      aria-label={t("documents.remove", { name: document.name })}
-                    >
-                      <TalentIcon name="supprimer" size="s" />
-                    </button>
-                  </form>
-                )}
-              </li>
-            ))}
-          </ul>
-        </section>
-      )}
+      {/* Ordinateur et tablette (planche web recruteur-3 § 3) : le document et le formulaire à
+          gauche, « En attendant » à droite. */}
+      <div className="t-w4-g2e">
+        <div className="t-w4-col">
+          {organization.documents.length > 0 && (
+            <section aria-labelledby="r5-ver-docs" className="t-flux t-serre">
+              <h2 id="r5-ver-docs" className="t-ck-t">
+                {t("documents.title")}
+              </h2>
+              <ul className="t-verre t-liste t-lignes">
+                {organization.documents.map((document) => (
+                  <li key={document.id} className="t-li">
+                    <span className="t-cases" aria-hidden>
+                      <TalentIcon name="document" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b className="t-r5-coupe">{document.name}</b>
+                      <span>
+                        {t("documents.meta", {
+                          size: fileSize(document.size),
+                          date: document.createdAt,
+                        })}
+                      </span>
+                    </span>
+                    {admin && !verified && status !== "pending" && (
+                      <form action={removeVerificationDocumentAction}>
+                        <input type="hidden" name="id" value={document.id} />
+                        <button
+                          type="submit"
+                          className="t-bi t-press"
+                          aria-label={t("documents.remove", { name: document.name })}
+                        >
+                          <TalentIcon name="supprimer" size="s" />
+                        </button>
+                      </form>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )}
 
-      {!entitled ? (
-        <div className="t-verre t-carte">
-          <b>{t("locked", { plan: orgPlanFor(plans, "org.verified_profile") })}</b>
-          {admin && (
-            <Link href="/app/abonnement/formules" className="t-bt t-p t-s t-press">
-              {tr("plans")}
-            </Link>
+          {!entitled ? (
+            <div className="t-verre t-carte">
+              <b>{t("locked", { plan: orgPlanFor(plans, "org.verified_profile") })}</b>
+              {admin && (
+                <Link href="/app/abonnement/formules" className="t-bt t-p t-s t-press">
+                  {tr("plans")}
+                </Link>
+              )}
+            </div>
+          ) : (
+            admin &&
+            open && (
+              <section aria-labelledby="r5-ver-form" className="t-flux t-serre">
+                <h2 id="r5-ver-form" className="t-ck-t">
+                  {t("docs")}
+                </h2>
+                <form action={requestVerificationAction} className="t-flux">
+                  <div className="t-champ">
+                    <label htmlFor="r5-ver-registration">{t("form.registration")}</label>
+                    <span className="t-verre t-saisie">
+                      <input
+                        id="r5-ver-registration"
+                        name="registration"
+                        required
+                        minLength={3}
+                        maxLength={200}
+                        defaultValue={previous.registration ?? ""}
+                      />
+                    </span>
+                  </div>
+                  <div className="t-champ">
+                    <label htmlFor="r5-ver-tax">{t("form.taxId")}</label>
+                    <span className="t-verre t-saisie">
+                      <input
+                        id="r5-ver-tax"
+                        name="taxId"
+                        maxLength={120}
+                        defaultValue={previous.taxId ?? ""}
+                      />
+                    </span>
+                  </div>
+                  <div className="t-champ">
+                    <label htmlFor="r5-ver-domain">{t("form.domainEmail")}</label>
+                    <span className="t-verre t-saisie">
+                      <input
+                        id="r5-ver-domain"
+                        name="domainEmail"
+                        type="email"
+                        maxLength={200}
+                        defaultValue={previous.domainEmail ?? ""}
+                      />
+                    </span>
+                  </div>
+                  <div className="t-champ">
+                    <label htmlFor="r5-ver-mandate">{t("form.mandate")}</label>
+                    <textarea
+                      id="r5-ver-mandate"
+                      name="mandate"
+                      required
+                      minLength={3}
+                      maxLength={500}
+                      rows={3}
+                      defaultValue={previous.mandate ?? ""}
+                      className="t-verre t-zone"
+                      aria-describedby="r5-ver-mandate-h"
+                    />
+                    <p id="r5-ver-mandate-h" className="t-aide">
+                      {t("form.mandateHint")}
+                    </p>
+                  </div>
+                  <div className="t-champ">
+                    <label htmlFor="r5-ver-documents">{t("form.documents")}</label>
+                    <input
+                      id="r5-ver-documents"
+                      name="documents"
+                      type="file"
+                      multiple
+                      accept="application/pdf,image/png,image/jpeg,image/webp"
+                      className="t-r5-fichier"
+                      aria-describedby="r5-ver-documents-h"
+                    />
+                    <p id="r5-ver-documents-h" className="t-aide">
+                      {t("form.documentsHint")}
+                    </p>
+                  </div>
+                  <button type="submit" className="t-bt t-p t-m t-pl t-press">
+                    {status === "info_requested"
+                      ? t("answer")
+                      : status === "rejected"
+                        ? t("resubmit")
+                        : t("submit")}
+                  </button>
+                </form>
+              </section>
+            )
           )}
         </div>
-      ) : (
-        admin &&
-        open && (
-          <section aria-labelledby="r5-ver-form" className="t-flux t-serre">
-            <h2 id="r5-ver-form" className="t-ck-t">
-              {t("docs")}
-            </h2>
-            <form action={requestVerificationAction} className="t-flux">
-              <div className="t-champ">
-                <label htmlFor="r5-ver-registration">{t("form.registration")}</label>
-                <span className="t-verre t-saisie">
-                  <input
-                    id="r5-ver-registration"
-                    name="registration"
-                    required
-                    minLength={3}
-                    maxLength={200}
-                    defaultValue={previous.registration ?? ""}
-                  />
-                </span>
-              </div>
-              <div className="t-champ">
-                <label htmlFor="r5-ver-tax">{t("form.taxId")}</label>
-                <span className="t-verre t-saisie">
-                  <input
-                    id="r5-ver-tax"
-                    name="taxId"
-                    maxLength={120}
-                    defaultValue={previous.taxId ?? ""}
-                  />
-                </span>
-              </div>
-              <div className="t-champ">
-                <label htmlFor="r5-ver-domain">{t("form.domainEmail")}</label>
-                <span className="t-verre t-saisie">
-                  <input
-                    id="r5-ver-domain"
-                    name="domainEmail"
-                    type="email"
-                    maxLength={200}
-                    defaultValue={previous.domainEmail ?? ""}
-                  />
-                </span>
-              </div>
-              <div className="t-champ">
-                <label htmlFor="r5-ver-mandate">{t("form.mandate")}</label>
-                <textarea
-                  id="r5-ver-mandate"
-                  name="mandate"
-                  required
-                  minLength={3}
-                  maxLength={500}
-                  rows={3}
-                  defaultValue={previous.mandate ?? ""}
-                  className="t-verre t-zone"
-                  aria-describedby="r5-ver-mandate-h"
-                />
-                <p id="r5-ver-mandate-h" className="t-aide">
-                  {t("form.mandateHint")}
-                </p>
-              </div>
-              <div className="t-champ">
-                <label htmlFor="r5-ver-documents">{t("form.documents")}</label>
-                <input
-                  id="r5-ver-documents"
-                  name="documents"
-                  type="file"
-                  multiple
-                  accept="application/pdf,image/png,image/jpeg,image/webp"
-                  className="t-r5-fichier"
-                  aria-describedby="r5-ver-documents-h"
-                />
-                <p id="r5-ver-documents-h" className="t-aide">
-                  {t("form.documentsHint")}
-                </p>
-              </div>
-              <button type="submit" className="t-bt t-p t-m t-pl t-press">
-                {status === "info_requested"
-                  ? t("answer")
-                  : status === "rejected"
-                    ? t("resubmit")
-                    : t("submit")}
-              </button>
-            </form>
-          </section>
-        )
-      )}
-
-      {!verified && (
-        <p className="t-gar">
-          <TalentIcon name="offre" size="s" />
-          <span>{tr("meanwhile")}</span>
-        </p>
-      )}
-      <p className="t-gar">
-        <TalentIcon name="message" size="s" />
-        <span>{tr("question")}</span>
-      </p>
+        <div className="t-w4-col">
+          {!verified && <h2 className="t-ck-t t-w4-web">{tw("meanwhile")}</h2>}
+          {!verified && (
+            <p className="t-gar">
+              <TalentIcon name="offre" size="s" />
+              <span>{tr("meanwhile")}</span>
+            </p>
+          )}
+          <p className="t-gar">
+            <TalentIcon name="message" size="s" />
+            <span>{tr("question")}</span>
+          </p>
+        </div>
+      </div>
     </div>
   );
 }

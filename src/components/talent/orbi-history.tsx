@@ -38,9 +38,19 @@ export async function historyDate() {
 export async function OrbiHistoryAside({
   rows,
   current,
+  looks,
 }: {
-  rows: { id: string; title: string; topic: OrbiTopic; messages: number; updatedAt: Date }[];
+  rows: {
+    id: string;
+    title: string;
+    topic: OrbiTopic;
+    subject?: string;
+    messages: number;
+    updatedAt: Date;
+  }[];
   current: string | null;
+  /** Icon and colour by stored subject, before the talent's (the recruiter's Orbi, web lot 3). */
+  looks?: Readonly<Record<string, { icon: TalentIconName; tone: string }>>;
 }) {
   const t = await getTranslations("talentOrbi");
   const when = await historyDate();
@@ -68,25 +78,28 @@ export async function OrbiHistoryAside({
         <p className="t-orw-vide">{t("web.empty")}</p>
       ) : (
         <ul aria-label={t("historyPage.list")} className="t-orw-l">
-          {rows.map((row) => (
-            <li key={row.id}>
-              <Link
-                href={`/app/orbi?c=${row.id}`}
-                aria-current={row.id === current ? "page" : undefined}
-                className={cx("t-press", row.id === current && "t-on")}
-              >
-                <span aria-hidden className={cx("t-cases", topicLook[row.topic].tone)}>
-                  <TalentIcon name={topicLook[row.topic].icon} size="s" />
-                </span>
-                <span className="t-t">
-                  <b>{row.title}</b>
-                  <span>
-                    {t("historyPage.line", { count: row.messages, date: when(row.updatedAt) })}
+          {rows.map((row) => {
+            const look = (row.subject && looks?.[row.subject]) || topicLook[row.topic];
+            return (
+              <li key={row.id}>
+                <Link
+                  href={`/app/orbi?c=${row.id}`}
+                  aria-current={row.id === current ? "page" : undefined}
+                  className={cx("t-press", row.id === current && "t-on")}
+                >
+                  <span aria-hidden className={cx("t-cases", look.tone)}>
+                    <TalentIcon name={look.icon} size="s" />
                   </span>
-                </span>
-              </Link>
-            </li>
-          ))}
+                  <span className="t-t">
+                    <b>{row.title}</b>
+                    <span>
+                      {t("historyPage.line", { count: row.messages, date: when(row.updatedAt) })}
+                    </span>
+                  </span>
+                </Link>
+              </li>
+            );
+          })}
         </ul>
       )}
       <Link href="/app/orbi/historique" className="t-orw-gar t-press">

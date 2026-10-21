@@ -3,6 +3,7 @@ import { getFormatter, getTranslations } from "next-intl/server";
 import { OrbiLine } from "@/components/recruiter/offers";
 import { OperatorTile } from "@/components/talent/billing/operator";
 import { PlanPicker, type PlanChoice } from "@/components/talent/billing/plan-picker";
+import { InvoiceRows } from "@/components/talent/billing/invoice-rows";
 import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { Notice } from "@/components/talent/notice";
@@ -84,7 +85,7 @@ export async function RecruiterBilling({
   const now = new Date();
   const subject: Subject = { type: "organization", id: ctx.organizationId };
   const where = { subjectType: subject.type, subjectId: subject.id };
-  const [plan, current, quotas, invoices, payments, organization, canPay, plans] =
+  const [plan, current, quotas, invoices, payments, organization, canPay, plans, recent] =
     await Promise.all([
       resolvePlan(db, subject, now),
       liveSubscription(db, subject, now),
@@ -111,6 +112,13 @@ export async function RecruiterBilling({
         where: { family: { in: [...FAMILIES] }, active: true, isPublic: true },
         orderBy: { sortOrder: "asc" },
         include: { entitlements: true },
+      }),
+      // The two last invoices, beside the way of paying on a computer (planche web recruteur-3 § 5).
+      db.invoice.findMany({
+        where,
+        orderBy: { issuedAt: "desc" },
+        take: 2,
+        include: { payment: { select: { method: true, operator: true } } },
       }),
     ]);
   if (!plan) return null;
@@ -197,9 +205,49 @@ export async function RecruiterBilling({
     </li>
   );
   const reminder = end ? new Date(end.getTime() - REMINDER_DAYS * DAY) : null;
+  const tw = await getTranslations("hireWeb3.billing");
+  /** A quota as a card of the web page (planche web recruteur-3 § 5, `.q4`). */
+  const card = (
+    name: string,
+    used: number,
+    max: number,
+    key: string,
+    icon: "candidats" | "offre" | "orbi",
+    tone: string,
+  ) => (
+    <li key={key} className="t-quota">
+      <span className={cx("t-cases", tone)} aria-hidden>
+        <TalentIcon name={icon} size="s" />
+      </span>
+      <div className="t-l">
+        <b>{name}</b>
+        {max > 0 ? (
+          <span className="t-w4-n">
+            {used} <small>{tw("of", { max })}</small>
+          </span>
+        ) : (
+          <span className="t-w4-n">
+            {max < 0 ? tr("quota.unlimited", { used }) : t("abonnement.quota.none")}
+          </span>
+        )}
+      </div>
+      {max > 0 && (
+        <span
+          role="progressbar"
+          aria-label={tr("quota.aria", { name, used, max })}
+          aria-valuemin={0}
+          aria-valuemax={max}
+          aria-valuenow={Math.min(used, max)}
+          className="t-barre"
+        >
+          <i style={{ width: `${Math.min(100, Math.round((used / max) * 100))}%` }} />
+        </span>
+      )}
+    </li>
+  );
 
   return (
-    <div className="t-flux">
+    <div className="t-flux t-w4 t-large t-rw3-abo">
       <FlowHead back="/app/hire/compte" backLabel={tr("back")} title={t("abonnement.title")} />
       {one(params.resiliation) && <Notice tone="ok">{t("abonnement.notice.resiliation")}</Notice>}
       {one(params.reactivation) && <Notice tone="ok">{t("abonnement.notice.reactivation")}</Notice>}
@@ -250,6 +298,16 @@ export async function RecruiterBilling({
             </i>
           </span>
         )}
+        <div className="t-w4-web t-bts">
+          {renewHref && canPay && (
+            <Link href={renewHref} className="t-bt t-m t-press t-rw3-ext">
+              {t("talentW4.billing.extend")}
+            </Link>
+          )}
+          <Link href="/app/abonnement/formules" className="t-bt t-p t-m t-press">
+            {t("talentW4.billing.change")}
+          </Link>
+        </div>
       </section>
       {current?.pendingPlan && canPay && (
         <form action={downgradeSubscription}>
@@ -261,7 +319,30 @@ export async function RecruiterBilling({
         </form>
       )}
 
-      <ul aria-label={t("abonnement.quotas.label")} className="t-verre t-quotas">
+      <ul
+        aria-label={t("abonnement.quotas.label")}
+        className="t-verre t-quotas t-w4-q4 t-rw3-q4 t-w4-web"
+      >
+        {card(tr("quota.seats"), seats.used, seats.max, "seats", "candidats", "t-w4-k2")}
+        {card(tr("quota.jobs"), jobs, jobsMax, "jobs", "offre", "t-w4-k1")}
+        {card(tr("quota.credits"), credits.used, credits.limit, "credits", "orbi", "t-w4-k4")}
+        <li className="t-quota">
+          <span className="t-cases t-w4-k3" aria-hidden>
+            <TalentIcon name="document" size="s" />
+          </span>
+          <div className="t-l">
+            <b>{tr("quota.cv")}</b>
+            <span className="t-w4-n">{quotas.cv ? tr("included") : tr("notIncluded")}</span>
+          </div>
+          <span className="t-w4-qs">
+            {tw("sub", {
+              name: tr("quota.scorecards"),
+              value: quotas.scorecards ? tr("included") : tr("notIncluded"),
+            })}
+          </span>
+        </li>
+      </ul>
+      <ul aria-label={t("abonnement.quotas.label")} className="t-verre t-quotas t-w4-tel">
         {quota(tr("quota.seats"), seats.used, seats.max, "seats")}
         {quota(tr("quota.jobs"), jobs, jobsMax, "jobs")}
         {quota(tr("quota.credits"), credits.used, credits.limit, "credits")}
@@ -293,57 +374,95 @@ export async function RecruiterBilling({
         </OrbiLine>
       )}
 
-      {current && end && (
-        <section aria-labelledby="r5-abo-ech" className="t-flux t-serre">
-          <h2 id="r5-abo-ech" className="t-ck-t">
-            {tr("dates.title")}
-          </h2>
-          <ol className="t-verre t-r5-tl">
-            {lastPaid && (
-              <li className="t-ok">
+      <div className="t-w4-g2e">
+        {current && end && (
+          <section aria-labelledby="r5-abo-ech" className="t-flux t-serre">
+            <h2 id="r5-abo-ech" className="t-ck-t t-w4-sech">
+              {tr("dates.title")}
+            </h2>
+            <ol className="t-verre t-r5-tl">
+              {lastPaid && (
+                <li className="t-ok">
+                  <i aria-hidden />
+                  <div>
+                    <b>{tr("dates.paid", { amount: formatUsd(lastPaid.amountCents) })}</b>
+                    <span>
+                      {[
+                        short(lastPaid.createdAt),
+                        lastPaid.method === "mobile_money" ? opName(lastPaid.operator) : method,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
+                  </div>
+                </li>
+              )}
+              {reminder && reminder > now && !canceled && price > 0 && (
+                <li className="t-at">
+                  <i aria-hidden />
+                  <div>
+                    <b>{tr("dates.reminder")}</b>
+                    <span>
+                      {tr("dates.reminderLine", { date: short(reminder), days: REMINDER_DAYS })}
+                    </span>
+                  </div>
+                </li>
+              )}
+              <li>
                 <i aria-hidden />
                 <div>
-                  <b>{tr("dates.paid", { amount: formatUsd(lastPaid.amountCents) })}</b>
+                  <b>{tr("dates.end")}</b>
                   <span>
-                    {[
-                      short(lastPaid.createdAt),
-                      lastPaid.method === "mobile_money" ? opName(lastPaid.operator) : method,
-                    ]
-                      .filter(Boolean)
-                      .join(" · ")}
+                    {current.pendingPlan
+                      ? tr("dates.endNext", { date: short(end), plan: current.pendingPlan.name })
+                      : freePlan
+                        ? tr("dates.endFree", { date: short(end), plan: freePlan.name })
+                        : short(end)}
                   </span>
                 </div>
               </li>
-            )}
-            {reminder && reminder > now && !canceled && price > 0 && (
-              <li className="t-at">
-                <i aria-hidden />
-                <div>
-                  <b>{tr("dates.reminder")}</b>
-                  <span>
-                    {tr("dates.reminderLine", { date: short(reminder), days: REMINDER_DAYS })}
-                  </span>
-                </div>
-              </li>
-            )}
-            <li>
-              <i aria-hidden />
-              <div>
-                <b>{tr("dates.end")}</b>
-                <span>
-                  {current.pendingPlan
-                    ? tr("dates.endNext", { date: short(end), plan: current.pendingPlan.name })
-                    : freePlan
-                      ? tr("dates.endFree", { date: short(end), plan: freePlan.name })
-                      : short(end)}
+            </ol>
+          </section>
+        )}
+        {/* Ordinateur et tablette : le moyen de paiement et les deux dernières factures. */}
+        <div className="t-w4-col t-w4-web">
+          <div className="t-w4-sec">
+            <h2>{tw("payment")}</h2>
+            <Link href="/app/abonnement/factures">{t("talentW4.billing.invoicesAll")}</Link>
+          </div>
+          <ul className="t-verre t-liste t-lignes">
+            <li className="t-li">
+              {lastPaid?.method === "mobile_money" && lastPaid.operator ? (
+                <span className="t-cases" aria-hidden>
+                  <OperatorTile code={lastPaid.operator} name={opName(lastPaid.operator)} />
                 </span>
-              </div>
+              ) : (
+                <span className="t-cases t-c1" aria-hidden>
+                  <TalentIcon name="portefeuille" size="s" />
+                </span>
+              )}
+              <span className="t-t">
+                <b>
+                  {lastPaid?.method === "mobile_money" && lastPaid.operator
+                    ? opName(lastPaid.operator)
+                    : t("abonnement.method.title")}
+                </b>
+                <span>{method ?? t("abonnement.method.none")}</span>
+              </span>
             </li>
-          </ol>
-        </section>
-      )}
+          </ul>
+          {recent.length > 0 ? (
+            <InvoiceRows invoices={recent} />
+          ) : (
+            <p className="t-gar">
+              <TalentIcon name="document" size="s" />
+              <span>{tr("invoices", { org: organization.name, count: invoices })}</span>
+            </p>
+          )}
+        </div>
+      </div>
 
-      <ul className="t-verre t-liste t-lignes" aria-label={t("abonnement.title")}>
+      <ul className="t-verre t-liste t-lignes t-w4-tel" aria-label={t("abonnement.title")}>
         <li>
           <Link href="/app/abonnement/formules" className="t-li t-press">
             <span className="t-cases t-c2" aria-hidden>
@@ -573,12 +692,15 @@ export async function RecruiterPlans({
     : null;
 
   return (
-    <div className="t-flux">
-      <FlowHead
-        back="/app/abonnement"
-        backLabel={tr("plansBack")}
-        title={family === "rh" ? tr("plansTitle") : t("formules.title")}
-      />
+    <div className="t-flux t-w4 t-large t-rw3-plans">
+      <div className="t-w4-h">
+        <FlowHead
+          back="/app/abonnement"
+          backLabel={tr("plansBack")}
+          title={family === "rh" ? tr("plansTitle") : t("formules.title")}
+        />
+        <p className="t-w4-web t-w4-sub">{t("hireWeb3.plans.sub")}</p>
+      </div>
       {fits && (
         <OrbiLine>
           {tr.rich("fits", {

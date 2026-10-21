@@ -4,9 +4,9 @@ import { NextIntlClientProvider, useLocale, type AbstractIntlMessages } from "ne
 import { usePathname, useSearchParams } from "next/navigation";
 import { useEffect, useState } from "react";
 import Link from "next/link";
-import { orbiAides, type OrbiReply } from "@/lib/orbi";
+import type { OrbiReply } from "@/lib/orbi";
 import { orbiPanelAction } from "@/server/actions/orbi";
-import { TalentIcon } from "../icon";
+import { TalentIcon, type TalentIconName } from "../icon";
 import { OrbiChat } from "../orbi-chat";
 import { OrbiMark } from "../orbi-mark";
 import { closeDialog, SidePanel } from "./dialog";
@@ -80,8 +80,11 @@ type Loaded = {
 export function OrbiPanel({
   texts,
   labels,
+  aides,
+  hrefs,
+  home,
 }: {
-  /** The `talentOrbi` texts of the conversation. */
+  /** The `talentOrbi` texts of the conversation (with the recruiter's own words in their space). */
   texts: AbstractIntlMessages;
   labels: {
     title: string;
@@ -90,7 +93,12 @@ export function OrbiPanel({
     loading: string;
     error: string;
     aides: string;
-  } & Record<(typeof orbiAides)[number]["key"], string>;
+  };
+  /** The aids shown before the first question: the talent's four, or the recruiter's. */
+  aides: readonly { key: string; href: string; icon: TalentIconName; label: string }[];
+  /** The pages an answer may propose (the recruiter's in their space, web recruteur lot 3). */
+  hrefs?: Readonly<Record<string, string>>;
+  home?: string;
 }) {
   const locale = useLocale();
   const pathname = usePathname();
@@ -150,15 +158,17 @@ export function OrbiPanel({
             credits={loaded.credits}
             question={loaded.question}
             panelLabels={{ close: labels.close, expand: labels.expand }}
+            hrefs={hrefs}
+            home={home}
           >
             {loaded.messages.length === 0 && !loaded.question && (
               <nav aria-label={labels.aides}>
                 <ul className="t-op-aides">
-                  {orbiAides.map((aide) => (
+                  {aides.map((aide) => (
                     <li key={aide.key}>
                       <Link href={aide.href} className="t-press">
                         <TalentIcon name={aide.icon} size="xs" />
-                        {labels[aide.key]}
+                        {aide.label}
                       </Link>
                     </li>
                   ))}

@@ -13,8 +13,11 @@ export function OnboardingFrame({
   head,
   children,
   className,
+  tag,
 }: {
   brand: string;
+  /** A word beside the logo on a tablet or a computer (« Hire », planche web recruteur-3 § 8). */
+  tag?: string;
   homeLabel: string;
   head?: React.ReactNode;
   children: React.ReactNode;
@@ -26,6 +29,11 @@ export function OnboardingFrame({
         <Link href="/app" aria-label={homeLabel} className="t-lgo">
           <AccessMark size={30} />
           <span aria-hidden>{brand}</span>
+          {tag && (
+            <small aria-hidden className="t-obw-tag">
+              {tag}
+            </small>
+          )}
         </Link>
         {head}
       </div>

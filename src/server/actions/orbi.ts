@@ -9,7 +9,12 @@ import { db } from "@/server/db";
 import { usage } from "@/server/entitlements";
 import { getActiveSpace } from "@/server/hire-context";
 import { reportError } from "@/server/observability";
-import { recruiterPersona, recruiterTopics } from "@/server/services/recruiter-orbi";
+import {
+  organizationCreditsLeft,
+  recruiterOrbiActions,
+  recruiterPersona,
+  recruiterTopics,
+} from "@/server/services/recruiter-orbi";
 import {
   askOrbi,
   askOrbiAs,
@@ -97,6 +102,25 @@ export async function orbiPanelAction(raw: { id: string | null }): Promise<{
   const parsed = panelInput.safeParse(raw);
   const user = await requireUser("/app");
   const id = parsed.success ? parsed.data.id : null;
+  // In an organization's space (web recruteur lot 3): the organization's credits and an exchange
+  // of that space only, like the page (`RecruiterOrbi`).
+  const space = await getActiveSpace(user.id);
+  if (space) {
+    const [left, conversation] = await Promise.all([
+      organizationCreditsLeft(db, space.organizationId),
+      id
+        ? getOrbiConversation(db, user.id, id, {
+            organizationId: space.organizationId,
+            actions: recruiterOrbiActions,
+          })
+        : null,
+    ]);
+    return {
+      credits: left,
+      conversationId: conversation?.id ?? null,
+      messages: conversation?.messages ?? [],
+    };
+  }
   const [credits, conversation] = await Promise.all([
     usage(db, { type: "user", id: user.id }, AI_CREDITS_KEY),
     id ? getOrbiConversation(db, user.id, id) : null,

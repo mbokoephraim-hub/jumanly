@@ -54,35 +54,50 @@ export default async function TeamPage({ searchParams }: PageProps<"/app/organis
   const subject = { type: "organization" as const, id: ctx.organizationId };
   const permissions = hirePermissions(ctx.role);
   const admin = permissions.administer;
-  const [{ members, invitations }, seats, permissionsLevel, plan, plans, teamsOn, activity] =
-    await Promise.all([
-      listMembers(db, ctx),
-      seatUsage(db, ctx.organizationId),
-      level(db, subject, "org.permissions.level"),
-      resolvePlan(db, subject),
-      listPublicPlans(db),
-      can(db, subject, "org.teams"),
-      permissions.readApplications
-        ? db.applicationEvent.findMany({
-            where: {
-              type: { in: activityTypes },
-              actorId: { not: null },
-              application: { job: { organizationId: ctx.organizationId } },
+  const tw = await getTranslations("hireWeb3.team");
+  const [
+    { members, invitations },
+    seats,
+    permissionsLevel,
+    plan,
+    plans,
+    teamsOn,
+    activity,
+    assigned,
+  ] = await Promise.all([
+    listMembers(db, ctx),
+    seatUsage(db, ctx.organizationId),
+    level(db, subject, "org.permissions.level"),
+    resolvePlan(db, subject),
+    listPublicPlans(db),
+    can(db, subject, "org.teams"),
+    permissions.readApplications
+      ? db.applicationEvent.findMany({
+          where: {
+            type: { in: activityTypes },
+            actorId: { not: null },
+            application: { job: { organizationId: ctx.organizationId } },
+          },
+          orderBy: { createdAt: "desc" },
+          take: 5,
+          select: {
+            id: true,
+            type: true,
+            actorId: true,
+            createdAt: true,
+            application: {
+              select: { profile: { select: { user: { select: { name: true } } } } },
             },
-            orderBy: { createdAt: "desc" },
-            take: 5,
-            select: {
-              id: true,
-              type: true,
-              actorId: true,
-              createdAt: true,
-              application: {
-                select: { profile: { select: { user: { select: { name: true } } } } },
-              },
-            },
-          })
-        : Promise.resolve([]),
-    ]);
+          },
+        })
+      : Promise.resolve([]),
+    // The offers entrusted to each member (« Offres » of the web table, planche web recruteur-3 § 4).
+    db.job.groupBy({
+      by: ["assignedToId"],
+      where: { organizationId: ctx.organizationId, status: "published" },
+      _count: { _all: true },
+    }),
+  ]);
   const teams = teamsOn
     ? await db.team.findMany({
         where: { organizationId: ctx.organizationId, kind: "team" },
@@ -101,6 +116,7 @@ export default async function TeamPage({ searchParams }: PageProps<"/app/organis
   const roles = grantableRoles(permissionsLevel);
   const roleName = (role: MembershipRole) =>
     role === "partner_manager" ? role : to(`roles.${role}.text`);
+  const offersOf = new Map(assigned.map((row) => [row.assignedToId, row._count._all]));
   const names = new Map(members.map((member) => [member.userId, member.user.name]));
   const now = new Date();
   const ago = (date: Date) => {
@@ -131,19 +147,27 @@ export default async function TeamPage({ searchParams }: PageProps<"/app/organis
   };
 
   return (
-    <div className="t-flux">
-      <FlowHead
-        back="/app/organisation"
-        backLabel={t("back")}
-        title={t("title")}
-        end={
-          admin ? (
-            <SheetButton target="r5-inviter" className="t-bi t-press" label={t("invite")}>
-              <TalentIcon name="plus" size="s" />
-            </SheetButton>
-          ) : undefined
-        }
-      />
+    <div className="t-flux t-w4 t-large t-rw3-team">
+      <div className="t-w4-h">
+        <FlowHead
+          back="/app/organisation"
+          backLabel={t("back")}
+          title={t("title")}
+          end={
+            admin ? (
+              <SheetButton target="r5-inviter" className="t-bi t-press" label={t("invite")}>
+                <TalentIcon name="plus" size="s" />
+              </SheetButton>
+            ) : undefined
+          }
+        />
+        {admin && (
+          <SheetButton target="r5-inviter" className="t-bt t-p t-m t-press t-w4-web">
+            <TalentIcon name="plus" size="s" />
+            {tw("invite")}
+          </SheetButton>
+        )}
+      </div>
       {okText[ok] && <Notice tone="ok">{okText[ok]}</Notice>}
       {error && <Notice tone="err">{errorText[error] ?? t("invalid")}</Notice>}
 
@@ -165,7 +189,99 @@ export default async function TeamPage({ searchParams }: PageProps<"/app/organis
         )}
       </div>
 
-      <ul className="t-verre t-liste t-lignes" aria-label={t("members")}>
+      {/* Ordinateur et tablette (planche web recruteur-3 § 4) : les membres en tableau, avec
+          leurs offres, leur rôle et « Gérer ». Le téléphone garde sa liste. */}
+      <div className="t-verre t-rw3-tbl t-w4-web">
+        <table>
+          <caption className="sr-only">{t("members")}</caption>
+          <thead>
+            <tr>
+              <th scope="col">{tw("member")}</th>
+              <th scope="col">{tw("offers")}</th>
+              <th scope="col">{tw("role")}</th>
+              <th scope="col">
+                <span className="sr-only">{tw("actions")}</span>
+              </th>
+            </tr>
+          </thead>
+          <tbody>
+            {members.map((member, index) => {
+              const self = member.userId === user.id;
+              const editable =
+                admin && !self && (member.role !== "org_owner" || ctx.role === "org_owner");
+              return (
+                <tr key={member.id}>
+                  <th scope="row">
+                    <span className="t-rw3-who">
+                      <span className={cx("t-rc-av", ["", "t-b", "t-a"][index % 3])} aria-hidden>
+                        {initials(member.user.name)}
+                      </span>
+                      <span className="t-t">
+                        <b>{self ? t("you", { name: member.user.name }) : member.user.name}</b>
+                        <span>{member.user.email}</span>
+                      </span>
+                    </span>
+                  </th>
+                  <td>{tw("offersCount", { count: offersOf.get(member.userId) ?? 0 })}</td>
+                  <td>
+                    <span
+                      className={cx(
+                        "t-r5-role",
+                        (member.role === "org_owner" || member.role === "org_admin") && "t-r5-ad",
+                      )}
+                    >
+                      {roleName(member.role)}
+                    </span>
+                  </td>
+                  <td>
+                    {editable && (
+                      <SheetButton
+                        target={`r5-membre-${member.id}`}
+                        className="t-bt t-sec t-s t-press"
+                        label={tw("manageOf", { name: member.user.name })}
+                      >
+                        {tw("manage")}
+                      </SheetButton>
+                    )}
+                  </td>
+                </tr>
+              );
+            })}
+            {invitations.map((invitation) => (
+              <tr key={invitation.id}>
+                <th scope="row">
+                  <span className="t-rw3-who">
+                    <span className="t-rc-av t-a" aria-hidden>
+                      {initials(invitation.email)}
+                    </span>
+                    <span className="t-t">
+                      <b className="t-r5-coupe">{invitation.email}</b>
+                      <span>{t("invited", { ago: ago(invitation.createdAt) })}</span>
+                    </span>
+                  </span>
+                </th>
+                <td></td>
+                <td>
+                  <span className="t-r5-role">{t("pending")}</span>
+                </td>
+                <td>
+                  {admin && (
+                    <SheetButton
+                      target={`r5-invit-${invitation.id}`}
+                      className="t-bt t-sec t-s t-press"
+                      label={tw("manageOf", { name: invitation.email })}
+                    >
+                      {tw("manage")}
+                    </SheetButton>
+                  )}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      </div>
+
+      <ul className="t-verre t-liste t-lignes t-w4-tel" aria-label={t("members")}>
         {members.map((member, index) => {
           const self = member.userId === user.id;
           const editable =
@@ -230,71 +346,73 @@ export default async function TeamPage({ searchParams }: PageProps<"/app/organis
         ))}
       </ul>
 
-      <section aria-labelledby="r5-droits" className="t-flux t-serre">
-        <h2 id="r5-droits" className="t-ck-t">
-          {t("rights.title")}
-        </h2>
-        <table className="t-verre t-r5-droits">
-          <thead>
-            <tr>
-              <td />
-              {columns.map((role) => (
-                <th key={role} scope="col">
-                  <abbr title={roleName(role)}>{t(`rights.short.${role}`)}</abbr>
-                </th>
-              ))}
-            </tr>
-          </thead>
-          <tbody>
-            {rights.map((right) => (
-              <tr key={right}>
-                <th scope="row">{t(`rights.${right}`)}</th>
-                {columns.map((role) => {
-                  const yes = hirePermissions(role)[right];
-                  return (
-                    <td key={role} className={yes ? "t-r5-oui" : "t-r5-non"}>
-                      <span aria-hidden>{yes ? "✓" : "—"}</span>
-                      <span className="sr-only">{yes ? t("rights.yes") : t("rights.no")}</span>
-                    </td>
-                  );
-                })}
-              </tr>
-            ))}
-          </tbody>
-        </table>
-        <p className="t-gar">
-          <TalentIcon name="confidentialite" size="s" />
-          <span>{t("rights.owner")}</span>
-        </p>
-      </section>
-
-      {activity.length > 0 && (
-        <section aria-labelledby="r5-activite" className="t-flux t-serre">
-          <h2 id="r5-activite" className="t-ck-t">
-            {t("activity.title")}
+      <div className="t-w4-g2e">
+        <section aria-labelledby="r5-droits" className="t-flux t-serre">
+          <h2 id="r5-droits" className="t-ck-t">
+            {t("rights.title")}
           </h2>
-          <ul className="t-verre t-r5-act">
-            {activity.map((event, index) => {
-              const actor = names.get(event.actorId ?? "") ?? t("activity.former");
-              return (
-                <li key={event.id}>
-                  <span className={cx("t-rc-av", ["t-b", "", "t-a"][index % 3])} aria-hidden>
-                    {initials(actor)}
-                  </span>
-                  <span className="t-t">
-                    {t(`activity.${event.type as "note"}`, {
-                      actor: event.actorId === user.id ? t("activity.you") : shortName(actor),
-                      self: event.actorId === user.id ? "oui" : "non",
-                      name: shortName(event.application.profile.user.name),
-                    })}
-                  </span>
-                  <small>{when(event.createdAt)}</small>
-                </li>
-              );
-            })}
-          </ul>
+          <table className="t-verre t-r5-droits">
+            <thead>
+              <tr>
+                <td />
+                {columns.map((role) => (
+                  <th key={role} scope="col">
+                    <abbr title={roleName(role)}>{t(`rights.short.${role}`)}</abbr>
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              {rights.map((right) => (
+                <tr key={right}>
+                  <th scope="row">{t(`rights.${right}`)}</th>
+                  {columns.map((role) => {
+                    const yes = hirePermissions(role)[right];
+                    return (
+                      <td key={role} className={yes ? "t-r5-oui" : "t-r5-non"}>
+                        <span aria-hidden>{yes ? "✓" : "—"}</span>
+                        <span className="sr-only">{yes ? t("rights.yes") : t("rights.no")}</span>
+                      </td>
+                    );
+                  })}
+                </tr>
+              ))}
+            </tbody>
+          </table>
+          <p className="t-gar">
+            <TalentIcon name="confidentialite" size="s" />
+            <span>{t("rights.owner")}</span>
+          </p>
         </section>
-      )}
+
+        {activity.length > 0 && (
+          <section aria-labelledby="r5-activite" className="t-flux t-serre">
+            <h2 id="r5-activite" className="t-ck-t">
+              {t("activity.title")}
+            </h2>
+            <ul className="t-verre t-r5-act">
+              {activity.map((event, index) => {
+                const actor = names.get(event.actorId ?? "") ?? t("activity.former");
+                return (
+                  <li key={event.id}>
+                    <span className={cx("t-rc-av", ["t-b", "", "t-a"][index % 3])} aria-hidden>
+                      {initials(actor)}
+                    </span>
+                    <span className="t-t">
+                      {t(`activity.${event.type as "note"}`, {
+                        actor: event.actorId === user.id ? t("activity.you") : shortName(actor),
+                        self: event.actorId === user.id ? "oui" : "non",
+                        name: shortName(event.application.profile.user.name),
+                      })}
+                    </span>
+                    <small>{when(event.createdAt)}</small>
+                  </li>
+                );
+              })}
+            </ul>
+          </section>
+        )}
+      </div>
 
       {admin && (
         <Sheet

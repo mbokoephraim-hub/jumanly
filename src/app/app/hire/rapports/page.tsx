@@ -28,10 +28,11 @@ const sourceColor = { direct: "#2fd3a6", invitation: "#a6f26b", talent_search: "
  */
 export default async function ReportsPage({ searchParams }: PageProps<"/app/hire/rapports">) {
   const query = await searchParams;
-  const { ctx } = await requireHire("/app/hire/rapports");
+  const { ctx, space } = await requireHire("/app/hire/rapports");
   if (ctx.role === "hiring_manager") notFound();
   const t = await getTranslations("hire.reports");
   const tr = await getTranslations("rhReports");
+  const tw = await getTranslations("hireWeb3.reports");
   const format = await getFormatter();
   const byJob = one(query.vue) === "offres";
   const periode = one(query.periode) === "90d" ? "90d" : "30d";
@@ -82,8 +83,23 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
   const month = format.dateTime(range.to, { month: "long" });
 
   return (
-    <div className="t-flux">
-      <FlowHead back="/app/hire/compte" backLabel={tr("back")} title={t("title")} />
+    <div className="t-flux t-w4 t-large t-rw3-rap">
+      <div className="t-w4-h">
+        <FlowHead back="/app/hire/compte" backLabel={tr("back")} title={t("title")} />
+        <p className="t-w4-web t-w4-sub">
+          {tw(periode === "90d" ? "sub90" : "sub30", { org: space.organization.name })}
+        </p>
+        {exportable && (
+          <a
+            href={`/app/hire/rapports/export?periode=${periode}`}
+            className="t-bt t-sec t-m t-press t-w4-web"
+            download
+          >
+            <TalentIcon name="telecharger" size="s" />
+            {tw("export")}
+          </a>
+        )}
+      </div>
 
       <nav aria-label={t("period.text")} className="t-rx-onglets">
         <Link
@@ -174,7 +190,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
           </section>
         ) : null
       ) : (
-        <>
+        <div className="t-rw3-rg">
           {stats && !empty && (
             <section className="t-verre t-carte t-r5-rp" aria-labelledby="r5-rp-etapes">
               <h2 id="r5-rp-etapes">{tr("funnel")}</h2>
@@ -288,7 +304,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
               </section>
             ) : null,
           )}
-        </>
+        </div>
       )}
 
       {rank < reportRank("stats") && (
@@ -331,7 +347,7 @@ export default async function ReportsPage({ searchParams }: PageProps<"/app/hire
           </div>
           <a
             href={`/app/hire/rapports/export?periode=${periode}`}
-            className="t-bt t-p t-pl t-press"
+            className="t-bt t-p t-pl t-press t-w4-tel"
             download
           >
             <TalentIcon name="telecharger" size="s" />

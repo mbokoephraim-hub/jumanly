@@ -11,9 +11,12 @@ import type { HireToday } from "@/server/services/hire-today";
 export async function RecruiterBrief({
   today,
   firstName,
+  id = "r5-brief-t",
 }: {
   today: HireToday;
   firstName: string;
+  /** Its title's id: the page and the panel under the bell can both be in the page. */
+  id?: string;
 }) {
   const t = await getTranslations("rhNotifications.brief");
   const points = [
@@ -49,11 +52,11 @@ export async function RecruiterBrief({
   const name = firstName.split(/\s+/)[0] ?? "";
 
   return (
-    <section className="t-r5-brief" aria-labelledby="r5-brief-t">
+    <section className="t-r5-brief" aria-labelledby={id}>
       <div className="t-r5-brief-h">
         <OrbiMark size={30} />
         <div className="t-t">
-          <b id="r5-brief-t">{t("title")}</b>
+          <b id={id}>{t("title")}</b>
           <span>{t("source")}</span>
         </div>
       </div>

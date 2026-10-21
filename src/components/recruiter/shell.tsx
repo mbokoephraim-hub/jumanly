@@ -10,6 +10,9 @@ import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { appearanceScript, type Appearance } from "@/lib/appearance";
 import { TalentCommand } from "@/components/talent/web/command";
 import { TalentTopBar } from "@/components/talent/web/top-bar";
+import { OrbiPanel } from "@/components/talent/web/orbi-panel";
+import type { AbstractIntlMessages } from "next-intl";
+import { recruiterOrbiActions, recruiterOrbiAides } from "@/server/services/recruiter-orbi";
 import { RecruiterBottomBar } from "./bottom-bar";
 import { RecruiterHeader } from "./header";
 import { OrgMark } from "./org-mark";
@@ -33,6 +36,9 @@ export function RecruiterShell({
   appearance,
   reduceMotion,
   intro,
+  menu,
+  orbiTexts,
+  brief,
   children,
 }: {
   account: { name: string; image: string | null; line: string };
@@ -43,6 +49,12 @@ export function RecruiterShell({
   appearance: Appearance;
   reduceMotion: boolean;
   intro: IntroData;
+  /** The menu of the avatar on a computer (web recruteur lot 3), streamed. */
+  menu: ReactNode;
+  /** The texts of Orbi's conversation in the recruiter space, for the panel. */
+  orbiTexts: AbstractIntlMessages;
+  /** « Votre journée en bref » at the top of the notifications under the bell, streamed. */
+  brief?: ReactNode;
   children: ReactNode;
 }) {
   const t = useTranslations("hireShell");
@@ -50,6 +62,8 @@ export function RecruiterShell({
   const tc = useTranslations("talentShell.command");
   const tNotifs = useTranslations("notifs");
   const tNotifications = useTranslations("notifications");
+  const tOrbi = useTranslations("rhOrbi");
+  const tPanel = useTranslations("talentShell.orbiPanel");
   const notifications = {
     zero: t("header.notifications", { count: 0 }),
     one: t("header.notifications", { count: 1 }),
@@ -107,7 +121,8 @@ export function RecruiterShell({
           unread={unread}
           unreadMessages={unreadMessages}
           avatar={avatar}
-          accountHref="/app/hire/compte"
+          menu={menu}
+          brief={brief}
           labels={{
             search: t("web.search"),
             shortcut: t("web.shortcut"),
@@ -118,7 +133,7 @@ export function RecruiterShell({
               other: t("web.messages", { count: 2 }).replace("2", "#"),
             },
             account: t("header.account", { name: account.name }),
-            menu: t("header.account", { name: account.name }),
+            menu: t("web3.menu", { name: account.name }),
             panel: {
               title: tNotifs("web.title"),
               markAll: tNotifications("markAllRead"),
@@ -168,10 +183,28 @@ export function RecruiterShell({
           messages: t("nav.messages"),
         }}
       />
+      <Suspense fallback={null}>
+        <OrbiPanel
+          texts={orbiTexts}
+          hrefs={recruiterOrbiActions}
+          home="/app/hire"
+          labels={{
+            title: tOrbi("title"),
+            close: tPanel("close"),
+            expand: tPanel("expand"),
+            loading: tPanel("loading"),
+            error: tPanel("error"),
+            aides: tOrbi("aides.label"),
+          }}
+          aides={recruiterOrbiAides.map((aide) => ({
+            ...aide,
+            label: tOrbi(`aides.${aide.key}`),
+          }))}
+        />
+      </Suspense>
       <TalentCommand
         preview="/api/hire/recherche/apercu?q="
         results={null}
-        ask="/app/orbi?q="
         kinds={{ offer: t("command.offer"), candidate: t("command.candidate") }}
         labels={{
           title: t("command.title"),

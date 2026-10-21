@@ -16,6 +16,7 @@ import { ToastOnLoad } from "@/components/motion/toast-on-load";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
 import { cleanupConversationsAction } from "@/server/actions/hire-messaging";
 import { cleanupCandidates } from "@/server/services/hire-messaging";
+import { AutoSelect } from "@/components/talent/web/auto-select";
 
 const DAY = 86_400_000;
 
@@ -68,6 +69,67 @@ export async function RecruiterInbox({
   params: Record<string, string | string[] | undefined>;
 }) {
   const t = await getTranslations("rhInbox");
+  const tw = await getTranslations("hireWeb3.messages");
+  return (
+    <div className="t-flux t-large t-rw3-msgs">
+      <h1 className="sr-only">{t("title")}</h1>
+      <MessagesHead />
+      <div className="t-msg3 t-rw3-m3">
+        <div className="t-flux t-msg-ls t-rw3-ls">
+          <RecruiterInboxList ctx={ctx} params={params} autoOpen />
+        </div>
+        <div className="t-msg-vide">
+          <TalentIcon name="message" />
+          <p>{tw("choose")}</p>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/**
+ * The title of the messaging on a computer and a tablet, with its rule (planche web recruteur-3
+ * § 2, `.w-h`): on a phone the head of the frame names the tab.
+ */
+export async function MessagesHead() {
+  const t = await getTranslations("rhInbox");
+  const tw = await getTranslations("hireWeb3.messages");
+  return (
+    <div className="t-rw-h t-rw-web t-rw3-mh">
+      <div className="t-t">
+        <p aria-hidden className="t-rw-h1">
+          {t("title")}
+        </p>
+      </div>
+      <p className="t-rw3-pill">
+        <TalentIcon name="confidentialite" size="xs" />
+        {tw("rule")}
+      </p>
+    </div>
+  );
+}
+
+/**
+ * The list of the messaging: the search, the filters, Orbi's lines, the conversations and the
+ * rule. Alone on a phone; the left column of the messaging on a computer or a tablet, with the
+ * open conversation lit (`selected`).
+ */
+export async function RecruiterInboxList({
+  ctx,
+  params,
+  selected,
+  autoOpen = false,
+}: {
+  ctx: HireContext;
+  params: Record<string, string | string[] | undefined>;
+  selected?: string;
+  /**
+   * On a computer or a tablet the newest conversation opens beside the list (planche web
+   * recruteur-3 § 2), unless the list was filtered or searched. Never on a phone.
+   */
+  autoOpen?: boolean;
+}) {
+  const t = await getTranslations("rhInbox");
   const one = (key: string) => (typeof params[key] === "string" ? (params[key] as string) : "");
   const filter: InboxFilter = (inboxFilters as readonly string[]).includes(one("filtre"))
     ? (one("filtre") as InboxFilter)
@@ -91,9 +153,8 @@ export async function RecruiterInbox({
   const cleaned = one("ok") === "nettoyage" ? Number(one("n")) || 0 : null;
 
   return (
-    <div className="t-flux">
-      <h1 className="sr-only">{t("title")}</h1>
-      <form method="get" role="search" className="t-rech t-verre">
+    <>
+      <form action="/app/messages" method="get" role="search" className="t-rech t-verre">
         {filter !== "toutes" && <input type="hidden" name="filtre" value={filter} />}
         <TalentIcon name="recherche" size="s" />
         <input
@@ -160,7 +221,11 @@ export async function RecruiterInbox({
         <ul aria-label={t("list")} className="t-verre t-r5-cvs">
           {rows.map((row, index) => (
             <li key={row.id}>
-              <Link href={`/app/messages/${row.id}#dernier`} className="t-r5-cv t-press">
+              <Link
+                href={`/app/messages/${row.id}#dernier`}
+                aria-current={row.id === selected ? "page" : undefined}
+                className={cx("t-r5-cv t-press", row.id === selected && "t-on")}
+              >
                 <span className={cx("t-rc-av", avatarTone(index))} aria-hidden>
                   {initials(row.name)}
                 </span>
@@ -215,6 +280,9 @@ export async function RecruiterInbox({
         <TalentIcon name="confidentialite" size="s" />
         <span>{t("rule")}</span>
       </p>
+      {autoOpen && filter === "toutes" && !q && rows[0] && !one("ok") && (
+        <AutoSelect href={`/app/messages/${rows[0].id}#dernier`} from="web" />
+      )}
 
       {cleanup.length > 0 && (
         <Sheet id="r6-nettoyage" title={t6("cleanup.title")} closeLabel={t6("close")}>
@@ -250,6 +318,6 @@ export async function RecruiterInbox({
           </form>
         </Sheet>
       )}
-    </div>
+    </>
   );
 }

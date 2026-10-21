@@ -1,0 +1,764 @@
+/*
+ * Espace recruteur sur ordinateur et tablette · lot web recruteur 3 (docs/refonte-web, planche
+ * recruteur-3, générateur webr3.py) : Orbi en panneau et en page avec l'historique, messagerie en
+ * trois colonnes, notifications avec le résumé du jour, menu du compte, compte, organisation,
+ * vérification, équipe, abonnement, formules, rapports, paramètres, premiers pas. Sous 768 px,
+ * rien ne change : les enveloppes s'effacent et ce qui n'existe que sur ordinateur est masqué
+ * (`t-rw-web`, `t-rw-w`, recruiter-web-2.css).
+ */
+
+/* ── Menu du compte (planche § 3 « Menu du compte ») ── */
+.t-amenu form {
+  margin: 0;
+}
+.t-amenu .t-am-dc.t-rw3-am {
+  color: inherit;
+}
+.t-amenu .t-am-dc.t-rw3-am .t-cases {
+  background: var(--zone);
+}
+
+/* ── Messagerie en trois colonnes (planche § 2, `.msg3`) : la liste, l'échange, la candidature ── */
+@media (max-width: 767.98px) {
+  /* La conversation garde sa page du téléphone : l'enveloppe et la grille s'effacent. */
+  .t-rw3-th,
+  .t-rw3-ls {
+    display: contents;
+  }
+}
+@media (min-width: 768px) {
+  .t-cadre .t-rw3-msgs {
+    gap: 18px;
+    padding-bottom: 0;
+  }
+  .t-rw3-mh {
+    align-items: center;
+  }
+  /* La règle de la messagerie, en pastille à droite du titre (planche `.pill-w`). */
+  .t-rw3-pill {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    min-height: 34px;
+    padding: 6px 14px;
+    border-radius: 999px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+    font-size: 12.5px;
+    font-weight: 600;
+    color: var(--texte);
+  }
+  .t-rw3-pill svg {
+    flex: none;
+    color: var(--texte2);
+  }
+  .t-rw3-m3 {
+    grid-template-columns: 320px minmax(0, 1fr);
+  }
+  /* La liste : sans carte de verre, la conversation ouverte éclairée. */
+  .t-rw3-ls {
+    gap: 12px;
+  }
+  .t-rw3-ls > .t-rech {
+    flex: none;
+    height: 48px;
+  }
+  .t-rw3-ls > .t-rx-onglets {
+    flex: none;
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .t-rw3-ls > .t-rx-onglets::-webkit-scrollbar {
+    display: none;
+  }
+  .t-rw3-ls > .t-rx-onglets > * {
+    flex: none;
+  }
+  .t-rw3-ls > .t-rx-orbi {
+    padding: 10px 12px;
+    gap: 10px;
+    border-radius: 18px;
+    font-size: 12.5px;
+  }
+  .t-rw3-ls > .t-rx-orbi .t-bt {
+    height: 34px;
+    padding: 0 12px;
+  }
+  .t-rw3-ls > .t-r5-cvs {
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-rw3-ls > .t-r5-cvs > li + li {
+    border-top: 0;
+  }
+  .t-rw3-ls .t-r5-cv {
+    padding: 10px;
+    border-radius: 18px;
+    min-height: 0;
+    align-items: center;
+  }
+  .t-rw3-ls .t-r5-cv:hover,
+  .t-rw3-ls .t-r5-cv.t-on {
+    background: var(--zone);
+  }
+  .t-rw3-ls .t-r5-cv .t-rc-av {
+    width: 44px;
+    height: 44px;
+    flex: none;
+  }
+  /* La règle est dans la pastille de la tête. */
+  .t-rw3-ls > .t-gar {
+    display: none;
+  }
+  .t-rw3-ls > .t-vide {
+    box-shadow: none;
+    background: var(--zone);
+  }
+
+  /* L'échange : la tête, le fil qui défile, le bas posé dans la colonne. */
+  .t-rw3-m3 > .t-r5-conv {
+    gap: 0;
+    padding: 0;
+  }
+  .t-rw3-m3 > .t-r5-conv:has(.t-r5-brou) {
+    padding-bottom: 0;
+  }
+  .t-rw3-m3 > .t-r5-conv > .t-r5-ch {
+    flex: none;
+    gap: 12px;
+    padding: 14px 18px;
+    border-bottom: 1px solid var(--trait);
+  }
+  .t-rw3-m3 > .t-r5-conv > .t-r5-ch > a:first-child {
+    display: none;
+  }
+  .t-rw3-m3 > .t-r5-conv > .t-r5-ch .t-rc-av {
+    width: 44px;
+    height: 44px;
+  }
+  .t-rw3-m3 > .t-r5-conv > .t-r5-ch .t-t {
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: center;
+    column-gap: 10px;
+  }
+  .t-rw3-m3 > .t-r5-conv > .t-r5-ch h1 {
+    font-size: 16px;
+  }
+  .t-rw3-m3 > .t-r5-conv > .t-r5-ctx {
+    flex: none;
+    margin: 12px 18px;
+  }
+  .t-rw3-m3 > .t-r5-conv > :is(.t-notice, [role="status"], [role="alert"]) {
+    margin: 12px 18px 0;
+  }
+  .t-rw3-m3 > .t-r5-conv > .t-r5-fil {
+    flex: 1;
+    min-height: 0;
+    margin: 0;
+    overflow-y: auto;
+    overscroll-behavior: contain;
+    padding: 18px 22px;
+    background: var(--fond);
+  }
+  .t-rw3-m3 .t-r5-fil .t-b-r {
+    background: var(--plein);
+  }
+  .t-rw3-m3 > .t-r5-conv .t-r5-bas {
+    position: static;
+    left: auto;
+    bottom: auto;
+    z-index: auto;
+    width: auto;
+    max-width: none;
+    transform: none;
+    padding: 10px 16px 14px;
+    border-top: 1px solid var(--trait);
+  }
+  .t-rw3-m3 .t-r5-bas .t-compo {
+    min-height: 54px;
+    background: var(--zone);
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-rw3-m3 .t-r5-bas .t-compo .t-bi:not(.t-env) {
+    background: none;
+  }
+  .t-rw3-m3 .t-r5-bas .t-compo .t-env {
+    background: #0f3f37;
+    color: #a6f26b;
+  }
+  .t-rw3-m3 .t-r5-bas .t-r5-brou {
+    max-height: 34vh;
+  }
+  .t-rw3-m3 > .t-r5-conv > .t-gar {
+    margin: 12px 18px;
+  }
+}
+@media (min-width: 1200px) {
+  .t-rw3-m3:has(> .t-msg-cx) {
+    grid-template-columns: 320px minmax(0, 1fr) 280px;
+  }
+  /* La candidature a sa colonne : plus de carte de l'offre au-dessus du fil. */
+  .t-rw3-m3:has(> .t-msg-cx) > .t-r5-conv > .t-r5-ctx {
+    display: none;
+  }
+  .t-rw3-cx {
+    gap: 12px;
+  }
+  .t-rw3-cx .t-msg-h + * {
+    margin-top: -2px;
+  }
+  .t-rw3-cxo,
+  .t-rw3-itv,
+  .t-rw3-doc {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 14px;
+    border-radius: 20px;
+    background: var(--zone);
+    color: var(--texte);
+  }
+  .t-rw3-cxt,
+  .t-rw3-itv,
+  .t-rw3-doc {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 12px;
+  }
+  .t-rw3-cxt .t-cases {
+    background: var(--plein);
+  }
+  .t-rw3-doc {
+    background: none;
+    padding: 4px 0;
+  }
+  :is(.t-rw3-cxt, .t-rw3-itv, .t-rw3-doc) .t-t {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+  }
+  :is(.t-rw3-cxt, .t-rw3-itv, .t-rw3-doc) .t-t b {
+    font-size: 14px;
+    line-height: 1.25;
+  }
+  :is(.t-rw3-cxt, .t-rw3-itv, .t-rw3-doc) .t-t span {
+    font-size: 12.5px;
+    color: var(--texte2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .t-rw3-trk {
+    display: flex;
+    gap: 4px;
+  }
+  .t-rw3-trk i {
+    flex: 1;
+    height: 6px;
+    border-radius: 999px;
+    background: var(--trait);
+  }
+  .t-rw3-trk i.t-on {
+    background: linear-gradient(90deg, #2fd3a6, #2fd3a6);
+  }
+  .t-rw3-et {
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-rw3-et b {
+    color: var(--texte);
+  }
+  .t-rw3-day {
+    flex: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    width: 46px;
+    overflow: hidden;
+    border-radius: 12px;
+    background: var(--plein);
+    text-align: center;
+  }
+  .t-rw3-day small {
+    width: 100%;
+    padding: 2px 0;
+    background: #b8352a;
+    color: #fff;
+    font-size: 10px;
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+  .t-rw3-day b {
+    padding: 2px 0 4px;
+    font-size: 19px;
+    font-weight: 700;
+  }
+  .t-rw3-none {
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-rw3-dos {
+    margin-top: 4px;
+    width: 100%;
+  }
+}
+
+/* ── Compte (planche § 3 « Compte ») : l'identité, six tuiles, l'aide et la sortie ── */
+@media (max-width: 767.98px) {
+  .t-rw3-cptm {
+    display: contents;
+  }
+}
+@media (min-width: 768px) {
+  .t-rw3-cpt .t-w4-id form {
+    margin: 0;
+  }
+  .t-rw3-cpt .t-w4-id > .t-t {
+    flex: 1;
+    min-width: 0;
+  }
+  .t-rw3-cpt .t-w4-id > form,
+  .t-rw3-cpt .t-w4-id > .t-bt {
+    flex: none;
+  }
+  .t-rw3-tuiles > li > .t-li {
+    min-height: 168px;
+  }
+  .t-rw3-tuiles > li > .t-li > .t-tag {
+    margin-top: -4px;
+    background: rgba(255, 255, 255, 0.7);
+  }
+  .t-rw3-k5 > .t-li {
+    background: linear-gradient(150deg, #f1ece4, #ddd3c6);
+  }
+  .t-rw3-k6 > .t-li {
+    background: linear-gradient(150deg, #fbe4e0, #f3b3a9);
+  }
+  .sombre .t-rw3-k5 > .t-li {
+    background: linear-gradient(150deg, rgba(242, 237, 229, 0.16), rgba(242, 237, 229, 0.05));
+  }
+  .sombre .t-rw3-k6 > .t-li {
+    background: linear-gradient(150deg, rgba(240, 130, 110, 0.24), rgba(240, 130, 110, 0.08));
+  }
+  .sombre .t-rw3-tuiles > li > .t-li > .t-tag {
+    background: rgba(255, 255, 255, 0.12);
+  }
+}
+@media (min-width: 1200px) {
+  .t-w4-tuiles.t-rw3-tuiles.t-verre {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ── Abonnement (planche § 5 « Abonnement ») : la formule en bandeau, quatre cartes, deux colonnes ── */
+@media (min-width: 768px) {
+  .t-rw3-abo > .t-r5-hero {
+    align-items: center;
+    gap: 22px;
+    padding: 24px 26px;
+    border-radius: 30px;
+  }
+  .t-rw3-abo > .t-r5-hero > .t-r5-jr {
+    order: -1;
+    width: 92px;
+    height: 92px;
+  }
+  .t-rw3-abo > .t-r5-hero > .t-r5-jr i {
+    width: 74px;
+    height: 74px;
+    font-size: 12px;
+  }
+  .t-rw3-abo > .t-r5-hero > .t-r5-jr i b {
+    font-size: 24px;
+  }
+  .t-rw3-abo > .t-r5-hero .t-t b {
+    font-size: 28px;
+    letter-spacing: -0.02em;
+  }
+  .t-rw3-abo > .t-r5-hero .t-t span {
+    font-size: 13px;
+  }
+  .t-rw3-abo > .t-r5-hero > .t-bts {
+    flex: none;
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    justify-content: flex-end;
+  }
+  .t-rw3-abo > .t-r5-hero .t-bt {
+    flex: none;
+  }
+  .t-rw3-abo > .t-r5-hero .t-rw3-ext {
+    background: rgba(255, 255, 255, 0.12);
+    color: #f2ede5;
+  }
+  .t-rw3-q4 .t-quota {
+    align-content: start;
+  }
+  .t-rw3-abo .t-r5-tl {
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+}
+@media (min-width: 1200px) {
+  .t-rw3-q4.t-w4-q4.t-verre {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  .t-rw3-abo > .t-r5-hero .t-bt.t-p {
+    background: var(--g-accent);
+    color: #0f3f37;
+  }
+}
+
+/* ── Organisation (planche § 3 « Organisation ») : la carte en bandeau, quatre chiffres, deux colonnes ── */
+@media (min-width: 768px) {
+  .t-rw3-org .t-r5-org {
+    border-radius: 30px;
+  }
+  .t-rw3-org .t-r5-org .t-r5-ban {
+    height: 170px;
+  }
+  .t-rw3-org .t-r5-org-c {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr) auto;
+    column-gap: 18px;
+    row-gap: 4px;
+    align-items: center;
+    padding: 0 24px 22px;
+  }
+  .t-rw3-org .t-r5-org-c .t-r5-lg {
+    grid-row: 1 / span 3;
+    width: 96px;
+    height: 96px;
+    margin: -28px 0 0;
+    font-size: 28px;
+    border-radius: 24px;
+  }
+  .t-rw3-org .t-r5-org-c > :is(h2, p, .t-tag) {
+    grid-column: 2;
+    justify-self: start;
+  }
+  .t-rw3-org .t-r5-org-c h2 {
+    margin-top: 12px;
+    font-size: 26px;
+    letter-spacing: -0.02em;
+  }
+  .t-rw3-org .t-r5-org-c p {
+    font-size: 14px;
+  }
+  .t-rw3-org .t-r5-org-c > .t-bts {
+    grid-column: 3;
+    grid-row: 1 / span 3;
+    align-self: end;
+    display: flex;
+    gap: 10px;
+  }
+  .t-rw3-org .t-r5-org-c > .t-bts .t-bt {
+    flex: none;
+  }
+  :is(.t-rw3-org, .t-rw3-rap) .t-r5-st4 {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 14px;
+  }
+  :is(.t-rw3-org, .t-rw3-rap) .t-r5-st4 li {
+    padding: 18px 20px;
+    border-radius: 24px;
+    font-size: 13px;
+    gap: 4px;
+  }
+  :is(.t-rw3-org, .t-rw3-rap) .t-r5-st4 li b {
+    font-size: 30px;
+  }
+}
+@media (min-width: 768px) and (max-width: 1199.98px) {
+  .t-rw3-org .t-r5-org-c {
+    grid-template-columns: auto minmax(0, 1fr);
+  }
+  .t-rw3-org .t-r5-org-c > .t-bts {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    margin-top: 10px;
+  }
+}
+
+/* ── Mon profil RH (planche § 3 « Mon profil RH ») : le formulaire en carte, l'aperçu à droite ── */
+@media (max-width: 767.98px) {
+  .t-rw3-pfc {
+    display: contents;
+  }
+}
+@media (min-width: 768px) {
+  .t-rw3-prof.t-od-bas {
+    padding-bottom: 24px;
+  }
+  .t-rw3-pfc {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    padding: 24px;
+    border-radius: 30px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-rw3-pfc .t-ph-ed {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-self: stretch;
+    align-items: center;
+    gap: 18px;
+  }
+  .t-rw3-pfc .t-ph-ed .t-aide-c {
+    position: static;
+    transform: none;
+    flex: 1;
+    font-size: 13px;
+    text-align: left;
+    padding: 12px 16px;
+    border-radius: 18px;
+    background: var(--zone);
+  }
+  .t-rw3-pfc > form {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+  }
+  .t-rw3-pfc > form > .t-champ:has(#rh-profil-email) {
+    grid-column: 1 / -1;
+  }
+  .t-rw3-pfc > .t-bts {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+  }
+  .t-rw3-pfc > .t-bts .t-bt {
+    flex: none;
+    min-width: 140px;
+  }
+  .t-rw3-prof .t-r5-apc {
+    padding: 16px;
+    border-radius: 24px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+}
+
+/* ── Vérifier l'organisation (planche § 3) : l'anneau en carte, trois étapes en cartes ── */
+@media (min-width: 768px) {
+  .t-rw3-ver .t-r5-verp {
+    padding: 22px 26px;
+    border-radius: 30px;
+    gap: 20px;
+  }
+  .t-rw3-ver .t-r5-verp .t-t b {
+    font-size: 20px;
+  }
+  .t-rw3-ver .t-r5-verp .t-t span {
+    font-size: 14px;
+  }
+  .t-rw3-steps.t-verre {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 14px;
+    padding: 0;
+    overflow: visible;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+    border-radius: 0;
+  }
+  .t-rw3-steps > .t-li {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 20px;
+    border: 0;
+    border-radius: 26px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-rw3-steps > .t-li .t-cases {
+    border-radius: 50%;
+  }
+  .t-rw3-steps > .t-li .t-t b {
+    font-size: 16px;
+    white-space: normal;
+  }
+  .t-rw3-steps > .t-li .t-t span {
+    white-space: normal;
+  }
+}
+
+/* ── Équipe (planche § 4) : les membres en tableau, les droits et l'activité côte à côte ── */
+@media (min-width: 768px) {
+  .t-rw3-tbl {
+    padding: 6px 8px;
+    border-radius: 26px;
+    overflow-x: auto;
+  }
+  .t-rw3-tbl table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13.5px;
+  }
+  .t-rw3-tbl thead th {
+    padding: 12px 14px 10px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    text-align: left;
+    color: var(--texte2);
+  }
+  .t-rw3-tbl tbody :is(th, td) {
+    padding: 10px 14px;
+    border-top: 1px solid var(--trait);
+    text-align: left;
+    font-weight: 400;
+    vertical-align: middle;
+  }
+  .t-rw3-tbl tbody td:last-child {
+    text-align: right;
+    white-space: nowrap;
+  }
+  .t-rw3-who {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-width: 0;
+  }
+  .t-rw3-who .t-t {
+    display: flex;
+    flex-direction: column;
+    min-width: 0;
+  }
+  .t-rw3-who .t-t b {
+    font-size: 14px;
+  }
+  .t-rw3-who .t-t span {
+    font-size: 12.5px;
+    color: var(--texte2);
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .t-rw3-team .t-r5-seats {
+    padding: 18px 22px;
+    border-radius: 26px;
+  }
+}
+
+/* ── Rapports (planche § 6) : quatre chiffres, puis les cartes deux par deux ── */
+@media (max-width: 767.98px) {
+  .t-rw3-rg {
+    display: contents;
+  }
+}
+@media (min-width: 768px) {
+  /* Deux colonnes qui se remplissent l'une après l'autre (planche : funnel et sources à gauche,
+   * semaines, Orbi et PDF à droite), sans trou sous une carte courte. */
+  .t-rw3-rg {
+    display: block;
+    columns: 2;
+    column-gap: 16px;
+  }
+  .t-rw3-rg > * {
+    break-inside: avoid;
+    min-width: 0;
+    margin-bottom: 16px;
+  }
+  .t-rw3-rap .t-r5-rp {
+    padding: 20px 22px;
+    border-radius: 26px;
+  }
+  .t-rw3-rap .t-rx-sem {
+    height: 200px;
+  }
+  .t-rw3-rap .t-r5-pdf {
+    padding: 18px 20px;
+    border-radius: 26px;
+  }
+}
+
+/* ── Formules RH (planche § 5) : trois formules côte à côte, la comparaison en dessous ── */
+@media (min-width: 1200px) {
+  .t-rw3-plans .t-w4-f4 {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+@media (min-width: 768px) {
+  .t-rw3-plans .t-r5-cmp {
+    padding: 10px 14px;
+    border-radius: 26px;
+  }
+  .t-rw3-plans .t-r5-cmp table {
+    font-size: 13.5px;
+  }
+}
+@media (min-width: 768px) {
+  .t-w4-recap dt {
+    flex: none;
+  }
+}
+
+/* ── Notifications (planche § 2) : le résumé du jour et les demandes à gauche, la liste à droite.
+ * Hors espace recruteur, les enveloppes n'existent pas (`t-rw3-nw`). ── */
+.t-rw3-nw {
+  display: contents;
+}
+@media (min-width: 1200px) {
+  .t-rw3-ntg.t-w4-g2 {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.4fr);
+  }
+}
+
+/* ── Premiers pas (planche § 8) : « Hire » à côté du logo, l'accueil en bandeau ── */
+.t-obw-tag {
+  display: none;
+}
+@media (min-width: 768px) {
+  .t-obw-tag {
+    display: inline;
+    margin-left: 6px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texte2);
+  }
+  .t-rw3-wel {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 18px;
+    padding: 20px 24px;
+    border-radius: 26px;
+    background: linear-gradient(140deg, #0f3f37, #1c6b5a);
+    color: #f2ede5;
+  }
+  .t-rw3-wel svg {
+    flex: none;
+  }
+  .t-rw3-wel .t-t {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+  .t-rw3-wel b {
+    font-size: 16px;
+  }
+  .t-rw3-wel span span {
+    font-size: 13.5px;
+    color: rgba(242, 237, 229, 0.86);
+  }
+}

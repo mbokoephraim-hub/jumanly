@@ -9666,6 +9666,9 @@
       "offer": "Offre",
       "candidate": "Candidat",
       "none": "Aucun candidat ni aucune offre pour « {query} »."
+    },
+    "web3": {
+      "menu": "Menu du compte de {name}"
     }
   },
   "hireAccount": {
@@ -12569,6 +12572,92 @@
     "pools": {
       "sub": "Talents gardés pour plus tard",
       "crumb": "Viviers"
+    }
+  },
+  "hireWeb3": {
+    "menu": {
+      "seats": "{used} sur {limit}"
+    },
+    "account": {
+      "line": "{line} · {role}",
+      "talent": "Espace talent",
+      "profile": "Mon profil RH",
+      "org": "Page vue par les talents",
+      "reports": "{count, plural, =0 {Aucune candidature en 30 jours} one {# candidature en 30 jours} other {# candidatures en 30 jours}}",
+      "settings": "Notifications, sécurité, Orbi",
+      "help": "{email} · réponse par e-mail"
+    },
+    "billing": {
+      "of": "sur {max}",
+      "sub": "{name} : {value}",
+      "payment": "Paiement et factures"
+    },
+    "profile": {
+      "cancel": "Annuler"
+    },
+    "verification": {
+      "meanwhile": "En attendant"
+    },
+    "team": {
+      "invite": "Inviter",
+      "member": "Membre",
+      "offers": "Offres",
+      "role": "Rôle",
+      "actions": "Actions",
+      "offersCount": "{count, plural, =0 {Aucune offre} one {# offre} other {# offres}}",
+      "manage": "Gérer",
+      "manageOf": "Gérer {name}"
+    },
+    "reports": {
+      "sub30": "{org} · 30 derniers jours",
+      "sub90": "{org} · 90 derniers jours",
+      "export": "Exporter en PDF"
+    },
+    "settings": {
+      "display": "Apparence et Orbi"
+    },
+    "journal": {
+      "member": "Membre",
+      "profile": "Profil consulté",
+      "context": "Contexte",
+      "when": "Quand"
+    },
+    "plans": {
+      "sub": "Prépayé, sans renouvellement forcé. Les candidatures restent gratuites dans toutes les formules."
+    },
+    "welcome": {
+      "tag": "Hire",
+      "title": "Bienvenue dans Jumanly Hire",
+      "text": "Publiez, triez et rencontrez les bons talents. Orbi vous aide, vous décidez."
+    },
+    "org": {
+      "edit": "Modifier",
+      "sub": "Votre page, vue par les talents sur chaque offre"
+    },
+    "messages": {
+      "choose": "Choisissez une conversation pour la lire.",
+      "rule": "Seulement avec les candidats et les talents qui ont accepté le contact"
+    },
+    "thread": {
+      "aria": "Candidature liée à la conversation",
+      "application": "Candidature",
+      "proposal": "Proposition",
+      "score": "Dossier à {score} %",
+      "stage": "Étape {index} sur {total} · <b>{stage}</b>",
+      "documents": "Documents",
+      "cv": "CV",
+      "cvLine": "Envoyé avec la candidature, le {date}",
+      "noCv": "Pas de CV : le profil Jumanly tient lieu de dossier.",
+      "interview": "Entretien",
+      "itv": {
+        "pending": "Proposé · {time}",
+        "confirmed": "Confirmé · {time}",
+        "reschedule": "Autre date · {time}"
+      },
+      "itvWaiting": "En attente de {name}",
+      "itvAsked": "Proposée par {name}",
+      "open": "Ouvrir le dossier",
+      "profile": "Voir le profil"
     }
   },
   "hire": {

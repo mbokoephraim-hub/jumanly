@@ -47,6 +47,7 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
   const t = await getTranslations("org");
   const tr = await getTranslations("rhOrg");
   const tw = await getTranslations("hireWelcome.org");
+  const tw3 = await getTranslations("hireWeb3.org");
   const admin = hirePermissions(ctx.role).administer;
   const [organization, seats, jobs, applications, hired] = await Promise.all([
     db.organization.findUniqueOrThrow({
@@ -107,23 +108,26 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
   ] as const;
 
   return (
-    <div className="t-flux">
-      <FlowHead
-        back="/app/hire/compte"
-        backLabel={tr("back")}
-        title={t("title")}
-        end={
-          admin ? (
-            <Link
-              href="/app/organisation/modifier"
-              className="t-bi t-press"
-              aria-label={tr("edit")}
-            >
-              <TalentIcon name="modifier" size="s" />
-            </Link>
-          ) : undefined
-        }
-      />
+    <div className="t-flux t-w4 t-large t-rw3-org">
+      <div className="t-w4-h">
+        <FlowHead
+          back="/app/hire/compte"
+          backLabel={tr("back")}
+          title={t("title")}
+          end={
+            admin ? (
+              <Link
+                href="/app/organisation/modifier"
+                className="t-bi t-press"
+                aria-label={tr("edit")}
+              >
+                <TalentIcon name="modifier" size="s" />
+              </Link>
+            ) : undefined
+          }
+        />
+        <p className="t-w4-web t-w4-sub">{tw3("sub")}</p>
+      </div>
       {one(params.ok) && <Notice tone="ok">{t("profile.saved")}</Notice>}
 
       <section className="t-verre t-r5-org" aria-labelledby="r5-org-nom">
@@ -141,6 +145,21 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
             <TalentIcon name={verified ? "valider" : "horloge"} size="xs" />
             {t(`verification.status.${status}`)}
           </span>
+          {/* Ordinateur et tablette (planche web recruteur-3 § 3) : les deux actions sur la carte. */}
+          <div className="t-w4-web t-bts">
+            {organization.slug && (
+              <Link href={`/entreprises/${organization.slug}`} className="t-bt t-sec t-m t-press">
+                <TalentIcon name="profil" size="s" />
+                {tr("asTalent")}
+              </Link>
+            )}
+            {admin && (
+              <Link href="/app/organisation/modifier" className="t-bt t-p t-m t-press">
+                <TalentIcon name="modifier" size="s" />
+                {tw3("edit")}
+              </Link>
+            )}
+          </div>
         </div>
       </section>
 
@@ -153,94 +172,104 @@ export default async function OrganizationPage({ searchParams }: PageProps<"/app
         ))}
       </ul>
 
-      <section className="t-verre t-carte t-r5-pres" aria-labelledby="r5-org-pres">
-        <h2 id="r5-org-pres">
-          <span className="t-cases t-c1" aria-hidden>
-            <TalentIcon name="document" size="s" />
-          </span>
-          {tr("presentation")}
-        </h2>
-        {organization.description ? (
-          <p className="t-r5-pre">{organization.description}</p>
-        ) : (
-          <p className="t-r5-vide-t">{tr("noDescription")}</p>
-        )}
-        {organization.website && (
-          <a
-            href={organization.website}
-            rel="noopener noreferrer"
-            target="_blank"
-            className="t-lien-d"
-          >
-            {organization.website.replace(/^https?:\/\//, "")}
-          </a>
-        )}
-      </section>
-
-      {hint && admin && (
-        <OrbiLine
-          action={
-            <Link
-              href={
-                hint === "verify" ? "/app/organisation/verification" : "/app/organisation/modifier"
+      <div className="t-w4-g2">
+        <div className="t-w4-col">
+          <section className="t-verre t-carte t-r5-pres" aria-labelledby="r5-org-pres">
+            <h2 id="r5-org-pres">
+              <span className="t-cases t-c1" aria-hidden>
+                <TalentIcon name="document" size="s" />
+              </span>
+              {tr("presentation")}
+            </h2>
+            {organization.description ? (
+              <p className="t-r5-pre">{organization.description}</p>
+            ) : (
+              <p className="t-r5-vide-t">{tr("noDescription")}</p>
+            )}
+            {organization.website && (
+              <a
+                href={organization.website}
+                rel="noopener noreferrer"
+                target="_blank"
+                className="t-lien-d"
+              >
+                {organization.website.replace(/^https?:\/\//, "")}
+              </a>
+            )}
+          </section>
+        </div>
+        <div className="t-w4-col">
+          {hint && admin && (
+            <OrbiLine
+              action={
+                <Link
+                  href={
+                    hint === "verify"
+                      ? "/app/organisation/verification"
+                      : "/app/organisation/modifier"
+                  }
+                  className="t-bt t-sec t-s t-press"
+                >
+                  {tr(`hint.${hint}.cta`)}
+                </Link>
               }
-              className="t-bt t-sec t-s t-press"
             >
-              {tr(`hint.${hint}.cta`)}
-            </Link>
-          }
-        >
-          {tr(`hint.${hint}.text`)}
-        </OrbiLine>
-      )}
+              {tr(`hint.${hint}.text`)}
+            </OrbiLine>
+          )}
 
-      <ul className="t-verre t-liste t-lignes" aria-label={tr("manage")}>
-        <li>
-          <Link href="/app/organisation/equipe" className="t-li t-press">
-            <span className="t-cases t-c2" aria-hidden>
-              <TalentIcon name="candidats" size="s" />
-            </span>
-            <span className="t-t">
-              <b>{tr("team")}</b>
-              <span>
-                {seats.max < 0
-                  ? tr("seatsUnlimited", { used: seats.used })
-                  : tr("seats", { used: seats.used, max: seats.max })}
-              </span>
-            </span>
-            <TalentIcon name="suivant" />
-          </Link>
-        </li>
-        <li>
-          <Link href="/app/organisation/verification" className="t-li t-press">
-            <span className="t-cases t-c3" aria-hidden>
-              <TalentIcon name="valider" size="s" />
-            </span>
-            <span className="t-t">
-              <b>{tr("verification")}</b>
-              <span>{t(`verification.status.${status}`)}</span>
-            </span>
-            <TalentIcon name="suivant" />
-          </Link>
-        </li>
-        {admin && (
-          <li>
-            <Link href="/app/organisation/structure" className="t-li t-press">
-              <span className="t-cases" aria-hidden>
-                <TalentIcon name="entreprise" size="s" />
-              </span>
-              <span className="t-t">
-                <b>{tr("structure")}</b>
-                <span>{tr("structureLine")}</span>
-              </span>
-              <TalentIcon name="suivant" />
-            </Link>
-          </li>
-        )}
-      </ul>
+          <ul className="t-verre t-liste t-lignes" aria-label={tr("manage")}>
+            <li>
+              <Link href="/app/organisation/equipe" className="t-li t-press">
+                <span className="t-cases t-c2" aria-hidden>
+                  <TalentIcon name="candidats" size="s" />
+                </span>
+                <span className="t-t">
+                  <b>{tr("team")}</b>
+                  <span>
+                    {seats.max < 0
+                      ? tr("seatsUnlimited", { used: seats.used })
+                      : tr("seats", { used: seats.used, max: seats.max })}
+                  </span>
+                </span>
+                <TalentIcon name="suivant" />
+              </Link>
+            </li>
+            <li>
+              <Link href="/app/organisation/verification" className="t-li t-press">
+                <span className="t-cases t-c3" aria-hidden>
+                  <TalentIcon name="valider" size="s" />
+                </span>
+                <span className="t-t">
+                  <b>{tr("verification")}</b>
+                  <span>{t(`verification.status.${status}`)}</span>
+                </span>
+                <TalentIcon name="suivant" />
+              </Link>
+            </li>
+            {admin && (
+              <li>
+                <Link href="/app/organisation/structure" className="t-li t-press">
+                  <span className="t-cases" aria-hidden>
+                    <TalentIcon name="entreprise" size="s" />
+                  </span>
+                  <span className="t-t">
+                    <b>{tr("structure")}</b>
+                    <span>{tr("structureLine")}</span>
+                  </span>
+                  <TalentIcon name="suivant" />
+                </Link>
+              </li>
+            )}
+          </ul>
+        </div>
+      </div>
 
       {organization.slug && (
-        <Link href={`/entreprises/${organization.slug}`} className="t-bt t-sec t-m t-pl t-press">
+        <Link
+          href={`/entreprises/${organization.slug}`}
+          className="t-bt t-sec t-m t-pl t-press t-w4-tel"
+        >
           <TalentIcon name="profil" size="s" />
           {tr("asTalent")}
         </Link>
