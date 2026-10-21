@@ -114,8 +114,25 @@ export default async function InterviewPage({
             : null;
 
   return (
-    <div className="t-flux t-ri-prep">
+    <div className="t-flux t-ri-prep t-rw-prep">
       {toasts[ok] && <ToastOnLoad message={toasts[ok]} tone="success" />}
+      <div className="t-rw-h t-rw-web">
+        <div className="t-t">
+          <Link href="/app/hire/entretiens" className="t-rw-crumb">
+            <TalentIcon name="suivant" size="xs" />
+            {t("prep.back")}
+          </Link>
+          <h1>{t("prep.title")}</h1>
+          <p>
+            {[
+              person.name,
+              interview.startsAt ? `${day(interview.startsAt)}, ${hour(interview.startsAt)}` : null,
+            ]
+              .filter(Boolean)
+              .join(" · ")}
+          </p>
+        </div>
+      </div>
       <FlowHead
         back="/app/hire/entretiens"
         backLabel={t("prep.back")}
@@ -129,255 +146,272 @@ export default async function InterviewPage({
         }
       />
 
-      <Link href={`/app/hire/candidats/${application.id}`} className="t-verre t-ri-mini t-press">
-        <span className={cx("t-rc-av", avatarTone(application.id))} aria-hidden>
-          {initialsOf(person.name)}
-        </span>
-        <span className="t-t">
-          <b>{person.name}</b>
-          <span>{[application.job.title, application.stage.name].join(" · ")}</span>
-        </span>
-        {score !== null && (
-          <ScoreRing
-            score={score}
-            size="s"
-            text={ui("percent", { value: score })}
-            label={t("plan.scoreAria", { score })}
-          />
-        )}
-      </Link>
-
-      {errorText && (
-        <p className="t-gar t-err" role="alert">
-          <TalentIcon name="pourquoi" size="s" />
-          <span>{errorText}</span>
-        </p>
-      )}
-
-      <div className="t-ri-cases">
-        <div className="t-verre t-ri-date">
-          {interview.startsAt ? (
-            <>
-              <small>{format.dateTime(interview.startsAt, { weekday: "short", timeZone })}</small>
-              <b>{format.dateTime(interview.startsAt, { day: "numeric", timeZone })}</b>
-              <span>
-                {hour(interview.startsAt)} ·{" "}
-                {t("plan.duration", { minutes: interview.durationMinutes })}
-              </span>
-            </>
-          ) : (
-            <>
-              <small>{t("prep.when")}</small>
-              <b className="t-ri-q">
-                <TalentIcon name="horloge" size="s" />
-              </b>
-              <span>{t("plan.duration", { minutes: interview.durationMinutes })}</span>
-            </>
-          )}
-        </div>
-        <div className="t-verre t-ri-avec">
-          <small>{t("prep.with")}</small>
-          <span className="t-ri-pile" aria-hidden>
-            {team.slice(0, 4).map((userId) => (
-              <i key={userId} className={cx("t-rc-av", avatarTone(userId))}>
-                {initialsOf(nameOf(userId) || "?")}
-              </i>
-            ))}
-          </span>
-          <span>{team.map(nameOf).filter(Boolean).join(", ")}</span>
-        </div>
-      </div>
-
-      <div className="t-verre t-ri-statut">
-        <span
-          className={cx(
-            "t-ri-etq",
-            {
-              confirmed: "t-ok",
-              pending: "t-at",
-              reschedule: "t-au",
-              done: "t-fi",
-              no_show: "t-fi",
-              canceled: "t-an",
-              declined: "t-an",
-            }[interview.status],
-          )}
-        >
-          {t(`agenda.status.${interview.status === "no_show" ? "noShow" : interview.status}`)}
-        </span>
-        <span className="t-t">
-          {interview.status === "pending" && t("prep.status.pending", { firstName })}
-          {interview.status === "reschedule" && t("prep.status.reschedule", { firstName })}
-          {interview.status === "confirmed" &&
-            interview.startsAt &&
-            t("prep.status.confirmed", {
-              day: day(interview.startsAt),
-              time: hour(interview.startsAt),
-            })}
-          {interview.status === "declined" && t("prep.status.declined", { firstName })}
-          {interview.status === "canceled" && t("prep.status.canceled")}
-          {interview.status === "done" && t("prep.status.done")}
-          {interview.status === "no_show" && t("prep.status.noShow", { firstName })}
-        </span>
-        <span className="t-m">
-          {[
-            t(`plan.mode.${interview.mode}`),
-            interview.mode === "onsite" ? interview.address : interview.link,
-          ]
-            .filter(Boolean)
-            .join(" · ")}
-        </span>
-        {interview.status === "pending" && (
-          <ul className="t-ri-creneaux" aria-label={t("prep.slots")}>
-            {interview.slots.map((slot) => (
-              <li key={slot.toISOString()}>
-                {t("prep.slotAt", { day: day(slot), time: hour(slot) })}
-              </li>
-            ))}
-          </ul>
-        )}
-        {interview.status === "reschedule" && (
-          <ul className="t-ri-creneaux" aria-label={t("prep.proposed", { firstName })}>
-            {interview.proposedSlots.map((slot) => (
-              <li key={slot.toISOString()}>
-                <span>{t("prep.slotAt", { day: day(slot), time: hour(slot) })}</span>
-                {permissions.manage && slot > now && (
-                  <form action={acceptProposedSlotAction}>
-                    <input type="hidden" name="interview" value={interview.id} />
-                    <input type="hidden" name="slot" value={slot.toISOString()} />
-                    <button type="submit" className="t-bt t-p t-s t-press">
-                      {t("prep.accept")}
-                    </button>
-                  </form>
-                )}
-              </li>
-            ))}
-          </ul>
-        )}
-        {permissions.manage &&
-          (interview.status === "reschedule" || interview.status === "declined") &&
-          application.status === "active" && (
-            <Link
-              href={`/app/hire/candidats/${application.id}/entretien${interview.status === "reschedule" ? `?entretien=${interview.id}` : ""}`}
-              className="t-bt t-sec t-s t-press"
-            >
-              {t("prep.newTimes")}
-            </Link>
-          )}
-      </div>
-
-      <section aria-labelledby="ri-verif" className="t-rc-orbi">
-        <div className="t-h">
-          <OrbiMark size={30} />
-          <div className="t-t">
-            <b id="ri-verif">{t("prep.checkTitle")}</b>
-            <span>{t("prep.checkSub")}</span>
-          </div>
-        </div>
-        {proposed.length === 0 ? (
-          <p>{t("prep.checkNone")}</p>
-        ) : (
-          <ul className="t-rc-pts">
-            {proposed.map((item) => (
-              <li key={item.skill}>
-                <i aria-hidden className={item.check ? "t-a" : "t-v"}>
-                  {item.check ? "!" : "✓"}
-                </i>
-                <span>{t(`prep.point.${item.kind}`, { skill: item.skill })}</span>
-              </li>
-            ))}
-          </ul>
-        )}
-        {toCheck.length === 0 && proposed.length > 0 && (
-          <p className="t-rc-note">{t("prep.allProven")}</p>
-        )}
-      </section>
-
-      <section id="questions" aria-labelledby="ri-questions" className="t-ri-bloc">
-        <div className="t-ri-bh">
-          <h2 id="ri-questions">{t("prep.questions")}</h2>
-          {permissions.evaluate && own.length < QUESTIONS_MAX && (
-            <SheetButton target="ri-question" className="t-pq t-press">
-              <TalentIcon name="plus" size="xs" />
-              {t("prep.add")}
-            </SheetButton>
-          )}
-        </div>
-        <ol className="t-ri-qs">
-          {proposed.map((item) => (
-            <li key={item.skill} className="t-verre">
-              <span className="t-ri-qo" aria-hidden>
-                <TalentIcon name="orbi" size="xs" />
-              </span>
-              <span className="t-t">
-                <b>{t(`prep.ask.${item.kind}`, { skill: item.skill })}</b>
-                <span>
-                  {[
-                    item.skill,
-                    item.required ? t("prep.required") : t("prep.preferred"),
-                    item.check ? t("prep.toCheck") : null,
-                  ]
-                    .filter(Boolean)
-                    .join(" · ")}
-                </span>
-              </span>
-            </li>
-          ))}
-          {own.map((item) => (
-            <li key={item.id} className="t-verre">
-              <span className={cx("t-rc-av t-s", avatarTone(item.authorId))} aria-hidden>
-                {initialsOf(nameOf(item.authorId) || "?")}
-              </span>
-              <span className="t-t">
-                <b>{item.text}</b>
-                <span>
-                  {t("prep.by", { name: nameOf(item.authorId) || t("prep.formerMember") })}
-                </span>
-              </span>
-              {item.authorId === ctx.userId && (
-                <form action={removeInterviewQuestionAction}>
-                  <input type="hidden" name="interview" value={interview.id} />
-                  <input type="hidden" name="question" value={item.id} />
-                  <button
-                    type="submit"
-                    className="t-bi t-press"
-                    aria-label={t("prep.remove", { question: item.text })}
-                  >
-                    <TalentIcon name="supprimer" size="xs" />
-                  </button>
-                </form>
-              )}
-            </li>
-          ))}
-        </ol>
-        <p className="t-gar">
-          <TalentIcon name="confidentialite" size="s" />
-          <span>{t("prep.guard")}</span>
-        </p>
-      </section>
-
-      <nav aria-label={t("prep.actions")} className="t-verre t-fort t-bas-f t-ri-bas">
-        <SheetButton target="ri-partager" className="t-bt t-sec t-m t-press">
-          <TalentIcon name="partager" size="s" />
-          {t("prep.share")}
-        </SheetButton>
-        {permissions.evaluate && mine ? (
-          <Link
-            href={`/app/hire/candidats/${application.id}/evaluation`}
-            className={cx("t-bt t-m t-pl t-press", finished ? "t-p" : "t-sec")}
-          >
-            <TalentIcon name="valider" size="s" />
-            {t("prep.evaluate")}
-          </Link>
-        ) : (
+      {/* Web: the candidate and the interview on the left, the questions on the right. */}
+      <div className="t-rw-g t-rw-pg">
+        <div>
           <Link
             href={`/app/hire/candidats/${application.id}`}
-            className="t-bt t-p t-m t-pl t-press"
+            className="t-verre t-ri-mini t-press"
           >
-            {t("prep.file")}
+            <span className={cx("t-rc-av", avatarTone(application.id))} aria-hidden>
+              {initialsOf(person.name)}
+            </span>
+            <span className="t-t">
+              <b>{person.name}</b>
+              <span>{[application.job.title, application.stage.name].join(" · ")}</span>
+            </span>
+            {score !== null && (
+              <ScoreRing
+                score={score}
+                size="s"
+                text={ui("percent", { value: score })}
+                label={t("plan.scoreAria", { score })}
+              />
+            )}
           </Link>
-        )}
-      </nav>
+
+          {errorText && (
+            <p className="t-gar t-err" role="alert">
+              <TalentIcon name="pourquoi" size="s" />
+              <span>{errorText}</span>
+            </p>
+          )}
+
+          <div className="t-ri-cases">
+            <div className="t-verre t-ri-date">
+              {interview.startsAt ? (
+                <>
+                  <small>
+                    {format.dateTime(interview.startsAt, { weekday: "short", timeZone })}
+                  </small>
+                  <b>{format.dateTime(interview.startsAt, { day: "numeric", timeZone })}</b>
+                  <span>
+                    {hour(interview.startsAt)} ·{" "}
+                    {t("plan.duration", { minutes: interview.durationMinutes })}
+                  </span>
+                </>
+              ) : (
+                <>
+                  <small>{t("prep.when")}</small>
+                  <b className="t-ri-q">
+                    <TalentIcon name="horloge" size="s" />
+                  </b>
+                  <span>{t("plan.duration", { minutes: interview.durationMinutes })}</span>
+                </>
+              )}
+            </div>
+            <div className="t-verre t-ri-avec">
+              <small>{t("prep.with")}</small>
+              <span className="t-ri-pile" aria-hidden>
+                {team.slice(0, 4).map((userId) => (
+                  <i key={userId} className={cx("t-rc-av", avatarTone(userId))}>
+                    {initialsOf(nameOf(userId) || "?")}
+                  </i>
+                ))}
+              </span>
+              <span>{team.map(nameOf).filter(Boolean).join(", ")}</span>
+            </div>
+          </div>
+
+          <div className="t-verre t-ri-statut">
+            <span
+              className={cx(
+                "t-ri-etq",
+                {
+                  confirmed: "t-ok",
+                  pending: "t-at",
+                  reschedule: "t-au",
+                  done: "t-fi",
+                  no_show: "t-fi",
+                  canceled: "t-an",
+                  declined: "t-an",
+                }[interview.status],
+              )}
+            >
+              {t(`agenda.status.${interview.status === "no_show" ? "noShow" : interview.status}`)}
+            </span>
+            <span className="t-t">
+              {interview.status === "pending" && t("prep.status.pending", { firstName })}
+              {interview.status === "reschedule" && t("prep.status.reschedule", { firstName })}
+              {interview.status === "confirmed" &&
+                interview.startsAt &&
+                t("prep.status.confirmed", {
+                  day: day(interview.startsAt),
+                  time: hour(interview.startsAt),
+                })}
+              {interview.status === "declined" && t("prep.status.declined", { firstName })}
+              {interview.status === "canceled" && t("prep.status.canceled")}
+              {interview.status === "done" && t("prep.status.done")}
+              {interview.status === "no_show" && t("prep.status.noShow", { firstName })}
+            </span>
+            <span className="t-m">
+              {[
+                t(`plan.mode.${interview.mode}`),
+                interview.mode === "onsite" ? interview.address : interview.link,
+              ]
+                .filter(Boolean)
+                .join(" · ")}
+            </span>
+            {interview.status === "pending" && (
+              <ul className="t-ri-creneaux" aria-label={t("prep.slots")}>
+                {interview.slots.map((slot) => (
+                  <li key={slot.toISOString()}>
+                    {t("prep.slotAt", { day: day(slot), time: hour(slot) })}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {interview.status === "reschedule" && (
+              <ul className="t-ri-creneaux" aria-label={t("prep.proposed", { firstName })}>
+                {interview.proposedSlots.map((slot) => (
+                  <li key={slot.toISOString()}>
+                    <span>{t("prep.slotAt", { day: day(slot), time: hour(slot) })}</span>
+                    {permissions.manage && slot > now && (
+                      <form action={acceptProposedSlotAction}>
+                        <input type="hidden" name="interview" value={interview.id} />
+                        <input type="hidden" name="slot" value={slot.toISOString()} />
+                        <button type="submit" className="t-bt t-p t-s t-press">
+                          {t("prep.accept")}
+                        </button>
+                      </form>
+                    )}
+                  </li>
+                ))}
+              </ul>
+            )}
+            {permissions.manage &&
+              (interview.status === "reschedule" || interview.status === "declined") &&
+              application.status === "active" && (
+                <Link
+                  href={`/app/hire/candidats/${application.id}/entretien${interview.status === "reschedule" ? `?entretien=${interview.id}` : ""}`}
+                  className="t-bt t-sec t-s t-press"
+                >
+                  {t("prep.newTimes")}
+                </Link>
+              )}
+          </div>
+
+          <section aria-labelledby="ri-verif" className="t-rc-orbi">
+            <div className="t-h">
+              <OrbiMark size={30} />
+              <div className="t-t">
+                <b id="ri-verif">{t("prep.checkTitle")}</b>
+                <span>{t("prep.checkSub")}</span>
+              </div>
+            </div>
+            {proposed.length === 0 ? (
+              <p>{t("prep.checkNone")}</p>
+            ) : (
+              <ul className="t-rc-pts">
+                {proposed.map((item) => (
+                  <li key={item.skill}>
+                    <i aria-hidden className={item.check ? "t-a" : "t-v"}>
+                      {item.check ? "!" : "✓"}
+                    </i>
+                    <span>{t(`prep.point.${item.kind}`, { skill: item.skill })}</span>
+                  </li>
+                ))}
+              </ul>
+            )}
+            {toCheck.length === 0 && proposed.length > 0 && (
+              <p className="t-rc-note">{t("prep.allProven")}</p>
+            )}
+          </section>
+        </div>
+        <div>
+          <section id="questions" aria-labelledby="ri-questions" className="t-ri-bloc">
+            <div className="t-ri-bh">
+              <h2 id="ri-questions">{t("prep.questions")}</h2>
+              {permissions.evaluate && own.length < QUESTIONS_MAX && (
+                <SheetButton target="ri-question" className="t-pq t-press">
+                  <TalentIcon name="plus" size="xs" />
+                  {t("prep.add")}
+                </SheetButton>
+              )}
+            </div>
+            <ol className="t-ri-qs">
+              {proposed.map((item) => (
+                <li key={item.skill} className="t-verre">
+                  <span className="t-ri-qo" aria-hidden>
+                    <TalentIcon name="orbi" size="xs" />
+                  </span>
+                  <span className="t-t">
+                    <b>{t(`prep.ask.${item.kind}`, { skill: item.skill })}</b>
+                    <span>
+                      {[
+                        item.skill,
+                        item.required ? t("prep.required") : t("prep.preferred"),
+                        item.check ? t("prep.toCheck") : null,
+                      ]
+                        .filter(Boolean)
+                        .join(" · ")}
+                    </span>
+                  </span>
+                </li>
+              ))}
+              {own.map((item) => (
+                <li key={item.id} className="t-verre">
+                  <span className={cx("t-rc-av t-s", avatarTone(item.authorId))} aria-hidden>
+                    {initialsOf(nameOf(item.authorId) || "?")}
+                  </span>
+                  <span className="t-t">
+                    <b>{item.text}</b>
+                    <span>
+                      {t("prep.by", { name: nameOf(item.authorId) || t("prep.formerMember") })}
+                    </span>
+                  </span>
+                  {item.authorId === ctx.userId && (
+                    <form action={removeInterviewQuestionAction}>
+                      <input type="hidden" name="interview" value={interview.id} />
+                      <input type="hidden" name="question" value={item.id} />
+                      <button
+                        type="submit"
+                        className="t-bi t-press"
+                        aria-label={t("prep.remove", { question: item.text })}
+                      >
+                        <TalentIcon name="supprimer" size="xs" />
+                      </button>
+                    </form>
+                  )}
+                </li>
+              ))}
+            </ol>
+            <p className="t-gar">
+              <TalentIcon name="confidentialite" size="s" />
+              <span>{t("prep.guard")}</span>
+            </p>
+          </section>
+
+          <nav aria-label={t("prep.actions")} className="t-verre t-fort t-bas-f t-ri-bas t-rw-st">
+            {permissions.manage && live && (
+              <SheetButton target="ri-suivi" className="t-bt t-sec t-m t-press t-rw-web">
+                <TalentIcon name="plus-options" size="s" />
+                {t("prep.more")}
+              </SheetButton>
+            )}
+            <SheetButton target="ri-partager" className="t-bt t-sec t-m t-press">
+              <TalentIcon name="partager" size="s" />
+              {t("prep.share")}
+            </SheetButton>
+            {permissions.evaluate && mine ? (
+              <Link
+                href={`/app/hire/candidats/${application.id}/evaluation`}
+                className={cx("t-bt t-m t-pl t-press", finished ? "t-p" : "t-sec")}
+              >
+                <TalentIcon name="valider" size="s" />
+                {t("prep.evaluate")}
+              </Link>
+            ) : (
+              <Link
+                href={`/app/hire/candidats/${application.id}`}
+                className="t-bt t-p t-m t-pl t-press"
+              >
+                {t("prep.file")}
+              </Link>
+            )}
+          </nav>
+        </div>
+      </div>
 
       <Sheet id="ri-partager" title={t("prep.shareTitle")} closeLabel={t("plan.close")}>
         <p className="t-rc-note">{t("prep.shareText")}</p>

@@ -100,6 +100,8 @@ export async function TalentSearchView({
   segments: React.ReactNode;
 }) {
   const t = await getTranslations("hireTalents");
+  const tc = await getTranslations("hireCandidates");
+  const tw = await getTranslations("hireWeb.talents");
   const subject = { type: "organization" as const, id: ctx.organizationId };
   const [searchLevel, plans, offers, proposals, messages] = await Promise.all([
     level(db, subject, "hire.talent_search"),
@@ -229,250 +231,287 @@ export async function TalentSearchView({
     quotas.searches.limit < 0 ? null : { used: quotas.searches.used, max: quotas.searches.limit };
   const cards = result.status === "ok" ? talentCards(result.results, t, offer?.id ?? "") : [];
 
+  const clearHref = href({
+    competences: null,
+    lieu: null,
+    experience: null,
+    dispo: null,
+    distance: null,
+  });
+  /** The filters: in a sheet on a phone or a tablet, in a panel on the left from 1200 px. */
+  const filterForm = (prefix: string, inline: boolean) => (
+    <form action="/app/hire/candidats" className="t-ri-ff">
+      <input type="hidden" name="vue" value="talents" />
+      {asked && <input type="hidden" name="offre" value={asked} />}
+      {filters.q && <input type="hidden" name="q" value={filters.q} />}
+      {inline && offers.length > 0 && (
+        <fieldset>
+          <legend>{tw("compare")}</legend>
+          <SheetButton target="ri-offre" className="t-verre t-rw-cmp t-press">
+            <TalentIcon name="offre" size="xs" />
+            <span>{offer?.title ?? t("offer.none")}</span>
+          </SheetButton>
+        </fieldset>
+      )}
+      <fieldset>
+        <legend>{t("filters.skills")}</legend>
+        <div className="t-puces">
+          {suggestedSkills.map((skill) => (
+            <label key={skill} className="t-puce t-rc-ch">
+              <input
+                type="checkbox"
+                name="competences"
+                value={skill}
+                defaultChecked={filters.skills.includes(skill)}
+              />
+              {skill}
+            </label>
+          ))}
+        </div>
+        <div className="t-verre t-saisie">
+          <label htmlFor={`${prefix}competence`} className="sr-only">
+            {t("filters.addSkill")}
+          </label>
+          <input
+            id={`${prefix}competence`}
+            name="competences"
+            maxLength={60}
+            placeholder={t("filters.addSkill")}
+          />
+        </div>
+      </fieldset>
+      <fieldset>
+        <legend>{t("filters.place")}</legend>
+        <div className="t-puces">
+          {places.map((place) => (
+            <label key={place} className="t-puce t-rc-ch">
+              <input
+                type="radio"
+                name="lieu"
+                value={place}
+                defaultChecked={filters.location === place}
+              />
+              {place}
+            </label>
+          ))}
+          <label className="t-puce t-rc-ch">
+            <input type="radio" name="lieu" value="" defaultChecked={!filters.location} />
+            {t("filters.anywhere")}
+          </label>
+          <label className={cx("t-puce t-rc-ch", !deep && "t-ri-off")}>
+            <input
+              type="checkbox"
+              name="distance"
+              value="1"
+              disabled={!deep}
+              defaultChecked={Boolean(filters.remote)}
+            />
+            {t("filters.remote")}
+          </label>
+        </div>
+      </fieldset>
+      <fieldset disabled={!deep}>
+        <legend>{t("filters.experience")}</legend>
+        <div className="t-puces">
+          {experienceLevels.map((value) => (
+            <label key={value} className={cx("t-puce t-rc-ch", !deep && "t-ri-off")}>
+              <input
+                type="radio"
+                name="experience"
+                value={value}
+                defaultChecked={filters.level === value}
+              />
+              {t(`filters.level.${value}`)}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      <fieldset disabled={!deep}>
+        <legend>{t("filters.availabilityTitle")}</legend>
+        <div className="t-puces">
+          {(["open", "listening"] as const).map((value) => (
+            <label key={value} className={cx("t-puce t-rc-ch", !deep && "t-ri-off")}>
+              <input
+                type="radio"
+                name="dispo"
+                value={value}
+                defaultChecked={filters.availability === value}
+              />
+              {t(`filters.availability.${value}`)}
+            </label>
+          ))}
+        </div>
+      </fieldset>
+      {!deep && deepPlan && (
+        <p className="t-rc-note">{t("filters.deepLocked", { plan: deepPlan.name })}</p>
+      )}
+      <p className="t-gar">
+        <TalentIcon name="confidentialite" size="s" />
+        <span>{t("filters.guard")}</span>
+      </p>
+      {searchesLeft && <p className="t-rc-note">{t("filters.quota", searchesLeft)}</p>}
+      <div className="t-rx-feuille-bts">
+        <Link href={clearHref} className="t-bt t-sec t-m t-press">
+          {t("filters.clear")}
+        </Link>
+        <button type="submit" className="t-bt t-p t-m t-pl t-press">
+          {t("filters.submit")}
+        </button>
+      </div>
+    </form>
+  );
+
   return (
-    <div className="t-flux t-ri-talents">
-      <h1 className="sr-only">{t("title")}</h1>
-      {segments}
+    <div className="t-flux t-ri-talents t-rw-tal">
+      <div className="t-rw-h">
+        <div className="t-t">
+          <h1 className="sr-only">{t("title")}</h1>
+          <p className="t-rw-h1 t-rw-web" aria-hidden>
+            {tc("title")}
+          </p>
+          <p className="t-rw-web">{tw("sub")}</p>
+        </div>
+        {segments}
+      </div>
       <SubTabs current="talents" count={proposals} />
 
-      <form action="/app/hire/candidats" className="t-verre t-ri-rech" role="search">
-        <input type="hidden" name="vue" value="talents" />
-        {asked && <input type="hidden" name="offre" value={asked} />}
-        {filters.skills.length > 0 && (
-          <input type="hidden" name="competences" value={filters.skills.join(",")} />
-        )}
-        {filters.location && <input type="hidden" name="lieu" value={filters.location} />}
-        {filters.level && <input type="hidden" name="experience" value={filters.level} />}
-        {filters.availability && <input type="hidden" name="dispo" value={filters.availability} />}
-        {filters.remote && <input type="hidden" name="distance" value="1" />}
-        <TalentIcon name="recherche" size="s" />
-        <label htmlFor="ri-q" className="sr-only">
-          {t("search.label")}
-        </label>
-        <input
-          id="ri-q"
-          name="q"
-          type="search"
-          defaultValue={filters.q}
-          maxLength={100}
-          placeholder={t("search.placeholder")}
-          enterKeyHint="search"
-        />
-        <SheetButton
-          target="ri-filtres"
-          label={active ? t("filters.openActive", { count: active }) : t("filters.open")}
-          className="t-ri-f t-press"
-        >
-          <TalentIcon name="filtres" size="s" />
-          {active > 0 && <b aria-hidden>{active}</b>}
-        </SheetButton>
-      </form>
-
-      {chips.length > 0 && (
-        <ul className="t-ri-chips" aria-label={t("filters.active")}>
-          {chips.map((chip) => (
-            <li key={chip.label}>
-              <Link
-                href={chip.href}
-                className="t-puce t-on t-press"
-                aria-label={t("filters.remove", { filter: chip.label })}
-              >
-                {chip.label}
-                <TalentIcon name="fermer" size="xs" />
-              </Link>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {result.status === "ok" && (
-        <p className="t-ri-n">
-          {offer
-            ? t.rich("count.withOffer", {
-                count: result.total,
-                title: offer.title,
-                b: (chunks) => <b>{chunks}</b>,
-              })
-            : t("count.plain", { count: result.total })}{" "}
-          {offers.length > 0 && (
-            <SheetButton target="ri-offre" className="t-ri-lien t-press">
-              {t("offer.change")}
-            </SheetButton>
-          )}
-        </p>
-      )}
-
-      {result.status === "quota" ? (
-        <p className="t-gar t-err" role="alert">
-          <TalentIcon name="horloge" size="s" />
-          <span>{t("quota", { date: formatDayMonth(result.resetsAt) })}</span>
-        </p>
-      ) : result.status === "rateLimited" ? (
-        <p className="t-gar t-err" role="alert">
-          <TalentIcon name="horloge" size="s" />
-          <span>{t("rateLimited")}</span>
-        </p>
-      ) : result.status === "empty" ? (
-        <div className="t-verre t-rc-vide">
-          <span className="t-rc-rond" aria-hidden>
-            <TalentIcon name="recherche" />
-          </span>
-          <b>{t("empty.title")}</b>
-          <span>{t("empty.text")}</span>
-        </div>
-      ) : result.status === "ok" && cards.length === 0 ? (
-        <div className="t-verre t-rc-vide">
-          <span className="t-rc-rond" aria-hidden>
-            <TalentIcon name="candidats" />
-          </span>
-          <b>{t("none.title")}</b>
-          <span>{t("none.text")}</span>
-          {active > 0 && (
-            <Link
-              href={href({
-                competences: null,
-                lieu: null,
-                experience: null,
-                dispo: null,
-                distance: null,
-              })}
-              className="t-bt t-sec t-s t-press"
-            >
-              {t("filters.clear")}
-            </Link>
-          )}
-        </div>
-      ) : result.status === "ok" ? (
-        <NextIntlClientProvider messages={pickMessages(messages, ["hireTalents"])}>
-          <TalentList
-            key={JSON.stringify(raw)}
-            initial={cards}
-            more={result.page < result.pages}
-            load={moreTalentsAction.bind(null, raw)}
-          />
-        </NextIntlClientProvider>
-      ) : null}
-
-      <Sheet id="ri-filtres" title={t("filters.title")} closeLabel={t("filters.close")}>
-        <form action="/app/hire/candidats" className="t-ri-ff">
-          <input type="hidden" name="vue" value="talents" />
-          {asked && <input type="hidden" name="offre" value={asked} />}
-          {filters.q && <input type="hidden" name="q" value={filters.q} />}
-          <fieldset>
-            <legend>{t("filters.skills")}</legend>
-            <div className="t-puces">
-              {suggestedSkills.map((skill) => (
-                <label key={skill} className="t-puce t-rc-ch">
-                  <input
-                    type="checkbox"
-                    name="competences"
-                    value={skill}
-                    defaultChecked={filters.skills.includes(skill)}
-                  />
-                  {skill}
-                </label>
-              ))}
-            </div>
-            <div className="t-verre t-saisie">
-              <label htmlFor="ri-competence" className="sr-only">
-                {t("filters.addSkill")}
+      {/* Web: the filters on the left from 1200 px (planche `.tal-g`), the profiles on the right. */}
+      <div className="t-rw-tg">
+        <aside aria-labelledby="rw-filtres" className="t-verre t-rw-fltp t-rw-web">
+          <h2 id="rw-filtres">{tw("filters")}</h2>
+          {filterForm("rw-", true)}
+        </aside>
+        <div className="t-rw-c">
+          <div className="t-rw-srow">
+            <form action="/app/hire/candidats" className="t-verre t-ri-rech" role="search">
+              <input type="hidden" name="vue" value="talents" />
+              {asked && <input type="hidden" name="offre" value={asked} />}
+              {filters.skills.length > 0 && (
+                <input type="hidden" name="competences" value={filters.skills.join(",")} />
+              )}
+              {filters.location && <input type="hidden" name="lieu" value={filters.location} />}
+              {filters.level && <input type="hidden" name="experience" value={filters.level} />}
+              {filters.availability && (
+                <input type="hidden" name="dispo" value={filters.availability} />
+              )}
+              {filters.remote && <input type="hidden" name="distance" value="1" />}
+              <TalentIcon name="recherche" size="s" />
+              <label htmlFor="ri-q" className="sr-only">
+                {t("search.label")}
               </label>
               <input
-                id="ri-competence"
-                name="competences"
-                maxLength={60}
-                placeholder={t("filters.addSkill")}
+                id="ri-q"
+                name="q"
+                type="search"
+                defaultValue={filters.q}
+                maxLength={100}
+                placeholder={t("search.placeholder")}
+                enterKeyHint="search"
               />
-            </div>
-          </fieldset>
-          <fieldset>
-            <legend>{t("filters.place")}</legend>
-            <div className="t-puces">
-              {places.map((place) => (
-                <label key={place} className="t-puce t-rc-ch">
-                  <input
-                    type="radio"
-                    name="lieu"
-                    value={place}
-                    defaultChecked={filters.location === place}
-                  />
-                  {place}
-                </label>
-              ))}
-              <label className="t-puce t-rc-ch">
-                <input type="radio" name="lieu" value="" defaultChecked={!filters.location} />
-                {t("filters.anywhere")}
-              </label>
-              <label className={cx("t-puce t-rc-ch", !deep && "t-ri-off")}>
-                <input
-                  type="checkbox"
-                  name="distance"
-                  value="1"
-                  disabled={!deep}
-                  defaultChecked={Boolean(filters.remote)}
-                />
-                {t("filters.remote")}
-              </label>
-            </div>
-          </fieldset>
-          <fieldset disabled={!deep}>
-            <legend>{t("filters.experience")}</legend>
-            <div className="t-puces">
-              {experienceLevels.map((value) => (
-                <label key={value} className={cx("t-puce t-rc-ch", !deep && "t-ri-off")}>
-                  <input
-                    type="radio"
-                    name="experience"
-                    value={value}
-                    defaultChecked={filters.level === value}
-                  />
-                  {t(`filters.level.${value}`)}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          <fieldset disabled={!deep}>
-            <legend>{t("filters.availabilityTitle")}</legend>
-            <div className="t-puces">
-              {(["open", "listening"] as const).map((value) => (
-                <label key={value} className={cx("t-puce t-rc-ch", !deep && "t-ri-off")}>
-                  <input
-                    type="radio"
-                    name="dispo"
-                    value={value}
-                    defaultChecked={filters.availability === value}
-                  />
-                  {t(`filters.availability.${value}`)}
-                </label>
-              ))}
-            </div>
-          </fieldset>
-          {!deep && deepPlan && (
-            <p className="t-rc-note">{t("filters.deepLocked", { plan: deepPlan.name })}</p>
-          )}
-          <p className="t-gar">
-            <TalentIcon name="confidentialite" size="s" />
-            <span>{t("filters.guard")}</span>
-          </p>
-          {searchesLeft && <p className="t-rc-note">{t("filters.quota", searchesLeft)}</p>}
-          <div className="t-rx-feuille-bts">
-            <Link
-              href={href({
-                competences: null,
-                lieu: null,
-                experience: null,
-                dispo: null,
-                distance: null,
-              })}
-              className="t-bt t-sec t-m t-press"
-            >
-              {t("filters.clear")}
+              <SheetButton
+                target="ri-filtres"
+                label={active ? t("filters.openActive", { count: active }) : t("filters.open")}
+                className="t-ri-f t-press"
+              >
+                <TalentIcon name="filtres" size="s" />
+                {active > 0 && <b aria-hidden>{active}</b>}
+              </SheetButton>
+            </form>
+            <Link href="/app/hire/viviers" className="t-bt t-sec t-m t-press t-rw-web">
+              <TalentIcon name="favori" size="s" />
+              {tw("pools")}
             </Link>
-            <button type="submit" className="t-bt t-p t-m t-pl t-press">
-              {t("filters.submit")}
-            </button>
           </div>
-        </form>
+
+          {chips.length > 0 && (
+            <ul className="t-ri-chips" aria-label={t("filters.active")}>
+              {chips.map((chip) => (
+                <li key={chip.label}>
+                  <Link
+                    href={chip.href}
+                    className="t-puce t-on t-press"
+                    aria-label={t("filters.remove", { filter: chip.label })}
+                  >
+                    {chip.label}
+                    <TalentIcon name="fermer" size="xs" />
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          )}
+
+          {result.status === "ok" && (
+            <p className="t-ri-n">
+              {offer
+                ? t.rich("count.withOffer", {
+                    count: result.total,
+                    title: offer.title,
+                    b: (chunks) => <b>{chunks}</b>,
+                  })
+                : t("count.plain", { count: result.total })}{" "}
+              {offers.length > 0 && (
+                <SheetButton target="ri-offre" className="t-ri-lien t-press">
+                  {t("offer.change")}
+                </SheetButton>
+              )}
+            </p>
+          )}
+
+          {result.status === "quota" ? (
+            <p className="t-gar t-err" role="alert">
+              <TalentIcon name="horloge" size="s" />
+              <span>{t("quota", { date: formatDayMonth(result.resetsAt) })}</span>
+            </p>
+          ) : result.status === "rateLimited" ? (
+            <p className="t-gar t-err" role="alert">
+              <TalentIcon name="horloge" size="s" />
+              <span>{t("rateLimited")}</span>
+            </p>
+          ) : result.status === "empty" ? (
+            <div className="t-verre t-rc-vide">
+              <span className="t-rc-rond" aria-hidden>
+                <TalentIcon name="recherche" />
+              </span>
+              <b>{t("empty.title")}</b>
+              <span>{t("empty.text")}</span>
+            </div>
+          ) : result.status === "ok" && cards.length === 0 ? (
+            <div className="t-verre t-rc-vide">
+              <span className="t-rc-rond" aria-hidden>
+                <TalentIcon name="candidats" />
+              </span>
+              <b>{t("none.title")}</b>
+              <span>{t("none.text")}</span>
+              {active > 0 && (
+                <Link
+                  href={href({
+                    competences: null,
+                    lieu: null,
+                    experience: null,
+                    dispo: null,
+                    distance: null,
+                  })}
+                  className="t-bt t-sec t-s t-press"
+                >
+                  {t("filters.clear")}
+                </Link>
+              )}
+            </div>
+          ) : result.status === "ok" ? (
+            <NextIntlClientProvider messages={pickMessages(messages, ["hireTalents"])}>
+              <TalentList
+                key={JSON.stringify(raw)}
+                initial={cards}
+                more={result.page < result.pages}
+                load={moreTalentsAction.bind(null, raw)}
+              />
+            </NextIntlClientProvider>
+          ) : null}
+        </div>
+      </div>
+
+      <Sheet id="ri-filtres" title={t("filters.title")} closeLabel={t("filters.close")}>
+        {filterForm("ri-", false)}
       </Sheet>
 
       {offers.length > 0 && (
@@ -524,6 +563,8 @@ export async function ProposalsView({
 }) {
   const t = await getTranslations("hireTalents");
   const t6 = await getTranslations("hireTalents6");
+  const tc = await getTranslations("hireCandidates");
+  const tw = await getTranslations("hireWeb.proposals");
   const now = new Date();
   const [rows, quotas] = await Promise.all([
     orgProposals(db, ctx, now),
@@ -542,9 +583,17 @@ export async function ProposalsView({
   const contacts = quotas.contacts;
 
   return (
-    <div className="t-flux t-ri-talents">
-      <h1 className="sr-only">{t("proposals.title")}</h1>
-      {segments}
+    <div className="t-flux t-ri-talents t-rw-pps">
+      <div className="t-rw-h">
+        <div className="t-t">
+          <h1 className="sr-only">{t("proposals.title")}</h1>
+          <p className="t-rw-h1 t-rw-web" aria-hidden>
+            {tc("title")}
+          </p>
+          <p className="t-rw-web">{tw("sub")}</p>
+        </div>
+        {segments}
+      </div>
       <SubTabs current="propositions" count={rows.length} />
       {one(query.relance) === "ok" && <ToastOnLoad message={t6("remindedOk")} />}
       <nav className="t-rx-onglets" aria-label={t("proposals.filters")}>
@@ -582,9 +631,21 @@ export async function ProposalsView({
         </div>
       ) : (
         <ul className="t-verre t-ri-pp">
+          {/* Web: the proposals as a table (planche `.pp`), one column per piece of information. */}
+          <li className="t-rw-pph t-rw-web" aria-hidden>
+            <span />
+            <span>{tw("talent")}</span>
+            <span>{tw("offer")}</span>
+            <span>{tw("answer")}</span>
+            <span />
+          </li>
           {shown.map((row) => {
             const name =
               row.name ?? t("list.anonymous", { headline: row.headline || t("list.noHeadline") });
+            const date =
+              row.status === "pending"
+                ? when(row.createdAt)
+                : formatDayMonth(row.respondedAt ?? row.createdAt);
             return (
               <li key={row.id}>
                 <span className={cx("t-rc-av", avatarTone(row.profileId))} aria-hidden>
@@ -593,70 +654,81 @@ export async function ProposalsView({
                 <Link href={`/app/hire/talents/${row.profileId}`} className="t-t t-press">
                   <b>
                     <span className="t-rc-nom">{name}</span>
-                    <span className={cx("t-ri-etq", tag[row.status])}>
+                    <span className={cx("t-ri-etq t-rw-tel", tag[row.status])}>
                       {t(`proposals.status.${row.status}`)}
                     </span>
                   </b>
-                  <span>
-                    {[
-                      row.jobTitle,
-                      row.status === "pending"
-                        ? when(row.createdAt)
-                        : formatDayMonth(row.respondedAt ?? row.createdAt),
-                    ]
-                      .filter(Boolean)
-                      .join(" · ")}
+                  <span className="t-rw-tel">
+                    {[row.jobTitle, date].filter(Boolean).join(" · ")}
                   </span>
+                  {row.name && row.headline && <span className="t-rw-web">{row.headline}</span>}
                 </Link>
-                {row.canRemind && (
-                  <form action={remindProposalAction}>
-                    <input type="hidden" name="request" value={row.id} />
-                    <button
-                      type="submit"
-                      className="t-bt t-sec t-s t-press"
-                      aria-label={t6("remindAria", { name })}
+                <span className="t-rw-web t-rw-ppo">{row.jobTitle}</span>
+                <span className="t-rw-web t-rw-ppd">
+                  <span className={cx("t-ri-etq", tag[row.status])}>
+                    {t(`proposals.status.${row.status}`)}
+                  </span>
+                  {[null, date].join(" · ")}
+                </span>
+                <span className="t-rw-ppa">
+                  {row.canRemind && (
+                    <form action={remindProposalAction}>
+                      <input type="hidden" name="request" value={row.id} />
+                      <button
+                        type="submit"
+                        className="t-bt t-sec t-s t-press"
+                        aria-label={t6("remindAria", { name })}
+                      >
+                        {t6("remind")}
+                      </button>
+                    </form>
+                  )}
+                  {row.remindedAt && row.status === "pending" && (
+                    <span className="t-r6-sous">{t6("reminded")}</span>
+                  )}
+                  {row.conversationId && (
+                    <Link
+                      href={`/app/messages/${row.conversationId}`}
+                      aria-label={t("proposals.write", { name })}
+                      className="t-bi t-press"
                     >
-                      {t6("remind")}
-                    </button>
-                  </form>
-                )}
-                {row.remindedAt && row.status === "pending" && (
-                  <span className="t-r6-sous">{t6("reminded")}</span>
-                )}
-                {row.conversationId && (
-                  <Link
-                    href={`/app/messages/${row.conversationId}`}
-                    aria-label={t("proposals.write", { name })}
-                    className="t-bi t-press"
-                  >
-                    <TalentIcon name="message" size="s" />
-                  </Link>
-                )}
+                      <TalentIcon name="message" size="s" />
+                      <span className="t-rw-web" aria-hidden>
+                        {tw("write")}
+                      </span>
+                    </Link>
+                  )}
+                </span>
               </li>
             );
           })}
         </ul>
       )}
 
-      {contacts.limit >= 0 && (
-        <div className="t-verre t-ri-quota">
-          <p>
-            <b>{t("proposals.quota")}</b>
-            <span>{t("proposals.quotaValue", { used: contacts.used, max: contacts.limit })}</span>
-          </p>
-          <span
-            className="t-ri-barre"
-            role="img"
-            aria-label={t("proposals.quotaValue", { used: contacts.used, max: contacts.limit })}
-          >
-            <i
-              style={{
-                width: `${Math.min(100, (contacts.used / Math.max(1, contacts.limit)) * 100)}%`,
-              }}
-            />
-          </span>
-        </div>
-      )}
+      <div className="t-rw-ppt">
+        {contacts.limit >= 0 && (
+          <div className="t-verre t-ri-quota">
+            <p>
+              <b>{t("proposals.quota")}</b>
+              <span>{t("proposals.quotaValue", { used: contacts.used, max: contacts.limit })}</span>
+            </p>
+            <span
+              className="t-ri-barre"
+              role="img"
+              aria-label={t("proposals.quotaValue", { used: contacts.used, max: contacts.limit })}
+            >
+              <i
+                style={{
+                  width: `${Math.min(100, (contacts.used / Math.max(1, contacts.limit)) * 100)}%`,
+                }}
+              />
+            </span>
+          </div>
+        )}
+        <p className="t-verre t-rw-ppi t-rw-web">
+          <span>{tw.rich("info", { b: (chunks) => <b>{chunks}</b> })}</span>
+        </p>
+      </div>
     </div>
   );
 }

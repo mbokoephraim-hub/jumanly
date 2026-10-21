@@ -11520,6 +11520,11 @@
         "invalid": "Notez chaque critère et choisissez une suite.",
         "other": "L'évaluation n'a pas pu être enregistrée. Réessayez."
       }
+    },
+    "planWeb": {
+      "sub": "Jusqu'à {max} créneaux, {firstName} choisit",
+      "dayTeam": "{day} · équipe",
+      "previewSub": "Ce que {firstName} reçoit, avant l'envoi"
     }
   },
   "hireTalents": {
@@ -12494,6 +12499,76 @@
         "deadline": "Limite {date}",
         "noDeadline": "Sans date limite"
       }
+    },
+    "candidates": {
+      "sub": "{offer} · {count, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}}",
+      "sortFilter": "Trier et filtrer",
+      "sortFilterActive": "Trier et filtrer · {count}",
+      "sortedNote": "un filtre ne rejette personne",
+      "atsLine": "{count, plural, one {<b># candidature</b> pas encore analysée.} other {<b># candidatures</b> pas encore analysées.}} Orbi peut les classer : vous gardez la décision.",
+      "atsDone": "Le classement d'Orbi est prêt, avec le pourquoi de chaque place : vous gardez la décision.",
+      "analyze": "Analyser",
+      "pickTitle": "Choisissez une candidature",
+      "pickText": "Son dossier s'ouvre ici, sans quitter la liste. L'ouverture est enregistrée dans l'historique.",
+      "waiting": "En attendant",
+      "pools": "Ouvrir vos viviers",
+      "poolsText": "Les talents gardés pour plus tard",
+      "offer": "Revoir l'offre",
+      "offerText": "Description, étapes et diffusion"
+    },
+    "pane": {
+      "aria": "Dossier de {name}",
+      "interview": "Entretien",
+      "write": "Écrire",
+      "open": "Ouvrir le dossier complet de {name}",
+      "close": "Fermer le dossier",
+      "noAnalysis": "Orbi n'a pas encore résumé ce dossier. Le résumé se demande depuis le dossier complet."
+    },
+    "file": {
+      "crumb": "Candidatures · {offer}",
+      "actions": "Actions",
+      "more": "Plus d'actions",
+      "pager": "Candidature {index} sur {total}",
+      "pagerAria": "Parcourir les candidatures de l'offre",
+      "prev": "Candidature précédente",
+      "next": "Candidature suivante",
+      "ask": "Demander à Orbi",
+      "askLabel": "Votre question à Orbi",
+      "askSend": "Envoyer la question"
+    },
+    "decision": {
+      "message": "Message au candidat",
+      "received": "Ce que {firstName} a reçu",
+      "receivedFrom": "{company} · {job}",
+      "pool": "Vivier mis à jour",
+      "poolOpen": "Ouvrir le vivier « {name} »",
+      "poolCount": "{count, plural, =0 {Aucun talent} one {# talent} other {# talents}}"
+    },
+    "agenda": {
+      "toEvaluate": "À évaluer",
+      "eventAria": "{name}, {when}, {status}",
+      "seeAll": "Tout voir"
+    },
+    "talents": {
+      "sub": "Rechercher des talents · profils rendus visibles",
+      "filters": "Filtrer les talents",
+      "compare": "Comparer à l'offre",
+      "pools": "Viviers"
+    },
+    "proposals": {
+      "sub": "Rechercher des talents · vos propositions d'offre",
+      "talent": "Talent",
+      "offer": "Offre proposée",
+      "answer": "Réponse",
+      "write": "Écrire",
+      "info": "<b>Acceptée</b> : la conversation s'ouvre dans Messages. <b>Refusée</b> : sans détail, rien à faire."
+    },
+    "profile": {
+      "crumb": "Rechercher des talents"
+    },
+    "pools": {
+      "sub": "Talents gardés pour plus tard",
+      "crumb": "Viviers"
     }
   },
   "hire": {

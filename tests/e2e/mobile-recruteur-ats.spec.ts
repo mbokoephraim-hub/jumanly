@@ -232,6 +232,8 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
       page.getByText("Relance envoyée. Le talent décide toujours.").first(),
     ).toBeVisible();
   }
+  // Both projects may remind the same proposal at once: read the saved state afresh.
+  await page.reload();
   await expect(proposals.getByText("Relancé", { exact: true }).first()).toBeVisible();
   await noOverflow(page, "propositions");
 });

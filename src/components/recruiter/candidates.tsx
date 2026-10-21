@@ -96,9 +96,11 @@ export function FileSection({
   title,
   aside,
   open,
+  className,
   children,
 }: {
   id?: string;
+  className?: string;
   icon: ReactNode;
   tone: "former" | "accomp" | "oppo";
   title: string;
@@ -107,7 +109,7 @@ export function FileSection({
   children: ReactNode;
 }) {
   return (
-    <details id={id} className="t-verre t-sect t-rc-sect" open={open}>
+    <details id={id} className={cx("t-verre t-sect t-rc-sect", className)} open={open}>
       <summary className="t-sh">
         <span className={cx("t-cases", `t-g-${tone}`)} aria-hidden>
           {icon}

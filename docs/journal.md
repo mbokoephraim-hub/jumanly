@@ -2,6 +2,52 @@
 
 Une entrée par étape : ce qui a été fait, les décisions prises, les dettes à rembourser.
 
+## Étape 2, recruteur web lot 2 : candidats, dossier, décision, entretiens, talents (21 octobre 2026)
+
+Planche `docs/refonte-web/recruteur-2` (w0 à w6), ordinateur (1440 px) et tablette (1024 px),
+clair et sombre ; le téléphone (390 px) est identique au pixel près (comparaison avant/après de
+15 écrans, clair et sombre). Choix et écarts : `docs/decisions/2026-10-21-recruteur-web-lot-2.md`.
+
+**Mise en place.** Une feuille `src/styles/recruiter-web-2.css` : sous 768 px les enveloppes web
+s'effacent (`display: contents`), ce qui n'existe que sur ordinateur est masqué (`t-rw-web`,
+`t-rw-w`), l'inverse au-delà (`t-rw-tel`, `t-rw-m`). Le dossier ouvert à côté de la liste
+(`CandidatePane`) partage ses morceaux avec le dossier complet (`file-parts.tsx`) ; il enregistre
+la consultation comme lui (`recordView`, filtré par organisation).
+
+**Écran mobile → équivalent web** :
+
+| Téléphone (lot mobile) | Ordinateur et tablette |
+|---|---|
+| Candidats : offre, segments, ATS, ligne d'Orbi, puces d'étape, liste, Trier (feuille) | Tête + segments ; offre et « Trier et filtrer » (fenêtre ancrée) ; une ligne d'Orbi ; liste + dossier côte à côte (≥ 1200 px), liste en 2 colonnes (tablette) |
+| Candidats vides (En attendant, rechercher des talents) | Carte vide + « En attendant » (recherche, viviers, offre) en 2 colonnes |
+| Dossier (Orbi, documents, compétences, pièces, réponses, évaluation, notes, historique, barre du bas, menu « … ») | Fil, 2 colonnes, Actions en carte avec « Plus d'actions », « Candidature n sur N » |
+| Pourquoi ? · Changer d'étape · Lettre (feuilles) | Mêmes fenêtres, depuis le dossier complet ou le dossier ouvert à côté |
+| Analyse d'Orbi (feuille) | Panneau à droite avec « Demander à Orbi » |
+| Décision (choix, message, ton, motif, appel, vivier, envoi) et confirmation | 2 colonnes ; confirmation en carte + « Ce que X a reçu » et « Vivier mis à jour » |
+| Agenda semaine (bande des jours, groupes par jour, en attente) | Grille horaire de la semaine + colonne (en attente, À évaluer, Orbi) ; « Proposer un entretien » dans la barre |
+| Agenda mois, À évaluer | Grilles |
+| Proposer un entretien : jour, puis heures, puis aperçu | Jour et heures sur un écran, aperçu à côté du message |
+| Préparer l'entretien, Évaluer | 2 colonnes, barre dans la page |
+| Rechercher des talents, Filtres (feuille), Changer d'offre | Filtres ouverts à gauche (≥ 1200 px, feuille sur tablette), « Viviers », profils en 2 colonnes |
+| Mes propositions (puces, lignes, Relancer, Écrire, jauge) | Tableau Talent · Offre · Réponse · action, jauge et règle au-dessus |
+| Profil d'un talent (couverture, chiffres, Orbi, compétences, projets, parcours, barre du bas, menu « … ») | Carte de tête avec Vivier · Proposer l'offre · menu, 2 colonnes |
+| Proposer l'offre | Carte centrée |
+| Mes viviers, Créer un vivier, un vivier, son menu | Tête avec « Créer un vivier », cartes en grille ; vivier en grille, menu en tête |
+
+**Tests.** e2e `tests/e2e/web-recruteur-2.spec.ts` (dossier ouvert à côté et enregistré, Changer
+d'étape depuis la liste, dossier en 2 colonnes, décision, calendrier sans étape « Heures », agenda,
+filtres à gauche, propositions en tableau, viviers ; tablette). Les parcours du téléphone passent
+par `tests/e2e/hire-wide.ts` dans le projet « desktop » (dossier ouvert depuis le panneau,
+calendrier sans « Heures ») : `hire.spec.ts`, `hire-advanced.spec.ts`,
+`mobile-recruteur-candidats`, `-entretiens`, `-gerer`.
+
+**Captures.** `captures/refonte-recruteur-web-2/` du dossier du projet : 16 écrans à 1440, 1024
+et 390 px, clair et sombre.
+
+**Reste.** Panneau Orbi depuis tout écran (lot web recruteur 3) ; administration de l'entreprise
+(étape 3). Deux défauts du téléphone (boutons fins de la fenêtre d'analyse, champ d'avis de
+l'évaluation) attendent leur lot mobile : corrigés seulement au-delà de 768 px.
+
 ## Étape 2, recruteur web lot 1 : cadre, À traiter, offres, création, détail (21 octobre 2026)
 
 Planche `docs/refonte-web/recruteur-1`, ordinateur (1440 px) et tablette (1024 px), clair et

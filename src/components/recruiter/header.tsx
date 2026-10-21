@@ -24,7 +24,7 @@ export type RecruiterHeaderLabels = {
 };
 
 /** Destinations whose page draws its own head on a computer or a tablet (planche web recruteur-1). */
-const webHead = ["/app/hire", "/app/hire/offres"];
+const webHead = ["/app/hire", "/app/hire/offres", "/app/hire/candidats"];
 
 /** Recruiter pages that draw their own head, on top of the shared ones of the talent space. */
 function ownRecruiterHead(pathname: string) {

@@ -72,93 +72,99 @@ export function EvaluationForm({
     >
       <input type="hidden" name="application" value={applicationId} />
       <input type="hidden" name="back" value={back} />
-      <h2 className="t-lab-c">{t("criteria")}</h2>
-      {criteria.map((criterion, index) => (
-        <fieldset key={criterion.name} className="t-verre t-ri-crit">
-          <input type="hidden" name="criterion" value={criterion.name} />
-          <legend>
-            <b>{criterion.name}</b>
-            {criterion.description && <span>{criterion.description}</span>}
-          </legend>
-          <div className="t-ri-notes" role="radiogroup" aria-label={criterion.name}>
-            {Array.from({ length: max }, (_, step) => String(step + 1)).map((value) => (
-              <label key={value} className="t-press">
-                <input
-                  type="radio"
-                  name={`rating-${index}`}
-                  value={value}
-                  required
-                  checked={draft.ratings[criterion.name] === value}
-                  onChange={() =>
-                    setDraft((current) => ({
-                      ...current,
-                      ratings: { ...current.ratings, [criterion.name]: value },
-                    }))
-                  }
-                />
-                <b>{value}</b>
-                <span className="sr-only">{t(`rating.${value as "1"}`)}</span>
-              </label>
-            ))}
-          </div>
-          <span className="t-ri-echelle" aria-hidden>
-            <span>{t("rating.1")}</span>
-            <span>{t(`rating.${String(max) as "4"}`)}</span>
-          </span>
-        </fieldset>
-      ))}
-
-      <div className="t-champ">
-        <label htmlFor="ri-avis">{t("opinion")}</label>
-        <div className="t-verre t-saisie">
-          <textarea
-            id="ri-avis"
-            name="comment"
-            rows={4}
-            maxLength={2000}
-            placeholder={t("opinionPlaceholder")}
-            value={draft.comment}
-            onChange={(event) =>
-              setDraft((current) => ({ ...current, comment: event.target.value }))
-            }
-          />
-        </div>
-      </div>
-
-      <fieldset className="t-ri-suite-f">
-        <legend className="t-lab-c">{t("next")}</legend>
-        <div className="t-ri-suites">
-          {(["no", "yes", "maybe"] as const).map((value) => (
-            <label key={value} className={cx("t-press", `t-${value}`)}>
-              <input
-                type="radio"
-                name="suite"
-                value={value}
-                required
-                checked={draft.suite === value}
-                onChange={() => setDraft((current) => ({ ...current, suite: value }))}
-              />
-              <span className="t-cases" aria-hidden>
-                <TalentIcon
-                  name={value === "yes" ? "valider" : value === "no" ? "fermer" : "pourquoi"}
-                  size="s"
-                />
+      {/* Web: the criteria on the left, the opinion and what comes next on the right. */}
+      <div className="t-rw-evf">
+        <div>
+          <h2 className="t-lab-c">{t("criteria")}</h2>
+          {criteria.map((criterion, index) => (
+            <fieldset key={criterion.name} className="t-verre t-ri-crit">
+              <input type="hidden" name="criterion" value={criterion.name} />
+              <legend>
+                <b>{criterion.name}</b>
+                {criterion.description && <span>{criterion.description}</span>}
+              </legend>
+              <div className="t-ri-notes" role="radiogroup" aria-label={criterion.name}>
+                {Array.from({ length: max }, (_, step) => String(step + 1)).map((value) => (
+                  <label key={value} className="t-press">
+                    <input
+                      type="radio"
+                      name={`rating-${index}`}
+                      value={value}
+                      required
+                      checked={draft.ratings[criterion.name] === value}
+                      onChange={() =>
+                        setDraft((current) => ({
+                          ...current,
+                          ratings: { ...current.ratings, [criterion.name]: value },
+                        }))
+                      }
+                    />
+                    <b>{value}</b>
+                    <span className="sr-only">{t(`rating.${value as "1"}`)}</span>
+                  </label>
+                ))}
+              </div>
+              <span className="t-ri-echelle" aria-hidden>
+                <span>{t("rating.1")}</span>
+                <span>{t(`rating.${String(max) as "4"}`)}</span>
               </span>
-              {t(`suite.${value}`)}
-            </label>
+            </fieldset>
           ))}
         </div>
-      </fieldset>
+        <div>
+          <div className="t-champ">
+            <label htmlFor="ri-avis">{t("opinion")}</label>
+            <div className="t-verre t-saisie">
+              <textarea
+                id="ri-avis"
+                name="comment"
+                rows={4}
+                maxLength={2000}
+                placeholder={t("opinionPlaceholder")}
+                value={draft.comment}
+                onChange={(event) =>
+                  setDraft((current) => ({ ...current, comment: event.target.value }))
+                }
+              />
+            </div>
+          </div>
 
-      {children}
+          <fieldset className="t-ri-suite-f">
+            <legend className="t-lab-c">{t("next")}</legend>
+            <div className="t-ri-suites">
+              {(["no", "yes", "maybe"] as const).map((value) => (
+                <label key={value} className={cx("t-press", `t-${value}`)}>
+                  <input
+                    type="radio"
+                    name="suite"
+                    value={value}
+                    required
+                    checked={draft.suite === value}
+                    onChange={() => setDraft((current) => ({ ...current, suite: value }))}
+                  />
+                  <span className="t-cases" aria-hidden>
+                    <TalentIcon
+                      name={value === "yes" ? "valider" : value === "no" ? "fermer" : "pourquoi"}
+                      size="s"
+                    />
+                  </span>
+                  {t(`suite.${value}`)}
+                </label>
+              ))}
+            </div>
+          </fieldset>
 
-      <div className="t-verre t-fort t-bas-f t-ri-bas">
-        <button type="button" onClick={keep} className="t-bt t-sec t-m t-press">
-          {t("draft")}
-        </button>
-        <button type="submit" className="t-bt t-p t-m t-pl t-press">
-          {t("save")}
-        </button>
+          {children}
+
+          <div className="t-verre t-fort t-bas-f t-ri-bas t-rw-st">
+            <button type="button" onClick={keep} className="t-bt t-sec t-m t-press">
+              {t("draft")}
+            </button>
+            <button type="submit" className="t-bt t-p t-m t-pl t-press">
+              {t("save")}
+            </button>
+          </div>
+        </div>
       </div>
     </form>
   );

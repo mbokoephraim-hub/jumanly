@@ -3,6 +3,7 @@ import { expectAccessible } from "./a11y";
 import { expect, test, type Browser, type Page } from "./fixtures";
 import { fillOffer, publishFilledOffer, slugOf } from "./offer-flow";
 import { logIn, testEmail } from "./session";
+import { openCandidateFile } from "./hire-wide";
 
 // Recruiter space, lot 3 (docs/refonte-mobile, brief recruteur § 4 item 3, planches recruteur-2
 // § 1-3 and r2plus): the candidates by stage and their sort, the file, the notes, the score and its
@@ -119,14 +120,13 @@ test("candidats : liste et tri, dossier, analyse Orbi, étape, décision annulé
   await expect(main(page).getByRole("link", { name: /Jean-Pierre Démo/ })).toBeVisible();
 
   // The file: opening it is logged; the track shows « Reçue » now.
-  await main(page)
-    .getByRole("link", { name: /Jean-Pierre Démo/ })
-    .click();
-  await expect(page).toHaveURL(/\/app\/hire\/candidats\/[^/?]+$/);
+  await openCandidateFile(page, /Jean-Pierre Démo/);
   const fileUrl = page.url();
   const file = main(page);
   await expect(file.getByRole("heading", { level: 2, name: "Jean-Pierre Démo" })).toBeVisible();
-  await expect(file.locator('[aria-current="step"]')).toContainText("Reçue");
+  await expect(file.locator('[aria-current="step"]').filter({ visible: true })).toContainText(
+    "Reçue",
+  );
   await expectAccessible(page);
 
   // « Pourquoi ? »: a fixed calculation, the excluded data said.
@@ -148,7 +148,9 @@ test("candidats : liste et tri, dossier, analyse Orbi, étape, décision annulé
   await expect(page.locator("#notes")).toContainText("À vérifier en entretien");
   await expect(page.locator("#historique")).toContainText("Orbi a résumé le dossier");
   // The analysis moved nothing.
-  await expect(main(page).locator('[aria-current="step"]')).toContainText("Reçue");
+  await expect(main(page).locator('[aria-current="step"]').filter({ visible: true })).toContainText(
+    "Reçue",
+  );
 
   // « Changer d'étape »: the talent sees the new stage, no message is sent.
   await page.getByRole("button", { name: "Changer d'étape" }).click();
@@ -157,7 +159,9 @@ test("candidats : liste et tri, dossier, analyse Orbi, étape, décision annulé
   await move.locator("label").filter({ hasText: "En examen" }).click();
   await move.getByRole("button", { name: "Déplacer", exact: true }).click();
   await expect(page).toHaveURL(/ok=deplacee/);
-  await expect(main(page).locator('[aria-current="step"]')).toContainText("En examen");
+  await expect(main(page).locator('[aria-current="step"]').filter({ visible: true })).toContainText(
+    "En examen",
+  );
   const threadHref = await page
     .getByRole("link", { name: "Envoyer un message" })
     .getAttribute("href");
@@ -194,7 +198,9 @@ test("candidats : liste et tri, dossier, analyse Orbi, étape, décision annulé
   await main(page).getByRole("button", { name: "Annuler", exact: true }).click();
   await expect(page).toHaveURL(/ok=annulee/);
   expect(page.url().split("?")[0]).toBe(fileUrl);
-  await expect(main(page).locator('[aria-current="step"]')).toContainText("En examen");
+  await expect(main(page).locator('[aria-current="step"]').filter({ visible: true })).toContainText(
+    "En examen",
+  );
   await expect(page.locator("#historique")).toContainText("a annulé la décision");
   await talent.reload();
   await expect(talent.getByRole("main")).toContainText("Message retiré par l'entreprise.");
@@ -212,9 +218,7 @@ test("RH sans analyse : le dossier reste lisible, Orbi est proposé avec sa form
   const { jobId, talent } = await offerWithApplicant(page, browser, baseURL, isMobile);
   await talent.context().close();
   await page.goto(`/app/hire/candidats?offre=${jobId}`);
-  await main(page)
-    .getByRole("link", { name: /Jean-Pierre Démo/ })
-    .click();
+  await openCandidateFile(page, /Jean-Pierre Démo/);
   const orbi = page.locator("#orbi");
   await expect(orbi).toContainText("Résumé et analyse par Orbi");
   await expect(orbi).toContainText("Disponibles dès");
@@ -242,10 +246,7 @@ test("les écrans des candidats ne débordent jamais à 390 et 412 px, même ave
   );
   await talent.context().close();
   await page.goto(`/app/hire/candidats?offre=${jobId}`);
-  await main(page)
-    .getByRole("link", { name: /Jean-Pierre Démo/ })
-    .click();
-  await expect(page).toHaveURL(/\/app\/hire\/candidats\/[^/?]+$/);
+  await openCandidateFile(page, /Jean-Pierre Démo/);
   const file = page.url().split("?")[0]!;
   await page.getByRole("button", { name: "Résumer avec Orbi" }).click();
   await expect(page.getByRole("dialog", { name: "Analyse du dossier" })).toBeVisible();

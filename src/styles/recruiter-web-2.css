@@ -1,0 +1,1316 @@
+/*
+ * Espace recruteur sur ordinateur et tablette · lot web recruteur 2 (docs/refonte-web, planche
+ * recruteur-2, générateur webr2.py) : candidats avec la liste et le dossier côte à côte, dossier en
+ * deux colonnes, étapes et décision, agenda en semaine, talents avec les filtres à gauche,
+ * propositions en tableau, viviers. Sous 768 px, rien ne change : les enveloppes s'effacent
+ * (`display: contents`), ce qui n'existe que sur ordinateur est masqué (`t-rw-web`, `t-rw-w`) et
+ * ce qui n'existe que sur téléphone l'est au-delà (`t-rw-tel`, `t-rw-m`).
+ */
+
+/* ── Aides communes ── */
+@media (max-width: 767.98px) {
+  .t-rw-ats,
+  .t-rw-lst,
+  .t-rw-tlb,
+  .t-rw-m,
+  .t-rw-d2,
+  .t-rw-d2 > div,
+  .t-rw-ok,
+  .t-rw-ok > div,
+  .t-rw-agg,
+  .t-rw-agg > div,
+  .t-rw-pg,
+  .t-rw-pg > div,
+  .t-rw-tg,
+  .t-rw-tp,
+  .t-rw-tp > div,
+  .t-rw-evf,
+  .t-rw-evf > div,
+  .t-rw-srow,
+  .t-rw-tpw,
+  .t-rw-ppa,
+  .t-rw-ppt {
+    display: contents;
+  }
+  /* L'en-tête du tableau des propositions n'existe pas sur téléphone : pas de trait au-dessus de
+     la première ligne. */
+  .t-ri-pp > .t-rw-pph + li {
+    border-top: 0;
+  }
+  .t-rw-web,
+  .t-rw-w {
+    display: none !important;
+  }
+  /* Le titre de la page : lu sur téléphone, montré sur ordinateur. */
+  .t-rw-sr {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+}
+@media (min-width: 768px) {
+  .t-rw-tel,
+  .t-rw-m {
+    display: none !important;
+  }
+  .t-rw-w {
+    display: contents;
+  }
+  /* Une barre d'action posée dans la page (plus fixée en bas). */
+  .t-cadre .t-rw-st,
+  .t-cadre .t-rw-st.t-verre {
+    position: static;
+    left: auto;
+    right: auto;
+    bottom: auto;
+    transform: none;
+    width: auto;
+    max-width: none;
+    padding: 0;
+    justify-content: flex-end;
+    border-radius: 0;
+    background: none;
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-cadre .t-rw-st {
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+  .t-cadre .t-rw-st .t-bt,
+  .t-cadre .t-rw-st .t-bt.t-sec.t-m {
+    flex: none;
+    min-width: 140px;
+    height: 46px;
+  }
+  .t-cadre .t-flux:has(.t-rw-st),
+  .t-cadre .t-flux.t-rc-dos {
+    padding-bottom: 0;
+  }
+  /* Petite étiquette en capitales (planche `.lab`). */
+  .t-rw-k {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+  }
+  /* Le fil d'Ariane (planche `.crumb`). */
+  .t-rw-crumb {
+    display: inline-flex;
+    align-self: flex-start;
+    align-items: center;
+    gap: 8px;
+    min-height: 32px;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--texte2);
+  }
+  .t-rw-crumb svg {
+    transform: scaleX(-1);
+  }
+  .t-rw-crumb:hover {
+    color: var(--texte);
+  }
+  .t-rw-h > .t-seg {
+    flex: none;
+    min-width: 340px;
+    align-self: center;
+  }
+  .t-rw-h > .t-seg > a {
+    padding: 10px 18px;
+  }
+  .t-rw-acts {
+    flex: none;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  /* Une fenêtre ancrée sous le bouton qui l'ouvre, son titre gardé (planche `.pop-t`). */
+  .t-sheet.t-rw-pop {
+    inset: var(--t-ancre-y, 120px) auto auto var(--t-ancre-x, 50%);
+    margin: 0;
+    width: 380px;
+    max-width: calc(100vw - 32px);
+    height: fit-content;
+    max-height: calc(100dvh - 32px);
+    padding: 16px 18px;
+    gap: 10px;
+    border-radius: 24px;
+    box-shadow:
+      0 40px 80px -30px rgba(0, 0, 0, 0.5),
+      0 0 0 1px var(--trait);
+  }
+  .t-sheet.t-rw-pop::backdrop {
+    background: transparent;
+  }
+  .t-sheet.t-rw-pop h2 {
+    font-size: 15px;
+  }
+  .t-sheet.t-rw-pop .t-poignee {
+    display: none;
+  }
+  /* Les vignettes des documents occupent toute leur carte, bouton compris. */
+  .t-rc-doc > .t-pg,
+  .t-rc-doc > .t-t {
+    width: 100%;
+  }
+}
+
+/* ── 1. Candidats : la liste et le dossier côte à côte (planche `.ats`) ── */
+/* Le dossier à côté n'existe qu'à partir de 1200 px ; en dessous, la ligne mène au dossier. */
+.t-rw-pane,
+.t-rw-pick {
+  display: none;
+}
+@media (min-width: 768px) {
+  .t-rw-cands .t-rw-h .t-t > p {
+    margin-top: 6px;
+    font-size: 14px;
+    color: var(--texte2);
+  }
+  .t-rw-tlb {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+  }
+  .t-rw-tlb > .t-rc-off {
+    width: auto;
+    flex: 0 1 380px;
+    min-width: 0;
+    min-height: 56px;
+    padding: 10px 16px;
+    border-radius: 20px;
+  }
+  .t-rw-tlb > .t-bt {
+    flex: none;
+  }
+  .t-rw-cands .t-rx-orbi {
+    padding: 12px 14px 12px 16px;
+    font-size: 13.5px;
+  }
+  .t-rw-ats {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+  .t-rw-lst {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    min-width: 0;
+  }
+  .t-rw-lst .t-rc-tri-h {
+    margin-top: 0;
+  }
+  .t-rw-lst .t-rc-liste {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+  .t-rw-lst .t-rc-cl {
+    height: 100%;
+    padding: 14px 16px;
+    border-radius: 22px;
+  }
+  /* Rien encore : la carte vide et « En attendant » à côté (planche `.ats` vide). */
+  .t-rw-vg {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-rw-vg .t-rc-vide {
+    justify-content: center;
+    min-height: 260px;
+    padding: 40px 30px;
+    border-radius: 28px;
+  }
+  .t-rw-vg .t-rw-c {
+    gap: 10px;
+  }
+}
+@media (min-width: 1200px) {
+  .t-rw-ats {
+    grid-template-columns: 360px minmax(0, 1fr);
+  }
+  .t-rw-lst .t-rc-liste {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-rw-lst .t-rc-cl[aria-current] {
+    box-shadow:
+      inset 0 0 0 2px #0f3f37,
+      var(--verre);
+  }
+  .sombre .t-rw-lst .t-rc-cl[aria-current] {
+    box-shadow:
+      inset 0 0 0 2px #a6f26b,
+      var(--verre);
+  }
+  .t-rw-vg {
+    grid-template-columns: minmax(0, 1.75fr) minmax(0, 1fr);
+  }
+  /* Le dossier ouvert à côté (planche `.dos`). */
+  .t-rw-pane {
+    position: sticky;
+    top: 16px;
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    min-width: 0;
+    padding: 20px;
+    border-radius: 28px;
+    animation: t-rc-in 0.3s var(--ease, ease) backwards;
+  }
+  .t-rw-pane .t-rc-id {
+    padding: 0;
+  }
+  .t-rw-pane .t-rc-id h2 {
+    font-size: 20px;
+  }
+  .t-rw-pane .t-rc-id p {
+    font-size: 13px;
+  }
+  .t-rw-pane .t-rc-orbi {
+    padding: 16px;
+  }
+  .t-rw-pane .t-rc-doc .t-pg {
+    height: 96px;
+  }
+  .t-rw-pbar {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .t-rw-pbar > .t-bt {
+    flex: none;
+  }
+  .t-rw-pbar > .t-rc-bar-etat {
+    flex: 1;
+    padding: 0;
+  }
+  .t-rw-pbar > .t-rw-ouvrir {
+    margin-left: auto;
+    width: 44px;
+    height: 44px;
+  }
+  .t-rw-pick {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    min-height: 360px;
+    padding: 30px;
+    border-radius: 28px;
+    text-align: center;
+  }
+  .t-rw-pick b {
+    font-size: 16px;
+  }
+  .t-rw-pick > span:not(.t-rc-rond) {
+    max-width: 320px;
+    font-size: 13px;
+    color: var(--texte2);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .t-rw-pane {
+    animation: none;
+  }
+}
+
+/* ── 2. Le dossier en deux colonnes (planche `.dosw`) ── */
+@media (min-width: 768px) {
+  .t-rw-dos > .t-tete-f {
+    display: none;
+  }
+  .t-rw-dos > .t-rc-top {
+    padding: 20px 24px 16px;
+    border-radius: 28px;
+  }
+  .t-rw-dos > .t-rc-top .t-rc-id h2 {
+    font-size: 22px;
+  }
+  .t-rw-dos > .t-rc-top .t-rc-id p {
+    font-size: 13px;
+  }
+  .t-rw-d2 {
+    grid-template-columns: minmax(0, 1.45fr) minmax(0, 1fr);
+    gap: 16px;
+  }
+  .t-rw-d2 .t-rc-orbi {
+    padding: 16px 18px;
+    font-size: 13px;
+  }
+  .t-rw-d2 .t-rc-doc .t-pg {
+    height: 100px;
+  }
+  /* « Actions » : la barre du téléphone devient une carte (planche `.act-c`). */
+  .t-cadre .t-rw-d2 .t-rc-bar {
+    position: static;
+    left: auto;
+    bottom: auto;
+    z-index: auto;
+    transform: none;
+    width: auto;
+    max-width: none;
+    flex-direction: column;
+    align-items: stretch;
+    gap: 8px;
+    padding: 14px 16px 16px;
+    border-radius: 24px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+  .t-rw-d2 .t-rc-bar > .t-rw-k {
+    padding: 0 2px 2px;
+  }
+  .t-rw-d2 .t-rc-bar > .t-bt {
+    flex: none;
+    width: 100%;
+    height: 46px;
+  }
+  .t-rw-d2 .t-rc-bar > .t-rc-bar-etat {
+    flex: none;
+    padding: 8px 2px;
+    white-space: normal;
+  }
+  .t-rw-d2 .t-rc-bar .t-bi {
+    width: 100%;
+    height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--zone);
+    box-shadow: none;
+    font: inherit;
+    font-size: 13.5px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+  .t-rw-d2 .t-rc-bar .t-bi:hover {
+    background: var(--piste);
+  }
+  /* « Candidature 1 sur 24 » (planche `.nav-c`). */
+  .t-rw-pager {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 10px;
+    padding: 0 2px;
+    font-size: 12.5px;
+    color: var(--texte2);
+  }
+  .t-rw-pager .t-bi {
+    width: 36px;
+    height: 36px;
+  }
+  .t-rw-pager .t-ri-prec svg {
+    transform: scaleX(-1);
+  }
+  .t-rw-pager .t-off {
+    opacity: 0.4;
+    box-shadow: none;
+  }
+  /* Le panneau d'Orbi : une question en bas (planche `.op .ask`). */
+  .t-sheet.t-rx-op > * {
+    flex-shrink: 0;
+  }
+  .t-sheet.t-rx-op .t-rx-feuille-bts .t-bt.t-m {
+    height: 46px;
+    padding: 0 18px;
+  }
+  .t-sheet .t-rw-ask {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 8px;
+    margin-top: auto;
+    padding: 6px 6px 6px 16px;
+    border-radius: 999px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-sheet .t-rw-ask input {
+    flex: 1;
+    width: auto;
+    height: auto;
+    padding: 0;
+    box-shadow: none;
+    text-align: left;
+    min-width: 0;
+    min-height: 36px;
+    border: 0;
+    background: none;
+    font: inherit;
+    font-size: 13.5px;
+    color: var(--texte);
+  }
+  .t-rw-ask input:focus {
+    outline: none;
+  }
+  .t-rw-ask:focus-within {
+    box-shadow:
+      var(--verre),
+      0 0 0 2px var(--texte);
+  }
+  .t-rw-ask .t-bi {
+    width: 38px;
+    height: 38px;
+    border: 0;
+    background: var(--sapin);
+    color: #c8f59e;
+    cursor: pointer;
+  }
+  .sombre .t-rw-ask .t-bi {
+    background: var(--lime);
+    color: #0f3f37;
+  }
+}
+@media (min-width: 1200px) {
+  .t-rw-d2 {
+    grid-template-columns: minmax(0, 1fr) 330px;
+    gap: 18px;
+  }
+}
+
+/* ── 3. Étapes et décision (planches `DECIS`, `DECIS_OK` web) ── */
+/* La confirmation garde le texte du lot mobile sous ses enveloppes. */
+.t-rw-ok > div > p {
+  color: var(--texte2);
+  font-size: 13.5px;
+  max-width: 300px;
+}
+@media (max-width: 767.98px) {
+  /* Dans le formulaire, l'écart entre les cartes du haut reste celui de la page (14 px). */
+  .t-rc-dec-f .t-rc-dec-h,
+  .t-rc-dec-f .t-rc-evs {
+    margin-bottom: 2px;
+  }
+}
+@media (min-width: 768px) {
+  .t-rw-decp > .t-tete-f {
+    display: none;
+  }
+  .t-rw-decp > .t-rw-h .t-t {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .t-rw-decp > .t-rw-h .t-t > p {
+    margin-top: 2px;
+  }
+  .t-rw-dec {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-rw-dec > .t-rw-c {
+    gap: 12px;
+  }
+  .t-rw-dec .t-rc-dec-h {
+    padding: 16px 20px;
+    border-radius: 24px;
+  }
+  .t-rw-dec .t-rc-mini .t-t b {
+    font-size: 15px;
+  }
+  .t-rw-dec .t-rc-evs > div {
+    padding: 12px 14px;
+  }
+  .t-rw-dec .t-rc-res > a {
+    min-height: 120px;
+  }
+  .t-rw-dec .t-bas-f {
+    margin-top: 4px;
+  }
+  /* Décision enregistrée : une carte en deux colonnes (planche `.dec-ok`). */
+  .t-rw-fait {
+    align-items: stretch;
+    text-align: left;
+  }
+  .t-rw-ok {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 22px;
+    padding: 30px;
+    border-radius: 30px;
+    background: linear-gradient(140deg, #f2fce6, #ddf6ee);
+  }
+  .sombre .t-rw-ok {
+    background: linear-gradient(140deg, rgba(166, 242, 107, 0.14), rgba(47, 211, 166, 0.06));
+  }
+  .t-rw-ok > div {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+    min-width: 0;
+  }
+  .t-rw-ok .t-rond-ok {
+    width: 88px;
+    height: 88px;
+    margin-top: 0;
+  }
+  .t-rw-ok h1 {
+    font-size: 30px;
+    letter-spacing: -0.02em;
+  }
+  .t-rw-ok > div > p {
+    font-size: 14px;
+    max-width: none;
+  }
+  .t-rw-ok .t-rc-chk {
+    padding: 14px 16px;
+  }
+  .t-rw-ok .t-rc-encore {
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+  }
+  .t-rw-ok .t-rc-fait-bts {
+    margin-top: 2px;
+  }
+  .t-rw-recu {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-rw-recu .t-rw-c {
+    gap: 10px;
+  }
+  .t-rw-msg {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 16px 18px;
+    border-radius: 22px;
+    font-size: 13.5px;
+    line-height: 1.5;
+  }
+  .t-rw-msg .t-rw-k {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+}
+@media (min-width: 1200px) {
+  .t-rw-dec {
+    grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr);
+    gap: 22px;
+  }
+  .t-rw-ok,
+  .t-rw-recu {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* ── 4. Agenda : la semaine en heures (planche `.agw`) ── */
+@media (min-width: 768px) {
+  .t-rw-agp > .t-tete-f {
+    display: none;
+  }
+  .t-rw-agp > .t-rw-h > .t-seg {
+    min-width: 380px;
+  }
+  .t-rw-agp .t-rw-tlb {
+    flex-wrap: wrap;
+    justify-content: flex-start;
+  }
+  .t-rw-agp .t-rw-tlb > .t-rx-onglets {
+    flex: none;
+  }
+  .t-rw-agp .t-rw-tlb > .t-ri-semh {
+    flex: none;
+    margin-left: auto;
+  }
+  .t-rw-agp .t-rw-tlb > .t-ri-semh b {
+    min-width: 170px;
+  }
+  .t-rw-agp .t-rw-tlb > .t-bt {
+    flex: none;
+  }
+  .t-rw-agp .t-rw-tlb > .t-bt {
+    margin-left: auto;
+  }
+  .t-rw-agp .t-rw-tlb > .t-ri-semh + .t-bt {
+    margin-left: 0;
+  }
+  /* Mois et « À évaluer » : les demandes en attente en grille. */
+  .t-rw-agp > .t-ri-groupe > ul {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 10px;
+  }
+  .t-rw-agg {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-rw-agl {
+    order: -1;
+  }
+  /* Tablette : sous la semaine, les demandes et les évaluations côte à côte. */
+  .t-rw-aga {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    align-items: start;
+  }
+  .t-rw-aga .t-ri-groupe > h2 {
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+  .t-rw-aga .t-rx-orbi {
+    padding: 14px 16px;
+    border-radius: 22px;
+    font-size: 13px;
+  }
+  .t-rw-agw {
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
+    border-radius: 28px;
+  }
+  .t-rw-agh,
+  .t-rw-agb {
+    display: grid;
+    grid-template-columns: 56px repeat(5, minmax(0, 1fr)) repeat(2, minmax(0, 0.55fr));
+  }
+  .t-rw-agh {
+    padding: 14px 0 10px;
+    border-bottom: 1px solid var(--trait);
+  }
+  .t-rw-agh > span {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2px;
+  }
+  .t-rw-agh small {
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--texte2);
+  }
+  .t-rw-agh b {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    font-size: 19px;
+    font-weight: 600;
+  }
+  .t-rw-agh .t-auj b {
+    background: #0f3f37;
+    color: #c8f59e;
+    font-size: 16px;
+  }
+  .sombre .t-rw-agh .t-auj b {
+    background: #a6f26b;
+    color: #0f3f37;
+  }
+  .t-rw-agb {
+    position: relative;
+    box-sizing: content-box;
+    padding-bottom: 8px;
+    background-image: repeating-linear-gradient(
+      to bottom,
+      var(--trait) 0,
+      var(--trait) 1px,
+      transparent 1px,
+      transparent 56px
+    );
+    background-position: 0 0;
+  }
+  .t-rw-agt {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .t-rw-agt li {
+    height: 56px;
+    padding: 4px 8px 0 0;
+    text-align: right;
+    font-size: 11px;
+    font-weight: 600;
+    color: var(--texte2);
+  }
+  .t-rw-agj {
+    position: relative;
+    min-width: 0;
+    border-left: 1px solid var(--trait);
+  }
+  .t-rw-agj.t-we {
+    background: var(--zone);
+  }
+  .t-rw-agj ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  .t-rw-agj li {
+    position: absolute;
+    left: 4px;
+    right: 4px;
+  }
+  .t-rw-ev {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+    height: 100%;
+    min-height: 40px;
+    padding: 6px 8px;
+    border-left: 4px solid #2fd3a6;
+    border-radius: 12px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+    font-size: 11px;
+    color: var(--texte2);
+    overflow: hidden;
+  }
+  .t-rw-ev b,
+  .t-rw-ev span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .t-rw-ev b {
+    font-size: 12px;
+    color: var(--texte);
+  }
+  .t-rw-ev.t-at {
+    border-left-color: #f2b33d;
+  }
+  .t-rw-ev.t-au {
+    border-left-color: #e25c4b;
+    background:
+      repeating-linear-gradient(135deg, transparent 0 6px, rgba(226, 92, 75, 0.08) 6px 12px),
+      var(--plein);
+  }
+  .t-rw-ev.t-fi {
+    border-left-color: #2fd3a6;
+  }
+  .t-rw-ev:focus-visible {
+    outline: 2px solid var(--texte);
+    outline-offset: 2px;
+  }
+  /* À évaluer (planche `.ev-l`). */
+  .t-rw-aev {
+    display: flex;
+    flex-direction: column;
+    margin: 0;
+    padding: 4px 14px;
+    border-radius: 22px;
+    list-style: none;
+  }
+  .t-rw-aev li {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 0;
+  }
+  .t-rw-aev li + li {
+    border-top: 1px solid var(--trait);
+  }
+  .t-rw-aev .t-rc-av {
+    width: 36px;
+    height: 36px;
+    font-size: 11px;
+  }
+  .t-rw-aev .t-t {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    font-size: 11.5px;
+    color: var(--texte2);
+  }
+  .t-rw-aev .t-t b {
+    font-size: 13px;
+    color: var(--texte);
+  }
+  .t-rw-aev .t-t > span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  .t-rw-aev .t-bt {
+    flex: none;
+  }
+  /* Mois : le calendrier et le jour choisi côte à côte. */
+  .t-rw-agm {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-rw-agm .t-ri-grille a,
+  .t-rw-agm .t-ri-grille .t-hors {
+    height: 56px;
+  }
+}
+@media (min-width: 1200px) {
+  .t-rw-agg {
+    grid-template-columns: minmax(0, 1fr) 300px;
+    gap: 18px;
+  }
+  .t-rw-agl {
+    order: 0;
+    grid-column: 1;
+    grid-row: 1;
+  }
+  .t-rw-aga {
+    grid-column: 2;
+    grid-row: 1;
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-rw-agm {
+    grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  }
+  .t-rw-agp > .t-ri-groupe > ul {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+/* ── 5. Préparer l'entretien et évaluation (planches `PREP_R`, `EVAL` web) ── */
+@media (min-width: 768px) {
+  :is(.t-rw-prep, .t-rw-evp) > .t-tete-f {
+    display: none;
+  }
+  :is(.t-rw-prep, .t-rw-evp, .t-rw-plan, .t-rw-prop) > .t-rw-h .t-t {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  .t-rw-evp > .t-ri-mini {
+    display: none;
+  }
+  .t-rw-pg > div,
+  .t-rw-evf > div {
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    min-width: 0;
+  }
+  .t-rw-pg .t-ri-mini {
+    padding: 14px 16px;
+    border-radius: 22px;
+  }
+  .t-rw-pg .t-rc-orbi {
+    padding: 16px 18px;
+    font-size: 13px;
+  }
+  .t-rw-pg .t-ri-bas,
+  .t-rw-evf .t-ri-bas {
+    gap: 10px;
+    margin-top: 4px;
+  }
+  .t-rw-evf {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 18px;
+    align-items: start;
+  }
+  .t-rw-evf .t-ri-crit {
+    padding: 14px 16px;
+    border-radius: 22px;
+  }
+  .t-rw-evf .t-ri-suites label {
+    min-height: 110px;
+  }
+  /* L'avis : un vrai champ de plusieurs lignes. */
+  .t-rw-evf .t-saisie:has(textarea) {
+    height: auto;
+    padding: 12px 16px;
+  }
+  .t-rw-evf .t-saisie textarea {
+    flex: 1;
+    width: 100%;
+    min-height: 110px;
+    border: 0;
+    background: none;
+    font: inherit;
+    color: inherit;
+    resize: vertical;
+  }
+  .t-rw-evf .t-saisie textarea:focus {
+    outline: none;
+  }
+  .t-rw-evf .t-saisie:has(textarea:focus-visible) {
+    box-shadow:
+      0 0 0 2px var(--texte),
+      var(--verre);
+  }
+}
+@media (min-width: 1200px) {
+  .t-rw-pg {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .t-rw-evf {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+  }
+}
+
+/* ── 6. Proposer un entretien : le jour et ses heures côte à côte (planche `.prog-w`) ── */
+@media (min-width: 768px) {
+  .t-rw-plan > .t-tete-f {
+    display: none;
+  }
+  .t-cadre .t-flux.t-rw-plan {
+    padding-bottom: 0;
+  }
+  .t-rw-plg,
+  .t-rw-apg {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .t-rw-plg > .t-rw-c,
+  .t-rw-apg > .t-rw-c {
+    gap: 14px;
+  }
+  .t-rw-plan .t-ri-modes label {
+    min-height: 96px;
+  }
+  /* Le récapitulatif reste dans la page, sous les heures. */
+  .t-cadre .t-rw-plan .t-ri-recap {
+    position: static;
+    max-width: none;
+    margin: 0;
+    padding: 12px 12px 12px 20px;
+    border-radius: 24px;
+  }
+  .t-rw-plan .t-ri-jour {
+    border-radius: 24px;
+  }
+  .t-rw-apg .t-ri-inv {
+    max-width: 420px;
+    width: 100%;
+    align-self: center;
+  }
+}
+@media (min-width: 1200px) {
+  .t-rw-plg {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 20px;
+  }
+  .t-rw-apg {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 22px;
+  }
+}
+
+/* ── 7. Rechercher des talents, propositions, profil, viviers (planches `.tal-g`, `.pp`, `.tpw`,
+   `.vv3`) ── */
+@media (min-width: 768px) {
+  .t-rw-tal > .t-rw-h,
+  .t-rw-pps > .t-rw-h {
+    align-items: center;
+  }
+  .t-rw-tal > .t-ri-sub,
+  .t-rw-pps > .t-ri-sub {
+    align-self: flex-start;
+    min-width: 340px;
+  }
+  .t-rw-tg {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    gap: 20px;
+    align-items: start;
+  }
+  .t-rw-fltp {
+    display: none !important;
+  }
+  .t-rw-srow {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .t-rw-srow > .t-ri-rech {
+    flex: 1 1 auto;
+    min-width: 0;
+  }
+  .t-rw-srow > .t-bt {
+    flex: none;
+    height: 46px;
+  }
+  .t-rw-tal .t-ri-tls {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .t-rw-tal .t-ri-tl {
+    height: 100%;
+  }
+
+  /* Mes propositions : un tableau, une colonne par information. */
+  .t-rw-pps > .t-rx-onglets {
+    order: 1;
+  }
+  .t-rw-ppt {
+    order: 2;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 14px;
+    align-items: stretch;
+  }
+  .t-rw-pps > .t-ri-pp,
+  .t-rw-pps > .t-rc-vide {
+    order: 3;
+  }
+  .t-rw-ppt > .t-ri-quota {
+    justify-content: center;
+    padding: 14px 18px;
+  }
+  .t-rw-ppi {
+    display: flex;
+    align-items: center;
+    margin: 0;
+    padding: 14px 18px;
+    font-size: 12.5px;
+    line-height: 1.5;
+    color: var(--texte2);
+  }
+  .t-rw-ppi b {
+    color: var(--texte);
+  }
+  .t-rw-pps .t-ri-pp li {
+    display: grid;
+    grid-template-columns: 38px minmax(0, 1.3fr) minmax(0, 1.3fr) minmax(0, 1fr) minmax(130px, auto);
+    gap: 14px;
+    padding: 12px 18px;
+  }
+  .t-rw-pps .t-ri-pp li.t-rw-pph {
+    display: grid !important;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--texte2);
+  }
+  .t-rw-ppo {
+    min-width: 0;
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+  .t-rw-ppd {
+    min-width: 0;
+    font-size: 12px;
+    color: var(--texte2);
+  }
+  .t-rw-ppa {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .t-rw-ppa .t-bi:has(.t-rw-web) {
+    width: auto;
+    gap: 6px;
+    padding: 0 14px;
+    border-radius: 999px;
+    background: var(--p-fond);
+    color: var(--p-texte);
+    font-size: 12.5px;
+    font-weight: 600;
+  }
+
+  /* Profil d'un talent : la couverture, qui, et les actions dans une carte. */
+  .t-rw-tprof > .t-rw-tpw > .t-tete-f,
+  .t-rw-tprof > .t-bas-f {
+    display: none;
+  }
+  .t-cadre .t-flux.t-rw-tprof {
+    padding-bottom: 0;
+  }
+  .t-rw-tpw {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    gap: 14px 18px;
+    padding: 0 22px 20px;
+    border-radius: 28px;
+    overflow: hidden;
+  }
+  .t-rw-tpw > .t-ri-cover {
+    flex: 1 1 100%;
+    height: 96px;
+    margin: 0 -22px -44px;
+    border-radius: 0;
+  }
+  .t-rw-tpw > .t-ri-id {
+    flex: 1 1 360px;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    column-gap: 16px;
+    text-align: left;
+    min-width: 0;
+  }
+  .t-rw-tpw > .t-ri-id > .t-rc-av {
+    flex: none;
+    width: 84px;
+    height: 84px;
+    font-size: 24px;
+  }
+  .t-rw-tpw > .t-ri-id > h1 {
+    flex: 1 1 200px;
+    margin: 50px 0 6px;
+    font-size: 24px;
+  }
+  .t-rw-tpw > .t-ri-id > p,
+  .t-rw-tpw > .t-ri-id > .t-ri-puces {
+    flex: 1 1 100%;
+    padding-left: 100px;
+  }
+  .t-rw-tpw > .t-ri-id > p {
+    margin-top: -6px;
+    font-size: 13.5px;
+  }
+  .t-rw-tpw > .t-ri-id > .t-ri-puces {
+    justify-content: flex-start;
+  }
+  .t-rw-tpw > .t-rw-acts {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-left: auto;
+  }
+  .t-rw-tpw > .t-rw-acts .t-bt {
+    flex: none;
+    height: 46px;
+  }
+  .t-rw-tp .t-ri-stats li {
+    padding: 14px 6px;
+  }
+  .t-rw-tp .t-ri-stats b {
+    font-size: 22px;
+  }
+  .t-rw-tp .t-ri-stats span {
+    font-size: 11.5px;
+  }
+  .t-rw-tp .t-ri-projets {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+  }
+
+  /* Proposer l'offre : une carte au centre. */
+  .t-rw-prop > .t-tete-f,
+  .t-rw-prop > .t-ri-mini + .t-rw-h {
+    display: none;
+  }
+  .t-cadre .t-flux.t-rw-prop {
+    width: 100%;
+    max-width: 640px;
+    margin-inline: auto;
+    padding: 24px 26px 26px;
+    border-radius: 30px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-rw-prop .t-rw-st {
+    justify-content: flex-end;
+  }
+
+  /* Viviers : en-tête web, cartes en grille. */
+  :is(.t-rw-viv, .t-rw-vivd) > .t-tete-f {
+    display: none;
+  }
+  :is(.t-rw-viv, .t-rw-vivd) > .t-rw-h .t-t {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 4px;
+  }
+  :is(.t-rw-viv, .t-rw-vivd) > .t-rw-h {
+    align-items: center;
+  }
+  .t-rw-viv .t-ri-vcartes {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 14px;
+  }
+  .t-rw-viv .t-ri-vc {
+    height: 100%;
+  }
+  .t-rw-vivd > .t-ri-pp {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 12px;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+  }
+  .t-rw-vivd > .t-ri-pp > li {
+    align-items: flex-start;
+    padding: 14px 16px;
+    border-radius: 22px;
+    background: var(--plein);
+    box-shadow: var(--verre);
+  }
+  .t-rw-vivd > .t-ri-pp > li + li {
+    border-top: 0;
+  }
+}
+@media (min-width: 1200px) {
+  .t-rw-tg {
+    grid-template-columns: 270px minmax(0, 1fr);
+  }
+  .t-rw-fltp {
+    display: flex !important;
+    flex-direction: column;
+    gap: 12px;
+    padding: 18px;
+    border-radius: 26px;
+  }
+  .t-rw-fltp > h2 {
+    font-size: 15px;
+    font-weight: 600;
+  }
+  .t-rw-fltp .t-ri-ff {
+    gap: 14px;
+  }
+  .t-rw-fltp .t-rx-feuille-bts {
+    flex-wrap: wrap;
+  }
+  .t-rw-fltp .t-rx-feuille-bts .t-bt {
+    flex: 1 1 auto;
+    height: 42px;
+  }
+  .t-rw-cmp {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    width: 100%;
+    min-height: 40px;
+    padding: 8px 12px;
+    border-radius: 14px;
+    background: var(--zone);
+    box-shadow: none;
+    font-size: 12.5px;
+    font-weight: 600;
+    text-align: left;
+  }
+  .t-rw-tal .t-ri-f {
+    display: none;
+  }
+  .t-rw-tp {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+  }
+  .t-rw-viv .t-ri-vcartes,
+  .t-rw-vivd > .t-ri-pp {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}

@@ -7,6 +7,7 @@ import { avatarTone, initialsOf } from "@/components/recruiter/candidates";
 import { EvaluationForm } from "@/components/recruiter/evaluation-form";
 import { OrbiLine } from "@/components/recruiter/offers";
 import { FlowHead } from "@/components/talent/flow-head";
+import { TalentIcon } from "@/components/talent/icon";
 import { OrbiMark } from "@/components/talent/orbi-mark";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
 import { pickMessages } from "@/i18n/client-messages";
@@ -66,8 +67,27 @@ export default async function EvaluationPage({
   ]);
   const back = one(query.retour) === "entretiens" ? "/app/hire/entretiens?vue=evaluer" : fileHref;
   const person = application.profile.user;
+  const when = interview?.startsAt
+    ? t("interviewOn", {
+        date: format.dateTime(interview.startsAt, {
+          day: "numeric",
+          month: "long",
+          timeZone: interview.timezone,
+        }),
+      })
+    : null;
   const head = (
     <>
+      <div className="t-rw-h t-rw-web">
+        <div className="t-t">
+          <Link href={back} className="t-rw-crumb">
+            <TalentIcon name="suivant" size="xs" />
+            {t("back")}
+          </Link>
+          <h1>{t("title")}</h1>
+          <p>{[person.name, application.job.title, when].filter(Boolean).join(" · ")}</p>
+        </div>
+      </div>
       <FlowHead back={back} backLabel={t("back")} title={t("title")} />
       <div className="t-verre t-ri-mini">
         <span className={cx("t-rc-av", avatarTone(application.id))} aria-hidden>
@@ -75,22 +95,7 @@ export default async function EvaluationPage({
         </span>
         <span className="t-t">
           <b>{person.name}</b>
-          <span>
-            {[
-              application.job.title,
-              interview?.startsAt
-                ? t("interviewOn", {
-                    date: format.dateTime(interview.startsAt, {
-                      day: "numeric",
-                      month: "long",
-                      timeZone: interview.timezone,
-                    }),
-                  })
-                : null,
-            ]
-              .filter(Boolean)
-              .join(" · ")}
-          </span>
+          <span>{[application.job.title, when].filter(Boolean).join(" · ")}</span>
         </span>
       </div>
     </>
@@ -105,7 +110,7 @@ export default async function EvaluationPage({
           (item) => item.entitlements["hire.scorecards"] === "true",
         );
     return (
-      <div className="t-flux">
+      <div className="t-flux t-rw-evp">
         {head}
         <div className="t-rc-orbi">
           <div className="t-rc-lock">
@@ -142,7 +147,7 @@ export default async function EvaluationPage({
   const error = one(query.erreur);
 
   return (
-    <div className="t-flux t-ri-evalp">
+    <div className="t-flux t-ri-evalp t-rw-evp">
       {head}
       {error && (
         <p className="t-gar t-err" role="alert">

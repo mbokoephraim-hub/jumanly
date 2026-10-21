@@ -70,6 +70,7 @@ export default async function DecisionPage({
   const page = `${fileHref}/decision`;
   const { user, space, ctx } = await requireHire(page, "manage");
   const t = await getTranslations("hireCandidates");
+  const tw = await getTranslations("hireWeb.decision");
   const th = await getTranslations("hire");
   const ui = await getTranslations("ui");
   const now = new Date();
@@ -101,123 +102,189 @@ export default async function DecisionPage({
     const matches =
       matching === "none" ? new Map<string, never>() : await applicationMatches(db, others, now);
     const error = one(query.erreur);
+    // Web (lot 2): what the talent received and the pool, under the confirmation. Both are read
+    // through the application of this organization only.
+    const [sent, pool] = await Promise.all([
+      payload.messageId
+        ? db.message.findFirst({
+            where: {
+              id: payload.messageId,
+              hiddenAt: null,
+              conversation: { applicationId: application.id, organizationId: ctx.organizationId },
+            },
+            select: { body: true },
+          })
+        : null,
+      payload.poolAddedId
+        ? db.talentPool.findFirst({
+            where: { id: payload.poolAddedId, organizationId: ctx.organizationId },
+            select: { id: true, name: true, _count: { select: { entries: true } } },
+          })
+        : null,
+    ]);
     return (
-      <div className="t-flux t-conf t-rc-fait">
-        <span className="t-rond-ok">
-          <TalentIcon name="valider" />
-        </span>
-        <h1 className="t-h2s">{t("done.title")}</h1>
-        <p>
-          {payload.outcome === "withdrawn"
-            ? t("done.textWithdrawn", { name: person.name })
-            : t("done.text", { name: person.name, stage: payload.to ?? application.stage.name })}
-        </p>
-        {error === "delai" && <Notice tone="err">{t("done.expired")}</Notice>}
-        {error === "annulation" && <Notice tone="err">{t("done.undoError")}</Notice>}
-        <ul className="t-verre t-rc-chk">
-          <li>
-            <span className="t-o" aria-hidden>
-              <TalentIcon name="valider" size="xs" />
+      <div className="t-flux t-conf t-rc-fait t-rw-fait">
+        <div className="t-rw-ok">
+          <div>
+            <span className="t-rond-ok">
+              <TalentIcon name="valider" />
             </span>
-            {payload.messageId ? t("done.message", { firstName }) : t("done.noMessage")}
-          </li>
-          {payload.poolName && (
-            <li>
-              <span className="t-o" aria-hidden>
-                <TalentIcon name="valider" size="xs" />
-              </span>
-              {t("done.pool", { name: payload.poolName })}
-            </li>
-          )}
-          <li>
-            <span className="t-o" aria-hidden>
-              <TalentIcon name="valider" size="xs" />
-            </span>
-            {t("done.history")}
-          </li>
-          {open && payload.mail === "pending" && (
-            <li>
-              <span className="t-o t-g" aria-hidden>
-                <TalentIcon name="notification" size="xs" />
-              </span>
-              {t("done.mail", { firstName })}
-            </li>
-          )}
-          <li>
-            <span className="t-o t-g" aria-hidden>
-              <TalentIcon name="horloge" size="xs" />
-            </span>
-            <NextIntlClientProvider messages={pickMessages(messages, ["hireCandidates"])}>
-              {open ? <UndoCountdown deadline={deadline.toISOString()} /> : t("done.over")}
-            </NextIntlClientProvider>
-          </li>
-        </ul>
-
-        {others.length > 0 && (
-          <>
-            <h2 className="t-ck-t t-rc-encore">{t("done.next")}</h2>
-            <ul className="t-rc-minis">
-              {others.map((other) => {
-                const match = matches.get(other.id);
-                const score = match && match !== "disabled" ? match.score : null;
-                const interview = other.interviews[0]?.startsAt;
-                return (
-                  <li key={other.id}>
-                    <Link
-                      href={`/app/hire/candidats/${other.id}`}
-                      className="t-verre t-rc-mini t-press"
-                    >
-                      <CandidateAvatar id={other.id} name={other.profile.user.name} />
-                      <span className="t-t">
-                        <b>{other.profile.user.name}</b>
-                        <span>
-                          {[
-                            interview
-                              ? t("done.interviewed", { date: formatDayMonth(interview) })
-                              : other.stage.name,
-                            other._count.scorecards
-                              ? t("done.evaluated", { count: other._count.scorecards })
-                              : null,
-                          ]
-                            .filter(Boolean)
-                            .join(" · ")}
-                        </span>
-                      </span>
-                      {score !== null && (
-                        <ScoreRing
-                          score={score}
-                          size="s"
-                          text={ui("percent", { value: score })}
-                          label={t("file.scoreAria", { score })}
-                        />
-                      )}
-                    </Link>
-                  </li>
-                );
-              })}
+            <h1 className="t-h2s">{t("done.title")}</h1>
+            <p>
+              {payload.outcome === "withdrawn"
+                ? t("done.textWithdrawn", { name: person.name })
+                : t("done.text", {
+                    name: person.name,
+                    stage: payload.to ?? application.stage.name,
+                  })}
+            </p>
+            {error === "delai" && <Notice tone="err">{t("done.expired")}</Notice>}
+            {error === "annulation" && <Notice tone="err">{t("done.undoError")}</Notice>}
+            <ul className="t-verre t-rc-chk">
+              <li>
+                <span className="t-o" aria-hidden>
+                  <TalentIcon name="valider" size="xs" />
+                </span>
+                {payload.messageId ? t("done.message", { firstName }) : t("done.noMessage")}
+              </li>
+              {payload.poolName && (
+                <li>
+                  <span className="t-o" aria-hidden>
+                    <TalentIcon name="valider" size="xs" />
+                  </span>
+                  {t("done.pool", { name: payload.poolName })}
+                </li>
+              )}
+              <li>
+                <span className="t-o" aria-hidden>
+                  <TalentIcon name="valider" size="xs" />
+                </span>
+                {t("done.history")}
+              </li>
+              {open && payload.mail === "pending" && (
+                <li>
+                  <span className="t-o t-g" aria-hidden>
+                    <TalentIcon name="notification" size="xs" />
+                  </span>
+                  {t("done.mail", { firstName })}
+                </li>
+              )}
+              <li>
+                <span className="t-o t-g" aria-hidden>
+                  <TalentIcon name="horloge" size="xs" />
+                </span>
+                <NextIntlClientProvider messages={pickMessages(messages, ["hireCandidates"])}>
+                  {open ? <UndoCountdown deadline={deadline.toISOString()} /> : t("done.over")}
+                </NextIntlClientProvider>
+              </li>
             </ul>
-          </>
-        )}
+          </div>
+          <div>
+            {others.length > 0 && (
+              <>
+                <h2 className="t-ck-t t-rc-encore">{t("done.next")}</h2>
+                <ul className="t-rc-minis">
+                  {others.map((other) => {
+                    const match = matches.get(other.id);
+                    const score = match && match !== "disabled" ? match.score : null;
+                    const interview = other.interviews[0]?.startsAt;
+                    return (
+                      <li key={other.id}>
+                        <Link
+                          href={`/app/hire/candidats/${other.id}`}
+                          className="t-verre t-rc-mini t-press"
+                        >
+                          <CandidateAvatar id={other.id} name={other.profile.user.name} />
+                          <span className="t-t">
+                            <b>{other.profile.user.name}</b>
+                            <span>
+                              {[
+                                interview
+                                  ? t("done.interviewed", { date: formatDayMonth(interview) })
+                                  : other.stage.name,
+                                other._count.scorecards
+                                  ? t("done.evaluated", { count: other._count.scorecards })
+                                  : null,
+                              ]
+                                .filter(Boolean)
+                                .join(" · ")}
+                            </span>
+                          </span>
+                          {score !== null && (
+                            <ScoreRing
+                              score={score}
+                              size="s"
+                              text={ui("percent", { value: score })}
+                              label={t("file.scoreAria", { score })}
+                            />
+                          )}
+                        </Link>
+                      </li>
+                    );
+                  })}
+                </ul>
+              </>
+            )}
 
-        <div className="t-rc-fait-bts">
-          {open && (
-            <form action={undoDecisionAction}>
-              <input type="hidden" name="application" value={application.id} />
-              <button type="submit" className="t-bt t-sec t-m t-press">
-                {t("done.undo")}
-              </button>
-            </form>
-          )}
-          {others[0] ? (
-            <Link href={`/app/hire/candidats/${others[0].id}`} className="t-bt t-p t-m t-press">
-              {t("done.nextCandidate")}
-            </Link>
-          ) : (
-            <Link href={`/app/hire/candidats?offre=${job.id}`} className="t-bt t-p t-m t-press">
-              {t("done.back")}
-            </Link>
-          )}
+            <div className="t-rc-fait-bts">
+              {open && (
+                <form action={undoDecisionAction}>
+                  <input type="hidden" name="application" value={application.id} />
+                  <button type="submit" className="t-bt t-sec t-m t-press">
+                    {t("done.undo")}
+                  </button>
+                </form>
+              )}
+              {others[0] ? (
+                <Link href={`/app/hire/candidats/${others[0].id}`} className="t-bt t-p t-m t-press">
+                  {t("done.nextCandidate")}
+                </Link>
+              ) : (
+                <Link href={`/app/hire/candidats?offre=${job.id}`} className="t-bt t-p t-m t-press">
+                  {t("done.back")}
+                </Link>
+              )}
+            </div>
+          </div>
         </div>
+
+        {(sent || pool) && (
+          <div className="t-rw-g t-rw-recu t-rw-web">
+            {sent && (
+              <section aria-labelledby="rw-recu" className="t-rw-c">
+                <h2 id="rw-recu" className="t-rw-k">
+                  {tw("received", { firstName })}
+                </h2>
+                <div className="t-verre t-rw-msg">
+                  <p className="t-rw-k">
+                    <TalentIcon name="message" size="xs" />
+                    {tw("receivedFrom", { company: space.organization.name, job: job.title })}
+                  </p>
+                  <p className="whitespace-pre-line">{sent.body}</p>
+                </div>
+              </section>
+            )}
+            {pool && (
+              <section aria-labelledby="rw-vivier" className="t-rw-c">
+                <h2 id="rw-vivier" className="t-rw-k">
+                  {tw("pool")}
+                </h2>
+                <Link
+                  href={`/app/hire/viviers/${pool.id}`}
+                  aria-label={tw("poolOpen", { name: pool.name })}
+                  className="t-verre t-rc-sugg t-press"
+                >
+                  <TalentIcon name="favori" size="s" />
+                  <span className="t-t">
+                    <b>{pool.name}</b>
+                    <span>{tw("poolCount", { count: pool._count.entries })}</span>
+                  </span>
+                  <TalentIcon name="suivant" size="s" />
+                </Link>
+              </section>
+            )}
+          </div>
+        )}
       </div>
     );
   }
@@ -356,253 +423,272 @@ export default async function DecisionPage({
   const pool = pools[0];
 
   return (
-    <div className="t-flux t-rc-dec">
+    <div className="t-flux t-rc-dec t-rw-decp">
+      {/* Web: the head of the page (planche `DECIS` web); on a phone, the round « Retour » head. */}
+      <div className="t-rw-h t-rw-web">
+        <div className="t-t">
+          <Link href={fileHref} className="t-rw-crumb">
+            <TalentIcon name="suivant" size="xs" />
+            {t("decision.back")}
+          </Link>
+          <h1>{t("decision.title")}</h1>
+          <p>{[job.title, job.city].filter(Boolean).join(" · ")}</p>
+        </div>
+      </div>
       <FlowHead back={fileHref} backLabel={t("decision.back")} title={t("decision.title")} />
       {error === "1" && <Notice tone="err">{t("decision.error")}</Notice>}
       {error === "message" && <Notice tone="err">{t("decision.errorMessage")}</Notice>}
       {error === "appel" && <Notice tone="err">{t("decision.callError")}</Notice>}
 
-      <section className="t-verre t-rc-dec-h" aria-label={person.name}>
-        <div className="t-rc-mini">
-          <CandidateAvatar id={application.id} name={person.name} />
-          <span className="t-t">
-            <b>{person.name}</b>
-            <span>
-              {[
-                job.title,
-                interview?.startsAt
-                  ? t("decision.interviewOn", { date: formatDayMonth(interview.startsAt!) })
-                  : null,
-              ]
-                .filter(Boolean)
-                .join(" · ")}
-            </span>
-          </span>
-          {explanation && (
-            <ScoreRing
-              score={explanation.score}
-              size="s"
-              text={ui("percent", { value: explanation.score })}
-              label={t("file.scoreAria", { score: explanation.score })}
-            />
-          )}
-        </div>
-        <StageTrack steps={steps} label={t("file.track")} />
-      </section>
-
-      {evaluations.length > 0 && (
-        <section aria-label={t("decision.evaluations")} className="t-rc-evs">
-          {evaluations.map((item, index) => {
-            const rounded = Math.round(item.average);
-            return (
-              <div key={index}>
-                <b>{item.name}</b>
-                <span
-                  className="t-n5"
-                  role="img"
-                  aria-label={t("decision.evaluationAria", {
-                    name: item.name,
-                    score: Math.round(item.average * 10) / 10,
-                  })}
-                >
-                  {Array.from({ length: RATING_MAX }, (_, index) => index + 1).map((step) => (
-                    <i key={step} className={step <= rounded ? "t-on" : undefined} />
-                  ))}
-                </span>
-              </div>
-            );
-          })}
-        </section>
-      )}
-
       <form action={decideAction} className="t-rc-dec-f">
         <input type="hidden" name="application" value={application.id} />
-        <h2 className="t-lab-c" id="rc-resultat">
-          {t("decision.result")}
-        </h2>
-        <nav className="t-rc-res" aria-labelledby="rc-resultat">
-          {decisionOutcomes.map((value) => (
-            <Link
-              key={value}
-              href={link({ issue: value, ton: null })}
-              aria-current={outcome === value ? "true" : undefined}
-              className={cx("t-press", `t-${value}`)}
-              scroll={false}
-            >
-              <span className="t-cases" aria-hidden>
-                <TalentIcon name={outcomeIcon[value]} size="s" />
-              </span>
-              {t(`decision.outcome.${value}`)}
-              <small>{t(`decision.outcome.${value}Text`)}</small>
-            </Link>
-          ))}
-        </nav>
-
-        {!outcome ? (
-          <p className="t-gar">
-            <TalentIcon name="orbi" size="s" />
-            <span>{t("decision.choose")}</span>
-          </p>
-        ) : (
-          <>
-            <input type="hidden" name="outcome" value={outcome} />
-            {outcome === "withdrawn" && (
-              <p className="t-rc-note">{t("decision.withdrawnOptional")}</p>
-            )}
-            <NextIntlClientProvider messages={pickMessages(messages, ["hireCandidates"])}>
-              <DecisionMessage
-                key={`${outcome}-${tone}-${call ? "appel" : "seul"}`}
-                body={body}
-                segments={segments}
-                firstName={firstName}
-                title={t("decision.prepared")}
-                edited={t("decision.edited")}
-              />
-            </NextIntlClientProvider>
-            <ul className="t-rc-tons" aria-label={t("decision.tones")}>
-              {tones.map((chip) => (
-                <li key={chip}>
-                  <Link
-                    href={link({ ton: chip === "organisation" ? null : chip })}
-                    aria-current={chip === tone ? "true" : undefined}
-                    className="t-press"
-                    scroll={false}
-                  >
-                    {th(`templates.toneName.${chip}`)}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-
-            {outcome === "rejected" && (
-              <div className="t-champ">
-                <label htmlFor="rc-motif">{th("reject.reason.text")}</label>
-                <div className="t-verre t-saisie">
-                  <select id="rc-motif" name="reason" defaultValue="">
-                    <option value="">{t("decision.reasonNone")}</option>
-                    {rejectReasons.map((reason) => (
-                      <option key={reason} value={reason}>
-                        {th(`reject.reason.${reason}`)}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-                <small>{th("reject.reason.hint")}</small>
+        {/* Web: who and the result on the left, the message on the right (planche `DECIS`). */}
+        <div className="t-rw-g t-rw-dec">
+          <div className="t-rw-c">
+            <section className="t-verre t-rc-dec-h" aria-label={person.name}>
+              <div className="t-rc-mini">
+                <CandidateAvatar id={application.id} name={person.name} />
+                <span className="t-t">
+                  <b>{person.name}</b>
+                  <span>
+                    {[
+                      job.title,
+                      interview?.startsAt
+                        ? t("decision.interviewOn", { date: formatDayMonth(interview.startsAt!) })
+                        : null,
+                    ]
+                      .filter(Boolean)
+                      .join(" · ")}
+                  </span>
+                </span>
+                {explanation && (
+                  <ScoreRing
+                    score={explanation.score}
+                    size="s"
+                    text={ui("percent", { value: explanation.score })}
+                    label={t("file.scoreAria", { score: explanation.score })}
+                  />
+                )}
               </div>
+              <StageTrack steps={steps} label={t("file.track")} />
+            </section>
+
+            {evaluations.length > 0 && (
+              <section aria-label={t("decision.evaluations")} className="t-rc-evs">
+                {evaluations.map((item, index) => {
+                  const rounded = Math.round(item.average);
+                  return (
+                    <div key={index}>
+                      <b>{item.name}</b>
+                      <span
+                        className="t-n5"
+                        role="img"
+                        aria-label={t("decision.evaluationAria", {
+                          name: item.name,
+                          score: Math.round(item.average * 10) / 10,
+                        })}
+                      >
+                        {Array.from({ length: RATING_MAX }, (_, index) => index + 1).map((step) => (
+                          <i key={step} className={step <= rounded ? "t-on" : undefined} />
+                        ))}
+                      </span>
+                    </div>
+                  );
+                })}
+              </section>
             )}
 
-            {outcome === "hired" && appointments && (
-              <div className="t-verre t-liste t-lignes t-ri-appel">
+            <h2 className="t-lab-c" id="rc-resultat">
+              {t("decision.result")}
+            </h2>
+            <nav className="t-rc-res" aria-labelledby="rc-resultat">
+              {decisionOutcomes.map((value) => (
                 <Link
-                  href={link({ appel: call ? null : "1" })}
-                  role="switch"
-                  aria-checked={call}
-                  className="t-li t-press"
+                  key={value}
+                  href={link({ issue: value, ton: null })}
+                  aria-current={outcome === value ? "true" : undefined}
+                  className={cx("t-press", `t-${value}`)}
                   scroll={false}
-                  replace
                 >
-                  <span className="t-cases t-c1" aria-hidden>
-                    <TalentIcon name="entretien" size="s" />
+                  <span className="t-cases" aria-hidden>
+                    <TalentIcon name={outcomeIcon[value]} size="s" />
                   </span>
-                  <span className="t-t">
-                    <b>{t("decision.call")}</b>
-                    <span>{t("decision.callText", { minutes: ARRIVAL_CALL_MINUTES })}</span>
-                  </span>
-                  <span aria-hidden className={cx("t-sw", call && "t-on")} />
+                  {t(`decision.outcome.${value}`)}
+                  <small>{t(`decision.outcome.${value}Text`)}</small>
                 </Link>
-                {call && (
-                  <div className="t-li t-ri-appel-c">
-                    <input type="hidden" name="appel" value="on" />
-                    <input type="hidden" name="timezone" value={timeZone} />
-                    {Array.from({ length: SLOTS_MAX }, (_, index) => (
-                      <div key={index} className="t-champ">
-                        <label htmlFor={`rc-appel-${index}`}>
-                          {t("decision.callSlot", { rank: index + 1 })}
-                        </label>
-                        <div className="t-verre t-saisie">
-                          <input
-                            id={`rc-appel-${index}`}
-                            type="datetime-local"
-                            name="slot"
-                            required={index === 0}
-                            step={900}
-                          />
-                        </div>
+              ))}
+            </nav>
+          </div>
+          <div className="t-rw-c">
+            <h2 className="t-lab-c t-rw-web">{tw("message")}</h2>
+
+            {!outcome ? (
+              <p className="t-gar">
+                <TalentIcon name="orbi" size="s" />
+                <span>{t("decision.choose")}</span>
+              </p>
+            ) : (
+              <>
+                <input type="hidden" name="outcome" value={outcome} />
+                {outcome === "withdrawn" && (
+                  <p className="t-rc-note">{t("decision.withdrawnOptional")}</p>
+                )}
+                <NextIntlClientProvider messages={pickMessages(messages, ["hireCandidates"])}>
+                  <DecisionMessage
+                    key={`${outcome}-${tone}-${call ? "appel" : "seul"}`}
+                    body={body}
+                    segments={segments}
+                    firstName={firstName}
+                    title={t("decision.prepared")}
+                    edited={t("decision.edited")}
+                  />
+                </NextIntlClientProvider>
+                <ul className="t-rc-tons" aria-label={t("decision.tones")}>
+                  {tones.map((chip) => (
+                    <li key={chip}>
+                      <Link
+                        href={link({ ton: chip === "organisation" ? null : chip })}
+                        aria-current={chip === tone ? "true" : undefined}
+                        className="t-press"
+                        scroll={false}
+                      >
+                        {th(`templates.toneName.${chip}`)}
+                      </Link>
+                    </li>
+                  ))}
+                </ul>
+
+                {outcome === "rejected" && (
+                  <div className="t-champ">
+                    <label htmlFor="rc-motif">{th("reject.reason.text")}</label>
+                    <div className="t-verre t-saisie">
+                      <select id="rc-motif" name="reason" defaultValue="">
+                        <option value="">{t("decision.reasonNone")}</option>
+                        {rejectReasons.map((reason) => (
+                          <option key={reason} value={reason}>
+                            {th(`reject.reason.${reason}`)}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                    <small>{th("reject.reason.hint")}</small>
+                  </div>
+                )}
+
+                {outcome === "hired" && appointments && (
+                  <div className="t-verre t-liste t-lignes t-ri-appel">
+                    <Link
+                      href={link({ appel: call ? null : "1" })}
+                      role="switch"
+                      aria-checked={call}
+                      className="t-li t-press"
+                      scroll={false}
+                      replace
+                    >
+                      <span className="t-cases t-c1" aria-hidden>
+                        <TalentIcon name="entretien" size="s" />
+                      </span>
+                      <span className="t-t">
+                        <b>{t("decision.call")}</b>
+                        <span>{t("decision.callText", { minutes: ARRIVAL_CALL_MINUTES })}</span>
+                      </span>
+                      <span aria-hidden className={cx("t-sw", call && "t-on")} />
+                    </Link>
+                    {call && (
+                      <div className="t-li t-ri-appel-c">
+                        <input type="hidden" name="appel" value="on" />
+                        <input type="hidden" name="timezone" value={timeZone} />
+                        {Array.from({ length: SLOTS_MAX }, (_, index) => (
+                          <div key={index} className="t-champ">
+                            <label htmlFor={`rc-appel-${index}`}>
+                              {t("decision.callSlot", { rank: index + 1 })}
+                            </label>
+                            <div className="t-verre t-saisie">
+                              <input
+                                id={`rc-appel-${index}`}
+                                type="datetime-local"
+                                name="slot"
+                                required={index === 0}
+                                step={900}
+                              />
+                            </div>
+                          </div>
+                        ))}
+                        <small>{t("decision.callNote", { zone: zoneLabel(timeZone, now) })}</small>
                       </div>
-                    ))}
-                    <small>{t("decision.callNote", { zone: zoneLabel(timeZone, now) })}</small>
+                    )}
                   </div>
                 )}
-              </div>
-            )}
 
-            {pool && outcome !== "withdrawn" && (
-              <div className="t-verre t-liste t-lignes">
-                <label className="t-li t-press">
-                  <span className="t-cases t-c2" aria-hidden>
-                    <TalentIcon name="favori" size="s" />
-                  </span>
-                  <span className="t-t">
-                    <b>
-                      {pools.length === 1
-                        ? t("decision.pool", { name: pool.name })
-                        : t("decision.poolChoose")}
-                    </b>
-                    <span>{t("decision.poolText")}</span>
-                  </span>
-                  <input type="checkbox" role="switch" name="vivier" className="sr-only" />
-                  <span aria-hidden className="t-sw" />
-                </label>
-                {pools.length === 1 ? (
-                  <input type="hidden" name="pool" value={pool.id} />
-                ) : (
-                  <div className="t-li">
-                    <label htmlFor="rc-vivier" className="sr-only">
-                      {t("decision.poolSelect")}
+                {pool && outcome !== "withdrawn" && (
+                  <div className="t-verre t-liste t-lignes">
+                    <label className="t-li t-press">
+                      <span className="t-cases t-c2" aria-hidden>
+                        <TalentIcon name="favori" size="s" />
+                      </span>
+                      <span className="t-t">
+                        <b>
+                          {pools.length === 1
+                            ? t("decision.pool", { name: pool.name })
+                            : t("decision.poolChoose")}
+                        </b>
+                        <span>{t("decision.poolText")}</span>
+                      </span>
+                      <input type="checkbox" role="switch" name="vivier" className="sr-only" />
+                      <span aria-hidden className="t-sw" />
                     </label>
-                    <select id="rc-vivier" name="pool" className="t-rc-sel">
-                      {pools.map((item) => (
-                        <option key={item.id} value={item.id}>
-                          {item.name}
-                        </option>
-                      ))}
-                    </select>
+                    {pools.length === 1 ? (
+                      <input type="hidden" name="pool" value={pool.id} />
+                    ) : (
+                      <div className="t-li">
+                        <label htmlFor="rc-vivier" className="sr-only">
+                          {t("decision.poolSelect")}
+                        </label>
+                        <select id="rc-vivier" name="pool" className="t-rc-sel">
+                          {pools.map((item) => (
+                            <option key={item.id} value={item.id}>
+                              {item.name}
+                            </option>
+                          ))}
+                        </select>
+                      </div>
+                    )}
                   </div>
                 )}
-              </div>
+              </>
             )}
-          </>
-        )}
 
-        <p className="t-gar">
-          <TalentIcon name="horloge" size="s" />
-          <span>{t("decision.guard")}</span>
-        </p>
+            <p className="t-gar">
+              <TalentIcon name="horloge" size="s" />
+              <span>{t("decision.guard")}</span>
+            </p>
 
-        <div className="t-verre t-fort t-bas-f">
-          {later ? (
-            <button
-              type="submit"
-              formAction={laterDecisionAction}
-              formNoValidate
-              className="t-bt t-sec t-m t-press"
-            >
-              {t("decision.later")}
-            </button>
-          ) : (
-            <Link href={fileHref} className="t-bt t-sec t-m t-press">
-              {t("decision.later")}
-            </Link>
-          )}
-          {outcome ? (
-            <button type="submit" className="t-bt t-p t-pl t-press">
-              {t("decision.confirm")}
-            </button>
-          ) : (
-            <span className="t-bt t-p t-pl t-rc-off-bt" aria-disabled="true">
-              {t("decision.confirm")}
-            </span>
-          )}
+            <div className="t-verre t-fort t-bas-f t-rw-st">
+              {later ? (
+                <button
+                  type="submit"
+                  formAction={laterDecisionAction}
+                  formNoValidate
+                  className="t-bt t-sec t-m t-press"
+                >
+                  {t("decision.later")}
+                </button>
+              ) : (
+                <Link href={fileHref} className="t-bt t-sec t-m t-press">
+                  {t("decision.later")}
+                </Link>
+              )}
+              {outcome ? (
+                <button type="submit" className="t-bt t-p t-pl t-press">
+                  {t("decision.confirm")}
+                </button>
+              ) : (
+                <span className="t-bt t-p t-pl t-rc-off-bt" aria-disabled="true">
+                  {t("decision.confirm")}
+                </span>
+              )}
+            </div>
+          </div>
         </div>
       </form>
     </div>

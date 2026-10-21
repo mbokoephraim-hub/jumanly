@@ -70,6 +70,11 @@ export async function moveCandidateAction(formData: FormData) {
   );
   if (moved) await onStageChanged(applicationId, moved.to).catch((error) => reportError(error));
   flushMails();
+  // From the file opened beside the list (web recruteur lot 2): back there, the file still open.
+  if (formData.get("retour") === "liste")
+    redirect(
+      `/app/hire/candidats?${new URLSearchParams({ offre: application.jobId, id: applicationId, ok: "deplacee" })}`,
+    );
   redirect(`${fileOf(applicationId)}?ok=deplacee`);
 }
 

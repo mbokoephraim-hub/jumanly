@@ -24,6 +24,7 @@ export function SortSheet({
   filters,
   withScores,
   clearHref,
+  className,
 }: {
   id: string;
   offre: string;
@@ -34,6 +35,8 @@ export function SortSheet({
   filters: string[];
   withScores: boolean;
   clearHref: string;
+  /** On a computer: the window opens under « Trier et filtrer » (web recruteur lot 2). */
+  className?: string;
 }) {
   const t = useTranslations("hireCandidates.sort");
   const [chosenFloor, setFloor] = useState(floor);
@@ -51,7 +54,7 @@ export function SortSheet({
   );
   const sorts = withScores ? ["correspondance", "date", "etape"] : ["date", "etape"];
   return (
-    <Sheet id={id} title={t("title")} closeLabel={t("close")}>
+    <Sheet id={id} title={t("title")} closeLabel={t("close")} className={className}>
       <form action="/app/hire/candidats" className="t-rc-tri">
         <input type="hidden" name="offre" value={offre} />
         {etape && <input type="hidden" name="etape" value={etape} />}
