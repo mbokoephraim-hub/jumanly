@@ -4,6 +4,9 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { askOrbiAction } from "@/server/actions/orbi";
+import { orbiFactAction, type OrbiFactAnswer } from "@/server/actions/feed";
+import { FilAvatar } from "./fil/avatar";
+import { ORBI_EVENT, type OrbiFact } from "./orbi-bus";
 import { orbiActions, type OrbiReply } from "@/lib/orbi";
 import { rootTab, type PhoneTab } from "@/lib/phone-tabs";
 import { OrbiDisc, PhoneIcon } from "./icon";
@@ -37,7 +40,16 @@ export type OrbiTexts = {
   tabs: Record<PhoneTab, OrbiTabTexts>;
 };
 
-type Answer = { question: string; reply: OrbiReply | null; error: string | null };
+type Answer = {
+  question: string;
+  reply: OrbiReply | null;
+  error: string | null;
+  /** An answer built from the platform's facts (the Fil, lot B3). */
+  fact?: OrbiFactAnswer | null;
+};
+
+/** The four questions of the Fil answered from facts, in the order of the sheet. */
+const FIL_FACTS: OrbiFact[] = ["digest", "entreprises", "suivre", "ecrire"];
 
 /**
  * Orbi everywhere (brief § 3, planche Identité): the mint disc at the bottom right of each tab,
@@ -81,10 +93,40 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
     });
   };
 
+  const askFact = (fact: OrbiFact, question: string) => {
+    setOpen(true);
+    setAnswer({ question, reply: null, error: null, fact: null });
+    start(async () => {
+      const result = await orbiFactAction(fact).catch(() => null);
+      setAnswer(
+        result
+          ? { question: result.question, reply: null, error: null, fact: result }
+          : { question, reply: null, error: texts.failed },
+      );
+    });
+  };
+
+  /** A question of the sheet: from the facts on the Fil, from Orbi's conversation elsewhere. */
+  const choose = (question: string) => {
+    const index = current.questions.indexOf(question);
+    if (shownTab === "fil" && index >= 0) askFact(FIL_FACTS[index], question);
+    else ask(question);
+  };
+
   const openWith = (question?: string) => {
     setOpen(true);
-    if (question) ask(question);
+    if (question) choose(question);
   };
+
+  // « 3 offres publiées ce matin vous correspondent » and other cards of the pages.
+  useEffect(() => {
+    const listen = (event: Event) => {
+      const fact = (event as CustomEvent<OrbiFact>).detail;
+      askFact(fact, "");
+    };
+    window.addEventListener(ORBI_EVENT, listen);
+    return () => window.removeEventListener(ORBI_EVENT, listen);
+  });
 
   return (
     <>
@@ -142,6 +184,46 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
             <p className="nb-meta">{answer.question}</p>
             {answer.error ? (
               <p className="nb-orbi-texte">{answer.error}</p>
+            ) : answer.fact ? (
+              <>
+                <p className="nb-orbi-texte">{answer.fact.text}</p>
+                {answer.fact.cards.length > 0 ? (
+                  <div className="nb-orbi-liste">
+                    {answer.fact.cards.map((card) => (
+                      <Link
+                        key={card.href + card.title}
+                        href={card.href}
+                        className="nb-orbi-lien nb-orbi-fiche"
+                        onClick={() => setOpen(false)}
+                      >
+                        <FilAvatar
+                          initials={card.initials}
+                          image={card.image}
+                          tone={card.tone}
+                          org={card.org}
+                          size={40}
+                        />
+                        <span>
+                          <b>{card.title}</b>
+                          <small>{card.sub}</small>
+                        </span>
+                        <PhoneIcon name="chevron" size={18} />
+                      </Link>
+                    ))}
+                  </div>
+                ) : null}
+                {answer.fact.action ? (
+                  <Link
+                    href={answer.fact.action.href}
+                    className="nb-q nb-orbi-action"
+                    data-plein=""
+                    onClick={() => setOpen(false)}
+                  >
+                    {answer.fact.action.label}
+                  </Link>
+                ) : null}
+                <p className="nb-meta nb-orbi-decide">{texts.decide}</p>
+              </>
             ) : answer.reply ? (
               <>
                 <div className="nb-orbi-texte">
@@ -196,7 +278,7 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
         ) : (
           <div className="nb-orbi-liste nb-orbi-q">
             {current.questions.map((question) => (
-              <button key={question} type="button" className="nb-q" onClick={() => ask(question)}>
+              <button key={question} type="button" className="nb-q" onClick={() => choose(question)}>
                 {question}
               </button>
             ))}

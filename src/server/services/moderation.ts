@@ -14,11 +14,16 @@ export const reportReasons = [
   "personalData",
   "inappropriate",
   "impersonation",
+  // Le Fil (Modèle B, lot B3): « Fausse information ».
+  "misinformation",
   "other",
 ] as const;
 
-/** `profile`: a talent reported by another talent (Connexions, lot 6); the id is the profile. */
-export const reportTargets = ["job", "message", "conversation", "profile"] as const;
+/**
+ * `profile`: a talent reported by another talent (Connexions, lot 6); the id is the profile.
+ * `post`: a post or an answer of the Fil (Modèle B, lot B3).
+ */
+export const reportTargets = ["job", "message", "conversation", "profile", "post"] as const;
 
 export const reportSchema = z.object({
   targetType: z.enum(reportTargets),
@@ -72,6 +77,13 @@ export async function createReport(
       where: { id: input.targetId, status: { in: ["published", "closed"] } },
     });
     if (!job) return "notFound";
+  } else if (input.targetType === "post") {
+    const post = await db.feedPost.findFirst({
+      where: { id: input.targetId, hiddenAt: null },
+      select: { authorId: true, organizationId: true },
+    });
+    // One's own post is deleted, not reported.
+    if (!post || (post.authorId === reporterId && !post.organizationId)) return "notFound";
   } else if (input.targetType === "profile") {
     // Only someone the reporter is (or was) in touch with through Connexions.
     const profile = await db.talentProfile.findUnique({
@@ -295,7 +307,7 @@ export async function reportContext(
 ) {
   const ids = (type: string) =>
     reports.filter((report) => report.targetType === type).map((report) => report.targetId);
-  const [jobs, messages, conversations, reporters] = await Promise.all([
+  const [jobs, messages, conversations, reporters, posts] = await Promise.all([
     db.job.findMany({
       where: { id: { in: ids("job") } },
       select: {
@@ -331,8 +343,21 @@ export async function reportContext(
       where: { id: { in: [...new Set(reports.map((report) => report.reporterId))] } },
       select: { id: true, name: true, email: true },
     }),
+    db.feedPost.findMany({
+      where: { id: { in: ids("post") } },
+      select: {
+        id: true,
+        body: true,
+        imageUrl: true,
+        hiddenAt: true,
+        parentId: true,
+        author: { select: { name: true } },
+        organization: { select: { name: true } },
+      },
+    }),
   ]);
   return {
+    post: new Map(posts.map((item) => [item.id, item])),
     job: new Map(jobs.map((item) => [item.id, item])),
     message: new Map(messages.map((item) => [item.id, item])),
     conversation: new Map(conversations.map((item) => [item.id, item])),
@@ -412,7 +437,14 @@ export async function reportAuthor(
               select: { userId: true },
             })
           )?.userId
-        : report.targetType === "job"
+        : report.targetType === "post"
+          ? (
+              await db.feedPost.findUnique({
+                where: { id: report.targetId },
+                select: { authorId: true },
+              })
+            )?.authorId
+          : report.targetType === "job"
           ? (
               await db.job.findUnique({
                 where: { id: report.targetId },
@@ -499,6 +531,12 @@ export async function closeReport(
   if (!report || report.status === "closed") return null;
   if (input.decision === "hide") {
     if (report.targetType === "job") await refuseJob(db, actorId, report.targetId, input.reason);
+    if (report.targetType === "post") {
+      await db.feedPost.updateMany({
+        where: { id: report.targetId, hiddenAt: null },
+        data: { hiddenAt: now },
+      });
+    }
     if (report.targetType === "message") {
       await db.message.updateMany({
         where: { id: report.targetId, hiddenAt: null },

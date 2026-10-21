@@ -34,7 +34,7 @@ import {
   urgentReasons,
 } from "@/server/services/moderation";
 
-const types = ["job", "message", "conversation", "profile"] as const;
+const types = ["job", "message", "conversation", "profile", "post"] as const;
 type ReportType = (typeof types)[number];
 
 const tabs = { ouverts: "open", "en-cours": "inProgress", clotures: "closed" } as const;
@@ -373,6 +373,7 @@ async function ReportDetail({
   const t = await getTranslations("admin.reports");
   const reporter = context.reporter.get(report.reporterId);
   const job = context.job.get(report.targetId);
+  const post = context.post.get(report.targetId);
   const message = context.message.get(report.targetId);
   const conversation = context.conversation.get(report.targetId);
   const [thread, author, notes] = await Promise.all([
@@ -381,7 +382,9 @@ async function ReportDetail({
     reportNotes(db, report.id),
   ]);
   const available: Decision[] =
-    kind === "job" || kind === "message" ? ["dismiss", "warn", "hide"] : ["dismiss", "warn"];
+    kind === "job" || kind === "message" || kind === "post"
+      ? ["dismiss", "warn", "hide"]
+      : ["dismiss", "warn"];
   const resolution = decisions.find((item) => item === report.resolution);
   const open = report.status !== "closed";
   const canSuspend = writable && author && author.id !== adminId && author.platformRole === "user";
@@ -470,6 +473,21 @@ async function ReportDetail({
                 </li>
               ))}
             </ol>
+          </div>
+        )}
+        {post && (
+          <div className="flex flex-col gap-1.5 rounded-[16px] bg-blanc px-3.5 py-3">
+            <p className="text-[12px] text-ardoise">
+              {[
+                post.organization?.name ?? post.author?.name ?? t("detail.author"),
+                post.parentId ? t("detail.postReply") : t("detail.post"),
+              ].join(" · ")}
+            </p>
+            <p className="text-[12.5px] leading-[18px] whitespace-pre-line">{post.body}</p>
+            {post.imageUrl && <p className="text-[11px] text-ardoise">{t("detail.postImage")}</p>}
+            {post.hiddenAt && (
+              <span className="text-[11px] font-medium">{t("detail.hidden")}</span>
+            )}
           </div>
         )}
         {job && (

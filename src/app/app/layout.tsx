@@ -3,6 +3,7 @@ import { Suspense } from "react";
 import { AppShell } from "@/components/layout/app-shell";
 import { RecruiterShell } from "@/components/recruiter/shell";
 import { PhoneShell } from "@/components/phone/shell";
+import { FilTab } from "@/components/phone/fil/server";
 import { TalentShell } from "@/components/talent/shell";
 import { isPhone } from "@/server/view";
 import { Skeleton } from "@/components/ui";
@@ -79,7 +80,13 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
           unread={unread}
           unreadMessages={await unreadCount(db, { userId: user.id })}
           reduceMotion={user.reduceMotion}
-          tabs={{}}
+          tabs={{
+            fil: (
+              <Suspense fallback={null}>
+                <FilTab user={{ id: user.id, name: user.name, image: user.image ?? null }} />
+              </Suspense>
+            ),
+          }}
         >
           <ContentBanners audience="talents" />
           {children}
