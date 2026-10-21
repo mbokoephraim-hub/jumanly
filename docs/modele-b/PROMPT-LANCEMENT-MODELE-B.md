@@ -12,7 +12,7 @@ Méthode :
 
 - Commence par le lot B0 : le diagnostic dans `docs/journal.md` (écrans existants, écrans à refaire, fichiers à supprimer), puis enchaîne sans attendre.
 - Un lot = une branche et une PR, dans l'ordre B1 à B9 du brief. Chaque PR liste la correspondance capture → écran codé et les fichiers supprimés.
-- Pour chaque écran, ouvre la capture et le fichier `.dc.html` correspondant, et reproduis fidèlement la mise en forme, les textes et les états (valeurs exactes dans le fichier). L'interface talent mobile est uniquement en sombre.
+- Pour chaque écran, ouvre la capture et le fichier `.dc.html` correspondant, et reproduis fidèlement la mise en forme, les textes et les états (valeurs exactes dans le fichier). Les photos sont dans `docs/modele-b/images/`. L'interface talent mobile est uniquement en sombre.
 - Respecte les trois règles de comportement : aucun clic vide, recherche en deux temps, retour clair. Respecte la règle du mouvement : jamais d'écran vide ni de noir entre deux écrans, les 5 onglets restent montés, tout est préchargé pendant le logo (1,2 s, logo seul), jamais de roue qui tourne.
 - Respecte les règles d'or : candidater toujours gratuit ; droits par clés, jamais de nom de forfait ; Orbi propose, l'humain décide ; aucun numéro de téléphone Jumanly ; aucun texte en dur (`textes/textes-application.md` → `pnpm messages`) ; données de démonstration fictives, local et previews seulement.
 - Définition de fini : § 7 du brief.
