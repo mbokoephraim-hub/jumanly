@@ -72,6 +72,7 @@ export type CareerView = {
     title: string;
     line: string;
     featured: boolean;
+    cover: string | null;
     tone: number;
     href: string;
   }[];
@@ -212,6 +213,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
       ? t("portfolio.line", { tool: project.tool, count: project.photos })
       : t("portfolio.lineNoTool", { count: project.photos }),
     featured: project.featured,
+    cover: project.cover,
     tone: index % 5,
     href: `/app/career/portfolio/${project.id}`,
   }));

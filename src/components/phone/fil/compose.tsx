@@ -19,7 +19,7 @@ type Audience = "everyone" | "connections" | "nobody";
 const AUDIENCES: Audience[] = ["everyone", "connections", "nobody"];
 
 /** Reduces a photo to 1280 px (JPEG) on the phone before sending it. */
-async function shrink(file: File): Promise<Blob> {
+export async function shrink(file: File): Promise<Blob> {
   const bitmap = await createImageBitmap(file);
   const scale = Math.min(1, 1280 / Math.max(bitmap.width, bitmap.height));
   const canvas = document.createElement("canvas");
@@ -47,6 +47,7 @@ export function PhoneCompose({
   draft,
   back,
   startWithDraft = false,
+  startWork = null,
 }: {
   me: FilMe;
   works: Piece[];
@@ -58,14 +59,21 @@ export function PhoneCompose({
   back: string;
   /** The draft is asked from the start (« Ouvrir le brouillon » of Orbi). */
   startWithDraft?: boolean;
+  /** « Partager dans le Fil » of a project (Carrière): the project is attached from the start. */
+  startWork?: string | null;
 }) {
   const t = useTranslations("phoneFil");
   const tc = useTranslations("phone");
   const router = useRouter();
   const withDraft = startWithDraft && draft !== null && quoted === null;
   const [text, setText] = useState(withDraft ? draft.text : "");
+  const work = works.find((item) => item.id === startWork);
   const [piece, setPiece] = useState<{ type: "work" | "certificate"; item: Piece } | null>(
-    withDraft ? { type: "certificate", item: draft.certificate } : null,
+    withDraft
+      ? { type: "certificate", item: draft.certificate }
+      : work
+        ? { type: "work", item: work }
+        : null,
   );
   const [photo, setPhoto] = useState<{ token: string; preview: string } | null>(null);
   const [pick, setPick] = useState<"work" | "certificate" | null>(null);

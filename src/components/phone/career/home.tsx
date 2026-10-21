@@ -42,6 +42,14 @@ export function PhoneCareer({ view }: { view: CareerView }) {
     pathname !== "/app/career/cv"
       ? null
       : (params.get("ajouter") ?? (params.get("nouveau") === "1" ? "cv" : null));
+  // `?onglet=portfolio`: the tab a page of the tab goes back to when it was opened directly.
+  const tabAsked = pathname === "/app/career/cv" ? params.get("onglet") : null;
+  useEffect(() => {
+    if (!TABS.includes(tabAsked as Tab)) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
+    setTab(tabAsked as Tab);
+    router.replace("/app/career/cv", { scroll: false });
+  }, [tabAsked, router]);
   useEffect(() => {
     if (asked !== "competences" && asked !== "langues" && asked !== "cv") return;
     // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
@@ -544,15 +552,20 @@ function PortfolioPanel({ view }: { view: CareerView }) {
         <Link key={project.id} href={project.href} className="nb-ca-real">
           <span className="nb-ex-real-img" data-ton={project.tone} aria-hidden>
             {project.featured ? <em className="nb-ca-avant">{t("portfolio.featured")}</em> : null}
-            <svg viewBox="0 0 160 110" fill="none">
-              <path
-                d="M18 82 L58 56 L90 70 L128 32 L150 44"
-                stroke="rgba(255,255,255,.7)"
-                strokeWidth="6"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-              />
-            </svg>
+            {project.cover ? (
+              // eslint-disable-next-line @next/next/no-img-element -- private file, served by the API
+              <img src={project.cover} alt="" loading="lazy" />
+            ) : (
+              <svg viewBox="0 0 160 110" fill="none">
+                <path
+                  d="M18 82 L58 56 L90 70 L128 32 L150 44"
+                  stroke="rgba(255,255,255,.7)"
+                  strokeWidth="6"
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                />
+              </svg>
+            )}
           </span>
           <b>{project.title}</b>
           <small>{project.line}</small>

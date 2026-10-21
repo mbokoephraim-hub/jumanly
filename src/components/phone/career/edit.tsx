@@ -28,11 +28,11 @@ const CAREER = "/app/career/cv";
 type Result = { ok: true } | { ok: false; error: string };
 
 /** After « Enregistrer »: the page that opened the form, the Carrière tab otherwise. */
-function useLeave() {
+export function useLeave(fallback = CAREER) {
   const router = useRouter();
   return () => {
     if (pagesSeen() > 1) router.back();
-    else router.replace(CAREER);
+    else router.replace(fallback);
   };
 }
 
@@ -40,22 +40,24 @@ function useLeave() {
  * A form of the profile (planches Carrière-modifier, -apropos, -exp, -formation): « Annuler », the
  * title, « Enregistrer » in lime; the fields below. One save, then back to where the person was.
  */
-function FormPage({
+export function FormPage({
   title,
   onSave,
   pending,
   children,
+  back = CAREER,
 }: {
   title: string;
   onSave: () => void;
   pending: boolean;
   children: ReactNode;
+  back?: string;
 }) {
   const t = useTranslations("phoneCareer.form");
   return (
     <div className="nb-page nb-ca-form">
       <header className="nb-ca-form-barre">
-        <PhoneBack fallback={CAREER} label={t("cancel")} text={t("cancel")} />
+        <PhoneBack fallback={back} label={t("cancel")} text={t("cancel")} />
         <h1>{title}</h1>
         <button type="button" className="nb-ca-ok" onClick={onSave} disabled={pending}>
           {t("save")}
@@ -74,7 +76,7 @@ function FormPage({
   );
 }
 
-function Field({
+export function Field({
   label,
   children,
   error,
@@ -131,7 +133,7 @@ function Chips<T extends string>({
 }
 
 /** Orbi's card under a text: proposes a version, « Utiliser » or « Garder le mien ». */
-function OrbiRewrite({
+export function OrbiRewrite({
   kind,
   text,
   title,
@@ -139,7 +141,7 @@ function OrbiRewrite({
   button,
   onUse,
 }: {
-  kind: "about" | "experience";
+  kind: "about" | "experience" | "project";
   text: string;
   title?: string;
   hint: string;

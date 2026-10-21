@@ -4,10 +4,17 @@ import { refresh, revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
 import { getTranslations } from "next-intl/server";
 import { z } from "zod";
+import { Prisma } from "@/generated/prisma/client";
+import { onMessageSent } from "@/server/application-events";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { connectViewer } from "@/server/hire-context";
+import { reportError } from "@/server/observability";
+import { allowAttempt } from "@/server/rate-limit";
+import { withdrawApplication } from "@/server/services/applications";
+import { ConnectError, sendMessage } from "@/server/services/connect";
 import { DEFAULT_TEMPLATE_ID } from "@/features/cv/templates/registry";
-import { rewriteCareerText } from "@/server/services/career-phone";
+import { rewriteCareerText, type RewriteKind } from "@/server/services/career-phone";
 import { applyTemplate, cvFromProfile, MAX_CVS } from "@/server/services/cv";
 import { improveCvSummary } from "@/server/services/cv-coach";
 import { applyImport, parseImport } from "@/server/services/cv-import";
@@ -23,7 +30,16 @@ import {
   refreshCompleteness,
 } from "@/server/services/profile";
 import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
+import {
+  deleteProject,
+  parseProject,
+  PortfolioError,
+  projectSchema,
+  saveProject,
+  type NewProjectFile,
+} from "@/server/services/portfolio";
 import { PhotoError, removePhoto, savePhoto } from "@/server/services/profile-photo";
+import { fileStorage } from "@/server/storage";
 
 /**
  * Carrière on the phone (Modèle B, lot B5): the quick changes made from the tab itself. Each one
@@ -286,13 +302,13 @@ export async function saveCareerPhotoAction(formData: FormData): Promise<Result>
  * text from the person's own words only; nothing is saved until « Utiliser » then « Enregistrer ».
  */
 export async function rewriteCareerTextAction(raw: {
-  kind: "about" | "experience";
+  kind: RewriteKind;
   text: string;
   title?: string;
 }): Promise<{ ok: true; text: string } | { ok: false; error: string }> {
   const parsed = z
     .object({
-      kind: z.enum(["about", "experience"]),
+      kind: z.enum(["about", "experience", "project"]),
       text: z.string().max(3000),
       title: z.string().max(160).optional(),
     })
@@ -435,4 +451,122 @@ export async function applyCareerImportAction(formData: FormData) {
     skills: all("skills"),
   });
   await newCareerCvAction(new FormData());
+}
+
+/**
+ * « Nouvelle réalisation » and « Modifier » (planche Carrière-real-ajout): the photos added, the
+ * kept ones, the title, the description, the link. Returns the id of the project.
+ */
+export async function saveCareerProjectAction(
+  formData: FormData,
+): Promise<{ ok: true; id: string } | { ok: false; error: string }> {
+  const projectId = String(formData.get("id") ?? "").slice(0, 60) || undefined;
+  const parsed = projectSchema.safeParse({
+    title: formData.get("title"),
+    context: formData.get("context") ?? "",
+    skills: formData.getAll("skills").map(String),
+    visible: formData.get("visible") === "1",
+    link: String(formData.get("link") ?? "").trim(),
+    keep: formData.getAll("keep").map(String),
+  });
+  if (!parsed.success)
+    return { ok: false, error: parsed.error.issues[0]?.path[0] === "link" ? "link" : "title" };
+  const { user } = await mine();
+  const files: NewProjectFile[] = [];
+  for (const entry of formData.getAll("files")) {
+    if (entry instanceof File && entry.size > 0)
+      files.push({ name: entry.name, bytes: new Uint8Array(await entry.arrayBuffer()) });
+  }
+  try {
+    const id = await saveProject(db, fileStorage(db), user.id, parsed.data, files, projectId);
+    refresh();
+    return { ok: true, id };
+  } catch (error) {
+    if (error instanceof PortfolioError) return { ok: false, error: error.code };
+    throw error;
+  }
+}
+
+/** « Mettre en avant sur mon profil »: the project is shown to recruiters and on the page. */
+export async function featureCareerProjectAction(id: string, on: boolean): Promise<Result> {
+  const { profile } = await mine();
+  const document = await db.document.findFirst({
+    where: { id: String(id).slice(0, 60), profileId: profile.id, kind: "portfolio_item" },
+    select: { id: true, title: true, content: true },
+  });
+  const project = document ? parseProject(document) : null;
+  if (!document || !project) return fail("notFound");
+  const { id: _id, title: _title, ...content } = project;
+  await db.document.update({
+    where: { id: document.id },
+    data: { content: { ...content, visible: on === true } },
+  });
+  refresh();
+  return { ok: true };
+}
+
+/**
+ * « Supprimer » after the confirmation (planche Carrière-real-suppr): « retirée de votre portfolio
+ * et du Fil ». A post that only showed this project goes; a post with its own text or photo stays,
+ * without the project.
+ */
+export async function deleteCareerProjectAction(raw: string): Promise<Result> {
+  const { user } = await mine();
+  const id = String(raw).slice(0, 60);
+  await deleteProject(db, fileStorage(db), user.id, id);
+  const posts = await db.feedPost.findMany({
+    where: {
+      authorId: user.id,
+      organizationId: null,
+      attachment: { path: ["id"], equals: id },
+    },
+    select: { id: true, body: true, imageUrl: true, quotedId: true },
+  });
+  for (const post of posts) {
+    if (!post.body.trim() && !post.imageUrl && !post.quotedId)
+      await db.feedPost.delete({ where: { id: post.id } });
+    else
+      await db.feedPost.update({
+        where: { id: post.id },
+        data: { attachment: Prisma.DbNull, kind: "post" },
+      });
+  }
+  refresh();
+  return { ok: true };
+}
+
+/**
+ * « Retirer » after the confirmation (planche Carrière-cand-retirer): the application ends; the
+ * recruiting team sees it in its history. Applying elsewhere stays free and open.
+ */
+export async function withdrawCareerApplicationAction(raw: string): Promise<Result> {
+  const { user } = await mine();
+  const done = await withdrawApplication(db, user.id, String(raw).slice(0, 60));
+  if (!done) return fail("notFound");
+  refresh();
+  return { ok: true };
+}
+
+/** « Envoyer » in « Écrire à … » (planche Carrière-cand-ecrire): one message in the thread. */
+export async function sendCareerMessageAction(raw: {
+  conversationId: string;
+  body: string;
+}): Promise<Result> {
+  const parsed = z
+    .object({ conversationId: z.string().min(1).max(60), body: z.string().trim().min(1).max(4000) })
+    .safeParse(raw);
+  if (!parsed.success) return fail("empty");
+  const { user, viewer } = await connectViewer(`/app/messages/${parsed.data.conversationId}`);
+  if (!(await allowAttempt("message", user.id))) return fail("trop");
+  try {
+    const sent = await sendMessage(db, viewer, parsed.data.conversationId, {
+      body: parsed.data.body,
+    });
+    await onMessageSent({ ...sent, senderName: user.name }).catch((error) => reportError(error));
+  } catch (error) {
+    if (error instanceof ConnectError) return fail(error.code);
+    throw error;
+  }
+  refresh();
+  return { ok: true };
 }

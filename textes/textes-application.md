@@ -9110,6 +9110,96 @@ Conventions :
 | `phoneCareer.cvImport.found` | Voici ce que nous avons trouvé |
 | `phoneCareer.cvImport.foundText` | Décochez ce que vous ne voulez pas reprendre. |
 | `phoneCareer.cvImport.apply` | Ajouter à mon profil et créer le CV |
+| `phoneCareer.project.seo` | Réalisation |
+| `phoneCareer.project.back` | Portfolio |
+| `phoneCareer.project.edit` | Modifier |
+| `phoneCareer.project.close` | Fermer |
+| `phoneCareer.project.cancel` | Annuler |
+| `phoneCareer.project.count` | {n} / {all} |
+| `phoneCareer.project.photoAlt` | Photo {n} de « {title} » |
+| `phoneCareer.project.photoCount` | {count, plural, one {une photo} other {# photos}} |
+| `phoneCareer.project.feature` | Mettre en avant sur mon profil |
+| `phoneCareer.project.featuredOn` | Réalisation mise en avant |
+| `phoneCareer.project.featuredOff` | Réalisation retirée de la mise en avant |
+| `phoneCareer.project.share` | Partager dans le Fil |
+| `phoneCareer.project.delete` | Supprimer |
+| `phoneCareer.project.deleteQuestion` | Supprimer cette réalisation ? |
+| `phoneCareer.project.deleteText` | Elle est retirée de votre portfolio et du Fil. |
+| `phoneCareer.project.deleted` | Réalisation supprimée |
+| `phoneCareer.project.error` | Cela n’a pas marché. Réessayez dans un instant. |
+| `phoneCareer.project.newTitle` | Nouvelle réalisation |
+| `phoneCareer.project.editTitle` | Modifier la réalisation |
+| `phoneCareer.project.photos` | Photos ({max} au plus) |
+| `phoneCareer.project.photoAdd` | Ajouter |
+| `phoneCareer.project.photoRemove` | Retirer la photo {n} |
+| `phoneCareer.project.photoError` | Cette photo n’a pas pu être lue. Essayez-en une autre. |
+| `phoneCareer.project.photosHint` | Vérifiez qu’aucun numéro ni code personnel n’apparaît sur vos photos avant d’enregistrer. |
+| `phoneCareer.project.title` | Titre |
+| `phoneCareer.project.titlePlaceholder` | Ex. : Tableau de bord des ventes |
+| `phoneCareer.project.description` | Description |
+| `phoneCareer.project.orbi` | Orbi rédige la description à partir de votre titre et de vos notes. |
+| `phoneCareer.project.orbiButton` | Rédiger |
+| `phoneCareer.project.link` | Lien (facultatif) |
+| `phoneCareer.project.alsoFil` | Publier aussi dans le Fil |
+| `phoneCareer.project.added` | Réalisation ajoutée |
+| `phoneCareer.project.saved` | Réalisation enregistrée |
+| `phoneCareer.project.errors.title` | Donnez un titre à votre réalisation. |
+| `phoneCareer.project.errors.link` | Ce lien n’est pas valide. Il commence par https://. |
+| `phoneCareer.project.errors.entitlement` | Votre formule ne comprend pas le portfolio. |
+| `phoneCareer.project.errors.limit` | Vous avez atteint le nombre maximum de réalisations. |
+| `phoneCareer.project.errors.file` | Ces photos sont trop lourdes ou illisibles. Essayez-en d’autres. |
+| `phoneCareer.project.errors.notFound` | Cette réalisation n’existe plus. |
+| `phoneCareer.application.back` | Retour |
+| `phoneCareer.application.title` | Candidature |
+| `phoneCareer.application.close` | Fermer |
+| `phoneCareer.application.cancel` | Annuler |
+| `phoneCareer.application.offer` | Voir l’offre |
+| `phoneCareer.application.where` | Où en est-elle |
+| `phoneCareer.application.hour` | {m, select, 00 {{h} h} other {{h} h {m}}} |
+| `phoneCareer.application.step.sent` | Candidature envoyée |
+| `phoneCareer.application.step.viewed` | Vue par {company} |
+| `phoneCareer.application.step.notViewed` | Pas encore ouverte |
+| `phoneCareer.application.step.viewedSeen` | Votre candidature a été lue |
+| `phoneCareer.application.step.interview` | Entretien |
+| `phoneCareer.application.step.interviewOn` | {day}, {hour} |
+| `phoneCareer.application.step.interviewLater` | Si votre profil est retenu |
+| `phoneCareer.application.step.noInterview` | Sans entretien |
+| `phoneCareer.application.step.decision` | Décision |
+| `phoneCareer.application.decision.after` | Après l’entretien |
+| `phoneCareer.application.decision.hired` | Bonne nouvelle : votre candidature est retenue |
+| `phoneCareer.application.decision.notSelected` | Candidature non retenue cette fois |
+| `phoneCareer.application.decision.withdrawn` | Vous avez retiré votre candidature |
+| `phoneCareer.application.decision.jobClosed` | L’offre est fermée |
+| `phoneCareer.application.interview` | Entretien |
+| `phoneCareer.application.interviewWhen` | {day} · {hour} |
+| `phoneCareer.application.with` | avec {name} |
+| `phoneCareer.application.join` | Rejoindre l’entretien |
+| `phoneCareer.application.calendar` | Ajouter à l’agenda |
+| `phoneCareer.application.prepare` | Préparer avec Orbi |
+| `phoneCareer.application.practice` | S’entraîner avec Orbi |
+| `phoneCareer.application.practiceKinds` | Écrit ou oral |
+| `phoneCareer.application.cv` | CV envoyé |
+| `phoneCareer.application.writeTo` | Écrire à {name} |
+| `phoneCareer.application.writeTeam` | Écrire à l’équipe de recrutement |
+| `phoneCareer.application.draftInterview` | {name, select, none {Bonjour} other {Bonjour {name}}}, merci pour l’invitation. Je confirme ma présence {day} à {hour}. Bonne journée, {me} |
+| `phoneCareer.application.draftNews` | {name, select, none {Bonjour} other {Bonjour {name}}}, le poste {title} m’intéresse toujours. Avez-vous des nouvelles de ma candidature ? Bonne journée, {me} |
+| `phoneCareer.application.draftNote` | Brouillon proposé par Orbi, modifiable. |
+| `phoneCareer.application.send` | Envoyer |
+| `phoneCareer.application.sent` | Message envoyé |
+| `phoneCareer.application.orbi` | Orbi |
+| `phoneCareer.application.orbiTitle` | Préparer l’entretien |
+| `phoneCareer.application.askPeople` | Quelles questions me posera {name} ? |
+| `phoneCareer.application.askTeam` | Quelles questions l’équipe de recrutement va-t-elle poser ? |
+| `phoneCareer.application.askCompany` | Que dire sur {company} ? |
+| `phoneCareer.application.context` | candidature au poste {title} chez {company} |
+| `phoneCareer.application.orbiPlaceholder` | Écrire à Orbi… |
+| `phoneCareer.application.orbiSend` | Demander à Orbi |
+| `phoneCareer.application.withdraw` | Retirer ma candidature |
+| `phoneCareer.application.withdrawQuestion` | Retirer votre candidature ? |
+| `phoneCareer.application.withdrawText` | {company} sera prévenu. Vous pourrez postuler à d’autres offres à tout moment. |
+| `phoneCareer.application.withdrawConfirm` | Retirer |
+| `phoneCareer.application.withdrawn` | Candidature retirée |
+| `phoneCareer.application.error` | Cela n’a pas marché. Réessayez dans un instant. |
 
 ### Refonte recruteur · Cadre mobile (lot 1)
 

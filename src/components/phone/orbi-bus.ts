@@ -11,3 +11,10 @@ export type OrbiFact = (typeof ORBI_FACTS)[number];
 export function askOrbiFrom(fact: OrbiFact) {
   window.dispatchEvent(new CustomEvent<OrbiFact>(ORBI_EVENT, { detail: fact }));
 }
+
+/** A question for Orbi's conversation, asked from a page (« Préparer avec Orbi », lot B5). */
+export const ORBI_ASK_EVENT = "nb:orbi-question";
+
+export function askOrbi(question: string) {
+  window.dispatchEvent(new CustomEvent<string>(ORBI_ASK_EVENT, { detail: question }));
+}

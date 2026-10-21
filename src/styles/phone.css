@@ -5668,3 +5668,337 @@ input:checked + .nb-ca-radio::after {
 .nb-ca-bas {
   padding-top: 16px;
 }
+
+/* ─── Carrière : réalisation (planches Carrière-real, -real-ajout, -real-suppr, lot B5) ─── */
+.nb-ca-projet {
+  padding-bottom: 40px;
+}
+.nb-ca-projet .nb-ca-form-barre .nb-retour svg {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+}
+.nb-ca-projet .nb-ca-ok {
+  color: var(--nb-creme);
+  display: inline-flex;
+  align-items: center;
+}
+.nb-ca-projet-img {
+  position: relative;
+  height: 260px;
+  background: #11413a;
+  overflow: hidden;
+}
+.nb-ca-projet-img > svg {
+  width: 100%;
+  height: 100%;
+  padding: 40px 60px;
+}
+.nb-ca-projet-defile {
+  display: flex;
+  height: 100%;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  scrollbar-width: none;
+}
+.nb-ca-projet-defile::-webkit-scrollbar {
+  display: none;
+}
+.nb-ca-projet-defile img {
+  flex: 0 0 100%;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  scroll-snap-align: start;
+}
+.nb-ca-projet-compte {
+  position: absolute;
+  right: 12px;
+  bottom: 12px;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12.5px;
+  font-weight: 700;
+  background: rgba(11, 26, 31, 0.85);
+}
+.nb-ca-projet-corps {
+  padding: 18px 16px 18px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.nb-ca-projet-corps h1 {
+  font-size: 24px;
+  font-weight: 700;
+  line-height: 1.25;
+}
+.nb-ca-projet-corps .nb-meta {
+  margin-top: 4px;
+  font-size: 13.5px;
+}
+.nb-ca-projet-texte {
+  margin-top: 10px;
+  font-size: 15px;
+  line-height: 1.6;
+  white-space: pre-line;
+}
+.nb-ca-projet-corps a {
+  display: block;
+  margin-top: 10px;
+  color: var(--nb-menthe);
+  overflow-wrap: anywhere;
+}
+.nb-ca-projet-corps .nb-ca-chips {
+  margin-top: 14px;
+  padding: 0;
+}
+.nb-ca-real .nb-ex-real-img img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nb-ca-photos {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+}
+.nb-ca-photo {
+  position: relative;
+  width: 104px;
+  height: 104px;
+  border-radius: 14px;
+  overflow: hidden;
+  background: #11302c;
+}
+.nb-ca-photo img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.nb-ca-photo button {
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 28px;
+  height: 28px;
+  display: grid;
+  place-items: center;
+  border-radius: 50%;
+  background: rgba(11, 26, 31, 0.85);
+  color: var(--nb-creme);
+}
+.nb-ca-photo-ajout {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+  background: none;
+  border: 1.5px dashed rgba(255, 255, 255, 0.25);
+  font-size: 14px;
+  color: var(--nb-creme);
+  cursor: pointer;
+}
+.nb-ca-photo-ajout svg {
+  color: var(--nb-lime);
+}
+.nb-ca-ch > .nb-meta {
+  margin-top: 10px;
+  font-size: 13px;
+}
+
+/* ─── Carrière : candidature (planches Carrière-candidature, -cand-orbi, -cand-ecrire, -cand-retirer) ─── */
+.nb-ca-cand-tete {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 18px 16px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.nb-ca-cand-tete > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.nb-ca-cand-tete b {
+  display: block;
+  font-size: 17px;
+  line-height: 1.3;
+}
+.nb-ca-cand-tete small {
+  display: block;
+  margin-top: 4px;
+  font-size: 13.5px;
+}
+.nb-ca-cand-logo {
+  flex: 0 0 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: grid;
+  place-items: center;
+  background: #11413a;
+  color: var(--nb-lime);
+  font-weight: 700;
+  font-size: 15px;
+}
+.nb-ca-cand-offre {
+  display: inline-flex;
+  align-items: center;
+  gap: 2px;
+  min-height: 44px;
+  font-size: 14px;
+  color: var(--nb-brume);
+  white-space: nowrap;
+}
+.nb-ca-cand-suivi {
+  padding: 18px 20px 6px;
+}
+.nb-ca-cand-suivi ol {
+  list-style: none;
+  margin: 10px 0 0;
+  padding: 0;
+}
+.nb-ca-cand-suivi li {
+  position: relative;
+  padding: 0 0 18px 34px;
+}
+.nb-ca-cand-suivi li::before {
+  content: "";
+  position: absolute;
+  left: 2px;
+  top: 5px;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: var(--nb-creme);
+}
+.nb-ca-cand-suivi li:not(:last-child)::after {
+  content: "";
+  position: absolute;
+  left: 8px;
+  top: 19px;
+  bottom: -3px;
+  width: 2px;
+  background: rgba(255, 255, 255, 0.18);
+}
+.nb-ca-cand-suivi li[data-etat="current"]::before {
+  background: var(--nb-lime);
+}
+.nb-ca-cand-suivi li[data-etat="current"] b {
+  color: var(--nb-lime);
+}
+.nb-ca-cand-suivi li[data-etat="next"]::before {
+  background: rgba(255, 255, 255, 0.16);
+}
+.nb-ca-cand-suivi li[data-etat="next"] b {
+  color: var(--nb-brume);
+}
+.nb-ca-cand-suivi b {
+  display: block;
+  font-size: 16px;
+  font-weight: 500;
+}
+.nb-ca-cand-suivi small {
+  display: block;
+  margin-top: 2px;
+  font-size: 13.5px;
+  color: var(--nb-brume);
+}
+.nb-ca-cand-ent {
+  margin: 4px 16px 16px;
+  padding: 18px;
+  border-radius: 18px;
+  border: 1px solid rgba(166, 240, 102, 0.35);
+}
+.nb-ca-cand-k {
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--nb-lime);
+}
+.nb-ca-cand-ent > b {
+  display: block;
+  margin-top: 6px;
+  font-size: 20px;
+}
+.nb-ca-cand-ent > .nb-meta {
+  margin-top: 4px;
+  font-size: 14px;
+}
+.nb-ca-cand-ent > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 16px;
+}
+.nb-ca-cand-ent .nb-bouton {
+  flex: 1 1 0;
+  min-width: 0;
+  padding: 0 12px;
+  font-size: 14.5px;
+  white-space: nowrap;
+}
+.nb-ca-cand-ent .nb-bouton[data-plein] {
+  flex-basis: 100%;
+}
+.nb-bouton[data-menthe] {
+  background: var(--nb-menthe);
+  color: var(--nb-nuit);
+  border-color: var(--nb-menthe);
+}
+.nb-ca-cand-lignes {
+  border-top: 1px solid rgba(255, 255, 255, 0.08);
+}
+.nb-ca-it small[data-lime] {
+  color: var(--nb-lime);
+}
+.nb-ca-cand-orbi-t {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  margin-bottom: 8px;
+}
+.nb-ca-cand-orbi-t b {
+  display: block;
+  font-size: 17px;
+}
+.nb-ca-cand-q {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 16px 20px;
+  border-radius: 14px;
+  background: rgba(255, 255, 255, 0.06);
+  font-weight: 600;
+  font-size: 15px;
+  color: var(--nb-creme);
+}
+.nb-ca-cand-ecrire {
+  display: flex;
+  align-items: center;
+  margin-top: 4px;
+  border-radius: 26px;
+  border: 1px solid var(--nb-menthe);
+  background: #111d20;
+  padding: 0 6px 0 18px;
+}
+.nb-ca-cand-ecrire input {
+  flex: 1;
+  height: 50px;
+  background: none;
+  border: 0;
+  outline: 0;
+  font: inherit;
+  color: var(--nb-creme);
+}
+.nb-ca-cand-ecrire button {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background: var(--nb-menthe);
+  color: var(--nb-nuit);
+}
+.nb-ca-projet-corps .nb-ex-chip {
+  display: inline-flex;
+  align-items: center;
+}

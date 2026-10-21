@@ -7,7 +7,7 @@ import { listApplications, talentStatus, type TalentApplicationStatus } from "./
 import { stageFor, type Stage, stages } from "./diagnostic-scoring";
 import { isJobOpen, openJobWhere } from "./jobs";
 import { followedCourses } from "./learn-space";
-import { listProjects } from "./portfolio";
+import { listProjects, type PortfolioProject } from "./portfolio";
 import { completeness, getFullProfile, parseProfileLanguages } from "./profile";
 
 /**
@@ -76,6 +76,12 @@ export async function suggestedSkills(db: PrismaClient, owned: string[], take = 
     const name = names.get(row.skillId);
     return name ? [{ id: row.skillId, name }] : [];
   });
+}
+
+/** The first photo of a project (its files are served by `/api/projets/[id]/[n]`). */
+export function projectCover(project: PortfolioProject) {
+  const index = project.files.findIndex((file) => file.type.startsWith("image/"));
+  return index < 0 ? null : `/api/projets/${project.id}/${index}`;
 }
 
 export async function careerHome(db: PrismaClient, userId: string, now = new Date()) {
@@ -221,7 +227,8 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
       id: project.id,
       title: project.title,
       tool: project.skills[0] ?? null,
-      photos: project.media.length,
+      photos: project.files.filter((file) => file.type.startsWith("image/")).length,
+      cover: projectCover(project),
       files: project.files.length,
       featured: project.visible,
     })),
@@ -241,10 +248,15 @@ export type CareerHome = Awaited<ReturnType<typeof careerHome>>;
 
 const rewriteOutput = z.object({ text: z.string() });
 
+export type RewriteKind = "about" | "experience" | "project";
+
 const REWRITE_SYSTEM = {
   about: [
     "Tu es Orbi, l'assistant de Jumanly. Tu réécris le texte « À propos » d'un profil en français simple, en 2 ou 3 phrases, à la première personne, pour des recruteurs.",
     "Commence par un verbe d'action ou par le métier, termine par l'objectif.",
+  ],
+  project: [
+    "Tu es Orbi, l'assistant de Jumanly. Tu rédiges la description d'une réalisation du portfolio en français simple, en 2 ou 3 phrases : ce qui a été fait, avec quoi, pour quel résultat.",
   ],
   experience: [
     "Tu es Orbi, l'assistant de Jumanly. Tu corriges les fautes de la description d'une expérience et la mets en forme : 2 à 4 lignes, une réalisation par ligne, chacune commençant par un verbe d'action.",
@@ -260,7 +272,7 @@ const REWRITE_RULES = [
 ];
 
 /** Without a model: the person's own words, tidied (spaces, capitals, one line per sentence). */
-export function rewriteTemplate(kind: "about" | "experience", text: string) {
+export function rewriteTemplate(kind: RewriteKind, text: string) {
   const sentences = text
     .replace(/\s+/g, " ")
     .split(/(?<=[.!?])\s+|\n+/)
@@ -278,7 +290,7 @@ export function rewriteTemplate(kind: "about" | "experience", text: string) {
 export async function rewriteCareerText(
   db: PrismaClient,
   userId: string,
-  input: { kind: "about" | "experience"; text: string; title?: string },
+  input: { kind: RewriteKind; text: string; title?: string },
 ): Promise<string | { error: AiError["code"] | "empty" | "same" }> {
   const text = input.text.trim();
   if (text.length < 10) return { error: "empty" };
@@ -287,7 +299,11 @@ export async function rewriteCareerText(
       userId,
       feature: "proofread",
       system: [...REWRITE_SYSTEM[input.kind], ...REWRITE_RULES].join("\n"),
-      prompt: [input.title ? `Poste : ${input.title}` : "", "Texte :", text].join("\n"),
+      prompt: [
+        input.title ? `${input.kind === "project" ? "Réalisation" : "Poste"} : ${input.title}` : "",
+        "Texte :",
+        text,
+      ].join("\n"),
       schema: rewriteOutput,
       template: () => ({ text: rewriteTemplate(input.kind, text) }),
     });
