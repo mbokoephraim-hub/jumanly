@@ -58,6 +58,12 @@ export const notificationTypes = [
   "orgJoinAccepted",
   "orgJoinDeclined",
   "jobEnding",
+  // Le Fil (Modèle B, lot B3): answers, names, J'aime, republications and quotes.
+  "feedReply",
+  "feedMention",
+  "feedLike",
+  "feedRepost",
+  "feedQuote",
 ] as const;
 export type NotificationType = (typeof notificationTypes)[number];
 
@@ -91,7 +97,18 @@ export const notificationCategories = {
     "matchReviewed",
     "profileViewed",
   ],
-  messages: ["newMessage", "mention", "contactRequest", "contactAccepted", "contactDeclined"],
+  messages: [
+    "newMessage",
+    "mention",
+    "contactRequest",
+    "contactAccepted",
+    "contactDeclined",
+    "feedReply",
+    "feedMention",
+    "feedLike",
+    "feedRepost",
+    "feedQuote",
+  ],
   learning: ["certificateIssued", "diagnosticReady", "diagnosticReminder"],
   billing: [
     "renewalDue",

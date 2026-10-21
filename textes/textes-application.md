@@ -8239,6 +8239,204 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 
 ---
 
+### Modèle B · Fil au téléphone
+
+*Lot B3 (docs/modele-b, rangées 05 et 06, planche `Fil.dc.html`) : Fil façon Threads (Pour vous, Abonnements, Entreprises), publication et réponses, J'aime, Répondre, Republier, Citer, Envoyer, menu ···, signalement, nouvelle publication, notifications (Tout, Candidatures, Offres, Réseau) et Orbi depuis le Fil.*
+
+| Clé | Texte |
+|---|---|
+| `phoneFil.seo` | Fil |
+| `phoneFil.title` | Fil |
+| `phoneFil.bell` | {count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}} |
+| `phoneFil.bellMany` | 99+ |
+| `phoneFil.account` | Votre carrière |
+| `phoneFil.tabs` | Fils |
+| `phoneFil.tab.pourvous` | Pour vous |
+| `phoneFil.tab.abonnements` | Abonnements |
+| `phoneFil.tab.entreprises` | Entreprises |
+| `phoneFil.compose.prompt` | Quoi de neuf ? |
+| `phoneFil.compose.button` | Publier |
+| `phoneFil.tag.company` | Entreprise |
+| `phoneFil.tag.newRole` | Nouveau poste |
+| `phoneFil.tag.work` | Réalisation |
+| `phoneFil.tag.certificate` | Attestation |
+| `phoneFil.tag.event` | Événement |
+| `phoneFil.you` | Vous |
+| `phoneFil.more` | Plus d'options |
+| `phoneFil.profile` | Voir le profil |
+| `phoneFil.like` | J'aime |
+| `phoneFil.likeCount` | {count, plural, =0 {J'aime} one {J'aime, # personne} other {J'aime, # personnes}} |
+| `phoneFil.reply` | Répondre |
+| `phoneFil.replyCount` | {count, plural, =0 {Répondre} one {Répondre, # réponse} other {Répondre, # réponses}} |
+| `phoneFil.repost` | Republier |
+| `phoneFil.repostCount` | {count, plural, =0 {Republier} one {Republier, # republication} other {Republier, # republications}} |
+| `phoneFil.seeReplies` | {count, plural, one {Voir la réponse} other {Voir les # réponses}} |
+| `phoneFil.score` | {score} % pour vous |
+| `phoneFil.offerLine` | {city} · {contract} · {remote} |
+| `phoneFil.contract.cdi` | CDI |
+| `phoneFil.contract.cdd` | CDD |
+| `phoneFil.contract.internship` | Stage |
+| `phoneFil.contract.freelance` | Freelance |
+| `phoneFil.contract.parttime` | Temps partiel |
+| `phoneFil.contract.apprenticeship` | Alternance |
+| `phoneFil.contract.volunteer` | Bénévolat |
+| `phoneFil.remote.onsite` | sur site |
+| `phoneFil.remote.hybrid` | hybride |
+| `phoneFil.remote.remote` | à distance |
+| `phoneFil.event.going` | Je participe |
+| `phoneFil.event.registered` | Inscrite ✓ |
+| `phoneFil.event.participants` | {count, plural, one {# participant} other {# participants}} |
+| `phoneFil.event.registeredToast` | Inscrite. Rappel la veille dans vos notifications. |
+| `phoneFil.event.canceledToast` | Participation annulée |
+| `phoneFil.masked` | Publication masquée. Vous en verrez moins comme celle-ci. |
+| `phoneFil.maskedUndo` | Annuler |
+| `phoneFil.orbiCard.title` | Orbi |
+| `phoneFil.orbiCard.offers` | {count, plural, one {# offre publiée ce matin vous correspond.} other {# offres publiées ce matin vous correspondent.}} |
+| `phoneFil.end` | Vous êtes à jour. Revenez plus tard ou |
+| `phoneFil.endLink` | explorez les offres |
+| `phoneFil.endAfter` | . |
+| `phoneFil.empty.abonnements` | Les publications des personnes et des entreprises que vous suivez, et de vos connexions, s'afficheront ici. |
+| `phoneFil.empty.entreprises` | Les entreprises n'ont encore rien publié. |
+| `phoneFil.empty.pourvous` | Personne n'a encore publié. Soyez la première personne à partager une nouvelle. |
+| `phoneFil.time.now` | à l'instant |
+| `phoneFil.time.minutes` | {count} min |
+| `phoneFil.time.hours` | {count} h |
+| `phoneFil.time.yesterday` | hier |
+| `phoneFil.time.days` | {count} j |
+| `phoneFil.stamp.today` | Aujourd'hui à {time} |
+| `phoneFil.stamp.yesterday` | Hier à {time} |
+| `phoneFil.stamp.week` | {day} à {time} |
+| `phoneFil.stamp.date` | {date} à {time} |
+| `phoneFil.detail.title` | Publication |
+| `phoneFil.detail.back` | Fil |
+| `phoneFil.detail.backNotifs` | Notifications |
+| `phoneFil.detail.profile` | Profil |
+| `phoneFil.detail.replies` | {count, plural, =0 {0 réponse} one {# réponse} other {# réponses}} |
+| `phoneFil.detail.noReplies` | Aucune réponse pour l'instant. Lancez la conversation. |
+| `phoneFil.detail.replyTo` | Répondre à {name}… |
+| `phoneFil.detail.replyLabel` | Votre réponse |
+| `phoneFil.detail.replyingTo` | Réponse à {name} |
+| `phoneFil.detail.send` | Envoyer |
+| `phoneFil.detail.cancelReply` | Annuler |
+| `phoneFil.detail.closed.connections` | Seules les connexions de {name} peuvent répondre. |
+| `phoneFil.detail.closed.nobody` | {name} a fermé les réponses. |
+| `phoneFil.detail.empty` | Écrivez d'abord votre réponse. |
+| `phoneFil.detail.sent` | Réponse publiée |
+| `phoneFil.detail.gone` | Cette publication n'est plus disponible. |
+| `phoneFil.menu.title` | Publication de {name} |
+| `phoneFil.menu.mine` | Votre publication |
+| `phoneFil.menu.profile` | Voir le profil |
+| `phoneFil.menu.save` | Enregistrer |
+| `phoneFil.menu.unsave` | Retirer des enregistrements |
+| `phoneFil.menu.saveSub` | À retrouver dans Carrière |
+| `phoneFil.menu.link` | Copier le lien |
+| `phoneFil.menu.linkSub` | Pour la partager ailleurs |
+| `phoneFil.menu.hide` | Ne plus voir ce type de publication |
+| `phoneFil.menu.hideSub` | Le Fil s'adapte à vos choix |
+| `phoneFil.menu.report` | Signaler |
+| `phoneFil.menu.reportSub` | Contenu faux, abusif ou arnaque |
+| `phoneFil.menu.delete` | Supprimer la publication |
+| `phoneFil.menu.deleteSub` | Elle disparaît du Fil |
+| `phoneFil.toast.saved` | Publication enregistrée |
+| `phoneFil.toast.unsaved` | Retirée des enregistrements |
+| `phoneFil.toast.link` | Lien copié |
+| `phoneFil.toast.hidden` | C'est noté. Vous en verrez moins. |
+| `phoneFil.toast.deleted` | Publication supprimée |
+| `phoneFil.toast.reposted` | Republiée sur votre profil |
+| `phoneFil.toast.unreposted` | Republication annulée |
+| `phoneFil.toast.sentTo` | Envoyée à {name} |
+| `phoneFil.toast.error` | Cela n'a pas fonctionné. Réessayez dans un instant. |
+| `phoneFil.report.title` | Signaler la publication |
+| `phoneFil.report.anonymous` | {name} ne saura pas que c'est vous. |
+| `phoneFil.report.scam` | Fausse offre ou arnaque |
+| `phoneFil.report.harassment` | Propos blessants |
+| `phoneFil.report.misinformation` | Fausse information |
+| `phoneFil.report.inappropriate` | Contenu inapproprié |
+| `phoneFil.report.other` | Autre raison |
+| `phoneFil.report.done` | Merci. Notre équipe vérifie sous 24 h. |
+| `phoneFil.report.already` | Vous avez déjà signalé cette publication. Notre équipe vérifie. |
+| `phoneFil.reshare.do` | Republier |
+| `phoneFil.reshare.doSub` | Sur votre profil, sans commentaire |
+| `phoneFil.reshare.undo` | Annuler la republication |
+| `phoneFil.reshare.undoSub` | Elle quitte votre profil |
+| `phoneFil.reshare.quote` | Citer |
+| `phoneFil.reshare.quoteSub` | Ajouter votre avis au-dessus |
+| `phoneFil.reshare.send` | Envoyer à une connexion |
+| `phoneFil.reshare.sendSub` | Dans Messages |
+| `phoneFil.send.title` | Envoyer à |
+| `phoneFil.send.button` | Envoyer |
+| `phoneFil.send.to` | Envoyer à {name} |
+| `phoneFil.send.open` | Ouvrir Messages |
+| `phoneFil.send.none` | Vous n'avez pas encore de connexion. Ajoutez-en depuis Messages. |
+| `phoneFil.send.message` | Je te partage cette publication de {name} : {link} |
+| `phoneFil.publish.title` | Nouvelle publication |
+| `phoneFil.publish.cancel` | Annuler |
+| `phoneFil.publish.placeholder` | Quoi de neuf ? |
+| `phoneFil.publish.label` | Votre publication |
+| `phoneFil.publish.photo` | Photo |
+| `phoneFil.publish.work` | Réalisation |
+| `phoneFil.publish.certificate` | Attestation |
+| `phoneFil.publish.remove` | Retirer la pièce jointe |
+| `phoneFil.publish.workDetail` | Réalisation · Portfolio |
+| `phoneFil.publish.certificateDetail` | Formation Jumanly · {date} |
+| `phoneFil.publish.pickWork` | Choisir une réalisation |
+| `phoneFil.publish.pickCertificate` | Choisir une attestation |
+| `phoneFil.publish.noWork` | Aucune réalisation dans votre portfolio pour l'instant. |
+| `phoneFil.publish.noWorkLink` | Ajouter une réalisation |
+| `phoneFil.publish.noCertificate` | Aucune attestation pour l'instant. Terminez une formation pour en obtenir une. |
+| `phoneFil.publish.noCertificateLink` | Voir les formations |
+| `phoneFil.publish.orbi` | Orbi peut écrire un brouillon à partir de votre attestation {course}. |
+| `phoneFil.publish.orbiTry` | Essayer |
+| `phoneFil.publish.draft` | Je viens d'obtenir mon attestation « {course} » sur Jumanly. Prochaine étape : la mettre en pratique. |
+| `phoneFil.publish.audience.everyone` | Tout le monde peut répondre |
+| `phoneFil.publish.audience.connections` | Mes connexions peuvent répondre |
+| `phoneFil.publish.audience.nobody` | Personne ne peut répondre |
+| `phoneFil.publish.audience.label` | Qui peut répondre : {audience}. Changer |
+| `phoneFil.publish.submit` | Publier |
+| `phoneFil.publish.empty` | Écrivez quelque chose ou ajoutez une pièce jointe. |
+| `phoneFil.publish.done` | Publication partagée |
+| `phoneFil.publish.photoError` | Cette photo ne peut pas être ajoutée. Choisissez une image JPEG, PNG ou WebP. |
+| `phoneFil.publish.photoAlt` | Photo jointe par {name} |
+| `phoneFil.publish.quoting` | Publication citée |
+| `phoneFil.notifs.systemInitial` | J |
+| `phoneFil.notifs.title` | Notifications |
+| `phoneFil.notifs.back` | Fil |
+| `phoneFil.notifs.settings` | Réglages des notifications |
+| `phoneFil.notifs.filters` | Catégories |
+| `phoneFil.notifs.filter.tout` | Tout |
+| `phoneFil.notifs.filter.candidatures` | Candidatures |
+| `phoneFil.notifs.filter.offres` | Offres |
+| `phoneFil.notifs.filter.reseau` | Réseau |
+| `phoneFil.notifs.unread` | {count, plural, =0 {Tout est lu} one {# non lue} other {# non lues}} |
+| `phoneFil.notifs.markAll` | Tout marquer comme lu |
+| `phoneFil.notifs.markedAll` | Tout est marqué comme lu |
+| `phoneFil.notifs.group.today` | Aujourd'hui |
+| `phoneFil.notifs.group.thisWeek` | Cette semaine |
+| `phoneFil.notifs.group.earlier` | Plus tôt |
+| `phoneFil.notifs.ago.now` | À l'instant |
+| `phoneFil.notifs.ago.minutes` | Il y a {count} min |
+| `phoneFil.notifs.ago.hours` | Il y a {count} h |
+| `phoneFil.notifs.ago.yesterday` | Hier |
+| `phoneFil.notifs.empty` | Rien dans cette catégorie pour l'instant. |
+| `phoneFil.notifs.newDot` | Non lue |
+| `phoneFil.orbi.digest` | {count, plural, =0 {Rien de nouveau depuis hier. Les offres d'Explorer vous attendent.} one {Une nouveauté aujourd'hui : {names}.} other {# nouveautés aujourd'hui : {names}.}} |
+| `phoneFil.orbi.digestTitle` | Résumer les nouveautés du jour |
+| `phoneFil.orbi.digestPost` | {name} a publié |
+| `phoneFil.orbi.offers` | {count, plural, =0 {Aucune offre publiée ce matin ne vous correspond encore.} one {Classée selon votre profil.} other {Classées selon votre profil, la plus proche en premier.}} |
+| `phoneFil.orbi.offersTitle` | {count, plural, one {# offre publiée ce matin} other {# offres publiées ce matin}} |
+| `phoneFil.orbi.companies` | {count, plural, =0 {Aucune entreprise ne publie d'offre en ce moment.} one {Une entreprise recrute en ce moment.} other {# entreprises recrutent en ce moment.}} |
+| `phoneFil.orbi.companyLine` | {count, plural, one {# offre en cours} other {# offres en cours}} |
+| `phoneFil.orbi.follow` | {count, plural, =0 {Personne à vous proposer pour l'instant. Revenez quand le Fil sera plus animé.} other {Ces personnes et entreprises publient dans le Fil en ce moment.}} |
+| `phoneFil.orbi.write` | {course, select, none {Vous n'avez pas encore d'attestation. Terminez une formation et je vous aiderai à l'annoncer.} other {Voici un brouillon : « {draft} »}} |
+| `phoneFil.orbi.openDraft` | Ouvrir le brouillon |
+| `phoneFil.orbi.jobLine` | {org} · {score} % pour vous |
+| `phoneFil.orbi.jobLineNoScore` | {org} · {city} |
+| `phoneFil.person.line` | {title} · {company} |
+| `phoneFil.profileMessage` | Message |
+| `phoneFil.profileOffers` | Offres en cours |
+| `phoneFil.profilePosts` | Publications |
+| `phoneFil.profileNoPosts` | Aucune publication pour l'instant. |
+
 ## Partie 04 · Espace recruteur et entreprise
 
 Textes d'interface de l'espace Hire et de la gestion d'organisation. Les droits (`hire.*`, `org.*`, `reports.*`, `connect.appointments`) et les rôles suivent `docs/specifications.md (partie 05)`.
@@ -13833,6 +14031,11 @@ Conventions :
 | `notifications.item.orgJoinAccepted` | Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe ! |
 | `notifications.item.orgJoinDeclined` | Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation. |
 | `notifications.item.jobEnding` | {days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}} |
+| `notifications.item.feedReply` | {name} a répondu à votre publication. |
+| `notifications.item.feedMention` | {name} vous a mentionné dans une réponse. |
+| `notifications.item.feedLike` | {name} a aimé votre publication. |
+| `notifications.item.feedRepost` | {name} a republié votre publication. |
+| `notifications.item.feedQuote` | {name} a cité votre publication. |
 | `notifications.item.unread` | Non lue |
 
 ### Notifications · Talent (par événement)
@@ -14860,6 +15063,7 @@ Conventions :
 | `report.reason.personalData` | Demande abusive de données personnelles |
 | `report.reason.inappropriate` | Contenu inapproprié |
 | `report.reason.impersonation` | Usurpation d'identité |
+| `report.reason.misinformation` | Fausse information |
 | `report.reason.other` | Autre motif |
 | `report.details.text` | Précisions (facultatif) |
 | `report.details.placeholder` | Ce qui vous a alerté, en quelques mots. |
@@ -17001,6 +17205,7 @@ Conventions :
 | `admin.reports.type.conversation` | Conversation |
 | `admin.reports.type.question` | Question de formation |
 | `admin.reports.type.profile` | Profil |
+| `admin.reports.type.post` | Publication du Fil |
 | `admin.reports.type.organization` | Organisation |
 | `admin.reports.type.aiSuggestion` | Suggestion IA |
 | `admin.reports.col.reason` | Motif |
@@ -17027,6 +17232,10 @@ Conventions :
 | `admin.reports.detail.title.job` | Offre signalée |
 | `admin.reports.detail.title.message` | Message signalé |
 | `admin.reports.detail.title.conversation` | Conversation signalée |
+| `admin.reports.detail.title.post` | Publication signalée |
+| `admin.reports.detail.post` | Publication du Fil |
+| `admin.reports.detail.postReply` | Réponse dans le Fil |
+| `admin.reports.detail.postImage` | Avec une photo |
 | `admin.reports.detail.author` | Auteur |
 | `admin.reports.detail.flagged` | message signalé |
 | `admin.reports.detail.hidden` | Ce contenu est déjà masqué. |

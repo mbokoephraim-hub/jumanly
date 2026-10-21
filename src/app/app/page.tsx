@@ -27,6 +27,7 @@ import { jobCards } from "@/server/services/jobs";
 import { nextLessons } from "@/server/services/learn-academy";
 import { completeness, getFullProfile } from "@/server/services/profile";
 import { readSignupFlow } from "@/server/signup-flow";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("forMe");
@@ -57,6 +58,8 @@ export default async function ForMePage({ searchParams }: PageProps<"/app">) {
   // A recruiter in their organization space lands on Hire; « Personnel » in the switcher comes back here.
   if (await getActiveSpace(user.id)) redirect("/app/hire");
   if (await getPartnerSpace(user.id)) redirect("/app/partenaire");
+  // On a phone the Fil is the tab kept mounted by the layout (Modèle B, lot B3): nothing here.
+  if (await isPhone()) return null;
   const now = new Date();
 
   // « Payer plus tard » at sign-up: remind the plan that was chosen (partie 06 § 6.2).

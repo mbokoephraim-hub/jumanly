@@ -227,6 +227,8 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   await page.goto("/app/hire/candidats?vue=propositions");
   const proposals = main(page);
   const remind = proposals.getByRole("button", { name: /^Relancer / });
+  // The list first (« Relancer » or « Relancé »): counting before it shows would skip the reminder.
+  await expect(remind.or(proposals.getByText("Relancé", { exact: true })).first()).toBeVisible();
   if (await remind.count()) {
     await remind.first().click();
     // `relance=ok` when this click reminded, `relance=non` when the other project was first.

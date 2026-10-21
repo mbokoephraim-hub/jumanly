@@ -50,6 +50,51 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Modèle B · B3 : le Fil au téléphone (21 octobre 2026)
+
+Planche Fil (`docs/modele-b/captures/INDEX.md`, rangées 05 et 06). Écarts et choix :
+`docs/decisions/2026-10-21-modele-b-b3.md`.
+
+**Fait.**
+- Onglet Fil (`src/components/phone/fil/`), gardé monté sous les autres onglets et lu pendant le
+  logo : « Pour vous », « Abonnements », « Entreprises » sans rechargement, cloche avec le nombre de
+  notifications non lues, « Quoi de neuf ? », publications avec offre et score, photo, réalisation,
+  attestation, citation, événement (« Je participe »), aperçu de la première réponse, carte d'Orbi
+  quand des offres du matin correspondent, « Vous êtes à jour ».
+- Publication `/app/fil/[id]` : réponses, J'aime, « Répondre » (avec « @Prénom Nom »), barre de
+  réponse fixe ou message quand les réponses sont fermées, retour vers le Fil ou les notifications.
+- Feuilles : menu « ··· » (profil, enregistrer, copier le lien, ne plus voir ce type, signaler,
+  supprimer pour ses publications), signalement (motif « Fausse information » ajouté, visible dans
+  `/admin/signalements`), Republier / Citer / Envoyer à une connexion (dans Messages).
+- Nouvelle publication `/app/fil/publier` : texte, photo réduite sur le téléphone, réalisation ou
+  attestation, brouillon d'Orbi, « Qui peut répondre », retour au Fil.
+- Notifications au téléphone : filtres Tout, Candidatures, Offres, Réseau, groupes Aujourd'hui /
+  Cette semaine / Plus tôt, « Tout marquer comme lu ». Nouveaux types : réponse, mention, J'aime,
+  republication, citation.
+- Orbi depuis le Fil : quatre questions calculées sans modèle ni crédit, avec des fiches à ouvrir.
+- Pages minimales d'une personne et d'une entreprise (dessinées en B4).
+- Migration additive `20261021165623_talent_feed`. Démo : `prisma/seed/fil.ts` (quatre talents
+  fictifs, publications de Baobab Fintech et Mwinda Énergie, photos dans `public/modele-b/`).
+
+**Captures → maquettes** (`captures/etape-1/`, 390 × 844) :
+
+| Capture | Maquette |
+|---|---|
+| `b3-fil.png` | 031 Fil |
+| `b3-detail.png` | 032 Fil-detail |
+| `b3-publier.png` | 033 Fil-publier |
+| `b3-orbi.png`, `b3-orbi-reponse.png` | 034 Fil-orbi, 041 Fil-orbi-reponse |
+| `b3-notifs.png` | 035 Fil-notifs |
+| `b3-detail-baobab.png` | 036 Fil-detail-baobab |
+| `b3-menu.png`, `b3-signaler.png` | 037 Fil-menu, 038 Fil-signaler |
+| `b3-repub.png`, `b3-envoi.png` | 039 Fil-repub, 040 Fil-envoi |
+
+**Tests.** `tests/db/feed.test.ts` (abonnements, publication vide, « Qui peut répondre », J'aime,
+type masqué, suppression, signalement) ; `tests/e2e/modele-b-fil.spec.ts` (chaque bouton du Fil ouvre
+quelque chose, Fil gardé monté à l'aller-retour).
+
+**Fichiers supprimés.** Aucun (l'ancien tableau de bord sert encore l'ordinateur et la tablette).
+
 ## Modèle B · B2 : accueil, inscription et premier profil au téléphone (21 octobre 2026)
 
 Planche Accueil (`docs/modele-b/captures/INDEX.md`, rangées 02 et 03). Écarts et choix :

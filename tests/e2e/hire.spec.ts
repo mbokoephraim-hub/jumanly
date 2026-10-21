@@ -186,8 +186,11 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
     "Non retenue",
   );
   await talent.goto("/app/notifications");
+  // On a phone (Modèle B, lot B3), the notification is a sentence: « … n'a pas retenu … ».
   await expect(
-    talent.getByRole("button", { name: /^Candidature non retenue/ }).first(),
+    talent
+      .getByRole("button", { name: /^Candidature non retenue|n'a pas retenu votre candidature/ })
+      .first(),
   ).toContainText(title);
   await talent.context().close();
 });

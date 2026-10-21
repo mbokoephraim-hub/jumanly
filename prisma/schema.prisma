@@ -148,6 +148,9 @@ model Organization {
   suspensionReason        String?
   /// Jobs that were live when the organization was suspended, published again on reactivation.
   suspendedJobIds         String[]               @default([])
+  /// Le Fil (Modèle B, lot B3): the organization's posts and who follows it.
+  feedPosts               FeedPost[]
+  feedFollowers           FeedFollow[]
   createdAt               DateTime               @default(now())
   updatedAt               DateTime               @updatedAt
 }
@@ -325,6 +328,7 @@ model Job {
   applicationDrafts       ApplicationDraft[]
   matchResults            MatchResult[]
   viewDays                JobViewDay[]
+  feedPosts               FeedPost[]
   createdAt               DateTime           @default(now())
   updatedAt               DateTime           @updatedAt
 
@@ -842,6 +846,16 @@ model User {
   connectionsReceived Connection[]              @relation("ConnectionAddressee")
   enrollments         Enrollment[]
   learningPaths       LearningPathFollow[]
+  /// Le Fil (Modèle B, lot B3).
+  feedPosts           FeedPost[]                @relation("FeedPostAuthor")
+  feedLikes           FeedLike[]
+  feedReposts         FeedRepost[]
+  feedSaves           FeedSave[]
+  feedFollows         FeedFollow[]              @relation("FeedFollower")
+  feedFollowers       FeedFollow[]              @relation("FeedFollowedUser")
+  feedHiddenTypes     FeedHiddenType[]
+  feedEvents          FeedEventParticipant[]
+  feedImages          FeedImage[]
   quizAttempts        QuizAttempt[]
   lessonNotes         LessonNote[]
   exerciseSubmissions ExerciseSubmission[]
@@ -2334,4 +2348,151 @@ model Locality {
 
   @@unique([countryCode, name])
   @@index([countryCode, rank])
+}
+
+// ─── Le Fil (Modèle B, lot B3, docs/modele-b) ───────────────────
+
+/// What a post is about: its tag in the Fil (« Nouveau poste », « Réalisation »…) and the
+/// « type » a person can choose to see less of.
+enum FeedPostKind {
+  post
+  newRole
+  work
+  certificate
+  event
+}
+
+/// Who may answer a post (« Tout le monde peut répondre »).
+enum FeedReplyPolicy {
+  everyone
+  connections
+  nobody
+}
+
+/// A post of the Fil, or an answer to one (`parentId`). Written by a person (`authorId`) or in
+/// the name of an organization (`organizationId`, with the member who wrote it as author).
+model FeedPost {
+  id             String                 @id @default(cuid(2))
+  authorId       String?
+  author         User?                  @relation("FeedPostAuthor", fields: [authorId], references: [id], onDelete: Cascade)
+  organizationId String?
+  organization   Organization?          @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  kind           FeedPostKind           @default(post)
+  body           String
+  /// A photo: an uploaded one (/api/fil/image/…) or a demo picture.
+  imageUrl       String?
+  imageAlt       String?
+  /// An offer shown under the text, with the reader's score.
+  jobId          String?
+  job            Job?                   @relation(fields: [jobId], references: [id], onDelete: SetNull)
+  /// A piece of the author's career: { type: "work" | "certificate", id, title, detail }.
+  attachment     Json?
+  /// « Citer »: the post quoted under this one.
+  quotedId       String?
+  quoted         FeedPost?              @relation("FeedQuote", fields: [quotedId], references: [id], onDelete: SetNull)
+  quotes         FeedPost[]             @relation("FeedQuote")
+  /// An answer: the post it answers.
+  parentId       String?
+  parent         FeedPost?              @relation("FeedReplies", fields: [parentId], references: [id], onDelete: Cascade)
+  replies        FeedPost[]             @relation("FeedReplies")
+  replyPolicy    FeedReplyPolicy        @default(everyone)
+  /// An event (« Portes ouvertes »): when it takes place.
+  eventAt        DateTime?
+  /// Taken down by moderation after a report.
+  hiddenAt       DateTime?
+  likes          FeedLike[]
+  reposts        FeedRepost[]
+  saves          FeedSave[]
+  participants   FeedEventParticipant[]
+  images         FeedImage[]
+  createdAt      DateTime               @default(now())
+
+  @@index([parentId, createdAt])
+  @@index([createdAt])
+  @@index([authorId, createdAt])
+  @@index([organizationId, createdAt])
+}
+
+model FeedLike {
+  postId    String
+  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([postId, userId])
+  @@index([userId])
+}
+
+/// « Republier »: the post shown on the person's profile, without a comment.
+model FeedRepost {
+  postId    String
+  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([postId, userId])
+  @@index([userId, createdAt])
+}
+
+/// « Enregistrer »: kept for later, found again in Carrière.
+model FeedSave {
+  postId    String
+  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([postId, userId])
+  @@index([userId, createdAt])
+}
+
+/// A person who follows another person or an organization (« Abonnements »).
+model FeedFollow {
+  id             String        @id @default(cuid(2))
+  followerId     String
+  follower       User          @relation("FeedFollower", fields: [followerId], references: [id], onDelete: Cascade)
+  userId         String?
+  user           User?         @relation("FeedFollowedUser", fields: [userId], references: [id], onDelete: Cascade)
+  organizationId String?
+  organization   Organization? @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  createdAt      DateTime      @default(now())
+
+  @@unique([followerId, userId])
+  @@unique([followerId, organizationId])
+}
+
+/// « Ne plus voir ce type de publication »: a kind of post (or « company ») the person sees no more.
+model FeedHiddenType {
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  type      String
+  createdAt DateTime @default(now())
+
+  @@id([userId, type])
+}
+
+/// « Je participe » to an event of the Fil.
+model FeedEventParticipant {
+  postId    String
+  post      FeedPost @relation(fields: [postId], references: [id], onDelete: Cascade)
+  userId    String
+  user      User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  createdAt DateTime @default(now())
+
+  @@id([postId, userId])
+}
+
+/// A photo added to a post, served under an unguessable address.
+model FeedImage {
+  id          String    @id @default(cuid(2))
+  token       String    @unique
+  ownerId     String
+  owner       User      @relation(fields: [ownerId], references: [id], onDelete: Cascade)
+  postId      String?
+  post        FeedPost? @relation(fields: [postId], references: [id], onDelete: Cascade)
+  contentType String
+  bytes       Bytes
+  createdAt   DateTime  @default(now())
 }

@@ -57,7 +57,8 @@ test("l'appli s'ouvre sur le logo animé, puis sur l'espace", async ({ browser, 
   await expect(page).toHaveURL(/\/app$/);
   // Kept while the space loads underneath, then gone.
   await expect(page.locator(`#${id}`)).toHaveCount(0, { timeout: 6000 });
-  await expect(page.locator("main")).toBeVisible();
+  // On a phone the Fil tab, kept mounted, is the main region (its pile stays empty).
+  await expect(page.getByRole("main")).toBeVisible();
   await context.close();
 });
 

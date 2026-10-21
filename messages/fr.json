@@ -10000,6 +10000,249 @@
       "plan": "Finaliser ma formule"
     }
   },
+  "phoneFil": {
+    "seo": "Fil",
+    "title": "Fil",
+    "bell": "{count, plural, =0 {Notifications} one {Notifications, # non lue} other {Notifications, # non lues}}",
+    "bellMany": "99+",
+    "account": "Votre carrière",
+    "tabs": "Fils",
+    "tab": {
+      "pourvous": "Pour vous",
+      "abonnements": "Abonnements",
+      "entreprises": "Entreprises"
+    },
+    "compose": {
+      "prompt": "Quoi de neuf ?",
+      "button": "Publier"
+    },
+    "tag": {
+      "company": "Entreprise",
+      "newRole": "Nouveau poste",
+      "work": "Réalisation",
+      "certificate": "Attestation",
+      "event": "Événement"
+    },
+    "you": "Vous",
+    "more": "Plus d'options",
+    "profile": "Voir le profil",
+    "like": "J'aime",
+    "likeCount": "{count, plural, =0 {J'aime} one {J'aime, # personne} other {J'aime, # personnes}}",
+    "reply": "Répondre",
+    "replyCount": "{count, plural, =0 {Répondre} one {Répondre, # réponse} other {Répondre, # réponses}}",
+    "repost": "Republier",
+    "repostCount": "{count, plural, =0 {Republier} one {Republier, # republication} other {Republier, # republications}}",
+    "seeReplies": "{count, plural, one {Voir la réponse} other {Voir les # réponses}}",
+    "score": "{score} % pour vous",
+    "offerLine": "{city} · {contract} · {remote}",
+    "contract": {
+      "cdi": "CDI",
+      "cdd": "CDD",
+      "internship": "Stage",
+      "freelance": "Freelance",
+      "parttime": "Temps partiel",
+      "apprenticeship": "Alternance",
+      "volunteer": "Bénévolat"
+    },
+    "remote": {
+      "onsite": "sur site",
+      "hybrid": "hybride",
+      "remote": "à distance"
+    },
+    "event": {
+      "going": "Je participe",
+      "registered": "Inscrite ✓",
+      "participants": "{count, plural, one {# participant} other {# participants}}",
+      "registeredToast": "Inscrite. Rappel la veille dans vos notifications.",
+      "canceledToast": "Participation annulée"
+    },
+    "masked": "Publication masquée. Vous en verrez moins comme celle-ci.",
+    "maskedUndo": "Annuler",
+    "orbiCard": {
+      "title": "Orbi",
+      "offers": "{count, plural, one {# offre publiée ce matin vous correspond.} other {# offres publiées ce matin vous correspondent.}}"
+    },
+    "end": "Vous êtes à jour. Revenez plus tard ou",
+    "endLink": "explorez les offres",
+    "endAfter": ".",
+    "empty": {
+      "abonnements": "Les publications des personnes et des entreprises que vous suivez, et de vos connexions, s'afficheront ici.",
+      "entreprises": "Les entreprises n'ont encore rien publié.",
+      "pourvous": "Personne n'a encore publié. Soyez la première personne à partager une nouvelle."
+    },
+    "time": {
+      "now": "à l'instant",
+      "minutes": "{count} min",
+      "hours": "{count} h",
+      "yesterday": "hier",
+      "days": "{count} j"
+    },
+    "stamp": {
+      "today": "Aujourd'hui à {time}",
+      "yesterday": "Hier à {time}",
+      "week": "{day} à {time}",
+      "date": "{date} à {time}"
+    },
+    "detail": {
+      "title": "Publication",
+      "back": "Fil",
+      "backNotifs": "Notifications",
+      "profile": "Profil",
+      "replies": "{count, plural, =0 {0 réponse} one {# réponse} other {# réponses}}",
+      "noReplies": "Aucune réponse pour l'instant. Lancez la conversation.",
+      "replyTo": "Répondre à {name}…",
+      "replyLabel": "Votre réponse",
+      "replyingTo": "Réponse à {name}",
+      "send": "Envoyer",
+      "cancelReply": "Annuler",
+      "closed": {
+        "connections": "Seules les connexions de {name} peuvent répondre.",
+        "nobody": "{name} a fermé les réponses."
+      },
+      "empty": "Écrivez d'abord votre réponse.",
+      "sent": "Réponse publiée",
+      "gone": "Cette publication n'est plus disponible."
+    },
+    "menu": {
+      "title": "Publication de {name}",
+      "mine": "Votre publication",
+      "profile": "Voir le profil",
+      "save": "Enregistrer",
+      "unsave": "Retirer des enregistrements",
+      "saveSub": "À retrouver dans Carrière",
+      "link": "Copier le lien",
+      "linkSub": "Pour la partager ailleurs",
+      "hide": "Ne plus voir ce type de publication",
+      "hideSub": "Le Fil s'adapte à vos choix",
+      "report": "Signaler",
+      "reportSub": "Contenu faux, abusif ou arnaque",
+      "delete": "Supprimer la publication",
+      "deleteSub": "Elle disparaît du Fil"
+    },
+    "toast": {
+      "saved": "Publication enregistrée",
+      "unsaved": "Retirée des enregistrements",
+      "link": "Lien copié",
+      "hidden": "C'est noté. Vous en verrez moins.",
+      "deleted": "Publication supprimée",
+      "reposted": "Republiée sur votre profil",
+      "unreposted": "Republication annulée",
+      "sentTo": "Envoyée à {name}",
+      "error": "Cela n'a pas fonctionné. Réessayez dans un instant."
+    },
+    "report": {
+      "title": "Signaler la publication",
+      "anonymous": "{name} ne saura pas que c'est vous.",
+      "scam": "Fausse offre ou arnaque",
+      "harassment": "Propos blessants",
+      "misinformation": "Fausse information",
+      "inappropriate": "Contenu inapproprié",
+      "other": "Autre raison",
+      "done": "Merci. Notre équipe vérifie sous 24 h.",
+      "already": "Vous avez déjà signalé cette publication. Notre équipe vérifie."
+    },
+    "reshare": {
+      "do": "Republier",
+      "doSub": "Sur votre profil, sans commentaire",
+      "undo": "Annuler la republication",
+      "undoSub": "Elle quitte votre profil",
+      "quote": "Citer",
+      "quoteSub": "Ajouter votre avis au-dessus",
+      "send": "Envoyer à une connexion",
+      "sendSub": "Dans Messages"
+    },
+    "send": {
+      "title": "Envoyer à",
+      "button": "Envoyer",
+      "to": "Envoyer à {name}",
+      "open": "Ouvrir Messages",
+      "none": "Vous n'avez pas encore de connexion. Ajoutez-en depuis Messages.",
+      "message": "Je te partage cette publication de {name} : {link}"
+    },
+    "publish": {
+      "title": "Nouvelle publication",
+      "cancel": "Annuler",
+      "placeholder": "Quoi de neuf ?",
+      "label": "Votre publication",
+      "photo": "Photo",
+      "work": "Réalisation",
+      "certificate": "Attestation",
+      "remove": "Retirer la pièce jointe",
+      "workDetail": "Réalisation · Portfolio",
+      "certificateDetail": "Formation Jumanly · {date}",
+      "pickWork": "Choisir une réalisation",
+      "pickCertificate": "Choisir une attestation",
+      "noWork": "Aucune réalisation dans votre portfolio pour l'instant.",
+      "noWorkLink": "Ajouter une réalisation",
+      "noCertificate": "Aucune attestation pour l'instant. Terminez une formation pour en obtenir une.",
+      "noCertificateLink": "Voir les formations",
+      "orbi": "Orbi peut écrire un brouillon à partir de votre attestation {course}.",
+      "orbiTry": "Essayer",
+      "draft": "Je viens d'obtenir mon attestation « {course} » sur Jumanly. Prochaine étape : la mettre en pratique.",
+      "audience": {
+        "everyone": "Tout le monde peut répondre",
+        "connections": "Mes connexions peuvent répondre",
+        "nobody": "Personne ne peut répondre",
+        "label": "Qui peut répondre : {audience}. Changer"
+      },
+      "submit": "Publier",
+      "empty": "Écrivez quelque chose ou ajoutez une pièce jointe.",
+      "done": "Publication partagée",
+      "photoError": "Cette photo ne peut pas être ajoutée. Choisissez une image JPEG, PNG ou WebP.",
+      "photoAlt": "Photo jointe par {name}",
+      "quoting": "Publication citée"
+    },
+    "notifs": {
+      "systemInitial": "J",
+      "title": "Notifications",
+      "back": "Fil",
+      "settings": "Réglages des notifications",
+      "filters": "Catégories",
+      "filter": {
+        "tout": "Tout",
+        "candidatures": "Candidatures",
+        "offres": "Offres",
+        "reseau": "Réseau"
+      },
+      "unread": "{count, plural, =0 {Tout est lu} one {# non lue} other {# non lues}}",
+      "markAll": "Tout marquer comme lu",
+      "markedAll": "Tout est marqué comme lu",
+      "group": {
+        "today": "Aujourd'hui",
+        "thisWeek": "Cette semaine",
+        "earlier": "Plus tôt"
+      },
+      "ago": {
+        "now": "À l'instant",
+        "minutes": "Il y a {count} min",
+        "hours": "Il y a {count} h",
+        "yesterday": "Hier"
+      },
+      "empty": "Rien dans cette catégorie pour l'instant.",
+      "newDot": "Non lue"
+    },
+    "orbi": {
+      "digest": "{count, plural, =0 {Rien de nouveau depuis hier. Les offres d'Explorer vous attendent.} one {Une nouveauté aujourd'hui : {names}.} other {# nouveautés aujourd'hui : {names}.}}",
+      "digestTitle": "Résumer les nouveautés du jour",
+      "digestPost": "{name} a publié",
+      "offers": "{count, plural, =0 {Aucune offre publiée ce matin ne vous correspond encore.} one {Classée selon votre profil.} other {Classées selon votre profil, la plus proche en premier.}}",
+      "offersTitle": "{count, plural, one {# offre publiée ce matin} other {# offres publiées ce matin}}",
+      "companies": "{count, plural, =0 {Aucune entreprise ne publie d'offre en ce moment.} one {Une entreprise recrute en ce moment.} other {# entreprises recrutent en ce moment.}}",
+      "companyLine": "{count, plural, one {# offre en cours} other {# offres en cours}}",
+      "follow": "{count, plural, =0 {Personne à vous proposer pour l'instant. Revenez quand le Fil sera plus animé.} other {Ces personnes et entreprises publient dans le Fil en ce moment.}}",
+      "write": "{course, select, none {Vous n'avez pas encore d'attestation. Terminez une formation et je vous aiderai à l'annoncer.} other {Voici un brouillon : « {draft} »}}",
+      "openDraft": "Ouvrir le brouillon",
+      "jobLine": "{org} · {score} % pour vous",
+      "jobLineNoScore": "{org} · {city}"
+    },
+    "person": {
+      "line": "{title} · {company}"
+    },
+    "profileMessage": "Message",
+    "profileOffers": "Offres en cours",
+    "profilePosts": "Publications",
+    "profileNoPosts": "Aucune publication pour l'instant."
+  },
   "hireShell": {
     "skip": "Aller au contenu principal",
     "nav": {
@@ -16786,6 +17029,11 @@
       "orgJoinAccepted": "Votre demande pour rejoindre {org} est acceptée. Bienvenue dans l'équipe !",
       "orgJoinDeclined": "Votre demande pour rejoindre {org} n'a pas été acceptée. Vous pouvez continuer avec votre propre organisation.",
       "jobEnding": "{days, plural, =0 {« {jobTitle} » se termine aujourd'hui.} one {« {jobTitle} » se termine demain.} other {« {jobTitle} » se termine dans # jours.}}",
+      "feedReply": "{name} a répondu à votre publication.",
+      "feedMention": "{name} vous a mentionné dans une réponse.",
+      "feedLike": "{name} a aimé votre publication.",
+      "feedRepost": "{name} a republié votre publication.",
+      "feedQuote": "{name} a cité votre publication.",
       "unread": "Non lue"
     }
   },
@@ -17894,6 +18142,7 @@
       "personalData": "Demande abusive de données personnelles",
       "inappropriate": "Contenu inapproprié",
       "impersonation": "Usurpation d'identité",
+      "misinformation": "Fausse information",
       "other": "Autre motif"
     },
     "details": {
@@ -20479,6 +20728,7 @@
         "conversation": "Conversation",
         "question": "Question de formation",
         "profile": "Profil",
+        "post": "Publication du Fil",
         "organization": "Organisation",
         "aiSuggestion": "Suggestion IA"
       },
@@ -20513,8 +20763,12 @@
         "title": {
           "job": "Offre signalée",
           "message": "Message signalé",
-          "conversation": "Conversation signalée"
+          "conversation": "Conversation signalée",
+          "post": "Publication signalée"
         },
+        "post": "Publication du Fil",
+        "postReply": "Réponse dans le Fil",
+        "postImage": "Avec une photo",
         "author": "Auteur",
         "flagged": "message signalé",
         "hidden": "Ce contenu est déjà masqué.",

@@ -16,6 +16,9 @@ import { db } from "@/server/db";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
 import { hireToday } from "@/server/services/hire-today";
+import { isPhone } from "@/server/view";
+import { PhoneNotifications } from "@/components/phone/fil/notifications";
+import { FilTexts, notificationRows } from "@/components/phone/fil/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("notifications");
@@ -35,6 +38,13 @@ export default async function NotificationsPage({ searchParams }: PageProps<"/ap
   // A partner keeps its own screen; a recruiting team gets Orbi's brief of the day above the list
   // (planche r3plus `NOTIF_R`, recruteur lot 5).
   if (partner && !space) return <TeamNotifications params={params} user={user} />;
+  // On a phone, the talent's notifications of Modèle B (lot B3), from the bell of the Fil.
+  if (!space && !partner && (await isPhone()))
+    return (
+      <FilTexts>
+        <PhoneNotifications rows={await notificationRows(user.id)} />
+      </FilTexts>
+    );
 
   const t = await getTranslations();
   const ctx = space
