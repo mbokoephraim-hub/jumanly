@@ -79,7 +79,7 @@ test("télécharger mon CV sur téléphone : créer, aperçu, PDF", async ({ pag
   await page.locator(".nb-ca-modeles form button").first().click();
   await expect(page).toHaveURL(/\/app\/career\/cv\/[^/?]+$/);
   const id = new URL(page.url()).pathname.split("/").pop()!;
-  const title = (await page.locator(".nb-ca-editeur h1").textContent())!.trim();
+  const title = (await page.locator(".nb-ca-editeur h1").first().textContent())!.trim();
   expect(title).not.toBe("");
 
   // The CV's menu in the tab: « Exporter en PDF ou Word », then « Télécharger ».
