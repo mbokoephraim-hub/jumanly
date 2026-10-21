@@ -75,8 +75,8 @@ Planches Carrière (`docs/modele-b/captures/INDEX.md`, rangées 11 à 15). Écar
 
 **Captures → maquettes** (`captures/etape-1/`, 390 × 844) : `b5-073` à `b5-113`, un fichier par
 planche, au numéro de la maquette (073 Carrière à 113 Carrière-cand-retirer). Planches sans capture
-propre : 092 et 093 (attente et fin du paiement, mêmes gabarits que 091), 101 (menu d'un CV, dans
-`tests/e2e/modele-b-carriere.spec.ts`), 104 et 105 (lecture et résultat de l'import).
+propre : 092 et 093 (attente et fin du paiement, mêmes gabarits que 091), 104 et 105 (lecture et
+résultat de l'import).
 
 **Remplacé au téléphone.** L'ancienne page Paramètres et ses sous-pages, l'ancien « Mon
 abonnement » et son paiement, l'ancien éditeur et les anciens modèles de CV, l'ancien détail d'une
@@ -88,7 +88,10 @@ ses sous-pages, encore joignables par une ancienne adresse ; l'ordinateur garde 
 l'onglet reste monté au retour des paramètres, une réalisation de bout en bout, une candidature,
 le brouillon d'Orbi) ; `tests/db/career.test.ts` (lien d'une réalisation, couverture, Orbi sans
 modèle). En local, `simulations d'entretien › sans simulation` échoue sur une matrice de forfaits
-modifiée par d'anciens essais ; il passe sur une base neuve (CI).
+modifiée par d'anciens essais ; il passe sur une base neuve (CI). Les anciens tests du téléphone qui
+visaient les écrans remplacés suivent les nouveaux écrans ; trois parcours de `cv-templates` et la
+liste de `cv-documents` ne tournent plus qu'à l'ordinateur, le test « studio CV (téléphone) » est
+retiré (écran disparu).
 
 ## Modèle B · B4 : Explorer, une offre, une entreprise, une personne (21 octobre 2026)
 
