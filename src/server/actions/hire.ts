@@ -10,6 +10,7 @@ import { requireUser } from "@/server/auth/session";
 import { ensureApplicationConversation, sendMessage } from "@/server/services/connect";
 import { addTeamNote } from "@/server/services/evaluation";
 import { closeJob, deleteDraft, duplicateJob, HireError, publishJob } from "@/server/services/hire";
+import { setupAccount } from "@/server/services/accounts";
 import { hireMemberships, partnerMemberships } from "@/server/services/organization";
 import { reportError } from "@/server/observability";
 import { writeJob, type JobWriterInput, type JobWriterResult } from "@/server/services/job-writer";
@@ -52,6 +53,26 @@ export async function switchSpace(formData: FormData) {
   await setActiveSpace(wanted);
   const suite = String(formData.get("suite") ?? "");
   redirect(suite.startsWith("/app/") && !suite.startsWith("//") ? suite : "/app/hire");
+}
+
+/**
+ * « Passer en compte recruteur » (Ephraïm, 22/10/2026), from the talent's settings. A person who
+ * already works in a recruiter space goes there; anyone else gets their own organization, still
+ * to be named, and the recruiter's first steps (/app/bienvenue: who they recruit for, the
+ * organization, or joining an existing one). The talent profile stays, one tap away.
+ */
+export async function becomeRecruiterAction() {
+  const user = await requireUser("/app/parametres");
+  const memberships = await hireMemberships(db, user.id);
+  const usable = memberships.find((membership) => !membership.organization.suspendedAt);
+  if (usable) {
+    await setActiveSpace(usable.organizationId);
+    redirect("/app/hire");
+  }
+  if (memberships.length > 0) redirect("/app/acces-refuse?raison=organisation");
+  const org = await setupAccount(db, user.id, { profile: "rh" });
+  if (org) await setActiveSpace(org.id);
+  redirect("/app/bienvenue");
 }
 
 // ─── Jobs ─────────────────────────────────────────────────────────────────────

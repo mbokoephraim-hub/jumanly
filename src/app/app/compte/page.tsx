@@ -10,7 +10,7 @@ import { TalentIcon, type TalentIconName } from "@/components/talent/icon";
 import { cx } from "@/lib/cx";
 import { AI_CREDITS_KEY } from "@/server/ai";
 import { signOut } from "@/server/actions/auth";
-import { switchSpace } from "@/server/actions/hire";
+import { becomeRecruiterAction, switchSpace } from "@/server/actions/hire";
 import { ADMIN_ROLES, requireUser } from "@/server/auth/session";
 import { phoneTalentRedirect } from "@/server/phone-routes";
 import { db } from "@/server/db";
@@ -267,42 +267,56 @@ export default async function AccountPage() {
             />
           </List>
 
-          {(spaces.length > 0 || isTester(user) || admin) && (
-            <List label={t("group.spaces")}>
-              {spaces.map((membership) => (
-                <li key={membership.organizationId}>
-                  <form action={switchSpace}>
-                    <input type="hidden" name="space" value={membership.organizationId} />
-                    <button type="submit" className="t-li t-press">
-                      <span className="t-cases" aria-hidden>
-                        <TalentIcon name="entreprise" size="s" />
+          <List label={t("group.spaces")}>
+            {spaces.map((membership) => (
+              <li key={membership.organizationId}>
+                <form action={switchSpace}>
+                  <input type="hidden" name="space" value={membership.organizationId} />
+                  <button type="submit" className="t-li t-press">
+                    <span className="t-cases" aria-hidden>
+                      <TalentIcon name="entreprise" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b>{membership.organization.name}</b>
+                      <span>
+                        {membership.organization.type === "partner"
+                          ? t("spaces.partner")
+                          : t("spaces.text")}
                       </span>
-                      <span className="t-t">
-                        <b>{membership.organization.name}</b>
-                        <span>
-                          {membership.organization.type === "partner"
-                            ? t("spaces.partner")
-                            : t("spaces.text")}
-                        </span>
-                      </span>
-                      <TalentIcon name="suivant" />
-                    </button>
-                  </form>
-                </li>
-              ))}
-              {isTester(user) && (
-                <Row
-                  href="/app/testeur"
-                  icon="portefeuille"
-                  title={t("tester.title")}
-                  text={t("tester.text")}
-                />
-              )}
-              {admin && (
-                <Row href="/admin" icon="cadenas" title={t("admin.title")} text={t("admin.text")} />
-              )}
-            </List>
-          )}
+                    </span>
+                    <TalentIcon name="suivant" />
+                  </button>
+                </form>
+              </li>
+            ))}
+            {!spaces.some((membership) => membership.organization.type !== "partner") && (
+              <li>
+                <form action={becomeRecruiterAction}>
+                  <button type="submit" className="t-li t-press">
+                    <span className="t-cases" aria-hidden>
+                      <TalentIcon name="entreprise" size="s" />
+                    </span>
+                    <span className="t-t">
+                      <b>{t("spaces.become")}</b>
+                      <span>{t("spaces.becomeText")}</span>
+                    </span>
+                    <TalentIcon name="suivant" />
+                  </button>
+                </form>
+              </li>
+            )}
+            {isTester(user) && (
+              <Row
+                href="/app/testeur"
+                icon="portefeuille"
+                title={t("tester.title")}
+                text={t("tester.text")}
+              />
+            )}
+            {admin && (
+              <Row href="/admin" icon="cadenas" title={t("admin.title")} text={t("admin.text")} />
+            )}
+          </List>
         </div>
 
         <div className="t-w4-col">

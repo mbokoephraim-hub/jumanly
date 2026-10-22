@@ -5,6 +5,7 @@ import { useTranslations } from "next-intl";
 import { useState, useTransition, type ReactNode } from "react";
 import { showToast } from "@/components/motion/toaster";
 import { signOut } from "@/server/actions/auth";
+import { becomeRecruiterAction } from "@/server/actions/hire";
 import {
   saveCareerNotificationsAction,
   saveCareerPrivacyAction,
@@ -60,6 +61,7 @@ export function PhoneSettings({
   plan,
   language,
   install,
+  recruiter,
 }: {
   name: string;
   image: string | null;
@@ -70,9 +72,12 @@ export function PhoneSettings({
   language: string;
   /** « Installer l'appli », drawn by the server (its texts are not sent to the browser). */
   install: ReactNode;
+  /** The person already works in a recruiter space (« Ouvrir »), or may open one. */
+  recruiter: "open" | "become";
 }) {
   const t = useTranslations("phoneCareer.reglages");
   const [leaving, setLeaving] = useState(false);
+  const [hiring, setHiring] = useState(false);
   return (
     <SettingsFrame title={t("title")} back="/app/career/cv">
       <Link href="/app/career/profil" className="nb-ca-it nb-ca-moi" data-ligne="">
@@ -94,6 +99,26 @@ export function PhoneSettings({
       <Row href="/app/abonnement" end={<em>{plan}</em>}>
         {t("plan")}
       </Row>
+      <p className="nb-ca-gr">{t("recruiter.group")}</p>
+      {recruiter === "open" ? (
+        <form action={becomeRecruiterAction}>
+          <button type="submit" className="nb-ca-it" data-ligne="">
+            <span>
+              {t("recruiter.open")}
+              <small className="nb-meta">{t("recruiter.openText")}</small>
+            </span>
+            <PhoneIcon name="chevron" size={18} />
+          </button>
+        </form>
+      ) : (
+        <button type="button" className="nb-ca-it" data-ligne="" onClick={() => setHiring(true)}>
+          <span>
+            {t("recruiter.become")}
+            <small className="nb-meta">{t("recruiter.becomeText")}</small>
+          </span>
+          <PhoneIcon name="chevron" size={18} />
+        </button>
+      )}
       <p className="nb-ca-gr">{t("privacyGroup")}</p>
       <Row href="/app/parametres/confidentialite">{t("privacy")}</Row>
       <Row href="/app/parametres/notifications">{t("notifications")}</Row>
@@ -112,6 +137,29 @@ export function PhoneSettings({
       >
         {t("signOut")}
       </button>
+      <PhoneSheet
+        open={hiring}
+        onClose={() => setHiring(false)}
+        label={t("recruiter.question")}
+        closeLabel={t("close")}
+      >
+        <b className="nb-ex-feuille-t">{t("recruiter.question")}</b>
+        <p className="nb-meta nb-ca-feuille-d">{t("recruiter.questionText")}</p>
+        <form action={becomeRecruiterAction} className="nb-ca-feuille-b">
+          <button type="submit" className="nb-bouton" data-large="" data-plein="">
+            {t("recruiter.confirm")}
+          </button>
+          <button
+            type="button"
+            className="nb-bouton"
+            data-large=""
+            data-contour=""
+            onClick={() => setHiring(false)}
+          >
+            {t("cancel")}
+          </button>
+        </form>
+      </PhoneSheet>
       <PhoneSheet
         open={leaving}
         onClose={() => setLeaving(false)}

@@ -25,5 +25,3 @@ export const MIN_AGE = 16;
 export const CODE_DIGITS = 6;
 /** E-mail codes and sign-in links stay valid this long. */
 export const CODE_MINUTES = 15;
-/** Days during which a deleted account can be recovered by signing in again (textes). */
-export const DELETION_GRACE_DAYS = 30;

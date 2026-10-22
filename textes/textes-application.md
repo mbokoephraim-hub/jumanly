@@ -1265,7 +1265,7 @@ Rappel du paramètre `?suite=` : si le visiteur arrive depuis une action (postul
 | `login.twoFactor.seo` | Vérification en deux étapes · Jumanly |
 | `login.twoFactor.title` | Confirmez votre connexion |
 | `login.twoFactor.text` | Votre compte est protégé par la vérification en deux étapes. Nous venons d'envoyer un code à {digits} chiffres à votre adresse e-mail. |
-| `login.deletionScheduled` | Votre compte sera supprimé dans {days} jours. Reconnectez-vous avant cette date pour annuler la suppression. |
+| `login.deleted` | Votre compte et toutes vos données ont été supprimés. Vous pouvez créer un nouveau compte à tout moment, il repartira de zéro. |
 
 ---
 
@@ -4076,7 +4076,7 @@ Conventions :
 | `parametres.delete.title` | Supprimer mon compte |
 | `parametres.delete.sheet` | Supprimer mon compte ? |
 | `parametres.delete.what` | Ce qui sera effacé |
-| `parametres.delete.text` | Profil, CV, documents, messages et candidatures, après {days} jours. Reconnectez-vous avant pour changer d'avis. Un abonnement en cours n'est pas remboursé. |
+| `parametres.delete.text` | Tout, immédiatement et définitivement : profil, CV, documents, publications, messages, relations et candidatures. Rien ne pourra être récupéré. Un abonnement en cours n'est pas remboursé. |
 | `parametres.delete.export` | Télécharger mes données d'abord |
 | `parametres.delete.exportHint` | Recommandé |
 | `parametres.delete.type` | Tapez SUPPRIMER pour confirmer |
@@ -7580,7 +7580,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `settings.data.delete.desc` | Votre profil, vos CV, vos messages et vos attestations seront supprimés. Les recruteurs ne verront plus vos candidatures. |
 | `settings.data.delete.cta` | Supprimer mon compte |
 | `settings.data.delete.confirm.title` | Supprimer définitivement votre compte ? |
-| `settings.data.delete.confirm.body` | Vous disposez de {days} jours pour changer d'avis en vous reconnectant. Passé ce délai, la suppression est définitive. Un abonnement en cours n'est pas remboursé automatiquement. |
+| `settings.data.delete.confirm.body` | La suppression est immédiate et définitive : toutes vos données sont effacées et rien ne pourra être récupéré. Un abonnement en cours n'est pas remboursé automatiquement. |
 | `settings.data.delete.confirm.type` | Tapez SUPPRIMER pour confirmer |
 | `settings.data.delete.confirm.password` | Votre mot de passe |
 | `settings.data.delete.confirm.cta` | Supprimer mon compte |
@@ -7661,6 +7661,8 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `compte.help.text` | assistant@jumanly.io |
 | `compte.spaces.text` | Passer à l’espace recruteur |
 | `compte.spaces.partner` | Passer à l’espace partenaire |
+| `compte.spaces.become` | Passer en compte recruteur |
+| `compte.spaces.becomeText` | Votre profil talent reste intact. Publiez des offres et recevez des candidatures. |
 | `compte.tester.title` | Mode testeur |
 | `compte.tester.text` | Changer de formule sans payer |
 | `compte.admin.title` | Administration |
@@ -8404,6 +8406,7 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `phoneFil.publish.audience.label` | Qui peut répondre : {audience}. Changer |
 | `phoneFil.publish.submit` | Publier |
 | `phoneFil.publish.empty` | Écrivez quelque chose ou ajoutez une pièce jointe. |
+| `phoneFil.publish.count` | {count} / {max} caractères |
 | `phoneFil.publish.done` | Publication partagée |
 | `phoneFil.publish.photoError` | Cette photo ne peut pas être ajoutée. Choisissez une image JPEG, PNG ou WebP. |
 | `phoneFil.publish.photoAlt` | Photo jointe par {name} |
@@ -9020,6 +9023,14 @@ Conventions :
 | `phoneCareer.reglages.subscription` | Abonnement |
 | `phoneCareer.reglages.plan` | Ma formule |
 | `phoneCareer.reglages.noPlan` | Gratuite |
+| `phoneCareer.reglages.recruiter.group` | Recrutement |
+| `phoneCareer.reglages.recruiter.become` | Passer en compte recruteur |
+| `phoneCareer.reglages.recruiter.becomeText` | Publiez des offres et recevez des candidatures |
+| `phoneCareer.reglages.recruiter.open` | Ouvrir mon espace recruteur |
+| `phoneCareer.reglages.recruiter.openText` | Vos offres, vos candidats, votre équipe |
+| `phoneCareer.reglages.recruiter.question` | Passer en compte recruteur ? |
+| `phoneCareer.reglages.recruiter.questionText` | Votre profil talent reste intact. Vous indiquez pour qui vous recrutez, puis vous pouvez publier des offres. Vous revenez à votre profil talent quand vous voulez, depuis votre espace recruteur. |
+| `phoneCareer.reglages.recruiter.confirm` | Continuer |
 | `phoneCareer.reglages.privacyGroup` | Vie privée |
 | `phoneCareer.reglages.privacy` | Confidentialité |
 | `phoneCareer.reglages.notifications` | Notifications |

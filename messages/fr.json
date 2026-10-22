@@ -1638,7 +1638,7 @@
       "title": "Confirmez votre connexion",
       "text": "Votre compte est protégé par la vérification en deux étapes. Nous venons d'envoyer un code à {digits} chiffres à votre adresse e-mail."
     },
-    "deletionScheduled": "Votre compte sera supprimé dans {days} jours. Reconnectez-vous avant cette date pour annuler la suppression."
+    "deleted": "Votre compte et toutes vos données ont été supprimés. Vous pouvez créer un nouveau compte à tout moment, il repartira de zéro."
   },
   "forgot": {
     "seo": {
@@ -4801,7 +4801,7 @@
       "title": "Supprimer mon compte",
       "sheet": "Supprimer mon compte ?",
       "what": "Ce qui sera effacé",
-      "text": "Profil, CV, documents, messages et candidatures, après {days} jours. Reconnectez-vous avant pour changer d'avis. Un abonnement en cours n'est pas remboursé.",
+      "text": "Tout, immédiatement et définitivement : profil, CV, documents, publications, messages, relations et candidatures. Rien ne pourra être récupéré. Un abonnement en cours n'est pas remboursé.",
       "export": "Télécharger mes données d'abord",
       "exportHint": "Recommandé",
       "type": "Tapez SUPPRIMER pour confirmer",
@@ -9187,7 +9187,7 @@
         "cta": "Supprimer mon compte",
         "confirm": {
           "title": "Supprimer définitivement votre compte ?",
-          "body": "Vous disposez de {days} jours pour changer d'avis en vous reconnectant. Passé ce délai, la suppression est définitive. Un abonnement en cours n'est pas remboursé automatiquement.",
+          "body": "La suppression est immédiate et définitive : toutes vos données sont effacées et rien ne pourra être récupéré. Un abonnement en cours n'est pas remboursé automatiquement.",
           "type": "Tapez SUPPRIMER pour confirmer",
           "password": "Votre mot de passe",
           "cta": "Supprimer mon compte",
@@ -9290,7 +9290,9 @@
     },
     "spaces": {
       "text": "Passer à l’espace recruteur",
-      "partner": "Passer à l’espace partenaire"
+      "partner": "Passer à l’espace partenaire",
+      "become": "Passer en compte recruteur",
+      "becomeText": "Votre profil talent reste intact. Publiez des offres et recevez des candidatures."
     },
     "tester": {
       "title": "Mode testeur",
@@ -10197,6 +10199,7 @@
       },
       "submit": "Publier",
       "empty": "Écrivez quelque chose ou ajoutez une pièce jointe.",
+      "count": "{count} / {max} caractères",
       "done": "Publication partagée",
       "photoError": "Cette photo ne peut pas être ajoutée. Choisissez une image JPEG, PNG ou WebP.",
       "photoAlt": "Photo jointe par {name}",
@@ -10892,6 +10895,16 @@
       "subscription": "Abonnement",
       "plan": "Ma formule",
       "noPlan": "Gratuite",
+      "recruiter": {
+        "group": "Recrutement",
+        "become": "Passer en compte recruteur",
+        "becomeText": "Publiez des offres et recevez des candidatures",
+        "open": "Ouvrir mon espace recruteur",
+        "openText": "Vos offres, vos candidats, votre équipe",
+        "question": "Passer en compte recruteur ?",
+        "questionText": "Votre profil talent reste intact. Vous indiquez pour qui vous recrutez, puis vous pouvez publier des offres. Vous revenez à votre profil talent quand vous voulez, depuis votre espace recruteur.",
+        "confirm": "Continuer"
+      },
       "privacyGroup": "Vie privée",
       "privacy": "Confidentialité",
       "notifications": "Notifications",

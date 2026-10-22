@@ -1,5 +1,6 @@
 import { afterAll, describe, expect, it } from "vitest";
 import {
+  authorSignals,
   createPost,
   deletePost,
   FeedError,
@@ -39,6 +40,27 @@ describe("Fil", () => {
     expect((await listFeed(db, reader, "abonnements")).some((item) => item.id === id)).toBe(true);
     // A person's post is not a company's.
     expect((await listFeed(db, reader, "entreprises")).some((item) => item.id === id)).toBe(false);
+  });
+
+  it("limite une publication à 220 caractères, pas une réponse", async () => {
+    const author = await person();
+    await expect(createPost(db, author, { body: "a".repeat(221) }, labels)).rejects.toBeInstanceOf(
+      FeedError,
+    );
+    const id = await createPost(db, author, { body: "a".repeat(220) }, labels);
+    await expect(replyTo(db, author, { post: id, body: "b".repeat(500) })).resolves.toBeTruthy();
+  });
+
+  it("compte ce que fait un auteur pour « Pour vous » : réponses, jours actifs, connexions", async () => {
+    const author = await person();
+    const friend = await person();
+    const post = await createPost(db, friend, { body: "Une nouvelle fictive" }, labels);
+    await replyTo(db, author, { post, body: "Bravo" });
+    await db.connection.create({
+      data: { requesterId: friend, addresseeId: author, status: "accepted" },
+    });
+    const signals = (await authorSignals(db, [author])).get(author);
+    expect(signals).toEqual({ replies: 1, activeDays: 1, connections: 1, hiredHere: false });
   });
 
   it("refuse une publication vide", async () => {
