@@ -42,11 +42,13 @@ export default async function FilComposePage({ searchParams }: PageProps<"/app/f
     return (
       <FilTexts recruiter>
         <PhoneRecruiterCompose
+          // A fresh form for each way in (« Publier » or « Publier au nom de… »).
+          key={query.nom === "entreprise" ? "entreprise" : "moi"}
           me={meOf({ name: user.name, image: user.image ?? null })}
           org={
             space.canPublishAsOrg
               ? {
-                  name: space.org.name,
+                  name: shortName(space.org.name),
                   initials: initialsOf(space.org.name),
                   logo: space.org.logo,
                 }

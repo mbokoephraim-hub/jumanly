@@ -6,7 +6,7 @@ import { publishingSpace } from "@/server/hire-context";
 import { listFeed } from "@/server/services/feed";
 import { unreadNotifications } from "@/server/services/notifications";
 import { FilAvatar } from "../fil/avatar";
-import { feedWords, initialsOf } from "../fil/data";
+import { feedWords, initialsOf, shortName } from "../fil/data";
 import { PhoneFil } from "../fil/feed";
 import { FilTexts, meOf, sendTargetViews } from "../fil/server";
 
@@ -52,7 +52,7 @@ export async function RhFil({
             org
             size={24}
           />
-          {t("asOrg", { org: space.org.name })}
+          {t("asOrg", { org: shortName(space.org.name) })}
         </Link>
       ) : null}
     </div>

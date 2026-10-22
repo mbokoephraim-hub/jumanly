@@ -49,8 +49,11 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
 }) => {
   test.setTimeout(300_000);
   await freshRecruiter(page, "rx-offres");
-  // Nothing waits yet: « Rien à traiter », and the way to publish.
-  await expect(main(page)).toContainText("Rien à traiter pour l'instant");
+  // Nothing waits yet: « Rien à traiter », and the way to publish. On a phone, the first screen
+  // is the recruiter's Fil (Modèle B recruteur, M3).
+  if (isMobile)
+    await expect(main(page).getByRole("heading", { name: "Fil", exact: true })).toBeVisible();
+  else await expect(main(page)).toContainText("Rien à traiter pour l'instant");
 
   const first = `Analyste crédit fictif ${suffix()}`;
   const question = "Êtes-vous disponible avant le 1er décembre ?";
@@ -160,12 +163,21 @@ test("une offre en 4 étapes : publiée, en pause, reprise puis clôturée", asy
   });
   await context.close();
 
-  await page.goto("/app/hire");
-  await expect(main(page)).toContainText("Amani Fictif");
-  await main(page)
-    .getByRole("link", { name: /Examiner/ })
-    .first()
-    .click();
+  if (isMobile) {
+    // On a phone, the applications wait in Candidatures (Modèle B recruteur, M3).
+    await page.goto("/app/hire/candidats");
+    await main(page)
+      .getByRole("link", { name: /Amani Fictif/ })
+      .first()
+      .click();
+  } else {
+    await page.goto("/app/hire");
+    await expect(main(page)).toContainText("Amani Fictif");
+    await main(page)
+      .getByRole("link", { name: /Examiner/ })
+      .first()
+      .click();
+  }
   await expect(page).toHaveURL(/\/app\/hire\/candidats\//);
   await expect(page.locator("#reponses")).toContainText(question);
   await expect(page.locator("#reponses")).toContainText("Oui");
