@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 import {
   contentSecurityPolicy,
-  MICROPHONE_ROUTE,
+  MEDIA_ROUTE,
   permissionsPolicy,
   securityHeaders,
 } from "@/lib/security-headers";
@@ -34,12 +34,14 @@ describe("security headers (partie 10 § 10.5)", () => {
     ).toBeUndefined();
   });
 
-  it("allows the microphone only on the voice simulation page", () => {
+  it("allows the microphone and the camera only in the signed-in space", () => {
     const rules = securityHeaders({ production: true });
     expect(header(rules, "/:path*", "Permissions-Policy")).toContain("microphone=()");
-    expect(header(rules, MICROPHONE_ROUTE, "Permissions-Policy")).toContain("microphone=(self)");
-    // The page rule comes last, so it wins over the general one.
-    expect(rules.at(-1)?.source).toBe(MICROPHONE_ROUTE);
-    expect(permissionsPolicy({ microphone: false })).toContain("camera=()");
+    expect(header(rules, "/:path*", "Permissions-Policy")).toContain("camera=()");
+    expect(header(rules, MEDIA_ROUTE, "Permissions-Policy")).toContain("microphone=(self)");
+    expect(header(rules, MEDIA_ROUTE, "Permissions-Policy")).toContain("camera=(self)");
+    // The space rule comes last, so it wins over the general one.
+    expect(rules.at(-1)?.source).toBe(MEDIA_ROUTE);
+    expect(permissionsPolicy({ media: false })).toContain("geolocation=()");
   });
 });

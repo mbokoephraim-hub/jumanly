@@ -9716,6 +9716,320 @@ Conventions :
 | `phoneLearn.orbi.whyNoOffer` | Aucune de vos offres ne le demande pour l’instant. Il vous reste {left, plural, =0 {le quiz final} one {# leçon} other {# leçons}} pour finir {course}. |
 | `phoneLearn.orbi.resume` | Reprendre {course} |
 
+### Modèle B · Messages au téléphone
+
+*Lot B8 (docs/modele-b, rangées 18 à 21, planches `Messages*.dc.html`) : la liste en trois rubriques, les demandes de connexion, la recherche, la discussion et ses cartes, Orbi qui aide à écrire, les pièces jointes, la note vocale, l’appareil photo, les infos, les médias, les messages éphémères, le blocage, l’effacement et l’export. On écrit seulement à ses connexions ; Orbi propose, la personne décide.*
+
+| Clé | Texte |
+|---|---|
+| `phoneMsg.title` | Messages |
+| `phoneMsg.new` | Nouveau message |
+| `phoneMsg.back` | Retour |
+| `phoneMsg.close` | Fermer |
+| `phoneMsg.pdf` | PDF |
+| `phoneMsg.hd` | HD |
+| `phoneMsg.cancel` | Annuler |
+| `phoneMsg.error` | Ça n’a pas marché. Réessayez. |
+| `phoneMsg.verified` | Compte vérifié |
+| `phoneMsg.muted` | Mode silencieux |
+| `phoneMsg.unread` | {count, plural, one {# message non lu} other {# messages non lus}} |
+| `phoneMsg.sending` | Envoi… |
+| `phoneMsg.tabsLabel` | Types de conversations |
+| `phoneMsg.tab.connexions` | Connexions |
+| `phoneMsg.tab.recruteurs` | Recruteurs |
+| `phoneMsg.tab.entreprises` | Entreprises |
+| `phoneMsg.empty.connexions` | Aucune discussion pour l’instant. Écrivez à une de vos connexions. |
+| `phoneMsg.empty.recruteurs` | Aucun recruteur ne vous a encore écrit. Quand une équipe répond à votre candidature, la discussion arrive ici. |
+| `phoneMsg.empty.entreprises` | Aucun message d’entreprise pour l’instant. |
+| `phoneMsg.onlyConnections` | Vous écrivez seulement à vos connexions. |
+| `phoneMsg.time.yesterday` | Hier |
+| `phoneMsg.status.online` | En ligne |
+| `phoneMsg.status.seenAt` | Vu à {time} |
+| `phoneMsg.status.seenYesterday` | Vu hier à {time} |
+| `phoneMsg.status.seenOn` | Vu le {date} |
+| `phoneMsg.status.company` | Compte entreprise |
+| `phoneMsg.who.job` | {title} · {company} |
+| `phoneMsg.who.recruiter` | Recrutement |
+| `phoneMsg.preview.none` | Aucun message |
+| `phoneMsg.preview.mine` | Vous : {text} |
+| `phoneMsg.preview.photos` | {count, plural, one {Photo} other {# photos}} |
+| `phoneMsg.preview.voice` | Note vocale · {duration} |
+| `phoneMsg.preview.contact` | Contact · {name} |
+| `phoneMsg.preview.org` | Organisation · {name} |
+| `phoneMsg.preview.doc` | Document · {name} |
+| `phoneMsg.preview.event` | {label} · {when} |
+| `phoneMsg.preview.hired` | Candidature retenue |
+| `phoneMsg.preview.rejected` | Candidature non retenue |
+| `phoneMsg.requests.title` | Demandes de connexion |
+| `phoneMsg.requests.summary` | {others, plural, =0 {{name}} one {{name} et # autre personne} other {{name} et # autres personnes}} |
+| `phoneMsg.requests.none` | Aucune demande en attente |
+| `phoneMsg.requests.quoted` | « {text} » |
+| `phoneMsg.requests.accept` | Accepter |
+| `phoneMsg.requests.ignore` | Ignorer |
+| `phoneMsg.requests.decline` | Refuser |
+| `phoneMsg.requests.write` | Écrire à {name} |
+| `phoneMsg.requests.accepted` | Vous êtes connectés : vous pouvez écrire à {name} |
+| `phoneMsg.requests.ignored` | Demande ignorée. {name} n’est pas prévenu·e. |
+| `phoneMsg.requests.orgs` | Entreprises qui souhaitent échanger avec vous |
+| `phoneMsg.requests.about` | Au sujet de : {job} |
+| `phoneMsg.requests.orgAccepted` | Vous pouvez échanger avec {name} |
+| `phoneMsg.requests.declined` | Demande refusée. {name} est prévenue, sans détail. |
+| `phoneMsg.requests.note` | Une fois connectés, vous pouvez vous écrire. Sans connexion, pas de message. |
+| `phoneMsg.newSheet.title` | Nouveau message |
+| `phoneMsg.newSheet.note` | Vous pouvez écrire seulement à vos connexions. |
+| `phoneMsg.newSheet.none` | Vous n’avez pas encore de connexion. |
+| `phoneMsg.newSheet.explore` | Trouver des personnes dans Explorer › |
+| `phoneMsg.search.label` | Rechercher dans les messages |
+| `phoneMsg.search.placeholder` | Rechercher une personne ou un message |
+| `phoneMsg.search.clear` | Effacer la recherche |
+| `phoneMsg.search.byType` | Rechercher par type |
+| `phoneMsg.search.type.photos` | Photos |
+| `phoneMsg.search.type.docs` | Documents |
+| `phoneMsg.search.type.liens` | Liens |
+| `phoneMsg.search.type.contacts` | Contacts |
+| `phoneMsg.search.type.vocaux` | Notes vocales |
+| `phoneMsg.search.type.rdv` | Rendez-vous |
+| `phoneMsg.search.recents` | Recherches récentes |
+| `phoneMsg.search.connections` | Vos connexions |
+| `phoneMsg.search.hint` | Tapez une lettre pour chercher un nom ou un mot dans vos messages. |
+| `phoneMsg.search.removeFilter` | Retirer le filtre |
+| `phoneMsg.search.results` | {count, plural, =0 {0 résultat} one {# résultat} other {# résultats}} |
+| `phoneMsg.search.searching` | Recherche… |
+| `phoneMsg.search.noneOfType` | Rien de ce type dans vos messages. |
+| `phoneMsg.search.seePhoto` | Voir la photo |
+| `phoneMsg.search.people` | Personnes |
+| `phoneMsg.search.noPeople` | Aucune connexion à ce nom. |
+| `phoneMsg.search.inMessages` | Dans les messages |
+| `phoneMsg.search.noMessages` | Aucun message ne contient « {q} ». |
+| `phoneMsg.openInfos` | Voir les informations de la discussion |
+| `phoneMsg.options` | Options de la discussion |
+| `phoneMsg.convSearch.placeholder` | Rechercher dans la discussion |
+| `phoneMsg.convSearch.count` | {index} sur {total} |
+| `phoneMsg.convSearch.none` | 0 résultat |
+| `phoneMsg.convSearch.previous` | Résultat précédent |
+| `phoneMsg.convSearch.next` | Résultat suivant |
+| `phoneMsg.convSearch.close` | Fermer |
+| `phoneMsg.thread.empty` | Aucun message. Écrivez le premier. |
+| `phoneMsg.thread.blocked` | Vous avez bloqué {name}. |
+| `phoneMsg.thread.unblock` | Débloquer |
+| `phoneMsg.thread.notConnected` | Vous n’êtes plus connectés : vous ne pouvez plus vous écrire. |
+| `phoneMsg.thread.closed` | Cette discussion n’accepte plus de messages. |
+| `phoneMsg.compose.attach` | Joindre un fichier |
+| `phoneMsg.compose.placeholder` | Écrire un message |
+| `phoneMsg.compose.orbi` | Écrire avec Orbi |
+| `phoneMsg.compose.send` | Envoyer |
+| `phoneMsg.compose.camera` | Prendre une photo |
+| `phoneMsg.compose.voice` | Enregistrer une note vocale |
+| `phoneMsg.voice.recording` | Note vocale en cours |
+| `phoneMsg.voice.delete` | Supprimer la note vocale |
+| `phoneMsg.voice.send` | Envoyer la note vocale |
+| `phoneMsg.voice.deleted` | Note vocale supprimée |
+| `phoneMsg.voice.denied` | Autorisez le micro pour enregistrer une note vocale. |
+| `phoneMsg.voice.unavailable` | Ce téléphone ne permet pas d’enregistrer une note vocale ici. |
+| `phoneMsg.errors.tooMany` | Beaucoup de messages d’un coup : attendez un instant. |
+| `phoneMsg.errors.blocked` | Cette discussion n’accepte plus de messages. |
+| `phoneMsg.errors.type` | Ce fichier n’est pas accepté : un PDF ou une image seulement. |
+| `phoneMsg.errors.size` | Fichier trop lourd : 4 Mo au plus. |
+| `phoneMsg.bubble.seePhotos` | Voir les photos |
+| `phoneMsg.bubble.seeProfile` | Voir le profil |
+| `phoneMsg.bubble.seePage` | Voir la page |
+| `phoneMsg.bubble.play` | Écouter la note vocale |
+| `phoneMsg.bubble.pause` | Mettre en pause |
+| `phoneMsg.bubble.read` | · Lu |
+| `phoneMsg.bubble.sent` | · Envoyé |
+| `phoneMsg.bubble.docRequest` | Document demandé : {name} |
+| `phoneMsg.doc.cv` | CV · PDF |
+| `phoneMsg.doc.text` | Lettre ou texte · PDF |
+| `phoneMsg.event.slot` | Rendez-vous proposé |
+| `phoneMsg.event.interview` | Entretien |
+| `phoneMsg.event.agenda` | Ajouter à l’agenda |
+| `phoneMsg.event.choose` | Choisir un créneau |
+| `phoneMsg.event.toConfirm` | Créneau à confirmer |
+| `phoneMsg.event.mode.video` | En visio |
+| `phoneMsg.event.mode.onsite` | Sur place |
+| `phoneMsg.event.mode.audio` | Par téléphone |
+| `phoneMsg.ephemeral.title` | Messages éphémères |
+| `phoneMsg.ephemeral.text` | Les nouveaux messages disparaissent après la durée choisie, pour vous et pour {name}. |
+| `phoneMsg.ephemeral.off` | Désactivés |
+| `phoneMsg.ephemeral.day` | 24 heures |
+| `phoneMsg.ephemeral.week` | 7 jours |
+| `phoneMsg.ephemeral.quarter` | 90 jours |
+| `phoneMsg.ephemeral.banner` | Messages éphémères : {duration} |
+| `phoneMsg.ephemeral.toastOn` | Messages éphémères activés |
+| `phoneMsg.ephemeral.toastOff` | Messages éphémères désactivés |
+| `phoneMsg.ephemeral.lineMineOn` | Vous avez activé les messages éphémères : {duration} |
+| `phoneMsg.ephemeral.lineMineOff` | Vous avez désactivé les messages éphémères |
+| `phoneMsg.ephemeral.lineOn` | {name} a activé les messages éphémères : {duration} |
+| `phoneMsg.ephemeral.lineOff` | {name} a désactivé les messages éphémères |
+| `phoneMsg.mute.on` | Mode silencieux activé |
+| `phoneMsg.mute.off` | Notifications réactivées |
+| `phoneMsg.sheet.menu` | Options de la discussion avec {name} |
+| `phoneMsg.sheet.plus` | Plus |
+| `phoneMsg.sheet.ephem` | Messages éphémères |
+| `phoneMsg.sheet.export` | Exporter la discussion |
+| `phoneMsg.sheet.bloquer` | Bloquer {name} |
+| `phoneMsg.sheet.effacer` | Effacer la discussion |
+| `phoneMsg.sheet.raccourci` | Ajouter un raccourci |
+| `phoneMsg.menu.profile` | Voir le profil |
+| `phoneMsg.menu.page` | Voir la page |
+| `phoneMsg.menu.search` | Rechercher dans la discussion |
+| `phoneMsg.menu.medias` | Médias, liens et documents |
+| `phoneMsg.menu.mute` | Mode silencieux |
+| `phoneMsg.menu.ephemeral` | Messages éphémères |
+| `phoneMsg.menu.more` | Plus |
+| `phoneMsg.plus.block` | Bloquer {name} |
+| `phoneMsg.plus.unblock` | Débloquer {name} |
+| `phoneMsg.plus.clear` | Effacer la discussion |
+| `phoneMsg.plus.export` | Exporter la discussion |
+| `phoneMsg.plus.shortcut` | Ajouter un raccourci sur l’écran d’accueil |
+| `phoneMsg.confirm.blockTitle` | Bloquer {name} ? |
+| `phoneMsg.confirm.blockPerson` | {name} ne pourra plus vous écrire. La personne n’est pas prévenue. |
+| `phoneMsg.confirm.blockOrg` | {name} ne pourra plus vous écrire. Vos candidatures restent en cours. L’entreprise n’est pas prévenue. |
+| `phoneMsg.confirm.block` | Bloquer |
+| `phoneMsg.confirm.blocked` | {name} est bloqué·e |
+| `phoneMsg.confirm.unblocked` | {name} est débloqué·e |
+| `phoneMsg.confirm.clearTitle` | Effacer la discussion ? |
+| `phoneMsg.confirm.clearText` | Les messages sont effacés pour vous seulement. {name} les garde. |
+| `phoneMsg.confirm.clear` | Effacer |
+| `phoneMsg.confirm.cleared` | Discussion effacée |
+| `phoneMsg.export.title` | Exporter la discussion |
+| `phoneMsg.export.without` | Sans les médias |
+| `phoneMsg.export.withoutNote` | Un fichier texte, plus léger |
+| `phoneMsg.export.with` | Avec les médias |
+| `phoneMsg.export.withNote` | Photos et documents dans un dossier .zip |
+| `phoneMsg.export.go` | Exporter |
+| `phoneMsg.export.done` | {file} enregistré dans vos téléchargements |
+| `phoneMsg.export.system` | Jumanly |
+| `phoneMsg.export.fileTitle` | Discussion avec {name} sur Jumanly |
+| `phoneMsg.shortcut.title` | Ajouter un raccourci |
+| `phoneMsg.shortcut.text` | Dans le menu de votre navigateur, touchez « Ajouter à l’écran d’accueil » : la discussion avec {name} s’ouvrira directement. Vous pouvez aussi copier son lien. |
+| `phoneMsg.shortcut.copy` | Copier le lien de la discussion |
+| `phoneMsg.shortcut.copied` | Lien copié |
+| `phoneMsg.shortcut.ok` | Compris |
+| `phoneMsg.infos.profile` | Profil |
+| `phoneMsg.infos.page` | Page |
+| `phoneMsg.infos.search` | Rechercher |
+| `phoneMsg.infos.sound` | Son activé |
+| `phoneMsg.infos.silent` | Silencieux |
+| `phoneMsg.infos.medias` | Médias, liens et documents |
+| `phoneMsg.infos.openMedias` | Ouvrir les médias |
+| `phoneMsg.medias.tabs` | Contenus partagés |
+| `phoneMsg.medias.tab.medias` | Médias |
+| `phoneMsg.medias.tab.liens` | Liens |
+| `phoneMsg.medias.tab.docs` | Documents |
+| `phoneMsg.medias.noPhotos` | Aucune photo dans cette discussion. |
+| `phoneMsg.medias.noLinks` | Aucun lien dans cette discussion. |
+| `phoneMsg.medias.noDocs` | Aucun document dans cette discussion. |
+| `phoneMsg.viewer.photoOf` | Photo · {date} |
+| `phoneMsg.viewer.openDoc` | Ouvrir le document |
+| `phoneMsg.viewer.forward` | Transférer |
+| `phoneMsg.viewer.save` | Enregistrer |
+| `phoneMsg.viewer.saved` | Enregistré dans vos téléchargements |
+| `phoneMsg.viewer.forwardTitle` | Transférer à |
+| `phoneMsg.viewer.forwarded` | Transféré à {name} |
+| `phoneMsg.viewer.nobody` | Aucune autre discussion pour l’instant. |
+| `phoneMsg.attach.title` | Joindre |
+| `phoneMsg.attach.choice.docs` | Documents |
+| `phoneMsg.attach.choice.cv` | CV |
+| `phoneMsg.attach.choice.lettre` | Lettre de motivation |
+| `phoneMsg.attach.choice.contact` | Contact |
+| `phoneMsg.attach.choice.agenda` | Agenda |
+| `phoneMsg.attach.choice.org` | Organisation |
+| `phoneMsg.attach.sheet.docs` | Documents |
+| `phoneMsg.attach.sheet.cv` | Envoyer un CV |
+| `phoneMsg.attach.sheet.lettre` | Lettre de motivation |
+| `phoneMsg.attach.sheet.contact` | Partager un contact |
+| `phoneMsg.attach.sheet.agenda` | Proposer un rendez-vous |
+| `phoneMsg.attach.sheet.org` | Partager une organisation |
+| `phoneMsg.attach.recent` | Photos récentes |
+| `phoneMsg.attach.touch` | Touchez pour choisir |
+| `phoneMsg.attach.picked` | {count, plural, one {# choisie} other {# choisies}} |
+| `phoneMsg.attach.pick` | Choisir cette photo |
+| `phoneMsg.attach.more` | Choisir d’autres photos |
+| `phoneMsg.attach.allowText` | Autorisez Jumanly à voir vos photos pour les envoyer ici. |
+| `phoneMsg.attach.allow` | Autoriser l’accès |
+| `phoneMsg.attach.cancelPick` | Annuler la sélection |
+| `phoneMsg.attach.hdLabel` | Envoyer en haute définition |
+| `phoneMsg.attach.send` | {count, plural, one {Envoyer 1 photo} other {Envoyer # photos}} |
+| `phoneMsg.attach.photosSent` | {count, plural, one {Photo envoyée} other {# photos envoyées}} |
+| `phoneMsg.attach.photosSentHd` | {count, plural, one {Photo envoyée en HD} other {# photos envoyées en HD}} |
+| `phoneMsg.attach.phone` | Sur ce téléphone |
+| `phoneMsg.attach.pickFile` | Choisir un fichier |
+| `phoneMsg.attach.pickFileNote` | Un PDF ou une image, 4 Mo au plus |
+| `phoneMsg.attach.jumanly` | Vos documents sur Jumanly |
+| `phoneMsg.attach.docSent` | Document envoyé |
+| `phoneMsg.attach.changed` | Modifié le {date} |
+| `phoneMsg.attach.cvSent` | {name} envoyé |
+| `phoneMsg.attach.noCv` | Aucun CV pour l’instant. |
+| `phoneMsg.attach.newCv` | Créer un nouveau CV dans Carrière › |
+| `phoneMsg.attach.letterSent` | Lettre envoyée |
+| `phoneMsg.attach.noLetter` | Aucune lettre pour l’instant. |
+| `phoneMsg.attach.orbiLetter` | Orbi rédige une lettre pour {company} à partir de votre profil. |
+| `phoneMsg.attach.orbiLetterAny` | Orbi rédige une lettre de motivation à partir de votre profil. |
+| `phoneMsg.attach.orbiLetterAsk` | Rédige une lettre de motivation pour {company} à partir de mon profil. |
+| `phoneMsg.attach.orbiLetterAskAny` | Rédige une lettre de motivation à partir de mon profil. |
+| `phoneMsg.attach.write` | Rédiger |
+| `phoneMsg.attach.fromConnections` | Parmi vos connexions |
+| `phoneMsg.attach.contactSent` | Contact partagé |
+| `phoneMsg.attach.noContacts` | Aucune autre connexion à partager. |
+| `phoneMsg.attach.orgSent` | Organisation partagée |
+| `phoneMsg.attach.noOrgs` | Suivez une entreprise ou postulez pour la partager ici. |
+| `phoneMsg.agenda.day` | Jour |
+| `phoneMsg.agenda.hourTitle` | Heure |
+| `phoneMsg.agenda.hour` | {hour} h |
+| `phoneMsg.agenda.how` | Comment |
+| `phoneMsg.agenda.mode.visio` | Visio |
+| `phoneMsg.agenda.mode.place` | Sur place |
+| `phoneMsg.agenda.mode.call` | Appel |
+| `phoneMsg.agenda.send` | Envoyer : {when} |
+| `phoneMsg.agenda.sent` | Proposition de rendez-vous envoyée |
+| `phoneMsg.agenda.summary` | Rendez-vous proposé sur Jumanly |
+| `phoneMsg.camera.title` | Appareil photo |
+| `phoneMsg.camera.seen` | Ce que voit la caméra |
+| `phoneMsg.camera.close` | Fermer la caméra |
+| `phoneMsg.camera.take` | Prendre la photo |
+| `phoneMsg.camera.gallery` | Ouvrir la galerie |
+| `phoneMsg.camera.switch` | Changer de caméra |
+| `phoneMsg.camera.front` | Caméra avant |
+| `phoneMsg.camera.back` | Caméra arrière |
+| `phoneMsg.camera.off` | La caméra n’est pas disponible ici : prenez ou choisissez une photo avec votre téléphone. |
+| `phoneMsg.camera.pick` | Prendre une photo |
+| `phoneMsg.camera.caption` | Ajouter une légende |
+| `phoneMsg.camera.captionLabel` | Légende |
+| `phoneMsg.camera.send` | Envoyer la photo |
+| `phoneMsg.camera.sent` | Photo envoyée |
+| `phoneMsg.camera.sentHd` | Photo envoyée en HD |
+| `phoneMsg.help.title` | Orbi |
+| `phoneMsg.help.for` | Vous aide à écrire à {name} |
+| `phoneMsg.help.yours` | Votre texte : « {text} » |
+| `phoneMsg.help.mode.reply` | Proposer une réponse |
+| `phoneMsg.help.mode.pro` | Plus professionnel |
+| `phoneMsg.help.mode.short` | Plus court |
+| `phoneMsg.help.mode.fix` | Corriger les fautes |
+| `phoneMsg.help.mode.english` | Traduire en anglais |
+| `phoneMsg.help.thinking` | Orbi écrit… |
+| `phoneMsg.help.use` | Utiliser |
+| `phoneMsg.help.again` | Autre version |
+| `phoneMsg.help.fixEmpty` | Écrivez d’abord votre message : Orbi corrige l’orthographe et la ponctuation. |
+| `phoneMsg.help.needsAi` | La traduction a besoin d’Orbi, qui n’est pas disponible pour l’instant. |
+| `phoneMsg.help.simple` | Orbi n’est pas disponible : voici un texte simple, à adapter. |
+| `phoneMsg.help.decide` | Orbi propose, vous décidez : relisez avant d’envoyer. |
+| `phoneMsg.help.template.reply` | {peer, select, yes {Merci {firstName} pour ton message ! Je te réponds en détail très vite.} other {Bonjour {firstName}, merci pour votre message. Je reviens vers vous très vite.}} |
+| `phoneMsg.help.template.replyAgain` | {peer, select, yes {Salut {firstName}, bien reçu, merci ! On en reparle bientôt.} other {Bonjour {firstName}, je vous remercie pour votre message et reste à votre disposition.}} |
+| `phoneMsg.help.template.pro` | Bonjour {firstName}, {text} Cordialement, {me} |
+| `phoneMsg.help.template.proEmpty` | Bonjour {firstName}, je vous remercie pour votre message. Cordialement, {me} |
+| `phoneMsg.help.template.shortEmpty` | Merci, bien reçu ! |
+| `phoneMsg.orbi.unread` | {people, plural, one {Une discussion attend votre réponse ({count, plural, one {# message} other {# messages}}).} other {# discussions attendent votre réponse ({count, plural, one {# message} other {# messages}}).}} |
+| `phoneMsg.orbi.unreadNone` | Aucun message non lu : vous êtes à jour. |
+| `phoneMsg.orbi.priority` | À {name} : son dernier message attend votre réponse ({when}). |
+| `phoneMsg.orbi.priorityRecruiter` | À {name} ({company}) : un recruteur attend votre réponse. |
+| `phoneMsg.orbi.priorityNone` | Personne n’attend de réponse pour l’instant. |
+| `phoneMsg.orbi.answer` | Répondre à {name} |
+| `phoneMsg.orbi.recruiter` | Ouvrez la discussion, puis touchez l’étincelle à côté du champ : je propose un message que vous pouvez modifier. |
+| `phoneMsg.orbi.recruiterNone` | Aucun recruteur ne vous a encore écrit. Quand une équipe vous répond, je vous aide à lui écrire. |
+| `phoneMsg.orbi.seeOffers` | Voir les offres |
+| `phoneMsg.orbi.reread` | Écrivez votre message dans la discussion, puis touchez l’étincelle : « Corriger les fautes » ou « Plus professionnel ». Je propose, vous choisissez. |
+
 ### Refonte recruteur · Cadre mobile (lot 1)
 
 *Coquille de l'espace recruteur (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 1) : organisation active, barre du bas À traiter · Offres · Orbi · Candidats · Messages, Compte RH, premiers pas.*

@@ -184,6 +184,8 @@ export async function seedSuiviScenario(db: SeedClient) {
       },
     });
     const at = (hours: number) => new Date(Date.now() - hours * hour);
+    // Seeded again on each run: only the latest invitation stays in the conversation.
+    await db.message.deleteMany({ where: { conversationId: conversation.id } });
     await db.message.createMany({
       data: [
         {
@@ -237,6 +239,8 @@ export async function seedSuiviScenario(db: SeedClient) {
         talentUserId: grace.id,
       },
     });
+    // Seeded again on each run: the question stays alone.
+    await db.message.deleteMany({ where: { conversationId: conversation.id } });
     await db.message.create({
       data: {
         conversationId: conversation.id,

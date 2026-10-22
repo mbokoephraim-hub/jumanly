@@ -7,6 +7,7 @@ import { FilTab } from "@/components/phone/fil/server";
 import { CareerTab } from "@/components/phone/career/server";
 import { ExplorerTab } from "@/components/phone/explorer/server";
 import { FormationTab } from "@/components/phone/learn/server";
+import { MessagesTab } from "@/components/phone/messages/server";
 import { TalentShell } from "@/components/talent/shell";
 import { isPhone } from "@/server/view";
 import { Skeleton } from "@/components/ui";
@@ -102,6 +103,11 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
             formation: (
               <Suspense fallback={null}>
                 <FormationTab user={{ id: user.id, name: user.name, image: user.image ?? null }} />
+              </Suspense>
+            ),
+            messages: (
+              <Suspense fallback={null}>
+                <MessagesTab user={{ id: user.id, showPresence: user.showPresence }} />
               </Suspense>
             ),
           }}

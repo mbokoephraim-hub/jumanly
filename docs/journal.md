@@ -50,6 +50,39 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Modèle B · B8 : Messages au téléphone (22 octobre 2026)
+
+Planches Messages (`docs/modele-b/captures/INDEX.md`, rangées 147 à 183). Écarts et choix :
+`docs/decisions/2026-10-22-modele-b-b8.md`.
+
+**Fait.**
+- Onglet Messages gardé monté (`src/components/phone/messages/`) : recherche (par type, recherches
+  récentes, connexions, puis noms et messages), rubriques Connexions · Recruteurs · Entreprises,
+  demandes de connexion avec leur mot, « Nouveau message » vers les connexions seulement.
+- Discussion : bulles, photos, documents, contacts, organisations, rendez-vous, notes vocales,
+  liens (une offre de Jumanly s'ouvre dans l'espace), « Lu », recherche dans la discussion,
+  composeur avec Orbi, caméra et micro, cartes de décision de recrutement.
+- Feuilles : joindre (documents du téléphone ou de Jumanly, CV, lettre, contact, agenda,
+  organisation, photos en HD), menu « ··· », Plus (bloquer, effacer, exporter, raccourci),
+  messages éphémères, Orbi pour écrire (répondre, plus pro, plus court, corriger, anglais).
+- Pages Infos et Médias, liens et documents ; visionneuse avec Transférer et Enregistrer.
+- Données : migration additive `20261022010000_modele_b_messages` (éphémère, effacement par
+  personne, mot d'une demande, types photo, vocal, contact, organisation). Aucune donnée effacée.
+- Services `messages-phone.ts`, `message-media.ts`, `message-help.ts` ; actions
+  `src/server/actions/messages-phone.ts` ; routes média, agenda (.ics) et export.
+- Caméra et micro permis au site dans l'espace connecté (en-tête `Permissions-Policy`).
+
+**Captures → maquettes** (`captures/etape-1/`, 390 × 844) : `b8-147` à `b8-183`, au numéro de la
+rangée.
+
+**Remplacé au téléphone.** L'ancienne liste des messages et l'ancienne conversation du talent.
+L'ordinateur et le recruteur gardent leurs pages.
+
+**Tests.** `tests/e2e/modele-b-messages.spec.ts` (chaque bouton ouvre quelque chose, demandes,
+onglet gardé monté) ; `tests/unit/message-help.test.ts` ; `tests/db/messages-phone.test.ts`
+(silence, éphémère, effacement, rubriques, accès) ; `hire`, `hire-advanced` et
+`mobile-recruteur-ats` adaptés au téléphone ; `security-headers` mis à jour.
+
 ## Modèle B · B7 : Formation au téléphone (21 octobre 2026)
 
 Planches Formation (`docs/modele-b/captures/INDEX.md`, rangées 134 à 146). Écarts et choix :
