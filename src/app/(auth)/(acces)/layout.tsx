@@ -6,6 +6,7 @@ import { AppearanceRoot } from "@/components/talent/appearance";
 import { pickMessages } from "@/i18n/client-messages";
 import { appearanceScript } from "@/lib/appearance";
 import { phoneThemeScript } from "@/lib/phone-theme";
+import { PhoneThemeColor } from "@/components/phone/theme-color";
 import { isPhone } from "@/server/view";
 
 /**
@@ -31,6 +32,7 @@ async function AccessFrame({ children }: { children: React.ReactNode }) {
       <div className="nb-app nb-acces">
         <script dangerouslySetInnerHTML={{ __html: appearanceScript("dark") }} />
         <script dangerouslySetInnerHTML={{ __html: phoneThemeScript() }} />
+        <PhoneThemeColor />
         <AppearanceRoot appearance="dark" />
         <NextIntlClientProvider
           messages={pickMessages(messages, ["access", "auth", "signup", "phoneAccueil", "phone"])}
