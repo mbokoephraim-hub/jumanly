@@ -72,7 +72,7 @@ async function publishJob(page: Page, title: string) {
     skill: "Analyse de données",
   });
   const { jobId } = await publishFilledOffer(page, "Publier");
-  await expect(page.getByRole("main")).toContainText("Offre publiée");
+  await expect(page.getByRole("main")).toContainText(/Offre publiée|Votre offre est en ligne/);
   const slug = await slugOf(page);
   return { pipelineUrl: `/app/hire/candidats?offre=${jobId}`, slug };
 }
@@ -385,8 +385,13 @@ test("l'administrateur pose la bannière et le logo de l'entreprise", async ({ p
     skill: "Bureautique",
   });
   const editor = page.locator("main").filter({ visible: true });
-  // On a phone the card of step 4, on a computer the « Aperçu de l'annonce » beside the form.
-  await expect(editor.locator(`img[src="${src}"]`).filter({ visible: true }).first()).toBeVisible();
+  // On a phone the card of step 4 shows the logo (Modèle B recruteur, M4), on a computer the
+  // « Aperçu de l'annonce » beside the form shows the banner.
+  const shown =
+    test.info().project.name === "mobile"
+      ? editor.locator('.nb-rh-apercu-offre img[src^="/medias/orgs/"]')
+      : editor.locator(`img[src="${src}"]`);
+  await expect(shown.filter({ visible: true }).first()).toBeVisible();
 
   await page.goto("/app/organisation/modifier");
   await main.getByRole("button", { name: "Bannière" }).click();

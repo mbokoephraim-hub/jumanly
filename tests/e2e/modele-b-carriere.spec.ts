@@ -122,8 +122,14 @@ test.describe("Modèle B · Carrière au téléphone", () => {
     await page.goto("/app/career/portfolio/nouvelle");
     const form = page.locator(".nb-ca-form");
     await expect(form.getByRole("heading", { name: "Nouvelle réalisation" })).toBeVisible();
-    await form.getByLabel("Titre").fill("Réalisation de test (fictive)");
-    await form.getByLabel("Description").fill("Un tableau imaginé pour le test.");
+    // The form may hydrate after the first keystrokes: type again until both fields hold.
+    await expect(async () => {
+      await form.getByLabel("Titre").fill("Réalisation de test (fictive)");
+      await form.getByLabel("Description").fill("Un tableau imaginé pour le test.");
+      await page.waitForTimeout(300);
+      await expect(form.getByLabel("Titre")).toHaveValue("Réalisation de test (fictive)");
+      await expect(form.getByLabel("Description")).toHaveValue("Un tableau imaginé pour le test.");
+    }).toPass();
     await form.getByRole("switch", { name: "Publier aussi dans le Fil" }).click();
     await form.getByRole("button", { name: "Enregistrer" }).click();
     await page.waitForURL("**/app/career/cv**");

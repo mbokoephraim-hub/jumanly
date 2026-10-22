@@ -14343,6 +14343,199 @@ Conventions :
 | `phoneRhFil.compose.done` | Publication partagée |
 | `phoneRhFil.compose.submit` | Publier |
 
+### Modèle B recruteur · Offres au téléphone
+
+*Lot M4 (docs/modele-b-recruteur, mobile/captures section 03) : les offres et leurs indicateurs, publier en quatre étapes, partager, clôturer avec le rapport PDF. Candidater reste gratuit.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhOffres.list.line` | {live, plural, =0 {Aucune offre en cours} one {# offre en cours} other {# offres en cours}} · {applications, plural, =0 {aucune candidature} one {# candidature} other {# candidatures}} · {unseen, plural, =0 {aucune nouvelle} one {# nouvelle} other {# nouvelles}} |
+| `phoneRhOffres.list.filters` | Filtrer les offres |
+| `phoneRhOffres.list.filter.toutes` | Toutes |
+| `phoneRhOffres.list.filter.encours` | En cours |
+| `phoneRhOffres.list.filter.terminees` | Terminées |
+| `phoneRhOffres.list.empty.toutes` | Aucune offre pour l'instant. Le « + » en haut en crée une en quatre étapes. |
+| `phoneRhOffres.list.empty.encours` | Aucune offre en ligne en ce moment. |
+| `phoneRhOffres.list.empty.terminees` | Aucune offre terminée. |
+| `phoneRhOffres.list.new` | {count, plural, one {# nouvelle} other {# nouvelles}} |
+| `phoneRhOffres.list.online` | {count, plural, =0 {En ligne depuis aujourd'hui} one {En ligne depuis # jour} other {En ligne depuis # jours}} |
+| `phoneRhOffres.list.ended` | Candidatures fermées |
+| `phoneRhOffres.list.notPublished` | Pas encore publiée |
+| `phoneRhOffres.status.published` | En cours |
+| `phoneRhOffres.status.pending_review` | En vérification |
+| `phoneRhOffres.status.draft` | Brouillon |
+| `phoneRhOffres.status.rejected` | Refusée |
+| `phoneRhOffres.status.changes_requested` | À corriger |
+| `phoneRhOffres.status.paused` | En pause |
+| `phoneRhOffres.status.closed` | Terminée |
+| `phoneRhOffres.status.archived` | Archivée |
+| `phoneRhOffres.status.expired` | Terminée |
+| `phoneRhOffres.contract.cdi` | CDI |
+| `phoneRhOffres.contract.cdd` | CDD |
+| `phoneRhOffres.contract.stage` | Stage |
+| `phoneRhOffres.contract.mission` | Mission |
+| `phoneRhOffres.contract.freelance` | Freelance |
+| `phoneRhOffres.contract.alternance` | Alternance |
+| `phoneRhOffres.contract.volontariat` | Volontariat |
+| `phoneRhOffres.remote.onsite` | Sur place |
+| `phoneRhOffres.remote.hybrid` | Hybride |
+| `phoneRhOffres.remote.remote` | Télétravail |
+| `phoneRhOffres.figures.views` | {count, plural, one {vue} other {vues}} |
+| `phoneRhOffres.figures.days` | {count, plural, one {jour en ligne} other {jours en ligne}} |
+| `phoneRhOffres.figures.applications` | {count, plural, one {candidature} other {candidatures}} |
+| `phoneRhOffres.figures.rate` | des vues deviennent candidatures |
+| `phoneRhOffres.figures.unseen` | {count, plural, one {nouvelle à traiter} other {nouvelles à traiter}} |
+| `phoneRhOffres.detail.back` | Offres |
+| `phoneRhOffres.detail.published` | Publiée le {date} |
+| `phoneRhOffres.detail.draft` | Brouillon, pas encore publiée |
+| `phoneRhOffres.detail.online` | {count, plural, =0 {en ligne depuis aujourd'hui} one {en ligne depuis # jour} other {en ligne depuis # jours}} |
+| `phoneRhOffres.detail.left` | {count, plural, one {# jour restant} other {# jours restants}} |
+| `phoneRhOffres.detail.ended` | terminée le {date} |
+| `phoneRhOffres.detail.orbiWaiting` | {count, plural, one {# candidature attend une réponse.} other {# candidatures attendent une réponse.}} |
+| `phoneRhOffres.detail.orbiNone` | Pas encore de candidature. Partager l'offre dans le Fil l'aide à se faire voir. |
+| `phoneRhOffres.detail.orbiDone` | Toutes les candidatures ont été ouvertes. |
+| `phoneRhOffres.detail.why` | Pourquoi ? |
+| `phoneRhOffres.detail.whyText` | Orbi compte les candidatures que personne de l'équipe n'a encore ouvertes. Il ne classe pas les personnes à votre place : c'est vous qui décidez. |
+| `phoneRhOffres.detail.chart` | Candidatures reçues |
+| `phoneRhOffres.detail.period` | Période |
+| `phoneRhOffres.detail.days` | {count} jours |
+| `phoneRhOffres.detail.chartLabel` | {count, plural, =0 {Aucune candidature} one {# candidature} other {# candidatures}} sur les {days} derniers jours |
+| `phoneRhOffres.detail.added` | +{count} |
+| `phoneRhOffres.detail.sources` | D'où viennent les candidats |
+| `phoneRhOffres.detail.see` | {count, plural, one {Voir le candidat} other {Voir les # candidats}} |
+| `phoneRhOffres.source.direct` | L'offre sur Jumanly |
+| `phoneRhOffres.source.invitation` | Vos invitations |
+| `phoneRhOffres.source.talent_search` | Recherche de talents |
+| `phoneRhOffres.candidates.back` | L'offre |
+| `phoneRhOffres.candidates.line` | {count, plural, =0 {Aucun candidat} one {# candidat} other {# candidats}} · {unseen, plural, =0 {aucun nouveau} one {# nouveau} other {# nouveaux}} |
+| `phoneRhOffres.candidates.rule` | Classés par correspondance avec l'offre. Le score ne tient compte ni du nom, ni de l'âge, ni de la photo. Vous décidez. |
+| `phoneRhOffres.candidates.ruleNoScore` | Classés du plus récent au plus ancien. Vous décidez. |
+| `phoneRhOffres.candidates.sort` | Trier dans Candidatures |
+| `phoneRhOffres.published.title` | Votre offre est en ligne |
+| `phoneRhOffres.published.text` | « {title} » apparaît dans Explorer. Orbi la propose aux talents qui correspondent. |
+| `phoneRhOffres.published.reviewTitle` | Votre offre part en vérification |
+| `phoneRhOffres.published.reviewText` | « {title} » sera en ligne dès que Jumanly aura vérifié votre entreprise. Vous recevrez une notification. |
+| `phoneRhOffres.published.copy` | Copier le lien |
+| `phoneRhOffres.published.copied` | Lien copié |
+| `phoneRhOffres.published.offers` | Voir mes offres |
+| `phoneRhOffres.published.see` | Voir l'offre |
+| `phoneRhOffres.published.toFil` | Partager dans le Fil |
+| `phoneRhOffres.menu.open` | Actions de l'offre |
+| `phoneRhOffres.menu.edit` | Modifier l'offre |
+| `phoneRhOffres.menu.editHint` | Reprend les étapes, déjà remplies |
+| `phoneRhOffres.menu.pause` | Mettre en pause |
+| `phoneRhOffres.menu.pauseHint` | Elle disparaît d'Explorer, rien n'est perdu |
+| `phoneRhOffres.menu.resume` | Remettre en ligne |
+| `phoneRhOffres.menu.resumeHint` | Elle revient dans Explorer |
+| `phoneRhOffres.menu.share` | Partager |
+| `phoneRhOffres.menu.shareHint` | Lien, Fil, WhatsApp |
+| `phoneRhOffres.menu.duplicate` | Dupliquer |
+| `phoneRhOffres.menu.duplicateHint` | Une nouvelle offre à partir de celle-ci |
+| `phoneRhOffres.menu.reopen` | Rouvrir l'offre |
+| `phoneRhOffres.menu.reopenHint` | Elle accepte de nouveau les candidatures |
+| `phoneRhOffres.menu.report` | Rapport de l'offre |
+| `phoneRhOffres.menu.reportHint` | Statistiques et sources, en PDF |
+| `phoneRhOffres.menu.close` | Clôturer l'offre |
+| `phoneRhOffres.menu.closeHint` | Fin des candidatures, rapport PDF |
+| `phoneRhOffres.menu.shareTitle` | Partager l'offre |
+| `phoneRhOffres.menu.copy` | Copier le lien |
+| `phoneRhOffres.menu.copied` | Lien copié |
+| `phoneRhOffres.menu.toFil` | Publier dans le Fil |
+| `phoneRhOffres.menu.toFilHint` | Au nom de {org} |
+| `phoneRhOffres.menu.whatsapp` | WhatsApp |
+| `phoneRhOffres.menu.whatsappHint` | Envoyer à un contact |
+| `phoneRhOffres.menu.closeTitle` | Clôturer « {title} » ? |
+| `phoneRhOffres.menu.closeText` | {count, plural, =0 {L'offre ne reçoit plus de candidatures, et le rapport PDF se prépare.} one {Le candidat reçoit un message. Sa candidature reste consultable, et le rapport PDF se prépare.} other {Les # candidats reçoivent un message. Les candidatures restent consultables, et le rapport PDF se prépare.}} |
+| `phoneRhOffres.menu.closeConfirm` | Clôturer l'offre |
+| `phoneRhOffres.menu.closeKeep` | Garder en ligne |
+| `phoneRhOffres.menu.reportTitle` | Offre clôturée, rapport prêt |
+| `phoneRhOffres.menu.reportText` | {views, plural, one {# vue} other {# vues}} · {applications, plural, one {# candidature} other {# candidatures}} · {hired, plural, one {# retenu} other {# retenus}}. Le PDF reprend les statistiques et les sources de la période de l'offre. |
+| `phoneRhOffres.menu.reportDownload` | Télécharger le PDF |
+| `phoneRhOffres.menu.reportLocked` | Le rapport PDF fait partie des outils de recrutement avancés. L'administrateur de l'entreprise peut les activer. |
+| `phoneRhOffres.menu.reportLater` | Plus tard |
+| `phoneRhOffres.publish.title` | Nouvelle offre |
+| `phoneRhOffres.publish.editTitle` | Modifier l'offre |
+| `phoneRhOffres.publish.back` | Retour |
+| `phoneRhOffres.publish.draft` | Brouillon |
+| `phoneRhOffres.publish.progress` | Étape {step} sur 4 |
+| `phoneRhOffres.publish.continue` | Continuer |
+| `phoneRhOffres.publish.publish` | Publier l'offre |
+| `phoneRhOffres.publish.review` | Envoyer en vérification |
+| `phoneRhOffres.publish.steps.1.kicker` | Étape 1 sur 4 · Le poste |
+| `phoneRhOffres.publish.steps.1.title` | Quel poste recrutez-vous ? |
+| `phoneRhOffres.publish.steps.2.kicker` | Étape 2 sur 4 · Les détails |
+| `phoneRhOffres.publish.steps.2.title` | Les détails |
+| `phoneRhOffres.publish.steps.3.kicker` | Étape 3 sur 4 · La présélection |
+| `phoneRhOffres.publish.steps.3.title` | La présélection |
+| `phoneRhOffres.publish.steps.4.kicker` | Étape 4 sur 4 · L'aperçu |
+| `phoneRhOffres.publish.steps.4.title` | Ce que verront les talents |
+| `phoneRhOffres.publish.fields.title` | Intitulé du poste |
+| `phoneRhOffres.publish.fields.titlePlaceholder` | Par exemple : Analyste crédit junior |
+| `phoneRhOffres.publish.fields.description` | Description du poste |
+| `phoneRhOffres.publish.fields.descriptionPlaceholder` | En quelques phrases : l'équipe, les missions, ce que la personne apprendra. |
+| `phoneRhOffres.publish.fields.skills` | Compétences attendues |
+| `phoneRhOffres.publish.fields.skillPlaceholder` | Par exemple : Excel |
+| `phoneRhOffres.publish.fields.addSkill` | Ajouter une compétence |
+| `phoneRhOffres.publish.fields.removeSkill` | Retirer {skill} |
+| `phoneRhOffres.publish.fields.add` | Ajouter |
+| `phoneRhOffres.publish.fields.city` | Ville |
+| `phoneRhOffres.publish.fields.otherCity` | Autre ville |
+| `phoneRhOffres.publish.fields.country` | Pays du poste |
+| `phoneRhOffres.publish.fields.remote` | Mode de travail |
+| `phoneRhOffres.publish.fields.contract` | Contrat |
+| `phoneRhOffres.publish.fields.salary` | Salaire |
+| `phoneRhOffres.publish.fields.salaryShow` | Afficher le salaire |
+| `phoneRhOffres.publish.fields.salaryHidden` | Le salaire ne s'affiche pas |
+| `phoneRhOffres.publish.fields.salaryMin` | Minimum (USD par mois) |
+| `phoneRhOffres.publish.fields.salaryMax` | Maximum (USD par mois) |
+| `phoneRhOffres.publish.fields.salaryHint` | Les offres avec salaire reçoivent plus de candidatures. |
+| `phoneRhOffres.publish.fields.questions` | {count, plural, =0 {Questions aux candidats} one {Questions aux candidats · # choisie} other {Questions aux candidats · # choisies}} |
+| `phoneRhOffres.publish.fields.question` | Votre question |
+| `phoneRhOffres.publish.fields.questionPlaceholder` | Ajouter votre question |
+| `phoneRhOffres.publish.fields.documents` | Documents demandés |
+| `phoneRhOffres.publish.fields.screeningNote` | Aucune réponse n'écarte un candidat : elles vous aident à trier, vous décidez. |
+| `phoneRhOffres.publish.errors.title` | Indiquez l'intitulé du poste (3 caractères au moins). |
+| `phoneRhOffres.publish.errors.description` | Décrivez le poste en quelques phrases. |
+| `phoneRhOffres.publish.errors.skills` | Ajoutez au moins une compétence attendue. |
+| `phoneRhOffres.publish.errors.unknownSkills` | Ces compétences ne sont pas dans le référentiel : {skills}. Choisissez un nom proche. |
+| `phoneRhOffres.publish.errors.forbidden` | Ce texte ne peut pas être publié. Reformulez-le. |
+| `phoneRhOffres.publish.errors.city` | Choisissez la ville du poste. |
+| `phoneRhOffres.publish.errors.country` | Indiquez le pays du poste. |
+| `phoneRhOffres.publish.errors.salary` | Indiquez un minimum et un maximum, le maximum au moins égal au minimum. |
+| `phoneRhOffres.publish.errors.failed` | L'offre n'a pas pu être enregistrée. Réessayez. |
+| `phoneRhOffres.publish.errors.limit` | Vous avez atteint le nombre d'offres en ligne de votre formule. Mettez une offre en pause ou clôturez-en une. |
+| `phoneRhOffres.publish.errors.question` | Écrivez une question de 5 caractères au moins. |
+| `phoneRhOffres.publish.errors.questionsMax` | 5 questions au plus. |
+| `phoneRhOffres.publish.orbi.label` | Orbi peut proposer un texte |
+| `phoneRhOffres.publish.orbi.proposed` | Proposé par Orbi · à relire |
+| `phoneRhOffres.publish.orbi.propose` | Proposer un texte |
+| `phoneRhOffres.publish.orbi.again` | Proposer un autre texte |
+| `phoneRhOffres.publish.orbi.writing` | Orbi écrit… |
+| `phoneRhOffres.publish.orbi.failed` | Orbi n'a pas pu écrire le texte. Écrivez-le vous-même. |
+| `phoneRhOffres.publish.orbi.consent` | Activez l'aide d'Orbi dans les réglages pour qu'il propose un texte. |
+| `phoneRhOffres.publish.orbi.quota` | Les crédits d'Orbi de ce mois sont utilisés. Écrivez le texte vous-même. |
+| `phoneRhOffres.publish.orbi.nothing` | Orbi n'a pas de proposition pour ce poste. Écrivez le texte vous-même. |
+| `phoneRhOffres.publish.contracts.cdi` | CDI |
+| `phoneRhOffres.publish.contracts.cdd` | CDD |
+| `phoneRhOffres.publish.contracts.stage` | Stage |
+| `phoneRhOffres.publish.contracts.freelance` | Freelance |
+| `phoneRhOffres.publish.remotes.onsite` | Sur place |
+| `phoneRhOffres.publish.remotes.hybrid` | Hybride |
+| `phoneRhOffres.publish.remotes.remote` | Télétravail |
+| `phoneRhOffres.publish.documents.cv` | CV |
+| `phoneRhOffres.publish.documents.letter` | Lettre |
+| `phoneRhOffres.publish.documents.diploma` | Diplôme |
+| `phoneRhOffres.publish.documents.portfolio` | Portfolio |
+| `phoneRhOffres.publish.salaryLine` | {min} à {max} USD par mois |
+| `phoneRhOffres.publish.previewLabel` | Aperçu de l'offre |
+| `phoneRhOffres.publish.previewLine` | {count, plural, =0 {Aucune question de présélection} one {# question de présélection} other {# questions de présélection}} · candidater reste gratuit |
+| `phoneRhOffres.publish.applyFree` | Candidater gratuitement |
+| `phoneRhOffres.publish.suggestions.skills` | Avez-vous déjà occupé un poste semblable ? |
+| `phoneRhOffres.publish.suggestions.start` | Quand pouvez-vous commencer ? |
+| `phoneRhOffres.publish.suggestions.city` | Êtes-vous à {city} ou prêt·e à y venir ? |
+| `phoneRhOffres.publish.suggestions.move` | Êtes-vous prêt·e à venir sur le lieu du poste ? |
+| `phoneRhOffres.publish.suggestions.salary` | Quel salaire attendez-vous ? |
+
 
 ---
 

@@ -4,6 +4,9 @@ import { getTranslations } from "next-intl/server";
 import { JobFlow, type FlowQuery } from "@/components/recruiter/job-flow";
 import { db } from "@/server/db";
 import { requireHire } from "@/server/hire-context";
+import { isPhone } from "@/server/view";
+import { PhoneRecruiterPublish } from "@/components/phone/recruteur/publier";
+import { RhOffresTexts, rhPublishData } from "@/components/phone/recruteur/offres";
 import { getOrgJob, HireError } from "@/server/services/hire";
 import { jobStepOf } from "@/server/services/hire-offers";
 
@@ -27,12 +30,21 @@ export default async function EditOfferPage({
 }: PageProps<"/app/hire/offres/[id]/modifier">) {
   const [{ id }, raw] = await Promise.all([params, searchParams]);
   const query = flat(raw);
-  const { ctx } = await requireHire(`/app/hire/offres/${id}/modifier`, "manage");
+  const { ctx, user } = await requireHire(`/app/hire/offres/${id}/modifier`, "manage");
   const job = await getOrgJob(db, ctx, id).catch((error) => {
     if (error instanceof HireError) notFound();
     throw error;
   });
   if (job.status === "closed" || job.status === "archived") notFound();
+  if (await isPhone())
+    return (
+      <RhOffresTexts>
+        <PhoneRecruiterPublish
+          key={job.id}
+          data={await rhPublishData(ctx, user.id, job.id, Number(query.etape) || 1)}
+        />
+      </RhOffresTexts>
+    );
   const org = await db.organization.findUniqueOrThrow({
     where: { id: ctx.organizationId },
     select: { name: true, banner: true, logo: true },
