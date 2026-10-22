@@ -94,43 +94,6 @@ export function talentTabOf(pathname: string): TalentTab | null {
 /** The destinations themselves: their page opens on the big title, the round buttons, the avatar. */
 export const talentTabPaths: string[] = talentTabs.map((tab) => tab.href);
 
-/**
- * Talent screens with their own fixed action bar at the bottom of a phone: the bottom bar steps
- * aside there (offer detail and application, Learning Room, conversation, CV editor, Mon espace).
- */
-export function hidesTalentTabBar(pathname: string) {
-  const [, app, section, page] = pathname.split("/");
-  if (app !== "app" || !section) return false;
-  if (section === "bienvenue") return true;
-  // Lot 7: subscription, payment, settings, search and the tester tool draw their own head
-  // (planche talent-4 § 7 and § 8), without the bar.
-  if (["abonnement", "parametres", "recherche", "testeur"].includes(section)) return true;
-  // Compte and Connexions open from the avatar and draw their own head (planche talent-4 § 2).
-  if (section === "compte") return true;
-  // Orbi opens as a conversation page: back arrow at the top, the composer in place of the bar.
-  if (section === "orbi") return true;
-  // Mon profil and its screens draw their own head (planche talent-4 § 3).
-  if (section === "profil") return true;
-  if (section === "jobs") return Boolean(page) && !["candidatures", "enregistrees"].includes(page);
-  // Messages and notifications open from the head and draw their own (planche talent-2 § 5).
-  if (section === "messages" || section === "notifications") return true;
-  if (section === "suivi") return Boolean(page);
-  // Every page of Apprendre under its home draws its own head (planche talent-3).
-  if (section === "learn") return Boolean(page);
-  if (section === "career")
-    return (
-      // Lot 6b and 6c: the diagnostic, the plan, the practice, CV et documents, LinkedIn and the
-      // letters draw their own head (planche talent-4 § 5 and § 6).
-      page === "cv" ||
-      page === "linkedin" ||
-      page === "documents" ||
-      page === "entretiens" ||
-      page === "diagnostic" ||
-      page === "plan"
-    );
-  return false;
-}
-
 /** Organization space (Hire): shown when an organization is chosen in the space switcher. */
 export const hireNavigation: AppNavigationItem[] = [
   { key: "home", href: "/app/hire", icon: "accueil" },

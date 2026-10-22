@@ -1,5 +1,5 @@
 import { describe, expect, it } from "vitest";
-import { hidesTalentTabBar, talentTabOf, talentTabs } from "@/config/navigation";
+import { talentTabOf, talentTabs } from "@/config/navigation";
 
 describe("navigation Talent (docs/refonte-mobile, brief § 2.1)", () => {
   it("garde cinq destinations dans la barre du bas, Orbi au milieu", () => {
@@ -20,60 +20,5 @@ describe("navigation Talent (docs/refonte-mobile, brief § 2.1)", () => {
     expect(talentTabOf("/app/orbi")?.key).toBe("orbi");
     expect(talentTabOf("/app/compte")).toBeNull();
     expect(talentTabOf("/app/jobsx")).toBeNull();
-  });
-
-  it("masque la barre du bas sur les écrans qui ont leur barre d'action fixe", () => {
-    for (const path of [
-      "/app/jobs/analyste-de-donnees",
-      "/app/learn/excel-analyse",
-      "/app/learn/excel-analyse/lecon-1",
-      "/app/learn/mes-formations",
-      "/app/learn/rechercher",
-      "/app/learn/parcours/data",
-      "/app/messages",
-      "/app/messages/abc",
-      "/app/notifications",
-      "/app/suivi/abc",
-      "/app/jobs/analyste-de-donnees/postuler",
-      "/app/career/entretiens/nouveau",
-      "/app/career/entretiens",
-      "/app/career/diagnostic",
-      "/app/career/plan",
-      "/app/profil/point",
-      "/app/compte",
-      "/app/compte/connexions",
-      "/app/career/cv/abc",
-      // Lot 6c: CV et documents opens from Compte and draws its own head.
-      "/app/career/cv",
-      "/app/career/cv/modeles",
-      "/app/career/linkedin",
-      "/app/career/documents/abc",
-      "/app/bienvenue",
-      // Lot 7: subscription, settings, help, search and the tester tool draw their own head.
-      "/app/abonnement",
-      "/app/abonnement/payer",
-      "/app/abonnement/factures",
-      "/app/parametres",
-      "/app/parametres/securite",
-      "/app/compte/aide",
-      "/app/recherche",
-      "/app/testeur",
-      "/app/orbi",
-      "/app/orbi/historique",
-    ])
-      expect(hidesTalentTabBar(path), path).toBe(true);
-  });
-
-  it("la garde sur les listes et les pages de destination", () => {
-    for (const path of [
-      "/app",
-      "/app/jobs",
-      "/app/jobs/candidatures",
-      "/app/jobs/enregistrees",
-      "/app/learn",
-      "/app/career",
-      "/app/suivi",
-    ])
-      expect(hidesTalentTabBar(path), path).toBe(false);
   });
 });

@@ -11,6 +11,7 @@ import { cx } from "@/lib/cx";
 import { formatDayMonth } from "@/lib/dates";
 import { statusChip } from "@/lib/suivi-status";
 import { requireUser } from "@/server/auth/session";
+import { phoneTalentRedirect } from "@/server/phone-routes";
 import { db } from "@/server/db";
 import { getActiveSpace } from "@/server/hire-context";
 import { getPartnerSpace } from "@/server/partner-context";
@@ -32,6 +33,13 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function SuiviPage({ searchParams }: PageProps<"/app/suivi">) {
   const user = await requireUser("/app/suivi");
   const query = await searchParams;
+  // Modèle B (B5, B9): the applications are a tab of Carrière on a phone, each one its page.
+  await phoneTalentRedirect(
+    user.id,
+    typeof query.id === "string"
+      ? `/app/suivi/${encodeURIComponent(query.id.slice(0, 60))}`
+      : "/app/career/cv?onglet=candidatures",
+  );
   if (await getActiveSpace(user.id)) redirect("/app/hire");
   if (await getPartnerSpace(user.id)) redirect("/app/partenaire");
   const t = await getTranslations();

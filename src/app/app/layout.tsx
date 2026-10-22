@@ -81,8 +81,6 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
             firstName: user.firstName,
             image: user.image ?? null,
           }}
-          unread={unread}
-          unreadMessages={await unreadCount(db, { userId: user.id })}
           reduceMotion={user.reduceMotion}
           tabs={{
             fil: (

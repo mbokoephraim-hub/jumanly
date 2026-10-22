@@ -189,7 +189,7 @@ export function PhoneOffer({ offer }: { offer: PhoneOfferView }) {
           {saved ? t("offer.saved") : t("offer.save")}
         </button>
         {applied ? (
-          <Link href="/app/jobs/candidatures" className="nb-ex-postuler" data-fait="">
+          <Link href="/app/career/cv?onglet=candidatures" className="nb-ex-postuler" data-fait="">
             <PhoneIcon name="coche" size={18} stroke={2.2} />
             {t("offer.applied")}
           </Link>
@@ -274,7 +274,12 @@ function ApplySheet({
           </span>
           <b>{t("apply.done")}</b>
           <p className="nb-meta">{t("apply.doneText")}</p>
-          <Link href="/app/jobs/candidatures" className="nb-bouton" data-plein="" data-large="">
+          <Link
+            href="/app/career/cv?onglet=candidatures"
+            className="nb-bouton"
+            data-plein=""
+            data-large=""
+          >
             {t("apply.doneSee")}
           </Link>
           <button type="button" className="nb-bouton" data-large="" onClick={onClose}>

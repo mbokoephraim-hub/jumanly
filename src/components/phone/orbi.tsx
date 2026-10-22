@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useEffect, useRef, useState, useTransition } from "react";
 import { askOrbiAction } from "@/server/actions/orbi";
 import { orbiFactAction, type OrbiFactAnswer } from "@/server/actions/feed";
@@ -71,6 +71,18 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
   const [pending, start] = useTransition();
   const conversation = useRef<string | undefined>(undefined);
   const [shownTab, setShownTab] = useState<PhoneTab>(tab ?? "fil");
+  const router = useRouter();
+  const asked = useSearchParams().get("orbi") === "1";
+
+  // `?orbi=1` (the former page Orbi, a link of an e-mail): the sheet opens, the address is cleaned.
+  useEffect(() => {
+    if (!asked) return;
+    // eslint-disable-next-line react-hooks/set-state-in-effect -- follows the address
+    setOpen(true);
+    const url = new URL(window.location.href);
+    url.searchParams.delete("orbi");
+    router.replace(`${url.pathname}${url.search}${url.hash}`, { scroll: false });
+  }, [asked, router]);
 
   // The sheet speaks for the tab it was opened from.
   useEffect(() => {

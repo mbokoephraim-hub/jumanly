@@ -10,6 +10,7 @@ import { dynamic } from "@/i18n/dynamic";
 import { cx } from "@/lib/cx";
 import { db } from "@/server/db";
 import { connectViewer } from "@/server/hire-context";
+import { phoneTalentRedirect } from "@/server/phone-routes";
 import { getCourseSearch, getJobSearch } from "@/server/queries/public";
 import { listConversations } from "@/server/services/connect";
 import { contractFilterOf } from "@/server/services/jobs";
@@ -33,6 +34,8 @@ type View = (typeof views)[number];
 export default async function SearchPage({ searchParams }: PageProps<"/app/recherche">) {
   const params = await searchParams;
   const { user, viewer } = await connectViewer("/app/recherche");
+  // Modèle B (B4, B9): the search of the phone is the one of Explorer.
+  await phoneTalentRedirect(user.id, "/app/jobs");
   if (await inOrganizationSpace(user.id)) return <HireSearch params={params} />;
   const t = await getTranslations();
   const d = dynamic(t);

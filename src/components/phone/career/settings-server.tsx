@@ -1,5 +1,6 @@
 import "server-only";
 import { getTranslations } from "next-intl/server";
+import { InstallApp } from "@/components/site/install-app";
 import { dynamic } from "@/i18n/dynamic";
 import { formatDate } from "@/lib/dates";
 import { formatUsd } from "@/lib/money";
@@ -9,6 +10,7 @@ import { paymentProvider } from "@/server/payments";
 import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
 import { liveSubscription, localMask, quoteCheckout } from "@/server/services/subscriptions";
 import { initialsOf, toneOf } from "../fil/data";
+import { PhoneIcon } from "../icon";
 import { PhonePay, PhonePayEnd, PhonePayWait, PhonePlans, type PlanCard } from "./billing";
 import { CareerTexts } from "./server";
 import { NotificationsForm, PhoneHelp, PhoneSettings, PrivacyForm } from "./settings";
@@ -27,6 +29,60 @@ type User = {
   aiConsentAt: Date | null;
 };
 
+/**
+ * « Installer l'appli » (Ephraïm, 20/10), kept from the former Compte (lot B9): the browser's own
+ * installation on Android, the three gestures of Safari on an iPhone; hidden once installed.
+ */
+export async function InstallRow() {
+  const t = await getTranslations("system.install");
+  return (
+    <InstallApp
+      id="nb-installer"
+      buttonClassName="nb-ca-it nb-ca-installer"
+      dialogClassName="nb-installer"
+      trigger={
+        <>
+          <span>
+            {t("button")}
+            <small className="nb-meta">{t("text")}</small>
+          </span>
+          <PhoneIcon name="chevron" size={18} />
+        </>
+      }
+      steps={
+        <>
+          <span className="nb-poignee" aria-hidden />
+          <div className="nb-installer-h">
+            <h2 id="nb-installer-t">{t("ios.title")}</h2>
+            <form method="dialog">
+              <button type="submit" className="nb-rond" aria-label={t("ios.close")}>
+                <PhoneIcon name="fermer" size={20} stroke={2} />
+              </button>
+            </form>
+          </div>
+          <p className="nb-meta">{t("ios.intro")}</p>
+          <ol aria-label={t("ios.steps")}>
+            {(["step1", "step2", "step3"] as const).map((key, index) => (
+              <li key={key}>
+                <span aria-hidden>{index + 1}</span>
+                <span>
+                  <b>{t(`ios.${key}.title`)}</b>
+                  <small className="nb-meta">{t(`ios.${key}.text`)}</small>
+                </span>
+              </li>
+            ))}
+          </ol>
+          <form method="dialog">
+            <button type="submit" className="nb-bouton" data-plein="" data-large="">
+              {t("ios.done")}
+            </button>
+          </form>
+        </>
+      }
+    />
+  );
+}
+
 /** « Paramètres » on the phone (planche Carrière-parametres). */
 export async function PhoneSettingsScreen({ user }: { user: User }) {
   const t = await getTranslations("phoneCareer.reglages");
@@ -40,6 +96,7 @@ export async function PhoneSettingsScreen({ user }: { user: User }) {
         tone={toneOf(user.name, false)}
         email={user.email}
         plan={plan?.planName ?? t("noPlan")}
+        install={<InstallRow />}
         language={t("french")}
       />
     </CareerTexts>

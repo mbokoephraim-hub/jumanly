@@ -12,10 +12,28 @@ test("Compte : profil, documents, abonnement, apparence gardée, déconnexion", 
   test.setTimeout(90_000);
   await signUpFromPricing(page, "Créer mon compte gratuit", testEmail("compte"));
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
+  // Modèle B (docs/modele-b, lot B9): on a phone the account is Paramètres, dark only.
+  if (isMobile) {
+    await page.goto("/app/compte");
+    await expect(page).toHaveURL(/\/app\/parametres$/);
+    for (const path of ["/app/parametres", "/app/abonnement", "/app/parametres/securite"]) {
+      await page.goto(path);
+      await expect(page.locator("html"), path).toHaveClass(/sombre/);
+    }
+    await expectAccessible(page);
+    await page.goto("/app/parametres");
+    await page.getByRole("button", { name: "Se déconnecter" }).click();
+    await page
+      .getByRole("dialog", { name: "Se déconnecter ?" })
+      .getByRole("button", { name: "Se déconnecter" })
+      .click();
+    await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
+    return;
+  }
   await page.goto("/app/compte");
   await expect(page.getByRole("heading", { level: 1, name: "Compte" })).toBeVisible();
   // Web (planche web talent-4 § 3): the ring and « Voir mon profil » in a button-like label.
-  const profile = isMobile ? /Voir mon profil · \d+ %/ : /Voir mon profil/;
+  const profile = /Voir mon profil/;
   await expect(page.getByRole("link", { name: profile })).toHaveAttribute("href", "/app/profil");
   const mine = page.getByRole("list", { name: "Mes documents et mon réseau" });
   for (const row of ["CV et documents", "Attestations", "S’entraîner aux entretiens", "Connexions"])
@@ -45,18 +63,6 @@ test("Compte : profil, documents, abonnement, apparence gardée, déconnexion", 
       appearance.getByRole("radio", { name: new RegExp(`^${name}`) }).check({ force: true }),
     ]);
   };
-  // Modèle B (docs/modele-b): the talent space on a phone is dark only.
-  if (isMobile) {
-    for (const path of ["/app/compte", "/app/abonnement", "/app/parametres/securite"]) {
-      await page.goto(path);
-      await expect(page.locator("html"), path).toHaveClass(/sombre/);
-    }
-    await expectAccessible(page);
-    await page.goto("/app/compte");
-    await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
-    await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
-    return;
-  }
   await page.goto("/app/parametres");
   await page.getByRole("button", { name: /^Apparence/ }).click();
   await expect(

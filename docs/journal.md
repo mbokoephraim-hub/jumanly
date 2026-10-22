@@ -50,6 +50,58 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Modèle B · rapport final, lots B1 à B9 (22 octobre 2026)
+
+Référence : `docs/modele-b/BRIEF-MODELE-B-CLAUDE-CODE.md` (décision d'Ephraïm du 21/10/2026). L'espace
+talent au téléphone est entièrement passé au Modèle B : sombre seulement, cinq onglets gardés montés
+(Fil · Explorer · Carrière · Formation · Messages, en icônes seules), Orbi flottant sur chaque onglet,
+ouverture de 1,2 s avec préchargement, pages empilées au-dessus des onglets, aucun passage par un écran
+noir. L'ordinateur et la tablette gardent `docs/refonte-web/`. Rien n'a changé pour le recruteur,
+l'organisation, l'administration ni les règles métier.
+
+| Lot | Contenu | PR |
+|---|---|---|
+| B0 + B1 | Diagnostic, fondations (coque, barre, Orbi, ouverture, transitions, recherche en deux temps, feuilles) | #131 |
+| B2 | Accueil, inscription, connexion, premier profil en 6 étapes | #132 |
+| B3 | Le Fil : publications, réponses, j'aime, republications, notifications | #133 |
+| B4 | Explorer, une offre, une entreprise, une personne | #134 |
+| B5 | Carrière : profil, CV, portfolio, progression, candidatures, paramètres, formule | #135 |
+| B6 | Simulation d'entretien avec Orbi | #136 |
+| B7 | Formation : accueil, cours, leçon, quiz, attestations | #137 |
+| B8 | Messages : rubriques, recherche, discussion, pièces jointes, demandes | #138 |
+| B9 | Nettoyage : redirections, ancien design retiré, écrans sans planche aux couleurs du Modèle B | voir ci-dessous |
+
+**Ce que fait B9.**
+- Une ancienne adresse du talent ouverte sur un téléphone mène à son écran du Modèle B
+  (`src/server/phone-routes.ts`) : compte et « Mon espace » → Paramètres, connexions → Messages, Suivi
+  et candidatures → Carrière · Candidatures, profil et ses formulaires → Carrière, portfolio → onglet
+  Portfolio, recherche → Explorer, Orbi → la feuille d'Orbi sur le Fil (`?orbi=1`).
+- L'ancienne tête du téléphone (`legacy-head.tsx`, cadre `.nb-ancien`) et l'ancienne barre du bas
+  (`talent/bottom-bar.tsx`, `hidesTalentTabBar`) sont supprimées.
+- Les écrans sans planche (diagnostic, plan, LinkedIn, sécurité, factures, historique d'Orbi…)
+  gardent leur contenu dans le cadre `.nb-cadre`, aux couleurs du Modèle B (nuit à plat, cartes sans
+  verre, tête en barre). Liste et raisons : `docs/decisions/2026-10-22-modele-b-b9.md`.
+- « Installer l'appli », qui n'était que dans l'ancien Compte, est repris dans Paramètres.
+- Les anciens parcours de bout en bout qui passaient par ces adresses au téléphone (compte, profil,
+  Suivi, Orbi, portfolio, recherche) suivent maintenant les écrans du Modèle B.
+
+**Tests.** `tests/e2e/modele-b-nettoyage.spec.ts` : chaque ancienne adresse mène à son écran, l'ancienne
+page Orbi ouvre la feuille, un écran sans planche garde sa tête, son « Retour » et les couleurs du
+Modèle B, et le retour vers un onglet ne passe jamais par un écran vide. Chaque lot a son propre fichier
+`tests/e2e/modele-b-*.spec.ts` (chaque bouton ouvre quelque chose, transitions).
+
+**Captures.** `docs/modele-b/captures/etape-1/` : `b1-*` à `b8-*` au numéro des planches de
+`captures/INDEX.md`, et `b9-01` à `b9-10` pour les redirections et les écrans sans planche après
+nettoyage.
+
+**Reste à décider ou à faire (hors Modèle B).**
+- Les écrans sans planche gardent leur mise en page d'avant, recolorée. Des planches pour le
+  diagnostic, LinkedIn, la sécurité, les factures et l'historique d'Orbi permettraient de les
+  redessiner à leur tour.
+- Le Modèle B est en français seulement, comme le reste de l'application (anglais prévu plus tard).
+- Écarts propres à chaque lot (données que la plateforme n'a pas, textes ajustés pour rester vrais) :
+  `docs/decisions/2026-10-21-modele-b-b1.md` à `2026-10-22-modele-b-b9.md`.
+
 ## Modèle B · B8 : Messages au téléphone (22 octobre 2026)
 
 Planches Messages (`docs/modele-b/captures/INDEX.md`, rangées 147 à 183). Écarts et choix :

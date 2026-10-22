@@ -83,16 +83,21 @@ test("les pages de l'espace sont gardées pour servir hors connexion", async ({ 
   const context = await browser.newContext();
   const page = await context.newPage();
   await logIn(page, demo.talentPro);
-  await page.goto("/app/profil");
+  // CV et documents: the same address on a phone (Carrière) and on a computer.
+  await page.goto("/app/career/cv");
   await page.evaluate(() => navigator.serviceWorker.ready);
   // Once the worker controls the page, the pages opened are kept.
   await page.reload();
   await expect
     .poll(() => page.evaluate(() => Boolean(navigator.serviceWorker.controller)))
     .toBe(true);
-  await page.goto("/app/profil");
+  await page.goto("/app/career/cv");
   await page.goto("/app/learn");
-  const lesson = await page.locator('main a[href^="/app/learn/"]').first().getAttribute("href");
+  const lesson = await page
+    .getByRole("main")
+    .locator('a[href^="/app/learn/"]')
+    .first()
+    .getAttribute("href");
   await page.goto(lesson!);
   await page.goto("/app/notifications");
 
@@ -114,7 +119,7 @@ test("les pages de l'espace sont gardées pour servir hors connexion", async ({ 
     .poll(async () => (await kept())?.pages ?? [], { timeout: 20_000 })
     .toEqual(
       expect.arrayContaining([
-        "/app/profil",
+        "/app/career/cv",
         "/app/learn",
         lesson!.split("?")[0]!,
         "/app/notifications",

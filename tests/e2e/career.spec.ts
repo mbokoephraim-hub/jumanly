@@ -129,15 +129,23 @@ test("simulation orale : la réponse se tape si la dictée n'est pas disponible"
   await expect(page.getByRole("heading", { name: "Question 2 sur 4" })).toBeVisible();
 });
 
-test("projets : verrou en Free, page publique sans compte", async ({ page, browser }) => {
+test("projets : verrou en Free, page publique sans compte", async ({ page, browser, isMobile }) => {
   await logIn(page, demo.talentFree);
-  // The former portfolio page leads to the « Projets » of Mon profil.
   await page.goto("/app/career/portfolio");
-  await expect(page).toHaveURL(/\/app\/profil\?section=projets/);
-  await expect(page.locator("#projets")).toHaveAttribute("open", "");
-  await expect(
-    page.locator("#projets").getByRole("link", { name: /Montrez vos projets/ }),
-  ).toBeVisible();
+  if (isMobile) {
+    // Modèle B (lots B5, B9): the former portfolio page leads to the Portfolio tab of Carrière.
+    await expect(page).toHaveURL(/\/app\/career\/cv\?onglet=portfolio$/);
+    await expect(
+      page.locator(".nb-ca-onglets").getByRole("tab", { name: "Portfolio" }),
+    ).toHaveAttribute("aria-selected", "true");
+  } else {
+    // The former portfolio page leads to the « Projets » of Mon profil.
+    await expect(page).toHaveURL(/\/app\/profil\?section=projets/);
+    await expect(page.locator("#projets")).toHaveAttribute("open", "");
+    await expect(
+      page.locator("#projets").getByRole("link", { name: /Montrez vos projets/ }),
+    ).toBeVisible();
+  }
 
   const context = await browser.newContext();
   const visitor = await context.newPage();

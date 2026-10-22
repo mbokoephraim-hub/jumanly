@@ -12,17 +12,20 @@ test("Orbi : écrire, comprendre la réponse, retrouver puis effacer l'échange"
   await expect(page).toHaveURL(/\/app\/bienvenue/, { timeout: 20_000 });
   await page.goto("/app/orbi");
   if (isMobile) {
-    // Téléphone : une page de conversation, retour en haut, pas de barre du bas.
-    await expect(page.getByRole("navigation", { name: "Navigation principale" })).toHaveCount(0);
-    await expect(page.getByRole("link", { name: "Retour" })).toBeVisible();
-  } else {
-    // Ordinateur (cadre web W0) : la barre latérale reste, Orbi y est la page courante.
+    // Téléphone (Modèle B, lot B9) : Orbi est le disque flottant de chaque onglet ; l'ancienne
+    // page ouvre sa feuille sur le Fil (tests/e2e/modele-b-fondations.spec.ts pour la suite).
+    await expect(page).toHaveURL(/\/app$/);
     await expect(
-      page.getByRole("navigation", { name: "Navigation principale" }).getByRole("link", {
-        name: "Orbi",
-      }),
-    ).toHaveAttribute("aria-current", "page");
+      page.getByRole("dialog", { name: "Orbi" }).getByRole("textbox", { name: "Écrire à Orbi" }),
+    ).toBeVisible();
+    return;
   }
+  // Ordinateur (cadre web W0) : la barre latérale reste, Orbi y est la page courante.
+  await expect(
+    page.getByRole("navigation", { name: "Navigation principale" }).getByRole("link", {
+      name: "Orbi",
+    }),
+  ).toHaveAttribute("aria-current", "page");
   await expect(page.getByText("0 crédit", { exact: true })).toBeVisible();
 
   // The tabs of the phone load underneath: write once the page answers (hydrated).

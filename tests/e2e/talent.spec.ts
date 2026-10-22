@@ -1,4 +1,4 @@
-import { expect, test, type Locator } from "./fixtures";
+import { expect, test, type Locator, type Page } from "./fixtures";
 import {
   demo,
   finishOnboarding,
@@ -31,28 +31,18 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await finishOnboarding(page, { country: "Congo", city: "Kinshasa" });
   await expect(page).toHaveURL(new RegExp(`/app/jobs/${JOB}`));
 
-  // Profile (planche talent-4 § 3): summary, an experience, three skills, each on its screen.
-  await page.goto("/app/profil/modifier");
-  await page
-    .locator("#pf-summary")
-    .fill("Comptable rigoureuse, cinq ans de saisie et de rapprochements bancaires en PME.");
-  await page.getByRole("button", { name: "Enregistrer", exact: true }).click();
-  await expect(page).toHaveURL(/\/app\/profil\?ok=identite/);
-
-  await page.goto("/app/profil/experience");
-  await page.locator("#pf-exp-title").fill("Assistante comptable");
-  await page.locator("#pf-exp-company").fill("Entreprise fictive");
-  await page.locator("#pf-exp-start").fill("2021-03");
-  await page.getByText("Poste actuel", { exact: true }).click();
-  await page.locator("#pf-exp-result").fill("Saisie des factures\nRapprochements bancaires");
-  await page.getByRole("button", { name: "Ajouter", exact: true }).click();
-  await expect(page.locator("#experiences")).toContainText("Assistante comptable");
-
-  for (const skill of ["Analyse de données", "Administration", "Achats"]) {
-    await page.goto(`/app/profil/competence?q=${encodeURIComponent(skill)}`);
-    await page.getByRole("button", { name: /^Ajouter/ }).click();
-    await expect(page.locator("#competences")).toContainText(skill);
-  }
+  if (isMobile) {
+    // On a phone (Modèle B, lots B5 and B9) the profile is Carrière: an experience, its form.
+    await page.goto("/app/profil/experience", { waitUntil: "networkidle" });
+    await expect(page).toHaveURL(/\/app\/career\/profil\/experience\/nouvelle$/);
+    const form = page.locator(".nb-ca-form");
+    await form.getByLabel("Poste").fill("Assistante comptable");
+    await form.getByLabel("Entreprise", { exact: true }).fill("Entreprise fictive");
+    await form.getByLabel("Début").fill("2021-03");
+    await form.getByRole("switch", { name: "J’y travaille encore" }).click();
+    await form.getByRole("button", { name: "Enregistrer" }).click();
+    await expect(page.getByText("Expérience ajoutée.")).toBeVisible();
+  } else await buildProfile(page);
 
   // CV from the profile, then its PDF.
   const cvId = await newCvFromList(page);
@@ -108,6 +98,31 @@ test("un talent Free postule depuis une offre publique, suit puis retire sa cand
   await expect(page).toHaveURL(/vue=terminees/);
   await expect(page.getByRole("main")).toContainText("Retirée");
 });
+
+/** Profile (planche talent-4 § 3) on a computer: summary, an experience, three skills, each on its screen. */
+async function buildProfile(page: Page) {
+  await page.goto("/app/profil/modifier");
+  await page
+    .locator("#pf-summary")
+    .fill("Comptable rigoureuse, cinq ans de saisie et de rapprochements bancaires en PME.");
+  await page.getByRole("button", { name: "Enregistrer", exact: true }).click();
+  await expect(page).toHaveURL(/\/app\/profil\?ok=identite/);
+
+  await page.goto("/app/profil/experience");
+  await page.locator("#pf-exp-title").fill("Assistante comptable");
+  await page.locator("#pf-exp-company").fill("Entreprise fictive");
+  await page.locator("#pf-exp-start").fill("2021-03");
+  await page.getByText("Poste actuel", { exact: true }).click();
+  await page.locator("#pf-exp-result").fill("Saisie des factures\nRapprochements bancaires");
+  await page.getByRole("button", { name: "Ajouter", exact: true }).click();
+  await expect(page.locator("#experiences")).toContainText("Assistante comptable");
+
+  for (const skill of ["Analyse de données", "Administration", "Achats"]) {
+    await page.goto(`/app/profil/competence?q=${encodeURIComponent(skill)}`);
+    await page.getByRole("button", { name: /^Ajouter/ }).click();
+    await expect(page.locator("#competences")).toContainText(skill);
+  }
+}
 
 /** Answers every screen of the diagnostic (second answer of each choice), then starts the scan. Returns the number of follow-up questions met. */
 async function answerDiagnostic(flow: Locator) {

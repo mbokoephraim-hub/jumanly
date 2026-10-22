@@ -5,9 +5,11 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { hidesRecruiterTabBar, recruiterTabOf, recruiterTabs } from "@/config/navigation";
 import { cx } from "@/lib/cx";
-import { ORBI_STATE_EVENT } from "@/components/talent/bottom-bar";
 import { TalentIcon } from "@/components/talent/icon";
 import { OrbiMark, type OrbiState } from "@/components/talent/orbi-mark";
+
+/** Event that sets the state of Orbi's mark in the bar (« reflechit » while Orbi works). */
+const ORBI_STATE_EVENT = "jm-orbi-state";
 
 /**
  * Bottom bar of the recruiter space (brief recruteur § 1, planche recruteur-1 `nav`): the same

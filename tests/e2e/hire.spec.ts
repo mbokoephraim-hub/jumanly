@@ -158,7 +158,10 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
 
   // The talent never sees the team's notes; the status says « Entretien ».
   await talent.goto("/app/suivi");
-  const card = talent.locator("li").filter({ hasText: title }).first();
+  // On a phone (Modèle B, lot B9) Suivi is the tab Candidatures of Carrière.
+  const card = (isMobile ? talent.locator("#car-panneau a") : talent.locator("li"))
+    .filter({ hasText: title })
+    .first();
   await expect(card).toContainText("Entretien");
   await expect(talent.getByRole("main")).not.toContainText("tableaux croisés");
 
@@ -187,9 +190,11 @@ test("un recruteur publie, un talent postule, échange puis reçoit une décisio
   await expect(decision).toContainText("Ce n'est pas la fin du parcours.");
 
   await talent.goto("/app/suivi?vue=terminees");
-  await expect(talent.locator("li").filter({ hasText: title }).first()).toContainText(
-    "Non retenue",
-  );
+  await expect(
+    (isMobile ? talent.locator("#car-panneau a") : talent.locator("li"))
+      .filter({ hasText: title })
+      .first(),
+  ).toContainText("Non retenue");
   await talent.goto("/app/notifications");
   // On a phone (Modèle B, lot B3), the notification is a sentence: « … n'a pas retenu … ».
   await expect(

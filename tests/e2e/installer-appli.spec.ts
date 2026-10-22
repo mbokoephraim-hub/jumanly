@@ -56,13 +56,13 @@ test.describe("sur iPhone", () => {
     await expect(dialog).toBeHidden();
   });
 
-  test("Compte : la ligne « Installer l'appli » ouvre les gestes", async ({ page }) => {
+  test("Paramètres : la ligne « Installer l'appli » ouvre les gestes", async ({ page }) => {
     await logIn(page, demo.talentFree);
-    // Opened directly, without the welcome intro of the sign-in (`?arrivee=1`).
+    // On an iPhone the talent space is the Modèle B: the former Compte leads to Paramètres.
     await page.goto("/app/compte");
-    await expect(page.getByRole("heading", { level: 1, name: "Compte" })).toBeVisible();
-    const settings = page.getByRole("list", { name: "Abonnement et réglages" });
-    const row = settings.getByRole("button", { name: /Installer l'appli/ });
+    await expect(page).toHaveURL(/\/app\/parametres$/);
+    await expect(page.getByRole("heading", { level: 1, name: "Paramètres" })).toBeVisible();
+    const row = page.locator(".nb-ca-reglages").getByRole("button", { name: /Installer l'appli/ });
     await expect(row).toBeVisible();
     await row.click();
     const dialog = page.getByRole("dialog", { name: "Installer Jumanly sur votre iPhone" });
