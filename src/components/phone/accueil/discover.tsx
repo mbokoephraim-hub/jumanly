@@ -179,8 +179,146 @@ function Illustration({ slide }: { slide: (typeof SLIDES)[number] }) {
   );
 }
 
-export function PhoneDiscover() {
-  const t = useTranslations("phoneAccueil.welcome");
+/** The recruiter's three screens (Modèle B recruteur, M2): an offer, the pipeline, a decision. */
+function RecruiterIllustration({ slide }: { slide: (typeof SLIDES)[number] }) {
+  const t = useTranslations("phoneRhAccueil.welcome.card");
+  if (slide === "s1")
+    return (
+      <span className="nb-illu" key="r1">
+        <span
+          className="nb-rh-illu-offre"
+          data-flotte=""
+          style={{ "--r": "-3deg" } as React.CSSProperties}
+        >
+          <span className="nb-illu-tags">
+            <span className="nb-tag" data-lime="">
+              {t("live")}
+            </span>
+            <span className="nb-tag" data-plein="">
+              {t("new")}
+            </span>
+          </span>
+          <b>{t("job")}</b>
+          <span className="nb-meta">{t("jobMeta")}</span>
+          <span className="nb-rh-illu-chiffres">
+            {(
+              [
+                ["412", "views"],
+                ["6", "days"],
+                ["38", "applications"],
+              ] as const
+            ).map(([figure, key]) => (
+              <span key={key}>
+                <b>{figure}</b>
+                {t(key)}
+              </span>
+            ))}
+          </span>
+        </span>
+        <span
+          className="nb-rh-illu-orbi"
+          data-flotte2=""
+          data-place="r1"
+          style={{ "--r": "4deg" } as React.CSSProperties}
+        >
+          <OrbiDisc size={28} />
+          <span>{t("drafted")}</span>
+        </span>
+      </span>
+    );
+  if (slide === "s2")
+    return (
+      <span className="nb-illu" key="r2">
+        <span
+          className="nb-rh-illu-offre"
+          data-large=""
+          data-flotte=""
+          style={{ "--r": "-2deg" } as React.CSSProperties}
+        >
+          <span className="nb-rh-illu-etapes">
+            {(
+              [
+                ["18", "received"],
+                ["9", "shortlist"],
+                ["5", "interview"],
+                ["1", "offer"],
+              ] as const
+            ).map(([figure, key]) => (
+              <span key={key} data-on={key === "interview" ? "" : undefined}>
+                <b>{figure}</b>
+                {t(key)}
+              </span>
+            ))}
+          </span>
+          {(
+            [
+              ["c1", "86 %"],
+              ["c2", "81 %"],
+            ] as const
+          ).map(([key, score]) => (
+            <span key={key} className="nb-rh-illu-cand">
+              <span className="nb-rh-illu-av">{t(`${key}Mark`)}</span>
+              <span>
+                <b>{t(`${key}Name`)}</b>
+                <span className="nb-meta">{t(`${key}Meta`)}</span>
+              </span>
+              <b className="nb-rh-illu-score">{score}</b>
+            </span>
+          ))}
+        </span>
+        <span
+          className="nb-rh-illu-orbi"
+          data-flotte2=""
+          data-place="r2"
+          style={{ "--r": "3deg" } as React.CSSProperties}
+        >
+          <OrbiDisc size={28} />
+          <span>{t("read")}</span>
+        </span>
+      </span>
+    );
+  return (
+    <span className="nb-illu" key="r3">
+      <span
+        className="nb-rh-illu-entretien"
+        data-flotte=""
+        style={{ "--r": "3deg" } as React.CSSProperties}
+      >
+        <span className="nb-rh-illu-quand">{t("when")}</span>
+        <b>{t("c1Name")}</b>
+        <span className="nb-rh-illu-ou">{t("where")}</span>
+        <span className="nb-rh-illu-etoiles" role="img" aria-label={t("stars")}>
+          {[0, 1, 2, 3, 4].map((index) => (
+            <svg key={index} width="18" height="18" viewBox="0 0 24 24" aria-hidden>
+              <path
+                d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8L3.6 9.6l5.8-.8z"
+                fill={index < 4 ? "#14745F" : "#C9D0CC"}
+              />
+            </svg>
+          ))}
+        </span>
+      </span>
+      <span
+        className="nb-illu-bulle"
+        data-flotte2=""
+        data-place="r3"
+        style={{ "--r": "-3deg" } as React.CSSProperties}
+      >
+        <span className="nb-illu-ok">
+          <PhoneIcon name="coche" size={18} stroke={2.6} />
+        </span>
+        <span>
+          <b>{t("decision")}</b>
+          <span className="nb-meta">{t("replies")}</span>
+        </span>
+      </span>
+    </span>
+  );
+}
+
+export function PhoneDiscover({ recruiter = false }: { recruiter?: boolean }) {
+  const t = useTranslations(recruiter ? "phoneRhAccueil.welcome" : "phoneAccueil.welcome");
+  const common = useTranslations("phoneAccueil.welcome");
   const [phase, setPhase] = useState<"ouverture" | "depart" | "bienvenue">("ouverture");
   const [slide, setSlide] = useState(0);
 
@@ -221,10 +359,10 @@ export function PhoneDiscover() {
         <button
           type="button"
           className="nb-bienvenue-scene"
-          aria-label={t("next")}
+          aria-label={common("next")}
           onClick={() => setSlide((slide + 1) % SLIDES.length)}
         >
-          <Illustration slide={key} />
+          {recruiter ? <RecruiterIllustration slide={key} /> : <Illustration slide={key} />}
         </button>
         <div className="nb-bienvenue-texte" aria-live="polite">
           <p className="nb-mot">{t(`${key}.word`)}</p>
@@ -236,7 +374,7 @@ export function PhoneDiscover() {
             <button
               key={item}
               type="button"
-              aria-label={t("dot", { n: index + 1, word: t(`${item}.word`) })}
+              aria-label={common("dot", { n: index + 1, word: t(`${item}.word`) })}
               aria-current={index === slide || undefined}
               onClick={() => setSlide(index)}
             >
@@ -245,11 +383,19 @@ export function PhoneDiscover() {
           ))}
         </div>
         <div className="nb-bas-fixe">
-          <Link href="/inscription" className="nb-bp" prefetch>
-            {t("signup")}
+          <Link
+            href={recruiter ? "/inscription?profil=rh" : "/inscription"}
+            className="nb-bp"
+            prefetch
+          >
+            {common("signup")}
           </Link>
-          <Link href="/connexion" className="nb-bs" prefetch>
-            {t("login")}
+          <Link
+            href={recruiter ? "/connexion?profil=rh" : "/connexion"}
+            className="nb-bs"
+            prefetch
+          >
+            {common("login")}
           </Link>
         </div>
       </div>

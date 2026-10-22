@@ -21,6 +21,7 @@ import {
 } from "@/server/services/accounts";
 import { allowAttempt, clientIp } from "@/server/rate-limit";
 import { readSignupFlow, writeSignupFlow } from "@/server/signup-flow";
+import { isPhone } from "@/server/view";
 import { reportError } from "@/server/observability";
 import { withArrival } from "@/lib/app-intro";
 
@@ -170,8 +171,11 @@ export async function verifyEmail(_: AuthFormState, formData: FormData): Promise
       db,
       org ? { type: "organization", id: org.id } : { type: "user", id: user.id },
     );
-    const welcome =
-      org && (profile === "rh" || profile === "company")
+    // A recruiter without a company yet (phone, Modèle B recruteur) is welcomed at the end of
+    // the profile, once the company is known.
+    const welcome = !org && profile === "rh"
+      ? Promise.resolve()
+      : org && (profile === "rh" || profile === "company")
         ? sendWelcome(user.email, {
             kind: profile === "company" ? "company" : "recruiter",
             firstName: user.firstName ?? user.name,
@@ -341,8 +345,9 @@ export async function signInWithProvider(provider: string, formData: FormData) {
       provider: id,
       callbackURL: withArrival(next ?? "/app"),
       // A new talent goes on to the first questions; an organization still picks its plan.
+      // On a phone, a recruiter goes on to the profile too (Modèle B recruteur, M2).
       newUserCallbackURL:
-        profile === "talent"
+        profile === "talent" || (profile === "rh" && (await isPhone()))
           ? `/inscription/continuer?${signupStep}`
           : `/inscription/forfait?${signupStep}`,
       errorCallbackURL: `/connexion?erreur=${id}`,

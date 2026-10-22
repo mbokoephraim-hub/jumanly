@@ -74,9 +74,12 @@ export const signupAccountSchema = z
     // One box for the conditions; its note covers the minimum age and the explained AI.
     terms: accepted("termsRequired"),
     newsletter: z.literal("on").optional(),
+    phone: z.literal("1").optional(),
   })
   .superRefine((data, ctx) => {
     if (data.profile === "talent") return;
+    // On a phone, the recruiter gives the company at step 5 of the profile (Modèle B recruteur).
+    if (data.profile === "rh" && data.phone === "1") return;
     if (!data.orgName) {
       ctx.addIssue({ code: "custom", path: ["orgName"], message: "orgNameRequired" });
     }
@@ -130,6 +133,12 @@ export async function setupAccount(
   });
   if (existing) return existing.organization;
   const orgName = input.orgName?.trim() || "";
+  // A recruiter signing up on a phone (Modèle B recruteur, M2) names the company at step 5 of the
+  // profile: the account is marked as a recruiter's, without an organization yet.
+  if (!orgName && input.profile === "rh") {
+    await db.recruiterProfile.upsert({ where: { userId }, update: {}, create: { userId } });
+    return null;
+  }
   const user = await db.user.findUniqueOrThrow({ where: { id: userId } });
   return db.organization.create({
     data: {

@@ -12,7 +12,7 @@ import { signUp, type AuthFormState } from "./auth";
 /**
  * « Créer votre compte » on the phone (Modèle B, Accueil): the e-mail first, kept in the sign-up
  * cookie, then the password (`/inscription/compte`), then the code. A talent only: a recruiter signs
- * up from its own page.
+ * up the same way with `profil=rh` (Modèle B recruteur, M2).
  */
 export async function rememberSignupEmail(
   _: AuthFormState,
@@ -31,6 +31,11 @@ export async function rememberSignupEmail(
         select: { code: true },
       })
     : null;
+  // A recruiter (Modèle B recruteur, M2): no plan at sign-up, the company comes at step 5.
+  if (formData.get("profil") === "rh") {
+    await writeSignupFlow({ profile: "rh", email: email.data, plan: undefined, next });
+    redirect(stepHref("/inscription/compte", { profil: "rh", suite: next }));
+  }
   await writeSignupFlow({ profile: "talent", email: email.data, plan: plan?.code, next });
   redirect(stepHref("/inscription/compte", { profil: "talent", forfait: plan?.code, suite: next }));
 }
@@ -61,7 +66,10 @@ export async function phoneSignUp(
   const t = await getTranslations("phoneAccueil");
   formData.set("email", flow.email);
   formData.set("name", nameFromEmail(flow.email, t("profile.name.fallback")));
-  formData.set("profile", "talent");
+  if (flow.profile === "rh") {
+    formData.set("profile", "rh");
+    formData.set("phone", "1");
+  } else formData.set("profile", "talent");
   formData.set("terms", "on");
   return signUp(state, formData);
 }

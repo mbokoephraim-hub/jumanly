@@ -17124,6 +17124,316 @@
       }
     }
   },
+  "phoneRhAccueil": {
+    "welcome": {
+      "s1": {
+        "word": "Publier",
+        "title": "Votre offre en ligne en 5 minutes",
+        "text": "Orbi rédige avec vous. Les talents qui correspondent la voient en premier."
+      },
+      "s2": {
+        "word": "Trier",
+        "title": "Toutes vos candidatures au même endroit",
+        "text": "Étapes, CV lus par Orbi, notes de l'équipe. Le score explique toujours pourquoi."
+      },
+      "s3": {
+        "word": "Recruter",
+        "title": "Entretiens, décisions, réponses",
+        "text": "Planifiez, évaluez, répondez à chacun. Vous décidez, Orbi vous aide."
+      },
+      "card": {
+        "live": "En cours",
+        "new": "3 nouvelles",
+        "job": "Analyste de données junior",
+        "jobMeta": "Kinshasa · CDI",
+        "views": "vues",
+        "days": "jours",
+        "applications": "candidatures",
+        "drafted": "J'ai rédigé le texte et deux questions de présélection.",
+        "received": "Reçues",
+        "shortlist": "Présélection",
+        "interview": "Entretien",
+        "offer": "Offre",
+        "c1Mark": "GM",
+        "c1Name": "Grâce Mbuyi",
+        "c1Meta": "SQL, Excel · Présélection",
+        "c2Mark": "EK",
+        "c2Name": "Esther Kabila",
+        "c2Meta": "Power BI · Reçue",
+        "read": "38 CV lus : 12 couvrent tous vos critères.",
+        "when": "Entretien · jeudi 10 h",
+        "where": "Analyste de données junior · en visio",
+        "stars": "Quatre étoiles sur cinq",
+        "decision": "Décision : retenue",
+        "replies": "Réponse envoyée à 37 autres candidats"
+      }
+    },
+    "signup": {
+      "title": "Créer votre compte recruteur",
+      "subtitle": "Gratuit pour publier et trier. Cinq minutes suffisent.",
+      "emailPlaceholder": "prenom.nom@entreprise.cd",
+      "emailError": "Entrez une adresse e-mail valide, par exemple n.kalala@baobabfintech.cd.",
+      "hasAccount": "Déjà inscrite ou inscrit ?",
+      "talent": "Vous cherchez un emploi ?",
+      "talentLink": "Créer un compte talent"
+    },
+    "legal": {
+      "terms": {
+        "title": "Conditions pour les recruteurs",
+        "p1": "Candidater reste gratuit pour les talents : aucune offre ne peut le faire payer.",
+        "p2": "Orbi recommande, vous décidez : aucun refus automatique.",
+        "p3": "Chaque candidat reçoit une réponse, même courte."
+      },
+      "privacy": {
+        "p1": "Vous ne voyez un profil que si la personne a candidaté ou l'a rendu visible.",
+        "p2": "Chaque consultation de profil est enregistrée.",
+        "p3": "Le score ne tient jamais compte du nom, de l'âge, du genre ou de la photo."
+      }
+    },
+    "login": {
+      "subtitle": "Connectez-vous pour retrouver vos offres et vos candidatures."
+    }
+  },
+  "phoneRhOnboarding": {
+    "step": "Étape {n} sur 7 · {name}",
+    "steps": {
+      "1": "Vous",
+      "2": "Où vous êtes",
+      "3": "Vos contacts",
+      "4": "Votre rôle",
+      "5": "Votre entreprise",
+      "6": "Ce que vous recrutez",
+      "7": "Votre profil recruteur"
+    },
+    "progress": "Étape {n} sur 7",
+    "previous": "Étape précédente",
+    "next": "Continuer",
+    "finish": "Terminer",
+    "saving": "Enregistrement…",
+    "close": "Fermer",
+    "failed": "L'enregistrement n'a pas abouti. Réessayez.",
+    "you": {
+      "title": "Bonjour, présentez-vous",
+      "text": "Les talents voient qui recrute. Un visage inspire confiance.",
+      "from": "Repris de votre compte {provider}. Vous pouvez le corriger.",
+      "first": "Prénom",
+      "last": "Nom",
+      "photo": "Photo",
+      "photoAdd": "Ajouter une photo",
+      "photoChange": "Changer la photo",
+      "saved": "Photo enregistrée : un visage net et un fond sobre inspirent confiance.",
+      "remove": "Retirer",
+      "error": "Indiquez votre prénom et votre nom."
+    },
+    "place": {
+      "based": "Vous êtes basé·e en",
+      "change": "Changer",
+      "changeAria": "Changer de pays, actuellement {country}",
+      "city": "Dans quelle ville ?",
+      "otherCity": "Autre ville",
+      "cityInput": "Votre ville",
+      "also": "Vous recrutez aussi à",
+      "error": "Choisissez votre ville.",
+      "dialSheet": "Indicatif du numéro"
+    },
+    "contacts": {
+      "title": "Comment vous joindre ?",
+      "text": "L'e-mail professionnel confirme votre entreprise. Le reste est facultatif.",
+      "workEmail": "E-mail professionnel · obligatoire",
+      "workEmailPlaceholder": "prenom.nom@entreprise.cd",
+      "domain": "Domaine {domain} : il servira à valider votre entreprise.",
+      "personal": "Adresse personnelle : votre entreprise devra vous valider à la main.",
+      "phone": "Téléphone · facultatif",
+      "dialAria": "Indicatif {code}, {country}. Changer",
+      "phoneError": "Au moins 8 chiffres.",
+      "whatsapp": "Ce numéro est aussi sur WhatsApp",
+      "linkedin": "LinkedIn · facultatif",
+      "linkedinPlaceholder": "linkedin.com/in/votre-profil",
+      "who": "Qui voit votre téléphone et votre LinkedIn ?",
+      "nobody": {
+        "title": "Personne",
+        "text": "Vos contacts restent privés"
+      },
+      "interview": {
+        "title": "Candidats en entretien",
+        "text": "Seulement ceux que vous invitez"
+      },
+      "connections": {
+        "title": "Mes connexions",
+        "text": "Les personnes connectées avec vous"
+      },
+      "errorEmail": "Indiquez votre e-mail professionnel.",
+      "errorPhone": "Le numéro doit avoir au moins 8 chiffres, ou laissez-le vide."
+    },
+    "role": {
+      "title": "Votre rôle dans le recrutement",
+      "charge": {
+        "title": "Chargé·e de recrutement",
+        "text": "Je gère les offres et les candidats"
+      },
+      "rh": {
+        "title": "Responsable RH",
+        "text": "Je pilote le recrutement et l'équipe"
+      },
+      "manager": {
+        "title": "Manager qui recrute",
+        "text": "Je recrute pour mon équipe"
+      },
+      "dirigeant": {
+        "title": "Dirigeant·e",
+        "text": "Je dirige l'entreprise"
+      },
+      "cabinet": {
+        "title": "Cabinet de recrutement",
+        "text": "Je recrute pour des clients"
+      },
+      "independant": {
+        "title": "Indépendant·e",
+        "text": "Je recrute à mon compte"
+      },
+      "job": "Votre poste, tel qu'il s'affichera",
+      "jobs": {
+        "charge": "Chargée de recrutement; Chargé de recrutement; Talent acquisition",
+        "rh": "Responsable RH; DRH; Responsable du personnel",
+        "manager": "Responsable d'équipe; Chef d'équipe; Responsable data",
+        "dirigeant": "Directrice générale; Directeur général; Fondatrice; Fondateur",
+        "cabinet": "Consultante en recrutement; Consultant en recrutement; Chasseur de têtes",
+        "independant": "Recruteuse indépendante; Recruteur indépendant; Consultante RH"
+      },
+      "error": "Choisissez votre rôle et votre poste."
+    },
+    "company": {
+      "title": "Pour quelle entreprise recrutez-vous ?",
+      "search": "Rechercher votre entreprise",
+      "near": "Déjà sur Jumanly, près de vous",
+      "on": "Sur Jumanly",
+      "none": "« {query} » n'est pas encore sur Jumanly.",
+      "create": "Mon entreprise n'est pas sur Jumanly",
+      "createHint": "Créer sa page, vous en serez l'administrateur ou l'administratrice",
+      "independent": "Je recrute en indépendant·e",
+      "people": "{size} personnes",
+      "recruiters": "{count, plural, one {# recruteur} other {# recruteurs}}",
+      "managedBy": "{name} gère la page",
+      "domainMatch": "Votre e-mail {domain} correspond : validation en général dans la journée.",
+      "domainOther": "Votre e-mail n'est pas en @{domain} : l'administrateur vérifiera à la main.",
+      "request": "Demander à rejoindre la page",
+      "requestHint": "Une fois accepté, le logo de l'entreprise s'affiche sur votre profil et vos offres.",
+      "state": {
+        "chosen": "Sur Jumanly",
+        "pending": "Demande envoyée",
+        "accepted": "Rattachement accepté",
+        "created": "Page créée par vous"
+      },
+      "waitingTitle": "En attente de validation",
+      "waitingText": "Votre espace est prêt : vous publierez au nom de l'entreprise dès l'accord.",
+      "cancel": "Annuler la demande",
+      "cancelled": "Demande annulée",
+      "admin": "Vous administrez cette page : vous pourrez inviter votre équipe depuis Compte.",
+      "other": "Choisir une autre entreprise",
+      "independentTitle": "Vous recrutez en indépendant·e",
+      "independentText": "Vos offres s'affichent à votre nom. Vous pourrez rejoindre une entreprise plus tard.",
+      "independentBack": "Choisir plutôt une entreprise",
+      "errorChoose": "Choisissez votre entreprise.",
+      "errorSend": "Envoyez la demande de rattachement, ou choisissez une autre option.",
+      "unavailable": "Cette entreprise ne peut pas être rejointe pour le moment."
+    },
+    "join": {
+      "title": "Rejoindre {org}",
+      "text": "L'administrateur reçoit votre nom, votre poste ({job}) et votre e-mail professionnel.",
+      "message": "Votre message",
+      "default": "Bonjour, je rejoins l'équipe recrutement de {org}. Pouvez-vous valider mon rattachement ?",
+      "send": "Envoyer la demande",
+      "cancel": "Annuler",
+      "sent": "Demande envoyée à {name}",
+      "sentAdmin": "Demande envoyée à l'administrateur de la page"
+    },
+    "create": {
+      "title": "Créer la page de l'entreprise",
+      "logo": "Logo",
+      "logoAria": "Ajouter le logo de l'entreprise",
+      "logoLater": "Le logo s'ajoute ensuite depuis la page de l'entreprise.",
+      "name": "Nom de l'entreprise",
+      "namePlaceholder": "Ex. Kinshasa Logistique",
+      "sector": "Secteur",
+      "sectors": "Fintech; Banque; Énergie; Santé; Commerce; Télécoms; ONG; Autre",
+      "size": "Taille",
+      "sizes": {
+        "s1": "1 à 10",
+        "s2": "11 à 50",
+        "s3": "51 à 200",
+        "s4": "201 à 1 000",
+        "s5": "plus de 1 000"
+      },
+      "note": "Jumanly vérifie la page sous 48 h. Vous pouvez préparer vos offres dès maintenant.",
+      "submit": "Créer la page",
+      "cancel": "Annuler",
+      "done": "Page « {name} » créée : vous en êtes l'administrateur ou l'administratrice",
+      "nameError": "Écrivez le nom de l'entreprise."
+    },
+    "recruits": {
+      "title": "Quels profils recrutez-vous ?",
+      "text": "Orbi vous propose ces talents en premier, et votre Fil suit ces domaines.",
+      "count": "{count, plural, =0 {Aucun domaine} one {# domaine} other {# domaines}}",
+      "domains": "Data; Finance; Service client; Tech; Commercial; Marketing; RH; Juridique; Logistique; Santé",
+      "levels": "Niveaux",
+      "levelList": "Stage; Junior; Confirmé; Cadre",
+      "hires": "Recrutements par an",
+      "hire": {
+        "few": "1 à 5",
+        "some": "6 à 20",
+        "many": "plus de 20"
+      },
+      "error": "Choisissez au moins un domaine."
+    },
+    "profile": {
+      "title": "Votre profil recruteur",
+      "text": "Voici ce que verront les talents.",
+      "hiringNow": "Recrute en ce moment",
+      "headline": "Votre phrase d'accroche",
+      "orbi": "Orbi propose une accroche",
+      "badge": "Afficher « Recrute en ce moment »",
+      "badgeHint": "Les talents peuvent vous suivre",
+      "auto": "Je recrute {what}",
+      "autoFor": "Je recrute {what} pour {org}",
+      "autoDomains": "en {domains}",
+      "autoTalents": "des talents",
+      "and": "{a} et {b}",
+      "join": "Rejoignez l'équipe {org} : {domains}",
+      "reply": "{job} · je réponds à chaque candidature",
+      "independent": "Indépendant·e"
+    },
+    "headline": {
+      "title": "Votre accroche",
+      "from": "Orbi · trois propositions, vous choisissez"
+    },
+    "notifications": {
+      "title": "Ne laissez aucun candidat sans réponse",
+      "text": "Une notification pour les nouvelles candidatures, les entretiens et votre équipe. Rien d'autre.",
+      "example1": "3 nouvelles candidatures pour Analyste de données junior",
+      "example2": "Grâce Mbuyi a confirmé l'entretien de jeudi 10 h"
+    },
+    "ready": {
+      "complete": "Profil recruteur complété à {pct} %",
+      "title": "Bienvenue, {name}",
+      "logoPending": "Le logo de {org} s'affichera dès que l'administrateur aura validé.",
+      "logoShown": "Le logo de {org} s'affiche sur votre profil.",
+      "independent": "Vous recrutez en indépendant·e.",
+      "orbi": "Je peux rédiger votre première offre à partir d'un simple intitulé.",
+      "orbiTry": "Essayer",
+      "start": "Pour bien démarrer",
+      "publish": "Publier une première offre",
+      "publishHint": "5 étapes, Orbi rédige avec vous",
+      "invite": "Inviter mon équipe",
+      "inviteHint": "Managers et RH, chacun avec son rôle",
+      "talents": "Chercher des talents",
+      "talentsHint": "Profils visibles en {domains}",
+      "talentsAll": "Profils visibles sur Jumanly",
+      "edit": "Modifier mes réponses",
+      "notifOn": "Vous serez prévenu·e de chaque nouvelle candidature",
+      "notifOff": "Notifications désactivées · à changer dans Compte › Paramètres",
+      "enter": "Entrer dans Jumanly"
+    }
+  },
   "pricing": {
     "seo": {
       "title": "Tarifs et forfaits · Jumanly",

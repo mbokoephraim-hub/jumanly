@@ -14052,6 +14052,247 @@ Conventions :
 | `phoneRh.orbi.messages.q3` | Proposer une réponse à un candidat |
 | `phoneRh.orbi.messages.q4` | Relire un message avant de l'envoyer |
 
+### Modèle B recruteur · ouverture et inscription au téléphone
+
+*Lot M2 (docs/modele-b-recruteur, mobile/captures section 01) : bienvenue en trois écrans, compte recruteur, conditions pour les recruteurs, puis le profil recruteur en sept étapes (vous, où vous êtes, contacts, rôle, entreprise et demande de rattachement, ce que vous recrutez, profil), les notifications et « Profil prêt ». Les cartes de la bienvenue sont une illustration manifestement fictive.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhAccueil.welcome.s1.word` | Publier |
+| `phoneRhAccueil.welcome.s1.title` | Votre offre en ligne en 5 minutes |
+| `phoneRhAccueil.welcome.s1.text` | Orbi rédige avec vous. Les talents qui correspondent la voient en premier. |
+| `phoneRhAccueil.welcome.s2.word` | Trier |
+| `phoneRhAccueil.welcome.s2.title` | Toutes vos candidatures au même endroit |
+| `phoneRhAccueil.welcome.s2.text` | Étapes, CV lus par Orbi, notes de l'équipe. Le score explique toujours pourquoi. |
+| `phoneRhAccueil.welcome.s3.word` | Recruter |
+| `phoneRhAccueil.welcome.s3.title` | Entretiens, décisions, réponses |
+| `phoneRhAccueil.welcome.s3.text` | Planifiez, évaluez, répondez à chacun. Vous décidez, Orbi vous aide. |
+| `phoneRhAccueil.welcome.card.live` | En cours |
+| `phoneRhAccueil.welcome.card.new` | 3 nouvelles |
+| `phoneRhAccueil.welcome.card.job` | Analyste de données junior |
+| `phoneRhAccueil.welcome.card.jobMeta` | Kinshasa · CDI |
+| `phoneRhAccueil.welcome.card.views` | vues |
+| `phoneRhAccueil.welcome.card.days` | jours |
+| `phoneRhAccueil.welcome.card.applications` | candidatures |
+| `phoneRhAccueil.welcome.card.drafted` | J'ai rédigé le texte et deux questions de présélection. |
+| `phoneRhAccueil.welcome.card.received` | Reçues |
+| `phoneRhAccueil.welcome.card.shortlist` | Présélection |
+| `phoneRhAccueil.welcome.card.interview` | Entretien |
+| `phoneRhAccueil.welcome.card.offer` | Offre |
+| `phoneRhAccueil.welcome.card.c1Mark` | GM |
+| `phoneRhAccueil.welcome.card.c1Name` | Grâce Mbuyi |
+| `phoneRhAccueil.welcome.card.c1Meta` | SQL, Excel · Présélection |
+| `phoneRhAccueil.welcome.card.c2Mark` | EK |
+| `phoneRhAccueil.welcome.card.c2Name` | Esther Kabila |
+| `phoneRhAccueil.welcome.card.c2Meta` | Power BI · Reçue |
+| `phoneRhAccueil.welcome.card.read` | 38 CV lus : 12 couvrent tous vos critères. |
+| `phoneRhAccueil.welcome.card.when` | Entretien · jeudi 10 h |
+| `phoneRhAccueil.welcome.card.where` | Analyste de données junior · en visio |
+| `phoneRhAccueil.welcome.card.stars` | Quatre étoiles sur cinq |
+| `phoneRhAccueil.welcome.card.decision` | Décision : retenue |
+| `phoneRhAccueil.welcome.card.replies` | Réponse envoyée à 37 autres candidats |
+| `phoneRhAccueil.signup.title` | Créer votre compte recruteur |
+| `phoneRhAccueil.signup.subtitle` | Gratuit pour publier et trier. Cinq minutes suffisent. |
+| `phoneRhAccueil.signup.emailPlaceholder` | prenom.nom@entreprise.cd |
+| `phoneRhAccueil.signup.emailError` | Entrez une adresse e-mail valide, par exemple n.kalala@baobabfintech.cd. |
+| `phoneRhAccueil.signup.hasAccount` | Déjà inscrite ou inscrit ? |
+| `phoneRhAccueil.signup.talent` | Vous cherchez un emploi ? |
+| `phoneRhAccueil.signup.talentLink` | Créer un compte talent |
+| `phoneRhAccueil.legal.terms.title` | Conditions pour les recruteurs |
+| `phoneRhAccueil.legal.terms.p1` | Candidater reste gratuit pour les talents : aucune offre ne peut le faire payer. |
+| `phoneRhAccueil.legal.terms.p2` | Orbi recommande, vous décidez : aucun refus automatique. |
+| `phoneRhAccueil.legal.terms.p3` | Chaque candidat reçoit une réponse, même courte. |
+| `phoneRhAccueil.legal.privacy.p1` | Vous ne voyez un profil que si la personne a candidaté ou l'a rendu visible. |
+| `phoneRhAccueil.legal.privacy.p2` | Chaque consultation de profil est enregistrée. |
+| `phoneRhAccueil.legal.privacy.p3` | Le score ne tient jamais compte du nom, de l'âge, du genre ou de la photo. |
+| `phoneRhAccueil.login.subtitle` | Connectez-vous pour retrouver vos offres et vos candidatures. |
+| `phoneRhOnboarding.step` | Étape {n} sur 7 · {name} |
+| `phoneRhOnboarding.steps.1` | Vous |
+| `phoneRhOnboarding.steps.2` | Où vous êtes |
+| `phoneRhOnboarding.steps.3` | Vos contacts |
+| `phoneRhOnboarding.steps.4` | Votre rôle |
+| `phoneRhOnboarding.steps.5` | Votre entreprise |
+| `phoneRhOnboarding.steps.6` | Ce que vous recrutez |
+| `phoneRhOnboarding.steps.7` | Votre profil recruteur |
+| `phoneRhOnboarding.progress` | Étape {n} sur 7 |
+| `phoneRhOnboarding.previous` | Étape précédente |
+| `phoneRhOnboarding.next` | Continuer |
+| `phoneRhOnboarding.finish` | Terminer |
+| `phoneRhOnboarding.saving` | Enregistrement… |
+| `phoneRhOnboarding.close` | Fermer |
+| `phoneRhOnboarding.failed` | L'enregistrement n'a pas abouti. Réessayez. |
+| `phoneRhOnboarding.you.title` | Bonjour, présentez-vous |
+| `phoneRhOnboarding.you.text` | Les talents voient qui recrute. Un visage inspire confiance. |
+| `phoneRhOnboarding.you.from` | Repris de votre compte {provider}. Vous pouvez le corriger. |
+| `phoneRhOnboarding.you.first` | Prénom |
+| `phoneRhOnboarding.you.last` | Nom |
+| `phoneRhOnboarding.you.photo` | Photo |
+| `phoneRhOnboarding.you.photoAdd` | Ajouter une photo |
+| `phoneRhOnboarding.you.photoChange` | Changer la photo |
+| `phoneRhOnboarding.you.saved` | Photo enregistrée : un visage net et un fond sobre inspirent confiance. |
+| `phoneRhOnboarding.you.remove` | Retirer |
+| `phoneRhOnboarding.you.error` | Indiquez votre prénom et votre nom. |
+| `phoneRhOnboarding.place.based` | Vous êtes basé·e en |
+| `phoneRhOnboarding.place.change` | Changer |
+| `phoneRhOnboarding.place.changeAria` | Changer de pays, actuellement {country} |
+| `phoneRhOnboarding.place.city` | Dans quelle ville ? |
+| `phoneRhOnboarding.place.otherCity` | Autre ville |
+| `phoneRhOnboarding.place.cityInput` | Votre ville |
+| `phoneRhOnboarding.place.also` | Vous recrutez aussi à |
+| `phoneRhOnboarding.place.error` | Choisissez votre ville. |
+| `phoneRhOnboarding.place.dialSheet` | Indicatif du numéro |
+| `phoneRhOnboarding.contacts.title` | Comment vous joindre ? |
+| `phoneRhOnboarding.contacts.text` | L'e-mail professionnel confirme votre entreprise. Le reste est facultatif. |
+| `phoneRhOnboarding.contacts.workEmail` | E-mail professionnel · obligatoire |
+| `phoneRhOnboarding.contacts.workEmailPlaceholder` | prenom.nom@entreprise.cd |
+| `phoneRhOnboarding.contacts.domain` | Domaine {domain} : il servira à valider votre entreprise. |
+| `phoneRhOnboarding.contacts.personal` | Adresse personnelle : votre entreprise devra vous valider à la main. |
+| `phoneRhOnboarding.contacts.phone` | Téléphone · facultatif |
+| `phoneRhOnboarding.contacts.dialAria` | Indicatif {code}, {country}. Changer |
+| `phoneRhOnboarding.contacts.phoneError` | Au moins 8 chiffres. |
+| `phoneRhOnboarding.contacts.whatsapp` | Ce numéro est aussi sur WhatsApp |
+| `phoneRhOnboarding.contacts.linkedin` | LinkedIn · facultatif |
+| `phoneRhOnboarding.contacts.linkedinPlaceholder` | linkedin.com/in/votre-profil |
+| `phoneRhOnboarding.contacts.who` | Qui voit votre téléphone et votre LinkedIn ? |
+| `phoneRhOnboarding.contacts.nobody.title` | Personne |
+| `phoneRhOnboarding.contacts.nobody.text` | Vos contacts restent privés |
+| `phoneRhOnboarding.contacts.interview.title` | Candidats en entretien |
+| `phoneRhOnboarding.contacts.interview.text` | Seulement ceux que vous invitez |
+| `phoneRhOnboarding.contacts.connections.title` | Mes connexions |
+| `phoneRhOnboarding.contacts.connections.text` | Les personnes connectées avec vous |
+| `phoneRhOnboarding.contacts.errorEmail` | Indiquez votre e-mail professionnel. |
+| `phoneRhOnboarding.contacts.errorPhone` | Le numéro doit avoir au moins 8 chiffres, ou laissez-le vide. |
+| `phoneRhOnboarding.role.title` | Votre rôle dans le recrutement |
+| `phoneRhOnboarding.role.charge.title` | Chargé·e de recrutement |
+| `phoneRhOnboarding.role.charge.text` | Je gère les offres et les candidats |
+| `phoneRhOnboarding.role.rh.title` | Responsable RH |
+| `phoneRhOnboarding.role.rh.text` | Je pilote le recrutement et l'équipe |
+| `phoneRhOnboarding.role.manager.title` | Manager qui recrute |
+| `phoneRhOnboarding.role.manager.text` | Je recrute pour mon équipe |
+| `phoneRhOnboarding.role.dirigeant.title` | Dirigeant·e |
+| `phoneRhOnboarding.role.dirigeant.text` | Je dirige l'entreprise |
+| `phoneRhOnboarding.role.cabinet.title` | Cabinet de recrutement |
+| `phoneRhOnboarding.role.cabinet.text` | Je recrute pour des clients |
+| `phoneRhOnboarding.role.independant.title` | Indépendant·e |
+| `phoneRhOnboarding.role.independant.text` | Je recrute à mon compte |
+| `phoneRhOnboarding.role.job` | Votre poste, tel qu'il s'affichera |
+| `phoneRhOnboarding.role.jobs.charge` | Chargée de recrutement; Chargé de recrutement; Talent acquisition |
+| `phoneRhOnboarding.role.jobs.rh` | Responsable RH; DRH; Responsable du personnel |
+| `phoneRhOnboarding.role.jobs.manager` | Responsable d'équipe; Chef d'équipe; Responsable data |
+| `phoneRhOnboarding.role.jobs.dirigeant` | Directrice générale; Directeur général; Fondatrice; Fondateur |
+| `phoneRhOnboarding.role.jobs.cabinet` | Consultante en recrutement; Consultant en recrutement; Chasseur de têtes |
+| `phoneRhOnboarding.role.jobs.independant` | Recruteuse indépendante; Recruteur indépendant; Consultante RH |
+| `phoneRhOnboarding.role.error` | Choisissez votre rôle et votre poste. |
+| `phoneRhOnboarding.company.title` | Pour quelle entreprise recrutez-vous ? |
+| `phoneRhOnboarding.company.search` | Rechercher votre entreprise |
+| `phoneRhOnboarding.company.near` | Déjà sur Jumanly, près de vous |
+| `phoneRhOnboarding.company.on` | Sur Jumanly |
+| `phoneRhOnboarding.company.none` | « {query} » n'est pas encore sur Jumanly. |
+| `phoneRhOnboarding.company.create` | Mon entreprise n'est pas sur Jumanly |
+| `phoneRhOnboarding.company.createHint` | Créer sa page, vous en serez l'administrateur ou l'administratrice |
+| `phoneRhOnboarding.company.independent` | Je recrute en indépendant·e |
+| `phoneRhOnboarding.company.people` | {size} personnes |
+| `phoneRhOnboarding.company.recruiters` | {count, plural, one {# recruteur} other {# recruteurs}} |
+| `phoneRhOnboarding.company.managedBy` | {name} gère la page |
+| `phoneRhOnboarding.company.domainMatch` | Votre e-mail {domain} correspond : validation en général dans la journée. |
+| `phoneRhOnboarding.company.domainOther` | Votre e-mail n'est pas en @{domain} : l'administrateur vérifiera à la main. |
+| `phoneRhOnboarding.company.request` | Demander à rejoindre la page |
+| `phoneRhOnboarding.company.requestHint` | Une fois accepté, le logo de l'entreprise s'affiche sur votre profil et vos offres. |
+| `phoneRhOnboarding.company.state.chosen` | Sur Jumanly |
+| `phoneRhOnboarding.company.state.pending` | Demande envoyée |
+| `phoneRhOnboarding.company.state.accepted` | Rattachement accepté |
+| `phoneRhOnboarding.company.state.created` | Page créée par vous |
+| `phoneRhOnboarding.company.waitingTitle` | En attente de validation |
+| `phoneRhOnboarding.company.waitingText` | Votre espace est prêt : vous publierez au nom de l'entreprise dès l'accord. |
+| `phoneRhOnboarding.company.cancel` | Annuler la demande |
+| `phoneRhOnboarding.company.cancelled` | Demande annulée |
+| `phoneRhOnboarding.company.admin` | Vous administrez cette page : vous pourrez inviter votre équipe depuis Compte. |
+| `phoneRhOnboarding.company.other` | Choisir une autre entreprise |
+| `phoneRhOnboarding.company.independentTitle` | Vous recrutez en indépendant·e |
+| `phoneRhOnboarding.company.independentText` | Vos offres s'affichent à votre nom. Vous pourrez rejoindre une entreprise plus tard. |
+| `phoneRhOnboarding.company.independentBack` | Choisir plutôt une entreprise |
+| `phoneRhOnboarding.company.errorChoose` | Choisissez votre entreprise. |
+| `phoneRhOnboarding.company.errorSend` | Envoyez la demande de rattachement, ou choisissez une autre option. |
+| `phoneRhOnboarding.company.unavailable` | Cette entreprise ne peut pas être rejointe pour le moment. |
+| `phoneRhOnboarding.join.title` | Rejoindre {org} |
+| `phoneRhOnboarding.join.text` | L'administrateur reçoit votre nom, votre poste ({job}) et votre e-mail professionnel. |
+| `phoneRhOnboarding.join.message` | Votre message |
+| `phoneRhOnboarding.join.default` | Bonjour, je rejoins l'équipe recrutement de {org}. Pouvez-vous valider mon rattachement ? |
+| `phoneRhOnboarding.join.send` | Envoyer la demande |
+| `phoneRhOnboarding.join.cancel` | Annuler |
+| `phoneRhOnboarding.join.sent` | Demande envoyée à {name} |
+| `phoneRhOnboarding.join.sentAdmin` | Demande envoyée à l'administrateur de la page |
+| `phoneRhOnboarding.create.title` | Créer la page de l'entreprise |
+| `phoneRhOnboarding.create.logo` | Logo |
+| `phoneRhOnboarding.create.logoAria` | Ajouter le logo de l'entreprise |
+| `phoneRhOnboarding.create.logoLater` | Le logo s'ajoute ensuite depuis la page de l'entreprise. |
+| `phoneRhOnboarding.create.name` | Nom de l'entreprise |
+| `phoneRhOnboarding.create.namePlaceholder` | Ex. Kinshasa Logistique |
+| `phoneRhOnboarding.create.sector` | Secteur |
+| `phoneRhOnboarding.create.sectors` | Fintech; Banque; Énergie; Santé; Commerce; Télécoms; ONG; Autre |
+| `phoneRhOnboarding.create.size` | Taille |
+| `phoneRhOnboarding.create.sizes.s1` | 1 à 10 |
+| `phoneRhOnboarding.create.sizes.s2` | 11 à 50 |
+| `phoneRhOnboarding.create.sizes.s3` | 51 à 200 |
+| `phoneRhOnboarding.create.sizes.s4` | 201 à 1 000 |
+| `phoneRhOnboarding.create.sizes.s5` | plus de 1 000 |
+| `phoneRhOnboarding.create.note` | Jumanly vérifie la page sous 48 h. Vous pouvez préparer vos offres dès maintenant. |
+| `phoneRhOnboarding.create.submit` | Créer la page |
+| `phoneRhOnboarding.create.cancel` | Annuler |
+| `phoneRhOnboarding.create.done` | Page « {name} » créée : vous en êtes l'administrateur ou l'administratrice |
+| `phoneRhOnboarding.create.nameError` | Écrivez le nom de l'entreprise. |
+| `phoneRhOnboarding.recruits.title` | Quels profils recrutez-vous ? |
+| `phoneRhOnboarding.recruits.text` | Orbi vous propose ces talents en premier, et votre Fil suit ces domaines. |
+| `phoneRhOnboarding.recruits.count` | {count, plural, =0 {Aucun domaine} one {# domaine} other {# domaines}} |
+| `phoneRhOnboarding.recruits.domains` | Data; Finance; Service client; Tech; Commercial; Marketing; RH; Juridique; Logistique; Santé |
+| `phoneRhOnboarding.recruits.levels` | Niveaux |
+| `phoneRhOnboarding.recruits.levelList` | Stage; Junior; Confirmé; Cadre |
+| `phoneRhOnboarding.recruits.hires` | Recrutements par an |
+| `phoneRhOnboarding.recruits.hire.few` | 1 à 5 |
+| `phoneRhOnboarding.recruits.hire.some` | 6 à 20 |
+| `phoneRhOnboarding.recruits.hire.many` | plus de 20 |
+| `phoneRhOnboarding.recruits.error` | Choisissez au moins un domaine. |
+| `phoneRhOnboarding.profile.title` | Votre profil recruteur |
+| `phoneRhOnboarding.profile.text` | Voici ce que verront les talents. |
+| `phoneRhOnboarding.profile.hiringNow` | Recrute en ce moment |
+| `phoneRhOnboarding.profile.headline` | Votre phrase d'accroche |
+| `phoneRhOnboarding.profile.orbi` | Orbi propose une accroche |
+| `phoneRhOnboarding.profile.badge` | Afficher « Recrute en ce moment » |
+| `phoneRhOnboarding.profile.badgeHint` | Les talents peuvent vous suivre |
+| `phoneRhOnboarding.profile.auto` | Je recrute {what} |
+| `phoneRhOnboarding.profile.autoFor` | Je recrute {what} pour {org} |
+| `phoneRhOnboarding.profile.autoDomains` | en {domains} |
+| `phoneRhOnboarding.profile.autoTalents` | des talents |
+| `phoneRhOnboarding.profile.and` | {a} et {b} |
+| `phoneRhOnboarding.profile.join` | Rejoignez l'équipe {org} : {domains} |
+| `phoneRhOnboarding.profile.reply` | {job} · je réponds à chaque candidature |
+| `phoneRhOnboarding.profile.independent` | Indépendant·e |
+| `phoneRhOnboarding.headline.title` | Votre accroche |
+| `phoneRhOnboarding.headline.from` | Orbi · trois propositions, vous choisissez |
+| `phoneRhOnboarding.notifications.title` | Ne laissez aucun candidat sans réponse |
+| `phoneRhOnboarding.notifications.text` | Une notification pour les nouvelles candidatures, les entretiens et votre équipe. Rien d'autre. |
+| `phoneRhOnboarding.notifications.example1` | 3 nouvelles candidatures pour Analyste de données junior |
+| `phoneRhOnboarding.notifications.example2` | Grâce Mbuyi a confirmé l'entretien de jeudi 10 h |
+| `phoneRhOnboarding.ready.complete` | Profil recruteur complété à {pct} % |
+| `phoneRhOnboarding.ready.title` | Bienvenue, {name} |
+| `phoneRhOnboarding.ready.logoPending` | Le logo de {org} s'affichera dès que l'administrateur aura validé. |
+| `phoneRhOnboarding.ready.logoShown` | Le logo de {org} s'affiche sur votre profil. |
+| `phoneRhOnboarding.ready.independent` | Vous recrutez en indépendant·e. |
+| `phoneRhOnboarding.ready.orbi` | Je peux rédiger votre première offre à partir d'un simple intitulé. |
+| `phoneRhOnboarding.ready.orbiTry` | Essayer |
+| `phoneRhOnboarding.ready.start` | Pour bien démarrer |
+| `phoneRhOnboarding.ready.publish` | Publier une première offre |
+| `phoneRhOnboarding.ready.publishHint` | 5 étapes, Orbi rédige avec vous |
+| `phoneRhOnboarding.ready.invite` | Inviter mon équipe |
+| `phoneRhOnboarding.ready.inviteHint` | Managers et RH, chacun avec son rôle |
+| `phoneRhOnboarding.ready.talents` | Chercher des talents |
+| `phoneRhOnboarding.ready.talentsHint` | Profils visibles en {domains} |
+| `phoneRhOnboarding.ready.talentsAll` | Profils visibles sur Jumanly |
+| `phoneRhOnboarding.ready.edit` | Modifier mes réponses |
+| `phoneRhOnboarding.ready.notifOn` | Vous serez prévenu·e de chaque nouvelle candidature |
+| `phoneRhOnboarding.ready.notifOff` | Notifications désactivées · à changer dans Compte › Paramètres |
+| `phoneRhOnboarding.ready.enter` | Entrer dans Jumanly |
+
 
 ---
 

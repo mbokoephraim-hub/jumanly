@@ -35,6 +35,9 @@ async function VerifyStep() {
   // Modèle B is the talent's phone: a recruiter keeps the code page of their own journey.
   if ((flow.profile ?? "talent") === "talent" && (await isPhone()))
     return <PhoneCodePage email={flow.email} />;
+  // The recruiter's phone sign-up (Modèle B recruteur, M2) has the same code screen.
+  if (flow.profile === "rh" && (await isPhone()))
+    return <PhoneCodePage email={flow.email} recruiter />;
   const t = await getTranslations("access");
   return (
     <>
