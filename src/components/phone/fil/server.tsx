@@ -24,10 +24,22 @@ import { PhoneFil, type FilMe } from "./feed";
 import type { SendTarget } from "./sheets";
 
 /** The texts the screens of the Fil need in the browser. */
-export async function FilTexts({ children }: { children: ReactNode }) {
+export async function FilTexts({
+  children,
+  recruiter = false,
+}: {
+  children: ReactNode;
+  /** The recruiter's Fil and « Nouvelle publication » (Modèle B recruteur, M3). */
+  recruiter?: boolean;
+}) {
   const messages = await getMessages();
   return (
-    <NextIntlClientProvider messages={pickMessages(messages, ["phoneFil", "phone"])}>
+    <NextIntlClientProvider
+      messages={pickMessages(
+        messages,
+        recruiter ? ["phoneFil", "phone", "phoneRhFil"] : ["phoneFil", "phone"],
+      )}
+    >
       {children}
     </NextIntlClientProvider>
   );

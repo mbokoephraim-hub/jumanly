@@ -17035,13 +17035,16 @@
         "offres": "Mes offres",
         "candidats": "Candidats",
         "entreprises": "Entreprises",
-        "personnes": "Personnes"
+        "personnes": "Personnes",
+        "publications": "Publications"
       },
       "groups": {
         "offers": "Mes offres · {count}",
         "candidates": "Candidats · {count}",
         "companies": "Entreprises · {count}",
-        "people": "Personnes · {count}"
+        "people": "Personnes · {count}",
+        "peopleAndCompanies": "Personnes et entreprises",
+        "posts": "Publications"
       },
       "offerLine": "{city} · {status} · {count, plural, =0 {0 candidature} one {# candidature} other {# candidatures}}",
       "status": {
@@ -17057,7 +17060,7 @@
       "fil": {
         "label": "Rechercher dans le Fil",
         "placeholder": "Publications, personnes, entreprises",
-        "note": "Personnes et entreprises : tout Jumanly."
+        "note": "Publications, personnes et entreprises : tout Jumanly."
       },
       "offres": {
         "label": "Rechercher une offre, une entreprise ou une personne",
@@ -17432,6 +17435,50 @@
       "notifOn": "Vous serez prévenu·e de chaque nouvelle candidature",
       "notifOff": "Notifications désactivées · à changer dans Compte › Paramètres",
       "enter": "Entrer dans Jumanly"
+    }
+  },
+  "phoneRhFil": {
+    "prompt": "Partager une nouvelle, une offre…",
+    "publish": "Publier",
+    "asOrg": "Publier au nom de {org}",
+    "end": "Vous êtes à jour. Pendant ce temps,",
+    "endLink": "cherchez des talents",
+    "compose": {
+      "title": "Nouvelle publication",
+      "close": "Fermer",
+      "as": "Publier en tant que",
+      "asMe": "Votre profil",
+      "asOrg": "Page de l'entreprise",
+      "seenMe": "Visible par votre réseau et les talents qui suivent {org}.",
+      "seenOrg": "Visible sur la page de {org} et dans le Fil de ses abonnés.",
+      "type": "Type",
+      "types": {
+        "texte": "Texte",
+        "photo": "Photo",
+        "offre": "Une offre",
+        "evenement": "Un événement"
+      },
+      "text": "Texte",
+      "count": "{count} / {max}",
+      "placeholder": "Partager une nouvelle, une offre…",
+      "orbi": "Orbi complète le texte",
+      "orbiAsk": "Complète ce début de publication pour le Fil, en 220 caractères au plus : « {text} »",
+      "orbiAskEmpty": "Que publier dans le Fil pour attirer de bons profils ?",
+      "photoPick": "Choisir une photo",
+      "photoAlt": "Photo jointe à la publication",
+      "photoRemove": "Retirer la photo",
+      "photoError": "Cette photo ne peut pas être ajoutée. Choisissez une image JPEG, PNG ou WebP.",
+      "job": "Offre jointe",
+      "noJob": "Aucune offre en ligne pour l'instant.",
+      "noJobLink": "Publier une offre",
+      "eventAt": "Date et heure de l'événement",
+      "errorText": "Écrivez quelques mots avant de publier.",
+      "errorPhoto": "Choisissez une photo.",
+      "errorJob": "Choisissez l'offre à joindre.",
+      "errorEvent": "Indiquez la date de l'événement.",
+      "failed": "La publication n'a pas pu être envoyée. Réessayez.",
+      "done": "Publication partagée",
+      "submit": "Publier"
     }
   },
   "pricing": {

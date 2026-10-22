@@ -546,10 +546,18 @@ export const newPostSchema = z
     quotedId: z.string().trim().max(60).optional(),
     replyPolicy: z.enum(["everyone", "connections", "nobody"]).default("everyone"),
     image: z.string().trim().max(60).optional(),
+    /** A recruiter publishes in their own name or in the name of their company (M3). */
+    as: z.enum(["me", "org"]).default("me"),
+    /** « Une offre »: a published offer of the recruiter's organization. */
+    jobId: z.string().trim().max(60).optional(),
+    /** « Un événement »: when it takes place. */
+    eventAt: z.coerce.date().optional(),
   })
-  .refine((input) => input.body.length > 0 || input.attachment || input.quotedId || input.image, {
-    message: "empty",
-  });
+  .refine(
+    (input) =>
+      input.body.length > 0 || input.attachment || input.quotedId || input.image || input.jobId,
+    { message: "empty" },
+  );
 export type NewPost = z.input<typeof newPostSchema>;
 
 /** The career pieces a person may join to a post: their projects and their attestations. */
@@ -588,10 +596,27 @@ export async function createPost(
   userId: string,
   raw: NewPost,
   labels: { work: string; certificate: (date: Date) => string },
+  /**
+   * The recruiter's space (Modèle B recruteur, M3): its offers may be joined, and a member who
+   * manages the offers may publish in its name. Every offer is read inside this organization.
+   */
+  hire?: { organizationId: string; canPublishAsOrg: boolean },
+  now = new Date(),
 ) {
   const parsed = newPostSchema.safeParse(raw);
   if (!parsed.success) throw new FeedError("invalid");
   const input = parsed.data;
+  if (input.as === "org" && !hire?.canPublishAsOrg) throw new FeedError("invalid");
+  if (input.jobId) {
+    if (!hire) throw new FeedError("invalid");
+    const job = await db.job.findFirst({
+      where: { id: input.jobId, organizationId: hire.organizationId, status: "published" },
+      select: { id: true },
+    });
+    if (!job) throw new FeedError("invalid");
+  }
+  if (input.eventAt && input.eventAt.getTime() < now.getTime() - DAY_MS)
+    throw new FeedError("invalid");
   let attachment: FeedAttachment | null = null;
   let kind: FeedPostKind = "post";
   if (input.attachment && input.attachmentId) {
@@ -627,7 +652,10 @@ export async function createPost(
   const post = await db.feedPost.create({
     data: {
       authorId: userId,
-      kind,
+      organizationId: input.as === "org" ? hire!.organizationId : null,
+      kind: input.eventAt ? "event" : kind,
+      eventAt: input.eventAt ?? null,
+      jobId: input.jobId ?? null,
       body: input.body,
       attachment: attachment ?? undefined,
       quotedId: input.quotedId,
@@ -1108,4 +1136,35 @@ export async function organizationAuthor(db: PrismaClient, slug: string, now = n
     offers: org._count.jobs,
   };
   return { id: org.id, author, jobs: org.jobs };
+}
+
+/**
+ * « Rechercher dans · Publications » of the recruiter's Fil (Modèle B recruteur, M3): the posts
+ * whose text holds the words, newest first, never a reply, a hidden post or one of a blocked person.
+ */
+export async function searchPosts(db: PrismaClient, viewerId: string, query: string, take = 6) {
+  const words = query.trim().slice(0, 100);
+  if (!words) return [];
+  const { blocked } = await circle(db, viewerId);
+  const rows = await db.feedPost.findMany({
+    where: {
+      parentId: null,
+      hiddenAt: null,
+      body: { contains: words, mode: "insensitive" },
+      NOT: blocked.length > 0 ? [{ authorId: { in: blocked }, organizationId: null }] : [],
+    },
+    orderBy: { createdAt: "desc" },
+    take,
+    select: {
+      id: true,
+      body: true,
+      author: { select: { name: true } },
+      organization: { select: { name: true } },
+    },
+  });
+  return rows.map((row) => ({
+    id: row.id,
+    body: row.body,
+    by: row.organization?.name ?? row.author?.name ?? "",
+  }));
 }

@@ -4092,3 +4092,24 @@ ou affiché, premiers pas), et « Entrer dans Jumanly » ouvre le Fil recruteur.
   `CAPTURE_DIR=… pnpm test:e2e tests/e2e/modele-b-recruteur-inscription.spec.ts --project=mobile`.
 - Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-inscription.md`.
 - Ordinateur et tablette inchangés : l'inscription recruteur web (entreprise et forfait) reste la même.
+
+## Modèle B recruteur mobile · M3, Fil (22 octobre 2026)
+
+Section 02 des captures (031 à 040). Au téléphone, l'onglet Fil du recruteur (`/app/hire`) montre :
+la ligne « Partager une nouvelle, une offre… » avec « Publier », le lien « Publier au nom de
+l'entreprise » (seulement pour un membre qui gère les offres), puis « Pour vous · Abonnements ·
+Entreprises » comme pour un talent. La fin de liste mène à Talents.
+
+- « Nouvelle publication » du recruteur : publier en tant que soi ou que l'entreprise (avec qui la
+  verra), type Texte, Photo, Une offre (une offre en ligne de l'organisation) ou Un événement (date
+  et heure), compteur 220 caractères, « Orbi complète le texte ». Après publication, retour au Fil.
+- Recherche du Fil : Tout, Publications, Personnes, Entreprises ; avec « Tout », « Personnes et
+  entreprises » puis « Publications ». Jamais les offres ni les candidats dans le Fil.
+- « À traiter » n'est plus le premier écran au téléphone ; il le reste sur ordinateur et tablette.
+- Code : `src/components/phone/recruteur/fil.tsx` et `compose.tsx`, `publishingSpace()` dans
+  `src/server/hire-context.ts`, `createPost()` et `searchPosts()` dans `src/server/services/feed.ts`.
+- Textes : partie « Modèle B recruteur · Fil au téléphone » (`phoneRhFil`).
+- Tests : `tests/db/modele-b-recruteur-fil.test.ts` (au nom de l'entreprise seulement si l'on gère
+  les offres, offre d'une autre organisation ou non publiée refusée, événement passé refusé,
+  recherche sans personne bloquée), `tests/e2e/modele-b-recruteur-fil.spec.ts`.
+- Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-fil.md`. Aucune migration.

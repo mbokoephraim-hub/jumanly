@@ -13992,10 +13992,13 @@ Conventions :
 | `phoneRh.search.scopes.candidats` | Candidats |
 | `phoneRh.search.scopes.entreprises` | Entreprises |
 | `phoneRh.search.scopes.personnes` | Personnes |
+| `phoneRh.search.scopes.publications` | Publications |
 | `phoneRh.search.groups.offers` | Mes offres · {count} |
 | `phoneRh.search.groups.candidates` | Candidats · {count} |
 | `phoneRh.search.groups.companies` | Entreprises · {count} |
 | `phoneRh.search.groups.people` | Personnes · {count} |
+| `phoneRh.search.groups.peopleAndCompanies` | Personnes et entreprises |
+| `phoneRh.search.groups.posts` | Publications |
 | `phoneRh.search.offerLine` | {city} · {status} · {count, plural, =0 {0 candidature} one {# candidature} other {# candidatures}} |
 | `phoneRh.search.status.draft` | Brouillon |
 | `phoneRh.search.status.pending_review` | En vérification |
@@ -14007,7 +14010,7 @@ Conventions :
 | `phoneRh.search.status.changes_requested` | À corriger |
 | `phoneRh.search.fil.label` | Rechercher dans le Fil |
 | `phoneRh.search.fil.placeholder` | Publications, personnes, entreprises |
-| `phoneRh.search.fil.note` | Personnes et entreprises : tout Jumanly. |
+| `phoneRh.search.fil.note` | Publications, personnes et entreprises : tout Jumanly. |
 | `phoneRh.search.offres.label` | Rechercher une offre, une entreprise ou une personne |
 | `phoneRh.search.offres.placeholder` | Offres, entreprises, personnes |
 | `phoneRh.search.offres.note` | Mes offres : seulement les vôtres. Entreprises et personnes : tout Jumanly. |
@@ -14292,6 +14295,53 @@ Conventions :
 | `phoneRhOnboarding.ready.notifOn` | Vous serez prévenu·e de chaque nouvelle candidature |
 | `phoneRhOnboarding.ready.notifOff` | Notifications désactivées · à changer dans Compte › Paramètres |
 | `phoneRhOnboarding.ready.enter` | Entrer dans Jumanly |
+
+---
+
+### Modèle B recruteur · Fil au téléphone
+
+*Lot M3 (docs/modele-b-recruteur, mobile/captures section 02) : le Fil du recruteur, publier en son nom ou au nom de l'entreprise (seulement pour un membre qui gère les offres), joindre une offre en ligne de l'entreprise ou annoncer un événement.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRhFil.prompt` | Partager une nouvelle, une offre… |
+| `phoneRhFil.publish` | Publier |
+| `phoneRhFil.asOrg` | Publier au nom de {org} |
+| `phoneRhFil.end` | Vous êtes à jour. Pendant ce temps, |
+| `phoneRhFil.endLink` | cherchez des talents |
+| `phoneRhFil.compose.title` | Nouvelle publication |
+| `phoneRhFil.compose.close` | Fermer |
+| `phoneRhFil.compose.as` | Publier en tant que |
+| `phoneRhFil.compose.asMe` | Votre profil |
+| `phoneRhFil.compose.asOrg` | Page de l'entreprise |
+| `phoneRhFil.compose.seenMe` | Visible par votre réseau et les talents qui suivent {org}. |
+| `phoneRhFil.compose.seenOrg` | Visible sur la page de {org} et dans le Fil de ses abonnés. |
+| `phoneRhFil.compose.type` | Type |
+| `phoneRhFil.compose.types.texte` | Texte |
+| `phoneRhFil.compose.types.photo` | Photo |
+| `phoneRhFil.compose.types.offre` | Une offre |
+| `phoneRhFil.compose.types.evenement` | Un événement |
+| `phoneRhFil.compose.text` | Texte |
+| `phoneRhFil.compose.count` | {count} / {max} |
+| `phoneRhFil.compose.placeholder` | Partager une nouvelle, une offre… |
+| `phoneRhFil.compose.orbi` | Orbi complète le texte |
+| `phoneRhFil.compose.orbiAsk` | Complète ce début de publication pour le Fil, en 220 caractères au plus : « {text} » |
+| `phoneRhFil.compose.orbiAskEmpty` | Que publier dans le Fil pour attirer de bons profils ? |
+| `phoneRhFil.compose.photoPick` | Choisir une photo |
+| `phoneRhFil.compose.photoAlt` | Photo jointe à la publication |
+| `phoneRhFil.compose.photoRemove` | Retirer la photo |
+| `phoneRhFil.compose.photoError` | Cette photo ne peut pas être ajoutée. Choisissez une image JPEG, PNG ou WebP. |
+| `phoneRhFil.compose.job` | Offre jointe |
+| `phoneRhFil.compose.noJob` | Aucune offre en ligne pour l'instant. |
+| `phoneRhFil.compose.noJobLink` | Publier une offre |
+| `phoneRhFil.compose.eventAt` | Date et heure de l'événement |
+| `phoneRhFil.compose.errorText` | Écrivez quelques mots avant de publier. |
+| `phoneRhFil.compose.errorPhoto` | Choisissez une photo. |
+| `phoneRhFil.compose.errorJob` | Choisissez l'offre à joindre. |
+| `phoneRhFil.compose.errorEvent` | Indiquez la date de l'événement. |
+| `phoneRhFil.compose.failed` | La publication n'a pas pu être envoyée. Réessayez. |
+| `phoneRhFil.compose.done` | Publication partagée |
+| `phoneRhFil.compose.submit` | Publier |
 
 
 ---

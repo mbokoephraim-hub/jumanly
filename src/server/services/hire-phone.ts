@@ -27,6 +27,7 @@ export const RH_SEARCH_SCOPES = [
   "candidats",
   "entreprises",
   "personnes",
+  "publications",
 ] as const;
 export type RhSearchScope = (typeof RH_SEARCH_SCOPES)[number];
 

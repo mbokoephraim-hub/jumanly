@@ -2,11 +2,14 @@ import type { Metadata } from "next";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { redirect } from "next/navigation";
 import { PhoneCompose } from "@/components/phone/fil/compose";
-import { feedWords, shortName } from "@/components/phone/fil/data";
+import { feedWords, initialsOf, shortName } from "@/components/phone/fil/data";
+import { PhoneRecruiterCompose } from "@/components/phone/recruteur/compose";
 import { FilTexts, meOf } from "@/components/phone/fil/server";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
+import { publishingSpace } from "@/server/hire-context";
 import { attachableItems, getPost, latestCertificate } from "@/server/services/feed";
+import { contractFilterOf } from "@/server/services/jobs";
 import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -24,6 +27,41 @@ export default async function FilComposePage({ searchParams }: PageProps<"/app/f
   const query = await searchParams;
   const user = await requireUser("/app/fil/publier");
   if (!(await isPhone())) redirect("/app");
+  // A recruiter (Modèle B recruteur, M3): « Publier en tant que », the company's offers, events.
+  const space = await publishingSpace(user.id);
+  if (space) {
+    const [jobs, tj] = await Promise.all([
+      db.job.findMany({
+        where: { organizationId: space.organizationId, status: "published" },
+        orderBy: { publishedAt: "desc" },
+        take: 20,
+        select: { id: true, title: true, city: true, contractType: true },
+      }),
+      getTranslations("jobs.search.contract"),
+    ]);
+    return (
+      <FilTexts recruiter>
+        <PhoneRecruiterCompose
+          me={meOf({ name: user.name, image: user.image ?? null })}
+          org={
+            space.canPublishAsOrg
+              ? {
+                  name: space.org.name,
+                  initials: initialsOf(space.org.name),
+                  logo: space.org.logo,
+                }
+              : null
+          }
+          jobs={jobs.map((job) => ({
+            id: job.id,
+            title: job.title,
+            detail: [tj(contractFilterOf(job.contractType)), job.city].filter(Boolean).join(" · "),
+          }))}
+          startAsOrg={query.nom === "entreprise"}
+        />
+      </FilTexts>
+    );
+  }
   const t = await getTranslations("phoneFil.publish");
   const format = await getFormatter();
   const quotedId = typeof query.citer === "string" ? query.citer : null;
