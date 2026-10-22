@@ -64,7 +64,8 @@ export function PhoneFil({
         <h1>{t("title")}</h1>
         <FilBell initial={unread} />
         <Link href="/app/career/cv" className="nb-fil-moi" aria-label={t("account")}>
-          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={40} />
+          {/* The size of the bell beside it (Ephraïm, 22/10/2026). */}
+          <FilAvatar initials={me.initials} image={me.image} tone={0} org={false} me size={28} />
         </Link>
       </header>
       <div className="nb-onglets nb-fil-onglets" role="tablist" aria-label={t("tabs")}>
