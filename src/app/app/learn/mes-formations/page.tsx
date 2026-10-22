@@ -10,6 +10,8 @@ import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { talentAttestations } from "@/server/services/attestations";
 import { followedCourses, savedCourses } from "@/server/services/learn-space";
+import { isPhone } from "@/server/view";
+import { redirect } from "next/navigation";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("apprendre.mine");
@@ -29,6 +31,9 @@ export default async function MyCoursesPage({
   const params = await searchParams;
   const view: View = views.includes(params.vue as View) ? (params.vue as View) : "en-cours";
   const user = await requireUser("/app/learn/mes-formations");
+  // The phone (Modèle B, lot B7): « Mes cours » and « Attestations » are rubrics of the tab.
+  if (await isPhone())
+    redirect(`/app/learn?onglet=${view === "attestations" ? "attestations" : "mes-cours"}`);
   const t = await getTranslations();
   const format = await getFormatter();
   const [followed, saved, attestations] = await Promise.all([

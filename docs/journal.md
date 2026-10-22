@@ -50,6 +50,38 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Modèle B · B7 : Formation au téléphone (21 octobre 2026)
+
+Planches Formation (`docs/modele-b/captures/INDEX.md`, rangées 134 à 146). Écarts et choix :
+`docs/decisions/2026-10-21-modele-b-b7.md`.
+
+**Fait.**
+- Onglet Formation gardé monté (`src/components/phone/learn/`) : en-tête et recherche, rubriques
+  Pour vous · Mes cours · Attestations, carte « Continuer », « Pourquoi ? » vers Orbi, cours pour vos
+  offres par compétence, « Avant votre entretien » avec « Répéter avec Orbi ».
+- Recherche en deux temps : où chercher (Tout, Cours, Leçons, Attestations), recherches récentes,
+  compétences demandées ; puis résultats dès la première lettre, groupés ; rien trouvé → Orbi.
+- Détail du cours : bandeau, étiquettes, progression, « Vous saurez », programme, Enregistrer,
+  Commencer ou Reprendre, menu (partager, enregistrer, signaler) et feuille de la formule.
+- Leçon : vidéo ou bande, « À retenir », question rapide (`content.check`, saisie dans l'admin),
+  « Orbi explique autrement », quiz et exercice, Précédente et Leçon suivante ou Terminer le cours,
+  réglages (vitesse, sous-titres, fichiers, signaler).
+- Attestation : « Bravo » à la fin d'un cours, carte avec le lien de vérification, profil, Fil, PDF.
+- Services `learn-phone.ts`, actions `src/server/actions/learn-phone.ts`, seed des leçons SQL et CV
+  (à retenir, question rapide).
+
+**Captures → maquettes** (`captures/etape-1/`, 390 × 844) : `b7-134` à `b7-146`, au numéro de la
+rangée.
+
+**Remplacé au téléphone.** L'ancien accueil Apprendre, l'ancien détail du cours, l'ancienne leçon,
+l'ancienne attestation et les pages Mes formations, Attestations et Rechercher (redirigées vers les
+rubriques de l'onglet). L'ordinateur garde ses pages.
+
+**Tests.** `tests/e2e/modele-b-formation.spec.ts` (chaque bouton ouvre quelque chose, cours et leçon,
+cours au-dessus de la formule, attestation, onglet gardé monté) ; `tests/unit/lesson-check.test.ts` ;
+`learn`, `mobile-talent` et `admin-v4` adaptés au téléphone. Le test recruteur « fin d'offre » accepte
+2 ou 3 jours quand minuit passe entre le seed et le test.
+
 ## Modèle B · B6 : simulation d'entretien avec Orbi (21 octobre 2026)
 
 Planches Entretien (`docs/modele-b/captures/INDEX.md`, rangées 114 à 133). Écarts et choix :

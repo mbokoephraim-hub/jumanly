@@ -77,6 +77,10 @@ export async function followedCourses(db: PrismaClient, userId: string) {
       startedAt: row.startedAt,
       certificate: row.certificate?.revokedAt ? null : row.certificate,
       modules: row.course.modules.length,
+      /** The lessons in order, for « Leçon 3 sur 8 » (Modèle B, lot B7). */
+      lessonIds: lessons.map((lesson) => lesson.id),
+      /** Required lessons not done yet. */
+      leftLessons: left.length,
       next,
       minutesLeft: Math.max(
         1,

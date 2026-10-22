@@ -21,6 +21,8 @@ import { forMeJobs } from "@/server/services/for-me";
 import { jobCards } from "@/server/services/jobs";
 import { getLearnerCourse, lessonsOf, requiredLessons } from "@/server/services/learn";
 import { planForCatalogLevel } from "@/server/services/plans";
+import { isPhone } from "@/server/view";
+import { PhoneCourseScreen } from "@/components/phone/learn/pages";
 
 export async function generateMetadata({
   params,
@@ -67,6 +69,17 @@ export default async function LearnCoursePage({
     redirect(`/app/learn/${encodeURIComponent(slug)}?vue=terminee`);
 
   const user = await requireUser(`/app/learn/${slug}`);
+  // The phone (Modèle B, lot B7): the course, and the attestation once it is finished.
+  if (await isPhone()) {
+    if (param("vue") === "terminee") {
+      const certificate = await db.certificate.findFirst({
+        where: { enrollment: { userId: user.id, course: { slug } }, revokedAt: null },
+        select: { id: true },
+      });
+      if (certificate) redirect(`/app/learn/attestations/${certificate.id}?nouvelle=1`);
+    }
+    return <PhoneCourseScreen user={user} slug={slug} />;
+  }
   const [found, plans] = await Promise.all([getLearnerCourse(db, user.id, slug), getPublicPlans()]);
   if (!found) notFound();
   const t = await getTranslations();

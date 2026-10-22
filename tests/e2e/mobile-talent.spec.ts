@@ -290,16 +290,25 @@ test("trouver une offre et postuler : étapes, brouillon et coupure réseau", as
 
 // Refonte mobile, lot 5 (planche talent-3): resume the course in progress from Apprendre, then the
 // classroom: the tabs of the lesson, its files and the free Orbi help.
-test("reprendre une formation depuis Apprendre", async ({ page }) => {
+test("reprendre une formation depuis Apprendre", async ({ page, isMobile }) => {
   await logIn(page, "grace.ux@jumanly.test");
   await page.goto("/app/learn");
   await expectAccessible(page);
-  await page.getByRole("link", { name: "Reprendre" }).filter({ visible: true }).first().click();
+  // On the phone, Formation is Modèle B (lot B7): « Continuer » opens the lesson to resume.
+  await page
+    .getByRole("link", { name: isMobile ? /^Continuer/ : "Reprendre" })
+    .filter({ visible: true })
+    .first()
+    .click();
   await expect(page).toHaveURL(/\/app\/learn\/[^/?]+\/[^/?]+/);
   await expect(page.getByRole("heading", { level: 1 }).filter({ visible: true })).toBeVisible();
 });
 
-test("une leçon : onglets, notes et fichiers", async ({ page }) => {
+test("une leçon : onglets, notes et fichiers", async ({ page, isMobile }) => {
+  test.skip(
+    isMobile,
+    "Au téléphone, la leçon est celle du Modèle B (modele-b-formation.spec.ts, fichiers dans son menu).",
+  );
   await logIn(page, "grace.ux@jumanly.test");
   await page.goto("/app/learn/ux-service-client-excellence");
   const start = page.getByRole("button", { name: "Commencer la formation" });

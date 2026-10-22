@@ -8,6 +8,7 @@ import type { Prisma, PrismaClient } from "@/generated/prisma/client";
 import { slugify } from "./accounts";
 import { OUTLINE_STEPS_MAX, OUTLINE_TAKEAWAYS_MAX, lessonResourceSchema } from "./learn";
 import { findSkill } from "./profile";
+import { checkFromForm } from "./learn-phone";
 
 export const courseStatuses = ["draft", "review", "published", "archived"] as const;
 export const catalogLevelOptions = ["free", "fundamentals", "standard", "advanced"] as const;
@@ -754,6 +755,8 @@ export const lessonFormSchema = z.object({
   brief: text(600).default(""),
   steps: text(2000).default(""),
   takeaways: text(1000).default(""),
+  // The quick question of the phone (Modèle B, lot B7); absent from older forms.
+  check: text(1500).default(""),
   resources: text(3000),
   transcript: text(50_000),
   isPreview: z.literal("on").optional(),
@@ -817,6 +820,7 @@ export async function updateLesson(
       content: {
         ...(paragraphs.length > 0 ? { paragraphs } : {}),
         ...outlineFromForm(input),
+        ...(checkFromForm(input.check) ? { check: checkFromForm(input.check) } : {}),
       },
       resources,
       transcript: input.transcript || null,

@@ -34,8 +34,15 @@ test("espace talent : recherche de l'en-tête et compte derrière l'avatar", asy
 
   // The account opens from the avatar of a destination; Se déconnecter sits in Compte.
   await page.goto("/app/learn");
-  await page.getByRole("link", { name: /^Compte de / }).click();
-  await expect(page).toHaveURL(/\/app\/compte$/);
+  if (isMobile) {
+    // Modèle B (lot B7): the avatar of Formation opens Carrière; the account stays at /app/compte.
+    await page.locator(".nb-fo-accueil").getByRole("link", { name: "Mon profil" }).click();
+    await expect(page).toHaveURL(/\/app\/career\/cv$/);
+    await page.goto("/app/compte");
+  } else {
+    await page.getByRole("link", { name: /^Compte de / }).click();
+    await expect(page).toHaveURL(/\/app\/compte$/);
+  }
   await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
   await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
 });

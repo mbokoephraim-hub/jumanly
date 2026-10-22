@@ -6,6 +6,7 @@ import { PhoneShell } from "@/components/phone/shell";
 import { FilTab } from "@/components/phone/fil/server";
 import { CareerTab } from "@/components/phone/career/server";
 import { ExplorerTab } from "@/components/phone/explorer/server";
+import { FormationTab } from "@/components/phone/learn/server";
 import { TalentShell } from "@/components/talent/shell";
 import { isPhone } from "@/server/view";
 import { Skeleton } from "@/components/ui";
@@ -96,6 +97,11 @@ async function SignedIn({ children }: { children: React.ReactNode }) {
             carriere: (
               <Suspense fallback={null}>
                 <CareerTab user={{ id: user.id }} />
+              </Suspense>
+            ),
+            formation: (
+              <Suspense fallback={null}>
+                <FormationTab user={{ id: user.id, name: user.name, image: user.image ?? null }} />
               </Suspense>
             ),
           }}

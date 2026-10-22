@@ -81,25 +81,35 @@ async function moduleStep(userId: string, slug: string, lessonId: string) {
   return { next, celebrate };
 }
 
+type Learner = { id: string; email: string; firstName?: string | null };
+
+/** A new attestation: the notification and the e-mail (also used by the phone, lot B7). */
+export async function announceCertificate(
+  user: Learner,
+  certificate: NonNullable<Awaited<ReturnType<typeof completeLesson>>>,
+) {
+  await notify(db, {
+    userIds: [user.id],
+    type: "certificateIssued",
+    payload: { courseTitle: certificate.courseTitle },
+    href: `/app/learn/attestations/${certificate.code}`,
+  });
+  const email = certificateEmail(user.firstName, {
+    courseTitle: certificate.courseTitle,
+    code: certificate.code,
+    certificateId: certificate.id,
+  });
+  await send(user.email, email.subject, email.props).catch((error) => reportError(error));
+}
+
 async function afterProgress(
-  user: { id: string; email: string; firstName?: string | null },
+  user: Learner,
   slug: string,
   lessonId: string,
   certificate: Awaited<ReturnType<typeof completeLesson>>,
 ) {
   if (certificate) {
-    await notify(db, {
-      userIds: [user.id],
-      type: "certificateIssued",
-      payload: { courseTitle: certificate.courseTitle },
-      href: `/app/learn/attestations/${certificate.code}`,
-    });
-    const email = certificateEmail(user.firstName, {
-      courseTitle: certificate.courseTitle,
-      code: certificate.code,
-      certificateId: certificate.id,
-    });
-    await send(user.email, email.subject, email.props).catch((error) => reportError(error));
+    await announceCertificate(user, certificate);
     redirect(`${coursePath(slug)}?vue=terminee`);
   }
   const { next, celebrate } = await moduleStep(user.id, slug, lessonId);

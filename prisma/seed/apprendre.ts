@@ -45,6 +45,84 @@ const video = (title: string, minutes: number, brief: string, more: string[] = [
   paragraphs: [brief, ...more],
 });
 
+/**
+ * Modèle B, lot B7: « À retenir » and the quick question of some lessons on the phone
+ * (`content.takeaways`, `content.check`), by lesson title. Fictional teaching content.
+ */
+type Check = { question: string; options: string[]; answer: number; explanation: string };
+const phoneLessons: Record<string, { takeaways?: string[]; check?: Check }> = {
+  "INNER JOIN": {
+    takeaways: [
+      "Une jointure relie deux tables par une colonne commune",
+      "INNER JOIN ne garde que les lignes présentes des deux côtés",
+      "Nommez les tables avec un alias court",
+    ],
+    check: {
+      question: "Quelles lignes garde INNER JOIN ?",
+      options: [
+        "Celles présentes dans les deux tables",
+        "Toutes les lignes de la première table",
+        "Aucune ligne",
+      ],
+      answer: 0,
+      explanation: "INNER JOIN ne garde que ce qui existe des deux côtés de la jointure.",
+    },
+  },
+  "LEFT JOIN": {
+    takeaways: [
+      "LEFT JOIN garde toutes les lignes de la première table",
+      "Une valeur absente à droite devient NULL",
+      "Pratique pour trouver ce qui manque",
+    ],
+    check: {
+      question: "Que devient une ligne sans correspondance à droite avec LEFT JOIN ?",
+      options: ["Elle reste, avec des NULL", "Elle disparaît", "Elle est doublée"],
+      answer: 0,
+      explanation: "LEFT JOIN garde la ligne de gauche et met NULL dans les colonnes de droite.",
+    },
+  },
+  "Une requête dans la requête": {
+    takeaways: [
+      "La sous-requête est calculée d'abord",
+      "Elle se place entre parenthèses",
+      "Testez-la seule avant de l'imbriquer",
+    ],
+    check: {
+      question: "Quelle partie est calculée en premier ?",
+      options: ["La sous-requête", "Le SELECT principal", "Le ORDER BY"],
+      answer: 0,
+      explanation:
+        "La requête entre parenthèses donne d'abord son résultat à la requête principale.",
+    },
+  },
+  "Les six secondes du premier regard": {
+    takeaways: [
+      "Le haut du CV est lu en premier",
+      "Un titre qui reprend le poste visé",
+      "Les compétences clés visibles tout de suite",
+    ],
+    check: {
+      question: "Que lit d'abord un recruteur ?",
+      options: ["Le haut du CV", "Les loisirs", "La dernière ligne"],
+      answer: 0,
+      explanation: "Le titre, le dernier poste et les compétences sont lus en quelques secondes.",
+    },
+  },
+  "Les rubriques utiles": {
+    takeaways: [
+      "Gardez ce qui sert le poste visé",
+      "Retirez ce qui n'apporte rien",
+      "Un ordre clair : expériences, formation, compétences",
+    ],
+    check: {
+      question: "Quelle rubrique garder ?",
+      options: ["Celle qui sert le poste visé", "Toutes, par principe", "Aucune"],
+      answer: 0,
+      explanation: "Un CV court ne garde que ce qui aide le recruteur à vous choisir.",
+    },
+  },
+};
+
 const courses: Course[] = [
   {
     slug: "demo-t3-ecrire-un-cv",
@@ -480,6 +558,7 @@ export async function seedLearnScenario(db: SeedClient) {
                 ...(lesson.brief ? { brief: lesson.brief } : {}),
                 ...(lesson.steps ? { steps: lesson.steps } : {}),
                 ...(lesson.takeaways ? { takeaways: lesson.takeaways } : {}),
+                ...phoneLessons[lesson.title],
               },
               ...(lesson.quiz
                 ? {
