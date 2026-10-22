@@ -1,0 +1,946 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jumanly Modèle B · Recruteur · Candidatures</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050D10}
+a{color:#A6F26B;text-decoration:none}
+.fd,.fd *{box-sizing:border-box}
+.fd{font-family:"Sora",system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.fd h1,.fd h2,.fd h3,.fd p{margin:0}
+.fd button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.fd textarea{font:inherit}
+.fd .scroll{scrollbar-width:none}.fd .scroll::-webkit-scrollbar{display:none}
+.fd .hrow{display:flex;gap:10px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
+.fd .hrow::after{content:"";flex:0 0 6px}
+.fd .hrow::-webkit-scrollbar{display:none}
+.fd .hrow>*{flex:none}
+.fd .sec{display:flex;align-items:baseline;justify-content:space-between;padding:0 20px;margin:28px 0 10px}
+.fd .sec h2{font-size:18px;font-weight:600}
+.fd .sec a,.fd .sec button{font-size:14px;font-weight:600;min-height:36px;display:inline-flex;align-items:center}
+.fd .meta{font-size:13px;color:#8FA39E}
+.fd .tag{display:inline-block;font-size:12.5px;padding:5px 9px;border-radius:7px;background:#1A2629;color:#C9D6D2;white-space:nowrap}
+.fd .ligne{width:100%;display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);color:#F2EDE5}
+.fd .mini{width:48px;height:48px;border-radius:14px;color:#FFFFFF;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .av{width:44px;height:44px;border-radius:50%;background:#1B3338;color:#F2EDE5;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .barre{display:block;height:4px;border-radius:2px;background:rgba(255,255,255,.1);margin-top:8px;overflow:hidden}
+.fd .barre i{display:block;height:100%;background:#A6F26B;border-radius:2px}
+.fd .chip,.fd .pill{height:38px;padding:0 15px;border-radius:19px;font-size:13.5px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;flex:none}
+.fd .bp{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border-radius:26px;background:#A6F26B;color:#0B1A1F;font-size:15px;font-weight:700;text-align:center}
+.fd .bs{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 20px;border-radius:26px;border:1px solid rgba(255,255,255,.18);font-size:14px;font-weight:600;text-align:center;color:#F2EDE5}
+.fd .bloc{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fd .bloc h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.fd .li{display:flex;gap:10px;font-size:14.5px;line-height:1.45;color:#ECE7DF;padding:4px 0}
+.fd .li i{width:6px;height:6px;border-radius:50%;background:#A6F26B;margin-top:8px;flex:none}
+.fd .barreh{padding:50px 12px 8px;display:flex;align-items:center;gap:4px;border-bottom:1px solid rgba(255,255,255,.08);min-height:102px}
+.fd .retour{height:44px;padding:0 8px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;color:#F2EDE5}
+.fd .plus{font-size:18px;letter-spacing:1px;color:#B9CBC6;min-width:44px;min-height:44px;text-align:center;display:flex;align-items:center;justify-content:center}
+.fd .rond{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .nav{position:absolute;left:0;right:0;bottom:0;height:84px;padding:8px 6px 22px;background:rgba(11,26,31,.86);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));z-index:4}
+.fd .nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;position:relative}
+.fd .voile{position:absolute;inset:0;width:100%;background:rgba(0,0,0,.55)}
+.fd .feuille{position:absolute;left:0;right:0;bottom:0;background:#13282C;border-radius:30px 30px 0 0;padding:10px 20px 28px;border-top:1px solid rgba(255,255,255,.08);max-height:760px;overflow-y:auto;scrollbar-width:none}
+.fd .poignee{display:block;width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.2);margin:0 auto 14px}
+.fd .opt{width:100%;display:flex;align-items:center;gap:14px;min-height:56px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px;font-weight:600;color:#F2EDE5}
+.fd .opt small{display:block;font-size:12.5px;font-weight:400;color:#8FA39E;margin-top:2px}
+.fd .annuler{width:100%;height:50px;margin-top:12px;border-radius:999px;background:#1B3338;text-align:center;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#F2EDE5}
+.fd .q{width:100%;padding:14px 16px;border-radius:16px;background:#1B3338;font-size:14px;font-weight:600;line-height:1.4;display:block;color:#F2EDE5}
+.fd .champ{display:flex;align-items:center;gap:10px;min-height:52px;border-radius:26px;background:#0B1A1F;padding:0 6px 0 18px;border:1px solid rgba(47,211,166,.45);min-width:0}
+.fd .champ input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:14px;color:#F2EDE5}
+.fd .env{height:40px;padding:0 16px;border-radius:20px;background:#A6F26B;color:#0B1A1F;font-size:13px;font-weight:700;display:flex;align-items:center;flex:none}
+.fd .in{width:100%;height:52px;border-radius:16px;background:#0B1A1F;border:1px solid rgba(255,255,255,.14);padding:0 16px;font:inherit;font-size:15px;color:#F2EDE5;outline:0}
+.fd .ta{width:100%;min-height:96px;border-radius:16px;background:#0B1A1F;border:1px solid rgba(255,255,255,.14);padding:12px 14px;font-size:14.5px;line-height:1.45;color:#F2EDE5;outline:0;resize:none}
+.fd .lab{display:block;font-size:13px;font-weight:600;color:#B9CBC6;margin:20px 0 10px}
+.fd .bas{position:absolute;left:0;right:0;bottom:0;padding:12px 20px 28px;background:rgba(11,26,31,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);display:flex;gap:10px;z-index:4}
+.fd .seg{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none;padding:0 8px}
+.fd .seg::-webkit-scrollbar{display:none}
+.fd .seg button{height:46px;padding:0 12px;font-size:14px;white-space:nowrap;position:relative;flex:none}
+.fd .seg button i{position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:2px;background:#A6F26B}
+.fd .carte{width:100%;display:block;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:#13282C;padding:16px;color:#F2EDE5}
+.fd .kpi{display:flex;gap:8px}
+.fd .kpi span{flex:1;border-radius:12px;background:#0B1A1F;padding:9px 10px;font-size:11.5px;color:#8FA39E}
+.fd .kpi b{display:block;font-size:17px;font-weight:700;color:#F2EDE5;margin-bottom:1px}
+.fd .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fd .tuile{border-radius:16px;background:#13282C;border:1px solid rgba(255,255,255,.08);padding:14px;font-size:12.5px;color:#8FA39E;display:block}
+.fd .tuile b{display:block;font-size:24px;font-weight:700;color:#F2EDE5;letter-spacing:-0.02em;margin-bottom:2px}
+.fd .case{width:24px;height:24px;border-radius:7px;border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#0B1A1F;flex:none}
+.fd .score{min-width:50px;height:30px;padding:0 9px;border-radius:15px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.fd .rech{flex:1;min-width:0;height:50px;border-radius:25px;background:#1A2629;display:flex;align-items:center;gap:12px;padding:0 16px}
+.fd .rech input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:16px;color:#F2EDE5}
+.fd .rech input::placeholder,.fd .in::placeholder,.fd .champ input::placeholder{color:#6F8580}
+/* mvt-jumanly 2 */
+:root{--mvt-o:.4;--mvt-s:.975;--mvt-tx:0px;--mvt-r:150%;--mvt-x:50%;--mvt-y:50%}
+[data-ecran]{animation:mvtEcran .34s cubic-bezier(.2,.8,.2,1) both;transform-origin:var(--mvt-x) var(--mvt-y)}
+.voile,.shb{animation:mvtVoile .26s ease-out both}
+.voile+div,.shb+div,.voile+.feuille,.shb+.shp,[style*="z-index: 10"]>button:first-child+div{animation:mvtMonte .34s cubic-bezier(.2,.8,.2,1) both}
+@keyframes mvtEcran{from{opacity:var(--mvt-o);transform:translateX(var(--mvt-tx)) scale(var(--mvt-s));clip-path:circle(var(--mvt-r) at var(--mvt-x) var(--mvt-y))}to{opacity:1;transform:none;clip-path:circle(150% at var(--mvt-x) var(--mvt-y))}}
+@keyframes mvtVoile{from{opacity:0}to{opacity:1}}
+@keyframes mvtMonte{from{transform:translateY(56px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){[data-ecran],.voile,.shb,.voile+div,.shb+div{animation:none!important}}
+/* fin mvt */
+</style>
+</helmet>
+<div class="fd" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F; border-radius: 44px;">
+
+<!-- ============ LISTE ============ -->
+<sc-if value="{{vListe}}" hint-placeholder-val="{{ true }}">
+<div class="scroll" data-ecran="" style="position: absolute; inset: 0; overflow-y: auto; padding-bottom: 180px;">
+<header style="padding: 54px 20px 0; display: flex; align-items: center; gap: 10px;">
+<h1 style="flex: 1; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">Candidatures</h1>
+<sc-if value="{{sansRech}}" hint-placeholder-val="{{ true }}"><button onClick="{{ouvrirRech}}" class="rond" aria-label="Rechercher un candidat" style="background: #1A2629;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB3AE" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex: none;"><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4.4-4.4"></path></svg></button></sc-if>
+<a href="Recruteur-compte.dc.html" aria-label="Mon compte" style="position: relative; width: 36px; height: 36px; flex: none; display: block;"><span style="display: block; width: 36px; height: 36px; border-radius: 50%; overflow: hidden;"><svg width="36" height="36" viewBox="0 0 100 100" aria-hidden="true" style="display: block; border-radius: 50%; flex: none;"><rect width="100" height="100" fill="#F4C9A0"></rect><circle cx="50" cy="40" r="25" fill="#2A1A12"></circle><ellipse cx="50" cy="46" rx="16" ry="19" fill="#8A5A3B"></ellipse><path d="M34 40c2-13 30-15 32 0-4-6-12-9-16-9s-12 3-16 9z" fill="#2A1A12"></path><path d="M18 100c4-20 18-28 32-28s28 8 32 28z" fill="#0F3F37"></path><path d="M42 72l8 10 8-10" fill="none" stroke="#A6F26B" stroke-width="3"></path></svg></span><span style="position: absolute; right: -3px; bottom: -3px; width: 16px; height: 16px; border-radius: 5px; background: #14745F; border: 2px solid #0B1A1F; color: #FFFFFF; font-size: 6.5px; font-weight: 800; display: flex; align-items: center; justify-content: center;">BF</span></a>
+</header>
+
+<sc-if value="{{aRech}}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="padding: 14px 20px 0; display: flex; align-items: center; gap: 10px;">
+<label class="rech" style="border: 1px solid rgba(166,242,107,.35);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB3AE" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex: none;"><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4.4-4.4"></path></svg><input value="{{q}}" onChange="{{chercher}}" aria-label="Rechercher un candidat" placeholder="Nom, compétence, ville">
+<sc-if value="{{aQ}}" hint-placeholder-val="{{ false }}"><button onClick="{{viderQ}}" aria-label="Effacer" style="width: 30px; height: 30px; color: #9FB3AE; font-size: 18px; text-align: center;">×</button></sc-if></label>
+<button onClick="{{annulerRech}}" style="height: 44px; font-size: 14px; font-weight: 600; color: #A6F26B; flex: none;">Annuler</button></div>
+<p class="meta" style="padding: 18px 20px 10px;">Chercher par</p>
+<div style="padding: 0 20px;"><div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{rTypes}}" as="f" hint-placeholder-count="4"><button onClick="{{f.pick}}" class="pill" style="border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}}</button></sc-for></div></div>
+<sc-if value="{{qVide}}" hint-placeholder-val="{{ true }}"><div><p class="meta" style="padding: 22px 20px 4px;">Recherches récentes</p>
+<sc-for list="{{recents}}" as="r" hint-placeholder-count="3"><button onClick="{{r.pick}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 20px; font-size: 15px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M12 4.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zM12 8v4l2.5 2"></path></svg><span style="flex: 1;">{{r.t}}</span><span class="meta">{{r.d}}</span></button></sc-for>
+<p class="meta" style="line-height: 1.5; padding: 22px 20px;">Seulement les personnes qui ont candidaté à vos offres.</p></div></sc-if>
+<sc-if value="{{qPlein}}" hint-placeholder-val="{{ false }}"><div><p class="meta" style="padding: 18px 20px 4px;">{{nRes}}</p><sc-for list="{{resRech}}" as="x" hint-placeholder-count="3"><div class="ligne" style="padding: 12px 20px;"><sc-if value="{{selMode}}" hint-placeholder-val="{{ false }}"><button onClick="{{x.basculer}}" aria-label="Sélectionner {{x.nom}}" class="case" style="background: {{x.caseBg}}; border-color: {{x.caseBd}};">{{x.case}}</button></sc-if><button onClick="{{x.ouvrir}}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px;"><span class="av" style="background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="flex: 1; min-width: 0;"><span style="display: flex; align-items: center; gap: 6px;"><b style="font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.nom}}</b><sc-if value="{{x.nouv}}" hint-placeholder-val="{{ false }}"><span style="width: 7px; height: 7px; border-radius: 50%; background: #A6F26B; flex: none;"></span></sc-if></span><span class="meta" style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.titre}}</span><span class="meta" style="display: block; font-size: 12px;">{{x.offre}} · {{x.recu}}</span></span><span class="score" style="background: {{x.sbg}}; color: {{x.scol}};">{{x.score}}</span></button></div></sc-for>
+<sc-if value="{{rRien}}" hint-placeholder-val="{{ false }}"><p class="meta" style="text-align: center; padding: 30px 20px;">Personne pour « {{q}} ».</p></sc-if></div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{sansRech}}" hint-placeholder-val="{{ true }}">
+<div>
+<p class="meta" style="padding: 6px 20px 0;">{{resume}}</p>
+<div class="hrow" style="gap: 8px; padding-top: 14px;"><sc-for list="{{offresF}}" as="f" hint-placeholder-count="5"><button onClick="{{f.pick}}" class="pill" style="height: 36px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}}</button></sc-for></div>
+<div style="margin-top: 8px;"><div class="seg" role="tablist"><sc-for list="{{sousOnglets}}" as="o" hint-placeholder-count="4"><button role="tab" aria-selected="{{o.sel}}" onClick="{{o.pick}}" style="font-weight: {{o.fw}}; color: {{o.col}};">{{o.t}}<sc-if value="{{o.aN}}" hint-placeholder-val="{{ false }}"><span style="margin-left: 6px; font-size: 11.5px; font-weight: 800; color: #A6F26B;">{{o.n}}</span></sc-if><sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}"><i></i></sc-if></button></sc-for></div></div>
+
+<!-- Fort potentiel -->
+<sc-if value="{{sFort}}" hint-placeholder-val="{{ true }}">
+<div style="padding: 16px 20px 0; display: flex; flex-direction: column; gap: 12px;">
+<button onClick="{{ouvrirDiag}}" style="width: 100%; padding: 14px; border-radius: 18px; background: rgba(47,211,166,.08); border: 1px solid rgba(47,211,166,.28); display: flex; gap: 12px; align-items: center;"><svg width="34" height="34" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">{{diagT}}</b><span class="meta" style="color: #9FD9C6;">Diagnostic de tous les CV, critère par critère</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m9 6 6 6-6 6"></path></svg></button>
+<p class="meta">{{nFortT}} · classés par score, jamais écartés</p>
+<sc-for list="{{fort}}" as="x" hint-placeholder-count="3"><div class="carte" style="padding: 0; overflow: hidden;"><button onClick="{{x.ouvrir}}" style="display: block; width: 100%; padding: 16px 16px 12px;"><span style="display: flex; align-items: center; gap: 12px;"><span class="av" style="background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15.5px;">{{x.nom}}</b><span class="meta" style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.offre}} · {{x.et}}</span></span><span class="score" style="background: {{x.sbg}}; color: {{x.scol}};">{{x.score}}</span></span><span style="display: block; margin-top: 12px;"><sc-for list="{{x.raisons}}" as="r" hint-placeholder-count="3"><span class="li" style="font-size: 13.5px; padding: 2px 0;"><i></i>{{r.t}}</span></sc-for></span><span style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 10px;"><span class="meta" style="font-size: 12px; width: 100%;">Ce qui l’intéresse</span><sc-for list="{{x.interets}}" as="t" hint-placeholder-count="3"><span class="tag">{{t.t}}</span></sc-for></span></button><span style="display: flex; align-items: center; gap: 8px; padding: 10px 16px 14px; border-top: 1px solid rgba(255,255,255,.06);"><span class="meta" style="flex: 1; font-size: 12.5px;">{{x.dispo}} · {{x.assigneT}}</span><sc-if value="{{x.aPresel}}" hint-placeholder-val="{{ true }}"><button onClick="{{x.preselectionner}}" style="height: 34px; padding: 0 12px; border-radius: 17px; background: #A6F26B; color: #0B1A1F; font-size: 12.5px; font-weight: 700;">Présélectionner</button></sc-if><button onClick="{{x.ouvrir}}" style="height: 34px; padding: 0 12px; border-radius: 17px; border: 1px solid rgba(255,255,255,.2); font-size: 12.5px; font-weight: 700;">Ouvrir</button></span></div></sc-for>
+<sc-if value="{{sansFort}}" hint-placeholder-val="{{ false }}"><p class="meta" style="text-align: center; padding: 20px 0;">Aucun profil à 80 % pour ce filtre. Regardez « Toutes ».</p></sc-if>
+</div>
+</sc-if>
+
+<!-- Toutes, par étape -->
+<sc-if value="{{sToutes}}" hint-placeholder-val="{{ false }}">
+<div>
+<div class="hrow" style="gap: 8px; padding-top: 14px;"><sc-for list="{{etapesF}}" as="e" hint-placeholder-count="6"><button onClick="{{e.pick}}" style="height: 56px; min-width: 92px; padding: 0 12px; border-radius: 16px; background: {{e.bg}}; color: {{e.col}}; text-align: left;"><b style="display: block; font-size: 17px; color: {{e.ncol}};">{{e.n}}</b><span style="font-size: 12px; font-weight: 600;">{{e.t}}</span></button></sc-for></div>
+<div style="display: flex; align-items: center; gap: 10px; padding: 12px 20px 4px;">
+<button onClick="{{basculerTri}}" style="display: flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 600; color: #B9CBC6; min-height: 36px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M7 4v16M3.5 16.5 7 20l3.5-3.5M17 20V4M13.5 7.5 17 4l3.5 3.5"></path></svg>{{triT}}</button><span style="flex: 1;"></span>
+<sc-if value="{{sansSel}}" hint-placeholder-val="{{ true }}"><button onClick="{{entrerSel}}" style="font-size: 13.5px; font-weight: 700; color: #A6F26B; min-height: 36px;">Sélectionner</button></sc-if>
+<sc-if value="{{selMode}}" hint-placeholder-val="{{ false }}"><span style="display: flex; gap: 14px;"><button onClick="{{toutSel}}" style="font-size: 13.5px; font-weight: 700; color: #F2EDE5; min-height: 36px;">Tout</button><button onClick="{{sortirSel}}" style="font-size: 13.5px; font-weight: 700; color: #A6F26B; min-height: 36px;">Terminer</button></span></sc-if>
+</div>
+<sc-for list="{{dansEtape}}" as="x" hint-placeholder-count="5"><div class="ligne" style="padding: 12px 20px;"><sc-if value="{{selMode}}" hint-placeholder-val="{{ false }}"><button onClick="{{x.basculer}}" aria-label="Sélectionner {{x.nom}}" class="case" style="background: {{x.caseBg}}; border-color: {{x.caseBd}};">{{x.case}}</button></sc-if><button onClick="{{x.ouvrir}}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px;"><span class="av" style="background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="flex: 1; min-width: 0;"><span style="display: flex; align-items: center; gap: 6px;"><b style="font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.nom}}</b><sc-if value="{{x.nouv}}" hint-placeholder-val="{{ false }}"><span style="width: 7px; height: 7px; border-radius: 50%; background: #A6F26B; flex: none;"></span></sc-if></span><span class="meta" style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.titre}}</span><span class="meta" style="display: block; font-size: 12px;">{{x.offre}} · {{x.recu}}</span></span><span class="score" style="background: {{x.sbg}}; color: {{x.scol}};">{{x.score}}</span></button></div></sc-for>
+<sc-if value="{{etapeVide}}" hint-placeholder-val="{{ false }}"><p class="meta" style="text-align: center; padding: 30px 20px;">Personne à cette étape.</p></sc-if>
+<sc-if value="{{aPlus}}" hint-placeholder-val="{{ false }}"><button onClick="{{plus}}" style="display: block; margin: 14px auto 0; height: 44px; padding: 0 20px; border-radius: 22px; background: #1B3338; font-size: 14px; font-weight: 700;">{{plusT}}</button></sc-if>
+</div>
+</sc-if>
+
+<!-- Entretiens -->
+<sc-if value="{{sEnt}}" hint-placeholder-val="{{ false }}">
+<div>
+<div class="hrow" style="gap: 8px; padding-top: 14px;"><sc-for list="{{entOnglets}}" as="f" hint-placeholder-count="4"><button onClick="{{f.pick}}" class="pill" style="height: 36px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}} · {{f.n}}</button></sc-for></div>
+<div style="padding: 14px 20px 0; display: flex; flex-direction: column; gap: 12px;">
+<sc-for list="{{entListe}}" as="x" hint-placeholder-count="2"><div class="carte">
+<button onClick="{{x.ouvrir}}" style="width: 100%; display: flex; align-items: center; gap: 12px;"><span style="width: 58px; flex: none; text-align: center; border-radius: 14px; background: #0B1A1F; padding: 8px 0;"><b style="display: block; font-size: 15px;">{{x.h}}</b><span class="meta" style="font-size: 11px;">{{x.mode}}</span></span>
+<span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{x.nom}}</b><span class="meta" style="display: block;">{{x.j}} · {{x.offre}}</span><span class="meta" style="display: block; font-size: 12px;">Avec {{x.avec}}</span></span><span class="score" style="background: {{x.sbg}}; color: {{x.scol}};">{{x.score}}</span></button>
+<div style="display: flex; gap: 8px; margin-top: 12px;">
+<sc-if value="{{x.aVenir}}" hint-placeholder-val="{{ true }}"><button onClick="{{x.rejoindre}}" class="bp" style="height: 42px; font-size: 13.5px; flex: 1;">Rejoindre</button></sc-if>
+<sc-if value="{{x.aDoc}}" hint-placeholder-val="{{ false }}"><button onClick="{{x.documenter}}" class="bp" style="height: 42px; font-size: 13.5px; flex: 1;">Documenter l’entretien</button></sc-if>
+<sc-if value="{{x.aFait}}" hint-placeholder-val="{{ false }}"><button onClick="{{x.documenter}}" class="bs" style="height: 42px; font-size: 13.5px; flex: 1;">Voir l’évaluation</button></sc-if>
+<button onClick="{{x.ouvrir}}" class="bs" style="height: 42px; font-size: 13.5px;">Fiche</button></div></div></sc-for>
+<sc-if value="{{entVide}}" hint-placeholder-val="{{ false }}"><p class="meta" style="text-align: center; padding: 30px 0;">Aucun entretien ici. Planifiez-en un depuis la fiche d’un candidat.</p></sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- Décisions -->
+<sc-if value="{{sDec}}" hint-placeholder-val="{{ false }}">
+<div>
+<div class="hrow" style="gap: 8px; padding-top: 14px;"><sc-for list="{{decOnglets}}" as="f" hint-placeholder-count="3"><button onClick="{{f.pick}}" class="pill" style="height: 36px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}} · {{f.n}}</button></sc-for></div>
+<sc-if value="{{aSansRep}}" hint-placeholder-val="{{ false }}"><button onClick="{{repondreNonRep}}" style="margin: 14px 20px 4px; width: calc(100% - 40px); padding: 14px; border-radius: 18px; background: rgba(244,196,99,.08); border: 1px solid rgba(244,196,99,.3); display: flex; gap: 12px; align-items: center;"><svg width="34" height="34" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">{{sansRepT}}</b><span class="meta">Chaque candidat reçoit une réponse, même courte</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m9 6 6 6-6 6"></path></svg></button></sc-if>
+<sc-for list="{{decListe}}" as="x" hint-placeholder-count="3"><button onClick="{{x.ouvrir}}" class="ligne"><span class="av" style="background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{x.nom}}</b><span class="meta" style="display: block;">{{x.offre}}</span><span style="display: block; font-size: 12.5px; color: {{x.stCol}};">{{x.statut}}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m9 6 6 6-6 6"></path></svg></button></sc-for>
+<sc-if value="{{decVide}}" hint-placeholder-val="{{ false }}"><p class="meta" style="text-align: center; padding: 30px 20px;">Rien ici pour l’instant.</p></sc-if>
+</div>
+</sc-if>
+</div>
+</sc-if>
+</div>
+
+<!-- barre d’actions de la sélection -->
+<sc-if value="{{selMode}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; left: 12px; right: 12px; bottom: 96px; z-index: 6; border-radius: 22px; background: #1B3338; border: 1px solid rgba(255,255,255,.1); box-shadow: 0 20px 40px -14px rgba(0,0,0,.8); padding: 10px 8px 8px;">
+<p style="font-size: 13px; font-weight: 700; text-align: center; padding-bottom: 6px;">{{nSelT}}</p>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr));">
+<button onClick="{{selDeplacer}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; min-height: 52px; justify-content: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M5 12h14M13 6l6 6-6 6"></path></svg>Étape</button>
+<button onClick="{{selRepondre}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; min-height: 52px; justify-content: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>Répondre</button>
+<button onClick="{{selRepartir}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; min-height: 52px; justify-content: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M8 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM16 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM2.5 19a5.5 5.5 0 0 1 11 0M10.5 19a5.5 5.5 0 0 1 11 0"></path></svg>Répartir</button>
+<button onClick="{{selPdf}}" style="display: flex; flex-direction: column; align-items: center; gap: 4px; font-size: 11.5px; font-weight: 600; min-height: 52px; justify-content: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 3.5h8l4 4v13H6zM14 3.5v4h4M9 13h6M9 16.5h4"></path></svg>PDF</button>
+</div></div>
+</sc-if>
+<sc-if value="{{avecNav}}" hint-placeholder-val="{{ true }}"><nav aria-label="Navigation principale" class="nav"><a href="Recruteur-fil.dc.html" aria-label="Fil" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span></a><a href="Recruteur-offres.dc.html" aria-label="Offres" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5a1.5 1.5 0 0 1 1.5-1.5h14a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5zM8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3.5 12.5h17M12 11.5v2"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span></a><a href="Recruteur-candidatures.dc.html" aria-label="Candidatures" aria-current="page" style="color: #A6F26B;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.3M21.5 20a6.5 6.5 0 0 0-3.8-5.9"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 1;"></span></a><a href="Recruteur-talents.dc.html" aria-label="Talents" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8L3.6 9.6l5.8-.8z"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span></a><a href="Recruteur-messages.dc.html" aria-label="Messages" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span><span style="position: absolute; top: 6px; left: 50%; margin-left: 7px; width: 8px; height: 8px; border-radius: 50%; background: #A6F26B;"></span></a></nav></sc-if>
+</sc-if>
+
+<!-- ============ FICHE CANDIDAT ============ -->
+<sc-if value="{{vFiche}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barreh"><button onClick="{{retourFiche}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg>{{retourT}}</button><span style="flex: 1;"></span><button onClick="{{ouvrirMenu}}" class="plus" aria-label="Plus d’options">···</button></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding-bottom: 120px;">
+<div style="padding: 18px 20px 4px; display: flex; gap: 14px; align-items: center;">
+<span class="av" style="width: 64px; height: 64px; font-size: 20px; background: {{fiche.bg}}; color: {{fiche.fg}};">{{fiche.ini}}</span>
+<span style="flex: 1; min-width: 0;"><h1 style="font-size: 21px; line-height: 1.25;">{{fiche.nom}}</h1><span class="meta" style="display: block; margin-top: 2px;">{{fiche.titre}}</span><span class="meta" style="display: block;">{{fiche.ville}} · reçue {{fiche.recu}} via {{fiche.src}}</span></span>
+</div>
+<div style="padding: 12px 20px 0; display: flex; gap: 8px;">
+<button onClick="{{ouvrirPourquoi}}" style="flex: 1; padding: 12px 14px; border-radius: 16px; background: #13282C; display: flex; align-items: center; gap: 10px;"><span class="score" style="background: {{fiche.sbg}}; color: {{fiche.scol}};">{{fiche.score}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 13px;">{{fiche.bandeT}}</b><span style="font-size: 12.5px; font-weight: 700; color: #5FE0B8;">Pourquoi ?</span></span></button>
+<button onClick="{{ouvrirDeplacer}}" style="flex: 1; padding: 12px 14px; border-radius: 16px; background: #13282C; text-align: left;"><span class="meta" style="font-size: 12px;">Étape</span><b style="display: flex; align-items: center; gap: 6px; font-size: 14px; margin-top: 2px;">{{fiche.et}}<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m6 9 6 6 6-6"></path></svg></b></button>
+</div>
+<p class="meta" style="padding: 10px 20px 0; font-size: 12px;">{{fiche.offre}}</p>
+<div style="margin-top: 10px;"><div class="seg" role="tablist"><sc-for list="{{ongletsFiche}}" as="o" hint-placeholder-count="5"><button role="tab" aria-selected="{{o.sel}}" onClick="{{o.pick}}" style="font-weight: {{o.fw}}; color: {{o.col}};">{{o.t}}<sc-if value="{{o.aN}}" hint-placeholder-val="{{ false }}"><span style="margin-left: 6px; font-size: 11.5px; font-weight: 800; color: #A6F26B;">{{o.n}}</span></sc-if><sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}"><i></i></sc-if></button></sc-for></div></div>
+
+<sc-if value="{{oResume}}" hint-placeholder-val="{{ true }}"><div>
+<div class="bloc"><h3 style="display: flex; align-items: center; gap: 8px;"><svg width="22" height="22" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg>Ce qu’Orbi a relevé</h3><sc-for list="{{fiche.raisons}}" as="r" hint-placeholder-count="3"><div class="li"><i></i>{{r.t}}</div></sc-for>
+<sc-if value="{{fiche.aVerif}}" hint-placeholder-val="{{ true }}"><div style="margin-top: 10px;"><p class="meta" style="font-weight: 700; color: #F4D59A;">À vérifier en entretien</p><sc-for list="{{fiche.verifier}}" as="r" hint-placeholder-count="2"><div class="li"><i style="background: #F4D59A;"></i>{{r.t}}</div></sc-for></div></sc-if></div>
+<div class="bloc"><h3>Ce qui l’intéresse</h3><div style="display: flex; flex-wrap: wrap; gap: 6px;"><sc-for list="{{fiche.interets}}" as="t" hint-placeholder-count="3"><span class="tag">{{t.t}}</span></sc-for></div><p class="meta" style="margin-top: 10px;">Disponibilité : {{fiche.dispo}}</p></div>
+<sc-if value="{{fiche.aEnt}}" hint-placeholder-val="{{ true }}"><div class="bloc"><h3>Entretien</h3>
+<div style="display: flex; align-items: center; gap: 12px; padding: 12px; border-radius: 16px; background: #13282C;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#A6F26B" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M4.5 6.5h15v13h-15zM4.5 10.5h15M8.5 4v4M15.5 4v4"></path></svg><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">{{fiche.ent.j}} · {{fiche.ent.h}}</b><span class="meta">{{fiche.ent.mode}} · avec {{fiche.ent.avec}}</span></span></div>
+<sc-if value="{{fiche.entFait}}" hint-placeholder-val="{{ false }}"><sc-if value="{{fiche.aEval}}" hint-placeholder-val="{{ false }}"><button onClick="{{voirEval}}" class="ligne" style="padding: 12px 0; border: 0;"><span style="flex: 1;"><b style="display: block; font-size: 14px;">{{fiche.evalT}}</b><span class="meta">Moyenne {{fiche.evalMoy}}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m9 6 6 6-6 6"></path></svg></button></sc-if></sc-if></div></sc-if>
+<sc-if value="{{fiche.aProp}}" hint-placeholder-val="{{ false }}"><div class="bloc"><h3>Proposition</h3><p style="font-size: 14.5px;">{{fiche.prop.salaire}} · début le {{fiche.prop.debut}}</p><p class="meta" style="margin-top: 4px;">{{fiche.prop.etat}}</p></div></sc-if>
+<button onClick="{{ouvrirRepartir}}" class="ligne" style="padding: 16px 20px;"><span class="av" style="width: 36px; height: 36px; font-size: 12px;">{{fiche.assIni}}</span><span style="flex: 1;"><span class="meta">Suivi par</span><b style="display: block; font-size: 14.5px;">{{fiche.assigneT}}</b></span><span class="meta" style="color: #A6F26B; font-weight: 700;">Répartir</span></button>
+<p class="meta" style="padding: 14px 20px; font-size: 12px; line-height: 1.5;">Cette consultation est enregistrée. Le score n’utilise ni le nom, ni l’âge, ni le genre, ni la photo.</p>
+</div></sc-if>
+
+<sc-if value="{{oCv}}" hint-placeholder-val="{{ false }}"><div>
+<div class="bloc"><h3>Expérience</h3><sc-for list="{{fiche.exp}}" as="r" hint-placeholder-count="2"><div style="padding: 6px 0;"><b style="display: block; font-size: 14.5px;">{{r.t}}</b><span class="meta">{{r.d}}</span></div></sc-for></div>
+<div class="bloc"><h3>Formation</h3><p style="font-size: 14.5px; line-height: 1.45;">{{fiche.form}}</p><sc-if value="{{fiche.aAttest}}" hint-placeholder-val="{{ true }}"><span class="tag" style="margin-top: 10px; background: rgba(166,242,107,.12); color: #A6F26B; font-weight: 700;">✓ {{fiche.attest}}</span></sc-if></div>
+<div class="bloc"><h3>Compétences</h3><sc-for list="{{fiche.comp}}" as="r" hint-placeholder-count="3"><div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14.5px;"><span>{{r.t}}</span><span style="font-size: 12.5px; font-weight: 700; color: {{r.vc}};">{{r.v}}</span></div></sc-for></div>
+<div class="bloc"><h3>Langues</h3><p style="font-size: 14.5px;">{{fiche.langues}}</p></div>
+<div style="padding: 16px 20px;"><button onClick="{{telechargerCv}}" class="bs" style="width: 100%;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 3.5h8l4 4v13H6zM14 3.5v4h4M9 13h6M9 16.5h4"></path></svg>Télécharger le CV d’origine</button></div>
+</div></sc-if>
+
+<sc-if value="{{oRep}}" hint-placeholder-val="{{ false }}"><div>
+<sc-if value="{{fiche.aReponses}}" hint-placeholder-val="{{ true }}"><div><sc-for list="{{fiche.reponses}}" as="r" hint-placeholder-count="2"><div class="bloc"><p class="meta" style="font-weight: 700;">{{r.q}}</p><p style="font-size: 14.5px; line-height: 1.5; margin-top: 6px;">{{r.r}}</p></div></sc-for></div></sc-if>
+<sc-if value="{{fiche.sansReponses}}" hint-placeholder-val="{{ false }}"><p class="meta" style="padding: 20px;">Pas de question de présélection sur cette offre.</p></sc-if>
+<div class="bloc"><h3>Documents</h3>
+<button onClick="{{ouvrirDoc}}" class="opt" style="border: 0;"><span style="width: 36px; height: 44px; border-radius: 8px; background: #F2EDE5; color: #9A3524; font-size: 10px; font-weight: 800; display: flex; align-items: flex-end; justify-content: center; padding-bottom: 5px; flex: none;">PDF</span><span style="flex: 1;">CV.pdf<small>2 pages · lu par Orbi</small></span></button>
+<sc-if value="{{fiche.aAttest}}" hint-placeholder-val="{{ true }}"><button onClick="{{ouvrirDoc}}" class="opt" style="border: 0;"><span style="width: 36px; height: 44px; border-radius: 8px; background: #0F3F37; color: #A6F26B; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none;">✓</span><span style="flex: 1;">Attestation Jumanly<small>Vérifiable en ligne</small></span></button></sc-if>
+</div>
+</div></sc-if>
+
+<sc-if value="{{oNotes}}" hint-placeholder-val="{{ false }}"><div>
+<sc-if value="{{fiche.aEval}}" hint-placeholder-val="{{ false }}"><button onClick="{{voirEval}}" class="ligne" style="padding: 16px 20px;"><span class="mini" style="width: 40px; height: 40px; background: #0F3F37; color: #A6F26B;">★</span><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">Évaluation d’entretien</b><span class="meta">{{fiche.evalT}} · {{fiche.evalMoy}}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m9 6 6 6-6 6"></path></svg></button></sc-if>
+<div style="padding: 16px 20px 6px;"><label class="champ" style="border-color: rgba(255,255,255,.18);"><input value="{{note}}" onChange="{{ecrireNote}}" aria-label="Ajouter une note" placeholder="Ajouter une note pour l’équipe"><button onClick="{{ajouterNote}}" class="env">Ajouter</button></label></div>
+<sc-for list="{{fiche.notes}}" as="n" hint-placeholder-count="2"><div class="ligne" style="align-items: flex-start;"><span class="av" style="width: 34px; height: 34px; font-size: 11px;">{{n.ini}}</span><span style="flex: 1;"><span style="display: flex; justify-content: space-between;"><b style="font-size: 13.5px;">{{n.au}}</b><span class="meta" style="font-size: 12px;">{{n.d}}</span></span><span style="display: block; font-size: 14px; line-height: 1.45; margin-top: 3px;">{{n.t}}</span></span></div></sc-for>
+<p class="meta" style="padding: 14px 20px; font-size: 12px;">Les notes sont visibles par l’équipe de recrutement, jamais par le candidat.</p>
+</div></sc-if>
+
+<sc-if value="{{oHist}}" hint-placeholder-val="{{ false }}"><div style="padding: 10px 20px;">
+<sc-for list="{{fiche.hist}}" as="h" hint-placeholder-count="3"><div style="display: flex; gap: 12px; padding: 10px 0;"><span style="width: 10px; height: 10px; border-radius: 50%; background: #5FE0B8; margin-top: 5px; flex: none;"></span><span><span style="display: block; font-size: 14px;">{{h.t}}</span><span class="meta" style="font-size: 12px;">{{h.d}}</span></span></div></sc-for>
+</div></sc-if>
+</div>
+<div class="bas">
+<button onClick="{{ecrireMsg}}" class="bs" aria-label="Écrire à la personne" style="width: 52px; padding: 0; flex: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg></button>
+<button onClick="{{actionSuiv}}" class="bp" style="flex: 1; width: auto;">{{fiche.suivT}}</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ PLANIFIER ============ -->
+<sc-if value="{{vPlan}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barreh"><button onClick="{{retourVue}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg>Retour</button><b style="flex: 1; text-align: center; font-size: 14px; color: #B9CBC6; margin-right: 44px;">{{planTitre}}</b></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding: 0 20px 130px;">
+<span class="lab">Jour</span>
+<div style="display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none; margin: 0 -20px; padding: 0 20px;"><sc-for list="{{jours}}" as="j" hint-placeholder-count="6"><button onClick="{{j.pick}}" style="width: 58px; height: 66px; border-radius: 18px; background: {{j.bg}}; color: {{j.col}}; text-align: center; flex: none;"><span style="display: block; font-size: 12px; font-weight: 600;">{{j.t}}</span><b style="display: block; font-size: 20px;">{{j.n}}</b></button></sc-for></div>
+<span class="lab">Créneau · libres pour Aline et vous</span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px;"><sc-for list="{{creneaux}}" as="c" hint-placeholder-count="6"><button onClick="{{c.pick}}" style="height: 46px; border-radius: 14px; border: 1px solid {{c.bd}}; background: {{c.bg}}; color: {{c.col}}; font-size: 14px; font-weight: 700; text-align: center; text-decoration: {{c.deco}};">{{c.t}}</button></sc-for></div>
+<span class="lab">Comment</span>
+<div style="display: flex; gap: 8px;"><sc-for list="{{modes}}" as="m" hint-placeholder-count="3"><button onClick="{{m.pick}}" style="flex: 1; padding: 12px 10px; border-radius: 16px; border: 1.5px solid {{m.bd}}; background: {{m.bg}};"><b style="display: block; font-size: 14px;">{{m.t}}</b><span class="meta" style="font-size: 11.5px;">{{m.d}}</span></button></sc-for></div>
+<span class="lab">Durée</span><div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{durees}}" as="f" hint-placeholder-count="3"><button onClick="{{f.pick}}" class="pill" style="border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}}</button></sc-for></div>
+<span class="lab">Avec</span>
+<sc-for list="{{invitesL}}" as="m" hint-placeholder-count="3"><button onClick="{{m.pick}}" class="opt"><span class="case" style="background: {{m.bg}}; border-color: {{m.bd}};">{{m.sym}}</span><span class="av" style="width: 36px; height: 36px; font-size: 12px;">{{m.ini}}</span><span style="flex: 1;">{{m.nom}}<small>{{m.role}}</small></span></button></sc-for>
+<span class="lab">Message envoyé au candidat</span>
+<p style="padding: 14px; border-radius: 16px; background: #13282C; font-size: 14px; line-height: 1.5;">{{planMsg}}</p>
+</div>
+<div class="bas"><button onClick="{{envoyerInvit}}" class="bp" style="opacity: {{planOp}};">Envoyer l’invitation</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{vPlanifie}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; padding: 120px 20px 0; text-align: center;">
+<span style="width: 84px; height: 84px; border-radius: 50%; background: #A6F26B; color: #0B1A1F; display: flex; align-items: center; justify-content: center; margin: 0 auto;"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span>
+<h1 style="font-size: 24px; margin-top: 22px;">Invitation envoyée</h1>
+<p class="meta" style="font-size: 14px; margin-top: 8px; line-height: 1.5;">{{fiche.nom}} reçoit l’invitation dans Messages et par e-mail.</p>
+<div style="margin-top: 22px; text-align: left; padding: 16px; border-radius: 20px; background: #F2EDE5; color: #0B1A1F;"><span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #14745F;">{{planifie.mode}}</span><b style="display: block; font-size: 18px; margin-top: 6px;">{{planifie.j}} · {{planifie.h}}</b><span style="display: block; font-size: 13px; color: #4A5A56; margin-top: 4px;">Avec {{planifie.avec}} · {{planifie.lien}}</span></div>
+<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 24px;">
+<button onClick="{{ajouterAgenda}}" class="bp">Ajouter à mon agenda</button>
+<button onClick="{{voirFicheApres}}" class="bs" style="width: 100%;">Revenir à la fiche</button>
+<button onClick="{{retourListeApres}}" style="font-size: 14px; font-weight: 700; color: #A6F26B; min-height: 44px; text-align: center;">Voir tous les entretiens</button>
+</div></div>
+</sc-if>
+
+<!-- ============ ÉVALUATION ============ -->
+<sc-if value="{{vEval}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barreh"><button onClick="{{retourVue}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg>Retour</button><span style="flex: 1;"></span></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding: 18px 20px 130px;">
+<h1 style="font-size: 23px;">{{evalTitre}}</h1><p class="meta" style="margin-top: 4px;">{{evalSous}}</p>
+<div style="margin-top: 18px; display: flex; flex-direction: column; gap: 10px;"><sc-for list="{{grille}}" as="g" hint-placeholder-count="4"><div style="padding: 14px; border-radius: 18px; background: #13282C;"><span style="display: flex; justify-content: space-between;"><b style="font-size: 14.5px;">{{g.t}}</b><span class="meta">{{g.val}}</span></span>
+<span style="display: flex; gap: 6px; margin-top: 8px;"><sc-for list="{{g.etoiles}}" as="e" hint-placeholder-count="5"><button onClick="{{e.pick}}" aria-label="{{e.lab}}" style="width: 40px; height: 40px; font-size: 26px; color: {{e.col}}; text-align: center;">★</button></sc-for></span></div></sc-for></div>
+<span class="lab">Points forts</span><textarea class="ta" onChange="{{ecrireFort}}" aria-label="Points forts" placeholder="Ce qui vous a convaincu">{{ptFort}}</textarea>
+<span class="lab">Points de vigilance</span><textarea class="ta" onChange="{{ecrireVig}}" aria-label="Points de vigilance" placeholder="Ce qu’il faut vérifier">{{ptVig}}</textarea>
+<span class="lab">Votre recommandation</span>
+<div style="display: flex; gap: 8px;"><sc-for list="{{recos}}" as="r" hint-placeholder-count="3"><button onClick="{{r.pick}}" style="flex: 1; height: 48px; border-radius: 16px; background: {{r.bg}}; color: {{r.col}}; font-size: 13.5px; font-weight: 700; text-align: center;">{{r.t}}</button></sc-for></div>
+<p class="meta" style="margin-top: 12px; line-height: 1.5; font-size: 12.5px;">Visible par l’équipe de recrutement. La décision finale se prend ensemble, dans la fiche.</p>
+</div>
+<div class="bas"><button onClick="{{enregistrerEval}}" class="bp" style="opacity: {{evalOp}};">Enregistrer l’évaluation</button></div>
+</div>
+</sc-if>
+
+<!-- ============ PROPOSITION ============ -->
+<sc-if value="{{vProp}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barreh"><button onClick="{{retourVue}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg>Retour</button><span style="flex: 1;"></span></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding: 18px 20px 130px;">
+<h1 style="font-size: 23px;">{{propTitre}}</h1><p class="meta" style="margin-top: 4px;">{{propPoste}}</p>
+<span class="lab">Salaire mensuel (USD)</span><input class="in" value="{{salaire}}" onChange="{{ecrireSalaire}}" inputmode="numeric" aria-label="Salaire mensuel en dollars">
+<span class="lab">Date de début</span><input class="in" value="{{debut}}" onChange="{{ecrireDebut}}" aria-label="Date de début">
+<span class="lab">Message</span><textarea class="ta" onChange="{{ecrireMsgProp}}" aria-label="Message de la proposition" style="min-height: 120px;">{{msgProp}}</textarea>
+<p class="meta" style="margin-top: 12px; line-height: 1.5; font-size: 12.5px;">La personne accepte, refuse ou pose une question depuis Messages. Vous êtes prévenue.</p>
+</div>
+<div class="bas"><button onClick="{{envoyerProp}}" class="bp">Envoyer la proposition</button></div>
+</div>
+</sc-if>
+
+<!-- ============ DIAGNOSTIC DES CV ============ -->
+<sc-if value="{{vDiag}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barreh"><button onClick="{{retourDiag}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg>Candidatures</button><span style="flex: 1;"></span><button onClick="{{pdfDiag}}" class="plus" aria-label="Télécharger le diagnostic en PDF"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 3.5h8l4 4v13H6zM14 3.5v4h4M9 13h6M9 16.5h4"></path></svg></button></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding-bottom: 130px;">
+<div style="padding: 18px 20px 0; display: flex; align-items: center; gap: 12px;"><svg width="42" height="42" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span><h1 style="font-size: 21px;">Diagnostic des CV</h1><span class="meta">{{diag.n}} CV lus · {{diag.offre}}</span></span></div>
+<div class="hrow" style="gap: 8px; padding-top: 14px;"><sc-for list="{{diagOffres}}" as="f" hint-placeholder-count="4"><button onClick="{{f.pick}}" class="pill" style="height: 34px; font-size: 13px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}}</button></sc-for></div>
+<div class="bloc">
+<span style="display: flex; height: 14px; border-radius: 7px; overflow: hidden; gap: 2px;"><i style="width: {{diag.wT}}; background: #A6F26B;"></i><i style="width: {{diag.wP}}; background: #9FE8D2;"></i><i style="width: {{diag.wQ}}; background: #4A5F5B;"></i></span>
+<div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 14px;">
+<span class="tuile" style="padding: 12px;"><b style="color: #A6F26B; font-size: 22px;">{{diag.tous}}</b>couvrent tous les critères</span>
+<span class="tuile" style="padding: 12px;"><b style="color: #9FE8D2; font-size: 22px;">{{diag.part}}</b>en partie</span>
+<span class="tuile" style="padding: 12px;"><b style="font-size: 22px;">{{diag.peu}}</b>peu</span></div></div>
+<div class="bloc"><h3>Compétences présentes dans les CV</h3><sc-for list="{{couv}}" as="r" hint-placeholder-count="3"><div style="display: flex; align-items: center; gap: 12px; padding: 6px 0; font-size: 14px;"><span style="width: 110px; flex: none;">{{r.t}}</span><span style="flex: 1; height: 8px; border-radius: 4px; background: rgba(255,255,255,.08); overflow: hidden;"><span style="display: block; height: 100%; width: {{r.larg}}; background: #5FE0B8;"></span></span><span class="meta" style="width: 62px; text-align: right; font-size: 12px;">{{r.n}}</span></div></sc-for>
+<p class="meta" style="margin-top: 10px; line-height: 1.5;">{{diag.manque}}</p></div>
+<div class="sec" style="margin-top: 20px;"><h2>Les plus proches de l’offre</h2></div>
+<sc-for list="{{diag.top}}" as="x" hint-placeholder-count="3"><div class="ligne" style="padding: 12px 20px;"><sc-if value="{{selMode}}" hint-placeholder-val="{{ false }}"><button onClick="{{x.basculer}}" aria-label="Sélectionner {{x.nom}}" class="case" style="background: {{x.caseBg}}; border-color: {{x.caseBd}};">{{x.case}}</button></sc-if><button onClick="{{x.ouvrir}}" style="flex: 1; min-width: 0; display: flex; align-items: center; gap: 12px;"><span class="av" style="background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="flex: 1; min-width: 0;"><span style="display: flex; align-items: center; gap: 6px;"><b style="font-size: 15px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.nom}}</b><sc-if value="{{x.nouv}}" hint-placeholder-val="{{ false }}"><span style="width: 7px; height: 7px; border-radius: 50%; background: #A6F26B; flex: none;"></span></sc-if></span><span class="meta" style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.titre}}</span><span class="meta" style="display: block; font-size: 12px;">{{x.offre}} · {{x.recu}}</span></span><span class="score" style="background: {{x.sbg}}; color: {{x.scol}};">{{x.score}}</span></button></div></sc-for>
+<p class="meta" style="padding: 16px 20px; line-height: 1.5; font-size: 12.5px;">Orbi lit et classe, il n’écarte personne. Chaque score s’explique dans la fiche.</p>
+</div>
+<div class="bas"><sc-if value="{{aPreselTous}}" hint-placeholder-val="{{ true }}"><button onClick="{{confirmerPresel}}" class="bp">{{preselTousT}}</button></sc-if><sc-if value="{{sansPreselTous}}" hint-placeholder-val="{{ false }}"><button onClick="{{pdfDiag}}" class="bp">Télécharger le diagnostic</button></sc-if></div>
+</div>
+</sc-if>
+
+<sc-if value="{{fab}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; right: 20px; bottom: 100px; display: flex; align-items: center; gap: 8px; z-index: 5;"><sc-if value="{{aBulle}}" hint-placeholder-val="{{ true }}"><button onClick="{{bulleGo}}" style="max-width: 210px; background: #1B3338; border-radius: 18px 18px 6px 18px; padding: 9px 12px; font-size: 12.5px; font-weight: 600; line-height: 1.35; box-shadow: 0 14px 30px -12px rgba(0,0,0,.8); border: 1px solid rgba(255,255,255,.08);">{{bulle}}</button></sc-if><button onClick="{{ouvrirOrbi}}" aria-label="Ouvrir Orbi, l’assistant" style="width: 58px; height: 58px; border-radius: 50%; flex: none; box-shadow: 0 0 0 6px rgba(47,211,166,.2),0 14px 30px -8px rgba(47,211,166,.55);"><svg width="58" height="58" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg></button>
+</div>
+</sc-if>
+
+<!-- ============ FEUILLES ============ -->
+<sc-if value="{{fMenu}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<p style="font-size: 13px; color: #8FA39E; padding: 0 4px 6px;">{{fiche.nom}}</p><sc-for list="{{menuF}}" as="m" hint-placeholder-count="6"><button onClick="{{m.go}}" class="opt" style="color: {{m.col}};"><span>{{m.t}}<small>{{m.s}}</small></span></button></sc-for><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fPourquoi}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 12px;"><span class="score" style="height: 40px; min-width: 64px; font-size: 17px; background: {{fiche.sbg}}; color: {{fiche.scol}};">{{fiche.score}}</span><span><b style="display: block; font-size: 17px;">Pourquoi {{fiche.score}} ?</b><span class="meta">{{fiche.bandeT}} · calcul fixe, pas une décision</span></span></div><div style="margin-top: 14px;"><sc-for list="{{fiche.criteres}}" as="r" hint-placeholder-count="8"><div style="padding: 7px 0;"><span style="display: flex; justify-content: space-between; font-size: 13.5px;"><span>{{r.t}}</span><span class="meta" style="font-size: 12.5px;">{{r.pts}}</span></span><span style="display: block; height: 6px; border-radius: 3px; background: rgba(255,255,255,.08); margin-top: 5px; overflow: hidden;"><span style="display: block; height: 100%; width: {{r.larg}}; background: {{r.col}};"></span></span></div></sc-for></div><p class="meta" style="margin-top: 12px; line-height: 1.5; font-size: 12.5px;">Jamais utilisés : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise.</p><button onClick="{{fermer}}" class="annuler">Fermer</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fDeplacer}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px; padding: 0 4px 6px;">Changer d’étape</b><sc-for list="{{deplacer}}" as="m" hint-placeholder-count="6"><button onClick="{{m.pick}}" class="opt"><span style="flex: 1;">{{m.t}}</span><span style="color: #A6F26B; font-weight: 800;">{{m.sym}}</span></button></sc-for><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fDeplacerSel}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px; padding: 0 4px 6px;">Déplacer {{nSelT}}</b><sc-for list="{{deplacerSel}}" as="m" hint-placeholder-count="6"><button onClick="{{m.pick}}" class="opt"><span style="flex: 1;">{{m.t}}</span></button></sc-for><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fRepartir}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px; padding: 0 4px 6px;">{{repTitre}}</b><p class="meta" style="padding: 0 4px 6px;">La personne choisie suit le dossier et reçoit une notification.</p><sc-for list="{{repartir}}" as="m" hint-placeholder-count="4"><button onClick="{{m.pick}}" class="opt"><span class="av" style="width: 38px; height: 38px; font-size: 12px;">{{m.ini}}</span><span style="flex: 1;">{{m.nom}}<small>{{m.role}}</small></span><span style="color: #A6F26B; font-weight: 800;">{{m.sym}}</span></button></sc-for><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fNon}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px; padding: 0 4px;">{{nonTitre}}</b><span class="lab" style="margin-top: 14px;">Motif · pour vous seulement</span><div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{motifs}}" as="f" hint-placeholder-count="4"><button onClick="{{f.pick}}" class="pill" style="height: 34px; font-size: 12.5px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}}</button></sc-for></div><span class="lab">Message envoyé</span><textarea class="ta" onChange="{{ecrireMsgNon}}" aria-label="Message au candidat" style="min-height: 130px;">{{msgNon}}</textarea><button onClick="{{envoyerNon}}" class="bp" style="margin-top: 14px;">Envoyer et ne pas retenir</button><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fGroupe}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px; padding: 0 4px;">{{groupeTitre}}</b><p class="meta" style="padding: 4px 4px 0;">{{groupeNoms}}</p><span class="lab" style="margin-top: 14px;">Modèle</span><div style="display: flex; flex-direction: column; gap: 8px;"><sc-for list="{{modeles}}" as="v" hint-placeholder-count="4"><button onClick="{{v.pick}}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; border: 1.5px solid {{v.bd}}; background: {{v.bg}};"><span style="width: 18px; height: 18px; border-radius: 50%; border: 2px solid {{v.rb}}; background: {{v.rbg}}; flex: none;"></span><b style="font-size: 14px;">{{v.t}}</b></button></sc-for></div><span class="lab">Aperçu pour la première personne</span><p style="padding: 14px; border-radius: 16px; background: #0B1A1F; font-size: 14px; line-height: 1.5;">{{apercuG}}</p><button onClick="{{envoyerGroupe}}" class="bp" style="margin-top: 14px;">Envoyer à chacun</button><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fPdf}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<span style="display: flex; align-items: center; gap: 12px;"><span style="width: 48px; height: 48px; border-radius: 14px; background: #1B3338; color: #A6F26B; display: flex; align-items: center; justify-content: center;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 3.5h8l4 4v13H6zM14 3.5v4h4M9 13h6M9 16.5h4"></path></svg></span><span><b style="display: block; font-size: 17px;">Télécharger en PDF</b><span class="meta">{{pdfTitre}}</span></span></span><span class="lab" style="margin-top: 16px;">Contenu</span><sc-for list="{{pdfOpts}}" as="o" hint-placeholder-count="5"><button onClick="{{o.pick}}" class="opt"><span class="case" style="background: {{o.bg}}; border-color: {{o.bd}};">{{o.sym}}</span><span style="flex: 1;">{{o.t}}</span></button></sc-for><p class="meta" style="margin-top: 10px; font-size: 12px;">Le téléchargement est enregistré dans le journal de l’entreprise.</p><button onClick="{{telechargerPdf}}" class="bp" style="margin-top: 14px;">Télécharger</button><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fDoc}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px; padding: 0 4px 6px;">Demander un document</b><sc-for list="{{DOCS}}" as="m" hint-placeholder-count="4"><button onClick="{{m.go}}" class="opt"><span style="flex: 1;">{{m.t}}</span></button></sc-for><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fMessage}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 12px;"><span class="av" style="background: {{fiche.bg}}; color: {{fiche.fg}};">{{fiche.ini}}</span><span style="flex: 1;"><b style="display: block; font-size: 16px;">Écrire à {{fiche.nom}}</b><span class="meta">La conversation reste liée à sa candidature</span></span></div><textarea class="ta" onChange="{{ecrireMsgRapide}}" aria-label="Votre message" placeholder="Votre message" style="margin-top: 14px;">{{msgRapide}}</textarea><button onClick="{{envoyerMsgRapide}}" class="bp" style="margin-top: 12px;">Envoyer</button><a href="Recruteur-conversation.dc.html" class="annuler">Ouvrir la conversation</a>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fBienvenue}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style="text-align: center;"><span class="poignee"></span>
+<b style="display: block; font-size: 17px; margin-top: 6px;">Message de bienvenue envoyé</b><p style="font-size: 14px; color: #B9CBC6; line-height: 1.5; margin-top: 8px;">Bienvenue chez Baobab Fintech ! Rendez-vous le lundi 2 novembre à 8 h 30, au 12 avenue de la Justice, Gombe. Nadia</p><p class="meta" style="margin-top: 10px;">L’offre reste en ligne tant que vous ne la clôturez pas.</p><a href="Recruteur-offre-cloturer.dc.html" class="bp" style="margin-top: 14px;">Clôturer l’offre</a><button onClick="{{fermer}}" class="annuler">Plus tard</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fPresel}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style="text-align: center;"><span class="poignee"></span>
+<b style="display: block; font-size: 17px; margin-top: 6px;">{{preselTousT}} ?</b><p style="font-size: 14px; color: #B9CBC6; line-height: 1.5; margin-top: 8px;">Ils passent en présélection. Personne n’est écarté : les autres restent dans « Reçue », et vous pouvez revenir en arrière.</p><button onClick="{{preselTous}}" class="bp" style="margin-top: 16px;">Confirmer</button><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{orbi}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 12;">
+<button onClick="{{fermerOrbi}}" aria-label="Fermer Orbi" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 12px;"><sc-if value="{{aRep}}" hint-placeholder-val="{{ false }}"><button onClick="{{autresQ}}" aria-label="Autres questions" style="height: 40px; width: 32px; display: flex; align-items: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg></button></sc-if><svg width="42" height="42" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="flex: 1;"><b style="display: block; font-size: 17px;">{{orbiTitre}}</b><span style="font-size: 12.5px; color: #8FA39E;">Orbi · {{orbiSous}} · 212 crédits restants</span></span><button onClick="{{fermerOrbi}}" aria-label="Fermer" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #8FA39E;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+<sc-if value="{{sansRep}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;"><sc-for list="{{questionsOrbi}}" as="q" hint-placeholder-count="4"><button onClick="{{q.go}}" class="q">{{q.t}}</button></sc-for></div></sc-if>
+<sc-if value="{{aRep}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 16px;"><p class="meta">{{ra.q}}</p><p style="font-size: 15px; line-height: 1.5; margin-top: 8px;">{{ra.t}}</p><sc-if value="{{ra.aAct}}" hint-placeholder-val="{{ true }}"><button onClick="{{ra.act}}" class="q" style="margin-top: 14px; background: #A6F26B; color: #0B1A1F; text-align: center;">{{ra.actT}}</button></sc-if><sc-if value="{{ra.aLien}}" hint-placeholder-val="{{ false }}"><a href="{{ra.href}}" class="q" style="margin-top: 14px; background: #A6F26B; color: #0B1A1F; text-align: center;">{{ra.actT}}</a></sc-if><p class="meta" style="margin-top: 10px; font-size: 12px;">Orbi recommande, vous décidez.</p></div></sc-if>
+<label class="champ" style="margin-top: 14px;"><input value="{{oq}}" onChange="{{ecrireOrbi}}" aria-label="Écrire à Orbi" placeholder="Écrire à Orbi…"><button onClick="{{envoyerOrbi}}" class="env">Envoyer</button></label>
+<a href="Recruteur-orbi.dc.html" style="display: flex; justify-content: center; margin-top: 10px; font-size: 13.5px; font-weight: 700; color: #5FE0B8; min-height: 36px; align-items: center;">Ouvrir la conversation complète</a>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{aToast}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="position: absolute; left: 20px; right: 20px; top: 54px; z-index: 30; padding: 14px 16px; border-radius: 16px; background: #F2EDE5; color: #0B1A1F; font-size: 14px; font-weight: 600; box-shadow: 0 16px 30px -10px rgba(0,0,0,.7); display: flex; align-items: center; gap: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14745F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>{{toast}}</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"vue": {"editor": "enum", "options": ["liste", "fiche", "planifier", "planifie", "evaluation", "proposition", "diagnostic"], "default": "liste"}, "sous": {"editor": "enum", "options": ["fort", "toutes", "entretiens", "decisions"], "default": "fort"}, "of": {"editor": "enum", "options": ["tout", "analyste", "clientele", "flutter", "marketing"], "default": "tout"}, "cand": {"editor": "text", "default": "grace"}, "onglet": {"editor": "enum", "options": ["resume", "cv", "reponses", "notes", "historique"], "default": "resume"}, "etapeF": {"editor": "enum", "options": ["recue", "presel", "entretien", "proposition", "recrute", "nonretenu"], "default": "recue"}, "entF": {"editor": "enum", "options": ["aujourdhui", "avenir", "documenter", "faits"], "default": "aujourdhui"}, "decF": {"editor": "enum", "options": ["propositions", "recrutes", "nonretenus"], "default": "propositions"}, "feuille": {"editor": "enum", "options": ["aucune", "menu", "pourquoi", "deplacer", "repartir", "nonretenu", "groupe", "pdf", "document", "message", "presel"], "default": "aucune"}, "rempli": {"editor": "boolean", "default": false}, "evalFaite": {"editor": "boolean", "default": false}, "orbi": {"editor": "boolean", "default": false}, "orbiRep": {"editor": "enum", "options": ["aucune", "qui", "diag", "reponse", "entretien"], "default": "aucune"}, "recherche": {"editor": "enum", "options": ["", "options", "texte"], "default": ""}, "$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && !window.__mvtJ) {
+      window.__mvtJ = 1;
+      const R = document.documentElement.style;
+      const pose = (o, s, tx, r) => { R.setProperty('--mvt-o', o); R.setProperty('--mvt-s', s); R.setProperty('--mvt-tx', tx); R.setProperty('--mvt-r', r); };
+      document.addEventListener('pointerdown', (e) => {
+        const b = e.target && e.target.closest && e.target.closest('button, a, [role="button"]');
+        if (!b) return;
+        const ec = b.closest('[data-ecran]') || document.body;
+        const z = ec.getBoundingClientRect(), k = b.getBoundingClientRect();
+        R.setProperty('--mvt-x', Math.round(e.clientX - z.left) + 'px');
+        R.setProperty('--mvt-y', Math.round(e.clientY - z.top) + 'px');
+        const lab = (b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '').slice(0, 40);
+        if (b.querySelector('path[d^="M15 5 8 12"]') || /^\s*retour/i.test(lab)) pose('.6', '1', '-22px', '150%');
+        else if (b.querySelector('circle[fill="#2FD3A6"]') || /orbi/i.test(b.getAttribute('aria-label') || '')) pose('1', '1', '0px', '22px');
+        else if (k.height >= 64 && k.width >= 160) pose('.5', '.92', '0px', '150%');
+        else pose('.4', '.975', '0px', '150%');
+        clearTimeout(window.__mvtT);
+        window.__mvtT = setTimeout(() => { pose('.4', '.975', '0px', '150%'); }, 700);
+      }, true);
+    }
+    const st = this.state || {};
+    const p = this.props || {};
+    const has = (k) => Object.prototype.hasOwnProperty.call(st, k);
+    const S = (o) => this.setState(o);
+    const flash = (t) => { S({ toast: t }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: null }), 2300); };
+    const val = (e) => (e && e.target ? e.target.value : '');
+    const oui = (x) => x === true || x === 'true';
+    const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const prop = (k, d) => (has(k) ? st[k] : (p[k] !== undefined && p[k] !== '' && p[k] !== 'aucune' ? p[k] : d));
+    const chiffre = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    // pastilles de choix (filtres, sous-onglets)
+    const pills = (liste, actif, cle) => liste.map(([k, t]) => ({ t, pick: () => S({ [cle]: k }), bg: k === actif ? '#F2EDE5' : 'transparent', col: k === actif ? '#0B1A1F' : '#F2EDE5', bd: k === actif ? '#F2EDE5' : 'rgba(255,255,255,.22)' }));
+    const onglets = (liste, actif, cle, extra) => liste.map(([k, t, n]) => ({ t, n: n || '', aN: !!n, sel: k === actif ? 'true' : 'false', on: k === actif, fw: k === actif ? '700' : '500', col: k === actif ? '#F2EDE5' : '#8FA39E', pick: () => S({ [cle]: k, ...(extra || {}) }) }));
+    // bande de score (doc 08) : jamais de rouge
+    const bande = (s) => (s >= 85 ? ['Très compatible', '#0B1A1F', '#A6F26B'] : s >= 70 ? ['Compatible', '#0B1A1F', '#9FE8D2'] : s >= 50 ? ['Partiellement compatible', '#0B1A1F', '#F4D59A'] : ['Peu compatible', '#0B1A1F', '#C9D6D2']);
+    // Orbi : questions propres à la page, réponse, action
+    const orbiKit = (OQ, sous, titre, bulleK) => {
+      const ouvert = has('orbi') ? st.orbi : oui(p.orbi);
+      const rep = has('oRep') ? st.oRep : (p.orbiRep && p.orbiRep !== 'aucune' ? p.orbiRep : null);
+      const r = rep && OQ[rep] ? OQ[rep] : null;
+      const oq = st.oq ?? '';
+      const cles = Object.keys(OQ);
+      return {
+        orbi: !!ouvert, ouvrirOrbi: () => S({ orbi: true, oRep: null }), fermerOrbi: () => S({ orbi: false }), autresQ: () => S({ oRep: null }),
+        aRep: !!r, sansRep: !r, orbiTitre: titre, orbiSous: sous,
+        questionsOrbi: cles.map((k) => ({ t: OQ[k].q, go: () => S({ oRep: k }) })),
+        ra: r ? { q: r.q, t: r.t, actT: r.actT || '', act: r.act || (() => S({ orbi: false })), aAct: !!r.act, aLien: !!r.href, href: r.href || '' } : { q: '', t: '', actT: '', act: () => {}, aAct: false, aLien: false, href: '' },
+        oq, ecrireOrbi: (e) => S({ oq: val(e) }), envoyerOrbi: () => { if (!oq.trim()) return flash('Écrivez votre question à Orbi'); S({ oRep: cles[0], oq: '' }); },
+        aBulle: !!bulleK, bulle: bulleK ? OQ[bulleK].q : '', bulleGo: () => S({ orbi: true, oRep: bulleK }),
+        aToast: !!st.toast, toast: st.toast || ''
+      };
+    };
+
+    // ===== Données communes de la maquette recruteur (fictives) · aujourd’hui : jeudi 22 octobre 2026 =====
+    const OFFRES = {
+      analyste: { t: 'Analyste de données junior', court: 'Analyste de données', ville: 'Kinshasa', statut: 'encours', cand: 38, nouv: 3 },
+      clientele: { t: 'Chargé·e de clientèle Mobile Money', court: 'Chargé·e de clientèle', ville: 'Lubumbashi', statut: 'encours', cand: 52, nouv: 5 },
+      flutter: { t: 'Développeur·se mobile Flutter', court: 'Développeur·se Flutter', ville: 'Kinshasa', statut: 'encours', cand: 9, nouv: 9 },
+      marketing: { t: 'Stagiaire marketing digital', court: 'Stagiaire marketing', ville: 'Kinshasa', statut: 'pause', cand: 71, nouv: 0 }
+    };
+    const ETAPES = [['recue', 'Reçue'], ['presel', 'Présélection'], ['entretien', 'Entretien'], ['proposition', 'Proposition'], ['recrute', 'Recruté·e']];
+    const ETAPE_T = { recue: 'Reçue', presel: 'Présélection', entretien: 'Entretien', proposition: 'Proposition', recrute: 'Recruté·e', nonretenu: 'Non retenu·e', retire: 'Retirée' };
+    // 8 critères du calcul (doc 08) : poids fixes, valeur de 0 à 1
+    const CRITERES = [['skills_required', 'Compétences requises', 35], ['skills_preferred', 'Compétences souhaitées', 10], ['experience', 'Expérience', 15], ['education', 'Formation', 10],
+      ['languages', 'Langues', 10], ['location', 'Lieu et mode de travail', 10], ['contract', 'Contrat et disponibilité', 5], ['semantic', 'Proximité du profil', 5]];
+    const scoreDe = (v) => Math.round(CRITERES.reduce((a, c, i) => a + c[2] * v[i], 0) / CRITERES.reduce((a, c) => a + c[2], 0) * 100);
+    const EQUIPE = {
+      nadia: { nom: 'Nadia Kalala', ini: 'NK', role: 'Chargée de recrutement', droit: 'Recruteuse', moi: true },
+      joseph: { nom: 'Joseph Ilunga', ini: 'JI', role: 'Responsable RH', droit: 'Administrateur' },
+      aline: { nom: 'Aline Mukeba', ini: 'AM', role: 'Responsable data', droit: 'Manager' },
+      patrice: { nom: 'Patrice Nzuzi', ini: 'PN', role: 'Responsable service client', droit: 'Manager' }
+    };
+    const C = (o) => ({ ...o, score: scoreDe(o.v) });
+    const CANDS = [
+      C({ k: 'grace', nom: 'Grâce Mbuyi', ini: 'GM', bg: '#DDF6EE', fg: '#14745F', offre: 'analyste', etape: 'entretien', ville: 'Kinshasa', recu: 'il y a 5 jours', nouv: false, src: 'Explorer', dispo: 'Dans 2 semaines', assigne: 'aline',
+        v: [0.92, 0.7, 0.8, 1, 0.9, 1, 1, 0.8], titre: 'Jeune diplômée · Cap : Analyste de données',
+        comp: [['SQL', true], ['Excel', true], ['Power BI', false], ['Python', false]], exp: [['Stagiaire data', 'Rawbank · 6 mois · 2025'], ['Assistante de recherche', 'UNIKIN · 1 an']],
+        form: 'Licence en économie, Université de Kinshasa (2025)', langues: 'Français C2 · Anglais B2 · Lingala', interets: ['Data', 'Fintech', 'Évoluer vers analyste confirmée'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Oui, SQL tous les jours en stage chez Rawbank, et Power BI pour deux tableaux de bord.'], ['Quand pouvez-vous commencer ?', 'Dans deux semaines, le 5 novembre.']],
+        notes: [['Aline Mukeba', 'Très bon cas pratique SQL. À voir : Power BI avancé.', 'hier'], ['Nadia Kalala', 'Disponible le 5 novembre, prétentions dans la fourchette.', 'il y a 3 jours']],
+        entretien: { j: 'Jeudi 22 oct.', h: '10 h 00', mode: 'Visio', avec: 'Aline Mukeba', lien: 'meet.jumanly.io/bf-grace' },
+        verifier: ['Niveau réel sur Power BI (déclaré, non vérifié)', 'Expérience en équipe produit'], attest: 'SQL pour l’analyse · attestation Jumanly' }),
+      C({ k: 'benjamin', nom: 'Benjamin Tshibangu', ini: 'BT', bg: '#E3E8FB', fg: '#2D3F8A', offre: 'analyste', etape: 'proposition', ville: 'Kinshasa', recu: 'il y a 6 jours', nouv: false, src: 'Orbi', dispo: 'Immédiate', assigne: 'nadia',
+        v: [0.95, 0.9, 1, 1, 0.8, 1, 1, 0.9], titre: 'Analyste junior · 2 ans d’expérience',
+        comp: [['SQL', true], ['Power BI', true], ['Python', false], ['Excel', false]], exp: [['Analyste junior', 'Vodacash · 2 ans'], ['Stage BI', 'Equity BCDC · 6 mois']],
+        form: 'Master en statistique, ISTA (2023)', langues: 'Français C2 · Anglais B1', interets: ['Data', 'Tableaux de bord', 'Encadrer des juniors'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Oui, les deux depuis deux ans.'], ['Quand pouvez-vous commencer ?', 'Tout de suite.']],
+        notes: [['Aline Mukeba', 'Excellent entretien. Proposition validée avec Joseph.', 'mardi']], entretien: null,
+        verifier: ['Anglais écrit pour les rapports au siège'], attest: 'Power BI · les bases · attestation Jumanly', proposition: { salaire: '850 USD par mois', debut: '1er novembre', etat: 'Envoyée mardi, en attente de réponse' } }),
+      C({ k: 'esther', nom: 'Esther Kabila', ini: 'EK', bg: '#F9E3C8', fg: '#8A4B12', offre: 'analyste', etape: 'recue', ville: 'Kinshasa', recu: 'il y a 2 h', nouv: true, src: 'Explorer', dispo: 'Dans 1 mois', assigne: '',
+        v: [0.88, 0.8, 0.7, 1, 0.9, 1, 0.5, 0.8], titre: 'Data analyst · 1 an d’expérience',
+        comp: [['Power BI', true], ['SQL', false], ['Excel', false]], exp: [['Data analyst', 'Kin Marché · 1 an']], form: 'Licence en informatique de gestion, UPC (2024)', langues: 'Français C2 · Anglais B2',
+        interets: ['Data', 'Visualisation', 'Commerce'], reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Power BI tous les jours, SQL pour les extractions.'], ['Quand pouvez-vous commencer ?', 'Après un mois de préavis.']],
+        notes: [], entretien: null, verifier: ['Préavis d’un mois : compatible avec la date ?'], attest: '' }),
+      C({ k: 'patrick', nom: 'Patrick Ilunga', ini: 'PI', bg: '#E8F0D8', fg: '#4F6B12', offre: 'analyste', etape: 'presel', ville: 'Kinshasa', recu: 'il y a 4 jours', nouv: false, src: 'Fil', dispo: 'Immédiate', assigne: 'nadia',
+        v: [0.8, 0.6, 0.7, 1, 0.8, 1, 1, 0.7], titre: 'Analyste crédit · reconversion vers la data',
+        comp: [['Excel', true], ['SQL', false], ['Power BI', false]], exp: [['Analyste crédit', 'Advans · 3 ans']], form: 'Licence en finance, ISC (2022)', langues: 'Français C2 · Anglais B1', interets: ['Data', 'Risques', 'Fintech'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'SQL en formation, Excel avancé au quotidien.'], ['Quand pouvez-vous commencer ?', 'Immédiatement.']], notes: [['Nadia Kalala', 'Profil finance solide, SQL à confirmer.', 'lundi']], entretien: null,
+        verifier: ['Pratique réelle de SQL'], attest: '' }),
+      C({ k: 'didier', nom: 'Didier Lukusa', ini: 'DL', bg: '#EDE3FB', fg: '#5A2D8A', offre: 'analyste', etape: 'entretien', ville: 'Kinshasa', recu: 'il y a 6 jours', nouv: false, src: 'Explorer', dispo: 'Dans 2 semaines', assigne: 'aline',
+        v: [0.7, 0.8, 0.6, 1, 0.8, 1, 1, 0.7], titre: 'Développeur Python · intérêt pour la data',
+        comp: [['Python', true], ['SQL', false], ['Excel', false]], exp: [['Développeur', 'Freelance · 2 ans']], form: 'Licence en informatique, UNIKIN (2024)', langues: 'Français C2 · Anglais B2', interets: ['Data', 'Automatisation'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'SQL oui, Power BI pas encore.'], ['Quand pouvez-vous commencer ?', 'Dans deux semaines.']], notes: [],
+        entretien: { j: 'Mardi 20 oct.', h: '14 h 00', mode: 'Sur place', avec: 'Aline Mukeba', lien: 'Baobab Fintech, Gombe', fait: true }, verifier: ['Visualisation de données'], attest: '' }),
+      C({ k: 'sarah', nom: 'Sarah Mbala', ini: 'SM', bg: '#FBE3EF', fg: '#8A2D5C', offre: 'analyste', etape: 'recue', ville: 'Matadi', recu: 'il y a 3 h', nouv: true, src: 'Partage du lien', dispo: 'Immédiate', assigne: '',
+        v: [0.7, 0.5, 0.5, 0.6, 0.9, 0.7, 1, 0.6], titre: 'Assistante comptable · Excel avancé',
+        comp: [['Excel', true], ['SQL', false]], exp: [['Assistante comptable', 'Port de Matadi · 2 ans']], form: 'Graduat en comptabilité, ISP Matadi (2023)', langues: 'Français C2 · Kikongo', interets: ['Finance', 'Data', 'Déménager à Kinshasa'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Pas encore, je suis la formation SQL sur Jumanly.'], ['Quand pouvez-vous commencer ?', 'Tout de suite, je peux venir à Kinshasa.']], notes: [], entretien: null,
+        verifier: ['Installation à Kinshasa'], attest: '' }),
+      C({ k: 'junior', nom: 'Junior Mukendi', ini: 'JM', bg: '#E3F3FB', fg: '#1E5E79', offre: 'analyste', etape: 'recue', ville: 'Kinshasa', recu: 'il y a 5 h', nouv: true, src: 'Explorer', dispo: 'Immédiate', assigne: '',
+        v: [0.55, 0.4, 0.5, 1, 0.7, 1, 1, 0.5], titre: 'Étudiant en statistique',
+        comp: [['Statistiques', true], ['Excel', false]], exp: [['Stage', 'INS · 3 mois']], form: 'Licence en statistique en cours, ISTA', langues: 'Français C2 · Anglais A2', interets: ['Statistiques', 'Premier emploi'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Non, mais j’apprends vite.'], ['Quand pouvez-vous commencer ?', 'Immédiatement.']], notes: [], entretien: null, verifier: ['Fin des études et disponibilité réelle'], attest: '' }),
+      C({ k: 'ruth', nom: 'Ruth Ngoy', ini: 'RN', bg: '#F3E8D8', fg: '#6B4F12', offre: 'analyste', etape: 'nonretenu', ville: 'Kinshasa', recu: 'il y a 6 jours', nouv: false, src: 'Explorer', dispo: 'Immédiate', assigne: 'nadia',
+        v: [0.5, 0.4, 0.4, 0.6, 0.8, 1, 1, 0.5], titre: 'Assistante administrative',
+        comp: [['Excel', false]], exp: [['Assistante', 'Cabinet Kalonji · 3 ans']], form: 'Graduat en secrétariat (2021)', langues: 'Français C2', interets: ['Administration', 'Data'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Non.'], ['Quand pouvez-vous commencer ?', 'Immédiatement.']], notes: [['Nadia Kalala', 'Profil éloigné du poste. Orientée vers le cours SQL gratuit.', 'mardi']], entretien: null, verifier: [], attest: '' }),
+      C({ k: 'amani', nom: 'Amani Kasongo', ini: 'AK', bg: '#FBE3E3', fg: '#8A2D2D', offre: 'clientele', etape: 'entretien', ville: 'Lubumbashi', recu: 'il y a 8 jours', nouv: false, src: 'Fil', dispo: 'Immédiate', assigne: 'patrice',
+        v: [0.95, 0.9, 0.9, 1, 1, 1, 1, 0.9], titre: 'Chargée de clientèle · 3 ans',
+        comp: [['Service client', true], ['Swahili', true], ['Mobile Money', false]], exp: [['Conseillère clientèle', 'Airtel Money · 3 ans']], form: 'Licence en communication, UNILU (2022)', langues: 'Français C2 · Swahili C2 · Anglais B1', interets: ['Service client', 'Encadrer une équipe'],
+        reponses: [['Parlez-vous swahili ?', 'Oui, c’est ma langue maternelle.'], ['Avez-vous déjà travaillé au contact de clients ?', 'Trois ans chez Airtel Money.']], notes: [],
+        entretien: { j: 'Vendredi 23 oct.', h: '9 h 30', mode: 'Appel', avec: 'Patrice Nzuzi', lien: 'Appel Jumanly' }, verifier: ['Gestion des réclamations difficiles'], attest: '' }),
+      C({ k: 'chantal', nom: 'Chantal Kapinga', ini: 'CK', bg: '#E8F0D8', fg: '#4F6B12', offre: 'clientele', etape: 'recue', ville: 'Lubumbashi', recu: 'il y a 1 h', nouv: true, src: 'Explorer', dispo: 'Dans 2 semaines', assigne: '',
+        v: [0.85, 0.7, 0.6, 1, 1, 1, 1, 0.8], titre: 'Caissière · Rawbank',
+        comp: [['Service client', true], ['Swahili', true]], exp: [['Caissière', 'Rawbank Lubumbashi · 2 ans']], form: 'Graduat en gestion (2023)', langues: 'Français C2 · Swahili C2', interets: ['Banque', 'Service client'],
+        reponses: [['Parlez-vous swahili ?', 'Oui.'], ['Avez-vous déjà travaillé au contact de clients ?', 'Oui, deux ans au guichet.']], notes: [], entretien: null, verifier: ['Aisance au téléphone'], attest: '' }),
+      C({ k: 'fiston', nom: 'Fiston Mwamba', ini: 'FM', bg: '#E3E8FB', fg: '#2D3F8A', offre: 'clientele', etape: 'presel', ville: 'Lubumbashi', recu: 'il y a 7 jours', nouv: false, src: 'Fil', dispo: 'Immédiate', assigne: 'patrice',
+        v: [0.75, 0.6, 0.7, 1, 0.9, 1, 1, 0.7], titre: 'Agent commercial',
+        comp: [['Vente', true], ['Swahili', true]], exp: [['Agent commercial', 'Vodacom · 2 ans']], form: 'Diplôme d’État (2020)', langues: 'Français C1 · Swahili C2', interets: ['Commercial', 'Mobile Money'],
+        reponses: [['Parlez-vous swahili ?', 'Oui.'], ['Avez-vous déjà travaillé au contact de clients ?', 'Oui, en vente terrain.']], notes: [], entretien: null, verifier: ['Rédaction des comptes rendus'], attest: '' }),
+      C({ k: 'moussa', nom: 'Moussa Diallo', ini: 'MD', bg: '#E3F3FB', fg: '#1E5E79', offre: 'flutter', etape: 'recue', ville: 'Lubumbashi', recu: 'hier', nouv: true, src: 'Orbi', dispo: 'Dans 1 mois', assigne: '',
+        v: [0.95, 0.9, 0.9, 1, 0.9, 1, 0.5, 0.9], titre: 'Développeur Flutter · 3 applications publiées',
+        comp: [['Flutter', true], ['Dart', true], ['Firebase', false]], exp: [['Développeur mobile', 'Freelance · 3 ans']], form: 'Licence en génie logiciel, UNILU (2022)', langues: 'Français C2 · Anglais B2', interets: ['Mobile', 'Réseaux lents', 'Télétravail'],
+        reponses: [['Avez-vous publié une application sur le Play Store ?', 'Oui, trois, dont une utilisée par 20 000 personnes.']], notes: [], entretien: null, verifier: ['Préavis d’un mois'], attest: '' }),
+      C({ k: 'kevin', nom: 'Kevin Lumbala', ini: 'KL', bg: '#EDE3FB', fg: '#5A2D8A', offre: 'flutter', etape: 'recue', ville: 'Kinshasa', recu: 'hier', nouv: true, src: 'Explorer', dispo: 'Immédiate', assigne: '',
+        v: [0.6, 0.5, 0.5, 1, 0.8, 1, 1, 0.6], titre: 'Développeur web · débute en Flutter',
+        comp: [['JavaScript', true], ['Flutter', false]], exp: [['Développeur web', 'Agence Kin Digital · 1 an']], form: 'Licence en informatique, ISIPA (2024)', langues: 'Français C2 · Anglais B1', interets: ['Mobile', 'Apprendre'],
+        reponses: [['Avez-vous publié une application sur le Play Store ?', 'Pas encore.']], notes: [], entretien: null, verifier: ['Projet Flutter personnel'], attest: '' }),
+      C({ k: 'joelle', nom: 'Joëlle Mbayo', ini: 'JM', bg: '#FBE3EF', fg: '#8A2D5C', offre: 'marketing', etape: 'recrute', ville: 'Kinshasa', recu: 'il y a 15 jours', nouv: false, src: 'Fil', dispo: 'Immédiate', assigne: 'nadia',
+        v: [0.9, 0.8, 0.8, 1, 0.9, 1, 1, 0.8], titre: 'Étudiante en marketing',
+        comp: [['Réseaux sociaux', true], ['Canva', true]], exp: [['Community manager', 'Association Likelemba · 1 an']], form: 'Licence en marketing en cours, ISC', langues: 'Français C2 · Anglais B2', interets: ['Marketing', 'Fintech'],
+        reponses: [['Quels réseaux utilisez-vous le plus ?', 'Instagram, TikTok et LinkedIn.']], notes: [['Nadia Kalala', 'Stage signé, début le 2 novembre.', 'lundi']], entretien: null, verifier: [], attest: '' })
+    ];
+    // Les autres candidatures de chaque offre, plus courtes, pour que les nombres soient justes partout
+    const PRENOMS = ['Joël', 'Merveille', 'Christian', 'Divine', 'Gloire', 'Héritier', 'Nathalie', 'Glody', 'Rachel', 'Exaucé', 'Prisca', 'Dieumerci', 'Sandrine', 'Jonathan', 'Bénédicte', 'Cédric', 'Ornella', 'Arsène', 'Laetitia', 'Trésor'];
+    const NOMS = ['Kabamba', 'Mutombo', 'Tshilombo', 'Lokwa', 'Mpoyi', 'Ndaya', 'Kazadi', 'Bokele', 'Masudi', 'Lufungula', 'Mwanza', 'Kanku', 'Nsimba', 'Ilunga', 'Banza'];
+    const COULS = [['#DDF6EE', '#14745F'], ['#F9E3C8', '#8A4B12'], ['#E3E8FB', '#2D3F8A'], ['#FBE3EF', '#8A2D5C'], ['#E8F0D8', '#4F6B12'], ['#EDE3FB', '#5A2D8A']];
+    const SKL = { analyste: ['Excel', 'SQL', 'Power BI'], clientele: ['Service client', 'Swahili', 'Vente'], flutter: ['Flutter', 'Dart', 'JavaScript'], marketing: ['Réseaux sociaux', 'Canva', 'Rédaction'] };
+    let graine = 7;
+    const hasard = () => { graine = (graine * 9301 + 49297) % 233280; return graine / 233280; };
+    Object.keys(OFFRES).forEach((ok) => {
+      const deja = CANDS.filter((c) => c.offre === ok);
+      let nouvRest = OFFRES[ok].nouv - deja.filter((c) => c.nouv).length;
+      for (let i = deja.length; i < OFFRES[ok].cand; i++) {
+        const pr = PRENOMS[Math.floor(hasard() * PRENOMS.length)], nm = NOMS[Math.floor(hasard() * NOMS.length)];
+        const v = CRITERES.map(() => Math.round((0.35 + hasard() * 0.6) * 100) / 100);
+        const nouv = nouvRest > 0; if (nouv) nouvRest--;
+        const r = hasard();
+        const etape = nouv ? 'recue' : (ok === 'marketing' ? (r < 0.5 ? 'nonretenu' : 'presel') : (r < 0.55 ? 'recue' : r < 0.8 ? 'presel' : 'nonretenu'));
+        const cl = COULS[i % COULS.length], sk = SKL[ok];
+        CANDS.push(C({ k: ok + '-' + i, nom: pr + ' ' + nm, ini: (pr[0] + nm[0]).toUpperCase(), bg: cl[0], fg: cl[1], offre: ok, etape, ville: OFFRES[ok].ville, recu: nouv ? 'aujourd’hui' : 'il y a ' + (2 + (i % 9)) + ' jours', nouv,
+          src: ['Explorer', 'Fil', 'Partage du lien', 'Orbi'][i % 4], dispo: ['Immédiate', 'Dans 2 semaines', 'Dans 1 mois'][i % 3], assigne: '', v, titre: sk[i % 3] + ' · ' + (1 + (i % 4)) + ' an' + ((i % 4) ? 's' : '') + ' d’expérience',
+          comp: [[sk[i % 3], i % 2 === 0], [sk[(i + 1) % 3], false]], exp: [['Poste précédent', 'Entreprise de ' + OFFRES[ok].ville + ' · ' + (1 + (i % 4)) + ' an' + ((i % 4) ? 's' : '')]], form: 'Licence (' + (2018 + (i % 7)) + ')', langues: 'Français C2',
+          interets: [sk[0], 'Premier poste chez Baobab'], reponses: [], notes: [], entretien: null, verifier: [], attest: '', court: true }));
+      }
+    });
+    const candDe = (k) => CANDS.find((c) => c.k === k) || CANDS[0];
+
+    // ===== État : étapes déplacées, répartitions, notes, évaluations, réponses envoyées =====
+    const etapes = st.etapes || {};
+    const etapeDe = (c) => etapes[c.k] || c.etape;
+    const assign = st.assign || {};
+    const assigneDe = (c) => (Object.prototype.hasOwnProperty.call(assign, c.k) ? assign[c.k] : c.assigne);
+    const repondu = st.repondu || { ruth: true };
+    const notesEn = st.notesEn || {};
+    const evals = st.evals || (oui(p.evalFaite) ? { didier: { n: [4, 4, 5, 3], reco: 'retenir', fort: 'Python solide, très motivé.', vig: 'Visualisation à renforcer.' } } : {});
+    const rdv = st.rdv || {};
+    const entretienDe = (c) => rdv[c.k] || c.entretien;
+
+    const vue = prop('vue', 'liste');
+    const of = prop('of', 'tout');
+    const sous = prop('sous', 'fort');
+    const ck = prop('cand', 'grace');
+    const c0 = candDe(ck);
+    const fRaw = has('feuille') ? st.feuille : (p.feuille && p.feuille !== 'aucune' ? p.feuille : null);
+    const fermer = () => S({ feuille: null });
+    const ouvrir = (k, onglet) => () => S({ vue: 'fiche', cand: k, onglet: onglet || 'resume', feuille: null, depuis: vue === 'fiche' ? 'liste' : vue, rech: false, orbi: false });
+
+    const dansOffre = (c) => of === 'tout' || c.offre === of;
+    const actives = CANDS.filter((c) => OFFRES[c.offre].statut !== 'terminee');
+
+    // Raisons principales (gabarits à partir des faits, doc 08)
+    const raisons = (c) => {
+      const R = [];
+      const verif = c.comp.filter((x) => x[1]).map((x) => x[0]);
+      if (c.v[0] >= 0.85) R.push('Couvre les compétences requises' + (verif.length ? ' (' + verif.slice(0, 2).join(', ') + ' vérifiés)' : ''));
+      else if (c.v[0] >= 0.6) R.push('Couvre une partie des compétences requises');
+      if (c.v[2] >= 0.8 && c.exp[0]) R.push(c.exp[0][0] + ' · ' + c.exp[0][1].split(' · ')[0]);
+      if (c.v[5] >= 1) R.push('À ' + c.ville + ', comme le poste');
+      if (c.v[4] >= 0.9) R.push('Langues : ' + c.langues.split(' · ').slice(0, 2).join(', '));
+      if (c.v[6] >= 1) R.push('Disponibilité : ' + c.dispo.toLowerCase());
+      return R.slice(0, 3);
+    };
+    const ligneC = (c) => {
+      const s = c.score, b = bande(s), e = etapeDe(c), a = assigneDe(c);
+      return { k: c.k, nom: c.nom, ini: c.ini, bg: c.bg, fg: c.fg, offre: OFFRES[c.offre].court, score: s + ' %', sbg: b[2], scol: b[1], bandeT: b[0],
+        et: ETAPE_T[e], nouv: c.nouv && e === 'recue', recu: c.recu, ville: c.ville, titre: c.titre, dispo: c.dispo,
+        interets: c.interets.slice(0, 3).map((t) => ({ t })), raisons: raisons(c).map((t) => ({ t })),
+        assigneT: a ? 'Suivi par ' + EQUIPE[a].nom.split(' ')[0] : 'Pas encore réparti', ouvrir: ouvrir(c.k),
+        sel: !!(st.sel || {})[c.k], case: (st.sel || {})[c.k] ? '✓' : '', caseBg: (st.sel || {})[c.k] ? '#A6F26B' : 'transparent', caseBd: (st.sel || {})[c.k] ? '#A6F26B' : 'rgba(255,255,255,.3)',
+        basculer: () => { const s2 = { ...(st.sel || {}) }; if (s2[c.k]) delete s2[c.k]; else s2[c.k] = true; S({ sel: s2 }); },
+        preselectionner: () => { S({ etapes: { ...etapes, [c.k]: 'presel' } }); flash(c.nom.split(' ')[0] + ' passe en présélection'); },
+        aPresel: e === 'recue' };
+    };
+
+    // ===== Filtres d’offre =====
+    const offresF = [['tout', 'Toutes les offres', actives.length], ...Object.keys(OFFRES).map((k) => [k, OFFRES[k].court, CANDS.filter((c) => c.offre === k).length])]
+      .map(([k, t, n]) => ({ t: t + ' · ' + n, pick: () => S({ of: k, lim: 30, etapeF: has('etapeF') ? st.etapeF : 'recue' }), bg: k === of ? '#F2EDE5' : 'transparent', col: k === of ? '#0B1A1F' : '#F2EDE5', bd: k === of ? '#F2EDE5' : 'rgba(255,255,255,.22)' }));
+
+    // ===== Fort potentiel =====
+    const fort = actives.filter((c) => dansOffre(c) && c.score >= 80 && ['recue', 'presel', 'entretien'].includes(etapeDe(c))).sort((a, b) => b.score - a.score);
+    // ===== Toutes : par étape =====
+    const ETAPES_F = [...ETAPES, ['nonretenu', 'Non retenus']];
+    const etapeF = prop('etapeF', 'recue');
+    const tri = st.tri || 'score';
+    const dansEtape = actives.filter((c) => dansOffre(c) && etapeDe(c) === etapeF).sort((a, b) => (tri === 'score' ? b.score - a.score : (b.nouv ? 1 : 0) - (a.nouv ? 1 : 0)));
+    const lim = st.lim || 30;
+    const etapesF = ETAPES_F.map(([k, t]) => { const n = actives.filter((c) => dansOffre(c) && etapeDe(c) === k).length; return { t, n, pick: () => S({ etapeF: k, lim: 30 }), bg: k === etapeF ? '#A6F26B' : '#13282C', col: k === etapeF ? '#0B1A1F' : '#F2EDE5', ncol: k === etapeF ? '#0B1A1F' : '#A6F26B' }; });
+    const selMode = !!st.selMode;
+    const sel = Object.keys(st.sel || {});
+    const nSel = sel.length;
+
+    // ===== Entretiens =====
+    const avecEnt = actives.filter((c) => dansOffre(c) && entretienDe(c));
+    const ENT_F = [['aujourdhui', 'Aujourd’hui'], ['avenir', 'À venir'], ['documenter', 'À documenter'], ['faits', 'Documentés']];
+    const entF = prop('entF', 'aujourdhui');
+    const classeEnt = (c) => { const e = entretienDe(c); if (evals[c.k]) return 'faits'; if (e.fait) return 'documenter'; if (e.j.startsWith('Jeudi 22')) return 'aujourdhui'; return 'avenir'; };
+    const entListe = avecEnt.filter((c) => classeEnt(c) === entF).map((c) => { const e = entretienDe(c); return { ...ligneC(c), j: e.j, h: e.h, mode: e.mode, avec: e.avec, lieu: e.lien, aDoc: classeEnt(c) === 'documenter', aFait: classeEnt(c) === 'faits', aVenir: ['aujourdhui', 'avenir'].includes(classeEnt(c)),
+      documenter: () => S({ vue: 'evaluation', cand: c.k, depuis: 'liste' }), rejoindre: () => flash(e.mode === 'Visio' ? 'Visio ouverte : ' + e.lien : e.mode === 'Appel' ? 'Appel lancé vers ' + c.nom.split(' ')[0] : 'Itinéraire vers ' + e.lien) }; });
+    const entOnglets = ENT_F.map(([k, t]) => ({ t, n: avecEnt.filter((c) => classeEnt(c) === k).length, pick: () => S({ entF: k }), bg: k === entF ? '#F2EDE5' : 'transparent', col: k === entF ? '#0B1A1F' : '#F2EDE5', bd: k === entF ? '#F2EDE5' : 'rgba(255,255,255,.22)' }));
+
+    // ===== Décisions =====
+    const DEC_F = [['propositions', 'Propositions'], ['recrutes', 'Recrutés'], ['nonretenus', 'Non retenus']];
+    const decF = prop('decF', 'propositions');
+    const props2 = actives.filter((c) => dansOffre(c) && etapeDe(c) === 'proposition');
+    const recrutes = CANDS.filter((c) => dansOffre(c) && etapeDe(c) === 'recrute');
+    const nonret = actives.filter((c) => dansOffre(c) && etapeDe(c) === 'nonretenu');
+    const sansRep = nonret.filter((c) => !repondu[c.k]);
+    const decListe = (decF === 'propositions' ? props2 : decF === 'recrutes' ? recrutes : nonret).map((c) => ({ ...ligneC(c),
+      statut: decF === 'propositions' ? (c.proposition ? c.proposition.etat : 'Proposition envoyée') : decF === 'recrutes' ? 'Recruté·e · ' + OFFRES[c.offre].court : (repondu[c.k] ? 'Réponse envoyée' : 'Sans réponse pour l’instant'),
+      stCol: decF === 'nonretenus' && !repondu[c.k] ? '#F4C463' : '#8FA39E' }));
+    const decOnglets = DEC_F.map(([k, t]) => ({ t, n: (k === 'propositions' ? props2 : k === 'recrutes' ? recrutes : nonret).length, pick: () => S({ decF: k }), bg: k === decF ? '#F2EDE5' : 'transparent', col: k === decF ? '#0B1A1F' : '#F2EDE5', bd: k === decF ? '#F2EDE5' : 'rgba(255,255,255,.22)' }));
+
+    const SOUS = [['fort', 'Fort potentiel', fort.length], ['toutes', 'Toutes', ''], ['entretiens', 'Entretiens', avecEnt.filter((c) => ['aujourdhui', 'documenter'].includes(classeEnt(c))).length || ''], ['decisions', 'Décisions', sansRep.length || '']];
+    const sousOnglets = onglets(SOUS, sous, 'sous', { selMode: false, sel: {} });
+
+    // ===== Recherche en deux temps =====
+    const rech = has('rech') ? st.rech : (p.recherche === 'options' || p.recherche === 'texte');
+    const q = st.q ?? (p.recherche === 'texte' ? 'sql' : '');
+    const rt = st.rt || 'tout';
+    const nq = norm(q.trim());
+    const rTypes = pills([['tout', 'Tout'], ['nom', 'Nom'], ['comp', 'Compétence'], ['ville', 'Ville']], rt, 'rt');
+    const resRech = !nq ? [] : actives.filter((c) => (rt === 'tout' || rt === 'nom') && norm(c.nom).includes(nq) || (rt === 'tout' || rt === 'comp') && c.comp.some((x) => norm(x[0]).includes(nq)) || (rt === 'tout' || rt === 'ville') && norm(c.ville).includes(nq))
+      .sort((a, b) => b.score - a.score).slice(0, 20).map(ligneC);
+    const recents = [['Power BI', 'compétence'], ['Grâce Mbuyi', 'nom'], ['Lubumbashi', 'ville']].map(([t, d]) => ({ t, d, pick: () => S({ q: t }) }));
+
+    // ===== Fiche candidat =====
+    const e0 = etapeDe(c0), b0 = bande(c0.score), a0 = assigneDe(c0), ent0 = entretienDe(c0);
+    const ONGLETS_F = [['resume', 'Résumé'], ['cv', 'CV'], ['reponses', 'Réponses'], ['notes', 'Notes'], ['historique', 'Historique']];
+    const ongletF = prop('onglet', 'resume');
+    const notes0 = [...(notesEn[c0.k] || []), ...c0.notes].map(([au, t, d]) => ({ au, t, d, ini: au.split(' ').map((m) => m[0]).join('') }));
+    const ev0 = evals[c0.k];
+    const suiv = { recue: ['Présélectionner', 'presel'], presel: ['Planifier un entretien', 'planifier'], entretien: ev0 || (ent0 && ent0.fait) ? ['Faire une proposition', 'proposition'] : ['Documenter l’entretien', 'evaluation'], proposition: ['Marquer comme recruté·e', 'recrute'], recrute: ['Voir le message de bienvenue', 'bienvenue'], nonretenu: ['Revoir la candidature', 'recue'], retire: ['Revoir la candidature', 'recue'] }[e0];
+    const actionSuiv = () => {
+      const [, cible] = suiv;
+      if (cible === 'planifier') return S({ vue: 'planifier', depuis: 'fiche', jour: 0, creneau: null });
+      if (cible === 'evaluation') return S({ vue: 'evaluation', depuis: 'fiche' });
+      if (cible === 'proposition') return S({ vue: 'proposition', depuis: 'fiche' });
+      if (cible === 'bienvenue') return S({ feuille: 'bienvenue' });
+      S({ etapes: { ...etapes, [c0.k]: cible } });
+      flash(c0.nom.split(' ')[0] + ' : ' + ETAPE_T[cible].toLowerCase());
+    };
+    const HIST = [[c0.recu, 'Candidature reçue via ' + c0.src], ...(e0 !== 'recue' ? [['', 'Passée en ' + (e0 === 'nonretenu' ? 'non retenue' : 'présélection') + ' par Nadia']] : []),
+      ...(ent0 ? [[ent0.j, 'Entretien ' + ent0.mode.toLowerCase() + ' avec ' + ent0.avec + (ent0.fait ? ' · fait' : ' · prévu')]] : []), ...(ev0 ? [['aujourd’hui', 'Évaluation enregistrée']] : []),
+      ...(c0.proposition ? [['mardi', 'Proposition envoyée : ' + c0.proposition.salaire]] : []), ['aujourd’hui', 'Fiche consultée par Nadia Kalala (journal)']];
+    const criteres0 = CRITERES.map(([k, t, w], i) => ({ t, w: w + ' pts', pts: Math.round(w * c0.v[i] * 10) / 10 + ' / ' + w, larg: Math.round(c0.v[i] * 100) + '%', col: c0.v[i] >= 0.85 ? '#A6F26B' : c0.v[i] >= 0.6 ? '#9FE8D2' : '#F4D59A' }));
+    const fiche = { nom: c0.nom, ini: c0.ini, bg: c0.bg, fg: c0.fg, titre: c0.titre, ville: c0.ville, offre: OFFRES[c0.offre].t, et: ETAPE_T[e0], score: c0.score + ' %', sbg: b0[2], scol: b0[1], bandeT: b0[0],
+      recu: c0.recu, src: c0.src, dispo: c0.dispo, interets: c0.interets.map((t) => ({ t })), raisons: raisons(c0).map((t) => ({ t })), verifier: c0.verifier.map((t) => ({ t })), aVerif: c0.verifier.length > 0,
+      exp: c0.exp.map(([t, d]) => ({ t, d })), form: c0.form, langues: c0.langues, comp: c0.comp.map(([t, v]) => ({ t, v: v ? 'vérifiée' : 'déclarée', vc: v ? '#A6F26B' : '#8FA39E' })),
+      attest: c0.attest, aAttest: !!c0.attest, reponses: c0.reponses.map(([q2, r]) => ({ q: q2, r })), aReponses: c0.reponses.length > 0, sansReponses: c0.reponses.length === 0,
+      assigneT: a0 ? EQUIPE[a0].nom + ' · ' + EQUIPE[a0].role : 'Personne pour l’instant', assIni: a0 ? EQUIPE[a0].ini : '?',
+      aEnt: !!ent0, ent: ent0 || { j: '', h: '', mode: '', avec: '', lien: '' }, entFait: !!(ent0 && ent0.fait), entPrevu: !!(ent0 && !ent0.fait),
+      aEval: !!ev0, evalT: ev0 ? ({ retenir: 'Recommandation : retenir', revoir: 'Recommandation : à revoir', non: 'Recommandation : ne pas retenir' }[ev0.reco]) : '', evalMoy: ev0 ? (ev0.n.reduce((a, x) => a + x, 0) / ev0.n.length).toFixed(1).replace('.', ',') + ' / 5' : '',
+      aProp: !!c0.proposition, prop: c0.proposition || { salaire: '', debut: '', etat: '' }, suivT: suiv[0], nonRetenu: e0 === 'nonretenu', decide: ['nonretenu', 'recrute'].includes(e0),
+      hist: HIST.map(([d, t]) => ({ d, t })), criteres: criteres0, notes: notes0, aNotes: notes0.length > 0, nNotes: notes0.length, nouv: c0.nouv && e0 === 'recue' };
+    const ongletsFiche = onglets(ONGLETS_F.map(([k, t]) => [k, t, k === 'notes' && notes0.length ? String(notes0.length) : '']), ongletF, 'onglet');
+    const note = st.note ?? '';
+    const ajouterNote = () => { if (!note.trim()) return flash('Écrivez une note'); S({ notesEn: { ...notesEn, [c0.k]: [['Nadia Kalala', note.trim(), 'à l’instant'], ...(notesEn[c0.k] || [])] }, note: '' }); flash('Note ajoutée, visible par l’équipe'); };
+
+    // Déplacer
+    const deplacer = [...ETAPES, ['nonretenu', 'Non retenu·e']].map(([k, t]) => ({ t, sym: k === e0 ? '✓' : '', pick: () => {
+      if (k === 'nonretenu') return S({ feuille: 'nonretenu' });
+      if (k === 'entretien' && !ent0) return S({ feuille: null, vue: 'planifier', depuis: 'fiche' });
+      S({ etapes: { ...etapes, [c0.k]: k }, feuille: null }); flash(c0.nom.split(' ')[0] + ' : ' + t.toLowerCase());
+    } }));
+    // Répartir (une personne ou la sélection)
+    const cibleRep = st.pourSel ? sel : [c0.k];
+    const charge = (m) => CANDS.filter((c) => assigneDe(c) === m && !['nonretenu', 'recrute'].includes(etapeDe(c))).length;
+    const repartir = Object.keys(EQUIPE).map((m) => ({ nom: EQUIPE[m].nom + (EQUIPE[m].moi ? ' (moi)' : ''), ini: EQUIPE[m].ini, role: EQUIPE[m].role + ' · ' + charge(m) + ' candidats suivis', sym: !st.pourSel && a0 === m ? '✓' : '',
+      pick: () => { const a2 = { ...assign }; cibleRep.forEach((k) => { a2[k] = m; }); S({ assign: a2, feuille: null, selMode: false, sel: {} }); flash(cibleRep.length > 1 ? cibleRep.length + ' candidats confiés à ' + EQUIPE[m].nom.split(' ')[0] : 'Confié à ' + EQUIPE[m].nom.split(' ')[0] + ', prévenu par notification'); } }));
+    // Ne pas retenir : motif privé + message bienveillant
+    const MOTIFS = ['Compétences éloignées du poste', 'Autre candidat plus proche', 'Disponibilité incompatible', 'Poste pourvu'];
+    const motif = st.motif ?? 0;
+    const motifs = MOTIFS.map((t, i) => ({ t, pick: () => S({ motif: i }), bg: i === motif ? '#F2EDE5' : 'transparent', col: i === motif ? '#0B1A1F' : '#F2EDE5', bd: i === motif ? '#F2EDE5' : 'rgba(255,255,255,.22)' }));
+    const cibleNon = st.pourSel ? sel : [c0.k];
+    const msgNon = st.msgNon ?? `Bonjour ${st.pourSel ? '{prénom}' : c0.nom.split(' ')[0]}, merci pour votre candidature au poste « ${OFFRES[c0.offre].court} ». Nous avons choisi un autre profil cette fois. Votre profil reste visible pour nos prochaines offres, et le cours gratuit « SQL pour l’analyse » peut vous aider. Bonne continuation. Nadia, Baobab Fintech`;
+    const envoyerNon = () => { const e2 = { ...etapes }, r2 = { ...repondu }; cibleNon.forEach((k) => { e2[k] = 'nonretenu'; r2[k] = true; }); S({ etapes: e2, repondu: r2, feuille: null, selMode: false, sel: {} }); flash(cibleNon.length > 1 ? cibleNon.length + ' réponses envoyées' : 'Réponse envoyée à ' + c0.nom.split(' ')[0]); };
+    // Réponse groupée
+    const MODELES = [['entretien', 'Invitation à un entretien', 'Bonjour {prénom}, votre profil nous intéresse pour le poste « {poste} ». Choisissez un créneau d’entretien avec ce lien. Nadia, Baobab Fintech'],
+      ['document', 'Demande de document', 'Bonjour {prénom}, pour avancer, pouvez-vous ajouter votre dernier diplôme ou une attestation à votre candidature ? Merci. Nadia'],
+      ['attente', 'Candidature bien reçue', 'Bonjour {prénom}, nous avons bien reçu votre candidature. Nous revenons vers vous d’ici le 5 novembre. Nadia'],
+      ['non', 'Réponse non retenue', 'Bonjour {prénom}, merci pour votre candidature. Nous avons choisi d’autres profils cette fois. Votre profil reste visible pour nos prochaines offres. Nadia']];
+    const modele = st.modele || 'entretien';
+    const modeles = MODELES.map(([k, t]) => ({ t, pick: () => S({ modele: k }), bd: k === modele ? '#A6F26B' : 'rgba(255,255,255,.12)', bg: k === modele ? 'rgba(166,242,107,.08)' : 'transparent', rb: k === modele ? '#A6F26B' : 'rgba(255,255,255,.3)', rbg: k === modele ? '#A6F26B' : 'transparent' }));
+    const ciblesGroupe = st.groupeNonRep ? sansRep.map((c) => c.k) : sel;
+    const premierG = candDe(ciblesGroupe[0] || 'esther');
+    const apercuG = (MODELES.find((m) => m[0] === modele) || MODELES[0])[2].replace('{prénom}', premierG.nom.split(' ')[0]).replace('{poste}', OFFRES[premierG.offre].court);
+    const envoyerGroupe = () => {
+      const e2 = { ...etapes }, r2 = { ...repondu };
+      ciblesGroupe.forEach((k) => { if (modele === 'non') { e2[k] = 'nonretenu'; r2[k] = true; } if (modele === 'entretien' && ['recue', 'presel'].includes(etapeDe(candDe(k)))) e2[k] = 'presel'; });
+      S({ etapes: e2, repondu: r2, feuille: null, selMode: false, sel: {}, groupeNonRep: false });
+      flash(ciblesGroupe.length + ' messages envoyés, chacun à son prénom');
+    };
+    // PDF
+    const PDFC = [['fiche', 'Fiche et score expliqué'], ['cv', 'CV'], ['reponses', 'Réponses et documents'], ['notes', 'Notes et évaluations'], ['hist', 'Historique des décisions']];
+    const pdfSel = st.pdfSel || { fiche: true, cv: true, reponses: true, notes: true, hist: false };
+    const pdfOpts = PDFC.map(([k, t]) => ({ t, pick: () => S({ pdfSel: { ...pdfSel, [k]: !pdfSel[k] } }), sym: pdfSel[k] ? '✓' : '', bg: pdfSel[k] ? '#A6F26B' : 'transparent', bd: pdfSel[k] ? '#A6F26B' : 'rgba(255,255,255,.3)' }));
+    const pdfPour = st.pdfPour || (st.pourSel ? 'sel' : vue === 'diagnostic' ? 'offre' : 'un');
+    const pdfTitre = pdfPour === 'sel' ? nSel + ' candidats sélectionnés' : pdfPour === 'offre' ? 'Toutes les candidatures · ' + OFFRES[of === 'tout' ? 'analyste' : of].court : c0.nom;
+    const telechargerPdf = () => { S({ feuille: null, selMode: false, sel: {}, pdfPour: null, pourSel: false }); flash('PDF téléchargé : ' + pdfTitre + ' (' + Object.values(pdfSel).filter(Boolean).length + ' parties)'); };
+
+    // ===== Planifier un entretien =====
+    const JOURS = [['Ven. 23', 'vendredi 23 octobre'], ['Lun. 26', 'lundi 26 octobre'], ['Mar. 27', 'mardi 27 octobre'], ['Mer. 28', 'mercredi 28 octobre'], ['Jeu. 29', 'jeudi 29 octobre'], ['Ven. 30', 'vendredi 30 octobre']];
+    const jour = st.jour ?? 0;
+    const CREN = ['9 h 00', '10 h 00', '11 h 30', '14 h 00', '15 h 30', '16 h 30'];
+    const pris = { 0: [1, 3], 1: [0], 2: [4], 3: [], 4: [2, 3], 5: [5] };
+    const creneau = has('creneau') ? st.creneau : (oui(p.rempli) ? 1 : null);
+    const jours = JOURS.map(([t], i) => ({ t: t.split(' ')[0], n: t.split(' ')[1], pick: () => S({ jour: i, creneau: null }), bg: i === jour ? '#A6F26B' : '#13282C', col: i === jour ? '#0B1A1F' : '#F2EDE5' }));
+    const creneaux = CREN.map((t, i) => { const occ = (pris[jour] || []).includes(i); return { t, occ, libre: !occ, pick: () => (occ ? flash('Aline a déjà un rendez-vous à ' + t) : S({ creneau: i })), bg: i === creneau ? '#A6F26B' : 'transparent', col: occ ? '#56706B' : i === creneau ? '#0B1A1F' : '#F2EDE5', bd: i === creneau ? '#A6F26B' : occ ? 'rgba(255,255,255,.06)' : 'rgba(255,255,255,.22)', deco: occ ? 'line-through' : 'none' }; });
+    const MODES = [['Visio', 'Lien Jumanly créé'], ['Sur place', 'Baobab Fintech, Gombe'], ['Appel', 'Appel dans l’app']];
+    const mode = st.mode || 'Visio';
+    const modes = MODES.map(([k, d]) => ({ t: k, d, pick: () => S({ mode: k }), bd: k === mode ? '#A6F26B' : 'rgba(255,255,255,.12)', bg: k === mode ? 'rgba(166,242,107,.08)' : '#13282C' }));
+    const DUREES = [['30', '30 min'], ['45', '45 min'], ['60', '1 h']];
+    const duree = st.duree || '45';
+    const durees = pills(DUREES, duree, 'duree');
+    const invites = st.invites || { aline: true };
+    const invitesL = ['joseph', 'aline', 'patrice'].map((m) => ({ nom: EQUIPE[m].nom, ini: EQUIPE[m].ini, role: EQUIPE[m].role, pick: () => S({ invites: { ...invites, [m]: !invites[m] } }), sym: invites[m] ? '✓' : '', bg: invites[m] ? '#A6F26B' : 'transparent', bd: invites[m] ? '#A6F26B' : 'rgba(255,255,255,.3)' }));
+    const avecT = Object.keys(invites).filter((m) => invites[m]).map((m) => EQUIPE[m].nom).join(', ') || 'vous seule';
+    const planOk = creneau !== null;
+    const envoyerInvit = () => {
+      if (!planOk) return flash('Choisissez un créneau');
+      const e = { j: JOURS[jour][1].replace(/^\w/, (x) => x.toUpperCase()).replace(' octobre', ' oct.'), h: CREN[creneau], mode, avec: avecT, lien: mode === 'Visio' ? 'meet.jumanly.io/bf-' + c0.k : mode === 'Sur place' ? 'Baobab Fintech, Gombe' : 'Appel Jumanly' };
+      S({ rdv: { ...rdv, [c0.k]: e }, etapes: { ...etapes, [c0.k]: 'entretien' }, vue: 'planifie' });
+    };
+    const planifie = rdv[c0.k] || { j: 'Vendredi 23 oct.', h: '10 h 00', mode: 'Visio', avec: 'Aline Mukeba', lien: 'meet.jumanly.io/bf-' + c0.k };
+
+    // ===== Évaluation (grille) =====
+    const GRILLE = ['Compétences techniques', 'Communication', 'Motivation pour le poste', 'Connaissance du secteur'];
+    const notesG = st.notesG || (ev0 ? ev0.n : [0, 0, 0, 0]);
+    const grille = GRILLE.map((t, i) => ({ t, etoiles: [1, 2, 3, 4, 5].map((n) => ({ n, pick: () => { const g2 = [...notesG]; g2[i] = n; S({ notesG: g2 }); }, col: n <= notesG[i] ? '#A6F26B' : '#33464A', lab: t + ' : ' + n + ' sur 5' })), val: notesG[i] ? notesG[i] + ' / 5' : '—' }));
+    const reco = st.reco ?? (ev0 ? ev0.reco : '');
+    const RECO = [['retenir', 'Retenir'], ['revoir', 'À revoir'], ['non', 'Ne pas retenir']];
+    const recos = RECO.map(([k, t]) => ({ t, pick: () => S({ reco: k }), bg: k === reco ? (k === 'non' ? '#F2EDE5' : '#A6F26B') : '#13282C', col: k === reco ? '#0B1A1F' : '#F2EDE5' }));
+    const ptFort = st.ptFort ?? (ev0 ? ev0.fort : '');
+    const ptVig = st.ptVig ?? (ev0 ? ev0.vig : '');
+    const evalOk = notesG.every((n) => n > 0) && !!reco;
+    const enregistrerEval = () => {
+      if (!evalOk) return flash(notesG.some((n) => !n) ? 'Notez les 4 critères' : 'Choisissez une recommandation');
+      S({ evals: { ...evals, [c0.k]: { n: notesG, reco, fort: ptFort, vig: ptVig } }, vue: 'fiche', onglet: 'notes', notesG: null, reco: null });
+      flash('Évaluation enregistrée · la décision reste à prendre');
+    };
+
+    // ===== Proposition =====
+    const salaire = st.salaire ?? '850';
+    const debut = st.debut ?? '5 novembre 2026';
+    const msgProp = st.msgProp ?? `Bonjour ${c0.nom.split(' ')[0]}, toute l’équipe a apprécié nos échanges. Nous avons le plaisir de vous proposer le poste de ${OFFRES[c0.offre].court}. Vous trouverez les détails ci-dessous.`;
+    const envoyerProp = () => { S({ etapes: { ...etapes, [c0.k]: 'proposition' }, vue: 'fiche', onglet: 'resume' }); flash('Proposition envoyée à ' + c0.nom.split(' ')[0]); };
+
+    // ===== Diagnostic des CV par Orbi =====
+    const ofD = st.ofD || (of === 'tout' ? 'analyste' : of);
+    const cvD = CANDS.filter((c) => c.offre === ofD);
+    const tous = cvD.filter((c) => c.score >= 80), part = cvD.filter((c) => c.score >= 60 && c.score < 80), peu = cvD.filter((c) => c.score < 60);
+    const SK = SKL[ofD];
+    const couv = SK.map((s) => { const n = cvD.filter((c) => c.comp.some((x) => x[0] === s)).length; return { t: s, n: n + ' sur ' + cvD.length, larg: Math.round(n / cvD.length * 100) + '%' }; });
+    const diagOffres = Object.keys(OFFRES).map((k) => ({ t: OFFRES[k].court, pick: () => S({ ofD: k }), bg: k === ofD ? '#F2EDE5' : 'transparent', col: k === ofD ? '#0B1A1F' : '#F2EDE5', bd: k === ofD ? '#F2EDE5' : 'rgba(255,255,255,.22)' }));
+    const diag = { offre: OFFRES[ofD].t, n: cvD.length, tous: tous.length, part: part.length, peu: peu.length, wT: Math.round(tous.length / cvD.length * 100) + '%', wP: Math.round(part.length / cvD.length * 100) + '%', wQ: Math.round(peu.length / cvD.length * 100) + '%',
+      top: tous.sort((a, b) => b.score - a.score).slice(0, 5).map(ligneC), manque: SK[2] + ' manque à ' + (cvD.length - cvD.filter((c) => c.comp.some((x) => x[0] === SK[2])).length) + ' candidats : le cours gratuit Jumanly peut leur être proposé.' };
+    const aPreselTous = tous.filter((c) => etapeDe(c) === 'recue');
+    const preselTous = () => { const e2 = { ...etapes }; aPreselTous.forEach((c) => { e2[c.k] = 'presel'; }); S({ etapes: e2, feuille: null }); flash(aPreselTous.length + ' candidats passent en présélection'); };
+
+    // ===== Retours =====
+    const retourFiche = () => S({ vue: st.depuis === 'diagnostic' ? 'diagnostic' : 'liste', feuille: null });
+    const retourVue = () => S({ vue: st.depuis === 'liste' ? 'liste' : 'fiche', feuille: null });
+
+    // ===== Orbi =====
+    const top3 = fort.slice(0, 3);
+    const OQ = {
+      qui: { q: 'Qui recevoir en premier ?', t: top3.length ? top3.map((c) => c.nom.split(' ')[0] + ' (' + c.score + ' %)').join(', ') + ' couvrent le mieux vos critères. Le score compare les profils à l’offre ; c’est vous qui choisissez.' : 'Aucun profil au-dessus de 80 % pour ce filtre.', actT: 'Voir le fort potentiel', act: () => S({ sous: 'fort', vue: 'liste', orbi: false }) },
+      diag: { q: 'Faire le diagnostic de tous les CV', t: `J’ai lu les ${CANDS.filter((c) => c.offre === 'analyste').length} CV d’Analyste de données : ${CANDS.filter((c) => c.offre === 'analyste' && c.score >= 80).length} couvrent tous vos critères. Je ne retire personne de la liste.`, actT: 'Ouvrir le diagnostic', act: () => S({ vue: 'diagnostic', ofD: 'analyste', orbi: false }) },
+      reponse: { q: `Répondre aux ${sansRep.length} candidats sans réponse`, t: 'Je prépare un message bienveillant, adressé à chacun par son prénom. Vous le relisez avant l’envoi.', actT: 'Préparer la réponse groupée', act: () => S({ feuille: 'groupe', groupeNonRep: true, modele: 'non', orbi: false }) },
+      entretien: { q: 'Préparer l’entretien de Grâce (10 h)', t: 'Points à vérifier : niveau réel sur Power BI (déclaré, non vérifié) et expérience en équipe produit. Ses réponses et les notes d’Aline sont dans sa fiche.', actT: 'Ouvrir la fiche de Grâce', act: () => S({ vue: 'fiche', cand: 'grace', onglet: 'resume', orbi: false }) }
+    };
+    const ok = orbiKit(OQ, 'depuis Candidatures', 'Vos candidatures', vue === 'liste' && sous === 'fort' ? (sansRep.length ? 'reponse' : 'qui') : null);
+
+    return {
+
+      avecNav: !(this.props && (this.props.coque === true || this.props.coque === 'true')),
+      ...ok,
+      vListe: vue === 'liste', vFiche: vue === 'fiche', vPlan: vue === 'planifier', vPlanifie: vue === 'planifie', vEval: vue === 'evaluation', vProp: vue === 'proposition', vDiag: vue === 'diagnostic',
+      offresF, sousOnglets, sFort: sous === 'fort', sToutes: sous === 'toutes', sEnt: sous === 'entretiens', sDec: sous === 'decisions',
+      resume: `${actives.filter((c) => c.nouv && etapeDe(c) === 'recue').length} nouvelles · ${actives.filter((c) => dansOffre(c)).length} candidatures · ${fort.length} à fort potentiel`,
+      fort: fort.slice(0, 12).map(ligneC), aFort: fort.length > 0, sansFort: fort.length === 0, nFortT: fort.length + ' profils à 80 % et plus',
+      ouvrirDiag: () => S({ vue: 'diagnostic', ofD: of === 'tout' ? 'analyste' : of, depuis: 'liste' }), diagT: `Orbi a lu ${actives.filter((c) => dansOffre(c)).length} CV`,
+      etapesF, dansEtape: dansEtape.slice(0, lim).map(ligneC), aPlus: dansEtape.length > lim, plusT: 'Afficher ' + Math.min(30, dansEtape.length - lim) + ' de plus', plus: () => S({ lim: lim + 30 }),
+      etapeVide: dansEtape.length === 0, triT: tri === 'score' ? 'Par score' : 'Nouvelles d’abord', basculerTri: () => S({ tri: tri === 'score' ? 'date' : 'score' }),
+      selMode, sansSel: !selMode, entrerSel: () => S({ selMode: true, sel: {} }), sortirSel: () => S({ selMode: false, sel: {} }), nSelT: nSel + ' sélectionné' + (nSel > 1 ? 's' : ''), aSel: nSel > 0,
+      toutSel: () => { const s2 = {}; dansEtape.slice(0, lim).forEach((c) => { s2[c.k] = true; }); S({ sel: s2 }); },
+      selDeplacer: () => (nSel ? S({ feuille: 'deplacerSel' }) : flash('Sélectionnez au moins une personne')),
+      selRepondre: () => (nSel ? S({ feuille: 'groupe', groupeNonRep: false }) : flash('Sélectionnez au moins une personne')),
+      selRepartir: () => (nSel ? S({ feuille: 'repartir', pourSel: true }) : flash('Sélectionnez au moins une personne')),
+      selPdf: () => (nSel ? S({ feuille: 'pdf', pourSel: true, pdfPour: 'sel' }) : flash('Sélectionnez au moins une personne')),
+      deplacerSel: [...ETAPES, ['nonretenu', 'Non retenu·e']].map(([k, t]) => ({ t, pick: () => { if (k === 'nonretenu') return S({ feuille: 'nonretenu', pourSel: true }); const e2 = { ...etapes }; sel.forEach((x) => { e2[x] = k; }); S({ etapes: e2, feuille: null, selMode: false, sel: {} }); flash(nSel + ' candidats : ' + t.toLowerCase()); } })),
+      entOnglets, entListe, entVide: entListe.length === 0,
+      decOnglets, decListe, decVide: decListe.length === 0, aSansRep: decF === 'nonretenus' && sansRep.length > 0, sansRepT: `Répondre aux ${sansRep.length} sans réponse`, repondreNonRep: () => S({ feuille: 'groupe', groupeNonRep: true, modele: 'non' }),
+      // recherche
+      aRech: !!rech, sansRech: !rech, q, chercher: (e) => S({ q: val(e) }), ouvrirRech: () => S({ rech: true }), annulerRech: () => S({ rech: false, q: '' }), viderQ: () => S({ q: '' }),
+      aQ: q.length > 0, qVide: !q.trim(), qPlein: !!q.trim(), rTypes, recents, resRech, nRes: resRech.length + ' résultat' + (resRech.length > 1 ? 's' : ''), rRien: !!q.trim() && resRech.length === 0,
+      // fiche
+      fiche, ongletsFiche, oResume: ongletF === 'resume', oCv: ongletF === 'cv', oRep: ongletF === 'reponses', oNotes: ongletF === 'notes', oHist: ongletF === 'historique',
+      retourFiche, retourT: st.depuis === 'diagnostic' ? 'Diagnostic' : 'Candidatures', actionSuiv, ouvrirMenu: () => S({ feuille: 'menu' }), ouvrirPourquoi: () => S({ feuille: 'pourquoi' }),
+      ouvrirDeplacer: () => S({ feuille: 'deplacer' }), ouvrirRepartir: () => S({ feuille: 'repartir', pourSel: false }), deplacer, repartir,
+      note, ecrireNote: (e) => S({ note: val(e) }), ajouterNote, voirEval: () => S({ vue: 'evaluation', depuis: 'fiche' }), planifierDepuisFiche: () => S({ vue: 'planifier', depuis: 'fiche', creneau: null }),
+      telechargerCv: () => flash('CV de ' + c0.nom.split(' ')[0] + ' téléchargé (PDF)'), ouvrirDoc: () => flash('Document ouvert dans la visionneuse'),
+      ecrireMsg: () => S({ feuille: 'message' }), msgRapide: st.msgRapide ?? '', ecrireMsgRapide: (e) => S({ msgRapide: val(e) }),
+      envoyerMsgRapide: () => { if (!String(st.msgRapide || '').trim()) return flash('Écrivez votre message'); S({ feuille: null, msgRapide: '' }); flash('Message envoyé à ' + c0.nom.split(' ')[0] + ' · retrouvez-le dans Messages'); },
+      menuF: [
+        { t: 'Changer d’étape', s: 'Actuellement : ' + ETAPE_T[e0], go: () => S({ feuille: 'deplacer' }), col: '#F2EDE5' },
+        { t: 'Répartir à un collègue', s: a0 ? 'Suivi par ' + EQUIPE[a0].nom : 'Personne pour l’instant', go: () => S({ feuille: 'repartir', pourSel: false }), col: '#F2EDE5' },
+        { t: 'Planifier un entretien', s: ent0 ? 'Déjà prévu : ' + ent0.j + ', ' + ent0.h : 'Créneaux de l’équipe', go: () => S({ vue: 'planifier', depuis: 'fiche', feuille: null, creneau: null }), col: '#F2EDE5' },
+        { t: 'Demander un document', s: 'Diplôme, attestation, références', go: () => S({ feuille: 'document' }), col: '#F2EDE5' },
+        { t: 'Télécharger le PDF', s: 'Fiche, CV, réponses, notes', go: () => S({ feuille: 'pdf', pdfPour: 'un', pourSel: false }), col: '#F2EDE5' },
+        { t: 'Ne pas retenir', s: 'Avec un message bienveillant', go: () => S({ feuille: 'nonretenu', pourSel: false }), col: '#F08A7C' }
+      ],
+      DOCS: ['Dernier diplôme', 'Attestation de travail', 'Deux références', 'Pièce d’identité'].map((t) => ({ t, go: () => { S({ feuille: null }); flash('Demande envoyée : ' + t.toLowerCase()); } })),
+      motifs, msgNon, ecrireMsgNon: (e) => S({ msgNon: val(e) }), envoyerNon, nonTitre: cibleNon.length > 1 ? 'Ne pas retenir ' + cibleNon.length + ' candidats' : 'Ne pas retenir ' + c0.nom.split(' ')[0],
+      modeles, apercuG, envoyerGroupe, groupeTitre: 'Message à ' + ciblesGroupe.length + ' candidat' + (ciblesGroupe.length > 1 ? 's' : ''), groupeNoms: ciblesGroupe.slice(0, 4).map((k) => candDe(k).nom.split(' ')[0]).join(', ') + (ciblesGroupe.length > 4 ? ' et ' + (ciblesGroupe.length - 4) + ' autres' : ''),
+      pdfOpts, pdfTitre, telechargerPdf, repTitre: st.pourSel ? 'Répartir ' + nSel + ' candidats' : 'Confier ' + c0.nom.split(' ')[0] + ' à',
+      fMenu: fRaw === 'menu', fPourquoi: fRaw === 'pourquoi', fDeplacer: fRaw === 'deplacer', fDeplacerSel: fRaw === 'deplacerSel', fRepartir: fRaw === 'repartir', fNon: fRaw === 'nonretenu', fGroupe: fRaw === 'groupe', fPdf: fRaw === 'pdf',
+      fDoc: fRaw === 'document', fMessage: fRaw === 'message', fBienvenue: fRaw === 'bienvenue', fPresel: fRaw === 'presel', fermer,
+      // planifier
+      jours, creneaux, modes, durees, invitesL, envoyerInvit, planOp: planOk ? '1' : '.45', planTitre: 'Entretien avec ' + c0.nom.split(' ')[0], retourVue,
+      planMsg: `Bonjour ${c0.nom.split(' ')[0]}, je vous propose un entretien pour le poste « ${OFFRES[c0.offre].court} » le ${JOURS[jour][1]}${creneau !== null ? ' à ' + CREN[creneau] : ''}, ${mode === 'Visio' ? 'en visio' : mode === 'Sur place' ? 'dans nos bureaux de la Gombe' : 'par appel'}. Vous pouvez accepter ou proposer un autre moment.`,
+      planifie, voirFicheApres: () => S({ vue: 'fiche', onglet: 'resume' }), retourListeApres: () => S({ vue: 'liste', sous: 'entretiens', entF: 'avenir' }), ajouterAgenda: () => flash('Ajouté à votre agenda et à celui de ' + avecT.split(',')[0]),
+      // évaluation
+      grille, recos, ptFort, ptVig, ecrireFort: (e) => S({ ptFort: val(e) }), ecrireVig: (e) => S({ ptVig: val(e) }), enregistrerEval, evalOp: evalOk ? '1' : '.45', evalTitre: 'Entretien de ' + c0.nom.split(' ')[0], evalSous: (ent0 ? ent0.j + ' · ' + ent0.mode + ' · avec ' + ent0.avec : 'Entretien'),
+      // proposition
+      salaire, debut, ecrireSalaire: (e) => S({ salaire: val(e).replace(/\D/g, '') }), ecrireDebut: (e) => S({ debut: val(e) }), msgProp, ecrireMsgProp: (e) => S({ msgProp: val(e) }), envoyerProp, propTitre: 'Proposition à ' + c0.nom.split(' ')[0], propPoste: OFFRES[c0.offre].t,
+      // diagnostic
+      diag, couv, diagOffres, preselTous, aPreselTous: aPreselTous.length > 0, sansPreselTous: aPreselTous.length === 0, preselTousT: aPreselTous.length === 1 ? 'Présélectionner la personne encore en « Reçue »' : 'Présélectionner les ' + aPreselTous.length + ' encore en « Reçue »', confirmerPresel: () => S({ feuille: 'presel' }),
+      pdfDiag: () => S({ feuille: 'pdf', pdfPour: 'offre', pourSel: false }), retourDiag: () => S({ vue: 'liste' }),
+      fab: vue === 'liste' && !rech && !selMode
+    };
+  }
+}
+
+</script>
+</body>
+</html>

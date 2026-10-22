@@ -1,0 +1,136 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jumanly Modèle B · Recruteur · Offre d’une autre entreprise</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050D10}
+a{color:#A6F26B;text-decoration:none}
+.fd,.fd *{box-sizing:border-box}
+.fd{font-family:"Sora",system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.fd h1,.fd h2,.fd h3,.fd p{margin:0}
+.fd button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.fd textarea{font:inherit}
+.fd .scroll{scrollbar-width:none}.fd .scroll::-webkit-scrollbar{display:none}
+.fd .hrow{display:flex;gap:10px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
+.fd .hrow::after{content:"";flex:0 0 6px}
+.fd .hrow::-webkit-scrollbar{display:none}
+.fd .hrow>*{flex:none}
+.fd .sec{display:flex;align-items:baseline;justify-content:space-between;padding:0 20px;margin:28px 0 10px}
+.fd .sec h2{font-size:18px;font-weight:600}
+.fd .sec a,.fd .sec button{font-size:14px;font-weight:600;min-height:36px;display:inline-flex;align-items:center}
+.fd .meta{font-size:13px;color:#8FA39E}
+.fd .tag{display:inline-block;font-size:12.5px;padding:5px 9px;border-radius:7px;background:#1A2629;color:#C9D6D2;white-space:nowrap}
+.fd .ligne{width:100%;display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);color:#F2EDE5}
+.fd .mini{width:48px;height:48px;border-radius:14px;color:#FFFFFF;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .av{width:44px;height:44px;border-radius:50%;background:#1B3338;color:#F2EDE5;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .barre{display:block;height:4px;border-radius:2px;background:rgba(255,255,255,.1);margin-top:8px;overflow:hidden}
+.fd .barre i{display:block;height:100%;background:#A6F26B;border-radius:2px}
+.fd .chip,.fd .pill{height:38px;padding:0 15px;border-radius:19px;font-size:13.5px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;flex:none}
+.fd .bp{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border-radius:26px;background:#A6F26B;color:#0B1A1F;font-size:15px;font-weight:700;text-align:center}
+.fd .bs{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 20px;border-radius:26px;border:1px solid rgba(255,255,255,.18);font-size:14px;font-weight:600;text-align:center;color:#F2EDE5}
+.fd .bloc{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fd .bloc h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.fd .li{display:flex;gap:10px;font-size:14.5px;line-height:1.45;color:#ECE7DF;padding:4px 0}
+.fd .li i{width:6px;height:6px;border-radius:50%;background:#A6F26B;margin-top:8px;flex:none}
+.fd .barreh{padding:50px 12px 8px;display:flex;align-items:center;gap:4px;border-bottom:1px solid rgba(255,255,255,.08);min-height:102px}
+.fd .retour{height:44px;padding:0 8px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;color:#F2EDE5}
+.fd .plus{font-size:18px;letter-spacing:1px;color:#B9CBC6;min-width:44px;min-height:44px;text-align:center;display:flex;align-items:center;justify-content:center}
+.fd .rond{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .nav{position:absolute;left:0;right:0;bottom:0;height:84px;padding:8px 6px 22px;background:rgba(11,26,31,.86);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));z-index:4}
+.fd .nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;position:relative}
+.fd .voile{position:absolute;inset:0;width:100%;background:rgba(0,0,0,.55)}
+.fd .feuille{position:absolute;left:0;right:0;bottom:0;background:#13282C;border-radius:30px 30px 0 0;padding:10px 20px 28px;border-top:1px solid rgba(255,255,255,.08);max-height:760px;overflow-y:auto;scrollbar-width:none}
+.fd .poignee{display:block;width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.2);margin:0 auto 14px}
+.fd .opt{width:100%;display:flex;align-items:center;gap:14px;min-height:56px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px;font-weight:600;color:#F2EDE5}
+.fd .opt small{display:block;font-size:12.5px;font-weight:400;color:#8FA39E;margin-top:2px}
+.fd .annuler{width:100%;height:50px;margin-top:12px;border-radius:999px;background:#1B3338;text-align:center;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#F2EDE5}
+.fd .q{width:100%;padding:14px 16px;border-radius:16px;background:#1B3338;font-size:14px;font-weight:600;line-height:1.4;display:block;color:#F2EDE5}
+.fd .champ{display:flex;align-items:center;gap:10px;min-height:52px;border-radius:26px;background:#0B1A1F;padding:0 6px 0 18px;border:1px solid rgba(47,211,166,.45);min-width:0}
+.fd .champ input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:14px;color:#F2EDE5}
+.fd .env{height:40px;padding:0 16px;border-radius:20px;background:#A6F26B;color:#0B1A1F;font-size:13px;font-weight:700;display:flex;align-items:center;flex:none}
+.fd .in{width:100%;height:52px;border-radius:16px;background:#0B1A1F;border:1px solid rgba(255,255,255,.14);padding:0 16px;font:inherit;font-size:15px;color:#F2EDE5;outline:0}
+.fd .ta{width:100%;min-height:96px;border-radius:16px;background:#0B1A1F;border:1px solid rgba(255,255,255,.14);padding:12px 14px;font-size:14.5px;line-height:1.45;color:#F2EDE5;outline:0;resize:none}
+.fd .lab{display:block;font-size:13px;font-weight:600;color:#B9CBC6;margin:20px 0 10px}
+.fd .bas{position:absolute;left:0;right:0;bottom:0;padding:12px 20px 28px;background:rgba(11,26,31,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);display:flex;gap:10px;z-index:4}
+.fd .seg{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none;padding:0 8px}
+.fd .seg::-webkit-scrollbar{display:none}
+.fd .seg button{height:46px;padding:0 12px;font-size:14px;white-space:nowrap;position:relative;flex:none}
+.fd .seg button i{position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:2px;background:#A6F26B}
+.fd .carte{width:100%;display:block;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:#13282C;padding:16px;color:#F2EDE5}
+.fd .kpi{display:flex;gap:8px}
+.fd .kpi span{flex:1;border-radius:12px;background:#0B1A1F;padding:9px 10px;font-size:11.5px;color:#8FA39E}
+.fd .kpi b{display:block;font-size:17px;font-weight:700;color:#F2EDE5;margin-bottom:1px}
+.fd .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fd .tuile{border-radius:16px;background:#13282C;border:1px solid rgba(255,255,255,.08);padding:14px;font-size:12.5px;color:#8FA39E;display:block}
+.fd .tuile b{display:block;font-size:24px;font-weight:700;color:#F2EDE5;letter-spacing:-0.02em;margin-bottom:2px}
+.fd .case{width:24px;height:24px;border-radius:7px;border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#0B1A1F;flex:none}
+.fd .score{min-width:50px;height:30px;padding:0 9px;border-radius:15px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.fd .rech{flex:1;min-width:0;height:50px;border-radius:25px;background:#1A2629;display:flex;align-items:center;gap:12px;padding:0 16px}
+.fd .rech input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:16px;color:#F2EDE5}
+.fd .rech input::placeholder,.fd .in::placeholder,.fd .champ input::placeholder{color:#6F8580}
+/* mvt-jumanly 2 */
+:root{--mvt-o:.4;--mvt-s:.975;--mvt-tx:0px;--mvt-r:150%;--mvt-x:50%;--mvt-y:50%}
+[data-ecran]{animation:mvtEcran .34s cubic-bezier(.2,.8,.2,1) both;transform-origin:var(--mvt-x) var(--mvt-y)}
+.voile,.shb{animation:mvtVoile .26s ease-out both}
+.voile+div,.shb+div,.voile+.feuille,.shb+.shp,[style*="z-index: 10"]>button:first-child+div{animation:mvtMonte .34s cubic-bezier(.2,.8,.2,1) both}
+@keyframes mvtEcran{from{opacity:var(--mvt-o);transform:translateX(var(--mvt-tx)) scale(var(--mvt-s));clip-path:circle(var(--mvt-r) at var(--mvt-x) var(--mvt-y))}to{opacity:1;transform:none;clip-path:circle(150% at var(--mvt-x) var(--mvt-y))}}
+@keyframes mvtVoile{from{opacity:0}to{opacity:1}}
+@keyframes mvtMonte{from{transform:translateY(56px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){[data-ecran],.voile,.shb,.voile+div,.shb+div{animation:none!important}}
+/* fin mvt */
+</style>
+</helmet>
+<div class="fd" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F; border-radius: 44px;">
+
+<div style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barreh"><a href="{{retourHref}}" class="retour" style="color: #F2EDE5;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg>{{nom}}</a><span style="flex: 1;"></span></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding: 20px 20px 120px;">
+<span class="mini" style="background: {{bg}};">{{ini}}</span>
+<h1 style="font-size: 23px; margin-top: 14px;">{{titre}}</h1><p class="meta" style="margin-top: 4px;">{{nom}} · {{lieu}}</p>
+<div class="kpi" style="margin-top: 16px;"><span><b>{{cand}}</b>candidatures</span><span><b>{{jours}}</b>en ligne</span></div>
+<p style="font-size: 14.5px; line-height: 1.55; margin-top: 18px; color: #C9D6D2;">Vous voyez cette offre comme un talent la voit. Les recruteurs ne peuvent pas candidater ni voir ses candidats.</p>
+</div>
+<div class="bas"><a href="Recruteur-publier-1.dc.html" class="bs" style="width: 100%;">Créer une offre semblable chez Baobab</a></div>
+</div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"ent": {"editor": "enum", "options": ["fleuve", "kivu", "mwinda", "lisanga"], "default": "fleuve"}, "$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && !window.__mvtJ) {
+      window.__mvtJ = 1;
+      const R = document.documentElement.style;
+      const pose = (o, s, tx, r) => { R.setProperty('--mvt-o', o); R.setProperty('--mvt-s', s); R.setProperty('--mvt-tx', tx); R.setProperty('--mvt-r', r); };
+      document.addEventListener('pointerdown', (e) => {
+        const b = e.target && e.target.closest && e.target.closest('button, a, [role="button"]');
+        if (!b) return;
+        const ec = b.closest('[data-ecran]') || document.body;
+        const z = ec.getBoundingClientRect(), k = b.getBoundingClientRect();
+        R.setProperty('--mvt-x', Math.round(e.clientX - z.left) + 'px');
+        R.setProperty('--mvt-y', Math.round(e.clientY - z.top) + 'px');
+        const lab = (b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '').slice(0, 40);
+        if (b.querySelector('path[d^="M15 5 8 12"]') || /^\s*retour/i.test(lab)) pose('.6', '1', '-22px', '150%');
+        else if (b.querySelector('circle[fill="#2FD3A6"]') || /orbi/i.test(b.getAttribute('aria-label') || '')) pose('1', '1', '0px', '22px');
+        else if (k.height >= 64 && k.width >= 160) pose('.5', '.92', '0px', '150%');
+        else pose('.4', '.975', '0px', '150%');
+        clearTimeout(window.__mvtT);
+        window.__mvtT = setTimeout(() => { pose('.4', '.975', '0px', '150%'); }, 700);
+      }, true);
+    }
+    const p = this.props || {};
+    const O = { fleuve: ['Fleuve Banque', 'FB', '#1E4E79', 'Analyste crédit', 'Kinshasa · CDI · 5 postes', '120', '4 jours'], kivu: ['Kivu Data Lab', 'KD', '#4B2D7A', 'Data analyst', 'Goma · CDI', '46', '9 jours'],
+      mwinda: ['Mwinda Énergie', 'ME', '#B07A12', 'Technicien·ne solaire', 'Kinshasa · CDI', '31', '6 jours'], lisanga: ['Lisanga Santé', 'LS', '#0F6B5A', 'Infirmier·ère', 'Kinshasa · CDI', '58', '12 jours'] };
+    const k = O[p.ent] ? p.ent : 'fleuve'; const o = O[k];
+    return { nom: o[0], ini: o[1], bg: o[2], titre: o[3], lieu: o[4], cand: o[5], jours: o[6], retourHref: 'Recruteur-entreprise-' + k + '.dc.html' };
+  }
+}
+</script>
+</body>
+</html>

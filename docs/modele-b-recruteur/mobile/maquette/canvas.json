@@ -1,0 +1,2073 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-10-22T08:00:00Z"
+ },
+ "title": "Jumanly Modèle B · Recruteur",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [],
+ "boards": {
+  "Recruteur-accueil.dc.html": {
+   "x": 0,
+   "y": 300,
+   "w": 390,
+   "h": 844,
+   "title": "Ouverture et inscription (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-ouverture.dc.html": {
+   "x": 470,
+   "y": 300,
+   "w": 390,
+   "h": 844,
+   "title": "Ouverture · Logo animé",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-bienvenue.dc.html": {
+   "x": 940,
+   "y": 300,
+   "w": 390,
+   "h": 844,
+   "title": "Bienvenue 1/3 · Publier",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-bienvenue-2.dc.html": {
+   "x": 1410,
+   "y": 300,
+   "w": 390,
+   "h": 844,
+   "title": "Bienvenue 2/3 · Trier",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-bienvenue-3.dc.html": {
+   "x": 1880,
+   "y": 300,
+   "w": 390,
+   "h": 844,
+   "title": "Bienvenue 3/3 · Recruter",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-inscription.dc.html": {
+   "x": 2350,
+   "y": 300,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · Compte recruteur",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-google.dc.html": {
+   "x": 2820,
+   "y": 300,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · Compte Google",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-linkedin.dc.html": {
+   "x": 3290,
+   "y": 300,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · LinkedIn avec le poste",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-conditions.dc.html": {
+   "x": 3760,
+   "y": 300,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · Conditions recruteur",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-code.dc.html": {
+   "x": 4230,
+   "y": 300,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · Code reçu",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-motdepasse.dc.html": {
+   "x": 0,
+   "y": 1304,
+   "w": 390,
+   "h": 844,
+   "title": "Inscription · Mot de passe",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-connexion.dc.html": {
+   "x": 470,
+   "y": 1304,
+   "w": 390,
+   "h": 844,
+   "title": "Se connecter",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-oubli.dc.html": {
+   "x": 940,
+   "y": 1304,
+   "w": 390,
+   "h": 844,
+   "title": "Mot de passe oublié · lien envoyé",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-vous.dc.html": {
+   "x": 1410,
+   "y": 1304,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 1/7 · Nom et photo",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-ville.dc.html": {
+   "x": 1880,
+   "y": 1304,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 2/7 · Pays et villes",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-pays.dc.html": {
+   "x": 2350,
+   "y": 1304,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 2/7 · Liste des pays",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-contacts.dc.html": {
+   "x": 2820,
+   "y": 1304,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 3/7 · Contacts",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-indicatif.dc.html": {
+   "x": 3290,
+   "y": 1304,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 3/7 · Indicatif du téléphone",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-role.dc.html": {
+   "x": 3760,
+   "y": 1304,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 4/7 · Rôle et poste",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-entreprise.dc.html": {
+   "x": 4230,
+   "y": 1304,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 5/7 · Rechercher l’entreprise",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-entreprise-trouvee.dc.html": {
+   "x": 0,
+   "y": 2308,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 5/7 · Entreprise sur Jumanly",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-demande.dc.html": {
+   "x": 470,
+   "y": 2308,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 5/7 · Demande de rattachement",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-attente.dc.html": {
+   "x": 940,
+   "y": 2308,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 5/7 · Demande envoyée",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-creer.dc.html": {
+   "x": 1410,
+   "y": 2308,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 5/7 · Créer la page entreprise",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-recrute.dc.html": {
+   "x": 1880,
+   "y": 2308,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 6/7 · Ce que vous recrutez",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-apercu.dc.html": {
+   "x": 2350,
+   "y": 2308,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 7/7 · Profil recruteur",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-profil-orbi.dc.html": {
+   "x": 2820,
+   "y": 2308,
+   "w": 390,
+   "h": 844,
+   "title": "Profil 7/7 · Orbi propose une accroche",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-notifications-activer.dc.html": {
+   "x": 3290,
+   "y": 2308,
+   "w": 390,
+   "h": 844,
+   "title": "Notifications · Activer",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-pret.dc.html": {
+   "x": 3760,
+   "y": 2308,
+   "w": 390,
+   "h": 844,
+   "title": "Profil prêt · logo en attente",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-pret-accepte.dc.html": {
+   "x": 4230,
+   "y": 2308,
+   "w": 390,
+   "h": 844,
+   "title": "Profil prêt · rattachement accepté",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-fil.dc.html": {
+   "x": 0,
+   "y": 3872,
+   "w": 390,
+   "h": 844,
+   "title": "Fil (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-fil-abonnements.dc.html": {
+   "x": 470,
+   "y": 3872,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Abonnements",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-fil-entreprises.dc.html": {
+   "x": 940,
+   "y": 3872,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Entreprises",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-fil-recherche.dc.html": {
+   "x": 1410,
+   "y": 3872,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Rechercher : les options",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-fil-recherche-texte.dc.html": {
+   "x": 1880,
+   "y": 3872,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Recherche « data »",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-fil-publication.dc.html": {
+   "x": 2350,
+   "y": 3872,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Publication et commentaires",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-fil-menu.dc.html": {
+   "x": 2820,
+   "y": 3872,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Menu ··· d’une publication",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-fil-publier.dc.html": {
+   "x": 3290,
+   "y": 3872,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Publier en son nom",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-fil-publier-baobab.dc.html": {
+   "x": 3760,
+   "y": 3872,
+   "w": 390,
+   "h": 844,
+   "title": "Fil · Publier une offre au nom de Baobab",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-fil-orbi.dc.html": {
+   "x": 4230,
+   "y": 3872,
+   "w": 390,
+   "h": 844,
+   "title": "Orbi · idée de publication",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offres.dc.html": {
+   "x": 0,
+   "y": 5436,
+   "w": 390,
+   "h": 844,
+   "title": "Offres (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offres-encours.dc.html": {
+   "x": 470,
+   "y": 5436,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Offres en cours",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offres-recherche.dc.html": {
+   "x": 940,
+   "y": 5436,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Rechercher : les options",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offres-recherche-texte.dc.html": {
+   "x": 1410,
+   "y": 5436,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Une lettre tapée",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offre-detail.dc.html": {
+   "x": 1880,
+   "y": 5436,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Détail et statistiques",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offre-menu.dc.html": {
+   "x": 2350,
+   "y": 5436,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Menu de l’offre",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offre-partage.dc.html": {
+   "x": 2820,
+   "y": 5436,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Partager l’offre",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offre-cloturer.dc.html": {
+   "x": 3290,
+   "y": 5436,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Clôturer l’offre",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offre-rapport.dc.html": {
+   "x": 3760,
+   "y": 5436,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Rapport PDF",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offre-candidats.dc.html": {
+   "x": 4230,
+   "y": 5436,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Candidats de l’offre",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-publier-1.dc.html": {
+   "x": 0,
+   "y": 6440,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Publier 1 · Le poste",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-publier-2.dc.html": {
+   "x": 470,
+   "y": 6440,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Publier 2 · Les détails",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-publier-3.dc.html": {
+   "x": 940,
+   "y": 6440,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Publier 3 · La présélection",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-publier-4.dc.html": {
+   "x": 1410,
+   "y": 6440,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Publier 4 · L’aperçu",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-publier-5.dc.html": {
+   "x": 1880,
+   "y": 6440,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Offre publiée",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offres-orbi.dc.html": {
+   "x": 2350,
+   "y": 6440,
+   "w": 390,
+   "h": 844,
+   "title": "Recruteur · Orbi sur les offres",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidatures.dc.html": {
+   "x": 0,
+   "y": 8004,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-toutes.dc.html": {
+   "x": 470,
+   "y": 8004,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · Toutes, étape Reçue",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-selection.dc.html": {
+   "x": 940,
+   "y": 8004,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · Toutes, présélection",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-entretiens.dc.html": {
+   "x": 1410,
+   "y": 8004,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · Entretiens du jour",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-a-documenter.dc.html": {
+   "x": 1880,
+   "y": 8004,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · Entretiens à documenter",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-decisions.dc.html": {
+   "x": 2350,
+   "y": 8004,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · Décisions, propositions",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-nonretenus.dc.html": {
+   "x": 2820,
+   "y": 8004,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · Non retenus et réponses",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-recherche.dc.html": {
+   "x": 3290,
+   "y": 8004,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · Rechercher : les options",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-recherche-texte.dc.html": {
+   "x": 3760,
+   "y": 8004,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · Recherche « sql »",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-diagnostic.dc.html": {
+   "x": 4230,
+   "y": 8004,
+   "w": 390,
+   "h": 844,
+   "title": "Diagnostic de tous les CV par Orbi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat.dc.html": {
+   "x": 0,
+   "y": 9008,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche candidat · Résumé",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-pourquoi.dc.html": {
+   "x": 470,
+   "y": 9008,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Pourquoi ce score",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-cv.dc.html": {
+   "x": 940,
+   "y": 9008,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · CV",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-reponses.dc.html": {
+   "x": 1410,
+   "y": 9008,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Réponses et documents",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-notes.dc.html": {
+   "x": 1880,
+   "y": 9008,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Notes de l’équipe",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-historique.dc.html": {
+   "x": 2350,
+   "y": 9008,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Historique",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-menu.dc.html": {
+   "x": 2820,
+   "y": 9008,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Menu ···",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-etape.dc.html": {
+   "x": 3290,
+   "y": 9008,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Changer d’étape",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-repartir.dc.html": {
+   "x": 3760,
+   "y": 9008,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Répartir à un collègue",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-pdf.dc.html": {
+   "x": 4230,
+   "y": 9008,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Télécharger le PDF",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-nonretenu.dc.html": {
+   "x": 0,
+   "y": 10012,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Ne pas retenir, message bienveillant",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-planifier.dc.html": {
+   "x": 470,
+   "y": 10012,
+   "w": 390,
+   "h": 844,
+   "title": "Planifier un entretien",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-planifie.dc.html": {
+   "x": 940,
+   "y": 10012,
+   "w": 390,
+   "h": 844,
+   "title": "Entretien planifié",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-evaluation.dc.html": {
+   "x": 1410,
+   "y": 10012,
+   "w": 390,
+   "h": 844,
+   "title": "Documenter l’entretien · grille",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-proposition.dc.html": {
+   "x": 1880,
+   "y": 10012,
+   "w": 390,
+   "h": 844,
+   "title": "Faire une proposition",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-groupe.dc.html": {
+   "x": 2350,
+   "y": 10012,
+   "w": 390,
+   "h": 844,
+   "title": "Réponse groupée aux non retenus",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-orbi.dc.html": {
+   "x": 2820,
+   "y": 10012,
+   "w": 390,
+   "h": 844,
+   "title": "Orbi · qui recevoir en premier",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-analyste.dc.html": {
+   "x": 0,
+   "y": 11576,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · offre Analyste (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-clientele.dc.html": {
+   "x": 470,
+   "y": 11576,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · offre Clientèle",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-flutter.dc.html": {
+   "x": 940,
+   "y": 11576,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · offre Flutter",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-cand-marketing.dc.html": {
+   "x": 1410,
+   "y": 11576,
+   "w": 390,
+   "h": 844,
+   "title": "Candidatures · offre Marketing",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-benjamin.dc.html": {
+   "x": 1880,
+   "y": 11576,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Benjamin Tshibangu",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-esther.dc.html": {
+   "x": 2350,
+   "y": 11576,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Esther Kabila",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-patrick.dc.html": {
+   "x": 2820,
+   "y": 11576,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Patrick Ilunga",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-didier.dc.html": {
+   "x": 3290,
+   "y": 11576,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Didier Lukusa",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-sarah.dc.html": {
+   "x": 3760,
+   "y": 11576,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Sarah Mbala",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-junior.dc.html": {
+   "x": 4230,
+   "y": 11576,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Junior Mukendi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-ruth.dc.html": {
+   "x": 0,
+   "y": 12580,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Ruth Ngoy",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-amani.dc.html": {
+   "x": 470,
+   "y": 12580,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Amani Kasongo",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-chantal.dc.html": {
+   "x": 940,
+   "y": 12580,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Chantal Kapinga",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-fiston.dc.html": {
+   "x": 1410,
+   "y": 12580,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Fiston Mwamba",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-moussa.dc.html": {
+   "x": 1880,
+   "y": 12580,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Moussa Diallo",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-kevin.dc.html": {
+   "x": 2350,
+   "y": 12580,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Kevin Lumbala",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-candidat-joelle.dc.html": {
+   "x": 2820,
+   "y": 12580,
+   "w": 390,
+   "h": 844,
+   "title": "Fiche · Joëlle Mbayo",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talents.dc.html": {
+   "x": 0,
+   "y": 14144,
+   "w": 390,
+   "h": 844,
+   "title": "Talents (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talents-recherche.dc.html": {
+   "x": 470,
+   "y": 14144,
+   "w": 390,
+   "h": 844,
+   "title": "Talents · Rechercher : les options",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talents-recherche-texte.dc.html": {
+   "x": 940,
+   "y": 14144,
+   "w": 390,
+   "h": 844,
+   "title": "Talents · Recherche « sql »",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talents-vivier.dc.html": {
+   "x": 1410,
+   "y": 14144,
+   "w": 390,
+   "h": 844,
+   "title": "Talents · Vivier",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talents-liste.dc.html": {
+   "x": 1880,
+   "y": 14144,
+   "w": 390,
+   "h": 844,
+   "title": "Talents · Une liste du vivier",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talents-reseau.dc.html": {
+   "x": 2350,
+   "y": 14144,
+   "w": 390,
+   "h": 844,
+   "title": "Talents · Réseau : invitations, à connaître, relations",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talents-propositions.dc.html": {
+   "x": 2820,
+   "y": 14144,
+   "w": 390,
+   "h": 844,
+   "title": "Talents · Propositions envoyées",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent.dc.html": {
+   "x": 3290,
+   "y": 14144,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent vu par le recruteur",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent-pourquoi.dc.html": {
+   "x": 3760,
+   "y": 14144,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent · Pourquoi ce score",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent-parcours.dc.html": {
+   "x": 4230,
+   "y": 14144,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent · Parcours",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent-realisations.dc.html": {
+   "x": 0,
+   "y": 15148,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent · Réalisations",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent-proposer.dc.html": {
+   "x": 470,
+   "y": 15148,
+   "w": 390,
+   "h": 844,
+   "title": "Proposer une offre à un talent",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent-vivier.dc.html": {
+   "x": 940,
+   "y": 15148,
+   "w": 390,
+   "h": 844,
+   "title": "Ajouter au vivier",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent-menu.dc.html": {
+   "x": 1410,
+   "y": 15148,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent · Menu ···",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent-cedric.dc.html": {
+   "x": 1880,
+   "y": 15148,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent · Cédric",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent-nathalie.dc.html": {
+   "x": 2350,
+   "y": 15148,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent · Nathalie",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent-gloria.dc.html": {
+   "x": 2820,
+   "y": 15148,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent · Gloria (proposition vue)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talent-joel.dc.html": {
+   "x": 3290,
+   "y": 15148,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent · Joël (proposition acceptée)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-talents-orbi.dc.html": {
+   "x": 3760,
+   "y": 15148,
+   "w": 390,
+   "h": 844,
+   "title": "Orbi · qui proposer",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-messages.dc.html": {
+   "x": 0,
+   "y": 16712,
+   "w": 390,
+   "h": 844,
+   "title": "Messages (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-messages-talents.dc.html": {
+   "x": 470,
+   "y": 16712,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Réseau",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-messages-equipe.dc.html": {
+   "x": 940,
+   "y": 16712,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Équipe",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-messages-recherche.dc.html": {
+   "x": 1410,
+   "y": 16712,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Recherche « g »",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-messages-nouveau.dc.html": {
+   "x": 1880,
+   "y": 16712,
+   "w": 390,
+   "h": 844,
+   "title": "Messages · Nouveau message",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-conversation.dc.html": {
+   "x": 2350,
+   "y": 16712,
+   "w": 390,
+   "h": 844,
+   "title": "Conversation avec une candidate",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-conversation-benjamin.dc.html": {
+   "x": 2820,
+   "y": 16712,
+   "w": 390,
+   "h": 844,
+   "title": "Conversation · report de la date de début",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-conversation-modeles.dc.html": {
+   "x": 3290,
+   "y": 16712,
+   "w": 390,
+   "h": 844,
+   "title": "Conversation · Modèles de messages",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-conversation-joindre.dc.html": {
+   "x": 3760,
+   "y": 16712,
+   "w": 390,
+   "h": 844,
+   "title": "Conversation · Joindre",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-conversation-talent.dc.html": {
+   "x": 4230,
+   "y": 16712,
+   "w": 390,
+   "h": 844,
+   "title": "Conversation avec un talent",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-conversation-nathalie.dc.html": {
+   "x": 0,
+   "y": 17716,
+   "w": 390,
+   "h": 844,
+   "title": "Conversation avec une relation talent",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-conversation-christelle.dc.html": {
+   "x": 470,
+   "y": 17716,
+   "w": 390,
+   "h": 844,
+   "title": "Conversation avec une recruteuse d’une autre entreprise",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-conversation-equipe.dc.html": {
+   "x": 940,
+   "y": 17716,
+   "w": 390,
+   "h": 844,
+   "title": "Conversation avec l’équipe",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-conversation-joseph.dc.html": {
+   "x": 1410,
+   "y": 17716,
+   "w": 390,
+   "h": 844,
+   "title": "Conversation · rattachement accepté",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-messages-orbi.dc.html": {
+   "x": 1880,
+   "y": 17716,
+   "w": 390,
+   "h": 844,
+   "title": "Orbi · qui attend une réponse",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-compte.dc.html": {
+   "x": 0,
+   "y": 19280,
+   "w": 390,
+   "h": 844,
+   "title": "Compte (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-compte-profil.dc.html": {
+   "x": 470,
+   "y": 19280,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Mon profil recruteur",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-compte-modifier.dc.html": {
+   "x": 940,
+   "y": 19280,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Modifier mon profil",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-compte-stats.dc.html": {
+   "x": 1410,
+   "y": 19280,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Mes statistiques",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-compte-enregistres.dc.html": {
+   "x": 1880,
+   "y": 19280,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Publications enregistrées",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-equipe.dc.html": {
+   "x": 2350,
+   "y": 19280,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Équipe de recrutement",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-equipe-proposer.dc.html": {
+   "x": 2820,
+   "y": 19280,
+   "w": 390,
+   "h": 844,
+   "title": "Équipe · Proposer un collègue",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-formule.dc.html": {
+   "x": 3290,
+   "y": 19280,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Formule Company (lecture seule)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-parametres.dc.html": {
+   "x": 3760,
+   "y": 19280,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Modèles de messages",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-compte-notifications.dc.html": {
+   "x": 4230,
+   "y": 19280,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Réglage des notifications",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-compte-confidentialite.dc.html": {
+   "x": 0,
+   "y": 20284,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Confidentialité et données",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-compte-langue.dc.html": {
+   "x": 470,
+   "y": 20284,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Langue",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-aide.dc.html": {
+   "x": 940,
+   "y": 20284,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Aide et contact",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-deconnexion.dc.html": {
+   "x": 1410,
+   "y": 20284,
+   "w": 390,
+   "h": 844,
+   "title": "Compte · Se déconnecter",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise.dc.html": {
+   "x": 0,
+   "y": 21848,
+   "w": 390,
+   "h": 844,
+   "title": "Page entreprise (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-fleuve.dc.html": {
+   "x": 470,
+   "y": 21848,
+   "w": 390,
+   "h": 844,
+   "title": "Page entreprise · Fleuve Banque",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-kivu.dc.html": {
+   "x": 940,
+   "y": 21848,
+   "w": 390,
+   "h": 844,
+   "title": "Page entreprise · Kivu Data Lab",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-mwinda.dc.html": {
+   "x": 1410,
+   "y": 21848,
+   "w": 390,
+   "h": 844,
+   "title": "Page entreprise · Mwinda Énergie",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-lisanga.dc.html": {
+   "x": 1880,
+   "y": 21848,
+   "w": 390,
+   "h": 844,
+   "title": "Page entreprise · Lisanga Santé",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-jumanly.dc.html": {
+   "x": 2350,
+   "y": 21848,
+   "w": 390,
+   "h": 844,
+   "title": "Page entreprise · Jumanly",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-offres.dc.html": {
+   "x": 2820,
+   "y": 21848,
+   "w": 390,
+   "h": 844,
+   "title": "Page Baobab · Offres",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-membres.dc.html": {
+   "x": 3290,
+   "y": 21848,
+   "w": 390,
+   "h": 844,
+   "title": "Page Baobab · Membres",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-fleuve-membres.dc.html": {
+   "x": 3760,
+   "y": 21848,
+   "w": 390,
+   "h": 844,
+   "title": "Fleuve Banque · Membres",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-fleuve-tous.dc.html": {
+   "x": 4230,
+   "y": 21848,
+   "w": 390,
+   "h": 844,
+   "title": "Fleuve Banque · Se connecter à tous",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-offre-autre.dc.html": {
+   "x": 0,
+   "y": 22852,
+   "w": 390,
+   "h": 844,
+   "title": "Offre d’une autre entreprise",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-fleuve-offre.dc.html": {
+   "x": 470,
+   "y": 22852,
+   "w": 390,
+   "h": 844,
+   "title": "Offre de fleuve",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-kivu-offre.dc.html": {
+   "x": 940,
+   "y": 22852,
+   "w": 390,
+   "h": 844,
+   "title": "Offre de kivu",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-mwinda-offre.dc.html": {
+   "x": 1410,
+   "y": 22852,
+   "w": 390,
+   "h": 844,
+   "title": "Offre de mwinda",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-lisanga-offre.dc.html": {
+   "x": 1880,
+   "y": 22852,
+   "w": 390,
+   "h": 844,
+   "title": "Offre de lisanga",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne.dc.html": {
+   "x": 2350,
+   "y": 22852,
+   "w": 390,
+   "h": 844,
+   "title": "Profil d’un membre",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-joelle.dc.html": {
+   "x": 2820,
+   "y": 22852,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Joëlle Kasongo (Baobab Fintech)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-grace.dc.html": {
+   "x": 3290,
+   "y": 22852,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Grâce Mbuyi (Baobab Fintech)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-christelle.dc.html": {
+   "x": 3760,
+   "y": 22852,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Christelle Mwamba (Fleuve Banque)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-didier.dc.html": {
+   "x": 4230,
+   "y": 22852,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Didier Mbala (Fleuve Banque)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-sarah.dc.html": {
+   "x": 0,
+   "y": 23856,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Sarah Lukusa (Fleuve Banque)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-tresor.dc.html": {
+   "x": 470,
+   "y": 23856,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Trésor Banza (Kivu Data Lab)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-esther.dc.html": {
+   "x": 940,
+   "y": 23856,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Esther Kahindo (Kivu Data Lab)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-moise.dc.html": {
+   "x": 1410,
+   "y": 23856,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Moïse Bahati (Kivu Data Lab)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-ornella.dc.html": {
+   "x": 1880,
+   "y": 23856,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Ornella Kazadi (Mwinda Énergie)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-benoit.dc.html": {
+   "x": 2350,
+   "y": 23856,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Benoît Mukendi (Mwinda Énergie)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-rose.dc.html": {
+   "x": 2820,
+   "y": 23856,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Rose Kanku (Lisanga Santé)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-personne-paul.dc.html": {
+   "x": 3290,
+   "y": 23856,
+   "w": 390,
+   "h": 844,
+   "title": "Membre · Paul Tshibangu (Lisanga Santé)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-kivu-membres.dc.html": {
+   "x": 3760,
+   "y": 23856,
+   "w": 390,
+   "h": 844,
+   "title": "kivu · Membres",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-mwinda-membres.dc.html": {
+   "x": 4230,
+   "y": 23856,
+   "w": 390,
+   "h": 844,
+   "title": "mwinda · Membres",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-entreprise-lisanga-membres.dc.html": {
+   "x": 0,
+   "y": 24860,
+   "w": 390,
+   "h": 844,
+   "title": "lisanga · Membres",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-notifications.dc.html": {
+   "x": 0,
+   "y": 26424,
+   "w": 390,
+   "h": 844,
+   "title": "Notifications (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-notifications-candidatures.dc.html": {
+   "x": 470,
+   "y": 26424,
+   "w": 390,
+   "h": 844,
+   "title": "Notifications · Candidatures",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-notifications-reseau.dc.html": {
+   "x": 940,
+   "y": 26424,
+   "w": 390,
+   "h": 844,
+   "title": "Notifications · Réseau",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-notifications-admin.dc.html": {
+   "x": 1410,
+   "y": 26424,
+   "w": 390,
+   "h": 844,
+   "title": "Notifications de l’administrateur (Joseph)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-orbi.dc.html": {
+   "x": 1880,
+   "y": 26424,
+   "w": 390,
+   "h": 844,
+   "title": "Orbi",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-basculer.dc.html": {
+   "x": 0,
+   "y": 27988,
+   "w": 390,
+   "h": 844,
+   "title": "Changer de profil · recruteuse (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-basculer-admin.dc.html": {
+   "x": 470,
+   "y": 27988,
+   "w": 390,
+   "h": 844,
+   "title": "Changer de profil · recruteur administrateur",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-mode-talent.dc.html": {
+   "x": 940,
+   "y": 27988,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent (discret)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-mode-talent-candidatures.dc.html": {
+   "x": 1410,
+   "y": 27988,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent · Mes candidatures",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-mode-talent-joseph.dc.html": {
+   "x": 1880,
+   "y": 27988,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent de l’administrateur",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-mode-talent-experience.dc.html": {
+   "x": 2350,
+   "y": 27988,
+   "w": 390,
+   "h": 844,
+   "title": "Profil talent · Ajouter une expérience",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-mode-entreprise.dc.html": {
+   "x": 2820,
+   "y": 27988,
+   "w": 390,
+   "h": 844,
+   "title": "Agir au nom de l’entreprise (administrateur)",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "Recruteur-mode-entreprise-messages.dc.html": {
+   "x": 3290,
+   "y": 27988,
+   "w": 390,
+   "h": 844,
+   "title": "Entreprise · répondre au nom de Baobab",
+   "is_interactive": true,
+   "radius": 44
+  },
+  "RecruteurTablette.dc.html": {
+   "x": 0,
+   "y": 34852,
+   "w": 1180,
+   "h": 820,
+   "title": "Tablette (prototype cliquable)",
+   "is_interactive": true,
+   "radius": 24
+  },
+  "RecruteurTablette-agenda.dc.html": {
+   "x": 0,
+   "y": 35832,
+   "w": 1180,
+   "h": 820,
+   "title": "Tablette · Agenda de la semaine",
+   "is_interactive": true,
+   "radius": 24
+  },
+  "RecruteurTablette-candidat.dc.html": {
+   "x": 1260,
+   "y": 35832,
+   "w": 1180,
+   "h": 820,
+   "title": "Tablette · Fiche candidat et « Pourquoi ? »",
+   "is_interactive": true,
+   "radius": 24
+  },
+  "RecruteurTablette-messages.dc.html": {
+   "x": 2520,
+   "y": 35832,
+   "w": 1180,
+   "h": 820,
+   "title": "Tablette · Messages",
+   "is_interactive": true,
+   "radius": 24
+  },
+  "RecruteurTablette-talents.dc.html": {
+   "x": 0,
+   "y": 36812,
+   "w": 1180,
+   "h": 820,
+   "title": "Tablette · Talents",
+   "is_interactive": true,
+   "radius": 24
+  }
+ },
+ "order": [
+  "Recruteur-accueil.dc.html",
+  "Recruteur-ouverture.dc.html",
+  "Recruteur-bienvenue.dc.html",
+  "Recruteur-bienvenue-2.dc.html",
+  "Recruteur-bienvenue-3.dc.html",
+  "Recruteur-inscription.dc.html",
+  "Recruteur-google.dc.html",
+  "Recruteur-linkedin.dc.html",
+  "Recruteur-conditions.dc.html",
+  "Recruteur-code.dc.html",
+  "Recruteur-motdepasse.dc.html",
+  "Recruteur-connexion.dc.html",
+  "Recruteur-oubli.dc.html",
+  "Recruteur-profil-vous.dc.html",
+  "Recruteur-profil-ville.dc.html",
+  "Recruteur-profil-pays.dc.html",
+  "Recruteur-profil-contacts.dc.html",
+  "Recruteur-profil-indicatif.dc.html",
+  "Recruteur-profil-role.dc.html",
+  "Recruteur-profil-entreprise.dc.html",
+  "Recruteur-profil-entreprise-trouvee.dc.html",
+  "Recruteur-profil-demande.dc.html",
+  "Recruteur-profil-attente.dc.html",
+  "Recruteur-profil-creer.dc.html",
+  "Recruteur-profil-recrute.dc.html",
+  "Recruteur-profil-apercu.dc.html",
+  "Recruteur-profil-orbi.dc.html",
+  "Recruteur-notifications-activer.dc.html",
+  "Recruteur-pret.dc.html",
+  "Recruteur-pret-accepte.dc.html",
+  "Recruteur-fil.dc.html",
+  "Recruteur-fil-abonnements.dc.html",
+  "Recruteur-fil-entreprises.dc.html",
+  "Recruteur-fil-recherche.dc.html",
+  "Recruteur-fil-recherche-texte.dc.html",
+  "Recruteur-fil-publication.dc.html",
+  "Recruteur-fil-menu.dc.html",
+  "Recruteur-fil-publier.dc.html",
+  "Recruteur-fil-publier-baobab.dc.html",
+  "Recruteur-fil-orbi.dc.html",
+  "Recruteur-offres.dc.html",
+  "Recruteur-offres-encours.dc.html",
+  "Recruteur-offres-recherche.dc.html",
+  "Recruteur-offres-recherche-texte.dc.html",
+  "Recruteur-offre-detail.dc.html",
+  "Recruteur-offre-menu.dc.html",
+  "Recruteur-offre-partage.dc.html",
+  "Recruteur-offre-cloturer.dc.html",
+  "Recruteur-offre-rapport.dc.html",
+  "Recruteur-offre-candidats.dc.html",
+  "Recruteur-publier-1.dc.html",
+  "Recruteur-publier-2.dc.html",
+  "Recruteur-publier-3.dc.html",
+  "Recruteur-publier-4.dc.html",
+  "Recruteur-publier-5.dc.html",
+  "Recruteur-offres-orbi.dc.html",
+  "Recruteur-candidatures.dc.html",
+  "Recruteur-cand-toutes.dc.html",
+  "Recruteur-cand-selection.dc.html",
+  "Recruteur-cand-entretiens.dc.html",
+  "Recruteur-cand-a-documenter.dc.html",
+  "Recruteur-cand-decisions.dc.html",
+  "Recruteur-cand-nonretenus.dc.html",
+  "Recruteur-cand-recherche.dc.html",
+  "Recruteur-cand-recherche-texte.dc.html",
+  "Recruteur-cand-diagnostic.dc.html",
+  "Recruteur-candidat.dc.html",
+  "Recruteur-candidat-pourquoi.dc.html",
+  "Recruteur-candidat-cv.dc.html",
+  "Recruteur-candidat-reponses.dc.html",
+  "Recruteur-candidat-notes.dc.html",
+  "Recruteur-candidat-historique.dc.html",
+  "Recruteur-candidat-menu.dc.html",
+  "Recruteur-candidat-etape.dc.html",
+  "Recruteur-candidat-repartir.dc.html",
+  "Recruteur-candidat-pdf.dc.html",
+  "Recruteur-candidat-nonretenu.dc.html",
+  "Recruteur-planifier.dc.html",
+  "Recruteur-planifie.dc.html",
+  "Recruteur-evaluation.dc.html",
+  "Recruteur-proposition.dc.html",
+  "Recruteur-cand-groupe.dc.html",
+  "Recruteur-cand-orbi.dc.html",
+  "Recruteur-cand-analyste.dc.html",
+  "Recruteur-cand-clientele.dc.html",
+  "Recruteur-cand-flutter.dc.html",
+  "Recruteur-cand-marketing.dc.html",
+  "Recruteur-candidat-benjamin.dc.html",
+  "Recruteur-candidat-esther.dc.html",
+  "Recruteur-candidat-patrick.dc.html",
+  "Recruteur-candidat-didier.dc.html",
+  "Recruteur-candidat-sarah.dc.html",
+  "Recruteur-candidat-junior.dc.html",
+  "Recruteur-candidat-ruth.dc.html",
+  "Recruteur-candidat-amani.dc.html",
+  "Recruteur-candidat-chantal.dc.html",
+  "Recruteur-candidat-fiston.dc.html",
+  "Recruteur-candidat-moussa.dc.html",
+  "Recruteur-candidat-kevin.dc.html",
+  "Recruteur-candidat-joelle.dc.html",
+  "Recruteur-talents.dc.html",
+  "Recruteur-talents-recherche.dc.html",
+  "Recruteur-talents-recherche-texte.dc.html",
+  "Recruteur-talents-vivier.dc.html",
+  "Recruteur-talents-liste.dc.html",
+  "Recruteur-talents-reseau.dc.html",
+  "Recruteur-talents-propositions.dc.html",
+  "Recruteur-talent.dc.html",
+  "Recruteur-talent-pourquoi.dc.html",
+  "Recruteur-talent-parcours.dc.html",
+  "Recruteur-talent-realisations.dc.html",
+  "Recruteur-talent-proposer.dc.html",
+  "Recruteur-talent-vivier.dc.html",
+  "Recruteur-talent-menu.dc.html",
+  "Recruteur-talent-cedric.dc.html",
+  "Recruteur-talent-nathalie.dc.html",
+  "Recruteur-talent-gloria.dc.html",
+  "Recruteur-talent-joel.dc.html",
+  "Recruteur-talents-orbi.dc.html",
+  "Recruteur-messages.dc.html",
+  "Recruteur-messages-talents.dc.html",
+  "Recruteur-messages-equipe.dc.html",
+  "Recruteur-messages-recherche.dc.html",
+  "Recruteur-messages-nouveau.dc.html",
+  "Recruteur-conversation.dc.html",
+  "Recruteur-conversation-benjamin.dc.html",
+  "Recruteur-conversation-modeles.dc.html",
+  "Recruteur-conversation-joindre.dc.html",
+  "Recruteur-conversation-talent.dc.html",
+  "Recruteur-conversation-nathalie.dc.html",
+  "Recruteur-conversation-christelle.dc.html",
+  "Recruteur-conversation-equipe.dc.html",
+  "Recruteur-conversation-joseph.dc.html",
+  "Recruteur-messages-orbi.dc.html",
+  "Recruteur-compte.dc.html",
+  "Recruteur-compte-profil.dc.html",
+  "Recruteur-compte-modifier.dc.html",
+  "Recruteur-compte-stats.dc.html",
+  "Recruteur-compte-enregistres.dc.html",
+  "Recruteur-equipe.dc.html",
+  "Recruteur-equipe-proposer.dc.html",
+  "Recruteur-formule.dc.html",
+  "Recruteur-parametres.dc.html",
+  "Recruteur-compte-notifications.dc.html",
+  "Recruteur-compte-confidentialite.dc.html",
+  "Recruteur-compte-langue.dc.html",
+  "Recruteur-aide.dc.html",
+  "Recruteur-deconnexion.dc.html",
+  "Recruteur-entreprise.dc.html",
+  "Recruteur-entreprise-fleuve.dc.html",
+  "Recruteur-entreprise-kivu.dc.html",
+  "Recruteur-entreprise-mwinda.dc.html",
+  "Recruteur-entreprise-lisanga.dc.html",
+  "Recruteur-entreprise-jumanly.dc.html",
+  "Recruteur-entreprise-offres.dc.html",
+  "Recruteur-entreprise-membres.dc.html",
+  "Recruteur-entreprise-fleuve-membres.dc.html",
+  "Recruteur-entreprise-fleuve-tous.dc.html",
+  "Recruteur-offre-autre.dc.html",
+  "Recruteur-entreprise-fleuve-offre.dc.html",
+  "Recruteur-entreprise-kivu-offre.dc.html",
+  "Recruteur-entreprise-mwinda-offre.dc.html",
+  "Recruteur-entreprise-lisanga-offre.dc.html",
+  "Recruteur-personne.dc.html",
+  "Recruteur-personne-joelle.dc.html",
+  "Recruteur-personne-grace.dc.html",
+  "Recruteur-personne-christelle.dc.html",
+  "Recruteur-personne-didier.dc.html",
+  "Recruteur-personne-sarah.dc.html",
+  "Recruteur-personne-tresor.dc.html",
+  "Recruteur-personne-esther.dc.html",
+  "Recruteur-personne-moise.dc.html",
+  "Recruteur-personne-ornella.dc.html",
+  "Recruteur-personne-benoit.dc.html",
+  "Recruteur-personne-rose.dc.html",
+  "Recruteur-personne-paul.dc.html",
+  "Recruteur-entreprise-kivu-membres.dc.html",
+  "Recruteur-entreprise-mwinda-membres.dc.html",
+  "Recruteur-entreprise-lisanga-membres.dc.html",
+  "Recruteur-notifications.dc.html",
+  "Recruteur-notifications-candidatures.dc.html",
+  "Recruteur-notifications-reseau.dc.html",
+  "Recruteur-notifications-admin.dc.html",
+  "Recruteur-orbi.dc.html",
+  "Recruteur-basculer.dc.html",
+  "Recruteur-basculer-admin.dc.html",
+  "Recruteur-mode-talent.dc.html",
+  "Recruteur-mode-talent-candidatures.dc.html",
+  "Recruteur-mode-talent-joseph.dc.html",
+  "Recruteur-mode-talent-experience.dc.html",
+  "Recruteur-mode-entreprise.dc.html",
+  "Recruteur-mode-entreprise-messages.dc.html",
+  "RecruteurTablette.dc.html",
+  "RecruteurTablette-agenda.dc.html",
+  "RecruteurTablette-candidat.dc.html",
+  "RecruteurTablette-messages.dc.html",
+  "RecruteurTablette-talents.dc.html"
+ ],
+ "notes": {
+  "s01": {
+   "x": 0,
+   "y": 0,
+   "text": "01 · Ouverture et inscription du recruteur : rôle, entreprise et demande de logo, pays, contacts, profil",
+   "kind": "title1",
+   "maxW": 4620
+  },
+  "s02": {
+   "x": 0,
+   "y": 3572,
+   "text": "02 · Fil : publier en son nom ou au nom de Baobab Fintech",
+   "kind": "title1",
+   "maxW": 4620
+  },
+  "s03": {
+   "x": 0,
+   "y": 5136,
+   "text": "03 · Offres : indicateurs, publier en 5 étapes, partager, clôturer",
+   "kind": "title1",
+   "maxW": 4620
+  },
+  "s04": {
+   "x": 0,
+   "y": 7704,
+   "text": "04 · Candidatures (ATS) : fort potentiel, étapes, entretiens, décisions, fiche, planifier, évaluer, proposer, diagnostic",
+   "kind": "title1",
+   "maxW": 4620
+  },
+  "s05": {
+   "x": 0,
+   "y": 11276,
+   "text": "05 · Candidatures par offre et fiche de chaque candidat",
+   "kind": "title1",
+   "maxW": 4620
+  },
+  "s06": {
+   "x": 0,
+   "y": 13844,
+   "text": "06 · Talents : recherche, vivier, propositions, profil vu par le recruteur",
+   "kind": "title1",
+   "maxW": 4620
+  },
+  "s07": {
+   "x": 0,
+   "y": 16412,
+   "text": "07 · Messages : candidats, talents, équipe",
+   "kind": "title1",
+   "maxW": 4620
+  },
+  "s08": {
+   "x": 0,
+   "y": 18980,
+   "text": "08 · Compte : profil avec logo, statistiques, équipe, formule en lecture, réglages, aide",
+   "kind": "title1",
+   "maxW": 4620
+  },
+  "s09": {
+   "x": 0,
+   "y": 21548,
+   "text": "09 · Pages entreprise, membres et réseau",
+   "kind": "title1",
+   "maxW": 4620
+  },
+  "s10": {
+   "x": 0,
+   "y": 26124,
+   "text": "10 · Notifications et Orbi",
+   "kind": "title1",
+   "maxW": 2270
+  },
+  "s11": {
+   "x": 0,
+   "y": 27688,
+   "text": "11 · Changer de profil : recruteur, talent discret, entreprise (administrateur)",
+   "kind": "title1",
+   "maxW": 3680
+  },
+  "s12": {
+   "x": 0,
+   "y": 29252,
+   "text": "12 · Tablette : la même appli en grand (rail d’icônes et Orbi flottant)",
+   "kind": "title1",
+   "maxW": 4480
+  }
+ },
+ "designSystems": []
+}

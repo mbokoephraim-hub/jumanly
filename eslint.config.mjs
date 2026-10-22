@@ -37,6 +37,7 @@ const eslintConfig = defineConfig([
     // Mockup boards and their generators (docs/refonte-mobile, …): reference files, not app code.
     "docs/**/maquette/**",
     "docs/**/source/**",
+    "docs/**/generateurs/**",
   ]),
 ]);
 

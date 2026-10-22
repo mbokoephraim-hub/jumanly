@@ -3973,7 +3973,7 @@ Quatre corrections d'Ephraïm, détail dans `docs/decisions/2026-10-22-compte-re
 
 - Un talent passe en compte recruteur depuis Paramètres (téléphone) ou Compte (ordinateur).
 - « Supprimer mon compte » efface tout immédiatement ; la même adresse repart de zéro. Paiements et
-  factures gardés sans lien (comptabilité), à confirmer par Ephraïm.
+  factures gardés sans lien (comptabilité), confirmé par Ephraïm le 22/10/2026.
 - Publications du Fil : 220 caractères au plus, compteur visible ; réponses inchangées.
 - « Pour vous » classé par `feed-rank.ts` (offres, nouveaux postes, événements, auteurs actifs,
   commentateurs, bien connectés), plafonné et varié.
@@ -3987,3 +3987,9 @@ Carrière : photo 64 px (au lieu de 96), boutons Partager et Modifier 34 px, puc
 28 px, onglets Profil · CV · Portfolio · Progression · Candidatures 44 px en 14 px. Le bloc d'identité
 passe au-dessus de la bannière, que la photo plus petite ne dégage plus. Plus aucun cadre vert dans un
 champ de texte quand on écrit (publication, recherche d'Explorer).
+
+## Modèle B recruteur et administrateur déposé (22 octobre 2026)
+
+- Ephraïm a validé l'espace recruteur sur mobile et sur ordinateur, ainsi que l'espace administrateur sur ordinateur.
+- Ils sont déposés dans `docs/modele-b-recruteur/` : brief, prompt, captures avec index, sources `.dc.html`, rapports PDF et générateurs.
+- Ce dépôt remplace les planches recruteur et admin de `docs/refonte-mobile/` et de `docs/refonte-web/`. `CLAUDE.md` et `docs/PLAN-REFONTE-EN-3-ETAPES.md` sont mis à jour.
