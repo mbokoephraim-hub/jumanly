@@ -7,6 +7,7 @@ import { useTranslations } from "next-intl";
 import { useRef, useState, useTransition } from "react";
 import { showToast } from "@/components/motion/toaster";
 import { publishAction, uploadFeedImageAction } from "@/server/actions/feed";
+import { FEED_POST_MAX } from "@/server/services/feed-limits";
 import { PhoneBack } from "../back";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
@@ -148,9 +149,18 @@ export function PhoneCompose({
             onChange={(event) => setText(event.target.value)}
             aria-label={t("publish.label")}
             placeholder={t("publish.placeholder")}
-            maxLength={2000}
+            maxLength={FEED_POST_MAX}
             rows={4}
+            aria-describedby="fil-pub-compte"
           />
+          <span
+            id="fil-pub-compte"
+            className="nb-meta nb-fil-pub-compte"
+            data-plein={text.length >= FEED_POST_MAX ? "" : undefined}
+            aria-live="polite"
+          >
+            {t("publish.count", { count: text.length, max: FEED_POST_MAX })}
+          </span>
           {photo ? (
             <span className="nb-fil-pj-photo">
               <img src={photo.preview} alt={t("publish.photoAlt", { name: me.name })} />

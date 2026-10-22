@@ -15,11 +15,10 @@ import {
 } from "@/components/talent/settings-controls";
 import { Sheet, SheetButton } from "@/components/talent/sheet";
 import { cx } from "@/lib/cx";
-import { DELETION_GRACE_DAYS } from "@/lib/password";
-import { scheduleDeletion, updateDisplay } from "@/server/actions/settings";
+import { deleteAccount, updateDisplay } from "@/server/actions/settings";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { ownedOrganization } from "@/server/services/accounts";
+import { ownedOrganizations } from "@/server/services/account-deletion";
 import { redirect } from "next/navigation";
 import { RecruiterSettings } from "@/components/recruiter/settings";
 import { getActiveSpace } from "@/server/hire-context";
@@ -107,7 +106,7 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
     return <PhoneSettingsScreen user={user} />;
   const t = await getTranslations();
   const [org, credential] = await Promise.all([
-    ownedOrganization(db, user.id),
+    ownedOrganizations(db, user.id).then((owned) => owned.blocking),
     db.account.findFirst({
       where: { userId: user.id, providerId: "credential" },
       select: { password: true },
@@ -266,10 +265,10 @@ export default async function SettingsPage({ searchParams }: PageProps<"/app/par
             <span>{t("parametres.delete.owner", { org: org.name })}</span>
           </p>
         ) : (
-          <form action={scheduleDeletion} className="t-flux t-suppr">
+          <form action={deleteAccount} className="t-flux t-suppr">
             <div className="t-danger-c">
               <b>{t("parametres.delete.what")}</b>
-              <p>{t("parametres.delete.text", { days: DELETION_GRACE_DAYS })}</p>
+              <p>{t("parametres.delete.text")}</p>
             </div>
             {deleting && error === "confirm" && (
               <Notice tone="err">{t("parametres.delete.errorConfirm")}</Notice>

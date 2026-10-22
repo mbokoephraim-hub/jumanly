@@ -2,24 +2,32 @@
  * Le Fil (Modèle B, lot B3, docs/modele-b rangées 05-06): posts of people and organizations,
  * answers, J'aime, Republier, Citer, Enregistrer, « Ne plus voir ce type de publication »,
  * events and reports. Every post is visible to every signed-in talent; a blocked connection
- * hides each other's posts. Nothing here ranks people: « Pour vous » is the most recent first.
+ * hides each other's posts. « Pour vous » puts professional posts forward (feed-rank.ts, Ephraïm's
+ * request of 22/10/2026); the two other tabs stay the most recent first.
  */
 import { randomBytes } from "node:crypto";
 import { z } from "zod";
-import type { FeedPostKind, Prisma, PrismaClient } from "@/generated/prisma/client";
+import { Prisma } from "@/generated/prisma/client";
+import type { FeedPostKind, PrismaClient } from "@/generated/prisma/client";
 import { matchesForUser } from "@/server/matching/service";
+import { FEED_POST_MAX } from "./feed-limits";
+import { rankFeed, type AuthorSignals } from "./feed-rank";
 import { photoType } from "./profile-photo";
 import { notify } from "./notifications";
 
 export const FEED_TABS = ["pourvous", "abonnements", "entreprises"] as const;
 export type FeedTab = (typeof FEED_TABS)[number];
 
-/** A post or an answer: at most this many characters. */
+/** An answer: at most this many characters. */
 export const FEED_BODY_MAX = 2000;
+export { FEED_POST_MAX };
 /** A photo reduced on the phone stays far below this. */
 export const FEED_IMAGE_MAX = 1_000_000;
 const IMAGE_PREFIX = "/api/fil/image/";
 const PAGE = 30;
+/** « Pour vous » chooses its page among this many recent posts. */
+const CANDIDATES = 200;
+const DAY_MS = 86_400_000;
 
 export class FeedError extends Error {
   constructor(public code: "notFound" | "invalid" | "closed" | "image") {
@@ -321,8 +329,9 @@ async function toItems(
 }
 
 /**
- * One tab of the Fil, most recent first: « Pour vous » (everything), « Abonnements » (people and
- * organizations followed, connections, and the viewer's own posts), « Entreprises ».
+ * One tab of the Fil: « Pour vous » (everything, professional posts first, feed-rank.ts), then,
+ * most recent first, « Abonnements » (people and organizations followed, connections, and the
+ * viewer's own posts) and « Entreprises ».
  */
 export async function listFeed(
   db: PrismaClient,
@@ -365,10 +374,98 @@ export async function listFeed(
   const rows = await db.feedPost.findMany({
     where,
     orderBy: { createdAt: "desc" },
-    take: PAGE,
+    take: tab === "pourvous" ? CANDIDATES : PAGE,
     select: postSelect,
   });
-  return toItems(db, viewerId, rows, connected, now);
+  if (tab !== "pourvous") return toItems(db, viewerId, rows, connected, now);
+  const people = [
+    ...new Set(rows.flatMap((row) => (row.authorId && !row.organizationId ? [row.authorId] : []))),
+  ];
+  const authors = await authorSignals(db, people, now);
+  const ranked = rankFeed(
+    rows.map((row) => ({
+      ...row,
+      hasJob: row.job !== null,
+      likes: row._count.likes,
+      replies: row._count.replies,
+      reposts: row._count.reposts,
+    })),
+    authors,
+    viewerId,
+    now,
+  ).slice(0, PAGE);
+  const byId = new Map(rows.map((row) => [row.id, row]));
+  return toItems(
+    db,
+    viewerId,
+    ranked.map((post) => byId.get(post.id)!),
+    connected,
+    now,
+  );
+}
+
+/**
+ * What the authors of « Pour vous » did on Jumanly (feed-rank.ts): answers and active days over
+ * 30 days, accepted connections, a job obtained through an application in the last 120 days.
+ */
+export async function authorSignals(
+  db: PrismaClient,
+  people: string[],
+  now = new Date(),
+): Promise<Map<string, AuthorSignals>> {
+  const result = new Map<string, AuthorSignals>();
+  if (people.length === 0) return result;
+  const since = new Date(now.getTime() - 30 * DAY_MS);
+  const [replies, days, requested, received, hired] = await Promise.all([
+    db.feedPost.groupBy({
+      by: ["authorId"],
+      where: {
+        authorId: { in: people },
+        organizationId: null,
+        parentId: { not: null },
+        createdAt: { gte: since },
+      },
+      _count: { _all: true },
+    }),
+    db.$queryRaw<{ id: string; days: bigint }[]>`
+      SELECT id, COUNT(DISTINCT day) AS days FROM (
+        SELECT "authorId" AS id, date_trunc('day', "createdAt") AS day FROM "FeedPost"
+        WHERE "authorId" IN (${Prisma.join(people)}) AND "createdAt" >= ${since}
+        UNION
+        SELECT "userId" AS id, date_trunc('day', "createdAt") AS day FROM "FeedLike"
+        WHERE "userId" IN (${Prisma.join(people)}) AND "createdAt" >= ${since}
+      ) AS activity GROUP BY id`,
+    db.connection.groupBy({
+      by: ["requesterId"],
+      where: { requesterId: { in: people }, status: "accepted" },
+      _count: { _all: true },
+    }),
+    db.connection.groupBy({
+      by: ["addresseeId"],
+      where: { addresseeId: { in: people }, status: "accepted" },
+      _count: { _all: true },
+    }),
+    db.application.findMany({
+      where: {
+        status: "hired",
+        updatedAt: { gte: new Date(now.getTime() - 120 * DAY_MS) },
+        profile: { userId: { in: people } },
+      },
+      select: { profile: { select: { userId: true } } },
+    }),
+  ]);
+  const hiredHere = new Set(hired.map((row) => row.profile.userId));
+  for (const id of people) {
+    result.set(id, {
+      replies: replies.find((row) => row.authorId === id)?._count._all ?? 0,
+      activeDays: Number(days.find((row) => row.id === id)?.days ?? 0),
+      connections:
+        (requested.find((row) => row.requesterId === id)?._count._all ?? 0) +
+        (received.find((row) => row.addresseeId === id)?._count._all ?? 0),
+      hiredHere: hiredHere.has(id),
+    });
+  }
+  return result;
 }
 
 export type FeedReply = {
@@ -443,7 +540,7 @@ async function visiblePost(db: PrismaClient, viewerId: string, id: string) {
 
 export const newPostSchema = z
   .object({
-    body: z.string().trim().max(FEED_BODY_MAX).default(""),
+    body: z.string().trim().max(FEED_POST_MAX).default(""),
     attachment: z.enum(["work", "certificate"]).optional(),
     attachmentId: z.string().trim().max(60).optional(),
     quotedId: z.string().trim().max(60).optional(),

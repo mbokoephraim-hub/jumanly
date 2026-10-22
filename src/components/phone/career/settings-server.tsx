@@ -8,6 +8,7 @@ import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
 import { paymentProvider } from "@/server/payments";
 import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
+import { hireMemberships } from "@/server/services/organization";
 import { liveSubscription, localMask, quoteCheckout } from "@/server/services/subscriptions";
 import { initialsOf, toneOf } from "../fil/data";
 import { PhoneIcon } from "../icon";
@@ -86,7 +87,10 @@ export async function InstallRow() {
 /** « Paramètres » on the phone (planche Carrière-parametres). */
 export async function PhoneSettingsScreen({ user }: { user: User }) {
   const t = await getTranslations("phoneCareer.reglages");
-  const plan = await resolvePlan(db, { type: "user", id: user.id }, new Date());
+  const [plan, memberships] = await Promise.all([
+    resolvePlan(db, { type: "user", id: user.id }, new Date()),
+    hireMemberships(db, user.id),
+  ]);
   return (
     <CareerTexts>
       <PhoneSettings
@@ -98,6 +102,7 @@ export async function PhoneSettingsScreen({ user }: { user: User }) {
         plan={plan?.planName ?? t("noPlan")}
         install={<InstallRow />}
         language={t("french")}
+        recruiter={memberships.length > 0 ? "open" : "become"}
       />
     </CareerTexts>
   );

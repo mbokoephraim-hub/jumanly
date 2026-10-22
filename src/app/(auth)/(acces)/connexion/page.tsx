@@ -6,7 +6,6 @@ import { getTranslations } from "next-intl/server";
 import { AccessHead, ProviderButtons } from "@/components/access/frame";
 import { LoginForm } from "@/components/access/forms";
 import { TalentIcon } from "@/components/talent/icon";
-import { DELETION_GRACE_DAYS } from "@/lib/password";
 import { pageMetadata } from "@/lib/seo";
 import { readSignupParams } from "@/lib/signup-params";
 import { signInWithProvider } from "@/server/actions/auth";
@@ -54,11 +53,7 @@ async function Login({ searchParams }: Pick<PageProps<"/connexion">, "searchPara
   if (await isPhone()) {
     const notices: { tone: "ok" | "err"; text: string }[] = [];
     if (params.deconnecte) notices.push({ tone: "ok", text: t("auth.success.logout") });
-    if (params.suppression)
-      notices.push({
-        tone: "err",
-        text: t("login.deletionScheduled", { days: DELETION_GRACE_DAYS }),
-      });
+    if (params.suppression) notices.push({ tone: "ok", text: t("login.deleted") });
     if (failed) notices.push({ tone: "err", text: t(`auth.error.${failed as "google"}Failed`) });
     if (suite) notices.push({ tone: "ok", text: t("auth.resume.generic") });
     return <PhoneLoginPage next={suite} notices={notices} />;
@@ -72,8 +67,7 @@ async function Login({ searchParams }: Pick<PageProps<"/connexion">, "searchPara
         subtitle={t("access.login.subtitle")}
       />
       {params.deconnecte && notice("ok", t("auth.success.logout"))}
-      {params.suppression &&
-        notice("err", t("login.deletionScheduled", { days: DELETION_GRACE_DAYS }))}
+      {params.suppression && notice("ok", t("login.deleted"))}
       {failed && notice("err", t(`auth.error.${failed as "google"}Failed`))}
       {suite && notice("ok", t("auth.resume.generic"))}
       <LoginForm

@@ -14,14 +14,14 @@ import {
 } from "@/components/ui";
 import { countryOptions } from "@/config/countries";
 import { formatDate } from "@/lib/dates";
-import { DELETION_GRACE_DAYS, PASSWORD_MIN } from "@/lib/password";
+import { PASSWORD_MIN } from "@/lib/password";
 import { cx } from "@/lib/cx";
 import { dynamic } from "@/i18n/dynamic";
 import {
   changePassword,
   revokeOtherSessions,
   revokeSession,
-  scheduleDeletion,
+  deleteAccount,
   setTwoFactor,
   updateAccount,
   updateDisplay,
@@ -31,7 +31,7 @@ import { auth } from "@/server/auth";
 import { getSession, requireUser, type CurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { resolvePlan } from "@/server/entitlements";
-import { ownedOrganization } from "@/server/services/accounts";
+import { ownedOrganizations } from "@/server/services/account-deletion";
 import { AppPageHeader } from "@/components/app/page-header";
 import { TabRail } from "@/components/motion/tab-rail";
 import { Icon } from "@/components/brand/icon";
@@ -596,7 +596,7 @@ async function PrivacyTab({ user, params }: { user: CurrentUser; params: Params 
 
 async function DataTab({ user, params }: { user: CurrentUser; params: Params }) {
   const t = await getTranslations();
-  const org = await ownedOrganization(db, user.id);
+  const org = (await ownedOrganizations(db, user.id)).blocking;
   const error = one(params.erreur);
   const hasPassword = Boolean(
     await db.account.findFirst({
@@ -630,13 +630,11 @@ async function DataTab({ user, params }: { user: CurrentUser; params: Params }) 
               {t("settings.data.delete.cta")}
             </summary>
             <form
-              action={scheduleDeletion}
+              action={deleteAccount}
               className="mt-4 flex max-w-md flex-col gap-4 rounded-md bg-creme p-4"
             >
               <p className="font-semibold">{t("settings.data.delete.confirm.title")}</p>
-              <p className="text-sm">
-                {t("settings.data.delete.confirm.body", { days: DELETION_GRACE_DAYS })}
-              </p>
+              <p className="text-sm">{t("settings.data.delete.confirm.body")}</p>
               <TextField
                 id="delete-confirm"
                 name="confirm"

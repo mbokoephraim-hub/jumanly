@@ -2,15 +2,20 @@
 
 import { APIError } from "better-auth/api";
 import { refresh } from "next/cache";
-import { headers } from "next/headers";
+import { cookies, headers } from "next/headers";
 import { redirect } from "next/navigation";
 import { z } from "zod";
-import { DELETION_GRACE_DAYS, passwordProblem } from "@/lib/password";
+import { passwordProblem } from "@/lib/password";
 import { sendPasswordChanged } from "@/server/account-emails";
 import { auth } from "@/server/auth";
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
-import { ownedOrganization } from "@/server/services/accounts";
+import { SPACE_COOKIE } from "@/server/hire-context";
+import {
+  AccountDeletionError,
+  eraseAccount,
+  ownedOrganizations,
+} from "@/server/services/account-deletion";
 import { NOTIFICATION_CATEGORIES } from "@/server/services/notifications";
 
 /**
@@ -156,10 +161,10 @@ export async function updatePrivacy(formData: FormData) {
 }
 
 /**
- * Deletion request: effective after DELETION_GRACE_DAYS unless the person signs in again
- * (the session hook cancels it). An organization owner must hand over the organization first.
+ * « Supprimer mon compte » (Ephraïm, 22/10/2026): at once and for good, no grace period. Everything
+ * of the person is erased; the same e-mail can sign up again as a new account.
  */
-export async function scheduleDeletion(formData: FormData) {
+export async function deleteAccount(formData: FormData) {
   const user = await requireUser("/app/parametres");
   if (
     String(formData.get("confirm") ?? "")
@@ -168,7 +173,7 @@ export async function scheduleDeletion(formData: FormData) {
   ) {
     back("donnees", { erreur: "confirm" });
   }
-  if (await ownedOrganization(db, user.id)) back("donnees", { erreur: "owner" });
+  if ((await ownedOrganizations(db, user.id)).blocking) back("donnees", { erreur: "owner" });
   const account = await db.account.findFirst({
     where: { userId: user.id, providerId: "credential" },
     select: { password: true },
@@ -181,11 +186,17 @@ export async function scheduleDeletion(formData: FormData) {
     });
     if (!valid) back("donnees", { erreur: "wrongPassword" });
   }
-  await db.user.update({
-    where: { id: user.id },
-    data: { deletionScheduledAt: new Date(Date.now() + DELETION_GRACE_DAYS * 86_400_000) },
-  });
-  await db.session.deleteMany({ where: { userId: user.id } });
+  try {
+    await eraseAccount(db, user.id);
+  } catch (error) {
+    if (error instanceof AccountDeletionError) back("donnees", { erreur: "owner" });
+    throw error;
+  }
+  const jar = await cookies();
+  for (const cookie of jar.getAll()) {
+    if (cookie.name.includes("better-auth") || cookie.name === SPACE_COOKIE)
+      jar.delete(cookie.name);
+  }
   redirect("/connexion?suppression=1");
 }
 

@@ -3966,3 +3966,16 @@ et les deux pages du rapport PDF.
 - Préchargement : `PhonePreload` charge en arrière-plan les pages des liens de l'écran (et des onglets montés), avec leurs données (`partialPrefetching: false`, copie gardée 30 s), sauf fichiers, conversations, notifications, messages, candidatures et espaces d'équipe ; rien avec l'économiseur de données ou en 2G.
 - Note : `docs/decisions/2026-10-22-banniere-et-prechargement.md`. Tests : unitaire `phone-preload`, e2e `mobile-profil-cv` (bannière) et `modele-b-prechargement`.
 
+
+## Compte recruteur, suppression immédiate, Fil professionnel (22 octobre 2026)
+
+Quatre corrections d'Ephraïm, détail dans `docs/decisions/2026-10-22-compte-recruteur-suppression-fil.md`.
+
+- Un talent passe en compte recruteur depuis Paramètres (téléphone) ou Compte (ordinateur).
+- « Supprimer mon compte » efface tout immédiatement ; la même adresse repart de zéro. Paiements et
+  factures gardés sans lien (comptabilité), à confirmer par Ephraïm.
+- Publications du Fil : 220 caractères au plus, compteur visible ; réponses inchangées.
+- « Pour vous » classé par `feed-rank.ts` (offres, nouveaux postes, événements, auteurs actifs,
+  commentateurs, bien connectés), plafonné et varié.
+- Tests : `tests/unit/feed-rank.test.ts`, `tests/db/account-deletion.test.ts`, `tests/db/feed.test.ts`,
+  `tests/e2e/corrections-compte.spec.ts`.
