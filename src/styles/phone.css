@@ -3575,6 +3575,10 @@ section + section .nb-ex-sec {
   color: var(--nb-couv);
   position: relative;
 }
+/* Ambre trop clair sur blanc (2,6:1) : la teinte foncée garde le contraste AA. */
+.nb-ex-logo[data-blanc][data-ton="1"] {
+  color: #8a5a00;
+}
 .nb-ex [data-ton="0"] {
   --nb-couv: #0f3f37;
 }
