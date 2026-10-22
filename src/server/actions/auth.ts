@@ -125,6 +125,7 @@ export async function signUp(_: AuthFormState, formData: FormData): Promise<Auth
     profile: input.profile,
     orgName: input.orgName,
     orgRole: input.orgRole,
+    phone: input.phone === "1",
   });
   await writeSignupFlow({
     profile: input.profile,
@@ -173,20 +174,21 @@ export async function verifyEmail(_: AuthFormState, formData: FormData): Promise
     );
     // A recruiter without a company yet (phone, Modèle B recruteur) is welcomed at the end of
     // the profile, once the company is known.
-    const welcome = !org && profile === "rh"
-      ? Promise.resolve()
-      : org && (profile === "rh" || profile === "company")
-        ? sendWelcome(user.email, {
-            kind: profile === "company" ? "company" : "recruiter",
-            firstName: user.firstName ?? user.name,
-            plan: plan?.planName ?? "",
-            org: org.name,
-          })
-        : sendWelcome(user.email, {
-            kind: "talent",
-            firstName: user.firstName ?? user.name,
-            plan: plan?.planName ?? "",
-          });
+    const welcome =
+      !org && profile === "rh"
+        ? Promise.resolve()
+        : org && (profile === "rh" || profile === "company")
+          ? sendWelcome(user.email, {
+              kind: profile === "company" ? "company" : "recruiter",
+              firstName: user.firstName ?? user.name,
+              plan: plan?.planName ?? "",
+              org: org.name,
+            })
+          : sendWelcome(user.email, {
+              kind: "talent",
+              firstName: user.firstName ?? user.name,
+              plan: plan?.planName ?? "",
+            });
     await welcome.catch((error) =>
       reportError(error, { message: "E-mail de bienvenue non envoyé" }),
     );

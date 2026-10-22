@@ -152,16 +152,13 @@ export async function rhSaveRecruits(input: {
   hiresPerYear: "few" | "some" | "many" | null;
 }): Promise<RhResult> {
   const user = await recruiter();
-  return (await saveRecruits(db, user.id, input))
-    ? { ok: true }
-    : { ok: false, error: "recruits" };
+  return (await saveRecruits(db, user.id, input)) ? { ok: true } : { ok: false, error: "recruits" };
 }
 
 /** « Terminer »: the profile is complete; the welcome e-mail names the company or the person. */
 export async function rhFinish(input: { headline: string; hiringNow: boolean }): Promise<RhResult> {
   const user = await recruiter();
-  if (!(await finishRecruiterProfile(db, user.id, input)))
-    return { ok: false, error: "headline" };
+  if (!(await finishRecruiterProfile(db, user.id, input))) return { ok: false, error: "headline" };
   const state = await companyState(db, user.id);
   const space = await db.membership.findFirst({
     where: { userId: user.id, status: "active", role: "org_owner" },

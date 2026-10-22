@@ -114,7 +114,11 @@ export async function PhoneSignupPage({
         <AccessBack href="/decouvrir?profil=rh" label={t("back")} />
         <div className="nb-corps">
           <Head title={tr("signup.title")} text={tr("signup.subtitle")} />
-          <ProviderList providers={list} action={signInWithProvider} hidden={{ profil: "rh", next }} />
+          <ProviderList
+            providers={list}
+            action={signInWithProvider}
+            hidden={{ profil: "rh", next }}
+          />
           {list.length > 0 ? <OrLine>{t("signup.or")}</OrLine> : null}
           <SignupEmailForm
             defaultEmail={defaultEmail}

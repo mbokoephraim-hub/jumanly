@@ -390,11 +390,7 @@ export function PhoneDiscover({ recruiter = false }: { recruiter?: boolean }) {
           >
             {common("signup")}
           </Link>
-          <Link
-            href={recruiter ? "/connexion?profil=rh" : "/connexion"}
-            className="nb-bs"
-            prefetch
-          >
+          <Link href={recruiter ? "/connexion?profil=rh" : "/connexion"} className="nb-bs" prefetch>
             {common("login")}
           </Link>
         </div>

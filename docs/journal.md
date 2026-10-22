@@ -4057,3 +4057,38 @@ transitions et préchargement du talent (listes Hire préchargées, fiches journ
 - `mobile-recruteur.spec.ts` (ancienne barre) ne tourne plus sur le projet mobile ; remplacé par
   `modele-b-recruteur-coque.spec.ts`. Test en base : `tests/db/modele-b-recruteur.test.ts`.
 - Ordinateur et tablette inchangés. Une fenêtre d'ordinateur rétrécie garde pour l'instant l'interface web (bascule à revoir en M8, avec le nettoyage).
+
+## Modèle B recruteur mobile · M2, ouverture et inscription (22 octobre 2026)
+
+Section 01 des captures (001 à 030). Au téléphone, « Je recrute » mène à la bienvenue recruteur
+(trois écrans Publier · Trier · Recruter), puis à l'inscription recruteur : e-mail, mot de passe,
+code, conditions pour les recruteurs en trois points, connexion avec son propre sous-titre. Ensuite
+le profil recruteur en sept étapes, chaque étape enregistrée en avançant :
+
+1. Vous : prénom, nom, photo (feuille appareil photo ou galerie).
+2. Où vous êtes : pays (feuille par régions, avec recherche), ville, autres villes où l'on recrute.
+3. Vos contacts : e-mail professionnel obligatoire (le domaine sert à valider l'entreprise),
+   téléphone facultatif avec indicatif (feuille), WhatsApp, LinkedIn, et qui les voit.
+4. Votre rôle : six rôles, poste tel qu'il s'affichera, avec suggestions.
+5. Votre entreprise : recherche dès la première lettre, fiche de l'entreprise, demande de
+   rattachement avec un message (les administrateurs sont prévenus dans l'appli et par e-mail),
+   demande en attente (annulable), création de la page (la personne l'administre) ou recrutement en
+   indépendant·e. Le logo de l'entreprise ne s'affiche qu'après l'accord.
+6. Ce que vous recrutez : domaines (au moins un), niveaux, recrutements par an.
+7. Votre profil recruteur : aperçu, accroche (Orbi propose trois phrases), « Recrute en ce moment ».
+
+Puis « Ne laissez aucun candidat sans réponse » (notifications) et « Profil prêt » (logo en attente
+ou affiché, premiers pas), et « Entrer dans Jumanly » ouvre le Fil recruteur.
+
+- Base : table `RecruiterProfile` et colonne `OrgJoinRequest.message`, migration additive
+  `20261022153517_recruiter_profile_phone`.
+- `src/server/services/recruiter-onboarding.ts`, `src/server/actions/phone-rh-onboarding.ts`,
+  `src/components/phone/recruteur/onboarding.tsx`, styles dans `src/styles/phone-recruteur.css`.
+- Textes : parties « Modèle B recruteur · ouverture et inscription au téléphone » de
+  `textes/textes-application.md` (`phoneRhAccueil`, `phoneRhOnboarding`).
+- Tests : `tests/db/modele-b-recruteur-inscription.test.ts` (recherche limitée aux entreprises que
+  l'on peut rejoindre, demande, acceptation, annulation, création de page),
+  `tests/e2e/modele-b-recruteur-inscription.spec.ts` (chaque bouton du lot). Captures 390 × 844 :
+  `CAPTURE_DIR=… pnpm test:e2e tests/e2e/modele-b-recruteur-inscription.spec.ts --project=mobile`.
+- Choix notés dans `docs/decisions/2026-10-22-modele-b-recruteur-inscription.md`.
+- Ordinateur et tablette inchangés : l'inscription recruteur web (entreprise et forfait) reste la même.

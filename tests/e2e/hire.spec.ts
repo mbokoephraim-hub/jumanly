@@ -6,11 +6,18 @@ import { fillOffer, publishFilledOffer, slugOf } from "./offer-flow";
 import { lastCode } from "./outbox";
 import { demo, logIn, testEmail } from "./session";
 import { openCandidateFile } from "./hire-wide";
+import { phoneRecruiterWithPage } from "./recruiter-phone";
 
 /** A new RH account with its organization (inscription, profil « Professionnel RH », Free). */
 async function signUpRecruiter(page: Page, email: string, orgName: string) {
-  // Recruiters go straight to the plan step (refonte mobile, lot 2).
   await page.goto("/inscription?profil=rh");
+  // On a phone, the recruiter's sign-up of Modèle B: the company page is created at step 5.
+  if (await page.locator(".nb-ecran").count()) {
+    await phoneRecruiterWithPage(page, email, orgName);
+    execFileSync("pnpm", ["exec", "tsx", "tests/e2e/verify-org.ts", email]);
+    return;
+  }
+  // Recruiters go straight to the plan step (refonte mobile, lot 2).
   await expect(page).toHaveURL(/\/inscription\/forfait/);
   await page.getByRole("button", { name: "Continuer" }).click();
   await expect(page).toHaveURL(/\/inscription\/compte/);

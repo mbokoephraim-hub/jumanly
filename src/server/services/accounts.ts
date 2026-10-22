@@ -123,7 +123,7 @@ async function uniqueOrgSlug(db: PrismaClient, name: string) {
 export async function setupAccount(
   db: PrismaClient,
   userId: string,
-  input: { profile: SignupProfile; orgName?: string; orgRole?: string },
+  input: { profile: SignupProfile; orgName?: string; orgRole?: string; phone?: boolean },
 ) {
   await db.talentProfile.upsert({ where: { userId }, update: {}, create: { userId } });
   if (input.profile !== "rh" && input.profile !== "company") return null;
@@ -136,8 +136,14 @@ export async function setupAccount(
   // A recruiter signing up on a phone (Modèle B recruteur, M2) names the company at step 5 of the
   // profile: the account is marked as a recruiter's, without an organization yet.
   if (!orgName && input.profile === "rh") {
-    await db.recruiterProfile.upsert({ where: { userId }, update: {}, create: { userId } });
-    return null;
+    const marked = await db.recruiterProfile.findUnique({
+      where: { userId },
+      select: { id: true },
+    });
+    if (input.phone || marked) {
+      if (!marked) await db.recruiterProfile.create({ data: { userId } });
+      return null;
+    }
   }
   const user = await db.user.findUniqueOrThrow({ where: { id: userId } });
   return db.organization.create({

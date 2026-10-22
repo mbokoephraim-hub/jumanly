@@ -5,6 +5,7 @@ import { updateTag } from "next/cache";
 import { z } from "zod";
 import { onMessageSent } from "@/server/application-events";
 import { db } from "@/server/db";
+import { isPhone } from "@/server/view";
 import { requireHire, setActiveSpace } from "@/server/hire-context";
 import { requireUser } from "@/server/auth/session";
 import { ensureApplicationConversation, sendMessage } from "@/server/services/connect";
@@ -70,7 +71,8 @@ export async function becomeRecruiterAction() {
     redirect("/app/hire");
   }
   if (memberships.length > 0) redirect("/app/acces-refuse?raison=organisation");
-  const org = await setupAccount(db, user.id, { profile: "rh" });
+  // On a phone, the recruiter's profile of Modèle B (M2) names the company at its step 5.
+  const org = await setupAccount(db, user.id, { profile: "rh", phone: await isPhone() });
   if (org) await setActiveSpace(org.id);
   redirect("/app/bienvenue");
 }

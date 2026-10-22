@@ -225,7 +225,10 @@ export async function searchCompanies(
   if (!words) {
     const user = await db.user.findUnique({ where: { id: userId }, select: { city: true } });
     const near = await db.organization.findMany({
-      where: { ...base, ...(user?.city ? { city: { equals: user.city, mode: "insensitive" } } : {}) },
+      where: {
+        ...base,
+        ...(user?.city ? { city: { equals: user.city, mode: "insensitive" } } : {}),
+      },
       orderBy: [{ jobs: { _count: "desc" } }, { name: "asc" }],
       take: 3,
       select: cardSelect,
@@ -368,8 +371,10 @@ export async function createCompany(
   await cancelCompanyRequest(db, userId);
   const profile = await ensureRecruiterProfile(db, userId);
   const user = await personName(db, userId);
+  // Same kind as a page created by a recruiter on a computer (sign-up « Professionnel RH »): its
+  // plans are the RH ones, free to start; the administrator changes it on the web.
   const data = {
-    type: "company" as const,
+    type: "recruiter" as const,
     name: parsed.name,
     sector: parsed.sector || null,
     size: parsed.size,

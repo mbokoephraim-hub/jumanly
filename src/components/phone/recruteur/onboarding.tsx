@@ -1206,19 +1206,19 @@ function CompanyStep({
               </div>
             ) : null}
             {state === "created" ? <p className="nb-rh-domaine">{t("company.admin")}</p> : null}
+            {state === "pending" ? (
+              <button
+                type="button"
+                className="nb-lien"
+                data-creme=""
+                disabled={pending}
+                onClick={onReset}
+              >
+                {t("company.other")}
+              </button>
+            ) : null}
           </div>
         </div>
-        {state === "pending" || state === "created" ? (
-          <button
-            type="button"
-            className="nb-lien"
-            data-creme=""
-            disabled={pending}
-            onClick={onReset}
-          >
-            {t("company.other")}
-          </button>
-        ) : null}
       </div>
     );
 

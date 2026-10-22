@@ -29,7 +29,7 @@ export async function GET(request: NextRequest) {
   // A recruiter on a phone (Modèle B recruteur, M2): the seven steps of the recruiter's profile.
   if (params.get("profil") === "rh") {
     if (await pendingSocialSignup(db, session.user.id))
-      await setupAccount(db, session.user.id, { profile: "rh" });
+      await setupAccount(db, session.user.id, { profile: "rh", phone: true });
     await writeSignupFlow({ profile: "rh", plan: undefined, next });
     return NextResponse.redirect(new URL(withArrival("/app/bienvenue"), request.url));
   }
