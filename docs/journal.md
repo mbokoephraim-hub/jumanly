@@ -3993,3 +3993,46 @@ champ de texte quand on écrit (publication, recherche d'Explorer).
 - Ephraïm a validé l'espace recruteur sur mobile et sur ordinateur, ainsi que l'espace administrateur sur ordinateur.
 - Ils sont déposés dans `docs/modele-b-recruteur/` : brief, prompt, captures avec index, sources `.dc.html`, rapports PDF et générateurs.
 - Ce dépôt remplace les planches recruteur et admin de `docs/refonte-mobile/` et de `docs/refonte-web/`. `CLAUDE.md` et `docs/PLAN-REFONTE-EN-3-ETAPES.md` sont mis à jour.
+
+## Modèle B recruteur mobile · M0, diagnostic (22 octobre 2026)
+
+Demande d'Ephraïm du 22/10/2026 : refaire l'appli recruteur au téléphone (390 px) sur le Modèle B
+(`docs/modele-b-recruteur/`, sections 01 à 11 de `mobile/captures/INDEX.md`). Tablette, ordinateur et
+administration d'entreprise ne bougent pas. Lots M0 à M8, une branche et une PR par lot, puis arrêt
+en attendant la validation.
+
+**Aujourd'hui au téléphone.** Un recruteur (espace Hire actif) reçoit au téléphone la coque
+`RecruiterShell` de l'ancienne refonte (`docs/refonte-mobile`, lots R1 à R6, PR #116 à #123) : en-tête
+avec la pastille de l'organisation (`header.tsx`, `org-sheet.tsx`), barre flottante À traiter · Offres ·
+Orbi · Candidats · Messages (`bottom-bar.tsx`), thème clair ou sombre. Une seule base de code pour les
+trois largeurs : les écrans sont responsives, les règles téléphone vivent dans des `@media (max-width:
+767px)` de `recruiter*.css`. Écrans existants :
+
+| Section Modèle B | Écran existant au téléphone | À faire |
+|---|---|---|
+| 01 Ouverture, inscription | `/decouvrir` et `/inscription` (talent, B2), `/app/hire/bienvenue` et `/app/bienvenue` (premiers pas R, 3 étapes), `org-join.tsx` (demande pour rejoindre) | Refaire : rôle, entreprise, demande de rattachement et logo, pays et contacts, profil recruteur en 7 étapes, notifications, profil prêt |
+| 02 Fil | aucun pour le recruteur (le Fil talent B3 n'est pas dans la coque RH) | Nouveau : Fil du recruteur, publier en son nom ou au nom de l'entreprise |
+| 03 Offres | `/app/hire/offres`, `/app/hire/offres/[id]`, `/nouvelle` (4 étapes), `/modifier`, `/fiche`, fin d'offre (`ending.tsx`) | Refaire : indicateurs, détail et statistiques, menu, partage, clôture, rapport PDF, publication en 5 étapes |
+| 04-05 Candidatures | `/app/hire` (À traiter), `/app/hire/candidats`, `/candidats/[id]` (+ `entretien`, `evaluation`, `decision`, `message`), `/offres/[id]/ats`, `/retenus`, `/reponses`, `/app/hire/entretiens` | Refaire : ATS en onglets (fort potentiel, toutes par étape, entretiens, décisions, non retenus), diagnostic de tous les CV, fiche candidat (résumé, pourquoi, CV, réponses, notes, historique, menu), planifier, évaluer, proposer, réponse groupée |
+| 06 Talents | `/app/hire/talents`, `/talents/[id]`, `/proposer`, `/app/hire/viviers` | Refaire : recherche en deux temps, vivier, propositions, onglet Réseau, profil talent vu par le recruteur |
+| 07 Messages | `/app/messages` et `/app/messages/[id]` (version RH, `thread.tsx`, `thread-composer.tsx`, `inbox.tsx`) | Refaire : catégories Candidats · Réseau · Équipe, nouveau message, modèles, joindre |
+| 08 Compte | `/app/hire/compte`, `/compte/profil`, `/app/hire/modeles`, `/app/hire/rapports`, `/app/parametres`, `/app/abonnement` | Refaire : compte par l'avatar, profil avec logo, statistiques, enregistrées, équipe, formule en lecture seule, réglages, aide par e-mail |
+| 09 Pages entreprise | `/app/entreprises/[slug]`, `/app/personnes/[id]` (talent B4) | Adapter au recruteur : onglets Offres et Membres, « Se connecter à tous », bandeau réseau |
+| 10 Notifications, Orbi | `/app/notifications` (version RH), Orbi en panneau (`OrbiPanel`) | Refaire : notifications par catégorie, Orbi flottant menthe |
+| 11 Changer de profil | feuille « Organisation active » (`org-sheet.tsx`), « Passer à mon espace talent » | Refaire : recruteur, profil talent discret, profil entreprise (administrateur) |
+
+**Choix des adresses au téléphone** (le web garde les siennes) : Fil `/app/hire`, Offres
+`/app/hire/offres`, Candidatures `/app/hire/candidats`, Talents `/app/hire/talents`, Messages
+`/app/messages`. Les cinq onglets restent montés sous les pages, comme pour le talent.
+
+**Ancien design recruteur mobile à supprimer (M8).** Ce qui ne sert qu'au téléphone dans la coque
+`RecruiterShell` : `src/components/recruiter/bottom-bar.tsx`, `header.tsx` (en-tête téléphone),
+la variante téléphone de `org-sheet.tsx`, `recruiterTabs` et `hidesRecruiterTabBar` de
+`src/config/navigation.ts` s'ils ne servent plus, les règles `@media (max-width: 767px)` de
+`src/styles/recruiter*.css`, les textes devenus orphelins, et les e2e `mobile-recruteur*.spec.ts` sur le
+projet mobile (remplacés par les e2e `modele-b-recruteur-*`). Les composants partagés avec la tablette et
+l'ordinateur restent. Les anciennes adresses téléphone (`/app/hire/viviers`, `/app/hire/entretiens`,
+`/app/hire/modeles`…) redirigent au téléphone vers leur écran Modèle B.
+
+**Données.** Rien n'est effacé ; les migrations éventuelles (publication au nom de l'entreprise,
+réseau du recruteur, profil talent discret) sont additives.
