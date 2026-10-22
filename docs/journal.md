@@ -80,7 +80,7 @@ L'ordinateur et le recruteur gardent leurs pages.
 
 **Tests.** `tests/e2e/modele-b-messages.spec.ts` (chaque bouton ouvre quelque chose, demandes,
 onglet gardé monté) ; `tests/unit/message-help.test.ts` ; `tests/db/messages-phone.test.ts`
-(silence, éphémère, effacement, rubriques, accès) ; `hire`, `hire-advanced` et
+(silence, éphémère, effacement, rubriques, accès) ; `modele-b-fil` (la feuille « Envoyer à » se ferme par Échap avec plus de connexions), `hire`, `hire-advanced` et
 `mobile-recruteur-ats` adaptés au téléphone ; `security-headers` mis à jour.
 
 ## Modèle B · B7 : Formation au téléphone (21 octobre 2026)
