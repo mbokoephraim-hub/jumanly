@@ -57,7 +57,8 @@ test.describe("Modèle B · Fil au téléphone", () => {
     const send = page.getByRole("dialog", { name: "Envoyer à" });
     await expect(send.getByRole("button", { name: "Envoyer" }).first()).toBeVisible();
     await expect(send.getByRole("link", { name: "Ouvrir Messages" })).toBeVisible();
-    await send.getByRole("button", { name: "Fermer" }).last().click();
+    // With many connections the sheet covers the veil: Échap closes it.
+    await page.keyboard.press("Escape");
     await expect(send).toBeHidden();
 
     // Répondre opens the post, with its answers and the reply bar; the way back is the Fil.

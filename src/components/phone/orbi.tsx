@@ -50,6 +50,8 @@ type Answer = {
 
 /** The four questions of the Fil answered from facts, in the order of the sheet. */
 const FIL_FACTS: OrbiFact[] = ["digest", "entreprises", "suivre", "ecrire"];
+/** The four questions of Messages, answered from the person's conversations (lot B8). */
+const MESSAGE_FACTS: OrbiFact[] = ["nonlus", "prioritaire", "recruteur", "relire"];
 
 /**
  * Orbi everywhere (brief § 3, planche Identité): the mint disc at the bottom right of each tab,
@@ -115,6 +117,7 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
     if (shownTab === "fil" && index >= 0) askFact(FIL_FACTS[index], question);
     // « Pourquoi ce cours pour mon Cap ? » of Formation: from the facts too (lot B7).
     else if (shownTab === "formation" && index === 0) askFact("cours", question);
+    else if (shownTab === "messages" && index >= 0) askFact(MESSAGE_FACTS[index], question);
     else ask(question);
   };
 

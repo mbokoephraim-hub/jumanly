@@ -4,8 +4,19 @@
  */
 export const ORBI_EVENT = "nb:orbi";
 
-/** Answers Orbi gives from the facts of the platform, without a credit (lots B3, B7). */
-export const ORBI_FACTS = ["digest", "offres", "entreprises", "suivre", "ecrire", "cours"] as const;
+/** Answers Orbi gives from the facts of the platform, without a credit (lots B3, B7, B8). */
+export const ORBI_FACTS = [
+  "digest",
+  "offres",
+  "entreprises",
+  "suivre",
+  "ecrire",
+  "cours",
+  "nonlus",
+  "prioritaire",
+  "recruteur",
+  "relire",
+] as const;
 export type OrbiFact = (typeof ORBI_FACTS)[number];
 
 export function askOrbiFrom(fact: OrbiFact) {

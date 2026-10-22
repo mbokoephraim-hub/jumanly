@@ -46,6 +46,9 @@ export const aiFeatures = {
   // organization's credits. Nothing is sent: the recruiter reads and decides.
   recruiter_orbi: { credits: 1, tier: "fast" },
   message_draft: { credits: 1, tier: "fast" },
+  // Modèle B lot B8 · Orbi helps the talent write in a conversation (answer, tone, shorter,
+  // spelling, English), one credit of the person per text. Nothing is sent: the person decides.
+  message_help: { credits: 1, tier: "fast" },
 } as const;
 export type AiFeature = keyof typeof aiFeatures;
 

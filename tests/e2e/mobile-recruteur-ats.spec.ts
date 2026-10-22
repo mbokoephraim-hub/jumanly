@@ -146,7 +146,9 @@ test("ATS : analyse par Orbi, profil pour l'offre, retenus, réponse groupée re
 
   // The talent sees the invitation in their messages…
   await talent.goto("/app/messages");
-  await expect(talent.locator("main").filter({ visible: true })).toContainText("Recruteuse");
+  // On a phone (Modèle B, lot B8), the recruiters have their own rubric.
+  if (isMobile) await talent.getByRole("tab", { name: /^Recruteurs/ }).click();
+  await expect(talent.getByRole("main")).toContainText("Recruteuse");
   // …until « Annuler l'envoi » withdraws it within 10 minutes.
   await main(page).getByRole("button", { name: "Annuler l'envoi" }).click();
   await expect(main(page)).toContainText("Envoi annulé");

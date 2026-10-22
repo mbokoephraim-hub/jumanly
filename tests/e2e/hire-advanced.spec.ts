@@ -67,13 +67,26 @@ test("recherche de talents et mise en relation acceptée", async ({
 
   // Messages (planche talent-2 § 5): the request sits above the conversations, opened in a sheet.
   await page.goto("/app/messages");
-  const request = page.getByRole("button", { name: /Groupe Démo.*souhaite échanger avec vous/ });
-  await expect(request.first()).toBeVisible();
-  await expectAccessible(page);
-  await request.first().click();
-  await page.getByRole("dialog").getByRole("button", { name: "Accepter et échanger" }).click();
-  await expect(page).toHaveURL(/\/app\/messages\/[^/?]+\?ok=relation/);
-  await expect(page.getByText("Vous pouvez maintenant échanger avec")).toBeVisible();
+  if (isMobile) {
+    // On a phone (Modèle B, lot B8): the request waits in « Demandes de connexion ».
+    await page.getByRole("link", { name: /^Demandes de connexion/ }).click();
+    await page.waitForURL("**/app/messages/demandes");
+    const card = page.locator(".nb-ms-demande").filter({ hasText: "Groupe Démo" }).first();
+    await expect(card).toBeVisible();
+    await expectAccessible(page);
+    await card.getByRole("button", { name: "Accepter" }).click();
+    await card.getByRole("link", { name: /^Écrire à / }).click();
+    await expect(page).toHaveURL(/\/app\/messages\/[^/?]+$/);
+    await expect(page.locator(".nb-ms-conv")).toBeVisible();
+  } else {
+    const request = page.getByRole("button", { name: /Groupe Démo.*souhaite échanger avec vous/ });
+    await expect(request.first()).toBeVisible();
+    await expectAccessible(page);
+    await request.first().click();
+    await page.getByRole("dialog").getByRole("button", { name: "Accepter et échanger" }).click();
+    await expect(page).toHaveURL(/\/app\/messages\/[^/?]+\?ok=relation/);
+    await expect(page.getByText("Vous pouvez maintenant échanger avec")).toBeVisible();
+  }
   await recruiter.context().close();
 });
 

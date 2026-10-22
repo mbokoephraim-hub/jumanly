@@ -11705,6 +11705,397 @@
       "resume": "Reprendre {course}"
     }
   },
+  "phoneMsg": {
+    "title": "Messages",
+    "new": "Nouveau message",
+    "back": "Retour",
+    "close": "Fermer",
+    "pdf": "PDF",
+    "hd": "HD",
+    "cancel": "Annuler",
+    "error": "Ça n’a pas marché. Réessayez.",
+    "verified": "Compte vérifié",
+    "muted": "Mode silencieux",
+    "unread": "{count, plural, one {# message non lu} other {# messages non lus}}",
+    "sending": "Envoi…",
+    "tabsLabel": "Types de conversations",
+    "tab": {
+      "connexions": "Connexions",
+      "recruteurs": "Recruteurs",
+      "entreprises": "Entreprises"
+    },
+    "empty": {
+      "connexions": "Aucune discussion pour l’instant. Écrivez à une de vos connexions.",
+      "recruteurs": "Aucun recruteur ne vous a encore écrit. Quand une équipe répond à votre candidature, la discussion arrive ici.",
+      "entreprises": "Aucun message d’entreprise pour l’instant."
+    },
+    "onlyConnections": "Vous écrivez seulement à vos connexions.",
+    "time": {
+      "yesterday": "Hier"
+    },
+    "status": {
+      "online": "En ligne",
+      "seenAt": "Vu à {time}",
+      "seenYesterday": "Vu hier à {time}",
+      "seenOn": "Vu le {date}",
+      "company": "Compte entreprise"
+    },
+    "who": {
+      "job": "{title} · {company}",
+      "recruiter": "Recrutement"
+    },
+    "preview": {
+      "none": "Aucun message",
+      "mine": "Vous : {text}",
+      "photos": "{count, plural, one {Photo} other {# photos}}",
+      "voice": "Note vocale · {duration}",
+      "contact": "Contact · {name}",
+      "org": "Organisation · {name}",
+      "doc": "Document · {name}",
+      "event": "{label} · {when}",
+      "hired": "Candidature retenue",
+      "rejected": "Candidature non retenue"
+    },
+    "requests": {
+      "title": "Demandes de connexion",
+      "summary": "{others, plural, =0 {{name}} one {{name} et # autre personne} other {{name} et # autres personnes}}",
+      "none": "Aucune demande en attente",
+      "quoted": "« {text} »",
+      "accept": "Accepter",
+      "ignore": "Ignorer",
+      "decline": "Refuser",
+      "write": "Écrire à {name}",
+      "accepted": "Vous êtes connectés : vous pouvez écrire à {name}",
+      "ignored": "Demande ignorée. {name} n’est pas prévenu·e.",
+      "orgs": "Entreprises qui souhaitent échanger avec vous",
+      "about": "Au sujet de : {job}",
+      "orgAccepted": "Vous pouvez échanger avec {name}",
+      "declined": "Demande refusée. {name} est prévenue, sans détail.",
+      "note": "Une fois connectés, vous pouvez vous écrire. Sans connexion, pas de message."
+    },
+    "newSheet": {
+      "title": "Nouveau message",
+      "note": "Vous pouvez écrire seulement à vos connexions.",
+      "none": "Vous n’avez pas encore de connexion.",
+      "explore": "Trouver des personnes dans Explorer ›"
+    },
+    "search": {
+      "label": "Rechercher dans les messages",
+      "placeholder": "Rechercher une personne ou un message",
+      "clear": "Effacer la recherche",
+      "byType": "Rechercher par type",
+      "type": {
+        "photos": "Photos",
+        "docs": "Documents",
+        "liens": "Liens",
+        "contacts": "Contacts",
+        "vocaux": "Notes vocales",
+        "rdv": "Rendez-vous"
+      },
+      "recents": "Recherches récentes",
+      "connections": "Vos connexions",
+      "hint": "Tapez une lettre pour chercher un nom ou un mot dans vos messages.",
+      "removeFilter": "Retirer le filtre",
+      "results": "{count, plural, =0 {0 résultat} one {# résultat} other {# résultats}}",
+      "searching": "Recherche…",
+      "noneOfType": "Rien de ce type dans vos messages.",
+      "seePhoto": "Voir la photo",
+      "people": "Personnes",
+      "noPeople": "Aucune connexion à ce nom.",
+      "inMessages": "Dans les messages",
+      "noMessages": "Aucun message ne contient « {q} »."
+    },
+    "openInfos": "Voir les informations de la discussion",
+    "options": "Options de la discussion",
+    "convSearch": {
+      "placeholder": "Rechercher dans la discussion",
+      "count": "{index} sur {total}",
+      "none": "0 résultat",
+      "previous": "Résultat précédent",
+      "next": "Résultat suivant",
+      "close": "Fermer"
+    },
+    "thread": {
+      "empty": "Aucun message. Écrivez le premier.",
+      "blocked": "Vous avez bloqué {name}.",
+      "unblock": "Débloquer",
+      "notConnected": "Vous n’êtes plus connectés : vous ne pouvez plus vous écrire.",
+      "closed": "Cette discussion n’accepte plus de messages."
+    },
+    "compose": {
+      "attach": "Joindre un fichier",
+      "placeholder": "Écrire un message",
+      "orbi": "Écrire avec Orbi",
+      "send": "Envoyer",
+      "camera": "Prendre une photo",
+      "voice": "Enregistrer une note vocale"
+    },
+    "voice": {
+      "recording": "Note vocale en cours",
+      "delete": "Supprimer la note vocale",
+      "send": "Envoyer la note vocale",
+      "deleted": "Note vocale supprimée",
+      "denied": "Autorisez le micro pour enregistrer une note vocale.",
+      "unavailable": "Ce téléphone ne permet pas d’enregistrer une note vocale ici."
+    },
+    "errors": {
+      "tooMany": "Beaucoup de messages d’un coup : attendez un instant.",
+      "blocked": "Cette discussion n’accepte plus de messages.",
+      "type": "Ce fichier n’est pas accepté : un PDF ou une image seulement.",
+      "size": "Fichier trop lourd : 4 Mo au plus."
+    },
+    "bubble": {
+      "seePhotos": "Voir les photos",
+      "seeProfile": "Voir le profil",
+      "seePage": "Voir la page",
+      "play": "Écouter la note vocale",
+      "pause": "Mettre en pause",
+      "read": "· Lu",
+      "sent": "· Envoyé",
+      "docRequest": "Document demandé : {name}"
+    },
+    "doc": {
+      "cv": "CV · PDF",
+      "text": "Lettre ou texte · PDF"
+    },
+    "event": {
+      "slot": "Rendez-vous proposé",
+      "interview": "Entretien",
+      "agenda": "Ajouter à l’agenda",
+      "choose": "Choisir un créneau",
+      "toConfirm": "Créneau à confirmer",
+      "mode": {
+        "video": "En visio",
+        "onsite": "Sur place",
+        "audio": "Par téléphone"
+      }
+    },
+    "ephemeral": {
+      "title": "Messages éphémères",
+      "text": "Les nouveaux messages disparaissent après la durée choisie, pour vous et pour {name}.",
+      "off": "Désactivés",
+      "day": "24 heures",
+      "week": "7 jours",
+      "quarter": "90 jours",
+      "banner": "Messages éphémères : {duration}",
+      "toastOn": "Messages éphémères activés",
+      "toastOff": "Messages éphémères désactivés",
+      "lineMineOn": "Vous avez activé les messages éphémères : {duration}",
+      "lineMineOff": "Vous avez désactivé les messages éphémères",
+      "lineOn": "{name} a activé les messages éphémères : {duration}",
+      "lineOff": "{name} a désactivé les messages éphémères"
+    },
+    "mute": {
+      "on": "Mode silencieux activé",
+      "off": "Notifications réactivées"
+    },
+    "sheet": {
+      "menu": "Options de la discussion avec {name}",
+      "plus": "Plus",
+      "ephem": "Messages éphémères",
+      "export": "Exporter la discussion",
+      "bloquer": "Bloquer {name}",
+      "effacer": "Effacer la discussion",
+      "raccourci": "Ajouter un raccourci"
+    },
+    "menu": {
+      "profile": "Voir le profil",
+      "page": "Voir la page",
+      "search": "Rechercher dans la discussion",
+      "medias": "Médias, liens et documents",
+      "mute": "Mode silencieux",
+      "ephemeral": "Messages éphémères",
+      "more": "Plus"
+    },
+    "plus": {
+      "block": "Bloquer {name}",
+      "unblock": "Débloquer {name}",
+      "clear": "Effacer la discussion",
+      "export": "Exporter la discussion",
+      "shortcut": "Ajouter un raccourci sur l’écran d’accueil"
+    },
+    "confirm": {
+      "blockTitle": "Bloquer {name} ?",
+      "blockPerson": "{name} ne pourra plus vous écrire. La personne n’est pas prévenue.",
+      "blockOrg": "{name} ne pourra plus vous écrire. Vos candidatures restent en cours. L’entreprise n’est pas prévenue.",
+      "block": "Bloquer",
+      "blocked": "{name} est bloqué·e",
+      "unblocked": "{name} est débloqué·e",
+      "clearTitle": "Effacer la discussion ?",
+      "clearText": "Les messages sont effacés pour vous seulement. {name} les garde.",
+      "clear": "Effacer",
+      "cleared": "Discussion effacée"
+    },
+    "export": {
+      "title": "Exporter la discussion",
+      "without": "Sans les médias",
+      "withoutNote": "Un fichier texte, plus léger",
+      "with": "Avec les médias",
+      "withNote": "Photos et documents dans un dossier .zip",
+      "go": "Exporter",
+      "done": "{file} enregistré dans vos téléchargements",
+      "system": "Jumanly",
+      "fileTitle": "Discussion avec {name} sur Jumanly"
+    },
+    "shortcut": {
+      "title": "Ajouter un raccourci",
+      "text": "Dans le menu de votre navigateur, touchez « Ajouter à l’écran d’accueil » : la discussion avec {name} s’ouvrira directement. Vous pouvez aussi copier son lien.",
+      "copy": "Copier le lien de la discussion",
+      "copied": "Lien copié",
+      "ok": "Compris"
+    },
+    "infos": {
+      "profile": "Profil",
+      "page": "Page",
+      "search": "Rechercher",
+      "sound": "Son activé",
+      "silent": "Silencieux",
+      "medias": "Médias, liens et documents",
+      "openMedias": "Ouvrir les médias"
+    },
+    "medias": {
+      "tabs": "Contenus partagés",
+      "tab": {
+        "medias": "Médias",
+        "liens": "Liens",
+        "docs": "Documents"
+      },
+      "noPhotos": "Aucune photo dans cette discussion.",
+      "noLinks": "Aucun lien dans cette discussion.",
+      "noDocs": "Aucun document dans cette discussion."
+    },
+    "viewer": {
+      "photoOf": "Photo · {date}",
+      "openDoc": "Ouvrir le document",
+      "forward": "Transférer",
+      "save": "Enregistrer",
+      "saved": "Enregistré dans vos téléchargements",
+      "forwardTitle": "Transférer à",
+      "forwarded": "Transféré à {name}",
+      "nobody": "Aucune autre discussion pour l’instant."
+    },
+    "attach": {
+      "title": "Joindre",
+      "choice": {
+        "docs": "Documents",
+        "cv": "CV",
+        "lettre": "Lettre de motivation",
+        "contact": "Contact",
+        "agenda": "Agenda",
+        "org": "Organisation"
+      },
+      "sheet": {
+        "docs": "Documents",
+        "cv": "Envoyer un CV",
+        "lettre": "Lettre de motivation",
+        "contact": "Partager un contact",
+        "agenda": "Proposer un rendez-vous",
+        "org": "Partager une organisation"
+      },
+      "recent": "Photos récentes",
+      "touch": "Touchez pour choisir",
+      "picked": "{count, plural, one {# choisie} other {# choisies}}",
+      "pick": "Choisir cette photo",
+      "more": "Choisir d’autres photos",
+      "allowText": "Autorisez Jumanly à voir vos photos pour les envoyer ici.",
+      "allow": "Autoriser l’accès",
+      "cancelPick": "Annuler la sélection",
+      "hdLabel": "Envoyer en haute définition",
+      "send": "{count, plural, one {Envoyer 1 photo} other {Envoyer # photos}}",
+      "photosSent": "{count, plural, one {Photo envoyée} other {# photos envoyées}}",
+      "photosSentHd": "{count, plural, one {Photo envoyée en HD} other {# photos envoyées en HD}}",
+      "phone": "Sur ce téléphone",
+      "pickFile": "Choisir un fichier",
+      "pickFileNote": "Un PDF ou une image, 4 Mo au plus",
+      "jumanly": "Vos documents sur Jumanly",
+      "docSent": "Document envoyé",
+      "changed": "Modifié le {date}",
+      "cvSent": "{name} envoyé",
+      "noCv": "Aucun CV pour l’instant.",
+      "newCv": "Créer un nouveau CV dans Carrière ›",
+      "letterSent": "Lettre envoyée",
+      "noLetter": "Aucune lettre pour l’instant.",
+      "orbiLetter": "Orbi rédige une lettre pour {company} à partir de votre profil.",
+      "orbiLetterAny": "Orbi rédige une lettre de motivation à partir de votre profil.",
+      "orbiLetterAsk": "Rédige une lettre de motivation pour {company} à partir de mon profil.",
+      "orbiLetterAskAny": "Rédige une lettre de motivation à partir de mon profil.",
+      "write": "Rédiger",
+      "fromConnections": "Parmi vos connexions",
+      "contactSent": "Contact partagé",
+      "noContacts": "Aucune autre connexion à partager.",
+      "orgSent": "Organisation partagée",
+      "noOrgs": "Suivez une entreprise ou postulez pour la partager ici."
+    },
+    "agenda": {
+      "day": "Jour",
+      "hourTitle": "Heure",
+      "hour": "{hour} h",
+      "how": "Comment",
+      "mode": {
+        "visio": "Visio",
+        "place": "Sur place",
+        "call": "Appel"
+      },
+      "send": "Envoyer : {when}",
+      "sent": "Proposition de rendez-vous envoyée",
+      "summary": "Rendez-vous proposé sur Jumanly"
+    },
+    "camera": {
+      "title": "Appareil photo",
+      "seen": "Ce que voit la caméra",
+      "close": "Fermer la caméra",
+      "take": "Prendre la photo",
+      "gallery": "Ouvrir la galerie",
+      "switch": "Changer de caméra",
+      "front": "Caméra avant",
+      "back": "Caméra arrière",
+      "off": "La caméra n’est pas disponible ici : prenez ou choisissez une photo avec votre téléphone.",
+      "pick": "Prendre une photo",
+      "caption": "Ajouter une légende",
+      "captionLabel": "Légende",
+      "send": "Envoyer la photo",
+      "sent": "Photo envoyée",
+      "sentHd": "Photo envoyée en HD"
+    },
+    "help": {
+      "title": "Orbi",
+      "for": "Vous aide à écrire à {name}",
+      "yours": "Votre texte : « {text} »",
+      "mode": {
+        "reply": "Proposer une réponse",
+        "pro": "Plus professionnel",
+        "short": "Plus court",
+        "fix": "Corriger les fautes",
+        "english": "Traduire en anglais"
+      },
+      "thinking": "Orbi écrit…",
+      "use": "Utiliser",
+      "again": "Autre version",
+      "fixEmpty": "Écrivez d’abord votre message : Orbi corrige l’orthographe et la ponctuation.",
+      "needsAi": "La traduction a besoin d’Orbi, qui n’est pas disponible pour l’instant.",
+      "simple": "Orbi n’est pas disponible : voici un texte simple, à adapter.",
+      "decide": "Orbi propose, vous décidez : relisez avant d’envoyer.",
+      "template": {
+        "reply": "{peer, select, yes {Merci {firstName} pour ton message ! Je te réponds en détail très vite.} other {Bonjour {firstName}, merci pour votre message. Je reviens vers vous très vite.}}",
+        "replyAgain": "{peer, select, yes {Salut {firstName}, bien reçu, merci ! On en reparle bientôt.} other {Bonjour {firstName}, je vous remercie pour votre message et reste à votre disposition.}}",
+        "pro": "Bonjour {firstName}, {text} Cordialement, {me}",
+        "proEmpty": "Bonjour {firstName}, je vous remercie pour votre message. Cordialement, {me}",
+        "shortEmpty": "Merci, bien reçu !"
+      }
+    },
+    "orbi": {
+      "unread": "{people, plural, one {Une discussion attend votre réponse ({count, plural, one {# message} other {# messages}}).} other {# discussions attendent votre réponse ({count, plural, one {# message} other {# messages}}).}}",
+      "unreadNone": "Aucun message non lu : vous êtes à jour.",
+      "priority": "À {name} : son dernier message attend votre réponse ({when}).",
+      "priorityRecruiter": "À {name} ({company}) : un recruteur attend votre réponse.",
+      "priorityNone": "Personne n’attend de réponse pour l’instant.",
+      "answer": "Répondre à {name}",
+      "recruiter": "Ouvrez la discussion, puis touchez l’étincelle à côté du champ : je propose un message que vous pouvez modifier.",
+      "recruiterNone": "Aucun recruteur ne vous a encore écrit. Quand une équipe vous répond, je vous aide à lui écrire.",
+      "seeOffers": "Voir les offres",
+      "reread": "Écrivez votre message dans la discussion, puis touchez l’étincelle : « Corriger les fautes » ou « Plus professionnel ». Je propose, vous choisissez."
+    }
+  },
   "hireShell": {
     "skip": "Aller au contenu principal",
     "nav": {

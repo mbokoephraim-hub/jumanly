@@ -30,6 +30,8 @@ import { createReport } from "@/server/services/moderation";
 import { feedWords, initialsOf, shortName, toneOf } from "@/components/phone/fil/data";
 import { shortTitle } from "@/components/phone/learn/data";
 import { formationHome } from "@/server/services/learn-phone";
+import { messagesFact } from "@/components/phone/messages/orbi-facts";
+import { ORBI_FACTS } from "@/components/phone/orbi-bus";
 
 /**
  * The gestures of the Fil (Modèle B, lot B3). Order of CLAUDE.md: validate → session → service.
@@ -187,7 +189,7 @@ export type OrbiFactAnswer = {
   action: { href: string; label: string } | null;
 };
 
-const facts = z.enum(["digest", "offres", "entreprises", "suivre", "ecrire", "cours"]);
+const facts = z.enum(ORBI_FACTS);
 
 /**
  * Orbi's answers in the Fil that come from the platform's facts (lot B3): the day's news, the
@@ -216,6 +218,15 @@ export async function orbiFactAction(raw: string): Promise<OrbiFactAnswer | null
     };
   };
   switch (parsed.data) {
+    // Messages (lot B8): from the person's own conversations.
+    case "nonlus":
+    case "prioritaire":
+    case "recruteur":
+    case "relire": {
+      const tm = await getTranslations("phone.orbi.messages");
+      const index = ["nonlus", "prioritaire", "recruteur", "relire"].indexOf(parsed.data) + 1;
+      return messagesFact(parsed.data, user, tm(`q${index}` as "q1"));
+    }
     case "digest": {
       const items = (await feedDigest(db, user.id, now)).map(words.post);
       return {

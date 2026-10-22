@@ -38,19 +38,24 @@ export function contentSecurityPolicy({ production }: { production: boolean }) {
   return policy.join("; ");
 }
 
-/** Microphone off everywhere but the spoken interview simulation; no camera, location or payment API. */
-export function permissionsPolicy({ microphone }: { microphone: boolean }) {
+/**
+ * Microphone and camera off on the public pages; in the signed-in space, allowed to the site itself
+ * (the browser still asks the person): the spoken interview simulation, the voice notes and the
+ * photos of Messages. The space moves from page to page without reloading, so the policy of the
+ * first page loaded stays: it is set for the whole space. No location or payment API.
+ */
+export function permissionsPolicy({ media }: { media: boolean }) {
   return [
-    "camera=()",
-    `microphone=(${microphone ? "self" : ""})`,
+    `camera=(${media ? "self" : ""})`,
+    `microphone=(${media ? "self" : ""})`,
     "geolocation=()",
     "payment=()",
     "usb=()",
   ].join(", ");
 }
 
-/** The voice simulation page: the only one allowed to use the microphone. */
-export const MICROPHONE_ROUTE = "/app/career/entretiens/:id";
+/** The signed-in space: the only one allowed to use the microphone and the camera. */
+export const MEDIA_ROUTE = "/app/:path*";
 
 export function securityHeaders({ production }: { production: boolean }): {
   source: string;
@@ -62,7 +67,7 @@ export function securityHeaders({ production }: { production: boolean }): {
     { key: "X-Frame-Options", value: "DENY" },
     { key: "Referrer-Policy", value: "strict-origin-when-cross-origin" },
     { key: "Cross-Origin-Opener-Policy", value: "same-origin" },
-    { key: "Permissions-Policy", value: permissionsPolicy({ microphone: false }) },
+    { key: "Permissions-Policy", value: permissionsPolicy({ media: false }) },
     ...(production
       ? [{ key: "Strict-Transport-Security", value: "max-age=63072000; includeSubDomains" }]
       : []),
@@ -71,8 +76,8 @@ export function securityHeaders({ production }: { production: boolean }): {
     { source: "/:path*", headers: common },
     // Listed last: for the same header, the last matching rule wins.
     {
-      source: MICROPHONE_ROUTE,
-      headers: [{ key: "Permissions-Policy", value: permissionsPolicy({ microphone: true }) }],
+      source: MEDIA_ROUTE,
+      headers: [{ key: "Permissions-Policy", value: permissionsPolicy({ media: true }) }],
     },
   ];
 }

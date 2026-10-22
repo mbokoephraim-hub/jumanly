@@ -3,6 +3,8 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { getFormatter, getTranslations } from "next-intl/server";
 import { RecruiterThread } from "@/components/recruiter/thread";
+import { PhoneThreadPage } from "@/components/phone/messages/server";
+import { isPhone } from "@/server/view";
 import { Logo, toneOf } from "@/components/talent/art";
 import { FlowHead } from "@/components/talent/flow-head";
 import { InboxList } from "@/components/talent/messages/inbox-list";
@@ -84,6 +86,8 @@ export default async function ThreadPage({
   const context = await connectViewer(`/app/messages/${id}`);
   if (context.viewer.hire) return <RecruiterThread id={id} query={query} context={context} />;
   const { user, space, viewer } = context;
+  // On a phone, the conversation of Modèle B (lot B8).
+  if (await isPhone()) return <PhoneThreadPage user={user} id={id} />;
   const t = await getTranslations();
   const format = await getFormatter();
 

@@ -60,34 +60,46 @@ function accessWhere(viewer: Viewer): Prisma.ConversationWhereInput {
 
 const peerSide = { select: { id: true, name: true, image: true } } as const;
 
-const listInclude = {
-  organization: { select: { name: true, verifiedAt: true, logo: true } },
-  application: {
-    select: {
-      id: true,
-      job: { select: { title: true, slug: true } },
-      stage: { select: { name: true } },
-      profile: { select: { user: { select: { name: true } } } },
+/** Built at each call: « now » decides which ephemeral messages are still shown. */
+const listInclude = () =>
+  ({
+    organization: { select: { name: true, verifiedAt: true, logo: true } },
+    application: {
+      select: {
+        id: true,
+        job: { select: { title: true, slug: true } },
+        stage: { select: { name: true } },
+        profile: { select: { user: { select: { name: true } } } },
+      },
     },
-  },
-  contactRequest: {
-    select: {
-      job: { select: { title: true } },
-      profile: { select: { id: true, user: { select: { name: true } } } },
+    contactRequest: {
+      select: {
+        job: { select: { title: true } },
+        profile: { select: { id: true, user: { select: { name: true } } } },
+      },
     },
-  },
-  connection: {
-    select: { id: true, status: true, blockedById: true, requester: peerSide, addressee: peerSide },
-  },
-  messages: { where: { hiddenAt: null }, orderBy: { createdAt: "desc" }, take: 1 },
-} satisfies Prisma.ConversationInclude;
+    connection: {
+      select: {
+        id: true,
+        status: true,
+        blockedById: true,
+        requester: peerSide,
+        addressee: peerSide,
+      },
+    },
+    messages: {
+      where: { hiddenAt: null, OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+      orderBy: { createdAt: "desc" },
+      take: 1,
+    },
+  }) satisfies Prisma.ConversationInclude;
 
 export async function listConversations(db: PrismaClient, viewer: Viewer) {
   const conversations = await db.conversation.findMany({
     where: accessWhere(viewer),
     orderBy: { lastMessageAt: "desc" },
     take: 100,
-    include: { ...listInclude, participants: { where: { userId: viewer.userId } } },
+    include: { ...listInclude(), participants: { where: { userId: viewer.userId } } },
   });
   return conversations.map((conversation) => {
     const last = conversation.messages[0] ?? null;
@@ -109,8 +121,13 @@ export async function getConversation(db: PrismaClient, viewer: Viewer, id: stri
   const conversation = await db.conversation.findFirst({
     where: { id, ...accessWhere(viewer) },
     include: {
-      ...listInclude,
-      messages: { orderBy: { createdAt: "asc" }, take: 300 },
+      ...listInclude(),
+      // « Messages éphémères » (Modèle B lot B8): an expired message is no longer shown.
+      messages: {
+        where: { OR: [{ expiresAt: null }, { expiresAt: { gt: new Date() } }] },
+        orderBy: { createdAt: "asc" },
+        take: 300,
+      },
     },
   });
   if (!conversation) throw new ConnectError("notFound");
@@ -162,6 +179,9 @@ export async function sendMessage(
       kind: input.kind ?? "text",
       payload: input.payload ?? {},
       createdAt: now,
+      expiresAt: conversation.ephemeralSeconds
+        ? new Date(now.getTime() + conversation.ephemeralSeconds * 1000)
+        : null,
     },
   });
   await db.conversation.update({

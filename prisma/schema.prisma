@@ -1568,6 +1568,8 @@ model Connection {
   status       ConnectionStatus @default(pending)
   /// Who blocked the other one, when status is blocked.
   blockedById  String?
+  /// A short word sent with the request (« Demandes de connexion », Modèle B lot B8).
+  note         String?
   conversation Conversation?
   createdAt    DateTime         @default(now())
   respondedAt  DateTime?
@@ -1578,29 +1580,32 @@ model Connection {
 
 /// One conversation per application, between the talent and the hiring organization.
 model Conversation {
-  id             String                    @id @default(cuid(2))
-  kind           ConversationKind
-  applicationId  String?                   @unique
-  application    Application?              @relation(fields: [applicationId], references: [id], onDelete: Cascade)
-  organizationId String?
-  organization   Organization?             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
+  id               String                    @id @default(cuid(2))
+  kind             ConversationKind
+  applicationId    String?                   @unique
+  application      Application?              @relation(fields: [applicationId], references: [id], onDelete: Cascade)
+  organizationId   String?
+  organization     Organization?             @relation(fields: [organizationId], references: [id], onDelete: Cascade)
   /// The talent side of the conversation.
-  talentUserId   String
-  contactRequest ContactRequest?
+  talentUserId     String
+  contactRequest   ContactRequest?
   /// For a peer conversation: the accepted connection it belongs to.
-  connectionId   String?                   @unique
-  connection     Connection?               @relation(fields: [connectionId], references: [id], onDelete: Cascade)
+  connectionId     String?                   @unique
+  connection       Connection?               @relation(fields: [connectionId], references: [id], onDelete: Cascade)
   /// Set when the talent blocks the organization: no more messages from it.
-  blockedAt      DateTime?
+  blockedAt        DateTime?
   /// « Retirer de ma messagerie » (recruteur lot 6): hidden on the organization's side only, until
   /// a new message arrives. The talent keeps every message; nothing is deleted.
-  orgHiddenAt    DateTime?
+  orgHiddenAt      DateTime?
   /// « Épingler la conversation »: shown first in the organization's list.
-  orgPinnedAt    DateTime?
-  participants   ConversationParticipant[]
-  messages       Message[]
-  lastMessageAt  DateTime                  @default(now())
-  createdAt      DateTime                  @default(now())
+  orgPinnedAt      DateTime?
+  /// « Messages éphémères » (Modèle B lot B8, between two talents): new messages are hidden after
+  /// this many seconds, for both sides. Null: off.
+  ephemeralSeconds Int?
+  participants     ConversationParticipant[]
+  messages         Message[]
+  lastMessageAt    DateTime                  @default(now())
+  createdAt        DateTime                  @default(now())
 
   @@index([organizationId, lastMessageAt])
   @@index([talentUserId, lastMessageAt])
@@ -1615,6 +1620,9 @@ model ConversationParticipant {
   lastReadAt     DateTime?
   /// « Couper les notifications » of this conversation, for this person only.
   mutedAt        DateTime?
+  /// « Effacer la discussion » (Modèle B lot B8): the messages before it are hidden for this person
+  /// only; the other side keeps them and nothing is deleted.
+  clearedAt      DateTime?
 
   @@unique([conversationId, userId])
 }
@@ -1630,6 +1638,14 @@ enum MessageKind {
   slot
   /// A recruitment decision (rejected or hired), shown as a DecisionCard, never as a bubble.
   decision
+  /// Photos sent from the phone (Modèle B lot B8): payload { files: [{ key, width, height }], hd }.
+  image
+  /// A voice note: payload { key, seconds, type }.
+  voice
+  /// A connection's card: payload { userId, name, line }.
+  contact
+  /// An organization's card: payload { slug, name, line }.
+  organization
 }
 
 model Message {
@@ -1643,6 +1659,8 @@ model Message {
   payload        Json         @default("{}")
   /// Hidden by moderation after a report.
   hiddenAt       DateTime?
+  /// Sent while « Messages éphémères » was on: hidden for both sides after this time (never deleted).
+  expiresAt      DateTime?
   createdAt      DateTime     @default(now())
 
   @@index([conversationId, createdAt])
