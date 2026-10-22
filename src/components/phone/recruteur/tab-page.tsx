@@ -12,6 +12,8 @@ type ResultItem = {
   image?: string | null;
   org?: boolean;
   icon?: PhoneIconName;
+  /** A post of the Fil: its text, then who wrote it, without a picture. */
+  post?: boolean;
 };
 type ResultGroup = { title: string; items: ResultItem[] };
 type Recent = { q: string; kind: string };
@@ -110,9 +112,12 @@ export function RhTabPage({
     if (!q) return;
     const controller = new AbortController();
     const timer = setTimeout(() => {
-      fetch(`/api/hire/recherche/telephone?q=${encodeURIComponent(q)}&dans=${scope}`, {
-        signal: controller.signal,
-      })
+      fetch(
+        `/api/hire/recherche/telephone?q=${encodeURIComponent(q)}&dans=${scope}&onglet=${search?.tab ?? ""}`,
+        {
+          signal: controller.signal,
+        },
+      )
         .then((response) => (response.ok ? response.json() : { groups: [] }))
         .then((data: { groups: ResultGroup[] }) => setGroups(data.groups))
         .catch(() => undefined);
@@ -121,7 +126,7 @@ export function RhTabPage({
       clearTimeout(timer);
       controller.abort();
     };
-  }, [query, scope]);
+  }, [query, scope, search?.tab]);
 
   const close = () => {
     setOpen(false);
@@ -237,6 +242,7 @@ export function RhTabPage({
                     key={item.href}
                     href={item.href}
                     className="nb-rh-res"
+                    data-publication={item.post ? "" : undefined}
                     onClick={() =>
                       keepRecent(search.tab, {
                         q: query.trim(),
@@ -244,22 +250,24 @@ export function RhTabPage({
                       })
                     }
                   >
-                    <span
-                      className="nb-rh-mini"
-                      data-org={item.org ? "" : undefined}
-                      data-icone={item.icon ? "" : undefined}
-                    >
-                      {item.icon ? (
-                        <PhoneIcon name={item.icon} size={22} stroke={1.8} />
-                      ) : item.image ? (
-                        // eslint-disable-next-line @next/next/no-img-element -- a 48 px picture
-                        <img src={item.image} alt="" />
-                      ) : (
-                        item.initials
-                      )}
-                    </span>
+                    {item.post ? null : (
+                      <span
+                        className="nb-rh-mini"
+                        data-org={item.org ? "" : undefined}
+                        data-icone={item.icon ? "" : undefined}
+                      >
+                        {item.icon ? (
+                          <PhoneIcon name={item.icon} size={22} stroke={1.8} />
+                        ) : item.image ? (
+                          // eslint-disable-next-line @next/next/no-img-element -- a 48 px picture
+                          <img src={item.image} alt="" />
+                        ) : (
+                          item.initials
+                        )}
+                      </span>
+                    )}
                     <span className="nb-rh-res-t">
-                      <b>{item.title}</b>
+                      {item.post ? <span>{item.title}</span> : <b>{item.title}</b>}
                       {item.sub ? <span className="nb-meta">{item.sub}</span> : null}
                     </span>
                   </Link>

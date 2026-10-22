@@ -5,6 +5,7 @@ import { getCurrentUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { getActiveSpace } from "@/server/hire-context";
 import { exploreSearch } from "@/server/services/explore";
+import { searchPosts } from "@/server/services/feed";
 import { RH_SEARCH_SCOPES, recruiterPhoneSearch } from "@/server/services/hire-phone";
 
 const querySchema = z.object({
@@ -30,6 +31,7 @@ const initials = (name: string) =>
 export async function GET(request: Request) {
   const params = new URL(request.url).searchParams;
   const parsed = querySchema.safeParse({ q: params.get("q") ?? "", dans: params.get("dans") });
+  const fil = params.get("onglet") === "fil";
   if (!parsed.success) return NextResponse.json({ groups: [] });
   const user = await getCurrentUser();
   if (!user) return NextResponse.json({ groups: [] }, { status: 401 });
@@ -37,8 +39,10 @@ export async function GET(request: Request) {
   if (!space) return NextResponse.json({ groups: [] }, { status: 403 });
   const { q, dans } = parsed.data;
   const t = await getTranslations("phoneRh.search");
-  const want = (scope: (typeof RH_SEARCH_SCOPES)[number]) => dans === "tout" || dans === scope;
-  const [mine, companies, people] = await Promise.all([
+  // The Fil searches posts, people and companies, never the organization's offers or candidates.
+  const want = (scope: (typeof RH_SEARCH_SCOPES)[number]) =>
+    (dans === "tout" && !(fil && (scope === "offres" || scope === "candidats"))) || dans === scope;
+  const [mine, companies, people, posts] = await Promise.all([
     want("offres") || want("candidats")
       ? recruiterPhoneSearch(
           db,
@@ -52,7 +56,30 @@ export async function GET(request: Request) {
     want("personnes")
       ? exploreSearch(db, user.id, q, "personnes").then((found) => found.people)
       : null,
+    // « Publications » belongs to the Fil only (Modèle B recruteur, M3).
+    want("publications") && (fil || dans === "publications") ? searchPosts(db, user.id, q) : null,
   ]);
+  const companyItems = (companies ?? []).map((company) => ({
+    href: `/app/entreprises/${company.slug}`,
+    title: company.name,
+    sub: [company.sector, company.city].filter(Boolean).join(" · "),
+    initials: initials(company.name),
+    image: company.logo,
+    org: true,
+  }));
+  const peopleItems = (people ?? []).map((person) => ({
+    href: `/app/personnes/${person.id}`,
+    title: person.name,
+    sub: [person.title, person.company].filter(Boolean).join(" · "),
+    initials: initials(person.name),
+    image: person.image,
+  }));
+  const postItems = (posts ?? []).map((post) => ({
+    href: `/app/fil/${post.id}`,
+    title: post.body.length > 140 ? `${post.body.slice(0, 139)}…` : post.body,
+    sub: post.by,
+    post: true,
+  }));
   const groups = [
     want("offres") && mine
       ? {
@@ -75,31 +102,19 @@ export async function GET(request: Request) {
           items: mine.candidates.map((item) => ({ ...item, initials: initials(item.title) })),
         }
       : null,
-    companies
-      ? {
-          title: t("groups.companies", { count: companies.length }),
-          items: companies.map((company) => ({
-            href: `/app/entreprises/${company.slug}`,
-            title: company.name,
-            sub: [company.sector, company.city].filter(Boolean).join(" · "),
-            initials: initials(company.name),
-            image: company.logo,
-            org: true,
-          })),
-        }
-      : null,
-    people
-      ? {
-          title: t("groups.people", { count: people.length }),
-          items: people.map((person) => ({
-            href: `/app/personnes/${person.id}`,
-            title: person.name,
-            sub: [person.title, person.company].filter(Boolean).join(" · "),
-            initials: initials(person.name),
-            image: person.image,
-          })),
-        }
-      : null,
+    ...(fil && dans === "tout"
+      ? // In the Fil (planche Recruteur-fil-recherche-texte), « Tout » shows people and companies
+        // together, then the posts.
+        [{ title: t("groups.peopleAndCompanies"), items: [...peopleItems, ...companyItems] }]
+      : [
+          companies
+            ? { title: t("groups.companies", { count: companyItems.length }), items: companyItems }
+            : null,
+          people
+            ? { title: t("groups.people", { count: peopleItems.length }), items: peopleItems }
+            : null,
+        ]),
+    posts ? { title: t("groups.posts"), items: postItems } : null,
   ].filter((group) => group !== null && group.items.length > 0);
   return NextResponse.json({ groups }, { headers: { "Cache-Control": "private, no-store" } });
 }

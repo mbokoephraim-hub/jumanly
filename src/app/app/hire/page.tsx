@@ -15,6 +15,7 @@ import { applicationsThisWeek, hireToday } from "@/server/services/hire-today";
 import { atsToday } from "@/server/services/hire-ats";
 import { isPhone } from "@/server/view";
 import { RhTab, RhBell } from "@/components/phone/recruteur/head";
+import { RhFil } from "@/components/phone/recruteur/fil";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireToday");
@@ -451,14 +452,18 @@ async function HireTodayPageContent() {
   );
 }
 
-/** On a phone, the first screen of the Fil tab of Modèle B (docs/modele-b-recruteur, lot M1). */
+/**
+ * On a phone, the Fil tab of Modèle B (docs/modele-b-recruteur, lot M3): the recruiter's Fil.
+ * « À traiter » stays the first screen on a computer and a tablet.
+ */
 export default async function HireTodayPage() {
-  const content = <HireTodayPageContent />;
-  if (await isPhone())
+  if (await isPhone()) {
+    const { user } = await requireHire("/app/hire");
     return (
-      <RhTab tab="fil" actions={<RhBell />}>
-        {content}
+      <RhTab tab="fil" actions={<RhBell />} legacy={false}>
+        <RhFil user={{ id: user.id, name: user.name, image: user.image ?? null }} />
       </RhTab>
     );
-  return content;
+  }
+  return <HireTodayPageContent />;
 }

@@ -13,7 +13,7 @@ import { RhTabPage, type RhSearchSetup } from "./tab-page";
 
 /** « Rechercher dans » of each tab (planches Recruteur-*-recherche). */
 const SCOPES: Record<RecruiterTab, string[]> = {
-  fil: ["tout", "personnes", "entreprises"],
+  fil: ["tout", "publications", "personnes", "entreprises"],
   offres: ["tout", "offres", "entreprises", "personnes"],
   candidatures: ["tout", "candidats", "offres"],
   talents: ["tout", "personnes", "entreprises"],

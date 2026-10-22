@@ -65,3 +65,28 @@ export async function connectViewer(suite = "/app/messages") {
     : null;
   return { user, space, viewer: { userId: user.id, hire } };
 }
+
+/**
+ * Where a recruiter publishes in the Fil (Modèle B recruteur, M3): the active organization, whose
+ * offers may be joined to a post, and whether the person may publish in its name — a member who
+ * manages the offers, in a company page (never the space under their own name).
+ */
+export async function publishingSpace(userId: string) {
+  const space = await getActiveSpace(userId);
+  if (!space) return null;
+  const [personal, org] = await Promise.all([
+    db.recruiterProfile.findFirst({
+      where: { userId, personalOrganizationId: space.organizationId },
+      select: { id: true },
+    }),
+    db.organization.findUniqueOrThrow({
+      where: { id: space.organizationId },
+      select: { name: true, logo: true },
+    }),
+  ]);
+  return {
+    organizationId: space.organizationId,
+    canPublishAsOrg: hirePermissions(space.role).manage && !personal,
+    org,
+  };
+}

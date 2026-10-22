@@ -1143,3 +1143,160 @@
   line-height: 1.45;
   animation: nbApproche 0.3s ease-out both;
 }
+
+/* ── M3 · Fil (planches Recruteur-fil*) ─────────────────────────────────────────────────── */
+.nb-rh-fil-haut {
+  padding: 14px 20px 0;
+}
+.nb-rh-fil-publier {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 10px 10px 12px;
+  border-radius: 24px;
+  background: var(--nb-carte);
+}
+.nb-rh-fil-publier-l {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  font-size: 15px;
+  line-height: 1.3;
+}
+.nb-rh-fil-publier .nb-fil-publier-b {
+  background: var(--nb-lime);
+  color: var(--nb-nuit);
+}
+.nb-rh-fil-org {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  min-height: 44px;
+  margin-top: 6px;
+  font-size: 14.5px;
+  font-weight: 700;
+  color: var(--nb-menthe-claire);
+}
+.nb-rh-fil .nb-fil-onglets {
+  margin-top: 4px;
+}
+.nb-rh-res[data-publication] .nb-rh-res-t > span:first-child {
+  color: var(--nb-texte);
+  font-size: 15px;
+  line-height: 1.4;
+}
+
+/* « Nouvelle publication » of a recruiter */
+.nb-rh-pub {
+  position: relative;
+  min-height: 100dvh;
+  padding-bottom: 130px;
+}
+.nb-rh-pub-barre {
+  display: grid;
+  grid-template-columns: 44px 1fr 44px;
+  align-items: center;
+  padding: var(--nb-haut) 12px 10px;
+  border-bottom: 1px solid var(--nb-filet);
+}
+.nb-rh-pub-barre h1 {
+  text-align: center;
+  font-size: 17px;
+  font-weight: 700;
+}
+.nb-rh-pub-corps {
+  padding: 4px 20px 0;
+}
+.nb-rh-pub-label {
+  display: block;
+  margin: 22px 0 10px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--nb-gris);
+}
+.nb-rh-pub-ligne {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+}
+.nb-rh-pub-ligne [data-plein] {
+  color: var(--nb-corail);
+}
+.nb-rh-pub-qui,
+.nb-rh-pub-offres {
+  display: grid;
+  gap: 10px;
+}
+.nb-rh-pub-carte {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  width: 100%;
+  min-height: 64px;
+  padding: 12px 16px;
+  border-radius: 18px;
+  border: 1px solid var(--nb-filet-fort);
+  background: var(--nb-carte);
+  text-align: left;
+}
+.nb-rh-pub-carte > span:not(.nb-av):not(.nb-rh-pub-point) {
+  flex: 1;
+  min-width: 0;
+  display: grid;
+  gap: 2px;
+}
+.nb-rh-pub-carte b {
+  font-size: 16px;
+}
+.nb-rh-pub-carte[aria-checked="true"] {
+  border-color: var(--nb-lime);
+  background: #16302a;
+}
+.nb-rh-pub-point {
+  flex: none;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  border: 2px solid #6c807b;
+}
+.nb-rh-pub-carte[aria-checked="true"] .nb-rh-pub-point {
+  border: 0;
+  background: var(--nb-lime);
+}
+.nb-rh-pub-note {
+  margin-top: 10px;
+  font-size: 13.5px;
+  line-height: 1.4;
+}
+.nb-rh-pub-types {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.nb-rh-pub-types .nb-chip[aria-checked="true"] {
+  background: var(--nb-creme);
+  color: var(--nb-nuit);
+  border-color: var(--nb-creme);
+}
+.nb-rh-pub-texte textarea {
+  min-height: 128px;
+  font-size: 16px;
+  line-height: 1.45;
+}
+.nb-rh-pub .nb-rh-orbi-ligne {
+  width: auto;
+  margin-top: 14px;
+  padding: 8px 0;
+  border: 0;
+  background: none;
+  font-weight: 700;
+  color: var(--nb-menthe-claire);
+}
+.nb-rh-pub-photo {
+  margin-top: 14px;
+}
+.nb-rh-pub-ajout {
+  margin-top: 14px;
+}
