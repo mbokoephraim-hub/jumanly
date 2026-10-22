@@ -183,6 +183,12 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
+/* The page runs under the status bar (viewport-fit=cover): the pages not drawn for it start below
+   it. The Modèle B (`.nb-app`) places its own bars with env(safe-area-inset-*). */
+html:not(:has(.nb-app)) body {
+  padding-top: env(safe-area-inset-top);
+}
+
 /* Focus visible : Sapin 2 px + halo Lime 4 px (§ 11.8, planche 00-01). */
 :focus-visible {
   outline: 2px solid var(--jm-sapin);

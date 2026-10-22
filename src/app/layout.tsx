@@ -24,11 +24,16 @@ export async function generateMetadata(): Promise<Metadata> {
     title: { default: t("home.seo.title"), template: `%s ${t("common.seo.titleSuffix")}` },
     description: t("home.seo.description"),
     applicationName: t("common.brand"),
+    // Installed on an iPhone: the status bar is drawn over the app's own background.
+    appleWebApp: { capable: true, statusBarStyle: "black-translucent", title: t("common.brand") },
   };
 }
 
 export const viewport: Viewport = {
   themeColor: "#0F3F37",
+  // The page runs under the status bar and the home indicator of the phone: the background covers
+  // the whole screen, each fixed bar keeps clear of them with env(safe-area-inset-*).
+  viewportFit: "cover",
 };
 
 export default async function RootLayout({ children }: LayoutProps<"/">) {

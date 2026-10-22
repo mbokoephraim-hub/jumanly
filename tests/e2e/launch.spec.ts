@@ -22,9 +22,10 @@ test("Jumanly s'installe comme une application", async ({ request }) => {
   const manifest = await (await request.get("/manifest.webmanifest")).json();
   expect(manifest.name).toBe("Jumanly");
   expect(manifest.display).toBe("standalone");
-  // The installed app opens on the animated logo, on a cream background (no black screen).
+  // The installed app opens on the animated logo, on the night of the Modèle B (the phone app is
+  // dark only): the same background from the first frame, from the top of the screen to the bottom.
   expect(manifest.start_url).toBe("/demarrage");
-  expect(manifest.background_color).toBe("#EEE8DE");
+  expect(manifest.background_color).toBe("#0b1a1f");
   expect(manifest.icons.map((icon: { sizes: string }) => icon.sizes)).toContain("512x512");
   for (const icon of manifest.icons as { src: string }[]) {
     expect((await request.get(icon.src)).status(), icon.src).toBe(200);
