@@ -3979,3 +3979,10 @@ Quatre corrections d'Ephraïm, détail dans `docs/decisions/2026-10-22-compte-re
   commentateurs, bien connectés), plafonné et varié.
 - Tests : `tests/unit/feed-rank.test.ts`, `tests/db/account-deletion.test.ts`, `tests/db/feed.test.ts`,
   `tests/e2e/corrections-compte.spec.ts`.
+
+## Tailles réduites au téléphone : Fil et Carrière (22 octobre 2026)
+
+Demande d'Ephraïm (deux captures) : la photo en haut du Fil passe à 28 px, la taille de la cloche.
+Carrière : photo 64 px (au lieu de 96), boutons Partager et Modifier 34 px, puces Cap et disponibilité
+28 px, onglets Profil · CV · Portfolio · Progression · Candidatures 44 px en 14 px. Le bloc d'identité
+passe au-dessus de la bannière, que la photo plus petite ne dégage plus.

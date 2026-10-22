@@ -123,7 +123,7 @@ export function PhoneCareer({ view }: { view: CareerView }) {
                   image={view.image}
                   tone={view.tone}
                   org={false}
-                  size={96}
+                  size={64}
                 />
               </span>
               <span className="nb-ex-id-actions">

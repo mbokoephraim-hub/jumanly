@@ -4674,12 +4674,21 @@ section + section .nb-ex-sec {
 .nb-ca-ronds .nb-ex-rond {
   background: rgba(7, 15, 18, 0.8);
 }
+/* Above the banner, which the smaller photo no longer clears. */
+.nb-ca-id {
+  position: relative;
+}
 .nb-ca-id .nb-ex-id-haut {
   margin-top: 8px;
 }
+/* Smaller than the Explorer pages (Ephraïm, 22/10/2026): photo, buttons, chips and tabs. */
+.nb-ca-id .nb-ex-id-actions {
+  gap: 8px;
+}
 .nb-ca-id .nb-ex-id-actions .nb-bouton {
-  height: 46px;
-  padding: 0 22px;
+  height: 34px;
+  padding: 0 14px;
+  font-size: 13px;
 }
 .nb-ca-id .nb-ex-id-nom {
   margin-top: 14px;
@@ -4692,12 +4701,12 @@ section + section .nb-ex-sec {
 }
 .nb-ca-cap,
 .nb-ca-dispo {
-  height: 36px;
-  padding: 0 14px;
-  border-radius: 18px;
+  height: 28px;
+  padding: 0 11px;
+  border-radius: 14px;
   display: inline-flex;
   align-items: center;
-  font-size: 13.5px;
+  font-size: 12px;
   font-weight: 600;
 }
 .nb-ca-cap {
@@ -4732,7 +4741,16 @@ section + section .nb-ex-sec {
   background: var(--nb-lime);
 }
 .nb-ca-onglets {
-  margin-top: 18px;
+  margin-top: 16px;
+}
+.nb-ca-onglets [role="tab"] {
+  height: 44px;
+  padding: 0 11px;
+  font-size: 14px;
+}
+.nb-ca-onglets [role="tab"][aria-selected="true"]::after {
+  left: 8px;
+  right: 8px;
 }
 .nb-ca-orbi {
   display: flex;
