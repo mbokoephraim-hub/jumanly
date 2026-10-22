@@ -50,6 +50,7 @@ type Payload = {
   interviewId?: string;
   ephemeral?: { by?: string; seconds?: number | null };
   outcome?: string;
+  retracted?: boolean;
   signer?: string;
 };
 
@@ -314,7 +315,7 @@ export async function messageViews(
   const signerIds = [
     ...new Set(decisions.flatMap((message) => (message.senderId ? [message.senderId] : []))),
   ];
-  const [interviews, people, signers, similar, tc, ts] = await Promise.all([
+  const [interviews, people, signers, similar, tc, ts, th] = await Promise.all([
     interviewIds.length
       ? db.interview.findMany({
           where: { id: { in: interviewIds } },
@@ -347,6 +348,7 @@ export async function messageViews(
       : Promise.resolve([]),
     getTranslations("connect.decision"),
     getTranslations("suivi.similar"),
+    getTranslations(),
   ]);
   const longDate = (date: Date, timeZone?: string) => {
     const text = format.dateTime(date, {
@@ -362,6 +364,11 @@ export async function messageViews(
 
   const bubbleOf = (message: PhoneConversation["messages"][number]): Bubble => {
     const payload = payloadOf(message.payload);
+    if (message.hiddenAt)
+      return {
+        kind: "system",
+        text: th(payload.retracted ? "hireCandidates.retracted" : "report.hidden"),
+      };
     switch (message.kind) {
       case "decision": {
         const hired = payload.outcome === "hired";

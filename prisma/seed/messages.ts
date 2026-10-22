@@ -105,6 +105,31 @@ export async function seedMessages(db: SeedClient) {
     });
   }
 
+  // Sarah gets the same two requests, for the e2e of the requests (accept, ignore): Grâce's stay
+  // as they are for the other journeys that use them.
+  const daniel = user("daniel.connexion@jumanly.test");
+  const fatou = user("fatou.connexion@jumanly.test");
+  for (const requester of [daniel, fatou]) {
+    if (!requester) continue;
+    await db.connection.deleteMany({
+      where: {
+        OR: [
+          { requesterId: requester.id, addresseeId: sarah.id },
+          { requesterId: sarah.id, addresseeId: requester.id },
+        ],
+      },
+    });
+    await db.connection.create({
+      data: {
+        requesterId: requester.id,
+        addresseeId: sarah.id,
+        status: "pending",
+        note: notes[requester.email]?.replace("Grâce", "Sarah") ?? null,
+        createdAt: ago(requester === daniel ? 24 * 60 : 2 * 24 * 60),
+      },
+    });
+  }
+
   // Three talents of the Fil, connected with Grâce, start again from a clean state.
   const others = [patrick, joel, sarah];
   await db.connection.deleteMany({

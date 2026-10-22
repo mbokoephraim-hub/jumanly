@@ -338,6 +338,7 @@ export type ThreadMessage = {
   kind: string;
   payload: Prisma.JsonValue;
   expiresAt: Date | null;
+  hiddenAt: Date | null;
   createdAt: Date;
 };
 
@@ -356,8 +357,9 @@ export async function phoneConversation(
   const item = await itemOf(db, row, userId, now);
   if (!item) throw new ConnectError("notFound");
   const me = row.participants.find((participant) => participant.userId === userId) ?? null;
+  // A message withdrawn by the company or hidden after a report keeps its place, as a line.
   const messages: ThreadMessage[] = await db.message.findMany({
-    where: { conversationId, ...visibleWhere(now, me?.clearedAt ?? null) },
+    where: { conversationId, ...visibleWhere(now, me?.clearedAt ?? null), hiddenAt: undefined },
     orderBy: { createdAt: "asc" },
     take: 300,
     select: {
@@ -367,6 +369,7 @@ export async function phoneConversation(
       kind: true,
       payload: true,
       expiresAt: true,
+      hiddenAt: true,
       createdAt: true,
     },
   });

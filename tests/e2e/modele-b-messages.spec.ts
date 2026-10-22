@@ -198,7 +198,8 @@ test.describe("Modèle B · Messages au téléphone", () => {
   });
 
   test("les demandes : accepter puis écrire, ignorer sans prévenir", async ({ page }) => {
-    await logIn(page, "grace.ux@jumanly.test");
+    // Sarah's requests (seed `messages.ts`): Grâce's are used by other journeys at the same time.
+    await logIn(page, "sarah.fil@jumanly.test");
     await page.goto("/app/messages/demandes");
     const requests = page.locator(".nb-ms-dem");
     await expect(requests.getByText("« On a suivi le même cours SQL ! »")).toBeVisible();
