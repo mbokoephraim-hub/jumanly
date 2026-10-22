@@ -3979,3 +3979,8 @@ Quatre corrections d'Ephraïm, détail dans `docs/decisions/2026-10-22-compte-re
   commentateurs, bien connectés), plafonné et varié.
 - Tests : `tests/unit/feed-rank.test.ts`, `tests/db/account-deletion.test.ts`, `tests/db/feed.test.ts`,
   `tests/e2e/corrections-compte.spec.ts`.
+
+## Export des rapports pour Company (22 octobre 2026)
+
+- Décision d'Ephraïm : toutes les formules Company peuvent télécharger leurs rapports. Le droit `reports.export` passe à ✓ pour Company dans la partie 05 et dans le seed.
+- Sur une base existante, il faut activer le droit dans Admin > Forfaits, car le seed ne change pas les valeurs déjà présentes. Note : `docs/decisions/2026-10-22-export-rapports-company.md`.
