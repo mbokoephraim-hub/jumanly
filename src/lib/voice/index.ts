@@ -44,6 +44,9 @@ const LANG = "fr-FR";
 export class BrowserVoice implements VoiceAdapter {
   readonly name = "browser";
 
+  /** `en-US` for the interview in English (lot B6); French otherwise. */
+  constructor(private readonly lang = LANG) {}
+
   private get Recognition(): RecognitionConstructor | null {
     if (typeof window === "undefined") return null;
     const scope = window as unknown as {
@@ -65,10 +68,11 @@ export class BrowserVoice implements VoiceAdapter {
     if (!this.canSpeak) return events.onEnd?.();
     window.speechSynthesis.cancel();
     const utterance = new SpeechSynthesisUtterance(text);
-    utterance.lang = LANG;
+    utterance.lang = this.lang;
+    const prefix = this.lang.slice(0, 2).toLowerCase();
     const voice = window.speechSynthesis
       .getVoices()
-      .find((item) => item.lang.toLowerCase().startsWith("fr"));
+      .find((item) => item.lang.toLowerCase().startsWith(prefix));
     if (voice) utterance.voice = voice;
     utterance.onstart = () => events.onStart?.();
     utterance.onend = () => events.onEnd?.();
@@ -87,7 +91,7 @@ export class BrowserVoice implements VoiceAdapter {
       return () => undefined;
     }
     const recognition = new Recognition();
-    recognition.lang = LANG;
+    recognition.lang = this.lang;
     recognition.continuous = true;
     recognition.interimResults = true;
     const finals: string[] = [];
@@ -122,6 +126,6 @@ export class NoVoice implements VoiceAdapter {
   }
 }
 
-export function voiceAdapter(): VoiceAdapter {
-  return process.env.NEXT_PUBLIC_VOICE_PROVIDER === "none" ? new NoVoice() : new BrowserVoice();
+export function voiceAdapter(lang?: string): VoiceAdapter {
+  return process.env.NEXT_PUBLIC_VOICE_PROVIDER === "none" ? new NoVoice() : new BrowserVoice(lang);
 }

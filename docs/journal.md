@@ -50,6 +50,36 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Modèle B · B6 : simulation d'entretien avec Orbi (21 octobre 2026)
+
+Planches Entretien (`docs/modele-b/captures/INDEX.md`, rangées 114 à 133). Écarts et choix :
+`docs/decisions/2026-10-21-modele-b-b6.md`.
+
+**Fait.**
+- Réglages (`/app/career/entretiens/nouveau`, depuis une candidature, une offre ou Formation) :
+  l'offre et le CV lus, écrit ou oral, durée 5 · 10 · 15 min, sept sujets, ton du recruteur, ce que la
+  formule inclut, l'essai de 5 min, la feuille « formule » et « Garder l'essai ».
+- Préparation : quatre étapes animées, « Voir les questions avant », Commencer, Annuler ou Modifier
+  (l'unité revient).
+- Micro (autorisation, test, sous-titres, « Je préfère par écrit »), question orale (Répéter, Indice,
+  Son), réponse dictée ou tapée, « Orbi relance », pause, arrêt avec ou sans bilan ; mode écrit avec
+  compteur de mots.
+- Analyse puis bilan sur 100 (critères avec leur raison, ce qui marche, à travailler, question par
+  question), détail d'une réponse, refaire les questions faibles, « Mes simulations ».
+- Services `interview-score.ts` (note par règles), `interview-phone.ts` ; actions
+  `src/server/actions/interview-phone.ts` ; écrans `src/components/phone/interview/`.
+- Droit `career.interview.trial.monthly` ajouté au seed (aucune migration : les droits vivent en base).
+
+**Captures → maquettes** (`captures/etape-1/`, 390 × 844) : `b6-114` à `b6-133`, au numéro de la
+maquette ; variantes `b`/`c` pour un second état de la même planche (121b, 122b, 129b, 131b, 131c).
+
+**Remplacé au téléphone.** L'ancienne liste, l'ancien « Nouvel entraînement » et l'ancienne séance
+des simulations. L'ordinateur garde ses pages.
+
+**Tests.** `tests/e2e/modele-b-entretien.spec.ts` (réglages et verrous, parcours oral complet,
+parcours écrit, aller-retour depuis une candidature sans écran vide) ; `tests/unit/interview-score.test.ts` ;
+`tests/db/career.test.ts` (essai, annulation, reprise).
+
 ## Modèle B · B5 : Carrière au téléphone (21 octobre 2026)
 
 Planches Carrière (`docs/modele-b/captures/INDEX.md`, rangées 11 à 15). Écarts et choix :

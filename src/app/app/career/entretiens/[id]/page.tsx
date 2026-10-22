@@ -15,6 +15,16 @@ import { answerInterviewAction, finishInterviewAction } from "@/server/actions/c
 import { requireUser } from "@/server/auth/session";
 import { db } from "@/server/db";
 import { gapCourses } from "@/server/matching/service";
+import { isPhone } from "@/server/view";
+import { PhoneInterviewAnswer, PhoneInterviewReport } from "@/components/phone/interview/report";
+import { PhoneInterviewRun } from "@/components/phone/interview/run";
+import {
+  answerView,
+  InterviewTexts,
+  originOf,
+  reportView,
+  runView,
+} from "@/components/phone/interview/server";
 import { ANSWER_MAX, getInterview, type FeedbackLine } from "@/server/services/interview-sim";
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -43,6 +53,34 @@ export default async function PracticeSessionPage({
   const user = await requireUser(`/app/career/entretiens/${id}`);
   const session = await getInterview(db, user.id, id);
   if (!session) notFound();
+  // On the phone (Modèle B, lot B6): the session, then the report and each answer.
+  if (await isPhone()) {
+    const origin = await originOf(query);
+    const answer = Number(query.reponse);
+    if (session.status === "active")
+      return (
+        <InterviewTexts>
+          <PhoneInterviewRun key={session.id} view={await runView(session, origin)} />
+        </InterviewTexts>
+      );
+    if (Number.isInteger(answer) && answer >= 1 && answer <= session.turns.length)
+      return (
+        <InterviewTexts>
+          <PhoneInterviewAnswer
+            key={answer}
+            view={await answerView(session, answer - 1, origin)}
+            query={origin.query}
+          />
+        </InterviewTexts>
+      );
+    return (
+      <InterviewTexts>
+        <PhoneInterviewReport
+          view={await reportView(session, origin, query.depuis === "historique")}
+        />
+      </InterviewTexts>
+    );
+  }
   const t = await getTranslations();
   const d = dynamic(t);
   const line = (item: FeedbackLine) =>

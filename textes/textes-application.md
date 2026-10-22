@@ -2645,6 +2645,11 @@ Conventions :
 | `practice.tip.technical` | Pensez à donner un résultat chiffré : qu'est-ce qui a changé grâce à votre travail ? |
 | `practice.tip.motivation` | Reliez votre parcours à ce poste : pourquoi cette entreprise, pourquoi maintenant. |
 | `practice.tip.behavioral` | Décrivez ce que vous avez fait vous-même, pas seulement l'équipe. |
+| `practice.tip.full` | Une réponse = une situation, ce que vous avez fait, un résultat chiffré. |
+| `practice.tip.experiences` | Parlez d'une expérience précise : la situation, ce que vous avez fait, le résultat. |
+| `practice.tip.situations` | Dites par quoi vous commencez, puis comment vous vérifiez que ça marche. |
+| `practice.tip.traps` | Restez calme et honnête : une réponse courte, puis un exemple. |
+| `practice.tip.english` | Short sentences, one example, one figure. |
 | `practice.skip` | Passer |
 | `practice.answer` | Répondre |
 | `practice.feedback.good` | Bonne préparation |
@@ -6575,6 +6580,11 @@ Ces textes figurent dans le CV téléchargé. Ils suivent la « langue des titre
 | `career.interviews.setup.type.technical` | Entretien technique |
 | `career.interviews.setup.type.motivation` | Motivation et parcours |
 | `career.interviews.setup.type.behavioral` | Mises en situation |
+| `career.interviews.setup.type.full` | Entretien complet |
+| `career.interviews.setup.type.experiences` | Mes expériences |
+| `career.interviews.setup.type.situations` | Mises en situation |
+| `career.interviews.setup.type.traps` | Questions pièges |
+| `career.interviews.setup.type.english` | Entretien en anglais |
 | `career.interviews.setup.level.text` | Exigence |
 | `career.interviews.setup.level.easy` | Bienveillant |
 | `career.interviews.setup.level.standard` | Standard |
@@ -9200,6 +9210,342 @@ Conventions :
 | `phoneCareer.application.withdrawConfirm` | Retirer |
 | `phoneCareer.application.withdrawn` | Candidature retirée |
 | `phoneCareer.application.error` | Cela n’a pas marché. Réessayez dans un instant. |
+
+### Modèle B · Simulation d’entretien au téléphone
+
+*Lot B6 (docs/modele-b, rangée 16, planche `Entretien.dc.html`) : réglages, essai offert, préparation des questions, micro, entretien à l’oral et par écrit, indice, pause, arrêt, analyse, bilan, détail d’une réponse et « Mes simulations ». Rien n’est montré au recruteur.*
+
+| Clé | Texte |
+|---|---|
+| `phoneInterview.seo` | Simulation d’entretien |
+| `phoneInterview.back.candidature` | Candidature |
+| `phoneInterview.back.formation` | Formation |
+| `phoneInterview.back.default` | Retour |
+| `phoneInterview.history` | Mes simulations |
+| `phoneInterview.quoted` | « {text} » |
+| `phoneInterview.title` | S’entraîner pour l’entretien |
+| `phoneInterview.jobWhen` | {company} · {when} |
+| `phoneInterview.prepares` | Je prépare les questions à partir de l’offre de {company} et de votre CV {cv}. |
+| `phoneInterview.preparesProfile` | Je prépare les questions à partir de l’offre de {company} et de votre profil. |
+| `phoneInterview.preparesNoJob` | Je prépare les questions à partir de votre profil et du poste visé. |
+| `phoneInterview.jobTitle` | Pour quel poste ? |
+| `phoneInterview.jobTitlePlaceholder` | Ex. : Analyste de données junior |
+| `phoneInterview.how` | Comment |
+| `phoneInterview.mode.text` | Par écrit |
+| `phoneInterview.mode.voice` | À l’oral |
+| `phoneInterview.from` | Dès {plan} |
+| `phoneInterview.included` | Inclus dans votre formule {plan} |
+| `phoneInterview.includedNoPlan` | Inclus dans votre formule |
+| `phoneInterview.trial` | Essai offert : une simulation de 5 min. Le reste dès {plan}. |
+| `phoneInterview.trialUsed` | Essai utilisé · passez en {plan} pour continuer |
+| `phoneInterview.notIncluded` | Pas inclus dans votre formule · dès {plan} |
+| `phoneInterview.duration` | Durée |
+| `phoneInterview.minutes` | {count} min |
+| `phoneInterview.questions` | {count} questions |
+| `phoneInterview.locked` | Réservé à {plan} |
+| `phoneInterview.focusTitle` | Sur quoi |
+| `phoneInterview.focus.full.title` | Entretien complet |
+| `phoneInterview.focus.full.text` | Un peu de tout, comme le vrai |
+| `phoneInterview.focus.experiences.title` | Mes expériences |
+| `phoneInterview.focus.experiences.text` | Vos expériences, vos projets, la méthode STAR |
+| `phoneInterview.focus.technical.title` | Questions techniques |
+| `phoneInterview.focus.technical.text` | Les savoir-faire du poste |
+| `phoneInterview.focus.motivation.title` | Motivation et entreprise |
+| `phoneInterview.focus.motivation.text` | Pourquoi eux, pourquoi ce poste, votre projet |
+| `phoneInterview.focus.situations.title` | Mises en situation |
+| `phoneInterview.focus.situations.text` | Des cas concrets à résoudre à voix haute |
+| `phoneInterview.focus.traps.title` | Questions pièges |
+| `phoneInterview.focus.traps.text` | Défaut, salaire, comparaison |
+| `phoneInterview.focus.english.title` | Entretien en anglais |
+| `phoneInterview.focus.english.text` | Les mêmes questions, en anglais |
+| `phoneInterview.tone` | Ton du recruteur |
+| `phoneInterview.toneName.easy` | Bienveillant |
+| `phoneInterview.toneName.hard` | Exigeant |
+| `phoneInterview.toneWord.easy` | bienveillant |
+| `phoneInterview.toneWord.hard` | exigeant |
+| `phoneInterview.modeWord.text` | par écrit |
+| `phoneInterview.modeWord.voice` | à l’oral |
+| `phoneInterview.private` | Vos réponses restent privées. Le recruteur ne voit jamais vos simulations. |
+| `phoneInterview.ctaTrial` | Essayer gratuitement · 5 min |
+| `phoneInterview.ctaUpgrade` | Passer en {plan} |
+| `phoneInterview.ctaPlans` | Voir les formules |
+| `phoneInterview.ctaStart` | Préparer la simulation · {count} min |
+| `phoneInterview.sheet.title.text` | L’entretien par écrit est inclus dans {plan} |
+| `phoneInterview.sheet.title.voice` | L’entretien à l’oral est inclus dans {plan} |
+| `phoneInterview.sheet.text` | Vous voulez {what}. {plan} ouvre 5, 10 et 15 minutes, tous les sujets et plus de simulations chaque mois. Paiement par Mobile Money, sans engagement. |
+| `phoneInterview.sheet.what.minutes` | {count} minutes |
+| `phoneInterview.sheet.what.focus` | « {focus} » |
+| `phoneInterview.sheet.what.new` | une nouvelle simulation |
+| `phoneInterview.sheet.plans` | Voir les formules |
+| `phoneInterview.sheet.keepTrial` | Garder l’essai de 5 min |
+| `phoneInterview.sheet.later` | Plus tard |
+| `phoneInterview.sheet.close` | Fermer |
+| `phoneInterview.error.consent` | Pour qu’Orbi prépare les questions, autorisez l’assistance IA dans vos paramètres. |
+| `phoneInterview.error.consentCta` | Ouvrir les paramètres |
+| `phoneInterview.error.quota` | Vos simulations du mois sont utilisées. Elles reviennent le {date}. |
+| `phoneInterview.error.entitlement` | Cette simulation n’est pas incluse dans votre formule. |
+| `phoneInterview.error.invalid` | Indiquez le poste visé (2 caractères au moins). |
+| `phoneInterview.error.network` | Orbi n’a pas pu préparer les questions. Vérifiez la connexion et réessayez. |
+| `phoneInterview.dl.back` | Réglages |
+| `phoneInterview.dl.title` | Orbi prépare votre entretien |
+| `phoneInterview.dl.ready` | C’est prêt |
+| `phoneInterview.dl.summary` | {count} questions · {minutes} min · {mode} |
+| `phoneInterview.dl.offer` | Lecture de l’offre de {company} |
+| `phoneInterview.dl.job` | Lecture du poste visé : {title} |
+| `phoneInterview.dl.cv` | Lecture de votre CV {cv} |
+| `phoneInterview.dl.profile` | Lecture de votre profil |
+| `phoneInterview.dl.chosen` | {count} questions choisies : {focus} |
+| `phoneInterview.dl.voice` | Voix d’Orbi prête, ton {tone} |
+| `phoneInterview.dl.timer` | Chronomètre réglé sur {minutes} min |
+| `phoneInterview.dl.note` | Les questions sont prêtes sur votre téléphone. Vos réponses restent privées. |
+| `phoneInterview.dl.see` | Voir les questions avant |
+| `phoneInterview.dl.hide` | Masquer les questions |
+| `phoneInterview.dl.start` | Commencer |
+| `phoneInterview.dl.cancel` | Annuler |
+| `phoneInterview.dl.edit` | Modifier les réglages |
+| `phoneInterview.mic.back` | Questions |
+| `phoneInterview.mic.title` | Avant de commencer |
+| `phoneInterview.mic.text` | Orbi pose la question à voix haute, vous répondez comme devant le recruteur. |
+| `phoneInterview.mic.need` | Le micro est nécessaire |
+| `phoneInterview.mic.kept` | Le son n’est jamais enregistré : seul le texte de vos réponses est gardé, pour vous. |
+| `phoneInterview.mic.allow` | Autoriser le micro |
+| `phoneInterview.mic.ok` | On vous entend bien |
+| `phoneInterview.mic.say` | Dites quelques mots pour tester. |
+| `phoneInterview.mic.denied` | Le micro n’est pas autorisé. Autorisez-le dans les réglages du navigateur, ou répondez par écrit. |
+| `phoneInterview.mic.tips` | Pour bien se lancer |
+| `phoneInterview.mic.tip1` | Un endroit calme, téléphone à 20 cm. |
+| `phoneInterview.mic.tip2` | Une respiration avant chaque réponse. |
+| `phoneInterview.mic.tip3` | Un exemple et un chiffre par réponse. |
+| `phoneInterview.mic.captions` | Afficher le texte des questions |
+| `phoneInterview.mic.captionsText` | Utile si le son est faible |
+| `phoneInterview.mic.write` | Je préfère par écrit |
+| `phoneInterview.mic.go` | C’est parti |
+| `phoneInterview.run.question` | Question {n} sur {count} |
+| `phoneInterview.run.left` | {time} restantes |
+| `phoneInterview.run.leftWrite` | {time} pour répondre |
+| `phoneInterview.run.pause` | Mettre en pause |
+| `phoneInterview.run.end` | Terminer |
+| `phoneInterview.run.asks` | Orbi pose la question |
+| `phoneInterview.run.listens` | À vous · Orbi écoute |
+| `phoneInterview.run.followUp` | Orbi relance |
+| `phoneInterview.run.followUpTag` | Relance |
+| `phoneInterview.run.followUpQuestion` | Pouvez-vous donner un chiffre précis ? |
+| `phoneInterview.run.followUpHint` | Un nombre, une durée, un pourcentage. |
+| `phoneInterview.run.repeat` | Répéter |
+| `phoneInterview.run.hint` | Indice |
+| `phoneInterview.run.sound` | Son |
+| `phoneInterview.run.muted` | Son coupé |
+| `phoneInterview.run.answerNow` | Répondre maintenant |
+| `phoneInterview.run.done` | J’ai fini de répondre |
+| `phoneInterview.run.finish` | Terminer |
+| `phoneInterview.run.typed` | Votre réponse, si le micro ne transcrit pas sur ce téléphone… |
+| `phoneInterview.run.writeHint` | Un indice ? |
+| `phoneInterview.run.placeholder` | Écrivez votre réponse comme vous la diriez… |
+| `phoneInterview.run.answerLabel` | Votre réponse |
+| `phoneInterview.run.words` | {count, plural, one {# mot} other {# mots}} · visez 60 à 120 |
+| `phoneInterview.run.send` | Envoyer |
+| `phoneInterview.run.empty` | Répondez, même en quelques mots. |
+| `phoneInterview.run.repeated` | Orbi répète la question |
+| `phoneInterview.run.error` | La réponse n’est pas partie. Vérifiez la connexion et réessayez. |
+| `phoneInterview.pause.title` | En pause |
+| `phoneInterview.pause.text` | Le chrono est arrêté. |
+| `phoneInterview.pause.resume` | Reprendre |
+| `phoneInterview.pause.restart` | Recommencer la question |
+| `phoneInterview.pause.stop` | Arrêter la simulation |
+| `phoneInterview.hint.title` | Un indice |
+| `phoneInterview.hint.text` | Le chrono continue |
+| `phoneInterview.hint.star` | La méthode STAR |
+| `phoneInterview.hint.s` | <b>S</b>ituation : où, quand |
+| `phoneInterview.hint.t` | <b>T</b>âche : votre rôle |
+| `phoneInterview.hint.a` | <b>A</b>ction : ce que vous faites |
+| `phoneInterview.hint.r` | <b>R</b>ésultat : un chiffre |
+| `phoneInterview.hint.go` | Je réponds |
+| `phoneInterview.stop.title` | Arrêter la simulation ? |
+| `phoneInterview.stop.text` | Vous avez répondu à {answered, plural, =0 {aucune question} one {# question} other {# questions}} sur {count}. Rien n’est envoyé au recruteur. |
+| `phoneInterview.stop.report` | Voir le bilan de ces réponses |
+| `phoneInterview.stop.quit` | Arrêter sans bilan |
+| `phoneInterview.stop.continue` | Continuer l’entretien |
+| `phoneInterview.stop.quitted` | Simulation arrêtée. Rien n’est envoyé au recruteur. |
+| `phoneInterview.an.title` | Orbi analyse vos réponses |
+| `phoneInterview.an.transcript` | Transcription de vos réponses |
+| `phoneInterview.an.pace` | Débit, pauses et mots de remplissage |
+| `phoneInterview.an.length` | Longueur et clarté des réponses |
+| `phoneInterview.an.offer` | Comparaison avec l’offre de {company} |
+| `phoneInterview.an.job` | Comparaison avec le poste visé |
+| `phoneInterview.report.close` | Fermer et revenir |
+| `phoneInterview.report.private` | Privé · rien que pour vous |
+| `phoneInterview.report.outOf` | sur 100 |
+| `phoneInterview.report.title` | Votre bilan |
+| `phoneInterview.report.summary` | {focus} · {mode} · {minutes} min |
+| `phoneInterview.report.why` | Calculé à partir de vos réponses, critère par critère. Ce n’est pas une prédiction de recrutement. |
+| `phoneInterview.report.criterion.clarity` | Clarté |
+| `phoneInterview.report.criterion.examples` | Exemples concrets |
+| `phoneInterview.report.criterion.relevance` | Lien avec l’offre |
+| `phoneInterview.report.criterion.ease` | Aisance à l’oral |
+| `phoneInterview.report.criterion.length` | Longueur |
+| `phoneInterview.report.reason.clarityGood` | Phrases courtes, idée principale en premier. |
+| `phoneInterview.report.reason.clarityLong` | Des phrases longues : coupez-les et commencez par l’idée principale. |
+| `phoneInterview.report.reason.examplesGood` | Un chiffre dans chaque réponse : bien. |
+| `phoneInterview.report.reason.examplesMissing` | {count, plural, one {Une réponse sans chiffre} other {# réponses sans chiffre}} : dites un nombre, une durée, un pourcentage. |
+| `phoneInterview.report.reason.relevanceCited` | Vous citez {words} : bien vu. |
+| `phoneInterview.report.reason.relevanceMissing` | Reliez vos réponses à l’offre : {words}. |
+| `phoneInterview.report.reason.relevanceNoOffer` | Reliez chaque réponse au poste visé. |
+| `phoneInterview.report.reason.ease` | {speed} mots par minute, {fillers, plural, =0 {aucun « euh »} one {un « euh »} other {# « euh »}}. Respirez avant de répondre. |
+| `phoneInterview.report.reason.lengthGood` | Bonne longueur : 60 à 120 mots. |
+| `phoneInterview.report.reason.lengthOff` | Visez 60 à 120 mots par réponse. |
+| `phoneInterview.report.works` | Ce qui marche |
+| `phoneInterview.report.toWork` | À travailler |
+| `phoneInterview.report.toWorkBefore` | À travailler avant {day} |
+| `phoneInterview.report.byQuestion` | Question par question |
+| `phoneInterview.report.weak` | {count, plural, one {Refaire la question faible} other {Refaire les # questions faibles}} |
+| `phoneInterview.report.new` | Nouvelle simulation |
+| `phoneInterview.report.backTo.candidature` | Retour : ma candidature |
+| `phoneInterview.report.backTo.formation` | Retour : Formation |
+| `phoneInterview.report.unanswered` | Sans réponse |
+| `phoneInterview.report.none` | Aucune réponse : il n’y a rien à noter. Recommencez quand vous voulez. |
+| `phoneInterview.answer.back` | Bilan |
+| `phoneInterview.answer.question` | Question {n} |
+| `phoneInterview.answer.score` | {score} / 100 |
+| `phoneInterview.answer.said` | Ce que vous avez dit |
+| `phoneInterview.answer.wrote` | Ce que vous avez écrit |
+| `phoneInterview.answer.duration` | {minutes, plural, =0 {{seconds} s} other {# min {seconds} s}} de réponse |
+| `phoneInterview.answer.pace` | {speed} mots par minute |
+| `phoneInterview.answer.words` | {count, plural, one {# mot} other {# mots}} |
+| `phoneInterview.answer.followUp` | Relance : {question} |
+| `phoneInterview.answer.works` | Ce qui marche |
+| `phoneInterview.answer.improve` | À améliorer |
+| `phoneInterview.answer.tip` | Conseil d’Orbi |
+| `phoneInterview.answer.work.number` | Vous donnez un chiffre : le recruteur voit ce qui a changé. |
+| `phoneInterview.answer.work.situation` | Vous partez d’une situation réelle et vous restez dans le sujet. |
+| `phoneInterview.answer.work.offer` | Vous reliez votre réponse à l’offre. |
+| `phoneInterview.answer.work.clear` | Des phrases courtes, faciles à suivre. |
+| `phoneInterview.answer.work.answered` | Vous avez répondu : c’est la première étape. |
+| `phoneInterview.answer.fix.number` | Il manque un chiffre : un nombre, une durée, un pourcentage. |
+| `phoneInterview.answer.fix.result` | Il manque le résultat : dites ce qui a changé grâce à vous. |
+| `phoneInterview.answer.fix.long` | Coupez les phrases longues et commencez par l’idée principale. |
+| `phoneInterview.answer.fix.short` | Développez un peu : visez 60 à 120 mots. |
+| `phoneInterview.answer.fix.fast` | Ralentissez un peu : respirez entre deux idées. |
+| `phoneInterview.answer.fix.slow` | Allez un peu plus vite : une idée, un exemple. |
+| `phoneInterview.answer.fix.company` | Terminez par ce que l’entreprise y gagne. |
+| `phoneInterview.answer.retry` | Refaire cette question |
+| `phoneInterview.answer.next` | Question suivante |
+| `phoneInterview.list.back` | Réglages |
+| `phoneInterview.list.title` | Mes simulations |
+| `phoneInterview.list.text` | Visibles par vous seulement. Le recruteur ne les voit jamais. |
+| `phoneInterview.list.row` | {focus} · {mode} |
+| `phoneInterview.list.meta` | {date} · {minutes} min |
+| `phoneInterview.list.today` | Aujourd’hui |
+| `phoneInterview.list.ongoing` | En cours |
+| `phoneInterview.list.empty` | Pas encore de simulation. Choisissez un sujet et lancez-vous : c’est privé. |
+| `phoneInterview.list.new` | Nouvelle simulation |
+| `phoneInterview.bank.experiences.q1` | Présentez-vous en une minute. |
+| `phoneInterview.bank.experiences.h1` | Formation, expérience, ce que vous visez. Finissez par le poste de {jobTitle}. |
+| `phoneInterview.bank.experiences.q2` | Parlez-moi de votre dernière expérience. Qu’avez-vous amélioré ? |
+| `phoneInterview.bank.experiences.h2` | Situation, tâche, action, résultat. Donnez un chiffre. |
+| `phoneInterview.bank.experiences.q3` | Racontez un projet dont vous êtes fier ou fière. |
+| `phoneInterview.bank.experiences.h3` | Le problème, votre rôle, ce qui a changé ensuite. |
+| `phoneInterview.bank.experiences.q4` | Décrivez un désaccord avec un collègue et comment vous l’avez réglé. |
+| `phoneInterview.bank.experiences.h4` | Restez factuel. Montrez l’écoute, puis la solution. |
+| `phoneInterview.bank.experiences.q5` | Parlez-moi d’une situation imprévue que vous avez dû gérer. |
+| `phoneInterview.bank.experiences.h5` | Ce qui est arrivé, ce que vous avez décidé, le résultat. |
+| `phoneInterview.bank.experiences.q6` | Parlez-moi d’un échec et de ce que vous en avez appris. |
+| `phoneInterview.bank.experiences.h6` | Un vrai échec, petit. Insistez sur ce que vous faites autrement depuis. |
+| `phoneInterview.bank.experiences.q7` | Comment organisez-vous une semaine chargée ? |
+| `phoneInterview.bank.experiences.h7` | Une méthode simple : les priorités du lundi, un point le vendredi. |
+| `phoneInterview.bank.experiences.q8` | Quel retour d’un responsable vous a fait progresser ? |
+| `phoneInterview.bank.experiences.h8` | Citez le retour, puis ce que vous avez changé. |
+| `phoneInterview.bank.experiences.q9` | Qu’avez-vous appris seul ou seule récemment, et pourquoi ? |
+| `phoneInterview.bank.experiences.h9` | Le besoin concret qui vous a poussé, et ce que vous en faites. |
+| `phoneInterview.bank.technical.q1` | Quels outils utilisez-vous le plus pour un poste de {jobTitle}, et pour quoi faire ? |
+| `phoneInterview.bank.technical.h1` | Deux ou trois outils, chacun avec un exemple d’usage. |
+| `phoneInterview.bank.technical.q2` | Comment vérifiez-vous la qualité de votre travail avant de le rendre ? |
+| `phoneInterview.bank.technical.h2` | Les étapes de vérification, dans l’ordre. |
+| `phoneInterview.bank.technical.q3` | Expliquez une notion de votre métier à quelqu’un qui ne la connaît pas. |
+| `phoneInterview.bank.technical.h3` | Une phrase simple, puis un exemple de tous les jours. |
+| `phoneInterview.bank.technical.q4` | Décrivez une tâche technique que vous avez menée de bout en bout. |
+| `phoneInterview.bank.technical.h4` | Le besoin, les étapes, l’outil, le résultat. |
+| `phoneInterview.bank.technical.q5` | Que faites-vous quand vous ne savez pas résoudre un problème ? |
+| `phoneInterview.bank.technical.h5` | Chercher, essayer, demander : dans quel ordre et à qui. |
+| `phoneInterview.bank.technical.q6` | Comment présentez-vous un résultat à un responsable pressé ? |
+| `phoneInterview.bank.technical.h6` | Un chiffre clé, une tendance, une décision à prendre. |
+| `phoneInterview.bank.technical.q7` | Une erreur apparaît dans votre travail. Comment la retrouvez-vous ? |
+| `phoneInterview.bank.technical.h7` | Reproduire, isoler, corriger, vérifier. |
+| `phoneInterview.bank.technical.q8` | Comment restez-vous à jour dans votre métier ? |
+| `phoneInterview.bank.technical.h8` | Une source précise et ce qu’elle vous a appris récemment. |
+| `phoneInterview.bank.technical.q9` | Quels indicateurs suivriez-vous pour juger votre travail de {jobTitle} ? |
+| `phoneInterview.bank.technical.h9` | Deux ou trois indicateurs, et pourquoi chacun compte. |
+| `phoneInterview.bank.motivation.q1` | Pourquoi ce poste de {jobTitle} ? |
+| `phoneInterview.bank.motivation.h1` | Ce que le poste vous apporte, et ce que vous lui apportez. |
+| `phoneInterview.bank.motivation.q2` | Que savez-vous de notre entreprise et de nos clients ? |
+| `phoneInterview.bank.motivation.h2` | Ce qu’elle fait, pour qui, et un fait récent. |
+| `phoneInterview.bank.motivation.q3` | Où vous voyez-vous dans trois ans ? |
+| `phoneInterview.bank.motivation.h3` | Un objectif réaliste, lié au poste. |
+| `phoneInterview.bank.motivation.q4` | Pourquoi ce secteur plutôt qu’un autre ? |
+| `phoneInterview.bank.motivation.h4` | Un moment ou une expérience qui vous a donné envie. |
+| `phoneInterview.bank.motivation.q5` | Qu’apporteriez-vous dès le premier mois ? |
+| `phoneInterview.bank.motivation.h5` | Une chose concrète et utile, en partant de leurs besoins. |
+| `phoneInterview.bank.motivation.q6` | Qu’attendez-vous de votre responsable ? |
+| `phoneInterview.bank.motivation.h6` | Des objectifs clairs et des retours réguliers. |
+| `phoneInterview.bank.motivation.q7` | Qu’est-ce qui vous motive le matin ? |
+| `phoneInterview.bank.motivation.h7` | Un exemple vrai, pas une formule. |
+| `phoneInterview.bank.motivation.q8` | Quelle question aimeriez-vous nous poser ? |
+| `phoneInterview.bank.motivation.h8` | Préparez-en deux : l’équipe, les priorités du poste. |
+| `phoneInterview.bank.motivation.q9` | Qu’est-ce qui vous ferait rester longtemps chez nous ? |
+| `phoneInterview.bank.motivation.h9` | Apprendre, avoir des responsabilités, voir l’effet de son travail. |
+| `phoneInterview.bank.situations.q1` | Un résultat baisse fortement cette semaine. Par quoi commencez-vous ? |
+| `phoneInterview.bank.situations.h1` | Vérifier les données, puis comparer par jour, par lieu, par client. |
+| `phoneInterview.bank.situations.q2` | Un responsable veut une réponse pour demain, il vous manque des informations. Que faites-vous ? |
+| `phoneInterview.bank.situations.h2` | Donner la réponse avec sa limite, et la date de la réponse complète. |
+| `phoneInterview.bank.situations.q3` | Deux collègues vous donnent des consignes opposées. Comment tranchez-vous ? |
+| `phoneInterview.bank.situations.h3` | Retrouver l’objectif commun, puis demander à la bonne personne. |
+| `phoneInterview.bank.situations.q4` | Un client se plaint d’un service non rendu. Que regardez-vous d’abord ? |
+| `phoneInterview.bank.situations.h4` | L’historique, ce qui a été promis, ce qui s’est passé. |
+| `phoneInterview.bank.situations.q5` | On vous confie un travail urgent en deux jours. Comment vous organisez-vous ? |
+| `phoneInterview.bank.situations.h5` | Une chose à la fois : besoin, plan, premier jet, retour. |
+| `phoneInterview.bank.situations.q6` | Vous trouvez une erreur dans un travail déjà envoyé. Que faites-vous ? |
+| `phoneInterview.bank.situations.h6` | Prévenir vite, corriger, expliquer ce qui change. |
+| `phoneInterview.bank.situations.q7` | Votre méthode habituelle ne marche pas cette fois. Que tentez-vous ? |
+| `phoneInterview.bank.situations.h7` | Comprendre pourquoi, essayer autre chose, demander de l’aide. |
+| `phoneInterview.bank.situations.q8` | Un collègue vous demande des informations confidentielles. Que répondez-vous ? |
+| `phoneInterview.bank.situations.h8` | Vérifier son droit d’accès, ne partager que le nécessaire. |
+| `phoneInterview.bank.situations.q9` | Comment mesureriez-vous si un changement que vous proposez a marché ? |
+| `phoneInterview.bank.situations.h9` | Un indicateur avant, un après, et une comparaison. |
+| `phoneInterview.bank.traps.q1` | Quel est votre plus grand défaut ? |
+| `phoneInterview.bank.traps.h1` | Un vrai défaut, et ce que vous faites pour le corriger. |
+| `phoneInterview.bank.traps.q2` | Quelles sont vos attentes de salaire ? |
+| `phoneInterview.bank.traps.h2` | Une fourchette préparée, puis la question des avantages. |
+| `phoneInterview.bank.traps.q3` | Pourquoi vous plutôt qu’une autre personne ? |
+| `phoneInterview.bank.traps.h3` | Trois raisons courtes, liées à l’offre. |
+| `phoneInterview.bank.traps.q4` | Avez-vous d’autres entretiens en cours ? |
+| `phoneInterview.bank.traps.h4` | Oui ou non, sans détails, et redites votre intérêt. |
+| `phoneInterview.bank.traps.q5` | Votre expérience vous semble-t-elle suffisante pour ce poste ? |
+| `phoneInterview.bank.traps.h5` | Ce que vous avez vraiment fait, et comment vous apprenez vite. |
+| `phoneInterview.bank.traps.q6` | Que ferez-vous si nous ne vous retenons pas ? |
+| `phoneInterview.bank.traps.h6` | Continuer à progresser, rester en contact. |
+| `phoneInterview.bank.traps.q7` | Qu’est-ce qui vous agace chez un collègue ? |
+| `phoneInterview.bank.traps.h7` | Restez positif, parlez d’organisation. |
+| `phoneInterview.bank.traps.q8` | Pourquoi y a-t-il une période sans emploi dans votre parcours ? |
+| `phoneInterview.bank.traps.h8` | Ce que vous avez appris ou fait pendant cette période. |
+| `phoneInterview.bank.traps.q9` | Seriez-vous prêt ou prête à travailler le samedi ? |
+| `phoneInterview.bank.traps.h9` | Une réponse claire, avec vos conditions. |
+| `phoneInterview.bank.english.q1` | Tell me about yourself. |
+| `phoneInterview.bank.english.h1` | Studies, experience, goal. Short sentences. |
+| `phoneInterview.bank.english.q2` | Why do you want this {jobTitle} position? |
+| `phoneInterview.bank.english.h2` | What the job brings you, and what you bring to it. |
+| `phoneInterview.bank.english.q3` | Describe a project you are proud of. |
+| `phoneInterview.bank.english.h3` | Problem, your role, result. |
+| `phoneInterview.bank.english.q4` | How do you check the quality of your work? |
+| `phoneInterview.bank.english.h4` | Two or three steps, in order. |
+| `phoneInterview.bank.english.q5` | What is your greatest strength? |
+| `phoneInterview.bank.english.h5` | One strength, one example. |
+| `phoneInterview.bank.english.q6` | Where do you see yourself in three years? |
+| `phoneInterview.bank.english.h6` | Growing in the job, in the company. |
+| `phoneInterview.bank.english.q7` | How do you handle pressure? |
+| `phoneInterview.bank.english.h7` | A real example. |
+| `phoneInterview.bank.english.q8` | Do you have any questions for us? |
+| `phoneInterview.bank.english.h8` | Ask about the team and the first goals. |
+| `phoneInterview.bank.english.q9` | What are your salary expectations? |
+| `phoneInterview.bank.english.h9` | A range, then benefits. |
 
 ### Refonte recruteur · Cadre mobile (lot 1)
 
@@ -16652,6 +16998,7 @@ Conventions :
 | `admin.entitlement.career_tools_extended` | Outils de carrière avancés |
 | `admin.entitlement.career_interview_text_monthly` | Simulations d'entretien écrites par mois |
 | `admin.entitlement.career_interview_voice_monthly` | Simulations d'entretien vocales par mois |
+| `admin.entitlement.career_interview_trial_monthly` | Simulation d'essai de 5 min par mois (quand la formule n'inclut pas le mode) |
 | `admin.entitlement.learn_catalog_level` | Catalogue de formations |
 | `admin.entitlement.learn_exercises_job_specific` | Exercices par métier |
 | `admin.entitlement.learn_resources_specialized` | Ressources spécialisées |

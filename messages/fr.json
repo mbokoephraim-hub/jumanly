@@ -3168,7 +3168,12 @@
       "hr": "Parlez d'une expérience précise : la situation, ce que vous avez fait, le résultat.",
       "technical": "Pensez à donner un résultat chiffré : qu'est-ce qui a changé grâce à votre travail ?",
       "motivation": "Reliez votre parcours à ce poste : pourquoi cette entreprise, pourquoi maintenant.",
-      "behavioral": "Décrivez ce que vous avez fait vous-même, pas seulement l'équipe."
+      "behavioral": "Décrivez ce que vous avez fait vous-même, pas seulement l'équipe.",
+      "full": "Une réponse = une situation, ce que vous avez fait, un résultat chiffré.",
+      "experiences": "Parlez d'une expérience précise : la situation, ce que vous avez fait, le résultat.",
+      "situations": "Dites par quoi vous commencez, puis comment vous vérifiez que ça marche.",
+      "traps": "Restez calme et honnête : une réponse courte, puis un exemple.",
+      "english": "Short sentences, one example, one figure."
     },
     "skip": "Passer",
     "answer": "Répondre",
@@ -8341,7 +8346,12 @@
           "hr": "Entretien RH",
           "technical": "Entretien technique",
           "motivation": "Motivation et parcours",
-          "behavioral": "Mises en situation"
+          "behavioral": "Mises en situation",
+          "full": "Entretien complet",
+          "experiences": "Mes expériences",
+          "situations": "Mises en situation",
+          "traps": "Questions pièges",
+          "english": "Entretien en anglais"
         },
         "level": {
           "text": "Exigence",
@@ -11094,6 +11104,415 @@
       "withdrawConfirm": "Retirer",
       "withdrawn": "Candidature retirée",
       "error": "Cela n’a pas marché. Réessayez dans un instant."
+    }
+  },
+  "phoneInterview": {
+    "seo": "Simulation d’entretien",
+    "back": {
+      "candidature": "Candidature",
+      "formation": "Formation",
+      "default": "Retour"
+    },
+    "history": "Mes simulations",
+    "quoted": "« {text} »",
+    "title": "S’entraîner pour l’entretien",
+    "jobWhen": "{company} · {when}",
+    "prepares": "Je prépare les questions à partir de l’offre de {company} et de votre CV {cv}.",
+    "preparesProfile": "Je prépare les questions à partir de l’offre de {company} et de votre profil.",
+    "preparesNoJob": "Je prépare les questions à partir de votre profil et du poste visé.",
+    "jobTitle": "Pour quel poste ?",
+    "jobTitlePlaceholder": "Ex. : Analyste de données junior",
+    "how": "Comment",
+    "mode": {
+      "text": "Par écrit",
+      "voice": "À l’oral"
+    },
+    "from": "Dès {plan}",
+    "included": "Inclus dans votre formule {plan}",
+    "includedNoPlan": "Inclus dans votre formule",
+    "trial": "Essai offert : une simulation de 5 min. Le reste dès {plan}.",
+    "trialUsed": "Essai utilisé · passez en {plan} pour continuer",
+    "notIncluded": "Pas inclus dans votre formule · dès {plan}",
+    "duration": "Durée",
+    "minutes": "{count} min",
+    "questions": "{count} questions",
+    "locked": "Réservé à {plan}",
+    "focusTitle": "Sur quoi",
+    "focus": {
+      "full": {
+        "title": "Entretien complet",
+        "text": "Un peu de tout, comme le vrai"
+      },
+      "experiences": {
+        "title": "Mes expériences",
+        "text": "Vos expériences, vos projets, la méthode STAR"
+      },
+      "technical": {
+        "title": "Questions techniques",
+        "text": "Les savoir-faire du poste"
+      },
+      "motivation": {
+        "title": "Motivation et entreprise",
+        "text": "Pourquoi eux, pourquoi ce poste, votre projet"
+      },
+      "situations": {
+        "title": "Mises en situation",
+        "text": "Des cas concrets à résoudre à voix haute"
+      },
+      "traps": {
+        "title": "Questions pièges",
+        "text": "Défaut, salaire, comparaison"
+      },
+      "english": {
+        "title": "Entretien en anglais",
+        "text": "Les mêmes questions, en anglais"
+      }
+    },
+    "tone": "Ton du recruteur",
+    "toneName": {
+      "easy": "Bienveillant",
+      "hard": "Exigeant"
+    },
+    "toneWord": {
+      "easy": "bienveillant",
+      "hard": "exigeant"
+    },
+    "modeWord": {
+      "text": "par écrit",
+      "voice": "à l’oral"
+    },
+    "private": "Vos réponses restent privées. Le recruteur ne voit jamais vos simulations.",
+    "ctaTrial": "Essayer gratuitement · 5 min",
+    "ctaUpgrade": "Passer en {plan}",
+    "ctaPlans": "Voir les formules",
+    "ctaStart": "Préparer la simulation · {count} min",
+    "sheet": {
+      "title": {
+        "text": "L’entretien par écrit est inclus dans {plan}",
+        "voice": "L’entretien à l’oral est inclus dans {plan}"
+      },
+      "text": "Vous voulez {what}. {plan} ouvre 5, 10 et 15 minutes, tous les sujets et plus de simulations chaque mois. Paiement par Mobile Money, sans engagement.",
+      "what": {
+        "minutes": "{count} minutes",
+        "focus": "« {focus} »",
+        "new": "une nouvelle simulation"
+      },
+      "plans": "Voir les formules",
+      "keepTrial": "Garder l’essai de 5 min",
+      "later": "Plus tard",
+      "close": "Fermer"
+    },
+    "error": {
+      "consent": "Pour qu’Orbi prépare les questions, autorisez l’assistance IA dans vos paramètres.",
+      "consentCta": "Ouvrir les paramètres",
+      "quota": "Vos simulations du mois sont utilisées. Elles reviennent le {date}.",
+      "entitlement": "Cette simulation n’est pas incluse dans votre formule.",
+      "invalid": "Indiquez le poste visé (2 caractères au moins).",
+      "network": "Orbi n’a pas pu préparer les questions. Vérifiez la connexion et réessayez."
+    },
+    "dl": {
+      "back": "Réglages",
+      "title": "Orbi prépare votre entretien",
+      "ready": "C’est prêt",
+      "summary": "{count} questions · {minutes} min · {mode}",
+      "offer": "Lecture de l’offre de {company}",
+      "job": "Lecture du poste visé : {title}",
+      "cv": "Lecture de votre CV {cv}",
+      "profile": "Lecture de votre profil",
+      "chosen": "{count} questions choisies : {focus}",
+      "voice": "Voix d’Orbi prête, ton {tone}",
+      "timer": "Chronomètre réglé sur {minutes} min",
+      "note": "Les questions sont prêtes sur votre téléphone. Vos réponses restent privées.",
+      "see": "Voir les questions avant",
+      "hide": "Masquer les questions",
+      "start": "Commencer",
+      "cancel": "Annuler",
+      "edit": "Modifier les réglages"
+    },
+    "mic": {
+      "back": "Questions",
+      "title": "Avant de commencer",
+      "text": "Orbi pose la question à voix haute, vous répondez comme devant le recruteur.",
+      "need": "Le micro est nécessaire",
+      "kept": "Le son n’est jamais enregistré : seul le texte de vos réponses est gardé, pour vous.",
+      "allow": "Autoriser le micro",
+      "ok": "On vous entend bien",
+      "say": "Dites quelques mots pour tester.",
+      "denied": "Le micro n’est pas autorisé. Autorisez-le dans les réglages du navigateur, ou répondez par écrit.",
+      "tips": "Pour bien se lancer",
+      "tip1": "Un endroit calme, téléphone à 20 cm.",
+      "tip2": "Une respiration avant chaque réponse.",
+      "tip3": "Un exemple et un chiffre par réponse.",
+      "captions": "Afficher le texte des questions",
+      "captionsText": "Utile si le son est faible",
+      "write": "Je préfère par écrit",
+      "go": "C’est parti"
+    },
+    "run": {
+      "question": "Question {n} sur {count}",
+      "left": "{time} restantes",
+      "leftWrite": "{time} pour répondre",
+      "pause": "Mettre en pause",
+      "end": "Terminer",
+      "asks": "Orbi pose la question",
+      "listens": "À vous · Orbi écoute",
+      "followUp": "Orbi relance",
+      "followUpTag": "Relance",
+      "followUpQuestion": "Pouvez-vous donner un chiffre précis ?",
+      "followUpHint": "Un nombre, une durée, un pourcentage.",
+      "repeat": "Répéter",
+      "hint": "Indice",
+      "sound": "Son",
+      "muted": "Son coupé",
+      "answerNow": "Répondre maintenant",
+      "done": "J’ai fini de répondre",
+      "finish": "Terminer",
+      "typed": "Votre réponse, si le micro ne transcrit pas sur ce téléphone…",
+      "writeHint": "Un indice ?",
+      "placeholder": "Écrivez votre réponse comme vous la diriez…",
+      "answerLabel": "Votre réponse",
+      "words": "{count, plural, one {# mot} other {# mots}} · visez 60 à 120",
+      "send": "Envoyer",
+      "empty": "Répondez, même en quelques mots.",
+      "repeated": "Orbi répète la question",
+      "error": "La réponse n’est pas partie. Vérifiez la connexion et réessayez."
+    },
+    "pause": {
+      "title": "En pause",
+      "text": "Le chrono est arrêté.",
+      "resume": "Reprendre",
+      "restart": "Recommencer la question",
+      "stop": "Arrêter la simulation"
+    },
+    "hint": {
+      "title": "Un indice",
+      "text": "Le chrono continue",
+      "star": "La méthode STAR",
+      "s": "<b>S</b>ituation : où, quand",
+      "t": "<b>T</b>âche : votre rôle",
+      "a": "<b>A</b>ction : ce que vous faites",
+      "r": "<b>R</b>ésultat : un chiffre",
+      "go": "Je réponds"
+    },
+    "stop": {
+      "title": "Arrêter la simulation ?",
+      "text": "Vous avez répondu à {answered, plural, =0 {aucune question} one {# question} other {# questions}} sur {count}. Rien n’est envoyé au recruteur.",
+      "report": "Voir le bilan de ces réponses",
+      "quit": "Arrêter sans bilan",
+      "continue": "Continuer l’entretien",
+      "quitted": "Simulation arrêtée. Rien n’est envoyé au recruteur."
+    },
+    "an": {
+      "title": "Orbi analyse vos réponses",
+      "transcript": "Transcription de vos réponses",
+      "pace": "Débit, pauses et mots de remplissage",
+      "length": "Longueur et clarté des réponses",
+      "offer": "Comparaison avec l’offre de {company}",
+      "job": "Comparaison avec le poste visé"
+    },
+    "report": {
+      "close": "Fermer et revenir",
+      "private": "Privé · rien que pour vous",
+      "outOf": "sur 100",
+      "title": "Votre bilan",
+      "summary": "{focus} · {mode} · {minutes} min",
+      "why": "Calculé à partir de vos réponses, critère par critère. Ce n’est pas une prédiction de recrutement.",
+      "criterion": {
+        "clarity": "Clarté",
+        "examples": "Exemples concrets",
+        "relevance": "Lien avec l’offre",
+        "ease": "Aisance à l’oral",
+        "length": "Longueur"
+      },
+      "reason": {
+        "clarityGood": "Phrases courtes, idée principale en premier.",
+        "clarityLong": "Des phrases longues : coupez-les et commencez par l’idée principale.",
+        "examplesGood": "Un chiffre dans chaque réponse : bien.",
+        "examplesMissing": "{count, plural, one {Une réponse sans chiffre} other {# réponses sans chiffre}} : dites un nombre, une durée, un pourcentage.",
+        "relevanceCited": "Vous citez {words} : bien vu.",
+        "relevanceMissing": "Reliez vos réponses à l’offre : {words}.",
+        "relevanceNoOffer": "Reliez chaque réponse au poste visé.",
+        "ease": "{speed} mots par minute, {fillers, plural, =0 {aucun « euh »} one {un « euh »} other {# « euh »}}. Respirez avant de répondre.",
+        "lengthGood": "Bonne longueur : 60 à 120 mots.",
+        "lengthOff": "Visez 60 à 120 mots par réponse."
+      },
+      "works": "Ce qui marche",
+      "toWork": "À travailler",
+      "toWorkBefore": "À travailler avant {day}",
+      "byQuestion": "Question par question",
+      "weak": "{count, plural, one {Refaire la question faible} other {Refaire les # questions faibles}}",
+      "new": "Nouvelle simulation",
+      "backTo": {
+        "candidature": "Retour : ma candidature",
+        "formation": "Retour : Formation"
+      },
+      "unanswered": "Sans réponse",
+      "none": "Aucune réponse : il n’y a rien à noter. Recommencez quand vous voulez."
+    },
+    "answer": {
+      "back": "Bilan",
+      "question": "Question {n}",
+      "score": "{score} / 100",
+      "said": "Ce que vous avez dit",
+      "wrote": "Ce que vous avez écrit",
+      "duration": "{minutes, plural, =0 {{seconds} s} other {# min {seconds} s}} de réponse",
+      "pace": "{speed} mots par minute",
+      "words": "{count, plural, one {# mot} other {# mots}}",
+      "followUp": "Relance : {question}",
+      "works": "Ce qui marche",
+      "improve": "À améliorer",
+      "tip": "Conseil d’Orbi",
+      "work": {
+        "number": "Vous donnez un chiffre : le recruteur voit ce qui a changé.",
+        "situation": "Vous partez d’une situation réelle et vous restez dans le sujet.",
+        "offer": "Vous reliez votre réponse à l’offre.",
+        "clear": "Des phrases courtes, faciles à suivre.",
+        "answered": "Vous avez répondu : c’est la première étape."
+      },
+      "fix": {
+        "number": "Il manque un chiffre : un nombre, une durée, un pourcentage.",
+        "result": "Il manque le résultat : dites ce qui a changé grâce à vous.",
+        "long": "Coupez les phrases longues et commencez par l’idée principale.",
+        "short": "Développez un peu : visez 60 à 120 mots.",
+        "fast": "Ralentissez un peu : respirez entre deux idées.",
+        "slow": "Allez un peu plus vite : une idée, un exemple.",
+        "company": "Terminez par ce que l’entreprise y gagne."
+      },
+      "retry": "Refaire cette question",
+      "next": "Question suivante"
+    },
+    "list": {
+      "back": "Réglages",
+      "title": "Mes simulations",
+      "text": "Visibles par vous seulement. Le recruteur ne les voit jamais.",
+      "row": "{focus} · {mode}",
+      "meta": "{date} · {minutes} min",
+      "today": "Aujourd’hui",
+      "ongoing": "En cours",
+      "empty": "Pas encore de simulation. Choisissez un sujet et lancez-vous : c’est privé.",
+      "new": "Nouvelle simulation"
+    },
+    "bank": {
+      "experiences": {
+        "q1": "Présentez-vous en une minute.",
+        "h1": "Formation, expérience, ce que vous visez. Finissez par le poste de {jobTitle}.",
+        "q2": "Parlez-moi de votre dernière expérience. Qu’avez-vous amélioré ?",
+        "h2": "Situation, tâche, action, résultat. Donnez un chiffre.",
+        "q3": "Racontez un projet dont vous êtes fier ou fière.",
+        "h3": "Le problème, votre rôle, ce qui a changé ensuite.",
+        "q4": "Décrivez un désaccord avec un collègue et comment vous l’avez réglé.",
+        "h4": "Restez factuel. Montrez l’écoute, puis la solution.",
+        "q5": "Parlez-moi d’une situation imprévue que vous avez dû gérer.",
+        "h5": "Ce qui est arrivé, ce que vous avez décidé, le résultat.",
+        "q6": "Parlez-moi d’un échec et de ce que vous en avez appris.",
+        "h6": "Un vrai échec, petit. Insistez sur ce que vous faites autrement depuis.",
+        "q7": "Comment organisez-vous une semaine chargée ?",
+        "h7": "Une méthode simple : les priorités du lundi, un point le vendredi.",
+        "q8": "Quel retour d’un responsable vous a fait progresser ?",
+        "h8": "Citez le retour, puis ce que vous avez changé.",
+        "q9": "Qu’avez-vous appris seul ou seule récemment, et pourquoi ?",
+        "h9": "Le besoin concret qui vous a poussé, et ce que vous en faites."
+      },
+      "technical": {
+        "q1": "Quels outils utilisez-vous le plus pour un poste de {jobTitle}, et pour quoi faire ?",
+        "h1": "Deux ou trois outils, chacun avec un exemple d’usage.",
+        "q2": "Comment vérifiez-vous la qualité de votre travail avant de le rendre ?",
+        "h2": "Les étapes de vérification, dans l’ordre.",
+        "q3": "Expliquez une notion de votre métier à quelqu’un qui ne la connaît pas.",
+        "h3": "Une phrase simple, puis un exemple de tous les jours.",
+        "q4": "Décrivez une tâche technique que vous avez menée de bout en bout.",
+        "h4": "Le besoin, les étapes, l’outil, le résultat.",
+        "q5": "Que faites-vous quand vous ne savez pas résoudre un problème ?",
+        "h5": "Chercher, essayer, demander : dans quel ordre et à qui.",
+        "q6": "Comment présentez-vous un résultat à un responsable pressé ?",
+        "h6": "Un chiffre clé, une tendance, une décision à prendre.",
+        "q7": "Une erreur apparaît dans votre travail. Comment la retrouvez-vous ?",
+        "h7": "Reproduire, isoler, corriger, vérifier.",
+        "q8": "Comment restez-vous à jour dans votre métier ?",
+        "h8": "Une source précise et ce qu’elle vous a appris récemment.",
+        "q9": "Quels indicateurs suivriez-vous pour juger votre travail de {jobTitle} ?",
+        "h9": "Deux ou trois indicateurs, et pourquoi chacun compte."
+      },
+      "motivation": {
+        "q1": "Pourquoi ce poste de {jobTitle} ?",
+        "h1": "Ce que le poste vous apporte, et ce que vous lui apportez.",
+        "q2": "Que savez-vous de notre entreprise et de nos clients ?",
+        "h2": "Ce qu’elle fait, pour qui, et un fait récent.",
+        "q3": "Où vous voyez-vous dans trois ans ?",
+        "h3": "Un objectif réaliste, lié au poste.",
+        "q4": "Pourquoi ce secteur plutôt qu’un autre ?",
+        "h4": "Un moment ou une expérience qui vous a donné envie.",
+        "q5": "Qu’apporteriez-vous dès le premier mois ?",
+        "h5": "Une chose concrète et utile, en partant de leurs besoins.",
+        "q6": "Qu’attendez-vous de votre responsable ?",
+        "h6": "Des objectifs clairs et des retours réguliers.",
+        "q7": "Qu’est-ce qui vous motive le matin ?",
+        "h7": "Un exemple vrai, pas une formule.",
+        "q8": "Quelle question aimeriez-vous nous poser ?",
+        "h8": "Préparez-en deux : l’équipe, les priorités du poste.",
+        "q9": "Qu’est-ce qui vous ferait rester longtemps chez nous ?",
+        "h9": "Apprendre, avoir des responsabilités, voir l’effet de son travail."
+      },
+      "situations": {
+        "q1": "Un résultat baisse fortement cette semaine. Par quoi commencez-vous ?",
+        "h1": "Vérifier les données, puis comparer par jour, par lieu, par client.",
+        "q2": "Un responsable veut une réponse pour demain, il vous manque des informations. Que faites-vous ?",
+        "h2": "Donner la réponse avec sa limite, et la date de la réponse complète.",
+        "q3": "Deux collègues vous donnent des consignes opposées. Comment tranchez-vous ?",
+        "h3": "Retrouver l’objectif commun, puis demander à la bonne personne.",
+        "q4": "Un client se plaint d’un service non rendu. Que regardez-vous d’abord ?",
+        "h4": "L’historique, ce qui a été promis, ce qui s’est passé.",
+        "q5": "On vous confie un travail urgent en deux jours. Comment vous organisez-vous ?",
+        "h5": "Une chose à la fois : besoin, plan, premier jet, retour.",
+        "q6": "Vous trouvez une erreur dans un travail déjà envoyé. Que faites-vous ?",
+        "h6": "Prévenir vite, corriger, expliquer ce qui change.",
+        "q7": "Votre méthode habituelle ne marche pas cette fois. Que tentez-vous ?",
+        "h7": "Comprendre pourquoi, essayer autre chose, demander de l’aide.",
+        "q8": "Un collègue vous demande des informations confidentielles. Que répondez-vous ?",
+        "h8": "Vérifier son droit d’accès, ne partager que le nécessaire.",
+        "q9": "Comment mesureriez-vous si un changement que vous proposez a marché ?",
+        "h9": "Un indicateur avant, un après, et une comparaison."
+      },
+      "traps": {
+        "q1": "Quel est votre plus grand défaut ?",
+        "h1": "Un vrai défaut, et ce que vous faites pour le corriger.",
+        "q2": "Quelles sont vos attentes de salaire ?",
+        "h2": "Une fourchette préparée, puis la question des avantages.",
+        "q3": "Pourquoi vous plutôt qu’une autre personne ?",
+        "h3": "Trois raisons courtes, liées à l’offre.",
+        "q4": "Avez-vous d’autres entretiens en cours ?",
+        "h4": "Oui ou non, sans détails, et redites votre intérêt.",
+        "q5": "Votre expérience vous semble-t-elle suffisante pour ce poste ?",
+        "h5": "Ce que vous avez vraiment fait, et comment vous apprenez vite.",
+        "q6": "Que ferez-vous si nous ne vous retenons pas ?",
+        "h6": "Continuer à progresser, rester en contact.",
+        "q7": "Qu’est-ce qui vous agace chez un collègue ?",
+        "h7": "Restez positif, parlez d’organisation.",
+        "q8": "Pourquoi y a-t-il une période sans emploi dans votre parcours ?",
+        "h8": "Ce que vous avez appris ou fait pendant cette période.",
+        "q9": "Seriez-vous prêt ou prête à travailler le samedi ?",
+        "h9": "Une réponse claire, avec vos conditions."
+      },
+      "english": {
+        "q1": "Tell me about yourself.",
+        "h1": "Studies, experience, goal. Short sentences.",
+        "q2": "Why do you want this {jobTitle} position?",
+        "h2": "What the job brings you, and what you bring to it.",
+        "q3": "Describe a project you are proud of.",
+        "h3": "Problem, your role, result.",
+        "q4": "How do you check the quality of your work?",
+        "h4": "Two or three steps, in order.",
+        "q5": "What is your greatest strength?",
+        "h5": "One strength, one example.",
+        "q6": "Where do you see yourself in three years?",
+        "h6": "Growing in the job, in the company.",
+        "q7": "How do you handle pressure?",
+        "h7": "A real example.",
+        "q8": "Do you have any questions for us?",
+        "h8": "Ask about the team and the first goals.",
+        "q9": "What are your salary expectations?",
+        "h9": "A range, then benefits."
+      }
     }
   },
   "hireShell": {
@@ -19941,6 +20360,7 @@
       "career_tools_extended": "Outils de carrière avancés",
       "career_interview_text_monthly": "Simulations d'entretien écrites par mois",
       "career_interview_voice_monthly": "Simulations d'entretien vocales par mois",
+      "career_interview_trial_monthly": "Simulation d'essai de 5 min par mois (quand la formule n'inclut pas le mode)",
       "learn_catalog_level": "Catalogue de formations",
       "learn_exercises_job_specific": "Exercices par métier",
       "learn_resources_specialized": "Ressources spécialisées",

@@ -17,6 +17,9 @@ import {
   quotaKey,
 } from "@/server/services/interview-sim";
 import { listPublicPlans, talentPlanFor } from "@/server/services/plans";
+import { isPhone } from "@/server/view";
+import { PhoneInterviewHistory } from "@/components/phone/interview/report";
+import { historyRows, InterviewTexts } from "@/components/phone/interview/server";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("entrain");
@@ -44,6 +47,13 @@ export default async function InterviewsPage({
 }: PageProps<"/app/career/entretiens">) {
   const query = await searchParams;
   const user = await requireUser("/app/career/entretiens");
+  // On the phone (Modèle B, lot B6): « Mes simulations ».
+  if (await isPhone())
+    return (
+      <InterviewTexts>
+        <PhoneInterviewHistory rows={await historyRows(user.id)} />
+      </InterviewTexts>
+    );
   const t = await getTranslations();
   const format = await getFormatter();
   const now = new Date();

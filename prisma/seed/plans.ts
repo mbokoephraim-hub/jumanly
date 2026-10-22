@@ -176,6 +176,8 @@ const talentMatrix: { plans: string[]; rows: Row[] } = {
     b("career.tools.extended", false, false, true, true),
     lim("career.interview.text.monthly", 0, 3, 10, 25),
     lim("career.interview.voice.monthly", 0, 0, 3, 10),
+    // Trial session of 5 minutes when the plan does not include the mode (Modèle B, lot B6).
+    lim("career.interview.trial.monthly", 1, 1, 0, 0),
     lv("learn.catalog.level", "free", "fundamentals", "standard", "advanced"),
     b("learn.exercises.job_specific", false, false, true, true),
     b("learn.resources.specialized", false, false, false, true),

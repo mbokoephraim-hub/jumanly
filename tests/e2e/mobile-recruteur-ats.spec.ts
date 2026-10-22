@@ -187,7 +187,8 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   await expect(request.getByRole("button", { name: "Accepter" })).toBeVisible();
   await expect(request.getByRole("combobox", { name: "Rôle" })).toBeVisible();
   const ending = notes.locator(".t-r6-fin").filter({ hasText: "Chargé de clientèle (démo)" });
-  await expect(ending).toContainText("Fin de l'offre dans 3 jours");
+  // The seed closes it three days after it runs: two calendar days when midnight passed since.
+  await expect(ending).toContainText(/Fin de l'offre dans [23] jours/);
   await ending.getByRole("button", { name: /Prolonger l'offre/ }).click();
   const prolong = page.getByRole("dialog", { name: "Prolonger l'offre" });
   await expect(prolong).toContainText("+14 jours");

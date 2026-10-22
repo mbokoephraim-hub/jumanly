@@ -13,6 +13,7 @@ import { emptyCv, parseCv } from "@/server/services/cv";
 import {
   answerQuestion,
   finishInterview,
+  discardInterview,
   getInterview,
   InterviewError,
   questionCount,
@@ -171,6 +172,85 @@ describe("simulations d'entretien (E10, partie 08 § 8.9)", () => {
       "interview_feedback",
       "interview_questions",
     ]);
+  });
+});
+
+describe("simulations au téléphone : essai, annulation, reprise (Modèle B, lot B6)", () => {
+  const trialUsage = (userId: string) =>
+    usage(db, { type: "user", id: userId }, "career.interview.trial.monthly");
+  const phone = (focus: InterviewSetup["type"], minutes: number): InterviewSetup => ({
+    ...setup("voice"),
+    type: focus,
+    level: "easy",
+    durationMinutes: minutes,
+  });
+  /** A talent whose plan has no voice session but one trial (read from the plans, never named). */
+  async function trialTalent() {
+    const user = await talent({ key: "career.interview.voice.monthly", value: "0" });
+    const trial = await trialUsage(user.id);
+    return { user, trial };
+  }
+
+  it("sans l'oral dans le forfait : un essai de 5 minutes, sujets avancés et longues durées exclus", async () => {
+    const { user, trial } = await trialTalent();
+    if (trial.limit === 0) return; // the plan has no trial: nothing to try
+    await expect(startInterview(db, user.id, phone("traps", 5), bank)).rejects.toMatchObject({
+      code: "entitlement",
+    });
+    await expect(startInterview(db, user.id, phone("motivation", 10), bank)).rejects.toMatchObject({
+      code: "entitlement",
+    });
+    const session = await startInterview(db, user.id, phone("motivation", 5), bank, new Date(), {
+      phone: true,
+    });
+    expect((await getInterview(db, user.id, session.id))?.turns).toHaveLength(3);
+    expect((await trialUsage(user.id)).used).toBe(1);
+    if (trial.limit === 1) {
+      await expect(startInterview(db, user.id, phone("motivation", 5), bank)).rejects.toMatchObject(
+        { code: "quota" },
+      );
+    }
+  });
+
+  it("annuler avant la première réponse rend l'unité ; une réponse donnée n'est jamais effacée", async () => {
+    const { user, trial } = await trialTalent();
+    if (trial.limit === 0) return;
+    const first = await startInterview(db, user.id, phone("motivation", 5), bank);
+    expect(await discardInterview(db, user.id, first.id)).toBe(true);
+    expect(await getInterview(db, user.id, first.id)).toBeNull();
+    expect((await trialUsage(user.id)).used).toBe(0);
+
+    const second = await startInterview(db, user.id, phone("motivation", 5), bank);
+    await answerQuestion(db, user.id, second.id, {
+      answer: "J'ai réduit les délais de traitement de 5 à 2 jours.",
+      durationSec: 20,
+    });
+    expect(await discardInterview(db, user.id, second.id)).toBe(false);
+    expect(await getInterview(db, user.id, second.id)).not.toBeNull();
+    expect((await trialUsage(user.id)).used).toBe(1);
+  });
+
+  it("refaire des questions reprend exactement les mêmes, avec leurs indices", async () => {
+    const user = await talent({ key: "career.interview.text.monthly", value: "3" });
+    const replay = [
+      { question: "Question rejouée A ?", hint: "Indice A" },
+      { question: "Question rejouée B ?", hint: null },
+    ];
+    const session = await startInterview(
+      db,
+      user.id,
+      { ...setup("text"), durationMinutes: 5 },
+      replay.map((item) => item.question),
+      new Date(),
+      { replay },
+    );
+    const turns = (await getInterview(db, user.id, session.id))?.turns ?? [];
+    expect(turns.map((item) => item.question)).toEqual([
+      "Question rejouée A ?",
+      "Question rejouée B ?",
+    ]);
+    expect(turns[0].hint).toBe("Indice A");
+    expect((await textQuota(user.id)).used).toBe(1);
   });
 });
 
