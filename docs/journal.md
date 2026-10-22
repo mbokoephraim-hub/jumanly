@@ -50,6 +50,19 @@ Modèle B.
 **Plan.** B1 fondations (coque sombre à 5 onglets montés, Orbi flottant, ouverture et préchargement,
 transitions, recherche en deux temps, feuilles), puis B2 à B9 dans l'ordre du brief, une PR par lot.
 
+## Plein écran au téléphone (22 octobre 2026)
+
+Sur la demande d'Ephraïm, le fond sombre du Modèle B couvre maintenant tout l'écran du téléphone, sous la barre d'état et sous la barre d'accueil :
+
+- `viewport-fit=cover` ;
+- barre du navigateur et appli installée en `#0b1a1f` ;
+- manifeste dans la même couleur ;
+- barre d'état translucide sur iPhone.
+
+Les autres pages commencent sous la barre d'état. Le détail est dans `docs/decisions/2026-10-22-plein-ecran-telephone.md`.
+
+Vérifications : lint, types, 364 tests unitaires, messages:check et build passent. Les e2e du Modèle B (Fil, accueil, nettoyage, installer) et le nouveau `modele-b-plein-ecran.spec.ts` passent aussi. À voir sur un vrai téléphone à encoche, que Chromium ne simule pas.
+
 ## Modèle B · rapport final, lots B1 à B9 (22 octobre 2026)
 
 Référence : `docs/modele-b/BRIEF-MODELE-B-CLAUDE-CODE.md` (décision d'Ephraïm du 21/10/2026). L'espace

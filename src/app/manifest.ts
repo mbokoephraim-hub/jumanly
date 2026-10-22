@@ -1,5 +1,6 @@
 import type { MetadataRoute } from "next";
 import { getTranslations } from "next-intl/server";
+import { PHONE_NIGHT } from "@/lib/phone-theme";
 
 /** Web app manifest: Jumanly can be installed on a phone's home screen (partie 12, E11). */
 export default async function manifest(): Promise<MetadataRoute.Manifest> {
@@ -13,9 +14,10 @@ export default async function manifest(): Promise<MetadataRoute.Manifest> {
     start_url: "/demarrage",
     scope: "/",
     display: "standalone",
-    // The cream of the talent space: no dark screen while the app starts.
-    background_color: "#EEE8DE",
-    theme_color: "#EEE8DE",
+    // The night of the Modèle B (the talent space on a phone, dark only): the app starts on the
+    // same background as its first screen, from the top of the screen to the bottom.
+    background_color: PHONE_NIGHT,
+    theme_color: PHONE_NIGHT,
     icons: [
       { src: "/icon.svg", sizes: "any", type: "image/svg+xml" },
       { src: "/marque/jumanly-favicon-192.png", sizes: "192x192", type: "image/png" },

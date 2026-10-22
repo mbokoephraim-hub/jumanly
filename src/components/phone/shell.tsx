@@ -8,6 +8,7 @@ import { appearanceScript } from "@/lib/appearance";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { orbiActions } from "@/lib/orbi";
 import { PHONE_TABS, type PhoneTab } from "@/lib/phone-tabs";
+import { phoneThemeScript } from "@/lib/phone-theme";
 import { PhoneArrivals } from "./arrivals";
 import { PhoneNav } from "./nav";
 import { Opening } from "./opening";
@@ -82,6 +83,7 @@ export async function PhoneShell({
       {/* Before the first paint: the logo alone, and the dark class of the screens without a mockup. */}
       <script dangerouslySetInnerHTML={{ __html: openingScript(tBrand("brand")) }} />
       <script dangerouslySetInnerHTML={{ __html: appearanceScript("dark") }} />
+      <script dangerouslySetInnerHTML={{ __html: phoneThemeScript() }} />
       <AppearanceRoot appearance="dark" />
       <Opening />
       <ViewSync view="phone" />
