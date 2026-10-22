@@ -15,12 +15,15 @@ export async function generateMetadata(): Promise<Metadata> {
  * this phone, short afterwards), then three screens and « Créer un compte » / « Se connecter ».
  * On a computer, the home page plays that part.
  */
-export default async function DiscoverPage() {
-  if (!(await isPhone())) redirect("/");
+export default async function DiscoverPage({ searchParams }: PageProps<"/decouvrir">) {
+  const { profil } = await searchParams;
+  // The recruiter's welcome (Modèle B recruteur, M2): publier, trier, recruter.
+  const recruiter = profil === "rh";
+  if (!(await isPhone())) redirect(recruiter ? "/recruteurs" : "/");
   return (
     <>
       <script dangerouslySetInnerHTML={{ __html: DISCOVER_FLAG_SCRIPT }} />
-      <PhoneDiscover />
+      <PhoneDiscover recruiter={recruiter} />
     </>
   );
 }

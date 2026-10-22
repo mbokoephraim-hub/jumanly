@@ -177,10 +177,15 @@ export function SignupEmailForm({
   defaultEmail,
   plan,
   next,
+  recruiter = false,
+  texts,
 }: {
   defaultEmail?: string;
   plan?: string;
   next?: string;
+  /** The recruiter's sign-up (Modèle B recruteur, M2): its placeholder and its example. */
+  recruiter?: boolean;
+  texts?: { placeholder: string; error: string };
 }) {
   const t = useTranslations("phoneAccueil");
   const [state, action, pending] = useActionState(rememberSignupEmail, idle);
@@ -201,6 +206,7 @@ export function SignupEmailForm({
     >
       {plan ? <input type="hidden" name="forfait" value={plan} /> : null}
       {next ? <input type="hidden" name="next" value={next} /> : null}
+      {recruiter ? <input type="hidden" name="profil" value="rh" /> : null}
       <label className="nb-lab" htmlFor="inscription-email">
         {t("signup.email")}
       </label>
@@ -211,7 +217,7 @@ export function SignupEmailForm({
         type="email"
         inputMode="email"
         autoComplete="email"
-        placeholder={t("signup.emailPlaceholder")}
+        placeholder={texts?.placeholder ?? t("signup.emailPlaceholder")}
         value={email}
         onChange={(event) => {
           setEmail(event.target.value);
@@ -220,7 +226,9 @@ export function SignupEmailForm({
         aria-invalid={invalid || undefined}
         aria-describedby={invalid ? "inscription-email-err" : undefined}
       />
-      <FieldError id="inscription-email-err">{invalid ? t("signup.emailError") : null}</FieldError>
+      <FieldError id="inscription-email-err">
+        {invalid ? (texts?.error ?? t("signup.emailError")) : null}
+      </FieldError>
       <button
         type="submit"
         className="nb-bp nb-form-envoi"

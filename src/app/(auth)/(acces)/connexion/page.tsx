@@ -56,7 +56,7 @@ async function Login({ searchParams }: Pick<PageProps<"/connexion">, "searchPara
     if (params.suppression) notices.push({ tone: "ok", text: t("login.deleted") });
     if (failed) notices.push({ tone: "err", text: t(`auth.error.${failed as "google"}Failed`) });
     if (suite) notices.push({ tone: "ok", text: t("auth.resume.generic") });
-    return <PhoneLoginPage next={suite} notices={notices} />;
+    return <PhoneLoginPage next={suite} notices={notices} recruiter={params.profil === "rh"} />;
   }
   return (
     <>

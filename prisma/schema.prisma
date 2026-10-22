@@ -823,6 +823,7 @@ model User {
   /// J-3 only by default (brief recruteur § 2.16 bis).
   endingReminders     String[]                  @default(["d3"])
   joinRequests        OrgJoinRequest[]
+  recruiterProfile    RecruiterProfile?
   sessions            Session[]
   accounts            Account[]
   twoFactors          TwoFactor[]
@@ -2148,6 +2149,8 @@ model OrgJoinRequest {
   user           User              @relation(fields: [userId], references: [id], onDelete: Cascade)
   /// Why the organization was proposed: same e-mail domain, or same name.
   matchedBy      String
+  /// « Votre message » to the administrators (Modèle B recruteur, M2), optional.
+  message        String?
   status         JoinRequestStatus @default(pending)
   /// Role given on acceptance.
   role           MembershipRole?
@@ -2527,4 +2530,43 @@ model FeedImage {
   contentType String
   bytes       Bytes
   createdAt   DateTime  @default(now())
+}
+
+/// The recruiter's own profile, filled in seven steps at sign-up on a phone (Modèle B recruteur,
+/// lot M2): what talents see of the person who recruits. Its existence marks an account that signed
+/// up as a recruiter; the organization comes at step 5 (join, create, or independent).
+model RecruiterProfile {
+  id                     String    @id @default(cuid(2))
+  userId                 String    @unique
+  user                   User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  /// charge, rh, manager, dirigeant, cabinet, independant (`phoneRhOnboarding.role.*`).
+  kind                   String?
+  /// « Votre poste, tel qu'il s'affichera ».
+  jobTitle               String?
+  /// Professional e-mail: its domain helps the administrator validate the attachment.
+  workEmail              String?
+  /// Phone number without its country code, and the code's country (ISO 3166-1 alpha-2).
+  phone                  String?
+  phoneCountry           String?
+  whatsapp               Boolean   @default(false)
+  linkedin               String?
+  /// Who sees the phone and LinkedIn: nobody, interview (candidates invited), connections.
+  contactsFor            String    @default("interview")
+  /// Other cities where the person recruits.
+  otherCities            String[]  @default([])
+  /// Domains, levels and hires per year (« Ce que vous recrutez »).
+  domains                String[]  @default([])
+  levels                 String[]  @default([])
+  hiresPerYear           String?
+  /// « Je recrute en indépendant·e »: offers show under the person's name.
+  independent            Boolean   @default(false)
+  /// The space opened under the person's own name while a request to join waits (or for an
+  /// independent): becomes the company page if the person creates one.
+  personalOrganizationId String?
+  headline               String?
+  /// « Recrute en ce moment » on the profile.
+  hiringNow              Boolean   @default(true)
+  completedAt            DateTime?
+  createdAt              DateTime  @default(now())
+  updatedAt              DateTime  @updatedAt
 }

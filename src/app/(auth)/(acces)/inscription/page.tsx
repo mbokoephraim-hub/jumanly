@@ -37,6 +37,16 @@ async function SignupEntry({ searchParams }: Pick<PageProps<"/inscription">, "se
   const params = readSignupParams(await searchParams);
   if (await getSession()) redirect(params.suite ?? "/app");
   if (params.profil === "partner") redirect("/partenaires#contact");
+  // On a phone, a recruiter creates the account first (Modèle B recruteur, M2): the company comes
+  // at step 5 of the profile, the plan later on a computer.
+  if (params.profil === "rh" && (await isPhone()))
+    return (
+      <PhoneSignupPage
+        recruiter
+        next={params.suite}
+        defaultEmail={(await readSignupFlow()).email}
+      />
+    );
   if (params.profil === "rh" || params.profil === "company") {
     redirect(stepHref("/inscription/forfait", params));
   }

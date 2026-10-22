@@ -33,7 +33,8 @@ test.describe("Compte talent : recruteur, suppression, publications", () => {
     ).toBeVisible();
     await sheet.getByRole("button", { name: "Continuer" }).click();
     await page.waitForURL("**/app/bienvenue**");
-    await expect(page.getByText("Vous recrutez pour…").first()).toBeVisible();
+    // On a phone, the recruiter's profile of Modèle B (M2) opens; the talent profile stays.
+    await expect(page.getByText("Étape 1 sur 7 · Vous")).toBeVisible();
   });
 
   test("supprimer son compte efface tout, et la même adresse recommence à zéro", async ({

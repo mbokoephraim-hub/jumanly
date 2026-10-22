@@ -65,7 +65,7 @@ const initials = (first: string, last: string) =>
   `${first.trim()[0] ?? ""}${last.trim()[0] ?? ""}`.toUpperCase();
 
 /** A photo of the phone is often several megabytes: it is sent as a 720 px JPEG. */
-async function shrink(file: File): Promise<Blob> {
+export async function shrink(file: File): Promise<Blob> {
   try {
     const bitmap = await createImageBitmap(file);
     const scale = Math.min(1, 720 / Math.max(bitmap.width, bitmap.height));
@@ -662,7 +662,7 @@ export function PhoneOnboarding({ data }: { data: OnboardingData }) {
   );
 }
 
-function Flag({ code }: { code: string }) {
+export function Flag({ code }: { code: string }) {
   return (
     <img
       src={`/drapeaux/${code.toLowerCase()}.svg`}
