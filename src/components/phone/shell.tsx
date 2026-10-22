@@ -8,6 +8,7 @@ import { appearanceScript } from "@/lib/appearance";
 import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { orbiActions } from "@/lib/orbi";
 import { PHONE_TABS, type PhoneTab } from "@/lib/phone-tabs";
+import { PhoneArrivals } from "./arrivals";
 import { PhoneNav } from "./nav";
 import { Opening } from "./opening";
 import { openingScript } from "./opening-script";
@@ -86,6 +87,7 @@ export async function PhoneShell({
       <ViewSync view="phone" />
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={t("toasts")} closeLabel={t("close")} placement="top" />
+      <PhoneArrivals />
       <OfflineDrafts
         scope={account.id}
         labels={{
