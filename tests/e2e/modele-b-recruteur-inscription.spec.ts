@@ -119,8 +119,10 @@ test.describe("Modèle B recruteur · inscription au téléphone", () => {
     await step(page, 3);
     await expect(page.getByLabel(/E-mail professionnel/)).toHaveValue(email);
     await page.getByLabel(/Téléphone/).fill("812");
+    await expect(page.locator("#rh-tel-err")).toBeVisible();
     await next(page).click();
     await expect(page.locator(".nb-bas .nb-erreur")).toBeVisible();
+    await step(page, 3);
     await page.getByLabel(/Téléphone/).fill("812 345 678");
     await page.getByRole("button", { name: /^Indicatif/ }).click();
     const dial = page.getByRole("dialog", { name: "Indicatif du numéro" });
