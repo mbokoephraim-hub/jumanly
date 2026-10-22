@@ -12,6 +12,31 @@ const asked = new Map<string, number>();
 /** A preloaded page is kept 30 s by the router (`staleTimes.static`): asked again after. */
 const FRESH_MS = 28_000;
 
+/**
+ * An action that calls `refresh()` (Next: « dynamic data only ») redraws the screen shown but keeps
+ * the pages loaded ahead, which may then show data from before it (« 1 leçon sur 4 » after the
+ * second one). Its answer is read as a full revalidation instead, as `revalidatePath` does, so
+ * that Next drops those pages too; they load again. Other actions are left as they are.
+ */
+function dropPreloadedAfterRefresh() {
+  const original = window.fetch;
+  window.fetch = async (input, init) => {
+    const response = await original(input, init);
+    if (!new Headers(init?.headers).has("next-action")) return response;
+    if (response.headers.get("x-action-revalidated") !== "2") return response;
+    const headers = new Headers(response.headers);
+    headers.set("x-action-revalidated", "1");
+    return new Response(response.body, {
+      status: response.status,
+      statusText: response.statusText,
+      headers,
+    });
+  };
+  return () => {
+    window.fetch = original;
+  };
+}
+
 /** Waits until the phone has nothing else to do (or a short while where that is not known). */
 const idle = (run: () => void) => {
   if (typeof window.requestIdleCallback === "function") {
@@ -74,12 +99,14 @@ export function PhonePreload() {
     const refresh = window.setInterval(() => {
       if (document.visibilityState === "visible") run(true);
     }, FRESH_MS + 1000);
+    const restore = dropPreloadedAfterRefresh();
     const root = document.querySelector(".nb-app");
     if (root) observer.observe(root, { childList: true, subtree: true });
     return () => {
       stopped = true;
       window.clearTimeout(timer);
       window.clearInterval(refresh);
+      restore();
       observer.disconnect();
     };
   }, [pathname, router]);
