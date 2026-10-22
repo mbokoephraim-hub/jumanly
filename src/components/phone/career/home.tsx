@@ -9,6 +9,7 @@ import { addSuggestedSkillsAction, newCareerCvAction } from "@/server/actions/ca
 import { deleteCv, duplicateCv, setPrimaryCv } from "@/server/actions/cv";
 import { CompanyMark } from "../explorer/cards";
 import { FilAvatar } from "../fil/avatar";
+import { DrawnBanner } from "./banner";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { PhoneSheet } from "../sheet";
 import type { CareerEntry, CareerView } from "./data";
@@ -74,13 +75,14 @@ export function PhoneCareer({ view }: { view: CareerView }) {
 
   return (
     <div className="nb-page nb-ex nb-ca">
-      <div className="nb-ca-banniere" data-ton={view.tone} aria-hidden>
-        <svg viewBox="0 0 390 150" preserveAspectRatio="none">
-          <g fill="none" stroke="#fff" strokeOpacity=".18" strokeWidth="2">
-            <path d="M0 70 C 90 30, 180 110, 270 60 S 390 40, 390 40" />
-            <path d="M0 100 C 100 60, 190 140, 280 90 S 390 70, 390 70" />
-          </g>
-        </svg>
+      <div
+        className="nb-ca-banniere"
+        data-ton={view.tone}
+        data-image={view.banner ? "" : undefined}
+        aria-hidden
+      >
+        {/* eslint-disable-next-line @next/next/no-img-element -- the person's own upload */}
+        {view.banner ? <img src={view.banner} alt="" /> : <DrawnBanner />}
       </div>
       <div className="nb-ca-haut">
         <p className="nb-ca-sur">{t("eyebrow")}</p>

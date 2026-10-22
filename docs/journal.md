@@ -3958,3 +3958,11 @@ de `.t-saisie`). « Recommandés » affichait « aucun dossier » sous le podium
 
 **Captures.** `captures/refonte-recruteur-lot-6/` du dossier du projet, 390 px, clair et sombre,
 et les deux pages du rapport PDF.
+
+## Bannière du profil et préchargement des pages (22 octobre 2026)
+
+- Demande d'Ephraïm : changer la bannière du profil, et des pages déjà chargées quand on les ouvre.
+- Bannière : « Changer la bannière » dans « Modifier le profil » (photo, galerie, ou bannière Jumanly), image recadrée en 5 × 2 dans le téléphone, visible sur Carrière et sur la page de la personne. Migration additive `profile_banner`.
+- Préchargement : `PhonePreload` charge en arrière-plan les pages des liens de l'écran (et des onglets montés), sauf fichiers, conversations, espaces d'équipe ; rien avec l'économiseur de données ou en 2G.
+- Note : `docs/decisions/2026-10-22-banniere-et-prechargement.md`. Tests : unitaire `phone-preload`, e2e `mobile-profil-cv` (bannière) et `modele-b-prechargement`.
+

@@ -55,3 +55,40 @@ export async function photoByToken(db: PrismaClient, token: string) {
     select: { bytes: true, contentType: true, updatedAt: true },
   });
 }
+
+/** A banner cut to 1200 × 480 by the browser stays far below this. */
+export const BANNER_MAX_BYTES = 1_500_000;
+const BANNER_PREFIX = "/api/banniere/";
+
+/**
+ * Saves the banner of the profile (Carrière, page of a person) under a new unguessable address:
+ * the old address stops working at once.
+ */
+export async function saveBanner(db: PrismaClient, userId: string, bytes: Uint8Array) {
+  if (bytes.length === 0 || bytes.length > BANNER_MAX_BYTES) throw new PhotoError("size");
+  const contentType = photoType(bytes);
+  if (!contentType) throw new PhotoError("type");
+  const token = randomBytes(18).toString("base64url");
+  const data = { token, contentType, bytes: Buffer.from(bytes) };
+  const address = `${BANNER_PREFIX}${token}`;
+  await db.$transaction([
+    db.profileBanner.upsert({ where: { userId }, create: { userId, ...data }, update: data }),
+    db.talentProfile.update({ where: { userId }, data: { banner: address } }),
+  ]);
+  return address;
+}
+
+/** Removes the banner: the profile goes back to the drawn one. */
+export async function removeBanner(db: PrismaClient, userId: string) {
+  await db.$transaction([
+    db.profileBanner.deleteMany({ where: { userId } }),
+    db.talentProfile.updateMany({ where: { userId }, data: { banner: null } }),
+  ]);
+}
+
+export async function bannerByToken(db: PrismaClient, token: string) {
+  return db.profileBanner.findUnique({
+    where: { token },
+    select: { bytes: true, contentType: true },
+  });
+}

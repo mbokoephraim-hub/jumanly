@@ -66,6 +66,7 @@ export default async function PersonPage({ params }: PageProps<"/app/personnes/[
           initials: initialsOf(person.name),
           tone: toneOf(person.name, false),
           image: person.image,
+          banner: person.banner,
           verified: person.verified,
           handle: [t("person.handle", { handle: handleOf(person.name) }), person.city]
             .filter(Boolean)

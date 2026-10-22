@@ -15,6 +15,7 @@ import { PhoneNav } from "./nav";
 import { Opening } from "./opening";
 import { openingScript } from "./opening-script";
 import { PhoneOrbi, type OrbiTexts } from "./orbi";
+import { PhonePreload } from "./preload";
 import { PhoneStack } from "./stack";
 import { ViewSync } from "./view-sync";
 
@@ -91,6 +92,7 @@ export async function PhoneShell({
       <AppMotionRoot reduce={reduceMotion} />
       <Toaster label={t("toasts")} closeLabel={t("close")} placement="top" />
       <PhoneArrivals />
+      <PhonePreload />
       <PhoneThemeColor />
       <OfflineDrafts
         scope={account.id}

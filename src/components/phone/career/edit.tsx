@@ -17,6 +17,7 @@ import {
   saveCareerPhotoAction,
 } from "@/server/actions/career-phone";
 import { PhoneBack } from "../back";
+import { BannerField } from "./banner";
 import { FilAvatar } from "../fil/avatar";
 import { OrbiDisc, PhoneIcon } from "../icon";
 import { pagesSeen } from "../pages-seen";
@@ -329,6 +330,7 @@ export type HeadValues = {
   summary: string;
   availability: "open" | "listening" | "not_looking";
   image: string | null;
+  banner: string | null;
   initials: string;
   tone: number;
 };
@@ -386,6 +388,7 @@ export function HeadForm({ values }: { values: HeadValues }) {
         )
       }
     >
+      <BannerField banner={values.banner} />
       <div className="nb-ca-form-photo">
         <FilAvatar
           initials={values.initials}

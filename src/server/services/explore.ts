@@ -575,6 +575,7 @@ export async function personPage(db: PrismaClient, viewerId: string, id: string)
       talentProfile: {
         select: {
           visibility: true,
+          banner: true,
           headline: true,
           summary: true,
           desiredJobTitles: true,
@@ -652,6 +653,7 @@ export async function personPage(db: PrismaClient, viewerId: string, id: string)
     id: user.id,
     name: user.name,
     image: user.image,
+    banner: profile.banner,
     verified: user.emailVerified,
     title: current?.title || profile.headline || profile.desiredJobTitles[0] || null,
     company: current?.company ?? null,

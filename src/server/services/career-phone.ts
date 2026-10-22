@@ -189,6 +189,7 @@ export async function careerHome(db: PrismaClient, userId: string, now = new Dat
     portfolioSlug: profile.portfolioPublic ? profile.portfolioSlug : null,
     user: profile.user,
     profile: {
+      banner: profile.banner,
       headline: profile.headline,
       summary: profile.summary,
       targetJob: profile.targetJob,
