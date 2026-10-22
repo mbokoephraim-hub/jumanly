@@ -4056,4 +4056,4 @@ transitions et préchargement du talent (listes Hire préchargées, fiches journ
   lisible dans le cadre sombre (contrastes AA vérifiés avec axe).
 - `mobile-recruteur.spec.ts` (ancienne barre) ne tourne plus sur le projet mobile ; remplacé par
   `modele-b-recruteur-coque.spec.ts`. Test en base : `tests/db/modele-b-recruteur.test.ts`.
-- Ordinateur et tablette inchangés (`RecruiterShell` signale seulement la vue large).
+- Ordinateur et tablette inchangés. Une fenêtre d'ordinateur rétrécie garde pour l'instant l'interface web (bascule à revoir en M8, avec le nettoyage).
