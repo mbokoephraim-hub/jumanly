@@ -38,7 +38,13 @@ import {
   saveProject,
   type NewProjectFile,
 } from "@/server/services/portfolio";
-import { PhotoError, removePhoto, savePhoto } from "@/server/services/profile-photo";
+import {
+  PhotoError,
+  removeBanner,
+  removePhoto,
+  saveBanner,
+  savePhoto,
+} from "@/server/services/profile-photo";
 import { fileStorage } from "@/server/storage";
 
 /**
@@ -293,6 +299,29 @@ export async function saveCareerPhotoAction(formData: FormData): Promise<Result>
     if (error instanceof PhotoError) return fail(error.code);
     throw error;
   }
+  revalidatePath("/app", "layout");
+  return { ok: true };
+}
+
+/** « Changer la bannière » (Modifier le profil): the 1200 × 480 JPEG made on the phone. */
+export async function saveCareerBannerAction(formData: FormData): Promise<Result> {
+  const file = formData.get("banner");
+  if (!(file instanceof File) || file.size === 0) return fail("photo");
+  const { user } = await mine();
+  try {
+    await saveBanner(db, user.id, new Uint8Array(await file.arrayBuffer()));
+  } catch (error) {
+    if (error instanceof PhotoError) return fail(error.code);
+    throw error;
+  }
+  revalidatePath("/app", "layout");
+  return { ok: true };
+}
+
+/** « Revenir à la bannière Jumanly »: the drawn banner again. */
+export async function removeCareerBannerAction(): Promise<Result> {
+  const { user } = await mine();
+  await removeBanner(db, user.id);
   revalidatePath("/app", "layout");
   return { ok: true };
 }

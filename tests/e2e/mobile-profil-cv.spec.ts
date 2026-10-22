@@ -38,13 +38,32 @@ test("compléter mon profil sur téléphone : titre, photo, expérience", async 
   await page.getByRole("button", { name: "Changer la photo" }).click();
   const sheet = page.getByRole("dialog", { name: "Photo de profil" });
   await expect(sheet.getByRole("button", { name: "Choisir dans la galerie" })).toBeVisible();
-  await page.locator('.nb-ca-form input[type="file"]').nth(1).setInputFiles(photo);
+  await page
+    .locator('.nb-ca-form input[type="file"]:not([data-banniere])')
+    .nth(1)
+    .setInputFiles(photo);
   await expect(page.getByText("Photo mise à jour.")).toBeVisible();
   await page.goto("/app/career/cv");
   const src = await page.locator('.nb-ca img[src^="/api/photo/"]').first().getAttribute("src");
   const served = await page.request.get(src!);
   expect(served.headers()["content-type"]).toBe("image/jpeg");
   expect(served.headers()["x-content-type-options"]).toBe("nosniff");
+
+  // The banner (22/10/2026): a wide picture, cut to 5 by 2 in the browser, shown on Carrière.
+  await page.goto("/app/career/profil");
+  await page.getByRole("button", { name: "Changer la bannière" }).click();
+  const bannerSheet = page.getByRole("dialog", { name: "Bannière du profil" });
+  await expect(bannerSheet.getByRole("button", { name: "Choisir dans la galerie" })).toBeVisible();
+  await page.locator('.nb-ca-form input[data-banniere][type="file"]').nth(1).setInputFiles(photo);
+  await expect(page.getByText("Bannière mise à jour.")).toBeVisible();
+  await page.goto("/app/career/cv");
+  const banner = page.locator('.nb-ca-banniere img[src^="/api/banniere/"]').first();
+  const bannerServed = await page.request.get((await banner.getAttribute("src"))!);
+  expect(bannerServed.headers()["content-type"]).toBe("image/jpeg");
+  await page.goto("/app/career/profil");
+  await page.getByRole("button", { name: "Changer la bannière" }).click();
+  await bannerSheet.getByRole("button", { name: "Revenir à la bannière Jumanly" }).click();
+  await expect(page.getByText("Bannière Jumanly remise.")).toBeVisible();
 
   // An experience: the former address opens the form of Carrière.
   await page.goto("/app/profil/experience", { waitUntil: "networkidle" });

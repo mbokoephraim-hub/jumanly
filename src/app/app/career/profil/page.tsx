@@ -35,6 +35,7 @@ export default async function CareerEditPage() {
           summary: profile.summary ?? "",
           availability: profile.availability,
           image: profile.user.image,
+          banner: profile.banner,
           initials: initialsOf(name),
           tone: toneOf(name, false),
         }}

@@ -45,6 +45,8 @@ export type CareerView = {
   initials: string;
   tone: number;
   image: string | null;
+  /** The banner the person chose (an /api/banniere/… address), or null for the drawn one. */
+  banner: string | null;
   /** « @grace.mbuyi · Analyste de données junior · Kinshasa ». */
   handle: string;
   cap: string | null;
@@ -404,6 +406,7 @@ export async function careerView(home: CareerHome, now = new Date()): Promise<Ca
     initials: initialsOf(name),
     tone: toneOf(name, false),
     image: home.user.image,
+    banner: home.profile.banner,
     handle: handleText,
     cap: home.profile.targetJob,
     availability: t(`availability.${home.profile.availability}`),

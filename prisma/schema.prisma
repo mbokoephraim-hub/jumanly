@@ -831,6 +831,7 @@ model User {
   diagnostics         CareerDiagnostic[]
   diagnosticDraft     CareerDiagnosticDraft?
   profilePhoto        ProfilePhoto?
+  profileBanner       ProfileBanner?
   savedJobs           SavedJob[]
   applicationDrafts   ApplicationDraft[]
   jobsCreated         Job[]                     @relation("JobCreator")
@@ -1133,6 +1134,8 @@ model TalentProfile {
   /// Situation chosen on the phone (Modèle B, profile step 4): student, graduate, seeking,
   /// employed or switching (`phoneAccueil.profile.situation.*`).
   situation              String?
+  /// Banner chosen by the person (an /api/banniere/… address); null shows the drawn one.
+  banner                 String?
   targetJob              String?
   visibility             ProfileVisibility @default(private)
   availability           Availability      @default(open)
@@ -2322,6 +2325,17 @@ model LicenseLink {
 /// (square JPEG), kept here and served at /api/photo/{token}: an unguessable address, renewed at
 /// each change, shown where the person's avatar or CV is shown. Never used for matching (CLAUDE.md,
 /// golden rule 4).
+/// The banner of a talent's profile (Carrière, page of a person): one per account, served by
+/// /api/banniere/[token]; a new picture gets a new address.
+model ProfileBanner {
+  userId      String   @id
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+  token       String   @unique
+  contentType String
+  bytes       Bytes
+  updatedAt   DateTime @updatedAt
+}
+
 model ProfilePhoto {
   userId      String   @id
   user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)

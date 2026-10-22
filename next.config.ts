@@ -4,12 +4,16 @@ import { securityHeaders } from "./src/lib/security-headers";
 
 const nextConfig: NextConfig = {
   cacheComponents: true,
-  partialPrefetching: true,
+  // Préchargement complet (22/10/2026) : une page chargée d'avance par le téléphone
+  // (src/components/phone/preload.tsx) arrive avec ses données, un toucher l'ouvre sans attendre.
+  // Le préchargement partiel ne chargeait que la coquille : il reste désactivé.
+  partialPrefetching: false,
   // Pas d'en-tête « X-Powered-By » : on n'expose pas la technologie utilisée.
   poweredByHeader: false,
   // Justificatifs de vérification (Admin v2, étape 4) : 4 Mo par envoi, sous la limite de 4,5 Mo
-  // d'une requête sur Vercel.
-  experimental: { serverActions: { bodySizeLimit: "4.2mb" } },
+  // d'une requête sur Vercel. Une page chargée d'avance sert 30 s au plus, pour ne pas montrer
+  // de données anciennes.
+  experimental: { serverActions: { bodySizeLimit: "4.2mb" }, staleTimes: { static: 30 } },
   // Export PDF des CV par Chromium (docs/modeles-cv § 6.3) : ces paquets restent hors du bundle.
   serverExternalPackages: ["puppeteer-core", "@sparticuz/chromium", "playwright-core"],
   outputFileTracingIncludes: {

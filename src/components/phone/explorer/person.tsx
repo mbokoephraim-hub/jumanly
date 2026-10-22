@@ -24,6 +24,8 @@ export type PersonPageView = {
   initials: string;
   tone: number;
   image: string | null;
+  /** The banner the person chose, or null for the drawn one. */
+  banner: string | null;
   verified: boolean;
   /** « @patrick.ilunga · Kinshasa ». */
   handle: string;
@@ -99,14 +101,19 @@ export function PhonePerson({
   return (
     <div className="nb-page nb-ex nb-ex-profil">
       <div className="nb-ex-banniere nb-ex-vagues" data-ton={person.tone}>
-        <svg viewBox="0 0 390 150" preserveAspectRatio="none" aria-hidden>
-          <g fill="none" stroke="#fff" strokeOpacity=".25" strokeWidth="2">
-            <path d="M0 70 C 90 30, 180 110, 270 60 S 390 40, 390 40" />
-            <path d="M0 100 C 100 60, 190 140, 280 90 S 390 70, 390 70" />
-            <path d="M0 130 C 110 90, 200 170, 290 120 S 390 100, 390 100" />
-          </g>
-          <circle cx="330" cy="30" r="22" fill="var(--nb-lime)" opacity=".85" />
-        </svg>
+        {person.banner ? (
+          // eslint-disable-next-line @next/next/no-img-element -- the person's own upload
+          <img src={person.banner} alt="" />
+        ) : (
+          <svg viewBox="0 0 390 150" preserveAspectRatio="none" aria-hidden>
+            <g fill="none" stroke="#fff" strokeOpacity=".25" strokeWidth="2">
+              <path d="M0 70 C 90 30, 180 110, 270 60 S 390 40, 390 40" />
+              <path d="M0 100 C 100 60, 190 140, 280 90 S 390 70, 390 70" />
+              <path d="M0 130 C 110 90, 200 170, 290 120 S 390 100, 390 100" />
+            </g>
+            <circle cx="330" cy="30" r="22" fill="var(--nb-lime)" opacity=".85" />
+          </svg>
+        )}
         <div className="nb-ex-banniere-b">
           <span className="nb-ex-rond">
             <PhoneBack fallback="/app/jobs" label={t("person.back")} />

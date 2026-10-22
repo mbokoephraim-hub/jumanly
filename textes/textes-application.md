@@ -8904,6 +8904,15 @@ Conventions :
 | `phoneCareer.form.photoSaved` | Photo mise à jour. |
 | `phoneCareer.form.photoRemoved` | Photo retirée. |
 | `phoneCareer.form.photoError` | Cette photo n’a pas pu être enregistrée. Essayez une image JPEG ou PNG de moins de 5 Mo. |
+| `phoneCareer.form.bannerChange` | Changer la bannière |
+| `phoneCareer.form.bannerTitle` | Bannière du profil |
+| `phoneCareer.form.bannerText` | L’image en haut de votre profil, en format large. |
+| `phoneCareer.form.bannerCamera` | Prendre une photo |
+| `phoneCareer.form.bannerGallery` | Choisir dans la galerie |
+| `phoneCareer.form.bannerRemove` | Revenir à la bannière Jumanly |
+| `phoneCareer.form.bannerSaved` | Bannière mise à jour. |
+| `phoneCareer.form.bannerRemoved` | Bannière Jumanly remise. |
+| `phoneCareer.form.bannerError` | Cette image n’a pas pu être enregistrée. Essayez une image JPEG ou PNG. |
 | `phoneCareer.form.name` | Nom affiché |
 | `phoneCareer.form.handle` | Nom d’utilisateur |
 | `phoneCareer.form.headline` | Titre |
