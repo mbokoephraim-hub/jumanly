@@ -184,8 +184,9 @@ test("Baobab Fintech : classement prêt, fin d'offre, demande pour rejoindre, me
   // Notifications: the join request waiting for the administrator and the offer ending in 3 days.
   await page.goto("/app/notifications?fin=1");
   const notes = main(page);
-  const request = notes.locator("#demandes");
-  await expect(request).toContainText("Josué Démo");
+  // Other tests may leave their own requests to Baobab (Modèle B recruteur, M2): Josué's only.
+  const request = notes.locator("#demandes form").filter({ hasText: "Josué Démo" });
+  await expect(request).toBeVisible();
   await expect(request.getByRole("button", { name: "Accepter" })).toBeVisible();
   await expect(request.getByRole("combobox", { name: "Rôle" })).toBeVisible();
   const ending = notes.locator(".t-r6-fin").filter({ hasText: "Chargé de clientèle (démo)" });
