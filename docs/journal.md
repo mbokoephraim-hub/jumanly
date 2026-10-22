@@ -3979,3 +3979,9 @@ Quatre corrections d'Ephraïm, détail dans `docs/decisions/2026-10-22-compte-re
   commentateurs, bien connectés), plafonné et varié.
 - Tests : `tests/unit/feed-rank.test.ts`, `tests/db/account-deletion.test.ts`, `tests/db/feed.test.ts`,
   `tests/e2e/corrections-compte.spec.ts`.
+
+## Modèle B recruteur et administrateur déposé (22 octobre 2026)
+
+- Ephraïm a validé l'espace recruteur sur mobile et sur ordinateur, ainsi que l'espace administrateur sur ordinateur.
+- Ils sont déposés dans `docs/modele-b-recruteur/` : brief, prompt, captures avec index, sources `.dc.html`, rapports PDF et générateurs.
+- Ce dépôt remplace les planches recruteur et admin de `docs/refonte-mobile/` et de `docs/refonte-web/`. `CLAUDE.md` et `docs/PLAN-REFONTE-EN-3-ETAPES.md` sont mis à jour.

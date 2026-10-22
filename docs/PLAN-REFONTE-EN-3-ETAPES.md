@@ -15,6 +15,8 @@ Instruction permanente pour Claude Code. Elle prime sur l'ordre de travail des b
 - Ordinateur et tablette : `docs/refonte-web/BRIEF-WEB-CLAUDE-CODE.md` (W0 cadre commun, puis lots talent 1, 2, Studio CV, 3, 4) et planches `docs/refonte-web/talent-1` à `talent-4`, `studio-cv`.
 - Fin de l'étape : toutes les routes talent (`/app/*` hors `/app/hire` et `/app/organisation`), publiques d'authentification et premiers pas, ne montrent que le nouveau design à 390, 1024 et 1440 px, en clair et en sombre.
 
+> **Mise à jour du 22/10/2026** : pour les étapes 2 et 3, la référence est désormais `docs/modele-b-recruteur/BRIEF-MODELE-B-RECRUTEUR-CLAUDE-CODE.md`. L'étape 2 couvre le recruteur sur mobile, sur tablette et sur ordinateur (lots R0 à R8). L'étape 3 couvre l'administrateur et l'entreprise sur le web (lots A1 à A6). Les briefs et planches recruteur et admin de `docs/refonte-mobile/` et `docs/refonte-web/` cités ci-dessous sont remplacés.
+
 ## Étape 2 · Interface Recruteur : application mobile et web sur ordinateur
 
 - Mobile : `docs/refonte-mobile/BRIEF-RECRUTEUR-CLAUDE-CODE.md`, `docs/audit-hire/AUDIT-HIRE-MOBILE.md`, planches `recruteur-1` à `recruteur-4` (v2 comprises).

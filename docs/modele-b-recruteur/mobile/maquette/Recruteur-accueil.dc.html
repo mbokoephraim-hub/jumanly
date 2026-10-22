@@ -1,0 +1,912 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jumanly Modèle B · Recruteur · Ouverture et inscription</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050D10}
+a{color:#A6F26B;text-decoration:none}
+.fd,.fd *{box-sizing:border-box}
+.fd{font-family:"Sora",system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.fd h1,.fd h2,.fd h3,.fd p{margin:0}
+.fd button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.fd .scroll{scrollbar-width:none}.fd .scroll::-webkit-scrollbar{display:none}
+.fd .pg{position:absolute;inset:0;overflow-y:auto;animation:entre .35s ease-out both}
+.fd .meta{font-size:13px;color:#8FA39E}
+.fd .h1{font-size:28px;font-weight:700;letter-spacing:-0.02em;line-height:1.2}
+.fd .sous{font-size:15px;line-height:1.5;color:#B9CBC6;margin-top:10px}
+.fd .bp{display:flex;align-items:center;justify-content:center;width:100%;height:54px;border-radius:27px;background:#A6F26B;color:#0B1A1F;font-size:15.5px;font-weight:700;text-align:center}
+.fd .bs{display:flex;align-items:center;justify-content:center;width:100%;height:54px;border-radius:27px;border:1px solid rgba(255,255,255,.2);font-size:15px;font-weight:600;text-align:center;color:#F2EDE5}
+.fd .bf{display:flex;align-items:center;gap:12px;width:100%;height:54px;padding:0 18px;border-radius:27px;border:1px solid rgba(255,255,255,.16);font-size:15px;font-weight:600}
+.fd .bf b{flex:1;text-align:center;font-weight:600;margin-right:22px}
+.fd .fo{width:22px;height:22px;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .lab{display:block;font-size:13px;font-weight:600;color:#B9CBC6;margin:0 0 8px 4px}
+.fd .in{width:100%;height:54px;border-radius:16px;background:#13282C;border:1px solid rgba(255,255,255,.12);padding:0 16px;font:inherit;font-size:16px;color:#F2EDE5;outline:0}
+.fd .in:focus{border-color:#A6F26B}
+.fd .in::placeholder{color:#6F8580}
+.fd .erreur{font-size:13px;color:#FFB4A8;margin:8px 4px 0}
+.fd .lien{font-size:14px;font-weight:700;color:#A6F26B;min-height:40px;display:inline-flex;align-items:center}
+.fd .barreh{padding:50px 12px 0;display:flex;align-items:center;gap:8px;min-height:94px}
+.fd .retour{width:44px;height:44px;display:flex;align-items:center;justify-content:center;flex:none;color:#F2EDE5}
+.fd .chip{height:40px;padding:0 16px;border-radius:20px;font-size:14px;font-weight:500;white-space:nowrap;display:inline-flex;align-items:center;flex:none}
+.fd .ligne{width:100%;display:flex;align-items:center;gap:14px;padding:14px 0;border-bottom:1px solid rgba(255,255,255,.07);color:#F2EDE5}
+.fd .bas{position:absolute;left:0;right:0;bottom:0;padding:16px 20px 30px;background:linear-gradient(180deg,rgba(11,26,31,0) 0,#0B1A1F 22px);z-index:3}
+.fd .voile{position:absolute;inset:0;width:100%;background:rgba(0,0,0,.6)}
+.fd .feuille{position:absolute;left:0;right:0;bottom:0;background:#13282C;border-radius:30px 30px 0 0;padding:10px 20px 28px;border-top:1px solid rgba(255,255,255,.08);animation:monte .28s ease-out both}
+.fd .poignee{display:block;width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.2);margin:0 auto 14px}
+.fd .opt{width:100%;display:flex;align-items:center;gap:14px;min-height:60px;padding:10px 4px;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px;font-weight:600;color:#F2EDE5}
+.fd .opt small{display:block;font-size:12.5px;font-weight:400;color:#8FA39E;margin-top:2px}
+.fd .annuler{width:100%;height:50px;margin-top:12px;border-radius:999px;background:#1B3338;text-align:center;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.fd .q{width:100%;padding:14px 16px;border-radius:16px;background:#1B3338;font-size:14px;font-weight:600}
+.fd .av{width:40px;height:40px;border-radius:50%;background:#A6F26B;color:#0B1A1F;font-size:13px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .flag{width:30px;height:21px;border-radius:4px;flex:none;box-shadow:inset 0 0 0 1px rgba(255,255,255,.18)}
+.fd .tag{font-size:12.5px;padding:5px 9px;border-radius:7px;background:#1A2629;color:#C9D6D2}
+@keyframes entre{from{opacity:.4;transform:scale(.975)}to{opacity:1;transform:none}}
+@keyframes monte{from{transform:translateY(40px);opacity:.4}to{transform:none;opacity:1}}
+@keyframes flotte{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-8px) rotate(var(--r,0deg))}}
+.fd .flotte{animation:flotte 5s ease-in-out infinite}
+.fd .flotte2{animation:flotte 6s ease-in-out -2s infinite}
+
+/* ===== Ouverture : le logo s’anime ===== */
+.fd .spl{position:absolute;inset:0;background:#0B1A1F;overflow:hidden}
+.fd .halo{position:absolute;left:50%;top:416px;width:420px;height:420px;margin:-210px 0 0 -210px;border-radius:50%;background:radial-gradient(circle,rgba(166,242,107,.22) 0,rgba(166,242,107,0) 62%);animation:halo 2.6s ease-out .5s both}
+@keyframes halo{0%{transform:scale(.3);opacity:0}45%{opacity:1}100%{transform:scale(1.15);opacity:.45}}
+.fd .lgs{position:absolute;left:0;top:0;width:72px;height:72px;animation:glisse .62s cubic-bezier(.65,0,.35,1) 1.35s both}
+@keyframes glisse{from{transform:translateX(118px)}to{transform:none}}
+.fd .lgs-in{width:72px;height:72px;animation:carre .62s cubic-bezier(.34,1.56,.64,1) both}
+@keyframes carre{0%{transform:scale(0) rotate(-14deg)}65%{transform:scale(1.08) rotate(2deg)}100%{transform:none}}
+.fd .lg-trait{animation:trait .55s ease-out .35s both}
+@keyframes trait{from{stroke-dashoffset:72}to{stroke-dashoffset:0}}
+.fd .lg-tete{animation:tete .55s cubic-bezier(.34,1.56,.64,1) .82s both}
+@keyframes tete{0%{transform:translateY(-70px);opacity:0}55%{opacity:1}100%{transform:none;opacity:1}}
+.fd .lgt{position:absolute;left:86px;top:8px;animation:texte .6s cubic-bezier(.22,1,.36,1) 1.55s both}
+@keyframes texte{from{clip-path:inset(0 100% 0 0);transform:translateX(-14px);opacity:0}to{clip-path:inset(0 0 0 0);transform:none;opacity:1}}
+.fd .lg-point{transform-box:fill-box;transform-origin:center;animation:point .45s cubic-bezier(.34,1.56,.64,1) 2.1s both}
+@keyframes point{0%{transform:scale(0)}70%{transform:scale(1.4)}100%{transform:scale(1)}}
+.fd .slogan{position:absolute;left:0;right:0;top:486px;text-align:center;font-size:17px;font-weight:500;color:#B9CBC6;letter-spacing:.01em}
+.fd .slogan span{display:inline-block;animation:mot .5s ease-out both}
+.fd .slogan span:nth-child(1){animation-delay:2.4s}.fd .slogan span:nth-child(2){animation-delay:2.6s;color:#F2EDE5}.fd .slogan span:nth-child(3){animation-delay:2.8s;color:#A6F26B}
+@keyframes mot{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
+.fd .porteur{position:absolute;left:0;right:0;bottom:46px;text-align:center;font-size:12.5px;color:#6F8580;animation:mot .6s ease-out 3s both}
+.fd .court{position:absolute;left:159px;top:380px;width:72px;height:72px}
+.fd .court .lgs-in{animation-duration:.5s}
+.fd .court .lg-trait{animation-delay:.25s;animation-duration:.4s}
+.fd .court .lg-tete{animation-delay:.55s;animation-duration:.45s}
+.fd .onde{position:absolute;inset:0;border-radius:22px;border:2px solid #A6F26B;animation:onde .9s ease-out 1s both}
+@keyframes onde{from{transform:scale(1);opacity:.8}to{transform:scale(1.9);opacity:0}}
+@media (prefers-reduced-motion: reduce){.fd *,.fd *::before{animation-duration:.01ms!important;animation-delay:0s!important}}
+@keyframes anneau{from{stroke-dasharray:0 213.6}}@keyframes lecture{from{transform:scaleX(0)}to{transform:scaleX(1)}}/* mvt-jumanly 2 */
+:root{--mvt-o:.4;--mvt-s:.975;--mvt-tx:0px;--mvt-r:150%;--mvt-x:50%;--mvt-y:50%}
+[data-ecran]{animation:mvtEcran .34s cubic-bezier(.2,.8,.2,1) both;transform-origin:var(--mvt-x) var(--mvt-y)}
+.voile,.shb{animation:mvtVoile .26s ease-out both}
+.voile+div,.shb+div,.voile+.feuille,.shb+.shp,[style*="z-index: 10"]>button:first-child+div{animation:mvtMonte .34s cubic-bezier(.2,.8,.2,1) both}
+@keyframes mvtEcran{from{opacity:var(--mvt-o);transform:translateX(var(--mvt-tx)) scale(var(--mvt-s));clip-path:circle(var(--mvt-r) at var(--mvt-x) var(--mvt-y))}to{opacity:1;transform:none;clip-path:circle(150% at var(--mvt-x) var(--mvt-y))}}
+@keyframes mvtVoile{from{opacity:0}to{opacity:1}}
+@keyframes mvtMonte{from{transform:translateY(56px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){[data-ecran],.voile,.shb,.voile+div,.shb+div{animation:none!important}}
+/* fin mvt */
+</style>
+</helmet>
+<div class="fd" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F; border-radius: 44px;">
+
+<!-- ============ OUVERTURE : logo animé (deux copies pour rejouer) ============ -->
+<sc-if value="{{vOuverture}}" hint-placeholder-val="{{ true }}">
+<div data-ecran="" style="position: absolute; inset: 0;" role="img" aria-label="Jumanly, Learn. Grow. Connect.">
+<sc-if value="{{longA}}" hint-placeholder-val="{{ true }}"><div class="spl"><span class="halo"></span><div style="position: absolute; left: 41px; top: 380px; width: 308px; height: 72px;"><div class="lgs"><div class="lgs-in"><svg width="72" height="72" viewBox="0 0 120 120" aria-hidden="true" style="display: block; overflow: visible;"><rect class="lg-carre" width="120" height="120" rx="30" fill="#A6F26B"></rect><g transform="translate(2.25 -4.35) scale(1.1)"><path class="lg-trait" d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#0F3F37" stroke-width="17" stroke-linecap="round" stroke-dasharray="72"></path><circle class="lg-tete" cx="70" cy="31" r="11.5" fill="#0F3F37"></circle></g></svg></div></div><div class="lgt"><svg width="222" height="56.1" viewBox="-8 -773 3945 997" aria-label="jumanly" role="img" style="display: block; overflow: visible;"><path d="M2 205V86H44Q81 86 101.0 66.0Q121 46 121 9V-543H255V1Q255 76 232.0 120.5Q209 165 161.0 185.0Q113 205 35 205Z M42 -439V-543H255V-439Z M578 17Q484 17 432.5 -45.0Q381 -107 381 -229V-544H520V-217Q520 -167 548.0 -137.5Q576 -108 624 -108Q672 -108 702.5 -139.0Q733 -170 733 -223V-544H872V0H762V-231H773Q773 -149 752.0 -94.0Q731 -39 689.0 -11.0Q647 17 584 17Z M1014 0V-543H1124V-310H1114Q1114 -392 1135.0 -447.5Q1156 -503 1197.5 -531.5Q1239 -560 1301 -560H1307Q1370 -560 1411.5 -531.5Q1453 -503 1473.5 -447.5Q1494 -392 1494 -310H1459Q1459 -392 1480.5 -447.5Q1502 -503 1543.5 -531.5Q1585 -560 1647 -560H1653Q1716 -560 1758.0 -531.5Q1800 -503 1821.5 -447.5Q1843 -392 1843 -310V0H1704V-323Q1704 -374 1678.0 -404.5Q1652 -435 1604 -435Q1556 -435 1527.0 -403.5Q1498 -372 1498 -319V0H1359V-323Q1359 -374 1333.0 -404.5Q1307 -435 1259 -435Q1211 -435 1182.0 -403.5Q1153 -372 1153 -319V0Z M2303 0V-161H2280V-340Q2280 -387 2257.0 -410.0Q2234 -433 2186 -433Q2161 -433 2126.0 -432.0Q2091 -431 2055.5 -429.5Q2020 -428 1992 -426V-544Q2015 -546 2044.0 -548.0Q2073 -550 2103.5 -550.5Q2134 -551 2161 -551Q2245 -551 2300.5 -529.0Q2356 -507 2384.5 -460.0Q2413 -413 2413 -337V0Z M2128 14Q2069 14 2024.5 -7.0Q1980 -28 1955.5 -67.0Q1931 -106 1931 -161Q1931 -221 1960.5 -259.0Q1990 -297 2043.5 -316.0Q2097 -335 2169 -335H2295V-252H2167Q2119 -252 2093.5 -228.5Q2068 -205 2068 -168Q2068 -131 2093.5 -108.0Q2119 -85 2167 -85Q2196 -85 2220.5 -95.5Q2245 -106 2261.5 -131.5Q2278 -157 2280 -201L2314 -162Q2309 -105 2286.5 -66.0Q2264 -27 2224.5 -6.5Q2185 14 2128 14Z M2544 0V-543H2654V-310H2644Q2644 -393 2666.0 -448.5Q2688 -504 2731.5 -532.0Q2775 -560 2840 -560H2846Q2943 -560 2993.0 -497.5Q3043 -435 3043 -311V0H2904V-323Q2904 -373 2875.5 -404.0Q2847 -435 2797 -435Q2746 -435 2714.5 -403.5Q2683 -372 2683 -319V0Z M3181 0V-730H3320V0Z M3113 -626V-730H3320V-626Z M3445 214V95H3547Q3576 95 3595.5 87.5Q3615 80 3628.0 63.5Q3641 47 3648 18L3794 -543H3927L3766 48Q3750 109 3721.0 145.5Q3692 182 3646.5 198.0Q3601 214 3534 214Z M3614 -12V-122H3730V-12Z M3567 -12 3391 -543H3531L3698 -12Z" fill="#F2EDE5"></path><circle class="lg-point" cx="166.5" cy="-687.5" r="89" fill="#A6F26B"></circle></svg></div></div><p class="slogan"><span>Learn.</span> <span>Grow.</span> <span>Connect.</span></p><p class="porteur">Une plateforme développée par The Growth Lab</p></div></sc-if>
+<sc-if value="{{longB}}" hint-placeholder-val="{{ false }}"><div class="spl"><span class="halo"></span><div style="position: absolute; left: 41px; top: 380px; width: 308px; height: 72px;"><div class="lgs"><div class="lgs-in"><svg width="72" height="72" viewBox="0 0 120 120" aria-hidden="true" style="display: block; overflow: visible;"><rect class="lg-carre" width="120" height="120" rx="30" fill="#A6F26B"></rect><g transform="translate(2.25 -4.35) scale(1.1)"><path class="lg-trait" d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#0F3F37" stroke-width="17" stroke-linecap="round" stroke-dasharray="72"></path><circle class="lg-tete" cx="70" cy="31" r="11.5" fill="#0F3F37"></circle></g></svg></div></div><div class="lgt"><svg width="222" height="56.1" viewBox="-8 -773 3945 997" aria-label="jumanly" role="img" style="display: block; overflow: visible;"><path d="M2 205V86H44Q81 86 101.0 66.0Q121 46 121 9V-543H255V1Q255 76 232.0 120.5Q209 165 161.0 185.0Q113 205 35 205Z M42 -439V-543H255V-439Z M578 17Q484 17 432.5 -45.0Q381 -107 381 -229V-544H520V-217Q520 -167 548.0 -137.5Q576 -108 624 -108Q672 -108 702.5 -139.0Q733 -170 733 -223V-544H872V0H762V-231H773Q773 -149 752.0 -94.0Q731 -39 689.0 -11.0Q647 17 584 17Z M1014 0V-543H1124V-310H1114Q1114 -392 1135.0 -447.5Q1156 -503 1197.5 -531.5Q1239 -560 1301 -560H1307Q1370 -560 1411.5 -531.5Q1453 -503 1473.5 -447.5Q1494 -392 1494 -310H1459Q1459 -392 1480.5 -447.5Q1502 -503 1543.5 -531.5Q1585 -560 1647 -560H1653Q1716 -560 1758.0 -531.5Q1800 -503 1821.5 -447.5Q1843 -392 1843 -310V0H1704V-323Q1704 -374 1678.0 -404.5Q1652 -435 1604 -435Q1556 -435 1527.0 -403.5Q1498 -372 1498 -319V0H1359V-323Q1359 -374 1333.0 -404.5Q1307 -435 1259 -435Q1211 -435 1182.0 -403.5Q1153 -372 1153 -319V0Z M2303 0V-161H2280V-340Q2280 -387 2257.0 -410.0Q2234 -433 2186 -433Q2161 -433 2126.0 -432.0Q2091 -431 2055.5 -429.5Q2020 -428 1992 -426V-544Q2015 -546 2044.0 -548.0Q2073 -550 2103.5 -550.5Q2134 -551 2161 -551Q2245 -551 2300.5 -529.0Q2356 -507 2384.5 -460.0Q2413 -413 2413 -337V0Z M2128 14Q2069 14 2024.5 -7.0Q1980 -28 1955.5 -67.0Q1931 -106 1931 -161Q1931 -221 1960.5 -259.0Q1990 -297 2043.5 -316.0Q2097 -335 2169 -335H2295V-252H2167Q2119 -252 2093.5 -228.5Q2068 -205 2068 -168Q2068 -131 2093.5 -108.0Q2119 -85 2167 -85Q2196 -85 2220.5 -95.5Q2245 -106 2261.5 -131.5Q2278 -157 2280 -201L2314 -162Q2309 -105 2286.5 -66.0Q2264 -27 2224.5 -6.5Q2185 14 2128 14Z M2544 0V-543H2654V-310H2644Q2644 -393 2666.0 -448.5Q2688 -504 2731.5 -532.0Q2775 -560 2840 -560H2846Q2943 -560 2993.0 -497.5Q3043 -435 3043 -311V0H2904V-323Q2904 -373 2875.5 -404.0Q2847 -435 2797 -435Q2746 -435 2714.5 -403.5Q2683 -372 2683 -319V0Z M3181 0V-730H3320V0Z M3113 -626V-730H3320V-626Z M3445 214V95H3547Q3576 95 3595.5 87.5Q3615 80 3628.0 63.5Q3641 47 3648 18L3794 -543H3927L3766 48Q3750 109 3721.0 145.5Q3692 182 3646.5 198.0Q3601 214 3534 214Z M3614 -12V-122H3730V-12Z M3567 -12 3391 -543H3531L3698 -12Z" fill="#F2EDE5"></path><circle class="lg-point" cx="166.5" cy="-687.5" r="89" fill="#A6F26B"></circle></svg></div></div><p class="slogan"><span>Learn.</span> <span>Grow.</span> <span>Connect.</span></p><p class="porteur">Une plateforme développée par The Growth Lab</p></div></sc-if>
+<sc-if value="{{courtA}}" hint-placeholder-val="{{ false }}"><div class="spl"><span class="halo" style="animation-delay: .2s; animation-duration: 1.4s;"></span><div class="court"><span class="onde"></span><div class="lgs-in"><svg width="72" height="72" viewBox="0 0 120 120" aria-hidden="true" style="display: block; overflow: visible;"><rect class="lg-carre" width="120" height="120" rx="30" fill="#A6F26B"></rect><g transform="translate(2.25 -4.35) scale(1.1)"><path class="lg-trait" d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#0F3F37" stroke-width="17" stroke-linecap="round" stroke-dasharray="72"></path><circle class="lg-tete" cx="70" cy="31" r="11.5" fill="#0F3F37"></circle></g></svg></div></div></div></sc-if>
+<sc-if value="{{courtB}}" hint-placeholder-val="{{ false }}"><div class="spl"><span class="halo" style="animation-delay: .2s; animation-duration: 1.4s;"></span><div class="court"><span class="onde"></span><div class="lgs-in"><svg width="72" height="72" viewBox="0 0 120 120" aria-hidden="true" style="display: block; overflow: visible;"><rect class="lg-carre" width="120" height="120" rx="30" fill="#A6F26B"></rect><g transform="translate(2.25 -4.35) scale(1.1)"><path class="lg-trait" d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#0F3F37" stroke-width="17" stroke-linecap="round" stroke-dasharray="72"></path><circle class="lg-tete" cx="70" cy="31" r="11.5" fill="#0F3F37"></circle></g></svg></div></div></div></sc-if>
+</div>
+</sc-if>
+
+<!-- ============ BIENVENUE ============ -->
+<sc-if value="{{vBienvenue}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" class="pg" style="overflow: hidden;">
+<div style="position: absolute; left: 0; right: 0; top: 58px; display: flex; justify-content: center;"><span style="display: inline-flex; align-items: center; gap: 10px;"><svg width="30" height="30" viewBox="0 0 120 120" aria-hidden="true" style="display: block; overflow: visible;"><rect width="120" height="120" rx="30" fill="#A6F26B"></rect><g transform="translate(2.25 -4.35) scale(1.1)"><path d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#0F3F37" stroke-width="17" stroke-linecap="round" stroke-dasharray="72"></path><circle cx="70" cy="31" r="11.5" fill="#0F3F37"></circle></g></svg><svg width="96" height="24.3" viewBox="-8 -773 3945 997" aria-label="jumanly" role="img" style="display: block; overflow: visible;"><path d="M2 205V86H44Q81 86 101.0 66.0Q121 46 121 9V-543H255V1Q255 76 232.0 120.5Q209 165 161.0 185.0Q113 205 35 205Z M42 -439V-543H255V-439Z M578 17Q484 17 432.5 -45.0Q381 -107 381 -229V-544H520V-217Q520 -167 548.0 -137.5Q576 -108 624 -108Q672 -108 702.5 -139.0Q733 -170 733 -223V-544H872V0H762V-231H773Q773 -149 752.0 -94.0Q731 -39 689.0 -11.0Q647 17 584 17Z M1014 0V-543H1124V-310H1114Q1114 -392 1135.0 -447.5Q1156 -503 1197.5 -531.5Q1239 -560 1301 -560H1307Q1370 -560 1411.5 -531.5Q1453 -503 1473.5 -447.5Q1494 -392 1494 -310H1459Q1459 -392 1480.5 -447.5Q1502 -503 1543.5 -531.5Q1585 -560 1647 -560H1653Q1716 -560 1758.0 -531.5Q1800 -503 1821.5 -447.5Q1843 -392 1843 -310V0H1704V-323Q1704 -374 1678.0 -404.5Q1652 -435 1604 -435Q1556 -435 1527.0 -403.5Q1498 -372 1498 -319V0H1359V-323Q1359 -374 1333.0 -404.5Q1307 -435 1259 -435Q1211 -435 1182.0 -403.5Q1153 -372 1153 -319V0Z M2303 0V-161H2280V-340Q2280 -387 2257.0 -410.0Q2234 -433 2186 -433Q2161 -433 2126.0 -432.0Q2091 -431 2055.5 -429.5Q2020 -428 1992 -426V-544Q2015 -546 2044.0 -548.0Q2073 -550 2103.5 -550.5Q2134 -551 2161 -551Q2245 -551 2300.5 -529.0Q2356 -507 2384.5 -460.0Q2413 -413 2413 -337V0Z M2128 14Q2069 14 2024.5 -7.0Q1980 -28 1955.5 -67.0Q1931 -106 1931 -161Q1931 -221 1960.5 -259.0Q1990 -297 2043.5 -316.0Q2097 -335 2169 -335H2295V-252H2167Q2119 -252 2093.5 -228.5Q2068 -205 2068 -168Q2068 -131 2093.5 -108.0Q2119 -85 2167 -85Q2196 -85 2220.5 -95.5Q2245 -106 2261.5 -131.5Q2278 -157 2280 -201L2314 -162Q2309 -105 2286.5 -66.0Q2264 -27 2224.5 -6.5Q2185 14 2128 14Z M2544 0V-543H2654V-310H2644Q2644 -393 2666.0 -448.5Q2688 -504 2731.5 -532.0Q2775 -560 2840 -560H2846Q2943 -560 2993.0 -497.5Q3043 -435 3043 -311V0H2904V-323Q2904 -373 2875.5 -404.0Q2847 -435 2797 -435Q2746 -435 2714.5 -403.5Q2683 -372 2683 -319V0Z M3181 0V-730H3320V0Z M3113 -626V-730H3320V-626Z M3445 214V95H3547Q3576 95 3595.5 87.5Q3615 80 3628.0 63.5Q3641 47 3648 18L3794 -543H3927L3766 48Q3750 109 3721.0 145.5Q3692 182 3646.5 198.0Q3601 214 3534 214Z M3614 -12V-122H3730V-12Z M3567 -12 3391 -543H3531L3698 -12Z" fill="#F2EDE5"></path><circle cx="166.5" cy="-687.5" r="89" fill="#A6F26B"></circle></svg></span></div>
+<button onClick="{{suivantSlide}}" aria-label="Écran suivant" style="position: absolute; left: 0; right: 0; top: 104px; height: 400px; display: block;">
+
+<sc-if value="{{s0}}" hint-placeholder-val="{{ true }}">
+<span style="position: absolute; inset: 0; animation: entre .45s ease-out both;">
+<span class="flotte" style="--r: -3deg; position: absolute; left: 50px; top: 34px; width: 290px; padding: 16px; border-radius: 20px; background: #13282C; border: 1px solid rgba(255,255,255,.14); box-shadow: 0 30px 60px -20px rgba(0,0,0,.8);">
+<span style="display: flex; gap: 6px;"><span class="tag" style="background: rgba(166,242,107,.12); color: #A6F26B; font-weight: 700;">En cours</span><span class="tag" style="background: #A6F26B; color: #0B1A1F; font-weight: 700;">3 nouvelles</span></span>
+<b style="display: block; font-size: 17px; margin-top: 12px;">Analyste de données junior</b><span class="meta" style="display: block; margin-top: 3px;">Kinshasa · CDI</span>
+<span style="display: flex; gap: 8px; margin-top: 14px;"><span style="flex: 1; border-radius: 12px; background: #0B1A1F; padding: 9px 10px; font-size: 11.5px; color: #8FA39E;"><b style="display: block; font-size: 17px; color: #F2EDE5;">412</b>vues</span><span style="flex: 1; border-radius: 12px; background: #0B1A1F; padding: 9px 10px; font-size: 11.5px; color: #8FA39E;"><b style="display: block; font-size: 17px; color: #F2EDE5;">6</b>jours</span><span style="flex: 1; border-radius: 12px; background: #0B1A1F; padding: 9px 10px; font-size: 11.5px; color: #8FA39E;"><b style="display: block; font-size: 17px; color: #F2EDE5;">38</b>candidatures</span></span></span>
+<span class="flotte2" style="--r: 4deg; position: absolute; left: 30px; top: 300px; width: 270px; display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 18px; background: #0F2A2A; border: 1px solid rgba(47,211,166,.4); box-shadow: 0 20px 40px -16px rgba(0,0,0,.8);"><svg width="30" height="30" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="font-size: 13.5px; line-height: 1.45;">J’ai rédigé le texte et deux questions de présélection.</span></span>
+</span>
+</sc-if>
+
+<sc-if value="{{s1}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; inset: 0; animation: entre .45s ease-out both;">
+<span class="flotte" style="--r: -2deg; position: absolute; left: 34px; top: 30px; width: 322px; padding: 16px; border-radius: 22px; background: #13282C; border: 1px solid rgba(255,255,255,.12); box-shadow: 0 30px 60px -20px rgba(0,0,0,.8);">
+<span style="display: flex; gap: 6px;"><span style="flex: 1; text-align: center; border-radius: 10px; background: #0B1A1F; padding: 8px 0; font-size: 10.5px; color: #8FA39E;"><b style="display: block; font-size: 16px; color: #F2EDE5;">18</b>Reçues</span><span style="flex: 1; text-align: center; border-radius: 10px; background: #0B1A1F; padding: 8px 0; font-size: 10.5px; color: #8FA39E;"><b style="display: block; font-size: 16px; color: #F2EDE5;">9</b>Présélection</span><span style="flex: 1; text-align: center; border-radius: 10px; background: rgba(166,242,107,.14); padding: 8px 0; font-size: 10.5px; color: #A6F26B;"><b style="display: block; font-size: 16px;">5</b>Entretien</span><span style="flex: 1; text-align: center; border-radius: 10px; background: #0B1A1F; padding: 8px 0; font-size: 10.5px; color: #8FA39E;"><b style="display: block; font-size: 16px; color: #F2EDE5;">1</b>Offre</span></span>
+<span style="display: flex; align-items: center; gap: 10px; margin-top: 14px;"><span class="av" style="background: #1B3338; color: #F2EDE5;">GM</span><span style="flex: 1;"><b style="display: block; font-size: 14px;">Grâce Mbuyi</b><span class="meta">SQL, Excel · Présélection</span></span><b style="color: #A6F26B; font-size: 15px;">86 %</b></span>
+<span style="display: flex; align-items: center; gap: 10px; margin-top: 10px;"><span class="av" style="background: #1B3338; color: #F2EDE5;">EK</span><span style="flex: 1;"><b style="display: block; font-size: 14px;">Esther Kabila</b><span class="meta">Power BI · Reçue</span></span><b style="color: #A6F26B; font-size: 15px;">81 %</b></span></span>
+<span class="flotte2" style="--r: 3deg; position: absolute; right: 26px; top: 300px; width: 250px; display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 18px; background: #0F2A2A; border: 1px solid rgba(47,211,166,.4); box-shadow: 0 20px 40px -16px rgba(0,0,0,.8);"><svg width="30" height="30" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="font-size: 13.5px; line-height: 1.45;">38 CV lus : 12 couvrent tous vos critères.</span></span>
+</span>
+</sc-if>
+
+<sc-if value="{{s2}}" hint-placeholder-val="{{ false }}">
+<span style="position: absolute; inset: 0; animation: entre .45s ease-out both;">
+<span class="flotte" style="--r: 3deg; position: absolute; left: 56px; top: 34px; width: 278px; padding: 18px; border-radius: 22px; background: #F2EDE5; color: #0B1A1F; box-shadow: 0 30px 60px -20px rgba(0,0,0,.8);">
+<span style="font-size: 12px; font-weight: 700; letter-spacing: .08em; text-transform: uppercase; color: #14745F;">Entretien · jeudi 10 h</span>
+<b style="display: block; font-size: 18px; margin-top: 8px;">Grâce Mbuyi</b><span style="display: block; font-size: 13px; color: #4A5A56; margin-top: 2px;">Analyste de données junior · en visio</span>
+<span style="display: flex; gap: 4px; margin-top: 12px; font-size: 18px; color: #14745F;">★★★★<span style="color: #C9D0CC;">★</span></span></span>
+<span class="flotte2" style="--r: -3deg; position: absolute; left: 34px; top: 290px; display: flex; align-items: center; gap: 10px; padding: 12px 16px 12px 12px; border-radius: 18px; background: #13282C; border: 1px solid rgba(255,255,255,.1); box-shadow: 0 20px 40px -16px rgba(0,0,0,.8);"><span style="width: 34px; height: 34px; border-radius: 50%; background: #A6F26B; color: #0B1A1F; display: flex; align-items: center; justify-content: center;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span><span><b style="display: block; font-size: 14px;">Décision : retenue</b><span class="meta">Réponse envoyée à 37 autres candidats</span></span></span>
+</span>
+</sc-if>
+</button>
+
+<div style="position: absolute; left: 24px; right: 24px; top: 506px;">
+<p style="font-size: 12.5px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; color: #A6F26B;">{{sl.mot}}</p>
+<h1 style="font-size: 26px; font-weight: 700; letter-spacing: -0.02em; line-height: 1.22; margin-top: 8px;">{{sl.t}}</h1>
+<p class="sous" style="margin-top: 8px;">{{sl.d}}</p>
+</div>
+<div style="position: absolute; left: 18px; top: 650px; display: flex; gap: 6px;"><sc-for list="{{points}}" as="d" hint-placeholder-count="3"><button onClick="{{d.pick}}" aria-label="{{d.t}}" style="height: 24px; display: flex; align-items: center;"><span style="display: block; width: {{d.w}}; height: 7px; border-radius: 4px; background: {{d.bg}}; transition: width .25s;"></span></button></sc-for></div>
+<div style="position: absolute; left: 20px; right: 20px; bottom: 30px; display: flex; flex-direction: column; gap: 10px;">
+<button onClick="{{versInscription}}" class="bp">Créer un compte</button>
+<button onClick="{{versConnexion}}" class="bs">Se connecter</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ INSCRIPTION ============ -->
+<sc-if value="{{vInscription}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" class="pg scroll" style="padding-bottom: 30px;">
+<div class="barreh"><button onClick="{{versBienvenue}}" class="retour" aria-label="Retour"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></button></div>
+<div style="padding: 4px 20px 0;">
+<h1 class="h1">Créer votre compte recruteur</h1>
+<p class="sous">Gratuit pour publier et trier. Cinq minutes suffisent.</p>
+<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 28px;">
+<button onClick="{{google}}" class="bf"><span class="fo" style="background: #FFFFFF; color: #4285F4; font-size: 14px; font-weight: 800; border-radius: 50%;">G</span><b>Continuer avec Google</b></button>
+<button onClick="{{apple}}" class="bf"><span class="fo"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F2EDE5" d="M16.5 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.5-3.7zM14.3 5.8c.6-.8 1.1-1.8 1-2.8-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.7-1 2.7 1 .1 2-.5 2.7-1.3z"></path></svg></span><b>Continuer avec Apple</b></button>
+<button onClick="{{linkedin}}" class="bf"><span class="fo" style="background: #0A66C2; color: #FFFFFF; font-size: 12px; font-weight: 800; border-radius: 5px;">in</span><b>Continuer avec LinkedIn</b></button>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; margin: 26px 0 22px;"><span style="flex: 1; height: 1px; background: rgba(255,255,255,.1);"></span><span class="meta">ou avec votre e-mail</span><span style="flex: 1; height: 1px; background: rgba(255,255,255,.1);"></span></div>
+<label><span class="lab">Adresse e-mail</span><input class="in" type="email" value="{{email}}" onChange="{{ecrireEmail}}" placeholder="prenom.nom@entreprise.cd" aria-label="Adresse e-mail"></label>
+<sc-if value="{{errEmail}}" hint-placeholder-val="{{ false }}"><p class="erreur">Entrez une adresse e-mail valide, par exemple n.kalala@baobabfintech.cd.</p></sc-if>
+<button onClick="{{continuerEmail}}" class="bp" style="margin-top: 16px; opacity: {{emailOp}};">Continuer</button>
+<p style="text-align: center; margin-top: 20px; font-size: 14px; color: #B9CBC6;">Déjà inscrite ou inscrit ? <button onClick="{{versConnexion}}" class="lien">Se connecter</button></p>
+<p style="text-align: center; margin-top: 18px; font-size: 12.5px; line-height: 1.6; color: #8FA39E;">En continuant, vous acceptez les <button onClick="{{legalCond}}" style="color: #F2EDE5; text-decoration: underline; font-size: 12.5px;">Conditions</button> et la <button onClick="{{legalConf}}" style="color: #F2EDE5; text-decoration: underline; font-size: 12.5px;">Politique de confidentialité</button>.</p>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ CODE ============ -->
+<sc-if value="{{vCode}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" class="pg scroll">
+<div class="barreh"><button onClick="{{modifierEmail}}" class="retour" aria-label="Retour"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></button></div>
+<div style="padding: 4px 20px 0;">
+<h1 class="h1">Vérifiez votre boîte mail</h1>
+<p class="sous">Nous avons envoyé un code à 6 chiffres à <b style="color: #F2EDE5;">{{emailAff}}</b>.</p>
+<label style="position: relative; display: flex; gap: 8px; margin-top: 30px;">
+<sc-for list="{{cases}}" as="c" hint-placeholder-count="6"><span style="flex: 1; height: 62px; border-radius: 16px; background: #13282C; border: 1.5px solid {{c.bd}}; display: flex; align-items: center; justify-content: center; font-size: 26px; font-weight: 700;">{{c.c}}</span></sc-for>
+<input value="{{code}}" onChange="{{ecrireCode}}" inputmode="numeric" autocomplete="one-time-code" aria-label="Code à 6 chiffres" style="position: absolute; inset: 0; width: 100%; opacity: 0; font-size: 16px; border: 0;">
+</label>
+<sc-if value="{{errCode}}" hint-placeholder-val="{{ false }}"><p class="erreur">Le code contient 6 chiffres.</p></sc-if>
+<button onClick="{{remplirCode}}" style="margin-top: 16px; height: 44px; padding: 0 16px; border-radius: 22px; background: #1B3338; font-size: 14px; font-weight: 600;">Depuis Mail : 482 913</button>
+<button onClick="{{verifier}}" class="bp" style="margin-top: 26px; opacity: {{codeOp}};">Vérifier</button>
+<div style="display: flex; justify-content: space-between; margin-top: 14px;"><button onClick="{{renvoyer}}" class="lien">Renvoyer le code</button><button onClick="{{modifierEmail}}" class="lien" style="color: #F2EDE5;">Changer d’adresse</button></div>
+<p class="meta" style="margin-top: 14px; line-height: 1.5;">Pas reçu ? Regardez dans les spams. Le code reste valable 10 minutes.</p>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ MOT DE PASSE ============ -->
+<sc-if value="{{vMdp}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" class="pg scroll">
+<div class="barreh"><button onClick="{{retourCode}}" class="retour" aria-label="Retour"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></button></div>
+<div style="padding: 4px 20px 0;">
+<h1 class="h1">Choisissez un mot de passe</h1>
+<p class="sous">Pour vous reconnecter avec {{emailAff}}.</p>
+<label style="display: block; margin-top: 28px;"><span class="lab">Mot de passe</span>
+<span style="position: relative; display: block;"><input class="in" type="{{typeMdp}}" value="{{mdp}}" onChange="{{ecrireMdp}}" aria-label="Mot de passe" style="padding-right: 92px;">
+<button onClick="{{basculerMdp}}" style="position: absolute; right: 8px; top: 7px; height: 40px; padding: 0 12px; font-size: 13.5px; font-weight: 700; color: #A6F26B;">{{voirT}}</button></span></label>
+<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 16px;">
+<sc-for list="{{regles}}" as="r" hint-placeholder-count="3"><span style="display: flex; align-items: center; gap: 10px; font-size: 14px; color: {{r.col}};"><span style="width: 20px; height: 20px; border-radius: 50%; border: 1.5px solid {{r.bd}}; background: {{r.bg}}; display: flex; align-items: center; justify-content: center; font-size: 11px; font-weight: 800;">{{r.sym}}</span>{{r.t}}</span></sc-for>
+</div>
+<sc-if value="{{errMdp}}" hint-placeholder-val="{{ false }}"><p class="erreur">Votre mot de passe doit cocher les trois règles.</p></sc-if>
+<button onClick="{{suggererMdp}}" style="margin-top: 20px; height: 44px; padding: 0 16px; border-radius: 22px; background: #1B3338; font-size: 14px; font-weight: 600;">Utiliser un mot de passe fort suggéré</button>
+<button onClick="{{validerMdp}}" class="bp" style="margin-top: 26px; opacity: {{mdpOp}};">Créer mon compte</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ CONNEXION ============ -->
+<sc-if value="{{vConnexion}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" class="pg scroll" style="padding-bottom: 30px;">
+<div class="barreh"><button onClick="{{versBienvenue}}" class="retour" aria-label="Retour"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></button></div>
+<div style="padding: 4px 20px 0;">
+<h1 class="h1">Bon retour</h1>
+<p class="sous">Connectez-vous pour retrouver vos offres et vos candidatures.</p>
+<div style="display: flex; flex-direction: column; gap: 10px; margin-top: 26px;">
+<button onClick="{{google}}" class="bf"><span class="fo" style="background: #FFFFFF; color: #4285F4; font-size: 14px; font-weight: 800; border-radius: 50%;">G</span><b>Continuer avec Google</b></button>
+<button onClick="{{apple}}" class="bf"><span class="fo"><svg width="20" height="20" viewBox="0 0 24 24" aria-hidden="true"><path fill="#F2EDE5" d="M16.5 12.6c0-2.3 1.9-3.4 2-3.5-1.1-1.6-2.8-1.8-3.4-1.8-1.4-.1-2.8.9-3.5.9-.7 0-1.8-.8-3-.8-1.5 0-3 .9-3.8 2.3-1.6 2.8-.4 7 1.2 9.3.8 1.1 1.7 2.4 2.9 2.3 1.2 0 1.6-.7 3-.7s1.8.7 3 .7c1.3 0 2.1-1.1 2.8-2.3.9-1.3 1.3-2.6 1.3-2.7-.1 0-2.5-1-2.5-3.7zM14.3 5.8c.6-.8 1.1-1.8 1-2.8-.9 0-2 .6-2.7 1.4-.6.7-1.1 1.7-1 2.7 1 .1 2-.5 2.7-1.3z"></path></svg></span><b>Continuer avec Apple</b></button>
+<button onClick="{{linkedin}}" class="bf"><span class="fo" style="background: #0A66C2; color: #FFFFFF; font-size: 12px; font-weight: 800; border-radius: 5px;">in</span><b>Continuer avec LinkedIn</b></button>
+</div>
+<div style="display: flex; align-items: center; gap: 12px; margin: 24px 0 20px;"><span style="flex: 1; height: 1px; background: rgba(255,255,255,.1);"></span><span class="meta">ou</span><span style="flex: 1; height: 1px; background: rgba(255,255,255,.1);"></span></div>
+<label><span class="lab">Adresse e-mail</span><input class="in" type="email" value="{{cEmail}}" onChange="{{ecrireCEmail}}" aria-label="Adresse e-mail"></label>
+<label style="display: block; margin-top: 14px;"><span class="lab">Mot de passe</span><input class="in" type="password" value="{{cMdp}}" onChange="{{ecrireCMdp}}" aria-label="Mot de passe"></label>
+<button onClick="{{trousseau}}" style="margin-top: 12px; width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 14px; border-radius: 16px; background: #1B3338;"><span class="av" style="width: 34px; height: 34px; font-size: 12px;">NK</span><span style="flex: 1;"><b style="display: block; font-size: 14px;">n.kalala@baobabfintech.cd</b><span class="meta">Mot de passe enregistré sur ce téléphone</span></span></button>
+<sc-if value="{{errConn}}" hint-placeholder-val="{{ false }}"><p class="erreur">Entrez votre e-mail et votre mot de passe.</p></sc-if>
+<div style="margin-top: 20px;">
+<sc-if value="{{connOk}}" hint-placeholder-val="{{ false }}"><a href="Recruteur-fil.dc.html" class="bp">Se connecter</a></sc-if>
+<sc-if value="{{connPas}}" hint-placeholder-val="{{ true }}"><button onClick="{{refuserConn}}" class="bp" style="opacity: .45;">Se connecter</button></sc-if>
+</div>
+<div style="display: flex; justify-content: space-between; margin-top: 12px;"><button onClick="{{versOubli}}" class="lien" style="color: #F2EDE5;">Mot de passe oublié ?</button><button onClick="{{versInscription}}" class="lien">Créer un compte</button></div>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ MOT DE PASSE OUBLIÉ ============ -->
+<sc-if value="{{vOubli}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" class="pg scroll">
+<div class="barreh"><button onClick="{{versConnexion}}" class="retour" aria-label="Retour"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></button></div>
+<div style="padding: 4px 20px 0;">
+<sc-if value="{{oPas}}" hint-placeholder-val="{{ true }}"><div>
+<h1 class="h1">Mot de passe oublié</h1>
+<p class="sous">Nous vous envoyons un lien pour en choisir un nouveau.</p>
+<label style="display: block; margin-top: 28px;"><span class="lab">Adresse e-mail</span><input class="in" type="email" value="{{oEmail}}" onChange="{{ecrireOEmail}}" placeholder="prenom.nom@entreprise.cd" aria-label="Adresse e-mail"></label>
+<sc-if value="{{errOubli}}" hint-placeholder-val="{{ false }}"><p class="erreur">Entrez l’adresse de votre compte.</p></sc-if>
+<button onClick="{{envoyerLien}}" class="bp" style="margin-top: 18px;">Envoyer le lien</button>
+</div></sc-if>
+<sc-if value="{{oEnvoye}}" hint-placeholder-val="{{ false }}"><div style="padding-top: 60px; text-align: center;">
+<span style="width: 76px; height: 76px; margin: 0 auto; border-radius: 50%; background: rgba(166,242,107,.14); color: #A6F26B; display: flex; align-items: center; justify-content: center;"><svg width="34" height="34" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"></path></svg></span>
+<h1 class="h1" style="margin-top: 22px;">Lien envoyé</h1>
+<p class="sous">Ouvrez le message envoyé à <b style="color: #F2EDE5;">{{oEmailAff}}</b> depuis ce téléphone. Le lien reste valable 30 minutes.</p>
+<button onClick="{{versConnexion}}" class="bp" style="margin-top: 30px;">Revenir à la connexion</button>
+<button onClick="{{renvoyerLien}}" class="lien" style="margin-top: 10px;">Renvoyer le lien</button>
+</div></sc-if>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ DÉTAILS DU PROFIL ============ -->
+<sc-if value="{{vProfil}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0;">
+<div class="barreh" style="gap: 10px; padding-right: 20px;"><button onClick="{{precedent}}" class="retour" aria-label="Étape précédente"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 5 8 12l7 7"></path></svg></button>
+<div style="flex: 1; display: flex; gap: 5px;"><sc-for list="{{barres}}" as="b" hint-placeholder-count="7"><span style="flex: 1; height: 4px; border-radius: 2px; background: {{b.bg}}; transition: background .3s;"></span></sc-for></div>
+</div>
+<div class="scroll" style="position: absolute; left: 0; right: 0; top: 94px; bottom: 0; overflow-y: auto; padding: 14px 20px 150px;">
+<p class="meta">{{etapeT}}</p>
+
+<sc-if value="{{e1}}" hint-placeholder-val="{{ true }}"><div style="animation: entre .35s ease-out both;">
+<div style="display: flex; align-items: center; gap: 18px; margin-top: 14px;">
+<sc-if value="{{sansPhoto}}" hint-placeholder-val="{{ true }}"><button onClick="{{prendrePhoto}}" aria-label="Ajouter une photo" style="width: 104px; height: 104px; border-radius: 50%; border: 2px dashed rgba(255,255,255,.25); background: #13282C; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; flex: none;"><span style="font-size: 28px; font-weight: 700; color: #8FA39E;">{{ini}}</span><span style="font-size: 12px; font-weight: 700; color: #A6F26B;">Photo</span></button></sc-if>
+<sc-if value="{{aPhoto}}" hint-placeholder-val="{{ false }}"><button onClick="{{prendrePhoto}}" aria-label="Changer la photo" style="width: 104px; height: 104px; border-radius: 50%; flex: none; box-shadow: 0 0 0 4px #0B1A1F, 0 0 0 6px #A6F26B; overflow: hidden;"><svg width="104" height="104" viewBox="0 0 100 100" aria-hidden="true" style="display: block; border-radius: 50%;"><rect width="100" height="100" fill="#F4C9A0"></rect><circle cx="50" cy="40" r="25" fill="#2A1A12"></circle><ellipse cx="50" cy="46" rx="16" ry="19" fill="#8A5A3B"></ellipse><path d="M34 40c2-13 30-15 32 0-4-6-12-9-16-9s-12 3-16 9z" fill="#2A1A12"></path><path d="M18 100c4-20 18-28 32-28s28 8 32 28z" fill="#0F3F37"></path><path d="M42 72l8 10 8-10" fill="none" stroke="#A6F26B" stroke-width="3"></path></svg></button></sc-if>
+<div><h1 class="h1" style="font-size: 25px;">Bonjour, présentez-vous</h1><p class="meta" style="margin-top: 6px; line-height: 1.45;">Les talents voient qui recrute. Un visage inspire confiance.</p></div>
+</div>
+<sc-if value="{{viaFour}}" hint-placeholder-val="{{ false }}"><p style="margin-top: 16px; font-size: 13.5px; color: #5FE0B8;">Repris de votre compte {{fourT}}. Vous pouvez le corriger.</p></sc-if>
+<div style="display: flex; gap: 10px; margin-top: 24px;">
+<label style="flex: 1; min-width: 0;"><span class="lab">Prénom</span><input class="in" value="{{prenom}}" onChange="{{ecrirePrenom}}" aria-label="Prénom" placeholder="Nadia"></label>
+<label style="flex: 1; min-width: 0;"><span class="lab">Nom</span><input class="in" value="{{nom}}" onChange="{{ecrireNom}}" aria-label="Nom" placeholder="Kalala"></label>
+</div>
+<sc-if value="{{aPhoto}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 18px; display: flex; align-items: flex-start; gap: 10px; padding: 12px 14px; border-radius: 16px; background: #0F2A2A; border: 1px solid rgba(47,211,166,.35);"><svg width="28" height="28" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="font-size: 13.5px; line-height: 1.45;">Photo vérifiée : visage net, fond sobre.</span><button onClick="{{retirerPhoto}}" style="margin-left: auto; font-size: 13px; font-weight: 700; color: #FFB4A8; flex: none;">Retirer</button></div></sc-if>
+</div></sc-if>
+
+<sc-if value="{{e2}}" hint-placeholder-val="{{ false }}"><div style="animation: entre .35s ease-out both;">
+<button onClick="{{ouvrirPays}}" style="display: block; width: 100%; margin-top: 12px; border-radius: 24px; overflow: hidden; border: 1px solid rgba(255,255,255,.14); background: #13282C; text-align: left;">
+<span style="display: block; height: 110px; background: {{paysFlag}}; position: relative;"><span style="position: absolute; right: 14px; top: 14px; height: 32px; padding: 0 12px; border-radius: 16px; background: rgba(11,26,31,.75); color: #F2EDE5; font-size: 13px; font-weight: 700; display: flex; align-items: center;">Changer</span></span>
+<span style="display: block; padding: 14px 16px;"><span class="meta">Vous êtes basée en</span><b style="display: block; font-size: 22px; margin-top: 2px;">{{paysT}}</b></span></button>
+<h1 class="h1" style="font-size: 23px; margin-top: 26px;">Dans quelle ville ?</h1>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 14px;"><sc-for list="{{villes}}" as="v" hint-placeholder-count="6"><button onClick="{{v.pick}}" class="chip" style="border: 1px solid {{v.bd}}; background: {{v.bg}}; color: {{v.col}};">{{v.t}}</button></sc-for>
+<button onClick="{{autreVille}}" class="chip" style="border: 1px dashed rgba(255,255,255,.3); color: #B9CBC6;">Autre ville</button></div>
+<sc-if value="{{villeLibre}}" hint-placeholder-val="{{ false }}"><input class="in" value="{{ville}}" onChange="{{ecrireVille}}" aria-label="Votre ville" placeholder="Nom de votre ville" style="margin-top: 12px;"></sc-if>
+<sc-if value="{{aVille}}" hint-placeholder-val="{{ true }}"><div><span class="lab" style="margin-top: 24px;">Vous recrutez aussi à</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{autresVilles}}" as="v" hint-placeholder-count="5"><button onClick="{{v.pick}}" class="chip" style="height: 36px; font-size: 13.5px; border: 1px solid {{v.bd}}; background: {{v.bg}}; color: {{v.col}}; font-weight: 600;">{{v.sym}}{{v.t}}</button></sc-for></div></div></sc-if>
+</div></sc-if>
+
+<sc-if value="{{e3}}" hint-placeholder-val="{{ false }}"><div style="animation: entre .35s ease-out both;">
+<h1 class="h1" style="margin-top: 8px;">Comment vous joindre ?</h1>
+<p class="sous">L’e-mail professionnel confirme votre entreprise. Le reste est facultatif.</p>
+<div style="margin-top: 22px; border-radius: 22px; background: #13282C; border: 1px solid rgba(255,255,255,.08); overflow: hidden;">
+<label style="display: block; padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.07);"><span class="meta" style="display: flex; align-items: center; gap: 8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16v12H4zM4 7l8 6 8-6"></path></svg>E-mail professionnel · obligatoire</span>
+<input value="{{emailPro}}" onChange="{{ecrireEmailPro}}" type="email" aria-label="E-mail professionnel" placeholder="prenom.nom@entreprise.cd" style="width: 100%; margin-top: 8px; border: 0; outline: 0; background: none; font: inherit; font-size: 16px; color: #F2EDE5;"></label>
+<sc-if value="{{estPro}}" hint-placeholder-val="{{ true }}"><p style="padding: 10px 16px; font-size: 12.5px; color: #A6F26B; border-bottom: 1px solid rgba(255,255,255,.07);">Domaine {{domainePro}} : il servira à valider votre entreprise.</p></sc-if>
+<sc-if value="{{estPerso}}" hint-placeholder-val="{{ false }}"><p style="padding: 10px 16px; font-size: 12.5px; color: #F4C463; border-bottom: 1px solid rgba(255,255,255,.07);">Adresse personnelle : votre entreprise devra vous valider à la main.</p></sc-if>
+<div style="padding: 14px 16px; border-bottom: 1px solid rgba(255,255,255,.07);"><span class="meta" style="display: flex; align-items: center; gap: 8px;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6.5 3.5h3l1.5 4-2 1.2a11 11 0 0 0 5.3 5.3l1.2-2 4 1.5v3a2 2 0 0 1-2 2A15 15 0 0 1 4.5 5.5a2 2 0 0 1 2-2z"></path></svg>Téléphone · facultatif</span>
+<div style="display: flex; align-items: center; gap: 10px; margin-top: 8px;">
+<button onClick="{{ouvrirInd}}" aria-label="Choisir l’indicatif : {{indPays}}" style="height: 40px; padding: 0 10px; border-radius: 12px; background: #0B1A1F; display: flex; align-items: center; gap: 8px; font-size: 15px; font-weight: 600; flex: none;"><span class="flag" style="width: 24px; height: 17px; background: {{indFlag}};"></span>{{indT}}<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"></path></svg></button>
+<input value="{{tel}}" onChange="{{ecrireTel}}" inputmode="tel" aria-label="Numéro de téléphone" placeholder="812 345 678" style="flex: 1 1 0; width: 0; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 16px; color: #F2EDE5;"></div>
+<sc-if value="{{telErr}}" hint-placeholder-val="{{ false }}"><p class="erreur" style="margin: 8px 0 0;">Au moins 8 chiffres.</p></sc-if></div>
+<div style="padding: 12px 16px; border-bottom: 1px solid rgba(255,255,255,.07); display: flex; align-items: center; gap: 12px;"><span style="flex: 1; font-size: 14.5px;">Ce numéro est aussi sur WhatsApp</span><button onClick="{{basculerWa}}" role="switch" aria-checked="{{wa}}" aria-label="Numéro sur WhatsApp" style="width: 48px; height: 28px; border-radius: 14px; background: {{waBg}}; position: relative; flex: none;"><span style="position: absolute; left: 4px; top: 4px; width: 20px; height: 20px; border-radius: 50%; background: #0B1A1F; transform: translateX({{waX}}); transition: transform .2s;"></span></button></div>
+<label style="display: block; padding: 14px 16px;"><span class="meta" style="display: flex; align-items: center; gap: 8px;"><span class="fo" style="width: 18px; height: 18px; background: #0A66C2; color: #FFFFFF; font-size: 10px; font-weight: 800; border-radius: 4px;">in</span>LinkedIn · facultatif</span>
+<sc-if value="{{sansLinkedin}}" hint-placeholder-val="{{ true }}"><button onClick="{{importerLinkedin}}" style="margin-top: 10px; height: 40px; padding: 0 14px; border-radius: 20px; background: #0A66C2; color: #FFFFFF; font-size: 13.5px; font-weight: 700;">Relier mon profil LinkedIn</button></sc-if>
+<sc-if value="{{aLinkedin}}" hint-placeholder-val="{{ false }}"><input value="{{linkedin}}" onChange="{{ecrireLinkedin}}" aria-label="Lien LinkedIn" style="width: 100%; margin-top: 8px; border: 0; outline: 0; background: none; font: inherit; font-size: 15px; color: #F2EDE5;"></sc-if></label>
+</div>
+<span class="lab" style="margin-top: 22px;">Qui voit votre téléphone et votre LinkedIn ?</span>
+<div style="display: flex; flex-direction: column; gap: 8px;"><sc-for list="{{visOpts}}" as="v" hint-placeholder-count="3"><button onClick="{{v.pick}}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; border: 1.5px solid {{v.bd}}; background: {{v.bg}};"><span style="width: 20px; height: 20px; border-radius: 50%; border: 2px solid {{v.rb}}; background: {{v.rbg}}; flex: none;"></span><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">{{v.t}}</b><span class="meta">{{v.d}}</span></span></button></sc-for></div>
+</div></sc-if>
+
+<sc-if value="{{e4}}" hint-placeholder-val="{{ false }}"><div style="animation: entre .35s ease-out both;">
+<h1 class="h1" style="margin-top: 8px;">Votre rôle dans le recrutement</h1>
+<div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 22px;">
+<sc-for list="{{roles}}" as="r" hint-placeholder-count="6"><button onClick="{{r.pick}}" style="min-height: 128px; padding: 14px; border-radius: 20px; border: 1.5px solid {{r.bd}}; background: {{r.bg}}; display: flex; flex-direction: column; gap: 10px; transition: all .2s;"><svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="{{r.ic2}}" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="{{r.ic}}"></path></svg><span><b style="display: block; font-size: 14.5px; line-height: 1.3;">{{r.t}}</b><span class="meta" style="display: block; margin-top: 3px; font-size: 12px; line-height: 1.35;">{{r.d}}</span></span></button></sc-for>
+</div>
+<sc-if value="{{aRole}}" hint-placeholder-val="{{ true }}"><div style="margin-top: 22px;">
+<label><span class="lab">Votre poste, tel qu’il s’affichera</span><input class="in" value="{{poste}}" onChange="{{ecrirePoste}}" aria-label="Votre poste" placeholder="Chargée de recrutement"></label>
+<div style="display: flex; flex-wrap: wrap; gap: 8px; margin-top: 10px;"><sc-for list="{{postesSugg}}" as="v" hint-placeholder-count="3"><button onClick="{{v.pick}}" class="chip" style="height: 34px; font-size: 13px; border: 1px solid {{v.bd}}; background: {{v.bg}}; color: {{v.col}};">{{v.t}}</button></sc-for></div>
+</div></sc-if>
+</div></sc-if>
+
+<sc-if value="{{e5}}" hint-placeholder-val="{{ false }}"><div style="animation: entre .35s ease-out both;">
+<h1 class="h1" style="margin-top: 8px;">Pour quelle entreprise recrutez-vous ?</h1>
+<sc-if value="{{sansEnt}}" hint-placeholder-val="{{ true }}"><div>
+<label style="margin-top: 20px; height: 52px; border-radius: 26px; background: #1A2629; display: flex; align-items: center; gap: 12px; padding: 0 16px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB3AE" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4.4-4.4"></path></svg><input value="{{eq}}" onChange="{{ecrireEnt}}" aria-label="Rechercher votre entreprise" placeholder="Nom de l’entreprise" style="flex: 1 1 0; width: 0; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 16px; color: #F2EDE5;"></label>
+<sc-if value="{{eVide}}" hint-placeholder-val="{{ true }}"><div><p class="meta" style="margin: 20px 0 6px;">Déjà sur Jumanly, près de vous</p>
+<sc-for list="{{entSugg}}" as="x" hint-placeholder-count="3"><button onClick="{{x.pick}}" class="ligne"><span style="width: 44px; height: 44px; border-radius: 12px; background: {{x.c}}; color: #FFFFFF; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none;">{{x.ab}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{x.t}}</b><span class="meta">{{x.s}}</span></span></button></sc-for></div></sc-if>
+<sc-if value="{{ePlein}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 8px;">
+<sc-for list="{{resEnt}}" as="x" hint-placeholder-count="1"><button onClick="{{x.pick}}" class="ligne"><span style="width: 44px; height: 44px; border-radius: 12px; background: {{x.c}}; color: #FFFFFF; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none;">{{x.ab}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{x.t}}</b><span class="meta">{{x.s}}</span></span><span class="meta" style="color: #5FE0B8; font-weight: 700;">Sur Jumanly</span></button></sc-for>
+<sc-if value="{{eRien}}" hint-placeholder-val="{{ false }}"><p class="meta" style="padding: 16px 0 4px;">« {{eq}} » n’est pas encore sur Jumanly.</p></sc-if>
+</div></sc-if>
+<button onClick="{{creerPage}}" style="margin-top: 18px; width: 100%; display: flex; align-items: center; gap: 12px; padding: 14px 16px; border-radius: 18px; border: 1px dashed rgba(255,255,255,.28);"><span style="width: 40px; height: 40px; border-radius: 12px; background: #1B3338; color: #A6F26B; display: flex; align-items: center; justify-content: center; font-size: 22px; flex: none;">+</span><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">Mon entreprise n’est pas sur Jumanly</b><span class="meta">Créer sa page, vous en serez l’administratrice</span></span></button>
+<button onClick="{{jeSuisIndep}}" class="lien" style="margin-top: 8px; color: #B9CBC6;">Je recrute en indépendante</button>
+</div></sc-if>
+<sc-if value="{{aEnt}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 20px; border-radius: 24px; overflow: hidden; background: #13282C; border: 1px solid rgba(255,255,255,.12); animation: entre .3s ease-out both;">
+<span style="display: block; height: 84px; background: {{e0.c}}; position: relative; overflow: hidden;"><svg viewBox="0 0 350 84" preserveAspectRatio="xMidYMid slice" style="position: absolute; inset: 0; width: 100%; height: 100%;" aria-hidden="true"><g fill="none" stroke="#FFFFFF" stroke-opacity=".16" stroke-width="18"><circle cx="300" cy="10" r="60"></circle><circle cx="40" cy="90" r="50"></circle></g></svg></span>
+<div style="padding: 0 16px 16px; margin-top: -30px; position: relative;">
+<span style="width: 60px; height: 60px; border-radius: 16px; background: {{e0.c}}; border: 3px solid #13282C; color: #FFFFFF; font-size: 19px; font-weight: 800; display: flex; align-items: center; justify-content: center;">{{e0.ab}}</span>
+<div style="display: flex; align-items: center; gap: 8px; margin-top: 10px;"><b style="font-size: 18px;">{{e0.t}}</b><span class="tag" style="background: {{eeB}}; color: {{eeC}}; font-weight: 700;">{{eeT}}</span></div>
+<p class="meta" style="margin-top: 4px;">{{e0.s}}</p><p class="meta" style="margin-top: 2px;">{{e0.rec}}</p>
+<sc-if value="{{entChoisie}}" hint-placeholder-val="{{ true }}"><div>
+<sc-if value="{{emailCorrespond}}" hint-placeholder-val="{{ true }}"><p style="margin-top: 12px; font-size: 13px; line-height: 1.45; color: #A6F26B;">Votre e-mail {{domainePro}} correspond : validation en général dans la journée.</p></sc-if>
+<sc-if value="{{emailDiff}}" hint-placeholder-val="{{ false }}"><p style="margin-top: 12px; font-size: 13px; line-height: 1.45; color: #F4C463;">Votre e-mail n’est pas en @{{e0.dom}} : l’administrateur vérifiera à la main.</p></sc-if>
+<button onClick="{{demander}}" class="bp" style="margin-top: 14px; height: 48px;">Demander à rejoindre la page</button>
+<p class="meta" style="margin-top: 10px; line-height: 1.5; font-size: 12.5px;">Une fois accepté, le logo de l’entreprise s’affiche sur votre profil et vos offres.</p></div></sc-if>
+<sc-if value="{{entAttente}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 14px; padding: 12px 14px; border-radius: 16px; background: rgba(244,196,99,.08); border: 1px solid rgba(244,196,99,.3);"><b style="display: block; font-size: 14px;">En attente de validation</b><span style="display: block; font-size: 13px; line-height: 1.45; color: #D5DEDB; margin-top: 4px;">Vous pouvez déjà préparer vos offres. Elles seront publiées au nom de l’entreprise après l’accord.</span><button onClick="{{annulerDemande}}" class="lien" style="color: #F2EDE5; min-height: 34px;">Annuler la demande</button></div></sc-if>
+<sc-if value="{{entCreee}}" hint-placeholder-val="{{ false }}"><p style="margin-top: 12px; font-size: 13px; line-height: 1.45; color: #A6F26B;">Vous administrez cette page : vous pourrez inviter votre équipe depuis Compte.</p></sc-if>
+<button onClick="{{changerEnt}}" class="lien" style="color: #B9CBC6; min-height: 34px;">Choisir une autre entreprise</button>
+</div></div></sc-if>
+<sc-if value="{{indep}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 20px; padding: 16px; border-radius: 20px; background: #13282C;"><b style="display: block; font-size: 15px;">Vous recrutez en indépendante</b><p class="meta" style="margin-top: 4px; line-height: 1.5;">Vos offres s’affichent à votre nom. Vous pourrez rejoindre une entreprise plus tard.</p><button onClick="{{changerEnt}}" class="lien" style="color: #F2EDE5;">Choisir plutôt une entreprise</button></div></sc-if>
+</div></sc-if>
+
+<sc-if value="{{e6}}" hint-placeholder-val="{{ false }}"><div style="animation: entre .35s ease-out both;">
+<h1 class="h1" style="margin-top: 8px;">Quels profils recrutez-vous ?</h1>
+<p class="sous">Orbi vous propose ces talents en premier, et votre Fil suit ces domaines.</p>
+<p style="margin: 20px 0 10px; font-size: 13px; font-weight: 700; color: #A6F26B;">{{nDomT}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{doms}}" as="c" hint-placeholder-count="10"><button onClick="{{c.pick}}" class="chip" style="border: 1px solid {{c.bd}}; background: {{c.bg}}; color: {{c.col}}; font-weight: 600; transition: all .15s;">{{c.sym}}{{c.t}}</button></sc-for></div>
+<span class="lab" style="margin-top: 26px;">Niveaux</span>
+<div style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 6px; padding: 4px; border-radius: 18px; background: #0F2226;"><sc-for list="{{nivs}}" as="c" hint-placeholder-count="4"><button onClick="{{c.pick}}" style="height: 42px; border-radius: 14px; background: {{c.bg}}; color: {{c.col}}; font-size: 13.5px; font-weight: 600; text-align: center;">{{c.t}}</button></sc-for></div>
+<span class="lab" style="margin-top: 26px;">Recrutements par an</span>
+<div style="display: flex; gap: 8px;"><sc-for list="{{vols}}" as="c" hint-placeholder-count="3"><button onClick="{{c.pick}}" style="flex: 1; height: 64px; border-radius: 18px; border: 1px solid {{c.bd}}; background: {{c.bg}}; color: {{c.col}}; font-size: 15px; font-weight: 700; text-align: center;">{{c.t}}</button></sc-for></div>
+</div></sc-if>
+
+<sc-if value="{{e7}}" hint-placeholder-val="{{ false }}"><div style="animation: entre .35s ease-out both;">
+<h1 class="h1" style="margin-top: 8px;">Votre profil recruteur</h1>
+<p class="sous">Voici ce que verront les talents.</p>
+<div style="margin-top: 20px; border-radius: 24px; background: #13282C; border: 1px solid rgba(255,255,255,.12); padding: 18px;">
+<div style="display: flex; align-items: center; gap: 14px;">
+<span style="position: relative; width: 64px; height: 64px; flex: none;"><span style="display: block; width: 64px; height: 64px; border-radius: 50%; overflow: hidden;"><svg width="64" height="64" viewBox="0 0 100 100" aria-hidden="true" style="display: block; border-radius: 50%;"><rect width="100" height="100" fill="#F4C9A0"></rect><circle cx="50" cy="40" r="25" fill="#2A1A12"></circle><ellipse cx="50" cy="46" rx="16" ry="19" fill="#8A5A3B"></ellipse><path d="M34 40c2-13 30-15 32 0-4-6-12-9-16-9s-12 3-16 9z" fill="#2A1A12"></path><path d="M18 100c4-20 18-28 32-28s28 8 32 28z" fill="#0F3F37"></path><path d="M42 72l8 10 8-10" fill="none" stroke="#A6F26B" stroke-width="3"></path></svg></span>
+<sc-if value="{{logoVisible}}" hint-placeholder-val="{{ false }}"><span style="position: absolute; right: -4px; bottom: -4px; width: 28px; height: 28px; border-radius: 8px; background: {{logoC}}; border: 2px solid #13282C; color: #FFFFFF; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center;">{{logoAb}}</span></sc-if>
+<sc-if value="{{logoAttente}}" hint-placeholder-val="{{ true }}"><span style="position: absolute; right: -4px; bottom: -4px; width: 28px; height: 28px; border-radius: 8px; background: #33464A; border: 2px dashed #F4C463; color: #F4C463; font-size: 13px; font-weight: 800; display: flex; align-items: center; justify-content: center;">…</span></sc-if></span>
+<span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 17px;">{{nomComplet}}</b><span class="meta" style="display: block;">{{posteAff}} · {{entT}}</span><span class="meta" style="display: block;">{{lieuAff}}</span></span></div>
+<sc-if value="{{aBadge}}" hint-placeholder-val="{{ true }}"><span style="display: inline-flex; align-items: center; gap: 6px; margin-top: 14px; height: 28px; padding: 0 10px; border-radius: 14px; background: rgba(166,242,107,.14); color: #A6F26B; font-size: 12.5px; font-weight: 700;"><i style="width: 7px; height: 7px; border-radius: 50%; background: #A6F26B;"></i>Recrute en ce moment</span></sc-if>
+<p style="font-size: 14.5px; line-height: 1.5; margin-top: 12px;">{{titreAff}}</p>
+<div style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 12px;"><sc-for list="{{domListe}}" as="c" hint-placeholder-count="3"><span class="tag">{{c.t}}</span></sc-for></div>
+</div>
+<label style="display: block; margin-top: 20px;"><span class="lab">Votre phrase d’accroche</span><input class="in" value="{{titreP}}" onChange="{{ecrireTitreP}}" aria-label="Phrase d’accroche" placeholder="Je recrute les talents data de Baobab Fintech"></label>
+<button onClick="{{ouvrirOrbi}}" style="margin-top: 12px; width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; background: #0F2A2A; border: 1px solid rgba(47,211,166,.35);"><svg width="28" height="28" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="flex: 1; font-size: 14px; font-weight: 600;">Orbi propose une accroche</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></button>
+<div style="display: flex; align-items: center; gap: 14px; margin-top: 14px; padding: 14px 16px; border-radius: 18px; background: #13282C;"><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">Afficher « Recrute en ce moment »</b><span class="meta">Les talents peuvent vous suivre</span></span><button onClick="{{basculerBadge}}" role="switch" aria-checked="{{badge}}" aria-label="Afficher Recrute en ce moment" style="width: 48px; height: 28px; border-radius: 14px; background: {{badgeBg}}; position: relative; flex: none;"><span style="position: absolute; left: 4px; top: 4px; width: 20px; height: 20px; border-radius: 50%; background: #0B1A1F; transform: translateX({{badgeX}}); transition: transform .2s;"></span></button></div>
+</div></sc-if>
+</div>
+<div class="bas">
+<sc-if value="{{errEtape}}" hint-placeholder-val="{{ false }}"><p class="erreur" style="margin: 0 4px 10px;">{{errMsg}}</p></sc-if>
+<button onClick="{{suivant}}" class="bp" style="opacity: {{suivOp}};">{{suivT}}</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ NOTIFICATIONS ============ -->
+<sc-if value="{{vNotifs}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" class="pg" style="overflow: hidden;">
+<div style="position: absolute; left: 20px; right: 20px; top: 150px;">
+<div class="flotte" style="--r: -2deg; display: flex; gap: 12px; padding: 14px; border-radius: 22px; background: rgba(27,51,56,.92); border: 1px solid rgba(255,255,255,.1); box-shadow: 0 30px 50px -20px rgba(0,0,0,.8);"><span style="flex: none;"><svg width="40" height="40" viewBox="0 0 120 120" aria-hidden="true" style="display: block; overflow: visible;"><rect width="120" height="120" rx="30" fill="#A6F26B"></rect><g transform="translate(2.25 -4.35) scale(1.1)"><path d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#0F3F37" stroke-width="17" stroke-linecap="round" stroke-dasharray="72"></path><circle cx="70" cy="31" r="11.5" fill="#0F3F37"></circle></g></svg></span><span style="flex: 1;"><span style="display: flex; justify-content: space-between;"><b style="font-size: 14px;">Jumanly</b><span class="meta">maintenant</span></span><span style="display: block; font-size: 14px; line-height: 1.4; margin-top: 3px;">3 nouvelles candidatures pour Analyste de données junior</span></span></div>
+<div class="flotte2" style="--r: 2deg; margin: 14px 18px 0; display: flex; gap: 12px; padding: 14px; border-radius: 22px; background: rgba(27,51,56,.6); border: 1px solid rgba(255,255,255,.06); opacity: .85;"><span style="flex: none;"><svg width="40" height="40" viewBox="0 0 120 120" aria-hidden="true" style="display: block; overflow: visible;"><rect width="120" height="120" rx="30" fill="#A6F26B"></rect><g transform="translate(2.25 -4.35) scale(1.1)"><path d="M70 55 V70 A19 19 0 0 1 33.15 76.50" fill="none" stroke="#0F3F37" stroke-width="17" stroke-linecap="round" stroke-dasharray="72"></path><circle cx="70" cy="31" r="11.5" fill="#0F3F37"></circle></g></svg></span><span style="flex: 1;"><span style="display: flex; justify-content: space-between;"><b style="font-size: 14px;">Jumanly</b><span class="meta">hier</span></span><span style="display: block; font-size: 14px; line-height: 1.4; margin-top: 3px;">Grâce Mbuyi a confirmé l’entretien de jeudi 10 h</span></span></div>
+</div>
+<div style="position: absolute; left: 24px; right: 24px; top: 470px;">
+<h1 class="h1">Ne laissez aucun candidat sans réponse</h1>
+<p class="sous">Une notification pour les nouvelles candidatures, les entretiens et votre équipe. Rien d’autre.</p>
+</div>
+<div style="position: absolute; left: 20px; right: 20px; bottom: 30px; display: flex; flex-direction: column; gap: 10px;">
+<button onClick="{{activer}}" class="bp">Activer les notifications</button>
+<button onClick="{{plusTard}}" class="bs">Plus tard</button>
+</div>
+</div>
+</sc-if>
+
+<!-- ============ PROFIL PRÊT ============ -->
+<sc-if value="{{vPret}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0;">
+<div class="pg scroll" style="padding-bottom: 130px;">
+<span style="position: absolute; left: 50%; top: 40px; width: 460px; height: 460px; margin-left: -230px; border-radius: 50%; background: radial-gradient(circle, rgba(166,242,107,.16) 0, rgba(166,242,107,0) 60%); pointer-events: none;"></span>
+<div style="position: relative; padding: 70px 20px 0; text-align: center;">
+<span style="position: relative; display: block; width: 124px; height: 124px; margin: 0 auto; animation: carre .6s cubic-bezier(.34,1.56,.64,1) both;">
+<svg width="124" height="124" viewBox="0 0 76 76" aria-hidden="true" style="position: absolute; inset: 0; transform: rotate(-90deg);"><circle cx="38" cy="38" r="34" fill="none" stroke="rgba(255,255,255,.1)" stroke-width="3.4"></circle><circle cx="38" cy="38" r="34" fill="none" stroke="#A6F26B" stroke-width="3.4" stroke-linecap="round" stroke-dasharray="{{ringDash}}" style="animation: anneau 1.2s ease-out .3s both;"></circle></svg>
+<span style="position: absolute; left: 11px; top: 11px; width: 102px; height: 102px; border-radius: 50%; overflow: hidden;"><svg width="102" height="102" viewBox="0 0 100 100" aria-hidden="true" style="display: block; border-radius: 50%;"><rect width="100" height="100" fill="#F4C9A0"></rect><circle cx="50" cy="40" r="25" fill="#2A1A12"></circle><ellipse cx="50" cy="46" rx="16" ry="19" fill="#8A5A3B"></ellipse><path d="M34 40c2-13 30-15 32 0-4-6-12-9-16-9s-12 3-16 9z" fill="#2A1A12"></path><path d="M18 100c4-20 18-28 32-28s28 8 32 28z" fill="#0F3F37"></path><path d="M42 72l8 10 8-10" fill="none" stroke="#A6F26B" stroke-width="3"></path></svg></span>
+<sc-if value="{{logoVisible}}" hint-placeholder-val="{{ false }}"><span style="position: absolute; right: 4px; bottom: 4px; width: 36px; height: 36px; border-radius: 10px; background: {{logoC}}; border: 3px solid #0B1A1F; color: #FFFFFF; font-size: 12px; font-weight: 800; display: flex; align-items: center; justify-content: center;">{{logoAb}}</span></sc-if>
+<sc-if value="{{logoAttente}}" hint-placeholder-val="{{ true }}"><span style="position: absolute; right: 4px; bottom: 4px; width: 36px; height: 36px; border-radius: 10px; background: #33464A; border: 2px dashed #F4C463; color: #F4C463; font-size: 15px; font-weight: 800; display: flex; align-items: center; justify-content: center;">…</span></sc-if>
+</span>
+<p style="margin-top: 16px; font-size: 13px; font-weight: 700; color: #A6F26B; animation: mot .5s ease-out .5s both;">Profil recruteur complété à {{pctT}}</p>
+<h1 class="h1" style="margin-top: 8px; animation: mot .5s ease-out .6s both;">Bienvenue, {{prenomAff}}</h1>
+<p class="sous" style="animation: mot .5s ease-out .7s both;">{{posteAff}} · {{entT}}</p>
+<p class="meta" style="margin-top: 6px; animation: mot .5s ease-out .75s both;">{{pretEnt}}</p>
+</div>
+<div style="position: relative; margin: 24px 20px 0; display: flex; align-items: flex-start; gap: 12px; padding: 14px 16px; border-radius: 18px; background: #0F2A2A; border: 1px solid rgba(47,211,166,.35); animation: mot .5s ease-out .95s both;"><svg width="32" height="32" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="flex: 1; font-size: 14px; line-height: 1.45;">Je peux rédiger votre première offre à partir d’un simple intitulé. <a href="Recruteur-publier-1.dc.html" style="font-weight: 700; color: #5FE0B8;">Essayer</a></span></div>
+<p class="meta" style="position: relative; padding: 24px 20px 4px;">Pour bien démarrer</p>
+<div style="position: relative; padding: 0 20px; animation: mot .5s ease-out 1.05s both;">
+<a href="Recruteur-publier-1.dc.html" class="ligne"><span style="flex: 1;"><b style="display: block; font-size: 15px;">Publier une première offre</b><span class="meta">5 étapes, Orbi rédige avec vous</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></a>
+<a href="Recruteur-equipe.dc.html" class="ligne"><span style="flex: 1;"><b style="display: block; font-size: 15px;">Inviter mon équipe</b><span class="meta">Managers et RH, chacun avec son rôle</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></a>
+<a href="Recruteur-talents.dc.html" class="ligne"><span style="flex: 1;"><b style="display: block; font-size: 15px;">Chercher des talents</b><span class="meta">Profils visibles en data, finance et service client</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></a>
+<button onClick="{{modifierProfil}}" class="ligne" style="border: 0;"><span style="flex: 1;"><b style="display: block; font-size: 15px;">Modifier mes réponses</b><span class="meta">{{notifT}}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m9 6 6 6-6 6"></path></svg></button>
+</div>
+</div>
+<div class="bas"><a href="Recruteur-fil.dc.html" class="bp">Entrer dans Jumanly</a></div>
+</div>
+</sc-if>
+
+<!-- ============ FEUILLES ============ -->
+<sc-if value="{{fCompte}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<p style="font-size: 17px; font-weight: 700; padding: 0 4px 6px;">{{fo.titre}}</p>
+<p class="meta" style="padding: 0 4px 8px;">Jumanly reçoit seulement votre nom, votre photo et votre e-mail.</p>
+<sc-for list="{{comptes}}" as="c" hint-placeholder-count="2">
+<sc-if value="{{compteBtn}}" hint-placeholder-val="{{ true }}"><button onClick="{{c.go}}" class="opt"><span class="av">{{c.ini}}</span><span style="flex: 1;">{{c.t}}<small>{{c.s}}</small></span></button></sc-if>
+<sc-if value="{{compteLien}}" hint-placeholder-val="{{ false }}"><a href="{{c.href}}" class="opt"><span class="av">{{c.ini}}</span><span style="flex: 1;">{{c.t}}<small>{{c.s}}</small></span></a></sc-if>
+</sc-for>
+<button onClick="{{autreCompte}}" class="annuler">{{fo.autre}}</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{fLegal}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<p style="font-size: 17px; font-weight: 700; padding: 0 4px 4px;">{{legal.t}}</p>
+<p class="meta" style="padding: 0 4px 10px;">L’essentiel en trois points</p>
+<sc-for list="{{legal.l}}" as="l" hint-placeholder-count="3"><p style="display: flex; gap: 10px; font-size: 14.5px; line-height: 1.5; padding: 8px 4px;"><i style="width: 6px; height: 6px; border-radius: 50%; background: #A6F26B; margin-top: 9px; flex: none;"></i>{{l.t}}</p></sc-for>
+<p class="meta" style="padding: 8px 4px 0;">Questions : assistant@jumanly.io</p>
+<button onClick="{{fermer}}" class="annuler" style="background: #A6F26B; color: #0B1A1F;">J’ai compris</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{fPhoto}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<p style="font-size: 17px; font-weight: 700; padding: 0 4px 6px;">Votre photo</p>
+<button onClick="{{choisirPhoto}}" class="opt"><span style="flex: 1;">Prendre une photo<small>Avec l’appareil photo, de face</small></span></button>
+<button onClick="{{choisirPhoto}}" class="opt"><span style="flex: 1;">Choisir dans la galerie<small>Une photo récente et nette</small></span></button>
+<button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{fPays}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style="top: 70px; display: flex; flex-direction: column; padding-bottom: 0;"><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 10px;"><b style="flex: 1; font-size: 17px; padding-left: 4px;">{{paysTitre}}</b><button onClick="{{fermer}}" aria-label="Fermer" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #8FA39E;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+<label style="margin-top: 8px; height: 50px; border-radius: 25px; background: #0B1A1F; display: flex; align-items: center; gap: 12px; padding: 0 16px; flex: none;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB3AE" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4.4-4.4"></path></svg><input value="{{pq}}" onChange="{{ecrirePays}}" aria-label="Rechercher un pays" placeholder="Rechercher un pays" style="flex: 1 1 0; width: 0; min-width: 0; border: 0; outline: 0; background: none; font: inherit; font-size: 16px; color: #F2EDE5;"></label>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding: 4px 0 30px;">
+<sc-for list="{{listePays}}" as="x" hint-placeholder-count="8">
+<sc-if value="{{x.aTitre}}" hint-placeholder-val="{{ false }}"><p class="meta" style="padding: 18px 4px 4px;">{{x.titre}}</p></sc-if>
+<button onClick="{{x.pick}}" class="opt" style="min-height: 54px;"><span class="flag" style="background: {{x.flag}};"></span><span style="flex: 1;">{{x.t}}</span><span class="meta" style="margin-right: 8px;">{{x.ind}}</span><span style="color: #A6F26B; font-weight: 800;">{{x.sym}}</span></button>
+</sc-for>
+<sc-if value="{{aucunPays}}" hint-placeholder-val="{{ false }}"><p class="meta" style="padding: 24px 4px; text-align: center;">Aucun pays pour « {{pq}} ».</p></sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{fDemande}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 12px;"><span style="width: 44px; height: 44px; border-radius: 12px; background: {{e0.c}}; color: #FFFFFF; font-size: 14px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex: none;">{{e0.ab}}</span><span style="flex: 1;"><b style="display: block; font-size: 17px;">Rejoindre {{e0.t}}</b><span class="meta">{{e0.rec}}</span></span></div>
+<p style="font-size: 14px; line-height: 1.5; color: #D5DEDB; margin-top: 14px;">L’administrateur reçoit votre nom, votre poste ({{posteAff}}) et votre e-mail professionnel.</p>
+<label style="display: block; margin-top: 14px;"><span class="lab">Votre message</span><textarea onChange="{{ecrireMsgDem}}" aria-label="Message à l’administrateur" style="width: 100%; min-height: 92px; border-radius: 16px; background: #0B1A1F; border: 1px solid rgba(255,255,255,.12); padding: 12px 14px; font: inherit; font-size: 14.5px; line-height: 1.45; color: #F2EDE5; outline: 0; resize: none;">{{msgDem}}</textarea></label>
+<button onClick="{{envoyerDemande}}" class="bp" style="margin-top: 14px;">Envoyer la demande</button>
+<button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{fCreer}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style="top: 90px; overflow-y: auto;"><span class="poignee"></span>
+<b style="display: block; font-size: 18px; padding: 0 4px;">Créer la page de l’entreprise</b>
+<div style="display: flex; align-items: center; gap: 14px; margin-top: 16px;">
+<sc-if value="{{nSansLogo}}" hint-placeholder-val="{{ true }}"><button onClick="{{ajouterLogo}}" style="width: 64px; height: 64px; border-radius: 18px; border: 2px dashed rgba(255,255,255,.25); color: #A6F26B; font-size: 12px; font-weight: 700; text-align: center; flex: none;">Logo</button></sc-if>
+<sc-if value="{{nLogo}}" hint-placeholder-val="{{ false }}"><button onClick="{{ajouterLogo}}" style="width: 64px; height: 64px; border-radius: 18px; background: #0F3F37; color: #A6F26B; font-size: 20px; font-weight: 800; text-align: center; flex: none;">✓</button></sc-if>
+<label style="flex: 1; min-width: 0;"><span class="lab">Nom de l’entreprise</span><input class="in" value="{{nouvelle.t}}" onChange="{{ecrireNouv}}" aria-label="Nom de l’entreprise" placeholder="Ex. Kinshasa Logistique"></label></div>
+<span class="lab" style="margin-top: 18px;">Secteur</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{sects}}" as="v" hint-placeholder-count="8"><button onClick="{{v.pick}}" class="chip" style="height: 36px; font-size: 13.5px; border: 1px solid {{v.bd}}; background: {{v.bg}}; color: {{v.col}};">{{v.t}}</button></sc-for></div>
+<span class="lab" style="margin-top: 18px;">Taille</span>
+<div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{tailles}}" as="v" hint-placeholder-count="5"><button onClick="{{v.pick}}" class="chip" style="height: 36px; font-size: 13.5px; border: 1px solid {{v.bd}}; background: {{v.bg}}; color: {{v.col}};">{{v.t}}</button></sc-for></div>
+<p class="meta" style="margin-top: 14px; line-height: 1.5;">Jumanly vérifie la page sous 48 h. Vous pourrez publier dès maintenant.</p>
+<button onClick="{{creerEnt}}" class="bp" style="margin-top: 14px;">Créer la page</button>
+<button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{orbi}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermerOrbi}}" aria-label="Fermer Orbi" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 12px;"><svg width="42" height="42" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="flex: 1;"><b style="display: block; font-size: 17px;">Votre accroche</b><span class="meta">Orbi · trois propositions, vous choisissez</span></span>
+<button onClick="{{fermerOrbi}}" aria-label="Fermer" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #8FA39E;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+<div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;"><sc-for list="{{titresOrbi}}" as="q" hint-placeholder-count="3"><button onClick="{{q.pick}}" class="q" style="line-height: 1.45;">{{q.t}}</button></sc-for></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{fSysteme}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10; display: flex; align-items: center; justify-content: center;">
+<span class="voile" style="pointer-events: none;"></span>
+<div role="alertdialog" aria-label="Autorisation des notifications" style="position: relative; width: 280px; border-radius: 18px; background: rgba(44,56,58,.96); text-align: center; overflow: hidden; animation: carre .35s ease-out both;">
+<p style="padding: 20px 18px 6px; font-size: 16px; font-weight: 700; line-height: 1.35;">« Jumanly » souhaite vous envoyer des notifications</p>
+<p style="padding: 0 18px 18px; font-size: 13px; color: #C9D6D2; line-height: 1.45;">Alertes, sons et pastilles. Modifiable dans les réglages.</p>
+<div style="display: flex; border-top: 1px solid rgba(255,255,255,.12);"><button onClick="{{autoriserNon}}" style="flex: 1; height: 48px; text-align: center; font-size: 15px; color: #8FD3FF;">Refuser</button><button onClick="{{autoriserOui}}" style="flex: 1; height: 48px; text-align: center; font-size: 15px; font-weight: 700; color: #8FD3FF; border-left: 1px solid rgba(255,255,255,.12);">Autoriser</button></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{aToast}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="position: absolute; left: 20px; right: 20px; top: 54px; z-index: 30; padding: 14px 16px; border-radius: 16px; background: #F2EDE5; color: #0B1A1F; font-size: 14px; font-weight: 600; box-shadow: 0 16px 30px -10px rgba(0,0,0,.7);">{{toast}}</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"vue": {"editor": "enum", "options": ["ouverture", "bienvenue", "inscription", "code", "motdepasse", "connexion", "oubli", "profil", "notifs", "pret"], "default": "ouverture"}, "auto": {"editor": "boolean", "default": true}, "court": {"editor": "boolean", "default": false}, "slide": {"editor": "number", "default": 0}, "etape": {"editor": "number", "default": 1}, "rempli": {"editor": "boolean", "default": false}, "feuille": {"editor": "enum", "options": ["aucune", "compte", "legal", "pays", "indicatif", "photo", "demande", "creer", "systeme"], "default": "aucune"}, "entEtat": {"editor": "enum", "options": ["", "choisie", "attente", "acceptee", "creee", "indep"], "default": ""}, "entTexte": {"editor": "boolean", "default": false}, "fournisseur": {"editor": "enum", "options": ["google", "apple", "linkedin"], "default": "google"}, "orbi": {"editor": "boolean", "default": false}, "cvLu": {"editor": "boolean", "default": false}, "envoye": {"editor": "boolean", "default": false}, "capTexte": {"editor": "boolean", "default": false}, "paysTexte": {"editor": "boolean", "default": false}, "$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && !window.__mvtJ) {
+      window.__mvtJ = 1;
+      const R = document.documentElement.style;
+      const pose = (o, s, tx, r) => { R.setProperty('--mvt-o', o); R.setProperty('--mvt-s', s); R.setProperty('--mvt-tx', tx); R.setProperty('--mvt-r', r); };
+      document.addEventListener('pointerdown', (e) => {
+        const b = e.target && e.target.closest && e.target.closest('button, a, [role="button"]');
+        if (!b) return;
+        const ec = b.closest('[data-ecran]') || document.body;
+        const z = ec.getBoundingClientRect(), k = b.getBoundingClientRect();
+        R.setProperty('--mvt-x', Math.round(e.clientX - z.left) + 'px');
+        R.setProperty('--mvt-y', Math.round(e.clientY - z.top) + 'px');
+        const lab = (b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '').slice(0, 40);
+        if (b.querySelector('path[d^="M15 5 8 12"]') || /^\s*retour/i.test(lab)) pose('.6', '1', '-22px', '150%');
+        else if (b.querySelector('circle[fill="#2FD3A6"]') || /orbi/i.test(b.getAttribute('aria-label') || '')) pose('1', '1', '0px', '22px');
+        else if (k.height >= 64 && k.width >= 160) pose('.5', '.92', '0px', '150%');
+        else pose('.4', '.975', '0px', '150%');
+        clearTimeout(window.__mvtT);
+        window.__mvtT = setTimeout(() => { pose('.4', '.975', '0px', '150%'); }, 700);
+      }, true);
+    }
+    const st = this.state || {};
+    const p = this.props || {};
+    const has = (k) => Object.prototype.hasOwnProperty.call(st, k);
+    const S = (o) => this.setState(o);
+    const flash = (t) => { S({ toast: t }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: null }), 2300); };
+    const val = (e) => (e && e.target ? e.target.value : '');
+    const sansAccent = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const oui = (x) => x === true || x === 'true';
+
+    // Nadia Kalala, la recruteuse d’exemple : chargée de recrutement chez Baobab Fintech, Kinshasa
+    const rempli = oui(p.rempli);
+    const D0 = rempli
+      ? { prenom: 'Nadia', nom: 'Kalala', email: 'nadia.kalala@gmail.com', photo: true, pays: 'cd', ville: 'Kinshasa', ailleurs: { Lubumbashi: true },
+          emailPro: 'n.kalala@baobabfintech.cd', tel: '812 345 678', wa: true, linkedin: 'linkedin.com/in/nadiakalala', vis: 'cand',
+          role: 'charge', poste: 'Chargée de recrutement', ent: 'baobab', entEtat: p.entEtat || 'attente', dom: { Data: true, Finance: true, 'Service client': true }, niv: { Junior: true, Stage: true }, vol: '6-20',
+          titreP: 'Je recrute les talents data et service client de Baobab Fintech', badge: true }
+      : { prenom: '', nom: '', email: '', photo: false, pays: 'cd', ville: '', ailleurs: {}, emailPro: '', tel: '', wa: false, linkedin: '', vis: 'cand',
+          role: '', poste: '', ent: '', entEtat: '', dom: {}, niv: {}, vol: '', titreP: '', badge: true };
+    const g = (k) => (has(k) ? st[k] : D0[k]);
+
+    const vue = st.vue ?? p.vue ?? 'ouverture';
+    const auto = p.auto === undefined ? true : oui(p.auto);
+    const court = oui(p.court);
+    const NE = 7;
+    const etape = Math.min(Math.max(Number(st.etape ?? p.etape ?? 1) || 1, 1), NE);
+    const fRaw = has('feuille') ? st.feuille : (p.feuille && p.feuille !== 'aucune' ? p.feuille : null);
+    const fournisseur = st.four ?? p.fournisseur ?? 'google';
+    const mode = st.mode ?? (vue === 'connexion' ? 'connexion' : 'inscription');
+    const fermer = () => S({ feuille: null });
+
+    if (vue === 'ouverture' && !this._tm) {
+      this._tm = setTimeout(() => {
+        this._tm = null;
+        if (auto) this.setState({ vue: 'bienvenue' });
+        else this.setState({ rejoue: !this.state.rejoue });
+      }, auto ? (court ? 1700 : 3900) : (court ? 2600 : 5200));
+    }
+    const rejoue = !!st.rejoue;
+
+    // Bienvenue côté recruteur : publier, trier, recruter
+    const SL = [
+      { mot: 'Publier', t: 'Votre offre en ligne en 5 minutes', d: 'Orbi rédige avec vous. Les talents qui correspondent la voient en premier.' },
+      { mot: 'Trier', t: 'Toutes vos candidatures au même endroit', d: 'Étapes, CV lus par Orbi, notes de l’équipe. Le score explique toujours pourquoi.' },
+      { mot: 'Recruter', t: 'Entretiens, décisions, réponses', d: 'Planifiez, évaluez, répondez à chacun. Vous décidez, Orbi vous aide.' }
+    ];
+    const slide = Math.min(Math.max(Number(st.slide ?? p.slide ?? 0) || 0, 0), 2);
+    const points = SL.map((s, i) => ({ t: 'Écran ' + (i + 1) + ' : ' + s.mot, pick: () => S({ slide: i }), w: i === slide ? '22px' : '7px', bg: i === slide ? '#A6F26B' : 'rgba(255,255,255,.25)' }));
+    const sl = SL[slide];
+
+    // Inscription
+    const email = g('email');
+    const emailOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(email.trim());
+    const err = st.err || '';
+    const FOUR = {
+      google: { t: 'Google', titre: 'Choisissez un compte Google', lignes: [['Nadia Kalala', 'nadia.kalala@gmail.com'], ['Nadia Kalala (travail)', 'n.kalala@baobabfintech.cd']], autre: 'Utiliser un autre compte' },
+      apple: { t: 'Apple', titre: 'Continuer avec Apple', lignes: [['Partager mon e-mail', 'nadia.kalala@icloud.com'], ['Masquer mon e-mail', 'Apple crée une adresse relais privée']], autre: 'Annuler' },
+      linkedin: { t: 'LinkedIn', titre: 'Autoriser Jumanly sur LinkedIn', lignes: [['Nadia Kalala', 'Nom, photo et e-mail seulement'], ['Nadia Kalala + poste actuel', 'Importe aussi « Chargée de recrutement · Baobab Fintech »']], autre: 'Annuler' }
+    };
+    const fo = FOUR[fournisseur] || FOUR.google;
+    const ouvrirFour = (k) => () => S({ feuille: 'compte', four: k, mode });
+    const viaFour = (i) => () => {
+      const l = fo.lignes[i][1];
+      const mail = l.includes('@') ? l : (fournisseur === 'apple' ? 'x7k2p9@privaterelay.appleid.com' : 'nadia.kalala@gmail.com');
+      const pro = mail.endsWith('.cd') && mail.includes('baobab');
+      const li = fournisseur === 'linkedin' && i === 1;
+      S({ feuille: null, email: mail, prenom: 'Nadia', nom: 'Kalala', photo: fournisseur !== 'apple', viaFour: true, vue: 'profil', etape: 1, err: '',
+        ...(pro ? { emailPro: mail } : {}), ...(li ? { poste: 'Chargée de recrutement', role: 'charge', linkedin: 'linkedin.com/in/nadiakalala' } : {}) });
+    };
+    const comptes = fo.lignes.map(([t, s], i) => ({ t, s, ini: 'NK', go: viaFour(i), aLien: mode === 'connexion', href: 'Recruteur-fil.dc.html' }));
+    const continuerEmail = () => { if (!emailOk) { S({ err: 'email' }); return; } S({ vue: 'code', code: '', err: '', viaFour: false }); };
+
+    const code = String(st.code ?? (vue === 'code' && rempli ? '4829' : '')).replace(/\D/g, '').slice(0, 6);
+    const cases = [0, 1, 2, 3, 4, 5].map((i) => ({ c: code[i] || '', bd: i === code.length ? '#A6F26B' : (code[i] ? 'rgba(255,255,255,.35)' : 'rgba(255,255,255,.14)') }));
+    const verifier = () => { if (code.length < 6) { S({ err: 'code' }); return; } S({ vue: 'motdepasse', err: '' }); };
+
+    const mdp = st.mdp ?? (rempli && vue === 'motdepasse' ? 'Baobab2026' : '');
+    const voirMdp = !!st.voirMdp;
+    const R = [['8 caractères au moins', mdp.length >= 8], ['Une majuscule', /[A-Z]/.test(mdp)], ['Un chiffre', /\d/.test(mdp)]];
+    const mdpOk = R.every((r) => r[1]);
+    const regles = R.map(([t, ok]) => ({ t, sym: ok ? '✓' : '', col: ok ? '#A6F26B' : '#8FA39E', bd: ok ? '#A6F26B' : 'rgba(255,255,255,.25)', bg: ok ? 'rgba(166,242,107,.14)' : 'transparent' }));
+    const validerMdp = () => { if (!mdpOk) { S({ err: 'mdp' }); return; } S({ vue: 'profil', etape: 1, err: '' }); };
+
+    const cEmail = st.cEmail ?? '';
+    const cMdp = st.cMdp ?? '';
+    const connOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(cEmail.trim()) && cMdp.length >= 6;
+    const oEmail = st.oEmail ?? '';
+    const oEnvoye = !!st.oEnvoye || (oui(p.envoye) && !has('oEnvoye'));
+
+    // ===== Profil recruteur en 7 étapes =====
+    const prenom = g('prenom'), nom = g('nom');
+    const photo = g('photo');
+    const PAYS = [
+      ['cd', 'RD Congo', 'Votre pays', 'linear-gradient(150deg, #007FFF 0 40%, #F7D618 40% 44%, #CE1021 44% 56%, #F7D618 56% 60%, #007FFF 60%)', ['Kinshasa', 'Lubumbashi', 'Goma', 'Kisangani', 'Bukavu', 'Matadi'], '+243'],
+      ['cg', 'Congo-Brazzaville', 'Afrique centrale', 'linear-gradient(135deg, #009543 0 42%, #FBDE4A 42% 58%, #DC241F 58%)', ['Brazzaville', 'Pointe-Noire', 'Dolisie'], '+242'],
+      ['cm', 'Cameroun', 'Afrique centrale', 'linear-gradient(90deg, #007A5E 0 33.3%, #CE1126 33.3% 66.6%, #FCD116 66.6%)', ['Douala', 'Yaoundé', 'Bafoussam'], '+237'],
+      ['ga', 'Gabon', 'Afrique centrale', 'linear-gradient(180deg, #009E60 0 33.3%, #FCD116 33.3% 66.6%, #3A75C4 66.6%)', ['Libreville', 'Port-Gentil', 'Franceville'], '+241'],
+      ['rw', 'Rwanda', 'Afrique centrale', 'linear-gradient(180deg, #00A1DE 0 50%, #FAD201 50% 75%, #20603D 75%)', ['Kigali', 'Huye', 'Musanze'], '+250'],
+      ['ci', 'Côte d’Ivoire', 'Afrique de l’Ouest', 'linear-gradient(90deg, #F77F00 0 33.3%, #FFFFFF 33.3% 66.6%, #009E60 66.6%)', ['Abidjan', 'Bouaké', 'Yamoussoukro'], '+225'],
+      ['sn', 'Sénégal', 'Afrique de l’Ouest', 'linear-gradient(90deg, #00853F 0 33.3%, #FDEF42 33.3% 66.6%, #E31B23 66.6%)', ['Dakar', 'Thiès', 'Saint-Louis'], '+221'],
+      ['ml', 'Mali', 'Afrique de l’Ouest', 'linear-gradient(90deg, #14B53A 0 33.3%, #FCD116 33.3% 66.6%, #CE1126 66.6%)', ['Bamako', 'Sikasso', 'Ségou'], '+223'],
+      ['be', 'Belgique', 'Hors d’Afrique', 'linear-gradient(90deg, #111111 0 33.3%, #FDDA24 33.3% 66.6%, #EF3340 66.6%)', ['Bruxelles', 'Liège', 'Anvers'], '+32'],
+      ['fr', 'France', 'Hors d’Afrique', 'linear-gradient(90deg, #002395 0 33.3%, #FFFFFF 33.3% 66.6%, #ED2939 66.6%)', ['Paris', 'Lyon', 'Marseille'], '+33'],
+      ['ca', 'Canada', 'Hors d’Afrique', 'linear-gradient(90deg, #D52B1E 0 25%, #FFFFFF 25% 75%, #D52B1E 75%)', ['Montréal', 'Ottawa', 'Toronto'], '+1']
+    ];
+    const paysK = g('pays');
+    const pa = PAYS.find((x) => x[0] === paysK) || PAYS[0];
+    // l’indicatif peut venir d’un autre pays que celui de la ville (numéro étranger)
+    const indK = st.ind ?? paysK;
+    const ind = PAYS.find((x) => x[0] === indK) || pa;
+    const ville = g('ville');
+    const villeLibre = !!st.villeLibre;
+    const villes = pa[4].map((v) => ({ t: v, pick: () => S({ ville: v, villeLibre: false, err: '' }), bg: v === ville ? '#F2EDE5' : 'transparent', col: v === ville ? '#0B1A1F' : '#F2EDE5', bd: v === ville ? '#F2EDE5' : 'rgba(255,255,255,.28)' }));
+    const ailleurs = g('ailleurs');
+    const autresVilles = pa[4].filter((v) => v !== ville).map((v) => { const a = !!ailleurs[v]; return { t: v, pick: () => S({ ailleurs: { ...ailleurs, [v]: !a } }), sym: a ? '✓ ' : '+ ', bg: a ? '#A6F26B' : 'transparent', col: a ? '#0B1A1F' : '#F2EDE5', bd: a ? '#A6F26B' : 'rgba(255,255,255,.28)' }; });
+    const pq = st.pq ?? (oui(p.paysTexte) ? 'ca' : '');
+    const pqs = sansAccent(pq);
+    const pourInd = st.pourInd ?? (p.feuille === 'indicatif');
+    let derniereZone = '';
+    const listePays = PAYS.filter((x) => !pqs || sansAccent(x[1]).includes(pqs)).map((x) => {
+      const titre = !pqs && x[2] !== derniereZone ? x[2] : '';
+      derniereZone = x[2];
+      const actif = pourInd ? x[0] === indK : x[0] === paysK;
+      return { t: x[1], flag: x[3], ind: x[5], aTitre: !!titre, titre, sym: actif ? '✓' : '',
+        pick: () => (pourInd ? S({ ind: x[0], feuille: null, pq: '' }) : S({ pays: x[0], ind: x[0], ville: '', ailleurs: {}, feuille: null, pq: '' })) };
+    });
+
+    // Contacts
+    const emailPro = g('emailPro'), tel = g('tel'), wa = g('wa'), linkedin = g('linkedin'), vis = g('vis');
+    const emailProOk = /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(String(emailPro).trim());
+    const domainePro = emailProOk ? String(emailPro).split('@')[1] : '';
+    const estPerso = /gmail|yahoo|hotmail|outlook|icloud/.test(domainePro);
+    const telChiffres = String(tel).replace(/\D/g, '');
+    const telOk = telChiffres.length === 0 || telChiffres.length >= 8;
+    const VIS = [['personne', 'Personne', 'Vos contacts restent privés'], ['cand', 'Candidats en entretien', 'Seulement ceux que vous invitez'], ['cx', 'Mes connexions', 'Les personnes connectées avec vous']];
+    const visOpts = VIS.map(([k, t, d]) => ({ t, d, pick: () => S({ vis: k }), bd: k === vis ? '#A6F26B' : 'rgba(255,255,255,.12)', bg: k === vis ? 'rgba(166,242,107,.08)' : 'transparent', rb: k === vis ? '#A6F26B' : 'rgba(255,255,255,.3)', rbg: k === vis ? '#A6F26B' : 'transparent' }));
+    const visT = (VIS.find((x) => x[0] === vis) || VIS[0])[1];
+
+    // Rôle
+    const ROLES = [
+      ['charge', 'Chargé·e de recrutement', 'Je gère les offres et les candidats', 'M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.3M21.5 20a6.5 6.5 0 0 0-3.8-5.9'],
+      ['rh', 'Responsable RH', 'Je pilote le recrutement et l’équipe', 'M4 20V9l8-5 8 5v11M9 20v-6h6v6'],
+      ['manager', 'Manager qui recrute', 'Je recrute pour mon équipe', 'M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8L3.6 9.6l5.8-.8z'],
+      ['dirigeant', 'Dirigeant·e', 'Je dirige l’entreprise', 'M4 19h16M6 19V9l6-4 6 4v10M10 19v-5h4v5'],
+      ['cabinet', 'Cabinet de recrutement', 'Je recrute pour des clients', 'M3.5 8.5a1.5 1.5 0 0 1 1.5-1.5h14a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5zM8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7'],
+      ['indep', 'Indépendant·e', 'Je recrute à mon compte', 'M12 12a4 4 0 1 0 0-8 4 4 0 0 0 0 8zM5 20a7 7 0 0 1 14 0']
+    ];
+    const role = g('role');
+    const POSTE_SUGG = { charge: ['Chargée de recrutement', 'Talent acquisition', 'Recruteuse'], rh: ['Responsable RH', 'DRH', 'Responsable du personnel'], manager: ['Responsable data', 'Chef d’équipe', 'Directrice commerciale'], dirigeant: ['Directrice générale', 'Fondatrice', 'Gérante'], cabinet: ['Consultante en recrutement', 'Associée', 'Chasseuse de têtes'], indep: ['Recruteuse indépendante', 'Consultante RH'] };
+    const roles = ROLES.map(([k, t, d, ic]) => ({ t, d, ic, pick: () => S({ role: k, poste: has('poste') && st.poste ? st.poste : (POSTE_SUGG[k] || [''])[0], err: '' }),
+      bd: k === role ? '#A6F26B' : 'rgba(255,255,255,.1)', bg: k === role ? 'rgba(166,242,107,.1)' : '#13282C', ic2: k === role ? '#A6F26B' : '#8FA39E' }));
+    const poste = g('poste');
+    const postesSugg = (POSTE_SUGG[role] || []).map((t) => ({ t, pick: () => S({ poste: t }), bg: t === poste ? '#F2EDE5' : 'transparent', col: t === poste ? '#0B1A1F' : '#F2EDE5', bd: t === poste ? '#F2EDE5' : 'rgba(255,255,255,.28)' }));
+    const roleT = (ROLES.find((x) => x[0] === role) || ['', ''])[1];
+
+    // Entreprise : sur Jumanly ou non
+    const ENTS = [
+      { k: 'baobab', t: 'Baobab Fintech', ab: 'BF', c: '#14745F', s: 'Fintech · Kinshasa · 51 à 200 personnes', rec: 'Joseph Ilunga (RH) gère la page · 3 recruteurs', dom: 'baobabfintech.cd', offres: 8 },
+      { k: 'fleuve', t: 'Fleuve Banque', ab: 'FB', c: '#1E4E79', s: 'Banque · Kinshasa · plus de 500 personnes', rec: '5 recruteurs', dom: 'fleuvebanque.cd', offres: 5 },
+      { k: 'mwinda', t: 'Mwinda Énergie', ab: 'ME', c: '#B07A12', s: 'Énergie · Kinshasa · 201 à 500 personnes', rec: '2 recruteurs', dom: 'mwinda.cd', offres: 3 },
+      { k: 'lisanga', t: 'Lisanga Santé', ab: 'LS', c: '#8A2D2D', s: 'Santé · Kinshasa · 51 à 200 personnes', rec: '1 recruteur', dom: 'lisanga.cd', offres: 2 },
+      { k: 'kivu', t: 'Kivu Data Lab', ab: 'KD', c: '#4B2D7A', s: 'Data · Goma · 11 à 50 personnes', rec: '1 recruteur', dom: 'kivudata.cd', offres: 4 }
+    ];
+    const entK = g('ent');
+    const entEtat = g('entEtat'); // '', 'choisie', 'attente', 'acceptee', 'creee', 'indep'
+    const nouvelle = st.nouvelle || { t: '', sect: 'Fintech', taille: '11 à 50', logo: false };
+    const e0 = entEtat === 'creee' ? { k: 'nouvelle', t: nouvelle.t || 'Ma société', ab: (nouvelle.t || 'MS').split(' ').map((m) => m[0]).join('').slice(0, 2).toUpperCase(), c: '#0F3F37', s: `${nouvelle.sect} · ${ville || 'Kinshasa'} · ${nouvelle.taille} personnes`, rec: 'Vous gérez la page', dom: '', offres: 0 }
+      : (ENTS.find((x) => x.k === entK) || null);
+    const eq = st.eq ?? (oui(p.entTexte) ? 'bao' : '');
+    const eqs = sansAccent(eq);
+    const resEnt = ENTS.filter((x) => eqs && sansAccent(x.t).includes(eqs)).map((x) => ({ ...x, pick: () => S({ ent: x.k, entEtat: 'choisie', eq: '', err: '' }) }));
+    const entSugg = ENTS.slice(0, 3).map((x) => ({ ...x, pick: () => S({ ent: x.k, entEtat: 'choisie', eq: '', err: '' }) }));
+    const emailCorrespond = !!e0 && !!e0.dom && domainePro === e0.dom;
+    const msgDemande = st.msgDem ?? 'Bonjour Joseph, je rejoins l’équipe recrutement de Baobab Fintech. Pouvez-vous valider mon rattachement ?';
+    const envoyerDemande = () => { S({ entEtat: 'attente', feuille: null }); flash('Demande envoyée à ' + (e0 && e0.k === 'baobab' ? 'Joseph Ilunga' : 'l’administrateur de la page')); };
+    const SECT = ['Fintech', 'Banque', 'Énergie', 'Santé', 'Commerce', 'Télécoms', 'ONG', 'Autre'];
+    const TAILLE = ['1 à 10', '11 à 50', '51 à 200', '201 à 500', 'plus de 500'];
+    const sects = SECT.map((t) => ({ t, pick: () => S({ nouvelle: { ...nouvelle, sect: t } }), bg: t === nouvelle.sect ? '#F2EDE5' : 'transparent', col: t === nouvelle.sect ? '#0B1A1F' : '#F2EDE5', bd: t === nouvelle.sect ? '#F2EDE5' : 'rgba(255,255,255,.28)' }));
+    const tailles = TAILLE.map((t) => ({ t, pick: () => S({ nouvelle: { ...nouvelle, taille: t } }), bg: t === nouvelle.taille ? '#F2EDE5' : 'transparent', col: t === nouvelle.taille ? '#0B1A1F' : '#F2EDE5', bd: t === nouvelle.taille ? '#F2EDE5' : 'rgba(255,255,255,.28)' }));
+    const creerEnt = () => { if (nouvelle.t.trim().length < 2) { flash('Écrivez le nom de l’entreprise'); return; } S({ entEtat: 'creee', feuille: null, ent: 'nouvelle' }); flash('Page « ' + nouvelle.t.trim() + ' » créée : vous en êtes l’administratrice'); };
+    const ENT_ETAT = {
+      choisie: ['Sur Jumanly', '#5FE0B8', 'rgba(47,211,166,.12)'], attente: ['Demande envoyée', '#F4C463', 'rgba(244,196,99,.14)'],
+      acceptee: ['Rattachement accepté', '#A6F26B', 'rgba(166,242,107,.14)'], creee: ['Page créée par vous', '#A6F26B', 'rgba(166,242,107,.14)']
+    };
+    const ee = ENT_ETAT[entEtat] || ENT_ETAT.choisie;
+    const logoVisible = entEtat === 'acceptee' || entEtat === 'creee';
+
+    // Ce que vous recrutez
+    const DOMS = ['Data', 'Finance', 'Service client', 'Tech', 'Commercial', 'Marketing', 'RH', 'Juridique', 'Logistique', 'Santé'];
+    const dom = g('dom');
+    const doms = DOMS.map((t) => { const a = !!dom[t]; return { t, pick: () => S({ dom: { ...dom, [t]: !a }, err: '' }), sym: a ? '✓ ' : '+ ', bg: a ? '#A6F26B' : 'transparent', col: a ? '#0B1A1F' : '#F2EDE5', bd: a ? '#A6F26B' : 'rgba(255,255,255,.28)' }; });
+    const nDom = Object.keys(dom).filter((k) => dom[k]).length;
+    const NIV = ['Stage', 'Junior', 'Confirmé', 'Cadre'];
+    const niv = g('niv');
+    const nivs = NIV.map((t) => { const a = !!niv[t]; return { t, pick: () => S({ niv: { ...niv, [t]: !a } }), bg: a ? '#F2EDE5' : '#13282C', col: a ? '#0B1A1F' : '#F2EDE5' }; });
+    const VOL = [['1-5', '1 à 5'], ['6-20', '6 à 20'], ['20+', 'plus de 20']];
+    const vol = g('vol');
+    const vols = VOL.map(([k, t]) => ({ t, pick: () => S({ vol: k }), bg: k === vol ? '#A6F26B' : 'transparent', col: k === vol ? '#0B1A1F' : '#F2EDE5', bd: k === vol ? '#A6F26B' : 'rgba(255,255,255,.2)' }));
+
+    // Profil recruteur (aperçu)
+    const titreP = g('titreP');
+    const badge = g('badge');
+    const domListe = Object.keys(dom).filter((k) => dom[k]).map((t) => ({ t }));
+    const titreAuto = 'Je recrute ' + (nDom ? 'en ' + Object.keys(dom).filter((k) => dom[k]).slice(0, 2).join(' et ').toLowerCase() : 'des talents') + (e0 ? ' pour ' + e0.t : '');
+
+    const ETAPES = [
+      { t: 'Vous', ok: !!prenom.trim() && !!nom.trim(), msg: 'Indiquez votre prénom et votre nom.' },
+      { t: 'Où vous êtes', ok: !!ville, msg: 'Choisissez votre ville.' },
+      { t: 'Vos contacts', ok: emailProOk && telOk, msg: !emailProOk ? 'Indiquez votre e-mail professionnel.' : 'Le numéro doit avoir au moins 8 chiffres, ou laissez-le vide.' },
+      { t: 'Votre rôle', ok: !!role && !!String(poste).trim(), msg: 'Choisissez votre rôle et votre poste.' },
+      { t: 'Votre entreprise', ok: !!entEtat && entEtat !== 'choisie' || entEtat === 'indep', msg: entEtat === 'choisie' ? 'Envoyez la demande de rattachement, ou choisissez une autre option.' : 'Choisissez votre entreprise.' },
+      { t: 'Ce que vous recrutez', ok: nDom >= 1, msg: 'Choisissez au moins un domaine.' },
+      { t: 'Votre profil recruteur', ok: true, msg: '' }
+    ];
+    const et = ETAPES[etape - 1];
+    const barres = ETAPES.map((x, i) => ({ bg: i < etape ? '#A6F26B' : 'rgba(255,255,255,.14)' }));
+    const suivant = () => {
+      if (!et.ok) { S({ err: 'etape' }); return; }
+      if (etape === 7 && !String(titreP).trim()) S({ titreP: titreAuto });
+      if (etape < NE) S({ etape: etape + 1, err: '' }); else S({ vue: 'notifs', err: '' });
+    };
+    const precedent = () => {
+      if (etape > 1) { S({ etape: etape - 1, err: '' }); return; }
+      S({ vue: st.viaFour ? 'inscription' : (has('mdp') ? 'motdepasse' : 'inscription'), err: '' });
+    };
+
+    const pct = 30 + (photo ? 10 : 0) + (emailProOk ? 10 : 0) + (telChiffres.length >= 8 ? 5 : 0) + (linkedin ? 5 : 0) + (logoVisible ? 15 : (entEtat === 'attente' ? 5 : 0)) + (nDom ? 10 : 0) + (String(titreP).trim() ? 10 : 0);
+    const R0 = 2 * Math.PI * 34;
+
+    // Orbi : aide pour le titre du profil
+    const orbi = has('orbi') ? st.orbi : oui(p.orbi);
+    const TITRES = [titreAuto, 'Rejoignez l’équipe Baobab Fintech : data, finance et service client', 'Chargée de recrutement · je réponds à chaque candidature'];
+    const titresOrbi = TITRES.map((t) => ({ t, pick: () => S({ titreP: t, orbi: false }) }));
+
+    const autoriser = (ok) => () => { S({ feuille: null, vue: 'pret', notifOk: ok }); };
+    const entT = e0 ? e0.t : (entEtat === 'indep' ? 'Indépendante' : '');
+
+    return {
+      vOuverture: vue === 'ouverture', vBienvenue: vue === 'bienvenue', vInscription: vue === 'inscription', vCode: vue === 'code', vMdp: vue === 'motdepasse',
+      vConnexion: vue === 'connexion', vOubli: vue === 'oubli', vProfil: vue === 'profil', vNotifs: vue === 'notifs', vPret: vue === 'pret',
+      longA: !court && !rejoue, longB: !court && rejoue, courtA: court && !rejoue, courtB: court && rejoue,
+      points, sl, s0: slide === 0, s1: slide === 1, s2: slide === 2, suivantSlide: () => S({ slide: (slide + 1) % 3 }),
+      versInscription: () => S({ vue: 'inscription', mode: 'inscription', err: '' }), versConnexion: () => S({ vue: 'connexion', mode: 'connexion', err: '' }), versBienvenue: () => S({ vue: 'bienvenue', err: '' }),
+      email, ecrireEmail: (e) => S({ email: val(e), err: '' }), errEmail: err === 'email', continuerEmail, emailOp: emailOk ? '1' : '.45',
+      google: ouvrirFour('google'), apple: ouvrirFour('apple'), linkedin: ouvrirFour('linkedin'),
+      legalCond: () => S({ feuille: 'legal', legal: 'cond' }), legalConf: () => S({ feuille: 'legal', legal: 'conf' }),
+      cases, ecrireCode: (e) => S({ code: val(e).replace(/\D/g, '').slice(0, 6), err: '' }), code, errCode: err === 'code',
+      remplirCode: () => S({ code: '482913', err: '' }), verifier, codeOp: code.length === 6 ? '1' : '.45',
+      renvoyer: () => flash('Nouveau code envoyé à ' + (email || 'votre adresse')), modifierEmail: () => S({ vue: 'inscription', err: '' }), emailAff: email || 'votre adresse',
+      mdp, ecrireMdp: (e) => S({ mdp: val(e), err: '' }), typeMdp: voirMdp ? 'text' : 'password', voirT: voirMdp ? 'Masquer' : 'Afficher',
+      basculerMdp: () => S({ voirMdp: !voirMdp }), regles, errMdp: err === 'mdp', validerMdp, mdpOp: mdpOk ? '1' : '.45',
+      suggererMdp: () => S({ mdp: 'Kin-Bao7-Mvu2', voirMdp: true, err: '' }), retourCode: () => S({ vue: 'code', err: '' }),
+      cEmail, cMdp, ecrireCEmail: (e) => S({ cEmail: val(e), err: '' }), ecrireCMdp: (e) => S({ cMdp: val(e), err: '' }),
+      connOk, connPas: !connOk, refuserConn: () => S({ err: 'conn' }), errConn: err === 'conn',
+      trousseau: () => S({ cEmail: 'n.kalala@baobabfintech.cd', cMdp: 'Baobab2026', err: '' }),
+      versOubli: () => S({ vue: 'oubli', oEmail: cEmail, oEnvoye: false, err: '' }),
+      oEmail, ecrireOEmail: (e) => S({ oEmail: val(e), err: '' }), oEnvoye, oPas: !oEnvoye,
+      envoyerLien: () => { if (!/^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(oEmail.trim())) { S({ err: 'oubli' }); return; } S({ oEnvoye: true, err: '' }); },
+      errOubli: err === 'oubli', oEmailAff: oEmail || 'n.kalala@baobabfintech.cd', renvoyerLien: () => flash('Lien renvoyé à ' + (oEmail || 'votre adresse')),
+      // profil
+      etapeT: 'Étape ' + etape + ' sur ' + NE + ' · ' + et.t, barres, suivant, precedent,
+      errEtape: err === 'etape', errMsg: et.msg || '', suivOp: et.ok ? '1' : '.45', suivT: etape === NE ? 'Terminer' : 'Continuer',
+      e1: etape === 1, e2: etape === 2, e3: etape === 3, e4: etape === 4, e5: etape === 5, e6: etape === 6, e7: etape === 7,
+      prenom, nom, ecrirePrenom: (e) => S({ prenom: val(e), err: '' }), ecrireNom: (e) => S({ nom: val(e), err: '' }),
+      viaFour: !!st.viaFour, fourT: fo.t, ini: ((prenom[0] || 'N') + (nom[0] || 'K')).toUpperCase(),
+      aPhoto: !!photo, sansPhoto: !photo, prendrePhoto: () => S({ feuille: 'photo' }),
+      choisirPhoto: () => { S({ photo: true, feuille: null }); flash('Photo ajoutée'); }, retirerPhoto: () => S({ photo: false }),
+      paysT: pa[1], paysFlag: pa[3], ouvrirPays: () => S({ feuille: 'pays', pq: '', pourInd: false }), villes, ville, villeLibre,
+      autreVille: () => S({ villeLibre: true, ville: '' }), ecrireVille: (e) => S({ ville: val(e), err: '' }), autresVilles, aVille: !!ville,
+      pq, ecrirePays: (e) => S({ pq: val(e) }), listePays, aucunPays: listePays.length === 0, paysTitre: pourInd ? 'Indicatif du numéro' : 'Votre pays',
+      // contacts
+      emailPro, ecrireEmailPro: (e) => S({ emailPro: val(e), err: '' }), emailProOk, estPerso: emailProOk && estPerso, estPro: emailProOk && !estPerso, domainePro,
+      reprendreEmail: () => S({ emailPro: email && !/gmail|yahoo|hotmail|outlook|icloud/.test(email) ? email : 'n.kalala@baobabfintech.cd' }),
+      tel, ecrireTel: (e) => S({ tel: val(e).replace(/[^\d ]/g, '').slice(0, 14), err: '' }), indT: ind[5], indFlag: ind[3], indPays: ind[1],
+      ouvrirInd: () => S({ feuille: 'pays', pq: '', pourInd: true }), telErr: !telOk,
+      wa: wa ? 'true' : 'false', waBg: wa ? '#A6F26B' : 'rgba(255,255,255,.18)', waX: wa ? '20px' : '0px', basculerWa: () => S({ wa: !wa }),
+      linkedin, ecrireLinkedin: (e) => S({ linkedin: val(e) }), importerLinkedin: () => { S({ linkedin: 'linkedin.com/in/nadiakalala', poste: poste || 'Chargée de recrutement' }); flash('Profil LinkedIn relié'); },
+      aLinkedin: !!linkedin, sansLinkedin: !linkedin, visOpts, visT,
+      // rôle
+      roles, poste, ecrirePoste: (e) => S({ poste: val(e), err: '' }), postesSugg, aRole: !!role, roleT,
+      // entreprise
+      eq, ecrireEnt: (e) => S({ eq: val(e) }), eVide: !eq.trim(), ePlein: !!eq.trim(), resEnt, entSugg, eRien: !!eq.trim() && resEnt.length === 0,
+      aEnt: !!e0 && entEtat !== 'indep', sansEnt: (!e0 && entEtat !== 'indep'), indep: entEtat === 'indep', e0: e0 || { t: '', ab: '', c: '#0F3F37', s: '', rec: '', dom: '', offres: 0 },
+      eeT: ee[0], eeC: ee[1], eeB: ee[2], entChoisie: entEtat === 'choisie', entAttente: entEtat === 'attente', entAcceptee: entEtat === 'acceptee', entCreee: entEtat === 'creee',
+      emailCorrespond, emailDiff: !emailCorrespond && !!e0 && !!e0.dom,
+      demander: () => S({ feuille: 'demande' }), msgDem: msgDemande, ecrireMsgDem: (e) => S({ msgDem: val(e) }), envoyerDemande,
+      annulerDemande: () => { S({ entEtat: 'choisie' }); flash('Demande annulée'); },
+      changerEnt: () => S({ ent: '', entEtat: '', eq: '' }), creerPage: () => S({ feuille: 'creer', nouvelle: { ...nouvelle, t: nouvelle.t || eq } }),
+      jeSuisIndep: () => S({ entEtat: 'indep', ent: '', err: '' }),
+      nouvelle, ecrireNouv: (e) => S({ nouvelle: { ...nouvelle, t: val(e) } }), sects, tailles, creerEnt,
+      ajouterLogo: () => { S({ nouvelle: { ...nouvelle, logo: true } }); flash('Logo ajouté'); }, nLogo: !!nouvelle.logo, nSansLogo: !nouvelle.logo,
+      // ce que vous recrutez
+      doms, nDomT: nDom + (nDom > 1 ? ' domaines' : ' domaine'), nivs, vols,
+      // profil
+      titreP, ecrireTitreP: (e) => S({ titreP: val(e) }), titreAff: String(titreP).trim() || titreAuto, domListe,
+      badge: badge ? 'true' : 'false', badgeBg: badge ? '#A6F26B' : 'rgba(255,255,255,.18)', badgeX: badge ? '20px' : '0px', basculerBadge: () => S({ badge: !badge }), aBadge: !!badge,
+      entT, posteAff: (poste || 'Chargée de recrutement'), logoVisible, logoAttente: entEtat === 'attente', logoAb: e0 ? e0.ab : 'NK', logoC: e0 ? e0.c : '#0F3F37',
+      // Orbi
+      orbi, ouvrirOrbi: () => S({ orbi: true }), fermerOrbi: () => S({ orbi: false }), titresOrbi,
+      // notifications et fin
+      activer: () => S({ feuille: 'systeme' }), plusTard: () => S({ vue: 'pret', notifOk: false }), autoriserOui: autoriser(true), autoriserNon: autoriser(false),
+      pctT: pct + ' %', ringDash: (R0 * Math.min(pct, 100) / 100).toFixed(1) + ' ' + R0.toFixed(1), nomComplet: (prenom || 'Nadia') + ' ' + (nom || 'Kalala'),
+      prenomAff: prenom || 'Nadia', lieuAff: (ville || 'Kinshasa') + ', ' + pa[1],
+      notifT: st.notifOk === false ? 'Notifications désactivées · à changer dans Compte › Paramètres' : 'Vous serez prévenue de chaque nouvelle candidature',
+      pretEnt: entEtat === 'attente' ? 'Le logo ' + entT + ' s’affichera dès que Joseph aura validé.' : (logoVisible ? 'Le logo ' + entT + ' s’affiche sur votre profil.' : 'Vous recrutez en indépendante.'),
+      modifierProfil: () => S({ vue: 'profil', etape: 1 }),
+      // feuilles
+      fCompte: fRaw === 'compte', fLegal: fRaw === 'legal', fPays: fRaw === 'pays', fSysteme: fRaw === 'systeme', fPhoto: fRaw === 'photo', fDemande: fRaw === 'demande', fCreer: fRaw === 'creer', fermer,
+      fo, comptes, compteBtn: mode !== 'connexion', compteLien: mode === 'connexion',
+      autreCompte: () => S({ feuille: null, vue: mode === 'connexion' ? 'connexion' : 'inscription' }),
+      legal: (st.legal ?? p.legal ?? 'cond') === 'conf'
+        ? { t: 'Politique de confidentialité', l: [{ t: 'Vous ne voyez un profil que si la personne a candidaté ou l’a rendu visible.' }, { t: 'Chaque consultation de profil est enregistrée.' }, { t: 'Le score ne tient jamais compte du nom, de l’âge, du genre ou de la photo.' }] }
+        : { t: 'Conditions pour les recruteurs', l: [{ t: 'Candidater reste gratuit pour les talents : aucune offre ne peut le faire payer.' }, { t: 'Orbi recommande, vous décidez : aucun refus automatique.' }, { t: 'Chaque candidat reçoit une réponse, même courte.' }] },
+      aToast: !!st.toast, toast: st.toast || ''
+    };
+  }
+}
+
+</script>
+</body>
+</html>

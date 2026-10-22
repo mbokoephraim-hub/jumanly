@@ -1,0 +1,624 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jumanly Modèle B · Recruteur · Talents</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050D10}
+a{color:#A6F26B;text-decoration:none}
+.fd,.fd *{box-sizing:border-box}
+.fd{font-family:"Sora",system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.fd h1,.fd h2,.fd h3,.fd p{margin:0}
+.fd button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.fd textarea{font:inherit}
+.fd .scroll{scrollbar-width:none}.fd .scroll::-webkit-scrollbar{display:none}
+.fd .hrow{display:flex;gap:10px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
+.fd .hrow::after{content:"";flex:0 0 6px}
+.fd .hrow::-webkit-scrollbar{display:none}
+.fd .hrow>*{flex:none}
+.fd .sec{display:flex;align-items:baseline;justify-content:space-between;padding:0 20px;margin:28px 0 10px}
+.fd .sec h2{font-size:18px;font-weight:600}
+.fd .sec a,.fd .sec button{font-size:14px;font-weight:600;min-height:36px;display:inline-flex;align-items:center}
+.fd .meta{font-size:13px;color:#8FA39E}
+.fd .tag{display:inline-block;font-size:12.5px;padding:5px 9px;border-radius:7px;background:#1A2629;color:#C9D6D2;white-space:nowrap}
+.fd .ligne{width:100%;display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);color:#F2EDE5}
+.fd .mini{width:48px;height:48px;border-radius:14px;color:#FFFFFF;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .av{width:44px;height:44px;border-radius:50%;background:#1B3338;color:#F2EDE5;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .barre{display:block;height:4px;border-radius:2px;background:rgba(255,255,255,.1);margin-top:8px;overflow:hidden}
+.fd .barre i{display:block;height:100%;background:#A6F26B;border-radius:2px}
+.fd .chip,.fd .pill{height:38px;padding:0 15px;border-radius:19px;font-size:13.5px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;flex:none}
+.fd .bp{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border-radius:26px;background:#A6F26B;color:#0B1A1F;font-size:15px;font-weight:700;text-align:center}
+.fd .bs{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 20px;border-radius:26px;border:1px solid rgba(255,255,255,.18);font-size:14px;font-weight:600;text-align:center;color:#F2EDE5}
+.fd .bloc{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fd .bloc h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.fd .li{display:flex;gap:10px;font-size:14.5px;line-height:1.45;color:#ECE7DF;padding:4px 0}
+.fd .li i{width:6px;height:6px;border-radius:50%;background:#A6F26B;margin-top:8px;flex:none}
+.fd .barreh{padding:50px 12px 8px;display:flex;align-items:center;gap:4px;border-bottom:1px solid rgba(255,255,255,.08);min-height:102px}
+.fd .retour{height:44px;padding:0 8px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;color:#F2EDE5}
+.fd .plus{font-size:18px;letter-spacing:1px;color:#B9CBC6;min-width:44px;min-height:44px;text-align:center;display:flex;align-items:center;justify-content:center}
+.fd .rond{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .nav{position:absolute;left:0;right:0;bottom:0;height:84px;padding:8px 6px 22px;background:rgba(11,26,31,.86);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));z-index:4}
+.fd .nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;position:relative}
+.fd .voile{position:absolute;inset:0;width:100%;background:rgba(0,0,0,.55)}
+.fd .feuille{position:absolute;left:0;right:0;bottom:0;background:#13282C;border-radius:30px 30px 0 0;padding:10px 20px 28px;border-top:1px solid rgba(255,255,255,.08);max-height:760px;overflow-y:auto;scrollbar-width:none}
+.fd .poignee{display:block;width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.2);margin:0 auto 14px}
+.fd .opt{width:100%;display:flex;align-items:center;gap:14px;min-height:56px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px;font-weight:600;color:#F2EDE5}
+.fd .opt small{display:block;font-size:12.5px;font-weight:400;color:#8FA39E;margin-top:2px}
+.fd .annuler{width:100%;height:50px;margin-top:12px;border-radius:999px;background:#1B3338;text-align:center;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#F2EDE5}
+.fd .q{width:100%;padding:14px 16px;border-radius:16px;background:#1B3338;font-size:14px;font-weight:600;line-height:1.4;display:block;color:#F2EDE5}
+.fd .champ{display:flex;align-items:center;gap:10px;min-height:52px;border-radius:26px;background:#0B1A1F;padding:0 6px 0 18px;border:1px solid rgba(47,211,166,.45);min-width:0}
+.fd .champ input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:14px;color:#F2EDE5}
+.fd .env{height:40px;padding:0 16px;border-radius:20px;background:#A6F26B;color:#0B1A1F;font-size:13px;font-weight:700;display:flex;align-items:center;flex:none}
+.fd .in{width:100%;height:52px;border-radius:16px;background:#0B1A1F;border:1px solid rgba(255,255,255,.14);padding:0 16px;font:inherit;font-size:15px;color:#F2EDE5;outline:0}
+.fd .ta{width:100%;min-height:96px;border-radius:16px;background:#0B1A1F;border:1px solid rgba(255,255,255,.14);padding:12px 14px;font-size:14.5px;line-height:1.45;color:#F2EDE5;outline:0;resize:none}
+.fd .lab{display:block;font-size:13px;font-weight:600;color:#B9CBC6;margin:20px 0 10px}
+.fd .bas{position:absolute;left:0;right:0;bottom:0;padding:12px 20px 28px;background:rgba(11,26,31,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);display:flex;gap:10px;z-index:4}
+.fd .seg{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none;padding:0 8px}
+.fd .seg::-webkit-scrollbar{display:none}
+.fd .seg button{height:46px;padding:0 12px;font-size:14px;white-space:nowrap;position:relative;flex:none}
+.fd .seg button i{position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:2px;background:#A6F26B}
+.fd .carte{width:100%;display:block;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:#13282C;padding:16px;color:#F2EDE5}
+.fd .kpi{display:flex;gap:8px}
+.fd .kpi span{flex:1;border-radius:12px;background:#0B1A1F;padding:9px 10px;font-size:11.5px;color:#8FA39E}
+.fd .kpi b{display:block;font-size:17px;font-weight:700;color:#F2EDE5;margin-bottom:1px}
+.fd .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fd .tuile{border-radius:16px;background:#13282C;border:1px solid rgba(255,255,255,.08);padding:14px;font-size:12.5px;color:#8FA39E;display:block}
+.fd .tuile b{display:block;font-size:24px;font-weight:700;color:#F2EDE5;letter-spacing:-0.02em;margin-bottom:2px}
+.fd .case{width:24px;height:24px;border-radius:7px;border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#0B1A1F;flex:none}
+.fd .score{min-width:50px;height:30px;padding:0 9px;border-radius:15px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.fd .rech{flex:1;min-width:0;height:50px;border-radius:25px;background:#1A2629;display:flex;align-items:center;gap:12px;padding:0 16px}
+.fd .rech input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:16px;color:#F2EDE5}
+.fd .rech input::placeholder,.fd .in::placeholder,.fd .champ input::placeholder{color:#6F8580}
+/* mvt-jumanly 2 */
+:root{--mvt-o:.4;--mvt-s:.975;--mvt-tx:0px;--mvt-r:150%;--mvt-x:50%;--mvt-y:50%}
+[data-ecran]{animation:mvtEcran .34s cubic-bezier(.2,.8,.2,1) both;transform-origin:var(--mvt-x) var(--mvt-y)}
+.voile,.shb{animation:mvtVoile .26s ease-out both}
+.voile+div,.shb+div,.voile+.feuille,.shb+.shp,[style*="z-index: 10"]>button:first-child+div{animation:mvtMonte .34s cubic-bezier(.2,.8,.2,1) both}
+@keyframes mvtEcran{from{opacity:var(--mvt-o);transform:translateX(var(--mvt-tx)) scale(var(--mvt-s));clip-path:circle(var(--mvt-r) at var(--mvt-x) var(--mvt-y))}to{opacity:1;transform:none;clip-path:circle(150% at var(--mvt-x) var(--mvt-y))}}
+@keyframes mvtVoile{from{opacity:0}to{opacity:1}}
+@keyframes mvtMonte{from{transform:translateY(56px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){[data-ecran],.voile,.shb,.voile+div,.shb+div{animation:none!important}}
+/* fin mvt */
+</style>
+</helmet>
+<div class="fd" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F; border-radius: 44px;">
+
+<sc-if value="{{vAccueil}}" hint-placeholder-val="{{ true }}">
+<div class="scroll" data-ecran="" style="position: absolute; inset: 0; overflow-y: auto; padding-bottom: 170px;">
+<header style="padding: 54px 20px 0; display: flex; align-items: center; gap: 10px;">
+<h1 style="flex: 1; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">Talents</h1><a href="Recruteur-notifications.dc.html" class="rond" aria-label="Notifications, 4 nouvelles" style="position: relative; background: #1A2629; color: #F2EDE5;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.5 1.5h-15zM10 20.5a2 2 0 0 0 4 0"></path></svg><span style="position: absolute; right: 7px; top: 7px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #A6F26B; color: #0B1A1F; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center;">4</span></a><a href="Recruteur-compte.dc.html" aria-label="Mon compte" style="position: relative; width: 36px; height: 36px; flex: none; display: block;"><span style="display: block; width: 36px; height: 36px; border-radius: 50%; overflow: hidden;"><svg width="36" height="36" viewBox="0 0 100 100" aria-hidden="true" style="display: block; border-radius: 50%; flex: none;"><rect width="100" height="100" fill="#F4C9A0"></rect><circle cx="50" cy="40" r="25" fill="#2A1A12"></circle><ellipse cx="50" cy="46" rx="16" ry="19" fill="#8A5A3B"></ellipse><path d="M34 40c2-13 30-15 32 0-4-6-12-9-16-9s-12 3-16 9z" fill="#2A1A12"></path><path d="M18 100c4-20 18-28 32-28s28 8 32 28z" fill="#0F3F37"></path><path d="M42 72l8 10 8-10" fill="none" stroke="#A6F26B" stroke-width="3"></path></svg></span><span style="position: absolute; right: -3px; bottom: -3px; width: 16px; height: 16px; border-radius: 5px; background: #14745F; border: 2px solid #0B1A1F; color: #FFFFFF; font-size: 6.5px; font-weight: 800; display: flex; align-items: center; justify-content: center;">BF</span></a>
+</header>
+<sc-if value="{{sansRech}}" hint-placeholder-val="{{ true }}">
+<div>
+<div style="padding: 14px 20px 0;"><button onClick="{{ouvrirRech}}" class="rech" style="width: 100%;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB3AE" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex: none;"><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4.4-4.4"></path></svg><span style="color: #6F8580; font-size: 15px;">Compétence, métier, ville</span></button></div>
+<div style="margin-top: 10px;"><div class="seg" role="tablist"><sc-for list="{{sousOnglets}}" as="o" hint-placeholder-count="4"><button role="tab" aria-selected="{{o.sel}}" onClick="{{o.pick}}" style="font-weight: {{o.fw}}; color: {{o.col}};">{{o.t}}<sc-if value="{{o.aN}}" hint-placeholder-val="{{ false }}"><span style="margin-left: 6px; font-size: 11.5px; font-weight: 800; color: #A6F26B;">{{o.n}}</span></sc-if><sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}"><i></i></sc-if></button></sc-for></div></div>
+
+<sc-if value="{{sDec}}" hint-placeholder-val="{{ true }}"><div>
+<div class="hrow" style="gap: 8px; padding-top: 14px;"><sc-for list="{{filtres}}" as="f" hint-placeholder-count="5"><button onClick="{{f.pick}}" class="pill" style="height: 36px; border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}}</button></sc-for></div>
+<p class="meta" style="padding: 12px 20px 0;">{{nVisT}}</p>
+<div class="g2" style="padding: 12px 20px 0;"><sc-for list="{{pourOffres}}" as="x" hint-placeholder-count="4"><button onClick="{{x.ouvrir}}" style="display: block; border-radius: 20px; background: #13282C; border: 1px solid rgba(255,255,255,.08); overflow: hidden; text-align: left;"><span style="display: block; height: 54px; background: linear-gradient(135deg, {{x.bg}} 0%, #13282C 100%); opacity: .5;"></span><span style="display: block; padding: 0 12px 14px; margin-top: -30px;"><span class="av" style="width: 56px; height: 56px; font-size: 17px; background: {{x.bg}}; color: {{x.fg}}; border: 3px solid #13282C;">{{x.ini}}</span><b style="display: block; font-size: 14.5px; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.nom}}</b><span class="meta" style="display: block; font-size: 12px; line-height: 1.35; height: 32px; overflow: hidden;">{{x.titre}}</span><span class="meta" style="display: block; font-size: 12px; margin-top: 4px;">{{x.ville}}</span><span style="display: flex; align-items: center; gap: 6px; margin-top: 10px;"><span class="score" style="height: 26px; min-width: 44px; font-size: 12.5px; background: {{x.sbg}}; color: {{x.scol}};">{{x.sc}}</span><span class="meta" style="font-size: 11.5px; line-height: 1.2;">{{x.pour}}</span></span><sc-if value="{{x.aProp}}" hint-placeholder-val="{{ false }}"><span style="display: block; font-size: 11.5px; font-weight: 700; color: #F4D59A; margin-top: 8px;">{{x.propT}}</span></sc-if><sc-if value="{{x.enVivier}}" hint-placeholder-val="{{ false }}"><span style="display: block; font-size: 11.5px; font-weight: 700; color: #5FE0B8; margin-top: 8px;">Dans votre vivier</span></sc-if></span></button></sc-for></div>
+<sc-if value="{{sansPourOffres}}" hint-placeholder-val="{{ false }}"><p class="meta" style="text-align: center; padding: 30px 20px;">Aucun talent visible pour cette offre pour l’instant.</p></sc-if>
+<p class="meta" style="padding: 18px 20px; font-size: 12px; line-height: 1.5;">Seulement les talents qui ont rendu leur profil visible. Ceux qui ont candidaté sont dans Candidatures.</p>
+</div></sc-if>
+
+<sc-if value="{{sRes}}" hint-placeholder-val="{{ false }}"><div>
+<sc-if value="{{aInvit}}" hint-placeholder-val="{{ true }}"><div><p class="meta" style="padding: 16px 20px 2px; font-weight: 700;">Invitations reçues</p>
+<sc-for list="{{invitations}}" as="x" hint-placeholder-count="2"><div class="ligne"><a href="{{x.href}}" style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; color: #F2EDE5;"><span class="av" style="background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{x.nom}}</b><span class="meta" style="display: block; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.s}}</span><span class="meta" style="display: block; font-size: 11.5px;">{{x.type}} · {{x.commun}}</span></span></a><span style="display: flex; gap: 6px; flex: none;"><button onClick="{{x.ignorer}}" aria-label="Ignorer {{x.nom}}" class="rond" style="width: 36px; height: 36px; border: 1px solid rgba(255,255,255,.22); color: #B9CBC6;"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 6l12 12M18 6 6 18"></path></svg></button><button onClick="{{x.accepter}}" style="height: 36px; padding: 0 14px; border-radius: 18px; background: #A6F26B; color: #0B1A1F; font-size: 13px; font-weight: 700;">Accepter</button></span></div></sc-for></div></sc-if>
+<p class="meta" style="padding: 18px 20px 2px; font-weight: 700;">À connaître</p>
+<div class="hrow" style="gap: 10px; padding-top: 8px;"><sc-for list="{{suggestionsR}}" as="x" hint-placeholder-count="3"><div style="width: 160px; padding: 14px; border-radius: 20px; background: #13282C; border: 1px solid rgba(255,255,255,.08); text-align: center;">
+<a href="{{x.href}}" style="display: block; color: #F2EDE5;"><span class="av" style="width: 56px; height: 56px; margin: 0 auto; font-size: 17px; background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><b style="display: block; font-size: 14px; margin-top: 8px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.nom}}</b><span class="meta" style="display: block; font-size: 11.5px; height: 30px; overflow: hidden; line-height: 1.3;">{{x.s}}</span><span style="display: block; font-size: 11px; font-weight: 700; color: #5FE0B8; margin-top: 4px;">{{x.type}}</span></a>
+<button onClick="{{x.connecter}}" style="width: 100%; height: 34px; margin-top: 10px; border-radius: 17px; border: 1px solid {{x.bbd}}; background: {{x.bbg}}; color: {{x.bcol}}; font-size: 12.5px; font-weight: 700; text-align: center;">{{x.bt}}</button></div></sc-for></div>
+<div style="display: flex; align-items: baseline; justify-content: space-between; padding: 22px 20px 10px;"><b style="font-size: 16px;">Mes relations</b><span class="meta">{{nRelT}}</span></div>
+<div style="padding: 0 20px 4px;"><div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{relFiltres}}" as="f" hint-placeholder-count="3"><button onClick="{{f.pick}}" class="pill" style="border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}}</button></sc-for></div></div>
+<sc-for list="{{relationsF}}" as="x" hint-placeholder-count="3"><div class="ligne"><a href="{{x.href}}" style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; color: #F2EDE5;"><span class="av" style="background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{x.nom}}</b><span class="meta" style="display: block; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.s}}</span><span class="meta" style="display: block; font-size: 11.5px;">{{x.type}} · {{x.commun}}</span></span></a><a href="{{x.msgHref}}" aria-label="Écrire à {{x.nom}}" class="rond" style="width: 40px; height: 40px; background: #13282C; color: #F2EDE5;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg></a></div></sc-for>
+<p class="meta" style="padding: 16px 20px; font-size: 12.5px; line-height: 1.5;">Une relation peut vous écrire et voir vos publications. Elle ne voit pas vos candidats ni votre vivier.</p>
+</div></sc-if>
+<sc-if value="{{sViv}}" hint-placeholder-val="{{ false }}"><div style="padding: 16px 20px 0; display: flex; flex-direction: column; gap: 10px;">
+<sc-for list="{{vivierL}}" as="l" hint-placeholder-count="3"><button onClick="{{l.ouvrir}}" class="carte" style="display: flex; align-items: center; gap: 14px;">
+<span style="display: flex; flex: none; width: 74px;"><sc-for list="{{l.avs}}" as="a" hint-placeholder-count="3"><span class="av" style="width: 36px; height: 36px; font-size: 12px; margin-right: -14px; border: 2px solid #13282C; background: {{a.bg}}; color: {{a.fg}};">{{a.ini}}</span></sc-for></span>
+<span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{l.t}}</b><span class="meta">{{l.n}}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m9 6 6 6-6 6"></path></svg></button></sc-for>
+<button onClick="{{nouvelleListe}}" style="height: 52px; border-radius: 20px; border: 1.5px dashed rgba(255,255,255,.22); font-size: 14px; font-weight: 700; color: #A6F26B; text-align: center; display: flex; align-items: center; justify-content: center; gap: 8px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M12 5v14M5 12h14"></path></svg>Nouvelle liste</button>
+<p class="meta" style="line-height: 1.5; font-size: 12.5px; margin-top: 6px;">Votre vivier personnel : les talents ne savent pas dans quelle liste ils sont. Le vivier partagé avec l’équipe vient avec Company Plus.</p>
+</div></sc-if>
+
+<sc-if value="{{sProp}}" hint-placeholder-val="{{ false }}"><div>
+<p class="meta" style="padding: 16px 20px 4px;">Les offres que vous avez proposées à des talents</p>
+<sc-for list="{{propsL}}" as="x" hint-placeholder-count="2"><button onClick="{{x.ouvrir}}" class="ligne"><span class="av" style="background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{x.nom}}</b><span class="meta" style="display: block;">{{x.offre}} · {{x.d}}</span><span style="display: block; font-size: 12.5px; font-weight: 700; color: {{x.ecol}};">{{x.etat}}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m9 6 6 6-6 6"></path></svg></button></sc-for>
+<p class="meta" style="padding: 16px 20px; line-height: 1.5; font-size: 12.5px;">Quand un talent accepte, sa candidature arrive dans Candidatures, comme les autres. Candidater reste gratuit pour lui.</p>
+</div></sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{aRech}}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="padding: 14px 20px 0; display: flex; align-items: center; gap: 10px;">
+<label class="rech" style="border: 1px solid rgba(166,242,107,.35);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB3AE" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex: none;"><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4.4-4.4"></path></svg><input value="{{q}}" onChange="{{chercher}}" aria-label="Rechercher un talent" placeholder="Compétence, métier, ville">
+<sc-if value="{{aQ}}" hint-placeholder-val="{{ false }}"><button onClick="{{viderQ}}" aria-label="Effacer" style="width: 30px; height: 30px; color: #9FB3AE; font-size: 18px; text-align: center;">×</button></sc-if></label>
+<button onClick="{{annulerRech}}" style="height: 44px; font-size: 14px; font-weight: 600; color: #A6F26B; flex: none;">Annuler</button></div>
+<p class="meta" style="padding: 18px 20px 10px;">Chercher par</p><div style="padding: 0 20px;"><div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{rTypes}}" as="f" hint-placeholder-count="4"><button onClick="{{f.pick}}" class="pill" style="border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}}</button></sc-for></div></div>
+<sc-if value="{{qVide}}" hint-placeholder-val="{{ true }}"><div>
+<p class="meta" style="padding: 22px 20px 4px;">Recherches récentes</p>
+<sc-for list="{{recents}}" as="r" hint-placeholder-count="3"><button onClick="{{r.pick}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 20px; font-size: 15px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M12 4.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zM12 8v4l2.5 2"></path></svg><span style="flex: 1;">{{r.t}}</span><span class="meta">{{r.d}}</span></button></sc-for>
+<p class="meta" style="padding: 18px 20px 4px; display: flex; align-items: center; gap: 8px;"><svg width="18" height="18" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg>Suggéré par Orbi</p>
+<sc-for list="{{suggestions}}" as="r" hint-placeholder-count="2"><button onClick="{{r.pick}}" style="width: 100%; display: flex; flex-direction: column; padding: 10px 20px;"><b style="font-size: 15px;">{{r.t}}</b><span class="meta">{{r.d}}</span></button></sc-for>
+</div></sc-if>
+<sc-if value="{{qPlein}}" hint-placeholder-val="{{ false }}"><div><p class="meta" style="padding: 18px 20px 4px;">{{nRes}}</p><sc-for list="{{resRech}}" as="x" hint-placeholder-count="3"><button onClick="{{x.ouvrir}}" class="ligne"><span class="av" style="background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{x.nom}}</b><span class="meta" style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.titre}}</span><span class="meta" style="display: block; font-size: 12px;">{{x.ville}} · {{x.pour}}</span></span><span class="score" style="background: {{x.sbg}}; color: {{x.scol}};">{{x.sc}}</span></button></sc-for>
+<sc-if value="{{rRien}}" hint-placeholder-val="{{ false }}"><p class="meta" style="text-align: center; padding: 30px 20px;">Aucun talent visible pour « {{q}} ».</p></sc-if></div></sc-if>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{avecNav}}" hint-placeholder-val="{{ true }}"><nav aria-label="Navigation principale" class="nav"><a href="Recruteur-fil.dc.html" aria-label="Fil" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span></a><a href="Recruteur-offres.dc.html" aria-label="Offres" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5a1.5 1.5 0 0 1 1.5-1.5h14a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5zM8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3.5 12.5h17M12 11.5v2"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span></a><a href="Recruteur-candidatures.dc.html" aria-label="Candidatures" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.3M21.5 20a6.5 6.5 0 0 0-3.8-5.9"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span><span style="position: absolute; top: 4px; left: 50%; margin-left: 6px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #A6F26B; color: #0B1A1F; font-size: 9.5px; font-weight: 800; display: flex; align-items: center; justify-content: center;">17</span></a><a href="Recruteur-talents.dc.html" aria-label="Talents" aria-current="page" style="color: #A6F26B;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8L3.6 9.6l5.8-.8z"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 1;"></span></a><a href="Recruteur-messages.dc.html" aria-label="Messages" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span><span style="position: absolute; top: 6px; left: 50%; margin-left: 7px; width: 8px; height: 8px; border-radius: 50%; background: #A6F26B;"></span></a></nav></sc-if>
+</sc-if>
+
+<!-- Liste du vivier -->
+<sc-if value="{{vListe}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barreh"><button onClick="{{retourListe}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg>Vivier</button><span style="flex: 1;"></span></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding-bottom: 40px;">
+<div style="padding: 18px 20px 6px;"><h1 style="font-size: 23px;">{{listeT}}</h1><p class="meta" style="margin-top: 4px;">{{listeN}} · visible par vous seule</p></div>
+<sc-for list="{{membres}}" as="x" hint-placeholder-count="3"><button onClick="{{x.ouvrir}}" class="ligne"><span class="av" style="background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 15px;">{{x.nom}}</b><span class="meta" style="display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.titre}}</span><span class="meta" style="display: block; font-size: 12px;">{{x.ville}} · {{x.pour}}</span></span><span class="score" style="background: {{x.sbg}}; color: {{x.scol}};">{{x.sc}}</span></button></sc-for>
+</div></div>
+</sc-if>
+
+<!-- Profil vu par le recruteur -->
+<sc-if value="{{vProfil}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<div class="scroll" style="flex: 1; overflow-y: auto; padding-bottom: 120px;">
+<div style="height: 150px; background: linear-gradient(160deg, {{profil.bg}} 0%, #0F3F37 70%); position: relative;">
+<div style="position: absolute; left: 12px; right: 12px; top: 50px; display: flex; justify-content: space-between;">
+<button onClick="{{retourProfil}}" class="rond" aria-label="Retour" style="background: rgba(11,26,31,.55);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg></button>
+<button onClick="{{ouvrirMenuP}}" class="rond" aria-label="Plus d’options" style="background: rgba(11,26,31,.55); color: #F2EDE5; font-size: 18px;">···</button></div></div>
+<div style="padding: 0 20px; margin-top: -44px; position: relative;">
+<span class="av" style="width: 88px; height: 88px; font-size: 26px; background: {{profil.bg}}; color: {{profil.fg}}; border: 4px solid #0B1A1F;">{{profil.ini}}</span>
+<div style="display: flex; align-items: center; gap: 8px; margin-top: 10px;"><h1 style="font-size: 23px;">{{profil.nom}}</h1><sc-if value="{{profil.aCap}}" hint-placeholder-val="{{ true }}"><span style="font-size: 11px; font-weight: 800; padding: 3px 7px; border-radius: 6px; background: #A6F26B; color: #0B1A1F;">CAP</span></sc-if></div>
+<p style="font-size: 15px; color: #C9D6D2; margin-top: 2px;">{{profil.titre}}</p>
+<p class="meta" style="margin-top: 4px;">{{profil.ville}} · actif {{profil.actif}}</p>
+<sc-if value="{{profil.aMobile}}" hint-placeholder-val="{{ true }}"><p style="font-size: 13px; color: #5FE0B8; margin-top: 4px; font-weight: 600;">{{profil.mobile}}</p></sc-if>
+</div>
+<div style="display: flex; gap: 8px; padding: 14px 20px 0;"><button onClick="{{profilRel.connecter}}" style="flex: 1; height: 42px; border-radius: 21px; border: 1px solid {{profilRel.bbd}}; background: {{profilRel.bbg}}; color: {{profilRel.bcol}}; font-size: 14px; font-weight: 700; text-align: center;">{{profilRel.bt}}</button><sc-if value="{{estRelation}}" hint-placeholder-val="{{ false }}"><a href="{{msgHrefP}}" class="bs" style="height: 42px; flex: 1;">Écrire</a></sc-if></div>
+<button onClick="{{ouvrirPourquoi}}" style="margin: 12px 20px 0; width: calc(100% - 40px); padding: 14px; border-radius: 18px; background: #13282C; display: flex; align-items: center; gap: 12px;">
+<span class="score" style="height: 40px; min-width: 62px; font-size: 16px; background: {{profil.sbg}}; color: {{profil.scol}};">{{profil.sc}}</span>
+<span style="flex: 1; min-width: 0;"><b style="display: block; font-size: 14px;">{{profil.bandeT}}</b><span class="meta" style="display: block; font-size: 12px;">avec {{profil.pour}}</span></span><span style="font-size: 13px; font-weight: 700; color: #5FE0B8;">Pourquoi ?</span></button>
+<sc-if value="{{profil.aProp}}" hint-placeholder-val="{{ false }}"><p style="margin: 10px 20px 0; padding: 10px 14px; border-radius: 14px; background: rgba(244,213,154,.1); color: #F4D59A; font-size: 13px; font-weight: 600;">{{profil.propT}}</p></sc-if>
+<div style="margin-top: 14px;"><div class="seg" role="tablist"><sc-for list="{{ongletsP}}" as="o" hint-placeholder-count="3"><button role="tab" aria-selected="{{o.sel}}" onClick="{{o.pick}}" style="font-weight: {{o.fw}}; color: {{o.col}};">{{o.t}}<sc-if value="{{o.aN}}" hint-placeholder-val="{{ false }}"><span style="margin-left: 6px; font-size: 11.5px; font-weight: 800; color: #A6F26B;">{{o.n}}</span></sc-if><sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}"><i></i></sc-if></button></sc-for></div></div>
+<sc-if value="{{oProfil}}" hint-placeholder-val="{{ true }}"><div>
+<div class="bloc"><h3>Compétences</h3><sc-for list="{{profil.comp}}" as="r" hint-placeholder-count="3"><div style="display: flex; justify-content: space-between; padding: 6px 0; font-size: 14.5px;"><span>{{r.t}}</span><span style="font-size: 12.5px; font-weight: 700; color: {{r.vc}};">{{r.v}}</span></div></sc-for></div>
+<div class="bloc"><h3>Ce qui l’intéresse</h3><div style="display: flex; flex-wrap: wrap; gap: 6px;"><sc-for list="{{profil.interets}}" as="t" hint-placeholder-count="3"><span class="tag">{{t.t}}</span></sc-for></div></div>
+<div class="bloc"><h3>Langues</h3><p style="font-size: 14.5px;">{{profil.langues}}</p></div>
+</div></sc-if>
+<sc-if value="{{oParcours}}" hint-placeholder-val="{{ false }}"><div>
+<div class="bloc"><h3>Expérience</h3><sc-for list="{{profil.exp}}" as="r" hint-placeholder-count="2"><div style="padding: 6px 0;"><b style="display: block; font-size: 14.5px;">{{r.t}}</b><span class="meta">{{r.d}}</span></div></sc-for></div>
+<div class="bloc"><h3>Formation</h3><p style="font-size: 14.5px; line-height: 1.45;">{{profil.form}}</p></div>
+</div></sc-if>
+<sc-if value="{{oReals}}" hint-placeholder-val="{{ false }}"><div style="padding: 16px 20px 0; display: flex; flex-direction: column; gap: 10px;">
+<sc-for list="{{profil.reals}}" as="r" hint-placeholder-count="2"><div style="padding: 16px; border-radius: 18px; background: #F2EDE5; color: #0B1A1F;"><b style="display: block; font-size: 15px;">{{r.t}}</b><span style="font-size: 13px; color: #4A5A56;">{{r.d}}</span></div></sc-for>
+</div></sc-if>
+<p class="meta" style="padding: 16px 20px; font-size: 12px; line-height: 1.5;">Consultation enregistrée : la personne voit que Baobab Fintech a consulté son profil. Le score n’utilise ni le nom, ni l’âge, ni la photo.</p>
+</div>
+<div class="bas">
+<button onClick="{{ouvrirVivier}}" class="bs" aria-label="{{profil.vivierT}}" style="width: 52px; padding: 0; flex: none; color: {{vivCol}};"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6.5 4h11v16.5L12 16.5l-5.5 4z"></path></svg></button>
+<button onClick="{{ouvrirProposer}}" class="bp" style="flex: 1; width: auto;">Proposer une offre</button>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{fab}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; right: 20px; bottom: 100px; display: flex; align-items: center; gap: 8px; z-index: 5;"><sc-if value="{{aBulle}}" hint-placeholder-val="{{ true }}"><button onClick="{{bulleGo}}" style="max-width: 210px; background: #1B3338; border-radius: 18px 18px 6px 18px; padding: 9px 12px; font-size: 12.5px; font-weight: 600; line-height: 1.35; box-shadow: 0 14px 30px -12px rgba(0,0,0,.8); border: 1px solid rgba(255,255,255,.08);">{{bulle}}</button></sc-if><button onClick="{{ouvrirOrbi}}" aria-label="Ouvrir Orbi, l’assistant" style="width: 58px; height: 58px; border-radius: 50%; flex: none; box-shadow: 0 0 0 6px rgba(47,211,166,.2),0 14px 30px -8px rgba(47,211,166,.55);"><svg width="58" height="58" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg></button>
+</div>
+</sc-if>
+
+<!-- Feuilles -->
+<sc-if value="{{fPourquoi}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 12px;"><span class="score" style="height: 40px; min-width: 64px; font-size: 17px; background: {{profil.sbg}}; color: {{profil.scol}};">{{profil.sc}}</span><span><b style="display: block; font-size: 17px;">Pourquoi {{profil.sc}} ?</b><span class="meta">Avec {{profil.pour}} · calcul fixe</span></span></div><div style="margin-top: 14px;"><sc-for list="{{profil.criteres}}" as="r" hint-placeholder-count="8"><div style="padding: 7px 0;"><span style="display: flex; justify-content: space-between; font-size: 13.5px;"><span>{{r.t}}</span><span class="meta" style="font-size: 12.5px;">{{r.pts}}</span></span><span style="display: block; height: 6px; border-radius: 3px; background: rgba(255,255,255,.08); margin-top: 5px; overflow: hidden;"><span style="display: block; height: 100%; width: {{r.larg}}; background: {{r.col}};"></span></span></div></sc-for></div><p class="meta" style="margin-top: 12px; line-height: 1.5; font-size: 12.5px;">Jamais utilisés : nom, genre, âge, photo, nationalité, origine, religion, situation familiale, santé, handicap, adresse précise.</p><button onClick="{{fermer}}" class="annuler">Fermer</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fProposer}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px;">Proposer une offre à {{profil.nom}}</b><p class="meta" style="margin-top: 4px;">La personne choisit de candidater ou non.</p><span class="lab">Offre</span><div style="display: flex; flex-direction: column; gap: 8px;"><sc-for list="{{offresProp}}" as="v" hint-placeholder-count="3"><button onClick="{{v.pick}}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; border: 1.5px solid {{v.bd}}; background: {{v.bg}};"><span style="width: 18px; height: 18px; border-radius: 50%; border: 2px solid {{v.rb}}; background: {{v.rbg}}; flex: none;"></span><span style="flex: 1;"><b style="display: block; font-size: 14px;">{{v.t}}</b><span class="meta" style="font-size: 12px;">{{v.s}}</span></span></button></sc-for></div><span class="lab">Message</span><textarea class="ta" onChange="{{ecrireMsgProp}}" aria-label="Message de la proposition" style="min-height: 110px;">{{msgProp}}</textarea><button onClick="{{envoyerProp}}" class="bp" style="margin-top: 14px;">Envoyer la proposition</button><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fPropEnvoyee}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style="text-align: center;"><span class="poignee"></span>
+<span style="width: 64px; height: 64px; border-radius: 50%; background: #A6F26B; color: #0B1A1F; display: flex; align-items: center; justify-content: center; margin: 6px auto 0;"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg></span><b style="display: block; font-size: 18px; margin-top: 14px;">Proposition envoyée</b><p class="meta" style="font-size: 14px; margin-top: 6px; line-height: 1.5;">{{profil.nom}} la reçoit dans ses messages. Vous serez prévenue dès sa réponse.</p><a href="Recruteur-talents-propositions.dc.html" class="bp" style="margin-top: 16px;">Suivre mes propositions</a><button onClick="{{fermer}}" class="annuler">Rester sur le profil</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fVivier}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px; padding: 0 4px 6px;">Ajouter {{profil.nom}} au vivier</b><sc-for list="{{listesChoix}}" as="o" hint-placeholder-count="3"><button onClick="{{o.pick}}" class="opt"><span class="case" style="background: {{o.bg}}; border-color: {{o.bd}};">{{o.sym}}</span><span style="flex: 1;">{{o.t}}<small>{{o.n}}</small></span></button></sc-for><span class="lab">Ou une nouvelle liste</span><input class="in" value="{{nouvelleL}}" onChange="{{ecrireNouvelleL}}" aria-label="Nom de la nouvelle liste" placeholder="Ex. : Finance 2027"><button onClick="{{enregistrerVivier}}" class="bp" style="margin-top: 14px;">Enregistrer</button><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fMenuP}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<sc-for list="{{menuP}}" as="m" hint-placeholder-count="4"><button onClick="{{m.go}}" class="opt"><span>{{m.t}}<small>{{m.s}}</small></span></button></sc-for><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fCreerListe}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px;">Nouvelle liste</b><span class="lab">Nom</span><input class="in" value="{{nomListe}}" onChange="{{ecrireNomListe}}" aria-label="Nom de la liste" placeholder="Ex. : Profils finance"><button onClick="{{creerListe}}" class="bp" style="margin-top: 14px;">Créer la liste</button><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{orbi}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 12;">
+<button onClick="{{fermerOrbi}}" aria-label="Fermer Orbi" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 12px;"><sc-if value="{{aRep}}" hint-placeholder-val="{{ false }}"><button onClick="{{autresQ}}" aria-label="Autres questions" style="height: 40px; width: 32px; display: flex; align-items: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg></button></sc-if><svg width="42" height="42" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="flex: 1;"><b style="display: block; font-size: 17px;">{{orbiTitre}}</b><span style="font-size: 12.5px; color: #8FA39E;">Orbi · {{orbiSous}} · 212 crédits restants</span></span><button onClick="{{fermerOrbi}}" aria-label="Fermer" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #8FA39E;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+<sc-if value="{{sansRep}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;"><sc-for list="{{questionsOrbi}}" as="q" hint-placeholder-count="4"><button onClick="{{q.go}}" class="q">{{q.t}}</button></sc-for></div></sc-if>
+<sc-if value="{{aRep}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 16px;"><p class="meta">{{ra.q}}</p><p style="font-size: 15px; line-height: 1.5; margin-top: 8px;">{{ra.t}}</p><sc-if value="{{ra.aAct}}" hint-placeholder-val="{{ true }}"><button onClick="{{ra.act}}" class="q" style="margin-top: 14px; background: #A6F26B; color: #0B1A1F; text-align: center;">{{ra.actT}}</button></sc-if><sc-if value="{{ra.aLien}}" hint-placeholder-val="{{ false }}"><a href="{{ra.href}}" class="q" style="margin-top: 14px; background: #A6F26B; color: #0B1A1F; text-align: center;">{{ra.actT}}</a></sc-if><p class="meta" style="margin-top: 10px; font-size: 12px;">Orbi recommande, vous décidez.</p></div></sc-if>
+<label class="champ" style="margin-top: 14px;"><input value="{{oq}}" onChange="{{ecrireOrbi}}" aria-label="Écrire à Orbi" placeholder="Écrire à Orbi…"><button onClick="{{envoyerOrbi}}" class="env">Envoyer</button></label>
+<a href="Recruteur-orbi.dc.html" style="display: flex; justify-content: center; margin-top: 10px; font-size: 13.5px; font-weight: 700; color: #5FE0B8; min-height: 36px; align-items: center;">Ouvrir la conversation complète</a>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{aToast}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="position: absolute; left: 20px; right: 20px; top: 54px; z-index: 30; padding: 14px 16px; border-radius: 16px; background: #F2EDE5; color: #0B1A1F; font-size: 14px; font-weight: 600; box-shadow: 0 16px 30px -10px rgba(0,0,0,.7); display: flex; align-items: center; gap: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14745F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>{{toast}}</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"vue": {"editor": "enum", "options": ["accueil", "profil", "liste"], "default": "accueil"}, "sous": {"editor": "enum", "options": ["decouvrir", "vivier", "propositions", "reseau"], "default": "decouvrir"}, "talent": {"editor": "enum", "options": ["rachel", "cedric", "nathalie", "joel", "prince", "gloria"], "default": "rachel"}, "ongletP": {"editor": "enum", "options": ["profil", "parcours", "realisations"], "default": "profil"}, "liste": {"editor": "enum", "options": ["data", "managers", "mobile"], "default": "data"}, "feuille": {"editor": "enum", "options": ["aucune", "pourquoi", "proposer", "propEnvoyee", "vivier", "menuP", "creerListe"], "default": "aucune"}, "recherche": {"editor": "enum", "options": ["", "options", "texte"], "default": ""}, "orbi": {"editor": "boolean", "default": false}, "orbiRep": {"editor": "enum", "options": ["aucune", "qui", "relance", "visibilite"], "default": "aucune"}, "$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && !window.__mvtJ) {
+      window.__mvtJ = 1;
+      const R = document.documentElement.style;
+      const pose = (o, s, tx, r) => { R.setProperty('--mvt-o', o); R.setProperty('--mvt-s', s); R.setProperty('--mvt-tx', tx); R.setProperty('--mvt-r', r); };
+      document.addEventListener('pointerdown', (e) => {
+        const b = e.target && e.target.closest && e.target.closest('button, a, [role="button"]');
+        if (!b) return;
+        const ec = b.closest('[data-ecran]') || document.body;
+        const z = ec.getBoundingClientRect(), k = b.getBoundingClientRect();
+        R.setProperty('--mvt-x', Math.round(e.clientX - z.left) + 'px');
+        R.setProperty('--mvt-y', Math.round(e.clientY - z.top) + 'px');
+        const lab = (b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '').slice(0, 40);
+        if (b.querySelector('path[d^="M15 5 8 12"]') || /^\s*retour/i.test(lab)) pose('.6', '1', '-22px', '150%');
+        else if (b.querySelector('circle[fill="#2FD3A6"]') || /orbi/i.test(b.getAttribute('aria-label') || '')) pose('1', '1', '0px', '22px');
+        else if (k.height >= 64 && k.width >= 160) pose('.5', '.92', '0px', '150%');
+        else pose('.4', '.975', '0px', '150%');
+        clearTimeout(window.__mvtT);
+        window.__mvtT = setTimeout(() => { pose('.4', '.975', '0px', '150%'); }, 700);
+      }, true);
+    }
+    const st = this.state || {};
+    const p = this.props || {};
+    const has = (k) => Object.prototype.hasOwnProperty.call(st, k);
+    const S = (o) => this.setState(o);
+    const flash = (t) => { S({ toast: t }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: null }), 2300); };
+    const val = (e) => (e && e.target ? e.target.value : '');
+    const oui = (x) => x === true || x === 'true';
+    const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const prop = (k, d) => (has(k) ? st[k] : (p[k] !== undefined && p[k] !== '' && p[k] !== 'aucune' ? p[k] : d));
+    const chiffre = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    // pastilles de choix (filtres, sous-onglets)
+    const pills = (liste, actif, cle) => liste.map(([k, t]) => ({ t, pick: () => S({ [cle]: k }), bg: k === actif ? '#F2EDE5' : 'transparent', col: k === actif ? '#0B1A1F' : '#F2EDE5', bd: k === actif ? '#F2EDE5' : 'rgba(255,255,255,.22)' }));
+    const onglets = (liste, actif, cle, extra) => liste.map(([k, t, n]) => ({ t, n: n || '', aN: !!n, sel: k === actif ? 'true' : 'false', on: k === actif, fw: k === actif ? '700' : '500', col: k === actif ? '#F2EDE5' : '#8FA39E', pick: () => S({ [cle]: k, ...(extra || {}) }) }));
+    // bande de score (doc 08) : jamais de rouge
+    const bande = (s) => (s >= 85 ? ['Très compatible', '#0B1A1F', '#A6F26B'] : s >= 70 ? ['Compatible', '#0B1A1F', '#9FE8D2'] : s >= 50 ? ['Partiellement compatible', '#0B1A1F', '#F4D59A'] : ['Peu compatible', '#0B1A1F', '#C9D6D2']);
+    // Orbi : questions propres à la page, réponse, action
+    const orbiKit = (OQ, sous, titre, bulleK) => {
+      const ouvert = has('orbi') ? st.orbi : oui(p.orbi);
+      const rep = has('oRep') ? st.oRep : (p.orbiRep && p.orbiRep !== 'aucune' ? p.orbiRep : null);
+      const r = rep && OQ[rep] ? OQ[rep] : null;
+      const oq = st.oq ?? '';
+      const cles = Object.keys(OQ);
+      return {
+        orbi: !!ouvert, ouvrirOrbi: () => S({ orbi: true, oRep: null }), fermerOrbi: () => S({ orbi: false }), autresQ: () => S({ oRep: null }),
+        aRep: !!r, sansRep: !r, orbiTitre: titre, orbiSous: sous,
+        questionsOrbi: cles.map((k) => ({ t: OQ[k].q, go: () => S({ oRep: k }) })),
+        ra: r ? { q: r.q, t: r.t, actT: r.actT || '', act: r.act || (() => S({ orbi: false })), aAct: !!r.act, aLien: !!r.href, href: r.href || '' } : { q: '', t: '', actT: '', act: () => {}, aAct: false, aLien: false, href: '' },
+        oq, ecrireOrbi: (e) => S({ oq: val(e) }), envoyerOrbi: () => { if (!oq.trim()) return flash('Écrivez votre question à Orbi'); S({ oRep: cles[0], oq: '' }); },
+        aBulle: !!bulleK, bulle: bulleK ? OQ[bulleK].q : '', bulleGo: () => S({ orbi: true, oRep: bulleK }),
+        aToast: !!st.toast, toast: st.toast || ''
+      };
+    };
+
+    // ===== Données communes de la maquette recruteur (fictives) · aujourd’hui : jeudi 22 octobre 2026 =====
+    const OFFRES = {
+      analyste: { t: 'Analyste de données junior', court: 'Analyste de données', ville: 'Kinshasa', statut: 'encours', cand: 38, nouv: 3 },
+      clientele: { t: 'Chargé·e de clientèle Mobile Money', court: 'Chargé·e de clientèle', ville: 'Lubumbashi', statut: 'encours', cand: 52, nouv: 5 },
+      flutter: { t: 'Développeur·se mobile Flutter', court: 'Développeur·se Flutter', ville: 'Kinshasa', statut: 'encours', cand: 9, nouv: 9 },
+      marketing: { t: 'Stagiaire marketing digital', court: 'Stagiaire marketing', ville: 'Kinshasa', statut: 'pause', cand: 71, nouv: 0 }
+    };
+    const ETAPES = [['recue', 'Reçue'], ['presel', 'Présélection'], ['entretien', 'Entretien'], ['proposition', 'Proposition'], ['recrute', 'Recruté·e']];
+    const ETAPE_T = { recue: 'Reçue', presel: 'Présélection', entretien: 'Entretien', proposition: 'Proposition', recrute: 'Recruté·e', nonretenu: 'Non retenu·e', retire: 'Retirée' };
+    // 8 critères du calcul (doc 08) : poids fixes, valeur de 0 à 1
+    const CRITERES = [['skills_required', 'Compétences requises', 35], ['skills_preferred', 'Compétences souhaitées', 10], ['experience', 'Expérience', 15], ['education', 'Formation', 10],
+      ['languages', 'Langues', 10], ['location', 'Lieu et mode de travail', 10], ['contract', 'Contrat et disponibilité', 5], ['semantic', 'Proximité du profil', 5]];
+    const scoreDe = (v) => Math.round(CRITERES.reduce((a, c, i) => a + c[2] * v[i], 0) / CRITERES.reduce((a, c) => a + c[2], 0) * 100);
+    const EQUIPE = {
+      nadia: { nom: 'Nadia Kalala', ini: 'NK', role: 'Chargée de recrutement', droit: 'Recruteuse', moi: true },
+      joseph: { nom: 'Joseph Ilunga', ini: 'JI', role: 'Responsable RH', droit: 'Administrateur' },
+      aline: { nom: 'Aline Mukeba', ini: 'AM', role: 'Responsable data', droit: 'Manager' },
+      patrice: { nom: 'Patrice Nzuzi', ini: 'PN', role: 'Responsable service client', droit: 'Manager' }
+    };
+    const C = (o) => ({ ...o, score: scoreDe(o.v) });
+    const CANDS = [
+      C({ k: 'grace', nom: 'Grâce Mbuyi', ini: 'GM', bg: '#DDF6EE', fg: '#14745F', offre: 'analyste', etape: 'entretien', ville: 'Kinshasa', recu: 'il y a 5 jours', nouv: false, src: 'Explorer', dispo: 'Dans 2 semaines', assigne: 'aline',
+        v: [0.92, 0.7, 0.8, 1, 0.9, 1, 1, 0.8], titre: 'Jeune diplômée · Cap : Analyste de données',
+        comp: [['SQL', true], ['Excel', true], ['Power BI', false], ['Python', false]], exp: [['Stagiaire data', 'Rawbank · 6 mois · 2025'], ['Assistante de recherche', 'UNIKIN · 1 an']],
+        form: 'Licence en économie, Université de Kinshasa (2025)', langues: 'Français C2 · Anglais B2 · Lingala', interets: ['Data', 'Fintech', 'Évoluer vers analyste confirmée'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Oui, SQL tous les jours en stage chez Rawbank, et Power BI pour deux tableaux de bord.'], ['Quand pouvez-vous commencer ?', 'Dans deux semaines, le 5 novembre.']],
+        notes: [['Aline Mukeba', 'Très bon cas pratique SQL. À voir : Power BI avancé.', 'hier'], ['Nadia Kalala', 'Disponible le 5 novembre, prétentions dans la fourchette.', 'il y a 3 jours']],
+        entretien: { j: 'Jeudi 22 oct.', h: '10 h 00', mode: 'Visio', avec: 'Aline Mukeba', lien: 'meet.jumanly.io/bf-grace' },
+        verifier: ['Niveau réel sur Power BI (déclaré, non vérifié)', 'Expérience en équipe produit'], attest: 'SQL pour l’analyse · attestation Jumanly' }),
+      C({ k: 'benjamin', nom: 'Benjamin Tshibangu', ini: 'BT', bg: '#E3E8FB', fg: '#2D3F8A', offre: 'analyste', etape: 'proposition', ville: 'Kinshasa', recu: 'il y a 6 jours', nouv: false, src: 'Orbi', dispo: 'Immédiate', assigne: 'nadia',
+        v: [0.95, 0.9, 1, 1, 0.8, 1, 1, 0.9], titre: 'Analyste junior · 2 ans d’expérience',
+        comp: [['SQL', true], ['Power BI', true], ['Python', false], ['Excel', false]], exp: [['Analyste junior', 'Vodacash · 2 ans'], ['Stage BI', 'Equity BCDC · 6 mois']],
+        form: 'Master en statistique, ISTA (2023)', langues: 'Français C2 · Anglais B1', interets: ['Data', 'Tableaux de bord', 'Encadrer des juniors'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Oui, les deux depuis deux ans.'], ['Quand pouvez-vous commencer ?', 'Tout de suite.']],
+        notes: [['Aline Mukeba', 'Excellent entretien. Proposition validée avec Joseph.', 'mardi']], entretien: null,
+        verifier: ['Anglais écrit pour les rapports au siège'], attest: 'Power BI · les bases · attestation Jumanly', proposition: { salaire: '850 USD par mois', debut: '1er novembre', etat: 'Envoyée mardi, en attente de réponse' } }),
+      C({ k: 'esther', nom: 'Esther Kabila', ini: 'EK', bg: '#F9E3C8', fg: '#8A4B12', offre: 'analyste', etape: 'recue', ville: 'Kinshasa', recu: 'il y a 2 h', nouv: true, src: 'Explorer', dispo: 'Dans 1 mois', assigne: '',
+        v: [0.88, 0.8, 0.7, 1, 0.9, 1, 0.5, 0.8], titre: 'Data analyst · 1 an d’expérience',
+        comp: [['Power BI', true], ['SQL', false], ['Excel', false]], exp: [['Data analyst', 'Kin Marché · 1 an']], form: 'Licence en informatique de gestion, UPC (2024)', langues: 'Français C2 · Anglais B2',
+        interets: ['Data', 'Visualisation', 'Commerce'], reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Power BI tous les jours, SQL pour les extractions.'], ['Quand pouvez-vous commencer ?', 'Après un mois de préavis.']],
+        notes: [], entretien: null, verifier: ['Préavis d’un mois : compatible avec la date ?'], attest: '' }),
+      C({ k: 'patrick', nom: 'Patrick Ilunga', ini: 'PI', bg: '#E8F0D8', fg: '#4F6B12', offre: 'analyste', etape: 'presel', ville: 'Kinshasa', recu: 'il y a 4 jours', nouv: false, src: 'Fil', dispo: 'Immédiate', assigne: 'nadia',
+        v: [0.8, 0.6, 0.7, 1, 0.8, 1, 1, 0.7], titre: 'Analyste crédit · reconversion vers la data',
+        comp: [['Excel', true], ['SQL', false], ['Power BI', false]], exp: [['Analyste crédit', 'Advans · 3 ans']], form: 'Licence en finance, ISC (2022)', langues: 'Français C2 · Anglais B1', interets: ['Data', 'Risques', 'Fintech'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'SQL en formation, Excel avancé au quotidien.'], ['Quand pouvez-vous commencer ?', 'Immédiatement.']], notes: [['Nadia Kalala', 'Profil finance solide, SQL à confirmer.', 'lundi']], entretien: null,
+        verifier: ['Pratique réelle de SQL'], attest: '' }),
+      C({ k: 'didier', nom: 'Didier Lukusa', ini: 'DL', bg: '#EDE3FB', fg: '#5A2D8A', offre: 'analyste', etape: 'entretien', ville: 'Kinshasa', recu: 'il y a 6 jours', nouv: false, src: 'Explorer', dispo: 'Dans 2 semaines', assigne: 'aline',
+        v: [0.7, 0.8, 0.6, 1, 0.8, 1, 1, 0.7], titre: 'Développeur Python · intérêt pour la data',
+        comp: [['Python', true], ['SQL', false], ['Excel', false]], exp: [['Développeur', 'Freelance · 2 ans']], form: 'Licence en informatique, UNIKIN (2024)', langues: 'Français C2 · Anglais B2', interets: ['Data', 'Automatisation'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'SQL oui, Power BI pas encore.'], ['Quand pouvez-vous commencer ?', 'Dans deux semaines.']], notes: [],
+        entretien: { j: 'Mardi 20 oct.', h: '14 h 00', mode: 'Sur place', avec: 'Aline Mukeba', lien: 'Baobab Fintech, Gombe', fait: true }, verifier: ['Visualisation de données'], attest: '' }),
+      C({ k: 'sarah', nom: 'Sarah Mbala', ini: 'SM', bg: '#FBE3EF', fg: '#8A2D5C', offre: 'analyste', etape: 'recue', ville: 'Matadi', recu: 'il y a 3 h', nouv: true, src: 'Partage du lien', dispo: 'Immédiate', assigne: '',
+        v: [0.7, 0.5, 0.5, 0.6, 0.9, 0.7, 1, 0.6], titre: 'Assistante comptable · Excel avancé',
+        comp: [['Excel', true], ['SQL', false]], exp: [['Assistante comptable', 'Port de Matadi · 2 ans']], form: 'Graduat en comptabilité, ISP Matadi (2023)', langues: 'Français C2 · Kikongo', interets: ['Finance', 'Data', 'Déménager à Kinshasa'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Pas encore, je suis la formation SQL sur Jumanly.'], ['Quand pouvez-vous commencer ?', 'Tout de suite, je peux venir à Kinshasa.']], notes: [], entretien: null,
+        verifier: ['Installation à Kinshasa'], attest: '' }),
+      C({ k: 'junior', nom: 'Junior Mukendi', ini: 'JM', bg: '#E3F3FB', fg: '#1E5E79', offre: 'analyste', etape: 'recue', ville: 'Kinshasa', recu: 'il y a 5 h', nouv: true, src: 'Explorer', dispo: 'Immédiate', assigne: '',
+        v: [0.55, 0.4, 0.5, 1, 0.7, 1, 1, 0.5], titre: 'Étudiant en statistique',
+        comp: [['Statistiques', true], ['Excel', false]], exp: [['Stage', 'INS · 3 mois']], form: 'Licence en statistique en cours, ISTA', langues: 'Français C2 · Anglais A2', interets: ['Statistiques', 'Premier emploi'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Non, mais j’apprends vite.'], ['Quand pouvez-vous commencer ?', 'Immédiatement.']], notes: [], entretien: null, verifier: ['Fin des études et disponibilité réelle'], attest: '' }),
+      C({ k: 'ruth', nom: 'Ruth Ngoy', ini: 'RN', bg: '#F3E8D8', fg: '#6B4F12', offre: 'analyste', etape: 'nonretenu', ville: 'Kinshasa', recu: 'il y a 6 jours', nouv: false, src: 'Explorer', dispo: 'Immédiate', assigne: 'nadia',
+        v: [0.5, 0.4, 0.4, 0.6, 0.8, 1, 1, 0.5], titre: 'Assistante administrative',
+        comp: [['Excel', false]], exp: [['Assistante', 'Cabinet Kalonji · 3 ans']], form: 'Graduat en secrétariat (2021)', langues: 'Français C2', interets: ['Administration', 'Data'],
+        reponses: [['Avez-vous déjà utilisé SQL ou Power BI ?', 'Non.'], ['Quand pouvez-vous commencer ?', 'Immédiatement.']], notes: [['Nadia Kalala', 'Profil éloigné du poste. Orientée vers le cours SQL gratuit.', 'mardi']], entretien: null, verifier: [], attest: '' }),
+      C({ k: 'amani', nom: 'Amani Kasongo', ini: 'AK', bg: '#FBE3E3', fg: '#8A2D2D', offre: 'clientele', etape: 'entretien', ville: 'Lubumbashi', recu: 'il y a 8 jours', nouv: false, src: 'Fil', dispo: 'Immédiate', assigne: 'patrice',
+        v: [0.95, 0.9, 0.9, 1, 1, 1, 1, 0.9], titre: 'Chargée de clientèle · 3 ans',
+        comp: [['Service client', true], ['Swahili', true], ['Mobile Money', false]], exp: [['Conseillère clientèle', 'Airtel Money · 3 ans']], form: 'Licence en communication, UNILU (2022)', langues: 'Français C2 · Swahili C2 · Anglais B1', interets: ['Service client', 'Encadrer une équipe'],
+        reponses: [['Parlez-vous swahili ?', 'Oui, c’est ma langue maternelle.'], ['Avez-vous déjà travaillé au contact de clients ?', 'Trois ans chez Airtel Money.']], notes: [],
+        entretien: { j: 'Vendredi 23 oct.', h: '9 h 30', mode: 'Appel', avec: 'Patrice Nzuzi', lien: 'Appel Jumanly' }, verifier: ['Gestion des réclamations difficiles'], attest: '' }),
+      C({ k: 'chantal', nom: 'Chantal Kapinga', ini: 'CK', bg: '#E8F0D8', fg: '#4F6B12', offre: 'clientele', etape: 'recue', ville: 'Lubumbashi', recu: 'il y a 1 h', nouv: true, src: 'Explorer', dispo: 'Dans 2 semaines', assigne: '',
+        v: [0.85, 0.7, 0.6, 1, 1, 1, 1, 0.8], titre: 'Caissière · Rawbank',
+        comp: [['Service client', true], ['Swahili', true]], exp: [['Caissière', 'Rawbank Lubumbashi · 2 ans']], form: 'Graduat en gestion (2023)', langues: 'Français C2 · Swahili C2', interets: ['Banque', 'Service client'],
+        reponses: [['Parlez-vous swahili ?', 'Oui.'], ['Avez-vous déjà travaillé au contact de clients ?', 'Oui, deux ans au guichet.']], notes: [], entretien: null, verifier: ['Aisance au téléphone'], attest: '' }),
+      C({ k: 'fiston', nom: 'Fiston Mwamba', ini: 'FM', bg: '#E3E8FB', fg: '#2D3F8A', offre: 'clientele', etape: 'presel', ville: 'Lubumbashi', recu: 'il y a 7 jours', nouv: false, src: 'Fil', dispo: 'Immédiate', assigne: 'patrice',
+        v: [0.75, 0.6, 0.7, 1, 0.9, 1, 1, 0.7], titre: 'Agent commercial',
+        comp: [['Vente', true], ['Swahili', true]], exp: [['Agent commercial', 'Vodacom · 2 ans']], form: 'Diplôme d’État (2020)', langues: 'Français C1 · Swahili C2', interets: ['Commercial', 'Mobile Money'],
+        reponses: [['Parlez-vous swahili ?', 'Oui.'], ['Avez-vous déjà travaillé au contact de clients ?', 'Oui, en vente terrain.']], notes: [], entretien: null, verifier: ['Rédaction des comptes rendus'], attest: '' }),
+      C({ k: 'moussa', nom: 'Moussa Diallo', ini: 'MD', bg: '#E3F3FB', fg: '#1E5E79', offre: 'flutter', etape: 'recue', ville: 'Lubumbashi', recu: 'hier', nouv: true, src: 'Orbi', dispo: 'Dans 1 mois', assigne: '',
+        v: [0.95, 0.9, 0.9, 1, 0.9, 1, 0.5, 0.9], titre: 'Développeur Flutter · 3 applications publiées',
+        comp: [['Flutter', true], ['Dart', true], ['Firebase', false]], exp: [['Développeur mobile', 'Freelance · 3 ans']], form: 'Licence en génie logiciel, UNILU (2022)', langues: 'Français C2 · Anglais B2', interets: ['Mobile', 'Réseaux lents', 'Télétravail'],
+        reponses: [['Avez-vous publié une application sur le Play Store ?', 'Oui, trois, dont une utilisée par 20 000 personnes.']], notes: [], entretien: null, verifier: ['Préavis d’un mois'], attest: '' }),
+      C({ k: 'kevin', nom: 'Kevin Lumbala', ini: 'KL', bg: '#EDE3FB', fg: '#5A2D8A', offre: 'flutter', etape: 'recue', ville: 'Kinshasa', recu: 'hier', nouv: true, src: 'Explorer', dispo: 'Immédiate', assigne: '',
+        v: [0.6, 0.5, 0.5, 1, 0.8, 1, 1, 0.6], titre: 'Développeur web · débute en Flutter',
+        comp: [['JavaScript', true], ['Flutter', false]], exp: [['Développeur web', 'Agence Kin Digital · 1 an']], form: 'Licence en informatique, ISIPA (2024)', langues: 'Français C2 · Anglais B1', interets: ['Mobile', 'Apprendre'],
+        reponses: [['Avez-vous publié une application sur le Play Store ?', 'Pas encore.']], notes: [], entretien: null, verifier: ['Projet Flutter personnel'], attest: '' }),
+      C({ k: 'joelle', nom: 'Joëlle Mbayo', ini: 'JM', bg: '#FBE3EF', fg: '#8A2D5C', offre: 'marketing', etape: 'recrute', ville: 'Kinshasa', recu: 'il y a 15 jours', nouv: false, src: 'Fil', dispo: 'Immédiate', assigne: 'nadia',
+        v: [0.9, 0.8, 0.8, 1, 0.9, 1, 1, 0.8], titre: 'Étudiante en marketing',
+        comp: [['Réseaux sociaux', true], ['Canva', true]], exp: [['Community manager', 'Association Likelemba · 1 an']], form: 'Licence en marketing en cours, ISC', langues: 'Français C2 · Anglais B2', interets: ['Marketing', 'Fintech'],
+        reponses: [['Quels réseaux utilisez-vous le plus ?', 'Instagram, TikTok et LinkedIn.']], notes: [['Nadia Kalala', 'Stage signé, début le 2 novembre.', 'lundi']], entretien: null, verifier: [], attest: '' })
+    ];
+    // Les autres candidatures de chaque offre, plus courtes, pour que les nombres soient justes partout
+    const PRENOMS = ['Joël', 'Merveille', 'Christian', 'Divine', 'Gloire', 'Héritier', 'Nathalie', 'Glody', 'Rachel', 'Exaucé', 'Prisca', 'Dieumerci', 'Sandrine', 'Jonathan', 'Bénédicte', 'Cédric', 'Ornella', 'Arsène', 'Laetitia', 'Trésor'];
+    const NOMS = ['Kabamba', 'Mutombo', 'Tshilombo', 'Lokwa', 'Mpoyi', 'Ndaya', 'Kazadi', 'Bokele', 'Masudi', 'Lufungula', 'Mwanza', 'Kanku', 'Nsimba', 'Ilunga', 'Banza'];
+    const COULS = [['#DDF6EE', '#14745F'], ['#F9E3C8', '#8A4B12'], ['#E3E8FB', '#2D3F8A'], ['#FBE3EF', '#8A2D5C'], ['#E8F0D8', '#4F6B12'], ['#EDE3FB', '#5A2D8A']];
+    const SKL = { analyste: ['Excel', 'SQL', 'Power BI'], clientele: ['Service client', 'Swahili', 'Vente'], flutter: ['Flutter', 'Dart', 'JavaScript'], marketing: ['Réseaux sociaux', 'Canva', 'Rédaction'] };
+    let graine = 7;
+    const hasard = () => { graine = (graine * 9301 + 49297) % 233280; return graine / 233280; };
+    Object.keys(OFFRES).forEach((ok) => {
+      const deja = CANDS.filter((c) => c.offre === ok);
+      let nouvRest = OFFRES[ok].nouv - deja.filter((c) => c.nouv).length;
+      for (let i = deja.length; i < OFFRES[ok].cand; i++) {
+        const pr = PRENOMS[Math.floor(hasard() * PRENOMS.length)], nm = NOMS[Math.floor(hasard() * NOMS.length)];
+        const v = CRITERES.map(() => Math.round((0.35 + hasard() * 0.6) * 100) / 100);
+        const nouv = nouvRest > 0; if (nouv) nouvRest--;
+        const r = hasard();
+        const etape = nouv ? 'recue' : (ok === 'marketing' ? (r < 0.5 ? 'nonretenu' : 'presel') : (r < 0.55 ? 'recue' : r < 0.8 ? 'presel' : 'nonretenu'));
+        const cl = COULS[i % COULS.length], sk = SKL[ok];
+        CANDS.push(C({ k: ok + '-' + i, nom: pr + ' ' + nm, ini: (pr[0] + nm[0]).toUpperCase(), bg: cl[0], fg: cl[1], offre: ok, etape, ville: OFFRES[ok].ville, recu: nouv ? 'aujourd’hui' : 'il y a ' + (2 + (i % 9)) + ' jours', nouv,
+          src: ['Explorer', 'Fil', 'Partage du lien', 'Orbi'][i % 4], dispo: ['Immédiate', 'Dans 2 semaines', 'Dans 1 mois'][i % 3], assigne: '', v, titre: sk[i % 3] + ' · ' + (1 + (i % 4)) + ' an' + ((i % 4) ? 's' : '') + ' d’expérience',
+          comp: [[sk[i % 3], i % 2 === 0], [sk[(i + 1) % 3], false]], exp: [['Poste précédent', 'Entreprise de ' + OFFRES[ok].ville + ' · ' + (1 + (i % 4)) + ' an' + ((i % 4) ? 's' : '')]], form: 'Licence (' + (2018 + (i % 7)) + ')', langues: 'Français C2',
+          interets: [sk[0], 'Premier poste chez Baobab'], reponses: [], notes: [], entretien: null, verifier: [], attest: '', court: true }));
+      }
+    });
+    const candDe = (k) => CANDS.find((c) => c.k === k) || CANDS[0];
+
+    // Talents visibles par les recruteurs : ils ont rendu leur profil visible (règle d’or 5). Les candidats sont rangés dans Candidatures.
+    const T = (o) => ({ ...o, scores: Object.fromEntries(Object.entries(o.v).map(([k, v]) => [k, scoreDe(v)])) });
+    const TAL = [
+      T({ k: 'rachel', nom: 'Rachel Kanku', ini: 'RK', bg: '#DDF6EE', fg: '#14745F', titre: 'Data analyst · 2 ans', ville: 'Goma', mobile: 'Prête à venir à Kinshasa', ouvert: true, cap: true,
+        comp: [['SQL', true], ['Excel', true], ['Power BI', true], ['Python', false]], exp: [['Data analyst', 'Kivu Data Lab · 2 ans'], ['Stagiaire statistique', 'INS Goma · 6 mois']], form: 'Licence en statistique, ULPGL (2023)', langues: 'Français C2 · Anglais B2 · Swahili C2',
+        interets: ['Fintech', 'Tableaux de bord', 'Kinshasa'], reals: [['Tableau de bord des ventes', '3 200 vues · publié dans le Fil'], ['Attestation SQL Jumanly', 'Vérifiable en ligne']], v: { analyste: [1, 0.9, 0.9, 1, 1, 0.7, 1, 0.9] }, actif: 'hier' }),
+      T({ k: 'cedric', nom: 'Cédric Mpoyi', ini: 'CM', bg: '#E3E8FB', fg: '#2D3F8A', titre: 'Développeur Flutter · 4 ans', ville: 'Kinshasa', mobile: '', ouvert: true, cap: false,
+        comp: [['Flutter', true], ['Dart', true], ['Firebase', true]], exp: [['Développeur mobile', 'Kin Digital · 4 ans']], form: 'Licence en informatique, UPN (2021)', langues: 'Français C2 · Anglais B2',
+        interets: ['Mobile', 'Télétravail', 'Encadrer'], reals: [['Appli de livraison Kin Express', '50 000 téléchargements']], v: { flutter: [1, 0.9, 1, 1, 0.9, 1, 0.5, 0.9] }, actif: 'aujourd’hui' }),
+      T({ k: 'nathalie', nom: 'Nathalie Banza', ini: 'NB', bg: '#FBE3EF', fg: '#8A2D5C', titre: 'Conseillère clientèle · 5 ans', ville: 'Lubumbashi', mobile: '', ouvert: true, cap: true,
+        comp: [['Service client', true], ['Swahili', true], ['Encadrement', false]], exp: [['Cheffe d’équipe accueil', 'Orange Money · 2 ans'], ['Conseillère', 'Orange Money · 3 ans']], form: 'Licence en gestion, UNILU (2019)', langues: 'Français C2 · Swahili C2 · Anglais B1',
+        interets: ['Service client', 'Encadrer une équipe'], reals: [['Meilleure équipe du trimestre', 'Orange Money Lubumbashi']], v: { clientele: [1, 1, 1, 1, 1, 1, 0.5, 0.9] }, actif: 'il y a 3 jours' }),
+      T({ k: 'joel', nom: 'Joël Kabeya', ini: 'JK', bg: '#E8F0D8', fg: '#4F6B12', titre: 'Community manager · 2 ans', ville: 'Kinshasa', mobile: '', ouvert: true, cap: false,
+        comp: [['Réseaux sociaux', true], ['Canva', true], ['Rédaction', false]], exp: [['Community manager', 'Agence Mboka · 2 ans']], form: 'Licence en communication, IFASIC (2023)', langues: 'Français C2 · Anglais B1 · Lingala',
+        interets: ['Marketing', 'Fintech'], reals: [['Campagne « Mboka na biso »', '120 000 personnes touchées']], v: { marketing: [0.9, 0.8, 0.8, 1, 0.9, 1, 1, 0.8] }, actif: 'aujourd’hui' }),
+      T({ k: 'prince', nom: 'Prince Kalonji', ini: 'PK', bg: '#F9E3C8', fg: '#8A4B12', titre: 'Étudiant en data · cherche un stage', ville: 'Kinshasa', mobile: '', ouvert: true, cap: true,
+        comp: [['Excel', true], ['SQL', false]], exp: [['Projet de fin d’études', 'Analyse des prix du marché de la Liberté']], form: 'Licence en économie en cours, UNIKIN', langues: 'Français C2 · Lingala',
+        interets: ['Data', 'Stage'], reals: [['Cours SQL Jumanly terminé', '12 leçons · Cap']], v: { analyste: [0.6, 0.5, 0.3, 0.8, 0.8, 1, 0.5, 0.7] }, actif: 'il y a 2 jours' }),
+      T({ k: 'gloria', nom: 'Gloria Ndaya', ini: 'GN', bg: '#EDE3FB', fg: '#5A2D8A', titre: 'Analyste crédit · 3 ans', ville: 'Kinshasa', mobile: '', ouvert: false, cap: false,
+        comp: [['Excel', true], ['Risque crédit', true], ['SQL', false]], exp: [['Analyste crédit', 'Fleuve Banque · 3 ans']], form: 'Master en finance, UNIKIN (2022)', langues: 'Français C2 · Anglais C1',
+        interets: ['Risques', 'Fintech'], reals: [['Modèle de score de crédit', 'Présenté au Forum Fintech Kinshasa']], v: { analyste: [0.8, 0.7, 0.9, 1, 1, 1, 0.5, 0.8] }, actif: 'il y a 1 semaine' })
+    ];
+    const talDe = (k) => TAL.find((t) => t.k === k) || TAL[0];
+    const meilleure = (t) => Object.entries(t.scores).sort((a, b) => b[1] - a[1])[0];
+
+    const vue = prop('vue', 'accueil');
+    const sous = prop('sous', 'decouvrir');
+    const tk = prop('talent', 'rachel');
+    const t0 = talDe(tk);
+    const fRaw = has('feuille') ? st.feuille : (p.feuille && p.feuille !== 'aucune' ? p.feuille : null);
+    const fermer = () => S({ feuille: null });
+    const ouvrir = (k) => () => S({ vue: 'profil', talent: k, ongletP: 'profil', feuille: null, rech: false, orbi: false, depuis: vue });
+
+    // ---------- Vivier (listes) et propositions ----------
+    const LISTES0 = { data: { t: 'Data · Kinshasa et Goma', m: ['rachel', 'prince', 'gloria'] }, managers: { t: 'Futurs chefs d’équipe', m: ['nathalie'] }, mobile: { t: 'Mobile', m: ['cedric'] } };
+    const listes = st.listes || LISTES0;
+    const listeK = prop('liste', 'data');
+    const dansVivier = (k) => Object.values(listes).some((l) => l.m.includes(k));
+    const props0 = { gloria: { of: 'analyste', etat: 'vue', d: 'mardi' }, joel: { of: 'marketing', etat: 'acceptee', d: 'lundi' } };
+    const propsE = st.props || props0;
+    const ETATP = { envoyee: ['Envoyée', '#B9CBC6'], vue: ['Vue, sans réponse', '#F4D59A'], acceptee: ['Acceptée : il candidate', '#A6F26B'], declinee: ['Déclinée', '#8FA39E'] };
+
+    const filtreOf = prop('fo', 'tout');
+    const tuile = (t) => {
+      const [ok, sc] = filtreOf !== 'tout' && t.scores[filtreOf] !== undefined ? [filtreOf, t.scores[filtreOf]] : meilleure(t);
+      const b = bande(sc);
+      return { ...t, sc: sc + ' %', sbg: b[2], scol: b[1], pour: OFFRES[ok].court, ouvrir: ouvrir(t.k), aCap: t.cap, enVivier: dansVivier(t.k), aProp: !!propsE[t.k], propT: propsE[t.k] ? ETATP[propsE[t.k].etat][0] : '' };
+    };
+    const filtres = [['tout', 'Toutes mes offres'], ...Object.keys(OFFRES).map((k) => [k, OFFRES[k].court])];
+    const visibles = TAL.filter((t) => t.ouvert || propsE[t.k]);
+    const pourOffres = visibles.filter((t) => filtreOf === 'tout' || t.scores[filtreOf] !== undefined).map(tuile).sort((a, b) => parseInt(b.sc) - parseInt(a.sc));
+
+    // ---------- Recherche en deux temps ----------
+    const rech = has('rech') ? st.rech : !!p.recherche;
+    const q = has('q') ? st.q : (p.recherche === 'texte' ? 'sql' : '');
+    const nq = norm(q.trim());
+    const rt = st.rt || 'tout';
+    const rTypes = pills([['tout', 'Tout'], ['competence', 'Compétence'], ['metier', 'Métier'], ['ville', 'Ville']], rt, 'rt');
+    const resRech = !nq ? [] : visibles.filter((t) => {
+      const champs = { competence: t.comp.map((c) => c[0]).join(' '), metier: t.titre, ville: t.ville + ' ' + t.mobile };
+      return norm(rt === 'tout' ? Object.values(champs).join(' ') + ' ' + t.nom : champs[rt]).includes(nq);
+    }).map(tuile);
+    const recents = [['SQL', 'compétence'], ['Swahili Lubumbashi', 'compétence et ville'], ['Flutter', 'métier']].map(([t, d]) => ({ t, d, pick: () => S({ q: t.split(' ')[0] }) }));
+    const suggestions = [['Power BI', 'manque à 14 candidats de l’offre Analyste'], ['Encadrement', 'pour Chargé·e de clientèle']].map(([t, d]) => ({ t, d, pick: () => S({ q: t }) }));
+
+    // ---------- Profil vu par le recruteur ----------
+    const ongletP = prop('ongletP', 'profil');
+    const [okP, scP] = meilleure(t0);
+    const bP = bande(scP);
+    const vP = t0.v[okP];
+    const profil = { ...t0, sc: scP + ' %', sbg: bP[2], scol: bP[1], bandeT: bP[0], pour: OFFRES[okP].t, aMobile: !!t0.mobile, aCap: t0.cap,
+      enVivier: dansVivier(t0.k), vivierT: dansVivier(t0.k) ? 'Dans votre vivier' : 'Ajouter au vivier',
+      aProp: !!propsE[t0.k], propT: propsE[t0.k] ? 'Proposition ' + OFFRES[propsE[t0.k].of].court + ' · ' + ETATP[propsE[t0.k].etat][0].toLowerCase() : '',
+      comp: t0.comp.map(([t, ok]) => ({ t, v: ok ? 'Vérifiée' : 'Déclarée', vc: ok ? '#A6F26B' : '#8FA39E' })),
+      exp: t0.exp.map(([t, d]) => ({ t, d })), interets: t0.interets.map((t) => ({ t })), reals: t0.reals.map(([t, d]) => ({ t, d })),
+      criteres: CRITERES.map(([k, t, w], i) => ({ t, pts: (Math.round(w * vP[i] * 10) / 10) + ' / ' + w, larg: Math.round(vP[i] * 100) + '%', col: vP[i] >= 0.85 ? '#A6F26B' : vP[i] >= 0.6 ? '#9FE8D2' : '#F4D59A' })) };
+    const ongletsP = onglets([['profil', 'Profil'], ['parcours', 'Parcours'], ['realisations', 'Réalisations']], ongletP, 'ongletP');
+
+    // Proposer une offre
+    const pOf = st.pOf || okP;
+    const offresProp = Object.keys(OFFRES).filter((k) => OFFRES[k].statut === 'encours').map((k) => {
+      const s = t0.scores[k]; const on = k === pOf;
+      return { t: OFFRES[k].t, s: s !== undefined ? s + ' % compatible' : 'Score calculé à l’envoi', pick: () => S({ pOf: k }), bd: on ? '#A6F26B' : 'rgba(255,255,255,.14)', bg: on ? 'rgba(166,242,107,.08)' : 'transparent', rb: on ? '#A6F26B' : 'rgba(255,255,255,.3)', rbg: on ? '#A6F26B' : 'transparent' };
+    });
+    const msgPropDef = `Bonjour ${t0.nom.split(' ')[0]}, votre profil correspond à notre offre « ${OFFRES[pOf].t} ». Si elle vous intéresse, vous pouvez candidater en un geste, gratuitement. Nadia, Baobab Fintech`;
+    const msgProp = st.msgProp ?? msgPropDef;
+    const envoyerProp = () => S({ props: { ...propsE, [t0.k]: { of: pOf, etat: 'envoyee', d: 'à l’instant' } }, feuille: 'propEnvoyee', msgProp: undefined });
+
+    // Ajouter au vivier
+    const lsel = st.lsel || Object.keys(listes).filter((k) => listes[k].m.includes(t0.k));
+    const listesChoix = Object.entries(listes).map(([k, l]) => { const on = lsel.includes(k); return { t: l.t, n: l.m.length + ' personne' + (l.m.length > 1 ? 's' : ''), pick: () => S({ lsel: on ? lsel.filter((x) => x !== k) : [...lsel, k] }), sym: on ? '✓' : '', bg: on ? '#A6F26B' : 'transparent', bd: on ? '#A6F26B' : 'rgba(255,255,255,.3)' }; });
+    const nouvelleL = st.nouvelleL ?? '';
+    const enregistrerVivier = () => {
+      const L = JSON.parse(JSON.stringify(listes));
+      Object.keys(L).forEach((k) => { L[k].m = L[k].m.filter((x) => x !== t0.k); if (lsel.includes(k)) L[k].m.push(t0.k); });
+      if (nouvelleL.trim()) L['l' + Object.keys(L).length] = { t: nouvelleL.trim(), m: [t0.k] };
+      S({ listes: L, feuille: null, lsel: undefined, nouvelleL: '' }); flash(lsel.length || nouvelleL.trim() ? `${t0.nom.split(' ')[0]} est dans votre vivier` : 'Retiré du vivier');
+    };
+
+    // Vivier : listes et liste ouverte
+    const vivierL = Object.entries(listes).map(([k, l]) => ({ t: l.t, n: l.m.length + ' talent' + (l.m.length > 1 ? 's' : ''), avs: l.m.slice(0, 3).map((m) => { const x = talDe(m); return { ini: x.ini, bg: x.bg, fg: x.fg }; }), ouvrir: () => S({ vue: 'liste', liste: k }) }));
+    const lst = listes[listeK] || Object.values(listes)[0];
+    const membres = lst.m.map((m) => tuile(talDe(m)));
+    const propsL = Object.entries(propsE).map(([k, pr]) => { const x = talDe(k); return { nom: x.nom, ini: x.ini, bg: x.bg, fg: x.fg, offre: OFFRES[pr.of].court, d: pr.d, etat: ETATP[pr.etat][0], ecol: ETATP[pr.etat][1], ouvrir: ouvrir(k), aCand: pr.etat === 'acceptee' }; });
+
+    // ---------- Réseau : relations avec des talents et d’autres recruteurs ----------
+    const PERS = {
+      christelle: { nom: 'Christelle Mwamba', ini: 'CM', bg: '#1E4E79', fg: '#FFFFFF', s: 'Recruteuse · Fleuve Banque · Kinshasa', type: 'Recruteuse', href: 'Recruteur-entreprise-fleuve.dc.html', commun: '12 relations en commun' },
+      tresor: { nom: 'Trésor Banza', ini: 'TB', bg: '#4B2D7A', fg: '#FFFFFF', s: 'Responsable RH · Kivu Data Lab · Goma', type: 'RH', href: 'Recruteur-entreprise-kivu.dc.html', commun: 'Même domaine : data' },
+      ornella: { nom: 'Ornella Kazadi', ini: 'OK', bg: '#B07A12', fg: '#FFFFFF', s: 'Chargée RH · Mwinda Énergie · Kinshasa', type: 'RH', href: 'Recruteur-entreprise-mwinda.dc.html', commun: 'Même ville : Kinshasa' }
+    };
+    TAL.forEach((t) => { PERS[t.k] = { nom: t.nom, ini: t.ini, bg: t.bg, fg: t.fg, s: t.titre + ' · ' + t.ville, type: 'Talent', href: t.k === 'rachel' ? 'Recruteur-talent.dc.html' : `Recruteur-talent-${t.k}.dc.html`, commun: t.cap ? 'Badge Cap' : 'Même pays : RD Congo' }; });
+    const rel = st.rel || { joel: 'relation', christelle: 'relation', nathalie: 'relation' };
+    const recues = (st.recues || ['prince', 'tresor']).filter((k) => !rel[k]);
+    const etatRel = (k) => rel[k] || '';
+    const relBouton = (k) => { const e = etatRel(k); return { bt: e === 'relation' ? 'Relation' : e === 'attente' ? 'En attente' : 'Se connecter', bbg: e ? 'transparent' : '#A6F26B', bcol: e ? '#B9CBC6' : '#0B1A1F', bbd: e ? 'rgba(255,255,255,.22)' : '#A6F26B',
+      connecter: () => { if (e === 'relation') return; S({ rel: { ...rel, [k]: e === 'attente' ? undefined : 'attente' } }); if (!e) flash(`Invitation envoyée à ${PERS[k].nom.split(' ')[0]}`); } }; };
+    const convDe = (k) => (k === 'joel' ? 'Recruteur-conversation-talent.dc.html' : ['nathalie', 'christelle'].includes(k) ? `Recruteur-conversation-${k}.dc.html` : 'Recruteur-messages-nouveau.dc.html');
+    const persL = (k) => ({ k, ...PERS[k], ...relBouton(k), msgHref: convDe(k) });
+    const invitations = recues.map((k) => ({ ...persL(k), accepter: () => { S({ rel: { ...rel, [k]: 'relation' } }); flash(`${PERS[k].nom.split(' ')[0]} fait partie de vos relations`); }, ignorer: () => S({ recues: recues.filter((x) => x !== k) }) }));
+    const relations = Object.keys(rel).filter((k) => rel[k] === 'relation').map(persL);
+    const suggestionsR = ['ornella', 'rachel', 'cedric', 'gloria'].filter((k) => rel[k] !== 'relation').map(persL);
+    const relFiltre = prop('rf', 'tous');
+    const relationsF = relations.filter((x) => relFiltre === 'tous' || (relFiltre === 'talents' ? x.type === 'Talent' : x.type !== 'Talent'));
+    const profilRel = relBouton(t0.k);
+
+    const OQ = {
+      qui: { q: 'Qui proposer pour l’offre Analyste ?', t: `Rachel Kanku (Goma, prête à venir à Kinshasa) couvre SQL, Excel et Power BI vérifiés : ${talDe('rachel').scores.analyste} %. Elle n’a pas encore candidaté. Gloria Ndaya a vu votre proposition mardi sans répondre.`, actT: 'Voir le profil de Rachel', act: () => S({ vue: 'profil', talent: 'rachel', orbi: false }) },
+      relance: { q: 'Relancer les propositions sans réponse', t: 'Une seule proposition attend : Gloria Ndaya, vue mardi. Une relance courte suffit ; si elle ne répond pas, Jumanly ne la relancera pas une deuxième fois.', actT: 'Voir les propositions', act: () => S({ vue: 'accueil', sous: 'propositions', orbi: false }) },
+      visibilite: { q: 'Pourquoi je ne vois pas tous les talents ?', t: 'Vous voyez les personnes qui ont rendu leur profil visible aux recruteurs, et celles qui ont candidaté chez vous (dans Candidatures). Chaque profil ouvert est enregistré et la personne le sait.' }
+    };
+    const ok = orbiKit(OQ, 'depuis Talents', 'Trouver des talents', vue === 'accueil' && sous === 'decouvrir' ? 'qui' : null);
+
+    return {
+
+      avecNav: !(this.props && (this.props.coque === true || this.props.coque === 'true')),
+      ...ok,
+      vAccueil: vue === 'accueil', vProfil: vue === 'profil', vListe: vue === 'liste',
+      sousOnglets: onglets([['decouvrir', 'Découvrir'], ['vivier', 'Vivier', String(Object.values(listes).reduce((a, l) => a + l.m.length, 0))], ['propositions', 'Propositions', String(Object.keys(propsE).length)], ['reseau', 'Réseau', recues.length ? String(recues.length) : '']], sous, 'sous'),
+      sRes: sous === 'reseau', invitations, aInvit: invitations.length > 0, relationsF, suggestionsR, nRelT: (relations.length + 125) + ' relations', relFiltres: pills([['tous', 'Toutes'], ['talents', 'Talents'], ['recruteurs', 'Recruteurs et RH']], relFiltre, 'rf'), profilRel, msgHrefP: convDe(t0.k), estRelation: etatRel(t0.k) === 'relation', pasRelation: etatRel(t0.k) !== 'relation',
+      sDec: sous === 'decouvrir', sViv: sous === 'vivier', sProp: sous === 'propositions',
+      filtres: pills(filtres, filtreOf, 'fo'), pourOffres, aPourOffres: pourOffres.length > 0, sansPourOffres: pourOffres.length === 0,
+      nVisT: `${visibles.length} talents visibles · mis à jour aujourd’hui`,
+      aRech: rech, sansRech: !rech, q, aQ: q.length > 0, qVide: !nq, qPlein: !!nq, rTypes, recents, suggestions, resRech, rRien: !!nq && resRech.length === 0, nRes: resRech.length + ' talent' + (resRech.length > 1 ? 's' : ''),
+      ouvrirRech: () => S({ rech: true }), annulerRech: () => S({ rech: false, q: '' }), chercher: (e) => S({ q: val(e) }), viderQ: () => S({ q: '' }),
+      vivierL, nouvelleListe: () => S({ feuille: 'creerListe' }), nomListe: st.nomListe ?? '', ecrireNomListe: (e) => S({ nomListe: val(e) }),
+      creerListe: () => { const n = (st.nomListe || '').trim(); if (!n) return flash('Donnez un nom à la liste'); S({ listes: { ...listes, ['l' + Object.keys(listes).length]: { t: n, m: [] } }, feuille: null, nomListe: '' }); flash(`Liste « ${n} » créée`); },
+      propsL, aPropsL: propsL.length > 0,
+      // liste ouverte
+      listeT: lst.t, listeN: lst.m.length + ' talent' + (lst.m.length > 1 ? 's' : ''), membres, retourListe: () => S({ vue: 'accueil', sous: 'vivier' }),
+      // profil
+      profil, ongletsP, oProfil: ongletP === 'profil', oParcours: ongletP === 'parcours', oReals: ongletP === 'realisations',
+      retourProfil: () => S({ vue: st.depuis === 'liste' ? 'liste' : 'accueil', feuille: null }), retourT: st.depuis === 'liste' ? lst.t : 'Talents',
+      ouvrirPourquoi: () => S({ feuille: 'pourquoi' }), ouvrirProposer: () => S({ feuille: 'proposer', pOf: okP }), ouvrirVivier: () => S({ feuille: 'vivier' }), ouvrirMenuP: () => S({ feuille: 'menuP' }),
+      fPourquoi: fRaw === 'pourquoi', fProposer: fRaw === 'proposer', fPropEnvoyee: fRaw === 'propEnvoyee', fVivier: fRaw === 'vivier', fMenuP: fRaw === 'menuP', fCreerListe: fRaw === 'creerListe', fermer,
+      offresProp, msgProp, ecrireMsgProp: (e) => S({ msgProp: val(e) }), envoyerProp, propOffreT: OFFRES[pOf].t,
+      listesChoix, nouvelleL, ecrireNouvelleL: (e) => S({ nouvelleL: val(e) }), enregistrerVivier,
+      menuP: [
+        { t: 'Partager le profil à un collègue', s: 'Aline, Patrice ou Joseph le reçoivent dans Messages', go: () => { fermer(); flash('Profil partagé avec Aline Mukeba'); } },
+        { t: 'Télécharger le profil en PDF', s: 'Le téléchargement est enregistré', go: () => { fermer(); flash('Profil téléchargé en PDF'); } },
+        { t: 'Masquer ce profil de mes suggestions', s: 'Il reste visible par recherche', go: () => { S({ vue: 'accueil', feuille: null }); flash('Profil masqué de vos suggestions'); } },
+        { t: 'Signaler ce profil', s: 'L’équipe Jumanly vérifie sous 24 h', go: () => { fermer(); flash('Signalement envoyé à l’équipe Jumanly'); } }
+      ],
+      vivCol: profil.enVivier ? '#A6F26B' : '#F2EDE5', fab: vue === 'accueil' && !rech
+    };
+  }
+}
+
+</script>
+</body>
+</html>

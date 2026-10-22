@@ -1,0 +1,400 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jumanly Modèle B · Recruteur · Fil</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0;background:#050D10}
+a{color:#A6F26B;text-decoration:none}
+.fd,.fd *{box-sizing:border-box}
+.fd{font-family:"Sora",system-ui,sans-serif;color:#F2EDE5;-webkit-font-smoothing:antialiased}
+.fd h1,.fd h2,.fd h3,.fd p{margin:0}
+.fd button{font:inherit;color:inherit;background:none;border:0;padding:0;margin:0;cursor:pointer;text-align:left}
+.fd textarea{font:inherit}
+.fd .scroll{scrollbar-width:none}.fd .scroll::-webkit-scrollbar{display:none}
+.fd .hrow{display:flex;gap:10px;overflow-x:auto;padding:0 20px 4px;scrollbar-width:none}
+.fd .hrow::after{content:"";flex:0 0 6px}
+.fd .hrow::-webkit-scrollbar{display:none}
+.fd .hrow>*{flex:none}
+.fd .sec{display:flex;align-items:baseline;justify-content:space-between;padding:0 20px;margin:28px 0 10px}
+.fd .sec h2{font-size:18px;font-weight:600}
+.fd .sec a,.fd .sec button{font-size:14px;font-weight:600;min-height:36px;display:inline-flex;align-items:center}
+.fd .meta{font-size:13px;color:#8FA39E}
+.fd .tag{display:inline-block;font-size:12.5px;padding:5px 9px;border-radius:7px;background:#1A2629;color:#C9D6D2;white-space:nowrap}
+.fd .ligne{width:100%;display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid rgba(255,255,255,.07);color:#F2EDE5}
+.fd .mini{width:48px;height:48px;border-radius:14px;color:#FFFFFF;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .av{width:44px;height:44px;border-radius:50%;background:#1B3338;color:#F2EDE5;font-size:14px;font-weight:700;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .barre{display:block;height:4px;border-radius:2px;background:rgba(255,255,255,.1);margin-top:8px;overflow:hidden}
+.fd .barre i{display:block;height:100%;background:#A6F26B;border-radius:2px}
+.fd .chip,.fd .pill{height:38px;padding:0 15px;border-radius:19px;font-size:13.5px;font-weight:600;white-space:nowrap;display:inline-flex;align-items:center;flex:none}
+.fd .bp{display:flex;align-items:center;justify-content:center;gap:8px;width:100%;height:52px;border-radius:26px;background:#A6F26B;color:#0B1A1F;font-size:15px;font-weight:700;text-align:center}
+.fd .bs{display:flex;align-items:center;justify-content:center;gap:8px;height:52px;padding:0 20px;border-radius:26px;border:1px solid rgba(255,255,255,.18);font-size:14px;font-weight:600;text-align:center;color:#F2EDE5}
+.fd .bloc{padding:18px 20px;border-bottom:1px solid rgba(255,255,255,.07)}
+.fd .bloc h3{font-size:15px;font-weight:700;margin-bottom:10px}
+.fd .li{display:flex;gap:10px;font-size:14.5px;line-height:1.45;color:#ECE7DF;padding:4px 0}
+.fd .li i{width:6px;height:6px;border-radius:50%;background:#A6F26B;margin-top:8px;flex:none}
+.fd .barreh{padding:50px 12px 8px;display:flex;align-items:center;gap:4px;border-bottom:1px solid rgba(255,255,255,.08);min-height:102px}
+.fd .retour{height:44px;padding:0 8px;font-size:15px;font-weight:600;display:flex;align-items:center;gap:4px;white-space:nowrap;color:#F2EDE5}
+.fd .plus{font-size:18px;letter-spacing:1px;color:#B9CBC6;min-width:44px;min-height:44px;text-align:center;display:flex;align-items:center;justify-content:center}
+.fd .rond{width:44px;height:44px;border-radius:50%;display:flex;align-items:center;justify-content:center;flex:none}
+.fd .nav{position:absolute;left:0;right:0;bottom:0;height:84px;padding:8px 6px 22px;background:rgba(11,26,31,.86);backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);border-top:1px solid rgba(255,255,255,.07);display:grid;grid-template-columns:repeat(5,minmax(0,1fr));z-index:4}
+.fd .nav a{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;position:relative}
+.fd .voile{position:absolute;inset:0;width:100%;background:rgba(0,0,0,.55)}
+.fd .feuille{position:absolute;left:0;right:0;bottom:0;background:#13282C;border-radius:30px 30px 0 0;padding:10px 20px 28px;border-top:1px solid rgba(255,255,255,.08);max-height:760px;overflow-y:auto;scrollbar-width:none}
+.fd .poignee{display:block;width:40px;height:5px;border-radius:3px;background:rgba(255,255,255,.2);margin:0 auto 14px}
+.fd .opt{width:100%;display:flex;align-items:center;gap:14px;min-height:56px;padding:8px 4px;border-bottom:1px solid rgba(255,255,255,.06);font-size:15px;font-weight:600;color:#F2EDE5}
+.fd .opt small{display:block;font-size:12.5px;font-weight:400;color:#8FA39E;margin-top:2px}
+.fd .annuler{width:100%;height:50px;margin-top:12px;border-radius:999px;background:#1B3338;text-align:center;font-size:15px;font-weight:700;display:flex;align-items:center;justify-content:center;color:#F2EDE5}
+.fd .q{width:100%;padding:14px 16px;border-radius:16px;background:#1B3338;font-size:14px;font-weight:600;line-height:1.4;display:block;color:#F2EDE5}
+.fd .champ{display:flex;align-items:center;gap:10px;min-height:52px;border-radius:26px;background:#0B1A1F;padding:0 6px 0 18px;border:1px solid rgba(47,211,166,.45);min-width:0}
+.fd .champ input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:14px;color:#F2EDE5}
+.fd .env{height:40px;padding:0 16px;border-radius:20px;background:#A6F26B;color:#0B1A1F;font-size:13px;font-weight:700;display:flex;align-items:center;flex:none}
+.fd .in{width:100%;height:52px;border-radius:16px;background:#0B1A1F;border:1px solid rgba(255,255,255,.14);padding:0 16px;font:inherit;font-size:15px;color:#F2EDE5;outline:0}
+.fd .ta{width:100%;min-height:96px;border-radius:16px;background:#0B1A1F;border:1px solid rgba(255,255,255,.14);padding:12px 14px;font-size:14.5px;line-height:1.45;color:#F2EDE5;outline:0;resize:none}
+.fd .lab{display:block;font-size:13px;font-weight:600;color:#B9CBC6;margin:20px 0 10px}
+.fd .bas{position:absolute;left:0;right:0;bottom:0;padding:12px 20px 28px;background:rgba(11,26,31,.92);backdrop-filter:blur(16px);-webkit-backdrop-filter:blur(16px);border-top:1px solid rgba(255,255,255,.08);display:flex;gap:10px;z-index:4}
+.fd .seg{display:flex;gap:0;border-bottom:1px solid rgba(255,255,255,.08);overflow-x:auto;scrollbar-width:none;padding:0 8px}
+.fd .seg::-webkit-scrollbar{display:none}
+.fd .seg button{height:46px;padding:0 12px;font-size:14px;white-space:nowrap;position:relative;flex:none}
+.fd .seg button i{position:absolute;left:12px;right:12px;bottom:-1px;height:3px;border-radius:2px;background:#A6F26B}
+.fd .carte{width:100%;display:block;border-radius:20px;border:1px solid rgba(255,255,255,.12);background:#13282C;padding:16px;color:#F2EDE5}
+.fd .kpi{display:flex;gap:8px}
+.fd .kpi span{flex:1;border-radius:12px;background:#0B1A1F;padding:9px 10px;font-size:11.5px;color:#8FA39E}
+.fd .kpi b{display:block;font-size:17px;font-weight:700;color:#F2EDE5;margin-bottom:1px}
+.fd .g2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.fd .tuile{border-radius:16px;background:#13282C;border:1px solid rgba(255,255,255,.08);padding:14px;font-size:12.5px;color:#8FA39E;display:block}
+.fd .tuile b{display:block;font-size:24px;font-weight:700;color:#F2EDE5;letter-spacing:-0.02em;margin-bottom:2px}
+.fd .case{width:24px;height:24px;border-radius:7px;border:1.5px solid rgba(255,255,255,.3);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:800;color:#0B1A1F;flex:none}
+.fd .score{min-width:50px;height:30px;padding:0 9px;border-radius:15px;font-size:13.5px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;flex:none}
+.fd .rech{flex:1;min-width:0;height:50px;border-radius:25px;background:#1A2629;display:flex;align-items:center;gap:12px;padding:0 16px}
+.fd .rech input{flex:1 1 0;width:0;min-width:0;border:0;outline:0;background:none;font:inherit;font-size:16px;color:#F2EDE5}
+.fd .rech input::placeholder,.fd .in::placeholder,.fd .champ input::placeholder{color:#6F8580}
+/* mvt-jumanly 2 */
+:root{--mvt-o:.4;--mvt-s:.975;--mvt-tx:0px;--mvt-r:150%;--mvt-x:50%;--mvt-y:50%}
+[data-ecran]{animation:mvtEcran .34s cubic-bezier(.2,.8,.2,1) both;transform-origin:var(--mvt-x) var(--mvt-y)}
+.voile,.shb{animation:mvtVoile .26s ease-out both}
+.voile+div,.shb+div,.voile+.feuille,.shb+.shp,[style*="z-index: 10"]>button:first-child+div{animation:mvtMonte .34s cubic-bezier(.2,.8,.2,1) both}
+@keyframes mvtEcran{from{opacity:var(--mvt-o);transform:translateX(var(--mvt-tx)) scale(var(--mvt-s));clip-path:circle(var(--mvt-r) at var(--mvt-x) var(--mvt-y))}to{opacity:1;transform:none;clip-path:circle(150% at var(--mvt-x) var(--mvt-y))}}
+@keyframes mvtVoile{from{opacity:0}to{opacity:1}}
+@keyframes mvtMonte{from{transform:translateY(56px);opacity:.6}to{transform:none;opacity:1}}
+@media (prefers-reduced-motion: reduce){[data-ecran],.voile,.shb,.voile+div,.shb+div{animation:none!important}}
+/* fin mvt */
+</style>
+</helmet>
+<div class="fd" style="width: 390px; height: 844px; position: relative; overflow: hidden; background: #0B1A1F; border-radius: 44px;">
+
+<sc-if value="{{vListe}}" hint-placeholder-val="{{ true }}">
+<div class="scroll" data-ecran="" style="position: absolute; inset: 0; overflow-y: auto; padding-bottom: 170px;">
+<header style="padding: 54px 20px 0; display: flex; align-items: center; gap: 10px;">
+<h1 style="flex: 1; font-size: 28px; font-weight: 700; letter-spacing: -0.02em;">Fil</h1>
+<sc-if value="{{sansRech}}" hint-placeholder-val="{{ true }}"><button onClick="{{ouvrirRech}}" class="rond" aria-label="Rechercher" style="background: #1A2629;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB3AE" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex: none;"><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4.4-4.4"></path></svg></button></sc-if><a href="Recruteur-notifications.dc.html" class="rond" aria-label="Notifications, 4 nouvelles" style="position: relative; background: #1A2629; color: #F2EDE5;"><svg width="21" height="21" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 16.5V11a6 6 0 1 1 12 0v5.5l1.5 1.5h-15zM10 20.5a2 2 0 0 0 4 0"></path></svg><span style="position: absolute; right: 7px; top: 7px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #A6F26B; color: #0B1A1F; font-size: 10px; font-weight: 800; display: flex; align-items: center; justify-content: center;">4</span></a><a href="Recruteur-compte.dc.html" aria-label="Mon compte" style="position: relative; width: 36px; height: 36px; flex: none; display: block;"><span style="display: block; width: 36px; height: 36px; border-radius: 50%; overflow: hidden;"><svg width="36" height="36" viewBox="0 0 100 100" aria-hidden="true" style="display: block; border-radius: 50%; flex: none;"><rect width="100" height="100" fill="#F4C9A0"></rect><circle cx="50" cy="40" r="25" fill="#2A1A12"></circle><ellipse cx="50" cy="46" rx="16" ry="19" fill="#8A5A3B"></ellipse><path d="M34 40c2-13 30-15 32 0-4-6-12-9-16-9s-12 3-16 9z" fill="#2A1A12"></path><path d="M18 100c4-20 18-28 32-28s28 8 32 28z" fill="#0F3F37"></path><path d="M42 72l8 10 8-10" fill="none" stroke="#A6F26B" stroke-width="3"></path></svg></span><span style="position: absolute; right: -3px; bottom: -3px; width: 16px; height: 16px; border-radius: 5px; background: #14745F; border: 2px solid #0B1A1F; color: #FFFFFF; font-size: 6.5px; font-weight: 800; display: flex; align-items: center; justify-content: center;">BF</span></a>
+</header>
+<sc-if value="{{sansRech}}" hint-placeholder-val="{{ true }}">
+<div>
+<div style="padding: 14px 20px 0;"><button onClick="{{ouvrirPublier}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 10px 10px 10px 12px; border-radius: 22px; background: #13282C;">
+<span style="width: 38px; height: 38px; border-radius: 50%; overflow: hidden; flex: none;"><svg width="38" height="38" viewBox="0 0 100 100" aria-hidden="true" style="display: block; border-radius: 50%; flex: none;"><rect width="100" height="100" fill="#F4C9A0"></rect><circle cx="50" cy="40" r="25" fill="#2A1A12"></circle><ellipse cx="50" cy="46" rx="16" ry="19" fill="#8A5A3B"></ellipse><path d="M34 40c2-13 30-15 32 0-4-6-12-9-16-9s-12 3-16 9z" fill="#2A1A12"></path><path d="M18 100c4-20 18-28 32-28s28 8 32 28z" fill="#0F3F37"></path><path d="M42 72l8 10 8-10" fill="none" stroke="#A6F26B" stroke-width="3"></path></svg></span><span style="flex: 1; color: #6F8580; font-size: 14.5px;">Partager une nouvelle, une offre…</span>
+<span style="height: 34px; padding: 0 12px; border-radius: 17px; background: #A6F26B; color: #0B1A1F; font-size: 12.5px; font-weight: 700; display: flex; align-items: center;">Publier</span></button>
+<button onClick="{{ouvrirPublierBaobab}}" style="display: flex; align-items: center; gap: 8px; margin-top: 8px; font-size: 13px; font-weight: 600; color: #9FD9C6; min-height: 36px;"><span style="width: 20px; height: 20px; border-radius: 6px; background: #14745F; color: #FFFFFF; font-size: 8px; font-weight: 800; display: flex; align-items: center; justify-content: center;">BF</span>Publier au nom de Baobab Fintech</button></div>
+<div style="margin-top: 6px;"><div class="seg" role="tablist"><sc-for list="{{sousOnglets}}" as="o" hint-placeholder-count="3"><button role="tab" aria-selected="{{o.sel}}" onClick="{{o.pick}}" style="font-weight: {{o.fw}}; color: {{o.col}};">{{o.t}}<sc-if value="{{o.aN}}" hint-placeholder-val="{{ false }}"><span style="margin-left: 6px; font-size: 11.5px; font-weight: 800; color: #A6F26B;">{{o.n}}</span></sc-if><sc-if value="{{o.on}}" hint-placeholder-val="{{ false }}"><i></i></sc-if></button></sc-for></div></div>
+<sc-if value="{{sEnt}}" hint-placeholder-val="{{ false }}"><div class="hrow" style="gap: 10px; padding-top: 14px;"><sc-for list="{{ENTS}}" as="e" hint-placeholder-count="4"><div style="width: 150px; padding: 14px; border-radius: 20px; background: #13282C; border: 1px solid rgba(255,255,255,.08);">
+<a href="{{e.href}}" style="display: block; color: #F2EDE5;"><span class="mini" style="background: {{e.bg}}; color: {{e.fg}};">{{e.ini}}</span><b style="display: block; font-size: 14px; margin-top: 10px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{e.nom}}</b><span class="meta" style="font-size: 12px;">{{e.s}}</span></a>
+<button onClick="{{e.suivre}}" style="width: 100%; height: 34px; margin-top: 10px; border-radius: 17px; border: 1px solid {{e.bbd}}; background: {{e.bbg}}; color: {{e.bcol}}; font-size: 12.5px; font-weight: 700; text-align: center;">{{e.bt}}</button></div></sc-for></div></sc-if>
+<sc-for list="{{liste}}" as="x" hint-placeholder-count="3"><article style="padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,.07);"><div style="display: flex; align-items: center; gap: 12px;"><a href="{{x.href}}" style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; color: #F2EDE5;"><span class="av" style="border-radius: {{x.rond}}; background: {{x.bg}}; color: {{x.fg}};">{{x.ini}}</span><span style="min-width: 0;"><b style="display: block; font-size: 15px;">{{x.auteur}}</b><span class="meta" style="display: block; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{x.s}} · {{x.d}}</span></span></a><sc-if value="{{x.aSuivre}}" hint-placeholder-val="{{ false }}"><button onClick="{{x.suivre}}" style="height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid rgba(166,242,107,.5); color: #A6F26B; font-size: 12.5px; font-weight: 700;">Suivre</button></sc-if><button onClick="{{x.menu}}" class="plus" aria-label="Plus d’options">···</button></div><sc-if value="{{x.aTag}}" hint-placeholder-val="{{ true }}"><span class="tag" style="margin-top: 12px; font-size: 11.5px; font-weight: 700; color: #9FD9C6; background: rgba(47,211,166,.1);">{{x.tag}}</span></sc-if><button onClick="{{x.ouvrir}}" style="display: block; font-size: 15px; line-height: 1.5; margin-top: 10px; color: #ECE7DF;">{{x.t}}</button><sc-if value="{{x.aVis}}" hint-placeholder-val="{{ true }}"><button onClick="{{x.ouvrir}}" style="display: block; width: 100%; margin-top: 12px; border-radius: 18px; overflow: hidden;"><sc-if value="{{x.vGraph}}" hint-placeholder-val="{{ true }}"><span style="display: block; height: 170px; background: #F2EDE5; padding: 16px; position: relative;"><span style="font-size: 12px; font-weight: 700; color: #14745F;">{{x.visT}}</span><svg viewBox="0 0 300 100" width="100%" height="110" preserveAspectRatio="none" aria-hidden="true" style="display: block; margin-top: 10px;"><path d="M0 85 L30 78 L60 80 L90 62 L120 66 L150 48 L180 52 L210 34 L240 38 L270 20 L300 14" fill="none" stroke="#14745F" stroke-width="3"></path><path d="M0 85 L30 78 L60 80 L90 62 L120 66 L150 48 L180 52 L210 34 L240 38 L270 20 L300 14 V100 H0z" fill="rgba(20,116,95,.12)"></path></svg></span></sc-if><sc-if value="{{x.vOffre}}" hint-placeholder-val="{{ false }}"><span style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #0F3F37; border: 1px solid rgba(166,242,107,.25); border-radius: 18px;"><span class="mini" style="background: #A6F26B; color: #0F3F37;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M3.5 8.5a1.5 1.5 0 0 1 1.5-1.5h14a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5zM8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3.5 12.5h17M12 11.5v2"></path></svg></span><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">{{x.visT}}</b><span style="font-size: 12.5px; color: #A6F26B; font-weight: 700;">Voir l’offre</span></span></span></sc-if><sc-if value="{{x.vBienv}}" hint-placeholder-val="{{ false }}"><span style="display: flex; align-items: flex-end; height: 170px; padding: 16px; background: radial-gradient(circle at 75% 30%, #A6F26B 0 22%, transparent 23%), linear-gradient(150deg, #14745F, #0F3F37); color: #F2EDE5;"><b style="font-size: 22px; line-height: 1.1;">{{x.visT}}</b></span></sc-if><sc-if value="{{x.vAppli}}" hint-placeholder-val="{{ false }}"><span style="display: flex; align-items: center; justify-content: center; gap: 14px; height: 170px; background: linear-gradient(150deg, #1E3B8A, #0B1A1F);"><span style="width: 70px; height: 128px; border-radius: 16px; border: 3px solid #F2EDE5; background: #13282C; display: block;"></span><b style="font-size: 15px; max-width: 150px; line-height: 1.3;">{{x.visT}}</b></span></sc-if><sc-if value="{{x.vEven}}" hint-placeholder-val="{{ false }}"><span style="display: flex; gap: 14px; align-items: center; padding: 16px; background: #F2EDE5; color: #0B1A1F;"><span style="width: 56px; height: 62px; border-radius: 14px; background: #0F3F37; color: #A6F26B; text-align: center; padding-top: 8px; flex: none;"><b style="display: block; font-size: 22px;">14</b><span style="font-size: 11px; font-weight: 700;">NOV.</span></span><span><b style="display: block; font-size: 15px;">Journée carrière</b><span style="font-size: 13px; color: #4A5A56;">{{x.visT}}</span></span></span></sc-if></button></sc-if><sc-if value="{{x.aStats}}" hint-placeholder-val="{{ false }}"><a href="Recruteur-offre-detail.dc.html" style="display: block; margin-top: 10px; font-size: 13px; font-weight: 700; color: #5FE0B8;">{{x.stats}} · voir les statistiques</a></sc-if><div style="display: flex; gap: 6px; margin-top: 12px;"><button onClick="{{x.aimer}}" style="display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border-radius: 19px; background: #13282C; font-size: 13px; font-weight: 600; color: {{x.jcol}};"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M12 20s-7.5-4.6-7.5-10A4.2 4.2 0 0 1 12 7.6 4.2 4.2 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"></path></svg>{{x.jt}}</button><button onClick="{{x.commenter}}" style="display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border-radius: 19px; background: #13282C; font-size: 13px; font-weight: 600; color: #B9CBC6;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>{{x.ct}}</button><span style="flex: 1;"></span><button onClick="{{x.partager}}" aria-label="Partager" style="width: 38px; height: 38px; border-radius: 50%; background: #13282C; display: flex; align-items: center; justify-content: center; color: #B9CBC6;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M12 4v11M7.5 8.5 12 4l4.5 4.5M5 14v5h14v-5"></path></svg></button></div></article></sc-for>
+<sc-if value="{{rien}}" hint-placeholder-val="{{ false }}"><p class="meta" style="text-align: center; padding: 40px 20px;">Rien de neuf ici. Suivez des entreprises ou des talents pour remplir cet onglet.</p></sc-if>
+</div>
+</sc-if>
+<sc-if value="{{aRech}}" hint-placeholder-val="{{ false }}">
+<div>
+<div style="padding: 14px 20px 0; display: flex; align-items: center; gap: 10px;">
+<label class="rech" style="border: 1px solid rgba(166,242,107,.35);"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#9FB3AE" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" style="flex: none;"><circle cx="11" cy="11" r="6.5"></circle><path d="m20 20-4.4-4.4"></path></svg><input value="{{q}}" onChange="{{chercher}}" aria-label="Rechercher dans le Fil" placeholder="Publications, personnes, entreprises">
+<sc-if value="{{aQ}}" hint-placeholder-val="{{ false }}"><button onClick="{{viderQ}}" aria-label="Effacer" style="width: 30px; height: 30px; color: #9FB3AE; font-size: 18px; text-align: center;">×</button></sc-if></label>
+<button onClick="{{annulerRech}}" style="height: 44px; font-size: 14px; font-weight: 600; color: #A6F26B; flex: none;">Annuler</button></div>
+<p class="meta" style="padding: 18px 20px 10px;">Chercher dans</p><div style="padding: 0 20px;"><div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{rTypes}}" as="f" hint-placeholder-count="4"><button onClick="{{f.pick}}" class="pill" style="border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}}</button></sc-for></div></div>
+<sc-if value="{{qVide}}" hint-placeholder-val="{{ true }}"><div><p class="meta" style="padding: 22px 20px 4px;">Recherches récentes</p>
+<sc-for list="{{recents}}" as="r" hint-placeholder-count="3"><button onClick="{{r.pick}}" style="width: 100%; display: flex; align-items: center; gap: 12px; padding: 12px 20px; font-size: 15px;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M12 4.5a7.5 7.5 0 1 0 0 15 7.5 7.5 0 0 0 0-15zM12 8v4l2.5 2"></path></svg><span style="flex: 1;">{{r.t}}</span><span class="meta">{{r.d}}</span></button></sc-for></div></sc-if>
+<sc-if value="{{qPlein}}" hint-placeholder-val="{{ false }}"><div>
+<sc-if value="{{aRAut}}" hint-placeholder-val="{{ true }}"><div><p class="meta" style="padding: 20px 20px 6px;">Personnes et entreprises</p><sc-for list="{{rAut}}" as="a" hint-placeholder-count="2"><a href="{{a.href}}" class="ligne"><span class="av" style="border-radius: {{a.rond}}; background: {{a.bg}}; color: {{a.fg}};">{{a.ini}}</span><span style="flex: 1;"><b style="display: block; font-size: 15px;">{{a.nom}}</b><span class="meta">{{a.s}}</span></span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#8FA39E" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m9 6 6 6-6 6"></path></svg></a></sc-for></div></sc-if>
+<sc-if value="{{aRPubs}}" hint-placeholder-val="{{ true }}"><div><p class="meta" style="padding: 20px 20px 6px;">Publications</p><sc-for list="{{rPubs}}" as="r" hint-placeholder-count="2"><button onClick="{{r.ouvrir}}" class="ligne" style="flex-direction: column; align-items: flex-start; gap: 4px;"><span style="font-size: 14.5px; line-height: 1.45;">{{r.t}}</span><span class="meta">{{r.a}}</span></button></sc-for></div></sc-if>
+<sc-if value="{{rRien}}" hint-placeholder-val="{{ false }}"><p class="meta" style="text-align: center; padding: 30px 20px;">Rien pour « {{q}} ».</p></sc-if>
+</div></sc-if>
+</div>
+</sc-if>
+</div>
+<sc-if value="{{avecNav}}" hint-placeholder-val="{{ true }}"><nav aria-label="Navigation principale" class="nav"><a href="Recruteur-fil.dc.html" aria-label="Fil" aria-current="page" style="color: #A6F26B;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.1" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 6h16M4 12h16M4 18h10"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 1;"></span></a><a href="Recruteur-offres.dc.html" aria-label="Offres" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3.5 8.5a1.5 1.5 0 0 1 1.5-1.5h14a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5zM8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3.5 12.5h17M12 11.5v2"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span></a><a href="Recruteur-candidatures.dc.html" aria-label="Candidatures" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11a3.5 3.5 0 1 0 0-7 3.5 3.5 0 0 0 0 7zM2.5 20a6.5 6.5 0 0 1 13 0M16 4.6a3.5 3.5 0 0 1 0 6.3M21.5 20a6.5 6.5 0 0 0-3.8-5.9"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span><span style="position: absolute; top: 4px; left: 50%; margin-left: 6px; min-width: 16px; height: 16px; padding: 0 4px; border-radius: 8px; background: #A6F26B; color: #0B1A1F; font-size: 9.5px; font-weight: 800; display: flex; align-items: center; justify-content: center;">17</span></a><a href="Recruteur-talents.dc.html" aria-label="Talents" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3.5l2.6 5.3 5.8.8-4.2 4.1 1 5.8L12 16.8l-5.2 2.7 1-5.8L3.6 9.6l5.8-.8z"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span></a><a href="Recruteur-messages.dc.html" aria-label="Messages" style="color: #8FA39E;"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg><span style="width: 5px; height: 5px; border-radius: 50%; background: #A6F26B; opacity: 0;"></span><span style="position: absolute; top: 6px; left: 50%; margin-left: 7px; width: 8px; height: 8px; border-radius: 50%; background: #A6F26B;"></span></a></nav></sc-if>
+</sc-if>
+
+<!-- Publication ouverte -->
+<sc-if value="{{vPub}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barreh"><button onClick="{{retourPub}}" class="retour" aria-label="Retour"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg>Fil</button><span style="flex: 1;"></span></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding-bottom: 120px;">
+<article style="padding: 18px 20px; border-bottom: 1px solid rgba(255,255,255,.07);"><div style="display: flex; align-items: center; gap: 12px;"><a href="{{po.href}}" style="display: flex; align-items: center; gap: 12px; flex: 1; min-width: 0; color: #F2EDE5;"><span class="av" style="border-radius: {{po.rond}}; background: {{po.bg}}; color: {{po.fg}};">{{po.ini}}</span><span style="min-width: 0;"><b style="display: block; font-size: 15px;">{{po.auteur}}</b><span class="meta" style="display: block; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">{{po.s}} · {{po.d}}</span></span></a><sc-if value="{{po.aSuivre}}" hint-placeholder-val="{{ false }}"><button onClick="{{po.suivre}}" style="height: 32px; padding: 0 12px; border-radius: 16px; border: 1px solid rgba(166,242,107,.5); color: #A6F26B; font-size: 12.5px; font-weight: 700;">Suivre</button></sc-if><button onClick="{{po.menu}}" class="plus" aria-label="Plus d’options">···</button></div><sc-if value="{{po.aTag}}" hint-placeholder-val="{{ true }}"><span class="tag" style="margin-top: 12px; font-size: 11.5px; font-weight: 700; color: #9FD9C6; background: rgba(47,211,166,.1);">{{po.tag}}</span></sc-if><button onClick="{{po.ouvrir}}" style="display: block; font-size: 15px; line-height: 1.5; margin-top: 10px; color: #ECE7DF;">{{po.t}}</button><sc-if value="{{po.aVis}}" hint-placeholder-val="{{ true }}"><button onClick="{{po.ouvrir}}" style="display: block; width: 100%; margin-top: 12px; border-radius: 18px; overflow: hidden;"><sc-if value="{{po.vGraph}}" hint-placeholder-val="{{ true }}"><span style="display: block; height: 170px; background: #F2EDE5; padding: 16px; position: relative;"><span style="font-size: 12px; font-weight: 700; color: #14745F;">{{po.visT}}</span><svg viewBox="0 0 300 100" width="100%" height="110" preserveAspectRatio="none" aria-hidden="true" style="display: block; margin-top: 10px;"><path d="M0 85 L30 78 L60 80 L90 62 L120 66 L150 48 L180 52 L210 34 L240 38 L270 20 L300 14" fill="none" stroke="#14745F" stroke-width="3"></path><path d="M0 85 L30 78 L60 80 L90 62 L120 66 L150 48 L180 52 L210 34 L240 38 L270 20 L300 14 V100 H0z" fill="rgba(20,116,95,.12)"></path></svg></span></sc-if><sc-if value="{{po.vOffre}}" hint-placeholder-val="{{ false }}"><span style="display: flex; align-items: center; gap: 12px; padding: 16px; background: #0F3F37; border: 1px solid rgba(166,242,107,.25); border-radius: 18px;"><span class="mini" style="background: #A6F26B; color: #0F3F37;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M3.5 8.5a1.5 1.5 0 0 1 1.5-1.5h14a1.5 1.5 0 0 1 1.5 1.5v10a1.5 1.5 0 0 1-1.5 1.5H5a1.5 1.5 0 0 1-1.5-1.5zM8.5 7V5.5A1.5 1.5 0 0 1 10 4h4a1.5 1.5 0 0 1 1.5 1.5V7M3.5 12.5h17M12 11.5v2"></path></svg></span><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">{{po.visT}}</b><span style="font-size: 12.5px; color: #A6F26B; font-weight: 700;">Voir l’offre</span></span></span></sc-if><sc-if value="{{po.vBienv}}" hint-placeholder-val="{{ false }}"><span style="display: flex; align-items: flex-end; height: 170px; padding: 16px; background: radial-gradient(circle at 75% 30%, #A6F26B 0 22%, transparent 23%), linear-gradient(150deg, #14745F, #0F3F37); color: #F2EDE5;"><b style="font-size: 22px; line-height: 1.1;">{{po.visT}}</b></span></sc-if><sc-if value="{{po.vAppli}}" hint-placeholder-val="{{ false }}"><span style="display: flex; align-items: center; justify-content: center; gap: 14px; height: 170px; background: linear-gradient(150deg, #1E3B8A, #0B1A1F);"><span style="width: 70px; height: 128px; border-radius: 16px; border: 3px solid #F2EDE5; background: #13282C; display: block;"></span><b style="font-size: 15px; max-width: 150px; line-height: 1.3;">{{po.visT}}</b></span></sc-if><sc-if value="{{po.vEven}}" hint-placeholder-val="{{ false }}"><span style="display: flex; gap: 14px; align-items: center; padding: 16px; background: #F2EDE5; color: #0B1A1F;"><span style="width: 56px; height: 62px; border-radius: 14px; background: #0F3F37; color: #A6F26B; text-align: center; padding-top: 8px; flex: none;"><b style="display: block; font-size: 22px;">14</b><span style="font-size: 11px; font-weight: 700;">NOV.</span></span><span><b style="display: block; font-size: 15px;">Journée carrière</b><span style="font-size: 13px; color: #4A5A56;">{{po.visT}}</span></span></span></sc-if></button></sc-if><sc-if value="{{po.aStats}}" hint-placeholder-val="{{ false }}"><a href="Recruteur-offre-detail.dc.html" style="display: block; margin-top: 10px; font-size: 13px; font-weight: 700; color: #5FE0B8;">{{po.stats}} · voir les statistiques</a></sc-if><div style="display: flex; gap: 6px; margin-top: 12px;"><button onClick="{{po.aimer}}" style="display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border-radius: 19px; background: #13282C; font-size: 13px; font-weight: 600; color: {{po.jcol}};"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M12 20s-7.5-4.6-7.5-10A4.2 4.2 0 0 1 12 7.6 4.2 4.2 0 0 1 19.5 10c0 5.4-7.5 10-7.5 10z"></path></svg>{{po.jt}}</button><button onClick="{{po.commenter}}" style="display: flex; align-items: center; gap: 6px; height: 38px; padding: 0 12px; border-radius: 19px; background: #13282C; font-size: 13px; font-weight: 600; color: #B9CBC6;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M20 11.5a7.5 7.5 0 0 1-11 6.6L4 19.5l1.4-4.5A7.5 7.5 0 1 1 20 11.5z"></path></svg>{{po.ct}}</button><span style="flex: 1;"></span><button onClick="{{po.partager}}" aria-label="Partager" style="width: 38px; height: 38px; border-radius: 50%; background: #13282C; display: flex; align-items: center; justify-content: center; color: #B9CBC6;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M12 4v11M7.5 8.5 12 4l4.5 4.5M5 14v5h14v-5"></path></svg></button></div></article>
+<p class="meta" style="padding: 16px 20px 4px;">Commentaires</p>
+<sc-for list="{{coms}}" as="n" hint-placeholder-count="2"><div class="ligne" style="align-items: flex-start;"><span class="av" style="width: 34px; height: 34px; font-size: 11px;">{{n.ini}}</span><span style="flex: 1;"><span style="display: flex; justify-content: space-between;"><b style="font-size: 13.5px;">{{n.n}}</b><span class="meta" style="font-size: 12px;">{{n.d}}</span></span><span style="display: block; font-size: 14px; line-height: 1.45; margin-top: 3px;">{{n.t}}</span></span></div></sc-for>
+<sc-if value="{{sansComs}}" hint-placeholder-val="{{ false }}"><p class="meta" style="padding: 10px 20px;">Soyez la première personne à commenter.</p></sc-if>
+</div>
+<div class="bas"><label class="champ" style="flex: 1; border-color: rgba(255,255,255,.18);"><input value="{{com}}" onChange="{{ecrireCom}}" aria-label="Écrire un commentaire" placeholder="Écrire un commentaire"><button onClick="{{envoyerCom}}" class="env">Envoyer</button></label></div>
+</div>
+</sc-if>
+
+<!-- Publier -->
+<sc-if value="{{vPublier}}" hint-placeholder-val="{{ false }}">
+<div data-ecran="" style="position: absolute; inset: 0; display: flex; flex-direction: column;">
+<header class="barreh"><button onClick="{{annulerPublier}}" class="retour" aria-label="Fermer"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 6l12 12M18 6 6 18"></path></svg></button><b style="flex: 1; text-align: center; font-size: 15px;">Nouvelle publication</b><span style="width: 44px;"></span></header>
+<div class="scroll" style="flex: 1; overflow-y: auto; padding: 0 20px 130px;">
+<span class="lab">Publier en tant que</span>
+<div style="display: flex; flex-direction: column; gap: 8px;"><sc-for list="{{auNoms}}" as="v" hint-placeholder-count="2"><button onClick="{{v.pick}}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; border: 1.5px solid {{v.bd}}; background: {{v.fond}};"><span class="av" style="width: 38px; height: 38px; font-size: 12px; border-radius: {{v.r}}; background: {{v.bg}}; color: {{v.fg}};">{{v.ini}}</span><span style="flex: 1;"><b style="display: block; font-size: 14.5px;">{{v.t}}</b><span class="meta" style="font-size: 12px;">{{v.s}}</span></span><span style="width: 18px; height: 18px; border-radius: 50%; border: 2px solid {{v.rb}}; background: {{v.rbg}}; flex: none;"></span></button></sc-for></div>
+<p class="meta" style="margin-top: 8px; font-size: 12px;">{{auNomT}}</p>
+<span class="lab">Type</span><div style="display: flex; flex-wrap: wrap; gap: 8px;"><sc-for list="{{ptypes}}" as="f" hint-placeholder-count="4"><button onClick="{{f.pick}}" class="pill" style="border: 1px solid {{f.bd}}; background: {{f.bg}}; color: {{f.col}};">{{f.t}}</button></sc-for></div>
+<span class="lab" style="display: flex; justify-content: space-between;"><span>Texte</span><span style="color: {{carCol}}; font-weight: 700;" aria-label="{{resteCar}}">{{nCar}}</span></span><textarea class="ta" maxlength="220" onChange="{{ecrireTexte}}" aria-label="Texte de la publication, 220 caractères au plus" placeholder="Une nouvelle, un recrutement, un conseil aux candidats…" style="min-height: 130px;">{{texte}}</textarea>
+<button onClick="{{ameliorer}}" style="display: flex; align-items: center; gap: 8px; margin-top: 10px; font-size: 13.5px; font-weight: 700; color: #5FE0B8; min-height: 40px;"><svg width="20" height="20" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg>Orbi complète le texte</button>
+<sc-if value="{{aOffreT}}" hint-placeholder-val="{{ false }}"><div><span class="lab">Offre jointe</span><div style="display: flex; flex-direction: column; gap: 8px;"><sc-for list="{{offresP}}" as="v" hint-placeholder-count="3"><button onClick="{{v.pick}}" style="display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 16px; border: 1.5px solid {{v.bd}}; background: {{v.bg}};"><span style="width: 18px; height: 18px; border-radius: 50%; border: 2px solid {{v.rb}}; background: {{v.rbg}}; flex: none;"></span><b style="font-size: 14px;">{{v.t}}</b></button></sc-for></div></div></sc-if>
+<sc-if value="{{aPhotoT}}" hint-placeholder-val="{{ false }}"><div><span class="lab">Photo</span>
+<sc-if value="{{sansPhoto}}" hint-placeholder-val="{{ true }}"><button onClick="{{ajouterPhoto}}" style="width: 100%; height: 140px; border-radius: 18px; border: 1.5px dashed rgba(255,255,255,.22); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px; color: #B9CBC6; font-size: 14px; font-weight: 600;"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M4 7.5h3l1.5-2h7l1.5 2h3v11H4zM12 16a3 3 0 1 0 0-6 3 3 0 0 0 0 6z"></path></svg>Choisir une photo</button></sc-if>
+<sc-if value="{{photo}}" hint-placeholder-val="{{ false }}"><div style="position: relative; height: 170px; border-radius: 18px; background: radial-gradient(circle at 75% 30%, #A6F26B 0 22%, transparent 23%), linear-gradient(150deg, #14745F, #0F3F37);"><button onClick="{{retirerPhoto}}" aria-label="Retirer la photo" class="rond" style="position: absolute; right: 10px; top: 10px; background: rgba(11,26,31,.6); width: 36px; height: 36px;"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div></sc-if>
+</div></sc-if>
+<sc-if value="{{aEvenT}}" hint-placeholder-val="{{ false }}"><div><span class="lab">Date</span><input class="in" value="{{evenJ}}" aria-label="Date de l’événement" readonly><span class="lab">Lieu</span><input class="in" value="{{evenL}}" aria-label="Lieu de l’événement" readonly></div></sc-if>
+</div>
+<div class="bas"><button onClick="{{publier}}" class="bp" style="opacity: {{pubOp}};">Publier</button></div>
+</div>
+</sc-if>
+
+<sc-if value="{{fab}}" hint-placeholder-val="{{ true }}">
+<div style="position: absolute; right: 20px; bottom: 100px; display: flex; align-items: center; gap: 8px; z-index: 5;"><sc-if value="{{aBulle}}" hint-placeholder-val="{{ true }}"><button onClick="{{bulleGo}}" style="max-width: 210px; background: #1B3338; border-radius: 18px 18px 6px 18px; padding: 9px 12px; font-size: 12.5px; font-weight: 600; line-height: 1.35; box-shadow: 0 14px 30px -12px rgba(0,0,0,.8); border: 1px solid rgba(255,255,255,.08);">{{bulle}}</button></sc-if><button onClick="{{ouvrirOrbi}}" aria-label="Ouvrir Orbi, l’assistant" style="width: 58px; height: 58px; border-radius: 50%; flex: none; box-shadow: 0 0 0 6px rgba(47,211,166,.2),0 14px 30px -8px rgba(47,211,166,.55);"><svg width="58" height="58" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg></button>
+</div>
+</sc-if>
+<sc-if value="{{fMenu}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<p style="font-size: 13px; color: #8FA39E; padding: 0 4px 6px;">{{menuTitre}}</p><sc-for list="{{menuL}}" as="m" hint-placeholder-count="4"><sc-if value="{{m.bouton}}" hint-placeholder-val="{{ true }}"><button onClick="{{m.go}}" class="opt" style="color: {{m.col}};"><span>{{m.t}}<small>{{m.s}}</small></span></button></sc-if><sc-if value="{{m.lien}}" hint-placeholder-val="{{ false }}"><a href="{{m.href}}" class="opt"><span>{{m.t}}<small>{{m.s}}</small></span></a></sc-if></sc-for><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{fPartage}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 10;">
+<button onClick="{{fermer}}" aria-label="Fermer" class="voile"></button>
+<div class="feuille" style=""><span class="poignee"></span>
+<b style="display: block; font-size: 17px; padding: 0 4px 6px;">Partager</b><sc-for list="{{partage}}" as="m" hint-placeholder-count="3"><button onClick="{{m.go}}" class="opt"><span>{{m.t}}<small>{{m.s}}</small></span></button></sc-for><button onClick="{{fermer}}" class="annuler">Annuler</button>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{orbi}}" hint-placeholder-val="{{ false }}">
+<div style="position: absolute; inset: 0; z-index: 12;">
+<button onClick="{{fermerOrbi}}" aria-label="Fermer Orbi" class="voile"></button>
+<div class="feuille"><span class="poignee"></span>
+<div style="display: flex; align-items: center; gap: 12px;"><sc-if value="{{aRep}}" hint-placeholder-val="{{ false }}"><button onClick="{{autresQ}}" aria-label="Autres questions" style="height: 40px; width: 32px; display: flex; align-items: center;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M15 5 8 12l7 7"></path></svg></button></sc-if><svg width="42" height="42" viewBox="0 0 48 48" aria-hidden="true" style="flex: none;"><circle cx="24" cy="24" r="23" fill="#2FD3A6"></circle><path d="M23 10.5c1.3 7.4 5.6 11.8 13 13.1-7.4 1.3-11.7 5.7-13 13.1-1.3-7.4-5.6-11.8-13-13.1 7.4-1.3 11.7-5.7 13-13.1z" fill="#0B1A1F"></path><circle cx="35" cy="13" r="3.4" fill="#F2EDE5"></circle></svg><span style="flex: 1;"><b style="display: block; font-size: 17px;">{{orbiTitre}}</b><span style="font-size: 12.5px; color: #8FA39E;">Orbi · {{orbiSous}} · 212 crédits restants</span></span><button onClick="{{fermerOrbi}}" aria-label="Fermer" style="width: 40px; height: 40px; display: flex; align-items: center; justify-content: center; color: #8FA39E;"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="M6 6l12 12M18 6 6 18"></path></svg></button></div>
+<sc-if value="{{sansRep}}" hint-placeholder-val="{{ true }}"><div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px;"><sc-for list="{{questionsOrbi}}" as="q" hint-placeholder-count="4"><button onClick="{{q.go}}" class="q">{{q.t}}</button></sc-for></div></sc-if>
+<sc-if value="{{aRep}}" hint-placeholder-val="{{ false }}"><div style="margin-top: 16px;"><p class="meta">{{ra.q}}</p><p style="font-size: 15px; line-height: 1.5; margin-top: 8px;">{{ra.t}}</p><sc-if value="{{ra.aAct}}" hint-placeholder-val="{{ true }}"><button onClick="{{ra.act}}" class="q" style="margin-top: 14px; background: #A6F26B; color: #0B1A1F; text-align: center;">{{ra.actT}}</button></sc-if><sc-if value="{{ra.aLien}}" hint-placeholder-val="{{ false }}"><a href="{{ra.href}}" class="q" style="margin-top: 14px; background: #A6F26B; color: #0B1A1F; text-align: center;">{{ra.actT}}</a></sc-if><p class="meta" style="margin-top: 10px; font-size: 12px;">Orbi recommande, vous décidez.</p></div></sc-if>
+<label class="champ" style="margin-top: 14px;"><input value="{{oq}}" onChange="{{ecrireOrbi}}" aria-label="Écrire à Orbi" placeholder="Écrire à Orbi…"><button onClick="{{envoyerOrbi}}" class="env">Envoyer</button></label>
+<a href="Recruteur-orbi.dc.html" style="display: flex; justify-content: center; margin-top: 10px; font-size: 13.5px; font-weight: 700; color: #5FE0B8; min-height: 36px; align-items: center;">Ouvrir la conversation complète</a>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{aToast}}" hint-placeholder-val="{{ false }}">
+<div role="status" style="position: absolute; left: 20px; right: 20px; top: 54px; z-index: 30; padding: 14px 16px; border-radius: 16px; background: #F2EDE5; color: #0B1A1F; font-size: 14px; font-weight: 600; box-shadow: 0 16px 30px -10px rgba(0,0,0,.7); display: flex; align-items: center; gap: 10px;"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#14745F" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex: none;"><path d="m5 12.5 4.5 4.5L19 7.5"></path></svg>{{toast}}</div>
+</sc-if>
+
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"vue": {"editor": "enum", "options": ["liste", "publication", "publier"], "default": "liste"}, "sous": {"editor": "enum", "options": ["pourvous", "abonnements", "entreprises"], "default": "pourvous"}, "post": {"editor": "enum", "options": ["p1", "p2", "p3", "p4", "p5", "p6", "p7"], "default": "p1"}, "auNom": {"editor": "enum", "options": ["moi", "baobab"], "default": "moi"}, "ptype": {"editor": "enum", "options": ["texte", "photo", "offre", "evenement"], "default": "texte"}, "rempli": {"editor": "boolean", "default": false}, "feuille": {"editor": "enum", "options": ["aucune", "menu", "partage"], "default": "aucune"}, "recherche": {"editor": "enum", "options": ["", "options", "texte"], "default": ""}, "orbi": {"editor": "boolean", "default": false}, "orbiRep": {"editor": "enum", "options": ["aucune", "idee", "resultats", "evenement"], "default": "aucune"}, "$preview": {"width": 390, "height": 844}}'>
+class Component extends DCLogic {
+  renderVals() {
+    if (typeof window !== 'undefined' && typeof document !== 'undefined' && !window.__mvtJ) {
+      window.__mvtJ = 1;
+      const R = document.documentElement.style;
+      const pose = (o, s, tx, r) => { R.setProperty('--mvt-o', o); R.setProperty('--mvt-s', s); R.setProperty('--mvt-tx', tx); R.setProperty('--mvt-r', r); };
+      document.addEventListener('pointerdown', (e) => {
+        const b = e.target && e.target.closest && e.target.closest('button, a, [role="button"]');
+        if (!b) return;
+        const ec = b.closest('[data-ecran]') || document.body;
+        const z = ec.getBoundingClientRect(), k = b.getBoundingClientRect();
+        R.setProperty('--mvt-x', Math.round(e.clientX - z.left) + 'px');
+        R.setProperty('--mvt-y', Math.round(e.clientY - z.top) + 'px');
+        const lab = (b.getAttribute('aria-label') || '') + ' ' + (b.textContent || '').slice(0, 40);
+        if (b.querySelector('path[d^="M15 5 8 12"]') || /^\s*retour/i.test(lab)) pose('.6', '1', '-22px', '150%');
+        else if (b.querySelector('circle[fill="#2FD3A6"]') || /orbi/i.test(b.getAttribute('aria-label') || '')) pose('1', '1', '0px', '22px');
+        else if (k.height >= 64 && k.width >= 160) pose('.5', '.92', '0px', '150%');
+        else pose('.4', '.975', '0px', '150%');
+        clearTimeout(window.__mvtT);
+        window.__mvtT = setTimeout(() => { pose('.4', '.975', '0px', '150%'); }, 700);
+      }, true);
+    }
+    const st = this.state || {};
+    const p = this.props || {};
+    const has = (k) => Object.prototype.hasOwnProperty.call(st, k);
+    const S = (o) => this.setState(o);
+    const flash = (t) => { S({ toast: t }); clearTimeout(this._t); this._t = setTimeout(() => this.setState({ toast: null }), 2300); };
+    const val = (e) => (e && e.target ? e.target.value : '');
+    const oui = (x) => x === true || x === 'true';
+    const norm = (s) => String(s || '').toLowerCase().normalize('NFD').replace(/[̀-ͯ]/g, '');
+    const prop = (k, d) => (has(k) ? st[k] : (p[k] !== undefined && p[k] !== '' && p[k] !== 'aucune' ? p[k] : d));
+    const chiffre = (n) => String(n).replace(/\B(?=(\d{3})+(?!\d))/g, ' ');
+    // pastilles de choix (filtres, sous-onglets)
+    const pills = (liste, actif, cle) => liste.map(([k, t]) => ({ t, pick: () => S({ [cle]: k }), bg: k === actif ? '#F2EDE5' : 'transparent', col: k === actif ? '#0B1A1F' : '#F2EDE5', bd: k === actif ? '#F2EDE5' : 'rgba(255,255,255,.22)' }));
+    const onglets = (liste, actif, cle, extra) => liste.map(([k, t, n]) => ({ t, n: n || '', aN: !!n, sel: k === actif ? 'true' : 'false', on: k === actif, fw: k === actif ? '700' : '500', col: k === actif ? '#F2EDE5' : '#8FA39E', pick: () => S({ [cle]: k, ...(extra || {}) }) }));
+    // bande de score (doc 08) : jamais de rouge
+    const bande = (s) => (s >= 85 ? ['Très compatible', '#0B1A1F', '#A6F26B'] : s >= 70 ? ['Compatible', '#0B1A1F', '#9FE8D2'] : s >= 50 ? ['Partiellement compatible', '#0B1A1F', '#F4D59A'] : ['Peu compatible', '#0B1A1F', '#C9D6D2']);
+    // Orbi : questions propres à la page, réponse, action
+    const orbiKit = (OQ, sous, titre, bulleK) => {
+      const ouvert = has('orbi') ? st.orbi : oui(p.orbi);
+      const rep = has('oRep') ? st.oRep : (p.orbiRep && p.orbiRep !== 'aucune' ? p.orbiRep : null);
+      const r = rep && OQ[rep] ? OQ[rep] : null;
+      const oq = st.oq ?? '';
+      const cles = Object.keys(OQ);
+      return {
+        orbi: !!ouvert, ouvrirOrbi: () => S({ orbi: true, oRep: null }), fermerOrbi: () => S({ orbi: false }), autresQ: () => S({ oRep: null }),
+        aRep: !!r, sansRep: !r, orbiTitre: titre, orbiSous: sous,
+        questionsOrbi: cles.map((k) => ({ t: OQ[k].q, go: () => S({ oRep: k }) })),
+        ra: r ? { q: r.q, t: r.t, actT: r.actT || '', act: r.act || (() => S({ orbi: false })), aAct: !!r.act, aLien: !!r.href, href: r.href || '' } : { q: '', t: '', actT: '', act: () => {}, aAct: false, aLien: false, href: '' },
+        oq, ecrireOrbi: (e) => S({ oq: val(e) }), envoyerOrbi: () => { if (!oq.trim()) return flash('Écrivez votre question à Orbi'); S({ oRep: cles[0], oq: '' }); },
+        aBulle: !!bulleK, bulle: bulleK ? OQ[bulleK].q : '', bulleGo: () => S({ orbi: true, oRep: bulleK }),
+        aToast: !!st.toast, toast: st.toast || ''
+      };
+    };
+
+    // Fil du recruteur : talents, entreprises, Jumanly. Nadia publie en son nom ou au nom de Baobab Fintech (droit donné par Joseph, administrateur).
+    const AUT = {
+      rachel: { nom: 'Rachel Kanku', ini: 'RK', bg: '#DDF6EE', fg: '#14745F', s: 'Data analyst · Goma', href: 'Recruteur-talent.dc.html', type: 'talent' },
+      cedric: { nom: 'Cédric Mpoyi', ini: 'CM', bg: '#E3E8FB', fg: '#2D3F8A', s: 'Développeur Flutter · Kinshasa', href: 'Recruteur-talent-cedric.dc.html', type: 'talent' },
+      joel: { nom: 'Joël Kabeya', ini: 'JK', bg: '#E8F0D8', fg: '#4F6B12', s: 'Community manager · Kinshasa', href: 'Recruteur-talent-joel.dc.html', type: 'talent' },
+      fleuve: { nom: 'Fleuve Banque', ini: 'FB', bg: '#1E4E79', fg: '#FFFFFF', s: 'Banque · Kinshasa', href: 'Recruteur-entreprise-fleuve.dc.html', type: 'ent', carre: true },
+      kivu: { nom: 'Kivu Data Lab', ini: 'KD', bg: '#4B2D7A', fg: '#FFFFFF', s: 'Data · Goma', href: 'Recruteur-entreprise-kivu.dc.html', type: 'ent', carre: true },
+      baobab: { nom: 'Baobab Fintech', ini: 'BF', bg: '#14745F', fg: '#FFFFFF', s: 'Publié par Joseph Ilunga', href: 'Recruteur-entreprise.dc.html', type: 'ent', carre: true, nous: true },
+      jumanly: { nom: 'Jumanly', ini: 'J', bg: '#A6F26B', fg: '#0F3F37', s: 'Learn. Grow. Connect.', href: 'Recruteur-entreprise-jumanly.dc.html', type: 'ent', carre: true },
+      nadia: { nom: 'Nadia Kalala', ini: 'NK', bg: '#F4C9A0', fg: '#2A1A12', s: 'Chargée de recrutement · Baobab Fintech', href: 'Recruteur-compte-profil.dc.html', type: 'moi', moi: true }
+    };
+    const POSTS0 = [
+      { k: 'p1', a: 'rachel', d: '2 h', t: 'Mon tableau de bord des ventes de Kivu Data Lab est en ligne : 18 mois de paiements Mobile Money, lus en 30 secondes.', vis: 'graph', visT: 'Ventes · Goma · 2025-2026', j: 48, c: 6, cat: 'talents', suivi: true, tag: 'Réalisation' },
+      { k: 'p2', a: 'fleuve', d: '4 h', t: 'Nous recrutons 5 analystes crédit à Kinshasa. Candidature gratuite sur Jumanly.', vis: 'offre', visT: 'Analyste crédit · CDI · Kinshasa', j: 120, c: 14, cat: 'entreprises', suivi: false, tag: 'Offre' },
+      { k: 'p3', a: 'baobab', d: 'hier', t: 'Bienvenue à Joëlle, notre nouvelle stagiaire marketing, recrutée via Jumanly. Elle commence le 2 novembre.', vis: 'bienvenue', visT: 'Bienvenue Joëlle', j: 86, c: 11, cat: 'entreprises', suivi: true, tag: 'Votre entreprise' },
+      { k: 'p4', a: 'cedric', d: 'hier', t: 'Kin Express passe 50 000 téléchargements. L’appli pèse 9 Mo et tient sur un réseau 2G.', vis: 'appli', visT: 'Kin Express · 50 000 téléchargements', j: 210, c: 23, cat: 'talents', suivi: false, tag: 'Réalisation' },
+      { k: 'p5', a: 'jumanly', d: 'lundi', t: 'Journée carrière à Kinshasa le samedi 14 novembre : stands entreprises et entretiens sur place. Inscription des recruteurs ouverte.', vis: 'evenement', visT: 'Sam. 14 nov. · Kinshasa', j: 340, c: 41, cat: 'entreprises', suivi: true, tag: 'Événement' },
+      { k: 'p6', a: 'kivu', d: 'lundi', t: 'Ce que nous avons appris en recrutant 12 data analysts à Goma : les attestations vérifiées font gagner une semaine.', vis: '', visT: '', j: 64, c: 9, cat: 'entreprises', suivi: false, tag: 'Article' },
+      { k: 'p7', a: 'nadia', d: '16 oct.', t: 'Baobab Fintech recrute un·e analyste de données junior à Kinshasa. Candidature gratuite, réponse à chaque personne.', vis: 'offre', visT: 'Analyste de données junior · CDI · Kinshasa', j: 92, c: 8, cat: 'moi', suivi: true, tag: 'Votre offre', stats: '412 vues · 38 candidatures' }
+    ];
+    const POSTS = [...(st.miens || []), ...POSTS0];
+    const aime = st.aime || {};
+    const enreg = st.enreg || {};
+    const caches = st.caches || {};
+    const suivis = st.suivis || { baobab: true, jumanly: true, rachel: true, kivu: false, fleuve: false };
+    const COMS = { p1: [['Aline Mukeba', 'AM', 'Très clair. Tu utilises Power BI ?', '1 h'], ['Rachel Kanku', 'RK', 'Oui, avec des données SQL en dessous.', '45 min']], p4: [['Kevin Lumbala', 'KL', 'Bravo ! Tu as un conseil pour alléger une appli ?', '20 h']] };
+
+    const vue = prop('vue', 'liste');
+    const sous = prop('sous', 'pourvous');
+    const pk = prop('post', 'p1');
+    const fRaw = has('feuille') ? st.feuille : (p.feuille && p.feuille !== 'aucune' ? p.feuille : null);
+    const fermer = () => S({ feuille: null });
+
+    const carte = (x) => {
+      const a = AUT[x.a];
+      return { ...x, ...a, auteur: a.nom, aut: a, rond: a.carre ? '12px' : '50%', aVis: !!x.vis, vGraph: x.vis === 'graph', vOffre: x.vis === 'offre', vBienv: x.vis === 'bienvenue', vAppli: x.vis === 'appli', vEven: x.vis === 'evenement',
+        jt: (x.j + (aime[x.k] ? 1 : 0)) + '', jcol: aime[x.k] ? '#A6F26B' : '#B9CBC6', aimer: () => S({ aime: { ...aime, [x.k]: !aime[x.k] } }),
+        commenter: () => S({ vue: 'publication', post: x.k, feuille: null }), ouvrir: () => S({ vue: 'publication', post: x.k, feuille: null }), menu: () => S({ feuille: 'menu', post: x.k }),
+        partager: () => S({ feuille: 'partage', post: x.k }), ct: x.c + (st.comsAj && st.comsAj[x.k] ? st.comsAj[x.k].length : 0) + '', stats: x.stats || '', aStats: !!x.stats, aTag: !!x.tag,
+        aSuivre: !a.moi && !a.nous && !suivis[x.a], suivre: () => { S({ suivis: { ...suivis, [x.a]: true } }); flash(`Vous suivez ${a.nom}`); } };
+    };
+    const liste = POSTS.filter((x) => !caches[x.a]).filter((x) => sous === 'pourvous' || (sous === 'abonnements' ? (suivis[x.a] || x.a === 'nadia') : AUT[x.a].type === 'ent')).map(carte);
+
+    // Entreprises à suivre (onglet Entreprises)
+    const ENTS = [['fleuve', 'Banque · 5 offres'], ['kivu', 'Data · 4 offres'], ['mwinda', 'Énergie · 3 offres'], ['lisanga', 'Santé · 2 offres']].map(([k, s]) => {
+      const a = AUT[k] || { nom: k === 'mwinda' ? 'Mwinda Énergie' : 'Lisanga Santé', ini: k === 'mwinda' ? 'ME' : 'LS', bg: k === 'mwinda' ? '#B07A12' : '#0F6B5A', fg: '#FFFFFF' };
+      return { nom: a.nom, ini: a.ini, bg: a.bg, fg: a.fg, s, href: `Recruteur-entreprise-${k}.dc.html`, suivi: !!suivis[k], bt: suivis[k] ? 'Suivie' : 'Suivre', bbg: suivis[k] ? 'transparent' : '#A6F26B', bcol: suivis[k] ? '#B9CBC6' : '#0B1A1F', bbd: suivis[k] ? 'rgba(255,255,255,.22)' : '#A6F26B',
+        suivre: () => S({ suivis: { ...suivis, [k]: !suivis[k] } }) };
+    });
+
+    // Publication ouverte
+    const po = carte(POSTS.find((x) => x.k === pk) || POSTS[0]);
+    const comsAj = st.comsAj || {};
+    const coms = [...(COMS[po.k] || []), ...(comsAj[po.k] || [])].map(([n, ini, t, d]) => ({ n, ini, t, d }));
+    const com = st.com ?? '';
+    const envoyerCom = () => { if (!com.trim()) return flash('Écrivez un commentaire'); S({ comsAj: { ...comsAj, [po.k]: [...(comsAj[po.k] || []), ['Nadia Kalala', 'NK', com.trim(), 'à l’instant']] }, com: '' }); };
+
+    // Menu ···
+    const pm = POSTS.find((x) => x.k === (st.post ?? pk)) || POSTS[0];
+    const am = AUT[pm.a];
+    const menu = am.moi ? [
+      { t: 'Voir les statistiques', s: pm.stats || 'Vues et réactions', href: 'Recruteur-offre-detail.dc.html', lien: true },
+      { t: 'Modifier la publication', s: 'Le texte et l’image', go: () => S({ vue: 'publier', feuille: null, texte: pm.t, auNom: 'moi' }) },
+      { t: 'Supprimer', s: 'Elle disparaît du Fil', go: () => { S({ caches: { ...caches }, miens: (st.miens || []).filter((x) => x.k !== pm.k), feuille: null }); flash('Publication supprimée'); }, col: '#F4D59A' }
+    ] : [
+      { t: enreg[pm.k] ? 'Retirer des enregistrements' : 'Enregistrer', s: 'Retrouvez-la dans votre compte', go: () => { S({ enreg: { ...enreg, [pm.k]: !enreg[pm.k] }, feuille: null }); flash(enreg[pm.k] ? 'Retirée des enregistrements' : 'Publication enregistrée'); } },
+      { t: `Voir ${am.type === 'ent' ? 'la page de' : 'le profil de'} ${am.nom}`, s: am.s, href: am.href, lien: true },
+      { t: `Ne plus voir ${am.nom}`, s: 'Ses publications disparaissent de votre Fil', go: () => { S({ caches: { ...caches, [pm.a]: true }, feuille: null, vue: 'liste' }); flash(`${am.nom} n’apparaît plus dans votre Fil`); } },
+      { t: 'Signaler', s: 'L’équipe Jumanly vérifie sous 24 h', go: () => { fermer(); flash('Signalement envoyé'); } }
+    ];
+    const menuL = menu.map((m) => ({ ...m, lien: !!m.lien, bouton: !m.lien, href: m.href || '', go: m.go || (() => {}), col: m.col || '#F2EDE5' }));
+    const partage = [['Copier le lien', 'jumanly.io/fil/' + pm.k], ['Envoyer dans Messages', 'À un collègue ou un candidat'], ['WhatsApp', 'Envoyer à un contact']].map(([t, s], i) => ({ t, s,
+      go: () => { fermer(); flash(i === 0 ? 'Lien copié' : i === 1 ? 'Envoyé à Aline Mukeba' : 'Ouverture de WhatsApp'); } }));
+
+    // Publier
+    const auNom = prop('auNom', 'moi');
+    const MAXC = 220; // limite d’une publication (demande d’Ephraïm du 22/10)
+    const ptype = prop('ptype', 'texte');
+    const texte = has('texte') ? st.texte : (oui(p.rempli) ? 'Nous ouvrons un poste de développeur·se Flutter en télétravail. Si vous aimez les applis légères qui tiennent sur un réseau lent, parlons-en.' : '');
+    const pOffre = st.pOffre || 'flutter';
+    const OFF = [['analyste', 'Analyste de données junior'], ['clientele', 'Chargé·e de clientèle Mobile Money'], ['flutter', 'Développeur·se mobile Flutter']];
+    const auNoms = [['moi', 'Nadia Kalala', 'Votre profil', 'NK', '#F4C9A0', '#2A1A12', '50%'], ['baobab', 'Baobab Fintech', 'Page de l’entreprise', 'BF', '#14745F', '#FFFFFF', '12px']].map(([k, t, s, ini, bg, fg, r]) => ({ t, s, ini, bg, fg, r,
+      pick: () => S({ auNom: k }), bd: k === auNom ? '#A6F26B' : 'rgba(255,255,255,.14)', fond: k === auNom ? 'rgba(166,242,107,.08)' : 'transparent', rb: k === auNom ? '#A6F26B' : 'rgba(255,255,255,.3)', rbg: k === auNom ? '#A6F26B' : 'transparent' }));
+    const ptypes = pills([['texte', 'Texte'], ['photo', 'Photo'], ['offre', 'Une offre'], ['evenement', 'Un événement']], ptype, 'ptype');
+    const offresP = OFF.map(([k, t]) => ({ t, pick: () => S({ pOffre: k }), bd: k === pOffre ? '#A6F26B' : 'rgba(255,255,255,.14)', bg: k === pOffre ? 'rgba(166,242,107,.08)' : 'transparent', rb: k === pOffre ? '#A6F26B' : 'rgba(255,255,255,.3)', rbg: k === pOffre ? '#A6F26B' : 'transparent' }));
+    const photo = !!st.photo;
+    const publier = () => {
+      if (!texte.trim()) return flash('Écrivez quelques mots avant de publier');
+      if (texte.length > MAXC) return flash('220 caractères au plus : raccourcissez le texte');
+      const nv = { k: 'm' + ((st.miens || []).length + 1), a: auNom === 'baobab' ? 'baobab' : 'nadia', d: 'à l’instant', t: texte.trim(), vis: ptype === 'offre' ? 'offre' : ptype === 'evenement' ? 'evenement' : ptype === 'photo' && photo ? 'bienvenue' : '', visT: ptype === 'offre' ? OFF.find((o) => o[0] === pOffre)[1] : ptype === 'evenement' ? 'Événement Baobab Fintech' : 'Photo', j: 0, c: 0, cat: 'moi', suivi: true, tag: ptype === 'offre' ? 'Votre offre' : '' };
+      S({ miens: [nv, ...(st.miens || [])], vue: 'liste', sous: 'pourvous', texte: '', photo: false, ptype: 'texte' }); flash(auNom === 'baobab' ? 'Publié au nom de Baobab Fintech' : 'Publié dans le Fil');
+    };
+
+    // Recherche en deux temps
+    const rech = has('rech') ? st.rech : !!p.recherche;
+    const q = has('q') ? st.q : (p.recherche === 'texte' ? 'data' : '');
+    const nq = norm(q.trim());
+    const rt = st.rt || 'tout';
+    const rTypes = pills([['tout', 'Tout'], ['publications', 'Publications'], ['personnes', 'Personnes'], ['entreprises', 'Entreprises']], rt, 'rt');
+    const rPubs = (!nq || !['tout', 'publications'].includes(rt)) ? [] : POSTS.filter((x) => norm(x.t + ' ' + x.visT).includes(nq)).map((x) => ({ t: x.t, a: AUT[x.a].nom, ouvrir: () => S({ vue: 'publication', post: x.k, rech: false }) }));
+    const rAut = (!nq) ? [] : Object.entries(AUT).filter(([k, a]) => !a.moi && (rt === 'tout' || (rt === 'personnes' ? a.type === 'talent' : rt === 'entreprises' ? a.type === 'ent' : false)) && norm(a.nom + ' ' + a.s).includes(nq)).map(([k, a]) => ({ ...a, rond: a.carre ? '12px' : '50%' }));
+    const recents = [['Data', 'publications'], ['Fleuve Banque', 'entreprise'], ['Journée carrière', 'événement']].map(([t, d]) => ({ t, d, pick: () => S({ q: t }) }));
+
+    const OQ = {
+      idee: { q: 'Que publier pour attirer des profils Flutter ?', t: 'Les talents Flutter lisent surtout les publications concrètes : une capture de l’appli, la taille de l’équipe, le télétravail. Une phrase sur les réseaux lents parle aux développeurs d’ici.', actT: 'Préparer la publication', act: () => S({ vue: 'publier', ptype: 'offre', pOffre: 'flutter', texte: 'Nous ouvrons un poste de développeur·se Flutter en télétravail. Si vous aimez les applis légères qui tiennent sur un réseau lent, parlons-en.', orbi: false }) },
+      resultats: { q: 'Comment marche ma publication du 16 octobre ?', t: '412 vues et 38 candidatures, dont 28 % venues du Fil. Elle a surtout été vue à Kinshasa, entre 19 h et 22 h.', actT: 'Voir les statistiques de l’offre', href: 'Recruteur-offre-detail.dc.html' },
+      evenement: { q: 'Faut-il aller à la Journée carrière du 14 novembre ?', t: 'Elle réunit surtout des jeunes diplômés de Kinshasa : bon pour l’offre Analyste junior et le stage marketing. Les stands se réservent auprès de Jumanly par e-mail.', actT: 'Ouvrir la publication', act: () => S({ vue: 'publication', post: 'p5', orbi: false }) }
+    };
+    const ok = orbiKit(OQ, 'depuis le Fil', 'Votre Fil', vue === 'liste' ? 'idee' : null);
+    const ameliorer = () => { if (!texte.trim()) return flash('Écrivez d’abord quelques mots'); const plus = texte.trim().replace(/\.$/, '') + '. Candidature gratuite, réponse à chaque personne.'; if (plus.length > MAXC) return flash('Plus de place : 220 caractères au plus'); S({ texte: plus }); flash('Orbi a complété le texte : relisez avant de publier'); };
+
+    return {
+
+      avecNav: !(this.props && (this.props.coque === true || this.props.coque === 'true')),
+      ...ok,
+      vListe: vue === 'liste', vPub: vue === 'publication', vPublier: vue === 'publier',
+      sousOnglets: onglets([['pourvous', 'Pour vous'], ['abonnements', 'Abonnements'], ['entreprises', 'Entreprises']], sous, 'sous'),
+      sEnt: sous === 'entreprises', liste, ENTS, rien: liste.length === 0,
+      ouvrirPublier: () => S({ vue: 'publier', auNom: 'moi', ptype: 'texte' }), ouvrirPublierBaobab: () => S({ vue: 'publier', auNom: 'baobab', ptype: 'texte' }),
+      // publication ouverte
+      po, coms, aComs: coms.length > 0, sansComs: coms.length === 0, com, ecrireCom: (e) => S({ com: val(e) }), envoyerCom, retourPub: () => S({ vue: 'liste', feuille: null }),
+      // feuilles
+      fMenu: fRaw === 'menu', fPartage: fRaw === 'partage', fermer, menuL, partage, menuTitre: am.nom,
+      // publier
+      auNoms, ptypes, aOffreT: ptype === 'offre', aPhotoT: ptype === 'photo', aEvenT: ptype === 'evenement', offresP, texte, ecrireTexte: (e) => S({ texte: val(e).slice(0, MAXC) }), MAXC, nCar: texte.length + ' / ' + MAXC, carCol: texte.length > MAXC - 20 ? '#F4D59A' : '#8FA39E', resteCar: (MAXC - texte.length) + ' caractères restants',
+      photo, sansPhoto: !photo, ajouterPhoto: () => S({ photo: true }), retirerPhoto: () => S({ photo: false }), publier, annulerPublier: () => S({ vue: 'liste', texte: '' }), ameliorer,
+      pubOp: texte.trim() ? '1' : '.45', auNomT: auNom === 'baobab' ? 'Visible sur la page de Baobab Fintech et dans le Fil de ses abonnés.' : 'Visible par votre réseau et les talents qui suivent Baobab.',
+      evenJ: 'Samedi 14 novembre', evenL: 'Baobab Fintech, Gombe',
+      // recherche
+      aRech: rech, sansRech: !rech, q, aQ: q.length > 0, qVide: !nq, qPlein: !!nq, rTypes, recents, rPubs, rAut, aRPubs: rPubs.length > 0, aRAut: rAut.length > 0, rRien: !!nq && !rPubs.length && !rAut.length,
+      ouvrirRech: () => S({ rech: true }), annulerRech: () => S({ rech: false, q: '' }), chercher: (e) => S({ q: val(e) }), viderQ: () => S({ q: '' }),
+      fab: vue === 'liste' && !rech
+    };
+  }
+}
+
+</script>
+</body>
+</html>

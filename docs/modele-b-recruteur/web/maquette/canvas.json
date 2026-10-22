@@ -1,0 +1,971 @@
+{
+ "v": 3,
+ "createdOnFiles": {
+  "v": 1,
+  "at": "2026-10-22T08:00:00Z"
+ },
+ "title": "Jumanly · Recruteur et administrateur sur le web",
+ "launch": {
+  "view": "canvas"
+ },
+ "pages": [],
+ "boards": {
+  "Web-Site.dc.html": {
+   "x": 0,
+   "y": 300,
+   "w": 1440,
+   "h": 900,
+   "title": "Site public · page Recruter",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-Site-tarifs.dc.html": {
+   "x": 1520,
+   "y": 300,
+   "w": 1440,
+   "h": 900,
+   "title": "Site public · tarifs",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-Acces.dc.html": {
+   "x": 0,
+   "y": 1920,
+   "w": 1440,
+   "h": 900,
+   "title": "Ouverture, connexion et inscriptions (prototype cliquable complet)",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-ouverture.dc.html": {
+   "x": 1520,
+   "y": 1920,
+   "w": 1440,
+   "h": 900,
+   "title": "Ouverture · logo animé",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-connexion.dc.html": {
+   "x": 3040,
+   "y": 1920,
+   "w": 1440,
+   "h": 900,
+   "title": "Se connecter",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-oubli.dc.html": {
+   "x": 0,
+   "y": 2980,
+   "w": 1440,
+   "h": 900,
+   "title": "Mot de passe oublié",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-profil.dc.html": {
+   "x": 1520,
+   "y": 2980,
+   "w": 1440,
+   "h": 900,
+   "title": "Créer un compte · Vous êtes…",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-compte.dc.html": {
+   "x": 0,
+   "y": 4600,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur 1/9 · compte",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-code.dc.html": {
+   "x": 1520,
+   "y": 4600,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur 2/9 · code reçu",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-photo.dc.html": {
+   "x": 3040,
+   "y": 4600,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur 3/9 · photo",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-pays.dc.html": {
+   "x": 0,
+   "y": 5660,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur 4/9 · pays et contacts",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-role.dc.html": {
+   "x": 1520,
+   "y": 5660,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur 5/9 · rôle",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-entreprise.dc.html": {
+   "x": 3040,
+   "y": 5660,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur 6/9 · rechercher l’entreprise",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-entreprise-trouvee.dc.html": {
+   "x": 0,
+   "y": 6720,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur 6/9 · entreprise trouvée",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-demande.dc.html": {
+   "x": 1520,
+   "y": 6720,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur 7/9 · demande de rattachement",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-recrute.dc.html": {
+   "x": 3040,
+   "y": 6720,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur 8/9 · ce que vous recrutez",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-profil.dc.html": {
+   "x": 0,
+   "y": 7780,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur 9/9 · accroche et profil",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-attente.dc.html": {
+   "x": 1520,
+   "y": 7780,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur · demande envoyée",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-r-accepte.dc.html": {
+   "x": 3040,
+   "y": 7780,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteur · rattachement accepté",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-a-forfait.dc.html": {
+   "x": 0,
+   "y": 9400,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur 1/9 · formule",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-a-compte.dc.html": {
+   "x": 1520,
+   "y": 9400,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur 2/9 · compte de l’entreprise",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-a-code.dc.html": {
+   "x": 3040,
+   "y": 9400,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur 3/9 · code reçu",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-a-role.dc.html": {
+   "x": 0,
+   "y": 10460,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur 4/9 · rôle",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-a-entreprise.dc.html": {
+   "x": 1520,
+   "y": 10460,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur 5/9 · l’entreprise",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-a-logo.dc.html": {
+   "x": 3040,
+   "y": 10460,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur 6/9 · logo et bannière",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-a-verif.dc.html": {
+   "x": 0,
+   "y": 11520,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur 7/9 · vérification",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-a-paiement.dc.html": {
+   "x": 1520,
+   "y": 11520,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur 8/9 · paiement Mobile Money",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-a-equipe.dc.html": {
+   "x": 3040,
+   "y": 11520,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur 9/9 · inviter l’équipe",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-acces-a-pret.dc.html": {
+   "x": 0,
+   "y": 12580,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · espace prêt",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-App.dc.html": {
+   "x": 0,
+   "y": 14200,
+   "w": 1440,
+   "h": 900,
+   "title": "Appli recruteur sur ordinateur (prototype cliquable complet)",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-accueil-bienvenue.dc.html": {
+   "x": 1520,
+   "y": 14200,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Premier passage · Bienvenue",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-accueil.dc.html": {
+   "x": 3040,
+   "y": 14200,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Accueil · aujourd’hui",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-fil.dc.html": {
+   "x": 0,
+   "y": 15260,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Fil · publier (220 caractères)",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-offres.dc.html": {
+   "x": 1520,
+   "y": 15260,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Offres · liste et indicateurs",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-offre.dc.html": {
+   "x": 3040,
+   "y": 15260,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Offre · aperçu",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-offre-annonce.dc.html": {
+   "x": 0,
+   "y": 16320,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Offre · annonce",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-offre-reglages.dc.html": {
+   "x": 1520,
+   "y": 16320,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Offre · équipe et réglages",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-nouvelle-1.dc.html": {
+   "x": 3040,
+   "y": 16320,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Publier une offre 1/5 · le poste",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-nouvelle-2.dc.html": {
+   "x": 0,
+   "y": 17380,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Publier une offre 2/5 · compétences",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-nouvelle-3.dc.html": {
+   "x": 1520,
+   "y": 17380,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Publier une offre 3/5 · conditions",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-nouvelle-4.dc.html": {
+   "x": 3040,
+   "y": 17380,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Publier une offre 4/5 · questions",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-nouvelle-5.dc.html": {
+   "x": 0,
+   "y": 18440,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Publier une offre 5/5 · aperçu et équipe",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-candidatures.dc.html": {
+   "x": 1520,
+   "y": 18440,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Candidatures · ATS en colonnes",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-candidatures-liste.dc.html": {
+   "x": 3040,
+   "y": 18440,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Candidatures · ATS en liste",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-candidat.dc.html": {
+   "x": 0,
+   "y": 19500,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Fiche · résumé et « Pourquoi ? »",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-candidat-profil.dc.html": {
+   "x": 1520,
+   "y": 19500,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Fiche · profil et CV",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-candidat-reponses.dc.html": {
+   "x": 3040,
+   "y": 19500,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Fiche · réponses",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-candidat-diagnostic.dc.html": {
+   "x": 0,
+   "y": 20560,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Fiche · diagnostic à évaluer",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-candidat-evaluations.dc.html": {
+   "x": 1520,
+   "y": 20560,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Fiche · évaluations",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-candidat-notes.dc.html": {
+   "x": 3040,
+   "y": 20560,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Fiche · notes de l’équipe",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-candidat-historique.dc.html": {
+   "x": 0,
+   "y": 21620,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Fiche · historique",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-evaluation.dc.html": {
+   "x": 1520,
+   "y": 21620,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Évaluer un entretien · grille",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-agenda.dc.html": {
+   "x": 3040,
+   "y": 21620,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Agenda · semaine",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-agenda-jour.dc.html": {
+   "x": 0,
+   "y": 22680,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Agenda · jour",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-agenda-mois.dc.html": {
+   "x": 1520,
+   "y": 22680,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Agenda · mois",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-talents.dc.html": {
+   "x": 3040,
+   "y": 22680,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Talents · découvrir",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-talents-vivier.dc.html": {
+   "x": 0,
+   "y": 23740,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Talents · vivier",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-talents-propositions.dc.html": {
+   "x": 1520,
+   "y": 23740,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Talents · propositions",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-talents-reseau.dc.html": {
+   "x": 3040,
+   "y": 23740,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Talents · réseau",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-messages.dc.html": {
+   "x": 0,
+   "y": 24800,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Messages",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-notifs.dc.html": {
+   "x": 1520,
+   "y": 24800,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Notifications",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-orbi.dc.html": {
+   "x": 3040,
+   "y": 24800,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Orbi · conversation",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-tableau.dc.html": {
+   "x": 0,
+   "y": 25860,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Tableau de bord (droit accordé)",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-moi.dc.html": {
+   "x": 1520,
+   "y": 25860,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Mon espace · rôle, tâches, rapport PDF",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-compte.dc.html": {
+   "x": 3040,
+   "y": 25860,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Compte · profil",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-compte-bascule.dc.html": {
+   "x": 0,
+   "y": 26920,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Compte · changer de profil",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-compte-formule.dc.html": {
+   "x": 1520,
+   "y": 26920,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Compte · formule en lecture",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-compte-securite.dc.html": {
+   "x": 3040,
+   "y": 26920,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Compte · sécurité",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-compte-notifs.dc.html": {
+   "x": 0,
+   "y": 27980,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Compte · notifications",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-compte-aide.dc.html": {
+   "x": 1520,
+   "y": 27980,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Compte · aide et contact",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-compte-sortie.dc.html": {
+   "x": 3040,
+   "y": 27980,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Compte · se déconnecter",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-entreprise.dc.html": {
+   "x": 0,
+   "y": 29040,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Page d’une autre entreprise · membres",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-N-baobab.dc.html": {
+   "x": 1520,
+   "y": 29040,
+   "w": 1440,
+   "h": 900,
+   "title": "Recruteuse · Page de Baobab Fintech",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-accueil-bienvenue.dc.html": {
+   "x": 0,
+   "y": 30660,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Premier passage · Bienvenue",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-accueil.dc.html": {
+   "x": 1520,
+   "y": 30660,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Accueil · équipe et demandes",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-equipe.dc.html": {
+   "x": 3040,
+   "y": 30660,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Équipe · membres, rôles et droits",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-equipe-taches.dc.html": {
+   "x": 0,
+   "y": 31720,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Équipe · toutes les tâches",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-equipe-invitations.dc.html": {
+   "x": 1520,
+   "y": 31720,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Équipe · invitations et demandes",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-tableau.dc.html": {
+   "x": 3040,
+   "y": 31720,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Tableau de bord et PDF",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-moi.dc.html": {
+   "x": 0,
+   "y": 32780,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Mon espace",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-pageEnt.dc.html": {
+   "x": 1520,
+   "y": 32780,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Page entreprise · modifier",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-baobab.dc.html": {
+   "x": 3040,
+   "y": 32780,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Page entreprise · vue publique",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-factu.dc.html": {
+   "x": 0,
+   "y": 33840,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Formule et facturation",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-journal.dc.html": {
+   "x": 1520,
+   "y": 33840,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Journal des consultations",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-reglages.dc.html": {
+   "x": 3040,
+   "y": 33840,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Réglages · étapes de l’ATS",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-reglages-modeles.dc.html": {
+   "x": 0,
+   "y": 34900,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Réglages · modèles de messages",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-reglages-grille.dc.html": {
+   "x": 1520,
+   "y": 34900,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Réglages · grille d’entretien",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-candidatures.dc.html": {
+   "x": 3040,
+   "y": 34900,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Candidatures de toute l’équipe",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-agenda.dc.html": {
+   "x": 0,
+   "y": 35960,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Agenda de l’équipe",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-offres.dc.html": {
+   "x": 1520,
+   "y": 35960,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Offres de l’équipe",
+   "is_interactive": true,
+   "radius": 14
+  },
+  "Web-J-compte-bascule.dc.html": {
+   "x": 3040,
+   "y": 35960,
+   "w": 1440,
+   "h": 900,
+   "title": "Administrateur · Compte · agir au nom de Baobab Fintech",
+   "is_interactive": true,
+   "radius": 14
+  }
+ },
+ "order": [
+  "Web-Site.dc.html",
+  "Web-Site-tarifs.dc.html",
+  "Web-Acces.dc.html",
+  "Web-acces-ouverture.dc.html",
+  "Web-acces-connexion.dc.html",
+  "Web-acces-oubli.dc.html",
+  "Web-acces-profil.dc.html",
+  "Web-acces-r-compte.dc.html",
+  "Web-acces-r-code.dc.html",
+  "Web-acces-r-photo.dc.html",
+  "Web-acces-r-pays.dc.html",
+  "Web-acces-r-role.dc.html",
+  "Web-acces-r-entreprise.dc.html",
+  "Web-acces-r-entreprise-trouvee.dc.html",
+  "Web-acces-r-demande.dc.html",
+  "Web-acces-r-recrute.dc.html",
+  "Web-acces-r-profil.dc.html",
+  "Web-acces-r-attente.dc.html",
+  "Web-acces-r-accepte.dc.html",
+  "Web-acces-a-forfait.dc.html",
+  "Web-acces-a-compte.dc.html",
+  "Web-acces-a-code.dc.html",
+  "Web-acces-a-role.dc.html",
+  "Web-acces-a-entreprise.dc.html",
+  "Web-acces-a-logo.dc.html",
+  "Web-acces-a-verif.dc.html",
+  "Web-acces-a-paiement.dc.html",
+  "Web-acces-a-equipe.dc.html",
+  "Web-acces-a-pret.dc.html",
+  "Web-App.dc.html",
+  "Web-N-accueil-bienvenue.dc.html",
+  "Web-N-accueil.dc.html",
+  "Web-N-fil.dc.html",
+  "Web-N-offres.dc.html",
+  "Web-N-offre.dc.html",
+  "Web-N-offre-annonce.dc.html",
+  "Web-N-offre-reglages.dc.html",
+  "Web-N-nouvelle-1.dc.html",
+  "Web-N-nouvelle-2.dc.html",
+  "Web-N-nouvelle-3.dc.html",
+  "Web-N-nouvelle-4.dc.html",
+  "Web-N-nouvelle-5.dc.html",
+  "Web-N-candidatures.dc.html",
+  "Web-N-candidatures-liste.dc.html",
+  "Web-N-candidat.dc.html",
+  "Web-N-candidat-profil.dc.html",
+  "Web-N-candidat-reponses.dc.html",
+  "Web-N-candidat-diagnostic.dc.html",
+  "Web-N-candidat-evaluations.dc.html",
+  "Web-N-candidat-notes.dc.html",
+  "Web-N-candidat-historique.dc.html",
+  "Web-N-evaluation.dc.html",
+  "Web-N-agenda.dc.html",
+  "Web-N-agenda-jour.dc.html",
+  "Web-N-agenda-mois.dc.html",
+  "Web-N-talents.dc.html",
+  "Web-N-talents-vivier.dc.html",
+  "Web-N-talents-propositions.dc.html",
+  "Web-N-talents-reseau.dc.html",
+  "Web-N-messages.dc.html",
+  "Web-N-notifs.dc.html",
+  "Web-N-orbi.dc.html",
+  "Web-N-tableau.dc.html",
+  "Web-N-moi.dc.html",
+  "Web-N-compte.dc.html",
+  "Web-N-compte-bascule.dc.html",
+  "Web-N-compte-formule.dc.html",
+  "Web-N-compte-securite.dc.html",
+  "Web-N-compte-notifs.dc.html",
+  "Web-N-compte-aide.dc.html",
+  "Web-N-compte-sortie.dc.html",
+  "Web-N-entreprise.dc.html",
+  "Web-N-baobab.dc.html",
+  "Web-J-accueil-bienvenue.dc.html",
+  "Web-J-accueil.dc.html",
+  "Web-J-equipe.dc.html",
+  "Web-J-equipe-taches.dc.html",
+  "Web-J-equipe-invitations.dc.html",
+  "Web-J-tableau.dc.html",
+  "Web-J-moi.dc.html",
+  "Web-J-pageEnt.dc.html",
+  "Web-J-baobab.dc.html",
+  "Web-J-factu.dc.html",
+  "Web-J-journal.dc.html",
+  "Web-J-reglages.dc.html",
+  "Web-J-reglages-modeles.dc.html",
+  "Web-J-reglages-grille.dc.html",
+  "Web-J-candidatures.dc.html",
+  "Web-J-agenda.dc.html",
+  "Web-J-offres.dc.html",
+  "Web-J-compte-bascule.dc.html"
+ ],
+ "notes": {
+  "s01": {
+   "x": 0,
+   "y": 0,
+   "text": "01 · Site public : page Recruter et tarifs",
+   "kind": "title1",
+   "maxW": 4480
+  },
+  "s02": {
+   "x": 0,
+   "y": 1620,
+   "text": "02 · Ouverture, connexion, mot de passe oublié, choix du profil",
+   "kind": "title1",
+   "maxW": 4480
+  },
+  "s03": {
+   "x": 0,
+   "y": 4300,
+   "text": "03 · Inscription du recruteur (Nadia) : compte, rôle, demande de rattachement à Baobab Fintech",
+   "kind": "title1",
+   "maxW": 4480
+  },
+  "s04": {
+   "x": 0,
+   "y": 9100,
+   "text": "04 · Inscription de l’administrateur (Joseph) : formule, entreprise, logo, vérification, paiement, équipe",
+   "kind": "title1",
+   "maxW": 4480
+  },
+  "s05": {
+   "x": 0,
+   "y": 13900,
+   "text": "05 · Recruteuse Nadia · appli sur ordinateur : accueil, offres, ATS, fiche candidat, agenda, talents, messages, pilotage, compte",
+   "kind": "title1",
+   "maxW": 4480
+  },
+  "s06": {
+   "x": 0,
+   "y": 30360,
+   "text": "06 · Administrateur Joseph · espace entreprise : équipe et rôles, tâches, page entreprise, formule et facturation, journal, réglages",
+   "kind": "title1",
+   "maxW": 4480
+  }
+ },
+ "designSystems": []
+}
