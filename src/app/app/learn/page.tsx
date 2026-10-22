@@ -14,6 +14,7 @@ import { listDomains } from "@/server/services/learn-domains";
 import { myPaths } from "@/server/services/learn-paths";
 import { followedCourses, suggestedPath } from "@/server/services/learn-space";
 import { talentAttestations } from "@/server/services/attestations";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("apprendre");
@@ -35,6 +36,16 @@ const domainLooks: TalentIconName[] = ["cv", "progression", "connexion", "entrep
  */
 export default async function LearnHomePage({ searchParams }: PageProps<"/app/learn">) {
   const params = await searchParams;
+  // The phone (Modèle B, lot B7): the Formation tab is kept mounted by the layout.
+  if (await isPhone()) {
+    if (typeof params.liste === "string")
+      redirect(
+        params.liste === "terminees" || params.liste === "enregistrees"
+          ? "/app/learn?onglet=mes-cours"
+          : "/app/learn",
+      );
+    return null;
+  }
   const query = new URLSearchParams();
   for (const [key, value] of Object.entries(params))
     if (typeof value === "string") query.set(key, value);

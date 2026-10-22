@@ -17,7 +17,8 @@ export async function generateMetadata(): Promise<Metadata> {
 /**
  * « Nouvelle publication » (Modèle B, lot B3). `?citer=<id>`: « Citer » a post;
  * `?brouillon=attestation`: Orbi's draft about the last attestation, ready to publish;
- * `?realisation=<id>`: « Partager dans le Fil » of a project of Carrière (lot B5).
+ * `?realisation=<id>`: « Partager dans le Fil » of a project of Carrière (lot B5);
+ * `?attestation=<id>`: « Partager dans le Fil » of an attestation (lot B7), Orbi's draft about it.
  */
 export default async function FilComposePage({ searchParams }: PageProps<"/app/fil/publier">) {
   const query = await searchParams;
@@ -37,6 +38,11 @@ export default async function FilComposePage({ searchParams }: PageProps<"/app/f
       date: format.dateTime(date, { day: "numeric", month: "short", year: "numeric" }),
     });
   const quoted = quotedPost ? words.post(quotedPost.post) : null;
+  const askedId = typeof query.attestation === "string" ? query.attestation : null;
+  const asked = askedId ? items.certificate.find((item) => item.id === askedId) : undefined;
+  const shared = asked
+    ? { id: asked.id, courseTitle: asked.title, issuedAt: asked.issuedAt }
+    : certificate;
   return (
     <FilTexts>
       <PhoneCompose
@@ -51,20 +57,20 @@ export default async function FilComposePage({ searchParams }: PageProps<"/app/f
           quoted ? { id: quoted.id, name: shortName(quoted.author.name), body: quoted.body } : null
         }
         draft={
-          certificate
+          shared
             ? {
-                text: t("draft", { course: certificate.courseTitle }),
-                course: certificate.courseTitle,
+                text: t("draft", { course: shared.courseTitle }),
+                course: shared.courseTitle,
                 certificate: {
-                  id: certificate.id,
-                  title: certificate.courseTitle,
-                  detail: day(certificate.issuedAt),
+                  id: shared.id,
+                  title: shared.courseTitle,
+                  detail: day(shared.issuedAt),
                 },
               }
             : null
         }
-        back="/app"
-        startWithDraft={query.brouillon === "attestation"}
+        back={asked ? `/app/learn/attestations/${asked.id}` : "/app"}
+        startWithDraft={query.brouillon === "attestation" || Boolean(asked)}
         startWork={typeof query.realisation === "string" ? query.realisation : null}
       />
     </FilTexts>

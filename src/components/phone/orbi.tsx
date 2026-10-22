@@ -113,6 +113,8 @@ export function PhoneOrbi({ texts }: { texts: OrbiTexts }) {
   const choose = (question: string) => {
     const index = current.questions.indexOf(question);
     if (shownTab === "fil" && index >= 0) askFact(FIL_FACTS[index], question);
+    // « Pourquoi ce cours pour mon Cap ? » of Formation: from the facts too (lot B7).
+    else if (shownTab === "formation" && index === 0) askFact("cours", question);
     else ask(question);
   };
 

@@ -29,6 +29,7 @@ import {
   type AdminCourse,
 } from "@/server/services/course-admin";
 import { lessonOutline, lessonParagraphs, parseResources } from "@/server/services/learn";
+import { checkToForm, lessonCheck } from "@/server/services/learn-phone";
 
 type Lesson = AdminCourse["modules"][number]["lessons"][number];
 
@@ -496,6 +497,15 @@ export async function LessonEditor({
           hint={t("lesson.takeawaysHint")}
           defaultValue={outline.takeaways.join("\n")}
           rows={3}
+        />
+        <TextArea
+          id="lesson-check"
+          name="check"
+          label={t("lesson.check")}
+          hint={t("lesson.checkHint")}
+          defaultValue={checkToForm(lessonCheck(lesson.content))}
+          maxLength={1500}
+          rows={4}
         />
         <TextArea
           id="lesson-resources"

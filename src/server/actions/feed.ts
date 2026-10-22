@@ -28,6 +28,8 @@ import {
 } from "@/server/services/feed";
 import { createReport } from "@/server/services/moderation";
 import { feedWords, initialsOf, shortName, toneOf } from "@/components/phone/fil/data";
+import { shortTitle } from "@/components/phone/learn/data";
+import { formationHome } from "@/server/services/learn-phone";
 
 /**
  * The gestures of the Fil (Modèle B, lot B3). Order of CLAUDE.md: validate → session → service.
@@ -185,7 +187,7 @@ export type OrbiFactAnswer = {
   action: { href: string; label: string } | null;
 };
 
-const facts = z.enum(["digest", "offres", "entreprises", "suivre", "ecrire"]);
+const facts = z.enum(["digest", "offres", "entreprises", "suivre", "ecrire", "cours"]);
 
 /**
  * Orbi's answers in the Fil that come from the platform's facts (lot B3): the day's news, the
@@ -288,6 +290,37 @@ export async function orbiFactAction(raw: string): Promise<OrbiFactAnswer | null
           };
         }),
         action: null,
+      };
+    }
+    case "cours": {
+      // Formation (lot B7): why the course in progress counts for the person's offers.
+      const home = await formationHome(db, user.id, now);
+      const tl = await getTranslations("phoneLearn.orbi");
+      const current = home.current;
+      if (!current)
+        return {
+          question: tl("noneQuestion"),
+          text: tl("none"),
+          cards: [],
+          action: { href: "/app/learn", label: tl("seeCourses") },
+        };
+      const course = shortTitle(current.title);
+      return {
+        question: tl("whyQuestion", { course }),
+        text: home.advice
+          ? tl("why", {
+              company: shortName(home.advice.company),
+              job: home.advice.job,
+              others: home.advice.offers - 1,
+            })
+          : tl("whyNoOffer", { course, left: current.leftLessons }),
+        cards: [],
+        action: {
+          href: current.next
+            ? `/app/learn/${current.slug}/${current.next.id}`
+            : `/app/learn/${current.slug}`,
+          label: tl("resume", { course }),
+        },
       };
     }
     case "ecrire": {

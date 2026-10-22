@@ -9547,6 +9547,175 @@ Conventions :
 | `phoneInterview.bank.english.q9` | What are your salary expectations? |
 | `phoneInterview.bank.english.h9` | A range, then benefits. |
 
+### Modèle B · Formation au téléphone
+
+*Lot B7 (docs/modele-b, rangée 17, planche `Formation.dc.html`) : l’onglet Formation (Pour vous, Mes cours, Attestations), la recherche, le cours, la leçon et sa question rapide, le quiz, l’exercice, le cours terminé et l’attestation. Orbi propose, la personne décide.*
+
+| Clé | Texte |
+|---|---|
+| `phoneLearn.title` | Formation |
+| `phoneLearn.account` | Mon profil |
+| `phoneLearn.tabs` | Choisir une rubrique |
+| `phoneLearn.tab.forYou` | Pour vous |
+| `phoneLearn.tab.mine` | Mes cours |
+| `phoneLearn.tab.attestations` | Attestations |
+| `phoneLearn.continue` | Continuer |
+| `phoneLearn.continueLine` | {lesson} · {title} · {duration} |
+| `phoneLearn.empty.title` | Aucun cours en cours |
+| `phoneLearn.empty.text` | Choisissez un cours pour vos offres ci-dessous : la première leçon prend quelques minutes. |
+| `phoneLearn.advice` | {course} est demandé dans {count, plural, one {# de vos offres} other {# de vos offres}}. Il vous reste {left, plural, =0 {le quiz final} one {# leçon} other {# leçons}}. |
+| `phoneLearn.adviceNoOffer` | Il vous reste {left, plural, =0 {le quiz final} one {# leçon} other {# leçons}} pour finir {course}. |
+| `phoneLearn.why` | Pourquoi ? |
+| `phoneLearn.forOffers` | Pour vos offres |
+| `phoneLearn.seeAll` | Tout voir |
+| `phoneLearn.seeAllOf` | Tout voir : {section} |
+| `phoneLearn.domains` | Domaines |
+| `phoneLearn.all` | Tout |
+| `phoneLearn.noCourses` | Aucun cours dans ce domaine pour l’instant. |
+| `phoneLearn.interview.title` | Avant votre entretien |
+| `phoneLearn.interview.line` | {company} · {when} |
+| `phoneLearn.interview.practiceTitle` | Préparer un entretien |
+| `phoneLearn.practice` | Répéter avec Orbi |
+| `phoneLearn.practiceLine` | À l’oral ou par écrit · 5 à 15 min |
+| `phoneLearn.inProgress` | En cours |
+| `phoneLearn.noProgress` | Aucun cours en cours pour l’instant. |
+| `phoneLearn.finishedGroup` | Terminés |
+| `phoneLearn.noFinished` | Aucun cours terminé pour l’instant. |
+| `phoneLearn.saved` | Enregistrés |
+| `phoneLearn.noSaved` | Touchez « Enregistrer » sur un cours pour le garder ici. |
+| `phoneLearn.certificatesCount` | {count, plural, =0 {Aucune attestation pour l’instant} one {# attestation obtenue} other {# attestations obtenues}} |
+| `phoneLearn.certificatesNote` | Chaque attestation a un lien de vérification. Elle s’ajoute seule à votre profil dans Carrière. |
+| `phoneLearn.certificateLine` | Obtenue le {date} · {score} % |
+| `phoneLearn.certificateLineNoScore` | Obtenue le {date} |
+| `phoneLearn.cardLine` | {count, plural, one {# leçon} other {# leçons}} · {duration} |
+| `phoneLearn.lessonLine` | {course} · {duration} |
+| `phoneLearn.lessonOf` | Leçon {n} sur {count} |
+| `phoneLearn.finishedOn` | Attestation obtenue · {date} |
+| `phoneLearn.finishedNoDate` | Cours terminé |
+| `phoneLearn.done` | Terminé |
+| `phoneLearn.percent` | {value} % |
+| `phoneLearn.free` | Gratuit |
+| `phoneLearn.hours` | {hours} h {minutes} |
+| `phoneLearn.hoursOnly` | {hours} h |
+| `phoneLearn.minutes` | {count} min |
+| `phoneLearn.level.beginner` | Débutant |
+| `phoneLearn.level.intermediate` | Intermédiaire |
+| `phoneLearn.level.advanced` | Avancé |
+| `phoneLearn.error` | Cela n’a pas marché. Réessayez dans un instant. |
+| `phoneLearn.close` | Fermer |
+| `phoneLearn.cancel` | Annuler |
+| `phoneLearn.report` | Signaler un problème |
+| `phoneLearn.reportLine` | Vidéo, texte ou question : écrivez à l’équipe |
+| `phoneLearn.search.label` | Rechercher un cours, une leçon ou une attestation |
+| `phoneLearn.search.placeholder` | Cours, compétences, attestations |
+| `phoneLearn.search.clear` | Effacer |
+| `phoneLearn.search.cancel` | Annuler |
+| `phoneLearn.search.in` | Rechercher dans |
+| `phoneLearn.search.scope.tout` | Tout |
+| `phoneLearn.search.scope.cours` | Cours |
+| `phoneLearn.search.scope.lecons` | Leçons |
+| `phoneLearn.search.scope.attestations` | Attestations |
+| `phoneLearn.search.resume` | Reprendre |
+| `phoneLearn.search.resumeAction` | Reprendre |
+| `phoneLearn.search.recent` | Recherches récentes |
+| `phoneLearn.search.today` | aujourd’hui |
+| `phoneLearn.search.yesterday` | hier |
+| `phoneLearn.search.skills` | Compétences demandées dans vos offres |
+| `phoneLearn.search.hint` | Tapez une lettre : cours, leçons et attestations s’affichent tout de suite. |
+| `phoneLearn.search.courses` | Cours · {count} |
+| `phoneLearn.search.lessons` | Leçons · {count} |
+| `phoneLearn.search.certificates` | Attestations · {count} |
+| `phoneLearn.search.empty` | Aucun cours pour « {query} ». |
+| `phoneLearn.search.askOrbi` | Demander à Orbi de trouver un cours |
+| `phoneLearn.search.orbiQuestion` | Trouve-moi un cours sur « {query} » |
+| `phoneLearn.course.more` | Plus d’options |
+| `phoneLearn.course.source` | {domain} · Jumanly Formation |
+| `phoneLearn.course.lessons` | {count, plural, one {# leçon} other {# leçons}} |
+| `phoneLearn.course.progress` | {done, plural, one {# leçon} other {# leçons}} sur {count} terminées |
+| `phoneLearn.course.outcomes` | Vous saurez |
+| `phoneLearn.course.programme` | Programme |
+| `phoneLearn.course.lockedLine` | {duration} · {plan} |
+| `phoneLearn.course.current` | En cours |
+| `phoneLearn.course.lessonDone` | terminée |
+| `phoneLearn.course.certificate` | Attestation obtenue |
+| `phoneLearn.course.certificateOn` | Le {date} |
+| `phoneLearn.course.see` | Voir |
+| `phoneLearn.course.save` | Enregistrer |
+| `phoneLearn.course.saved` | Enregistré |
+| `phoneLearn.course.unsave` | Retirer des enregistrés |
+| `phoneLearn.course.saveLine` | À retrouver dans Mes cours |
+| `phoneLearn.course.savedToast` | Cours enregistré dans Mes cours |
+| `phoneLearn.course.unsavedToast` | Cours retiré de Mes cours |
+| `phoneLearn.course.share` | Partager le cours |
+| `phoneLearn.course.shareLine` | Lien, WhatsApp ou e-mail |
+| `phoneLearn.course.shared` | Lien du cours copié |
+| `phoneLearn.course.start` | Commencer |
+| `phoneLearn.course.resume` | Reprendre la leçon {n} |
+| `phoneLearn.course.review` | Revoir le cours |
+| `phoneLearn.course.unlock` | Débloquer avec {plan} |
+| `phoneLearn.premium.title` | « {course} » est inclus dans {plan} |
+| `phoneLearn.premium.text` | La formule {plan} débloque ce cours et les autres cours de son niveau. Paiement par Mobile Money ou par carte, sans engagement. |
+| `phoneLearn.premium.plans` | Voir les formules |
+| `phoneLearn.premium.trial` | Essayer la première leçon |
+| `phoneLearn.lesson.position` | Leçon {n} sur {count} |
+| `phoneLearn.lesson.settings` | Réglages de la leçon |
+| `phoneLearn.lesson.play` | Lire la vidéo |
+| `phoneLearn.lesson.start` | 0:00 |
+| `phoneLearn.lesson.lineCaptions` | {duration} · sous-titres en français |
+| `phoneLearn.lesson.takeaways` | À retenir |
+| `phoneLearn.lesson.quick` | Question rapide |
+| `phoneLearn.lesson.right` | Bonne réponse. |
+| `phoneLearn.lesson.wrong` | Pas tout à fait. |
+| `phoneLearn.lesson.explain` | Explique autrement : {lesson} |
+| `phoneLearn.lesson.explainAction` | Orbi explique autrement |
+| `phoneLearn.lesson.orbiContext` | leçon « {lesson} » du cours « {course} » |
+| `phoneLearn.lesson.previous` | Précédente |
+| `phoneLearn.lesson.next` | Leçon suivante |
+| `phoneLearn.lesson.finishCourse` | Terminer le cours |
+| `phoneLearn.lesson.answerFirst` | Répondez à la question rapide pour continuer. |
+| `phoneLearn.lesson.quizFirst` | Envoyez vos réponses au quiz pour continuer. |
+| `phoneLearn.lesson.exerciseFirst` | Rendez l’exercice pour continuer. |
+| `phoneLearn.lesson.doneToast` | Leçon {n} terminée |
+| `phoneLearn.lesson.speed` | Vitesse de lecture : {speed} × |
+| `phoneLearn.lesson.captionsOn` | Sous-titres en français |
+| `phoneLearn.lesson.captionsOff` | Sous-titres désactivés |
+| `phoneLearn.lesson.touchToChange` | Touchez pour changer |
+| `phoneLearn.lesson.file` | Support de la leçon · télécharger |
+| `phoneLearn.quiz.rule` | Il faut {passing} % de bonnes réponses. Vous pouvez recommencer. |
+| `phoneLearn.quiz.number` | {n}. |
+| `phoneLearn.quiz.submit` | Envoyer mes réponses |
+| `phoneLearn.quiz.passed` | Réussi : {score} % de bonnes réponses. |
+| `phoneLearn.quiz.failed` | {score} % de bonnes réponses : il en faut {passing} %. Relisez les leçons et recommencez. |
+| `phoneLearn.exercise.title` | Rendre l’exercice |
+| `phoneLearn.exercise.text` | Un PDF ou une photo de votre travail, 5 Mo au plus. |
+| `phoneLearn.exercise.problem` | Le fichier n’a pas pu être envoyé : un PDF ou une photo de 5 Mo au plus. |
+| `phoneLearn.exercise.file` | Choisir un fichier |
+| `phoneLearn.exercise.fileLine` | PDF ou photo |
+| `phoneLearn.exercise.submit` | Envoyer mon travail |
+| `phoneLearn.certificate.bravo` | Bravo {name} ! |
+| `phoneLearn.certificate.bravoAnon` | Bravo ! |
+| `phoneLearn.certificate.finished` | Vous avez terminé « {course} ». |
+| `phoneLearn.certificate.kicker` | Attestation Jumanly |
+| `phoneLearn.certificate.awardedTo` | Décernée à |
+| `phoneLearn.certificate.line` | Le {date} · score final {score} % |
+| `phoneLearn.certificate.lineNoScore` | Le {date} |
+| `phoneLearn.certificate.verify` | Vérification : |
+| `phoneLearn.certificate.addToProfile` | Ajouter à mon profil |
+| `phoneLearn.certificate.onProfile` | Sur votre profil ✓ |
+| `phoneLearn.certificate.addedToProfile` | Ajoutée à votre profil dans Carrière |
+| `phoneLearn.certificate.alreadyOnProfile` | Déjà visible sur votre profil |
+| `phoneLearn.certificate.shareFil` | Partager dans le Fil |
+| `phoneLearn.certificate.pdf` | Télécharger en PDF |
+| `phoneLearn.certificate.more` | Voir d’autres cours |
+| `phoneLearn.certificate.course` | Revoir le cours |
+| `phoneLearn.orbi.noneQuestion` | Quel cours pour mes offres ? |
+| `phoneLearn.orbi.none` | Vous n’avez pas de cours en cours. Dans « Pour vos offres », je vous montre les cours qui comblent ce que vos offres demandent. |
+| `phoneLearn.orbi.seeCourses` | Voir les cours |
+| `phoneLearn.orbi.whyQuestion` | Pourquoi {course} ? |
+| `phoneLearn.orbi.why` | {company} le demande pour le poste « {job} »{others, plural, =0 {} one {, et # autre de vos offres aussi} other {, et # autres de vos offres aussi}}. Avec l’attestation, cette compétence s’ajoute à votre profil. |
+| `phoneLearn.orbi.whyNoOffer` | Aucune de vos offres ne le demande pour l’instant. Il vous reste {left, plural, =0 {le quiz final} one {# leçon} other {# leçons}} pour finir {course}. |
+| `phoneLearn.orbi.resume` | Reprendre {course} |
+
 ### Refonte recruteur · Cadre mobile (lot 1)
 
 *Coquille de l'espace recruteur (docs/refonte-mobile/BRIEF-RECRUTEUR, lot 1) : organisation active, barre du bas À traiter · Offres · Orbi · Candidats · Messages, Compte RH, premiers pas.*
@@ -17490,6 +17659,8 @@ Conventions :
 | `admin.courses.lesson.stepsHint` | Une étape par ligne : Titre | minutes (ex. : Préparer une plage propre | 2). Six au plus. Facultatif. |
 | `admin.courses.lesson.takeaways` | À retenir |
 | `admin.courses.lesson.takeawaysHint` | Un point par ligne, trois au plus. Facultatif. |
+| `admin.courses.lesson.check` | Question rapide (téléphone) |
+| `admin.courses.lesson.checkHint` | La question sur la première ligne, puis une réponse par ligne (quatre au plus). Mettez * devant la bonne réponse et > devant l’explication. Facultatif. |
 | `admin.courses.quiz.add` | Ajouter un quiz |
 | `admin.courses.quiz.passScore` | Seuil de réussite (%) |
 | `admin.courses.quiz.attempts` | Nombre de tentatives (0 = illimité) |
