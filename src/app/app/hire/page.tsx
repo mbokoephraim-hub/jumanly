@@ -13,6 +13,8 @@ import { hirePermissions, isOrgVerified } from "@/server/services/hire";
 import { activeCount, listOffers } from "@/server/services/hire-offers";
 import { applicationsThisWeek, hireToday } from "@/server/services/hire-today";
 import { atsToday } from "@/server/services/hire-ats";
+import { isPhone } from "@/server/view";
+import { RhTab, RhBell } from "@/components/phone/recruteur/head";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireToday");
@@ -27,7 +29,7 @@ const firstName = (name: string | null | undefined) => (name ?? "").trim().split
  * the active offers. When nothing waits: « Rien à traiter », the figures of the week, Orbi and the
  * next steps. Real figures only; Orbi points, the recruiter decides.
  */
-export default async function HireTodayPage() {
+async function HireTodayPageContent() {
   const { user, space, ctx } = await requireHire("/app/hire");
   const t = await getTranslations("hireToday");
   const tw = await getTranslations("hireWeb.today");
@@ -447,4 +449,16 @@ export default async function HireTodayPage() {
       {sheets}
     </div>
   );
+}
+
+/** On a phone, the first screen of the Fil tab of Modèle B (docs/modele-b-recruteur, lot M1). */
+export default async function HireTodayPage() {
+  const content = <HireTodayPageContent />;
+  if (await isPhone())
+    return (
+      <RhTab tab="fil" actions={<RhBell />}>
+        {content}
+      </RhTab>
+    );
+  return content;
 }

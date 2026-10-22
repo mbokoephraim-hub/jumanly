@@ -39,7 +39,15 @@ describe("préchargement au téléphone", () => {
   it("n'ouvre jamais une conversation ni un espace d'équipe (leur ouverture laisse une trace)", () => {
     expect(preloadPath("/app/messages/c1", "/app")).toBeNull();
     expect(preloadPath("/app/hire/candidats/a1", "/app")).toBeNull();
+    expect(preloadPath("/app/hire/talents/p1", "/app/hire/talents")).toBeNull();
+    expect(preloadPath("/app/hire/offres/j1/ats/a1", "/app/hire/offres")).toBeNull();
     expect(preloadPath("/app/partenaire", "/app")).toBeNull();
+  });
+
+  it("charge à l'avance les listes du recruteur, jamais un dossier (Modèle B recruteur)", () => {
+    expect(preloadPath("/app/hire/offres", "/app/hire")).toBe("/app/hire/offres");
+    expect(preloadPath("/app/hire/offres/j1", "/app/hire/offres")).toBe("/app/hire/offres/j1");
+    expect(preloadPath("/app/hire/candidats", "/app/hire")).toBe("/app/hire/candidats");
   });
 
   it("redemande toujours les pages qui changent pendant qu'on les regarde", () => {

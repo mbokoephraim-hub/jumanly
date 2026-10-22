@@ -13965,6 +13965,93 @@ Conventions :
 | `org.delete.activeSubscription` | Résiliez d'abord l'abonnement en cours. |
 | `org.delete.done` | Organisation supprimée. |
 
+### Modèle B recruteur · coque au téléphone
+
+*Lot M1 (docs/modele-b-recruteur, mobile/, brief § 3 et § 4) : barre du bas Fil · Offres · Candidatures · Talents · Messages en icônes seules, Orbi flottant, avatar vers le compte, recherche en deux temps sous l'en-tête de chaque onglet.*
+
+| Clé | Texte |
+|---|---|
+| `phoneRh.nav.fil` | Fil |
+| `phoneRh.nav.offres` | Offres |
+| `phoneRh.nav.candidatures` | Candidatures |
+| `phoneRh.nav.talents` | Talents |
+| `phoneRh.nav.messages` | Messages |
+| `phoneRh.nav.candidaturesNew` | Candidatures, {count, plural, one {# nouvelle} other {# nouvelles}} |
+| `phoneRh.nav.messagesUnread` | Messages, {count, plural, one {# conversation non lue} other {# conversations non lues}} |
+| `phoneRh.head.account` | Mon compte |
+| `phoneRh.head.notifications` | {count, plural, =0 {Notifications} one {Notifications, # nouvelle} other {Notifications, # nouvelles}} |
+| `phoneRh.head.newOffer` | Publier une offre |
+| `phoneRh.search.open` | Rechercher |
+| `phoneRh.search.cancel` | Annuler |
+| `phoneRh.search.clear` | Effacer |
+| `phoneRh.search.searchIn` | Rechercher dans |
+| `phoneRh.search.recent` | Recherches récentes |
+| `phoneRh.search.empty` | Aucun résultat pour « {query} ». |
+| `phoneRh.search.scopes.tout` | Tout |
+| `phoneRh.search.scopes.offres` | Mes offres |
+| `phoneRh.search.scopes.candidats` | Candidats |
+| `phoneRh.search.scopes.entreprises` | Entreprises |
+| `phoneRh.search.scopes.personnes` | Personnes |
+| `phoneRh.search.groups.offers` | Mes offres · {count} |
+| `phoneRh.search.groups.candidates` | Candidats · {count} |
+| `phoneRh.search.groups.companies` | Entreprises · {count} |
+| `phoneRh.search.groups.people` | Personnes · {count} |
+| `phoneRh.search.offerLine` | {city} · {status} · {count, plural, =0 {0 candidature} one {# candidature} other {# candidatures}} |
+| `phoneRh.search.status.draft` | Brouillon |
+| `phoneRh.search.status.pending_review` | En vérification |
+| `phoneRh.search.status.published` | En cours |
+| `phoneRh.search.status.paused` | En pause |
+| `phoneRh.search.status.closed` | Terminée |
+| `phoneRh.search.status.archived` | Archivée |
+| `phoneRh.search.status.rejected` | Refusée |
+| `phoneRh.search.status.changes_requested` | À corriger |
+| `phoneRh.search.fil.label` | Rechercher dans le Fil |
+| `phoneRh.search.fil.placeholder` | Publications, personnes, entreprises |
+| `phoneRh.search.fil.note` | Personnes et entreprises : tout Jumanly. |
+| `phoneRh.search.offres.label` | Rechercher une offre, une entreprise ou une personne |
+| `phoneRh.search.offres.placeholder` | Offres, entreprises, personnes |
+| `phoneRh.search.offres.note` | Mes offres : seulement les vôtres. Entreprises et personnes : tout Jumanly. |
+| `phoneRh.search.candidatures.label` | Rechercher un candidat ou une offre |
+| `phoneRh.search.candidatures.placeholder` | Nom, compétence, offre |
+| `phoneRh.search.candidatures.note` | Seulement les candidatures de vos offres. |
+| `phoneRh.search.talents.label` | Rechercher un talent ou une entreprise |
+| `phoneRh.search.talents.placeholder` | Métier, compétence, ville |
+| `phoneRh.search.talents.note` | Seulement les talents qui ont rendu leur profil visible. |
+| `phoneRh.search.messages.label` | Rechercher dans les messages |
+| `phoneRh.search.messages.placeholder` | Nom, offre |
+| `phoneRh.search.messages.note` | Candidats de vos offres, et personnes de tout Jumanly. |
+| `phoneRh.orbi.plan` | Voir la formule |
+| `phoneRh.orbi.fil.bubble` | Que publier pour attirer des candidats ? |
+| `phoneRh.orbi.fil.from` | Orbi · depuis le Fil |
+| `phoneRh.orbi.fil.q1` | Que publier pour attirer des candidats ? |
+| `phoneRh.orbi.fil.q2` | Comment marche ma dernière publication ? |
+| `phoneRh.orbi.fil.q3` | Quels événements suivre ce mois-ci ? |
+| `phoneRh.orbi.fil.q4` | Écrire une publication sur une offre |
+| `phoneRh.orbi.offres.bubble` | Comment attirer plus de candidats ? |
+| `phoneRh.orbi.offres.from` | Orbi · depuis Offres |
+| `phoneRh.orbi.offres.q1` | Comment attirer plus de candidats ? |
+| `phoneRh.orbi.offres.q2` | Quelle offre marche le mieux ? |
+| `phoneRh.orbi.offres.q3` | Rédiger une nouvelle offre |
+| `phoneRh.orbi.offres.q4` | Faut-il relancer une offre ? |
+| `phoneRh.orbi.candidatures.bubble` | Qui recevoir en premier ? |
+| `phoneRh.orbi.candidatures.from` | Orbi · depuis Candidatures |
+| `phoneRh.orbi.candidatures.q1` | Qui recevoir en premier ? |
+| `phoneRh.orbi.candidatures.q2` | Faire le diagnostic de tous les CV |
+| `phoneRh.orbi.candidatures.q3` | Préparer mon prochain entretien |
+| `phoneRh.orbi.candidatures.q4` | Répondre aux candidats sans réponse |
+| `phoneRh.orbi.talents.bubble` | Qui proposer pour mes offres ? |
+| `phoneRh.orbi.talents.from` | Orbi · depuis Talents |
+| `phoneRh.orbi.talents.q1` | Qui proposer pour mes offres ? |
+| `phoneRh.orbi.talents.q2` | Relancer les propositions sans réponse |
+| `phoneRh.orbi.talents.q3` | Pourquoi je ne vois pas tous les talents ? |
+| `phoneRh.orbi.talents.q4` | Qui ajouter à mon vivier ? |
+| `phoneRh.orbi.messages.bubble` | Qui attend une réponse ? |
+| `phoneRh.orbi.messages.from` | Orbi · depuis Messages |
+| `phoneRh.orbi.messages.q1` | Qui attend une réponse de ma part ? |
+| `phoneRh.orbi.messages.q2` | Résumer mes non-lus |
+| `phoneRh.orbi.messages.q3` | Proposer une réponse à un candidat |
+| `phoneRh.orbi.messages.q4` | Relire un message avant de l'envoyer |
+
 
 ---
 

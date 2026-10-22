@@ -12,6 +12,8 @@ import { requireHire } from "@/server/hire-context";
 import { hirePermissions } from "@/server/services/hire";
 import { activeCount, listOffers, offerTabs, type OfferTab } from "@/server/services/hire-offers";
 import { orgStructure } from "@/server/services/org-structure";
+import { isPhone } from "@/server/view";
+import { RhNewOffer, RhTab } from "@/components/phone/recruteur/head";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireOffers.list");
@@ -26,7 +28,7 @@ const OK_TOASTS = ["brouillon", "pause", "reprise", "fermee", "supprimee"] as co
  * filters, « Créer une offre », the five tabs with their counts, then one card per offer with its
  * colour and its real figures. The « … » of each card opens its actions.
  */
-export default async function HireOffersPage({ searchParams }: PageProps<"/app/hire/offres">) {
+async function HireOffersPageContent({ searchParams }: PageProps<"/app/hire/offres">) {
   const params = await searchParams;
   const { ctx, space } = await requireHire("/app/hire/offres");
   const t = await getTranslations("hireOffers");
@@ -263,4 +265,16 @@ export default async function HireOffersPage({ searchParams }: PageProps<"/app/h
       )}
     </div>
   );
+}
+
+/** On a phone, the first screen of the Offres tab of Modèle B (docs/modele-b-recruteur, lot M1). */
+export default async function HireOffersPage(props: PageProps<"/app/hire/offres">) {
+  const content = <HireOffersPageContent {...props} />;
+  if (await isPhone())
+    return (
+      <RhTab tab="offres" actions={<RhNewOffer />}>
+        {content}
+      </RhTab>
+    );
+  return content;
 }

@@ -15,9 +15,11 @@ export async function hireSearchPreview(
   ctx: HireContext,
   query: string,
   max = 6,
+  /** Fewest letters asked (two on a computer, one on the phone's search in two steps). */
+  minLetters = 2,
 ): Promise<HirePreviewItem[]> {
   const words = query.trim().slice(0, 100);
-  if (words.length < 2) return [];
+  if (words.length < minLetters) return [];
   const scope = await jobScope(db, ctx);
   const contains = { contains: words, mode: "insensitive" as const };
   const [jobs, applications] = await Promise.all([

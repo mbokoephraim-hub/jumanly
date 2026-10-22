@@ -24,6 +24,8 @@ import { requireHire } from "@/server/hire-context";
 import { reportError } from "@/server/observability";
 import { HireError, hirePermissions } from "@/server/services/hire";
 import { candidateList, type CandidateRow } from "@/server/services/hire-candidates";
+import { isPhone } from "@/server/view";
+import { RhTab } from "@/components/phone/recruteur/head";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("hireCandidates");
@@ -42,7 +44,7 @@ const DAY = 86_400_000;
  * many are hidden and shows them again in one tap. « Rechercher des talents » (`?vue=talents`, managers
  * only) and its « Mes propositions » (`?vue=propositions`) are drawn by talent-search.tsx (lot 4).
  */
-export default async function CandidatesPage({ searchParams }: PageProps<"/app/hire/candidats">) {
+async function CandidatesPageContent({ searchParams }: PageProps<"/app/hire/candidats">) {
   const query = await searchParams;
   const { ctx } = await requireHire("/app/hire/candidats", "readApplications");
   const t = await getTranslations("hireCandidates");
@@ -457,4 +459,13 @@ export default async function CandidatesPage({ searchParams }: PageProps<"/app/h
       </Sheet>
     </div>
   );
+}
+
+/** On a phone, the first screen of the Candidatures tab of Modèle B (docs/modele-b-recruteur, lot M1). */
+export default async function CandidatesPage(props: PageProps<"/app/hire/candidats">) {
+  const content = <CandidatesPageContent {...props} />;
+  if (!(await isPhone())) return content;
+  // The talent search (`?vue=talents`) is the Talents tab on a phone.
+  const talents = (await props.searchParams).vue === "talents";
+  return <RhTab tab={talents ? "talents" : "candidatures"}>{content}</RhTab>;
 }
