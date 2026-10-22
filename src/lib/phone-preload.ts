@@ -28,6 +28,17 @@ const RECORDED = [
   /^\/app\/(hire|partenaire|organisation)(\/|$)/,
 ];
 
+/**
+ * Pages that change while one looks at them (what others send, the answers of recruiters, a
+ * form being filled): always asked for at the tap, never shown from a copy loaded earlier.
+ */
+const LIVE = [
+  /^\/app\/(notifications|messages)(\/|$)/,
+  /^\/app\/suivi(\/|$)/,
+  /^\/app\/jobs\/candidatures(\/|$)/,
+  /\/postuler$/,
+];
+
 /** At most this many pages are preloaded after a screen appears. */
 export const PRELOAD_MAX = 40;
 
@@ -48,6 +59,8 @@ export function preloadPath(href: string, current: string): string | null {
   if (path === current) return null;
   if (FILES.some((pattern) => pattern.test(path))) return null;
   if (RECORDED.some((pattern) => pattern.test(path))) return null;
+  if (LIVE.some((pattern) => pattern.test(path))) return null;
+  if (url.searchParams.has("postuler")) return null;
   return `${path}${url.search}`;
 }
 

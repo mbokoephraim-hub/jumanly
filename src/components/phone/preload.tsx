@@ -9,8 +9,8 @@ type Connection = { saveData?: boolean; effectiveType?: string };
 
 /** When each page was last asked for in this visit, kept across screens. */
 const asked = new Map<string, number>();
-/** A preloaded page is kept a minute by the router (`staleTimes.static`): asked again after. */
-const FRESH_MS = 50_000;
+/** A preloaded page is kept 30 s by the router (`staleTimes.static`): asked again after. */
+const FRESH_MS = 28_000;
 
 /** Waits until the phone has nothing else to do (or a short while where that is not known). */
 const idle = (run: () => void) => {

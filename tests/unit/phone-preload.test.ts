@@ -21,11 +21,9 @@ function routeHandlers(dir: string): string[] {
 describe("préchargement au téléphone", () => {
   it("charge les pages de l'espace connecté, avec leurs paramètres", () => {
     expect(preloadPath("/app/career/cv", "/app")).toBe("/app/career/cv");
-    expect(preloadPath("/app/jobs/offre-1?postuler=1", "/app")).toBe(
-      "/app/jobs/offre-1?postuler=1",
+    expect(preloadPath("/app/jobs/offre-1?source=fil", "/app")).toBe(
+      "/app/jobs/offre-1?source=fil",
     );
-    expect(preloadPath("/app/messages", "/app")).toBe("/app/messages");
-    expect(preloadPath("/app/messages/demandes", "/app")).toBe("/app/messages/demandes");
     expect(preloadPath("/app/learn/cours-1/lecon-1", "/app")).toBe("/app/learn/cours-1/lecon-1");
     expect(preloadPath("/app/learn/attestations/a1", "/app")).toBe("/app/learn/attestations/a1");
   });
@@ -42,6 +40,15 @@ describe("préchargement au téléphone", () => {
     expect(preloadPath("/app/messages/c1", "/app")).toBeNull();
     expect(preloadPath("/app/hire/candidats/a1", "/app")).toBeNull();
     expect(preloadPath("/app/partenaire", "/app")).toBeNull();
+  });
+
+  it("redemande toujours les pages qui changent pendant qu'on les regarde", () => {
+    expect(preloadPath("/app/notifications", "/app")).toBeNull();
+    expect(preloadPath("/app/messages", "/app")).toBeNull();
+    expect(preloadPath("/app/messages/demandes", "/app")).toBeNull();
+    expect(preloadPath("/app/suivi", "/app")).toBeNull();
+    expect(preloadPath("/app/jobs/offre-1?postuler=1", "/app")).toBeNull();
+    expect(preloadPath("/app/jobs/offre-1/postuler", "/app")).toBeNull();
   });
 
   it("ne télécharge aucun fichier de l'espace connecté", () => {
