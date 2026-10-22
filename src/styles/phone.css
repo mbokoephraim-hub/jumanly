@@ -60,10 +60,17 @@ html:has(.nb-app) body {
   outline: 2px solid var(--nb-lime);
   outline-offset: 2px;
 }
-/* A text field takes no halo of the site (globals.css, a lime square around the text): its pill
-   shows the focus (`:focus-within`), or the lime outline above when it has none. */
-.nb-app :is(input, textarea, select):focus-visible {
+/* A text field takes no frame when one writes in it (Ephraïm, 22/10/2026): neither the halo of the
+   site (globals.css) nor the lime outline above. The caret and the keyboard show where one writes;
+   a field drawn as a pill still shows its own focus (`:focus-within`). Boxes to tick keep the outline. */
+.nb-app
+  :is(
+    input:not([type="checkbox"], [type="radio"], [type="range"], [type="file"]),
+    textarea,
+    select
+  ):focus-visible {
   box-shadow: none;
+  outline: none;
 }
 
 /* ─── Couches : 5 onglets gardés, la pile des pages, le cliché de l'écran quitté ─── */
@@ -3470,9 +3477,9 @@ html[data-nb-decouvert] .nb-spl-halo {
   outline: none;
   box-shadow: none;
 }
+/* No green frame while typing (Ephraïm, 22/10/2026): the pill only lightens a little. */
 .nb-ex-recherche:focus-within {
-  outline: 2px solid var(--nb-lime);
-  outline-offset: 2px;
+  background: #223236;
 }
 .nb-ex-recherche input::placeholder {
   color: #9fb3ae;
