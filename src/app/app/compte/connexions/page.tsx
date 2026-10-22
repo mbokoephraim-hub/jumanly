@@ -16,6 +16,7 @@ import {
   requestConnectionAction,
 } from "@/server/actions/connections";
 import { requireUser } from "@/server/auth/session";
+import { phoneTalentRedirect } from "@/server/phone-routes";
 import { db } from "@/server/db";
 import {
   connectionPeer,
@@ -54,6 +55,11 @@ export default async function ConnectionsPage({
 }: PageProps<"/app/compte/connexions">) {
   const params = await searchParams;
   const user = await requireUser("/app/compte/connexions");
+  // Modèle B (B8, B9): connections and their requests are in Messages on a phone.
+  await phoneTalentRedirect(
+    user.id,
+    one(params.onglet) === "demandes" ? "/app/messages/demandes" : "/app/messages",
+  );
   const t = await getTranslations();
   const tab = one(params.onglet) === "demandes" ? "demandes" : "connexions";
   const q = (one(params.q) ?? "").slice(0, 80);

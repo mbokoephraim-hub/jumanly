@@ -9,7 +9,6 @@ import { OFFLINE_SLOT_ID } from "@/lib/connection";
 import { appearanceScript, type Appearance } from "@/lib/appearance";
 import type { AbstractIntlMessages } from "next-intl";
 import { AppearanceRoot } from "./appearance";
-import { TalentBottomBar } from "./bottom-bar";
 import { TalentHeader } from "./header";
 import { OfflineDrafts } from "./offline-drafts";
 import { TalentCommand } from "./web/command";
@@ -20,9 +19,9 @@ import { TalentTopBar } from "./web/top-bar";
 import { ViewSync } from "@/components/phone/view-sync";
 
 /**
- * Talent space, one code for three widths (docs/refonte-mobile, lot 1; docs/refonte-web, W0).
- * Phone (< 768 px): the head with the big title, the page, the floating bar Pour moi · Offres ·
- * Orbi · Apprendre · Suivi. Tablet (768 to 1199 px): the 84 px rail of icons and the top bar.
+ * Talent space on a tablet and a computer (docs/refonte-web, W0); a phone, or a window narrowed
+ * under 768 px, gets the Modèle B (src/components/phone, `ViewSync`). Tablet (768 to 1199 px):
+ * the 84 px rail of icons and the top bar.
  * Computer (≥ 1200 px): the 232 px sidebar and the top bar. Everywhere: `Ctrl K` (search and
  * Orbi), the Orbi panel on the right (`?orbi=1`). Light, dark or Auto (the device decides).
  */
@@ -194,18 +193,6 @@ export function TalentShell({
           </main>
         </div>
       </div>
-      <TalentBottomBar
-        badge={followUp}
-        labels={{
-          aria: t("nav.aria"),
-          badge: t("nav.badge", { count: followUp }),
-          forMe: t("nav.forMe"),
-          offers: t("nav.offers"),
-          orbi: t("nav.orbi"),
-          learn: t("nav.learn"),
-          suivi: t("nav.suivi"),
-        }}
-      />
       <Suspense fallback={null}>
         <OrbiPanel
           texts={orbiTexts}

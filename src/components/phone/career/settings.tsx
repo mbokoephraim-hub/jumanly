@@ -59,6 +59,7 @@ export function PhoneSettings({
   email,
   plan,
   language,
+  install,
 }: {
   name: string;
   image: string | null;
@@ -67,6 +68,8 @@ export function PhoneSettings({
   email: string;
   plan: string;
   language: string;
+  /** « Installer l'appli », drawn by the server (its texts are not sent to the browser). */
+  install: ReactNode;
 }) {
   const t = useTranslations("phoneCareer.reglages");
   const [leaving, setLeaving] = useState(false);
@@ -100,6 +103,7 @@ export function PhoneSettings({
         <small>{language}</small>
       </div>
       <Row href="/app/compte/aide">{t("help")}</Row>
+      {install}
       <button
         type="button"
         className="nb-ca-it nb-ca-sortir"

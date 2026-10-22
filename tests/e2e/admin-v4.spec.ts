@@ -10,6 +10,24 @@ test("espace talent : recherche de l'en-tête et compte derrière l'avatar", asy
   isMobile,
 }) => {
   await logIn(page, demo.talentPro);
+  if (isMobile) {
+    // Modèle B (lot B9): the search is Explorer's and the profile is Carrière on a phone; the
+    // avatar of Formation opens Carrière, the account is Paramètres.
+    await page.goto("/app/recherche?q=CV");
+    await expect(page).toHaveURL(/\/app\/jobs$/);
+    await page.goto("/app/learn");
+    await page.locator(".nb-fo-accueil").getByRole("link", { name: "Mon profil" }).click();
+    await expect(page).toHaveURL(/\/app\/career\/cv$/);
+    await page.goto("/app/compte");
+    await expect(page).toHaveURL(/\/app\/parametres$/);
+    await page.getByRole("button", { name: "Se déconnecter" }).click();
+    await page
+      .getByRole("dialog", { name: "Se déconnecter ?" })
+      .getByRole("button", { name: "Se déconnecter" })
+      .click();
+    await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
+    return;
+  }
   // Pour moi has no search since lot 3 (planche talent-1): the grouped results stay reachable.
   await page.goto("/app/recherche?q=CV");
   const courses = page.getByRole("region", { name: /^Formations/ });
@@ -24,25 +42,16 @@ test("espace talent : recherche de l'en-tête et compte derrière l'avatar", asy
   await expect(page.getByRole("region", { name: /^Offres/ })).toHaveCount(0);
   await expectAccessible(page);
 
-  // The profile (planche talent-4 § 3): sections that fold on the phone, Compétences open first;
-  // on a wide screen (web talent 4b) every section is open in two columns.
+  // The profile (web talent 4b): every section is open in two columns.
   await page.goto("/app/profil");
   await expect(page.locator("details.t-sect")).toHaveCount(7);
   await expect(page.locator("#competences")).toHaveAttribute("open", "");
-  if (isMobile) await page.locator("#langues > summary").click();
   await expect(page.locator("#langues")).toHaveAttribute("open", "");
 
   // The account opens from the avatar of a destination; Se déconnecter sits in Compte.
   await page.goto("/app/learn");
-  if (isMobile) {
-    // Modèle B (lot B7): the avatar of Formation opens Carrière; the account stays at /app/compte.
-    await page.locator(".nb-fo-accueil").getByRole("link", { name: "Mon profil" }).click();
-    await expect(page).toHaveURL(/\/app\/career\/cv$/);
-    await page.goto("/app/compte");
-  } else {
-    await page.getByRole("link", { name: /^Compte de / }).click();
-    await expect(page).toHaveURL(/\/app\/compte$/);
-  }
+  await page.getByRole("link", { name: /^Compte de / }).click();
+  await expect(page).toHaveURL(/\/app\/compte$/);
   await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
   await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
 });

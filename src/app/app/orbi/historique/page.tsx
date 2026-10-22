@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import Link from "next/link";
 import { getTranslations } from "next-intl/server";
+import { FlowHead } from "@/components/talent/flow-head";
 import { TalentIcon } from "@/components/talent/icon";
 import { historyDate, topicLook } from "@/components/talent/orbi-history";
 import { requireUser } from "@/server/auth/session";
@@ -8,6 +9,7 @@ import { clearOrbiHistoryAction, deleteOrbiConversationAction } from "@/server/a
 import { db } from "@/server/db";
 import { getActiveSpace } from "@/server/hire-context";
 import { listOrbiConversations } from "@/server/services/orbi";
+import { isPhone } from "@/server/view";
 
 export async function generateMetadata(): Promise<Metadata> {
   const t = await getTranslations("talentOrbi.historyPage");
@@ -29,9 +31,15 @@ export default async function OrbiHistoryPage({ searchParams }: PageProps<"/app/
   const confirming = params.effacer === "1";
   const rows = await listOrbiConversations(db, user.id, query, space?.organizationId ?? null);
   const when = await historyDate();
+  // The phone of the talent has no head above the pages any more (Modèle B, B9): this one draws its own.
+  const ownHead = !space && (await isPhone());
+  const tShell = await getTranslations("talentShell");
 
   return (
     <>
+      {ownHead ? (
+        <FlowHead back="/app" backLabel={tShell("header.back")} title={t("metaTitle")} />
+      ) : null}
       <form action="/app/orbi/historique" method="get" role="search" className="t-rech t-verre">
         <TalentIcon name="recherche" size="s" />
         <input

@@ -81,14 +81,21 @@ test.describe("connexion", () => {
 
     // Refonte mobile: the account opens from the avatar of a destination; Se déconnecter sits
     // at the bottom of Compte, on a phone as on a computer.
-    // On a phone (Modèle B), Explorer has no avatar link to the account: Compte opens directly.
-    if (isMobile) await page.goto("/app/compte");
-    else {
+    // On a phone (Modèle B), the account is Paramètres: « Se déconnecter », then its confirmation.
+    if (isMobile) {
+      await page.goto("/app/compte");
+      await expect(page).toHaveURL(/\/app\/parametres$/);
+      await page.getByRole("button", { name: "Se déconnecter" }).click();
+      await page
+        .getByRole("dialog", { name: "Se déconnecter ?" })
+        .getByRole("button", { name: "Se déconnecter" })
+        .click();
+    } else {
       await page.goto("/app/jobs");
       await page.getByRole("link", { name: /^Compte de / }).click();
+      await expect(page).toHaveURL(/\/app\/compte$/);
+      await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
     }
-    await expect(page).toHaveURL(/\/app\/compte$/);
-    await page.getByRole("button", { name: "Se déconnecter" }).filter({ visible: true }).click();
     await expect(page).toHaveURL(/\/connexion\?deconnecte=1/);
 
     // Signed out, the space opens on « Bienvenue » on a phone (Modèle B), on sign-in elsewhere.

@@ -938,28 +938,122 @@ html[data-nb-reduit]::view-transition-old(nb-pile) {
   color: inherit;
 }
 
-/* Pages pas encore redessinées (B2 à B8) : elles gardent leur mise en page sombre dans la pile.
-   Une page du Modèle B (`.nb-page`) prend tout l'écran. Retiré en B9. */
-.nb-ancien > .t-colonne:first-child {
-  padding-top: var(--nb-haut);
+/* Écrans sans planche propre du Modèle B (lot B9 : diagnostic, LinkedIn, sécurité, factures…) :
+   leur contenu reste, aux couleurs du Modèle B (nuit à plat, cartes sans verre ni lueur) et sous
+   leur propre tête, en barre comme celle des pages du Modèle B. Une page du Modèle B (`.nb-page`)
+   prend tout l'écran. */
+.nb-cadre {
+  --fond: var(--nb-nuit);
+  --surface: var(--nb-carte);
+  --plein: var(--nb-surface);
+  --texte: var(--nb-texte);
+  --texte2: var(--nb-brume);
+  --trait: var(--nb-filet);
+  --verre: 0 0 0 1px var(--nb-filet);
+  --verre-fort: 0 0 0 1px var(--nb-filet-fort);
+  background: var(--nb-nuit);
 }
-.nb-ancien:has(.nb-page) > header {
+.nb-cadre::before {
   display: none;
 }
-.nb-pile[data-racine] .nb-ancien > .t-colonne:last-child {
+.nb-cadre .t-verre {
+  -webkit-backdrop-filter: none;
+  backdrop-filter: none;
+}
+.nb-pile[data-racine] .nb-cadre > .t-colonne {
   padding-bottom: 24px;
 }
-.nb-ancien:has(.nb-page) {
+.nb-cadre .t-tete-f {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  margin: 0 -16px;
+  padding: var(--nb-haut) 12px 8px;
+  min-height: calc(var(--nb-haut) + 52px);
+  background: var(--nb-nuit);
+  border-bottom: 1px solid var(--nb-filet);
+}
+.nb-cadre .t-tete-f h1,
+.nb-cadre .t-tete-f .t-h1 {
+  font-size: 17px;
+  font-weight: 700;
+}
+.nb-cadre .t-tete-f > .t-bi:first-child {
+  background: none;
+  box-shadow: none;
+  color: var(--nb-creme);
+}
+.nb-cadre:has(.nb-page) {
   background: none;
   min-height: 0;
 }
-.nb-ancien:has(.nb-page)::before {
-  display: none;
-}
-.nb-ancien:has(.nb-page) > .t-colonne {
+.nb-cadre:has(.nb-page) > .t-colonne {
   max-width: none;
   padding: 0;
   gap: 0;
+}
+/* « Installer l'appli » dans Paramètres (lot B9) : la ligne, et les trois gestes de Safari. */
+.nb-ca-installer {
+  width: 100%;
+  text-align: left;
+}
+.nb-ca-installer > span {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+.nb-installer {
+  margin: auto 0 0;
+  width: 100%;
+  max-width: none;
+  max-height: 90dvh;
+  border: 0;
+  border-radius: 24px 24px 0 0;
+  padding: 10px 20px calc(16px + var(--nb-bas));
+  background: var(--nb-surface);
+  color: var(--nb-texte);
+}
+.nb-installer::backdrop {
+  background: rgba(0, 0, 0, 0.6);
+}
+.nb-installer-h {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 6px;
+}
+.nb-installer h2 {
+  font-size: 18px;
+  font-weight: 700;
+}
+.nb-installer ol {
+  list-style: none;
+  display: grid;
+  gap: 14px;
+  margin: 16px 0 20px;
+  padding: 0;
+}
+.nb-installer li {
+  display: flex;
+  gap: 12px;
+}
+.nb-installer li > span:first-child {
+  flex: none;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  font-weight: 700;
+  background: var(--nb-lime);
+  color: #0f3f37;
+}
+.nb-installer li > span:last-child {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
 .nb-vide {
   text-align: center;

@@ -7,6 +7,7 @@ import { orbiAides } from "@/lib/orbi";
 import { OrbiChat } from "@/components/talent/orbi-chat";
 import { AI_CREDITS_KEY } from "@/server/ai";
 import { requireUser } from "@/server/auth/session";
+import { phoneTalentRedirect } from "@/server/phone-routes";
 import { db } from "@/server/db";
 import { usage } from "@/server/entitlements";
 import { getActiveSpace } from "@/server/hire-context";
@@ -31,6 +32,9 @@ const aides = orbiAides;
 export default async function OrbiPage({ searchParams }: PageProps<"/app/orbi">) {
   const params = await searchParams;
   const user = await requireUser("/app/orbi");
+  // Modèle B (B9): Orbi is the floating disc of each tab on a phone; its sheet opens on the Fil.
+  // An exchange of the history (`?c=`) keeps this page.
+  if (typeof params.c !== "string") await phoneTalentRedirect(user.id, "/app?orbi=1");
   // In an organization's space: the recruiting assistant (recruteur lot 5, planche `ORB_R`).
   const space = await getActiveSpace(user.id);
   if (space)

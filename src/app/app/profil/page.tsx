@@ -36,6 +36,7 @@ import {
 } from "@/server/actions/profile";
 import { setPortfolioPublicAction } from "@/server/actions/portfolio";
 import { requireUser } from "@/server/auth/session";
+import { phoneTalentRedirect } from "@/server/phone-routes";
 import { db } from "@/server/db";
 import { talentAttestations } from "@/server/services/attestations";
 import { listProjects, portfolioLevel } from "@/server/services/portfolio";
@@ -154,6 +155,11 @@ export default async function ProfilePage({ searchParams }: PageProps<"/app/prof
   const params = await searchParams;
   if (one(params.photo) === "1") redirect("/app/profil/modifier?photo=1");
   const user = await requireUser("/app/profil");
+  // Modèle B (B5, B9): the profile is the Carrière tab on a phone, and its form « Modifier le
+  // profil ». A return of a former form (`?ok=`, `?erreur=`) keeps this page.
+  if (one(params.fenetre) === "modifier") await phoneTalentRedirect(user.id, "/app/career/profil");
+  if (Object.keys(params).length === 0 || params.section)
+    await phoneTalentRedirect(user.id, "/app/career/cv");
   const t = await getTranslations();
   const td = dynamic(t);
   const [profile, attestations, level] = await Promise.all([

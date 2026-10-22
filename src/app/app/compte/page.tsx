@@ -12,6 +12,7 @@ import { AI_CREDITS_KEY } from "@/server/ai";
 import { signOut } from "@/server/actions/auth";
 import { switchSpace } from "@/server/actions/hire";
 import { ADMIN_ROLES, requireUser } from "@/server/auth/session";
+import { phoneTalentRedirect } from "@/server/phone-routes";
 import { db } from "@/server/db";
 import { resolvePlan, usage } from "@/server/entitlements";
 import { getActiveSpace } from "@/server/hire-context";
@@ -127,6 +128,8 @@ function InstallSteps({
  */
 export default async function AccountPage() {
   const user = await requireUser("/app/compte");
+  // Modèle B (B9): the account lives in Paramètres on a phone.
+  await phoneTalentRedirect(user.id, "/app/parametres");
   if (await getActiveSpace(user.id)) redirect("/app/hire");
   if (await getPartnerSpace(user.id)) redirect("/app/partenaire");
   const t = await getTranslations("compte");
